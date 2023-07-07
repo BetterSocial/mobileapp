@@ -6,7 +6,9 @@ import * as serviceFile from '../../src/service/file';
 import * as servicePermission from '../../src/utils/permission';
 import useGroupInfo from '../../src/screens/GroupInfo/hooks/useGroupInfo';
 import {Context} from '../../src/context';
+import * as serviceProfile from '../../src/service/profile';
 
+// eslint-disable-next-line global-require
 jest.mock('react-native-permissions', () => require('react-native-permissions/mock'));
 
 const mockedPushNavigation = jest.fn();
@@ -70,6 +72,41 @@ describe('useGroupInfo should run correctly', () => {
     user_id: 'c6c91b04-795c-404e-b012-ea28813a2006',
     username: 'Agita'
   };
+
+  // const mockMyProfile2 = {
+  //   bio: 'Fe mobile engineer',
+  //   country_code: 'ID',
+  //   createdAt: '2022-06-10T13:11:53.000Z',
+  //   follower: 13,
+  //   follower_symbol: '< 25',
+  //   following: 10,
+  //   following_symbol: '< 25',
+  //   human_id: 'I4K3M10FGR78EWQQDNQ3',
+  //   last_active_at: '2022-06-10T13:11:53.000Z',
+  //   location: [
+  //     {
+  //       city: 'Yauco, PR',
+  //       country: 'US',
+  //       createdAt: '2022-05-30T14:15:24.000Z',
+  //       location_id: '45',
+  //       location_level: 'City',
+  //       neighborhood: '',
+  //       slug_name: '',
+  //       state: 'Puerto Rico',
+  //       status: 'Y',
+  //       updatedAt: '2022-05-30T14:15:24.000Z'
+  //     }
+  //   ],
+  //   profile_pic_asset_id: '6f47f70bea98469f4a24b6ffc550c984',
+  //   profile_pic_path:
+  //     'https://res.cloudinary.com/hpjivutj2/image/upload/v1659099243/pbdv3jlyd4mhmtis6kqx.jpg',
+  //   profile_pic_public_id: 'pbdv3jlyd4mhmtis6kqx',
+  //   real_name: null,
+  //   status: 'Y',
+  //   updatedAt: '2022-07-29T12:54:04.000Z',
+  //   user_id: 'c6c91b04-795c-404e-b012-ea28813a2007',
+  //   username: 'elon'
+  // };
 
   const mockAsset = [
     {
@@ -201,7 +238,7 @@ describe('useGroupInfo should run correctly', () => {
       id: 'c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
       last_message_at: '2023-01-24T01:00:59.432027Z',
       member_count: 4,
-      name: 'Test group baru',
+      name: 'Agita, elon',
       type: 'messaging',
       updated_at: '2023-01-24T01:41:46.237211Z'
     },
@@ -214,6 +251,8 @@ describe('useGroupInfo should run correctly', () => {
     queryMembers: mockQueryMember
   };
 
+  const mockDispatchChannel = jest.fn();
+
   const wrapper = ({children}) => (
     <Context.Provider
       value={{
@@ -221,8 +260,42 @@ describe('useGroupInfo should run correctly', () => {
           {isShowHeader: true, myProfile: mockMyProfile, navbarTitle: "Who you're following"}
         ],
         groupChat: [{asset: mockAsset, participants: mockParticipans}],
-        channel: [{channel: mockChannel}],
-        client: [{}, jest.fn()]
+        channel: [{channel: mockChannel}, mockDispatchChannel],
+        client: [
+          {
+            client: {
+              queryChannels: jest.fn().mockResolvedValue([mockChannel]),
+              channel: jest.fn().mockResolvedValue({create: jest.fn(), addMembers: jest.fn()})
+            }
+          },
+          jest.fn()
+        ]
+      }}>
+      {children}
+    </Context.Provider>
+  );
+  const mockAddCreate = jest.fn();
+  const moctAddMemeber = jest.fn();
+
+  const wrapper2 = ({children}) => (
+    <Context.Provider
+      value={{
+        profile: [
+          {isShowHeader: true, myProfile: mockMyProfile, navbarTitle: "Who you're following"}
+        ],
+        groupChat: [{asset: mockAsset, participants: mockParticipans}],
+        channel: [{channel: mockChannel}, mockDispatchChannel],
+        client: [
+          {
+            client: {
+              queryChannels: jest.fn().mockResolvedValue([]),
+              channel: jest
+                .fn()
+                .mockResolvedValue({create: mockAddCreate, addMembers: moctAddMemeber})
+            }
+          },
+          jest.fn()
+        ]
       }}>
       {children}
     </Context.Provider>
@@ -325,4 +398,451 @@ describe('useGroupInfo should run correctly', () => {
     expect(spyService).toHaveBeenCalled();
     expect(result.current.uploadedImage).toEqual('https://detik.jpg');
   });
+
+  it('handleOpenProfile should run correctly', async () => {
+    const navigation = {
+      push: jest.fn(),
+      navigate: jest.fn()
+    };
+    const {result, waitForValueToChanger} = renderHook(() => useGroupInfo({navigation}), {wrapper});
+    act(() => {
+      result.current.handleOpenProfile({user_id: 'c6c91b04-795c-404e-b012-ea28813a2006'});
+    });
+    expect(result.current.openModal).toBeFalsy();
+  });
+
+  it('memberName sshould run correctly', () => {
+    const navigation = {
+      push: jest.fn(),
+      navigate: jest.fn()
+    };
+    const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper});
+    expect(result.current.memberName()).toEqual('elon');
+  });
+
+  it('chatName sshould run correctly', () => {
+    const navigation = {
+      push: jest.fn(),
+      navigate: jest.fn()
+    };
+    const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper});
+    expect(result.current.chatName).toEqual('elon');
+  });
+  it('checkUserIsBlockHandle no block test 1 sshould run correctly', async () => {
+    const navigation = {
+      push: jest.fn(),
+      navigate: jest.fn(),
+      reset: jest.fn()
+    };
+    const spy = jest
+      .spyOn(serviceProfile, 'checkUserBlock')
+      .mockResolvedValue({data: {data: {blocked: false, blocker: false}}});
+    const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper});
+    await result.current.setSelectedUser({user_id: '123'});
+    await result.current.checkUserIsBlockHandle();
+    expect(result.current.openModal).toBeFalsy();
+
+    expect(spy).toHaveBeenCalled();
+    expect(mockedResetNavigation).toHaveBeenCalled();
+    expect(mockDispatchChannel).toHaveBeenCalled();
+  });
+
+  it('checkUserIsBlockHandle no block test 2 sshould run correctly', async () => {
+    const navigation = {
+      push: jest.fn(),
+      navigate: jest.fn(),
+      reset: jest.fn()
+    };
+    const spy = jest
+      .spyOn(serviceProfile, 'checkUserBlock')
+      .mockResolvedValue({data: {data: {blocked: false, blocker: false}}});
+    const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper: wrapper2});
+    await result.current.setSelectedUser({user_id: '123', user: {name: 'agita'}});
+    await result.current.checkUserIsBlockHandle();
+    expect(result.current.openModal).toBeFalsy();
+
+    expect(spy).toHaveBeenCalled();
+    expect(mockedResetNavigation).toHaveBeenCalled();
+    expect(mockDispatchChannel).toHaveBeenCalled();
+    expect(mockAddCreate).toHaveBeenCalled();
+    expect(moctAddMemeber).toHaveBeenCalled();
+  });
+
+  it('checkUserIsBlockHandle block sshould run correctly', async () => {
+    const navigation = {
+      push: jest.fn(),
+      navigate: jest.fn(),
+      reset: jest.fn()
+    };
+    const spy = jest
+      .spyOn(serviceProfile, 'checkUserBlock')
+      .mockResolvedValue({data: {data: {blocked: true, blocker: false}}});
+    const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper: wrapper2});
+    await result.current.setSelectedUser({user_id: '123', user: {name: 'agita'}});
+    await result.current.checkUserIsBlockHandle();
+    expect(result.current.openModal).toBeFalsy();
+
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('openChatMessage with no channel sshould run correctly', async () => {
+    const navigation = {
+      push: jest.fn(),
+      navigate: jest.fn(),
+      reset: jest.fn()
+    };
+    const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper: wrapper2});
+    await result.current.setSelectedUser({user_id: '123', user: {name: 'agita'}});
+    await result.current.openChatMessage();
+    expect(mockedResetNavigation).toHaveBeenCalled();
+    expect(mockDispatchChannel).toHaveBeenCalled();
+    expect(mockAddCreate).toHaveBeenCalled();
+    expect(moctAddMemeber).toHaveBeenCalled();
+  });
+  it('openChatMessage with channel sshould run correctly', async () => {
+    const navigation = {
+      push: jest.fn(),
+      navigate: jest.fn(),
+      reset: jest.fn()
+    };
+    const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper});
+    await result.current.setSelectedUser({user_id: '123', user: {name: 'agita'}});
+    await result.current.openChatMessage();
+    expect(mockedResetNavigation).toHaveBeenCalled();
+    expect(mockDispatchChannel).toHaveBeenCalled();
+  });
+  it('initParticipant sshould run correctly', async () => {
+    const navigation = {
+      push: jest.fn(),
+      navigate: jest.fn(),
+      reset: jest.fn()
+    };
+    const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper});
+    await result.current.initParticipant({123: 'ag'});
+    expect(result.current.newParticipant).toEqual([{0: 'a', 1: 'g'}]);
+  });
+
+  it('handleSelectedUer sshould run correctly', async () => {
+    const navigation = {
+      push: jest.fn(),
+      navigate: jest.fn(),
+      reset: jest.fn()
+    };
+    const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper});
+    await result.current.handleSelectUser({user_id: 'c6c91b04-795c-404e-b012-ea28813a2007'});
+    expect(result.current.selectedUser).toEqual({user_id: 'c6c91b04-795c-404e-b012-ea28813a2007'});
+    expect(result.current.openModal).toBeTruthy();
+  });
 });
+
+// const handleOpenProfile = async (item) => {
+//   await setOpenModal(false);
+//   setTimeout(() => {
+//     if (profile.myProfile.user_id === item.user_id) {
+//       return null;
+//     }
+
+//     return navigation.push('OtherProfile', {
+//       data: {
+//         user_id: profile.myProfile.user_id,
+//         other_id: item.user_id,
+//         username: item.user?.name
+//       }
+//     });
+//   }, 500);
+// };
+
+// const serializeMembersList = (result = []) => {
+//   if (!result) {
+//     return {};
+//   }
+
+//   if (result.length === 0) {
+//     return {};
+//   }
+
+//   const membersObject = {};
+//   result.forEach((item) => {
+//     membersObject[item.user_id] = item;
+//   });
+//   return membersObject;
+// };
+// const getMembersList = async () => {
+//   setIsLoadingMembers(true);
+//   try {
+//     const result = await channel.queryMembers({});
+//     setNewParticipan(result.members);
+//     setParticipants(result.members, groupPatchDispatch);
+
+//     setIsLoadingMembers(false);
+//   } catch (e) {
+//     if (__DEV__) {
+//       console.log(e);
+//     }
+//     setIsLoadingMembers(false);
+//   }
+// };
+// const memberName = () => {
+//   return getChatName(channelState?.channel?.data.name, profile.myProfile.username);
+// };
+// const chatName = getChatName(username, profile.myProfile.username);
+
+// const handleOnNameChange = () => {
+//   navigation.push('GroupSetting', {
+//     username: chatName,
+//     focusChatName: true,
+//     refresh: getMembersList
+//   });
+// };
+// // eslint-disable-next-line consistent-return
+// const checkUserIsBlockHandle = async () => {
+//   try {
+//     const sendData = {
+//       user_id: selectedUser.user_id
+//     };
+//     const processGetBlock = await checkUserBlock(sendData);
+
+//     if (!processGetBlock.data.data.blocked && !processGetBlock.data.data.blocker) {
+//       return openChatMessage();
+//     }
+//     return handleOpenProfile(selectedUser);
+//   } catch (e) {
+//     console.log(e, 'eman');
+//   }
+// };
+
+// const handleOnImageClicked = () => {
+//   launchGallery();
+// };
+
+// const uploadImageBase64 = async (res) => {
+//   try {
+//     setIsUploadingImage(true);
+//     const result = await uploadFile(`data:image/jpeg;base64,${res.base64}`);
+//     setUploadedImage(result.data.url);
+//     const dataEdit = {
+//       name: chatName,
+//       image: result.data.url
+//     };
+
+//     await channel.update(dataEdit);
+//     setIsUploadingImage(false);
+//   } catch (e) {
+//     if (__DEV__) {
+//       console.log(e);
+//     }
+//   }
+// };
+
+// const launchGallery = async () => {
+//   const {success} = await requestExternalStoragePermission();
+//   if (success) {
+//     launchImageLibrary(
+//       {
+//         mediaType: 'photo',
+//         maxHeight: 500,
+//         maxWidth: 500,
+//         includeBase64: true
+//       },
+//       (res) => {
+//         if (!res.didCancel) {
+//           uploadImageBase64(res);
+//         }
+//       }
+//     );
+//   }
+// };
+
+// const initParticipant = (obj) => {
+//   const newData = [];
+//   if (typeof obj === 'object') {
+//     Object.keys(obj).forEach((key) => {
+//       const newObj = {...obj[key]};
+//       newData.push(newObj);
+//     });
+//   }
+//   setNewParticipan(newData);
+// };
+
+// const handleSelectUser = async (user) => {
+//   if (user.user_id === profile.myProfile.user_id) return;
+//   await setSelectedUser(user);
+//   setOpenModal(true);
+// };
+
+// const handleCloseSelectUser = async () => {
+//   setOpenModal(false);
+// };
+
+// const generateSystemChat = async (message, userSelected) => {
+//   try {
+//     if (!message) message = '';
+//     const generatedChannelId = generateRandomId();
+//     const channelChat = await client.client.channel('system', generatedChannelId, {
+//       name: channelState?.channel?.data.name,
+//       type_channel: 'system',
+//       channel_type: 2,
+//       image: channelState.channel.data.image
+//     });
+//     await channelChat.create();
+//     await channelChat.addMembers([userSelected]);
+//     await channelChat.sendMessage(
+//       {
+//         text: message,
+//         isRemoveMember: true,
+//         silent: true
+//       },
+//       {skip_push: true}
+//     );
+//   } catch (e) {
+//     if (__DEV__) {
+//       console.log(e);
+//     }
+//   }
+// };
+
+// const onRemoveUser = async () => {
+//   setOpenModal(false);
+//   try {
+//     const result = await channel.removeMembers([selectedUser.user_id]);
+//     const updateParticipant = newParticipant.filter(
+//       (participant) => participant.user_id !== selectedUser.user_id
+//     );
+//     setNewParticipan(updateParticipant);
+//     await channel.sendMessage(
+//       {
+//         text: `${profile.myProfile.username} removed ${selectedUser.user.name} from this group`,
+//         isRemoveMember: true,
+//         user_id: profile.myProfile.user_id,
+//         silent: true
+//       },
+//       {skip_push: true}
+//     );
+//     await generateSystemChat(
+//       `${profile.myProfile.username} removed you from this group`,
+//       selectedUser.user_id
+//     );
+//     setNewParticipan(result.members);
+//     setParticipants(result.members, groupPatchDispatch);
+//   } catch (e) {
+//     if (__DEV__) {
+//       console.log(e, 'error');
+//     }
+//   }
+// };
+
+// const openChatMessage = async () => {
+//   await setOpenModal(false);
+
+//   const members = [profile.myProfile.user_id];
+//   members.push(selectedUser.user_id);
+//   const filter = {type: 'messaging', members: {$eq: members}};
+//   const sort = [{last_message_at: -1}];
+//   const memberWithRoles = members.map((item) => ({
+//     user_id: item,
+//     channel_role: 'channel_moderator'
+//   }));
+//   await setOpenModal(false);
+//   const filterMessage = await client.client.queryChannels(filter, sort, {
+//     watch: true, // this is the default
+//     state: true
+//   });
+//   navigation.reset({
+//     index: 1,
+//     routes: [
+//       {
+//         name: 'AuthenticatedStack',
+//         params: {
+//           screen: 'HomeTabs',
+//           params: {
+//             screen: 'ChannelList'
+//           }
+//         }
+//       },
+//       {
+//         name: 'AuthenticatedStack',
+//         params: {
+//           screen: 'ChatDetailPage'
+//         }
+//       }
+//     ]
+//   });
+//   const generatedChannelId = generateRandomId();
+
+//   if (filterMessage.length > 0) {
+//     setChannel(filterMessage[0], dispatchChannel);
+//   } else {
+//     const channelChat = await client.client.channel('messaging', generatedChannelId, {
+//       name: selectedUser.user.name,
+//       type_channel: 1
+//     });
+//     await channelChat.create();
+//     await channelChat.addMembers(memberWithRoles);
+//     setChannel(channelChat, dispatchChannel);
+//   }
+// };
+
+// const alertRemoveUser = async (status) => {
+//   if (status === 'view') {
+//     setOpenModal(false);
+//     handleOpenProfile(selectedUser).catch((e) => console.log(e));
+//   }
+//   if (status === 'remove') {
+//     Alert.alert(
+//       null,
+//       `Are you sure you want to remove ${selectedUser.user.name} from this group? We will let the group know that you removed ${selectedUser.user.name}.`,
+//       [{text: 'Yes - remove', onPress: () => onRemoveUser()}, {text: 'Cancel'}]
+//     );
+//   }
+
+//   if (status === 'message') {
+//     await checkUserIsBlockHandle();
+//   }
+// };
+// const onLeaveGroup = () => {
+//   Alert.alert('Leave group', 'Are you sure you want to leave group ?', [
+//     {text: 'Yes', onPress: leaveGroup},
+//     {text: 'No'}
+//   ]);
+// };
+
+// const leaveGroup = async () => {
+//   try {
+//     const response = await channel.removeMembers([profile.myProfile.user_id]);
+//     await generateSystemChat('You left this group', profile.myProfile.user_id);
+//     SimpleToast.show('You left this chat');
+//     navigation.reset({
+//       index: 1,
+//       routes: [
+//         {
+//           name: 'AuthenticatedStack',
+//           params: {
+//             screen: 'HomeTabs',
+//             params: {
+//               screen: 'ChannelList'
+//             }
+//           }
+//         }
+//       ]
+//     });
+//     setNewParticipan(response.members);
+//   } catch (e) {
+//     console.log(e, 'sayu');
+//   }
+// };
+
+// const onReportGroup = () => {
+//   const emailTo = `mailto:contact@bettersocial.org?subject=Reporting a group&body=Reporting group ${
+//     channelState.channel?.data?.name || ''
+//   }.Please type reason for reporting this group below.Thank you!`;
+//   Linking.openURL(emailTo);
+// };
+
+// // eslint-disable-next-line consistent-return
+// const handlePressContact = async (item) => {
+//   if (channelState?.channel.data.type === 'group') {
+//     await handleSelectUser(item);
+//     return true;
+//   }
+//   handleOpenProfile(item);
+// };
