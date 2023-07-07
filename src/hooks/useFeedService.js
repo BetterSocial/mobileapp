@@ -2,7 +2,7 @@ import {useSetRecoilState} from 'recoil';
 import {getFeedNotification, setFeedChatsFromLocal} from '../service/feeds';
 import {feedChatAtom} from '../models/feeds/feedsNotification';
 
-const useFeed = () => {
+const useFeedService = () => {
   const setFeedChatData = useSetRecoilState(feedChatAtom);
 
   const getFeedChat = async () => {
@@ -16,4 +16,4 @@ const useFeed = () => {
   return {getFeedChat};
 };
 
-export default useFeed;
+export default useFeedService;

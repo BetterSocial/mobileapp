@@ -35,7 +35,7 @@ import {setChannel} from '../../context/actions/setChannel';
 import {setTotalUnreadPostNotif} from '../../context/actions/unReadMessageAction';
 import {traceMetricScreen} from '../../libraries/performance/firebasePerformance';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import useFeed from '../../hooks/useFeed';
+import useFeedService from '../../hooks/useFeedService';
 
 const ChannelListScreen = () => {
   const streami18n = new Streami18n({
@@ -59,7 +59,7 @@ const ChannelListScreen = () => {
   const channelListLocalValue = useRecoilValue(channelListLocalAtom);
   const [followUserList, setFollowUserList] = useRecoilState(followersOrFollowingAtom);
 
-  const {getFeedChat} = useFeed();
+  const {getFeedChat} = useFeedService();
 
   const filters = {
     members: {$in: [myProfile.user_id]},
