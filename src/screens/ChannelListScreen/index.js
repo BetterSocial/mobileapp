@@ -8,6 +8,7 @@ import {ChannelList, ChannelPreviewTitle, Chat, Streami18n} from 'stream-chat-re
 import {useNavigation} from '@react-navigation/core';
 import {useRecoilState, useRecoilValue} from 'recoil';
 
+import moment from 'moment';
 import ChannelStatusIcon from '../../components/ChannelStatusIcon';
 import CustomPreviewAvatar from './elements/CustomPreviewAvatar';
 import CustomPreviewUnreadCount from './elements/CustomPreviewUnreadCount';
@@ -34,6 +35,7 @@ import {setChannel} from '../../context/actions/setChannel';
 import {setTotalUnreadPostNotif} from '../../context/actions/unReadMessageAction';
 import {traceMetricScreen} from '../../libraries/performance/firebasePerformance';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import useFeed from '../../hooks/useFeed';
 
 const ChannelListScreen = () => {
   const streami18n = new Streami18n({
@@ -56,6 +58,8 @@ const ChannelListScreen = () => {
   const [, dispatchUnreadMessage] = React.useContext(Context).unReadMessage;
   const channelListLocalValue = useRecoilValue(channelListLocalAtom);
   const [followUserList, setFollowUserList] = useRecoilState(followersOrFollowingAtom);
+
+  const {getFeedChat} = useFeed();
 
   const filters = {
     members: {$in: [myProfile.user_id]},
@@ -133,11 +137,18 @@ const ChannelListScreen = () => {
   };
 
   const goToFeedDetail = async (item) => {
-    navigation.navigate('PostDetailPage', {
-      feedId: item.activity_id,
-      refreshCache: () => handleUpdateCache(item.activity_id, item.totalCommentBadge),
-      isCaching: false
-    });
+    const currentDate = moment();
+
+    if (moment(item.expired_at).isBefore(currentDate)) {
+      Toast.show('This post expired and has been removed', Toast.LONG);
+      getFeedChat();
+    } else {
+      navigation.navigate('PostDetailPage', {
+        feedId: item.activity_id,
+        refreshCache: () => handleUpdateCache(item.activity_id, item.totalCommentBadge),
+        isCaching: false
+      });
+    }
   };
 
   const countPostNotifComponent = (item) => {
