@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {colors} from '../../utils/colors';
+import useReadmore from './hooks/useReadmore';
 
 const styles = StyleSheet.create({
   moreText: {
@@ -22,55 +23,45 @@ const styles = StyleSheet.create({
  */
 
 const ReadMore = (props) => {
-  const [curNumberLine, setNumberLine] = React.useState(0);
-  const [charLength, setCharLength] = React.useState(0);
-  const [isFinishSetLayout, setIsFinishSetLayout] = React.useState(false);
-  const [lengthTextFirstLine, setLengthTextFirstLine] = React.useState(0);
-
-  const handleLayoutText = async ({nativeEvent}) => {
-    let characterNumber = 0;
-    let textWidth = 0;
-    let lengthFirstLine = 0;
-    // eslint-disable-next-line no-plusplus
-    for (let i = 0; i < nativeEvent.lines.length; i++) {
-      characterNumber += nativeEvent.lines[i].text.length;
-      textWidth += nativeEvent.lines[i].width;
-      if (i === 0) {
-        lengthFirstLine = nativeEvent.lines[i].text.length;
-      }
-    }
-    await setNumberLine(nativeEvent.lines.length);
-    await setCharLength(characterNumber);
-    await setLengthTextFirstLine(lengthFirstLine);
-    setIsFinishSetLayout(true);
-  };
-  const handleReadMoreText = () => {
-    if (props.numberLine < curNumberLine) {
-      const substringText = props.numberLine * (lengthTextFirstLine - 5);
-      const longText = substringText;
-
-      return longText;
-    }
-    return charLength;
-  };
+  const {
+    isFinishSetLayout,
+    realNumberLine,
+    textShown,
+    layoutWidth,
+    setIsFinishSetLayout,
+    handleLayoutText,
+    handleLayoutWidth,
+    limitNumberLine
+  } = useReadmore({
+    numberLine: props.numberLine
+  });
 
   React.useEffect(() => {
     setIsFinishSetLayout(false);
-  }, [props.text]);
-
+  }, [layoutWidth, props.text]);
   return (
-    <View style={props.containerStyle}>
+    <View onLayout={handleLayoutWidth} style={props.containerStyle}>
       {isFinishSetLayout ? (
-        <TouchableOpacity onPress={props.onPress}>
+        <TouchableOpacity testID="finishLayout" onPress={props.onPress}>
           <Text>
-            {props.text.substring(0, handleReadMoreText())}{' '}
-            {props.numberLine < curNumberLine ? <Text style={styles.moreText}>More...</Text> : null}{' '}
+            {textShown}{' '}
+            {limitNumberLine < realNumberLine ? (
+              <Text testID="moreText" style={styles.moreText}>
+                More...
+              </Text>
+            ) : null}{' '}
           </Text>
         </TouchableOpacity>
       ) : null}
-      {!isFinishSetLayout ? <Text onTextLayout={handleLayoutText}>{props.text} </Text> : null}
+      {!isFinishSetLayout ? (
+        <Text testID="notFinishLayout" onTextLayout={handleLayoutText}>
+          {props.text}{' '}
+        </Text>
+      ) : null}
     </View>
   );
 };
 
-export default ReadMore;
+export default React.memo(ReadMore, (prevProps, nextProps) => {
+  return prevProps === nextProps;
+});
