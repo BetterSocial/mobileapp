@@ -384,7 +384,9 @@ const useGroupInfo = () => {
     handleOpenProfile,
     onReportGroup,
     setSelectedUser,
-    openChatMessage
+    openChatMessage,
+    generateSystemChat,
+    setNewParticipan
   };
 };
 
