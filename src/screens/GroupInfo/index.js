@@ -21,6 +21,7 @@ import Header from '../../components/Header';
 // eslint-disable-next-line camelcase
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
 import ModalAction from './elements/ModalAction';
+import ReportGroup from '../../assets/images/report.png';
 import useGroupInfo from './hooks/useGroupInfo';
 import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
@@ -53,7 +54,8 @@ const GroupInfo = () => {
     onLeaveGroup,
     profile,
     channelState,
-    handlePressContact
+    handlePressContact,
+    onReportGroup
   } = useGroupInfo();
 
   React.useEffect(() => {
@@ -214,6 +216,14 @@ const GroupInfo = () => {
                     </View>
                     <View>
                       <Text style={styles.textAct}>Exit Group</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={onReportGroup} style={styles.buttonGroup}>
+                    <View style={styles.imageActContainer}>
+                      <FastImage style={styles.imageAction} source={ReportGroup} />
+                    </View>
+                    <View>
+                      <Text style={styles.textAct}>Report Group</Text>
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -389,5 +399,8 @@ export const styles = StyleSheet.create({
   textAct: {
     color: '#FF2E63',
     fontSize: 14
+  },
+  scrollContainer: {
+    paddingBottom: 30
   }
 });

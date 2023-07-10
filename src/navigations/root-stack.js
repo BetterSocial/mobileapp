@@ -96,7 +96,7 @@ export const RootNavigator = () => {
         style={{
           height: '100%'
         }}>
-        <NetworkStatusIndicator hide={false} />
+        <NetworkStatusIndicator hide={true} />
         {/* <StatusBar translucent backgroundColor="white" /> */}
         <RootStack.Navigator
           screenOptions={{
