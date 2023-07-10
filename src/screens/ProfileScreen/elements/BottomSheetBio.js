@@ -18,11 +18,11 @@ const BottomSheetBio = React.forwardRef((props, ref) => {
         // pullBottom
         viewstyle={styles.bottomsheet}>
         <View style={styles.containerBottomSheet}>
-          <Text style={styles.title}>{props.username || 'Update your'} bio</Text>
+          <Text style={styles.title}>{props.username} Edit prompt</Text>
           <AutoFocusTextArea
             value={props.value}
             onChangeText={props.onChangeText}
-            placeholder="Add Bio"
+            placeholder="Message prompt"
             keyboardAppearDelay={500}
             editable={!props.isOtherProfile}
           />
