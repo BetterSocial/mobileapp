@@ -396,6 +396,10 @@ const useGroupInfo = () => {
     handlePressContact,
     handleOpenProfile,
     onReportGroup,
+    setSelectedUser,
+    openChatMessage,
+    generateSystemChat,
+    setNewParticipan,
     setUsername
   };
 };
