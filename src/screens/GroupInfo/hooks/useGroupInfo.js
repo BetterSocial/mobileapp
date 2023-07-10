@@ -3,7 +3,7 @@ import {useNavigation} from '@react-navigation/core';
 import SimpleToast from 'react-native-simple-toast';
 import {openComposer} from 'react-native-email-link';
 import {launchImageLibrary} from 'react-native-image-picker';
-import {Alert, Linking} from 'react-native';
+import {Alert} from 'react-native';
 import {generateRandomId} from 'stream-chat-react-native-core';
 import {Context} from '../../../context';
 import {uploadFile} from '../../../service/file';
