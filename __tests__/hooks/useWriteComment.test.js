@@ -13,10 +13,10 @@ describe('useWriteComment hook should run correctly', () => {
       }
     }
   };
-   const dataAnonym2 = {
+  const dataAnonym2 = {
     data: {
-        anon_user_info_emoji_name: 'cow',
-    anon_user_info_color_name: 'red'
+      anon_user_info_emoji_name: 'cow',
+      anon_user_info_color_name: 'red'
     }
   };
   const dataSignedUserName = {
@@ -29,7 +29,7 @@ describe('useWriteComment hook should run correctly', () => {
   it('handleUserName should run correctly', () => {
     const {result} = renderHook(useWriteComment);
     expect(result.current.handleUserName(dataAnonym)).toEqual(
-      `${dataAnonym.anon_user_info_color_name} ${dataAnonym.anon_user_info_emoji_name}`
+      `Anonymous ${dataAnonym.anon_user_info_emoji_name}`
     );
     expect(result.current.handleUserName(dataSignedUserName)).toEqual(
       dataSignedUserName.actor.data.username
@@ -39,7 +39,7 @@ describe('useWriteComment hook should run correctly', () => {
   it('handleReplyUsername should run correctly', () => {
     const {result} = renderHook(useWriteComment);
     expect(result.current.handleUsernameReplyComment(dataAnonym2)).toEqual(
-      `${dataAnonym.anon_user_info_color_name} ${dataAnonym.anon_user_info_emoji_name}`
+      `Anonymous ${dataAnonym.anon_user_info_emoji_name}`
     );
     expect(result.current.handleUsernameReplyComment(dataSigned)).toEqual(
       dataSigned.user.data.username

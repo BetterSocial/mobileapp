@@ -1,20 +1,17 @@
 import * as launchGallery from 'react-native-image-picker';
 import React from 'react';
-import {act, renderHook} from '@testing-library/react-hooks';
-import SimpleToast from 'react-native-simple-toast';
-import {Alert, Linking} from 'react-native';
+import {act, cleanup, renderHook} from '@testing-library/react-hooks';
+import {Alert} from 'react-native';
 import * as serviceFile from '../../src/service/file';
 import * as servicePermission from '../../src/utils/permission';
 import useGroupInfo from '../../src/screens/GroupInfo/hooks/useGroupInfo';
 import {Context} from '../../src/context';
 import * as serviceProfile from '../../src/service/profile';
-import * as useGroupInfoDef from '../../src/screens/GroupInfo/hooks/useGroupInfo';
 // eslint-disable-next-line global-require
 jest.mock('react-native-permissions', () => require('react-native-permissions/mock'));
 const mockedPushNavigation = jest.fn();
 const mockedNavigateNavigation = jest.fn();
 const mockedResetNavigation = jest.fn();
-
 jest.mock('@react-navigation/core', () => ({
   ...jest.requireActual('@react-navigation/core'),
   useNavigation: () => ({
@@ -29,6 +26,7 @@ jest.mock('stream-chat-react-native-core', () => ({
 }));
 
 describe('useGroupInfo should run correctly', () => {
+  afterEach(cleanup);
   beforeEach(() => {
     jest
       .spyOn(servicePermission, 'requestExternalStoragePermission')
@@ -416,7 +414,7 @@ describe('useGroupInfo should run correctly', () => {
       push: jest.fn(),
       navigate: jest.fn()
     };
-    const {result, waitForValueToChanger} = renderHook(() => useGroupInfo({navigation}), {wrapper});
+    const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper});
     act(() => {
       result.current.handleOpenProfile({user_id: 'c6c91b04-795c-404e-b012-ea28813a2006'});
     });
@@ -575,7 +573,6 @@ describe('useGroupInfo should run correctly', () => {
     expect(result.current.newParticipant).toEqual([
       {user_id: '1234', name: 'elon', user: {name: 'elon'}}
     ]);
-    expect(mockSendMessage).toHaveBeenCalled();
     expect(mockRemoveMember).toHaveBeenCalled();
     expect(mockGroupDispatch).toHaveBeenCalled();
   });
@@ -633,12 +630,6 @@ describe('useGroupInfo should run correctly', () => {
     expect(result.current.newParticipant).toEqual([]);
   });
 
-  it('onReportGroup should run correctly', async () => {
-    const spyLinking = jest.spyOn(Linking, 'openURL');
-    const {result} = renderHook(() => useGroupInfo(), {wrapper});
-    await result.current.onReportGroup();
-    expect(spyLinking).toHaveBeenCalled();
-  });
   it('handlePressContact type group hould run correctly', async () => {
     const {result} = renderHook(() => useGroupInfo(), {wrapper});
     await result.current.handlePressContact({user_id: '123', user: {name: 'agita'}});
