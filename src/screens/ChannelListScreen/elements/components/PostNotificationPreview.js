@@ -169,7 +169,7 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
         return `You: ${findComment.reaction.data.text}`;
       }
       if (findComment.reaction.data.anon_user_info_color_name) {
-        return `${findComment.reaction.data.anon_user_info_color_name} ${findComment.reaction.data.anon_user_info_emoji_name} replied to your comment: ${findComment.reaction.data.text}`;
+        return `Anonymous ${findComment.reaction.data.anon_user_info_emoji_name} replied to your comment: ${findComment.reaction.data.text}`;
       }
       return `${findComment.reaction?.user?.data?.username} replied to your comment: ${findComment.reaction.data.text} `;
     }

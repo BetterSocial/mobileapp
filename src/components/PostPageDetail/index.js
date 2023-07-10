@@ -138,7 +138,10 @@ const PostPageDetailIdComponent = (props) => {
           }, 300);
         }
       } catch (e) {
-        Toast.show(e?.response?.data?.message || "Can't get detail feed", Toast.LONG);
+        Toast.show(
+          e?.response?.data?.message || 'Failed to load feed - please try again',
+          Toast.LONG
+        );
         navigation.goBack();
       }
     } else {
@@ -642,7 +645,7 @@ const PostPageDetailIdComponent = (props) => {
                   showScoreButton={true}
                   onPressScore={handleOnPressScore}
                   onPressBlock={() => refBlockComponent.current.openBlockComponent(item)}
-                  isSelf={profile.myProfile.user_id === item.actor.id}
+                  isSelf={profile.myProfile.user_id === item.actor?.id}
                 />
               </View>
             </ScrollView>

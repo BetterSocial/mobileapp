@@ -1,26 +1,26 @@
 import * as React from 'react';
+import EasyFollowSystem from 'stream-chat-react-native-core/src/components/ChannelList/EasyFollowSystem';
+import crashlytics from '@react-native-firebase/crashlytics';
 import moment from 'moment';
 import {Channel, Chat, MessageInput, MessageList, Streami18n} from 'stream-chat-react-native';
-import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
 import {MessageSystem} from 'stream-chat-react-native-core';
+import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
+import {useRecoilState} from 'recoil';
 
 import ChatStatusIcon from '../../components/ChatStatusIcon';
 import Header from '../../components/Chat/Header';
 import ImageSendPreview from './elements/ImageSendPreview';
 import InputMessage from '../../components/Chat/InputMessage';
+import api from '../../service/config';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {CustomMessageSystem} from '../../components';
+import {followersOrFollowingAtom} from '../ChannelListScreen/model/followersOrFollowingAtom';
 import {fonts} from '../../utils/fonts';
 import {setAsset, setParticipants} from '../../context/actions/groupChat';
+import {setChannel} from '../../context/actions/setChannel';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {setChannel} from '../../context/actions/setChannel';
-import EasyFollowSystem from 'stream-chat-react-native-core/src/components/ChannelList/EasyFollowSystem';
-import api from '../../service/config';
-import crashlytics from '@react-native-firebase/crashlytics';
-import {useRecoilState} from 'recoil';
-import {followersOrFollowingAtom} from '../ChannelListScreen/model/followersOrFollowingAtom';
 
 const streami18n = new Streami18n({
   language: 'en'
@@ -62,23 +62,28 @@ const ChatDetailPage = ({route}) => {
       );
       setChannel(channel, dispatchChannel);
     } catch (e) {
-      console.log(e, 'eman');
+      if (__DEV__) {
+        console.log(e, 'eman');
+      }
     }
   };
   React.useEffect(() => {
-    if (clients && route.params && !channelClient.client) {
+    if (clients && route?.params?.data && !channelClient.client) {
       handleChannelClient();
     }
   }, [route.params, clients]);
 
   React.useEffect(() => {
     return () => {
-      console.log(route, 'sinar');
-      if (route.params.channel) {
-        setChannel(route.params.channel, dispatchChannel);
-      }
+      onBackHandle();
     };
   }, []);
+
+  const onBackHandle = () => {
+    if (route?.params?.channel) {
+      setChannel(route.params.channel, dispatchChannel);
+    }
+  };
 
   const defaultActionsAllowed = (messageActionsProp) => {
     const {
@@ -135,6 +140,8 @@ const ChatDetailPage = ({route}) => {
       if (response?.data) {
         return response.data.data;
       }
+
+      return null;
     } catch (error) {
       crashlytics().recordError(new Error(error));
       throw new Error(error);

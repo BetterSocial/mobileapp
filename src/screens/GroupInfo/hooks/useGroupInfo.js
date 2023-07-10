@@ -1,6 +1,7 @@
 import React from 'react';
 import {useNavigation} from '@react-navigation/core';
 import SimpleToast from 'react-native-simple-toast';
+import {openComposer} from 'react-native-email-link';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {Alert, Linking} from 'react-native';
 import {generateRandomId} from 'stream-chat-react-native-core';
@@ -10,6 +11,7 @@ import {requestExternalStoragePermission} from '../../../utils/permission';
 import {getChatName} from '../../../utils/string/StringUtils';
 import {setChannel} from '../../../context/actions/setChannel';
 import {checkUserBlock} from '../../../service/profile';
+import {setParticipants} from '../../../context/actions/groupChat';
 
 const useGroupInfo = () => {
   const [groupChatState, groupPatchDispatch] = React.useContext(Context).groupChat;
@@ -46,9 +48,12 @@ const useGroupInfo = () => {
     return membersObject;
   };
   const getMembersList = async () => {
+    setIsLoadingMembers(true);
     try {
       const result = await channel.queryMembers({});
       setNewParticipan(result.members);
+      setParticipants(result.members, groupPatchDispatch);
+
       setIsLoadingMembers(false);
     } catch (e) {
       if (__DEV__) {
@@ -60,23 +65,8 @@ const useGroupInfo = () => {
   const memberName = () => {
     return getChatName(channelState?.channel?.data.name, profile.myProfile.username);
   };
-
   const chatName = getChatName(username, profile.myProfile.username);
-  const onProfilePressed = () => {
-    if (profile.myProfile.user_id === selectedUser.user_id) {
-      navigation.navigate('ProfileScreen', {
-        isNotFromHomeTab: true
-      });
-    }
 
-    navigation.navigate('OtherProfile', {
-      data: {
-        user_id: profile.myProfile.user_id,
-        other_id: selectedUser.user_id,
-        username: selectedUser.user.name
-      }
-    });
-  };
   const handleOnNameChange = () => {
     navigation.push('GroupSetting', {
       username: chatName,
@@ -95,7 +85,7 @@ const useGroupInfo = () => {
       if (!processGetBlock.data.data.blocked && !processGetBlock.data.data.blocker) {
         return openChatMessage();
       }
-      return onProfilePressed();
+      return handleOpenProfile(selectedUser);
     } catch (e) {
       console.log(e, 'eman');
     }
@@ -164,16 +154,18 @@ const useGroupInfo = () => {
     setOpenModal(false);
   };
 
-  const generateSystemChat = async (message = '') => {
+  const generateSystemChat = async (message, userSelected) => {
     try {
+      if (!message) message = '';
       const generatedChannelId = generateRandomId();
       const channelChat = await client.client.channel('system', generatedChannelId, {
         name: channelState?.channel?.data.name,
         type_channel: 'system',
-        channel_type: 2
+        channel_type: 2,
+        image: channelState.channel.data.image
       });
       await channelChat.create();
-      await channelChat.addMembers([profile.myProfile.user_id]);
+      await channelChat.addMembers([userSelected]);
       await channelChat.sendMessage(
         {
           text: message,
@@ -191,7 +183,6 @@ const useGroupInfo = () => {
 
   const onRemoveUser = async () => {
     setOpenModal(false);
-
     try {
       const result = await channel.removeMembers([selectedUser.user_id]);
       const updateParticipant = newParticipant.filter(
@@ -207,16 +198,21 @@ const useGroupInfo = () => {
         },
         {skip_push: true}
       );
-      await generateSystemChat(`${profile.myProfile.username} removed you from this group`);
+      await generateSystemChat(
+        `${profile.myProfile.username} removed you from this group`,
+        selectedUser.user_id
+      );
       setNewParticipan(result.members);
+      setParticipants(result.members, groupPatchDispatch);
     } catch (e) {
-      console.log(e, 'eman');
+      if (__DEV__) {
+        console.log(e, 'error');
+      }
     }
   };
 
   const openChatMessage = async () => {
     await setOpenModal(false);
-    navigation.push('ChatDetailPage', {channel});
 
     const members = [profile.myProfile.user_id];
     members.push(selectedUser.user_id);
@@ -226,10 +222,30 @@ const useGroupInfo = () => {
       user_id: item,
       channel_role: 'channel_moderator'
     }));
-
+    await setOpenModal(false);
     const filterMessage = await client.client.queryChannels(filter, sort, {
       watch: true, // this is the default
       state: true
+    });
+    navigation.reset({
+      index: 1,
+      routes: [
+        {
+          name: 'AuthenticatedStack',
+          params: {
+            screen: 'HomeTabs',
+            params: {
+              screen: 'ChannelList'
+            }
+          }
+        },
+        {
+          name: 'AuthenticatedStack',
+          params: {
+            screen: 'ChatDetailPage'
+          }
+        }
+      ]
     });
     const generatedChannelId = generateRandomId();
 
@@ -249,7 +265,7 @@ const useGroupInfo = () => {
   const alertRemoveUser = async (status) => {
     if (status === 'view') {
       setOpenModal(false);
-      onProfilePressed();
+      handleOpenProfile(selectedUser).catch((e) => console.log(e));
     }
     if (status === 'remove') {
       Alert.alert(
@@ -264,16 +280,13 @@ const useGroupInfo = () => {
     }
   };
   const onLeaveGroup = () => {
-    Alert.alert('Leave group', 'Are you sure you want to leave group ?', [
-      {text: 'Yes', onPress: leaveGroup},
-      {text: 'No'}
-    ]);
+    Alert.alert('', 'Exit this group?', [{text: 'Cancel'}, {text: 'Exit', onPress: leaveGroup}]);
   };
 
   const leaveGroup = async () => {
     try {
       const response = await channel.removeMembers([profile.myProfile.user_id]);
-      await generateSystemChat('You left this group');
+      await generateSystemChat('You left this group', profile.myProfile.user_id);
       SimpleToast.show('You left this chat');
       navigation.reset({
         index: 1,
@@ -296,10 +309,13 @@ const useGroupInfo = () => {
   };
 
   const onReportGroup = () => {
-    const emailTo = `mailto:contact@bettersocial.org?subject=Reporting a group&body=Reporting group ${
-      channelState.channel?.data?.name || ''
-    }.Please type reason for reporting this group below.Thank you!`;
-    Linking.openURL(emailTo);
+    openComposer({
+      to: 'contact@bettersocial.org',
+      subject: 'Reporting a group',
+      body: `Reporting group ${
+        channelState.channel?.data?.name || ''
+      }. Please type reason for reporting this group below. Thank you!`
+    });
   };
 
   // eslint-disable-next-line consistent-return
@@ -313,19 +329,19 @@ const useGroupInfo = () => {
 
   const handleOpenProfile = async (item) => {
     await setOpenModal(false);
-    if (profile.myProfile.user_id === item.user_id) {
-      navigation.navigate('ProfileScreen', {
-        isNotFromHomeTab: true
-      });
-    }
-
-    navigation.navigate('OtherProfile', {
-      data: {
-        user_id: profile.myProfile.user_id,
-        other_id: item.user_id,
-        username: item.user.name
+    setTimeout(() => {
+      if (profile.myProfile.user_id === item.user_id) {
+        return null;
       }
-    });
+
+      return navigation.push('OtherProfile', {
+        data: {
+          user_id: profile.myProfile.user_id,
+          other_id: item.user_id,
+          username: item.user?.name
+        }
+      });
+    }, 500);
   };
 
   return {
@@ -348,7 +364,6 @@ const useGroupInfo = () => {
     createChat,
     countUser,
     getMembersList,
-    onProfilePressed,
     handleOnNameChange,
     handleOnImageClicked,
     uploadImageBase64,
@@ -367,6 +382,7 @@ const useGroupInfo = () => {
     onLeaveGroup,
     checkUserIsBlockHandle,
     handlePressContact,
+    handleOpenProfile,
     onReportGroup
   };
 };

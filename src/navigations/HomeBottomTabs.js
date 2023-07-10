@@ -12,6 +12,7 @@ import MemoHome from '../assets/icon/Home';
 import MemoNews from '../assets/icon/News';
 import MemoProfileIcon from '../assets/icon/Profile';
 import UniversalLink from '../configs/UniversalLink';
+import WebsocketResearchScreen from '../screens/WebsocketResearchScreen';
 import {ChannelListScreen, FeedScreen, NewsScreen, ProfileScreen} from '../screens';
 import {Context} from '../context';
 import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';

@@ -31,6 +31,7 @@ build/
 .idea
 .gradle
 local.properties
+/android/gradle.properties
 *.iml
 
 # node.js
@@ -55,6 +56,7 @@ buck-out/
 */fastlane/report.xml
 */fastlane/Preview.html
 */fastlane/screenshots
+/fastlane/appconnect-api-key.p8
 
 # Bundle artifact
 *.jsbundle
@@ -72,7 +74,6 @@ android/app/src/release/google-services.json
 android/app/keystore.properties
 
 *.bak
-yarn.lock
 android/debug.keystore
 
 # Jest testing
