@@ -4,25 +4,6 @@ export interface GetAllAnonymousPostNotificationResponse {
   message: string;
 }
 
-export interface AnonymousPostNotification {
-  activity_id: string;
-  data: AnonymousPostNotificationData;
-  isSeen: boolean;
-  totalComment: number;
-  isOwnPost: boolean;
-  totalCommentBadge: number;
-  isRead: boolean;
-  type: string;
-  titlePost: string;
-  downvote: number;
-  upvote: number;
-  postMaker: PostMaker;
-  isAnonym: boolean;
-  comments: Comment[];
-  unreadComment: number;
-  block: number;
-}
-
 export interface AnonymousPostNotificationData {
   last_message_at: string;
   updated_at: string;
@@ -38,6 +19,26 @@ export interface PostMaker {
 export interface PostMakerData {
   profile_pic_url?: string;
   username: string;
+}
+
+export interface AnonymousPostNotification {
+  activity_id: string;
+  block: number;
+  comments: Comment[];
+  data: AnonymousPostNotificationData;
+  downvote: number;
+  expired_at: string;
+  isAnonym: boolean;
+  isOwnPost: boolean;
+  isRead: boolean;
+  isSeen: boolean;
+  postMaker: PostMaker;
+  titlePost: string;
+  totalComment: number;
+  totalCommentBadge: number;
+  type: string;
+  unreadComment: number;
+  upvote: number;
 }
 
 export interface Comment {

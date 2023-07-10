@@ -138,8 +138,6 @@ class ChannelList implements BaseDbSchema {
   }
 
   async saveAndUpdateIncrementCount(db: SQLiteDatabase, incrementCount: number): Promise<void> {
-    const jsonString: string | null = null;
-
     const unreadCountResponse = await db.executeSql(
       `SELECT unread_count FROM ${ChannelList.getTableName()} WHERE id = ?`,
       [this.id]
@@ -207,7 +205,8 @@ class ChannelList implements BaseDbSchema {
   static async getUnreadCount(db: SQLiteDatabase): Promise<number> {
     try {
       const [results] = await db.executeSql(
-        `SELECT SUM(unread_count) as unread_count FROM ${ChannelList.getTableName()}`
+        `SELECT SUM(unread_count) as unread_count FROM ${ChannelList.getTableName()}
+        WHERE expired_at IS NULL OR datetime(expired_at) >= datetime('now')`
       );
 
       return Promise.resolve(results?.rows?.raw()[0]?.unread_count || 0);
@@ -311,7 +310,8 @@ class ChannelList implements BaseDbSchema {
       createdAt: new Date().toISOString(),
       rawJson: data,
       user: null,
-      members: null
+      members: null,
+      expiredAt: data?.expired_at
     });
   }
 }
