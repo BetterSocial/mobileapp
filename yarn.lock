@@ -11101,6 +11101,10 @@ react-native-document-picker@5.0.2:
   resolved "https://registry.yarnpkg.com/react-native-document-picker/-/react-native-document-picker-5.0.2.tgz#be5654544055ff6498da5585034c36df91435577"
   integrity sha512-AGhvDWvuc4cSH8MKOO8HK9Fe4E2533aru1X8sgU5NN/BW1uAY1POUCurcNmlXJFobCHTGi0F+b3Er7glD3yicQ==
 
+"react-native-email-link@https://github.com/agit26milan/react-native-email-link.git":
+  version "1.14.4"
+  resolved "https://github.com/agit26milan/react-native-email-link.git#b61c7ebb414306c4a899bd738cb54250e3276117"
+
 react-native-emoji-selector@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/react-native-emoji-selector/-/react-native-emoji-selector-0.2.0.tgz#b1ed980cd585a3fd0fca1da6a29006c1a5979615"
