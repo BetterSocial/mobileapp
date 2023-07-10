@@ -45,7 +45,7 @@ const TextAreaChat = ({
   onChangeMessage,
   defaultValue,
   disabledButton = false,
-  disabledInput = false
+  disabledInput = false,
   height
 }: TextAreaChatProps) => {
   const [message, setMessage] = React.useState<string>(defaultValue);
