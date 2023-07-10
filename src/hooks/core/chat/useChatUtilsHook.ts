@@ -1,4 +1,5 @@
 import SimpleToast from 'react-native-simple-toast';
+import moment from 'moment';
 import {atom, useRecoilState} from 'recoil';
 import {useNavigation} from '@react-navigation/native';
 
@@ -36,21 +37,15 @@ function useChatUtilsHook(): UseChatUtilsHook {
     if (!selectedChannel) return;
     setChannelAsRead(selectedChannel);
   };
-
-  const goToChatScreen = (channel: ChannelList) => {
-    setChannelAsRead(channel);
-    if (channel?.channelType === 'ANON_POST_NOTIFICATION') return goToPostDetailScreen(channel);
-    navigation.navigate('SampleChatScreen');
-    setChat({
-      ...chat,
-      selectedChannel: channel
-    });
-    return null;
-  };
-
-  const goToPostDetailScreen = (channel: ChannelList) => {
+  const helperGoToPostDetailScreen = (channel: ChannelList) => {
     setChannelAsRead(channel);
     const postNotificationChannel = channel as PostNotificationChannelList;
+
+    const isPostNotificationExpired = moment(postNotificationChannel?.expiredAt).isBefore(moment());
+    if (isPostNotificationExpired) {
+      SimpleToast.show('This post expired and has been removed', SimpleToast.SHORT);
+      return refresh('channelList');
+    }
 
     if (!postNotificationChannel?.rawJson?.activity_id)
       return SimpleToast.show('Failed to get id', SimpleToast.SHORT);
@@ -59,6 +54,19 @@ function useChatUtilsHook(): UseChatUtilsHook {
       feedId: postNotificationChannel?.rawJson?.activity_id,
       isCaching: false
     });
+  };
+
+  const goToChatScreen = (channel: ChannelList) => {
+    setChannelAsRead(channel);
+    if (channel?.channelType === 'ANON_POST_NOTIFICATION')
+      return helperGoToPostDetailScreen(channel);
+
+    navigation.navigate('SampleChatScreen');
+    setChat({
+      ...chat,
+      selectedChannel: channel
+    });
+    return null;
   };
 
   const goBackFromChatScreen = () => {
@@ -81,7 +89,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
     selectedChannel,
     goBack,
     goToChatScreen,
-    goToPostDetailScreen,
+    goToPostDetailScreen: helperGoToPostDetailScreen,
     goToChatInfoScreen,
     goBackFromChatScreen,
     setSelectedChannelAsRead

@@ -34,6 +34,7 @@ export interface ChannelList {
   lastUpdatedAt: string;
   lastUpdatedBy: string;
   createdAt: string;
+  expiredAt: string;
   rawJson: any;
   user: UserSchema | null;
   members: ChannelListMemberSchema[] | null;
