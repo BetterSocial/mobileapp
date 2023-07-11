@@ -27,17 +27,25 @@ import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {getSpecificCache} from '../../utils/cache';
 import {setTopics as setTopicsContext} from '../../context/actions/topics';
+import useOnBoardingTopics from './hooks/useOnBoardingTopics';
 
 const {width} = Dimensions.get('screen');
 
 const Topics = () => {
+  const {
+    topicSelected,
+    setTopicSelected,
+    topics,
+    setTopics,
+    minTopic,
+    myTopic,
+    setMyTopic,
+    isPreload,
+    setIspreload
+  } = useOnBoardingTopics();
   const navigation = useNavigation();
-  const [topicSelected, setTopicSelected] = React.useState([]);
-  const [topics, setTopics] = React.useState([]);
-  const [minTopic] = React.useState(3);
+
   const [, dispatch] = React.useContext(Context).topics;
-  const [myTopic, setMyTopic] = React.useState({});
-  const [isPreload, setIspreload] = React.useState(true);
 
   const {isFetchingTopic, isTopicFetchError, getTopicsData, topicCollection} = useSignin();
   const getCacheTopic = async () => {
