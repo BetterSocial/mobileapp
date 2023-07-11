@@ -177,6 +177,8 @@ describe('useGroupInfo should run correctly', () => {
       }
     ]
   }));
+
+  const mockQueryMemberError = jest.fn().mockRejectedValue('error');
   const mockRemoveMember = jest.fn().mockResolvedValue({
     members: [{user_id: '1234', name: 'elon', user: {name: 'elon'}}]
   });
@@ -218,7 +220,47 @@ describe('useGroupInfo should run correctly', () => {
     lastTypingEvent: null,
     queryMembers: mockQueryMember,
     removeMembers: mockRemoveMember,
-    sendMessage: mockSendMessage
+    sendMessage: mockSendMessage,
+    update: jest.fn().mockResolvedValue({success: true})
+  };
+
+  const mockChannelError = {
+    cid: 'messaging:c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
+    data: {
+      cid: 'messaging:c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
+      created_at: '2022-09-30T22:49:45.59342Z',
+      createdBy: {
+        banned: false,
+        created_at: '2022-06-10T13:11:53.396427Z',
+        id: 'c6c91b04-795c-404e-b012-ea28813a2006',
+        image:
+          'https://res.cloudinary.com/hpjivutj2/image/upload/v1659099243/pbdv3jlyd4mhmtis6kqx.jpg',
+        last_active: '2022-06-10T13:11:58.020555Z',
+        name: 'Agita',
+        online: false,
+        role: 'user',
+        updated_at: '2023-01-24T01:41:19.021868Z'
+      },
+      disabled: false,
+      frozen: false,
+      hidden: false,
+      id: 'c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
+      last_message_at: '2023-01-24T01:00:59.432027Z',
+      member_count: 4,
+      name: 'Agita, elon',
+      type: 'group',
+      updated_at: '2023-01-24T01:41:46.237211Z'
+    },
+    disconnected: false,
+    id: 'c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
+    initialized: true,
+    isTyping: false,
+    lastKeyStroke: undefined,
+    lastTypingEvent: null,
+    queryMembers: mockQueryMemberError,
+    removeMembers: jest.fn().mockRejectedValue('error'),
+    sendMessage: mockSendMessage,
+    update: jest.fn().mockRejectedValue({success: false})
   };
 
   const mockChannelMessage = {
@@ -311,6 +353,30 @@ describe('useGroupInfo should run correctly', () => {
     </Context.Provider>
   );
 
+  const wrapperError = ({children}) => (
+    <Context.Provider
+      value={{
+        profile: [
+          {isShowHeader: true, myProfile: mockMyProfile, navbarTitle: "Who you're following"}
+        ],
+        groupChat: [{asset: mockAsset, participants: mockParticipans}],
+        channel: [{channel: mockChannelError}, mockDispatchChannel],
+        client: [
+          {
+            client: {
+              queryChannels: jest.fn().mockResolvedValue([]),
+              channel: jest
+                .fn()
+                .mockResolvedValue({create: mockAddCreate, addMembers: moctAddMemeber})
+            }
+          },
+          jest.fn()
+        ]
+      }}>
+      {children}
+    </Context.Provider>
+  );
+
   it('handleOnNameChange should run correctly', () => {
     const navigation = {
       push: jest.fn()
@@ -371,6 +437,17 @@ describe('useGroupInfo should run correctly', () => {
     expect(result.current.isLoadingMembers).toBeFalsy();
   });
 
+  it('error getMemberList should run correctly', async () => {
+    const navigation = {
+      push: jest.fn(),
+      navigate: jest.fn()
+    };
+
+    const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper: wrapperError});
+    await result.current.getMembersList();
+    expect(result.current.isLoadingMembers).toBeFalsy();
+  });
+
   it('`handle`OnNameChange should run correctly', () => {
     const navigation = {
       push: jest.fn(),
@@ -404,9 +481,23 @@ describe('useGroupInfo should run correctly', () => {
     const spyService = jest.spyOn(serviceFile, 'uploadFile');
     const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper});
     await result.current.uploadImageBase64({base64: '1234'});
-    expect(result.current.isUploadingImage).toBeTruthy();
     expect(spyService).toHaveBeenCalled();
     expect(result.current.uploadedImage).toEqual('https://detik.jpg');
+    expect(result.current.isUploadingImage).toBeFalsy();
+  });
+
+  it('error uploadImageBase64 should run correctly', async () => {
+    const navigation = {
+      push: jest.fn(),
+      navigate: jest.fn()
+    };
+    const spyService = jest.spyOn(serviceFile, 'uploadFile');
+    const spyConsole = jest.spyOn(console, 'log');
+    const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper: wrapperError});
+    await result.current.uploadImageBase64({base64: '1234'});
+    expect(spyService).toHaveBeenCalled();
+    expect(result.current.uploadedImage).toEqual('https://detik.jpg');
+    expect(spyConsole).toHaveBeenCalled();
   });
 
   it('handleOpenProfile should run correctly', async () => {
@@ -455,6 +546,20 @@ describe('useGroupInfo should run correctly', () => {
     expect(spy).toHaveBeenCalled();
     expect(mockedResetNavigation).toHaveBeenCalled();
     expect(mockDispatchChannel).toHaveBeenCalled();
+  });
+
+  it('error checkUserIsBlockHandle no block test 1 sshould run correctly', async () => {
+    const navigation = {
+      push: jest.fn(),
+      navigate: jest.fn(),
+      reset: jest.fn()
+    };
+    const spyConsole = jest.spyOn(console, 'log');
+    jest.spyOn(serviceProfile, 'checkUserBlock').mockRejectedValue('error');
+    const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper});
+    await result.current.setSelectedUser({user_id: '123'});
+    await result.current.checkUserIsBlockHandle();
+    expect(spyConsole).toHaveBeenCalled();
   });
 
   it('checkUserIsBlockHandle no block test 2 sshould run correctly', async () => {
@@ -568,6 +673,7 @@ describe('useGroupInfo should run correctly', () => {
       {user_id: '123', name: 'agita', user: {name: 'agita'}},
       {user_id: '1234', name: 'elon', user: {name: 'elon'}}
     ]);
+
     await result.current.onRemoveUser();
     expect(result.current.openModal).toBeFalsy();
     expect(result.current.newParticipant).toEqual([
@@ -575,6 +681,18 @@ describe('useGroupInfo should run correctly', () => {
     ]);
     expect(mockRemoveMember).toHaveBeenCalled();
     expect(mockGroupDispatch).toHaveBeenCalled();
+  });
+
+  it('error onRemoveUser should run correctly', async () => {
+    const {result} = renderHook(() => useGroupInfo(), {wrapper: wrapperError});
+    await result.current.setSelectedUser({user_id: '123', name: 'agita', user: {name: 'agita'}});
+    await result.current.setNewParticipan([
+      {user_id: '123', name: 'agita', user: {name: 'agita'}},
+      {user_id: '1234', name: 'elon', user: {name: 'elon'}}
+    ]);
+    const spyConsole = jest.spyOn(console, 'log');
+    await result.current.onRemoveUser();
+    expect(spyConsole).toHaveBeenCalled();
   });
 
   it('handleCloseSelectedUser should run correctly', async () => {
