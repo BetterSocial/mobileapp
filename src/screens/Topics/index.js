@@ -10,23 +10,16 @@ import {
   Text,
   View
 } from 'react-native';
-import {useNavigation} from '@react-navigation/core';
 
 import CustomPressable from '../../components/CustomPressable';
 import ListTopic from './ListTopics';
 import StringConstant from '../../utils/string/StringConstant';
-import useSignin from '../SignInV2/hooks/useSignin';
-import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
 import {COLORS} from '../../utils/theme';
-import {Context} from '../../context';
 import {Header} from '../../components';
 import {ProgressBar} from '../../components/ProgressBar';
-import {TOPICS_PICK} from '../../utils/cache/constant';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import {getSpecificCache} from '../../utils/cache';
-import {setTopics as setTopicsContext} from '../../context/actions/topics';
 import useOnBoardingTopics from './hooks/useOnBoardingTopics';
 
 const {width} = Dimensions.get('screen');
@@ -34,31 +27,22 @@ const {width} = Dimensions.get('screen');
 const Topics = () => {
   const {
     topicSelected,
-    setTopicSelected,
     topics,
     setTopics,
     minTopic,
     myTopic,
-    setMyTopic,
     isPreload,
-    setIspreload
+    isFetchingTopic,
+    isTopicFetchError,
+    topicCollection,
+    getCacheTopic,
+    handleSelectedLanguage,
+    next,
+    onBack,
+    keyExtractor,
+    getTopicsData
   } = useOnBoardingTopics();
-  const navigation = useNavigation();
 
-  const [, dispatch] = React.useContext(Context).topics;
-
-  const {isFetchingTopic, isTopicFetchError, getTopicsData, topicCollection} = useSignin();
-  const getCacheTopic = async () => {
-    getSpecificCache(TOPICS_PICK, (cache) => {
-      if (cache) {
-        setTopics(cache);
-        setIspreload(false);
-      } else {
-        getTopicsData();
-        setIspreload(false);
-      }
-    });
-  };
   React.useEffect(() => {
     // console.log(topicCollection, 'lusi')
     if (topicCollection.length > 0) {
@@ -69,35 +53,6 @@ const Topics = () => {
     getCacheTopic();
   }, []);
 
-  const handleSelectedLanguage = React.useCallback(
-    (val) => {
-      if (!myTopic[val]) {
-        setMyTopic({...myTopic, [val]: val});
-      } else {
-        setMyTopic({...myTopic, [val]: null});
-      }
-      let copytopicSelected = [...topicSelected];
-      const index = copytopicSelected.findIndex((data) => data === val);
-      if (index > -1) {
-        copytopicSelected = copytopicSelected.filter((data) => data !== val);
-      } else {
-        copytopicSelected.push(val);
-      }
-      setTopicSelected(copytopicSelected);
-    },
-    [topicSelected]
-  );
-
-  const next = () => {
-    if (topicSelected.length >= minTopic) {
-      Analytics.logEvent('onb_select_topics_add_btn', {
-        onb_topics_selected: topicSelected
-      });
-      setTopicsContext(topicSelected, dispatch);
-      navigation.navigate('WhotoFollow');
-    }
-  };
-
   const renderListTopics = ({item, i}) => (
     <ListTopic
       item={item}
@@ -106,11 +61,6 @@ const Topics = () => {
       handleSelectedLanguage={handleSelectedLanguage}
     />
   );
-  const onBack = () => {
-    navigation.goBack();
-  };
-
-  const keyExtractor = React.useCallback((item, index) => index.toString(), []);
 
   return (
     <SafeAreaView style={styles.container}>

@@ -4,6 +4,8 @@ import {Context} from '../../../context';
 import {getSpecificCache} from '../../../utils/cache';
 import {TOPICS_PICK} from '../../../utils/cache/constant';
 import useSignin from '../../SignInV2/hooks/useSignin';
+import {Analytics} from '../../../libraries/analytics/firebaseAnalytics';
+import {setTopics as setTopicsContext} from '../../../context/actions/topics';
 
 const useOnBoardingTopics = () => {
   const navigation = useNavigation();
@@ -27,6 +29,41 @@ const useOnBoardingTopics = () => {
     });
   };
 
+  const handleSelectedLanguage = React.useCallback(
+    (val) => {
+      if (!myTopic[val]) {
+        setMyTopic({...myTopic, [val]: val});
+      } else {
+        setMyTopic({...myTopic, [val]: null});
+      }
+      let copytopicSelected = [...topicSelected];
+      const index = copytopicSelected.findIndex((data) => data === val);
+      if (index > -1) {
+        copytopicSelected = copytopicSelected.filter((data) => data !== val);
+      } else {
+        copytopicSelected.push(val);
+      }
+      setTopicSelected(copytopicSelected);
+    },
+    [topicSelected]
+  );
+
+  const next = () => {
+    if (topicSelected.length >= minTopic) {
+      Analytics.logEvent('onb_select_topics_add_btn', {
+        onb_topics_selected: topicSelected
+      });
+      setTopicsContext(topicSelected, dispatch);
+      navigation.navigate('WhotoFollow');
+    }
+  };
+
+  const onBack = () => {
+    navigation.goBack();
+  };
+
+  const keyExtractor = React.useCallback((item, index) => index.toString(), []);
+
   return {
     topicSelected,
     setTopicSelected,
@@ -36,7 +73,16 @@ const useOnBoardingTopics = () => {
     myTopic,
     setMyTopic,
     isPreload,
-    setIspreload
+    setIspreload,
+    getCacheTopic,
+    handleSelectedLanguage,
+    next,
+    onBack,
+    keyExtractor,
+    isFetchingTopic,
+    isTopicFetchError,
+    topicCollection,
+    getTopicsData
   };
 };
 
