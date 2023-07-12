@@ -1,14 +1,15 @@
 /* eslint-disable no-underscore-dangle */
 import * as React from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, Platform} from 'react-native';
+import {Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import ArrowLeftIcon from '../../../assets/icons/images/arrow-left.svg';
+import GlobalButton from '../../../components/Button/GlobalButton';
 import SettingIcon from '../../../assets/icons/images/setting.svg';
+import ShareButtonIcon from '../../../components/ShareIcon/index';
 import ShareIcon from '../../../assets/icons/Ic_share';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
-import GlobalButton from '../../../components/Button/GlobalButton';
 
 const ProfileHeader = ({
   onShareClicked = () => {},
