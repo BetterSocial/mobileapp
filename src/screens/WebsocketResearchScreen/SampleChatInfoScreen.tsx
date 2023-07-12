@@ -189,7 +189,7 @@ const SampleChatInfoScreen = () => {
                     <Text style={styles.groupName}>{trimString(channelInfo?.name, 20)}</Text>
                   </View>
                   <Text style={styles.dateCreate}>
-                    Created {moment(channelInfo?.createdAt).format('DD MMMM YYYY')}
+                    Created {moment(channelInfo?.createdAt).format('MM/DD/YYYY')}
                   </Text>
                 </View>
               </View>

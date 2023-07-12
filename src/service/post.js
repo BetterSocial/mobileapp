@@ -17,7 +17,7 @@ export const createPost = async (data) => {
 
 export const createPollPost = async (data) => {
   try {
-    const resApi = await api.post('/activity/post-v2', data);
+    const resApi = await api.post('/activity/post-v3', data);
 
     return resApi.data;
   } catch (error) {
