@@ -44,7 +44,8 @@ const ReadMore = (props) => {
       {isFinishSetLayout ? (
         <TouchableOpacity testID="finishLayout" onPress={props.onPress}>
           <Text>
-            {textShown}{' '}
+            {textShown}
+            {''}
             {limitNumberLine < realNumberLine ? (
               <Text testID="moreText" style={styles.moreText}>
                 More...

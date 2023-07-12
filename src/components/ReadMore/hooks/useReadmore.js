@@ -12,8 +12,10 @@ const useReadmore = ({numberLine}) => {
     // eslint-disable-next-line no-plusplus
     for (let i = 0; i < numberLine; i++) {
       if (i === numberLine - 1) {
+        const availableText = nativeEvent.lines[i]?.text;
+        if (!availableText) return;
         let newText = `${nativeEvent.lines[i]?.text}`.replace(/\n/g, '');
-        if (nativeEvent.lines[i]?.width >= layoutWidth * 0.85) {
+        if (nativeEvent.lines[i]?.width >= layoutWidth * 0.8) {
           newText = newText.substring(10);
         }
         text += newText;
