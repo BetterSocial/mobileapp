@@ -1,10 +1,11 @@
 import * as React from 'react';
-import {View, TextInput, ActivityIndicator, Text, TouchableOpacity} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {colors} from '../../utils/colors';
+import {ActivityIndicator, Text, TextInput, TouchableOpacity, View} from 'react-native';
+
 import MemoSendComment from '../../assets/icon/IconSendComment';
-import {PhotoProfileProps, TextAreaChatProps} from './typings';
+import {PhotoProfileProps, TextAreaChatProps} from './typing';
 import {S} from './styles';
+import {colors} from '../../utils/colors';
 
 const PhotoProfile = ({
   anonUser,
@@ -45,8 +46,7 @@ const TextAreaChat = ({
   onChangeMessage,
   defaultValue,
   disabledButton = false,
-  disabledInput = false,
-  height
+  disabledInput = false
 }: TextAreaChatProps) => {
   const [message, setMessage] = React.useState<string>(defaultValue);
 
@@ -75,10 +75,7 @@ const TextAreaChat = ({
         multiline={true}
         onChangeText={onChangeText}
         placeholder={placeholder}
-        style={[
-          S.textArea,
-          {color: disabledInput ? colors.gray1 : colors.black, minHeight: height}
-        ]}
+        style={[S.textArea, {color: disabledInput ? colors.gray1 : colors.black}]}
         placeholderTextColor={colors.gray}
         value={message}
         editable={!disabledInput}
