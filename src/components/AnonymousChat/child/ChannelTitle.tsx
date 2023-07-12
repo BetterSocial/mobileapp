@@ -6,7 +6,7 @@ import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousCha
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 
-const ChannelTitle = ({type, name, time, message, unreadCount}) => {
+const ChannelTitle = ({type, name, time, message, unreadCount, isMe}) => {
   const styles = StyleSheet.create({
     chatContentName: {
       fontFamily: fonts.inter[700],
@@ -77,7 +77,7 @@ const ChannelTitle = ({type, name, time, message, unreadCount}) => {
         <View style={baseStyles.chatContentSection}>
           {/* Message */}
           <Text numberOfLines={1} ellipsizeMode="tail" style={styles.chatContentMessage}>
-            {message}
+            {`${isMe ? 'You: ' : ''}${message}`}
           </Text>
           {/* Unread Count */}
           {unreadCount > 0 && (

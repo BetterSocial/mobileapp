@@ -29,10 +29,13 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
   block = 11,
   type = BaseChannelItemTypeProps.ANON_PM,
   isCommentExists = false,
+  isMe = false,
+  postMaker = null,
   onPress = () => {
     console.log('onPress');
   }
 }) => {
+  // console.log(postMaker);
   return (
     <CustomPressable onPress={onPress}>
       <View style={styles.chatContainer}>
@@ -42,6 +45,7 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
           type={type}
           anonPostNotificationUserInfo={anonPostNotificationUserInfo}
           isCommentExists={isCommentExists}
+          postMaker={postMaker}
         />
 
         <View style={styles.chatContentContainer}>
@@ -50,6 +54,7 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
             time={time}
             type={type}
             message={message}
+            isMe={isMe}
             unreadCount={unreadCount}
           />
 

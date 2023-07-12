@@ -8,20 +8,22 @@ export enum BaseChannelItemTypeProps {
 }
 
 export interface BaseChannelItemProps {
-  anonPostNotificationUserInfo: any;
-  picture: string;
-  name: string;
+  isMe: boolean;
   message: string;
+  name: string;
+  picture: string;
   time: string;
   type: BaseChannelItemTypeProps;
-  postNotificationMessageText?: string;
-  postNotificationMessageUser?: string;
-  unreadCount?: number;
-  postNotificationPicture?: string;
-  upvote?: number;
-  downvote?: number;
-  comments?: number;
+  anonPostNotificationUserInfo?: any;
   block?: number;
+  comments?: number;
+  downvote?: number;
   isCommentExists?: boolean;
   onPress?: () => void;
+  postNotificationMessageText?: string;
+  postNotificationMessageUser?: string;
+  postNotificationPicture?: string;
+  unreadCount?: number;
+  upvote?: number;
+  postMaker?: any;
 }

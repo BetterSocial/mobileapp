@@ -83,6 +83,8 @@ const AnonPostNotificationChannelItem: (props: MessageChannelItemProps) => React
       anonPostNotificationUserInfo={anonymousPostNotificationUserInfo}
       isCommentExists={!!firstComment}
       unreadCount={postNotifItem?.unreadCount}
+      postMaker={postMaker?.data}
+      isMe={item?.user?.isMe}
     />
   );
 };

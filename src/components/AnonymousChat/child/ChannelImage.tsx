@@ -3,6 +3,7 @@ import FastImage from 'react-native-fast-image';
 import {StyleSheet, View} from 'react-native';
 
 import AnonymousProfile from '../../../assets/images/AnonymousProfile.png';
+import ChannelAnonymousImage from './ChannelAnonymousImage';
 import ChannelAnonymousSubImage from './ChannelAnonymousSubImage';
 import ChatIcon from '../../../assets/chat-icon.png';
 import FeedIcon from '../../../assets/images/feed-icon.png';
@@ -13,6 +14,7 @@ const ChannelImage = ({
   mainPicture,
   postNotificationPicture,
   anonPostNotificationUserInfo = null,
+  postMaker = null,
   isCommentExists = false,
   type = BaseChannelItemTypeProps.ANON_PM
 }) => {
@@ -51,6 +53,10 @@ const ChannelImage = ({
     anonPostNotificationUserInfo?.anon_user_info_emoji_code !== null &&
     anonPostNotificationUserInfo?.anon_user_info_emoji_code !== undefined;
 
+  const isPostMakerAnonymous =
+    postMaker?.anon_user_info_emoji_code !== null &&
+    postMaker?.anon_user_info_emoji_code !== undefined;
+
   const renderMyPostNotificationSubImage = () => {
     if (!isCommentExists)
       return (
@@ -67,6 +73,14 @@ const ChannelImage = ({
     return (
       <FastImage source={{uri: postNotificationPicture}} style={styles.postNotificationImage} />
     );
+  };
+
+  const renderMainImage = () => {
+    if (isPostMakerAnonymous)
+      return (
+        <ChannelAnonymousImage anonPostNotificationUserInfo={postMaker} imageStyle={styles.image} />
+      );
+    return <FastImage source={{uri: mainPicture}} style={styles.image} />;
   };
 
   // ANON PM CHANNEL IMAGE
@@ -93,7 +107,8 @@ const ChannelImage = ({
   if (type === BaseChannelItemTypeProps.ANON_POST_NOTIFICATION_I_COMMENTED)
     return (
       <View>
-        <FastImage source={{uri: mainPicture}} style={styles.image} />
+        {/* <FastImage source={{uri: mainPicture}} style={styles.image} /> */}
+        {renderMainImage()}
         <FastImage source={AnonymousProfile} style={styles.postNotificationImage} />
       </View>
     );

@@ -18,6 +18,7 @@ const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement
       time={calculateTime(item?.lastUpdatedAt)}
       onPress={onChannelPressed}
       unreadCount={item?.unreadCount}
+      isMe={item?.user?.isMe}
     />
   );
 };
