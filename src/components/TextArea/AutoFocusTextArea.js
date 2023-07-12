@@ -23,6 +23,7 @@ export default class AutoFocusTextArea extends React.Component {
   render() {
     return (
       <TextInput
+        testID="textAreaTest"
         ref={this.inputElement}
         value={this.props.value}
         onChangeText={this.props.onChangeText}
@@ -41,7 +42,7 @@ AutoFocusTextArea.propTypes = {
   value: PropTypes.string,
   placeholder: PropTypes.string,
   onChangeText: PropTypes.func,
-  style: PropTypes.object,
+  style: PropTypes.object
 };
 
 const styles = StyleSheet.create({
@@ -56,6 +57,6 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[500],
     fontSize: 14,
     color: colors.black,
-    lineHeight: 24,
-  },
+    lineHeight: 24
+  }
 });
