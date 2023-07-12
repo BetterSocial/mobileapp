@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import BaseChannelItem from './BaseChannelItem';
+import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {BaseChannelItemTypeProps} from '../../../types/component/AnonymousChat/BaseChannelItem.types';
 import {
   Comment,
@@ -15,6 +16,8 @@ const AnonPostNotificationChannelItem: (props: MessageChannelItemProps) => React
   item,
   onChannelPressed
 }) => {
+  const {anonProfileId, signedProfileId} = useProfileHook();
+
   const postNotifItem = item as PostNotificationChannelList;
   let commenterName = '';
   let postNotificationMessageText = '';
@@ -41,6 +44,10 @@ const AnonPostNotificationChannelItem: (props: MessageChannelItemProps) => React
       ...firstComment?.reaction?.data
     };
 
+    const firstCommenterId = firstComment?.reaction?.user_id;
+    const isFirstCommenterMe =
+      firstCommenterId === signedProfileId || firstCommenterId === anonProfileId;
+
     if (firstComment?.reaction?.isOwningReaction) commenterName = 'You';
     else if (anonymousCommenterName) {
       commenterName = `Anonymous ${capitalizeFirstText(anonymousCommenterName)}`;
@@ -48,6 +55,8 @@ const AnonPostNotificationChannelItem: (props: MessageChannelItemProps) => React
       commenterName = firstComment?.reaction?.user?.data?.username;
       postNotificationPicture = firstComment?.reaction?.user?.data?.profile_pic_url;
     }
+
+    if (isFirstCommenterMe) commenterName = 'You';
 
     postNotificationMessageText =
       level2FirstComment?.data?.text ||
