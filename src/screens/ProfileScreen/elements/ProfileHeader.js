@@ -1,11 +1,11 @@
 /* eslint-disable no-underscore-dangle */
 import * as React from 'react';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Platform} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import ArrowLeftIcon from '../../../assets/icons/images/arrow-left.svg';
 import SettingIcon from '../../../assets/icons/images/setting.svg';
-import ShareIcon from '../../../assets/icons/images/share.svg';
+import ShareIcon from '../../../assets/icons/Ic_share';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 import GlobalButton from '../../../components/Button/GlobalButton';
@@ -40,6 +40,13 @@ const ProfileHeader = ({
     );
   };
 
+  const handleIconSize = () => {
+    if (Platform.OS === 'ios') {
+      return 22;
+    }
+    return 20;
+  };
+
   return (
     <View style={styles.header}>
       {__renderBackArrow()}
@@ -49,7 +56,12 @@ const ProfileHeader = ({
       <View style={styles.wrapHeaderButton}>
         <View style={hideSetting ? styles.btnShareWithoutSetting : styles.btnShare}>
           <TouchableOpacity onPress={onShareClicked}>
-            <ShareIcon width={20} height={20} fill={colors.black} />
+            <ShareIcon
+              color="black"
+              width={handleIconSize()}
+              height={handleIconSize()}
+              fill={colors.black}
+            />
           </TouchableOpacity>
         </View>
 
