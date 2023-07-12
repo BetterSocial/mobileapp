@@ -11,7 +11,7 @@ const useOnBoardingTopics = () => {
   const navigation = useNavigation();
   const [topicSelected, setTopicSelected] = React.useState([]);
   const [topics, setTopics] = React.useState([]);
-  const [minTopic] = React.useState(3);
+  const [minTopic, setMinTopic] = React.useState(3);
   const [, dispatch] = React.useContext(Context).topics;
   const [myTopic, setMyTopic] = React.useState({});
   const [isPreload, setIspreload] = React.useState(true);
@@ -82,7 +82,8 @@ const useOnBoardingTopics = () => {
     isFetchingTopic,
     isTopicFetchError,
     topicCollection,
-    getTopicsData
+    getTopicsData,
+    setMinTopic
   };
 };
 

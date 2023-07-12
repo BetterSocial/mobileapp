@@ -12,13 +12,15 @@ jest.mock('react-native-permissions', () => require('react-native-permissions/mo
 const mockedPushNavigation = jest.fn();
 const mockedNavigateNavigation = jest.fn();
 const mockedResetNavigation = jest.fn();
+const mockGoBack = jest.fn();
 
 jest.mock('@react-navigation/core', () => ({
   ...jest.requireActual('@react-navigation/core'),
   useNavigation: () => ({
     navigate: mockedNavigateNavigation,
     push: mockedPushNavigation,
-    reset: mockedResetNavigation
+    reset: mockedResetNavigation,
+    goBack: mockGoBack
   })
 }));
 
