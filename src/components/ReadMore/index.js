@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {colors} from '../../utils/colors';
+import useReadmore from './hooks/useReadmore';
 
 const styles = StyleSheet.create({
   moreText: {
@@ -56,7 +57,7 @@ const ReadMore = (props) => {
   return (
     <View onLayout={handleLayoutWidth} style={props.containerStyle}>
       {isFinishSetLayout ? (
-        <TouchableOpacity onPress={props.onPress}>
+        <TouchableOpacity testID="finishLayout" onPress={props.onPress}>
           <Text>
             {textShown}{' '}
             {props.numberLine < realNumberLine ? (
@@ -65,9 +66,15 @@ const ReadMore = (props) => {
           </Text>
         </TouchableOpacity>
       ) : null}
-      {!isFinishSetLayout ? <Text onTextLayout={handleLayoutText}>{props.text} </Text> : null}
+      {!isFinishSetLayout ? (
+        <Text testID="notFinishLayout" onTextLayout={handleLayoutText}>
+          {props.text}{' '}
+        </Text>
+      ) : null}
     </View>
   );
 };
 
-export default ReadMore;
+export default React.memo(ReadMore, (prevProps, nextProps) => {
+  return prevProps === nextProps;
+});

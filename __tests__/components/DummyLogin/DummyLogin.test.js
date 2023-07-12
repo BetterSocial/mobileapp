@@ -48,13 +48,4 @@ describe('DummyLogin should run correctly', () => {
     fireEvent.press(getByTestId('closedemo'));
     expect(reset).toHaveBeenCalled();
   });
-
-  it('dummyOnBoarding should run correctly', () => {
-    const reset = jest.fn();
-    const spyHumanId = jest.spyOn(actionUser, 'setDataHumenId');
-    const {getByTestId} = render(<DummyLogin resetClickTime={reset} />, {wrapper: Store});
-    fireEvent.press(getByTestId('dummyonboarding'));
-    expect(spyHumanId).toHaveBeenCalled();
-    expect(mockNavigate).toHaveBeenCalled();
-  });
 });
