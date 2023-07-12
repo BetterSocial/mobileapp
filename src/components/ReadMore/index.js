@@ -31,7 +31,9 @@ const ReadMore = (props) => {
     // eslint-disable-next-line no-plusplus
     for (let i = 0; i < props.numberLine; i++) {
       if (i === props.numberLine - 1) {
-        let newText = `${nativeEvent.lines[i]?.text}`.replace(/\n/g, '');
+        const availableText = nativeEvent.lines[i]?.text;
+        if (!availableText) return;
+        let newText = `${availableText}`.replace(/\n/g, '');
         if (nativeEvent.lines[i]?.width >= layoutWidth * 0.85) {
           newText = newText.substring(10);
         }
@@ -56,8 +58,7 @@ const ReadMore = (props) => {
       {isFinishSetLayout ? (
         <TouchableOpacity onPress={props.onPress}>
           <Text>
-            {textShown}
-            {''}
+            {textShown}{' '}
             {props.numberLine < realNumberLine ? (
               <Text style={styles.moreText}>More...</Text>
             ) : null}{' '}
