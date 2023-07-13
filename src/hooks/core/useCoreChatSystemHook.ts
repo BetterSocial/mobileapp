@@ -84,6 +84,21 @@ const useCoreChatSystemHook = () => {
     refresh('channelMember');
   };
 
+  const helperAnonymousChannelPromiseBuilder = async (channel) => {
+    const chatName = await getAnonymousChatName(lastJsonMessage?.channel?.members);
+    return new Promise((resolve, reject) => {
+      try {
+        console.log(JSON.stringify(channel, null, 2));
+        channel.targetName = chatName?.name;
+        channel.targetImage = chatName?.image;
+        const channelList = ChannelList.fromAnonymousChannelAPI(channel);
+        return resolve(channelList.saveIfLatest(localDb));
+      } catch (e) {
+        return reject(e);
+      }
+    });
+  };
+
   const getAllAnonymousChannels = async () => {
     if (!localDb) return;
     let anonymousChannel = [];
@@ -216,8 +231,7 @@ const useCoreChatSystemHook = () => {
   }, [lastJsonMessage, localDb]);
 
   React.useEffect(() => {
-    // getAllAnonymousChannels().catch((e) => console.log(e));
-    // getAllAnonymousPostNotifications().catch((e) => console.log(e));
+    getAllAnonymousPostNotifications().catch((e) => console.log(e));
   }, [localDb]);
 };
 

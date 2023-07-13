@@ -178,6 +178,11 @@ const getChatName = (usernames, me) => {
     return acc;
   }, []);
   if (userArraysWithoutMe.length > 1) {
+    if (userArraysWithoutMe.length > 6) {
+      const removeArray = userArraysWithoutMe.slice(0, 6);
+
+      return `${removeArray.join(', ')} & others`;
+    }
     return userArraysWithoutMe.join(', ');
   }
   if (userArraysWithoutMe.length === 1) {

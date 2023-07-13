@@ -1,9 +1,10 @@
 import FastImage from 'react-native-fast-image';
 import React from 'react';
 import {Avatar} from 'stream-chat-react-native-core/src/components/Avatar/Avatar';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 
 import FeedIcon from '../../../../assets/images/feed-icon.png';
+import dimen from '../../../../utils/dimen';
 
 const styles = StyleSheet.create({
   iconStyle: {
@@ -26,6 +27,16 @@ const styles = StyleSheet.create({
     flex: 1,
     borderWidth: 1,
     borderColor: 'white'
+  },
+  avatarAnonymous: {
+    height: 48,
+    width: 48,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 24
+  },
+  emojiStyle: {
+    fontSize: dimen.size.FEED_HEADER_ANONYMOUS_IMAGE_RADIUS
   }
 });
 
@@ -37,7 +48,7 @@ const AvatarPostNotif = ({item}) => {
     return item.postMaker.data.profile_pic_url;
   };
 
-  return (
+  const handleAvatar = () => (
     <Avatar
       childrenType={
         <View style={styles.typeContainer}>
@@ -53,6 +64,19 @@ const AvatarPostNotif = ({item}) => {
       image={handleImage()}
     />
   );
+
+  if (item.isAnonym) {
+    if (!item.postMaker?.data?.emoji_code) {
+      return <>{handleAvatar()}</>;
+    }
+    return (
+      <View style={[styles.avatarAnonymous, {backgroundColor: item.postMaker?.data?.color_code}]}>
+        <Text style={styles.emojiStyle}>{item.postMaker?.data?.emoji_code}</Text>
+      </View>
+    );
+  }
+
+  return <>{handleAvatar()}</>;
 };
 
 export default React.memo(

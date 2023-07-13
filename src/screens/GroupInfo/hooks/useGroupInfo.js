@@ -383,7 +383,11 @@ const useGroupInfo = () => {
     checkUserIsBlockHandle,
     handlePressContact,
     handleOpenProfile,
-    onReportGroup
+    onReportGroup,
+    setSelectedUser,
+    openChatMessage,
+    generateSystemChat,
+    setNewParticipan
   };
 };
 
