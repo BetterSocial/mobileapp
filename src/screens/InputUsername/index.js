@@ -1,6 +1,5 @@
 import * as React from 'react';
-import _ from 'lodash';
-import Toast from 'react-native-simple-toast';
+
 import {
   Animated,
   Image,
@@ -14,23 +13,25 @@ import {
   View
 } from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import Toast from 'react-native-simple-toast';
+import _ from 'lodash';
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
+import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
+import {setImage, setUsername} from '../../context/actions/users';
 
-import BottomSheetChooseImage from './elements/BottomSheetChooseImage';
-import MemoOnboardingChangeProfilePlusIcon from '../../assets/icon/OnboardingChangeProfilePlusIcon';
-import StringConstant from '../../utils/string/StringConstant';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
+import BottomSheetChooseImage from './elements/BottomSheetChooseImage';
 import {Button} from '../../components/Button';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {Input} from '../../components/Input';
+import MemoOnboardingChangeProfilePlusIcon from '../../assets/icon/OnboardingChangeProfilePlusIcon';
 import {ProgressBar} from '../../components/ProgressBar';
+import StringConstant from '../../utils/string/StringConstant';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
 import {setCapitalFirstLetter} from '../../utils/Utils';
-import {setImage, setUsername} from '../../context/actions/users';
 import {verifyUsername} from '../../service/users';
 
 const MAXIMUM_USERNAME_LENGTH = 19;
