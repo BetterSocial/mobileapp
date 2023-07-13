@@ -111,9 +111,9 @@ const PollOptionsMultipleChoice = ({
           )}
           <Text style={styles.pollOptionItemText(isPollDisabled(), isMax)}>{item.option}</Text>
           {isPollDisabled() && (
-            <Text
-              testID="optionPercentage"
-              style={styles.pollOptionItemPercentage}>{`${optionPercentage}%`}</Text>
+            <Text testID="optionPercentage" style={styles.pollOptionItemPercentage}>{`${
+              Math.round(optionPercentage * 10) / 10
+            }%`}</Text>
           )}
         </View>
       </View>

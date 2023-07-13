@@ -15,7 +15,7 @@ const useReadmore = ({numberLine}) => {
         const availableText = nativeEvent.lines[i]?.text;
         if (!availableText) return;
         let newText = `${nativeEvent.lines[i]?.text}`.replace(/\n/g, '');
-        if (nativeEvent.lines[i]?.width >= layoutWidth * 0.85) {
+        if (nativeEvent.lines[i]?.width >= layoutWidth * 0.8) {
           newText = newText.substring(10);
         }
         text += newText;
