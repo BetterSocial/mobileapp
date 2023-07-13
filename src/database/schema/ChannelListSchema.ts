@@ -3,8 +3,8 @@ import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import BaseDbSchema from './BaseDbSchema';
 import ChannelListMemberSchema from './ChannelListMemberSchema';
 import UserSchema from './UserSchema';
+import {AnonymousChannelData} from '../../../types/repo/AnonymousMessageRepo/AnonymousChannelsData';
 import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
-import {ChannelData} from '../../../types/repo/AnonymousMessageRepo/ChannelData';
 
 class ChannelList implements BaseDbSchema {
   id: string;
@@ -280,16 +280,16 @@ class ChannelList implements BaseDbSchema {
     });
   }
 
-  static fromAnonymousChannelAPI(data: ChannelData): ChannelList {
+  static fromAnonymousChannelAPI(data: AnonymousChannelData): ChannelList {
     return new ChannelList({
       id: data?.id,
-      channelPicture: '',
-      name: data?.name,
-      description: '',
-      unreadCount: 1,
+      channelPicture: data?.targetImage,
+      name: data?.targetName,
+      description: data?.firstMessage?.text || data?.firstMessage?.message,
+      unreadCount: 0,
       channelType: 'ANON_PM',
       lastUpdatedAt: data?.last_message_at,
-      lastUpdatedBy: '',
+      lastUpdatedBy: data?.firstMessage?.user?.id,
       createdAt: data?.created_at,
       rawJson: data,
       user: null,
