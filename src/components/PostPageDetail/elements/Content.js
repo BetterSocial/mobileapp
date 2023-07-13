@@ -17,10 +17,12 @@ import {smartRender} from '../../../utils/Utils';
 import Card from '../../Card/Card';
 import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
 import usePostDetail from '../hooks/usePostDetail';
+import Swiper from '../../Swiper';
 
 const {width: screenWidth} = Dimensions.get('window');
 const FONT_SIZE_TEXT = 16;
 const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPostDetail}) => {
+  console.log(images_url, 'nongol');
   const navigation = useNavigation();
   const cekImage = () => images_url && images_url !== '';
   const {hashtagAtComponent} = useContentFeed({navigation});
@@ -146,9 +148,10 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
           </View>
         )}
         {images_url?.length > 0 && (
-          <View>
-            <ImageLayouter images={images_url || []} onimageclick={onImageClickedByIndex} />
-          </View>
+          <Swiper items={images_url || []} />
+          // <View>
+          //   <ImageLayouter images={images_url || []} onimageclick={onImageClickedByIndex} />
+          // </View>
         )}
         <View style={styles.topicContainer}>
           <TopicsChip
