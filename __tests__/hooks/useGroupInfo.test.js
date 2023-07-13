@@ -178,7 +178,6 @@ describe('useGroupInfo should run correctly', () => {
     ]
   }));
 
-  const mockQueryMemberError = jest.fn().mockRejectedValue('error');
   const mockRemoveMember = jest.fn().mockResolvedValue({
     members: [{user_id: '1234', name: 'elon', user: {name: 'elon'}}]
   });
@@ -681,7 +680,6 @@ describe('useGroupInfo should run correctly', () => {
   });
 
   it('onReportGroup should run correctly', async () => {
-    const spyLinking = jest.spyOn(Linking, 'openURL');
     const {result} = renderHook(() => useGroupInfo(), {wrapper});
     await result.current.onReportGroup();
   });
