@@ -836,11 +836,6 @@ const CreatePost = () => {
             labelStyle={styles.listText}
             onPress={() => sheetPrivacyRef.current.open()}
           />
-          {/* <Gap style={styles.height(16)} />
-        <Text style={styles.desc}>
-          Your post targets{' '}
-          <Text style={styles.userTarget}>~ {audienceEstimations}</Text> users.
-        </Text> */}
           <Gap style={styles.height(25)} />
           <Button disabled={isButtonDisabled()} onPress={postV2}>
             Post
