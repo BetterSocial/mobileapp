@@ -98,6 +98,7 @@ const useCoreChatSystemHook = () => {
     try {
       const allPromises = [];
       anonymousChannel.forEach((channel) => {
+        console.log(JSON.stringify(channel, null, 2));
         const channelList = ChannelList.fromAnonymousChannelAPI(channel);
         allPromises.push(channelList.saveIfLatest(localDb).catch((e) => console.log(e)));
       });
@@ -216,8 +217,7 @@ const useCoreChatSystemHook = () => {
   }, [lastJsonMessage, localDb]);
 
   React.useEffect(() => {
-    // getAllAnonymousChannels().catch((e) => console.log(e));
-    // getAllAnonymousPostNotifications().catch((e) => console.log(e));
+    getAllAnonymousPostNotifications().catch((e) => console.log(e));
   }, [localDb]);
 };
 
