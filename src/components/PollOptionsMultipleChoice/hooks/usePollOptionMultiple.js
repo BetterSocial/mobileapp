@@ -2,31 +2,32 @@ export const usePollOptionMultiple = ({
   item,
   mypoll,
   index,
+  // total,
   selectedindex,
   isexpired,
   isalreadypolling = false,
   maxpolls = [],
   onselected = () => {},
-  total = 0
+  totalVotingUser = 0
 }) => {
   const counter = item?.counter || 0;
-  const optionPercentage = total === 0 ? 0 : ((counter / total) * 100).toFixed(0);
+  const optionPercentage =
+    totalVotingUser === 0 ? 0 : ((counter / totalVotingUser) * 100).toFixed(0);
 
   const isPollDisabled = () => isalreadypolling || isexpired;
 
   const selected = selectedindex.includes(index);
 
   const isMyPoll = () =>
-    mypoll?.reduce((acc, current) => {
+    mypoll.reduce((acc, current) => {
       const isCurrentItemMyPoll = item?.polling_option_id === current?.polling_option_id;
       return acc || isCurrentItemMyPoll;
     }, false);
 
   const onOptionsClicked = () => {
     if (isPollDisabled()) {
-      return;
+      return null;
     }
-
     if (selected) {
       const idx = selectedindex.indexOf(index);
       const newSelectedIndex = [...selectedindex];
