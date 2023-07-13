@@ -142,7 +142,7 @@ const Item = ({
     <View key={item.id} style={styles.cardContainer}>
       <Header
         onHeaderOptionClicked={onHeaderOptionClicked}
-        headerStyle={{paddingHorizontal: 9}}
+        headerStyle={{paddingLeft: 9, paddingRight: 9}}
         props={item}
         height={getHeightHeader()}
         showAnonymousOption={true}
