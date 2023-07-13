@@ -1,12 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import * as React from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  Dimensions,
-  TouchableOpacity,
-} from 'react-native';
+import {View, StyleSheet, Text, Dimensions, TouchableOpacity} from 'react-native';
 
 import PropTypes from 'prop-types';
 import {fonts} from '../../utils/fonts';
@@ -31,52 +25,52 @@ const Footer = ({
   item,
   totalVote = 0,
   totalComment = 0,
-  statusVote = 'none',
+  statusVote = 'none'
 }) => (
-    <View style={[styles.rowSpaceBeetwen, styles.container]}>
-      <View style={[styles.rowSpaceBeetwen, styles.width(0.25)]}>
-        <TouchableOpacity testID='onShare' onPress={onPressShare} style={styles.widthFlex}>
-          <MemoIcShare height={20} width={20} />
-        </TouchableOpacity>
-        <TouchableOpacity testID='onComment' onPress={onPressComment} style={styles.widthFlex}>
-          <MemoIcComment height={20} width={20} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={onPressComment} style={styles.widthFlex}>
-          <Text style={styles.textCount(0)}>{totalComment}</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={[styles.rowSpaceBeetwen, styles.width(0.25)]}>
-        <TouchableOpacity testID='onBlock' onPress={() => onPressBlock(item)}>
-          <MemoIcBlockInactive height={18} width={18} />
-        </TouchableOpacity>
-        <TouchableOpacity testID='onDownvote' onPress={() => onPressDownVote(item)}>
-          {statusVote === 'downvote' ? (
-            <View testID='downvoteOn' >
-              <MemoIcArrowDownVoteOn width={18} height={18} />
-            </View>
-          ) : (
-            <View testID='downvoteOff' >
-              <MemoIcArrowDownvoteOff width={18} height={18} />
-            </View>
-          )}
-        </TouchableOpacity>
-
-        <Text style={styles.textCount(totalVote)}>{totalVote}</Text>
-
-        <TouchableOpacity testID='onUpvote' onPress={() => onPressUpvote(item)}>
-          {statusVote === 'upvote' ? (
-            <View testID='upvoteOn'>
-              <MemoIcArrowUpvoteOn  width={18} height={18} />
-            </View>
-          ) : (
-            <View testID='upvoteOff'>
-              <MemoIcArrowUpvoteOff  width={18} height={18} />
-            </View>
-          )}
-        </TouchableOpacity>
-      </View>
+  <View style={[styles.rowSpaceBeetwen, styles.container]}>
+    <View style={[styles.rowSpaceBeetwen, styles.width(0.25)]}>
+      <TouchableOpacity testID="onShare" onPress={onPressShare} style={styles.widthFlex}>
+        <MemoIcShare height={20} width={20} />
+      </TouchableOpacity>
+      <TouchableOpacity testID="onComment" onPress={onPressComment} style={styles.widthFlex}>
+        <MemoIcComment height={20} width={20} />
+      </TouchableOpacity>
+      <TouchableOpacity onPress={onPressComment} style={styles.widthFlex}>
+        <Text style={styles.textCount(0)}>{totalComment}</Text>
+      </TouchableOpacity>
     </View>
-  );
+    <View style={[styles.rowSpaceBeetwen, styles.width(0.25)]}>
+      <TouchableOpacity testID="onBlock" onPress={() => onPressBlock(item)}>
+        <MemoIcBlockInactive height={18} width={18} />
+      </TouchableOpacity>
+      <TouchableOpacity testID="onDownvote" onPress={() => onPressDownVote(item)}>
+        {statusVote === 'downvote' ? (
+          <View testID="downvoteOn">
+            <MemoIcArrowDownVoteOn width={18} height={18} />
+          </View>
+        ) : (
+          <View testID="downvoteOff">
+            <MemoIcArrowDownvoteOff width={18} height={18} />
+          </View>
+        )}
+      </TouchableOpacity>
+
+      <Text style={styles.textCount(totalVote)}>{totalVote}</Text>
+
+      <TouchableOpacity testID="onUpvote" onPress={() => onPressUpvote(item)}>
+        {statusVote === 'upvote' ? (
+          <View testID="upvoteOn">
+            <MemoIcArrowUpvoteOn width={18} height={18} />
+          </View>
+        ) : (
+          <View testID="upvoteOff">
+            <MemoIcArrowUpvoteOff width={18} height={18} />
+          </View>
+        )}
+      </TouchableOpacity>
+    </View>
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -85,27 +79,37 @@ const styles = StyleSheet.create({
     paddingBottom: 16.12,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
-    borderBottomColor: colors.gray1,
+    borderBottomColor: colors.gray1
   },
   rowSpaceBeetwen: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   textCount: (totalVote) => ({
     fontFamily: fonts.inter[400],
     fontSize: 18,
     lineHeight: 24,
     // eslint-disable-next-line no-nested-ternary
-    color: totalVote > 0 ? '#00ADB5' : totalVote < 0 ? '#FF2E63' : '#C4C4C4',
+    color: handleTextCountColor(totalVote)
   }),
   width: (count) => ({
-    width: screenWidth * count,
+    width: screenWidth * count
   }),
   widthFlex: {
-    flex: 1,
-  },
+    flex: 1
+  }
 });
+
+const handleTextCountColor = (totalVote) => {
+  if (totalVote > 0) {
+    return '#00ADB5';
+  }
+  if (totalVote < 0) {
+    return '#FF2E63';
+  }
+  return '#C4C4C4';
+};
 
 Footer.propTypes = {
   onPressShare: PropTypes.func,
@@ -117,7 +121,7 @@ Footer.propTypes = {
   totalVote: PropTypes.number,
   totalComment: PropTypes.number,
   statusVote: PropTypes.oneOf(['none', 'upvote', 'downvote']),
-  isSelf: PropTypes.bool,
+  isSelf: PropTypes.bool
 };
 
 export default Footer;

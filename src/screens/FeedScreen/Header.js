@@ -209,7 +209,7 @@ const _renderProfileNormal = ({
             <View style={{}}>
               <Image
                 source={{
-                  uri: profile_pic_url ?? DEFAULT_PROFILE_PIC_PATH
+                  uri: profile_pic_url || DEFAULT_PROFILE_PIC_PATH
                 }}
                 style={styles.avatarImage}
               />
