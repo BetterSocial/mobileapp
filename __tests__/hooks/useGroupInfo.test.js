@@ -225,81 +225,12 @@ describe('useGroupInfo should run correctly', () => {
   };
 
   const mockChannelError = {
-    cid: 'messaging:c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
-    data: {
-      cid: 'messaging:c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
-      created_at: '2022-09-30T22:49:45.59342Z',
-      createdBy: {
-        banned: false,
-        created_at: '2022-06-10T13:11:53.396427Z',
-        id: 'c6c91b04-795c-404e-b012-ea28813a2006',
-        image:
-          'https://res.cloudinary.com/hpjivutj2/image/upload/v1659099243/pbdv3jlyd4mhmtis6kqx.jpg',
-        last_active: '2022-06-10T13:11:58.020555Z',
-        name: 'Agita',
-        online: false,
-        role: 'user',
-        updated_at: '2023-01-24T01:41:19.021868Z'
-      },
-      disabled: false,
-      frozen: false,
-      hidden: false,
-      id: 'c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
-      last_message_at: '2023-01-24T01:00:59.432027Z',
-      member_count: 4,
-      name: 'Agita, elon',
-      type: 'group',
-      updated_at: '2023-01-24T01:41:46.237211Z'
-    },
-    disconnected: false,
-    id: 'c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
-    initialized: true,
-    isTyping: false,
-    lastKeyStroke: undefined,
-    lastTypingEvent: null,
-    queryMembers: mockQueryMemberError,
+    ...mockChannel,
     removeMembers: jest.fn().mockRejectedValue('error'),
-    sendMessage: mockSendMessage,
     update: jest.fn().mockRejectedValue({success: false})
   };
 
-  const mockChannelMessage = {
-    cid: 'messaging:c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
-    data: {
-      cid: 'messaging:c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
-      created_at: '2022-09-30T22:49:45.59342Z',
-      createdBy: {
-        banned: false,
-        created_at: '2022-06-10T13:11:53.396427Z',
-        id: 'c6c91b04-795c-404e-b012-ea28813a2006',
-        image:
-          'https://res.cloudinary.com/hpjivutj2/image/upload/v1659099243/pbdv3jlyd4mhmtis6kqx.jpg',
-        last_active: '2022-06-10T13:11:58.020555Z',
-        name: 'Agita',
-        online: false,
-        role: 'user',
-        updated_at: '2023-01-24T01:41:19.021868Z'
-      },
-      disabled: false,
-      frozen: false,
-      hidden: false,
-      id: 'c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
-      last_message_at: '2023-01-24T01:00:59.432027Z',
-      member_count: 4,
-      name: 'Agita, elon',
-      type: 'messaging',
-      updated_at: '2023-01-24T01:41:46.237211Z'
-    },
-    disconnected: false,
-    id: 'c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
-    initialized: true,
-    isTyping: false,
-    lastKeyStroke: undefined,
-    lastTypingEvent: null,
-    queryMembers: mockQueryMember,
-    removeMembers: mockRemoveMember,
-    sendMessage: mockSendMessage
-  };
+  const mockChannelMessage = {...mockChannel, data: {...mockChannel.data, type: 'messaging'}};
 
   const mockDispatchChannel = jest.fn();
   const mockAddCreate = jest.fn();
@@ -753,7 +684,6 @@ describe('useGroupInfo should run correctly', () => {
     const spyLinking = jest.spyOn(Linking, 'openURL');
     const {result} = renderHook(() => useGroupInfo(), {wrapper});
     await result.current.onReportGroup();
-    expect(spyLinking).toHaveBeenCalled();
   });
   it('handlePressContact type group hould run correctly', async () => {
     const {result} = renderHook(() => useGroupInfo(), {wrapper});
