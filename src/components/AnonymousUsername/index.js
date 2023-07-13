@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import {StyleSheet, Text} from 'react-native';
 
 import {POST_VERSION} from '../../utils/constants';
@@ -30,7 +31,11 @@ const AnonymousUsername = (props) => {
   const {version, anonUserInfo} = props;
 
   if (version >= POST_VERSION) {
-    return <Text style={styles.feedUsername}>{`Anonymous ${anonUserInfo.emojiName}`}</Text>;
+    return (
+      <Text
+        testID="newVersion"
+        style={styles.feedUsername}>{`Anonymous ${anonUserInfo.emojiName}`}</Text>
+    );
   }
 
   return <Text style={styles.feedUsername}>Anonymous</Text>;

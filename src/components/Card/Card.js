@@ -103,7 +103,7 @@ Card.propTypes = {
 
 const styles = StyleSheet.create({
   link: {
-    color: '#2f80ed',
+    color: COLORS.blue,
     textDecorationLine: 'underline',
     marginStart: 8,
     fontSize: 12
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     lineHeight: 18
   },
   openLinkText: {
-    color: '#2f80ed',
+    color: COLORS.blue,
     textDecorationLine: 'underline',
     marginStart: 8,
     fontSize: 12

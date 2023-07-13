@@ -1,14 +1,6 @@
-import * as React from "react"
-import Svg, {
-  Circle,
-  ClipPath,
-  Defs,
-  Ellipse,
-  G,
-  Mask,
-  Path,
-  Rect,
-} from "react-native-svg"
+import * as React from 'react';
+import Svg, {Circle, ClipPath, Defs, Ellipse, G, Mask, Path, Rect} from 'react-native-svg';
+import {COLORS} from '../../utils/theme';
 /* SVGR has dropped some elements not supported by react-native-svg: filter */
 
 const Onboarding3 = (props) => (
@@ -18,8 +10,7 @@ const Onboarding3 = (props) => (
     fill="none"
     viewBox="0 0 375 340"
     xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
+    {...props}>
     <Path fill="#54E4B9" d="M0 0h375v340H0z" />
     <Path
       fillRule="evenodd"
@@ -201,14 +192,13 @@ const Onboarding3 = (props) => (
       <Mask
         id="c"
         style={{
-          maskType: "alpha",
+          maskType: 'alpha'
         }}
         maskUnits="userSpaceOnUse"
         x={104}
         y={100}
         width={89}
-        height={106}
-      >
+        height={106}>
         <Path
           d="M147.57 100.016c-24.625.548-44.106 21.938-43.559 47.606.547 25.668 21.232 58.027 45.748 57.368 24.515-.658 43.777-33.894 43.23-59.562-.548-25.668-20.86-46.07-45.419-45.412Z"
           fill="#DD58C4"
@@ -365,11 +355,7 @@ const Onboarding3 = (props) => (
         strokeMiterlimit={10}
       />
       <Path d="M135.255 175.896h-.901v2.463h.901v-2.463Z" fill="#561800" />
-      <Path
-        d="M129.724 140.933s8.368-2.507 13.702 0"
-        stroke="#DD3812"
-        strokeWidth={3.299}
-      />
+      <Path d="M129.724 140.933s8.368-2.507 13.702 0" stroke="#DD3812" strokeWidth={3.299} />
       <Path
         d="m125.072 132.949 1.286 2.574a2.208 2.208 0 0 0 1.65 1.198l2.87.418a2.204 2.204 0 0 1 1.747 1.493 2.2 2.2 0 0 1-.537 2.235l-2.068 2.023a2.207 2.207 0 0 0-.638 1.947l.495 2.859a2.195 2.195 0 0 1-2.003 2.547 2.196 2.196 0 0 1-1.175-.238l-2.573-1.286a2.197 2.197 0 0 0-2.034 0l-2.563 1.352a2.198 2.198 0 0 1-3.189-2.309l.495-2.859a2.203 2.203 0 0 0-.627-1.947l-2.078-2.023a2.2 2.2 0 0 1 1.21-3.728l2.87-.418a2.196 2.196 0 0 0 1.649-1.198l1.287-2.607a2.197 2.197 0 0 1 3.108-.907c.348.21.631.513.818.874Z"
         fill="#DD3812"
@@ -455,14 +441,8 @@ const Onboarding3 = (props) => (
       />
     </G>
     <G filter="url(#d)">
-      <Path
-        fill="#9BC1F3"
-        d="m226.229 187.297 7.645-7.645 19.81 19.809-7.646 7.645z"
-      />
-      <Path
-        fill="#75ACF5"
-        d="m226.229 187.297 1.974-1.974 19.808 19.81-1.973 1.973z"
-      />
+      <Path fill="#9BC1F3" d="m226.229 187.297 7.645-7.645 19.81 19.809-7.646 7.645z" />
+      <Path fill="#75ACF5" d="m226.229 187.297 1.974-1.974 19.808 19.81-1.973 1.973z" />
       <Rect
         x={232.137}
         y={196.68}
@@ -475,14 +455,13 @@ const Onboarding3 = (props) => (
       <Mask
         id="e"
         style={{
-          maskType: "alpha",
+          maskType: 'alpha'
         }}
         maskUnits="userSpaceOnUse"
         x={234}
         y={187}
         width={48}
-        height={48}
-      >
+        height={48}>
         <Rect
           x={232.136}
           y={196.68}
@@ -510,7 +489,7 @@ const Onboarding3 = (props) => (
         r={44.969}
         fill="#DAF6FF"
         fillOpacity={0.86}
-        stroke="#2F80ED"
+        stroke={COLORS.blue}
         strokeWidth={4.915}
       />
       <G clipPath="url(#f)" fill="#6A6A6A">
@@ -528,21 +507,13 @@ const Onboarding3 = (props) => (
     </G>
     <Defs>
       <ClipPath id="a">
-        <Path
-          fill="#fff"
-          transform="translate(0 7.875)"
-          d="M0 0h375v328.125H0z"
-        />
+        <Path fill="#fff" transform="translate(0 7.875)" d="M0 0h375v328.125H0z" />
       </ClipPath>
       <ClipPath id="f">
-        <Path
-          fill="#fff"
-          transform="translate(171.184 116.744)"
-          d="M0 0h58.484v58.484H0z"
-        />
+        <Path fill="#fff" transform="translate(171.184 116.744)" d="M0 0h58.484v58.484H0z" />
       </ClipPath>
     </Defs>
   </Svg>
-)
+);
 
-export default Onboarding3
+export default Onboarding3;

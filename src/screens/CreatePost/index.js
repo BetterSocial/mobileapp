@@ -933,7 +933,7 @@ const styles = StyleSheet.create({
     height
   }),
   reminderContainer: {
-    backgroundColor: '#2F80ED',
+    backgroundColor: '#2C67BC',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 7,

@@ -32,6 +32,7 @@ import {requestCameraPermission, requestExternalStoragePermission} from '../../u
 import {setCapitalFirstLetter} from '../../utils/Utils';
 import {setImage, setUsername} from '../../context/actions/users';
 import {verifyUsername} from '../../service/users';
+import {COLORS} from '../../utils/theme';
 
 const MAXIMUM_USERNAME_LENGTH = 19;
 const MINIMUM_USERNAME_LENGTH = 3;
@@ -299,7 +300,7 @@ const ChooseUsername = () => {
             {/* <Animated.View style={[styles.constainerInfo, {opacity: fadeInfo}]}>
             <View style={styles.parentIcon} >
             <View style={styles.containerIcon}>
-              <IconFontAwesome5 name="exclamation" size={12} color="#2F80ED" />
+              <IconFontAwesome5 name="exclamation" size={12} color={COLORS.blue} />
             </View>
             </View>
               <View style={styles.parentInfo} >
