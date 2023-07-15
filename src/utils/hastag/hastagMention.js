@@ -1,10 +1,9 @@
 import * as React from 'react';
-import reactStringReplace from 'react-string-replace';
-import {StyleSheet, Text} from 'react-native';
-import {generateRandomId} from 'stream-chat-react-native-core';
 
-import {fonts} from '../fonts';
-import {COLORS} from '../theme';
+import {Text} from 'react-native';
+import {generateRandomId} from 'stream-chat-react-native-core';
+import reactStringReplace from 'react-string-replace';
+import UtilStyle from '../style';
 
 const handleHastagMention = (
   text = '',
@@ -25,21 +24,21 @@ const handleHastagMention = (
     if (isHashtagInTopic || isHashtagUnique) {
       topicOccurence?.push(match?.substring(1));
       return (
-        <Text key={generateRandomId()} style={styles.mention}>
+        <Text key={generateRandomId()} style={UtilStyle.mention}>
           {`${match.toLowerCase()}`}
         </Text>
       );
     }
 
     return (
-      <Text key={generateRandomId()} style={styles.mention}>
+      <Text key={generateRandomId()} style={UtilStyle.mention}>
         {match}
       </Text>
     );
   });
 
   const reactStringMention = reactStringReplace(reactStringHashtags, mentionRegex, (match) => (
-    <Text key={generateRandomId()} style={styles.mention}>
+    <Text key={generateRandomId()} style={UtilStyle.mention}>
       {match}
     </Text>
   ));
@@ -48,13 +47,5 @@ const handleHastagMention = (
   }
   return reactStringMention;
 };
-
-const styles = StyleSheet.create({
-  mention: {
-    color: COLORS.blue,
-    fontFamily: fonts.inter[500],
-    fontWeight: '500'
-  }
-});
 
 export default handleHastagMention;
