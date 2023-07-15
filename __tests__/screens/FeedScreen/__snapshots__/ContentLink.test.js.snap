@@ -621,7 +621,7 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
                     }
                   }
                 >
-                  Jan 6, 0001
+                  Jan 6, 0002
                 </Text>
                 <View
                   style={
