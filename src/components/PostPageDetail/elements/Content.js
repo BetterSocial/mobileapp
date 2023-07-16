@@ -145,7 +145,7 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
             })}
           </View>
         )}
-        {images_url.length > 0 && (
+        {images_url?.length > 0 && (
           <View>
             <ImageLayouter images={images_url || []} onimageclick={onImageClickedByIndex} />
           </View>

@@ -70,6 +70,7 @@ import {KarmaScore} from './elements/KarmaScore';
 import BioAndDMSetting from './elements/BioAndDMSetting';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import LinkAndSocialMedia from './elements/LinkAndSocialMedia';
+import {ButtonNewPost} from '../../components/Button';
 
 const {height, width} = Dimensions.get('screen');
 
@@ -708,6 +709,7 @@ const ProfileScreen = ({route}) => {
             onClose={onHeaderOptionClosed}
             onDeleteClicked={onDeletePost}
           />
+          <ButtonNewPost isShowArrow={isShowButton} />
         </SafeAreaProvider>
       ) : null}
     </>
