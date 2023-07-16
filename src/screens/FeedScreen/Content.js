@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {Dimensions, Platform, Pressable, StyleSheet, Text, View} from 'react-native';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {useNavigation, useRoute} from '@react-navigation/native';
+import {AutoSizeText, ResizeTextMode} from 'react-native-auto-size-text';
 
 import ContentPoll from './ContentPoll';
 import ImageLayouter from './elements/ImageLayouter';
@@ -14,6 +15,7 @@ import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
 import usePostDetail from '../../components/PostPageDetail/hooks/usePostDetail';
+import ReadMore from '../../components/ReadMore';
 
 const {width: screenWidth, height} = Dimensions.get('window');
 
@@ -65,14 +67,50 @@ const Content = ({
       substringNumber = substringWithPollTopic;
     }
 
+    const amountCharacter = (lines = []) => {
+      const a = lines.map((line) => line.text.length);
+      console.log(a, 'aman');
+    };
+
+    // const hanldeFontSize
+
     return (
-      <View testID="postTypePoll" style={styles.containerText}>
+      <View
+        // onLayout={({nativeEvent}) =>
+        //   console.log('sasa', {height: nativeEvent.layout.height, width: nativeEvent.layout.width})
+        // }
+        testID="postTypePoll"
+        style={styles.containerText}>
+        {/* <ReadMore
+          textStyle={{
+            fontSize: calculationText(message).fontSize,
+            lineHeight: calculationText(message).lineHeight
+          }}
+          text={message}
+          numberLine={3}
+        /> */}
         <Text
+          // onTextLayout={({nativeEvent}) => {
+          //   amountCharacter(nativeEvent.lines);
+          //   console.log(nativeEvent.lines[0].height, 'sisi');
+          // }}
           style={[
             styles.textMedia,
             {
-              fontSize: calculationText(message).fontSize,
-              lineHeight: calculationText(message).lineHeight
+              fontSize: calculationText(
+                message,
+                null,
+                null,
+                normalizeFontSize(40),
+                normalizeFontSize(80)
+              ).fontSize,
+              lineHeight: calculationText(
+                message,
+                null,
+                null,
+                normalizeFontSize(40),
+                normalizeFontSize(80)
+              ).lineHeight
             }
           ]}>
           {getCaptionWithTopicStyle(
@@ -122,7 +160,7 @@ const Content = ({
         </View>
       )}
 
-      <TopicsChip topics={topics} fontSize={normalizeFontSize(14)} text={message} />
+      {/* <TopicsChip topics={topics} fontSize={normalizeFontSize(14)} text={message} /> */}
     </Pressable>
   );
 };
@@ -202,6 +240,7 @@ export const styles = StyleSheet.create({
   contentFeed: {
     flex: 1,
     marginTop: 0
+    // backgroundColor: 'red'
   },
   item: {
     width: screenWidth - 20,
@@ -233,7 +272,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 10
   },
   containerText: {
-    height: 'auto',
+    height: '100%',
     flexDirection: 'row'
   }
 });

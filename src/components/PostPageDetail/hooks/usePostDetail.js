@@ -46,17 +46,23 @@ const usePostDetail = () => {
     return newComment;
   };
 
-  const calculationText = (message, post_type, image) => {
+  const calculationText = (
+    message,
+    post_type,
+    image,
+    shortTextSize = shortTextFontSize,
+    shortTextLineH = shortTextLineHeight
+  ) => {
     if (!message) message = '';
-    let fontSize = shortTextFontSize;
+    let fontSize = shortTextSize;
     let lineHeight = shortTextLineHeight;
     let containerHeight = 0;
     if (message?.length > 270) {
       fontSize = longTextFontSize;
       lineHeight = longTextLineHeight;
     } else {
-      fontSize = shortTextFontSize;
-      lineHeight = shortTextLineHeight;
+      fontSize = shortTextSize;
+      lineHeight = shortTextLineH;
     }
     const numLines = 0.5;
 

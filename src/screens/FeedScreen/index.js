@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Animated, InteractionManager, StatusBar, StyleSheet} from 'react-native';
+import {Animated, FlatList, InteractionManager, StatusBar, StyleSheet} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 
@@ -239,6 +239,14 @@ const FeedScreen = (props) => {
         animatedValue={offset}
         onContainerClicked={handleSearchBarClicked}
       />
+      {/* <FlatList
+        onEndReachedThreshold={0.9}
+        refreshing={loading}
+        data={feeds}
+        renderItem={renderItem}
+        onEndReach={onEndReach}
+        onEndReached={onEndReach}
+      /> */}
       <TiktokScroll
         ref={listRef}
         contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT}
