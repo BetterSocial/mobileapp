@@ -75,8 +75,11 @@ const TextAreaChat = ({
         multiline={true}
         onChangeText={onChangeText}
         placeholder={placeholder}
-        style={[S.textArea, {color: disabledInput ? colors.gray1 : colors.black}]}
-        placeholderTextColor={colors.gray}
+        style={[
+          S.textArea,
+          {color: disabledInput ? colors.gray1 : colors.black, minHeight: height}
+        ]}
+        placeholderTextColor={'#C4C4C4'}
         value={message}
         editable={!disabledInput}
       />
@@ -87,7 +90,7 @@ const TextAreaChat = ({
           S.sendIconContainer,
           {backgroundColor: message && !disabledButton ? colors.bondi_blue : colors.gray1}
         ]}>
-        <MemoSendComment fill={colors.gray1} style={{alignSelf: 'center'}} />
+        <MemoSendComment />
       </TouchableOpacity>
     </View>
   );

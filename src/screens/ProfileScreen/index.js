@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   Dimensions,
   LogBox,
+  Pressable,
   StatusBar,
   StyleSheet,
   Text,
@@ -17,6 +18,7 @@ import {showMessage} from 'react-native-flash-message';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {useNavigation} from '@react-navigation/core';
 
+import Tooltip from 'react-native-walkthrough-tooltip';
 import AnonymousTab from './elements/AnonymousTab';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BlockComponent from '../../components/BlockComponent';
@@ -65,12 +67,12 @@ import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {ButtonNewPost} from '../../components/Button';
 import WarningCircleOutline from '../../../assets/icons/warning-circle-outline.svg';
 import {KarmaScore} from './elements/KarmaScore';
 import BioAndDMSetting from './elements/BioAndDMSetting';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import LinkAndSocialMedia from './elements/LinkAndSocialMedia';
+import {ButtonNewPost} from '../../components/Button';
 
 const {height, width} = Dimensions.get('screen');
 
@@ -87,6 +89,9 @@ const Header = (props) => {
     setTabIndexToSigned,
     setTabIndexToAnonymous
   } = props;
+
+  const [karmaTooltip, setKarmaTooltip] = React.useState(false);
+
   return (
     <View
       onLayout={(event) => {
@@ -109,7 +114,27 @@ const Header = (props) => {
             />
             <View style={{flexDirection: 'row'}}>
               <KarmaScore score={86} />
-              <WarningCircleOutline height={15} width={15} style={{marginLeft: 5}} />
+              <Tooltip
+                contentStyle={{borderRadius: 8, background: '#FFF'}}
+                arrowStyle={{marginLeft: 2}}
+                showChildInTooltip={false}
+                isVisible={karmaTooltip}
+                useInteractionManager={true}
+                topAdjustment={-20}
+                content={
+                  <View style={{padding: 5}}>
+                    <Text style={styles.tooltipText}>
+                      Your Karma is based on upvotes, downvotes and blocks. The higher your Karma,
+                      the more visibility for your posts.
+                    </Text>
+                  </View>
+                }
+                placement="bottom"
+                onClose={() => setKarmaTooltip(false)}>
+                <Pressable onPress={() => setKarmaTooltip(true)}>
+                  <WarningCircleOutline height={15} width={15} style={{marginLeft: 5}} />
+                </Pressable>
+              </Tooltip>
             </View>
           </View>
         </View>
@@ -807,6 +832,13 @@ const styles = StyleSheet.create({
   },
   bioText: {
     paddingLeft: 0
+  },
+  tooltipText: {
+    color: '#828282',
+    fontFamily: 'Inter',
+    fontSize: 12,
+    fontStyle: 'normal',
+    fontWeight: '400'
   }
 });
 
