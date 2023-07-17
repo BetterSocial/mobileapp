@@ -49,7 +49,7 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
       setIsAllowFollowingSendDM((current) => !current);
     } else {
       SimpleToast.show(
-        'To protect your connections` anonymity, you need to follow at least 20 users to enable this option',
+        "To protect your connections' anonymity, you need to follow at least 20 users to enable this option",
         SimpleToast.LONG
       );
     }
