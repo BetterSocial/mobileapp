@@ -55,6 +55,10 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
     }
   };
 
+  const handleClickTextArea = () => {
+    SimpleToast.show('You cannot send yourself messages.', SimpleToast.SHORT);
+  };
+
   const ref = React.useRef(true);
 
   React.useEffect(() => {
@@ -80,16 +84,20 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
         )}
       </Pressable>
 
-      <TextAreaChat
-        isAnonimity={false}
-        avatarUrl={avatarUrl}
-        loadingAnonUser={false}
-        onChangeMessage={() => {}}
-        onSend={() => {}}
-        height={55}
-        disabledInput
-        placeholder="Other users will be able to reply to your prompt and direct message you."
-      />
+      <Pressable onPress={handleClickTextArea}>
+        <View pointerEvents="none">
+          <TextAreaChat
+            isAnonimity={false}
+            avatarUrl={avatarUrl}
+            loadingAnonUser={false}
+            onChangeMessage={() => {}}
+            onSend={() => {}}
+            height={55}
+            disabledInput
+            placeholder="Other users will be able to reply to your prompt and direct message you."
+          />
+        </View>
+      </Pressable>
 
       <TouchableOpacity onPress={toggleSwitchAnon} style={styles.toggleSwitchAnon}>
         <ToggleSwitch
