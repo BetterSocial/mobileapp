@@ -226,7 +226,7 @@ workflows:
       - release-android:
           context: mobile_dev
           env: dev
-          build-type: dev
+          build-type: debug
           requires:
             - node
       - release-ios:
