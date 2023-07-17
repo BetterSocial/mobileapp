@@ -71,12 +71,11 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
     <View style={styles.container}>
       <Pressable onPress={() => changeBio()} style={{paddingVertical: 12}}>
         {isBioEmpty ? (
-          <Text style={{color: colors.white}}>Add Bio</Text>
+          <Text style={styles.editPromptLabel}>Edit Prompt</Text>
         ) : (
           <Text style={{color: colors.white, fontSize: 14, fontWeight: '600'}}>
             {bio}
-            {'. '}
-            <Text style={styles.editPromptLabel}>Edit Prompt</Text>
+            {bio && bio !== ' ' ? '.' : ''} <Text style={styles.editPromptLabel}>Edit Prompt</Text>
           </Text>
         )}
       </Pressable>
