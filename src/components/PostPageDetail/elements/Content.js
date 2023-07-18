@@ -119,7 +119,7 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
                 item={item}
                 pollexpiredat={item.polls_expired_at}
                 multiplechoice={item.multiplechoice}
-                isalreadypolling={item.isalreadypolling}
+                isAlreadyPolling={item.isalreadypolling}
                 onnewpollfetched={onnewpollfetched}
                 voteCount={item.voteCount}
                 topics={item?.topics}
@@ -145,7 +145,7 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
             })}
           </View>
         )}
-        {images_url.length > 0 && (
+        {images_url?.length > 0 && (
           <View>
             <ImageLayouter images={images_url || []} onimageclick={onImageClickedByIndex} />
           </View>

@@ -8,7 +8,7 @@ import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
 import {convertString} from '../../../utils/string/StringUtils';
 import ButtonFollow from './ButtonFollow';
 import ButtonFollowing from './ButtonFollowing';
-import ShareIcon from '../../../assets/icons/images/share.svg';
+import ShareIcon from '../../../assets/icons/Ic_share';
 
 const Navigation = ({domain, onPress, isFollow = false, onShareCommunity}) => {
   const navigation = useNavigation();
@@ -29,7 +29,7 @@ const Navigation = ({domain, onPress, isFollow = false, onShareCommunity}) => {
       </View>
       <View style={styles.containerAction}>
         <TouchableOpacity onPress={onShareCommunity} style={styles.shareIconStyle}>
-          <ShareIcon width={20} height={20} />
+          <ShareIcon color="black" width={20} height={20} />
         </TouchableOpacity>
         {isFollow ? (
           <ButtonFollowing handleSetUnFollow={onPress} />

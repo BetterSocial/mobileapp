@@ -111,7 +111,10 @@ const useFeed = () => {
       const totalLevel2Comment = feedDetail?.latest_reactions?.comment?.map(
         (child) => child?.children_counts?.comment || 0
       ) || [0];
-      const total2 = totalLevel2Comment?.reduce((a, b) => a + b);
+      let total2 = 0;
+      if (totalLevel2Comment?.length > 0) {
+        total2 = totalLevel2Comment?.reduce((a, b) => a + b);
+      }
       const level3Comment = [];
       feedDetail?.latest_reactions?.comment?.forEach((feed) => {
         const mapCount = feed?.latest_children?.comment?.map(
@@ -123,7 +126,7 @@ const useFeed = () => {
       });
       let total3 = 0;
       if (level3Comment.length > 0) {
-        total3 = level3Comment.reduce((a, b) => a + b);
+        total3 = level3Comment?.reduce((a, b) => a + b);
       }
       return parentComment + total2 + total3;
     }
