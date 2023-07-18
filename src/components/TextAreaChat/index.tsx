@@ -49,6 +49,10 @@ const TextAreaChat = ({
 }: TextAreaChatProps) => {
   const [message, setMessage] = React.useState<string>(defaultValue);
 
+  const isButtonActive = message && !disabledButton;
+
+  const iconSendBackgroundColor = isAnonimity ? colors.bondi_blue : colors.blue1;
+
   const onChangeText = (text: string) => {
     setMessage(text);
   };
@@ -82,11 +86,11 @@ const TextAreaChat = ({
       <TouchableOpacity
         onPress={onSend}
         disabled={!message || disabledButton}
-        style={[
-          S.sendIconContainer,
-          {backgroundColor: message && !disabledButton ? colors.bondi_blue : colors.gray1}
-        ]}>
-        <MemoSendComment fill={colors.gray1} style={{alignSelf: 'center'}} />
+        style={[S.sendIconContainer]}>
+        <MemoSendComment
+          fillBackground={isButtonActive ? iconSendBackgroundColor : colors.gray1}
+          fillIcon={colors.white}
+        />
       </TouchableOpacity>
     </View>
   );
