@@ -27,7 +27,6 @@ import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
 import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
-import {trimString} from '../../utils/string/TrimString';
 
 const GroupInfo = () => {
   const navigation = useNavigation();
@@ -42,7 +41,6 @@ const GroupInfo = () => {
     isUploadingImage,
     createChat,
     getMembersList,
-    chatName,
     handleOnNameChange,
     handleOnImageClicked,
     newParticipant,
@@ -55,6 +53,7 @@ const GroupInfo = () => {
     profile,
     channelState,
     handlePressContact,
+    setUsername,
     onReportGroup
   } = useGroupInfo();
 
@@ -68,6 +67,12 @@ const GroupInfo = () => {
 
     return unsubscribe;
   }, [navigation]);
+
+  React.useEffect(() => {
+    if (channel?.data?.name) {
+      setUsername(channel.data.name);
+    }
+  }, [JSON.stringify(channel.data)]);
 
   const showImageProfile = () => {
     if (profileChannel || channel?.data?.image) {
@@ -156,7 +161,7 @@ const GroupInfo = () => {
               <View style={styles.row}>
                 <View style={styles.column}>
                   <View style={styles.containerGroupName}>
-                    <Text style={styles.groupName}>{trimString(chatName, 20)}</Text>
+                    <Text style={styles.groupName}>{memberName()}</Text>
                   </View>
                   <Text style={styles.dateCreate}>
                     Created {moment(createChat).format('DD/MM/YY')}
