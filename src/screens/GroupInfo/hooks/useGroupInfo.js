@@ -1,8 +1,9 @@
 import React from 'react';
 import {useNavigation} from '@react-navigation/core';
 import SimpleToast from 'react-native-simple-toast';
+import {openComposer} from 'react-native-email-link';
 import {launchImageLibrary} from 'react-native-image-picker';
-import {Alert, Linking} from 'react-native';
+import {Alert} from 'react-native';
 import {generateRandomId} from 'stream-chat-react-native-core';
 import {Context} from '../../../context';
 import {uploadFile} from '../../../service/file';
@@ -291,10 +292,7 @@ const useGroupInfo = () => {
     }
   };
   const onLeaveGroup = () => {
-    Alert.alert('Leave group', 'Are you sure you want to leave group ?', [
-      {text: 'Yes', onPress: leaveGroup},
-      {text: 'No'}
-    ]);
+    Alert.alert('', 'Exit this group?', [{text: 'Cancel'}, {text: 'Exit', onPress: leaveGroup}]);
   };
 
   const leaveGroup = async () => {
@@ -323,10 +321,13 @@ const useGroupInfo = () => {
   };
 
   const onReportGroup = () => {
-    const emailTo = `mailto:contact@bettersocial.org?subject=Reporting a group&body=Reporting group ${
-      channelState.channel?.data?.name || ''
-    }.Please type reason for reporting this group below.Thank you!`;
-    Linking.openURL(emailTo);
+    openComposer({
+      to: 'contact@bettersocial.org',
+      subject: 'Reporting a group',
+      body: `Reporting group ${
+        channelState.channel?.data?.name || ''
+      }. Please type reason for reporting this group below. Thank you!`
+    });
   };
 
   // eslint-disable-next-line consistent-return
@@ -395,7 +396,11 @@ const useGroupInfo = () => {
     handlePressContact,
     handleOpenProfile,
     onReportGroup,
-    setUsername
+    setUsername,
+    setSelectedUser,
+    openChatMessage,
+    generateSystemChat,
+    setNewParticipan
   };
 };
 
