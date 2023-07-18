@@ -2,7 +2,6 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import {cleanup, fireEvent, render} from '@testing-library/react-native';
 
-import * as actionUser from '../../../src/context/actions/users';
 import DummyLogin from '../../../src/components/DevDummyLogin';
 import Store, {Context} from '../../../src/context/Store';
 import {usersState} from '../../../src/context/reducers/userReducer';
