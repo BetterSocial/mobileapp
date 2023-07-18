@@ -19,7 +19,7 @@ const ContentPoll = ({
   item,
   multiplechoice = false,
   onnewpollfetched,
-  isalreadypolling,
+  isAlreadyPolling: isAlreadyPollingProps,
   pollexpiredat,
   index = -1,
   voteCount = 0,
@@ -34,8 +34,9 @@ const ContentPoll = ({
     setMultipleChoiceSelected,
     showSetResultsButton,
     onSeeResultsClicked,
-    modifiedPoll
-  } = useContentPoll({isalreadypolling, polls});
+    modifiedPoll,
+    count
+  } = useContentPoll({isAlreadyPolling: isAlreadyPollingProps, polls, voteCount});
   const initialSetup = () => {
     if (multiplechoice) onSeeResultsClicked(item, multiplechoice, onnewpollfetched, index);
   };
@@ -86,7 +87,7 @@ const ContentPoll = ({
         </View>
       </View>
       <View style={styles.totalVotesContainer}>
-        <Text style={styles.totalpolltext}>{`${voteCount} votes `}</Text>
+        <Text style={styles.totalpolltext}>{`${count} votes `}</Text>
         <View
           style={{
             width: 4,

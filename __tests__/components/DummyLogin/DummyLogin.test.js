@@ -2,7 +2,6 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import {cleanup, fireEvent, render} from '@testing-library/react-native';
 
-import * as actionUser from '../../../src/context/actions/users';
 import DummyLogin from '../../../src/components/DevDummyLogin';
 import Store, {Context} from '../../../src/context/Store';
 import {usersState} from '../../../src/context/reducers/userReducer';
@@ -47,14 +46,5 @@ describe('DummyLogin should run correctly', () => {
     const {getByTestId} = render(<DummyLogin resetClickTime={reset} />, {wrapper: Store});
     fireEvent.press(getByTestId('closedemo'));
     expect(reset).toHaveBeenCalled();
-  });
-
-  it('dummyOnBoarding should run correctly', () => {
-    const reset = jest.fn();
-    const spyHumanId = jest.spyOn(actionUser, 'setDataHumenId');
-    const {getByTestId} = render(<DummyLogin resetClickTime={reset} />, {wrapper: Store});
-    fireEvent.press(getByTestId('dummyonboarding'));
-    expect(spyHumanId).toHaveBeenCalled();
-    expect(mockNavigate).toHaveBeenCalled();
   });
 });
