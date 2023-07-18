@@ -59,12 +59,17 @@ describe('SringUtils should be run correctly', () => {
     const username3 = 'elon musk, steve jobs';
     const username4 = 'agita, elon';
     const username5 = '';
+    const usernamemuch =
+      'agita, elon musk, steve jobs, bill gates, sundar pincay, bradpit, leonardo, rafael leao';
     expect(getChatName(null, null)).toEqual('No Name');
     expect(getChatName(username)).toEqual('agita');
     expect(getChatName(username2, 'agita')).toEqual('elon musk, steve jobs');
     expect(getChatName(username3)).toEqual('elon musk, steve jobs');
     expect(getChatName(username4, 'agita')).toEqual('elon');
     expect(getChatName(username5, 'agita')).toEqual('No Name');
+    expect(getChatName(usernamemuch, 'agita')).toEqual(
+      'elon musk, steve jobs, bill gates, sundar pincay, bradpit, leonardo & others'
+    );
   });
 
   it('getGroupMemberCount should run correctly', () => {

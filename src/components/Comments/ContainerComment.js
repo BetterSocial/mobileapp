@@ -57,7 +57,7 @@ const ContainerComment = ({
   const onDeleteCommentClicked = async (item) => {
     const response = await deleteComment(item?.id);
     if (response?.success) {
-      deleteCommentFromContext(feedId, item?.id, selectedCommentLevelForDelete, updateParentPost);
+      deleteCommentFromContext(feedId, item?.id, selectedCommentLevelForDelete);
       refreshComment();
       SimpleToast.show('Comment has been deleted successfully');
     }

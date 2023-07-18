@@ -30,7 +30,7 @@ const CreatePostInput = ({
   const [positionTopicSearch, setPositionTopicSearch] = React.useState(0);
   const [lastTopicInCursor, setLastTopicInCursor] = React.useState('');
   const [shouldUpdateHashtag, setShouldUpdateHashtag] = React.useState(0);
-
+  const inputRef = React.useRef();
   const {formattedText, handleStateHashtag, handleStateMention, setHashtags, updateHashtag} =
     useHastagMention('');
 
@@ -41,6 +41,14 @@ const CreatePostInput = ({
   React.useEffect(() => {
     if (shouldUpdateHashtag > 0) updateHashtag(message, topics, setTopics, positionEndCursor);
   }, [shouldUpdateHashtag]);
+
+  React.useEffect(() => {
+    if (inputRef?.current) {
+      setTimeout(() => {
+        inputRef.current.focus();
+      }, 500);
+    }
+  }, []);
 
   const cancelTokenRef = React.useRef(axios.CancelToken.source());
 
@@ -184,6 +192,7 @@ const CreatePostInput = ({
         onSelectionChange={(e) => {
           setPositionEndCursor(e.nativeEvent.selection.end);
         }}
+        ref={inputRef}
         onKeyPress={isTopicInDeletedText}
         onChangeText={handlePostTextChanged}
         // value={message}
