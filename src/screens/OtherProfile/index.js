@@ -1016,11 +1016,16 @@ const styles = StyleSheet.create({
   rightHeaderContentContainer: {display: 'flex', flexDirection: 'row'},
   headerImageContainer: {display: 'flex', flexDirection: 'row'},
   bioAndSendChatContainer: (isAnonimity) => ({
-    backgroundColor: isAnonimity ? colors.bondi_blue : colors.blue,
+    backgroundColor: isAnonimity ? colors.bondi_blue : colors.blue1,
     borderRadius: 15,
     paddingHorizontal: 10,
     paddingTop: 10
   }),
-  bioText: (isAnonimity) => ({color: isAnonimity ? colors.black : colors.white})
+  bioText: (isAnonimity) => ({
+    color: isAnonimity ? colors.greenDark : colors.white,
+    fontSize: 14,
+    fontWeight: '600',
+    lineHeight: 22
+  })
 });
 export default withInteractionsManaged(OtherProfile);
