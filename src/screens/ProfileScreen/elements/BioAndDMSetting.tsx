@@ -1,0 +1,149 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+import * as React from 'react';
+import {Text, View, StyleSheet, TouchableOpacity, Pressable} from 'react-native';
+import ToggleSwitch from 'toggle-switch-react-native';
+import SimpleToast from 'react-native-simple-toast';
+import TextAreaChat from '../../../components/TextAreaChat';
+import {colors} from '../../../utils/colors';
+import {profileSettingsDMpermission} from '../../../service/profile';
+
+type BioAndDMSettingProps = {
+  bio: string;
+  avatarUrl: string;
+  changeBio: () => void;
+  following: number;
+  allowAnonDm: boolean;
+  onlyReceivedDmFromUserFollowing: boolean;
+};
+
+const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
+  bio,
+  changeBio,
+  avatarUrl,
+  following,
+  allowAnonDm,
+  onlyReceivedDmFromUserFollowing
+}) => {
+  const [isAnonymity, setIsAnonymity] = React.useState(allowAnonDm);
+  const [isAllowFollowingSendDM, setIsAllowFollowingSendDM] = React.useState(
+    onlyReceivedDmFromUserFollowing
+  );
+
+  const updateProfileSetting = async () => {
+    try {
+      await profileSettingsDMpermission(isAnonymity, isAllowFollowingSendDM);
+    } catch (error) {
+      SimpleToast.show('Update settings failed, please try again.', SimpleToast.SHORT);
+      setIsAnonymity(allowAnonDm);
+      setIsAllowFollowingSendDM(onlyReceivedDmFromUserFollowing);
+    }
+  };
+
+  const toggleSwitchAnon = () => {
+    setIsAnonymity((current) => !current);
+    setIsAllowFollowingSendDM(false);
+  };
+
+  const toggleSwitchAnonAllowFollowing = () => {
+    if (following >= 20) {
+      setIsAllowFollowingSendDM((current) => !current);
+    } else {
+      SimpleToast.show(
+        "To protect your connections' anonymity, you need to follow at least 20 users to enable this option",
+        SimpleToast.LONG
+      );
+    }
+  };
+
+  const handleClickTextArea = () => {
+    SimpleToast.show('You cannot send yourself messages.', SimpleToast.SHORT);
+  };
+
+  const ref = React.useRef(true);
+
+  React.useEffect(() => {
+    if (ref.current) {
+      ref.current = false;
+    } else {
+      updateProfileSetting();
+    }
+  }, [isAnonymity, isAllowFollowingSendDM]);
+
+  const isBioEmpty = bio === null || bio === undefined;
+
+  return (
+    <View style={styles.container}>
+      <Pressable onPress={() => changeBio()} style={{paddingVertical: 12}}>
+        {isBioEmpty ? (
+          <Text style={styles.editPromptLabel}>Edit Prompt</Text>
+        ) : (
+          <Text style={{color: colors.white, fontSize: 14, fontWeight: '600'}}>
+            {bio}
+            {bio && bio !== ' ' ? '.' : ''} <Text style={styles.editPromptLabel}>Edit Prompt</Text>
+          </Text>
+        )}
+      </Pressable>
+
+      <Pressable onPress={handleClickTextArea}>
+        <View pointerEvents="none">
+          <TextAreaChat
+            isAnonimity={false}
+            avatarUrl={avatarUrl}
+            loadingAnonUser={false}
+            onChangeMessage={() => {}}
+            onSend={() => {}}
+            height={55}
+            disabledInput
+            placeholder="Other users will be able to reply to your prompt and direct message you."
+          />
+        </View>
+      </Pressable>
+
+      <TouchableOpacity onPress={toggleSwitchAnon} style={styles.toggleSwitchAnon}>
+        <ToggleSwitch
+          isOn={isAnonymity}
+          onToggle={toggleSwitchAnon}
+          onColor={'#9DEDF1'}
+          circleColor={isAnonymity ? '#00ADB5' : colors.white}
+          label={'Allow anonymous messages? '}
+          offColor="#F5F5F5"
+          size="small"
+          labelStyle={styles.toggleLabel}
+        />
+      </TouchableOpacity>
+
+      {isAnonymity && (
+        <TouchableOpacity
+          onPress={toggleSwitchAnonAllowFollowing}
+          style={styles.toggleSwitchAnonFollowing}>
+          <ToggleSwitch
+            isOn={isAllowFollowingSendDM}
+            onToggle={toggleSwitchAnonAllowFollowing}
+            onColor={'#9DEDF1'}
+            label={'Only allow anon DMs from users you follow?'}
+            offColor="#F5F5F5"
+            circleColor={isAllowFollowingSendDM ? '#00ADB5' : colors.white}
+            size="small"
+            labelStyle={styles.toggleLabelFollowingDM}
+          />
+        </TouchableOpacity>
+      )}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.darkBlue,
+    borderRadius: 15,
+    paddingHorizontal: 12,
+    marginTop: 20
+  },
+  editPromptLabel: {color: colors.blueSea10, textDecorationLine: 'underline'},
+  toggleLabel: {color: colors.white, marginRight: 2, fontSize: 12},
+  toggleLabelFollowingDM: {color: colors.white, marginRight: 5, fontSize: 12},
+  toggleSwitchAnon: {display: 'flex', alignSelf: 'flex-end', paddingVertical: 12},
+  toggleSwitchAnonFollowing: {display: 'flex', alignSelf: 'flex-end', paddingBottom: 12}
+});
+
+export default BioAndDMSetting;
