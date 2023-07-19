@@ -13,6 +13,7 @@ import {POST_TYPE_POLL} from '../../utils/constants';
 import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
+import usePostDetail from '../../components/PostPageDetail/hooks/usePostDetail';
 
 const {width: screenWidth, height} = Dimensions.get('window');
 
@@ -33,7 +34,7 @@ const Content = ({
   const substringNoImageTopic = devHeight / 1.6 - 40 * (height / screenWidth);
   const substringWithPoll = devHeight / 3 - 40 * (height / screenWidth);
   const substringWithPollTopic = devHeight / 5 - 40 * (height / screenWidth);
-
+  const {calculationText} = usePostDetail();
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
       title: 'Photo',
@@ -66,7 +67,14 @@ const Content = ({
 
     return (
       <View testID="postTypePoll" style={styles.containerText}>
-        <Text style={styles.textMedia}>
+        <Text
+          style={[
+            styles.textMedia,
+            {
+              fontSize: calculationText(message).fontSize,
+              lineHeight: calculationText(message).lineHeight
+            }
+          ]}>
           {getCaptionWithTopicStyle(
             route?.params?.id,
             message,
@@ -101,7 +109,7 @@ const Content = ({
             item={item}
             pollexpiredat={item.polls_expired_at}
             multiplechoice={item.multiplechoice}
-            isalreadypolling={item.isalreadypolling}
+            isAlreadyPolling={item.isalreadypolling}
             onnewpollfetched={onNewPollFetched}
             voteCount={item.voteCount}
             topics={item?.topics}

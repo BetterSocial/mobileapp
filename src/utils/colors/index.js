@@ -26,5 +26,6 @@ export const colors = {
   elm: '#22878B',
   blockColor: '#FF2E63',
   darkBlue: '#2C67BC',
-  blueSea10: '#55C2FF'
+  blueSea10: '#55C2FF',
+  greenDark: '#004346'
 };

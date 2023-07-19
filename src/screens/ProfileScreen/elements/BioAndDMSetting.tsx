@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import * as React from 'react';
-import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {Text, View, StyleSheet, TouchableOpacity, Pressable} from 'react-native';
 import ToggleSwitch from 'toggle-switch-react-native';
 import SimpleToast from 'react-native-simple-toast';
 import TextAreaChat from '../../../components/TextAreaChat';
 import {colors} from '../../../utils/colors';
-import {trimString} from '../../../utils/string/TrimString/index';
 import {profileSettingsDMpermission} from '../../../service/profile';
 
 type BioAndDMSettingProps = {
@@ -50,10 +49,14 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
       setIsAllowFollowingSendDM((current) => !current);
     } else {
       SimpleToast.show(
-        'To protect your connections` anonymity, you need to follow at least 20 users to enable this option',
+        "To protect your connections' anonymity, you need to follow at least 20 users to enable this option",
         SimpleToast.LONG
       );
     }
+  };
+
+  const handleClickTextArea = () => {
+    SimpleToast.show('You cannot send yourself messages.', SimpleToast.SHORT);
   };
 
   const ref = React.useRef(true);
@@ -70,31 +73,31 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
 
   return (
     <View style={styles.container}>
-      <View style={{paddingVertical: 10}}>
+      <Pressable onPress={() => changeBio()} style={{paddingVertical: 12}}>
         {isBioEmpty ? (
-          <Text style={{color: colors.white}}>Add Bio</Text>
+          <Text style={styles.editPromptLabel}>Edit Prompt</Text>
         ) : (
-          <Text style={{color: colors.white, fontSize: 14}}>
-            {trimString(bio, 121)}
-            {'. '}
-            {bio.length > 121 ? <Text style={{color: colors.white}}>see more</Text> : null}
-            <Text onPress={() => changeBio()} style={styles.editPromptLabel}>
-              Edit Prompt
-            </Text>
+          <Text style={{color: colors.white, fontSize: 14, fontWeight: '600'}}>
+            {bio}
+            {bio && bio !== ' ' ? '.' : ''} <Text style={styles.editPromptLabel}>Edit Prompt</Text>
           </Text>
         )}
-      </View>
+      </Pressable>
 
-      <TextAreaChat
-        isAnonimity={false}
-        avatarUrl={avatarUrl}
-        loadingAnonUser={false}
-        onChangeMessage={() => {}}
-        onSend={() => {}}
-        height={55}
-        disabledInput
-        placeholder="Other users will be able to reply to your prompt and direct message you."
-      />
+      <Pressable onPress={handleClickTextArea}>
+        <View pointerEvents="none">
+          <TextAreaChat
+            isAnonimity={false}
+            avatarUrl={avatarUrl}
+            loadingAnonUser={false}
+            onChangeMessage={() => {}}
+            onSend={() => {}}
+            height={55}
+            disabledInput
+            placeholder="Other users will be able to reply to your prompt and direct message you."
+          />
+        </View>
+      </Pressable>
 
       <TouchableOpacity onPress={toggleSwitchAnon} style={styles.toggleSwitchAnon}>
         <ToggleSwitch
@@ -133,14 +136,14 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.darkBlue,
     borderRadius: 15,
-    paddingHorizontal: 10,
-    marginTop: 18
+    paddingHorizontal: 12,
+    marginTop: 20
   },
   editPromptLabel: {color: colors.blueSea10, textDecorationLine: 'underline'},
   toggleLabel: {color: colors.white, marginRight: 2, fontSize: 12},
   toggleLabelFollowingDM: {color: colors.white, marginRight: 5, fontSize: 12},
-  toggleSwitchAnon: {display: 'flex', alignSelf: 'flex-end', paddingVertical: 8},
-  toggleSwitchAnonFollowing: {display: 'flex', alignSelf: 'flex-end', paddingBottom: 8}
+  toggleSwitchAnon: {display: 'flex', alignSelf: 'flex-end', paddingVertical: 12},
+  toggleSwitchAnonFollowing: {display: 'flex', alignSelf: 'flex-end', paddingBottom: 12}
 });
 
 export default BioAndDMSetting;

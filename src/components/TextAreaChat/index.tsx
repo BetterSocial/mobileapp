@@ -50,6 +50,10 @@ const TextAreaChat = ({
 }: TextAreaChatProps) => {
   const [message, setMessage] = React.useState<string>(defaultValue);
 
+  const isButtonActive = message && !disabledButton;
+
+  const iconSendBackgroundColor = isAnonimity ? colors.bondi_blue : colors.blue1;
+
   const onChangeText = (text: string) => {
     setMessage(text);
   };
@@ -75,19 +79,22 @@ const TextAreaChat = ({
         multiline={true}
         onChangeText={onChangeText}
         placeholder={placeholder}
-        style={[S.textArea, {color: disabledInput ? colors.gray1 : colors.black}]}
-        placeholderTextColor={colors.gray}
+        style={[
+          S.textArea,
+          {color: disabledInput ? colors.gray1 : colors.black, minHeight: height}
+        ]}
+        placeholderTextColor={'#C4C4C4'}
         value={message}
         editable={!disabledInput}
       />
       <TouchableOpacity
         onPress={onSend}
         disabled={!message || disabledButton}
-        style={[
-          S.sendIconContainer,
-          {backgroundColor: message && !disabledButton ? colors.bondi_blue : colors.gray1}
-        ]}>
-        <MemoSendComment fill={colors.gray1} style={{alignSelf: 'center'}} />
+        style={[S.sendIconContainer]}>
+        <MemoSendComment
+          fillBackground={isButtonActive ? iconSendBackgroundColor : colors.gray1}
+          fillIcon={colors.white}
+        />
       </TouchableOpacity>
     </View>
   );

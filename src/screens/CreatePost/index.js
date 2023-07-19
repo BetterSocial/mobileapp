@@ -3,10 +3,7 @@
 /* eslint-disable no-shadow */
 /* eslint-disable camelcase */
 import * as React from 'react';
-import PSL from 'psl';
-import Toast from 'react-native-simple-toast';
-import {Image} from 'react-native-compressor';
-import _, {debounce} from 'lodash';
+
 import {
   Alert,
   Animated,
@@ -19,23 +16,46 @@ import {
   Text,
   View
 } from 'react-native';
+import {Button, ButtonAddMedia} from '../../components/Button';
+import {
+  DEFAULT_TOPIC_PIC_PATH,
+  MAX_POLLING_ALLOWED,
+  MIN_POLLING_ALLOWED
+} from '../../utils/constants';
+import {ShowingAudience, createPost} from '../../service/post';
+import _, {debounce} from 'lodash';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
+import {
+  getDurationId,
+  getLocationId,
+  getPrivacyId,
+  setDurationId,
+  setLocationId,
+  setPrivacyId
+} from '../../utils/setting';
+import {getUrl, isContainUrl} from '../../utils/Utils';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {openSettings} from 'react-native-permissions';
-import {showMessage} from 'react-native-flash-message';
+import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
 import {useNavigation, useRoute} from '@react-navigation/core';
-import ImagePicker from 'react-native-image-crop-picker';
 
+import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
+import { COLORS } from '../../utils/theme';
 import ContentLink from './elements/ContentLink';
+import {Context} from '../../context';
 import CreatePollContainer from './elements/CreatePollContainer';
 import CreatePostInput from '../../components/CreatePostInput';
 import Gap from '../../components/Gap';
 import Header from '../../components/Header';
+import {Image} from 'react-native-compressor';
+import ImagePicker from 'react-native-image-crop-picker';
 import ListItem from '../../components/MenuPostItem';
 import Loading from '../Loading';
 import Location from '../../assets/icons/Ic_location';
 import MemoIc_hastag from '../../assets/icons/Ic_hastag';
 import MemoIc_user_group from '../../assets/icons/Ic_user_group';
 import MemoIc_world from '../../assets/icons/Ic_world';
+import {PROFILE_CACHE} from '../../utils/cache/constant';
+import PSL from 'psl';
 import ProfileDefault from '../../assets/images/ProfileDefault.png';
 import SheetAddTopic from './elements/SheetAddTopic';
 import SheetCloseBtn from './elements/SheetCloseBtn';
@@ -46,39 +66,21 @@ import SheetPrivacy from './elements/SheetPrivacy';
 import ShowMedia from './elements/ShowMedia';
 import StringConstant from '../../utils/string/StringConstant';
 import Timer from '../../assets/icons/Ic_timer';
+import Toast from 'react-native-simple-toast';
 import TopicItem from '../../components/TopicItem';
 import UserProfile from './elements/UserProfile';
 import WarningAnimatedMessage from '../../components/WarningAnimateMessage';
-import useCreatePostHook from '../../hooks/screen/useCreatePostHook';
-import useHastagMention from './elements/useHastagMention';
-import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
-import {Button, ButtonAddMedia} from '../../components/Button';
-import {Context} from '../../context';
-import {
-  DEFAULT_TOPIC_PIC_PATH,
-  MAX_POLLING_ALLOWED,
-  MIN_POLLING_ALLOWED
-} from '../../utils/constants';
-import {PROFILE_CACHE} from '../../utils/cache/constant';
-import {ShowingAudience, createPost} from '../../service/post';
 import {colors} from '../../utils/colors';
 import {composeImageMeta} from '../../utils/string/file';
-import {fonts, normalizeFontSize} from '../../utils/fonts';
-import {
-  getDurationId,
-  getLocationId,
-  getPrivacyId,
-  setDurationId,
-  setLocationId,
-  setPrivacyId
-} from '../../utils/setting';
 import {getLinkPreviewInfo} from '../../service/feeds';
 import {getMyProfile} from '../../service/profile';
 import {getSpecificCache} from '../../utils/cache';
-import {getUrl, isContainUrl} from '../../utils/Utils';
 import {getUserId} from '../../utils/users';
-import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
+import {openSettings} from 'react-native-permissions';
+import {showMessage} from 'react-native-flash-message';
 import {uploadPhoto} from '../../service/file';
+import useCreatePostHook from '../../hooks/screen/useCreatePostHook';
+import useHastagMention from './elements/useHastagMention';
 
 const IS_GEO_SELECT_ENABLED = false;
 
@@ -941,7 +943,7 @@ const styles = StyleSheet.create({
     height
   }),
   reminderContainer: {
-    backgroundColor: '#2C67BC',
+    backgroundColor: COLORS.blue,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 7,

@@ -1,17 +1,18 @@
 import React from 'react';
-import {useNavigation} from '@react-navigation/core';
 import SimpleToast from 'react-native-simple-toast';
-import {openComposer} from 'react-native-email-link';
-import {launchImageLibrary} from 'react-native-image-picker';
 import {Alert} from 'react-native';
 import {generateRandomId} from 'stream-chat-react-native-core';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {openComposer} from 'react-native-email-link';
+import {useNavigation} from '@react-navigation/core';
+
 import {Context} from '../../../context';
-import {uploadFile} from '../../../service/file';
-import {requestExternalStoragePermission} from '../../../utils/permission';
-import {getChatName} from '../../../utils/string/StringUtils';
-import {setChannel} from '../../../context/actions/setChannel';
 import {checkUserBlock} from '../../../service/profile';
+import {getChatName} from '../../../utils/string/StringUtils';
+import {requestExternalStoragePermission} from '../../../utils/permission';
+import {setChannel} from '../../../context/actions/setChannel';
 import {setParticipants} from '../../../context/actions/groupChat';
+import {uploadFile} from '../../../service/file';
 
 const useGroupInfo = () => {
   const [groupChatState, groupPatchDispatch] = React.useContext(Context).groupChat;
@@ -396,11 +397,11 @@ const useGroupInfo = () => {
     handlePressContact,
     handleOpenProfile,
     onReportGroup,
+    setUsername,
     setSelectedUser,
     openChatMessage,
     generateSystemChat,
-    setNewParticipan,
-    setUsername
+    setNewParticipan
   };
 };
 
