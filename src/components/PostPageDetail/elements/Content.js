@@ -1,4 +1,5 @@
 import * as React from 'react';
+import FastImage from 'react-native-fast-image';
 import PropTypes from 'prop-types';
 import {Dimensions, Platform, StyleSheet, Text, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -8,6 +9,7 @@ import Card from '../../Card/Card';
 import ContentPoll from '../../../screens/FeedScreen/ContentPoll';
 import ImageLayouter from './ImageLayouter';
 import TopicsChip from '../../TopicsChip/TopicsChip';
+import dimen from '../../../utils/dimen';
 import useContentFeed from '../../../screens/FeedScreen/hooks/useContentFeed';
 import usePostDetail from '../hooks/usePostDetail';
 import {COLORS} from '../../../utils/theme';
@@ -52,7 +54,6 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
     );
     navigation.push('LinkContextScreen', param);
   };
-
   const onPressDomain = () => {
     const param = linkContextScreenParamBuilder(
       item,
@@ -119,7 +120,7 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
                 item={item}
                 pollexpiredat={item.polls_expired_at}
                 multiplechoice={item.multiplechoice}
-                isalreadypolling={item.isalreadypolling}
+                isAlreadyPolling={item.isalreadypolling}
                 onnewpollfetched={onnewpollfetched}
                 voteCount={item.voteCount}
                 topics={item?.topics}
@@ -146,8 +147,12 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
           </View>
         )}
         {images_url?.length > 0 && (
-          <View>
-            <ImageLayouter images={images_url || []} onimageclick={onImageClickedByIndex} />
+          <View style={styles.containerImage}>
+            <ImageLayouter
+              mode={FastImage.resizeMode.stretch}
+              images={images_url || []}
+              onimageclick={onImageClickedByIndex}
+            />
           </View>
         )}
         <View style={styles.topicContainer}>
@@ -307,5 +312,9 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     fontSize: FONT_SIZE_TEXT,
     letterSpacing: 0.1
+  },
+  containerImage: {
+    flex: 1,
+    height: dimen.normalizeDimen(300)
   }
 });
