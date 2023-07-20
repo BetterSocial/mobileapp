@@ -188,7 +188,7 @@ const OtherProfile = () => {
 
   const generateAnonProfile = async () => {
     setLoadingGenerateAnon(true);
-    const anonProfileResult = await generateAnonProfileOtherProfile(profile.myProfile.user_id);
+    const anonProfileResult = await generateAnonProfileOtherProfile(other_id);
     console.log({anonProfileResult});
     setLoadingGenerateAnon(false);
     setAnonProfile(anonProfileResult);
