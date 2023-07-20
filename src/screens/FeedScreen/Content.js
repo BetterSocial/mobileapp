@@ -14,7 +14,6 @@ import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
 import usePostDetail from '../../components/PostPageDetail/hooks/usePostDetail';
-import ReadMore from '../../components/ReadMore';
 
 const {width: screenWidth, height} = Dimensions.get('window');
 
@@ -40,8 +39,8 @@ const Content = ({
     message,
     null,
     null,
-    normalizeFontSize(26),
-    normalizeFontSize(52),
+    normalizeFontSize(30),
+    normalizeFontSize(40),
     125,
     true
   );
@@ -88,7 +87,7 @@ const Content = ({
 
     return (
       <View testID="postTypePoll" style={[styles.containerText, handleContainerText()]}>
-        <Text style={handleStyleFont()}>
+        <Text numberOfLines={5} style={handleStyleFont()}>
           {getCaptionWithTopicStyle(
             route?.params?.id,
             message,

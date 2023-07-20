@@ -4,8 +4,8 @@ import {POST_TYPE_LINK, POST_TYPE_POLL} from '../../../utils/constants';
 import {normalizeFontSize} from '../../../utils/fonts';
 
 const usePostDetail = () => {
-  const longTextFontSize = normalizeFontSize(16);
-  const longTextLineHeight = normalizeFontSize(24);
+  let longTextFontSize = normalizeFontSize(16);
+  let longTextLineHeight = normalizeFontSize(24);
   const shortTextFontSize = normalizeFontSize(24);
   const shortTextLineHeight = normalizeFontSize(44);
   const {top, bottom} = useSafeAreaInsets();
@@ -59,22 +59,30 @@ const usePostDetail = () => {
     if (!message) message = '';
     let fontSize = shortTextSize;
     let lineHeight = shortTextLineHeight;
+    let line = message?.length / messageLength;
+    if (line < 1) {
+      line = 1;
+    } else {
+      line += 0.3;
+    }
     let containerHeight = 0;
     if (message?.length > messageLength) {
       if (!isFeed) {
         fontSize = longTextFontSize;
         lineHeight = longTextLineHeight;
       } else {
-        fontSize = message?.length / messageLength / shortTextFontSize;
-        lineHeight = message?.length / messageLength / shortTextFontSize;
+        longTextFontSize = normalizeFontSize(20);
+        longTextLineHeight = normalizeFontSize(30);
+        fontSize = (1 / line) * shortTextSize;
+        lineHeight = (1 / line) * shortTextLineH;
         if (fontSize < longTextFontSize) {
           fontSize = longTextFontSize;
           lineHeight = longTextLineHeight;
         }
       }
     } else {
-      fontSize = shortTextSize;
-      lineHeight = shortTextLineH;
+      fontSize = (1 / line) * shortTextSize;
+      lineHeight = (1 / line) * shortTextLineH;
     }
     const numLines = 0.5;
 
