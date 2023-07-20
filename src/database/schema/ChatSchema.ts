@@ -3,6 +3,7 @@ import {v4 as uuid} from 'uuid';
 
 import BaseDbSchema from './BaseDbSchema';
 import UserSchema from './UserSchema';
+import {ModifyAnonymousChatData} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 
 class ChatSchema implements BaseDbSchema {
   id: string;
@@ -227,6 +228,23 @@ class ChatSchema implements BaseDbSchema {
       userId,
       isMe: true,
       isContinuous: true
+    });
+  }
+
+  static fromInitAnonymousChatAPI(data: ModifyAnonymousChatData): ChatSchema {
+    return new ChatSchema({
+      id: data?.message?.id,
+      channelId: data?.message?.cid,
+      createdAt: data?.message?.created_at,
+      updatedAt: data?.message?.updated_at,
+      isMe: true,
+      message: data?.message?.message,
+      rawJson: data,
+      status: 'sent',
+      isContinuous: false,
+      type: 'regular',
+      user: null,
+      userId: data?.message?.user?.id
     });
   }
 

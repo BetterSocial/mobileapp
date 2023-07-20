@@ -5,6 +5,10 @@ import ChannelListMemberSchema from './ChannelListMemberSchema';
 import UserSchema from './UserSchema';
 import {AnonymousChannelData} from '../../../types/repo/AnonymousMessageRepo/AnonymousChannelsData';
 import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
+import {
+  InitAnonymousChatData,
+  ModifyAnonymousChatData
+} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 
 class ChannelList implements BaseDbSchema {
   id: string;
@@ -312,6 +316,24 @@ class ChannelList implements BaseDbSchema {
       user: null,
       members: null,
       expiredAt: data?.expired_at
+    });
+  }
+
+  static fromInitAnonymousChatAPI(data: ModifyAnonymousChatData): ChannelList {
+    return new ChannelList({
+      id: data?.message?.cid,
+      channelPicture: '',
+      name: data?.targetName,
+      description: data?.message?.message,
+      unreadCount: 0,
+      channelType: 'ANON_PM',
+      lastUpdatedAt: data?.message?.created_at,
+      lastUpdatedBy: data?.message?.user?.id,
+      createdAt: data?.message?.created_at,
+      rawJson: data,
+      user: null,
+      expiredAt: null,
+      members: null
     });
   }
 }
