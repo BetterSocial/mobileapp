@@ -3,7 +3,7 @@ import {Pressable, Text, View, StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import useImageLayout from '../hooks/useImageLayout';
 
-const ImageItem = ({image, index, onImageClick, images}) => {
+const ImageItem = ({image, index, onImageClick, images, mode}) => {
   const {handleImageWidth} = useImageLayout();
   const onPress = () => onImageClick(index);
   if (index > 3) return null;
@@ -20,7 +20,7 @@ const ImageItem = ({image, index, onImageClick, images}) => {
             <FastImage
               source={{uri: image}}
               style={styles.imageStyle}
-              resizeMode={FastImage.resizeMode.cover}
+              resizeMode={mode || FastImage.resizeMode.cover}
             />
           </React.Fragment>
         </Pressable>
