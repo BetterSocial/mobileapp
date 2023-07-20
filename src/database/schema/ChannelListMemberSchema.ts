@@ -78,7 +78,8 @@ class ChannelListMemberSchema implements BaseDbSchema {
   ): Promise<ChannelListMemberSchema[]> {
     const selectQuery = `
         SELECT A.*,
-            B.user_id,
+            B.user_id as user_schema_user_id,
+            B.channel_id as user_schema_channel_id,
             B.username,
             B.country_code,
             B.profile_picture,
@@ -91,8 +92,8 @@ class ChannelListMemberSchema implements BaseDbSchema {
                 ELSE FALSE END AS is_me
         FROM ${ChannelListMemberSchema.getTableName()} A
         INNER JOIN ${UserSchema.getTableName()} B
-        ON A.user_id = B.user_id
-        WHERE channel_id = ?`;
+        ON A.user_id = user_schema_user_id AND A.channel_id = user_schema_channel_id
+        WHERE A.channel_id = ?`;
     const selectParams = [myId, myAnonymousId, channelId];
 
     try {
