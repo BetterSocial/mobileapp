@@ -426,7 +426,7 @@ PODS:
     - React-Core
   - react-native-keyevent (0.2.8):
     - React
-  - react-native-mmkv (2.10.1):
+  - react-native-mmkv (2.5.1):
     - MMKV (>= 1.2.13)
     - React-Core
   - react-native-netinfo (6.0.0):
@@ -989,7 +989,7 @@ SPEC CHECKSUMS:
   react-native-image-picker: 31971f6184e7c1dcb4fc1f122e1ba2c3fb11ef1e
   react-native-image-resizer: d9fb629a867335bdc13230ac2a58702bb8c8828f
   react-native-keyevent: f8728b8c73dbfbcb4d2c56d9e78be082c673c456
-  react-native-mmkv: dea675cf9697ad35940f1687e98e133e1358ef9f
+  react-native-mmkv: 69b9c003f10afdd01addf7c6ee784ce42ee2eff3
   react-native-netinfo: e849fc21ca2f4128a5726c801a82fc6f4a6db50d
   react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
   react-native-simple-toast: 8ee5d23f0b92b935ab7434cdb65159ce12dfb4b7

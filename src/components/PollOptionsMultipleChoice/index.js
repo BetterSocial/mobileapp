@@ -18,7 +18,8 @@ const PollOptionsMultipleChoice = ({
   isalreadypolling = false,
   maxpolls = [],
   onselected = () => {},
-  total = 0
+  total = 0,
+  totalVotingUser = 0
 }) => {
   const {
     onOptionsClicked,
@@ -38,7 +39,7 @@ const PollOptionsMultipleChoice = ({
     isalreadypolling,
     maxpolls,
     onselected,
-    total
+    totalVotingUser
   });
 
   const renderPercentageBar = () => {
