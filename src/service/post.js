@@ -73,6 +73,7 @@ export const inputSingleChoicePoll = async (polling_id, polling_option_id) => {
       polling_id,
       polling_option_id
     });
+
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(error.response.data);

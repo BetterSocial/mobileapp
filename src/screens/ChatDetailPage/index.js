@@ -3,15 +3,18 @@ import EasyFollowSystem from 'stream-chat-react-native-core/src/components/Chann
 import crashlytics from '@react-native-firebase/crashlytics';
 import moment from 'moment';
 import {Channel, Chat, MessageInput, MessageList, Streami18n} from 'stream-chat-react-native';
-import {MessageSystem} from 'stream-chat-react-native-core';
+import {MessageAvatar, MessageSystem} from 'stream-chat-react-native-core';
 import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
 import {useRecoilState} from 'recoil';
 
+import AnonymousIcon from '../ChannelListScreen/elements/components/AnonymousIcon';
 import ChatStatusIcon from '../../components/ChatStatusIcon';
+import CustomMessageAvatar from './elements/CustomMessageAvatar';
 import Header from '../../components/Chat/Header';
 import ImageSendPreview from './elements/ImageSendPreview';
 import InputMessage from '../../components/Chat/InputMessage';
 import api from '../../service/config';
+import {CHANNEL_TYPE_ANONYMOUS} from '../../utils/constants';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {CustomMessageSystem} from '../../components';
@@ -31,6 +34,10 @@ const ChatDetailPage = ({route}) => {
   const [channelClient, dispatchChannel] = React.useContext(Context).channel;
   const [followUserList, setFollowUserList] = useRecoilState(followersOrFollowingAtom);
   const [, dispatch] = React.useContext(Context).groupChat;
+
+  const channelData = channelClient?.channel;
+  const channelType = channelClient?.channel?.data?.channel_type;
+
   const messageSystemCustom = (props) => {
     const {message, channel} = props;
     if (channel?.data.channel_type === 2 || channel?.data.channel_type === 3)
@@ -169,6 +176,7 @@ const ChatDetailPage = ({route}) => {
 
     return true;
   };
+
   if (clients.client && channelClient.channel) {
     return (
       <SafeAreaView>
@@ -187,6 +195,14 @@ const ChatDetailPage = ({route}) => {
               threadRepliesEnabled={false}
               MessageStatus={ChatStatusIcon}
               MessageSystem={(props) => messageSystemCustom(props)}
+              MessageAvatar={(props) => (
+                <CustomMessageAvatar
+                  channelType={channelType}
+                  color={channelData?.data?.anon_user_info_color_code}
+                  emoji={channelData?.data?.anon_user_info_emoji_code}
+                  {...props}
+                />
+              )}
               // MessageContent={(props) => <CustomMessageContent {...props} />}
               messageActions={(props) => defaultActionsAllowed(props)}
               ReactionList={() => null}>
