@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import {Dimensions, Platform, Pressable, StyleSheet, Text, View} from 'react-native';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {useNavigation, useRoute} from '@react-navigation/native';
-import {AutoSizeText, ResizeTextMode} from 'react-native-auto-size-text';
 
 import ContentPoll from './ContentPoll';
 import ImageLayouter from './elements/ImageLayouter';
@@ -147,7 +146,7 @@ const Content = ({
             item={item}
             pollexpiredat={item.polls_expired_at}
             multiplechoice={item.multiplechoice}
-            isalreadypolling={item.isalreadypolling}
+            isAlreadyPolling={item.isalreadypolling}
             onnewpollfetched={onNewPollFetched}
             voteCount={item.voteCount}
             topics={item?.topics}
