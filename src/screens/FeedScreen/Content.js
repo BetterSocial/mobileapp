@@ -9,7 +9,7 @@ import ContentPoll from './ContentPoll';
 import ImageLayouter from './elements/ImageLayouter';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import {COLORS} from '../../utils/theme';
-import {POST_TYPE_POLL} from '../../utils/constants';
+import {POST_TYPE_LINK, POST_TYPE_POLL} from '../../utils/constants';
 import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
@@ -36,6 +36,15 @@ const Content = ({
   const substringWithPoll = devHeight / 3 - 40 * (height / screenWidth);
   const substringWithPollTopic = devHeight / 5 - 40 * (height / screenWidth);
   const {calculationText} = usePostDetail();
+  const {fontSize, lineHeight} = calculationText(
+    message,
+    null,
+    null,
+    normalizeFontSize(26),
+    normalizeFontSize(52),
+    125,
+    true
+  );
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
       title: 'Photo',
@@ -66,52 +75,20 @@ const Content = ({
       substringNumber = substringWithPollTopic;
     }
 
-    const amountCharacter = (lines = []) => {
-      const a = lines.map((line) => line.text.length);
-      console.log(a, 'aman');
+    const handleStyleFont = () => {
+      const defaultStyle = [
+        styles.textMedia,
+        {
+          fontSize,
+          lineHeight
+        }
+      ];
+      return defaultStyle;
     };
 
-    // const hanldeFontSize
-
     return (
-      <View
-        // onLayout={({nativeEvent}) =>
-        //   console.log('sasa', {height: nativeEvent.layout.height, width: nativeEvent.layout.width})
-        // }
-        testID="postTypePoll"
-        style={styles.containerText}>
-        {/* <ReadMore
-          textStyle={{
-            fontSize: calculationText(message).fontSize,
-            lineHeight: calculationText(message).lineHeight
-          }}
-          text={message}
-          numberLine={3}
-        /> */}
-        <Text
-          // onTextLayout={({nativeEvent}) => {
-          //   amountCharacter(nativeEvent.lines);
-          //   console.log(nativeEvent.lines[0].height, 'sisi');
-          // }}
-          style={[
-            styles.textMedia,
-            {
-              fontSize: calculationText(
-                message,
-                null,
-                null,
-                normalizeFontSize(40),
-                normalizeFontSize(80)
-              ).fontSize,
-              lineHeight: calculationText(
-                message,
-                null,
-                null,
-                normalizeFontSize(40),
-                normalizeFontSize(80)
-              ).lineHeight
-            }
-          ]}>
+      <View testID="postTypePoll" style={[styles.containerText, handleContainerText()]}>
+        <Text style={handleStyleFont()}>
           {getCaptionWithTopicStyle(
             route?.params?.id,
             message,
@@ -128,11 +105,25 @@ const Content = ({
     );
   };
 
+  const handleContainerText = () => {
+    if (
+      message?.length < 125 &&
+      item.post_type !== POST_TYPE_POLL &&
+      item.post_type !== POST_TYPE_LINK &&
+      images_url.length <= 0
+    ) {
+      return styles.centerVertical;
+    }
+    return {};
+  };
+
   return (
     <Pressable onPress={onPress} style={[styles.contentFeed, style]}>
       {message?.length > 0 ? (
         <View>
-          <View style={styles.containerMainText}>{renderHandleTextContent()}</View>
+          <View style={[styles.containerMainText, handleContainerText()]}>
+            {renderHandleTextContent()}
+          </View>
         </View>
       ) : null}
 
@@ -159,7 +150,7 @@ const Content = ({
         </View>
       )}
 
-      {/* <TopicsChip topics={topics} fontSize={normalizeFontSize(14)} text={message} /> */}
+      <TopicsChip topics={topics} fontSize={normalizeFontSize(14)} text={message} />
     </Pressable>
   );
 };
@@ -271,7 +262,11 @@ export const styles = StyleSheet.create({
     paddingVertical: 10
   },
   containerText: {
-    height: '100%',
     flexDirection: 'row'
+  },
+  centerVertical: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%'
   }
 });

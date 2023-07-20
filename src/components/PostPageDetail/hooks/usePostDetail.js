@@ -1,12 +1,13 @@
 import {Dimensions, StatusBar} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {POST_TYPE_LINK, POST_TYPE_POLL} from '../../../utils/constants';
+import {normalizeFontSize} from '../../../utils/fonts';
 
 const usePostDetail = () => {
-  const longTextFontSize = 16;
-  const longTextLineHeight = 24;
-  const shortTextFontSize = 24;
-  const shortTextLineHeight = 44;
+  const longTextFontSize = normalizeFontSize(16);
+  const longTextLineHeight = normalizeFontSize(24);
+  const shortTextFontSize = normalizeFontSize(24);
+  const shortTextLineHeight = normalizeFontSize(44);
   const {top, bottom} = useSafeAreaInsets();
   const updateVoteLatestChildrenLevel3 = (commentList, dataUpdated) => {
     const updateComment = commentList.map((comment) => {
@@ -51,15 +52,26 @@ const usePostDetail = () => {
     post_type,
     image,
     shortTextSize = shortTextFontSize,
-    shortTextLineH = shortTextLineHeight
+    shortTextLineH = shortTextLineHeight,
+    messageLength = 270,
+    isFeed
   ) => {
     if (!message) message = '';
     let fontSize = shortTextSize;
     let lineHeight = shortTextLineHeight;
     let containerHeight = 0;
-    if (message?.length > 270) {
-      fontSize = longTextFontSize;
-      lineHeight = longTextLineHeight;
+    if (message?.length > messageLength) {
+      if (!isFeed) {
+        fontSize = longTextFontSize;
+        lineHeight = longTextLineHeight;
+      } else {
+        fontSize = message?.length / messageLength / shortTextFontSize;
+        lineHeight = message?.length / messageLength / shortTextFontSize;
+        if (fontSize < longTextFontSize) {
+          fontSize = longTextFontSize;
+          lineHeight = longTextLineHeight;
+        }
+      }
     } else {
       fontSize = shortTextSize;
       lineHeight = shortTextLineH;
