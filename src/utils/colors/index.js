@@ -17,6 +17,7 @@ export const colors = {
   pattens_blue: '#ddf2fe',
   blue: '#2F80ED',
   lightblue: '#55C2FF',
+  blue1: '#2C67BC',
   red: '#FF2E63',
   holytosca: '#00ADB5',
   holytosca30percent: '#00ADB54D',
@@ -25,5 +26,6 @@ export const colors = {
   halfBaked: '#88CDD0',
   tradewind: '#58B1B5',
   elm: '#22878B',
-  blockColor: '#FF2E63'
+  blockColor: '#FF2E63',
+  greenDark: '#004346'
 };
