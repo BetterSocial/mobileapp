@@ -60,7 +60,7 @@ const Footer = ({
       <View style={styles.leftGroupContainer}>
         <TouchableOpacity testID="shareBtn" style={styles.btn} onPress={onPressShare}>
           <View style={styles.btnShare}>
-            <MemoIc_share height={20} width={22} />
+            <MemoIc_share height={20} width={21} />
           </View>
         </TouchableOpacity>
         {disableComment ? (

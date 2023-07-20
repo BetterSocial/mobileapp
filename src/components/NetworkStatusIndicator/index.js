@@ -22,7 +22,6 @@ const NetworkStatusIndicator = ({hide = false}) => {
     };
   }, []);
 
-  console.log(removeTimeout.current, isInternetReachable);
   React.useEffect(() => {
     if (isInternetReachable) {
       clearTimeout(removeTimeout.current);

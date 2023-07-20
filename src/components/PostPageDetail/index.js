@@ -68,13 +68,8 @@ const PostPageDetailIdComponent = (props) => {
   const [commentContext, dispatchComment] = React.useContext(Context).comments;
   const {comments} = commentContext;
   const [, setLoadingGetComment] = React.useState(true);
-  const {
-    updateVoteLatestChildrenLevel3,
-    updateVoteChildrenLevel1,
-    calculationText,
-    calculatedSizeScreen,
-    calculatePaddingBtm
-  } = usePostDetail();
+  const {updateVoteLatestChildrenLevel3, updateVoteChildrenLevel1, calculatePaddingBtm} =
+    usePostDetail();
   const {updateFeedContext} = usePostContextHook(contextSource);
   const {handleUserName} = useWriteComment();
 
@@ -84,7 +79,6 @@ const PostPageDetailIdComponent = (props) => {
     }
     const queryParam = new URLSearchParams(commenListParam).toString();
     const response = await getCommentList(feedId, queryParam);
-
     saveComment(response.data.data, dispatchComment);
     setLoadingGetComment(false);
     if (scrollToBottom) {
@@ -651,7 +645,7 @@ const PostPageDetailIdComponent = (props) => {
                   showScoreButton={profile?.myProfile?.is_backdoor_user}
                   onPressScore={handleOnPressScore}
                   onPressBlock={() => refBlockComponent.current.openBlockComponent(item)}
-                  isSelf={profile.myProfile.user_id === item.actor.id}
+                  isSelf={profile.myProfile.user_id === item.actor?.id}
                 />
               </View>
             </ScrollView>
