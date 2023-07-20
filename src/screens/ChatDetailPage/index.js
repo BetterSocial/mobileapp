@@ -169,6 +169,7 @@ const ChatDetailPage = ({route}) => {
 
     return true;
   };
+
   if (clients.client && channelClient.channel) {
     return (
       <SafeAreaView>
