@@ -98,7 +98,9 @@ const PollOptions = ({
           )}
           <Text style={styles.pollOptionItemText(isexpired, isMax)}>{poll?.option}</Text>
           {isPollDisabled() ? (
-            <Text style={styles.pollOptionItemPercentage}>{`${optionPercentage}%`}</Text>
+            <Text style={styles.pollOptionItemPercentage}>{`${
+              Math.round(optionPercentage * 10) / 10
+            }%`}</Text>
           ) : (
             <></>
           )}

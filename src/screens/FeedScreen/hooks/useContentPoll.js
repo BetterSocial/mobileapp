@@ -52,10 +52,14 @@ const useContentPoll = ({polls, voteCount, isAlreadyPolling: isAlreadyPollingPro
       newItem.pollOptions = newPolls;
       newItem.mypolling = selectedPolls;
       if (multipleChoiceSelected.length > 0) newItem.voteCount++;
+
+      setCount(voteCount + 1);
+      setNewPoll(newItem);
     }
-    if (onnewpollfetched && typeof onnewpollfetched === 'function')
+    if (onnewpollfetched && typeof onnewpollfetched === 'function') {
       onnewpollfetched(newItem, index);
-    setNewPoll(newItem);
+    }
+    setIsAlreadyPolling(true);
   };
 
   const handleNoMultipleChoice = async (item, onnewpollfetched, index) => {
