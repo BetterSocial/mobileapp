@@ -41,7 +41,7 @@ export interface Message {
   anon_user_info_emoji_name: string;
 }
 
-export interface Member {
+export interface InitAnonymousChatDataMember {
   user_id: string;
   human_id?: string;
   country_code?: string;
@@ -69,7 +69,7 @@ export interface Member {
 export interface InitAnonymousChatData {
   message: Message;
   duration: string;
-  members: Member[];
+  members: InitAnonymousChatDataMember[];
 }
 
 export interface ModifyAnonymousChatData extends InitAnonymousChatData {

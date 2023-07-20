@@ -191,14 +191,26 @@ class ChannelList implements BaseDbSchema {
     myAnonymousId: string
   ): Promise<ChannelList[]> {
     const [results] = await db.executeSql(
-      `SELECT *,
+      `SELECT 
+        A.*,
         CASE last_updated_by
           WHEN ? THEN 1
           WHEN ? THEN 1
-          ELSE 0 END AS is_me
+          ELSE 0 END AS is_me,
+        B.id AS user_row_id,
+        B.user_id,
+        B.channel_id,
+        B.username,
+        B.country_code,
+        B.created_at AS user_created_at,
+        B.updated_at AS user_updated_at,
+        B.last_active_at,
+        B.profile_picture,
+        B.bio,
+        B.is_banned
       FROM ${ChannelList.getTableName()} A
       LEFT JOIN ${UserSchema.getTableName()} B
-      ON A.last_updated_by = B.user_id
+      ON A.last_updated_by = B.user_id AND A.id = B.channel_id
       WHERE expired_at IS NULL OR datetime(expired_at) >= datetime('now')
       ORDER BY last_updated_at DESC`,
       [myId, myAnonymousId]

@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 
 import AnonymousChatInfoHeader from '../../components/Header/AnonymousChatInfoHeader';
+import AnonymousIcon from '../ChannelListScreen/elements/components/AnonymousIcon';
 import useAnonymousChatInfoScreenHook from '../../hooks/screen/useAnonymousChatInfoHook';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {Loading} from '../../components';
@@ -171,6 +172,9 @@ const SampleChatInfoScreen = () => {
     );
   };
 
+  const {anon_user_info_color_code, anon_user_info_emoji_code, anon_user_info_emoji_name} =
+    channelInfo?.rawJson?.channel || {};
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -196,7 +200,7 @@ const SampleChatInfoScreen = () => {
               <View style={styles.lineTop} />
               <View style={styles.lineTop} />
               <View style={styles.users}>
-                <Text style={styles.countUser}>Participants ({2})</Text>
+                <Text style={styles.countUser}>Participants ({channelInfo?.members?.length})</Text>
                 <FlatList
                   testID="participants"
                   data={channelInfo?.members}
@@ -207,10 +211,25 @@ const SampleChatInfoScreen = () => {
                         key={index}
                         item={item}
                         onPress={() => onContactPressed(item)}
-                        fullname={item?.user?.isMe ? 'You' : item?.user?.username}
+                        fullname={
+                          item?.user?.isMe
+                            ? `Anonymous ${anon_user_info_emoji_name} (You)`
+                            : item?.user?.username
+                        }
                         photo={item?.user?.profilePicture}
                         showArrow={!item?.user?.isMe}
                         userId={signedProfileId}
+                        ImageComponent={
+                          item?.user?.isMe && (
+                            <View style={{marginRight: 17}}>
+                              <AnonymousIcon
+                                color={anon_user_info_color_code}
+                                emojiCode={anon_user_info_emoji_code}
+                                size={normalize(48)}
+                              />
+                            </View>
+                          )
+                        }
                       />
                     </View>
                   )}
