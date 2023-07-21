@@ -196,6 +196,14 @@ const ChatDetailPage = ({route}) => {
                 threadRepliesEnabled={false}
                 MessageStatus={ChatStatusIcon}
                 MessageSystem={(props) => messageSystemCustom(props)}
+                MessageAvatar={(props) => (
+                  <CustomMessageAvatar
+                    channelType={channelType}
+                    color={channelData?.data?.anon_user_info_color_code}
+                    emoji={channelData?.data?.anon_user_info_emoji_code}
+                    {...props}
+                  />
+                )}
                 // MessageContent={(props) => <CustomMessageContent {...props} />}
                 messageActions={(props) => defaultActionsAllowed(props)}
                 ReactionList={() => null}>
