@@ -21,7 +21,7 @@ import useChannelList from './hooks/useChannelList';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
 } from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
-import {CHANNEL_TYPE_TOPIC} from '../../utils/constants';
+import {CHANNEL_TYPE_ANONYMOUS, CHANNEL_TYPE_TOPIC} from '../../utils/constants';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {FEED_COMMENT_COUNT} from '../../utils/cache/constant';
@@ -125,13 +125,26 @@ const ChannelListScreen = () => {
     dispatchUnreadMessage(setTotalUnreadPostNotif(totalMessage));
   };
 
+  /**
+   *
+   * @param {import('stream-chat-react-native-core').ChannelPreviewTitleProps} props
+   * @returns
+   */
   const customPreviewTitle = (props) => {
-    let {name} = props?.channel?.data || {};
-    const {id} = props?.channel?.data || {};
-    if (name?.toLowerCase() === 'us' && id?.toLowerCase() === 'us') name = 'United States';
+    const {channel} = props;
+
+    const {name} = channel?.data || {};
+    const {id} = channel?.data || {};
+    let displayName = name || props?.displayName;
+    if (channel?.data?.channel_type === CHANNEL_TYPE_ANONYMOUS) {
+      displayName = `Anonymous ${channel?.data?.anon_user_info_emoji_name}`;
+    }
+
+    if (name?.toLowerCase() === 'us' && id?.toLowerCase() === 'us') displayName = 'United States';
+
     return (
       <View style={{paddingRight: 12}}>
-        <ChannelPreviewTitle displayName={getChatName(name, profile.myProfile.username)} />
+        <ChannelPreviewTitle displayName={getChatName(displayName, profile.myProfile.username)} />
       </View>
     );
   };

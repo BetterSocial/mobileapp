@@ -3,24 +3,28 @@ import EasyFollowSystem from 'stream-chat-react-native-core/src/components/Chann
 import crashlytics from '@react-native-firebase/crashlytics';
 import moment from 'moment';
 import {Channel, Chat, MessageInput, MessageList, Streami18n} from 'stream-chat-react-native';
-import {MessageSystem} from 'stream-chat-react-native-core';
+import {MessageAvatar, MessageSystem} from 'stream-chat-react-native-core';
 import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
 import {useRecoilState} from 'recoil';
+
+import AnonymousIcon from '../ChannelListScreen/elements/components/AnonymousIcon';
 import ChatStatusIcon from '../../components/ChatStatusIcon';
+import CustomMessageAvatar from './elements/CustomMessageAvatar';
 import Header from '../../components/Chat/Header';
 import ImageSendPreview from './elements/ImageSendPreview';
 import InputMessage from '../../components/Chat/InputMessage';
 import api from '../../service/config';
+import {CHANNEL_TYPE_ANONYMOUS} from '../../utils/constants';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {CustomMessageSystem} from '../../components';
 import {followersOrFollowingAtom} from '../ChannelListScreen/model/followersOrFollowingAtom';
 import {fonts} from '../../utils/fonts';
 import {setAsset} from '../../context/actions/groupChat';
-import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
-import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {setChannel} from '../../context/actions/setChannel';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
+import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
+import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 const streami18n = new Streami18n({
   language: 'en'
@@ -32,6 +36,10 @@ const ChatDetailPage = ({route}) => {
   const {interactionsComplete} = useAfterInteractions();
   const [followUserList, setFollowUserList] = useRecoilState(followersOrFollowingAtom);
   const [, dispatch] = React.useContext(Context).groupChat;
+
+  const channelData = channelClient?.channel;
+  const channelType = channelClient?.channel?.data?.channel_type;
+
   const messageSystemCustom = (props) => {
     const {message, channel} = props;
     if (channel?.data.channel_type === 2 || channel?.data.channel_type === 3)

@@ -16,9 +16,9 @@ import HeaderContact from '../../components/Header/HeaderContact';
 import Loading from '../Loading';
 import useGroupSetting from './hooks/useGroupSetting';
 import {COLORS} from '../../utils/theme';
+import {Context} from '../../context';
 import {ProfileContact} from '../../components/Items';
 import {fonts} from '../../utils/fonts';
-import { Context } from '../../context';
 
 const {width} = Dimensions.get('screen');
 
@@ -36,6 +36,12 @@ const GroupSetting = ({navigation, route}) => {
   } = useGroupSetting({navigation, route});
   const isFocusChatName = route?.params?.focusChatName;
   const [channelState] = React.useContext(Context).channel;
+
+  const anonymousName = `Anonymous ${channelState?.data?.anon_user_info_emoji_name}`;
+  const getProfileName = (name) => {
+    console.log('name', name);
+    return name === 'AnonymousUser' ? anonymousName : name;
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -65,7 +71,11 @@ const GroupSetting = ({navigation, route}) => {
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item}) => (
               <View style={{height: 72}}>
-                <ProfileContact key={item} fullname={item.user.name} photo={item.user.image} />
+                <ProfileContact
+                  key={item}
+                  fullname={getProfileName(participants[item].user.name)}
+                  photo={participants[item].user.image}
+                />
               </View>
             )}
           />
