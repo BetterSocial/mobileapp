@@ -52,21 +52,20 @@ const usePostDetail = () => {
     message,
     post_type,
     image,
-    shortTextSize = shortTextFontSize,
-    shortTextLineH = shortTextLineHeight,
-    messageLength = 270,
+    shortTextSize,
+    shortTextLineH,
+    messageLength,
     isFeed
   ) => {
     if (!message) message = '';
     let fontSize = shortTextSize;
+    if (!shortTextSize) shortTextSize = shortTextFontSize;
+    if (!shortTextLineH) shortTextLineH = shortTextLineHeight;
+    if (!messageLength) messageLength = 270;
     let lineHeight = shortTextLineHeight;
     let line = message?.length / messageLength;
     let defaultNumberLine = 5;
-    if (line < 1) {
-      line = 1;
-    } else {
-      // line += 0.3;
-    }
+    if (line < 1) line = 1;
     let containerHeight = 0;
     if (message?.length > messageLength) {
       if (!isFeed) {
