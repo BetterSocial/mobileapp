@@ -189,15 +189,15 @@ const styles = StyleSheet.create({
     marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0
   }),
   cardContainer: {
-    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT,
     width: FULL_WIDTH,
     borderBottomWidth: 7,
     borderBottomColor: colors.lightgrey,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT
   },
   cardMain: {
-    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT,
-    width: '100%'
+    width: '100%',
+    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT
   }
 });
 

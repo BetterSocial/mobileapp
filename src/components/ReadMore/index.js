@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
  * @property {string} text
  * @property {number} numberLine
  * @property {Function} onPress
+ * @property {import('react-native').StyleProp} textStyle
  */
 
 /**
@@ -43,7 +44,7 @@ const ReadMore = (props) => {
     <View onLayout={handleLayoutWidth} style={props.containerStyle}>
       {isFinishSetLayout ? (
         <TouchableOpacity testID="finishLayout" onPress={props.onPress}>
-          <Text>
+          <Text style={props.textStyle}>
             {textShown}
             {''}
             {limitNumberLine < realNumberLine ? (
@@ -55,7 +56,7 @@ const ReadMore = (props) => {
         </TouchableOpacity>
       ) : null}
       {!isFinishSetLayout ? (
-        <Text testID="notFinishLayout" onTextLayout={handleLayoutText}>
+        <Text style={props.textStyle} testID="notFinishLayout" onTextLayout={handleLayoutText}>
           {props.text}{' '}
         </Text>
       ) : null}
