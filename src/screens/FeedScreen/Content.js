@@ -35,7 +35,7 @@ const Content = ({
   const substringWithPoll = devHeight / 3 - 40 * (height / screenWidth);
   const substringWithPollTopic = devHeight / 5 - 40 * (height / screenWidth);
   const {calculationText} = usePostDetail();
-  const {fontSize, lineHeight} = calculationText(
+  const {fontSize, lineHeight, defaultNumberLine} = calculationText(
     message,
     null,
     null,
@@ -87,7 +87,7 @@ const Content = ({
 
     return (
       <View testID="postTypePoll" style={[styles.containerText, handleContainerText()]}>
-        <Text numberOfLines={5} style={handleStyleFont()}>
+        <Text numberOfLines={defaultNumberLine} style={handleStyleFont()}>
           {getCaptionWithTopicStyle(
             route?.params?.id,
             message,

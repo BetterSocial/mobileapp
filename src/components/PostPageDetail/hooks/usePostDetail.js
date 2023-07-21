@@ -60,10 +60,11 @@ const usePostDetail = () => {
     let fontSize = shortTextSize;
     let lineHeight = shortTextLineHeight;
     let line = message?.length / messageLength;
+    let defaultNumberLine = 5;
     if (line < 1) {
       line = 1;
     } else {
-      line += 0.3;
+      // line += 0.3;
     }
     let containerHeight = 0;
     if (message?.length > messageLength) {
@@ -75,9 +76,16 @@ const usePostDetail = () => {
         longTextLineHeight = normalizeFontSize(30);
         fontSize = (1 / line) * shortTextSize;
         lineHeight = (1 / line) * shortTextLineH;
-        if (fontSize < longTextFontSize) {
+        if (
+          fontSize < longTextFontSize &&
+          (post_type === POST_TYPE_POLL || post_type === POST_TYPE_LINK || image?.length > 0)
+        ) {
           fontSize = longTextFontSize;
           lineHeight = longTextLineHeight;
+        } else {
+          fontSize = shortTextFontSize * 0.6;
+          lineHeight = shortTextLineHeight * 0.6;
+          defaultNumberLine = 10;
         }
       }
     } else {
@@ -99,7 +107,7 @@ const usePostDetail = () => {
       containerHeight *= 2;
     }
     const containerComment = calculatedSizeScreen - containerHeight;
-    return {fontSize, lineHeight, containerHeight, containerComment};
+    return {fontSize, lineHeight, containerHeight, containerComment, defaultNumberLine};
   };
 
   const calculatedSizeScreen = top + bottom + StatusBar.currentHeight + 170;
