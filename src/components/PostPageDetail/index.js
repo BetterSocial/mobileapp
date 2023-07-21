@@ -603,28 +603,15 @@ const PostPageDetailIdComponent = (props) => {
               contentContainerStyle={{
                 paddingBottom: handlePaddingBottom()
               }}>
-              {item.post_type === POST_TYPE_LINK ? (
-                <ContentLink
-                  og={item.og}
-                  onHeaderPress={onPressDomain}
-                  onCardContentPress={() => navigateToLinkContextPage(item)}
-                  score={item.credderScore}
-                  message={item?.message}
-                  topics={item?.topics}
-                  item={item}
-                  isPostDetail={true}
-                />
-              ) : (
-                <Content
-                  message={item.message}
-                  images_url={item.images_url}
-                  style={styles.additionalContentStyle(item?.images_url?.length, height)}
-                  topics={item?.topics}
-                  item={item}
-                  onnewpollfetched={onNewPollFetched}
-                  isPostDetail={true}
-                />
-              )}
+              <Content
+                message={item.message}
+                images_url={item.images_url}
+                style={styles.additionalContentStyle(item?.images_url?.length, height)}
+                topics={item?.topics}
+                item={item}
+                onnewpollfetched={onNewPollFetched}
+                isPostDetail={true}
+              />
               <View style={styles.footerContainer}>
                 <Footer
                   item={item}
