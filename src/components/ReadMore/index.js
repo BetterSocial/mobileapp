@@ -64,4 +64,6 @@ const ReadMore = (props) => {
   );
 };
 
-export default ReadMore;
+export default React.memo(ReadMore, (prevProps, nextProps) => {
+  return prevProps === nextProps;
+});

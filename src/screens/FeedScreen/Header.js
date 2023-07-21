@@ -195,7 +195,7 @@ const _renderProfileNormal = ({
           styles.rowSpaceBeetwen,
           styles.heightHeader(height),
           headerStyle,
-          {paddingLeft: isPostDetail ? 10 : 0}
+          styles.postDetail(isPostDetail)
         ]}>
         <View style={styles.rowCenter}>
           {isBackButton ? (
@@ -209,7 +209,7 @@ const _renderProfileNormal = ({
             <View style={{}}>
               <Image
                 source={{
-                  uri: profile_pic_url ?? DEFAULT_PROFILE_PIC_PATH
+                  uri: profile_pic_url || DEFAULT_PROFILE_PIC_PATH
                 }}
                 style={styles.avatarImage}
               />
@@ -441,7 +441,10 @@ const styles = StyleSheet.create({
     padding: 10
     // paddingLeft: 24
   },
-  avatarImage: {height: 48, width: 48, borderRadius: 24}
+  avatarImage: {height: 48, width: 48, borderRadius: 24},
+  postDetail: (isPostDetail) => ({
+    paddingLeft: isPostDetail ? 10 : 0
+  })
 });
 
 Header.propsTypes = {

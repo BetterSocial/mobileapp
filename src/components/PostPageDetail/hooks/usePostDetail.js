@@ -1,5 +1,6 @@
 import {Dimensions, StatusBar} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+
 import {POST_TYPE_LINK, POST_TYPE_POLL} from '../../../utils/constants';
 import {normalizeFontSize} from '../../../utils/fonts';
 
@@ -93,10 +94,10 @@ const usePostDetail = () => {
       lineHeight = (1 / line) * shortTextLineH;
     }
     const numLines = 0.5;
+    const messageLength = (message || '').length;
+    const widthDimension = Dimensions.get('window').width;
 
-    const numberOfLines = Math.ceil(
-      message?.length / ((Dimensions.get('window').width / fontSize) * numLines)
-    );
+    const numberOfLines = Math.ceil(messageLength / ((widthDimension / fontSize) * numLines));
 
     containerHeight = numberOfLines * lineHeight;
     containerHeight = Math.max(containerHeight, shortTextLineHeight * 5);
