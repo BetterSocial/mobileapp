@@ -3,18 +3,16 @@ import EasyFollowSystem from 'stream-chat-react-native-core/src/components/Chann
 import crashlytics from '@react-native-firebase/crashlytics';
 import moment from 'moment';
 import {Channel, Chat, MessageInput, MessageList, Streami18n} from 'stream-chat-react-native';
-import {MessageAvatar, MessageSystem} from 'stream-chat-react-native-core';
+import {MessageSystem} from 'stream-chat-react-native-core';
 import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
 import {useRecoilState} from 'recoil';
 
-import AnonymousIcon from '../ChannelListScreen/elements/components/AnonymousIcon';
 import ChatStatusIcon from '../../components/ChatStatusIcon';
 import CustomMessageAvatar from './elements/CustomMessageAvatar';
 import Header from '../../components/Chat/Header';
 import ImageSendPreview from './elements/ImageSendPreview';
 import InputMessage from '../../components/Chat/InputMessage';
 import api from '../../service/config';
-import {CHANNEL_TYPE_ANONYMOUS} from '../../utils/constants';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {CustomMessageSystem} from '../../components';
