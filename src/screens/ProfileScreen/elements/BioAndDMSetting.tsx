@@ -77,7 +77,7 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
         {isBioEmpty ? (
           <Text style={styles.editPromptLabel}>Edit Prompt</Text>
         ) : (
-          <Text style={{color: colors.white, fontSize: 14, fontWeight: '600'}}>
+          <Text style={styles.bioText}>
             {bio}
             {bio && bio !== ' ' ? '.' : ''} <Text style={styles.editPromptLabel}>Edit Prompt</Text>
           </Text>
@@ -140,6 +140,14 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   editPromptLabel: {color: colors.blueSea10, textDecorationLine: 'underline'},
+  bioText: {
+    color: '#F5F5F5',
+    fontFamily: 'Inter',
+    fontSize: 14,
+    fontStyle: 'normal',
+    fontWeight: '600',
+    lineHeight: 22
+  },
   toggleLabel: {color: colors.white, marginRight: 2, fontSize: 12},
   toggleLabelFollowingDM: {color: colors.white, marginRight: 5, fontSize: 12},
   toggleSwitchAnon: {display: 'flex', alignSelf: 'flex-end', paddingVertical: 12},
