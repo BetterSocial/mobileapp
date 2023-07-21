@@ -50,7 +50,7 @@ const useCoreChatSystemHook = () => {
     await channelList.save(localDb);
 
     const user = UserSchema.fromWebsocketObject(lastJsonMessage);
-    await user.save(localDb);
+    await user.saveOrUpdateIfExists(localDb);
 
     const isMyMessage =
       lastJsonMessage?.message?.user?.id === signedProfileId ||
@@ -60,11 +60,13 @@ const useCoreChatSystemHook = () => {
       const chat = ChatSchema.fromWebsocketObject(lastJsonMessage);
       await chat.save(localDb);
     }
-
     try {
       lastJsonMessage?.channel?.members?.forEach(async (member) => {
-        const userMember = UserSchema.fromMemberWebsocketObject(member);
-        await userMember.save(localDb);
+        const userMember = UserSchema.fromMemberWebsocketObject(
+          member,
+          lastJsonMessage?.channel?.id
+        );
+        await userMember.saveOrUpdateIfExists(localDb);
 
         const memberSchema = ChannelListMemberSchema.fromWebsocketObject(
           lastJsonMessage?.channel?.id,

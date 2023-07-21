@@ -3,6 +3,7 @@ import {v4 as uuid} from 'uuid';
 
 import BaseDbSchema from './BaseDbSchema';
 import UserSchema from './UserSchema';
+import {ModifyAnonymousChatData} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 
 class ChatSchema implements BaseDbSchema {
   id: string;
@@ -100,7 +101,8 @@ class ChatSchema implements BaseDbSchema {
   ): Promise<BaseDbSchema[]> {
     const selectQuery = `
       SELECT A.*, 
-        B.user_id, 
+        B.user_id as user_schema_user_id,
+        B.channel_id as user_channel_id, 
         B.username, 
         B.country_code, 
         B.created_at as user_created_at, 
@@ -117,8 +119,8 @@ class ChatSchema implements BaseDbSchema {
       FROM 
       ${ChatSchema.getTableName()} A 
       INNER JOIN ${UserSchema.getTableName()} B 
-      ON A.user_id = B.user_id
-      WHERE channel_id = ? ORDER BY created_at DESC;`;
+      ON A.user_id = user_schema_user_id AND A.channel_id = user_channel_id
+      WHERE A.channel_id = ? ORDER BY created_at DESC;`;
 
     const [{rows}] = await db.executeSql(selectQuery, [myId, myAnonymousId, channelId]);
     return Promise.resolve(rows.raw().map(this.fromDatabaseObject));
@@ -227,6 +229,23 @@ class ChatSchema implements BaseDbSchema {
       userId,
       isMe: true,
       isContinuous: true
+    });
+  }
+
+  static fromInitAnonymousChatAPI(data: ModifyAnonymousChatData): ChatSchema {
+    return new ChatSchema({
+      id: data?.message?.id,
+      channelId: data?.message?.cid,
+      createdAt: data?.message?.created_at,
+      updatedAt: data?.message?.updated_at,
+      isMe: true,
+      message: data?.message?.message,
+      rawJson: data,
+      status: 'sent',
+      isContinuous: false,
+      type: 'regular',
+      user: null,
+      userId: data?.message?.user?.id
     });
   }
 

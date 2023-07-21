@@ -2,6 +2,7 @@ import {SQLiteDatabase} from 'react-native-sqlite-storage';
 
 import BaseDbSchema from './BaseDbSchema';
 import UserSchema from './UserSchema';
+import {InitAnonymousChatDataMember} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 
 class ChannelListMemberSchema implements BaseDbSchema {
   id: string;
@@ -77,7 +78,8 @@ class ChannelListMemberSchema implements BaseDbSchema {
   ): Promise<ChannelListMemberSchema[]> {
     const selectQuery = `
         SELECT A.*,
-            B.user_id,
+            B.user_id as user_schema_user_id,
+            B.channel_id as user_schema_channel_id,
             B.username,
             B.country_code,
             B.profile_picture,
@@ -90,8 +92,8 @@ class ChannelListMemberSchema implements BaseDbSchema {
                 ELSE FALSE END AS is_me
         FROM ${ChannelListMemberSchema.getTableName()} A
         INNER JOIN ${UserSchema.getTableName()} B
-        ON A.user_id = B.user_id
-        WHERE channel_id = ?`;
+        ON A.user_id = user_schema_user_id AND A.channel_id = user_schema_channel_id
+        WHERE A.channel_id = ?`;
     const selectParams = [myId, myAnonymousId, channelId];
 
     try {
@@ -132,8 +134,8 @@ class ChannelListMemberSchema implements BaseDbSchema {
   };
 
   static fromWebsocketObject = (
-    channelId: any,
-    messageId: any,
+    channelId: string,
+    messageId: string,
     member: any
   ): ChannelListMemberSchema => {
     return new ChannelListMemberSchema({
@@ -144,6 +146,23 @@ class ChannelListMemberSchema implements BaseDbSchema {
       isBanned: member.banned,
       isShadowBanned: member.shadow_banned,
       joinedAt: member.updated_at,
+      user: null
+    });
+  };
+
+  static fromInitAnonymousChatAPI = (
+    channelId: string,
+    messageId: string,
+    member: InitAnonymousChatDataMember
+  ): ChannelListMemberSchema => {
+    return new ChannelListMemberSchema({
+      channelId,
+      id: messageId,
+      userId: member?.user_id,
+      isModerator: false,
+      isBanned: member?.is_banned,
+      isShadowBanned: false,
+      joinedAt: member?.updated_at,
       user: null
     });
   };
