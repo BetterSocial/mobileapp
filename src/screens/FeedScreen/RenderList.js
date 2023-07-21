@@ -188,20 +188,15 @@ const styles = StyleSheet.create({
     marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0
   }),
   cardContainer: {
-    // maxHeight: dimen.size.FEED_CURRENT_ITEM_HEIGHT,
     width: FULL_WIDTH,
     borderBottomWidth: 7,
     borderBottomColor: colors.lightgrey,
     backgroundColor: 'white',
     height: dimen.size.FEED_CURRENT_ITEM_HEIGHT
-    // minHeight: dimen.size.FEED_CURRENT_ITEM_HEIGHT / 2
   },
   cardMain: {
-    // maxHeight: dimen.size.FEED_CURRENT_ITEM_HEIGHT,
     width: '100%',
     height: dimen.size.FEED_CURRENT_ITEM_HEIGHT
-
-    // minHeight: dimen.size.FEED_CURRENT_ITEM_HEIGHT / 2
   }
 });
 
