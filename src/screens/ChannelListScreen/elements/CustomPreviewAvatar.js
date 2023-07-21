@@ -1,7 +1,7 @@
 import * as React from 'react';
 import FastImage from 'react-native-fast-image';
 import {ChannelAvatar} from 'stream-chat-react-native';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 
 import AnonymousIcon from './components/AnonymousIcon';
 import ChatIcon from '../../../assets/chat-icon.png';
