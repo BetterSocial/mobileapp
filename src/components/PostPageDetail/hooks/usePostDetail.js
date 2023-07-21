@@ -94,7 +94,6 @@ const usePostDetail = () => {
       lineHeight = (1 / line) * shortTextLineH;
     }
     const numLines = 0.5;
-    const messageLength = (message || '').length;
     const widthDimension = Dimensions.get('window').width;
 
     const numberOfLines = Math.ceil(messageLength / ((widthDimension / fontSize) * numLines));
