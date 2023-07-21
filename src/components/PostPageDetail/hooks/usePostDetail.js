@@ -89,6 +89,8 @@ const usePostDetail = () => {
     return {fontSize, lineHeight, defaultNumberLine};
   };
 
+  const calculatedSizeScreen = top + bottom + StatusBar.currentHeight + 170;
+
   const calculationText = (
     message,
     post_type,
@@ -114,9 +116,7 @@ const usePostDetail = () => {
     });
     const numLines = 0.5;
     const widthDimension = Dimensions.get('window').width;
-
-    const numberOfLines = Math.ceil(messageLength / ((widthDimension / fontSize) * numLines));
-
+    const numberOfLines = Math.ceil(message?.length / ((widthDimension / fontSize) * numLines));
     containerHeight = numberOfLines * lineHeight;
     containerHeight = Math.max(containerHeight, shortTextLineHeight * 5);
     if (image?.length > 0 || post_type === POST_TYPE_POLL) {
@@ -128,8 +128,6 @@ const usePostDetail = () => {
     const containerComment = calculatedSizeScreen - containerHeight;
     return {fontSize, lineHeight, containerHeight, containerComment, defaultNumberLine};
   };
-
-  const calculatedSizeScreen = top + bottom + StatusBar.currentHeight + 170;
 
   const calculatePaddingBtm = () => {
     let defaultValue = 108;

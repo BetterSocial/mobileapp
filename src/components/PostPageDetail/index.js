@@ -596,8 +596,7 @@ const PostPageDetailIdComponent = (props) => {
           <ScrollView
             ref={scrollViewRef}
             showsVerticalScrollIndicator={false}
-            nestedScrollEnabled={true}
-            contentContainerStyle={styles.scrollContent}>
+            nestedScrollEnabled={true}>
             <ScrollView
               nestedScrollEnabled
               contentContainerStyle={{
