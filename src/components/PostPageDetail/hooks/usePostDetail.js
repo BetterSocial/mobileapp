@@ -48,7 +48,7 @@ const usePostDetail = () => {
     return newComment;
   };
 
-  const calculationText = (
+  const handleText = ({
     message,
     post_type,
     image,
@@ -56,17 +56,12 @@ const usePostDetail = () => {
     shortTextLineH,
     messageLength,
     isFeed
-  ) => {
-    if (!message) message = '';
+  }) => {
     let fontSize = shortTextSize;
-    if (!shortTextSize) shortTextSize = shortTextFontSize;
-    if (!shortTextLineH) shortTextLineH = shortTextLineHeight;
-    if (!messageLength) messageLength = 270;
     let lineHeight = shortTextLineHeight;
     let line = message?.length / messageLength;
     let defaultNumberLine = 5;
     if (line < 1) line = 1;
-    let containerHeight = 0;
     if (message?.length > messageLength) {
       if (!isFeed) {
         fontSize = longTextFontSize;
@@ -75,7 +70,6 @@ const usePostDetail = () => {
         longTextFontSize = normalizeFontSize(20);
         longTextLineHeight = normalizeFontSize(30);
         fontSize = (1 / line) * shortTextSize;
-        lineHeight = (1 / line) * shortTextLineH;
         if (
           fontSize < longTextFontSize &&
           (post_type === POST_TYPE_POLL || post_type === POST_TYPE_LINK || image?.length > 0)
@@ -92,6 +86,32 @@ const usePostDetail = () => {
       fontSize = (1 / line) * shortTextSize;
       lineHeight = (1 / line) * shortTextLineH;
     }
+    return {fontSize, lineHeight, defaultNumberLine};
+  };
+
+  const calculationText = (
+    message,
+    post_type,
+    image,
+    shortTextSize,
+    shortTextLineH,
+    messageLength,
+    isFeed
+  ) => {
+    if (!message) message = '';
+    if (!shortTextSize) shortTextSize = shortTextFontSize;
+    if (!shortTextLineH) shortTextLineH = shortTextLineHeight;
+    if (!messageLength) messageLength = 270;
+    let containerHeight = 0;
+    const {fontSize, lineHeight, defaultNumberLine} = handleText({
+      message,
+      post_type,
+      image,
+      shortTextSize,
+      shortTextLineH,
+      messageLength,
+      isFeed
+    });
     const numLines = 0.5;
     const widthDimension = Dimensions.get('window').width;
 
