@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import * as React from 'react';
-import {Text, View, StyleSheet, TouchableOpacity, Pressable} from 'react-native';
+import {Text, View, StyleSheet, TouchableOpacity, Pressable, Platform} from 'react-native';
 import ToggleSwitch from 'toggle-switch-react-native';
 import SimpleToast from 'react-native-simple-toast';
 import TextAreaChat from '../../../components/TextAreaChat';
 import {colors} from '../../../utils/colors';
 import {profileSettingsDMpermission} from '../../../service/profile';
+import {addDotAndRemoveNewline} from '../../../utils/string/TrimString';
 
 type BioAndDMSettingProps = {
   bio: string;
@@ -77,9 +78,8 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
         {isBioEmpty ? (
           <Text style={styles.editPromptLabel}>Edit Prompt</Text>
         ) : (
-          <Text style={{color: colors.white, fontSize: 14, fontWeight: '600'}}>
-            {bio}
-            {bio && bio !== ' ' ? '.' : ''} <Text style={styles.editPromptLabel}>Edit Prompt</Text>
+          <Text style={styles.bioText}>
+            {addDotAndRemoveNewline(bio)} <Text style={styles.editPromptLabel}>Edit Prompt</Text>
           </Text>
         )}
       </Pressable>
@@ -140,6 +140,14 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   editPromptLabel: {color: colors.blueSea10, textDecorationLine: 'underline'},
+  bioText: {
+    color: '#F5F5F5',
+    fontFamily: 'Inter',
+    fontSize: 14,
+    fontStyle: 'normal',
+    fontWeight: Platform.OS === 'android' ? '700' : '600',
+    lineHeight: 22
+  },
   toggleLabel: {color: colors.white, marginRight: 2, fontSize: 12},
   toggleLabelFollowingDM: {color: colors.white, marginRight: 5, fontSize: 12},
   toggleSwitchAnon: {display: 'flex', alignSelf: 'flex-end', paddingVertical: 12},

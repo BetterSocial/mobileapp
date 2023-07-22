@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import {colors} from '../../utils/colors';
 
 export const S = StyleSheet.create({
@@ -25,7 +25,8 @@ export const S = StyleSheet.create({
     fontSize: 12,
     fontStyle: 'normal',
     fontWeight: '400',
-    lineHeight: 18
+    lineHeight: 18,
+    paddingTop: Platform.OS === 'android' ? -20 : 5
   },
   image: {
     width: 24,

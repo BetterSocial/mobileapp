@@ -496,7 +496,7 @@ const ProfileScreen = ({route}) => {
         setIsLoadingUpdateBio(false);
         setDataMainBio(dataMain.bio);
         showMessage({
-          message: 'Update bio profile error',
+          message: 'Failed to update profile',
           type: 'danger'
         });
       });
@@ -646,12 +646,12 @@ const ProfileScreen = ({route}) => {
             updateCellsBatchingPeriod={10}
             removeClippedSubviews
             windowSize={10}
-            snapToOffsets={(() => {
-              const posts = feeds.map(
-                (item, index) => headerHeightRef.current + index * dimen.size.PROFILE_ITEM_HEIGHT
-              );
-              return [0, ...posts];
-            })()}
+            // snapToOffsets={(() => {
+            //   const posts = feeds.map(
+            //     (item, index) => headerHeightRef.current + index * dimen.size.PROFILE_ITEM_HEIGHT
+            //   );
+            //   return [0, ...posts];
+            // })()}
             ListHeaderComponent={
               <Header
                 headerHeightRef={headerHeightRef}

@@ -27,7 +27,6 @@ import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
 import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
-import {trimString} from '../../utils/string/TrimString';
 
 const GroupInfo = () => {
   const navigation = useNavigation();
@@ -42,7 +41,6 @@ const GroupInfo = () => {
     isUploadingImage,
     createChat,
     getMembersList,
-    chatName,
     handleOnNameChange,
     handleOnImageClicked,
     newParticipant,
