@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import * as React from 'react';
-import {Text, View, StyleSheet, TouchableOpacity, Pressable} from 'react-native';
+import {Text, View, StyleSheet, TouchableOpacity, Pressable, Platform} from 'react-native';
 import ToggleSwitch from 'toggle-switch-react-native';
 import SimpleToast from 'react-native-simple-toast';
 import TextAreaChat from '../../../components/TextAreaChat';
 import {colors} from '../../../utils/colors';
 import {profileSettingsDMpermission} from '../../../service/profile';
+import {addDotAndRemoveNewline} from '../../../utils/string/TrimString';
 
 type BioAndDMSettingProps = {
   bio: string;
@@ -78,8 +79,7 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
           <Text style={styles.editPromptLabel}>Edit Prompt</Text>
         ) : (
           <Text style={styles.bioText}>
-            {bio}
-            {bio && bio !== ' ' ? '.' : ''} <Text style={styles.editPromptLabel}>Edit Prompt</Text>
+            {addDotAndRemoveNewline(bio)} <Text style={styles.editPromptLabel}>Edit Prompt</Text>
           </Text>
         )}
       </Pressable>
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter',
     fontSize: 14,
     fontStyle: 'normal',
-    fontWeight: '600',
+    fontWeight: Platform.OS === 'android' ? '700' : '600',
     lineHeight: 22
   },
   toggleLabel: {color: colors.white, marginRight: 2, fontSize: 12},
