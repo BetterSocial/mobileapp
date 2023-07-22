@@ -19,14 +19,13 @@ export const S = StyleSheet.create({
     marginRight: 6
   },
   textArea: {
-    minHeight: 88,
     display: 'flex',
     flex: 1,
     fontSize: 12,
     fontStyle: 'normal',
     fontWeight: '400',
     lineHeight: 18,
-    paddingTop: Platform.OS === 'android' ? -20 : 5
+    textAlignVertical: 'top'
   },
   image: {
     width: 24,

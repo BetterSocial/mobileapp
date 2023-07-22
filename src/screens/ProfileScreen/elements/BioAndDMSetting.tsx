@@ -2,7 +2,7 @@
 import * as React from 'react';
 import {Text, View, StyleSheet, TouchableOpacity, Pressable, Platform} from 'react-native';
 import ToggleSwitch from 'toggle-switch-react-native';
-import SimpleToast from 'react-native-simple-toast';
+import ToastMessage from 'react-native-toast-message';
 import TextAreaChat from '../../../components/TextAreaChat';
 import {colors} from '../../../utils/colors';
 import {profileSettingsDMpermission} from '../../../service/profile';
@@ -34,7 +34,6 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
     try {
       await profileSettingsDMpermission(isAnonymity, isAllowFollowingSendDM);
     } catch (error) {
-      SimpleToast.show('Update settings failed, please try again.', SimpleToast.SHORT);
       setIsAnonymity(allowAnonDm);
       setIsAllowFollowingSendDM(onlyReceivedDmFromUserFollowing);
     }
@@ -49,15 +48,21 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
     if (following >= 20) {
       setIsAllowFollowingSendDM((current) => !current);
     } else {
-      SimpleToast.show(
-        "To protect your connections' anonymity, you need to follow at least 20 users to enable this option",
-        SimpleToast.LONG
-      );
+      ToastMessage.show({
+        type: 'asNative',
+        text1:
+          "To protect your connections' anonymity, you need to follow at least 20 users to enable this option",
+        position: 'bottom'
+      });
     }
   };
 
   const handleClickTextArea = () => {
-    SimpleToast.show('You cannot send yourself messages.', SimpleToast.SHORT);
+    ToastMessage.show({
+      type: 'asNative',
+      text1: 'You cannot send yourself messages.',
+      position: 'bottom'
+    });
   };
 
   const ref = React.useRef(true);
@@ -92,7 +97,7 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
             loadingAnonUser={false}
             onChangeMessage={() => {}}
             onSend={() => {}}
-            height={55}
+            minHeight={55}
             disabledInput
             placeholder="Other users will be able to reply to your prompt and direct message you."
           />

@@ -15,5 +15,6 @@ export interface TextAreaChatProps extends PhotoProfileProps {
   onSend: () => void;
   disabledButton?: boolean;
   disabledInput?: boolean;
-  height?: number;
+  minHeight?: number;
+  maxHeight?: number;
 }

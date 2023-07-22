@@ -1,5 +1,6 @@
 import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
+import ToastMessage from 'react-native-toast-message';
 import {
   Dimensions,
   Image,
@@ -223,10 +224,11 @@ const OtherProfile = () => {
 
   const showSignedMessageDisableToast = () => {
     if (!isSignedMessageEnabled) {
-      SimpleToast.show(
-        `Only users ${dataMain.username} follows can send messages`,
-        SimpleToast.SHORT
-      );
+      ToastMessage.show({
+        type: 'asNative',
+        text1: `Only users ${dataMain.username} follows can send messages`,
+        position: 'bottom'
+      });
     }
   };
 
@@ -384,7 +386,11 @@ const OtherProfile = () => {
     if (!isSignedMessageEnabled) {
       showSignedMessageDisableToast();
     } else if (!isAnonimityEnabled) {
-      SimpleToast.show('This user does not want to receive anonymous messages', SimpleToast.LONG);
+      ToastMessage.show({
+        type: 'asNative',
+        text1: 'This user does not want to receive anonymous messages',
+        position: 'bottom'
+      });
     } else {
       setIsAnonimity((prevState) => !prevState);
       await generateAnonProfile();
@@ -858,8 +864,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 100,
-    marginBottom: 12,
-    marginRight: 12
+    marginRight: 22
   },
   containerProfile: {
     marginTop: 24
@@ -1014,7 +1019,7 @@ const styles = StyleSheet.create({
   },
   toggleSwitchContainer: {display: 'flex', alignSelf: 'flex-end', paddingVertical: 10},
   rightHeaderContentContainer: {display: 'flex', flexDirection: 'row'},
-  headerImageContainer: {display: 'flex', flexDirection: 'row'},
+  headerImageContainer: {display: 'flex', flexDirection: 'row', marginBottom: 20},
   bioAndSendChatContainer: (isAnonimity) => ({
     backgroundColor: isAnonimity ? colors.bondi_blue : colors.blue1,
     borderRadius: 15,
