@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import * as React from 'react';
-import {Text, View, StyleSheet, TouchableOpacity, Pressable} from 'react-native';
+import {Text, View, StyleSheet, TouchableOpacity, Pressable, Platform} from 'react-native';
 import ToggleSwitch from 'toggle-switch-react-native';
-import SimpleToast from 'react-native-simple-toast';
+import ToastMessage from 'react-native-toast-message';
 import TextAreaChat from '../../../components/TextAreaChat';
 import {colors} from '../../../utils/colors';
 import {profileSettingsDMpermission} from '../../../service/profile';
+import {addDotAndRemoveNewline} from '../../../utils/string/TrimString';
 
 type BioAndDMSettingProps = {
   bio: string;
@@ -16,14 +17,14 @@ type BioAndDMSettingProps = {
   onlyReceivedDmFromUserFollowing: boolean;
 };
 
-const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
+const BioAndDMSetting = ({
   bio,
   changeBio,
   avatarUrl,
   following,
   allowAnonDm,
   onlyReceivedDmFromUserFollowing
-}) => {
+}: BioAndDMSettingProps) => {
   const [isAnonymity, setIsAnonymity] = React.useState(allowAnonDm);
   const [isAllowFollowingSendDM, setIsAllowFollowingSendDM] = React.useState(
     onlyReceivedDmFromUserFollowing
@@ -33,7 +34,6 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
     try {
       await profileSettingsDMpermission(isAnonymity, isAllowFollowingSendDM);
     } catch (error) {
-      SimpleToast.show('Update settings failed, please try again.', SimpleToast.SHORT);
       setIsAnonymity(allowAnonDm);
       setIsAllowFollowingSendDM(onlyReceivedDmFromUserFollowing);
     }
@@ -48,15 +48,21 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
     if (following >= 20) {
       setIsAllowFollowingSendDM((current) => !current);
     } else {
-      SimpleToast.show(
-        "To protect your connections' anonymity, you need to follow at least 20 users to enable this option",
-        SimpleToast.LONG
-      );
+      ToastMessage.show({
+        type: 'asNative',
+        text1:
+          "To protect your connections' anonymity, you need to follow at least 20 users to enable this option",
+        position: 'bottom'
+      });
     }
   };
 
   const handleClickTextArea = () => {
-    SimpleToast.show('You cannot send yourself messages.', SimpleToast.SHORT);
+    ToastMessage.show({
+      type: 'asNative',
+      text1: 'You cannot send yourself messages.',
+      position: 'bottom'
+    });
   };
 
   const ref = React.useRef(true);
@@ -77,9 +83,8 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
         {isBioEmpty ? (
           <Text style={styles.editPromptLabel}>Edit Prompt</Text>
         ) : (
-          <Text style={{color: colors.white, fontSize: 14, fontWeight: '600'}}>
-            {bio}
-            {bio && bio !== ' ' ? '.' : ''} <Text style={styles.editPromptLabel}>Edit Prompt</Text>
+          <Text style={styles.bioText}>
+            {addDotAndRemoveNewline(bio)} <Text style={styles.editPromptLabel}>Edit Prompt</Text>
           </Text>
         )}
       </Pressable>
@@ -92,7 +97,7 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
             loadingAnonUser={false}
             onChangeMessage={() => {}}
             onSend={() => {}}
-            height={55}
+            minHeight={55}
             disabledInput
             placeholder="Other users will be able to reply to your prompt and direct message you."
           />
@@ -140,6 +145,14 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   editPromptLabel: {color: colors.blueSea10, textDecorationLine: 'underline'},
+  bioText: {
+    color: '#F5F5F5',
+    fontFamily: 'Inter',
+    fontSize: 14,
+    fontStyle: 'normal',
+    fontWeight: Platform.OS === 'android' ? '700' : '600',
+    lineHeight: 22
+  },
   toggleLabel: {color: colors.white, marginRight: 2, fontSize: 12},
   toggleLabelFollowingDM: {color: colors.white, marginRight: 5, fontSize: 12},
   toggleSwitchAnon: {display: 'flex', alignSelf: 'flex-end', paddingVertical: 12},
