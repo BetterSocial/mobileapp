@@ -15,12 +15,12 @@ import {
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
+import Popover from 'react-native-popover-view';
 import DefaultChatGroupProfilePicture from '../../assets/images/default-chat-group-picture.png';
 import ExitGroup from '../../assets/images/exit-group.png';
 import Header from '../../components/Header';
 // eslint-disable-next-line camelcase
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
-import ModalAction from './elements/ModalAction';
 import ReportGroup from '../../assets/images/report.png';
 import useGroupInfo from './hooks/useGroupInfo';
 import {Loading} from '../../components';
@@ -28,6 +28,7 @@ import {ProfileContact} from '../../components/Items';
 import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {trimString} from '../../utils/string/TrimString';
+import {COLORS} from '../../utils/theme';
 
 const GroupInfo = () => {
   const navigation = useNavigation();
@@ -46,16 +47,15 @@ const GroupInfo = () => {
     handleOnNameChange,
     handleOnImageClicked,
     newParticipant,
-    selectedUser,
-    handleCloseSelectUser,
-    openModal,
     alertRemoveUser,
     memberName,
     onLeaveGroup,
     profile,
     channelState,
-    handlePressContact,
-    onReportGroup
+    onReportGroup,
+    showPopover,
+    setShowPopover,
+    handleOpenPopOver
   } = useGroupInfo();
 
   React.useEffect(() => {
@@ -194,15 +194,43 @@ const GroupInfo = () => {
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({item, index}) => (
                     <View style={{height: normalize(72)}}>
-                      <ProfileContact
-                        key={index}
-                        item={item}
-                        onPress={() => handlePressContact(item)}
-                        fullname={item.user.name}
-                        photo={item.user.image}
-                        showArrow={channelState?.channel.data.type === 'group'}
-                        userId={profile.myProfile.user_id}
-                      />
+                      <Popover
+                        isVisible={showPopover}
+                        onRequestClose={() => setShowPopover(false)}
+                        from={
+                          <View>
+                            <ProfileContact
+                              key={index}
+                              item={item}
+                              onPress={() => handleOpenPopOver(item)}
+                              fullname={item.user.name}
+                              photo={item.user.image}
+                              showArrow={channelState?.channel.data.type === 'group'}
+                              userId={profile.myProfile.user_id}
+                            />
+                          </View>
+                        }>
+                        <View style={styles.modalActUser}>
+                          <Text
+                            style={styles.textActUser}
+                            onPress={() => alertRemoveUser('message')}>
+                            Message {item.user.name}
+                          </Text>
+                          <Text
+                            style={styles.textActUser}
+                            onPress={() => alertRemoveUser('message')}>
+                            Message Anonymously
+                          </Text>
+                          <Text
+                            style={styles.textActUser}
+                            onPress={() => alertRemoveUser('remove')}>
+                            Remove from Group
+                          </Text>
+                          <Text style={styles.textActUser} onPress={() => alertRemoveUser('view')}>
+                            View Profile
+                          </Text>
+                        </View>
+                      </Popover>
                     </View>
                   )}
                 />
@@ -243,13 +271,6 @@ const GroupInfo = () => {
             <Loading visible={isLoadingMembers} />
           </View>
           <Loading visible={isUploadingImage} />
-          <ModalAction
-            name={selectedUser?.user?.name}
-            isOpen={openModal}
-            onCloseModal={handleCloseSelectUser}
-            selectedUser={selectedUser}
-            onPress={alertRemoveUser}
-          />
         </>
       )}
     </SafeAreaView>
@@ -402,5 +423,18 @@ export const styles = StyleSheet.create({
   },
   scrollContainer: {
     paddingBottom: 30
+  },
+  modalActUser: {
+    padding: 16,
+    paddingLeft: 27,
+    paddingRight: 70
+  },
+  textActUser: {
+    fontFamily: 'Inter',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    fontSize: 18,
+    color: COLORS.black000,
+    paddingVertical: 20
   }
 });
