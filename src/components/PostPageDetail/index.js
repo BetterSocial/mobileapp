@@ -8,7 +8,6 @@ import {useRoute} from '@react-navigation/native';
 import BlockComponent from '../BlockComponent';
 import ContainerComment from '../Comments/ContainerComment';
 import Content from './elements/Content';
-import ContentLink from './elements/ContentLink';
 import Header from '../../screens/FeedScreen/Header';
 import LoadingWithoutModal from '../LoadingWithoutModal';
 import ShareUtils from '../../utils/share';
@@ -21,7 +20,6 @@ import usePostContextHook, {CONTEXT_SOURCE} from '../../hooks/usePostContextHook
 import {
   ANALYTICS_SHARE_POST_FEED_ID,
   ANALYTICS_SHARE_POST_PDP_SCREEN,
-  POST_TYPE_LINK,
   SOURCE_PDP
 } from '../../utils/constants';
 import {Context} from '../../context';
@@ -30,10 +28,9 @@ import {createCommentParentV2, getCommentList} from '../../service/comment';
 import {downVote, upVote} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
 import {getCountCommentWithChildInDetailPage} from '../../utils/getstream';
-import {getFeedDetail, viewTimePost} from '../../service/post';
-import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import {getFeedDetail} from '../../service/post';
 import {saveComment} from '../../context/actions/comment';
-import {setFeedByIndex, setTimer} from '../../context/actions/feeds';
+import {setFeedByIndex} from '../../context/actions/feeds';
 import {showScoreAlertDialog} from '../../utils/Utils';
 import {useFeedDataContext} from '../../hooks/useFeedDataContext';
 import {withInteractionsManaged} from '../WithInteractionManaged';
@@ -53,14 +50,12 @@ const PostPageDetailIdComponent = (props) => {
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
   const [loadingPost, setLoadingPost] = React.useState(false);
-  const [time, setTime] = React.useState(new Date().getTime());
   const [item, setItem] = React.useState(null);
   const navigation = useNavigation();
   const route = useRoute();
   const scrollViewRef = React.useRef(null);
   const refBlockComponent = React.useRef();
   const [feedsContext, dispatch] = useFeedDataContext(contextSource);
-  const {timer} = feedsContext;
   const [commenListParam] = React.useState({
     limit: 100
   });
@@ -235,27 +230,6 @@ const PostPageDetailIdComponent = (props) => {
       setLoadingPost(false);
       Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
     }
-  };
-
-  const onPressDomain = () => {
-    const param = linkContextScreenParamBuilder(
-      item,
-      item.og.domain,
-      item.og.domainImage,
-      item.og.domain_page_id
-    );
-
-    const currentTime = new Date();
-    const feedDiffTime = currentTime.getTime() - timer.getTime();
-    const pdpDiffTime = currentTime.getTime() - time;
-
-    if (feedId) {
-      viewTimePost(feedId, pdpDiffTime + feedDiffTime, SOURCE_PDP);
-    }
-
-    setTime(new Date().getTime());
-    setTimer(new Date(), dispatch);
-    navigation.navigate('DomainScreen', param);
   };
 
   const onCommentButtonClicked = () => {
@@ -456,28 +430,6 @@ const PostPageDetailIdComponent = (props) => {
       },
       dispatch
     );
-  };
-
-  const navigateToLinkContextPage = (itemParams) => {
-    const param = linkContextScreenParamBuilder(
-      itemParams,
-      itemParams.og.domain,
-      itemParams.og.domainImage,
-      itemParams.og.domain_page_id
-    );
-
-    const currentTime = new Date();
-    const feedDiffTime = currentTime.getTime() - timer.getTime();
-    const pdpDiffTime = currentTime.getTime() - time;
-
-    if (feedId) {
-      viewTimePost(feedId, pdpDiffTime + feedDiffTime, SOURCE_PDP);
-    }
-
-    setTime(new Date().getTime());
-    setTimer(new Date(), dispatch);
-
-    navigation.push('LinkContextScreen', param);
   };
 
   const onPressDownVoteHandle = async () => {

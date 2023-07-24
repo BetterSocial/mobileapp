@@ -33,6 +33,9 @@ const useGroupInfo = () => {
   const [newParticipant, setNewParticipan] = React.useState([]);
   const [openModal, setOpenModal] = React.useState(false);
   const [, dispatchChannel] = React.useContext(Context).channel;
+
+  const anonUserEmojiName = channelState?.channel?.data?.anon_user_info_emoji_name;
+
   const serializeMembersList = (result = []) => {
     if (!result) {
       return {};
@@ -64,6 +67,7 @@ const useGroupInfo = () => {
     }
   };
   const memberName = () => {
+    if (anonUserEmojiName) return `Anonymous ${anonUserEmojiName}`;
     return getChatName(username, profile.myProfile.username);
   };
   const chatName = getChatName(username, profile.myProfile.username);
@@ -331,13 +335,17 @@ const useGroupInfo = () => {
     });
   };
 
-  // eslint-disable-next-line consistent-return
   const handlePressContact = async (item) => {
     if (channelState?.channel.data.type === 'group') {
       await handleSelectUser(item);
       return true;
     }
-    handleOpenProfile(item);
+
+    if (anonUserEmojiName) {
+      return true;
+    }
+
+    return handleOpenProfile(item);
   };
 
   const handleOpenProfile = async (item) => {
