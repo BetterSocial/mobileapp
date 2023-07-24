@@ -1,17 +1,18 @@
 import React from 'react';
-import {useNavigation} from '@react-navigation/core';
 import SimpleToast from 'react-native-simple-toast';
-import {openComposer} from 'react-native-email-link';
-import {launchImageLibrary} from 'react-native-image-picker';
 import {Alert} from 'react-native';
 import {generateRandomId} from 'stream-chat-react-native-core';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {openComposer} from 'react-native-email-link';
+import {useNavigation} from '@react-navigation/core';
+
 import {Context} from '../../../context';
-import {uploadFile} from '../../../service/file';
-import {requestExternalStoragePermission} from '../../../utils/permission';
-import {getChatName} from '../../../utils/string/StringUtils';
-import {setChannel} from '../../../context/actions/setChannel';
 import {checkUserBlock} from '../../../service/profile';
+import {getChatName} from '../../../utils/string/StringUtils';
+import {requestExternalStoragePermission} from '../../../utils/permission';
+import {setChannel} from '../../../context/actions/setChannel';
 import {setParticipants} from '../../../context/actions/groupChat';
+import {uploadFile} from '../../../service/file';
 
 const useGroupInfo = () => {
   const [groupChatState, groupPatchDispatch] = React.useContext(Context).groupChat;
@@ -31,6 +32,7 @@ const useGroupInfo = () => {
   const [selectedUser, setSelectedUser] = React.useState(null);
   const [newParticipant, setNewParticipan] = React.useState([]);
   const [openModal, setOpenModal] = React.useState(false);
+  const [showPopover, setShowPopover] = React.useState(false);
   const [, dispatchChannel] = React.useContext(Context).channel;
   const serializeMembersList = (result = []) => {
     if (!result) {
@@ -143,9 +145,9 @@ const useGroupInfo = () => {
     setNewParticipan(newData);
   };
 
-  const handleSelectUser = async (user) => {
+  const handleSelectUser = (user) => {
     if (user.user_id === profile.myProfile.user_id) return;
-    await setSelectedUser(user);
+    setSelectedUser(user);
     setOpenModal(true);
   };
 
@@ -275,6 +277,7 @@ const useGroupInfo = () => {
   };
 
   const alertRemoveUser = async (status) => {
+    setShowPopover(false);
     if (status === 'view') {
       setOpenModal(false);
       handleOpenProfile(selectedUser).catch((e) => console.log(e));
@@ -291,6 +294,7 @@ const useGroupInfo = () => {
       await checkUserIsBlockHandle();
     }
   };
+
   const onLeaveGroup = () => {
     Alert.alert('', 'Exit this group?', [{text: 'Cancel'}, {text: 'Exit', onPress: leaveGroup}]);
   };
@@ -332,8 +336,9 @@ const useGroupInfo = () => {
 
   // eslint-disable-next-line consistent-return
   const handlePressContact = async (item) => {
+    setShowPopover(false);
     if (channelState?.channel.data.type === 'group') {
-      await handleSelectUser(item);
+      handleSelectUser(item);
       return true;
     }
     handleOpenProfile(item);
@@ -354,6 +359,15 @@ const useGroupInfo = () => {
         }
       });
     }, 500);
+  };
+
+  const handleOpenPopOver = async (user) => {
+    if (user.user_id === profile.myProfile.user_id) {
+      setShowPopover(false);
+      return;
+    }
+    handleSelectUser(user);
+    setShowPopover(true);
   };
 
   return {
@@ -398,8 +412,11 @@ const useGroupInfo = () => {
     onReportGroup,
     setUsername,
     setSelectedUser,
-    openChatMessage,
     generateSystemChat,
+    showPopover,
+    setShowPopover,
+    handleOpenPopOver,
+    openChatMessage,
     setNewParticipan
   };
 };
