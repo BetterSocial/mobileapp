@@ -37,7 +37,7 @@ const Content = ({
   const {calculationText} = usePostDetail();
   const {fontSize, lineHeight, defaultNumberLine} = calculationText(
     message,
-    null,
+    item.post_type,
     null,
     normalizeFontSize(30),
     normalizeFontSize(40),
@@ -84,7 +84,6 @@ const Content = ({
       ];
       return defaultStyle;
     };
-
     return (
       <View testID="postTypePoll" style={[styles.containerText, handleContainerText()]}>
         <Text numberOfLines={defaultNumberLine} style={handleStyleFont()}>

@@ -70,12 +70,16 @@ const usePostDetail = () => {
         longTextFontSize = normalizeFontSize(20);
         longTextLineHeight = normalizeFontSize(30);
         fontSize = (1 / line) * shortTextSize;
-        if (
-          fontSize < longTextFontSize &&
-          (post_type === POST_TYPE_POLL || post_type === POST_TYPE_LINK || image?.length > 0)
-        ) {
-          fontSize = longTextFontSize;
-          lineHeight = longTextLineHeight;
+        if (post_type === POST_TYPE_POLL || post_type === POST_TYPE_LINK || image?.length > 0) {
+          if (fontSize < longTextFontSize) {
+            fontSize = longTextFontSize;
+            lineHeight = longTextLineHeight;
+            defaultNumberLine = 4;
+          } else {
+            fontSize = shortTextFontSize * 0.6;
+            lineHeight = shortTextLineHeight * 0.6;
+            defaultNumberLine = 4;
+          }
         } else {
           fontSize = shortTextFontSize * 0.6;
           lineHeight = shortTextLineHeight * 0.6;
