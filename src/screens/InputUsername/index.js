@@ -299,7 +299,7 @@ const ChooseUsername = () => {
             {/* <Animated.View style={[styles.constainerInfo, {opacity: fadeInfo}]}>
             <View style={styles.parentIcon} >
             <View style={styles.containerIcon}>
-              <IconFontAwesome5 name="exclamation" size={12} color="#2F80ED" />
+              <IconFontAwesome5 name="exclamation" size={12} color="#2C67BC" />
             </View>
             </View>
               <View style={styles.parentInfo} >
