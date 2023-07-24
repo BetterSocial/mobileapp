@@ -299,7 +299,7 @@ exports[`Testing Feed Screen Content Link Card Matches Snapshot 1`] = `
       <Text
         style={
           Object {
-            "color": "#2f80ed",
+            "color": "#2C67BC",
             "fontSize": 12,
             "marginStart": 8,
             "textDecorationLine": "underline",
@@ -783,7 +783,7 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
           <Text
             style={
               Object {
-                "color": "#2f80ed",
+                "color": "#2C67BC",
                 "fontSize": 12,
                 "marginStart": 8,
                 "textDecorationLine": "underline",
