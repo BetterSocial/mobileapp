@@ -26,10 +26,9 @@ import {createCommentParentV2, getCommentList} from '../../service/comment';
 import {downVote, upVote} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
 import {getCountCommentWithChildInDetailPage} from '../../utils/getstream';
-import {getFeedDetail, viewTimePost} from '../../service/post';
-import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import {getFeedDetail} from '../../service/post';
 import {saveComment} from '../../context/actions/comment';
-import {setFeedByIndex, setTimer} from '../../context/actions/feeds';
+import {setFeedByIndex} from '../../context/actions/feeds';
 import {showScoreAlertDialog} from '../../utils/Utils';
 import {useFeedDataContext} from '../../hooks/useFeedDataContext';
 import {withInteractionsManaged} from '../WithInteractionManaged';
@@ -51,14 +50,12 @@ const PostPageDetailIdComponent = (props) => {
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
   const [loadingPost, setLoadingPost] = React.useState(false);
-  const [time, setTime] = React.useState(new Date().getTime());
   const [item, setItem] = React.useState(null);
   const navigation = useNavigation();
   const route = useRoute();
   const scrollViewRef = React.useRef(null);
   const refBlockComponent = React.useRef();
   const [feedsContext, dispatch] = useFeedDataContext(contextSource);
-  const {timer} = feedsContext;
   const [commenListParam] = React.useState({
     limit: 100
   });
