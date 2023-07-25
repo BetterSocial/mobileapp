@@ -581,7 +581,7 @@ const PostPageDetailIdComponent = (props) => {
                     )
                   }
                   onPressComment={onCommentButtonClicked}
-                  showScoreButton={true}
+                  showScoreButton={profile?.myProfile?.is_backdoor_user}
                   onPressScore={handleOnPressScore}
                   onPressBlock={() => refBlockComponent.current.openBlockComponent(item)}
                   isSelf={profile.myProfile.user_id === item.actor?.id}
