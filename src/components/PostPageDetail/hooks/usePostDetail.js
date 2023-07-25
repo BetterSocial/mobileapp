@@ -60,7 +60,7 @@ const usePostDetail = () => {
     let fontSize = shortTextSize;
     let lineHeight = shortTextLineHeight;
     let line = message?.length / messageLength;
-    console.log({line, message}, 'line');
+    // console.log({line, message}, 'line');
     let defaultNumberLine = 5;
     if (line < 1) line = 1;
     if (message?.length > messageLength) {
@@ -77,13 +77,13 @@ const usePostDetail = () => {
             lineHeight = longTextLineHeight;
             // defaultNumberLine = 4;
           } else {
-            fontSize = shortTextFontSize * 0.6;
-            lineHeight = shortTextLineHeight * 0.6;
+            fontSize = shortTextFontSize;
+            lineHeight = shortTextLineHeight;
             // defaultNumberLine = 5;
           }
         } else {
-          fontSize = shortTextFontSize * 0.6;
-          lineHeight = shortTextLineHeight * 0.6;
+          fontSize = shortTextFontSize;
+          lineHeight = shortTextLineHeight;
           defaultNumberLine = 10;
         }
       }

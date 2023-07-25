@@ -11,7 +11,7 @@ import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import {COLORS} from '../../utils/theme';
 import {POST_TYPE_LINK, POST_TYPE_POLL} from '../../utils/constants';
 import {colors} from '../../utils/colors';
-import {fonts, normalizeFontSize} from '../../utils/fonts';
+import {fonts, normalizeFontSize, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
 import usePostDetail from '../../components/PostPageDetail/hooks/usePostDetail';
 
@@ -34,14 +34,18 @@ const Content = ({
   const substringNoImageTopic = devHeight / 1.6 - 40 * (height / screenWidth);
   const substringWithPoll = devHeight / 3 - 40 * (height / screenWidth);
   const substringWithPollTopic = devHeight / 5 - 40 * (height / screenWidth);
+  const [heightLayout, setHeightLayout] = React.useState(0);
+  const [numberLine, setNumberLine] = React.useState(null);
   const {calculationText} = usePostDetail();
+  const maxFontSize = normalizeFontSizeByWidth(40);
+  const maxLineHeight = normalizeFontSizeByWidth(40 * 1.5);
   const {fontSize, lineHeight, defaultNumberLine} = calculationText(
     message,
     item.post_type,
     null,
-    normalizeFontSize(30),
-    normalizeFontSize(40),
-    125,
+    maxFontSize,
+    maxLineHeight,
+    150,
     true
   );
   const onImageClickedByIndex = (index) => {
@@ -74,19 +78,56 @@ const Content = ({
       substringNumber = substringWithPollTopic;
     }
 
+    const handleFontSize = () => {
+      if ((defaultNumberLine / (numberLine || 1)) * fontSize < normalizeFontSizeByWidth(16)) {
+        return fontSize;
+      }
+      return (defaultNumberLine / (numberLine || 1)) * fontSize;
+    };
+
+    const handleLineHeight = () => {
+      if (
+        (defaultNumberLine / (numberLine || 1)) * lineHeight <
+        normalizeFontSizeByWidth(16 * 1.5)
+      ) {
+        return lineHeight;
+      }
+      return (defaultNumberLine / (numberLine || 1)) * lineHeight;
+    };
+
     const handleStyleFont = () => {
       const defaultStyle = [
         styles.textMedia,
         {
-          fontSize,
-          lineHeight
+          fontSize: handleFontSize(),
+          lineHeight: handleLineHeight()
         }
       ];
       return defaultStyle;
     };
+
+    const handleNumberLine = ({nativeEvent}) => {
+      // console.log(nativeEvent.lines, 'biban');
+      // setNumberLine(nativeEvent.lines.length);
+    };
+
+    const hanldeHeightContainer = ({nativeEvent}) => {
+      // setHeightLayout(nativeEvent.layout.height);
+      if (!numberLine) {
+        setNumberLine(nativeEvent.layout.height / lineHeight);
+      }
+    };
+
+    console.log({numberLine}, 'taiman');
     return (
-      <View testID="postTypePoll" style={[styles.containerText, handleContainerText()]}>
-        <Text numberOfLines={defaultNumberLine} style={handleStyleFont()}>
+      <View
+        onLayout={hanldeHeightContainer}
+        testID="postTypePoll"
+        style={[styles.containerText, handleContainerText()]}>
+        <Text
+          // onTextLayout={({nativeEvent}) => setNumberLine(nativeEvent.lines.length)}
+          // numberOfLines={defaultNumberLine}
+          style={handleStyleFont()}>
           {getCaptionWithTopicStyle(
             route?.params?.id,
             message,
@@ -102,6 +143,7 @@ const Content = ({
       </View>
     );
   };
+  console.log({defaultNumberLine, numberLine, maxFontSize}, 'lisaman');
 
   const handleContainerText = () => {
     if (
