@@ -6,6 +6,7 @@ import './src/libraries/reactotron/reactotronInstance';
 import {enableScreens} from 'react-native-screens';
 import config from 'react-native-config';
 import {AppRegistry} from 'react-native';
+
 import * as Sentry from '@sentry/react-native';
 import {configureHumanID} from '@human-internet/react-native-humanid';
 import DeviceInfo from 'react-native-device-info';
