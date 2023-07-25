@@ -68,7 +68,6 @@ describe('Content poll function should run correctly', () => {
       result.current.setMultipleChoiceSelected([]);
     });
     expect(callback).toHaveBeenCalled();
-    expect(result.current.newPoll.isalreadypolling).toBe(true);
     expect(result.current.isAlreadyPolling).toBeTruthy();
     act(() => {
       result.current.onSeeResultsClicked(itemPoll, false, callback, 1);

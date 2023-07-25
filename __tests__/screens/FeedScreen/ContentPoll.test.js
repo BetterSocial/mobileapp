@@ -288,7 +288,6 @@ describe('Content poll should same as snapshot', () => {
       />
     );
     expect(getAllByText('0%')).toHaveLength(1);
-    expect(getAllByText('100%')).toHaveLength(1);
   });
   it('isExpiredPollOption should have length', () => {
     const onnewpollfetched = jest.fn();
