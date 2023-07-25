@@ -5,54 +5,64 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.00038">
+      <testcase classname="fastlane.lanes" name="00: default_platform" time="0.000172">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="1: setup_circle_ci" time="0.000474">
+      <testcase classname="fastlane.lanes" name="01: setup_circle_ci" time="0.000284">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="2: Switch to ios bump_version lane" time="0.00018">
+      <testcase classname="fastlane.lanes" name="02: Switch to ios bump_version lane" time="6.9e-05">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="3: get_version_number" time="0.179585">
+      <testcase classname="fastlane.lanes" name="03: get_version_number" time="0.076234">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="4: firebase_app_distribution_get_latest_release" time="1.59334">
+      <testcase classname="fastlane.lanes" name="04: firebase_app_distribution_get_latest_release" time="1.661018">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="5: increment_build_number" time="0.829749">
+      <testcase classname="fastlane.lanes" name="05: increment_build_number" time="0.453038">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="6: Switch to ios build lane" time="0.000146">
+      <testcase classname="fastlane.lanes" name="06: Switch to ios build lane" time="0.000102">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="7: update_code_signing_settings" time="0.064564">
+      <testcase classname="fastlane.lanes" name="07: update_code_signing_settings" time="0.03805">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="8: match" time="4.074124">
+      <testcase classname="fastlane.lanes" name="08: match" time="4.987106">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="9: build_ios_app" time="26130.35181">
+      <testcase classname="fastlane.lanes" name="09: build_ios_app" time="125.033935">
         
-          <failure message="/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/actions/actions_helper.rb:67:in `execute_action&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/runner.rb:255:in `block in execute_action&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/runner.rb:229:in `chdir&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/runner.rb:229:in `execute_action&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/runner.rb:157:in `trigger_action_by_name&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/fast_file.rb:159:in `method_missing&apos;&#10;Fastfile:267:in `block (3 levels) in parsing_binding&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/lane.rb:33:in `call&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/runner.rb:204:in `try_switch_to_lane&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/runner.rb:146:in `trigger_action_by_name&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/fast_file.rb:159:in `method_missing&apos;&#10;Fastfile:231:in `block (3 levels) in parsing_binding&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/lane.rb:33:in `call&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/runner.rb:49:in `block in execute&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/runner.rb:45:in `chdir&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/runner.rb:45:in `execute&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/lane_manager.rb:47:in `cruise_lane&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/command_line_handler.rb:36:in `handle&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/commands_generator.rb:110:in `block (2 levels) in run&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/commander-4.6.0/lib/commander/command.rb:187:in `call&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/commander-4.6.0/lib/commander/command.rb:157:in `run&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/commander-4.6.0/lib/commander/runner.rb:444:in `run_active_command&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane_core/lib/fastlane_core/ui/fastlane_runner.rb:124:in `run!&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/commander-4.6.0/lib/commander/delegates.rb:18:in `run!&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/commands_generator.rb:354:in `run&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/commands_generator.rb:43:in `start&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/cli_tools_distributor.rb:123:in `take_off&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/bin/fastlane:23:in `&lt;top (required)&gt;&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/bin/fastlane:25:in `load&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/bin/fastlane:25:in `&lt;main&gt;&apos;&#10;&#10;Error building the application - see the log above" />
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="10: Switch to ios upload_ipa_to_firebase_distribution lane" time="0.000129">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="11: firebase_app_distribution" time="36.530235">
+        
+          <failure message="/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/actions/actions_helper.rb:67:in `execute_action&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/runner.rb:255:in `block in execute_action&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/runner.rb:229:in `chdir&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/runner.rb:229:in `execute_action&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/runner.rb:157:in `trigger_action_by_name&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/fast_file.rb:159:in `method_missing&apos;&#10;Fastfile:285:in `block (3 levels) in parsing_binding&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/lane.rb:33:in `call&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/runner.rb:204:in `try_switch_to_lane&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/runner.rb:146:in `trigger_action_by_name&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/fast_file.rb:159:in `method_missing&apos;&#10;Fastfile:235:in `block (3 levels) in parsing_binding&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/lane.rb:33:in `call&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/runner.rb:49:in `block in execute&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/runner.rb:45:in `chdir&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/runner.rb:45:in `execute&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/lane_manager.rb:47:in `cruise_lane&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/command_line_handler.rb:36:in `handle&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/commands_generator.rb:110:in `block (2 levels) in run&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/commander-4.6.0/lib/commander/command.rb:187:in `call&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/commander-4.6.0/lib/commander/command.rb:157:in `run&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/commander-4.6.0/lib/commander/runner.rb:444:in `run_active_command&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane_core/lib/fastlane_core/ui/fastlane_runner.rb:124:in `run!&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/commander-4.6.0/lib/commander/delegates.rb:18:in `run!&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/commands_generator.rb:354:in `run&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/commands_generator.rb:43:in `start&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/fastlane/lib/fastlane/cli_tools_distributor.rb:123:in `take_off&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/gems/fastlane-2.213.0/bin/fastlane:23:in `&lt;top (required)&gt;&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/bin/fastlane:25:in `load&apos;&#10;/opt/homebrew/Cellar/fastlane/2.213.0/libexec/bin/fastlane:25:in `&lt;main&gt;&apos;&#10;&#10;App Distribution halted because it had a problem uploading the IPA: There&apos;s been an error processing your upload.&#10;The IPA bundle ID &apos;org.reactjs.native.example.BetterSocial&apos; does not match your Firebase app&apos;s bundle ID &apos;org.bettersocial&apos;. Change the IPA bundle ID to org.bettersocial and retry the upload.&#10;&#10; If a Firebase app already exists for &apos;org.reactjs.native.example.BetterSocial&apos;, upload your IPA to that Firebase app instead." />
         
       </testcase>
     

@@ -44,6 +44,7 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
     {name: 'halofajarism', humanId: 'halofajarism'},
     {name: 'fajarus1', humanId: 'tYy3OFurquv0lkYF'},
     {name: 'agita', humanId: 'agita'},
+    {name: 'usup', humanId: 'P19FGPQGMSZ5VSHA0YSQ'},
     {name: 'bastian', humanId: 'bastian'},
     {name: 'agita2', humanId: 'I4K3M10FGR78EWQQDNQ2'},
     {name: 'agita3', humanId: 'dlNWskypPXEPyNPM'},
