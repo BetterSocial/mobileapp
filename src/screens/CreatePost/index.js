@@ -19,7 +19,6 @@ import {
   Text,
   View
 } from 'react-native';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {openSettings} from 'react-native-permissions';
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation, useRoute} from '@react-navigation/core';
@@ -79,6 +78,7 @@ import {getUrl, isContainUrl} from '../../utils/Utils';
 import {getUserId} from '../../utils/users';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
 import {uploadPhoto} from '../../service/file';
+import {COLORS} from '../../utils/theme';
 
 const IS_GEO_SELECT_ENABLED = false;
 
@@ -945,7 +945,7 @@ const styles = StyleSheet.create({
     height
   }),
   reminderContainer: {
-    backgroundColor: '#2F80ED',
+    backgroundColor: COLORS.blue,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 7,
