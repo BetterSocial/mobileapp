@@ -13,7 +13,9 @@ import LoadingWithoutModal from '../LoadingWithoutModal';
 import ShareUtils from '../../utils/share';
 import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from '../Comments/WriteComment';
+import useFeed from '../../screens/FeedScreen/hooks/useFeed';
 import usePostDetail from './hooks/usePostDetail';
+import useWriteComment from '../Comments/hooks/useWriteComment';
 import usePostContextHook, {CONTEXT_SOURCE} from '../../hooks/usePostContextHooks';
 import {
   ANALYTICS_SHARE_POST_FEED_ID,
@@ -32,8 +34,6 @@ import {setFeedByIndex} from '../../context/actions/feeds';
 import {showScoreAlertDialog} from '../../utils/Utils';
 import {useFeedDataContext} from '../../hooks/useFeedDataContext';
 import {withInteractionsManaged} from '../WithInteractionManaged';
-import useFeed from '../../screens/FeedScreen/hooks/useFeed';
-import useWriteComment from '../Comments/hooks/useWriteComment';
 
 const {width, height} = Dimensions.get('window');
 
@@ -581,7 +581,7 @@ const PostPageDetailIdComponent = (props) => {
                     )
                   }
                   onPressComment={onCommentButtonClicked}
-                  showScoreButton={true}
+                  showScoreButton={profile?.myProfile?.is_backdoor_user}
                   onPressScore={handleOnPressScore}
                   onPressBlock={() => refBlockComponent.current.openBlockComponent(item)}
                   isSelf={profile.myProfile.user_id === item.actor?.id}
