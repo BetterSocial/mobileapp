@@ -30,7 +30,8 @@ const NetworkStatusIndicator = ({hide = false}) => {
     };
   }, []);
 
-  if (hide) return <View testID="isHide" />;
+  // eslint-disable-next-line no-constant-condition
+  if (hide || true) return <View testID="isHide" />;
 
   if (!isOnline)
     return (
