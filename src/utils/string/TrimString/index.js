@@ -4,3 +4,14 @@ export const trimString = (string, length) => {
   }
   return '';
 };
+
+export const addDotAndRemoveNewline = (text) => {
+  const trimmedText = text.trim();
+
+  const textWithoutNewline = trimmedText.replace(/\n+$/, '');
+
+  if (textWithoutNewline.length > 0) {
+    return `${textWithoutNewline}.`;
+  }
+  return text;
+};
