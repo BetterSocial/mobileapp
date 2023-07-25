@@ -9,10 +9,11 @@ import ContentPoll from './ContentPoll';
 import ImageLayouter from './elements/ImageLayouter';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import {COLORS} from '../../utils/theme';
-import {POST_TYPE_POLL} from '../../utils/constants';
+import {POST_TYPE_LINK, POST_TYPE_POLL} from '../../utils/constants';
 import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
+import usePostDetail from '../../components/PostPageDetail/hooks/usePostDetail';
 
 const {width: screenWidth, height} = Dimensions.get('window');
 
@@ -33,7 +34,16 @@ const Content = ({
   const substringNoImageTopic = devHeight / 1.6 - 40 * (height / screenWidth);
   const substringWithPoll = devHeight / 3 - 40 * (height / screenWidth);
   const substringWithPollTopic = devHeight / 5 - 40 * (height / screenWidth);
-
+  const {calculationText} = usePostDetail();
+  const {fontSize, lineHeight, defaultNumberLine} = calculationText(
+    message,
+    null,
+    null,
+    normalizeFontSize(30),
+    normalizeFontSize(40),
+    125,
+    true
+  );
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
       title: 'Photo',
@@ -64,9 +74,20 @@ const Content = ({
       substringNumber = substringWithPollTopic;
     }
 
+    const handleStyleFont = () => {
+      const defaultStyle = [
+        styles.textMedia,
+        {
+          fontSize,
+          lineHeight
+        }
+      ];
+      return defaultStyle;
+    };
+
     return (
-      <View testID="postTypePoll" style={styles.containerText}>
-        <Text style={styles.textMedia}>
+      <View testID="postTypePoll" style={[styles.containerText, handleContainerText()]}>
+        <Text numberOfLines={defaultNumberLine} style={handleStyleFont()}>
           {getCaptionWithTopicStyle(
             route?.params?.id,
             message,
@@ -83,11 +104,25 @@ const Content = ({
     );
   };
 
+  const handleContainerText = () => {
+    if (
+      message?.length < 125 &&
+      item.post_type !== POST_TYPE_POLL &&
+      item.post_type !== POST_TYPE_LINK &&
+      images_url.length <= 0
+    ) {
+      return styles.centerVertical;
+    }
+    return {};
+  };
+
   return (
     <Pressable onPress={onPress} style={[styles.contentFeed, style]}>
       {message?.length > 0 ? (
         <View>
-          <View style={styles.containerMainText}>{renderHandleTextContent()}</View>
+          <View style={[styles.containerMainText, handleContainerText()]}>
+            {renderHandleTextContent()}
+          </View>
         </View>
       ) : null}
 
@@ -194,6 +229,7 @@ export const styles = StyleSheet.create({
   contentFeed: {
     flex: 1,
     marginTop: 0
+    // backgroundColor: 'red'
   },
   item: {
     width: screenWidth - 20,
@@ -225,7 +261,11 @@ export const styles = StyleSheet.create({
     paddingVertical: 10
   },
   containerText: {
-    height: 'auto',
     flexDirection: 'row'
+  },
+  centerVertical: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%'
   }
 });

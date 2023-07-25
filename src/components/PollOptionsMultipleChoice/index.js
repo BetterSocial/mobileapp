@@ -5,9 +5,9 @@ import {StyleSheet, Text, TouchableNativeFeedback, View} from 'react-native';
 
 import IconPollMine from '../../assets/icon/IconPollMine';
 import IconPollWinnerBadge from '../../assets/icon/IconPollWinnerBadge';
+import usePollOptionMultiple from './hooks/usePollOptionMultiple';
 import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
-import usePollOptionMultiple from './hooks/usePollOptionMultiple';
 
 const PollOptionsMultipleChoice = ({
   item,
@@ -18,6 +18,7 @@ const PollOptionsMultipleChoice = ({
   isalreadypolling = false,
   maxpolls = [],
   onselected = () => {},
+  total = 0,
   totalVotingUser = 0
 }) => {
   const {
@@ -107,7 +108,6 @@ const PollOptionsMultipleChoice = ({
               testID="checkbox"
               value={selected}
               tintColors={{true: colors.holytosca, false: colors.black}}
-              onChange={onOptionsClicked}
             />
           )}
           <Text style={styles.pollOptionItemText(isPollDisabled(), isMax)}>{item.option}</Text>

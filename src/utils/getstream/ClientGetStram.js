@@ -26,6 +26,9 @@ export const useClientGetstream = () => {
         if (token) {
           const userId = await jwtDecode(token.id).user_id;
           const userData = await getMyProfile(userId);
+          /**
+           * @type {import('stream-chat').OwnUserResponse}
+           */
           const user = {
             id: userId,
             name: userData?.data.username,

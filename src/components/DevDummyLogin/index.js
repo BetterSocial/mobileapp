@@ -41,6 +41,7 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
     {name: 'halofajarism', humanId: 'halofajarism'},
     {name: 'fajarus1', humanId: 'tYy3OFurquv0lkYF'},
     {name: 'agita', humanId: 'agita'},
+    {name: 'usup', humanId: 'P19FGPQGMSZ5VSHA0YSQ'},
     {name: 'bastian', humanId: 'bastian'},
     {name: 'agita2', humanId: 'I4K3M10FGR78EWQQDNQ2'},
     {name: 'agita3', humanId: 'dlNWskypPXEPyNPM'},
@@ -55,7 +56,9 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
     {name: 'CatLadyForever', humanId: 'YZ55TDV3W49CCFW722CX'},
     {name: 'Liz2', humanId: 'HXDX51MNA1DFV09608SX'},
     {name: 'Simplythebest2', humanId: 'WUCHMWWT9ZNHYFCMPMXZ'},
-    {name: 'AlwaysinCrimson', humanId: 'GEPIX69EXGSRF17MMX0S'}
+    {name: 'AlwaysinCrimson', humanId: 'GEPIX69EXGSRF17MMX0S'},
+    {name: 'moni', humanId: 'B1NXMDLD9YRF3F7YIYXZ'},
+    {name: 'usup', humanId: 'P19FGPQGMSZ5VSHA0YSQ'}
   ]);
 
   const [passwordText, setPasswordText] = React.useState('');
