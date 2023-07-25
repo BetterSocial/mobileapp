@@ -18,6 +18,7 @@ const PollOptionsMultipleChoice = ({
   isalreadypolling = false,
   maxpolls = [],
   onselected = () => {},
+  total = 0,
   totalVotingUser = 0
 }) => {
   const {
