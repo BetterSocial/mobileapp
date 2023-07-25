@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
+import AnonymousIcon from '../ChannelListScreen/elements/components/AnonymousIcon';
 import DefaultChatGroupProfilePicture from '../../assets/images/default-chat-group-picture.png';
 import ExitGroup from '../../assets/images/exit-group.png';
 import Header from '../../components/Header';
@@ -56,7 +57,6 @@ const GroupInfo = () => {
     setUsername,
     onReportGroup
   } = useGroupInfo();
-
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       if (route?.params?.from === 'AddParticipant') {
@@ -141,10 +141,35 @@ const GroupInfo = () => {
   const handleMember = async () => {
     await getMembersList();
   };
+
+  const getProfileName = (name) => {
+    const anonymousName = `Anonymous ${channel?.data?.anon_user_info_emoji_name}`;
+    return name === 'AnonymousUser' ? anonymousName : name;
+  };
+
+  const getAnonymousImage = (name) => {
+    if (name === 'AnonymousUser') {
+      return (
+        <View style={{marginRight: 17}}>
+          <AnonymousIcon
+            size={48}
+            color={channel?.data?.anon_user_info_color_code}
+            emojiCode={channel?.data?.anon_user_info_emoji_code}
+          />
+        </View>
+      );
+    }
+    return null;
+  };
+
   React.useEffect(() => {
     handleMember();
   }, []);
 
+  React.useEffect(() => {
+    getMembersList();
+  }, []);
+  console.log(openModal, 'laka');
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -153,7 +178,7 @@ const GroupInfo = () => {
         <>
           <Header isCenter onPress={() => navigation.goBack()} title={memberName()} />
           <View style={styles.lineTop} />
-          <ScrollView nestedScrollEnabled={true}>
+          <ScrollView contentContainerStyle={styles.scrollContainer} nestedScrollEnabled={true}>
             <SafeAreaView>
               <TouchableOpacity testID="imageClick" onPress={handleOnImageClicked}>
                 <View style={styles.containerPhoto}>{showImageProfile()}</View>
@@ -203,10 +228,11 @@ const GroupInfo = () => {
                         key={index}
                         item={item}
                         onPress={() => handlePressContact(item)}
-                        fullname={item.user.name}
+                        fullname={getProfileName(item.user.name)}
                         photo={item.user.image}
                         showArrow={channelState?.channel.data.type === 'group'}
                         userId={profile.myProfile.user_id}
+                        ImageComponent={getAnonymousImage(item?.user?.name)}
                       />
                     </View>
                   )}

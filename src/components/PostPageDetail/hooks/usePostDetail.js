@@ -1,12 +1,14 @@
 import {Dimensions, StatusBar} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+
 import {POST_TYPE_LINK, POST_TYPE_POLL} from '../../../utils/constants';
+import {normalizeFontSize} from '../../../utils/fonts';
 
 const usePostDetail = () => {
-  const longTextFontSize = 16;
-  const longTextLineHeight = 24;
-  const shortTextFontSize = 24;
-  const shortTextLineHeight = 44;
+  let longTextFontSize = normalizeFontSize(16);
+  let longTextLineHeight = normalizeFontSize(24);
+  const shortTextFontSize = normalizeFontSize(24);
+  const shortTextLineHeight = normalizeFontSize(44);
   const {top, bottom} = useSafeAreaInsets();
   const updateVoteLatestChildrenLevel3 = (commentList, dataUpdated) => {
     const updateComment = commentList.map((comment) => {
@@ -46,24 +48,75 @@ const usePostDetail = () => {
     return newComment;
   };
 
-  const calculationText = (message, post_type, image) => {
-    if (!message) message = '';
-    let fontSize = shortTextFontSize;
+  const handleText = ({
+    message,
+    post_type,
+    image,
+    shortTextSize,
+    shortTextLineH,
+    messageLength,
+    isFeed
+  }) => {
+    let fontSize = shortTextSize;
     let lineHeight = shortTextLineHeight;
-    let containerHeight = 0;
-    if (message?.length > 270) {
-      fontSize = longTextFontSize;
-      lineHeight = longTextLineHeight;
+    let line = message?.length / messageLength;
+    let defaultNumberLine = 5;
+    if (line < 1) line = 1;
+    if (message?.length > messageLength) {
+      if (!isFeed) {
+        fontSize = longTextFontSize;
+        lineHeight = longTextLineHeight;
+      } else {
+        longTextFontSize = normalizeFontSize(20);
+        longTextLineHeight = normalizeFontSize(30);
+        fontSize = (1 / line) * shortTextSize;
+        if (
+          fontSize < longTextFontSize &&
+          (post_type === POST_TYPE_POLL || post_type === POST_TYPE_LINK || image?.length > 0)
+        ) {
+          fontSize = longTextFontSize;
+          lineHeight = longTextLineHeight;
+        } else {
+          fontSize = shortTextFontSize * 0.6;
+          lineHeight = shortTextLineHeight * 0.6;
+          defaultNumberLine = 10;
+        }
+      }
     } else {
-      fontSize = shortTextFontSize;
-      lineHeight = shortTextLineHeight;
+      fontSize = (1 / line) * shortTextSize;
+      lineHeight = (1 / line) * shortTextLineH;
     }
+    return {fontSize, lineHeight, defaultNumberLine};
+  };
+
+  const calculatedSizeScreen = top + bottom + StatusBar.currentHeight + 170;
+
+  const calculationText = (
+    message,
+    post_type,
+    image,
+    shortTextSize,
+    shortTextLineH,
+    messageLength,
+    isFeed
+  ) => {
+    if (!message) message = '';
+    if (!shortTextSize) shortTextSize = shortTextFontSize;
+    if (!shortTextLineH) shortTextLineH = shortTextLineHeight;
+    if (!messageLength) messageLength = 270;
+    let containerHeight = 0;
+    const {fontSize, lineHeight, defaultNumberLine} = handleText({
+      message,
+      post_type,
+      image,
+      shortTextSize,
+      shortTextLineH,
+      messageLength,
+      isFeed
+    });
     const numLines = 0.5;
-
-    const numberOfLines = Math.ceil(
-      message?.length / ((Dimensions.get('window').width / fontSize) * numLines)
-    );
-
+    const widthDimension = Dimensions.get('window').width;
+    const numberOfLines = Math.ceil(message?.length / ((widthDimension / fontSize) * numLines));
     containerHeight = numberOfLines * lineHeight;
     containerHeight = Math.max(containerHeight, shortTextLineHeight * 5);
     if (image?.length > 0 || post_type === POST_TYPE_POLL) {
@@ -73,10 +126,8 @@ const usePostDetail = () => {
       containerHeight *= 2;
     }
     const containerComment = calculatedSizeScreen - containerHeight;
-    return {fontSize, lineHeight, containerHeight, containerComment};
+    return {fontSize, lineHeight, containerHeight, containerComment, defaultNumberLine};
   };
-
-  const calculatedSizeScreen = top + bottom + StatusBar.currentHeight + 170;
 
   const calculatePaddingBtm = () => {
     let defaultValue = 108;
