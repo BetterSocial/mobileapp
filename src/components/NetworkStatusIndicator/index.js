@@ -15,7 +15,6 @@ const NetworkStatusIndicator = ({hide = false}) => {
 
   React.useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
-      console.log(state);
       if (isOnline !== state.isConnected) {
         removeTimeout.current = setTimeout(() => {
           setIsOnline(state.isConnected);

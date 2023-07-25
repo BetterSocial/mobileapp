@@ -1,7 +1,15 @@
 import * as React from 'react';
 import FastImage from 'react-native-fast-image';
 import ToggleSwitch from 'toggle-switch-react-native';
-import {ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from 'react-native';
 
 import AnonUserInfoRepo from '../../service/repo/anonUserInfoRepo';
 import MemoSendComment from '../../assets/icon/IconSendComment';
@@ -96,18 +104,17 @@ const WriteComment = ({
           </>
         )}
 
-        <View style={styles.content}>
-          <TextInput
-            testID="changeinput"
-            ref={commentInputRef}
-            placeholder={StringConstant.commentBoxDefaultPlaceholder}
-            // multiline={isAndroid}
-            placeholderTextColor={colors.gray}
-            style={styles.text}
-            onChangeText={onChangeText}
-            value={value}
-          />
-        </View>
+        <TextInput
+          testID="changeinput"
+          ref={commentInputRef}
+          placeholder={StringConstant.commentBoxDefaultPlaceholder}
+          placeholderTextColor={colors.gray}
+          style={[styles.text, styles.content]}
+          onChangeText={onChangeText}
+          value={value}
+          multiline
+          textAlignVertical="center"
+        />
         <TouchableOpacity
           testID="iscommentenable"
           onPress={() => onPress(isAnonimity, anonimityData)}
@@ -197,10 +204,9 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: fonts.inter[400],
     color: colors.black,
-    lineHeight: 14.52,
-    paddingTop: 5,
-    paddingBottom: 5,
-    maxHeight: 100
+    maxHeight: 100,
+    paddingTop: Platform.OS === 'ios' ? 10 : 5,
+    paddingBottom: Platform.OS === 'ios' ? 10 : 5
   },
   icSendButton: {
     alignSelf: 'center'
