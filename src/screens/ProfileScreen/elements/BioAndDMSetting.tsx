@@ -99,7 +99,7 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
             onSend={() => {}}
             minHeight={55}
             disabledInput
-            placeholder="Other users will be able to reply to your prompt and direct message you."
+            placeholder="From here, others can message you, for example replying to your prompt above."
           />
         </View>
       </Pressable>

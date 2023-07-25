@@ -841,7 +841,9 @@ const styles = StyleSheet.create({
   },
   content: {
     flexDirection: 'column',
-    padding: 20
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0'
   },
   dummyItem: (heightItem) => ({
     height: heightItem
