@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
     paddingRight: 8,
     paddingTop: 4,
-    paddingBottom: 4,
+    paddingBottom: 8,
     borderRadius: 8,
     flex: 1
   },

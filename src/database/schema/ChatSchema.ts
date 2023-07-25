@@ -233,6 +233,15 @@ class ChatSchema implements BaseDbSchema {
   }
 
   static fromInitAnonymousChatAPI(data: ModifyAnonymousChatData): ChatSchema {
+    let rawJson = null;
+
+    try {
+      rawJson = JSON.stringify(data);
+    } catch (e) {
+      console.log('error stringify');
+      console.log(e);
+    }
+
     return new ChatSchema({
       id: data?.message?.id,
       channelId: data?.message?.cid,
@@ -240,7 +249,7 @@ class ChatSchema implements BaseDbSchema {
       updatedAt: data?.message?.updated_at,
       isMe: true,
       message: data?.message?.message,
-      rawJson: data,
+      rawJson,
       status: 'sent',
       isContinuous: false,
       type: 'regular',

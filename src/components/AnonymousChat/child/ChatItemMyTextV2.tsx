@@ -113,7 +113,8 @@ const ChatItemMyTextV2 = ({
   time = '4h',
   isContinuous = false,
   message = 'Ultrices neque op semper blahbla blahri mauris amet, penatibus. pi Amet, mollis quam venenatis di',
-  status = ChatStatus.PENDING
+  status = ChatStatus.PENDING,
+  AnonymousImage = null
 }: ChatItemMyTextProps) => {
   const messageRef = React.useRef<Text>(null);
   const [isNewLine, setIsNewLine] = React.useState(true);
@@ -141,6 +142,12 @@ const ChatItemMyTextV2 = ({
     );
   }, []);
 
+  const renderAvatar = React.useCallback(() => {
+    if (isContinuous) return <View style={styles.avatar} />;
+    if (AnonymousImage) return AnonymousImage;
+    return <FastImage style={styles.avatar} source={{uri: avatar}} />;
+  }, []);
+
   const textContainerStyle = [styles.textContainer, isNewLine && styles.textContainerNewLine];
 
   return (
@@ -159,16 +166,7 @@ const ChatItemMyTextV2 = ({
 
         {renderIcon()}
       </View>
-      {isContinuous ? (
-        <View style={styles.avatar} />
-      ) : (
-        <FastImage
-          style={styles.avatar}
-          source={{
-            uri: avatar
-          }}
-        />
-      )}
+      {renderAvatar()}
     </View>
   );
 };

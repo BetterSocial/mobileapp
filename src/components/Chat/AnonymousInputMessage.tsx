@@ -106,7 +106,11 @@ const AnonymousInputMessage = ({onSendButtonClicked}: AnonymousInputMessageProps
             style={[styles.btn, isDisableButton() ? styles.disableButton : styles.enableButton]}
             disabled={isDisableButton()}
             onPress={handleSendMessage}>
-            <IconSend style={styles.icSendButton} />
+            <IconSend
+              style={styles.icSendButton}
+              fillBackground={isDisableButton() ? colors.gray1 : colors.bondi_blue}
+              fillIcon={colors.white}
+            />
           </TouchableOpacity>
         </View>
       </View>
