@@ -21,12 +21,12 @@ import Header from '../../components/Header';
 // eslint-disable-next-line camelcase
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
 import ModalAction from './elements/ModalAction';
+import ReportGroup from '../../assets/images/report.png';
 import useGroupInfo from './hooks/useGroupInfo';
 import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
 import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
-import {trimString} from '../../utils/string/TrimString';
 
 const GroupInfo = () => {
   const navigation = useNavigation();
@@ -41,7 +41,6 @@ const GroupInfo = () => {
     isUploadingImage,
     createChat,
     getMembersList,
-    chatName,
     handleOnNameChange,
     handleOnImageClicked,
     newParticipant,
@@ -53,7 +52,9 @@ const GroupInfo = () => {
     onLeaveGroup,
     profile,
     channelState,
-    handlePressContact
+    handlePressContact,
+    setUsername,
+    onReportGroup
   } = useGroupInfo();
 
   React.useEffect(() => {
@@ -66,6 +67,12 @@ const GroupInfo = () => {
 
     return unsubscribe;
   }, [navigation]);
+
+  React.useEffect(() => {
+    if (channel?.data?.name) {
+      setUsername(channel.data.name);
+    }
+  }, [JSON.stringify(channel.data)]);
 
   const showImageProfile = () => {
     if (profileChannel || channel?.data?.image) {
@@ -154,7 +161,7 @@ const GroupInfo = () => {
               <View style={styles.row}>
                 <View style={styles.column}>
                   <View style={styles.containerGroupName}>
-                    <Text style={styles.groupName}>{trimString(chatName, 20)}</Text>
+                    <Text style={styles.groupName}>{memberName()}</Text>
                   </View>
                   <Text style={styles.dateCreate}>
                     Created {moment(createChat).format('DD/MM/YY')}
@@ -214,6 +221,14 @@ const GroupInfo = () => {
                     </View>
                     <View>
                       <Text style={styles.textAct}>Exit Group</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={onReportGroup} style={styles.buttonGroup}>
+                    <View style={styles.imageActContainer}>
+                      <FastImage style={styles.imageAction} source={ReportGroup} />
+                    </View>
+                    <View>
+                      <Text style={styles.textAct}>Report Group</Text>
                     </View>
                   </TouchableOpacity>
                 </View>
