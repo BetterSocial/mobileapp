@@ -2,13 +2,13 @@ import {Dimensions, StatusBar} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {POST_TYPE_LINK, POST_TYPE_POLL} from '../../../utils/constants';
-import {normalizeFontSize} from '../../../utils/fonts';
+import {normalizeFontSizeByWidth} from '../../../utils/fonts';
 
 const usePostDetail = () => {
-  let longTextFontSize = normalizeFontSize(16);
-  let longTextLineHeight = normalizeFontSize(24);
-  const shortTextFontSize = normalizeFontSize(24);
-  const shortTextLineHeight = normalizeFontSize(44);
+  let longTextFontSize = normalizeFontSizeByWidth(16);
+  let longTextLineHeight = normalizeFontSizeByWidth(24);
+  const shortTextFontSize = normalizeFontSizeByWidth(24);
+  const shortTextLineHeight = normalizeFontSizeByWidth(44);
   const {top, bottom} = useSafeAreaInsets();
   const updateVoteLatestChildrenLevel3 = (commentList, dataUpdated) => {
     const updateComment = commentList.map((comment) => {
@@ -60,6 +60,7 @@ const usePostDetail = () => {
     let fontSize = shortTextSize;
     let lineHeight = shortTextLineHeight;
     let line = message?.length / messageLength;
+    console.log({line, message}, 'line');
     let defaultNumberLine = 5;
     if (line < 1) line = 1;
     if (message?.length > messageLength) {
@@ -67,18 +68,18 @@ const usePostDetail = () => {
         fontSize = longTextFontSize;
         lineHeight = longTextLineHeight;
       } else {
-        longTextFontSize = normalizeFontSize(20);
-        longTextLineHeight = normalizeFontSize(30);
+        longTextFontSize = normalizeFontSizeByWidth(16);
+        longTextLineHeight = normalizeFontSizeByWidth(24);
         fontSize = (1 / line) * shortTextSize;
         if (post_type === POST_TYPE_POLL || post_type === POST_TYPE_LINK || image?.length > 0) {
           if (fontSize < longTextFontSize) {
             fontSize = longTextFontSize;
             lineHeight = longTextLineHeight;
-            defaultNumberLine = 4;
+            // defaultNumberLine = 4;
           } else {
             fontSize = shortTextFontSize * 0.6;
             lineHeight = shortTextLineHeight * 0.6;
-            defaultNumberLine = 4;
+            // defaultNumberLine = 5;
           }
         } else {
           fontSize = shortTextFontSize * 0.6;
