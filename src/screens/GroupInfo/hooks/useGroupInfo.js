@@ -32,6 +32,7 @@ const useGroupInfo = () => {
   const [selectedUser, setSelectedUser] = React.useState(null);
   const [newParticipant, setNewParticipan] = React.useState([]);
   const [openModal, setOpenModal] = React.useState(false);
+  const [showPopover, setShowPopover] = React.useState(false);
   const [, dispatchChannel] = React.useContext(Context).channel;
 
   const anonUserEmojiName = channelState?.channel?.data?.anon_user_info_emoji_name;
@@ -280,6 +281,7 @@ const useGroupInfo = () => {
   };
 
   const alertRemoveUser = async (status) => {
+    setShowPopover(false);
     if (status === 'view') {
       setOpenModal(false);
       handleOpenProfile(selectedUser).catch((e) => console.log(e));
@@ -296,6 +298,7 @@ const useGroupInfo = () => {
       await checkUserIsBlockHandle();
     }
   };
+
   const onLeaveGroup = () => {
     Alert.alert('', 'Exit this group?', [{text: 'Cancel'}, {text: 'Exit', onPress: leaveGroup}]);
   };
@@ -336,6 +339,7 @@ const useGroupInfo = () => {
   };
 
   const handlePressContact = async (item) => {
+    setShowPopover(false);
     if (channelState?.channel.data.type === 'group') {
       await handleSelectUser(item);
       return true;
@@ -363,6 +367,15 @@ const useGroupInfo = () => {
         }
       });
     }, 500);
+  };
+
+  const handleOpenPopOver = async (user) => {
+    if (user.user_id === profile.myProfile.user_id) {
+      setShowPopover(false);
+      return;
+    }
+    await handleSelectUser(user);
+    setShowPopover(true);
   };
 
   return {
@@ -407,9 +420,10 @@ const useGroupInfo = () => {
     onReportGroup,
     setUsername,
     setSelectedUser,
-    openChatMessage,
     generateSystemChat,
-    setNewParticipan
+    showPopover,
+    setShowPopover,
+    handleOpenPopOver
   };
 };
 
