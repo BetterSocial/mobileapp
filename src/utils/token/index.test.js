@@ -9,7 +9,6 @@ import {
   setToken,
   setAnonymousToken,
   getToken,
-  removeAccessToken,
   removeLocalStorege
 } from './index';
 

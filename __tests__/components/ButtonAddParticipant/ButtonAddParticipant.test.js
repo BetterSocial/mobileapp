@@ -1,7 +1,7 @@
 import * as React from 'react';
-import {render, cleanup, fireEvent} from '@testing-library/react-native';
-import ButtonAddParticipants from '../../../src/components/Button/ButtonAddParticipants';
+import {render, fireEvent} from '@testing-library/react-native';
 import {act} from 'react-test-renderer';
+import ButtonAddParticipants from '../../../src/components/Button/ButtonAddParticipants';
 
 const mockNavigate = jest.fn();
 jest.mock('@react-navigation/core', () => ({
