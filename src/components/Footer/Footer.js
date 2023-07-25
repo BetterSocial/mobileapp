@@ -9,6 +9,7 @@ import MemoIc_arrow_upvote_on from '../../assets/arrow/Ic_upvote_on';
 import MemoIc_block_inactive from '../../assets/block/Ic_block_inactive';
 import MemoIc_comment from '../../assets/icons/Ic_comment';
 import MemoIc_share from '../../assets/icons/Ic_share';
+import Memoic_globe from '../../assets/icons/ic_globe';
 import {FONTS} from '../../utils/theme';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
@@ -25,7 +26,9 @@ const Footer = ({
   totalVote,
   disableComment = false,
   blockStatus,
-  loadingVote
+  loadingVote,
+  showScoreButton = false,
+  onPressScore
 }) => {
   const handleBlockUi = () => {
     if (isSelf) {
@@ -86,6 +89,13 @@ const Footer = ({
         </TouchableOpacity>
       )}
       <View style={styles.rightGroupContainer}>
+        {showScoreButton ? (
+          <TouchableOpacity onPress={onPressScore}>
+            <Memoic_globe height={20} width={20} />
+          </TouchableOpacity>
+        ) : (
+          <></>
+        )}
         {handleBlockUi()}
         <TouchableOpacity
           testID="downVoteBtn"

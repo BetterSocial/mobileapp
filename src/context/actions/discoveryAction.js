@@ -1,5 +1,6 @@
 import {
   DISCOVERY_RESET,
+  DISCOVERY_RESET_ALL,
   DISCOVERY_SET_DATA,
   DISCOVERY_SET_DATA_DOMAINS,
   DISCOVERY_SET_DATA_NEWS,
@@ -21,7 +22,7 @@ import {
   DISCOVERY_SET_NEW_UNFOLLOWED_DOMAIN,
   DISCOVERY_SET_NEW_UNFOLLOWED_TOPIC,
   DISCOVERY_SET_NEW_UNFOLLOWED_USER,
-  DISCOVERY_SET_RECENT_SEARCH,
+  DISCOVERY_SET_RECENT_SEARCH
 } from '../Types';
 
 /**
@@ -32,7 +33,7 @@ import {
 const setDiscoveryLoadingData = async (isLoading, dispatch) => {
   dispatch({
     type: DISCOVERY_SET_LOADING_DATA,
-    payload: isLoading,
+    payload: isLoading
   });
 };
 
@@ -44,7 +45,7 @@ const setDiscoveryLoadingData = async (isLoading, dispatch) => {
 const setDiscoveryInitialDomains = async (data, dispatch) => {
   dispatch({
     type: DISCOVERY_SET_INITIAL_DOMAINS,
-    payload: data,
+    payload: data
   });
 };
 
@@ -56,7 +57,7 @@ const setDiscoveryInitialDomains = async (data, dispatch) => {
 const setDiscoveryInitialTopics = async (data, dispatch) => {
   dispatch({
     type: DISCOVERY_SET_INITIAL_TOPICS,
-    payload: data,
+    payload: data
   });
 };
 
@@ -68,7 +69,7 @@ const setDiscoveryInitialTopics = async (data, dispatch) => {
 const setDiscoveryInitialUsers = async (data, dispatch) => {
   dispatch({
     type: DISCOVERY_SET_INITIAL_USERS,
-    payload: data,
+    payload: data
   });
 };
 
@@ -80,7 +81,7 @@ const setDiscoveryInitialUsers = async (data, dispatch) => {
 const setDiscoveryLoadingDataUser = async (isLoading, dispatch) => {
   dispatch({
     type: DISCOVERY_SET_LOADING_DATA_USER,
-    payload: isLoading,
+    payload: isLoading
   });
 };
 /**
@@ -91,7 +92,7 @@ const setDiscoveryLoadingDataUser = async (isLoading, dispatch) => {
 const setDiscoveryLoadingDataDomain = async (isLoading, dispatch) => {
   dispatch({
     type: DISCOVERY_SET_LOADING_DATA_DOMAIN,
-    payload: isLoading,
+    payload: isLoading
   });
 };
 /**
@@ -102,7 +103,7 @@ const setDiscoveryLoadingDataDomain = async (isLoading, dispatch) => {
 const setDiscoveryLoadingDataTopic = async (isLoading, dispatch) => {
   dispatch({
     type: DISCOVERY_SET_LOADING_DATA_TOPIC,
-    payload: isLoading,
+    payload: isLoading
   });
 };
 /**
@@ -113,7 +114,7 @@ const setDiscoveryLoadingDataTopic = async (isLoading, dispatch) => {
 const setDiscoveryLoadingDataNews = async (isLoading, dispatch) => {
   dispatch({
     type: DISCOVERY_SET_LOADING_DATA_NEWS,
-    payload: isLoading,
+    payload: isLoading
   });
 };
 
@@ -125,7 +126,7 @@ const setDiscoveryLoadingDataNews = async (isLoading, dispatch) => {
 const setDiscoveryFirstTimeOpen = async (isFirstTimeOpen, dispatch) => {
   dispatch({
     type: DISCOVERY_SET_FIRST_TIME_OPEN,
-    payload: isFirstTimeOpen,
+    payload: isFirstTimeOpen
   });
 };
 
@@ -137,7 +138,7 @@ const setDiscoveryFirstTimeOpen = async (isFirstTimeOpen, dispatch) => {
 const setDiscoveryFocus = async (isFocus, dispatch) => {
   dispatch({
     type: DISCOVERY_SET_FOCUS,
-    payload: isFocus,
+    payload: isFocus
   });
 };
 
@@ -150,8 +151,8 @@ const setDiscoveryData = async (data, dispatch) => {
   dispatch({
     type: DISCOVERY_SET_DATA,
     payload: {
-      discovery: data,
-    },
+      discovery: data
+    }
   });
 };
 
@@ -159,8 +160,8 @@ const setDiscoveryDataUsers = async (data, dispatch) => {
   dispatch({
     type: DISCOVERY_SET_DATA_USERS,
     payload: {
-      discovery: data,
-    },
+      discovery: data
+    }
   });
 };
 
@@ -168,15 +169,15 @@ const setDiscoveryDataDomains = async (data, dispatch) => {
   dispatch({
     type: DISCOVERY_SET_DATA_DOMAINS,
     payload: {
-      discovery: data,
-    },
+      discovery: data
+    }
   });
 };
 
 const setDiscoveryRecentSearch = async (data, dispatch) => {
   dispatch({
     type: DISCOVERY_SET_RECENT_SEARCH,
-    payload: data,
+    payload: data
   });
 };
 
@@ -184,8 +185,8 @@ const setDiscoveryDataTopics = async (data, dispatch) => {
   dispatch({
     type: DISCOVERY_SET_DATA_TOPICS,
     payload: {
-      discovery: data,
-    },
+      discovery: data
+    }
   });
 };
 
@@ -193,8 +194,8 @@ const setDiscoveryDataNews = async (data, dispatch) => {
   dispatch({
     type: DISCOVERY_SET_DATA_NEWS,
     payload: {
-      discovery: data,
-    },
+      discovery: data
+    }
   });
 };
 
@@ -202,8 +203,8 @@ const setNewFollowedUsers = async (data, dispatch) => {
   dispatch({
     type: DISCOVERY_SET_NEW_FOLLOWED_USER,
     payload: {
-      newFollowedUsers: data,
-    },
+      newFollowedUsers: data
+    }
   });
 };
 
@@ -211,8 +212,8 @@ const setNewUnfollowedUsers = async (data, dispatch) => {
   dispatch({
     type: DISCOVERY_SET_NEW_UNFOLLOWED_USER,
     payload: {
-      newUnfollowedUsers: data,
-    },
+      newUnfollowedUsers: data
+    }
   });
 };
 
@@ -220,8 +221,8 @@ const setNewFollowedDomains = async (data, dispatch) => {
   dispatch({
     type: DISCOVERY_SET_NEW_FOLLOWED_DOMAIN,
     payload: {
-      newFollowedDomains: data,
-    },
+      newFollowedDomains: data
+    }
   });
 };
 
@@ -229,14 +230,14 @@ const setNewUnfollowedDomains = async (data, dispatch) => {
   dispatch({
     type: DISCOVERY_SET_NEW_UNFOLLOWED_DOMAIN,
     payload: {
-      newUnfollowedDomains: data,
-    },
+      newUnfollowedDomains: data
+    }
   });
 };
 
 const reset = async (dispatch) => {
   dispatch({
-    type: DISCOVERY_RESET,
+    type: DISCOVERY_RESET
   });
 };
 
@@ -244,8 +245,8 @@ const setNewFollowedTopics = async (data, dispatch) => {
   dispatch({
     type: DISCOVERY_SET_NEW_FOLLOWED_TOPIC,
     payload: {
-      newFollowedTopics: data,
-    },
+      newFollowedTopics: data
+    }
   });
 };
 
@@ -253,13 +254,20 @@ const setNewUnfollowedTopics = async (data, dispatch) => {
   dispatch({
     type: DISCOVERY_SET_NEW_UNFOLLOWED_TOPIC,
     payload: {
-      newUnfollowedTopics: data,
-    },
+      newUnfollowedTopics: data
+    }
+  });
+};
+
+const resetAllDiscovery = async (dispatch) => {
+  dispatch({
+    type: DISCOVERY_RESET_ALL
   });
 };
 
 const DiscoveryAction = {
   reset,
+  resetAllDiscovery,
   setDiscoveryInitialDomains,
   setDiscoveryInitialTopics,
   setDiscoveryInitialUsers,
@@ -281,7 +289,7 @@ const DiscoveryAction = {
   setNewUnfollowedDomains,
   setNewUnfollowedTopics,
   setNewUnfollowedUsers,
-  setDiscoveryRecentSearch,
+  setDiscoveryRecentSearch
 };
 
 export default DiscoveryAction;

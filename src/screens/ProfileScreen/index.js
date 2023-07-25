@@ -33,6 +33,7 @@ import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
 import RenderItem from './elements/RenderItem';
 import ShareUtils from '../../utils/share';
 import dimen from '../../utils/dimen';
+import useResetContext from '../../hooks/context/useResetContext';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
 } from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
@@ -41,6 +42,7 @@ import useProfileScreenHook, {
   TAB_INDEX_SIGNED
 } from '../../hooks/screen/useProfileScreenHook';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
+import {ButtonNewPost} from '../../components/Button';
 import {Context} from '../../context';
 import {PROFILE_CACHE} from '../../utils/cache/constant';
 import {
@@ -67,7 +69,6 @@ import {trimString} from '../../utils/string/TrimString';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {ButtonNewPost} from '../../components/Button';
 
 const {height, width} = Dimensions.get('screen');
 
@@ -115,6 +116,7 @@ const ProfileScreen = ({route}) => {
   const [, setIsHitApiFirstTime] = React.useState(false);
 
   const updateUserClient = useUpdateClientGetstreamHook();
+  const {refreshCount} = useResetContext();
 
   const LIMIT_PROFILE_FEED = 10;
 
@@ -149,6 +151,13 @@ const ProfileScreen = ({route}) => {
       };
     }
   }, [interactionsComplete]);
+
+  React.useEffect(() => {
+    if (refreshCount > 0) {
+      setDataMain({});
+      setDataMainBio('');
+    }
+  }, [refreshCount]);
 
   React.useEffect(() => {
     if (interactionsComplete) {

@@ -7,11 +7,13 @@ import NetworkStatusIndicator from '../../../src/components/NetworkStatusIndicat
 jest.useFakeTimers();
 
 const mockNetInfo = jest.fn().mockImplementation({isInternetReachable: false});
+const mockAddEventListener = jest.fn();
 
 jest.mock('@react-native-community/netinfo', () => ({
   useNetInfo: () => ({
     netInfo: mockNetInfo
-  })
+  }),
+  addEventListener: jest.fn().mockImplementation(() => mockAddEventListener)
 }));
 
 jest.mock('react', () => ({
@@ -33,5 +35,6 @@ describe('Testing Network Status Indicator Component', () => {
   it('props hide should run correctly', () => {
     const {getAllByTestId} = render(<NetworkStatusIndicator hide={true} />);
     expect(getAllByTestId('isHide')).toHaveLength(1);
+    expect(mockAddEventListener).toHaveBeenCalled();
   });
 });
