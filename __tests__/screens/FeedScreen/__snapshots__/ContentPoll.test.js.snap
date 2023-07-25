@@ -155,7 +155,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
               },
               Object {
                 "backgroundColor": "#00ADB5",
-                "width": "100%",
+                "width": "50%",
               },
             ]
           }
@@ -203,7 +203,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
             }
             testID="optionPercentage"
           >
-            100%
+            50%
           </Text>
         </View>
       </View>

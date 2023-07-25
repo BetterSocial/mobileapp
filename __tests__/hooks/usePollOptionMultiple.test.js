@@ -100,7 +100,7 @@ describe('usePollOptionMultiple should run correctly', () => {
         selectedindex: '1'
       })
     );
-    expect(result.current.onOptionsClicked()).toBeUndefined();
+    expect(result.current.onOptionsClicked()).toBeNull();
   });
 
   it('onSelected props should call', () => {
