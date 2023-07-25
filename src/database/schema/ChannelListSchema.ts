@@ -232,6 +232,11 @@ class ChannelList implements BaseDbSchema {
     }
   }
 
+  static clearAll = async (db: SQLiteDatabase): Promise<void> => {
+    const query = `DELETE FROM ${ChannelList.getTableName()}`;
+    await db.executeSql(query);
+  };
+
   static getTableName(): string {
     return 'channel_lists';
   }

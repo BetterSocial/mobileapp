@@ -18,13 +18,20 @@ const usePostNotificationListenerHook = (onPostNotifReceived) => {
     console.log('initFeedSubscription');
     const token: string = await getAnonymousToken();
     const client = clientStream(token);
-    const notifFeed = client?.feed('notification', anonProfileId, token);
-    notifFeed?.subscribe((data) => {
-      if (!data || !onPostNotifReceived || typeof onPostNotifReceived !== 'function') return;
-      onPostNotifReceived(data);
-    });
+    try {
+      const notifFeed = client?.feed('notification', anonProfileId, token);
+      notifFeed?.subscribe((data) => {
+        if (!data || !onPostNotifReceived || typeof onPostNotifReceived !== 'function') return;
+        onPostNotifReceived(data);
+      });
 
-    feedSubscriptionRef.current = notifFeed;
+      feedSubscriptionRef.current = notifFeed;
+    } catch (e) {
+      console.log('anonProfileId', anonProfileId);
+      console.log('token', token);
+      console.log('initFeedSubscription error');
+      console.log(e);
+    }
   };
 
   React.useEffect(() => {

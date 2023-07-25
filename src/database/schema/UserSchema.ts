@@ -255,6 +255,11 @@ class UserSchema implements BaseDbSchema {
     });
   }
 
+  static clearAll = async (db: SQLiteDatabase): Promise<void> => {
+    const query = `DELETE FROM ${UserSchema.getTableName()}`;
+    await db.executeSql(query);
+  };
+
   get = async (db: SQLiteDatabase, id: string): Promise<UserSchema> => {
     const [{rows}] = await db.executeSql('SELECT * FROM users WHERE id = ?', [id]);
     if (rows?.length === 0) return null;

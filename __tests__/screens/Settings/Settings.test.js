@@ -7,6 +7,9 @@ import Store from '../../../src/context/Store';
 const mockLogScreenView = jest.fn();
 const mockGoBack = jest.fn();
 const mockNavigate = jest.fn();
+
+jest.useFakeTimers();
+
 jest.mock('@react-native-firebase/analytics', () => () => ({
   logEvent: jest.fn(),
   logLogin: jest.fn(),
@@ -33,10 +36,9 @@ jest.mock('../../../src/hooks/useAfterInteractions', () => ({
 jest.mock('recoil', () => ({
   useRecoilValue: jest.fn(() => 0),
   atom: jest.fn(() => 0),
-  useSetRecoilState: jest.fn(() => 0)
+  useSetRecoilState: jest.fn(() => 0),
+  useRecoilState: jest.fn(() => [0, jest.fn()])
 }));
-
-jest.mock('');
 
 describe('Settings page should run correctly', () => {
   it('Should match snapshot', () => {

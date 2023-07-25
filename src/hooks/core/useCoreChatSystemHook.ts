@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useRecoilValue} from 'recoil';
 
 import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../database/schema/ChannelListSchema';
@@ -16,11 +17,16 @@ import {
   LatestChildrenComment
 } from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
 import {GetstreamFeedListenerObject} from '../../../types/hooks/core/getstreamFeedListener/feedListenerObject';
+import {InitialStartupAtom} from '../../service/initialStartup';
 import {getAnonymousChatName} from '../../utils/string/StringUtils';
 
 const useCoreChatSystemHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook() as UseLocalDatabaseHook;
   const {anonProfileId, signedProfileId} = useProfileHook();
+  const initialStartup: any = useRecoilValue(InitialStartupAtom);
+
+  const isEnteringApp =
+    initialStartup?.id !== null && initialStartup?.id !== undefined && initialStartup?.id !== '';
 
   const onPostNotifReceived: (data: GetstreamFeedListenerObject) => Promise<void> = async (
     data
@@ -233,8 +239,10 @@ const useCoreChatSystemHook = () => {
   }, [lastJsonMessage, localDb]);
 
   React.useEffect(() => {
-    getAllAnonymousPostNotifications().catch((e) => console.log(e));
-  }, [localDb]);
+    if (isEnteringApp) {
+      getAllAnonymousPostNotifications().catch((e) => console.log(e));
+    }
+  }, [localDb, isEnteringApp]);
 };
 
 export default useCoreChatSystemHook;

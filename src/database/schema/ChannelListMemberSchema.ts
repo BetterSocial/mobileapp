@@ -121,6 +121,11 @@ class ChannelListMemberSchema implements BaseDbSchema {
     });
   }
 
+  static clearAll = async (db: SQLiteDatabase): Promise<void> => {
+    const query = `DELETE FROM ${ChannelListMemberSchema.getTableName()}`;
+    await db.executeSql(query);
+  };
+
   getAll = (db: SQLiteDatabase): Promise<BaseDbSchema[]> => {
     throw new Error('Method not implemented.');
   };
