@@ -10,7 +10,8 @@ describe('Content poll function should run correctly', () => {
       option: 'Fre',
       polling_id: '732c5bdc-3bd2-4460-8baa-2bbdbb495185',
       polling_option_id: '35a46076-628c-4b68-b585-62dd9e19357b',
-      updatedAt: '2022-11-28T01:26:14.000Z'
+      updatedAt: '2022-11-28T01:26:14.000Z',
+      isalreadypolling: false
     },
     {
       counter: '0',
@@ -18,7 +19,8 @@ describe('Content poll function should run correctly', () => {
       option: 'Fra',
       polling_id: '732c5bdc-3bd2-4460-8baa-2bbdbb495185',
       polling_option_id: '05c3371d-f374-4c79-8c88-03cb1d86d07b',
-      updatedAt: '2022-11-28T01:26:14.000Z'
+      updatedAt: '2022-11-28T01:26:14.000Z',
+      isalreadypolling: false
     }
   ];
 
