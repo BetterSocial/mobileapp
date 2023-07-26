@@ -27,11 +27,7 @@ export const calculateTime = (time) => {
       return `${hours}h ago`;
     }
 
-    if (days < 2) {
-      return 'Yesterday';
-    }
-
-    if (days >= 2 && days <= 6) {
+    if (days <= 6) {
       return `${days}d ago`;
     }
 

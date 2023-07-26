@@ -82,6 +82,7 @@ const AnonPostNotificationChannelItem: (props: MessageChannelItemProps) => React
       downvote={item?.rawJson?.downvote}
       isCommentExists={!!firstComment}
       isMe={item?.user?.isMe}
+      isOwnSignedPost={item?.rawJson?.isOwnSignedPost}
       message={item?.description}
       name={postMaker?.data?.username}
       onPress={onChannelPressed}

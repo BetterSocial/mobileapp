@@ -14,6 +14,7 @@ export interface BaseChannelItemProps {
   downvote?: number;
   isCommentExists?: boolean;
   isMe: boolean;
+  isOwnSignedPost?: boolean;
   message: string;
   name: string;
   onPress?: () => void;
