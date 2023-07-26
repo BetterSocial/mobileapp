@@ -37,15 +37,15 @@ const Content = ({
   const [heightLayout, setHeightLayout] = React.useState(0);
   const [numberLine, setNumberLine] = React.useState(null);
   const {calculationText} = usePostDetail();
-  const maxFontSize = normalizeFontSizeByWidth(40);
-  const maxLineHeight = normalizeFontSizeByWidth(40 * 1.5);
+  const maxFontSize = normalizeFontSizeByWidth(32);
+  const maxLineHeight = normalizeFontSizeByWidth(32 * 1.5);
   const {fontSize, lineHeight, defaultNumberLine} = calculationText(
     message,
     item.post_type,
     null,
     maxFontSize,
     maxLineHeight,
-    150,
+    125,
     true
   );
   const onImageClickedByIndex = (index) => {
@@ -85,6 +85,8 @@ const Content = ({
       return (defaultNumberLine / (numberLine || 1)) * fontSize;
     };
 
+    console.log(handleFontSize(), fontSize, numberLine, defaultNumberLine, message, 'rumah 123');
+
     const handleLineHeight = () => {
       if (
         (defaultNumberLine / (numberLine || 1)) * lineHeight <
@@ -114,11 +116,10 @@ const Content = ({
     const hanldeHeightContainer = ({nativeEvent}) => {
       // setHeightLayout(nativeEvent.layout.height);
       if (!numberLine) {
-        setNumberLine(nativeEvent.layout.height / lineHeight);
+        setNumberLine(Math.floor(nativeEvent.layout.height / lineHeight));
       }
     };
 
-    console.log({numberLine}, 'taiman');
     return (
       <View
         onLayout={hanldeHeightContainer}
@@ -126,7 +127,7 @@ const Content = ({
         style={[styles.containerText, handleContainerText()]}>
         <Text
           // onTextLayout={({nativeEvent}) => setNumberLine(nativeEvent.lines.length)}
-          // numberOfLines={defaultNumberLine}
+          numberOfLines={numberLine}
           style={handleStyleFont()}>
           {getCaptionWithTopicStyle(
             route?.params?.id,
@@ -143,7 +144,6 @@ const Content = ({
       </View>
     );
   };
-  console.log({defaultNumberLine, numberLine, maxFontSize}, 'lisaman');
 
   const handleContainerText = () => {
     if (

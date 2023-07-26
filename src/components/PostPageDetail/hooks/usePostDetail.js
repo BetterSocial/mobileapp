@@ -58,9 +58,8 @@ const usePostDetail = () => {
     isFeed
   }) => {
     let fontSize = shortTextSize;
-    let lineHeight = shortTextLineHeight;
+    let lineHeight = shortTextLineH;
     let line = message?.length / messageLength;
-    // console.log({line, message}, 'line');
     let defaultNumberLine = 5;
     if (line < 1) line = 1;
     if (message?.length > messageLength) {
