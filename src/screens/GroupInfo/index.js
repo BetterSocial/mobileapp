@@ -189,7 +189,7 @@ const GroupInfo = () => {
                     <Text style={styles.groupName}>{memberName()}</Text>
                   </View>
                   <Text style={styles.dateCreate}>
-                    Created {moment(createChat).format('DD/MM/YY')}
+                    Created {moment(createChat).format('MM/DD/YY')}
                   </Text>
                 </View>
                 <TouchableOpacity onPress={handleOnNameChange} style={styles.pencilIconTouchable}>
