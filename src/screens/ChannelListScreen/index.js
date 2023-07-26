@@ -138,10 +138,19 @@ const ChannelListScreen = () => {
 
   const goToFeedDetail = async (item) => {
     const currentDate = moment();
+    console.log(item.expired_at);
+    const expiredDate = moment(item.expired_at);
+    const isExpired = expiredDate.isBefore(currentDate);
 
-    if (moment(item.expired_at).isBefore(currentDate)) {
-      Toast.show('This post expired and has been removed', Toast.LONG);
-      getFeedChat();
+    if (isExpired) {
+      const hoursDiff = currentDate.diff(expiredDate, 'hours');
+
+      if (hoursDiff > 48) {
+        Toast.show('This post expired and has been removed', Toast.LONG);
+        getFeedChat();
+      } else {
+        Toast.show('This post expired and has been removed', Toast.LONG);
+      }
     } else {
       navigation.navigate('PostDetailPage', {
         feedId: item.activity_id,
