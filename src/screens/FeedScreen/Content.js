@@ -34,8 +34,8 @@ const Content = ({
   const substringNoImageTopic = devHeight / 1.6 - 40 * (height / screenWidth);
   const substringWithPoll = devHeight / 3 - 40 * (height / screenWidth);
   const substringWithPollTopic = devHeight / 5 - 40 * (height / screenWidth);
-  const [heightLayout, setHeightLayout] = React.useState(0);
   const [numberLine, setNumberLine] = React.useState(null);
+  const [layoutHeight, setLayoutHeight] = React.useState(0);
   const {calculationText} = usePostDetail();
   const maxFontSize = normalizeFontSizeByWidth(32);
   const maxLineHeight = normalizeFontSizeByWidth(32 * 1.5);
@@ -46,7 +46,8 @@ const Content = ({
     maxFontSize,
     maxLineHeight,
     125,
-    true
+    true,
+    numberLine
   );
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
@@ -79,22 +80,13 @@ const Content = ({
     }
 
     const handleFontSize = () => {
-      if ((defaultNumberLine / (numberLine || 1)) * fontSize < normalizeFontSizeByWidth(16)) {
-        return fontSize;
-      }
-      return (defaultNumberLine / (numberLine || 1)) * fontSize;
+      return fontSize;
     };
 
-    console.log(handleFontSize(), fontSize, numberLine, defaultNumberLine, message, 'rumah 123');
+    // console.log(handleFontSize(), fontSize, numberLine, defaultNumberLine, message, 'rumah 123');
 
     const handleLineHeight = () => {
-      if (
-        (defaultNumberLine / (numberLine || 1)) * lineHeight <
-        normalizeFontSizeByWidth(16 * 1.5)
-      ) {
-        return lineHeight;
-      }
-      return (defaultNumberLine / (numberLine || 1)) * lineHeight;
+      return lineHeight;
     };
 
     const handleStyleFont = () => {
@@ -113,18 +105,8 @@ const Content = ({
       // setNumberLine(nativeEvent.lines.length);
     };
 
-    const hanldeHeightContainer = ({nativeEvent}) => {
-      // setHeightLayout(nativeEvent.layout.height);
-      if (!numberLine) {
-        setNumberLine(Math.floor(nativeEvent.layout.height / lineHeight));
-      }
-    };
-
     return (
-      <View
-        onLayout={hanldeHeightContainer}
-        testID="postTypePoll"
-        style={[styles.containerText, handleContainerText()]}>
+      <View testID="postTypePoll" style={[styles.containerText, handleContainerText()]}>
         <Text
           // onTextLayout={({nativeEvent}) => setNumberLine(nativeEvent.lines.length)}
           numberOfLines={numberLine}
@@ -156,12 +138,21 @@ const Content = ({
     }
     return {};
   };
-
+  console.log({layoutHeight}, 'sempak6');
+  React.useEffect(() => {
+    setNumberLine(layoutHeight / lineHeight);
+  }, [lineHeight, layoutHeight]);
+  const hanldeHeightContainer = ({nativeEvent}) => {
+    console.log(nativeEvent.layout.height, message, 'sempak9');
+    setLayoutHeight(nativeEvent.layout.height);
+  };
   return (
     <Pressable onPress={onPress} style={[styles.contentFeed, style]}>
       {message?.length > 0 ? (
         <View>
-          <View style={[styles.containerMainText, handleContainerText()]}>
+          <View
+            onLayout={hanldeHeightContainer}
+            style={[styles.containerMainText, handleContainerText()]}>
             {renderHandleTextContent()}
           </View>
         </View>
