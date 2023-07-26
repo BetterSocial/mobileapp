@@ -33,6 +33,32 @@ import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 const heightBs = Dimensions.get('window').height * 0.85;
 const heightBsPassword = Dimensions.get('window').height * 0.65;
 
+const S = StyleSheet.create({
+  devTrialView: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    zIndex: 999,
+    backgroundColor: 'red'
+  },
+  dummyLoginButton: {},
+  dummyAccountItem: {
+    paddingHorizontal: 16,
+    paddingVertical: 8
+  },
+  divider: {
+    width: '100%',
+    backgroundColor: COLORS.gray,
+    height: 2
+  },
+  passwordTextInput: {
+    margin: 16,
+    padding: 16,
+    backgroundColor: COLORS.lightgrey
+  }
+});
+
 const DevDummyLogin = ({resetClickTime = () => {}}) => {
   const {ENABLE_DEV_ONLY_FEATURE} = configEnv;
 
@@ -62,7 +88,7 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
   const [passwordText, setPasswordText] = React.useState('');
   const [isPasswordShown, setIsPasswordShown] = React.useState(false);
   const [isLoadingCheckPassword, setIsLoadingCheckPassword] = React.useState(false);
-  const [viewMode, setViewMode] = React.useState('');
+  const [viewMode] = React.useState('');
 
   const dummyLoginRbSheetRef = React.useRef(null);
   const dummyLoginPasswordRbSheetRef = React.useRef(null);
@@ -147,23 +173,18 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
       });
   };
 
-  const openDummyLoginPassword = (mode) => {
-    setViewMode(mode);
-    dummyLoginPasswordRbSheetRef?.current?.open();
-  };
-
   if (ENABLE_DEV_ONLY_FEATURE === 'true')
     return (
       <View style={S.devTrialView}>
         <Button
           testID="dummyonboarding"
           title="Dev Dummy Onboarding"
-          onPress={() => openDummyLoginPassword('onboarding')}
+          onPress={() => navigateToChooseUsername()}
         />
         <Button
           testID="demologin"
           title="Demo Login"
-          onPress={() => openDummyLoginPassword('login')}
+          onPress={() => dummyLoginRbSheetRef?.current?.open()}
         />
         <Button testID="closedemo" title="Close Demo Menu" onPress={closeDummyLogin} />
         <RBSheet height={heightBsPassword} ref={dummyLoginPasswordRbSheetRef}>
@@ -200,31 +221,5 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
 
   return <></>;
 };
-
-const S = StyleSheet.create({
-  devTrialView: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    zIndex: 999,
-    backgroundColor: 'red'
-  },
-  dummyLoginButton: {},
-  dummyAccountItem: {
-    paddingHorizontal: 16,
-    paddingVertical: 8
-  },
-  divider: {
-    width: '100%',
-    backgroundColor: COLORS.gray,
-    height: 2
-  },
-  passwordTextInput: {
-    margin: 16,
-    padding: 16,
-    backgroundColor: COLORS.lightgrey
-  }
-});
 
 export default DevDummyLogin;
