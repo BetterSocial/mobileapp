@@ -16,18 +16,24 @@ const PhotoProfile = ({
   const {anon_user_info_emoji_code, anon_user_info_color_code} = anonUser ?? {};
 
   if (isAnonimity) {
-    return loadingAnonUser ? (
-      <ActivityIndicator size={'small'} color={colors.bondi_blue} style={S.image} />
-    ) : (
-      <View style={[S.image, {backgroundColor: anon_user_info_color_code}]}>
-        <Text style={S.emojyStyle}>{anon_user_info_emoji_code}</Text>
+    return (
+      <View
+        style={[
+          S.image,
+          {backgroundColor: loadingAnonUser ? 'transparent' : anon_user_info_color_code}
+        ]}>
+        {loadingAnonUser ? (
+          <ActivityIndicator size={'small'} color={colors.bondi_blue} />
+        ) : (
+          <Text style={S.emojiStyle}>{anon_user_info_emoji_code}</Text>
+        )}
       </View>
     );
   }
 
   return (
     <FastImage
-      style={[S.image, chatDisabled && {opacity: 0.4}]}
+      style={[S.image, {opacity: chatDisabled ? 0.4 : 1}]}
       source={{
         uri: avatarUrl
       }}
