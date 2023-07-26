@@ -76,24 +76,25 @@ const AnonPostNotificationChannelItem: (props: MessageChannelItemProps) => React
 
   return (
     <BaseChannelItem
-      message={item?.description}
-      type={type}
-      picture={postMaker?.data?.profile_pic_url}
-      name={postMaker?.data?.username}
-      time={calculateTime(item?.lastUpdatedAt)}
-      onPress={onChannelPressed}
+      anonPostNotificationUserInfo={anonymousPostNotificationUserInfo}
       block={item?.rawJson?.block}
       comments={item?.rawJson?.comments?.length}
       downvote={item?.rawJson?.downvote}
-      upvote={item?.rawJson?.upvote}
+      isCommentExists={!!firstComment}
+      isMe={item?.user?.isMe}
+      message={item?.description}
+      name={postMaker?.data?.username}
+      onPress={onChannelPressed}
+      picture={postMaker?.data?.profile_pic_url}
+      postMaker={postMaker?.data}
       postNotificationMessageText={postNotificationMessageText}
       postNotificationMessageUser={commenterName}
       postNotificationPicture={postNotificationPicture}
-      anonPostNotificationUserInfo={anonymousPostNotificationUserInfo}
-      isCommentExists={!!firstComment}
+      showPostNotificationStats={isOwnPost}
+      time={calculateTime(item?.lastUpdatedAt)}
+      type={type}
       unreadCount={postNotifItem?.unreadCount}
-      postMaker={postMaker?.data}
-      isMe={item?.user?.isMe}
+      upvote={item?.rawJson?.upvote}
     />
   );
 };

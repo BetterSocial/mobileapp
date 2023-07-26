@@ -21,8 +21,7 @@ const ChannelPostNotificationMessage = ({
       fontSize: 12,
       lineHeight: 20,
       color: colors.gray,
-      marginRight: 29,
-      marginBottom: 7
+      marginRight: 29
     },
     chatContentPostNotificationMessageBold: {
       fontFamily: fonts.inter[600],
