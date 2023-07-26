@@ -4,6 +4,7 @@ import {Alert} from 'react-native';
 import {useSetRecoilState} from 'recoil';
 
 import StringConstant from '../../../utils/string/StringConstant';
+import useResetContext from '../../../hooks/context/useResetContext';
 import {Context} from '../../../context';
 import {InitialStartupAtom} from '../../../service/initialStartup';
 import {clearLocalStorege} from '../../../utils/token';
@@ -23,14 +24,21 @@ const useSettings = () => {
   const [, myProfileDispatch] = React.useContext(Context).myProfileFeed;
   const [, feedDispatch] = React.useContext(Context).feeds;
 
+  const {resetAllContext} = useResetContext();
+
   const logout = async () => {
-    await removeFcmToken();
-    removeAllCache();
-    resetProfileFeed(myProfileDispatch);
-    setMainFeeds([], feedDispatch);
-    client?.disconnectUser();
-    createClient(null, dispatch);
-    clearLocalStorege();
+    try {
+      await removeFcmToken();
+      removeAllCache();
+      resetProfileFeed(myProfileDispatch);
+      setMainFeeds([], feedDispatch);
+      resetAllContext();
+      client?.disconnectUser();
+      createClient(null, dispatch);
+      clearLocalStorege();
+    } catch (e) {
+      console.log('error', e);
+    }
   };
 
   const handleResponseDelete = async (response) => {
