@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
     paddingTop: 4,
     paddingBottom: 8,
     borderRadius: 8,
+    borderTopStartRadius: 0,
     flex: 1
   },
   userText: {
