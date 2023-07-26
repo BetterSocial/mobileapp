@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
     paddingTop: 4,
     paddingBottom: 4,
     borderRadius: 8,
+    borderTopEndRadius: 0,
     flex: 1
   },
   textContainerNewLine: {

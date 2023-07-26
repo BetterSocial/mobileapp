@@ -13,24 +13,25 @@ import {
 } from '../../../types/component/AnonymousChat/BaseChannelItem.types';
 
 const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
-  picture = 'https://fastly.picsum.photos/id/173/400/400.jpg?hmac=TU_DMkn7FSRRwiEpVveLvmyATg-y4hNrNKT-Cs4VQ1M',
-  postNotificationPicture = 'https://fastly.picsum.photos/id/912/400/400.jpg?hmac=Wg3Y7jTiQxHr_NpRsTrHG58kBfZQGNeH2tCl5u2Ipr0',
-  name = 'Amanda Amanda Amanda Amanda Amanda Amanda',
-  message = 'How have you been? Do you want to meet up sometime?',
-  // postNotificationMessageText = 'Help all of us to bring good food to more people in the villages, we will hold a party for tonight',
-  postNotificationMessageText = '',
-  postNotificationMessageUser = null,
   anonPostNotificationUserInfo = null,
-  unreadCount = 0,
-  time = '12:00 PM',
-  upvote = 15,
-  downvote = 3,
-  comments = 155,
   block = 11,
-  type = BaseChannelItemTypeProps.ANON_PM,
+  comments = 155,
+  downvote = 3,
   isCommentExists = false,
   isMe = false,
+  isOwnSignedPost = false,
+  message = 'How have you been? Do you want to meet up sometime?',
+  name = 'Amanda Amanda Amanda Amanda Amanda Amanda',
+  picture = 'https://fastly.picsum.photos/id/173/400/400.jpg?hmac=TU_DMkn7FSRRwiEpVveLvmyATg-y4hNrNKT-Cs4VQ1M',
   postMaker = null,
+  postNotificationMessageText = '',
+  postNotificationMessageUser = null,
+  postNotificationPicture = 'https://fastly.picsum.photos/id/912/400/400.jpg?hmac=Wg3Y7jTiQxHr_NpRsTrHG58kBfZQGNeH2tCl5u2Ipr0',
+  showPostNotificationStats = false,
+  time = '12:00 PM',
+  type = BaseChannelItemTypeProps.ANON_PM,
+  unreadCount = 0,
+  upvote = 15,
   onPress = () => {
     console.log('onPress');
   }
@@ -46,6 +47,7 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
           anonPostNotificationUserInfo={anonPostNotificationUserInfo}
           isCommentExists={isCommentExists}
           postMaker={postMaker}
+          isOwnSignedPost={isOwnSignedPost}
         />
 
         <View style={styles.chatContentContainer}>
@@ -76,6 +78,7 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
               upvote={upvote}
               downvote={downvote}
               comments={comments}
+              shown={showPostNotificationStats}
             />
           </View>
         </View>

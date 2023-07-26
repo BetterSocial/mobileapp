@@ -27,7 +27,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
     channel.setRead(localDb).catch((e) => console.log('setChannelAsRead error', e));
 
     AnonymousMessageRepo.setChannelAsRead(channel?.id).catch((e) => {
-      console.log('setChannelAsRead error', e);
+      console.log('setChannelAsRead error api', e);
     });
 
     refresh('channelList');

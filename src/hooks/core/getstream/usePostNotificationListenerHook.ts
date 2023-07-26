@@ -35,7 +35,7 @@ const usePostNotificationListenerHook = (onPostNotifReceived) => {
   };
 
   React.useEffect(() => {
-    initFeedSubscription();
+    if (anonProfileId) initFeedSubscription();
 
     return () => {
       feedSubscriptionRef.current?.unsubscribe();

@@ -115,7 +115,13 @@ class ChatSchema implements BaseDbSchema {
           WHEN ? THEN 1 
           WHEN ? THEN 1
           ELSE 0 END AS is_me,
-        CASE WHEN A.user_id = LAG(A.user_id) OVER (ORDER BY A.created_at) THEN 1 ELSE 0 END AS is_continuous
+        CASE WHEN A.user_id = LAG(A.user_id) OVER (ORDER BY A.created_at) 
+          THEN 
+            CASE WHEN (julianday(A.created_at) - julianday(LAG(A.created_at) OVER (ORDER BY A.created_at))) * 24 < 1
+            THEN 1
+            ELSE 0
+            END
+          ELSE 0 END AS is_continuous
       FROM 
       ${ChatSchema.getTableName()} A 
       INNER JOIN ${UserSchema.getTableName()} B 

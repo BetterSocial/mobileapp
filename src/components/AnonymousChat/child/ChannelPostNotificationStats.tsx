@@ -13,7 +13,8 @@ const ChannelPostNotificationStats = ({
   downvote = 0,
   comments = 0,
   block = 0,
-  type = BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION
+  type = BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION,
+  shown = false
 }) => {
   const styles = StyleSheet.create({
     descriptionContainer: {
@@ -21,7 +22,9 @@ const ChannelPostNotificationStats = ({
       flex: 1,
       flexDirection: 'row',
       justifyContent: 'space-between',
-      marginRight: 45
+      marginRight: 45,
+      marginTop: 7,
+      minHeight: 24
     },
     avatarContainer: {},
     avatarNoHeight: {},
@@ -38,6 +41,8 @@ const ChannelPostNotificationStats = ({
   });
 
   if (type === BaseChannelItemTypeProps.ANON_PM) return <></>;
+
+  if (!shown) return <View style={{height: 0}}></View>;
 
   return (
     <View style={styles.descriptionContainer}>

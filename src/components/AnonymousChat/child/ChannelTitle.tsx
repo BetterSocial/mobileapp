@@ -20,6 +20,7 @@ const ChannelTitle = ({type, name, time, message, unreadCount, isMe}) => {
       fontSize: 14,
       lineHeight: 22,
       marginLeft: 20,
+      color: colors.gray,
       alignSelf: 'flex-start'
     },
     chatContentMessage: {
@@ -60,6 +61,9 @@ const ChannelTitle = ({type, name, time, message, unreadCount, isMe}) => {
     },
     postNotificationMessageBold: {
       fontFamily: fonts.inter[700]
+    },
+    anonPmMessage: {
+      marginBottom: 0
     }
   });
 
@@ -74,7 +78,7 @@ const ChannelTitle = ({type, name, time, message, unreadCount, isMe}) => {
           {/* Time */}
           <Text style={styles.chatContentTime}>{time}</Text>
         </View>
-        <View style={baseStyles.chatContentSection}>
+        <View style={[baseStyles.chatContentSection, styles.anonPmMessage]}>
           {/* Message */}
           <Text numberOfLines={1} ellipsizeMode="tail" style={styles.chatContentMessage}>
             {`${isMe ? 'You: ' : ''}${message}`}

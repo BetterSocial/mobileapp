@@ -16,6 +16,7 @@ const ChannelImage = ({
   anonPostNotificationUserInfo = null,
   postMaker = null,
   isCommentExists = false,
+  isOwnSignedPost = false,
   type = BaseChannelItemTypeProps.ANON_PM
 }) => {
   const styles = StyleSheet.create({
@@ -109,6 +110,17 @@ const ChannelImage = ({
       <View>
         {/* <FastImage source={{uri: mainPicture}} style={styles.image} /> */}
         {renderMainImage()}
+        <FastImage source={AnonymousProfile} style={styles.postNotificationImage} />
+      </View>
+    );
+
+  // MY POST NOTIFICATION I COMMENTED CHANNEL IMAGE
+  if (type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_I_COMMENTED && isOwnSignedPost)
+    return (
+      <View>
+        {/* Chat Image */}
+        <FastImage source={{uri: mainPicture}} style={styles.image} />
+        {/* Post Notification Image */}
         <FastImage source={AnonymousProfile} style={styles.postNotificationImage} />
       </View>
     );

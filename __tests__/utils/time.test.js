@@ -1,4 +1,5 @@
 import moment from 'moment';
+
 import {calculateTime} from '../../src/utils/time';
 
 describe('Util time should correct', () => {
@@ -12,7 +13,7 @@ describe('Util time should correct', () => {
     const lessThan3Weeks = moment().subtract(15, 'day');
     expect(calculateTime(less1Minute)).toEqual('1m ago');
     expect(calculateTime(less24Hours)).toEqual('20h ago');
-    expect(calculateTime(less2Days)).toEqual('Yesterday');
+    expect(calculateTime(less2Days)).toEqual('1d ago');
     expect(calculateTime(lessThan50Second)).toEqual('1m ago');
     expect(calculateTime(lessThanWeek)).toEqual('5d ago');
     expect(calculateTime(lessThan2Weeks)).toEqual('1w ago');
