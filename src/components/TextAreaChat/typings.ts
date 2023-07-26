@@ -1,7 +1,7 @@
 import {AnonUser} from '../../../types/service/AnonProfile.type';
 
 export interface PhotoProfileProps {
-  anonUser: AnonUser;
+  anonUser?: AnonUser;
   isAnonimity: boolean;
   loadingAnonUser: boolean;
   avatarUrl: string;
@@ -15,4 +15,6 @@ export interface TextAreaChatProps extends PhotoProfileProps {
   onSend: () => void;
   disabledButton?: boolean;
   disabledInput?: boolean;
+  minHeight?: number;
+  maxHeight?: number;
 }

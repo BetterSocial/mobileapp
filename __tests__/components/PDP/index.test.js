@@ -1,9 +1,9 @@
 import * as React from 'react';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {cleanup, render} from '@testing-library/react-native';
 
-import {render, cleanup} from '@testing-library/react-native';
 import PDP from '../../../src/components/PostPageDetail';
 import Store from '../../../src/context/Store';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 jest.mock('react-native-activity-feed/node_modules/react-native-image-crop-picker', () => ({
   openPicker: jest.fn()
@@ -28,6 +28,10 @@ jest.mock('@react-navigation/native', () => ({
   useNavigation: () => ({
     goBack: mockedGoBack
   })
+}));
+
+jest.mock('@react-native-clipboard/clipboard', () => ({
+  setString: jest.fn()
 }));
 
 describe('PDP component should run correctly', () => {
