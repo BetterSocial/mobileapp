@@ -186,7 +186,6 @@ const _renderProfileNormal = ({
     actor,
     source
   });
-
   return (
     <SafeAreaView>
       <View
@@ -281,7 +280,6 @@ const Header = ({
     anon_user_info_emoji_name,
     version = 1
   } = props;
-
   if (anonimity) {
     return _renderAnonimity({
       time,
