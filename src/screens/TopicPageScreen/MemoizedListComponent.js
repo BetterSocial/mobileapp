@@ -9,6 +9,7 @@ import Header from '../FeedScreen/Header';
 import ShareUtils from '../../utils/share';
 import StringConstant from '../../utils/string/StringConstant';
 import dimen from '../../utils/dimen';
+import useFeed from '../FeedScreen/hooks/useFeed';
 import {
   ANALYTICS_SHARE_POST_TOPIC_ID,
   ANALYTICS_SHARE_POST_TOPIC_SCREEN,
@@ -19,7 +20,7 @@ import {
 import {Footer, Gap, PreviewComment} from '../../components';
 import {colors} from '../../utils/colors';
 import {getCommentLength, getCountCommentWithChild} from '../../utils/getstream';
-import useFeed from '../FeedScreen/hooks/useFeed';
+import {showScoreAlertDialog} from '../../utils/Utils';
 
 const FULL_WIDTH = Dimensions.get('screen').width;
 const tabBarHeight = StatusBar.currentHeight;
@@ -52,7 +53,8 @@ const RenderListFeed = (props) => {
     initialSetup,
     onPressUpvoteHook,
     onPressDownVoteHook,
-    statusUpvote
+    statusUpvote,
+    showScoreButton
   } = useFeed();
 
   const onPressDownVoteHandle = async () => {
@@ -155,6 +157,8 @@ const RenderListFeed = (props) => {
             statusVote={voteStatus}
             loadingVote={loadingVote}
             isSelf={item.anonimity ? false : userId === item?.actor?.id}
+            onPressScore={showScoreAlertDialog}
+            showScoreButton={showScoreButton}
           />
         </View>
         {getCommentLength(item.latest_reactions.comment) > 0 && (

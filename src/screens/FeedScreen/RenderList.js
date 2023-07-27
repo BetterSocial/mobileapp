@@ -53,7 +53,8 @@ const RenderListFeed = (props) => {
     initialSetup,
     onPressUpvoteHook,
     onPressDownVoteHook,
-    getTotalReaction
+    getTotalReaction,
+    showScoreButton
   } = useFeed();
 
   const onPressDownVoteHandle = async () => {
@@ -155,7 +156,7 @@ const RenderListFeed = (props) => {
             onPressDownVote={onPressDownVoteHandle}
             onPressUpvote={onPressUpvoteHandle}
             statusVote={voteStatus}
-            showScoreButton={true}
+            showScoreButton={showScoreButton}
             onPressScore={() => showScoreAlertDialog(item)}
             isSelf={item.anonimity ? false : selfUserId === item.actor.id}
           />

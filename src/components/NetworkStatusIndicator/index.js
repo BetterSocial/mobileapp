@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
-import {useNetInfo} from '@react-native-community/netinfo';
+import NetInfo from '@react-native-community/netinfo';
 
 import {COLORS} from '../../utils/theme';
 
@@ -11,33 +11,27 @@ import {COLORS} from '../../utils/theme';
  */
 const NetworkStatusIndicator = ({hide = false}) => {
   const [isOnline, setIsOnline] = React.useState(true);
-  const {isInternetReachable} = useNetInfo();
   const removeTimeout = React.useRef(null);
 
   React.useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      if (isOnline !== state.isConnected) {
+        removeTimeout.current = setTimeout(() => {
+          setIsOnline(state.isConnected);
+        }, 3500);
+      }
+    });
+
     return () => {
+      unsubscribe();
       if (removeTimeout.current) {
         clearTimeout(removeTimeout.current);
       }
     };
   }, []);
 
-  React.useEffect(() => {
-    if (isInternetReachable) {
-      clearTimeout(removeTimeout.current);
-      if (!isOnline) {
-        setIsOnline(true);
-      }
-    }
-
-    if (isOnline !== isInternetReachable) {
-      removeTimeout.current = setTimeout(() => {
-        setIsOnline(false);
-      }, 3500);
-    }
-  }, [isInternetReachable, removeTimeout.current]);
-
-  if (hide) return <View testID="isHide" />;
+  // eslint-disable-next-line no-constant-condition
+  if (hide || true) return <View testID="isHide" />;
 
   if (!isOnline)
     return (
