@@ -8,6 +8,7 @@ import {ChannelList, ChannelPreviewTitle, Chat, Streami18n} from 'stream-chat-re
 import {useNavigation} from '@react-navigation/core';
 import {useRecoilState, useRecoilValue} from 'recoil';
 
+import moment from 'moment';
 import ChannelStatusIcon from '../../components/ChannelStatusIcon';
 import CustomPreviewAvatar from './elements/CustomPreviewAvatar';
 import CustomPreviewUnreadCount from './elements/CustomPreviewUnreadCount';
@@ -20,7 +21,7 @@ import useChannelList from './hooks/useChannelList';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
 } from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
-import {CHANNEL_TYPE_TOPIC} from '../../utils/constants';
+import {CHANNEL_TYPE_ANONYMOUS, CHANNEL_TYPE_TOPIC} from '../../utils/constants';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {FEED_COMMENT_COUNT} from '../../utils/cache/constant';
@@ -34,6 +35,7 @@ import {setChannel} from '../../context/actions/setChannel';
 import {setTotalUnreadPostNotif} from '../../context/actions/unReadMessageAction';
 import {traceMetricScreen} from '../../libraries/performance/firebasePerformance';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import useFeedService from '../../hooks/useFeedService';
 
 const ChannelListScreen = () => {
   const streami18n = new Streami18n({
@@ -56,6 +58,8 @@ const ChannelListScreen = () => {
   const [, dispatchUnreadMessage] = React.useContext(Context).unReadMessage;
   const channelListLocalValue = useRecoilValue(channelListLocalAtom);
   const [followUserList, setFollowUserList] = useRecoilState(followersOrFollowingAtom);
+
+  const {getFeedChat} = useFeedService();
 
   const filters = {
     members: {$in: [myProfile.user_id]},
@@ -121,23 +125,52 @@ const ChannelListScreen = () => {
     dispatchUnreadMessage(setTotalUnreadPostNotif(totalMessage));
   };
 
+  /**
+   *
+   * @param {import('stream-chat-react-native-core').ChannelPreviewTitleProps} props
+   * @returns
+   */
   const customPreviewTitle = (props) => {
-    let {name} = props?.channel?.data || {};
-    const {id} = props?.channel?.data || {};
-    if (name?.toLowerCase() === 'us' && id?.toLowerCase() === 'us') name = 'United States';
+    const {channel} = props;
+
+    const {name} = channel?.data || {};
+    const {id} = channel?.data || {};
+    let displayName = name || props?.displayName;
+    if (channel?.data?.channel_type === CHANNEL_TYPE_ANONYMOUS) {
+      displayName = `Anonymous ${channel?.data?.anon_user_info_emoji_name}`;
+    }
+
+    if (name?.toLowerCase() === 'us' && id?.toLowerCase() === 'us') displayName = 'United States';
+
     return (
       <View style={{paddingRight: 12}}>
-        <ChannelPreviewTitle displayName={getChatName(name, profile.myProfile.username)} />
+        <ChannelPreviewTitle displayName={getChatName(displayName, profile.myProfile.username)} />
       </View>
     );
   };
 
   const goToFeedDetail = async (item) => {
-    navigation.navigate('PostDetailPage', {
-      feedId: item.activity_id,
-      refreshCache: () => handleUpdateCache(item.activity_id, item.totalCommentBadge),
-      isCaching: false
-    });
+    const currentDate = moment();
+    console.log(item.expired_at);
+    const expiredDate = moment(item.expired_at);
+    const isExpired = expiredDate.isBefore(currentDate);
+
+    if (isExpired) {
+      const hoursDiff = currentDate.diff(expiredDate, 'hours');
+
+      if (hoursDiff > 48) {
+        Toast.show('This post expired and has been removed', Toast.LONG);
+        getFeedChat();
+      } else {
+        Toast.show('This post expired and has been removed', Toast.LONG);
+      }
+    } else {
+      navigation.navigate('PostDetailPage', {
+        feedId: item.activity_id,
+        refreshCache: () => handleUpdateCache(item.activity_id, item.totalCommentBadge),
+        isCaching: false
+      });
+    }
   };
 
   const countPostNotifComponent = (item) => {

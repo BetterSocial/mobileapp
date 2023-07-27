@@ -112,7 +112,7 @@ const Content = ({
             item
           )}{' '}
           {message.length > substringPostImage ? (
-            <Text style={{color: '#2F80ED'}}>More...</Text>
+            <Text style={{color: COLORS.blue}}>More...</Text>
           ) : null}
         </Text>
       </View>
