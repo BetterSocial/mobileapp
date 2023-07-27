@@ -76,92 +76,92 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
           style={[
             handleStyleFeed(),
             {
-              marginHorizontal: 6,
-              paddingHorizontal: isPostDetail ? 12 : 0,
               minHeight: calculationText(hashtagAtComponent(sanitizeUrl(message))).containerHeight
             }
           ]}>
-          {item.post_type !== POST_TYPE_LINK ? (
-            <Text
-              style={[
-                styles.textContentFeed,
-                {
-                  fontSize: calculationText(message).fontSize,
-                  lineHeight: calculationText(message).lineHeight
-                }
-              ]}>
-              {hashtagAtComponent(message)}
-            </Text>
-          ) : (
-            <Text
-              style={[
-                styles.textContentFeed,
-                {
-                  fontSize: calculationText(sanitizeUrl(message)).fontSize,
-                  lineHeight: calculationText(sanitizeUrl(message)).lineHeight
-                }
-              ]}>
-              {hashtagAtComponent(sanitizeUrl(message))}{' '}
-            </Text>
+          <View style={styles.postTextContainer(isPostDetail)}>
+            {item.post_type !== POST_TYPE_LINK ? (
+              <Text
+                style={[
+                  styles.textContentFeed,
+                  {
+                    fontSize: calculationText(message).fontSize,
+                    lineHeight: calculationText(message).lineHeight
+                  }
+                ]}>
+                {hashtagAtComponent(message)}
+              </Text>
+            ) : (
+              <Text
+                style={[
+                  styles.textContentFeed,
+                  {
+                    fontSize: calculationText(sanitizeUrl(message)).fontSize,
+                    lineHeight: calculationText(sanitizeUrl(message)).lineHeight
+                  }
+                ]}>
+                {hashtagAtComponent(sanitizeUrl(message))}{' '}
+              </Text>
+            )}
+          </View>
+          <View style={styles.pollContainer}>
+            {item && item.post_type === POST_TYPE_POLL ? (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: isPostDetail ? 'flex-end' : 'flex-start',
+                  marginBottom: 0
+                }}>
+                <ContentPoll
+                  message={item.message}
+                  images_url={item.images_url}
+                  polls={item.pollOptions}
+                  item={item}
+                  pollexpiredat={item.polls_expired_at}
+                  multiplechoice={item.multiplechoice}
+                  isAlreadyPolling={item.isalreadypolling}
+                  onnewpollfetched={onnewpollfetched}
+                  voteCount={item.voteCount}
+                  topics={item?.topics}
+                  isPostDetail={isPostDetail}
+                />
+              </View>
+            ) : null}
+          </View>
+          {item && item.post_type === POST_TYPE_LINK && (
+            <View style={styles.newsCard}>
+              {smartRender(Card, {
+                domain: item.og.domain,
+                date: new Date(item.og.date).toLocaleDateString(),
+                domainImage: item.og.domainImage,
+                title: item.og.title,
+                description: item.og.description,
+                image: item.og.image,
+                url: item.og.url,
+                onHeaderPress: onPressDomain,
+                onCardContentPress: navigateToLinkContextPage,
+                score: item.score,
+                item
+              })}
+            </View>
           )}
-        </View>
-        <View style={{paddingHorizontal: 12}}>
-          {item && item.post_type === POST_TYPE_POLL ? (
-            <View
-              style={{
-                flex: 1,
-                justifyContent: isPostDetail ? 'flex-end' : 'flex-start',
-                marginBottom: 0
-              }}>
-              <ContentPoll
-                message={item.message}
-                images_url={item.images_url}
-                polls={item.pollOptions}
-                item={item}
-                pollexpiredat={item.polls_expired_at}
-                multiplechoice={item.multiplechoice}
-                isAlreadyPolling={item.isalreadypolling}
-                onnewpollfetched={onnewpollfetched}
-                voteCount={item.voteCount}
-                topics={item?.topics}
-                isPostDetail={isPostDetail}
+          {images_url?.length > 0 && (
+            <View style={styles.containerImage}>
+              <ImageLayouter
+                mode={FastImage.resizeMode.stretch}
+                images={images_url || []}
+                onimageclick={onImageClickedByIndex}
               />
             </View>
-          ) : null}
-        </View>
-        {item && item.post_type === POST_TYPE_LINK && (
-          <View style={styles.newsCard}>
-            {smartRender(Card, {
-              domain: item.og.domain,
-              date: new Date(item.og.date).toLocaleDateString(),
-              domainImage: item.og.domainImage,
-              title: item.og.title,
-              description: item.og.description,
-              image: item.og.image,
-              url: item.og.url,
-              onHeaderPress: onPressDomain,
-              onCardContentPress: navigateToLinkContextPage,
-              score: item.score,
-              item
-            })}
-          </View>
-        )}
-        {images_url?.length > 0 && (
-          <View style={styles.containerImage}>
-            <ImageLayouter
-              mode={FastImage.resizeMode.stretch}
-              images={images_url || []}
-              onimageclick={onImageClickedByIndex}
+          )}
+          <View style={styles.topicContainer}>
+            <TopicsChip
+              isPdp={true}
+              topics={topics}
+              fontSize={normalizeFontSize(14)}
+              text={message}
             />
           </View>
-        )}
-        <View style={styles.topicContainer}>
-          <TopicsChip
-            isPdp={true}
-            topics={topics}
-            fontSize={normalizeFontSize(14)}
-            text={message}
-          />
         </View>
       </ScrollView>
     </>
@@ -316,5 +316,11 @@ const styles = StyleSheet.create({
   containerImage: {
     flex: 1,
     height: dimen.normalizeDimen(300)
-  }
+  },
+  pollContainer: {
+    paddingHorizontal: 12
+  },
+  postTextContainer: (isPostDetail) => ({
+    paddingHorizontal: isPostDetail ? 12 : 0
+  })
 });
