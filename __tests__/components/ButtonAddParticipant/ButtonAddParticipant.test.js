@@ -15,7 +15,7 @@ jest.mock('@react-navigation/core', () => ({
 describe('ButtonAddParticipant should run correctly', () => {
   it('should be match with snapshot', () => {
     const refresh = jest.fn();
-    const {toJSON, getByTestId} = render(<ButtonAddParticipants refresh={refresh} />);
+    const {toJSON, getByTestId} = render(<ButtonAddParticipants reafresh={refresh} />);
     act(() => {
       fireEvent.press(getByTestId('btnPress'));
     });

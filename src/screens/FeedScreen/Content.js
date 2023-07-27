@@ -11,9 +11,9 @@ import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import {COLORS} from '../../utils/theme';
 import {POST_TYPE_LINK, POST_TYPE_POLL} from '../../utils/constants';
 import {colors} from '../../utils/colors';
-import {fonts, normalizeFontSize} from '../../utils/fonts';
+import {fonts, normalizeFontSize, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
-import usePostDetail from '../../components/PostPageDetail/hooks/usePostDetail';
+import useCalculationContent from './hooks/useCalculationContent';
 
 const {width: screenWidth, height} = Dimensions.get('window');
 
@@ -34,16 +34,11 @@ const Content = ({
   const substringNoImageTopic = devHeight / 1.6 - 40 * (height / screenWidth);
   const substringWithPoll = devHeight / 3 - 40 * (height / screenWidth);
   const substringWithPollTopic = devHeight / 5 - 40 * (height / screenWidth);
-  const {calculationText} = usePostDetail();
-  const {fontSize, lineHeight, defaultNumberLine} = calculationText(
-    message,
-    null,
-    null,
-    normalizeFontSize(30),
-    normalizeFontSize(40),
-    125,
-    true
-  );
+  const [layoutHeight, setLayoutHeight] = React.useState(null);
+  const [textHeight, setTextHeight] = React.useState(null);
+  const maxFontSize = normalizeFontSizeByWidth(40);
+  const minFontSize = normalizeFontSizeByWidth(18);
+  const {handleCalculation} = useCalculationContent();
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
       title: 'Photo',
@@ -78,16 +73,36 @@ const Content = ({
       const defaultStyle = [
         styles.textMedia,
         {
-          fontSize,
-          lineHeight
+          fontSize: handleCalculation(
+            layoutHeight,
+            textHeight,
+            maxFontSize,
+            minFontSize,
+            item.post_type,
+            item.images_url
+          ).font,
+          lineHeight: handleCalculation(
+            layoutHeight,
+            textHeight,
+            maxFontSize,
+            minFontSize,
+            item.post_type,
+            item.images_url
+          ).lineHeight
         }
       ];
       return defaultStyle;
     };
 
+    const handleTextLine = ({nativeEvent}) => {
+      if (!textHeight || textHeight <= 0) {
+        setTextHeight(nativeEvent.layout.height);
+      }
+    };
+
     return (
       <View testID="postTypePoll" style={[styles.containerText, handleContainerText()]}>
-        <Text numberOfLines={defaultNumberLine} style={handleStyleFont()}>
+        <Text onLayout={handleTextLine} style={handleStyleFont()}>
           {getCaptionWithTopicStyle(
             route?.params?.id,
             message,
@@ -116,8 +131,16 @@ const Content = ({
     return {};
   };
 
+  const hanldeHeightContainer = ({nativeEvent}) => {
+    if (!layoutHeight || layoutHeight <= 0) {
+      setLayoutHeight(nativeEvent.layout.height);
+    }
+  };
   return (
-    <Pressable onPress={onPress} style={[styles.contentFeed, style]}>
+    <Pressable
+      onLayout={hanldeHeightContainer}
+      onPress={onPress}
+      style={[styles.contentFeed, style]}>
       {message?.length > 0 ? (
         <View>
           <View style={[styles.containerMainText, handleContainerText()]}>
