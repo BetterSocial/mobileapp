@@ -232,6 +232,24 @@ const OtherProfile = () => {
     }
   };
 
+  const gotoChatRoom = async () => {
+    const type = 'messaging';
+    const sort = [{last_message_at: -1}];
+
+    const members = [profile.myProfile.user_id, dataMain.user_id];
+    const filter = {type, members: {$eq: members}};
+
+    const clientChat = await client.client;
+
+    const findChannels = await clientChat.queryChannels(filter, sort, {
+      watch: true,
+      state: true
+    });
+
+    setChannel(findChannels[0], dispatchChannel);
+    await navigation.replace('ChatDetailPage');
+  };
+
   const sendSignedDM = async () => {
     try {
       setLoadingSendDM(true);
@@ -240,9 +258,10 @@ const OtherProfile = () => {
         message: dmChat
       };
       await sendSignedDMOtherProfile(signedMParams);
+      await gotoChatRoom();
       setDMChat('');
     } catch (error) {
-      SimpleToast.show('Send message failed', SimpleToast.SHORT);
+      console.error(error);
     } finally {
       setLoadingSendDM(false);
     }
