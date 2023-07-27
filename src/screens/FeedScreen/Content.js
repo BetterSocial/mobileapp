@@ -13,7 +13,7 @@ import {POST_TYPE_LINK, POST_TYPE_POLL} from '../../utils/constants';
 import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
-import usePostDetail from '../../components/PostPageDetail/hooks/usePostDetail';
+import useCalculationContent from './hooks/useCalculationContent';
 
 const {width: screenWidth, height} = Dimensions.get('window');
 
@@ -34,21 +34,11 @@ const Content = ({
   const substringNoImageTopic = devHeight / 1.6 - 40 * (height / screenWidth);
   const substringWithPoll = devHeight / 3 - 40 * (height / screenWidth);
   const substringWithPollTopic = devHeight / 5 - 40 * (height / screenWidth);
-  const [numberLine, setNumberLine] = React.useState(null);
-  const [layoutHeight, setLayoutHeight] = React.useState(0);
-  const {calculationText} = usePostDetail();
-  const maxFontSize = normalizeFontSizeByWidth(32);
-  const maxLineHeight = normalizeFontSizeByWidth(32 * 1.5);
-  const {fontSize, lineHeight, defaultNumberLine} = calculationText(
-    message,
-    item.post_type,
-    null,
-    maxFontSize,
-    maxLineHeight,
-    125,
-    true,
-    numberLine
-  );
+  const [layoutHeight, setLayoutHeight] = React.useState(null);
+  const [textHeight, setTextHeight] = React.useState(null);
+  const maxFontSize = normalizeFontSizeByWidth(40);
+  const minFontSize = normalizeFontSizeByWidth(18);
+  const {handleCalculation} = useCalculationContent();
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
       title: 'Photo',
@@ -79,38 +69,40 @@ const Content = ({
       substringNumber = substringWithPollTopic;
     }
 
-    const handleFontSize = () => {
-      return fontSize;
-    };
-
-    // console.log(handleFontSize(), fontSize, numberLine, defaultNumberLine, message, 'rumah 123');
-
-    const handleLineHeight = () => {
-      return lineHeight;
-    };
-
     const handleStyleFont = () => {
       const defaultStyle = [
         styles.textMedia,
         {
-          fontSize: handleFontSize(),
-          lineHeight: handleLineHeight()
+          fontSize: handleCalculation(
+            layoutHeight,
+            textHeight,
+            maxFontSize,
+            minFontSize,
+            item.post_type,
+            item.images_url
+          ).font,
+          lineHeight: handleCalculation(
+            layoutHeight,
+            textHeight,
+            maxFontSize,
+            minFontSize,
+            item.post_type,
+            item.images_url
+          ).lineHeight
         }
       ];
       return defaultStyle;
     };
 
-    const handleNumberLine = ({nativeEvent}) => {
-      // console.log(nativeEvent.lines, 'biban');
-      // setNumberLine(nativeEvent.lines.length);
+    const handleTextLine = ({nativeEvent}) => {
+      if (!textHeight || textHeight <= 0) {
+        setTextHeight(nativeEvent.layout.height);
+      }
     };
 
     return (
       <View testID="postTypePoll" style={[styles.containerText, handleContainerText()]}>
-        <Text
-          // onTextLayout={({nativeEvent}) => setNumberLine(nativeEvent.lines.length)}
-          numberOfLines={numberLine}
-          style={handleStyleFont()}>
+        <Text onLayout={handleTextLine} style={handleStyleFont()}>
           {getCaptionWithTopicStyle(
             route?.params?.id,
             message,
@@ -138,21 +130,20 @@ const Content = ({
     }
     return {};
   };
-  console.log({layoutHeight}, 'sempak6');
-  React.useEffect(() => {
-    setNumberLine(layoutHeight / lineHeight);
-  }, [lineHeight, layoutHeight]);
+
   const hanldeHeightContainer = ({nativeEvent}) => {
-    console.log(nativeEvent.layout.height, message, 'sempak9');
-    setLayoutHeight(nativeEvent.layout.height);
+    if (!layoutHeight || layoutHeight <= 0) {
+      setLayoutHeight(nativeEvent.layout.height);
+    }
   };
   return (
-    <Pressable onPress={onPress} style={[styles.contentFeed, style]}>
+    <Pressable
+      onLayout={hanldeHeightContainer}
+      onPress={onPress}
+      style={[styles.contentFeed, style]}>
       {message?.length > 0 ? (
         <View>
-          <View
-            onLayout={hanldeHeightContainer}
-            style={[styles.containerMainText, handleContainerText()]}>
+          <View style={[styles.containerMainText, handleContainerText()]}>
             {renderHandleTextContent()}
           </View>
         </View>

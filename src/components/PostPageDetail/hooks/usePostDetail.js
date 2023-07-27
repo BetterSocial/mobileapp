@@ -5,8 +5,8 @@ import {POST_TYPE_LINK, POST_TYPE_POLL} from '../../../utils/constants';
 import {normalizeFontSizeByWidth} from '../../../utils/fonts';
 
 const usePostDetail = () => {
-  let longTextFontSize = normalizeFontSizeByWidth(16);
-  let longTextLineHeight = normalizeFontSizeByWidth(24);
+  const longTextFontSize = normalizeFontSizeByWidth(16);
+  const longTextLineHeight = normalizeFontSizeByWidth(24);
   console.log(longTextLineHeight, 'sempak2');
   const shortTextFontSize = normalizeFontSizeByWidth(24);
   const shortTextLineHeight = normalizeFontSizeByWidth(44);
@@ -49,74 +49,26 @@ const usePostDetail = () => {
     return newComment;
   };
 
-  const handleText = ({
-    message,
-    post_type,
-    image,
-    shortTextSize,
-    shortTextLineH,
-    messageLength,
-    isFeed,
-    numberLine
-  }) => {
-    if (!numberLine) numberLine = 5;
-    let fontSize = shortTextSize;
-    let lineHeight = shortTextLineH;
-    const minNumberLine = 5;
-    if (message?.length > messageLength) {
-      if (!isFeed) {
-        fontSize = longTextFontSize;
-        lineHeight = longTextLineHeight;
-      } else {
-        longTextFontSize = normalizeFontSizeByWidth(16);
-        longTextLineHeight = normalizeFontSizeByWidth(24);
-        fontSize = (minNumberLine / numberLine) * shortTextSize;
-        if (post_type === POST_TYPE_POLL || post_type === POST_TYPE_LINK || image?.length > 0) {
-          fontSize = longTextFontSize;
-          lineHeight = longTextLineHeight;
-        } else {
-          fontSize = longTextFontSize;
-          lineHeight = longTextLineHeight;
-        }
-      }
-    } else {
-      fontSize = shortTextSize;
-      lineHeight = shortTextLineH;
-    }
-    console.log({lineHeight, fontSize, message, numberLine}, 'sempak5');
-    return {fontSize, lineHeight};
-  };
-
   const calculatedSizeScreen = top + bottom + StatusBar.currentHeight + 170;
 
-  const calculationText = (
-    message,
-    post_type,
-    image,
-    shortTextSize,
-    shortTextLineH,
-    messageLength,
-    isFeed,
-    numberLine
-  ) => {
+  const calculationText = (message, post_type, image) => {
     if (!message) message = '';
-    if (!shortTextSize) shortTextSize = shortTextFontSize;
-    if (!shortTextLineH) shortTextLineH = shortTextLineHeight;
-    if (!messageLength) messageLength = 270;
+    let fontSize = shortTextFontSize;
+    let lineHeight = shortTextLineHeight;
     let containerHeight = 0;
-    const {fontSize, lineHeight} = handleText({
-      message,
-      post_type,
-      image,
-      shortTextSize,
-      shortTextLineH,
-      messageLength,
-      isFeed,
-      numberLine
-    });
+    if (message?.length > 270) {
+      fontSize = longTextFontSize;
+      lineHeight = longTextLineHeight;
+    } else {
+      fontSize = shortTextFontSize;
+      lineHeight = shortTextLineHeight;
+    }
     const numLines = 0.5;
-    const widthDimension = Dimensions.get('window').width;
-    const numberOfLines = Math.ceil(message?.length / ((widthDimension / fontSize) * numLines));
+
+    const numberOfLines = Math.ceil(
+      message?.length / ((Dimensions.get('window').width / fontSize) * numLines)
+    );
+
     containerHeight = numberOfLines * lineHeight;
     containerHeight = Math.max(containerHeight, shortTextLineHeight * 5);
     if (image?.length > 0 || post_type === POST_TYPE_POLL) {
