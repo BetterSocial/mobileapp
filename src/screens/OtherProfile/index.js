@@ -5,6 +5,7 @@ import {
   Dimensions,
   Image,
   InteractionManager,
+  Keyboard,
   SafeAreaView,
   StatusBar,
   StyleSheet,
@@ -190,7 +191,6 @@ const OtherProfile = () => {
   const generateAnonProfile = async () => {
     setLoadingGenerateAnon(true);
     const anonProfileResult = await generateAnonProfileOtherProfile(profile.myProfile.user_id);
-    console.log({anonProfileResult});
     setLoadingGenerateAnon(false);
     setAnonProfile(anonProfileResult);
   };
@@ -779,6 +779,7 @@ const OtherProfile = () => {
         )}
 
         <ProfileTiktokScroll
+          keyboardShouldPersistTaps="handled"
           ref={flatListRef}
           data={isFeedsShown ? feeds : []}
           onScroll={handleScroll}
@@ -812,7 +813,10 @@ const OtherProfile = () => {
                   index={index}
                   onNewPollFetched={onNewPollFetched}
                   onPressDomain={onPressDomain}
-                  onPress={() => onPress(item, index)}
+                  onPress={() => {
+                    onPress(item, index);
+                    Keyboard.dismiss();
+                  }}
                   onPressComment={() => onPressComment(item, item.id)}
                   onPressUpvote={(post) => setUpVote(post, index)}
                   selfUserId={yourselfId}
