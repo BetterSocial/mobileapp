@@ -28,17 +28,15 @@ const Content = ({
 }) => {
   const navigation = useNavigation();
   const route = useRoute();
-  const devHeight = Dimensions.get('screen').height;
-  const substringPostImage = devHeight / 2.5 - 40 * (height / screenWidth);
-  const substringNoImageNoTopic = devHeight / 1.5 - 40 * (height / screenWidth);
-  const substringNoImageTopic = devHeight / 1.6 - 40 * (height / screenWidth);
-  const substringWithPoll = devHeight / 3 - 40 * (height / screenWidth);
-  const substringWithPollTopic = devHeight / 5 - 40 * (height / screenWidth);
   const [layoutHeight, setLayoutHeight] = React.useState(null);
   const [textHeight, setTextHeight] = React.useState(null);
   const maxFontSize = normalizeFontSizeByWidth(40);
   const minFontSize = normalizeFontSizeByWidth(18);
   const {handleCalculation} = useCalculationContent();
+  const [amountCut, setAmountCut] = React.useState(0);
+  const [newMessage, setNewMessage] = React.useState(null);
+  // const [textWidth, setTextWidth] = React.useState(null);
+  const [numberLine, setNumberLine] = React.useState(0);
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
       title: 'Photo',
@@ -49,46 +47,25 @@ const Content = ({
       }, [])
     });
   };
+  const [hasMoreText, setHasMoreText] = React.useState(false);
   const renderHandleTextContent = () => {
-    let substringNumber = 0;
-    if (images_url.length > 0) {
-      substringNumber = substringPostImage;
-    }
-    if (images_url.length < 1 && topics.length > 0) {
-      substringNumber = substringNoImageTopic;
-    }
-    if (images_url.length < 1 && topics.length < 1) {
-      substringNumber = substringNoImageNoTopic;
-    }
-
-    if (item.post_type === POST_TYPE_POLL && topics.length < 1) {
-      substringNumber = substringWithPoll;
-    }
-
-    if (item.post_type === POST_TYPE_POLL && topics.length > 1) {
-      substringNumber = substringWithPollTopic;
-    }
+    const {lineHeight, font, readMore} = handleCalculation(
+      layoutHeight,
+      textHeight,
+      maxFontSize,
+      minFontSize,
+      item.post_type,
+      item.images_url,
+      message
+    );
+    const maxLine = Math.ceil(layoutHeight / lineHeight);
 
     const handleStyleFont = () => {
       const defaultStyle = [
         styles.textMedia,
         {
-          fontSize: handleCalculation(
-            layoutHeight,
-            textHeight,
-            maxFontSize,
-            minFontSize,
-            item.post_type,
-            item.images_url
-          ).font,
-          lineHeight: handleCalculation(
-            layoutHeight,
-            textHeight,
-            maxFontSize,
-            minFontSize,
-            item.post_type,
-            item.images_url
-          ).lineHeight
+          fontSize: font,
+          lineHeight
         }
       ];
       return defaultStyle;
@@ -98,23 +75,124 @@ const Content = ({
       if (!textHeight || textHeight <= 0) {
         setTextHeight(nativeEvent.layout.height);
       }
+      console.log(nativeEvent, 'babu');
+      // if (!textWidth || textWidth <= 0) {
+      //   setTextWidth(nativeEvent.layout.width);
+      // }
     };
 
+    // React.useEffect(() => {
+    //   if (amountCut) {
+    //     console.log({amountCut, numberLine, maxLine}, 'nani');
+    //     if (numberLine > maxLine) {
+    //       setNewMessage(message.substring(0, amountCut - 50));
+    //     }
+    //   }
+    // }, [amountCut, numberLine]);
+
+    const handleTextLayout = ({nativeEvent}) => {
+      setNumberLine(nativeEvent.lines.length);
+      let text = '';
+      const newMaxLine = maxLine - 3;
+      for (let i = 0; i < newMaxLine; i++) {
+        if (nativeEvent.lines[i]) {
+          text += nativeEvent.lines[i].text;
+        }
+        // text += nativeEvent.lines[i].text;
+      }
+      if (text.length > 0 && nativeEvent.lines.length >= newMaxLine) {
+        return setAmountCut(text.length - 20);
+      }
+      return setAmountCut(text.length);
+
+      // if (maxLine > 0) {
+      //   for (let i = 0; i <= newMaxLine; i++) {
+      //     if (nativeEvent.lines[i]) {
+      //       if (i == newMaxLine) {
+      //         text2.push(nativeEvent.lines[i].text.substring(0, 30));
+      //       } else {
+      //         text2.push(nativeEvent.lines[i].text);
+      //       }
+      //     }
+      //   }
+      //   text = text2.join(' ');
+      //   // setCutText(text);
+      //   console.log({hasMoreText, message, newMaxLine, length: nativeEvent.lines.length}, 'sio');
+
+      //   if (newMaxLine < nativeEvent.lines.length) {
+      //     setHasMoreText(true);
+      //   }
+      // }
+    };
+
+    // const linePerCharacter = screenWidth / textWidth;
+    console.log(
+      {maxLine, screenWidth, numberLine, amountCut, message, length: message.length},
+      'angkah1'
+    );
     return (
       <View testID="postTypePoll" style={[styles.containerText, handleContainerText()]}>
-        <Text onLayout={handleTextLine} style={handleStyleFont()}>
-          {getCaptionWithTopicStyle(
-            route?.params?.id,
-            message,
-            navigation,
-            substringNumber,
-            item?.topics,
-            item
-          )}{' '}
-          {message.length > substringPostImage ? (
-            <Text style={{color: '#2F80ED'}}>More...</Text>
-          ) : null}
-        </Text>
+        {amountCut <= 0 ? (
+          <Text
+            onTextLayout={handleTextLayout}
+            numberOfLines={maxLine}
+            // numberOfLines={Platform.OS === 'ios' ? 0 : maxLine}
+            onLayout={handleTextLine}
+            style={handleStyleFont()}>
+            {getCaptionWithTopicStyle(
+              route?.params?.id,
+              message,
+              navigation,
+              null,
+              item?.topics,
+              item
+            )}
+            {/* {numberLine > maxLine ? <Text style={{color: 'red'}}>More..</Text> : null} */}
+          </Text>
+        ) : (
+          <Text style={handleStyleFont()}>
+            {getCaptionWithTopicStyle(
+              route?.params?.id,
+              message.substring(0, amountCut),
+              navigation,
+              null,
+              item?.topics,
+              item
+            )}{' '}
+            {/* {amountCut > maxLine ? <Text style={styles.seemore}>More..</Text> : null} */}
+          </Text>
+        )}
+
+        {/* {!cutText ? (
+          <Text
+            onTextLayout={handleTextLayout}
+            numberOfLines={maxLine}
+            onLayout={handleTextLine}
+            style={handleStyleFont()}>
+            {getCaptionWithTopicStyle(
+              route?.params?.id,
+              message,
+              navigation,
+              null,
+              item?.topics,
+              item
+            )}
+          </Text>
+        ) : (
+          <>
+            <Text style={handleStyleFont()}>
+              {getCaptionWithTopicStyle(
+                route?.params?.id,
+                cutText,
+                navigation,
+                null,
+                item?.topics,
+                item
+              )}{' '}
+              {hasMoreText ? <Text style={styles.seemore}>More...</Text> : null}
+            </Text>
+          </>
+        )} */}
       </View>
     );
   };
@@ -252,7 +330,6 @@ export const styles = StyleSheet.create({
   contentFeed: {
     flex: 1,
     marginTop: 0
-    // backgroundColor: 'red'
   },
   item: {
     width: screenWidth - 20,
