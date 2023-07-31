@@ -276,6 +276,8 @@ const getCaptionWithTopicStyle = (idParams, text, navigation, substringEnd, topi
   const validationTextHasAt = /\B(\@[a-zA-Z0-9_+-]+\b)(?!;)/;
   if (substringEnd && typeof substringEnd === 'number') {
     text = text.substring(0, substringEnd);
+  } else {
+    text = text.substring(0, text.length);
   }
   substringEnd = Math.round(substringEnd);
   text = reactStringReplace(text, topicRegex, (match) => {

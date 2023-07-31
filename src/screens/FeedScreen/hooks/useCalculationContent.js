@@ -9,6 +9,12 @@ const useCalculationContent = () => {
     post_type,
     image
   ) => {
+    const diff = containerHeight - textHeight;
+    const averageDiff = diff / containerHeight;
+    let readMore = false;
+    if (averageDiff < 0.05) {
+      readMore = true;
+    }
     if (
       containerHeight &&
       textHeight &&
@@ -16,22 +22,23 @@ const useCalculationContent = () => {
       post_type !== POST_TYPE_LINK &&
       image.length === 0
     ) {
-      const diff = containerHeight - textHeight;
-      const averageDiff = diff / containerHeight;
       let font = hugeFont * averageDiff;
       let lineHeight = hugeFont * 1.5 * averageDiff;
+
       if (font < smallFont) {
         font = smallFont;
         lineHeight = smallFont * 1.5;
       }
       return {
         font,
-        lineHeight
+        lineHeight,
+        readMore
       };
     }
     return {
       font: smallFont,
-      lineHeight: smallFont * 1.5
+      lineHeight: smallFont * 1.5,
+      readMore
     };
   };
   return {
