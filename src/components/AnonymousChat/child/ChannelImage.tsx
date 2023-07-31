@@ -58,6 +58,8 @@ const ChannelImage = ({
     postMaker?.anon_user_info_emoji_code !== null &&
     postMaker?.anon_user_info_emoji_code !== undefined;
 
+  const isOldPostMakerAnonymous = postMaker?.emoji_code !== null;
+
   const renderMyPostNotificationSubImage = () => {
     if (!isCommentExists)
       return (
@@ -81,6 +83,18 @@ const ChannelImage = ({
       return (
         <ChannelAnonymousImage anonPostNotificationUserInfo={postMaker} imageStyle={styles.image} />
       );
+
+    if (isOldPostMakerAnonymous)
+      return (
+        <ChannelAnonymousImage
+          anonPostNotificationUserInfo={{
+            anon_user_info_emoji_code: postMaker.emoji_code,
+            anon_user_info_color_code: postMaker.color_code
+          }}
+          imageStyle={styles.image}
+        />
+      );
+
     return <FastImage source={{uri: mainPicture}} style={styles.image} />;
   };
 

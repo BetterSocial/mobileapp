@@ -36,7 +36,6 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
     console.log('onPress');
   }
 }) => {
-  // console.log(postMaker);
   return (
     <CustomPressable onPress={onPress}>
       <View style={styles.chatContainer}>

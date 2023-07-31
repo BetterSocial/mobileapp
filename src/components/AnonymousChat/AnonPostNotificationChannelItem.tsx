@@ -66,6 +66,7 @@ const AnonPostNotificationChannelItem: (props: MessageChannelItemProps) => React
 
   const postMaker = postNotifItem?.rawJson?.postMaker;
   const isOwnPost = postNotifItem?.rawJson?.isOwnPost;
+  const isOwnSignedPost = item?.rawJson?.isOwnSignedPost;
 
   let type = BaseChannelItemTypeProps.ANON_POST_NOTIFICATION;
   if (isOwnPost && firstComment?.reaction?.isOwningReaction)
@@ -81,8 +82,8 @@ const AnonPostNotificationChannelItem: (props: MessageChannelItemProps) => React
       comments={item?.rawJson?.comments?.length}
       downvote={item?.rawJson?.downvote}
       isCommentExists={!!firstComment}
-      isMe={item?.user?.isMe}
-      isOwnSignedPost={item?.rawJson?.isOwnSignedPost}
+      isMe={item?.user?.isMe || isOwnSignedPost || isOwnPost}
+      isOwnSignedPost={isOwnSignedPost}
       message={item?.description}
       name={postMaker?.data?.username}
       onPress={onChannelPressed}

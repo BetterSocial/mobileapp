@@ -162,10 +162,10 @@ class ChannelList implements BaseDbSchema {
         return;
       }
 
-      const existingLastUpdatedAt = new Date(existingChannel.lastUpdatedAt);
+      const existingLastUpdatedAt = new Date(existingChannel.last_updated_at);
       const newLastUpdatedAt = new Date(this.lastUpdatedAt);
 
-      if (newLastUpdatedAt > existingLastUpdatedAt) {
+      if (newLastUpdatedAt.getTime() > existingLastUpdatedAt.getTime()) {
         await this.save(db);
       }
     } catch (e) {
