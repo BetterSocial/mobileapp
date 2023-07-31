@@ -370,6 +370,8 @@ const useGroupInfo = () => {
   };
 
   const handleOpenPopOver = async (user) => {
+    if (user?.user?.username?.indexOf('Anonymous') > -1) return;
+
     if (user.user_id === profile.myProfile.user_id) {
       setShowPopover(false);
       return;
@@ -423,7 +425,9 @@ const useGroupInfo = () => {
     generateSystemChat,
     showPopover,
     setShowPopover,
-    handleOpenPopOver
+    handleOpenPopOver,
+    openChatMessage,
+    setNewParticipan
   };
 };
 
