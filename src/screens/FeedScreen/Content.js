@@ -106,11 +106,11 @@ const Content = ({
             onTextLayout={handleTextLayout}
             numberOfLines={calculateMaxLine()}
             onLayout={handleTextLine}
-            style={handleStyleFont()}>
+            style={[handleStyleFont(), handleContainerText().text]}>
             {message.replace(/\n/g, ' ')}
           </Text>
         ) : (
-          <Text style={handleStyleFont()}>
+          <Text style={[handleStyleFont(), handleContainerText().text]}>
             {getCaptionWithTopicStyle(
               route?.params?.id,
               message.substring(0, amountCut),
@@ -134,9 +134,15 @@ const Content = ({
       item.post_type !== POST_TYPE_LINK &&
       images_url.length <= 0
     ) {
-      return styles.centerVertical;
+      return {
+        container: styles.centerVertical,
+        text: styles.centerVerticalText
+      };
     }
-    return {};
+    return {
+      container: {},
+      text: {}
+    };
   };
 
   const hanldeHeightContainer = ({nativeEvent}) => {
@@ -151,7 +157,7 @@ const Content = ({
       style={[styles.contentFeed, style]}>
       {message?.length > 0 ? (
         <View>
-          <View style={[styles.containerMainText, handleContainerText()]}>
+          <View style={[styles.containerMainText, handleContainerText().container]}>
             {renderHandleTextContent()}
           </View>
         </View>
@@ -295,6 +301,10 @@ export const styles = StyleSheet.create({
   centerVertical: {
     alignItems: 'center',
     justifyContent: 'center',
-    height: '100%'
+    height: '100%',
+    backgroundColor: '#11468F'
+  },
+  centerVerticalText: {
+    color: 'white'
   }
 });
