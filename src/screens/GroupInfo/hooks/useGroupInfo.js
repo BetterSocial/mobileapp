@@ -341,6 +341,7 @@ const useGroupInfo = () => {
       await handleSelectUser(item);
       return true;
     }
+
     handleOpenProfile(item);
   };
 
@@ -362,6 +363,8 @@ const useGroupInfo = () => {
   };
 
   const handleOpenPopOver = async (user) => {
+    if (user?.user?.username?.indexOf('Anonymous') > -1) return;
+
     if (user.user_id === profile.myProfile.user_id) {
       setShowPopover(false);
       return;
