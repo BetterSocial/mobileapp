@@ -7,8 +7,7 @@ const useCalculationContent = () => {
     hugeFont,
     smallFont,
     post_type,
-    image,
-    message
+    image
   ) => {
     const diff = containerHeight - textHeight;
     const averageDiff = diff / containerHeight;
@@ -23,11 +22,6 @@ const useCalculationContent = () => {
       post_type !== POST_TYPE_LINK &&
       image.length === 0
     ) {
-      console.log(
-        {containerHeight, textHeight, message, diff, averageDiff, length: message.length, readMore},
-        'angkah'
-      );
-
       let font = hugeFont * averageDiff;
       let lineHeight = hugeFont * 1.5 * averageDiff;
 

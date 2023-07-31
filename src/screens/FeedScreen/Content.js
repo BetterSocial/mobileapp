@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 import * as React from 'react';
 /* eslint-disable no-nested-ternary */
 import PropTypes from 'prop-types';
@@ -15,7 +16,7 @@ import {fonts, normalizeFontSize, normalizeFontSizeByWidth} from '../../utils/fo
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
 import useCalculationContent from './hooks/useCalculationContent';
 
-const {width: screenWidth, height} = Dimensions.get('window');
+const {width: screenWidth} = Dimensions.get('window');
 
 const Content = ({
   message,
@@ -34,9 +35,6 @@ const Content = ({
   const minFontSize = normalizeFontSizeByWidth(18);
   const {handleCalculation} = useCalculationContent();
   const [amountCut, setAmountCut] = React.useState(0);
-  const [newMessage, setNewMessage] = React.useState(null);
-  // const [textWidth, setTextWidth] = React.useState(null);
-  const [numberLine, setNumberLine] = React.useState(0);
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
       title: 'Photo',
@@ -47,9 +45,8 @@ const Content = ({
       }, [])
     });
   };
-  const [hasMoreText, setHasMoreText] = React.useState(false);
   const renderHandleTextContent = () => {
-    const {lineHeight, font, readMore} = handleCalculation(
+    const {lineHeight, font} = handleCalculation(
       layoutHeight,
       textHeight,
       maxFontSize,
@@ -58,7 +55,17 @@ const Content = ({
       item.images_url,
       message
     );
-    const maxLine = Math.ceil(layoutHeight / lineHeight);
+
+    const calculateMaxLine = () => {
+      if (
+        item.post_type === POST_TYPE_POLL ||
+        item.post_type === POST_TYPE_LINK ||
+        images_url.length > 0
+      ) {
+        return 5;
+      }
+      return Math.floor(layoutHeight / lineHeight);
+    };
 
     const handleStyleFont = () => {
       const defaultStyle = [
@@ -75,79 +82,31 @@ const Content = ({
       if (!textHeight || textHeight <= 0) {
         setTextHeight(nativeEvent.layout.height);
       }
-      console.log(nativeEvent, 'babu');
-      // if (!textWidth || textWidth <= 0) {
-      //   setTextWidth(nativeEvent.layout.width);
-      // }
     };
 
-    // React.useEffect(() => {
-    //   if (amountCut) {
-    //     console.log({amountCut, numberLine, maxLine}, 'nani');
-    //     if (numberLine > maxLine) {
-    //       setNewMessage(message.substring(0, amountCut - 50));
-    //     }
-    //   }
-    // }, [amountCut, numberLine]);
-
     const handleTextLayout = ({nativeEvent}) => {
-      setNumberLine(nativeEvent.lines.length);
       let text = '';
-      const newMaxLine = maxLine - 3;
+      const newMaxLine = Platform.OS === 'ios' ? calculateMaxLine() - 1 : calculateMaxLine();
       for (let i = 0; i < newMaxLine; i++) {
         if (nativeEvent.lines[i]) {
           text += nativeEvent.lines[i].text;
         }
-        // text += nativeEvent.lines[i].text;
       }
-      if (text.length > 0 && nativeEvent.lines.length >= newMaxLine) {
-        return setAmountCut(text.length - 20);
+      if (text.length > 0 && message.length > text.length) {
+        return setAmountCut(text.length - 10);
       }
       return setAmountCut(text.length);
-
-      // if (maxLine > 0) {
-      //   for (let i = 0; i <= newMaxLine; i++) {
-      //     if (nativeEvent.lines[i]) {
-      //       if (i == newMaxLine) {
-      //         text2.push(nativeEvent.lines[i].text.substring(0, 30));
-      //       } else {
-      //         text2.push(nativeEvent.lines[i].text);
-      //       }
-      //     }
-      //   }
-      //   text = text2.join(' ');
-      //   // setCutText(text);
-      //   console.log({hasMoreText, message, newMaxLine, length: nativeEvent.lines.length}, 'sio');
-
-      //   if (newMaxLine < nativeEvent.lines.length) {
-      //     setHasMoreText(true);
-      //   }
-      // }
     };
 
-    // const linePerCharacter = screenWidth / textWidth;
-    console.log(
-      {maxLine, screenWidth, numberLine, amountCut, message, length: message.length},
-      'angkah1'
-    );
     return (
       <View testID="postTypePoll" style={[styles.containerText, handleContainerText()]}>
         {amountCut <= 0 ? (
           <Text
             onTextLayout={handleTextLayout}
-            numberOfLines={maxLine}
-            // numberOfLines={Platform.OS === 'ios' ? 0 : maxLine}
+            numberOfLines={calculateMaxLine()}
             onLayout={handleTextLine}
             style={handleStyleFont()}>
-            {getCaptionWithTopicStyle(
-              route?.params?.id,
-              message,
-              navigation,
-              null,
-              item?.topics,
-              item
-            )}
-            {/* {numberLine > maxLine ? <Text style={{color: 'red'}}>More..</Text> : null} */}
+            {message.replace(/\n/g, ' ')}
           </Text>
         ) : (
           <Text style={handleStyleFont()}>
@@ -158,41 +117,11 @@ const Content = ({
               null,
               item?.topics,
               item
-            )}{' '}
-            {/* {amountCut > maxLine ? <Text style={styles.seemore}>More..</Text> : null} */}
+            )}
+            {''}
+            {amountCut < message.length ? <Text style={styles.seemore}> More..</Text> : null}
           </Text>
         )}
-
-        {/* {!cutText ? (
-          <Text
-            onTextLayout={handleTextLayout}
-            numberOfLines={maxLine}
-            onLayout={handleTextLine}
-            style={handleStyleFont()}>
-            {getCaptionWithTopicStyle(
-              route?.params?.id,
-              message,
-              navigation,
-              null,
-              item?.topics,
-              item
-            )}
-          </Text>
-        ) : (
-          <>
-            <Text style={handleStyleFont()}>
-              {getCaptionWithTopicStyle(
-                route?.params?.id,
-                cutText,
-                navigation,
-                null,
-                item?.topics,
-                item
-              )}{' '}
-              {hasMoreText ? <Text style={styles.seemore}>More...</Text> : null}
-            </Text>
-          </>
-        )} */}
       </View>
     );
   };
@@ -280,8 +209,7 @@ export const styles = StyleSheet.create({
     fontSize: normalizeFontSize(14),
     color: colors.black,
     lineHeight: 24,
-    flex: 1,
-    flexWrap: 'wrap'
+    flex: 1
   },
 
   seemore: {
@@ -329,19 +257,19 @@ export const styles = StyleSheet.create({
   },
   contentFeed: {
     flex: 1,
-    marginTop: 0
+    marginTop: 0,
+    height: '100%',
+    width: '100%'
   },
   item: {
     width: screenWidth - 20,
     height: screenWidth - 20,
     marginTop: 10,
-    marginLeft: -20,
-    backgroundColor: 'pink'
+    marginLeft: -20
   },
   imageContainer: {
     flex: 1,
     marginBottom: Platform.select({ios: 0, android: 1}), // Prevent a random Android rendering issue
-    backgroundColor: 'white',
     borderRadius: 8
   },
   image: {
@@ -358,7 +286,7 @@ export const styles = StyleSheet.create({
   textContainer: {},
   containerMainText: {
     paddingHorizontal: 16,
-    paddingVertical: 10
+    paddingTop: 10
   },
   containerText: {
     flexDirection: 'row'
