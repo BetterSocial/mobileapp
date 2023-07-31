@@ -32,7 +32,7 @@ const BaseChatItem = ({item, index}: BaseChatItemComponentProps) => {
         avatar=""
         isContinuous={item?.isContinuous}
         message={item?.message}
-        time={calculateTime(item?.updatedAt)}
+        time={calculateTime(item?.updatedAt, true)}
         username={`Anonymous ${anon_user_info_emoji_name}`}
         type={BaseChatItemTypeProps.MY_ANON_CHAT}
         status={item?.status as ChatStatus}
@@ -44,7 +44,7 @@ const BaseChatItem = ({item, index}: BaseChatItemComponentProps) => {
       avatar={item?.user?.profilePicture}
       isContinuous={item?.isContinuous}
       message={item?.message}
-      time={calculateTime(item?.updatedAt)}
+      time={calculateTime(item?.updatedAt, true)}
       username={item?.user?.username}
       type={BaseChatItemTypeProps.ANON_CHAT}
     />
