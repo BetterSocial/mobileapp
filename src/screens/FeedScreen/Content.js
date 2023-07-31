@@ -45,59 +45,60 @@ const Content = ({
       }, [])
     });
   };
+
+  const {lineHeight, font} = handleCalculation(
+    layoutHeight,
+    textHeight,
+    maxFontSize,
+    minFontSize,
+    item.post_type,
+    item.images_url,
+    message
+  );
+
+  const calculateMaxLine = () => {
+    if (
+      item.post_type === POST_TYPE_POLL ||
+      item.post_type === POST_TYPE_LINK ||
+      images_url.length > 0
+    ) {
+      return 5;
+    }
+    return Math.floor(layoutHeight / lineHeight);
+  };
+
+  const handleStyleFont = () => {
+    const defaultStyle = [
+      styles.textMedia,
+      {
+        fontSize: font,
+        lineHeight
+      }
+    ];
+    return defaultStyle;
+  };
+
+  const handleTextLine = ({nativeEvent}) => {
+    if (!textHeight || textHeight <= 0) {
+      setTextHeight(nativeEvent.layout.height);
+    }
+  };
+
+  const handleTextLayout = ({nativeEvent}) => {
+    let text = '';
+    const newMaxLine = Platform.OS === 'ios' ? calculateMaxLine() - 1 : calculateMaxLine();
+    for (let i = 0; i < newMaxLine; i++) {
+      if (nativeEvent.lines[i]) {
+        text += nativeEvent.lines[i].text;
+      }
+    }
+    if (text.length > 0 && message.length > text.length) {
+      return setAmountCut(text.length - 10);
+    }
+    return setAmountCut(text.length);
+  };
+
   const renderHandleTextContent = () => {
-    const {lineHeight, font} = handleCalculation(
-      layoutHeight,
-      textHeight,
-      maxFontSize,
-      minFontSize,
-      item.post_type,
-      item.images_url,
-      message
-    );
-
-    const calculateMaxLine = () => {
-      if (
-        item.post_type === POST_TYPE_POLL ||
-        item.post_type === POST_TYPE_LINK ||
-        images_url.length > 0
-      ) {
-        return 5;
-      }
-      return Math.floor(layoutHeight / lineHeight);
-    };
-
-    const handleStyleFont = () => {
-      const defaultStyle = [
-        styles.textMedia,
-        {
-          fontSize: font,
-          lineHeight
-        }
-      ];
-      return defaultStyle;
-    };
-
-    const handleTextLine = ({nativeEvent}) => {
-      if (!textHeight || textHeight <= 0) {
-        setTextHeight(nativeEvent.layout.height);
-      }
-    };
-
-    const handleTextLayout = ({nativeEvent}) => {
-      let text = '';
-      const newMaxLine = Platform.OS === 'ios' ? calculateMaxLine() - 1 : calculateMaxLine();
-      for (let i = 0; i < newMaxLine; i++) {
-        if (nativeEvent.lines[i]) {
-          text += nativeEvent.lines[i].text;
-        }
-      }
-      if (text.length > 0 && message.length > text.length) {
-        return setAmountCut(text.length - 10);
-      }
-      return setAmountCut(text.length);
-    };
-
     return (
       <View testID="postTypePoll" style={[styles.containerText, handleContainerText()]}>
         {amountCut <= 0 ? (
