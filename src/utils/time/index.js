@@ -3,7 +3,7 @@ import moment from 'moment';
 import DateTimeUtils from './DateTime';
 
 // eslint-disable-next-line import/prefer-default-export
-export const calculateTime = (time) => {
+export const calculateTime = (time, formatForChatTab = false) => {
   if (time) {
     const now = moment();
     const utc = now;
@@ -13,7 +13,7 @@ export const calculateTime = (time) => {
     const days = utc.diff(date, 'days');
     const weeks = utc.diff(date, 'weeks');
 
-    if (days >= 30) {
+    if (days >= 30 && !formatForChatTab) {
       return DateTimeUtils.format(time);
     }
 
@@ -27,7 +27,11 @@ export const calculateTime = (time) => {
       return `${hours}h ago`;
     }
 
-    if (days < 2) {
+    if (days === 1 && formatForChatTab) {
+      return `${days}d ago`;
+    }
+
+    if (days === 1) {
       return 'Yesterday';
     }
 
