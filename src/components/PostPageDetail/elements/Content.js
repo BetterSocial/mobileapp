@@ -6,18 +6,18 @@ import {useNavigation} from '@react-navigation/native';
 
 import FastImage from 'react-native-fast-image';
 import ImageLayouter from '../../../screens/FeedScreen/elements/ImageLayouter';
+import Card from '../../Card/Card';
+import ContentPoll from '../../../screens/FeedScreen/ContentPoll';
 import TopicsChip from '../../TopicsChip/TopicsChip';
+import useContentFeed from '../../../screens/FeedScreen/hooks/useContentFeed';
+import usePostDetail from '../hooks/usePostDetail';
 import {COLORS} from '../../../utils/theme';
+import {POST_TYPE_LINK, POST_TYPE_POLL} from '../../../utils/constants';
 import {colors} from '../../../utils/colors';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
-import {sanitizeUrl} from '../../../utils/string/StringUtils';
-import ContentPoll from '../../../screens/FeedScreen/ContentPoll';
-import {POST_TYPE_POLL, POST_TYPE_LINK} from '../../../utils/constants';
-import useContentFeed from '../../../screens/FeedScreen/hooks/useContentFeed';
-import {smartRender} from '../../../utils/Utils';
-import Card from '../../Card/Card';
 import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
-import usePostDetail from '../hooks/usePostDetail';
+import {sanitizeUrl} from '../../../utils/string/StringUtils';
+import {smartRender} from '../../../utils/Utils';
 import dimen from '../../../utils/dimen';
 
 const {width: screenWidth} = Dimensions.get('window');
@@ -65,6 +65,7 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
     navigation.navigate('DomainScreen', param);
   };
   if (!cekImage) return null;
+
   return (
     <>
       <ScrollView
@@ -76,36 +77,36 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
           style={[
             handleStyleFeed(),
             {
-              marginHorizontal: 6,
-              paddingHorizontal: isPostDetail ? 12 : 0,
               minHeight: calculationText(hashtagAtComponent(sanitizeUrl(message))).containerHeight
             }
           ]}>
-          {item.post_type !== POST_TYPE_LINK ? (
-            <Text
-              style={[
-                styles.textContentFeed,
-                {
-                  fontSize: calculationText(message).fontSize,
-                  lineHeight: calculationText(message).lineHeight
-                }
-              ]}>
-              {hashtagAtComponent(message)}
-            </Text>
-          ) : (
-            <Text
-              style={[
-                styles.textContentFeed,
-                {
-                  fontSize: calculationText(sanitizeUrl(message)).fontSize,
-                  lineHeight: calculationText(sanitizeUrl(message)).lineHeight
-                }
-              ]}>
-              {hashtagAtComponent(sanitizeUrl(message))}{' '}
-            </Text>
-          )}
+          <View style={styles.postTextContainer(isPostDetail)}>
+            {item.post_type !== POST_TYPE_LINK ? (
+              <Text
+                style={[
+                  styles.textContentFeed,
+                  {
+                    fontSize: calculationText(message).fontSize,
+                    lineHeight: calculationText(message).lineHeight
+                  }
+                ]}>
+                {hashtagAtComponent(message)}
+              </Text>
+            ) : (
+              <Text
+                style={[
+                  styles.textContentFeed,
+                  {
+                    fontSize: calculationText(sanitizeUrl(message)).fontSize,
+                    lineHeight: calculationText(sanitizeUrl(message)).lineHeight
+                  }
+                ]}>
+                {hashtagAtComponent(sanitizeUrl(message))}{' '}
+              </Text>
+            )}
+          </View>
         </View>
-        <View style={{paddingHorizontal: 12}}>
+        <View style={styles.pollContainer}>
           {item && item.post_type === POST_TYPE_POLL ? (
             <View
               style={{
@@ -316,5 +317,11 @@ const styles = StyleSheet.create({
   containerImage: {
     flex: 1,
     height: dimen.normalizeDimen(300)
-  }
+  },
+  pollContainer: {
+    paddingHorizontal: 12
+  },
+  postTextContainer: (isPostDetail) => ({
+    paddingHorizontal: isPostDetail ? 12 : 0
+  })
 });

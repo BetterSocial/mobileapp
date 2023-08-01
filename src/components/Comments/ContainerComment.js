@@ -25,7 +25,6 @@ const ContainerComment = ({
   refreshComment,
   navigateToReplyView,
   findCommentAndUpdate,
-  updateParentPost = () => {},
   contextSource = CONTEXT_SOURCE.FEEDS,
   itemParent
 }) => {
@@ -72,6 +71,13 @@ const ContainerComment = ({
     );
   };
 
+  const handlePaddingBottom = () => {
+    if (!itemParent?.message || itemParent?.message === '') {
+      return calculatePaddingBtm() + calculationText(itemParent?.message).containerHeight;
+    }
+    return calculatePaddingBtm();
+  };
+
   return (
     <View style={[styles.container]}>
       <View
@@ -79,7 +85,7 @@ const ContainerComment = ({
           styles.containerComment,
           {
             minHeight: calculateMinHeight() + calculatePaddingBtm(),
-            paddingBottom: calculatePaddingBtm()
+            paddingBottom: handlePaddingBottom()
           }
         ]}>
         <View style={styles.lineBeforeProfile} />

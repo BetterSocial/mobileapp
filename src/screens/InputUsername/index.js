@@ -13,7 +13,7 @@ import {
   TouchableWithoutFeedback,
   View
 } from 'react-native';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
 
@@ -91,19 +91,22 @@ const ChooseUsername = () => {
   const handleOpenCamera = async () => {
     const {success, message} = await requestCameraPermission();
     if (success) {
-      launchCamera(
-        {
-          mediaType: 'photo',
-          includeBase64: true,
-          selectionLimit: 1
-        },
-        (res) => {
-          if (res.base64) {
-            setImage(`${res.base64}`, dispatch);
-            bottomSheetChooseImageRef.current.close();
+      ImagePicker.openCamera({
+        width: 512,
+        height: 512,
+        cropping: true,
+        mediaType: 'photo',
+        includeBase64: true
+      })
+        .then((imageRes) => {
+          setImage(imageRes.data, dispatch);
+          bottomSheetChooseImageRef.current.close();
+        })
+        .catch((e) => {
+          if (__DEV__) {
+            console.log('error', e);
           }
-        }
-      );
+        });
     } else {
       Toast.show(message, Toast.SHORT);
     }
@@ -112,12 +115,22 @@ const ChooseUsername = () => {
   const handleOpenGallery = async () => {
     const {success, message} = await requestExternalStoragePermission();
     if (success) {
-      launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
-        if (res.base64) {
-          setImage(`${res.base64}`, dispatch);
+      ImagePicker.openPicker({
+        width: 512,
+        height: 512,
+        cropping: true,
+        mediaType: 'photo',
+        includeBase64: true
+      })
+        .then((imageRes) => {
+          setImage(imageRes.data, dispatch);
           bottomSheetChooseImageRef.current.close();
-        }
-      });
+        })
+        .catch((e) => {
+          if (__DEV__) {
+            console.log('error', e);
+          }
+        });
     } else {
       Toast.show(message, Toast.SHORT);
     }
@@ -299,7 +312,7 @@ const ChooseUsername = () => {
             {/* <Animated.View style={[styles.constainerInfo, {opacity: fadeInfo}]}>
             <View style={styles.parentIcon} >
             <View style={styles.containerIcon}>
-              <IconFontAwesome5 name="exclamation" size={12} color="#2F80ED" />
+              <IconFontAwesome5 name="exclamation" size={12} color="#2C67BC" />
             </View>
             </View>
               <View style={styles.parentInfo} >

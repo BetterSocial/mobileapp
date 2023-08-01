@@ -165,7 +165,7 @@ const RenderListFeed = (props) => {
           <View style={styles.contentReaction(getHeightReaction())}>
             <React.Fragment>
               <PreviewComment
-                user={item.latest_reactions.comment[0].user}
+                user={item?.latest_reactions?.comment[0]?.user}
                 comment={item?.latest_reactions?.comment[0]?.data?.text || ''}
                 image={item?.latest_reactions?.comment[0]?.user?.data?.profile_pic_url || ''}
                 time={item.latest_reactions.comment[0].created_at}
@@ -189,15 +189,15 @@ const styles = StyleSheet.create({
     marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0
   }),
   cardContainer: {
-    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT,
     width: FULL_WIDTH,
     borderBottomWidth: 7,
     borderBottomColor: colors.lightgrey,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT
   },
   cardMain: {
-    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT,
-    width: '100%'
+    width: '100%',
+    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT
   }
 });
 

@@ -5,6 +5,7 @@
 import * as React from 'react';
 import PSL from 'psl';
 import Toast from 'react-native-simple-toast';
+import {Image} from 'react-native-compressor';
 import _, {debounce} from 'lodash';
 import {
   Alert,
@@ -18,11 +19,10 @@ import {
   Text,
   View
 } from 'react-native';
-import {Image} from 'react-native-compressor';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {openSettings} from 'react-native-permissions';
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation, useRoute} from '@react-navigation/core';
+import ImagePicker from 'react-native-image-crop-picker';
 
 import ContentLink from './elements/ContentLink';
 import CreatePollContainer from './elements/CreatePollContainer';
@@ -78,6 +78,7 @@ import {getUrl, isContainUrl} from '../../utils/Utils';
 import {getUserId} from '../../utils/users';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
 import {uploadPhoto} from '../../service/file';
+import {COLORS} from '../../utils/theme';
 
 const IS_GEO_SELECT_ENABLED = false;
 
@@ -320,7 +321,6 @@ const CreatePost = () => {
 
     try {
       const responseUpload = await uploadPhoto(asset);
-
       setMediaStorage((val) => [...val, newArr]);
       setDataImage((val) => [...val, responseUpload.data.url]);
       sheetMediaRef.current.close();
@@ -337,15 +337,21 @@ const CreatePost = () => {
   const uploadMediaFromLibrary = async () => {
     const {success} = await requestExternalStoragePermission();
     if (success) {
-      launchImageLibrary({mediaType: 'photo'}, async (res) => {
-        if (res.didCancel && __DEV__) {
-          console.log('User cancelled image picker');
-        } else if (res.uri) {
-          await uploadPhotoImage(res.uri);
-        } else if (__DEV__) {
-          console.log('CreatePost (launchImageLibrary): ', res);
-        }
-      });
+      ImagePicker.openPicker({
+        width: 512,
+        height: 512,
+        cropping: true,
+        mediaType: 'photo'
+      })
+        .then(async (data) => {
+          const file = data.path;
+          await uploadPhotoImage(file);
+        })
+        .catch((e) => {
+          if (__DEV__) {
+            console.log(e, 'error crop');
+          }
+        });
     } else {
       Alert.alert(
         'Permission denied',
@@ -360,17 +366,24 @@ const CreatePost = () => {
       );
     }
   };
-
   const takePhoto = async () => {
     const {success, message} = await requestCameraPermission();
     if (success) {
-      launchCamera({mediaType: 'photo'}, async (res) => {
-        if (res.didCancel && __DEV__) {
-          console.log('User cancelled image picker');
-        } else if (res.uri) {
-          await uploadPhotoImage(res.uri);
-        }
-      });
+      ImagePicker.openCamera({
+        width: 512,
+        height: 512,
+        cropping: true,
+        mediaType: 'photo'
+      })
+        .then(async (data) => {
+          const file = data.path;
+          await uploadPhotoImage(file);
+        })
+        .catch((e) => {
+          if (__DEV__) {
+            console.log(e, 'error crop');
+          }
+        });
     } else {
       Toast.show(message, Toast.SHORT);
     }
@@ -932,7 +945,7 @@ const styles = StyleSheet.create({
     height
   }),
   reminderContainer: {
-    backgroundColor: '#2F80ED',
+    backgroundColor: COLORS.blue,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 7,

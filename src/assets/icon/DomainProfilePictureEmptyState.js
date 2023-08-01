@@ -1,14 +1,21 @@
 import * as React from 'react';
-import Svg, {Path, Rect} from 'react-native-svg';
+import Svg, {Path} from 'react-native-svg';
 
 import TestIdConstant from '../../utils/testId';
+import {COLORS} from '../../utils/theme';
 
 function DomainProfilePictureEmptyState(props) {
   return (
-    <Svg width="20" height="20" viewBox="0 0 100 100" fill="none" testID={TestIdConstant.iconDomainProfilePictureEmptyState} {...props}>
+    <Svg
+      width="20"
+      height="20"
+      viewBox="0 0 100 100"
+      fill="none"
+      testID={TestIdConstant.iconDomainProfilePictureEmptyState}
+      {...props}>
       <Path
         d="M0 50C0 22.3858 22.3858 0 50 0C77.6142 0 100 22.3858 100 50C100 77.6142 77.6142 100 50 100C22.3858 100 0 77.6142 0 50Z"
-        fill="#2F80ED"
+        fill={COLORS.blue}
       />
       <Path
         fillRule="evenodd"
@@ -20,7 +27,7 @@ function DomainProfilePictureEmptyState(props) {
         fillRule="evenodd"
         clipRule="evenodd"
         d="M48.2561 34.1424L44.037 41.5751C44.008 41.6264 43.9956 41.6856 44.0014 41.7443C44.0073 41.8031 44.0311 41.8585 44.0696 41.903C44.1081 41.9474 44.1593 41.9786 44.2162 41.9923C44.2731 42.006 44.3327 42.0014 44.3869 41.9792L47.2855 40.7881C48.0645 40.4684 48.9363 40.4684 49.7153 40.7881L52.6139 41.9781C52.6679 42.0001 52.7274 42.0045 52.784 41.9909C52.8407 41.9772 52.8918 41.9461 52.9302 41.9019C52.9686 41.8577 52.9925 41.8025 52.9985 41.7439C53.0045 41.6854 52.9924 41.6264 52.9638 41.5751L48.7436 34.1424C48.7189 34.0991 48.6834 34.0631 48.6406 34.0382C48.5978 34.0132 48.5493 34 48.4999 34C48.4504 34 48.4019 34.0132 48.3591 34.0382C48.3163 34.0631 48.2808 34.0991 48.2561 34.1424Z"
-        fill="#2F80ED"
+        fill={COLORS.blue}
       />
     </Svg>
   );

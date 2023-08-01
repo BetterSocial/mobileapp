@@ -62,9 +62,8 @@ const detectStateInCity = (city) => {
  * @returns {String}
  */
 const displayCityName = (city, state) => {
-  if (city === null || city === undefined || city === '') throw new Error('City must be defined');
-  if (state === null || state === undefined || state === '')
-    throw new Error('State must be defined');
+  if (city === null || city === undefined || city === '') return null;
+  if (state === null || state === undefined || state === '') return null;
   if (detectStateInCity(city)) return city;
 
   return `${city}, ${state}`;
@@ -161,6 +160,7 @@ const displayFormattedSearchLocationsV2 = (searchQuery, locationObject) => {
   return null;
 };
 
+// eslint-disable-next-line consistent-return
 const getChatName = (usernames, me) => {
   if (!usernames) {
     return 'No Name';
@@ -186,7 +186,6 @@ const getChatName = (usernames, me) => {
   if (userArraysWithoutMe.length === 1) {
     return userArraysWithoutMe[0].trim();
   }
-  return 'No name';
 };
 
 const getGroupMemberCount = (channel) => Object.keys(channel?.state?.members).length;
@@ -277,6 +276,8 @@ const getCaptionWithTopicStyle = (idParams, text, navigation, substringEnd, topi
   const validationTextHasAt = /\B(\@[a-zA-Z0-9_+-]+\b)(?!;)/;
   if (substringEnd && typeof substringEnd === 'number') {
     text = text.substring(0, substringEnd);
+  } else {
+    text = text.substring(0, text.length);
   }
   substringEnd = Math.round(substringEnd);
   text = reactStringReplace(text, topicRegex, (match) => {
