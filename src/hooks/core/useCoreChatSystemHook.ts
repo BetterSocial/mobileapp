@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {useRecoilValue} from 'recoil';
+import {v4 as uuid} from 'uuid';
 
 import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../database/schema/ChannelListSchema';
@@ -93,17 +94,58 @@ const useCoreChatSystemHook = () => {
   };
 
   const helperAnonymousChannelPromiseBuilder = async (channel) => {
-    const chatName = await getAnonymousChatName(lastJsonMessage?.channel?.members);
+    if (channel?.members?.length === 0) return Promise.reject(Error('no members'));
+
+    const chatName = await getAnonymousChatName(channel?.members);
     return new Promise((resolve, reject) => {
       try {
-        console.log(JSON.stringify(channel, null, 2));
         channel.targetName = chatName?.name;
         channel.targetImage = chatName?.image;
+        channel.firstMessage = channel?.messages?.[0];
+        channel.channel = {...channel};
         const channelList = ChannelList.fromAnonymousChannelAPI(channel);
         return resolve(channelList.saveIfLatest(localDb));
       } catch (e) {
+        console.log('error on helperAnonymousChannelPromiseBuilder');
         return reject(e);
       }
+    });
+  };
+
+  const saveAnonymousChannelData = async (channel) => {
+    if (!channel?.members || channel?.members?.length === 0) return;
+    try {
+      await helperAnonymousChannelPromiseBuilder(channel);
+    } catch (e) {
+      console.log('error on saveAnonymousChannelData helperAnonymousChannelPromiseBuilder');
+      console.log(e);
+    }
+
+    try {
+      channel?.members?.forEach(async (member) => {
+        const userMember = UserSchema.fromMemberWebsocketObject(member, channel.id);
+        const memberSchema = ChannelListMemberSchema.fromWebsocketObject(
+          channel?.id,
+          uuid(),
+          member
+        );
+        await memberSchema.save(localDb);
+        await userMember.saveOrUpdateIfExists(localDb);
+      });
+
+      channel?.messages?.forEach(async (message) => {
+        const chat = ChatSchema.fromGetAllAnonymousChannelAPI(channel?.id, message);
+        await chat.save(localDb);
+      });
+    } catch (e) {
+      console.log('error on saveAnonymousChannelData');
+      console.log(e);
+    }
+  };
+
+  const saveAllAnonymousChannelData = async (channels) => {
+    channels?.forEach(async (channel) => {
+      saveAnonymousChannelData(channel);
     });
   };
 
@@ -119,13 +161,7 @@ const useCoreChatSystemHook = () => {
     }
 
     try {
-      const allPromises = [];
-      anonymousChannel.forEach((channel) => {
-        const channelList = ChannelList.fromAnonymousChannelAPI(channel);
-        allPromises.push(channelList.saveIfLatest(localDb).catch((e) => console.log(e)));
-      });
-
-      await Promise.all(allPromises);
+      await saveAllAnonymousChannelData(anonymousChannel);
       refresh('channelList');
     } catch (e) {
       console.log('error on saving anonymousChannel');
@@ -241,6 +277,7 @@ const useCoreChatSystemHook = () => {
   React.useEffect(() => {
     if (isEnteringApp) {
       getAllAnonymousPostNotifications().catch((e) => console.log(e));
+      getAllAnonymousChannels().catch((e) => console.log(e));
     }
   }, [localDb, isEnteringApp]);
 };
