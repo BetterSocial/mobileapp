@@ -236,6 +236,8 @@ class UserSchema implements BaseDbSchema {
     });
   }
 
+  static fromMessageAnonymousChatAPI = UserSchema.fromMemberWebsocketObject;
+
   static fromInitAnonymousChatAPI(
     object: InitAnonymousChatDataMember,
     channelId: string

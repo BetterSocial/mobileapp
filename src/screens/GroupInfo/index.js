@@ -1,5 +1,6 @@
 import * as React from 'react';
 import FastImage from 'react-native-fast-image';
+import Popover from 'react-native-popover-view';
 import moment from 'moment';
 import {
   FlatList,
@@ -21,9 +22,9 @@ import ExitGroup from '../../assets/images/exit-group.png';
 import Header from '../../components/Header';
 // eslint-disable-next-line camelcase
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
-import ModalAction from './elements/ModalAction';
 import ReportGroup from '../../assets/images/report.png';
 import useGroupInfo from './hooks/useGroupInfo';
+import {COLORS} from '../../utils/theme';
 import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
 import {colors} from '../../utils/colors';
@@ -45,17 +46,17 @@ const GroupInfo = () => {
     handleOnNameChange,
     handleOnImageClicked,
     newParticipant,
-    selectedUser,
-    handleCloseSelectUser,
-    openModal,
     alertRemoveUser,
     memberName,
     onLeaveGroup,
     profile,
     channelState,
-    handlePressContact,
     setUsername,
-    onReportGroup
+    onReportGroup,
+    showPopover,
+    setShowPopover,
+    handleOpenPopOver,
+    selectedUser
   } = useGroupInfo();
 
   React.useEffect(() => {
@@ -167,6 +168,10 @@ const GroupInfo = () => {
     handleMember();
   }, []);
 
+  React.useEffect(() => {
+    getMembersList();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -221,16 +226,44 @@ const GroupInfo = () => {
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({item, index}) => (
                     <View style={{height: normalize(72)}}>
-                      <ProfileContact
-                        key={index}
-                        item={item}
-                        onPress={() => handlePressContact(item)}
-                        fullname={getProfileName(item.user.name)}
-                        photo={item.user.image}
-                        showArrow={channelState?.channel.data.type === 'group'}
-                        userId={profile.myProfile.user_id}
-                        ImageComponent={getAnonymousImage(item?.user?.name)}
-                      />
+                      <Popover
+                        isVisible={showPopover}
+                        onRequestClose={() => setShowPopover(false)}
+                        from={
+                          <View>
+                            <ProfileContact
+                              key={index}
+                              item={item}
+                              onPress={() => handleOpenPopOver(item)}
+                              fullname={getProfileName(item.user.name)}
+                              photo={item.user.image}
+                              showArrow={channelState?.channel.data.type === 'group'}
+                              userId={profile.myProfile.user_id}
+                              ImageComponent={getAnonymousImage(item?.user?.name)}
+                            />
+                          </View>
+                        }>
+                        <View style={styles.modalActUser}>
+                          <Text
+                            style={styles.textActUser}
+                            onPress={() => alertRemoveUser('message')}>
+                            Message {selectedUser?.user?.name}
+                          </Text>
+                          <Text
+                            style={styles.textActUser}
+                            onPress={() => alertRemoveUser('message_anonymously')}>
+                            Message Anonymously
+                          </Text>
+                          <Text
+                            style={styles.textActUser}
+                            onPress={() => alertRemoveUser('remove')}>
+                            Remove from Group
+                          </Text>
+                          <Text style={styles.textActUser} onPress={() => alertRemoveUser('view')}>
+                            View Profile
+                          </Text>
+                        </View>
+                      </Popover>
                     </View>
                   )}
                 />
@@ -271,13 +304,6 @@ const GroupInfo = () => {
             <Loading visible={isLoadingMembers} />
           </View>
           <Loading visible={isUploadingImage} />
-          <ModalAction
-            name={selectedUser?.user?.name}
-            isOpen={openModal}
-            onCloseModal={handleCloseSelectUser}
-            selectedUser={selectedUser}
-            onPress={alertRemoveUser}
-          />
         </>
       )}
     </SafeAreaView>
@@ -430,5 +456,18 @@ export const styles = StyleSheet.create({
   },
   scrollContainer: {
     paddingBottom: 30
+  },
+  modalActUser: {
+    padding: 16,
+    paddingLeft: 27,
+    paddingRight: 70
+  },
+  textActUser: {
+    fontFamily: 'Inter',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    fontSize: 18,
+    color: COLORS.black000,
+    paddingVertical: 20
   }
 });

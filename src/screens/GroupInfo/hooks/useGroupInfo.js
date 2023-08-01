@@ -5,10 +5,17 @@ import {generateRandomId} from 'stream-chat-react-native-core';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {openComposer} from 'react-native-email-link';
 import {useNavigation} from '@react-navigation/core';
+import {v4 as uuid} from 'uuid';
 
+import ChannelList from '../../../database/schema/ChannelListSchema';
+import ChannelListMemberSchema from '../../../database/schema/ChannelListMemberSchema';
+import UserSchema from '../../../database/schema/UserSchema';
+import useChatUtilsHook from '../../../hooks/core/chat/useChatUtilsHook';
+import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import {Context} from '../../../context';
 import {checkUserBlock} from '../../../service/profile';
 import {getChatName} from '../../../utils/string/StringUtils';
+import {getOrCreateAnonymousChannel} from '../../../service/chat';
 import {requestExternalStoragePermission} from '../../../utils/permission';
 import {setChannel} from '../../../context/actions/setChannel';
 import {setParticipants} from '../../../context/actions/groupChat';
@@ -32,7 +39,11 @@ const useGroupInfo = () => {
   const [selectedUser, setSelectedUser] = React.useState(null);
   const [newParticipant, setNewParticipan] = React.useState([]);
   const [openModal, setOpenModal] = React.useState(false);
+  const [showPopover, setShowPopover] = React.useState(false);
   const [, dispatchChannel] = React.useContext(Context).channel;
+
+  const {goToChatScreen} = useChatUtilsHook();
+  const {localDb} = useLocalDatabaseHook();
 
   const anonUserEmojiName = channelState?.channel?.data?.anon_user_info_emoji_name;
 
@@ -148,9 +159,9 @@ const useGroupInfo = () => {
     setNewParticipan(newData);
   };
 
-  const handleSelectUser = async (user) => {
+  const handleSelectUser = (user) => {
     if (user.user_id === profile.myProfile.user_id) return;
-    await setSelectedUser(user);
+    setSelectedUser(user);
     setOpenModal(true);
   };
 
@@ -279,7 +290,61 @@ const useGroupInfo = () => {
     }
   };
 
+  const handleMessageAnonymously = async () => {
+    try {
+      const response = await getOrCreateAnonymousChannel(selectedUser?.user_id);
+      console.log('response', selectedUser);
+      const targetRawJson = {
+        type: 'notification.message_new',
+        cid: response?.channel?.id,
+        channel_id: '',
+        channel_type: 'messaging',
+        channel: response?.channel,
+        created_at: response?.channel,
+        targetName: selectedUser?.user?.name,
+        targetImage: selectedUser?.user?.image
+      };
+      const channelList = ChannelList.fromMessageAnonymouslyAPI({
+        channel: response?.channel,
+        members: response?.members,
+        appAdditionalData: {
+          rawJson: targetRawJson,
+          message: '',
+          targetName: selectedUser?.user?.name,
+          targetImage: selectedUser?.user?.image
+        }
+      });
+
+      await channelList.saveIfLatest(localDb);
+      try {
+        response?.members?.forEach(async (member) => {
+          const userMember = UserSchema.fromMemberWebsocketObject(member, response?.channel?.id);
+          await userMember.saveOrUpdateIfExists(localDb);
+
+          const memberSchema = ChannelListMemberSchema.fromWebsocketObject(
+            response?.channel?.id,
+            uuid(),
+            member
+          );
+          await memberSchema.save(localDb);
+        });
+      } catch (e) {
+        console.log('error on memberSchema');
+        console.log(e);
+      }
+
+      goToChatScreen(channelList);
+    } catch (e) {
+      SimpleToast.show('Failed to message this user anonymously');
+    }
+  };
+
+  /**
+   *
+   * @param {('view' | 'remove' | 'message' | 'message_anonymously')} status
+   */
   const alertRemoveUser = async (status) => {
+    setShowPopover(false);
     if (status === 'view') {
       setOpenModal(false);
       handleOpenProfile(selectedUser).catch((e) => console.log(e));
@@ -295,7 +360,12 @@ const useGroupInfo = () => {
     if (status === 'message') {
       await checkUserIsBlockHandle();
     }
+
+    if (status === 'message_anonymously') {
+      await handleMessageAnonymously();
+    }
   };
+
   const onLeaveGroup = () => {
     Alert.alert('', 'Exit this group?', [{text: 'Cancel'}, {text: 'Exit', onPress: leaveGroup}]);
   };
@@ -336,8 +406,9 @@ const useGroupInfo = () => {
   };
 
   const handlePressContact = async (item) => {
+    setShowPopover(false);
     if (channelState?.channel.data.type === 'group') {
-      await handleSelectUser(item);
+      handleSelectUser(item);
       return true;
     }
 
@@ -363,6 +434,15 @@ const useGroupInfo = () => {
         }
       });
     }, 500);
+  };
+
+  const handleOpenPopOver = async (user) => {
+    if (user.user_id === profile.myProfile.user_id) {
+      setShowPopover(false);
+      return;
+    }
+    handleSelectUser(user);
+    setShowPopover(true);
   };
 
   return {
@@ -407,8 +487,11 @@ const useGroupInfo = () => {
     onReportGroup,
     setUsername,
     setSelectedUser,
-    openChatMessage,
     generateSystemChat,
+    showPopover,
+    setShowPopover,
+    handleOpenPopOver,
+    openChatMessage,
     setNewParticipan
   };
 };
