@@ -306,7 +306,7 @@ class ChannelList implements BaseDbSchema {
       id: data?.id,
       channelPicture: data?.targetImage,
       name: data?.targetName,
-      description: data?.firstMessage?.text || data?.firstMessage?.message,
+      description: data?.firstMessage?.text || data?.firstMessage?.message || '',
       unreadCount: 0,
       channelType: 'ANON_PM',
       lastUpdatedAt: data?.last_message_at,
