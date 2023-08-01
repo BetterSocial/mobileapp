@@ -32,9 +32,11 @@ const Content = ({
   const [layoutHeight, setLayoutHeight] = React.useState(null);
   const [textHeight, setTextHeight] = React.useState(null);
   const maxFontSize = normalizeFontSizeByWidth(40);
-  const minFontSize = normalizeFontSizeByWidth(18);
+  const minFontSize = normalizeFontSizeByWidth(16);
   const {handleCalculation} = useCalculationContent();
   const [amountCut, setAmountCut] = React.useState(0);
+  const [textCut, setTextCunt] = React.useState(null);
+  const [arrText] = React.useState([]);
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
       title: 'Photo',
@@ -86,18 +88,32 @@ const Content = ({
 
   const handleTextLayout = ({nativeEvent}) => {
     let text = '';
-    const newMaxLine = Platform.OS === 'ios' ? calculateMaxLine() - 1 : calculateMaxLine();
+    const newMaxLine = calculateMaxLine() - 1;
     for (let i = 0; i < newMaxLine; i++) {
       if (nativeEvent.lines[i]) {
-        text += nativeEvent.lines[i].text;
+        if (i === newMaxLine - 1) {
+          text += nativeEvent.lines[i].text.substring(0, 30);
+          arrText.push(nativeEvent.lines[i].text.substring(0, 30));
+        } else {
+          text += nativeEvent.lines[i].text;
+          arrText.push(nativeEvent.lines[i].text);
+        }
       }
     }
-    if (text.length > 0 && message.length > text.length) {
-      return setAmountCut(text.length - 10);
-    }
-    return setAmountCut(text.length);
+    setTextCunt(text);
+    setAmountCut(text.length);
   };
 
+  console.log(
+    {
+      amountCut,
+      maxLine: calculateMaxLine(),
+      arrText,
+      textCut,
+      textLength: message.length
+    },
+    'sumprit'
+  );
   const renderHandleTextContent = () => {
     return (
       <View testID="postTypePoll" style={[styles.containerText, handleContainerText()]}>
@@ -107,17 +123,20 @@ const Content = ({
             numberOfLines={calculateMaxLine()}
             onLayout={handleTextLine}
             style={[handleStyleFont(), handleContainerText().text]}>
-            {message.replace(/\n/g, ' ')}
+            {message.replace(/[\r\n]+/g)}
           </Text>
         ) : (
-          <Text style={[handleStyleFont(), handleContainerText().text]}>
+          <Text
+            numberOfLines={calculateMaxLine()}
+            style={[handleStyleFont(), handleContainerText().text]}>
             {getCaptionWithTopicStyle(
               route?.params?.id,
-              message.substring(0, amountCut),
+              textCut,
               navigation,
               null,
               item?.topics,
-              item
+              item,
+              handleContainerText().isShort
             )}
             {''}
             {amountCut < message.length ? <Text style={styles.seemore}> More..</Text> : null}
@@ -136,12 +155,14 @@ const Content = ({
     ) {
       return {
         container: styles.centerVertical,
-        text: styles.centerVerticalText
+        text: styles.centerVerticalText,
+        isShort: true
       };
     }
     return {
       container: {},
-      text: {}
+      text: {},
+      isShort: false
     };
   };
 

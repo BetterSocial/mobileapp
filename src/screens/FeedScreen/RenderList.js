@@ -183,7 +183,7 @@ const RenderListFeed = (props) => {
 };
 
 const styles = StyleSheet.create({
-  footerWrapper: (h) => ({height: h + 10}),
+  footerWrapper: (h) => ({height: h}),
   contentReaction: (heightReaction) => ({
     maxHeight: heightReaction,
     marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0
