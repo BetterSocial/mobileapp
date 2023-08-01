@@ -4,9 +4,11 @@ import {ChannelAvatar} from 'stream-chat-react-native';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
+import AnonymousIcon from '../../screens/ChannelListScreen/elements/components/AnonymousIcon';
 import DefaultGroupProfilePicture from '../../assets/images/default-group-picture.png';
 import GlobalButton from '../Button/GlobalButton';
 import MemoIc_arrow_back_white from '../../assets/arrow/Ic_arrow_back_white';
+import {CHANNEL_TYPE_ANONYMOUS} from '../../utils/constants';
 import {Context} from '../../context';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
@@ -17,8 +19,12 @@ const Header = ({onBack}) => {
   const [channelClient] = React.useContext(Context).channel;
   const [profileContext] = React.useContext(Context).profile;
   const {channel} = channelClient;
-  const username = channelClient.channel?.data?.name;
   const [chatName, setChatName] = React.useState(null);
+  let username = channelClient.channel?.data?.name;
+  const channelType = channelClient?.channel?.data?.channel_type;
+  if (channelType === CHANNEL_TYPE_ANONYMOUS) {
+    username = `Anonymous ${channelClient?.channel?.data?.anon_user_info_emoji_name}`;
+  }
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -43,6 +49,18 @@ const Header = ({onBack}) => {
   }, [JSON.stringify(profileContext.myProfile), username]);
 
   const renderHeaderImage = () => {
+    if (channelType === CHANNEL_TYPE_ANONYMOUS) {
+      return (
+        <View style={{marginLeft: 18}}>
+          <AnonymousIcon
+            size={42}
+            color={channel?.data?.anon_user_info_color_code}
+            emojiCode={channel?.data?.anon_user_info_emoji_code}
+          />
+        </View>
+      );
+    }
+
     if (channel?.data?.image) {
       if (channel?.data?.image.indexOf('res.cloudinary.com') > -1) {
         return <Image source={{uri: channel?.data?.image}} style={styles.image} />;
