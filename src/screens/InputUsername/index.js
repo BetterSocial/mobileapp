@@ -19,6 +19,7 @@ import {useNavigation} from '@react-navigation/core';
 
 import BottomSheetChooseImage from './elements/BottomSheetChooseImage';
 import MemoOnboardingChangeProfilePlusIcon from '../../assets/icon/OnboardingChangeProfilePlusIcon';
+import WarningIcon from '../../../assets/icons/warning-circle-blue.svg';
 import StringConstant from '../../utils/string/StringConstant';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
@@ -32,6 +33,7 @@ import {requestCameraPermission, requestExternalStoragePermission} from '../../u
 import {setCapitalFirstLetter} from '../../utils/Utils';
 import {setImage, setUsername} from '../../context/actions/users';
 import {verifyUsername} from '../../service/users';
+import {COLORS} from '../../utils/theme';
 
 const MAXIMUM_USERNAME_LENGTH = 19;
 const MINIMUM_USERNAME_LENGTH = 3;
@@ -296,19 +298,18 @@ const ChooseUsername = () => {
                 {messageTypeFetch(typeFetch, formatUsernameString())}
               </View>
             </View>
-            {/* <Animated.View style={[styles.constainerInfo, {opacity: fadeInfo}]}>
-            <View style={styles.parentIcon} >
-            <View style={styles.containerIcon}>
-              <IconFontAwesome5 name="exclamation" size={12} color="#2F80ED" />
-            </View>
-            </View>
-              <View style={styles.parentInfo} >
-              <Text style={styles.infoText}>
-              {StringConstant.onboardingChooseUsernameBlueBoxHint}
-            </Text>
+            <Animated.View style={[styles.constainerInfo, {opacity: fadeInfo}]}>
+              <View style={styles.parentIcon}>
+                <View style={styles.containerIcon}>
+                  <WarningIcon />
+                </View>
               </View>
-
-          </Animated.View> */}
+              <View style={styles.parentInfo}>
+                <Text style={styles.infoText}>
+                  {StringConstant.onboardingChooseUsernameBlueBoxHint}
+                </Text>
+              </View>
+            </Animated.View>
           </View>
         </TouchableWithoutFeedback>
 
@@ -401,9 +402,9 @@ const styles = StyleSheet.create({
   infoText: {
     fontFamily: 'Inter-Regular',
     fontStyle: 'normal',
-    fontWeight: 'normal',
+    fontWeight: '400',
     fontSize: 14,
-    color: 'rgba(47, 128, 237, 1)',
+    color: COLORS.blue,
     // marginLeft: 12,
     lineHeight: 24,
     paddingHorizontal: 4
@@ -431,7 +432,8 @@ const styles = StyleSheet.create({
   }),
   parentIcon: {
     width: '10%',
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   parentInfo: {
     width: '90%'
