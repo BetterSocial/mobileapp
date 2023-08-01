@@ -31,6 +31,7 @@ function useAnonymousChatScreenHook(): UseAnonymousChatScreenHook {
       myUserId,
       myAnonymousId
     )) as ChatSchema[];
+    console.log('initChatData', data);
     setChats(data);
   };
 

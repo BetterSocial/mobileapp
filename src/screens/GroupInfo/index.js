@@ -55,7 +55,8 @@ const GroupInfo = () => {
     onReportGroup,
     showPopover,
     setShowPopover,
-    handleOpenPopOver
+    handleOpenPopOver,
+    selectedUser
   } = useGroupInfo();
 
   React.useEffect(() => {
@@ -246,11 +247,11 @@ const GroupInfo = () => {
                           <Text
                             style={styles.textActUser}
                             onPress={() => alertRemoveUser('message')}>
-                            Message {item.user.name}
+                            Message {selectedUser?.user?.name}
                           </Text>
                           <Text
                             style={styles.textActUser}
-                            onPress={() => alertRemoveUser('message')}>
+                            onPress={() => alertRemoveUser('message_anonymously')}>
                             Message Anonymously
                           </Text>
                           <Text

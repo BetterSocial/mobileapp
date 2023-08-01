@@ -155,6 +155,8 @@ class ChannelListMemberSchema implements BaseDbSchema {
     });
   };
 
+  static fromMessageAnonymousChatAPI = ChannelListMemberSchema.fromWebsocketObject;
+
   static fromInitAnonymousChatAPI = (
     channelId: string,
     messageId: string,
