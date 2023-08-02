@@ -122,17 +122,6 @@ const Content = ({
     setAmountCut(text.length);
   };
 
-  console.log(
-    {
-      amountCut,
-      maxLine: calculateMaxLine(),
-      arrText,
-      textCut,
-      textLength: message.length,
-      post_type: item.post_type
-    },
-    'sumprit'
-  );
   const renderHandleTextContent = () => {
     return (
       <View testID="postTypePoll" style={[styles.containerText, handleContainerText()]}>
@@ -197,7 +186,11 @@ const Content = ({
       style={[styles.contentFeed, style]}>
       {message?.length > 0 ? (
         <View>
-          <View style={[styles.containerMainText, handleContainerText().container]}>
+          <View
+            style={[
+              styles.containerMainText(handleContainerText().isShort),
+              handleContainerText().container
+            ]}>
             {renderHandleTextContent()}
           </View>
         </View>
@@ -331,10 +324,10 @@ export const styles = StyleSheet.create({
     height: 32
   },
   textContainer: {},
-  containerMainText: {
+  containerMainText: (isShort) => ({
     paddingHorizontal: 16,
-    paddingTop: 10
-  },
+    paddingTop: isShort ? 0 : 10
+  }),
   containerText: {
     flexDirection: 'row'
   },
