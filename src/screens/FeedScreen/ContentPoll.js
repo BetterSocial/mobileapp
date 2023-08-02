@@ -35,18 +35,23 @@ const ContentPoll = ({
     showSetResultsButton,
     onSeeResultsClicked,
     modifiedPoll,
-    count
+    count,
+    newPoll
   } = useContentPoll({isAlreadyPolling: isAlreadyPollingProps, polls, voteCount});
+
   const initialSetup = () => {
-    if (multiplechoice) onSeeResultsClicked(item, multiplechoice, onnewpollfetched, index);
+    if (!multiplechoice) onSeeResultsClicked(item, multiplechoice, onnewpollfetched, index);
   };
 
   React.useEffect(() => {
-    initialSetup();
+    if (singleChoiceSelectedIndex !== -1) {
+      initialSetup();
+    }
   }, [singleChoiceSelectedIndex]);
 
   const renderSeeResultButtonHandle = () =>
     renderSeeResultButton(multiplechoice, multipleChoiceSelected);
+
   return (
     <View style={[styles.containerShowMessage]}>
       <View style={styles.pollOptionsContainer}>
@@ -67,13 +72,13 @@ const ContentPoll = ({
                 isalreadypolling={isAlreadyPolling}
                 maxpolls={modifiedPoll(polls).maxId}
                 total={modifiedPoll(polls).totalpoll}
-                totalVotingUser={voteCount}
+                totalVotingUser={count}
               />
             ) : (
               <PollOptions
                 key={indexPoll}
                 poll={pollItem}
-                mypoll={item?.mypolling}
+                mypoll={newPoll?.mypolling}
                 index={indexPoll}
                 selectedindex={singleChoiceSelectedIndex}
                 total={modifiedPoll(polls).totalpoll}

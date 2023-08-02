@@ -1,7 +1,7 @@
 /* eslint-disable import/no-named-as-default */
 import * as React from 'react';
 import CheckBox from '@react-native-community/checkbox';
-import {StyleSheet, Text, TouchableNativeFeedback, View} from 'react-native';
+import {Platform, StyleSheet, Text, TouchableNativeFeedback, View} from 'react-native';
 
 import IconPollMine from '../../assets/icon/IconPollMine';
 import IconPollWinnerBadge from '../../assets/icon/IconPollWinnerBadge';
@@ -18,6 +18,7 @@ const PollOptionsMultipleChoice = ({
   isalreadypolling = false,
   maxpolls = [],
   onselected = () => {},
+  total = 0,
   totalVotingUser = 0
 }) => {
   const {
@@ -91,6 +92,11 @@ const PollOptionsMultipleChoice = ({
     return <View testID="nonePoll" />;
   };
 
+  const checkboxStyle = StyleSheet.flatten([
+    Platform.OS === 'ios' ? {width: 15, height: 15, alignSelf: 'center'} : {},
+    {marginRight: 10}
+  ]);
+
   return (
     <TouchableNativeFeedback
       testID="multiple"
@@ -106,8 +112,9 @@ const PollOptionsMultipleChoice = ({
             <CheckBox
               testID="checkbox"
               value={selected}
+              boxType="square"
               tintColors={{true: colors.holytosca, false: colors.black}}
-              onChange={onOptionsClicked}
+              style={checkboxStyle}
             />
           )}
           <Text style={styles.pollOptionItemText(isPollDisabled(), isMax)}>{item.option}</Text>
@@ -151,7 +158,9 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingVertical: 4,
     paddingHorizontal: 16,
-    alignSelf: 'center'
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   pollOptionItemText: (isexpired, isMax) => ({
     flex: 1,

@@ -3,11 +3,11 @@ import * as React from 'react';
 import {StyleSheet, View} from 'react-native';
 import ImageItem from './ImageItem';
 
-const ImageLayouter = ({images = [], onimageclick}) => {
+const ImageLayouter = ({images = [], onimageclick, mode}) => {
   const imageOnClick = React.useCallback(onimageclick, []);
   return (
     <>
-      <View style={styles.imageContainer}>
+      <View style={[styles.imageContainer]}>
         {images.length > 0 &&
           images.map((image, index) => (
             <React.Fragment key={index}>
@@ -17,6 +17,7 @@ const ImageLayouter = ({images = [], onimageclick}) => {
                 index={index}
                 onImageClick={imageOnClick}
                 images={images}
+                mode={mode}
               />
             </React.Fragment>
           ))}
