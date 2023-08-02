@@ -1,17 +1,18 @@
 import React from 'react';
-import {useNavigation} from '@react-navigation/core';
 import SimpleToast from 'react-native-simple-toast';
-import {openComposer} from 'react-native-email-link';
-import {launchImageLibrary} from 'react-native-image-picker';
 import {Alert} from 'react-native';
 import {generateRandomId} from 'stream-chat-react-native-core';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {openComposer} from 'react-native-email-link';
+import {useNavigation} from '@react-navigation/core';
+
 import {Context} from '../../../context';
-import {uploadFile} from '../../../service/file';
-import {requestExternalStoragePermission} from '../../../utils/permission';
-import {getChatName} from '../../../utils/string/StringUtils';
-import {setChannel} from '../../../context/actions/setChannel';
 import {checkUserBlock} from '../../../service/profile';
+import {getChatName} from '../../../utils/string/StringUtils';
+import {requestExternalStoragePermission} from '../../../utils/permission';
+import {setChannel} from '../../../context/actions/setChannel';
 import {setParticipants} from '../../../context/actions/groupChat';
+import {uploadFile} from '../../../service/file';
 
 const useGroupInfo = () => {
   const [groupChatState, groupPatchDispatch] = React.useContext(Context).groupChat;
@@ -25,13 +26,16 @@ const useGroupInfo = () => {
   const [isLoadingMembers, setIsLoadingMembers] = React.useState(false);
   const [uploadedImage, setUploadedImage] = React.useState('');
   const [isUploadingImage, setIsUploadingImage] = React.useState(false);
-  const username = channelState.channel?.data?.name;
+  const [username, setUsername] = React.useState(channelState.channel?.data?.name);
   const createChat = channelState.channel?.data?.created_at;
   const countUser = Object.entries(participants).length;
   const [selectedUser, setSelectedUser] = React.useState(null);
   const [newParticipant, setNewParticipan] = React.useState([]);
   const [openModal, setOpenModal] = React.useState(false);
   const [, dispatchChannel] = React.useContext(Context).channel;
+
+  const anonUserEmojiName = channelState?.channel?.data?.anon_user_info_emoji_name;
+
   const serializeMembersList = (result = []) => {
     if (!result) {
       return {};
@@ -63,10 +67,10 @@ const useGroupInfo = () => {
     }
   };
   const memberName = () => {
-    return getChatName(channelState?.channel?.data.name, profile.myProfile.username);
+    if (anonUserEmojiName) return `Anonymous ${anonUserEmojiName}`;
+    return getChatName(username, profile.myProfile.username);
   };
   const chatName = getChatName(username, profile.myProfile.username);
-
   const handleOnNameChange = () => {
     navigation.push('GroupSetting', {
       username: chatName,
@@ -181,6 +185,18 @@ const useGroupInfo = () => {
     }
   };
 
+  const updateMemberName = (members = []) => {
+    if (!channel.data.isEditName && members.length > 0) {
+      members = members.map((member) => member.user.name).join(',');
+      setUsername(members);
+      if (members.length > 1) {
+        channel?.update({
+          name: members
+        });
+      }
+    }
+  };
+
   const onRemoveUser = async () => {
     setOpenModal(false);
     try {
@@ -189,6 +205,7 @@ const useGroupInfo = () => {
         (participant) => participant.user_id !== selectedUser.user_id
       );
       setNewParticipan(updateParticipant);
+      updateMemberName(result.members);
       await channel.sendMessage(
         {
           text: `${profile.myProfile.username} removed ${selectedUser.user.name} from this group`,
@@ -318,13 +335,17 @@ const useGroupInfo = () => {
     });
   };
 
-  // eslint-disable-next-line consistent-return
   const handlePressContact = async (item) => {
     if (channelState?.channel.data.type === 'group') {
       await handleSelectUser(item);
       return true;
     }
-    handleOpenProfile(item);
+
+    if (anonUserEmojiName) {
+      return true;
+    }
+
+    return handleOpenProfile(item);
   };
 
   const handleOpenProfile = async (item) => {
@@ -383,7 +404,12 @@ const useGroupInfo = () => {
     checkUserIsBlockHandle,
     handlePressContact,
     handleOpenProfile,
-    onReportGroup
+    onReportGroup,
+    setUsername,
+    setSelectedUser,
+    openChatMessage,
+    generateSystemChat,
+    setNewParticipan
   };
 };
 

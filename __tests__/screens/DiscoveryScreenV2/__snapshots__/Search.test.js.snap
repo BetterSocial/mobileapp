@@ -75,7 +75,7 @@ exports[`Testing Discovery Screen V2 Testing Discovery Search Bar Match Snapshot
         onChangeText={[Function]}
         onFocus={[Function]}
         onSubmitEditing={[Function]}
-        placeholder="Search Better"
+        placeholder="Search BetterSocial"
         placeholderTextColor="#C4C4C4"
         rejectResponderTermination={true}
         returnKeyType="search"

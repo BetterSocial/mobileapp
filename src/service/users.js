@@ -178,3 +178,27 @@ export const verifyHumanIdExchangeToken = async (exchangeToken) => {
     return Promise.reject(error?.response?.data);
   }
 };
+
+export const checkPasswordForDemoLogin = async (password) => {
+  try {
+    const payload = {password};
+    const result = await api.post('/users/password-verify-user', payload);
+    if (result?.data?.code === 200) {
+      return {
+        success: true,
+        message: result?.data?.message
+      };
+    }
+
+    return {
+      success: false,
+      message: result?.data?.message
+    };
+  } catch (e) {
+    crashlytics().recordError(new Error(e));
+    return {
+      success: false,
+      message: e?.response?.data?.message
+    };
+  }
+};
