@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     lineHeight: 24,
     // eslint-disable-next-line no-nested-ternary
-    color: totalVote > 0 ? '#00ADB5' : totalVote < 0 ? '#FF2E63' : '#C4C4C4'
+    color: handleTextCountColor(totalVote)
   }),
   width: (count) => ({
     width: screenWidth * count
@@ -100,6 +100,16 @@ const styles = StyleSheet.create({
     flex: 1
   }
 });
+
+const handleTextCountColor = (totalVote) => {
+  if (totalVote > 0) {
+    return '#00ADB5';
+  }
+  if (totalVote < 0) {
+    return '#FF2E63';
+  }
+  return '#C4C4C4';
+};
 
 Footer.propTypes = {
   onPressShare: PropTypes.func,
