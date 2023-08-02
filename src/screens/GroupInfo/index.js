@@ -22,8 +22,10 @@ import Header from '../../components/Header';
 // eslint-disable-next-line camelcase
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
 import ModalAction from './elements/ModalAction';
+import ModalActionAnonymous from './elements/ModalActionAnonymous';
 import ReportGroup from '../../assets/images/report.png';
 import useGroupInfo from './hooks/useGroupInfo';
+import {CHANNEL_TYPE_ANONYMOUS} from '../../utils/constants';
 import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
 import {colors} from '../../utils/colors';
@@ -55,7 +57,9 @@ const GroupInfo = () => {
     channelState,
     handlePressContact,
     setUsername,
-    onReportGroup
+    onReportGroup,
+    isAnonymousModalOpen,
+    setIsAnonymousModalOpen
   } = useGroupInfo();
 
   React.useEffect(() => {
@@ -227,7 +231,10 @@ const GroupInfo = () => {
                         onPress={() => handlePressContact(item)}
                         fullname={getProfileName(item.user.name)}
                         photo={item.user.image}
-                        showArrow={channelState?.channel.data.type === 'group'}
+                        showArrow={
+                          channelState?.channel.data.type === 'group' ||
+                          channelState?.channel?.data?.channel_type === CHANNEL_TYPE_ANONYMOUS
+                        }
                         userId={profile.myProfile.user_id}
                         ImageComponent={getAnonymousImage(item?.user?.name)}
                       />
@@ -274,6 +281,13 @@ const GroupInfo = () => {
           <ModalAction
             name={selectedUser?.user?.name}
             isOpen={openModal}
+            onCloseModal={handleCloseSelectUser}
+            selectedUser={selectedUser}
+            onPress={alertRemoveUser}
+          />
+          <ModalActionAnonymous
+            name={selectedUser?.user?.anonymousUsername}
+            isOpen={isAnonymousModalOpen}
             onCloseModal={handleCloseSelectUser}
             selectedUser={selectedUser}
             onPress={alertRemoveUser}

@@ -7,6 +7,7 @@ import {openComposer} from 'react-native-email-link';
 import {useNavigation} from '@react-navigation/core';
 
 import {Context} from '../../../context';
+import {blockUser, blockUserFromAnonChat} from '../../../service/blocking';
 import {checkUserBlock} from '../../../service/profile';
 import {getChatName} from '../../../utils/string/StringUtils';
 import {requestExternalStoragePermission} from '../../../utils/permission';
@@ -32,6 +33,7 @@ const useGroupInfo = () => {
   const [selectedUser, setSelectedUser] = React.useState(null);
   const [newParticipant, setNewParticipan] = React.useState([]);
   const [openModal, setOpenModal] = React.useState(false);
+  const [isAnonymousModalOpen, setIsAnonymousModalOpen] = React.useState(false);
   const [, dispatchChannel] = React.useContext(Context).channel;
 
   const anonUserEmojiName = channelState?.channel?.data?.anon_user_info_emoji_name;
@@ -156,6 +158,7 @@ const useGroupInfo = () => {
 
   const handleCloseSelectUser = async () => {
     setOpenModal(false);
+    setIsAnonymousModalOpen(false);
   };
 
   const generateSystemChat = async (message, userSelected) => {
@@ -279,6 +282,32 @@ const useGroupInfo = () => {
     }
   };
 
+  const blockAnonUser = async () => {
+    console.log(selectedUser, 'selectedUser');
+    const payload = {
+      userId: selectedUser?.user?.id,
+      postId: null,
+      source: 'group_info',
+      reason: [],
+      message: 'block anonymous user from group info'
+    };
+    try {
+      setIsAnonymousModalOpen(false);
+      const blockUserResponse = await blockUserFromAnonChat(payload);
+      console.log(blockUserResponse, 'blockUserResponse');
+      if (blockUserResponse.success === 'success') {
+        // SimpleToast.show('anonymous user blocked');
+      }
+    } catch (e) {
+      SimpleToast.show('failed to block anonymous user');
+      console.log(e);
+    }
+  };
+
+  /**
+   *
+   * @param {('view' | 'remove' | 'message' | 'block')} status
+   */
   const alertRemoveUser = async (status) => {
     if (status === 'view') {
       setOpenModal(false);
@@ -290,6 +319,10 @@ const useGroupInfo = () => {
         `Are you sure you want to remove ${selectedUser.user.name} from this group? We will let the group know that you removed ${selectedUser.user.name}.`,
         [{text: 'Yes - remove', onPress: () => onRemoveUser()}, {text: 'Cancel'}]
       );
+    }
+
+    if (status === 'block') {
+      blockAnonUser();
     }
 
     if (status === 'message') {
@@ -342,6 +375,10 @@ const useGroupInfo = () => {
     }
 
     if (anonUserEmojiName) {
+      const modifiedUser = {...item};
+      modifiedUser.user.anonymousUsername = `Anonymous ${anonUserEmojiName}`;
+      setSelectedUser(modifiedUser);
+      setIsAnonymousModalOpen(true);
       return true;
     }
 
@@ -409,7 +446,9 @@ const useGroupInfo = () => {
     setSelectedUser,
     openChatMessage,
     generateSystemChat,
-    setNewParticipan
+    setNewParticipan,
+    isAnonymousModalOpen,
+    setIsAnonymousModalOpen
   };
 };
 
