@@ -12,7 +12,6 @@ const TopicText = ({
   item,
   isShortText
 }) => {
-  console.log({isShortText}, 'isShort');
   const onClick = () => {
     // Do navigation here
     if (goToDetailPage && navigation) {
