@@ -13,7 +13,7 @@ const onboardingChooseUsernameHeadline = 'Choose your username & photo';
 const onboardingChooseUsernameSubHeadline =
   'A recognizable profile ensures that your\nfriends can find you. No real names required!';
 const onboardingChooseUsernameBlueBoxHint =
-  'At all times, you can hide your name and photo in posts, comments, and chats.';
+  'You can hide your name and photo in\nposts, comments, and chats at all times.';
 const onboardingChooseUsernameButtonStateNext = 'NEXT';
 const onboardingChooseUsernameErrorCannotBeEmpty = 'Username cannot be empty';
 const onboardingChooseUsernameLabelCheckingAvailability = 'Checking availability';
