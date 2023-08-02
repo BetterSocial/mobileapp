@@ -8,6 +8,7 @@ import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
 import {useRecoilState} from 'recoil';
 
 import ChatStatusIcon from '../../components/ChatStatusIcon';
+import CustomMessageAvatar from './elements/CustomMessageAvatar';
 import Header from '../../components/Chat/Header';
 import ImageSendPreview from './elements/ImageSendPreview';
 import InputMessage from '../../components/Chat/InputMessage';
@@ -31,6 +32,10 @@ const ChatDetailPage = ({route}) => {
   const [channelClient, dispatchChannel] = React.useContext(Context).channel;
   const [followUserList, setFollowUserList] = useRecoilState(followersOrFollowingAtom);
   const [, dispatch] = React.useContext(Context).groupChat;
+
+  const channelData = channelClient?.channel;
+  const channelType = channelClient?.channel?.data?.channel_type;
+
   const messageSystemCustom = (props) => {
     const {message, channel} = props;
     if (channel?.data.channel_type === 2 || channel?.data.channel_type === 3)
@@ -188,6 +193,14 @@ const ChatDetailPage = ({route}) => {
               threadRepliesEnabled={false}
               MessageStatus={ChatStatusIcon}
               MessageSystem={(props) => messageSystemCustom(props)}
+              MessageAvatar={(props) => (
+                <CustomMessageAvatar
+                  channelType={channelType}
+                  color={channelData?.data?.anon_user_info_color_code}
+                  emoji={channelData?.data?.anon_user_info_emoji_code}
+                  {...props}
+                />
+              )}
               // MessageContent={(props) => <CustomMessageContent {...props} />}
               messageActions={(props) => defaultActionsAllowed(props)}
               ReactionList={() => null}>
