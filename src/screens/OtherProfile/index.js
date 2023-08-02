@@ -219,7 +219,11 @@ const OtherProfile = () => {
       const response = await sendAnonymousDMOtherProfile(anonDMParams);
       await saveChatFromOtherProfile(response);
       setDMChat('');
-    } catch (_) {
+    } catch (e) {
+      if (e?.response?.data?.status === 'Channel is blocked') {
+        setDMChat('');
+        return;
+      }
       SimpleToast.show('Send message failed', SimpleToast.SHORT);
     } finally {
       setLoadingSendDM(false);

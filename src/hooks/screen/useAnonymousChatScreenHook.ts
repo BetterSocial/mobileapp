@@ -78,6 +78,7 @@ function useAnonymousChatScreenHook(): UseAnonymousChatScreenHook {
       refresh('channelList');
     } catch (e) {
       console.log(e);
+      if (e?.response?.data?.status === 'Channel is blocked') return;
 
       setTimeout(() => {
         sendChat(message, iteration + 1, currentChatSchema).catch((sendChatError) => {
