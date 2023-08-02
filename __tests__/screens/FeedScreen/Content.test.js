@@ -2,6 +2,7 @@ import React from 'react';
 import {render, cleanup} from '@testing-library/react-native';
 
 import Content from '../../../src/screens/FeedScreen/Content';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
@@ -94,15 +95,17 @@ describe('Content component should run correctly', () => {
     const onPressDomain = jest.fn();
     const images_url = ['https://detik.jpg'];
     const {toJSON} = render(
-      <Content
-        message={'halo test'}
-        item={item}
-        images_url={images_url}
-        onNewPollFetched={onNewPollFetched}
-        onPressDomain={onPressDomain}
-        onPress={onPress}
-        topics={item.topics}
-      />
+      <SafeAreaProvider>
+        <Content
+          message={'halo test'}
+          item={item}
+          images_url={images_url}
+          onNewPollFetched={onNewPollFetched}
+          onPressDomain={onPressDomain}
+          onPress={onPress}
+          topics={item.topics}
+        />
+      </SafeAreaProvider>
     );
     expect(toJSON).toMatchSnapshot();
   });
