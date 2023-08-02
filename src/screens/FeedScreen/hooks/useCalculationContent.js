@@ -11,10 +11,7 @@ const useCalculationContent = () => {
   ) => {
     const diff = containerHeight - textHeight;
     const averageDiff = diff / containerHeight;
-    let readMore = false;
-    if (averageDiff < 0.05) {
-      readMore = true;
-    }
+
     if (
       containerHeight &&
       textHeight &&
@@ -31,14 +28,12 @@ const useCalculationContent = () => {
       }
       return {
         font,
-        lineHeight,
-        readMore
+        lineHeight
       };
     }
     return {
       font: smallFont,
-      lineHeight: smallFont * 1.5,
-      readMore
+      lineHeight: smallFont * 1.5
     };
   };
   return {

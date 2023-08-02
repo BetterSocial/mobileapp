@@ -266,7 +266,15 @@ const getSingularOrPluralText = (number, singularText, pluralText) => {
  * @param {Any} navigation
  * @returns
  */
-const getCaptionWithTopicStyle = (idParams, text, navigation, substringEnd, topics, item) => {
+const getCaptionWithTopicStyle = (
+  idParams,
+  text,
+  navigation,
+  substringEnd,
+  topics,
+  item,
+  isShort
+) => {
   if (!topics || !Array.isArray(topics)) {
     topics = [];
   }
@@ -289,6 +297,7 @@ const getCaptionWithTopicStyle = (idParams, text, navigation, substringEnd, topi
           navigation={navigation}
           text={match}
           currentTopic={id}
+          isShortText={isShort}
         />
       );
     return match;
@@ -301,6 +310,7 @@ const getCaptionWithTopicStyle = (idParams, text, navigation, substringEnd, topi
       navigation={navigation}
       text={match}
       currentTopic={id}
+      isShortText={isShort}
     />
   ));
   return text;
