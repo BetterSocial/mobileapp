@@ -10,7 +10,7 @@ import ContentPoll from './ContentPoll';
 import ImageLayouter from './elements/ImageLayouter';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import {COLORS} from '../../utils/theme';
-import {POST_TYPE_LINK, POST_TYPE_POLL} from '../../utils/constants';
+import {POST_TYPE_LINK, POST_TYPE_POLL, POST_TYPE_STANDARD} from '../../utils/constants';
 import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
@@ -37,6 +37,7 @@ const Content = ({
   const [amountCut, setAmountCut] = React.useState(0);
   const [textCut, setTextCunt] = React.useState(null);
   const [arrText] = React.useState([]);
+  const isIos = Platform.OS === 'ios';
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
       title: 'Photo',
@@ -86,12 +87,29 @@ const Content = ({
     }
   };
 
+  const handleCountDeviceLine = () => {
+    let newMaxLine = calculateMaxLine();
+    let countDeviceLine = newMaxLine;
+    if (!isIos) {
+      newMaxLine -= 1;
+    }
+    if (item.post_type !== POST_TYPE_STANDARD || item.images_url.length > 0) {
+      countDeviceLine = newMaxLine - 1;
+    } else {
+      countDeviceLine = newMaxLine - 2;
+    }
+    return {
+      countDeviceLine,
+      newMaxLine
+    };
+  };
+
   const handleTextLayout = ({nativeEvent}) => {
     let text = '';
-    const newMaxLine = calculateMaxLine() - 1;
+    const {newMaxLine, countDeviceLine} = handleCountDeviceLine();
     for (let i = 0; i < newMaxLine; i++) {
       if (nativeEvent.lines[i]) {
-        if (i === newMaxLine - 1) {
+        if (i === countDeviceLine) {
           text += nativeEvent.lines[i].text.substring(0, 30);
           arrText.push(nativeEvent.lines[i].text.substring(0, 30));
         } else {
@@ -110,7 +128,8 @@ const Content = ({
       maxLine: calculateMaxLine(),
       arrText,
       textCut,
-      textLength: message.length
+      textLength: message.length,
+      post_type: item.post_type
     },
     'sumprit'
   );
