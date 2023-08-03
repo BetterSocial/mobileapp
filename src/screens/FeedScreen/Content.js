@@ -131,7 +131,7 @@ const Content = ({
             numberOfLines={calculateMaxLine()}
             onLayout={handleTextLine}
             style={[handleStyleFont(), handleContainerText().text]}>
-            {message.replace(/[\r\n]+/g)}
+            {message.replace(/[\r\n]+/g, '')}
           </Text>
         ) : (
           <Text
