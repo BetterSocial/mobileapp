@@ -1,4 +1,5 @@
 import ChannelListMemberSchema from '../schema/ChannelListMemberSchema';
+import ChannelListSchema from '../schema/ChannelListSchema';
 import ChatSchema from '../schema/ChatSchema';
 import UserSchema from '../schema/UserSchema';
 import useLocalDatabaseHook from './useLocalDatabaseHook';
@@ -11,7 +12,7 @@ import {getAnonymousChatName} from '../../utils/string/StringUtils';
 const useSaveAnonChatHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook();
 
-  const saveChatFromOtherProfile = async (object: InitAnonymousChatData) => {
+  const saveChatFromOtherProfile = async (object: InitAnonymousChatData, status = 'sent') => {
     if (!localDb) return;
 
     const chatName = await getAnonymousChatName(object?.members);
@@ -23,7 +24,7 @@ const useSaveAnonChatHook = () => {
 
     initAnonymousChat.message.cid = initAnonymousChat.message.cid.replace('messaging:', '');
 
-    const chat = ChatSchema.fromInitAnonymousChatAPI(initAnonymousChat);
+    const chat = ChatSchema.fromInitAnonymousChatAPI(initAnonymousChat, status);
     await chat.save(localDb);
 
     try {
@@ -51,8 +52,29 @@ const useSaveAnonChatHook = () => {
     refresh('chat');
   };
 
+  const helperUpdateChannelListDescription = async (object: InitAnonymousChatData) => {
+    const channelId = object?.message?.cid?.replace('messaging:', '');
+    const channelList = await ChannelListSchema.getById(localDb, channelId);
+
+    const channelListSchema = ChannelListSchema.fromDatabaseObject(channelList);
+    channelListSchema.description = object?.message?.text;
+    channelListSchema.lastUpdatedAt = new Date().toISOString();
+    channelListSchema.lastUpdatedBy = object?.message?.user?.id;
+    channelListSchema.save(localDb);
+  };
+
+  const savePendingChatFromOtherProfile = async (object: InitAnonymousChatData) => {
+    try {
+      helperUpdateChannelListDescription(object);
+      saveChatFromOtherProfile(object, 'pending');
+    } catch (e) {
+      console.log('error savePendingChatFromOtherProfile', e);
+    }
+  };
+
   return {
-    saveChatFromOtherProfile
+    saveChatFromOtherProfile,
+    savePendingChatFromOtherProfile
   };
 };
 

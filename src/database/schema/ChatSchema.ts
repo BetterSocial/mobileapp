@@ -264,7 +264,7 @@ class ChatSchema implements BaseDbSchema {
     });
   }
 
-  static fromInitAnonymousChatAPI(data: ModifyAnonymousChatData): ChatSchema {
+  static fromInitAnonymousChatAPI(data: ModifyAnonymousChatData, status = 'sent'): ChatSchema {
     let rawJson = null;
 
     try {
@@ -282,7 +282,7 @@ class ChatSchema implements BaseDbSchema {
       isMe: true,
       message: data?.message?.message,
       rawJson,
-      status: 'sent',
+      status,
       isContinuous: false,
       type: 'regular',
       user: null,

@@ -170,7 +170,7 @@ const OtherProfile = () => {
   const [loading, setLoading] = React.useState(false);
   const [isAnonimity, setIsAnonimity] = React.useState(false);
 
-  const {saveChatFromOtherProfile} = useSaveAnonChatHook();
+  const {saveChatFromOtherProfile, savePendingChatFromOtherProfile} = useSaveAnonChatHook();
 
   const create = useClientGetstream();
   const {interactionsComplete} = useAfterInteractions();
@@ -221,6 +221,8 @@ const OtherProfile = () => {
       setDMChat('');
     } catch (e) {
       if (e?.response?.data?.status === 'Channel is blocked') {
+        const response = e?.response?.data?.data;
+        await savePendingChatFromOtherProfile(response);
         setDMChat('');
         return;
       }
