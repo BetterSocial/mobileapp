@@ -44,7 +44,6 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
     }
     return styles.contentFeedLink;
   };
-
   const navigateToLinkContextPage = () => {
     const param = linkContextScreenParamBuilder(
       item,
@@ -65,7 +64,6 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
     navigation.navigate('DomainScreen', param);
   };
   if (!cekImage) return null;
-
   return (
     <>
       <ScrollView
@@ -80,7 +78,11 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
               {
                 marginHorizontal: 6,
                 paddingHorizontal: isPostDetail ? 12 : 0,
-                minHeight: calculationText(hashtagAtComponent(sanitizeUrl(message))).containerHeight
+                minHeight: calculationText(
+                  hashtagAtComponent(sanitizeUrl(message)),
+                  item.post_type,
+                  item.images_url
+                ).containerHeight
               }
             ]}>
             {item.post_type !== POST_TYPE_LINK ? (
@@ -114,7 +116,6 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
             <View
               style={{
                 flex: 1,
-                justifyContent: isPostDetail ? 'flex-end' : 'flex-start',
                 marginBottom: 0
               }}>
               <ContentPoll

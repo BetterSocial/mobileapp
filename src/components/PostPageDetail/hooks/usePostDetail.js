@@ -1,3 +1,4 @@
+/* eslint-disable operator-assignment */
 import {Dimensions, StatusBar} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {POST_TYPE_LINK, POST_TYPE_POLL} from '../../../utils/constants';
@@ -46,7 +47,7 @@ const usePostDetail = () => {
     return newComment;
   };
 
-  const calculationText = (message, post_type, image) => {
+  const calculationText = (message, post_type, images = []) => {
     if (!message) message = '';
     let fontSize = shortTextFontSize;
     let lineHeight = shortTextLineHeight;
@@ -63,15 +64,9 @@ const usePostDetail = () => {
     const numberOfLines = Math.ceil(
       message?.length / ((Dimensions.get('window').width / fontSize) * numLines)
     );
-
     containerHeight = numberOfLines * lineHeight;
     containerHeight = Math.max(containerHeight, shortTextLineHeight * 5);
-    if (image?.length > 0 || post_type === POST_TYPE_POLL) {
-      containerHeight *= 1.8;
-    }
-    if (post_type === POST_TYPE_LINK) {
-      containerHeight *= 2;
-    }
+    containerHeight = containerHeight * 0.8;
     const containerComment = calculatedSizeScreen - containerHeight;
     return {fontSize, lineHeight, containerHeight, containerComment};
   };
