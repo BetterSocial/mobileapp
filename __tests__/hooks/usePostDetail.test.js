@@ -1,5 +1,6 @@
 import {Dimensions} from 'react-native';
 import {renderHook} from '@testing-library/react-hooks';
+
 import usePostDetail from '../../src/components/PostPageDetail/hooks/usePostDetail';
 
 jest.mock('react-native-safe-area-context', () => {

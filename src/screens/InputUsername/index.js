@@ -13,12 +13,13 @@ import {
   TouchableWithoutFeedback,
   View
 } from 'react-native';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
 
 import BottomSheetChooseImage from './elements/BottomSheetChooseImage';
 import MemoOnboardingChangeProfilePlusIcon from '../../assets/icon/OnboardingChangeProfilePlusIcon';
+import WarningIcon from '../../../assets/icons/warning-circle-blue.svg';
 import StringConstant from '../../utils/string/StringConstant';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
@@ -32,6 +33,7 @@ import {requestCameraPermission, requestExternalStoragePermission} from '../../u
 import {setCapitalFirstLetter} from '../../utils/Utils';
 import {setImage, setUsername} from '../../context/actions/users';
 import {verifyUsername} from '../../service/users';
+import {COLORS} from '../../utils/theme';
 
 const MAXIMUM_USERNAME_LENGTH = 19;
 const MINIMUM_USERNAME_LENGTH = 3;
@@ -42,7 +44,6 @@ const ChooseUsername = () => {
   const [users, dispatch] = React.useContext(Context).users;
   const [username, setUsernameState] = React.useState('');
   const [typeFetch, setTypeFetch] = React.useState('');
-  const [fadeInfo] = React.useState(new Animated.Value(0));
 
   const verifyUsernameDebounce = React.useCallback(
     _.debounce(async (text) => {
@@ -58,29 +59,6 @@ const ChooseUsername = () => {
     []
   );
 
-  const hideInfo = () => {
-    Animated.timing(fadeInfo, {
-      toValue: 0,
-      duration: 500
-    }).start();
-  };
-  const showInfoHandle = () => {
-    Animated.timing(fadeInfo, {
-      toValue: 1,
-      duration: 500
-    }).start();
-  };
-
-  React.useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', hideInfo);
-    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', showInfoHandle);
-
-    return () => {
-      keyboardDidHideListener.remove();
-      keyboardDidShowListener.remove();
-    };
-  }, []);
-
   const onPhoto = () => {
     Analytics.logEvent('btn_take_photo_profile', {
       id: 2
@@ -91,19 +69,22 @@ const ChooseUsername = () => {
   const handleOpenCamera = async () => {
     const {success, message} = await requestCameraPermission();
     if (success) {
-      launchCamera(
-        {
-          mediaType: 'photo',
-          includeBase64: true,
-          selectionLimit: 1
-        },
-        (res) => {
-          if (res.base64) {
-            setImage(`${res.base64}`, dispatch);
-            bottomSheetChooseImageRef.current.close();
+      ImagePicker.openCamera({
+        width: 512,
+        height: 512,
+        cropping: true,
+        mediaType: 'photo',
+        includeBase64: true
+      })
+        .then((imageRes) => {
+          setImage(imageRes.data, dispatch);
+          bottomSheetChooseImageRef.current.close();
+        })
+        .catch((e) => {
+          if (__DEV__) {
+            console.log('error', e);
           }
-        }
-      );
+        });
     } else {
       Toast.show(message, Toast.SHORT);
     }
@@ -112,12 +93,22 @@ const ChooseUsername = () => {
   const handleOpenGallery = async () => {
     const {success, message} = await requestExternalStoragePermission();
     if (success) {
-      launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
-        if (res.base64) {
-          setImage(`${res.base64}`, dispatch);
+      ImagePicker.openPicker({
+        width: 512,
+        height: 512,
+        cropping: true,
+        mediaType: 'photo',
+        includeBase64: true
+      })
+        .then((imageRes) => {
+          setImage(imageRes.data, dispatch);
           bottomSheetChooseImageRef.current.close();
-        }
-      });
+        })
+        .catch((e) => {
+          if (__DEV__) {
+            console.log('error', e);
+          }
+        });
     } else {
       Toast.show(message, Toast.SHORT);
     }
@@ -281,7 +272,7 @@ const ChooseUsername = () => {
                   </View>
                 </View>
               </TouchableOpacity>
-              <View>
+              <View style={{flex: 1}}>
                 <Input
                   placeholder="Username"
                   onChangeText={checkUsername}
@@ -291,32 +282,29 @@ const ChooseUsername = () => {
                   textContentType="username"
                   autoCapitalize="sentences"
                   autoCorrect={false}
+                  style={styles.input}
                   autoFocus
                 />
                 {messageTypeFetch(typeFetch, formatUsernameString())}
               </View>
             </View>
-            {/* <Animated.View style={[styles.constainerInfo, {opacity: fadeInfo}]}>
-            <View style={styles.parentIcon} >
-            <View style={styles.containerIcon}>
-              <IconFontAwesome5 name="exclamation" size={12} color="#2F80ED" />
-            </View>
-            </View>
-              <View style={styles.parentInfo} >
-              <Text style={styles.infoText}>
-              {StringConstant.onboardingChooseUsernameBlueBoxHint}
-            </Text>
+            <View style={styles.constainerInfo}>
+              <View style={styles.parentIcon}>
+                <View style={styles.containerIcon}>
+                  <WarningIcon />
+                </View>
               </View>
-
-          </Animated.View> */}
+              <View style={styles.parentInfo}>
+                <Text style={styles.infoText}>
+                  {StringConstant.onboardingChooseUsernameBlueBoxHint}
+                </Text>
+              </View>
+            </View>
           </View>
         </TouchableWithoutFeedback>
 
         <View style={styles.gap} />
         <View style={styles.footer}>
-          <Text style={styles.textSmall}>
-            No matter your username, you can always post anonymously
-          </Text>
           <Button disabled={isNextButtonDisabled()} onPress={() => next()}>
             {StringConstant.onboardingChooseUsernameButtonStateNext}
           </Button>
@@ -339,8 +327,17 @@ const styles = StyleSheet.create({
     marginTop: 28,
     marginBottom: 20
   },
+  input: {
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: '#BDBDBD',
+    paddingHorizontal: 23,
+    paddingVertical: 13,
+    width: '100%'
+  },
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: 'white'
   },
   btnNext: {marginTop: 16},
   gap: {flex: 1},
@@ -381,10 +378,10 @@ const styles = StyleSheet.create({
   constainerInfo: {
     backgroundColor: 'rgba(85, 194, 255, 0.3)',
     flexDirection: 'row',
-    borderRadius: 4,
+    borderRadius: 8,
     width: '100%',
     paddingHorizontal: 7,
-    paddingVertical: 13
+    paddingVertical: 8
   },
   containerIcon: {
     width: 25,
@@ -401,9 +398,9 @@ const styles = StyleSheet.create({
   infoText: {
     fontFamily: 'Inter-Regular',
     fontStyle: 'normal',
-    fontWeight: 'normal',
+    fontWeight: '400',
     fontSize: 14,
-    color: 'rgba(47, 128, 237, 1)',
+    color: COLORS.blue,
     // marginLeft: 12,
     lineHeight: 24,
     paddingHorizontal: 4
@@ -431,25 +428,17 @@ const styles = StyleSheet.create({
   }),
   parentIcon: {
     width: '10%',
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   parentInfo: {
     width: '90%'
   },
   footer: {
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingBottom: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 20,
     backgroundColor: colors.white,
-    shadowColor: colors.black,
-    shadowOffset: {
-      width: 0,
-      height: 5
-    },
-    shadowOpacity: 0.36,
-    shadowRadius: 6.68,
-    elevation: 11,
-    height: 112
+    justifyContent: 'flex-end'
   },
   textSmall: {
     fontFamily: 'Inter',
