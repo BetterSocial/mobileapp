@@ -70,7 +70,7 @@ const usePostDetail = () => {
     );
     containerHeight = numberOfLines * lineHeight;
     containerHeight = Math.max(containerHeight, shortTextLineHeight * 5);
-    containerHeight = containerHeight * 0.8;
+    containerHeight = containerHeight * 0.5;
     const containerComment = calculatedSizeScreen - containerHeight;
     return {fontSize, lineHeight, containerHeight, containerComment};
   };
