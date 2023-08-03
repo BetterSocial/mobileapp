@@ -1,6 +1,6 @@
-import React from 'react';
 import Modal from 'react-native-modal';
-import {TouchableOpacity, Text, View, StyleSheet, Platform} from 'react-native';
+import React from 'react';
+import {Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 const ModalAction = (props) => {
   const {isOpen, name, onCloseModal, onPress, selectedUser} = props;

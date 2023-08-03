@@ -48,7 +48,7 @@ describe('Content poll function should run correctly', () => {
   });
 
   it('showSetResultsButton should run correctly', () => {
-    const {result} = renderHook(() => useContentPoll({polls}));
+    const {result} = renderHook(() => useContentPoll({polls, isalreadypolling: false}));
     const expiredDate = '2022-11-25T02:14:14.499Z';
     const notExpiredDare = '2023-12-29T02:14:14.499Z';
     act(() => {
@@ -63,7 +63,7 @@ describe('Content poll function should run correctly', () => {
   });
 
   it('onSeeResultsClicked should run correctly', () => {
-    const {result} = renderHook(() => useContentPoll({polls}));
+    const {result} = renderHook(() => useContentPoll({polls, isalreadypolling: false}));
     const callback = jest.fn();
     act(() => {
       result.current.onSeeResultsClicked(itemPoll, true, callback, 1);
