@@ -321,5 +321,11 @@ const styles = StyleSheet.create({
   containerImage: {
     flex: 1,
     height: dimen.normalizeDimen(300)
-  }
+  },
+  pollContainer: {
+    paddingHorizontal: 12
+  },
+  postTextContainer: (isPostDetail) => ({
+    paddingHorizontal: isPostDetail ? 12 : 0
+  })
 });
