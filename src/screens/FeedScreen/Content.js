@@ -155,12 +155,7 @@ const Content = ({
   };
 
   const handleContainerText = () => {
-    if (
-      message?.length < 125 &&
-      item.post_type !== POST_TYPE_POLL &&
-      item.post_type !== POST_TYPE_LINK &&
-      images_url.length <= 0
-    ) {
+    if (message?.length < 125 && item.post_type === POST_TYPE_STANDARD && images_url.length <= 0) {
       return {
         container: styles.centerVertical,
         text: styles.centerVerticalText,
