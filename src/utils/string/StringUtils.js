@@ -305,7 +305,15 @@ const getSingularOrPluralText = (number, singularText, pluralText) => {
  * @param {Any} navigation
  * @returns
  */
-const getCaptionWithTopicStyle = (idParams, text, navigation, substringEnd, topics, item) => {
+const getCaptionWithTopicStyle = (
+  idParams,
+  text,
+  navigation,
+  substringEnd,
+  topics,
+  item,
+  isShort
+) => {
   if (!topics || !Array.isArray(topics)) {
     topics = [];
   }
@@ -315,6 +323,8 @@ const getCaptionWithTopicStyle = (idParams, text, navigation, substringEnd, topi
   const validationTextHasAt = /\B(\@[a-zA-Z0-9_+-]+\b)(?!;)/;
   if (substringEnd && typeof substringEnd === 'number') {
     text = text.substring(0, substringEnd);
+  } else {
+    text = text.substring(0, text.length);
   }
   substringEnd = Math.round(substringEnd);
   text = reactStringReplace(text, topicRegex, (match) => {
@@ -326,6 +336,7 @@ const getCaptionWithTopicStyle = (idParams, text, navigation, substringEnd, topi
           navigation={navigation}
           text={match}
           currentTopic={id}
+          isShortText={isShort}
         />
       );
     return match;
@@ -338,6 +349,7 @@ const getCaptionWithTopicStyle = (idParams, text, navigation, substringEnd, topi
       navigation={navigation}
       text={match}
       currentTopic={id}
+      isShortText={isShort}
     />
   ));
   return text;
