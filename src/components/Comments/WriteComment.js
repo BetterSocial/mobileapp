@@ -35,7 +35,6 @@ const WriteComment = ({
   const [isAnonimity, setIsAnonimity] = React.useState(false);
   const isCommentEnabled = value.length > 0;
   const [loadingUser, setLoadingUser] = React.useState(false);
-  const isDisableSubmit = !isCommentEnabled || loadingPost;
   const [anonimityData, setAnoimityData] = React.useState({});
   const storageKey = 'isAnonymByDefault';
   const getAnonUser = React.useCallback(async () => {
@@ -74,7 +73,6 @@ const WriteComment = ({
       }
     });
   }, []);
-
   const saveToStorage = (valueData) => {
     AsyncStorage.setItem(storageKey, valueData);
   };
@@ -137,10 +135,12 @@ const WriteComment = ({
         <TouchableOpacity
           testID="iscommentenable"
           onPress={() => onPress(isAnonimity, anonimityData)}
-          style={styles.btn(isDisableSubmit || loadingUser)}
-          disabled={isDisableSubmit || loadingUser}>
+          style={styles.btn(!isCommentEnabled || loadingUser || loadingPost)}
+          disabled={!isCommentEnabled || loadingUser || loadingPost}>
           <MemoSendComment
-            fillBackground={isDisableSubmit || loadingUser ? colors.bondi_blue : '#C4C4C4'}
+            fillBackground={
+              !isCommentEnabled || loadingUser || loadingPost ? '#C4C4C4' : colors.bondi_blue
+            }
           />
         </TouchableOpacity>
       </View>
