@@ -197,7 +197,7 @@ const Content = ({
       ) : null}
 
       {item && item.post_type === POST_TYPE_POLL ? (
-        <View style={styles.containerMainText}>
+        <View style={styles.containerMainText(handleContainerText().isShort)}>
           <ContentPoll
             message={item.message}
             images_url={item.images_url}
