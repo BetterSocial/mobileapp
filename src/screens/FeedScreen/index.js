@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Animated, FlatList, InteractionManager, StatusBar, StyleSheet} from 'react-native';
+import {Animated, InteractionManager, StatusBar, StyleSheet} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 

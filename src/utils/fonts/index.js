@@ -47,8 +47,8 @@ export const normalizeFontSizeByWidth = (fontSize) => {
   return normalizedFontSize;
 };
 
-export const scaleFontSize = (fontSize, screenHeight = 771) => {
-  const {width, height, scale, fontScale} = Dimensions.get('window');
+export const scaleFontSize = (fontSize) => {
+  const {height} = Dimensions.get('window');
   const newScale = height / (812 - 78);
   const newSize = fontSize * newScale;
   if (Platform.OS === 'ios') return Math.round(PixelRatio.roundToNearestPixel(newSize));
