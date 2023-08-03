@@ -4,6 +4,7 @@ import {StyleSheet, Text} from 'react-native';
 import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 import {getUserId} from '../../utils/token';
+import {colors} from '../../utils/colors';
 
 const TaggingUserText = ({
   text,
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[500]
   },
   shortText: (isShort) => ({
-    color: isShort ? 'rgba(255, 255, 255, 0.7)' : 'black'
+    color: isShort ? 'rgba(255, 255, 255, 0.7)' : colors.blue
   })
 });
 
