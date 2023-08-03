@@ -44,7 +44,6 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
     }
     return styles.contentFeedLink;
   };
-
   const navigateToLinkContextPage = () => {
     const param = linkContextScreenParamBuilder(
       item,
@@ -73,14 +72,20 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
         style={styles.contentFeed}
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}>
-        <View
-          style={[
-            handleStyleFeed(),
-            {
-              minHeight: calculationText(hashtagAtComponent(sanitizeUrl(message))).containerHeight
-            }
-          ]}>
-          <View style={styles.postTextContainer(isPostDetail)}>
+        {!message || message === '' ? null : (
+          <View
+            style={[
+              handleStyleFeed(),
+              {
+                marginHorizontal: 6,
+                paddingHorizontal: isPostDetail ? 12 : 0,
+                minHeight: calculationText(
+                  hashtagAtComponent(sanitizeUrl(message)),
+                  item.post_type,
+                  item.images_url
+                ).containerHeight
+              }
+            ]}>
             {item.post_type !== POST_TYPE_LINK ? (
               <Text
                 style={[
@@ -105,13 +110,13 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
               </Text>
             )}
           </View>
-        </View>
-        <View style={styles.pollContainer}>
+        )}
+
+        <View style={{paddingHorizontal: 12}}>
           {item && item.post_type === POST_TYPE_POLL ? (
             <View
               style={{
                 flex: 1,
-                justifyContent: isPostDetail ? 'flex-end' : 'flex-start',
                 marginBottom: 0
               }}>
               <ContentPoll
