@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
   recyclerview: {
-    marginBottom: 90
+    marginBottom: 112
   },
   content: {
     padding: 22
