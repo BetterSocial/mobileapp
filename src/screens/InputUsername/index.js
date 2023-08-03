@@ -44,7 +44,6 @@ const ChooseUsername = () => {
   const [users, dispatch] = React.useContext(Context).users;
   const [username, setUsernameState] = React.useState('');
   const [typeFetch, setTypeFetch] = React.useState('');
-  const [fadeInfo] = React.useState(new Animated.Value(0));
 
   const verifyUsernameDebounce = React.useCallback(
     _.debounce(async (text) => {
@@ -59,29 +58,6 @@ const ChooseUsername = () => {
     }, 500),
     []
   );
-
-  const hideInfo = () => {
-    Animated.timing(fadeInfo, {
-      toValue: 0,
-      duration: 500
-    }).start();
-  };
-  const showInfoHandle = () => {
-    Animated.timing(fadeInfo, {
-      toValue: 1,
-      duration: 500
-    }).start();
-  };
-
-  React.useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', hideInfo);
-    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', showInfoHandle);
-
-    return () => {
-      keyboardDidHideListener.remove();
-      keyboardDidShowListener.remove();
-    };
-  }, []);
 
   const onPhoto = () => {
     Analytics.logEvent('btn_take_photo_profile', {
@@ -296,7 +272,7 @@ const ChooseUsername = () => {
                   </View>
                 </View>
               </TouchableOpacity>
-              <View>
+              <View style={{flex: 1}}>
                 <Input
                   placeholder="Username"
                   onChangeText={checkUsername}
@@ -306,12 +282,13 @@ const ChooseUsername = () => {
                   textContentType="username"
                   autoCapitalize="sentences"
                   autoCorrect={false}
+                  style={styles.input}
                   autoFocus
                 />
                 {messageTypeFetch(typeFetch, formatUsernameString())}
               </View>
             </View>
-            <Animated.View style={[styles.constainerInfo, {opacity: fadeInfo}]}>
+            <View style={styles.constainerInfo}>
               <View style={styles.parentIcon}>
                 <View style={styles.containerIcon}>
                   <WarningIcon />
@@ -322,15 +299,12 @@ const ChooseUsername = () => {
                   {StringConstant.onboardingChooseUsernameBlueBoxHint}
                 </Text>
               </View>
-            </Animated.View>
+            </View>
           </View>
         </TouchableWithoutFeedback>
 
         <View style={styles.gap} />
         <View style={styles.footer}>
-          <Text style={styles.textSmall}>
-            No matter your username, you can always post anonymously
-          </Text>
           <Button disabled={isNextButtonDisabled()} onPress={() => next()}>
             {StringConstant.onboardingChooseUsernameButtonStateNext}
           </Button>
@@ -353,8 +327,17 @@ const styles = StyleSheet.create({
     marginTop: 28,
     marginBottom: 20
   },
+  input: {
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: '#BDBDBD',
+    paddingHorizontal: 23,
+    paddingVertical: 13,
+    width: '100%'
+  },
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: 'white'
   },
   btnNext: {marginTop: 16},
   gap: {flex: 1},
@@ -395,10 +378,10 @@ const styles = StyleSheet.create({
   constainerInfo: {
     backgroundColor: 'rgba(85, 194, 255, 0.3)',
     flexDirection: 'row',
-    borderRadius: 4,
+    borderRadius: 8,
     width: '100%',
     paddingHorizontal: 7,
-    paddingVertical: 13
+    paddingVertical: 8
   },
   containerIcon: {
     width: 25,
@@ -452,19 +435,10 @@ const styles = StyleSheet.create({
     width: '90%'
   },
   footer: {
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingBottom: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 20,
     backgroundColor: colors.white,
-    shadowColor: colors.black,
-    shadowOffset: {
-      width: 0,
-      height: 5
-    },
-    shadowOpacity: 0.36,
-    shadowRadius: 6.68,
-    elevation: 11,
-    height: 112
+    justifyContent: 'flex-end'
   },
   textSmall: {
     fontFamily: 'Inter',
