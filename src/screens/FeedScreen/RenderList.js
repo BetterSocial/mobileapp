@@ -22,6 +22,7 @@ import {Footer, Gap, PreviewComment} from '../../components';
 import {colors} from '../../utils/colors';
 import {getCommentLength} from '../../utils/getstream';
 import {showScoreAlertDialog} from '../../utils/Utils';
+import {normalizeFontSizeByWidth} from '../../utils/fonts';
 
 const tabBarHeight = StatusBar.currentHeight;
 const FULL_WIDTH = Dimensions.get('screen').width;
@@ -183,21 +184,22 @@ const RenderListFeed = (props) => {
 };
 
 const styles = StyleSheet.create({
-  footerWrapper: (h) => ({height: h + 10}),
+  footerWrapper: (h) => ({height: h, alignItems: 'center', justifyContent: 'center'}),
   contentReaction: (heightReaction) => ({
     maxHeight: heightReaction,
     marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0
   }),
   cardContainer: {
-    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT,
     width: FULL_WIDTH,
-    borderBottomWidth: 7,
+    borderBottomWidth: 0,
     borderBottomColor: colors.lightgrey,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT,
+    marginBottom: normalizeFontSizeByWidth(4)
   },
   cardMain: {
-    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT,
-    width: '100%'
+    width: '100%',
+    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT
   }
 });
 

@@ -11,7 +11,8 @@ const TaggingUserText = ({
   currentTopic = null,
   otherId = null,
   goToDetailPage,
-  item
+  item,
+  isShortText
 }) => {
   const username = text.replace('@', '');
 
@@ -43,7 +44,10 @@ const TaggingUserText = ({
   };
 
   return (
-    <Text testID="TaggingUserTextComponent" onPress={onClick} style={styles.text}>
+    <Text
+      testID="TaggingUserTextComponent"
+      onPress={onClick}
+      style={[styles.text, styles.shortText(isShortText)]}>
       {text}
     </Text>
   );
@@ -53,7 +57,10 @@ const styles = StyleSheet.create({
   text: {
     color: COLORS.blue,
     fontFamily: fonts.inter[500]
-  }
+  },
+  shortText: (isShort) => ({
+    color: isShort ? 'rgba(255, 255, 255, 0.7)' : 'black'
+  })
 });
 
 export default React.memo(TaggingUserText);
