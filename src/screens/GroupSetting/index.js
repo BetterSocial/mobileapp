@@ -67,7 +67,7 @@ const GroupSetting = ({navigation, route}) => {
         <View style={styles.users}>
           <Text style={styles.countUser}>{`Participants (${countUser})`}</Text>
           <FlatList
-            data={Object.keys(participants)}
+            data={participants}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item}) => (
               <View style={{height: 72}}>

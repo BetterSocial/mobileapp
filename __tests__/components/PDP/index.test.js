@@ -1,9 +1,9 @@
 import * as React from 'react';
 
 import {render, cleanup} from '@testing-library/react-native';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 import PDP from '../../../src/components/PostPageDetail';
 import Store from '../../../src/context/Store';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 jest.mock('react-native-activity-feed/node_modules/react-native-image-crop-picker', () => ({
   openPicker: jest.fn()
@@ -14,6 +14,10 @@ jest.mock('../../../src/hooks/useAfterInteractions', () => ({
     transitionRef: {current: {animateNextTransition: jest.fn()}},
     interactionsComplete: true
   })
+}));
+
+jest.mock('@react-native-clipboard/clipboard', () => ({
+  setString: jest.fn()
 }));
 
 const mockedGoBack = jest.fn();
