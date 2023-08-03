@@ -31,7 +31,7 @@ const onboardingLocalCommunityHeadline = 'Find your local community';
 const onboardingLocalCommunitySubHeadline =
   'Your location will be used to show relevant posts, and not be visible to others or on your profile.';
 const onboardingLocalCommunityPrimaryLocationTitle = 'Add New Location';
-const onboardingLocalCommunityPrimaryLocationSubTitle = 'Search your favorite location';
+const onboardingLocalCommunityPrimaryLocationSubTitle = 'Add the places you call home';
 const onboardingLocalCommunitySecondaryLocationTitle = 'Add a second location';
 const onboardingLocalCommunitySecondaryLocationSubTitle =
   '🏡 Home away from home? Add a second location';
