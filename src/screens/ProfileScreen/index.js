@@ -149,7 +149,7 @@ const Header = (props) => {
           following={dataMain.following}
         />
 
-        <LinkAndSocialMedia username={dataMain.username} />
+        <LinkAndSocialMedia username={dataMain.username} prompt={dataMainBio} />
       </View>
       <View>
         <View style={styles.tabs} ref={postRef}>
