@@ -80,38 +80,34 @@ describe('usePOstDetail should run correctly', () => {
     expect(result.current.calculatePaddingBtm()).toEqual(200);
   });
 
-  // it('calculationText should run correctly', () => {
-  //   jest.spyOn(Dimensions, 'get').mockReturnValue({width: 400, height: 800});
-  //   const {result} = renderHook(usePostDetail);
-  //   expect(result.current.calculationText('wide')).toEqual({
-  //     containerComment: 141.72503242542152,
-  //     containerHeight: 228.27496757457848,
-  //     defaultNumberLine: 5,
-  //     fontSize: 24.902723735408564,
-  //     lineHeight: 45.654993514915695
-  //   });
-  //   expect(result.current.calculationText('wide', 2)).toEqual({
-  //     containerComment: -86.54993514915697,
-  //     containerHeight: 456.54993514915697,
-  //     defaultNumberLine: 5,
-  //     fontSize: 24.902723735408564,
-  //     lineHeight: 45.654993514915695
-  //   });
+  it('calculationText should run correctly', () => {
+    jest.spyOn(Dimensions, 'get').mockReturnValue({width: 400, height: 800});
+    const {result} = renderHook(usePostDetail);
+    expect(result.current.calculationText('wide')).toEqual({
+      containerComment: 135.33333333333334,
+      containerHeight: 234.66666666666666,
+      fontSize: 25.6,
+      lineHeight: 46.93333333333333
+    });
+    expect(result.current.calculationText('wide', 2)).toEqual({
+      containerComment: -99.33333333333331,
+      containerHeight: 469.3333333333333,
+      fontSize: 25.6,
+      lineHeight: 46.93333333333333
+    });
 
-  //   expect(result.current.calculationText('wide', 1)).toEqual({
-  //     containerComment: -40.89494163424126,
-  //     containerHeight: 410.89494163424126,
-  //     defaultNumberLine: 5,
-  //     fontSize: 24.902723735408564,
-  //     lineHeight: 45.654993514915695
-  //   });
+    expect(result.current.calculationText('wide', 1)).toEqual({
+      containerComment: -52.39999999999998,
+      containerHeight: 422.4,
+      fontSize: 25.6,
+      lineHeight: 46.93333333333333
+    });
 
-  //   expect(result.current.calculationText(longText)).toEqual({
-  //     containerComment: -1821.4396887159537,
-  //     containerHeight: 2191.4396887159537,
-  //     defaultNumberLine: 5,
-  //     fontSize: 16.60181582360571,
-  //     lineHeight: 24.902723735408564
-  //   });
-  // });
+    expect(result.current.calculationText(longText)).toEqual({
+      containerComment: -1959.6,
+      containerHeight: 2329.6,
+      fontSize: 17.066666666666666,
+      lineHeight: 25.6
+    });
+  });
 });
