@@ -1,4 +1,4 @@
-import {SQLiteDatabase} from 'react-native-sqlite-storage';
+import {SQLiteDatabase, Transaction} from 'react-native-sqlite-storage';
 
 import BaseDbSchema from './BaseDbSchema';
 import UserSchema from './UserSchema';
@@ -32,7 +32,7 @@ class ChannelListMemberSchema implements BaseDbSchema {
     this.user = user;
   }
 
-  save = async (db: SQLiteDatabase): Promise<void> => {
+  save = async (db: SQLiteDatabase, transaction: Transaction = null): Promise<void> => {
     if (await this.checkIfExist(db)) return;
 
     const insertQuery = `INSERT OR REPLACE INTO ${ChannelListMemberSchema.getTableName()} (
@@ -55,7 +55,22 @@ class ChannelListMemberSchema implements BaseDbSchema {
       this.joinedAt
     ];
 
-    await db.executeSql(insertQuery, insertParams);
+    try {
+      if (transaction) {
+        transaction.executeSql(insertQuery, insertParams);
+      } else {
+        db.executeSql(insertQuery, insertParams);
+      }
+    } catch (e) {
+      console.log('save channellistmember error', e);
+    }
+  };
+
+  saveIfNotExist = async (db: SQLiteDatabase): Promise<void> => {
+    const ifExists = await this.checkIfExist(db);
+    if (ifExists) return;
+
+    this.save(db);
   };
 
   checkIfExist = async (db: SQLiteDatabase): Promise<boolean> => {
@@ -154,6 +169,8 @@ class ChannelListMemberSchema implements BaseDbSchema {
       user: null
     });
   };
+
+  static fromMessageAnonymousChatAPI = ChannelListMemberSchema.fromWebsocketObject;
 
   static fromInitAnonymousChatAPI = (
     channelId: string,

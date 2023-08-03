@@ -1,3 +1,5 @@
+import {v4 as uuid} from 'uuid';
+
 import ChannelListMemberSchema from '../schema/ChannelListMemberSchema';
 import ChannelListSchema from '../schema/ChannelListSchema';
 import ChatSchema from '../schema/ChatSchema';
@@ -28,20 +30,28 @@ const useSaveAnonChatHook = () => {
     await chat.save(localDb);
 
     try {
-      object?.members?.forEach((member) => {
-        const userMember = UserSchema.fromInitAnonymousChatAPI(
-          member,
-          initAnonymousChat?.message?.cid
-        );
-        userMember.saveOrUpdateIfExists(localDb);
+      object?.members?.forEach(async (member) => {
+        try {
+          const userMember = UserSchema.fromInitAnonymousChatAPI(
+            member,
+            initAnonymousChat?.message?.cid
+          );
+          await userMember.saveOrUpdateIfExists(localDb);
+        } catch (e) {
+          console.log('error saveChatFromOtherProfile userMember', e);
+        }
 
-        const memberSchema = ChannelListMemberSchema.fromInitAnonymousChatAPI(
-          initAnonymousChat?.message?.cid,
-          object?.message?.id,
-          member
-        );
+        try {
+          const memberSchema = ChannelListMemberSchema.fromInitAnonymousChatAPI(
+            initAnonymousChat?.message?.cid,
+            uuid(),
+            member
+          );
 
-        memberSchema.save(localDb);
+          memberSchema.saveIfNotExist(localDb);
+        } catch (e) {
+          console.log('error saveChatFromOtherProfile memberSchema', e);
+        }
       });
     } catch (e) {
       console.log('error saveChatFromOtherProfile');
