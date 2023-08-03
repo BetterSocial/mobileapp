@@ -1,5 +1,4 @@
 import React from 'react';
-import {Dimensions, StatusBar} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
 import dimen from '../../../utils/dimen';
