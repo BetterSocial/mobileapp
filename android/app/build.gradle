@@ -151,8 +151,8 @@ android {
         applicationId "org.bettersocial"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 409
-        versionName "2.0.0.109"
+        versionCode 414
+        versionName "2.0.0.114"
     }
     splits {
         abi {
