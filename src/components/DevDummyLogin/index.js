@@ -15,6 +15,7 @@ import {
 import {StackActions, useNavigation} from '@react-navigation/native';
 import {useSetRecoilState} from 'recoil';
 
+import StorageUtils from '../../utils/storage';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {InitialStartupAtom} from '../../service/initialStartup';
@@ -94,16 +95,22 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
 
   const checkPassword = async () => {
     setIsLoadingCheckPassword(true);
+    StorageUtils.onboardingPassword.set(passwordText);
     const response = await checkPasswordForDemoLogin(passwordText);
-    if (response?.success) {
-      dummyLoginPasswordRbSheetRef.current.close();
-      if (viewMode === 'login') openDummyLogin();
-      else if (viewMode === 'onboarding') navigateToChooseUsername();
-    } else {
-      SimpleToast.show('Wrong Password', SimpleToast.SHORT);
+    setIsLoadingCheckPassword(false);
+    if (!response?.success && response?.code === 429) {
+      SimpleToast.show('Too many requests, please try again later.', SimpleToast.SHORT);
+      return;
     }
 
-    setIsLoadingCheckPassword(false);
+    if (!response?.success) {
+      SimpleToast.show('Wrong Password', SimpleToast.SHORT);
+      return;
+    }
+
+    dummyLoginPasswordRbSheetRef.current.close();
+    if (viewMode === 'login') openDummyLogin();
+    else if (viewMode === 'onboarding') navigateToChooseUsername();
   };
 
   const dummyLogin = (appUserId) => {
@@ -151,6 +158,11 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
     setViewMode(mode);
     dummyLoginPasswordRbSheetRef?.current?.open();
   };
+
+  React.useEffect(() => {
+    const savedPasswordText = StorageUtils.onboardingPassword.get();
+    if (savedPasswordText) setPasswordText(savedPasswordText);
+  }, []);
 
   if (ENABLE_DEV_ONLY_FEATURE === 'true')
     return (
