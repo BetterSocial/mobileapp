@@ -153,7 +153,8 @@ const GroupInfo = () => {
   };
 
   const getAnonymousImage = (name) => {
-    if (name === 'AnonymousUser') {
+    console.log('name', name);
+    if (name?.indexOf('Anonymous') > -1) {
       return (
         <View style={{marginRight: 17}}>
           <AnonymousIcon
