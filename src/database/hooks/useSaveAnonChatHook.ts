@@ -4,6 +4,7 @@ import ChannelListMemberSchema from '../schema/ChannelListMemberSchema';
 import ChannelListSchema from '../schema/ChannelListSchema';
 import ChatSchema from '../schema/ChatSchema';
 import UserSchema from '../schema/UserSchema';
+import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
 import useLocalDatabaseHook from './useLocalDatabaseHook';
 import {
   InitAnonymousChatData,
@@ -13,8 +14,26 @@ import {getAnonymousChatName} from '../../utils/string/StringUtils';
 
 const useSaveAnonChatHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook();
+  const {goToChatScreen} = useChatUtilsHook();
 
-  const saveChatFromOtherProfile = async (object: InitAnonymousChatData, status = 'sent') => {
+  const helperFindChatById = async (object: InitAnonymousChatData): Promise<ChannelListSchema> => {
+    const channelId = object?.message?.cid?.replace('messaging:', '');
+    const channelList = await ChannelListSchema.getById(localDb, channelId);
+
+    const channelListSchema = ChannelListSchema.fromDatabaseObject(channelList);
+    return channelListSchema;
+  };
+
+  const helperGoToAnonymousChat = async (object: InitAnonymousChatData) => {
+    const channelListSchema = await helperFindChatById(object);
+    goToChatScreen(channelListSchema);
+  };
+
+  const saveChatFromOtherProfile = async (
+    object: InitAnonymousChatData,
+    status = 'sent',
+    withNavigate = false
+  ) => {
     if (!localDb) return;
 
     const chatName = await getAnonymousChatName(object?.members);
@@ -60,23 +79,26 @@ const useSaveAnonChatHook = () => {
 
     refresh('channelList');
     refresh('chat');
+
+    if (withNavigate) helperGoToAnonymousChat(object);
   };
 
   const helperUpdateChannelListDescription = async (object: InitAnonymousChatData) => {
-    const channelId = object?.message?.cid?.replace('messaging:', '');
-    const channelList = await ChannelListSchema.getById(localDb, channelId);
+    const channelListSchema = await helperFindChatById(object);
 
-    const channelListSchema = ChannelListSchema.fromDatabaseObject(channelList);
     channelListSchema.description = object?.message?.text;
     channelListSchema.lastUpdatedAt = new Date().toISOString();
     channelListSchema.lastUpdatedBy = object?.message?.user?.id;
     channelListSchema.save(localDb);
   };
 
-  const savePendingChatFromOtherProfile = async (object: InitAnonymousChatData) => {
+  const savePendingChatFromOtherProfile = async (
+    object: InitAnonymousChatData,
+    withNavigate = false
+  ) => {
     try {
       helperUpdateChannelListDescription(object);
-      saveChatFromOtherProfile(object, 'pending');
+      saveChatFromOtherProfile(object, 'pending', withNavigate);
     } catch (e) {
       console.log('error savePendingChatFromOtherProfile', e);
     }

@@ -217,12 +217,12 @@ const OtherProfile = () => {
         anon_user_info_color_code
       };
       const response = await sendAnonymousDMOtherProfile(anonDMParams);
-      await saveChatFromOtherProfile(response);
+      await saveChatFromOtherProfile(response, 'sent', true);
       setDMChat('');
     } catch (e) {
       if (e?.response?.data?.status === 'Channel is blocked') {
         const response = e?.response?.data?.data;
-        await savePendingChatFromOtherProfile(response);
+        await savePendingChatFromOtherProfile(response, true);
         setDMChat('');
         return;
       }
@@ -242,6 +242,24 @@ const OtherProfile = () => {
     }
   };
 
+  const gotoChatRoom = async () => {
+    const type = 'messaging';
+    const sort = [{last_message_at: -1}];
+
+    const members = [profile.myProfile.user_id, dataMain.user_id];
+    const filter = {type, members: {$eq: members}};
+
+    const clientChat = await client.client;
+
+    const findChannels = await clientChat.queryChannels(filter, sort, {
+      watch: true,
+      state: true
+    });
+
+    setChannel(findChannels[0], dispatchChannel);
+    await navigation.replace('ChatDetailPage');
+  };
+
   const sendSignedDM = async () => {
     try {
       setLoadingSendDM(true);
@@ -250,6 +268,7 @@ const OtherProfile = () => {
         message: dmChat
       };
       await sendSignedDMOtherProfile(signedMParams);
+      await gotoChatRoom();
       setDMChat('');
     } catch (error) {
       SimpleToast.show('Send message failed', SimpleToast.SHORT);
