@@ -90,15 +90,9 @@ const Content = ({
 
   const handleCountDeviceLine = () => {
     let newMaxLine = calculateMaxLine();
-    let countDeviceLine = newMaxLine;
+    const countDeviceLine = newMaxLine;
     if (!isIos) {
       newMaxLine -= 1;
-    }
-
-    if (item.post_type !== POST_TYPE_STANDARD || item.images_url.length > 0) {
-      countDeviceLine = newMaxLine;
-    } else {
-      countDeviceLine = newMaxLine;
     }
     return {
       countDeviceLine,
