@@ -2,13 +2,11 @@
 import {Dimensions, StatusBar} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
-import {POST_TYPE_LINK, POST_TYPE_POLL} from '../../../utils/constants';
 import {normalizeFontSizeByWidth} from '../../../utils/fonts';
 
 const usePostDetail = () => {
   const longTextFontSize = normalizeFontSizeByWidth(16);
   const longTextLineHeight = normalizeFontSizeByWidth(24);
-  console.log(longTextLineHeight, 'sempak2');
   const shortTextFontSize = normalizeFontSizeByWidth(24);
   const shortTextLineHeight = normalizeFontSizeByWidth(44);
   const {top, bottom} = useSafeAreaInsets();

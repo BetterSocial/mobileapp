@@ -10,7 +10,7 @@ exports[`Testing Topic Text Match snapshot 1`] = `
         "fontFamily": "Inter-Medium",
       },
       Object {
-        "color": "black",
+        "color": "#2F80ED",
       },
     ]
   }
