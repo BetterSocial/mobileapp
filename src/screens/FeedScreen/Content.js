@@ -36,7 +36,6 @@ const Content = ({
   const {handleCalculation} = useCalculationContent();
   const [amountCut, setAmountCut] = React.useState(0);
   const [textCut, setTextCunt] = React.useState(null);
-  const [amountLineBreakP, setAmountLineBreal] = React.useState(0);
   const [arrText] = React.useState([]);
   const isIos = Platform.OS === 'ios';
   const onImageClickedByIndex = (index) => {
@@ -119,7 +118,6 @@ const Content = ({
     const amountLineBreak = handleLineBreak(nativeEvent, newMaxLine);
     countDeviceLine = newMaxLine - amountLineBreak.length / 2;
     newMaxLine -= amountLineBreak.length / 2;
-    setAmountLineBreal(amountLineBreak);
     if (item.post_type === POST_TYPE_STANDARD && item.images_url.length <= 0) {
       countDeviceLine -= 2;
     } else {
