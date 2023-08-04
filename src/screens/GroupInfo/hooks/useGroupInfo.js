@@ -36,6 +36,8 @@ const useGroupInfo = () => {
   const [isAnonymousModalOpen, setIsAnonymousModalOpen] = React.useState(false);
   const [, dispatchChannel] = React.useContext(Context).channel;
 
+  const blockModalRef = React.useRef(null);
+
   const anonUserEmojiName = channelState?.channel?.data?.anon_user_info_emoji_name;
 
   const serializeMembersList = (result = []) => {
@@ -283,21 +285,20 @@ const useGroupInfo = () => {
   };
 
   const blockAnonUser = async () => {
-    console.log(selectedUser, 'selectedUser');
-    const payload = {
-      userId: selectedUser?.user?.id,
-      postId: null,
-      source: 'group_info',
-      reason: [],
-      message: 'block anonymous user from group info'
-    };
     try {
       setIsAnonymousModalOpen(false);
-      const blockUserResponse = await blockUserFromAnonChat(payload);
-      console.log(blockUserResponse, 'blockUserResponse');
-      if (blockUserResponse.success === 'success') {
-        // SimpleToast.show('anonymous user blocked');
-      }
+      const blockComponentValue = {
+        postId: null,
+        isAnonymousUserFromGroupInfo: true,
+        actor: {
+          id: selectedUser?.user?.id,
+          data: {
+            username: selectedUser?.user?.anonymousUsername
+          }
+        }
+      };
+
+      blockModalRef?.current?.openBlockComponent(blockComponentValue);
     } catch (e) {
       SimpleToast.show('failed to block anonymous user');
       console.log(e);
@@ -448,7 +449,8 @@ const useGroupInfo = () => {
     generateSystemChat,
     setNewParticipan,
     isAnonymousModalOpen,
-    setIsAnonymousModalOpen
+    setIsAnonymousModalOpen,
+    blockModalRef
   };
 };
 

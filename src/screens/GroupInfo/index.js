@@ -16,6 +16,7 @@ import {
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 import AnonymousIcon from '../ChannelListScreen/elements/components/AnonymousIcon';
+import BlockComponent from '../../components/BlockComponent';
 import DefaultChatGroupProfilePicture from '../../assets/images/default-chat-group-picture.png';
 import ExitGroup from '../../assets/images/exit-group.png';
 import Header from '../../components/Header';
@@ -59,7 +60,7 @@ const GroupInfo = () => {
     setUsername,
     onReportGroup,
     isAnonymousModalOpen,
-    setIsAnonymousModalOpen
+    blockModalRef
   } = useGroupInfo();
 
   React.useEffect(() => {
@@ -293,6 +294,8 @@ const GroupInfo = () => {
             selectedUser={selectedUser}
             onPress={alertRemoveUser}
           />
+
+          <BlockComponent ref={blockModalRef} screen="group_info" />
         </>
       )}
     </SafeAreaView>
