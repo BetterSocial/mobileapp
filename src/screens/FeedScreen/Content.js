@@ -36,6 +36,7 @@ const Content = ({
   const {handleCalculation} = useCalculationContent();
   const [amountCut, setAmountCut] = React.useState(0);
   const [textCut, setTextCunt] = React.useState(null);
+  const [amountLineBreakP, setAmountLineBreal] = React.useState(0);
   const [arrText] = React.useState([]);
   const isIos = Platform.OS === 'ios';
   const onImageClickedByIndex = (index) => {
@@ -93,10 +94,11 @@ const Content = ({
     if (!isIos) {
       newMaxLine -= 1;
     }
+
     if (item.post_type !== POST_TYPE_STANDARD || item.images_url.length > 0) {
-      countDeviceLine = newMaxLine - 1;
+      countDeviceLine = newMaxLine;
     } else {
-      countDeviceLine = newMaxLine - 2;
+      countDeviceLine = newMaxLine;
     }
     return {
       countDeviceLine,
@@ -104,9 +106,31 @@ const Content = ({
     };
   };
 
+  const handleLineBreak = (nativeEvent, newMaxLine) => {
+    const amountLineBreak = [];
+    if (nativeEvent.lines.length > newMaxLine) {
+      nativeEvent.lines.forEach((char, index) => {
+        if (index <= newMaxLine && char.text.match(/[\r\n]+/g)) {
+          amountLineBreak.push(char.text);
+        }
+      });
+    }
+    return amountLineBreak;
+  };
+
   const handleTextLayout = ({nativeEvent}) => {
     let text = '';
-    const {newMaxLine, countDeviceLine} = handleCountDeviceLine();
+
+    let {newMaxLine, countDeviceLine} = handleCountDeviceLine();
+    const amountLineBreak = handleLineBreak(nativeEvent, newMaxLine);
+    countDeviceLine = newMaxLine - amountLineBreak.length / 2;
+    newMaxLine -= amountLineBreak.length / 2;
+    setAmountLineBreal(amountLineBreak);
+    if (item.post_type === POST_TYPE_STANDARD && item.images_url.length <= 0) {
+      countDeviceLine -= 2;
+    } else {
+      countDeviceLine -= 1;
+    }
     for (let i = 0; i < newMaxLine; i++) {
       if (nativeEvent.lines[i]) {
         if (i === countDeviceLine) {
@@ -121,7 +145,6 @@ const Content = ({
     setTextCunt(text);
     setAmountCut(text.length);
   };
-
   const renderHandleTextContent = () => {
     return (
       <View testID="postTypePoll" style={[styles.containerText, handleContainerText()]}>
@@ -131,7 +154,7 @@ const Content = ({
             numberOfLines={calculateMaxLine()}
             onLayout={handleTextLine}
             style={[handleStyleFont(), handleContainerText().text]}>
-            {message.replace(/[\r\n]+/g, '')}
+            {message}
           </Text>
         ) : (
           <Text
