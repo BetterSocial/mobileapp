@@ -9,9 +9,8 @@ import MemoIc_arrow_upvote_on from '../../assets/arrow/Ic_upvote_on';
 import MemoIc_block_inactive from '../../assets/block/Ic_block_inactive';
 import MemoIc_comment from '../../assets/icons/Ic_comment';
 import MemoIc_share from '../../assets/icons/Ic_share';
+import Memoic_globe from '../../assets/icons/ic_globe';
 import {FONTS} from '../../utils/theme';
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
 
 const Footer = ({
   onPressShare,
@@ -25,7 +24,9 @@ const Footer = ({
   totalVote,
   disableComment = false,
   blockStatus,
-  loadingVote
+  loadingVote,
+  showScoreButton = false,
+  onPressScore
 }) => {
   const handleBlockUi = () => {
     if (isSelf) {
@@ -86,6 +87,13 @@ const Footer = ({
         </TouchableOpacity>
       )}
       <View style={styles.rightGroupContainer}>
+        {showScoreButton ? (
+          <TouchableOpacity onPress={onPressScore}>
+            <Memoic_globe height={20} width={20} />
+          </TouchableOpacity>
+        ) : (
+          <></>
+        )}
         {handleBlockUi()}
         <TouchableOpacity
           testID="downVoteBtn"
@@ -193,22 +201,6 @@ const styles = StyleSheet.create({
     flex: 1,
     height: '100%',
     justifyContent: 'center'
-  },
-  buttonFollowing: {
-    width: 88,
-    height: 36,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: colors.bondi_blue,
-    borderRadius: 8
-  },
-  textButtonFollowing: {
-    fontFamily: fonts.inter[600],
-    fontWeight: 'bold',
-    fontSize: 12,
-    color: colors.bondi_blue
   }
 });
 

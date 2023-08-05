@@ -16,6 +16,7 @@ import {
   POST_TYPE_STANDARD,
   SOURCE_MY_PROFILE
 } from '../../../utils/constants';
+import {Context} from '../../../context';
 import {Footer, PreviewComment} from '../../../components';
 import {getCountCommentWithChild} from '../../../utils/getstream';
 import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
@@ -74,6 +75,7 @@ const Item = ({
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
   const navigation = useNavigation();
+  const [profile] = React.useContext(Context).profile;
 
   React.useEffect(() => {
     const initial = () => {
@@ -142,7 +144,7 @@ const Item = ({
     <View key={item.id} style={styles.cardContainer}>
       <Header
         onHeaderOptionClicked={onHeaderOptionClicked}
-        headerStyle={{paddingHorizontal: 9}}
+        headerStyle={styles.headerContainer}
         props={item}
         height={getHeightHeader()}
         showAnonymousOption={true}
@@ -190,7 +192,7 @@ const Item = ({
           }
           onPressComment={() => onPressComment(item)}
           onPressBlock={() => onPressBlock(item)}
-          showScoreButton={true}
+          showScoreButton={profile?.myProfile?.is_backdoor_user}
           onPressScore={() => showScoreAlertDialog(item)}
           onPressDownVote={() => {
             setStatusDowvote((prev) => {
@@ -295,5 +297,8 @@ const styles = StyleSheet.create({
   }),
   linearGradient: {
     height: 8
+  },
+  headerContainer: {
+    marginHorizontal: 9
   }
 });
