@@ -35,7 +35,6 @@ import Topics from '../screens/Topics';
 import WebsocketResearchScreen from '../screens/WebsocketResearchScreen';
 import WhotoFollow from '../screens/WhotoFollow';
 import api from '../service/config';
-import useCoreChatSystemHook from '../hooks/core/useCoreChatSystemHook';
 import {
   AddParticipant,
   ChannelScreen,
