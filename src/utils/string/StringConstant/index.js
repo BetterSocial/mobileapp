@@ -48,7 +48,7 @@ const postDetailPageSeeReplies = (count) => `See ${count} ${count > 1 ? 'replies
 // Create Post
 const createPostDone = 'Your post was successfully published.';
 const createPostFailedNoMessage = 'Post cannot be empty.';
-const createPostFailedGeneralError = 'Failed to create new post.';
+const createPostFailedGeneralError = 'Your post failed - Please try again';
 
 // Chat Tab
 const chatTabHeaderPlaceholder = 'Search Users';
