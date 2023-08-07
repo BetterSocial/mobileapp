@@ -5,10 +5,7 @@ import ChannelListMemberSchema from './ChannelListMemberSchema';
 import UserSchema from './UserSchema';
 import {AnonymousChannelData} from '../../../types/repo/AnonymousMessageRepo/AnonymousChannelsData';
 import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
-import {
-  InitAnonymousChatData,
-  ModifyAnonymousChatData
-} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
+import {ModifyAnonymousChatData} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 
 class ChannelList implements BaseDbSchema {
   id: string;

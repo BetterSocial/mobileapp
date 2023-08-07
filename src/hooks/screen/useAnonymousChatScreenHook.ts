@@ -5,7 +5,6 @@ import SimpleToast from 'react-native-simple-toast';
 import {v4 as uuid} from 'uuid';
 
 import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
-import ChannelList from '../../database/schema/ChannelListSchema';
 import ChatSchema from '../../database/schema/ChatSchema';
 import UseAnonymousChatScreenHook from '../../../types/hooks/screens/useAnonymousChatScreenHook.types';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
