@@ -50,7 +50,7 @@ describe('useComment should run correctly', () => {
   it('upvote status none should run correctly', async () => {
     const updateVote = jest.fn();
     const findCommentAndUpdate = jest.fn();
-    const spy = jest.spyOn(serviceVote, 'voteComment');
+    const spy = jest.spyOn(serviceVote, 'voteCommentV2');
     const {result} = renderHook(() =>
       useComment({comment, level, updateVote, findCommentAndUpdate})
     );
@@ -69,7 +69,7 @@ describe('useComment should run correctly', () => {
   it('downvote status none should run correctly', async () => {
     const updateVote = jest.fn();
     const findCommentAndUpdate = jest.fn();
-    const spy = jest.spyOn(serviceVote, 'voteComment');
+    const spy = jest.spyOn(serviceVote, 'voteCommentV2');
     const {result} = renderHook(() =>
       useComment({comment, level, updateVote, findCommentAndUpdate})
     );
@@ -85,7 +85,7 @@ describe('useComment should run correctly', () => {
   it('upvote status upvote should run correctly', async () => {
     const updateVote = jest.fn();
     const findCommentAndUpdate = jest.fn();
-    const spy = jest.spyOn(serviceVote, 'voteComment');
+    const spy = jest.spyOn(serviceVote, 'voteCommentV2');
     const {result} = renderHook(() =>
       useComment({
         comment: {...comment, data: {...comment.data, count_upvote: 1, count_downvote: 0}},
@@ -106,7 +106,7 @@ describe('useComment should run correctly', () => {
   it('upvote status downvote should run correctly', async () => {
     const updateVote = jest.fn();
     const findCommentAndUpdate = jest.fn();
-    const spy = jest.spyOn(serviceVote, 'voteComment');
+    const spy = jest.spyOn(serviceVote, 'voteCommentV2');
     const {result} = renderHook(() =>
       useComment({
         comment: {...comment, data: {...comment.data, count_upvote: 0, count_downvote: 2}},
@@ -127,7 +127,7 @@ describe('useComment should run correctly', () => {
   it('downvote status downvote should run correctly', async () => {
     const updateVote = jest.fn();
     const findCommentAndUpdate = jest.fn();
-    const spy = jest.spyOn(serviceVote, 'voteComment');
+    const spy = jest.spyOn(serviceVote, 'voteCommentV2');
     const {result} = renderHook(() =>
       useComment({comment, level, updateVote, findCommentAndUpdate})
     );
@@ -143,7 +143,7 @@ describe('useComment should run correctly', () => {
   it('downvote status upvote should run correctly', async () => {
     const updateVote = jest.fn();
     const findCommentAndUpdate = jest.fn();
-    const spy = jest.spyOn(serviceVote, 'voteComment');
+    const spy = jest.spyOn(serviceVote, 'voteCommentV2');
     const {result} = renderHook(() =>
       useComment({comment, level, updateVote, findCommentAndUpdate})
     );
