@@ -4,6 +4,7 @@ import {StyleSheet, Text} from 'react-native';
 import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 import {getUserId} from '../../utils/token';
+import {colors} from '../../utils/colors';
 
 const TaggingUserText = ({
   text,
@@ -11,7 +12,8 @@ const TaggingUserText = ({
   currentTopic = null,
   otherId = null,
   goToDetailPage,
-  item
+  item,
+  isShortText
 }) => {
   const username = text.replace('@', '');
 
@@ -43,7 +45,10 @@ const TaggingUserText = ({
   };
 
   return (
-    <Text testID="TaggingUserTextComponent" onPress={onClick} style={styles.text}>
+    <Text
+      testID="TaggingUserTextComponent"
+      onPress={onClick}
+      style={[styles.text, styles.shortText(isShortText)]}>
       {text}
     </Text>
   );
@@ -53,7 +58,10 @@ const styles = StyleSheet.create({
   text: {
     color: COLORS.blue,
     fontFamily: fonts.inter[500]
-  }
+  },
+  shortText: (isShort) => ({
+    color: isShort ? 'rgba(255, 255, 255, 0.7)' : colors.blue
+  })
 });
 
 export default React.memo(TaggingUserText);
