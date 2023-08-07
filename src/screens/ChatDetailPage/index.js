@@ -177,50 +177,57 @@ const ChatDetailPage = ({route}) => {
     return true;
   };
 
+  console.log('channelClient', channelClient.channel?.data?.is_channel_blocked);
+
+  const renderMessageInput = () => {
+    if (channelClient.channel?.data?.is_channel_blocked) {
+      return <></>;
+    }
+
+    return <MessageInput Input={InputMessage} />;
+  };
+
   if (clients.client && channelClient.channel) {
     return (
       <SafeAreaView>
         <StatusBar backgroundColor="white" translucent={false} />
-        {interactionsComplete ? (
-          <EasyFollowSystem valueCallback={checkFollowBack} followButtonAction={followButtonAction}>
-            <Chat client={clients.client} i18nInstance={streami18n}>
-              <Channel
-                channel={channelClient.channel}
-                DateHeader={CustomDateHeader}
-                hasFilePicker={false}
-                ImageUploadPreview={<ImageSendPreview />}
-                keyboardVerticalOffset={0}
-                mutesEnabled={false}
-                reactionsEnabled={false}
-                readEventsEnabled={true}
-                threadRepliesEnabled={false}
-                MessageStatus={ChatStatusIcon}
-                MessageSystem={(props) => messageSystemCustom(props)}
-                MessageAvatar={(props) => (
-                  <CustomMessageAvatar
-                    channelType={channelType}
-                    color={channelData?.data?.anon_user_info_color_code}
-                    emoji={channelData?.data?.anon_user_info_emoji_code}
-                    {...props}
-                  />
-                )}
-                // MessageContent={(props) => <CustomMessageContent {...props} />}
-                messageActions={(props) => defaultActionsAllowed(props)}
-                ReactionList={() => null}>
-                <>
-                  <Header />
-                  <MessageList
-                    tDateTimeParser={testDate}
-                    InlineDateSeparator={CustomInlineDateSeparator}
-                    loading={false}
-                  />
-
-                  <MessageInput Input={InputMessage} />
-                </>
-              </Channel>
-            </Chat>
-          </EasyFollowSystem>
-        ) : null}
+        <EasyFollowSystem valueCallback={checkFollowBack} followButtonAction={followButtonAction}>
+          <Chat client={clients.client} i18nInstance={streami18n}>
+            <Channel
+              channel={channelClient.channel}
+              DateHeader={CustomDateHeader}
+              hasFilePicker={false}
+              ImageUploadPreview={<ImageSendPreview />}
+              keyboardVerticalOffset={0}
+              mutesEnabled={false}
+              reactionsEnabled={false}
+              readEventsEnabled={true}
+              threadRepliesEnabled={false}
+              MessageStatus={ChatStatusIcon}
+              MessageSystem={(props) => messageSystemCustom(props)}
+              MessageAvatar={(props) => (
+                <CustomMessageAvatar
+                  channelType={channelType}
+                  color={channelData?.data?.anon_user_info_color_code}
+                  emoji={channelData?.data?.anon_user_info_emoji_code}
+                  {...props}
+                />
+              )}
+              // MessageContent={(props) => <CustomMessageContent {...props} />}
+              messageActions={(props) => defaultActionsAllowed(props)}
+              ReactionList={() => null}>
+              <>
+                <Header />
+                <MessageList
+                  tDateTimeParser={testDate}
+                  InlineDateSeparator={CustomInlineDateSeparator}
+                  loading={false}
+                />
+                {renderMessageInput()}
+              </>
+            </Channel>
+          </Chat>
+        </EasyFollowSystem>
       </SafeAreaView>
     );
   }

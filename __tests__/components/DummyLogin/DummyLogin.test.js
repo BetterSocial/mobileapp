@@ -4,6 +4,7 @@ import {cleanup, fireEvent, render} from '@testing-library/react-native';
 
 import DummyLogin from '../../../src/components/DevDummyLogin';
 import Store, {Context} from '../../../src/context/Store';
+import {myProfileState} from '../../../src/context/reducers/myProfileReducer';
 import {usersState} from '../../../src/context/reducers/userReducer';
 
 const mockNavigate = jest.fn();
@@ -25,11 +26,18 @@ jest.mock('react-native-config', () => ({
   ENABLE_DEV_ONLY_FEATURE: 'true'
 }));
 
+jest.mock('recoil', () => ({
+  useRecoilState: () => [{}, jest.fn()],
+  atom: jest.fn(),
+  useSetRecoilState: () => jest.fn()
+}));
+
 describe('DummyLogin should run correctly', () => {
   afterEach(cleanup);
   it('should match snapshot', () => {
     const contextValue = {
-      users: [usersState, () => jest.fn()]
+      users: [usersState, () => jest.fn()],
+      profile: [myProfileState, () => jest.fn()]
     };
 
     const reset = jest.fn();

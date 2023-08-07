@@ -2,36 +2,79 @@
 /* eslint-disable import/no-unresolved */
 
 import * as React from 'react';
-import {ScrollView, Text, View} from 'react-native';
+import {Dimensions, FlatList, KeyboardAvoidingView, Platform, StyleSheet, View} from 'react-native';
 
+import AnonymousChatHeader from '../../components/AnonymousChat/AnonymousChatHeader';
+import AnonymousInputMessage from '../../components/Chat/AnonymousInputMessage';
+import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import useAnonymousChatScreenHook from '../../hooks/screen/useAnonymousChatScreenHook';
-import {Button} from '../../components/Button';
+import {colors} from '../../utils/colors';
+
+const {height} = Dimensions.get('window');
 
 const SampleChatScreen = () => {
-  const {chats, goBackFromChatScreen, goToChatInfoScreen, sendChat} = useAnonymousChatScreenHook();
+  const {selectedChannel, chats, goBackFromChatScreen, goToChatInfoScreen, sendChat} =
+    useAnonymousChatScreenHook();
+  const styles = StyleSheet.create({
+    keyboardAvoidingView: {
+      flex: 1,
+      backgroundColor: colors.white
+    },
+    container: {
+      display: 'flex',
+      flexDirection: 'column',
+      height: height - 85
+    },
+    chatContainer: {
+      display: 'flex',
+      height: '100%',
+      marginBottom: 72
+    },
+    inputContainer: {
+      backgroundColor: colors.white,
+      position: 'absolute',
+      bottom: 0,
+      // height: 50,
+      left: 0,
+      right: 0,
+      zIndex: 100,
+      padding: 8,
+      paddingBottom: 16,
+      borderTopColor: colors.lightgrey,
+      borderTopWidth: 1
+    }
+  });
+
+  const renderChatItem = React.useCallback(({item, index}) => {
+    return <BaseChatItem item={item} index={index} />;
+  }, []);
 
   return (
-    <View>
-      <Button onPress={goBackFromChatScreen}>Back</Button>
-      <Button onPress={goToChatInfoScreen}>To Chat Info</Button>
-      <Button onPress={() => sendChat(undefined)}>Send chat</Button>
-      <Text style={{paddingBottom: 16}}>SampleChatScreen</Text>
-      <ScrollView>
-        {chats?.map((item, index) => {
-          return (
-            <View key={index}>
-              <View style={{borderBottomColor: 'black', borderBottomWidth: 1}} />
-              <Text>{`${item?.id}`}</Text>
-              <Text>{`${item?.user?.isMe ? 'You' : item?.user?.username}: ${item?.message}`}</Text>
-              <Text>{item?.updatedAt}</Text>
-              <Text>{`Chat Type: ${item?.type}`}</Text>
-              <Text>{`Status: ${item?.status}`}</Text>
-              <View style={{borderBottomColor: 'black', borderBottomWidth: 1}} />
-            </View>
-          );
-        })}
-      </ScrollView>
-    </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.keyboardAvoidingView}
+      keyboardVerticalOffset={-500}>
+      <AnonymousChatHeader
+        onAvatarPress={goToChatInfoScreen}
+        onBackPress={goBackFromChatScreen}
+        onThreeDotPress={goToChatInfoScreen}
+        avatar={selectedChannel?.channelPicture}
+        user={selectedChannel?.name}
+      />
+      <FlatList
+        style={styles.chatContainer}
+        data={chats}
+        inverted={true}
+        initialNumToRender={20}
+        alwaysBounceVertical={false}
+        bounces={false}
+        keyExtractor={(item, index) => item?.id || index.toString()}
+        renderItem={renderChatItem}
+      />
+      <View style={styles.inputContainer}>
+        <AnonymousInputMessage onSendButtonClicked={sendChat} />
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 

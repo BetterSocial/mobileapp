@@ -8,7 +8,9 @@ const TABLE_NAME = UserSchema.getTableName();
 class MigrationVersion2 implements Migration {
   up = async (db: SQLiteDatabase): Promise<void> => {
     const upQuery = `CREATE TABLE IF NOT EXISTS ${TABLE_NAME} (
-      user_id UUID PRIMARY KEY NOT NULL DEFAULT (UUID()),
+      id UUID PRIMARY KEY NOT NULL,
+      channel_id UUID NOT NULL,
+      user_id UUID NOT NULL,
       username TEXT NOT NULL,
       country_code TEXT,
       created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,

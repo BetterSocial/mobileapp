@@ -41,6 +41,10 @@ jest.mock('react-native-safe-area-context', () => {
   };
 });
 
+jest.mock('@react-native-clipboard/clipboard', () => ({
+  setString: jest.fn()
+}));
+
 describe('PDP page should run correctly', () => {
   const props = {
     route: {

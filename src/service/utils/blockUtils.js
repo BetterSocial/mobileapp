@@ -1,6 +1,6 @@
 import Toast from 'react-native-simple-toast';
 
-import {blockAnonymous, blockDomain, blockUser} from '../blocking';
+import {blockAnonymous, blockDomain, blockUser, blockUserFromAnonChat} from '../blocking';
 
 const handleMessage = (reason = [], message = '', type = 'user') => {
   let successMessage = `The ${type} was blocked successfully. \nThanks for making BetterSocial better!`;
@@ -59,7 +59,24 @@ const uiBlockDomain = async (domainId, reason, message, source) => {
   }
 };
 
+const uiBlockAnonymousUserFromGroupInfo = async (userId, source, reason, message, callback) => {
+  const data = {
+    userId,
+    source,
+    reason,
+    message
+  };
+  try {
+    await blockUserFromAnonChat(data);
+    Toast.show(handleMessage(reason, message), Toast.LONG);
+    if (callback) callback();
+  } catch (e) {
+    Toast.show(String(e.message), Toast.LONG);
+  }
+};
+
 export default {
+  uiBlockAnonymousUserFromGroupInfo,
   uiBlockPostAnonymous,
   uiBlockUser,
   uiBlockDomain

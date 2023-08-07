@@ -35,6 +35,7 @@ import Topics from '../screens/Topics';
 import WebsocketResearchScreen from '../screens/WebsocketResearchScreen';
 import WhotoFollow from '../screens/WhotoFollow';
 import api from '../service/config';
+import useCoreChatSystemHook from '../hooks/core/useCoreChatSystemHook';
 import {
   AddParticipant,
   ChannelScreen,
@@ -56,7 +57,7 @@ import {useInitialStartup} from '../hooks/useInitialStartup';
 const RootStack = createNativeStackNavigator();
 
 export const RootNavigator = () => {
-  // useCoreChatSystemHook();
+  useCoreChatSystemHook();
 
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const [following, setFollowing] = useRecoilState(followersOrFollowingAtom);

@@ -22,7 +22,8 @@ class BlockComponent extends React.Component {
       userId: '',
       username: '',
       reason: [],
-      isAnonymous: false
+      isAnonymous: false,
+      isAnonymousUserFromGroupInfo: false
     };
 
     this.refBlockPostAnonymous = React.createRef();
@@ -70,15 +71,25 @@ class BlockComponent extends React.Component {
   openBlockComponent(value) {
     if (value.actor.id === this.state.myId) {
       Toast.show("Can't Block yourself", Toast.LONG);
-    } else {
+      return;
+    }
+
+    if (value.isAnonymousUserFromGroupInfo) {
+      this.setState({isAnonymousUserFromGroupInfo: true});
       this.setDataToState(value);
-      if (value.anonimity) {
-        this.setState({isAnonymous: true});
+      this.refInteractionManaged.current = InteractionManager.runAfterInteractions(() => {
         this.refBlockPostAnonymous.current.open();
-      } else {
-        this.setState({isAnonymous: false});
-        this.refBlockUser.current.open();
-      }
+      });
+      return;
+    }
+
+    this.setDataToState(value);
+    if (value.anonimity) {
+      this.setState({isAnonymous: true});
+      this.refBlockPostAnonymous.current.open();
+    } else {
+      this.setState({isAnonymous: false});
+      this.refBlockUser.current.open();
     }
   }
 
@@ -112,6 +123,12 @@ class BlockComponent extends React.Component {
         this.refReportPostAnonymous.current.open();
       });
     } else {
+      if (this.state.isAnonymousUserFromGroupInfo) {
+        this.__blockAnonymousUserFromGroupInfo();
+        this.refBlockPostAnonymous.current.close();
+        return;
+      }
+
       this.__blockPostAnonymous();
     }
     this.refBlockPostAnonymous.current.close();
@@ -130,6 +147,7 @@ class BlockComponent extends React.Component {
 
   __onSkipOnlyBlock() {
     this.refReportUser.current.close();
+    if (this.state.isAnonymousUserFromGroupInfo) return this.__blockAnonymousUserFromGroupInfo();
     if (this.state.isAnonymous) return this.__blockPostAnonymous();
     return this.__blockUser();
   }
@@ -145,6 +163,7 @@ class BlockComponent extends React.Component {
       this.refBlockUser.current.close();
       this.refBlockPostAnonymous.current.close();
 
+      if (this.state.isAnonymousUserFromGroupInfo) return this.__blockAnonymousUserFromGroupInfo();
       if (this.state.isAnonymous) return this.__blockPostAnonymous();
       return this.__blockUser();
     }, 500);
@@ -174,6 +193,21 @@ class BlockComponent extends React.Component {
     blockUtils.uiBlockPostAnonymous(
       postId,
       this.props.screen || 'screen_feed',
+      reason,
+      messageReport,
+      () => {
+        if (this.props.refreshAnonymous) {
+          this.props.refreshAnonymous(this.state.postId);
+        }
+      }
+    );
+  }
+
+  __blockAnonymousUserFromGroupInfo() {
+    const {userId, messageReport, reason} = this.state;
+    blockUtils.uiBlockAnonymousUserFromGroupInfo(
+      userId,
+      this.props.screen || 'group_info',
       reason,
       messageReport,
       () => {
