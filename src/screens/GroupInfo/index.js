@@ -14,21 +14,24 @@ import {
   View
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import Popover from 'react-native-popover-view';
 
 import AnonymousIcon from '../ChannelListScreen/elements/components/AnonymousIcon';
+import BlockComponent from '../../components/BlockComponent';
 import DefaultChatGroupProfilePicture from '../../assets/images/default-chat-group-picture.png';
 import ExitGroup from '../../assets/images/exit-group.png';
 import Header from '../../components/Header';
 // eslint-disable-next-line camelcase
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
+import ModalAction from './elements/ModalAction';
+import ModalActionAnonymous from './elements/ModalActionAnonymous';
 import ReportGroup from '../../assets/images/report.png';
 import useGroupInfo from './hooks/useGroupInfo';
+import {CHANNEL_TYPE_ANONYMOUS} from '../../utils/constants';
+import {COLORS} from '../../utils/theme';
 import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
 import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
-import {COLORS} from '../../utils/theme';
 
 const GroupInfo = () => {
   const navigation = useNavigation();
@@ -53,9 +56,12 @@ const GroupInfo = () => {
     channelState,
     setUsername,
     onReportGroup,
-    showPopover,
-    setShowPopover,
-    handleOpenPopOver
+    isAnonymousModalOpen,
+    blockModalRef,
+    handleCloseSelectUser,
+    handlePressContact,
+    selectedUser,
+    openModal
   } = useGroupInfo();
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -148,7 +154,8 @@ const GroupInfo = () => {
   };
 
   const getAnonymousImage = (name) => {
-    if (name === 'AnonymousUser') {
+    console.log('name', name);
+    if (name?.indexOf('Anonymous') > -1) {
       return (
         <View style={{marginRight: 17}}>
           <AnonymousIcon
@@ -224,44 +231,19 @@ const GroupInfo = () => {
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({item, index}) => (
                     <View style={{height: normalize(72)}}>
-                      <Popover
-                        isVisible={showPopover}
-                        onRequestClose={() => setShowPopover(false)}
-                        from={
-                          <View>
-                            <ProfileContact
-                              key={index}
-                              item={item}
-                              onPress={() => handleOpenPopOver(item)}
-                              fullname={getProfileName(item.user.name)}
-                              photo={item.user.image}
-                              showArrow={channelState?.channel.data.type === 'group'}
-                              userId={profile.myProfile.user_id}
-                              ImageComponent={getAnonymousImage(item?.user?.name)}
-                            />
-                          </View>
-                        }>
-                        <View style={styles.modalActUser}>
-                          <Text
-                            style={styles.textActUser}
-                            onPress={() => alertRemoveUser('message')}>
-                            Message {item.user.name}
-                          </Text>
-                          <Text
-                            style={styles.textActUser}
-                            onPress={() => alertRemoveUser('message')}>
-                            Message Anonymously
-                          </Text>
-                          <Text
-                            style={styles.textActUser}
-                            onPress={() => alertRemoveUser('remove')}>
-                            Remove from Group
-                          </Text>
-                          <Text style={styles.textActUser} onPress={() => alertRemoveUser('view')}>
-                            View Profile
-                          </Text>
-                        </View>
-                      </Popover>
+                      <ProfileContact
+                        key={index}
+                        item={item}
+                        onPress={() => handlePressContact(item)}
+                        fullname={getProfileName(item.user.name)}
+                        photo={item.user.image}
+                        showArrow={
+                          channelState?.channel.data.type === 'group' ||
+                          channelState?.channel?.data?.channel_type === CHANNEL_TYPE_ANONYMOUS
+                        }
+                        userId={profile.myProfile.user_id}
+                        ImageComponent={getAnonymousImage(item?.user?.name)}
+                      />
                     </View>
                   )}
                 />
@@ -302,6 +284,22 @@ const GroupInfo = () => {
             <Loading visible={isLoadingMembers} />
           </View>
           <Loading visible={isUploadingImage} />
+          <ModalAction
+            name={selectedUser?.user?.name}
+            isOpen={openModal}
+            onCloseModal={handleCloseSelectUser}
+            selectedUser={selectedUser}
+            onPress={alertRemoveUser}
+          />
+          <ModalActionAnonymous
+            name={selectedUser?.user?.anonymousUsername}
+            isOpen={isAnonymousModalOpen}
+            onCloseModal={handleCloseSelectUser}
+            selectedUser={selectedUser}
+            onPress={alertRemoveUser}
+          />
+
+          <BlockComponent ref={blockModalRef} screen="group_info" />
         </>
       )}
     </SafeAreaView>

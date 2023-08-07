@@ -54,3 +54,13 @@ export const unblockUserApi = async (data) => {
     return e.response || '';
   }
 };
+
+export const blockUserFromAnonChat = async (data) => {
+  try {
+    const resApi = await api.post('/users/block-anon-user-from-chat', data);
+    return resApi.data;
+  } catch (error) {
+    crashlytics().recordError(new Error(error));
+    return error.response.data;
+  }
+};

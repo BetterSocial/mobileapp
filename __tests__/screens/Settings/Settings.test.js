@@ -1,12 +1,16 @@
 import React from 'react';
 import {act, fireEvent, render} from '@testing-library/react-native';
+
+import * as useSetting from '../../../src/screens/Settings/hooks/useSettings';
 import Settings from '../../../src/screens/Settings';
 import Store from '../../../src/context/Store';
-import * as useSetting from '../../../src/screens/Settings/hooks/useSettings';
 
 const mockLogScreenView = jest.fn();
 const mockGoBack = jest.fn();
 const mockNavigate = jest.fn();
+
+jest.useFakeTimers();
+
 jest.mock('@react-native-firebase/analytics', () => () => ({
   logEvent: jest.fn(),
   logLogin: jest.fn(),
@@ -27,6 +31,14 @@ jest.mock('../../../src/hooks/useAfterInteractions', () => ({
     transitionRef: {current: {animateNextTransition: jest.fn()}},
     interactionsComplete: true
   })
+}));
+
+// mock useRecoilValue
+jest.mock('recoil', () => ({
+  useRecoilValue: jest.fn(() => 0),
+  atom: jest.fn(() => 0),
+  useSetRecoilState: jest.fn(() => 0),
+  useRecoilState: jest.fn(() => [0, jest.fn()])
 }));
 
 describe('Settings page should run correctly', () => {

@@ -1,4 +1,4 @@
-const {atom} = require('recoil');
+import {atom} from 'recoil';
 
 const localDatabaseAtom = atom({
   key: 'localDatabaseAtom',
