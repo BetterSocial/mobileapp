@@ -95,11 +95,8 @@ const createChildComment = async (
 const createChildCommentV3 = async (
   text,
   reactionId,
-  useridFeed,
   sendPostNotif,
-  postMaker,
   activityId,
-  postTitle,
   isAnonymous,
   anonUser
 ) => {

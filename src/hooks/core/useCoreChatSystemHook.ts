@@ -169,14 +169,12 @@ const useCoreChatSystemHook = () => {
     }
   };
 
-  const unreadCountProcessor = (postNotification: AnonymousPostNotification) => {
+  const helperDetermineIsMyChildComment = (postNotification: AnonymousPostNotification) => {
     let latestComment: Comment = null;
     let latestCommentLatestChild: LatestChildrenComment = null;
+    const postHasComment = postNotification?.comments?.length > 0;
     let isMyComment = false;
     let isMyChildComment = false;
-
-    const isMyPost = postNotification?.isOwnPost;
-    const postHasComment = postNotification?.comments?.length > 0;
 
     if (postHasComment) {
       latestComment = postNotification?.comments[0];
@@ -189,6 +187,18 @@ const useCoreChatSystemHook = () => {
           latestCommentLatestChildUserId === anonProfileId;
       }
     }
+
+    return {
+      isMyComment,
+      isMyChildComment
+    };
+  };
+
+  const unreadCountProcessor = (postNotification: AnonymousPostNotification) => {
+    const isMyPost = postNotification?.isOwnPost;
+    const postHasComment = postNotification?.comments?.length > 0;
+
+    const {isMyComment, isMyChildComment} = helperDetermineIsMyChildComment(postNotification);
 
     if (isMyPost && postHasComment) {
       // Return 1 if the post is my post and has comment from other user(PoN2)

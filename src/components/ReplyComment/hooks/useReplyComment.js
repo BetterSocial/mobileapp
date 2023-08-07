@@ -234,11 +234,8 @@ const useReplyComment = ({
         const data = await createChildCommentV3(
           textComment,
           item.id,
-          item.user.id,
           sendPostNotif,
-          dataFeed?.actor?.id,
           dataFeed?.id ?? dataFeed?.reaction_id,
-          dataFeed?.message,
           isAnonimity,
           anonimityData
         );

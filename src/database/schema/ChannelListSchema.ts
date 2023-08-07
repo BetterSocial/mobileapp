@@ -318,7 +318,7 @@ class ChannelList implements BaseDbSchema {
   static fromAnonymousPostNotificationAPI(data: AnonymousPostNotification): ChannelList {
     return new ChannelList({
       id: data?.activity_id,
-      channelPicture: '',
+      channelPicture: data?.postMaker?.data?.profile_pic_url || '',
       name: data?.titlePost,
       description: data?.titlePost,
       unreadCount: 0,

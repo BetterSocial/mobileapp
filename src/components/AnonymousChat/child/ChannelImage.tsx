@@ -58,7 +58,8 @@ const ChannelImage = ({
     postMaker?.anon_user_info_emoji_code !== null &&
     postMaker?.anon_user_info_emoji_code !== undefined;
 
-  const isOldPostMakerAnonymous = postMaker?.emoji_code !== null;
+  const isOldPostMakerAnonymous =
+    postMaker?.emoji_code !== null && postMaker?.emoji_code !== undefined;
 
   const renderMyPostNotificationSubImage = () => {
     if (!isCommentExists)

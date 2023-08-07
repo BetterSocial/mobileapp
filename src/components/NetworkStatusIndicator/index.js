@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
+import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 
 import {COLORS} from '../../utils/theme';
 
@@ -12,6 +12,7 @@ import {COLORS} from '../../utils/theme';
 const NetworkStatusIndicator = ({hide = false}) => {
   const [isOnline, setIsOnline] = React.useState(true);
   const removeTimeout = React.useRef(null);
+  const isHidden = hide || true;
 
   React.useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
@@ -31,17 +32,17 @@ const NetworkStatusIndicator = ({hide = false}) => {
   }, []);
 
   // eslint-disable-next-line no-constant-condition
-  if (hide || true) return <View testID="isHide" />;
+  if (isHidden) return <View testID="isHide" />;
 
-  // if (!isOnline)
-  //   return (
-  //     <View testID="internet-not-available" style={styles.container}>
-  //       <View style={styles.bottomContainer}>
-  //         <ActivityIndicator color={COLORS.white} size={14} />
-  //         <Text style={styles.text}>No Internet Connection</Text>
-  //       </View>
-  //     </View>
-  //   );
+  if (!isOnline)
+    return (
+      <View testID="internet-not-available" style={styles.container}>
+        <View style={styles.bottomContainer}>
+          <ActivityIndicator color={COLORS.white} size={14} />
+          <Text style={styles.text}>No Internet Connection</Text>
+        </View>
+      </View>
+    );
 
   return <></>;
 };

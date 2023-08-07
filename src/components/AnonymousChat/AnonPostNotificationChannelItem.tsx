@@ -28,22 +28,21 @@ const AnonPostNotificationChannelItem: (props: MessageChannelItemProps) => React
   let level1FirstComment: Reaction = null;
   let level2FirstComment: Reaction = null;
 
-  if (postNotifItem?.rawJson?.comments?.length > 0) {
-    if (postNotifItem?.rawJson?.comments[0]?.reaction?.latest_children?.comment?.length > 0) {
-      const level1 = postNotifItem?.rawJson?.comments[0]?.reaction?.latest_children?.comment[0];
-      level1FirstComment = level1;
+  const helperDeterminePostType = (
+    isOwnPost: boolean,
+    isOwningReaction: boolean
+  ): BaseChannelItemTypeProps => {
+    let type = BaseChannelItemTypeProps.ANON_POST_NOTIFICATION;
+    if (isOwnPost && isOwningReaction)
+      type = BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_I_COMMENTED;
+    else if (isOwnPost) type = BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION;
+    else if (isOwningReaction) type = BaseChannelItemTypeProps.ANON_POST_NOTIFICATION_I_COMMENTED;
 
-      if (level1?.latest_children?.comment?.length > 0) {
-        level2FirstComment = level1?.latest_children?.comment[0];
-      }
-    }
+    return type;
+  };
 
-    firstComment = postNotifItem?.rawJson?.comments[0];
+  const helperDetermineCommenterName = () => {
     const anonymousCommenterName = firstComment?.reaction?.data?.anon_user_info_emoji_name;
-    anonymousPostNotificationUserInfo = {
-      ...firstComment?.reaction?.data
-    };
-
     const firstCommenterId = firstComment?.reaction?.user_id;
     const isFirstCommenterMe =
       firstCommenterId === signedProfileId || firstCommenterId === anonProfileId;
@@ -58,6 +57,26 @@ const AnonPostNotificationChannelItem: (props: MessageChannelItemProps) => React
 
     if (isFirstCommenterMe) commenterName = 'You';
 
+    return commenterName;
+  };
+
+  if (postNotifItem?.rawJson?.comments?.length > 0) {
+    if (postNotifItem?.rawJson?.comments[0]?.reaction?.latest_children?.comment?.length > 0) {
+      const level1 = postNotifItem?.rawJson?.comments[0]?.reaction?.latest_children?.comment[0];
+      level1FirstComment = level1;
+
+      if (level1?.latest_children?.comment?.length > 0) {
+        level2FirstComment = level1?.latest_children?.comment[0];
+      }
+    }
+
+    firstComment = postNotifItem?.rawJson?.comments[0];
+    anonymousPostNotificationUserInfo = {
+      ...firstComment?.reaction?.data
+    };
+
+    helperDetermineCommenterName();
+
     postNotificationMessageText =
       level2FirstComment?.data?.text ||
       level1FirstComment?.data?.text ||
@@ -68,12 +87,7 @@ const AnonPostNotificationChannelItem: (props: MessageChannelItemProps) => React
   const isOwnPost = postNotifItem?.rawJson?.isOwnPost;
   const isOwnSignedPost = item?.rawJson?.isOwnSignedPost;
 
-  let type = BaseChannelItemTypeProps.ANON_POST_NOTIFICATION;
-  if (isOwnPost && firstComment?.reaction?.isOwningReaction)
-    type = BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_I_COMMENTED;
-  else if (isOwnPost) type = BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION;
-  else if (firstComment?.reaction?.isOwningReaction)
-    type = BaseChannelItemTypeProps.ANON_POST_NOTIFICATION_I_COMMENTED;
+  const type = helperDeterminePostType(isOwnPost, firstComment?.reaction?.isOwningReaction);
 
   return (
     <BaseChannelItem
