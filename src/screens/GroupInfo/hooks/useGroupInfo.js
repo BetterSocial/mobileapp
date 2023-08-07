@@ -7,7 +7,6 @@ import {openComposer} from 'react-native-email-link';
 import {useNavigation} from '@react-navigation/core';
 
 import {Context} from '../../../context';
-import {blockUser, blockUserFromAnonChat} from '../../../service/blocking';
 import {checkUserBlock} from '../../../service/profile';
 import {getChatName} from '../../../utils/string/StringUtils';
 import {requestExternalStoragePermission} from '../../../utils/permission';
@@ -17,7 +16,6 @@ import {uploadFile} from '../../../service/file';
 
 const useGroupInfo = () => {
   const [groupChatState, groupPatchDispatch] = React.useContext(Context).groupChat;
-  //  const [client] = React.useContext(Context).client
   const navigation = useNavigation();
   const {participants, asset} = groupChatState;
   const [client] = React.useContext(Context).client;
@@ -370,6 +368,8 @@ const useGroupInfo = () => {
   };
 
   const handlePressContact = async (item) => {
+    if (item.user_id === profile.myProfile.user_id) return true;
+
     if (channelState?.channel.data.type === 'group') {
       await handleSelectUser(item);
       return true;
