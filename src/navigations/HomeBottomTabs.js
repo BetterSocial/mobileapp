@@ -13,11 +13,9 @@ import MemoHome from '../assets/icon/Home';
 import MemoNews from '../assets/icon/News';
 import MemoProfileIcon from '../assets/icon/Profile';
 import UniversalLink from '../configs/UniversalLink';
-import WebsocketResearchScreen from '../screens/WebsocketResearchScreen';
 import profileAtom from '../atom/profileAtom';
 import useRootChannelListHook from '../hooks/screen/useRootChannelListHook';
-import {ChannelListScreen, FeedScreen, NewsScreen, ProfileScreen} from '../screens';
-import {Context} from '../context';
+import {FeedScreen, NewsScreen, ProfileScreen} from '../screens';
 import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
 import {colors} from '../utils/colors';
 import {fcmTokenService} from '../service/users';
@@ -33,6 +31,31 @@ function HomeBottomTabs({navigation}) {
   const {totalUnreadCount} = useRootChannelListHook();
 
   let isOpenNotification = false;
+
+  const helperNavigationResetWithData = (screenData) => {
+    setTimeout(() => {
+      if (!isOpenNotification) {
+        isOpenNotification = true;
+        navigation.reset({
+          index: 1,
+          routes: [
+            {
+              name: 'AuthenticatedStack',
+              params: {
+                screen: 'HomeTabs',
+                params: {
+                  screen: 'ChannelList'
+                }
+              }
+            },
+            {
+              ...screenData
+            }
+          ]
+        });
+      }
+    }, 500);
+  };
 
   const handleNotification = async (notification) => {
     if (notification.data.type === 'feed' || notification.data.type === 'reaction') {
@@ -51,34 +74,15 @@ function HomeBottomTabs({navigation}) {
       });
     }
     if (notification.data.type === 'message.new') {
-      setTimeout(() => {
-        if (!isOpenNotification) {
-          isOpenNotification = true;
-          navigation.reset({
-            index: 1,
-            routes: [
-              {
-                name: 'AuthenticatedStack',
-                params: {
-                  screen: 'HomeTabs',
-                  params: {
-                    screen: 'ChannelList'
-                  }
-                }
-              },
-              {
-                name: 'AuthenticatedStack',
-                params: {
-                  screen: 'ChatDetailPage',
-                  params: {
-                    data: notification.data
-                  }
-                }
-              }
-            ]
-          });
+      helperNavigationResetWithData({
+        name: 'AuthenticatedStack',
+        params: {
+          screen: 'ChatDetailPage',
+          params: {
+            data: notification.data
+          }
         }
-      }, 500);
+      });
     }
   };
 
@@ -186,6 +190,11 @@ function HomeBottomTabs({navigation}) {
     createChannel();
     requestPermission();
     updateProfileAtomId();
+
+    messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+      console.log('Message handled in the background!', remoteMessage);
+      handlePushNotif(remoteMessage);
+    });
 
     const unsubscribe = messaging().onMessage((remoteMessage) => {
       // eslint-disable-next-line no-unused-expressions
