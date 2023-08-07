@@ -20,7 +20,7 @@ import {useNavigation} from '@react-navigation/core';
 
 import BottomSheetChooseImage from './elements/BottomSheetChooseImage';
 import MemoOnboardingChangeProfilePlusIcon from '../../assets/icon/OnboardingChangeProfilePlusIcon';
-import WarningIcon from '../../../assets/icons/warning-circle-blue.svg';
+import WarningIcon from '../../assets/icon-svg/warning_circle_blue.svg';
 import StringConstant from '../../utils/string/StringConstant';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
@@ -311,16 +311,14 @@ const ChooseUsername = () => {
                   autoCapitalize="sentences"
                   autoCorrect={false}
                   style={styles.input}
-                  autoFocus
+                  autoFocus={false}
                 />
                 {messageTypeFetch(typeFetch, formatUsernameString())}
               </View>
             </View>
             <View style={styles.constainerInfo}>
               <View style={styles.parentIcon}>
-                <View style={styles.containerIcon}>
-                  <WarningIcon />
-                </View>
+                <WarningIcon />
               </View>
               <View style={styles.parentInfo}>
                 <Text style={styles.infoText}>
@@ -404,24 +402,12 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   constainerInfo: {
-    backgroundColor: 'rgba(85, 194, 255, 0.3)',
+    backgroundColor: 'rgba(47, 128, 237, 0.2)',
     flexDirection: 'row',
     borderRadius: 8,
     width: '100%',
     paddingHorizontal: 7,
     paddingVertical: 8
-  },
-  containerIcon: {
-    width: 25,
-    height: 25,
-    borderRadius: 13,
-    backgroundColor: 'rgba(47,128,237,0.3)',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 7,
-    marginTop: 3
-    // marginRight: 7
   },
   infoText: {
     fontFamily: 'Inter-Regular',
