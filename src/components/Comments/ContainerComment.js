@@ -25,7 +25,6 @@ const ContainerComment = ({
   refreshComment,
   navigateToReplyView,
   findCommentAndUpdate,
-  updateParentPost = () => {},
   contextSource = CONTEXT_SOURCE.FEEDS,
   itemParent
 }) => {

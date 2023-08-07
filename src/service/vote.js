@@ -19,7 +19,7 @@ const saveCacheVote = () => {
   saveToCache(FIRST_VOTE, {isVote: true});
 };
 
-export const voteCommentV2 = async (data, callback) => {
+export const voteCommentV2 = async (data) => {
   try {
     const resApi = await api.post('/feeds/comment-vote-v2', data);
     return resApi.data;

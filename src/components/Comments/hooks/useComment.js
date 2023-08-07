@@ -1,5 +1,5 @@
 import React from 'react';
-import {iVoteComment, voteComment, voteCommentV2} from '../../../service/vote';
+import {iVoteComment, voteCommentV2} from '../../../service/vote';
 
 const useComment = ({comment, findCommentAndUpdate, level, updateVote}) => {
   const [totalVote, setTotalVote] = React.useState(
