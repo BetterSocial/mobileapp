@@ -56,9 +56,11 @@ const ReadMore = (props) => {
         </TouchableOpacity>
       ) : null}
       {!isFinishSetLayout ? (
-        <Text style={props.textStyle} testID="notFinishLayout" onTextLayout={handleLayoutText}>
-          {props.text}{' '}
-        </Text>
+        <TouchableOpacity testID="finishLayout" onPress={props.onPress}>
+          <Text style={props.textStyle} testID="notFinishLayout" onTextLayout={handleLayoutText}>
+            {props.text}{' '}
+          </Text>
+        </TouchableOpacity>
       ) : null}
     </View>
   );
