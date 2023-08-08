@@ -50,21 +50,20 @@ const CopyLink: React.FC<Omit<LinkProps, 'prompt'>> = ({username}) => {
 
 const InstagramButton = () => {
   const shareInstagramStory = async () => {
-    const shareOptions = {
-      backgroundImage:
-        'https://img.freepik.com/free-vector/watercolor-instagram-story-wallpaper-vector-minimal-social-media-background_53876-144473.jpg',
-      stickerImage:
-        'https://img.freepik.com/free-vector/watercolor-instagram-story-wallpaper-vector-minimal-social-media-background_53876-144473.jpg',
-      backgroundBottomColor: '#fefefe',
-      backgroundTopColor: '#906df4',
-      social: Share.Social.INSTAGRAM_STORIES
-    };
-
-    try {
-      await Share.shareSingle(shareOptions);
-    } catch (error) {
-      console.error('Error =>', error);
-    }
+    // const shareOptions = {
+    //   backgroundImage:
+    //     'https://img.freepik.com/free-vector/watercolor-instagram-story-wallpaper-vector-minimal-social-media-background_53876-144473.jpg',
+    //   stickerImage:
+    //     'https://img.freepik.com/free-vector/watercolor-instagram-story-wallpaper-vector-minimal-social-media-background_53876-144473.jpg',
+    //   backgroundBottomColor: '#fefefe',
+    //   backgroundTopColor: '#906df4',
+    //   social: Share.Social.INSTAGRAM_STORIES
+    // };
+    // try {
+    //   await Share.shareSingle(shareOptions);
+    // } catch (error) {
+    //   console.error('Error =>', error);
+    // }
   };
 
   return (
