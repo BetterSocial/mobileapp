@@ -21,6 +21,7 @@ import {setFeedByIndex, setTimer} from '../../context/actions/feeds';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {viewTimePost} from '../../service/post';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import {normalizeFontSizeByWidth} from '../../utils/fonts';
 
 let lastDragY = 0;
 
@@ -241,7 +242,7 @@ const FeedScreen = (props) => {
       />
       <TiktokScroll
         ref={listRef}
-        contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT}
+        contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT + normalizeFontSizeByWidth(4)}
         data={feeds}
         onEndReach={onEndReach}
         onRefresh={onRefresh}
