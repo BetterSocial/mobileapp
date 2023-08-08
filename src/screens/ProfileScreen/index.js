@@ -19,6 +19,7 @@ import {showMessage} from 'react-native-flash-message';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {useNavigation} from '@react-navigation/core';
 
+import Config from 'react-native-config';
 import AnonymousTab from './elements/AnonymousTab';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BioAndDMSetting from './elements/BioAndDMSetting';
@@ -77,6 +78,8 @@ import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 const {height, width} = Dimensions.get('screen');
 
+const isShowKarma = Config.DOPPLER_ENVIRONMENT === 'dev';
+
 const Header = (props) => {
   const {
     headerHeightRef,
@@ -113,30 +116,32 @@ const Header = (props) => {
                 goToFollowings(dataMain.user_id, dataMain.username)
               }
             />
-            {/* <View style={{flexDirection: 'row'}}>
-              <KarmaScore score={86} />
-              <Tooltip
-                contentStyle={{borderRadius: 8, background: '#FFF'}}
-                arrowStyle={{marginLeft: 2}}
-                showChildInTooltip={false}
-                isVisible={karmaTooltip}
-                useInteractionManager={true}
-                topAdjustment={-20}
-                content={
-                  <View style={{padding: 5}}>
-                    <Text style={styles.tooltipText}>
-                      Your Karma is based on upvotes, downvotes and blocks. The higher your Karma,
-                      the more visibility for your posts.
-                    </Text>
-                  </View>
-                }
-                placement="bottom"
-                onClose={() => setKarmaTooltip(false)}>
-                <Pressable onPress={() => setKarmaTooltip(true)}>
-                  <WarningCircleOutline height={15} width={15} style={{marginLeft: 5}} />
-                </Pressable>
-              </Tooltip>
-            </View> */}
+            {isShowKarma ? (
+              <View style={{flexDirection: 'row'}}>
+                <KarmaScore score={86} />
+                <Tooltip
+                  contentStyle={{borderRadius: 8, background: '#FFF'}}
+                  arrowStyle={{marginLeft: 2}}
+                  showChildInTooltip={false}
+                  isVisible={karmaTooltip}
+                  useInteractionManager={true}
+                  topAdjustment={-20}
+                  content={
+                    <View style={{padding: 5}}>
+                      <Text style={styles.tooltipText}>
+                        Your Karma is based on upvotes, downvotes and blocks. The higher your Karma,
+                        the more visibility for your posts.
+                      </Text>
+                    </View>
+                  }
+                  placement="bottom"
+                  onClose={() => setKarmaTooltip(false)}>
+                  <Pressable onPress={() => setKarmaTooltip(true)}>
+                    <WarningCircleOutline height={15} width={15} style={{marginLeft: 5}} />
+                  </Pressable>
+                </Tooltip>
+              </View>
+            ) : null}
           </View>
         </View>
 
