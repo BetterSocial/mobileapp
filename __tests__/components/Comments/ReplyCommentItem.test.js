@@ -167,7 +167,7 @@ describe('ReplyCommentItem should run correctly', () => {
 
   it('downcoteBtn should run correctly', () => {
     const onPress = jest.fn();
-    const spyDownvote = jest.spyOn(serviceVote, 'voteComment');
+    const spyDownvote = jest.spyOn(serviceVote, 'voteCommentV2');
     const refreshComment = jest.fn();
     const {getByTestId} = render(
       <ReplyCommentItem
@@ -190,7 +190,7 @@ describe('ReplyCommentItem should run correctly', () => {
   });
   it('upvoteBtn should run correctly', () => {
     const onPress = jest.fn();
-    const spyDownvote = jest.spyOn(serviceVote, 'voteComment');
+    const spyDownvote = jest.spyOn(serviceVote, 'voteCommentV2');
     const refreshComment = jest.fn();
     const {getByTestId} = render(
       <ReplyCommentItem

@@ -14,7 +14,6 @@ const FeedsPostDetail = (props) => {
   const {feedId, refreshCache} = props.route.params;
   const {feeds} = feedsContext;
   const {navigateToReplyView} = useMainPdp(props);
-
   React.useEffect(() => {
     if (refreshCache && typeof refreshCache === 'function') {
       refreshCache();

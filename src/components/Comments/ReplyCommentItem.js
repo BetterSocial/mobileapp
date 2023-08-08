@@ -17,7 +17,7 @@ import {calculateTime} from '../../utils/time';
 import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
-import {iVoteComment, voteComment} from '../../service/vote';
+import {iVoteComment, voteCommentV2} from '../../service/vote';
 import {removeWhiteSpace} from '../../utils/Utils';
 import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
 import CommentUserName from '../CommentUsername/CommentUsername';
@@ -46,7 +46,6 @@ const ReplyCommentItem = ({
     comment.data.count_upvote - comment.data.count_downvote
   );
   const [statusVote, setStatusVote] = React.useState('');
-
   const onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
       console.log('');
@@ -74,32 +73,29 @@ const ReplyCommentItem = ({
 
   const onUpVote = async () => {
     const dataVote = {
-      activity_id: comment.id,
-      text: comment.data.text,
-      status: 'upvote'
+      reaction_id: comment.id,
+      vote: 'upvote'
     };
     onVote(dataVote);
   };
 
   const onDownVote = async () => {
     const dataVote = {
-      activity_id: comment.id,
-      text: comment.data.text,
-      status: 'downvote'
+      reaction_id: comment.id,
+      vote: 'downvote'
     };
     onVote(dataVote);
   };
   const onVote = async (dataVote) => {
-    const result = await voteComment(dataVote);
+    const result = await voteCommentV2(dataVote);
     if (updateVoteParent && typeof updateVoteParent === 'function') {
-      updateVoteParent(result, dataVote, comment);
+      updateVoteParent();
     }
-    setTotalVote(result.data.data.count_upvote - result.data.data.count_downvote);
+    setTotalVote(result.data.count_upvote - result.data.count_downvote);
     iVote();
     if (refreshComment) refreshComment(result);
     updateComment(result.data.activity_id);
   };
-
   const iVote = async () => {
     const result = await iVoteComment(comment.id);
     if (result.code === 200) {
