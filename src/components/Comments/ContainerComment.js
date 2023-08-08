@@ -72,9 +72,9 @@ const ContainerComment = ({
     );
   };
 
-  const handleUpdateVote = (a, b, c) => {
+  const handleUpdateVote = () => {
     if (updateVote && typeof updateVote === 'function') {
-      updateVote(a, b, c);
+      updateVote();
     }
   };
 
