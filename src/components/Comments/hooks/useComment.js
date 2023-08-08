@@ -1,10 +1,11 @@
 import React from 'react';
 import {iVoteComment, voteCommentV2} from '../../../service/vote';
 
-const useComment = ({comment, findCommentAndUpdate, level, updateVote}) => {
+const useComment = ({comment, level, updateVote}) => {
   const [totalVote, setTotalVote] = React.useState(
     comment.data?.count_upvote - comment.data?.count_downvote
   );
+  console.log({updateVote}, 'nana');
   const [statusVote, setStatusVote] = React.useState('none');
   const onUpVote = async () => {
     if (statusVote === 'upvote') {
@@ -46,9 +47,6 @@ const useComment = ({comment, findCommentAndUpdate, level, updateVote}) => {
   };
   const onVote = async (dataVote) => {
     const result = await voteCommentV2(dataVote);
-    if (findCommentAndUpdate) {
-      findCommentAndUpdate(comment.id, result.data, level);
-    }
     if (updateVote) {
       updateVote(result.data, comment, level);
     }

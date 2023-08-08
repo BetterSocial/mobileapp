@@ -89,7 +89,6 @@ const ReplyCommentItem = ({
     onVote(dataVote);
   };
   const onVote = async (dataVote) => {
-    console.log({dataVote}, 'sempak');
     const result = await voteCommentV2(dataVote);
     if (updateVoteParent && typeof updateVoteParent === 'function') {
       updateVoteParent(result, dataVote, comment);
@@ -145,6 +144,8 @@ const ReplyCommentItem = ({
       onLongPress();
     }
   };
+
+  console.log({comment, totalVote}, 'laki');
 
   return (
     <TouchableOpacity

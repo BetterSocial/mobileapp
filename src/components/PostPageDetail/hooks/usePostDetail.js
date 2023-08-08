@@ -47,6 +47,24 @@ const usePostDetail = () => {
     });
     return newComment;
   };
+
+  const updateVoteChildrenLevel0 = (commentList, dataUpdated) => {
+    console.log({commentList, dataUpdated}, 'suip');
+    // const newComment = commentList.map((myComment) => {
+    //   if (myComment.id === dataUpdated.parent) {
+    //     const newChild = myComment.latest_children.comment.map((child) => {
+    //       if (child.id === dataUpdated.id) {
+    //         return {...child, data: dataUpdated.data};
+    //       }
+    //       return {...child};
+    //     });
+    //     return {...myComment, latest_children: {comment: newChild}};
+    //   }
+    //   return {...myComment};
+    // });
+    // return newComment;
+  };
+
   const calculatedSizeScreen = top + bottom + StatusBar.currentHeight + 170;
 
   const calculationText = (message) => {
@@ -86,7 +104,8 @@ const usePostDetail = () => {
     updateVoteChildrenLevel1,
     calculationText,
     calculatedSizeScreen,
-    calculatePaddingBtm
+    calculatePaddingBtm,
+    updateVoteChildrenLevel0
   };
 };
 

@@ -18,7 +18,6 @@ const ReplyComment = (props) => {
     updateVoteLatestChildren,
     getComment
   } = props.route.params;
-  console.log(props.route.params, 'suli');
   const {level} = props.route.params;
   const {dataFeed} = props.route.params;
   const [feeds, dispatch] = React.useContext(Context).feeds;
@@ -47,6 +46,7 @@ const ReplyComment = (props) => {
         findCommentAndUpdate={findCommentAndUpdate}
         itemParent={itemParent}
         parentComment={parentComment}
+        getComment={getComment}
       />
     </View>
   );

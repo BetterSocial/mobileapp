@@ -2,7 +2,6 @@ import React from 'react';
 import Toast from 'react-native-simple-toast';
 import moment from 'moment';
 import {useNavigation} from '@react-navigation/core';
-
 import StringConstant from '../../../utils/string/StringConstant';
 import useUpdateComment from '../../Comments/hooks/useUpdateComment';
 import {Context} from '../../../context';
@@ -24,6 +23,7 @@ const useReplyComment = ({
   const [newCommentList, setNewCommentList] = React.useState([]);
   const [item, setItem] = React.useState(itemProp);
   const navigation = useNavigation();
+  // const dispatch = useDispatch
   const scrollViewRef = React.useRef(null);
   const {updateComment} = useUpdateComment();
   const [profile] = React.useContext(Context).profile;
@@ -181,9 +181,12 @@ const useReplyComment = ({
   const updateFeed = async (isSort) => {
     try {
       const data = await getFeedDetail(item.activity_id);
+
       handleUpdateFeed(data, isSort);
     } catch (e) {
-      console.log(e);
+      if (__DEV__) {
+        console.log(e);
+      }
     }
   };
   const handleUpdateFeed = (data, isSort) => {
@@ -269,7 +272,6 @@ const useReplyComment = ({
         // setLoadingCMD(false);
       }
     } catch (error) {
-      console.log(error);
       Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
     }
   };

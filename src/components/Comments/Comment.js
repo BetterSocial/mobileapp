@@ -34,7 +34,6 @@ const Comment = ({
   level,
   showLeftConnector = true,
   disableOnTextPress = false,
-  findCommentAndUpdate,
   updateVote,
   onLongPress
 }) => {
@@ -43,7 +42,6 @@ const Comment = ({
   const [yourselfId, setYourselfId] = React.useState('');
   const {totalVote, setTotalVote, statusVote, onUpVote, onDownVote, iVote} = useComment({
     comment,
-    findCommentAndUpdate,
     level,
     updateVote
   });
