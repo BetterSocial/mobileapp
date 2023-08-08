@@ -5,9 +5,9 @@ import {Platform, StyleSheet, Text, TouchableNativeFeedback, View} from 'react-n
 
 import IconPollMine from '../../assets/icon/IconPollMine';
 import IconPollWinnerBadge from '../../assets/icon/IconPollWinnerBadge';
-import usePollOptionMultiple from './hooks/usePollOptionMultiple';
 import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
+import usePollOptionMultiple from './hooks/usePollOptionMultiple';
 
 const PollOptionsMultipleChoice = ({
   item,

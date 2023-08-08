@@ -77,7 +77,6 @@ const InputMessage = () => {
       setText(draftMessage);
     }
   }, []);
-
   return (
     <>
       <View style={styles.container}>
@@ -87,10 +86,13 @@ const InputMessage = () => {
             <MemoIc_Picture width={20} height={20} />
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.btn(!isDisableButton())}
+            style={styles.btn(isDisableButton())}
             disabled={isDisableButton()}
             onPress={handleSendMessage}>
-            <IconSend style={styles.icSendButton} />
+            <IconSend
+              fillBackground={isDisableButton() ? colors.gray1 : colors.bondi_blue}
+              style={styles.icSendButton}
+            />
           </TouchableOpacity>
         </View>
 
@@ -146,8 +148,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.lightgrey
   },
-  btn: (enabled) => ({
-    backgroundColor: enabled ? colors.bondi_blue : colors.gray1,
+  btn: (disable) => ({
+    backgroundColor: disable ? colors.gray1 : colors.bondi_blue,
     borderRadius: 18,
     width: 35,
     height: 35,

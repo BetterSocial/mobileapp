@@ -1,7 +1,8 @@
-import {SQLiteDatabase} from 'react-native-sqlite-storage';
+import {SQLiteDatabase, Transaction} from 'react-native-sqlite-storage';
 
 import BaseDbSchema from './BaseDbSchema';
 import UserSchema from './UserSchema';
+import {InitAnonymousChatDataMember} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 
 class ChannelListMemberSchema implements BaseDbSchema {
   id: string;
@@ -31,7 +32,7 @@ class ChannelListMemberSchema implements BaseDbSchema {
     this.user = user;
   }
 
-  save = async (db: SQLiteDatabase): Promise<void> => {
+  save = async (db: SQLiteDatabase, transaction: Transaction = null): Promise<void> => {
     if (await this.checkIfExist(db)) return;
 
     const insertQuery = `INSERT OR REPLACE INTO ${ChannelListMemberSchema.getTableName()} (
@@ -54,7 +55,22 @@ class ChannelListMemberSchema implements BaseDbSchema {
       this.joinedAt
     ];
 
-    await db.executeSql(insertQuery, insertParams);
+    try {
+      if (transaction) {
+        transaction.executeSql(insertQuery, insertParams);
+      } else {
+        db.executeSql(insertQuery, insertParams);
+      }
+    } catch (e) {
+      console.log('save channellistmember error', e);
+    }
+  };
+
+  saveIfNotExist = async (db: SQLiteDatabase): Promise<void> => {
+    const ifExists = await this.checkIfExist(db);
+    if (ifExists) return;
+
+    this.save(db);
   };
 
   checkIfExist = async (db: SQLiteDatabase): Promise<boolean> => {
@@ -76,15 +92,23 @@ class ChannelListMemberSchema implements BaseDbSchema {
     myAnonymousId: string
   ): Promise<ChannelListMemberSchema[]> {
     const selectQuery = `
-        SELECT *,
+        SELECT A.*,
+            B.user_id as user_schema_user_id,
+            B.channel_id as user_schema_channel_id,
+            B.username,
+            B.country_code,
+            B.profile_picture,
+            B.bio,
+            B.is_banned,
+            B.last_active_at,
             CASE A.user_id 
                 WHEN ? THEN true
                 WHEN ? THEN true
                 ELSE FALSE END AS is_me
         FROM ${ChannelListMemberSchema.getTableName()} A
         INNER JOIN ${UserSchema.getTableName()} B
-        ON A.user_id = B.user_id
-        WHERE channel_id = ?`;
+        ON A.user_id = user_schema_user_id AND A.channel_id = user_schema_channel_id
+        WHERE A.channel_id = ?`;
     const selectParams = [myId, myAnonymousId, channelId];
 
     try {
@@ -112,6 +136,11 @@ class ChannelListMemberSchema implements BaseDbSchema {
     });
   }
 
+  static clearAll = async (db: SQLiteDatabase): Promise<void> => {
+    const query = `DELETE FROM ${ChannelListMemberSchema.getTableName()}`;
+    await db.executeSql(query);
+  };
+
   getAll = (db: SQLiteDatabase): Promise<BaseDbSchema[]> => {
     throw new Error('Method not implemented.');
   };
@@ -125,8 +154,8 @@ class ChannelListMemberSchema implements BaseDbSchema {
   };
 
   static fromWebsocketObject = (
-    channelId: any,
-    messageId: any,
+    channelId: string,
+    messageId: string,
     member: any
   ): ChannelListMemberSchema => {
     return new ChannelListMemberSchema({
@@ -137,6 +166,25 @@ class ChannelListMemberSchema implements BaseDbSchema {
       isBanned: member.banned,
       isShadowBanned: member.shadow_banned,
       joinedAt: member.updated_at,
+      user: null
+    });
+  };
+
+  static fromMessageAnonymousChatAPI = ChannelListMemberSchema.fromWebsocketObject;
+
+  static fromInitAnonymousChatAPI = (
+    channelId: string,
+    messageId: string,
+    member: InitAnonymousChatDataMember
+  ): ChannelListMemberSchema => {
+    return new ChannelListMemberSchema({
+      channelId,
+      id: messageId,
+      userId: member?.user_id,
+      isModerator: false,
+      isBanned: member?.is_banned,
+      isShadowBanned: false,
+      joinedAt: member?.updated_at,
       user: null
     });
   };

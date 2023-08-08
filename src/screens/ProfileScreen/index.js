@@ -1,6 +1,7 @@
 import * as React from 'react';
 import ImagePicker from 'react-native-image-crop-picker';
 import Toast from 'react-native-simple-toast';
+import Tooltip from 'react-native-walkthrough-tooltip';
 import {
   ActivityIndicator,
   Dimensions,
@@ -18,21 +19,23 @@ import {showMessage} from 'react-native-flash-message';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {useNavigation} from '@react-navigation/core';
 
-import Tooltip from 'react-native-walkthrough-tooltip';
 import AnonymousTab from './elements/AnonymousTab';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
+import BioAndDMSetting from './elements/BioAndDMSetting';
 import BlockComponent from '../../components/BlockComponent';
 import BottomSheetBio from './elements/BottomSheetBio';
 import BottomSheetImage from './elements/BottomSheetImage';
 import BottomSheetRealname from './elements/BottomSheetRealname';
 import CustomPressable from '../../components/CustomPressable';
 import FollowInfoRow from './elements/FollowInfoRow';
+import LinkAndSocialMedia from './elements/LinkAndSocialMedia';
 import PostOptionModal from '../../components/Modal/PostOptionModal';
 import ProfileHeader from './elements/ProfileHeader';
 import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
 import RenderItem from './elements/RenderItem';
 import ShareUtils from '../../utils/share';
+import WarningCircleOutline from '../../../assets/icons/warning-circle-outline.svg';
 import dimen from '../../utils/dimen';
 import useResetContext from '../../hooks/context/useResetContext';
 import useOnBottomNavigationTabPressHook, {
@@ -45,6 +48,8 @@ import useProfileScreenHook, {
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {ButtonNewPost} from '../../components/Button';
 import {Context} from '../../context';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {KarmaScore} from './elements/KarmaScore';
 import {PROFILE_CACHE} from '../../utils/cache/constant';
 import {
   changeRealName,
@@ -59,21 +64,16 @@ import {deleteAnonymousPost, deletePost, getFeedDetail} from '../../service/post
 import {downVote, upVote} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
 import {getAccessToken} from '../../utils/token';
-import {saveToCache} from '../../utils/cache';
 import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
+import {saveToCache} from '../../utils/cache';
 import {setFeedByIndex} from '../../context/actions/feeds';
 import {setMyProfileAction} from '../../context/actions/setMyProfileAction';
 import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import WarningCircleOutline from '../../../assets/icons/warning-circle-outline.svg';
-import {KarmaScore} from './elements/KarmaScore';
-import BioAndDMSetting from './elements/BioAndDMSetting';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
-import LinkAndSocialMedia from './elements/LinkAndSocialMedia';
 
 const {height, width} = Dimensions.get('screen');
 
