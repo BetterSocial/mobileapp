@@ -11,7 +11,7 @@ import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getPollTime, isPollExpired} from '../../utils/string/StringUtils';
 
-const {width: screenWidth} = Dimensions.get('window');
+const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
 const FONT_SIZE_MEDIA = 16;
 
 const ContentPoll = ({
@@ -56,7 +56,7 @@ const ContentPoll = ({
     <View style={[styles.containerShowMessage]}>
       <View style={styles.pollOptionsContainer}>
         <Text style={styles.voteFont}>All votes are anonymous - even to the poll’s author!</Text>
-        <View style={styles.pollContainer}>
+        <View style={multiplechoice ? styles.pollContainerMC : styles.pollContainer}>
           {polls.map((pollItem, indexPoll) =>
             multiplechoice ? (
               <PollOptionsMultipleChoice
@@ -323,7 +323,12 @@ const styles = StyleSheet.create({
     color: COLORS.blue
   },
   pollContainer: {
-    paddingTop: 10
+    paddingTop: 10,
+    height: (screenHeight * 25) / 100
+  },
+  pollContainerMC: {
+    paddingTop: 10,
+    height: (screenHeight * 18) / 100
   },
   voteFont: {
     fontSize: normalizeFontSize(12),
