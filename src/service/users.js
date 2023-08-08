@@ -191,6 +191,7 @@ export const checkPasswordForDemoLogin = async (password) => {
     }
 
     return {
+      code: result?.data?.code,
       success: false,
       message: result?.data?.message
     };
@@ -198,6 +199,7 @@ export const checkPasswordForDemoLogin = async (password) => {
     crashlytics().recordError(new Error(e));
     return {
       success: false,
+      code: e?.response?.data?.code,
       message: e?.response?.data?.message
     };
   }
