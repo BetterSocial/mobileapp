@@ -113,7 +113,7 @@ const Header = (props) => {
                 goToFollowings(dataMain.user_id, dataMain.username)
               }
             />
-            <View style={{flexDirection: 'row'}}>
+            {/* <View style={{flexDirection: 'row'}}>
               <KarmaScore score={86} />
               <Tooltip
                 contentStyle={{borderRadius: 8, background: '#FFF'}}
@@ -136,7 +136,7 @@ const Header = (props) => {
                   <WarningCircleOutline height={15} width={15} style={{marginLeft: 5}} />
                 </Pressable>
               </Tooltip>
-            </View>
+            </View> */}
           </View>
         </View>
 
@@ -149,7 +149,7 @@ const Header = (props) => {
           following={dataMain.following}
         />
 
-        <LinkAndSocialMedia username={dataMain.username} />
+        <LinkAndSocialMedia username={dataMain.username} prompt={dataMainBio} />
       </View>
       <View>
         <View style={styles.tabs} ref={postRef}>

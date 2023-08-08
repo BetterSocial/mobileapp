@@ -1,4 +1,5 @@
 import Modal from 'react-native-modal';
+// eslint-disable-next-line import/no-unresolved
 import NetworkLogger, {startNetworkLogging} from 'react-native-network-logger';
 import React, {useState} from 'react';
 import {SafeAreaView, StyleSheet, Text, TouchableOpacity} from 'react-native';

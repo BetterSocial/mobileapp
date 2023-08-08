@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-// eslint-disable-next-line no-use-before-define
 import * as React from 'react';
-import {Alert, StyleSheet, Text, TouchableOpacity, View, ViewStyle} from 'react-native';
+import {Alert, Pressable, StyleSheet, Text, TouchableOpacity, View, ViewStyle} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import config from 'react-native-config';
+import Share from 'react-native-share';
 import {colors} from '../../../utils/colors';
 import InstagramIcon from '../../../assets/social-media/instagram.svg';
 import TwitterIcon from '../../../assets/social-media/twitter.svg';
@@ -11,6 +10,7 @@ import ShareUtils from '../../../utils/share/index';
 
 interface LinkProps {
   username: string;
+  prompt: string;
 }
 
 interface ButtonProps {
@@ -26,7 +26,7 @@ const Button: React.FC<ButtonProps> = ({onPress, style, children}) => {
   );
 };
 
-const CopyLink: React.FC<LinkProps> = ({username}) => {
+const CopyLink: React.FC<Omit<LinkProps, 'prompt'>> = ({username}) => {
   const showCopyAlert = () =>
     Alert.alert('🔗 Link Copied!', `${config.SHARE_URL}/u/${username}`, [{text: 'OK'}]);
 
@@ -48,18 +48,54 @@ const CopyLink: React.FC<LinkProps> = ({username}) => {
   );
 };
 
-const InstagramButton = () => (
-  <LinearGradient
-    colors={['#7024C4', '#C21975', '#C74C4D', '#E09B3D']}
-    start={{x: 0, y: 0}}
-    end={{x: 1, y: 0}}
-    style={styles.instagramContainer}>
-    <Text style={styles.buttonSocialMediaLabel}>IG Story</Text>
-    <InstagramIcon height={16} width={16} />
-  </LinearGradient>
-);
+const InstagramButton = () => {
+  const shareInstagramStory = async () => {
+    // const shareOptions = {
+    //   backgroundImage:
+    //     'https://img.freepik.com/free-vector/watercolor-instagram-story-wallpaper-vector-minimal-social-media-background_53876-144473.jpg',
+    //   stickerImage:
+    //     'https://img.freepik.com/free-vector/watercolor-instagram-story-wallpaper-vector-minimal-social-media-background_53876-144473.jpg',
+    //   backgroundBottomColor: '#fefefe',
+    //   backgroundTopColor: '#906df4',
+    //   social: Share.Social.INSTAGRAM_STORIES
+    // };
+    // try {
+    //   await Share.shareSingle(shareOptions);
+    // } catch (error) {
+    //   console.error('Error =>', error);
+    // }
+  };
 
-const LinkAndSocialMedia: React.FC<LinkProps> = ({username}) => {
+  return (
+    <Pressable onPress={shareInstagramStory}>
+      <LinearGradient
+        colors={['#7024C4', '#C21975', '#C74C4D', '#E09B3D']}
+        start={{x: 0, y: 0}}
+        end={{x: 1, y: 0}}
+        style={styles.instagramContainer}>
+        <Text style={styles.buttonSocialMediaLabel}>IG Story</Text>
+        <InstagramIcon height={16} width={16} />
+      </LinearGradient>
+    </Pressable>
+  );
+};
+
+const LinkAndSocialMedia: React.FC<LinkProps> = ({username, prompt}) => {
+  const shareTwitter = async () => {
+    const shareOptions = {
+      message: `${prompt}\n`,
+      url: `${config.SHARE_URL}/u/${username}`,
+      social: Share.Social.TWITTER,
+      failOnCancel: true
+    };
+
+    try {
+      await Share.shareSingle(shareOptions);
+    } catch (error) {
+      console.log('Error =>', error);
+    }
+  };
+
   return (
     <View style={styles.linkAndSocialMediaContainer}>
       <Text style={styles.linkAndSocialMediaTitle}>Receive anonymous messages anywhere:</Text>
@@ -72,10 +108,7 @@ const LinkAndSocialMedia: React.FC<LinkProps> = ({username}) => {
         <Text style={styles.shareStepLabel}>Step 2: Share your link</Text>
 
         <View style={{flexDirection: 'row'}}>
-          <Button
-            // tslint:disable-next-line: no-empty
-            onPress={() => {}}
-            style={styles.tweetButton}>
+          <Button onPress={shareTwitter} style={styles.tweetButton}>
             <Text style={styles.buttonSocialMediaLabel}>Tweet</Text>
             <TwitterIcon height={16} width={20} />
           </Button>
