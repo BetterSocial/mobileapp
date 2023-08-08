@@ -76,36 +76,36 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
           style={[
             handleStyleFeed(),
             {
-              marginHorizontal: 6,
-              paddingHorizontal: isPostDetail ? 12 : 0,
               minHeight: calculationText(hashtagAtComponent(sanitizeUrl(message))).containerHeight
             }
           ]}>
-          {item.post_type !== POST_TYPE_LINK ? (
-            <Text
-              style={[
-                styles.textContentFeed,
-                {
-                  fontSize: calculationText(message).fontSize,
-                  lineHeight: calculationText(message).lineHeight
-                }
-              ]}>
-              {hashtagAtComponent(message)}
-            </Text>
-          ) : (
-            <Text
-              style={[
-                styles.textContentFeed,
-                {
-                  fontSize: calculationText(sanitizeUrl(message)).fontSize,
-                  lineHeight: calculationText(sanitizeUrl(message)).lineHeight
-                }
-              ]}>
-              {hashtagAtComponent(sanitizeUrl(message))}{' '}
-            </Text>
-          )}
+          <View style={styles.postTextContainer(isPostDetail)}>
+            {item.post_type !== POST_TYPE_LINK ? (
+              <Text
+                style={[
+                  styles.textContentFeed,
+                  {
+                    fontSize: calculationText(message).fontSize,
+                    lineHeight: calculationText(message).lineHeight
+                  }
+                ]}>
+                {hashtagAtComponent(message)}
+              </Text>
+            ) : (
+              <Text
+                style={[
+                  styles.textContentFeed,
+                  {
+                    fontSize: calculationText(sanitizeUrl(message)).fontSize,
+                    lineHeight: calculationText(sanitizeUrl(message)).lineHeight
+                  }
+                ]}>
+                {hashtagAtComponent(sanitizeUrl(message))}{' '}
+              </Text>
+            )}
+          </View>
         </View>
-        <View style={{paddingHorizontal: 12}}>
+        <View style={styles.pollContainer}>
           {item && item.post_type === POST_TYPE_POLL ? (
             <View
               style={{
@@ -149,7 +149,7 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
         {images_url?.length > 0 && (
           <View style={styles.containerImage}>
             <ImageLayouter
-              mode={FastImage.resizeMode.stretch}
+              mode={FastImage.resizeMode.cover}
               images={images_url || []}
               onimageclick={onImageClickedByIndex}
             />
@@ -316,5 +316,11 @@ const styles = StyleSheet.create({
   containerImage: {
     flex: 1,
     height: dimen.normalizeDimen(300)
-  }
+  },
+  pollContainer: {
+    paddingHorizontal: 12
+  },
+  postTextContainer: (isPostDetail) => ({
+    paddingHorizontal: isPostDetail ? 12 : 0
+  })
 });

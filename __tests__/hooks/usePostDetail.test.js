@@ -1,5 +1,6 @@
 import {Dimensions} from 'react-native';
 import {renderHook} from '@testing-library/react-hooks';
+
 import usePostDetail from '../../src/components/PostPageDetail/hooks/usePostDetail';
 
 jest.mock('react-native-safe-area-context', () => {
@@ -83,30 +84,30 @@ describe('usePOstDetail should run correctly', () => {
     jest.spyOn(Dimensions, 'get').mockReturnValue({width: 400, height: 800});
     const {result} = renderHook(usePostDetail);
     expect(result.current.calculationText('wide')).toEqual({
-      containerComment: 150,
-      containerHeight: 220,
-      fontSize: 24,
-      lineHeight: 44
+      containerComment: 252.66666666666669,
+      containerHeight: 117.33333333333333,
+      fontSize: 25.6,
+      lineHeight: 46.93333333333333
     });
     expect(result.current.calculationText('wide', 2)).toEqual({
-      containerComment: -70,
-      containerHeight: 440,
-      fontSize: 24,
-      lineHeight: 44
+      containerComment: 252.66666666666669,
+      containerHeight: 117.33333333333333,
+      fontSize: 25.6,
+      lineHeight: 46.93333333333333
     });
 
     expect(result.current.calculationText('wide', 1)).toEqual({
-      containerComment: -26,
-      containerHeight: 396,
-      fontSize: 24,
-      lineHeight: 44
+      containerComment: 252.66666666666669,
+      containerHeight: 117.33333333333333,
+      fontSize: 25.6,
+      lineHeight: 46.93333333333333
     });
 
     expect(result.current.calculationText(longText)).toEqual({
-      containerComment: -1670,
-      containerHeight: 2040,
-      fontSize: 16,
-      lineHeight: 24
+      containerComment: -794.8,
+      containerHeight: 1164.8,
+      fontSize: 17.066666666666666,
+      lineHeight: 25.6
     });
   });
 });

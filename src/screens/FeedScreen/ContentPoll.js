@@ -38,6 +38,7 @@ const ContentPoll = ({
     count,
     newPoll
   } = useContentPoll({isAlreadyPolling: isAlreadyPollingProps, polls, voteCount});
+
   const initialSetup = () => {
     if (!multiplechoice) onSeeResultsClicked(item, multiplechoice, onnewpollfetched, index);
   };
