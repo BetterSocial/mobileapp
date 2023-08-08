@@ -82,8 +82,8 @@ const PollOptions = ({
         key={`poll-options-${index}`}
         style={
           selectedindex === index
-            ? styles.pollOptionItemContainerActive
-            : styles.pollOptionItemContainer
+            ? styles.pollOptionsItemActiveContainer
+            : styles.pollOptionsItemContainer
         }>
         {renderPercentageBar()}
         <View style={styles.pollOptionTextContainer}>
@@ -117,38 +117,40 @@ const styles = StyleSheet.create({
     marginTop: 16,
     marginBottom: 8
   },
-  pollOptionItemContainer: {
+  pollOptionsItemContainer: {
+    flex: 1,
     backgroundColor: colors.lightgrey,
     marginBottom: 8,
-    // height: 56,
     borderRadius: 8,
-    display: 'flex',
     flexDirection: 'row'
   },
-  pollOptionItemContainerActive: {
+  pollOptionsItemActiveContainer: {
+    flex: 1,
     backgroundColor: colors.holytosca30percent,
-    // height: 56,
     marginBottom: 8,
     borderRadius: 8,
-    display: 'flex',
     flexDirection: 'row'
   },
   pollOptionTextContainer: {
     display: 'flex',
     flexDirection: 'row',
+    alignContent: 'center',
+    justifyContent: 'center',
     width: '100%',
     paddingVertical: 12,
     paddingHorizontal: 16
   },
   pollOptionItemText: () => ({
     flex: 1,
+    textAlignVertical: 'center',
     color: colors.black,
     fontFamily: fonts.inter[400],
     marginStart: 0,
-    alignSelf: 'center',
+    marginBottom: 5,
     fontSize: normalizeFontSize(14)
   }),
   pollOptionItemPercentage: {
+    textAlignVertical: 'center',
     fontSize: normalizeFontSize(14)
   },
   percentageBar: (percent, isMyPoll = false) => {
