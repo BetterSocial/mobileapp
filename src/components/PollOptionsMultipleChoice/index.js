@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     borderRadius: 8,
     // height: 56,
-    display: 'flex',
+    flex: 1,
     flexDirection: 'row'
   },
   pollOptionItemContainerActive: {
@@ -143,12 +143,14 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     borderRadius: 8,
     // height: 56,
-    display: 'flex',
+    flex: 1,
     flexDirection: 'row'
   },
   pollOptionTextContainer: {
     display: 'flex',
     flexDirection: 'row',
+    alignContent: 'center',
+    justifyContent: 'center',
     width: '100%',
     paddingVertical: 4,
     paddingHorizontal: 16,
@@ -156,16 +158,16 @@ const styles = StyleSheet.create({
   },
   pollOptionItemText: (isexpired, isMax) => ({
     flex: 1,
+    textAlignVertical: 'center',
     color: colors.black,
     fontFamily: fonts.inter[400],
-    alignSelf: 'center',
     marginTop: isMax ? 0 : isexpired ? 6 : 0,
     marginBottom: isMax ? 0 : isexpired ? 6 : 0,
     marginLeft: 0,
     fontSize: normalizeFontSize(14)
   }),
   pollOptionItemPercentage: {
-    alignSelf: 'center',
+    textAlignVertical: 'center',
     fontSize: normalizeFontSize(14)
   },
   totalpolltext: {

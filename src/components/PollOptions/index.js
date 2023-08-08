@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     // height: 56,
     borderRadius: 8,
-    display: 'flex',
+    flex: 1,
     flexDirection: 'row'
   },
   pollOptionItemContainerActive: {
@@ -130,25 +130,29 @@ const styles = StyleSheet.create({
     // height: 56,
     marginBottom: 8,
     borderRadius: 8,
-    display: 'flex',
+    flex: 1,
     flexDirection: 'row'
   },
   pollOptionTextContainer: {
     display: 'flex',
     flexDirection: 'row',
+    alignContent: 'center',
+    justifyContent: 'center',
     width: '100%',
     paddingVertical: 12,
     paddingHorizontal: 16
   },
   pollOptionItemText: () => ({
     flex: 1,
+    textAlignVertical: 'center',
     color: colors.black,
     fontFamily: fonts.inter[400],
     marginStart: 0,
-    alignSelf: 'center',
+    marginBottom: 5,
     fontSize: normalizeFontSize(14)
   }),
   pollOptionItemPercentage: {
+    textAlignVertical: 'center',
     fontSize: normalizeFontSize(14)
   },
   percentageBar: (percent, isMyPoll = false) => {
