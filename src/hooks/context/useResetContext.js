@@ -7,6 +7,7 @@ import ChatSchema from '../../database/schema/ChatSchema';
 import DiscoveryAction from '../../context/actions/discoveryAction';
 import UserSchema from '../../database/schema/UserSchema';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
+import useProfileHook from '../core/profile/useProfileHook';
 import {Context} from '../../context';
 import {resetAllNews} from '../../context/actions/news';
 import {setMyProfileResetAll} from '../../context/actions/setMyProfileAction';
@@ -25,11 +26,17 @@ const useResetContext = () => {
   const setRefreshCount = useSetRecoilState(resetAtom);
   const refreshCount = useRecoilValue(resetAtom);
 
+  const {setProfileId} = useProfileHook();
+
   const resetAllContext = () => {
     setRefreshCount(new Date().getTime());
     DiscoveryAction.resetAllDiscovery(discoveryDispatch);
     resetAllNews(newsDispatch);
     setMyProfileResetAll(profileDispatch);
+    setProfileId({
+      anonProfileId: null,
+      profileId: null
+    });
   };
 
   const resetLocalDB = () => {
