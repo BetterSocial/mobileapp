@@ -96,7 +96,6 @@ const ReplyCommentItem = ({
     if (refreshComment) refreshComment(result);
     updateComment(result.data.activity_id);
   };
-  console.log(totalVote, 'total');
   const iVote = async () => {
     const result = await iVoteComment(comment.id);
     if (result.code === 200) {
