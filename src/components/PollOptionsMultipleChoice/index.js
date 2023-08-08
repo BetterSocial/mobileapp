@@ -18,7 +18,6 @@ const PollOptionsMultipleChoice = ({
   isalreadypolling = false,
   maxpolls = [],
   onselected = () => {},
-  total = 0,
   totalVotingUser = 0
 }) => {
   const {
@@ -156,7 +155,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignContent: 'center',
-    justifyContent: 'center',
     width: '100%',
     paddingVertical: 4,
     paddingHorizontal: 16,
