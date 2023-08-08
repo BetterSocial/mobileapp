@@ -40,7 +40,6 @@ const ReplyCommentId = ({
     setCommentHook,
     temporaryText,
     isLastInParentHook,
-    findCommentAndUpdateHook,
     setTextComment,
     newCommentList,
     item,
@@ -49,7 +48,16 @@ const ReplyCommentId = ({
     scrollViewRef,
     createComment,
     getThisComment
-  } = useReplyComment({itemProp, indexFeed, dataFeed, updateParent, updateReply, itemParent, page});
+  } = useReplyComment({
+    itemProp,
+    indexFeed,
+    dataFeed,
+    updateParent,
+    updateReply,
+    itemParent,
+    page,
+    getComment
+  });
   const {handleUsernameReplyComment} = useWriteComment();
   const {showAlertDelete} = useCommentAction();
   React.useEffect(() => {

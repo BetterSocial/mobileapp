@@ -5,7 +5,6 @@ const useComment = ({comment, level, updateVote}) => {
   const [totalVote, setTotalVote] = React.useState(
     comment.data?.count_upvote - comment.data?.count_downvote
   );
-  console.log({updateVote}, 'nana');
   const [statusVote, setStatusVote] = React.useState('none');
   const onUpVote = async () => {
     if (statusVote === 'upvote') {
@@ -46,9 +45,9 @@ const useComment = ({comment, level, updateVote}) => {
     onVote(dataVote);
   };
   const onVote = async (dataVote) => {
-    const result = await voteCommentV2(dataVote);
+    await voteCommentV2(dataVote);
     if (updateVote) {
-      updateVote(result.data, comment, level);
+      updateVote();
     }
     iVote();
   };

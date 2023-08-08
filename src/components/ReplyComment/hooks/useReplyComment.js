@@ -3,29 +3,18 @@ import Toast from 'react-native-simple-toast';
 import moment from 'moment';
 import {useNavigation} from '@react-navigation/core';
 import StringConstant from '../../../utils/string/StringConstant';
-import useUpdateComment from '../../Comments/hooks/useUpdateComment';
 import {Context} from '../../../context';
 import {createChildComment} from '../../../service/comment';
 import {getFeedDetail} from '../../../service/post';
 import {getCommentChild} from '../../../service/feeds';
 
-const useReplyComment = ({
-  itemProp,
-  indexFeed,
-  dataFeed,
-  updateParent,
-  updateReply,
-  itemParent,
-  page
-}) => {
+const useReplyComment = ({itemProp, indexFeed, dataFeed, updateParent, page, getComment}) => {
   const [temporaryText, setTemporaryText] = React.useState('');
   const [textComment, setTextComment] = React.useState('');
   const [newCommentList, setNewCommentList] = React.useState([]);
   const [item, setItem] = React.useState(itemProp);
   const navigation = useNavigation();
-  // const dispatch = useDispatch
   const scrollViewRef = React.useRef(null);
-  const {updateComment} = useUpdateComment();
   const [profile] = React.useContext(Context).profile;
   const [defaultData] = React.useState({
     data: {count_downvote: 0, count_upvote: 0, text: textComment},
@@ -259,17 +248,12 @@ const useReplyComment = ({
             }
           ];
           setNewCommentList(newComment);
-          if (typeof updateReply === 'function') {
-            updateReply(newComment, itemParent, item.id);
+          if (getComment && typeof getComment === 'function') {
+            getComment();
           }
-          updateFeed(true);
-          updateComment(item.activity_id);
         } else {
           Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
         }
-      } else {
-        // Toast.show('Comments are not empty', Toast.LONG);
-        // setLoadingCMD(false);
       }
     } catch (error) {
       Toast.show(StringConstant.generalCommentFailed, Toast.LONG);

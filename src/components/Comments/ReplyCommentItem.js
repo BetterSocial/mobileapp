@@ -46,7 +46,6 @@ const ReplyCommentItem = ({
     comment.data.count_upvote - comment.data.count_downvote
   );
   const [statusVote, setStatusVote] = React.useState('');
-  console.log(JSON.stringify(refreshComment), 'huku');
   const onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
       console.log('');
@@ -77,7 +76,6 @@ const ReplyCommentItem = ({
       reaction_id: comment.id,
       vote: 'upvote'
     };
-    console.log({dataVote}, 'nana');
     onVote(dataVote);
   };
 
@@ -91,9 +89,8 @@ const ReplyCommentItem = ({
   const onVote = async (dataVote) => {
     const result = await voteCommentV2(dataVote);
     if (updateVoteParent && typeof updateVoteParent === 'function') {
-      updateVoteParent(result, dataVote, comment);
+      updateVoteParent();
     }
-    console.log({result}, 'result');
     setTotalVote(result.data.count_upvote - result.data.count_downvote);
     iVote();
     if (refreshComment) refreshComment(result);
@@ -144,8 +141,6 @@ const ReplyCommentItem = ({
       onLongPress();
     }
   };
-
-  console.log({comment, totalVote}, 'laki');
 
   return (
     <TouchableOpacity
