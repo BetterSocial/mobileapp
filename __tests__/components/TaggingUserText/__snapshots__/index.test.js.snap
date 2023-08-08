@@ -4,10 +4,15 @@ exports[`TaggingUserText component test should render and match snapshot 1`] = `
 <Text
   onPress={[Function]}
   style={
-    Object {
-      "color": "#2C67BC",
-      "fontFamily": "Inter-Medium",
-    }
+    Array [
+      Object {
+        "color": "#2F80ED",
+        "fontFamily": "Inter-Medium",
+      },
+      Object {
+        "color": "#2F80ED",
+      },
+    ]
   }
   testID="TaggingUserTextComponent"
 >
