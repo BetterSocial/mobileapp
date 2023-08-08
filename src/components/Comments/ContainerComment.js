@@ -72,10 +72,16 @@ const ContainerComment = ({
     );
   };
 
-  const handleUpdateVote = (a, b, c) => {
+  const handleUpdateVote = () => {
     if (updateVote && typeof updateVote === 'function') {
-      updateVote(a, b, c);
+      updateVote();
     }
+  };
+  const handlePaddingBottom = () => {
+    if (!itemParent?.message || itemParent?.message === '') {
+      return calculatePaddingBtm() + calculationText(itemParent?.message).containerHeight;
+    }
+    return calculatePaddingBtm();
   };
 
   return (
@@ -85,7 +91,7 @@ const ContainerComment = ({
           styles.containerComment,
           {
             minHeight: calculateMinHeight() + calculatePaddingBtm(),
-            paddingBottom: calculatePaddingBtm()
+            paddingBottom: handlePaddingBottom()
           }
         ]}>
         <View style={styles.lineBeforeProfile} />

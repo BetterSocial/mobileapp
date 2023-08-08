@@ -16,7 +16,6 @@ import {uploadFile} from '../../../service/file';
 
 const useGroupInfo = () => {
   const [groupChatState, groupPatchDispatch] = React.useContext(Context).groupChat;
-  //  const [client] = React.useContext(Context).client
   const navigation = useNavigation();
   const {participants, asset} = groupChatState;
   const [client] = React.useContext(Context).client;
@@ -32,7 +31,10 @@ const useGroupInfo = () => {
   const [selectedUser, setSelectedUser] = React.useState(null);
   const [newParticipant, setNewParticipan] = React.useState([]);
   const [openModal, setOpenModal] = React.useState(false);
+  const [isAnonymousModalOpen, setIsAnonymousModalOpen] = React.useState(false);
   const [, dispatchChannel] = React.useContext(Context).channel;
+
+  const blockModalRef = React.useRef(null);
 
   const anonUserEmojiName = channelState?.channel?.data?.anon_user_info_emoji_name;
 
@@ -156,6 +158,7 @@ const useGroupInfo = () => {
 
   const handleCloseSelectUser = async () => {
     setOpenModal(false);
+    setIsAnonymousModalOpen(false);
   };
 
   const generateSystemChat = async (message, userSelected) => {
@@ -279,6 +282,31 @@ const useGroupInfo = () => {
     }
   };
 
+  const blockAnonUser = async () => {
+    try {
+      setIsAnonymousModalOpen(false);
+      const blockComponentValue = {
+        postId: null,
+        isAnonymousUserFromGroupInfo: true,
+        actor: {
+          id: selectedUser?.user?.id,
+          data: {
+            username: selectedUser?.user?.anonymousUsername
+          }
+        }
+      };
+
+      blockModalRef?.current?.openBlockComponent(blockComponentValue);
+    } catch (e) {
+      SimpleToast.show('failed to block anonymous user');
+      console.log(e);
+    }
+  };
+
+  /**
+   *
+   * @param {('view' | 'remove' | 'message' | 'block')} status
+   */
   const alertRemoveUser = async (status) => {
     if (status === 'view') {
       setOpenModal(false);
@@ -292,10 +320,15 @@ const useGroupInfo = () => {
       );
     }
 
+    if (status === 'block') {
+      blockAnonUser();
+    }
+
     if (status === 'message') {
       await checkUserIsBlockHandle();
     }
   };
+
   const onLeaveGroup = () => {
     Alert.alert('', 'Exit this group?', [{text: 'Cancel'}, {text: 'Exit', onPress: leaveGroup}]);
   };
@@ -336,12 +369,18 @@ const useGroupInfo = () => {
   };
 
   const handlePressContact = async (item) => {
+    if (item.user_id === profile.myProfile.user_id) return true;
+
     if (channelState?.channel.data.type === 'group') {
       await handleSelectUser(item);
       return true;
     }
 
     if (anonUserEmojiName) {
+      const modifiedUser = {...item};
+      modifiedUser.user.anonymousUsername = `Anonymous ${anonUserEmojiName}`;
+      setSelectedUser(modifiedUser);
+      setIsAnonymousModalOpen(true);
       return true;
     }
 
@@ -407,9 +446,12 @@ const useGroupInfo = () => {
     onReportGroup,
     setUsername,
     setSelectedUser,
-    openChatMessage,
     generateSystemChat,
-    setNewParticipan
+    setNewParticipan,
+    isAnonymousModalOpen,
+    setIsAnonymousModalOpen,
+    blockModalRef,
+    openChatMessage
   };
 };
 

@@ -18,8 +18,9 @@ import {Context} from '../../context';
 import {CustomMessageSystem} from '../../components';
 import {followersOrFollowingAtom} from '../ChannelListScreen/model/followersOrFollowingAtom';
 import {fonts} from '../../utils/fonts';
-import {setAsset, setParticipants} from '../../context/actions/groupChat';
+import {setAsset} from '../../context/actions/groupChat';
 import {setChannel} from '../../context/actions/setChannel';
+import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
@@ -30,6 +31,7 @@ const streami18n = new Streami18n({
 const ChatDetailPage = ({route}) => {
   const [clients] = React.useContext(Context).client;
   const [channelClient, dispatchChannel] = React.useContext(Context).channel;
+  const {interactionsComplete} = useAfterInteractions();
   const [followUserList, setFollowUserList] = useRecoilState(followersOrFollowingAtom);
   const [, dispatch] = React.useContext(Context).groupChat;
 
@@ -72,6 +74,7 @@ const ChatDetailPage = ({route}) => {
       }
     }
   };
+
   React.useEffect(() => {
     if (clients && route?.params?.data && !channelClient.client) {
       handleChannelClient();
@@ -126,7 +129,6 @@ const ChatDetailPage = ({route}) => {
   }, []);
   React.useEffect(() => {
     searchUserMessages(channelClient.channel?.cid);
-    setParticipants(channelClient.channel?.state?.members, dispatch);
   }, [clients.client]);
   const searchUserMessages = async (channelID) => {
     const messages = await clients.client.search(
@@ -175,6 +177,16 @@ const ChatDetailPage = ({route}) => {
     return true;
   };
 
+  console.log('channelClient', channelClient.channel?.data?.is_channel_blocked);
+
+  const renderMessageInput = () => {
+    if (channelClient.channel?.data?.is_channel_blocked) {
+      return <></>;
+    }
+
+    return <MessageInput Input={InputMessage} />;
+  };
+
   if (clients.client && channelClient.channel) {
     return (
       <SafeAreaView>
@@ -211,8 +223,7 @@ const ChatDetailPage = ({route}) => {
                   InlineDateSeparator={CustomInlineDateSeparator}
                   loading={false}
                 />
-
-                <MessageInput Input={InputMessage} />
+                {renderMessageInput()}
               </>
             </Channel>
           </Chat>

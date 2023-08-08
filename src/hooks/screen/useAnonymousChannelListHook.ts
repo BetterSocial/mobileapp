@@ -9,7 +9,7 @@ import {getUserId} from '../../utils/token';
 
 function useAnonymousChannelListScreenHook(): UseAnonymousChannelListScreenHook {
   const {localDb, channelList} = useLocalDatabaseHook();
-  const {goToChatScreen} = useChatUtilsHook();
+  const {goToChatScreen, goToPostDetailScreen} = useChatUtilsHook();
 
   const [channels, setChannels] = React.useState([]);
 
@@ -27,7 +27,8 @@ function useAnonymousChannelListScreenHook(): UseAnonymousChannelListScreenHook 
 
   return {
     channels,
-    goToChatScreen
+    goToChatScreen,
+    goToPostDetailScreen
   };
 }
 
