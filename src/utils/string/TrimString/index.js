@@ -11,7 +11,7 @@ export const addDotAndRemoveNewline = (text) => {
   const textWithoutNewline = trimmedText.replace(/\n+$/, '');
 
   if (textWithoutNewline.length > 0) {
-    return `${textWithoutNewline}.`;
+    return `${textWithoutNewline}`;
   }
   return text;
 };
