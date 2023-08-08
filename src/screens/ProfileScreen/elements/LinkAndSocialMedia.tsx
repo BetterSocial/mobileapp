@@ -18,6 +18,9 @@ interface ButtonProps {
   style?: ViewStyle;
 }
 
+const socialShareDescription =
+  "Message me on BetterSocial! It's a new, friendlier and more private social media alternative: ";
+
 const Button: React.FC<ButtonProps> = ({onPress, style, children}) => {
   return (
     <TouchableOpacity onPress={onPress} style={[styles.buttonContainer, style]}>
@@ -82,8 +85,9 @@ const InstagramButton = () => {
 
 const LinkAndSocialMedia: React.FC<LinkProps> = ({username, prompt}) => {
   const shareTwitter = async () => {
+    const message = prompt || socialShareDescription;
     const shareOptions = {
-      message: `${prompt}\n`,
+      message: `${message}\n`,
       url: `${config.SHARE_URL}/u/${username}`,
       social: Share.Social.TWITTER,
       failOnCancel: true
