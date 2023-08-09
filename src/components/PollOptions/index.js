@@ -1,11 +1,13 @@
 import * as React from 'react';
-import {StyleSheet, TouchableNativeFeedback, View, Text} from 'react-native';
+import {StyleSheet, TouchableNativeFeedback, View, Text, Dimensions} from 'react-native';
 
 import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 import IconPollWinnerBadge from '../../assets/icon/IconPollWinnerBadge';
 import IconPollMine from '../../assets/icon/IconPollMine';
+
+const {height: screenHeight} = Dimensions.get('window');
 
 const PollOptions = ({
   mypoll,
@@ -111,25 +113,22 @@ const PollOptions = ({
 };
 
 const styles = StyleSheet.create({
-  pollOptionsContainer: {
-    width: '100%',
-    padding: 0,
-    marginTop: 16,
-    marginBottom: 8
-  },
   pollOptionsItemContainer: {
     flex: 1,
     backgroundColor: colors.lightgrey,
     marginBottom: 8,
     borderRadius: 8,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    height: (screenHeight * 7) / 100
   },
   pollOptionsItemActiveContainer: {
     flex: 1,
     backgroundColor: colors.holytosca30percent,
     marginBottom: 8,
     borderRadius: 8,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    height: (screenHeight * 7) / 100,
+    width: '100%'
   },
   pollOptionTextContainer: {
     display: 'flex',
@@ -205,4 +204,6 @@ const styles = StyleSheet.create({
   }
 });
 
-export default PollOptions;
+export default React.memo(PollOptions, (prevProps, nextProps) => {
+  return prevProps.isalreadypolling !== nextProps.isalreadypolling;
+});
