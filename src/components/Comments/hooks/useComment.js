@@ -1,9 +1,9 @@
 import React from 'react';
-import {iVoteComment, voteComment} from '../../../service/vote';
+import {iVoteComment, voteCommentV2} from '../../../service/vote';
 
-const useComment = ({comment, findCommentAndUpdate, level, updateVote}) => {
+const useComment = ({comment, level, updateVote}) => {
   const [totalVote, setTotalVote] = React.useState(
-    comment.data.count_upvote - comment.data.count_downvote
+    comment.data?.count_upvote - comment.data?.count_downvote
   );
   const [statusVote, setStatusVote] = React.useState('none');
   const onUpVote = async () => {
@@ -20,9 +20,8 @@ const useComment = ({comment, findCommentAndUpdate, level, updateVote}) => {
       setStatusVote('upvote');
     }
     const dataVote = {
-      activity_id: comment.id,
-      text: comment.data.text,
-      status: 'upvote'
+      reaction_id: comment.id,
+      vote: 'upvote'
     };
     onVote(dataVote);
   };
@@ -40,19 +39,15 @@ const useComment = ({comment, findCommentAndUpdate, level, updateVote}) => {
       setStatusVote('downvote');
     }
     const dataVote = {
-      activity_id: comment.id,
-      text: comment.data.text,
-      status: 'downvote'
+      reaction_id: comment.id,
+      vote: 'downvote'
     };
     onVote(dataVote);
   };
   const onVote = async (dataVote) => {
-    const result = await voteComment(dataVote);
-    if (findCommentAndUpdate) {
-      findCommentAndUpdate(comment.id, result.data, level);
-    }
+    await voteCommentV2(dataVote);
     if (updateVote) {
-      updateVote(result.data, comment, level);
+      updateVote();
     }
     iVote();
   };
