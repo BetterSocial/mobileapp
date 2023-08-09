@@ -853,6 +853,35 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               }
             }
           >
+            Message Anonymously
+          </Text>
+        </View>
+        <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "justifyContent": "center",
+              "opacity": 1,
+              "paddingVertical": 18,
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "fontSize": 16,
+                "fontWeight": "bold",
+              }
+            }
+          >
             View 
             's Profile 
           </Text>

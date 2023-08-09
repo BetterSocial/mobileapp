@@ -5,10 +5,17 @@ import {generateRandomId} from 'stream-chat-react-native-core';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {openComposer} from 'react-native-email-link';
 import {useNavigation} from '@react-navigation/core';
+import {v4 as uuid} from 'uuid';
 
+import ChannelList from '../../../database/schema/ChannelListSchema';
+import ChannelListMemberSchema from '../../../database/schema/ChannelListMemberSchema';
+import UserSchema from '../../../database/schema/UserSchema';
+import useChatUtilsHook from '../../../hooks/core/chat/useChatUtilsHook';
+import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import {Context} from '../../../context';
 import {checkUserBlock} from '../../../service/profile';
 import {getChatName} from '../../../utils/string/StringUtils';
+import {getOrCreateAnonymousChannel} from '../../../service/chat';
 import {requestExternalStoragePermission} from '../../../utils/permission';
 import {setChannel} from '../../../context/actions/setChannel';
 import {setParticipants} from '../../../context/actions/groupChat';
@@ -33,6 +40,9 @@ const useGroupInfo = () => {
   const [openModal, setOpenModal] = React.useState(false);
   const [isAnonymousModalOpen, setIsAnonymousModalOpen] = React.useState(false);
   const [, dispatchChannel] = React.useContext(Context).channel;
+
+  const {goToChatScreen} = useChatUtilsHook();
+  const {localDb} = useLocalDatabaseHook();
 
   const blockModalRef = React.useRef(null);
 
@@ -303,9 +313,59 @@ const useGroupInfo = () => {
     }
   };
 
+  const handleMessageAnonymously = async () => {
+    try {
+      setOpenModal(false);
+      const response = await getOrCreateAnonymousChannel(selectedUser?.user_id);
+      const targetRawJson = {
+        type: 'notification.message_new',
+        cid: response?.channel?.id,
+        channel_id: '',
+        channel_type: 'messaging',
+        channel: response?.channel,
+        created_at: response?.channel,
+        targetName: selectedUser?.user?.name,
+        targetImage: selectedUser?.user?.image
+      };
+      const channelList = ChannelList.fromMessageAnonymouslyAPI({
+        channel: response?.channel,
+        members: response?.members,
+        appAdditionalData: {
+          rawJson: targetRawJson,
+          message: '',
+          targetName: selectedUser?.user?.name,
+          targetImage: selectedUser?.user?.image
+        }
+      });
+
+      await channelList.saveIfLatest(localDb);
+      try {
+        response?.members?.forEach(async (member) => {
+          const userMember = UserSchema.fromMemberWebsocketObject(member, response?.channel?.id);
+          await userMember.saveOrUpdateIfExists(localDb);
+
+          const memberSchema = ChannelListMemberSchema.fromWebsocketObject(
+            response?.channel?.id,
+            uuid(),
+            member
+          );
+          await memberSchema.save(localDb);
+        });
+      } catch (e) {
+        console.log('error on memberSchema');
+        console.log(e);
+      }
+
+      setOpenModal(false);
+      goToChatScreen(channelList);
+    } catch (e) {
+      SimpleToast.show('Failed to message this user anonymously');
+    }
+  };
+
   /**
    *
-   * @param {('view' | 'remove' | 'message' | 'block')} status
+   * @param {('view' | 'remove' | 'message' | 'block' | 'message-anonymously')} status
    */
   const alertRemoveUser = async (status) => {
     if (status === 'view') {
@@ -326,6 +386,10 @@ const useGroupInfo = () => {
 
     if (status === 'message') {
       await checkUserIsBlockHandle();
+    }
+
+    if (status === 'message-anonymously') {
+      handleMessageAnonymously();
     }
   };
   const onLeaveGroup = () => {

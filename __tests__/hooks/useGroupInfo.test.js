@@ -1,12 +1,13 @@
 import * as launchGallery from 'react-native-image-picker';
 import React from 'react';
-import {act, renderHook} from '@testing-library/react-hooks';
 import {Alert} from 'react-native';
+import {act, renderHook} from '@testing-library/react-hooks';
+
 import * as serviceFile from '../../src/service/file';
 import * as servicePermission from '../../src/utils/permission';
+import * as serviceProfile from '../../src/service/profile';
 import useGroupInfo from '../../src/screens/GroupInfo/hooks/useGroupInfo';
 import {Context} from '../../src/context';
-import * as serviceProfile from '../../src/service/profile';
 // eslint-disable-next-line global-require
 jest.mock('react-native-permissions', () => require('react-native-permissions/mock'));
 const mockedPushNavigation = jest.fn();
@@ -24,6 +25,11 @@ jest.mock('@react-navigation/core', () => ({
 
 jest.mock('stream-chat-react-native-core', () => ({
   generateRandomId: jest.fn(() => 'random-id')
+}));
+
+jest.mock('recoil', () => ({
+  atom: jest.fn(),
+  useRecoilState: jest.fn(() => [{}, jest.fn()])
 }));
 
 describe('useGroupInfo should run correctly', () => {
