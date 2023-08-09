@@ -4,6 +4,7 @@ import Toast from 'react-native-simple-toast';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import {
   ActivityIndicator,
+  Alert,
   Dimensions,
   LogBox,
   Pressable,
@@ -11,7 +12,8 @@ import {
   StyleSheet,
   Text,
   TouchableNativeFeedback,
-  View
+  View,
+  Linking
 } from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {debounce} from 'lodash';
@@ -382,8 +384,13 @@ const ProfileScreen = ({route}) => {
     listRef?.current?.scrollToTop();
   };
 
+  const openSettingApp = () => {
+    Linking.openSettings();
+    closeImageBs();
+  };
+
   const onOpenImageGalery = async () => {
-    const {success, message} = await requestExternalStoragePermission();
+    const {success} = await requestExternalStoragePermission();
     if (success) {
       ImagePicker.openPicker({
         width: 512,
@@ -395,12 +402,14 @@ const ProfileScreen = ({route}) => {
         handleUpdateImage(`data:image/jpeg;base64,${imageRes.data}`, 'gallery');
       });
     } else {
-      Toast.show(message, Toast.SHORT);
+      openAlertPermission(
+        'We’re not able to access your photos, please adjust your permission settings for BetterSocial.'
+      );
     }
   };
 
   const onOpenCamera = async () => {
-    const {success, message} = await requestCameraPermission();
+    const {success} = await requestCameraPermission();
     if (success) {
       ImagePicker.openCamera({
         width: 512,
@@ -412,8 +421,17 @@ const ProfileScreen = ({route}) => {
         handleUpdateImage(`data:image/jpeg;base64,${imageRes.data}`, 'camera');
       });
     } else {
-      Toast.show(message, Toast.SHORT);
+      openAlertPermission(
+        'We’re not able to access your camera, please adjust your permission settings for BetterSocial.'
+      );
     }
+  };
+
+  const openAlertPermission = (message) => {
+    Alert.alert('Permission Denied', message, [
+      {text: 'Open Settings', onPress: openSettingApp},
+      {text: 'Close'}
+    ]);
   };
 
   const onViewProfilePicture = () => {
