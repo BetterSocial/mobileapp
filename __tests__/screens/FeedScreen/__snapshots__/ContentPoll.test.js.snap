@@ -56,6 +56,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
             "borderRadius": 8,
             "flex": 1,
             "flexDirection": "row",
+            "height": NaN,
             "marginBottom": 8,
           }
         }
@@ -142,6 +143,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
             "borderRadius": 8,
             "flex": 1,
             "flexDirection": "row",
+            "height": NaN,
             "marginBottom": 8,
           }
         }
