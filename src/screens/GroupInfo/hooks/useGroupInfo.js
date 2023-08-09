@@ -451,18 +451,17 @@ const useGroupInfo = () => {
   };
 
   const handlePressContact = async (item) => {
-    if (item.user_id === profile.myProfile.user_id) return true;
+    if (item.user_id === profile.myProfile.user_id) return;
 
     if (anonUserEmojiName) {
       const modifiedUser = {...item};
       modifiedUser.user.anonymousUsername = `Anonymous ${anonUserEmojiName}`;
       setSelectedUser(modifiedUser);
       setIsAnonymousModalOpen(true);
-      return true;
+      return;
     }
 
     await handleSelectUser(item);
-    return true;
   };
 
   const handleOpenProfile = async (item) => {
