@@ -2,10 +2,10 @@ import Config from 'react-native-config';
 /* eslint-disable no-useless-catch */
 import {StreamChat} from 'stream-chat';
 
-import {getAccessToken} from '../utils/token';
-import {getUserId} from '../utils/users';
 import anonymousApi from './anonymousConfig';
 import api from './config';
+import {getAccessToken} from '../utils/token';
+import {getUserId} from '../utils/users';
 
 const chatClient = new StreamChat(Config.STREAM_API_KEY);
 const createChannel = async (channelType, members, channelName) => {
@@ -99,4 +99,28 @@ const sendSignedDMOtherProfile = async ({user_id, message}) => {
   return Promise.reject(response.data?.data);
 };
 
-export {createChannel, sendSystemMessage, sendAnonymousDMOtherProfile, sendSignedDMOtherProfile};
+const getOrCreateAnonymousChannel = async (userId) => {
+  const payload = {
+    members: [userId]
+  };
+
+  try {
+    const response = await anonymousApi.post('/chat/channels', payload);
+    if (response?.status === 200) {
+      return Promise.resolve(response.data);
+    }
+
+    return Promise.reject(response.data);
+  } catch (e) {
+    if (e?.response?.data?.message) return Promise.reject(e?.response?.data?.message);
+    return Promise.reject(e);
+  }
+};
+
+export {
+  createChannel,
+  sendSystemMessage,
+  sendAnonymousDMOtherProfile,
+  sendSignedDMOtherProfile,
+  getOrCreateAnonymousChannel
+};

@@ -5,10 +5,18 @@ import {generateRandomId} from 'stream-chat-react-native-core';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {openComposer} from 'react-native-email-link';
 import {useNavigation} from '@react-navigation/core';
+import {v4 as uuid} from 'uuid';
 
+import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
+import ChannelList from '../../../database/schema/ChannelListSchema';
+import ChannelListMemberSchema from '../../../database/schema/ChannelListMemberSchema';
+import UserSchema from '../../../database/schema/UserSchema';
+import useChatUtilsHook from '../../../hooks/core/chat/useChatUtilsHook';
+import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import {Context} from '../../../context';
 import {checkUserBlock} from '../../../service/profile';
 import {getChatName} from '../../../utils/string/StringUtils';
+import {getOrCreateAnonymousChannel} from '../../../service/chat';
 import {requestExternalStoragePermission} from '../../../utils/permission';
 import {setChannel} from '../../../context/actions/setChannel';
 import {setParticipants} from '../../../context/actions/groupChat';
@@ -32,7 +40,11 @@ const useGroupInfo = () => {
   const [newParticipant, setNewParticipan] = React.useState([]);
   const [openModal, setOpenModal] = React.useState(false);
   const [isAnonymousModalOpen, setIsAnonymousModalOpen] = React.useState(false);
+  const [isFetchingAllowAnonDM, setIsFetchingAllowAnonDM] = React.useState(false);
   const [, dispatchChannel] = React.useContext(Context).channel;
+
+  const {goToChatScreen} = useChatUtilsHook();
+  const {localDb} = useLocalDatabaseHook();
 
   const blockModalRef = React.useRef(null);
 
@@ -152,8 +164,19 @@ const useGroupInfo = () => {
 
   const handleSelectUser = async (user) => {
     if (user.user_id === profile.myProfile.user_id) return;
-    await setSelectedUser(user);
-    setOpenModal(true);
+    const defaultUserData = {...user};
+    defaultUserData.allow_anon_dm = false;
+    try {
+      setIsFetchingAllowAnonDM(true);
+      await AnonymousMessageRepo.checkIsTargetAllowingAnonDM(user.user_id);
+      defaultUserData.allow_anon_dm = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      await setSelectedUser(defaultUserData);
+      setOpenModal(true);
+      setIsFetchingAllowAnonDM(false);
+    }
   };
 
   const handleCloseSelectUser = async () => {
@@ -303,9 +326,64 @@ const useGroupInfo = () => {
     }
   };
 
+  const handleMessageAnonymously = async () => {
+    if (!selectedUser?.allow_anon_dm) {
+      SimpleToast.show('This user does not allow anonymous messages');
+      return;
+    }
+
+    try {
+      setOpenModal(false);
+      const response = await getOrCreateAnonymousChannel(selectedUser?.user_id);
+      const targetRawJson = {
+        type: 'notification.message_new',
+        cid: response?.channel?.id,
+        channel_id: '',
+        channel_type: 'messaging',
+        channel: response?.channel,
+        created_at: response?.channel,
+        targetName: selectedUser?.user?.name,
+        targetImage: selectedUser?.user?.image
+      };
+      const channelList = ChannelList.fromMessageAnonymouslyAPI({
+        channel: response?.channel,
+        members: response?.members,
+        appAdditionalData: {
+          rawJson: targetRawJson,
+          message: '',
+          targetName: selectedUser?.user?.name,
+          targetImage: selectedUser?.user?.image
+        }
+      });
+
+      await channelList.saveIfLatest(localDb);
+      try {
+        response?.members?.forEach(async (member) => {
+          const userMember = UserSchema.fromMemberWebsocketObject(member, response?.channel?.id);
+          await userMember.saveOrUpdateIfExists(localDb);
+
+          const memberSchema = ChannelListMemberSchema.fromWebsocketObject(
+            response?.channel?.id,
+            uuid(),
+            member
+          );
+          await memberSchema.save(localDb);
+        });
+      } catch (e) {
+        console.log('error on memberSchema');
+        console.log(e);
+      }
+
+      setOpenModal(false);
+      goToChatScreen(channelList);
+    } catch (e) {
+      SimpleToast.show(e || 'Failed to message this user anonymously');
+    }
+  };
+
   /**
    *
-   * @param {('view' | 'remove' | 'message' | 'block')} status
+   * @param {('view' | 'remove' | 'message' | 'block' | 'message-anonymously')} status
    */
   const alertRemoveUser = async (status) => {
     if (status === 'view') {
@@ -326,6 +404,10 @@ const useGroupInfo = () => {
 
     if (status === 'message') {
       await checkUserIsBlockHandle();
+    }
+
+    if (status === 'message-anonymously') {
+      handleMessageAnonymously();
     }
   };
 
@@ -369,22 +451,17 @@ const useGroupInfo = () => {
   };
 
   const handlePressContact = async (item) => {
-    if (item.user_id === profile.myProfile.user_id) return true;
-
-    if (channelState?.channel.data.type === 'group') {
-      await handleSelectUser(item);
-      return true;
-    }
+    if (item.user_id === profile.myProfile.user_id) return;
 
     if (anonUserEmojiName) {
       const modifiedUser = {...item};
       modifiedUser.user.anonymousUsername = `Anonymous ${anonUserEmojiName}`;
       setSelectedUser(modifiedUser);
       setIsAnonymousModalOpen(true);
-      return true;
+      return;
     }
 
-    return handleOpenProfile(item);
+    await handleSelectUser(item);
   };
 
   const handleOpenProfile = async (item) => {
@@ -451,7 +528,8 @@ const useGroupInfo = () => {
     isAnonymousModalOpen,
     setIsAnonymousModalOpen,
     blockModalRef,
-    openChatMessage
+    openChatMessage,
+    isFetchingAllowAnonDM
   };
 };
 

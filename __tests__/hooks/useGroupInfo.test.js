@@ -1,12 +1,15 @@
 import * as launchGallery from 'react-native-image-picker';
 import React from 'react';
-import {act, cleanup, renderHook} from '@testing-library/react-hooks';
 import {Alert} from 'react-native';
+import {act, cleanup, renderHook} from '@testing-library/react-hooks';
+
 import * as serviceFile from '../../src/service/file';
 import * as servicePermission from '../../src/utils/permission';
+import * as serviceProfile from '../../src/service/profile';
+import AnonymousMessageRepo from '../../src/service/repo/anonymousMessageRepo';
 import useGroupInfo from '../../src/screens/GroupInfo/hooks/useGroupInfo';
 import {Context} from '../../src/context';
-import * as serviceProfile from '../../src/service/profile';
+
 // eslint-disable-next-line global-require
 jest.mock('react-native-permissions', () => require('react-native-permissions/mock'));
 const mockedPushNavigation = jest.fn();
@@ -23,6 +26,11 @@ jest.mock('@react-navigation/core', () => ({
 
 jest.mock('stream-chat-react-native-core', () => ({
   generateRandomId: jest.fn(() => 'random-id')
+}));
+
+jest.mock('recoil', () => ({
+  atom: jest.fn(),
+  useRecoilState: jest.fn(() => [{}, jest.fn()])
 }));
 
 describe('useGroupInfo should run correctly', () => {
@@ -643,9 +651,16 @@ describe('useGroupInfo should run correctly', () => {
       navigate: jest.fn(),
       reset: jest.fn()
     };
+
+    jest
+      .spyOn(AnonymousMessageRepo, 'checkIsTargetAllowingAnonDM')
+      .mockResolvedValue({success: true});
     const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper});
     await result.current.handleSelectUser({user_id: 'c6c91b04-795c-404e-b012-ea28813a2007'});
-    expect(result.current.selectedUser).toEqual({user_id: 'c6c91b04-795c-404e-b012-ea28813a2007'});
+    expect(result.current.selectedUser).toEqual({
+      user_id: 'c6c91b04-795c-404e-b012-ea28813a2007',
+      allow_anon_dm: true
+    });
     expect(result.current.openModal).toBeTruthy();
   });
 
@@ -756,7 +771,12 @@ describe('useGroupInfo should run correctly', () => {
   it('handlePressContact type message hould run correctly', async () => {
     const {result} = renderHook(() => useGroupInfo(), {wrapper: wrapper2});
     await result.current.handlePressContact({user_id: '123', user: {name: 'agita'}});
-    expect(result.current.openModal).toBeFalsy();
+    expect(result.current.openModal).toBeTruthy();
+    expect(result.current.selectedUser).toEqual({
+      user_id: '123',
+      user: {name: 'agita'},
+      allow_anon_dm: true
+    });
     expect(mockedPushNavigation).toHaveBeenCalled();
   });
 });
