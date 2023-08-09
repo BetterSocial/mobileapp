@@ -23,7 +23,13 @@ import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Context} from '../../context';
 import {InitialStartupAtom} from '../../service/initialStartup';
 import {fonts} from '../../utils/fonts';
-import {removeLocalStorege, setAccessToken, setRefreshToken, setUserId} from '../../utils/token';
+import {
+  removeLocalStorege,
+  setAccessToken,
+  setAnonymousToken,
+  setRefreshToken,
+  setUserId
+} from '../../utils/token';
 import {setDataHumenId} from '../../context/actions/users';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {verifyHumanIdExchangeToken} from '../../service/users';
@@ -55,9 +61,10 @@ const SignIn = () => {
       try {
         const response = await verifyHumanIdExchangeToken(exchangeToken);
         if (response?.data?.data) {
-          const {token, refresh_token} = response?.data || {};
+          const {token, refresh_token, anonymousToken} = response?.data || {};
           setAccessToken(token);
           setRefreshToken(refresh_token);
+          setAnonymousToken(anonymousToken);
           setValueStartup({
             id: token,
             deeplinkProfile: false
