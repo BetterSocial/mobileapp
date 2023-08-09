@@ -705,6 +705,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
     deviceWidth={null}
     hardwareAccelerated={false}
     hideModalContentWhileAnimating={false}
+    isGroup={true}
     isOpen={false}
     onBackdropPress={[MockFunction]}
     onCloseModal={[MockFunction]}
@@ -760,6 +761,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
       deviceWidth={null}
       forwardedRef={[Function]}
       hideModalContentWhileAnimating={false}
+      isGroup={true}
       isOpen={false}
       onBackdropPress={[MockFunction]}
       onCloseModal={[MockFunction]}
@@ -830,6 +832,36 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
             }
           >
             Message 
+          </Text>
+        </View>
+        <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "justifyContent": "center",
+              "opacity": 1,
+              "paddingVertical": 18,
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "color": "#C4C4C4",
+                "fontSize": 16,
+                "fontWeight": "bold",
+              }
+            }
+          >
+            Message Anonymously
           </Text>
         </View>
         <View
@@ -1026,6 +1058,38 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
             Block 
           </Text>
         </View>
+      </View>
+    </View>
+  </Modal>
+  <Modal
+    hardwareAccelerated={false}
+    transparent={true}
+    visible={true}
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "flex": 1,
+          "justifyContent": "center",
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "backgroundColor": "rgba(0, 0, 0, 0.22)",
+            "borderRadius": 10,
+            "padding": 50,
+          }
+        }
+      >
+        <ActivityIndicator
+          animating={true}
+          color="#00ADB5"
+          hidesWhenStopped={true}
+          size="large"
+        />
       </View>
     </View>
   </Modal>

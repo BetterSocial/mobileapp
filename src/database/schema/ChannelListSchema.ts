@@ -5,6 +5,7 @@ import ChannelListMemberSchema from './ChannelListMemberSchema';
 import UserSchema from './UserSchema';
 import {AnonymousChannelData} from '../../../types/repo/AnonymousMessageRepo/AnonymousChannelsData';
 import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
+import {MessageAnonymouslyData} from '../../../types/repo/AnonymousMessageRepo/MessageAnonymouslyData';
 import {ModifyAnonymousChatData} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 
 class ChannelList implements BaseDbSchema {
@@ -208,7 +209,7 @@ class ChannelList implements BaseDbSchema {
       FROM ${ChannelList.getTableName()} A
       LEFT JOIN ${UserSchema.getTableName()} B
       ON A.last_updated_by = B.user_id AND A.id = B.channel_id
-      WHERE expired_at IS NULL OR datetime(expired_at) >= datetime('now')
+      WHERE expired_at IS NULL OR datetime(expired_at) >= datetime('now') AND A.description != ''
       ORDER BY last_updated_at DESC`,
       [myId, myAnonymousId]
     );
@@ -345,6 +346,24 @@ class ChannelList implements BaseDbSchema {
       lastUpdatedBy: data?.message?.user?.id,
       createdAt: data?.message?.created_at,
       rawJson: data,
+      user: null,
+      expiredAt: null,
+      members: null
+    });
+  }
+
+  static fromMessageAnonymouslyAPI(data: MessageAnonymouslyData): ChannelList {
+    return new ChannelList({
+      id: data?.channel?.id,
+      channelPicture: data?.appAdditionalData?.targetImage,
+      name: data?.appAdditionalData?.targetName,
+      description: data?.appAdditionalData?.message,
+      unreadCount: 0,
+      channelType: 'ANON_PM',
+      lastUpdatedAt: data?.channel?.last_message_at,
+      lastUpdatedBy: '',
+      createdAt: data?.channel?.created_at,
+      rawJson: data?.appAdditionalData?.rawJson,
       user: null,
       expiredAt: null,
       members: null
