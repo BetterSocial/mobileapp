@@ -215,7 +215,7 @@ const getAnonymousChatName = async (members) => {
   }
   if (userArraysWithoutMe.length === 1) {
     return Promise.resolve({
-      name: userArraysWithoutMe[0]?.name?.trim(),
+      name: userArraysWithoutMe[0]?.username?.trim() || userArraysWithoutMe[0]?.name?.trim(),
       image: userArraysWithoutMe[0]?.image
     });
   }
