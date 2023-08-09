@@ -7,6 +7,7 @@ import {openComposer} from 'react-native-email-link';
 import {useNavigation} from '@react-navigation/core';
 import {v4 as uuid} from 'uuid';
 
+import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../../database/schema/ChannelListSchema';
 import ChannelListMemberSchema from '../../../database/schema/ChannelListMemberSchema';
 import UserSchema from '../../../database/schema/UserSchema';
@@ -39,6 +40,7 @@ const useGroupInfo = () => {
   const [newParticipant, setNewParticipan] = React.useState([]);
   const [openModal, setOpenModal] = React.useState(false);
   const [isAnonymousModalOpen, setIsAnonymousModalOpen] = React.useState(false);
+  const [isFetchingAllowAnonDM, setIsFetchingAllowAnonDM] = React.useState(false);
   const [, dispatchChannel] = React.useContext(Context).channel;
 
   const {goToChatScreen} = useChatUtilsHook();
@@ -162,8 +164,19 @@ const useGroupInfo = () => {
 
   const handleSelectUser = async (user) => {
     if (user.user_id === profile.myProfile.user_id) return;
-    await setSelectedUser(user);
-    setOpenModal(true);
+    const defaultUserData = {...user};
+    defaultUserData.allow_anon_dm = false;
+    try {
+      setIsFetchingAllowAnonDM(true);
+      await AnonymousMessageRepo.checkIsTargetAllowingAnonDM(user.user_id);
+      defaultUserData.allow_anon_dm = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      await setSelectedUser(defaultUserData);
+      setOpenModal(true);
+      setIsFetchingAllowAnonDM(false);
+    }
   };
 
   const handleCloseSelectUser = async () => {
@@ -314,6 +327,11 @@ const useGroupInfo = () => {
   };
 
   const handleMessageAnonymously = async () => {
+    if (!selectedUser?.allow_anon_dm) {
+      SimpleToast.show('This user does not allow anonymous messages');
+      return;
+    }
+
     try {
       setOpenModal(false);
       const response = await getOrCreateAnonymousChannel(selectedUser?.user_id);
@@ -359,7 +377,7 @@ const useGroupInfo = () => {
       setOpenModal(false);
       goToChatScreen(channelList);
     } catch (e) {
-      SimpleToast.show('Failed to message this user anonymously');
+      SimpleToast.show(e || 'Failed to message this user anonymously');
     }
   };
 
@@ -434,11 +452,6 @@ const useGroupInfo = () => {
   const handlePressContact = async (item) => {
     if (item.user_id === profile.myProfile.user_id) return true;
 
-    if (channelState?.channel.data.type === 'group') {
-      await handleSelectUser(item);
-      return true;
-    }
-
     if (anonUserEmojiName) {
       const modifiedUser = {...item};
       modifiedUser.user.anonymousUsername = `Anonymous ${anonUserEmojiName}`;
@@ -447,7 +460,8 @@ const useGroupInfo = () => {
       return true;
     }
 
-    return handleOpenProfile(item);
+    await handleSelectUser(item);
+    return true;
   };
 
   const handleOpenProfile = async (item) => {
@@ -514,7 +528,8 @@ const useGroupInfo = () => {
     setNewParticipan,
     isAnonymousModalOpen,
     setIsAnonymousModalOpen,
-    blockModalRef
+    blockModalRef,
+    isFetchingAllowAnonDM
   };
 };
 

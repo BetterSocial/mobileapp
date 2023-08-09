@@ -60,7 +60,8 @@ const GroupInfo = () => {
     setUsername,
     onReportGroup,
     isAnonymousModalOpen,
-    blockModalRef
+    blockModalRef,
+    isFetchingAllowAnonDM
   } = useGroupInfo();
 
   React.useEffect(() => {
@@ -233,10 +234,7 @@ const GroupInfo = () => {
                         onPress={() => handlePressContact(item)}
                         fullname={getProfileName(item.user.name)}
                         photo={item.user.image}
-                        showArrow={
-                          channelState?.channel.data.type === 'group' ||
-                          channelState?.channel?.data?.channel_type === CHANNEL_TYPE_ANONYMOUS
-                        }
+                        showArrow={true}
                         userId={profile.myProfile.user_id}
                         ImageComponent={getAnonymousImage(item?.user?.name)}
                       />
@@ -286,6 +284,7 @@ const GroupInfo = () => {
             onCloseModal={handleCloseSelectUser}
             selectedUser={selectedUser}
             onPress={alertRemoveUser}
+            isGroup={channelState?.channel?.data?.type === 'group'}
           />
           <ModalActionAnonymous
             name={selectedUser?.user?.anonymousUsername}
@@ -294,6 +293,8 @@ const GroupInfo = () => {
             selectedUser={selectedUser}
             onPress={alertRemoveUser}
           />
+
+          <Loading visible={isFetchingAllowAnonDM} />
 
           <BlockComponent ref={blockModalRef} screen="group_info" />
         </>

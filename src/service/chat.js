@@ -104,12 +104,17 @@ const getOrCreateAnonymousChannel = async (userId) => {
     members: [userId]
   };
 
-  const response = await anonymousApi.post('/chat/channels', payload);
-  if (response?.status === 200) {
-    return Promise.resolve(response.data);
-  }
+  try {
+    const response = await anonymousApi.post('/chat/channels', payload);
+    if (response?.status === 200) {
+      return Promise.resolve(response.data);
+    }
 
-  return Promise.reject(response.data);
+    return Promise.reject(response.data);
+  } catch (e) {
+    if (e?.response?.data?.message) return Promise.reject(e?.response?.data?.message);
+    return Promise.reject(e);
+  }
 };
 
 export {
