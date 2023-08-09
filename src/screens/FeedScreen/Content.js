@@ -213,7 +213,6 @@ const Content = ({
             message={item.message}
             images_url={item.images_url}
             polls={item.pollOptions}
-            // onPress={() => onPress(item, index)}
             item={item}
             pollexpiredat={item.polls_expired_at}
             multiplechoice={item.multiplechoice}
