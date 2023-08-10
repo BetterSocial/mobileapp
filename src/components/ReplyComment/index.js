@@ -75,6 +75,13 @@ const ReplyCommentId = ({
     }
   }, [itemProp]);
 
+  const updateVote = () => {
+    if (getComment && typeof getComment === 'function') {
+      getComment();
+    }
+    getThisComment();
+  };
+
   const navigationGoBack = () => navigation.goBack();
   if (!item) return null;
   return (
@@ -127,7 +134,7 @@ const ReplyCommentId = ({
                           comment={itemReply}
                           onPress={() => showChildrenCommentView(itemReply)}
                           level={parseInt(level, 10) + 1}
-                          updateVote={getComment}
+                          updateVote={updateVote}
                           onLongPress={() => {
                             showAlertDelete(itemReply, false, updateComment);
                           }}

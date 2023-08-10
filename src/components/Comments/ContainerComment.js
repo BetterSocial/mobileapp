@@ -130,7 +130,8 @@ export const ReplyComment = ({
   hideLeftConnector,
   navigateToReplyView,
   findCommentAndUpdate,
-  onCommentLongPressed = () => {}
+  onCommentLongPressed = () => {},
+  updateVote
 }) => {
   const {isLast, isLastInParent} = useReplyComment();
   return (
@@ -153,6 +154,7 @@ export const ReplyComment = ({
                     onPress={() => navigateToReplyView({item, level: 2, indexFeed})}
                     isLast={isLast(item, index, countComment)}
                     findCommentAndUpdate={findCommentAndUpdate}
+                    updateVote={updateVote}
                   />
                   {item.children_counts.comment > 0 && (
                     <>
