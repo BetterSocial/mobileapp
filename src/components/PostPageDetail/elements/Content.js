@@ -63,6 +63,14 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
 
     navigation.navigate('DomainScreen', param);
   };
+
+  const handleTopicStyle = () => {
+    if (images_url.length > 0) {
+      return styles.topicContainerWithImage;
+    }
+    return styles.topicContainerNoImage;
+  };
+
   if (!cekImage) return null;
 
   return (
@@ -161,7 +169,7 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
             />
           </View>
         )}
-        <View style={styles.topicContainer}>
+        <View style={handleTopicStyle()}>
           <TopicsChip
             isPdp={true}
             topics={topics}
@@ -246,9 +254,13 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     paddingTop: 5
   },
-  topicContainer: {
+  topicContainerWithImage: {
     position: 'absolute',
     bottom: 0
+  },
+  topicContainerNoImage: {
+    backgroundColor: 'transparent',
+    justifyContent: 'flex-end'
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],
