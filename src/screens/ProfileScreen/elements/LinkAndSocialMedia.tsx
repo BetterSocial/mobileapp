@@ -1,5 +1,15 @@
 import * as React from 'react';
-import {Alert, Pressable, StyleSheet, Text, TouchableOpacity, View, ViewStyle} from 'react-native';
+import {
+  Alert,
+  Linking,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ViewStyle
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import config from 'react-native-config';
 import Share from 'react-native-share';
@@ -19,7 +29,7 @@ interface ButtonProps {
 }
 
 const socialShareDescription =
-  "Message me on BetterSocial! It's a new, friendlier and more private social media alternative: ";
+  "Message me on BetterSocial! It's a new, friendlier and more private social media alternative:";
 
 const Button: React.FC<ButtonProps> = ({onPress, style, children}) => {
   return (
@@ -51,22 +61,36 @@ const CopyLink: React.FC<Omit<LinkProps, 'prompt'>> = ({username}) => {
   );
 };
 
-const InstagramButton = () => {
+const InstagramButton = ({socialMessage}: {socialMessage: string}) => {
+  const [hasInstagramInstalled, setHasInstagramInstalled] = React.useState(false);
+
+  React.useEffect(() => {
+    if (Platform.OS === 'ios') {
+      Linking.canOpenURL('instagram://').then((val) => setHasInstagramInstalled(val));
+    } else {
+      Share.isPackageInstalled('com.instagram.android').then(({message}) => {
+        setHasInstagramInstalled(message.includes('Installed'));
+      });
+    }
+  }, []);
+
   const shareInstagramStory = async () => {
-    // const shareOptions = {
-    //   backgroundImage:
-    //     'https://img.freepik.com/free-vector/watercolor-instagram-story-wallpaper-vector-minimal-social-media-background_53876-144473.jpg',
-    //   stickerImage:
-    //     'https://img.freepik.com/free-vector/watercolor-instagram-story-wallpaper-vector-minimal-social-media-background_53876-144473.jpg',
-    //   backgroundBottomColor: '#fefefe',
-    //   backgroundTopColor: '#906df4',
-    //   social: Share.Social.INSTAGRAM_STORIES
-    // };
-    // try {
-    //   await Share.shareSingle(shareOptions);
-    // } catch (error) {
-    //   console.error('Error =>', error);
-    // }
+    try {
+      if (hasInstagramInstalled) {
+        const shareOptions = {
+          message: `${socialMessage}`,
+          social: Share.Social.INSTAGRAM
+        };
+        await Share.shareSingle(shareOptions);
+      } else {
+        await Share.open({
+          url: 'https://www.instagram.com/direct/inbox/',
+          message: `${socialMessage}`
+        });
+      }
+    } catch (error) {
+      console.error({shareInstagramStory: error});
+    }
   };
 
   return (
@@ -84,11 +108,13 @@ const InstagramButton = () => {
 };
 
 const LinkAndSocialMedia: React.FC<LinkProps> = ({username, prompt}) => {
+  const profileURL = `${config.SHARE_URL}/u/${username}`;
+  const message = prompt || socialShareDescription;
+  const socialMessage = `${message}\n${profileURL}`;
+
   const shareTwitter = async () => {
-    const message = prompt || socialShareDescription;
     const shareOptions = {
-      message: `${message}\n`,
-      url: `${config.SHARE_URL}/u/${username}`,
+      message: socialMessage,
       social: Share.Social.TWITTER,
       failOnCancel: true
     };
@@ -117,7 +143,7 @@ const LinkAndSocialMedia: React.FC<LinkProps> = ({username, prompt}) => {
             <TwitterIcon height={16} width={20} />
           </Button>
 
-          <InstagramButton />
+          <InstagramButton socialMessage={socialMessage} />
 
           <Button
             onPress={() => {
