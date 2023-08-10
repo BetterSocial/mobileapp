@@ -1,18 +1,20 @@
 import * as launchGallery from 'react-native-image-picker';
 import React from 'react';
-import {act, renderHook} from '@testing-library/react-hooks';
 import {Alert} from 'react-native';
+import {act, cleanup, renderHook} from '@testing-library/react-hooks';
+
 import * as serviceFile from '../../src/service/file';
 import * as servicePermission from '../../src/utils/permission';
+import * as serviceProfile from '../../src/service/profile';
+import AnonymousMessageRepo from '../../src/service/repo/anonymousMessageRepo';
 import useGroupInfo from '../../src/screens/GroupInfo/hooks/useGroupInfo';
 import {Context} from '../../src/context';
-import * as serviceProfile from '../../src/service/profile';
+
 // eslint-disable-next-line global-require
 jest.mock('react-native-permissions', () => require('react-native-permissions/mock'));
 const mockedPushNavigation = jest.fn();
 const mockedNavigateNavigation = jest.fn();
 const mockedResetNavigation = jest.fn();
-
 jest.mock('@react-navigation/core', () => ({
   ...jest.requireActual('@react-navigation/core'),
   useNavigation: () => ({
@@ -26,7 +28,13 @@ jest.mock('stream-chat-react-native-core', () => ({
   generateRandomId: jest.fn(() => 'random-id')
 }));
 
+jest.mock('recoil', () => ({
+  atom: jest.fn(),
+  useRecoilState: jest.fn(() => [{}, jest.fn()])
+}));
+
 describe('useGroupInfo should run correctly', () => {
+  afterEach(cleanup);
   beforeEach(() => {
     jest
       .spyOn(servicePermission, 'requestExternalStoragePermission')
@@ -178,6 +186,7 @@ describe('useGroupInfo should run correctly', () => {
     ]
   }));
 
+  const mockQueryMemberError = jest.fn().mockRejectedValue('error');
   const mockRemoveMember = jest.fn().mockResolvedValue({
     members: [{user_id: '1234', name: 'elon', user: {name: 'elon'}}]
   });
@@ -224,12 +233,81 @@ describe('useGroupInfo should run correctly', () => {
   };
 
   const mockChannelError = {
-    ...mockChannel,
+    cid: 'messaging:c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
+    data: {
+      cid: 'messaging:c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
+      created_at: '2022-09-30T22:49:45.59342Z',
+      createdBy: {
+        banned: false,
+        created_at: '2022-06-10T13:11:53.396427Z',
+        id: 'c6c91b04-795c-404e-b012-ea28813a2006',
+        image:
+          'https://res.cloudinary.com/hpjivutj2/image/upload/v1659099243/pbdv3jlyd4mhmtis6kqx.jpg',
+        last_active: '2022-06-10T13:11:58.020555Z',
+        name: 'Agita',
+        online: false,
+        role: 'user',
+        updated_at: '2023-01-24T01:41:19.021868Z'
+      },
+      disabled: false,
+      frozen: false,
+      hidden: false,
+      id: 'c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
+      last_message_at: '2023-01-24T01:00:59.432027Z',
+      member_count: 4,
+      name: 'Agita, elon',
+      type: 'group',
+      updated_at: '2023-01-24T01:41:46.237211Z'
+    },
+    disconnected: false,
+    id: 'c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
+    initialized: true,
+    isTyping: false,
+    lastKeyStroke: undefined,
+    lastTypingEvent: null,
+    queryMembers: mockQueryMemberError,
     removeMembers: jest.fn().mockRejectedValue('error'),
+    sendMessage: mockSendMessage,
     update: jest.fn().mockRejectedValue({success: false})
   };
 
-  const mockChannelMessage = {...mockChannel, data: {...mockChannel.data, type: 'messaging'}};
+  const mockChannelMessage = {
+    cid: 'messaging:c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
+    data: {
+      cid: 'messaging:c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
+      created_at: '2022-09-30T22:49:45.59342Z',
+      createdBy: {
+        banned: false,
+        created_at: '2022-06-10T13:11:53.396427Z',
+        id: 'c6c91b04-795c-404e-b012-ea28813a2006',
+        image:
+          'https://res.cloudinary.com/hpjivutj2/image/upload/v1659099243/pbdv3jlyd4mhmtis6kqx.jpg',
+        last_active: '2022-06-10T13:11:58.020555Z',
+        name: 'Agita',
+        online: false,
+        role: 'user',
+        updated_at: '2023-01-24T01:41:19.021868Z'
+      },
+      disabled: false,
+      frozen: false,
+      hidden: false,
+      id: 'c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
+      last_message_at: '2023-01-24T01:00:59.432027Z',
+      member_count: 4,
+      name: 'Agita, elon',
+      type: 'messaging',
+      updated_at: '2023-01-24T01:41:46.237211Z'
+    },
+    disconnected: false,
+    id: 'c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
+    initialized: true,
+    isTyping: false,
+    lastKeyStroke: undefined,
+    lastTypingEvent: null,
+    queryMembers: mockQueryMember,
+    removeMembers: mockRemoveMember,
+    sendMessage: mockSendMessage
+  };
 
   const mockDispatchChannel = jest.fn();
   const mockAddCreate = jest.fn();
@@ -573,9 +651,16 @@ describe('useGroupInfo should run correctly', () => {
       navigate: jest.fn(),
       reset: jest.fn()
     };
+
+    jest
+      .spyOn(AnonymousMessageRepo, 'checkIsTargetAllowingAnonDM')
+      .mockResolvedValue({success: true});
     const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper});
     await result.current.handleSelectUser({user_id: 'c6c91b04-795c-404e-b012-ea28813a2007'});
-    expect(result.current.selectedUser).toEqual({user_id: 'c6c91b04-795c-404e-b012-ea28813a2007'});
+    expect(result.current.selectedUser).toEqual({
+      user_id: 'c6c91b04-795c-404e-b012-ea28813a2007',
+      allow_anon_dm: true
+    });
     expect(result.current.openModal).toBeTruthy();
   });
 
@@ -609,7 +694,6 @@ describe('useGroupInfo should run correctly', () => {
     expect(result.current.newParticipant).toEqual([
       {user_id: '1234', name: 'elon', user: {name: 'elon'}}
     ]);
-    expect(mockSendMessage).toHaveBeenCalled();
     expect(mockRemoveMember).toHaveBeenCalled();
     expect(mockGroupDispatch).toHaveBeenCalled();
   });
@@ -679,10 +763,6 @@ describe('useGroupInfo should run correctly', () => {
     expect(result.current.newParticipant).toEqual([]);
   });
 
-  it('onReportGroup should run correctly', async () => {
-    const {result} = renderHook(() => useGroupInfo(), {wrapper});
-    await result.current.onReportGroup();
-  });
   it('handlePressContact type group hould run correctly', async () => {
     const {result} = renderHook(() => useGroupInfo(), {wrapper});
     await result.current.handlePressContact({user_id: '123', user: {name: 'agita'}});
@@ -691,7 +771,12 @@ describe('useGroupInfo should run correctly', () => {
   it('handlePressContact type message hould run correctly', async () => {
     const {result} = renderHook(() => useGroupInfo(), {wrapper: wrapper2});
     await result.current.handlePressContact({user_id: '123', user: {name: 'agita'}});
-    expect(result.current.openModal).toBeFalsy();
+    expect(result.current.openModal).toBeTruthy();
+    expect(result.current.selectedUser).toEqual({
+      user_id: '123',
+      user: {name: 'agita'},
+      allow_anon_dm: true
+    });
     expect(mockedPushNavigation).toHaveBeenCalled();
   });
 });

@@ -16,14 +16,18 @@ import {
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 import AnonymousIcon from '../ChannelListScreen/elements/components/AnonymousIcon';
+import BlockComponent from '../../components/BlockComponent';
 import DefaultChatGroupProfilePicture from '../../assets/images/default-chat-group-picture.png';
 import ExitGroup from '../../assets/images/exit-group.png';
 import Header from '../../components/Header';
 // eslint-disable-next-line camelcase
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
 import ModalAction from './elements/ModalAction';
+import ModalActionAnonymous from './elements/ModalActionAnonymous';
 import ReportGroup from '../../assets/images/report.png';
 import useGroupInfo from './hooks/useGroupInfo';
+import {CHANNEL_TYPE_ANONYMOUS} from '../../utils/constants';
+import {COLORS} from '../../utils/theme';
 import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
 import {colors} from '../../utils/colors';
@@ -45,19 +49,21 @@ const GroupInfo = () => {
     handleOnNameChange,
     handleOnImageClicked,
     newParticipant,
-    selectedUser,
-    handleCloseSelectUser,
-    openModal,
     alertRemoveUser,
     memberName,
     onLeaveGroup,
     profile,
     channelState,
-    handlePressContact,
     setUsername,
-    onReportGroup
+    onReportGroup,
+    isAnonymousModalOpen,
+    blockModalRef,
+    handleCloseSelectUser,
+    handlePressContact,
+    selectedUser,
+    openModal,
+    isFetchingAllowAnonDM
   } = useGroupInfo();
-
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       if (route?.params?.from === 'AddParticipant') {
@@ -149,7 +155,8 @@ const GroupInfo = () => {
   };
 
   const getAnonymousImage = (name) => {
-    if (name === 'AnonymousUser') {
+    console.log('name', name);
+    if (name?.indexOf('Anonymous') > -1) {
       return (
         <View style={{marginRight: 17}}>
           <AnonymousIcon
@@ -167,6 +174,10 @@ const GroupInfo = () => {
     handleMember();
   }, []);
 
+  React.useEffect(() => {
+    getMembersList();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -175,7 +186,7 @@ const GroupInfo = () => {
         <>
           <Header isCenter onPress={() => navigation.goBack()} title={memberName()} />
           <View style={styles.lineTop} />
-          <ScrollView nestedScrollEnabled={true}>
+          <ScrollView contentContainerStyle={styles.scrollContainer} nestedScrollEnabled={true}>
             <SafeAreaView>
               <TouchableOpacity testID="imageClick" onPress={handleOnImageClicked}>
                 <View style={styles.containerPhoto}>{showImageProfile()}</View>
@@ -186,7 +197,7 @@ const GroupInfo = () => {
                     <Text style={styles.groupName}>{memberName()}</Text>
                   </View>
                   <Text style={styles.dateCreate}>
-                    Created {moment(createChat).format('DD/MM/YY')}
+                    Created {moment(createChat).format('MM/DD/YY')}
                   </Text>
                 </View>
                 <TouchableOpacity onPress={handleOnNameChange} style={styles.pencilIconTouchable}>
@@ -227,7 +238,7 @@ const GroupInfo = () => {
                         onPress={() => handlePressContact(item)}
                         fullname={getProfileName(item.user.name)}
                         photo={item.user.image}
-                        showArrow={channelState?.channel.data.type === 'group'}
+                        showArrow={true}
                         userId={profile.myProfile.user_id}
                         ImageComponent={getAnonymousImage(item?.user?.name)}
                       />
@@ -277,7 +288,19 @@ const GroupInfo = () => {
             onCloseModal={handleCloseSelectUser}
             selectedUser={selectedUser}
             onPress={alertRemoveUser}
+            isGroup={channelState?.channel?.data?.type === 'group'}
           />
+          <ModalActionAnonymous
+            name={selectedUser?.user?.anonymousUsername}
+            isOpen={isAnonymousModalOpen}
+            onCloseModal={handleCloseSelectUser}
+            selectedUser={selectedUser}
+            onPress={alertRemoveUser}
+          />
+
+          <Loading visible={isFetchingAllowAnonDM} />
+
+          <BlockComponent ref={blockModalRef} screen="group_info" />
         </>
       )}
     </SafeAreaView>
@@ -430,5 +453,18 @@ export const styles = StyleSheet.create({
   },
   scrollContainer: {
     paddingBottom: 30
+  },
+  modalActUser: {
+    padding: 16,
+    paddingLeft: 27,
+    paddingRight: 70
+  },
+  textActUser: {
+    fontFamily: 'Inter',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    fontSize: 18,
+    color: COLORS.black000,
+    paddingVertical: 20
   }
 });

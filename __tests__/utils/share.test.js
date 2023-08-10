@@ -30,6 +30,10 @@ jest.mock('@react-native-firebase/analytics', () => {
   });
 });
 
+jest.mock('@react-native-clipboard/clipboard', () => ({
+  setString: jest.fn()
+}));
+
 describe('Share utils test should pass', () => {
   afterEach(cleanup);
 
