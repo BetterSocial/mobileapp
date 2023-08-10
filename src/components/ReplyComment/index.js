@@ -33,15 +33,13 @@ const ReplyCommentId = ({
   dataFeed,
   updateReply,
   itemParent,
-  updateVote,
-  updateVoteLatestChildren
+  getComment
 }) => {
   const navigation = useNavigation();
   const {
     setCommentHook,
     temporaryText,
     isLastInParentHook,
-    findCommentAndUpdateHook,
     setTextComment,
     newCommentList,
     item,
@@ -51,7 +49,16 @@ const ReplyCommentId = ({
     createComment,
     onSaveHeight,
     getThisComment
-  } = useReplyComment({itemProp, indexFeed, dataFeed, updateParent, updateReply, itemParent, page});
+  } = useReplyComment({
+    itemProp,
+    indexFeed,
+    dataFeed,
+    updateParent,
+    updateReply,
+    itemParent,
+    page,
+    getComment
+  });
   const {handleUsernameReplyComment} = useWriteComment();
   const {showAlertDelete} = useCommentAction();
   React.useEffect(() => {
@@ -67,6 +74,13 @@ const ReplyCommentId = ({
       getThisComment();
     }
   }, [itemProp]);
+
+  const updateVote = () => {
+    if (getComment && typeof getComment === 'function') {
+      getComment();
+    }
+    getThisComment();
+  };
 
   const navigationGoBack = () => navigation.goBack();
   if (!item) return null;
@@ -96,7 +110,7 @@ const ReplyCommentId = ({
             isLast={newCommentList.length <= 0}
             level={level}
             refreshComment={updateFeed}
-            updateVoteParent={updateVote}
+            updateVoteParent={getComment}
           />
           {newCommentList.length > 0 &&
             newCommentList.map((itemReply, index) => (
@@ -120,9 +134,7 @@ const ReplyCommentId = ({
                           comment={itemReply}
                           onPress={() => showChildrenCommentView(itemReply)}
                           level={parseInt(level, 10) + 1}
-                          refreshComment={updateFeed}
-                          findCommentAndUpdate={findCommentAndUpdateHook}
-                          updateVote={updateVoteLatestChildren}
+                          updateVote={updateVote}
                           onLongPress={() => {
                             showAlertDelete(itemReply, false, updateComment);
                           }}

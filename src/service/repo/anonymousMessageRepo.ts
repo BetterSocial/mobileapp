@@ -3,6 +3,7 @@ import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRep
 import {ChannelData} from '../../../types/repo/AnonymousMessageRepo/ChannelData';
 
 const baseUrl = {
+  checkIsTargetAllowingAnonDM: 'chat/channels/check-allow-anon-dm-status',
   sendAnonymousMessage: '/chat/anonymous',
   getAllAnonymousChannels: '/chat/channels',
   getAllAnonymousPostNotifications: '/feeds/feed-chat/anonymous',
@@ -11,11 +12,30 @@ const baseUrl = {
 };
 
 interface AnonymousMessageRepoTypes {
+  checkIsTargetAllowingAnonDM: (targetUserId: string) => Promise<any>;
   sendAnonymousMessage: (channelId: string, message: string) => Promise<any>;
   getAllAnonymousChannels: () => Promise<ChannelData[]>;
   getAllAnonymousPostNotifications: () => Promise<AnonymousPostNotification[]>;
   getSingleAnonymousPostNotifications: (activityId: string) => Promise<AnonymousPostNotification>;
   setChannelAsRead: (channelId: string) => Promise<boolean>;
+}
+
+async function checkIsTargetAllowingAnonDM(targetUserId: string) {
+  try {
+    const payload = {
+      members: [targetUserId]
+    };
+    const response = await anonymousApi.post(baseUrl.checkIsTargetAllowingAnonDM, payload);
+    if (response.status === 200) {
+      return Promise.resolve(response.data?.data);
+    }
+
+    return Promise.reject(response.data?.message);
+  } catch (e) {
+    console.log(e);
+    if (e?.response?.data?.message) return Promise.reject(e?.response?.data?.message);
+    return Promise.reject(e);
+  }
 }
 
 async function sendAnonymousMessage(channelId: string, message: string) {
@@ -68,8 +88,6 @@ async function getSingleAnonymousPostNotifications(
   activityId: string
 ): Promise<AnonymousPostNotification> {
   try {
-    console.log('activityId');
-    console.log(activityId);
     const response = await anonymousApi.get(
       baseUrl.getSingleAnonymousPostNotifications(activityId)
     );
@@ -102,6 +120,7 @@ async function setChannelAsRead(channelId: string): Promise<boolean> {
 }
 
 const AnonymousMessageRepo: AnonymousMessageRepoTypes = {
+  checkIsTargetAllowingAnonDM,
   sendAnonymousMessage,
   getAllAnonymousChannels,
   getAllAnonymousPostNotifications,

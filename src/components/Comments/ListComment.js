@@ -14,7 +14,8 @@ const ListComment = ({
   navigateToReplyView,
   findCommentAndUpdate,
   hideLeftConnector,
-  navigation
+  navigation,
+  updateVote
 }) => {
   return (
     <TouchableWithoutFeedback key={index} onLongPress={() => onCommentLongPressed(item, 0)}>
@@ -42,6 +43,7 @@ const ListComment = ({
               // refreshComment={refreshComment}
               findCommentAndUpdate={findCommentAndUpdate}
               onLongPress={onCommentLongPressed}
+              updateVote={updateVote}
             />
           ) : null}
         </View>
@@ -56,6 +58,7 @@ const ListComment = ({
             // refreshComment={(children) => refreshChildComment({parent: item, children: children.data})}
             findCommentAndUpdate={findCommentAndUpdate}
             onCommentLongPressed={onCommentLongPressed}
+            updateVote={updateVote}
           />
         )}
       </View>

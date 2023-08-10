@@ -2,9 +2,12 @@ import Modal from 'react-native-modal';
 import React from 'react';
 import {Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
+import {COLORS} from '../../../utils/theme';
+
 const ModalAction = (props) => {
-  const {isOpen, name, onCloseModal, onPress, selectedUser} = props;
+  const {isOpen, name, onCloseModal, onPress, selectedUser, isGroup = false} = props;
   const isAndroid = Platform.OS === 'android';
+
   return (
     <Modal
       animationInTiming={200}
@@ -19,12 +22,21 @@ const ModalAction = (props) => {
           style={styles.buttonStyle}>
           <Text style={styles.textButton}>Message {name}</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => onPress('message-anonymously', selectedUser)}
+          style={styles.buttonStyle}>
+          <Text style={selectedUser?.allow_anon_dm ? styles.textButton : styles.disabledTextButton}>
+            Message Anonymously
+          </Text>
+        </TouchableOpacity>
         <TouchableOpacity onPress={() => onPress('view')} style={styles.buttonStyle}>
           <Text style={styles.textButton}>View {name}&apos;s Profile </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => onPress('remove')} style={styles.buttonStyle}>
-          <Text style={styles.textButton}>Remove {name} </Text>
-        </TouchableOpacity>
+        {isGroup && (
+          <TouchableOpacity onPress={() => onPress('remove')} style={styles.buttonStyle}>
+            <Text style={styles.textButton}>Remove {name} </Text>
+          </TouchableOpacity>
+        )}
       </View>
     </Modal>
   );
@@ -38,6 +50,11 @@ const styles = StyleSheet.create({
   buttonStyle: {
     paddingVertical: 18,
     justifyContent: 'center'
+  },
+  disabledTextButton: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: COLORS.gray1
   },
   textButton: {
     fontSize: 16,
