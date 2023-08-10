@@ -3,6 +3,7 @@ import React from 'react';
 import {TOPICS_PICK} from '../../../utils/cache/constant';
 import {get} from '../../../api/server';
 import {saveToCache} from '../../../utils/cache';
+import {Monitoring} from '../../../libraries/monitoring/sentry';
 
 const useSignin = () => {
   const [topicCollection, setTopics] = React.useState([]);
@@ -31,6 +32,7 @@ const useSignin = () => {
     get({url: '/topics/list'})
       .then((res) => {
         if (res.status === 200) {
+          Monitoring.logActions('Topic from API', res.data.body);
           topicMapping(res.data.body);
         }
 

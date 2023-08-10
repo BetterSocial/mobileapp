@@ -35,6 +35,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
     <View
       style={
         Object {
+          "height": NaN,
           "paddingTop": 10,
         }
       }
@@ -53,8 +54,9 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
           Object {
             "backgroundColor": "#F5F5F5",
             "borderRadius": 8,
-            "display": "flex",
+            "flex": 1,
             "flexDirection": "row",
+            "height": NaN,
             "marginBottom": 8,
           }
         }
@@ -81,9 +83,12 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
         <View
           style={
             Object {
+              "alignContent": "center",
+              "alignItems": "center",
               "alignSelf": "center",
               "display": "flex",
               "flexDirection": "row",
+              "justifyContent": "center",
               "paddingHorizontal": 16,
               "paddingVertical": 4,
               "width": "100%",
@@ -96,7 +101,6 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
           <Text
             style={
               Object {
-                "alignSelf": "center",
                 "color": "#000000",
                 "flex": 1,
                 "fontFamily": "Inter-Regular",
@@ -104,6 +108,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
                 "marginBottom": 6,
                 "marginLeft": 0,
                 "marginTop": 6,
+                "textAlignVertical": "center",
               }
             }
           >
@@ -112,8 +117,8 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
           <Text
             style={
               Object {
-                "alignSelf": "center",
                 "fontSize": NaN,
+                "textAlignVertical": "center",
               }
             }
             testID="optionPercentage"
@@ -136,8 +141,9 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
           Object {
             "backgroundColor": "#F5F5F5",
             "borderRadius": 8,
-            "display": "flex",
+            "flex": 1,
             "flexDirection": "row",
+            "height": NaN,
             "marginBottom": 8,
           }
         }
@@ -164,9 +170,12 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
         <View
           style={
             Object {
+              "alignContent": "center",
+              "alignItems": "center",
               "alignSelf": "center",
               "display": "flex",
               "flexDirection": "row",
+              "justifyContent": "center",
               "paddingHorizontal": 16,
               "paddingVertical": 4,
               "width": "100%",
@@ -181,7 +190,6 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
           <Text
             style={
               Object {
-                "alignSelf": "center",
                 "color": "#000000",
                 "flex": 1,
                 "fontFamily": "Inter-Regular",
@@ -189,6 +197,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
                 "marginBottom": 0,
                 "marginLeft": 0,
                 "marginTop": 0,
+                "textAlignVertical": "center",
               }
             }
           >
@@ -197,8 +206,8 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
           <Text
             style={
               Object {
-                "alignSelf": "center",
                 "fontSize": NaN,
+                "textAlignVertical": "center",
               }
             }
             testID="optionPercentage"

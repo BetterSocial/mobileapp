@@ -5,7 +5,6 @@ import FastImage from 'react-native-fast-image';
 /* eslint-disable camelcase */
 import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
-import {calculateTime} from 'stream-chat-react-native-core/src/components/ChannelList/customUtils';
 import {useTheme} from 'stream-chat-react-native-core/src/contexts/themeContext/ThemeContext';
 
 import AvatarPostNotif from './AvatarPostNotif';
@@ -16,6 +15,7 @@ import MemoIc_arrow_upvote_on from '../../../../assets/arrow/Ic_upvote_on';
 import MemoIc_block_inactive from '../../../../assets/block/Ic_block_inactive';
 import MemoIc_comment from '../../../../assets/icons/Ic_comment';
 import {Context} from '../../../../context';
+import {calculateTime} from '../../../../utils/time';
 import {normalizeFontSize} from '../../../../utils/fonts';
 
 const styles = StyleSheet.create({
@@ -178,7 +178,7 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
 
   const handleDate = () => {
     if (item.data && item.data.last_message_at) {
-      return calculateTime(item.data.last_message_at);
+      return calculateTime(item.data.last_message_at, true);
     }
     return null;
   };

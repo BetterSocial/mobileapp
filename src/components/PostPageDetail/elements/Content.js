@@ -73,16 +73,14 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
         style={styles.contentFeed}
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}>
-        {!message || message === '' ? null : (
-          <View
-            style={[
-              handleStyleFeed(),
-              {
-                marginHorizontal: 6,
-                paddingHorizontal: isPostDetail ? 12 : 0,
-                minHeight: calculationText(hashtagAtComponent(sanitizeUrl(message))).containerHeight
-              }
-            ]}>
+        <View
+          style={[
+            handleStyleFeed(),
+            {
+              minHeight: calculationText(hashtagAtComponent(sanitizeUrl(message))).containerHeight
+            }
+          ]}>
+          <View style={styles.postTextContainer(isPostDetail)}>
             {item.post_type !== POST_TYPE_LINK ? (
               <Text
                 style={[
@@ -107,9 +105,8 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
               </Text>
             )}
           </View>
-        )}
-
-        <View style={{paddingHorizontal: 12}}>
+        </View>
+        <View style={styles.pollContainer}>
           {item && item.post_type === POST_TYPE_POLL ? (
             <View
               style={{
@@ -153,7 +150,7 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
         {images_url?.length > 0 && (
           <View style={styles.containerImage}>
             <ImageLayouter
-              mode={FastImage.resizeMode.stretch}
+              mode={FastImage.resizeMode.cover}
               images={images_url || []}
               onimageclick={onImageClickedByIndex}
             />
@@ -245,8 +242,8 @@ const styles = StyleSheet.create({
     paddingTop: 5
   },
   topicContainer: {
-    backgroundColor: 'transparent',
-    justifyContent: 'flex-end'
+    position: 'absolute',
+    bottom: 0
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],
@@ -320,5 +317,11 @@ const styles = StyleSheet.create({
   containerImage: {
     flex: 1,
     height: dimen.normalizeDimen(300)
-  }
+  },
+  pollContainer: {
+    paddingHorizontal: 12
+  },
+  postTextContainer: (isPostDetail) => ({
+    paddingHorizontal: isPostDetail ? 12 : 0
+  })
 });

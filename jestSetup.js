@@ -36,6 +36,12 @@ jest.mock('react-native-reanimated', () => ({
   Extrapolate: jest.fn().mockReturnValue('clamp')
 }));
 
+jest.mock('@react-native-community/netinfo', () => ({
+  getCurrentState: jest.fn(() => Promise.resolve()),
+  addEventListener: jest.fn(() => () => {}),
+  removeListeners: jest.fn()
+}));
+
 global.__reanimatedWorkletInit = jest.fn();
 console.warn = jest.fn(mockConsoleMethod(console.warn));
 console.error = jest.fn(mockConsoleMethod(console.error));

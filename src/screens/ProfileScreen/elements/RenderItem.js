@@ -299,6 +299,6 @@ const styles = StyleSheet.create({
     height: 8
   },
   headerContainer: {
-    paddingHorizontal: 9
+    marginHorizontal: 9
   }
 });

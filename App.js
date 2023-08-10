@@ -1,10 +1,11 @@
 import {HumanIDProvider} from '@human-internet/react-native-humanid';
 import {NavigationContainer} from '@react-navigation/native';
-import * as React from 'react';
-import Toast from 'react-native-toast-message';
 
-import {BackHandler, View, KeyboardAvoidingView, Platform} from 'react-native';
-import FlashMessage from 'react-native-flash-message';
+import DeviceInfo from 'react-native-device-info';
+import {appUpgradeVersionCheck} from 'app-upgrade-react-native-sdk';
+import {OverlayProvider, Streami18n} from 'stream-chat-react-native';
+import {RecoilDebugObserver} from 'reactotron-recoil-plugin';
+import {RecoilRoot} from 'recoil';
 import {
   SafeAreaProvider,
   useSafeAreaFrame,
@@ -19,9 +20,7 @@ import Store from './src/context/Store';
 import {linking} from './src/navigations/linking';
 import {RootNavigator} from './src/navigations/root-stack';
 import {toastConfig} from './src/configs/ToastConfig';
-import {Analytics} from './src/libraries/analytics/firebaseAnalytics';
-import NetworkDebuggerModal from './src/components/NetworkDebuggerModal';
-import useFirebaseRemoteConfig from './src/libraries/Configs/RemoteConfig';
+import {APP_UPGRADE_API_KEY, ENV} from './src/libraries/Configs/ENVConfig';
 
 const App = () => {
   const {bottom, top} = useSafeAreaInsets();
@@ -82,6 +81,33 @@ const App = () => {
       routeNameRef.current = navigationRef.current?.getCurrentRoute?.()?.name;
     }
   };
+
+  const appInfo = {
+    appId: Platform.OS === 'ios' ? '1615684520' : 'org.bettersocial', // Your app id in play store or app store
+    appName: DeviceInfo.getApplicationName(), // Your app name
+    appVersion: DeviceInfo.getVersion(), // Your app version
+    platform: Platform.OS, // App Platform, android or ios
+    environment: ENV // App Environment, production, development
+  };
+
+  // Alert config is optional
+  const alertConfig = {
+    title: 'Update Notice',
+    updateButtonTitle: 'Update Now',
+    laterButtonTitle: 'Later',
+    onDismissCallback: () => {
+      if (__DEV__) {
+        console.log('Dismiss');
+      }
+    },
+    onLaterCallback: () => {
+      if (__DEV__) {
+        console.log('Later');
+      }
+    }
+  };
+
+  appUpgradeVersionCheck(appInfo, APP_UPGRADE_API_KEY, alertConfig);
 
   return (
     <>

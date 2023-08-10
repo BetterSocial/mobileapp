@@ -61,6 +61,7 @@
     "@stream-io/flat-list-mvcp": "0.10.1",
     "@types/react-native-sqlite-storage": "^6.0.0",
     "@victorzimnikov/react-native-wheel-picker-android": "^3.0.3",
+    "app-upgrade-react-native-sdk": "^1.0.15",
     "axios": "^0.21.4",
     "getstream": "^7.4.1",
     "jwt-decode": "^3.1.2",

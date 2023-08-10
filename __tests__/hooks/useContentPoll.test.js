@@ -10,7 +10,8 @@ describe('Content poll function should run correctly', () => {
       option: 'Fre',
       polling_id: '732c5bdc-3bd2-4460-8baa-2bbdbb495185',
       polling_option_id: '35a46076-628c-4b68-b585-62dd9e19357b',
-      updatedAt: '2022-11-28T01:26:14.000Z'
+      updatedAt: '2022-11-28T01:26:14.000Z',
+      isalreadypolling: false
     },
     {
       counter: '0',
@@ -18,7 +19,8 @@ describe('Content poll function should run correctly', () => {
       option: 'Fra',
       polling_id: '732c5bdc-3bd2-4460-8baa-2bbdbb495185',
       polling_option_id: '05c3371d-f374-4c79-8c88-03cb1d86d07b',
-      updatedAt: '2022-11-28T01:26:14.000Z'
+      updatedAt: '2022-11-28T01:26:14.000Z',
+      isalreadypolling: false
     }
   ];
 
@@ -46,7 +48,11 @@ describe('Content poll function should run correctly', () => {
   });
 
   it('showSetResultsButton should run correctly', () => {
+<<<<<<< HEAD
     const {result} = renderHook(() => useContentPoll({polls, isalreadypolling: false}));
+=======
+    const {result} = renderHook(() => useContentPoll({polls}));
+>>>>>>> 08326bc345699e5112170ecfdb5f80d15fb3844b
     const expiredDate = '2022-11-25T02:14:14.499Z';
     const notExpiredDare = '2023-12-29T02:14:14.499Z';
     act(() => {
@@ -61,14 +67,21 @@ describe('Content poll function should run correctly', () => {
   });
 
   it('onSeeResultsClicked should run correctly', () => {
+<<<<<<< HEAD
     const {result} = renderHook(() => useContentPoll({polls, isalreadypolling: false}));
+=======
+    const {result} = renderHook(() => useContentPoll({polls}));
+>>>>>>> 08326bc345699e5112170ecfdb5f80d15fb3844b
     const callback = jest.fn();
     act(() => {
       result.current.onSeeResultsClicked(itemPoll, true, callback, 1);
       result.current.setMultipleChoiceSelected([]);
     });
     expect(callback).toHaveBeenCalled();
+<<<<<<< HEAD
     expect(result.current.newPoll.isalreadypolling).toBe(true);
+=======
+>>>>>>> 08326bc345699e5112170ecfdb5f80d15fb3844b
     expect(result.current.isAlreadyPolling).toBeTruthy();
     act(() => {
       result.current.onSeeResultsClicked(itemPoll, false, callback, 1);

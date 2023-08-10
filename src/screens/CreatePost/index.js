@@ -539,6 +539,10 @@ const CreatePost = () => {
       if (__DEV__) {
         console.log('CreatePost : ', e);
       }
+      showMessage({
+        message: StringConstant.createPostFailedGeneralError,
+        type: 'danger'
+      });
     }
     Analytics.logEvent('create_post', {
       id: 6,
