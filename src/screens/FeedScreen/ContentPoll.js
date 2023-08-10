@@ -138,7 +138,7 @@ const stylesComponent = (pollLength) =>
     },
     containerShowMessage: {
       justifyContent: 'flex-start',
-      marginBottom: 0,
+      marginBottom: 48,
       paddingVertical: 0,
       height: 'auto'
     },
@@ -241,7 +241,8 @@ const stylesComponent = (pollLength) =>
     },
     pollOptionsContainer: {
       width: '100%',
-      padding: 0
+      padding: 0,
+      marginBottom: 0
     },
     pollOptionItemContainer: {
       backgroundColor: colors.lightgrey,
@@ -273,8 +274,7 @@ const stylesComponent = (pollLength) =>
       fontFamily: fonts.inter[400],
       fontSize: normalizeFontSize(12),
       lineHeight: 16,
-      color: colors.blackgrey,
-      alignSelf: 'center'
+      color: colors.blackgrey
     },
     polltime: {
       fontFamily: fonts.inter[400],
@@ -331,7 +331,7 @@ const stylesComponent = (pollLength) =>
     },
     pollListContainer: {
       paddingTop: 10,
-      height: (pollLength * (screenHeight * 8)) / 100
+      height: (pollLength * (screenHeight * 9)) / 100
     },
     voteFont: {
       fontSize: normalizeFontSize(12),
