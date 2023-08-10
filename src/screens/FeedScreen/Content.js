@@ -31,13 +31,14 @@ const Content = ({
   const route = useRoute();
   const [layoutHeight, setLayoutHeight] = React.useState(null);
   const [textHeight, setTextHeight] = React.useState(null);
-  const maxFontSize = normalizeFontSizeByWidth(40);
+  const maxFontSize = normalizeFontSizeByWidth(28);
   const minFontSize = normalizeFontSizeByWidth(16);
   const {handleCalculation} = useCalculationContent();
   const [amountCut, setAmountCut] = React.useState(0);
   const [textCut, setTextCunt] = React.useState(null);
   const [arrText] = React.useState([]);
   const isIos = Platform.OS === 'ios';
+
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
       title: 'Photo',
@@ -212,7 +213,6 @@ const Content = ({
             message={item.message}
             images_url={item.images_url}
             polls={item.pollOptions}
-            // onPress={() => onPress(item, index)}
             item={item}
             pollexpiredat={item.polls_expired_at}
             multiplechoice={item.multiplechoice}
@@ -336,7 +336,7 @@ export const styles = StyleSheet.create({
   textContainer: {},
   containerMainText: (isShort) => ({
     paddingHorizontal: 16,
-    paddingTop: isShort ? 0 : 10
+    paddingVertical: isShort ? 0 : 10
   }),
   containerText: {
     flexDirection: 'row'
