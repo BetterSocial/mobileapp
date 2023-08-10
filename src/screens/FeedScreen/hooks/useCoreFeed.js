@@ -6,7 +6,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Context} from '../../../context';
 import {FEEDS_CACHE} from '../../../utils/cache/constant';
 import {downVote, upVote} from '../../../service/vote';
-import {getFeedDetail, getMainFeed, getMainFeedV2} from '../../../service/post';
+import {getFeedDetail, getMainFeedV2} from '../../../service/post';
 import {getSpecificCache, saveToCache} from '../../../utils/cache';
 import {setFeedByIndex, setMainFeeds, setTimer} from '../../../context/actions/feeds';
 
