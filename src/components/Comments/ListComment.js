@@ -58,6 +58,7 @@ const ListComment = ({
             // refreshComment={(children) => refreshChildComment({parent: item, children: children.data})}
             findCommentAndUpdate={findCommentAndUpdate}
             onCommentLongPressed={onCommentLongPressed}
+            updateVote={updateVote}
           />
         )}
       </View>
