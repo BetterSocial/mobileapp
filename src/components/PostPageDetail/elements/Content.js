@@ -1,24 +1,24 @@
 import * as React from 'react';
+import FastImage from 'react-native-fast-image';
 import PropTypes from 'prop-types';
 import {Dimensions, Platform, StyleSheet, Text, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 
-import FastImage from 'react-native-fast-image';
+import Card from '../../Card/Card';
+import ContentPoll from '../../../screens/FeedScreen/ContentPoll';
 import ImageLayouter from '../../../screens/FeedScreen/elements/ImageLayouter';
 import TopicsChip from '../../TopicsChip/TopicsChip';
+import dimen from '../../../utils/dimen';
+import useContentFeed from '../../../screens/FeedScreen/hooks/useContentFeed';
+import usePostDetail from '../hooks/usePostDetail';
 import {COLORS} from '../../../utils/theme';
+import {POST_TYPE_LINK, POST_TYPE_POLL} from '../../../utils/constants';
 import {colors} from '../../../utils/colors';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
-import {sanitizeUrl} from '../../../utils/string/StringUtils';
-import ContentPoll from '../../../screens/FeedScreen/ContentPoll';
-import {POST_TYPE_POLL, POST_TYPE_LINK} from '../../../utils/constants';
-import useContentFeed from '../../../screens/FeedScreen/hooks/useContentFeed';
-import {smartRender} from '../../../utils/Utils';
-import Card from '../../Card/Card';
 import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
-import usePostDetail from '../hooks/usePostDetail';
-import dimen from '../../../utils/dimen';
+import {sanitizeUrl} from '../../../utils/string/StringUtils';
+import {smartRender} from '../../../utils/Utils';
 
 const {width: screenWidth} = Dimensions.get('window');
 const FONT_SIZE_TEXT = 16;
@@ -31,7 +31,7 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
     navigation.push('ImageViewer', {
       title: 'Photo',
       index,
-      images: images_url.reduce((acc, current) => {
+      images: images_url?.reduce((acc, current) => {
         acc.push({url: current});
         return acc;
       }, [])
@@ -44,7 +44,6 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
     }
     return styles.contentFeedLink;
   };
-
   const navigateToLinkContextPage = () => {
     const param = linkContextScreenParamBuilder(
       item,
@@ -64,7 +63,16 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
 
     navigation.navigate('DomainScreen', param);
   };
+
+  const handleTopicStyle = () => {
+    if (images_url.length > 0) {
+      return styles.topicContainerWithImage;
+    }
+    return styles.topicContainerNoImage;
+  };
+
   if (!cekImage) return null;
+
   return (
     <>
       <ScrollView
@@ -72,14 +80,20 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
         style={styles.contentFeed}
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}>
-        <View
-          style={[
-            handleStyleFeed(),
-            {
-              minHeight: calculationText(hashtagAtComponent(sanitizeUrl(message))).containerHeight
-            }
-          ]}>
-          <View style={styles.postTextContainer(isPostDetail)}>
+        {!message || message === '' ? null : (
+          <View
+            style={[
+              handleStyleFeed(),
+              {
+                marginHorizontal: 6,
+                paddingHorizontal: isPostDetail ? 12 : 0,
+                minHeight: calculationText(
+                  hashtagAtComponent(sanitizeUrl(message)),
+                  item.post_type,
+                  item.images_url
+                ).containerHeight
+              }
+            ]}>
             {item.post_type !== POST_TYPE_LINK ? (
               <Text
                 style={[
@@ -104,13 +118,13 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
               </Text>
             )}
           </View>
-        </View>
-        <View style={styles.pollContainer}>
+        )}
+
+        <View style={{paddingHorizontal: 12}}>
           {item && item.post_type === POST_TYPE_POLL ? (
             <View
               style={{
                 flex: 1,
-                justifyContent: isPostDetail ? 'flex-end' : 'flex-start',
                 marginBottom: 0
               }}>
               <ContentPoll
@@ -155,7 +169,7 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
             />
           </View>
         )}
-        <View style={styles.topicContainer}>
+        <View style={handleTopicStyle()}>
           <TopicsChip
             isPdp={true}
             topics={topics}
@@ -240,9 +254,13 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     paddingTop: 5
   },
-  topicContainer: {
+  topicContainerWithImage: {
     position: 'absolute',
     bottom: 0
+  },
+  topicContainerNoImage: {
+    backgroundColor: 'transparent',
+    justifyContent: 'flex-end'
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],

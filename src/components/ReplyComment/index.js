@@ -33,15 +33,13 @@ const ReplyCommentId = ({
   dataFeed,
   updateReply,
   itemParent,
-  updateVote,
-  updateVoteLatestChildren
+  getComment
 }) => {
   const navigation = useNavigation();
   const {
     setCommentHook,
     temporaryText,
     isLastInParentHook,
-    findCommentAndUpdateHook,
     setTextComment,
     newCommentList,
     item,
@@ -49,8 +47,18 @@ const ReplyCommentId = ({
     updateFeed,
     scrollViewRef,
     createComment,
+    onSaveHeight,
     getThisComment
-  } = useReplyComment({itemProp, indexFeed, dataFeed, updateParent, updateReply, itemParent, page});
+  } = useReplyComment({
+    itemProp,
+    indexFeed,
+    dataFeed,
+    updateParent,
+    updateReply,
+    itemParent,
+    page,
+    getComment
+  });
   const {handleUsernameReplyComment} = useWriteComment();
   const {showAlertDelete} = useCommentAction();
   React.useEffect(() => {
@@ -59,11 +67,20 @@ const ReplyCommentId = ({
     }
   }, [temporaryText]);
 
+  const updateComment = () => getThisComment(true);
+
   React.useEffect(() => {
     if (itemProp) {
       getThisComment();
     }
   }, [itemProp]);
+
+  const updateVote = () => {
+    if (getComment && typeof getComment === 'function') {
+      getComment();
+    }
+    getThisComment();
+  };
 
   const navigationGoBack = () => navigation.goBack();
   if (!item) return null;
@@ -79,7 +96,10 @@ const ReplyCommentId = ({
         </Text>
         <View style={styles.btn} />
       </View>
-      <ScrollView ref={scrollViewRef} contentContainerStyle={styles.commentScrollView}>
+      <ScrollView
+        onContentSizeChange={onSaveHeight}
+        ref={scrollViewRef}
+        contentContainerStyle={styles.commentScrollView}>
         <View style={styles.containerComment}>
           <ReplyCommentItem
             indexFeed={indexFeed}
@@ -90,7 +110,7 @@ const ReplyCommentId = ({
             isLast={newCommentList.length <= 0}
             level={level}
             refreshComment={updateFeed}
-            updateVoteParent={updateVote}
+            updateVoteParent={getComment}
           />
           {newCommentList.length > 0 &&
             newCommentList.map((itemReply, index) => (
@@ -100,7 +120,7 @@ const ReplyCommentId = ({
                     <ConnectorWrapper index={index}>
                       <Pressable
                         onLongPress={() => {
-                          showAlertDelete(itemReply, false, () => getThisComment(true));
+                          showAlertDelete(itemReply, false, updateComment);
                         }}
                         style={styles.childCommentWrapper}>
                         <Comment
@@ -114,11 +134,9 @@ const ReplyCommentId = ({
                           comment={itemReply}
                           onPress={() => showChildrenCommentView(itemReply)}
                           level={parseInt(level, 10) + 1}
-                          refreshComment={updateFeed}
-                          findCommentAndUpdate={findCommentAndUpdateHook}
-                          updateVote={updateVoteLatestChildren}
+                          updateVote={updateVote}
                           onLongPress={() => {
-                            showAlertDelete(itemReply, false, () => getThisComment(true));
+                            showAlertDelete(itemReply, false, updateComment);
                           }}
                         />
                         {itemReply.children_counts.comment > 0 && (

@@ -6,7 +6,7 @@ import Migration from './migration.types';
 class MigrationVersion3 implements Migration {
   up = async (db: SQLiteDatabase): Promise<void> => {
     const upQuery = `CREATE TABLE IF NOT EXISTS ${ChannelListMemberSchema.getTableName()} (
-      id UUID PRIMARY KEY NOT NULL DEFAULT (UUID()),
+      id UUID PRIMARY KEY NOT NULL,
       channel_id TEXT NOT NULL,
       user_id UUID NOT NULL,
       is_moderator INTEGER NOT NULL DEFAULT 0,

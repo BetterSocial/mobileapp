@@ -57,7 +57,7 @@ import {useInitialStartup} from '../hooks/useInitialStartup';
 const RootStack = createNativeStackNavigator();
 
 export const RootNavigator = () => {
-  // useCoreChatSystemHook();
+  useCoreChatSystemHook();
 
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const [following, setFollowing] = useRecoilState(followersOrFollowingAtom);

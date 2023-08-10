@@ -1,8 +1,8 @@
 /* eslint-disable no-plusplus */
 import React from 'react';
 
+import {NO_POLL_UUID, isPollExpired} from '../../../utils/string/StringUtils';
 import {inputSingleChoicePoll} from '../../../service/post';
-import {isPollExpired, NO_POLL_UUID} from '../../../utils/string/StringUtils';
 
 const useContentPoll = ({polls, voteCount, isAlreadyPolling: isAlreadyPollingProps}) => {
   const [isAlreadyPolling, setIsAlreadyPolling] = React.useState(false);
@@ -37,7 +37,8 @@ const useContentPoll = ({polls, voteCount, isAlreadyPolling: isAlreadyPollingPro
     newItem.isalreadypolling = true;
     newItem.refreshtoken = new Date().valueOf();
     if (multipleChoiceSelected.length === 0) {
-      setIsAlreadyPolling(false);
+      setIsAlreadyPolling(true);
+      inputSingleChoicePoll(polls[0].polling_id, NO_POLL_UUID).catch((e) => console.log(e));
     } else {
       setIsAlreadyPolling(true);
       const selectedPolls = [];
