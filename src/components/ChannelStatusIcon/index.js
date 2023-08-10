@@ -1,6 +1,7 @@
 import * as React from 'react';
 import moment from 'moment';
 import {StyleSheet, Text, View} from 'react-native';
+
 import {calculateTime} from '../../utils/time';
 
 const ChannelStatusIcon = (props) => {
@@ -8,7 +9,7 @@ const ChannelStatusIcon = (props) => {
     const updatedAt = props?.latestMessagePreview?.messageObject?.updated_at;
     if (!updatedAt) return <></>;
 
-    const diffTime = calculateTime(moment(updatedAt));
+    const diffTime = calculateTime(moment(updatedAt), true);
     return <Text style={styles.time}>{diffTime}</Text>;
   };
 

@@ -1,11 +1,13 @@
 import * as React from 'react';
-import {StyleSheet, TouchableNativeFeedback, View, Text} from 'react-native';
+import {StyleSheet, TouchableNativeFeedback, View, Text, Dimensions} from 'react-native';
 
 import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 import IconPollWinnerBadge from '../../assets/icon/IconPollWinnerBadge';
 import IconPollMine from '../../assets/icon/IconPollMine';
+
+const {height: screenHeight} = Dimensions.get('window');
 
 const PollOptions = ({
   mypoll,
@@ -82,8 +84,8 @@ const PollOptions = ({
         key={`poll-options-${index}`}
         style={
           selectedindex === index
-            ? styles.pollOptionItemContainerActive
-            : styles.pollOptionItemContainer
+            ? styles.pollOptionsItemActiveContainer
+            : styles.pollOptionsItemContainer
         }>
         {renderPercentageBar()}
         <View style={styles.pollOptionTextContainer}>
@@ -111,44 +113,43 @@ const PollOptions = ({
 };
 
 const styles = StyleSheet.create({
-  pollOptionsContainer: {
-    width: '100%',
-    padding: 0,
-    marginTop: 16,
-    marginBottom: 8
-  },
-  pollOptionItemContainer: {
+  pollOptionsItemContainer: {
+    flex: 1,
     backgroundColor: colors.lightgrey,
     marginBottom: 8,
-    // height: 56,
     borderRadius: 8,
-    display: 'flex',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    height: (screenHeight * 7) / 100
   },
-  pollOptionItemContainerActive: {
+  pollOptionsItemActiveContainer: {
+    flex: 1,
     backgroundColor: colors.holytosca30percent,
-    // height: 56,
     marginBottom: 8,
     borderRadius: 8,
-    display: 'flex',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    height: (screenHeight * 7) / 100,
+    width: '100%'
   },
   pollOptionTextContainer: {
     display: 'flex',
     flexDirection: 'row',
+    alignContent: 'center',
+    justifyContent: 'center',
     width: '100%',
     paddingVertical: 12,
     paddingHorizontal: 16
   },
   pollOptionItemText: () => ({
     flex: 1,
+    textAlignVertical: 'center',
     color: colors.black,
     fontFamily: fonts.inter[400],
     marginStart: 0,
-    alignSelf: 'center',
+    marginBottom: 5,
     fontSize: normalizeFontSize(14)
   }),
   pollOptionItemPercentage: {
+    textAlignVertical: 'center',
     fontSize: normalizeFontSize(14)
   },
   percentageBar: (percent, isMyPoll = false) => {
@@ -203,4 +204,6 @@ const styles = StyleSheet.create({
   }
 });
 
-export default PollOptions;
+export default React.memo(PollOptions, (prevProps, nextProps) => {
+  return prevProps.isalreadypolling !== nextProps.isalreadypolling;
+});
