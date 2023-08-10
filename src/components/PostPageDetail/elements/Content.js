@@ -241,8 +241,8 @@ const styles = StyleSheet.create({
     paddingTop: 5
   },
   topicContainer: {
-    backgroundColor: 'transparent',
-    justifyContent: 'flex-end'
+    position: 'absolute',
+    bottom: 0
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],
