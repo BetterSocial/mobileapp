@@ -1,7 +1,7 @@
 /* eslint-disable import/no-named-as-default */
 import * as React from 'react';
 import CheckBox from '@react-native-community/checkbox';
-import {Platform, StyleSheet, Text, TouchableNativeFeedback, View} from 'react-native';
+import {Platform, StyleSheet, Text, TouchableNativeFeedback, View, Dimensions} from 'react-native';
 
 import IconPollMine from '../../assets/icon/IconPollMine';
 import IconPollWinnerBadge from '../../assets/icon/IconPollWinnerBadge';
@@ -9,6 +9,7 @@ import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import usePollOptionMultiple from './hooks/usePollOptionMultiple';
 
+const {height} = Dimensions.get('window');
 const PollOptionsMultipleChoice = ({
   item,
   mypoll,
@@ -18,7 +19,6 @@ const PollOptionsMultipleChoice = ({
   isalreadypolling = false,
   maxpolls = [],
   onselected = () => {},
-  total = 0,
   totalVotingUser = 0
 }) => {
   const {
@@ -43,6 +43,7 @@ const PollOptionsMultipleChoice = ({
   });
 
   const renderPercentageBar = () => {
+    console.log(isMyPoll(), 'test');
     if (isexpired) {
       return (
         <View
@@ -102,8 +103,7 @@ const PollOptionsMultipleChoice = ({
       testID="multiple"
       disabled={isPollDisabled()}
       onPress={onOptionsClicked}>
-      <View
-        style={selected ? styles.pollOptionItemContainerActive : styles.pollOptionItemContainer}>
+      <View style={styles.pollOptionItemContainer}>
         {renderPercentageBar()}
         <View style={styles.pollOptionTextContainer}>
           {isPollDisabled() ? (
@@ -140,21 +140,22 @@ const styles = StyleSheet.create({
     backgroundColor: colors.lightgrey,
     marginBottom: 8,
     borderRadius: 8,
-    // height: 56,
-    display: 'flex',
+    height: (height * 7) / 100,
+    flex: 1,
     flexDirection: 'row'
   },
   pollOptionItemContainerActive: {
     backgroundColor: colors.holytosca30percent,
     marginBottom: 8,
     borderRadius: 8,
-    // height: 56,
-    display: 'flex',
+    height: (height * 7) / 100,
+    flex: 1,
     flexDirection: 'row'
   },
   pollOptionTextContainer: {
     display: 'flex',
     flexDirection: 'row',
+    alignContent: 'center',
     width: '100%',
     paddingVertical: 4,
     paddingHorizontal: 16,
@@ -164,16 +165,16 @@ const styles = StyleSheet.create({
   },
   pollOptionItemText: (isexpired, isMax) => ({
     flex: 1,
+    textAlignVertical: 'center',
     color: colors.black,
     fontFamily: fonts.inter[400],
-    alignSelf: 'center',
     marginTop: isMax ? 0 : isexpired ? 6 : 0,
     marginBottom: isMax ? 0 : isexpired ? 6 : 0,
     marginLeft: 0,
     fontSize: normalizeFontSize(14)
   }),
   pollOptionItemPercentage: {
-    alignSelf: 'center',
+    textAlignVertical: 'center',
     fontSize: normalizeFontSize(14)
   },
   totalpolltext: {
@@ -197,7 +198,6 @@ const styles = StyleSheet.create({
     height: 12,
     alignSelf: 'center',
     borderRadius: 6,
-    backgroundColor: colors.holytosca,
     marginEnd: 12
   },
   totalVotesContainer: {
