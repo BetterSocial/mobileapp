@@ -4,7 +4,6 @@ import SimpleToast from 'react-native-simple-toast';
 import GlobalButton from '../../../components/Button/GlobalButton';
 
 import {colors} from '../../../utils/colors';
-import {fonts} from '../../../utils/fonts';
 import {getSingularOrPluralText} from '../../../utils/string/StringUtils';
 /**
  *
