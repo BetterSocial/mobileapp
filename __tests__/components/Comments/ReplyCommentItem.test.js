@@ -13,6 +13,8 @@ jest.mock('react-native/Libraries/Components/Pressable/Pressable');
 jest.useFakeTimers();
 
 describe('ReplyCommentItem should run correctly', () => {
+  const spyDownvote = jest.spyOn(serviceVote, 'voteCommentV2');
+
   afterEach(cleanup);
   const user = {
     created_at: '2022-06-10T13:11:47.095310Z',
@@ -167,7 +169,6 @@ describe('ReplyCommentItem should run correctly', () => {
 
   it('downcoteBtn should run correctly', () => {
     const onPress = jest.fn();
-    const spyDownvote = jest.spyOn(serviceVote, 'voteCommentV2');
     const refreshComment = jest.fn();
     const {getByTestId} = render(
       <ReplyCommentItem
@@ -190,7 +191,6 @@ describe('ReplyCommentItem should run correctly', () => {
   });
   it('upvoteBtn should run correctly', () => {
     const onPress = jest.fn();
-    const spyDownvote = jest.spyOn(serviceVote, 'voteCommentV2');
     const refreshComment = jest.fn();
     const {getByTestId} = render(
       <ReplyCommentItem
