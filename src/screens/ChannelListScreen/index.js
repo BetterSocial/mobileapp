@@ -237,7 +237,7 @@ const ChannelListScreen = () => {
     };
 
     api
-      .post('/profiles/follow-user', requestData)
+      .post('/profiles/follow-user-v3', requestData)
       .then((res) => {
         Promise.resolve(res.data);
       })
