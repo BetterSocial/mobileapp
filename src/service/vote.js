@@ -19,6 +19,17 @@ const saveCacheVote = () => {
   saveToCache(FIRST_VOTE, {isVote: true});
 };
 
+export const voteCommentV2 = async (data) => {
+  try {
+    const resApi = await api.post('/feeds/comment-vote-v2', data);
+    return resApi.data;
+  } catch (error) {
+    crashlytics().recordError(new Error(error));
+    SimpleToast.show(StringConstant.upvoteFailedText, SimpleToast.SHORT);
+    return error;
+  }
+};
+
 export const upVote = async (data, callback) => {
   try {
     const resApi = await api.post('/activity/upvote', data);
@@ -76,6 +87,7 @@ export const voteComment = async (data) => {
     return error;
   }
 };
+
 export const iVoteComment = async (id) => {
   try {
     const resApi = await api.get(`/activity/i_vote_comment?id=${id}`);
