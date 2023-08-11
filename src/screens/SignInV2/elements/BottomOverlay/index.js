@@ -8,7 +8,7 @@ import StringConstant from '../../../../utils/string/StringConstant';
 import dimen from '../../../../utils/dimen';
 import {COLORS} from '../../../../utils/theme';
 import {colors} from '../../../../utils/colors';
-import {fonts, normalizeFontSize} from '../../../../utils/fonts';
+import {fonts, normalize, normalizeFontSize} from '../../../../utils/fonts';
 import {openUrl} from '../../../../utils/Utils';
 import {imageConst} from '../../../../components/Image';
 
@@ -185,12 +185,11 @@ const bottomOverlayStyles = StyleSheet.create({
     alignSelf: 'center'
   },
   title: {
-    marginTop: 26,
-    marginBottom: 12,
-    marginRight: 32,
-    fontSize: normalizeFontSize(36),
+    marginTop: normalize(35),
+    marginBottom: normalize(30),
+    lineHeight: normalize(28),
+    fontSize: normalizeFontSize(22),
     fontFamily: fonts.inter[600],
-    lineHeight: 43.57,
     color: COLORS.blueOnboarding,
     alignSelf: 'flex-start'
   },
