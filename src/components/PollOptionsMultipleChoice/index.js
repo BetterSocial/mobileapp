@@ -43,6 +43,7 @@ const PollOptionsMultipleChoice = ({
   });
 
   const renderPercentageBar = () => {
+    console.log(isMyPoll(), 'test');
     if (isexpired) {
       return (
         <View
@@ -102,8 +103,7 @@ const PollOptionsMultipleChoice = ({
       testID="multiple"
       disabled={isPollDisabled()}
       onPress={onOptionsClicked}>
-      <View
-        style={selected ? styles.pollOptionItemContainerActive : styles.pollOptionItemContainer}>
+      <View style={styles.pollOptionItemContainer}>
         {renderPercentageBar()}
         <View style={styles.pollOptionTextContainer}>
           {isPollDisabled() ? (
@@ -198,7 +198,6 @@ const styles = StyleSheet.create({
     height: 12,
     alignSelf: 'center',
     borderRadius: 6,
-    backgroundColor: colors.holytosca,
     marginEnd: 12
   },
   totalVotesContainer: {

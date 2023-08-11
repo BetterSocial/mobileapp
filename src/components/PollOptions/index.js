@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StyleSheet, TouchableNativeFeedback, View, Text, Dimensions} from 'react-native';
+import {StyleSheet, TouchableNativeFeedback, View, Text, Dimensions, Platform} from 'react-native';
 
 import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
@@ -98,7 +98,7 @@ const PollOptions = ({
               }
             />
           )}
-          <Text style={styles.pollOptionItemText(isexpired, isMax)}>{poll?.option}</Text>
+          <Text style={styles.pollOptionItemText}>{poll?.option}</Text>
           {isPollDisabled() ? (
             <Text style={styles.pollOptionItemPercentage}>{`${
               Math.round(optionPercentage * 10) / 10
@@ -116,6 +116,8 @@ const styles = StyleSheet.create({
   pollOptionsItemContainer: {
     flex: 1,
     backgroundColor: colors.lightgrey,
+    justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: 8,
     borderRadius: 8,
     flexDirection: 'row',
@@ -126,28 +128,29 @@ const styles = StyleSheet.create({
     backgroundColor: colors.holytosca30percent,
     marginBottom: 8,
     borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
     flexDirection: 'row',
     height: (screenHeight * 7) / 100,
     width: '100%'
   },
   pollOptionTextContainer: {
-    display: 'flex',
+    flex: 1,
     flexDirection: 'row',
-    alignContent: 'center',
+    alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
     paddingVertical: 12,
     paddingHorizontal: 16
   },
-  pollOptionItemText: () => ({
+  pollOptionItemText: {
     flex: 1,
     textAlignVertical: 'center',
     color: colors.black,
     fontFamily: fonts.inter[400],
-    marginStart: 0,
-    marginBottom: 5,
+    marginBottom: Platform.OS === 'ios' ? 0 : 3,
     fontSize: normalizeFontSize(14)
-  }),
+  },
   pollOptionItemPercentage: {
     textAlignVertical: 'center',
     fontSize: normalizeFontSize(14)

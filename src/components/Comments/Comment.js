@@ -34,7 +34,6 @@ const Comment = ({
   level,
   showLeftConnector = true,
   disableOnTextPress = false,
-  findCommentAndUpdate,
   updateVote,
   onLongPress
 }) => {
@@ -43,7 +42,6 @@ const Comment = ({
   const [yourselfId, setYourselfId] = React.useState('');
   const {totalVote, setTotalVote, statusVote, onUpVote, onDownVote, iVote} = useComment({
     comment,
-    findCommentAndUpdate,
     level,
     updateVote
   });
@@ -98,7 +96,7 @@ const Comment = ({
   }, []);
 
   React.useEffect(() => {
-    setTotalVote(comment.data.count_upvote - comment.data.count_downvote);
+    setTotalVote(comment.data?.count_upvote - comment.data?.count_downvote);
     iVote();
   }, [JSON.stringify(comment.data)]);
 
@@ -126,10 +124,10 @@ const Comment = ({
           style={styles.flexStartContainer}
           onPress={openProfile}>
           <View style={styles.profile}>
-            {comment.data.anon_user_info_emoji_name || comment.data.is_anonymous ? (
+            {comment.data?.anon_user_info_emoji_name || comment.data?.is_anonymous ? (
               <View
-                style={[styles.image, {backgroundColor: comment.data.anon_user_info_color_code}]}>
-                <Text>{comment.data.anon_user_info_emoji_code}</Text>
+                style={[styles.image, {backgroundColor: comment.data?.anon_user_info_color_code}]}>
+                <Text>{comment.data?.anon_user_info_emoji_code}</Text>
               </View>
             ) : (
               <Image
@@ -154,7 +152,7 @@ const Comment = ({
           onLongPress={handleOnLongPress}
           style={styles.flexStartContainer}
           onPress={onTextPress}>
-          <Text style={styles.post}>{getCaptionWithLinkStyle(comment.data.text)}</Text>
+          <Text style={styles.post}>{getCaptionWithLinkStyle(comment.data?.text)}</Text>
         </ButtonHightlight>
       </TouchableOpacity>
       <View style={styles.constainerFooter}>
