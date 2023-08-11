@@ -20,7 +20,6 @@ import {followersOrFollowingAtom} from '../ChannelListScreen/model/followersOrFo
 import {fonts} from '../../utils/fonts';
 import {setAsset, setParticipants} from '../../context/actions/groupChat';
 import {setChannel} from '../../context/actions/setChannel';
-import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 const streami18n = new Streami18n({
@@ -59,16 +58,18 @@ const ChatDetailPage = ({route}) => {
     return <MessageSystem {...props} />;
   };
   const handleChannelClient = async () => {
-    try {
-      const channel = clients.client.getChannelById(
-        route.params.data.channel_type,
-        route.params.data.channel_id,
-        {}
-      );
-      setChannel(channel, dispatchChannel);
-    } catch (e) {
-      if (__DEV__) {
-        console.log(e, 'eman');
+    if (clients.client) {
+      try {
+        const channel = clients.client.getChannelById(
+          route.params.data.channel_type,
+          route.params.data.channel_id,
+          {}
+        );
+        setChannel(channel, dispatchChannel);
+      } catch (e) {
+        if (__DEV__) {
+          console.log(e, 'eman');
+        }
       }
     }
   };
@@ -120,14 +121,12 @@ const ChatDetailPage = ({route}) => {
 
     return options;
   };
-  const connect = useClientGetstream();
-  React.useEffect(() => {
-    connect();
-  }, []);
+
   React.useEffect(() => {
     searchUserMessages(channelClient.channel?.cid);
     setParticipants(channelClient.channel?.state?.members, dispatch);
   }, [clients.client]);
+
   const searchUserMessages = async (channelID) => {
     const messages = await clients.client.search(
       {
