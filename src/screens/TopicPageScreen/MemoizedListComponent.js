@@ -21,6 +21,7 @@ import {Footer, Gap, PreviewComment} from '../../components';
 import {colors} from '../../utils/colors';
 import {getCommentLength, getCountCommentWithChild} from '../../utils/getstream';
 import {showScoreAlertDialog} from '../../utils/Utils';
+import {normalizeFontSizeByWidth} from '../../utils/fonts';
 
 const FULL_WIDTH = Dimensions.get('screen').width;
 const tabBarHeight = StatusBar.currentHeight;
@@ -182,18 +183,16 @@ const RenderListFeed = (props) => {
 
 const styles = StyleSheet.create({
   cardContainer: () => ({
-    // height: FULL_HEIGHT - tabBarHeight,
-    height: dimen.size.TOPIC_CURRENT_ITEM_HEIGHT,
+    height: dimen.size.TOPIC_CURRENT_ITEM_HEIGHT - normalizeFontSizeByWidth(2),
     width: FULL_WIDTH,
-    backgroundColor: colors.white,
-    borderBottomWidth: 7,
-    borderBottomColor: colors.lightgrey
+    marginBottom: normalizeFontSizeByWidth(3),
+    backgroundColor: colors.white
   }),
   cardMain: {
     height: '100%',
     width: '100%'
   },
-  footerWrapper: (h) => ({height: h, bottom: 0}),
+  footerWrapper: (h) => ({height: h}),
   contentReaction: (heightReaction) => ({
     maxHeight: heightReaction,
     marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0

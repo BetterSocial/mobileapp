@@ -1,8 +1,9 @@
 import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
-import {StatusBar, View} from 'react-native';
+import {StatusBar, StyleSheet} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 import BlockComponent from '../../components/BlockComponent';
 import ButtonAddPostTopic from '../../components/Button/ButtonAddPostTopic';
 import MemoizedListComponent from './MemoizedListComponent';
@@ -23,6 +24,13 @@ import {getUserTopic} from '../../service/topics';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {setFeedByIndex, setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import {normalizeFontSizeByWidth} from '../../utils/fonts';
+
+const styles = StyleSheet.create({
+  parentContainer: {
+    flex: 1
+  }
+});
 
 const TopicPageScreen = (props) => {
   const route = useRoute();
@@ -304,8 +312,7 @@ const TopicPageScreen = (props) => {
 
   if (isInitialLoading) return null;
   return (
-    <View
-      style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
+    <SafeAreaProvider forceInset={{top: 'always'}} style={styles.parentContainer}>
       <StatusBar barStyle="dark-content" translucent={false} />
       <Navigation
         domain={topicName}
@@ -313,16 +320,14 @@ const TopicPageScreen = (props) => {
         onPress={() => handleFollowTopic()}
         isFollow={isFollow}
       />
-      <View style={{flex: 1}}>
-        <TiktokScroll
-          contentHeight={dimen.size.TOPIC_CURRENT_ITEM_HEIGHT}
-          data={feeds}
-          onEndReach={onEndReach}
-          onRefresh={onRefresh}
-          refreshing={loading}
-          renderItem={renderItem}
-        />
-      </View>
+      <TiktokScroll
+        contentHeight={dimen.size.TOPIC_CURRENT_ITEM_HEIGHT + normalizeFontSizeByWidth(3)}
+        data={feeds}
+        onEndReach={onEndReach}
+        onRefresh={onRefresh}
+        refreshing={loading}
+        renderItem={renderItem}
+      />
       <ButtonAddPostTopic topicName={topicName} onRefresh={onRefresh} />
       <BlockComponent
         ref={refBlockComponent}
@@ -330,7 +335,7 @@ const TopicPageScreen = (props) => {
         refreshAnonymous={onDeleteBlockedPostCompleted}
         screen="topic_screen"
       />
-    </View>
+    </SafeAreaProvider>
   );
 };
 export default withInteractionsManaged(TopicPageScreen);
