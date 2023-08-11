@@ -2,7 +2,7 @@ import {SET_ASSET_GROUP_CHAT, SET_PARTICIPANTS_GROUP_CHAT} from '../Types';
 
 const groupChatState = {
   asset: [],
-  participants: {},
+  participants: [],
 };
 const groupChatReducer = (state = groupChatState, action) => {
   switch (action.type) {

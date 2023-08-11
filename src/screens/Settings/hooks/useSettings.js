@@ -26,7 +26,7 @@ const useSettings = () => {
   const [, myProfileDispatch] = React.useContext(Context).myProfileFeed;
   const [, feedDispatch] = React.useContext(Context).feeds;
 
-  const {resetAllContext} = useResetContext();
+  const {resetAllContext, resetLocalDB} = useResetContext();
 
   const logout = async () => {
     try {
@@ -35,6 +35,7 @@ const useSettings = () => {
       resetProfileFeed(myProfileDispatch);
       setMainFeeds([], feedDispatch);
       resetAllContext();
+      resetLocalDB();
       client?.disconnectUser();
       createClient(null, dispatch);
       clearLocalStorege();

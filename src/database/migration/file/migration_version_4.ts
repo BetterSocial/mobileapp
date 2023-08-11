@@ -9,7 +9,7 @@ const TABLE_NAME = ChatSchema.getTableName();
 class MigrationVersion4 implements Migration {
   up = async (db: SQLiteDatabase): Promise<void> => {
     const upQuery = `CREATE TABLE IF NOT EXISTS ${TABLE_NAME} (
-        id UUID PRIMARY KEY NOT NULL DEFAULT (UUID()),
+        id UUID PRIMARY KEY NOT NULL,
         channel_id TEXT NOT NULL,
         user_id UUID NOT NULL,
         message TEXT NOT NULL,

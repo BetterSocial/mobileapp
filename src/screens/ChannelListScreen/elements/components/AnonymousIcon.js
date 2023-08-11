@@ -17,9 +17,14 @@ const AnonymousIcon = ({color, emojiCode, size, withBorder = false}) => {
       alignItems: 'center'
     },
     anonPostNotificationEmoji: {
+      display: 'flex',
       fontSize: size * 0.75,
+      width: size,
       alignSelf: 'center',
-      textAlign: 'center'
+      textAlign: 'center',
+      justifyContent: 'center',
+      marginLeft: size * 0.04,
+      alignItems: 'center'
     }
   });
 

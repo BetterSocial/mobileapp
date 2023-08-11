@@ -1,18 +1,21 @@
 import React from 'react';
 import Toast from 'react-native-simple-toast';
 import moment from 'moment';
-import {useNavigation} from '@react-navigation/core';
+import {useNavigation, useRoute} from '@react-navigation/core';
+import {Dimensions} from 'react-native';
 import StringConstant from '../../../utils/string/StringConstant';
 import {Context} from '../../../context';
-import {createChildComment} from '../../../service/comment';
-import {getFeedDetail} from '../../../service/post';
+import {createChildCommentV3} from '../../../service/comment';
 import {getCommentChild} from '../../../service/feeds';
+import {getFeedDetail} from '../../../service/post';
 
 const useReplyComment = ({itemProp, indexFeed, dataFeed, updateParent, page, getComment}) => {
   const [temporaryText, setTemporaryText] = React.useState('');
   const [textComment, setTextComment] = React.useState('');
   const [newCommentList, setNewCommentList] = React.useState([]);
   const [item, setItem] = React.useState(itemProp);
+  const {params} = useRoute();
+  const [curHeight] = React.useState(Dimensions.get('window').height);
   const navigation = useNavigation();
   const scrollViewRef = React.useRef(null);
   const [profile] = React.useContext(Context).profile;
@@ -146,7 +149,6 @@ const useReplyComment = ({itemProp, indexFeed, dataFeed, updateParent, page, get
     }
     return [];
   };
-
   const showChildrenCommentView = async (itemReply) => {
     const itemParentProps = await {
       ...itemProp,
@@ -163,7 +165,8 @@ const useReplyComment = ({itemProp, indexFeed, dataFeed, updateParent, page, get
       updateVote: (data, dataVote) => updateVoteParentPostHook(data, dataVote, itemParentProps),
       updateVoteLatestChildren: (data, dataVote) =>
         updateVoteLatestChildrenParentHook(data, dataVote, itemParentProps),
-      getComment: getThisComment
+      getComment: getThisComment,
+      getCommentParent: params.getComment
     });
   };
 
@@ -193,12 +196,8 @@ const useReplyComment = ({itemProp, indexFeed, dataFeed, updateParent, page, get
       }
     }
   };
-  const createComment = async (isAnonimity, anonimityData) => {
-    let sendPostNotif = false;
-    if (page !== 'DetailDomainScreen') {
-      sendPostNotif = true;
-    }
 
+  const handleAddedComment = (isAnonimity, anonimityData) => {
     const commentWillBeAddedData = {
       ...defaultData,
       data: {...defaultData.data, text: textComment}
@@ -220,21 +219,27 @@ const useReplyComment = ({itemProp, indexFeed, dataFeed, updateParent, page, get
 
     setTemporaryText('');
     setNewCommentList([...newCommentList, commentWillBeAddedData]);
+  };
+
+  const createComment = async (isAnonimity, anonimityData) => {
+    let sendPostNotif = false;
+    if (page !== 'DetailDomainScreen') {
+      sendPostNotif = true;
+    }
+
+    handleAddedComment(isAnonimity, anonimityData);
 
     try {
       if (textComment.trim() !== '') {
-        const data = await createChildComment(
+        const data = await createChildCommentV3(
           textComment,
           item.id,
-          item.user.id,
           sendPostNotif,
-          dataFeed?.actor?.id,
-          dataFeed.id,
-          dataFeed.message,
+          dataFeed?.id ?? dataFeed?.reaction_id,
           isAnonimity,
           anonimityData
         );
-        scrollViewRef.current.scrollToEnd();
+        scrollViewRef.current.scrollToEnd({animated: true});
         if (data.code === 200) {
           const newComment = [
             ...newCommentList,
@@ -294,6 +299,7 @@ const useReplyComment = ({itemProp, indexFeed, dataFeed, updateParent, page, get
     handleUpdateFeed,
     scrollViewRef,
     createComment,
+    curHeight,
     getThisComment
   };
 };
