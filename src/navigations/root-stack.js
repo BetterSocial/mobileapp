@@ -68,7 +68,7 @@ export const RootNavigator = () => {
       if (state.isConnected && following?.length !== 0) {
         const successValue = [];
         following.forEach((value) => {
-          api.post('/profiles/follow-user', value).then(() => {
+          api.post('/profiles/follow-user-v3', value).then(() => {
             successValue.push(value.user_id_followed);
           });
         });
