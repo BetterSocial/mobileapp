@@ -24,7 +24,7 @@ import {
 } from '../../utils/constants';
 import {Context} from '../../context';
 import {Footer} from '..';
-import {createCommentParentV2, getCommentList} from '../../service/comment';
+import {createCommentParentV3, getCommentList} from '../../service/comment';
 import {downVote, upVote} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
 import {getCountCommentWithChildInDetailPage} from '../../utils/getstream';
@@ -213,7 +213,7 @@ const PostPageDetailIdComponent = (props) => {
         if (isAnonimity) {
           sendData = {...sendData, anon_user_info: anonUser};
         }
-        const data = await createCommentParentV2(sendData);
+        const data = await createCommentParentV3(sendData);
         updateCachingComment(data?.data);
         if (data.code === 200) {
           setTextComment('');
