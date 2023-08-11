@@ -19,7 +19,7 @@ import {sanitizeUrlForLinking} from '../../utils/Utils';
 import {COLORS} from '../../utils/theme';
 import {fonts} from '../../utils/fonts';
 
-const CardStyle = StyleSheet.create({
+const style = StyleSheet.create({
   link: {
     color: COLORS.blue,
     textDecorationLine: 'underline',
@@ -115,21 +115,15 @@ const Card = (props) => {
   // const styles = buildStylesheet('card', props.styles);
   const renderImageComponent = () => {
     if (image)
-      return (
-        <Image testID="contentLinkImageUrlImage" style={CardStyle.image} source={{uri: image}} />
-      );
+      return <Image testID="contentLinkImageUrlImage" style={style.image} source={{uri: image}} />;
 
     return (
-      <Image
-        testID="contentLinkImageEmptyStateImage"
-        style={CardStyle.image}
-        source={NewsEmptyState}
-      />
+      <Image testID="contentLinkImageEmptyStateImage" style={style.image} source={NewsEmptyState} />
     );
   };
 
   return (
-    <View style={CardStyle.container}>
+    <View style={style.container}>
       <View>
         <TouchableOpacity
           onPress={() => onHeaderPress(item)}
@@ -142,22 +136,20 @@ const Card = (props) => {
           onPress={onCardContentPress}
           style={{flex: 1}}
           testID={TestIdConstant.contentLinkContentPress}>
-          <View style={CardStyle.content}>
+          <View style={style.content}>
             <View>
-              <Text style={CardStyle.title}>
-                {_.truncate(`${title}`, {length: 80, separator: ''})}
-              </Text>
+              <Text style={style.title}>{_.truncate(`${title}`, {length: 80, separator: ''})}</Text>
             </View>
             <View style={{flex: 1, height: 150}}>{renderImageComponent()}</View>
             <View>
-              <Text style={CardStyle.description}>
+              <Text style={style.description}>
                 {_.truncate(`${description}`, {length: 120})}
                 {/* {description} */}
-                <Gap style={CardStyle.width(2)} />
+                <Gap style={style.width(2)} />
                 <Text
                   testID={TestIdConstant.contentLinkOpenLinkPress}
                   onPress={() => Linking.openURL(sanitizeUrlForLinking(url))}
-                  style={CardStyle.link}>
+                  style={style.link}>
                   Open Link
                 </Text>
               </Text>
