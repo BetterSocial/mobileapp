@@ -531,6 +531,10 @@ const PostPageDetailIdComponent = (props) => {
     return comments.length <= 0 ? calculatePaddingBtm() : 0;
   };
 
+  const handleUpdateVote = () => {
+    getComment();
+  };
+
   return (
     <View style={styles.container}>
       {loading && !route.params.isCaching ? <LoadingWithoutModal /> : null}
@@ -606,8 +610,8 @@ const PostPageDetailIdComponent = (props) => {
                   )
                 }
                 findCommentAndUpdate={findCommentAndUpdate}
-                updateParentPost={updateParentPost}
                 contextSource={contextSource}
+                updateVote={handleUpdateVote}
               />
             )}
           </ScrollView>
