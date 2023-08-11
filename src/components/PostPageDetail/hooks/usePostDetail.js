@@ -47,6 +47,7 @@ const usePostDetail = () => {
     });
     return newComment;
   };
+
   const calculatedSizeScreen = top + bottom + StatusBar.currentHeight + 170;
 
   const calculationText = (message) => {
