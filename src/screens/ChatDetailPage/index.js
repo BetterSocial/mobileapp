@@ -175,6 +175,16 @@ const ChatDetailPage = ({route}) => {
     return true;
   };
 
+  console.log('channelClient', channelClient.channel?.data?.is_channel_blocked);
+
+  const renderMessageInput = () => {
+    if (channelClient.channel?.data?.is_channel_blocked) {
+      return <></>;
+    }
+
+    return <MessageInput Input={InputMessage} />;
+  };
+
   if (clients.client && channelClient.channel) {
     return (
       <SafeAreaView>
@@ -211,8 +221,7 @@ const ChatDetailPage = ({route}) => {
                   InlineDateSeparator={CustomInlineDateSeparator}
                   loading={false}
                 />
-
-                <MessageInput Input={InputMessage} />
+                {renderMessageInput()}
               </>
             </Channel>
           </Chat>

@@ -233,9 +233,6 @@ const ChannelListScreen = () => {
     <>
       <StatusBar translucent={false} />
       <ScrollView ref={listRef} contentInsetAdjustmentBehavior="automatic">
-        <View style={{height: 52}}>
-          <Search animatedValue={0} onPress={() => navigation.navigate('ContactScreen')} />
-        </View>
         <EasyFollowSystem valueCallback={checkFollowBack} followButtonAction={followButtonAction}>
           {myProfile && myProfile.user_id && client.client ? (
             <Chat client={client.client} i18nInstance={streami18n}>
