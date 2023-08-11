@@ -15,7 +15,9 @@ export const colors = {
   silver: '#BDBDBD',
   french_pass: '#b6e4fd',
   pattens_blue: '#ddf2fe',
-  blue: '#2F80ED',
+  blue: '#2C67BC',
+  lightblue: '#55C2FF',
+  blue1: '#2C67BC',
   red: '#FF2E63',
   holytosca: '#00ADB5',
   holytosca30percent: '#00ADB54D',
@@ -24,5 +26,8 @@ export const colors = {
   halfBaked: '#88CDD0',
   tradewind: '#58B1B5',
   elm: '#22878B',
-  blockColor: '#FF2E63'
+  blockColor: '#FF2E63',
+  darkBlue: '#2C67BC',
+  blueSea10: '#55C2FF',
+  greenDark: '#004346'
 };

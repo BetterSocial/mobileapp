@@ -197,3 +197,18 @@ export const getOtherFeedsInProfile = async (userId, offset = 0) =>
         reject(err);
       });
   });
+
+export const profileSettingsDMpermission = async (allowAnonDm, onlyReceivedDmFromUserFollowing) =>
+  new Promise((resolve, reject) => {
+    api
+      .patch('profiles/settings', {
+        allowAnonDm,
+        onlyReceivedDmFromUserFollowing
+      })
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });

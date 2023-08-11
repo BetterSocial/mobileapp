@@ -2,6 +2,7 @@
 import config from 'react-native-config';
 import {Alert, Share} from 'react-native';
 
+import Clipboard from '@react-native-clipboard/clipboard';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 
 const buildShare = async (message) => {
@@ -60,6 +61,10 @@ const shareFeeds = async (item, analyticsLogEvent, analyticsId) => {
 
 const shareUserLink = (username) => buildShare(`${config.SHARE_URL}/u/${username}`);
 
+const copyToClipboard = (username) => {
+  Clipboard.setString(`${config.SHARE_URL}/u/${username}`);
+};
+
 const ShareUtils = {
   shareDomain,
   shareFeeds,
@@ -67,7 +72,8 @@ const ShareUtils = {
   sharePostInProfile,
   sharePostInTopic,
   shareUserLink,
-  shareCommunity
+  shareCommunity,
+  copyToClipboard
 };
 
 export default ShareUtils;

@@ -6,7 +6,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Context} from '../../../context';
 import {FEEDS_CACHE} from '../../../utils/cache/constant';
 import {downVote, upVote} from '../../../service/vote';
-import {getFeedDetail, getMainFeed} from '../../../service/post';
+import {getFeedDetail, getMainFeedV2} from '../../../service/post';
 import {getSpecificCache, saveToCache} from '../../../utils/cache';
 import {setFeedByIndex, setMainFeeds, setTimer} from '../../../context/actions/feeds';
 
@@ -30,10 +30,10 @@ const useCoreFeed = () => {
       setLoading(true);
     }
     try {
-      const query = `?offset=${offsetFeed}`;
+      const query = `?offset=${offsetFeed}&feed=main_feed_following`;
 
-      const dataFeeds = await getMainFeed(query);
-      if (Array.isArray(dataFeeds.data) && dataFeeds.data?.length <= 0) {
+      const dataFeeds = await getMainFeedV2(query);
+      if (Array.isArray(dataFeeds.data) && dataFeeds.data.length <= 0) {
         setLoading(false);
         return setIsLastPage(true);
       }

@@ -1,6 +1,7 @@
 // Splash Screen
 
 // Sign in
+const signInScreenHumanIdFoundation = 'Foundation for a Human Internet';
 const signInScreenHumanIdBrand = 'humanID';
 const signInScreenHumanIdDetail =
   'is an independent nonprofit guaranteeing\n your privacy. Better Social will receive no personal\ninformation.';
@@ -9,17 +10,20 @@ const signInTermsLink = 'Terms';
 const signInPrivacy = 'Privacy Policy';
 
 // Onboarding - Choose Username
-const onboardingChooseUsernameHeadline = 'Choose your username';
+const onboardingChooseUsernameHeadline = 'Choose your username & photo';
 const onboardingChooseUsernameSubHeadline =
-  'BetterSocial does not require real names - just make sure your friends will find & recognize you';
+  'A recognizable profile ensures that your\nfriends can find you. No real names required!';
 const onboardingChooseUsernameBlueBoxHint =
-  'Remember that whatever your name, you will always be able to post anonymously';
+  'You can hide your name and photo in\nposts, comments, and chats at all times.';
 const onboardingChooseUsernameButtonStateNext = 'NEXT';
 const onboardingChooseUsernameErrorCannotBeEmpty = 'Username cannot be empty';
 const onboardingChooseUsernameLabelCheckingAvailability = 'Checking availability';
 const onboardingChooseUsernameLabelMinimumChar = 'Username min. 3 characters';
 const onboardingChooseUsernameLabelMaximumChar = 'Username maximum 19 characters';
 const onboardingChooseUsernameLabelJustANumber = 'Username cannot be just a number';
+const onboardingChooseUsernameAlertProfilePictureTitle = 'Add a profile picture?';
+const onboardingChooseUsernameAlertProfilePictureDesc =
+  'Make sure that your friends can identify you to connect. You’ll always be able to hide your name and image to post, comment and chat anonymously!';
 const onboardingChooseUsernameLabelUserAvailable = (username) =>
   `Congrats - ${username} is still available`;
 const onboardingChooseUsernameLabelUserTaken = (username) =>
@@ -30,7 +34,7 @@ const onboardingLocalCommunityHeadline = 'Find your local community';
 const onboardingLocalCommunitySubHeadline =
   'Your location will be used to show relevant posts, and not be visible to others or on your profile.';
 const onboardingLocalCommunityPrimaryLocationTitle = 'Add New Location';
-const onboardingLocalCommunityPrimaryLocationSubTitle = 'Search your favorite location';
+const onboardingLocalCommunityPrimaryLocationSubTitle = 'Add the places you call home';
 const onboardingLocalCommunitySecondaryLocationTitle = 'Add a second location';
 const onboardingLocalCommunitySecondaryLocationSubTitle =
   '🏡 Home away from home? Add a second location';
@@ -132,6 +136,7 @@ const dynamicLinkPostExpired = 'This post has expired and has been deleted autom
 
 export default {
   signInPrivacy,
+  signInScreenHumanIdFoundation,
   signInScreenHumanIdBrand,
   signInScreenHumanIdDetail,
   signInTermsAndPrivacyDetail,
@@ -148,6 +153,8 @@ export default {
   onboardingChooseUsernameLabelMinimumChar,
   onboardingChooseUsernameLabelMaximumChar,
   onboardingChooseUsernameLabelJustANumber,
+  onboardingChooseUsernameAlertProfilePictureTitle,
+  onboardingChooseUsernameAlertProfilePictureDesc,
   onboardingChooseUsernameLabelUserAvailable,
   onboardingChooseUsernameLabelUserTaken,
 
