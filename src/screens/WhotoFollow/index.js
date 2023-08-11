@@ -1,4 +1,5 @@
 import * as React from 'react';
+import JwtDecode from 'jwt-decode';
 import crashlytics from '@react-native-firebase/crashlytics';
 import {
   ActivityIndicator,
@@ -17,6 +18,7 @@ import {useSetRecoilState} from 'recoil';
 import ItemUser from './elements/ItemUser';
 import Label from './elements/Label';
 import Loading from '../Loading';
+import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
 import {Context} from '../../context';
@@ -37,6 +39,8 @@ const VIEW_TYPE_LABEL_LOCATION = 2;
 const VIEW_TYPE_DATA = 3;
 
 const WhotoFollow = () => {
+  const {setProfileId} = useProfileHook();
+
   const [users, setUsers] = React.useState([]);
   const [followed, setFollowed] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -174,6 +178,12 @@ const WhotoFollow = () => {
           setRefreshToken(res.refresh_token);
           try {
             await setAnonymousToken(res.anonymousToken);
+            const userId = await JwtDecode(res.token).user_id;
+            const anonymousUserId = await JwtDecode(res.anonymousToken).user_id;
+            setProfileId({
+              anonProfileId: anonymousUserId,
+              signedProfileId: userId
+            });
           } catch (e) {
             crashlytics().recordError(new Error(e));
           }

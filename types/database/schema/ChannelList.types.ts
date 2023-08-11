@@ -1,3 +1,6 @@
+/* eslint-disable no-shadow */
+import {ChatListDetail} from './ChatListDetail.types';
+
 export interface UserSchema {
   id: string;
   username: string;
@@ -31,6 +34,7 @@ export interface ChannelList {
   lastUpdatedAt: string;
   lastUpdatedBy: string;
   createdAt: string;
+  expiredAt: string;
   rawJson: any;
   user: UserSchema | null;
   members: ChannelListMemberSchema[] | null;
@@ -44,7 +48,16 @@ export interface ChatSchema {
   type: string;
   createdAt: string;
   updatedAt: string;
-  rawJson: string;
+  rawJson: ChatListDetail | null;
   user: UserSchema | null;
   status: string;
+  isMe: boolean;
+  isContinuous: boolean;
+}
+
+export enum ChatStatus {
+  PENDING = 'pending',
+  SENT = 'sent',
+  DELIVERED = 'delivered',
+  READ = 'read'
 }
