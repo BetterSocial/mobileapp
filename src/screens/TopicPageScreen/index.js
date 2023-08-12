@@ -1,4 +1,5 @@
 import * as React from 'react';
+import _ from 'lodash';
 import SimpleToast from 'react-native-simple-toast';
 import {StatusBar, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -45,16 +46,29 @@ const TopicPageScreen = (props) => {
   const {followTopic} = useChatClientHook();
 
   const initialFetchTopicFeeds = async (cacheLength = 0) => {
-    const resultGetTopicPages = await getTopicPages(id);
-    const {data = [], offset: offsetFeeds = 0} = resultGetTopicPages || {};
-    setTopicFeeds(data, dispatch);
-    setOffset(offsetFeeds);
-    setIsInitialLoading(false);
+    try {
+      const resultGetTopicPages = await getTopicPages(id?.toLowerCase(), 0);
+      const {data = [], offset: offsetFeeds = 0} = resultGetTopicPages || {};
+      setTopicFeeds(data, dispatch);
+      setOffset(offsetFeeds);
+      TopicPageStorage.set(id?.toLowerCase(), data, offsetFeeds);
 
-    TopicPageStorage.set(id?.toLowerCase(), data, offsetFeeds);
+      if (cacheLength === 0 && data?.length === 0)
+        SimpleToast.show('No posts yet', SimpleToast.SHORT);
+    } catch (e) {
+      if (cacheLength === 0 && e?.response?.data?.data?.length === 0) {
+        SimpleToast.show('No posts yet', SimpleToast.SHORT);
+        setTopicFeeds([], dispatch);
+        return;
+      }
 
-    if (cacheLength === 0 && data?.length === 0)
-      SimpleToast.show('No posts yet', SimpleToast.SHORT);
+      if (e?.response?.data?.data?.length === 0) {
+        SimpleToast.show('No more posts to show', SimpleToast.SHORT);
+      }
+    } finally {
+      setIsInitialLoading(false);
+      setLoading(false);
+    }
   };
 
   const initData = async () => {
@@ -92,7 +106,10 @@ const TopicPageScreen = (props) => {
       initData();
     });
 
-    return unsubscribe;
+    return () => {
+      unsubscribe();
+      setTopicFeeds([], dispatch);
+    };
   }, [navigation]);
 
   React.useEffect(() => {
@@ -139,10 +156,12 @@ const TopicPageScreen = (props) => {
             TopicPageStorage.set(id?.toLowerCase(), data, offsetFeeds);
             setTopicFeeds(data, dispatch);
           } else {
-            const joinData = [...feeds, ...data];
+            const joinData = _.uniqBy([...feeds, ...data], (item) => item.id);
             TopicPageStorage.set(id?.toLowerCase(), joinData, offsetFeeds);
             setTopicFeeds(joinData, dispatch);
           }
+
+          setOffset(offsetFeeds);
         }
       } catch (error) {
         if (__DEV__) {

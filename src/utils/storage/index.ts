@@ -12,9 +12,10 @@ enum StorageKeysEnum {
 interface IStorage {
   get: () => string;
   set: (value: string) => void;
+  clear: () => void;
   setForKey: (key: string, value: string) => void;
   getForKey: (key: string) => string;
-  clear: () => void;
+  clearForKey: (key: string) => void;
 }
 /**
  * TYPES
@@ -43,12 +44,17 @@ const storageBuilder = (keyName: StorageKeysEnum): IStorage => {
     MMKVStorage.delete(keyName);
   };
 
+  const clearForKey = (key: string) => {
+    MMKVStorage.delete(`${keyName}_${key}`);
+  };
+
   return {
     get,
     set,
+    clear,
     setForKey,
     getForKey,
-    clear
+    clearForKey
   };
 };
 
