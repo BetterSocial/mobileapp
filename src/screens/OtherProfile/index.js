@@ -309,6 +309,7 @@ const OtherProfile = () => {
   React.useEffect(() => {
     return () => {
       if (interactionManagerRef.current) interactionManagerRef.current.cancel();
+      setOtherProfileFeed([], dispatchOtherProfile);
     };
   }, []);
 
