@@ -250,14 +250,6 @@ const ChooseUsername = () => {
     );
   };
 
-  const checkProfilePicture = () => {
-    if (users.photo) {
-      next();
-    } else {
-      showAlertProfilePicture();
-    }
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
