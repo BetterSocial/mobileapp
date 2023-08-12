@@ -2,6 +2,7 @@ import * as React from 'react';
 import _ from 'lodash';
 import Toast from 'react-native-simple-toast';
 import {
+  Alert,
   Animated,
   Image,
   Keyboard,
@@ -230,6 +231,33 @@ const ChooseUsername = () => {
         return <Text />;
     }
   };
+
+  const showAlertProfilePicture = () => {
+    Alert.alert(
+      StringConstant.onboardingChooseUsernameAlertProfilePictureTitle,
+      StringConstant.onboardingChooseUsernameAlertProfilePictureDesc,
+      [
+        {
+          text: 'Add profile picture',
+          onPress: () => onPhoto()
+        },
+        {
+          text: 'Skip',
+          style: 'cancel',
+          onPress: () => next()
+        }
+      ]
+    );
+  };
+
+  const checkProfilePicture = () => {
+    if (users.photo) {
+      next();
+    } else {
+      showAlertProfilePicture();
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -290,7 +318,7 @@ const ChooseUsername = () => {
 
         <View style={styles.gap} />
         <View style={styles.footer}>
-          <Button disabled={isNextButtonDisabled()} onPress={() => next()}>
+          <Button disabled={isNextButtonDisabled()} onPress={() => checkProfilePicture()}>
             {StringConstant.onboardingChooseUsernameButtonStateNext}
           </Button>
         </View>

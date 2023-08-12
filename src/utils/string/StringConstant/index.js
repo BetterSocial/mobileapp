@@ -21,6 +21,9 @@ const onboardingChooseUsernameLabelCheckingAvailability = 'Checking availability
 const onboardingChooseUsernameLabelMinimumChar = 'Username min. 3 characters';
 const onboardingChooseUsernameLabelMaximumChar = 'Username maximum 19 characters';
 const onboardingChooseUsernameLabelJustANumber = 'Username cannot be just a number';
+const onboardingChooseUsernameAlertProfilePictureTitle = 'Add a profile picture?';
+const onboardingChooseUsernameAlertProfilePictureDesc =
+  'Make sure that your friends can identify you to connect. You’ll always be able to hide your name and image to post, comment and chat anonymously!';
 const onboardingChooseUsernameLabelUserAvailable = (username) =>
   `Congrats - ${username} is still available`;
 const onboardingChooseUsernameLabelUserTaken = (username) =>
@@ -150,6 +153,8 @@ export default {
   onboardingChooseUsernameLabelMinimumChar,
   onboardingChooseUsernameLabelMaximumChar,
   onboardingChooseUsernameLabelJustANumber,
+  onboardingChooseUsernameAlertProfilePictureTitle,
+  onboardingChooseUsernameAlertProfilePictureDesc,
   onboardingChooseUsernameLabelUserAvailable,
   onboardingChooseUsernameLabelUserTaken,
 
