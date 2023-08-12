@@ -9,11 +9,11 @@ const signInTermsLink = 'Terms';
 const signInPrivacy = 'Privacy Policy';
 
 // Onboarding - Choose Username
-const onboardingChooseUsernameHeadline = 'Choose your username';
+const onboardingChooseUsernameHeadline = 'Choose your username & photo';
 const onboardingChooseUsernameSubHeadline =
-  'BetterSocial does not require real names - just make sure your friends will find & recognize you';
+  'A recognizable profile ensures that your\nfriends can find you. No real names required!';
 const onboardingChooseUsernameBlueBoxHint =
-  'Remember that whatever your name, you will always be able to post anonymously';
+  'You can hide your name and photo in\nposts, comments, and chats at all times.';
 const onboardingChooseUsernameButtonStateNext = 'NEXT';
 const onboardingChooseUsernameErrorCannotBeEmpty = 'Username cannot be empty';
 const onboardingChooseUsernameLabelCheckingAvailability = 'Checking availability';
