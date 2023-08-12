@@ -13,20 +13,12 @@ import {openUrl} from '../../../../utils/Utils';
 import {imageConst} from '../../../../components/Image';
 
 const HUMAN_ID_URL = 'https://www.human-internet.org';
-const TERMS_URL = 'https://www.bettersocial.org/terms';
-const PRIVACY_URL = 'https://www.bettersocial.org/privacy';
+// const TERMS_URL = 'https://www.bettersocial.org/terms';
+// const PRIVACY_URL = 'https://www.bettersocial.org/privacy';
 
 const BottomOverlay = ({count, handleLogin, index, isLogin, title, onNextSlide, textSvg}) => {
   const goToHumanIdWeb = () => {
     openUrl(HUMAN_ID_URL, true);
-  };
-
-  const goToTermsWeb = () => {
-    openUrl(TERMS_URL, true);
-  };
-
-  const goToPrivacyTerms = () => {
-    openUrl(PRIVACY_URL, true);
   };
 
   if (isLogin)
