@@ -250,6 +250,14 @@ const ChooseUsername = () => {
     );
   };
 
+  const checkProfilePicture = () => {
+    if (users.photo) {
+      next();
+    } else {
+      showAlertProfilePicture();
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -310,7 +318,7 @@ const ChooseUsername = () => {
 
         <View style={styles.gap} />
         <View style={styles.footer}>
-          <Button disabled={isNextButtonDisabled()} onPress={() => next()}>
+          <Button disabled={isNextButtonDisabled()} onPress={() => checkProfilePicture()}>
             {StringConstant.onboardingChooseUsernameButtonStateNext}
           </Button>
         </View>
