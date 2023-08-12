@@ -1,6 +1,7 @@
 // Splash Screen
 
 // Sign in
+const signInScreenHumanIdFoundation = 'Foundation for a Human Internet';
 const signInScreenHumanIdBrand = 'humanID';
 const signInScreenHumanIdDetail =
   'is an independent nonprofit guaranteeing\n your privacy. Better Social will receive no personal\ninformation.';
@@ -132,6 +133,7 @@ const dynamicLinkPostExpired = 'This post has expired and has been deleted autom
 
 export default {
   signInPrivacy,
+  signInScreenHumanIdFoundation,
   signInScreenHumanIdBrand,
   signInScreenHumanIdDetail,
   signInTermsAndPrivacyDetail,
