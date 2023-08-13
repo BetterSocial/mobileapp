@@ -226,7 +226,6 @@ const OtherProfile = () => {
         setDMChat('');
         return;
       }
-      SimpleToast.show('Send message failed', SimpleToast.SHORT);
     } finally {
       setLoadingSendDM(false);
     }
@@ -257,12 +256,13 @@ const OtherProfile = () => {
     });
 
     setChannel(findChannels[0], dispatchChannel);
-    await navigation.replace('ChatDetailPage');
+    await navigation.navigate('ChatDetailPage');
   };
 
   const sendSignedDM = async () => {
     try {
       setLoadingSendDM(true);
+      setIsLoading(true);
       const signedMParams = {
         user_id: dataMain.user_id,
         message: dmChat
@@ -274,6 +274,7 @@ const OtherProfile = () => {
       console.error(error);
     } finally {
       setLoadingSendDM(false);
+      setIsLoading(false);
     }
   };
 
@@ -782,8 +783,9 @@ const OtherProfile = () => {
           username={dataMain.username}
         />
         {isLoading ? (
-          <View style={styles.containerLoading}>
-            <LoadingWithoutModal />
+          <View
+            style={loadingSendDM ? styles.containerLoading : styles.containerLoadingBlockScreen}>
+            <LoadingWithoutModal text={loadingSendDM ? 'Initializing chat' : null} />
           </View>
         ) : (
           <></>
@@ -1049,6 +1051,14 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   containerLoading: {
+    height: '100%',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    zIndex: 99
+  },
+  containerLoadingBlockScreen: {
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center'
