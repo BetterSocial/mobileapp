@@ -9,7 +9,7 @@ import NewsEmptyState from '../../assets/images/news-empty-state.png';
 import TestIdConstant from '../../utils/testId';
 import Image from '../Image';
 import {sanitizeUrlForLinking} from '../../utils/Utils';
-import CardStyle from './style/CardStyle';
+import {CardStyle} from './style/CardStyle';
 
 const Card = (props) => {
   const {

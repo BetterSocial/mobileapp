@@ -2,7 +2,7 @@ import {StyleSheet} from 'react-native';
 import {COLORS} from '../../../utils/theme';
 import {fonts} from '../../../utils/fonts';
 
-const CardStyle = StyleSheet.create({
+export const CardStyle = StyleSheet.create({
   link: {
     color: COLORS.blue,
     textDecorationLine: 'underline',
@@ -80,5 +80,3 @@ const CardStyle = StyleSheet.create({
     fontSize: 12
   }
 });
-
-export default CardStyle;
