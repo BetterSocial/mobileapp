@@ -12,7 +12,7 @@ const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement
   return (
     <BaseChannelItem
       type={BaseChannelItemTypeProps.ANON_PM}
-      message={item?.description}
+      message={item?.description || ' '}
       name={item?.name}
       picture={item?.channelPicture}
       time={calculateTime(item?.lastUpdatedAt, true)}
