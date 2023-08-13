@@ -8,6 +8,7 @@ interface ITopicPageStorageObject {
 interface ITopicPageStorage {
   get: (key: string) => ITopicPageStorageObject;
   set: (key: string, feeds: any[], offset: number) => void;
+  clear: (key: string) => void;
 }
 
 const TopicPageStorage: ITopicPageStorage = {
@@ -24,6 +25,10 @@ const TopicPageStorage: ITopicPageStorage = {
   set: (key: string, feeds: any[], offset: number) => {
     StorageUtils.topicPages.setForKey(`${key}_offset`, offset.toString());
     StorageUtils.topicPages.setForKey(`${key}`, JSON.stringify(feeds));
+  },
+  clear: (key: string) => {
+    StorageUtils.topicPages.clearForKey(`${key}_offset`);
+    StorageUtils.topicPages.clearForKey(`${key}`);
   }
 };
 
