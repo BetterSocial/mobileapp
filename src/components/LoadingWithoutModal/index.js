@@ -1,15 +1,18 @@
 import * as React from 'react';
-import {ActivityIndicator, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 
 import {COLORS} from '../../utils/theme';
 
-const LoadingWithoutModal = () => (
+const LoadingWithoutModal = (props) => {
+  return (
     <View style={styles.container}>
-      <View style={styles.content}>
+      <View style={styles.content(!!props.text)}>
         <ActivityIndicator size="large" color={COLORS.holyTosca} />
+        {props?.text && <Text style={styles.text}>{props.text}</Text>}
       </View>
     </View>
   );
+};
 
 export default LoadingWithoutModal;
 
@@ -17,12 +20,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    // backgroundColor: 'red'
+    alignItems: 'center'
   },
-  content: {
+  content: (isHasText) => ({
     backgroundColor: 'rgba(0, 0, 0, 0.22)',
-    padding: 50,
-    borderRadius: 10,
-  },
+    padding: isHasText ? 30 : 50,
+    borderRadius: 10
+  }),
+  text: {
+    color: '#fff',
+    fontSize: 16,
+    marginTop: 10
+  }
 });

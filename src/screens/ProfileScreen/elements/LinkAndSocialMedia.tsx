@@ -143,7 +143,8 @@ const LinkAndSocialMedia: React.FC<LinkProps> = ({username, prompt}) => {
             <TwitterIcon height={16} width={20} />
           </Button>
 
-          <InstagramButton socialMessage={socialMessage} />
+          {/* <InstagramButton socialMessage={socialMessage} /> */}
+          <View style={{width: 10}} />
 
           <Button
             onPress={() => {
