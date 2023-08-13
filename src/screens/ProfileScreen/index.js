@@ -65,7 +65,7 @@ import {deleteAnonymousPost, deletePost, getFeedDetail} from '../../service/post
 import {downVote, upVote} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
 import {getAccessToken} from '../../utils/token';
-import {getSpecificCache, saveToCache} from '../../utils/cache';
+import {saveToCache} from '../../utils/cache';
 import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
@@ -116,7 +116,7 @@ const Header = (props) => {
                 goToFollowings(dataMain.user_id, dataMain.username)
               }
             />
-            {isShowKarma ? (
+            {/* {isShowKarma ? (
               <View style={{flexDirection: 'row'}}>
                 <KarmaScore score={86} />
                 <Tooltip
@@ -141,7 +141,7 @@ const Header = (props) => {
                   </Pressable>
                 </Tooltip>
               </View>
-            ) : null}
+            ) : null} */}
           </View>
         </View>
 
