@@ -1,4 +1,4 @@
-import { Dimensions, PixelRatio, Platform } from 'react-native';
+import {Dimensions, PixelRatio, Platform} from 'react-native';
 
 export const fonts = {
   inter: {
@@ -10,7 +10,7 @@ export const fonts = {
     600: 'Inter-SemiBold',
     700: 'Inter-Bold',
     800: 'Inter-ExtraBold',
-    900: 'Inter-Black',
+    900: 'Inter-Black'
   },
   poppins: {
     100: 'Poppins-Thin',
@@ -21,8 +21,8 @@ export const fonts = {
     600: 'Poppins-SemiBold',
     700: 'Poppins-Bold',
     800: 'Poppins-ExtraBold',
-    900: 'Poppins-Black',
-  },
+    900: 'Poppins-Black'
+  }
 };
 
 export const normalize = (size) => {
@@ -40,10 +40,15 @@ export const normalizeFontSize = (fontSize) => {
   return normalizedFontSize;
 };
 
-export const scaleFontSize = (fontSize, screenHeight = 771) => {
-  const {
-    width, height, scale, fontScale,
-  } = Dimensions.get('window');
+export const normalizeFontSizeByWidth = (fontSize) => {
+  const referenceHeight = 375;
+  const currentScreenHeight = Dimensions.get('screen').width;
+  const normalizedFontSize = (currentScreenHeight / referenceHeight) * fontSize;
+  return normalizedFontSize;
+};
+
+export const scaleFontSize = (fontSize) => {
+  const {height} = Dimensions.get('window');
   const newScale = height / (812 - 78);
   const newSize = fontSize * newScale;
   if (Platform.OS === 'ios') return Math.round(PixelRatio.roundToNearestPixel(newSize));

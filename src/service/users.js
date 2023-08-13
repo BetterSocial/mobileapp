@@ -166,11 +166,17 @@ export const removeFcmToken = async () => {
   }
 };
 
-export const verifyHumanIdExchangeToken = async (exchangeToken) => {
+export const verifyHumanIdExchangeToken = async (exchangeToken, dummy = false) => {
+  const data = {
+    token: exchangeToken
+  };
+
+  const exchangeTokenUrl = dummy
+    ? '/users/check-exchange-token-dummy'
+    : '/users/check-exchange-token';
+
   try {
-    const result = await api.post('/users/check-exchange-token', {
-      token: exchangeToken
-    });
+    const result = await api.post(exchangeTokenUrl, data);
 
     return Promise.resolve(result?.data);
   } catch (error) {
@@ -191,6 +197,7 @@ export const checkPasswordForDemoLogin = async (password) => {
     }
 
     return {
+      code: result?.data?.code,
       success: false,
       message: result?.data?.message
     };
@@ -198,6 +205,7 @@ export const checkPasswordForDemoLogin = async (password) => {
     crashlytics().recordError(new Error(e));
     return {
       success: false,
+      code: e?.response?.data?.code,
       message: e?.response?.data?.message
     };
   }

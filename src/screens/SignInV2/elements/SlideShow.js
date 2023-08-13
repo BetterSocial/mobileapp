@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Dimensions, StyleSheet, Text, View, TouchableWithoutFeedback } from 'react-native';
-import { RFValue } from 'react-native-responsive-fontsize';
-import { SwiperFlatList } from 'react-native-swiper-flatlist';
+import {Dimensions, StyleSheet, Text, View, TouchableWithoutFeedback} from 'react-native';
+import {RFValue} from 'react-native-responsive-fontsize';
+import {SwiperFlatList} from 'react-native-swiper-flatlist';
 
 import FgOnboarding1 from '../../../assets/background/fg_onboarding_full_1.png';
 import FgOnboarding2 from '../../../assets/background/fg_onboarding_full_2.png';
@@ -11,127 +11,132 @@ import OnboardingText1 from '../../../assets/onboarding/OnboardingText1';
 import OnboardingText2 from '../../../assets/onboarding/OnboardingText2';
 import OnboardingText3 from '../../../assets/onboarding/OnboardingText3';
 import OnboardingText4 from '../../../assets/onboarding/OnboardingText4';
-import { COLORS } from '../../../utils/theme';
-import { SlideShowItem } from './SlideShowItem';
-import { fonts, normalizeFontSize, scaleFontSize } from '../../../utils/fonts';
+import {COLORS} from '../../../utils/theme';
+import {SlideShowItem} from './SlideShowItem';
+import {fonts, normalizeFontSize, scaleFontSize} from '../../../utils/fonts';
 
-const { width: screenWidth, fontScale, scale } = Dimensions.get('window');
+const {width: screenWidth, fontScale, scale} = Dimensions.get('window');
 
-const SlideShow = ({ onChangeNewIndex = (newIndex) => { }, handleLogin, onContainerPress = () => {} }) => {
-  const [index, setIndex] = React.useState(0)
-
-  const flatListRef = React.useRef(null)
+const SlideShow = ({
+  onChangeNewIndex = (newIndex) => {},
+  handleLogin,
+  onContainerPress = () => {}
+}) => {
+  const flatListRef = React.useRef(null);
 
   const data = [
     {
       illustrations: FgOnboarding1,
-      title: 'Be yourself',
+      title: 'Go Incognito with a Tap',
       // textSvg: <OnboardingText1 preserveAspectRatio="xMinYMin meet" width={292 - 32}/>,
-      textSvg: <OnboardingText1 preserveAspectRatio="xMinYMin meet" width={'100%'}/>,
-      text: <Text style={slideShowStyles.textFontNormal}>
-        {`Say `}
-        <Text style={slideShowStyles.textFontBold}>{`No `}</Text>
-        {`to self-censorship & `}
-        <Text style={slideShowStyles.textFontBold}>{`Yes `}</Text>
-        {`to privacy!`}
-        {`\n`}
+      textSvg: <OnboardingText1 preserveAspectRatio="xMinYMin meet" width={'100%'} />,
+      text: (
+        <Text style={slideShowStyles.textFontNormal}>
+          <Text style={slideShowStyles.textFontBold}>{'Post, comment and chat anonymously. '}</Text>
+          {'We’ll'}
+          {'\n'}
 
-        {`Post anonymously - if you want. All upvotes,`}
-        {`\n`}
+          {'never reveal your username, and you’ll be'}
+          {'\n'}
 
-        {`downvotes, blocks and who you're following`}
-        {`\n`}
+          {'assigned a different random emoji for every'}
+          {'\n'}
 
-        {`are `}
-        <Text style={slideShowStyles.textFontBold}>{`always `}</Text>
-        {`anonymous!`}
-      </Text>,
+          {'post, comment or message.'}
+          {'\n'}
+
+          {'So go ahead and '}
+          <Text style={slideShowStyles.textFontBold}>{'say what you really thisnk!'}</Text>
+        </Text>
+      )
     },
     {
       illustrations: FgOnboarding2,
-      title: 'Be human',
+      title: 'Get Anonymous Messages',
       // textSvg: <OnboardingText2 preserveAspectRatio="xMinYMin meet" width={297 - 32}/>,
-      textSvg: <OnboardingText2 preserveAspectRatio="xMinYMin meet" width={'100%'}/>,
-      text: <Text style={slideShowStyles.textFontNormal}>
-        <Text style={slideShowStyles.textFontBold}>{`Better `}</Text>
-        {`blocks fake accounts, and won't spam `}
-        {`\n`}
+      textSvg: <OnboardingText2 preserveAspectRatio="xMinYMin meet" width={'100%'} />,
+      text: (
+        <Text style={slideShowStyles.textFontNormal}>
+          {'Share your link on other platforms to receive'}
+          {'\n'}
 
-        {`you with irrelevant notifications.`}
-        {`\n`}
+          {'anonymous messages from your friends. '}
+          <Text style={slideShowStyles.textFontBold}>{'Ask'}</Text>
+          {'\n'}
 
-        {`We believe that in a functioning community,`}
-        {`\n`}
+          <Text style={slideShowStyles.textFontBold}>{'for advice, feedback, and more!'}</Text>
+          {'\n'}
 
-        {`everyone deserves `}
-        <Text style={slideShowStyles.textFontBold}>{`one voice, `}</Text>
-        {`not to be `}
-        {`\n`}
-
-        {`drowned by bots & automated posts.`}
-      </Text>,
+          {'As always, abuse can be blocked in two clicks.'}
+        </Text>
+      )
     },
     {
       illustrations: FgOnboarding3,
-      title: 'Be real',
+      title: 'Find Your Community',
       // textSvg: <OnboardingText3 preserveAspectRatio="xMinYMin meet" width={303 - 32}/>,
-      textSvg: <OnboardingText3 preserveAspectRatio="xMinYMin meet" width={'100%'}/>,
-      text: <Text style={slideShowStyles.textFontNormal}>
-        {`Identifying fake news is hard!`}
-        {`\n`}
+      textSvg: <OnboardingText3 preserveAspectRatio="xMinYMin meet" width={'100%'} />,
+      text: (
+        <Text style={slideShowStyles.textFontNormal}>
+          {'Posting into a community is as easy as using a'}
+          {'\n'}
 
-        {`Better makes it easy to find context and other`}
-        {`\n`}
+          <Text style={slideShowStyles.textFontBold}>{'#hashtag. '}</Text>
+          {'Add '}
+          <Text style={slideShowStyles.textFontBold}>{'#communities '}</Text>
+          {'to your posts to'}
+          {'\n'}
 
-        {`opinions, without telling you what to believe.`}
-        {`\n`}
+          {'reach more people.'}
+          {'\n'}
 
-        {`Credder.com's independent credibility score`}
-        {`\n`}
+          {'Follow friends and communities to start and'}
+          {'\n'}
 
-        {`provides ratings by independent journalists.`}
-      </Text>,
+          {'join conversations.'}
+        </Text>
+      )
     },
     {
       illustrations: FgOnboarding4,
-      title: 'Be safe',
+      title: 'Don’t Miss Anything',
       // textSvg: <OnboardingText4 preserveAspectRatio="xMinYMin meet" width={306 - 32}/>,
-      textSvg: <OnboardingText4 preserveAspectRatio="xMinYMin meet" width={'100%'}/>,
-      text: <Text style={slideShowStyles.textFontNormal}>
-        {`Be safe from surveillance and harassment.`}
-        {`\n`}
+      textSvg: <OnboardingText4 preserveAspectRatio="xMinYMin meet" width={'100%'} />,
+      text: (
+        <Text style={slideShowStyles.textFontNormal}>
+          {'Chats, posts, comments, and communities:'}
+          {'\n'}
 
-        {`Block haters in 2 clicks & penalize their posts`}
-        {`\n`}
+          {'Find all your conversations separated between'}
+          {'\n'}
 
-        {`across the platform. Like real life communities,`}
-        {`\n`}
+          {'your anonymous and your public activity.'}
+          {'\n'}
 
-        {`our algorithm amplifies respect, without`}
-        {`\n`}
+          <Text style={slideShowStyles.textFontBold}>{'Avoid notification spam '}</Text>
+          {'and check what’s'}
+          {'\n'}
 
-        {`rejecting free speech.`}
-      </Text>,
+          {'new, all in one place.'}
+        </Text>
+      )
     },
     {
       isLogin: true,
       illustrations: FgOnboarding1,
       title: 'Be Safe',
-      text: <Text style={slideShowStyles.textFontNormal}>
-      </Text>,
+      text: <Text style={slideShowStyles.textFontNormal}></Text>
     }
-
   ];
   const handleChangeIndex = (swiperData) => {
     // onChangeNewIndex(swiperData, data.length);
-    // flatListRef.current.scrollToIndex({ index: swiperData.index })
-    setIndex(swiperData.index)
+    flatListRef.current.scrollToIndex({index: swiperData.index});
+    // setIndex(swiperData.index)
   };
 
   const onHandleNextSlide = (toIndex) => {
-    flatListRef.current.scrollToIndex({ index: toIndex })
-    setIndex(toIndex)
-  }
+    flatListRef.current.scrollToIndex({index: toIndex});
+  };
 
   return (
     <SwiperFlatList
@@ -139,19 +144,21 @@ const SlideShow = ({ onChangeNewIndex = (newIndex) => { }, handleLogin, onContai
       index={0}
       data={data}
       scroll
-      renderItem={({ item, index }) =>
-      <SlideShowItem index={index}
-      onPressContainer={onContainerPress}
-      key={`slideshowitem-${index}`}
-      count={data.length}
-      handleLogin={handleLogin}
-      illustration={item.illustrations}
-      isLogin={item.isLogin}
-      onNextSlide={onHandleNextSlide}
-      text={item.text}
-      title={item.title}
-      textSvg={item.textSvg} />
-      }
+      renderItem={({item, index}) => (
+        <SlideShowItem
+          index={index}
+          onPressContainer={onContainerPress}
+          key={`slideshowitem-${index}`}
+          count={data.length}
+          handleLogin={handleLogin}
+          illustration={item.illustrations}
+          isLogin={item.isLogin}
+          onNextSlide={onHandleNextSlide}
+          text={item.text}
+          title={item.title}
+          textSvg={item.textSvg}
+        />
+      )}
       onChangeIndex={handleChangeIndex}
       viewabilityConfig={{
         itemVisiblePercentThreshold: 1,
@@ -168,7 +175,7 @@ const slideShowStyles = StyleSheet.create({
     fontFamily: fonts.inter[700],
     fontSize: fontScale < 1 ? RFValue(16, 812) : RFValue(14, 812),
     lineHeight: fontScale < 1 ? RFValue(22) : RFValue(20),
-    color: COLORS.blackgrey,
+    color: COLORS.blackgrey
   },
   textFontNormal: {
     fontFamily: fonts.inter[400],
@@ -178,29 +185,29 @@ const slideShowStyles = StyleSheet.create({
     flex: 1,
     alignSelf: 'flex-start',
     marginRight: 32,
-    zIndex: 1000,
+    zIndex: 1000
   }
-})
+});
 
 const styles = StyleSheet.create({
   containerCard: {
     flex: 1,
     backgroundColor: 'gray',
-    width: screenWidth,
+    width: screenWidth
   },
-  image: { flex: 1 },
+  image: {flex: 1},
   dot: {
     width: 8,
     height: 8,
-    marginHorizontal: 5,
+    marginHorizontal: 5
   },
   dotContainer: {
-    marginBottom: 6,
+    marginBottom: 6
   },
   onboardingItem: (backgroundColor) => {
     return {
-      backgroundColor: backgroundColor,
-      alignSelf: 'center',
-    }
+      backgroundColor,
+      alignSelf: 'center'
+    };
   }
 });

@@ -101,7 +101,7 @@ export const useInitialStartup = () => {
     try {
       const query = `?offset=${offset}&limit=${LIMIT_FIRST_FEEDS}`;
       const dataFeeds = await getMainFeed(query);
-      if (dataFeeds.data.length > 0) {
+      if (dataFeeds.data?.length > 0) {
         const {data} = dataFeeds;
         const dataWithDummy = [...data, {dummy: true}];
         let saveData = {

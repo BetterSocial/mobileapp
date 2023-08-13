@@ -1,31 +1,27 @@
 import * as React from 'react';
 import SplashScreenPackage from 'react-native-splash-screen';
 import analytics from '@react-native-firebase/analytics';
-import {
-  Linking,
-} from 'react-native';
-import { StackActions } from '@react-navigation/native';
-import { debounce } from 'lodash';
-import { useNavigation } from '@react-navigation/core';
+import {Linking} from 'react-native';
+import {StackActions} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/core';
 
-import { Context } from '../../context/Store';
-import { getFollowing, getProfileByUsername } from '../../service/profile';
-import { getUserId } from '../../utils/users';
-import { setNews } from '../../context/actions/news';
-import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
-import { verifyTokenGetstream } from '../../service/users';
+import useProfileHook from '../../hooks/core/profile/useProfileHook';
+import {getAnonymousUserId, getUserId} from '../../utils/users';
+import {getProfileByUsername} from '../../service/profile';
+import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
+import {verifyTokenGetstream} from '../../service/users';
 
 const SplashScreen = () => {
   const navigation = useNavigation();
   const BASE_DEEPLINK_URL_REGEX = 'link.bettersocial.org/u';
-  const [isModalShown, setIsModalShown] = React.useState(false);
+  const [, setIsModalShown] = React.useState(false);
 
-  const [, newsDispatch] = React.useContext(Context).news;
-  const [, followingDispatch] = React.useContext(Context).following;
   const create = useClientGetstream();
   const debounceNavigationPage = (selfUserId) => {
     navigation.dispatch(StackActions.replace(selfUserId ? 'HomeTabs' : 'SignIn'));
   };
+
+  const {setProfileId} = useProfileHook();
 
   const getDiscoveryData = async (selfUserId) => {
     SplashScreenPackage.hide();
@@ -51,6 +47,12 @@ const SplashScreen = () => {
   const doVerifyUser = async () => {
     try {
       const id = await getUserId();
+      const anonymousUserId = await getAnonymousUserId();
+      setProfileId({
+        anonProfileId: anonymousUserId,
+        profileId: id
+      });
+
       if (id !== null && id !== '') {
         const verify = await verifyTokenGetstream();
         if (verify !== null && verify !== '') {
@@ -89,7 +91,7 @@ const SplashScreen = () => {
         // Check if myself
         if (selfUserId === otherProfile.user_id) {
           navigation.replace('HomeTabs', {
-            screen: 'Profile',
+            screen: 'Profile'
           });
           return setIsModalShown(false);
         }
@@ -103,6 +105,8 @@ const SplashScreen = () => {
 
         return setIsModalShown(false);
       }
+
+      return setIsModalShown(false);
     } catch (e) {
       return navigateWithoutDeeplink(null);
     }
@@ -111,15 +115,13 @@ const SplashScreen = () => {
   React.useEffect(() => {
     analytics().logScreenView({
       screen_class: 'SplashScreen',
-      screen_name: 'Splash Screen',
+      screen_name: 'Splash Screen'
     });
 
     getDeepLinkUrl();
   }, []);
 
-  return (
-    null
-  );
+  return null;
 };
 
 export default SplashScreen;

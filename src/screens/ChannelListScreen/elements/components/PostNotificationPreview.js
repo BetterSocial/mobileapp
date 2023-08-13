@@ -5,7 +5,6 @@ import FastImage from 'react-native-fast-image';
 /* eslint-disable camelcase */
 import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
-import {calculateTime} from 'stream-chat-react-native-core/src/components/ChannelList/customUtils';
 import {useTheme} from 'stream-chat-react-native-core/src/contexts/themeContext/ThemeContext';
 
 import AvatarPostNotif from './AvatarPostNotif';
@@ -16,6 +15,7 @@ import MemoIc_arrow_upvote_on from '../../../../assets/arrow/Ic_upvote_on';
 import MemoIc_block_inactive from '../../../../assets/block/Ic_block_inactive';
 import MemoIc_comment from '../../../../assets/icons/Ic_comment';
 import {Context} from '../../../../context';
+import {calculateTime} from '../../../../utils/time';
 import {normalizeFontSize} from '../../../../utils/fonts';
 
 const styles = StyleSheet.create({
@@ -169,16 +169,16 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
         return `You: ${findComment.reaction.data.text}`;
       }
       if (findComment.reaction.data.anon_user_info_color_name) {
-        return `Anonymous ${findComment.reaction.data.anon_user_info_emoji_name} replied to your comment: ${findComment.reaction.data.text}`;
+        return `Anonymous ${findComment.reaction.data.anon_user_info_emoji_name}: ${findComment.reaction.data.text}`;
       }
-      return `${findComment.reaction?.user?.data?.username} replied to your comment: ${findComment.reaction.data.text} `;
+      return `${findComment.reaction?.user?.data?.username}: ${findComment.reaction.data.text} `;
     }
     return 'No comments yet';
   };
 
   const handleDate = () => {
     if (item.data && item.data.last_message_at) {
-      return calculateTime(item.data.last_message_at);
+      return calculateTime(item.data.last_message_at, true);
     }
     return null;
   };

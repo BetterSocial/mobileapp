@@ -120,7 +120,9 @@ const WriteComment = ({
           onPress={() => onPress(isAnonimity, anonimityData)}
           style={styles.btn(isDisableSubmit || loadingUser)}
           disabled={isDisableSubmit || loadingUser}>
-          <MemoSendComment style={styles.icSendButton} />
+          <MemoSendComment
+            fillBackground={isDisableSubmit || loadingUser ? colors.bondi_blue : '#C4C4C4'}
+          />
         </TouchableOpacity>
       </View>
     </View>
