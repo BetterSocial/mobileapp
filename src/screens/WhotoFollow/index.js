@@ -31,6 +31,7 @@ import {registerUser} from '../../service/users';
 import {setAccessToken, setAnonymousToken, setRefreshToken, setToken} from '../../utils/token';
 import {setImage} from '../../context/actions/users';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
+import {COLORS} from '../../utils/theme';
 
 const {width} = Dimensions.get('screen');
 
@@ -253,8 +254,7 @@ const WhotoFollow = () => {
       <View style={styles.content}>
         <Text style={styles.textWhoToFollow}>Who to follow</Text>
         <Text style={styles.textDescription}>
-          Interesting people to follow. You can edit this anytime, and others cannot see who you
-          follow.
+          {'Find interesting people to follow.\nYou can edit this anytime.'}
         </Text>
       </View>
       {isLoading ? <ActivityIndicator size="small" color="#0000ff" /> : null}
@@ -275,6 +275,7 @@ const WhotoFollow = () => {
         <></>
       )}
       <View style={styles.footer}>
+        <Text style={styles.textSmall}>Others cannot see who you’re following.</Text>
         <Button onPress={() => register()}>FINISH</Button>
       </View>
       <Loading visible={fetchRegister} />
@@ -288,7 +289,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
   recyclerview: {
-    marginBottom: 90
+    marginBottom: 112
   },
   content: {
     padding: 22
@@ -326,7 +327,7 @@ const styles = StyleSheet.create({
   footer: {
     position: 'absolute',
     bottom: 0,
-    height: 90,
+    height: 112,
     width,
     paddingLeft: 20,
     paddingRight: 20,
@@ -345,6 +346,15 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     marginTop: 'auto',
     zIndex: 1000
+  },
+  textSmall: {
+    fontFamily: 'Inter',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: 10,
+    textAlign: 'center',
+    color: COLORS.blackgrey,
+    marginBottom: 12
   },
   containerCard: {
     flexDirection: 'row',
@@ -458,7 +468,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   }),
   listUser: {
-    marginBottom: 90
+    marginBottom: 112
   }
 });
 export default WhotoFollow;
