@@ -8,7 +8,7 @@ export const trimString = (string, length) => {
 export const addDotAndRemoveNewline = (text) => {
   const trimmedText = text.trim();
 
-  const textWithoutNewline = trimmedText.replace(/\n+$/, '');
+  const textWithoutNewline = trimmedText.replace(/(?:\n+)$/, '');
 
   if (textWithoutNewline.length > 0) {
     return `${textWithoutNewline}`;

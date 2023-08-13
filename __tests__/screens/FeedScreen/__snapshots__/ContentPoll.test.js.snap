@@ -7,7 +7,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
       Object {
         "height": "auto",
         "justifyContent": "flex-start",
-        "marginBottom": 0,
+        "marginBottom": 48,
         "paddingVertical": 0,
       },
     ]
@@ -16,6 +16,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
   <View
     style={
       Object {
+        "marginBottom": 0,
         "padding": 0,
         "width": "100%",
       }
@@ -230,7 +231,6 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
     <Text
       style={
         Object {
-          "alignSelf": "center",
           "color": "#828282",
           "fontFamily": "Inter-Regular",
           "fontSize": NaN,

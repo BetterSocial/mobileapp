@@ -1,6 +1,7 @@
 import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import ToastMessage from 'react-native-toast-message';
+import ToggleSwitch from 'toggle-switch-react-native';
 import {
   Dimensions,
   Image,
@@ -19,7 +20,6 @@ import {generateRandomId} from 'stream-chat-react-native';
 import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
 
-import ToggleSwitch from 'toggle-switch-react-native';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BlockIcon from '../../assets/icons/images/block-blue.svg';
 import BlockProfile from '../../components/Blocking/BlockProfile';
@@ -33,7 +33,9 @@ import RenderItem from '../ProfileScreen/elements/RenderItem';
 import ReportUser from '../../components/Blocking/ReportUser';
 import ShareUtils from '../../utils/share';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
+import TextAreaChat from '../../components/TextAreaChat';
 import dimen from '../../utils/dimen';
+import useSaveAnonChatHook from '../../database/hooks/useSaveAnonChatHook';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {blockUser, unblockUserApi} from '../../service/blocking';
@@ -47,19 +49,18 @@ import {
 import {colors} from '../../utils/colors';
 import {downVote, upVote} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
+import {generateAnonProfileOtherProfile} from '../../service/anonymousProfile';
 import {getAccessToken} from '../../utils/token';
 import {getFeedDetail} from '../../service/post';
 import {getSingularOrPluralText} from '../../utils/string/StringUtils';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import {sendAnonymousDMOtherProfile, sendSignedDMOtherProfile} from '../../service/chat';
 import {setChannel} from '../../context/actions/setChannel';
 import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherProfileFeed';
 import {trimString} from '../../utils/string/TrimString';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import TextAreaChat from '../../components/TextAreaChat';
-import {generateAnonProfileOtherProfile} from '../../service/anonymousProfile';
-import {sendAnonymousDMOtherProfile, sendSignedDMOtherProfile} from '../../service/chat';
 
 const {width, height} = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -170,6 +171,8 @@ const OtherProfile = () => {
   const [loading, setLoading] = React.useState(false);
   const [isAnonimity, setIsAnonimity] = React.useState(false);
 
+  const {saveChatFromOtherProfile, savePendingChatFromOtherProfile} = useSaveAnonChatHook();
+
   const create = useClientGetstream();
   const {interactionsComplete} = useAfterInteractions();
 
@@ -190,7 +193,8 @@ const OtherProfile = () => {
 
   const generateAnonProfile = async () => {
     setLoadingGenerateAnon(true);
-    const anonProfileResult = await generateAnonProfileOtherProfile(profile.myProfile.user_id);
+    const anonProfileResult = await generateAnonProfileOtherProfile(other_id);
+    console.log({anonProfileResult});
     setLoadingGenerateAnon(false);
     setAnonProfile(anonProfileResult);
   };
@@ -213,9 +217,16 @@ const OtherProfile = () => {
         anon_user_info_color_name,
         anon_user_info_color_code
       };
-      await sendAnonymousDMOtherProfile(anonDMParams);
+      const response = await sendAnonymousDMOtherProfile(anonDMParams);
+      await saveChatFromOtherProfile(response, 'sent', true);
       setDMChat('');
-    } catch (_) {
+    } catch (e) {
+      if (e?.response?.data?.status === 'Channel is blocked') {
+        const response = e?.response?.data?.data;
+        await savePendingChatFromOtherProfile(response, true);
+        setDMChat('');
+        return;
+      }
       SimpleToast.show('Send message failed', SimpleToast.SHORT);
     } finally {
       setLoadingSendDM(false);
@@ -299,6 +310,7 @@ const OtherProfile = () => {
   React.useEffect(() => {
     return () => {
       if (interactionManagerRef.current) interactionManagerRef.current.cancel();
+      setOtherProfileFeed([], dispatchOtherProfile);
     };
   }, []);
 

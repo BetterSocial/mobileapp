@@ -16,6 +16,7 @@ export const colors = {
   french_pass: '#b6e4fd',
   pattens_blue: '#ddf2fe',
   blue: '#2F80ED',
+  lightblue: '#55C2FF',
   blue1: '#2C67BC',
   red: '#FF2E63',
   holytosca: '#00ADB5',
