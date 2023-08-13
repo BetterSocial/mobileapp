@@ -267,7 +267,6 @@ describe('GroupInfo should run correctly', () => {
       onLeaveGroup: jest.fn(),
       setUsername: jest.fn(),
       profile: '',
-      setUsername: jest.fn(),
       channelState: {
         channel: {
           data: {

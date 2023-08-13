@@ -31,7 +31,6 @@ const streami18n = new Streami18n({
 const ChatDetailPage = ({route}) => {
   const [clients] = React.useContext(Context).client;
   const [channelClient, dispatchChannel] = React.useContext(Context).channel;
-  const {interactionsComplete} = useAfterInteractions();
   const [followUserList, setFollowUserList] = useRecoilState(followersOrFollowingAtom);
   const [, dispatch] = React.useContext(Context).groupChat;
 
