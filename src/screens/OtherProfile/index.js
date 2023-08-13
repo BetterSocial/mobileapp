@@ -1,5 +1,7 @@
 import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
+import ToastMessage from 'react-native-toast-message';
+import ToggleSwitch from 'toggle-switch-react-native';
 import {
   Dimensions,
   Image,
@@ -18,7 +20,7 @@ import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
 
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
-import BlockBlueIcon from '../../assets/icons/images/block-blue.svg';
+import BlockIcon from '../../assets/icons/images/block-blue.svg';
 import BlockProfile from '../../components/Blocking/BlockProfile';
 import BottomSheetBio from '../ProfileScreen/elements/BottomSheetBio';
 import EnveloveBlueIcon from '../../assets/icons/images/envelove-blue.svg';
@@ -30,7 +32,9 @@ import RenderItem from '../ProfileScreen/elements/RenderItem';
 import ReportUser from '../../components/Blocking/ReportUser';
 import ShareUtils from '../../utils/share';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
+import TextAreaChat from '../../components/TextAreaChat';
 import dimen from '../../utils/dimen';
+import useSaveAnonChatHook from '../../database/hooks/useSaveAnonChatHook';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {blockUser, unblockUserApi} from '../../service/blocking';
@@ -44,10 +48,12 @@ import {
 import {colors} from '../../utils/colors';
 import {downVote, upVote} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
+import {generateAnonProfileOtherProfile} from '../../service/anonymousProfile';
 import {getAccessToken} from '../../utils/token';
 import {getFeedDetail} from '../../service/post';
 import {getSingularOrPluralText} from '../../utils/string/StringUtils';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import {sendAnonymousDMOtherProfile, sendSignedDMOtherProfile} from '../../service/chat';
 import {setChannel} from '../../context/actions/setChannel';
 import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherProfileFeed';
 import {trimString} from '../../utils/string/TrimString';
@@ -58,11 +64,76 @@ import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 const {width, height} = Dimensions.get('screen');
 // let headerHeight = 0;
 
+const BioAndChat = (props) => {
+  const {
+    isAnonimity,
+    bio,
+    openBio,
+    isSignedMessageEnabled,
+    showSignedMessageDisableToast,
+    loadingGenerateAnon,
+    avatarUrl,
+    anonProfile,
+    onSendDM,
+    setDMChat,
+    loadingSendDM,
+    dmChat,
+    username,
+    toggleSwitch,
+    isAnonimityEnabled
+  } = props;
+  return (
+    <View style={styles.bioAndSendChatContainer(isAnonimity)}>
+      <View style={styles.containerBio}>
+        {bio === null || bio === undefined ? (
+          <Text style={styles.bioText(isAnonimity)}>No Bio</Text>
+        ) : (
+          <TouchableOpacity onPress={openBio}>
+            <Text linkStyle={styles.seeMore} style={styles.bioText(isAnonimity)}>
+              {trimString(bio, 121)}{' '}
+              {bio.length > 121 ? <Text style={{color: colors.blue}}>see more</Text> : null}
+            </Text>
+          </TouchableOpacity>
+        )}
+      </View>
+      <TouchableOpacity
+        disabled={isSignedMessageEnabled}
+        activeOpacity={1}
+        onPress={showSignedMessageDisableToast}>
+        <TextAreaChat
+          isAnonimity={isAnonimity}
+          loadingAnonUser={loadingGenerateAnon}
+          avatarUrl={avatarUrl}
+          anonUser={anonProfile}
+          placeholder="Send a direct message"
+          disabledInput={!isSignedMessageEnabled}
+          onSend={onSendDM}
+          onChangeMessage={setDMChat}
+          disabledButton={loadingSendDM || !isSignedMessageEnabled}
+          defaultValue={
+            isSignedMessageEnabled ? dmChat : `Only users ${username} follows can send messages`
+          }
+        />
+      </TouchableOpacity>
+      <TouchableOpacity onPress={toggleSwitch} style={styles.toggleSwitchContainer}>
+        <ToggleSwitch
+          isOn={isAnonimity}
+          onToggle={toggleSwitch}
+          onColor={'#9DEDF1'}
+          label={isAnonimityEnabled || !isSignedMessageEnabled ? 'Anonymity' : 'Anonymity disabled'}
+          offColor="#F5F5F5"
+          size="small"
+          labelStyle={{color: isAnonimityEnabled ? colors.white : '#648ABF'}}
+        />
+      </TouchableOpacity>
+    </View>
+  );
+};
+
 const OtherProfile = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const bottomSheetBio = React.useRef(null);
-  const postRef = React.useRef(null);
   const blockUserRef = React.useRef();
   const reportUserRef = React.useRef();
   const specificIssueRef = React.useRef();
@@ -97,12 +168,122 @@ const OtherProfile = () => {
   const [isLastPage, setIsLastPage] = React.useState(false);
   const [, setIsHitApiFirstTime] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const [isAnonimity, setIsAnonimity] = React.useState(false);
+
+  const {saveChatFromOtherProfile, savePendingChatFromOtherProfile} = useSaveAnonChatHook();
 
   const create = useClientGetstream();
   const {interactionsComplete} = useAfterInteractions();
 
   const {params} = route;
   const {feeds} = otherProfileFeeds;
+
+  const [loadingGenerateAnon, setLoadingGenerateAnon] = React.useState(false);
+  const [loadingSendDM, setLoadingSendDM] = React.useState(false);
+  const [anonProfile, setAnonProfile] = React.useState();
+  const [dmChat, setDMChat] = React.useState();
+
+  const isSignedMessageEnabled = dataMain.isSignedMessageEnabled ?? true;
+  const isAnonimityEnabled = dataMain.isAnonMessageEnabled && isSignedMessageEnabled;
+
+  React.useEffect(() => {
+    setDMChat('');
+  }, [isSignedMessageEnabled]);
+
+  const generateAnonProfile = async () => {
+    setLoadingGenerateAnon(true);
+    const anonProfileResult = await generateAnonProfileOtherProfile(other_id);
+    console.log({anonProfileResult});
+    setLoadingGenerateAnon(false);
+    setAnonProfile(anonProfileResult);
+  };
+
+  const sentAnonDM = async () => {
+    try {
+      setLoadingSendDM(true);
+      const {
+        anon_user_info_emoji_name,
+        anon_user_info_emoji_code,
+        anon_user_info_color_name,
+        anon_user_info_color_code
+      } = anonProfile ?? {};
+
+      const anonDMParams = {
+        user_id: dataMain.user_id,
+        message: dmChat,
+        anon_user_info_emoji_name,
+        anon_user_info_emoji_code,
+        anon_user_info_color_name,
+        anon_user_info_color_code
+      };
+      const response = await sendAnonymousDMOtherProfile(anonDMParams);
+      await saveChatFromOtherProfile(response, 'sent', true);
+      setDMChat('');
+    } catch (e) {
+      if (e?.response?.data?.status === 'Channel is blocked') {
+        const response = e?.response?.data?.data;
+        await savePendingChatFromOtherProfile(response, true);
+        setDMChat('');
+        return;
+      }
+      SimpleToast.show('Send message failed', SimpleToast.SHORT);
+    } finally {
+      setLoadingSendDM(false);
+    }
+  };
+
+  const showSignedMessageDisableToast = () => {
+    if (!isSignedMessageEnabled) {
+      ToastMessage.show({
+        type: 'asNative',
+        text1: `Only users ${dataMain.username} follows can send messages`,
+        position: 'bottom'
+      });
+    }
+  };
+
+  const gotoChatRoom = async () => {
+    const type = 'messaging';
+    const sort = [{last_message_at: -1}];
+
+    const members = [profile.myProfile.user_id, dataMain.user_id];
+    const filter = {type, members: {$eq: members}};
+
+    const clientChat = await client.client;
+
+    const findChannels = await clientChat.queryChannels(filter, sort, {
+      watch: true,
+      state: true
+    });
+
+    setChannel(findChannels[0], dispatchChannel);
+    await navigation.replace('ChatDetailPage');
+  };
+
+  const sendSignedDM = async () => {
+    try {
+      setLoadingSendDM(true);
+      const signedMParams = {
+        user_id: dataMain.user_id,
+        message: dmChat
+      };
+      await sendSignedDMOtherProfile(signedMParams);
+      await gotoChatRoom();
+      setDMChat('');
+    } catch (error) {
+      SimpleToast.show('Send message failed', SimpleToast.SHORT);
+    } finally {
+      setLoadingSendDM(false);
+    }
+  };
+
+  const onSendDM = async () => {
+    if (isAnonimity) {
+      await sentAnonDM();
+    } else {
+      await sendSignedDM();
+    }
+  };
 
   const getOtherFeeds = async (userId, offset = 0) => {
     try {
@@ -128,6 +309,7 @@ const OtherProfile = () => {
   React.useEffect(() => {
     return () => {
       if (interactionManagerRef.current) interactionManagerRef.current.cancel();
+      setOtherProfileFeed([], dispatchOtherProfile);
     };
   }, []);
 
@@ -230,20 +412,20 @@ const OtherProfile = () => {
     bottomSheetBio.current.open();
   };
 
-  const __renderBio = (string) => (
-    <View style={styles.containerBio}>
-      {string === null || string === undefined ? (
-        <Text>No Bio</Text>
-      ) : (
-        <TouchableOpacity onPress={openBio}>
-          <Text linkStyle={styles.seeMore}>
-            {trimString(string, 121)}{' '}
-            {string.length > 121 ? <Text style={{color: colors.blue}}>see more</Text> : null}
-          </Text>
-        </TouchableOpacity>
-      )}
-    </View>
-  );
+  const toggleSwitch = async () => {
+    if (!isSignedMessageEnabled) {
+      showSignedMessageDisableToast();
+    } else if (!isAnonimityEnabled) {
+      ToastMessage.show({
+        type: 'asNative',
+        text1: 'This user does not want to receive anonymous messages',
+        position: 'bottom'
+      });
+    } else {
+      setIsAnonimity((prevState) => !prevState);
+      await generateAnonProfile();
+    }
+  };
 
   const __renderListHeader = () => {
     const __renderBlockIcon = () => {
@@ -254,7 +436,11 @@ const OtherProfile = () => {
           </View>
         );
 
-      return <BlockBlueIcon width={20} height={20} fill={colors.bondi_blue} />;
+      return (
+        <View style={{...styles.btnMsg, borderColor: colors.gray1}}>
+          <BlockIcon width={20} height={20} style={{color: colors.gray1}} />
+        </View>
+      );
     };
 
     const handleOpenFollowerUser = () => {
@@ -289,7 +475,6 @@ const OtherProfile = () => {
               </View>
             ) : null}
           </View>
-          {__renderBio(dataMain.bio)}
         </React.Fragment>
       );
     };
@@ -322,39 +507,55 @@ const OtherProfile = () => {
       if (blockStatus.blocker) return <></>;
       return (
         <React.Fragment>
+          {__renderFollowingButton()}
           <GlobalButton onPress={onCreateChannel}>
             <View style={styles.btnMsg}>
               <EnveloveBlueIcon width={20} height={20} fill={colors.bondi_blue} />
             </View>
           </GlobalButton>
-
-          {__renderFollowingButton()}
         </React.Fragment>
       );
     };
 
     if (blockStatus.blocked) return <></>;
     return (
-      <React.Fragment>
-        <View style={styles.containerProfile}>
-          <View style={styles.wrapImageAndStatus}>
-            <Image
-              style={styles.profileImage}
-              source={{
-                uri: dataMain.profile_pic_path ?? DEFAULT_PROFILE_PIC_PATH
-              }}
-            />
+      <>
+        <View style={styles.headerImageContainer}>
+          <Image
+            style={styles.profileImage}
+            source={{
+              uri: dataMain.profile_pic_path ?? DEFAULT_PROFILE_PIC_PATH
+            }}
+          />
 
-            <View style={styles.wrapButton}>
-              <GlobalButton onPress={onBlockReaction}>{__renderBlockIcon()}</GlobalButton>
-
+          <View>
+            <View style={styles.rightHeaderContentContainer}>
+              <GlobalButton buttonStyle={{paddingLeft: 0}} onPress={onBlockReaction}>
+                {__renderBlockIcon()}
+              </GlobalButton>
               {__renderMessageAndFollowButtonGroup()}
             </View>
+            {__renderFollowerDetail()}
           </View>
-          {dataMain.real_name && <Text style={styles.nameProfile}>{dataMain.real_name}</Text>}
         </View>
-        {__renderFollowerDetail()}
-      </React.Fragment>
+        <BioAndChat
+          isAnonimity={isAnonimity}
+          bio={dataMain.bio}
+          openBio={openBio}
+          isSignedMessageEnabled={isSignedMessageEnabled}
+          showSignedMessageDisableToast={showSignedMessageDisableToast}
+          loadingGenerateAnon={loadingGenerateAnon}
+          avatarUrl={profile.myProfile.profile_pic_path}
+          anonProfile={anonProfile}
+          onSendDM={onSendDM}
+          setDMChat={setDMChat}
+          loadingSendDM={loadingSendDM}
+          dmChat={dmChat}
+          username={dataMain.username}
+          toggleSwitch={toggleSwitch}
+          isAnonimityEnabled={isAnonimityEnabled}
+        />
+      </>
     );
   };
 
@@ -608,11 +809,6 @@ const OtherProfile = () => {
                 headerHeightRef.current = headerHeightLayout;
               }}>
               <View style={styles.content}>{__renderListHeader()}</View>
-              <View>
-                <View style={styles.tabs} ref={postRef}>
-                  <Text style={styles.postText}>Posts</Text>
-                </View>
-              </View>
             </View>
           }>
           {({item, index}) => {
@@ -629,7 +825,6 @@ const OtherProfile = () => {
                   onPressDomain={onPressDomain}
                   onPress={() => onPress(item, index)}
                   onPressComment={() => onPressComment(item, item.id)}
-                  // onPressBlock={() => onPressBlock(item)}
                   onPressUpvote={(post) => setUpVote(post, index)}
                   selfUserId={yourselfId}
                   onPressDownVote={(post) => setDownVote(post, index)}
@@ -676,7 +871,9 @@ const styles = StyleSheet.create({
   },
   content: {
     flexDirection: 'column',
-    padding: 20
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0'
   },
   dummyItem: (heightItem) => ({
     height: heightItem
@@ -699,7 +896,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 100,
-    marginBottom: 12
+    marginRight: 22
   },
   containerProfile: {
     marginTop: 24
@@ -718,8 +915,7 @@ const styles = StyleSheet.create({
   },
   wrapFollower: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 12
+    alignItems: 'center'
   },
   wrapRow: {
     flexDirection: 'row',
@@ -733,13 +929,12 @@ const styles = StyleSheet.create({
     paddingRight: 4
   },
   textFollow: {
-    fontFamily: fonts.inter[800],
     fontSize: 14,
     color: colors.black,
     paddingRight: 4
   },
   containerBio: {
-    marginTop: 8
+    marginBottom: 10
   },
   seeMore: {
     fontFamily: fonts.inter[500],
@@ -840,12 +1035,34 @@ const styles = StyleSheet.create({
     flex: 1
   },
   btnMsg: {
-    paddingVertical: 0
+    width: 36,
+    height: 36,
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: colors.bondi_blue,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   containerLoading: {
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center'
-  }
+  },
+  toggleSwitchContainer: {display: 'flex', alignSelf: 'flex-end', paddingVertical: 10},
+  rightHeaderContentContainer: {display: 'flex', flexDirection: 'row'},
+  headerImageContainer: {display: 'flex', flexDirection: 'row', marginBottom: 20},
+  bioAndSendChatContainer: (isAnonimity) => ({
+    backgroundColor: isAnonimity ? colors.bondi_blue : colors.blue1,
+    borderRadius: 15,
+    paddingHorizontal: 10,
+    paddingTop: 10
+  }),
+  bioText: (isAnonimity) => ({
+    color: isAnonimity ? colors.greenDark : colors.white,
+    fontSize: 14,
+    fontWeight: '600',
+    lineHeight: 22
+  })
 });
 export default withInteractionsManaged(OtherProfile);

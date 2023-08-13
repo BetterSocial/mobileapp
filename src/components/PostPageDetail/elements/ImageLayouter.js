@@ -8,7 +8,7 @@ const ImageLayouter = ({images = [], onimageclick}) => {
   const [height, setHeight] = React.useState({});
   const [width, setWidth] = React.useState({});
   const [ratio, setRatio] = React.useState({});
-
+  const {cover} = Image.resizeMode;
   const onloadHandle = (nativeEvent, index) => {
     setRatio({
       ...ratio,
@@ -29,7 +29,7 @@ const ImageLayouter = ({images = [], onimageclick}) => {
       <View style={[styles.twoPhotoLayout, {flexWrap: 'wrap'}]}>
         <Pressable style={{justifyContent: 'center'}} onPress={() => onimageclick(0)}>
           <Image
-            resizeMode={Image.resizeMode.cover}
+            resizeMode={cover}
             source={{uri: images[0]}}
             style={[
               {
@@ -60,7 +60,7 @@ const ImageLayouter = ({images = [], onimageclick}) => {
                   }
                 ]}
                 source={{uri: item}}
-                resizeMode={Image.resizeMode.cover}
+                resizeMode={cover}
                 onLoad={({nativeEvent}) => onloadHandle(nativeEvent, index)}
               />
             </Pressable>
@@ -86,7 +86,7 @@ const ImageLayouter = ({images = [], onimageclick}) => {
                     width: Dimensions.get('window').width,
                     height: Dimensions.get('window').width * (ratio[`image_${index}`] || 0)
                   }}
-                  resizeMode={Image.resizeMode.cover}
+                  resizeMode={cover}
                 />
               </Pressable>
             );
@@ -103,7 +103,7 @@ const ImageLayouter = ({images = [], onimageclick}) => {
                   width: Dimensions.get('window').width / 2,
                   height: (Dimensions.get('window').width / 2) * (ratio[`image_${index}`] || 0)
                 }}
-                resizeMode={Image.resizeMode.cover}
+                resizeMode={cover}
               />
             </Pressable>
           );
@@ -127,7 +127,7 @@ const ImageLayouter = ({images = [], onimageclick}) => {
                   width: Dimensions.get('window').width / 2,
                   height: (Dimensions.get('window').width / 2) * (ratio[`image_${index}`] || 0)
                 }}
-                resizeMode={Image.resizeMode.cover}
+                resizeMode={cover}
               />
             </Pressable>
           );
@@ -181,7 +181,7 @@ const ImageLayouter = ({images = [], onimageclick}) => {
                         height:
                           (Dimensions.get('window').width / 2) * (ratio[`image_${index}`] || 0)
                       }}
-                      resizeMode={Image.resizeMode.cover}
+                      resizeMode={cover}
                     />
                   </>
                 )}
