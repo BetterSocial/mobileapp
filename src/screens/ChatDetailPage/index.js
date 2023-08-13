@@ -20,7 +20,6 @@ import {followersOrFollowingAtom} from '../ChannelListScreen/model/followersOrFo
 import {fonts} from '../../utils/fonts';
 import {setAsset} from '../../context/actions/groupChat';
 import {setChannel} from '../../context/actions/setChannel';
-import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
