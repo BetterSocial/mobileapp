@@ -121,7 +121,7 @@ const WriteComment = ({
           style={styles.btn(isDisableSubmit || loadingUser)}
           disabled={isDisableSubmit || loadingUser}>
           <MemoSendComment
-            fillBackground={isDisableSubmit || loadingUser ? colors.bondi_blue : '#C4C4C4'}
+            fillBackground={isDisableSubmit || loadingUser ? '#C4C4C4' : colors.bondi_blue}
           />
         </TouchableOpacity>
       </View>
