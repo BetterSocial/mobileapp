@@ -8,12 +8,11 @@ const getTopicPages = async (query, offset = 0) => {
     return res.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
-    // throw new Error(error);
-    return []
+    throw error;
   }
 };
 
 export {
   // eslint-disable-next-line import/prefer-default-export
-  getTopicPages,
+  getTopicPages
 };
