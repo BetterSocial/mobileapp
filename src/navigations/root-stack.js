@@ -24,7 +24,6 @@ import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
 import ProfilePostDetail from '../screens/ProfilePostDetail';
 import ProfileReplyComment from '../screens/ProfileReplyComment';
 import ReplyComment from '../screens/ReplyComment';
-import ReplyCommentLev3 from '../screens/ReplyComment2';
 import SampleChatInfoScreen from '../screens/WebsocketResearchScreen/SampleChatInfoScreen';
 import SampleChatScreen from '../screens/WebsocketResearchScreen/SampleChatScreen';
 import Settings from '../screens/Settings';
@@ -252,11 +251,7 @@ const AuthenticatedNavigator = () => {
         component={ReplyComment}
         options={{headerShown: false}}
       />
-      <AuthenticatedStack.Screen
-        name="ReplyCommentLev3"
-        component={ReplyCommentLev3}
-        options={{headerShown: false}}
-      />
+
       <AuthenticatedStack.Screen
         name="ProfileReplyComment"
         component={ProfileReplyComment}

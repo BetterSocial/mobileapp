@@ -34,8 +34,8 @@ const Comment = ({
   level,
   showLeftConnector = true,
   disableOnTextPress = false,
-  updateVote,
-  onLongPress
+  onLongPress,
+  updateVote
 }) => {
   const navigation = useNavigation();
   const refBlockComponent = React.useRef();
