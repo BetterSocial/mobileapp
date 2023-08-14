@@ -2,7 +2,6 @@ import crashlytics from '@react-native-firebase/crashlytics';
 
 import anonymousApi from './anonymousConfig';
 import api from './config';
-import moment from 'moment';
 
 const createCommentParent = async (text, activityId, useridFeed, sendPostNotif) => {
   try {

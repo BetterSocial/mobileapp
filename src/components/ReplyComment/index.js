@@ -47,8 +47,7 @@ const ReplyCommentId = ({
     updateFeed,
     scrollViewRef,
     createComment,
-    getThisComment,
-    findCommentAndUpdateHook
+    getThisComment
   } = useReplyComment({
     itemProp,
     indexFeed,
