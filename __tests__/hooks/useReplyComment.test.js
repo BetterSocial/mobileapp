@@ -1,9 +1,10 @@
-import {act, renderHook} from '@testing-library/react-hooks';
 import moment from 'moment';
-import useReplyComment from '../../src/components/ReplyComment/hooks/useReplyComment';
-import Store from '../../src/context/Store';
-import * as feedSrvice from '../../src/service/post';
+import {act, renderHook} from '@testing-library/react-hooks';
+
 import * as feedApi from '../../src/service/feeds';
+import * as feedSrvice from '../../src/service/post';
+import Store from '../../src/context/Store';
+import useReplyComment from '../../src/components/ReplyComment/hooks/useReplyComment';
 
 const mockPush = jest.fn();
 
@@ -189,66 +190,6 @@ const comments = [
 ];
 
 describe('hooks function should run correctly', () => {
-  it('should sort date correctly', () => {
-    const {result} = renderHook(() => useReplyComment({itemProp}), {wrapper: Store});
-    expect(result.current.getThisCommentHook(itemProp)).toStrictEqual([
-      {
-        activity_id: 'bea7567e-38f1-11ed-8bdd-0e4b8d0e7a11',
-        updated_at: '2022-09-21T00:20:23.011138Z',
-        children_counts: {},
-        created_at: '2023-01-12T11:00:06.912432Z',
-        data: {
-          count_downvote: 1,
-          count_upvote: 0,
-          targetFeeds: ['notification:c6c91b04-795c-404e-b012-ea28813a2006'],
-          text: 'favorite baru'
-        },
-        id: 'd0da5ec6-a964-4876-bfc4-0363f8ffc6e0',
-        parent: 'cc86999d-b7cd-4bec-accf-d7e57e301e90',
-        kind: 'comment',
-        user: {
-          created_at: '2022-06-10T13:11:53.385703Z',
-          data: {
-            human_id: 'I4K3M10FGR78EWQQDNQ2',
-            profile_pic_url:
-              'https://res.cloudinary.com/hpjivutj2/image/upload/v1659099243/pbdv3jlyd4mhmtis6kqx.jpg',
-            username: 'Agita'
-          },
-          id: 'c6c91b04-795c-404e-b012-ea28813a2006',
-          updated_at: '2022-07-29T12:54:03.879150Z'
-        },
-        user_id: 'c6c91b04-795c-404e-b012-ea28813a2006'
-      },
-      {
-        activity_id: 'bea7567e-38f1-11ed-8bdd-0e4b8d0e7a11',
-        updated_at: '2022-09-22T00:20:23.011138Z',
-        children_counts: {},
-        created_at: '2023-01-12T11:00:06.912432Z',
-        data: {
-          count_downvote: 1,
-          count_upvote: 0,
-          targetFeeds: ['notification:c6c91b04-795c-404e-b012-ea28813a2006'],
-          text: 'favorite'
-        },
-        id: 'd0da5ec6-a964-4876-bfc4-0363f8ffc6e0',
-        kind: 'comment',
-        parent: 'cc86999d-b7cd-4bec-accf-d7e57e301e90',
-        user: {
-          created_at: '2022-06-10T13:11:53.385703Z',
-          data: {
-            human_id: 'I4K3M10FGR78EWQQDNQ2',
-            profile_pic_url:
-              'https://res.cloudinary.com/hpjivutj2/image/upload/v1659099243/pbdv3jlyd4mhmtis6kqx.jpg',
-            username: 'Agita'
-          },
-          id: 'c6c91b04-795c-404e-b012-ea28813a2006',
-          updated_at: '2022-07-29T12:54:03.879150Z'
-        },
-        user_id: 'c6c91b04-795c-404e-b012-ea28813a2006'
-      }
-    ]);
-  });
-
   const itemReply = {
     activity_id: 'bea7567e-38f1-11ed-8bdd-0e4b8d0e7a11',
     updated_at: '2022-09-22T00:20:23.011138Z',

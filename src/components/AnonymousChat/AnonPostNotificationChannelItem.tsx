@@ -61,21 +61,23 @@ const AnonPostNotificationChannelItem: (props: MessageChannelItemProps) => React
   };
 
   if (postNotifItem?.rawJson?.comments?.length > 0) {
-    if (postNotifItem?.rawJson?.comments[0]?.reaction?.latest_children?.comment?.length > 0) {
-      const level1 = postNotifItem?.rawJson?.comments[0]?.reaction?.latest_children?.comment[0];
-      level1FirstComment = level1;
-
-      if (level1?.latest_children?.comment?.length > 0) {
-        level2FirstComment = level1?.latest_children?.comment[0];
-      }
-    }
-
     firstComment = postNotifItem?.rawJson?.comments[0];
     anonymousPostNotificationUserInfo = {
       ...firstComment?.reaction?.data
     };
 
     helperDetermineCommenterName();
+
+    if (postNotifItem?.rawJson?.comments[0]?.reaction?.latest_children?.comment?.length > 0) {
+      const level1 = postNotifItem?.rawJson?.comments[0]?.reaction?.latest_children?.comment[0];
+      level1FirstComment = level1;
+      commenterName = level1?.user?.data?.username;
+
+      if (level1?.latest_children?.comment?.length > 0) {
+        level2FirstComment = level1?.latest_children?.comment[0];
+        commenterName = level1?.user?.data?.username;
+      }
+    }
 
     postNotificationMessageText =
       level2FirstComment?.data?.text ||
