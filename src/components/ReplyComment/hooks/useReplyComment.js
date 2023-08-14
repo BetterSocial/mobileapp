@@ -68,20 +68,6 @@ const useReplyComment = ({itemProp, indexFeed, dataFeed, updateParent, page, get
     }
   };
 
-  const getThisCommentHook = () => {
-    let comments = [];
-    if (
-      itemProp.latest_children &&
-      itemProp.latest_children.comment &&
-      Array.isArray(itemProp.latest_children.comment)
-    ) {
-      comments = itemProp.latest_children.comment.sort(
-        (a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()
-      );
-    }
-    return comments;
-  };
-
   const updateReplyPostHook = (comment, itemParentProps, commentId) => {
     if (itemParentProps) {
       const updateMyComment = itemParentProps.latest_children.comment.map((dComment) => {
@@ -275,7 +261,6 @@ const useReplyComment = ({itemProp, indexFeed, dataFeed, updateParent, page, get
   };
 
   return {
-    getThisCommentHook,
     updateReplyPostHook,
     setTemporaryText,
     setCommentHook,

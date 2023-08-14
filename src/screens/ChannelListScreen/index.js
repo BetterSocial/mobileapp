@@ -65,7 +65,7 @@ const ChannelListScreen = () => {
     members: {$in: [myProfile.user_id]},
     type: {$in: ['messaging', 'topics', 'group', 'system']}
   };
-  // React.useEffect(() => { }, [unReadMessage]);
+
   const perf = React.useRef(null);
   const sort = [{last_message_at: -1}];
   const options = {
@@ -248,7 +248,6 @@ const ChannelListScreen = () => {
 
     return true;
   };
-
   return (
     <>
       <StatusBar translucent={false} />

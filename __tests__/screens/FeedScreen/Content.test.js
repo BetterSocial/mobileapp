@@ -3,6 +3,7 @@ import {render, cleanup} from '@testing-library/react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 import Content from '../../../src/screens/FeedScreen/Content';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
