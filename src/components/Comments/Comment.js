@@ -21,6 +21,7 @@ import {removeWhiteSpace} from '../../utils/Utils';
 import BlockComponent from '../BlockComponent';
 import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
 import CommentUserName from '../CommentUsername/CommentUsername';
+import moment from 'moment';
 
 const Comment = ({
   user,
@@ -142,7 +143,7 @@ const Comment = ({
 
             <View style={styles.containerUsername}>
               <CommentUserName comment={comment} user={user} />
-              <Text style={styles.time}> {calculateTime(time)}</Text>
+              <Text style={styles.time}> {calculateTime(time || moment().format())}</Text>
             </View>
           </View>
         </ButtonHightlight>
