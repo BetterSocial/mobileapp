@@ -1,12 +1,10 @@
 import * as React from 'react';
 import ImagePicker from 'react-native-image-crop-picker';
 import Toast from 'react-native-simple-toast';
-import Tooltip from 'react-native-walkthrough-tooltip';
 import {
   ActivityIndicator,
   Dimensions,
   LogBox,
-  Pressable,
   StatusBar,
   StyleSheet,
   Text,
@@ -36,7 +34,6 @@ import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
 import RenderItem from './elements/RenderItem';
 import ShareUtils from '../../utils/share';
-import WarningCircleOutline from '../../../assets/icons/warning-circle-outline.svg';
 import dimen from '../../utils/dimen';
 import useResetContext from '../../hooks/context/useResetContext';
 import useOnBottomNavigationTabPressHook, {
@@ -50,7 +47,6 @@ import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {ButtonNewPost} from '../../components/Button';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
-import {KarmaScore} from './elements/KarmaScore';
 import {PROFILE_CACHE} from '../../utils/cache/constant';
 import {
   changeRealName,
@@ -94,8 +90,6 @@ const Header = (props) => {
     setTabIndexToAnonymous
   } = props;
 
-  const [karmaTooltip, setKarmaTooltip] = React.useState(false);
-
   return (
     <View
       onLayout={(event) => {
@@ -116,32 +110,6 @@ const Header = (props) => {
                 goToFollowings(dataMain.user_id, dataMain.username)
               }
             />
-            {/* {isShowKarma ? (
-              <View style={{flexDirection: 'row'}}>
-                <KarmaScore score={86} />
-                <Tooltip
-                  contentStyle={{borderRadius: 8, background: '#FFF'}}
-                  arrowStyle={{marginLeft: 2}}
-                  showChildInTooltip={false}
-                  isVisible={karmaTooltip}
-                  useInteractionManager={true}
-                  topAdjustment={-20}
-                  content={
-                    <View style={{padding: 5}}>
-                      <Text style={styles.tooltipText}>
-                        Your Karma is based on upvotes, downvotes and blocks. The higher your Karma,
-                        the more visibility for your posts.
-                      </Text>
-                    </View>
-                  }
-                  placement="bottom"
-                  onClose={() => setKarmaTooltip(false)}>
-                  <Pressable onPress={() => setKarmaTooltip(true)}>
-                    <WarningCircleOutline height={15} width={15} style={{marginLeft: 5}} />
-                  </Pressable>
-                </Tooltip>
-              </View>
-            ) : null} */}
           </View>
         </View>
 
