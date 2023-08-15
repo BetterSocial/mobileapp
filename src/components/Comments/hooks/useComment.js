@@ -1,7 +1,7 @@
 import React from 'react';
 import {iVoteComment, voteCommentV2} from '../../../service/vote';
 
-const useComment = ({comment, level, updateVote}) => {
+const useComment = ({comment, updateVote}) => {
   const [totalVote, setTotalVote] = React.useState(
     comment.data?.count_upvote - comment.data?.count_downvote
   );
@@ -49,7 +49,6 @@ const useComment = ({comment, level, updateVote}) => {
     if (updateVote) {
       updateVote();
     }
-    iVote();
   };
 
   const iVote = async () => {

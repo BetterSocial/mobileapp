@@ -76,7 +76,6 @@ const ReplyCommentId = ({
     if (getComment && typeof getComment === 'function') {
       getComment();
     }
-    getThisComment();
   };
 
   const navigationGoBack = () => navigation.goBack();
@@ -120,7 +119,7 @@ const ReplyCommentId = ({
                         <Comment
                           indexFeed={indexFeed}
                           showLeftConnector={false}
-                          time={itemReply.updated_at}
+                          time={itemReply.created_at}
                           photo={itemReply.user.data && itemReply.user.data.profile_pic_url}
                           isLast={level >= 2}
                           key={`r${index}`}

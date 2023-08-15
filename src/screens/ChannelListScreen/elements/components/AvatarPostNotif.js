@@ -1,7 +1,8 @@
-import React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
-import {Avatar} from 'stream-chat-react-native-core/src/components/Avatar/Avatar';
 import FastImage from 'react-native-fast-image';
+import React from 'react';
+import {Avatar} from 'stream-chat-react-native-core/src/components/Avatar/Avatar';
+import {StyleSheet, Text, View} from 'react-native';
+
 import FeedIcon from '../../../../assets/images/feed-icon.png';
 import dimen from '../../../../utils/dimen';
 
