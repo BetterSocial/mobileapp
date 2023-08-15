@@ -1,17 +1,17 @@
 import * as React from 'react';
 import ImagePicker from 'react-native-image-crop-picker';
 import Toast from 'react-native-simple-toast';
-import Tooltip from 'react-native-walkthrough-tooltip';
 import {
   ActivityIndicator,
+  Alert,
   Dimensions,
   LogBox,
-  Pressable,
   StatusBar,
   StyleSheet,
   Text,
   TouchableNativeFeedback,
-  View
+  View,
+  Linking
 } from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {debounce} from 'lodash';
@@ -19,6 +19,7 @@ import {showMessage} from 'react-native-flash-message';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {useNavigation} from '@react-navigation/core';
 
+import Config from 'react-native-config';
 import AnonymousTab from './elements/AnonymousTab';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BioAndDMSetting from './elements/BioAndDMSetting';
@@ -35,7 +36,6 @@ import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
 import RenderItem from './elements/RenderItem';
 import ShareUtils from '../../utils/share';
-import WarningCircleOutline from '../../../assets/icons/warning-circle-outline.svg';
 import dimen from '../../utils/dimen';
 import useResetContext from '../../hooks/context/useResetContext';
 import useOnBottomNavigationTabPressHook, {
@@ -49,7 +49,6 @@ import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {ButtonNewPost} from '../../components/Button';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
-import {KarmaScore} from './elements/KarmaScore';
 import {PROFILE_CACHE} from '../../utils/cache/constant';
 import {
   changeRealName,
@@ -64,7 +63,7 @@ import {deleteAnonymousPost, deletePost, getFeedDetail} from '../../service/post
 import {downVote, upVote} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
 import {getAccessToken} from '../../utils/token';
-import {getSpecificCache, saveToCache} from '../../utils/cache';
+import {saveToCache} from '../../utils/cache';
 import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
@@ -76,6 +75,8 @@ import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 const {height, width} = Dimensions.get('screen');
+
+const isShowKarma = Config.DOPPLER_ENVIRONMENT === 'dev';
 
 const Header = (props) => {
   const {
@@ -90,8 +91,6 @@ const Header = (props) => {
     setTabIndexToSigned,
     setTabIndexToAnonymous
   } = props;
-
-  const [karmaTooltip, setKarmaTooltip] = React.useState(false);
 
   return (
     <View
@@ -113,30 +112,6 @@ const Header = (props) => {
                 goToFollowings(dataMain.user_id, dataMain.username)
               }
             />
-            <View style={{flexDirection: 'row'}}>
-              <KarmaScore score={86} />
-              <Tooltip
-                contentStyle={{borderRadius: 8, background: '#FFF'}}
-                arrowStyle={{marginLeft: 2}}
-                showChildInTooltip={false}
-                isVisible={karmaTooltip}
-                useInteractionManager={true}
-                topAdjustment={-20}
-                content={
-                  <View style={{padding: 5}}>
-                    <Text style={styles.tooltipText}>
-                      Your Karma is based on upvotes, downvotes and blocks. The higher your Karma,
-                      the more visibility for your posts.
-                    </Text>
-                  </View>
-                }
-                placement="bottom"
-                onClose={() => setKarmaTooltip(false)}>
-                <Pressable onPress={() => setKarmaTooltip(true)}>
-                  <WarningCircleOutline height={15} width={15} style={{marginLeft: 5}} />
-                </Pressable>
-              </Tooltip>
-            </View>
           </View>
         </View>
 
@@ -149,7 +124,7 @@ const Header = (props) => {
           following={dataMain.following}
         />
 
-        <LinkAndSocialMedia username={dataMain.username} />
+        <LinkAndSocialMedia username={dataMain.username} prompt={dataMainBio} />
       </View>
       <View>
         <View style={styles.tabs} ref={postRef}>
@@ -377,8 +352,13 @@ const ProfileScreen = ({route}) => {
     listRef?.current?.scrollToTop();
   };
 
+  const openSettingApp = () => {
+    Linking.openSettings();
+    closeImageBs();
+  };
+
   const onOpenImageGalery = async () => {
-    const {success, message} = await requestExternalStoragePermission();
+    const {success} = await requestExternalStoragePermission();
     if (success) {
       ImagePicker.openPicker({
         width: 512,
@@ -390,12 +370,14 @@ const ProfileScreen = ({route}) => {
         handleUpdateImage(`data:image/jpeg;base64,${imageRes.data}`, 'gallery');
       });
     } else {
-      Toast.show(message, Toast.SHORT);
+      openAlertPermission(
+        'We’re not able to access your photos, please adjust your permission settings for BetterSocial.'
+      );
     }
   };
 
   const onOpenCamera = async () => {
-    const {success, message} = await requestCameraPermission();
+    const {success} = await requestCameraPermission();
     if (success) {
       ImagePicker.openCamera({
         width: 512,
@@ -407,8 +389,17 @@ const ProfileScreen = ({route}) => {
         handleUpdateImage(`data:image/jpeg;base64,${imageRes.data}`, 'camera');
       });
     } else {
-      Toast.show(message, Toast.SHORT);
+      openAlertPermission(
+        'We’re not able to access your camera, please adjust your permission settings for BetterSocial.'
+      );
     }
+  };
+
+  const openAlertPermission = (message) => {
+    Alert.alert('Permission Denied', message, [
+      {text: 'Open Settings', onPress: openSettingApp},
+      {text: 'Close'}
+    ]);
   };
 
   const onViewProfilePicture = () => {

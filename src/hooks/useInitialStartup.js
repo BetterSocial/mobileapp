@@ -14,10 +14,8 @@ import {Context} from '../context';
 import {FEEDS_CACHE, NEWS_CACHE, PROFILE_CACHE, RECENT_SEARCH_TERMS} from '../utils/cache/constant';
 import {InitialStartupAtom} from '../service/initialStartup';
 import {channelListLocalAtom} from '../service/channelListLocal';
-import {feedChatAtom} from '../models/feeds/feedsNotification';
 import {getAccessToken} from '../utils/token';
 import {getDomains, getFollowedDomain} from '../service/domain';
-import {getFeedNotification, setFeedChatsFromLocal} from '../service/feeds';
 import {getFollowing, getMyProfile} from '../service/profile';
 import {getFollowingTopic} from '../service/topics';
 import {getMainFeed} from '../service/post';
@@ -27,6 +25,7 @@ import {setMyProfileAction} from '../context/actions/setMyProfileAction';
 import {setNews} from '../context/actions/news';
 import {traceMetricScreen} from '../libraries/performance/firebasePerformance';
 import {useClientGetstream} from '../utils/getstream/ClientGetStram';
+import useFeedService from './useFeedService';
 
 export const useInitialStartup = () => {
   const [, newsDispatch] = React.useContext(Context).news;
@@ -37,13 +36,14 @@ export const useInitialStartup = () => {
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const setInitialValue = useSetRecoilState(InitialStartupAtom);
   const setLocalChannelData = useSetRecoilState(channelListLocalAtom);
-  const setFeedChatData = useSetRecoilState(feedChatAtom);
   const [clientState] = React.useContext(Context).client;
   const {client} = clientState;
   const perf = React.useRef(null);
   const timeoutSplashScreen = React.useRef(null);
   const [loadingUser, setLoadingUser] = React.useState(true);
   const getLocalChannelData = useLocalChannelsFirst(setLocalChannelData);
+
+  const {getFeedChat} = useFeedService();
 
   const LIMIT_FIRST_FEEDS = 1;
   const LIMIT_FIRST_NEWS = 3;
@@ -53,14 +53,6 @@ export const useInitialStartup = () => {
     const accessToken = await getAccessToken();
     if (accessToken) {
       setInitialValue({id: accessToken.id});
-    }
-  };
-
-  const getFeedChat = async () => {
-    const res = await getFeedNotification();
-    if (res.success) {
-      setFeedChatData(res.data);
-      setFeedChatsFromLocal(res.data);
     }
   };
 
