@@ -16,6 +16,7 @@ import {deleteComment} from '../../service/comment';
 import {getUserId} from '../../utils/users';
 import usePostDetail from '../PostPageDetail/hooks/usePostDetail';
 import ListComment from './ListComment';
+import moment from 'moment';
 
 const ContainerComment = ({
   feedId,
@@ -144,7 +145,7 @@ export const ReplyComment = ({
                     user={item.user}
                     level={1}
                     photo={item.user?.data?.profile_pic_url}
-                    time={item.created_at}
+                    time={item.created_at || moment().format()}
                     onPress={() => navigateToReplyView({item, level: 2, indexFeed})}
                     isLast={isLast(item, index, countComment)}
                     findCommentAndUpdate={findCommentAndUpdate}

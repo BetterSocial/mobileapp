@@ -7,7 +7,7 @@ import {useNavigation} from '@react-navigation/native';
 
 import Card from '../../Card/Card';
 import ContentPoll from '../../../screens/FeedScreen/ContentPoll';
-import ImageLayouter from './ImageLayouter';
+import ImageLayouter from '../../../screens/FeedScreen/elements/ImageLayouter';
 import TopicsChip from '../../TopicsChip/TopicsChip';
 import dimen from '../../../utils/dimen';
 import useContentFeed from '../../../screens/FeedScreen/hooks/useContentFeed';
