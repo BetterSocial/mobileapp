@@ -324,7 +324,7 @@ const TopicPageScreen = (props) => {
         isFollow={isFollow}
       />
       <TiktokScroll
-        contentHeight={dimen.size.TOPIC_CURRENT_ITEM_HEIGHT + normalizeFontSizeByWidth(3)}
+        contentHeight={dimen.size.TOPIC_CURRENT_ITEM_HEIGHT + normalizeFontSizeByWidth(4)}
         data={feeds}
         onEndReach={onEndReach}
         onRefresh={onRefresh}

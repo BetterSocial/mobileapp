@@ -45,14 +45,14 @@ const styles = StyleSheet.create({
   Header: {
     flexDirection: 'row',
     height: dimen.size.TOPIC_FEED_HEADER_HEIGHT,
-    paddingEnd: normalize(16),
+    paddingRight: normalize(16),
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white'
   },
   backbutton: {
     paddingLeft: 16,
-    paddingEnd: 16,
+    paddingRight: 16,
     height: '100%',
     justifyContent: 'center'
   },

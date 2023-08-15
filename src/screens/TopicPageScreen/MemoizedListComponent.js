@@ -183,9 +183,9 @@ const RenderListFeed = (props) => {
 
 const styles = StyleSheet.create({
   cardContainer: () => ({
-    height: dimen.size.TOPIC_CURRENT_ITEM_HEIGHT - normalizeFontSizeByWidth(2),
+    height: dimen.size.TOPIC_CURRENT_ITEM_HEIGHT,
     width: FULL_WIDTH,
-    marginBottom: normalizeFontSizeByWidth(3),
+    marginBottom: normalizeFontSizeByWidth(4),
     backgroundColor: colors.white
   }),
   cardMain: {
