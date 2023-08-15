@@ -6,6 +6,7 @@ import {
   Dimensions,
   Image,
   InteractionManager,
+  Keyboard,
   SafeAreaView,
   StatusBar,
   StyleSheet,
@@ -193,7 +194,6 @@ const OtherProfile = () => {
   const generateAnonProfile = async () => {
     setLoadingGenerateAnon(true);
     const anonProfileResult = await generateAnonProfileOtherProfile(other_id);
-    console.log({anonProfileResult});
     setLoadingGenerateAnon(false);
     setAnonProfile(anonProfileResult);
   };
@@ -226,7 +226,6 @@ const OtherProfile = () => {
         setDMChat('');
         return;
       }
-      SimpleToast.show('Send message failed', SimpleToast.SHORT);
     } finally {
       setLoadingSendDM(false);
     }
@@ -257,12 +256,13 @@ const OtherProfile = () => {
     });
 
     setChannel(findChannels[0], dispatchChannel);
-    await navigation.replace('ChatDetailPage');
+    await navigation.navigate('ChatDetailPage');
   };
 
   const sendSignedDM = async () => {
     try {
       setLoadingSendDM(true);
+      setIsLoading(true);
       const signedMParams = {
         user_id: dataMain.user_id,
         message: dmChat
@@ -271,9 +271,10 @@ const OtherProfile = () => {
       await gotoChatRoom();
       setDMChat('');
     } catch (error) {
-      SimpleToast.show('Send message failed', SimpleToast.SHORT);
+      console.error(error);
     } finally {
       setLoadingSendDM(false);
+      setIsLoading(false);
     }
   };
 
@@ -782,14 +783,16 @@ const OtherProfile = () => {
           username={dataMain.username}
         />
         {isLoading ? (
-          <View style={styles.containerLoading}>
-            <LoadingWithoutModal />
+          <View
+            style={loadingSendDM ? styles.containerLoading : styles.containerLoadingBlockScreen}>
+            <LoadingWithoutModal text={loadingSendDM ? 'Initializing chat' : null} />
           </View>
         ) : (
           <></>
         )}
 
         <ProfileTiktokScroll
+          keyboardShouldPersistTaps="handled"
           ref={flatListRef}
           data={isFeedsShown ? feeds : []}
           onScroll={handleScroll}
@@ -823,7 +826,10 @@ const OtherProfile = () => {
                   index={index}
                   onNewPollFetched={onNewPollFetched}
                   onPressDomain={onPressDomain}
-                  onPress={() => onPress(item, index)}
+                  onPress={() => {
+                    onPress(item, index);
+                    Keyboard.dismiss();
+                  }}
                   onPressComment={() => onPressComment(item, item.id)}
                   onPressUpvote={(post) => setUpVote(post, index)}
                   selfUserId={yourselfId}
@@ -1045,6 +1051,14 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   containerLoading: {
+    height: '100%',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    zIndex: 99
+  },
+  containerLoadingBlockScreen: {
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center'

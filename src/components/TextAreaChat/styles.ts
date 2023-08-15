@@ -32,16 +32,16 @@ export const S = StyleSheet.create({
     width: 24,
     height: 24,
     marginTop: 5,
-    borderRadius: 18,
+    borderRadius: 50,
     marginRight: 6,
     alignItems: 'center',
     justifyContent: 'center'
   },
-  emojyStyle: {
+  emojiStyle: {
     fontSize: 12
   },
   sendIconContainer: {
-    borderRadius: 18,
+    borderRadius: 50,
     width: 35,
     height: 35,
     display: 'flex',
