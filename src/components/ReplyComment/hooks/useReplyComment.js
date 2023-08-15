@@ -253,7 +253,11 @@ const useReplyComment = ({itemProp, indexFeed, dataFeed, updateParent, page, get
   const getThisComment = async (isUpdate) => {
     if (itemProp.latest_children.comment && Array.isArray(itemProp.latest_children.comment)) {
       if (!isUpdate) {
-        setNewCommentList(itemProp.latest_children?.comment);
+        setNewCommentList(
+          itemProp.latest_children?.comment.sort(
+            (a, b) => moment(a.created_at).unix() - moment(b.created_at).unix()
+          )
+        );
       }
     }
     const response = await getCommentChild({activity_id: item?.id, feed_id: item.activity_id});
