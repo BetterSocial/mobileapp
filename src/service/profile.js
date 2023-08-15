@@ -81,7 +81,7 @@ export const getFollowing = async () =>
 export const setUnFollow = async (data) =>
   new Promise((resolve, reject) => {
     api
-      .post('/profiles/unfollow-user', data)
+      .post('/profiles/unfollow-user-v3', data)
       .then((res) => {
         resolve(res.data);
       })
@@ -112,7 +112,7 @@ export const setFollow = async (data) => {
   );
   return new Promise((resolve, reject) => {
     api
-      .post('/profiles/follow-user', data)
+      .post('/profiles/follow-user-v3', data)
       .then((res) => {
         resolve(res.data);
       })
@@ -193,6 +193,21 @@ export const getOtherFeedsInProfile = async (userId, offset = 0) =>
     api
       .get(`/profiles/feeds/${userId}?offset=${offset}`)
       .then((res) => resolve(res.data))
+      .catch((err) => {
+        reject(err);
+      });
+  });
+
+export const profileSettingsDMpermission = async (allowAnonDm, onlyReceivedDmFromUserFollowing) =>
+  new Promise((resolve, reject) => {
+    api
+      .patch('profiles/settings', {
+        allowAnonDm,
+        onlyReceivedDmFromUserFollowing
+      })
+      .then((res) => {
+        resolve(res.data);
+      })
       .catch((err) => {
         reject(err);
       });

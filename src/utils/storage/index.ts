@@ -5,13 +5,17 @@ import {MMKV} from 'react-native-mmkv';
  * TYPES
  */
 enum StorageKeysEnum {
-  OnboardingPassword = 'onboardingPassword'
+  OnboardingPassword = 'onboardingPassword',
+  TopicPages = 'topicPages'
 }
 
 interface IStorage {
   get: () => string;
   set: (value: string) => void;
   clear: () => void;
+  setForKey: (key: string, value: string) => void;
+  getForKey: (key: string) => string;
+  clearForKey: (key: string) => void;
 }
 /**
  * TYPES
@@ -28,22 +32,39 @@ const storageBuilder = (keyName: StorageKeysEnum): IStorage => {
     MMKVStorage.set(keyName, value);
   };
 
+  const setForKey = (key: string, value: string) => {
+    MMKVStorage.set(`${keyName}_${key}`, value);
+  };
+
+  const getForKey = (key: string) => {
+    return MMKVStorage.getString(`${keyName}_${key}`);
+  };
+
   const clear = () => {
     MMKVStorage.delete(keyName);
+  };
+
+  const clearForKey = (key: string) => {
+    MMKVStorage.delete(`${keyName}_${key}`);
   };
 
   return {
     get,
     set,
-    clear
+    clear,
+    setForKey,
+    getForKey,
+    clearForKey
   };
 };
 
 const StorageUtils = {
-  onboardingPassword: storageBuilder(StorageKeysEnum.OnboardingPassword)
+  onboardingPassword: storageBuilder(StorageKeysEnum.OnboardingPassword),
+  topicPages: storageBuilder(StorageKeysEnum.TopicPages)
 };
 
 export interface IStorageUtils {
   onboardingPassword: Storage;
+  topicPages: Storage;
 }
 export default StorageUtils;

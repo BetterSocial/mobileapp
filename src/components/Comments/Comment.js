@@ -21,6 +21,7 @@ import {removeWhiteSpace} from '../../utils/Utils';
 import BlockComponent from '../BlockComponent';
 import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
 import CommentUserName from '../CommentUsername/CommentUsername';
+import moment from 'moment';
 
 const Comment = ({
   user,
@@ -34,8 +35,8 @@ const Comment = ({
   level,
   showLeftConnector = true,
   disableOnTextPress = false,
-  updateVote,
-  onLongPress
+  onLongPress,
+  updateVote
 }) => {
   const navigation = useNavigation();
   const refBlockComponent = React.useRef();
@@ -142,7 +143,7 @@ const Comment = ({
 
             <View style={styles.containerUsername}>
               <CommentUserName comment={comment} user={user} />
-              <Text style={styles.time}> {calculateTime(time)}</Text>
+              <Text style={styles.time}> {calculateTime(time || moment().format())}</Text>
             </View>
           </View>
         </ButtonHightlight>
