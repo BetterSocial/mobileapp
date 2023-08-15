@@ -8,6 +8,7 @@ import {ChannelList, ChannelPreviewTitle, Chat, Streami18n} from 'stream-chat-re
 import {useNavigation} from '@react-navigation/core';
 import {useRecoilState, useRecoilValue} from 'recoil';
 
+import moment from 'moment';
 import ChannelStatusIcon from '../../components/ChannelStatusIcon';
 import CustomPreviewAvatar from './elements/CustomPreviewAvatar';
 import CustomPreviewUnreadCount from './elements/CustomPreviewUnreadCount';
@@ -34,6 +35,7 @@ import {setChannel} from '../../context/actions/setChannel';
 import {setTotalUnreadPostNotif} from '../../context/actions/unReadMessageAction';
 import {traceMetricScreen} from '../../libraries/performance/firebasePerformance';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import useFeedService from '../../hooks/useFeedService';
 
 const ChannelListScreen = () => {
   const streami18n = new Streami18n({
@@ -56,6 +58,8 @@ const ChannelListScreen = () => {
   const [, dispatchUnreadMessage] = React.useContext(Context).unReadMessage;
   const channelListLocalValue = useRecoilValue(channelListLocalAtom);
   const [followUserList, setFollowUserList] = useRecoilState(followersOrFollowingAtom);
+
+  const {getFeedChat} = useFeedService();
 
   const filters = {
     members: {$in: [myProfile.user_id]},
@@ -146,11 +150,27 @@ const ChannelListScreen = () => {
   };
 
   const goToFeedDetail = async (item) => {
-    navigation.navigate('PostDetailPage', {
-      feedId: item.activity_id,
-      refreshCache: () => handleUpdateCache(item.activity_id, item.totalCommentBadge),
-      isCaching: false
-    });
+    const currentDate = moment();
+    console.log(item.expired_at);
+    const expiredDate = moment(item.expired_at);
+    const isExpired = expiredDate.isBefore(currentDate);
+
+    if (isExpired) {
+      const hoursDiff = currentDate.diff(expiredDate, 'hours');
+
+      if (hoursDiff > 48) {
+        Toast.show('This post expired and has been removed', Toast.LONG);
+        getFeedChat();
+      } else {
+        Toast.show('This post expired and has been removed', Toast.LONG);
+      }
+    } else {
+      navigation.navigate('PostDetailPage', {
+        feedId: item.activity_id,
+        refreshCache: () => handleUpdateCache(item.activity_id, item.totalCommentBadge),
+        isCaching: false
+      });
+    }
   };
 
   const countPostNotifComponent = (item) => {
