@@ -144,7 +144,7 @@ const Item = ({
     <View key={item.id} style={styles.cardContainer}>
       <Header
         onHeaderOptionClicked={onHeaderOptionClicked}
-        headerStyle={{paddingHorizontal: 9}}
+        headerStyle={styles.headerContainer}
         props={item}
         height={getHeightHeader()}
         showAnonymousOption={true}
@@ -297,5 +297,8 @@ const styles = StyleSheet.create({
   }),
   linearGradient: {
     height: 8
+  },
+  headerContainer: {
+    marginHorizontal: 9
   }
 });

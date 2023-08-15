@@ -1,12 +1,21 @@
 import * as React from 'react';
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import Mi from 'react-native-vector-icons/MaterialIcons';
+import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 
 import MemoIc_Checklist from '../../assets/icons/Ic_Checklist';
 import {COLORS} from '../../utils/theme';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 
-const ProfileContact = ({photo, fullname, onPress, select, showArrow, userId, item}) => (
+const ProfileContact = ({
+  photo,
+  fullname,
+  onPress,
+  select,
+  showArrow,
+  userId,
+  item,
+  ImageComponent = null
+}) => (
   <Pressable
     onPress={onPress}
     android_ripple={{
@@ -17,11 +26,13 @@ const ProfileContact = ({photo, fullname, onPress, select, showArrow, userId, it
     style={styles.pressable}>
     <View style={styles.container}>
       <View style={styles.profile}>
-        <Image
-          testID="image"
-          style={styles.image}
-          source={{uri: photo !== '' ? photo : undefined}}
-        />
+        {ImageComponent || (
+          <Image
+            testID="image"
+            style={styles.image}
+            source={{uri: photo !== '' ? photo : undefined}}
+          />
+        )}
         <Text style={styles.fullname}>{fullname}</Text>
       </View>
       {showArrow && (

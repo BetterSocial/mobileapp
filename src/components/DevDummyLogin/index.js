@@ -1,4 +1,5 @@
 import * as React from 'react';
+import JwtDecode from 'jwt-decode';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import SimpleToast from 'react-native-simple-toast';
 import configEnv from 'react-native-config';
@@ -15,6 +16,8 @@ import {
 import {StackActions, useNavigation} from '@react-navigation/native';
 import {useSetRecoilState} from 'recoil';
 
+import StorageUtils from '../../utils/storage';
+import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {InitialStartupAtom} from '../../service/initialStartup';
@@ -33,8 +36,35 @@ import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 const heightBs = Dimensions.get('window').height * 0.85;
 const heightBsPassword = Dimensions.get('window').height * 0.65;
 
+const S = StyleSheet.create({
+  devTrialView: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    zIndex: 999,
+    backgroundColor: 'red'
+  },
+  dummyLoginButton: {},
+  dummyAccountItem: {
+    paddingHorizontal: 16,
+    paddingVertical: 8
+  },
+  divider: {
+    width: '100%',
+    backgroundColor: COLORS.gray,
+    height: 2
+  },
+  passwordTextInput: {
+    margin: 16,
+    padding: 16,
+    backgroundColor: COLORS.lightgrey
+  }
+});
+
 const DevDummyLogin = ({resetClickTime = () => {}}) => {
   const {ENABLE_DEV_ONLY_FEATURE} = configEnv;
+  const {setProfileId} = useProfileHook();
 
   const [dummyUsers] = React.useState([
     {name: 'fajarismv2', humanId: 'fajarismv2'},
@@ -94,16 +124,22 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
 
   const checkPassword = async () => {
     setIsLoadingCheckPassword(true);
+    StorageUtils.onboardingPassword.set(passwordText);
     const response = await checkPasswordForDemoLogin(passwordText);
-    if (response?.success) {
-      dummyLoginPasswordRbSheetRef.current.close();
-      if (viewMode === 'login') openDummyLogin();
-      else if (viewMode === 'onboarding') navigateToChooseUsername();
-    } else {
-      SimpleToast.show('Wrong Password', SimpleToast.SHORT);
+    setIsLoadingCheckPassword(false);
+    if (!response?.success && response?.code === 429) {
+      SimpleToast.show('Too many requests, please try again later.', SimpleToast.SHORT);
+      return;
     }
 
-    setIsLoadingCheckPassword(false);
+    if (!response?.success) {
+      SimpleToast.show('Wrong Password', SimpleToast.SHORT);
+      return;
+    }
+
+    dummyLoginPasswordRbSheetRef.current.close();
+    if (viewMode === 'login') openDummyLogin();
+    else if (viewMode === 'onboarding') navigateToChooseUsername();
   };
 
   const dummyLogin = (appUserId) => {
@@ -118,13 +154,20 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
           return;
         }
         if (response.data) {
-          setAccessToken(response.token);
-          console.log('response.anonymous_token', response);
-          setAnonymousToken(response.anonymousToken);
+          await setAnonymousToken(response.anonymousToken);
+          await setAccessToken(response.token);
           setRefreshToken(response.refresh_token);
+
+          const userId = await JwtDecode(response.token).user_id;
+          const anonymousUserId = await JwtDecode(response.anonymousToken).user_id;
+          setProfileId({
+            anonProfileId: anonymousUserId,
+            signedProfileId: userId
+          });
           try {
             await setAnonymousToken(response.anonymousToken);
           } catch (e) {
+            console.log('e');
             console.log(e);
           }
           streamChat(response.token).then(() => {
@@ -151,6 +194,11 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
     setViewMode(mode);
     dummyLoginPasswordRbSheetRef?.current?.open();
   };
+
+  React.useEffect(() => {
+    const savedPasswordText = StorageUtils.onboardingPassword.get();
+    if (savedPasswordText) setPasswordText(savedPasswordText);
+  }, []);
 
   if (ENABLE_DEV_ONLY_FEATURE === 'true')
     return (
@@ -200,31 +248,5 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
 
   return <></>;
 };
-
-const S = StyleSheet.create({
-  devTrialView: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    zIndex: 999,
-    backgroundColor: 'red'
-  },
-  dummyLoginButton: {},
-  dummyAccountItem: {
-    paddingHorizontal: 16,
-    paddingVertical: 8
-  },
-  divider: {
-    width: '100%',
-    backgroundColor: COLORS.gray,
-    height: 2
-  },
-  passwordTextInput: {
-    margin: 16,
-    padding: 16,
-    backgroundColor: COLORS.lightgrey
-  }
-});
 
 export default DevDummyLogin;

@@ -21,7 +21,7 @@ import useChannelList from './hooks/useChannelList';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
 } from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
-import {CHANNEL_TYPE_TOPIC} from '../../utils/constants';
+import {CHANNEL_TYPE_ANONYMOUS, CHANNEL_TYPE_TOPIC} from '../../utils/constants';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {FEED_COMMENT_COUNT} from '../../utils/cache/constant';
@@ -65,7 +65,7 @@ const ChannelListScreen = () => {
     members: {$in: [myProfile.user_id]},
     type: {$in: ['messaging', 'topics', 'group', 'system']}
   };
-  // React.useEffect(() => { }, [unReadMessage]);
+
   const perf = React.useRef(null);
   const sort = [{last_message_at: -1}];
   const options = {
@@ -125,13 +125,26 @@ const ChannelListScreen = () => {
     dispatchUnreadMessage(setTotalUnreadPostNotif(totalMessage));
   };
 
+  /**
+   *
+   * @param {import('stream-chat-react-native-core').ChannelPreviewTitleProps} props
+   * @returns
+   */
   const customPreviewTitle = (props) => {
-    let {name} = props?.channel?.data || {};
-    const {id} = props?.channel?.data || {};
-    if (name?.toLowerCase() === 'us' && id?.toLowerCase() === 'us') name = 'United States';
+    const {channel} = props;
+
+    const {name} = channel?.data || {};
+    const {id} = channel?.data || {};
+    let displayName = name || props?.displayName;
+    if (channel?.data?.channel_type === CHANNEL_TYPE_ANONYMOUS) {
+      displayName = `Anonymous ${channel?.data?.anon_user_info_emoji_name}`;
+    }
+
+    if (name?.toLowerCase() === 'us' && id?.toLowerCase() === 'us') displayName = 'United States';
+
     return (
       <View style={{paddingRight: 12}}>
-        <ChannelPreviewTitle displayName={getChatName(name, profile.myProfile.username)} />
+        <ChannelPreviewTitle displayName={getChatName(displayName, profile.myProfile.username)} />
       </View>
     );
   };
@@ -224,7 +237,7 @@ const ChannelListScreen = () => {
     };
 
     api
-      .post('/profiles/follow-user', requestData)
+      .post('/profiles/follow-user-v3', requestData)
       .then((res) => {
         Promise.resolve(res.data);
       })
@@ -235,14 +248,10 @@ const ChannelListScreen = () => {
 
     return true;
   };
-
   return (
     <>
       <StatusBar translucent={false} />
       <ScrollView ref={listRef} contentInsetAdjustmentBehavior="automatic">
-        <View style={{height: 52}}>
-          <Search animatedValue={0} onPress={() => navigation.navigate('ContactScreen')} />
-        </View>
         <EasyFollowSystem valueCallback={checkFollowBack} followButtonAction={followButtonAction}>
           {myProfile && myProfile.user_id && client.client ? (
             <Chat client={client.client} i18nInstance={streami18n}>

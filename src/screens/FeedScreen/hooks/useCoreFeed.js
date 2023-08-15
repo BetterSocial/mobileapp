@@ -33,7 +33,7 @@ const useCoreFeed = () => {
       const query = `?offset=${offsetFeed}`;
 
       const dataFeeds = await getMainFeed(query);
-      if (Array.isArray(dataFeeds.data) && dataFeeds.data.length <= 0) {
+      if (Array.isArray(dataFeeds.data) && dataFeeds.data?.length <= 0) {
         setLoading(false);
         return setIsLastPage(true);
       }
