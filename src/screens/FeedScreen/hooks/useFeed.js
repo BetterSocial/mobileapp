@@ -31,7 +31,7 @@ const useFeed = () => {
     navigation.push('LinkContextScreen', param);
   };
 
-  const getHeightFooter = (bottomHeight = 0) => {
+  const getHeightFooter = () => {
     const h = normalizeFontSizeByWidth(52);
     return h;
   };

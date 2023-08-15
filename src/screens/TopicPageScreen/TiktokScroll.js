@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FlatList, StyleSheet, Dimensions, StatusBar } from 'react-native';
+import {FlatList, StyleSheet, Dimensions, StatusBar} from 'react-native';
 import PropTypes from 'prop-types';
 import Empty from './elements/Empty';
 
@@ -8,15 +8,14 @@ const tabBarHeight = StatusBar.currentHeight;
 
 const styles = StyleSheet.create({
   flatlistContainer: {
-    paddingBottom: 0,
-  },
+    paddingBottom: 0
+  }
 });
 
 const TiktokScroll = (props) => {
-  const { data, children, onRefresh, refreshing, onEndReach } = props;
+  const {data, children, onRefresh, refreshing, onEndReach} = props;
   const flatListRef = React.useRef();
-  const deviceHeight = FULL_HEIGHT - tabBarHeight
-
+  const deviceHeight = FULL_HEIGHT - tabBarHeight;
 
   return (
     <FlatList
@@ -46,12 +45,12 @@ TiktokScroll.propTypes = {
   onRefresh: PropTypes.func,
   refreshing: PropTypes.bool,
   onScrollBeginDrag: PropTypes.func,
-  onEndReach: PropTypes.func,
+  onEndReach: PropTypes.func
 };
 
 TiktokScroll.defaultProps = {
   data: [],
-  onEndReach: () => null,
+  onEndReach: () => null
 };
 
 export default TiktokScroll;
