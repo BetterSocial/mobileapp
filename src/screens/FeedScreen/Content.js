@@ -114,13 +114,18 @@ const Content = ({
 
   const handleTextLayout = ({nativeEvent}) => {
     let text = '';
-
     let {newMaxLine, countDeviceLine} = handleCountDeviceLine();
     const amountLineBreak = handleLineBreak(nativeEvent, newMaxLine);
     countDeviceLine = newMaxLine - amountLineBreak.length / 2;
     newMaxLine -= amountLineBreak.length / 2;
     if (item.post_type === POST_TYPE_STANDARD && item.images_url.length <= 0) {
-      countDeviceLine -= 2;
+      if (topics.length > 0) {
+        newMaxLine -= 2;
+        countDeviceLine -= 3;
+      } else {
+        newMaxLine -= 1;
+        countDeviceLine -= 2;
+      }
     } else {
       countDeviceLine -= 1;
     }
