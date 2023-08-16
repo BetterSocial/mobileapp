@@ -265,7 +265,6 @@ describe('GroupInfo should run correctly', () => {
       alertRemoveUser: jest.fn(),
       memberName: jest.fn(() => ''),
       onLeaveGroup: jest.fn(),
-      setUsername: jest.fn(),
       profile: '',
       setUsername: jest.fn(),
       channelState: {
