@@ -301,10 +301,9 @@ const styles = StyleSheet.create({
   },
 
   containerProgress: {
-    marginTop: 36,
+    marginTop: 20,
     paddingLeft: 22,
-    paddingRight: 22,
-    paddingTop: 22
+    paddingRight: 22
   },
   textWhoToFollow: {
     fontFamily: 'Poppins',
