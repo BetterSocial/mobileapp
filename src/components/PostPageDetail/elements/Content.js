@@ -65,12 +65,6 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
     navigation.navigate('DomainScreen', param);
   };
 
-  const handleContentStyle = () => {
-    if (images_url.length > 0) {
-      return {};
-    }
-  };
-
   if (!cekImage) return null;
 
   return (
