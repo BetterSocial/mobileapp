@@ -225,7 +225,7 @@ const Content = ({
       ) : null}
       {images_url.length > 0 && (
         <View style={styles.containerImage}>
-          <ImageLayouter images={images_url} onimageclick={onImageClickedByIndex} />
+          <ImageLayouter isFeed={true} images={images_url} onimageclick={onImageClickedByIndex} />
         </View>
       )}
 
