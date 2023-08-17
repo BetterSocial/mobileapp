@@ -85,6 +85,7 @@ const useContentPoll = ({polls, voteCount, isAlreadyPolling: isAlreadyPollingPro
         setCount(voteCount + 1);
       }
     }
+
     if (onnewpollfetched && typeof onnewpollfetched === 'function') {
       onnewpollfetched(newItem, index);
     }

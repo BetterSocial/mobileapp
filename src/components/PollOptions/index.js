@@ -207,6 +207,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default React.memo(PollOptions, (prevProps, nextProps) => {
-  return prevProps.isalreadypolling !== nextProps.isalreadypolling;
-});
+export default React.memo(PollOptions);
