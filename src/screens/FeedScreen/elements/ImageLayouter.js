@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import {ImageBackground, StyleSheet, View, Text} from 'react-native';
+import {ImageBackground, StyleSheet, View} from 'react-native';
 import ImageItem from './ImageItem';
 import FastImage from 'react-native-fast-image';
 
