@@ -207,7 +207,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               }
             >
               Created 
-              24/01/23
+              01/24/23
             </Text>
           </View>
           <View
@@ -700,6 +700,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
     deviceWidth={null}
     hardwareAccelerated={false}
     hideModalContentWhileAnimating={false}
+    isGroup={true}
     isOpen={false}
     onBackdropPress={[MockFunction]}
     onCloseModal={[MockFunction]}
@@ -755,6 +756,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
       deviceWidth={null}
       forwardedRef={[Function]}
       hideModalContentWhileAnimating={false}
+      isGroup={true}
       isOpen={false}
       onBackdropPress={[MockFunction]}
       onCloseModal={[MockFunction]}
@@ -848,6 +850,36 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
           <Text
             style={
               Object {
+                "color": "#C4C4C4",
+                "fontSize": 16,
+                "fontWeight": "bold",
+              }
+            }
+          >
+            Message Anonymously
+          </Text>
+        </View>
+        <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "justifyContent": "center",
+              "opacity": 1,
+              "paddingVertical": 18,
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
                 "fontSize": 16,
                 "fontWeight": "bold",
               }
@@ -890,5 +922,1973 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
       </View>
     </View>
   </Modal>
+  <Modal
+    animationType="none"
+    deviceHeight={null}
+    deviceWidth={null}
+    hardwareAccelerated={false}
+    hideModalContentWhileAnimating={false}
+    onBackdropPress={[MockFunction]}
+    onCloseModal={[MockFunction]}
+    onModalHide={[Function]}
+    onModalWillHide={[Function]}
+    onModalWillShow={[Function]}
+    onPress={[MockFunction]}
+    onRequestClose={[Function]}
+    panResponderThreshold={4}
+    scrollHorizontal={false}
+    scrollOffset={0}
+    scrollOffsetMax={0}
+    scrollTo={null}
+    selectedUser={Array []}
+    statusBarTranslucent={false}
+    supportedOrientations={
+      Array [
+        "portrait",
+        "landscape",
+      ]
+    }
+    swipeThreshold={100}
+    transparent={true}
+    visible={false}
+  >
+    <View
+      accessible={true}
+      focusable={true}
+      forwardedRef={[Function]}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "backgroundColor": "black",
+          "bottom": 0,
+          "height": undefined,
+          "left": 0,
+          "opacity": 0,
+          "position": "absolute",
+          "right": 0,
+          "top": 0,
+          "width": undefined,
+        }
+      }
+    />
+    <View
+      deviceHeight={null}
+      deviceWidth={null}
+      forwardedRef={[Function]}
+      hideModalContentWhileAnimating={false}
+      onBackdropPress={[MockFunction]}
+      onCloseModal={[MockFunction]}
+      onModalHide={[Function]}
+      onModalWillHide={[Function]}
+      onModalWillShow={[Function]}
+      onPress={[MockFunction]}
+      panResponderThreshold={4}
+      pointerEvents="box-none"
+      scrollHorizontal={false}
+      scrollOffset={0}
+      scrollOffsetMax={0}
+      scrollTo={null}
+      selectedUser={Array []}
+      statusBarTranslucent={false}
+      style={
+        Object {
+          "flex": 1,
+          "justifyContent": "center",
+          "margin": NaN,
+          "transform": Array [
+            Object {
+              "translateY": 0,
+            },
+          ],
+        }
+      }
+      supportedOrientations={
+        Array [
+          "portrait",
+          "landscape",
+        ]
+      }
+      swipeThreshold={100}
+    >
+      <View
+        style={
+          Object {
+            "backgroundColor": "white",
+            "padding": 24,
+          }
+        }
+      >
+        <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "justifyContent": "center",
+              "opacity": 1,
+              "paddingVertical": 18,
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "fontSize": 16,
+                "fontWeight": "bold",
+              }
+            }
+          >
+            Block 
+          </Text>
+        </View>
+      </View>
+    </View>
+  </Modal>
+  <Modal
+    hardwareAccelerated={false}
+    transparent={true}
+    visible={true}
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "flex": 1,
+          "justifyContent": "center",
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "backgroundColor": "rgba(0, 0, 0, 0.22)",
+            "borderRadius": 10,
+            "padding": 50,
+          }
+        }
+      >
+        <ActivityIndicator
+          animating={true}
+          color="#00ADB5"
+          hidesWhenStopped={true}
+          size="large"
+        />
+      </View>
+    </View>
+  </Modal>
+  <View>
+    <View>
+      <Modal
+        animationType="none"
+        hardwareAccelerated={false}
+        onRequestClose={[Function]}
+        supportedOrientations={
+          Array [
+            "portrait",
+            "portrait-upside-down",
+            "landscape",
+            "landscape-left",
+            "landscape-right",
+          ]
+        }
+        transparent={true}
+        visible={false}
+      >
+        <View
+          onLayout={[Function]}
+          style={
+            Array [
+              Array [
+                Object {
+                  "backgroundColor": "#00000077",
+                  "flex": 1,
+                },
+                undefined,
+              ],
+              Object {
+                "paddingBottom": 0,
+              },
+            ]
+          }
+        >
+          <View
+            accessible={true}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "backgroundColor": "transparent",
+                "flex": 1,
+                "opacity": 1,
+              }
+            }
+          />
+          <View
+            onMoveShouldSetResponder={[Function]}
+            onMoveShouldSetResponderCapture={[Function]}
+            onResponderEnd={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderReject={[Function]}
+            onResponderRelease={[Function]}
+            onResponderStart={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            onStartShouldSetResponderCapture={[Function]}
+            style={
+              Object {
+                "backgroundColor": "#fff",
+                "borderTopLeftRadius": 20,
+                "borderTopRightRadius": 20,
+                "height": "auto",
+                "overflow": "hidden",
+                "transform": Array [
+                  Object {
+                    "translateX": 0,
+                  },
+                  Object {
+                    "translateY": 0,
+                  },
+                ],
+                "width": "100%",
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "alignItems": "center",
+                  "backgroundColor": "transparent",
+                  "width": "100%",
+                }
+              }
+            >
+              <View
+                style={
+                  Array [
+                    Object {
+                      "backgroundColor": "#ccc",
+                      "borderRadius": 5,
+                      "height": 5,
+                      "margin": 10,
+                      "width": 35,
+                    },
+                    Object {
+                      "backgroundColor": "#E0E0E0",
+                      "width": 60,
+                    },
+                  ]
+                }
+              />
+            </View>
+            <Text
+              style={
+                Object {
+                  "color": "#000",
+                  "fontFamily": "Inter-SemiBold",
+                  "fontSize": 18,
+                  "marginLeft": 21,
+                }
+              }
+            >
+              What do you want to do?
+            </Text>
+            <Text
+              style={
+                Object {
+                  "color": "#828282",
+                  "fontFamily": "Inter-Regular",
+                  "fontSize": 12,
+                  "marginBottom": 29,
+                  "marginHorizontal": 21,
+                  "marginTop": 17,
+                }
+              }
+            >
+              Blocking all of this user's anonymous post from your feed will also reduce their visibility for all other posts.
+            </Text>
+            <View
+              accessible={true}
+              focusable={true}
+              onClick={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                Object {
+                  "borderTopColor": "#E0E0E0",
+                  "borderTopWidth": 1,
+                  "opacity": 1,
+                  "paddingHorizontal": 22,
+                  "paddingVertical": 15,
+                }
+              }
+            >
+              <View
+                style={
+                  Object {
+                    "alignItems": "center",
+                    "flexDirection": "row",
+                  }
+                }
+              >
+                <Icon
+                  color="#000"
+                  name="block"
+                  size={17}
+                />
+                <Text
+                  style={
+                    Object {
+                      "color": "#000",
+                      "fontFamily": "Inter-Medium",
+                      "fontSize": 14,
+                      "marginLeft": 15,
+                    }
+                  }
+                >
+                  Block user's anonymous post indefinitely
+                </Text>
+              </View>
+              <View
+                style={
+                  Object {
+                    "flexDirection": "row",
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "color": "#828282",
+                      "flex": 1,
+                      "fontFamily": "Inter-Regular",
+                      "fontSize": 12,
+                      "marginTop": 5,
+                    }
+                  }
+                >
+                  You won’t see any anonymous posts from this user and the user’s reach will be reduced across BetterSocial, in particular for this post. This action cannot be reversed!
+                </Text>
+              </View>
+            </View>
+            <View
+              accessible={true}
+              focusable={true}
+              onClick={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                Object {
+                  "borderTopColor": "#E0E0E0",
+                  "borderTopWidth": 1,
+                  "opacity": 1,
+                  "paddingHorizontal": 22,
+                  "paddingVertical": 15,
+                }
+              }
+            >
+              <View
+                style={
+                  Object {
+                    "alignItems": "center",
+                    "flexDirection": "row",
+                  }
+                }
+              >
+                <SvgMock />
+                <Text
+                  style={
+                    Object {
+                      "color": "#000",
+                      "fontFamily": "Inter-Medium",
+                      "fontSize": 14,
+                      "marginLeft": 15,
+                    }
+                  }
+                >
+                  Block & report this user
+                </Text>
+              </View>
+              <View
+                style={
+                  Object {
+                    "flexDirection": "row",
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "color": "#828282",
+                      "flex": 1,
+                      "fontFamily": "Inter-Regular",
+                      "fontSize": 12,
+                      "marginTop": 5,
+                    }
+                  }
+                >
+                  This account is fake, hacked, or involved in criminal activity. You will need to provide additional information to help us take consequences.
+                </Text>
+                <View
+                  accessible={true}
+                  focusable={false}
+                  onClick={[Function]}
+                  onResponderGrant={[Function]}
+                  onResponderMove={[Function]}
+                  onResponderRelease={[Function]}
+                  onResponderTerminate={[Function]}
+                  onResponderTerminationRequest={[Function]}
+                  onStartShouldSetResponder={[Function]}
+                  style={
+                    Object {
+                      "alignItems": "flex-end",
+                      "justifyContent": "center",
+                      "marginLeft": 15,
+                      "opacity": 1,
+                      "width": 20,
+                    }
+                  }
+                >
+                  <Icon
+                    color="#000"
+                    name="chevron-right"
+                    size={17}
+                  />
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    </View>
+    <View>
+      <Modal
+        animationType="none"
+        hardwareAccelerated={false}
+        onRequestClose={[Function]}
+        supportedOrientations={
+          Array [
+            "portrait",
+            "portrait-upside-down",
+            "landscape",
+            "landscape-left",
+            "landscape-right",
+          ]
+        }
+        transparent={true}
+        visible={false}
+      >
+        <View
+          onLayout={[Function]}
+          style={
+            Array [
+              Array [
+                Object {
+                  "backgroundColor": "#00000077",
+                  "flex": 1,
+                },
+                undefined,
+              ],
+              Object {
+                "paddingBottom": 0,
+              },
+            ]
+          }
+        >
+          <View
+            accessible={true}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "backgroundColor": "transparent",
+                "flex": 1,
+                "opacity": 1,
+              }
+            }
+          />
+          <View
+            onMoveShouldSetResponder={[Function]}
+            onMoveShouldSetResponderCapture={[Function]}
+            onResponderEnd={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderReject={[Function]}
+            onResponderRelease={[Function]}
+            onResponderStart={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            onStartShouldSetResponderCapture={[Function]}
+            style={
+              Object {
+                "backgroundColor": "#fff",
+                "borderTopLeftRadius": 20,
+                "borderTopRightRadius": 20,
+                "height": "auto",
+                "overflow": "hidden",
+                "transform": Array [
+                  Object {
+                    "translateX": 0,
+                  },
+                  Object {
+                    "translateY": 0,
+                  },
+                ],
+                "width": "100%",
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "alignItems": "center",
+                  "backgroundColor": "transparent",
+                  "width": "100%",
+                }
+              }
+            >
+              <View
+                style={
+                  Array [
+                    Object {
+                      "backgroundColor": "#ccc",
+                      "borderRadius": 5,
+                      "height": 5,
+                      "margin": 10,
+                      "width": 35,
+                    },
+                    Object {
+                      "backgroundColor": "#E0E0E0",
+                      "width": 60,
+                    },
+                  ]
+                }
+              />
+            </View>
+            <Text
+              style={
+                Object {
+                  "color": "#000",
+                  "fontFamily": "Inter-SemiBold",
+                  "fontSize": 18,
+                  "marginLeft": 21,
+                }
+              }
+            >
+              What do you want to do?
+            </Text>
+            <Text
+              style={
+                Object {
+                  "color": "#828282",
+                  "fontFamily": "Inter-Regular",
+                  "fontSize": 12,
+                  "marginBottom": 29,
+                  "marginHorizontal": 21,
+                  "marginTop": 17,
+                }
+              }
+            >
+              Blocking a user will not just remove their post from your feed, but also reduce their visibility for all other users.
+            </Text>
+            <View
+              accessible={true}
+              focusable={true}
+              onClick={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                Object {
+                  "borderTopColor": "#E0E0E0",
+                  "borderTopWidth": 1,
+                  "opacity": 1,
+                  "paddingHorizontal": 22,
+                  "paddingVertical": 15,
+                }
+              }
+            >
+              <View
+                style={
+                  Object {
+                    "alignItems": "center",
+                    "flexDirection": "row",
+                  }
+                }
+              >
+                <Icon
+                  color="#000"
+                  name="block"
+                  size={17}
+                />
+                <Text
+                  style={
+                    Object {
+                      "color": "#000",
+                      "fontFamily": "Inter-Medium",
+                      "fontSize": 14,
+                      "marginLeft": 15,
+                    }
+                  }
+                >
+                  Block  indefinitely
+                </Text>
+              </View>
+              <View
+                style={
+                  Object {
+                    "flexDirection": "row",
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "color": "#828282",
+                      "flex": 1,
+                      "fontFamily": "Inter-Regular",
+                      "fontSize": 12,
+                      "marginTop": 5,
+                    }
+                  }
+                >
+                  You will not be able to see each other’s posts, or message each other. The user’s reach will be reduced across BetterSocial, in particular for this post.
+                </Text>
+              </View>
+            </View>
+            <View
+              accessible={true}
+              focusable={true}
+              onClick={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                Object {
+                  "borderTopColor": "#E0E0E0",
+                  "borderTopWidth": 1,
+                  "opacity": 1,
+                  "paddingHorizontal": 22,
+                  "paddingVertical": 15,
+                }
+              }
+            >
+              <View
+                style={
+                  Object {
+                    "alignItems": "center",
+                    "flexDirection": "row",
+                  }
+                }
+              >
+                <SvgMock />
+                <Text
+                  style={
+                    Object {
+                      "color": "#000",
+                      "fontFamily": "Inter-Medium",
+                      "fontSize": 14,
+                      "marginLeft": 15,
+                    }
+                  }
+                >
+                  Block & report 
+                </Text>
+              </View>
+              <View
+                style={
+                  Object {
+                    "flexDirection": "row",
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "color": "#828282",
+                      "flex": 1,
+                      "fontFamily": "Inter-Regular",
+                      "fontSize": 12,
+                      "marginTop": 5,
+                    }
+                  }
+                >
+                  This account is fake, hacked, or involved in criminal activity. You will need to provide additional information to help us take consequences.
+                </Text>
+                <View
+                  accessible={true}
+                  focusable={false}
+                  onClick={[Function]}
+                  onResponderGrant={[Function]}
+                  onResponderMove={[Function]}
+                  onResponderRelease={[Function]}
+                  onResponderTerminate={[Function]}
+                  onResponderTerminationRequest={[Function]}
+                  onStartShouldSetResponder={[Function]}
+                  style={
+                    Object {
+                      "alignItems": "flex-end",
+                      "justifyContent": "center",
+                      "marginLeft": 15,
+                      "opacity": 1,
+                      "width": 20,
+                    }
+                  }
+                >
+                  <Icon
+                    color="#000"
+                    name="chevron-right"
+                    size={17}
+                  />
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    </View>
+    <Modal
+      animationType="none"
+      hardwareAccelerated={false}
+      onRequestClose={[Function]}
+      supportedOrientations={
+        Array [
+          "portrait",
+          "portrait-upside-down",
+          "landscape",
+          "landscape-left",
+          "landscape-right",
+        ]
+      }
+      transparent={true}
+      visible={false}
+    >
+      <View
+        onLayout={[Function]}
+        style={
+          Array [
+            Array [
+              Object {
+                "backgroundColor": "#00000077",
+                "flex": 1,
+              },
+              undefined,
+            ],
+            Object {
+              "paddingBottom": 0,
+            },
+          ]
+        }
+      >
+        <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "backgroundColor": "transparent",
+              "flex": 1,
+              "opacity": 1,
+            }
+          }
+        />
+        <View
+          onMoveShouldSetResponder={[Function]}
+          onMoveShouldSetResponderCapture={[Function]}
+          onResponderEnd={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderReject={[Function]}
+          onResponderRelease={[Function]}
+          onResponderStart={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          onStartShouldSetResponderCapture={[Function]}
+          style={
+            Object {
+              "backgroundColor": "#fff",
+              "borderTopLeftRadius": 20,
+              "borderTopRightRadius": 20,
+              "height": "80%",
+              "overflow": "hidden",
+              "transform": Array [
+                Object {
+                  "translateX": 0,
+                },
+                Object {
+                  "translateY": 0,
+                },
+              ],
+              "width": "100%",
+            }
+          }
+        >
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "width": "100%",
+              }
+            }
+          >
+            <View
+              style={
+                Array [
+                  Object {
+                    "backgroundColor": "#ccc",
+                    "borderRadius": 5,
+                    "height": 5,
+                    "margin": 10,
+                    "width": 35,
+                  },
+                  Object {
+                    "backgroundColor": "#E0E0E0",
+                    "width": 60,
+                  },
+                ]
+              }
+            />
+          </View>
+          <RCTScrollView
+            nestedScrollEnabled={true}
+          >
+            <View>
+              <View
+                accessible={true}
+                focusable={true}
+                onClick={[Function]}
+                onResponderGrant={[Function]}
+                onResponderMove={[Function]}
+                onResponderRelease={[Function]}
+                onResponderTerminate={[Function]}
+                onResponderTerminationRequest={[Function]}
+                onStartShouldSetResponder={[Function]}
+                style={
+                  Object {
+                    "backgroundColor": "#E0E0E0",
+                    "flexDirection": "row",
+                    "justifyContent": "space-between",
+                    "marginVertical": 22,
+                    "opacity": 1,
+                    "paddingHorizontal": 17,
+                    "paddingVertical": 18,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "color": "#000",
+                      "fontFamily": "Inter-Bold",
+                      "fontSize": 14,
+                    }
+                  }
+                >
+                  Skip & just block this account
+                </Text>
+                <Icon
+                  color="#000"
+                  name="chevron-right"
+                  size={17}
+                />
+              </View>
+              <Text
+                style={
+                  Object {
+                    "color": "#000",
+                    "fontFamily": "Inter-Bold",
+                    "fontSize": 16,
+                    "marginLeft": 21,
+                  }
+                }
+              >
+                Or select all which apply to specify the issue - provide more info on next screen:
+              </Text>
+              <View
+                accessible={true}
+                focusable={true}
+                onClick={[Function]}
+                onResponderGrant={[Function]}
+                onResponderMove={[Function]}
+                onResponderRelease={[Function]}
+                onResponderTerminate={[Function]}
+                onResponderTerminationRequest={[Function]}
+                onStartShouldSetResponder={[Function]}
+                style={
+                  Object {
+                    "borderBottomColor": "#E0E0E0",
+                    "borderBottomWidth": 1,
+                    "flexDirection": "row",
+                    "justifyContent": "space-between",
+                    "opacity": 1,
+                    "paddingRight": 20,
+                    "paddingVertical": 18,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "color": "#000",
+                      "flex": 1,
+                      "fontFamily": "Inter-Regular",
+                      "fontSize": 14,
+                      "paddingHorizontal": 20,
+                    }
+                  }
+                >
+                  It’s promotional spam
+                </Text>
+              </View>
+              <View
+                accessible={true}
+                focusable={true}
+                onClick={[Function]}
+                onResponderGrant={[Function]}
+                onResponderMove={[Function]}
+                onResponderRelease={[Function]}
+                onResponderTerminate={[Function]}
+                onResponderTerminationRequest={[Function]}
+                onStartShouldSetResponder={[Function]}
+                style={
+                  Object {
+                    "borderBottomColor": "#E0E0E0",
+                    "borderBottomWidth": 1,
+                    "flexDirection": "row",
+                    "justifyContent": "space-between",
+                    "opacity": 1,
+                    "paddingRight": 20,
+                    "paddingVertical": 18,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "color": "#000",
+                      "flex": 1,
+                      "fontFamily": "Inter-Regular",
+                      "fontSize": 14,
+                      "paddingHorizontal": 20,
+                    }
+                  }
+                >
+                  It’s intentional disinformation
+                </Text>
+              </View>
+              <View
+                accessible={true}
+                focusable={true}
+                onClick={[Function]}
+                onResponderGrant={[Function]}
+                onResponderMove={[Function]}
+                onResponderRelease={[Function]}
+                onResponderTerminate={[Function]}
+                onResponderTerminationRequest={[Function]}
+                onStartShouldSetResponder={[Function]}
+                style={
+                  Object {
+                    "borderBottomColor": "#E0E0E0",
+                    "borderBottomWidth": 1,
+                    "flexDirection": "row",
+                    "justifyContent": "space-between",
+                    "opacity": 1,
+                    "paddingRight": 20,
+                    "paddingVertical": 18,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "color": "#000",
+                      "flex": 1,
+                      "fontFamily": "Inter-Regular",
+                      "fontSize": 14,
+                      "paddingHorizontal": 20,
+                    }
+                  }
+                >
+                  The account is fake or not human
+                </Text>
+              </View>
+              <View
+                accessible={true}
+                focusable={true}
+                onClick={[Function]}
+                onResponderGrant={[Function]}
+                onResponderMove={[Function]}
+                onResponderRelease={[Function]}
+                onResponderTerminate={[Function]}
+                onResponderTerminationRequest={[Function]}
+                onStartShouldSetResponder={[Function]}
+                style={
+                  Object {
+                    "borderBottomColor": "#E0E0E0",
+                    "borderBottomWidth": 1,
+                    "flexDirection": "row",
+                    "justifyContent": "space-between",
+                    "opacity": 1,
+                    "paddingRight": 20,
+                    "paddingVertical": 18,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "color": "#000",
+                      "flex": 1,
+                      "fontFamily": "Inter-Regular",
+                      "fontSize": 14,
+                      "paddingHorizontal": 20,
+                    }
+                  }
+                >
+                  It’s private information (Doxxing)
+                </Text>
+              </View>
+              <View
+                accessible={true}
+                focusable={true}
+                onClick={[Function]}
+                onResponderGrant={[Function]}
+                onResponderMove={[Function]}
+                onResponderRelease={[Function]}
+                onResponderTerminate={[Function]}
+                onResponderTerminationRequest={[Function]}
+                onStartShouldSetResponder={[Function]}
+                style={
+                  Object {
+                    "borderBottomColor": "#E0E0E0",
+                    "borderBottomWidth": 1,
+                    "flexDirection": "row",
+                    "justifyContent": "space-between",
+                    "opacity": 1,
+                    "paddingRight": 20,
+                    "paddingVertical": 18,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "color": "#000",
+                      "flex": 1,
+                      "fontFamily": "Inter-Regular",
+                      "fontSize": 14,
+                      "paddingHorizontal": 20,
+                    }
+                  }
+                >
+                  It expresses intentions of self-harm
+                </Text>
+              </View>
+              <View
+                accessible={true}
+                focusable={true}
+                onClick={[Function]}
+                onResponderGrant={[Function]}
+                onResponderMove={[Function]}
+                onResponderRelease={[Function]}
+                onResponderTerminate={[Function]}
+                onResponderTerminationRequest={[Function]}
+                onStartShouldSetResponder={[Function]}
+                style={
+                  Object {
+                    "borderBottomColor": "#E0E0E0",
+                    "borderBottomWidth": 1,
+                    "flexDirection": "row",
+                    "justifyContent": "space-between",
+                    "opacity": 1,
+                    "paddingRight": 20,
+                    "paddingVertical": 18,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "color": "#000",
+                      "flex": 1,
+                      "fontFamily": "Inter-Regular",
+                      "fontSize": 14,
+                      "paddingHorizontal": 20,
+                    }
+                  }
+                >
+                  Violence/threats against humans or animals
+                </Text>
+              </View>
+              <View
+                accessible={true}
+                focusable={true}
+                onClick={[Function]}
+                onResponderGrant={[Function]}
+                onResponderMove={[Function]}
+                onResponderRelease={[Function]}
+                onResponderTerminate={[Function]}
+                onResponderTerminationRequest={[Function]}
+                onStartShouldSetResponder={[Function]}
+                style={
+                  Object {
+                    "borderBottomColor": "#E0E0E0",
+                    "borderBottomWidth": 1,
+                    "flexDirection": "row",
+                    "justifyContent": "space-between",
+                    "opacity": 1,
+                    "paddingRight": 20,
+                    "paddingVertical": 18,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "color": "#000",
+                      "flex": 1,
+                      "fontFamily": "Inter-Regular",
+                      "fontSize": 14,
+                      "paddingHorizontal": 20,
+                    }
+                  }
+                >
+                  Something else
+                </Text>
+              </View>
+              <View
+                style={
+                  Object {
+                    "marginBottom": 30,
+                    "paddingLeft": 18,
+                    "paddingRight": 22,
+                    "paddingTop": 8,
+                  }
+                }
+              >
+                <View
+                  accessible={true}
+                  focusable={true}
+                  onClick={[Function]}
+                  onResponderGrant={[Function]}
+                  onResponderMove={[Function]}
+                  onResponderRelease={[Function]}
+                  onResponderTerminate={[Function]}
+                  onResponderTerminationRequest={[Function]}
+                  onStartShouldSetResponder={[Function]}
+                  style={
+                    Object {
+                      "opacity": 1,
+                    }
+                  }
+                >
+                  <View
+                    style={
+                      Object {
+                        "alignItems": "center",
+                        "backgroundColor": "#00ADB5",
+                        "borderRadius": 8,
+                        "flexDirection": "row",
+                        "height": 50,
+                        "justifyContent": "center",
+                        "paddingHorizontal": 25,
+                      }
+                    }
+                  >
+                    <Text
+                      style={
+                        Object {
+                          "color": "#FFFFFF",
+                          "fontFamily": "Inter-SemiBold",
+                          "fontSize": 18,
+                        }
+                      }
+                    >
+                      <Text>
+                        Provide info on next screen
+                      </Text>
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </RCTScrollView>
+        </View>
+      </View>
+    </Modal>
+    <Modal
+      animationType="none"
+      hardwareAccelerated={false}
+      onRequestClose={[Function]}
+      supportedOrientations={
+        Array [
+          "portrait",
+          "portrait-upside-down",
+          "landscape",
+          "landscape-left",
+          "landscape-right",
+        ]
+      }
+      transparent={true}
+      visible={false}
+    >
+      <View
+        onLayout={[Function]}
+        style={
+          Array [
+            Array [
+              Object {
+                "backgroundColor": "#00000077",
+                "flex": 1,
+              },
+              undefined,
+            ],
+            Object {
+              "paddingBottom": 0,
+            },
+          ]
+        }
+      >
+        <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "backgroundColor": "transparent",
+              "flex": 1,
+              "opacity": 1,
+            }
+          }
+        />
+        <View
+          onMoveShouldSetResponder={[Function]}
+          onMoveShouldSetResponderCapture={[Function]}
+          onResponderEnd={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderReject={[Function]}
+          onResponderRelease={[Function]}
+          onResponderStart={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          onStartShouldSetResponderCapture={[Function]}
+          style={
+            Object {
+              "backgroundColor": "#fff",
+              "borderTopLeftRadius": 20,
+              "borderTopRightRadius": 20,
+              "height": "80%",
+              "overflow": "hidden",
+              "transform": Array [
+                Object {
+                  "translateX": 0,
+                },
+                Object {
+                  "translateY": 0,
+                },
+              ],
+              "width": "100%",
+            }
+          }
+        >
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "width": "100%",
+              }
+            }
+          >
+            <View
+              style={
+                Array [
+                  Object {
+                    "backgroundColor": "#ccc",
+                    "borderRadius": 5,
+                    "height": 5,
+                    "margin": 10,
+                    "width": 35,
+                  },
+                  Object {
+                    "backgroundColor": "#E0E0E0",
+                    "width": 60,
+                  },
+                ]
+              }
+            />
+          </View>
+          <RCTScrollView
+            nestedScrollEnabled={true}
+          >
+            <View>
+              <View
+                accessible={true}
+                focusable={true}
+                onClick={[Function]}
+                onResponderGrant={[Function]}
+                onResponderMove={[Function]}
+                onResponderRelease={[Function]}
+                onResponderTerminate={[Function]}
+                onResponderTerminationRequest={[Function]}
+                onStartShouldSetResponder={[Function]}
+                style={
+                  Object {
+                    "backgroundColor": "#E0E0E0",
+                    "flexDirection": "row",
+                    "justifyContent": "space-between",
+                    "marginVertical": 22,
+                    "opacity": 1,
+                    "paddingHorizontal": 17,
+                    "paddingVertical": 18,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "color": "#000",
+                      "fontFamily": "Inter-Bold",
+                      "fontSize": 14,
+                    }
+                  }
+                >
+                  Skip & just block this post
+                </Text>
+                <Icon
+                  color="#000"
+                  name="chevron-right"
+                  size={17}
+                />
+              </View>
+              <Text
+                style={
+                  Object {
+                    "color": "#000",
+                    "fontFamily": "Inter-Bold",
+                    "fontSize": 16,
+                    "marginLeft": 21,
+                  }
+                }
+              >
+                Or select all which apply to specify the issue - provide more info on next screen:
+              </Text>
+              <View
+                accessible={true}
+                focusable={true}
+                onClick={[Function]}
+                onResponderGrant={[Function]}
+                onResponderMove={[Function]}
+                onResponderRelease={[Function]}
+                onResponderTerminate={[Function]}
+                onResponderTerminationRequest={[Function]}
+                onStartShouldSetResponder={[Function]}
+                style={
+                  Object {
+                    "borderBottomColor": "#E0E0E0",
+                    "borderBottomWidth": 1,
+                    "flexDirection": "row",
+                    "justifyContent": "space-between",
+                    "opacity": 1,
+                    "paddingRight": 20,
+                    "paddingVertical": 18,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "color": "#000",
+                      "flex": 1,
+                      "fontFamily": "Inter-Regular",
+                      "fontSize": 14,
+                      "paddingHorizontal": 20,
+                    }
+                  }
+                >
+                  It’s promotional spam
+                </Text>
+              </View>
+              <View
+                accessible={true}
+                focusable={true}
+                onClick={[Function]}
+                onResponderGrant={[Function]}
+                onResponderMove={[Function]}
+                onResponderRelease={[Function]}
+                onResponderTerminate={[Function]}
+                onResponderTerminationRequest={[Function]}
+                onStartShouldSetResponder={[Function]}
+                style={
+                  Object {
+                    "borderBottomColor": "#E0E0E0",
+                    "borderBottomWidth": 1,
+                    "flexDirection": "row",
+                    "justifyContent": "space-between",
+                    "opacity": 1,
+                    "paddingRight": 20,
+                    "paddingVertical": 18,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "color": "#000",
+                      "flex": 1,
+                      "fontFamily": "Inter-Regular",
+                      "fontSize": 14,
+                      "paddingHorizontal": 20,
+                    }
+                  }
+                >
+                  It’s intentional disinformation
+                </Text>
+              </View>
+              <View
+                accessible={true}
+                focusable={true}
+                onClick={[Function]}
+                onResponderGrant={[Function]}
+                onResponderMove={[Function]}
+                onResponderRelease={[Function]}
+                onResponderTerminate={[Function]}
+                onResponderTerminationRequest={[Function]}
+                onStartShouldSetResponder={[Function]}
+                style={
+                  Object {
+                    "borderBottomColor": "#E0E0E0",
+                    "borderBottomWidth": 1,
+                    "flexDirection": "row",
+                    "justifyContent": "space-between",
+                    "opacity": 1,
+                    "paddingRight": 20,
+                    "paddingVertical": 18,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "color": "#000",
+                      "flex": 1,
+                      "fontFamily": "Inter-Regular",
+                      "fontSize": 14,
+                      "paddingHorizontal": 20,
+                    }
+                  }
+                >
+                  The account is fake or not human
+                </Text>
+              </View>
+              <View
+                accessible={true}
+                focusable={true}
+                onClick={[Function]}
+                onResponderGrant={[Function]}
+                onResponderMove={[Function]}
+                onResponderRelease={[Function]}
+                onResponderTerminate={[Function]}
+                onResponderTerminationRequest={[Function]}
+                onStartShouldSetResponder={[Function]}
+                style={
+                  Object {
+                    "borderBottomColor": "#E0E0E0",
+                    "borderBottomWidth": 1,
+                    "flexDirection": "row",
+                    "justifyContent": "space-between",
+                    "opacity": 1,
+                    "paddingRight": 20,
+                    "paddingVertical": 18,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "color": "#000",
+                      "flex": 1,
+                      "fontFamily": "Inter-Regular",
+                      "fontSize": 14,
+                      "paddingHorizontal": 20,
+                    }
+                  }
+                >
+                  It’s private information (Doxxing)
+                </Text>
+              </View>
+              <View
+                accessible={true}
+                focusable={true}
+                onClick={[Function]}
+                onResponderGrant={[Function]}
+                onResponderMove={[Function]}
+                onResponderRelease={[Function]}
+                onResponderTerminate={[Function]}
+                onResponderTerminationRequest={[Function]}
+                onStartShouldSetResponder={[Function]}
+                style={
+                  Object {
+                    "borderBottomColor": "#E0E0E0",
+                    "borderBottomWidth": 1,
+                    "flexDirection": "row",
+                    "justifyContent": "space-between",
+                    "opacity": 1,
+                    "paddingRight": 20,
+                    "paddingVertical": 18,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "color": "#000",
+                      "flex": 1,
+                      "fontFamily": "Inter-Regular",
+                      "fontSize": 14,
+                      "paddingHorizontal": 20,
+                    }
+                  }
+                >
+                  It expresses intentions of self-harm
+                </Text>
+              </View>
+              <View
+                accessible={true}
+                focusable={true}
+                onClick={[Function]}
+                onResponderGrant={[Function]}
+                onResponderMove={[Function]}
+                onResponderRelease={[Function]}
+                onResponderTerminate={[Function]}
+                onResponderTerminationRequest={[Function]}
+                onStartShouldSetResponder={[Function]}
+                style={
+                  Object {
+                    "borderBottomColor": "#E0E0E0",
+                    "borderBottomWidth": 1,
+                    "flexDirection": "row",
+                    "justifyContent": "space-between",
+                    "opacity": 1,
+                    "paddingRight": 20,
+                    "paddingVertical": 18,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "color": "#000",
+                      "flex": 1,
+                      "fontFamily": "Inter-Regular",
+                      "fontSize": 14,
+                      "paddingHorizontal": 20,
+                    }
+                  }
+                >
+                  Violence/threats against humans or animals
+                </Text>
+              </View>
+              <View
+                accessible={true}
+                focusable={true}
+                onClick={[Function]}
+                onResponderGrant={[Function]}
+                onResponderMove={[Function]}
+                onResponderRelease={[Function]}
+                onResponderTerminate={[Function]}
+                onResponderTerminationRequest={[Function]}
+                onStartShouldSetResponder={[Function]}
+                style={
+                  Object {
+                    "borderBottomColor": "#E0E0E0",
+                    "borderBottomWidth": 1,
+                    "flexDirection": "row",
+                    "justifyContent": "space-between",
+                    "opacity": 1,
+                    "paddingRight": 20,
+                    "paddingVertical": 18,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "color": "#000",
+                      "flex": 1,
+                      "fontFamily": "Inter-Regular",
+                      "fontSize": 14,
+                      "paddingHorizontal": 20,
+                    }
+                  }
+                >
+                  Something else
+                </Text>
+              </View>
+              <View
+                style={
+                  Object {
+                    "marginBottom": 30,
+                    "paddingLeft": 18,
+                    "paddingRight": 22,
+                    "paddingTop": 8,
+                  }
+                }
+              >
+                <View
+                  accessible={true}
+                  focusable={true}
+                  onClick={[Function]}
+                  onResponderGrant={[Function]}
+                  onResponderMove={[Function]}
+                  onResponderRelease={[Function]}
+                  onResponderTerminate={[Function]}
+                  onResponderTerminationRequest={[Function]}
+                  onStartShouldSetResponder={[Function]}
+                  style={
+                    Object {
+                      "opacity": 1,
+                    }
+                  }
+                >
+                  <View
+                    style={
+                      Object {
+                        "alignItems": "center",
+                        "backgroundColor": "#00ADB5",
+                        "borderRadius": 8,
+                        "flexDirection": "row",
+                        "height": 50,
+                        "justifyContent": "center",
+                        "paddingHorizontal": 25,
+                      }
+                    }
+                  >
+                    <Text
+                      style={
+                        Object {
+                          "color": "#FFFFFF",
+                          "fontFamily": "Inter-SemiBold",
+                          "fontSize": 18,
+                        }
+                      }
+                    >
+                      <Text>
+                        Provide info on next screen
+                      </Text>
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </RCTScrollView>
+        </View>
+      </View>
+    </Modal>
+    <Modal
+      animationType="none"
+      hardwareAccelerated={false}
+      onRequestClose={[Function]}
+      supportedOrientations={
+        Array [
+          "portrait",
+          "portrait-upside-down",
+          "landscape",
+          "landscape-left",
+          "landscape-right",
+        ]
+      }
+      transparent={true}
+      visible={false}
+    >
+      <View
+        onLayout={[Function]}
+        style={
+          Array [
+            Array [
+              Object {
+                "backgroundColor": "#00000077",
+                "flex": 1,
+              },
+              undefined,
+            ],
+            Object {
+              "paddingBottom": 0,
+            },
+          ]
+        }
+      >
+        <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "backgroundColor": "transparent",
+              "flex": 1,
+              "opacity": 1,
+            }
+          }
+        />
+        <View
+          onMoveShouldSetResponder={[Function]}
+          onMoveShouldSetResponderCapture={[Function]}
+          onResponderEnd={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderReject={[Function]}
+          onResponderRelease={[Function]}
+          onResponderStart={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          onStartShouldSetResponderCapture={[Function]}
+          style={
+            Object {
+              "backgroundColor": "#fff",
+              "borderTopLeftRadius": 20,
+              "borderTopRightRadius": 20,
+              "height": "auto",
+              "overflow": "hidden",
+              "transform": Array [
+                Object {
+                  "translateX": 0,
+                },
+                Object {
+                  "translateY": 0,
+                },
+              ],
+              "width": "100%",
+            }
+          }
+        >
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "width": "100%",
+              }
+            }
+          >
+            <View
+              style={
+                Array [
+                  Object {
+                    "backgroundColor": "#ccc",
+                    "borderRadius": 5,
+                    "height": 5,
+                    "margin": 10,
+                    "width": 35,
+                  },
+                  Object {
+                    "backgroundColor": "#E0E0E0",
+                    "width": 60,
+                  },
+                ]
+              }
+            />
+          </View>
+          <View>
+            <Text
+              style={
+                Object {
+                  "color": "#000",
+                  "fontFamily": "Inter-Bold",
+                  "fontSize": 18,
+                  "marginLeft": 21,
+                  "marginTop": 18,
+                }
+              }
+            >
+              Please specify the issue
+            </Text>
+            <TextInput
+              allowFontScaling={true}
+              multiline={true}
+              onChangeText={[Function]}
+              placeholder="Please provide more details to inform our
+ team (min. 50 characters)"
+              rejectResponderTermination={true}
+              style={
+                Object {
+                  "backgroundColor": "#F5F5F5",
+                  "borderRadius": 8,
+                  "color": "#828282",
+                  "fontFamily": "Inter-Regular",
+                  "height": 233,
+                  "marginLeft": 17,
+                  "marginRight": 23,
+                  "marginTop": 14,
+                  "paddingLeft": 19,
+                  "paddingRight": 13,
+                  "paddingVertical": 19,
+                }
+              }
+              textAlignVertical="top"
+              underlineColorAndroid="transparent"
+              value=""
+            />
+            <View
+              accessible={true}
+              focusable={true}
+              onClick={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                Object {
+                  "backgroundColor": "#E0E0E0",
+                  "flexDirection": "row",
+                  "justifyContent": "space-between",
+                  "marginVertical": 22,
+                  "opacity": 1,
+                  "paddingHorizontal": 17,
+                  "paddingVertical": 18,
+                }
+              }
+              testID="button-skip-test"
+            >
+              <Text
+                style={
+                  Object {
+                    "color": "#000",
+                    "fontFamily": "Inter-Bold",
+                    "fontSize": 14,
+                  }
+                }
+              >
+                Skip & just block this account
+              </Text>
+              <Icon
+                color="#000"
+                name="chevron-right"
+                size={17}
+              />
+            </View>
+            <View
+              style={
+                Object {
+                  "marginBottom": 19,
+                  "marginLeft": 18,
+                  "marginRight": 22,
+                }
+              }
+            >
+              <View
+                accessible={true}
+                focusable={true}
+                onClick={[Function]}
+                onResponderGrant={[Function]}
+                onResponderMove={[Function]}
+                onResponderRelease={[Function]}
+                onResponderTerminate={[Function]}
+                onResponderTerminationRequest={[Function]}
+                onStartShouldSetResponder={[Function]}
+                style={
+                  Object {
+                    "opacity": 1,
+                  }
+                }
+              >
+                <View
+                  style={
+                    Object {
+                      "alignItems": "center",
+                      "backgroundColor": "#00ADB5",
+                      "borderRadius": 8,
+                      "flexDirection": "row",
+                      "height": 50,
+                      "justifyContent": "center",
+                      "paddingHorizontal": 25,
+                    }
+                  }
+                >
+                  <Text
+                    style={
+                      Object {
+                        "color": "#FFFFFF",
+                        "fontFamily": "Inter-SemiBold",
+                        "fontSize": 18,
+                      }
+                    }
+                  >
+                    <Text>
+                      File Report
+                    </Text>
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+      </View>
+    </Modal>
+  </View>
 </RCTSafeAreaView>
 `;

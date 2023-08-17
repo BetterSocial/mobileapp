@@ -1,28 +1,36 @@
 import * as React from 'react';
+import _ from 'lodash';
 import SimpleToast from 'react-native-simple-toast';
-import {StatusBar, View} from 'react-native';
+import {StatusBar, StyleSheet} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 import BlockComponent from '../../components/BlockComponent';
 import ButtonAddPostTopic from '../../components/Button/ButtonAddPostTopic';
 import MemoizedListComponent from './MemoizedListComponent';
 import Navigation from './elements/Navigation';
 import ShareUtils from '../../utils/share';
 import TiktokScroll from '../../components/TiktokScroll';
+import TopicPageStorage from '../../utils/storage/custom/topicPageStorage';
 import dimen from '../../utils/dimen';
 import removePrefixTopic from '../../utils/topics/removePrefixTopic';
 import useChatClientHook from '../../utils/getstream/useChatClientHook';
 import {Context} from '../../context';
-import {TOPIC_LIST} from '../../utils/cache/constant';
 import {downVote, upVote} from '../../service/vote';
 import {getFeedDetail} from '../../service/post';
-import {getSpecificCache, saveToCache} from '../../utils/cache';
 import {getTopicPages} from '../../service/topicPages';
 import {getUserId} from '../../utils/users';
 import {getUserTopic} from '../../service/topics';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {setFeedByIndex, setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import {normalizeFontSizeByWidth} from '../../utils/fonts';
+
+const styles = StyleSheet.create({
+  parentContainer: {
+    flex: 1
+  }
+});
 
 const TopicPageScreen = (props) => {
   const route = useRoute();
@@ -37,7 +45,6 @@ const TopicPageScreen = (props) => {
   const mainFeeds = feedsContext.feeds;
   const [isFollow, setIsFollow] = React.useState(false);
   const [userTopicName, setUserTopicName] = React.useState('');
-  const [tempResponse, setTempResponse] = React.useState({});
   const [offset, setOffset] = React.useState(0);
   const [client] = React.useContext(Context).client;
   const navigation = useNavigation();
@@ -46,41 +53,53 @@ const TopicPageScreen = (props) => {
   const id = removePrefixTopic(topicWithPrefix);
   const {followTopic} = useChatClientHook();
 
+  const initialFetchTopicFeeds = async (cacheLength = 0) => {
+    try {
+      const resultGetTopicPages = await getTopicPages(id?.toLowerCase(), 0);
+      const {data = [], offset: offsetFeeds = 0} = resultGetTopicPages || {};
+      setTopicFeeds(data, dispatch);
+      setOffset(offsetFeeds);
+      TopicPageStorage.set(id?.toLowerCase(), data, offsetFeeds);
+
+      if (cacheLength === 0 && data?.length === 0)
+        SimpleToast.show('No posts yet', SimpleToast.SHORT);
+    } catch (e) {
+      if (cacheLength === 0 && e?.response?.data?.data?.length === 0) {
+        SimpleToast.show('No posts yet', SimpleToast.SHORT);
+        setTopicFeeds([], dispatch);
+        return;
+      }
+
+      if (e?.response?.data?.data?.length === 0) {
+        SimpleToast.show('No more posts to show', SimpleToast.SHORT);
+      }
+    } finally {
+      setIsInitialLoading(false);
+      setLoading(false);
+    }
+  };
+
   const initData = async () => {
     try {
       setIsInitialLoading(true);
-      // setLoading(true)
 
       const idLower = id.toLowerCase();
       setTopicName(idLower);
       setUserTopicName(idLower);
-      const query = `?name=${idLower}`;
       setTopicId(idLower);
-      // eslint-disable-next-line no-underscore-dangle
-      // const _resultGetTopicPages = await getTopicPages(id);
 
-      await getSpecificCache(`${TOPIC_LIST}_${id}`, async (cacheTopic) => {
-        if (!cacheTopic || cacheTopic?.length === 0) {
-          const resultGetTopicPages = await getTopicPages(id);
-          saveToCache(`${TOPIC_LIST}_${id}`, resultGetTopicPages);
-          setTempResponse(resultGetTopicPages);
-          setTopicFeeds(resultGetTopicPages.data, dispatch);
-          setOffset(resultGetTopicPages.offset);
-          setIsInitialLoading(false);
+      const {feeds: topicFeeds, offset: offsetFeeds} = TopicPageStorage.get(idLower);
 
-          if (resultGetTopicPages?.length === 0)
-            SimpleToast.show('No posts yet', SimpleToast.SHORT);
-        } else {
-          setTempResponse(cacheTopic);
-          setTopicFeeds(cacheTopic.data, dispatch);
-          setOffset(cacheTopic.offset);
-          setIsInitialLoading(false);
-        }
-      });
+      if (topicFeeds?.length > 0) {
+        setTopicFeeds(topicFeeds, dispatch);
+        setOffset(offsetFeeds);
+      }
 
-      // eslint-disable-next-line no-underscore-dangle
-      const _resultGetUserTopic = await getUserTopic(query);
-      if (_resultGetUserTopic.data) {
+      initialFetchTopicFeeds(topicFeeds?.length);
+
+      const query = `?name=${idLower}`;
+      const resultGetUserTopic = await getUserTopic(query);
+      if (resultGetUserTopic.data) {
         setIsFollow(true);
       }
     } catch (error) {
@@ -91,22 +110,14 @@ const TopicPageScreen = (props) => {
   };
 
   React.useEffect(() => {
-    if (feeds && Object.keys(tempResponse).length > 0) {
-      getSpecificCache(`${TOPIC_LIST}_${id}`, (cache) => {
-        const newData = {...cache, data: feeds};
-        if (Array.isArray(feeds) && feeds.length > 0) {
-          saveToCache(`${TOPIC_LIST}_${id}`, newData);
-        }
-      });
-    }
-  }, [JSON.stringify(feeds)]);
-
-  React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       initData();
     });
 
-    return unsubscribe;
+    return () => {
+      unsubscribe();
+      setTopicFeeds([], dispatch);
+    };
   }, [navigation]);
 
   React.useEffect(() => {
@@ -147,18 +158,18 @@ const TopicPageScreen = (props) => {
       try {
         setLoading(true);
         const result = await getTopicPages(topicId, offsetParam);
-        const {data} = result;
-        setOffset(result.offset);
+        const {data, offset: offsetFeeds} = result;
         if (result.code === 200) {
           if (offsetParam === 0) {
-            saveToCache(`${TOPIC_LIST}_${id}`, result);
+            TopicPageStorage.set(id?.toLowerCase(), data, offsetFeeds);
             setTopicFeeds(data, dispatch);
           } else {
-            const joinData = [...feeds, ...data];
-            const newResult = {...result, data: joinData};
-            saveToCache(`${TOPIC_LIST}_${id}`, newResult);
+            const joinData = _.uniqBy([...feeds, ...data], (item) => item.id);
+            TopicPageStorage.set(id?.toLowerCase(), joinData, offsetFeeds);
             setTopicFeeds(joinData, dispatch);
           }
+
+          setOffset(offsetFeeds);
         }
       } catch (error) {
         if (__DEV__) {
@@ -304,8 +315,7 @@ const TopicPageScreen = (props) => {
 
   if (isInitialLoading) return null;
   return (
-    <View
-      style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
+    <SafeAreaProvider forceInset={{top: 'always'}} style={styles.parentContainer}>
       <StatusBar barStyle="dark-content" translucent={false} />
       <Navigation
         domain={topicName}
@@ -313,16 +323,14 @@ const TopicPageScreen = (props) => {
         onPress={() => handleFollowTopic()}
         isFollow={isFollow}
       />
-      <View style={{flex: 1}}>
-        <TiktokScroll
-          contentHeight={dimen.size.TOPIC_CURRENT_ITEM_HEIGHT}
-          data={feeds}
-          onEndReach={onEndReach}
-          onRefresh={onRefresh}
-          refreshing={loading}
-          renderItem={renderItem}
-        />
-      </View>
+      <TiktokScroll
+        contentHeight={dimen.size.TOPIC_CURRENT_ITEM_HEIGHT + normalizeFontSizeByWidth(4)}
+        data={feeds}
+        onEndReach={onEndReach}
+        onRefresh={onRefresh}
+        refreshing={loading}
+        renderItem={renderItem}
+      />
       <ButtonAddPostTopic topicName={topicName} onRefresh={onRefresh} />
       <BlockComponent
         ref={refBlockComponent}
@@ -330,7 +338,7 @@ const TopicPageScreen = (props) => {
         refreshAnonymous={onDeleteBlockedPostCompleted}
         screen="topic_screen"
       />
-    </View>
+    </SafeAreaProvider>
   );
 };
 export default withInteractionsManaged(TopicPageScreen);

@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/core';
 import * as React from 'react';
-import {SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
 import dimen from '../../../utils/dimen';
@@ -18,7 +18,7 @@ const Navigation = ({domain, onPress, isFollow = false, onShareCommunity}) => {
   };
 
   return (
-    <SafeAreaView style={styles.Header}>
+    <View style={styles.Header}>
       <TouchableOpacity onPress={() => backScreen()} style={styles.backbutton}>
         <MemoIc_arrow_back width={normalize(18)} height={normalize(18)} />
       </TouchableOpacity>
@@ -37,7 +37,7 @@ const Navigation = ({domain, onPress, isFollow = false, onShareCommunity}) => {
           <ButtonFollow handleSetFollow={onPress} />
         )}
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -45,15 +45,14 @@ const styles = StyleSheet.create({
   Header: {
     flexDirection: 'row',
     height: dimen.size.TOPIC_FEED_HEADER_HEIGHT,
-    paddingEnd: normalize(16),
-    paddingVertical: normalize(8),
+    paddingRight: normalize(16),
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white'
   },
   backbutton: {
     paddingLeft: 16,
-    paddingEnd: 16,
+    paddingRight: 16,
     height: '100%',
     justifyContent: 'center'
   },

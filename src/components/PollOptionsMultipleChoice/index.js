@@ -1,13 +1,13 @@
 /* eslint-disable import/no-named-as-default */
 import * as React from 'react';
 import CheckBox from '@react-native-community/checkbox';
-import {Platform, StyleSheet, Text, TouchableNativeFeedback, View, Dimensions} from 'react-native';
+import {Dimensions, Platform, StyleSheet, Text, TouchableNativeFeedback, View} from 'react-native';
 
 import IconPollMine from '../../assets/icon/IconPollMine';
 import IconPollWinnerBadge from '../../assets/icon/IconPollWinnerBadge';
+import usePollOptionMultiple from './hooks/usePollOptionMultiple';
 import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
-import usePollOptionMultiple from './hooks/usePollOptionMultiple';
 
 const {height} = Dimensions.get('window');
 const PollOptionsMultipleChoice = ({
@@ -43,7 +43,6 @@ const PollOptionsMultipleChoice = ({
   });
 
   const renderPercentageBar = () => {
-    console.log(isMyPoll(), 'test');
     if (isexpired) {
       return (
         <View
