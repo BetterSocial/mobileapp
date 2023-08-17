@@ -24,6 +24,7 @@ export const usePollOptionMultiple = ({
       return acc || isCurrentItemMyPoll;
     }, false);
 
+  // eslint-disable-next-line consistent-return
   const onOptionsClicked = () => {
     if (isPollDisabled()) {
       return null;
