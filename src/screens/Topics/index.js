@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white
   },
   containerProgress: {
-    marginTop: 36,
+    marginTop: 20,
     marginBottom: 24,
     paddingHorizontal: 22
   },

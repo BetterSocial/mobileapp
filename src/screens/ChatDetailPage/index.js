@@ -20,7 +20,6 @@ import {followersOrFollowingAtom} from '../ChannelListScreen/model/followersOrFo
 import {fonts} from '../../utils/fonts';
 import {setAsset} from '../../context/actions/groupChat';
 import {setChannel} from '../../context/actions/setChannel';
-import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
@@ -31,7 +30,6 @@ const streami18n = new Streami18n({
 const ChatDetailPage = ({route}) => {
   const [clients] = React.useContext(Context).client;
   const [channelClient, dispatchChannel] = React.useContext(Context).channel;
-  const {interactionsComplete} = useAfterInteractions();
   const [followUserList, setFollowUserList] = useRecoilState(followersOrFollowingAtom);
   const [, dispatch] = React.useContext(Context).groupChat;
 
