@@ -2,6 +2,8 @@ import Config from 'react-native-config';
 /* eslint-disable no-useless-catch */
 import {StreamChat} from 'stream-chat';
 
+import anonymousApi from './anonymousConfig';
+import api from './config';
 import {getAccessToken} from '../utils/token';
 import {getUserId} from '../utils/users';
 
@@ -58,4 +60,67 @@ const sendSystemMessage = async (
   }
 };
 
-export {createChannel, sendSystemMessage};
+const sendAnonymousDMOtherProfile = async ({
+  user_id,
+  anon_user_info_color_code,
+  anon_user_info_color_name,
+  anon_user_info_emoji_code,
+  anon_user_info_emoji_name,
+  message
+}) => {
+  const payload = {
+    members: [user_id],
+    message,
+    anon_user_info_emoji_name,
+    anon_user_info_emoji_code,
+    anon_user_info_color_name,
+    anon_user_info_color_code
+  };
+
+  const response = await anonymousApi.post('/chat/init-chat-anonymous', payload);
+
+  if (response.status === 200) {
+    return Promise.resolve(response.data?.data);
+  }
+  return Promise.reject(response.data?.data);
+};
+
+const sendSignedDMOtherProfile = async ({user_id, message}) => {
+  const payload = {
+    members: [user_id],
+    message
+  };
+
+  const response = await api.post('/chat/init-chat', payload);
+
+  if (response.status === 200) {
+    return Promise.resolve(response.data?.data);
+  }
+  return Promise.reject(response.data?.data);
+};
+
+const getOrCreateAnonymousChannel = async (userId) => {
+  const payload = {
+    members: [userId]
+  };
+
+  try {
+    const response = await anonymousApi.post('/chat/channels', payload);
+    if (response?.status === 200) {
+      return Promise.resolve(response.data);
+    }
+
+    return Promise.reject(response.data);
+  } catch (e) {
+    if (e?.response?.data?.message) return Promise.reject(e?.response?.data?.message);
+    return Promise.reject(e);
+  }
+};
+
+export {
+  createChannel,
+  sendSystemMessage,
+  sendAnonymousDMOtherProfile,
+  sendSignedDMOtherProfile,
+  getOrCreateAnonymousChannel
+};

@@ -3,13 +3,15 @@ import ImagePicker from 'react-native-image-crop-picker';
 import Toast from 'react-native-simple-toast';
 import {
   ActivityIndicator,
+  Alert,
   Dimensions,
   LogBox,
   StatusBar,
   StyleSheet,
   Text,
   TouchableNativeFeedback,
-  View
+  View,
+  Linking
 } from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {debounce} from 'lodash';
@@ -17,15 +19,17 @@ import {showMessage} from 'react-native-flash-message';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {useNavigation} from '@react-navigation/core';
 
+import Config from 'react-native-config';
 import AnonymousTab from './elements/AnonymousTab';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
+import BioAndDMSetting from './elements/BioAndDMSetting';
 import BlockComponent from '../../components/BlockComponent';
 import BottomSheetBio from './elements/BottomSheetBio';
 import BottomSheetImage from './elements/BottomSheetImage';
 import BottomSheetRealname from './elements/BottomSheetRealname';
 import CustomPressable from '../../components/CustomPressable';
 import FollowInfoRow from './elements/FollowInfoRow';
-import GlobalButton from '../../components/Button/GlobalButton';
+import LinkAndSocialMedia from './elements/LinkAndSocialMedia';
 import PostOptionModal from '../../components/Modal/PostOptionModal';
 import ProfileHeader from './elements/ProfileHeader';
 import ProfilePicture from './elements/ProfilePicture';
@@ -44,6 +48,7 @@ import useProfileScreenHook, {
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {ButtonNewPost} from '../../components/Button';
 import {Context} from '../../context';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {PROFILE_CACHE} from '../../utils/cache/constant';
 import {
   changeRealName,
@@ -58,19 +63,86 @@ import {deleteAnonymousPost, deletePost, getFeedDetail} from '../../service/post
 import {downVote, upVote} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
 import {getAccessToken} from '../../utils/token';
-import {getSpecificCache, saveToCache} from '../../utils/cache';
+import {saveToCache} from '../../utils/cache';
 import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
 import {setFeedByIndex} from '../../context/actions/feeds';
 import {setMyProfileAction} from '../../context/actions/setMyProfileAction';
 import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
-import {trimString} from '../../utils/string/TrimString';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 const {height, width} = Dimensions.get('screen');
+
+const isShowKarma = Config.DOPPLER_ENVIRONMENT === 'dev';
+
+const Header = (props) => {
+  const {
+    headerHeightRef,
+    changeImage,
+    dataMain,
+    goToFollowings,
+    dataMainBio,
+    changeBio,
+    postRef,
+    profileTabIndex,
+    setTabIndexToSigned,
+    setTabIndexToAnonymous
+  } = props;
+
+  return (
+    <View
+      onLayout={(event) => {
+        const headerHeightLayout = event.nativeEvent.layout.height;
+        headerHeightRef.current = headerHeightLayout;
+      }}>
+      <View style={styles.content}>
+        <View style={{flexDirection: 'row'}}>
+          <ProfilePicture
+            onImageContainerClick={changeImage}
+            profilePicPath={dataMain.profile_pic_path}
+          />
+          <View style={{marginLeft: 20}}>
+            <FollowInfoRow
+              follower={dataMain.follower_symbol}
+              following={dataMain.following_symbol}
+              onFollowingContainerClicked={() =>
+                goToFollowings(dataMain.user_id, dataMain.username)
+              }
+            />
+          </View>
+        </View>
+
+        <BioAndDMSetting
+          avatarUrl={DEFAULT_PROFILE_PIC_PATH}
+          bio={dataMainBio}
+          changeBio={changeBio}
+          allowAnonDm={dataMain.allow_anon_dm}
+          onlyReceivedDmFromUserFollowing={dataMain.only_received_dm_from_user_following}
+          following={dataMain.following}
+        />
+
+        <LinkAndSocialMedia username={dataMain.username} prompt={dataMainBio} />
+      </View>
+      <View>
+        <View style={styles.tabs} ref={postRef}>
+          <CustomPressable
+            style={styles.tabItem(profileTabIndex === TAB_INDEX_SIGNED)}
+            onPress={setTabIndexToSigned}>
+            <Text style={styles.postText(profileTabIndex === TAB_INDEX_SIGNED)}>Signed Posts</Text>
+          </CustomPressable>
+          <CustomPressable
+            style={styles.tabItem(profileTabIndex === TAB_INDEX_ANONYMOUS)}
+            onPress={setTabIndexToAnonymous}>
+            <AnonymousTab isActive={profileTabIndex === TAB_INDEX_ANONYMOUS} />
+          </CustomPressable>
+        </View>
+      </View>
+    </View>
+  );
+};
 
 const ProfileScreen = ({route}) => {
   const navigation = useNavigation();
@@ -165,13 +237,7 @@ const ProfileScreen = ({route}) => {
       getAccessToken().then((val) => {
         setTokenJwt(val);
       });
-      getSpecificCache(PROFILE_CACHE, (res) => {
-        if (!res) {
-          fetchMyProfile();
-        } else {
-          saveProfileState(res);
-        }
-      });
+      fetchMyProfile();
     }
   }, [interactionsComplete]);
 
@@ -180,6 +246,7 @@ const ProfileScreen = ({route}) => {
     if (id) {
       setUserId(id);
       const result = await getMyProfile(id);
+      console.log({result: result.data.allow_anon_dm});
       if (result.code === 200) {
         saveToCache(PROFILE_CACHE, result.data);
         saveProfileState(result?.data);
@@ -285,8 +352,13 @@ const ProfileScreen = ({route}) => {
     listRef?.current?.scrollToTop();
   };
 
+  const openSettingApp = () => {
+    Linking.openSettings();
+    closeImageBs();
+  };
+
   const onOpenImageGalery = async () => {
-    const {success, message} = await requestExternalStoragePermission();
+    const {success} = await requestExternalStoragePermission();
     if (success) {
       ImagePicker.openPicker({
         width: 512,
@@ -298,12 +370,14 @@ const ProfileScreen = ({route}) => {
         handleUpdateImage(`data:image/jpeg;base64,${imageRes.data}`, 'gallery');
       });
     } else {
-      Toast.show(message, Toast.SHORT);
+      openAlertPermission(
+        'We’re not able to access your photos, please adjust your permission settings for BetterSocial.'
+      );
     }
   };
 
   const onOpenCamera = async () => {
-    const {success, message} = await requestCameraPermission();
+    const {success} = await requestCameraPermission();
     if (success) {
       ImagePicker.openCamera({
         width: 512,
@@ -315,8 +389,17 @@ const ProfileScreen = ({route}) => {
         handleUpdateImage(`data:image/jpeg;base64,${imageRes.data}`, 'camera');
       });
     } else {
-      Toast.show(message, Toast.SHORT);
+      openAlertPermission(
+        'We’re not able to access your camera, please adjust your permission settings for BetterSocial.'
+      );
     }
+  };
+
+  const openAlertPermission = (message) => {
+    Alert.alert('Permission Denied', message, [
+      {text: 'Open Settings', onPress: openSettingApp},
+      {text: 'Close'}
+    ]);
   };
 
   const onViewProfilePicture = () => {
@@ -379,6 +462,7 @@ const ProfileScreen = ({route}) => {
         });
       });
   };
+
   const changeBio = () => {
     if (dataMain.bio !== null || dataMain.bio !== undefined) {
       setTempBio(dataMain.bio);
@@ -412,7 +496,7 @@ const ProfileScreen = ({route}) => {
         setIsLoadingUpdateBio(false);
         setDataMainBio(dataMain.bio);
         showMessage({
-          message: 'Update bio profile error',
+          message: 'Failed to update profile',
           type: 'danger'
         });
       });
@@ -426,21 +510,6 @@ const ProfileScreen = ({route}) => {
     }
     setTempBio(text);
   };
-
-  const renderBio = (string) => (
-    <GlobalButton buttonStyle={styles.bioText} onPress={() => changeBio()}>
-      <View style={styles.containerBio}>
-        {string === null || string === undefined ? (
-          <Text style={{color: colors.blue}}>Add Bio</Text>
-        ) : (
-          <Text style={styles.seeMore}>
-            {trimString(string, 121)}{' '}
-            {string.length > 121 ? <Text style={{color: colors.blue}}>see more</Text> : null}
-          </Text>
-        )}
-      </View>
-    </GlobalButton>
-  );
 
   const onPressDomain = (item) => {
     const param = linkContextScreenParamBuilder(
@@ -483,6 +552,7 @@ const ProfileScreen = ({route}) => {
     await upVote(post);
     updateFeed(post, index);
   };
+
   const setDownVote = async (post, index) => {
     await downVote(post);
     updateFeed(post, index);
@@ -552,42 +622,6 @@ const ProfileScreen = ({route}) => {
     return reloadFetchAnonymousPost();
   };
 
-  const renderHeader = () => (
-    <View
-      onLayout={(event) => {
-        const headerHeightLayout = event.nativeEvent.layout.height;
-        headerHeightRef.current = headerHeightLayout;
-      }}>
-      <View style={styles.content}>
-        <ProfilePicture
-          onImageContainerClick={changeImage}
-          profilePicPath={dataMain.profile_pic_path}
-        />
-        <FollowInfoRow
-          follower={dataMain.follower_symbol}
-          following={dataMain.following_symbol}
-          onFollowingContainerClicked={() => goToFollowings(dataMain.user_id, dataMain.username)}
-        />
-
-        {renderBio(dataMainBio)}
-      </View>
-      <View>
-        <View style={styles.tabs} ref={postRef}>
-          <CustomPressable
-            style={styles.tabItem(profileTabIndex === TAB_INDEX_SIGNED)}
-            onPress={setTabIndexToSigned}>
-            <Text style={styles.postText(profileTabIndex === TAB_INDEX_SIGNED)}>Signed Posts</Text>
-          </CustomPressable>
-          <CustomPressable
-            style={styles.tabItem(profileTabIndex === TAB_INDEX_ANONYMOUS)}
-            onPress={setTabIndexToAnonymous}>
-            <AnonymousTab isActive={profileTabIndex === TAB_INDEX_ANONYMOUS} />
-          </CustomPressable>
-        </View>
-      </View>
-    </View>
-  );
-
   return (
     <>
       {!loadingContainer ? (
@@ -612,13 +646,26 @@ const ProfileScreen = ({route}) => {
             updateCellsBatchingPeriod={10}
             removeClippedSubviews
             windowSize={10}
-            snapToOffsets={(() => {
-              const posts = feeds.map(
-                (item, index) => headerHeightRef.current + index * dimen.size.PROFILE_ITEM_HEIGHT
-              );
-              return [0, ...posts];
-            })()}
-            ListHeaderComponent={renderHeader}>
+            // snapToOffsets={(() => {
+            //   const posts = feeds.map(
+            //     (item, index) => headerHeightRef.current + index * dimen.size.PROFILE_ITEM_HEIGHT
+            //   );
+            //   return [0, ...posts];
+            // })()}
+            ListHeaderComponent={
+              <Header
+                headerHeightRef={headerHeightRef}
+                changeImage={changeImage}
+                dataMain={dataMain}
+                goToFollowings={goToFollowings}
+                dataMainBio={dataMainBio}
+                changeBio={changeBio}
+                postRef={postRef}
+                profileTabIndex={profileTabIndex}
+                setTabIndexToSigned={setTabIndexToSigned}
+                setTabIndexToAnonymous={setTabIndexToAnonymous}
+              />
+            }>
             {({item, index}) => {
               const dummyItemHeight =
                 height -
@@ -785,6 +832,14 @@ const styles = StyleSheet.create({
   },
   bioText: {
     paddingLeft: 0
+  },
+  tooltipText: {
+    color: '#828282',
+    fontFamily: 'Inter',
+    fontSize: 12,
+    fontStyle: 'normal',
+    fontWeight: '400'
   }
 });
+
 export default React.memo(withInteractionsManaged(ProfileScreen));

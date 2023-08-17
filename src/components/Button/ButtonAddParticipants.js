@@ -9,6 +9,7 @@ const ButtonAddParticipants = (props) => {
   return (
     <View style={styles.btnAdd}>
       <TouchableWithoutFeedback
+        testID="btnPress"
         onPress={() => navigation.navigate('AddParticipant', {refresh: props.refresh})}>
         <Text style={styles.btnAddText}>+ Add Participants</Text>
       </TouchableWithoutFeedback>

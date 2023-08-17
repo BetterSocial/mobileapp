@@ -2,30 +2,19 @@ import React from 'react';
 import Toast from 'react-native-simple-toast';
 import moment from 'moment';
 import {useNavigation} from '@react-navigation/core';
-
 import StringConstant from '../../../utils/string/StringConstant';
-import useUpdateComment from '../../Comments/hooks/useUpdateComment';
 import {Context} from '../../../context';
-import {createChildComment} from '../../../service/comment';
-import {getFeedDetail} from '../../../service/post';
+import {createChildCommentV3} from '../../../service/comment';
 import {getCommentChild} from '../../../service/feeds';
+import {getFeedDetail} from '../../../service/post';
 
-const useReplyComment = ({
-  itemProp,
-  indexFeed,
-  dataFeed,
-  updateParent,
-  updateReply,
-  itemParent,
-  page
-}) => {
+const useReplyComment = ({itemProp, indexFeed, dataFeed, updateParent, page, getComment}) => {
   const [temporaryText, setTemporaryText] = React.useState('');
   const [textComment, setTextComment] = React.useState('');
   const [newCommentList, setNewCommentList] = React.useState([]);
   const [item, setItem] = React.useState(itemProp);
   const navigation = useNavigation();
   const scrollViewRef = React.useRef(null);
-  const {updateComment} = useUpdateComment();
   const [profile] = React.useContext(Context).profile;
   const [defaultData] = React.useState({
     data: {count_downvote: 0, count_upvote: 0, text: textComment},
@@ -74,20 +63,6 @@ const useReplyComment = ({
       setItem(replaceComment);
       setNewCommentList(updateMyComment);
     }
-  };
-
-  const getThisCommentHook = () => {
-    let comments = [];
-    if (
-      itemProp.latest_children &&
-      itemProp.latest_children.comment &&
-      Array.isArray(itemProp.latest_children.comment)
-    ) {
-      comments = itemProp.latest_children.comment.sort(
-        (a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()
-      );
-    }
-    return comments;
   };
 
   const updateReplyPostHook = (comment, itemParentProps, commentId) => {
@@ -181,9 +156,12 @@ const useReplyComment = ({
   const updateFeed = async (isSort) => {
     try {
       const data = await getFeedDetail(item.activity_id);
+
       handleUpdateFeed(data, isSort);
     } catch (e) {
-      console.log(e);
+      if (__DEV__) {
+        console.log(e);
+      }
     }
   };
   const handleUpdateFeed = (data, isSort) => {
@@ -231,14 +209,11 @@ const useReplyComment = ({
 
     try {
       if (textComment.trim() !== '') {
-        const data = await createChildComment(
+        const data = await createChildCommentV3(
           textComment,
           item.id,
-          item.user.id,
           sendPostNotif,
-          dataFeed?.actor?.id,
-          dataFeed.id,
-          dataFeed.message,
+          dataFeed?.id ?? dataFeed?.reaction_id,
           isAnonimity,
           anonimityData
         );
@@ -256,27 +231,25 @@ const useReplyComment = ({
             }
           ];
           setNewCommentList(newComment);
-          if (typeof updateReply === 'function') {
-            updateReply(newComment, itemParent, item.id);
+          if (getComment && typeof getComment === 'function') {
+            getComment();
           }
-          updateFeed(true);
-          updateComment(item.activity_id);
         } else {
           Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
         }
-      } else {
-        // Toast.show('Comments are not empty', Toast.LONG);
-        // setLoadingCMD(false);
       }
     } catch (error) {
-      console.log(error);
       Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
     }
   };
   const getThisComment = async (isUpdate) => {
     if (itemProp.latest_children.comment && Array.isArray(itemProp.latest_children.comment)) {
       if (!isUpdate) {
-        setNewCommentList(itemProp.latest_children?.comment);
+        setNewCommentList(
+          itemProp.latest_children?.comment.sort(
+            (a, b) => moment(a.created_at).unix() - moment(b.created_at).unix()
+          )
+        );
       }
     }
     const response = await getCommentChild({activity_id: item?.id, feed_id: item.activity_id});
@@ -284,7 +257,6 @@ const useReplyComment = ({
   };
 
   return {
-    getThisCommentHook,
     updateReplyPostHook,
     setTemporaryText,
     setCommentHook,

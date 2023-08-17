@@ -3,15 +3,46 @@ import FastImage from 'react-native-fast-image';
 import {ChannelAvatar} from 'stream-chat-react-native';
 import {StyleSheet, View} from 'react-native';
 
+import AnonymousIcon from './components/AnonymousIcon';
 import ChatIcon from '../../../assets/chat-icon.png';
 import DefaultChatGroupProfilePicture from '../../../assets/images/default-chat-group-picture.png';
 import GroupIcon from '../../../assets/group-icon.png';
 import Hashtag from '../../../assets/hashtag.png';
+import {CHANNEL_TYPE_ANONYMOUS} from '../../../utils/constants';
 import {colors} from '../../../utils/colors';
 import {getGroupMemberCount} from '../../../utils/string/StringUtils';
 
 const CustomPreviewAvatar = ({channel}) => {
-  if (channel.data.channel_type === 3) {
+  const channel_type = channel?.data?.channel_type;
+  if (channel_type === CHANNEL_TYPE_ANONYMOUS) {
+    return (
+      <View style={{marginLeft: 8}}>
+        <AnonymousIcon
+          size={48}
+          color={channel?.data?.anon_user_info_color_code}
+          emojiCode={channel?.data?.anon_user_info_emoji_code}
+        />
+        <View style={styles.typeContainer()}>
+          {channel.data.type === 'group' && (
+            <FastImage
+              resizeMode={FastImage.resizeMode.contain}
+              source={GroupIcon}
+              style={styles.iconChatStyle}
+            />
+          )}
+          {channel.data.type === 'messaging' && (
+            <FastImage
+              resizeMode={FastImage.resizeMode.contain}
+              source={ChatIcon}
+              style={styles.iconChatStyle}
+            />
+          )}
+        </View>
+      </View>
+    );
+  }
+
+  if (channel_type === 3) {
     return (
       <View style={styles.containerAvatar}>
         <FastImage
@@ -28,7 +59,7 @@ const CustomPreviewAvatar = ({channel}) => {
       </View>
     );
   }
-  if (channel.data.channel_type === 2) {
+  if (channel_type === 2) {
     return (
       <View style={styles.containerAvatar}>
         {channel?.data?.image ? (
@@ -164,5 +195,21 @@ const styles = StyleSheet.create({
     fontSize: 12,
     padding: 0,
     margin: 0
+  },
+  postNotificationImage: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    right: 0,
+    borderWidth: 2,
+    borderColor: colors.white,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  anonPostNotificationEmoji: {
+    fontSize: 32,
+    alignSelf: 'center',
+    textAlign: 'center'
   }
 });

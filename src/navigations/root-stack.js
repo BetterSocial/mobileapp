@@ -24,7 +24,6 @@ import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
 import ProfilePostDetail from '../screens/ProfilePostDetail';
 import ProfileReplyComment from '../screens/ProfileReplyComment';
 import ReplyComment from '../screens/ReplyComment';
-import ReplyCommentLev3 from '../screens/ReplyComment2';
 import SampleChatInfoScreen from '../screens/WebsocketResearchScreen/SampleChatInfoScreen';
 import SampleChatScreen from '../screens/WebsocketResearchScreen/SampleChatScreen';
 import Settings from '../screens/Settings';
@@ -57,7 +56,7 @@ import {useInitialStartup} from '../hooks/useInitialStartup';
 const RootStack = createNativeStackNavigator();
 
 export const RootNavigator = () => {
-  // useCoreChatSystemHook();
+  useCoreChatSystemHook();
 
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const [following, setFollowing] = useRecoilState(followersOrFollowingAtom);
@@ -68,7 +67,7 @@ export const RootNavigator = () => {
       if (state.isConnected && following?.length !== 0) {
         const successValue = [];
         following.forEach((value) => {
-          api.post('/profiles/follow-user', value).then(() => {
+          api.post('/profiles/follow-user-v3', value).then(() => {
             successValue.push(value.user_id_followed);
           });
         });
@@ -252,11 +251,7 @@ const AuthenticatedNavigator = () => {
         component={ReplyComment}
         options={{headerShown: false}}
       />
-      <AuthenticatedStack.Screen
-        name="ReplyCommentLev3"
-        component={ReplyCommentLev3}
-        options={{headerShown: false}}
-      />
+
       <AuthenticatedStack.Screen
         name="ProfileReplyComment"
         component={ProfileReplyComment}

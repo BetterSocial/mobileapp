@@ -4,20 +4,22 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import messaging from '@react-native-firebase/messaging';
 import {Platform, StyleSheet, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {useRecoilValue} from 'recoil';
+import {useRecoilState, useRecoilValue} from 'recoil';
 
+import ChannelListScreenV2 from '../screens/ChannelListScreenV2';
 import FirebaseConfig from '../configs/FirebaseConfig';
 import MemoFeed from '../assets/icon/Feed';
 import MemoHome from '../assets/icon/Home';
 import MemoNews from '../assets/icon/News';
 import MemoProfileIcon from '../assets/icon/Profile';
 import UniversalLink from '../configs/UniversalLink';
-import WebsocketResearchScreen from '../screens/WebsocketResearchScreen';
-import {ChannelListScreen, FeedScreen, NewsScreen, ProfileScreen} from '../screens';
-import {Context} from '../context';
+import profileAtom from '../atom/profileAtom';
+import useRootChannelListHook from '../hooks/screen/useRootChannelListHook';
+import {FeedScreen, NewsScreen, ProfileScreen} from '../screens';
 import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
 import {colors} from '../utils/colors';
 import {fcmTokenService} from '../service/users';
+import {getAnonymousUserId, getUserId} from '../utils/users';
 
 const Tab = createBottomTabNavigator();
 
@@ -25,8 +27,35 @@ function HomeBottomTabs({navigation}) {
   const isIos = Platform.OS === 'ios';
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const otherProfileData = useRecoilValue(otherProfileAtom);
-  const [unReadMessage] = React.useContext(Context).unReadMessage;
+  const [, setProfileAtom] = useRecoilState(profileAtom);
+  const {totalUnreadCount} = useRootChannelListHook();
+
   let isOpenNotification = false;
+
+  const helperNavigationResetWithData = (screenData) => {
+    setTimeout(() => {
+      if (!isOpenNotification) {
+        isOpenNotification = true;
+        navigation.reset({
+          index: 1,
+          routes: [
+            {
+              name: 'AuthenticatedStack',
+              params: {
+                screen: 'HomeTabs',
+                params: {
+                  screen: 'ChannelList'
+                }
+              }
+            },
+            {
+              ...screenData
+            }
+          ]
+        });
+      }
+    }, 500);
+  };
 
   const handleNotification = async (notification) => {
     if (notification.data.type === 'feed' || notification.data.type === 'reaction') {
@@ -45,34 +74,15 @@ function HomeBottomTabs({navigation}) {
       });
     }
     if (notification.data.type === 'message.new') {
-      setTimeout(() => {
-        if (!isOpenNotification) {
-          isOpenNotification = true;
-          navigation.reset({
-            index: 1,
-            routes: [
-              {
-                name: 'AuthenticatedStack',
-                params: {
-                  screen: 'HomeTabs',
-                  params: {
-                    screen: 'ChannelList'
-                  }
-                }
-              },
-              {
-                name: 'AuthenticatedStack',
-                params: {
-                  screen: 'ChatDetailPage',
-                  params: {
-                    data: notification.data
-                  }
-                }
-              }
-            ]
-          });
+      helperNavigationResetWithData({
+        name: 'AuthenticatedStack',
+        params: {
+          screen: 'ChatDetailPage',
+          params: {
+            data: notification.data
+          }
         }
-      }, 500);
+      });
     }
   };
 
@@ -157,7 +167,6 @@ function HomeBottomTabs({navigation}) {
   };
 
   const handlePushNotif = (remoteMessage) => {
-    console.log(remoteMessage, 'jahat');
     const {data} = remoteMessage;
     if (data.channel_type !== 3) {
       if (isIos) {
@@ -168,9 +177,24 @@ function HomeBottomTabs({navigation}) {
     }
   };
 
+  const updateProfileAtomId = async () => {
+    const signedUserId = await getUserId();
+    const anonUserId = await getAnonymousUserId();
+    setProfileAtom({
+      anonProfileId: anonUserId,
+      signedProfileId: signedUserId
+    });
+  };
+
   React.useEffect(() => {
     createChannel();
     requestPermission();
+    updateProfileAtomId();
+
+    messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+      console.log('Message handled in the background!', remoteMessage);
+      handlePushNotif(remoteMessage);
+    });
 
     const unsubscribe = messaging().onMessage((remoteMessage) => {
       // eslint-disable-next-line no-unused-expressions
@@ -270,7 +294,17 @@ function HomeBottomTabs({navigation}) {
             // unmountOnBlur: true
           }}
         />
-        <Tab.Screen
+        {/* <Tab.Screen
+          name="Feed"
+          component={WebsocketResearchScreen}
+          initialParams={{isBottomTab: true}}
+          options={{
+            activeTintColor: colors.holytosca,
+            tabBarIcon: renderTabLabelIcon('Feed')
+            // unmountOnBlur: true
+          }}
+        /> */}
+        {/* <Tab.Screen
           name="ChannelList"
           component={ChannelListScreen}
           initialParams={{isBottomTab: true}}
@@ -281,6 +315,16 @@ function HomeBottomTabs({navigation}) {
               unReadMessage.total_unread_count + unReadMessage.unread_post > 0
                 ? unReadMessage.total_unread_count + unReadMessage.unread_post
                 : null
+          }}
+        /> */}
+        <Tab.Screen
+          name="ChannelList"
+          component={ChannelListScreenV2}
+          initialParams={{isBottomTab: true}}
+          options={{
+            activeTintColor: colors.holytosca,
+            tabBarIcon: renderTabLabelIcon('ChannelList'),
+            tabBarBadge: totalUnreadCount > 0 ? totalUnreadCount : null
           }}
         />
         <Tab.Screen

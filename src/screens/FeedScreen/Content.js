@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 import * as React from 'react';
 /* eslint-disable no-nested-ternary */
 import PropTypes from 'prop-types';
@@ -9,12 +10,13 @@ import ContentPoll from './ContentPoll';
 import ImageLayouter from './elements/ImageLayouter';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import {COLORS} from '../../utils/theme';
-import {POST_TYPE_POLL} from '../../utils/constants';
+import {POST_TYPE_LINK, POST_TYPE_POLL, POST_TYPE_STANDARD} from '../../utils/constants';
 import {colors} from '../../utils/colors';
-import {fonts, normalizeFontSize} from '../../utils/fonts';
+import {fonts, normalizeFontSize, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
+import useCalculationContent from './hooks/useCalculationContent';
 
-const {width: screenWidth, height} = Dimensions.get('window');
+const {width: screenWidth} = Dimensions.get('window');
 
 const Content = ({
   message,
@@ -27,12 +29,15 @@ const Content = ({
 }) => {
   const navigation = useNavigation();
   const route = useRoute();
-  const devHeight = Dimensions.get('screen').height;
-  const substringPostImage = devHeight / 2.5 - 40 * (height / screenWidth);
-  const substringNoImageNoTopic = devHeight / 1.5 - 40 * (height / screenWidth);
-  const substringNoImageTopic = devHeight / 1.6 - 40 * (height / screenWidth);
-  const substringWithPoll = devHeight / 3 - 40 * (height / screenWidth);
-  const substringWithPollTopic = devHeight / 5 - 40 * (height / screenWidth);
+  const [layoutHeight, setLayoutHeight] = React.useState(null);
+  const [textHeight, setTextHeight] = React.useState(null);
+  const maxFontSize = normalizeFontSizeByWidth(28);
+  const minFontSize = normalizeFontSizeByWidth(16);
+  const {handleCalculation} = useCalculationContent();
+  const [amountCut, setAmountCut] = React.useState(0);
+  const [textCut, setTextCunt] = React.useState(null);
+  const [arrText] = React.useState([]);
+  const isIos = Platform.OS === 'ios';
 
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
@@ -44,60 +49,170 @@ const Content = ({
       }, [])
     });
   };
+
+  const {lineHeight, font} = handleCalculation(
+    layoutHeight,
+    textHeight,
+    maxFontSize,
+    minFontSize,
+    item.post_type,
+    item.images_url,
+    message
+  );
+
+  const calculateMaxLine = () => {
+    if (
+      item.post_type === POST_TYPE_POLL ||
+      item.post_type === POST_TYPE_LINK ||
+      images_url.length > 0
+    ) {
+      return 5;
+    }
+    return Math.floor(layoutHeight / lineHeight);
+  };
+
+  const handleStyleFont = () => {
+    const defaultStyle = [
+      styles.textMedia,
+      {
+        fontSize: font,
+        lineHeight
+      }
+    ];
+    return defaultStyle;
+  };
+
+  const handleTextLine = ({nativeEvent}) => {
+    if (!textHeight || textHeight <= 0) {
+      setTextHeight(nativeEvent.layout.height);
+    }
+  };
+
+  const handleCountDeviceLine = () => {
+    let newMaxLine = calculateMaxLine();
+    const countDeviceLine = newMaxLine;
+    if (!isIos) {
+      newMaxLine -= 1;
+    }
+    return {
+      countDeviceLine,
+      newMaxLine
+    };
+  };
+
+  const handleLineBreak = (nativeEvent, newMaxLine) => {
+    const amountLineBreak = [];
+    if (nativeEvent.lines.length > newMaxLine) {
+      nativeEvent.lines.forEach((char, index) => {
+        if (index <= newMaxLine && char.text.match(/[\r\n]+/g)) {
+          amountLineBreak.push(char.text);
+        }
+      });
+    }
+    return amountLineBreak;
+  };
+
+  const handleTextLayout = ({nativeEvent}) => {
+    let text = '';
+
+    let {newMaxLine, countDeviceLine} = handleCountDeviceLine();
+    const amountLineBreak = handleLineBreak(nativeEvent, newMaxLine);
+    countDeviceLine = newMaxLine - amountLineBreak.length / 2;
+    newMaxLine -= amountLineBreak.length / 2;
+    if (item.post_type === POST_TYPE_STANDARD && item.images_url.length <= 0) {
+      countDeviceLine -= 2;
+    } else {
+      countDeviceLine -= 1;
+    }
+    for (let i = 0; i < newMaxLine; i++) {
+      if (nativeEvent.lines[i]) {
+        if (i === countDeviceLine) {
+          text += nativeEvent.lines[i].text.substring(0, 30);
+          arrText.push(nativeEvent.lines[i].text.substring(0, 30));
+        } else {
+          text += nativeEvent.lines[i].text;
+          arrText.push(nativeEvent.lines[i].text);
+        }
+      }
+    }
+    setTextCunt(text);
+    setAmountCut(text.length);
+  };
   const renderHandleTextContent = () => {
-    let substringNumber = 0;
-    if (images_url.length > 0) {
-      substringNumber = substringPostImage;
-    }
-    if (images_url.length < 1 && topics.length > 0) {
-      substringNumber = substringNoImageTopic;
-    }
-    if (images_url.length < 1 && topics.length < 1) {
-      substringNumber = substringNoImageNoTopic;
-    }
-
-    if (item.post_type === POST_TYPE_POLL && topics.length < 1) {
-      substringNumber = substringWithPoll;
-    }
-
-    if (item.post_type === POST_TYPE_POLL && topics.length > 1) {
-      substringNumber = substringWithPollTopic;
-    }
-
     return (
-      <View testID="postTypePoll" style={styles.containerText}>
-        <Text style={styles.textMedia}>
-          {getCaptionWithTopicStyle(
-            route?.params?.id,
-            message,
-            navigation,
-            substringNumber,
-            item?.topics,
-            item
-          )}{' '}
-          {message.length > substringPostImage ? (
-            <Text style={{color: '#2F80ED'}}>More...</Text>
-          ) : null}
-        </Text>
+      <View testID="postTypePoll" style={[styles.containerText, handleContainerText()]}>
+        {amountCut <= 0 ? (
+          <Text
+            onTextLayout={handleTextLayout}
+            numberOfLines={calculateMaxLine()}
+            onLayout={handleTextLine}
+            style={[handleStyleFont(), handleContainerText().text]}>
+            {message}
+          </Text>
+        ) : (
+          <Text
+            numberOfLines={calculateMaxLine()}
+            style={[handleStyleFont(), handleContainerText().text]}>
+            {getCaptionWithTopicStyle(
+              route?.params?.id,
+              textCut,
+              navigation,
+              null,
+              item?.topics,
+              item,
+              handleContainerText().isShort
+            )}
+            {''}
+            {amountCut < message.length ? <Text style={styles.seemore}> More..</Text> : null}
+          </Text>
+        )}
       </View>
     );
   };
 
+  const handleContainerText = () => {
+    if (message?.length < 125 && item.post_type === POST_TYPE_STANDARD && images_url.length <= 0) {
+      return {
+        container: styles.centerVertical,
+        text: styles.centerVerticalText,
+        isShort: true
+      };
+    }
+    return {
+      container: {},
+      text: {},
+      isShort: false
+    };
+  };
+
+  const hanldeHeightContainer = ({nativeEvent}) => {
+    if (!layoutHeight || layoutHeight <= 0) {
+      setLayoutHeight(nativeEvent.layout.height);
+    }
+  };
   return (
-    <Pressable onPress={onPress} style={[styles.contentFeed, style]}>
+    <Pressable
+      onLayout={hanldeHeightContainer}
+      onPress={onPress}
+      style={[styles.contentFeed, style]}>
       {message?.length > 0 ? (
         <View>
-          <View style={styles.containerMainText}>{renderHandleTextContent()}</View>
+          <View
+            style={[
+              styles.containerMainText(handleContainerText().isShort),
+              handleContainerText().container
+            ]}>
+            {renderHandleTextContent()}
+          </View>
         </View>
       ) : null}
 
       {item && item.post_type === POST_TYPE_POLL ? (
-        <View style={styles.containerMainText}>
+        <View style={styles.containerMainText(handleContainerText().isShort)}>
           <ContentPoll
             message={item.message}
             images_url={item.images_url}
             polls={item.pollOptions}
-            // onPress={() => onPress(item, index)}
             item={item}
             pollexpiredat={item.polls_expired_at}
             multiplechoice={item.multiplechoice}
@@ -144,8 +259,7 @@ export const styles = StyleSheet.create({
     fontSize: normalizeFontSize(14),
     color: colors.black,
     lineHeight: 24,
-    flex: 1,
-    flexWrap: 'wrap'
+    flex: 1
   },
 
   seemore: {
@@ -193,19 +307,19 @@ export const styles = StyleSheet.create({
   },
   contentFeed: {
     flex: 1,
-    marginTop: 0
+    marginTop: 0,
+    height: '100%',
+    width: '100%'
   },
   item: {
     width: screenWidth - 20,
     height: screenWidth - 20,
     marginTop: 10,
-    marginLeft: -20,
-    backgroundColor: 'pink'
+    marginLeft: -20
   },
   imageContainer: {
     flex: 1,
     marginBottom: Platform.select({ios: 0, android: 1}), // Prevent a random Android rendering issue
-    backgroundColor: 'white',
     borderRadius: 8
   },
   image: {
@@ -220,12 +334,20 @@ export const styles = StyleSheet.create({
     height: 32
   },
   textContainer: {},
-  containerMainText: {
+  containerMainText: (isShort) => ({
     paddingHorizontal: 16,
-    paddingVertical: 10
-  },
+    paddingVertical: isShort ? 0 : 10
+  }),
   containerText: {
-    height: 'auto',
     flexDirection: 'row'
+  },
+  centerVertical: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+    backgroundColor: '#11468F'
+  },
+  centerVerticalText: {
+    color: 'white'
   }
 });

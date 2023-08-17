@@ -1,12 +1,14 @@
+/* eslint-disable operator-assignment */
 import {Dimensions, StatusBar} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {POST_TYPE_LINK, POST_TYPE_POLL} from '../../../utils/constants';
+
+import {normalizeFontSizeByWidth} from '../../../utils/fonts';
 
 const usePostDetail = () => {
-  const longTextFontSize = 16;
-  const longTextLineHeight = 24;
-  const shortTextFontSize = 24;
-  const shortTextLineHeight = 44;
+  const longTextFontSize = normalizeFontSizeByWidth(16);
+  const longTextLineHeight = normalizeFontSizeByWidth(24);
+  const shortTextFontSize = normalizeFontSizeByWidth(24);
+  const shortTextLineHeight = normalizeFontSizeByWidth(44);
   const {top, bottom} = useSafeAreaInsets();
   const updateVoteLatestChildrenLevel3 = (commentList, dataUpdated) => {
     const updateComment = commentList.map((comment) => {
@@ -46,7 +48,9 @@ const usePostDetail = () => {
     return newComment;
   };
 
-  const calculationText = (message, post_type, image) => {
+  const calculatedSizeScreen = top + bottom + StatusBar.currentHeight + 170;
+
+  const calculationText = (message) => {
     if (!message) message = '';
     let fontSize = shortTextFontSize;
     let lineHeight = shortTextLineHeight;
@@ -63,20 +67,12 @@ const usePostDetail = () => {
     const numberOfLines = Math.ceil(
       message?.length / ((Dimensions.get('window').width / fontSize) * numLines)
     );
-
     containerHeight = numberOfLines * lineHeight;
     containerHeight = Math.max(containerHeight, shortTextLineHeight * 5);
-    if (image?.length > 0 || post_type === POST_TYPE_POLL) {
-      containerHeight *= 1.8;
-    }
-    if (post_type === POST_TYPE_LINK) {
-      containerHeight *= 2;
-    }
+    containerHeight = containerHeight * 0.5;
     const containerComment = calculatedSizeScreen - containerHeight;
     return {fontSize, lineHeight, containerHeight, containerComment};
   };
-
-  const calculatedSizeScreen = top + bottom + StatusBar.currentHeight + 170;
 
   const calculatePaddingBtm = () => {
     let defaultValue = 108;

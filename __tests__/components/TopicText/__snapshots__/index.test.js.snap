@@ -4,10 +4,15 @@ exports[`Testing Topic Text Match snapshot 1`] = `
 <Text
   onPress={[Function]}
   style={
-    Object {
-      "color": "#2F80ED",
-      "fontFamily": "Inter-Medium",
-    }
+    Array [
+      Object {
+        "color": "#2F80ED",
+        "fontFamily": "Inter-Medium",
+      },
+      Object {
+        "color": "#2F80ED",
+      },
+    ]
   }
   testID="topicTextComponent"
 >
