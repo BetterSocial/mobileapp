@@ -12,6 +12,7 @@ describe('Content poll should same as snapshot', () => {
     post_type: 1,
     message: 'halo',
     images_url: '',
+    mypolling: [],
     pollOptions: [
       {
         counter: '0',
@@ -30,7 +31,6 @@ describe('Content poll should same as snapshot', () => {
         updatedAt: '2022-11-28T01:25:15.000Z'
       }
     ],
-    mypolling: [],
     polls_expired_at: '2022-11-29T01:24:25.170Z',
     multiplechoice: true,
     isalreadypolling: true,
