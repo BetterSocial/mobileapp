@@ -20,8 +20,6 @@ import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuil
 import {sanitizeUrl} from '../../../utils/string/StringUtils';
 import {smartRender} from '../../../utils/Utils';
 
-const {width: screenWidth} = Dimensions.get('window');
-const FONT_SIZE_TEXT = 16;
 const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPostDetail}) => {
   const navigation = useNavigation();
   const cekImage = () => images_url && images_url !== '';
@@ -197,14 +195,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     paddingVertical: 5
   },
-  topicContainerWithImage: {
-    position: 'absolute',
-    bottom: 0
-  },
-  topicContainerNoImage: {
-    backgroundColor: 'transparent',
-    justifyContent: 'flex-end'
-  },
   textContentFeed: (isShort) => ({
     fontFamily: fonts.inter[400],
     fontWeight: 'normal',
@@ -213,32 +203,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexWrap: 'wrap'
   }),
-  textComment: {
-    fontFamily: fonts.inter[400],
-    fontSize: normalizeFontSize(12),
-    lineHeight: 18,
-    color: colors.gray
-  },
-  usernameComment: {
-    fontFamily: fonts.inter[500],
-    fontWeight: '900',
-    fontSize: normalizeFontSize(12),
-    lineHeight: 24,
-    color: colors.black
-  },
-  usernameTextComment: {
-    fontFamily: fonts.inter[500],
-    fontSize: normalizeFontSize(12),
-    lineHeight: 24,
-    color: colors.gray
-  },
-  item: {
-    width: screenWidth - 20,
-    height: screenWidth - 20,
-    marginTop: 10,
-    marginLeft: -20,
-    backgroundColor: 'pink'
-  },
 
   contentFeedLink: {
     marginTop: 12,
@@ -249,12 +213,6 @@ const styles = StyleSheet.create({
   },
   newsCard: {
     paddingHorizontal: 20
-  },
-  message: {
-    fontFamily: fonts.inter[400],
-    lineHeight: 24,
-    fontSize: FONT_SIZE_TEXT,
-    letterSpacing: 0.1
   },
   containerImage: {
     flex: 1,
