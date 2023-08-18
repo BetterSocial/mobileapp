@@ -13,7 +13,7 @@ import dimen from '../../../utils/dimen';
 import useContentFeed from '../../../screens/FeedScreen/hooks/useContentFeed';
 import usePostDetail from '../hooks/usePostDetail';
 import {COLORS} from '../../../utils/theme';
-import {POST_TYPE_LINK, POST_TYPE_POLL} from '../../../utils/constants';
+import {POST_TYPE_LINK, POST_TYPE_POLL, POST_TYPE_STANDARD} from '../../../utils/constants';
 import {colors} from '../../../utils/colors';
 import {fonts, normalizeFontSize, normalizeFontSizeByWidth} from '../../../utils/fonts';
 import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
@@ -74,8 +74,12 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
     return calculationText(hashtagAtComponent(sanitizeUrl(message))).containerHeight;
   };
 
+  const isShort = () => {
+    return calculationText(hashtagAtComponent(sanitizeUrl(message))).isShortText;
+  };
+
   const isShortText = () => {
-    return calculateMinHeight() <= normalizeFontSizeByWidth(325);
+    return item.post_type === POST_TYPE_STANDARD && item.images_url.length === 0 && isShort();
   };
 
   const handleBgColor = () => {
