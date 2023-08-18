@@ -17,7 +17,7 @@ const useGroupSetting = ({navigation, route}) => {
   const [groupName, setGroupName] = React.useState(
     getChatName(route.params.username, profile.myProfile.username) || 'Set Group Name'
   );
-  console.log(participants, 'lala')
+  console.log(participants, 'lala');
   const [countUser] = React.useState(Object.entries(participants).length);
   const [changeName, setChangeName] = React.useState(false);
   const [changeImage, setChangeImage] = React.useState(false);
