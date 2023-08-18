@@ -70,6 +70,9 @@ const usePostDetail = () => {
     containerHeight = numberOfLines * lineHeight;
     containerHeight = Math.max(containerHeight, shortTextLineHeight * 5);
     containerHeight = containerHeight * 0.5;
+    if (containerHeight < normalizeFontSizeByWidth(325)) {
+      containerHeight = normalizeFontSizeByWidth(325);
+    }
     const containerComment = calculatedSizeScreen - containerHeight;
     return {fontSize, lineHeight, containerHeight, containerComment};
   };

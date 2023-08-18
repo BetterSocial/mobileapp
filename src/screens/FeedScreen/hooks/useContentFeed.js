@@ -27,7 +27,14 @@ const useContentFeed = ({navigation}) => {
     matchPress(match);
   }, []);
 
-  const hashtagAtComponent = (message, substring) => {
+  const hanldeShortTextColor = (isShortText) => {
+    if (isShortText) {
+      return 'rgba(255, 255, 255, 0.7)';
+    }
+    return colors.blue;
+  };
+
+  const hashtagAtComponent = (message, substring, isShortText) => {
     const regex = /\B([#@][a-zA-Z0-9_+-]+\b)(?!;)/;
     if (substring) {
       message = message.substring(0, substring);
@@ -35,7 +42,10 @@ const useContentFeed = ({navigation}) => {
     if (message && typeof message === 'string') {
       return reactStringReplace(message, regex, (match) => {
         return (
-          <Text onPress={() => onPressComponent(match)} testID="regex" style={{color: colors.blue}}>
+          <Text
+            onPress={() => onPressComponent(match)}
+            testID="regex"
+            style={{color: hanldeShortTextColor(isShortText)}}>
             {match}
           </Text>
         );

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import FastImage from 'react-native-fast-image';
 import PropTypes from 'prop-types';
-import {Dimensions, Platform, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 
@@ -15,13 +15,11 @@ import usePostDetail from '../hooks/usePostDetail';
 import {COLORS} from '../../../utils/theme';
 import {POST_TYPE_LINK, POST_TYPE_POLL} from '../../../utils/constants';
 import {colors} from '../../../utils/colors';
-import {fonts, normalizeFontSize} from '../../../utils/fonts';
+import {fonts, normalizeFontSize, normalizeFontSizeByWidth} from '../../../utils/fonts';
 import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
 import {sanitizeUrl} from '../../../utils/string/StringUtils';
 import {smartRender} from '../../../utils/Utils';
 
-const {width: screenWidth} = Dimensions.get('window');
-const FONT_SIZE_TEXT = 16;
 const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPostDetail}) => {
   const navigation = useNavigation();
   const cekImage = () => images_url && images_url !== '';
@@ -40,7 +38,7 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
 
   const handleStyleFeed = () => {
     if (item.post_type !== POST_TYPE_LINK) {
-      return styles.contentFeed;
+      return [styles.contentFeed, styles.noMv];
     }
     return styles.contentFeedLink;
   };
@@ -72,32 +70,50 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
     return styles.topicContainerNoImage;
   };
 
+  const calculateMinHeight = () => {
+    return calculationText(hashtagAtComponent(sanitizeUrl(message))).containerHeight;
+  };
+
+  const isShortText = () => {
+    return calculateMinHeight() <= normalizeFontSizeByWidth(325);
+  };
+
+  const handleBgColor = () => {
+    return isShortText() ? '#11468F' : 'white';
+  };
+
+  const containerCard = () => {
+    if (isShortText()) {
+      return {
+        justifyContent: 'center'
+      };
+    }
+    return {};
+  };
+
   if (!cekImage) return null;
   return (
     <>
       <ScrollView
         contentContainerStyle={{flexGrow: 1}}
-        style={styles.contentFeed}
+        style={[
+          styles.contentFeed,
+          {minHeight: calculateMinHeight(), backgroundColor: handleBgColor()}
+        ]}
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}>
-        <View
-          style={[
-            handleStyleFeed(),
-            {
-              minHeight: calculationText(hashtagAtComponent(sanitizeUrl(message))).containerHeight
-            }
-          ]}>
+        <View style={[handleStyleFeed(), containerCard()]}>
           <View style={styles.postTextContainer(isPostDetail)}>
             {item.post_type !== POST_TYPE_LINK ? (
               <Text
                 style={[
-                  styles.textContentFeed,
+                  styles.textContentFeed(isShortText()),
                   {
                     fontSize: calculationText(message).fontSize,
                     lineHeight: calculationText(message).lineHeight
                   }
                 ]}>
-                {hashtagAtComponent(message)}
+                {hashtagAtComponent(message, null, isShortText())}
               </Text>
             ) : (
               <Text
@@ -108,7 +124,7 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
                     lineHeight: calculationText(sanitizeUrl(message)).lineHeight
                   }
                 ]}>
-                {hashtagAtComponent(sanitizeUrl(message))}{' '}
+                {hashtagAtComponent(sanitizeUrl(message, null, isShortText()))}{' '}
               </Text>
             )}
           </View>
@@ -186,67 +202,9 @@ Content.propTypes = {
 export default Content;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingBottom: 16
-  },
-  fletlist: {flex: 1},
-  imageList: {
-    flex: 1,
-    width: screenWidth - 32,
-    borderRadius: 16
-  },
-  containerShowMessage: (currentRouteName) => ({
-    justifyContent: 'center',
-    alignItems: currentRouteName === 'Feed' ? 'center' : 'center',
-    flex: 1,
-    paddingBottom: 10,
-    minHeight: 100
-  }),
-  rowSpaceBeetwen: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between'
-  },
-  rowCenter: {
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  containerFeedProfile: {
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    marginLeft: 13
-  },
-
-  feedUsername: {
-    fontFamily: fonts.inter[600],
-    fontWeight: 'bold',
-    fontSize: 14,
-    color: colors.black
-  },
-  containerFeedText: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 5
-  },
-  feedDate: {
-    fontFamily: fonts.inter[400],
-    fontSize: 12,
-    color: colors.black,
-    lineHeight: 18
-  },
-  point: {
-    width: 4,
-    height: 4,
-    borderRadius: 4,
-    backgroundColor: colors.gray,
-    marginLeft: 8,
-    marginRight: 8
-  },
   contentFeed: {
     flex: 1,
-    backgroundColor: COLORS.white,
-    paddingTop: 5
+    paddingVertical: 5
   },
   topicContainerWithImage: {
     position: 'absolute',
@@ -256,59 +214,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     justifyContent: 'flex-end'
   },
-  textContentFeed: {
+  textContentFeed: (isShortText) => ({
     fontFamily: fonts.inter[400],
     fontWeight: 'normal',
     fontSize: normalizeFontSize(14),
-    color: colors.black,
+    color: isShortText ? colors.white : colors.black,
     flex: 1,
     flexWrap: 'wrap'
-  },
-  textComment: {
-    fontFamily: fonts.inter[400],
-    fontSize: normalizeFontSize(12),
-    lineHeight: 18,
-    color: colors.gray
-  },
-  usernameComment: {
-    fontFamily: fonts.inter[500],
-    fontWeight: '900',
-    fontSize: normalizeFontSize(12),
-    lineHeight: 24,
-    color: colors.black
-  },
-  usernameTextComment: {
-    fontFamily: fonts.inter[500],
-    fontSize: normalizeFontSize(12),
-    lineHeight: 24,
-    color: colors.gray
-  },
-  item: {
-    width: screenWidth - 20,
-    height: screenWidth - 20,
-    marginTop: 10,
-    marginLeft: -20,
-    backgroundColor: 'pink'
-  },
-  imageContainer: {
-    flex: 1,
-    marginBottom: Platform.select({ios: 0, android: 1}), // Prevent a random Android rendering issue
-    backgroundColor: 'white',
-    borderRadius: 8
-  },
-  image: {
-    ...StyleSheet.absoluteFillObject,
-    flex: 1,
-    aspectRatio: 1.5,
-    resizeMode: 'cover'
-  },
-  imageAnonimity: {
-    marginRight: 8,
-    width: 32,
-    height: 32
-  },
+  }),
+
   contentFeedLink: {
-    // flex: 1,
     marginTop: 12,
     paddingLeft: 20,
     paddingRight: 20,
@@ -317,14 +232,8 @@ const styles = StyleSheet.create({
   },
   newsCard: {
     paddingHorizontal: 20
-    // height: '80%',
   },
-  message: {
-    fontFamily: fonts.inter[400],
-    lineHeight: 24,
-    fontSize: FONT_SIZE_TEXT,
-    letterSpacing: 0.1
-  },
+
   containerImage: {
     flex: 1,
     height: dimen.normalizeDimen(300)
@@ -334,5 +243,8 @@ const styles = StyleSheet.create({
   },
   postTextContainer: (isPostDetail) => ({
     paddingHorizontal: isPostDetail ? 12 : 0
-  })
+  }),
+  noMv: {
+    marginVertical: 0
+  }
 });
