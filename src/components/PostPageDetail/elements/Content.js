@@ -13,7 +13,7 @@ import dimen from '../../../utils/dimen';
 import useContentFeed from '../../../screens/FeedScreen/hooks/useContentFeed';
 import usePostDetail from '../hooks/usePostDetail';
 import {COLORS} from '../../../utils/theme';
-import {POST_TYPE_LINK, POST_TYPE_POLL} from '../../../utils/constants';
+import {POST_TYPE_LINK, POST_TYPE_POLL, POST_TYPE_STANDARD} from '../../../utils/constants';
 import {colors} from '../../../utils/colors';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
 import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
@@ -72,12 +72,30 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
     return styles.topicContainerNoImage;
   };
 
+  const isShortText = () => {
+    return images_url.length <= 0 && item.post_type === POST_TYPE_STANDARD && message.length <= 125;
+  };
+
+  const handleContainerPdp = () => {
+    if (isShortText()) {
+      return styles.shortText;
+    }
+    return {};
+  };
+
+  const handleMessageContainerPdp = () => {
+    if (isShortText()) {
+      return styles.centerVertical;
+    }
+    return {};
+  };
+
   if (!cekImage) return null;
   return (
     <>
       <ScrollView
         contentContainerStyle={{flexGrow: 1}}
-        style={styles.contentFeed}
+        style={[styles.contentFeed, handleContainerPdp()]}
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}>
         <View
@@ -85,30 +103,32 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
             handleStyleFeed(),
             {
               minHeight: calculationText(hashtagAtComponent(sanitizeUrl(message))).containerHeight
-            }
+            },
+            handleContainerPdp(),
+            handleMessageContainerPdp()
           ]}>
           <View style={styles.postTextContainer(isPostDetail)}>
             {item.post_type !== POST_TYPE_LINK ? (
               <Text
                 style={[
-                  styles.textContentFeed,
+                  styles.textContentFeed(isShortText()),
                   {
                     fontSize: calculationText(message).fontSize,
                     lineHeight: calculationText(message).lineHeight
                   }
                 ]}>
-                {hashtagAtComponent(message)}
+                {hashtagAtComponent(message, null, isShortText())}
               </Text>
             ) : (
               <Text
                 style={[
-                  styles.textContentFeed,
+                  styles.textContentFeed(isShortText()),
                   {
                     fontSize: calculationText(sanitizeUrl(message)).fontSize,
                     lineHeight: calculationText(sanitizeUrl(message)).lineHeight
                   }
                 ]}>
-                {hashtagAtComponent(sanitizeUrl(message))}{' '}
+                {hashtagAtComponent(sanitizeUrl(message), null, isShortText())}{' '}
               </Text>
             )}
           </View>
@@ -246,7 +266,7 @@ const styles = StyleSheet.create({
   contentFeed: {
     flex: 1,
     backgroundColor: COLORS.white,
-    paddingTop: 5
+    paddingVertical: 5
   },
   topicContainerWithImage: {
     position: 'absolute',
@@ -256,14 +276,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     justifyContent: 'flex-end'
   },
-  textContentFeed: {
+  textContentFeed: (isShort) => ({
     fontFamily: fonts.inter[400],
     fontWeight: 'normal',
     fontSize: normalizeFontSize(14),
-    color: colors.black,
+    color: isShort ? colors.white : colors.black,
     flex: 1,
     flexWrap: 'wrap'
-  },
+  }),
   textComment: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(12),
@@ -334,5 +354,12 @@ const styles = StyleSheet.create({
   },
   postTextContainer: (isPostDetail) => ({
     paddingHorizontal: isPostDetail ? 12 : 0
-  })
+  }),
+  shortText: {
+    minHeight: 325,
+    backgroundColor: '#11468F'
+  },
+  centerVertical: {
+    justifyContent: 'center'
+  }
 });
