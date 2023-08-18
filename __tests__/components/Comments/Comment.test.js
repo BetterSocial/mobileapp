@@ -81,6 +81,27 @@ describe('Comment test should run correctly', () => {
     useRef.mockReturnValueOnce({current: openBlockComponent});
   });
 
+  it('open profile should run correctly', () => {
+    const onPress = jest.fn();
+    const findComment = jest.fn();
+    const updateVote = jest.fn();
+    const time = '2023-01-09T14:13:31.890300Z';
+    const {getByTestId} = render(
+      <Comment
+        user={user}
+        comment={comment}
+        photo={photo}
+        level={level}
+        onPress={onPress}
+        findCommentAndUpdate={findComment}
+        updateVote={updateVote}
+        time={time}
+      />
+    );
+    fireEvent.press(getByTestId('openProfile'));
+    // expect()
+  })
+
   it('Should match snapshot', () => {
     const onPress = jest.fn();
     const findComment = jest.fn();

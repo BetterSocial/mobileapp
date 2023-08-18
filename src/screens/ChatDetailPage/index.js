@@ -18,7 +18,7 @@ import {Context} from '../../context';
 import {CustomMessageSystem} from '../../components';
 import {followersOrFollowingAtom} from '../ChannelListScreen/model/followersOrFollowingAtom';
 import {fonts} from '../../utils/fonts';
-import {setAsset, setParticipants} from '../../context/actions/groupChat';
+import {setAsset} from '../../context/actions/groupChat';
 import {setChannel} from '../../context/actions/setChannel';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
@@ -72,6 +72,7 @@ const ChatDetailPage = ({route}) => {
       }
     }
   };
+
   React.useEffect(() => {
     if (clients && route?.params?.data && !channelClient.client) {
       handleChannelClient();
@@ -126,7 +127,6 @@ const ChatDetailPage = ({route}) => {
   }, []);
   React.useEffect(() => {
     searchUserMessages(channelClient.channel?.cid);
-    setParticipants(channelClient.channel?.state?.members, dispatch);
   }, [clients.client]);
   const searchUserMessages = async (channelID) => {
     const messages = await clients.client.search(

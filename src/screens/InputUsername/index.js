@@ -14,7 +14,7 @@ import {
   TouchableWithoutFeedback,
   View
 } from 'react-native';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
 
@@ -35,6 +35,7 @@ import {setCapitalFirstLetter} from '../../utils/Utils';
 import {setImage, setUsername} from '../../context/actions/users';
 import {verifyUsername} from '../../service/users';
 import {COLORS} from '../../utils/theme';
+import {Header} from '../../components';
 
 const MAXIMUM_USERNAME_LENGTH = 19;
 const MINIMUM_USERNAME_LENGTH = 3;
@@ -70,19 +71,22 @@ const ChooseUsername = () => {
   const handleOpenCamera = async () => {
     const {success, message} = await requestCameraPermission();
     if (success) {
-      launchCamera(
-        {
-          mediaType: 'photo',
-          includeBase64: true,
-          selectionLimit: 1
-        },
-        (res) => {
-          if (res.base64) {
-            setImage(`${res.base64}`, dispatch);
-            bottomSheetChooseImageRef.current.close();
+      ImagePicker.openCamera({
+        width: 512,
+        height: 512,
+        cropping: true,
+        mediaType: 'photo',
+        includeBase64: true
+      })
+        .then((imageRes) => {
+          setImage(imageRes.data, dispatch);
+          bottomSheetChooseImageRef.current.close();
+        })
+        .catch((e) => {
+          if (__DEV__) {
+            console.log('error', e);
           }
-        }
-      );
+        });
     } else {
       Toast.show(message, Toast.SHORT);
     }
@@ -91,12 +95,22 @@ const ChooseUsername = () => {
   const handleOpenGallery = async () => {
     const {success, message} = await requestExternalStoragePermission();
     if (success) {
-      launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
-        if (res.base64) {
-          setImage(`${res.base64}`, dispatch);
+      ImagePicker.openPicker({
+        width: 512,
+        height: 512,
+        cropping: true,
+        mediaType: 'photo',
+        includeBase64: true
+      })
+        .then((imageRes) => {
+          setImage(imageRes.data, dispatch);
           bottomSheetChooseImageRef.current.close();
-        }
-      });
+        })
+        .catch((e) => {
+          if (__DEV__) {
+            console.log('error', e);
+          }
+        });
     } else {
       Toast.show(message, Toast.SHORT);
     }
@@ -261,7 +275,7 @@ const ChooseUsername = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
-
+      <Header />
       <View style={styles.keyboardavoidingview}>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
           <View style={styles.content}>
@@ -412,12 +426,13 @@ const styles = StyleSheet.create({
     marginRight: 13
   },
   content: {
+    paddingTop: 20,
     paddingHorizontal: 20
   },
   keyboardavoidingview: {
     flex: 1,
     // paddingHorizontal: 20,
-    paddingTop: 75,
+    // paddingTop: 75,
     // paddingBottom: 32,
     justifyContent: 'flex-end'
   },

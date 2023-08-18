@@ -57,6 +57,17 @@ export const getMainFeed = async (query) => {
     return err.response.data;
   }
 };
+
+export const getMainFeedV2 = async (query) => {
+  try {
+    const res = await api.get(`/activity/feeds-v2${query}`);
+    return res.data;
+  } catch (err) {
+    crashlytics().recordError(err.response.data);
+    return err.response.data;
+  }
+};
+
 export const getFeedDetail = async (id) => {
   try {
     const resApi = await api.get(`/feeds/detail-feed?id=${id}`);

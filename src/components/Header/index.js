@@ -9,9 +9,15 @@ const Header = ({title, onPress, titleStyle = {}, containerStyle = {}, isCenter}
   const renderHeader = () => (
     <View style={styles.buttonBackContainerIos}>
       <View style={styles.content}>
-        <TouchableOpacity testID="backButton" style={styles.backPadding} onPress={onPress}>
-          <ArrowLeftIcon />
-        </TouchableOpacity>
+        {onPress ? (
+          <TouchableOpacity testID="backButton" style={styles.backPadding} onPress={onPress}>
+            <ArrowLeftIcon />
+          </TouchableOpacity>
+        ) : (
+          <View style={styles.backPadding}>
+            <View style={styles.nullBackIcon} />
+          </View>
+        )}
         <View style={styles.flex}>
           <Text
             numberOfLines={1}
@@ -80,5 +86,9 @@ const styles = StyleSheet.create({
   },
   flex: {
     flex: 1
+  },
+  nullBackIcon: {
+    width: 20,
+    height: 12
   }
 });
