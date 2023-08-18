@@ -65,13 +65,6 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
     navigation.navigate('DomainScreen', param);
   };
 
-  const handleTopicStyle = () => {
-    if (images_url.length > 0) {
-      return styles.topicContainerWithImage;
-    }
-    return styles.topicContainerNoImage;
-  };
-
   const isShortText = () => {
     return images_url.length <= 0 && item.post_type === POST_TYPE_STANDARD && message.length <= 125;
   };
@@ -91,11 +84,12 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
   };
 
   if (!cekImage) return null;
+
   return (
     <>
       <ScrollView
-        contentContainerStyle={{flexGrow: 1}}
         style={[styles.contentFeed, handleContainerPdp()]}
+        contentContainerStyle={styles.contensStyle(images_url.length > 0, isShortText())}
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}>
         <View
@@ -183,14 +177,7 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
             />
           </View>
         )}
-        <View style={handleTopicStyle()}>
-          <TopicsChip
-            isPdp={true}
-            topics={topics}
-            fontSize={normalizeFontSize(14)}
-            text={message}
-          />
-        </View>
+        <TopicsChip isPdp={true} topics={topics} fontSize={normalizeFontSize(14)} text={message} />
       </ScrollView>
     </>
   );
@@ -206,63 +193,6 @@ Content.propTypes = {
 export default Content;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingBottom: 16
-  },
-  fletlist: {flex: 1},
-  imageList: {
-    flex: 1,
-    width: screenWidth - 32,
-    borderRadius: 16
-  },
-  containerShowMessage: (currentRouteName) => ({
-    justifyContent: 'center',
-    alignItems: currentRouteName === 'Feed' ? 'center' : 'center',
-    flex: 1,
-    paddingBottom: 10,
-    minHeight: 100
-  }),
-  rowSpaceBeetwen: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between'
-  },
-  rowCenter: {
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  containerFeedProfile: {
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    marginLeft: 13
-  },
-
-  feedUsername: {
-    fontFamily: fonts.inter[600],
-    fontWeight: 'bold',
-    fontSize: 14,
-    color: colors.black
-  },
-  containerFeedText: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 5
-  },
-  feedDate: {
-    fontFamily: fonts.inter[400],
-    fontSize: 12,
-    color: colors.black,
-    lineHeight: 18
-  },
-  point: {
-    width: 4,
-    height: 4,
-    borderRadius: 4,
-    backgroundColor: colors.gray,
-    marginLeft: 8,
-    marginRight: 8
-  },
   contentFeed: {
     flex: 1,
     backgroundColor: COLORS.white,
@@ -310,25 +240,8 @@ const styles = StyleSheet.create({
     marginLeft: -20,
     backgroundColor: 'pink'
   },
-  imageContainer: {
-    flex: 1,
-    marginBottom: Platform.select({ios: 0, android: 1}), // Prevent a random Android rendering issue
-    backgroundColor: 'white',
-    borderRadius: 8
-  },
-  image: {
-    ...StyleSheet.absoluteFillObject,
-    flex: 1,
-    aspectRatio: 1.5,
-    resizeMode: 'cover'
-  },
-  imageAnonimity: {
-    marginRight: 8,
-    width: 32,
-    height: 32
-  },
+
   contentFeedLink: {
-    // flex: 1,
     marginTop: 12,
     paddingLeft: 20,
     paddingRight: 20,
@@ -337,7 +250,6 @@ const styles = StyleSheet.create({
   },
   newsCard: {
     paddingHorizontal: 20
-    // height: '80%',
   },
   message: {
     fontFamily: fonts.inter[400],
@@ -361,5 +273,8 @@ const styles = StyleSheet.create({
   },
   centerVertical: {
     justifyContent: 'center'
-  }
+  },
+  contensStyle: (containImage, isShortText) => ({
+    paddingBottom: containImage || isShortText ? 0 : 40
+  })
 });
