@@ -200,6 +200,7 @@ const OtherProfile = () => {
 
   const sentAnonDM = async () => {
     try {
+      setIsLoading(true);
       setLoadingSendDM(true);
       const {
         anon_user_info_emoji_name,
@@ -228,6 +229,7 @@ const OtherProfile = () => {
       }
     } finally {
       setLoadingSendDM(false);
+      setIsLoading(false);
     }
   };
 
