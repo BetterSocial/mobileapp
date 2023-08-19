@@ -9,12 +9,13 @@ import DiscoveryAction from '../context/actions/discoveryAction';
 import DiscoveryRepo from '../service/discovery';
 import following from '../context/actions/following';
 import streamFeed from '../utils/getstream/streamer';
+import useFeedService from './useFeedService';
+import TokenStorage, {ITokenEnum} from '../utils/storage/custom/tokenStorage';
 import {Analytics} from '../libraries/analytics/firebaseAnalytics';
 import {Context} from '../context';
 import {FEEDS_CACHE, NEWS_CACHE, PROFILE_CACHE, RECENT_SEARCH_TERMS} from '../utils/cache/constant';
 import {InitialStartupAtom} from '../service/initialStartup';
 import {channelListLocalAtom} from '../service/channelListLocal';
-import {getAccessToken} from '../utils/token';
 import {getDomains, getFollowedDomain} from '../service/domain';
 import {getFollowing, getMyProfile} from '../service/profile';
 import {getFollowingTopic} from '../service/topics';
@@ -25,7 +26,6 @@ import {setMyProfileAction} from '../context/actions/setMyProfileAction';
 import {setNews} from '../context/actions/news';
 import {traceMetricScreen} from '../libraries/performance/firebasePerformance';
 import {useClientGetstream} from '../utils/getstream/ClientGetStram';
-import useFeedService from './useFeedService';
 
 export const useInitialStartup = () => {
   const [, newsDispatch] = React.useContext(Context).news;
@@ -50,20 +50,24 @@ export const useInitialStartup = () => {
   const create = useClientGetstream();
 
   const doGetAccessToken = async () => {
-    const accessToken = await getAccessToken();
-    if (accessToken) {
-      setInitialValue({id: accessToken.id});
+    const token = TokenStorage.get(ITokenEnum.token);
+    if (token) {
+      setInitialValue({id: token});
     }
   };
 
   const callStreamFeed = async () => {
-    const token = await getAccessToken();
+    const token = TokenStorage.get(ITokenEnum.token);
     if (token) {
       const clientFeed = streamFeed(token);
-      const notif = clientFeed.feed('notification', profileState.user_id, token.id);
-      notif.subscribe(() => {
-        getFeedChat();
-      });
+      try {
+        const notif = clientFeed.feed('notification', profileState?.myProfile?.user_id, token);
+        notif.subscribe(() => {
+          getFeedChat();
+        });
+      } catch (e) {
+        console.log('qweqwewqeq', e);
+      }
     }
   };
 

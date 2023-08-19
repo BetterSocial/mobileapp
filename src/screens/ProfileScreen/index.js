@@ -1,9 +1,11 @@
 import * as React from 'react';
+import Config from 'react-native-config';
 import ImagePicker from 'react-native-image-crop-picker';
 import Toast from 'react-native-simple-toast';
 import {
   ActivityIndicator,
   Dimensions,
+  Linking,
   LogBox,
   StatusBar,
   StyleSheet,
@@ -17,7 +19,6 @@ import {showMessage} from 'react-native-flash-message';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {useNavigation} from '@react-navigation/core';
 
-import Config from 'react-native-config';
 import AnonymousTab from './elements/AnonymousTab';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BioAndDMSetting from './elements/BioAndDMSetting';
@@ -60,11 +61,10 @@ import {colors} from '../../utils/colors';
 import {deleteAnonymousPost, deletePost, getFeedDetail} from '../../service/post';
 import {downVote, upVote} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
-import {getAccessToken} from '../../utils/token';
-import {saveToCache} from '../../utils/cache';
 import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
+import {saveToCache} from '../../utils/cache';
 import {setFeedByIndex} from '../../context/actions/feeds';
 import {setMyProfileAction} from '../../context/actions/setMyProfileAction';
 import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
@@ -157,7 +157,6 @@ const ProfileScreen = ({route}) => {
   const [, dispatch] = React.useContext(Context).users;
   const [myProfileFeed, myProfileDispatch] = React.useContext(Context).myProfileFeed;
 
-  const [, setTokenJwt] = React.useState('');
   const [dataMain, setDataMain] = React.useState({});
   const [dataMainBio, setDataMainBio] = React.useState('');
   const [errorBio, setErrorBio] = React.useState('');
@@ -232,25 +231,25 @@ const ProfileScreen = ({route}) => {
   React.useEffect(() => {
     if (interactionsComplete) {
       getMyFeeds(0, LIMIT_PROFILE_FEED);
-      getAccessToken().then((val) => {
-        setTokenJwt(val);
-      });
       fetchMyProfile();
     }
   }, [interactionsComplete]);
 
   const fetchMyProfile = async () => {
-    const id = await getUserId();
-    if (id) {
-      setUserId(id);
-      const result = await getMyProfile(id);
-      console.log({result: result.data.allow_anon_dm});
-      if (result.code === 200) {
-        saveToCache(PROFILE_CACHE, result.data);
-        saveProfileState(result?.data);
-        return result?.data?.profile_pic_path;
+    try {
+      const id = await getUserId();
+      if (id) {
+        setUserId(id);
+        const result = await getMyProfile();
+        if (result.code === 200) {
+          saveToCache(PROFILE_CACHE, result.data);
+          saveProfileState(result?.data);
+          return result?.data?.profile_pic_path;
+        }
       }
       setLoadingContainer(false);
+    } catch (e) {
+      console.log('get my profile error', e);
     }
 
     return null;
