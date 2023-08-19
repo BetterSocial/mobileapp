@@ -5,7 +5,7 @@ import UseLocalDatabaseHook from '../../../../types/database/localDatabase.types
 import clientStream from '../../../utils/getstream/streamer';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import useProfileHook from '../profile/useProfileHook';
-import {getAnonymousToken} from '../../../utils/token';
+import TokenStorage, {ITokenEnum} from '../../../utils/storage/custom/tokenStorage';
 
 const usePostNotificationListenerHook = (onPostNotifReceived) => {
   const {localDb} = useLocalDatabaseHook() as UseLocalDatabaseHook;
@@ -15,8 +15,7 @@ const usePostNotificationListenerHook = (onPostNotifReceived) => {
   const {anonProfileId} = useProfileHook();
 
   const initFeedSubscription = async () => {
-    console.log('initFeedSubscription');
-    const token: string = await getAnonymousToken();
+    const token: string = TokenStorage.get(ITokenEnum.refreshToken);
     const client = clientStream(token);
     try {
       const notifFeed = client?.feed('notification', anonProfileId, token);

@@ -1,15 +1,16 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import {
-  setAccessToken,
   getAccessToken,
-  setRefreshToken,
   getRefreshToken,
-  getUserId,
-  setUserId,
-  setToken,
-  setAnonymousToken,
   getToken,
-  removeLocalStorege
+  getUserId,
+  removeLocalStorege,
+  setAccessToken,
+  setAnonymousToken,
+  setRefreshToken,
+  setToken,
+  setUserId
 } from './index';
 
 describe('testing function related to the token', () => {

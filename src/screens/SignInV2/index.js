@@ -1,4 +1,5 @@
 import * as React from 'react';
+import JwtDecode from 'jwt-decode';
 import SimpleToast from 'react-native-simple-toast';
 import crashlytics from '@react-native-firebase/crashlytics';
 import {BackHandler, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
@@ -17,25 +18,23 @@ import {useSetRecoilState} from 'recoil';
 
 import DevDummyLogin from '../../components/DevDummyLogin';
 import SlideShow from './elements/SlideShow';
+import TokenStorage from '../../utils/storage/custom/tokenStorage';
 import getRemoteConfig from '../../service/getRemoteConfig';
+import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import useSignin from './hooks/useSignin';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Context} from '../../context';
 import {InitialStartupAtom} from '../../service/initialStartup';
 import {fonts} from '../../utils/fonts';
-import {
-  removeLocalStorege,
-  setAccessToken,
-  setAnonymousToken,
-  setRefreshToken,
-  setUserId
-} from '../../utils/token';
+import {removeLocalStorege, setUserId} from '../../utils/token';
 import {setDataHumenId} from '../../context/actions/users';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {verifyHumanIdExchangeToken} from '../../service/users';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 const SignIn = () => {
+  const {setProfileId} = useProfileHook();
+
   const [, dispatch] = React.useContext(Context).users;
   const [clickTime, setClickTime] = React.useState(0);
   const [isDemoLoginEnabled, setIsDemoLoginEnabled] = React.useState(false);
@@ -61,16 +60,24 @@ const SignIn = () => {
       try {
         const response = await verifyHumanIdExchangeToken(exchangeToken);
         if (response?.data?.data) {
-          const {token, refresh_token, anonymousToken} = response?.data || {};
-          setAccessToken(token);
-          setRefreshToken(refresh_token);
-          setAnonymousToken(anonymousToken);
+          const {token, anonymousToken} = response?.data || {};
+          TokenStorage.set(response?.data);
           setValueStartup({
             id: token,
             deeplinkProfile: false
           });
           create(token);
           setUserId(response?.data?.appUserId);
+          try {
+            const userId = await JwtDecode(token).user_id;
+            const anonymousUserId = await JwtDecode(anonymousToken).user_id;
+            setProfileId({
+              anonProfileId: anonymousUserId,
+              signedProfileId: userId
+            });
+          } catch (e) {
+            crashlytics().recordError(new Error(e));
+          }
         } else {
           setDataHumenId(response?.data?.humanIdData, dispatch);
           removeLocalStorege('userId');
