@@ -18,9 +18,12 @@ import {useSetRecoilState} from 'recoil';
 import ItemUser from './elements/ItemUser';
 import Label from './elements/Label';
 import Loading from '../Loading';
+import StorageUtils from '../../utils/storage';
+import TokenStorage from '../../utils/storage/custom/tokenStorage';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
+import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {Header} from '../../components';
 import {InitialStartupAtom} from '../../service/initialStartup';
@@ -28,10 +31,9 @@ import {ProgressBar} from '../../components/ProgressBar';
 import {colors} from '../../utils/colors';
 import {get} from '../../api/server';
 import {registerUser} from '../../service/users';
-import {setAccessToken, setAnonymousToken, setRefreshToken, setToken} from '../../utils/token';
 import {setImage} from '../../context/actions/users';
+import {setToken} from '../../utils/token';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
-import {COLORS} from '../../utils/theme';
 
 const {width} = Dimensions.get('screen');
 
@@ -174,11 +176,9 @@ const WhotoFollow = () => {
       .then(async (res) => {
         setFetchRegister(false);
         if (res.code === 200) {
+          TokenStorage.set(res);
           setToken(res.token);
-          setAccessToken(res.token);
-          setRefreshToken(res.refresh_token);
           try {
-            await setAnonymousToken(res.anonymousToken);
             const userId = await JwtDecode(res.token).user_id;
             const anonymousUserId = await JwtDecode(res.anonymousToken).user_id;
             setProfileId({
