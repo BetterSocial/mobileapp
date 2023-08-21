@@ -1,6 +1,5 @@
 import * as React from 'react';
 import _ from 'lodash';
-import ImagePicker from 'react-native-image-crop-picker';
 import Toast from 'react-native-simple-toast';
 import {
   Alert,
@@ -14,6 +13,7 @@ import {
   TouchableWithoutFeedback,
   View
 } from 'react-native';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
 
@@ -69,23 +69,20 @@ const ChooseUsername = () => {
   const handleOpenCamera = async () => {
     const {success, message} = await requestCameraPermission();
     if (success) {
-      ImagePicker.openCamera({
-        width: 512,
-        height: 512,
-        cropping: true,
-        mediaType: 'photo',
-        includeBase64: true
-      })
-        .then((imageRes) => {
-          setImage(imageRes.data, dispatch);
-          setImageUrl(imageRes?.path, dispatch);
-          bottomSheetChooseImageRef.current.close();
-        })
-        .catch((e) => {
-          if (__DEV__) {
-            console.log('error', e);
+      launchCamera(
+        {
+          mediaType: 'photo',
+          includeBase64: true,
+          selectionLimit: 1
+        },
+        (res) => {
+          if (res.uri) setImageUrl(res.uri, dispatch);
+          if (res.base64) {
+            setImage(`${res.base64}`, dispatch);
+            bottomSheetChooseImageRef.current.close();
           }
-        });
+        }
+      );
     } else {
       Toast.show(message, Toast.SHORT);
     }
@@ -94,23 +91,13 @@ const ChooseUsername = () => {
   const handleOpenGallery = async () => {
     const {success, message} = await requestExternalStoragePermission();
     if (success) {
-      ImagePicker.openPicker({
-        width: 512,
-        height: 512,
-        cropping: true,
-        mediaType: 'photo',
-        includeBase64: true
-      })
-        .then((imageRes) => {
-          setImageUrl(imageRes?.path, dispatch);
-          setImage(imageRes.data, dispatch);
+      launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
+        if (res.uri) setImageUrl(res.uri, dispatch);
+        if (res.base64) {
+          setImage(`${res.base64}`, dispatch);
           bottomSheetChooseImageRef.current.close();
-        })
-        .catch((e) => {
-          if (__DEV__) {
-            console.log('error', e);
-          }
-        });
+        }
+      });
     } else {
       Toast.show(message, Toast.SHORT);
     }
