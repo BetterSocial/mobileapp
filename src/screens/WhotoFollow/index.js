@@ -27,6 +27,7 @@ import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {Header} from '../../components';
 import {InitialStartupAtom} from '../../service/initialStartup';
 import {ProgressBar} from '../../components/ProgressBar';
@@ -174,12 +175,14 @@ const WhotoFollow = () => {
       follow_source: 'onboarding'
     };
 
-    if (data?.users?.profile_pic_path) {
+    const profilePic = usersState?.photoUrl;
+    if (profilePic && profilePic !== DEFAULT_PROFILE_PIC_PATH) {
       try {
         const uploadedImageUrl = await ImageUtils.uploadImageWithoutAuth(
           data?.users?.profile_pic_path
         );
         data.users.profile_pic_path = uploadedImageUrl?.data?.url;
+        console.log('uploadedImageUrl', uploadedImageUrl);
       } catch (e) {
         console.log('error upload', e);
       }
