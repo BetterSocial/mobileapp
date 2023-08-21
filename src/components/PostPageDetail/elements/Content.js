@@ -15,7 +15,7 @@ import usePostDetail from '../hooks/usePostDetail';
 import {COLORS} from '../../../utils/theme';
 import {POST_TYPE_LINK, POST_TYPE_POLL, POST_TYPE_STANDARD} from '../../../utils/constants';
 import {colors} from '../../../utils/colors';
-import {fonts, normalizeFontSize} from '../../../utils/fonts';
+import {fonts, normalizeFontSize, normalizeFontSizeByWidth} from '../../../utils/fonts';
 import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
 import {sanitizeUrl} from '../../../utils/string/StringUtils';
 import {smartRender} from '../../../utils/Utils';
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: isPostDetail ? 12 : 0
   }),
   shortText: {
-    minHeight: 325,
+    minHeight: normalizeFontSizeByWidth(342),
     backgroundColor: '#11468F'
   },
   centerVertical: {
