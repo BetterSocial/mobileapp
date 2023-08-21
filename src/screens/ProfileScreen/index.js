@@ -34,7 +34,7 @@ import PostOptionModal from '../../components/Modal/PostOptionModal';
 import ProfileHeader from './elements/ProfileHeader';
 import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
-import RenderItem from './elements/RenderItem';
+import RenderItem from '../FeedScreen/RenderList';
 import ShareUtils from '../../utils/share';
 import dimen from '../../utils/dimen';
 import useResetContext from '../../hooks/context/useResetContext';
@@ -154,7 +154,7 @@ const ProfileScreen = ({route}) => {
   const refBlockComponent = React.useRef();
   const headerHeightRef = React.useRef(0);
 
-  const [, dispatchProfile] = React.useContext(Context).profile;
+  const [profile, dispatchProfile] = React.useContext(Context).profile;
   const [, dispatch] = React.useContext(Context).users;
   const [myProfileFeed, myProfileDispatch] = React.useContext(Context).myProfileFeed;
 
@@ -174,7 +174,6 @@ const ProfileScreen = ({route}) => {
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0);
   const [loadingContainer, setLoadingContainer] = React.useState(true);
-  const [yourselfId] = React.useState('');
   const [isLastPage, setIsLastPage] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [isPostOptionModalOpen, setIsOptionModalOpen] = React.useState(false);
@@ -200,7 +199,7 @@ const ProfileScreen = ({route}) => {
     setTabIndexToSigned,
     reloadFetchAnonymousPost
   } = useProfileScreenHook();
-
+  console.log(profileTabIndex, 'nikah');
   // eslint-disable-next-line consistent-return
   React.useEffect(() => {
     if (interactionsComplete) {
@@ -524,7 +523,7 @@ const ProfileScreen = ({route}) => {
       index,
       isalreadypolling: item.isalreadypolling,
       feedId: item.id,
-      refreshParent: getMyFeeds
+      refreshParent: profileTabIndex === 0 ? getMyFeeds : reloadFetchAnonymousPost
     });
   };
 
@@ -532,7 +531,7 @@ const ProfileScreen = ({route}) => {
     navigation.navigate('ProfilePostDetailPage', {
       feedId: id,
       isalreadypolling: item.isalreadypolling,
-      refreshParent: getMyFeeds
+      refreshParent: profileTabIndex === 0 ? getMyFeeds : reloadFetchAnonymousPost
     });
   };
 
@@ -546,33 +545,12 @@ const ProfileScreen = ({route}) => {
     );
   };
 
-  const setUpVote = async (post, index) => {
+  const setUpVote = async (post) => {
     await upVote(post);
-    updateFeed(post, index);
   };
 
-  const setDownVote = async (post, index) => {
+  const setDownVote = async (post) => {
     await downVote(post);
-    updateFeed(post, index);
-  };
-
-  const updateFeed = async (post, index) => {
-    try {
-      const data = await getFeedDetail(post.activity_id);
-      if (data) {
-        setFeedByIndex(
-          {
-            singleFeed: data.data,
-            index
-          },
-          dispatch
-        );
-      }
-    } catch (e) {
-      if (__DEV__) {
-        console.log(e);
-      }
-    }
   };
 
   const handleOnEndReached = () => {
@@ -597,7 +575,6 @@ const ProfileScreen = ({route}) => {
     setSelectedPostForOption(null);
     setIsOptionModalOpen(false);
   };
-
   const removePostByIdFromContext = () => {
     const deletedIndex = feeds?.findIndex((find) => selectedPostForOption?.id === find?.id);
     const newData = [...feeds];
@@ -636,6 +613,7 @@ const ProfileScreen = ({route}) => {
             data={mainFeeds}
             onRefresh={handleRefresh}
             refreshing={loading || isLoadingFetchingAnonymousPosts}
+            style={{backgroundColor: '#f2f2f2'}}
             onScroll={handleScroll}
             ListFooterComponent={isFetchingList ? <ActivityIndicator /> : null}
             onEndReach={handleOnEndReached}
@@ -644,12 +622,6 @@ const ProfileScreen = ({route}) => {
             updateCellsBatchingPeriod={10}
             removeClippedSubviews
             windowSize={10}
-            // snapToOffsets={(() => {
-            //   const posts = feeds.map(
-            //     (item, index) => headerHeightRef.current + index * dimen.size.PROFILE_ITEM_HEIGHT
-            //   );
-            //   return [0, ...posts];
-            // })()}
             ListHeaderComponent={
               <Header
                 headerHeightRef={headerHeightRef}
@@ -665,28 +637,19 @@ const ProfileScreen = ({route}) => {
               />
             }>
             {({item, index}) => {
-              const dummyItemHeight =
-                height -
-                dimen.size.PROFILE_ITEM_HEIGHT -
-                44 -
-                16 -
-                StatusBar.currentHeight -
-                bottomBarHeight;
-              if (item.dummy) return <View style={styles.dummyItem(dummyItemHeight)}></View>;
               return (
                 <RenderItem
-                  bottomBar={!isNotFromHomeTab}
+                  key={item.id}
                   item={item}
-                  index={index}
                   onNewPollFetched={onNewPollFetched}
+                  index={index}
                   onPressDomain={onPressDomain}
-                  onPress={() => onPress(item, index)}
-                  onPressComment={() => onPressComment(item, item.id)}
-                  onPressUpvote={(post) => setUpVote(post, index)}
-                  selfUserId={yourselfId}
-                  onHeaderOptionClicked={onHeaderOptionClicked}
-                  showAnonymousOption={true}
-                  onPressDownVote={(post) => setDownVote(post, index)}
+                  onPress={() => onPress(item)}
+                  onPressComment={() => onPressComment(index, item)}
+                  onPressUpvote={(post) => setUpVote(post)}
+                  selfUserId={profile.myProfile.user_id}
+                  onPressDownVote={(post) => setDownVote(post)}
+                  loading={loading}
                 />
               );
             }}
@@ -747,7 +710,8 @@ const styles = StyleSheet.create({
   },
   content: {
     flexDirection: 'column',
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
+    backgroundColor: colors.white
   },
   dummyItem: (heightItem) => ({
     height: heightItem,
@@ -792,7 +756,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    backgroundColor: colors.white
   },
   tabItem: (isActive) => ({
     flex: 1,
