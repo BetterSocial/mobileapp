@@ -152,7 +152,6 @@ const FeedScreen = (props) => {
   };
 
   function onRefresh() {
-    console.log('onRefresh called');
     getDataFeedsHandle(0, true);
     setIsLastPage(false);
     handleScroll(false);
@@ -273,10 +272,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     zIndex: -1
   },
-  dummyItem: (height) => ({
-    height,
-    backgroundColor: COLORS.gray1
-  }),
   containerLoading: {
     flex: 1,
     justifyContent: 'center',
