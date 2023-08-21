@@ -1,5 +1,6 @@
 import * as React from 'react';
 import JwtDecode from 'jwt-decode';
+import SimpleToast from 'react-native-simple-toast';
 import crashlytics from '@react-native-firebase/crashlytics';
 import {
   ActivityIndicator,
@@ -15,6 +16,7 @@ import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
 import {useSetRecoilState} from 'recoil';
 
+import ImageUtils from '../../utils/image';
 import ItemUser from './elements/ItemUser';
 import Label from './elements/Label';
 import Loading from '../Loading';
@@ -25,6 +27,7 @@ import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {Header} from '../../components';
 import {InitialStartupAtom} from '../../service/initialStartup';
 import {ProgressBar} from '../../components/ProgressBar';
@@ -151,7 +154,7 @@ const WhotoFollow = () => {
       });
   }, []);
 
-  const register = () => {
+  const register = async () => {
     setFetchRegister(true);
     Analytics.logEvent('onb_select_follows_btn_add', {
       onb_whofollow_users_selected: followed
@@ -163,7 +166,7 @@ const WhotoFollow = () => {
         country_code: usersState.countryCode,
         // human_id: randomString(16),
         // country_code: 'US',
-        profile_pic_path: usersState.photo,
+        profile_pic_path: usersState.photoUrl,
         status: 'A'
       },
       local_community: localCommunity.local_community,
@@ -171,6 +174,19 @@ const WhotoFollow = () => {
       follows: followed,
       follow_source: 'onboarding'
     };
+
+    const profilePic = usersState?.photoUrl;
+    if (profilePic && profilePic !== DEFAULT_PROFILE_PIC_PATH) {
+      try {
+        const uploadedImageUrl = await ImageUtils.uploadImageWithoutAuth(
+          data?.users?.profile_pic_path
+        );
+        data.users.profile_pic_path = uploadedImageUrl?.data?.url;
+        console.log('uploadedImageUrl', uploadedImageUrl);
+      } catch (e) {
+        console.log('error upload', e);
+      }
+    }
 
     registerUser(data)
       .then(async (res) => {
