@@ -67,7 +67,7 @@ export const verifyUsername = async (username) => {
 };
 export const registerUser = async (data) => {
   try {
-    const resApi = await api.post('/users/register-v2', {
+    const resApi = await api.post('/users/register-v2-without-upload-photo', {
       data
     });
     return resApi.data;
