@@ -648,9 +648,9 @@ const ProfileScreen = ({route}) => {
                   onPressDomain={onPressDomain}
                   onPress={() => onPress(item)}
                   onPressComment={() => onPressComment(index, item)}
-                  onPressUpvote={(post) => setUpVote(post, index)}
+                  onPressUpvote={(post) => setUpVote(post)}
                   selfUserId={profile.myProfile.user_id}
-                  onPressDownVote={(post) => setDownVote(post, index)}
+                  onPressDownVote={(post) => setDownVote(post)}
                   loading={loading}
                 />
               );
