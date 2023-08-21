@@ -3,7 +3,6 @@ import _ from 'lodash';
 import Toast from 'react-native-simple-toast';
 import {
   Alert,
-  Animated,
   Image,
   Keyboard,
   SafeAreaView,
@@ -14,28 +13,28 @@ import {
   TouchableWithoutFeedback,
   View
 } from 'react-native';
-import ImagePicker from 'react-native-image-crop-picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
 
 import BottomSheetChooseImage from './elements/BottomSheetChooseImage';
 import MemoOnboardingChangeProfilePlusIcon from '../../assets/icon/OnboardingChangeProfilePlusIcon';
-import WarningIcon from '../../assets/icon-svg/warning_circle_blue.svg';
 import StringConstant from '../../utils/string/StringConstant';
+import WarningIcon from '../../assets/icon-svg/warning_circle_blue.svg';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
+import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {Header} from '../../components';
 import {Input} from '../../components/Input';
 import {ProgressBar} from '../../components/ProgressBar';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
 import {setCapitalFirstLetter} from '../../utils/Utils';
-import {setImage, setUsername} from '../../context/actions/users';
+import {setImage, setImageUrl, setUsername} from '../../context/actions/users';
 import {verifyUsername} from '../../service/users';
-import {COLORS} from '../../utils/theme';
-import {Header} from '../../components';
 
 const MAXIMUM_USERNAME_LENGTH = 19;
 const MINIMUM_USERNAME_LENGTH = 3;
@@ -71,22 +70,20 @@ const ChooseUsername = () => {
   const handleOpenCamera = async () => {
     const {success, message} = await requestCameraPermission();
     if (success) {
-      ImagePicker.openCamera({
-        width: 512,
-        height: 512,
-        cropping: true,
-        mediaType: 'photo',
-        includeBase64: true
-      })
-        .then((imageRes) => {
-          setImage(imageRes.data, dispatch);
-          bottomSheetChooseImageRef.current.close();
-        })
-        .catch((e) => {
-          if (__DEV__) {
-            console.log('error', e);
+      launchCamera(
+        {
+          mediaType: 'photo',
+          includeBase64: true,
+          selectionLimit: 1
+        },
+        (res) => {
+          if (res.uri) setImageUrl(res.uri, dispatch);
+          if (res.base64) {
+            setImage(`${res.base64}`, dispatch);
+            bottomSheetChooseImageRef.current.close();
           }
-        });
+        }
+      );
     } else {
       Toast.show(message, Toast.SHORT);
     }
@@ -95,22 +92,13 @@ const ChooseUsername = () => {
   const handleOpenGallery = async () => {
     const {success, message} = await requestExternalStoragePermission();
     if (success) {
-      ImagePicker.openPicker({
-        width: 512,
-        height: 512,
-        cropping: true,
-        mediaType: 'photo',
-        includeBase64: true
-      })
-        .then((imageRes) => {
-          setImage(imageRes.data, dispatch);
+      launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
+        if (res.uri) setImageUrl(res.uri, dispatch);
+        if (res.base64) {
+          setImage(`${res.base64}`, dispatch);
           bottomSheetChooseImageRef.current.close();
-        })
-        .catch((e) => {
-          if (__DEV__) {
-            console.log('error', e);
-          }
-        });
+        }
+      });
     } else {
       Toast.show(message, Toast.SHORT);
     }
