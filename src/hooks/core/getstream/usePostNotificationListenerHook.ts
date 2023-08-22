@@ -15,7 +15,7 @@ const usePostNotificationListenerHook = (onPostNotifReceived) => {
   const {anonProfileId} = useProfileHook();
 
   const initFeedSubscription = async () => {
-    const token: string = TokenStorage.get(ITokenEnum.refreshToken);
+    const token: string = TokenStorage.get(ITokenEnum.anonymousToken);
     const client = clientStream(token);
     try {
       const notifFeed = client?.feed('notification', anonProfileId, token);
