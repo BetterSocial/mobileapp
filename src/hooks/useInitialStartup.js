@@ -9,15 +9,14 @@ import DiscoveryAction from '../context/actions/discoveryAction';
 import DiscoveryRepo from '../service/discovery';
 import following from '../context/actions/following';
 import streamFeed from '../utils/getstream/streamer';
+import useFeedService from './useFeedService';
+import TokenStorage, {ITokenEnum} from '../utils/storage/custom/tokenStorage';
 import {Analytics} from '../libraries/analytics/firebaseAnalytics';
 import {Context} from '../context';
 import {FEEDS_CACHE, NEWS_CACHE, PROFILE_CACHE, RECENT_SEARCH_TERMS} from '../utils/cache/constant';
 import {InitialStartupAtom} from '../service/initialStartup';
 import {channelListLocalAtom} from '../service/channelListLocal';
-import {feedChatAtom} from '../models/feeds/feedsNotification';
-import {getAccessToken} from '../utils/token';
 import {getDomains, getFollowedDomain} from '../service/domain';
-import {getFeedNotification, setFeedChatsFromLocal} from '../service/feeds';
 import {getFollowing, getMyProfile} from '../service/profile';
 import {getFollowingTopic} from '../service/topics';
 import {getMainFeed} from '../service/post';
@@ -37,7 +36,6 @@ export const useInitialStartup = () => {
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const setInitialValue = useSetRecoilState(InitialStartupAtom);
   const setLocalChannelData = useSetRecoilState(channelListLocalAtom);
-  const setFeedChatData = useSetRecoilState(feedChatAtom);
   const [clientState] = React.useContext(Context).client;
   const {client} = clientState;
   const perf = React.useRef(null);
@@ -45,33 +43,31 @@ export const useInitialStartup = () => {
   const [loadingUser, setLoadingUser] = React.useState(true);
   const getLocalChannelData = useLocalChannelsFirst(setLocalChannelData);
 
+  const {getFeedChat} = useFeedService();
+
   const LIMIT_FIRST_FEEDS = 1;
   const LIMIT_FIRST_NEWS = 3;
   const create = useClientGetstream();
 
   const doGetAccessToken = async () => {
-    const accessToken = await getAccessToken();
-    if (accessToken) {
-      setInitialValue({id: accessToken.id});
-    }
-  };
-
-  const getFeedChat = async () => {
-    const res = await getFeedNotification();
-    if (res.success) {
-      setFeedChatData(res.data);
-      setFeedChatsFromLocal(res.data);
+    const token = TokenStorage.get(ITokenEnum.token);
+    if (token) {
+      setInitialValue({id: token});
     }
   };
 
   const callStreamFeed = async () => {
-    const token = await getAccessToken();
+    const token = TokenStorage.get(ITokenEnum.token);
     if (token) {
       const clientFeed = streamFeed(token);
-      const notif = clientFeed.feed('notification', profileState.user_id, token.id);
-      notif.subscribe(() => {
-        getFeedChat();
-      });
+      try {
+        const notif = clientFeed.feed('notification', profileState?.myProfile?.user_id, token);
+        notif.subscribe(() => {
+          getFeedChat();
+        });
+      } catch (e) {
+        console.log('qweqwewqeq', e);
+      }
     }
   };
 

@@ -3,6 +3,7 @@ import * as React from 'react';
 import EasyFollowSystem from 'stream-chat-react-native-core/src/components/ChannelList/EasyFollowSystem';
 import Toast from 'react-native-simple-toast';
 import crashlytics from '@react-native-firebase/crashlytics';
+import moment from 'moment';
 import {ActivityIndicator, ScrollView, StatusBar, StyleSheet, View} from 'react-native';
 import {ChannelList, ChannelPreviewTitle, Chat, Streami18n} from 'stream-chat-react-native';
 import {useNavigation} from '@react-navigation/core';
@@ -13,10 +14,11 @@ import CustomPreviewAvatar from './elements/CustomPreviewAvatar';
 import CustomPreviewUnreadCount from './elements/CustomPreviewUnreadCount';
 import PostNotificationPreview from './elements/components/PostNotificationPreview';
 import PreviewMessage from './elements/CustomPreviewMessage';
-import Search from './elements/Search';
 import api from '../../service/config';
 import streamFeed from '../../utils/getstream/streamer';
 import useChannelList from './hooks/useChannelList';
+import useFeedService from '../../hooks/useFeedService';
+import TokenStorage, {ITokenEnum} from '../../utils/storage/custom/tokenStorage';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
 } from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
@@ -27,7 +29,6 @@ import {FEED_COMMENT_COUNT} from '../../utils/cache/constant';
 import {channelListLocalAtom} from '../../service/channelListLocal';
 import {feedChatAtom} from '../../models/feeds/feedsNotification';
 import {followersOrFollowingAtom} from './model/followersOrFollowingAtom';
-import {getAccessToken} from '../../utils/token';
 import {getChatName} from '../../utils/string/StringUtils';
 import {getSpecificCache} from '../../utils/cache';
 import {setChannel} from '../../context/actions/setChannel';
@@ -57,6 +58,8 @@ const ChannelListScreen = () => {
   const channelListLocalValue = useRecoilValue(channelListLocalAtom);
   const [followUserList, setFollowUserList] = useRecoilState(followersOrFollowingAtom);
 
+  const {getFeedChat} = useFeedService();
+
   const filters = {
     members: {$in: [myProfile.user_id]},
     type: {$in: ['messaging', 'topics', 'group', 'system']}
@@ -85,9 +88,9 @@ const ChannelListScreen = () => {
   );
 
   const handleUnsubscribeNotif = async () => {
-    const token = await getAccessToken();
+    const token = TokenStorage.get(ITokenEnum.token);
     const clientFeed = streamFeed(token);
-    const notif = clientFeed.feed('notification', myProfile.user_id, token.id);
+    const notif = clientFeed.feed('notification', myProfile.user_id, token);
     return () => {
       notif.unsubscribe();
     };
@@ -146,11 +149,27 @@ const ChannelListScreen = () => {
   };
 
   const goToFeedDetail = async (item) => {
-    navigation.navigate('PostDetailPage', {
-      feedId: item.activity_id,
-      refreshCache: () => handleUpdateCache(item.activity_id, item.totalCommentBadge),
-      isCaching: false
-    });
+    const currentDate = moment();
+    console.log(item.expired_at);
+    const expiredDate = moment(item.expired_at);
+    const isExpired = expiredDate.isBefore(currentDate);
+
+    if (isExpired) {
+      const hoursDiff = currentDate.diff(expiredDate, 'hours');
+
+      if (hoursDiff > 48) {
+        Toast.show('This post expired and has been removed', Toast.LONG);
+        getFeedChat();
+      } else {
+        Toast.show('This post expired and has been removed', Toast.LONG);
+      }
+    } else {
+      navigation.navigate('PostDetailPage', {
+        feedId: item.activity_id,
+        refreshCache: () => handleUpdateCache(item.activity_id, item.totalCommentBadge),
+        isCaching: false
+      });
+    }
   };
 
   const countPostNotifComponent = (item) => {

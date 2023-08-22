@@ -1,9 +1,18 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-// eslint-disable-next-line no-use-before-define
 import * as React from 'react';
-import {Alert, StyleSheet, Text, TouchableOpacity, View, ViewStyle} from 'react-native';
+import {
+  Alert,
+  Linking,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ViewStyle
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import config from 'react-native-config';
+import Share from 'react-native-share';
 import {colors} from '../../../utils/colors';
 import InstagramIcon from '../../../assets/social-media/instagram.svg';
 import TwitterIcon from '../../../assets/social-media/twitter.svg';
@@ -11,12 +20,16 @@ import ShareUtils from '../../../utils/share/index';
 
 interface LinkProps {
   username: string;
+  prompt: string;
 }
 
 interface ButtonProps {
   onPress: () => void;
   style?: ViewStyle;
 }
+
+const socialShareDescription =
+  "Message me on BetterSocial! It's a new, friendlier and more private social media alternative:";
 
 const Button: React.FC<ButtonProps> = ({onPress, style, children}) => {
   return (
@@ -26,7 +39,7 @@ const Button: React.FC<ButtonProps> = ({onPress, style, children}) => {
   );
 };
 
-const CopyLink: React.FC<LinkProps> = ({username}) => {
+const CopyLink: React.FC<Omit<LinkProps, 'prompt'>> = ({username}) => {
   const showCopyAlert = () =>
     Alert.alert('🔗 Link Copied!', `${config.SHARE_URL}/u/${username}`, [{text: 'OK'}]);
 
@@ -48,18 +61,71 @@ const CopyLink: React.FC<LinkProps> = ({username}) => {
   );
 };
 
-const InstagramButton = () => (
-  <LinearGradient
-    colors={['#7024C4', '#C21975', '#C74C4D', '#E09B3D']}
-    start={{x: 0, y: 0}}
-    end={{x: 1, y: 0}}
-    style={styles.instagramContainer}>
-    <Text style={styles.buttonSocialMediaLabel}>IG Story</Text>
-    <InstagramIcon height={16} width={16} />
-  </LinearGradient>
-);
+const InstagramButton = ({socialMessage}: {socialMessage: string}) => {
+  const [hasInstagramInstalled, setHasInstagramInstalled] = React.useState(false);
 
-const LinkAndSocialMedia: React.FC<LinkProps> = ({username}) => {
+  React.useEffect(() => {
+    if (Platform.OS === 'ios') {
+      Linking.canOpenURL('instagram://').then((val) => setHasInstagramInstalled(val));
+    } else {
+      Share.isPackageInstalled('com.instagram.android').then(({message}) => {
+        setHasInstagramInstalled(message.includes('Installed'));
+      });
+    }
+  }, []);
+
+  const shareInstagramStory = async () => {
+    try {
+      if (hasInstagramInstalled) {
+        const shareOptions = {
+          message: `${socialMessage}`,
+          social: Share.Social.INSTAGRAM
+        };
+        await Share.shareSingle(shareOptions);
+      } else {
+        await Share.open({
+          url: 'https://www.instagram.com/direct/inbox/',
+          message: `${socialMessage}`
+        });
+      }
+    } catch (error) {
+      console.error({shareInstagramStory: error});
+    }
+  };
+
+  return (
+    <Pressable onPress={shareInstagramStory}>
+      <LinearGradient
+        colors={['#7024C4', '#C21975', '#C74C4D', '#E09B3D']}
+        start={{x: 0, y: 0}}
+        end={{x: 1, y: 0}}
+        style={styles.instagramContainer}>
+        <Text style={styles.buttonSocialMediaLabel}>IG Story</Text>
+        <InstagramIcon height={16} width={16} />
+      </LinearGradient>
+    </Pressable>
+  );
+};
+
+const LinkAndSocialMedia: React.FC<LinkProps> = ({username, prompt}) => {
+  const profileURL = `${config.SHARE_URL}/u/${username}`;
+  const message = prompt || socialShareDescription;
+  const socialMessage = `${message}\n${profileURL}`;
+
+  const shareTwitter = async () => {
+    const shareOptions = {
+      message: socialMessage,
+      social: Share.Social.TWITTER,
+      failOnCancel: true
+    };
+
+    try {
+      await Share.shareSingle(shareOptions);
+    } catch (error) {
+      console.log('Error =>', error);
+    }
+  };
+
   return (
     <View style={styles.linkAndSocialMediaContainer}>
       <Text style={styles.linkAndSocialMediaTitle}>Receive anonymous messages anywhere:</Text>
@@ -72,15 +138,13 @@ const LinkAndSocialMedia: React.FC<LinkProps> = ({username}) => {
         <Text style={styles.shareStepLabel}>Step 2: Share your link</Text>
 
         <View style={{flexDirection: 'row'}}>
-          <Button
-            // tslint:disable-next-line: no-empty
-            onPress={() => {}}
-            style={styles.tweetButton}>
+          <Button onPress={shareTwitter} style={styles.tweetButton}>
             <Text style={styles.buttonSocialMediaLabel}>Tweet</Text>
             <TwitterIcon height={16} width={20} />
           </Button>
 
-          <InstagramButton />
+          {/* <InstagramButton socialMessage={socialMessage} /> */}
+          <View style={{width: 10}} />
 
           <Button
             onPress={() => {

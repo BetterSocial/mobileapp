@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, ScrollView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import {colors} from '../../utils/colors';
@@ -15,7 +15,11 @@ const TopicsChip = ({topics = [], fontSize = 24, isPdp}) => {
   if (topics.length === 0) return <></>;
 
   return (
-    <View style={!isPdp ? styles.topicContainer : styles.topicContainerPdp}>
+    <ScrollView
+      showsHorizontalScrollIndicator={false}
+      horizontal
+      contentContainerStyle={styles.contentStyle}
+      style={styles.topicContainer}>
       {topics.map((item) => (
         <View key={`topicContainer-${item}`} style={styles.topicItemContainer}>
           <TouchableOpacity
@@ -26,7 +30,7 @@ const TopicsChip = ({topics = [], fontSize = 24, isPdp}) => {
           </TouchableOpacity>
         </View>
       ))}
-    </View>
+    </ScrollView>
   );
 };
 
@@ -40,14 +44,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
     position: 'absolute',
     bottom: 0,
-    marginLeft: 16
-    // backgroundColor: colors.blue
-  },
-  topicContainerPdp: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    width: '100%',
-    marginLeft: 5
+    marginLeft: 12
   },
   topicItemContainer: {
     backgroundColor: colors.lightgrey,
@@ -60,10 +57,10 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[500],
     paddingHorizontal: 13,
     paddingVertical: 4.5,
-    // fontSize: 12,
-    // lineHeight: 14.52,
     borderRadius: 14,
     color: colors.blue
-    // backgroundColor: colors.red,
+  },
+  contentStyle: {
+    paddingRight: 12
   }
 });

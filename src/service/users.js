@@ -1,7 +1,7 @@
 import crashlytics from '@react-native-firebase/crashlytics';
 
+import StorageUtils from '../utils/storage';
 import api from './config';
-import {getRefreshToken} from '../utils/token';
 
 export const verifyUser = async (userId) => {
   try {
@@ -87,7 +87,7 @@ const verifyAccessToken = async () =>
     });
 
 export const refreshToken = async () => {
-  const token = await getRefreshToken();
+  const token = StorageUtils.refreshToken.get();
   const options = {
     headers: {
       Authorization: `Bearer ${token}`

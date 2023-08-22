@@ -4,18 +4,18 @@ import {StreamChat} from 'stream-chat';
 
 import anonymousApi from './anonymousConfig';
 import api from './config';
-import {getAccessToken} from '../utils/token';
+import TokenStorage, {ITokenEnum} from '../utils/storage/custom/tokenStorage';
 import {getUserId} from '../utils/users';
 
 const chatClient = new StreamChat(Config.STREAM_API_KEY);
 const createChannel = async (channelType, members, channelName) => {
   try {
-    const token = await getAccessToken();
+    const token = TokenStorage.get(ITokenEnum.token);
     const id = await getUserId();
     const user = {
       id
     };
-    await chatClient.connectUser(user, token.id);
+    await chatClient.connectUser(user, token);
     const channel = chatClient.channel(channelType, {
       name: channelName,
       members
@@ -35,12 +35,12 @@ const sendSystemMessage = async (
   selfUserText,
   otherUserText
 ) => {
-  const token = await getAccessToken();
+  const token = TokenStorage.get(ITokenEnum.token);
   const id = await getUserId();
   const user = {
     id
   };
-  await chatClient.connectUser(user, token.id);
+  await chatClient.connectUser(user, token);
   try {
     const channel = await chatClient.channel(channelType, channelId);
     channel.update(
