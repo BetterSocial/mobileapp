@@ -7,10 +7,10 @@ import LinkContextItem from './elements/Item';
 import Loading from '../Loading';
 import PostArrowUp from '../../assets/images/post-arrow-up.png';
 import TopicPageLabel from '../../components/Label/TopicPageLabel';
+import TokenStorage, {ITokenEnum} from '../../utils/storage/custom/tokenStorage';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {fonts} from '../../utils/fonts';
-import {getAccessToken} from '../../utils/token';
 import {getDomainIdIFollow, getLinkContextScreenRelated} from '../../service/domain';
 import {setIFollow} from '../../context/actions/news';
 
@@ -37,7 +37,7 @@ const LinkContextScreen = () => {
 
   React.useEffect(() => {
     const parseToken = async () => {
-      const value = await getAccessToken();
+      const value = TokenStorage.get(ITokenEnum.token);
       if (value) {
         const decoded = await JWTDecode(value);
         setIdFromToken(decoded.user_id);
