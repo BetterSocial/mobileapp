@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Config from 'react-native-config';
 import ImagePicker from 'react-native-image-crop-picker';
 import Toast from 'react-native-simple-toast';
 import {
@@ -17,7 +16,6 @@ import {
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {debounce} from 'lodash';
 import {showMessage} from 'react-native-flash-message';
-import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {useNavigation} from '@react-navigation/core';
 
 import AnonymousTab from './elements/AnonymousTab';
@@ -59,7 +57,7 @@ import {
   updateImageProfile
 } from '../../service/profile';
 import {colors} from '../../utils/colors';
-import {deleteAnonymousPost, deletePost, getFeedDetail} from '../../service/post';
+import {deleteAnonymousPost, deletePost} from '../../service/post';
 import {downVote, upVote} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
@@ -73,9 +71,7 @@ import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
-const {height, width} = Dimensions.get('screen');
-
-const isShowKarma = Config.DOPPLER_ENVIRONMENT === 'dev';
+const {width} = Dimensions.get('screen');
 
 const Header = (props) => {
   const {
@@ -181,7 +177,6 @@ const ProfileScreen = ({route}) => {
   const [isFetchingList, setIsFetchingList] = React.useState(false);
   const {interactionsComplete} = useAfterInteractions();
   const isNotFromHomeTab = route?.params?.isNotFromHomeTab;
-  const bottomBarHeight = isNotFromHomeTab ? 0 : useBottomTabBarHeight();
   const [, setIsHitApiFirstTime] = React.useState(false);
 
   const updateUserClient = useUpdateClientGetstreamHook();
@@ -565,11 +560,6 @@ const ProfileScreen = ({route}) => {
     getMyFeeds(0, LIMIT_PROFILE_FEED);
     reloadFetchAnonymousPost();
   }
-
-  const onHeaderOptionClicked = (item) => {
-    setSelectedPostForOption(item);
-    setIsOptionModalOpen(true);
-  };
 
   const onHeaderOptionClosed = () => {
     setSelectedPostForOption(null);
