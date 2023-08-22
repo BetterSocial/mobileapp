@@ -22,7 +22,7 @@ const FirebaseConfig = (props) => {
   }, []);
 
   React.useEffect(() => {
-    // dynamicLinks().getInitialLink().then(parseDynamicLink);
+    dynamicLinks().getInitialLink().then(parseDynamicLink);
   }, []);
 
   /**
