@@ -194,7 +194,6 @@ const ProfileScreen = ({route}) => {
     setTabIndexToSigned,
     reloadFetchAnonymousPost
   } = useProfileScreenHook();
-  console.log(profileTabIndex, 'nikah');
   // eslint-disable-next-line consistent-return
   React.useEffect(() => {
     if (interactionsComplete) {

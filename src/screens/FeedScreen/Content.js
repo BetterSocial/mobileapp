@@ -33,7 +33,7 @@ const Content = ({
   const [textHeight, setTextHeight] = React.useState(null);
   const maxFontSize = normalizeFontSizeByWidth(28);
   const minFontSize = normalizeFontSizeByWidth(16);
-  const {handleCalculation} = useCalculationContent();
+  const {handleCalculation, onLayoutTopicChip} = useCalculationContent();
   const [amountCut, setAmountCut] = React.useState(0);
   const [textCut, setTextCunt] = React.useState(null);
   const [arrText] = React.useState([]);
@@ -111,13 +111,12 @@ const Content = ({
     }
     return amountLineBreak;
   };
-
   const handleTextLayout = ({nativeEvent}) => {
     let text = '';
     let {newMaxLine, countDeviceLine} = handleCountDeviceLine();
     const amountLineBreak = handleLineBreak(nativeEvent, newMaxLine);
     countDeviceLine = newMaxLine - amountLineBreak.length / 2;
-    newMaxLine -= amountLineBreak.length / 2;
+    // newMaxLine -= amountLineBreak.length / 2;
     if (item.post_type === POST_TYPE_STANDARD && item.images_url.length <= 0) {
       if (topics.length > 0) {
         newMaxLine -= 2;
@@ -143,6 +142,8 @@ const Content = ({
     setTextCunt(text);
     setAmountCut(text.length);
   };
+  const showSeeMore = amountCut < message.length;
+
   const renderHandleTextContent = () => {
     return (
       <View testID="postTypePoll" style={[styles.containerText, handleContainerText()]}>
@@ -168,7 +169,7 @@ const Content = ({
               handleContainerText().isShort
             )}
             {''}
-            {amountCut < message.length ? <Text style={styles.seemore}> More..</Text> : null}
+            {showSeeMore ? <Text style={styles.seemore}> More..</Text> : null}
           </Text>
         )}
       </View>
@@ -176,7 +177,7 @@ const Content = ({
   };
 
   const handleContainerText = () => {
-    if (message?.length <= 125 && item.post_type === POST_TYPE_STANDARD && images_url.length <= 0) {
+    if (!showSeeMore && item.post_type === POST_TYPE_STANDARD && images_url.length <= 0) {
       return {
         container: styles.centerVertical,
         text: styles.centerVerticalText,
@@ -234,7 +235,12 @@ const Content = ({
         </View>
       )}
 
-      <TopicsChip topics={topics} fontSize={normalizeFontSize(14)} text={message} />
+      <TopicsChip
+        onLayout={onLayoutTopicChip}
+        topics={topics}
+        fontSize={normalizeFontSize(14)}
+        text={message}
+      />
     </Pressable>
   );
 };

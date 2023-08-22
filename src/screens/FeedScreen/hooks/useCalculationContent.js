@@ -36,8 +36,14 @@ const useCalculationContent = () => {
       lineHeight: smallFont * 1.5
     };
   };
+
+  const onLayoutTopicChip = (nativeEvent) => {
+    console.log({nativeEvent}, 'hele');
+  };
+
   return {
-    handleCalculation
+    handleCalculation,
+    onLayoutTopicChip
   };
 };
 
