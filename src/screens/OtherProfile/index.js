@@ -50,7 +50,6 @@ import {colors} from '../../utils/colors';
 import {downVote, upVote} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
 import {generateAnonProfileOtherProfile} from '../../service/anonymousProfile';
-import {getAccessToken} from '../../utils/token';
 import {getFeedDetail} from '../../service/post';
 import {getSingularOrPluralText} from '../../utils/string/StringUtils';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
@@ -148,7 +147,6 @@ const OtherProfile = () => {
   const [isLoading, setIsLoading] = React.useState(true);
   const [isShowButton, setIsShowButton] = React.useState(false);
   const [opacity, setOpacity] = React.useState(0);
-  const [, setTokenJwt] = React.useState('');
   const [reason, setReason] = React.useState([]);
   const [yourselfId] = React.useState('');
   const [blockStatus, setBlockStatus] = React.useState({
@@ -323,11 +321,6 @@ const OtherProfile = () => {
   React.useEffect(() => {
     create();
     setIsLoading(true);
-    const getJwtToken = async () => {
-      setTokenJwt(await getAccessToken());
-    };
-
-    getJwtToken();
     setUserId(params.data.user_id);
     setUsername(params.data.username);
     fetchOtherProfile(params.data.username);
