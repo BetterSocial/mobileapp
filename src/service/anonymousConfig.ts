@@ -1,7 +1,7 @@
 import axios from 'axios';
 import configEnv from 'react-native-config';
 
-import {getAnonymousToken, getRefreshToken, setAccessToken, setRefreshToken} from '../utils/token';
+import TokenStorage, {ITokenEnum} from '../utils/storage/custom/tokenStorage';
 
 const baseURL = configEnv.BASE_URL;
 
@@ -12,7 +12,7 @@ const anonymousApi = axios.create({
 });
 anonymousApi.interceptors.request.use(
   async (config) => {
-    const token = await getAnonymousToken();
+    const token = TokenStorage.get(ITokenEnum.anonymousToken);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -24,11 +24,10 @@ anonymousApi.interceptors.request.use(
 anonymousApi.interceptors.response.use(
   (response) => response,
   async (error) => {
-    if (
-      error?.response?.status === 401 &&
-      error?.response?.config?.url !== '/users/refresh-token'
-    ) {
-      const token = await getRefreshToken();
+    const isStatus401 = error?.response?.status === 401;
+    const isRefreshTokenUrl = error?.response?.config?.url === '/users/refresh-token';
+    if (isStatus401 && !isRefreshTokenUrl) {
+      const token = TokenStorage.get(ITokenEnum.refreshToken);
       const refreshApi = axios.create({
         baseURL,
         timeout: 3000,
@@ -38,15 +37,15 @@ anonymousApi.interceptors.response.use(
         async (refreshResponse) => {
           const data = refreshResponse?.data?.data;
           if (data?.token) {
-            await setRefreshToken(data?.refresh_token);
-            await setAccessToken(data?.token);
+            TokenStorage.set(data);
+            error.config.headers.Authorization = `Bearer ${data?.anonymousToken}`;
             return axios.request(error?.config);
           }
           return Promise.reject(error);
         },
         (refreshError) => {
           if (__DEV__) {
-            console.log('refreshError: ', refreshError);
+            console.log('refreshError: ', refreshError?.response?.data);
           }
           return Promise.reject(error);
         }

@@ -1,7 +1,7 @@
 import crashlytics from '@react-native-firebase/crashlytics';
 
+import StorageUtils from '../utils/storage';
 import api from './config';
-import {getRefreshToken} from '../utils/token';
 
 export const verifyUser = async (userId) => {
   try {
@@ -67,7 +67,7 @@ export const verifyUsername = async (username) => {
 };
 export const registerUser = async (data) => {
   try {
-    const resApi = await api.post('/users/register-v2', {
+    const resApi = await api.post('/users/register-v2-without-upload-photo', {
       data
     });
     return resApi.data;
@@ -87,7 +87,7 @@ const verifyAccessToken = async () =>
     });
 
 export const refreshToken = async () => {
-  const token = await getRefreshToken();
+  const token = StorageUtils.refreshToken.get();
   const options = {
     headers: {
       Authorization: `Bearer ${token}`

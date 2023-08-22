@@ -176,7 +176,7 @@ const Content = ({
   };
 
   const handleContainerText = () => {
-    if (message?.length < 125 && item.post_type === POST_TYPE_STANDARD && images_url.length <= 0) {
+    if (message?.length <= 125 && item.post_type === POST_TYPE_STANDARD && images_url.length <= 0) {
       return {
         container: styles.centerVertical,
         text: styles.centerVerticalText,
@@ -230,7 +230,7 @@ const Content = ({
       ) : null}
       {images_url.length > 0 && (
         <View style={styles.containerImage}>
-          <ImageLayouter images={images_url} onimageclick={onImageClickedByIndex} />
+          <ImageLayouter isFeed={true} images={images_url} onimageclick={onImageClickedByIndex} />
         </View>
       )}
 
