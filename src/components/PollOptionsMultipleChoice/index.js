@@ -212,4 +212,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default PollOptionsMultipleChoice;
+export default React.memo(PollOptionsMultipleChoice);
