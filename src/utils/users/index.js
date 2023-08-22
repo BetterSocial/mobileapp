@@ -18,7 +18,7 @@ export const getUserId = async () => {
 
 export const getAnonymousUserId = async () => {
   try {
-    const token = TokenStorage.get(ITokenEnum.refreshToken);
+    const token = TokenStorage.get(ITokenEnum.anonymousToken);
     if (token) {
       const id = await JWTDecode(token).user_id;
       return id;
