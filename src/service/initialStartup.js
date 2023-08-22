@@ -1,11 +1,12 @@
 /* eslint-disable no-useless-escape */
 import React from 'react';
-import {atom} from 'recoil';
 import {Linking} from 'react-native';
-import {getUserId} from '../utils/users';
-import {verifyTokenGetstream} from './users';
-import {setAccessToken, setRefreshToken, removeAccessToken} from '../utils/token';
+import {atom} from 'recoil';
+
 import {getProfileByUsername} from './profile';
+import {getUserId} from '../utils/users';
+import {removeAccessToken, setAccessToken} from '../utils/token';
+import {verifyTokenGetstream} from './users';
 
 const BASE_DEEPLINK_URL_REGEX = 'link.bettersocial.org/u';
 
@@ -37,7 +38,6 @@ export const InitialStartupAtom = atom({
       onSet((user) => {
         if (user !== null && user !== undefined) {
           setAccessToken(user);
-          setRefreshToken(user);
         } else {
           removeAccessToken();
         }

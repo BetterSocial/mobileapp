@@ -17,19 +17,14 @@ import {StackActions, useNavigation} from '@react-navigation/native';
 import {useSetRecoilState} from 'recoil';
 
 import StorageUtils from '../../utils/storage';
+import TokenStorage from '../../utils/storage/custom/tokenStorage';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {InitialStartupAtom} from '../../service/initialStartup';
 import {checkPasswordForDemoLogin, demoVerifyUser} from '../../service/users';
 import {randomString} from '../../utils/string/StringUtils';
-import {
-  removeLocalStorege,
-  setAccessToken,
-  setAnonymousToken,
-  setRefreshToken,
-  setUserId
-} from '../../utils/token';
+import {removeLocalStorege, setUserId} from '../../utils/token';
 import {setDataHumenId} from '../../context/actions/users';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 
@@ -154,9 +149,7 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
           return;
         }
         if (response.data) {
-          await setAnonymousToken(response.anonymousToken);
-          await setAccessToken(response.token);
-          setRefreshToken(response.refresh_token);
+          TokenStorage.set(response);
 
           const userId = await JwtDecode(response.token).user_id;
           const anonymousUserId = await JwtDecode(response.anonymousToken).user_id;
@@ -164,12 +157,7 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
             anonProfileId: anonymousUserId,
             signedProfileId: userId
           });
-          try {
-            await setAnonymousToken(response.anonymousToken);
-          } catch (e) {
-            console.log('e');
-            console.log(e);
-          }
+
           streamChat(response.token).then(() => {
             const testObj = {
               id: response.token,
