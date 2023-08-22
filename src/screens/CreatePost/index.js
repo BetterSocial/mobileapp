@@ -337,7 +337,7 @@ const CreatePost = () => {
   const uploadMediaFromLibrary = async () => {
     const {success} = await requestExternalStoragePermission();
     if (success) {
-      launchImageLibrary({mediaType: 'photo'}, async (res) => {
+      launchImageLibrary({mediaType: 'photo', includeBase64: true}, async (res) => {
         if (res.didCancel && __DEV__) {
           console.log('User cancelled image picker');
         } else if (res.uri) {
@@ -364,7 +364,7 @@ const CreatePost = () => {
   const takePhoto = async () => {
     const {success, message} = await requestCameraPermission();
     if (success) {
-      launchCamera({mediaType: 'photo'}, async (res) => {
+      launchCamera({mediaType: 'photo', includeBase64: true, selectionLimit: 1}, async (res) => {
         if (res.didCancel && __DEV__) {
           console.log('User cancelled image picker');
         } else if (res.uri) {
