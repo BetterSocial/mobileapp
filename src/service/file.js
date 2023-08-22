@@ -20,9 +20,25 @@ export const uploadPhoto = async (formData) => {
     testing: 'test'
   });
 
+  console.log(result?.data);
   if (result.data) {
     return result.data;
   }
 
   return null;
+};
+
+export const uploadPhotoWithoutAuth = async (formData) => {
+  try {
+    const result = await api.post('/upload/photo-without-auth', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      },
+      testing: 'test'
+    });
+
+    return Promise.resolve(result.data);
+  } catch (e) {
+    return Promise.reject(e);
+  }
 };
