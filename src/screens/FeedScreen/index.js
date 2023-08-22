@@ -13,7 +13,6 @@ import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
 } from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
 import {ButtonNewPost} from '../../components/Button';
-import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {DISCOVERY_TAB_TOPICS, SOURCE_FEED_TAB} from '../../utils/constants';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
