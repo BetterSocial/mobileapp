@@ -37,7 +37,7 @@ const useBetterWebsocketHook = () => {
   };
 
   const initAuthorization = async () => {
-    const token: string = TokenStorage.get(ITokenEnum.refreshToken);
+    const token: string = TokenStorage.get(ITokenEnum.anonymousToken);
     const userId: string = await getAnonymousUserId();
 
     const urlEncodedData = generateUserDataUrlEncoded(userId, token);

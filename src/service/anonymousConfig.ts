@@ -12,7 +12,7 @@ const anonymousApi = axios.create({
 });
 anonymousApi.interceptors.request.use(
   async (config) => {
-    const token = TokenStorage.get(ITokenEnum.refreshToken);
+    const token = TokenStorage.get(ITokenEnum.anonymousToken);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
