@@ -108,31 +108,28 @@ const Item = ({
 
   React.useEffect(() => {
     const validationStatusVote = () => {
-      if (item.reaction_counts !== undefined || null) {
-        if (item.latest_reactions.upvotes !== undefined) {
-          const upvote = item.latest_reactions.upvotes.filter(
-            (vote) => vote.user_id === selfUserId
-          );
-          if (upvote !== undefined) {
+      if (item.reaction_counts) {
+        if (item.latest_reactions.upvotes) {
+          const upvote = item.latest_reactions.upvotes.find((vote) => vote.user_id === selfUserId);
+          if (upvote) {
             setVoteStatus('upvote');
             setStatusUpvote(true);
           }
-        }
-
-        if (item.latest_reactions.downvotes !== undefined) {
-          const downvotes = item.latest_reactions.downvotes.filter(
+        } else if (item.latest_reactions.downvotes) {
+          const downvotes = item.latest_reactions.downvotes.find(
             (vote) => vote.user_id === selfUserId
           );
-          if (downvotes !== undefined) {
+          if (downvotes) {
             setVoteStatus('downvote');
             setStatusDowvote(true);
           }
+        } else {
+          setVoteStatus('none');
         }
       }
     };
     validationStatusVote();
   }, [item, selfUserId]);
-
   React.useEffect(() => {
     const initialVote = () => {
       const c = getCountVote(item);

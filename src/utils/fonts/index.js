@@ -41,9 +41,9 @@ export const normalizeFontSize = (fontSize) => {
 };
 
 export const normalizeFontSizeByWidth = (fontSize) => {
-  const referenceHeight = 375;
+  const referenceWidth = 375;
   const currentScreenHeight = Dimensions.get('screen').width;
-  const normalizedFontSize = (currentScreenHeight / referenceHeight) * fontSize;
+  const normalizedFontSize = (currentScreenHeight / referenceWidth) * fontSize;
   return normalizedFontSize;
 };
 
