@@ -20,7 +20,15 @@ import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuil
 import {sanitizeUrl} from '../../../utils/string/StringUtils';
 import {smartRender} from '../../../utils/Utils';
 
-const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPostDetail}) => {
+const Content = ({
+  message,
+  images_url,
+  topics = [],
+  item,
+  onnewpollfetched,
+  isPostDetail,
+  haveSeeMore
+}) => {
   const navigation = useNavigation();
   const cekImage = () => images_url && images_url !== '';
   const {hashtagAtComponent} = useContentFeed({navigation});
@@ -63,7 +71,7 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
   };
 
   const isShortText = () => {
-    return images_url.length <= 0 && item.post_type === POST_TYPE_STANDARD && message.length <= 125;
+    return images_url.length <= 0 && item.post_type === POST_TYPE_STANDARD && !haveSeeMore;
   };
 
   const handleContainerPdp = () => {
@@ -85,7 +93,7 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
   return (
     <>
       <ScrollView
-        style={[styles.contentFeed, handleContainerPdp()]}
+        style={[styles.contentFeed, handleContainerPdp(), {paddingVertical: message ? 5 : 0}]}
         contentContainerStyle={styles.contensStyle(images_url.length > 0, isShortText())}
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}>
@@ -93,36 +101,41 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
           style={[
             handleStyleFeed(),
             {
-              minHeight: calculationText(hashtagAtComponent(sanitizeUrl(message))).containerHeight
+              minHeight: message
+                ? calculationText(hashtagAtComponent(sanitizeUrl(message))).containerHeight
+                : 0,
+              paddingVertical: message ? 5 : 0
             },
             handleContainerPdp(),
             handleMessageContainerPdp()
           ]}>
-          <View style={styles.postTextContainer(isPostDetail)}>
-            {item.post_type !== POST_TYPE_LINK ? (
-              <Text
-                style={[
-                  styles.textContentFeed(isShortText()),
-                  {
-                    fontSize: calculationText(message).fontSize,
-                    lineHeight: calculationText(message).lineHeight
-                  }
-                ]}>
-                {hashtagAtComponent(message, null, isShortText())}
-              </Text>
-            ) : (
-              <Text
-                style={[
-                  styles.textContentFeed(isShortText()),
-                  {
-                    fontSize: calculationText(sanitizeUrl(message)).fontSize,
-                    lineHeight: calculationText(sanitizeUrl(message)).lineHeight
-                  }
-                ]}>
-                {hashtagAtComponent(sanitizeUrl(message), null, isShortText())}{' '}
-              </Text>
-            )}
-          </View>
+          {message ? (
+            <View style={styles.postTextContainer(isPostDetail)}>
+              {item.post_type !== POST_TYPE_LINK ? (
+                <Text
+                  style={[
+                    styles.textContentFeed(isShortText()),
+                    {
+                      fontSize: calculationText(message).fontSize,
+                      lineHeight: calculationText(message).lineHeight
+                    }
+                  ]}>
+                  {hashtagAtComponent(message, null, isShortText())}
+                </Text>
+              ) : (
+                <Text
+                  style={[
+                    styles.textContentFeed(isShortText()),
+                    {
+                      fontSize: calculationText(sanitizeUrl(message)).fontSize,
+                      lineHeight: calculationText(sanitizeUrl(message)).lineHeight
+                    }
+                  ]}>
+                  {hashtagAtComponent(sanitizeUrl(message), null, isShortText())}{' '}
+                </Text>
+              )}
+            </View>
+          ) : null}
         </View>
         <View style={styles.pollContainer}>
           {item && item.post_type === POST_TYPE_POLL ? (
