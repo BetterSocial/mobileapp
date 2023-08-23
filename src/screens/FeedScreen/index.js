@@ -125,13 +125,15 @@ const FeedScreen = (props) => {
     getDataFeedsHandle(postOffset);
   };
 
-  const onPress = (item) => {
+  const onPress = (item, haveSeeMore) => {
+    console.log({item, haveSeeMore}, 'lupi');
     props.navigation.navigate('PostDetailPage', {
       // index: index,
       isalreadypolling: item.isalreadypolling,
       feedId: item.id,
       data: item,
-      isCaching: false
+      isCaching: false,
+      haveSeeMore
     });
   };
 
@@ -215,7 +217,7 @@ const FeedScreen = (props) => {
         onNewPollFetched={onNewPollFetched}
         index={index}
         onPressDomain={onPressDomain}
-        onPress={() => onPress(item)}
+        onPress={(haveSeeMore) => onPress(item, haveSeeMore)}
         onPressComment={() => onPressComment(index, item)}
         onPressBlock={() => onPressBlock(item)}
         onPressUpvote={(post) => setUpVoteHandle(post, index)}

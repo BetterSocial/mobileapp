@@ -23,6 +23,7 @@ import {colors} from '../../utils/colors';
 import {getCommentLength} from '../../utils/getstream';
 import {showScoreAlertDialog} from '../../utils/Utils';
 import {normalizeFontSizeByWidth} from '../../utils/fonts';
+import {SearchAutoComplete} from '../../components/Search';
 
 const tabBarHeight = StatusBar.currentHeight;
 const FULL_WIDTH = Dimensions.get('screen').width;
@@ -134,7 +135,7 @@ const RenderListFeed = (props) => {
             index={index}
             message={item.message}
             images_url={item.images_url}
-            onPress={onPress}
+            onPress={(showSeeMore) => onPress(item, showSeeMore)}
             topics={item?.topics}
             item={item}
             onNewPollFetched={onNewPollFetched}

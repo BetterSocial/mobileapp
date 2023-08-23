@@ -119,8 +119,8 @@ const Content = ({
     // newMaxLine -= amountLineBreak.length / 2;
     if (item.post_type === POST_TYPE_STANDARD && item.images_url.length <= 0) {
       if (topics.length > 0) {
-        newMaxLine -= 2;
-        countDeviceLine -= 3;
+        newMaxLine -= Platform.OS === 'ios' ? 2 : 1;
+        countDeviceLine -= Platform.OS === 'ios' ? 3 : 2;
       } else {
         newMaxLine -= 1;
         countDeviceLine -= 2;
@@ -199,7 +199,7 @@ const Content = ({
   return (
     <Pressable
       onLayout={hanldeHeightContainer}
-      onPress={onPress}
+      onPress={() => onPress(showSeeMore)}
       style={[styles.contentFeed, style]}>
       {message?.length > 0 ? (
         <View>
