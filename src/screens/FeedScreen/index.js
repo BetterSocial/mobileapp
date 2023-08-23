@@ -126,7 +126,6 @@ const FeedScreen = (props) => {
   };
 
   const onPress = (item, haveSeeMore) => {
-    console.log({item, haveSeeMore}, 'lupi');
     props.navigation.navigate('PostDetailPage', {
       // index: index,
       isalreadypolling: item.isalreadypolling,
@@ -217,7 +216,9 @@ const FeedScreen = (props) => {
         onNewPollFetched={onNewPollFetched}
         index={index}
         onPressDomain={onPressDomain}
-        onPress={(haveSeeMore) => onPress(item, haveSeeMore)}
+        onPress={(haveSeeMore) => {
+          onPress(item, haveSeeMore);
+        }}
         onPressComment={() => onPressComment(index, item)}
         onPressBlock={() => onPressBlock(item)}
         onPressUpvote={(post) => setUpVoteHandle(post, index)}

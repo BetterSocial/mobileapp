@@ -82,6 +82,7 @@ const PostPageDetailIdComponent = (props) => {
       }, 300);
     }
   };
+  console.log(props.haveSeeMore, 'liku');
   React.useEffect(() => {
     getComment();
   }, []);
@@ -566,6 +567,7 @@ const PostPageDetailIdComponent = (props) => {
                 item={item}
                 onnewpollfetched={onNewPollFetched}
                 isPostDetail={true}
+                haveSeeMore={props.haveSeeMore}
               />
               <View style={styles.footerContainer}>
                 <Footer

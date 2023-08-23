@@ -135,7 +135,9 @@ const RenderListFeed = (props) => {
             index={index}
             message={item.message}
             images_url={item.images_url}
-            onPress={(showSeeMore) => onPress(item, showSeeMore)}
+            onPress={(showSeeMore) => {
+              onPress(showSeeMore);
+            }}
             topics={item?.topics}
             item={item}
             onNewPollFetched={onNewPollFetched}
