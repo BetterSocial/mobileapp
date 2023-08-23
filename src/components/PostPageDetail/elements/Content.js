@@ -1,7 +1,7 @@
 import * as React from 'react';
 import FastImage from 'react-native-fast-image';
 import PropTypes from 'prop-types';
-import {Dimensions, Platform, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, StyleSheet, Text, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 
@@ -50,7 +50,6 @@ const Content = ({
     }
     return styles.contentFeedLink;
   };
-
   const navigateToLinkContextPage = () => {
     const param = linkContextScreenParamBuilder(
       item,
