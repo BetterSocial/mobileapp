@@ -12,7 +12,6 @@ import MemoFeed from '../assets/icon/Feed';
 import MemoHome from '../assets/icon/Home';
 import MemoNews from '../assets/icon/News';
 import MemoProfileIcon from '../assets/icon/Profile';
-import UniversalLink from '../configs/UniversalLink';
 import profileAtom from '../atom/profileAtom';
 import useRootChannelListHook from '../hooks/screen/useRootChannelListHook';
 import {FeedScreen, NewsScreen, ProfileScreen} from '../screens';
@@ -349,7 +348,6 @@ function HomeBottomTabs({navigation}) {
         />
       </Tab.Navigator>
       <FirebaseConfig navigation={navigation} />
-      <UniversalLink navigation={navigation} />
     </View>
   );
 }
