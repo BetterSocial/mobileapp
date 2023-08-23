@@ -58,8 +58,9 @@ const createPostFailedGeneralError = 'Your post failed - Please try again';
 const chatTabHeaderPlaceholder = 'Search Users';
 const chatTabHeaderCreateChatButtonText = 'New Chat';
 
-// News Tab
-const newsTabHeaderPlaceholder = 'Search BetterSocial';
+// News TabSearch Communities
+
+const newsTabHeaderPlaceholder = 'Search Communities';
 const newsTabHeaderCreatePostButtonText = 'New Post';
 
 // Link Detail Page
