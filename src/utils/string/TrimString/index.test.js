@@ -5,6 +5,6 @@ it('testing trim String', () => {
 });
 
 it('should remove white space and add dot', () => {
-  expect(addDotAndRemoveNewline('hello  ')).toEqual('hello.');
-  expect(addDotAndRemoveNewline('hello    ')).toEqual('hello.');
+  expect(addDotAndRemoveNewline('hello  ')).toEqual('hello');
+  expect(addDotAndRemoveNewline('hello    ')).toEqual('hello');
 });

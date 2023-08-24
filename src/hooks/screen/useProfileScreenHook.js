@@ -11,7 +11,6 @@ const useProfileScreenHook = () => {
   const [isLoadingFetchingAnonymousPosts, setIsLoadingFetchingAnonymousPosts] =
     React.useState(false);
   const [isLoadingFetchingSignedPosts] = React.useState(false);
-
   const {feeds, anonymousFeeds, setMyProfileAnonymousFeed} = useMyProfileFeedContextHook();
 
   const isProfileTabSigned = profileTabIndex === TAB_INDEX_SIGNED;
