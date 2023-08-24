@@ -1,4 +1,10 @@
-import {ADD_NEWS_I_FOLLOW, NEWS_UPDATE_COMMENT, SET_NEWS, SET_NEWS_I_FOLLOW} from '../Types';
+import {
+  ADD_NEWS_I_FOLLOW,
+  NEWS_UPDATE_COMMENT,
+  SET_NEWS,
+  SET_NEWS_I_FOLLOW,
+  SET_NEWS_RESET_ALL
+} from '../Types';
 
 const newsState = {
   news: [],
@@ -43,6 +49,10 @@ const newsReducer = (state = newsState, action) => {
       };
     case NEWS_UPDATE_COMMENT:
       return updateComment(state, action);
+
+    case SET_NEWS_RESET_ALL:
+      return newsState;
+
     default:
       return state;
   }

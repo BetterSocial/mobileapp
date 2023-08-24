@@ -10,6 +10,13 @@ import useSettings from '../../src/screens/Settings/hooks/useSettings';
 
 jest.mock('react-native-simple-toast');
 
+jest.mock('recoil', () => ({
+  useRecoilValue: jest.fn(() => 0),
+  atom: jest.fn(() => 0),
+  useSetRecoilState: jest.fn(() => 0),
+  useRecoilState: jest.fn(() => [0, jest.fn()])
+}));
+
 describe('useSetting should run correctly', () => {
   it('logout should run correctly', async () => {
     const {result} = renderHook(useSettings, {wrapper: Store});

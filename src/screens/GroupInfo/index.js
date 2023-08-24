@@ -15,19 +15,22 @@ import {
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
+import AnonymousIcon from '../ChannelListScreen/elements/components/AnonymousIcon';
+import BlockComponent from '../../components/BlockComponent';
 import DefaultChatGroupProfilePicture from '../../assets/images/default-chat-group-picture.png';
 import ExitGroup from '../../assets/images/exit-group.png';
 import Header from '../../components/Header';
 // eslint-disable-next-line camelcase
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
 import ModalAction from './elements/ModalAction';
+import ModalActionAnonymous from './elements/ModalActionAnonymous';
 import ReportGroup from '../../assets/images/report.png';
 import useGroupInfo from './hooks/useGroupInfo';
+import {CHANNEL_TYPE_ANONYMOUS} from '../../utils/constants';
 import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
 import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
-import {trimString} from '../../utils/string/TrimString';
 
 const GroupInfo = () => {
   const navigation = useNavigation();
@@ -42,7 +45,6 @@ const GroupInfo = () => {
     isUploadingImage,
     createChat,
     getMembersList,
-    chatName,
     handleOnNameChange,
     handleOnImageClicked,
     newParticipant,
@@ -55,7 +57,11 @@ const GroupInfo = () => {
     profile,
     channelState,
     handlePressContact,
-    onReportGroup
+    setUsername,
+    onReportGroup,
+    isAnonymousModalOpen,
+    blockModalRef,
+    isFetchingAllowAnonDM
   } = useGroupInfo();
 
   React.useEffect(() => {
@@ -68,6 +74,12 @@ const GroupInfo = () => {
 
     return unsubscribe;
   }, [navigation]);
+
+  React.useEffect(() => {
+    if (channel?.data?.name) {
+      setUsername(channel.data.name);
+    }
+  }, [JSON.stringify(channel.data)]);
 
   const showImageProfile = () => {
     if (profileChannel || channel?.data?.image) {
@@ -136,6 +148,28 @@ const GroupInfo = () => {
   const handleMember = async () => {
     await getMembersList();
   };
+
+  const getProfileName = (name) => {
+    const anonymousName = `Anonymous ${channel?.data?.anon_user_info_emoji_name}`;
+    return name === 'AnonymousUser' ? anonymousName : name;
+  };
+
+  const getAnonymousImage = (name) => {
+    console.log('name', name);
+    if (name?.indexOf('Anonymous') > -1) {
+      return (
+        <View style={{marginRight: 17}}>
+          <AnonymousIcon
+            size={48}
+            color={channel?.data?.anon_user_info_color_code}
+            emojiCode={channel?.data?.anon_user_info_emoji_code}
+          />
+        </View>
+      );
+    }
+    return null;
+  };
+
   React.useEffect(() => {
     handleMember();
   }, []);
@@ -156,10 +190,10 @@ const GroupInfo = () => {
               <View style={styles.row}>
                 <View style={styles.column}>
                   <View style={styles.containerGroupName}>
-                    <Text style={styles.groupName}>{trimString(chatName, 20)}</Text>
+                    <Text style={styles.groupName}>{memberName()}</Text>
                   </View>
                   <Text style={styles.dateCreate}>
-                    Created {moment(createChat).format('DD/MM/YY')}
+                    Created {moment(createChat).format('MM/DD/YY')}
                   </Text>
                 </View>
                 <TouchableOpacity onPress={handleOnNameChange} style={styles.pencilIconTouchable}>
@@ -198,10 +232,11 @@ const GroupInfo = () => {
                         key={index}
                         item={item}
                         onPress={() => handlePressContact(item)}
-                        fullname={item.user.name}
+                        fullname={getProfileName(item.user.name)}
                         photo={item.user.image}
-                        showArrow={channelState?.channel.data.type === 'group'}
+                        showArrow={true}
                         userId={profile.myProfile.user_id}
+                        ImageComponent={getAnonymousImage(item?.user?.name)}
                       />
                     </View>
                   )}
@@ -249,7 +284,19 @@ const GroupInfo = () => {
             onCloseModal={handleCloseSelectUser}
             selectedUser={selectedUser}
             onPress={alertRemoveUser}
+            isGroup={channelState?.channel?.data?.type === 'group'}
           />
+          <ModalActionAnonymous
+            name={selectedUser?.user?.anonymousUsername}
+            isOpen={isAnonymousModalOpen}
+            onCloseModal={handleCloseSelectUser}
+            selectedUser={selectedUser}
+            onPress={alertRemoveUser}
+          />
+
+          <Loading visible={isFetchingAllowAnonDM} />
+
+          <BlockComponent ref={blockModalRef} screen="group_info" />
         </>
       )}
     </SafeAreaView>

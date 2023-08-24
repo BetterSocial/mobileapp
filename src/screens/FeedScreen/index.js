@@ -13,7 +13,6 @@ import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
 } from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
 import {ButtonNewPost} from '../../components/Button';
-import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {DISCOVERY_TAB_TOPICS, SOURCE_FEED_TAB} from '../../utils/constants';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
@@ -21,6 +20,7 @@ import {setFeedByIndex, setTimer} from '../../context/actions/feeds';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {viewTimePost} from '../../service/post';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import {normalizeFontSizeByWidth} from '../../utils/fonts';
 
 let lastDragY = 0;
 
@@ -151,7 +151,6 @@ const FeedScreen = (props) => {
   };
 
   function onRefresh() {
-    console.log('onRefresh called');
     getDataFeedsHandle(0, true);
     setIsLastPage(false);
     handleScroll(false);
@@ -241,7 +240,7 @@ const FeedScreen = (props) => {
       />
       <TiktokScroll
         ref={listRef}
-        contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT}
+        contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT + normalizeFontSizeByWidth(4)}
         data={feeds}
         onEndReach={onEndReach}
         onRefresh={onRefresh}
@@ -272,10 +271,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     zIndex: -1
   },
-  dummyItem: (height) => ({
-    height,
-    backgroundColor: COLORS.gray1
-  }),
   containerLoading: {
     flex: 1,
     justifyContent: 'center',

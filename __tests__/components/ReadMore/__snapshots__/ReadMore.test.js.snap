@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ReadMore component finissh layout should run correctly should match with snapshot 1`] = `[Function]`;
+
+exports[`ReadMore component setup layout should run correctly should match with snapshot 1`] = `[Function]`;

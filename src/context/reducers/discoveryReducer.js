@@ -1,6 +1,7 @@
 /* eslint-disable no-case-declarations */
 import {
   DISCOVERY_RESET,
+  DISCOVERY_RESET_ALL,
   DISCOVERY_SET_DATA_DOMAINS,
   DISCOVERY_SET_DATA_NEWS,
   DISCOVERY_SET_DATA_TOPICS,
@@ -85,6 +86,9 @@ const discoveryReducer = (state = discoveryState, action) => {
         isLoadingDiscoveryTopic: false,
         isLoadingDiscoveryNews: false
       };
+
+    case DISCOVERY_RESET_ALL:
+      return discoveryState;
 
     case DISCOVERY_SET_INITIAL_DOMAINS:
       return {

@@ -4,6 +4,9 @@ import Toast from 'react-native-toast-message';
 import {BackHandler, KeyboardAvoidingView, Platform, View} from 'react-native';
 import {HumanIDProvider} from '@human-internet/react-native-humanid';
 import {NavigationContainer} from '@react-navigation/native';
+
+import DeviceInfo from 'react-native-device-info';
+import {appUpgradeVersionCheck} from 'app-upgrade-react-native-sdk';
 import {OverlayProvider, Streami18n} from 'stream-chat-react-native';
 import {RecoilDebugObserver} from 'reactotron-recoil-plugin';
 import {RecoilRoot} from 'recoil';
@@ -20,6 +23,7 @@ import {fetchRemoteConfig} from './src/utils/FirebaseUtil';
 import {linking} from './src/navigations/linking';
 import {reactotronInstance} from './src/libraries/reactotron/reactotronInstance';
 import {toastConfig} from './src/configs/ToastConfig';
+import {APP_UPGRADE_API_KEY, ENV} from './src/libraries/Configs/ENVConfig';
 
 const App = () => {
   const {bottom, top} = useSafeAreaInsets();
@@ -83,6 +87,33 @@ const App = () => {
       routeNameRef.current = navigationRef.current?.getCurrentRoute?.()?.name;
     }
   };
+
+  const appInfo = {
+    appId: Platform.OS === 'ios' ? '1615684520' : 'org.bettersocial', // Your app id in play store or app store
+    appName: DeviceInfo.getApplicationName(), // Your app name
+    appVersion: DeviceInfo.getVersion(), // Your app version
+    platform: Platform.OS, // App Platform, android or ios
+    environment: ENV // App Environment, production, development
+  };
+
+  // Alert config is optional
+  const alertConfig = {
+    title: 'Update Notice',
+    updateButtonTitle: 'Update Now',
+    laterButtonTitle: 'Later',
+    onDismissCallback: () => {
+      if (__DEV__) {
+        console.log('Dismiss');
+      }
+    },
+    onLaterCallback: () => {
+      if (__DEV__) {
+        console.log('Later');
+      }
+    }
+  };
+
+  appUpgradeVersionCheck(appInfo, APP_UPGRADE_API_KEY, alertConfig);
 
   return (
     <>

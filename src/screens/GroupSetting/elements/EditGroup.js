@@ -98,7 +98,8 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     paddingTop: 5,
-    paddingBottom: 5
+    paddingBottom: 5,
+    flex: 1
   },
   itemEdit: {
     flexDirection: 'row',

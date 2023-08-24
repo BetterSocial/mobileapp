@@ -1,18 +1,18 @@
 import React from 'react';
-import {Dimensions, StatusBar} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
 import dimen from '../../../utils/dimen';
+import {Context} from '../../../context';
 import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
+import {normalizeFontSizeByWidth} from '../../../utils/fonts';
 
 const useFeed = () => {
   const navigation = useNavigation();
   const [totalVote, setTotalVote] = React.useState(0);
-  const FULL_HEIGHT = Dimensions.get('screen').height;
-  const tabBarHeight = StatusBar.currentHeight;
   const [voteStatus, setVoteStatus] = React.useState('none');
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
+  const [profile] = React.useContext(Context).profile;
 
   const handleVote = (data = {}) => {
     const upvote = data.upvotes ? data.upvotes : 0;
@@ -31,8 +31,8 @@ const useFeed = () => {
     navigation.push('LinkContextScreen', param);
   };
 
-  const getHeightFooter = (bottomHeight = 0) => {
-    const h = Math.floor(((FULL_HEIGHT - tabBarHeight - bottomHeight) * 7) / 100);
+  const getHeightFooter = () => {
+    const h = normalizeFontSizeByWidth(52);
     return h;
   };
 
@@ -152,7 +152,8 @@ const useFeed = () => {
     onPressUpvoteHook,
     onPressDownVoteHook,
     handleTextCountStyle,
-    getTotalReaction
+    getTotalReaction,
+    showScoreButton: profile?.myProfile?.is_backdoor_user
   };
 };
 

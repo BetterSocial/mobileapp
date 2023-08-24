@@ -1,9 +1,14 @@
-import {SQLiteDatabase} from 'react-native-sqlite-storage';
+import {ResultSet, SQLiteDatabase, Transaction} from 'react-native-sqlite-storage';
+import {v4 as uuidv4} from 'uuid';
 
 import BaseDbSchema from './BaseDbSchema';
-import ChatSchema from './ChatSchema';
+import {InitAnonymousChatDataMember} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 
 class UserSchema implements BaseDbSchema {
+  id: string;
+
+  channelId: string;
+
   userId: string;
 
   username: string;
@@ -25,6 +30,8 @@ class UserSchema implements BaseDbSchema {
   isMe: boolean;
 
   constructor({
+    id,
+    channelId,
     userId,
     username,
     countryCode,
@@ -46,12 +53,16 @@ class UserSchema implements BaseDbSchema {
     this.bio = bio;
     this.isBanned = isBanned;
     this.isMe = isMe;
+    this.id = id;
+    this.channelId = channelId;
   }
 
-  save = async (db: SQLiteDatabase): Promise<void> => {
+  save = async (db: SQLiteDatabase, transaction?: Transaction): Promise<void> => {
     try {
-      await db.executeSql(
-        `INSERT OR REPLACE INTO ${UserSchema.getTableName()} (
+      const query = `
+      INSERT OR REPLACE INTO ${UserSchema.getTableName()} (
+        id,
+        channel_id,
         user_id,
         username,
         country_code,
@@ -61,22 +72,110 @@ class UserSchema implements BaseDbSchema {
         profile_picture,
         bio,
         is_banned
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [
-          this.userId,
-          this.username,
-          this.countryCode,
-          this.createdAt,
-          this.updatedAt,
-          this.lastActiveAt,
-          this.profilePicture,
-          this.bio,
-          this.isBanned
-        ]
-      );
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+
+      const prepReplacement = [
+        this.id,
+        this.channelId,
+        this.userId,
+        this.username,
+        this.countryCode,
+        this.createdAt,
+        this.updatedAt,
+        this.lastActiveAt,
+        this.profilePicture,
+        this.bio,
+        this.isBanned
+      ];
+
+      if (transaction) {
+        await transaction.executeSql(query, prepReplacement);
+      } else {
+        await db.executeSql(query, prepReplacement);
+      }
     } catch (e) {
       console.log(e);
     }
+  };
+
+  update = async (db: SQLiteDatabase, transaction?: Transaction): Promise<void> => {
+    try {
+      const query = `UPDATE ${UserSchema.getTableName()}
+      SET
+        channel_id = ?,
+        user_id = ?,
+        username = ?,
+        country_code = ?,
+        created_at = ?,
+        updated_at = ?,
+        last_active_at = ?,
+        profile_picture = ?,
+        bio = ?,
+        is_banned = ?
+      WHERE
+        channel_id = ? AND user_id = ?`;
+
+      const prepReplacement = [
+        this.channelId,
+        this.userId,
+        this.username,
+        this.countryCode,
+        this.createdAt,
+        this.updatedAt,
+        this.lastActiveAt,
+        this.profilePicture,
+        this.bio,
+        this.isBanned,
+        this.channelId,
+        this.userId
+      ];
+
+      if (transaction) {
+        await transaction.executeSql(query, prepReplacement);
+      } else {
+        await db.executeSql(query, prepReplacement);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  isUserExists = async (
+    db: SQLiteDatabase,
+    userId: string,
+    channelId: string,
+    transaction?: Transaction
+  ): Promise<boolean> => {
+    try {
+      const query = `SELECT * FROM ${UserSchema.getTableName()} WHERE user_id = ? AND channel_id = ? LIMIT 1`;
+      let results: ResultSet;
+      if (transaction) {
+        [, results] = await transaction.executeSql(query, [userId, channelId]);
+      } else {
+        [results] = await db.executeSql(query, [userId, channelId]);
+      }
+
+      return results?.rows?.length > 0;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+  };
+
+  saveOrUpdateIfExists = async (db: SQLiteDatabase): Promise<void> => {
+    const resolver = (tx: Transaction) => {
+      const query = `SELECT * FROM ${UserSchema.getTableName()} WHERE user_id = ? AND channel_id = ? LIMIT 1`;
+      tx.executeSql(query, [this.userId, this.channelId], (isExistsTx, results) => {
+        const isExists = results?.rows?.length > 0;
+        if (isExists) {
+          this.update(db, isExistsTx);
+        } else {
+          this.save(db, isExistsTx);
+        }
+      });
+    };
+
+    db.transaction(resolver);
   };
 
   static async getAll(db: SQLiteDatabase): Promise<UserSchema[]> {
@@ -90,7 +189,9 @@ class UserSchema implements BaseDbSchema {
 
   static fromDatabaseObject(dbObject: any): UserSchema {
     return new UserSchema({
-      userId: dbObject.user_id,
+      id: dbObject?.id,
+      channelId: dbObject?.channel_id,
+      userId: dbObject?.user_id,
       username: dbObject.username,
       countryCode: dbObject.country_code,
       createdAt: dbObject.created_at,
@@ -105,6 +206,8 @@ class UserSchema implements BaseDbSchema {
 
   static fromWebsocketObject(json: any): UserSchema {
     return new UserSchema({
+      id: uuidv4(),
+      channelId: json?.message?.cid?.replace('messaging:', ''),
       userId: json?.message?.user?.id,
       username: json?.message?.user?.name,
       countryCode: '',
@@ -117,8 +220,10 @@ class UserSchema implements BaseDbSchema {
     });
   }
 
-  static fromMemberWebsocketObject(json: any): UserSchema {
+  static fromMemberWebsocketObject(json: any, channelId: string): UserSchema {
     return new UserSchema({
+      id: uuidv4(),
+      channelId,
       userId: json?.user?.id,
       username: json?.user?.name,
       countryCode: '',
@@ -130,6 +235,30 @@ class UserSchema implements BaseDbSchema {
       isBanned: json?.banned
     });
   }
+
+  static fromInitAnonymousChatAPI(
+    object: InitAnonymousChatDataMember,
+    channelId: string
+  ): UserSchema {
+    return new UserSchema({
+      id: uuidv4(),
+      channelId,
+      userId: object?.user_id,
+      bio: object?.bio,
+      countryCode: object?.country_code,
+      createdAt: object?.created_at,
+      lastActiveAt: object?.last_active_at,
+      profilePicture: object?.profile_pic_path,
+      updatedAt: object?.updated_at,
+      username: object?.username,
+      isBanned: object?.is_banned
+    });
+  }
+
+  static clearAll = async (db: SQLiteDatabase): Promise<void> => {
+    const query = `DELETE FROM ${UserSchema.getTableName()}`;
+    await db.executeSql(query);
+  };
 
   get = async (db: SQLiteDatabase, id: string): Promise<UserSchema> => {
     const [{rows}] = await db.executeSql('SELECT * FROM users WHERE id = ?', [id]);

@@ -4,7 +4,14 @@ import {StyleSheet, Text} from 'react-native';
 import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 
-const TopicText = ({text, navigation = null, currentTopic = null, goToDetailPage, item}) => {
+const TopicText = ({
+  text,
+  navigation = null,
+  currentTopic = null,
+  goToDetailPage,
+  item,
+  isShortText
+}) => {
   const onClick = () => {
     // Do navigation here
     if (goToDetailPage && navigation) {
@@ -22,7 +29,10 @@ const TopicText = ({text, navigation = null, currentTopic = null, goToDetailPage
   };
 
   return (
-    <Text testID="topicTextComponent" onPress={onClick} style={styles.text}>
+    <Text
+      testID="topicTextComponent"
+      onPress={onClick}
+      style={[styles.text, styles.shortText(isShortText)]}>
       {text}
     </Text>
   );
@@ -32,7 +42,10 @@ const styles = StyleSheet.create({
   text: {
     color: COLORS.blue,
     fontFamily: fonts.inter[500]
-  }
+  },
+  shortText: (isShort) => ({
+    color: isShort ? 'rgba(255, 255, 255, 0.7)' : COLORS.blue
+  })
 });
 
 export default React.memo(TopicText);

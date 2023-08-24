@@ -3,7 +3,9 @@ import ImagePicker from 'react-native-image-crop-picker';
 import Toast from 'react-native-simple-toast';
 import {
   ActivityIndicator,
+  Alert,
   Dimensions,
+  Linking,
   LogBox,
   StatusBar,
   StyleSheet,
@@ -14,25 +16,26 @@ import {
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {debounce} from 'lodash';
 import {showMessage} from 'react-native-flash-message';
-import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {useNavigation} from '@react-navigation/core';
 
 import AnonymousTab from './elements/AnonymousTab';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
+import BioAndDMSetting from './elements/BioAndDMSetting';
 import BlockComponent from '../../components/BlockComponent';
 import BottomSheetBio from './elements/BottomSheetBio';
 import BottomSheetImage from './elements/BottomSheetImage';
 import BottomSheetRealname from './elements/BottomSheetRealname';
 import CustomPressable from '../../components/CustomPressable';
 import FollowInfoRow from './elements/FollowInfoRow';
-import GlobalButton from '../../components/Button/GlobalButton';
+import LinkAndSocialMedia from './elements/LinkAndSocialMedia';
 import PostOptionModal from '../../components/Modal/PostOptionModal';
 import ProfileHeader from './elements/ProfileHeader';
 import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
-import RenderItem from './elements/RenderItem';
+import RenderItem from '../FeedScreen/RenderList';
 import ShareUtils from '../../utils/share';
 import dimen from '../../utils/dimen';
+import useResetContext from '../../hooks/context/useResetContext';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
 } from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
@@ -41,7 +44,9 @@ import useProfileScreenHook, {
   TAB_INDEX_SIGNED
 } from '../../hooks/screen/useProfileScreenHook';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
+import {ButtonNewPost} from '../../components/Button';
 import {Context} from '../../context';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {PROFILE_CACHE} from '../../utils/cache/constant';
 import {
   changeRealName,
@@ -52,24 +57,87 @@ import {
   updateImageProfile
 } from '../../service/profile';
 import {colors} from '../../utils/colors';
-import {deleteAnonymousPost, deletePost, getFeedDetail} from '../../service/post';
+import {deleteAnonymousPost, deletePost} from '../../service/post';
 import {downVote, upVote} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
-import {getAccessToken} from '../../utils/token';
-import {getSpecificCache, saveToCache} from '../../utils/cache';
 import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
+import {saveToCache} from '../../utils/cache';
 import {setFeedByIndex} from '../../context/actions/feeds';
 import {setMyProfileAction} from '../../context/actions/setMyProfileAction';
 import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
-import {trimString} from '../../utils/string/TrimString';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {ButtonNewPost} from '../../components/Button';
 
-const {height, width} = Dimensions.get('screen');
+const {width} = Dimensions.get('screen');
+
+const Header = (props) => {
+  const {
+    headerHeightRef,
+    changeImage,
+    dataMain,
+    goToFollowings,
+    dataMainBio,
+    changeBio,
+    postRef,
+    profileTabIndex,
+    setTabIndexToSigned,
+    setTabIndexToAnonymous
+  } = props;
+
+  return (
+    <View
+      onLayout={(event) => {
+        const headerHeightLayout = event.nativeEvent.layout.height;
+        headerHeightRef.current = headerHeightLayout;
+      }}>
+      <View style={styles.content}>
+        <View style={{flexDirection: 'row'}}>
+          <ProfilePicture
+            onImageContainerClick={changeImage}
+            profilePicPath={dataMain.profile_pic_path}
+          />
+          <View style={{marginLeft: 20}}>
+            <FollowInfoRow
+              follower={dataMain.follower_symbol}
+              following={dataMain.following_symbol}
+              onFollowingContainerClicked={() =>
+                goToFollowings(dataMain.user_id, dataMain.username)
+              }
+            />
+          </View>
+        </View>
+
+        <BioAndDMSetting
+          avatarUrl={DEFAULT_PROFILE_PIC_PATH}
+          bio={dataMainBio}
+          changeBio={changeBio}
+          allowAnonDm={dataMain.allow_anon_dm}
+          onlyReceivedDmFromUserFollowing={dataMain.only_received_dm_from_user_following}
+          following={dataMain.following}
+        />
+
+        <LinkAndSocialMedia username={dataMain.username} prompt={dataMainBio} />
+      </View>
+      <View>
+        <View style={styles.tabs} ref={postRef}>
+          <CustomPressable
+            style={styles.tabItem(profileTabIndex === TAB_INDEX_SIGNED)}
+            onPress={setTabIndexToSigned}>
+            <Text style={styles.postText(profileTabIndex === TAB_INDEX_SIGNED)}>Signed Posts</Text>
+          </CustomPressable>
+          <CustomPressable
+            style={styles.tabItem(profileTabIndex === TAB_INDEX_ANONYMOUS)}
+            onPress={setTabIndexToAnonymous}>
+            <AnonymousTab isActive={profileTabIndex === TAB_INDEX_ANONYMOUS} />
+          </CustomPressable>
+        </View>
+      </View>
+    </View>
+  );
+};
 
 const ProfileScreen = ({route}) => {
   const navigation = useNavigation();
@@ -82,11 +150,10 @@ const ProfileScreen = ({route}) => {
   const refBlockComponent = React.useRef();
   const headerHeightRef = React.useRef(0);
 
-  const [, dispatchProfile] = React.useContext(Context).profile;
+  const [profile, dispatchProfile] = React.useContext(Context).profile;
   const [, dispatch] = React.useContext(Context).users;
   const [myProfileFeed, myProfileDispatch] = React.useContext(Context).myProfileFeed;
 
-  const [, setTokenJwt] = React.useState('');
   const [dataMain, setDataMain] = React.useState({});
   const [dataMainBio, setDataMainBio] = React.useState('');
   const [errorBio, setErrorBio] = React.useState('');
@@ -103,7 +170,6 @@ const ProfileScreen = ({route}) => {
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0);
   const [loadingContainer, setLoadingContainer] = React.useState(true);
-  const [yourselfId] = React.useState('');
   const [isLastPage, setIsLastPage] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [isPostOptionModalOpen, setIsOptionModalOpen] = React.useState(false);
@@ -111,10 +177,10 @@ const ProfileScreen = ({route}) => {
   const [isFetchingList, setIsFetchingList] = React.useState(false);
   const {interactionsComplete} = useAfterInteractions();
   const isNotFromHomeTab = route?.params?.isNotFromHomeTab;
-  const bottomBarHeight = isNotFromHomeTab ? 0 : useBottomTabBarHeight();
   const [, setIsHitApiFirstTime] = React.useState(false);
 
   const updateUserClient = useUpdateClientGetstreamHook();
+  const {refreshCount} = useResetContext();
 
   const LIMIT_PROFILE_FEED = 10;
 
@@ -128,7 +194,7 @@ const ProfileScreen = ({route}) => {
     setTabIndexToSigned,
     reloadFetchAnonymousPost
   } = useProfileScreenHook();
-
+  console.log(profileTabIndex, 'nikah');
   // eslint-disable-next-line consistent-return
   React.useEffect(() => {
     if (interactionsComplete) {
@@ -151,32 +217,34 @@ const ProfileScreen = ({route}) => {
   }, [interactionsComplete]);
 
   React.useEffect(() => {
+    if (refreshCount > 0) {
+      setDataMain({});
+      setDataMainBio('');
+    }
+  }, [refreshCount]);
+
+  React.useEffect(() => {
     if (interactionsComplete) {
       getMyFeeds(0, LIMIT_PROFILE_FEED);
-      getAccessToken().then((val) => {
-        setTokenJwt(val);
-      });
-      getSpecificCache(PROFILE_CACHE, (res) => {
-        if (!res) {
-          fetchMyProfile();
-        } else {
-          saveProfileState(res);
-        }
-      });
+      fetchMyProfile();
     }
   }, [interactionsComplete]);
 
   const fetchMyProfile = async () => {
-    const id = await getUserId();
-    if (id) {
-      setUserId(id);
-      const result = await getMyProfile(id);
-      if (result.code === 200) {
-        saveToCache(PROFILE_CACHE, result.data);
-        saveProfileState(result?.data);
-        return result?.data?.profile_pic_path;
+    try {
+      const id = await getUserId();
+      if (id) {
+        setUserId(id);
+        const result = await getMyProfile();
+        if (result.code === 200) {
+          saveToCache(PROFILE_CACHE, result.data);
+          saveProfileState(result?.data);
+          return result?.data?.profile_pic_path;
+        }
       }
       setLoadingContainer(false);
+    } catch (e) {
+      console.log('get my profile error', e);
     }
 
     return null;
@@ -276,8 +344,13 @@ const ProfileScreen = ({route}) => {
     listRef?.current?.scrollToTop();
   };
 
+  const openSettingApp = () => {
+    Linking.openSettings();
+    closeImageBs();
+  };
+
   const onOpenImageGalery = async () => {
-    const {success, message} = await requestExternalStoragePermission();
+    const {success} = await requestExternalStoragePermission();
     if (success) {
       ImagePicker.openPicker({
         width: 512,
@@ -289,12 +362,14 @@ const ProfileScreen = ({route}) => {
         handleUpdateImage(`data:image/jpeg;base64,${imageRes.data}`, 'gallery');
       });
     } else {
-      Toast.show(message, Toast.SHORT);
+      openAlertPermission(
+        'We’re not able to access your photos, please adjust your permission settings for BetterSocial.'
+      );
     }
   };
 
   const onOpenCamera = async () => {
-    const {success, message} = await requestCameraPermission();
+    const {success} = await requestCameraPermission();
     if (success) {
       ImagePicker.openCamera({
         width: 512,
@@ -306,8 +381,17 @@ const ProfileScreen = ({route}) => {
         handleUpdateImage(`data:image/jpeg;base64,${imageRes.data}`, 'camera');
       });
     } else {
-      Toast.show(message, Toast.SHORT);
+      openAlertPermission(
+        'We’re not able to access your camera, please adjust your permission settings for BetterSocial.'
+      );
     }
+  };
+
+  const openAlertPermission = (message) => {
+    Alert.alert('Permission Denied', message, [
+      {text: 'Open Settings', onPress: openSettingApp},
+      {text: 'Close'}
+    ]);
   };
 
   const onViewProfilePicture = () => {
@@ -370,6 +454,7 @@ const ProfileScreen = ({route}) => {
         });
       });
   };
+
   const changeBio = () => {
     if (dataMain.bio !== null || dataMain.bio !== undefined) {
       setTempBio(dataMain.bio);
@@ -403,7 +488,7 @@ const ProfileScreen = ({route}) => {
         setIsLoadingUpdateBio(false);
         setDataMainBio(dataMain.bio);
         showMessage({
-          message: 'Update bio profile error',
+          message: 'Failed to update profile',
           type: 'danger'
         });
       });
@@ -417,21 +502,6 @@ const ProfileScreen = ({route}) => {
     }
     setTempBio(text);
   };
-
-  const renderBio = (string) => (
-    <GlobalButton buttonStyle={styles.bioText} onPress={() => changeBio()}>
-      <View style={styles.containerBio}>
-        {string === null || string === undefined ? (
-          <Text style={{color: colors.blue}}>Add Bio</Text>
-        ) : (
-          <Text style={styles.seeMore}>
-            {trimString(string, 121)}{' '}
-            {string.length > 121 ? <Text style={{color: colors.blue}}>see more</Text> : null}
-          </Text>
-        )}
-      </View>
-    </GlobalButton>
-  );
 
   const onPressDomain = (item) => {
     const param = linkContextScreenParamBuilder(
@@ -448,7 +518,7 @@ const ProfileScreen = ({route}) => {
       index,
       isalreadypolling: item.isalreadypolling,
       feedId: item.id,
-      refreshParent: getMyFeeds
+      refreshParent: profileTabIndex === 0 ? getMyFeeds : reloadFetchAnonymousPost
     });
   };
 
@@ -456,7 +526,7 @@ const ProfileScreen = ({route}) => {
     navigation.navigate('ProfilePostDetailPage', {
       feedId: id,
       isalreadypolling: item.isalreadypolling,
-      refreshParent: getMyFeeds
+      refreshParent: profileTabIndex === 0 ? getMyFeeds : reloadFetchAnonymousPost
     });
   };
 
@@ -470,32 +540,12 @@ const ProfileScreen = ({route}) => {
     );
   };
 
-  const setUpVote = async (post, index) => {
+  const setUpVote = async (post) => {
     await upVote(post);
-    updateFeed(post, index);
-  };
-  const setDownVote = async (post, index) => {
-    await downVote(post);
-    updateFeed(post, index);
   };
 
-  const updateFeed = async (post, index) => {
-    try {
-      const data = await getFeedDetail(post.activity_id);
-      if (data) {
-        setFeedByIndex(
-          {
-            singleFeed: data.data,
-            index
-          },
-          dispatch
-        );
-      }
-    } catch (e) {
-      if (__DEV__) {
-        console.log(e);
-      }
-    }
+  const setDownVote = async (post) => {
+    await downVote(post);
   };
 
   const handleOnEndReached = () => {
@@ -511,16 +561,10 @@ const ProfileScreen = ({route}) => {
     reloadFetchAnonymousPost();
   }
 
-  const onHeaderOptionClicked = (item) => {
-    setSelectedPostForOption(item);
-    setIsOptionModalOpen(true);
-  };
-
   const onHeaderOptionClosed = () => {
     setSelectedPostForOption(null);
     setIsOptionModalOpen(false);
   };
-
   const removePostByIdFromContext = () => {
     const deletedIndex = feeds?.findIndex((find) => selectedPostForOption?.id === find?.id);
     const newData = [...feeds];
@@ -543,42 +587,6 @@ const ProfileScreen = ({route}) => {
     return reloadFetchAnonymousPost();
   };
 
-  const renderHeader = () => (
-    <View
-      onLayout={(event) => {
-        const headerHeightLayout = event.nativeEvent.layout.height;
-        headerHeightRef.current = headerHeightLayout;
-      }}>
-      <View style={styles.content}>
-        <ProfilePicture
-          onImageContainerClick={changeImage}
-          profilePicPath={dataMain.profile_pic_path}
-        />
-        <FollowInfoRow
-          follower={dataMain.follower_symbol}
-          following={dataMain.following_symbol}
-          onFollowingContainerClicked={() => goToFollowings(dataMain.user_id, dataMain.username)}
-        />
-
-        {renderBio(dataMainBio)}
-      </View>
-      <View>
-        <View style={styles.tabs} ref={postRef}>
-          <CustomPressable
-            style={styles.tabItem(profileTabIndex === TAB_INDEX_SIGNED)}
-            onPress={setTabIndexToSigned}>
-            <Text style={styles.postText(profileTabIndex === TAB_INDEX_SIGNED)}>Signed Posts</Text>
-          </CustomPressable>
-          <CustomPressable
-            style={styles.tabItem(profileTabIndex === TAB_INDEX_ANONYMOUS)}
-            onPress={setTabIndexToAnonymous}>
-            <AnonymousTab isActive={profileTabIndex === TAB_INDEX_ANONYMOUS} />
-          </CustomPressable>
-        </View>
-      </View>
-    </View>
-  );
-
   return (
     <>
       {!loadingContainer ? (
@@ -595,6 +603,7 @@ const ProfileScreen = ({route}) => {
             data={mainFeeds}
             onRefresh={handleRefresh}
             refreshing={loading || isLoadingFetchingAnonymousPosts}
+            style={{backgroundColor: '#f2f2f2'}}
             onScroll={handleScroll}
             ListFooterComponent={isFetchingList ? <ActivityIndicator /> : null}
             onEndReach={handleOnEndReached}
@@ -603,36 +612,34 @@ const ProfileScreen = ({route}) => {
             updateCellsBatchingPeriod={10}
             removeClippedSubviews
             windowSize={10}
-            snapToOffsets={(() => {
-              const posts = feeds.map(
-                (item, index) => headerHeightRef.current + index * dimen.size.PROFILE_ITEM_HEIGHT
-              );
-              return [0, ...posts];
-            })()}
-            ListHeaderComponent={renderHeader}>
+            ListHeaderComponent={
+              <Header
+                headerHeightRef={headerHeightRef}
+                changeImage={changeImage}
+                dataMain={dataMain}
+                goToFollowings={goToFollowings}
+                dataMainBio={dataMainBio}
+                changeBio={changeBio}
+                postRef={postRef}
+                profileTabIndex={profileTabIndex}
+                setTabIndexToSigned={setTabIndexToSigned}
+                setTabIndexToAnonymous={setTabIndexToAnonymous}
+              />
+            }>
             {({item, index}) => {
-              const dummyItemHeight =
-                height -
-                dimen.size.PROFILE_ITEM_HEIGHT -
-                44 -
-                16 -
-                StatusBar.currentHeight -
-                bottomBarHeight;
-              if (item.dummy) return <View style={styles.dummyItem(dummyItemHeight)}></View>;
               return (
                 <RenderItem
-                  bottomBar={!isNotFromHomeTab}
+                  key={item.id}
                   item={item}
-                  index={index}
                   onNewPollFetched={onNewPollFetched}
+                  index={index}
                   onPressDomain={onPressDomain}
-                  onPress={() => onPress(item, index)}
-                  onPressComment={() => onPressComment(item, item.id)}
-                  onPressUpvote={(post) => setUpVote(post, index)}
-                  selfUserId={yourselfId}
-                  onHeaderOptionClicked={onHeaderOptionClicked}
-                  showAnonymousOption={true}
-                  onPressDownVote={(post) => setDownVote(post, index)}
+                  onPress={() => onPress(item)}
+                  onPressComment={() => onPressComment(index, item)}
+                  onPressUpvote={(post) => setUpVote(post)}
+                  selfUserId={profile.myProfile.user_id}
+                  onPressDownVote={(post) => setDownVote(post)}
+                  loading={loading}
                 />
               );
             }}
@@ -693,7 +700,8 @@ const styles = StyleSheet.create({
   },
   content: {
     flexDirection: 'column',
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
+    backgroundColor: colors.white
   },
   dummyItem: (heightItem) => ({
     height: heightItem,
@@ -738,7 +746,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    backgroundColor: colors.white
   },
   tabItem: (isActive) => ({
     flex: 1,
@@ -776,6 +785,14 @@ const styles = StyleSheet.create({
   },
   bioText: {
     paddingLeft: 0
+  },
+  tooltipText: {
+    color: '#828282',
+    fontFamily: 'Inter',
+    fontSize: 12,
+    fontStyle: 'normal',
+    fontWeight: '400'
   }
 });
+
 export default React.memo(withInteractionsManaged(ProfileScreen));

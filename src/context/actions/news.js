@@ -1,4 +1,10 @@
-import {ADD_NEWS_I_FOLLOW, NEWS_UPDATE_COMMENT, SET_NEWS, SET_NEWS_I_FOLLOW} from '../Types';
+import {
+  ADD_NEWS_I_FOLLOW,
+  NEWS_UPDATE_COMMENT,
+  SET_NEWS,
+  SET_NEWS_I_FOLLOW,
+  SET_NEWS_RESET_ALL
+} from '../Types';
 
 export const setNews = (news, dispatch) => {
   dispatch({
@@ -26,5 +32,11 @@ export const updateComment = (comment, activityId, dispatch) => {
       comment,
       activityId
     }
+  });
+};
+
+export const resetAllNews = (dispatch) => {
+  dispatch({
+    type: SET_NEWS_RESET_ALL
   });
 };

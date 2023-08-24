@@ -16,6 +16,7 @@ import {
   POST_TYPE_STANDARD,
   SOURCE_MY_PROFILE
 } from '../../../utils/constants';
+import {Context} from '../../../context';
 import {Footer, PreviewComment} from '../../../components';
 import {getCountCommentWithChild} from '../../../utils/getstream';
 import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
@@ -74,6 +75,7 @@ const Item = ({
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
   const navigation = useNavigation();
+  const [profile] = React.useContext(Context).profile;
 
   React.useEffect(() => {
     const initial = () => {
@@ -106,31 +108,28 @@ const Item = ({
 
   React.useEffect(() => {
     const validationStatusVote = () => {
-      if (item.reaction_counts !== undefined || null) {
-        if (item.latest_reactions.upvotes !== undefined) {
-          const upvote = item.latest_reactions.upvotes.filter(
-            (vote) => vote.user_id === selfUserId
-          );
-          if (upvote !== undefined) {
+      if (item.reaction_counts) {
+        if (item.latest_reactions.upvotes) {
+          const upvote = item.latest_reactions.upvotes.find((vote) => vote.user_id === selfUserId);
+          if (upvote) {
             setVoteStatus('upvote');
             setStatusUpvote(true);
           }
-        }
-
-        if (item.latest_reactions.downvotes !== undefined) {
-          const downvotes = item.latest_reactions.downvotes.filter(
+        } else if (item.latest_reactions.downvotes) {
+          const downvotes = item.latest_reactions.downvotes.find(
             (vote) => vote.user_id === selfUserId
           );
-          if (downvotes !== undefined) {
+          if (downvotes) {
             setVoteStatus('downvote');
             setStatusDowvote(true);
           }
+        } else {
+          setVoteStatus('none');
         }
       }
     };
     validationStatusVote();
   }, [item, selfUserId]);
-
   React.useEffect(() => {
     const initialVote = () => {
       const c = getCountVote(item);
@@ -142,7 +141,7 @@ const Item = ({
     <View key={item.id} style={styles.cardContainer}>
       <Header
         onHeaderOptionClicked={onHeaderOptionClicked}
-        headerStyle={{paddingLeft: 9, paddingRight: 9}}
+        headerStyle={styles.headerContainer}
         props={item}
         height={getHeightHeader()}
         showAnonymousOption={true}
@@ -190,7 +189,7 @@ const Item = ({
           }
           onPressComment={() => onPressComment(item)}
           onPressBlock={() => onPressBlock(item)}
-          showScoreButton={true}
+          showScoreButton={profile?.myProfile?.is_backdoor_user}
           onPressScore={() => showScoreAlertDialog(item)}
           onPressDownVote={() => {
             setStatusDowvote((prev) => {
@@ -295,5 +294,8 @@ const styles = StyleSheet.create({
   }),
   linearGradient: {
     height: 8
+  },
+  headerContainer: {
+    marginHorizontal: 9
   }
 });

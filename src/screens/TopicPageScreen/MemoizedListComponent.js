@@ -9,6 +9,7 @@ import Header from '../FeedScreen/Header';
 import ShareUtils from '../../utils/share';
 import StringConstant from '../../utils/string/StringConstant';
 import dimen from '../../utils/dimen';
+import useFeed from '../FeedScreen/hooks/useFeed';
 import {
   ANALYTICS_SHARE_POST_TOPIC_ID,
   ANALYTICS_SHARE_POST_TOPIC_SCREEN,
@@ -19,7 +20,8 @@ import {
 import {Footer, Gap, PreviewComment} from '../../components';
 import {colors} from '../../utils/colors';
 import {getCommentLength, getCountCommentWithChild} from '../../utils/getstream';
-import useFeed from '../FeedScreen/hooks/useFeed';
+import {showScoreAlertDialog} from '../../utils/Utils';
+import {normalizeFontSizeByWidth} from '../../utils/fonts';
 
 const FULL_WIDTH = Dimensions.get('screen').width;
 const tabBarHeight = StatusBar.currentHeight;
@@ -52,7 +54,8 @@ const RenderListFeed = (props) => {
     initialSetup,
     onPressUpvoteHook,
     onPressDownVoteHook,
-    statusUpvote
+    statusUpvote,
+    showScoreButton
   } = useFeed();
 
   const onPressDownVoteHandle = async () => {
@@ -155,6 +158,8 @@ const RenderListFeed = (props) => {
             statusVote={voteStatus}
             loadingVote={loadingVote}
             isSelf={item.anonimity ? false : userId === item?.actor?.id}
+            onPressScore={showScoreAlertDialog}
+            showScoreButton={showScoreButton}
           />
         </View>
         {getCommentLength(item.latest_reactions.comment) > 0 && (
@@ -178,18 +183,16 @@ const RenderListFeed = (props) => {
 
 const styles = StyleSheet.create({
   cardContainer: () => ({
-    // height: FULL_HEIGHT - tabBarHeight,
     height: dimen.size.TOPIC_CURRENT_ITEM_HEIGHT,
     width: FULL_WIDTH,
-    backgroundColor: colors.white,
-    borderBottomWidth: 7,
-    borderBottomColor: colors.lightgrey
+    marginBottom: normalizeFontSizeByWidth(4),
+    backgroundColor: colors.white
   }),
   cardMain: {
     height: '100%',
     width: '100%'
   },
-  footerWrapper: (h) => ({height: h, bottom: 0}),
+  footerWrapper: (h) => ({height: h}),
   contentReaction: (heightReaction) => ({
     maxHeight: heightReaction,
     marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0

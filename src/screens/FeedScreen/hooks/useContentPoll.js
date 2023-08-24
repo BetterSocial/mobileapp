@@ -2,13 +2,26 @@
 import React from 'react';
 
 import {inputSingleChoicePoll} from '../../../service/post';
-import {isPollExpired} from '../../../utils/string/StringUtils';
+import {isPollExpired, NO_POLL_UUID} from '../../../utils/string/StringUtils';
 
-const useContentPoll = ({polls}) => {
+const useContentPoll = ({polls, voteCount, isAlreadyPolling: isAlreadyPollingProps}) => {
   const [isAlreadyPolling, setIsAlreadyPolling] = React.useState(false);
   const [singleChoiceSelectedIndex, setSingleChoiceSelectedIndex] = React.useState(-1);
   const [multipleChoiceSelected, setMultipleChoiceSelected] = React.useState([]);
+  const [count, setCount] = React.useState(0);
   const [newPoll, setNewPoll] = React.useState(null);
+
+  React.useEffect(() => {
+    if (isAlreadyPollingProps) {
+      setIsAlreadyPolling(isAlreadyPollingProps);
+    }
+  }, [isAlreadyPollingProps]);
+
+  React.useEffect(() => {
+    if (voteCount > 0) {
+      setCount(voteCount);
+    }
+  }, [voteCount]);
 
   const renderSeeResultButton = (multiplechoice) => {
     if (multiplechoice && multipleChoiceSelected.length > 0) return 'Submit';
@@ -34,32 +47,45 @@ const useContentPoll = ({polls}) => {
         const selectedPoll = polls[changedPollIndex];
         newPolls[changedPollIndex].counter = Number(selectedPoll.counter) + 1;
         selectedPolls.push(selectedPoll);
+        inputSingleChoicePoll(selectedPoll.polling_id, selectedPoll.polling_option_id);
       }
       newItem.pollOptions = newPolls;
       newItem.mypolling = selectedPolls;
       if (multipleChoiceSelected.length > 0) newItem.voteCount++;
+
+      setCount(voteCount + 1);
+      setNewPoll(newItem);
     }
-    if (onnewpollfetched && typeof onnewpollfetched === 'function')
+    if (onnewpollfetched && typeof onnewpollfetched === 'function') {
       onnewpollfetched(newItem, index);
-    setNewPoll(newItem);
+    }
+    setIsAlreadyPolling(true);
   };
 
-  const handleNoMultipleChoice = (item, onnewpollfetched, index) => {
+  const handleNoMultipleChoice = async (item, onnewpollfetched, index) => {
     const newPolls = [...polls];
     const newItem = {...item};
     newItem.isalreadypolling = true;
     newItem.refreshtoken = new Date().valueOf();
 
     if (singleChoiceSelectedIndex === -1) {
-      // inputSingleChoicePoll(polls[0].polling_id, NO_POLL_UUID);
+      inputSingleChoicePoll(polls[0].polling_id, NO_POLL_UUID);
     } else {
       const selectedPoll = polls[singleChoiceSelectedIndex];
       newPolls[singleChoiceSelectedIndex].counter = Number(selectedPoll.counter) + 1;
       newItem.pollOptions = newPolls;
       newItem.mypolling = selectedPoll;
       newItem.voteCount++;
-      inputSingleChoicePoll(selectedPoll.polling_id, selectedPoll.polling_option_id);
+      const success = await inputSingleChoicePoll(
+        selectedPoll.polling_id,
+        selectedPoll.polling_option_id
+      );
+
+      if (success) {
+        setCount(voteCount + 1);
+      }
     }
+
     if (onnewpollfetched && typeof onnewpollfetched === 'function') {
       onnewpollfetched(newItem, index);
     }
@@ -110,7 +136,7 @@ const useContentPoll = ({polls}) => {
     renderSeeResultButton,
     showSetResultsButton,
     setIsAlreadyPolling,
-    isAlreadyPolling,
+    isAlreadyPolling: isAlreadyPolling || isAlreadyPollingProps,
     singleChoiceSelectedIndex,
     setSingleChoiceSelectedIndex,
     multipleChoiceSelected,
@@ -118,6 +144,7 @@ const useContentPoll = ({polls}) => {
     onSeeResultsClicked,
     modifiedPoll,
     newPoll,
+    count,
     handleStyleBar
   };
 };

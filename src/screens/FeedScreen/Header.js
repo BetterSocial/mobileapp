@@ -186,7 +186,6 @@ const _renderProfileNormal = ({
     actor,
     source
   });
-  console.log(headerStyle, 'susak');
   return (
     <SafeAreaView>
       <View
@@ -194,8 +193,8 @@ const _renderProfileNormal = ({
         style={[
           styles.rowSpaceBeetwen,
           styles.heightHeader(height),
-          {paddingLeft: isPostDetail ? 10 : 0},
-          headerStyle
+          headerStyle,
+          styles.postDetail(isPostDetail)
         ]}>
         <View style={styles.rowCenter}>
           {isBackButton ? (
@@ -281,7 +280,6 @@ const Header = ({
     anon_user_info_emoji_name,
     version = 1
   } = props;
-
   if (anonimity) {
     return _renderAnonimity({
       time,
@@ -441,7 +439,10 @@ const styles = StyleSheet.create({
     padding: 10
     // paddingLeft: 24
   },
-  avatarImage: {height: 48, width: 48, borderRadius: 24}
+  avatarImage: {height: 48, width: 48, borderRadius: 24},
+  postDetail: (isPostDetail) => ({
+    paddingLeft: isPostDetail ? 10 : 0
+  })
 });
 
 Header.propsTypes = {

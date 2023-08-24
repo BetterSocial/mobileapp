@@ -3,6 +3,7 @@ import SimpleToast from 'react-native-simple-toast';
 import {Alert, Dimensions, StyleSheet, Text, TouchableWithoutFeedback, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
+import moment from 'moment';
 import ButtonHightlight from '../ButtonHighlight';
 import Comment from './Comment';
 import ConnectorWrapper from './ConnectorWrapper';
@@ -25,9 +26,9 @@ const ContainerComment = ({
   refreshComment,
   navigateToReplyView,
   findCommentAndUpdate,
-  updateParentPost = () => {},
   contextSource = CONTEXT_SOURCE.FEEDS,
-  itemParent
+  itemParent,
+  updateVote
 }) => {
   const navigation = useNavigation();
   const [, setSelectedCommentForDelete] = React.useState(null);
@@ -72,6 +73,12 @@ const ContainerComment = ({
     );
   };
 
+  const handleUpdateVote = () => {
+    if (updateVote && typeof updateVote === 'function') {
+      updateVote();
+    }
+  };
+
   return (
     <View style={[styles.container]}>
       <View
@@ -83,7 +90,6 @@ const ContainerComment = ({
           }
         ]}>
         <View style={styles.lineBeforeProfile} />
-
         {comments.map((item, index) => (
           <>
             {item.user ? (
@@ -100,6 +106,7 @@ const ContainerComment = ({
                 findCommentAndUpdate={findCommentAndUpdate}
                 hideLeftConnector={hideLeftConnector}
                 navigation={navigation}
+                updateVote={handleUpdateVote}
               />
             ) : null}
           </>
@@ -118,7 +125,8 @@ export const ReplyComment = ({
   hideLeftConnector,
   navigateToReplyView,
   findCommentAndUpdate,
-  onCommentLongPressed = () => {}
+  onCommentLongPressed = () => {},
+  updateVote
 }) => {
   const {isLast, isLastInParent} = useReplyComment();
   return (
@@ -134,15 +142,14 @@ export const ReplyComment = ({
                     key={`c${index}`}
                     comment={item}
                     onLongPress={() => onCommentLongPressed(item, 1)}
-                    // username={item.user.data.username}
                     user={item.user}
                     level={1}
                     photo={item.user?.data?.profile_pic_url}
-                    time={item.created_at}
+                    time={item.created_at || moment().format()}
                     onPress={() => navigateToReplyView({item, level: 2, indexFeed})}
                     isLast={isLast(item, index, countComment)}
-                    // refreshComment={refreshComment}
                     findCommentAndUpdate={findCommentAndUpdate}
+                    updateVote={updateVote}
                   />
                   {item.children_counts.comment > 0 && (
                     <>
@@ -169,9 +176,7 @@ export const ReplyComment = ({
   );
 };
 export const ContainerReply = ({children, isGrandchild}) => (
-  <View style={[styles.containerReply, {borderColor: isGrandchild ? '#fff' : colors.gray1}]}>
-    {children}
-  </View>
+  <View style={[{borderColor: isGrandchild ? '#fff' : colors.gray1}]}>{children}</View>
 );
 
 export const isEqual = (prevProps, nextProps) => prevProps.comments === nextProps.comments;
@@ -185,9 +190,6 @@ export const styles = StyleSheet.create({
   },
   lineBeforeProfile: {
     height: 8.5
-  },
-  containerReply: {
-    // borderLeftWidth: 1
   },
   seeRepliesContainer: (isLast) => ({
     display: 'flex',

@@ -8,35 +8,32 @@ import {useRoute} from '@react-navigation/native';
 import BlockComponent from '../BlockComponent';
 import ContainerComment from '../Comments/ContainerComment';
 import Content from './elements/Content';
-import ContentLink from './elements/ContentLink';
 import Header from '../../screens/FeedScreen/Header';
 import LoadingWithoutModal from '../LoadingWithoutModal';
 import ShareUtils from '../../utils/share';
 import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from '../Comments/WriteComment';
+import useFeed from '../../screens/FeedScreen/hooks/useFeed';
 import usePostDetail from './hooks/usePostDetail';
+import useWriteComment from '../Comments/hooks/useWriteComment';
 import usePostContextHook, {CONTEXT_SOURCE} from '../../hooks/usePostContextHooks';
 import {
   ANALYTICS_SHARE_POST_FEED_ID,
   ANALYTICS_SHARE_POST_PDP_SCREEN,
-  POST_TYPE_LINK,
   SOURCE_PDP
 } from '../../utils/constants';
 import {Context} from '../../context';
 import {Footer} from '..';
-import {createCommentParentV2, getCommentList} from '../../service/comment';
+import {createCommentParentV3, getCommentList} from '../../service/comment';
 import {downVote, upVote} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
 import {getCountCommentWithChildInDetailPage} from '../../utils/getstream';
-import {getFeedDetail, viewTimePost} from '../../service/post';
-import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import {getFeedDetail} from '../../service/post';
 import {saveComment} from '../../context/actions/comment';
-import {setFeedByIndex, setTimer} from '../../context/actions/feeds';
+import {setFeedByIndex} from '../../context/actions/feeds';
 import {showScoreAlertDialog} from '../../utils/Utils';
 import {useFeedDataContext} from '../../hooks/useFeedDataContext';
 import {withInteractionsManaged} from '../WithInteractionManaged';
-import useFeed from '../../screens/FeedScreen/hooks/useFeed';
-import useWriteComment from '../Comments/hooks/useWriteComment';
 
 const {width, height} = Dimensions.get('window');
 
@@ -53,14 +50,12 @@ const PostPageDetailIdComponent = (props) => {
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
   const [loadingPost, setLoadingPost] = React.useState(false);
-  const [time, setTime] = React.useState(new Date().getTime());
   const [item, setItem] = React.useState(null);
   const navigation = useNavigation();
   const route = useRoute();
   const scrollViewRef = React.useRef(null);
   const refBlockComponent = React.useRef();
   const [feedsContext, dispatch] = useFeedDataContext(contextSource);
-  const {timer} = feedsContext;
   const [commenListParam] = React.useState({
     limit: 100
   });
@@ -218,7 +213,7 @@ const PostPageDetailIdComponent = (props) => {
         if (isAnonimity) {
           sendData = {...sendData, anon_user_info: anonUser};
         }
-        const data = await createCommentParentV2(sendData);
+        const data = await createCommentParentV3(sendData);
         updateCachingComment(data?.data);
         if (data.code === 200) {
           setTextComment('');
@@ -235,27 +230,6 @@ const PostPageDetailIdComponent = (props) => {
       setLoadingPost(false);
       Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
     }
-  };
-
-  const onPressDomain = () => {
-    const param = linkContextScreenParamBuilder(
-      item,
-      item.og.domain,
-      item.og.domainImage,
-      item.og.domain_page_id
-    );
-
-    const currentTime = new Date();
-    const feedDiffTime = currentTime.getTime() - timer.getTime();
-    const pdpDiffTime = currentTime.getTime() - time;
-
-    if (feedId) {
-      viewTimePost(feedId, pdpDiffTime + feedDiffTime, SOURCE_PDP);
-    }
-
-    setTime(new Date().getTime());
-    setTimer(new Date(), dispatch);
-    navigation.navigate('DomainScreen', param);
   };
 
   const onCommentButtonClicked = () => {
@@ -458,28 +432,6 @@ const PostPageDetailIdComponent = (props) => {
     );
   };
 
-  const navigateToLinkContextPage = (itemParams) => {
-    const param = linkContextScreenParamBuilder(
-      itemParams,
-      itemParams.og.domain,
-      itemParams.og.domainImage,
-      itemParams.og.domain_page_id
-    );
-
-    const currentTime = new Date();
-    const feedDiffTime = currentTime.getTime() - timer.getTime();
-    const pdpDiffTime = currentTime.getTime() - time;
-
-    if (feedId) {
-      viewTimePost(feedId, pdpDiffTime + feedDiffTime, SOURCE_PDP);
-    }
-
-    setTime(new Date().getTime());
-    setTimer(new Date(), dispatch);
-
-    navigation.push('LinkContextScreen', param);
-  };
-
   const onPressDownVoteHandle = async () => {
     setStatusDowvote((prev) => !prev);
     if (voteStatus === 'upvote') {
@@ -579,6 +531,10 @@ const PostPageDetailIdComponent = (props) => {
     return comments.length <= 0 ? calculatePaddingBtm() : 0;
   };
 
+  const handleUpdateVote = () => {
+    getComment();
+  };
+
   return (
     <View style={styles.container}>
       {loading && !route.params.isCaching ? <LoadingWithoutModal /> : null}
@@ -596,35 +552,21 @@ const PostPageDetailIdComponent = (props) => {
           <ScrollView
             ref={scrollViewRef}
             showsVerticalScrollIndicator={false}
-            nestedScrollEnabled={true}
-            contentContainerStyle={styles.scrollContent}>
+            nestedScrollEnabled={true}>
             <ScrollView
               nestedScrollEnabled
               contentContainerStyle={{
                 paddingBottom: handlePaddingBottom()
               }}>
-              {item.post_type === POST_TYPE_LINK ? (
-                <ContentLink
-                  og={item.og}
-                  onHeaderPress={onPressDomain}
-                  onCardContentPress={() => navigateToLinkContextPage(item)}
-                  score={item.credderScore}
-                  message={item?.message}
-                  topics={item?.topics}
-                  item={item}
-                  isPostDetail={true}
-                />
-              ) : (
-                <Content
-                  message={item.message}
-                  images_url={item.images_url}
-                  style={styles.additionalContentStyle(item?.images_url?.length, height)}
-                  topics={item?.topics}
-                  item={item}
-                  onnewpollfetched={onNewPollFetched}
-                  isPostDetail={true}
-                />
-              )}
+              <Content
+                message={item.message}
+                images_url={item.images_url}
+                style={styles.additionalContentStyle(item?.images_url?.length, height)}
+                topics={item?.topics}
+                item={item}
+                onnewpollfetched={onNewPollFetched}
+                isPostDetail={true}
+              />
               <View style={styles.footerContainer}>
                 <Footer
                   item={item}
@@ -642,7 +584,7 @@ const PostPageDetailIdComponent = (props) => {
                     )
                   }
                   onPressComment={onCommentButtonClicked}
-                  showScoreButton={true}
+                  showScoreButton={profile?.myProfile?.is_backdoor_user}
                   onPressScore={handleOnPressScore}
                   onPressBlock={() => refBlockComponent.current.openBlockComponent(item)}
                   isSelf={profile.myProfile.user_id === item.actor?.id}
@@ -668,8 +610,8 @@ const PostPageDetailIdComponent = (props) => {
                   )
                 }
                 findCommentAndUpdate={findCommentAndUpdate}
-                updateParentPost={updateParentPost}
                 contextSource={contextSource}
+                updateVote={handleUpdateVote}
               />
             )}
           </ScrollView>

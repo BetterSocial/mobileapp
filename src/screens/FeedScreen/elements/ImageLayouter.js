@@ -1,13 +1,32 @@
 import * as React from 'react';
 
-import {StyleSheet, View} from 'react-native';
+import {ImageBackground, StyleSheet, View} from 'react-native';
+import FastImage from 'react-native-fast-image';
 import ImageItem from './ImageItem';
 
-const ImageLayouter = ({images = [], onimageclick}) => {
+const ImageLayouter = ({images = [], onimageclick, mode, isFeed}) => {
   const imageOnClick = React.useCallback(onimageclick, []);
+
+  if (images.length === 1 && isFeed) {
+    return (
+      <ImageBackground
+        resizeMode="stretch"
+        blurRadius={80}
+        source={{uri: images[0]}}
+        style={styles.flex}>
+        <ImageItem
+          onImageClick={onimageclick}
+          images={images}
+          image={images[0]}
+          mode={FastImage.resizeMode.contain}
+        />
+      </ImageBackground>
+    );
+  }
+
   return (
     <>
-      <View style={styles.imageContainer}>
+      <View style={[styles.imageContainer]}>
         {images.length > 0 &&
           images.map((image, index) => (
             <React.Fragment key={index}>
@@ -17,6 +36,7 @@ const ImageLayouter = ({images = [], onimageclick}) => {
                 index={index}
                 onImageClick={imageOnClick}
                 images={images}
+                mode={mode}
               />
             </React.Fragment>
           ))}
@@ -55,6 +75,9 @@ const styles = StyleSheet.create({
     fontSize: 32,
     color: 'white',
     fontWeight: 'bold'
+  },
+  flex: {
+    flex: 1
   }
 });
 

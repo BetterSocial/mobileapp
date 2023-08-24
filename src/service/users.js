@@ -1,7 +1,7 @@
 import crashlytics from '@react-native-firebase/crashlytics';
 
+import StorageUtils from '../utils/storage';
 import api from './config';
-import {getRefreshToken} from '../utils/token';
 
 export const verifyUser = async (userId) => {
   try {
@@ -67,7 +67,7 @@ export const verifyUsername = async (username) => {
 };
 export const registerUser = async (data) => {
   try {
-    const resApi = await api.post('/users/register-v2', {
+    const resApi = await api.post('/users/register-v2-without-upload-photo', {
       data
     });
     return resApi.data;
@@ -87,7 +87,7 @@ const verifyAccessToken = async () =>
     });
 
 export const refreshToken = async () => {
-  const token = await getRefreshToken();
+  const token = StorageUtils.refreshToken.get();
   const options = {
     headers: {
       Authorization: `Bearer ${token}`
@@ -166,15 +166,47 @@ export const removeFcmToken = async () => {
   }
 };
 
-export const verifyHumanIdExchangeToken = async (exchangeToken) => {
+export const verifyHumanIdExchangeToken = async (exchangeToken, dummy = false) => {
+  const data = {
+    token: exchangeToken
+  };
+
+  const exchangeTokenUrl = dummy
+    ? '/users/check-exchange-token-dummy'
+    : '/users/check-exchange-token';
+
   try {
-    const result = await api.post('/users/check-exchange-token', {
-      token: exchangeToken
-    });
+    const result = await api.post(exchangeTokenUrl, data);
 
     return Promise.resolve(result?.data);
   } catch (error) {
     crashlytics().recordError(new Error(error));
     return Promise.reject(error?.response?.data);
+  }
+};
+
+export const checkPasswordForDemoLogin = async (password) => {
+  try {
+    const payload = {password};
+    const result = await api.post('/users/password-verify-user', payload);
+    if (result?.data?.code === 200) {
+      return {
+        success: true,
+        message: result?.data?.message
+      };
+    }
+
+    return {
+      code: result?.data?.code,
+      success: false,
+      message: result?.data?.message
+    };
+  } catch (e) {
+    crashlytics().recordError(new Error(e));
+    return {
+      success: false,
+      code: e?.response?.data?.code,
+      message: e?.response?.data?.message
+    };
   }
 };

@@ -43,10 +43,13 @@ const useGroupSetting = ({navigation, route}) => {
 
     if (changeName || changeImage) {
       if (withLoading) setIsLoading(true);
-      const dataEdit = {
+      let dataEdit = {
         name: groupName
         // ...(changeImage && {image: base64Profile}),
       };
+      if (changeName) {
+        dataEdit = {...dataEdit, isEditName: true};
+      }
       if (changeImage) {
         dataEdit.image = changeImageUrl;
       } else if (channel?.data?.image) {

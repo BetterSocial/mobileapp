@@ -1,4 +1,5 @@
 import {act, renderHook} from '@testing-library/react-hooks';
+
 import useFeed from '../../src/screens/FeedScreen/hooks/useFeed';
 
 jest.mock('@react-navigation/bottom-tabs', () => ({
@@ -17,6 +18,20 @@ jest.mock('@react-navigation/core', () => ({
     }
   })
 }));
+
+jest.mock('react', () => {
+  const originReact = jest.requireActual('react');
+  return {
+    ...originReact,
+    useContext: () => ({
+      profile: [
+        {
+          id: 'c6c91b04-795c-404e-b012-ea28813a2006'
+        }
+      ]
+    })
+  };
+});
 
 describe('Logic feed should run correctly', () => {
   const itemUpvote = {

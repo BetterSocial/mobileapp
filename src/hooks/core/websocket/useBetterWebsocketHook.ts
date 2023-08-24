@@ -2,8 +2,8 @@ import * as React from 'react';
 import Config from 'react-native-config';
 import useWebSocket from 'react-native-use-websocket';
 
+import TokenStorage, {ITokenEnum} from '../../../utils/storage/custom/tokenStorage';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
-import {getAnonymousToken} from '../../../utils/token';
 import {getAnonymousUserId} from '../../../utils/users';
 
 const useBetterWebsocketHook = () => {
@@ -37,7 +37,7 @@ const useBetterWebsocketHook = () => {
   };
 
   const initAuthorization = async () => {
-    const token: any = await getAnonymousToken();
+    const token: string = TokenStorage.get(ITokenEnum.anonymousToken);
     const userId: string = await getAnonymousUserId();
 
     const urlEncodedData = generateUserDataUrlEncoded(userId, token);

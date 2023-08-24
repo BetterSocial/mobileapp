@@ -8,6 +8,7 @@ import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
 import {useRecoilState} from 'recoil';
 
 import ChatStatusIcon from '../../components/ChatStatusIcon';
+import CustomMessageAvatar from './elements/CustomMessageAvatar';
 import Header from '../../components/Chat/Header';
 import ImageSendPreview from './elements/ImageSendPreview';
 import InputMessage from '../../components/Chat/InputMessage';
@@ -31,6 +32,10 @@ const ChatDetailPage = ({route}) => {
   const [channelClient, dispatchChannel] = React.useContext(Context).channel;
   const [followUserList, setFollowUserList] = useRecoilState(followersOrFollowingAtom);
   const [, dispatch] = React.useContext(Context).groupChat;
+
+  const channelData = channelClient?.channel;
+  const channelType = channelClient?.channel?.data?.channel_type;
+
   const messageSystemCustom = (props) => {
     const {message, channel} = props;
     if (channel?.data.channel_type === 2 || channel?.data.channel_type === 3)
@@ -158,7 +163,7 @@ const ChatDetailPage = ({route}) => {
     };
 
     api
-      .post('/profiles/follow-user', requestData)
+      .post('/profiles/follow-user-v3', requestData)
       .then((res) => {
         Promise.resolve(res.data);
       })
@@ -169,6 +174,17 @@ const ChatDetailPage = ({route}) => {
 
     return true;
   };
+
+  console.log('channelClient', channelClient.channel?.data?.is_channel_blocked);
+
+  const renderMessageInput = () => {
+    if (channelClient.channel?.data?.is_channel_blocked) {
+      return <></>;
+    }
+
+    return <MessageInput Input={InputMessage} />;
+  };
+
   if (clients.client && channelClient.channel) {
     return (
       <SafeAreaView>
@@ -187,6 +203,14 @@ const ChatDetailPage = ({route}) => {
               threadRepliesEnabled={false}
               MessageStatus={ChatStatusIcon}
               MessageSystem={(props) => messageSystemCustom(props)}
+              MessageAvatar={(props) => (
+                <CustomMessageAvatar
+                  channelType={channelType}
+                  color={channelData?.data?.anon_user_info_color_code}
+                  emoji={channelData?.data?.anon_user_info_emoji_code}
+                  {...props}
+                />
+              )}
               // MessageContent={(props) => <CustomMessageContent {...props} />}
               messageActions={(props) => defaultActionsAllowed(props)}
               ReactionList={() => null}>
@@ -197,8 +221,7 @@ const ChatDetailPage = ({route}) => {
                   InlineDateSeparator={CustomInlineDateSeparator}
                   loading={false}
                 />
-
-                <MessageInput Input={InputMessage} />
+                {renderMessageInput()}
               </>
             </Channel>
           </Chat>

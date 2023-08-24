@@ -3,10 +3,10 @@ import config from 'react-native-config';
 import jwtDecode from 'jwt-decode';
 import {StreamChat} from 'stream-chat';
 
+import TokenStorage, {ITokenEnum} from '../storage/custom/tokenStorage';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../constants';
 import {createClient} from '../../context/actions/createClient';
-import {getAccessToken} from '../token';
 import {getMyProfile} from '../../service/profile';
 import {setMessage} from '../firebase/setMessaging';
 import {setTotalUnReadMessage, setUnReadMessage} from '../../context/actions/unReadMessageAction';
@@ -18,14 +18,17 @@ export const useClientGetstream = () => {
   const create = async (tokenResult) => {
     try {
       if (!client.client) {
-        let token = await getAccessToken();
+        let token = TokenStorage.get(ITokenEnum.token);
         if (tokenResult) {
           token = tokenResult;
         }
 
         if (token) {
-          const userId = await jwtDecode(token.id).user_id;
+          const userId = await jwtDecode(token).user_id;
           const userData = await getMyProfile(userId);
+          /**
+           * @type {import('stream-chat').OwnUserResponse}
+           */
           const user = {
             id: userId,
             name: userData?.data.username,
@@ -33,7 +36,7 @@ export const useClientGetstream = () => {
             invisible: true
           };
           const chatClient = StreamChat.getInstance(config.STREAM_API_KEY);
-          const res = await chatClient.connectUser(user, token.id);
+          const res = await chatClient.connectUser(user, token);
           const unRead = {
             total_unread_count: res.me.total_unread_count,
             unread_channels: res.me.unread_channels,
@@ -68,8 +71,8 @@ export const useUpdateClientGetstreamHook = () => {
 
   const updateUserClient = async (image) => {
     const chatClient = StreamChat.getInstance(config.STREAM_API_KEY);
-    const token = await getAccessToken();
-    const userId = await jwtDecode(token.id).user_id;
+    const token = TokenStorage.get(ITokenEnum.token);
+    const userId = await jwtDecode(token).user_id;
 
     chatClient.partialUpdateUser({
       id: userId,

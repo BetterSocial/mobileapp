@@ -2,14 +2,16 @@
 import * as React from 'react';
 import moment from 'moment';
 import reactStringReplace from 'react-string-replace';
-import {StyleSheet, Text, Linking} from 'react-native';
+import {Linking, StyleSheet, Text} from 'react-native';
 
+import HighlightText from '../../components/HightlightClickText/HighlightText';
 import TaggingUserText from '../../components/TaggingUserText';
 import TextBold from '../../components/Text/TextBold';
 import TopicText from '../../components/TopicText';
 // eslint-disable-next-line import/no-cycle
 import removePrefixTopic from '../topics/removePrefixTopic';
-import HighlightText from '../../components/HightlightClickText/HighlightText';
+import {getAnonymousUserId} from '../users';
+import {getUserId} from '../token';
 
 const NO_POLL_UUID = '00000000-0000-0000-0000-000000000000';
 
@@ -176,12 +178,53 @@ const getChatName = (usernames, me) => {
     return acc;
   }, []);
   if (userArraysWithoutMe.length > 1) {
+    if (userArraysWithoutMe.length > 6) {
+      const removeArray = userArraysWithoutMe.slice(0, 6);
+
+      return `${removeArray.join(', ')} & others`;
+    }
     return userArraysWithoutMe.join(', ');
   }
   if (userArraysWithoutMe.length === 1) {
     return userArraysWithoutMe[0].trim();
   }
   return 'No name';
+};
+
+const getAnonymousChatName = async (members) => {
+  const anonUserId = await getAnonymousUserId();
+  const userId = await getUserId();
+
+  const userArraysWithoutMe = members.reduce((acc, currentItem) => {
+    const targetUserId = currentItem?.user_id;
+    if (
+      targetUserId &&
+      targetUserId !== '' &&
+      targetUserId !== userId &&
+      targetUserId !== anonUserId
+    ) {
+      acc.push(currentItem?.user);
+    }
+    return acc;
+  }, []);
+
+  if (userArraysWithoutMe.length > 1) {
+    return Promise.resolve({
+      name: 'Group Chat',
+      image: 'https://picsum.photos/200/300'
+    });
+  }
+  if (userArraysWithoutMe.length === 1) {
+    return Promise.resolve({
+      name: userArraysWithoutMe[0]?.username?.trim() || userArraysWithoutMe[0]?.name?.trim(),
+      image: userArraysWithoutMe[0]?.image
+    });
+  }
+
+  return Promise.resolve({
+    name: 'No Name',
+    image: 'https://picsum.photos/200/300'
+  });
 };
 
 const getGroupMemberCount = (channel) => Object.keys(channel?.state?.members).length;
@@ -262,7 +305,15 @@ const getSingularOrPluralText = (number, singularText, pluralText) => {
  * @param {Any} navigation
  * @returns
  */
-const getCaptionWithTopicStyle = (idParams, text, navigation, substringEnd, topics, item) => {
+const getCaptionWithTopicStyle = (
+  idParams,
+  text,
+  navigation,
+  substringEnd,
+  topics,
+  item,
+  isShort
+) => {
   if (!topics || !Array.isArray(topics)) {
     topics = [];
   }
@@ -272,6 +323,8 @@ const getCaptionWithTopicStyle = (idParams, text, navigation, substringEnd, topi
   const validationTextHasAt = /\B(\@[a-zA-Z0-9_+-]+\b)(?!;)/;
   if (substringEnd && typeof substringEnd === 'number') {
     text = text.substring(0, substringEnd);
+  } else {
+    text = text.substring(0, text.length);
   }
   substringEnd = Math.round(substringEnd);
   text = reactStringReplace(text, topicRegex, (match) => {
@@ -283,6 +336,7 @@ const getCaptionWithTopicStyle = (idParams, text, navigation, substringEnd, topi
           navigation={navigation}
           text={match}
           currentTopic={id}
+          isShortText={isShort}
         />
       );
     return match;
@@ -295,6 +349,7 @@ const getCaptionWithTopicStyle = (idParams, text, navigation, substringEnd, topi
       navigation={navigation}
       text={match}
       currentTopic={id}
+      isShortText={isShort}
     />
   ));
   return text;
@@ -363,5 +418,6 @@ export {
   getDurationTimeText,
   isLocationMatch,
   styles,
-  getCaptionWithLinkStyle
+  getCaptionWithLinkStyle,
+  getAnonymousChatName
 };

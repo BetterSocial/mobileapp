@@ -1,4 +1,6 @@
 import * as React from 'react';
+import JwtDecode from 'jwt-decode';
+import SimpleToast from 'react-native-simple-toast';
 import crashlytics from '@react-native-firebase/crashlytics';
 import {
   ActivityIndicator,
@@ -14,20 +16,26 @@ import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
 import {useSetRecoilState} from 'recoil';
 
+import ImageUtils from '../../utils/image';
 import ItemUser from './elements/ItemUser';
 import Label from './elements/Label';
 import Loading from '../Loading';
+import StorageUtils from '../../utils/storage';
+import TokenStorage from '../../utils/storage/custom/tokenStorage';
+import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
+import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {Header} from '../../components';
 import {InitialStartupAtom} from '../../service/initialStartup';
 import {ProgressBar} from '../../components/ProgressBar';
 import {colors} from '../../utils/colors';
 import {get} from '../../api/server';
 import {registerUser} from '../../service/users';
-import {setAccessToken, setAnonymousToken, setRefreshToken, setToken} from '../../utils/token';
 import {setImage} from '../../context/actions/users';
+import {setToken} from '../../utils/token';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 
 const {width} = Dimensions.get('screen');
@@ -37,6 +45,8 @@ const VIEW_TYPE_LABEL_LOCATION = 2;
 const VIEW_TYPE_DATA = 3;
 
 const WhotoFollow = () => {
+  const {setProfileId} = useProfileHook();
+
   const [users, setUsers] = React.useState([]);
   const [followed, setFollowed] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -144,7 +154,7 @@ const WhotoFollow = () => {
       });
   }, []);
 
-  const register = () => {
+  const register = async () => {
     setFetchRegister(true);
     Analytics.logEvent('onb_select_follows_btn_add', {
       onb_whofollow_users_selected: followed
@@ -156,7 +166,7 @@ const WhotoFollow = () => {
         country_code: usersState.countryCode,
         // human_id: randomString(16),
         // country_code: 'US',
-        profile_pic_path: usersState.photo,
+        profile_pic_path: usersState.photoUrl,
         status: 'A'
       },
       local_community: localCommunity.local_community,
@@ -165,15 +175,32 @@ const WhotoFollow = () => {
       follow_source: 'onboarding'
     };
 
+    const profilePic = usersState?.photoUrl;
+    if (profilePic && profilePic !== DEFAULT_PROFILE_PIC_PATH) {
+      try {
+        const uploadedImageUrl = await ImageUtils.uploadImageWithoutAuth(
+          data?.users?.profile_pic_path
+        );
+        data.users.profile_pic_path = uploadedImageUrl?.data?.url;
+        console.log('uploadedImageUrl', uploadedImageUrl);
+      } catch (e) {
+        console.log('error upload', e);
+      }
+    }
+
     registerUser(data)
       .then(async (res) => {
         setFetchRegister(false);
         if (res.code === 200) {
+          TokenStorage.set(res);
           setToken(res.token);
-          setAccessToken(res.token);
-          setRefreshToken(res.refresh_token);
           try {
-            await setAnonymousToken(res.anonymousToken);
+            const userId = await JwtDecode(res.token).user_id;
+            const anonymousUserId = await JwtDecode(res.anonymousToken).user_id;
+            setProfileId({
+              anonProfileId: anonymousUserId,
+              signedProfileId: userId
+            });
           } catch (e) {
             crashlytics().recordError(new Error(e));
           }
@@ -243,8 +270,7 @@ const WhotoFollow = () => {
       <View style={styles.content}>
         <Text style={styles.textWhoToFollow}>Who to follow</Text>
         <Text style={styles.textDescription}>
-          Interesting people to follow. You can edit this anytime, and others cannot see who you
-          follow.
+          {'Find interesting people to follow.\nYou can edit this anytime.'}
         </Text>
       </View>
       {isLoading ? <ActivityIndicator size="small" color="#0000ff" /> : null}
@@ -265,6 +291,7 @@ const WhotoFollow = () => {
         <></>
       )}
       <View style={styles.footer}>
+        <Text style={styles.textSmall}>Others cannot see who you’re following.</Text>
         <Button onPress={() => register()}>FINISH</Button>
       </View>
       <Loading visible={fetchRegister} />
@@ -278,7 +305,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
   recyclerview: {
-    marginBottom: 90
+    marginBottom: 112
   },
   content: {
     padding: 22
@@ -316,7 +343,7 @@ const styles = StyleSheet.create({
   footer: {
     position: 'absolute',
     bottom: 0,
-    height: 90,
+    height: 112,
     width,
     paddingLeft: 20,
     paddingRight: 20,
@@ -335,6 +362,15 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     marginTop: 'auto',
     zIndex: 1000
+  },
+  textSmall: {
+    fontFamily: 'Inter',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: 10,
+    textAlign: 'center',
+    color: COLORS.blackgrey,
+    marginBottom: 12
   },
   containerCard: {
     flexDirection: 'row',
@@ -448,7 +484,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   }),
   listUser: {
-    marginBottom: 90
+    marginBottom: 112
   }
 });
 export default WhotoFollow;
