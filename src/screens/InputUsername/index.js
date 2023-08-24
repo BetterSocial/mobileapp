@@ -378,11 +378,15 @@ const styles = StyleSheet.create({
     marginTop: 24
   },
   desc: {
-    fontSize: 14,
-    color: 'rgba(130,130,130,0.84)',
+    fontFamily: 'Inter',
+    fontStyle: 'normal',
     fontWeight: '400',
-    fontFamily: fonts.inter[400],
-    lineHeight: 24
+    fontSize: 14,
+    lineHeight: 24,
+    color: colors.gray,
+    opacity: 0.84,
+    marginTop: 8,
+    marginBottom: 12
   },
   btnImage: {
     width: 23,

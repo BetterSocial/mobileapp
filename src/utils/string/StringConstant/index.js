@@ -40,9 +40,10 @@ const onboardingLocalCommunitySecondaryLocationSubTitle =
   '🏡 Home away from home? Add a second location';
 
 // Onboarding - Topics
-const onboardingTopicsHeadline = 'Join communities of interest';
+const onboardingTopicsHeadline = 'Join communities\nof interest';
 const onboardingTopicsSubHeadline = 'Find like-minded people';
-const onboardingTopicsOthersCannotSee = "Others cannot see which communities you're following";
+const onboardingTopicsOthersCannotSee =
+  'You will be discoverable by those within your communities.';
 const onboardingTopicsButtonStateNext = 'NEXT';
 const onboardingTopicsButtonStateChooseMore = (count) => `CHOOSE ${count} MORE`;
 
