@@ -272,7 +272,8 @@ const LocalCommunity = () => {
 };
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: colors.white
   },
   header: {paddingHorizontal: 22, paddingTop: 22, paddingBottom: 5},
   textFindYourLocalCommunity: {
@@ -329,7 +330,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   containerProgress: {
-    marginTop: 36,
+    marginTop: 20,
     marginBottom: 24,
     paddingHorizontal: 20
   },

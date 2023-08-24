@@ -24,7 +24,6 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
     <View
       style={
         Object {
-          "height": 48,
           "width": "100%",
         }
       }
@@ -34,6 +33,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
           Object {
             "alignItems": "center",
             "flexDirection": "row",
+            "height": 48,
             "justifyContent": "center",
             "padding": 10,
           }
@@ -54,7 +54,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               "opacity": 1,
               "paddingLeft": 10,
               "paddingRight": 15,
-              "paddingVertical": 10,
+              "paddingVertical": 12,
             }
           }
           testID="backButton"

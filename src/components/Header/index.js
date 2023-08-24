@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
     // padding: 10
   },
   content: {
+    height: 48,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -72,11 +73,10 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   buttonBackContainerIos: {
-    height: 48,
     width: '100%'
   },
   backPadding: {
-    paddingVertical: 10,
+    paddingVertical: 12,
     paddingRight: 15,
     paddingLeft: 10
   },
