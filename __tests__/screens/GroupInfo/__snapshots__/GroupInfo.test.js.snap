@@ -24,7 +24,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
     <View
       style={
         Object {
-          "paddingVertical": 16,
+          "height": 48,
           "width": "100%",
         }
       }
