@@ -114,13 +114,18 @@ const Content = ({
 
   const handleTextLayout = ({nativeEvent}) => {
     let text = '';
-
     let {newMaxLine, countDeviceLine} = handleCountDeviceLine();
     const amountLineBreak = handleLineBreak(nativeEvent, newMaxLine);
     countDeviceLine = newMaxLine - amountLineBreak.length / 2;
     newMaxLine -= amountLineBreak.length / 2;
     if (item.post_type === POST_TYPE_STANDARD && item.images_url.length <= 0) {
-      countDeviceLine -= 2;
+      if (topics.length > 0) {
+        newMaxLine -= 2;
+        countDeviceLine -= 3;
+      } else {
+        newMaxLine -= 1;
+        countDeviceLine -= 2;
+      }
     } else {
       countDeviceLine -= 1;
     }
@@ -171,7 +176,7 @@ const Content = ({
   };
 
   const handleContainerText = () => {
-    if (message?.length < 125 && item.post_type === POST_TYPE_STANDARD && images_url.length <= 0) {
+    if (message?.length <= 125 && item.post_type === POST_TYPE_STANDARD && images_url.length <= 0) {
       return {
         container: styles.centerVertical,
         text: styles.centerVerticalText,
@@ -225,7 +230,7 @@ const Content = ({
       ) : null}
       {images_url.length > 0 && (
         <View style={styles.containerImage}>
-          <ImageLayouter images={images_url} onimageclick={onImageClickedByIndex} />
+          <ImageLayouter isFeed={true} images={images_url} onimageclick={onImageClickedByIndex} />
         </View>
       )}
 
