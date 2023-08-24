@@ -25,7 +25,7 @@ const useCoreFeed = () => {
   const {myProfile} = profileContext;
   const {bottom} = useSafeAreaInsets();
 
-  const getDataFeeds = async (offsetFeed = 0, useLoading, targetFeed = null) => {
+  const getDataFeeds = async (offsetFeed = 0, useLoading = false, targetFeed = null) => {
     setCountStack(null);
     if (useLoading) {
       setLoading(true);

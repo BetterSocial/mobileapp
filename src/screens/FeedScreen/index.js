@@ -56,7 +56,7 @@ const FeedScreen = (props) => {
   } = useCoreFeed();
   const interactionManagerRef = React.useRef(null);
   const interactionManagerAnimatedRef = React.useRef(null);
-  const getDataFeedsHandle = async (offsetFeed = 0, useLoading, targetFeed = null) => {
+  const getDataFeedsHandle = async (offsetFeed = 0, useLoading = false, targetFeed = null) => {
     getDataFeeds(offsetFeed, useLoading, targetFeed);
   };
   const onDeleteBlockedPostCompletedHandle = async (postId) => {
