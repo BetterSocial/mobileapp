@@ -10,6 +10,7 @@ import DiscoveryRepo from '../service/discovery';
 import following from '../context/actions/following';
 import streamFeed from '../utils/getstream/streamer';
 import useFeedService from './useFeedService';
+import useResetContext from './context/useResetContext';
 import TokenStorage, {ITokenEnum} from '../utils/storage/custom/tokenStorage';
 import {Analytics} from '../libraries/analytics/firebaseAnalytics';
 import {Context} from '../context';
@@ -42,6 +43,7 @@ export const useInitialStartup = () => {
   const timeoutSplashScreen = React.useRef(null);
   const [loadingUser, setLoadingUser] = React.useState(true);
   const getLocalChannelData = useLocalChannelsFirst(setLocalChannelData);
+  const {resetAllContext, resetLocalDB} = useResetContext();
 
   const {getFeedChat} = useFeedService();
 
@@ -53,6 +55,9 @@ export const useInitialStartup = () => {
     const token = TokenStorage.get(ITokenEnum.token);
     if (token) {
       setInitialValue({id: token});
+    } else {
+      resetAllContext();
+      resetLocalDB();
     }
   };
 
