@@ -116,7 +116,12 @@ const RenderListFeed = (props) => {
   return (
     <View style={[styles.cardContainer()]}>
       <View style={styles.cardMain}>
-        <Header hideThreeDot={true} props={item} height={getHeightHeader()} />
+        <Header
+          headerStyle={styles.ml3}
+          hideThreeDot={true}
+          props={item}
+          height={getHeightHeader()}
+        />
         {item.post_type === POST_TYPE_LINK && (
           <ContentLink
             index={index}
@@ -196,7 +201,10 @@ const styles = StyleSheet.create({
   contentReaction: (heightReaction) => ({
     maxHeight: heightReaction,
     marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0
-  })
+  }),
+  ml3: {
+    marginLeft: 3
+  }
 });
 
 RenderListFeed.propTypes = {
