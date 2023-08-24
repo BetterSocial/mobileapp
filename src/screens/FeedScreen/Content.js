@@ -100,15 +100,32 @@ const Content = ({
     };
   };
 
+  const handleTopicLength = () => {
+    const newMaxLine = Platform.OS === 'ios' ? 2 : 1;
+    const countDeviceLine = Platform.OS === 'ios' ? 3 : 2;
+    return {
+      newMaxLine,
+      countDeviceLine
+    };
+  };
+  const handleNoTopicLength = () => {
+    const newMaxLine = Platform.OS === 'ios' ? 1 : 0;
+    const countDeviceLine = Platform.OS === 'ios' ? 2 : 1;
+    return {
+      newMaxLine,
+      countDeviceLine
+    };
+  };
+
   const adjustmentCountDeviceLine = () => {
     let {newMaxLine, countDeviceLine} = handleCountDeviceLine();
     if (item.post_type === POST_TYPE_STANDARD && item.images_url.length <= 0) {
       if (topics.length > 0) {
-        newMaxLine -= Platform.OS === 'ios' ? 2 : 1;
-        countDeviceLine -= Platform.OS === 'ios' ? 3 : 2;
+        newMaxLine -= handleTopicLength().newMaxLine;
+        countDeviceLine -= handleTopicLength().countDeviceLine;
       } else {
-        newMaxLine -= Platform.OS === 'ios' ? 1 : 0;
-        countDeviceLine -= Platform.OS === 'ios' ? 2 : 1;
+        newMaxLine -= handleNoTopicLength().newMaxLine;
+        countDeviceLine -= handleNoTopicLength().countDeviceLine;
       }
     } else {
       countDeviceLine -= 1;
