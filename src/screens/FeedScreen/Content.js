@@ -100,22 +100,8 @@ const Content = ({
     };
   };
 
-  const handleLineBreak = (nativeEvent, newMaxLine) => {
-    const amountLineBreak = [];
-    if (nativeEvent.lines.length > newMaxLine) {
-      nativeEvent.lines.forEach((char, index) => {
-        if (index <= newMaxLine && char.text.match(/[\r\n]+/g)) {
-          amountLineBreak.push(char.text);
-        }
-      });
-    }
-    return amountLineBreak;
-  };
-  const handleTextLayout = ({nativeEvent}) => {
-    let text = '';
+  const adjustmentCountDeviceLine = () => {
     let {newMaxLine, countDeviceLine} = handleCountDeviceLine();
-    const amountLineBreak = handleLineBreak(nativeEvent, newMaxLine);
-    countDeviceLine = newMaxLine - amountLineBreak.length / 2;
     if (item.post_type === POST_TYPE_STANDARD && item.images_url.length <= 0) {
       if (topics.length > 0) {
         newMaxLine -= Platform.OS === 'ios' ? 2 : 1;
@@ -127,6 +113,15 @@ const Content = ({
     } else {
       countDeviceLine -= 1;
     }
+    return {
+      countDeviceLine,
+      newMaxLine
+    };
+  };
+
+  const handleTextLayout = ({nativeEvent}) => {
+    let text = '';
+    const {newMaxLine, countDeviceLine} = adjustmentCountDeviceLine();
     for (let i = 0; i < newMaxLine; i++) {
       if (nativeEvent.lines[i]) {
         if (i === countDeviceLine) {
