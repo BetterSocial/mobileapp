@@ -124,12 +124,13 @@ const FeedScreen = (props) => {
     getDataFeedsHandle(postOffset, false, nextTargetFeed);
   };
 
-  const onPress = (item) => {
+  const onPress = (item, haveSeeMore) => {
     props.navigation.navigate('PostDetailPage', {
       isalreadypolling: item.isalreadypolling,
       feedId: item.id,
       data: item,
-      isCaching: false
+      isCaching: false,
+      haveSeeMore
     });
   };
 
@@ -213,7 +214,9 @@ const FeedScreen = (props) => {
         onNewPollFetched={onNewPollFetched}
         index={index}
         onPressDomain={onPressDomain}
-        onPress={() => onPress(item)}
+        onPress={(haveSeeMore) => {
+          onPress(item, haveSeeMore);
+        }}
         onPressComment={() => onPressComment(index, item)}
         onPressBlock={() => onPressBlock(item)}
         onPressUpvote={(post) => setUpVoteHandle(post, index)}
