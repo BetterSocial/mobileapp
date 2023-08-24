@@ -195,6 +195,11 @@ function HomeBottomTabs({navigation}) {
       handlePushNotif(remoteMessage);
     });
 
+    messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+      console.log('Message handled in the background!', remoteMessage);
+      handlePushNotif(remoteMessage);
+    });
+
     const unsubscribe = messaging().onMessage((remoteMessage) => {
       // eslint-disable-next-line no-unused-expressions
       handlePushNotif(remoteMessage);

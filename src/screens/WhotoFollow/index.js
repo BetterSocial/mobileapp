@@ -205,7 +205,7 @@ const WhotoFollow = () => {
             crashlytics().recordError(new Error(e));
           }
           showMessage({
-            message: 'Welcome to Better Social',
+            message: 'Welcome to BetterSocial',
             type: 'success',
             backgroundColor: colors.holytosca
           });
@@ -317,10 +317,9 @@ const styles = StyleSheet.create({
   },
 
   containerProgress: {
-    marginTop: 36,
+    marginTop: 20,
     paddingLeft: 22,
-    paddingRight: 22,
-    paddingTop: 22
+    paddingRight: 22
   },
   textWhoToFollow: {
     fontFamily: 'Poppins',

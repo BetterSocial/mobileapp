@@ -5,6 +5,7 @@
 import * as React from 'react';
 import PSL from 'psl';
 import Toast from 'react-native-simple-toast';
+import {Image} from 'react-native-compressor';
 import _, {debounce} from 'lodash';
 import {
   Alert,
@@ -18,11 +19,10 @@ import {
   Text,
   View
 } from 'react-native';
-import {Image} from 'react-native-compressor';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {openSettings} from 'react-native-permissions';
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation, useRoute} from '@react-navigation/core';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 import ContentLink from './elements/ContentLink';
 import CreatePollContainer from './elements/CreatePollContainer';
@@ -78,6 +78,7 @@ import {getUrl, isContainUrl} from '../../utils/Utils';
 import {getUserId} from '../../utils/users';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
 import {uploadPhoto} from '../../service/file';
+import {COLORS} from '../../utils/theme';
 
 const IS_GEO_SELECT_ENABLED = false;
 
@@ -320,7 +321,6 @@ const CreatePost = () => {
 
     try {
       const responseUpload = await uploadPhoto(asset);
-
       setMediaStorage((val) => [...val, newArr]);
       setDataImage((val) => [...val, responseUpload.data.url]);
       sheetMediaRef.current.close();
@@ -360,7 +360,6 @@ const CreatePost = () => {
       );
     }
   };
-
   const takePhoto = async () => {
     const {success, message} = await requestCameraPermission();
     if (success) {
@@ -932,7 +931,7 @@ const styles = StyleSheet.create({
     height
   }),
   reminderContainer: {
-    backgroundColor: '#2F80ED',
+    backgroundColor: COLORS.blue,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 7,

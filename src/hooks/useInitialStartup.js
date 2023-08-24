@@ -10,6 +10,7 @@ import DiscoveryRepo from '../service/discovery';
 import following from '../context/actions/following';
 import streamFeed from '../utils/getstream/streamer';
 import useFeedService from './useFeedService';
+import useResetContext from './context/useResetContext';
 import TokenStorage, {ITokenEnum} from '../utils/storage/custom/tokenStorage';
 import {Analytics} from '../libraries/analytics/firebaseAnalytics';
 import {Context} from '../context';
@@ -19,7 +20,7 @@ import {channelListLocalAtom} from '../service/channelListLocal';
 import {getDomains, getFollowedDomain} from '../service/domain';
 import {getFollowing, getMyProfile} from '../service/profile';
 import {getFollowingTopic} from '../service/topics';
-import {getMainFeed} from '../service/post';
+import {getMainFeedV2WithTargetFeed} from '../service/post';
 import {getSpecificCache, saveToCache} from '../utils/cache';
 import {setMainFeeds, setTimer} from '../context/actions/feeds';
 import {setMyProfileAction} from '../context/actions/setMyProfileAction';
@@ -42,6 +43,7 @@ export const useInitialStartup = () => {
   const timeoutSplashScreen = React.useRef(null);
   const [loadingUser, setLoadingUser] = React.useState(true);
   const getLocalChannelData = useLocalChannelsFirst(setLocalChannelData);
+  const {resetAllContext, resetLocalDB} = useResetContext();
 
   const {getFeedChat} = useFeedService();
 
@@ -53,6 +55,9 @@ export const useInitialStartup = () => {
     const token = TokenStorage.get(ITokenEnum.token);
     if (token) {
       setInitialValue({id: token});
+    } else {
+      resetAllContext();
+      resetLocalDB();
     }
   };
 
@@ -96,13 +101,14 @@ export const useInitialStartup = () => {
   const getDataFeeds = async (offset = 0) => {
     try {
       const query = `?offset=${offset}&limit=${LIMIT_FIRST_FEEDS}`;
-      const dataFeeds = await getMainFeed(query);
+      const dataFeeds = await getMainFeedV2WithTargetFeed(query);
       if (dataFeeds.data?.length > 0) {
         const {data} = dataFeeds;
         const dataWithDummy = [...data, {dummy: true}];
         let saveData = {
           offset: dataFeeds.offset,
-          data: dataWithDummy
+          data: dataWithDummy,
+          targetFeed: dataFeeds?.feed
         };
         if (offset === 0) {
           setMainFeeds(dataWithDummy, dispatchFeeds);
