@@ -1,7 +1,7 @@
 import * as React from 'react';
 import FastImage from 'react-native-fast-image';
 import PropTypes from 'prop-types';
-import {Dimensions, Platform, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 
@@ -20,9 +20,15 @@ import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuil
 import {sanitizeUrl} from '../../../utils/string/StringUtils';
 import {smartRender} from '../../../utils/Utils';
 
-const {width: screenWidth} = Dimensions.get('window');
-const FONT_SIZE_TEXT = 16;
-const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPostDetail}) => {
+const Content = ({
+  message,
+  images_url,
+  topics = [],
+  item,
+  onnewpollfetched,
+  isPostDetail,
+  haveSeeMore
+}) => {
   const navigation = useNavigation();
   const cekImage = () => images_url && images_url !== '';
   const {hashtagAtComponent} = useContentFeed({navigation});
@@ -66,9 +72,8 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
   };
 
   const isShortText = () => {
-    return images_url.length <= 0 && item.post_type === POST_TYPE_STANDARD && message.length <= 125;
+    return images_url.length <= 0 && item.post_type === POST_TYPE_STANDARD && !haveSeeMore;
   };
-
   const handleContainerPdp = () => {
     if (isShortText()) {
       return styles.shortText;

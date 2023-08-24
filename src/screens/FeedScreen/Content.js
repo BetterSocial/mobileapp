@@ -35,7 +35,7 @@ const Content = ({
   const minFontSize = normalizeFontSizeByWidth(16);
   const {handleCalculation, onLayoutTopicChip} = useCalculationContent();
   const [amountCut, setAmountCut] = React.useState(0);
-  const [textCut, setTextCunt] = React.useState(null);
+  const [textCut, setTextCut] = React.useState(null);
   const [arrText] = React.useState([]);
   const isIos = Platform.OS === 'ios';
 
@@ -116,14 +116,13 @@ const Content = ({
     let {newMaxLine, countDeviceLine} = handleCountDeviceLine();
     const amountLineBreak = handleLineBreak(nativeEvent, newMaxLine);
     countDeviceLine = newMaxLine - amountLineBreak.length / 2;
-    // newMaxLine -= amountLineBreak.length / 2;
     if (item.post_type === POST_TYPE_STANDARD && item.images_url.length <= 0) {
       if (topics.length > 0) {
         newMaxLine -= Platform.OS === 'ios' ? 2 : 1;
         countDeviceLine -= Platform.OS === 'ios' ? 3 : 2;
       } else {
-        newMaxLine -= 1;
-        countDeviceLine -= 2;
+        newMaxLine -= Platform.OS === 'ios' ? 1 : 0;
+        countDeviceLine -= Platform.OS === 'ios' ? 2 : 1;
       }
     } else {
       countDeviceLine -= 1;
@@ -139,7 +138,7 @@ const Content = ({
         }
       }
     }
-    setTextCunt(text);
+    setTextCut(text);
     setAmountCut(text.length);
   };
   const showSeeMore = amountCut < message.length;
@@ -156,21 +155,23 @@ const Content = ({
             {message}
           </Text>
         ) : (
-          <Text
-            numberOfLines={calculateMaxLine()}
-            style={[handleStyleFont(), handleContainerText().text]}>
-            {getCaptionWithTopicStyle(
-              route?.params?.id,
-              textCut,
-              navigation,
-              null,
-              item?.topics,
-              item,
-              handleContainerText().isShort
-            )}
-            {''}
-            {showSeeMore ? <Text style={styles.seemore}> More..</Text> : null}
-          </Text>
+          <>
+            <Text
+              numberOfLines={calculateMaxLine()}
+              style={[handleStyleFont(), handleContainerText().text]}>
+              {getCaptionWithTopicStyle(
+                route?.params?.id,
+                textCut,
+                navigation,
+                null,
+                item?.topics,
+                item,
+                handleContainerText().isShort
+              )}
+
+              {showSeeMore ? <Text style={styles.seemore}> More..</Text> : null}
+            </Text>
+          </>
         )}
       </View>
     );
