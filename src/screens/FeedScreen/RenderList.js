@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
   cardMain: {
     width: '100%',
     height: dimen.size.FEED_CURRENT_ITEM_HEIGHT
-  }
+  },
   mh9: {
     marginHorizontal: 9
   }
