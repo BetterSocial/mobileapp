@@ -113,6 +113,7 @@ const RenderListFeed = (props) => {
           props={item}
           height={getHeightHeader()}
           source={SOURCE_FEED_TAB}
+          headerStyle={styles.mh9}
         />
         {item.post_type === POST_TYPE_LINK && (
           <ContentLink
@@ -200,6 +201,9 @@ const styles = StyleSheet.create({
   cardMain: {
     width: '100%',
     height: dimen.size.FEED_CURRENT_ITEM_HEIGHT
+  },
+  mh9: {
+    marginHorizontal: 9
   }
 });
 
