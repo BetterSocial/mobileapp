@@ -1,7 +1,8 @@
 import * as React from 'react';
-import {Animated, InteractionManager, StatusBar, StyleSheet} from 'react-native';
+import {Animated, InteractionManager, StatusBar, StyleSheet, View} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
+import {useCopilot} from 'react-native-copilot';
 
 import BlockComponent from '../../components/BlockComponent';
 import RenderListFeed from './RenderList';
@@ -22,6 +23,7 @@ import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {viewTimePost} from '../../service/post';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {normalizeFontSizeByWidth} from '../../utils/fonts';
+import {handleTutorialFinished} from '../../utils/tutorial';
 
 let lastDragY = 0;
 
@@ -35,6 +37,7 @@ const FeedScreen = (props) => {
   const {interactionsComplete} = useAfterInteractions();
   const {feeds, timer, viewPostTimeIndex} = feedsContext;
   const [isScroll, setIsScroll] = React.useState(false);
+  const [isIndexAnon, setIsIndexAnon] = React.useState(null);
   const {
     getDataFeeds,
     postOffset,
@@ -53,8 +56,11 @@ const FeedScreen = (props) => {
     handleScroll,
     setIsLastPage
   } = useCoreFeed();
+  const {start, stop, copilotEvents} = useCopilot();
   const interactionManagerRef = React.useRef(null);
   const interactionManagerAnimatedRef = React.useRef(null);
+  const [lastEvent, setLastEvent] = React.useState(null);
+  const [isStopped, setIsStopped] = React.useState(false);
   const getDataFeedsHandle = async (offsetFeed = 0, useLoading) => {
     getDataFeeds(offsetFeed, useLoading);
   };
@@ -64,6 +70,24 @@ const FeedScreen = (props) => {
   const onBlockCompletedHandle = async (postId) => {
     onBlockCompleted(postId);
   };
+
+  React.useEffect(() => {
+    copilotEvents.on('stepChange', (step) => {
+      setLastEvent(step.name);
+    });
+    copilotEvents.on('start', () => {
+      setIsStopped(false);
+    });
+    copilotEvents.on('stop', () => {
+      setIsStopped(true);
+    });
+  }, [copilotEvents]);
+
+  React.useEffect(() => {
+    if (isStopped) {
+      handleTutorialFinished(lastEvent);
+    }
+  }, [isStopped]);
 
   React.useEffect(() => {
     if (interactionsComplete) {
@@ -208,6 +232,24 @@ const FeedScreen = (props) => {
     saveSearchHeight(height);
   };
 
+  const scrollToAnon = React.useCallback(() => {
+    const firstAnonIndex = feeds?.findIndex((item) => item.anonimity);
+    if (firstAnonIndex > 0) {
+      stop();
+      setIsIndexAnon(firstAnonIndex);
+      listRef.current?.scrollToIndex({
+        index: firstAnonIndex
+      });
+      setTimeout(() => {
+        start();
+      }, 3000);
+    }
+  }, [feeds]);
+
+  React.useLayoutEffect(() => {
+    scrollToAnon();
+  }, [feeds]);
+
   const renderItem = ({item, index}) => {
     if (item.dummy) return <React.Fragment key={index} />;
     return (
@@ -228,6 +270,7 @@ const FeedScreen = (props) => {
         searchHeight={searchHeight}
         bottomArea={bottom}
         isScroll={isScroll}
+        isIndexAnon={isIndexAnon === index}
       />
     );
   };
@@ -241,7 +284,7 @@ const FeedScreen = (props) => {
         onContainerClicked={handleSearchBarClicked}
       />
       <TiktokScroll
-        ref={listRef}
+        listRef={listRef}
         contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT + normalizeFontSizeByWidth(4)}
         data={feeds}
         onEndReach={onEndReach}

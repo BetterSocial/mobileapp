@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
+import {useIsFocused} from '@react-navigation/core';
+import {useCopilot} from 'react-native-copilot';
 
 import Content from './Content';
 import ContentLink from './ContentLink';
@@ -18,11 +20,13 @@ import {
   POST_TYPE_STANDARD,
   SOURCE_FEED_TAB
 } from '../../utils/constants';
-import {Footer, Gap, PreviewComment} from '../../components';
+import {Footer, Gap, PreviewComment, TutorialStep} from '../../components';
 import {colors} from '../../utils/colors';
 import {getCommentLength} from '../../utils/getstream';
 import {showScoreAlertDialog} from '../../utils/Utils';
 import {normalizeFontSizeByWidth} from '../../utils/fonts';
+import AnonStep from '../../assets/icon-svg/anon_step.svg';
+import StringConstant from '../../utils/string/StringConstant';
 
 const tabBarHeight = StatusBar.currentHeight;
 const FULL_WIDTH = Dimensions.get('screen').width;
@@ -39,7 +43,8 @@ const RenderListFeed = (props) => {
     onPressBlock,
     onPressUpvote,
     selfUserId,
-    onPressDownVote
+    onPressDownVote,
+    isIndexAnon
   } = props;
   const {
     totalVote,
@@ -57,6 +62,8 @@ const RenderListFeed = (props) => {
     getTotalReaction,
     showScoreButton
   } = useFeed();
+  const isFocused = useIsFocused();
+  const {start} = useCopilot();
 
   const onPressDownVoteHandle = async () => {
     onPressDownVoteHook();
@@ -105,15 +112,28 @@ const RenderListFeed = (props) => {
 
   getTotalReaction(item);
 
+  // React.useEffect(() => {
+  //   if (isIndexAnon) {
+  //     start();
+  //   }
+  // }, [isIndexAnon]);
+  console.log('\n\nisFocusedFeed: ', isFocused);
+  console.log('isIndexAnon && isFocused: ', isIndexAnon && isFocused);
   return (
     <View key={item.id} testID="dataScroll" style={styles.cardContainer}>
       <View style={styles.cardMain}>
+        {/* <TutorialStep
+          active={isIndexAnon && isFocused}
+          name={StringConstant.tutorialAnonymousPostTitle}
+          text={StringConstant.tutorialAnonymousPostDescription}
+          imageItem={<AnonStep />}> */}
         <Header
           hideThreeDot={true}
           props={item}
           height={getHeightHeader()}
           source={SOURCE_FEED_TAB}
         />
+        {/* </TutorialStep> */}
         {item.post_type === POST_TYPE_LINK && (
           <ContentLink
             key={item.id}
