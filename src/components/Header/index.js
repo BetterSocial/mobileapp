@@ -13,11 +13,7 @@ const Header = ({title, onPress, titleStyle = {}, containerStyle = {}, isCenter}
           <TouchableOpacity testID="backButton" style={styles.backPadding} onPress={onPress}>
             <ArrowLeftIcon />
           </TouchableOpacity>
-        ) : (
-          <View style={styles.backPadding}>
-            <View style={styles.nullBackIcon} />
-          </View>
-        )}
+        ) : null}
         <View style={styles.flex}>
           <Text
             numberOfLines={1}
@@ -76,7 +72,7 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   buttonBackContainerIos: {
-    paddingVertical: 16,
+    height: 48,
     width: '100%'
   },
   backPadding: {
