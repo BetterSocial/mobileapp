@@ -251,7 +251,7 @@ const WhotoFollow = () => {
       <View style={styles.containerProgress}>
         <ProgressBar isStatic={true} value={100} />
       </View>
-      <View style={styles.content}>
+      <View>
         <Text style={styles.textWhoToFollow}>Who to follow</Text>
         <Text style={styles.textDescription}>
           {'Find interesting people to follow.\nYou can edit this anytime.'}
@@ -291,37 +291,36 @@ const styles = StyleSheet.create({
   recyclerview: {
     marginBottom: 112
   },
-  content: {
-    padding: 22
-  },
   wrapperHeader: {
     paddingLeft: 22,
     paddingRight: 22,
     paddingTop: 22
   },
-
   containerProgress: {
     marginTop: 20,
-    paddingLeft: 22,
-    paddingRight: 22
+    marginBottom: 24,
+    paddingHorizontal: 20
   },
   textWhoToFollow: {
-    fontFamily: 'Poppins',
+    fontFamily: 'Inter-Bold',
     fontStyle: 'normal',
-    fontWeight: 'bold',
+    fontWeight: '600',
     fontSize: 36,
-    lineHeight: 44,
-    color: '#11243D'
+    lineHeight: 43.57,
+    color: '#11243D',
+    marginHorizontal: 20
   },
   textDescription: {
-    fontFamily: 'Poppins',
+    fontFamily: 'Inter',
     fontStyle: 'normal',
-    fontWeight: 'normal',
-    fontSize: 12,
-    lineHeight: 20,
-    color: '#828282',
-    marginTop: 20,
-    opacity: 0.84
+    fontWeight: '400',
+    fontSize: 14,
+    lineHeight: 24,
+    color: colors.gray,
+    opacity: 0.84,
+    marginTop: 8,
+    marginBottom: 24,
+    paddingHorizontal: 20
   },
   footer: {
     position: 'absolute',
