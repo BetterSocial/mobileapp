@@ -48,7 +48,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     width: '100%',
-    marginTop: 12,
     position: 'absolute',
     bottom: 0,
     marginLeft: 12
