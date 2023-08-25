@@ -122,36 +122,38 @@ const Content = ({
         contentContainerStyle={styles.contensStyle(images_url.length > 0, isShortText())}
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}>
-        <View
-          onLayout={handleContainerHeight}
-          style={[handleStyleFeed(), handleContainerPdp(), handleMessageContainerPdp()]}>
-          <View style={styles.postTextContainer(isPostDetail)}>
-            {item.post_type !== POST_TYPE_LINK ? (
-              <Text
-                onLayout={handleTextHeight}
-                style={[
-                  styles.textContentFeed(isShortText()),
-                  {
-                    fontSize: font,
-                    lineHeight
-                  }
-                ]}>
-                {hashtagAtComponent(message, null, isShortText())}
-              </Text>
-            ) : (
-              <Text
-                style={[
-                  styles.textContentFeed(isShortText()),
-                  {
-                    fontSize: font,
-                    lineHeight
-                  }
-                ]}>
-                {hashtagAtComponent(sanitizeUrl(message), null, isShortText())}{' '}
-              </Text>
-            )}
+        {message?.length > 0 ? (
+          <View
+            onLayout={handleContainerHeight}
+            style={[handleStyleFeed(), handleContainerPdp(), handleMessageContainerPdp()]}>
+            <View style={styles.postTextContainer(isPostDetail)}>
+              {item.post_type !== POST_TYPE_LINK ? (
+                <Text
+                  onLayout={handleTextHeight}
+                  style={[
+                    styles.textContentFeed(isShortText()),
+                    {
+                      fontSize: font,
+                      lineHeight
+                    }
+                  ]}>
+                  {hashtagAtComponent(message, null, isShortText())}
+                </Text>
+              ) : (
+                <Text
+                  style={[
+                    styles.textContentFeed(isShortText()),
+                    {
+                      fontSize: font,
+                      lineHeight
+                    }
+                  ]}>
+                  {hashtagAtComponent(sanitizeUrl(message), null, isShortText())}{' '}
+                </Text>
+              )}
+            </View>
           </View>
-        </View>
+        ) : null}
         <View style={styles.pollContainer}>
           {item && item.post_type === POST_TYPE_POLL ? (
             <View
