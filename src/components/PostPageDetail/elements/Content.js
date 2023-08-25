@@ -1,8 +1,7 @@
 import * as React from 'react';
 import FastImage from 'react-native-fast-image';
 import PropTypes from 'prop-types';
-import {StyleSheet, Text, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import {StyleSheet, Text, View, ScrollView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import Card from '../../Card/Card';
@@ -63,7 +62,6 @@ const Content = ({
     }
     return styles.contentFeedLink;
   };
-
   const navigateToLinkContextPage = () => {
     const param = linkContextScreenParamBuilder(
       item,
@@ -118,7 +116,7 @@ const Content = ({
   return (
     <>
       <ScrollView
-        style={[styles.contentFeed, handleContainerPdp()]}
+        style={[styles.contentFeed, handleContainerPdp(), {paddingVertical: message ? 5 : 0}]}
         contentContainerStyle={styles.contensStyle(images_url.length > 0, isShortText())}
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}>
