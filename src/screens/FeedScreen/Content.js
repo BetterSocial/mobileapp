@@ -33,7 +33,8 @@ const Content = ({
   const [textHeight, setTextHeight] = React.useState(null);
   const maxFontSize = normalizeFontSizeByWidth(28);
   const minFontSize = normalizeFontSizeByWidth(16);
-  const {handleCalculation, onLayoutTopicChip} = useCalculationContent();
+  const {handleCalculation, onLayoutTopicChip, heightTopic, amountLineTopic} =
+    useCalculationContent();
   const [amountCut, setAmountCut] = React.useState(0);
   const [textCut, setTextCut] = React.useState(null);
   const [arrText] = React.useState([]);
@@ -101,8 +102,8 @@ const Content = ({
   };
 
   const handleTopicLength = () => {
-    const newMaxLine = Platform.OS === 'ios' ? 2 : 1;
-    const countDeviceLine = Platform.OS === 'ios' ? 3 : 2;
+    const newMaxLine = amountLineTopic + 1;
+    const countDeviceLine = amountLineTopic + 2;
     return {
       newMaxLine,
       countDeviceLine
@@ -155,9 +156,18 @@ const Content = ({
   };
   const showSeeMore = amountCut < message.length;
 
+  const handleMarginTopic = () => {
+    if (images_url.length <= 0 && item?.post_type === POST_TYPE_STANDARD) {
+      return heightTopic;
+    }
+    return 0;
+  };
+
   const renderHandleTextContent = () => {
     return (
-      <View testID="postTypePoll" style={[styles.containerText, handleContainerText()]}>
+      <View
+        testID="postTypePoll"
+        style={[styles.containerText, {marginBottom: handleMarginTopic()}]}>
         {amountCut <= 0 ? (
           <Text
             onTextLayout={handleTextLayout}
@@ -209,6 +219,11 @@ const Content = ({
       setLayoutHeight(nativeEvent.layout.height);
     }
   };
+
+  const calculateLineTopicChip = (nativeEvent) => {
+    onLayoutTopicChip(nativeEvent, lineHeight);
+  };
+
   return (
     <Pressable
       onLayout={hanldeHeightContainer}
@@ -249,7 +264,7 @@ const Content = ({
       )}
 
       <TopicsChip
-        onLayout={onLayoutTopicChip}
+        onLayout={calculateLineTopicChip}
         topics={topics}
         fontSize={normalizeFontSize(14)}
         text={message}
