@@ -1,17 +1,14 @@
 import React from 'react';
 import {POST_TYPE_LINK, POST_TYPE_POLL} from '../../../utils/constants';
-import {normalizeFontSizeByWidth} from '../../../utils/fonts';
 
 const useCalculationContent = () => {
-  const maxFontSize = normalizeFontSizeByWidth(28);
-  const minFontSize = normalizeFontSizeByWidth(16);
   const [amountLineTopic, setAmountLineTopic] = React.useState(0);
   const [heightTopic, setHeightTopic] = React.useState(0);
   const handleCalculation = (
     containerHeight,
     textHeight,
-    hugeFont = maxFontSize,
-    smallFont = minFontSize,
+    hugeFont,
+    smallFont,
     post_type,
     image
   ) => {
