@@ -86,7 +86,7 @@ const BioAndChat = (props) => {
     <View style={styles.bioAndSendChatContainer(isAnonimity)}>
       <View style={styles.containerBio}>
         {bio === null || bio === undefined ? (
-          <Text style={styles.bioText(isAnonimity)}>No Bio</Text>
+          <Text style={styles.bioText(isAnonimity)}>Send a message</Text>
         ) : (
           <TouchableOpacity onPress={openBio}>
             <Text linkStyle={styles.seeMore} style={styles.bioText(isAnonimity)}>
@@ -109,7 +109,7 @@ const BioAndChat = (props) => {
           disabledInput={!isSignedMessageEnabled}
           onSend={onSendDM}
           onChangeMessage={setDMChat}
-          disabledButton={loadingSendDM || !isSignedMessageEnabled}
+          disabledButton={loadingSendDM || !isSignedMessageEnabled || loadingGenerateAnon}
           defaultValue={
             isSignedMessageEnabled ? dmChat : `Only users ${username} follows can send messages`
           }

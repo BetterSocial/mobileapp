@@ -1,8 +1,7 @@
 import * as React from 'react';
 import FastImage from 'react-native-fast-image';
 import PropTypes from 'prop-types';
-import {StyleSheet, Text, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import {StyleSheet, Text, View, ScrollView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import Card from '../../Card/Card';
@@ -50,7 +49,6 @@ const Content = ({
     }
     return styles.contentFeedLink;
   };
-
   const navigateToLinkContextPage = () => {
     const param = linkContextScreenParamBuilder(
       item,
@@ -93,7 +91,7 @@ const Content = ({
   return (
     <>
       <ScrollView
-        style={[styles.contentFeed, handleContainerPdp()]}
+        style={[styles.contentFeed, handleContainerPdp(), {paddingVertical: message ? 5 : 0}]}
         contentContainerStyle={styles.contensStyle(images_url.length > 0, isShortText())}
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}>
@@ -101,36 +99,41 @@ const Content = ({
           style={[
             handleStyleFeed(),
             {
-              minHeight: calculationText(hashtagAtComponent(sanitizeUrl(message))).containerHeight
+              minHeight: message
+                ? calculationText(hashtagAtComponent(sanitizeUrl(message))).containerHeight
+                : 0,
+              paddingVertical: message ? 5 : 0
             },
             handleContainerPdp(),
             handleMessageContainerPdp()
           ]}>
-          <View style={styles.postTextContainer(isPostDetail)}>
-            {item.post_type !== POST_TYPE_LINK ? (
-              <Text
-                style={[
-                  styles.textContentFeed(isShortText()),
-                  {
-                    fontSize: calculationText(message).fontSize,
-                    lineHeight: calculationText(message).lineHeight
-                  }
-                ]}>
-                {hashtagAtComponent(message, null, isShortText())}
-              </Text>
-            ) : (
-              <Text
-                style={[
-                  styles.textContentFeed(isShortText()),
-                  {
-                    fontSize: calculationText(sanitizeUrl(message)).fontSize,
-                    lineHeight: calculationText(sanitizeUrl(message)).lineHeight
-                  }
-                ]}>
-                {hashtagAtComponent(sanitizeUrl(message), null, isShortText())}{' '}
-              </Text>
-            )}
-          </View>
+          {message ? (
+            <View style={styles.postTextContainer(isPostDetail)}>
+              {item.post_type !== POST_TYPE_LINK ? (
+                <Text
+                  style={[
+                    styles.textContentFeed(isShortText()),
+                    {
+                      fontSize: calculationText(message).fontSize,
+                      lineHeight: calculationText(message).lineHeight
+                    }
+                  ]}>
+                  {hashtagAtComponent(message, null, isShortText())}
+                </Text>
+              ) : (
+                <Text
+                  style={[
+                    styles.textContentFeed(isShortText()),
+                    {
+                      fontSize: calculationText(sanitizeUrl(message)).fontSize,
+                      lineHeight: calculationText(sanitizeUrl(message)).lineHeight
+                    }
+                  ]}>
+                  {hashtagAtComponent(sanitizeUrl(message), null, isShortText())}{' '}
+                </Text>
+              )}
+            </View>
+          ) : null}
         </View>
         <View style={styles.pollContainer}>
           {item && item.post_type === POST_TYPE_POLL ? (

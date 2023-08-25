@@ -26,6 +26,7 @@ import {TOPICS_PICK} from '../../utils/cache/constant';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {getSpecificCache} from '../../utils/cache';
+import {Monitoring} from '../../libraries/monitoring/sentry';
 import {setTopics as setTopicsContext} from '../../context/actions/topics';
 
 const {width} = Dimensions.get('screen');
@@ -43,6 +44,7 @@ const Topics = () => {
   const getCacheTopic = async () => {
     getSpecificCache(TOPICS_PICK, (cache) => {
       if (cache) {
+        Monitoring.logActions('set topics data from cache', cache);
         setTopics(cache);
         setIspreload(false);
       } else {
@@ -52,7 +54,6 @@ const Topics = () => {
     });
   };
   React.useEffect(() => {
-    // console.log(topicCollection, 'lusi')
     if (topicCollection.length > 0) {
       setTopics(topicCollection);
     }
@@ -98,6 +99,7 @@ const Topics = () => {
       handleSelectedLanguage={handleSelectedLanguage}
     />
   );
+
   const onBack = () => {
     navigation.goBack();
   };
@@ -195,18 +197,18 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white
   },
   containerProgress: {
-    marginTop: 36,
+    marginTop: 20,
     marginBottom: 24,
-    paddingHorizontal: 22
+    paddingHorizontal: 20
   },
   textPickYourTopic: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter-Bold',
     fontStyle: 'normal',
-    fontWeight: 'bold',
+    fontWeight: '600',
     fontSize: 36,
-    lineHeight: 44,
-    color: colors.bunting,
-    paddingHorizontal: 22
+    lineHeight: 43.57,
+    color: '#11243D',
+    marginHorizontal: 20
   },
   footer: {
     position: 'absolute',
@@ -232,13 +234,14 @@ const styles = StyleSheet.create({
   textGetPersonalContent: {
     fontFamily: 'Inter',
     fontStyle: 'normal',
-    fontWeight: 'normal',
+    fontWeight: '400',
     fontSize: 14,
+    lineHeight: 24,
     color: colors.gray,
     opacity: 0.84,
     marginTop: 8,
     marginBottom: 24,
-    paddingHorizontal: 22
+    paddingHorizontal: 20
   },
   containerTopic: {
     flexDirection: 'column',
@@ -332,4 +335,4 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline'
   }
 });
-export default React.memo(Topics);
+export default Topics;

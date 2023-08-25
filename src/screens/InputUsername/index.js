@@ -26,6 +26,7 @@ import {Button} from '../../components/Button';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {Header} from '../../components';
 import {Input} from '../../components/Input';
 import {ProgressBar} from '../../components/ProgressBar';
 import {colors} from '../../utils/colors';
@@ -262,7 +263,7 @@ const ChooseUsername = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
-
+      <Header />
       <View style={styles.keyboardavoidingview}>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
           <View style={styles.content}>
@@ -377,11 +378,15 @@ const styles = StyleSheet.create({
     marginTop: 24
   },
   desc: {
-    fontSize: 14,
-    color: 'rgba(130,130,130,0.84)',
+    fontFamily: 'Inter',
+    fontStyle: 'normal',
     fontWeight: '400',
-    fontFamily: fonts.inter[400],
-    lineHeight: 24
+    fontSize: 14,
+    lineHeight: 24,
+    color: colors.gray,
+    opacity: 0.84,
+    marginTop: 8,
+    marginBottom: 12
   },
   btnImage: {
     width: 23,
@@ -413,12 +418,13 @@ const styles = StyleSheet.create({
     marginRight: 13
   },
   content: {
+    paddingTop: 20,
     paddingHorizontal: 20
   },
   keyboardavoidingview: {
     flex: 1,
     // paddingHorizontal: 20,
-    paddingTop: 75,
+    // paddingTop: 75,
     // paddingBottom: 32,
     justifyContent: 'flex-end'
   },

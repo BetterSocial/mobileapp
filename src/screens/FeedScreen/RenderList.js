@@ -23,7 +23,6 @@ import {colors} from '../../utils/colors';
 import {getCommentLength} from '../../utils/getstream';
 import {showScoreAlertDialog} from '../../utils/Utils';
 import {normalizeFontSizeByWidth} from '../../utils/fonts';
-import {SearchAutoComplete} from '../../components/Search';
 
 const tabBarHeight = StatusBar.currentHeight;
 const FULL_WIDTH = Dimensions.get('screen').width;
@@ -114,6 +113,7 @@ const RenderListFeed = (props) => {
           props={item}
           height={getHeightHeader()}
           source={SOURCE_FEED_TAB}
+          headerStyle={styles.mh9}
         />
         {item.post_type === POST_TYPE_LINK && (
           <ContentLink
@@ -169,7 +169,7 @@ const RenderListFeed = (props) => {
           <View style={styles.contentReaction(getHeightReaction())}>
             <React.Fragment>
               <PreviewComment
-                user={item.latest_reactions.comment[0].user}
+                user={item?.latest_reactions?.comment[0]?.user}
                 comment={item?.latest_reactions?.comment[0]?.data?.text || ''}
                 image={item?.latest_reactions?.comment[0]?.user?.data?.profile_pic_url || ''}
                 time={item.latest_reactions.comment[0].created_at}
@@ -203,6 +203,9 @@ const styles = StyleSheet.create({
   cardMain: {
     width: '100%',
     height: dimen.size.FEED_CURRENT_ITEM_HEIGHT
+  },
+  mh9: {
+    marginHorizontal: 9
   }
 });
 

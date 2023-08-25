@@ -4,6 +4,7 @@ import IconEn from 'react-native-vector-icons/Entypo';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
+import moment from 'moment';
 import ButtonHightlight from '../ButtonHighlight';
 import Image from '../Image';
 import MemoCommentReply from '../../assets/icon/CommentReply';
@@ -21,7 +22,6 @@ import {removeWhiteSpace} from '../../utils/Utils';
 import BlockComponent from '../BlockComponent';
 import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
 import CommentUserName from '../CommentUsername/CommentUsername';
-import moment from 'moment';
 
 const Comment = ({
   user,
