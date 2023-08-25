@@ -2,7 +2,7 @@ import * as React from 'react';
 import JwtDecode from 'jwt-decode';
 import SimpleToast from 'react-native-simple-toast';
 import crashlytics from '@react-native-firebase/crashlytics';
-import {BackHandler, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
+import {BackHandler, StatusBar, StyleSheet, View} from 'react-native';
 import {StackActions} from '@react-navigation/native';
 // eslint-disable-next-line import/no-unresolved
 import {colors} from 'react-native-swiper-flatlist/src/themes';
@@ -143,7 +143,7 @@ const SignIn = () => {
   }, []);
 
   return (
-    <SafeAreaView style={S.container}>
+    <View>
       <StatusBar translucent={false} />
       <View style={S.containerSlideShow}>
         {clickTime >= 7 && isDemoLoginEnabled ? (
@@ -151,7 +151,7 @@ const SignIn = () => {
         ) : null}
         <SlideShow onContainerPress={onClickContainer} handleLogin={handleLogin} />
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 

@@ -1,12 +1,10 @@
 import * as React from 'react';
+import DeviceInfo from 'react-native-device-info';
 import FlashMessage from 'react-native-flash-message';
 import Toast from 'react-native-toast-message';
 import {BackHandler, KeyboardAvoidingView, Platform, View} from 'react-native';
 import {HumanIDProvider} from '@human-internet/react-native-humanid';
 import {NavigationContainer} from '@react-navigation/native';
-
-import DeviceInfo from 'react-native-device-info';
-import {appUpgradeVersionCheck} from 'app-upgrade-react-native-sdk';
 import {OverlayProvider, Streami18n} from 'stream-chat-react-native';
 import {RecoilDebugObserver} from 'reactotron-recoil-plugin';
 import {RecoilRoot} from 'recoil';
@@ -15,15 +13,16 @@ import {
   useSafeAreaFrame,
   useSafeAreaInsets
 } from 'react-native-safe-area-context';
+import {appUpgradeVersionCheck} from 'app-upgrade-react-native-sdk';
 
 import Store from './src/context/Store';
+import {APP_UPGRADE_API_KEY, ENV} from './src/libraries/Configs/ENVConfig';
 import {Analytics} from './src/libraries/analytics/firebaseAnalytics';
 import {RootNavigator} from './src/navigations/root-stack';
 import {fetchRemoteConfig} from './src/utils/FirebaseUtil';
 import {linking} from './src/navigations/linking';
 import {reactotronInstance} from './src/libraries/reactotron/reactotronInstance';
 import {toastConfig} from './src/configs/ToastConfig';
-import {APP_UPGRADE_API_KEY, ENV} from './src/libraries/Configs/ENVConfig';
 
 const App = () => {
   const {bottom, top} = useSafeAreaInsets();
@@ -118,7 +117,6 @@ const App = () => {
   return (
     <>
       <HumanIDProvider />
-      {/* <RealmProvider> */}
       <RecoilRoot>
         {__DEV__ ? <RecoilDebugObserver instance={reactotronInstance} /> : null}
         <Store>
@@ -127,17 +125,14 @@ const App = () => {
             onStateChange={handleStateChange}
             ref={navigationRef}
             linking={linking}>
-            <View style={{paddingTop: top, paddingBottom: bottom}}>
-              <OverlayProvider bottomInset={bottom} i18nInstance={streami18n}>
-                <KeyboardAvoidingView enabled={Platform.OS === 'ios'} behavior="padding">
-                  <RootNavigator areaHeight={height} />
-                </KeyboardAvoidingView>
-              </OverlayProvider>
-            </View>
+            <OverlayProvider bottomInset={bottom} i18nInstance={streami18n}>
+              <KeyboardAvoidingView enabled={Platform.OS === 'ios'} behavior="padding">
+                <RootNavigator areaHeight={height} />
+              </KeyboardAvoidingView>
+            </OverlayProvider>
           </NavigationContainer>
         </Store>
       </RecoilRoot>
-      {/* </RealmProvider> */}
       <Toast config={toastConfig} />
       <FlashMessage position="top" />
     </>
@@ -145,15 +140,7 @@ const App = () => {
 };
 
 const RootApp = () => (
-  <SafeAreaProvider
-    initialMetrics={{
-      insets: {
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0
-      }
-    }}>
+  <SafeAreaProvider>
     <App />
   </SafeAreaProvider>
 );
