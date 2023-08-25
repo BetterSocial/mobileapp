@@ -18,6 +18,7 @@ import {fonts, normalizeFontSize, normalizeFontSizeByWidth} from '../../../utils
 import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
 import {sanitizeUrl} from '../../../utils/string/StringUtils';
 import {smartRender} from '../../../utils/Utils';
+import useCalculationContent from '../../../screens/FeedScreen/hooks/useCalculationContent';
 
 const Content = ({
   message,
@@ -32,6 +33,11 @@ const Content = ({
   const cekImage = () => images_url && images_url !== '';
   const {hashtagAtComponent} = useContentFeed({navigation});
   const {calculationText} = usePostDetail();
+  const {handleCalculation} = useCalculationContent();
+  const [textHeight, setTextHeight] = React.useState(0);
+  const [containerHeight, setContainerHeight] = React.useState(0);
+  const maxFontSize = normalizeFontSizeByWidth(28);
+  const minFontSize = normalizeFontSizeByWidth(16);
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
       title: 'Photo',
@@ -42,7 +48,14 @@ const Content = ({
       }, [])
     });
   };
-
+  const {font, lineHeight} = handleCalculation(
+    containerHeight,
+    textHeight,
+    maxFontSize,
+    minFontSize,
+    item.post_type,
+    images_url
+  );
   const handleStyleFeed = () => {
     if (item.post_type !== POST_TYPE_LINK) {
       return styles.contentFeed;
@@ -86,6 +99,18 @@ const Content = ({
     return {};
   };
 
+  const handleTextHeight = ({nativeEvent}) => {
+    if (!textHeight || textHeight <= 0) {
+      setTextHeight(nativeEvent.layout.height);
+    }
+  };
+
+  const handleContainerHeight = ({nativeEvent}) => {
+    if (!containerHeight || containerHeight <= 0) {
+      setContainerHeight(nativeEvent.layout.height);
+    }
+  };
+
   if (!cekImage) return null;
 
   return (
@@ -96,44 +121,34 @@ const Content = ({
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}>
         <View
-          style={[
-            handleStyleFeed(),
-            {
-              minHeight: message
-                ? calculationText(hashtagAtComponent(sanitizeUrl(message))).containerHeight
-                : 0,
-              paddingVertical: message ? 5 : 0
-            },
-            handleContainerPdp(),
-            handleMessageContainerPdp()
-          ]}>
-          {message ? (
-            <View style={styles.postTextContainer(isPostDetail)}>
-              {item.post_type !== POST_TYPE_LINK ? (
-                <Text
-                  style={[
-                    styles.textContentFeed(isShortText()),
-                    {
-                      fontSize: calculationText(message).fontSize,
-                      lineHeight: calculationText(message).lineHeight
-                    }
-                  ]}>
-                  {hashtagAtComponent(message, null, isShortText())}
-                </Text>
-              ) : (
-                <Text
-                  style={[
-                    styles.textContentFeed(isShortText()),
-                    {
-                      fontSize: calculationText(sanitizeUrl(message)).fontSize,
-                      lineHeight: calculationText(sanitizeUrl(message)).lineHeight
-                    }
-                  ]}>
-                  {hashtagAtComponent(sanitizeUrl(message), null, isShortText())}{' '}
-                </Text>
-              )}
-            </View>
-          ) : null}
+          onLayout={handleContainerHeight}
+          style={[handleStyleFeed(), handleContainerPdp(), handleMessageContainerPdp()]}>
+          <View style={styles.postTextContainer(isPostDetail)}>
+            {item.post_type !== POST_TYPE_LINK ? (
+              <Text
+                onLayout={handleTextHeight}
+                style={[
+                  styles.textContentFeed(isShortText()),
+                  {
+                    fontSize: font,
+                    lineHeight
+                  }
+                ]}>
+                {hashtagAtComponent(message, null, isShortText())}
+              </Text>
+            ) : (
+              <Text
+                style={[
+                  styles.textContentFeed(isShortText()),
+                  {
+                    fontSize: font,
+                    lineHeight
+                  }
+                ]}>
+                {hashtagAtComponent(sanitizeUrl(message), null, isShortText())}{' '}
+              </Text>
+            )}
+          </View>
         </View>
         <View style={styles.pollContainer}>
           {item && item.post_type === POST_TYPE_POLL ? (
