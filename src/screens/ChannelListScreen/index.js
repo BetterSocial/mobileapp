@@ -235,8 +235,7 @@ const ChannelListScreen = () => {
                   onEndReached: () => null,
                   refreshControl: null
                 }}
-                // additionalData={listPostNotif}
-                additionalData={[]}
+                additionalData={listPostNotif}
                 context={myContext}
                 PreviewUnreadCount={chatBadge}
                 PreviewMessage={PreviewMessage}
