@@ -17,6 +17,7 @@ import PreviewMessage from './elements/CustomPreviewMessage';
 import api from '../../service/config';
 import streamFeed from '../../utils/getstream/streamer';
 import useChannelList from './hooks/useChannelList';
+import useCustomEasyFollowSystemHook from '../../hooks/core/getstream/useCustomEasyFollowSystemHook';
 import useFeedService from '../../hooks/useFeedService';
 import TokenStorage, {ITokenEnum} from '../../utils/storage/custom/tokenStorage';
 import useOnBottomNavigationTabPressHook, {
@@ -59,6 +60,7 @@ const ChannelListScreen = () => {
   const [followUserList, setFollowUserList] = useRecoilState(followersOrFollowingAtom);
 
   const {getFeedChat} = useFeedService();
+  const {followData, checkFollowStatus} = useCustomEasyFollowSystemHook();
 
   const filters = {
     members: {$in: [myProfile.user_id]},
@@ -213,6 +215,7 @@ const ChannelListScreen = () => {
   );
 
   const checkFollowBack = async (data) => {
+    console.log('data', data);
     try {
       const response = await api.get(`/users/check-follow?targetUserId=${data}`);
       if (response?.data) {
@@ -251,7 +254,10 @@ const ChannelListScreen = () => {
     <>
       <StatusBar translucent={false} />
       <ScrollView ref={listRef} contentInsetAdjustmentBehavior="automatic">
-        <EasyFollowSystem valueCallback={checkFollowBack} followButtonAction={followButtonAction}>
+        <EasyFollowSystem
+          followData={followData}
+          refreshFollowData={checkFollowStatus}
+          followButtonAction={followButtonAction}>
           {myProfile && myProfile.user_id && client.client ? (
             <Chat client={client.client} i18nInstance={streami18n}>
               <ChannelList
@@ -269,7 +275,8 @@ const ChannelListScreen = () => {
                   onEndReached: () => null,
                   refreshControl: null
                 }}
-                additionalData={listPostNotif}
+                // additionalData={listPostNotif}
+                additionalData={[]}
                 context={myContext}
                 PreviewUnreadCount={chatBadge}
                 PreviewMessage={PreviewMessage}

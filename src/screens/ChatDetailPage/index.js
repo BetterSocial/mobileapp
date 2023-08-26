@@ -13,6 +13,7 @@ import Header from '../../components/Chat/Header';
 import ImageSendPreview from './elements/ImageSendPreview';
 import InputMessage from '../../components/Chat/InputMessage';
 import api from '../../service/config';
+import useCustomEasyFollowSystemHook from '../../hooks/core/getstream/useCustomEasyFollowSystemHook';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {CustomMessageSystem} from '../../components';
@@ -32,6 +33,7 @@ const ChatDetailPage = ({route}) => {
   const [channelClient, dispatchChannel] = React.useContext(Context).channel;
   const [followUserList, setFollowUserList] = useRecoilState(followersOrFollowingAtom);
   const [, dispatch] = React.useContext(Context).groupChat;
+  const {checkFollowStatus, followData} = useCustomEasyFollowSystemHook();
 
   const channelData = channelClient?.channel;
   const channelType = channelClient?.channel?.data?.channel_type;
@@ -189,7 +191,10 @@ const ChatDetailPage = ({route}) => {
     return (
       <SafeAreaView>
         <StatusBar backgroundColor="white" translucent={false} />
-        <EasyFollowSystem valueCallback={checkFollowBack} followButtonAction={followButtonAction}>
+        <EasyFollowSystem
+          followData={followData}
+          refreshFollowData={checkFollowStatus}
+          followButtonAction={followButtonAction}>
           <Chat client={clients.client} i18nInstance={streami18n}>
             <Channel
               channel={channelClient.channel}
