@@ -2,19 +2,17 @@ import * as React from 'react';
 // eslint-disable-next-line import/no-unresolved
 import EasyFollowSystem from 'stream-chat-react-native-core/src/components/ChannelList/EasyFollowSystem';
 import Toast from 'react-native-simple-toast';
-import crashlytics from '@react-native-firebase/crashlytics';
 import moment from 'moment';
 import {ActivityIndicator, ScrollView, StatusBar, StyleSheet, View} from 'react-native';
 import {ChannelList, ChannelPreviewTitle, Chat, Streami18n} from 'stream-chat-react-native';
 import {useNavigation} from '@react-navigation/core';
-import {useRecoilState, useRecoilValue} from 'recoil';
+import {useRecoilValue} from 'recoil';
 
 import ChannelStatusIcon from '../../components/ChannelStatusIcon';
 import CustomPreviewAvatar from './elements/CustomPreviewAvatar';
 import CustomPreviewUnreadCount from './elements/CustomPreviewUnreadCount';
 import PostNotificationPreview from './elements/components/PostNotificationPreview';
 import PreviewMessage from './elements/CustomPreviewMessage';
-import api from '../../service/config';
 import streamFeed from '../../utils/getstream/streamer';
 import useChannelList from './hooks/useChannelList';
 import useCustomEasyFollowSystemHook from '../../hooks/core/getstream/useCustomEasyFollowSystemHook';
@@ -29,7 +27,6 @@ import {Context} from '../../context';
 import {FEED_COMMENT_COUNT} from '../../utils/cache/constant';
 import {channelListLocalAtom} from '../../service/channelListLocal';
 import {feedChatAtom} from '../../models/feeds/feedsNotification';
-import {followersOrFollowingAtom} from './model/followersOrFollowingAtom';
 import {getChatName} from '../../utils/string/StringUtils';
 import {getSpecificCache} from '../../utils/cache';
 import {setChannel} from '../../context/actions/setChannel';
