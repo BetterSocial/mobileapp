@@ -256,7 +256,7 @@ function HomeBottomTabs({navigation}) {
         initialRouteName={
           initialStartup !== null && otherProfileData?.user_id === initialStartup.id
             ? 'Profile'
-            : 'ChannelList'
+            : 'Feed'
         }
         tabBarOptions={{
           activeTintColor: colors.holytosca,
