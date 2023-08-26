@@ -1,22 +1,19 @@
 import * as React from 'react';
 import EasyFollowSystem from 'stream-chat-react-native-core/src/components/ChannelList/EasyFollowSystem';
-import crashlytics from '@react-native-firebase/crashlytics';
 import moment from 'moment';
 import {Channel, Chat, MessageInput, MessageList, Streami18n} from 'stream-chat-react-native';
 import {MessageSystem} from 'stream-chat-react-native-core';
 import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
-import {useRecoilState} from 'recoil';
 
 import ChatStatusIcon from '../../components/ChatStatusIcon';
 import CustomMessageAvatar from './elements/CustomMessageAvatar';
 import Header from '../../components/Chat/Header';
 import ImageSendPreview from './elements/ImageSendPreview';
 import InputMessage from '../../components/Chat/InputMessage';
-import api from '../../service/config';
+import useCustomEasyFollowSystemHook from '../../hooks/core/getstream/useCustomEasyFollowSystemHook';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {CustomMessageSystem} from '../../components';
-import {followersOrFollowingAtom} from '../ChannelListScreen/model/followersOrFollowingAtom';
 import {fonts} from '../../utils/fonts';
 import {setAsset} from '../../context/actions/groupChat';
 import {setChannel} from '../../context/actions/setChannel';
@@ -30,8 +27,8 @@ const streami18n = new Streami18n({
 const ChatDetailPage = ({route}) => {
   const [clients] = React.useContext(Context).client;
   const [channelClient, dispatchChannel] = React.useContext(Context).channel;
-  const [followUserList, setFollowUserList] = useRecoilState(followersOrFollowingAtom);
   const [, dispatch] = React.useContext(Context).groupChat;
+  const {checkFollowStatus, followUserFunction, followData} = useCustomEasyFollowSystemHook();
 
   const channelData = channelClient?.channel;
   const channelType = channelClient?.channel?.data?.channel_type;
@@ -139,44 +136,6 @@ const ChatDetailPage = ({route}) => {
   };
   const testDate = (v) => v;
 
-  const checkFollowBack = async (data) => {
-    try {
-      const response = await api.get(`/users/check-follow?targetUserId=${data}`);
-      if (response?.data) {
-        return response.data.data;
-      }
-
-      return null;
-    } catch (error) {
-      crashlytics().recordError(new Error(error));
-      throw new Error(error);
-    }
-  };
-
-  const followButtonAction = async (userId, targetUserId, username, targetUsername) => {
-    const requestData = {
-      user_id_follower: userId,
-      user_id_followed: targetUserId,
-      username_follower: username,
-      username_followed: targetUsername,
-      follow_source: 'chat'
-    };
-
-    api
-      .post('/profiles/follow-user-v3', requestData)
-      .then((res) => {
-        Promise.resolve(res.data);
-      })
-      .catch((err) => {
-        setFollowUserList([...followUserList, requestData]);
-        Promise.reject(err);
-      });
-
-    return true;
-  };
-
-  console.log('channelClient', channelClient.channel?.data?.is_channel_blocked);
-
   const renderMessageInput = () => {
     if (channelClient.channel?.data?.is_channel_blocked) {
       return <></>;
@@ -189,7 +148,10 @@ const ChatDetailPage = ({route}) => {
     return (
       <SafeAreaView>
         <StatusBar backgroundColor="white" translucent={false} />
-        <EasyFollowSystem valueCallback={checkFollowBack} followButtonAction={followButtonAction}>
+        <EasyFollowSystem
+          followData={followData}
+          refreshFollowData={checkFollowStatus}
+          followButtonAction={followUserFunction}>
           <Chat client={clients.client} i18nInstance={streami18n}>
             <Channel
               channel={channelClient.channel}
