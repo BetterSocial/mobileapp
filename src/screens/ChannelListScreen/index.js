@@ -57,10 +57,9 @@ const ChannelListScreen = () => {
     useChannelList();
   const [, dispatchUnreadMessage] = React.useContext(Context).unReadMessage;
   const channelListLocalValue = useRecoilValue(channelListLocalAtom);
-  const [followUserList, setFollowUserList] = useRecoilState(followersOrFollowingAtom);
 
   const {getFeedChat} = useFeedService();
-  const {followData, checkFollowStatus} = useCustomEasyFollowSystemHook();
+  const {followData, checkFollowStatus, followUserFunction} = useCustomEasyFollowSystemHook();
 
   const filters = {
     members: {$in: [myProfile.user_id]},
@@ -214,42 +213,6 @@ const ChannelListScreen = () => {
     />
   );
 
-  const checkFollowBack = async (data) => {
-    console.log('data', data);
-    try {
-      const response = await api.get(`/users/check-follow?targetUserId=${data}`);
-      if (response?.data) {
-        return response.data.data;
-      }
-
-      return null;
-    } catch (error) {
-      crashlytics().recordError(new Error(error));
-      throw new Error(error);
-    }
-  };
-
-  const followButtonAction = async (userId, targetUserId, username, targetUsername) => {
-    const requestData = {
-      user_id_follower: userId,
-      user_id_followed: targetUserId,
-      username_follower: username,
-      username_followed: targetUsername,
-      follow_source: 'chat'
-    };
-
-    api
-      .post('/profiles/follow-user-v3', requestData)
-      .then((res) => {
-        Promise.resolve(res.data);
-      })
-      .catch((err) => {
-        Promise.reject(err);
-        setFollowUserList([...followUserList, requestData]);
-      });
-
-    return true;
-  };
   return (
     <>
       <StatusBar translucent={false} />
@@ -257,7 +220,7 @@ const ChannelListScreen = () => {
         <EasyFollowSystem
           followData={followData}
           refreshFollowData={checkFollowStatus}
-          followButtonAction={followButtonAction}>
+          followButtonAction={followUserFunction}>
           {myProfile && myProfile.user_id && client.client ? (
             <Chat client={client.client} i18nInstance={streami18n}>
               <ChannelList

@@ -2,12 +2,16 @@
 import * as React from 'react';
 import _ from 'lodash';
 import axios from 'axios';
+import {useRecoilState} from 'recoil';
 
 import {checkFollowStatusBatch} from '../../../service/users';
+import {followersOrFollowingAtom} from '../../../screens/ChannelListScreen/model/followersOrFollowingAtom';
+import {setFollow} from '../../../service/profile';
 
 const useCustomEasyFollowSystemHook = () => {
   const [userIdsToCheck, setUserIdsToCheck] = React.useState<string[]>([]);
   const [followData, setFollowData] = React.useState({});
+  const [, setFollowUserList] = useRecoilState(followersOrFollowingAtom);
 
   const checkFollowStatusBatchCancelTokenRef = React.useRef(axios.CancelToken.source());
 
@@ -48,8 +52,38 @@ const useCustomEasyFollowSystemHook = () => {
   };
 
   const addFollowStatusQueueCheck = (userId: string) => {
-    console.log('addFollowStatusQueueCheck', userId);
     setUserIdsToCheck((prev) => _.uniq([...prev, userId]));
+  };
+
+  const followUserFunction = async (
+    userId: string,
+    targetUserId: string,
+    username: string,
+    targetUsername: string
+  ) => {
+    const requestData = {
+      user_id_follower: userId,
+      user_id_followed: targetUserId,
+      username_follower: username,
+      username_followed: targetUsername,
+      follow_source: 'chat'
+    };
+
+    try {
+      await setFollow(requestData);
+    } catch (e) {
+      console.log(e);
+      setFollowUserList((prev) => [...prev, requestData]);
+    } finally {
+      setFollowData((prev) => {
+        const newFollowData = {...prev};
+        newFollowData[targetUserId] = {
+          ...newFollowData[targetUserId],
+          is_following: true
+        };
+        return newFollowData;
+      });
+    }
   };
 
   const debounceTime = 500;
@@ -60,8 +94,9 @@ const useCustomEasyFollowSystemHook = () => {
   }, [userIdsToCheck]);
 
   return {
+    followData,
     checkFollowStatus: addFollowStatusQueueCheck,
-    followData
+    followUserFunction
   };
 };
 
