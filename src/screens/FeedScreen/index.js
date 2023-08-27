@@ -62,8 +62,8 @@ const FeedScreen = (props) => {
   const [lastEvent, setLastEvent] = React.useState(null);
   const [isStopped, setIsStopped] = React.useState(false);
   const [feedAnon, setFeedAnon] = React.useState({});
-  const getDataFeedsHandle = async (offsetFeed = 0, useLoading) => {
-    getDataFeeds(offsetFeed, useLoading);
+  const getDataFeedsHandle = async (offsetFeed = 0, useLoading = false, targetFeed = null) => {
+    getDataFeeds(offsetFeed, useLoading, targetFeed);
   };
   const onDeleteBlockedPostCompletedHandle = async (postId) => {
     onDeleteBlockedPostCompleted(postId);

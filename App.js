@@ -154,7 +154,6 @@ const RootApp = () => (
     tooltipComponent={TutorialTooltip}
     tooltipStyle={TooltipStyle.tooltip}
     stepNumberComponent={() => <View />}
-    // verticalOffset={10}
     backdropColor={COLORS.black80percent}
     androidStatusBarVisible>
     <SafeAreaProvider
