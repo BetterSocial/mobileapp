@@ -8,6 +8,7 @@ import Gap from './Gap';
 import Header from './Header';
 import CustomMessageSystem from './CustomMessageSystem';
 import Skeleton from './Skeleton';
+import TutorialStep from './TutorialStep';
 
 export {
   Avatar,
@@ -20,4 +21,5 @@ export {
   Header,
   CustomMessageSystem,
   Skeleton,
+  TutorialStep
 };
