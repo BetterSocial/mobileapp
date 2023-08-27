@@ -1,7 +1,7 @@
 import * as React from 'react';
 import FastImage from 'react-native-fast-image';
 import PropTypes from 'prop-types';
-import {Dimensions, Platform, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 
@@ -74,7 +74,6 @@ const Content = ({
   const isShortText = () => {
     return images_url.length <= 0 && item.post_type === POST_TYPE_STANDARD && !haveSeeMore;
   };
-
   const handleContainerPdp = () => {
     if (isShortText()) {
       return styles.shortText;
