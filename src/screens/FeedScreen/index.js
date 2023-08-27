@@ -3,6 +3,7 @@ import {Animated, InteractionManager, StatusBar, StyleSheet, View} from 'react-n
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 import {useCopilot} from 'react-native-copilot';
+import _ from 'lodash';
 
 import BlockComponent from '../../components/BlockComponent';
 import RenderListFeed from './RenderList';
@@ -37,7 +38,6 @@ const FeedScreen = (props) => {
   const {interactionsComplete} = useAfterInteractions();
   const {feeds, timer, viewPostTimeIndex} = feedsContext;
   const [isScroll, setIsScroll] = React.useState(false);
-  const [isIndexAnon, setIsIndexAnon] = React.useState(null);
   const {
     getDataFeeds,
     postOffset,
@@ -56,11 +56,12 @@ const FeedScreen = (props) => {
     handleScroll,
     setIsLastPage
   } = useCoreFeed();
-  const {start, stop, copilotEvents} = useCopilot();
+  const {start, copilotEvents} = useCopilot();
   const interactionManagerRef = React.useRef(null);
   const interactionManagerAnimatedRef = React.useRef(null);
   const [lastEvent, setLastEvent] = React.useState(null);
   const [isStopped, setIsStopped] = React.useState(false);
+  const [feedAnon, setFeedAnon] = React.useState({});
   const getDataFeedsHandle = async (offsetFeed = 0, useLoading) => {
     getDataFeeds(offsetFeed, useLoading);
   };
@@ -232,22 +233,12 @@ const FeedScreen = (props) => {
     saveSearchHeight(height);
   };
 
-  const scrollToAnon = React.useCallback(() => {
+  React.useEffect(() => {
     const firstAnonIndex = feeds?.findIndex((item) => item.anonimity);
     if (firstAnonIndex > 0) {
-      stop();
-      setIsIndexAnon(firstAnonIndex);
-      listRef.current?.scrollToIndex({
-        index: firstAnonIndex
-      });
-      setTimeout(() => {
-        start();
-      }, 3000);
+      setFeedAnon(feeds[firstAnonIndex]);
+      setTimeout(() => start(), 2000);
     }
-  }, [feeds]);
-
-  React.useLayoutEffect(() => {
-    scrollToAnon();
   }, [feeds]);
 
   const renderItem = ({item, index}) => {
@@ -270,7 +261,7 @@ const FeedScreen = (props) => {
         searchHeight={searchHeight}
         bottomArea={bottom}
         isScroll={isScroll}
-        isIndexAnon={isIndexAnon === index}
+        anonId={feedAnon?.id}
       />
     );
   };
@@ -286,7 +277,7 @@ const FeedScreen = (props) => {
       <TiktokScroll
         listRef={listRef}
         contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT + normalizeFontSizeByWidth(4)}
-        data={feeds}
+        data={feedAnon?.id ? _.uniqBy([{...feedAnon, isAnon: true}, ...feeds], 'id') : feeds}
         onEndReach={onEndReach}
         onRefresh={onRefresh}
         onScroll={handleScrollEvent}

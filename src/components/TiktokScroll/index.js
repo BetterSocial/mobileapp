@@ -8,59 +8,73 @@ const styles = StyleSheet.create({
   }
 });
 
-const TiktokScroll = (props) => {
-  const {
-    data,
-    listRef,
-    renderItem,
-    onRefresh,
-    refreshing,
-    onEndReach,
-    contentHeight = 548,
-    onScroll,
-    onScrollBeginDrag,
-    onMomentumScrollEnd,
-    searchHeight,
-    showSearchBar,
-    ...otherProps
-  } = props;
+class TiktokScroll extends React.Component {
+  constructor(props) {
+    super(props);
+    this.flatListScrollRef = React.createRef();
+    this.scrollToTop = this.scrollToTop.bind(this);
+  }
 
-  return (
-    <FlatList
-      contentInsetAdjustmentBehavior="automatic"
-      contentContainerStyle={[
-        styles.flatlistContainer,
-        {paddingTop: showSearchBar ? searchHeight : 0}
-      ]}
-      data={data}
-      decelerationRate="fast"
-      disableIntervalMomentum={true}
-      keyExtractor={(item) => item.id}
-      onEndReached={onEndReach}
-      onRefresh={onRefresh}
-      onScroll={onScroll}
-      onScrollBeginDrag={onScrollBeginDrag}
-      getItemLayout={(item, index) => ({
-        length: contentHeight,
-        offset: contentHeight * index,
-        index
-      })}
-      onMomentumScrollEnd={onMomentumScrollEnd}
-      initialNumToRender={2}
-      ref={listRef}
-      refreshing={refreshing}
-      renderItem={renderItem}
-      scrollEventThrottle={1}
-      showsVerticalScrollIndicator={false}
-      snapToAlignment="start"
-      snapToInterval={contentHeight}
-      maxToRenderPerBatch={2}
-      updateCellsBatchingPeriod={10}
-      windowSize={10}
-      {...otherProps}
-    />
-  );
-};
+  scrollToTop() {
+    this.flatListScrollRef.current.scrollToOffset({
+      offset: 0,
+      animated: true
+    });
+  }
+
+  render() {
+    const {
+      data,
+      renderItem,
+      onRefresh,
+      refreshing,
+      onEndReach,
+      contentHeight = 548,
+      onScroll,
+      onScrollBeginDrag,
+      onMomentumScrollEnd,
+      searchHeight,
+      showSearchBar,
+      ...otherProps
+    } = this.props;
+
+    return (
+      <FlatList
+        contentInsetAdjustmentBehavior="automatic"
+        contentContainerStyle={[
+          styles.flatlistContainer,
+          {paddingTop: showSearchBar ? searchHeight : 0}
+        ]}
+        data={data}
+        decelerationRate="fast"
+        disableIntervalMomentum={true}
+        keyExtractor={(item) => item.id}
+        onEndReached={onEndReach}
+        onRefresh={onRefresh}
+        onScroll={onScroll}
+        onScrollBeginDrag={onScrollBeginDrag}
+        getItemLayout={(item, index) => ({
+          length: contentHeight,
+          offset: contentHeight * index,
+          index
+        })}
+        onMomentumScrollEnd={onMomentumScrollEnd}
+        initialNumToRender={2}
+        ref={this.flatListScrollRef}
+        refreshing={refreshing}
+        renderItem={renderItem}
+        scrollEventThrottle={1}
+        showsVerticalScrollIndicator={false}
+        snapToAlignment="start"
+        snapToInterval={contentHeight}
+        maxToRenderPerBatch={2}
+        updateCellsBatchingPeriod={10}
+        windowSize={10}
+        {...otherProps}
+      />
+    );
+  }
+}
 
 TiktokScroll.propTypes = {
   data: PropTypes.array,

@@ -259,7 +259,7 @@ const CreatePost = () => {
 
   React.useEffect(() => {
     openTutorial();
-  }, []);
+  }, [isOpen]);
 
   React.useEffect(() => {
     debounced(message);
@@ -737,6 +737,7 @@ const CreatePost = () => {
         <Header title={headerTitle} onPress={() => onBack()} />
         <View style={{paddingHorizontal: 15}}>
           <TutorialStep
+            active={isFocused}
             name={StringConstant.tutorialCreateAnonymousPostTitle}
             text={StringConstant.tutorialCreateAnonymousPostDescription}>
             <UserProfile

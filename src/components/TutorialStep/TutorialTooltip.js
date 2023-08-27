@@ -2,13 +2,17 @@ import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {useCopilot} from 'react-native-copilot';
 import {TooltipStyle} from './TooltipStyle';
+import StringConstant from '../../utils/string/StringConstant';
+import AnonStep from '../../assets/icon-svg/anon_step.svg';
 
 export const TutorialTooltip = () => {
   const {goToNext, stop, currentStep, isLastStep} = useCopilot();
-  const imageItem =
-    currentStep?.wrapperRef?.current?._internalFiberInstanceHandleDEV?.pendingProps?.imageItem; // eslint-disable-line no-underscore-dangle
-  const buttonText =
-    currentStep?.wrapperRef?.current?._internalFiberInstanceHandleDEV?.pendingProps?.buttonText; // eslint-disable-line no-underscore-dangle
+  let buttonText = 'Okay';
+  let imageItem = null;
+  if (currentStep?.name === StringConstant.tutorialAnonymousPostTitle) {
+    buttonText = 'Got it!';
+    imageItem = <AnonStep />;
+  }
 
   const handleStop = () => {
     stop();
