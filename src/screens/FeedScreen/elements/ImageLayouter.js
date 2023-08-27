@@ -7,7 +7,7 @@ import FastImage from 'react-native-fast-image';
 const ImageLayouter = ({images = [], onimageclick, mode, isFeed}) => {
   const imageOnClick = React.useCallback(onimageclick, []);
 
-  if (images.length === 1 && isFeed) {
+  if (images.length === 1) {
     return (
       <ImageBackground
         resizeMode="stretch"
