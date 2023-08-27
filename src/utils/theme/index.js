@@ -3,6 +3,7 @@ export const COLORS = {
   black: '#1E1F20',
   black000: '#000',
   black30percent: 'rgba(0,0,0,0.3)',
+  black80percent: 'rgba(0,0,0,0.8)',
   black43: '#434343',
   blackgrey: '#828282',
   blue: '#2C67BC',

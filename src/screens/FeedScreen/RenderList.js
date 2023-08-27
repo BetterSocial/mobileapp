@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
+import {useIsFocused} from '@react-navigation/core';
 
 import Content from './Content';
 import ContentLink from './ContentLink';
@@ -18,11 +19,12 @@ import {
   POST_TYPE_STANDARD,
   SOURCE_FEED_TAB
 } from '../../utils/constants';
-import {Footer, Gap, PreviewComment} from '../../components';
+import {Footer, Gap, PreviewComment, TutorialStep} from '../../components';
 import {colors} from '../../utils/colors';
 import {getCommentLength} from '../../utils/getstream';
 import {showScoreAlertDialog} from '../../utils/Utils';
 import {normalizeFontSizeByWidth} from '../../utils/fonts';
+import StringConstant from '../../utils/string/StringConstant';
 
 const tabBarHeight = StatusBar.currentHeight;
 const FULL_WIDTH = Dimensions.get('screen').width;
@@ -39,7 +41,8 @@ const RenderListFeed = (props) => {
     onPressBlock,
     onPressUpvote,
     selfUserId,
-    onPressDownVote
+    onPressDownVote,
+    anonId
   } = props;
   const {
     totalVote,
@@ -57,6 +60,7 @@ const RenderListFeed = (props) => {
     getTotalReaction,
     showScoreButton
   } = useFeed();
+  const isFocused = useIsFocused();
 
   const onPressDownVoteHandle = async () => {
     onPressDownVoteHook();
@@ -108,13 +112,17 @@ const RenderListFeed = (props) => {
   return (
     <View key={item.id} testID="dataScroll" style={styles.cardContainer}>
       <View style={styles.cardMain}>
-        <Header
-          hideThreeDot={true}
-          props={item}
-          height={getHeightHeader()}
-          source={SOURCE_FEED_TAB}
-          headerStyle={styles.mh9}
-        />
+        <TutorialStep
+          active={item.id === anonId && isFocused}
+          name={StringConstant.tutorialAnonymousPostTitle}
+          text={StringConstant.tutorialAnonymousPostDescription}>
+          <Header
+            hideThreeDot={true}
+            props={item}
+            height={getHeightHeader()}
+            source={SOURCE_FEED_TAB}
+          />
+        </TutorialStep>
         {item.post_type === POST_TYPE_LINK && (
           <ContentLink
             key={item.id}
