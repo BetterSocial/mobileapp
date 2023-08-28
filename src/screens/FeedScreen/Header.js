@@ -115,8 +115,8 @@ const _renderAnonimity = ({
         style={[
           styles.rowSpaceBeetwen,
           styles.heightHeader(height),
-          headerStyle,
-          {paddingLeft: isPostDetail ? 10 : 0}
+          {paddingLeft: isPostDetail ? 10 : 0},
+          headerStyle
         ]}>
         <View style={styles.rowCenter}>
           {isBackButton ? (
