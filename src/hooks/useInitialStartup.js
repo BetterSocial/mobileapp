@@ -9,23 +9,24 @@ import DiscoveryAction from '../context/actions/discoveryAction';
 import DiscoveryRepo from '../service/discovery';
 import following from '../context/actions/following';
 import streamFeed from '../utils/getstream/streamer';
+import useFeedService from './useFeedService';
+import useResetContext from './context/useResetContext';
+import TokenStorage, {ITokenEnum} from '../utils/storage/custom/tokenStorage';
 import {Analytics} from '../libraries/analytics/firebaseAnalytics';
 import {Context} from '../context';
 import {FEEDS_CACHE, NEWS_CACHE, PROFILE_CACHE, RECENT_SEARCH_TERMS} from '../utils/cache/constant';
 import {InitialStartupAtom} from '../service/initialStartup';
 import {channelListLocalAtom} from '../service/channelListLocal';
-import {getAccessToken} from '../utils/token';
 import {getDomains, getFollowedDomain} from '../service/domain';
 import {getFollowing, getMyProfile} from '../service/profile';
 import {getFollowingTopic} from '../service/topics';
-import {getMainFeed} from '../service/post';
+import {getMainFeedV2WithTargetFeed} from '../service/post';
 import {getSpecificCache, saveToCache} from '../utils/cache';
 import {setMainFeeds, setTimer} from '../context/actions/feeds';
 import {setMyProfileAction} from '../context/actions/setMyProfileAction';
 import {setNews} from '../context/actions/news';
 import {traceMetricScreen} from '../libraries/performance/firebasePerformance';
 import {useClientGetstream} from '../utils/getstream/ClientGetStram';
-import useFeedService from './useFeedService';
 
 export const useInitialStartup = () => {
   const [, newsDispatch] = React.useContext(Context).news;
@@ -42,6 +43,7 @@ export const useInitialStartup = () => {
   const timeoutSplashScreen = React.useRef(null);
   const [loadingUser, setLoadingUser] = React.useState(true);
   const getLocalChannelData = useLocalChannelsFirst(setLocalChannelData);
+  const {resetAllContext, resetLocalDB} = useResetContext();
 
   const {getFeedChat} = useFeedService();
 
@@ -50,20 +52,27 @@ export const useInitialStartup = () => {
   const create = useClientGetstream();
 
   const doGetAccessToken = async () => {
-    const accessToken = await getAccessToken();
-    if (accessToken) {
-      setInitialValue({id: accessToken.id});
+    const token = TokenStorage.get(ITokenEnum.token);
+    if (token) {
+      setInitialValue({id: token});
+    } else {
+      resetAllContext();
+      resetLocalDB();
     }
   };
 
   const callStreamFeed = async () => {
-    const token = await getAccessToken();
+    const token = TokenStorage.get(ITokenEnum.token);
     if (token) {
       const clientFeed = streamFeed(token);
-      const notif = clientFeed.feed('notification', profileState.user_id, token.id);
-      notif.subscribe(() => {
-        getFeedChat();
-      });
+      try {
+        const notif = clientFeed.feed('notification', profileState?.myProfile?.user_id, token);
+        notif.subscribe(() => {
+          getFeedChat();
+        });
+      } catch (e) {
+        console.log('qweqwewqeq', e);
+      }
     }
   };
 
@@ -92,13 +101,14 @@ export const useInitialStartup = () => {
   const getDataFeeds = async (offset = 0) => {
     try {
       const query = `?offset=${offset}&limit=${LIMIT_FIRST_FEEDS}`;
-      const dataFeeds = await getMainFeed(query);
+      const dataFeeds = await getMainFeedV2WithTargetFeed(query);
       if (dataFeeds.data?.length > 0) {
         const {data} = dataFeeds;
         const dataWithDummy = [...data, {dummy: true}];
         let saveData = {
           offset: dataFeeds.offset,
-          data: dataWithDummy
+          data: dataWithDummy,
+          targetFeed: dataFeeds?.feed
         };
         if (offset === 0) {
           setMainFeeds(dataWithDummy, dispatchFeeds);

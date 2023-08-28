@@ -1,25 +1,24 @@
 import * as React from 'react';
+import Config from 'react-native-config';
 import ImagePicker from 'react-native-image-crop-picker';
 import Toast from 'react-native-simple-toast';
 import {
   ActivityIndicator,
   Alert,
   Dimensions,
+  Linking,
   LogBox,
   StatusBar,
   StyleSheet,
   Text,
   TouchableNativeFeedback,
-  View,
-  Linking
+  View
 } from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {debounce} from 'lodash';
 import {showMessage} from 'react-native-flash-message';
-import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {useNavigation} from '@react-navigation/core';
 
-import Config from 'react-native-config';
 import AnonymousTab from './elements/AnonymousTab';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BioAndDMSetting from './elements/BioAndDMSetting';
@@ -34,7 +33,7 @@ import PostOptionModal from '../../components/Modal/PostOptionModal';
 import ProfileHeader from './elements/ProfileHeader';
 import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
-import RenderItem from './elements/RenderItem';
+import RenderItem from '../FeedScreen/RenderList';
 import ShareUtils from '../../utils/share';
 import dimen from '../../utils/dimen';
 import useResetContext from '../../hooks/context/useResetContext';
@@ -59,14 +58,13 @@ import {
   updateImageProfile
 } from '../../service/profile';
 import {colors} from '../../utils/colors';
-import {deleteAnonymousPost, deletePost, getFeedDetail} from '../../service/post';
+import {deleteAnonymousPost, deletePost} from '../../service/post';
 import {downVote, upVote} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
-import {getAccessToken} from '../../utils/token';
-import {saveToCache} from '../../utils/cache';
 import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
+import {saveToCache} from '../../utils/cache';
 import {setFeedByIndex} from '../../context/actions/feeds';
 import {setMyProfileAction} from '../../context/actions/setMyProfileAction';
 import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
@@ -74,9 +72,7 @@ import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
-const {height, width} = Dimensions.get('screen');
-
-const isShowKarma = Config.DOPPLER_ENVIRONMENT === 'dev';
+const {width} = Dimensions.get('screen');
 
 const Header = (props) => {
   const {
@@ -155,11 +151,10 @@ const ProfileScreen = ({route}) => {
   const refBlockComponent = React.useRef();
   const headerHeightRef = React.useRef(0);
 
-  const [, dispatchProfile] = React.useContext(Context).profile;
+  const [profile, dispatchProfile] = React.useContext(Context).profile;
   const [, dispatch] = React.useContext(Context).users;
   const [myProfileFeed, myProfileDispatch] = React.useContext(Context).myProfileFeed;
 
-  const [, setTokenJwt] = React.useState('');
   const [dataMain, setDataMain] = React.useState({});
   const [dataMainBio, setDataMainBio] = React.useState('');
   const [errorBio, setErrorBio] = React.useState('');
@@ -176,7 +171,6 @@ const ProfileScreen = ({route}) => {
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0);
   const [loadingContainer, setLoadingContainer] = React.useState(true);
-  const [yourselfId] = React.useState('');
   const [isLastPage, setIsLastPage] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [isPostOptionModalOpen, setIsOptionModalOpen] = React.useState(false);
@@ -184,7 +178,6 @@ const ProfileScreen = ({route}) => {
   const [isFetchingList, setIsFetchingList] = React.useState(false);
   const {interactionsComplete} = useAfterInteractions();
   const isNotFromHomeTab = route?.params?.isNotFromHomeTab;
-  const bottomBarHeight = isNotFromHomeTab ? 0 : useBottomTabBarHeight();
   const [, setIsHitApiFirstTime] = React.useState(false);
 
   const updateUserClient = useUpdateClientGetstreamHook();
@@ -202,7 +195,6 @@ const ProfileScreen = ({route}) => {
     setTabIndexToSigned,
     reloadFetchAnonymousPost
   } = useProfileScreenHook();
-
   // eslint-disable-next-line consistent-return
   React.useEffect(() => {
     if (interactionsComplete) {
@@ -234,25 +226,25 @@ const ProfileScreen = ({route}) => {
   React.useEffect(() => {
     if (interactionsComplete) {
       getMyFeeds(0, LIMIT_PROFILE_FEED);
-      getAccessToken().then((val) => {
-        setTokenJwt(val);
-      });
       fetchMyProfile();
     }
   }, [interactionsComplete]);
 
   const fetchMyProfile = async () => {
-    const id = await getUserId();
-    if (id) {
-      setUserId(id);
-      const result = await getMyProfile(id);
-      console.log({result: result.data.allow_anon_dm});
-      if (result.code === 200) {
-        saveToCache(PROFILE_CACHE, result.data);
-        saveProfileState(result?.data);
-        return result?.data?.profile_pic_path;
+    try {
+      const id = await getUserId();
+      if (id) {
+        setUserId(id);
+        const result = await getMyProfile();
+        if (result.code === 200) {
+          saveToCache(PROFILE_CACHE, result.data);
+          saveProfileState(result?.data);
+          return result?.data?.profile_pic_path;
+        }
       }
       setLoadingContainer(false);
+    } catch (e) {
+      console.log('get my profile error', e);
     }
 
     return null;
@@ -526,7 +518,7 @@ const ProfileScreen = ({route}) => {
       index,
       isalreadypolling: item.isalreadypolling,
       feedId: item.id,
-      refreshParent: getMyFeeds
+      refreshParent: profileTabIndex === 0 ? getMyFeeds : reloadFetchAnonymousPost
     });
   };
 
@@ -534,7 +526,7 @@ const ProfileScreen = ({route}) => {
     navigation.navigate('ProfilePostDetailPage', {
       feedId: id,
       isalreadypolling: item.isalreadypolling,
-      refreshParent: getMyFeeds
+      refreshParent: profileTabIndex === 0 ? getMyFeeds : reloadFetchAnonymousPost
     });
   };
 
@@ -548,33 +540,12 @@ const ProfileScreen = ({route}) => {
     );
   };
 
-  const setUpVote = async (post, index) => {
+  const setUpVote = async (post) => {
     await upVote(post);
-    updateFeed(post, index);
   };
 
-  const setDownVote = async (post, index) => {
+  const setDownVote = async (post) => {
     await downVote(post);
-    updateFeed(post, index);
-  };
-
-  const updateFeed = async (post, index) => {
-    try {
-      const data = await getFeedDetail(post.activity_id);
-      if (data) {
-        setFeedByIndex(
-          {
-            singleFeed: data.data,
-            index
-          },
-          dispatch
-        );
-      }
-    } catch (e) {
-      if (__DEV__) {
-        console.log(e);
-      }
-    }
   };
 
   const handleOnEndReached = () => {
@@ -590,16 +561,10 @@ const ProfileScreen = ({route}) => {
     reloadFetchAnonymousPost();
   }
 
-  const onHeaderOptionClicked = (item) => {
-    setSelectedPostForOption(item);
-    setIsOptionModalOpen(true);
-  };
-
   const onHeaderOptionClosed = () => {
     setSelectedPostForOption(null);
     setIsOptionModalOpen(false);
   };
-
   const removePostByIdFromContext = () => {
     const deletedIndex = feeds?.findIndex((find) => selectedPostForOption?.id === find?.id);
     const newData = [...feeds];
@@ -638,6 +603,7 @@ const ProfileScreen = ({route}) => {
             data={mainFeeds}
             onRefresh={handleRefresh}
             refreshing={loading || isLoadingFetchingAnonymousPosts}
+            style={{backgroundColor: '#f2f2f2'}}
             onScroll={handleScroll}
             ListFooterComponent={isFetchingList ? <ActivityIndicator /> : null}
             onEndReach={handleOnEndReached}
@@ -646,12 +612,6 @@ const ProfileScreen = ({route}) => {
             updateCellsBatchingPeriod={10}
             removeClippedSubviews
             windowSize={10}
-            // snapToOffsets={(() => {
-            //   const posts = feeds.map(
-            //     (item, index) => headerHeightRef.current + index * dimen.size.PROFILE_ITEM_HEIGHT
-            //   );
-            //   return [0, ...posts];
-            // })()}
             ListHeaderComponent={
               <Header
                 headerHeightRef={headerHeightRef}
@@ -667,28 +627,19 @@ const ProfileScreen = ({route}) => {
               />
             }>
             {({item, index}) => {
-              const dummyItemHeight =
-                height -
-                dimen.size.PROFILE_ITEM_HEIGHT -
-                44 -
-                16 -
-                StatusBar.currentHeight -
-                bottomBarHeight;
-              if (item.dummy) return <View style={styles.dummyItem(dummyItemHeight)}></View>;
               return (
                 <RenderItem
-                  bottomBar={!isNotFromHomeTab}
+                  key={item.id}
                   item={item}
-                  index={index}
                   onNewPollFetched={onNewPollFetched}
+                  index={index}
                   onPressDomain={onPressDomain}
-                  onPress={() => onPress(item, index)}
-                  onPressComment={() => onPressComment(item, item.id)}
-                  onPressUpvote={(post) => setUpVote(post, index)}
-                  selfUserId={yourselfId}
-                  onHeaderOptionClicked={onHeaderOptionClicked}
-                  showAnonymousOption={true}
-                  onPressDownVote={(post) => setDownVote(post, index)}
+                  onPress={() => onPress(item)}
+                  onPressComment={() => onPressComment(index, item)}
+                  onPressUpvote={(post) => setUpVote(post)}
+                  selfUserId={profile.myProfile.user_id}
+                  onPressDownVote={(post) => setDownVote(post)}
+                  loading={loading}
                 />
               );
             }}
@@ -749,7 +700,8 @@ const styles = StyleSheet.create({
   },
   content: {
     flexDirection: 'column',
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
+    backgroundColor: colors.white
   },
   dummyItem: (heightItem) => ({
     height: heightItem,
@@ -794,7 +746,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    backgroundColor: colors.white
   },
   tabItem: (isActive) => ({
     flex: 1,

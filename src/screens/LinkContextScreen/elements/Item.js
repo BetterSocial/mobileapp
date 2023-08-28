@@ -7,11 +7,11 @@ import BlockDomainComponent from '../../../components/BlockDomain';
 import ContentRelated from './ContentRelated';
 import ShareUtils from '../../../utils/share';
 import dimen from '../../../utils/dimen';
+import TokenStorage, {ITokenEnum} from '../../../utils/storage/custom/tokenStorage';
 import {COLORS} from '../../../utils/theme';
 import {Content, Header, LinkContextScreenFooter} from '.';
 import {downVoteDomain, upVoteDomain} from '../../../service/vote';
 import {fonts} from '../../../utils/fonts';
-import {getAccessToken} from '../../../utils/token';
 import {linkContextScreenSwitchScreenParam} from '../../../utils/navigation/paramBuilder';
 import {openUrl} from '../../../utils/Utils';
 
@@ -69,7 +69,7 @@ const LinkContextItem = ({
 
   React.useEffect(() => {
     const parseToken = async () => {
-      const value = await getAccessToken();
+      const value = TokenStorage.get(ITokenEnum.token);
       if (value) {
         const decoded = await JWTDecode(value);
         setIdFromToken(decoded.user_id);

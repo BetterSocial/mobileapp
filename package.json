@@ -14,7 +14,7 @@
     "build:apk-android-profileable": "cd android && ENVFILE=.env.production ./gradlew assembleprodprofileable",
     "build:apk-android-profileable-update-stream": "yarn update-stream && cd android && ./gradlew clean && ENVFILE=.env.production ./gradlew assembleprodprofileable",
     "build:bundle-android-dev": "npm run update-env-dev && npm run update-stream && cd android && ./gradlew clean && ENVFILE=.env.development ./gradlew bundledevrelease",
-    "build:bundle-android-prod": "cd android && ENVFILE=.env.production ./gradlew assembleprodrelease",
+    "build:bundle-android-prod": "cd android && ENVFILE=.env.production ./gradlew bundleprodrelease",
     "build:bundle-android-prod-update-stream": "npm run update-env-prod && npm run update-stream && cd android && ./gradlew clean && ENVFILE=.env.production ./gradlew bundleprodrelease",
     "ios:dev-debug": "npm run update-env-dev && react-native run-ios --scheme 'BetterSocialDev' --simulator='iPhone 13'",
     "start": "react-native start",

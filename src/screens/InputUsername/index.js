@@ -3,7 +3,6 @@ import _ from 'lodash';
 import Toast from 'react-native-simple-toast';
 import {
   Alert,
-  Animated,
   Image,
   Keyboard,
   SafeAreaView,
@@ -20,10 +19,11 @@ import {useNavigation} from '@react-navigation/core';
 
 import BottomSheetChooseImage from './elements/BottomSheetChooseImage';
 import MemoOnboardingChangeProfilePlusIcon from '../../assets/icon/OnboardingChangeProfilePlusIcon';
-import WarningIcon from '../../assets/icon-svg/warning_circle_blue.svg';
 import StringConstant from '../../utils/string/StringConstant';
+import WarningIcon from '../../assets/icon-svg/warning_circle_blue.svg';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
+import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {Input} from '../../components/Input';
@@ -32,9 +32,8 @@ import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
 import {setCapitalFirstLetter} from '../../utils/Utils';
-import {setImage, setUsername} from '../../context/actions/users';
+import {setImage, setImageUrl, setUsername} from '../../context/actions/users';
 import {verifyUsername} from '../../service/users';
-import {COLORS} from '../../utils/theme';
 
 const MAXIMUM_USERNAME_LENGTH = 19;
 const MINIMUM_USERNAME_LENGTH = 3;
@@ -77,6 +76,7 @@ const ChooseUsername = () => {
           selectionLimit: 1
         },
         (res) => {
+          if (res.uri) setImageUrl(res.uri, dispatch);
           if (res.base64) {
             setImage(`${res.base64}`, dispatch);
             bottomSheetChooseImageRef.current.close();
@@ -92,6 +92,7 @@ const ChooseUsername = () => {
     const {success, message} = await requestExternalStoragePermission();
     if (success) {
       launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
+        if (res.uri) setImageUrl(res.uri, dispatch);
         if (res.base64) {
           setImage(`${res.base64}`, dispatch);
           bottomSheetChooseImageRef.current.close();
