@@ -10,7 +10,6 @@ import ImageLayouter from '../../../screens/FeedScreen/elements/ImageLayouter';
 import TopicsChip from '../../TopicsChip/TopicsChip';
 import dimen from '../../../utils/dimen';
 import useContentFeed from '../../../screens/FeedScreen/hooks/useContentFeed';
-import usePostDetail from '../hooks/usePostDetail';
 import {COLORS} from '../../../utils/theme';
 import {POST_TYPE_LINK, POST_TYPE_POLL, POST_TYPE_STANDARD} from '../../../utils/constants';
 import {colors} from '../../../utils/colors';
