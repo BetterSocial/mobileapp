@@ -32,7 +32,6 @@ const Content = ({
   const navigation = useNavigation();
   const cekImage = () => images_url && images_url !== '';
   const {hashtagAtComponent} = useContentFeed({navigation});
-  const {calculationText} = usePostDetail();
   const {handleCalculation} = useCalculationContent();
   const [textHeight, setTextHeight] = React.useState(0);
   const [containerHeight, setContainerHeight] = React.useState(0);
