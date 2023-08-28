@@ -309,12 +309,12 @@ const styles = StyleSheet.create({
   textSmall: {
     fontFamily: 'Inter',
     fontStyle: 'normal',
-    fontWeight: 'normal',
+    fontWeight: '400',
     fontSize: 10,
     textAlign: 'center',
-    color: colors.emperor,
+    color: colors.blackgrey,
     marginBottom: 10,
-    marginTop: 10
+    marginTop: 12
   },
   button: {
     backgroundColor: colors.gray
