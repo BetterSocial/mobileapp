@@ -1,4 +1,5 @@
 import * as React from 'react';
+import Config from 'react-native-config';
 import ImagePicker from 'react-native-image-crop-picker';
 import Toast from 'react-native-simple-toast';
 import {
@@ -194,7 +195,6 @@ const ProfileScreen = ({route}) => {
     setTabIndexToSigned,
     reloadFetchAnonymousPost
   } = useProfileScreenHook();
-  console.log(profileTabIndex, 'nikah');
   // eslint-disable-next-line consistent-return
   React.useEffect(() => {
     if (interactionsComplete) {
