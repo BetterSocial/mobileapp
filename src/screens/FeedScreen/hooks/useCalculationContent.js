@@ -29,6 +29,7 @@ const useCalculationContent = () => {
         font = smallFont;
         lineHeight = smallFont * 1.5;
       }
+
       return {
         font,
         lineHeight

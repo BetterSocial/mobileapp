@@ -110,8 +110,8 @@ const Content = ({
     };
   };
   const handleNoTopicLength = () => {
-    const newMaxLine = Platform.OS === 'ios' ? 0 : 0;
-    const countDeviceLine = Platform.OS === 'ios' ? 1 : 1;
+    const newMaxLine = isIos ? 1 : 0;
+    const countDeviceLine = isIos ? 2 : 1;
     return {
       newMaxLine,
       countDeviceLine
@@ -136,18 +136,17 @@ const Content = ({
       newMaxLine
     };
   };
-  // console.log({fo})
   const handleTextLayout = ({nativeEvent}) => {
     let text = '';
     const {newMaxLine, countDeviceLine} = adjustmentCountDeviceLine();
     for (let i = 0; i < newMaxLine; i++) {
       if (nativeEvent.lines[i]) {
-        if (i === countDeviceLine) {
-          text += nativeEvent.lines[i].text.substring(0, 30);
-          arrText.push(nativeEvent.lines[i].text.substring(0, 30));
-        } else {
+        if (i < countDeviceLine) {
           text += nativeEvent.lines[i].text;
           arrText.push(nativeEvent.lines[i].text);
+        } else if (i === countDeviceLine) {
+          text += nativeEvent.lines[i].text.substring(0, 28);
+          arrText.push(nativeEvent.lines[i].text.substring(0, 28));
         }
       }
     }
@@ -161,7 +160,6 @@ const Content = ({
     }
     return 0;
   };
-
   const renderHandleTextContent = () => {
     return (
       <View
@@ -212,7 +210,7 @@ const Content = ({
       };
     }
     return {
-      container: {backgroundColor: 'red'},
+      container: styles.mv5,
       text: {},
       isShort: false
     };
@@ -385,5 +383,8 @@ export const styles = StyleSheet.create({
   },
   centerVerticalText: {
     color: 'white'
+  },
+  mv5: {
+    marginVertical: 5
   }
 });

@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   },
   messageContainer: {
     paddingHorizontal: 20,
-    paddingBottom: 15
+    marginVertical: 5
   },
   message: {
     fontFamily: fonts.inter[400],
