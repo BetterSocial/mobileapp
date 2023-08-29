@@ -2,21 +2,20 @@ import * as React from 'react';
 // eslint-disable-next-line import/no-unresolved
 import EasyFollowSystem from 'stream-chat-react-native-core/src/components/ChannelList/EasyFollowSystem';
 import Toast from 'react-native-simple-toast';
-import crashlytics from '@react-native-firebase/crashlytics';
 import moment from 'moment';
 import {ActivityIndicator, ScrollView, StatusBar, StyleSheet, View} from 'react-native';
 import {ChannelList, ChannelPreviewTitle, Chat, Streami18n} from 'stream-chat-react-native';
 import {useNavigation} from '@react-navigation/core';
-import {useRecoilState, useRecoilValue} from 'recoil';
+import {useRecoilValue} from 'recoil';
 
 import ChannelStatusIcon from '../../components/ChannelStatusIcon';
 import CustomPreviewAvatar from './elements/CustomPreviewAvatar';
 import CustomPreviewUnreadCount from './elements/CustomPreviewUnreadCount';
 import PostNotificationPreview from './elements/components/PostNotificationPreview';
 import PreviewMessage from './elements/CustomPreviewMessage';
-import api from '../../service/config';
 import streamFeed from '../../utils/getstream/streamer';
 import useChannelList from './hooks/useChannelList';
+import useCustomEasyFollowSystemHook from '../../hooks/core/getstream/useCustomEasyFollowSystemHook';
 import useFeedService from '../../hooks/useFeedService';
 import TokenStorage, {ITokenEnum} from '../../utils/storage/custom/tokenStorage';
 import useOnBottomNavigationTabPressHook, {
@@ -28,7 +27,6 @@ import {Context} from '../../context';
 import {FEED_COMMENT_COUNT} from '../../utils/cache/constant';
 import {channelListLocalAtom} from '../../service/channelListLocal';
 import {feedChatAtom} from '../../models/feeds/feedsNotification';
-import {followersOrFollowingAtom} from './model/followersOrFollowingAtom';
 import {getChatName} from '../../utils/string/StringUtils';
 import {getSpecificCache} from '../../utils/cache';
 import {setChannel} from '../../context/actions/setChannel';
@@ -56,9 +54,9 @@ const ChannelListScreen = () => {
     useChannelList();
   const [, dispatchUnreadMessage] = React.useContext(Context).unReadMessage;
   const channelListLocalValue = useRecoilValue(channelListLocalAtom);
-  const [followUserList, setFollowUserList] = useRecoilState(followersOrFollowingAtom);
 
   const {getFeedChat} = useFeedService();
+  const {followData, checkFollowStatus, followUserFunction} = useCustomEasyFollowSystemHook();
 
   const filters = {
     members: {$in: [myProfile.user_id]},
@@ -212,46 +210,14 @@ const ChannelListScreen = () => {
     />
   );
 
-  const checkFollowBack = async (data) => {
-    try {
-      const response = await api.get(`/users/check-follow?targetUserId=${data}`);
-      if (response?.data) {
-        return response.data.data;
-      }
-
-      return null;
-    } catch (error) {
-      crashlytics().recordError(new Error(error));
-      throw new Error(error);
-    }
-  };
-
-  const followButtonAction = async (userId, targetUserId, username, targetUsername) => {
-    const requestData = {
-      user_id_follower: userId,
-      user_id_followed: targetUserId,
-      username_follower: username,
-      username_followed: targetUsername,
-      follow_source: 'chat'
-    };
-
-    api
-      .post('/profiles/follow-user-v3', requestData)
-      .then((res) => {
-        Promise.resolve(res.data);
-      })
-      .catch((err) => {
-        Promise.reject(err);
-        setFollowUserList([...followUserList, requestData]);
-      });
-
-    return true;
-  };
   return (
     <>
       <StatusBar translucent={false} />
       <ScrollView ref={listRef} contentInsetAdjustmentBehavior="automatic">
-        <EasyFollowSystem valueCallback={checkFollowBack} followButtonAction={followButtonAction}>
+        <EasyFollowSystem
+          followData={followData}
+          refreshFollowData={checkFollowStatus}
+          followButtonAction={followUserFunction}>
           {myProfile && myProfile.user_id && client.client ? (
             <Chat client={client.client} i18nInstance={streami18n}>
               <ChannelList
