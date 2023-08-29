@@ -9,6 +9,7 @@ import Content from './Content';
 import ContentLink from './ContentLink';
 import Header from './Header';
 import ShareUtils from '../../utils/share';
+import StringConstant from '../../utils/string/StringConstant';
 import dimen from '../../utils/dimen';
 import useFeed from './hooks/useFeed';
 import {
@@ -22,9 +23,8 @@ import {
 import {Footer, Gap, PreviewComment, TutorialStep} from '../../components';
 import {colors} from '../../utils/colors';
 import {getCommentLength} from '../../utils/getstream';
-import {showScoreAlertDialog} from '../../utils/Utils';
 import {normalizeFontSizeByWidth} from '../../utils/fonts';
-import StringConstant from '../../utils/string/StringConstant';
+import {showScoreAlertDialog} from '../../utils/Utils';
 
 const tabBarHeight = StatusBar.currentHeight;
 const FULL_WIDTH = Dimensions.get('screen').width;
