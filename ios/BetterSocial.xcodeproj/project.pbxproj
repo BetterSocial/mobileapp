@@ -1584,7 +1584,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.18.0.101;
+				CURRENT_PROJECT_VERSION = 2.0.2;
 				DEVELOPMENT_TEAM = J22M3M9VYU;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = J22M3M9VYU;
 				ENABLE_BITCODE = NO;
@@ -1592,7 +1592,7 @@
 				INFOPLIST_FILE = BetterSocial/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.18.0;
+				MARKETING_VERSION = 2.0.2;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1619,7 +1619,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.18.0.101;
+				CURRENT_PROJECT_VERSION = 2.0.2;
 				DEVELOPMENT_TEAM = J22M3M9VYU;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = J22M3M9VYU;
 				EXCLUDED_ARCHS = "";
@@ -1627,7 +1627,7 @@
 				INFOPLIST_FILE = BetterSocial/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.18.0;
+				MARKETING_VERSION = 2.0.2;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",

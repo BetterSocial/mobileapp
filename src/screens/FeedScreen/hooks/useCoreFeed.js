@@ -6,7 +6,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Context} from '../../../context';
 import {FEEDS_CACHE} from '../../../utils/cache/constant';
 import {downVote, upVote} from '../../../service/vote';
-import {getFeedDetail, getMainFeed} from '../../../service/post';
+import {getFeedDetail, getMainFeedV2WithTargetFeed} from '../../../service/post';
 import {getSpecificCache, saveToCache} from '../../../utils/cache';
 import {setFeedByIndex, setMainFeeds, setTimer} from '../../../context/actions/feeds';
 
@@ -20,11 +20,12 @@ const useCoreFeed = () => {
   const [searchHeight, setSearchHeight] = React.useState(0);
   const [isLastPage, setIsLastPage] = React.useState(false);
   const [isScroll, setIsAlreadyScroll] = React.useState(false);
+  const [nextTargetFeed, setNextTargetFeed] = React.useState(null);
   const {feeds, timer, viewPostTimeIndex} = feedsContext;
   const {myProfile} = profileContext;
   const {bottom} = useSafeAreaInsets();
 
-  const getDataFeeds = async (offsetFeed = 0, useLoading) => {
+  const getDataFeeds = async (offsetFeed = 0, useLoading = false, targetFeed = null) => {
     setCountStack(null);
     if (useLoading) {
       setLoading(true);
@@ -32,7 +33,7 @@ const useCoreFeed = () => {
     try {
       const query = `?offset=${offsetFeed}`;
 
-      const dataFeeds = await getMainFeed(query);
+      const dataFeeds = await getMainFeedV2WithTargetFeed(query, targetFeed);
       if (Array.isArray(dataFeeds.data) && dataFeeds.data?.length <= 0) {
         setLoading(false);
         return setIsLastPage(true);
@@ -50,7 +51,8 @@ const useCoreFeed = () => {
       const dataWithDummy = [...data, {dummy: true}];
       let saveData = {
         offsetFeed: dataFeeds.offset,
-        data: dataWithDummy
+        data: dataWithDummy,
+        targetFeed: dataFeeds?.feed
       };
       if (offsetFeed === 0) {
         setMainFeeds(dataWithDummy, dispatch);
@@ -67,6 +69,7 @@ const useCoreFeed = () => {
       }
       setCountStack(data.length);
     }
+    setNextTargetFeed(dataFeeds?.feed);
     setPostOffset(dataFeeds.offset);
     setTimer(new Date(), dispatch);
     setLoading(false);
@@ -92,6 +95,7 @@ const useCoreFeed = () => {
       if (result) {
         setMainFeeds(result.data, dispatch);
         setPostOffset(result.offset);
+        setNextTargetFeed(result.feed);
       } else {
         getDataFeeds();
       }
@@ -177,7 +181,8 @@ const useCoreFeed = () => {
     handleUpdateFeed,
     handleScroll,
     isScroll,
-    setIsLastPage
+    setIsLastPage,
+    nextTargetFeed
   };
 };
 

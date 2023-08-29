@@ -210,3 +210,25 @@ export const checkPasswordForDemoLogin = async (password) => {
     };
   }
 };
+
+export const checkFollowStatusBatch = async (targetUserIds = [], axiosOptions = {}) => {
+  if (targetUserIds.length === 0) return Promise.reject(new Error('User IDs is empty'));
+
+  try {
+    const payload = {
+      targetUserIds
+    };
+
+    const result = await api.post('/users/check-follow-batch', payload, axiosOptions);
+    if (result?.status === 200) {
+      return Promise.resolve(result?.data?.data);
+    }
+
+    return Promise.reject(result?.data?.message);
+  } catch (e) {
+    crashlytics().recordError(new Error(e));
+    return Promise.reject(
+      e?.response?.data?.message || "Can't check follow status, please try again later"
+    );
+  }
+};

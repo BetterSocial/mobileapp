@@ -33,9 +33,10 @@ const Content = ({
   const [textHeight, setTextHeight] = React.useState(null);
   const maxFontSize = normalizeFontSizeByWidth(28);
   const minFontSize = normalizeFontSizeByWidth(16);
-  const {handleCalculation} = useCalculationContent();
+  const {handleCalculation, onLayoutTopicChip, heightTopic, amountLineTopic} =
+    useCalculationContent();
   const [amountCut, setAmountCut] = React.useState(0);
-  const [textCut, setTextCunt] = React.useState(null);
+  const [textCut, setTextCut] = React.useState(null);
   const [arrText] = React.useState([]);
   const isIos = Platform.OS === 'ios';
 
@@ -100,35 +101,45 @@ const Content = ({
     };
   };
 
-  const handleLineBreak = (nativeEvent, newMaxLine) => {
-    const amountLineBreak = [];
-    if (nativeEvent.lines.length > newMaxLine) {
-      nativeEvent.lines.forEach((char, index) => {
-        if (index <= newMaxLine && char.text.match(/[\r\n]+/g)) {
-          amountLineBreak.push(char.text);
-        }
-      });
-    }
-    return amountLineBreak;
+  const handleTopicLength = () => {
+    const newMaxLine = amountLineTopic + 1;
+    const countDeviceLine = amountLineTopic + 2;
+    return {
+      newMaxLine,
+      countDeviceLine
+    };
+  };
+  const handleNoTopicLength = () => {
+    const newMaxLine = Platform.OS === 'ios' ? 1 : 0;
+    const countDeviceLine = Platform.OS === 'ios' ? 2 : 1;
+    return {
+      newMaxLine,
+      countDeviceLine
+    };
   };
 
-  const handleTextLayout = ({nativeEvent}) => {
-    let text = '';
+  const adjustmentCountDeviceLine = () => {
     let {newMaxLine, countDeviceLine} = handleCountDeviceLine();
-    const amountLineBreak = handleLineBreak(nativeEvent, newMaxLine);
-    countDeviceLine = newMaxLine - amountLineBreak.length / 2;
-    newMaxLine -= amountLineBreak.length / 2;
     if (item.post_type === POST_TYPE_STANDARD && item.images_url.length <= 0) {
       if (topics.length > 0) {
-        newMaxLine -= 2;
-        countDeviceLine -= 3;
+        newMaxLine -= handleTopicLength().newMaxLine;
+        countDeviceLine -= handleTopicLength().countDeviceLine;
       } else {
-        newMaxLine -= 1;
-        countDeviceLine -= 2;
+        newMaxLine -= handleNoTopicLength().newMaxLine;
+        countDeviceLine -= handleNoTopicLength().countDeviceLine;
       }
     } else {
       countDeviceLine -= 1;
     }
+    return {
+      countDeviceLine,
+      newMaxLine
+    };
+  };
+
+  const handleTextLayout = ({nativeEvent}) => {
+    let text = '';
+    const {newMaxLine, countDeviceLine} = adjustmentCountDeviceLine();
     for (let i = 0; i < newMaxLine; i++) {
       if (nativeEvent.lines[i]) {
         if (i === countDeviceLine) {
@@ -140,12 +151,23 @@ const Content = ({
         }
       }
     }
-    setTextCunt(text);
+    setTextCut(text);
     setAmountCut(text.length);
   };
+  const showSeeMore = amountCut < message.length;
+
+  const handleMarginTopic = () => {
+    if (images_url.length <= 0 && item?.post_type === POST_TYPE_STANDARD) {
+      return heightTopic;
+    }
+    return 0;
+  };
+
   const renderHandleTextContent = () => {
     return (
-      <View testID="postTypePoll" style={[styles.containerText, handleContainerText()]}>
+      <View
+        testID="postTypePoll"
+        style={[styles.containerText, {marginBottom: handleMarginTopic()}]}>
         {amountCut <= 0 ? (
           <Text
             onTextLayout={handleTextLayout}
@@ -155,28 +177,30 @@ const Content = ({
             {message}
           </Text>
         ) : (
-          <Text
-            numberOfLines={calculateMaxLine()}
-            style={[handleStyleFont(), handleContainerText().text]}>
-            {getCaptionWithTopicStyle(
-              route?.params?.id,
-              textCut,
-              navigation,
-              null,
-              item?.topics,
-              item,
-              handleContainerText().isShort
-            )}
-            {''}
-            {amountCut < message.length ? <Text style={styles.seemore}> More..</Text> : null}
-          </Text>
+          <>
+            <Text
+              numberOfLines={calculateMaxLine()}
+              style={[handleStyleFont(), handleContainerText().text]}>
+              {getCaptionWithTopicStyle(
+                route?.params?.id,
+                textCut,
+                navigation,
+                null,
+                item?.topics,
+                item,
+                handleContainerText().isShort
+              )}
+
+              {showSeeMore ? <Text style={styles.seemore}> More..</Text> : null}
+            </Text>
+          </>
         )}
       </View>
     );
   };
 
   const handleContainerText = () => {
-    if (message?.length <= 125 && item.post_type === POST_TYPE_STANDARD && images_url.length <= 0) {
+    if (!showSeeMore && item.post_type === POST_TYPE_STANDARD && images_url.length <= 0) {
       return {
         container: styles.centerVertical,
         text: styles.centerVerticalText,
@@ -195,10 +219,15 @@ const Content = ({
       setLayoutHeight(nativeEvent.layout.height);
     }
   };
+
+  const calculateLineTopicChip = (nativeEvent) => {
+    onLayoutTopicChip(nativeEvent, lineHeight);
+  };
+
   return (
     <Pressable
       onLayout={hanldeHeightContainer}
-      onPress={onPress}
+      onPress={() => onPress(showSeeMore)}
       style={[styles.contentFeed, style]}>
       {message?.length > 0 ? (
         <View>
@@ -234,7 +263,12 @@ const Content = ({
         </View>
       )}
 
-      <TopicsChip topics={topics} fontSize={normalizeFontSize(14)} text={message} />
+      <TopicsChip
+        onLayout={calculateLineTopicChip}
+        topics={topics}
+        fontSize={normalizeFontSize(14)}
+        text={message}
+      />
     </Pressable>
   );
 };

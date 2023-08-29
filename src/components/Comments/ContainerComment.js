@@ -3,6 +3,7 @@ import SimpleToast from 'react-native-simple-toast';
 import {Alert, Dimensions, StyleSheet, Text, TouchableWithoutFeedback, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
+import moment from 'moment';
 import ButtonHightlight from '../ButtonHighlight';
 import Comment from './Comment';
 import ConnectorWrapper from './ConnectorWrapper';
@@ -16,7 +17,6 @@ import {deleteComment} from '../../service/comment';
 import {getUserId} from '../../utils/users';
 import usePostDetail from '../PostPageDetail/hooks/usePostDetail';
 import ListComment from './ListComment';
-import moment from 'moment';
 
 const ContainerComment = ({
   feedId,

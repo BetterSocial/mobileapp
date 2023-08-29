@@ -84,30 +84,34 @@ describe('usePOstDetail should run correctly', () => {
     jest.spyOn(Dimensions, 'get').mockReturnValue({width: 400, height: 800});
     const {result} = renderHook(usePostDetail);
     expect(result.current.calculationText('wide')).toEqual({
-      containerComment: 252.66666666666669,
-      containerHeight: 117.33333333333333,
+      containerComment: 23.333333333333314,
+      containerHeight: 346.6666666666667,
       fontSize: 25.6,
-      lineHeight: 46.93333333333333
+      lineHeight: 46.93333333333333,
+      isShortText: true
     });
     expect(result.current.calculationText('wide', 2)).toEqual({
-      containerComment: 252.66666666666669,
-      containerHeight: 117.33333333333333,
+      containerComment: 23.333333333333314,
+      containerHeight: 346.6666666666667,
       fontSize: 25.6,
-      lineHeight: 46.93333333333333
+      lineHeight: 46.93333333333333,
+      isShortText: true
     });
 
     expect(result.current.calculationText('wide', 1)).toEqual({
-      containerComment: 252.66666666666669,
-      containerHeight: 117.33333333333333,
+      containerComment: 23.333333333333314,
+      containerHeight: 346.6666666666667,
       fontSize: 25.6,
-      lineHeight: 46.93333333333333
+      lineHeight: 46.93333333333333,
+      isShortText: true
     });
 
     expect(result.current.calculationText(longText)).toEqual({
       containerComment: -794.8,
       containerHeight: 1164.8,
       fontSize: 17.066666666666666,
-      lineHeight: 25.6
+      lineHeight: 25.6,
+      isShortText: false
     });
   });
 });

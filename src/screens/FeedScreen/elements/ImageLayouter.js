@@ -1,13 +1,13 @@
 import * as React from 'react';
 
 import {ImageBackground, StyleSheet, View} from 'react-native';
-import ImageItem from './ImageItem';
 import FastImage from 'react-native-fast-image';
+import ImageItem from './ImageItem';
 
 const ImageLayouter = ({images = [], onimageclick, mode, isFeed}) => {
   const imageOnClick = React.useCallback(onimageclick, []);
 
-  if (images.length === 1 && isFeed) {
+  if (images.length === 1) {
     return (
       <ImageBackground
         resizeMode="stretch"
