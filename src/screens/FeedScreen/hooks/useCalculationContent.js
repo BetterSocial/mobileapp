@@ -23,11 +23,13 @@ const useCalculationContent = () => {
     ) {
       let font = hugeFont * averageDiff;
       let lineHeight = hugeFont * 1.5 * averageDiff;
-
+      font = Math.ceil(font);
+      lineHeight = Math.ceil(lineHeight);
       if (font < smallFont) {
         font = smallFont;
         lineHeight = smallFont * 1.5;
       }
+
       return {
         font,
         lineHeight

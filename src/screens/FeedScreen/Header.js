@@ -115,10 +115,9 @@ const _renderAnonimity = ({
         style={[
           styles.rowSpaceBeetwen,
           styles.heightHeader(height),
-          {paddingLeft: isPostDetail ? 10 : 0},
-          headerStyle
+          {paddingLeft: isPostDetail ? 10 : 0}
         ]}>
-        <View style={styles.rowCenter}>
+        <View style={[styles.rowCenter, headerStyle]}>
           {isBackButton ? (
             <View testID="haveBackButton" style={[styles.btn]}>
               <GlobalButton
@@ -193,10 +192,9 @@ const _renderProfileNormal = ({
         style={[
           styles.rowSpaceBeetwen,
           styles.heightHeader(height),
-          headerStyle,
           styles.postDetail(isPostDetail)
         ]}>
-        <View style={styles.rowCenter}>
+        <View style={[styles.rowCenter, headerStyle]}>
           {isBackButton ? (
             <View testID="haveBackButton" style={styles.btn}>
               <GlobalButton testID="onBack" onPress={onBackNormalUser}>
@@ -435,9 +433,7 @@ const styles = StyleSheet.create({
     paddingLeft: 0
   },
   imageAnonymContainer: {
-    // paddingRight: 10,
     padding: 10
-    // paddingLeft: 24
   },
   avatarImage: {height: 48, width: 48, borderRadius: 24},
   postDetail: (isPostDetail) => ({
