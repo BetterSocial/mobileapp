@@ -23,7 +23,6 @@ import TokenStorage from '../../utils/storage/custom/tokenStorage';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
-import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {Header} from '../../components';
@@ -344,8 +343,8 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
     paddingBottom: 20,
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#000',
+    backgroundColor: colors.white,
+    shadowColor: colors.black,
     shadowOffset: {
       width: 0,
       height: 5
@@ -355,18 +354,18 @@ const styles = StyleSheet.create({
 
     elevation: 11,
     flexDirection: 'column',
-    justifyContent: 'flex-end',
-    marginTop: 'auto',
+    justifyContent: 'space-between',
     zIndex: 1000
   },
   textSmall: {
     fontFamily: 'Inter',
     fontStyle: 'normal',
-    fontWeight: 'normal',
+    fontWeight: '400',
     fontSize: 10,
     textAlign: 'center',
-    color: COLORS.blackgrey,
-    marginBottom: 12
+    color: colors.blackgrey,
+    marginBottom: 10,
+    marginTop: 12
   },
   containerCard: {
     flexDirection: 'row',
