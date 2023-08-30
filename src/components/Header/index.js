@@ -82,5 +82,9 @@ const styles = StyleSheet.create({
   },
   flex: {
     flex: 1
+  },
+  nullBackIcon: {
+    width: 20,
+    height: 12
   }
 });

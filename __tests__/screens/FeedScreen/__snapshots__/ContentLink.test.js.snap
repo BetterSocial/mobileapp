@@ -474,7 +474,6 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
       "backgroundColor": "#FFFFFF",
       "flex": 1,
       "marginHorizontal": 6,
-      "marginTop": 8,
     }
   }
 >
@@ -621,7 +620,7 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
                     }
                   }
                 >
-                  Jan 6, 0002
+                  Jan 6, 0001
                 </Text>
                 <View
                   style={
