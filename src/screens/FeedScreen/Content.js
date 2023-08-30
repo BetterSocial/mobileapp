@@ -12,7 +12,7 @@ import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import {COLORS} from '../../utils/theme';
 import {POST_TYPE_LINK, POST_TYPE_POLL, POST_TYPE_STANDARD} from '../../utils/constants';
 import {colors} from '../../utils/colors';
-import {fonts, normalizeFontSize, normalizeFontSizeByWidth} from '../../utils/fonts';
+import {fonts, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
 import useCalculationContent from './hooks/useCalculationContent';
 
@@ -33,9 +33,10 @@ const Content = ({
   const [textHeight, setTextHeight] = React.useState(null);
   const maxFontSize = normalizeFontSizeByWidth(28);
   const minFontSize = normalizeFontSizeByWidth(16);
-  const {handleCalculation} = useCalculationContent();
+  const {handleCalculation, onLayoutTopicChip, heightTopic, amountLineTopic} =
+    useCalculationContent();
   const [amountCut, setAmountCut] = React.useState(0);
-  const [textCut, setTextCunt] = React.useState(null);
+  const [textCut, setTextCut] = React.useState(null);
   const [arrText] = React.useState([]);
   const isIos = Platform.OS === 'ios';
 
@@ -68,7 +69,7 @@ const Content = ({
     ) {
       return 5;
     }
-    return Math.floor(layoutHeight / lineHeight);
+    return Math.round(layoutHeight / lineHeight);
   };
 
   const handleStyleFont = () => {
@@ -100,52 +101,75 @@ const Content = ({
     };
   };
 
-  const handleLineBreak = (nativeEvent, newMaxLine) => {
-    const amountLineBreak = [];
-    if (nativeEvent.lines.length > newMaxLine) {
-      nativeEvent.lines.forEach((char, index) => {
-        if (index <= newMaxLine && char.text.match(/[\r\n]+/g)) {
-          amountLineBreak.push(char.text);
-        }
-      });
-    }
-    return amountLineBreak;
+  const handleTopicLength = () => {
+    const topicLine = amountLineTopic + 0;
+    const countTopicLine = amountLineTopic + 1;
+    return {
+      topicLine,
+      countTopicLine
+    };
+  };
+  const handleNoTopicLength = () => {
+    const newMaxLine = isIos ? 1 : 0;
+    const countDeviceLine = isIos ? 2 : 1;
+    return {
+      newMaxLine,
+      countDeviceLine
+    };
   };
 
-  const handleTextLayout = ({nativeEvent}) => {
-    let text = '';
+  const adjustmentCountDeviceLine = () => {
     let {newMaxLine, countDeviceLine} = handleCountDeviceLine();
-    const amountLineBreak = handleLineBreak(nativeEvent, newMaxLine);
-    countDeviceLine = newMaxLine - amountLineBreak.length / 2;
-    newMaxLine -= amountLineBreak.length / 2;
     if (item.post_type === POST_TYPE_STANDARD && item.images_url.length <= 0) {
       if (topics.length > 0) {
-        newMaxLine -= 2;
-        countDeviceLine -= 3;
+        newMaxLine -= handleTopicLength().topicLine;
+        countDeviceLine -= handleTopicLength().countTopicLine;
       } else {
-        newMaxLine -= 1;
-        countDeviceLine -= 2;
+        newMaxLine -= handleNoTopicLength().newMaxLine;
+        countDeviceLine -= handleNoTopicLength().countDeviceLine;
       }
     } else {
       countDeviceLine -= 1;
     }
+    return {
+      countDeviceLine,
+      newMaxLine
+    };
+  };
+  const handleTextLayout = ({nativeEvent}) => {
+    let text = '';
+    const {newMaxLine, countDeviceLine} = adjustmentCountDeviceLine();
     for (let i = 0; i < newMaxLine; i++) {
       if (nativeEvent.lines[i]) {
-        if (i === countDeviceLine) {
-          text += nativeEvent.lines[i].text.substring(0, 30);
-          arrText.push(nativeEvent.lines[i].text.substring(0, 30));
-        } else {
+        if (i < countDeviceLine) {
           text += nativeEvent.lines[i].text;
           arrText.push(nativeEvent.lines[i].text);
+        } else if (i === countDeviceLine) {
+          text += nativeEvent.lines[i].text.substring(0, 28);
+          arrText.push(nativeEvent.lines[i].text.substring(0, 28));
         }
       }
     }
-    setTextCunt(text);
+    setTextCut(text);
     setAmountCut(text.length);
+  };
+  const showSeeMore = amountCut < message.length;
+  const handleMarginTopic = () => {
+    if (images_url.length <= 0 && item?.post_type === POST_TYPE_STANDARD) {
+      return heightTopic;
+    }
+    return 0;
   };
   const renderHandleTextContent = () => {
     return (
-      <View testID="postTypePoll" style={[styles.containerText, handleContainerText()]}>
+      <View
+        testID="postTypePoll"
+        style={[
+          styles.containerText,
+          handleContainerText().container,
+          {marginBottom: handleMarginTopic()},
+          {backgroundColor: 'transparent'}
+        ]}>
         {amountCut <= 0 ? (
           <Text
             onTextLayout={handleTextLayout}
@@ -155,28 +179,30 @@ const Content = ({
             {message}
           </Text>
         ) : (
-          <Text
-            numberOfLines={calculateMaxLine()}
-            style={[handleStyleFont(), handleContainerText().text]}>
-            {getCaptionWithTopicStyle(
-              route?.params?.id,
-              textCut,
-              navigation,
-              null,
-              item?.topics,
-              item,
-              handleContainerText().isShort
-            )}
-            {''}
-            {amountCut < message.length ? <Text style={styles.seemore}> More..</Text> : null}
-          </Text>
+          <>
+            <Text
+              numberOfLines={calculateMaxLine()}
+              style={[handleStyleFont(), handleContainerText().text]}>
+              {getCaptionWithTopicStyle(
+                route?.params?.id,
+                textCut,
+                navigation,
+                null,
+                item?.topics,
+                item,
+                handleContainerText().isShort
+              )}
+
+              {showSeeMore ? <Text style={styles.seemore}> More..</Text> : null}
+            </Text>
+          </>
         )}
       </View>
     );
   };
 
   const handleContainerText = () => {
-    if (message?.length <= 125 && item.post_type === POST_TYPE_STANDARD && images_url.length <= 0) {
+    if (!showSeeMore && item.post_type === POST_TYPE_STANDARD && images_url.length <= 0) {
       return {
         container: styles.centerVertical,
         text: styles.centerVerticalText,
@@ -184,21 +210,25 @@ const Content = ({
       };
     }
     return {
-      container: {},
+      container: styles.mv5,
       text: {},
       isShort: false
     };
   };
-
   const hanldeHeightContainer = ({nativeEvent}) => {
     if (!layoutHeight || layoutHeight <= 0) {
       setLayoutHeight(nativeEvent.layout.height);
     }
   };
+
+  const calculateLineTopicChip = (nativeEvent) => {
+    onLayoutTopicChip(nativeEvent, lineHeight);
+  };
+
   return (
     <Pressable
       onLayout={hanldeHeightContainer}
-      onPress={onPress}
+      onPress={() => onPress(showSeeMore)}
       style={[styles.contentFeed, style]}>
       {message?.length > 0 ? (
         <View>
@@ -234,7 +264,12 @@ const Content = ({
         </View>
       )}
 
-      <TopicsChip topics={topics} fontSize={normalizeFontSize(14)} text={message} />
+      <TopicsChip
+        onLayout={calculateLineTopicChip}
+        topics={topics}
+        fontSize={normalizeFontSizeByWidth(14)}
+        text={message}
+      />
     </Pressable>
   );
 };
@@ -261,7 +296,7 @@ export const styles = StyleSheet.create({
   textMedia: {
     fontFamily: fonts.inter[400],
     fontWeight: 'normal',
-    fontSize: normalizeFontSize(14),
+    fontSize: normalizeFontSizeByWidth(28),
     color: colors.black,
     lineHeight: 24,
     flex: 1
@@ -285,12 +320,6 @@ export const styles = StyleSheet.create({
     marginLeft: 13
   },
 
-  feedUsername: {
-    fontFamily: fonts.inter[600],
-    fontWeight: 'bold',
-    fontSize: normalizeFontSize(14),
-    color: colors.black
-  },
   containerFeedText: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -340,8 +369,8 @@ export const styles = StyleSheet.create({
   },
   textContainer: {},
   containerMainText: (isShort) => ({
-    paddingHorizontal: 16,
-    paddingVertical: isShort ? 0 : 10
+    paddingHorizontal: 16
+    // paddingVertical: isShort ? 0 : 10
   }),
   containerText: {
     flexDirection: 'row'
@@ -354,5 +383,8 @@ export const styles = StyleSheet.create({
   },
   centerVerticalText: {
     color: 'white'
+  },
+  mv5: {
+    marginVertical: 5
   }
 });

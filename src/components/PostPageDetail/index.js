@@ -38,7 +38,7 @@ import {withInteractionsManaged} from '../WithInteractionManaged';
 const {width, height} = Dimensions.get('window');
 
 const PostPageDetailIdComponent = (props) => {
-  const {feedId, navigateToReplyView, contextSource = CONTEXT_SOURCE.FEEDS} = props;
+  const {feedId, navigateToReplyView, contextSource = CONTEXT_SOURCE.FEEDS, haveSeeMore} = props;
   const [profile] = React.useContext(Context).profile;
   const [loading, setLoading] = React.useState(true);
   const [, setReaction] = React.useState(false);
@@ -67,7 +67,6 @@ const PostPageDetailIdComponent = (props) => {
     usePostDetail();
   const {updateFeedContext} = usePostContextHook(contextSource);
   const {handleUserName} = useWriteComment();
-
   const getComment = async (scrollToBottom, noNeedLoading) => {
     if (!noNeedLoading) {
       setLoadingGetComment(true);
@@ -566,6 +565,7 @@ const PostPageDetailIdComponent = (props) => {
                 item={item}
                 onnewpollfetched={onNewPollFetched}
                 isPostDetail={true}
+                haveSeeMore={haveSeeMore}
               />
               <View style={styles.footerContainer}>
                 <Footer

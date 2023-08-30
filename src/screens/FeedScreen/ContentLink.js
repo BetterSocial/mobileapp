@@ -10,7 +10,7 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 
 import Card from '../../components/Card/Card';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
-import {COLORS, SIZES} from '../../utils/theme';
+import {COLORS} from '../../utils/theme';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {smartRender} from '../../utils/Utils';
 import useContentFeed from './hooks/useContentFeed';
@@ -87,16 +87,12 @@ export default ContentLink;
 const styles = StyleSheet.create({
   contentFeed: {
     flex: 1,
-    marginTop: SIZES.base,
     marginHorizontal: 6,
     backgroundColor: COLORS.white
-    // maxHeight: dimen.size.FEED_CONTENT_LINK_MAX_HEIGHT,
   },
   messageContainer: {
     paddingHorizontal: 20,
-    paddingBottom: 15,
-    paddingTop: 7
-    // backgroundColor: 'red'
+    marginVertical: 5
   },
   message: {
     fontFamily: fonts.inter[400],
