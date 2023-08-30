@@ -820,13 +820,6 @@ const CreatePost = () => {
               />
             </>
           )}
-          <Gap style={styles.height(16)} />
-          <ListItem
-            icon={<MemoIc_world width={16.67} height={16.67} />}
-            label={listPrivacy.length === 0 ? 'Loading...' : listPrivacy[privacySelect].label}
-            labelStyle={styles.listText}
-            onPress={() => sheetPrivacyRef.current.open()}
-          />
           <Gap style={styles.height(25)} />
           <Button disabled={isButtonDisabled()} onPress={postV2}>
             Post
