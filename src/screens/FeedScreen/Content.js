@@ -69,7 +69,7 @@ const Content = ({
     ) {
       return 5;
     }
-    return Math.floor(layoutHeight / lineHeight);
+    return Math.round(layoutHeight / lineHeight);
   };
 
   const handleStyleFont = () => {
