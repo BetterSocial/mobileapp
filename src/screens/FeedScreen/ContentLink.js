@@ -10,7 +10,7 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 
 import Card from '../../components/Card/Card';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
-import {COLORS, SIZES} from '../../utils/theme';
+import {COLORS} from '../../utils/theme';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {smartRender} from '../../utils/Utils';
 import useContentFeed from './hooks/useContentFeed';

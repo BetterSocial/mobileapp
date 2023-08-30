@@ -23,7 +23,6 @@ import TokenStorage from '../../utils/storage/custom/tokenStorage';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
-import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {Header} from '../../components';
