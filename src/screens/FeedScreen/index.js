@@ -13,15 +13,14 @@ import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
 } from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
 import {ButtonNewPost} from '../../components/Button';
-import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {DISCOVERY_TAB_TOPICS, SOURCE_FEED_TAB} from '../../utils/constants';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import {normalizeFontSizeByWidth} from '../../utils/fonts';
 import {setFeedByIndex, setTimer} from '../../context/actions/feeds';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {viewTimePost} from '../../service/post';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {normalizeFontSizeByWidth} from '../../utils/fonts';
 
 let lastDragY = 0;
 
@@ -51,12 +50,13 @@ const FeedScreen = (props) => {
     saveSearchHeight,
     searchHeight,
     handleScroll,
-    setIsLastPage
+    setIsLastPage,
+    nextTargetFeed
   } = useCoreFeed();
   const interactionManagerRef = React.useRef(null);
   const interactionManagerAnimatedRef = React.useRef(null);
-  const getDataFeedsHandle = async (offsetFeed = 0, useLoading) => {
-    getDataFeeds(offsetFeed, useLoading);
+  const getDataFeedsHandle = async (offsetFeed = 0, useLoading = false, targetFeed = null) => {
+    getDataFeeds(offsetFeed, useLoading, targetFeed);
   };
   const onDeleteBlockedPostCompletedHandle = async (postId) => {
     onDeleteBlockedPostCompleted(postId);
@@ -121,18 +121,16 @@ const FeedScreen = (props) => {
   };
 
   const onEndReach = () => {
-    // Use -2 because last item is dummy
-    // getDataFeedsHandle(feeds[feeds.length - 2].id);
-    getDataFeedsHandle(postOffset);
+    getDataFeedsHandle(postOffset, false, nextTargetFeed);
   };
 
-  const onPress = (item) => {
+  const onPress = (item, haveSeeMore) => {
     props.navigation.navigate('PostDetailPage', {
-      // index: index,
       isalreadypolling: item.isalreadypolling,
       feedId: item.id,
       data: item,
-      isCaching: false
+      isCaching: false,
+      haveSeeMore
     });
   };
 
@@ -152,7 +150,6 @@ const FeedScreen = (props) => {
   };
 
   function onRefresh() {
-    console.log('onRefresh called');
     getDataFeedsHandle(0, true);
     setIsLastPage(false);
     handleScroll(false);
@@ -217,7 +214,9 @@ const FeedScreen = (props) => {
         onNewPollFetched={onNewPollFetched}
         index={index}
         onPressDomain={onPressDomain}
-        onPress={() => onPress(item)}
+        onPress={(haveSeeMore) => {
+          onPress(item, haveSeeMore);
+        }}
         onPressComment={() => onPressComment(index, item)}
         onPressBlock={() => onPressBlock(item)}
         onPressUpvote={(post) => setUpVoteHandle(post, index)}
@@ -273,10 +272,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     zIndex: -1
   },
-  dummyItem: (height) => ({
-    height,
-    backgroundColor: COLORS.gray1
-  }),
   containerLoading: {
     flex: 1,
     justifyContent: 'center',

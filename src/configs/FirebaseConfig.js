@@ -17,11 +17,6 @@ const FirebaseConfig = (props) => {
   const {navigation} = props;
 
   React.useEffect(() => {
-    handleBgDynamicLink();
-    handleFgDynamicLink();
-  });
-
-  React.useEffect(() => {
     const unsubscribe = dynamicLinks().onLink(parseDynamicLink);
     return () => unsubscribe();
   }, []);
@@ -35,9 +30,11 @@ const FirebaseConfig = (props) => {
    * @param {FirebaseDynamicLinksTypes.DynamicLink} dynamicLink
    */
   const parseDynamicLink = async (dynamicLink) => {
+    console.log('called dynamic link', dynamicLink);
     if (dynamicLink?.url?.includes('postExpired=true')) return handleExpiredPost();
     if (dynamicLink?.url?.includes('postPrivateId=')) return handlePrivatePost(dynamicLink);
     if (dynamicLink?.url?.includes('communityName')) return handleCommunityPage(dynamicLink);
+    if (dynamicLink?.url?.includes('users?username=')) return getUserProfile(dynamicLink?.url);
     return handlePost(dynamicLink);
   };
 
@@ -77,24 +74,6 @@ const FirebaseConfig = (props) => {
         data
       });
     }
-  };
-
-  const handleBgDynamicLink = () => {
-    dynamicLinks()
-      .getInitialLink()
-      .then((data) => {
-        if (data) {
-          getUserProfile(data.url);
-        }
-      });
-  };
-
-  const handleFgDynamicLink = () => {
-    dynamicLinks().onLink((link) => {
-      if (link) {
-        getUserProfile(link.url);
-      }
-    });
   };
 
   const handleExpiredPost = async () => {

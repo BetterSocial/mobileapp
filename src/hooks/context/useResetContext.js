@@ -5,6 +5,8 @@ import ChannelList from '../../database/schema/ChannelListSchema';
 import ChannelListMemberSchema from '../../database/schema/ChannelListMemberSchema';
 import ChatSchema from '../../database/schema/ChatSchema';
 import DiscoveryAction from '../../context/actions/discoveryAction';
+import TokenStorage from '../../utils/storage/custom/tokenStorage';
+import TopicPageStorage from '../../utils/storage/custom/topicPageStorage';
 import UserSchema from '../../database/schema/UserSchema';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import useProfileHook from '../core/profile/useProfileHook';
@@ -44,6 +46,9 @@ const useResetContext = () => {
     ChatSchema.clearAll(localDb);
     ChannelListMemberSchema.clearAll(localDb);
     ChannelList.clearAll(localDb);
+
+    TokenStorage.clear();
+    TopicPageStorage.clear();
   };
 
   return {

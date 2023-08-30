@@ -1,7 +1,7 @@
 import crashlytics from '@react-native-firebase/crashlytics';
 
+import StorageUtils from '../utils/storage';
 import api from './config';
-import {getRefreshToken} from '../utils/token';
 
 export const verifyUser = async (userId) => {
   try {
@@ -67,7 +67,7 @@ export const verifyUsername = async (username) => {
 };
 export const registerUser = async (data) => {
   try {
-    const resApi = await api.post('/users/register-v2', {
+    const resApi = await api.post('/users/register-v2-without-upload-photo', {
       data
     });
     return resApi.data;
@@ -87,7 +87,7 @@ const verifyAccessToken = async () =>
     });
 
 export const refreshToken = async () => {
-  const token = await getRefreshToken();
+  const token = StorageUtils.refreshToken.get();
   const options = {
     headers: {
       Authorization: `Bearer ${token}`
@@ -208,5 +208,27 @@ export const checkPasswordForDemoLogin = async (password) => {
       code: e?.response?.data?.code,
       message: e?.response?.data?.message
     };
+  }
+};
+
+export const checkFollowStatusBatch = async (targetUserIds = [], axiosOptions = {}) => {
+  if (targetUserIds.length === 0) return Promise.reject(new Error('User IDs is empty'));
+
+  try {
+    const payload = {
+      targetUserIds
+    };
+
+    const result = await api.post('/users/check-follow-batch', payload, axiosOptions);
+    if (result?.status === 200) {
+      return Promise.resolve(result?.data?.data);
+    }
+
+    return Promise.reject(result?.data?.message);
+  } catch (e) {
+    crashlytics().recordError(new Error(e));
+    return Promise.reject(
+      e?.response?.data?.message || "Can't check follow status, please try again later"
+    );
   }
 };

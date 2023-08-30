@@ -57,6 +57,24 @@ export const getMainFeed = async (query) => {
     return err.response.data;
   }
 };
+
+export const getMainFeedV2WithTargetFeed = async (query, targetFeed = null) => {
+  if (typeof targetFeed === 'string') {
+    query += `&feed=${targetFeed}`;
+  }
+
+  try {
+    const res = await api.get(`/activity/feeds-v2${query}`);
+    if (res?.status === 200 && res?.data?.status === 'success') {
+      return Promise.resolve(res?.data);
+    }
+    return Promise.reject(new Error('Failed to get feeds.'));
+  } catch (err) {
+    crashlytics().recordError(err.response.data);
+    return Promise.reject(err);
+  }
+};
+
 export const getFeedDetail = async (id) => {
   try {
     const resApi = await api.get(`/feeds/detail-feed?id=${id}`);
