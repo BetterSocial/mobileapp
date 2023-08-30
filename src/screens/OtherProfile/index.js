@@ -109,7 +109,7 @@ const BioAndChat = (props) => {
           disabledInput={!isSignedMessageEnabled}
           onSend={onSendDM}
           onChangeMessage={setDMChat}
-          disabledButton={loadingSendDM || !isSignedMessageEnabled}
+          disabledButton={loadingSendDM || !isSignedMessageEnabled || loadingGenerateAnon}
           defaultValue={
             isSignedMessageEnabled ? dmChat : `Only users ${username} follows can send messages`
           }
