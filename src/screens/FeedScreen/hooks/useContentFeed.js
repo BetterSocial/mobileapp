@@ -56,7 +56,9 @@ const useContentFeed = ({navigation}) => {
 
   return {
     hashtagAtComponent,
-    matchPress
+    matchPress,
+    hanldeShortTextColor,
+    onPressComponent
   };
 };
 
