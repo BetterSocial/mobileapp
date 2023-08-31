@@ -164,7 +164,7 @@ const LocalCommunity = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white'
+    backgroundColor: colors.white
   },
   header: {paddingHorizontal: 22, paddingTop: 22, paddingBottom: 5},
   textFindYourLocalCommunity: {

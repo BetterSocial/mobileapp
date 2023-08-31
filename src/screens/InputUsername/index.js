@@ -352,7 +352,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: 'white'
+    backgroundColor: colors.white
   },
   btnNext: {marginTop: 16},
   gap: {flex: 1},
@@ -423,9 +423,6 @@ const styles = StyleSheet.create({
   },
   keyboardavoidingview: {
     flex: 1,
-    // paddingHorizontal: 20,
-    // paddingTop: 75,
-    // paddingBottom: 32,
     justifyContent: 'flex-end'
   },
   textMessage: (color) => ({
