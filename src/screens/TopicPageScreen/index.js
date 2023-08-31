@@ -2,7 +2,7 @@ import * as React from 'react';
 import _ from 'lodash';
 import SimpleToast from 'react-native-simple-toast';
 import {StatusBar, StyleSheet} from 'react-native';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useRoute} from '@react-navigation/native';
 
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import BlockComponent from '../../components/BlockComponent';
@@ -47,7 +47,6 @@ const TopicPageScreen = (props) => {
   const [userTopicName, setUserTopicName] = React.useState('');
   const [offset, setOffset] = React.useState(0);
   const [client] = React.useContext(Context).client;
-  const navigation = useNavigation();
   const refBlockComponent = React.useRef();
   const topicWithPrefix = route.params.id;
   const id = removePrefixTopic(topicWithPrefix);
@@ -108,17 +107,6 @@ const TopicPageScreen = (props) => {
       }
     }
   };
-
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      initData();
-    });
-
-    return () => {
-      unsubscribe();
-      setTopicFeeds([], dispatch);
-    };
-  }, [navigation]);
 
   React.useEffect(() => {
     const parseToken = async () => {
@@ -231,11 +219,12 @@ const TopicPageScreen = (props) => {
     refreshingData(offset);
   };
 
-  const onPress = (item) => {
-    setTopicFeeds([], dispatch);
+  const onPress = (item, haveSeeMore) => {
     props.navigation.navigate('PostDetailPage', {
       feedId: item.id,
-      isalreadypolling: item.isalreadypolling
+      isalreadypolling: item.isalreadypolling,
+      from: 'topic',
+      haveSeeMore
     });
   };
 
@@ -302,7 +291,7 @@ const TopicPageScreen = (props) => {
       onNewPollFetched={onNewPollFetched}
       index={index}
       onPressDomain={onPressDomain}
-      onPress={() => onPress(item)}
+      onPress={(haveSeeMore) => onPress(item, haveSeeMore)}
       onPressComment={() => onPressComment(item)}
       onPressBlock={() => onPressBlock(item)}
       onPressUpvote={(post) => setUpVote(post, index)}

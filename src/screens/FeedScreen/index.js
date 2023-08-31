@@ -250,7 +250,7 @@ const FeedScreen = (props) => {
         onPress={(haveSeeMore) => {
           onPress(item, haveSeeMore);
         }}
-        onPressComment={() => onPressComment(index, item)}
+        onPressComment={(haveSeeMore) => onPress(item, haveSeeMore)}
         onPressBlock={() => onPressBlock(item)}
         onPressUpvote={(post) => setUpVoteHandle(post, index)}
         selfUserId={myProfile.user_id}
