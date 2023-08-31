@@ -31,7 +31,7 @@ const useCoreFeed = () => {
       setLoading(true);
     }
     try {
-      const query = `?offset=${offsetFeed}`;
+      const query = `?offset=${offsetFeed}&feed=main_feed_following`;
 
       const dataFeeds = await getMainFeedV2WithTargetFeed(query, targetFeed);
       if (Array.isArray(dataFeeds.data) && dataFeeds.data?.length <= 0) {

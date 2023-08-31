@@ -202,7 +202,7 @@ const WhotoFollow = () => {
             crashlytics().recordError(new Error(e));
           }
           showMessage({
-            message: 'Welcome to Better Social',
+            message: 'Welcome to BetterSocial',
             type: 'success',
             backgroundColor: colors.holytosca
           });
