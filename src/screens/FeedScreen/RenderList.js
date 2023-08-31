@@ -29,7 +29,7 @@ const FULL_WIDTH = Dimensions.get('screen').width;
 
 const RenderListFeed = (props) => {
   const bottomHeight = useBottomTabBarHeight();
-
+  const [isHaveSeeMore, setIsHaveSeeMore] = React.useState(false);
   const {
     item,
     index,
@@ -135,9 +135,10 @@ const RenderListFeed = (props) => {
             index={index}
             message={item.message}
             images_url={item.images_url}
-            onPress={(showSeeMore) => {
-              onPress(showSeeMore);
+            onPress={() => {
+              onPress(isHaveSeeMore);
             }}
+            setHaveSeeMore={(haveSeeMore) => setIsHaveSeeMore(haveSeeMore)}
             topics={item?.topics}
             item={item}
             onNewPollFetched={onNewPollFetched}
@@ -155,7 +156,7 @@ const RenderListFeed = (props) => {
                 ANALYTICS_SHARE_POST_FEED_ID
               )
             }
-            onPressComment={() => onPress(item)}
+            onPressComment={() => onPress(isHaveSeeMore)}
             onPressBlock={() => onPressBlock(item)}
             onPressDownVote={onPressDownVoteHandle}
             onPressUpvote={onPressUpvoteHandle}
