@@ -102,6 +102,11 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
     }
   />
   <RCTScrollView
+    contentContainerStyle={
+      Object {
+        "paddingBottom": 30,
+      }
+    }
     nestedScrollEnabled={true}
   >
     <View>
@@ -1873,6 +1878,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -1909,6 +1915,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -1945,6 +1952,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -1981,6 +1989,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2017,6 +2026,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2053,6 +2063,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2089,6 +2100,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2129,6 +2141,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                       "opacity": 1,
                     }
                   }
+                  testID="btn"
                 >
                   <View
                     style={
@@ -2350,6 +2363,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2386,6 +2400,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2422,6 +2437,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2458,6 +2474,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2494,6 +2511,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2530,6 +2548,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2566,6 +2585,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2606,6 +2626,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                       "opacity": 1,
                     }
                   }
+                  testID="btn"
                 >
                   <View
                     style={
@@ -2855,6 +2876,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "opacity": 1,
                   }
                 }
+                testID="btn"
               >
                 <View
                   style={

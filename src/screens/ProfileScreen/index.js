@@ -18,6 +18,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {debounce} from 'lodash';
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
+import {useCopilot} from 'react-native-copilot';
 
 import AnonymousTab from './elements/AnonymousTab';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
@@ -71,6 +72,7 @@ import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import {TutorialStep} from '../../components';
 
 const {width} = Dimensions.get('screen');
 
@@ -101,41 +103,63 @@ const Header = (props) => {
             profilePicPath={dataMain.profile_pic_path}
           />
           <View style={{marginLeft: 20}}>
-            <FollowInfoRow
-              follower={dataMain.follower_symbol}
-              following={dataMain.following_symbol}
-              onFollowingContainerClicked={() =>
-                goToFollowings(dataMain.user_id, dataMain.username)
+            <TutorialStep
+              name="Followers and Following"
+              text={
+                'We keep your followers and following\nanonymous from others to maintain your\nprivacy.'
               }
-            />
+              order={2}>
+              <FollowInfoRow
+                follower={dataMain.follower_symbol}
+                following={dataMain.following_symbol}
+                onFollowingContainerClicked={() =>
+                  goToFollowings(dataMain.user_id, dataMain.username)
+                }
+              />
+            </TutorialStep>
           </View>
         </View>
-
-        <BioAndDMSetting
-          avatarUrl={DEFAULT_PROFILE_PIC_PATH}
-          bio={dataMainBio}
-          changeBio={changeBio}
-          allowAnonDm={dataMain.allow_anon_dm}
-          onlyReceivedDmFromUserFollowing={dataMain.only_received_dm_from_user_following}
-          following={dataMain.following}
-        />
-
-        <LinkAndSocialMedia username={dataMain.username} prompt={dataMainBio} />
+        <TutorialStep
+          name="Receive More Messages"
+          text={'Expand your network and receive messages\nfrom a wider audience.'}
+          order={1}>
+          <BioAndDMSetting
+            avatarUrl={DEFAULT_PROFILE_PIC_PATH}
+            bio={dataMainBio}
+            changeBio={changeBio}
+            allowAnonDm={dataMain.allow_anon_dm}
+            onlyReceivedDmFromUserFollowing={dataMain.only_received_dm_from_user_following}
+            following={dataMain.following}
+          />
+        </TutorialStep>
+        <TutorialStep
+          name="Share Your Link"
+          text={'Share your link to invite your friends and receive anonymous messages.'}
+          order={3}>
+          <LinkAndSocialMedia username={dataMain.username} prompt={dataMainBio} />
+        </TutorialStep>
       </View>
-      <View>
-        <View style={styles.tabs} ref={postRef}>
-          <CustomPressable
-            style={styles.tabItem(profileTabIndex === TAB_INDEX_SIGNED)}
-            onPress={setTabIndexToSigned}>
-            <Text style={styles.postText(profileTabIndex === TAB_INDEX_SIGNED)}>Signed Posts</Text>
-          </CustomPressable>
-          <CustomPressable
-            style={styles.tabItem(profileTabIndex === TAB_INDEX_ANONYMOUS)}
-            onPress={setTabIndexToAnonymous}>
-            <AnonymousTab isActive={profileTabIndex === TAB_INDEX_ANONYMOUS} />
-          </CustomPressable>
+      <TutorialStep
+        name="Your Posts"
+        text={'View the posts you made both anonymously\nand on your public account.'}
+        order={4}>
+        <View>
+          <View style={styles.tabs} ref={postRef}>
+            <CustomPressable
+              style={styles.tabItem(profileTabIndex === TAB_INDEX_SIGNED)}
+              onPress={setTabIndexToSigned}>
+              <Text style={styles.postText(profileTabIndex === TAB_INDEX_SIGNED)}>
+                Signed Posts
+              </Text>
+            </CustomPressable>
+            <CustomPressable
+              style={styles.tabItem(profileTabIndex === TAB_INDEX_ANONYMOUS)}
+              onPress={setTabIndexToAnonymous}>
+              <AnonymousTab isActive={profileTabIndex === TAB_INDEX_ANONYMOUS} />
+            </CustomPressable>
+          </View>
         </View>
-      </View>
+      </TutorialStep>
     </View>
   );
 };
@@ -179,6 +203,7 @@ const ProfileScreen = ({route}) => {
   const {interactionsComplete} = useAfterInteractions();
   const isNotFromHomeTab = route?.params?.isNotFromHomeTab;
   const [, setIsHitApiFirstTime] = React.useState(false);
+  const {start} = useCopilot();
 
   const updateUserClient = useUpdateClientGetstreamHook();
   const {refreshCount} = useResetContext();
@@ -256,6 +281,9 @@ const ProfileScreen = ({route}) => {
       setDataMainBio(result.bio);
       setMyProfileAction(result, dispatchProfile);
       setLoadingContainer(false);
+      setTimeout(() => {
+        start();
+      }, 2000);
     }
   };
 
@@ -513,20 +541,12 @@ const ProfileScreen = ({route}) => {
     navigation.navigate('DomainScreen', param);
   };
 
-  const onPress = (item, index) => {
-    navigation.navigate('ProfilePostDetailPage', {
-      index,
+  const onPress = (item, haveSeeMore) => {
+    navigation.navigate('PostDetailPage', {
       isalreadypolling: item.isalreadypolling,
       feedId: item.id,
-      refreshParent: profileTabIndex === 0 ? getMyFeeds : reloadFetchAnonymousPost
-    });
-  };
-
-  const onPressComment = (item, id) => {
-    navigation.navigate('ProfilePostDetailPage', {
-      feedId: id,
-      isalreadypolling: item.isalreadypolling,
-      refreshParent: profileTabIndex === 0 ? getMyFeeds : reloadFetchAnonymousPost
+      refreshParent: profileTabIndex === 0 ? getMyFeeds : reloadFetchAnonymousPost,
+      haveSeeMore
     });
   };
 
@@ -634,8 +654,8 @@ const ProfileScreen = ({route}) => {
                   onNewPollFetched={onNewPollFetched}
                   index={index}
                   onPressDomain={onPressDomain}
-                  onPress={() => onPress(item)}
-                  onPressComment={() => onPressComment(index, item)}
+                  onPress={(haveSeeMore) => onPress(item, haveSeeMore)}
+                  onPressComment={(haveSeeMore) => onPress(item, haveSeeMore)}
                   onPressUpvote={(post) => setUpVote(post)}
                   selfUserId={profile.myProfile.user_id}
                   onPressDownVote={(post) => setDownVote(post)}
