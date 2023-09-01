@@ -1,14 +1,15 @@
 import * as React from 'react';
 
 import {Context} from '../context';
-import {setMainFeeds} from '../context/actions/feeds';
+import {setMainFeeds, setTopicFeeds} from '../context/actions/feeds';
 import {setMyProfileFeed} from '../context/actions/myProfileFeed';
 import {setOtherProfileFeed} from '../context/actions/otherProfileFeed';
 
 export const CONTEXT_SOURCE = {
   FEEDS: 'feeds',
   PROFILE_FEEDS: 'profile_feeds',
-  OTHER_PROFILE_FEEDS: 'other_profile_feeds'
+  OTHER_PROFILE_FEEDS: 'other_profile_feeds',
+  TOPIC_FEEDS: 'topic_feeds'
 };
 
 const usePostContextHook = (source = CONTEXT_SOURCE.FEEDS) => {
@@ -28,13 +29,14 @@ const usePostContextHook = (source = CONTEXT_SOURCE.FEEDS) => {
       [feedsContext, dispatch] = React.useContext(Context).otherProfileFeed;
       break;
 
+    case CONTEXT_SOURCE.TOPIC_FEEDS:
+      [feedsContext, dispatch] = React.useContext(Context).feeds;
+      break;
     default:
       break;
   }
 
   const {feeds} = feedsContext;
-
-  const updateSingleFeedFromApi = (postId) => {};
 
   const updateFeedContext = (newFeeds) => {
     switch (source) {
@@ -48,6 +50,9 @@ const usePostContextHook = (source = CONTEXT_SOURCE.FEEDS) => {
 
       case CONTEXT_SOURCE.OTHER_PROFILE_FEEDS:
         setOtherProfileFeed(newFeeds, dispatch);
+        break;
+      case CONTEXT_SOURCE.TOPIC_FEEDS:
+        setTopicFeeds(newFeeds, dispatch);
         break;
 
       default:
@@ -83,7 +88,6 @@ const usePostContextHook = (source = CONTEXT_SOURCE.FEEDS) => {
   };
 
   return {
-    updateSingleFeedFromApi,
     deleteCommentFromContext,
     deleteCommentFromContextByIndex,
     updateFeedContext
