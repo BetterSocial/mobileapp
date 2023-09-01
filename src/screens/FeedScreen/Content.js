@@ -40,17 +40,6 @@ const Content = ({
   const [arrText] = React.useState([]);
   const isIos = Platform.OS === 'ios';
 
-  const onImageClickedByIndex = (index) => {
-    navigation.push('ImageViewer', {
-      title: 'Photo',
-      index,
-      images: images_url.reduce((acc, current) => {
-        acc.push({url: current});
-        return acc;
-      }, [])
-    });
-  };
-
   const {lineHeight, font} = handleCalculation(
     layoutHeight,
     textHeight,
