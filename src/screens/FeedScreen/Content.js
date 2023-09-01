@@ -25,7 +25,8 @@ const Content = ({
   onPress,
   topics = [],
   item,
-  onNewPollFetched
+  onNewPollFetched,
+  setHaveSeeMore
 }) => {
   const navigation = useNavigation();
   const route = useRoute();
@@ -39,6 +40,24 @@ const Content = ({
   const [textCut, setTextCut] = React.useState(null);
   const [arrText] = React.useState([]);
   const isIos = Platform.OS === 'ios';
+
+  const onImageClickedByIndex = (index) => {
+    navigation.push('ImageViewer', {
+      title: 'Photo',
+      index,
+      images: images_url.reduce((acc, current) => {
+        acc.push({url: current});
+        return acc;
+      }, [])
+    });
+  };
+
+  React.useEffect(() => {
+    if (setHaveSeeMore && typeof setHaveSeeMore === 'function') {
+      const haveSeeMoreText = amountCut < message.length;
+      setHaveSeeMore(haveSeeMoreText);
+    }
+  }, [amountCut]);
 
   const {lineHeight, font} = handleCalculation(
     layoutHeight,
@@ -217,7 +236,7 @@ const Content = ({
   return (
     <Pressable
       onLayout={hanldeHeightContainer}
-      onPress={() => onPress(showSeeMore)}
+      onPress={onPress}
       style={[styles.contentFeed, style]}>
       {message?.length > 0 ? (
         <View>

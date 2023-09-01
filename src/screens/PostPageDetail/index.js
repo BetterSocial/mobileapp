@@ -11,7 +11,7 @@ import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 const FeedsPostDetail = (props) => {
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
-  const {feedId, refreshCache, haveSeeMore} = props.route.params;
+  const {feedId, refreshCache, haveSeeMore, refreshParent, contextSource} = props.route.params;
   const {feeds} = feedsContext;
   const {navigateToReplyView} = useMainPdp(props);
   React.useEffect(() => {
@@ -19,6 +19,15 @@ const FeedsPostDetail = (props) => {
       refreshCache();
     }
   }, []);
+
+  React.useEffect(() => {
+    return () => {
+      if (refreshParent && typeof refreshParent === 'function') {
+        refreshParent();
+      }
+    };
+  }, []);
+  console.log({contextSource}, 'lupia');
   return (
     <View style={styles.container}>
       <PostPageDetailComponent
@@ -28,7 +37,7 @@ const FeedsPostDetail = (props) => {
         setFeedByIndexProps={setFeedByIndex}
         navigateToReplyView={navigateToReplyView}
         page={props.route.name}
-        contextSource={CONTEXT_SOURCE.FEEDS}
+        contextSource={contextSource || CONTEXT_SOURCE.FEEDS}
         haveSeeMore={haveSeeMore}
       />
     </View>
