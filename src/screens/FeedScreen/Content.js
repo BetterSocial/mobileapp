@@ -41,17 +41,6 @@ const Content = ({
   const [arrText] = React.useState([]);
   const isIos = Platform.OS === 'ios';
 
-  const onImageClickedByIndex = (index) => {
-    navigation.push('ImageViewer', {
-      title: 'Photo',
-      index,
-      images: images_url.reduce((acc, current) => {
-        acc.push({url: current});
-        return acc;
-      }, [])
-    });
-  };
-
   React.useEffect(() => {
     if (setHaveSeeMore && typeof setHaveSeeMore === 'function') {
       const haveSeeMoreText = amountCut < message.length;
@@ -268,7 +257,7 @@ const Content = ({
       ) : null}
       {images_url.length > 0 && (
         <View style={styles.containerImage}>
-          <ImageLayouter isFeed={true} images={images_url} onimageclick={onImageClickedByIndex} />
+          <ImageLayouter isFeed={true} images={images_url} onimageclick={onPress} />
         </View>
       )}
 
