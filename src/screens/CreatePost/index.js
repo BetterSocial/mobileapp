@@ -198,7 +198,7 @@ const CreatePost = () => {
   }, []);
 
   const init = async () => {
-    const privacyId = await getPrivacyId();
+    const privacyId = 0;
     if (privacyId && isInCreatePostTopicScreen) {
       setPrivacySelect(0);
     }
@@ -400,13 +400,13 @@ const CreatePost = () => {
     sheetExpiredRef.current.close();
   };
   const onSetGeoSelect = (v) => {
-    getEstimationsAudience(listPrivacy[privacySelect].key, geoList[v].location_id);
+    getEstimationsAudience(listPrivacy[0].key, geoList[v].location_id);
     setGeoSelect(v);
     setLocationIdState(geoList[v].location_id);
     sheetGeoRef.current.close();
   };
   const onSetPrivacySelect = (v) => {
-    getEstimationsAudience(listPrivacy[v].key, geoList[geoSelect].location_id);
+    getEstimationsAudience(listPrivacy[0].key, geoList[geoSelect].location_id);
     setPrivacySelect(v);
     sheetPrivacyRef.current.close();
   };
@@ -471,7 +471,7 @@ const CreatePost = () => {
         topics: topicsToPost,
         verb: isPollShown ? 'poll' : 'tweet',
         feedGroup: 'main_feed',
-        privacy: listPrivacy[privacySelect].key,
+        privacy: listPrivacy[0].key,
         anonimity: typeUser,
         location: renderLocationString(geoList[geoSelect]),
         location_id: locationId,
@@ -499,7 +499,7 @@ const CreatePost = () => {
       setDurationId(JSON.stringify(expiredSelect));
       if (!isInCreatePostTopicScreen) {
         setLocationId(JSON.stringify(geoSelect));
-        setPrivacyId(JSON.stringify(privacySelect));
+        setPrivacyId(JSON.stringify(0));
       }
 
       if (isInCreatePostTopicScreen) {
@@ -534,7 +534,7 @@ const CreatePost = () => {
     Analytics.logEvent('create_post', {
       id: 6,
       newpost_reach: renderLocationString(geoList[geoSelect]),
-      newpost_privacy: listPrivacy[privacySelect].label,
+      newpost_privacy: listPrivacy[0].label,
       num_images: 0,
       added_poll: isPollShown,
       topics_added: listTopic,
