@@ -328,7 +328,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderBottomColor: colors.gray1,
     borderBottomWidth: 0.4,
-    paddingVertical: 8
+    paddingTop: 8,
+    paddingBottom: 8
   },
   rowCenter: {
     flexDirection: 'row',
