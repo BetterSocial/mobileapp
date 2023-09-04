@@ -331,7 +331,7 @@ const getCaptionWithTopicStyle = (
       return (
         <TopicText
           item={item}
-          goToDetailPage={true}
+          goToDetailPage={false}
           navigation={navigation}
           text={match}
           currentTopic={id}
