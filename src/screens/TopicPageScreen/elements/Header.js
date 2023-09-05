@@ -10,7 +10,15 @@ import ButtonFollow from './ButtonFollow';
 import ButtonFollowing from './ButtonFollowing';
 import {colors} from '../../../utils/colors';
 
-const Header = ({animatedValue, domain, onPress, isFollow = false, getHeaderLayout}) => {
+const Header = ({
+  animatedValue,
+  domain,
+  onPress,
+  memberCount,
+  isFollow = false,
+  getHeaderLayout,
+  handleOnMemberPress
+}) => {
   const onHeaderLayout = (event) => {
     const {height} = event.nativeEvent.layout;
     if (getHeaderLayout) {
@@ -27,8 +35,17 @@ const Header = ({animatedValue, domain, onPress, isFollow = false, getHeaderLayo
         </Text>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Image testID="imageTopicMember" source={TopicMemberIcon} style={styles.member} />
-          <Text style={styles.domainMember}>20 Members</Text>
+          <Text style={styles.domainMember}>{memberCount} Members</Text>
         </View>
+        {isFollow && (
+          <Text
+            style={styles.seeMemberText}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            onPress={handleOnMemberPress}>
+            See community member
+          </Text>
+        )}
       </View>
       <View style={styles.containerAction}>
         {isFollow ? (
@@ -81,6 +98,12 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     textAlign: 'left',
     color: colors.blackgrey
+  },
+  seeMemberText: {
+    fontSize: normalizeFontSize(12),
+    fontFamily: fonts.inter[500],
+    textAlign: 'left',
+    color: colors.blue1
   },
   containerAction: {
     flexDirection: 'row',

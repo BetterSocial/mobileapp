@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, StyleSheet, TouchableNativeFeedback, Text} from 'react-native';
 import {colors} from '../../../utils/colors';
-import {fonts} from '../../../utils/fonts';
+import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
 
 const ButtonFollow = ({handleSetFollow}) => {
   return (
@@ -15,7 +15,8 @@ const ButtonFollow = ({handleSetFollow}) => {
 
 const styles = StyleSheet.create({
   buttonFollow: {
-    width: 88,
+    width: normalize(88),
+    height: normalize(36),
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -26,7 +27,7 @@ const styles = StyleSheet.create({
   textButtonFollow: {
     fontFamily: fonts.inter[500],
     fontWeight: 'bold',
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     color: colors.white,
     lineHeight: 24
   }

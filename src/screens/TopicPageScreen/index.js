@@ -21,7 +21,7 @@ import {downVote, upVote} from '../../service/vote';
 import {getFeedDetail} from '../../service/post';
 import {getTopicPages} from '../../service/topicPages';
 import {getUserId} from '../../utils/users';
-import {getUserTopic} from '../../service/topics';
+import {getTopics, getUserTopic} from '../../service/topics';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {setFeedByIndex, setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
@@ -57,11 +57,14 @@ const TopicPageScreen = (props) => {
   const mainFeeds = feedsContext.feeds;
   const [isFollow, setIsFollow] = React.useState(false);
   const [userTopicName, setUserTopicName] = React.useState('');
+  const [topicMemberCount, setTopicMemberCount] = React.useState('');
   const [offset, setOffset] = React.useState(0);
   const [client] = React.useContext(Context).client;
   const refBlockComponent = React.useRef();
   const interactionManagerRef = React.useRef(null);
   const interactionManagerAnimatedRef = React.useRef(null);
+
+  const {listRef} = useOnBottomNavigationTabPressHook(LIST_VIEW_TYPE.TIKTOK_SCROLL, onRefresh);
 
   const topicWithPrefix = route.params.id;
   const id = removePrefixTopic(topicWithPrefix);
@@ -115,6 +118,11 @@ const TopicPageScreen = (props) => {
       const resultGetUserTopic = await getUserTopic(query);
       if (resultGetUserTopic.data) {
         setIsFollow(true);
+      }
+      const resultTopicDetail = await getTopics(idLower);
+      if (resultTopicDetail.data) {
+        const topicMember = resultTopicDetail.data[0]?.followersCount;
+        setTopicMemberCount(topicMember);
       }
     } catch (error) {
       if (__DEV__) {
@@ -363,7 +371,14 @@ const TopicPageScreen = (props) => {
       setHeaderHeight(Number(height));
     }
   };
-  const {listRef} = useOnBottomNavigationTabPressHook(LIST_VIEW_TYPE.TIKTOK_SCROLL, onRefresh);
+
+  const handleOnMemberPress = (item) => {
+    const navigationParam = {
+      id: topicName
+    };
+
+    navigation.push('TopicMemberScreen', navigationParam);
+  };
 
   const renderItem = ({item, index}) => (
     <MemoizedListComponent
@@ -392,6 +407,7 @@ const TopicPageScreen = (props) => {
         onPress={() => handleFollowTopic()}
         isHeaderHide={isHeaderHide}
         animatedValue={opacityAnimation}
+        memberCount={topicMemberCount}
       />
       <Header
         domain={topicName}
@@ -400,6 +416,8 @@ const TopicPageScreen = (props) => {
         isFollow={isFollow}
         getSearchLayout={saveHeaderhHeightHandle}
         animatedValue={offsetAnimation}
+        memberCount={topicMemberCount}
+        handleOnMemberPress={handleOnMemberPress}
       />
       <TiktokScroll
         ref={listRef}

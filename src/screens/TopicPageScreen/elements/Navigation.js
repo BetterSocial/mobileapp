@@ -12,7 +12,7 @@ import ShareIcon from '../../../assets/icons/Ic_share';
 import ShareIconCircle from '../../../assets/icons/Ic_share_circle';
 import {colors} from '../../../utils/colors';
 
-const Navigation = ({domain, isHeaderHide, animatedValue, onShareCommunity}) => {
+const Navigation = ({domain, isHeaderHide, animatedValue, onShareCommunity, memberCount}) => {
   const navigation = useNavigation();
 
   const backScreen = () => {
@@ -34,7 +34,7 @@ const Navigation = ({domain, isHeaderHide, animatedValue, onShareCommunity}) => 
         </Text>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Image testID="imageTopicMember" source={TopicMemberIcon} style={styles.member} />
-          <Text style={styles.domainMember}>20 Members</Text>
+          <Text style={styles.domainMember}>{memberCount} Members</Text>
         </View>
       </Animated.View>
       <View style={styles.containerAction}>
