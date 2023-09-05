@@ -1,14 +1,15 @@
 import * as React from 'react';
 import _ from 'lodash';
 import SimpleToast from 'react-native-simple-toast';
-import {StatusBar, StyleSheet} from 'react-native';
-import {useRoute} from '@react-navigation/native';
+import {Animated, InteractionManager, StatusBar, StyleSheet} from 'react-native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import BlockComponent from '../../components/BlockComponent';
 import ButtonAddPostTopic from '../../components/Button/ButtonAddPostTopic';
 import MemoizedListComponent from './MemoizedListComponent';
 import Navigation from './elements/Navigation';
+import Header from './elements/Header';
 import ShareUtils from '../../utils/share';
 import TiktokScroll from '../../components/TiktokScroll';
 import TopicPageStorage from '../../utils/storage/custom/topicPageStorage';
@@ -25,6 +26,9 @@ import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder
 import {setFeedByIndex, setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {normalizeFontSizeByWidth} from '../../utils/fonts';
+import useOnBottomNavigationTabPressHook, {
+  LIST_VIEW_TYPE
+} from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
 
 const styles = StyleSheet.create({
   parentContainer: {
@@ -32,14 +36,22 @@ const styles = StyleSheet.create({
   }
 });
 
+let lastDragY = 0;
+
 const TopicPageScreen = (props) => {
   const route = useRoute();
   const {params} = route;
+  const navigation = useNavigation();
   const [topicName, setTopicName] = React.useState(route?.params?.id);
   const [loading, setLoading] = React.useState(false);
   const [isInitialLoading, setIsInitialLoading] = React.useState(true);
   const [userId, setUserId] = React.useState('');
   const [topicId, setTopicId] = React.useState('');
+  const [isHeaderHide, setIsHeaderHide] = React.useState(false);
+  const [headerHeight, setHeaderHeight] = React.useState(0);
+  const offsetAnimation = React.useRef(new Animated.Value(0)).current;
+  const opacityAnimation = React.useRef(new Animated.Value(0)).current;
+
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   const feeds = feedsContext.topicFeeds;
   const mainFeeds = feedsContext.feeds;
@@ -48,6 +60,9 @@ const TopicPageScreen = (props) => {
   const [offset, setOffset] = React.useState(0);
   const [client] = React.useContext(Context).client;
   const refBlockComponent = React.useRef();
+  const interactionManagerRef = React.useRef(null);
+  const interactionManagerAnimatedRef = React.useRef(null);
+
   const topicWithPrefix = route.params.id;
   const id = removePrefixTopic(topicWithPrefix);
   const {followTopic} = useChatClientHook();
@@ -285,6 +300,71 @@ const TopicPageScreen = (props) => {
     }
   };
 
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      showHeaderAnimation();
+    });
+
+    return () => {
+      if (interactionManagerRef.current) interactionManagerRef.current.cancel();
+      if (interactionManagerAnimatedRef.current) interactionManagerAnimatedRef.current.cancel();
+
+      unsubscribe();
+    };
+  }, [navigation]);
+
+  const showHeaderAnimation = () => {
+    interactionManagerRef.current = InteractionManager.runAfterInteractions(() => {
+      Animated.timing(offsetAnimation, {
+        toValue: 0,
+        duration: 100,
+        useNativeDriver: false
+      }).start();
+      Animated.timing(opacityAnimation, {
+        toValue: 0,
+        duration: 100,
+        useNativeDriver: false
+      }).start();
+    });
+    setIsHeaderHide(false);
+  };
+
+  const handleOnScrollBeginDrag = (event) => {
+    lastDragY = event.nativeEvent.contentOffset.y;
+  };
+
+  const handleScrollEvent = React.useCallback(
+    (event) => {
+      const {y} = event.nativeEvent.contentOffset;
+      const dy = y - lastDragY;
+      if (dy + 30 <= 0) {
+        showHeaderAnimation();
+      } else if (dy - 20 > 0) {
+        interactionManagerAnimatedRef.current = InteractionManager.runAfterInteractions(() => {
+          Animated.timing(offsetAnimation, {
+            toValue: -dimen.size.TOPIC_FEED_HEADER_HEIGHT,
+            duration: 100,
+            useNativeDriver: false
+          }).start();
+          Animated.timing(opacityAnimation, {
+            toValue: 1,
+            duration: 100,
+            useNativeDriver: false
+          }).start();
+        });
+        setIsHeaderHide(true);
+      }
+    },
+    [offsetAnimation]
+  );
+
+  const saveHeaderhHeightHandle = (height) => {
+    if (!headerHeight) {
+      setHeaderHeight(Number(height));
+    }
+  };
+  const {listRef} = useOnBottomNavigationTabPressHook(LIST_VIEW_TYPE.TIKTOK_SCROLL, onRefresh);
+
   const renderItem = ({item, index}) => (
     <MemoizedListComponent
       item={item}
@@ -310,15 +390,27 @@ const TopicPageScreen = (props) => {
         domain={topicName}
         onShareCommunity={onShareCommunity}
         onPress={() => handleFollowTopic()}
+        isHeaderHide={isHeaderHide}
+        animatedValue={opacityAnimation}
+      />
+      <Header
+        domain={topicName}
+        onShareCommunity={onShareCommunity}
+        onPress={() => handleFollowTopic()}
         isFollow={isFollow}
+        getSearchLayout={saveHeaderhHeightHandle}
+        animatedValue={offsetAnimation}
       />
       <TiktokScroll
+        ref={listRef}
         contentHeight={dimen.size.TOPIC_CURRENT_ITEM_HEIGHT + normalizeFontSizeByWidth(4)}
         data={feeds}
         onEndReach={onEndReach}
         onRefresh={onRefresh}
         refreshing={loading}
         renderItem={renderItem}
+        onScroll={handleScrollEvent}
+        onScrollBeginDrag={handleOnScrollBeginDrag}
       />
       <ButtonAddPostTopic topicName={topicName} onRefresh={onRefresh} />
       <BlockComponent
