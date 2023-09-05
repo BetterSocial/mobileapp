@@ -91,6 +91,7 @@ const useCoreFeed = () => {
   };
 
   const checkCacheFeed = () => {
+    console.log('boban1');
     getSpecificCache(FEEDS_CACHE, (result) => {
       if (result) {
         setMainFeeds(result.data, dispatch);

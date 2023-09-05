@@ -108,7 +108,6 @@ const RenderListFeed = (props) => {
   }, [item]);
 
   getTotalReaction(item);
-
   return (
     <View key={item.id} testID="dataScroll" style={styles.cardContainer}>
       <View style={styles.cardMain}>
