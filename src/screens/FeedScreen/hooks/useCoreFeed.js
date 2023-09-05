@@ -31,7 +31,7 @@ const useCoreFeed = () => {
       setLoading(true);
     }
     try {
-      const query = `?offset=${offsetFeed}&feed=main_feed_following`;
+      const query = `?offset=${offsetFeed}`;
 
       const dataFeeds = await getMainFeedV2WithTargetFeed(query, targetFeed);
       if (Array.isArray(dataFeeds.data) && dataFeeds.data?.length <= 0) {
@@ -91,7 +91,6 @@ const useCoreFeed = () => {
   };
 
   const checkCacheFeed = () => {
-    console.log('boban1');
     getSpecificCache(FEEDS_CACHE, (result) => {
       if (result) {
         setMainFeeds(result.data, dispatch);
