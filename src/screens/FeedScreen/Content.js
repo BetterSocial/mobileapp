@@ -2,7 +2,7 @@
 import * as React from 'react';
 /* eslint-disable no-nested-ternary */
 import PropTypes from 'prop-types';
-import {Dimensions, Platform, Pressable, StatusBar, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, Platform, Pressable, StyleSheet, Text, View} from 'react-native';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {useNavigation, useRoute} from '@react-navigation/native';
 
