@@ -8,10 +8,10 @@ import PollOptionsMultipleChoice from '../../components/PollOptionsMultipleChoic
 import useContentPoll from './hooks/useContentPoll';
 import {COLORS} from '../../utils/theme';
 import {colors} from '../../utils/colors';
-import {fonts, normalizeFontSize} from '../../utils/fonts';
+import {fonts, normalizeFontSize, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {getPollTime, isPollExpired} from '../../utils/string/StringUtils';
 
-const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
+const {width: screenWidth} = Dimensions.get('window');
 const FONT_SIZE_MEDIA = 16;
 
 const ContentPoll = ({
@@ -332,7 +332,7 @@ const stylesComponent = (pollLength) =>
     },
     pollListContainer: {
       paddingTop: 10,
-      height: (pollLength * (screenHeight * 9)) / 100
+      height: (pollLength / 4) * normalizeFontSizeByWidth(250)
     },
     voteFont: {
       fontSize: normalizeFontSize(12),

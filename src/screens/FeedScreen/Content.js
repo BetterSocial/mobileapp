@@ -2,7 +2,7 @@
 import * as React from 'react';
 /* eslint-disable no-nested-ternary */
 import PropTypes from 'prop-types';
-import {Dimensions, Platform, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, Platform, Pressable, StatusBar, StyleSheet, Text, View} from 'react-native';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {useNavigation, useRoute} from '@react-navigation/native';
 
@@ -15,9 +15,9 @@ import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
 import useCalculationContent from './hooks/useCalculationContent';
+import {getCommentLength} from '../../utils/getstream';
 
 const {width: screenWidth} = Dimensions.get('window');
-
 const Content = ({
   message,
   images_url = [],
@@ -74,13 +74,16 @@ const Content = ({
     item.images_url,
     message
   );
-
   const calculateMaxLine = () => {
     if (item.post_type === POST_TYPE_LINK || images_url.length > 0) {
       return 5;
     }
     if (item.post_type === POST_TYPE_POLL) {
-      return Math.round((layoutHeight - heightPoll) / lineHeight);
+      const result = Math.round((layoutHeight - heightPoll) / lineHeight);
+      return result;
+    }
+    if (getCommentLength(item.latest_reactions.comment) > 0) {
+      return Math.floor(layoutHeight / lineHeight);
     }
     return Math.round(layoutHeight / lineHeight);
   };
@@ -232,9 +235,7 @@ const Content = ({
     };
   };
   const hanldeHeightContainer = ({nativeEvent}) => {
-    if (!layoutHeight || layoutHeight <= 0) {
-      setLayoutHeight(nativeEvent.layout.height);
-    }
+    setLayoutHeight(nativeEvent.layout.height);
   };
 
   const calculateLineTopicChip = (nativeEvent) => {
