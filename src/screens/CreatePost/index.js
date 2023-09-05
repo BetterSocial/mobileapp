@@ -5,6 +5,7 @@
 import * as React from 'react';
 import PSL from 'psl';
 import Toast from 'react-native-simple-toast';
+import {Image} from 'react-native-compressor';
 import _, {debounce} from 'lodash';
 import {
   Alert,
@@ -18,11 +19,11 @@ import {
   Text,
   View
 } from 'react-native';
-import {Image} from 'react-native-compressor';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {openSettings} from 'react-native-permissions';
 import {showMessage} from 'react-native-flash-message';
-import {useNavigation, useRoute} from '@react-navigation/core';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {useIsFocused, useNavigation, useRoute} from '@react-navigation/core';
+import {useCopilot} from 'react-native-copilot';
 
 import ContentLink from './elements/ContentLink';
 import CreatePollContainer from './elements/CreatePollContainer';
@@ -78,6 +79,7 @@ import {getUrl, isContainUrl} from '../../utils/Utils';
 import {getUserId} from '../../utils/users';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
 import {uploadPhoto} from '../../service/file';
+import {TutorialStep} from '../../components';
 
 const IS_GEO_SELECT_ENABLED = false;
 
@@ -94,6 +96,8 @@ const CreatePost = () => {
   const sheetGeoRef = React.useRef();
   const sheetPrivacyRef = React.useRef();
   const sheetBackRef = React.useRef();
+  const isFocused = useIsFocused();
+  const {start} = useCopilot();
 
   const [typeUser, setTypeUser] = React.useState(false);
   const {headerTitle, initialTopic, isInCreatePostTopicScreen, anonUserInfo} =
@@ -122,6 +126,7 @@ const CreatePost = () => {
   const [client] = React.useContext(Context).client;
   const [user] = React.useContext(Context).profile;
   const [allTaggingUser, setAllTaggingUser] = React.useState([]);
+  const [isOpen, setIsOpen] = React.useState(false);
   const animatedReminder = React.useRef(new Animated.Value(0)).current;
 
   const debounced = React.useCallback(
@@ -247,6 +252,15 @@ const CreatePost = () => {
     setIsLinkPreviewShown(response?.success);
   };
 
+  const openTutorial = React.useCallback(() => {
+    setIsOpen(true);
+    start();
+  }, [isOpen]);
+
+  React.useEffect(() => {
+    openTutorial();
+  }, [isOpen]);
+
   React.useEffect(() => {
     debounced(message);
   }, [message]);
@@ -321,7 +335,6 @@ const CreatePost = () => {
 
     try {
       const responseUpload = await uploadPhoto(asset);
-
       setMediaStorage((val) => [...val, newArr]);
       setDataImage((val) => [...val, responseUpload.data.url]);
       sheetMediaRef.current.close();
@@ -361,7 +374,6 @@ const CreatePost = () => {
       );
     }
   };
-
   const takePhoto = async () => {
     const {success, message} = await requestCameraPermission();
     if (success) {
@@ -722,21 +734,26 @@ const CreatePost = () => {
       <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={positionKeyboard}>
         <Header title={headerTitle} onPress={() => onBack()} />
         <View style={{paddingHorizontal: 15}}>
-          <UserProfile
-            setTypeUser={setTypeUser}
-            isAnonymous={typeUser}
-            anonUserInfo={anonUserInfo}
-            username={dataProfile.username ? dataProfile.username : 'Loading . . .'}
-            photo={
-              dataProfile.profile_pic_path ? {uri: dataProfile.profile_pic_path} : ProfileDefault
-            }
-            onPress={() => {
-              setMessage('');
-              navigation.navigate('ProfileScreen', {
-                isNotFromHomeTab: true
-              });
-            }}
-          />
+          <TutorialStep
+            active={isFocused}
+            name={StringConstant.tutorialCreateAnonymousPostTitle}
+            text={StringConstant.tutorialCreateAnonymousPostDescription}>
+            <UserProfile
+              setTypeUser={setTypeUser}
+              isAnonymous={typeUser}
+              anonUserInfo={anonUserInfo}
+              username={dataProfile.username ? dataProfile.username : 'Loading . . .'}
+              photo={
+                dataProfile.profile_pic_path ? {uri: dataProfile.profile_pic_path} : ProfileDefault
+              }
+              onPress={() => {
+                setMessage('');
+                navigation.navigate('ProfileScreen', {
+                  isNotFromHomeTab: true
+                });
+              }}
+            />
+          </TutorialStep>
           <Gap style={styles.height(8)} />
           <CreatePostInput
             setMessage={setMessage}
@@ -821,13 +838,6 @@ const CreatePost = () => {
               />
             </>
           )}
-          <Gap style={styles.height(16)} />
-          <ListItem
-            icon={<MemoIc_world width={16.67} height={16.67} />}
-            label={listPrivacy.length === 0 ? 'Loading...' : listPrivacy[privacySelect].label}
-            labelStyle={styles.listText}
-            onPress={() => sheetPrivacyRef.current.open()}
-          />
           <Gap style={styles.height(25)} />
           <Button disabled={isButtonDisabled()} onPress={postV2}>
             Post
@@ -933,7 +943,7 @@ const styles = StyleSheet.create({
     height
   }),
   reminderContainer: {
-    backgroundColor: '#2F80ED',
+    backgroundColor: colors.blue,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 7,

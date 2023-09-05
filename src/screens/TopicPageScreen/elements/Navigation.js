@@ -1,16 +1,18 @@
 import {useNavigation} from '@react-navigation/core';
 import * as React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Animated, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
+import TopicMemberIcon from '../../../assets/images/topic-member-picture.png';
 import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
+import MemoIc_arrow_back_circle from '../../../assets/arrow/Ic_arrow_back_circle';
 import dimen from '../../../utils/dimen';
 import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
 import {convertString} from '../../../utils/string/StringUtils';
-import ButtonFollow from './ButtonFollow';
-import ButtonFollowing from './ButtonFollowing';
 import ShareIcon from '../../../assets/icons/Ic_share';
+import ShareIconCircle from '../../../assets/icons/Ic_share_circle';
+import {colors} from '../../../utils/colors';
 
-const Navigation = ({domain, onPress, isFollow = false, onShareCommunity}) => {
+const Navigation = ({domain, isHeaderHide, animatedValue, onShareCommunity}) => {
   const navigation = useNavigation();
 
   const backScreen = () => {
@@ -18,64 +20,80 @@ const Navigation = ({domain, onPress, isFollow = false, onShareCommunity}) => {
   };
 
   return (
-    <View style={styles.Header}>
+    <View style={styles.Header(isHeaderHide)}>
       <TouchableOpacity onPress={() => backScreen()} style={styles.backbutton}>
-        <MemoIc_arrow_back width={normalize(18)} height={normalize(18)} />
+        {isHeaderHide ? (
+          <MemoIc_arrow_back_circle width={normalize(32)} height={normalize(32)} />
+        ) : (
+          <MemoIc_arrow_back width={normalize(24)} height={normalize(24)} />
+        )}
       </TouchableOpacity>
-      <View style={styles.domain}>
+      <Animated.View style={styles.domain(animatedValue)}>
         <Text style={styles.domainText} numberOfLines={1} ellipsizeMode="tail">
           {`#${convertString(domain, ' ', '')}`}
         </Text>
-      </View>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <Image testID="imageTopicMember" source={TopicMemberIcon} style={styles.member} />
+          <Text style={styles.domainMember}>20 Members</Text>
+        </View>
+      </Animated.View>
       <View style={styles.containerAction}>
         <TouchableOpacity onPress={onShareCommunity} style={styles.shareIconStyle}>
-          <ShareIcon color="black" width={20} height={20} />
+          {isHeaderHide ? (
+            <ShareIconCircle color="black" width={32} height={32} />
+          ) : (
+            <ShareIcon color="black" width={24} height={24} />
+          )}
         </TouchableOpacity>
-        {isFollow ? (
-          <ButtonFollowing handleSetUnFollow={onPress} />
-        ) : (
-          <ButtonFollow handleSetFollow={onPress} />
-        )}
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  Header: {
+  Header: (isHeaderHide) => ({
     flexDirection: 'row',
-    height: dimen.size.TOPIC_FEED_HEADER_HEIGHT,
-    paddingRight: normalize(16),
+    height: isHeaderHide
+      ? dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2
+      : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT,
+    paddingRight: normalize(10),
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white'
-  },
+    backgroundColor: 'white',
+    zIndex: 99
+  }),
   backbutton: {
     paddingLeft: 16,
     paddingRight: 16,
     height: '100%',
     justifyContent: 'center'
   },
-  domain: {
+  domain: (animatedValue) => ({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'flex-start',
     marginRight: 14,
-    alignSelf: 'center'
-  },
+    alignSelf: 'center',
+    opacity: animatedValue
+  }),
   domainText: {
-    fontSize: normalizeFontSize(18),
+    fontSize: normalizeFontSize(16),
     fontFamily: fonts.inter[600],
-    lineHeight: normalize(19),
-    fontWeight: 'bold',
-    textAlign: 'left'
+    textAlign: 'left',
+    color: colors.black
   },
-  buttonFollow: {
-    paddingHorizontal: 5,
-    paddingVertical: 10
+  member: {
+    width: normalize(16),
+    height: normalize(16),
+    marginRight: 5
+  },
+  domainMember: {
+    fontSize: normalizeFontSize(12),
+    fontFamily: fonts.inter[400],
+    textAlign: 'left',
+    color: colors.blackgrey
   },
   containerAction: {
-    marginRight: 10,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'

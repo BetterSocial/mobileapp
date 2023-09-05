@@ -9,6 +9,7 @@ import Content from './Content';
 import ContentLink from './ContentLink';
 import Header from './Header';
 import ShareUtils from '../../utils/share';
+import StringConstant from '../../utils/string/StringConstant';
 import dimen from '../../utils/dimen';
 import useFeed from './hooks/useFeed';
 import {
@@ -19,11 +20,11 @@ import {
   POST_TYPE_STANDARD,
   SOURCE_FEED_TAB
 } from '../../utils/constants';
-import {Footer, Gap, PreviewComment} from '../../components';
+import {Footer, Gap, PreviewComment, TutorialStep} from '../../components';
 import {colors} from '../../utils/colors';
 import {getCommentLength} from '../../utils/getstream';
-import {showScoreAlertDialog} from '../../utils/Utils';
 import {normalizeFontSizeByWidth} from '../../utils/fonts';
+import {showScoreAlertDialog} from '../../utils/Utils';
 
 const tabBarHeight = StatusBar.currentHeight;
 const FULL_WIDTH = Dimensions.get('screen').width;
@@ -107,17 +108,20 @@ const RenderListFeed = (props) => {
   }, [item]);
 
   getTotalReaction(item);
-
   return (
     <View key={item.id} testID="dataScroll" style={styles.cardContainer}>
       <View style={styles.cardMain}>
-        <Header
-          hideThreeDot={true}
-          props={item}
-          height={getHeightHeader()}
-          source={SOURCE_FEED_TAB}
-          headerStyle={styles.mh9}
-        />
+        <TutorialStep
+          active={item.id === anonId && isFocused}
+          name={StringConstant.tutorialAnonymousPostTitle}
+          text={StringConstant.tutorialAnonymousPostDescription}>
+          <Header
+            hideThreeDot={true}
+            props={item}
+            height={getHeightHeader()}
+            source={SOURCE_FEED_TAB}
+          />
+        </TutorialStep>
         {item.post_type === POST_TYPE_LINK && (
           <ContentLink
             key={item.id}
@@ -173,7 +177,7 @@ const RenderListFeed = (props) => {
           <View style={styles.contentReaction(getHeightReaction())}>
             <React.Fragment>
               <PreviewComment
-                user={item.latest_reactions.comment[0].user}
+                user={item?.latest_reactions?.comment[0]?.user}
                 comment={item?.latest_reactions?.comment[0]?.data?.text || ''}
                 image={item?.latest_reactions?.comment[0]?.user?.data?.profile_pic_url || ''}
                 time={item.latest_reactions.comment[0].created_at}
