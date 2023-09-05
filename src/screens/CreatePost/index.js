@@ -123,6 +123,7 @@ const CreatePost = () => {
   const [user] = React.useContext(Context).profile;
   const [allTaggingUser, setAllTaggingUser] = React.useState([]);
   const animatedReminder = React.useRef(new Animated.Value(0)).current;
+
   const debounced = React.useCallback(
     debounce((changedText) => {
       if (isContainUrl(changedText)) {

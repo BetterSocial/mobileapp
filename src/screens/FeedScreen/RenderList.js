@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
+import {useIsFocused} from '@react-navigation/core';
 
 import Content from './Content';
 import ContentLink from './ContentLink';
@@ -39,7 +40,8 @@ const RenderListFeed = (props) => {
     onPressBlock,
     onPressUpvote,
     selfUserId,
-    onPressDownVote
+    onPressDownVote,
+    anonId
   } = props;
   const {
     totalVote,
@@ -57,6 +59,7 @@ const RenderListFeed = (props) => {
     getTotalReaction,
     showScoreButton
   } = useFeed();
+  const isFocused = useIsFocused();
 
   const onPressDownVoteHandle = async () => {
     onPressDownVoteHook();
