@@ -22,8 +22,7 @@ import {
 import {openSettings} from 'react-native-permissions';
 import {showMessage} from 'react-native-flash-message';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {useIsFocused, useNavigation, useRoute} from '@react-navigation/core';
-import {useCopilot} from 'react-native-copilot';
+import {useNavigation, useRoute} from '@react-navigation/core';
 
 import ContentLink from './elements/ContentLink';
 import CreatePollContainer from './elements/CreatePollContainer';
@@ -79,7 +78,6 @@ import {getUrl, isContainUrl} from '../../utils/Utils';
 import {getUserId} from '../../utils/users';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
 import {uploadPhoto} from '../../service/file';
-import {TutorialStep} from '../../components';
 
 const IS_GEO_SELECT_ENABLED = false;
 
@@ -96,8 +94,6 @@ const CreatePost = () => {
   const sheetGeoRef = React.useRef();
   const sheetPrivacyRef = React.useRef();
   const sheetBackRef = React.useRef();
-  const isFocused = useIsFocused();
-  const {start} = useCopilot();
 
   const [typeUser, setTypeUser] = React.useState(false);
   const {headerTitle, initialTopic, isInCreatePostTopicScreen, anonUserInfo} =
@@ -126,7 +122,6 @@ const CreatePost = () => {
   const [client] = React.useContext(Context).client;
   const [user] = React.useContext(Context).profile;
   const [allTaggingUser, setAllTaggingUser] = React.useState([]);
-  const [isOpen, setIsOpen] = React.useState(false);
   const animatedReminder = React.useRef(new Animated.Value(0)).current;
 
   const debounced = React.useCallback(
@@ -251,15 +246,6 @@ const CreatePost = () => {
     } else setLinkPreviewMeta(null);
     setIsLinkPreviewShown(response?.success);
   };
-
-  const openTutorial = React.useCallback(() => {
-    setIsOpen(true);
-    start();
-  }, [isOpen]);
-
-  React.useEffect(() => {
-    openTutorial();
-  }, [isOpen]);
 
   React.useEffect(() => {
     debounced(message);
@@ -734,26 +720,21 @@ const CreatePost = () => {
       <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={positionKeyboard}>
         <Header title={headerTitle} onPress={() => onBack()} />
         <View style={{paddingHorizontal: 15}}>
-          <TutorialStep
-            active={isFocused}
-            name={StringConstant.tutorialCreateAnonymousPostTitle}
-            text={StringConstant.tutorialCreateAnonymousPostDescription}>
-            <UserProfile
-              setTypeUser={setTypeUser}
-              isAnonymous={typeUser}
-              anonUserInfo={anonUserInfo}
-              username={dataProfile.username ? dataProfile.username : 'Loading . . .'}
-              photo={
-                dataProfile.profile_pic_path ? {uri: dataProfile.profile_pic_path} : ProfileDefault
-              }
-              onPress={() => {
-                setMessage('');
-                navigation.navigate('ProfileScreen', {
-                  isNotFromHomeTab: true
-                });
-              }}
-            />
-          </TutorialStep>
+          <UserProfile
+            setTypeUser={setTypeUser}
+            isAnonymous={typeUser}
+            anonUserInfo={anonUserInfo}
+            username={dataProfile.username ? dataProfile.username : 'Loading . . .'}
+            photo={
+              dataProfile.profile_pic_path ? {uri: dataProfile.profile_pic_path} : ProfileDefault
+            }
+            onPress={() => {
+              setMessage('');
+              navigation.navigate('ProfileScreen', {
+                isNotFromHomeTab: true
+              });
+            }}
+          />
           <Gap style={styles.height(8)} />
           <CreatePostInput
             setMessage={setMessage}

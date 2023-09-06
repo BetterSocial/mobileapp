@@ -3,13 +3,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
-import {useIsFocused} from '@react-navigation/core';
 
 import Content from './Content';
 import ContentLink from './ContentLink';
 import Header from './Header';
 import ShareUtils from '../../utils/share';
-import StringConstant from '../../utils/string/StringConstant';
 import dimen from '../../utils/dimen';
 import useFeed from './hooks/useFeed';
 import {
@@ -20,11 +18,11 @@ import {
   POST_TYPE_STANDARD,
   SOURCE_FEED_TAB
 } from '../../utils/constants';
-import {Footer, Gap, PreviewComment, TutorialStep} from '../../components';
+import {Footer, Gap, PreviewComment} from '../../components';
 import {colors} from '../../utils/colors';
 import {getCommentLength} from '../../utils/getstream';
-import {normalizeFontSizeByWidth} from '../../utils/fonts';
 import {showScoreAlertDialog} from '../../utils/Utils';
+import {normalizeFontSizeByWidth} from '../../utils/fonts';
 
 const tabBarHeight = StatusBar.currentHeight;
 const FULL_WIDTH = Dimensions.get('screen').width;
@@ -41,8 +39,7 @@ const RenderListFeed = (props) => {
     onPressBlock,
     onPressUpvote,
     selfUserId,
-    onPressDownVote,
-    anonId
+    onPressDownVote
   } = props;
   const {
     totalVote,
@@ -60,7 +57,6 @@ const RenderListFeed = (props) => {
     getTotalReaction,
     showScoreButton
   } = useFeed();
-  const isFocused = useIsFocused();
 
   const onPressDownVoteHandle = async () => {
     onPressDownVoteHook();
@@ -108,20 +104,17 @@ const RenderListFeed = (props) => {
   }, [item]);
 
   getTotalReaction(item);
+
   return (
     <View key={item.id} testID="dataScroll" style={styles.cardContainer}>
       <View style={styles.cardMain}>
-        <TutorialStep
-          active={item.id === anonId && isFocused}
-          name={StringConstant.tutorialAnonymousPostTitle}
-          text={StringConstant.tutorialAnonymousPostDescription}>
-          <Header
-            hideThreeDot={true}
-            props={item}
-            height={getHeightHeader()}
-            source={SOURCE_FEED_TAB}
-          />
-        </TutorialStep>
+        <Header
+          hideThreeDot={true}
+          props={item}
+          height={getHeightHeader()}
+          source={SOURCE_FEED_TAB}
+          headerStyle={styles.mh9}
+        />
         {item.post_type === POST_TYPE_LINK && (
           <ContentLink
             key={item.id}
@@ -177,7 +170,7 @@ const RenderListFeed = (props) => {
           <View style={styles.contentReaction(getHeightReaction())}>
             <React.Fragment>
               <PreviewComment
-                user={item?.latest_reactions?.comment[0]?.user}
+                user={item.latest_reactions.comment[0].user}
                 comment={item?.latest_reactions?.comment[0]?.data?.text || ''}
                 image={item?.latest_reactions?.comment[0]?.user?.data?.profile_pic_url || ''}
                 time={item.latest_reactions.comment[0].created_at}
