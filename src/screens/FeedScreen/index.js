@@ -1,9 +1,7 @@
 import * as React from 'react';
-import {Animated, InteractionManager, StatusBar, StyleSheet, View} from 'react-native';
+import {Animated, InteractionManager, StatusBar, StyleSheet} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
-import {useCopilot} from 'react-native-copilot';
-import _ from 'lodash';
 
 import BlockComponent from '../../components/BlockComponent';
 import RenderListFeed from './RenderList';
@@ -23,7 +21,6 @@ import {setFeedByIndex, setTimer} from '../../context/actions/feeds';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {viewTimePost} from '../../service/post';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {handleTutorialFinished} from '../../utils/tutorial';
 
 let lastDragY = 0;
 
@@ -37,7 +34,6 @@ const FeedScreen = (props) => {
   const {interactionsComplete} = useAfterInteractions();
   const {feeds, timer, viewPostTimeIndex} = feedsContext;
   const [isScroll, setIsScroll] = React.useState(false);
-  const [updateIndex, setUpdateIndex] = React.useState(0);
   const {
     getDataFeeds,
     postOffset,
@@ -57,12 +53,8 @@ const FeedScreen = (props) => {
     setIsLastPage,
     nextTargetFeed
   } = useCoreFeed();
-  const {start, copilotEvents} = useCopilot();
   const interactionManagerRef = React.useRef(null);
   const interactionManagerAnimatedRef = React.useRef(null);
-  const [lastEvent, setLastEvent] = React.useState(null);
-  const [isStopped, setIsStopped] = React.useState(false);
-  const [feedAnon, setFeedAnon] = React.useState({});
   const getDataFeedsHandle = async (offsetFeed = 0, useLoading = false, targetFeed = null) => {
     getDataFeeds(offsetFeed, useLoading, targetFeed);
   };
@@ -72,24 +64,6 @@ const FeedScreen = (props) => {
   const onBlockCompletedHandle = async (postId) => {
     onBlockCompleted(postId);
   };
-  const [updateMoreText, setUpdateMoreText] = React.useState(false);
-  React.useEffect(() => {
-    copilotEvents.on('stepChange', (step) => {
-      setLastEvent(step.name);
-    });
-    copilotEvents.on('start', () => {
-      setIsStopped(false);
-    });
-    copilotEvents.on('stop', () => {
-      setIsStopped(true);
-    });
-  }, [copilotEvents]);
-
-  React.useEffect(() => {
-    if (isStopped) {
-      handleTutorialFinished(lastEvent);
-    }
-  }, [isStopped]);
 
   React.useEffect(() => {
     if (interactionsComplete) {
@@ -150,22 +124,24 @@ const FeedScreen = (props) => {
     getDataFeedsHandle(postOffset, false, nextTargetFeed);
   };
 
-  const refreshMoreText = (index) => {
-    setUpdateIndex(index);
-    setUpdateMoreText(true);
-    setTimeout(() => {
-      setUpdateMoreText(false);
-    }, 500);
-  };
-  console.log({updateMoreText}, 'lala1');
-  const onPress = (item, haveSeeMore, index) => {
+  const onPress = (item, haveSeeMore) => {
     props.navigation.navigate('PostDetailPage', {
       isalreadypolling: item.isalreadypolling,
       feedId: item.id,
       data: item,
       isCaching: false,
-      haveSeeMore,
-      refreshParent: () => refreshMoreText(index)
+      haveSeeMore
+    });
+  };
+
+  const onPressComment = (index, item) => {
+    props.navigation.navigate('PostDetailPage', {
+      // index: index,
+      feedId: item.id,
+      // refreshParent: getDataFeedsHandle,
+      data: item,
+      isCaching: true
+      // feedId:
     });
   };
 
@@ -229,17 +205,8 @@ const FeedScreen = (props) => {
     saveSearchHeight(height);
   };
 
-  React.useEffect(() => {
-    const firstAnonIndex = feeds?.findIndex((item) => item.anonimity);
-    if (firstAnonIndex > 0) {
-      setFeedAnon(feeds[firstAnonIndex]);
-      setTimeout(() => start(), 2000);
-    }
-  }, [feeds]);
-
   const renderItem = ({item, index}) => {
     if (item.dummy) return <React.Fragment key={index} />;
-    if (updateMoreText && updateIndex === index) return null;
     return (
       <RenderListFeed
         key={item.id}
@@ -248,9 +215,9 @@ const FeedScreen = (props) => {
         index={index}
         onPressDomain={onPressDomain}
         onPress={(haveSeeMore) => {
-          onPress(item, haveSeeMore, index);
+          onPress(item, haveSeeMore);
         }}
-        onPressComment={(haveSeeMore) => onPress(item, haveSeeMore, index)}
+        onPressComment={(haveSeeMore) => onPress(item, haveSeeMore)}
         onPressBlock={() => onPressBlock(item)}
         onPressUpvote={(post) => setUpVoteHandle(post, index)}
         selfUserId={myProfile.user_id}
@@ -260,7 +227,6 @@ const FeedScreen = (props) => {
         searchHeight={searchHeight}
         bottomArea={bottom}
         isScroll={isScroll}
-        anonId={feedAnon?.id}
       />
     );
   };
@@ -274,9 +240,9 @@ const FeedScreen = (props) => {
         onContainerClicked={handleSearchBarClicked}
       />
       <TiktokScroll
-        listRef={listRef}
+        ref={listRef}
         contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT + normalizeFontSizeByWidth(4)}
-        data={feedAnon?.id ? _.uniqBy([{...feedAnon, isAnon: true}, ...feeds], 'id') : feeds}
+        data={feeds}
         onEndReach={onEndReach}
         onRefresh={onRefresh}
         onScroll={handleScrollEvent}

@@ -2,6 +2,7 @@
 
 exports[`Content poll should same as snapshot should same as snapshot 1`] = `
 <View
+  onLayout={[Function]}
   style={
     Array [
       Object {

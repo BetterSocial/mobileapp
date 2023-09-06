@@ -16,7 +16,6 @@ import {
   useSafeAreaFrame,
   useSafeAreaInsets
 } from 'react-native-safe-area-context';
-import {CopilotProvider} from 'react-native-copilot';
 import {reactotronInstance} from './src/libraries/reactotron/reactotronInstance';
 
 import Store from './src/context/Store';
@@ -27,9 +26,6 @@ import {Analytics} from './src/libraries/analytics/firebaseAnalytics';
 import NetworkDebuggerModal from './src/components/NetworkDebuggerModal';
 import useFirebaseRemoteConfig from './src/libraries/Configs/RemoteConfig';
 import {APP_UPGRADE_API_KEY, ENV} from './src/libraries/Configs/ENVConfig';
-import {TutorialTooltip} from './src/components/TutorialStep/TutorialTooltip';
-import {COLORS} from './src/utils/theme';
-import {TooltipStyle} from './src/components/TutorialStep/TooltipStyle';
 
 const App = () => {
   const {bottom, top} = useSafeAreaInsets();
@@ -149,25 +145,17 @@ const App = () => {
 };
 
 const RootApp = () => (
-  <CopilotProvider
-    animated={false}
-    tooltipComponent={TutorialTooltip}
-    tooltipStyle={TooltipStyle.tooltip}
-    stepNumberComponent={() => <View />}
-    backdropColor={COLORS.black80percent}
-    androidStatusBarVisible>
-    <SafeAreaProvider
-      initialMetrics={{
-        insets: {
-          top: 0,
-          right: 0,
-          bottom: 0,
-          left: 0
-        }
-      }}>
-      <App />
-    </SafeAreaProvider>
-  </CopilotProvider>
+  <SafeAreaProvider
+    initialMetrics={{
+      insets: {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0
+      }
+    }}>
+    <App />
+  </SafeAreaProvider>
 );
 
 export default RootApp;
