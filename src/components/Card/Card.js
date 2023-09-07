@@ -8,6 +8,8 @@ import Header from './CardHeader';
 import NewsEmptyState from '../../assets/images/news-empty-state.png';
 import TestIdConstant from '../../utils/testId';
 import Image from '../Image';
+import {COLORS} from '../../utils/theme';
+import {fonts, normalizeFontSizeByWidth} from '../../utils/fonts';
 import CardStyle from './style/CardStyle';
 
 const Card = (props) => {

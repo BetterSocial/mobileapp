@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {COLORS} from '../../../utils/theme';
-import {fonts} from '../../../utils/fonts';
+import {fonts, normalizeFontSizeByWidth} from '../../../utils/fonts';
 
 const CardStyle = StyleSheet.create({
   link: {
@@ -42,7 +42,9 @@ const CardStyle = StyleSheet.create({
     borderColor: 'rgba(0,0,0, 0.5)',
     overflow: 'hidden',
     paddingBottom: 8,
-    flex: 1
+    flex: 1,
+    height: normalizeFontSizeByWidth(250),
+    marginBottom: 5
   },
   image: {
     width: '100%',
