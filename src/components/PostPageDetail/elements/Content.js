@@ -141,7 +141,7 @@ const Content = ({
         {message?.length > 0 ? (
           <View
             onLayout={handleContainerHeight}
-            style={[handleStyleFeed(), handleContainerPdp(), handleMessageContainerPdp()]}>
+            style={[styles.contentFeed, handleContainerPdp(), handleMessageContainerPdp()]}>
             <View style={styles.postTextContainer(isPostDetail)}>
               {item.post_type !== POST_TYPE_LINK ? (
                 <Text
@@ -246,7 +246,8 @@ const styles = StyleSheet.create({
   contentFeed: {
     flex: 1,
     backgroundColor: COLORS.white,
-    paddingVertical: 5
+    paddingVertical: 5,
+    paddingHorizontal: 4
   },
   textContentFeed: (isShort) => ({
     fontFamily: fonts.inter[400],
@@ -265,7 +266,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white
   },
   newsCard: {
-    paddingHorizontal: 20
+    paddingHorizontal: 16
   },
   containerImage: {
     flex: 1,

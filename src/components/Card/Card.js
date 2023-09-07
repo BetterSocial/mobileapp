@@ -16,7 +16,7 @@ import NewsEmptyState from '../../assets/images/news-empty-state.png';
 import TestIdConstant from '../../utils/testId';
 import Image from '../Image';
 import {COLORS} from '../../utils/theme';
-import {fonts} from '../../utils/fonts';
+import {fonts, normalizeFontSizeByWidth} from '../../utils/fonts';
 
 const Card = (props) => {
   const {
@@ -141,17 +141,17 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0,0,0, 0.5)',
     overflow: 'hidden',
     paddingBottom: 8,
-    flex: 1
+    flex: 1,
+    marginBottom: 5,
+    height: normalizeFontSizeByWidth(250)
   },
   image: {
     width: '100%',
     height: '100%'
   },
   content: {
-    // paddingTop: 8,
     justifyContent: 'space-between',
     flex: 1
-    // backgroundColor: 'blue',
   },
   title: {
     color: '#000000',
