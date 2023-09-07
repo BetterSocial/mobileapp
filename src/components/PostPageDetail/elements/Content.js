@@ -36,6 +36,8 @@ const Content = ({
   const [containerHeight, setContainerHeight] = React.useState(0);
   const maxFontSize = normalizeFontSizeByWidth(28);
   const minFontSize = normalizeFontSizeByWidth(16);
+  const [remainingHeight, setRemainingHeight] = React.useState(0);
+  const [topicHeight, setTopicHeight] = React.useState(0);
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
       title: 'Photo',
@@ -80,6 +82,13 @@ const Content = ({
     navigation.navigate('DomainScreen', param);
   };
 
+  React.useEffect(() => {
+    if (containerHeight > 0 && textHeight > 0) {
+      const remainingHeightNumber = containerHeight - textHeight;
+      setRemainingHeight(remainingHeightNumber);
+    }
+  }, [containerHeight, textHeight]);
+
   const isShortText = () => {
     return images_url.length <= 0 && item.post_type === POST_TYPE_STANDARD && !haveSeeMore;
   };
@@ -109,13 +118,24 @@ const Content = ({
     }
   };
 
-  if (!cekImage) return null;
+  const handlePaddingBottom = () => {
+    const isTextPassTopic = remainingHeight <= lineHeight + font * 2;
+    if ((!isTextPassTopic && topics.length > 0) || images_url?.length > 0) {
+      return 0;
+    }
+    return topicHeight;
+  };
 
+  const handleTopicChipHeight = (nativeEvent) => {
+    setTopicHeight(nativeEvent?.layout?.height);
+  };
+
+  if (!cekImage) return null;
   return (
     <>
       <ScrollView
         style={[styles.contentFeed, handleContainerPdp(), {paddingVertical: message ? 5 : 0}]}
-        contentContainerStyle={styles.contensStyle(images_url.length > 0, isShortText())}
+        contentContainerStyle={styles.contensStyle(handlePaddingBottom())}
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}>
         {message?.length > 0 ? (
@@ -201,7 +221,13 @@ const Content = ({
             />
           </View>
         )}
-        <TopicsChip isPdp={true} topics={topics} fontSize={normalizeFontSize(14)} text={message} />
+        <TopicsChip
+          onLayout={handleTopicChipHeight}
+          isPdp={true}
+          topics={topics}
+          fontSize={normalizeFontSize(14)}
+          text={message}
+        />
       </ScrollView>
     </>
   );
@@ -258,7 +284,7 @@ const styles = StyleSheet.create({
   centerVertical: {
     justifyContent: 'center'
   },
-  contensStyle: (containImage, isShortText) => ({
-    paddingBottom: containImage || isShortText ? 0 : 40
+  contensStyle: (paddingBottom) => ({
+    paddingBottom
   })
 });
