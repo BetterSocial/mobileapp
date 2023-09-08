@@ -24,7 +24,10 @@ const Card = (props) => {
     onHeaderPress,
     score,
     title,
-    url
+    url,
+    heightTopic = 0,
+    textHeight = 0,
+    contentHeight
   } = props;
   // const styles = buildStylesheet('card', props.styles);
   const renderImageComponent = () => {
@@ -48,8 +51,15 @@ const Card = (props) => {
     }
   };
 
+  const calculateHeight = () => {
+    if (contentHeight && typeof contentHeight === 'number') {
+      return contentHeight - heightTopic - textHeight - 20;
+    }
+    return normalizeFontSizeByWidth(250);
+  };
+
   return (
-    <View style={CardStyle.container}>
+    <View style={CardStyle.container(calculateHeight())}>
       <View>
         <TouchableOpacity
           onPress={() => onHeaderPress(item)}

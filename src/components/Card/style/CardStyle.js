@@ -36,16 +36,16 @@ const CardStyle = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  container: {
+  container: (height) => ({
     borderWidth: 0.5,
     borderRadius: 8,
     borderColor: 'rgba(0,0,0, 0.5)',
     overflow: 'hidden',
     paddingBottom: 8,
-    flex: 1,
-    height: normalizeFontSizeByWidth(250),
-    marginBottom: 5
-  },
+
+    marginBottom: 5,
+    height
+  }),
   image: {
     width: '100%',
     height: '100%'
