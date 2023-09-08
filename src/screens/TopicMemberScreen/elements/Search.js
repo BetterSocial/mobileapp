@@ -3,7 +3,6 @@ import * as React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
 import {debounce} from 'lodash';
-import {useNavigation} from '@react-navigation/core';
 
 import DiscoveryAction from '../../../context/actions/discoveryAction';
 import IconClear from '../../../assets/icon/IconClear';
@@ -21,13 +20,11 @@ const DiscoverySearch = ({
   setDiscoveryLoadingData = () => {},
   searchText = '',
   setSearchText = () => {},
-  isFocus = true,
   setIsFocus = () => {},
   setIsFirstTimeOpen = () => {},
   fetchDiscoveryData = () => {},
   onCancelToken = () => {}
 }) => {
-  const navigation = useNavigation();
   const [, discoveryDispatch] = React.useContext(Context).discovery;
   const discoverySearchBarRef = React.useRef(null);
 

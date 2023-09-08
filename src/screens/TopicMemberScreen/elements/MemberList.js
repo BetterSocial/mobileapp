@@ -3,34 +3,26 @@ import * as React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-import DiscoveryAction from '../../../context/actions/discoveryAction';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
-import StringConstant from '../../../utils/string/StringConstant';
 import useIsReady from '../../../hooks/useIsReady';
 import {COLORS} from '../../../utils/theme';
 import {Context} from '../../../context/Store';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
-import {getUserId} from '../../../utils/users';
 import {setFollow, setUnFollow} from '../../../service/profile';
-import DiscoveryItemList from '../../DiscoveryScreenV2/elements/DiscoveryItemList';
 import {getAllMemberTopic} from '../../../service/topics';
 import MemberItemList from './MemberItemList';
+import {getUserId} from '../../../utils/users';
 
 const FROM_TOPIC_MEMBER = 'fromtopicmember';
 
 const MemberList = ({
-  isLoadingDiscoveryUser = false,
   isFirstTimeOpen,
   topicName,
   followedUsers = [],
   setFollowedUsers = () => {},
-  unfollowedUsers = [],
-  setUnfollowedUsers = () => {},
   setSearchText = () => {}
 }) => {
-  const [discovery, discoveryDispatch] = React.useContext(Context).discovery;
-  const [following, followingDispatch] = React.useContext(Context).following;
   const [isLoading, setIsLoading] = React.useState(false);
   const [members, setMembers] = React.useState([]);
   const [profile] = React.useContext(Context).profile;
@@ -41,13 +33,13 @@ const MemberList = ({
   const isReady = useIsReady();
 
   React.useEffect(() => {
-    // const parseToken = async () => {
-    //   const id = await getUserId();
-    //   if (id) {
-    //     setMyId(id);
-    //   }
-    // };
-    // parseToken();
+    const parseToken = async () => {
+      const id = await getUserId();
+      if (id) {
+        setMyId(id);
+      }
+    };
+    parseToken();
     fetchMember();
   }, []);
 
@@ -55,7 +47,6 @@ const MemberList = ({
     if (withLoading) setIsLoading(true);
     const result = await getAllMemberTopic(topicName);
     if (result.code === 200) {
-      console.log('asasas : ', result);
       const newData = result.data.map((data) => ({
         ...data,
         name: data.username,
@@ -119,8 +110,6 @@ const MemberList = ({
   );
 
   const renderUsersItem = () => {
-    console.log('members: ', members);
-
     return (
       <>
         {members.map((item, index) =>

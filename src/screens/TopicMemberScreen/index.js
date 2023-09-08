@@ -1,37 +1,29 @@
 import * as React from 'react';
 import _ from 'lodash';
 import SimpleToast from 'react-native-simple-toast';
-import {Animated, InteractionManager, ScrollView, StatusBar, StyleSheet, View} from 'react-native';
+import {Animated, InteractionManager, ScrollView, StatusBar, StyleSheet} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import BlockComponent from '../../components/BlockComponent';
-import ButtonAddPostTopic from '../../components/Button/ButtonAddPostTopic';
-import Navigation from './elements/Navigation';
-import Header from './elements/Header';
 import ShareUtils from '../../utils/share';
-import TiktokScroll from '../../components/TiktokScroll';
 import TopicPageStorage from '../../utils/storage/custom/topicPageStorage';
 import dimen from '../../utils/dimen';
 import removePrefixTopic from '../../utils/topics/removePrefixTopic';
 import useChatClientHook from '../../utils/getstream/useChatClientHook';
 import {Context} from '../../context';
-import {downVote, upVote} from '../../service/vote';
-import {getFeedDetail} from '../../service/post';
 import {getTopicPages} from '../../service/topicPages';
 import {getUserId} from '../../utils/users';
 import {getTopics, getUserTopic} from '../../service/topics';
-import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
-import {setFeedByIndex, setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
+import {setTopicFeeds} from '../../context/actions/feeds';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
+import {normalize} from '../../utils/fonts';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
 } from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
 import Search from './elements/Search';
-import UsersFragment from '../DiscoveryScreenV2/fragment/UsersFragment';
-import {colors} from '../../utils/colors';
 import MemberList from './elements/MemberList';
+import Navigation from '../TopicPageScreen/elements/Navigation';
+import Header from '../TopicPageScreen/elements/Header';
 
 const styles = StyleSheet.create({
   parentContainer: {
@@ -297,8 +289,6 @@ const TopicMemberScreen = (props) => {
   const saveSearchHeightHandle = (height) => {
     setSearchHeight(height);
   };
-
-  const renderItem = ({item, index}) => <View />;
 
   if (isInitialLoading) return null;
   return (
