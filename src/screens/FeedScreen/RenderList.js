@@ -103,11 +103,19 @@ const RenderListFeed = (props) => {
     initialSetup(item);
   }, [item]);
 
-  getTotalReaction(item);
-
+  const contentLinkHeight = () => {
+    const haveLength =
+      getCommentLength(item.latest_reactions.comment) > 0 ? getHeightReaction() / 2.2 : 0;
+    return (
+      dimen.size.FEED_CURRENT_ITEM_HEIGHT -
+      getHeightHeader() -
+      getHeightFooter(bottomHeight) -
+      haveLength
+    );
+  };
   return (
     <View key={item.id} testID="dataScroll" style={styles.cardContainer}>
-      <View style={styles.cardMain}>
+      <View style={[styles.cardMain]}>
         <Header
           hideThreeDot={true}
           props={item}
@@ -127,6 +135,7 @@ const RenderListFeed = (props) => {
             message={item?.message}
             messageContainerStyle={{paddingHorizontal: 10}}
             topics={item?.topics}
+            contentHeight={contentLinkHeight()}
           />
         )}
         {(item.post_type === POST_TYPE_STANDARD || item.post_type === POST_TYPE_POLL) && (
