@@ -15,6 +15,7 @@ const Header = ({
   domain,
   onPress,
   detail,
+  hideSeeMember,
   isFollow = false,
   getHeaderLayout,
   handleOnMemberPress
@@ -40,7 +41,7 @@ const Header = ({
           <Image testID="imageTopicMember" source={TopicMemberIcon} style={styles.member} />
           <Text style={styles.domainMember}>{detail?.followersCount} Members</Text>
         </View>
-        {isFollow && (
+        {isFollow && !hideSeeMember && (
           <Text
             style={styles.seeMemberText}
             numberOfLines={1}

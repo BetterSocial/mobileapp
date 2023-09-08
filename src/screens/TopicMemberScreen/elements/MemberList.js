@@ -20,8 +20,7 @@ const MemberList = ({
   isFirstTimeOpen,
   topicName,
   followedUsers = [],
-  setFollowedUsers = () => {},
-  setSearchText = () => {}
+  setFollowedUsers = () => {}
 }) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [members, setMembers] = React.useState([]);

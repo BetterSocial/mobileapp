@@ -28,7 +28,6 @@ const DiscoverySearch = ({
   const [, discoveryDispatch] = React.useContext(Context).discovery;
   const discoverySearchBarRef = React.useRef(null);
 
-  const [isTextAvailable, setIsTextAvailable] = React.useState(false);
   const [lastSearch, setLastSearch] = React.useState('');
 
   const debounced = React.useCallback(
@@ -67,7 +66,6 @@ const DiscoverySearch = ({
 
   const handleChangeText = (text) => {
     setSearchText(text);
-    setIsTextAvailable(text.length > 0);
     debounceChangeText(text);
   };
 
@@ -112,12 +110,10 @@ const DiscoverySearch = ({
 
   React.useEffect(() => {
     debounceChangeText(searchText);
-    setIsTextAvailable(searchText.length > 0);
   }, [searchText]);
 
   React.useEffect(() => {
     const unsubscribe = () => {
-      setIsTextAvailable(false);
       setSearchText('');
       DiscoveryAction.setDiscoveryData(
         {
