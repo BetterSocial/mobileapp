@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
 let lastDragY = 0;
 
 const TopicMemberScreen = (props) => {
-  console.log('props: ', props);
   const route = useRoute();
   const navigation = useNavigation();
   const topicName = route?.params?.id;
@@ -168,14 +167,6 @@ const TopicMemberScreen = (props) => {
     }
   };
 
-  const handleOnMemberPress = (item) => {
-    const navigationParam = {
-      id: topicName
-    };
-
-    navigation.push('TopicMemberScreen', navigationParam);
-  };
-
   if (isInitialLoading) return null;
   return (
     <SafeAreaProvider forceInset={{top: 'always'}} style={styles.parentContainer}>
@@ -196,7 +187,6 @@ const TopicMemberScreen = (props) => {
         getSearchLayout={saveHeaderhHeightHandle}
         animatedValue={offsetAnimation}
         detail={topicDetail}
-        handleOnMemberPress={handleOnMemberPress}
         hideSeeMember={true}
       />
       <Search searchText={searchText} setSearchText={setSearchText} onContainerClicked={() => {}} />

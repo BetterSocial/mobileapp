@@ -11,8 +11,8 @@ import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 import {setFollow, setUnFollow} from '../../../service/profile';
 import {getAllMemberTopic} from '../../../service/topics';
-import MemberItemList from './MemberItemList';
 import {getUserId} from '../../../utils/users';
+import DiscoveryItemList from '../../DiscoveryScreenV2/elements/DiscoveryItemList';
 
 const FROM_TOPIC_MEMBER = 'fromtopicmember';
 
@@ -94,7 +94,7 @@ const MemberList = ({
   };
 
   const renderDiscoveryItem = (from, key, item, index) => (
-    <MemberItemList
+    <DiscoveryItemList
       key={`${key}-${index}`}
       onPressBody={() => handleOnPress(item)}
       handleSetFollow={() => handleFollow(from, true, item, index)}

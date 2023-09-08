@@ -78,7 +78,7 @@ const DiscoverySearch = ({
   };
 
   const handleOnSubmitEditing = (event) => {
-    const {text} = event?.nativeEvent;
+    const text = event?.nativeEvent?.text;
     handleSubmitSearchData(text);
   };
 
