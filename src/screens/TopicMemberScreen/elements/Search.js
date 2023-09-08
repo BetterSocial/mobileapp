@@ -1,136 +1,29 @@
 /* eslint-disable no-use-before-define */
 import * as React from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
-import {debounce} from 'lodash';
 
-import DiscoveryAction from '../../../context/actions/discoveryAction';
 import IconClear from '../../../assets/icon/IconClear';
 import MemoIcSearch from '../../../assets/icons/Ic_search';
 import StringConstant from '../../../utils/string/StringConstant';
 import TestIdConstant from '../../../utils/testId';
 import dimen from '../../../utils/dimen';
 import {COLORS, SIZES} from '../../../utils/theme';
-import {Context} from '../../../context/Store';
-import {RECENT_SEARCH_TERMS} from '../../../utils/cache/constant';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 
-const DiscoverySearch = ({
-  setDiscoveryLoadingData = () => {},
+const TopicSearch = ({
   searchText = '',
   setSearchText = () => {},
-  setIsFocus = () => {},
-  setIsFirstTimeOpen = () => {},
-  fetchDiscoveryData = () => {},
-  onCancelToken = () => {}
+  handleSubmitSearchData = () => {}
 }) => {
-  const [, discoveryDispatch] = React.useContext(Context).discovery;
-  const discoverySearchBarRef = React.useRef(null);
-
-  const [lastSearch, setLastSearch] = React.useState('');
-
-  const debounced = React.useCallback(
-    debounce((text) => {
-      handleSubmitSearchData(text);
-    }, 1000),
-
-    []
-  );
-
-  const handleFocus = (isFocusParam) => {
-    setIsFocus(isFocusParam);
-  };
-
-  const setAllLoading = (isLoading) => {
-    setDiscoveryLoadingData({
-      user: isLoading,
-      topic: isLoading,
-      domain: isLoading,
-      news: isLoading
-    });
-  };
-
-  const debounceChangeText = (text) => {
-    onCancelToken();
-    if (text.length > 2) {
-      setAllLoading(true);
-      setIsFirstTimeOpen(false);
-      debounced(text);
-    } else {
-      setIsFirstTimeOpen(true);
-      setAllLoading(false);
-      debounced.cancel();
-    }
-  };
-
-  const handleChangeText = (text) => {
-    setSearchText(text);
-    debounceChangeText(text);
-  };
-
-  const handleOnClearText = () => {
-    setSearchText('');
-    setLastSearch('');
-    // setIsTextAvailable(false)
-    // debounced.cancel()
-    // discoverySearchBarRef.current.focus()
-  };
-
   const handleOnSubmitEditing = (event) => {
     const text = event?.nativeEvent?.text;
     handleSubmitSearchData(text);
   };
 
-  const handleSubmitSearchData = async (text) => {
-    if (text === lastSearch) return;
-    setLastSearch(text);
-    setAllLoading(true);
-    setIsFirstTimeOpen(false);
-    fetchDiscoveryData(text);
-
-    const result = await AsyncStorage.getItem(RECENT_SEARCH_TERMS);
-
-    if (!result) {
-      const itemToSave = JSON.stringify([text]);
-      DiscoveryAction.setDiscoveryRecentSearch([text], discoveryDispatch);
-      AsyncStorage.setItem(RECENT_SEARCH_TERMS, itemToSave);
-      return;
-    }
-
-    let resultArray = JSON.parse(result);
-    if (resultArray.indexOf(text) > -1) return;
-
-    resultArray = [text].concat(resultArray);
-    if (resultArray.length > 3) resultArray.pop();
-
-    DiscoveryAction.setDiscoveryRecentSearch(resultArray, discoveryDispatch);
-    AsyncStorage.setItem(RECENT_SEARCH_TERMS, JSON.stringify(resultArray));
+  const handleOnClearText = () => {
+    setSearchText('');
   };
-
-  React.useEffect(() => {
-    debounceChangeText(searchText);
-  }, [searchText]);
-
-  React.useEffect(() => {
-    const unsubscribe = () => {
-      setSearchText('');
-      DiscoveryAction.setDiscoveryData(
-        {
-          followedUsers: [],
-          unfollowedUsers: [],
-          followedDomains: [],
-          unfollowedDomains: [],
-          followedTopic: [],
-          unfollowedTopic: [],
-          news: []
-        },
-        discoveryDispatch
-      );
-    };
-
-    return unsubscribe;
-  }, []);
 
   return (
     <View style={styles.animatedViewContainer}>
@@ -140,13 +33,10 @@ const DiscoverySearch = ({
             <MemoIcSearch width={16.67} height={16.67} />
           </View>
           <TextInput
-            ref={discoverySearchBarRef}
-            testID={TestIdConstant.discoveryScreenSearchBar}
+            testID={TestIdConstant.topicScreenSearchBar}
             focusable={true}
             value={searchText}
-            onChangeText={handleChangeText}
-            onFocus={() => handleFocus(true)}
-            onBlur={() => handleFocus(false)}
+            onChangeText={setSearchText}
             multiline={false}
             returnKeyType="search"
             onSubmitEditing={handleOnSubmitEditing}
@@ -156,7 +46,7 @@ const DiscoverySearch = ({
           />
 
           <TouchableOpacity
-            testID={TestIdConstant.discoveryScreenClearButton}
+            testID={TestIdConstant.topicScreenClearButton}
             delayPressIn={0}
             onPress={handleOnClearText}
             style={styles.clearIconContainer}
@@ -238,4 +128,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default DiscoverySearch;
+export default TopicSearch;
