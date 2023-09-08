@@ -15,6 +15,7 @@ const Header = ({
   domain,
   onPress,
   detail,
+  memberCount,
   isFollow = false,
   getHeaderLayout,
   handleOnMemberPress
@@ -40,15 +41,6 @@ const Header = ({
           <Image testID="imageTopicMember" source={TopicMemberIcon} style={styles.member} />
           <Text style={styles.domainMember}>{detail?.followersCount} Members</Text>
         </View>
-        {isFollow && (
-          <Text
-            style={styles.seeMemberText}
-            numberOfLines={1}
-            ellipsizeMode="tail"
-            onPress={handleOnMemberPress}>
-            See community member
-          </Text>
-        )}
       </View>
       <View style={styles.containerAction}>
         {isFollow ? (
@@ -65,8 +57,7 @@ const styles = StyleSheet.create({
   Header: (animatedValue) => ({
     flexDirection: 'row',
     height: dimen.size.TOPIC_FEED_HEADER_HEIGHT,
-    paddingRight: normalize(20),
-    paddingLeft: normalize(10),
+    paddingHorizontal: normalize(20),
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',

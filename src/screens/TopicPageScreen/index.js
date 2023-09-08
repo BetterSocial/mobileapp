@@ -25,7 +25,7 @@ import {getTopics, getUserTopic} from '../../service/topics';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {setFeedByIndex, setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {normalizeFontSizeByWidth} from '../../utils/fonts';
+import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
 } from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
@@ -57,7 +57,7 @@ const TopicPageScreen = (props) => {
   const mainFeeds = feedsContext.feeds;
   const [isFollow, setIsFollow] = React.useState(false);
   const [userTopicName, setUserTopicName] = React.useState('');
-  const [topicMemberCount, setTopicMemberCount] = React.useState('');
+  const [topicDetail, setTopicDetail] = React.useState({});
   const [offset, setOffset] = React.useState(0);
   const [client] = React.useContext(Context).client;
   const refBlockComponent = React.useRef();
@@ -121,8 +121,8 @@ const TopicPageScreen = (props) => {
       }
       const resultTopicDetail = await getTopics(idLower);
       if (resultTopicDetail.data) {
-        const topicMember = resultTopicDetail.data[0]?.followersCount;
-        setTopicMemberCount(topicMember);
+        const detail = resultTopicDetail.data[0];
+        setTopicDetail(detail);
       }
     } catch (error) {
       if (__DEV__) {
@@ -350,7 +350,7 @@ const TopicPageScreen = (props) => {
       } else if (dy - 20 > 0) {
         interactionManagerAnimatedRef.current = InteractionManager.runAfterInteractions(() => {
           Animated.timing(offsetAnimation, {
-            toValue: -dimen.size.TOPIC_FEED_HEADER_HEIGHT,
+            toValue: -(dimen.size.TOPIC_FEED_HEADER_HEIGHT + normalize(4)),
             duration: 100,
             useNativeDriver: false
           }).start();
@@ -407,7 +407,7 @@ const TopicPageScreen = (props) => {
         onPress={() => handleFollowTopic()}
         isHeaderHide={isHeaderHide}
         animatedValue={opacityAnimation}
-        memberCount={topicMemberCount}
+        detail={topicDetail}
       />
       <Header
         domain={topicName}
@@ -416,7 +416,7 @@ const TopicPageScreen = (props) => {
         isFollow={isFollow}
         getSearchLayout={saveHeaderhHeightHandle}
         animatedValue={offsetAnimation}
-        memberCount={topicMemberCount}
+        detail={topicDetail}
         handleOnMemberPress={handleOnMemberPress}
       />
       <TiktokScroll

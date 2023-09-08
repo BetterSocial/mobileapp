@@ -31,6 +31,15 @@ const getFollowingTopic = async () => {
   }
 };
 
+const getAllMemberTopic = async (query) => {
+  try {
+    const res = await api.get(`/topics/follower-list?name=${query}&limit=40`);
+    return res.data;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
 /**
  *
  * @param {string} name
@@ -46,4 +55,4 @@ const getTopics = async (name, axiosOptions = {}) => {
   }
 };
 
-export {getUserTopic, putUserTopic, getFollowingTopic, getTopics};
+export {getUserTopic, putUserTopic, getFollowingTopic, getAllMemberTopic, getTopics};

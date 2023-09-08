@@ -63,8 +63,8 @@ const styles = StyleSheet.create({
     zIndex: 99
   }),
   backbutton: {
-    paddingLeft: 16,
-    paddingRight: 16,
+    paddingLeft: 20,
+    paddingRight: 12,
     height: '100%',
     justifyContent: 'center'
   },
