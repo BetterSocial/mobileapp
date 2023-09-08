@@ -1,5 +1,4 @@
 import * as React from 'react';
-import _ from 'lodash';
 import {Animated, InteractionManager, ScrollView, StatusBar, StyleSheet} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
