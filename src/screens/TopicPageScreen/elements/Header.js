@@ -10,7 +10,16 @@ import ButtonFollow from './ButtonFollow';
 import ButtonFollowing from './ButtonFollowing';
 import {colors} from '../../../utils/colors';
 
-const Header = ({animatedValue, domain, onPress, isFollow = false, getHeaderLayout}) => {
+const Header = ({
+  animatedValue,
+  domain,
+  onPress,
+  detail,
+  hideSeeMember,
+  isFollow = false,
+  getHeaderLayout,
+  handleOnMemberPress
+}) => {
   const onHeaderLayout = (event) => {
     const {height} = event.nativeEvent.layout;
     if (getHeaderLayout) {
@@ -20,15 +29,27 @@ const Header = ({animatedValue, domain, onPress, isFollow = false, getHeaderLayo
 
   return (
     <Animated.View onLayout={onHeaderLayout} style={styles.Header(animatedValue)}>
-      <Image source={TopicDefaultIcon} style={styles.image} />
+      <Image
+        source={detail?.icon_path ? {uri: detail?.icon_path} : TopicDefaultIcon}
+        style={styles.image}
+      />
       <View style={styles.domain}>
         <Text style={styles.domainText} numberOfLines={1} ellipsizeMode="tail">
           {`#${convertString(domain, ' ', '')}`}
         </Text>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Image testID="imageTopicMember" source={TopicMemberIcon} style={styles.member} />
-          <Text style={styles.domainMember}>20 Members</Text>
+          <Text style={styles.domainMember}>{detail?.followersCount} Members</Text>
         </View>
+        {isFollow && !hideSeeMember && (
+          <Text
+            style={styles.seeMemberText}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            onPress={handleOnMemberPress}>
+            See community member
+          </Text>
+        )}
       </View>
       <View style={styles.containerAction}>
         {isFollow ? (
@@ -45,11 +66,13 @@ const styles = StyleSheet.create({
   Header: (animatedValue) => ({
     flexDirection: 'row',
     height: dimen.size.TOPIC_FEED_HEADER_HEIGHT,
-    paddingHorizontal: normalize(20),
+    paddingRight: normalize(20),
+    paddingLeft: normalize(10),
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.2)',
-    marginTop: animatedValue
+    backgroundColor: 'white',
+    marginTop: animatedValue,
+    marginBottom: normalize(4)
   }),
   image: {
     width: normalize(48),
@@ -81,6 +104,12 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     textAlign: 'left',
     color: colors.blackgrey
+  },
+  seeMemberText: {
+    fontSize: normalizeFontSize(12),
+    fontFamily: fonts.inter[500],
+    textAlign: 'left',
+    color: colors.blue1
   },
   containerAction: {
     flexDirection: 'row',

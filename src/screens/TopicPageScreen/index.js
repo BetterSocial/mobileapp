@@ -21,11 +21,11 @@ import {downVote, upVote} from '../../service/vote';
 import {getFeedDetail} from '../../service/post';
 import {getTopicPages} from '../../service/topicPages';
 import {getUserId} from '../../utils/users';
-import {getUserTopic} from '../../service/topics';
+import {getTopics, getUserTopic} from '../../service/topics';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {setFeedByIndex, setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {normalizeFontSizeByWidth} from '../../utils/fonts';
+import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
 } from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
@@ -57,11 +57,14 @@ const TopicPageScreen = (props) => {
   const mainFeeds = feedsContext.feeds;
   const [isFollow, setIsFollow] = React.useState(false);
   const [userTopicName, setUserTopicName] = React.useState('');
+  const [topicDetail, setTopicDetail] = React.useState({});
   const [offset, setOffset] = React.useState(0);
   const [client] = React.useContext(Context).client;
   const refBlockComponent = React.useRef();
   const interactionManagerRef = React.useRef(null);
   const interactionManagerAnimatedRef = React.useRef(null);
+
+  const {listRef} = useOnBottomNavigationTabPressHook(LIST_VIEW_TYPE.TIKTOK_SCROLL, onRefresh);
 
   const topicWithPrefix = route.params.id;
   const id = removePrefixTopic(topicWithPrefix);
@@ -115,6 +118,11 @@ const TopicPageScreen = (props) => {
       const resultGetUserTopic = await getUserTopic(query);
       if (resultGetUserTopic.data) {
         setIsFollow(true);
+      }
+      const resultTopicDetail = await getTopics(idLower);
+      if (resultTopicDetail.data) {
+        const detail = resultTopicDetail.data[0];
+        setTopicDetail(detail);
       }
     } catch (error) {
       if (__DEV__) {
@@ -342,7 +350,7 @@ const TopicPageScreen = (props) => {
       } else if (dy - 20 > 0) {
         interactionManagerAnimatedRef.current = InteractionManager.runAfterInteractions(() => {
           Animated.timing(offsetAnimation, {
-            toValue: -dimen.size.TOPIC_FEED_HEADER_HEIGHT,
+            toValue: -(dimen.size.TOPIC_FEED_HEADER_HEIGHT + normalize(4)),
             duration: 100,
             useNativeDriver: false
           }).start();
@@ -363,7 +371,14 @@ const TopicPageScreen = (props) => {
       setHeaderHeight(Number(height));
     }
   };
-  const {listRef} = useOnBottomNavigationTabPressHook(LIST_VIEW_TYPE.TIKTOK_SCROLL, onRefresh);
+
+  const handleOnMemberPress = (item) => {
+    const navigationParam = {
+      id: topicName
+    };
+
+    navigation.push('TopicMemberScreen', navigationParam);
+  };
 
   const renderItem = ({item, index}) => (
     <MemoizedListComponent
@@ -392,6 +407,7 @@ const TopicPageScreen = (props) => {
         onPress={() => handleFollowTopic()}
         isHeaderHide={isHeaderHide}
         animatedValue={opacityAnimation}
+        detail={topicDetail}
       />
       <Header
         domain={topicName}
@@ -400,6 +416,8 @@ const TopicPageScreen = (props) => {
         isFollow={isFollow}
         getSearchLayout={saveHeaderhHeightHandle}
         animatedValue={offsetAnimation}
+        detail={topicDetail}
+        handleOnMemberPress={handleOnMemberPress}
       />
       <TiktokScroll
         ref={listRef}
