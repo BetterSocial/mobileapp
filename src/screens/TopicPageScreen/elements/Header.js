@@ -1,11 +1,9 @@
 import * as React from 'react';
-import {StyleSheet, Text, Image, View, Animated} from 'react-native';
+import {StyleSheet, Image, View, Animated} from 'react-native';
 
-import TopicMemberIcon from '../../../assets/images/topic-member-picture.png';
 import TopicDefaultIcon from '../../../assets/topic.png';
 import dimen from '../../../utils/dimen';
 import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
-import {convertString} from '../../../utils/string/StringUtils';
 import ButtonFollow from './ButtonFollow';
 import ButtonFollowing from './ButtonFollowing';
 import {colors} from '../../../utils/colors';

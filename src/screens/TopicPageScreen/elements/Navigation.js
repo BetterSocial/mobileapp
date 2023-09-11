@@ -1,12 +1,10 @@
 import {useNavigation} from '@react-navigation/core';
 import * as React from 'react';
-import {Animated, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Animated, StyleSheet, TouchableOpacity, View} from 'react-native';
 
-import TopicMemberIcon from '../../../assets/images/topic-member-picture.png';
 import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
 import dimen from '../../../utils/dimen';
 import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
-import {convertString} from '../../../utils/string/StringUtils';
 import ShareIconCircle from '../../../assets/icons/Ic_share_circle';
 import {colors} from '../../../utils/colors';
 import ButtonFollow from './ButtonFollow';
