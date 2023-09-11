@@ -9,6 +9,7 @@ import {convertString} from '../../../utils/string/StringUtils';
 import ButtonFollow from './ButtonFollow';
 import ButtonFollowing from './ButtonFollowing';
 import ShareIcon from '../../../assets/icons/Ic_share';
+import Search from '../../FeedScreen/elements/Search';
 
 const Navigation = ({domain, onPress, isFollow = false, onShareCommunity}) => {
   const navigation = useNavigation();
@@ -18,7 +19,7 @@ const Navigation = ({domain, onPress, isFollow = false, onShareCommunity}) => {
   };
 
   return (
-    <View style={styles.Header}>
+    <Search>
       <TouchableOpacity onPress={() => backScreen()} style={styles.backbutton}>
         <MemoIc_arrow_back width={normalize(18)} height={normalize(18)} />
       </TouchableOpacity>
@@ -37,7 +38,7 @@ const Navigation = ({domain, onPress, isFollow = false, onShareCommunity}) => {
           <ButtonFollow handleSetFollow={onPress} />
         )}
       </View>
-    </View>
+    </Search>
   );
 };
 
@@ -45,13 +46,11 @@ const styles = StyleSheet.create({
   Header: {
     flexDirection: 'row',
     height: dimen.size.TOPIC_FEED_HEADER_HEIGHT,
-    paddingRight: normalize(16),
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white'
   },
   backbutton: {
-    paddingLeft: 16,
     paddingRight: 16,
     height: '100%',
     justifyContent: 'center'

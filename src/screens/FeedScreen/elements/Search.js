@@ -6,7 +6,7 @@ import StringConstant from '../../../utils/string/StringConstant';
 import {fonts} from '../../../utils/fonts';
 import {COLORS, FONTS, SIZES} from '../../../utils/theme';
 
-const Search = ({animatedValue, onContainerClicked = () => {}, getSearchLayout}) => {
+const Search = ({animatedValue, onContainerClicked = () => {}, getSearchLayout, children}) => {
   const onSearchLayout = (event) => {
     const {height} = event.nativeEvent.layout;
     if (getSearchLayout) {
@@ -14,27 +14,33 @@ const Search = ({animatedValue, onContainerClicked = () => {}, getSearchLayout})
     }
   };
 
+  if (children) {
+    return (
+      <Animated.View
+        onLayout={onSearchLayout}
+        style={HeaderStyles.animatedViewContainer(animatedValue)}>
+        <View style={[HeaderStyles.wrapperSearch, {backgroundColor: 'white'}]}>{children}</View>
+      </Animated.View>
+    );
+  }
+
   return (
-    <Animated.View onLayout={onSearchLayout} style={styles.animatedViewContainer(animatedValue)}>
-      <Pressable onPress={onContainerClicked} style={styles.searchContainer}>
-        <View style={styles.wrapperSearch}>
-          <View style={styles.wrapperIcon}>
+    <Animated.View
+      onLayout={onSearchLayout}
+      style={HeaderStyles.animatedViewContainer(animatedValue)}>
+      <Pressable onPress={onContainerClicked} style={HeaderStyles.searchContainer}>
+        <View style={HeaderStyles.wrapperSearch}>
+          <View style={HeaderStyles.wrapperIcon}>
             <MemoIc_search width={16.67} height={16.67} />
           </View>
-          <Text style={styles.inputText}>{StringConstant.newsTabHeaderPlaceholder}</Text>
+          <Text style={HeaderStyles.inputText}>{StringConstant.newsTabHeaderPlaceholder}</Text>
         </View>
       </Pressable>
     </Animated.View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    marginBottom: SIZES.base,
-    marginHorizontal: SIZES.base
-  },
+export const HeaderStyles = StyleSheet.create({
   searchContainer: {
     flex: 1
   },
