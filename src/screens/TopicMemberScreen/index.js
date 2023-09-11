@@ -6,7 +6,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import ShareUtils from '../../utils/share';
 import dimen from '../../utils/dimen';
 import useChatClientHook from '../../utils/getstream/useChatClientHook';
-import {getTopics, getUserTopic} from '../../service/topics';
+import {getAllMemberTopic, getTopics, getUserTopic} from '../../service/topics';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {normalize} from '../../utils/fonts';
 import Search from './elements/Search';
@@ -34,14 +34,13 @@ const TopicMemberScreen = (props) => {
   const route = useRoute();
   const navigation = useNavigation();
   const topicName = route?.params?.id;
-  const [loading, setLoading] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
   const [isInitialLoading, setIsInitialLoading] = React.useState(true);
   const [isHeaderHide, setIsHeaderHide] = React.useState(false);
   const [headerHeight, setHeaderHeight] = React.useState(0);
 
   const [searchText, setSearchText] = React.useState('');
-  const [discoveryDataFollowedUsers, setDiscoveryDataFollowedUsers] = React.useState([]);
-  const [discoveryDataUnfollowedUsers, setDiscoveryDataUnfollowedUsers] = React.useState([]);
+  const [topicMembers, setTopicMembers] = React.useState([]);
 
   const [isFollow, setIsFollow] = React.useState(false);
   const [topicDetail, setTopicDetail] = React.useState({});
@@ -52,6 +51,29 @@ const TopicMemberScreen = (props) => {
   const opacityAnimation = React.useRef(new Animated.Value(0)).current;
 
   const {followTopic} = useChatClientHook();
+
+  const fetchMember = async (withLoading, text = '') => {
+    if (withLoading) setIsLoading(true);
+    let query = `?name=${topicName}`;
+    if (text.length > 2) {
+      query = `?name=${topicName}&search=${text}`;
+    }
+
+    const result = await getAllMemberTopic(query);
+    if (result.code === 200) {
+      const newData = result.data.map((data) => ({
+        ...data,
+        name: data.username,
+        image: data.profile_pic_path,
+        description: null
+      }));
+      setTopicMembers(newData);
+      setIsLoading(false);
+      navigation.setOptions({
+        title: `Users (${newData.length})`
+      });
+    }
+  };
 
   const initData = async () => {
     try {
@@ -67,13 +89,13 @@ const TopicMemberScreen = (props) => {
         const detail = resultTopicDetail.data[0];
         setTopicDetail(detail);
       }
+      fetchMember(true);
     } catch (error) {
       if (__DEV__) {
         console.log(error);
       }
     } finally {
       setIsInitialLoading(false);
-      setLoading(false);
     }
   };
 
@@ -83,15 +105,12 @@ const TopicMemberScreen = (props) => {
 
   const handleFollowTopic = async () => {
     try {
-      setLoading(true);
       const followed = await followTopic(topicName);
       setIsFollow(followed);
-      setLoading(false);
     } catch (error) {
       if (__DEV__) {
         console.log(error);
       }
-      setLoading(false);
     }
   };
 
@@ -116,7 +135,7 @@ const TopicMemberScreen = (props) => {
     interactionManagerRef.current = InteractionManager.runAfterInteractions(() => {
       Animated.timing(offsetAnimation, {
         toValue: 0,
-        duration: 100,
+        duration: 200,
         useNativeDriver: false
       }).start();
       Animated.timing(opacityAnimation, {
@@ -136,7 +155,7 @@ const TopicMemberScreen = (props) => {
     (event) => {
       const {y} = event.nativeEvent.contentOffset;
       const dy = y - lastDragY;
-      if (dy + 30 <= 0) {
+      if (y <= 30) {
         showHeaderAnimation();
       } else if (dy - 20 > 0) {
         interactionManagerAnimatedRef.current = InteractionManager.runAfterInteractions(() => {
@@ -178,6 +197,7 @@ const TopicMemberScreen = (props) => {
         isHeaderHide={isHeaderHide}
         animatedValue={opacityAnimation}
         detail={topicDetail}
+        hideSeeMember={true}
       />
       <Header
         domain={topicName}
@@ -189,7 +209,13 @@ const TopicMemberScreen = (props) => {
         detail={topicDetail}
         hideSeeMember={true}
       />
-      <Search searchText={searchText} setSearchText={setSearchText} onContainerClicked={() => {}} />
+      <Search
+        setIsLoading={setIsLoading}
+        searchText={searchText}
+        setSearchText={setSearchText}
+        onContainerClicked={() => {}}
+        fetchMember={fetchMember}
+      />
       <ScrollView
         style={styles.fragmentContainer}
         contentContainerStyle={styles.fragmentContentContainer}
@@ -197,13 +223,9 @@ const TopicMemberScreen = (props) => {
         onScroll={handleScrollEvent}
         onScrollBeginDrag={handleOnScrollBeginDrag}>
         <MemberList
-          isLoadingDiscoveryUser={loading}
-          isFirstTimeOpen={false}
-          followedUsers={discoveryDataFollowedUsers}
-          unfollowedUsers={discoveryDataUnfollowedUsers}
-          setFollowedUsers={setDiscoveryDataFollowedUsers}
-          setUnfollowedUsers={setDiscoveryDataUnfollowedUsers}
-          setSearchText={setSearchText}
+          isLoading={isLoading}
+          topicMembers={topicMembers}
+          setTopicMembers={setTopicMembers}
           topicName={topicName}
         />
       </ScrollView>

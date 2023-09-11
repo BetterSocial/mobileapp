@@ -1,6 +1,7 @@
 /* eslint-disable no-use-before-define */
 import * as React from 'react';
 import {StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
+import {debounce} from 'lodash';
 
 import IconClear from '../../../assets/icon/IconClear';
 import MemoIcSearch from '../../../assets/icons/Ic_search';
@@ -12,10 +13,43 @@ import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 
 const TopicSearch = ({
+  setIsLoading,
   searchText = '',
   setSearchText = () => {},
-  handleSubmitSearchData = () => {}
+  fetchMember = () => {}
 }) => {
+  const [lastSearch, setLastSearch] = React.useState('');
+
+  const debounced = React.useCallback(
+    debounce((text) => {
+      handleSubmitSearchData(text);
+    }, 1000),
+
+    []
+  );
+
+  const debounceChangeText = (text) => {
+    if (text.length === 0) {
+      fetchMember(true);
+      debounced.cancel();
+    } else if (text.length > 2) {
+      setIsLoading(true);
+      debounced(text);
+    } else {
+      setIsLoading(false);
+      debounced.cancel();
+    }
+  };
+
+  const handleChangeText = (text) => {
+    setSearchText(text);
+    debounceChangeText(text);
+  };
+
+  React.useEffect(() => {
+    debounceChangeText(searchText);
+  }, [searchText]);
+
   const handleOnSubmitEditing = (event) => {
     const text = event?.nativeEvent?.text;
     handleSubmitSearchData(text);
@@ -23,6 +57,12 @@ const TopicSearch = ({
 
   const handleOnClearText = () => {
     setSearchText('');
+  };
+
+  const handleSubmitSearchData = async (text) => {
+    if (text === lastSearch) return;
+    setLastSearch(text);
+    fetchMember(false, text);
   };
 
   return (
@@ -36,7 +76,7 @@ const TopicSearch = ({
             testID={TestIdConstant.topicScreenSearchBar}
             focusable={true}
             value={searchText}
-            onChangeText={setSearchText}
+            onChangeText={handleChangeText}
             multiline={false}
             returnKeyType="search"
             onSubmitEditing={handleOnSubmitEditing}
