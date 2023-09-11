@@ -325,7 +325,7 @@ const TopicPageScreen = (props) => {
     interactionManagerRef.current = InteractionManager.runAfterInteractions(() => {
       Animated.timing(offsetAnimation, {
         toValue: 0,
-        duration: 100,
+        duration: 200,
         useNativeDriver: false
       }).start();
       Animated.timing(opacityAnimation, {
@@ -345,7 +345,7 @@ const TopicPageScreen = (props) => {
     (event) => {
       const {y} = event.nativeEvent.contentOffset;
       const dy = y - lastDragY;
-      if (dy + 30 <= 0) {
+      if (y <= 30) {
         showHeaderAnimation();
       } else if (dy - 20 > 0) {
         interactionManagerAnimatedRef.current = InteractionManager.runAfterInteractions(() => {
@@ -372,7 +372,7 @@ const TopicPageScreen = (props) => {
     }
   };
 
-  const handleOnMemberPress = (item) => {
+  const handleOnMemberPress = () => {
     const navigationParam = {
       id: topicName
     };
@@ -408,6 +408,8 @@ const TopicPageScreen = (props) => {
         isHeaderHide={isHeaderHide}
         animatedValue={opacityAnimation}
         detail={topicDetail}
+        isFollow={isFollow}
+        handleOnMemberPress={handleOnMemberPress}
       />
       <Header
         domain={topicName}

@@ -16,14 +16,7 @@ import DiscoveryItemList from '../../DiscoveryScreenV2/elements/DiscoveryItemLis
 
 const FROM_TOPIC_MEMBER = 'fromtopicmember';
 
-const MemberList = ({
-  isFirstTimeOpen,
-  topicName,
-  followedUsers = [],
-  setFollowedUsers = () => {}
-}) => {
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [members, setMembers] = React.useState([]);
+const MemberList = ({isLoading, topicMembers = [], setTopicMembers = () => {}}) => {
   const [profile] = React.useContext(Context).profile;
   const navigation = useNavigation();
 
@@ -39,26 +32,7 @@ const MemberList = ({
       }
     };
     parseToken();
-    fetchMember();
   }, []);
-
-  const fetchMember = async (withLoading) => {
-    if (withLoading) setIsLoading(true);
-    const result = await getAllMemberTopic(topicName);
-    if (result.code === 200) {
-      const newData = result.data.map((data) => ({
-        ...data,
-        name: data.username,
-        image: data.profile_pic_path,
-        description: null
-      }));
-      setMembers(newData);
-      if (withLoading) setIsLoading(false);
-      navigation.setOptions({
-        title: `Users (${newData.length})`
-      });
-    }
-  };
 
   const handleOnPress = (item) => {
     navigation.push('OtherProfile', {
@@ -70,13 +44,11 @@ const MemberList = ({
     });
   };
 
-  const handleFollow = async (from, willFollow, item, index) => {
-    if (from === FROM_TOPIC_MEMBER) {
-      const newFollowedUsers = [...followedUsers];
-      newFollowedUsers[index].user_id_follower = willFollow ? myId : null;
+  const handleFollow = async (willFollow, item, index) => {
+    const newFollowedUsers = [...topicMembers];
+    newFollowedUsers[index].user_id_follower = willFollow ? myId : null;
 
-      setFollowedUsers(newFollowedUsers);
-    }
+    setTopicMembers(newFollowedUsers);
 
     const data = {
       user_id_follower: myId,
@@ -97,8 +69,8 @@ const MemberList = ({
     <DiscoveryItemList
       key={`${key}-${index}`}
       onPressBody={() => handleOnPress(item)}
-      handleSetFollow={() => handleFollow(from, true, item, index)}
-      handleSetUnFollow={() => handleFollow(from, false, item, index)}
+      handleSetFollow={() => handleFollow(true, item, index)}
+      handleSetUnFollow={() => handleFollow(false, item, index)}
       item={{
         name: item.username,
         image: item.profile_pic_path,
@@ -111,7 +83,7 @@ const MemberList = ({
   const renderUsersItem = () => {
     return (
       <>
-        {members.map((item, index) =>
+        {topicMembers.map((item, index) =>
           renderDiscoveryItem(FROM_TOPIC_MEMBER, 'topicMember', item, index)
         )}
       </>
@@ -126,7 +98,7 @@ const MemberList = ({
         <LoadingWithoutModal />
       </View>
     );
-  if (members.length === 0 && !isFirstTimeOpen)
+  if (topicMembers.length === 0)
     return (
       <View style={styles.noDataFoundContainer}>
         <Text style={styles.noDataFoundText}>No users found</Text>

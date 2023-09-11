@@ -4,15 +4,24 @@ import {Animated, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-n
 
 import TopicMemberIcon from '../../../assets/images/topic-member-picture.png';
 import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
-import MemoIc_arrow_back_circle from '../../../assets/arrow/Ic_arrow_back_circle';
 import dimen from '../../../utils/dimen';
 import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
 import {convertString} from '../../../utils/string/StringUtils';
-import ShareIcon from '../../../assets/icons/Ic_share';
 import ShareIconCircle from '../../../assets/icons/Ic_share_circle';
 import {colors} from '../../../utils/colors';
+import ButtonFollow from './ButtonFollow';
 
-const Navigation = ({domain, isHeaderHide, animatedValue, onShareCommunity, detail}) => {
+const Navigation = ({
+  domain,
+  isHeaderHide,
+  animatedValue,
+  onShareCommunity,
+  detail,
+  isFollow,
+  onPress,
+  hideSeeMember,
+  handleOnMemberPress
+}) => {
   const navigation = useNavigation();
 
   const backScreen = () => {
@@ -22,11 +31,7 @@ const Navigation = ({domain, isHeaderHide, animatedValue, onShareCommunity, deta
   return (
     <View style={styles.Header(isHeaderHide)}>
       <TouchableOpacity onPress={() => backScreen()} style={styles.backbutton}>
-        {isHeaderHide ? (
-          <MemoIc_arrow_back_circle width={normalize(32)} height={normalize(32)} />
-        ) : (
-          <MemoIc_arrow_back width={normalize(24)} height={normalize(24)} />
-        )}
+        <MemoIc_arrow_back width={normalize(24)} height={normalize(24)} />
       </TouchableOpacity>
       <Animated.View style={styles.domain(animatedValue)}>
         <Text style={styles.domainText} numberOfLines={1} ellipsizeMode="tail">
@@ -36,15 +41,26 @@ const Navigation = ({domain, isHeaderHide, animatedValue, onShareCommunity, deta
           <Image testID="imageTopicMember" source={TopicMemberIcon} style={styles.member} />
           <Text style={styles.domainMember}>{detail?.followersCount} Members</Text>
         </View>
+        {isFollow && !hideSeeMember && (
+          <Text
+            style={styles.seeMemberText}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            onPress={handleOnMemberPress}>
+            See community member
+          </Text>
+        )}
       </Animated.View>
       <View style={styles.containerAction}>
-        <TouchableOpacity onPress={onShareCommunity} style={styles.shareIconStyle}>
-          {isHeaderHide ? (
+        {!isFollow && isHeaderHide ? (
+          <View style={{marginRight: normalize(10)}}>
+            <ButtonFollow handleSetFollow={onPress} />
+          </View>
+        ) : (
+          <TouchableOpacity onPress={onShareCommunity} style={styles.shareIconStyle}>
             <ShareIconCircle color="black" width={32} height={32} />
-          ) : (
-            <ShareIcon color="black" width={24} height={24} />
-          )}
-        </TouchableOpacity>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
@@ -63,7 +79,7 @@ const styles = StyleSheet.create({
     zIndex: 99
   }),
   backbutton: {
-    paddingLeft: 16,
+    paddingLeft: 20,
     paddingRight: 16,
     height: '100%',
     justifyContent: 'center'
@@ -97,6 +113,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  seeMemberText: {
+    fontSize: normalizeFontSize(12),
+    fontFamily: fonts.inter[500],
+    textAlign: 'left',
+    color: colors.blue1
   },
   shareIconStyle: {
     padding: 10

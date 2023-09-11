@@ -66,8 +66,7 @@ const styles = StyleSheet.create({
   Header: (animatedValue) => ({
     flexDirection: 'row',
     height: dimen.size.TOPIC_FEED_HEADER_HEIGHT,
-    paddingRight: normalize(20),
-    paddingLeft: normalize(10),
+    paddingHorizontal: normalize(20),
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
