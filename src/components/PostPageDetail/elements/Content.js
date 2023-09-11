@@ -56,12 +56,7 @@ const Content = ({
     item.post_type,
     images_url
   );
-  const handleStyleFeed = () => {
-    if (item.post_type !== POST_TYPE_LINK) {
-      return styles.contentFeed;
-    }
-    return styles.contentFeedLink;
-  };
+
   const navigateToLinkContextPage = () => {
     const param = linkContextScreenParamBuilder(
       item,
