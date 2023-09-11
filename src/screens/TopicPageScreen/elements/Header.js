@@ -3,10 +3,9 @@ import {StyleSheet, Image, View, Animated} from 'react-native';
 
 import TopicDefaultIcon from '../../../assets/topic.png';
 import dimen from '../../../utils/dimen';
-import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
+import {normalize} from '../../../utils/fonts';
 import ButtonFollow from './ButtonFollow';
 import ButtonFollowing from './ButtonFollowing';
-import {colors} from '../../../utils/colors';
 import TopicDomainHeader from './TopicDomainHeader';
 
 const Header = ({
@@ -76,29 +75,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     marginRight: 14,
     alignSelf: 'center'
-  },
-  domainText: {
-    fontSize: normalizeFontSize(16),
-    fontFamily: fonts.inter[600],
-    textAlign: 'left',
-    color: colors.black
-  },
-  member: {
-    width: normalize(16),
-    height: normalize(16),
-    marginRight: 5
-  },
-  domainMember: {
-    fontSize: normalizeFontSize(12),
-    fontFamily: fonts.inter[400],
-    textAlign: 'left',
-    color: colors.blackgrey
-  },
-  seeMemberText: {
-    fontSize: normalizeFontSize(12),
-    fontFamily: fonts.inter[500],
-    textAlign: 'left',
-    color: colors.blue1
   },
   containerAction: {
     flexDirection: 'row',

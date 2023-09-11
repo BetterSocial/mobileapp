@@ -82,33 +82,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     opacity: animatedValue
   }),
-  domainText: {
-    fontSize: normalizeFontSize(16),
-    fontFamily: fonts.inter[600],
-    textAlign: 'left',
-    color: colors.black
-  },
-  member: {
-    width: normalize(16),
-    height: normalize(16),
-    marginRight: 5
-  },
-  domainMember: {
-    fontSize: normalizeFontSize(12),
-    fontFamily: fonts.inter[400],
-    textAlign: 'left',
-    color: colors.blackgrey
-  },
   containerAction: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'
-  },
-  seeMemberText: {
-    fontSize: normalizeFontSize(12),
-    fontFamily: fonts.inter[500],
-    textAlign: 'left',
-    color: colors.blue1
   },
   shareIconStyle: {
     padding: 10
