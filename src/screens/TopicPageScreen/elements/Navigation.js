@@ -10,6 +10,7 @@ import {convertString} from '../../../utils/string/StringUtils';
 import ShareIconCircle from '../../../assets/icons/Ic_share_circle';
 import {colors} from '../../../utils/colors';
 import ButtonFollow from './ButtonFollow';
+import TopicDomainHeader from './TopicDomainHeader';
 
 const Navigation = ({
   domain,
@@ -34,22 +35,13 @@ const Navigation = ({
         <MemoIc_arrow_back width={normalize(24)} height={normalize(24)} />
       </TouchableOpacity>
       <Animated.View style={styles.domain(animatedValue)}>
-        <Text style={styles.domainText} numberOfLines={1} ellipsizeMode="tail">
-          {`#${convertString(domain, ' ', '')}`}
-        </Text>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Image testID="imageTopicMember" source={TopicMemberIcon} style={styles.member} />
-          <Text style={styles.domainMember}>{detail?.followersCount} Members</Text>
-        </View>
-        {isFollow && !hideSeeMember && (
-          <Text
-            style={styles.seeMemberText}
-            numberOfLines={1}
-            ellipsizeMode="tail"
-            onPress={handleOnMemberPress}>
-            See community member
-          </Text>
-        )}
+        <TopicDomainHeader
+          domain={domain}
+          detail={detail}
+          isFollow={isFollow}
+          hideSeeMember={hideSeeMember}
+          handleOnMemberPress={handleOnMemberPress}
+        />
       </Animated.View>
       <View style={styles.containerAction}>
         {!isFollow && isHeaderHide ? (

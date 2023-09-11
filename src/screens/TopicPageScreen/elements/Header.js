@@ -9,6 +9,7 @@ import {convertString} from '../../../utils/string/StringUtils';
 import ButtonFollow from './ButtonFollow';
 import ButtonFollowing from './ButtonFollowing';
 import {colors} from '../../../utils/colors';
+import TopicDomainHeader from './TopicDomainHeader';
 
 const Header = ({
   animatedValue,
@@ -34,22 +35,13 @@ const Header = ({
         style={styles.image}
       />
       <View style={styles.domain}>
-        <Text style={styles.domainText} numberOfLines={1} ellipsizeMode="tail">
-          {`#${convertString(domain, ' ', '')}`}
-        </Text>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Image testID="imageTopicMember" source={TopicMemberIcon} style={styles.member} />
-          <Text style={styles.domainMember}>{detail?.followersCount} Members</Text>
-        </View>
-        {isFollow && !hideSeeMember && (
-          <Text
-            style={styles.seeMemberText}
-            numberOfLines={1}
-            ellipsizeMode="tail"
-            onPress={handleOnMemberPress}>
-            See community member
-          </Text>
-        )}
+        <TopicDomainHeader
+          domain={domain}
+          detail={detail}
+          isFollow={isFollow}
+          hideSeeMember={hideSeeMember}
+          handleOnMemberPress={handleOnMemberPress}
+        />
       </View>
       <View style={styles.containerAction}>
         {isFollow ? (
