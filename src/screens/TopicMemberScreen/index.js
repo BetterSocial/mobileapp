@@ -198,6 +198,7 @@ const TopicMemberScreen = (props) => {
         animatedValue={opacityAnimation}
         detail={topicDetail}
         hideSeeMember={true}
+        isFollow={isFollow}
       />
       <Header
         domain={topicName}
