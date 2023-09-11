@@ -15,9 +15,9 @@ import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
 import useCalculationContent from './hooks/useCalculationContent';
+import {getCommentLength} from '../../utils/getstream';
 
 const {width: screenWidth} = Dimensions.get('window');
-
 const Content = ({
   message,
   images_url = [],
@@ -34,8 +34,14 @@ const Content = ({
   const [textHeight, setTextHeight] = React.useState(null);
   const maxFontSize = normalizeFontSizeByWidth(28);
   const minFontSize = normalizeFontSizeByWidth(16);
-  const {handleCalculation, onLayoutTopicChip, heightTopic, amountLineTopic} =
-    useCalculationContent();
+  const {
+    handleCalculation,
+    onLayoutTopicChip,
+    heightTopic,
+    amountLineTopic,
+    onTopicLayout,
+    heightPoll
+  } = useCalculationContent();
   const [amountCut, setAmountCut] = React.useState(0);
   const [textCut, setTextCut] = React.useState(null);
   const [arrText] = React.useState([]);
@@ -68,14 +74,16 @@ const Content = ({
     item.images_url,
     message
   );
-
   const calculateMaxLine = () => {
-    if (
-      item.post_type === POST_TYPE_POLL ||
-      item.post_type === POST_TYPE_LINK ||
-      images_url.length > 0
-    ) {
+    if (item.post_type === POST_TYPE_LINK || images_url.length > 0) {
       return 5;
+    }
+    if (item.post_type === POST_TYPE_POLL) {
+      const result = Math.round((layoutHeight - heightPoll) / lineHeight);
+      return result;
+    }
+    if (getCommentLength(item.latest_reactions.comment) > 0) {
+      return Math.floor(layoutHeight / lineHeight);
     }
     return Math.round(layoutHeight / lineHeight);
   };
@@ -128,7 +136,10 @@ const Content = ({
 
   const adjustmentCountDeviceLine = () => {
     let {newMaxLine, countDeviceLine} = handleCountDeviceLine();
-    if (item.post_type === POST_TYPE_STANDARD && item.images_url.length <= 0) {
+    if (
+      (item.post_type === POST_TYPE_STANDARD || item.post_type === POST_TYPE_POLL) &&
+      item.images_url.length <= 0
+    ) {
       if (topics.length > 0) {
         newMaxLine -= handleTopicLength().topicLine;
         countDeviceLine -= handleTopicLength().countTopicLine;
@@ -137,7 +148,7 @@ const Content = ({
         countDeviceLine -= handleNoTopicLength().countDeviceLine;
       }
     } else {
-      countDeviceLine -= 1;
+      countDeviceLine -= 2;
     }
     return {
       countDeviceLine,
@@ -224,9 +235,7 @@ const Content = ({
     };
   };
   const hanldeHeightContainer = ({nativeEvent}) => {
-    if (!layoutHeight || layoutHeight <= 0) {
-      setLayoutHeight(nativeEvent.layout.height);
-    }
+    setLayoutHeight(nativeEvent.layout.height);
   };
 
   const calculateLineTopicChip = (nativeEvent) => {
@@ -263,6 +272,7 @@ const Content = ({
             onnewpollfetched={onNewPollFetched}
             voteCount={item.voteCount}
             topics={item?.topics}
+            onLayout={onTopicLayout}
           />
         </View>
       ) : null}
