@@ -68,7 +68,7 @@ const Content = ({
       return 5;
     }
     if (item.post_type === POST_TYPE_POLL) {
-      const result = Math.round((layoutHeight - heightPoll) / lineHeight);
+      const result = Math.round((layoutHeight - heightPoll - heightTopic) / lineHeight);
       return result;
     }
     if (getCommentLength(item.latest_reactions.comment) > 0) {

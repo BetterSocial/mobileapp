@@ -139,9 +139,9 @@ const stylesComponent = (pollLength) =>
     },
     containerShowMessage: {
       justifyContent: 'flex-start',
-      marginBottom: 48,
       paddingVertical: 0,
-      height: 'auto'
+      height: 'auto',
+      marginTop: 5
     },
     imageList: {flex: 1, width: screenWidth - 32, borderRadius: 16},
     rowSpaceBeetwen: {
