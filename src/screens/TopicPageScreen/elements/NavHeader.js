@@ -7,6 +7,7 @@ import useChatClientHook from '../../../utils/getstream/useChatClientHook';
 const NavHeader = (props) => {
   const [isFollow, setIsFollow] = React.useState(false);
   const [topicDetail, setTopicDetail] = React.useState({});
+  const [isLoading, setIsLoading] = React.useState(true);
   const {followTopic} = useChatClientHook();
 
   React.useEffect(() => {
@@ -26,6 +27,7 @@ const NavHeader = (props) => {
 
   const initData = async () => {
     try {
+      setIsLoading(true);
       const query = `?name=${props.domain}`;
       const resultGetUserTopic = await getUserTopic(query);
       if (resultGetUserTopic.data) {
@@ -38,15 +40,14 @@ const NavHeader = (props) => {
       }
     } catch (error) {
       if (__DEV__) {
-        console.log(error);
+        console.log('err: ', error);
       }
     } finally {
-      if (__DEV__) {
-        console.log('done');
-      }
+      setIsLoading(false);
     }
   };
 
+  if (props.isInitialLoading || isLoading) return null;
   return (
     <>
       <Navigation isFollow={isFollow} detail={topicDetail} onPress={handleFollowTopic} {...props} />

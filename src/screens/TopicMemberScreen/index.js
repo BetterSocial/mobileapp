@@ -90,6 +90,7 @@ const TopicMemberScreen = (props) => {
       }
       setIsLoadingDiscovery({user: false});
     }
+    setIsInitialLoading(false);
   };
 
   const initData = async () => {
@@ -100,8 +101,6 @@ const TopicMemberScreen = (props) => {
       if (__DEV__) {
         console.log(error);
       }
-    } finally {
-      setIsInitialLoading(false);
     }
   };
 
@@ -191,6 +190,7 @@ const TopicMemberScreen = (props) => {
         opacityAnimation={opacityAnimation}
         offsetAnimation={offsetAnimation}
         hideSeeMember={true}
+        isInitialLoading={isInitialLoading}
       />
       <Search
         searchText={searchText}

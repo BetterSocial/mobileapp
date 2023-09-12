@@ -368,6 +368,7 @@ const TopicPageScreen = (props) => {
         opacityAnimation={opacityAnimation}
         offsetAnimation={offsetAnimation}
         handleOnMemberPress={handleOnMemberPress}
+        isInitialLoading={isInitialLoading}
       />
       <TiktokScroll
         ref={listRef}
