@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {Animated, InteractionManager, ScrollView, StatusBar, StyleSheet} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import axios from 'axios';
 
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import ShareUtils from '../../utils/share';
@@ -9,11 +10,13 @@ import useChatClientHook from '../../utils/getstream/useChatClientHook';
 import {getAllMemberTopic, getTopics, getUserTopic} from '../../service/topics';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {normalize} from '../../utils/fonts';
-import Search from './elements/Search';
-import MemberList from './elements/MemberList';
 import Navigation from '../TopicPageScreen/elements/Navigation';
 import Header from '../TopicPageScreen/elements/Header';
 import {colors} from '../../utils/colors';
+import Search from '../DiscoveryScreenV2/elements/Search';
+import StringConstant from '../../utils/string/StringConstant';
+import UsersFragment from '../DiscoveryScreenV2/fragment/UsersFragment';
+import {Context} from '../../context';
 
 const styles = StyleSheet.create({
   parentContainer: {
@@ -34,13 +37,18 @@ const TopicMemberScreen = (props) => {
   const route = useRoute();
   const navigation = useNavigation();
   const topicName = route?.params?.id;
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [profile] = React.useContext(Context).profile;
   const [isInitialLoading, setIsInitialLoading] = React.useState(true);
   const [isHeaderHide, setIsHeaderHide] = React.useState(false);
   const [headerHeight, setHeaderHeight] = React.useState(0);
 
   const [searchText, setSearchText] = React.useState('');
-  const [topicMembers, setTopicMembers] = React.useState([]);
+  const [initalMember, setInitialMember] = React.useState([]);
+  const [topicDataFollowedUsers, setTopicDataFollowedUsers] = React.useState([]);
+  const [topicDataUnfollowedUsers, setTopicDataUnfollowedUsers] = React.useState([]);
+  const [isFocus, setIsFocus] = React.useState(true);
+  const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true);
+  const cancelTokenRef = React.useRef(axios.CancelToken.source());
 
   const [isFollow, setIsFollow] = React.useState(false);
   const [topicDetail, setTopicDetail] = React.useState({});
@@ -50,10 +58,14 @@ const TopicMemberScreen = (props) => {
   const offsetAnimation = React.useRef(new Animated.Value(0)).current;
   const opacityAnimation = React.useRef(new Animated.Value(0)).current;
 
+  const [isLoadingDiscovery, setIsLoadingDiscovery] = React.useState({
+    user: false
+  });
+
   const {followTopic} = useChatClientHook();
 
-  const fetchMember = async (withLoading, text = '') => {
-    if (withLoading) setIsLoading(true);
+  const fetchMember = async (text = '') => {
+    setIsLoadingDiscovery({user: true});
     let query = `?name=${topicName}`;
     if (text.length > 2) {
       query = `?name=${topicName}&search=${text}`;
@@ -61,17 +73,29 @@ const TopicMemberScreen = (props) => {
 
     const result = await getAllMemberTopic(query);
     if (result.code === 200) {
-      const newData = result.data.map((data) => ({
-        ...data,
-        name: data.username,
-        image: data.profile_pic_path,
-        description: null
-      }));
-      setTopicMembers(newData);
-      setIsLoading(false);
-      navigation.setOptions({
-        title: `Users (${newData.length})`
-      });
+      const newDataFollowed = result.data
+        .filter((item) => item.is_following && profile.myProfile.user_id !== item.user_id)
+        .map((data) => ({
+          ...data,
+          name: data.username,
+          image: data.profile_pic_path,
+          description: null
+        }));
+      const newDataUnfollowed = result.data
+        .filter((item) => !item.is_following && profile.myProfile.user_id !== item.user_id)
+        .map((data) => ({
+          ...data,
+          name: data.username,
+          image: data.profile_pic_path,
+          description: null
+        }));
+      if (text) {
+        setTopicDataFollowedUsers(newDataFollowed);
+        setTopicDataUnfollowedUsers(newDataUnfollowed);
+      } else {
+        setInitialMember([...newDataFollowed, ...newDataUnfollowed]);
+      }
+      setIsLoadingDiscovery({user: false});
     }
   };
 
@@ -89,7 +113,7 @@ const TopicMemberScreen = (props) => {
         const detail = resultTopicDetail.data[0];
         setTopicDetail(detail);
       }
-      fetchMember(true);
+      fetchMember();
     } catch (error) {
       if (__DEV__) {
         console.log(error);
@@ -186,6 +210,11 @@ const TopicMemberScreen = (props) => {
     }
   };
 
+  const onCancelToken = () => {
+    cancelTokenRef?.current?.cancel();
+    cancelTokenRef.current = axios.CancelToken.source();
+  };
+
   if (isInitialLoading) return null;
   return (
     <SafeAreaProvider forceInset={{top: 'always'}} style={styles.parentContainer}>
@@ -211,11 +240,16 @@ const TopicMemberScreen = (props) => {
         hideSeeMember={true}
       />
       <Search
-        setIsLoading={setIsLoading}
         searchText={searchText}
         setSearchText={setSearchText}
-        onContainerClicked={() => {}}
-        fetchMember={fetchMember}
+        setDiscoveryLoadingData={setIsLoadingDiscovery}
+        isFocus={isFocus}
+        setIsFocus={setIsFocus}
+        fetchDiscoveryData={fetchMember}
+        onCancelToken={onCancelToken}
+        placeholderText={StringConstant.topicMemberPlaceholder}
+        setIsFirstTimeOpen={setIsFirstTimeOpen}
+        hideBackIcon={true}
       />
       <ScrollView
         style={styles.fragmentContainer}
@@ -223,11 +257,17 @@ const TopicMemberScreen = (props) => {
         keyboardShouldPersistTaps="handled"
         onScroll={handleScrollEvent}
         onScrollBeginDrag={handleOnScrollBeginDrag}>
-        <MemberList
-          isLoading={isLoading}
-          topicMembers={topicMembers}
-          setTopicMembers={setTopicMembers}
-          topicName={topicName}
+        <UsersFragment
+          isLoadingDiscoveryUser={isLoadingDiscovery.user}
+          isFirstTimeOpen={isFirstTimeOpen}
+          initialUsers={initalMember}
+          followedUsers={topicDataFollowedUsers}
+          unfollowedUsers={topicDataUnfollowedUsers}
+          setFollowedUsers={setTopicDataFollowedUsers}
+          setUnfollowedUsers={setTopicDataUnfollowedUsers}
+          setIsFirstTimeOpen={setIsFirstTimeOpen}
+          setSearchText={setSearchText}
+          withoutRecent={true}
         />
       </ScrollView>
     </SafeAreaProvider>
