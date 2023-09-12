@@ -4,9 +4,8 @@ import {Animated, StyleSheet, TouchableOpacity, View} from 'react-native';
 
 import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
 import dimen from '../../../utils/dimen';
-import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
+import {normalize} from '../../../utils/fonts';
 import ShareIconCircle from '../../../assets/icons/Ic_share_circle';
-import {colors} from '../../../utils/colors';
 import ButtonFollow from './ButtonFollow';
 import TopicDomainHeader from './TopicDomainHeader';
 
