@@ -35,7 +35,6 @@ const UsersFragment = ({
   withoutRecent = false
 }) => {
   const [discovery, discoveryDispatch] = React.useContext(Context).discovery;
-  const [following, followingDispatch] = React.useContext(Context).following;
   const [profile] = React.useContext(Context).profile;
   const navigation = useNavigation();
 
