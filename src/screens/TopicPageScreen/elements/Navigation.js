@@ -12,7 +12,7 @@ import TopicDomainHeader from './TopicDomainHeader';
 const Navigation = ({
   domain,
   isHeaderHide,
-  animatedValue,
+  opacityAnimation,
   onShareCommunity,
   detail,
   isFollow,
@@ -31,7 +31,7 @@ const Navigation = ({
       <TouchableOpacity onPress={() => backScreen()} style={styles.backbutton}>
         <MemoIc_arrow_back width={normalize(24)} height={normalize(24)} />
       </TouchableOpacity>
-      <Animated.View style={styles.domain(animatedValue)}>
+      <Animated.View style={styles.domain(opacityAnimation)}>
         <TopicDomainHeader
           domain={domain}
           detail={detail}

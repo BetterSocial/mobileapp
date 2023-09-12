@@ -6,17 +6,15 @@ import axios from 'axios';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import ShareUtils from '../../utils/share';
 import dimen from '../../utils/dimen';
-import useChatClientHook from '../../utils/getstream/useChatClientHook';
-import {getAllMemberTopic, getTopics, getUserTopic} from '../../service/topics';
+import {getAllMemberTopic} from '../../service/topics';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {normalize} from '../../utils/fonts';
-import Navigation from '../TopicPageScreen/elements/Navigation';
-import Header from '../TopicPageScreen/elements/Header';
 import {colors} from '../../utils/colors';
 import Search from '../DiscoveryScreenV2/elements/Search';
 import StringConstant from '../../utils/string/StringConstant';
 import UsersFragment from '../DiscoveryScreenV2/fragment/UsersFragment';
 import {Context} from '../../context';
+import NavHeader from '../TopicPageScreen/elements/NavHeader';
 
 const styles = StyleSheet.create({
   parentContainer: {
@@ -40,7 +38,6 @@ const TopicMemberScreen = (props) => {
   const [profile] = React.useContext(Context).profile;
   const [isInitialLoading, setIsInitialLoading] = React.useState(true);
   const [isHeaderHide, setIsHeaderHide] = React.useState(false);
-  const [headerHeight, setHeaderHeight] = React.useState(0);
 
   const [searchText, setSearchText] = React.useState('');
   const [initalMember, setInitialMember] = React.useState([]);
@@ -50,8 +47,6 @@ const TopicMemberScreen = (props) => {
   const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true);
   const cancelTokenRef = React.useRef(axios.CancelToken.source());
 
-  const [isFollow, setIsFollow] = React.useState(false);
-  const [topicDetail, setTopicDetail] = React.useState({});
   const interactionManagerRef = React.useRef(null);
   const interactionManagerAnimatedRef = React.useRef(null);
 
@@ -61,8 +56,6 @@ const TopicMemberScreen = (props) => {
   const [isLoadingDiscovery, setIsLoadingDiscovery] = React.useState({
     user: false
   });
-
-  const {followTopic} = useChatClientHook();
 
   const fetchMember = async (text = '') => {
     setIsLoadingDiscovery({user: true});
@@ -102,17 +95,6 @@ const TopicMemberScreen = (props) => {
   const initData = async () => {
     try {
       setIsInitialLoading(true);
-
-      const query = `?name=${topicName}`;
-      const resultGetUserTopic = await getUserTopic(query);
-      if (resultGetUserTopic.data) {
-        setIsFollow(true);
-      }
-      const resultTopicDetail = await getTopics(topicName);
-      if (resultTopicDetail.data) {
-        const detail = resultTopicDetail.data[0];
-        setTopicDetail(detail);
-      }
       fetchMember();
     } catch (error) {
       if (__DEV__) {
@@ -126,17 +108,6 @@ const TopicMemberScreen = (props) => {
   React.useEffect(() => {
     initData();
   }, []);
-
-  const handleFollowTopic = async () => {
-    try {
-      const followed = await followTopic(topicName);
-      setIsFollow(followed);
-    } catch (error) {
-      if (__DEV__) {
-        console.log(error);
-      }
-    }
-  };
 
   const onShareCommunity = () => {
     ShareUtils.shareCommunity(topicName);
@@ -204,12 +175,6 @@ const TopicMemberScreen = (props) => {
     [offsetAnimation]
   );
 
-  const saveHeaderhHeightHandle = (height) => {
-    if (!headerHeight) {
-      setHeaderHeight(Number(height));
-    }
-  };
-
   const onCancelToken = () => {
     cancelTokenRef?.current?.cancel();
     cancelTokenRef.current = axios.CancelToken.source();
@@ -219,24 +184,12 @@ const TopicMemberScreen = (props) => {
   return (
     <SafeAreaProvider forceInset={{top: 'always'}} style={styles.parentContainer}>
       <StatusBar barStyle="dark-content" translucent={false} />
-      <Navigation
+      <NavHeader
         domain={topicName}
         onShareCommunity={onShareCommunity}
-        onPress={() => handleFollowTopic()}
         isHeaderHide={isHeaderHide}
-        animatedValue={opacityAnimation}
-        detail={topicDetail}
-        hideSeeMember={true}
-        isFollow={isFollow}
-      />
-      <Header
-        domain={topicName}
-        onShareCommunity={onShareCommunity}
-        onPress={() => handleFollowTopic()}
-        isFollow={isFollow}
-        getSearchLayout={saveHeaderhHeightHandle}
-        animatedValue={offsetAnimation}
-        detail={topicDetail}
+        opacityAnimation={opacityAnimation}
+        offsetAnimation={offsetAnimation}
         hideSeeMember={true}
       />
       <Search

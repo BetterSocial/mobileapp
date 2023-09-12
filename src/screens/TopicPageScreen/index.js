@@ -8,20 +8,16 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import BlockComponent from '../../components/BlockComponent';
 import ButtonAddPostTopic from '../../components/Button/ButtonAddPostTopic';
 import MemoizedListComponent from './MemoizedListComponent';
-import Navigation from './elements/Navigation';
-import Header from './elements/Header';
 import ShareUtils from '../../utils/share';
 import TiktokScroll from '../../components/TiktokScroll';
 import TopicPageStorage from '../../utils/storage/custom/topicPageStorage';
 import dimen from '../../utils/dimen';
 import removePrefixTopic from '../../utils/topics/removePrefixTopic';
-import useChatClientHook from '../../utils/getstream/useChatClientHook';
 import {Context} from '../../context';
 import {downVote, upVote} from '../../service/vote';
 import {getFeedDetail} from '../../service/post';
 import {getTopicPages} from '../../service/topicPages';
 import {getUserId} from '../../utils/users';
-import {getTopics, getUserTopic} from '../../service/topics';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {setFeedByIndex, setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
@@ -29,6 +25,7 @@ import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
 } from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
+import NavHeader from './elements/NavHeader';
 
 const styles = StyleSheet.create({
   parentContainer: {
@@ -48,16 +45,12 @@ const TopicPageScreen = (props) => {
   const [userId, setUserId] = React.useState('');
   const [topicId, setTopicId] = React.useState('');
   const [isHeaderHide, setIsHeaderHide] = React.useState(false);
-  const [headerHeight, setHeaderHeight] = React.useState(0);
   const offsetAnimation = React.useRef(new Animated.Value(0)).current;
   const opacityAnimation = React.useRef(new Animated.Value(0)).current;
 
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   const feeds = feedsContext.topicFeeds;
   const mainFeeds = feedsContext.feeds;
-  const [isFollow, setIsFollow] = React.useState(false);
-  const [userTopicName, setUserTopicName] = React.useState('');
-  const [topicDetail, setTopicDetail] = React.useState({});
   const [offset, setOffset] = React.useState(0);
   const [client] = React.useContext(Context).client;
   const refBlockComponent = React.useRef();
@@ -68,7 +61,6 @@ const TopicPageScreen = (props) => {
 
   const topicWithPrefix = route.params.id;
   const id = removePrefixTopic(topicWithPrefix);
-  const {followTopic} = useChatClientHook();
 
   const initialFetchTopicFeeds = async (cacheLength = 0) => {
     try {
@@ -102,7 +94,6 @@ const TopicPageScreen = (props) => {
 
       const idLower = id.toLowerCase();
       setTopicName(idLower);
-      setUserTopicName(idLower);
       setTopicId(idLower);
 
       const {feeds: topicFeeds, offset: offsetFeeds} = TopicPageStorage.get(idLower);
@@ -113,17 +104,6 @@ const TopicPageScreen = (props) => {
       }
 
       initialFetchTopicFeeds(topicFeeds?.length);
-
-      const query = `?name=${idLower}`;
-      const resultGetUserTopic = await getUserTopic(query);
-      if (resultGetUserTopic.data) {
-        setIsFollow(true);
-      }
-      const resultTopicDetail = await getTopics(idLower);
-      if (resultTopicDetail.data) {
-        const detail = resultTopicDetail.data[0];
-        setTopicDetail(detail);
-      }
     } catch (error) {
       if (__DEV__) {
         console.log(error);
@@ -202,20 +182,6 @@ const TopicPageScreen = (props) => {
     onDeleteBlockedPostCompleted(postId);
 
     await refreshingData(0);
-  };
-
-  const handleFollowTopic = async () => {
-    try {
-      setLoading(true);
-      const followed = await followTopic(userTopicName);
-      setIsFollow(followed);
-      setLoading(false);
-    } catch (error) {
-      if (__DEV__) {
-        console.log(error);
-      }
-      setLoading(false);
-    }
   };
 
   const onNewPollFetched = (newPolls, index) => {
@@ -366,12 +332,6 @@ const TopicPageScreen = (props) => {
     [offsetAnimation]
   );
 
-  const saveHeaderhHeightHandle = (height) => {
-    if (!headerHeight) {
-      setHeaderHeight(Number(height));
-    }
-  };
-
   const handleOnMemberPress = () => {
     const navigationParam = {
       id: topicName
@@ -401,24 +361,12 @@ const TopicPageScreen = (props) => {
   return (
     <SafeAreaProvider forceInset={{top: 'always'}} style={styles.parentContainer}>
       <StatusBar barStyle="dark-content" translucent={false} />
-      <Navigation
+      <NavHeader
         domain={topicName}
         onShareCommunity={onShareCommunity}
-        onPress={() => handleFollowTopic()}
         isHeaderHide={isHeaderHide}
-        animatedValue={opacityAnimation}
-        detail={topicDetail}
-        isFollow={isFollow}
-        handleOnMemberPress={handleOnMemberPress}
-      />
-      <Header
-        domain={topicName}
-        onShareCommunity={onShareCommunity}
-        onPress={() => handleFollowTopic()}
-        isFollow={isFollow}
-        getSearchLayout={saveHeaderhHeightHandle}
-        animatedValue={offsetAnimation}
-        detail={topicDetail}
+        opacityAnimation={opacityAnimation}
+        offsetAnimation={offsetAnimation}
         handleOnMemberPress={handleOnMemberPress}
       />
       <TiktokScroll
