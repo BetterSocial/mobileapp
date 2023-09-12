@@ -16,8 +16,6 @@ const normalizeDimen = (size, baseReferenceScreenWidth = 375) =>
  * @param {int} size - Size to be normalized according to screen size
  * @returns {int} normalized size
  */
-const normalizeDimenHeight = (size, baseReferenceScreenWidth = 833) =>
-  size * (height / baseReferenceScreenWidth);
 
 const normalizeDimenByWidth = (size, baseReferenceScreenWidth = 375) =>
   size * (width / baseReferenceScreenWidth);
@@ -57,10 +55,10 @@ const baseSize = {
 
 const size = {
   DOMAIN_CURRENT_HEIGHT: normalizeDimenByWidth(baseSize.BASE_FEED3_CURRENT_ITEM_HEIGHT),
-  DOMAIN_HEADER_HEIGHT: normalizeDimenHeight(baseSize.DOMAIN_HEADER_HEIGHT),
+  DOMAIN_HEADER_HEIGHT: normalizeDimenByWidth(baseSize.DOMAIN_HEADER_HEIGHT),
   DISCOVERY_HEADER_HEIGHT: baseSize.DISCOVERY_HEADER_HEIGHT,
 
-  FEED_ACTION_BUTTON_HEIGHT_FROM_BOTTOM: normalizeDimenHeight(
+  FEED_ACTION_BUTTON_HEIGHT_FROM_BOTTOM: normalizeDimenByWidth(
     baseSize.FEED_ACTION_BUTTON_HEIGHT_FROM_BOTTOM
   ),
   FEED_ACTION_BUTTON_HEIGHT_FROM_RIGHT: normalizeDimen(
@@ -69,10 +67,10 @@ const size = {
   FEED_ACTION_BUTTON_RADIUS: normalizeDimen(baseSize.FEED_ACTION_BUTTON_RADIUS),
   FEED_CURRENT_ITEM_HEIGHT: normalizeDimenByWidth(baseSize.BASE_FEED3_CURRENT_ITEM_HEIGHT),
   FEED_COMMENT_CONTAINER_HEIGHT: normalizeDimenByWidth(baseSize.FEED_COMMENT_CONTAINER_HEIGHT),
-  FEED_CONTENT_LINK_MAX_HEIGHT: normalizeDimenHeight(baseSize.FEED_CONTENT_LINK_MAX_HEIGHT),
+  FEED_CONTENT_LINK_MAX_HEIGHT: normalizeDimenByWidth(baseSize.FEED_CONTENT_LINK_MAX_HEIGHT),
   FEED_HEADER_HEIGHT: normalizeDimenByWidth(baseSize.FEED_HEADER_HEIGHT),
-  FEED_HEADER_IMAGE_RADIUS: normalizeDimenHeight(baseSize.FEED_HEADER_IMAGE_RADIUS),
-  FEED_HEADER_ANONYMOUS_IMAGE_RADIUS: normalizeDimenHeight(
+  FEED_HEADER_IMAGE_RADIUS: normalizeDimenByWidth(baseSize.FEED_HEADER_IMAGE_RADIUS),
+  FEED_HEADER_ANONYMOUS_IMAGE_RADIUS: normalizeDimenByWidth(
     baseSize.FEED_HEADER_ANONYMOUS_IMAGE_RADIUS
   ),
 
@@ -83,8 +81,8 @@ const size = {
   TOPIC_FEED_HEADER_HEIGHT: normalizeDimenByWidth(baseSize.TOPIC_FEED_HEADER_HEIGHT),
   // TOPIC_CURRENT_ITEM_HEIGHT: (height - statusBarHeight - baseSize.TOPIC_FEED_HEADER_HEIGHT - baseSize.BASE_NEXT_CONTENT_PREVIEW_HEIGHT),
   TOPIC_CURRENT_ITEM_HEIGHT: normalizeDimenByWidth(baseSize.BASE_FEED3_CURRENT_ITEM_HEIGHT),
-  TOPIC_FEED_POST_BUTTON_HEIGHT: normalizeDimenHeight(baseSize.TOPIC_SCREEN_POST_BUTTON_HEIGHT),
-  TOPIC_FEED_BUTTON_HEIGHT_FROM_BOTTOM: normalizeDimenHeight(
+  TOPIC_FEED_POST_BUTTON_HEIGHT: normalizeDimenByWidth(baseSize.TOPIC_SCREEN_POST_BUTTON_HEIGHT),
+  TOPIC_FEED_BUTTON_HEIGHT_FROM_BOTTOM: normalizeDimenByWidth(
     baseSize.TOPIC_FEED_BUTTON_HEIGHT_FROM_BOTTOM
   ),
   // DOMAIN_CURRENT_HEIGHT: (height - statusBarHeight - baseSize.DOMAIN_HEADER_HEIGHT - baseSize.BASE_NEXT_CONTENT_PREVIEW_HEIGHT),
@@ -100,7 +98,7 @@ const size = {
   ONBOARDING_BOTTOM_OVERLAY_NEXT_BUTTON_SIZE: normalizeDimen(
     baseSize.ONBOARDING_BOTTOM_OVERLAY_NEXT_BUTTON_SIZE
   ),
-  ONBOARDING_BETTER_LOGO_HEIGHT: normalizeDimenHeight(
+  ONBOARDING_BETTER_LOGO_HEIGHT: normalizeDimenByWidth(
     baseSize.ONBOARDING_BETTER_LOGO_HEIGHT,
     837.68
   ),
