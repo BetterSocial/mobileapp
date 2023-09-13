@@ -19,8 +19,8 @@ const Navigation = ({domain, onPress, isFollow = false, onShareCommunity}) => {
   };
 
   return (
-    <Search>
-      <TouchableOpacity onPress={() => backScreen()} style={styles.backbutton}>
+    <Search containerStyle={styles.searchContainerStyle}>
+      <TouchableOpacity onPress={() => backScreen()} style={[styles.backbutton]}>
         <MemoIc_arrow_back width={normalize(18)} height={normalize(18)} />
       </TouchableOpacity>
       <View style={styles.domain}>
@@ -81,6 +81,10 @@ const styles = StyleSheet.create({
   },
   shareIconStyle: {
     padding: 10
+  },
+  searchContainerStyle: {
+    position: 'relative',
+    marginBottom: 0
   }
 });
 

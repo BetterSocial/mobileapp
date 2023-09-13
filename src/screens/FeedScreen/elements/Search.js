@@ -6,7 +6,13 @@ import StringConstant from '../../../utils/string/StringConstant';
 import {fonts} from '../../../utils/fonts';
 import {COLORS, FONTS, SIZES} from '../../../utils/theme';
 
-const Search = ({animatedValue, onContainerClicked = () => {}, getSearchLayout, children}) => {
+const Search = ({
+  animatedValue,
+  onContainerClicked = () => {},
+  getSearchLayout,
+  children,
+  containerStyle
+}) => {
   const onSearchLayout = (event) => {
     const {height} = event.nativeEvent.layout;
     if (getSearchLayout) {
@@ -18,7 +24,7 @@ const Search = ({animatedValue, onContainerClicked = () => {}, getSearchLayout, 
     return (
       <Animated.View
         onLayout={onSearchLayout}
-        style={HeaderStyles.animatedViewContainer(animatedValue)}>
+        style={[HeaderStyles.animatedViewContainer(animatedValue), containerStyle]}>
         <View style={[HeaderStyles.wrapperSearch, {backgroundColor: 'white'}]}>{children}</View>
       </Animated.View>
     );
@@ -27,7 +33,7 @@ const Search = ({animatedValue, onContainerClicked = () => {}, getSearchLayout, 
   return (
     <Animated.View
       onLayout={onSearchLayout}
-      style={HeaderStyles.animatedViewContainer(animatedValue)}>
+      style={[HeaderStyles.animatedViewContainer(animatedValue), containerStyle]}>
       <Pressable onPress={onContainerClicked} style={HeaderStyles.searchContainer}>
         <View style={HeaderStyles.wrapperSearch}>
           <View style={HeaderStyles.wrapperIcon}>
