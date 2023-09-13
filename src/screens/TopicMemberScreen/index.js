@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   }
 });
 
-let lastDragY = 0;
+let lastDragYTopicMember = 0;
 
 const TopicMemberScreen = (props) => {
   const route = useRoute();
@@ -37,7 +37,7 @@ const TopicMemberScreen = (props) => {
   const topicName = route?.params?.id;
   const [profile] = React.useContext(Context).profile;
   const [isInitialLoading, setIsInitialLoading] = React.useState(true);
-  const [isHeaderHide, setIsHeaderHide] = React.useState(false);
+  const [headerHide, setHeaderHide] = React.useState(false);
 
   const [searchText, setSearchText] = React.useState('');
   const [initalMember, setInitialMember] = React.useState([]);
@@ -93,7 +93,7 @@ const TopicMemberScreen = (props) => {
     setIsInitialLoading(false);
   };
 
-  const initData = async () => {
+  const initialData = async () => {
     try {
       setIsInitialLoading(true);
       fetchMember();
@@ -105,16 +105,16 @@ const TopicMemberScreen = (props) => {
   };
 
   React.useEffect(() => {
-    initData();
+    initialData();
   }, []);
 
-  const onShareCommunity = () => {
+  const onCommunityShare = () => {
     ShareUtils.shareCommunity(topicName);
   };
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      showHeaderAnimation();
+      showAnimationHeader();
     });
 
     return () => {
@@ -125,7 +125,7 @@ const TopicMemberScreen = (props) => {
     };
   }, [navigation]);
 
-  const showHeaderAnimation = () => {
+  const showAnimationHeader = () => {
     interactionManagerRef.current = InteractionManager.runAfterInteractions(() => {
       Animated.timing(offsetAnimation, {
         toValue: 0,
@@ -138,19 +138,19 @@ const TopicMemberScreen = (props) => {
         useNativeDriver: false
       }).start();
     });
-    setIsHeaderHide(false);
+    setHeaderHide(false);
   };
 
   const handleOnScrollBeginDrag = (event) => {
-    lastDragY = event.nativeEvent.contentOffset.y;
+    lastDragYTopicMember = event.nativeEvent.contentOffset.y;
   };
 
   const handleScrollEvent = React.useCallback(
     (event) => {
       const {y} = event.nativeEvent.contentOffset;
-      const dy = y - lastDragY;
+      const dy = y - lastDragYTopicMember;
       if (y <= 30) {
-        showHeaderAnimation();
+        showAnimationHeader();
       } else if (dy - 20 > 0) {
         interactionManagerAnimatedRef.current = InteractionManager.runAfterInteractions(() => {
           Animated.timing(offsetAnimation, {
@@ -168,13 +168,13 @@ const TopicMemberScreen = (props) => {
             useNativeDriver: false
           }).start();
         });
-        setIsHeaderHide(true);
+        setHeaderHide(true);
       }
     },
     [offsetAnimation]
   );
 
-  const onCancelToken = () => {
+  const onTokenCancel = () => {
     cancelTokenRef?.current?.cancel();
     cancelTokenRef.current = axios.CancelToken.source();
   };
@@ -185,8 +185,8 @@ const TopicMemberScreen = (props) => {
       <StatusBar barStyle="dark-content" translucent={false} />
       <NavHeader
         domain={topicName}
-        onShareCommunity={onShareCommunity}
-        isHeaderHide={isHeaderHide}
+        onShareCommunity={onCommunityShare}
+        isHeaderHide={headerHide}
         opacityAnimation={opacityAnimation}
         offsetAnimation={offsetAnimation}
         hideSeeMember={true}
@@ -199,7 +199,7 @@ const TopicMemberScreen = (props) => {
         isFocus={isFocus}
         setIsFocus={setIsFocus}
         fetchDiscoveryData={fetchMember}
-        onCancelToken={onCancelToken}
+        onCancelToken={onTokenCancel}
         placeholderText={StringConstant.topicMemberPlaceholder}
         setIsFirstTimeOpen={setIsFirstTimeOpen}
         hideBackIcon={true}
