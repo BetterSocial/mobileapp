@@ -4,11 +4,10 @@ import {Animated, StyleSheet, TouchableOpacity, View} from 'react-native';
 
 import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
 import dimen from '../../../utils/dimen';
-import {normalize} from '../../../utils/fonts';
+import {normalize, normalizeFontSizeByWidth} from '../../../utils/fonts';
 import ShareIconCircle from '../../../assets/icons/Ic_share_circle';
 import ButtonFollow from './ButtonFollow';
 import TopicDomainHeader from './TopicDomainHeader';
-import {HeaderStyles} from '../../FeedScreen/elements/Search';
 
 const Navigation = ({
   domain,
@@ -66,7 +65,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
     zIndex: 99,
-    paddingHorizontal: 20
+    paddingHorizontal: normalizeFontSizeByWidth(20)
   }),
   backbutton: {
     height: '100%',
