@@ -1,14 +1,18 @@
 const TestIdConstant = {
-    iconDomainProfilePicture: 'iconDomainProfilePicture',
-    iconDomainProfilePictureEmptyState : 'iconDomainProfilePictureEmptyState',
+  iconDomainProfilePicture: 'iconDomainProfilePicture',
+  iconDomainProfilePictureEmptyState: 'iconDomainProfilePictureEmptyState',
 
-    contentLinkHeaderPress : 'contentLinkHeaderPress',
-    contentLinkContentPress : 'contentLinkContentPress',
-    contentLinkOpenLinkPress : 'contentLinkOpenLinkPress',
+  contentLinkHeaderPress: 'contentLinkHeaderPress',
+  contentLinkContentPress: 'contentLinkContentPress',
+  contentLinkOpenLinkPress: 'contentLinkOpenLinkPress',
 
-    discoveryScreenBackArrow: 'discoveryScreenBackArrow',
-    discoveryScreenSearchBar: 'discoveryScreenSearchBar',
-    discoveryScreenClearButton: 'discoveryScreenClearButton'
-}
+  discoveryScreenBackArrow: 'discoveryScreenBackArrow',
+  discoveryScreenSearchBar: 'discoveryScreenSearchBar',
+  discoveryScreenClearButton: 'discoveryScreenClearButton',
 
-export default TestIdConstant
+  topicScreenBackArrow: 'topicScreenBackArrow',
+  topicScreenSearchBar: 'topicScreenSearchBar',
+  topicScreenClearButton: 'topicScreenClearButton'
+};
+
+export default TestIdConstant;
