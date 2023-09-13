@@ -195,18 +195,18 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white
   },
   containerProgress: {
-    marginTop: 36,
+    marginTop: 20,
     marginBottom: 24,
-    paddingHorizontal: 22
+    paddingHorizontal: 20
   },
   textPickYourTopic: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter-Bold',
     fontStyle: 'normal',
-    fontWeight: 'bold',
+    fontWeight: '600',
     fontSize: 36,
-    lineHeight: 44,
-    color: colors.bunting,
-    paddingHorizontal: 22
+    lineHeight: 43.57,
+    color: '#11243D',
+    marginHorizontal: 20
   },
   footer: {
     position: 'absolute',
@@ -232,13 +232,14 @@ const styles = StyleSheet.create({
   textGetPersonalContent: {
     fontFamily: 'Inter',
     fontStyle: 'normal',
-    fontWeight: 'normal',
+    fontWeight: '400',
     fontSize: 14,
+    lineHeight: 24,
     color: colors.gray,
     opacity: 0.84,
     marginTop: 8,
     marginBottom: 24,
-    paddingHorizontal: 22
+    paddingHorizontal: 20
   },
   containerTopic: {
     flexDirection: 'column',
@@ -306,12 +307,12 @@ const styles = StyleSheet.create({
   textSmall: {
     fontFamily: 'Inter',
     fontStyle: 'normal',
-    fontWeight: 'normal',
+    fontWeight: '400',
     fontSize: 10,
     textAlign: 'center',
-    color: colors.emperor,
+    color: colors.blackgrey,
     marginBottom: 10,
-    marginTop: 10
+    marginTop: 12
   },
   button: {
     backgroundColor: colors.gray

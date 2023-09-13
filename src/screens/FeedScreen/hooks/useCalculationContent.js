@@ -4,6 +4,7 @@ import {POST_TYPE_LINK, POST_TYPE_POLL} from '../../../utils/constants';
 const useCalculationContent = () => {
   const [amountLineTopic, setAmountLineTopic] = React.useState(0);
   const [heightTopic, setHeightTopic] = React.useState(0);
+  const [heightPoll, setHeightPoll] = React.useState(0);
   const handleCalculation = (
     containerHeight,
     textHeight,
@@ -12,7 +13,7 @@ const useCalculationContent = () => {
     post_type,
     image
   ) => {
-    const diff = containerHeight - textHeight - heightTopic;
+    const diff = containerHeight - textHeight - heightTopic - heightPoll;
     const averageDiff = diff / containerHeight;
     if (
       containerHeight &&
@@ -23,11 +24,13 @@ const useCalculationContent = () => {
     ) {
       let font = hugeFont * averageDiff;
       let lineHeight = hugeFont * 1.5 * averageDiff;
-
+      font = Math.ceil(font);
+      lineHeight = Math.ceil(lineHeight);
       if (font < smallFont) {
         font = smallFont;
         lineHeight = smallFont * 1.5;
       }
+
       return {
         font,
         lineHeight
@@ -50,11 +53,19 @@ const useCalculationContent = () => {
     getLayoutTopic(nativeEvent.layout?.height, lineHeight);
   };
 
+  const onTopicLayout = ({nativeEvent}) => {
+    if (nativeEvent.layout?.height > 0) {
+      setHeightPoll(nativeEvent.layout?.height);
+    }
+  };
+
   return {
     handleCalculation,
     onLayoutTopicChip,
     amountLineTopic,
-    heightTopic
+    heightTopic,
+    heightPoll,
+    onTopicLayout
   };
 };
 

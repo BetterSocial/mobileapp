@@ -513,20 +513,12 @@ const ProfileScreen = ({route}) => {
     navigation.navigate('DomainScreen', param);
   };
 
-  const onPress = (item, index) => {
-    navigation.navigate('ProfilePostDetailPage', {
-      index,
+  const onPress = (item, haveSeeMore) => {
+    navigation.navigate('PostDetailPage', {
       isalreadypolling: item.isalreadypolling,
       feedId: item.id,
-      refreshParent: profileTabIndex === 0 ? getMyFeeds : reloadFetchAnonymousPost
-    });
-  };
-
-  const onPressComment = (item, id) => {
-    navigation.navigate('ProfilePostDetailPage', {
-      feedId: id,
-      isalreadypolling: item.isalreadypolling,
-      refreshParent: profileTabIndex === 0 ? getMyFeeds : reloadFetchAnonymousPost
+      refreshParent: profileTabIndex === 0 ? getMyFeeds : reloadFetchAnonymousPost,
+      haveSeeMore
     });
   };
 
@@ -634,8 +626,8 @@ const ProfileScreen = ({route}) => {
                   onNewPollFetched={onNewPollFetched}
                   index={index}
                   onPressDomain={onPressDomain}
-                  onPress={() => onPress(item)}
-                  onPressComment={() => onPressComment(index, item)}
+                  onPress={(haveSeeMore) => onPress(item, haveSeeMore)}
+                  onPressComment={(haveSeeMore) => onPress(item, haveSeeMore)}
                   onPressUpvote={(post) => setUpVote(post)}
                   selfUserId={profile.myProfile.user_id}
                   onPressDownVote={(post) => setDownVote(post)}

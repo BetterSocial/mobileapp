@@ -42,6 +42,7 @@ const RenderListFeed = (props) => {
   } = props;
 
   const [loadingVote, setLoadingVote] = React.useState(false);
+  const [isHaveSeeMore, setIsHaveSeeMore] = React.useState(false);
   const {
     totalVote,
     getHeightReaction,
@@ -112,7 +113,6 @@ const RenderListFeed = (props) => {
     initialSetup(item);
     checkVotesHandle();
   }, [item]);
-
   return (
     <View style={[styles.cardContainer()]}>
       <View style={styles.cardMain}>
@@ -138,10 +138,11 @@ const RenderListFeed = (props) => {
             index={index}
             message={item.message}
             images_url={item.images_url}
-            onPress={onPress}
+            onPress={() => onPress(isHaveSeeMore)}
             item={item}
             onNewPollFetched={onNewPollFetched}
             topics={item?.topics}
+            setHaveSeeMore={(haveSeeMore) => setIsHaveSeeMore(haveSeeMore)}
           />
         )}
         <View style={styles.footerWrapper(getHeightFooter())}>
@@ -156,7 +157,7 @@ const RenderListFeed = (props) => {
                 ANALYTICS_SHARE_POST_TOPIC_ID
               )
             }
-            onPressComment={() => onPressComment(item)}
+            onPressComment={() => onPress(isHaveSeeMore)}
             onPressBlock={() => onPressBlock(item)}
             onPressDownVote={onPressDownVoteHandle}
             onPressUpvote={onPressUpvoteHandle}

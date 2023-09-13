@@ -12,12 +12,12 @@ import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import {COLORS} from '../../utils/theme';
 import {POST_TYPE_LINK, POST_TYPE_POLL, POST_TYPE_STANDARD} from '../../utils/constants';
 import {colors} from '../../utils/colors';
-import {fonts, normalizeFontSize, normalizeFontSizeByWidth} from '../../utils/fonts';
+import {fonts, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
 import useCalculationContent from './hooks/useCalculationContent';
+import {getCommentLength} from '../../utils/getstream';
 
 const {width: screenWidth} = Dimensions.get('window');
-
 const Content = ({
   message,
   images_url = [],
@@ -25,7 +25,8 @@ const Content = ({
   onPress,
   topics = [],
   item,
-  onNewPollFetched
+  onNewPollFetched,
+  setHaveSeeMore
 }) => {
   const navigation = useNavigation();
   const route = useRoute();
@@ -33,23 +34,25 @@ const Content = ({
   const [textHeight, setTextHeight] = React.useState(null);
   const maxFontSize = normalizeFontSizeByWidth(28);
   const minFontSize = normalizeFontSizeByWidth(16);
-  const {handleCalculation, onLayoutTopicChip, heightTopic, amountLineTopic} =
-    useCalculationContent();
+  const {
+    handleCalculation,
+    onLayoutTopicChip,
+    heightTopic,
+    amountLineTopic,
+    onTopicLayout,
+    heightPoll
+  } = useCalculationContent();
   const [amountCut, setAmountCut] = React.useState(0);
   const [textCut, setTextCut] = React.useState(null);
   const [arrText] = React.useState([]);
   const isIos = Platform.OS === 'ios';
 
-  const onImageClickedByIndex = (index) => {
-    navigation.push('ImageViewer', {
-      title: 'Photo',
-      index,
-      images: images_url.reduce((acc, current) => {
-        acc.push({url: current});
-        return acc;
-      }, [])
-    });
-  };
+  React.useEffect(() => {
+    if (setHaveSeeMore && typeof setHaveSeeMore === 'function') {
+      const haveSeeMoreText = amountCut < message.length;
+      setHaveSeeMore(haveSeeMoreText);
+    }
+  }, [amountCut]);
 
   const {lineHeight, font} = handleCalculation(
     layoutHeight,
@@ -60,16 +63,18 @@ const Content = ({
     item.images_url,
     message
   );
-
   const calculateMaxLine = () => {
-    if (
-      item.post_type === POST_TYPE_POLL ||
-      item.post_type === POST_TYPE_LINK ||
-      images_url.length > 0
-    ) {
+    if (item.post_type === POST_TYPE_LINK || images_url.length > 0) {
       return 5;
     }
-    return Math.floor(layoutHeight / lineHeight);
+    if (item.post_type === POST_TYPE_POLL) {
+      const result = Math.round((layoutHeight - heightPoll - heightTopic) / lineHeight);
+      return result;
+    }
+    if (getCommentLength(item.latest_reactions.comment) > 0) {
+      return Math.floor(layoutHeight / lineHeight);
+    }
+    return Math.round(layoutHeight / lineHeight);
   };
 
   const handleStyleFont = () => {
@@ -102,16 +107,16 @@ const Content = ({
   };
 
   const handleTopicLength = () => {
-    const newMaxLine = amountLineTopic + 1;
-    const countDeviceLine = amountLineTopic + 2;
+    const topicLine = amountLineTopic + 0;
+    const countTopicLine = amountLineTopic + 1;
     return {
-      newMaxLine,
-      countDeviceLine
+      topicLine,
+      countTopicLine
     };
   };
   const handleNoTopicLength = () => {
-    const newMaxLine = Platform.OS === 'ios' ? 1 : 0;
-    const countDeviceLine = Platform.OS === 'ios' ? 2 : 1;
+    const newMaxLine = isIos ? 1 : 0;
+    const countDeviceLine = isIos ? 2 : 1;
     return {
       newMaxLine,
       countDeviceLine
@@ -120,34 +125,36 @@ const Content = ({
 
   const adjustmentCountDeviceLine = () => {
     let {newMaxLine, countDeviceLine} = handleCountDeviceLine();
-    if (item.post_type === POST_TYPE_STANDARD && item.images_url.length <= 0) {
+    if (
+      (item.post_type === POST_TYPE_STANDARD || item.post_type === POST_TYPE_POLL) &&
+      item.images_url.length <= 0
+    ) {
       if (topics.length > 0) {
-        newMaxLine -= handleTopicLength().newMaxLine;
-        countDeviceLine -= handleTopicLength().countDeviceLine;
+        newMaxLine -= handleTopicLength().topicLine;
+        countDeviceLine -= handleTopicLength().countTopicLine;
       } else {
         newMaxLine -= handleNoTopicLength().newMaxLine;
         countDeviceLine -= handleNoTopicLength().countDeviceLine;
       }
     } else {
-      countDeviceLine -= 1;
+      countDeviceLine -= 2;
     }
     return {
       countDeviceLine,
       newMaxLine
     };
   };
-
   const handleTextLayout = ({nativeEvent}) => {
     let text = '';
     const {newMaxLine, countDeviceLine} = adjustmentCountDeviceLine();
     for (let i = 0; i < newMaxLine; i++) {
       if (nativeEvent.lines[i]) {
-        if (i === countDeviceLine) {
-          text += nativeEvent.lines[i].text.substring(0, 30);
-          arrText.push(nativeEvent.lines[i].text.substring(0, 30));
-        } else {
+        if (i < countDeviceLine) {
           text += nativeEvent.lines[i].text;
           arrText.push(nativeEvent.lines[i].text);
+        } else if (i === countDeviceLine) {
+          text += nativeEvent.lines[i].text.substring(0, 28);
+          arrText.push(nativeEvent.lines[i].text.substring(0, 28));
         }
       }
     }
@@ -155,19 +162,22 @@ const Content = ({
     setAmountCut(text.length);
   };
   const showSeeMore = amountCut < message.length;
-
   const handleMarginTopic = () => {
     if (images_url.length <= 0 && item?.post_type === POST_TYPE_STANDARD) {
       return heightTopic;
     }
     return 0;
   };
-
   const renderHandleTextContent = () => {
     return (
       <View
         testID="postTypePoll"
-        style={[styles.containerText, {marginBottom: handleMarginTopic()}]}>
+        style={[
+          styles.containerText,
+          handleContainerText().container,
+          {marginBottom: handleMarginTopic()},
+          {backgroundColor: 'transparent'}
+        ]}>
         {amountCut <= 0 ? (
           <Text
             onTextLayout={handleTextLayout}
@@ -208,16 +218,13 @@ const Content = ({
       };
     }
     return {
-      container: {},
+      container: styles.mv5,
       text: {},
       isShort: false
     };
   };
-
   const hanldeHeightContainer = ({nativeEvent}) => {
-    if (!layoutHeight || layoutHeight <= 0) {
-      setLayoutHeight(nativeEvent.layout.height);
-    }
+    setLayoutHeight(nativeEvent.layout.height);
   };
 
   const calculateLineTopicChip = (nativeEvent) => {
@@ -227,7 +234,7 @@ const Content = ({
   return (
     <Pressable
       onLayout={hanldeHeightContainer}
-      onPress={() => onPress(showSeeMore)}
+      onPress={onPress}
       style={[styles.contentFeed, style]}>
       {message?.length > 0 ? (
         <View>
@@ -254,19 +261,24 @@ const Content = ({
             onnewpollfetched={onNewPollFetched}
             voteCount={item.voteCount}
             topics={item?.topics}
+            onLayout={onTopicLayout}
           />
         </View>
       ) : null}
       {images_url.length > 0 && (
         <View style={styles.containerImage}>
-          <ImageLayouter isFeed={true} images={images_url} onimageclick={onImageClickedByIndex} />
+          <ImageLayouter
+            isFeed={true}
+            images={images_url}
+            onimageclick={() => onPress(showSeeMore)}
+          />
         </View>
       )}
 
       <TopicsChip
         onLayout={calculateLineTopicChip}
         topics={topics}
-        fontSize={normalizeFontSize(14)}
+        fontSize={normalizeFontSizeByWidth(14)}
         text={message}
       />
     </Pressable>
@@ -295,7 +307,7 @@ export const styles = StyleSheet.create({
   textMedia: {
     fontFamily: fonts.inter[400],
     fontWeight: 'normal',
-    fontSize: normalizeFontSize(14),
+    fontSize: normalizeFontSizeByWidth(28),
     color: colors.black,
     lineHeight: 24,
     flex: 1
@@ -319,12 +331,6 @@ export const styles = StyleSheet.create({
     marginLeft: 13
   },
 
-  feedUsername: {
-    fontFamily: fonts.inter[600],
-    fontWeight: 'bold',
-    fontSize: normalizeFontSize(14),
-    color: colors.black
-  },
   containerFeedText: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -374,8 +380,8 @@ export const styles = StyleSheet.create({
   },
   textContainer: {},
   containerMainText: (isShort) => ({
-    paddingHorizontal: 16,
-    paddingVertical: isShort ? 0 : 10
+    paddingHorizontal: 16
+    // paddingVertical: isShort ? 0 : 10
   }),
   containerText: {
     flexDirection: 'row'
@@ -388,5 +394,8 @@ export const styles = StyleSheet.create({
   },
   centerVerticalText: {
     color: 'white'
+  },
+  mv5: {
+    marginVertical: 5
   }
 });

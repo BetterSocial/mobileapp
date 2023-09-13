@@ -10,7 +10,7 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 
 import Card from '../../components/Card/Card';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
-import {COLORS, SIZES} from '../../utils/theme';
+import {COLORS} from '../../utils/theme';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {smartRender} from '../../utils/Utils';
 import useContentFeed from './hooks/useContentFeed';
@@ -27,29 +27,41 @@ const ContentLink = ({
   message = '',
   messageContainerStyle = {},
   topics = [],
-  isPostDetail
+  isPostDetail,
+  contentHeight
 }) => {
   const route = useRoute();
   const isTouchableDisabled = route?.name === 'PostDetailPage';
   const navigation = useNavigation();
-
+  const [heightTopic, setHeightTopic] = React.useState(0);
   const sanitizeUrl = message.replace(/(https?:\/\/)?([^.\s]+)?[^.\s]+\.[^\s]+/gi, '').trim();
   const {hashtagAtComponent} = useContentFeed({navigation});
+  const [textHeight, setTextHeight] = React.useState(0);
   const renderMessageContentLink = () => {
     if (sanitizeUrl?.length === 0) return <></>;
     return (
-      <View style={{...styles.messageContainer, ...messageContainerStyle}}>
+      <View
+        onLayout={handleTextHeight}
+        style={{...styles.messageContainer, ...messageContainerStyle}}>
         <Text style={styles.message}>
           {!isPostDetail ? hashtagAtComponent(sanitizeUrl, 100) : hashtagAtComponent(sanitizeUrl)}
           {!isPostDetail && message.length > 100 && (
             <Text style={{color: '#2F80ED'}}> More...</Text>
           )}
-          {/* {hashtagAtComponent(sanitizeUrl)} */}
         </Text>
       </View>
     );
   };
-
+  const handleTextHeight = ({nativeEvent}) => {
+    if (nativeEvent?.layout?.height && textHeight <= 0) {
+      setTextHeight(nativeEvent.layout.height);
+    }
+  };
+  const handleTopicLayout = (nativeEvent) => {
+    if (nativeEvent?.layout?.height && heightTopic <= 0) {
+      setHeightTopic(nativeEvent.layout.height);
+    }
+  };
   return (
     <View style={styles.contentFeed}>
       <TouchableNativeFeedback
@@ -60,24 +72,31 @@ const ContentLink = ({
           <TouchableWithoutFeedback onPress={onPress}>
             {renderMessageContentLink()}
           </TouchableWithoutFeedback>
-          <View style={{flex: 1}}>
-            {smartRender(Card, {
-              domain: og.domain,
-              date: new Date(og.date).toLocaleDateString(),
-              domainImage: og.domainImage,
-              title: og.title,
-              description: og.description,
-              image: og.image,
-              url: og.url,
-              onHeaderPress,
-              onCardContentPress,
-              score,
-              item
-            })}
-          </View>
+          {smartRender(Card, {
+            domain: og.domain,
+            date: new Date(og.date).toLocaleDateString(),
+            domainImage: og.domainImage,
+            title: og.title,
+            description: og.description,
+            image: og.image,
+            url: og.url,
+            onHeaderPress,
+            onCardContentPress,
+            score,
+            item,
+            heightTopic,
+            textHeight,
+            contentHeight
+          })}
         </>
       </TouchableNativeFeedback>
-      <TopicsChip topics={topics} fontSize={normalizeFontSize(14)} text={sanitizeUrl} />
+      <TopicsChip
+        onLayout={handleTopicLayout}
+        topics={topics}
+        fontSize={normalizeFontSize(14)}
+        text={sanitizeUrl}
+        // topicContainer={styles.topicStyle}
+      />
     </View>
   );
 };
@@ -87,21 +106,20 @@ export default ContentLink;
 const styles = StyleSheet.create({
   contentFeed: {
     flex: 1,
-    marginTop: SIZES.base,
     marginHorizontal: 6,
     backgroundColor: COLORS.white
-    // maxHeight: dimen.size.FEED_CONTENT_LINK_MAX_HEIGHT,
   },
   messageContainer: {
     paddingHorizontal: 20,
-    paddingBottom: 15,
-    paddingTop: 7
-    // backgroundColor: 'red'
+    marginVertical: 5
   },
   message: {
     fontFamily: fonts.inter[400],
     lineHeight: 24,
     fontSize: FONT_SIZE_TEXT,
     letterSpacing: 0.1
+  },
+  topicStyle: {
+    position: 'relative'
   }
 });

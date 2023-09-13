@@ -16,7 +16,7 @@ import NewsEmptyState from '../../assets/images/news-empty-state.png';
 import TestIdConstant from '../../utils/testId';
 import Image from '../Image';
 import {COLORS} from '../../utils/theme';
-import {fonts} from '../../utils/fonts';
+import {fonts, normalizeFontSizeByWidth} from '../../utils/fonts';
 
 const Card = (props) => {
   const {
@@ -30,7 +30,10 @@ const Card = (props) => {
     onHeaderPress,
     score,
     title,
-    url
+    url,
+    heightTopic = 0,
+    textHeight = 0,
+    contentHeight
   } = props;
   // const styles = buildStylesheet('card', props.styles);
   const renderImageComponent = () => {
@@ -52,8 +55,15 @@ const Card = (props) => {
     }
   };
 
+  const calculateHeight = () => {
+    if (contentHeight && typeof contentHeight === 'number') {
+      return contentHeight - heightTopic - textHeight - 20;
+    }
+    return normalizeFontSizeByWidth(250);
+  };
+
   return (
-    <View style={styles.container}>
+    <View style={styles.container(calculateHeight())}>
       <View>
         <TouchableOpacity
           onPress={() => onHeaderPress(item)}
@@ -135,23 +145,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  container: {
+  container: (height) => ({
     borderWidth: 0.5,
     borderRadius: 8,
     borderColor: 'rgba(0,0,0, 0.5)',
     overflow: 'hidden',
     paddingBottom: 8,
-    flex: 1
-  },
+
+    marginBottom: 5,
+    height
+  }),
   image: {
     width: '100%',
     height: '100%'
   },
   content: {
-    // paddingTop: 8,
     justifyContent: 'space-between',
     flex: 1
-    // backgroundColor: 'blue',
   },
   title: {
     color: '#000000',

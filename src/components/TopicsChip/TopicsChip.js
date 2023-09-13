@@ -5,7 +5,7 @@ import {useNavigation} from '@react-navigation/native';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
-const TopicsChip = ({topics = [], fontSize = 24, onLayout}) => {
+const TopicsChip = ({topics = [], fontSize = 24, onLayout, topicContainer}) => {
   const navigation = useNavigation();
 
   const onTopicPress = (topic) => {
@@ -26,7 +26,7 @@ const TopicsChip = ({topics = [], fontSize = 24, onLayout}) => {
       horizontal
       onLayout={handleLayout}
       contentContainerStyle={styles.contentStyle}
-      style={styles.topicContainer}>
+      style={[styles.topicContainer, topicContainer]}>
       {topics.map((item) => (
         <View key={`topicContainer-${item}`} style={styles.topicItemContainer}>
           <TouchableOpacity
