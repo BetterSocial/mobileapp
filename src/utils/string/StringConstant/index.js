@@ -129,6 +129,9 @@ const groupSettingUpdateFailed = 'Update failed, please try again';
 const feedDeleteCommentConfirmation = 'Do you want to delete your comment?';
 const feedDeletedUserName = 'Deleted User';
 
+// Topic
+const topicMemberPlaceholder = 'Search visible community members';
+
 // Firebase Config
 const dynamicLinkPostCannotBeFound = 'This post cannot be found';
 const dynamicLinkAuthorNotFollowing = 'You cannot access this private post';
@@ -227,6 +230,8 @@ export default {
   groupSettingUpdateFailed,
   feedDeleteCommentConfirmation,
   feedDeletedUserName,
+
+  topicMemberPlaceholder,
 
   dynamicLinkAuthorBlocks,
   dynamicLinkPostCannotBeFound,

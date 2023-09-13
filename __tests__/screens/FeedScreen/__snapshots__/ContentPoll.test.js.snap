@@ -2,12 +2,13 @@
 
 exports[`Content poll should same as snapshot should same as snapshot 1`] = `
 <View
+  onLayout={[Function]}
   style={
     Array [
       Object {
         "height": "auto",
         "justifyContent": "flex-start",
-        "marginBottom": 48,
+        "marginTop": 5,
         "paddingVertical": 0,
       },
     ]
