@@ -5,6 +5,7 @@
 import * as React from 'react';
 import PSL from 'psl';
 import Toast from 'react-native-simple-toast';
+import {Image} from 'react-native-compressor';
 import _, {debounce} from 'lodash';
 import {
   Alert,
@@ -18,10 +19,9 @@ import {
   Text,
   View
 } from 'react-native';
-import {Image} from 'react-native-compressor';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {openSettings} from 'react-native-permissions';
 import {showMessage} from 'react-native-flash-message';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {useNavigation, useRoute} from '@react-navigation/core';
 
 import ContentLink from './elements/ContentLink';
@@ -123,6 +123,7 @@ const CreatePost = () => {
   const [user] = React.useContext(Context).profile;
   const [allTaggingUser, setAllTaggingUser] = React.useState([]);
   const animatedReminder = React.useRef(new Animated.Value(0)).current;
+
   const debounced = React.useCallback(
     debounce((changedText) => {
       if (isContainUrl(changedText)) {
@@ -320,7 +321,6 @@ const CreatePost = () => {
 
     try {
       const responseUpload = await uploadPhoto(asset);
-
       setMediaStorage((val) => [...val, newArr]);
       setDataImage((val) => [...val, responseUpload.data.url]);
       sheetMediaRef.current.close();
@@ -360,7 +360,6 @@ const CreatePost = () => {
       );
     }
   };
-
   const takePhoto = async () => {
     const {success, message} = await requestCameraPermission();
     if (success) {
@@ -820,13 +819,6 @@ const CreatePost = () => {
               />
             </>
           )}
-          <Gap style={styles.height(16)} />
-          <ListItem
-            icon={<MemoIc_world width={16.67} height={16.67} />}
-            label={listPrivacy.length === 0 ? 'Loading...' : listPrivacy[privacySelect].label}
-            labelStyle={styles.listText}
-            onPress={() => sheetPrivacyRef.current.open()}
-          />
           <Gap style={styles.height(25)} />
           <Button disabled={isButtonDisabled()} onPress={postV2}>
             Post
@@ -932,7 +924,7 @@ const styles = StyleSheet.create({
     height
   }),
   reminderContainer: {
-    backgroundColor: '#2F80ED',
+    backgroundColor: colors.blue,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 7,

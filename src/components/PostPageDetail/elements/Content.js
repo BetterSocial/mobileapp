@@ -1,7 +1,7 @@
 import * as React from 'react';
 import FastImage from 'react-native-fast-image';
 import PropTypes from 'prop-types';
-import {StyleSheet, Text, View, ScrollView} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import Card from '../../Card/Card';
@@ -9,6 +9,7 @@ import ContentPoll from '../../../screens/FeedScreen/ContentPoll';
 import ImageLayouter from '../../../screens/FeedScreen/elements/ImageLayouter';
 import TopicsChip from '../../TopicsChip/TopicsChip';
 import dimen from '../../../utils/dimen';
+import useCalculationContent from '../../../screens/FeedScreen/hooks/useCalculationContent';
 import useContentFeed from '../../../screens/FeedScreen/hooks/useContentFeed';
 import {COLORS} from '../../../utils/theme';
 import {POST_TYPE_LINK, POST_TYPE_POLL, POST_TYPE_STANDARD} from '../../../utils/constants';
@@ -17,7 +18,6 @@ import {fonts, normalizeFontSize, normalizeFontSizeByWidth} from '../../../utils
 import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
 import {sanitizeUrl} from '../../../utils/string/StringUtils';
 import {smartRender} from '../../../utils/Utils';
-import useCalculationContent from '../../../screens/FeedScreen/hooks/useCalculationContent';
 
 const Content = ({
   message,

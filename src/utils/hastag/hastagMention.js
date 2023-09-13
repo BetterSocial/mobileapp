@@ -4,6 +4,7 @@ import {StyleSheet, Text} from 'react-native';
 import {generateRandomId} from 'stream-chat-react-native-core';
 
 import {fonts} from '../fonts';
+import {COLORS} from '../theme';
 
 const handleHastagMention = (
   text = '',
@@ -50,7 +51,7 @@ const handleHastagMention = (
 
 const styles = StyleSheet.create({
   mention: {
-    color: '#2F80ED',
+    color: COLORS.blue,
     fontFamily: fonts.inter[500],
     fontWeight: '500'
   }

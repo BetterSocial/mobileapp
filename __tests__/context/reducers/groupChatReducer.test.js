@@ -4,7 +4,7 @@ describe('groupChatReducer test should pass', () => {
   it('default state should be valid', () => {
     expect(groupChatState).toEqual({
       asset: [],
-      participants: {}
+      participants: []
     });
   });
 
@@ -23,24 +23,23 @@ describe('groupChatReducer test should pass', () => {
     };
     expect(groupChatReducer(groupChatState, action)).toEqual({
       asset: ['test1', 'test2'],
-      participants: {}
+      participants: []
     });
   });
 
   it('should set participant group chat state if action type matches', () => {
     const action = {
       type: 'SET_PARTICIPANTS_GROUP_CHAT',
-      payload: {
-        id: 1,
-        name: 'group chat'
-      }
+      payload: [
+        {
+          id: 1,
+          name: 'group chat'
+        }
+      ]
     };
     expect(groupChatReducer(groupChatState, action)).toEqual({
       asset: [],
-      participants: {
-        id: 1,
-        name: 'group chat'
-      }
+      participants: action.payload
     });
   });
 });

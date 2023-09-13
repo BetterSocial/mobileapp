@@ -267,11 +267,7 @@ const Content = ({
       ) : null}
       {images_url.length > 0 && (
         <View style={styles.containerImage}>
-          <ImageLayouter
-            isFeed={true}
-            images={images_url}
-            onimageclick={() => onPress(showSeeMore)}
-          />
+          <ImageLayouter isFeed={true} images={images_url} onimageclick={onPress} />
         </View>
       )}
 
