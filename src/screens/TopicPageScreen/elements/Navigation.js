@@ -4,16 +4,15 @@ import {Animated, StyleSheet, TouchableOpacity, View} from 'react-native';
 
 import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
 import dimen from '../../../utils/dimen';
-import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
+import {normalize} from '../../../utils/fonts';
 import ShareIconCircle from '../../../assets/icons/Ic_share_circle';
-import {colors} from '../../../utils/colors';
 import ButtonFollow from './ButtonFollow';
 import TopicDomainHeader from './TopicDomainHeader';
 
 const Navigation = ({
   domain,
   isHeaderHide,
-  animatedValue,
+  opacityAnimation,
   onShareCommunity,
   detail,
   isFollow,
@@ -32,7 +31,7 @@ const Navigation = ({
       <TouchableOpacity onPress={() => backScreen()} style={styles.backbutton}>
         <MemoIc_arrow_back width={normalize(24)} height={normalize(24)} />
       </TouchableOpacity>
-      <Animated.View style={styles.domain(animatedValue)}>
+      <Animated.View style={styles.domain(opacityAnimation)}>
         <TopicDomainHeader
           domain={domain}
           detail={detail}

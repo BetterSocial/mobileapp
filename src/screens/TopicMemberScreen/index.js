@@ -6,17 +6,15 @@ import axios from 'axios';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import ShareUtils from '../../utils/share';
 import dimen from '../../utils/dimen';
-import useChatClientHook from '../../utils/getstream/useChatClientHook';
-import {getAllMemberTopic, getTopics, getUserTopic} from '../../service/topics';
+import {getAllMemberTopic} from '../../service/topics';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {normalize} from '../../utils/fonts';
-import Navigation from '../TopicPageScreen/elements/Navigation';
-import Header from '../TopicPageScreen/elements/Header';
 import {colors} from '../../utils/colors';
 import Search from '../DiscoveryScreenV2/elements/Search';
 import StringConstant from '../../utils/string/StringConstant';
 import UsersFragment from '../DiscoveryScreenV2/fragment/UsersFragment';
 import {Context} from '../../context';
+import NavHeader from '../TopicPageScreen/elements/NavHeader';
 
 const styles = StyleSheet.create({
   parentContainer: {
@@ -31,7 +29,7 @@ const styles = StyleSheet.create({
   }
 });
 
-let lastDragY = 0;
+let lastDragYTopicMember = 0;
 
 const TopicMemberScreen = (props) => {
   const route = useRoute();
@@ -39,8 +37,7 @@ const TopicMemberScreen = (props) => {
   const topicName = route?.params?.id;
   const [profile] = React.useContext(Context).profile;
   const [isInitialLoading, setIsInitialLoading] = React.useState(true);
-  const [isHeaderHide, setIsHeaderHide] = React.useState(false);
-  const [headerHeight, setHeaderHeight] = React.useState(0);
+  const [headerHide, setHeaderHide] = React.useState(false);
 
   const [searchText, setSearchText] = React.useState('');
   const [initalMember, setInitialMember] = React.useState([]);
@@ -50,8 +47,6 @@ const TopicMemberScreen = (props) => {
   const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true);
   const cancelTokenRef = React.useRef(axios.CancelToken.source());
 
-  const [isFollow, setIsFollow] = React.useState(false);
-  const [topicDetail, setTopicDetail] = React.useState({});
   const interactionManagerRef = React.useRef(null);
   const interactionManagerAnimatedRef = React.useRef(null);
 
@@ -61,8 +56,6 @@ const TopicMemberScreen = (props) => {
   const [isLoadingDiscovery, setIsLoadingDiscovery] = React.useState({
     user: false
   });
-
-  const {followTopic} = useChatClientHook();
 
   const fetchMember = async (text = '') => {
     setIsLoadingDiscovery({user: true});
@@ -97,54 +90,31 @@ const TopicMemberScreen = (props) => {
       }
       setIsLoadingDiscovery({user: false});
     }
+    setIsInitialLoading(false);
   };
 
-  const initData = async () => {
+  const initialData = async () => {
     try {
       setIsInitialLoading(true);
-
-      const query = `?name=${topicName}`;
-      const resultGetUserTopic = await getUserTopic(query);
-      if (resultGetUserTopic.data) {
-        setIsFollow(true);
-      }
-      const resultTopicDetail = await getTopics(topicName);
-      if (resultTopicDetail.data) {
-        const detail = resultTopicDetail.data[0];
-        setTopicDetail(detail);
-      }
       fetchMember();
     } catch (error) {
       if (__DEV__) {
         console.log(error);
       }
-    } finally {
-      setIsInitialLoading(false);
     }
   };
 
   React.useEffect(() => {
-    initData();
+    initialData();
   }, []);
 
-  const handleFollowTopic = async () => {
-    try {
-      const followed = await followTopic(topicName);
-      setIsFollow(followed);
-    } catch (error) {
-      if (__DEV__) {
-        console.log(error);
-      }
-    }
-  };
-
-  const onShareCommunity = () => {
+  const onCommunityShare = () => {
     ShareUtils.shareCommunity(topicName);
   };
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      showHeaderAnimation();
+      showAnimationHeader();
     });
 
     return () => {
@@ -155,7 +125,7 @@ const TopicMemberScreen = (props) => {
     };
   }, [navigation]);
 
-  const showHeaderAnimation = () => {
+  const showAnimationHeader = () => {
     interactionManagerRef.current = InteractionManager.runAfterInteractions(() => {
       Animated.timing(offsetAnimation, {
         toValue: 0,
@@ -168,19 +138,19 @@ const TopicMemberScreen = (props) => {
         useNativeDriver: false
       }).start();
     });
-    setIsHeaderHide(false);
+    setHeaderHide(false);
   };
 
   const handleOnScrollBeginDrag = (event) => {
-    lastDragY = event.nativeEvent.contentOffset.y;
+    lastDragYTopicMember = event.nativeEvent.contentOffset.y;
   };
 
   const handleScrollEvent = React.useCallback(
     (event) => {
       const {y} = event.nativeEvent.contentOffset;
-      const dy = y - lastDragY;
+      const dy = y - lastDragYTopicMember;
       if (y <= 30) {
-        showHeaderAnimation();
+        showAnimationHeader();
       } else if (dy - 20 > 0) {
         interactionManagerAnimatedRef.current = InteractionManager.runAfterInteractions(() => {
           Animated.timing(offsetAnimation, {
@@ -198,19 +168,13 @@ const TopicMemberScreen = (props) => {
             useNativeDriver: false
           }).start();
         });
-        setIsHeaderHide(true);
+        setHeaderHide(true);
       }
     },
     [offsetAnimation]
   );
 
-  const saveHeaderhHeightHandle = (height) => {
-    if (!headerHeight) {
-      setHeaderHeight(Number(height));
-    }
-  };
-
-  const onCancelToken = () => {
+  const onTokenCancel = () => {
     cancelTokenRef?.current?.cancel();
     cancelTokenRef.current = axios.CancelToken.source();
   };
@@ -219,25 +183,14 @@ const TopicMemberScreen = (props) => {
   return (
     <SafeAreaProvider forceInset={{top: 'always'}} style={styles.parentContainer}>
       <StatusBar barStyle="dark-content" translucent={false} />
-      <Navigation
+      <NavHeader
         domain={topicName}
-        onShareCommunity={onShareCommunity}
-        onPress={() => handleFollowTopic()}
-        isHeaderHide={isHeaderHide}
-        animatedValue={opacityAnimation}
-        detail={topicDetail}
+        onShareCommunity={onCommunityShare}
+        isHeaderHide={headerHide}
+        opacityAnimation={opacityAnimation}
+        offsetAnimation={offsetAnimation}
         hideSeeMember={true}
-        isFollow={isFollow}
-      />
-      <Header
-        domain={topicName}
-        onShareCommunity={onShareCommunity}
-        onPress={() => handleFollowTopic()}
-        isFollow={isFollow}
-        getSearchLayout={saveHeaderhHeightHandle}
-        animatedValue={offsetAnimation}
-        detail={topicDetail}
-        hideSeeMember={true}
+        isInitialLoading={isInitialLoading}
       />
       <Search
         searchText={searchText}
@@ -246,7 +199,7 @@ const TopicMemberScreen = (props) => {
         isFocus={isFocus}
         setIsFocus={setIsFocus}
         fetchDiscoveryData={fetchMember}
-        onCancelToken={onCancelToken}
+        onCancelToken={onTokenCancel}
         placeholderText={StringConstant.topicMemberPlaceholder}
         setIsFirstTimeOpen={setIsFirstTimeOpen}
         hideBackIcon={true}

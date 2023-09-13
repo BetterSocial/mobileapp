@@ -124,11 +124,13 @@ describe('Main Feed should run correctly', () => {
     });
     expect(setMainFeed).toHaveBeenCalled();
     const updatePost = {activity_id: responseMock.data[0].id};
-    const spyUpdate = jest.spyOn(post, 'getFeedDetail');
+    const spyUpdate = jest.spyOn(post, 'getFeedDetail').mockResolvedValue({data: responseMock[0]});
+    const spySetFeedIndex = jest.spyOn(mainFeedAction, 'setFeedByIndex');
     act(() => {
       result.current.updateFeed(updatePost);
     });
     expect(spyUpdate).toHaveBeenCalled();
+    expect(spySetFeedIndex).toHaveBeenCalled();
   });
 
   it('setDownVote should run correctly', () => {

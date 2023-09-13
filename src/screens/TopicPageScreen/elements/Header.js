@@ -9,7 +9,7 @@ import ButtonFollowing from './ButtonFollowing';
 import TopicDomainHeader from './TopicDomainHeader';
 
 const Header = ({
-  animatedValue,
+  offsetAnimation,
   domain,
   onPress,
   detail,
@@ -26,7 +26,7 @@ const Header = ({
   };
 
   return (
-    <Animated.View onLayout={onHeaderLayout} style={styles.Header(animatedValue)}>
+    <Animated.View onLayout={onHeaderLayout} style={styles.Header(offsetAnimation)}>
       <Image
         source={detail?.icon_path ? {uri: detail?.icon_path} : TopicDefaultIcon}
         style={styles.image}

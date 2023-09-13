@@ -9,7 +9,6 @@ import {Dot, Gap} from '../index';
 import {calculateTime} from '../../utils/time';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
-import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
 import CommentUserName from '../CommentUsername/CommentUsername';
 import ReadMore from '../ReadMore';
 
@@ -37,7 +36,7 @@ const PreviewComment = ({comment, time, image, totalComment, onPress, user, item
   if (!user) return <></>;
 
   return (
-    <View style={styles.containerPreview}>
+    <View testID="userDefined" style={styles.containerPreview}>
       <View style={styles.lineBeforeProfile} />
       <View style={styles.container(totalComment)}>
         <TouchableOpacity style={styles.profileTouchable} onPress={openProfile}>
@@ -103,7 +102,7 @@ const PreviewComment = ({comment, time, image, totalComment, onPress, user, item
 
 export default React.memo(PreviewComment);
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   containerPreview: {paddingHorizontal: 20},
   text: {
     marginStart: 20
