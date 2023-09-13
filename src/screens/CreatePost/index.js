@@ -66,7 +66,6 @@ import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {
   getDurationId,
   getLocationId,
-  getPrivacyId,
   setDurationId,
   setLocationId,
   setPrivacyId
