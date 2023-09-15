@@ -16,6 +16,7 @@ import {fonts, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
 import useCalculationContent from './hooks/useCalculationContent';
 import {getCommentLength} from '../../utils/getstream';
+import useCoreFeed from './hooks/useCoreFeed';
 
 const {width: screenWidth} = Dimensions.get('window');
 const Content = ({
@@ -42,6 +43,7 @@ const Content = ({
     onTopicLayout,
     heightPoll
   } = useCalculationContent();
+  const {handleBgContentFeed} = useCoreFeed();
   const [amountCut, setAmountCut] = React.useState(0);
   const [textCut, setTextCut] = React.useState(null);
   const [arrText] = React.useState([]);
@@ -208,12 +210,13 @@ const Content = ({
       </View>
     );
   };
+  console.log(item, 'lio');
 
   const handleContainerText = () => {
     if (!showSeeMore && item.post_type === POST_TYPE_STANDARD && images_url.length <= 0) {
       return {
-        container: styles.centerVertical,
-        text: styles.centerVerticalText,
+        container: styles.centerVertical(item?.bgColor || item?.anon_user_info_color_code),
+        text: styles.centerVerticalText(item?.color || 'rgba(225,225,225,0.7)'),
         isShort: true
       };
     }
@@ -230,6 +233,10 @@ const Content = ({
   const calculateLineTopicChip = (nativeEvent) => {
     onLayoutTopicChip(nativeEvent, lineHeight);
   };
+
+  React.useEffect(() => {
+    handleBgContentFeed(item);
+  }, []);
 
   return (
     <Pressable
@@ -386,15 +393,15 @@ export const styles = StyleSheet.create({
   containerText: {
     flexDirection: 'row'
   },
-  centerVertical: {
+  centerVertical: (bg) => ({
     alignItems: 'center',
     justifyContent: 'center',
     height: '100%',
-    backgroundColor: '#11468F'
-  },
-  centerVerticalText: {
-    color: 'white'
-  },
+    backgroundColor: bg || '#11468F'
+  }),
+  centerVerticalText: (color) => ({
+    color
+  }),
   mv5: {
     marginVertical: 5
   }

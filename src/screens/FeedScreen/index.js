@@ -230,7 +230,7 @@ const FeedScreen = (props) => {
       />
     );
   };
-
+  console.log('boban10', {feeds});
   return (
     <SafeAreaProvider style={styles.container} forceInset={{top: 'always'}}>
       <StatusBar translucent={false} />
