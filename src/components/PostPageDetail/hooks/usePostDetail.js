@@ -71,7 +71,6 @@ const usePostDetail = () => {
     containerHeight = numberOfLines * lineHeight;
     containerHeight = Math.max(containerHeight, shortTextLineHeight * 5);
     containerHeight = containerHeight * 0.5;
-    console.log({containerHeight}, 'lipo');
     if (containerHeight < normalizeFontSizeByWidth(325)) {
       containerHeight = normalizeFontSizeByWidth(325);
       isShortText = true;

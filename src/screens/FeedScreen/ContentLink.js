@@ -14,6 +14,7 @@ import {COLORS} from '../../utils/theme';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {smartRender} from '../../utils/Utils';
 import useContentFeed from './hooks/useContentFeed';
+import useCalculationContentLink from './hooks/useCalculatiuonContentLink';
 
 const FONT_SIZE_TEXT = 16;
 
@@ -33,14 +34,16 @@ const ContentLink = ({
   const route = useRoute();
   const isTouchableDisabled = route?.name === 'PostDetailPage';
   const navigation = useNavigation();
-  const [heightTopic, setHeightTopic] = React.useState(0);
   const sanitizeUrl = message.replace(/(https?:\/\/)?([^.\s]+)?[^.\s]+\.[^\s]+/gi, '').trim();
   const {hashtagAtComponent} = useContentFeed({navigation});
-  const [textHeight, setTextHeight] = React.useState(0);
+
+  const {textHeight, heightTopic, handleTextHeight, handleTopicLayout} =
+    useCalculationContentLink();
   const renderMessageContentLink = () => {
     if (sanitizeUrl?.length === 0) return <></>;
     return (
       <View
+        testID="urlComponent"
         onLayout={handleTextHeight}
         style={{...styles.messageContainer, ...messageContainerStyle}}>
         <Text style={styles.message}>
@@ -52,16 +55,7 @@ const ContentLink = ({
       </View>
     );
   };
-  const handleTextHeight = ({nativeEvent}) => {
-    if (nativeEvent?.layout?.height && textHeight <= 0) {
-      setTextHeight(nativeEvent.layout.height);
-    }
-  };
-  const handleTopicLayout = (nativeEvent) => {
-    if (nativeEvent?.layout?.height && heightTopic <= 0) {
-      setHeightTopic(nativeEvent.layout.height);
-    }
-  };
+
   return (
     <View style={styles.contentFeed}>
       <TouchableNativeFeedback

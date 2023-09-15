@@ -3,6 +3,8 @@ import {act, renderHook} from '@testing-library/react-hooks';
 import * as actionFeed from '../../src/context/actions/feeds';
 import Store from '../../src/context/Store';
 import useFeedHeader from '../../src/screens/FeedScreen/hooks/useFeedHeader';
+import * as servicePost from '../../src/service/post';
+import SimpleToast from 'react-native-simple-toast';
 
 const mockedGoBack = jest.fn();
 const mockedNavigate = jest.fn();
@@ -17,6 +19,10 @@ jest.mock('@react-navigation/core', () => ({
     goBack: mockedGoBack,
     navigate: mockedNavigate
   })
+}));
+
+jest.mock('react-native-simple-toast', () => ({
+  show: jest.fn()
 }));
 
 describe('Feed Header should run correctly', () => {
@@ -57,5 +63,39 @@ describe('Feed Header should run correctly', () => {
       result.current.handleNavigate(actor.data.human_id);
     });
     expect(mockedNavigate).toHaveBeenCalled();
+  });
+  it('handleNavigate no data should run correctly', async () => {
+    const {result} = renderHook(() => useFeedHeader({actor: {data: null}, source: 'public'}), {
+      wrapper: Store
+    });
+    await result.current.handleNavigate(actor.data.human_id);
+    const spyToast = jest.spyOn(SimpleToast, 'show');
+
+    expect(spyToast).toHaveBeenCalled();
+  });
+  it('handleNavigate same user id should run correctly', async () => {
+    const {result} = renderHook(
+      () =>
+        useFeedHeader({
+          actor: {
+            data: {id: 'c6c91b04-795c-404e-b012-ea28813a2006'},
+            id: 'c6c91b04-795c-404e-b012-ea28813a2006'
+          },
+          source: 'public'
+        }),
+      {
+        wrapper: Store
+      }
+    );
+    await result.current.handleNavigate('c6c91b04-795c-404e-b012-ea28813a2006');
+    const spyToast = jest.spyOn(SimpleToast, 'show');
+
+    expect(spyToast).toHaveBeenCalled();
+  });
+  it('sendViewTimePost should run correctly', async () => {
+    const spy = jest.spyOn(servicePost, 'viewTimePost');
+    const {result} = renderHook(() => useFeedHeader({actor, source: 'public'}), {wrapper: Store});
+    await result.current.sendViewTimePost(123);
+    expect(spy).toHaveBeenCalled();
   });
 });

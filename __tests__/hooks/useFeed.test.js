@@ -1,16 +1,21 @@
 import {act, renderHook} from '@testing-library/react-hooks';
+import * as paramBuilder from '../../src/utils/navigation/paramBuilder';
 
 import useFeed from '../../src/screens/FeedScreen/hooks/useFeed';
+import {normalizeFontSizeByWidth} from '../../src/utils/fonts';
+import dimen from '../../src/utils/dimen';
 
 jest.mock('@react-navigation/bottom-tabs', () => ({
   useBottomTabBarHeight: jest.fn()
 }));
 const mockedGoBack = jest.fn();
 const mockedNavigate = jest.fn();
+const mockPush = jest.fn();
 jest.mock('@react-navigation/core', () => ({
   useNavigation: () => ({
     goBack: mockedGoBack,
-    navigate: mockedNavigate
+    navigate: mockedNavigate,
+    push: mockPush
   }),
   useRoute: () => ({
     params: {
@@ -84,6 +89,8 @@ describe('Logic feed should run correctly', () => {
       result.current.handleVote(data);
     });
     expect(result.current.totalVote).toEqual(0);
+    data = {};
+    expect(result.current.totalVote).toEqual(0);
   });
 
   it('onPressDownVoteHook should run correctly', () => {
@@ -139,5 +146,69 @@ describe('Logic feed should run correctly', () => {
     });
     expect(result.current.voteStatus).toEqual('upvote');
     expect(result.current.totalVote).toEqual(2);
+  });
+  it(' navigateToLinkContextPage should run correctly', async () => {
+    const mockItem = {
+      og: {
+        domain: 'https://detik.com',
+        domainImage: 'https://image.png'
+      }
+    };
+    const {result} = renderHook(useFeed);
+    const spyBuilder = jest.spyOn(paramBuilder, 'linkContextScreenParamBuilder');
+    await result.current.navigateToLinkContextPage(mockItem);
+    expect(spyBuilder).toHaveBeenCalled();
+  });
+  it('getHeightFooter should run correctly', async () => {
+    const {result} = renderHook(useFeed);
+    expect(result.current.getHeightFooter()).toEqual(normalizeFontSizeByWidth(52));
+  });
+  it('getHeightHeader should run correctly', async () => {
+    const {result} = renderHook(useFeed);
+    expect(result.current.getHeightHeader()).toEqual(dimen.size.FEED_HEADER_HEIGHT);
+  });
+  it('initialSetup should run correctly', async () => {
+    const item = {
+      reaction_counts: {
+        upvotes: 0,
+        downvotes: 1
+      }
+    };
+    const {result} = renderHook(useFeed);
+    await result.current.initialSetup(item);
+    expect(result.current.totalVote).toEqual(-1);
+  });
+
+  it('initialSetup should run correctly', async () => {
+    const {result} = renderHook(useFeed);
+    await result.current.setTotalVote(1);
+    expect(result.current.handleTextCountStyle()).toEqual('#00ADB5');
+    await result.current.setTotalVote(-1);
+    expect(result.current.handleTextCountStyle()).toEqual('#FF2E63');
+    await result.current.setTotalVote(0);
+    expect(result.current.handleTextCountStyle()).toEqual('#C4C4C4');
+  });
+
+  it('getTotalReaction should run correctly', async () => {
+    const {result} = renderHook(useFeed);
+    const feedDetail = {
+      reaction_counts: {
+        comment: 1
+      },
+      latest_reactions: {
+        comment: [
+          {
+            children_counts: {
+              comment: 2
+            },
+            latest_children: {
+              comment: [{children_counts: {comment: 2}}]
+            }
+          }
+        ]
+      }
+    };
+    expect(result.current.getTotalReaction(feedDetail)).toEqual(5);
+    expect(result.current.getTotalReaction(null)).toEqual(0);
   });
 });
