@@ -21,11 +21,13 @@ const FROM_FOLLOWED_USERS = 'fromfollowedusers';
 const FROM_FOLLOWED_USERS_INITIAL = 'fromfollowedusersinitial';
 const FROM_UNFOLLOWED_USERS = 'fromunfollowedusers';
 const FROM_UNFOLLOWED_USERS_INITIAL = 'fromunfollowedusersinitial';
+const FROM_USERS_INITIAL = 'fromusersinitial';
 
 const UsersFragment = ({
   isLoadingDiscoveryUser = false,
   isFirstTimeOpen,
   initialUsers = [],
+  setInitialUsers = () => {},
   followedUsers = [],
   setFollowedUsers = () => {},
   unfollowedUsers = [],
@@ -108,6 +110,13 @@ const UsersFragment = ({
       setUnfollowedUsers(newUnfollowedUsers);
     }
 
+    if (from === FROM_USERS_INITIAL) {
+      const newFollowedUsers = [...initialUsers];
+      newFollowedUsers[index].user_id_follower = willFollow ? myId : null;
+
+      setInitialUsers(newFollowedUsers);
+    }
+
     const data = {
       user_id_follower: myId,
       user_id_followed: item.user_id,
@@ -150,7 +159,7 @@ const UsersFragment = ({
       if (withoutRecent) {
         return [
           initialUsers.map((item, index) =>
-            renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, 'followedUsers', item, index)
+            renderDiscoveryItem(FROM_USERS_INITIAL, 'topicUsers', item, index)
           )
         ];
       }
