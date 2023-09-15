@@ -74,7 +74,7 @@ const UsersFragment = ({
   };
 
   const handleFollow = async (from, willFollow, item, index) => {
-    if (from === FROM_FOLLOWED_USERS_INITIAL) {
+    if (from === FROM_FOLLOWED_USERS_INITIAL || from === FROM_UNFOLLOWED_USERS_INITIAL) {
       const newFollowedUsers = [...users];
       newFollowedUsers[index].user_id_follower = willFollow ? myId : null;
       // const newInitialFollowedUsers = [...initialFollowedUsers]
@@ -83,17 +83,6 @@ const UsersFragment = ({
       // FollowingAction.setFollowingUsers(newFollowedUsers, followingDispatch)
       DiscoveryAction.setDiscoveryInitialUsers(newFollowedUsers, discoveryDispatch);
       // setInitialFollowedUsers(newInitialFollowedUsers)
-    }
-
-    if (from === FROM_UNFOLLOWED_USERS_INITIAL) {
-      const newFollowedUsers = [...users];
-      newFollowedUsers[index].user_id_follower = willFollow ? myId : null;
-      // const newInitialUnfollowedUsers = [...initialUnfollowedUsers]
-      // newInitialUnfollowedUsers[index].user_id_follower = willFollow ? myId : null
-
-      // FollowingAction.setFollowingUsers(newFollowedUsers, followingDispatch)
-      DiscoveryAction.setDiscoveryInitialUsers(newFollowedUsers, discoveryDispatch);
-      // setInitialUnfollowedUsers(newInitialUnfollowedUsers)
     }
 
     if (from === FROM_FOLLOWED_USERS) {
