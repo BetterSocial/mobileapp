@@ -5,6 +5,8 @@ import DomainList from '../RenderList';
 import TopicHeader from './TopicHeader';
 import useChatClientHook from '../../../../utils/getstream/useChatClientHook';
 import {getFollowingTopic} from '../../../../service/topics';
+import {Context} from '../../../../context';
+import DiscoveryAction from '../../../../context/actions/discoveryAction';
 
 const styles = StyleSheet.create({
   flatlistContainer: {
@@ -20,6 +22,8 @@ const TopicFragmentScreen = ({navigation}) => {
   const [listTopics, setListTopics] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const {followTopic} = useChatClientHook();
+  const [discovery, discoveryDispatch] = React.useContext(Context).discovery;
+  const [profile] = React.useContext(Context).profile;
 
   const handleGetTopic = async () => {
     setLoading(true);
@@ -37,7 +41,9 @@ const TopicFragmentScreen = ({navigation}) => {
     return setLoading(false);
   };
 
-  const handleUnfollow = (index, data) => {
+  const handleUnfollow = async (index, data) => {
+    console.log({discovery, data, profile}, 'kakak');
+    await updateFollow(data);
     const mappingData = listTopics.map((list, listIndex) => {
       if (index === listIndex) {
         return {...list, isunfollowed: true};
@@ -45,10 +51,27 @@ const TopicFragmentScreen = ({navigation}) => {
       return {...list};
     });
     setListTopics(mappingData);
-    updateFollow(data);
+    updateDiscoveryData(data, 'unfollow');
   };
 
-  const handleFollow = (index, data) => {
+  const updateDiscoveryData = (data, type) => {
+    const mappingDiscovery = discovery?.initialTopics?.map((discoveryData) => {
+      if (data.name === discoveryData?.name) {
+        return {
+          ...discoveryData,
+          user_id_follower: type === 'unfollow' ? null : profile.myProfile?.user_id
+        };
+      }
+      return {
+        ...discoveryData
+      };
+    });
+    DiscoveryAction.setDiscoveryInitialTopics(mappingDiscovery, discoveryDispatch);
+  };
+
+  const handleFollow = async (index, data) => {
+    console.log({discovery}, 'kakak1');
+    await updateFollow(data);
     const mappingData = listTopics.map((list, listIndex) => {
       if (index === listIndex) {
         return {...list, isunfollowed: false};
@@ -56,7 +79,7 @@ const TopicFragmentScreen = ({navigation}) => {
       return {...list};
     });
     setListTopics(mappingData);
-    updateFollow(data);
+    updateDiscoveryData(data, 'follow');
   };
 
   const updateFollow = async (data) => {
