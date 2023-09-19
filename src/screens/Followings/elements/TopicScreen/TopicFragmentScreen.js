@@ -42,7 +42,6 @@ const TopicFragmentScreen = ({navigation}) => {
   };
 
   const handleUnfollow = async (index, data) => {
-    console.log({discovery, data, profile}, 'kakak');
     await updateFollow(data);
     const mappingData = listTopics.map((list, listIndex) => {
       if (index === listIndex) {
