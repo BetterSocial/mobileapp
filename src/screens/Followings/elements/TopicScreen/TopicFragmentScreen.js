@@ -69,7 +69,6 @@ const TopicFragmentScreen = ({navigation}) => {
   };
 
   const handleFollow = async (index, data) => {
-    console.log({discovery}, 'kakak1');
     await updateFollow(data);
     const mappingData = listTopics.map((list, listIndex) => {
       if (index === listIndex) {
