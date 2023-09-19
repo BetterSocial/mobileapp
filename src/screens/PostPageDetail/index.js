@@ -11,7 +11,8 @@ import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 const FeedsPostDetail = (props) => {
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
-  const {feedId, refreshCache, haveSeeMore, refreshParent, contextSource} = props.route.params;
+  const {feedId, refreshCache, haveSeeMore, refreshParent, contextSource, bg, color} =
+    props.route.params;
   const {feeds} = feedsContext;
   const {navigateToReplyView} = useMainPdp(props);
   React.useEffect(() => {
@@ -27,7 +28,7 @@ const FeedsPostDetail = (props) => {
       }
     };
   }, []);
-  console.log({contextSource}, 'lupia');
+  console.log({feeds, color}, 'mamamia');
   return (
     <View style={styles.container}>
       <PostPageDetailComponent
@@ -39,6 +40,8 @@ const FeedsPostDetail = (props) => {
         page={props.route.name}
         contextSource={contextSource || CONTEXT_SOURCE.FEEDS}
         haveSeeMore={haveSeeMore}
+        bg={bg}
+        color={color}
       />
     </View>
   );

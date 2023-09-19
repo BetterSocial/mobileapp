@@ -41,7 +41,7 @@ const ContentPoll = ({
     newPoll
   } = useContentPoll({isAlreadyPolling: isAlreadyPollingProps, polls, voteCount});
 
-  const styles = stylesComponent(polls.length);
+  const styles = stylesComponent(polls?.length);
   const initialSetup = () => {
     if (!multiplechoice) onSeeResultsClicked(item, multiplechoice, onnewpollfetched, index);
   };
@@ -60,7 +60,7 @@ const ContentPoll = ({
       <View style={styles.pollOptionsContainer}>
         <Text style={styles.voteFont}>All votes are anonymous - even to the poll’s author!</Text>
         <View style={isPostDetail ? styles.pollContainer : styles.pollListContainer}>
-          {polls.map((pollItem, indexPoll) =>
+          {polls?.map((pollItem, indexPoll) =>
             multiplechoice ? (
               <PollOptionsMultipleChoice
                 key={indexPoll}

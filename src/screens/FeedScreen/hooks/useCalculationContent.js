@@ -54,7 +54,7 @@ const useCalculationContent = () => {
   };
 
   const onTopicLayout = ({nativeEvent}) => {
-    if (nativeEvent.layout?.height > 0) {
+    if (nativeEvent?.layout?.height > 0) {
       setHeightPoll(nativeEvent.layout?.height);
     }
   };

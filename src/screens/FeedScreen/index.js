@@ -132,15 +132,18 @@ const FeedScreen = (props) => {
       setUpdateMoreText(false);
     }, 500);
   };
-  console.log({updateMoreText}, 'lala1');
+
   const onPress = (item, haveSeeMore, index) => {
+    console.log({item}, 'nani');
     props.navigation.navigate('PostDetailPage', {
       isalreadypolling: item.isalreadypolling,
       feedId: item.id,
       data: item,
       isCaching: false,
       haveSeeMore,
-      refreshParent: () => refreshMoreText(index)
+      refreshParent: () => refreshMoreText(index),
+      bg: item?.bg,
+      color: item?.color
     });
   };
 

@@ -55,7 +55,7 @@ const Content = ({
       setHaveSeeMore(haveSeeMoreText);
     }
   }, [amountCut]);
-
+  console.log({item});
   const {lineHeight, font} = handleCalculation(
     layoutHeight,
     textHeight,
@@ -215,7 +215,7 @@ const Content = ({
   const handleContainerText = () => {
     if (!showSeeMore && item.post_type === POST_TYPE_STANDARD && images_url.length <= 0) {
       return {
-        container: styles.centerVertical(item?.bgColor || item?.anon_user_info_color_code),
+        container: styles.centerVertical(item?.bg || item?.anon_user_info_color_code),
         text: styles.centerVerticalText(item?.color || 'rgba(225,225,225,0.7)'),
         isShort: true
       };
@@ -255,7 +255,7 @@ const Content = ({
         </View>
       ) : null}
 
-      {item && item.post_type === POST_TYPE_POLL ? (
+      {/* {item && item.post_type === POST_TYPE_POLL ? (
         <View style={styles.containerMainText(handleContainerText().isShort)}>
           <ContentPoll
             message={item.message}
@@ -271,7 +271,7 @@ const Content = ({
             onLayout={onTopicLayout}
           />
         </View>
-      ) : null}
+      ) : null} */}
       {images_url.length > 0 && (
         <View style={styles.containerImage}>
           <ImageLayouter

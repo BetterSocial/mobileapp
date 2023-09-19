@@ -27,6 +27,7 @@ import {setMyProfileAction} from '../context/actions/setMyProfileAction';
 import {setNews} from '../context/actions/news';
 import {traceMetricScreen} from '../libraries/performance/firebasePerformance';
 import {useClientGetstream} from '../utils/getstream/ClientGetStram';
+import useCoreFeed from '../screens/FeedScreen/hooks/useCoreFeed';
 
 export const useInitialStartup = () => {
   const [, newsDispatch] = React.useContext(Context).news;
@@ -44,6 +45,7 @@ export const useInitialStartup = () => {
   const [loadingUser, setLoadingUser] = React.useState(true);
   const getLocalChannelData = useLocalChannelsFirst(setLocalChannelData);
   const {resetAllContext, resetLocalDB} = useResetContext();
+  const {checkCacheFeed} = useCoreFeed();
 
   const {getFeedChat} = useFeedService();
 
@@ -100,30 +102,31 @@ export const useInitialStartup = () => {
 
   const getDataFeeds = async (offset = 0) => {
     try {
-      const query = `?offset=${offset}&limit=${LIMIT_FIRST_FEEDS}`;
-      const dataFeeds = await getMainFeedV2WithTargetFeed(query);
-      if (dataFeeds.data?.length > 0) {
-        const {data} = dataFeeds;
-        const dataWithDummy = [...data, {dummy: true}];
-        let saveData = {
-          offset: dataFeeds.offset,
-          data: dataWithDummy,
-          targetFeed: dataFeeds?.feed
-        };
-        if (offset === 0) {
-          setMainFeeds(dataWithDummy, dispatchFeeds);
-          saveToCache(FEEDS_CACHE, saveData);
-        } else {
-          const clonedFeeds = [...feedsContext.feeds];
-          clonedFeeds.splice(feedsContext.feeds.length - 1, 0, ...data);
-          saveData = {
-            ...saveData,
-            data: clonedFeeds
-          };
-          setMainFeeds(clonedFeeds, dispatchFeeds);
-          saveToCache(FEEDS_CACHE, saveData);
-        }
-      }
+      checkCacheFeed();
+      // const query = `?offset=${offset}&limit=${LIMIT_FIRST_FEEDS}`;
+      // const dataFeeds = await getMainFeedV2WithTargetFeed(query);
+      // if (dataFeeds.data?.length > 0) {
+      //   const {data} = dataFeeds;
+      //   const dataWithDummy = [...data, {dummy: true}];
+      //   let saveData = {
+      //     offset: dataFeeds.offset,
+      //     data: dataWithDummy,
+      //     targetFeed: dataFeeds?.feed
+      //   };
+      //   if (offset === 0) {
+      //     // setMainFeeds(dataWithDummy, dispatchFeeds);
+      //     // saveToCache(FEEDS_CACHE, saveData);
+      //   } else {
+      //     const clonedFeeds = [...feedsContext.feeds];
+      //     clonedFeeds.splice(feedsContext.feeds.length - 1, 0, ...data);
+      //     saveData = {
+      //       ...saveData,
+      //       data: clonedFeeds
+      //     };
+      //     // setMainFeeds(clonedFeeds, dispatchFeeds);
+      //     // saveToCache(FEEDS_CACHE, saveData);
+      //   }
+      // }
       setTimer(new Date(), dispatchFeeds);
     } catch (e) {
       throw new Error(e);

@@ -4,10 +4,8 @@ import axios from 'axios';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {Context} from '../../../context';
-import {FEEDS_CACHE} from '../../../utils/cache/constant';
 import {downVote, upVote} from '../../../service/vote';
 import {getFeedDetail, getMainFeedV2WithTargetFeed} from '../../../service/post';
-import {getSpecificCache, saveToCache} from '../../../utils/cache';
 import {setFeedByIndex, setMainFeeds, setTimer} from '../../../context/actions/feeds';
 import {listFeedColor} from '../../../configs/FeedColor';
 import StorageUtils from '../../../utils/storage';
@@ -27,15 +25,15 @@ const useCoreFeed = () => {
   const {myProfile} = profileContext;
   const {bottom} = useSafeAreaInsets();
 
-  const handleBgContentFeed = (anonymColor) => {
-    // console.log({dataFeed}, 'jamaludin');
-    if (anonymColor) {
-      const findColor = listFeedColor.find((color) => color.bg == anonymColor);
-      console.log({findColor}, 'kurama');
-      return {
-        bg: anonymColor,
-        color: findColor?.color || 'rgba(255,255,255,0.7)'
-      };
+  const handleBgContentFeed = (feed) => {
+    if (feed.anon_user_info_color_code) {
+      const findColor = listFeedColor.find((color) => color.bg === feed?.anon_user_info_color_code);
+      if (findColor) {
+        return {
+          bg: findColor?.bg,
+          color: findColor?.color
+        };
+      }
     }
     const randomIndex = Math.floor(Math.random() * listFeedColor.length);
     return listFeedColor[randomIndex];
@@ -50,14 +48,12 @@ const useCoreFeed = () => {
       const query = `?offset=${offsetFeed}`;
 
       const dataFeeds = await getMainFeedV2WithTargetFeed(query, targetFeed);
-      console.log('boban2', {dataFeeds});
       if (Array.isArray(dataFeeds.data) && dataFeeds.data?.length <= 0) {
         setLoading(false);
         return setIsLastPage(true);
       }
       return handleDataFeeds(dataFeeds, offsetFeed);
     } catch (e) {
-      console.log(e, 'boban4');
       setLoading(false);
       return e;
     }
@@ -66,32 +62,33 @@ const useCoreFeed = () => {
   const handleDataFeeds = (dataFeeds, offsetFeed = 0) => {
     if (dataFeeds.data.length > 0) {
       const {data} = dataFeeds;
-      const mapNewData = data?.map((feed) => ({
-        ...feed,
-        bgColor: handleBgContentFeed().bg,
-        color: handleBgContentFeed(feed?.anon_user_info_color_code)
-      }));
-      console.log({mapNewData}, 'boban7');
-      const dataWithDummy = [...mapNewData, {dummy: true}];
+      const stringCacheFeed = StorageUtils.feedPages.get();
+      const {data: dataCache} = JSON.parse(stringCacheFeed);
+
+      const mapNewData = data?.map((feed) => {
+        const cacheBg = dataCache?.find((cache) => cache?.id === feed?.id);
+        if (cacheBg?.bg && cacheBg?.color) {
+          return {...cacheBg};
+        }
+        return {...feed, ...handleBgContentFeed(feed)};
+      });
+      const dataFeed = mapNewData;
       let saveData = {
         offsetFeed: dataFeeds.offset,
-        data: dataWithDummy,
+        data: dataFeed,
         targetFeed: dataFeeds?.feed
       };
       if (offsetFeed === 0) {
-        setMainFeeds(dataWithDummy, dispatch);
-        saveToCache(FEEDS_CACHE, saveData);
+        setMainFeeds(dataFeed, dispatch);
         StorageUtils.feedPages.set(JSON.stringify(saveData));
-        console.log('jalan');
       } else {
-        const clonedFeeds = [...feeds];
-        clonedFeeds.splice(feeds.length - 1, 0, ...data);
+        const clonedFeeds = [...feeds, ...mapNewData];
         saveData = {
           ...saveData,
           data: clonedFeeds
         };
         setMainFeeds(clonedFeeds, dispatch);
-        saveToCache(FEEDS_CACHE, saveData);
+        StorageUtils.feedPages.set(JSON.stringify(saveData));
       }
       setCountStack(data.length);
     }
@@ -118,28 +115,14 @@ const useCoreFeed = () => {
 
   const checkCacheFeed = async () => {
     const cacheFeed = StorageUtils.feedPages.get();
-    console.log({cacheFeed}, 'boban1');
-    if (cacheFeed) {
-      console.log('boban3');
+    if (!cacheFeed) {
       getDataFeeds();
     } else {
       const result = JSON.parse(cacheFeed);
       setMainFeeds(result.data, dispatch);
       setPostOffset(result.offset);
       setNextTargetFeed(result.feed);
-      console.log('boban5', {cacheFeed: JSON.parse(cacheFeed)});
     }
-
-    // getSpecificCache(FEEDS_CACHE, (result) => {
-    //   console.log('boban6', {result});
-    //   if (result) {
-    //     setMainFeeds(result.data, dispatch);
-    //     setPostOffset(result.offset);
-    //     setNextTargetFeed(result.feed);
-    //   } else {
-    //     getDataFeeds();
-    //   }
-    // });
   };
 
   const updateFeed = async (post, index) => {
