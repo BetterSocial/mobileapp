@@ -21,8 +21,8 @@ import {
 import {Footer, Gap, PreviewComment} from '../../components';
 import {colors} from '../../utils/colors';
 import {getCommentLength} from '../../utils/getstream';
-import {showScoreAlertDialog} from '../../utils/Utils';
 import {normalizeFontSizeByWidth} from '../../utils/fonts';
+import {showScoreAlertDialog} from '../../utils/Utils';
 
 const tabBarHeight = StatusBar.currentHeight;
 const FULL_WIDTH = Dimensions.get('screen').width;
@@ -39,7 +39,8 @@ const RenderListFeed = (props) => {
     onPressBlock,
     onPressUpvote,
     selfUserId,
-    onPressDownVote
+    onPressDownVote,
+    source = SOURCE_FEED_TAB
   } = props;
   const {
     totalVote,
@@ -119,7 +120,7 @@ const RenderListFeed = (props) => {
           hideThreeDot={true}
           props={item}
           height={getHeightHeader()}
-          source={SOURCE_FEED_TAB}
+          source={source}
           headerStyle={styles.mh9}
         />
         {item.post_type === POST_TYPE_LINK && (
