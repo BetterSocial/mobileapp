@@ -162,22 +162,10 @@ const Content = ({
     setAmountCut(text.length);
   };
   const showSeeMore = amountCut < message.length;
-  const handleMarginTopic = () => {
-    if (images_url.length <= 0 && item?.post_type === POST_TYPE_STANDARD) {
-      return heightTopic;
-    }
-    return 0;
-  };
+
   const renderHandleTextContent = () => {
     return (
-      <View
-        testID="postTypePoll"
-        style={[
-          styles.containerText,
-          handleContainerText().container,
-          {marginBottom: handleMarginTopic()},
-          {backgroundColor: 'transparent'}
-        ]}>
+      <View testID="postTypePoll" style={[styles.containerText, {backgroundColor: 'transparent'}]}>
         {amountCut <= 0 ? (
           <Text
             onTextLayout={handleTextLayout}
@@ -330,12 +318,6 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginLeft: 13
   },
-
-  containerFeedText: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 5
-  },
   feedDate: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
@@ -396,6 +378,6 @@ export const styles = StyleSheet.create({
     color: 'white'
   },
   mv5: {
-    marginVertical: 5
+    marginVertical: 6
   }
 });
