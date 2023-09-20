@@ -344,7 +344,7 @@ const getCaptionWithTopicStyle = (
   text = reactStringReplace(text, validationTextHasAt, (match) => (
     <TaggingUserText
       item={item}
-      goToDetailPage={true}
+      goToDetailPage={false}
       navigation={navigation}
       text={match}
       currentTopic={id}

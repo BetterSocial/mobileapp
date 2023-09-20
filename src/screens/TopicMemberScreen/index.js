@@ -214,6 +214,7 @@ const TopicMemberScreen = (props) => {
           isLoadingDiscoveryUser={isLoadingDiscovery.user}
           isFirstTimeOpen={isFirstTimeOpen}
           initialUsers={initalMember}
+          setInitialUsers={setInitialMember}
           followedUsers={topicDataFollowedUsers}
           unfollowedUsers={topicDataUnfollowedUsers}
           setFollowedUsers={setTopicDataFollowedUsers}
