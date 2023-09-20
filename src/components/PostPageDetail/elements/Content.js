@@ -129,14 +129,20 @@ const Content = ({
   return (
     <>
       <ScrollView
-        style={[styles.contentFeed, handleContainerPdp(), {paddingVertical: message ? 5 : 0}]}
+        style={[styles.contentFeed, handleContainerPdp()]}
         contentContainerStyle={styles.contensStyle(handlePaddingBottom())}
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}>
         {message?.length > 0 ? (
           <View
             onLayout={handleContainerHeight}
-            style={[styles.contentFeed, handleContainerPdp(), handleMessageContainerPdp()]}>
+            style={[
+              styles.contentFeed,
+              handleContainerPdp(),
+              handleMessageContainerPdp(),
+              styles.ph4,
+              styles.mv5
+            ]}>
             <View style={styles.postTextContainer(isPostDetail)}>
               {item.post_type !== POST_TYPE_LINK ? (
                 <Text
@@ -240,9 +246,7 @@ export default Content;
 const styles = StyleSheet.create({
   contentFeed: {
     flex: 1,
-    backgroundColor: COLORS.white,
-    paddingVertical: 5,
-    paddingHorizontal: 4
+    backgroundColor: COLORS.white
   },
   textContentFeed: (isShort) => ({
     fontFamily: fonts.inter[400],
@@ -282,5 +286,11 @@ const styles = StyleSheet.create({
   },
   contensStyle: (paddingBottom) => ({
     paddingBottom
-  })
+  }),
+  ph4: {
+    paddingHorizontal: 4
+  },
+  mv5: {
+    marginVertical: 6
+  }
 });
