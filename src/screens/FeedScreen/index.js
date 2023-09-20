@@ -34,7 +34,6 @@ const FeedScreen = (props) => {
   const {interactionsComplete} = useAfterInteractions();
   const {feeds, timer, viewPostTimeIndex} = feedsContext;
   const [isScroll, setIsScroll] = React.useState(false);
-  const [updateIndex, setUpdateIndex] = React.useState(0);
   const {
     getDataFeeds,
     postOffset,
@@ -65,7 +64,7 @@ const FeedScreen = (props) => {
   const onBlockCompletedHandle = async (postId) => {
     onBlockCompleted(postId);
   };
-  const [updateMoreText, setUpdateMoreText] = React.useState(false);
+
   React.useEffect(() => {
     if (interactionsComplete) {
       checkCacheFeed();
@@ -125,22 +124,24 @@ const FeedScreen = (props) => {
     getDataFeedsHandle(postOffset, false, nextTargetFeed);
   };
 
-  const refreshMoreText = (index) => {
-    setUpdateIndex(index);
-    setUpdateMoreText(true);
-    setTimeout(() => {
-      setUpdateMoreText(false);
-    }, 500);
-  };
-  console.log({updateMoreText}, 'lala1');
-  const onPress = (item, haveSeeMore, index) => {
+  const onPress = (item, haveSeeMore) => {
     props.navigation.navigate('PostDetailPage', {
       isalreadypolling: item.isalreadypolling,
       feedId: item.id,
       data: item,
       isCaching: false,
-      haveSeeMore,
-      refreshParent: () => refreshMoreText(index)
+      haveSeeMore
+    });
+  };
+
+  const onPressComment = (index, item) => {
+    props.navigation.navigate('PostDetailPage', {
+      // index: index,
+      feedId: item.id,
+      // refreshParent: getDataFeedsHandle,
+      data: item,
+      isCaching: true
+      // feedId:
     });
   };
 
@@ -206,7 +207,6 @@ const FeedScreen = (props) => {
 
   const renderItem = ({item, index}) => {
     if (item.dummy) return <React.Fragment key={index} />;
-    if (updateMoreText && updateIndex === index) return null;
     return (
       <RenderListFeed
         key={item.id}
@@ -215,9 +215,9 @@ const FeedScreen = (props) => {
         index={index}
         onPressDomain={onPressDomain}
         onPress={(haveSeeMore) => {
-          onPress(item, haveSeeMore, index);
+          onPress(item, haveSeeMore);
         }}
-        onPressComment={(haveSeeMore) => onPress(item, haveSeeMore, index)}
+        onPressComment={(haveSeeMore) => onPress(item, haveSeeMore)}
         onPressBlock={() => onPressBlock(item)}
         onPressUpvote={(post) => setUpVoteHandle(post, index)}
         selfUserId={myProfile.user_id}
