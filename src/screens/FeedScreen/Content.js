@@ -40,7 +40,8 @@ const Content = ({
     heightTopic,
     amountLineTopic,
     onTopicLayout,
-    heightPoll
+    heightPoll,
+    handleMarginVertical
   } = useCalculationContent();
   const [amountCut, setAmountCut] = React.useState(0);
   const [textCut, setTextCut] = React.useState(null);
@@ -237,7 +238,11 @@ const Content = ({
       ) : null}
 
       {item && item.post_type === POST_TYPE_POLL ? (
-        <View style={styles.containerMainText(handleContainerText().isShort)}>
+        <View
+          style={[
+            styles.containerMainText(handleContainerText().isShort),
+            {marginVertical: handleMarginVertical(message)}
+          ]}>
           <ContentPoll
             message={item.message}
             images_url={item.images_url}
