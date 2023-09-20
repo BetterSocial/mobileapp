@@ -8,8 +8,6 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
       Object {
         "height": "auto",
         "justifyContent": "flex-start",
-        "marginTop": 5,
-        "paddingVertical": 0,
       },
     ]
   }
