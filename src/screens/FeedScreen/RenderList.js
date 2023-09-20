@@ -57,6 +57,7 @@ const RenderListFeed = (props) => {
     getTotalReaction,
     showScoreButton
   } = useFeed();
+
   const onPressDownVoteHandle = async () => {
     onPressDownVoteHook();
     let newStatus = !statusDownvote;
