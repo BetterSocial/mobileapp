@@ -42,7 +42,8 @@ const RenderListFeed = (props) => {
     onPressDownVote,
     hideThreeDot = true,
     showAnonymousOption = false,
-    onHeaderOptionClicked = () => {}
+    onHeaderOptionClicked = () => {},
+    source = SOURCE_FEED_TAB
   } = props;
   const {
     totalVote,
@@ -123,7 +124,7 @@ const RenderListFeed = (props) => {
           hideThreeDot={hideThreeDot}
           props={item}
           height={getHeightHeader()}
-          source={SOURCE_FEED_TAB}
+          source={source}
           headerStyle={styles.mh9}
           showAnonymousOption={showAnonymousOption}
           onHeaderOptionClicked={onHeaderOptionClicked}
