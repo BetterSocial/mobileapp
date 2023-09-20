@@ -53,7 +53,6 @@ const useCoreChatSystemHook = () => {
     lastJsonMessage.targetImage = chatName?.image;
 
     const channelList = ChannelList.fromWebsocketObject(lastJsonMessage);
-
     await channelList.save(localDb);
 
     const user = UserSchema.fromWebsocketObject(lastJsonMessage);
@@ -275,6 +274,7 @@ const useCoreChatSystemHook = () => {
   };
 
   React.useEffect(() => {
+    console.log({lastJsonMessage, localDb}, 'timan');
     if (!lastJsonMessage && !localDb) return;
 
     const {type} = lastJsonMessage;

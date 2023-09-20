@@ -255,7 +255,7 @@ const Content = ({
         </View>
       ) : null}
 
-      {/* {item && item.post_type === POST_TYPE_POLL ? (
+      {item && item.post_type === POST_TYPE_POLL ? (
         <View style={styles.containerMainText(handleContainerText().isShort)}>
           <ContentPoll
             message={item.message}
@@ -271,7 +271,7 @@ const Content = ({
             onLayout={onTopicLayout}
           />
         </View>
-      ) : null} */}
+      ) : null}
       {images_url.length > 0 && (
         <View style={styles.containerImage}>
           <ImageLayouter
