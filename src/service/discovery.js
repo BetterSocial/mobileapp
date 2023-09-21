@@ -179,7 +179,7 @@ const fetchInitialDiscoveryTopics = async (limit = 25, page = 0) => {
  * @param {Number} page
  * @returns {FetchInitialDiscoveryUsersResponse}
  */
-const fetchInitialDiscoveryUsers = async (limit = 25, page = 0) => {
+const fetchInitialDiscoveryUsers = async (limit = 50, page = 0) => {
   try {
     const response = await api.post('discovery/init/user', {
       limit,
