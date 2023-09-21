@@ -1,12 +1,10 @@
 import React from 'react';
 import {POST_TYPE_LINK, POST_TYPE_POLL} from '../../../utils/constants';
-import {Platform} from 'react-native';
 
 const useCalculationContent = () => {
   const [amountLineTopic, setAmountLineTopic] = React.useState(0);
   const [heightTopic, setHeightTopic] = React.useState(0);
   const [heightPoll, setHeightPoll] = React.useState(0);
-  const isAndroid = Platform.OS === 'android';
   const handleCalculation = (
     containerHeight,
     textHeight,
@@ -62,13 +60,21 @@ const useCalculationContent = () => {
     }
   };
 
+  const handleMarginVertical = (message) => {
+    if (message?.length <= 0) {
+      return 6;
+    }
+    return 0;
+  };
+
   return {
     handleCalculation,
     onLayoutTopicChip,
     amountLineTopic,
     heightTopic,
     heightPoll,
-    onPollLayout
+    onPollLayout,
+    handleMarginVertical
   };
 };
 

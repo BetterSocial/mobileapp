@@ -49,7 +49,7 @@ const ContentLink = ({
         <Text style={styles.message}>
           {!isPostDetail ? hashtagAtComponent(sanitizeUrl, 100) : hashtagAtComponent(sanitizeUrl)}
           {!isPostDetail && message.length > 100 && (
-            <Text style={{color: '#2F80ED'}}> More...</Text>
+            <Text style={{color: COLORS.blue}}> More...</Text>
           )}
         </Text>
       </View>
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
   },
   messageContainer: {
     paddingHorizontal: 20,
-    marginVertical: 5
+    marginVertical: 6
   },
   message: {
     fontFamily: fonts.inter[400],

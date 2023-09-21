@@ -9,6 +9,10 @@ jest.mock('react-native-activity-feed/node_modules/react-native-image-crop-picke
   openPicker: jest.fn()
 }));
 
+jest.mock('@react-native-clipboard/clipboard', () => ({
+  setString: jest.fn()
+}));
+
 jest.mock('../../../src/hooks/useAfterInteractions', () => ({
   useAfterInteractions: () => ({
     transitionRef: {current: {animateNextTransition: jest.fn()}},
