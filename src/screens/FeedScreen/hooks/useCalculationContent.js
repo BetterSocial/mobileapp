@@ -53,9 +53,10 @@ const useCalculationContent = () => {
     getLayoutTopic(nativeEvent.layout?.height, lineHeight);
   };
 
-  const onTopicLayout = ({nativeEvent}) => {
+  const onPollLayout = ({nativeEvent}) => {
     if (nativeEvent.layout?.height > 0) {
-      setHeightPoll(nativeEvent.layout?.height);
+      const height = nativeEvent.layout?.height;
+      setHeightPoll(height);
     }
   };
 
@@ -72,7 +73,7 @@ const useCalculationContent = () => {
     amountLineTopic,
     heightTopic,
     heightPoll,
-    onTopicLayout,
+    onPollLayout,
     handleMarginVertical
   };
 };
