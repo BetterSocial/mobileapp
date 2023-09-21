@@ -39,7 +39,7 @@ const Content = ({
     onLayoutTopicChip,
     heightTopic,
     amountLineTopic,
-    onTopicLayout,
+    onPollLayout,
     heightPoll
   } = useCalculationContent();
   const [amountCut, setAmountCut] = React.useState(0);
@@ -53,7 +53,6 @@ const Content = ({
       setHaveSeeMore(haveSeeMoreText);
     }
   }, [amountCut]);
-
   const {lineHeight, font} = handleCalculation(
     layoutHeight,
     textHeight,
@@ -69,7 +68,8 @@ const Content = ({
     }
     if (item.post_type === POST_TYPE_POLL) {
       const result = Math.round((layoutHeight - heightPoll - heightTopic) / lineHeight);
-      return result;
+
+      return result >= 0 ? result : 0;
     }
     if (getCommentLength(item.latest_reactions.comment) > 0) {
       return Math.floor(layoutHeight / lineHeight);
@@ -261,7 +261,7 @@ const Content = ({
             onnewpollfetched={onNewPollFetched}
             voteCount={item.voteCount}
             topics={item?.topics}
-            onLayout={onTopicLayout}
+            onLayout={onPollLayout}
           />
         </View>
       ) : null}
