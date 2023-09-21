@@ -21,8 +21,8 @@ import {
 import {Footer, Gap, PreviewComment} from '../../components';
 import {colors} from '../../utils/colors';
 import {getCommentLength} from '../../utils/getstream';
-import {showScoreAlertDialog} from '../../utils/Utils';
 import {normalizeFontSizeByWidth} from '../../utils/fonts';
+import {showScoreAlertDialog} from '../../utils/Utils';
 
 const tabBarHeight = StatusBar.currentHeight;
 const FULL_WIDTH = Dimensions.get('screen').width;
@@ -39,7 +39,10 @@ const RenderListFeed = (props) => {
     onPressBlock,
     onPressUpvote,
     selfUserId,
-    onPressDownVote
+    onPressDownVote,
+    hideThreeDot = true,
+    showAnonymousOption = false,
+    onHeaderOptionClicked = () => {}
   } = props;
   const {
     totalVote,
@@ -116,11 +119,13 @@ const RenderListFeed = (props) => {
     <View key={item.id} testID="dataScroll" style={styles.cardContainer}>
       <View style={[styles.cardMain]}>
         <Header
-          hideThreeDot={true}
+          hideThreeDot={hideThreeDot}
           props={item}
           height={getHeightHeader()}
           source={SOURCE_FEED_TAB}
           headerStyle={styles.mh9}
+          showAnonymousOption={showAnonymousOption}
+          onHeaderOptionClicked={onHeaderOptionClicked}
         />
         {item.post_type === POST_TYPE_LINK && (
           <ContentLink
