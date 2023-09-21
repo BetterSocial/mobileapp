@@ -557,6 +557,12 @@ const ProfileScreen = ({route}) => {
     setSelectedPostForOption(null);
     setIsOptionModalOpen(false);
   };
+
+  const onHeaderOptionClicked = (post) => {
+    setSelectedPostForOption(post);
+    setIsOptionModalOpen(true);
+  };
+
   const removePostByIdFromContext = () => {
     const deletedIndex = feeds?.findIndex((find) => selectedPostForOption?.id === find?.id);
     const newData = [...feeds];
@@ -633,6 +639,9 @@ const ProfileScreen = ({route}) => {
                   onPressDownVote={(post) => setDownVote(post)}
                   loading={loading}
                   source={SOURCE_MY_PROFILE}
+                  hideThreeDot={false}
+                  showAnonymousOption={true}
+                  onHeaderOptionClicked={() => onHeaderOptionClicked(item)}
                 />
               );
             }}

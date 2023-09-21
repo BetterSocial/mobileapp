@@ -40,7 +40,10 @@ const RenderListFeed = (props) => {
     onPressUpvote,
     selfUserId,
     onPressDownVote,
-    source = SOURCE_FEED_TAB
+    source = SOURCE_FEED_TAB,
+    hideThreeDot = true,
+    showAnonymousOption = false,
+    onHeaderOptionClicked = () => {}
   } = props;
   const {
     totalVote,
@@ -117,11 +120,13 @@ const RenderListFeed = (props) => {
     <View key={item.id} testID="dataScroll" style={styles.cardContainer}>
       <View style={[styles.cardMain]}>
         <Header
-          hideThreeDot={true}
+          hideThreeDot={hideThreeDot}
           props={item}
           height={getHeightHeader()}
           source={source}
           headerStyle={styles.mh9}
+          showAnonymousOption={showAnonymousOption}
+          onHeaderOptionClicked={onHeaderOptionClicked}
         />
         {item.post_type === POST_TYPE_LINK && (
           <ContentLink
