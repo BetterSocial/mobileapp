@@ -65,6 +65,7 @@ const TopicPageScreen = (props) => {
   const initialFetchTopicFeeds = async (cacheLength = 0) => {
     try {
       const resultGetTopicPages = await getTopicPages(id?.toLowerCase(), 0);
+      console.log({resultGetTopicPages}, 'jilak');
       const {data = [], offset: offsetFeeds = 0} = resultGetTopicPages || {};
       setTopicFeeds(data, dispatch);
       setOffset(offsetFeeds);
@@ -89,6 +90,7 @@ const TopicPageScreen = (props) => {
   };
 
   const initData = async () => {
+    console.log('init');
     try {
       setIsInitialLoading(true);
 
@@ -97,7 +99,6 @@ const TopicPageScreen = (props) => {
       setTopicId(idLower);
 
       const {feeds: topicFeeds, offset: offsetFeeds} = TopicPageStorage.get(idLower);
-
       if (topicFeeds?.length > 0) {
         setTopicFeeds(topicFeeds, dispatch);
         setOffset(offsetFeeds);

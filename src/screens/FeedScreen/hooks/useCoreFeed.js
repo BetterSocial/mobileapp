@@ -7,8 +7,10 @@ import {Context} from '../../../context';
 import {FEEDS_CACHE} from '../../../utils/cache/constant';
 import {downVote, upVote} from '../../../service/vote';
 import {getFeedDetail, getMainFeedV2WithTargetFeed} from '../../../service/post';
-import {getSpecificCache, saveToCache} from '../../../utils/cache';
+import {saveToCache} from '../../../utils/cache';
 import {setFeedByIndex, setMainFeeds, setTimer} from '../../../context/actions/feeds';
+import {listFeedColor} from '../../../configs/FeedColor';
+import StorageUtils from '../../../utils/storage';
 
 const useCoreFeed = () => {
   const [loading, setLoading] = React.useState(false);
@@ -45,21 +47,57 @@ const useCoreFeed = () => {
     }
   };
 
+  const handleBgContentFeed = (feed) => {
+    if (feed.anon_user_info_color_code) {
+      const findColor = listFeedColor.find((color) => color.bg === feed?.anon_user_info_color_code);
+      if (findColor) {
+        return {
+          bg: findColor?.bg,
+          color: findColor?.color
+        };
+      }
+    }
+    const randomIndex = Math.floor(Math.random() * listFeedColor.length);
+    return listFeedColor[randomIndex];
+  };
+
+  const mappingColorFeed = ({dataFeed, dataCache}) => {
+    if (dataCache && typeof dataCache === 'string') {
+      dataCache = JSON.parse(dataCache);
+    }
+    const mapNewData = dataFeed?.map((feed) => {
+      const cacheBg = dataCache?.find((cache) => cache?.id === feed?.id);
+      if (cacheBg?.bg && cacheBg?.color) {
+        return {...cacheBg};
+      }
+      return {...feed, ...handleBgContentFeed(feed)};
+    });
+
+    return {
+      mapNewData
+    };
+  };
+
   const handleDataFeeds = (dataFeeds, offsetFeed = 0) => {
     if (dataFeeds.data.length > 0) {
       const {data} = dataFeeds;
-      const dataWithDummy = [...data, {dummy: true}];
+      let stringCacheFeed = StorageUtils.feedPages.get();
+      if (stringCacheFeed) {
+        stringCacheFeed = JSON.parse(stringCacheFeed);
+      } else {
+        stringCacheFeed = {};
+      }
+      const {mapNewData} = mappingColorFeed({dataFeed: data, dataCache: stringCacheFeed?.data});
       let saveData = {
         offsetFeed: dataFeeds.offset,
-        data: dataWithDummy,
+        data: mapNewData,
         targetFeed: dataFeeds?.feed
       };
       if (offsetFeed === 0) {
-        setMainFeeds(dataWithDummy, dispatch);
-        saveToCache(FEEDS_CACHE, saveData);
+        setMainFeeds(mapNewData, dispatch);
+        StorageUtils.feedPages.set(JSON.stringify(saveData));
       } else {
-        const clonedFeeds = [...feeds];
-        clonedFeeds.splice(feeds.length - 1, 0, ...data);
+        const clonedFeeds = [...feeds, ...mapNewData];
         saveData = {
           ...saveData,
           data: clonedFeeds
@@ -91,15 +129,15 @@ const useCoreFeed = () => {
   };
 
   const checkCacheFeed = () => {
-    getSpecificCache(FEEDS_CACHE, (result) => {
-      if (result) {
-        setMainFeeds(result.data, dispatch);
-        setPostOffset(result.offset);
-        setNextTargetFeed(result.feed);
-      } else {
-        getDataFeeds();
-      }
-    });
+    const cacheFeed = StorageUtils.feedPages.get();
+    if (!cacheFeed) {
+      getDataFeeds();
+    } else {
+      const result = JSON.parse(cacheFeed);
+      setMainFeeds(result.data, dispatch);
+      setPostOffset(result.offset);
+      setNextTargetFeed(result.feed);
+    }
   };
 
   const updateFeed = async (post, index) => {
@@ -182,7 +220,8 @@ const useCoreFeed = () => {
     handleScroll,
     isScroll,
     setIsLastPage,
-    nextTargetFeed
+    nextTargetFeed,
+    mappingColorFeed
   };
 };
 
