@@ -40,7 +40,8 @@ const Content = ({
     heightTopic,
     amountLineTopic,
     onPollLayout,
-    heightPoll
+    heightPoll,
+    handleMarginVertical
   } = useCalculationContent();
   const [amountCut, setAmountCut] = React.useState(0);
   const [textCut, setTextCut] = React.useState(null);
@@ -162,22 +163,10 @@ const Content = ({
     setAmountCut(text.length);
   };
   const showSeeMore = amountCut < message.length;
-  const handleMarginTopic = () => {
-    if (images_url.length <= 0 && item?.post_type === POST_TYPE_STANDARD) {
-      return heightTopic;
-    }
-    return 0;
-  };
+
   const renderHandleTextContent = () => {
     return (
-      <View
-        testID="postTypePoll"
-        style={[
-          styles.containerText,
-          handleContainerText().container,
-          {marginBottom: handleMarginTopic()},
-          {backgroundColor: 'transparent'}
-        ]}>
+      <View testID="postTypePoll" style={[styles.containerText, {backgroundColor: 'transparent'}]}>
         {amountCut <= 0 ? (
           <Text
             onTextLayout={handleTextLayout}
@@ -249,7 +238,11 @@ const Content = ({
       ) : null}
 
       {item && item.post_type === POST_TYPE_POLL ? (
-        <View style={styles.containerMainText(handleContainerText().isShort)}>
+        <View
+          style={[
+            styles.containerMainText(handleContainerText().isShort),
+            {marginVertical: handleMarginVertical(message)}
+          ]}>
           <ContentPoll
             message={item.message}
             images_url={item.images_url}
@@ -267,11 +260,7 @@ const Content = ({
       ) : null}
       {images_url.length > 0 && (
         <View style={styles.containerImage}>
-          <ImageLayouter
-            isFeed={true}
-            images={images_url}
-            onimageclick={() => onPress(showSeeMore)}
-          />
+          <ImageLayouter isFeed={true} images={images_url} onimageclick={onPress} />
         </View>
       )}
 
@@ -329,12 +318,6 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
     marginLeft: 13
-  },
-
-  containerFeedText: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 5
   },
   feedDate: {
     fontFamily: fonts.inter[400],
@@ -396,6 +379,6 @@ export const styles = StyleSheet.create({
     color
   }),
   mv5: {
-    marginVertical: 5
+    marginVertical: 6
   }
 });

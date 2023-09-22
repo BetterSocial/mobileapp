@@ -60,13 +60,21 @@ const useCalculationContent = () => {
     }
   };
 
+  const handleMarginVertical = (message) => {
+    if (message?.length <= 0) {
+      return 6;
+    }
+    return 0;
+  };
+
   return {
     handleCalculation,
     onLayoutTopicChip,
     amountLineTopic,
     heightTopic,
     heightPoll,
-    onPollLayout
+    onPollLayout,
+    handleMarginVertical
   };
 };
 
