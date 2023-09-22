@@ -26,6 +26,8 @@ import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
 } from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
 import NavHeader from './elements/NavHeader';
+import StorageUtils from '../../utils/storage';
+import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
 
 const styles = StyleSheet.create({
   parentContainer: {
@@ -56,7 +58,7 @@ const TopicPageScreen = (props) => {
   const refBlockComponent = React.useRef();
   const interactionManagerRef = React.useRef(null);
   const interactionManagerAnimatedRef = React.useRef(null);
-
+  const {mappingColorFeed} = useCoreFeed();
   const {listRef} = useOnBottomNavigationTabPressHook(LIST_VIEW_TYPE.TIKTOK_SCROLL, onRefresh);
 
   const topicWithPrefix = route.params.id;
@@ -65,11 +67,15 @@ const TopicPageScreen = (props) => {
   const initialFetchTopicFeeds = async (cacheLength = 0) => {
     try {
       const resultGetTopicPages = await getTopicPages(id?.toLowerCase(), 0);
-      console.log({resultGetTopicPages}, 'jilak');
+      const {data: cacheFeedTopic} = TopicPageStorage.get(id?.toLowerCase());
+      const {mapNewData} = mappingColorFeed({
+        dataFeed: resultGetTopicPages?.data,
+        dataCache: cacheFeedTopic
+      });
       const {data = [], offset: offsetFeeds = 0} = resultGetTopicPages || {};
-      setTopicFeeds(data, dispatch);
+      setTopicFeeds(mapNewData, dispatch);
       setOffset(offsetFeeds);
-      TopicPageStorage.set(id?.toLowerCase(), data, offsetFeeds);
+      TopicPageStorage.set(id?.toLowerCase(), mapNewData, offsetFeeds);
 
       if (cacheLength === 0 && data?.length === 0)
         SimpleToast.show('No posts yet', SimpleToast.SHORT);
@@ -90,7 +96,6 @@ const TopicPageScreen = (props) => {
   };
 
   const initData = async () => {
-    console.log('init');
     try {
       setIsInitialLoading(true);
 
@@ -102,9 +107,10 @@ const TopicPageScreen = (props) => {
       if (topicFeeds?.length > 0) {
         setTopicFeeds(topicFeeds, dispatch);
         setOffset(offsetFeeds);
+        setIsInitialLoading(false);
+      } else {
+        initialFetchTopicFeeds(topicFeeds?.length);
       }
-
-      initialFetchTopicFeeds(topicFeeds?.length);
     } catch (error) {
       if (__DEV__) {
         console.log(error);
@@ -150,13 +156,16 @@ const TopicPageScreen = (props) => {
       try {
         setLoading(true);
         const result = await getTopicPages(topicId, offsetParam);
+        const {feeds: cacheFeedTopic} = TopicPageStorage.get(id?.toLowerCase());
+
         const {data, offset: offsetFeeds} = result;
+        const {mapNewData} = mappingColorFeed({dataFeed: data, dataCache: cacheFeedTopic});
         if (result.code === 200) {
           if (offsetParam === 0) {
-            TopicPageStorage.set(id?.toLowerCase(), data, offsetFeeds);
-            setTopicFeeds(data, dispatch);
+            TopicPageStorage.set(id?.toLowerCase(), mapNewData, offsetFeeds);
+            setTopicFeeds(mapNewData, dispatch);
           } else {
-            const joinData = _.uniqBy([...feeds, ...data], (item) => item.id);
+            const joinData = _.uniqBy([...feeds, ...mapNewData], (item) => item.id);
             TopicPageStorage.set(id?.toLowerCase(), joinData, offsetFeeds);
             setTopicFeeds(joinData, dispatch);
           }
@@ -214,14 +223,8 @@ const TopicPageScreen = (props) => {
       feedId: item.id,
       isalreadypolling: item.isalreadypolling,
       from: 'topic',
-      haveSeeMore
-    });
-  };
-
-  const onPressComment = (item) => {
-    props.navigation.navigate('PostDetailPage', {
-      feedId: item.id,
-      isalreadypolling: item.isalreadypolling
+      haveSeeMore,
+      data: item
     });
   };
 
@@ -348,7 +351,7 @@ const TopicPageScreen = (props) => {
       index={index}
       onPressDomain={onPressDomain}
       onPress={(haveSeeMore) => onPress(item, haveSeeMore)}
-      onPressComment={() => onPressComment(item)}
+      onPressComment={() => onPress(item)}
       onPressBlock={() => onPressBlock(item)}
       onPressUpvote={(post) => setUpVote(post, index)}
       userId={userId}

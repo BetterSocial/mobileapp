@@ -26,7 +26,8 @@ const Content = ({
   item,
   onnewpollfetched,
   isPostDetail,
-  haveSeeMore
+  haveSeeMore,
+  parentData
 }) => {
   const navigation = useNavigation();
   const cekImage = () => images_url && images_url !== '';
@@ -89,7 +90,7 @@ const Content = ({
   };
   const handleContainerPdp = () => {
     if (isShortText()) {
-      return styles.shortText;
+      return styles.shortText(parentData?.bg || item?.anon_user_info_color_code);
     }
     return {};
   };
@@ -142,7 +143,7 @@ const Content = ({
                 <Text
                   onLayout={handleTextHeight}
                   style={[
-                    styles.textContentFeed(isShortText()),
+                    styles.textContentFeed(isShortText(), parentData?.color),
                     {
                       fontSize: font,
                       lineHeight
@@ -153,7 +154,7 @@ const Content = ({
               ) : (
                 <Text
                   style={[
-                    styles.textContentFeed(isShortText()),
+                    styles.textContentFeed(isShortText(), parentData?.color),
                     {
                       fontSize: font,
                       lineHeight
@@ -244,11 +245,11 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 4
   },
-  textContentFeed: (isShort) => ({
+  textContentFeed: (isShort, color) => ({
     fontFamily: fonts.inter[400],
     fontWeight: 'normal',
     fontSize: normalizeFontSize(14),
-    color: isShort ? colors.white : colors.black,
+    color: isShort ? color || colors.white : colors.black,
     flex: 1,
     flexWrap: 'wrap'
   }),
@@ -273,10 +274,10 @@ const styles = StyleSheet.create({
   postTextContainer: (isPostDetail) => ({
     paddingHorizontal: isPostDetail ? 12 : 0
   }),
-  shortText: {
+  shortText: (bg) => ({
     minHeight: normalizeFontSizeByWidth(342),
-    backgroundColor: '#11468F'
-  },
+    backgroundColor: bg || '#11468f'
+  }),
   centerVertical: {
     justifyContent: 'center'
   },

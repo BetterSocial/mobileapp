@@ -278,10 +278,7 @@ const ProfileScreen = ({route}) => {
       const result = await getSelfFeedsInProfile(offset, limit);
       const cacheFeed = StorageUtils.myFeeds.get();
       const {data: dataMyFeed} = result;
-      console.log({cacheFeed, dataMyFeed}, 'simak');
-
       const {mapNewData} = mappingColorFeed({dataFeed: dataMyFeed, dataCache: cacheFeed});
-      console.log({mapNewData}, 'silak');
       if (Array.isArray(result.data) && result.data.length === 0) {
         setIsLastPage(true);
       }
@@ -539,7 +536,8 @@ const ProfileScreen = ({route}) => {
       isalreadypolling: item.isalreadypolling,
       feedId: item.id,
       refreshParent: profileTabIndex === 0 ? getMyFeeds : reloadFetchAnonymousPost,
-      haveSeeMore
+      haveSeeMore,
+      data: item
     });
   };
 

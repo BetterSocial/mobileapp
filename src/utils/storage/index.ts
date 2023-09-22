@@ -11,7 +11,9 @@ enum StorageKeysEnum {
   JwtToken = 'jwtToken',
   AnonymousToken = 'anonymousToken',
   FeedPages = 'feedpages',
-  MyFeeds = 'myfeeds'
+  MyFeeds = 'myfeeds',
+  MyAnonymousFeed = 'myanonymousfeed',
+  OtherProfileFeed = 'otherprofilefeed'
 }
 
 interface IStorage {
@@ -76,7 +78,9 @@ const StorageUtils = {
   jwtToken: storageBuilder(StorageKeysEnum.JwtToken),
   anonymousToken: storageBuilder(StorageKeysEnum.AnonymousToken),
   feedPages: storageBuilder(StorageKeysEnum.FeedPages),
-  myFeeds: storageBuilder(StorageKeysEnum.MyFeeds)
+  myFeeds: storageBuilder(StorageKeysEnum.MyFeeds),
+  myAnonymousFeed: storageBuilder(StorageKeysEnum.MyAnonymousFeed),
+  otherProfileFeed: storageBuilder(StorageKeysEnum.OtherProfileFeed)
 };
 
 export interface IStorageUtils {
