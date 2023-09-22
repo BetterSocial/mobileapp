@@ -47,7 +47,7 @@ import useProfileScreenHook, {
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {ButtonNewPost} from '../../components/Button';
 import {Context} from '../../context';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {DEFAULT_PROFILE_PIC_PATH, SOURCE_MY_PROFILE} from '../../utils/constants';
 import {PROFILE_CACHE} from '../../utils/cache/constant';
 import {
   changeRealName,
@@ -557,6 +557,12 @@ const ProfileScreen = ({route}) => {
     setSelectedPostForOption(null);
     setIsOptionModalOpen(false);
   };
+
+  const onHeaderOptionClicked = (post) => {
+    setSelectedPostForOption(post);
+    setIsOptionModalOpen(true);
+  };
+
   const removePostByIdFromContext = () => {
     const deletedIndex = feeds?.findIndex((find) => selectedPostForOption?.id === find?.id);
     const newData = [...feeds];
@@ -632,6 +638,10 @@ const ProfileScreen = ({route}) => {
                   selfUserId={profile.myProfile.user_id}
                   onPressDownVote={(post) => setDownVote(post)}
                   loading={loading}
+                  source={SOURCE_MY_PROFILE}
+                  hideThreeDot={false}
+                  showAnonymousOption={true}
+                  onHeaderOptionClicked={() => onHeaderOptionClicked(item)}
                 />
               );
             }}
