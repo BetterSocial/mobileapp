@@ -230,7 +230,7 @@ const FeedScreen = (props) => {
       />
     );
   };
-
+  console.log({feeds}, 'lalak10');
   return (
     <SafeAreaProvider style={styles.container} forceInset={{top: 'always'}}>
       <StatusBar translucent={false} />

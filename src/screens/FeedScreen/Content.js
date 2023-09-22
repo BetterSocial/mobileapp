@@ -201,8 +201,8 @@ const Content = ({
   const handleContainerText = () => {
     if (!showSeeMore && item.post_type === POST_TYPE_STANDARD && images_url.length <= 0) {
       return {
-        container: styles.centerVertical,
-        text: styles.centerVerticalText,
+        container: styles.centerVertical(item?.bg),
+        text: styles.centerVerticalText(item?.color),
         isShort: true
       };
     }
@@ -369,15 +369,15 @@ export const styles = StyleSheet.create({
   containerText: {
     flexDirection: 'row'
   },
-  centerVertical: {
+  centerVertical: (bg) => ({
     alignItems: 'center',
     justifyContent: 'center',
     height: '100%',
-    backgroundColor: '#11468F'
-  },
-  centerVerticalText: {
-    color: 'white'
-  },
+    backgroundColor: bg
+  }),
+  centerVerticalText: (color) => ({
+    color
+  }),
   mv5: {
     marginVertical: 6
   }
