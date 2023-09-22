@@ -40,10 +40,10 @@ const RenderListFeed = (props) => {
     onPressUpvote,
     selfUserId,
     onPressDownVote,
+    source = SOURCE_FEED_TAB,
     hideThreeDot = true,
     showAnonymousOption = false,
-    onHeaderOptionClicked = () => {},
-    source = SOURCE_FEED_TAB
+    onHeaderOptionClicked = () => {}
   } = props;
   const {
     totalVote,

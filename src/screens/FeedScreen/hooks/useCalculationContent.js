@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {POST_TYPE_LINK, POST_TYPE_POLL} from '../../../utils/constants';
 
 const useCalculationContent = () => {
@@ -73,8 +74,8 @@ const useCalculationContent = () => {
     amountLineTopic,
     heightTopic,
     heightPoll,
-    onPollLayout,
-    handleMarginVertical
+    handleMarginVertical,
+    onPollLayout
   };
 };
 

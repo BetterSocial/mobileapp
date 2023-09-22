@@ -9,12 +9,12 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import ContentPoll from './ContentPoll';
 import ImageLayouter from './elements/ImageLayouter';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
+import useCalculationContent from './hooks/useCalculationContent';
 import {COLORS} from '../../utils/theme';
 import {POST_TYPE_LINK, POST_TYPE_POLL, POST_TYPE_STANDARD} from '../../utils/constants';
 import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
-import useCalculationContent from './hooks/useCalculationContent';
 import {getCommentLength} from '../../utils/getstream';
 
 const {width: screenWidth} = Dimensions.get('window');
@@ -39,9 +39,9 @@ const Content = ({
     onLayoutTopicChip,
     heightTopic,
     amountLineTopic,
-    onPollLayout,
     heightPoll,
-    handleMarginVertical
+    handleMarginVertical,
+    onPollLayout
   } = useCalculationContent();
   const [amountCut, setAmountCut] = React.useState(0);
   const [textCut, setTextCut] = React.useState(null);
