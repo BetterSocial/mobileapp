@@ -1,5 +1,3 @@
-import * as React from 'react';
-import _ from 'lodash';
 import SimpleToast from 'react-native-simple-toast';
 import moment from 'moment';
 import {atom, useRecoilState} from 'recoil';
