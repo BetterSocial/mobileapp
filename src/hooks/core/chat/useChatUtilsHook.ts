@@ -1,3 +1,5 @@
+import * as React from 'react';
+import _ from 'lodash';
 import SimpleToast from 'react-native-simple-toast';
 import moment from 'moment';
 import {atom, useRecoilState} from 'recoil';
@@ -27,16 +29,12 @@ function useChatUtilsHook(): UseChatUtilsHook {
     channel.setRead(localDb).catch((e) => console.log('setChannelAsRead error', e));
 
     AnonymousMessageRepo.setChannelAsRead(channel?.id).catch((e) => {
-      console.log('setChannelAsRead error api', e);
+      console.log('setChannelAsRead error api', e?.response?.data);
     });
 
     refresh('channelList');
   };
 
-  const setSelectedChannelAsRead = () => {
-    if (!selectedChannel) return;
-    setChannelAsRead(selectedChannel);
-  };
   const helperGoToPostDetailScreen = (channel: ChannelList) => {
     setChannelAsRead(channel);
     const postNotificationChannel = channel as PostNotificationChannelList;
@@ -91,8 +89,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
     goToChatScreen,
     goToPostDetailScreen: helperGoToPostDetailScreen,
     goToChatInfoScreen,
-    goBackFromChatScreen,
-    setSelectedChannelAsRead
+    goBackFromChatScreen
   };
 }
 
