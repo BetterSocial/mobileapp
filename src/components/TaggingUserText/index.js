@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[500]
   },
   shortText: (isShort) => ({
-    color: isShort ? 'rgba(255, 255, 255, 0.7)' : colors.blue
+    color: isShort ? 'rgba(0, 0, 0, 0.5)' : colors.blue
   })
 });
 
