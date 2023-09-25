@@ -101,12 +101,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: dimen.size.FEED_ACTION_BUTTON_HEIGHT_FROM_BOTTOM,
     right: dimen.size.FEED_ACTION_BUTTON_HEIGHT_FROM_RIGHT,
-    zIndex: 1,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.8,
-    shadowRadius: 1
+    zIndex: 1
   },
   text: {
     fontFamily: fonts.inter[500],
