@@ -78,7 +78,6 @@ const Content = ({
 
     navigation.navigate('DomainScreen', param);
   };
-
   React.useEffect(() => {
     if (containerHeight > 0 && textHeight > 0) {
       const remainingHeightNumber = containerHeight - textHeight;
@@ -91,11 +90,10 @@ const Content = ({
   };
   const handleContainerPdp = () => {
     if (isShortText()) {
-      return styles.shortText(parentData?.bg || item?.anon_user_info_color_code);
+      return styles.shortText(parentData?.bg);
     }
     return {};
   };
-
   const handleMessageContainerPdp = () => {
     if (isShortText()) {
       return styles.centerVertical;
@@ -256,11 +254,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.white
   },
-  textContentFeed: (isShort, color) => ({
+  textContentFeed: () => ({
     fontFamily: fonts.inter[400],
     fontWeight: 'normal',
     fontSize: normalizeFontSize(14),
-    color: isShort ? color || colors.white : colors.black,
+    color: colors.black,
     flex: 1,
     flexWrap: 'wrap'
   }),
@@ -287,10 +285,11 @@ const styles = StyleSheet.create({
   }),
   shortText: (bg) => ({
     minHeight: normalizeFontSizeByWidth(342),
-    backgroundColor: bg || '#11468f'
+    backgroundColor: bg
   }),
   centerVertical: {
-    justifyContent: 'center'
+    justifyContent: 'center',
+    backgroundColor: 'transparent'
   },
   contensStyle: (paddingBottom) => ({
     paddingBottom

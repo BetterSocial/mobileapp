@@ -11,6 +11,7 @@ import {saveToCache} from '../../../utils/cache';
 import {setFeedByIndex, setMainFeeds, setTimer} from '../../../context/actions/feeds';
 import {listFeedColor} from '../../../configs/FeedColor';
 import StorageUtils from '../../../utils/storage';
+import {checkIsHasColor, hexToRgb} from '../../../utils/colors';
 
 const useCoreFeed = () => {
   const [loading, setLoading] = React.useState(false);
@@ -49,16 +50,21 @@ const useCoreFeed = () => {
 
   const handleBgContentFeed = (feed) => {
     if (feed.anon_user_info_color_code) {
-      const findColor = listFeedColor.find((color) => color.bg === feed?.anon_user_info_color_code);
-      if (findColor) {
-        return {
-          bg: findColor?.bg,
-          color: findColor?.color
-        };
-      }
+      const rgb = hexToRgb(feed?.anon_user_info_color_code, 0.25);
+      const color = {
+        bg: `${rgb}`,
+        color: 'rgba(0,0,0)'
+      };
+      return color;
     }
     const randomIndex = Math.floor(Math.random() * listFeedColor.length);
-    return listFeedColor[randomIndex];
+    let newColor = listFeedColor[randomIndex];
+    newColor = {
+      ...newColor,
+      bg: hexToRgb(newColor.bg, 0.25),
+      color: 'rgba(0,0,0)'
+    };
+    return newColor;
   };
 
   const mappingColorFeed = ({dataFeed, dataCache}) => {
@@ -67,7 +73,11 @@ const useCoreFeed = () => {
     }
     const mapNewData = dataFeed?.map((feed) => {
       const cacheBg = dataCache?.find((cache) => cache?.id === feed?.id);
-      if (cacheBg?.bg && cacheBg?.color) {
+      if (cacheBg?.bg) {
+        const isHexColor = checkIsHasColor(cacheBg.bg);
+        if (isHexColor) {
+          return {...cacheBg, bg: hexToRgb(cacheBg.bg, 0.25)};
+        }
         return {...cacheBg};
       }
       return {...feed, ...handleBgContentFeed(feed)};

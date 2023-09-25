@@ -124,6 +124,13 @@ const Content = ({
     };
   };
 
+  const handleMarginTopic = () => {
+    if (images_url.length <= 0 && item?.post_type === POST_TYPE_STANDARD) {
+      return heightTopic;
+    }
+    return 0;
+  };
+
   const adjustmentCountDeviceLine = () => {
     let {newMaxLine, countDeviceLine} = handleCountDeviceLine();
     if (
@@ -373,10 +380,11 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: '100%',
-    backgroundColor: bg
+    backgroundColor: `${bg}`
   }),
-  centerVerticalText: (color) => ({
-    color
+  centerVerticalText: () => ({
+    color: 'black',
+    opacity: 1
   }),
   mv5: {
     marginVertical: 6
