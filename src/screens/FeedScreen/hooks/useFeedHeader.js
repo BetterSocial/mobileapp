@@ -85,7 +85,8 @@ const useFeedHeader = ({actor, source}) => {
     profile_pic_url,
     dispatch,
     onBackNormalUser,
-    handleNavigate
+    handleNavigate,
+    sendViewTimePost
   };
 };
 

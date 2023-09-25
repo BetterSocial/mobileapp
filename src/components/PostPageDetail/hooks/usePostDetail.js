@@ -54,6 +54,7 @@ const usePostDetail = () => {
     if (!message) message = '';
     let fontSize = shortTextFontSize;
     let lineHeight = shortTextLineHeight;
+    let isShortText = false;
     let containerHeight = 0;
     if (message?.length > 270) {
       fontSize = longTextFontSize;
@@ -70,8 +71,12 @@ const usePostDetail = () => {
     containerHeight = numberOfLines * lineHeight;
     containerHeight = Math.max(containerHeight, shortTextLineHeight * 5);
     containerHeight = containerHeight * 0.5;
+    if (containerHeight < normalizeFontSizeByWidth(325)) {
+      containerHeight = normalizeFontSizeByWidth(325);
+      isShortText = true;
+    }
     const containerComment = calculatedSizeScreen - containerHeight;
-    return {fontSize, lineHeight, containerHeight, containerComment};
+    return {fontSize, lineHeight, containerHeight, containerComment, isShortText};
   };
 
   const calculatePaddingBtm = () => {

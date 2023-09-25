@@ -1,4 +1,5 @@
 import * as React from 'react';
+import Config from 'react-native-config';
 import ImagePicker from 'react-native-image-crop-picker';
 import Toast from 'react-native-simple-toast';
 import {
@@ -46,7 +47,7 @@ import useProfileScreenHook, {
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {ButtonNewPost} from '../../components/Button';
 import {Context} from '../../context';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {DEFAULT_PROFILE_PIC_PATH, SOURCE_MY_PROFILE} from '../../utils/constants';
 import {PROFILE_CACHE} from '../../utils/cache/constant';
 import {
   changeRealName,
@@ -194,7 +195,6 @@ const ProfileScreen = ({route}) => {
     setTabIndexToSigned,
     reloadFetchAnonymousPost
   } = useProfileScreenHook();
-  console.log(profileTabIndex, 'nikah');
   // eslint-disable-next-line consistent-return
   React.useEffect(() => {
     if (interactionsComplete) {
@@ -513,20 +513,12 @@ const ProfileScreen = ({route}) => {
     navigation.navigate('DomainScreen', param);
   };
 
-  const onPress = (item, index) => {
-    navigation.navigate('ProfilePostDetailPage', {
-      index,
+  const onPress = (item, haveSeeMore) => {
+    navigation.navigate('PostDetailPage', {
       isalreadypolling: item.isalreadypolling,
       feedId: item.id,
-      refreshParent: profileTabIndex === 0 ? getMyFeeds : reloadFetchAnonymousPost
-    });
-  };
-
-  const onPressComment = (item, id) => {
-    navigation.navigate('ProfilePostDetailPage', {
-      feedId: id,
-      isalreadypolling: item.isalreadypolling,
-      refreshParent: profileTabIndex === 0 ? getMyFeeds : reloadFetchAnonymousPost
+      refreshParent: profileTabIndex === 0 ? getMyFeeds : reloadFetchAnonymousPost,
+      haveSeeMore
     });
   };
 
@@ -565,6 +557,12 @@ const ProfileScreen = ({route}) => {
     setSelectedPostForOption(null);
     setIsOptionModalOpen(false);
   };
+
+  const onHeaderOptionClicked = (post) => {
+    setSelectedPostForOption(post);
+    setIsOptionModalOpen(true);
+  };
+
   const removePostByIdFromContext = () => {
     const deletedIndex = feeds?.findIndex((find) => selectedPostForOption?.id === find?.id);
     const newData = [...feeds];
@@ -634,12 +632,16 @@ const ProfileScreen = ({route}) => {
                   onNewPollFetched={onNewPollFetched}
                   index={index}
                   onPressDomain={onPressDomain}
-                  onPress={() => onPress(item)}
-                  onPressComment={() => onPressComment(index, item)}
+                  onPress={(haveSeeMore) => onPress(item, haveSeeMore)}
+                  onPressComment={(haveSeeMore) => onPress(item, haveSeeMore)}
                   onPressUpvote={(post) => setUpVote(post)}
                   selfUserId={profile.myProfile.user_id}
                   onPressDownVote={(post) => setDownVote(post)}
                   loading={loading}
+                  source={SOURCE_MY_PROFILE}
+                  hideThreeDot={false}
+                  showAnonymousOption={true}
+                  onHeaderOptionClicked={() => onHeaderOptionClicked(item)}
                 />
               );
             }}

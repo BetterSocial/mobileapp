@@ -21,15 +21,15 @@ import {
 import {Footer, Gap, PreviewComment} from '../../components';
 import {colors} from '../../utils/colors';
 import {getCommentLength} from '../../utils/getstream';
-import {showScoreAlertDialog} from '../../utils/Utils';
 import {normalizeFontSizeByWidth} from '../../utils/fonts';
+import {showScoreAlertDialog} from '../../utils/Utils';
 
 const tabBarHeight = StatusBar.currentHeight;
 const FULL_WIDTH = Dimensions.get('screen').width;
 
 const RenderListFeed = (props) => {
   const bottomHeight = useBottomTabBarHeight();
-
+  const [isHaveSeeMore, setIsHaveSeeMore] = React.useState(false);
   const {
     item,
     index,
@@ -39,7 +39,11 @@ const RenderListFeed = (props) => {
     onPressBlock,
     onPressUpvote,
     selfUserId,
-    onPressDownVote
+    onPressDownVote,
+    source = SOURCE_FEED_TAB,
+    hideThreeDot = true,
+    showAnonymousOption = false,
+    onHeaderOptionClicked = () => {}
   } = props;
   const {
     totalVote,
@@ -57,7 +61,6 @@ const RenderListFeed = (props) => {
     getTotalReaction,
     showScoreButton
   } = useFeed();
-
   const onPressDownVoteHandle = async () => {
     onPressDownVoteHook();
     let newStatus = !statusDownvote;
@@ -103,16 +106,27 @@ const RenderListFeed = (props) => {
     initialSetup(item);
   }, [item]);
 
-  getTotalReaction(item);
-
+  const contentLinkHeight = () => {
+    const haveLength =
+      getCommentLength(item.latest_reactions.comment) > 0 ? getHeightReaction() / 2.2 : 0;
+    return (
+      dimen.size.FEED_CURRENT_ITEM_HEIGHT -
+      getHeightHeader() -
+      getHeightFooter(bottomHeight) -
+      haveLength
+    );
+  };
   return (
     <View key={item.id} testID="dataScroll" style={styles.cardContainer}>
-      <View style={styles.cardMain}>
+      <View style={[styles.cardMain]}>
         <Header
-          hideThreeDot={true}
+          hideThreeDot={hideThreeDot}
           props={item}
           height={getHeightHeader()}
-          source={SOURCE_FEED_TAB}
+          source={source}
+          headerStyle={styles.mh9}
+          showAnonymousOption={showAnonymousOption}
+          onHeaderOptionClicked={onHeaderOptionClicked}
         />
         {item.post_type === POST_TYPE_LINK && (
           <ContentLink
@@ -126,6 +140,7 @@ const RenderListFeed = (props) => {
             message={item?.message}
             messageContainerStyle={{paddingHorizontal: 10}}
             topics={item?.topics}
+            contentHeight={contentLinkHeight()}
           />
         )}
         {(item.post_type === POST_TYPE_STANDARD || item.post_type === POST_TYPE_POLL) && (
@@ -134,7 +149,10 @@ const RenderListFeed = (props) => {
             index={index}
             message={item.message}
             images_url={item.images_url}
-            onPress={onPress}
+            onPress={() => {
+              onPress(isHaveSeeMore);
+            }}
+            setHaveSeeMore={(haveSeeMore) => setIsHaveSeeMore(haveSeeMore)}
             topics={item?.topics}
             item={item}
             onNewPollFetched={onNewPollFetched}
@@ -152,7 +170,7 @@ const RenderListFeed = (props) => {
                 ANALYTICS_SHARE_POST_FEED_ID
               )
             }
-            onPressComment={() => onPress(item)}
+            onPressComment={() => onPress(isHaveSeeMore)}
             onPressBlock={() => onPressBlock(item)}
             onPressDownVote={onPressDownVoteHandle}
             onPressUpvote={onPressUpvoteHandle}
@@ -200,6 +218,9 @@ const styles = StyleSheet.create({
   cardMain: {
     width: '100%',
     height: dimen.size.FEED_CURRENT_ITEM_HEIGHT
+  },
+  mh9: {
+    marginHorizontal: 9
   }
 });
 

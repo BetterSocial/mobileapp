@@ -38,7 +38,7 @@ import {withInteractionsManaged} from '../WithInteractionManaged';
 const {width, height} = Dimensions.get('window');
 
 const PostPageDetailIdComponent = (props) => {
-  const {feedId, navigateToReplyView, contextSource = CONTEXT_SOURCE.FEEDS} = props;
+  const {feedId, navigateToReplyView, contextSource = CONTEXT_SOURCE.FEEDS, haveSeeMore} = props;
   const [profile] = React.useContext(Context).profile;
   const [loading, setLoading] = React.useState(true);
   const [, setReaction] = React.useState(false);
@@ -59,15 +59,16 @@ const PostPageDetailIdComponent = (props) => {
   const [commenListParam] = React.useState({
     limit: 100
   });
-  const {getTotalReaction} = useFeed();
+  const {getTotalReaction, getHeightHeader} = useFeed();
   const [commentContext, dispatchComment] = React.useContext(Context).comments;
   const {comments} = commentContext;
   const [, setLoadingGetComment] = React.useState(true);
   const {updateVoteLatestChildrenLevel3, updateVoteChildrenLevel1, calculatePaddingBtm} =
     usePostDetail();
   const {updateFeedContext} = usePostContextHook(contextSource);
-  const {handleUserName} = useWriteComment();
+  const {updateFeedContext: updateTopicContext} = usePostContextHook(CONTEXT_SOURCE.TOPIC_FEEDS);
 
+  const {handleUserName} = useWriteComment();
   const getComment = async (scrollToBottom, noNeedLoading) => {
     if (!noNeedLoading) {
       setLoadingGetComment(true);
@@ -326,10 +327,8 @@ const PostPageDetailIdComponent = (props) => {
     };
   };
 
-  const findVoteAndUpdate = (response, type) => {
-    const data = [];
-    data.push(response.data);
-    const mappingData = feedsContext.feeds.map((feed) => {
+  const updateListFeed = (response, type, data, name = 'feeds', defaultContext = feedsContext) => {
+    const mappingData = defaultContext[name]?.map((feed) => {
       if (feed.id === item.id) {
         if (type === 'upvote') {
           if (response.data) {
@@ -344,7 +343,15 @@ const PostPageDetailIdComponent = (props) => {
       }
       return {...feed};
     });
-    updateFeedContext(mappingData);
+    return mappingData;
+  };
+  const findVoteAndUpdate = (response, type) => {
+    const data = [];
+    data.push(response.data);
+    const mappingDataFeed = updateListFeed(response, type, data);
+    const mappingDataTopic = updateListFeed(response, type, data, 'topicFeeds');
+    updateFeedContext(mappingDataFeed);
+    updateTopicContext(mappingDataTopic);
   };
 
   const updateCachingComment = (comment) => {
@@ -547,6 +554,7 @@ const PostPageDetailIdComponent = (props) => {
             props={item}
             isBackButton={true}
             source={SOURCE_PDP}
+            height={getHeightHeader()}
           />
 
           <ScrollView
@@ -566,6 +574,7 @@ const PostPageDetailIdComponent = (props) => {
                 item={item}
                 onnewpollfetched={onNewPollFetched}
                 isPostDetail={true}
+                haveSeeMore={haveSeeMore}
               />
               <View style={styles.footerContainer}>
                 <Footer

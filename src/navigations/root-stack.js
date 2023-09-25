@@ -30,6 +30,7 @@ import Settings from '../screens/Settings';
 import SignIn from '../screens/SignInV2';
 import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import TopicPageScreen from '../screens/TopicPageScreen';
+import TopicMemberScreen from '../screens/TopicMemberScreen';
 import Topics from '../screens/Topics';
 import WebsocketResearchScreen from '../screens/WebsocketResearchScreen';
 import WhotoFollow from '../screens/WhotoFollow';
@@ -200,6 +201,11 @@ const AuthenticatedNavigator = () => {
       <AuthenticatedStack.Screen
         name="TopicPageScreen"
         component={TopicPageScreen}
+        options={{headerShown: false}}
+      />
+      <AuthenticatedStack.Screen
+        name="TopicMemberScreen"
+        component={TopicMemberScreen}
         options={{headerShown: false}}
       />
       <AuthenticatedStack.Screen

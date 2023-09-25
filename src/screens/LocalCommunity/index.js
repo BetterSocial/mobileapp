@@ -272,17 +272,18 @@ const LocalCommunity = () => {
 };
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: colors.white
   },
   header: {paddingHorizontal: 22, paddingTop: 22, paddingBottom: 5},
   textFindYourLocalCommunity: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter-Bold',
     fontStyle: 'normal',
-    fontWeight: 'bold',
+    fontWeight: '600',
     fontSize: 36,
-    lineHeight: 44,
-    paddingHorizontal: 22,
-    color: colors.bunting
+    lineHeight: 43.57,
+    color: '#11243D',
+    marginHorizontal: 20
   },
   containerInfo: {
     marginTop: 55,
@@ -329,21 +330,21 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   containerProgress: {
-    marginTop: 36,
+    marginTop: 20,
     marginBottom: 24,
-    paddingHorizontal: 22
+    paddingHorizontal: 20
   },
   textDesc: {
     fontFamily: 'Inter',
     fontStyle: 'normal',
-    fontWeight: 'normal',
+    fontWeight: '400',
     fontSize: 14,
     lineHeight: 24,
     color: colors.gray,
     opacity: 0.84,
     marginTop: 8,
-    marginBottom: 12,
-    paddingHorizontal: 22
+    marginBottom: 24,
+    paddingHorizontal: 20
   },
 
   card: {
@@ -401,12 +402,12 @@ const styles = StyleSheet.create({
   textSmall: {
     fontFamily: 'Inter',
     fontStyle: 'normal',
-    fontWeight: 'normal',
+    fontWeight: '400',
     fontSize: 10,
     textAlign: 'center',
-    color: colors.emperor,
+    color: colors.blackgrey,
     marginBottom: 10,
-    marginTop: 10
+    marginTop: 12
   },
   button: {
     backgroundColor: colors.gray

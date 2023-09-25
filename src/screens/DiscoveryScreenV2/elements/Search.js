@@ -30,10 +30,12 @@ const DiscoverySearch = ({
   searchText = '',
   setSearchText = () => {},
   isFocus = true,
+  placeholderText = StringConstant.discoverySearchBarPlaceholder,
   setIsFocus = () => {},
   setIsFirstTimeOpen = () => {},
   fetchDiscoveryData = () => {},
-  onCancelToken = () => {}
+  onCancelToken = () => {},
+  hideBackIcon = false
 }) => {
   const navigation = useNavigation();
   const [, discoveryDispatch] = React.useContext(Context).discovery;
@@ -78,6 +80,7 @@ const DiscoverySearch = ({
     } else {
       setIsFirstTimeOpen(true);
       setAllLoading(false);
+      debounced(text);
       debounced.cancel();
     }
   };
@@ -160,18 +163,20 @@ const DiscoverySearch = ({
   return (
     <View style={styles.animatedViewContainer}>
       <View style={styles.arrowContainer}>
-        <TouchableNativeFeedback
-          testID={TestIdConstant.discoveryScreenBackArrow}
-          onPress={handleBackPress}>
-          <View style={styles.backArrow}>
-            <MemoIcArrowBackWhite
-              width={20}
-              height={12}
-              fill={colors.black}
-              style={{alignSelf: 'center'}}
-            />
-          </View>
-        </TouchableNativeFeedback>
+        {!hideBackIcon && (
+          <TouchableNativeFeedback
+            testID={TestIdConstant.discoveryScreenBackArrow}
+            onPress={handleBackPress}>
+            <View style={styles.backArrow}>
+              <MemoIcArrowBackWhite
+                width={20}
+                height={12}
+                fill={colors.black}
+                style={{alignSelf: 'center'}}
+              />
+            </View>
+          </TouchableNativeFeedback>
+        )}
       </View>
       <View style={styles.searchContainer}>
         <View style={styles.wrapperSearch}>
@@ -193,7 +198,7 @@ const DiscoverySearch = ({
             multiline={false}
             returnKeyType="search"
             onSubmitEditing={handleOnSubmitEditing}
-            placeholder={StringConstant.discoverySearchBarPlaceholder}
+            placeholder={placeholderText}
             placeholderTextColor={COLORS.gray1}
             style={styles.input}
           />

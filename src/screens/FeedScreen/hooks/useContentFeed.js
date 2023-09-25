@@ -27,14 +27,14 @@ const useContentFeed = ({navigation}) => {
     matchPress(match);
   }, []);
 
-  const handleTextColor = (isShortText) => {
+  const hanldeShortTextColor = (isShortText) => {
     if (isShortText) {
       return 'rgba(255, 255, 255, 0.7)';
     }
     return colors.blue;
   };
 
-  const hashtagAtComponent = (message, substring, isShotText) => {
+  const hashtagAtComponent = (message, substring, isShortText) => {
     const regex = /\B([#@][a-zA-Z0-9_+-]+\b)(?!;)/;
     if (substring) {
       message = message.substring(0, substring);
@@ -45,7 +45,7 @@ const useContentFeed = ({navigation}) => {
           <Text
             onPress={() => onPressComponent(match)}
             testID="regex"
-            style={{color: handleTextColor(isShotText)}}>
+            style={{color: hanldeShortTextColor(isShortText)}}>
             {match}
           </Text>
         );
@@ -56,7 +56,9 @@ const useContentFeed = ({navigation}) => {
 
   return {
     hashtagAtComponent,
-    matchPress
+    matchPress,
+    hanldeShortTextColor,
+    onPressComponent
   };
 };
 

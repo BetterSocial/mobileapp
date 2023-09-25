@@ -1,8 +1,7 @@
 import * as React from 'react';
 import FastImage from 'react-native-fast-image';
 import PropTypes from 'prop-types';
-import {Dimensions, Platform, StyleSheet, Text, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import {StyleSheet, Text, View, ScrollView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import Card from '../../Card/Card';
@@ -11,7 +10,6 @@ import ImageLayouter from '../../../screens/FeedScreen/elements/ImageLayouter';
 import TopicsChip from '../../TopicsChip/TopicsChip';
 import dimen from '../../../utils/dimen';
 import useContentFeed from '../../../screens/FeedScreen/hooks/useContentFeed';
-import usePostDetail from '../hooks/usePostDetail';
 import {COLORS} from '../../../utils/theme';
 import {POST_TYPE_LINK, POST_TYPE_POLL, POST_TYPE_STANDARD} from '../../../utils/constants';
 import {colors} from '../../../utils/colors';
@@ -19,14 +17,28 @@ import {fonts, normalizeFontSize, normalizeFontSizeByWidth} from '../../../utils
 import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
 import {sanitizeUrl} from '../../../utils/string/StringUtils';
 import {smartRender} from '../../../utils/Utils';
+import useCalculationContent from '../../../screens/FeedScreen/hooks/useCalculationContent';
 
-const {width: screenWidth} = Dimensions.get('window');
-const FONT_SIZE_TEXT = 16;
-const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPostDetail}) => {
+const Content = ({
+  message,
+  images_url,
+  topics = [],
+  item,
+  onnewpollfetched,
+  isPostDetail,
+  haveSeeMore
+}) => {
   const navigation = useNavigation();
   const cekImage = () => images_url && images_url !== '';
   const {hashtagAtComponent} = useContentFeed({navigation});
-  const {calculationText} = usePostDetail();
+  const {handleCalculation} = useCalculationContent();
+  const [textHeight, setTextHeight] = React.useState(0);
+  const [containerHeight, setContainerHeight] = React.useState(0);
+  const maxFontSize = normalizeFontSizeByWidth(28);
+  const minFontSize = normalizeFontSizeByWidth(16);
+  const [remainingHeight, setRemainingHeight] = React.useState(0);
+  const [topicHeight, setTopicHeight] = React.useState(0);
+  const {handleMarginVertical} = useCalculationContent();
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
       title: 'Photo',
@@ -37,13 +49,14 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
       }, [])
     });
   };
-
-  const handleStyleFeed = () => {
-    if (item.post_type !== POST_TYPE_LINK) {
-      return styles.contentFeed;
-    }
-    return styles.contentFeedLink;
-  };
+  const {font, lineHeight} = handleCalculation(
+    containerHeight,
+    textHeight,
+    maxFontSize,
+    minFontSize,
+    item.post_type,
+    images_url
+  );
 
   const navigateToLinkContextPage = () => {
     const param = linkContextScreenParamBuilder(
@@ -65,10 +78,16 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
     navigation.navigate('DomainScreen', param);
   };
 
-  const isShortText = () => {
-    return images_url.length <= 0 && item.post_type === POST_TYPE_STANDARD && message.length <= 125;
-  };
+  React.useEffect(() => {
+    if (containerHeight > 0 && textHeight > 0) {
+      const remainingHeightNumber = containerHeight - textHeight;
+      setRemainingHeight(remainingHeightNumber);
+    }
+  }, [containerHeight, textHeight]);
 
+  const isShortText = () => {
+    return images_url.length <= 0 && item.post_type === POST_TYPE_STANDARD && !haveSeeMore;
+  };
   const handleContainerPdp = () => {
     if (isShortText()) {
       return styles.shortText;
@@ -83,52 +102,84 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
     return {};
   };
 
-  if (!cekImage) return null;
+  const handleTextHeight = ({nativeEvent}) => {
+    if (!textHeight || textHeight <= 0) {
+      setTextHeight(nativeEvent.layout.height);
+    }
+  };
 
+  const handleContainerHeight = ({nativeEvent}) => {
+    if (!containerHeight || containerHeight <= 0) {
+      setContainerHeight(nativeEvent.layout.height);
+    }
+  };
+
+  const handlePaddingBottom = () => {
+    const isTextPassTopic = remainingHeight <= lineHeight + font * 2;
+    if ((!isTextPassTopic && topics.length > 0) || images_url?.length > 0) {
+      return 0;
+    }
+    return topicHeight;
+  };
+
+  const handleTopicChipHeight = (nativeEvent) => {
+    setTopicHeight(nativeEvent?.layout?.height);
+  };
+
+  if (!cekImage) return null;
+  console.log({message: sanitizeUrl(message)}, 'laka');
   return (
     <>
       <ScrollView
         style={[styles.contentFeed, handleContainerPdp()]}
-        contentContainerStyle={styles.contensStyle(images_url.length > 0, isShortText())}
+        contentContainerStyle={styles.contensStyle(handlePaddingBottom())}
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}>
-        <View
-          style={[
-            handleStyleFeed(),
-            {
-              minHeight: calculationText(hashtagAtComponent(sanitizeUrl(message))).containerHeight
-            },
-            handleContainerPdp(),
-            handleMessageContainerPdp()
-          ]}>
-          <View style={styles.postTextContainer(isPostDetail)}>
-            {item.post_type !== POST_TYPE_LINK ? (
-              <Text
-                style={[
-                  styles.textContentFeed(isShortText()),
-                  {
-                    fontSize: calculationText(message).fontSize,
-                    lineHeight: calculationText(message).lineHeight
-                  }
-                ]}>
-                {hashtagAtComponent(message, null, isShortText())}
-              </Text>
-            ) : (
-              <Text
-                style={[
-                  styles.textContentFeed(isShortText()),
-                  {
-                    fontSize: calculationText(sanitizeUrl(message)).fontSize,
-                    lineHeight: calculationText(sanitizeUrl(message)).lineHeight
-                  }
-                ]}>
-                {hashtagAtComponent(sanitizeUrl(message), null, isShortText())}{' '}
-              </Text>
-            )}
+        {sanitizeUrl(message)?.length > 0 ? (
+          <View
+            onLayout={handleContainerHeight}
+            style={[
+              styles.contentFeed,
+              handleContainerPdp(),
+              handleMessageContainerPdp(),
+              styles.ph4,
+              styles.mv5
+            ]}>
+            <View style={styles.postTextContainer(isPostDetail)}>
+              {item.post_type !== POST_TYPE_LINK ? (
+                <Text
+                  onLayout={handleTextHeight}
+                  style={[
+                    styles.textContentFeed(isShortText()),
+                    {
+                      fontSize: font,
+                      lineHeight
+                    }
+                  ]}>
+                  {hashtagAtComponent(message, null, isShortText())}
+                </Text>
+              ) : (
+                <Text
+                  style={[
+                    styles.textContentFeed(isShortText()),
+                    {
+                      fontSize: font,
+                      lineHeight
+                    }
+                  ]}>
+                  {hashtagAtComponent(sanitizeUrl(message), null, isShortText())}{' '}
+                </Text>
+              )}
+            </View>
           </View>
-        </View>
-        <View style={styles.pollContainer}>
-          {item && item.post_type === POST_TYPE_POLL ? (
+        ) : null}
+
+        {item && item.post_type === POST_TYPE_POLL ? (
+          <View
+            style={[
+              styles.pollContainer,
+              {marginVertical: handleMarginVertical(sanitizeUrl(message))}
+            ]}>
             <View
               style={{
                 flex: 1,
@@ -149,10 +200,11 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
                 isPostDetail={isPostDetail}
               />
             </View>
-          ) : null}
-        </View>
+          </View>
+        ) : null}
         {item && item.post_type === POST_TYPE_LINK && (
-          <View style={styles.newsCard}>
+          <View
+            style={[styles.newsCard, {marginVertical: handleMarginVertical(sanitizeUrl(message))}]}>
             {smartRender(Card, {
               domain: item.og.domain,
               date: new Date(item.og.date).toLocaleDateString(),
@@ -177,7 +229,13 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
             />
           </View>
         )}
-        <TopicsChip isPdp={true} topics={topics} fontSize={normalizeFontSize(14)} text={message} />
+        <TopicsChip
+          onLayout={handleTopicChipHeight}
+          isPdp={true}
+          topics={topics}
+          fontSize={normalizeFontSize(14)}
+          text={message}
+        />
       </ScrollView>
     </>
   );
@@ -195,8 +253,7 @@ export default Content;
 const styles = StyleSheet.create({
   contentFeed: {
     flex: 1,
-    backgroundColor: COLORS.white,
-    paddingVertical: 5
+    backgroundColor: COLORS.white
   },
   textContentFeed: (isShort) => ({
     fontFamily: fonts.inter[400],
@@ -215,7 +272,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white
   },
   newsCard: {
-    paddingHorizontal: 20
+    paddingHorizontal: 16
   },
   containerImage: {
     flex: 1,
@@ -234,7 +291,13 @@ const styles = StyleSheet.create({
   centerVertical: {
     justifyContent: 'center'
   },
-  contensStyle: (containImage, isShortText) => ({
-    paddingBottom: containImage || isShortText ? 0 : 40
-  })
+  contensStyle: (paddingBottom) => ({
+    paddingBottom
+  }),
+  ph4: {
+    paddingHorizontal: 4
+  },
+  mv5: {
+    marginVertical: 6
+  }
 });

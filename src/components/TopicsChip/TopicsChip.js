@@ -5,11 +5,17 @@ import {useNavigation} from '@react-navigation/native';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
-const TopicsChip = ({topics = [], fontSize = 24, isPdp}) => {
+const TopicsChip = ({topics = [], fontSize = 24, onLayout, topicContainer}) => {
   const navigation = useNavigation();
 
   const onTopicPress = (topic) => {
     navigation.push('TopicPageScreen', {id: topic.replace('#', '')});
+  };
+
+  const handleLayout = ({nativeEvent}) => {
+    if (onLayout && typeof onLayout === 'function') {
+      onLayout(nativeEvent);
+    }
   };
 
   if (topics.length === 0) return <></>;
@@ -18,8 +24,9 @@ const TopicsChip = ({topics = [], fontSize = 24, isPdp}) => {
     <ScrollView
       showsHorizontalScrollIndicator={false}
       horizontal
+      onLayout={handleLayout}
       contentContainerStyle={styles.contentStyle}
-      style={styles.topicContainer}>
+      style={[styles.topicContainer, topicContainer]}>
       {topics.map((item) => (
         <View key={`topicContainer-${item}`} style={styles.topicItemContainer}>
           <TouchableOpacity
@@ -41,7 +48,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     width: '100%',
-    marginTop: 12,
     position: 'absolute',
     bottom: 0,
     marginLeft: 12

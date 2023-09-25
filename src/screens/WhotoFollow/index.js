@@ -1,6 +1,5 @@
 import * as React from 'react';
 import JwtDecode from 'jwt-decode';
-import SimpleToast from 'react-native-simple-toast';
 import crashlytics from '@react-native-firebase/crashlytics';
 import {
   ActivityIndicator,
@@ -20,12 +19,10 @@ import ImageUtils from '../../utils/image';
 import ItemUser from './elements/ItemUser';
 import Label from './elements/Label';
 import Loading from '../Loading';
-import StorageUtils from '../../utils/storage';
 import TokenStorage from '../../utils/storage/custom/tokenStorage';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
-import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {Header} from '../../components';
@@ -267,7 +264,7 @@ const WhotoFollow = () => {
       <View style={styles.containerProgress}>
         <ProgressBar isStatic={true} value={100} />
       </View>
-      <View style={styles.content}>
+      <View>
         <Text style={styles.textWhoToFollow}>Who to follow</Text>
         <Text style={styles.textDescription}>
           {'Find interesting people to follow.\nYou can edit this anytime.'}
@@ -302,43 +299,41 @@ const WhotoFollow = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: colors.white
   },
   recyclerview: {
     marginBottom: 112
-  },
-  content: {
-    padding: 22
   },
   wrapperHeader: {
     paddingLeft: 22,
     paddingRight: 22,
     paddingTop: 22
   },
-
   containerProgress: {
-    marginTop: 36,
-    paddingLeft: 22,
-    paddingRight: 22,
-    paddingTop: 22
+    marginTop: 20,
+    marginBottom: 24,
+    paddingHorizontal: 20
   },
   textWhoToFollow: {
-    fontFamily: 'Poppins',
+    fontFamily: 'Inter-Bold',
     fontStyle: 'normal',
-    fontWeight: 'bold',
+    fontWeight: '600',
     fontSize: 36,
-    lineHeight: 44,
-    color: '#11243D'
+    lineHeight: 43.57,
+    color: '#11243D',
+    marginHorizontal: 20
   },
   textDescription: {
-    fontFamily: 'Poppins',
+    fontFamily: 'Inter',
     fontStyle: 'normal',
-    fontWeight: 'normal',
-    fontSize: 12,
-    lineHeight: 20,
-    color: '#828282',
-    marginTop: 20,
-    opacity: 0.84
+    fontWeight: '400',
+    fontSize: 14,
+    lineHeight: 24,
+    color: colors.gray,
+    opacity: 0.84,
+    marginTop: 8,
+    marginBottom: 24,
+    paddingHorizontal: 20
   },
   footer: {
     position: 'absolute',
@@ -348,8 +343,8 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
     paddingBottom: 20,
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#000',
+    backgroundColor: colors.white,
+    shadowColor: colors.black,
     shadowOffset: {
       width: 0,
       height: 5
@@ -359,18 +354,18 @@ const styles = StyleSheet.create({
 
     elevation: 11,
     flexDirection: 'column',
-    justifyContent: 'flex-end',
-    marginTop: 'auto',
+    justifyContent: 'space-between',
     zIndex: 1000
   },
   textSmall: {
     fontFamily: 'Inter',
     fontStyle: 'normal',
-    fontWeight: 'normal',
+    fontWeight: '400',
     fontSize: 10,
     textAlign: 'center',
-    color: COLORS.blackgrey,
-    marginBottom: 12
+    color: colors.blackgrey,
+    marginBottom: 10,
+    marginTop: 12
   },
   containerCard: {
     flexDirection: 'row',

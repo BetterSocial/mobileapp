@@ -16,11 +16,11 @@ import {ButtonNewPost} from '../../components/Button';
 import {Context} from '../../context';
 import {DISCOVERY_TAB_TOPICS, SOURCE_FEED_TAB} from '../../utils/constants';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import {normalizeFontSizeByWidth} from '../../utils/fonts';
 import {setFeedByIndex, setTimer} from '../../context/actions/feeds';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {viewTimePost} from '../../service/post';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {normalizeFontSizeByWidth} from '../../utils/fonts';
 
 let lastDragY = 0;
 
@@ -34,6 +34,7 @@ const FeedScreen = (props) => {
   const {interactionsComplete} = useAfterInteractions();
   const {feeds, timer, viewPostTimeIndex} = feedsContext;
   const [isScroll, setIsScroll] = React.useState(false);
+  const [updateIndex, setUpdateIndex] = React.useState(0);
   const {
     getDataFeeds,
     postOffset,
@@ -50,12 +51,13 @@ const FeedScreen = (props) => {
     saveSearchHeight,
     searchHeight,
     handleScroll,
-    setIsLastPage
+    setIsLastPage,
+    nextTargetFeed
   } = useCoreFeed();
   const interactionManagerRef = React.useRef(null);
   const interactionManagerAnimatedRef = React.useRef(null);
-  const getDataFeedsHandle = async (offsetFeed = 0, useLoading) => {
-    getDataFeeds(offsetFeed, useLoading);
+  const getDataFeedsHandle = async (offsetFeed = 0, useLoading = false, targetFeed = null) => {
+    getDataFeeds(offsetFeed, useLoading, targetFeed);
   };
   const onDeleteBlockedPostCompletedHandle = async (postId) => {
     onDeleteBlockedPostCompleted(postId);
@@ -63,7 +65,7 @@ const FeedScreen = (props) => {
   const onBlockCompletedHandle = async (postId) => {
     onBlockCompleted(postId);
   };
-
+  const [updateMoreText, setUpdateMoreText] = React.useState(false);
   React.useEffect(() => {
     if (interactionsComplete) {
       checkCacheFeed();
@@ -120,29 +122,25 @@ const FeedScreen = (props) => {
   };
 
   const onEndReach = () => {
-    // Use -2 because last item is dummy
-    // getDataFeedsHandle(feeds[feeds.length - 2].id);
-    getDataFeedsHandle(postOffset);
+    getDataFeedsHandle(postOffset, false, nextTargetFeed);
   };
 
-  const onPress = (item) => {
+  const refreshMoreText = (index) => {
+    setUpdateIndex(index);
+    setUpdateMoreText(true);
+    setTimeout(() => {
+      setUpdateMoreText(false);
+    }, 500);
+  };
+  console.log({updateMoreText}, 'lala1');
+  const onPress = (item, haveSeeMore, index) => {
     props.navigation.navigate('PostDetailPage', {
-      // index: index,
       isalreadypolling: item.isalreadypolling,
       feedId: item.id,
       data: item,
-      isCaching: false
-    });
-  };
-
-  const onPressComment = (index, item) => {
-    props.navigation.navigate('PostDetailPage', {
-      // index: index,
-      feedId: item.id,
-      // refreshParent: getDataFeedsHandle,
-      data: item,
-      isCaching: true
-      // feedId:
+      isCaching: false,
+      haveSeeMore,
+      refreshParent: () => refreshMoreText(index)
     });
   };
 
@@ -208,6 +206,7 @@ const FeedScreen = (props) => {
 
   const renderItem = ({item, index}) => {
     if (item.dummy) return <React.Fragment key={index} />;
+    if (updateMoreText && updateIndex === index) return null;
     return (
       <RenderListFeed
         key={item.id}
@@ -215,8 +214,10 @@ const FeedScreen = (props) => {
         onNewPollFetched={onNewPollFetched}
         index={index}
         onPressDomain={onPressDomain}
-        onPress={() => onPress(item)}
-        onPressComment={() => onPressComment(index, item)}
+        onPress={(haveSeeMore) => {
+          onPress(item, haveSeeMore, index);
+        }}
+        onPressComment={(haveSeeMore) => onPress(item, haveSeeMore, index)}
         onPressBlock={() => onPressBlock(item)}
         onPressUpvote={(post) => setUpVoteHandle(post, index)}
         selfUserId={myProfile.user_id}
