@@ -132,7 +132,7 @@ const FeedScreen = (props) => {
       setUpdateMoreText(false);
     }, 500);
   };
-  console.log({updateMoreText}, 'lala1');
+
   const onPress = (item, haveSeeMore, index) => {
     props.navigation.navigate('PostDetailPage', {
       isalreadypolling: item.isalreadypolling,
