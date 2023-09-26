@@ -105,7 +105,8 @@ const styles = StyleSheet.create({
   },
   messageContainer: {
     paddingHorizontal: 20,
-    marginVertical: 6
+    marginTop: 6,
+    marginBottom: 12
   },
   message: {
     fontFamily: fonts.inter[400],
