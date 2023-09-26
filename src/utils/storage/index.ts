@@ -9,7 +9,11 @@ enum StorageKeysEnum {
   TopicPages = 'topicPages',
   RefreshToken = 'refreshToken',
   JwtToken = 'jwtToken',
-  AnonymousToken = 'anonymousToken'
+  AnonymousToken = 'anonymousToken',
+  FeedPages = 'feedpages',
+  MyFeeds = 'myfeeds',
+  MyAnonymousFeed = 'myanonymousfeed',
+  OtherProfileFeed = 'otherprofilefeed'
 }
 
 interface IStorage {
@@ -72,7 +76,11 @@ const StorageUtils = {
   topicPages: storageBuilder(StorageKeysEnum.TopicPages),
   refreshToken: storageBuilder(StorageKeysEnum.RefreshToken),
   jwtToken: storageBuilder(StorageKeysEnum.JwtToken),
-  anonymousToken: storageBuilder(StorageKeysEnum.AnonymousToken)
+  anonymousToken: storageBuilder(StorageKeysEnum.AnonymousToken),
+  feedPages: storageBuilder(StorageKeysEnum.FeedPages),
+  myFeeds: storageBuilder(StorageKeysEnum.MyFeeds),
+  myAnonymousFeed: storageBuilder(StorageKeysEnum.MyAnonymousFeed),
+  otherProfileFeed: storageBuilder(StorageKeysEnum.OtherProfileFeed)
 };
 
 export interface IStorageUtils {

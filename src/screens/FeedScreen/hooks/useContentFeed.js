@@ -29,7 +29,7 @@ const useContentFeed = ({navigation}) => {
 
   const hanldeShortTextColor = (isShortText) => {
     if (isShortText) {
-      return 'rgba(255, 255, 255, 0.7)';
+      return 'rgba(0, 0, 0, 0.5)';
     }
     return colors.blue;
   };
