@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white
   },
   newsCard: {
-    paddingHorizontal: 16
+    paddingHorizontal: 6
   },
   containerImage: {
     flex: 1,
@@ -298,6 +298,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4
   },
   mv5: {
-    marginVertical: 6
+    marginTop: 6,
+    marginBottom: 12
   }
 });

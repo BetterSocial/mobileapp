@@ -20,7 +20,6 @@ const FeedsPostDetail = (props) => {
       refreshCache();
     }
   }, []);
-  console.log({data}, 'nanima');
   React.useEffect(() => {
     return () => {
       if (refreshParent && typeof refreshParent === 'function') {

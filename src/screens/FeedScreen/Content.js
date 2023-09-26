@@ -127,7 +127,7 @@ const Content = ({
     if (images_url.length <= 0 && item?.post_type === POST_TYPE_STANDARD) {
       return heightTopic;
     }
-    return 0;
+    return 12;
   };
 
   const adjustmentCountDeviceLine = () => {
@@ -176,7 +176,6 @@ const Content = ({
         testID="postTypePoll"
         style={[
           styles.containerText,
-          handleContainerText().container,
           {marginBottom: handleMarginTopic()},
           {backgroundColor: 'transparent'}
         ]}>
