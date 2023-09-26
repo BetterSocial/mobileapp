@@ -26,7 +26,8 @@ const Content = ({
   item,
   onnewpollfetched,
   isPostDetail,
-  haveSeeMore
+  haveSeeMore,
+  parentData
 }) => {
   const navigation = useNavigation();
   const cekImage = () => images_url && images_url !== '';
@@ -77,7 +78,6 @@ const Content = ({
 
     navigation.navigate('DomainScreen', param);
   };
-
   React.useEffect(() => {
     if (containerHeight > 0 && textHeight > 0) {
       const remainingHeightNumber = containerHeight - textHeight;
@@ -90,11 +90,10 @@ const Content = ({
   };
   const handleContainerPdp = () => {
     if (isShortText()) {
-      return styles.shortText;
+      return styles.shortText(parentData?.bg);
     }
     return {};
   };
-
   const handleMessageContainerPdp = () => {
     if (isShortText()) {
       return styles.centerVertical;
@@ -150,7 +149,7 @@ const Content = ({
                 <Text
                   onLayout={handleTextHeight}
                   style={[
-                    styles.textContentFeed(isShortText()),
+                    styles.textContentFeed(isShortText(), parentData?.color),
                     {
                       fontSize: font,
                       lineHeight
@@ -161,7 +160,7 @@ const Content = ({
               ) : (
                 <Text
                   style={[
-                    styles.textContentFeed(isShortText()),
+                    styles.textContentFeed(isShortText(), parentData?.color),
                     {
                       fontSize: font,
                       lineHeight
@@ -255,11 +254,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.white
   },
-  textContentFeed: (isShort) => ({
+  textContentFeed: () => ({
     fontFamily: fonts.inter[400],
     fontWeight: 'normal',
     fontSize: normalizeFontSize(14),
-    color: isShort ? colors.white : colors.black,
+    color: colors.black,
     flex: 1,
     flexWrap: 'wrap'
   }),
@@ -272,7 +271,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white
   },
   newsCard: {
-    paddingHorizontal: 16
+    paddingHorizontal: 6
   },
   containerImage: {
     flex: 1,
@@ -284,12 +283,13 @@ const styles = StyleSheet.create({
   postTextContainer: (isPostDetail) => ({
     paddingHorizontal: isPostDetail ? 12 : 0
   }),
-  shortText: {
+  shortText: (bg) => ({
     minHeight: normalizeFontSizeByWidth(342),
-    backgroundColor: '#11468F'
-  },
+    backgroundColor: bg
+  }),
   centerVertical: {
-    justifyContent: 'center'
+    justifyContent: 'center',
+    backgroundColor: 'transparent'
   },
   contensStyle: (paddingBottom) => ({
     paddingBottom
@@ -298,6 +298,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4
   },
   mv5: {
-    marginVertical: 6
+    marginTop: 6,
+    marginBottom: 12
   }
 });
