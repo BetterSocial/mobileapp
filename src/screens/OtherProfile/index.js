@@ -60,6 +60,8 @@ import {trimString} from '../../utils/string/TrimString';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import StorageUtils from '../../utils/storage';
+import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
 
 const {width, height} = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -181,7 +183,7 @@ const OtherProfile = () => {
   const [loadingSendDM, setLoadingSendDM] = React.useState(false);
   const [anonProfile, setAnonProfile] = React.useState();
   const [dmChat, setDMChat] = React.useState();
-
+  const {mappingColorFeed} = useCoreFeed();
   const isSignedMessageEnabled = dataMain.isSignedMessageEnabled ?? true;
   const isAnonimityEnabled = dataMain.isAnonMessageEnabled && isSignedMessageEnabled;
 
@@ -289,15 +291,24 @@ const OtherProfile = () => {
   const getOtherFeeds = async (userId, offset = 0) => {
     try {
       setIsHitApiFirstTime(true);
-
+      const cacheFeed = StorageUtils.otherProfileFeed.getForKey(userId);
       const result = await getOtherFeedsInProfile(userId, offset);
+      const {data: feedOtherProfile} = result;
+      const {mapNewData} = mappingColorFeed({
+        dataFeed: feedOtherProfile,
+        dataCache: cacheFeed
+      });
+      console.log({mapNewData, cacheFeed}, 'sijak');
       if (Array.isArray(result.data) && result.data.length === 0) {
         setIsLastPage(true);
       }
-      if (offset === 0) setOtherProfileFeed(result.data, dispatchOtherProfile);
-      else {
-        const clonedFeeds = [...feeds, ...result.data];
+      if (offset === 0) {
+        setOtherProfileFeed(mapNewData, dispatchOtherProfile);
+        StorageUtils.otherProfileFeed.setForKey(userId, JSON.stringify(mapNewData));
+      } else {
+        const clonedFeeds = [...feeds, ...mapNewData];
         setOtherProfileFeed(clonedFeeds, dispatchOtherProfile);
+        StorageUtils.otherProfileFeed.setForKey(userId, JSON.stringify(clonedFeeds));
       }
       setLoading(false);
       setPostOffset(Number(result.offset));
@@ -344,6 +355,10 @@ const OtherProfile = () => {
     }
   };
 
+  const handleGetOtherFeed = (result) => {
+    getOtherFeeds(result.data.user_id);
+  };
+
   const fetchOtherProfile = async (usernames) => {
     try {
       const result = await getOtherProfile(usernames);
@@ -352,7 +367,7 @@ const OtherProfile = () => {
         setDataMainBio(result.data.bio);
         checkUserBlockHandle(result.data.user_id);
         setOtherId(result.data.user_id);
-        getOtherFeeds(result.data.user_id);
+        handleGetOtherFeed(result);
       }
     } catch (e) {
       if (e.response && e.response.data && e.response.data.message) {
