@@ -31,7 +31,7 @@ import useCoreFeed from '../screens/FeedScreen/hooks/useCoreFeed';
 export const useInitialStartup = () => {
   const [, newsDispatch] = React.useContext(Context).news;
   const [, discoveryDispatch] = React.useContext(Context).discovery;
-  const [feedsContext, dispatchFeeds] = React.useContext(Context).feeds;
+  const [, dispatchFeeds] = React.useContext(Context).feeds;
   const [, followingDispatch] = React.useContext(Context).following;
   const [profileState, dispatchProfile] = React.useContext(Context).profile;
   const initialStartup = useRecoilValue(InitialStartupAtom);
@@ -47,7 +47,6 @@ export const useInitialStartup = () => {
   const {checkCacheFeed} = useCoreFeed();
   const {getFeedChat} = useFeedService();
 
-  const LIMIT_FIRST_FEEDS = 1;
   const LIMIT_FIRST_NEWS = 3;
   const create = useClientGetstream();
 

@@ -26,7 +26,6 @@ import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
 } from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
 import NavHeader from './elements/NavHeader';
-import StorageUtils from '../../utils/storage';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
 
 const styles = StyleSheet.create({
