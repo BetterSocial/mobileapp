@@ -11,7 +11,7 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import Card from '../../components/Card/Card';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import {COLORS} from '../../utils/theme';
-import {fonts, normalizeFontSize} from '../../utils/fonts';
+import {fonts, normalizeFontSize, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {smartRender} from '../../utils/Utils';
 import useContentFeed from './hooks/useContentFeed';
 import useCalculationContentLink from './hooks/useCalculatiuonContentLink';
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   message: {
     fontFamily: fonts.inter[400],
     lineHeight: 24,
-    fontSize: FONT_SIZE_TEXT,
+    fontSize: normalizeFontSizeByWidth(16),
     letterSpacing: 0.1
   },
   topicStyle: {
