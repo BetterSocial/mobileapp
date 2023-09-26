@@ -71,6 +71,7 @@ import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import ShadowFloatingButtons from '../../components/Button/ShadowFloatingButtons';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
 import StorageUtils from '../../utils/storage';
 
@@ -693,11 +694,13 @@ const ProfileScreen = ({route}) => {
             isLoadingRemoveImage={isLoadingRemoveImage}
           />
           {isShowButton ? (
-            <TouchableNativeFeedback onPress={toTop}>
-              <View style={{...styles.btnBottom, opacity}}>
-                <ArrowUpWhiteIcon width={12} height={20} fill={colors.white} />
-              </View>
-            </TouchableNativeFeedback>
+            <ShadowFloatingButtons>
+              <TouchableNativeFeedback onPress={toTop}>
+                <View style={{...styles.btnBottom, opacity}}>
+                  <ArrowUpWhiteIcon width={12} height={20} fill={colors.white} />
+                </View>
+              </TouchableNativeFeedback>
+            </ShadowFloatingButtons>
           ) : null}
 
           <BlockComponent ref={refBlockComponent} refresh={getMyFeeds} screen="my_profile" />
