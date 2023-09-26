@@ -19,6 +19,7 @@ import {debounce} from 'lodash';
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
 
+import {Shadow} from 'react-native-shadow-2';
 import AnonymousTab from './elements/AnonymousTab';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BioAndDMSetting from './elements/BioAndDMSetting';
@@ -35,7 +36,9 @@ import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
 import RenderItem from '../FeedScreen/RenderList';
 import ShareUtils from '../../utils/share';
+import StorageUtils from '../../utils/storage';
 import dimen from '../../utils/dimen';
+import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
 import useResetContext from '../../hooks/context/useResetContext';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
@@ -71,8 +74,7 @@ import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
-import StorageUtils from '../../utils/storage';
+import ShadowFloatingButtons from '../../components/Button/ShadowFloatingButtons';
 
 const {width} = Dimensions.get('screen');
 
@@ -693,11 +695,13 @@ const ProfileScreen = ({route}) => {
             isLoadingRemoveImage={isLoadingRemoveImage}
           />
           {isShowButton ? (
-            <TouchableNativeFeedback onPress={toTop}>
-              <View style={{...styles.btnBottom, opacity}}>
-                <ArrowUpWhiteIcon width={12} height={20} fill={colors.white} />
-              </View>
-            </TouchableNativeFeedback>
+            <ShadowFloatingButtons>
+              <TouchableNativeFeedback onPress={toTop}>
+                <View style={{...styles.btnBottom, opacity}}>
+                  <ArrowUpWhiteIcon width={12} height={20} fill={colors.white} />
+                </View>
+              </TouchableNativeFeedback>
+            </ShadowFloatingButtons>
           ) : null}
 
           <BlockComponent ref={refBlockComponent} refresh={getMyFeeds} screen="my_profile" />

@@ -51,7 +51,7 @@ const ContentLink = ({
         {!isPostDetail ? (
           <Text tyle={[styles.message]}>
             {hashtagAtComponent(sanitizeUrl, 50)}{' '}
-            {message.length > 50 && <Text style={{color: '#2F80ED'}}> More...</Text>}{' '}
+            {message.length > 50 && <Text style={{color: COLORS.blue}}> More...</Text>}{' '}
           </Text>
         ) : (
           <Text
