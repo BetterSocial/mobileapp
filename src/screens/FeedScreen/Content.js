@@ -9,12 +9,12 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import ContentPoll from './ContentPoll';
 import ImageLayouter from './elements/ImageLayouter';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
-import useCalculationContent from './hooks/useCalculationContent';
 import {COLORS} from '../../utils/theme';
 import {POST_TYPE_LINK, POST_TYPE_POLL, POST_TYPE_STANDARD} from '../../utils/constants';
 import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
+import useCalculationContent from './hooks/useCalculationContent';
 import {getCommentLength} from '../../utils/getstream';
 
 const {width: screenWidth} = Dimensions.get('window');
@@ -39,9 +39,8 @@ const Content = ({
     onLayoutTopicChip,
     heightTopic,
     amountLineTopic,
-    heightPoll,
-    handleMarginVertical,
-    onPollLayout
+    onPollLayout,
+    heightPoll
   } = useCalculationContent();
   const [amountCut, setAmountCut] = React.useState(0);
   const [textCut, setTextCut] = React.useState(null);
@@ -173,7 +172,14 @@ const Content = ({
 
   const renderHandleTextContent = () => {
     return (
-      <View testID="postTypePoll" style={[styles.containerText, {backgroundColor: 'transparent'}]}>
+      <View
+        testID="postTypePoll"
+        style={[
+          styles.containerText,
+          handleContainerText().container,
+          {marginBottom: handleMarginTopic()},
+          {backgroundColor: 'transparent'}
+        ]}>
         {amountCut <= 0 ? (
           <Text
             onTextLayout={handleTextLayout}
@@ -245,11 +251,7 @@ const Content = ({
       ) : null}
 
       {item && item.post_type === POST_TYPE_POLL ? (
-        <View
-          style={[
-            styles.containerMainText(handleContainerText().isShort),
-            {marginVertical: handleMarginVertical(message)}
-          ]}>
+        <View style={styles.containerMainText(handleContainerText().isShort)}>
           <ContentPoll
             message={item.message}
             images_url={item.images_url}
@@ -267,7 +269,11 @@ const Content = ({
       ) : null}
       {images_url.length > 0 && (
         <View style={styles.containerImage}>
-          <ImageLayouter isFeed={true} images={images_url} onimageclick={onPress} />
+          <ImageLayouter
+            isFeed={true}
+            images={images_url}
+            onimageclick={() => onPress(showSeeMore)}
+          />
         </View>
       )}
 
@@ -325,6 +331,12 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
     marginLeft: 13
+  },
+
+  containerFeedText: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 5
   },
   feedDate: {
     fontFamily: fonts.inter[400],
@@ -387,6 +399,6 @@ export const styles = StyleSheet.create({
     opacity: 1
   }),
   mv5: {
-    marginVertical: 6
+    marginVertical: 5
   }
 });
