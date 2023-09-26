@@ -38,6 +38,7 @@ const Content = ({
   const minFontSize = normalizeFontSizeByWidth(16);
   const [remainingHeight, setRemainingHeight] = React.useState(0);
   const [topicHeight, setTopicHeight] = React.useState(0);
+  const {handleMarginVertical} = useCalculationContent();
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
       title: 'Photo',
@@ -126,17 +127,24 @@ const Content = ({
   };
 
   if (!cekImage) return null;
+  console.log({message: sanitizeUrl(message)}, 'laka');
   return (
     <>
       <ScrollView
-        style={[styles.contentFeed, handleContainerPdp(), {paddingVertical: message ? 5 : 0}]}
+        style={[styles.contentFeed, handleContainerPdp()]}
         contentContainerStyle={styles.contensStyle(handlePaddingBottom())}
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}>
-        {message?.length > 0 ? (
+        {sanitizeUrl(message)?.length > 0 ? (
           <View
             onLayout={handleContainerHeight}
-            style={[styles.contentFeed, handleContainerPdp(), handleMessageContainerPdp()]}>
+            style={[
+              styles.contentFeed,
+              handleContainerPdp(),
+              handleMessageContainerPdp(),
+              styles.ph4,
+              styles.mv5
+            ]}>
             <View style={styles.postTextContainer(isPostDetail)}>
               {item.post_type !== POST_TYPE_LINK ? (
                 <Text
@@ -166,8 +174,12 @@ const Content = ({
           </View>
         ) : null}
 
-        <View style={styles.pollContainer}>
-          {item && item.post_type === POST_TYPE_POLL ? (
+        {item && item.post_type === POST_TYPE_POLL ? (
+          <View
+            style={[
+              styles.pollContainer,
+              {marginVertical: handleMarginVertical(sanitizeUrl(message))}
+            ]}>
             <View
               style={{
                 flex: 1,
@@ -188,10 +200,11 @@ const Content = ({
                 isPostDetail={isPostDetail}
               />
             </View>
-          ) : null}
-        </View>
+          </View>
+        ) : null}
         {item && item.post_type === POST_TYPE_LINK && (
-          <View style={styles.newsCard}>
+          <View
+            style={[styles.newsCard, {marginVertical: handleMarginVertical(sanitizeUrl(message))}]}>
             {smartRender(Card, {
               domain: item.og.domain,
               date: new Date(item.og.date).toLocaleDateString(),
@@ -240,9 +253,7 @@ export default Content;
 const styles = StyleSheet.create({
   contentFeed: {
     flex: 1,
-    backgroundColor: COLORS.white,
-    paddingVertical: 5,
-    paddingHorizontal: 4
+    backgroundColor: COLORS.white
   },
   textContentFeed: (isShort) => ({
     fontFamily: fonts.inter[400],
@@ -282,5 +293,11 @@ const styles = StyleSheet.create({
   },
   contensStyle: (paddingBottom) => ({
     paddingBottom
-  })
+  }),
+  ph4: {
+    paddingHorizontal: 4
+  },
+  mv5: {
+    marginVertical: 6
+  }
 });

@@ -85,7 +85,7 @@ const ReplyCommentId = ({
       <StatusBar translucent={false} />
       <View style={styles.header}>
         <TouchableOpacity testID="backButton" onPress={navigationGoBack} style={styles.backArrow}>
-          <ArrowLeftIcon width={20} height={12} fill="#000" />
+          <ArrowLeftIcon width={20} height={20} fill="#000" />
         </TouchableOpacity>
         <Text testID="usernameText" style={styles.headerText}>
           Reply to {handleUsernameReplyComment(itemProp)}

@@ -39,8 +39,9 @@ const Content = ({
     onLayoutTopicChip,
     heightTopic,
     amountLineTopic,
-    onTopicLayout,
-    heightPoll
+    heightPoll,
+    handleMarginVertical,
+    onPollLayout
   } = useCalculationContent();
   const [amountCut, setAmountCut] = React.useState(0);
   const [textCut, setTextCut] = React.useState(null);
@@ -53,7 +54,6 @@ const Content = ({
       setHaveSeeMore(haveSeeMoreText);
     }
   }, [amountCut]);
-
   const {lineHeight, font} = handleCalculation(
     layoutHeight,
     textHeight,
@@ -69,7 +69,8 @@ const Content = ({
     }
     if (item.post_type === POST_TYPE_POLL) {
       const result = Math.round((layoutHeight - heightPoll - heightTopic) / lineHeight);
-      return result;
+
+      return result >= 0 ? result : 0;
     }
     if (getCommentLength(item.latest_reactions.comment) > 0) {
       return Math.floor(layoutHeight / lineHeight);
@@ -162,22 +163,10 @@ const Content = ({
     setAmountCut(text.length);
   };
   const showSeeMore = amountCut < message.length;
-  const handleMarginTopic = () => {
-    if (images_url.length <= 0 && item?.post_type === POST_TYPE_STANDARD) {
-      return heightTopic;
-    }
-    return 0;
-  };
+
   const renderHandleTextContent = () => {
     return (
-      <View
-        testID="postTypePoll"
-        style={[
-          styles.containerText,
-          handleContainerText().container,
-          {marginBottom: handleMarginTopic()},
-          {backgroundColor: 'transparent'}
-        ]}>
+      <View testID="postTypePoll" style={[styles.containerText, {backgroundColor: 'transparent'}]}>
         {amountCut <= 0 ? (
           <Text
             onTextLayout={handleTextLayout}
@@ -249,7 +238,11 @@ const Content = ({
       ) : null}
 
       {item && item.post_type === POST_TYPE_POLL ? (
-        <View style={styles.containerMainText(handleContainerText().isShort)}>
+        <View
+          style={[
+            styles.containerMainText(handleContainerText().isShort),
+            {marginVertical: handleMarginVertical(message)}
+          ]}>
           <ContentPoll
             message={item.message}
             images_url={item.images_url}
@@ -261,12 +254,12 @@ const Content = ({
             onnewpollfetched={onNewPollFetched}
             voteCount={item.voteCount}
             topics={item?.topics}
-            onLayout={onTopicLayout}
+            onLayout={onPollLayout}
           />
         </View>
       ) : null}
       {images_url.length > 0 && (
-        <View style={styles.containerImage}>
+        <View style={[styles.containerImage]}>
           <ImageLayouter
             isFeed={true}
             images={images_url}
@@ -330,12 +323,6 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginLeft: 13
   },
-
-  containerFeedText: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 5
-  },
   feedDate: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
@@ -396,6 +383,6 @@ export const styles = StyleSheet.create({
     color: 'white'
   },
   mv5: {
-    marginVertical: 5
+    marginVertical: 6
   }
 });
