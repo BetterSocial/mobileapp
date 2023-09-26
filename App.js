@@ -26,7 +26,7 @@ import {toastConfig} from './src/configs/ToastConfig';
 import {APP_UPGRADE_API_KEY, ENV} from './src/libraries/Configs/ENVConfig';
 
 const App = () => {
-  const {bottom, top} = useSafeAreaInsets();
+  const {top, bottom} = useSafeAreaInsets();
   const {height} = useSafeAreaFrame();
   const streami18n = new Streami18n({
     language: 'en'
@@ -127,8 +127,8 @@ const App = () => {
             onStateChange={handleStateChange}
             ref={navigationRef}
             linking={linking}>
-            <View style={{paddingTop: top, paddingBottom: bottom}}>
-              <OverlayProvider bottomInset={bottom} i18nInstance={streami18n}>
+            <View>
+              <OverlayProvider topInset={top} bottomInset={bottom} i18nInstance={streami18n}>
                 <KeyboardAvoidingView enabled={Platform.OS === 'ios'} behavior="padding">
                   <RootNavigator areaHeight={height} />
                 </KeyboardAvoidingView>

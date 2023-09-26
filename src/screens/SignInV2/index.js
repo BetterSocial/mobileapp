@@ -2,7 +2,7 @@ import * as React from 'react';
 import JwtDecode from 'jwt-decode';
 import SimpleToast from 'react-native-simple-toast';
 import crashlytics from '@react-native-firebase/crashlytics';
-import {BackHandler, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
+import {BackHandler, StatusBar, StyleSheet, View} from 'react-native';
 import {StackActions} from '@react-navigation/native';
 // eslint-disable-next-line import/no-unresolved
 import {colors} from 'react-native-swiper-flatlist/src/themes';
@@ -16,6 +16,7 @@ import {
 import {useNavigation} from '@react-navigation/core';
 import {useSetRecoilState} from 'recoil';
 
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import DevDummyLogin from '../../components/DevDummyLogin';
 import SlideShow from './elements/SlideShow';
 import TokenStorage from '../../utils/storage/custom/tokenStorage';
@@ -31,6 +32,7 @@ import {setDataHumenId} from '../../context/actions/users';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {verifyHumanIdExchangeToken} from '../../service/users';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import {COLORS} from '../../utils/theme';
 
 const SignIn = () => {
   const {setProfileId} = useProfileHook();
@@ -42,6 +44,7 @@ const SignIn = () => {
   const {getTopicsData} = useSignin();
   const navigation = useNavigation();
   const create = useClientGetstream();
+  const {top} = useSafeAreaInsets();
 
   const onClickContainer = () => {
     setClickTime((prevState) => prevState + 1);
@@ -143,15 +146,15 @@ const SignIn = () => {
   }, []);
 
   return (
-    <SafeAreaView style={S.container}>
-      <StatusBar translucent={false} />
+    <View style={S.container}>
+      <StatusBar translucent={true} backgroundColor="transparent" />
       <View style={S.containerSlideShow}>
         {clickTime >= 7 && isDemoLoginEnabled ? (
           <DevDummyLogin resetClickTime={resetClickTime} />
         ) : null}
         <SlideShow onContainerPress={onClickContainer} handleLogin={handleLogin} />
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -159,7 +162,8 @@ export default withInteractionsManaged(SignIn);
 
 const S = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: COLORS.blue
   },
   image: {
     width: 321,
