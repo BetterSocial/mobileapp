@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {Shadow} from 'react-native-shadow-2';
 import {StyleSheet, View} from 'react-native';
 
 const styles = StyleSheet.create({
