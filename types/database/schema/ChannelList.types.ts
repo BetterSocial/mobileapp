@@ -38,6 +38,7 @@ export interface ChannelList {
   rawJson: any;
   user: UserSchema | null;
   members: ChannelListMemberSchema[] | null;
+  setRead: (db: any) => Promise<void>;
 }
 
 export interface ChatSchema {

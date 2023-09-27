@@ -1,11 +1,11 @@
 import * as React from 'react';
-import {Shadow} from 'react-native-shadow-2';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import PostToCommunity from '../../assets/icon/PostToCommunity';
 import dimen from '../../utils/dimen';
 import useBetterNavigationHook from '../../hooks/navigation/useBetterNavigationHook';
 import {colors} from '../../utils/colors';
+import ShadowFloatingButtons from './ShadowFloatingButtons';
 
 const ButtonAddPostTopic = ({topicName, onRefresh}) => {
   const {toCreatePostWithTopic} = useBetterNavigationHook();
@@ -16,17 +16,17 @@ const ButtonAddPostTopic = ({topicName, onRefresh}) => {
 
   return (
     <View style={styles.container}>
-      <Shadow distance={4} startColor="#00000033" endColor="#00000000" offset={[0, 2]}>
+      <ShadowFloatingButtons>
         <TouchableOpacity
           onPress={onAddPostPressed}
           style={styles.buttonContainer}
           testID="onaddtopicbutton">
           <View style={styles.postToCommunityContainer}>
             <PostToCommunity />
-            <Text style={styles.text}>{'Post in \nCommunity'}</Text>
+            <Text style={styles.text}>{'Post to \nCommunity'}</Text>
           </View>
         </TouchableOpacity>
-      </Shadow>
+      </ShadowFloatingButtons>
     </View>
   );
 };

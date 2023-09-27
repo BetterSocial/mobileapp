@@ -7,7 +7,6 @@ interface UseChatUtilsHook {
   goToPostDetailScreen: (channel: ChannelList) => void;
   goToChatInfoScreen: () => void;
   goBackFromChatScreen: () => void;
-  setSelectedChannelAsRead: () => void;
 }
 
 export default UseChatUtilsHook;
