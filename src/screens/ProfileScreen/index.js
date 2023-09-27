@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Config from 'react-native-config';
 import ImagePicker from 'react-native-image-crop-picker';
 import Toast from 'react-native-simple-toast';
 import {
@@ -19,7 +18,6 @@ import {debounce} from 'lodash';
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
 
-import {Shadow} from 'react-native-shadow-2';
 import AnonymousTab from './elements/AnonymousTab';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BioAndDMSetting from './elements/BioAndDMSetting';

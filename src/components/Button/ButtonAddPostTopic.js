@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {Shadow} from 'react-native-shadow-2';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import PostToCommunity from '../../assets/icon/PostToCommunity';
