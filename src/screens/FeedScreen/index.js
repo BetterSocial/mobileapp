@@ -34,6 +34,7 @@ const FeedScreen = (props) => {
   const {interactionsComplete} = useAfterInteractions();
   const {feeds, timer, viewPostTimeIndex} = feedsContext;
   const [isScroll, setIsScroll] = React.useState(false);
+  const [updateIndex, setUpdateIndex] = React.useState(0);
   const {
     getDataFeeds,
     postOffset,
@@ -64,7 +65,7 @@ const FeedScreen = (props) => {
   const onBlockCompletedHandle = async (postId) => {
     onBlockCompleted(postId);
   };
-
+  const [updateMoreText, setUpdateMoreText] = React.useState(false);
   React.useEffect(() => {
     if (interactionsComplete) {
       checkCacheFeed();
@@ -124,24 +125,22 @@ const FeedScreen = (props) => {
     getDataFeedsHandle(postOffset, false, nextTargetFeed);
   };
 
-  const onPress = (item, haveSeeMore) => {
+  const refreshMoreText = (index) => {
+    setUpdateIndex(index);
+    setUpdateMoreText(true);
+    setTimeout(() => {
+      setUpdateMoreText(false);
+    }, 1);
+  };
+
+  const onPress = (item, haveSeeMore, index) => {
     props.navigation.navigate('PostDetailPage', {
       isalreadypolling: item.isalreadypolling,
       feedId: item.id,
       data: item,
       isCaching: false,
-      haveSeeMore
-    });
-  };
-
-  const onPressComment = (index, item) => {
-    props.navigation.navigate('PostDetailPage', {
-      // index: index,
-      feedId: item.id,
-      // refreshParent: getDataFeedsHandle,
-      data: item,
-      isCaching: true
-      // feedId:
+      haveSeeMore,
+      refreshParent: () => refreshMoreText(index)
     });
   };
 
@@ -205,32 +204,35 @@ const FeedScreen = (props) => {
     saveSearchHeight(height);
   };
 
+  const renderListFeed = (item, index) => (
+    <RenderListFeed
+      key={item.id}
+      item={item}
+      onNewPollFetched={onNewPollFetched}
+      index={index}
+      onPressDomain={onPressDomain}
+      onPress={(haveSeeMore) => {
+        onPress(item, haveSeeMore, index);
+      }}
+      onPressComment={(haveSeeMore) => onPress(item, haveSeeMore, index)}
+      onPressBlock={() => onPressBlock(item)}
+      onPressUpvote={(post) => setUpVoteHandle(post, index)}
+      selfUserId={myProfile.user_id}
+      onPressDownVote={(post) => setDownVoteHandle(post, index)}
+      loading={loading}
+      showNavbar={showNavbar}
+      searchHeight={searchHeight}
+      bottomArea={bottom}
+      isScroll={isScroll}
+    />
+  );
+
   const renderItem = ({item, index}) => {
     if (item.dummy) return <React.Fragment key={index} />;
-    return (
-      <RenderListFeed
-        key={item.id}
-        item={item}
-        onNewPollFetched={onNewPollFetched}
-        index={index}
-        onPressDomain={onPressDomain}
-        onPress={(haveSeeMore) => {
-          onPress(item, haveSeeMore);
-        }}
-        onPressComment={(haveSeeMore) => onPress(item, haveSeeMore)}
-        onPressBlock={() => onPressBlock(item)}
-        onPressUpvote={(post) => setUpVoteHandle(post, index)}
-        selfUserId={myProfile.user_id}
-        onPressDownVote={(post) => setDownVoteHandle(post, index)}
-        loading={loading}
-        showNavbar={showNavbar}
-        searchHeight={searchHeight}
-        bottomArea={bottom}
-        isScroll={isScroll}
-      />
-    );
+    if (updateMoreText && updateIndex === index) return null;
+    return renderListFeed(item, index);
   };
-  console.log({feeds}, 'lalak10');
+
   return (
     <SafeAreaProvider style={styles.container} forceInset={{top: 'always'}}>
       <StatusBar translucent={false} />

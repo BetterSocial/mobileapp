@@ -76,9 +76,9 @@ const useCoreFeed = () => {
       if (cacheBg?.bg) {
         const isHexColor = checkIsHasColor(cacheBg.bg);
         if (isHexColor) {
-          return {...cacheBg, bg: hexToRgb(cacheBg.bg, 0.25)};
+          return {...feed, bg: hexToRgb(cacheBg.bg, 0.25)};
         }
-        return {...cacheBg};
+        return {...feed, bg: cacheBg?.bg};
       }
       return {...feed, ...handleBgContentFeed(feed)};
     });
