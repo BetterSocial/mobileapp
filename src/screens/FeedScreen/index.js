@@ -130,7 +130,7 @@ const FeedScreen = (props) => {
     setUpdateMoreText(true);
     setTimeout(() => {
       setUpdateMoreText(false);
-    }, 50);
+    }, 1);
   };
 
   const onPress = (item, haveSeeMore, index) => {
