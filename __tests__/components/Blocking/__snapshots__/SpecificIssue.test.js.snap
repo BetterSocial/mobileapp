@@ -215,6 +215,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
                 "opacity": 1,
               }
             }
+            testID="btn"
           >
             <View
               style={

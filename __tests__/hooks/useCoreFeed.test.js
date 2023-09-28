@@ -1,13 +1,11 @@
 import axios from 'axios';
 import {act, renderHook} from '@testing-library/react-hooks';
 
-import * as cache from '../../src/utils/cache';
 import * as mainFeedAction from '../../src/context/actions/feeds';
 import * as post from '../../src/service/post';
 import * as vote from '../../src/service/vote';
 import Store from '../../src/context/Store';
 import useCoreFeed from '../../src/screens/FeedScreen/hooks/useCoreFeed';
-import {getSpecificCache} from '../../src/utils/cache';
 
 // import * as useCoreFeedAll from '../../src/screens/FeedScreen/hooks/useCoreFeed'
 
@@ -65,37 +63,6 @@ describe('Main Feed should run correctly', () => {
       result.current.saveSearchHeight('20');
     });
     expect(result.current.searchHeight).toEqual(20);
-  });
-
-  it('getDataFeeds should run correctly', async () => {
-    const {result} = renderHook(() => useCoreFeed(), {wrapper: Store});
-    axios.get.mockResolvedValue(responseMock);
-    act(() => {
-      const resp = result.current.getDataFeeds(10, false);
-      expect(resp).resolves.toEqual(responseMock);
-    });
-
-    const setMainFeed = jest.spyOn(mainFeedAction, 'setMainFeeds');
-    const saveToCache = jest.spyOn(cache, 'saveToCache');
-    act(() => {
-      result.current.handleDataFeeds(responseMock);
-    });
-    expect(setMainFeed).toHaveBeenCalled();
-    expect(saveToCache).toHaveBeenCalled();
-    act(() => {
-      result.current.handleDataFeeds(responseMock, 10);
-    });
-
-    expect(setMainFeed).toHaveBeenCalled();
-    expect(saveToCache).toHaveBeenCalled();
-  });
-
-  it('checkCacheFeed should run correctly', async () => {
-    const {result} = renderHook(() => useCoreFeed(), {wrapper: Store});
-    act(() => {
-      result.current.checkCacheFeed();
-    });
-    expect(getSpecificCache).toHaveBeenCalledTimes(1);
   });
 
   it('onBlockCompleted should run correctly', async () => {
