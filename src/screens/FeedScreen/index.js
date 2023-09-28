@@ -130,7 +130,7 @@ const FeedScreen = (props) => {
     setUpdateMoreText(true);
     setTimeout(() => {
       setUpdateMoreText(false);
-    }, 500);
+    }, 50);
   };
 
   const onPress = (item, haveSeeMore, index) => {
@@ -204,33 +204,35 @@ const FeedScreen = (props) => {
     saveSearchHeight(height);
   };
 
+  const renderListFeed = (item, index) => (
+    <RenderListFeed
+      key={item.id}
+      item={item}
+      onNewPollFetched={onNewPollFetched}
+      index={index}
+      onPressDomain={onPressDomain}
+      onPress={(haveSeeMore) => {
+        onPress(item, haveSeeMore, index);
+      }}
+      onPressComment={(haveSeeMore) => onPress(item, haveSeeMore, index)}
+      onPressBlock={() => onPressBlock(item)}
+      onPressUpvote={(post) => setUpVoteHandle(post, index)}
+      selfUserId={myProfile.user_id}
+      onPressDownVote={(post) => setDownVoteHandle(post, index)}
+      loading={loading}
+      showNavbar={showNavbar}
+      searchHeight={searchHeight}
+      bottomArea={bottom}
+      isScroll={isScroll}
+    />
+  );
+
   const renderItem = ({item, index}) => {
     if (item.dummy) return <React.Fragment key={index} />;
     if (updateMoreText && updateIndex === index) return null;
-    return (
-      <RenderListFeed
-        key={item.id}
-        item={item}
-        onNewPollFetched={onNewPollFetched}
-        index={index}
-        onPressDomain={onPressDomain}
-        onPress={(haveSeeMore) => {
-          onPress(item, haveSeeMore, index);
-        }}
-        onPressComment={(haveSeeMore) => onPress(item, haveSeeMore, index)}
-        onPressBlock={() => onPressBlock(item)}
-        onPressUpvote={(post) => setUpVoteHandle(post, index)}
-        selfUserId={myProfile.user_id}
-        onPressDownVote={(post) => setDownVoteHandle(post, index)}
-        loading={loading}
-        showNavbar={showNavbar}
-        searchHeight={searchHeight}
-        bottomArea={bottom}
-        isScroll={isScroll}
-      />
-    );
+    return renderListFeed(item, index);
   };
-  console.log({feeds}, 'lalak10');
+
   return (
     <SafeAreaProvider style={styles.container} forceInset={{top: 'always'}}>
       <StatusBar translucent={false} />

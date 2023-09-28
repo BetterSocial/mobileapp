@@ -195,6 +195,9 @@ const PostPageDetailIdComponent = (props) => {
   const onComment = (isAnonimity, anonimityData) => {
     if (typeComment === 'parent') {
       commentParent(isAnonimity, anonimityData);
+      if (props?.refreshParent) {
+        props.refreshParent();
+      }
     }
   };
   const commentParent = async (isAnonimity, anonimityData) => {

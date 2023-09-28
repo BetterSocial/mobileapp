@@ -52,7 +52,7 @@ describe('it should run correctly', () => {
   it('handleShortTextColor should run correctly', () => {
     const {result} = renderHook(() => useContentFeed({navigation}));
 
-    expect(result.current.hanldeShortTextColor(true)).toEqual('rgba(255, 255, 255, 0.7)');
+    expect(result.current.hanldeShortTextColor(true)).toEqual('rgba(0, 0, 0, 0.5)');
     expect(result.current.hanldeShortTextColor(false)).toEqual(colors.blue);
   });
 });
