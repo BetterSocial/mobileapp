@@ -19,8 +19,6 @@ const FeedsPostDetail = (props) => {
     if (refreshCache && typeof refreshCache === 'function') {
       refreshCache();
     }
-  }, []);
-  React.useEffect(() => {
     return () => {
       if (refreshParent && typeof refreshParent === 'function') {
         refreshParent();
@@ -40,6 +38,7 @@ const FeedsPostDetail = (props) => {
         contextSource={contextSource || CONTEXT_SOURCE.FEEDS}
         haveSeeMore={haveSeeMore}
         parentData={data}
+        refreshParent={refreshParent}
       />
     </View>
   );
