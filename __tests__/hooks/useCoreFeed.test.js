@@ -1,13 +1,11 @@
 import axios from 'axios';
 import {act, renderHook} from '@testing-library/react-hooks';
 
-import * as cache from '../../src/utils/cache';
 import * as mainFeedAction from '../../src/context/actions/feeds';
 import * as post from '../../src/service/post';
 import * as vote from '../../src/service/vote';
 import Store from '../../src/context/Store';
 import useCoreFeed from '../../src/screens/FeedScreen/hooks/useCoreFeed';
-import {getSpecificCache} from '../../src/utils/cache';
 import StorageUtils from '../../src/utils/storage';
 // import * as useCoreFeedAll from '../../src/screens/FeedScreen/hooks/useCoreFeed'
 
