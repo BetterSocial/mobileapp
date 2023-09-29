@@ -131,7 +131,7 @@
 		88BB6015299BC09D003FA042 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 88BB6014299BC09D003FA042 /* GoogleService-Info.plist */; };
 		88BB6018299BC0B3003FA042 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 88BB6016299BC0AF003FA042 /* GoogleService-Info.plist */; };
 		8D0FD4DAA700610C381364B1 /* libPods-BetterSocial-BetterSocialStaging.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 693E65DB895089B3EF1AAB46 /* libPods-BetterSocial-BetterSocialStaging.a */; };
-		92D8142362E828E0BFD1A9D0 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		92D8142362E828E0BFD1A9D0 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		A5224CE8D6A720A22C812214 /* libPods-BetterSocial-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EED9A83F9168ACF1BAA4715 /* libPods-BetterSocial-tvOS.a */; };
 		D45AE27A97BEC3B47B24F8AA /* libPods-BetterSocial.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 76417AC7BFD660F73CEE7EF3 /* libPods-BetterSocial.a */; };
 		DF3DAAF7FF3615D4C7F846C0 /* libPods-BetterSocial-BetterSocialDev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F0037939387463514218B69C /* libPods-BetterSocial-BetterSocialDev.a */; };
@@ -311,7 +311,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				92D8142362E828E0BFD1A9D0 /* BuildFile in Frameworks */,
+				92D8142362E828E0BFD1A9D0 /* (null) in Frameworks */,
 				DF3DAAF7FF3615D4C7F846C0 /* libPods-BetterSocial-BetterSocialDev.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1617,11 +1617,9 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BetterSocial/BetterSocialRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2.0.2;
 				DEVELOPMENT_TEAM = J22M3M9VYU;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = J22M3M9VYU;
 				EXCLUDED_ARCHS = "";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				INFOPLIST_FILE = BetterSocial/Info.plist;
@@ -1636,8 +1634,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.bettersocial;
 				PRODUCT_NAME = BetterSocial;
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore org.bettersocial";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore org.bettersocial";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

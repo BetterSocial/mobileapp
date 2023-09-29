@@ -520,8 +520,6 @@ PODS:
     - React-Core
   - RNCClipboard (1.11.2):
     - React-Core
-  - RNCMaskedView (0.1.11):
-    - React
   - RNCPicker (2.4.10):
     - React-Core
   - RNCPushNotificationIOS (1.11.0):
@@ -615,8 +613,6 @@ PODS:
     - React-Core
   - RNSVG (12.5.1):
     - React-Core
-  - RNTextSize (4.0.0-rc.1):
-    - React
   - RNVectorIcons (8.1.0):
     - React-Core
   - SDWebImage (5.11.1):
@@ -707,7 +703,6 @@ DEPENDENCIES:
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCCheckbox (from `../node_modules/@react-native-community/checkbox`)"
   - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
-  - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - "RNCPushNotificationIOS (from `../node_modules/@react-native-community/push-notification-ios`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
@@ -729,7 +724,6 @@ DEPENDENCIES:
   - "RNSentry (from `../node_modules/@sentry/react-native`)"
   - RNShare (from `../node_modules/react-native-share`)
   - RNSVG (from `../node_modules/react-native-svg`)
-  - RNTextSize (from `../node_modules/react-native-text-size/ios`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -882,8 +876,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/checkbox"
   RNCClipboard:
     :path: "../node_modules/@react-native-clipboard/clipboard"
-  RNCMaskedView:
-    :path: "../node_modules/@react-native-community/masked-view"
   RNCPicker:
     :path: "../node_modules/@react-native-picker/picker"
   RNCPushNotificationIOS:
@@ -926,8 +918,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-share"
   RNSVG:
     :path: "../node_modules/react-native-svg"
-  RNTextSize:
-    :path: "../node_modules/react-native-text-size/ios"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
   Yoga:
@@ -1021,7 +1011,6 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: b90b71f45b8b97be43bc4284e71a6af48ac9f547
   RNCCheckbox: 43bcc6493611468af0e19f19f029dab3da8561c4
   RNCClipboard: 3f0451a8100393908bea5c5c5b16f96d45f30bfc
-  RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPicker: 0bc2f0a29abcca7b7ed44a2d036aac9ab6d25700
   RNCPushNotificationIOS: 64218f3c776c03d7408284a819b2abfda1834bc8
   RNDeviceInfo: aad3c663b25752a52bf8fce93f2354001dd185aa
@@ -1043,7 +1032,6 @@ SPEC CHECKSUMS:
   RNSentry: 4fb2cd7d2d6cb94423c24884488206ef881da136
   RNShare: 4df87d1791f50a2c7b1d89432fb9bbb7c02a9c9a
   RNSVG: d7d7bc8229af3842c9cfc3a723c815a52cdd1105
-  RNTextSize: 7efa06531c6bb7ab6ed070b4ce0d1248cf06fcdf
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
