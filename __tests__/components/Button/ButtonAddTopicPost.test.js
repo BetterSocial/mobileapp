@@ -13,12 +13,6 @@ jest.mock('@react-navigation/core', () => ({
   })
 }));
 
-// eslint-disable-next-line react/display-name
-jest.mock('react-native-shadow-2', () => ({
-  ...jest.requireActual('react-native-shadow-2'),
-  Shadow: (props) => <>{props.children}</>
-}));
-
 describe('Testing Button Add Topic Post', () => {
   it('should match snapshot', () => {
     const {toJSON} = render(<ButtonAddPostTopic />);
