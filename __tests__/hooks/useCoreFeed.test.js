@@ -6,7 +6,7 @@ import * as post from '../../src/service/post';
 import * as vote from '../../src/service/vote';
 import Store from '../../src/context/Store';
 import useCoreFeed from '../../src/screens/FeedScreen/hooks/useCoreFeed';
-
+import StorageUtils from '../../src/utils/storage';
 // import * as useCoreFeedAll from '../../src/screens/FeedScreen/hooks/useCoreFeed'
 
 jest.mock('../../src/utils/cache', () => ({
@@ -21,6 +21,11 @@ jest.mock('react-native-safe-area-context', () => {
     SafeAreaConsumer: jest.fn().mockImplementation(({children}) => children(inset)),
     useSafeAreaInsets: jest.fn().mockImplementation(() => inset)
   };
+});
+
+const mGetRandomValues = jest.fn().mockReturnValueOnce(new Uint32Array(10));
+Object.defineProperty(global, 'crypto', {
+  value: {getRandomValues: mGetRandomValues}
 });
 
 jest.mock('axios');
@@ -63,6 +68,38 @@ describe('Main Feed should run correctly', () => {
       result.current.saveSearchHeight('20');
     });
     expect(result.current.searchHeight).toEqual(20);
+  });
+
+  it('getDataFeeds should run correctly', async () => {
+    const {result} = renderHook(() => useCoreFeed(), {wrapper: Store});
+    axios.get.mockResolvedValue(responseMock);
+    act(() => {
+      const resp = result.current.getDataFeeds(10, false);
+      expect(resp).resolves.toEqual(responseMock);
+    });
+
+    const setMainFeed = jest.spyOn(mainFeedAction, 'setMainFeeds');
+    const saveToCache = jest.spyOn(StorageUtils.feedPages, 'set');
+    act(() => {
+      result.current.handleDataFeeds(responseMock);
+    });
+    expect(setMainFeed).toHaveBeenCalled();
+    expect(saveToCache).toHaveBeenCalled();
+    act(() => {
+      result.current.handleDataFeeds(responseMock, 10);
+    });
+
+    expect(setMainFeed).toHaveBeenCalled();
+    expect(saveToCache).toHaveBeenCalled();
+  });
+
+  it('checkCacheFeed should run correctly', async () => {
+    const spyCache = jest.spyOn(StorageUtils.feedPages, 'get');
+    const {result} = renderHook(() => useCoreFeed(), {wrapper: Store});
+    act(() => {
+      result.current.checkCacheFeed();
+    });
+    expect(spyCache).toHaveBeenCalledTimes(1);
   });
 
   it('onBlockCompleted should run correctly', async () => {
