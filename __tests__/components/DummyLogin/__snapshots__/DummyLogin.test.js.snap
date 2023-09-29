@@ -7,6 +7,7 @@ Array [
       Object {
         "backgroundColor": "red",
         "left": 0,
+        "paddingTop": 0,
         "position": "absolute",
         "top": 0,
         "width": "100%",

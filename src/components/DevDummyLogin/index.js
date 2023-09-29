@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import {StackActions, useNavigation} from '@react-navigation/native';
 import {useSetRecoilState} from 'recoil';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import StorageUtils from '../../utils/storage';
 import TokenStorage from '../../utils/storage/custom/tokenStorage';
@@ -32,14 +33,15 @@ const heightBs = Dimensions.get('window').height * 0.85;
 const heightBsPassword = Dimensions.get('window').height * 0.65;
 
 const S = StyleSheet.create({
-  devTrialView: {
+  devTrialView: (top) => ({
     position: 'absolute',
     top: 0,
     left: 0,
     width: '100%',
     zIndex: 999,
-    backgroundColor: 'red'
-  },
+    backgroundColor: 'red',
+    paddingTop: top
+  }),
   dummyLoginButton: {},
   dummyAccountItem: {
     paddingHorizontal: 16,
@@ -94,6 +96,7 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
   const dummyLoginRbSheetRef = React.useRef(null);
   const dummyLoginPasswordRbSheetRef = React.useRef(null);
   const navigation = useNavigation();
+  const {top} = useSafeAreaInsets();
   const streamChat = useClientGetstream();
   const [, dispatch] = React.useContext(Context).users;
   const closeDummyLogin = () => {
@@ -192,7 +195,7 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
 
   if (ENABLE_DEV_ONLY_FEATURE === 'true')
     return (
-      <View style={S.devTrialView}>
+      <View style={S.devTrialView(top)}>
         <Button
           testID="dummyonboarding"
           title="Dev Dummy Onboarding"
