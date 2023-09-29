@@ -97,11 +97,7 @@ const styles = StyleSheet.create({
     width: dimen.size.FEED_ACTION_BUTTON_RADIUS,
     height: dimen.size.FEED_ACTION_BUTTON_RADIUS,
     borderRadius: dimen.size.FEED_ACTION_BUTTON_RADIUS,
-    justifyContent: 'center',
-    position: 'absolute',
-    bottom: dimen.size.FEED_ACTION_BUTTON_HEIGHT_FROM_BOTTOM,
-    right: dimen.size.FEED_ACTION_BUTTON_HEIGHT_FROM_RIGHT,
-    zIndex: 1
+    justifyContent: 'center'
   },
   text: {
     fontFamily: fonts.inter[500],
