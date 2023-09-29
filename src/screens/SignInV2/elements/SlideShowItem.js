@@ -73,7 +73,7 @@ export const SlideShowItem = ({
       </TouchableWithoutFeedback>
     );
   };
-
+  console.log('height: ', height);
   return (
     <View style={styles.container}>
       <View
@@ -81,7 +81,6 @@ export const SlideShowItem = ({
         onLayout={(event) => {
           const heightContainer = event.nativeEvent.layout.height;
           setHeightContainer(heightContainer);
-          console.log('height: ', heightContainer);
         }}>
         {__renderForeground()}
         {__renderBackground()}
@@ -131,10 +130,10 @@ const styles = StyleSheet.create({
   },
   onboardingForeground: (heightContainer, topArea) => ({
     position: 'absolute',
-    top: topArea <= 25 ? -topArea : normalize(topArea - 60),
+    top: topArea <= 20 ? -topArea : normalize(topArea - 60),
     zIndex: 1,
     width,
-    height: heightContainer + (topArea <= 25 ? topArea : normalize(60 - topArea)),
+    height: heightContainer + (topArea <= 20 ? topArea : normalize(60 - topArea)),
     resizeMode: 'cover'
   }),
   onboardingBackground: {

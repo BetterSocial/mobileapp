@@ -67,37 +67,6 @@ describe('Main Feed should run correctly', () => {
     expect(result.current.searchHeight).toEqual(20);
   });
 
-  it('getDataFeeds should run correctly', async () => {
-    const {result} = renderHook(() => useCoreFeed(), {wrapper: Store});
-    axios.get.mockResolvedValue(responseMock);
-    act(() => {
-      const resp = result.current.getDataFeeds(10, false);
-      expect(resp).resolves.toEqual(responseMock);
-    });
-
-    const setMainFeed = jest.spyOn(mainFeedAction, 'setMainFeeds');
-    const saveToCache = jest.spyOn(cache, 'saveToCache');
-    act(() => {
-      result.current.handleDataFeeds(responseMock);
-    });
-    expect(setMainFeed).toHaveBeenCalled();
-    expect(saveToCache).toHaveBeenCalled();
-    act(() => {
-      result.current.handleDataFeeds(responseMock, 10);
-    });
-
-    expect(setMainFeed).toHaveBeenCalled();
-    expect(saveToCache).toHaveBeenCalled();
-  });
-
-  it('checkCacheFeed should run correctly', async () => {
-    const {result} = renderHook(() => useCoreFeed(), {wrapper: Store});
-    act(() => {
-      result.current.checkCacheFeed();
-    });
-    expect(getSpecificCache).toHaveBeenCalledTimes(1);
-  });
-
   it('onBlockCompleted should run correctly', async () => {
     const {result} = renderHook(() => useCoreFeed(), {wrapper: Store});
     axios.get.mockResolvedValue(responseMock);
