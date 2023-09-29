@@ -130,9 +130,9 @@ const FeedScreen = (props) => {
     setUpdateMoreText(true);
     setTimeout(() => {
       setUpdateMoreText(false);
-    }, 500);
+    }, 1);
   };
-  console.log({updateMoreText}, 'lala1');
+
   const onPress = (item, haveSeeMore, index) => {
     props.navigation.navigate('PostDetailPage', {
       isalreadypolling: item.isalreadypolling,
@@ -204,31 +204,33 @@ const FeedScreen = (props) => {
     saveSearchHeight(height);
   };
 
+  const renderListFeed = (item, index) => (
+    <RenderListFeed
+      key={item.id}
+      item={item}
+      onNewPollFetched={onNewPollFetched}
+      index={index}
+      onPressDomain={onPressDomain}
+      onPress={(haveSeeMore) => {
+        onPress(item, haveSeeMore, index);
+      }}
+      onPressComment={(haveSeeMore) => onPress(item, haveSeeMore, index)}
+      onPressBlock={() => onPressBlock(item)}
+      onPressUpvote={(post) => setUpVoteHandle(post, index)}
+      selfUserId={myProfile.user_id}
+      onPressDownVote={(post) => setDownVoteHandle(post, index)}
+      loading={loading}
+      showNavbar={showNavbar}
+      searchHeight={searchHeight}
+      bottomArea={bottom}
+      isScroll={isScroll}
+    />
+  );
+
   const renderItem = ({item, index}) => {
     if (item.dummy) return <React.Fragment key={index} />;
     if (updateMoreText && updateIndex === index) return null;
-    return (
-      <RenderListFeed
-        key={item.id}
-        item={item}
-        onNewPollFetched={onNewPollFetched}
-        index={index}
-        onPressDomain={onPressDomain}
-        onPress={(haveSeeMore) => {
-          onPress(item, haveSeeMore, index);
-        }}
-        onPressComment={(haveSeeMore) => onPress(item, haveSeeMore, index)}
-        onPressBlock={() => onPressBlock(item)}
-        onPressUpvote={(post) => setUpVoteHandle(post, index)}
-        selfUserId={myProfile.user_id}
-        onPressDownVote={(post) => setDownVoteHandle(post, index)}
-        loading={loading}
-        showNavbar={showNavbar}
-        searchHeight={searchHeight}
-        bottomArea={bottom}
-        isScroll={isScroll}
-      />
-    );
+    return renderListFeed(item, index);
   };
 
   return (

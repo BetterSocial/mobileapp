@@ -47,7 +47,7 @@ import useProfileScreenHook, {
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {ButtonNewPost} from '../../components/Button';
 import {Context} from '../../context';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {DEFAULT_PROFILE_PIC_PATH, SOURCE_MY_PROFILE} from '../../utils/constants';
 import {PROFILE_CACHE} from '../../utils/cache/constant';
 import {
   changeRealName,
@@ -71,6 +71,9 @@ import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import ShadowFloatingButtons from '../../components/Button/ShadowFloatingButtons';
+import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
+import StorageUtils from '../../utils/storage';
 
 const {width} = Dimensions.get('screen');
 
@@ -182,7 +185,7 @@ const ProfileScreen = ({route}) => {
 
   const updateUserClient = useUpdateClientGetstreamHook();
   const {refreshCount} = useResetContext();
-
+  const {mappingColorFeed} = useCoreFeed();
   const LIMIT_PROFILE_FEED = 10;
 
   const {feeds} = myProfileFeed;
@@ -223,9 +226,19 @@ const ProfileScreen = ({route}) => {
     }
   }, [refreshCount]);
 
+  const initialMyFeed = () => {
+    const cacheFeed = StorageUtils.myFeeds.get();
+    console.log({cacheFeed}, 'lipok');
+    if (!cacheFeed) {
+      getMyFeeds(0, LIMIT_PROFILE_FEED);
+    } else {
+      setMyProfileFeed(JSON.parse(cacheFeed), myProfileDispatch);
+    }
+  };
+
   React.useEffect(() => {
     if (interactionsComplete) {
-      getMyFeeds(0, LIMIT_PROFILE_FEED);
+      initialMyFeed();
       fetchMyProfile();
     }
   }, [interactionsComplete]);
@@ -264,12 +277,18 @@ const ProfileScreen = ({route}) => {
       setIsFetchingList(true);
       setIsHitApiFirstTime(true);
       const result = await getSelfFeedsInProfile(offset, limit);
+      const cacheFeed = StorageUtils.myFeeds.get();
+      const {data: dataMyFeed} = result;
+      const {mapNewData} = mappingColorFeed({dataFeed: dataMyFeed, dataCache: cacheFeed});
       if (Array.isArray(result.data) && result.data.length === 0) {
         setIsLastPage(true);
       }
-      if (offset === 0) setMyProfileFeed(result.data, myProfileDispatch);
-      else {
-        const clonedFeeds = [...feeds, ...result.data];
+      if (offset === 0) {
+        StorageUtils.myFeeds.set(JSON.stringify(mapNewData));
+        setMyProfileFeed(mapNewData, myProfileDispatch);
+      } else {
+        const clonedFeeds = [...feeds, ...mapNewData];
+        StorageUtils.myFeeds.set(JSON.stringify(clonedFeeds));
         setMyProfileFeed(clonedFeeds, myProfileDispatch);
       }
       setLoading(false);
@@ -518,7 +537,8 @@ const ProfileScreen = ({route}) => {
       isalreadypolling: item.isalreadypolling,
       feedId: item.id,
       refreshParent: profileTabIndex === 0 ? getMyFeeds : reloadFetchAnonymousPost,
-      haveSeeMore
+      haveSeeMore,
+      data: item
     });
   };
 
@@ -557,6 +577,12 @@ const ProfileScreen = ({route}) => {
     setSelectedPostForOption(null);
     setIsOptionModalOpen(false);
   };
+
+  const onHeaderOptionClicked = (post) => {
+    setSelectedPostForOption(post);
+    setIsOptionModalOpen(true);
+  };
+
   const removePostByIdFromContext = () => {
     const deletedIndex = feeds?.findIndex((find) => selectedPostForOption?.id === find?.id);
     const newData = [...feeds];
@@ -632,6 +658,10 @@ const ProfileScreen = ({route}) => {
                   selfUserId={profile.myProfile.user_id}
                   onPressDownVote={(post) => setDownVote(post)}
                   loading={loading}
+                  source={SOURCE_MY_PROFILE}
+                  hideThreeDot={false}
+                  showAnonymousOption={true}
+                  onHeaderOptionClicked={() => onHeaderOptionClicked(item)}
                 />
               );
             }}
@@ -664,11 +694,13 @@ const ProfileScreen = ({route}) => {
             isLoadingRemoveImage={isLoadingRemoveImage}
           />
           {isShowButton ? (
-            <TouchableNativeFeedback onPress={toTop}>
-              <View style={{...styles.btnBottom, opacity}}>
-                <ArrowUpWhiteIcon width={12} height={20} fill={colors.white} />
-              </View>
-            </TouchableNativeFeedback>
+            <ShadowFloatingButtons>
+              <TouchableNativeFeedback onPress={toTop}>
+                <View style={{...styles.btnBottom, opacity}}>
+                  <ArrowUpWhiteIcon width={12} height={20} fill={colors.white} />
+                </View>
+              </TouchableNativeFeedback>
+            </ShadowFloatingButtons>
           ) : null}
 
           <BlockComponent ref={refBlockComponent} refresh={getMyFeeds} screen="my_profile" />

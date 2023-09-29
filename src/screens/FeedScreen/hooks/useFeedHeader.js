@@ -10,7 +10,6 @@ import {setTimer} from '../../../context/actions/feeds';
 import {viewTimePost} from '../../../service/post';
 
 const useFeedHeader = ({actor, source}) => {
-  console.log({source, actor}, 'kilang');
   const navigation = useNavigation();
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   const {feeds, timer, viewPostTimeIndex} = feedsContext;

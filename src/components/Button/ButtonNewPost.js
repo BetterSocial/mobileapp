@@ -6,6 +6,7 @@ import {Context} from '../../context';
 import {NavigationConstants, SOURCE_FEED_TAB} from '../../utils/constants';
 import {setTimer} from '../../context/actions/feeds';
 import {viewTimePost} from '../../service/post';
+import ShadowFloatingButtons from './ShadowFloatingButtons';
 
 const ButtonAddPost = ({onRefresh, isShowArrow}) => {
   const navigator = useNavigation();
@@ -22,11 +23,13 @@ const ButtonAddPost = ({onRefresh, isShowArrow}) => {
   };
 
   return (
-    <BaseButtonAddPost
-      isShowArrow={isShowArrow}
-      onAddPostPressed={__handleOnAddPostButtonClicked}
-      testID="onpress"
-    />
+    <ShadowFloatingButtons>
+      <BaseButtonAddPost
+        isShowArrow={isShowArrow}
+        onAddPostPressed={__handleOnAddPostButtonClicked}
+        testID="onpress"
+      />
+    </ShadowFloatingButtons>
   );
 };
 
