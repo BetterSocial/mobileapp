@@ -9,18 +9,12 @@ import IconSend from '../../assets/icon/IconSendComment';
 import SheetEmoji from './SheetEmoji';
 
 import {Context} from '../../context/Store';
-import {
-  deleteDraftChat,
-  getDraftChat,
-  getDraftChatStorageKey,
-  saveDraftChat
-} from '../../service/draftChat';
+import {deleteDraftChat, getDraftChat, saveDraftChat} from '../../service/draftChat';
 
 const InputMessage = () => {
   const [channelClient] = React.useContext(Context).channel;
   const members = channelClient.channel?.state?.members;
-
-  const draftChatStorageKey = getDraftChatStorageKey(members);
+  const channelId = channelClient.channel?.cid;
 
   const refEmoji = React.useRef(null);
   const {
@@ -37,7 +31,7 @@ const InputMessage = () => {
   const {isOnline} = useChatContext();
 
   const saveMessageToDraftDebounced = debounce((message) => {
-    saveDraftChat(draftChatStorageKey, message);
+    saveDraftChat(channelId, message);
   }, 500);
 
   const onChangeInput = (message) => {
@@ -53,7 +47,7 @@ const InputMessage = () => {
   const handleSendMessage = () => {
     sendMessage();
     closeAttachmentPicker();
-    deleteDraftChat(draftChatStorageKey);
+    deleteDraftChat(channelId);
   };
 
   const handleDelete = (item) => {
@@ -72,7 +66,7 @@ const InputMessage = () => {
   };
 
   React.useEffect(() => {
-    const draftMessage = getDraftChat(draftChatStorageKey);
+    const draftMessage = getDraftChat(channelId);
     if (draftMessage) {
       setText(draftMessage);
     }
