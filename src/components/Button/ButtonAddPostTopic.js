@@ -35,10 +35,6 @@ export default ButtonAddPostTopic;
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    bottom: dimen.size.TOPIC_FEED_BUTTON_HEIGHT_FROM_BOTTOM,
-    right: dimen.size.FEED_ACTION_BUTTON_HEIGHT_FROM_RIGHT,
-    zIndex: 1,
     backgroundColor: '#0000'
   },
   buttonContainer: {
