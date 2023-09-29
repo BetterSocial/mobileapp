@@ -16,7 +16,6 @@ import {
 import {useNavigation} from '@react-navigation/core';
 import {useSetRecoilState} from 'recoil';
 
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import DevDummyLogin from '../../components/DevDummyLogin';
 import SlideShow from './elements/SlideShow';
 import TokenStorage from '../../utils/storage/custom/tokenStorage';
@@ -44,7 +43,6 @@ const SignIn = () => {
   const {getTopicsData} = useSignin();
   const navigation = useNavigation();
   const create = useClientGetstream();
-  const {top} = useSafeAreaInsets();
 
   const onClickContainer = () => {
     setClickTime((prevState) => prevState + 1);
