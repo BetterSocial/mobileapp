@@ -743,11 +743,9 @@ const styles = StyleSheet.create({
     flex: 1
   },
   btnBottom: {
-    position: 'absolute',
     width: dimen.size.PROFILE_ACTION_BUTTON_RADIUS,
     height: dimen.size.PROFILE_ACTION_BUTTON_RADIUS,
-    right: 20,
-    bottom: dimen.size.FEED_ACTION_BUTTON_HEIGHT_FROM_BOTTOM,
+
     backgroundColor: colors.bondi_blue,
     borderRadius: 30,
     flexDirection: 'row',
