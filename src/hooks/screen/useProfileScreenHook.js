@@ -4,6 +4,7 @@ import ProfileRepo from '../../service/repo/profileRepo';
 import useMyProfileFeedContextHook from '../context/useMyProfileFeedContext';
 import StorageUtils from '../../utils/storage';
 import useCoreFeed from '../../screens/FeedScreen/hooks/useCoreFeed';
+import {getMyProfile} from '../../service/profile';
 
 export const TAB_INDEX_SIGNED = 0;
 export const TAB_INDEX_ANONYMOUS = 1;
@@ -15,6 +16,7 @@ const useProfileScreenHook = () => {
   const [isLoadingFetchingSignedPosts] = React.useState(false);
   const {feeds, anonymousFeeds, setMyProfileAnonymousFeed} = useMyProfileFeedContextHook();
   const {mappingColorFeed} = useCoreFeed();
+  const [cacheProfile, setProfileCache] = React.useState({});
   const isProfileTabSigned = profileTabIndex === TAB_INDEX_SIGNED;
 
   const setTabIndexToSigned = () => setProfileTabIndex(TAB_INDEX_SIGNED);
@@ -45,6 +47,46 @@ const useProfileScreenHook = () => {
     }
   }, []);
 
+  const fetchMyProfile = async (updateData) => {
+    try {
+      // if (cacheProfile && !updateData) {
+      //   console.log({cacheProfile}, 'zamanbatu');
+      //   saveProfileState(cacheProfile);
+      //   return cacheProfile?.profile_pic_path;
+      // }
+      const result = await getMyProfile();
+      if (result.code === 200) {
+        const {data} = result;
+        StorageUtils.profileData.set(JSON.stringify(data));
+        // saveProfileState(data);
+        return data?.profile_pic_path;
+      }
+    } catch (e) {
+      console.log('get my profile error', e);
+    }
+
+    return null;
+  };
+
+  React.useEffect(() => {
+    const myCacheProfile = StorageUtils.profileData.get();
+    if (!myCacheProfile) {
+    }
+  }, []);
+
+  const saveProfileCache = (cache) => {
+    if (cache && typeof cache === 'string') {
+      StorageUtils.profileData.set(cache);
+    }
+  };
+
+  const getProfileCache = () => {
+    const myCacheProfile = StorageUtils.profileData.get();
+    if (myCacheProfile) {
+      setProfileCache(JSON.parse(myCacheProfile));
+    }
+  };
+
   return {
     isLoadingFetchingAnonymousPosts,
     isLoadingFetchingSignedPosts,
@@ -54,7 +96,10 @@ const useProfileScreenHook = () => {
     reloadFetchAnonymousPost,
     fetchAnonymousPost,
     profileTabIndex,
-    isProfileTabSigned
+    isProfileTabSigned,
+    saveProfileCache,
+    getProfileCache,
+    cacheProfile
   };
 };
 
