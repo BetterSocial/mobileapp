@@ -7,6 +7,7 @@ import {AnonymousChannelData} from '../../../types/repo/AnonymousMessageRepo/Ano
 import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
 import {MessageAnonymouslyData} from '../../../types/repo/AnonymousMessageRepo/MessageAnonymouslyData';
 import {ModifyAnonymousChatData} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
+import {SignedPostNotification} from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 
 class ChannelList implements BaseDbSchema {
   id: string;
@@ -80,6 +81,8 @@ class ChannelList implements BaseDbSchema {
     return results.rows.raw()[0];
   };
 
+  //! TODO:
+  //! UPDATE ANONYMOUSID FOR SIGNED CHAT
   static getChannelInfo = async (
     db: SQLiteDatabase,
     channelId: string,
@@ -106,7 +109,7 @@ class ChannelList implements BaseDbSchema {
 
     try {
       jsonString = JSON.stringify(this.rawJson);
-      db.executeSql(
+      await db.executeSql(
         `INSERT OR REPLACE INTO ${ChannelList.getTableName()} (
           id,
           channel_picture,
@@ -183,6 +186,8 @@ class ChannelList implements BaseDbSchema {
     }
   }
 
+  //! TODO:
+  //! UPDATE ANONYMOUSID FOR SIGNED CHAT
   static async getAll(
     db: SQLiteDatabase,
     myId: string,
@@ -216,12 +221,21 @@ class ChannelList implements BaseDbSchema {
     return results.rows.raw().map(ChannelList.fromDatabaseObject);
   }
 
-  static async getUnreadCount(db: SQLiteDatabase): Promise<number> {
+  static async getUnreadCount(
+    db: SQLiteDatabase,
+    channelCategory: 'SIGNED' | 'ANON'
+  ): Promise<number> {
     try {
-      const [results] = await db.executeSql(
-        `SELECT SUM(unread_count) as unread_count FROM ${ChannelList.getTableName()}
-        WHERE expired_at IS NULL OR datetime(expired_at) >= datetime('now')`
-      );
+      const signedQuery = "('PM', 'GROUP', 'TOPIC', 'POST_NOTIFICATION', 'FOLLOW')";
+      const anonQuery = "('ANON_PM', 'ANON_GROUP', 'ANON_POST_NOTIFICATION')";
+
+      const selectQuery = `SELECT SUM(unread_count) as unread_count
+        FROM ${ChannelList.getTableName()}
+        WHERE channel_type IN ${channelCategory === 'ANON' ? anonQuery : signedQuery}
+        AND expired_at IS NULL
+        OR datetime(expired_at) >= datetime('now')`;
+
+      const [results] = await db.executeSql(selectQuery);
 
       return Promise.resolve(results?.rows?.raw()[0]?.unread_count || 0);
     } catch (e) {
@@ -239,14 +253,14 @@ class ChannelList implements BaseDbSchema {
     return 'channel_lists';
   }
 
-  static fromWebsocketObject(json): ChannelList {
+  static fromWebsocketObject(json, channelType: 'PM' | 'ANON_PM'): ChannelList {
     return new ChannelList({
       id: json?.channel?.id,
       channelPicture: json?.targetImage,
       name: json?.targetName,
       description: json?.message?.text || json?.message?.message,
       unreadCount: json?.unread_count,
-      channelType: 'ANON_PM',
+      channelType,
       lastUpdatedAt: json?.channel?.last_message_at,
       lastUpdatedBy: json?.message?.user?.id,
       createdAt: json?.channel?.created_at,
@@ -282,7 +296,10 @@ class ChannelList implements BaseDbSchema {
     });
   }
 
-  static fromPostNotifObject(json): ChannelList {
+  static fromPostNotifObject(
+    json,
+    channelType: 'POST_NOTIFICATION' | 'ANON_POST_NOTIFICATION'
+  ): ChannelList {
     const object = json?.new[0];
     return new ChannelList({
       id: object?.id,
@@ -290,7 +307,7 @@ class ChannelList implements BaseDbSchema {
       name: '',
       description: object?.message,
       unreadCount: 1,
-      channelType: 'ANON_POST_NOTIFICATION',
+      channelType,
       lastUpdatedAt: object?.time,
       lastUpdatedBy: object?.actor?.id,
       createdAt: object?.time,
@@ -299,20 +316,38 @@ class ChannelList implements BaseDbSchema {
     });
   }
 
-  static fromAnonymousChannelAPI(data: AnonymousChannelData): ChannelList {
+  static fromChannelAPI(data: AnonymousChannelData, channelType: 'PM' | 'ANON_PM'): ChannelList {
     return new ChannelList({
       id: data?.id,
       channelPicture: data?.targetImage,
       name: data?.targetName,
       description: data?.firstMessage?.text || data?.firstMessage?.message || '',
       unreadCount: 0,
-      channelType: 'ANON_PM',
+      channelType,
       lastUpdatedAt: data?.last_message_at,
       lastUpdatedBy: data?.firstMessage?.user?.id,
       createdAt: data?.created_at,
       rawJson: data,
       user: null,
       members: null
+    });
+  }
+
+  static fromSignedPostNotificationAPI(data: SignedPostNotification): ChannelList {
+    return new ChannelList({
+      id: data?.activity_id,
+      channelPicture: data?.postMaker?.data?.profile_pic_url || '',
+      name: data?.titlePost,
+      description: data?.titlePost,
+      unreadCount: 0,
+      channelType: 'POST_NOTIFICATION',
+      lastUpdatedAt: data?.data?.updated_at,
+      lastUpdatedBy: '',
+      createdAt: new Date().toISOString(),
+      rawJson: data,
+      user: null,
+      members: null,
+      expiredAt: data?.expired_at
     });
   }
 

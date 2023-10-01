@@ -7,6 +7,7 @@ import ChannelListMemberSchema from '../../../database/schema/ChannelListMemberS
 import ChatSchema from '../../../database/schema/ChatSchema';
 import UserSchema from '../../../database/schema/UserSchema';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
+import {ChannelData} from '../../../../types/repo/AnonymousMessageRepo/ChannelData';
 import {getAnonymousChatName} from '../../../utils/string/StringUtils';
 
 const useFetchAnonymousChannelHook = () => {
@@ -21,7 +22,7 @@ const useFetchAnonymousChannelHook = () => {
         channel.targetImage = chatName?.image;
         channel.firstMessage = channel?.messages?.[0];
         channel.channel = {...channel};
-        const channelList = ChannelList.fromAnonymousChannelAPI(channel);
+        const channelList = ChannelList.fromChannelAPI(channel, 'ANON_PM');
         return resolve(channelList.saveIfLatest(localDb));
       } catch (e) {
         console.log('error on helperAnonymousChannelPromiseBuilder');
@@ -67,7 +68,7 @@ const useFetchAnonymousChannelHook = () => {
 
   const getAllAnonymousChannels = async () => {
     if (!localDb) return;
-    let anonymousChannel = [];
+    let anonymousChannel: ChannelData[] = [];
 
     try {
       anonymousChannel = await AnonymousMessageRepo.getAllAnonymousChannels();
