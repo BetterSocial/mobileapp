@@ -14,7 +14,7 @@ const useRootChannelListHook = () => {
   const getAnonymousChannelUnreadCount = async () => {
     if (!localDb) return;
     try {
-      const unreadCount = await ChannelList.getUnreadCount(localDb);
+      const unreadCount = await ChannelList.getUnreadCount(localDb, 'ANON');
       setAnonymousChannelUnreadCount(unreadCount);
     } catch (e) {
       console.log(e);

@@ -44,7 +44,7 @@ const useCoreChatSystemHook = () => {
   usePostNotificationListenerHook(onPostNotifReceived);
   const {lastJsonMessage} = useBetterWebsocketHook();
 
-  const saveChannelListData = async () => {
+  const saveChannelListData = async (channelType: 'PM' | 'ANON_PM') => {
     if (!localDb) return;
 
     const chatName = await getAnonymousChatName(lastJsonMessage?.channel?.members);
@@ -52,7 +52,7 @@ const useCoreChatSystemHook = () => {
     lastJsonMessage.targetName = chatName?.name;
     lastJsonMessage.targetImage = chatName?.image;
 
-    const channelList = ChannelList.fromWebsocketObject(lastJsonMessage);
+    const channelList = ChannelList.fromWebsocketObject(lastJsonMessage, channelType);
 
     await channelList.save(localDb);
 
@@ -103,7 +103,7 @@ const useCoreChatSystemHook = () => {
         channel.targetImage = chatName?.image;
         channel.firstMessage = channel?.messages?.[0];
         channel.channel = {...channel};
-        const channelList = ChannelList.fromAnonymousChannelAPI(channel);
+        const channelList = ChannelList.fromChannelAPI(channel, 'ANON_PM');
         return resolve(channelList.saveIfLatest(localDb));
       } catch (e) {
         console.log('error on helperAnonymousChannelPromiseBuilder');
@@ -280,7 +280,7 @@ const useCoreChatSystemHook = () => {
     const {type} = lastJsonMessage;
     if (type === 'health.check') return;
     if (type === 'notification.message_new') {
-      saveChannelListData().catch((e) => console.log(e));
+      saveChannelListData('ANON_PM').catch((e) => console.log(e));
     }
   }, [lastJsonMessage, localDb]);
 
