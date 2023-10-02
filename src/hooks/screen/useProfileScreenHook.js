@@ -5,6 +5,8 @@ import useMyProfileFeedContextHook from '../context/useMyProfileFeedContext';
 import StorageUtils from '../../utils/storage';
 import useCoreFeed from '../../screens/FeedScreen/hooks/useCoreFeed';
 import {getMyProfile} from '../../service/profile';
+import {Context} from '../../context';
+import {setMyProfileAction} from '../../context/actions/setMyProfileAction';
 
 export const TAB_INDEX_SIGNED = 0;
 export const TAB_INDEX_ANONYMOUS = 1;
@@ -18,6 +20,7 @@ const useProfileScreenHook = () => {
   const {mappingColorFeed} = useCoreFeed();
   const [cacheProfile, setProfileCache] = React.useState({});
   const isProfileTabSigned = profileTabIndex === TAB_INDEX_SIGNED;
+  const [profileState, dispatchProfile] = React.useContext(Context).profile;
 
   const setTabIndexToSigned = () => setProfileTabIndex(TAB_INDEX_SIGNED);
 
@@ -68,12 +71,6 @@ const useProfileScreenHook = () => {
     return null;
   };
 
-  React.useEffect(() => {
-    const myCacheProfile = StorageUtils.profileData.get();
-    if (!myCacheProfile) {
-    }
-  }, []);
-
   const saveProfileCache = (cache) => {
     if (cache && typeof cache === 'string') {
       StorageUtils.profileData.set(cache);
@@ -82,8 +79,9 @@ const useProfileScreenHook = () => {
 
   const getProfileCache = () => {
     const myCacheProfile = StorageUtils.profileData.get();
+    console.log(myCacheProfile, 'nakal');
     if (myCacheProfile) {
-      setProfileCache(JSON.parse(myCacheProfile));
+      setMyProfileAction(JSON.parse(myCacheProfile), dispatchProfile);
     }
   };
 

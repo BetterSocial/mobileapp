@@ -27,6 +27,7 @@ import {setNews} from '../context/actions/news';
 import {traceMetricScreen} from '../libraries/performance/firebasePerformance';
 import {useClientGetstream} from '../utils/getstream/ClientGetStram';
 import useCoreFeed from '../screens/FeedScreen/hooks/useCoreFeed';
+import StorageUtils from '../utils/storage';
 
 export const useInitialStartup = () => {
   const [, newsDispatch] = React.useContext(Context).news;
@@ -78,7 +79,8 @@ export const useInitialStartup = () => {
   const getProfile = async () => {
     try {
       const profile = await getMyProfile();
-      saveToCache(PROFILE_CACHE, profile.data);
+      // saveToCache(PROFILE_CACHE, profile.data);
+      StorageUtils.profileData.set(JSON.stringify(profile.data));
       setMyProfileAction(profile.data, dispatchProfile);
       setLoadingUser(false);
     } catch (e) {

@@ -191,8 +191,7 @@ const ProfileScreen = ({route}) => {
     setTabIndexToAnonymous,
     setTabIndexToSigned,
     reloadFetchAnonymousPost,
-    getProfileCache,
-    cacheProfile
+    getProfileCache
   } = useProfileScreenHook();
   // eslint-disable-next-line consistent-return
   React.useEffect(() => {
@@ -231,7 +230,7 @@ const ProfileScreen = ({route}) => {
       setMyProfileFeed(JSON.parse(cacheFeed), myProfileDispatch);
     }
   };
-
+  console.log({myProfileFeed, profile}, 'nakal3');
   React.useEffect(() => {
     if (interactionsComplete) {
       initialMyFeed();
@@ -242,11 +241,6 @@ const ProfileScreen = ({route}) => {
 
   const fetchMyProfile = async (updateData) => {
     try {
-      // if (cacheProfile && !updateData) {
-      //   console.log({cacheProfile}, 'zamanbatu');
-      //   saveProfileState(cacheProfile);
-      //   return cacheProfile?.profile_pic_path;
-      // }
       const result = await getMyProfile();
       if (result.code === 200) {
         const {data} = result;
@@ -611,7 +605,7 @@ const ProfileScreen = ({route}) => {
           showArrow={isNotFromHomeTab}
           onShareClicked={onShare}
           onSettingsClicked={goToSettings}
-          username={dataMain.username}
+          username={profile?.myProfile?.username}
         />
         <ProfileTiktokScroll
           ref={listRef}
@@ -631,9 +625,9 @@ const ProfileScreen = ({route}) => {
             <Header
               headerHeightRef={headerHeightRef}
               changeImage={changeImage}
-              dataMain={dataMain}
+              dataMain={profile?.myProfile}
               goToFollowings={goToFollowings}
-              dataMainBio={dataMainBio}
+              dataMainBio={profile?.myProfile?.bio}
               changeBio={changeBio}
               postRef={postRef}
               profileTabIndex={profileTabIndex}
