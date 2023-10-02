@@ -152,7 +152,7 @@ const bottomOverlayStyles = StyleSheet.create({
   },
   loginBox: {
     width: '100%',
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.white,
     height: dimen.size.ONBOARDING_BOTTOM_OVERLAY_CONTAINER,
     display: 'flex',
     flexDirection: 'column',
