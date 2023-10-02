@@ -1,14 +1,12 @@
 import axios from 'axios';
 import {act, renderHook} from '@testing-library/react-hooks';
 
-import * as cache from '../../src/utils/cache';
 import * as mainFeedAction from '../../src/context/actions/feeds';
 import * as post from '../../src/service/post';
 import * as vote from '../../src/service/vote';
 import Store from '../../src/context/Store';
 import useCoreFeed from '../../src/screens/FeedScreen/hooks/useCoreFeed';
-import {getSpecificCache} from '../../src/utils/cache';
-
+import StorageUtils from '../../src/utils/storage';
 // import * as useCoreFeedAll from '../../src/screens/FeedScreen/hooks/useCoreFeed'
 
 jest.mock('../../src/utils/cache', () => ({
@@ -23,6 +21,11 @@ jest.mock('react-native-safe-area-context', () => {
     SafeAreaConsumer: jest.fn().mockImplementation(({children}) => children(inset)),
     useSafeAreaInsets: jest.fn().mockImplementation(() => inset)
   };
+});
+
+const mGetRandomValues = jest.fn().mockReturnValueOnce(new Uint32Array(10));
+Object.defineProperty(global, 'crypto', {
+  value: {getRandomValues: mGetRandomValues}
 });
 
 jest.mock('axios');
@@ -76,7 +79,7 @@ describe('Main Feed should run correctly', () => {
     });
 
     const setMainFeed = jest.spyOn(mainFeedAction, 'setMainFeeds');
-    const saveToCache = jest.spyOn(cache, 'saveToCache');
+    const saveToCache = jest.spyOn(StorageUtils.feedPages, 'set');
     act(() => {
       result.current.handleDataFeeds(responseMock);
     });
@@ -91,11 +94,12 @@ describe('Main Feed should run correctly', () => {
   });
 
   it('checkCacheFeed should run correctly', async () => {
+    const spyCache = jest.spyOn(StorageUtils.feedPages, 'get');
     const {result} = renderHook(() => useCoreFeed(), {wrapper: Store});
     act(() => {
       result.current.checkCacheFeed();
     });
-    expect(getSpecificCache).toHaveBeenCalledTimes(1);
+    expect(spyCache).toHaveBeenCalledTimes(1);
   });
 
   it('onBlockCompleted should run correctly', async () => {
