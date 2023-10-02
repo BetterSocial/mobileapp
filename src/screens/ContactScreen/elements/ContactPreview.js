@@ -1,14 +1,6 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  Image,
-  StyleSheet,
-  Pressable,
-} from 'react-native';
-import SeeMore from 'react-native-see-more-inline';
-import {SIZES} from '../../../utils/theme';
+import {Image, Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
+
 import MemoIconClose from './IconClose';
 
 const ContactPreview = ({users = [], onPress}) => {
@@ -20,29 +12,29 @@ const ContactPreview = ({users = [], onPress}) => {
       horizontal={true}
       style={{
         paddingHorizontal: 4,
-        paddingVertical: 20,
+        paddingVertical: 20
       }}>
-      {users.map((item, index) => {
+      {users.map((item) => {
         if (item) {
           return (
             <View
               key={item.user_id}
               style={{
                 marginHorizontal: 15,
-                width: 50,
+                width: 50
               }}>
               <View style={styles.tinyLogo}>
                 <Image
                   style={styles.tinyLogo}
                   source={{
-                    uri: item.profile_pic_path,
+                    uri: item.profile_pic_path
                   }}
                 />
                 <View
                   style={{
                     position: 'absolute',
                     top: -1,
-                    right: -5,
+                    right: -5
                   }}>
                   <Pressable onPress={() => onPress(item)}>
                     <MemoIconClose width={24} height={24} />
@@ -55,7 +47,7 @@ const ContactPreview = ({users = [], onPress}) => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   alignSelf: 'center',
-                  marginTop: 6,
+                  marginTop: 6
                 }}>
                 {item.username.length < 8
                   ? `${item.username}`
@@ -64,6 +56,8 @@ const ContactPreview = ({users = [], onPress}) => {
             </View>
           );
         }
+
+        return <></>;
       })}
     </ScrollView>
   );
@@ -73,8 +67,8 @@ const styles = StyleSheet.create({
   tinyLogo: {
     width: 54,
     height: 54,
-    borderRadius: 54,
-  },
+    borderRadius: 54
+  }
 });
 
 export default ContactPreview;

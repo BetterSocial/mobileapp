@@ -151,6 +151,8 @@ android {
         applicationId "org.bettersocial"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+        compileSdkVersion rootProject.ext.compileSdkVersion
+
         versionCode 417
         versionName "2.0.2"
     }
