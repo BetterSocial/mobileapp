@@ -4,8 +4,8 @@ import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import {v4 as uuid} from 'uuid';
 
-import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
 import ChatSchema from '../../database/schema/ChatSchema';
+import SignedMessageRepo from '../../service/repo/signedMessageRepo';
 import UseSignedChatScreenHook from '../../../types/hooks/screens/useSignedChatScreenHook.types';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
@@ -67,12 +67,7 @@ function useSignedChatScreenHook(): UseSignedChatScreenHook {
         refresh('channelList');
       }
 
-      //! TODO:
-      //! POST TO SIGNED REPO
-      const response = await AnonymousMessageRepo.sendAnonymousMessage(
-        selectedChannel?.id,
-        message
-      );
+      const response = await SignedMessageRepo.sendSignedMessage(selectedChannel?.id, message);
 
       await currentChatSchema.updateChatSentStatus(localDb, response);
       refresh('chat');

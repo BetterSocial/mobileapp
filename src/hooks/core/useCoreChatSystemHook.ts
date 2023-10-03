@@ -22,6 +22,8 @@ import {GetstreamFeedListenerObject} from '../../../types/hooks/core/getstreamFe
 import {InitialStartupAtom} from '../../service/initialStartup';
 import {getAnonymousChatName} from '../../utils/string/StringUtils';
 
+type ChannelType = 'SIGNED' | 'ANONYMOUS';
+
 const useCoreChatSystemHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook() as UseLocalDatabaseHook;
   const {anonProfileId, signedProfileId} = useProfileHook();
@@ -94,49 +96,36 @@ const useCoreChatSystemHook = () => {
     refresh('channelMember');
   };
 
-  const helperSignedChannelPromiseBuilder = async (channel) => {
+  const helperChannelPromiseBuilder = async (channel, channelType: ChannelType) => {
     if (channel?.members?.length === 0) return Promise.reject(Error('no members'));
-    const chatName = await getAnonymousChatName(channel?.members);
+
+    const isAnonymous = channelType === 'ANONYMOUS';
+    const chatName = isAnonymous
+      ? await getAnonymousChatName(channel?.members)
+      : channel?.members?.find((member) => member?.role === 'member')?.user;
+
     return new Promise((resolve, reject) => {
       try {
         channel.targetName = chatName?.name;
         channel.targetImage = chatName?.image;
         channel.firstMessage = channel?.messages?.[0];
         channel.channel = {...channel};
-        const channelList = ChannelList.fromChannelAPI(channel, 'PM');
+        const channelList = ChannelList.fromChannelAPI(channel, isAnonymous ? 'ANON_PM' : 'PM');
         return resolve(channelList.saveIfLatest(localDb));
       } catch (e) {
-        console.log('error on helperSignedChannelPromiseBuilder');
+        console.log('error on helperChannelPromiseBuilder');
         return reject(e);
       }
     });
   };
 
-  const helperAnonymousChannelPromiseBuilder = async (channel) => {
-    if (channel?.members?.length === 0) return Promise.reject(Error('no members'));
-
-    const chatName = await getAnonymousChatName(channel?.members);
-    return new Promise((resolve, reject) => {
-      try {
-        channel.targetName = chatName?.name;
-        channel.targetImage = chatName?.image;
-        channel.firstMessage = channel?.messages?.[0];
-        channel.channel = {...channel};
-        const channelList = ChannelList.fromChannelAPI(channel, 'ANON_PM');
-        return resolve(channelList.saveIfLatest(localDb));
-      } catch (e) {
-        console.log('error on helperAnonymousChannelPromiseBuilder');
-        return reject(e);
-      }
-    });
-  };
-
-  const saveSignedChannelData = async (channel) => {
+  const saveChannelData = async (channel, channelType: ChannelType) => {
     if (!channel?.members || channel?.members?.length === 0) return;
+
     try {
-      await helperSignedChannelPromiseBuilder(channel);
+      await helperChannelPromiseBuilder(channel, channelType);
     } catch (e) {
-      console.log('error on saveSignedChannelData helperSignedChannelPromiseBuilder');
+      console.log('error on saveChannelData helperChannelPromiseBuilder');
       console.log(e);
     }
 
@@ -157,51 +146,14 @@ const useCoreChatSystemHook = () => {
         await chat.save(localDb);
       });
     } catch (e) {
-      console.log('error on saveSignedChannelData');
+      console.log('error on saveChannelData');
       console.log(e);
     }
   };
 
-  const saveAnonymousChannelData = async (channel) => {
-    if (!channel?.members || channel?.members?.length === 0) return;
-    try {
-      await helperAnonymousChannelPromiseBuilder(channel);
-    } catch (e) {
-      console.log('error on saveAnonymousChannelData helperAnonymousChannelPromiseBuilder');
-      console.log(e);
-    }
-
-    try {
-      channel?.members?.forEach(async (member) => {
-        const userMember = UserSchema.fromMemberWebsocketObject(member, channel.id);
-        const memberSchema = ChannelListMemberSchema.fromWebsocketObject(
-          channel?.id,
-          uuid(),
-          member
-        );
-        await memberSchema.save(localDb);
-        await userMember.saveOrUpdateIfExists(localDb);
-      });
-
-      channel?.messages?.forEach(async (message) => {
-        const chat = ChatSchema.fromGetAllAnonymousChannelAPI(channel?.id, message);
-        await chat.save(localDb);
-      });
-    } catch (e) {
-      console.log('error on saveAnonymousChannelData');
-      console.log(e);
-    }
-  };
-
-  const saveAllsignedChannelData = async (channels) => {
+  const saveAllChannelData = async (channels, channelType: ChannelType) => {
     channels?.forEach(async (channel) => {
-      saveSignedChannelData(channel);
-    });
-  };
-
-  const saveAllAnonymousChannelData = async (channels) => {
-    channels?.forEach(async (channel) => {
-      saveAnonymousChannelData(channel);
+      saveChannelData(channel, channelType);
     });
   };
 
@@ -217,7 +169,7 @@ const useCoreChatSystemHook = () => {
     }
 
     try {
-      await saveAllsignedChannelData(signedChannel);
+      await saveAllChannelData(signedChannel, 'SIGNED');
       refresh('channelList');
     } catch (e) {
       console.log('error on saving signedChannel');
@@ -237,7 +189,7 @@ const useCoreChatSystemHook = () => {
     }
 
     try {
-      await saveAllAnonymousChannelData(anonymousChannel);
+      await saveAllChannelData(anonymousChannel, 'ANONYMOUS');
       refresh('channelList');
     } catch (e) {
       console.log('error on saving anonymousChannel');

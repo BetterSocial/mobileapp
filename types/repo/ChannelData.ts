@@ -1,4 +1,4 @@
-export interface GetAllSignedChannelsResponse {
+export interface GetAllChannelsResponse {
   code: number;
   status: string;
   data: ChannelData[];
