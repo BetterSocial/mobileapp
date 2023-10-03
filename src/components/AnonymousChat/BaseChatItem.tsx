@@ -4,7 +4,7 @@ import {View} from 'react-native';
 import AnonymousIcon from '../../screens/ChannelListScreen/elements/components/AnonymousIcon';
 import ChatItemMyTextV2 from './child/ChatItemMyTextV2';
 import ChatItemTargetText from './child/ChatItemTargetText';
-import useAnonymousChatScreenHook from '../../hooks/screen/useAnonymousChatScreenHook';
+import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
 import {
   BaseChatItemComponentProps,
   BaseChatItemTypeProps
@@ -13,7 +13,7 @@ import {ChatStatus} from '../../../types/database/schema/ChannelList.types';
 import {calculateTime} from '../../utils/time';
 
 const BaseChatItem = ({item, index}: BaseChatItemComponentProps) => {
-  const {selectedChannel} = useAnonymousChatScreenHook();
+  const {selectedChannel} = useChatScreenHook('ANONYMOUS');
   const {anon_user_info_emoji_name, anon_user_info_emoji_code, anon_user_info_color_code} =
     selectedChannel?.rawJson?.channel || {};
 
