@@ -1,4 +1,4 @@
-export interface GetAllAnonymousChannelsResponse {
+export interface GetAllChannelsResponse {
   code: number;
   status: string;
   data: ChannelData[];

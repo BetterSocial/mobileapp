@@ -26,9 +26,14 @@ function useChatUtilsHook(): UseChatUtilsHook {
     if (!localDb) return;
     channel.setRead(localDb).catch((e) => console.log('setChannelAsRead error', e));
 
-    AnonymousMessageRepo.setChannelAsRead(channel?.id).catch((e) => {
-      console.log('setChannelAsRead error api', e?.response?.data);
-    });
+    if (channel?.channelType?.includes('ANON')) {
+      AnonymousMessageRepo.setChannelAsRead(channel?.id).catch((e) => {
+        console.log('setChannelAsRead error api', e?.response?.data);
+      });
+    } else {
+      //! TODO:
+      //! POST TO SIGNED CHAT API & MARK AS READ
+    }
 
     refresh('channelList');
   };
@@ -54,7 +59,8 @@ function useChatUtilsHook(): UseChatUtilsHook {
 
   const goToChatScreen = (channel: ChannelList) => {
     setChannelAsRead(channel);
-    if (channel?.channelType === 'ANON_POST_NOTIFICATION')
+
+    if (channel?.channelType?.includes('POST_NOTIFICATION'))
       return helperGoToPostDetailScreen(channel);
 
     navigation.navigate('SampleChatScreen');

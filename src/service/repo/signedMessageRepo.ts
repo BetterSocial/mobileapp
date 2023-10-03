@@ -1,22 +1,23 @@
 import anonymousApi from '../anonymousConfig';
-import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
+import api from '../config';
 import {ChannelData} from '../../../types/repo/ChannelData';
+import {SignedPostNotification} from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 
 const baseUrl = {
   checkIsTargetAllowingAnonDM: 'chat/channels/check-allow-anon-dm-status',
-  sendAnonymousMessage: '/chat/anonymous',
-  getAllAnonymousChannels: '/chat/channels',
-  getAllAnonymousPostNotifications: '/feeds/feed-chat/anonymous',
-  getSingleAnonymousPostNotifications: (activityId: string) => `/feeds/feed-chat/${activityId}`,
+  sendSignedMessage: '/chat/anonymous',
+  getAllSignedChannels: '/chat/channels',
+  getAllSignedPostNotifications: '/feeds/feed-chat',
+  getSingleSignedPostNotifications: (activityId: string) => `/feeds/feed-chat/${activityId}`,
   setChannelAsRead: (channelId: string) => `/chat/channels/${channelId}/read`
 };
 
-interface AnonymousMessageRepoTypes {
+interface SignedMessageRepoTypes {
   checkIsTargetAllowingAnonDM: (targetUserId: string) => Promise<any>;
-  sendAnonymousMessage: (channelId: string, message: string) => Promise<any>;
-  getAllAnonymousChannels: () => Promise<ChannelData[]>;
-  getAllAnonymousPostNotifications: () => Promise<AnonymousPostNotification[]>;
-  getSingleAnonymousPostNotifications: (activityId: string) => Promise<AnonymousPostNotification>;
+  sendSignedMessage: (channelId: string, message: string) => Promise<any>;
+  getAllSignedChannels: () => Promise<ChannelData[]>;
+  getAllSignedPostNotifications: () => Promise<SignedPostNotification[]>;
+  getSingleSignedPostNotifications: (activityId: string) => Promise<SignedPostNotification>;
   setChannelAsRead: (channelId: string) => Promise<boolean>;
 }
 
@@ -25,7 +26,7 @@ async function checkIsTargetAllowingAnonDM(targetUserId: string) {
     const payload = {
       members: [targetUserId]
     };
-    const response = await anonymousApi.post(baseUrl.checkIsTargetAllowingAnonDM, payload);
+    const response = await api.post(baseUrl.checkIsTargetAllowingAnonDM, payload);
     if (response.status === 200) {
       return Promise.resolve(response.data?.data);
     }
@@ -38,13 +39,10 @@ async function checkIsTargetAllowingAnonDM(targetUserId: string) {
   }
 }
 
-async function sendAnonymousMessage(channelId: string, message: string) {
-  const payload = {
-    channelId,
-    message
-  };
+async function sendSignedMessage(channelId: string, message: string) {
+  const payload = {channelId, message};
   try {
-    const response = await anonymousApi.post(baseUrl.sendAnonymousMessage, payload);
+    const response = await api.post(baseUrl.sendSignedMessage, payload);
     if (response.status === 200) {
       return Promise.resolve(response.data?.data);
     }
@@ -56,9 +54,10 @@ async function sendAnonymousMessage(channelId: string, message: string) {
   }
 }
 
-async function getAllAnonymousChannels() {
+async function getAllSignedChannels() {
   try {
-    const response = await anonymousApi.get(baseUrl.getAllAnonymousChannels);
+    const response = await anonymousApi.get(baseUrl.getAllSignedChannels);
+
     if (response.status === 200) {
       return Promise.resolve(response.data?.data);
     }
@@ -70,9 +69,9 @@ async function getAllAnonymousChannels() {
   }
 }
 
-async function getAllAnonymousPostNotifications() {
+async function getAllSignedPostNotifications() {
   try {
-    const response = await anonymousApi.get(baseUrl.getAllAnonymousPostNotifications);
+    const response = await api.get(baseUrl.getAllSignedPostNotifications);
     if (response.status === 200) {
       return Promise.resolve(response.data?.data);
     }
@@ -84,13 +83,11 @@ async function getAllAnonymousPostNotifications() {
   }
 }
 
-async function getSingleAnonymousPostNotifications(
+async function getSingleSignedPostNotifications(
   activityId: string
-): Promise<AnonymousPostNotification> {
+): Promise<SignedPostNotification> {
   try {
-    const response = await anonymousApi.get(
-      baseUrl.getSingleAnonymousPostNotifications(activityId)
-    );
+    const response = await api.get(baseUrl.getSingleSignedPostNotifications(activityId));
     if (response.status === 200) {
       return Promise.resolve(response.data?.data);
     }
@@ -104,10 +101,8 @@ async function getSingleAnonymousPostNotifications(
 
 async function setChannelAsRead(channelId: string): Promise<boolean> {
   try {
-    const data = {
-      channelType: 'messaging'
-    };
-    const response = await anonymousApi.post(baseUrl.setChannelAsRead(channelId), data);
+    const data = {channelType: 'messaging'};
+    const response = await api.post(baseUrl.setChannelAsRead(channelId), data);
     if (response.status === 200) {
       return Promise.resolve(true);
     }
@@ -119,13 +114,13 @@ async function setChannelAsRead(channelId: string): Promise<boolean> {
   }
 }
 
-const AnonymousMessageRepo: AnonymousMessageRepoTypes = {
+const SignedMessageRepo: SignedMessageRepoTypes = {
   checkIsTargetAllowingAnonDM,
-  sendAnonymousMessage,
-  getAllAnonymousChannels,
-  getAllAnonymousPostNotifications,
-  getSingleAnonymousPostNotifications,
+  sendSignedMessage,
+  getAllSignedChannels,
+  getAllSignedPostNotifications,
+  getSingleSignedPostNotifications,
   setChannelAsRead
 };
 
-export default AnonymousMessageRepo;
+export default SignedMessageRepo;

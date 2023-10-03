@@ -7,14 +7,14 @@ import {Dimensions, FlatList, KeyboardAvoidingView, Platform, StyleSheet, View} 
 import AnonymousChatHeader from '../../components/AnonymousChat/AnonymousChatHeader';
 import AnonymousInputMessage from '../../components/Chat/AnonymousInputMessage';
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
-import useAnonymousChatScreenHook from '../../hooks/screen/useAnonymousChatScreenHook';
+import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
 import {colors} from '../../utils/colors';
 
 const {height} = Dimensions.get('window');
 
 const SampleChatScreen = () => {
   const {selectedChannel, chats, goBackFromChatScreen, goToChatInfoScreen, sendChat} =
-    useAnonymousChatScreenHook();
+    useChatScreenHook('ANONYMOUS');
   const styles = StyleSheet.create({
     keyboardAvoidingView: {
       flex: 1,
