@@ -702,9 +702,6 @@ const ProfileScreen = ({route}) => {
         />
         <ButtonNewPost isShowArrow={isShowButton} />
       </SafeAreaProvider>
-      {/* {!loadingContainer ? (
-        
-      ) : null} */}
     </>
   );
 };

@@ -28,6 +28,7 @@ import {traceMetricScreen} from '../libraries/performance/firebasePerformance';
 import {useClientGetstream} from '../utils/getstream/ClientGetStram';
 import useCoreFeed from '../screens/FeedScreen/hooks/useCoreFeed';
 import StorageUtils from '../utils/storage';
+import netInfo from '@react-native-community/netinfo';
 
 export const useInitialStartup = () => {
   const [, newsDispatch] = React.useContext(Context).news;
@@ -47,7 +48,7 @@ export const useInitialStartup = () => {
   const {resetAllContext, resetLocalDB} = useResetContext();
   const {checkCacheFeed} = useCoreFeed();
   const {getFeedChat} = useFeedService();
-
+  const isIos = Platform.OS === 'ios';
   const LIMIT_FIRST_NEWS = 3;
   const create = useClientGetstream();
 
@@ -59,6 +60,18 @@ export const useInitialStartup = () => {
       resetAllContext();
       resetLocalDB();
     }
+  };
+
+  const checkInternetConnection = () => {
+    netInfo.addEventListener((state) => {
+      if (state.isConnected) {
+        getProfile();
+        getDomain();
+        getDataFeeds();
+        getDiscoveryData();
+        getFeedChat();
+      }
+    });
   };
 
   const callStreamFeed = async () => {
@@ -79,7 +92,6 @@ export const useInitialStartup = () => {
   const getProfile = async () => {
     try {
       const profile = await getMyProfile();
-      // saveToCache(PROFILE_CACHE, profile.data);
       StorageUtils.profileData.set(JSON.stringify(profile.data));
       setMyProfileAction(profile.data, dispatchProfile);
       setLoadingUser(false);
@@ -152,6 +164,10 @@ export const useInitialStartup = () => {
       throw new Error(e);
     }
   };
+
+  React.useEffect(() => {
+    checkInternetConnection();
+  }, []);
 
   React.useEffect(() => {
     // logging section
