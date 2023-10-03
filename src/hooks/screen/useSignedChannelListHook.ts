@@ -13,7 +13,7 @@ function useSignedChannelListScreenHook(): UseSignedChannelListScreenHook {
 
   const [channels, setChannels] = React.useState([]);
 
-  const initChannelListData = async () => {
+  const initializeChannelListData = async () => {
     if (!localDb) return;
     const myId = await getUserId();
 
@@ -21,11 +21,12 @@ function useSignedChannelListScreenHook(): UseSignedChannelListScreenHook {
     //! REMOVE ANONYMOUSID
     const myAnonymousId = await getAnonymousUserId();
     const data = await ChannelList.getAll(localDb, myId, myAnonymousId);
+
     setChannels(data);
   };
 
   React.useEffect(() => {
-    initChannelListData();
+    initializeChannelListData();
   }, [localDb, channelList]);
 
   return {

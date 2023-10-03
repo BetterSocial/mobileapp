@@ -1,6 +1,6 @@
 import anonymousApi from '../anonymousConfig';
 import api from '../config';
-import {ChannelData} from '../../../types/repo/SignedMessageRepo/ChannelData';
+import {ChannelData} from '../../../types/repo/ChannelData';
 import {SignedPostNotification} from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 
 const baseUrl = {

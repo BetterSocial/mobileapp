@@ -2,22 +2,21 @@ import * as React from 'react';
 import {useNavigation} from '@react-navigation/core';
 
 import ChannelList from '../../database/schema/ChannelListSchema';
+import UseSignedChatInfoScreenHook from '../../../types/hooks/screens/useSignedChatInfoScreenHook.types';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import {ChannelListMemberSchema} from '../../../types/database/schema/ChannelList.types';
 import {getAnonymousUserId} from '../../utils/users';
 import {getUserId} from '../../utils/token';
-import UseSignedChatInfoScreenHook from '../../../types/hooks/screens/useSignedChatInfoScreenHook.types';
 
 function useSignedChatInfoScreenHook(): UseSignedChatInfoScreenHook {
   const {localDb, channelList} = useLocalDatabaseHook();
   const {selectedChannel, goBack} = useChatUtilsHook();
-
   const navigation = useNavigation();
 
   const [channelInfo, setChannelInfo] = React.useState(null);
 
-  const initChatInfoData = async () => {
+  const initializeChatInfoData = async () => {
     if (!localDb) return;
     const myId = await getUserId();
 
@@ -30,6 +29,7 @@ function useSignedChatInfoScreenHook(): UseSignedChatInfoScreenHook {
       myId,
       myAnonymousId
     );
+
     setChannelInfo(data);
   };
 
@@ -45,7 +45,7 @@ function useSignedChatInfoScreenHook(): UseSignedChatInfoScreenHook {
   };
 
   React.useEffect(() => {
-    initChatInfoData();
+    initializeChatInfoData();
   }, [localDb, channelList]);
 
   return {
