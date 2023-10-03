@@ -6,14 +6,15 @@ import {v4 as uuid} from 'uuid';
 
 import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
 import ChatSchema from '../../database/schema/ChatSchema';
-import UseAnonymousChatScreenHook from '../../../types/hooks/screens/useAnonymousChatScreenHook.types';
+import SignedMessageRepo from '../../service/repo/signedMessageRepo';
+import UseChatScreenHook from '../../../types/hooks/screens/useChatScreenHook.types';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import {getAnonymousUserId} from '../../utils/users';
 import {getUserId} from '../../utils/token';
 import {randomString} from '../../utils/string/StringUtils';
 
-function useAnonymousChatScreenHook(): UseAnonymousChatScreenHook {
+function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const {localDb, chat, refresh} = useLocalDatabaseHook();
   const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen} = useChatUtilsHook();
 
@@ -62,10 +63,12 @@ function useAnonymousChatScreenHook(): UseAnonymousChatScreenHook {
         refresh('channelList');
       }
 
-      const response = await AnonymousMessageRepo.sendAnonymousMessage(
-        selectedChannel?.id,
-        message
-      );
+      let response;
+      if (type === 'ANONYMOUS') {
+        response = await AnonymousMessageRepo.sendAnonymousMessage(selectedChannel?.id, message);
+      } else {
+        response = await SignedMessageRepo.sendSignedMessage(selectedChannel?.id, message);
+      }
 
       await currentChatSchema.updateChatSentStatus(localDb, response);
       refresh('chat');
@@ -95,4 +98,4 @@ function useAnonymousChatScreenHook(): UseAnonymousChatScreenHook {
   };
 }
 
-export default useAnonymousChatScreenHook;
+export default useChatScreenHook;
