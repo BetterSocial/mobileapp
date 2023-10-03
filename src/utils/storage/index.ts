@@ -14,7 +14,8 @@ enum StorageKeysEnum {
   MyFeeds = 'myfeeds',
   MyAnonymousFeed = 'myanonymousfeed',
   OtherProfileFeed = 'otherprofilefeed',
-  ProfileData = 'profiledata'
+  ProfileData = 'profiledata',
+  OtherProfileData = 'otherprofiledata'
 }
 
 interface IStorage {
@@ -82,7 +83,8 @@ const StorageUtils = {
   myFeeds: storageBuilder(StorageKeysEnum.MyFeeds),
   myAnonymousFeed: storageBuilder(StorageKeysEnum.MyAnonymousFeed),
   otherProfileFeed: storageBuilder(StorageKeysEnum.OtherProfileFeed),
-  profileData: storageBuilder(StorageKeysEnum.ProfileData)
+  profileData: storageBuilder(StorageKeysEnum.ProfileData),
+  otherProfileData: storageBuilder(StorageKeysEnum.OtherProfileData)
 };
 
 export interface IStorageUtils {

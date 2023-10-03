@@ -14,6 +14,7 @@ import {feedChatAtom} from '../../../models/feeds/feedsNotification';
 import {removeAllCache} from '../../../utils/cache';
 import {resetProfileFeed} from '../../../context/actions/myProfileFeed';
 import {setMainFeeds} from '../../../context/actions/feeds';
+import StorageUtils from '../../../utils/storage';
 
 const useSettings = () => {
   const [isLoadingDeletingAccount, setIsLoadingDeletingAccount] = React.useState(false);
@@ -48,7 +49,6 @@ const useSettings = () => {
   const handleResponseDelete = async (response) => {
     if (response.status === 'success') {
       logout();
-      console.log('');
       Toast.show(StringConstant.profileDeleteAccountSuccess, Toast.SHORT);
 
       setStartupValue({

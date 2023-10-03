@@ -2,7 +2,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
-import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 
 import Content from './Content';
 import ContentLink from './ContentLink';
@@ -28,7 +27,6 @@ const tabBarHeight = StatusBar.currentHeight;
 const FULL_WIDTH = Dimensions.get('screen').width;
 
 const RenderListFeed = (props) => {
-  const bottomHeight = useBottomTabBarHeight();
   const [isHaveSeeMore, setIsHaveSeeMore] = React.useState(false);
   const {
     item,
@@ -109,12 +107,7 @@ const RenderListFeed = (props) => {
   const contentLinkHeight = () => {
     const haveLength =
       getCommentLength(item.latest_reactions.comment) > 0 ? getHeightReaction() / 2.2 : 0;
-    return (
-      dimen.size.FEED_CURRENT_ITEM_HEIGHT -
-      getHeightHeader() -
-      getHeightFooter(bottomHeight) -
-      haveLength
-    );
+    return dimen.size.FEED_CURRENT_ITEM_HEIGHT - getHeightHeader() - getHeightFooter() - haveLength;
   };
   return (
     <View key={item.id} testID="dataScroll" style={styles.cardContainer}>
@@ -158,7 +151,7 @@ const RenderListFeed = (props) => {
             onNewPollFetched={onNewPollFetched}
           />
         )}
-        <View style={styles.footerWrapper(getHeightFooter(bottomHeight))}>
+        <View style={styles.footerWrapper(getHeightFooter())}>
           <Footer
             item={item}
             totalComment={getTotalReaction(item)}

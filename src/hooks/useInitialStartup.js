@@ -5,6 +5,7 @@ import {LogBox, Platform, StatusBar} from 'react-native';
 import {useLocalChannelsFirst} from 'stream-chat-react-native';
 import {useRecoilValue, useSetRecoilState} from 'recoil';
 
+import netInfo from '@react-native-community/netinfo';
 import DiscoveryAction from '../context/actions/discoveryAction';
 import DiscoveryRepo from '../service/discovery';
 import following from '../context/actions/following';
@@ -28,7 +29,6 @@ import {traceMetricScreen} from '../libraries/performance/firebasePerformance';
 import {useClientGetstream} from '../utils/getstream/ClientGetStram';
 import useCoreFeed from '../screens/FeedScreen/hooks/useCoreFeed';
 import StorageUtils from '../utils/storage';
-import netInfo from '@react-native-community/netinfo';
 
 export const useInitialStartup = () => {
   const [, newsDispatch] = React.useContext(Context).news;
@@ -48,7 +48,6 @@ export const useInitialStartup = () => {
   const {resetAllContext, resetLocalDB} = useResetContext();
   const {checkCacheFeed} = useCoreFeed();
   const {getFeedChat} = useFeedService();
-  const isIos = Platform.OS === 'ios';
   const LIMIT_FIRST_NEWS = 3;
   const create = useClientGetstream();
 
@@ -60,18 +59,6 @@ export const useInitialStartup = () => {
       resetAllContext();
       resetLocalDB();
     }
-  };
-
-  const checkInternetConnection = () => {
-    netInfo.addEventListener((state) => {
-      if (state.isConnected) {
-        getProfile();
-        getDomain();
-        getDataFeeds();
-        getDiscoveryData();
-        getFeedChat();
-      }
-    });
   };
 
   const callStreamFeed = async () => {
@@ -164,10 +151,6 @@ export const useInitialStartup = () => {
       throw new Error(e);
     }
   };
-
-  React.useEffect(() => {
-    checkInternetConnection();
-  }, []);
 
   React.useEffect(() => {
     // logging section

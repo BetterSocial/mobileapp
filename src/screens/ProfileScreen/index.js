@@ -17,7 +17,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {debounce} from 'lodash';
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
-
+import netInfo from '@react-native-community/netinfo';
 import AnonymousTab from './elements/AnonymousTab';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BioAndDMSetting from './elements/BioAndDMSetting';
@@ -221,11 +221,12 @@ const ProfileScreen = ({route}) => {
     }
   }, [refreshCount]);
 
-  const initialMyFeed = () => {
+  const initialMyFeed = async () => {
     const cacheFeed = StorageUtils.myFeeds.get();
-    console.log({cacheFeed}, 'lipok');
-    if (!cacheFeed) {
+    const status = await netInfo.fetch();
+    if (status.isConnected) {
       getMyFeeds(0, LIMIT_PROFILE_FEED);
+      console.log('masuka');
     } else {
       setMyProfileFeed(JSON.parse(cacheFeed), myProfileDispatch);
     }
