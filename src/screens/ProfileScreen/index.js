@@ -155,7 +155,7 @@ const ProfileScreen = ({route}) => {
   const [myProfileFeed, myProfileDispatch] = React.useContext(Context).myProfileFeed;
 
   const [dataMain, setDataMain] = React.useState({});
-  const [dataMainBio, setDataMainBio] = React.useState('');
+  const [, setDataMainBio] = React.useState('');
   const [errorBio, setErrorBio] = React.useState('');
   const [isChangeRealName, setIsChangeRealName] = React.useState(false);
   const [isLoadingRemoveImage, setIsLoadingRemoveImage] = React.useState(false);
@@ -235,7 +235,6 @@ const ProfileScreen = ({route}) => {
   React.useEffect(() => {
     if (interactionsComplete) {
       initialMyFeed();
-      // fetchMyProfile();
       getProfileCache();
     }
   }, [interactionsComplete]);
