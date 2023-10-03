@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {Dimensions, Image, StyleSheet, Text, TouchableWithoutFeedback, View} from 'react-native';
 
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import BgOnboardingTop from '../../../assets/background/bg_onboarding_top.png';
 import BottomOverlay from './BottomOverlay';
 import IconBetterOnboarding from '../../../assets/icon/IconBetterOnboarding';
@@ -22,12 +23,19 @@ export const SlideShowItem = ({
   onNextSlide = () => {},
   onPressContainer = () => {}
 }) => {
+  const [heightTopContainer, setHeightContainer] = React.useState(
+    height - dimen.size.ONBOARDING_BOTTOM_OVERLAY_CONTAINER
+  );
+  const {top} = useSafeAreaInsets();
   // eslint-disable-next-line no-underscore-dangle
   const __renderForeground = () => {
     if (index < 4)
       return (
         <TouchableWithoutFeedback onPress={onPressContainer}>
-          <Image source={illustration} style={styles.onboardingForeground} />
+          <Image
+            source={illustration}
+            style={styles.onboardingForeground(heightTopContainer, top)}
+          />
         </TouchableWithoutFeedback>
       );
     return <></>;
@@ -65,10 +73,15 @@ export const SlideShowItem = ({
       </TouchableWithoutFeedback>
     );
   };
-
+  console.log('height: ', height);
   return (
     <View style={styles.container}>
-      <View style={styles.topPartContainer}>
+      <View
+        style={styles.topPartContainer}
+        onLayout={(event) => {
+          const heightContainer = event.nativeEvent.layout.height;
+          setHeightContainer(heightContainer);
+        }}>
         {__renderForeground()}
         {__renderBackground()}
       </View>
@@ -115,15 +128,14 @@ const styles = StyleSheet.create({
       marginTop: -32
     };
   },
-  onboardingForeground: {
+  onboardingForeground: (heightContainer, topArea) => ({
     position: 'absolute',
-    top: height > 640 ? 0 : 0,
+    top: topArea <= 20 ? -topArea : normalize(topArea - 60),
     zIndex: 1,
     width,
-    height: '100%',
-    // resizeMode: 'contain'
+    height: heightContainer + (topArea <= 20 ? topArea : normalize(60 - topArea)),
     resizeMode: 'cover'
-  },
+  }),
   onboardingBackground: {
     width: '100%',
     height: '100%'
