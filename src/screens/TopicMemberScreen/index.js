@@ -34,7 +34,10 @@ let lastDragYTopicMember = 0;
 const TopicMemberScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  const {topicName, isFollow, setIsFollow, topicDetail} = route?.params;
+  const topicName = route?.params?.topicName;
+  const topicDetail = route?.params?.topicDetail;
+  const isFollow = route?.params?.isFollow;
+  const setIsFollow = route?.params?.setIsFollow;
 
   const [profile] = React.useContext(Context).profile;
   const [isInitialLoading, setIsInitialLoading] = React.useState(true);
