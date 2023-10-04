@@ -20,13 +20,13 @@ import {generateRandomId} from 'stream-chat-react-native';
 import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
 
+import netInfo from '@react-native-community/netinfo';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BlockIcon from '../../assets/icons/images/block-blue.svg';
 import BlockProfile from '../../components/Blocking/BlockProfile';
 import BottomSheetBio from '../ProfileScreen/elements/BottomSheetBio';
 import EnveloveBlueIcon from '../../assets/icons/images/envelove-blue.svg';
 import GlobalButton from '../../components/Button/GlobalButton';
-import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import ProfileHeader from '../ProfileScreen/elements/ProfileHeader';
 import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
 import RenderItem from '../ProfileScreen/elements/RenderItem';
@@ -146,7 +146,7 @@ const OtherProfile = () => {
   const [user_id, setUserId] = React.useState('');
   const [username, setUsername] = React.useState('');
   const [other_id, setOtherId] = React.useState('');
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [, setIsLoading] = React.useState(true);
   const [isShowButton, setIsShowButton] = React.useState(false);
   const [opacity, setOpacity] = React.useState(0);
   const [reason, setReason] = React.useState([]);
@@ -174,7 +174,6 @@ const OtherProfile = () => {
   const {saveChatFromOtherProfile, savePendingChatFromOtherProfile} = useSaveAnonChatHook();
 
   const create = useClientGetstream();
-  const {interactionsComplete} = useAfterInteractions();
 
   const {params} = route;
   const {feeds} = otherProfileFeeds;
@@ -298,7 +297,6 @@ const OtherProfile = () => {
         dataFeed: feedOtherProfile,
         dataCache: cacheFeed
       });
-      console.log({mapNewData, cacheFeed}, 'sijak');
       if (Array.isArray(result.data) && result.data.length === 0) {
         setIsLastPage(true);
       }
@@ -326,12 +324,6 @@ const OtherProfile = () => {
   }, []);
 
   React.useEffect(() => {
-    if (interactionsComplete) {
-      fetchOtherProfile(params?.data?.username);
-    }
-  }, [interactionsComplete]);
-
-  React.useEffect(() => {
     create();
     setIsLoading(true);
     setUserId(params.data.user_id);
@@ -355,28 +347,43 @@ const OtherProfile = () => {
     }
   };
 
-  const handleGetOtherFeed = (result) => {
-    getOtherFeeds(result.data.user_id);
+  const handleGetOtherFeed = (data) => {
+    getOtherFeeds(data.user_id);
+  };
+
+  const handleSaveDataOtherProfile = (data) => {
+    setDataMain(data);
+    setDataMainBio(data.bio);
+    checkUserBlockHandle(data.user_id);
+    setOtherId(data.user_id);
+    handleGetOtherFeed(data);
   };
 
   const fetchOtherProfile = async (usernames) => {
-    try {
-      const result = await getOtherProfile(usernames);
-      if (result.code === 200) {
-        setDataMain(result.data);
-        setDataMainBio(result.data.bio);
-        checkUserBlockHandle(result.data.user_id);
-        setOtherId(result.data.user_id);
-        handleGetOtherFeed(result);
+    const status = await netInfo.fetch();
+    if (status.isConnected) {
+      try {
+        const result = await getOtherProfile(usernames);
+        StorageUtils.otherProfileData.setForKey(usernames, JSON.stringify(result.data));
+        if (result.code === 200) {
+          handleSaveDataOtherProfile(result.data);
+        }
+      } catch (e) {
+        if (e.response && e.response.data && e.response.data.message) {
+          SimpleToast.show(e.response.data.message, SimpleToast.SHORT);
+        }
+        setBlockStatus({
+          ...blockStatus,
+          blocked: true
+        });
+        setIsLoading(false);
       }
-    } catch (e) {
-      if (e.response && e.response.data && e.response.data.message) {
-        SimpleToast.show(e.response.data.message, SimpleToast.SHORT);
+    } else {
+      const cache = await StorageUtils.otherProfileData.getForKey(usernames);
+      if (cache) {
+        const data = JSON.parse(cache);
+        handleSaveDataOtherProfile(data);
       }
-      setBlockStatus({
-        ...blockStatus,
-        blocked: true
-      });
       setIsLoading(false);
     }
   };
@@ -624,7 +631,6 @@ const OtherProfile = () => {
   const onBlockReaction = () => {
     blockUserRef.current.open();
   };
-
   const handleBlocking = async (message) => {
     setLoadingBlocking(true);
     let data = {
@@ -792,14 +798,6 @@ const OtherProfile = () => {
           onShareClicked={onShare}
           username={dataMain.username}
         />
-        {isLoading ? (
-          <View
-            style={loadingSendDM ? styles.containerLoading : styles.containerLoadingBlockScreen}>
-            <LoadingWithoutModal text={loadingSendDM ? 'Initializing chat' : null} />
-          </View>
-        ) : (
-          <></>
-        )}
 
         <ProfileTiktokScroll
           keyboardShouldPersistTaps="handled"

@@ -48,7 +48,6 @@ const useSettings = () => {
   const handleResponseDelete = async (response) => {
     if (response.status === 'success') {
       logout();
-      console.log('');
       Toast.show(StringConstant.profileDeleteAccountSuccess, Toast.SHORT);
 
       setStartupValue({

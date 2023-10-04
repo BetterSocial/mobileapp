@@ -31,6 +31,16 @@ export const callbackGetSpecificCache = (cacheKey, callback, result) => {
 export const saveToCache = (cacheKey, jsonData) => {
   if (jsonData && cacheKey && typeof jsonData === 'object' && typeof cacheKey === 'string') {
     AsyncStorage.getItem(CACHE_NAME, (err, result) => {
+      if (result && typeof result === 'string') {
+        let parseResult = JSON.parse(result);
+        parseResult = {...parseResult, [cacheKey]: jsonData};
+        AsyncStorage.setItem(CACHE_NAME, JSON.stringify(parseResult));
+      } else {
+        const dataSave = {
+          [cacheKey]: jsonData
+        };
+        AsyncStorage.setItem(CACHE_NAME, JSON.stringify(dataSave));
+      }
       callbackSaveToCache(cacheKey, jsonData, result);
     });
   }

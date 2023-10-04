@@ -17,7 +17,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {debounce} from 'lodash';
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
-
+import netInfo from '@react-native-community/netinfo';
 import AnonymousTab from './elements/AnonymousTab';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BioAndDMSetting from './elements/BioAndDMSetting';
@@ -49,7 +49,6 @@ import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {ButtonNewPost} from '../../components/Button';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH, SOURCE_MY_PROFILE} from '../../utils/constants';
-import {PROFILE_CACHE} from '../../utils/cache/constant';
 import {
   changeRealName,
   getMyProfile,
@@ -62,10 +61,8 @@ import {colors} from '../../utils/colors';
 import {deleteAnonymousPost, deletePost} from '../../service/post';
 import {downVote, upVote} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
-import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
-import {saveToCache} from '../../utils/cache';
 import {setFeedByIndex} from '../../context/actions/feeds';
 import {setMyProfileAction} from '../../context/actions/setMyProfileAction';
 import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
@@ -158,7 +155,7 @@ const ProfileScreen = ({route}) => {
   const [myProfileFeed, myProfileDispatch] = React.useContext(Context).myProfileFeed;
 
   const [dataMain, setDataMain] = React.useState({});
-  const [dataMainBio, setDataMainBio] = React.useState('');
+  const [, setDataMainBio] = React.useState('');
   const [errorBio, setErrorBio] = React.useState('');
   const [isChangeRealName, setIsChangeRealName] = React.useState(false);
   const [isLoadingRemoveImage, setIsLoadingRemoveImage] = React.useState(false);
@@ -167,12 +164,10 @@ const ProfileScreen = ({route}) => {
   const [opacity, setOpacity] = React.useState(0);
   const [tempBio, setTempBio] = React.useState('');
   const [tempFullName, setTempFullName] = React.useState('');
-  const [, setUserId] = React.useState(null);
   const [isLoadingUpdateImageGalery, setIsLoadingUpdateImageGalery] = React.useState(false);
   const [isLoadingUpdateImageCamera, setIsLoadingUpdateImageCamera] = React.useState(false);
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0);
-  const [loadingContainer, setLoadingContainer] = React.useState(true);
   const [isLastPage, setIsLastPage] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [isPostOptionModalOpen, setIsOptionModalOpen] = React.useState(false);
@@ -195,7 +190,8 @@ const ProfileScreen = ({route}) => {
     isProfileTabSigned,
     setTabIndexToAnonymous,
     setTabIndexToSigned,
-    reloadFetchAnonymousPost
+    reloadFetchAnonymousPost,
+    getProfileCache
   } = useProfileScreenHook();
   // eslint-disable-next-line consistent-return
   React.useEffect(() => {
@@ -225,36 +221,33 @@ const ProfileScreen = ({route}) => {
     }
   }, [refreshCount]);
 
-  const initialMyFeed = () => {
+  const initialMyFeed = async () => {
     const cacheFeed = StorageUtils.myFeeds.get();
-    console.log({cacheFeed}, 'lipok');
-    if (!cacheFeed) {
+    const status = await netInfo.fetch();
+    if (status.isConnected) {
       getMyFeeds(0, LIMIT_PROFILE_FEED);
+      console.log('masuka');
     } else {
       setMyProfileFeed(JSON.parse(cacheFeed), myProfileDispatch);
     }
   };
-
+  console.log({myProfileFeed, profile}, 'nakal3');
   React.useEffect(() => {
     if (interactionsComplete) {
       initialMyFeed();
-      fetchMyProfile();
+      getProfileCache();
     }
   }, [interactionsComplete]);
 
-  const fetchMyProfile = async () => {
+  const fetchMyProfile = async (updateData) => {
     try {
-      const id = await getUserId();
-      if (id) {
-        setUserId(id);
-        const result = await getMyProfile();
-        if (result.code === 200) {
-          saveToCache(PROFILE_CACHE, result.data);
-          saveProfileState(result?.data);
-          return result?.data?.profile_pic_path;
-        }
+      const result = await getMyProfile();
+      if (result.code === 200) {
+        const {data} = result;
+        StorageUtils.profileData.set(JSON.stringify(data));
+        saveProfileState(data);
+        return data?.profile_pic_path;
       }
-      setLoadingContainer(false);
     } catch (e) {
       console.log('get my profile error', e);
     }
@@ -267,7 +260,6 @@ const ProfileScreen = ({route}) => {
       setDataMain(result);
       setDataMainBio(result.bio);
       setMyProfileAction(result, dispatchProfile);
-      setLoadingContainer(false);
     }
   };
 
@@ -336,7 +328,7 @@ const ProfileScreen = ({route}) => {
     setIsChangeRealName(true);
     const result = await changeRealName(tempFullName);
     if (result.code === 200) {
-      fetchMyProfile();
+      fetchMyProfile(true);
       setIsChangeRealName(false);
       bottomSheetNameRef.current.close();
     } else {
@@ -440,7 +432,7 @@ const ProfileScreen = ({route}) => {
         if (res.code === 200) {
           closeImageBs();
           getMyFeeds();
-          const profilePicture = await fetchMyProfile();
+          const profilePicture = await fetchMyProfile(true);
           updateUserClient(profilePicture);
         }
       })
@@ -460,7 +452,7 @@ const ProfileScreen = ({route}) => {
         setIsLoadingRemoveImage(false);
         if (res.code === 200) {
           closeImageBs();
-          fetchMyProfile();
+          fetchMyProfile(true);
           getMyFeeds();
         }
       })
@@ -498,7 +490,7 @@ const ProfileScreen = ({route}) => {
       .then((res) => {
         setIsLoadingUpdateBio(false);
         if (res.code === 200) {
-          fetchMyProfile();
+          fetchMyProfile(true);
           debounceModalClose();
         }
       })
@@ -570,6 +562,7 @@ const ProfileScreen = ({route}) => {
     setIsLastPage(false);
     getMyFeeds(0, LIMIT_PROFILE_FEED);
     reloadFetchAnonymousPost();
+    fetchMyProfile(true);
   }
 
   const onHeaderOptionClosed = () => {
@@ -606,111 +599,110 @@ const ProfileScreen = ({route}) => {
 
   return (
     <>
-      {!loadingContainer ? (
-        <SafeAreaProvider style={styles.container} forceInset={{top: 'always'}}>
-          <StatusBar translucent={false} />
-          <ProfileHeader
-            showArrow={isNotFromHomeTab}
-            onShareClicked={onShare}
-            onSettingsClicked={goToSettings}
-            username={dataMain.username}
-          />
-          <ProfileTiktokScroll
-            ref={listRef}
-            data={mainFeeds}
-            onRefresh={handleRefresh}
-            refreshing={loading || isLoadingFetchingAnonymousPosts}
-            style={{backgroundColor: '#f2f2f2'}}
-            onScroll={handleScroll}
-            ListFooterComponent={isFetchingList ? <ActivityIndicator /> : null}
-            onEndReach={handleOnEndReached}
-            initialNumToRender={2}
-            maxToRenderPerBatch={2}
-            updateCellsBatchingPeriod={10}
-            removeClippedSubviews
-            windowSize={10}
-            ListHeaderComponent={
-              <Header
-                headerHeightRef={headerHeightRef}
-                changeImage={changeImage}
-                dataMain={dataMain}
-                goToFollowings={goToFollowings}
-                dataMainBio={dataMainBio}
-                changeBio={changeBio}
-                postRef={postRef}
-                profileTabIndex={profileTabIndex}
-                setTabIndexToSigned={setTabIndexToSigned}
-                setTabIndexToAnonymous={setTabIndexToAnonymous}
+      <SafeAreaProvider style={styles.container} forceInset={{top: 'always'}}>
+        <StatusBar translucent={false} />
+        <ProfileHeader
+          showArrow={isNotFromHomeTab}
+          onShareClicked={onShare}
+          onSettingsClicked={goToSettings}
+          username={profile?.myProfile?.username}
+        />
+        <ProfileTiktokScroll
+          ref={listRef}
+          data={mainFeeds}
+          onRefresh={handleRefresh}
+          refreshing={loading}
+          style={{backgroundColor: '#f2f2f2'}}
+          onScroll={handleScroll}
+          ListFooterComponent={isFetchingList ? <ActivityIndicator /> : null}
+          onEndReach={handleOnEndReached}
+          initialNumToRender={2}
+          maxToRenderPerBatch={2}
+          updateCellsBatchingPeriod={10}
+          removeClippedSubviews
+          windowSize={10}
+          ListHeaderComponent={
+            <Header
+              headerHeightRef={headerHeightRef}
+              changeImage={changeImage}
+              dataMain={profile?.myProfile}
+              goToFollowings={goToFollowings}
+              dataMainBio={profile?.myProfile?.bio}
+              changeBio={changeBio}
+              postRef={postRef}
+              profileTabIndex={profileTabIndex}
+              setTabIndexToSigned={setTabIndexToSigned}
+              setTabIndexToAnonymous={setTabIndexToAnonymous}
+            />
+          }>
+          {({item, index}) => {
+            return (
+              <RenderItem
+                key={item.id}
+                item={item}
+                onNewPollFetched={onNewPollFetched}
+                index={index}
+                onPressDomain={onPressDomain}
+                onPress={(haveSeeMore) => onPress(item, haveSeeMore)}
+                onPressComment={(haveSeeMore) => onPress(item, haveSeeMore)}
+                onPressUpvote={(post) => setUpVote(post)}
+                selfUserId={profile.myProfile.user_id}
+                onPressDownVote={(post) => setDownVote(post)}
+                loading={loading}
+                source={SOURCE_MY_PROFILE}
+                hideThreeDot={false}
+                showAnonymousOption={true}
+                onHeaderOptionClicked={() => onHeaderOptionClicked(item)}
               />
-            }>
-            {({item, index}) => {
-              return (
-                <RenderItem
-                  key={item.id}
-                  item={item}
-                  onNewPollFetched={onNewPollFetched}
-                  index={index}
-                  onPressDomain={onPressDomain}
-                  onPress={(haveSeeMore) => onPress(item, haveSeeMore)}
-                  onPressComment={(haveSeeMore) => onPress(item, haveSeeMore)}
-                  onPressUpvote={(post) => setUpVote(post)}
-                  selfUserId={profile.myProfile.user_id}
-                  onPressDownVote={(post) => setDownVote(post)}
-                  loading={loading}
-                  source={SOURCE_MY_PROFILE}
-                  hideThreeDot={false}
-                  showAnonymousOption={true}
-                  onHeaderOptionClicked={() => onHeaderOptionClicked(item)}
-                />
-              );
-            }}
-          </ProfileTiktokScroll>
-          <BottomSheetBio
-            ref={bottomSheetBioRef}
-            value={tempBio}
-            onChangeText={(text) => onChangeTempBio(text)}
-            handleSave={() => handleSaveBio()}
-            isLoadingUpdateBio={isLoadingUpdateBio}
-            error={errorBio}
-          />
+            );
+          }}
+        </ProfileTiktokScroll>
+        <BottomSheetBio
+          ref={bottomSheetBioRef}
+          value={tempBio}
+          onChangeText={(text) => onChangeTempBio(text)}
+          handleSave={() => handleSaveBio()}
+          isLoadingUpdateBio={isLoadingUpdateBio}
+          error={errorBio}
+        />
 
-          <BottomSheetRealname
-            ref={bottomSheetNameRef}
-            setTempFullName={(text) => setTempFullName(text)}
-            tempFullName={tempFullName}
-            errorChangeRealName={errorChangeRealName}
-            isChangeRealName={isChangeRealName}
-            handleSave={() => handleSave()}
-          />
-          <BottomSheetImage
-            ref={bottomSheetProfilePictureRef}
-            onViewProfilePicture={() => onViewProfilePicture()}
-            onOpenImageGalery={() => onOpenImageGalery()}
-            onOpenCamera={() => onOpenCamera()}
-            handleRemoveImageProfile={() => handleRemoveImageProfile()}
-            isLoadingUpdateImageGalery={isLoadingUpdateImageGalery}
-            isLoadingUpdateImageCamera={isLoadingUpdateImageCamera}
-            isLoadingRemoveImage={isLoadingRemoveImage}
-          />
-          {isShowButton ? (
-            <ShadowFloatingButtons>
-              <TouchableNativeFeedback onPress={toTop}>
-                <View style={{...styles.btnBottom, opacity}}>
-                  <ArrowUpWhiteIcon width={12} height={20} fill={colors.white} />
-                </View>
-              </TouchableNativeFeedback>
-            </ShadowFloatingButtons>
-          ) : null}
+        <BottomSheetRealname
+          ref={bottomSheetNameRef}
+          setTempFullName={(text) => setTempFullName(text)}
+          tempFullName={tempFullName}
+          errorChangeRealName={errorChangeRealName}
+          isChangeRealName={isChangeRealName}
+          handleSave={() => handleSave()}
+        />
+        <BottomSheetImage
+          ref={bottomSheetProfilePictureRef}
+          onViewProfilePicture={() => onViewProfilePicture()}
+          onOpenImageGalery={() => onOpenImageGalery()}
+          onOpenCamera={() => onOpenCamera()}
+          handleRemoveImageProfile={() => handleRemoveImageProfile()}
+          isLoadingUpdateImageGalery={isLoadingUpdateImageGalery}
+          isLoadingUpdateImageCamera={isLoadingUpdateImageCamera}
+          isLoadingRemoveImage={isLoadingRemoveImage}
+        />
+        <ButtonNewPost isShowArrow={isShowButton} />
 
-          <BlockComponent ref={refBlockComponent} refresh={getMyFeeds} screen="my_profile" />
-          <PostOptionModal
-            isOpen={isPostOptionModalOpen}
-            onClose={onHeaderOptionClosed}
-            onDeleteClicked={onDeletePost}
-          />
-          <ButtonNewPost isShowArrow={isShowButton} />
-        </SafeAreaProvider>
-      ) : null}
+        {isShowButton ? (
+          <ShadowFloatingButtons>
+            <TouchableNativeFeedback onPress={toTop}>
+              <View style={{...styles.btnBottom, opacity}}>
+                <ArrowUpWhiteIcon width={12} height={20} fill={colors.white} />
+              </View>
+            </TouchableNativeFeedback>
+          </ShadowFloatingButtons>
+        ) : null}
+
+        <BlockComponent ref={refBlockComponent} refresh={getMyFeeds} screen="my_profile" />
+        <PostOptionModal
+          isOpen={isPostOptionModalOpen}
+          onClose={onHeaderOptionClosed}
+          onDeleteClicked={onDeletePost}
+        />
+      </SafeAreaProvider>
     </>
   );
 };
