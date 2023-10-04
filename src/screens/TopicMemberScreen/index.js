@@ -31,10 +31,14 @@ const styles = StyleSheet.create({
 
 let lastDragYTopicMember = 0;
 
-const TopicMemberScreen = (props) => {
+const TopicMemberScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  const topicName = route?.params?.id;
+  const topicName = route?.params?.topicName;
+  const topicDetail = route?.params?.topicDetail;
+  const isFollow = route?.params?.isFollow;
+  const setIsFollow = route?.params?.setIsFollow;
+
   const [profile] = React.useContext(Context).profile;
   const [isInitialLoading, setIsInitialLoading] = React.useState(true);
   const [headerHide, setHeaderHide] = React.useState(false);
@@ -184,13 +188,14 @@ const TopicMemberScreen = (props) => {
     <SafeAreaProvider forceInset={{top: 'always'}} style={styles.parentContainer}>
       <StatusBar barStyle="dark-content" translucent={false} />
       <NavHeader
-        domain={topicName}
         onShareCommunity={onCommunityShare}
         isHeaderHide={headerHide}
         opacityAnimation={opacityAnimation}
         offsetAnimation={offsetAnimation}
         hideSeeMember={true}
-        isInitialLoading={isInitialLoading}
+        topicDetail={topicDetail}
+        setIsFollow={setIsFollow}
+        isFollow={isFollow}
       />
       <Search
         searchText={searchText}

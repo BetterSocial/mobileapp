@@ -10,7 +10,6 @@ import ButtonFollow from './ButtonFollow';
 import TopicDomainHeader from './TopicDomainHeader';
 
 const Navigation = ({
-  domain,
   isHeaderHide,
   opacityAnimation,
   onShareCommunity,
@@ -33,7 +32,6 @@ const Navigation = ({
       </TouchableOpacity>
       <Animated.View style={styles.domain(opacityAnimation)}>
         <TopicDomainHeader
-          domain={domain}
           detail={detail}
           isFollow={isFollow}
           hideSeeMember={hideSeeMember}
