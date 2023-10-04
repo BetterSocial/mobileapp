@@ -20,6 +20,11 @@ describe('GroupSetting should be run correctly', () => {
   const channle_id = 'c47d45f2-0dd9-4eaa-1600-4ff6e518199a';
   const participant = 'a3c59170-c110-4fac-929e-7834f6c6827f';
   const dateCreated = '2022-09-30T22:49:45.911054Z';
+  const userIdProfile = 'c6c91b04-795c-404e-b012-ea28813a2006';
+  const image =
+    'https://res.cloudinary.com/hpjivutj2/image/upload/v1659099243/pbdv3jlyd4mhmtis6kqx.jpg';
+  const location_created_at = '2022-05-30T14:15:24.000Z';
+  const name = 'Agita';
   const mockContext = {
     groupChat: [
       {
@@ -84,11 +89,10 @@ describe('GroupSetting should be run correctly', () => {
             createdBy: {
               banned: false,
               created_at: '2022-06-10T13:11:53.396427Z',
-              id: 'c6c91b04-795c-404e-b012-ea28813a2006',
-              image:
-                'https://res.cloudinary.com/hpjivutj2/image/upload/v1659099243/pbdv3jlyd4mhmtis6kqx.jpg',
+              id: userIdProfile,
+              image,
               last_active: '2022-06-10T13:11:58.020555Z',
-              name: 'Agita',
+              name: name,
               online: false,
               role: 'user',
               updated_at: '2023-01-24T01:41:19.021868Z'
@@ -130,25 +134,24 @@ describe('GroupSetting should be run correctly', () => {
             {
               city: 'Yauco, PR',
               country: 'US',
-              createdAt: '2022-05-30T14:15:24.000Z',
+              createdAt: location_created_at,
               location_id: '45',
               location_level: 'City',
               neighborhood: '',
               slug_name: '',
               state: 'Puerto Rico',
               status: 'Y',
-              updatedAt: '2022-05-30T14:15:24.000Z'
+              updatedAt: location_created_at
             }
           ],
           profile_pic_asset_id: '6f47f70bea98469f4a24b6ffc550c983',
-          profile_pic_path:
-            'https://res.cloudinary.com/hpjivutj2/image/upload/v1659099243/pbdv3jlyd4mhmtis6kqx.jpg',
+          profile_pic_path: image,
           profile_pic_public_id: 'pbdv3jlyd4mhmtis6kqx',
           real_name: null,
           status: 'Y',
           updatedAt: '2022-07-29T12:54:04.000Z',
-          user_id: 'c6c91b04-795c-404e-b012-ea28813a2006',
-          username: 'Agita'
+          user_id: userIdProfile,
+          username: name
         }
       }
     ]
