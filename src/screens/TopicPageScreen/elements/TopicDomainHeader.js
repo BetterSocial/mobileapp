@@ -6,11 +6,11 @@ import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
 import {convertString} from '../../../utils/string/StringUtils';
 import {colors} from '../../../utils/colors';
 
-const TopicDomainHeader = ({domain, detail, isFollow, hideSeeMember, handleOnMemberPress}) => {
+const TopicDomainHeader = ({detail, isFollow, hideSeeMember, handleOnMemberPress}) => {
   return (
     <View>
       <Text style={styles.domainText} numberOfLines={1} ellipsizeMode="tail">
-        {`#${convertString(domain, ' ', '')}`}
+        {`#${convertString(detail?.name, ' ', '')}`}
       </Text>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <Image testID="imageTopicMember" source={TopicMemberIcon} style={styles.member} />

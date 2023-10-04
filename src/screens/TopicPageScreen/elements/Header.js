@@ -10,7 +10,6 @@ import TopicDomainHeader from './TopicDomainHeader';
 
 const Header = ({
   offsetAnimation,
-  domain,
   onPress,
   detail,
   hideSeeMember,
@@ -33,7 +32,6 @@ const Header = ({
       />
       <View style={styles.domain}>
         <TopicDomainHeader
-          domain={domain}
           detail={detail}
           isFollow={isFollow}
           hideSeeMember={hideSeeMember}
