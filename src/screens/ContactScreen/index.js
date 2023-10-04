@@ -15,7 +15,7 @@ import {generateRandomId} from 'stream-chat-react-native-core';
 import {showMessage} from 'react-native-flash-message';
 
 import ContactPreview from './elements/ContactPreview';
-import Header from './elements/Header';
+import Header from '../../components/Header/HeaderContact';
 import ItemUser from './elements/ItemUser';
 import SearchRecyclerView from './elements/SearchRecyclerView';
 import StringConstant from '../../utils/string/StringConstant';
@@ -123,7 +123,7 @@ const ContactScreen = ({navigation}) => {
       const members = followed;
       const channelName = usernames;
       let typeChannel = 0;
-      console.log(members, 'moon')
+      console.log(members, 'moon');
       if (members.length > 2) {
         typeChannel = 1;
       }
