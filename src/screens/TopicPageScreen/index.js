@@ -27,6 +27,7 @@ import useOnBottomNavigationTabPressHook, {
 } from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
 import NavHeader from './elements/NavHeader';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
+import {getTopics, getUserTopic} from '../../service/topics';
 
 const styles = StyleSheet.create({
   parentContainer: {
@@ -45,6 +46,8 @@ const TopicPageScreen = (props) => {
   const [isInitialLoading, setIsInitialLoading] = React.useState(true);
   const [userId, setUserId] = React.useState('');
   const [topicId, setTopicId] = React.useState('');
+  const [isFollow, setIsFollow] = React.useState(false);
+  const [topicDetail, setTopicDetail] = React.useState({});
   const [isHeaderHide, setIsHeaderHide] = React.useState(false);
   const offsetAnimation = React.useRef(new Animated.Value(0)).current;
   const opacityAnimation = React.useRef(new Animated.Value(0)).current;
@@ -89,8 +92,29 @@ const TopicPageScreen = (props) => {
         SimpleToast.show('No more posts to show', SimpleToast.SHORT);
       }
     } finally {
-      setIsInitialLoading(false);
       setLoading(false);
+    }
+  };
+
+  const getTopicDetail = async (domain) => {
+    try {
+      const query = `?name=${domain}`;
+      const resultGetUserTopic = await getUserTopic(query);
+      if (resultGetUserTopic.data) {
+        setIsFollow(true);
+      }
+      const resultTopicDetail = await getTopics(domain);
+      if (resultTopicDetail.data) {
+        const detail = resultTopicDetail.data[0];
+        setTopicDetail(detail);
+        setIsInitialLoading(false);
+      }
+    } catch (error) {
+      if (__DEV__) {
+        console.log(error);
+      }
+    } finally {
+      setIsInitialLoading(false);
     }
   };
 
@@ -106,10 +130,10 @@ const TopicPageScreen = (props) => {
       if (topicFeeds?.length > 0) {
         setTopicFeeds(topicFeeds, dispatch);
         setOffset(offsetFeeds);
-        setIsInitialLoading(false);
       } else {
         initialFetchTopicFeeds(topicFeeds?.length);
       }
+      getTopicDetail(idLower);
     } catch (error) {
       if (__DEV__) {
         console.log(error);
@@ -337,7 +361,10 @@ const TopicPageScreen = (props) => {
 
   const handleOnMemberPress = () => {
     const navigationParam = {
-      id: topicName
+      topicName,
+      isFollow,
+      setIsFollow,
+      topicDetail
     };
 
     navigation.push('TopicMemberScreen', navigationParam);
@@ -365,13 +392,14 @@ const TopicPageScreen = (props) => {
     <SafeAreaProvider forceInset={{top: 'always'}} style={styles.parentContainer}>
       <StatusBar barStyle="dark-content" translucent={false} />
       <NavHeader
-        domain={topicName}
         onShareCommunity={onShareCommunity}
         isHeaderHide={isHeaderHide}
         opacityAnimation={opacityAnimation}
         offsetAnimation={offsetAnimation}
         handleOnMemberPress={handleOnMemberPress}
-        isInitialLoading={isInitialLoading}
+        topicDetail={topicDetail}
+        setIsFollow={setIsFollow}
+        isFollow={isFollow}
       />
       <TiktokScroll
         ref={listRef}
