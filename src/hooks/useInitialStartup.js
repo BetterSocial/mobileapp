@@ -5,7 +5,6 @@ import {LogBox, Platform, StatusBar} from 'react-native';
 import {useLocalChannelsFirst} from 'stream-chat-react-native';
 import {useRecoilValue, useSetRecoilState} from 'recoil';
 
-import netInfo from '@react-native-community/netinfo';
 import DiscoveryAction from '../context/actions/discoveryAction';
 import DiscoveryRepo from '../service/discovery';
 import following from '../context/actions/following';

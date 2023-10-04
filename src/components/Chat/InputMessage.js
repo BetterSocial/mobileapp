@@ -13,7 +13,6 @@ import {deleteDraftChat, getDraftChat, saveDraftChat} from '../../service/draftC
 
 const InputMessage = () => {
   const [channelClient] = React.useContext(Context).channel;
-  const members = channelClient.channel?.state?.members;
   const channelId = channelClient.channel?.cid;
 
   const refEmoji = React.useRef(null);

@@ -4,7 +4,6 @@ import ProfileRepo from '../../service/repo/profileRepo';
 import useMyProfileFeedContextHook from '../context/useMyProfileFeedContext';
 import StorageUtils from '../../utils/storage';
 import useCoreFeed from '../../screens/FeedScreen/hooks/useCoreFeed';
-import {getMyProfile} from '../../service/profile';
 import {Context} from '../../context';
 import {setMyProfileAction} from '../../context/actions/setMyProfileAction';
 
