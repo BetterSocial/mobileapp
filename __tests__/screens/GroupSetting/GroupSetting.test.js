@@ -1,8 +1,9 @@
 import React from 'react';
-import GroupSetting from '../../../src/screens/GroupSetting';
 import {render, act, fireEvent} from '@testing-library/react-native';
+import GroupSetting from '../../../src/screens/GroupSetting';
 import {Context} from '../../../src/context';
 
+// eslint-disable-next-line global-require
 jest.mock('react-native-permissions', () => require('react-native-permissions/mock'));
 jest.mock('react-native/Libraries/Pressability/usePressability');
 
@@ -14,13 +15,18 @@ jest.mock('../../../src/hooks/useAfterInteractions', () => ({
 }));
 
 describe('GroupSetting should be run correctly', () => {
+  const cid = 'messaging:c47d45f2-0dd9-4eaa-1600-4ff6e518199a';
+  const channel_created_at = '2022-09-30T22:49:45.59342Z';
+  const channle_id = 'c47d45f2-0dd9-4eaa-1600-4ff6e518199a';
+  const participant = 'a3c59170-c110-4fac-929e-7834f6c6827f';
+  const dateCreated = '2022-09-30T22:49:45.911054Z';
   const mockContext = {
     groupChat: [
       {
         asset: [
           {
             message: {
-              cid: 'messaging:c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
+              cid,
               created_at: '2023-01-24T00:59:12.801526Z',
               html: '',
               id: 'c6c91b04-795c-404e-b012-ea28813a2006-531b41e6-263b-4d6c-1c0e-e62f13357aef',
@@ -28,11 +34,11 @@ describe('GroupSetting should be run correctly', () => {
               mentioned_users: [],
               attachments: null,
               channel: {
-                cid: 'messaging:c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
-                created_at: '2022-09-30T22:49:45.59342Z',
+                cid,
+                created_at: channel_created_at,
                 disabled: false,
                 frozen: false,
-                id: 'c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
+                id: channle_id,
                 last_message_at: '2023-01-24T01:00:59.432027Z',
                 member_count: 4,
                 name: 'Test group baru',
@@ -46,15 +52,15 @@ describe('GroupSetting should be run correctly', () => {
           'a3c59170-c110-4fac-929e-7834f6c6827f': {
             banned: false,
             channel_role: 'channel_moderator',
-            created_at: '2022-09-30T22:49:45.911054Z',
+            created_at: dateCreated,
             is_moderator: true,
             role: 'admin',
             shadow_banned: false,
-            updated_at: '2022-09-30T22:49:45.911054Z',
+            updated_at: dateCreated,
             user: {
               banned: false,
               created_at: '2021-11-29T05:40:40.828927Z',
-              id: 'a3c59170-c110-4fac-929e-7834f6c6827f',
+              id: participant,
               image:
                 'https://res.cloudinary.com/hpjivutj2/image/upload/v1666664085/vcinqpjniuigf6mdnmzz.jpg',
               last_active: '2021-12-06T03:54:03.677683Z',
@@ -63,7 +69,7 @@ describe('GroupSetting should be run correctly', () => {
               role: 'admin',
               updated_at: '2022-11-02T15:30:30.170297Z'
             },
-            user_id: 'a3c59170-c110-4fac-929e-7834f6c6827f'
+            user_id: participant
           }
         }
       }
@@ -71,10 +77,10 @@ describe('GroupSetting should be run correctly', () => {
     channel: [
       {
         channel: {
-          cid: 'messaging:c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
+          cid,
           data: {
-            cid: 'messaging:c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
-            created_at: '2022-09-30T22:49:45.59342Z',
+            cid,
+            created_at: channel_created_at,
             createdBy: {
               banned: false,
               created_at: '2022-06-10T13:11:53.396427Z',
@@ -90,7 +96,7 @@ describe('GroupSetting should be run correctly', () => {
             disabled: false,
             frozen: false,
             hidden: false,
-            id: 'c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
+            id: channle_id,
             last_message_at: '2023-01-24T01:00:59.432027Z',
             member_count: 4,
             name: 'Test group baru',
@@ -99,7 +105,7 @@ describe('GroupSetting should be run correctly', () => {
             image: 'https://image.jpg'
           },
           disconnected: false,
-          id: 'c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
+          id: channle_id,
           initialized: true,
           isTyping: false,
           lastKeyStroke: undefined,
