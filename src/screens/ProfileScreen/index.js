@@ -611,7 +611,7 @@ const ProfileScreen = ({route}) => {
           ref={listRef}
           data={mainFeeds}
           onRefresh={handleRefresh}
-          refreshing={loading || isLoadingFetchingAnonymousPosts}
+          refreshing={loading}
           style={{backgroundColor: '#f2f2f2'}}
           onScroll={handleScroll}
           ListFooterComponent={isFetchingList ? <ActivityIndicator /> : null}
@@ -684,6 +684,8 @@ const ProfileScreen = ({route}) => {
           isLoadingUpdateImageCamera={isLoadingUpdateImageCamera}
           isLoadingRemoveImage={isLoadingRemoveImage}
         />
+        <ButtonNewPost isShowArrow={isShowButton} />
+
         {isShowButton ? (
           <ShadowFloatingButtons>
             <TouchableNativeFeedback onPress={toTop}>
@@ -700,7 +702,6 @@ const ProfileScreen = ({route}) => {
           onClose={onHeaderOptionClosed}
           onDeleteClicked={onDeletePost}
         />
-        <ButtonNewPost isShowArrow={isShowButton} />
       </SafeAreaProvider>
     </>
   );
