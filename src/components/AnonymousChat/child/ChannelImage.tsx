@@ -16,7 +16,6 @@ const ChannelImage = ({
   anonPostNotificationUserInfo = null,
   postMaker = null,
   isCommentExists = false,
-  isOwnSignedPost = false,
   type = BaseChannelItemTypeProps.ANON_PM
 }) => {
   const styles = StyleSheet.create({
@@ -50,42 +49,17 @@ const ChannelImage = ({
     }
   });
 
-  const isAnonymous =
-    anonPostNotificationUserInfo?.anon_user_info_emoji_code !== null &&
-    anonPostNotificationUserInfo?.anon_user_info_emoji_code !== undefined;
-
-  const isPostMakerAnonymous =
-    postMaker?.anon_user_info_emoji_code !== null &&
-    postMaker?.anon_user_info_emoji_code !== undefined;
-
-  const isOldPostMakerAnonymous =
-    postMaker?.emoji_code !== null && postMaker?.emoji_code !== undefined;
-
-  const renderMyPostNotificationSubImage = () => {
-    if (!isCommentExists)
-      return (
-        <View style={[styles.postNotificationImage, styles.myPostNotificationImageContainer]}>
-          <FastImage source={FeedIcon} style={styles.postNotificationIcon} />
-        </View>
-      );
-
-    if (isAnonymous)
-      return (
-        <ChannelAnonymousSubImage anonPostNotificationUserInfo={anonPostNotificationUserInfo} />
-      );
-
-    return (
-      <FastImage source={{uri: postNotificationPicture}} style={styles.postNotificationImage} />
-    );
-  };
+  const isAnonymousCommenter = Boolean(anonPostNotificationUserInfo?.anon_user_info_emoji_code);
+  const isAnonymousPostMaker = Boolean(postMaker?.anon_user_info_emoji_code);
+  const isAnonymousOldPostMaker = Boolean(postMaker?.emoji_code);
 
   const renderMainImage = () => {
-    if (isPostMakerAnonymous)
+    if (isAnonymousPostMaker)
       return (
         <ChannelAnonymousImage anonPostNotificationUserInfo={postMaker} imageStyle={styles.image} />
       );
 
-    if (isOldPostMakerAnonymous)
+    if (isAnonymousOldPostMaker)
       return (
         <ChannelAnonymousImage
           anonPostNotificationUserInfo={{
@@ -99,6 +73,24 @@ const ChannelImage = ({
     return <FastImage source={{uri: mainPicture}} style={styles.image} />;
   };
 
+  const renderMyPostNotificationSubImage = () => {
+    if (!isCommentExists)
+      return (
+        <View style={[styles.postNotificationImage, styles.myPostNotificationImageContainer]}>
+          <FastImage source={FeedIcon} style={styles.postNotificationIcon} />
+        </View>
+      );
+
+    if (isAnonymousCommenter)
+      return (
+        <ChannelAnonymousSubImage anonPostNotificationUserInfo={anonPostNotificationUserInfo} />
+      );
+
+    return (
+      <FastImage source={{uri: postNotificationPicture}} style={styles.postNotificationImage} />
+    );
+  };
+
   // ANON PM CHANNEL IMAGE
   if (type === BaseChannelItemTypeProps.ANON_PM)
     return (
@@ -110,57 +102,123 @@ const ChannelImage = ({
       </View>
     );
 
-  // ANON POST NOTIFICATION CHANNEL IMAGE
-  if (type === BaseChannelItemTypeProps.ANON_POST_NOTIFICATION)
+  // POST NOTIFICATION IMAGE FOR ANONYMOUS TAB
+  if (type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_I_COMMENTED_ANONYMOUSLY) {
     return (
       <View>
-        <FastImage source={{uri: mainPicture}} style={styles.image} />
+        <FastImage source={AnonymousProfile} style={styles.image} />
+        <FastImage source={AnonymousProfile} style={styles.postNotificationImage} />
+      </View>
+    );
+  }
+
+  if (type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_COMMENTED_ANONYMOUSLY) {
+    return (
+      <View>
+        <FastImage source={AnonymousProfile} style={styles.image} />
+        <ChannelAnonymousSubImage
+          anonPostNotificationUserInfo={{
+            anon_user_info_emoji_code: anonPostNotificationUserInfo?.anon_user_info_emoji_code,
+            anon_user_info_color_code: anonPostNotificationUserInfo?.anon_user_info_color_code
+          }}
+        />
+      </View>
+    );
+  }
+
+  if (
+    type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_I_COMMENTED ||
+    type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_COMMENTED
+  ) {
+    return (
+      <View>
+        <FastImage source={AnonymousProfile} style={styles.image} />
         {renderMyPostNotificationSubImage()}
       </View>
     );
+  }
 
-  // ANON POST NOTIFICATION I COMMENTED CHANNEL IMAGE
-  if (type === BaseChannelItemTypeProps.ANON_POST_NOTIFICATION_I_COMMENTED)
+  if (type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION) {
     return (
       <View>
-        {/* <FastImage source={{uri: mainPicture}} style={styles.image} /> */}
+        <FastImage source={AnonymousProfile} style={styles.image} />
+        <View style={[styles.postNotificationImage, styles.myPostNotificationImageContainer]}>
+          <FastImage source={FeedIcon} style={styles.postNotificationIcon} />
+        </View>
+      </View>
+    );
+  }
+
+  if (
+    type === BaseChannelItemTypeProps.ANON_POST_NOTIFICATION_I_COMMENTED_ANONYMOUSLY ||
+    type === BaseChannelItemTypeProps.SIGNED_POST_NOTIFICATION_I_COMMENTED_ANONYMOUSLY
+  ) {
+    return (
+      <View>
         {renderMainImage()}
         <FastImage source={AnonymousProfile} style={styles.postNotificationImage} />
       </View>
     );
+  }
 
-  // MY POST NOTIFICATION I COMMENTED CHANNEL IMAGE
-  if (type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_I_COMMENTED && isOwnSignedPost)
+  // POST NOTIFICATION IMAGE FOR SIGNED TAB
+  if (type === BaseChannelItemTypeProps.MY_SIGNED_POST_NOTIFICATION_I_COMMENTED_ANONYMOUSLY) {
     return (
       <View>
-        {/* Chat Image */}
         <FastImage source={{uri: mainPicture}} style={styles.image} />
-        {/* Post Notification Image */}
-        <FastImage source={AnonymousProfile} style={styles.postNotificationImage} />
+        <ChannelAnonymousSubImage
+          anonPostNotificationUserInfo={{
+            anon_user_info_emoji_code: anonPostNotificationUserInfo?.anon_user_info_emoji_code,
+            anon_user_info_color_code: anonPostNotificationUserInfo?.anon_user_info_color_code
+          }}
+        />
       </View>
     );
+  }
 
-  // MY POST NOTIFICATION I COMMENTED CHANNEL IMAGE
-  if (type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_I_COMMENTED)
+  if (
+    type === BaseChannelItemTypeProps.MY_SIGNED_POST_NOTIFICATION_I_COMMENTED ||
+    type === BaseChannelItemTypeProps.MY_SIGNED_POST_NOTIFICATION_COMMENTED_ANONYMOUSLY ||
+    type === BaseChannelItemTypeProps.MY_SIGNED_POST_NOTIFICATION_COMMENTED ||
+    type === BaseChannelItemTypeProps.SIGNED_POST_NOTIFICATION_I_COMMENTED ||
+    type === BaseChannelItemTypeProps.SIGNED_POST_NOTIFICATION
+  ) {
     return (
       <View>
-        {/* Chat Image */}
-        <FastImage source={AnonymousProfile} style={styles.image} />
-        {/* Post Notification Image */}
-        <FastImage source={AnonymousProfile} style={styles.postNotificationImage} />
-      </View>
-    );
-
-  // MY POST NOTIFICATION CHANNEL IMAGE
-  if (type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION)
-    return (
-      <View>
-        {/* Chat Image */}
-        <FastImage source={AnonymousProfile} style={styles.image} />
-        {/* Post Notification Image */}
+        <FastImage source={{uri: mainPicture}} style={styles.image} />
         {renderMyPostNotificationSubImage()}
       </View>
     );
+  }
+
+  if (type === BaseChannelItemTypeProps.MY_SIGNED_POST_NOTIFICATION) {
+    return (
+      <View>
+        <FastImage source={{uri: mainPicture}} style={styles.image} />
+        <View style={[styles.postNotificationImage, styles.myPostNotificationImageContainer]}>
+          <FastImage source={FeedIcon} style={styles.postNotificationIcon} />
+        </View>
+      </View>
+    );
+  }
+
+  if (type === BaseChannelItemTypeProps.ANON_POST_NOTIFICATION_I_COMMENTED) {
+    return (
+      <View>
+        {renderMainImage()}
+        <FastImage source={AnonymousProfile} style={styles.postNotificationImage} />
+      </View>
+    );
+  }
+
+  if (type === BaseChannelItemTypeProps.ANON_POST_NOTIFICATION) {
+    return (
+      <View>
+        {renderMainImage()}
+        {renderMyPostNotificationSubImage()}
+      </View>
+    );
+  }
 
   return <></>;
 };

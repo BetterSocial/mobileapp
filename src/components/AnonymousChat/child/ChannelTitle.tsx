@@ -94,10 +94,9 @@ const ChannelTitle = ({type, name, time, message, unreadCount, isMe}) => {
     );
 
   const getTitle = () => {
-    if (
-      type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION ||
-      type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_I_COMMENTED
-    ) {
+    const isMyPost = type?.includes('MY_SIGNED_POST') || type?.includes('MY_ANON_POST');
+
+    if (isMyPost) {
       if (message?.length === 0) return 'Your media post 📸 🖼';
       return 'Your post: ';
     }
