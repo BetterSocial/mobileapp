@@ -82,11 +82,12 @@ const PostNotificationChannelItem: (props: MessageChannelItemProps) => React.Rea
 
   return (
     <BaseChannelItem
+      type={type}
       anonPostNotificationUserInfo={anonymousPostNotificationUserInfo}
       block={item?.rawJson?.block}
       comments={item?.rawJson?.comments?.length}
       downvote={item?.rawJson?.downvote}
-      isCommentExists={!!firstComment}
+      isCommentExists={Boolean(firstComment)}
       isMe={item?.user?.isMe || isOwnSignedPost || isOwnPost}
       isOwnSignedPost={isOwnSignedPost}
       message={item?.description}
@@ -98,7 +99,6 @@ const PostNotificationChannelItem: (props: MessageChannelItemProps) => React.Rea
       postNotificationMessageUser={commenterName}
       postNotificationPicture={postNotificationPicture}
       time={calculateTime(item?.lastUpdatedAt, true)}
-      type={type}
       unreadCount={postNotifItem?.unreadCount}
       upvote={item?.rawJson?.upvote}
     />

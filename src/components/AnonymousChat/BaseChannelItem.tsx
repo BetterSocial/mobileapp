@@ -19,10 +19,9 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
   downvote = 0,
   isCommentExists = false,
   isMe = false,
-  isOwnSignedPost = false,
   message = '',
   name = '',
-  picture = 'https://res.cloudinary.com/hpjivutj2/image/upload/v1696816963/anonymous-profile.png',
+  picture = 'https://fastly.picsum.photos/id/173/400/400.jpg?hmac=TU_DMkn7FSRRwiEpVveLvmyATg-y4hNrNKT-Cs4VQ1M',
   postMaker = null,
   postNotificationMessageText = '',
   postNotificationMessageUser = null,
@@ -39,23 +38,22 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
     <CustomPressable onPress={onPress}>
       <View style={styles.chatContainer}>
         <ChannelImage
+          type={type}
           mainPicture={picture}
           postNotificationPicture={postNotificationPicture}
-          type={type}
           anonPostNotificationUserInfo={anonPostNotificationUserInfo}
           isCommentExists={isCommentExists}
           postMaker={postMaker}
-          isOwnSignedPost={isOwnSignedPost}
         />
 
         <View style={styles.chatContentContainer}>
           <ChannelTitle
-            name={name}
-            time={time}
             type={type}
+            name={name}
             message={message}
-            isMe={isMe}
+            time={time}
             unreadCount={unreadCount}
+            isMe={isMe}
           />
 
           {/* Post Notification Message */}
