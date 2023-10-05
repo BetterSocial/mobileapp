@@ -60,7 +60,6 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
           <View style={styles.chatContentSection}>
             <ChannelPostNotificationMessage
               type={type}
-              commenterId={''}
               commenterName={postNotificationMessageUser}
               message={postNotificationMessageText}
             />
