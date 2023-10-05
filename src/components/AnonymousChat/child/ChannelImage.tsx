@@ -202,16 +202,10 @@ const ChannelImage = ({
     );
   }
 
-  if (type === BaseChannelItemTypeProps.ANON_POST_NOTIFICATION_I_COMMENTED) {
-    return (
-      <View>
-        {renderMainImage()}
-        <FastImage source={AnonymousProfile} style={styles.postNotificationImage} />
-      </View>
-    );
-  }
-
-  if (type === BaseChannelItemTypeProps.ANON_POST_NOTIFICATION) {
+  if (
+    type === BaseChannelItemTypeProps.ANON_POST_NOTIFICATION ||
+    type === BaseChannelItemTypeProps.ANON_POST_NOTIFICATION_I_COMMENTED
+  ) {
     return (
       <View>
         {renderMainImage()}
