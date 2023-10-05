@@ -2,7 +2,6 @@ import * as React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
 import baseStyles from '../BaseChannelItemStyles';
-import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 
@@ -67,7 +66,7 @@ const ChannelTitle = ({type, name, time, message, unreadCount, isMe}) => {
     }
   });
 
-  if (type === BaseChannelItemTypeProps.ANON_PM)
+  if (type?.includes('PM')) {
     return (
       <>
         <View style={baseStyles.chatContentSection}>
@@ -92,6 +91,7 @@ const ChannelTitle = ({type, name, time, message, unreadCount, isMe}) => {
         </View>
       </>
     );
+  }
 
   const getTitle = () => {
     const isMyPost = type?.includes('MY_SIGNED_POST') || type?.includes('MY_ANON_POST');

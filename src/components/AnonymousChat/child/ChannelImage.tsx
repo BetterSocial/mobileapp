@@ -91,8 +91,8 @@ const ChannelImage = ({
     );
   };
 
-  // ANON PM CHANNEL IMAGE
-  if (type === BaseChannelItemTypeProps.ANON_PM)
+  // SIGNED OR ANON PM CHANNEL IMAGE
+  if (type?.includes('PM')) {
     return (
       <View>
         <FastImage source={{uri: mainPicture}} style={styles.image} />
@@ -101,6 +101,7 @@ const ChannelImage = ({
         </View>
       </View>
     );
+  }
 
   // POST NOTIFICATION IMAGE FOR ANONYMOUS TAB
   if (type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_I_COMMENTED_ANONYMOUSLY) {
