@@ -4,7 +4,7 @@ import IconEP from 'react-native-vector-icons/Entypo';
 import {StyleSheet, Text, View} from 'react-native';
 
 import CustomPressable from '../CustomPressable';
-import MemoIc_arrow_back_white from '../../assets/arrow/Ic_arrow_back_white';
+import IcArrowBackWhite from '../../assets/arrow/Ic_arrow_back_white';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
@@ -60,7 +60,7 @@ const ChatDetailHeader = ({
   return (
     <View style={styles.container}>
       <CustomPressable testID="pressable-back" style={styles.backButton} onPress={onBackPress}>
-        <MemoIc_arrow_back_white width={20} height={12} />
+        <IcArrowBackWhite width={20} height={12} />
       </CustomPressable>
       <CustomPressable
         testID="pressable-avatar"
