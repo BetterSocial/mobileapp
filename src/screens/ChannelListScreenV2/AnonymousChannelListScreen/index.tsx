@@ -4,8 +4,8 @@
 import * as React from 'react';
 import {ScrollView, View} from 'react-native';
 
-import AnonPostNotificationChannelItem from '../../../components/AnonymousChat/AnonPostNotificationChannelItem';
 import MessageChannelItem from '../../../components/AnonymousChat/MessageChannelItem';
+import PostNotificationChannelItem from '../../../components/AnonymousChat/PostNotificationChannelItem';
 import useAnonymousChannelListScreenHook from '../../../hooks/screen/useAnonymousChannelListHook';
 
 const AnonymousChannelListScreen = () => {
@@ -20,7 +20,7 @@ const AnonymousChannelListScreen = () => {
                 <MessageChannelItem item={item} onChannelPressed={() => goToChatScreen(item)} />
               )}
               {item?.channelType === 'ANON_POST_NOTIFICATION' && (
-                <AnonPostNotificationChannelItem
+                <PostNotificationChannelItem
                   item={item}
                   onChannelPressed={() => goToPostDetailScreen(item)}
                 />
