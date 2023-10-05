@@ -9,7 +9,7 @@ import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
-const AnonymousChatHeader = ({
+const ChatDetailHeader = ({
   avatar = DEFAULT_PROFILE_PIC_PATH,
   user,
   onBackPress = () => console.log('onBackPress'),
@@ -63,12 +63,7 @@ const AnonymousChatHeader = ({
         <MemoIc_arrow_back_white width={20} height={12} />
       </CustomPressable>
       <CustomPressable style={styles.textContainer} onPress={onAvatarPress}>
-        <FastImage
-          style={styles.avatar}
-          source={{
-            uri: avatar
-          }}
-        />
+        <FastImage style={styles.avatar} source={{uri: avatar}} />
         <Text numberOfLines={1} ellipsizeMode="tail" style={styles.text}>
           {user}
         </Text>
@@ -81,4 +76,4 @@ const AnonymousChatHeader = ({
   );
 };
 
-export default AnonymousChatHeader;
+export default ChatDetailHeader;
