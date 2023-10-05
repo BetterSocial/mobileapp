@@ -27,7 +27,6 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
   postNotificationMessageText = '',
   postNotificationMessageUser = null,
   postNotificationPicture = 'https://fastly.picsum.photos/id/912/400/400.jpg?hmac=Wg3Y7jTiQxHr_NpRsTrHG58kBfZQGNeH2tCl5u2Ipr0',
-  showPostNotificationStats = false,
   time = '12:00 PM',
   type = BaseChannelItemTypeProps.ANON_PM,
   unreadCount = 0,
@@ -59,8 +58,8 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
             unreadCount={unreadCount}
           />
 
+          {/* Post Notification Message */}
           <View style={styles.chatContentSection}>
-            {/* Post Notification Message */}
             <ChannelPostNotificationMessage
               type={type}
               commenterId={''}
@@ -77,7 +76,6 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
               upvote={upvote}
               downvote={downvote}
               comments={comments}
-              shown={showPostNotificationStats}
             />
           </View>
         </View>
