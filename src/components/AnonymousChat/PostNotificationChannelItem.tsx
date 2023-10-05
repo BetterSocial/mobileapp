@@ -35,8 +35,10 @@ const PostNotificationChannelItem: (props: MessageChannelItemProps) => React.Rea
     const isFirstCommenterMe =
       firstCommenterId === signedProfileId || firstCommenterId === anonProfileId;
 
-    if (firstComment?.reaction?.isOwningReaction) commenterName = 'You';
-    else if (anonymousCommenterName) {
+    if (firstComment?.reaction?.isOwningReaction) {
+      commenterName = 'You';
+      postNotificationPicture = firstComment?.reaction?.user?.data?.profile_pic_url;
+    } else if (anonymousCommenterName) {
       commenterName = `Anonymous ${capitalizeFirstText(anonymousCommenterName)}`;
     } else {
       commenterName = firstComment?.reaction?.user?.data?.username;
@@ -50,9 +52,7 @@ const PostNotificationChannelItem: (props: MessageChannelItemProps) => React.Rea
 
   if (postNotifItem?.rawJson?.comments?.length > 0) {
     firstComment = postNotifItem?.rawJson?.comments[0];
-    anonymousPostNotificationUserInfo = {
-      ...firstComment?.reaction?.data
-    };
+    anonymousPostNotificationUserInfo = {...firstComment?.reaction?.data};
 
     helperDetermineCommenterName();
 
