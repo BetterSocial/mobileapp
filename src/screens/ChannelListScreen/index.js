@@ -2,8 +2,8 @@
 import * as React from 'react';
 import {FlatList, View} from 'react-native';
 
-import AnonPostNotificationChannelItem from '../../components/AnonymousChat/AnonPostNotificationChannelItem';
 import MessageChannelItem from '../../components/AnonymousChat/MessageChannelItem';
+import PostNotificationChannelItem from '../../components/AnonymousChat/PostNotificationChannelItem';
 import useSignedChannelListScreenHook from '../../hooks/screen/useSignedChannelListHook';
 
 const ChannelListScreen = () => {
@@ -20,7 +20,7 @@ const ChannelListScreen = () => {
 
         if (item?.channelType === 'POST_NOTIFICATION') {
           return (
-            <AnonPostNotificationChannelItem
+            <PostNotificationChannelItem
               item={item}
               onChannelPressed={() => goToPostDetailScreen(item)}
             />
