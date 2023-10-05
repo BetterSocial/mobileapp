@@ -4,9 +4,9 @@
 import * as React from 'react';
 import {Dimensions, FlatList, KeyboardAvoidingView, Platform, StyleSheet, View} from 'react-native';
 
-import AnonymousChatHeader from '../../components/AnonymousChat/AnonymousChatHeader';
 import AnonymousInputMessage from '../../components/Chat/AnonymousInputMessage';
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
+import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
 import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
 import {colors} from '../../utils/colors';
 
@@ -54,7 +54,7 @@ const SampleChatScreen = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.keyboardAvoidingView}
       keyboardVerticalOffset={-500}>
-      <AnonymousChatHeader
+      <ChatDetailHeader
         onAvatarPress={goToChatInfoScreen}
         onBackPress={goBackFromChatScreen}
         onThreeDotPress={goToChatInfoScreen}
