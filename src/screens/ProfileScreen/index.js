@@ -265,8 +265,8 @@ const ProfileScreen = ({route}) => {
     try {
       setIsFetchingList(true);
       setIsHitApiFirstTime(true);
-      const result = await getSelfFeedsInProfile(offset, limit);
       const cacheFeed = StorageUtils.myFeeds.get();
+      const result = await getSelfFeedsInProfile(offset, limit);
       const {data: dataMyFeed} = result;
       const {mapNewData} = mappingColorFeed({dataFeed: dataMyFeed, dataCache: cacheFeed});
       if (Array.isArray(result.data) && result.data.length === 0) {
