@@ -145,7 +145,6 @@ const OtherProfile = () => {
   const [user_id, setUserId] = React.useState('');
   const [username, setUsername] = React.useState('');
   const [other_id, setOtherId] = React.useState('');
-  const [, setIsLoading] = React.useState(true);
   const [isShowButton, setIsShowButton] = React.useState(false);
   const [opacity, setOpacity] = React.useState(0);
   const [reason, setReason] = React.useState([]);
@@ -166,17 +165,11 @@ const OtherProfile = () => {
   const [profile] = React.useContext(Context).profile;
   const [, dispatch] = React.useContext(Context).feeds;
   const [isLastPage, setIsLastPage] = React.useState(false);
-  const [, setIsHitApiFirstTime] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
   const [isAnonimity, setIsAnonimity] = React.useState(false);
-
   const {saveChatFromOtherProfile, savePendingChatFromOtherProfile} = useSaveAnonChatHook();
-
-  const create = useClientGetstream();
-
   const {params} = route;
   const {feeds} = otherProfileFeeds;
-
   const [loadingGenerateAnon, setLoadingGenerateAnon] = React.useState(false);
   const [loadingSendDM, setLoadingSendDM] = React.useState(false);
   const [anonProfile, setAnonProfile] = React.useState();
@@ -198,7 +191,6 @@ const OtherProfile = () => {
 
   const sentAnonDM = async () => {
     try {
-      setIsLoading(true);
       setLoadingSendDM(true);
       const {
         anon_user_info_emoji_name,
@@ -227,7 +219,6 @@ const OtherProfile = () => {
       }
     } finally {
       setLoadingSendDM(false);
-      setIsLoading(false);
     }
   };
 
@@ -262,7 +253,6 @@ const OtherProfile = () => {
   const sendSignedDM = async () => {
     try {
       setLoadingSendDM(true);
-      setIsLoading(true);
       const signedMParams = {
         user_id: dataMain.user_id,
         message: dmChat
@@ -271,10 +261,11 @@ const OtherProfile = () => {
       await gotoChatRoom();
       setDMChat('');
     } catch (error) {
-      console.error(error);
+      if (__DEV__) {
+        console.log(error, 'error');
+      }
     } finally {
       setLoadingSendDM(false);
-      setIsLoading(false);
     }
   };
 
@@ -286,11 +277,18 @@ const OtherProfile = () => {
     }
   };
 
-  const getOtherFeeds = async (userId, offset = 0) => {
+  React.useEffect(() => {
+    setOtherId(params?.data?.other_id);
+  }, [params.data]);
+
+  const getOtherFeeds = async (offset = 0) => {
+    const otherId = other_id;
     try {
-      setIsHitApiFirstTime(true);
-      const cacheFeed = StorageUtils.otherProfileFeed.getForKey(userId);
-      const result = await getOtherFeedsInProfile(userId, offset);
+      const cacheFeed = StorageUtils.otherProfileFeed.getForKey(otherId);
+      if (cacheFeed) {
+        setOtherProfileFeed(JSON.parse(cacheFeed), dispatchOtherProfile);
+      }
+      const result = await getOtherFeedsInProfile(otherId, offset);
       const {data: feedOtherProfile} = result;
       const {mapNewData} = mappingColorFeed({
         dataFeed: feedOtherProfile,
@@ -301,17 +299,16 @@ const OtherProfile = () => {
       }
       if (offset === 0) {
         setOtherProfileFeed(mapNewData, dispatchOtherProfile);
-        StorageUtils.otherProfileFeed.setForKey(userId, JSON.stringify(mapNewData));
+        StorageUtils.otherProfileFeed.setForKey(otherId, JSON.stringify(mapNewData));
       } else {
         const clonedFeeds = [...feeds, ...mapNewData];
         setOtherProfileFeed(clonedFeeds, dispatchOtherProfile);
-        StorageUtils.otherProfileFeed.setForKey(userId, JSON.stringify(clonedFeeds));
+        StorageUtils.otherProfileFeed.setForKey(otherId, JSON.stringify(clonedFeeds));
       }
       setLoading(false);
       setPostOffset(Number(result.offset));
     } catch (e) {
       setLoading(false);
-      console.log(e, 'error');
     }
   };
 
@@ -323,31 +320,45 @@ const OtherProfile = () => {
   }, []);
 
   React.useEffect(() => {
-    create();
-    setIsLoading(true);
+    netInfo.addEventListener((state) => {
+      if (state.isConnected) {
+        initData();
+      } else {
+        handleOfflineMode();
+      }
+    });
+    initData();
+  }, []);
+
+  React.useEffect(() => {
+    getOtherFeeds();
+  }, [other_id]);
+
+  const initData = () => {
+    setLoading(true);
     setUserId(params.data.user_id);
     setUsername(params.data.username);
-    fetchOtherProfile(params.data.username);
-  }, [params.data]);
-
-  const checkUserBlockHandle = async (userId, callback) => {
-    try {
-      const sendData = {
-        user_id: userId
-      };
-      const processGetBlock = await checkUserBlock(sendData);
-      if (callback) callback();
-      if (processGetBlock.status === 200) {
-        setBlockStatus(processGetBlock.data.data);
-        setIsLoading(false);
-      }
-    } catch (e) {
-      setIsLoading(false);
-    }
+    fetchOtherProfile();
   };
 
-  const handleGetOtherFeed = (data) => {
-    getOtherFeeds(data.user_id);
+  const checkUserBlockHandle = async (userId, callback) => {
+    const status = await netInfo.fetch();
+    if (status.isConnected) {
+      try {
+        const sendData = {
+          user_id: userId
+        };
+        const processGetBlock = await checkUserBlock(sendData);
+        if (callback) callback();
+        if (processGetBlock.status === 200) {
+          setBlockStatus(processGetBlock.data.data);
+        }
+      } catch (e) {
+        if (__DEV__) {
+          console.log(e, 'error');
+        }
+      }
+    }
   };
 
   const handleSaveDataOtherProfile = (data) => {
@@ -355,18 +366,22 @@ const OtherProfile = () => {
     setDataMainBio(data.bio);
     checkUserBlockHandle(data.user_id);
     setOtherId(data.user_id);
-    handleGetOtherFeed(data);
+    setLoading(false);
   };
 
-  const fetchOtherProfile = async (usernames) => {
+  const fetchOtherProfile = async () => {
     const status = await netInfo.fetch();
     if (status.isConnected) {
       try {
-        const result = await getOtherProfile(usernames);
-        StorageUtils.otherProfileData.setForKey(usernames, JSON.stringify(result.data));
+        handleOfflineMode();
+        const result = await getOtherProfile(params?.data?.username);
         if (result.code === 200) {
           handleSaveDataOtherProfile(result.data);
         }
+        StorageUtils.otherProfileData.setForKey(
+          params?.data?.username,
+          JSON.stringify(result.data)
+        );
       } catch (e) {
         if (e.response && e.response.data && e.response.data.message) {
           SimpleToast.show(e.response.data.message, SimpleToast.SHORT);
@@ -375,18 +390,21 @@ const OtherProfile = () => {
           ...blockStatus,
           blocked: true
         });
-        setIsLoading(false);
       }
     } else {
-      const cache = await StorageUtils.otherProfileData.getForKey(usernames);
-      if (cache) {
-        const data = JSON.parse(cache);
-        handleSaveDataOtherProfile(data);
-      }
-      setIsLoading(false);
+      handleOfflineMode();
     }
   };
 
+  const handleOfflineMode = async () => {
+    const cache = await StorageUtils.otherProfileData.getForKey(params?.data?.username);
+    if (cache) {
+      const data = JSON.parse(cache);
+      handleSaveDataOtherProfile(data);
+    } else {
+      setLoading(false);
+    }
+  };
   const onShare = async () => ShareUtils.shareUserLink(username);
 
   const handleSetUnFollow = async () => {
@@ -402,7 +420,7 @@ const OtherProfile = () => {
     };
     const result = await setUnFollow(data);
     if (result.code === 200) {
-      fetchOtherProfile(username);
+      fetchOtherProfile();
     }
   };
 
@@ -421,7 +439,7 @@ const OtherProfile = () => {
     };
     const result = await setFollow(data);
     if (result.code === 200) {
-      fetchOtherProfile(username);
+      fetchOtherProfile();
     }
   };
 
@@ -597,7 +615,7 @@ const OtherProfile = () => {
   const onCreateChannel = async () => {
     try {
       const members = [other_id, profile.myProfile.user_id];
-      setIsLoading(true);
+
       const clientChat = await client.client;
       const filter = {type: 'messaging', members: {$eq: members}};
       const sort = [{last_message_at: -1}];
@@ -618,12 +636,10 @@ const OtherProfile = () => {
         setChannel(channelChat, dispatchChannel);
       }
       await navigation.navigate('ChatDetailPage');
-      setTimeout(() => setIsLoading(false), 400);
     } catch (e) {
       if (__DEV__) {
         console.log(e);
       }
-      setIsLoading(false);
     }
   };
 
@@ -709,7 +725,7 @@ const OtherProfile = () => {
       dispatch
     );
 
-    getOtherFeeds(other_id);
+    getOtherFeeds();
   };
 
   const onPressDomain = (item) => {
@@ -774,17 +790,23 @@ const OtherProfile = () => {
     });
   };
 
-  const isFeedsShown = !blockStatus.blocked && !blockStatus.blocker;
   const __handleOnEndReached = () => {
     if (!isLastPage) {
-      getOtherFeeds(other_id, postOffset);
+      getOtherFeeds(postOffset);
     }
   };
 
   const handleRefresh = () => {
-    setLoading(true);
     setIsLastPage(false);
-    getOtherFeeds(other_id, 0);
+    getOtherFeeds(0);
+  };
+
+  const handleDataFeed = () => {
+    const isFeedsShown = !blockStatus.blocked && !blockStatus.blocker;
+    if (isFeedsShown) {
+      return feeds;
+    }
+    return [];
   };
 
   return (
@@ -801,30 +823,26 @@ const OtherProfile = () => {
         <ProfileTiktokScroll
           keyboardShouldPersistTaps="handled"
           ref={flatListRef}
-          data={isFeedsShown ? feeds : []}
+          extraData={[feeds]}
+          data={handleDataFeed()}
           onScroll={handleScroll}
           onEndReach={__handleOnEndReached}
           onRefresh={handleRefresh}
           refreshing={loading}
-          snapToOffsets={(() => {
-            const posts = feeds.map(
-              (item, index) => headerHeightRef.current + index * dimen.size.PROFILE_ITEM_HEIGHT
-            );
-            return [0, ...posts];
-          })()}
           ListHeaderComponent={
-            <View
-              onLayout={(event) => {
-                const headerHeightLayout = event.nativeEvent.layout.height;
-                headerHeightRef.current = headerHeightLayout;
-              }}>
-              <View style={styles.content}>{__renderListHeader()}</View>
-            </View>
+            <>
+              {!loading ? (
+                <View
+                  onLayout={(event) => {
+                    const headerHeightLayout = event.nativeEvent.layout.height;
+                    headerHeightRef.current = headerHeightLayout;
+                  }}>
+                  <View style={styles.content}>{__renderListHeader()}</View>
+                </View>
+              ) : null}
+            </>
           }>
           {({item, index}) => {
-            const dummyItemHeight =
-              height - dimen.size.PROFILE_ITEM_HEIGHT - 44 - 16 - StatusBar.currentHeight;
-            if (item.dummy) return <View style={styles.dummyItem(dummyItemHeight)}></View>;
             return (
               <View style={{width: '100%'}}>
                 <RenderItem
@@ -846,6 +864,7 @@ const OtherProfile = () => {
             );
           }}
         </ProfileTiktokScroll>
+
         <BottomSheetBio
           username={dataMain.username}
           isOtherProfile={true}

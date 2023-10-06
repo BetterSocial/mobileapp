@@ -230,7 +230,6 @@ const ProfileScreen = ({route}) => {
       setMyProfileFeed(JSON.parse(cacheFeed), myProfileDispatch);
     }
   };
-  console.log({myProfileFeed, profile}, 'nakal3');
   React.useEffect(() => {
     if (interactionsComplete) {
       initialMyFeed();
