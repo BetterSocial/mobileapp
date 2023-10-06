@@ -186,7 +186,6 @@ const ProfileScreen = ({route}) => {
   const {
     feeds: mainFeeds,
     profileTabIndex,
-    isLoadingFetchingAnonymousPosts,
     isProfileTabSigned,
     setTabIndexToAnonymous,
     setTabIndexToSigned,
@@ -231,7 +230,6 @@ const ProfileScreen = ({route}) => {
       setMyProfileFeed(JSON.parse(cacheFeed), myProfileDispatch);
     }
   };
-  console.log({myProfileFeed, profile}, 'nakal3');
   React.useEffect(() => {
     if (interactionsComplete) {
       initialMyFeed();
@@ -267,8 +265,8 @@ const ProfileScreen = ({route}) => {
     try {
       setIsFetchingList(true);
       setIsHitApiFirstTime(true);
-      const result = await getSelfFeedsInProfile(offset, limit);
       const cacheFeed = StorageUtils.myFeeds.get();
+      const result = await getSelfFeedsInProfile(offset, limit);
       const {data: dataMyFeed} = result;
       const {mapNewData} = mappingColorFeed({dataFeed: dataMyFeed, dataCache: cacheFeed});
       if (Array.isArray(result.data) && result.data.length === 0) {
