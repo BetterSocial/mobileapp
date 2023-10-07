@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import OneSignalUtil from '../../service/onesignal';
 import {Context} from '../../context';
 import {DEFAULT_TOPIC_PIC_PATH} from '../constants';
 import {putUserTopic} from '../../service/topics';
@@ -55,8 +56,10 @@ const useChatClientHook = () => {
     const response = await putUserTopic(data);
     if (response?.data) {
       addTopicToChatTab(topic);
+      OneSignalUtil.addCommunityTag(topic);
     } else {
       removeTopicFromChatTab(topic);
+      OneSignalUtil.removeCommunityTag(topic);
     }
 
     return response?.data;

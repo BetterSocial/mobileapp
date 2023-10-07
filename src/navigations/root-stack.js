@@ -29,13 +29,14 @@ import SampleChatScreen from '../screens/WebsocketResearchScreen/SampleChatScree
 import Settings from '../screens/Settings';
 import SignIn from '../screens/SignInV2';
 import TermsAndCondition from '../screens/WebView/TermsAndCondition';
-import TopicPageScreen from '../screens/TopicPageScreen';
 import TopicMemberScreen from '../screens/TopicMemberScreen';
+import TopicPageScreen from '../screens/TopicPageScreen';
 import Topics from '../screens/Topics';
 import WebsocketResearchScreen from '../screens/WebsocketResearchScreen';
 import WhotoFollow from '../screens/WhotoFollow';
 import api from '../service/config';
 import useCoreChatSystemHook from '../hooks/core/useCoreChatSystemHook';
+import useOneSignalSubscribeToCommunityHooks from '../hooks/core/onesignal/useOneSignalSubscribeToCommunityHooks';
 import {
   AddParticipant,
   ChannelScreen,
@@ -58,6 +59,7 @@ const RootStack = createNativeStackNavigator();
 
 export const RootNavigator = () => {
   useCoreChatSystemHook();
+  useOneSignalSubscribeToCommunityHooks();
 
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const [following, setFollowing] = useRecoilState(followersOrFollowingAtom);

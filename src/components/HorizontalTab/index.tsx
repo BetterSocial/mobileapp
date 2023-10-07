@@ -60,7 +60,7 @@ const HorizontalTab = ({selectedTab, onSelectedTabChange, tabs = []}) => {
     <View style={styles.tabs}>
       {tabs.map((tab, index) => (
         <CustomPressable
-          key={tab?.props?.key}
+          key={index}
           onPress={() => onSelectedTabChange(index)}
           style={index === selectedTab ? styles.activeTabItem : styles.tabItem}>
           <View style={styles.childTabContainer}>{tab}</View>
