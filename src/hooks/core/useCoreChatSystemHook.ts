@@ -38,7 +38,7 @@ const useCoreChatSystemHook = () => {
   const isEnteringApp =
     initialStartup?.id !== null && initialStartup?.id !== undefined && initialStartup?.id !== '';
 
-  const onPostNotifReceived: (data: GetstreamFeedListenerObject) => Promise<void> = async (
+  const onAnonPostNotifReceived: (data: GetstreamFeedListenerObject) => Promise<void> = async (
     data
   ) => {
     try {
@@ -50,7 +50,17 @@ const useCoreChatSystemHook = () => {
     }
   };
 
-  usePostNotificationListenerHook(onPostNotifReceived);
+  const onSignedPostNotifReceived: (data: GetstreamFeedListenerObject) => Promise<void> = async (
+    data
+  ) => {
+    // TODO: Change this to get single signed post notification
+    console.log('onSignedPostNotifReceived', data);
+    onAnonPostNotifReceived(data);
+  };
+
+  usePostNotificationListenerHook(onAnonPostNotifReceived, true);
+  usePostNotificationListenerHook(onSignedPostNotifReceived, false);
+
   const {lastJsonMessage, lastSignedMessage} = useBetterWebsocketHook();
 
   const saveChannelListData = async (
