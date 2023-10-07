@@ -20,8 +20,9 @@ import {
   LatestChildrenComment
 } from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
 import {GetstreamFeedListenerObject} from '../../../types/hooks/core/getstreamFeedListener/feedListenerObject';
+import {GetstreamWebsocket} from './websocket/types.d';
 import {InitialStartupAtom} from '../../service/initialStartup';
-import {getAnonymousChatName} from '../../utils/string/StringUtils';
+import {getAnonymousChatName, getChatName} from '../../utils/string/StringUtils';
 
 type ChannelType = 'SIGNED' | 'ANONYMOUS';
 
@@ -50,42 +51,47 @@ const useCoreChatSystemHook = () => {
   };
 
   usePostNotificationListenerHook(onPostNotifReceived);
-  const {lastJsonMessage} = useBetterWebsocketHook();
+  const {lastJsonMessage, lastSignedMessage} = useBetterWebsocketHook();
 
-  const saveChannelListData = async (channelType: 'PM' | 'ANON_PM') => {
+  const saveChannelListData = async (
+    websocketData: GetstreamWebsocket,
+    channelType: 'PM' | 'ANON_PM'
+  ) => {
     if (!localDb) return;
 
-    const chatName = await getAnonymousChatName(lastJsonMessage?.channel?.members);
+    const chatName =
+      channelType === 'ANON_PM'
+        ? await getAnonymousChatName(websocketData?.channel?.members)
+        : getChatName(websocketData?.channel?.name);
 
-    lastJsonMessage.targetName = chatName?.name;
-    lastJsonMessage.targetImage = chatName?.image;
+    websocketData.targetName = chatName?.name;
+    websocketData.targetImage = chatName?.image;
 
-    const channelList = ChannelList.fromWebsocketObject(lastJsonMessage, channelType);
+    const channelList = ChannelList.fromWebsocketObject(websocketData, channelType);
+    console.log('channelList');
+    console.log(JSON.stringify(channelList, null, 2));
 
     await channelList.save(localDb);
 
-    const user = UserSchema.fromWebsocketObject(lastJsonMessage);
+    const user = UserSchema.fromWebsocketObject(websocketData);
     await user.saveOrUpdateIfExists(localDb);
 
     const isMyMessage =
-      lastJsonMessage?.message?.user?.id === signedProfileId ||
-      lastJsonMessage?.message?.user?.id === anonProfileId;
+      websocketData?.message?.user?.id === signedProfileId ||
+      websocketData?.message?.user?.id === anonProfileId;
 
     if (!isMyMessage) {
-      const chat = ChatSchema.fromWebsocketObject(lastJsonMessage);
+      const chat = ChatSchema.fromWebsocketObject(websocketData);
       await chat.save(localDb);
     }
     try {
-      lastJsonMessage?.channel?.members?.forEach(async (member) => {
-        const userMember = UserSchema.fromMemberWebsocketObject(
-          member,
-          lastJsonMessage?.channel?.id
-        );
+      websocketData?.channel?.members?.forEach(async (member) => {
+        const userMember = UserSchema.fromMemberWebsocketObject(member, websocketData?.channel?.id);
         await userMember.saveOrUpdateIfExists(localDb);
 
         const memberSchema = ChannelListMemberSchema.fromWebsocketObject(
-          lastJsonMessage?.channel?.id,
-          lastJsonMessage?.message?.id,
+          websocketData?.channel?.id,
+          websocketData?.message?.id,
           member
         );
         await memberSchema.save(localDb);
@@ -313,9 +319,20 @@ const useCoreChatSystemHook = () => {
     const {type} = lastJsonMessage;
     if (type === 'health.check') return;
     if (type === 'notification.message_new') {
-      saveChannelListData('ANON_PM').catch((e) => console.log(e));
+      saveChannelListData(lastJsonMessage, 'ANON_PM').catch((e) => console.log(e));
     }
   }, [lastJsonMessage, localDb]);
+
+  React.useEffect(() => {
+    if (!lastSignedMessage && !localDb) return;
+
+    const {type} = lastSignedMessage;
+    if (type === 'health.check') return;
+    if (type === 'notification.message_new') {
+      console.log('notification.message_new', lastSignedMessage);
+      saveChannelListData(lastSignedMessage, 'PM').catch((e) => console.log(e));
+    }
+  }, [lastSignedMessage, localDb]);
 
   React.useEffect(() => {
     if (isEnteringApp) {
