@@ -49,8 +49,14 @@ const TopicPageScreen = (props) => {
   const [isFollow, setIsFollow] = React.useState(false);
   const [topicDetail, setTopicDetail] = React.useState({});
   const [isHeaderHide, setIsHeaderHide] = React.useState(false);
-  const offsetAnimation = React.useRef(new Animated.Value(0)).current;
-  const opacityAnimation = React.useRef(new Animated.Value(0)).current;
+  const opacityNavAnimation = React.useRef(new Animated.Value(0)).current;
+  const opacityHeaderAnimation = React.useRef(new Animated.Value(1)).current;
+
+  const animatedHeight = React.useRef(
+    new Animated.Value(
+      dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT + dimen.size.TOPIC_FEED_HEADER_HEIGHT + normalize(4)
+    )
+  ).current;
 
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   const feeds = feedsContext.topicFeeds;
@@ -316,13 +322,21 @@ const TopicPageScreen = (props) => {
 
   const showHeaderAnimation = () => {
     interactionManagerRef.current = InteractionManager.runAfterInteractions(() => {
-      Animated.timing(offsetAnimation, {
-        toValue: 0,
-        duration: 200,
+      Animated.timing(animatedHeight, {
+        toValue:
+          dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT +
+          dimen.size.TOPIC_FEED_HEADER_HEIGHT +
+          normalize(4),
+        duration: 100,
         useNativeDriver: false
       }).start();
-      Animated.timing(opacityAnimation, {
+      Animated.timing(opacityNavAnimation, {
         toValue: 0,
+        duration: 100,
+        useNativeDriver: false
+      }).start();
+      Animated.timing(opacityHeaderAnimation, {
+        toValue: 1,
         duration: 100,
         useNativeDriver: false
       }).start();
@@ -342,13 +356,18 @@ const TopicPageScreen = (props) => {
         showHeaderAnimation();
       } else if (dy - 20 > 0) {
         interactionManagerAnimatedRef.current = InteractionManager.runAfterInteractions(() => {
-          Animated.timing(offsetAnimation, {
-            toValue: -(dimen.size.TOPIC_FEED_HEADER_HEIGHT + normalize(4)),
+          Animated.timing(animatedHeight, {
+            toValue: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2,
             duration: 100,
             useNativeDriver: false
           }).start();
-          Animated.timing(opacityAnimation, {
+          Animated.timing(opacityNavAnimation, {
             toValue: 1,
+            duration: 100,
+            useNativeDriver: false
+          }).start();
+          Animated.timing(opacityHeaderAnimation, {
+            toValue: 0,
             duration: 100,
             useNativeDriver: false
           }).start();
@@ -356,7 +375,7 @@ const TopicPageScreen = (props) => {
         setIsHeaderHide(true);
       }
     },
-    [offsetAnimation]
+    [animatedHeight]
   );
 
   const handleOnMemberPress = () => {
@@ -392,10 +411,11 @@ const TopicPageScreen = (props) => {
     <SafeAreaProvider forceInset={{top: 'always'}} style={styles.parentContainer}>
       <StatusBar barStyle="dark-content" translucent={false} />
       <NavHeader
+        animatedHeight={animatedHeight}
         onShareCommunity={onShareCommunity}
         isHeaderHide={isHeaderHide}
-        opacityAnimation={opacityAnimation}
-        offsetAnimation={offsetAnimation}
+        opacityNavAnimation={opacityNavAnimation}
+        opacityHeaderAnimation={opacityHeaderAnimation}
         handleOnMemberPress={handleOnMemberPress}
         topicDetail={topicDetail}
         setIsFollow={setIsFollow}

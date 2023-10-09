@@ -9,11 +9,11 @@ import ButtonFollowing from './ButtonFollowing';
 import TopicDomainHeader from './TopicDomainHeader';
 
 const Header = ({
-  offsetAnimation,
   onPress,
   detail,
   hideSeeMember,
   isFollow = false,
+  opacityHeaderAnimation,
   getHeaderLayout,
   handleOnMemberPress
 }) => {
@@ -25,7 +25,7 @@ const Header = ({
   };
 
   return (
-    <Animated.View onLayout={onHeaderLayout} style={styles.Header(offsetAnimation)}>
+    <Animated.View onLayout={onHeaderLayout} style={styles.Header(opacityHeaderAnimation)}>
       <Image
         source={detail?.icon_path ? {uri: detail?.icon_path} : TopicDefaultIcon}
         style={styles.image}
@@ -50,15 +50,15 @@ const Header = ({
 };
 
 const styles = StyleSheet.create({
-  Header: (animatedValue) => ({
+  Header: (opacityHeaderAnimation) => ({
     flexDirection: 'row',
     height: dimen.size.TOPIC_FEED_HEADER_HEIGHT,
     paddingHorizontal: normalize(20),
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
-    marginTop: animatedValue,
-    marginBottom: normalize(4)
+    marginBottom: normalize(4),
+    opacity: opacityHeaderAnimation
   }),
   image: {
     width: normalize(48),

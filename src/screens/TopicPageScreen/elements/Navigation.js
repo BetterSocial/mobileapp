@@ -11,7 +11,7 @@ import TopicDomainHeader from './TopicDomainHeader';
 
 const Navigation = ({
   isHeaderHide,
-  opacityAnimation,
+  opacityNavAnimation,
   onShareCommunity,
   detail,
   isFollow,
@@ -26,11 +26,11 @@ const Navigation = ({
   };
 
   return (
-    <View style={styles.Header(isHeaderHide)}>
+    <View style={styles.header(isHeaderHide)}>
       <TouchableOpacity onPress={() => backScreen()} style={styles.backbutton}>
         <MemoIc_arrow_back width={normalize(24)} height={normalize(24)} />
       </TouchableOpacity>
-      <Animated.View style={styles.domain(opacityAnimation)}>
+      <Animated.View style={styles.domain(opacityNavAnimation)}>
         <TopicDomainHeader
           detail={detail}
           isFollow={isFollow}
@@ -54,7 +54,7 @@ const Navigation = ({
 };
 
 const styles = StyleSheet.create({
-  Header: (isHeaderHide) => ({
+  header: (isHeaderHide) => ({
     flexDirection: 'row',
     height: isHeaderHide
       ? dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2
@@ -71,13 +71,13 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center'
   },
-  domain: (animatedValue) => ({
+  domain: (opacityNavAnimation) => ({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'flex-start',
     marginRight: 14,
     alignSelf: 'center',
-    opacity: animatedValue
+    opacity: opacityNavAnimation
   }),
   containerAction: {
     flexDirection: 'row',
