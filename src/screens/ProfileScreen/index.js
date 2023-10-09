@@ -610,7 +610,7 @@ const ProfileScreen = ({route}) => {
         data={mainFeeds}
         onRefresh={handleRefresh}
         refreshing={loading}
-        style={{backgroundColor: '#f2f2f2'}}
+        style={styles.flatlistContainer}
         onScroll={handleScroll}
         ListFooterComponent={isFetchingList ? <ActivityIndicator /> : null}
         onEndReach={handleOnEndReached}
@@ -802,6 +802,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontStyle: 'normal',
     fontWeight: '400'
+  },
+  flatlistContainer: {
+    backgroundColor: 'white'
   }
 });
 
