@@ -13,7 +13,8 @@ import {
   Text,
   TouchableNativeFeedback,
   TouchableOpacity,
-  View
+  View,
+  Pressable
 } from 'react-native';
 import {generateRandomId} from 'stream-chat-react-native';
 /* eslint-disable no-underscore-dangle */
@@ -88,12 +89,12 @@ const BioAndChat = (props) => {
         {bio === null || bio === undefined ? (
           <Text style={styles.bioText(isAnonimity)}>Send a message</Text>
         ) : (
-          <TouchableOpacity onPress={openBio}>
+          <Pressable onPress={openBio}>
             <Text linkStyle={styles.seeMore} style={styles.bioText(isAnonimity)}>
               {trimString(bio, 121)}{' '}
               {bio.length > 121 ? <Text style={{color: colors.blue}}>see more</Text> : null}
             </Text>
-          </TouchableOpacity>
+          </Pressable>
         )}
       </View>
       <TouchableOpacity
