@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Config from 'react-native-config';
-import useWebSocket from 'react-native-use-websocket';
 
+import useSimpleWebsocketHooks from './useSimpleWebsocketHooks';
 import TokenStorage, {ITokenEnum} from '../../../utils/storage/custom/tokenStorage';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
 import {getAnonymousUserId} from '../../../utils/users';
@@ -45,18 +45,7 @@ const useBetterWebsocketHook = () => {
     return websocketUrl;
   };
 
-  const getSocketUrl: () => Promise<string> = React.useCallback(() => {
-    return new Promise((resolve) => {
-      initAuthorization().then((url) => {
-        resolve(url);
-      });
-    });
-  }, []);
-
-  const {lastJsonMessage} = useWebSocket(getSocketUrl, {
-    onOpen: () => console.log('opened 123'),
-    shouldReconnect: (closeEvent) => true
-  });
+  const {lastJsonMessage} = useSimpleWebsocketHooks(initAuthorization(), null, null);
 
   return {lastJsonMessage};
 };
