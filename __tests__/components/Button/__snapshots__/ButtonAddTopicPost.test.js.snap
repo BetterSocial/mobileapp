@@ -5,17 +5,16 @@ exports[`Testing Button Add Topic Post should match snapshot 1`] = `
   style={
     Object {
       "backgroundColor": "#0000",
-      "bottom": NaN,
-      "position": "absolute",
-      "right": NaN,
-      "zIndex": 1,
     }
   }
 >
   <View
     style={
       Object {
+        "bottom": NaN,
         "elevation": 3,
+        "position": "absolute",
+        "right": NaN,
         "shadowColor": "#000",
         "shadowOffset": Object {
           "height": 1,
@@ -23,6 +22,7 @@ exports[`Testing Button Add Topic Post should match snapshot 1`] = `
         },
         "shadowOpacity": 0.8,
         "shadowRadius": 1,
+        "zIndex": 1,
       }
     }
   >
