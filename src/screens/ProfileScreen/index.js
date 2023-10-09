@@ -13,6 +13,7 @@ import {
   TouchableNativeFeedback,
   View
 } from 'react-native';
+import PropTypes from 'prop-types';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {debounce} from 'lodash';
 import {showMessage} from 'react-native-flash-message';
@@ -805,5 +806,19 @@ const styles = StyleSheet.create({
     fontWeight: '400'
   }
 });
+
+ProfileScreen.propTypes = {
+  headerHeightRef: PropTypes.object,
+  changeImage: PropTypes.func,
+  dataMain: PropTypes.object,
+  goToFollowings: PropTypes.func,
+  dataMainBio: PropTypes.object,
+  changeBio: PropTypes.func,
+  postRef: PropTypes.object,
+  profileTabIndex: PropTypes.number,
+  setTabIndexToSigned: PropTypes.func,
+  setTabIndexToAnonymous: PropTypes.func,
+  route: PropTypes.object
+};
 
 export default React.memo(withInteractionsManaged(ProfileScreen));
