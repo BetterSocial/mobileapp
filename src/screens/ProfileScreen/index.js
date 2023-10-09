@@ -597,112 +597,110 @@ const ProfileScreen = ({route}) => {
   };
 
   return (
-    <>
-      <SafeAreaProvider style={styles.container} forceInset={{top: 'always'}}>
-        <StatusBar translucent={false} />
-        <ProfileHeader
-          showArrow={isNotFromHomeTab}
-          onShareClicked={onShare}
-          onSettingsClicked={goToSettings}
-          username={profile?.myProfile?.username}
-        />
-        <ProfileTiktokScroll
-          ref={listRef}
-          data={mainFeeds}
-          onRefresh={handleRefresh}
-          refreshing={loading}
-          style={{backgroundColor: '#f2f2f2'}}
-          onScroll={handleScroll}
-          ListFooterComponent={isFetchingList ? <ActivityIndicator /> : null}
-          onEndReach={handleOnEndReached}
-          initialNumToRender={2}
-          maxToRenderPerBatch={2}
-          updateCellsBatchingPeriod={10}
-          removeClippedSubviews
-          windowSize={10}
-          ListHeaderComponent={
-            <Header
-              headerHeightRef={headerHeightRef}
-              changeImage={changeImage}
-              dataMain={profile?.myProfile}
-              goToFollowings={goToFollowings}
-              dataMainBio={profile?.myProfile?.bio}
-              changeBio={changeBio}
-              postRef={postRef}
-              profileTabIndex={profileTabIndex}
-              setTabIndexToSigned={setTabIndexToSigned}
-              setTabIndexToAnonymous={setTabIndexToAnonymous}
+    <SafeAreaProvider style={styles.container} forceInset={{top: 'always'}}>
+      <StatusBar translucent={false} />
+      <ProfileHeader
+        showArrow={isNotFromHomeTab}
+        onShareClicked={onShare}
+        onSettingsClicked={goToSettings}
+        username={profile?.myProfile?.username}
+      />
+      <ProfileTiktokScroll
+        ref={listRef}
+        data={mainFeeds}
+        onRefresh={handleRefresh}
+        refreshing={loading}
+        style={{backgroundColor: '#f2f2f2'}}
+        onScroll={handleScroll}
+        ListFooterComponent={isFetchingList ? <ActivityIndicator /> : null}
+        onEndReach={handleOnEndReached}
+        initialNumToRender={2}
+        maxToRenderPerBatch={2}
+        updateCellsBatchingPeriod={10}
+        removeClippedSubviews
+        windowSize={10}
+        ListHeaderComponent={
+          <Header
+            headerHeightRef={headerHeightRef}
+            changeImage={changeImage}
+            dataMain={profile?.myProfile}
+            goToFollowings={goToFollowings}
+            dataMainBio={profile?.myProfile?.bio}
+            changeBio={changeBio}
+            postRef={postRef}
+            profileTabIndex={profileTabIndex}
+            setTabIndexToSigned={setTabIndexToSigned}
+            setTabIndexToAnonymous={setTabIndexToAnonymous}
+          />
+        }>
+        {({item, index}) => {
+          return (
+            <RenderItem
+              key={item.id}
+              item={item}
+              onNewPollFetched={onNewPollFetched}
+              index={index}
+              onPressDomain={onPressDomain}
+              onPress={(haveSeeMore) => onPress(item, haveSeeMore)}
+              onPressComment={(haveSeeMore) => onPress(item, haveSeeMore)}
+              onPressUpvote={(post) => setUpVote(post)}
+              selfUserId={profile.myProfile.user_id}
+              onPressDownVote={(post) => setDownVote(post)}
+              loading={loading}
+              source={SOURCE_MY_PROFILE}
+              hideThreeDot={false}
+              showAnonymousOption={true}
+              onHeaderOptionClicked={() => onHeaderOptionClicked(item)}
             />
-          }>
-          {({item, index}) => {
-            return (
-              <RenderItem
-                key={item.id}
-                item={item}
-                onNewPollFetched={onNewPollFetched}
-                index={index}
-                onPressDomain={onPressDomain}
-                onPress={(haveSeeMore) => onPress(item, haveSeeMore)}
-                onPressComment={(haveSeeMore) => onPress(item, haveSeeMore)}
-                onPressUpvote={(post) => setUpVote(post)}
-                selfUserId={profile.myProfile.user_id}
-                onPressDownVote={(post) => setDownVote(post)}
-                loading={loading}
-                source={SOURCE_MY_PROFILE}
-                hideThreeDot={false}
-                showAnonymousOption={true}
-                onHeaderOptionClicked={() => onHeaderOptionClicked(item)}
-              />
-            );
-          }}
-        </ProfileTiktokScroll>
-        <BottomSheetBio
-          ref={bottomSheetBioRef}
-          value={tempBio}
-          onChangeText={(text) => onChangeTempBio(text)}
-          handleSave={() => handleSaveBio()}
-          isLoadingUpdateBio={isLoadingUpdateBio}
-          error={errorBio}
-        />
+          );
+        }}
+      </ProfileTiktokScroll>
+      <BottomSheetBio
+        ref={bottomSheetBioRef}
+        value={tempBio}
+        onChangeText={(text) => onChangeTempBio(text)}
+        handleSave={() => handleSaveBio()}
+        isLoadingUpdateBio={isLoadingUpdateBio}
+        error={errorBio}
+      />
 
-        <BottomSheetRealname
-          ref={bottomSheetNameRef}
-          setTempFullName={(text) => setTempFullName(text)}
-          tempFullName={tempFullName}
-          errorChangeRealName={errorChangeRealName}
-          isChangeRealName={isChangeRealName}
-          handleSave={() => handleSave()}
-        />
-        <BottomSheetImage
-          ref={bottomSheetProfilePictureRef}
-          onViewProfilePicture={() => onViewProfilePicture()}
-          onOpenImageGalery={() => onOpenImageGalery()}
-          onOpenCamera={() => onOpenCamera()}
-          handleRemoveImageProfile={() => handleRemoveImageProfile()}
-          isLoadingUpdateImageGalery={isLoadingUpdateImageGalery}
-          isLoadingUpdateImageCamera={isLoadingUpdateImageCamera}
-          isLoadingRemoveImage={isLoadingRemoveImage}
-        />
-        <ButtonNewPost isShowArrow={isShowButton} />
+      <BottomSheetRealname
+        ref={bottomSheetNameRef}
+        setTempFullName={(text) => setTempFullName(text)}
+        tempFullName={tempFullName}
+        errorChangeRealName={errorChangeRealName}
+        isChangeRealName={isChangeRealName}
+        handleSave={() => handleSave()}
+      />
+      <BottomSheetImage
+        ref={bottomSheetProfilePictureRef}
+        onViewProfilePicture={() => onViewProfilePicture()}
+        onOpenImageGalery={() => onOpenImageGalery()}
+        onOpenCamera={() => onOpenCamera()}
+        handleRemoveImageProfile={() => handleRemoveImageProfile()}
+        isLoadingUpdateImageGalery={isLoadingUpdateImageGalery}
+        isLoadingUpdateImageCamera={isLoadingUpdateImageCamera}
+        isLoadingRemoveImage={isLoadingRemoveImage}
+      />
+      <ButtonNewPost isShowArrow={isShowButton} />
 
-        {isShowButton ? (
-          <ShadowFloatingButtons>
-            <TouchableNativeFeedback onPress={toTop}>
-              <View style={{...styles.btnBottom, opacity}}>
-                <ArrowUpWhiteIcon width={12} height={20} fill={colors.white} />
-              </View>
-            </TouchableNativeFeedback>
-          </ShadowFloatingButtons>
-        ) : null}
+      {isShowButton ? (
+        <ShadowFloatingButtons>
+          <TouchableNativeFeedback onPress={toTop}>
+            <View style={{...styles.btnBottom, opacity}}>
+              <ArrowUpWhiteIcon width={12} height={20} fill={colors.white} />
+            </View>
+          </TouchableNativeFeedback>
+        </ShadowFloatingButtons>
+      ) : null}
 
-        <BlockComponent ref={refBlockComponent} refresh={getMyFeeds} screen="my_profile" />
-        <PostOptionModal
-          isOpen={isPostOptionModalOpen}
-          onClose={onHeaderOptionClosed}
-          onDeleteClicked={onDeletePost}
-        />
-      </SafeAreaProvider>
-    </>
+      <BlockComponent ref={refBlockComponent} refresh={getMyFeeds} screen="my_profile" />
+      <PostOptionModal
+        isOpen={isPostOptionModalOpen}
+        onClose={onHeaderOptionClosed}
+        onDeleteClicked={onDeletePost}
+      />
+    </SafeAreaProvider>
   );
 };
 
@@ -820,7 +818,7 @@ Header.propTypes = {
   setTabIndexToAnonymous: PropTypes.func
 };
 
-ProfileScreen.prototypes = {
+ProfileScreen.propTypes = {
   route: PropTypes.object
 };
 
