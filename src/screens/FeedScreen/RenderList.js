@@ -224,13 +224,14 @@ RenderListFeed.propTypes = {
   onPress: PropTypes.func,
   onNewPollFetched: PropTypes.func,
   onPressDomain: PropTypes.func,
-  onPressComment: PropTypes.func,
   onPressBlock: PropTypes.func,
-  Handle: PropTypes.func,
   selfUserId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   onPressUpvote: PropTypes.func,
   onPressDownVote: PropTypes.func,
-  loading: PropTypes.bool
+  source: PropTypes.string,
+  hideThreeDot: PropTypes.bool,
+  showAnonymousOption: PropTypes.bool,
+  onHeaderOptionClicked: PropTypes.func
 };
 
 export default React.memo(

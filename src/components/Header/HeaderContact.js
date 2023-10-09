@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-
+import PropTypes from 'prop-types';
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {COLORS, SIZES} from '../../utils/theme';
@@ -47,6 +47,17 @@ const HeaderContact = ({
 };
 
 export default HeaderContact;
+
+HeaderContact.propTypes = {
+  title: PropTypes.string,
+  subTitle: PropTypes.string,
+  onPress: PropTypes.func,
+  titleStyle: PropTypes.object,
+  subtitleStyle: PropTypes.object,
+  containerStyle: PropTypes.object,
+  onPressSub: PropTypes.func,
+  disabledNextBtn: PropTypes.bool
+};
 
 const styles = StyleSheet.create({
   container: {

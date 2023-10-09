@@ -13,13 +13,14 @@ import {
   Text,
   TouchableNativeFeedback,
   TouchableOpacity,
-  View
+  View,
+  Pressable
 } from 'react-native';
 import {generateRandomId} from 'stream-chat-react-native';
 /* eslint-disable no-underscore-dangle */
 import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
-
+import PropTypes from 'prop-types';
 import netInfo from '@react-native-community/netinfo';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BlockIcon from '../../assets/icons/images/block-blue.svg';
@@ -57,7 +58,6 @@ import {sendAnonymousDMOtherProfile, sendSignedDMOtherProfile} from '../../servi
 import {setChannel} from '../../context/actions/setChannel';
 import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherProfileFeed';
 import {trimString} from '../../utils/string/TrimString';
-import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import StorageUtils from '../../utils/storage';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
@@ -89,12 +89,12 @@ const BioAndChat = (props) => {
         {bio === null || bio === undefined ? (
           <Text style={styles.bioText(isAnonimity)}>Send a message</Text>
         ) : (
-          <TouchableOpacity onPress={openBio}>
+          <Pressable onPress={openBio}>
             <Text linkStyle={styles.seeMore} style={styles.bioText(isAnonimity)}>
               {trimString(bio, 121)}{' '}
               {bio.length > 121 ? <Text style={{color: colors.blue}}>see more</Text> : null}
             </Text>
-          </TouchableOpacity>
+          </Pressable>
         )}
       </View>
       <TouchableOpacity
@@ -165,7 +165,8 @@ const OtherProfile = () => {
   const [profile] = React.useContext(Context).profile;
   const [, dispatch] = React.useContext(Context).feeds;
   const [isLastPage, setIsLastPage] = React.useState(false);
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = React.useState(false);
+  const [initLoading, setInitLoading] = React.useState(true);
   const [isAnonimity, setIsAnonimity] = React.useState(false);
   const {saveChatFromOtherProfile, savePendingChatFromOtherProfile} = useSaveAnonChatHook();
   const {params} = route;
@@ -335,7 +336,7 @@ const OtherProfile = () => {
   }, [other_id]);
 
   const initData = () => {
-    setLoading(true);
+    setInitLoading(true);
     setUserId(params.data.user_id);
     setUsername(params.data.username);
     fetchOtherProfile();
@@ -367,6 +368,7 @@ const OtherProfile = () => {
     checkUserBlockHandle(data.user_id);
     setOtherId(data.user_id);
     setLoading(false);
+    setInitLoading(false);
   };
 
   const fetchOtherProfile = async () => {
@@ -386,6 +388,8 @@ const OtherProfile = () => {
         if (e.response && e.response.data && e.response.data.message) {
           SimpleToast.show(e.response.data.message, SimpleToast.SHORT);
         }
+        setLoading(false);
+        setInitLoading(false);
         setBlockStatus({
           ...blockStatus,
           blocked: true
@@ -403,6 +407,7 @@ const OtherProfile = () => {
       handleSaveDataOtherProfile(data);
     } else {
       setLoading(false);
+      setInitLoading(false);
     }
   };
   const onShare = async () => ShareUtils.shareUserLink(username);
@@ -444,7 +449,10 @@ const OtherProfile = () => {
   };
 
   const openBio = () => {
-    bottomSheetBio.current.open();
+    if (profile?.myProfile?.user_id !== other_id) {
+      return null;
+    }
+    return bottomSheetBio.current.open();
   };
 
   const toggleSwitch = async () => {
@@ -488,29 +496,27 @@ const OtherProfile = () => {
     const __renderFollowerDetail = () => {
       if (blockStatus.blocker) return <></>;
       return (
-        <React.Fragment>
-          <View style={styles.wrapFollower}>
-            <TouchableOpacity onPress={handleOpenFollowerUser} style={styles.wrapRow}>
-              <React.Fragment>
-                <Text style={styles.textTotal}>{dataMain.follower_symbol}</Text>
-                <Text style={styles.textFollow}>
-                  {getSingularOrPluralText(dataMain.follower_symbol, 'Follower', 'Followers')}
-                </Text>
-              </React.Fragment>
-            </TouchableOpacity>
-            {user_id === dataMain.user_id ? (
-              <View style={styles.following}>
-                <TouchableNativeFeedback
-                  onPress={() => goToFollowings(dataMain.user_id, dataMain.username)}>
-                  <View style={styles.wrapRow}>
-                    <Text style={styles.textTotal}>{dataMain.following_symbol}</Text>
-                    <Text style={styles.textFollow}>Following</Text>
-                  </View>
-                </TouchableNativeFeedback>
-              </View>
-            ) : null}
-          </View>
-        </React.Fragment>
+        <View style={styles.wrapFollower}>
+          <TouchableOpacity onPress={handleOpenFollowerUser} style={styles.wrapRow}>
+            <React.Fragment>
+              <Text style={styles.textTotal}>{dataMain.follower_symbol}</Text>
+              <Text style={styles.textFollow}>
+                {getSingularOrPluralText(dataMain.follower_symbol, 'Follower', 'Followers')}
+              </Text>
+            </React.Fragment>
+          </TouchableOpacity>
+          {user_id === dataMain.user_id ? (
+            <View style={styles.following}>
+              <TouchableNativeFeedback
+                onPress={() => goToFollowings(dataMain.user_id, dataMain.username)}>
+                <View style={styles.wrapRow}>
+                  <Text style={styles.textTotal}>{dataMain.following_symbol}</Text>
+                  <Text style={styles.textFollow}>Following</Text>
+                </View>
+              </TouchableNativeFeedback>
+            </View>
+          ) : null}
+        </View>
       );
     };
 
@@ -518,23 +524,19 @@ const OtherProfile = () => {
       if (user_id === dataMain.user_id) return <></>;
       if (dataMain.is_following)
         return (
-          <React.Fragment>
-            <GlobalButton onPress={() => handleSetUnFollow()}>
-              <View style={styles.buttonFollowing}>
-                <Text style={styles.textButtonFollowing}>Following</Text>
-              </View>
-            </GlobalButton>
-          </React.Fragment>
+          <GlobalButton onPress={() => handleSetUnFollow()}>
+            <View style={styles.buttonFollowing}>
+              <Text style={styles.textButtonFollowing}>Following</Text>
+            </View>
+          </GlobalButton>
         );
 
       return (
-        <React.Fragment>
-          <GlobalButton onPress={() => handleSetFollow()}>
-            <View style={styles.buttonFollow}>
-              <Text style={styles.textButtonFollow}>Follow</Text>
-            </View>
-          </GlobalButton>
-        </React.Fragment>
+        <GlobalButton onPress={() => handleSetFollow()}>
+          <View style={styles.buttonFollow}>
+            <Text style={styles.textButtonFollow}>Follow</Text>
+          </View>
+        </GlobalButton>
       );
     };
 
@@ -831,7 +833,7 @@ const OtherProfile = () => {
           refreshing={loading}
           ListHeaderComponent={
             <>
-              {!loading ? (
+              {!initLoading ? (
                 <View
                   onLayout={(event) => {
                     const headerHeightLayout = event.nativeEvent.layout.height;
@@ -1105,4 +1107,23 @@ const styles = StyleSheet.create({
     lineHeight: 22
   })
 });
+
+BioAndChat.propTypes = {
+  isAnonimity: PropTypes.bool,
+  bio: PropTypes.string,
+  openBio: PropTypes.bool,
+  isSignedMessageEnabled: PropTypes.bool,
+  showSignedMessageDisableToast: PropTypes.bool,
+  loadingGenerateAnon: PropTypes.bool,
+  avatarUrl: PropTypes.string,
+  anonProfile: PropTypes.object,
+  onSendDM: PropTypes.func,
+  setDMChat: PropTypes.func,
+  loadingSendDM: PropTypes.bool,
+  dmChat: PropTypes.string,
+  username: PropTypes.string,
+  toggleSwitch: PropTypes.func,
+  isAnonimityEnabled: PropTypes.bool
+};
+
 export default withInteractionsManaged(OtherProfile);
