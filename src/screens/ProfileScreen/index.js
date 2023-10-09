@@ -807,7 +807,7 @@ const styles = StyleSheet.create({
   }
 });
 
-ProfileScreen.propTypes = {
+Header.propTypes = {
   headerHeightRef: PropTypes.object,
   changeImage: PropTypes.func,
   dataMain: PropTypes.object,
@@ -817,7 +817,10 @@ ProfileScreen.propTypes = {
   postRef: PropTypes.object,
   profileTabIndex: PropTypes.number,
   setTabIndexToSigned: PropTypes.func,
-  setTabIndexToAnonymous: PropTypes.func,
+  setTabIndexToAnonymous: PropTypes.func
+};
+
+ProfileScreen.prototypes = {
   route: PropTypes.object
 };
 
