@@ -448,7 +448,10 @@ const OtherProfile = () => {
   };
 
   const openBio = () => {
-    bottomSheetBio.current.open();
+    if (profile?.myProfile?.user_id !== other_id) {
+      return null;
+    }
+    return bottomSheetBio.current.open();
   };
 
   const toggleSwitch = async () => {
