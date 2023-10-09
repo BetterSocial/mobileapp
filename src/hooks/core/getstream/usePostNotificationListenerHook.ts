@@ -7,18 +7,24 @@ import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import useProfileHook from '../profile/useProfileHook';
 import TokenStorage, {ITokenEnum} from '../../../utils/storage/custom/tokenStorage';
 
-const usePostNotificationListenerHook = (onPostNotifReceived) => {
+const usePostNotificationListenerHook = (onPostNotifReceived, isAnonymous = true) => {
   const {localDb} = useLocalDatabaseHook() as UseLocalDatabaseHook;
   const feedSubscriptionRef = React.useRef<StreamFeed<UR, UR, UR, UR, UR, UR> | undefined>(
     undefined
   );
-  const {anonProfileId} = useProfileHook();
+
+  const {anonProfileId, signedProfileId} = useProfileHook();
 
   const initFeedSubscription = async () => {
-    const token: string = TokenStorage.get(ITokenEnum.anonymousToken);
-    const client = clientStream(token);
+    const anonymousToken: string = TokenStorage.get(ITokenEnum.anonymousToken);
+    const signedToken: string = TokenStorage.get(ITokenEnum.token);
+
+    const tokenToSubscribe = isAnonymous ? anonymousToken : signedToken;
+    const idToSubscribe = isAnonymous ? anonProfileId : signedProfileId;
+
+    const client = clientStream(isAnonymous ? anonymousToken : signedToken);
     try {
-      const notifFeed = client?.feed('notification', anonProfileId, token);
+      const notifFeed = client?.feed('notification', idToSubscribe, tokenToSubscribe);
       notifFeed?.subscribe((data) => {
         if (!data || !onPostNotifReceived || typeof onPostNotifReceived !== 'function') return;
         onPostNotifReceived(data);
@@ -26,15 +32,23 @@ const usePostNotificationListenerHook = (onPostNotifReceived) => {
 
       feedSubscriptionRef.current = notifFeed;
     } catch (e) {
-      console.log('anonProfileId', anonProfileId);
-      console.log('token', token);
+      console.log('profileId', isAnonymous ? anonProfileId : signedProfileId);
+      console.log('token', isAnonymous ? anonymousToken : signedToken);
       console.log('initFeedSubscription error');
       console.log(e);
     }
   };
 
   React.useEffect(() => {
-    if (anonProfileId) initFeedSubscription();
+    if (anonProfileId && isAnonymous) initFeedSubscription();
+
+    return () => {
+      feedSubscriptionRef.current?.unsubscribe();
+    };
+  }, [localDb, anonProfileId]);
+
+  React.useEffect(() => {
+    if (anonProfileId && !isAnonymous) initFeedSubscription();
 
     return () => {
       feedSubscriptionRef.current?.unsubscribe();
