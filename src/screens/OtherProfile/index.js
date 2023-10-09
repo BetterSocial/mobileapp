@@ -165,7 +165,8 @@ const OtherProfile = () => {
   const [profile] = React.useContext(Context).profile;
   const [, dispatch] = React.useContext(Context).feeds;
   const [isLastPage, setIsLastPage] = React.useState(false);
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = React.useState(false);
+  const [initLoading, setInitLoading] = React.useState(true);
   const [isAnonimity, setIsAnonimity] = React.useState(false);
   const {saveChatFromOtherProfile, savePendingChatFromOtherProfile} = useSaveAnonChatHook();
   const {params} = route;
@@ -335,7 +336,7 @@ const OtherProfile = () => {
   }, [other_id]);
 
   const initData = () => {
-    setLoading(true);
+    setInitLoading(true);
     setUserId(params.data.user_id);
     setUsername(params.data.username);
     fetchOtherProfile();
@@ -367,6 +368,7 @@ const OtherProfile = () => {
     checkUserBlockHandle(data.user_id);
     setOtherId(data.user_id);
     setLoading(false);
+    setInitLoading(false);
   };
 
   const fetchOtherProfile = async () => {
@@ -386,6 +388,8 @@ const OtherProfile = () => {
         if (e.response && e.response.data && e.response.data.message) {
           SimpleToast.show(e.response.data.message, SimpleToast.SHORT);
         }
+        setLoading(false);
+        setInitLoading(false);
         setBlockStatus({
           ...blockStatus,
           blocked: true
@@ -403,6 +407,7 @@ const OtherProfile = () => {
       handleSaveDataOtherProfile(data);
     } else {
       setLoading(false);
+      setInitLoading(false);
     }
   };
   const onShare = async () => ShareUtils.shareUserLink(username);
@@ -831,7 +836,7 @@ const OtherProfile = () => {
           refreshing={loading}
           ListHeaderComponent={
             <>
-              {!loading ? (
+              {!initLoading ? (
                 <View
                   onLayout={(event) => {
                     const headerHeightLayout = event.nativeEvent.layout.height;

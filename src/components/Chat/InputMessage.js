@@ -1,9 +1,9 @@
 import * as React from 'react';
 import {StyleSheet, View, TextInput, TouchableOpacity, Image, FlatList} from 'react-native';
-import FA from 'react-native-vector-icons/FontAwesome';
+import Fa from 'react-native-vector-icons/FontAwesome';
 import {useChatContext, useMessageInputContext} from 'stream-chat-react-native';
 import {debounce} from 'lodash';
-import MemoIc_Picture from '../../assets/icons/Ic_Picture';
+import MemoIcPicture from '../../assets/icons/Ic_Picture';
 import {colors} from '../../utils/colors';
 import IconSend from '../../assets/icon/IconSendComment';
 import SheetEmoji from './SheetEmoji';
@@ -76,7 +76,7 @@ const InputMessage = () => {
         <View style={styles.containerInput}>
           <TextInput multiline style={styles.input} onChangeText={onChangeInput} value={text} />
           <TouchableOpacity style={styles.btnPicture} onPress={toggleAttachmentPicker}>
-            <MemoIc_Picture width={20} height={20} />
+            <MemoIcPicture width={20} height={20} />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.btn(isDisableButton())}
@@ -97,7 +97,7 @@ const InputMessage = () => {
             renderItem={({item, index}) => (
               <View key={index}>
                 <TouchableOpacity onPress={() => handleDelete(item)} style={styles.containerDelete}>
-                  <FA name="trash" color={'white'} size={18} />
+                  <Fa name="trash" color={'white'} size={18} />
                 </TouchableOpacity>
                 <Image style={styles.imageStyle} resizeMode="contain" source={{uri: item.url}} />
               </View>
