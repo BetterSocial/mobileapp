@@ -14,12 +14,26 @@ import useRootChannelListHook from '../../hooks/screen/useRootChannelListHook';
 const ChannelListScreenV2 = () => {
   const navigation = useNavigation();
   const {profile} = useProfileHook();
-  const {anonymousChannelUnreadCount, signedChannelUnreadCount} = useRootChannelListHook();
+  const {
+    anonymousChannelUnreadCount,
+    signedChannelUnreadCount,
+    refreshAnonymousChannelList,
+    refreshSignedChannelList
+  } = useRootChannelListHook();
 
   const [selectedTab, setSelectedTab] = React.useState(0);
 
   const navigateToContactScreen = () => {
     navigation.navigate('ContactScreen');
+  };
+
+  const onTabSelected = (index: number) => {
+    setSelectedTab(index);
+    if (index === 0) {
+      refreshSignedChannelList();
+    } else if (index === 1) {
+      refreshAnonymousChannelList();
+    }
   };
 
   return (
@@ -31,7 +45,7 @@ const ChannelListScreenV2 = () => {
         </View>
         <HorizontalTab
           selectedTab={selectedTab}
-          onSelectedTabChange={setSelectedTab}
+          onSelectedTabChange={onTabSelected}
           tabs={[
             <ChannelListTabItem
               key={0}
