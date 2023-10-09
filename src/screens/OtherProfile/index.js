@@ -19,7 +19,7 @@ import {generateRandomId} from 'stream-chat-react-native';
 /* eslint-disable no-underscore-dangle */
 import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
-
+import PropTypes from 'prop-types';
 import netInfo from '@react-native-community/netinfo';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BlockIcon from '../../assets/icons/images/block-blue.svg';
@@ -57,7 +57,6 @@ import {sendAnonymousDMOtherProfile, sendSignedDMOtherProfile} from '../../servi
 import {setChannel} from '../../context/actions/setChannel';
 import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherProfileFeed';
 import {trimString} from '../../utils/string/TrimString';
-import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import StorageUtils from '../../utils/storage';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
@@ -493,29 +492,27 @@ const OtherProfile = () => {
     const __renderFollowerDetail = () => {
       if (blockStatus.blocker) return <></>;
       return (
-        <React.Fragment>
-          <View style={styles.wrapFollower}>
-            <TouchableOpacity onPress={handleOpenFollowerUser} style={styles.wrapRow}>
-              <React.Fragment>
-                <Text style={styles.textTotal}>{dataMain.follower_symbol}</Text>
-                <Text style={styles.textFollow}>
-                  {getSingularOrPluralText(dataMain.follower_symbol, 'Follower', 'Followers')}
-                </Text>
-              </React.Fragment>
-            </TouchableOpacity>
-            {user_id === dataMain.user_id ? (
-              <View style={styles.following}>
-                <TouchableNativeFeedback
-                  onPress={() => goToFollowings(dataMain.user_id, dataMain.username)}>
-                  <View style={styles.wrapRow}>
-                    <Text style={styles.textTotal}>{dataMain.following_symbol}</Text>
-                    <Text style={styles.textFollow}>Following</Text>
-                  </View>
-                </TouchableNativeFeedback>
-              </View>
-            ) : null}
-          </View>
-        </React.Fragment>
+        <View style={styles.wrapFollower}>
+          <TouchableOpacity onPress={handleOpenFollowerUser} style={styles.wrapRow}>
+            <React.Fragment>
+              <Text style={styles.textTotal}>{dataMain.follower_symbol}</Text>
+              <Text style={styles.textFollow}>
+                {getSingularOrPluralText(dataMain.follower_symbol, 'Follower', 'Followers')}
+              </Text>
+            </React.Fragment>
+          </TouchableOpacity>
+          {user_id === dataMain.user_id ? (
+            <View style={styles.following}>
+              <TouchableNativeFeedback
+                onPress={() => goToFollowings(dataMain.user_id, dataMain.username)}>
+                <View style={styles.wrapRow}>
+                  <Text style={styles.textTotal}>{dataMain.following_symbol}</Text>
+                  <Text style={styles.textFollow}>Following</Text>
+                </View>
+              </TouchableNativeFeedback>
+            </View>
+          ) : null}
+        </View>
       );
     };
 
@@ -523,23 +520,19 @@ const OtherProfile = () => {
       if (user_id === dataMain.user_id) return <></>;
       if (dataMain.is_following)
         return (
-          <React.Fragment>
-            <GlobalButton onPress={() => handleSetUnFollow()}>
-              <View style={styles.buttonFollowing}>
-                <Text style={styles.textButtonFollowing}>Following</Text>
-              </View>
-            </GlobalButton>
-          </React.Fragment>
+          <GlobalButton onPress={() => handleSetUnFollow()}>
+            <View style={styles.buttonFollowing}>
+              <Text style={styles.textButtonFollowing}>Following</Text>
+            </View>
+          </GlobalButton>
         );
 
       return (
-        <React.Fragment>
-          <GlobalButton onPress={() => handleSetFollow()}>
-            <View style={styles.buttonFollow}>
-              <Text style={styles.textButtonFollow}>Follow</Text>
-            </View>
-          </GlobalButton>
-        </React.Fragment>
+        <GlobalButton onPress={() => handleSetFollow()}>
+          <View style={styles.buttonFollow}>
+            <Text style={styles.textButtonFollow}>Follow</Text>
+          </View>
+        </GlobalButton>
       );
     };
 
@@ -1110,4 +1103,23 @@ const styles = StyleSheet.create({
     lineHeight: 22
   })
 });
+
+BioAndChat.propTypes = {
+  isAnonimity: PropTypes.bool,
+  bio: PropTypes.string,
+  openBio: PropTypes.bool,
+  isSignedMessageEnabled: PropTypes.bool,
+  showSignedMessageDisableToast: PropTypes.bool,
+  loadingGenerateAnon: PropTypes.bool,
+  avatarUrl: PropTypes.string,
+  anonProfile: PropTypes.object,
+  onSendDM: PropTypes.func,
+  setDMChat: PropTypes.func,
+  loadingSendDM: PropTypes.bool,
+  dmChat: PropTypes.string,
+  username: PropTypes.string,
+  toggleSwitch: PropTypes.func,
+  isAnonimityEnabled: PropTypes.bool
+};
+
 export default withInteractionsManaged(OtherProfile);
