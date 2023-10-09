@@ -13,7 +13,7 @@ import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
 import {debounce} from 'lodash';
 import {generateRandomId} from 'stream-chat-react-native-core';
 import {showMessage} from 'react-native-flash-message';
-
+import PropTypes from 'prop-types';
 import ContactPreview from './elements/ContactPreview';
 import Header from '../../components/Header/HeaderContact';
 import ItemUser from './elements/ItemUser';
@@ -328,5 +328,9 @@ const styles = StyleSheet.create({
     marginEnd: 8
   })
 });
+
+ContactScreen.propTypes = {
+  navigation: PropTypes.object
+};
 
 export default withInteractionsManaged(ContactScreen);
