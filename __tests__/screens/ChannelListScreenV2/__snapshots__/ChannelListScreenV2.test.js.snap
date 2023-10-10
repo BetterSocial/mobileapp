@@ -183,6 +183,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
                 "paddingRight": 20,
               }
             }
+            testID="signed-channel-list-tab-item"
           >
             <View
               style={
@@ -257,6 +258,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
                 "paddingRight": 20,
               }
             }
+            testID="anonymous-channel-list-tab-item"
           >
             <View
               style={
@@ -296,6 +298,33 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
               as 
               Anonymous
             </Text>
+            <View
+              style={
+                Object {
+                  "alignItems": "center",
+                  "backgroundColor": "#FF2E63",
+                  "borderRadius": 8,
+                  "bottom": 4,
+                  "display": "flex",
+                  "height": 16,
+                  "justifyContent": "center",
+                  "width": 16,
+                }
+              }
+              testID="anonymous-channel-list-tab-item-unread-count"
+            >
+              <Text
+                style={
+                  Object {
+                    "color": "#ffffff",
+                    "fontFamily": "Inter-Medium",
+                    "fontSize": 10,
+                  }
+                }
+              >
+                3
+              </Text>
+            </View>
           </View>
         </View>
       </View>
