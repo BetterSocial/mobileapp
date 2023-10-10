@@ -14,24 +14,24 @@ import {
 
 const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
   anonPostNotificationUserInfo = null,
-  block = 11,
-  comments = 155,
-  downvote = 3,
+  block = 0,
+  comments = 0,
+  downvote = 0,
   isCommentExists = false,
   isMe = false,
   isOwnSignedPost = false,
-  message = 'How have you been? Do you want to meet up sometime?',
-  name = 'Amanda Amanda Amanda Amanda Amanda Amanda',
-  picture = 'https://fastly.picsum.photos/id/173/400/400.jpg?hmac=TU_DMkn7FSRRwiEpVveLvmyATg-y4hNrNKT-Cs4VQ1M',
+  message = '',
+  name = '',
+  picture = 'https://res.cloudinary.com/hpjivutj2/image/upload/v1696816963/anonymous-profile.png',
   postMaker = null,
   postNotificationMessageText = '',
   postNotificationMessageUser = null,
-  postNotificationPicture = 'https://fastly.picsum.photos/id/912/400/400.jpg?hmac=Wg3Y7jTiQxHr_NpRsTrHG58kBfZQGNeH2tCl5u2Ipr0',
+  postNotificationPicture = 'https://res.cloudinary.com/hpjivutj2/image/upload/v1696816963/anonymous-profile.png',
   showPostNotificationStats = false,
   time = '12:00 PM',
   type = BaseChannelItemTypeProps.ANON_PM,
   unreadCount = 0,
-  upvote = 15,
+  upvote = 0,
   onPress = () => {
     console.log('onPress');
   }
