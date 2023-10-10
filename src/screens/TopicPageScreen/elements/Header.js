@@ -8,15 +8,8 @@ import ButtonFollow from './ButtonFollow';
 import ButtonFollowing from './ButtonFollowing';
 import TopicDomainHeader from './TopicDomainHeader';
 
-const Header = ({
-  onPress,
-  detail,
-  hideSeeMember,
-  isFollow = false,
-  opacityHeaderAnimation,
-  getHeaderLayout,
-  handleOnMemberPress
-}) => {
+const Header = (props) => {
+  const {onPress, topicDetail, isFollow, opacityHeaderAnimation, getHeaderLayout} = props;
   const onHeaderLayout = (event) => {
     const {height} = event.nativeEvent.layout;
     if (getHeaderLayout) {
@@ -27,16 +20,11 @@ const Header = ({
   return (
     <Animated.View onLayout={onHeaderLayout} style={styles.Header(opacityHeaderAnimation)}>
       <Image
-        source={detail?.icon_path ? {uri: detail?.icon_path} : TopicDefaultIcon}
+        source={topicDetail?.icon_path ? {uri: topicDetail?.icon_path} : TopicDefaultIcon}
         style={styles.image}
       />
       <View style={styles.domain}>
-        <TopicDomainHeader
-          detail={detail}
-          isFollow={isFollow}
-          hideSeeMember={hideSeeMember}
-          handleOnMemberPress={handleOnMemberPress}
-        />
+        <TopicDomainHeader {...props} />
       </View>
       <View style={styles.containerAction}>
         {isFollow ? (
@@ -57,7 +45,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
-    marginBottom: normalize(4),
     opacity: opacityHeaderAnimation
   }),
   image: {

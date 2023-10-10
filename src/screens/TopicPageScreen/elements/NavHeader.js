@@ -6,14 +6,29 @@ import Header from './Header';
 import useChatClientHook from '../../../utils/getstream/useChatClientHook';
 
 const NavHeader = (props) => {
-  const {isFollow, setIsFollow, topicDetail, animatedHeight} = props;
+  const {
+    isFollow,
+    setIsFollow,
+    topicDetail,
+    memberCount,
+    setMemberCount,
+    animatedHeight,
+    getTopicDetail
+  } = props;
   const {followTopic} = useChatClientHook();
 
   const handleFollowTopic = async () => {
     setIsFollow(!isFollow);
+    if (isFollow) {
+      setMemberCount(memberCount - 1);
+    } else {
+      setMemberCount(memberCount + 1);
+    }
     try {
-      const followed = await followTopic(topicDetail.name);
+      const followed = await followTopic(topicDetail?.name);
+
       setIsFollow(followed);
+      getTopicDetail(topicDetail?.name);
     } catch (error) {
       if (__DEV__) {
         console.log(error);
@@ -23,8 +38,8 @@ const NavHeader = (props) => {
 
   return (
     <Animated.View style={{height: animatedHeight}}>
-      <Navigation isFollow={isFollow} detail={topicDetail} onPress={handleFollowTopic} {...props} />
-      <Header isFollow={isFollow} detail={topicDetail} onPress={handleFollowTopic} {...props} />
+      <Navigation onPress={handleFollowTopic} {...props} />
+      <Header onPress={handleFollowTopic} {...props} />
     </Animated.View>
   );
 };

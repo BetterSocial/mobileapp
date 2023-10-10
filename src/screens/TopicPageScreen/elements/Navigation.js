@@ -9,16 +9,8 @@ import ShareIconCircle from '../../../assets/icons/Ic_share_circle';
 import ButtonFollow from './ButtonFollow';
 import TopicDomainHeader from './TopicDomainHeader';
 
-const Navigation = ({
-  isHeaderHide,
-  opacityNavAnimation,
-  onShareCommunity,
-  detail,
-  isFollow,
-  onPress,
-  hideSeeMember,
-  handleOnMemberPress
-}) => {
+const Navigation = (props) => {
+  const {opacityNavAnimation, onShareCommunity, isHeaderHide, isFollow, onPress} = props;
   const navigation = useNavigation();
 
   const backScreen = () => {
@@ -31,12 +23,7 @@ const Navigation = ({
         <MemoIc_arrow_back width={normalize(24)} height={normalize(24)} />
       </TouchableOpacity>
       <Animated.View style={styles.domain(opacityNavAnimation)}>
-        <TopicDomainHeader
-          detail={detail}
-          isFollow={isFollow}
-          hideSeeMember={hideSeeMember}
-          handleOnMemberPress={handleOnMemberPress}
-        />
+        <TopicDomainHeader {...props} />
       </Animated.View>
       <View style={styles.containerAction}>
         {!isFollow && isHeaderHide ? (
