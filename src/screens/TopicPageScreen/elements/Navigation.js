@@ -1,6 +1,7 @@
 import {useNavigation} from '@react-navigation/core';
 import * as React from 'react';
 import {Animated, StyleSheet, TouchableOpacity, View} from 'react-native';
+import PropTypes from 'prop-types';
 
 import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
 import dimen from '../../../utils/dimen';
@@ -38,6 +39,14 @@ const Navigation = (props) => {
       </View>
     </View>
   );
+};
+
+Navigation.propTypes = {
+  opacityNavAnimation: PropTypes.number,
+  onShareCommunity: PropTypes.func,
+  isHeaderHide: PropTypes.bool,
+  isFollow: PropTypes.bool,
+  onPress: PropTypes.func
 };
 
 const styles = StyleSheet.create({

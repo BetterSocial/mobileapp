@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {StyleSheet, Image, View, Animated} from 'react-native';
+import PropTypes from 'prop-types';
 
 import TopicDefaultIcon from '../../../assets/topic.png';
 import dimen from '../../../utils/dimen';
@@ -35,6 +36,14 @@ const Header = (props) => {
       </View>
     </Animated.View>
   );
+};
+
+Header.propTypes = {
+  onPress: PropTypes.func,
+  topicDetail: PropTypes.object,
+  isFollow: PropTypes.bool,
+  opacityHeaderAnimation: PropTypes.number,
+  getHeaderLayout: PropTypes.func
 };
 
 const styles = StyleSheet.create({
