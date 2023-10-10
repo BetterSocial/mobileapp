@@ -6,7 +6,18 @@ import {colors} from '../../utils/colors';
 
 const {width} = Dimensions.get('screen');
 
-const HorizontalTab = ({selectedTab, onSelectedTabChange, tabs = []}) => {
+export type HorizontalTabItemProps = {
+  key: number;
+  tabElement: React.ReactNode;
+};
+
+export type HorizontalTabProps = {
+  selectedTab: number;
+  onSelectedTabChange: (index: number) => void;
+  tabs: HorizontalTabItemProps[];
+};
+
+const HorizontalTab = ({selectedTab, onSelectedTabChange, tabs = []}: HorizontalTabProps) => {
   const styles = StyleSheet.create({
     tabs: {
       width,
@@ -61,10 +72,10 @@ const HorizontalTab = ({selectedTab, onSelectedTabChange, tabs = []}) => {
       {tabs.map((tab, index) => (
         <CustomPressable
           testID={`horizontal-tab-${index}`}
-          key={index}
+          key={tab.key}
           onPress={() => onSelectedTabChange(index)}
           style={index === selectedTab ? styles.activeTabItem : styles.tabItem}>
-          <View style={styles.childTabContainer}>{tab}</View>
+          <View style={styles.childTabContainer}>{tab.tabElement}</View>
         </CustomPressable>
       ))}
     </View>
