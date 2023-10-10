@@ -1,6 +1,9 @@
 import * as React from 'react';
 
 import ChannelList from '../../database/schema/ChannelListSchema';
+import useFeedService from '../useFeedService';
+import useFetchAnonymousChannelHook from '../core/chat/useFetchAnonymousChannelHook';
+import useFetchAnonymousPostNotificationHook from '../core/chat/useFetchAnonymousPostNotificationHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import {Context} from '../../context';
 
@@ -11,6 +14,10 @@ const useRootChannelListHook = () => {
   const [anonymousChannelUnreadCount, setAnonymousChannelUnreadCount] = React.useState(0);
   const [signedChannelUnreadCount, setSignedChannelUnreadCount] = React.useState(0);
 
+  const {getAllAnonymousChannels} = useFetchAnonymousChannelHook();
+  const {getAllAnonymousPostNotifications} = useFetchAnonymousPostNotificationHook();
+  const {getFeedChat} = useFeedService();
+
   const getAnonymousChannelUnreadCount = async () => {
     if (!localDb) return;
     try {
@@ -19,6 +26,15 @@ const useRootChannelListHook = () => {
     } catch (e) {
       console.log(e);
     }
+  };
+
+  const refreshAnonymousChannelList = () => {
+    getAllAnonymousChannels().catch((e) => console.log(e));
+    getAllAnonymousPostNotifications().catch((e) => console.log(e));
+  };
+
+  const refreshSignedChannelList = () => {
+    getFeedChat().catch((e) => console.log(e));
   };
 
   const getSignedChannelUnreadCount = async () => {
@@ -40,7 +56,9 @@ const useRootChannelListHook = () => {
   return {
     anonymousChannelUnreadCount,
     signedChannelUnreadCount,
-    totalUnreadCount: anonymousChannelUnreadCount + signedChannelUnreadCount
+    totalUnreadCount: anonymousChannelUnreadCount + signedChannelUnreadCount,
+    refreshAnonymousChannelList,
+    refreshSignedChannelList
   };
 };
 
