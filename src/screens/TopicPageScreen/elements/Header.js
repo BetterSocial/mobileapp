@@ -8,15 +8,8 @@ import ButtonFollow from './ButtonFollow';
 import ButtonFollowing from './ButtonFollowing';
 import TopicDomainHeader from './TopicDomainHeader';
 
-const Header = ({
-  offsetAnimation,
-  onPress,
-  detail,
-  hideSeeMember,
-  isFollow = false,
-  getHeaderLayout,
-  handleOnMemberPress
-}) => {
+const Header = (props) => {
+  const {onPress, topicDetail, isFollow, opacityHeaderAnimation, getHeaderLayout} = props;
   const onHeaderLayout = (event) => {
     const {height} = event.nativeEvent.layout;
     if (getHeaderLayout) {
@@ -25,18 +18,13 @@ const Header = ({
   };
 
   return (
-    <Animated.View onLayout={onHeaderLayout} style={styles.Header(offsetAnimation)}>
+    <Animated.View onLayout={onHeaderLayout} style={styles.Header(opacityHeaderAnimation)}>
       <Image
-        source={detail?.icon_path ? {uri: detail?.icon_path} : TopicDefaultIcon}
+        source={topicDetail?.icon_path ? {uri: topicDetail?.icon_path} : TopicDefaultIcon}
         style={styles.image}
       />
       <View style={styles.domain}>
-        <TopicDomainHeader
-          detail={detail}
-          isFollow={isFollow}
-          hideSeeMember={hideSeeMember}
-          handleOnMemberPress={handleOnMemberPress}
-        />
+        <TopicDomainHeader {...props} />
       </View>
       <View style={styles.containerAction}>
         {isFollow ? (
@@ -50,15 +38,14 @@ const Header = ({
 };
 
 const styles = StyleSheet.create({
-  Header: (animatedValue) => ({
+  Header: (opacityHeaderAnimation) => ({
     flexDirection: 'row',
     height: dimen.size.TOPIC_FEED_HEADER_HEIGHT,
-    paddingHorizontal: normalize(16),
+    paddingHorizontal: normalize(20),
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
-    marginTop: animatedValue,
-    marginBottom: normalize(4)
+    opacity: opacityHeaderAnimation
   }),
   image: {
     width: normalize(48),

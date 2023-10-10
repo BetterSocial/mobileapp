@@ -9,16 +9,8 @@ import ShareIconCircle from '../../../assets/icons/Ic_share_circle';
 import ButtonFollow from './ButtonFollow';
 import TopicDomainHeader from './TopicDomainHeader';
 
-const Navigation = ({
-  isHeaderHide,
-  opacityAnimation,
-  onShareCommunity,
-  detail,
-  isFollow,
-  onPress,
-  hideSeeMember,
-  handleOnMemberPress
-}) => {
+const Navigation = (props) => {
+  const {opacityNavAnimation, onShareCommunity, isHeaderHide, isFollow, onPress} = props;
   const navigation = useNavigation();
 
   const backScreen = () => {
@@ -30,13 +22,8 @@ const Navigation = ({
       <TouchableOpacity onPress={() => backScreen()} style={styles.backbutton}>
         <MemoIc_arrow_back width={normalize(24)} height={normalize(24)} />
       </TouchableOpacity>
-      <Animated.View style={styles.domain(opacityAnimation)}>
-        <TopicDomainHeader
-          detail={detail}
-          isFollow={isFollow}
-          hideSeeMember={hideSeeMember}
-          handleOnMemberPress={handleOnMemberPress}
-        />
+      <Animated.View style={styles.domain(opacityNavAnimation)}>
+        <TopicDomainHeader {...props} />
       </Animated.View>
       <View style={styles.containerAction}>
         {!isFollow && isHeaderHide ? (
@@ -66,16 +53,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: normalizeFontSizeByWidth(20)
   }),
   backbutton: {
+    paddingRight: 16,
     height: '100%',
     justifyContent: 'center'
   },
-  domain: (animatedValue) => ({
+  domain: (opacityNavAnimation) => ({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'flex-start',
     marginRight: 14,
     alignSelf: 'center',
-    opacity: animatedValue
+    opacity: opacityNavAnimation
   }),
   containerAction: {
     flexDirection: 'row',
