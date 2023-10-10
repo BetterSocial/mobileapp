@@ -5,64 +5,79 @@ exports[`Testing Button Add Topic Post should match snapshot 1`] = `
   style={
     Object {
       "backgroundColor": "#0000",
-      "bottom": NaN,
-      "position": "absolute",
-      "right": NaN,
-      "zIndex": 1,
     }
   }
 >
   <View
-    accessible={true}
-    focusable={true}
-    onClick={[Function]}
-    onResponderGrant={[Function]}
-    onResponderMove={[Function]}
-    onResponderRelease={[Function]}
-    onResponderTerminate={[Function]}
-    onResponderTerminationRequest={[Function]}
-    onStartShouldSetResponder={[Function]}
     style={
       Object {
-        "backgroundColor": "#00ADB5",
-        "borderRadius": NaN,
-        "justifyContent": "center",
-        "opacity": 1,
+        "bottom": NaN,
+        "elevation": 3,
+        "position": "absolute",
+        "right": NaN,
+        "shadowColor": "#000",
+        "shadowOffset": Object {
+          "height": 1,
+          "width": 0,
+        },
+        "shadowOpacity": 0.8,
+        "shadowRadius": 1,
+        "zIndex": 1,
       }
     }
-    testID="onaddtopicbutton"
   >
     <View
+      accessible={true}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
       style={
         Object {
-          "alignItems": "center",
-          "flexDirection": "row",
+          "backgroundColor": "#00ADB5",
+          "borderRadius": NaN,
           "justifyContent": "center",
-          "paddingLeft": NaN,
-          "paddingRight": NaN,
+          "opacity": 1,
         }
       }
+      testID="onaddtopicbutton"
     >
-      <View />
-      <Text
+      <View
         style={
           Object {
-            "alignSelf": "center",
-            "color": "#ffffff",
-            "fontFamily": "Inter",
-            "fontSize": 12,
-            "fontStyle": "normal",
-            "fontWeight": "400",
-            "lineHeight": 14,
-            "marginBottom": NaN,
-            "marginLeft": NaN,
-            "marginTop": NaN,
+            "alignItems": "center",
+            "flexDirection": "row",
+            "justifyContent": "center",
+            "paddingLeft": NaN,
+            "paddingRight": NaN,
           }
         }
       >
-        Post in 
+        <View />
+        <Text
+          style={
+            Object {
+              "alignSelf": "center",
+              "color": "#ffffff",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontStyle": "normal",
+              "fontWeight": "400",
+              "lineHeight": 14,
+              "marginBottom": NaN,
+              "marginLeft": NaN,
+              "marginTop": NaN,
+            }
+          }
+        >
+          Post to 
 Community
-      </Text>
+        </Text>
+      </View>
     </View>
   </View>
 </View>
