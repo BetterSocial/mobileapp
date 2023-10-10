@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import SimpleToast from 'react-native-simple-toast';
+import PropTypes from 'prop-types';
 
 import TopicMemberIcon from '../../../assets/images/topic-member-picture.png';
 import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
@@ -35,6 +36,14 @@ const TopicDomainHeader = (props) => {
       </Pressable>
     </View>
   );
+};
+
+TopicDomainHeader.propTypes = {
+  handleOnMemberPress: PropTypes.func,
+  hideSeeMember: PropTypes.bool,
+  isFollow: PropTypes.bool,
+  memberCount: PropTypes.number,
+  topicDetail: PropTypes.object
 };
 
 const styles = StyleSheet.create({

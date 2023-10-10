@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {Animated} from 'react-native';
+import PropTypes from 'prop-types';
 
 import Navigation from './Navigation';
 import Header from './Header';
@@ -42,6 +43,16 @@ const NavHeader = (props) => {
       <Header onPress={handleFollowTopic} {...props} />
     </Animated.View>
   );
+};
+
+NavHeader.propTypes = {
+  isFollow: PropTypes.bool,
+  setIsFollow: PropTypes.func,
+  topicDetail: PropTypes.object,
+  memberCount: PropTypes.number,
+  setMemberCount: PropTypes.func,
+  animatedHeight: PropTypes.number,
+  getTopicDetail: PropTypes.func
 };
 
 export default NavHeader;

@@ -1,10 +1,11 @@
 import {useNavigation} from '@react-navigation/core';
 import * as React from 'react';
 import {Animated, StyleSheet, TouchableOpacity, View} from 'react-native';
+import PropTypes from 'prop-types';
 
 import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
 import dimen from '../../../utils/dimen';
-import {normalize} from '../../../utils/fonts';
+import {normalize, normalizeFontSizeByWidth} from '../../../utils/fonts';
 import ShareIconCircle from '../../../assets/icons/Ic_share_circle';
 import ButtonFollow from './ButtonFollow';
 import TopicDomainHeader from './TopicDomainHeader';
@@ -18,7 +19,7 @@ const Navigation = (props) => {
   };
 
   return (
-    <View style={styles.header(isHeaderHide)}>
+    <View style={[styles.Header(isHeaderHide)]}>
       <TouchableOpacity onPress={() => backScreen()} style={styles.backbutton}>
         <MemoIc_arrow_back width={normalize(24)} height={normalize(24)} />
       </TouchableOpacity>
@@ -40,20 +41,27 @@ const Navigation = (props) => {
   );
 };
 
+Navigation.propTypes = {
+  opacityNavAnimation: PropTypes.number,
+  onShareCommunity: PropTypes.func,
+  isHeaderHide: PropTypes.bool,
+  isFollow: PropTypes.bool,
+  onPress: PropTypes.func
+};
+
 const styles = StyleSheet.create({
-  header: (isHeaderHide) => ({
+  Header: (isHeaderHide) => ({
     flexDirection: 'row',
     height: isHeaderHide
       ? dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2
       : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT,
-    paddingRight: normalize(10),
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
-    zIndex: 99
+    zIndex: 99,
+    paddingHorizontal: normalizeFontSizeByWidth(20)
   }),
   backbutton: {
-    paddingLeft: 20,
     paddingRight: 16,
     height: '100%',
     justifyContent: 'center'
@@ -71,8 +79,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  shareIconStyle: {
-    padding: 10
+  shareIconStyle: {},
+  searchContainerStyle: {
+    position: 'relative',
+    marginBottom: 0
   }
 });
 
