@@ -3,6 +3,7 @@ import Toast from 'react-native-simple-toast';
 import {Alert} from 'react-native';
 import {useSetRecoilState} from 'recoil';
 
+import StorageUtils from '../../../utils/storage';
 import StringConstant from '../../../utils/string/StringConstant';
 import useResetContext from '../../../hooks/context/useResetContext';
 import {Context} from '../../../context';
@@ -30,6 +31,7 @@ const useSettings = () => {
 
   const logout = async () => {
     try {
+      StorageUtils.clearAll();
       await removeFcmToken();
       removeAllCache();
       resetProfileFeed(myProfileDispatch);
