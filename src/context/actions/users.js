@@ -1,4 +1,10 @@
-import {SET_DATA_HUMAN_ID, SET_DATA_IMAGE, SET_DATA_IMAGE_URL, SET_DATA_USERNAME} from '../Types';
+import {
+  SET_DATA_HUMAN_ID,
+  SET_DATA_IMAGE,
+  SET_DATA_IMAGE_URL,
+  SET_DATA_USERNAME,
+  SET_MY_PROFILE_INFORMATIO
+} from '../Types';
 
 export const setDataHumenId = async (data, dispatch) => {
   const {appUserId, countryCode} = data || {};
@@ -26,5 +32,12 @@ export const setUsername = (username, dispatch) => {
   dispatch({
     type: SET_DATA_USERNAME,
     payload: username
+  });
+};
+
+export const setMyProfileData = (profileData, dispatch) => {
+  dispatch({
+    type: SET_MY_PROFILE_INFORMATIO,
+    payload: profileData
   });
 };
