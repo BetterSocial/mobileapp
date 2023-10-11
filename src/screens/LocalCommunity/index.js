@@ -152,6 +152,7 @@ const LocalCommunity = () => {
           We value privacy and do not ask for location tracking access
         </Text>
         <Button
+          testID="btn"
           disabled={location.length < 1}
           style={location.length >= 1 ? null : styles.button}
           onPress={() => next()}>

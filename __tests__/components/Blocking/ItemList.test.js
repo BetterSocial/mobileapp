@@ -11,7 +11,7 @@ describe('Item List block should run correctly', () => {
     const {getAllByText, toJSON, getByTestId} = render(
       <ItemList active={true} onSelect={onSelect} label={'test'} />
     );
-    expect(toJSON).toMatchSnapshot();
+    expect(toJSON()).toMatchSnapshot();
     expect(getAllByText('test')).toHaveLength(1);
     await fireEvent.press(getByTestId('click'));
     expect(onSelect).toHaveBeenCalled();
