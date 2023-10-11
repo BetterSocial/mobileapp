@@ -35,8 +35,7 @@ const useFetchAnonymousChannelHook = () => {
     try {
       await __helperAnonymousChannelPromiseBuilder(channel);
     } catch (e) {
-      console.log('error on saveAnonymousChannelData helperAnonymousChannelPromiseBuilder');
-      console.log(e);
+      console.log('error on saveAnonymousChannelData helperAnonymousChannelPromiseBuilder', e);
     }
 
     try {
@@ -56,8 +55,7 @@ const useFetchAnonymousChannelHook = () => {
         await chat.save(localDb);
       });
     } catch (e) {
-      console.log('error on saveAnonymousChannelData');
-      console.log(e);
+      console.log('error on saveAnonymousChannelData', e);
     }
   };
 
@@ -74,16 +72,14 @@ const useFetchAnonymousChannelHook = () => {
     try {
       anonymousChannel = await AnonymousMessageRepo.getAllAnonymousChannels();
     } catch (e) {
-      console.log('error on getting anonymousChannel');
-      console.log(e);
+      console.log('error on getting anonymousChannel', e);
     }
 
     try {
       await __saveAllAnonymousChannelData(anonymousChannel);
       refresh('channelList');
     } catch (e) {
-      console.log('error on saving anonymousChannel');
-      console.log(e);
+      console.log('error on saving anonymousChannel', e);
     }
   };
 

@@ -7,7 +7,7 @@ export type UseSimpleWebsocketProps = {
   protocol?: string | string[];
 };
 
-const useSimpleWebsocket = (url, protocol) => {
+const useSimpleWebsocket = (url, protocol = null) => {
   const setupReconnectTimeoutId = React.useRef(null);
   const websocketRef = React.useRef<WebSocket | null>(null);
   const isInternetConnectedRef = React.useRef(true);
