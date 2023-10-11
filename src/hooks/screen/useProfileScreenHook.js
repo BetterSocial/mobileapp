@@ -35,7 +35,7 @@ const useProfileScreenHook = () => {
     fetchAnonymousPost();
   };
 
-  React.useEffect(() => {
+  const initData = () => {
     const cacheAnonymFeed = StorageUtils.myAnonymousFeed.get();
     if (!cacheAnonymFeed) {
       fetchAnonymousPost();
@@ -43,6 +43,10 @@ const useProfileScreenHook = () => {
       const parseAnonymFeed = JSON.parse(cacheAnonymFeed);
       setMyProfileAnonymousFeed(parseAnonymFeed);
     }
+  };
+
+  React.useEffect(() => {
+    initData();
   }, []);
 
   return {
@@ -54,7 +58,8 @@ const useProfileScreenHook = () => {
     reloadFetchAnonymousPost,
     fetchAnonymousPost,
     profileTabIndex,
-    isProfileTabSigned
+    isProfileTabSigned,
+    initData
   };
 };
 
