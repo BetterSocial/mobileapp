@@ -171,7 +171,7 @@ describe('GroupSetting should be run correctly', () => {
     };
 
     const {toJSON} = render(<GroupSetting navigation={navigation} route={route} />, {wrapper});
-    expect(toJSON).toMatchSnapshot();
+    expect(toJSON()).toMatchSnapshot();
   });
 
   it('onPress heaeder should run correctly', () => {
