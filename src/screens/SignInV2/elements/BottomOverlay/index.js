@@ -25,7 +25,7 @@ const BottomOverlay = ({count, handleLogin, index, isLogin, title, onNextSlide, 
         <View
           style={{
             ...bottomOverlayStyles.loginBox,
-            height: dimen.size.ONBOARDING_BOTTOM_OVERLAY_CONTAINER_LOGIN
+            height: dimen.size.ONBOARDING_BOTTOM_OVERLAY_CONTAINER
           }}>
           <View style={bottomOverlayStyles.containerBtnLogin}>
             <TouchableOpacity onPress={() => handleLogin()} style={bottomOverlayStyles.btnSign}>
@@ -147,18 +147,18 @@ const bottomOverlayStyles = StyleSheet.create({
     textDecorationLine: 'underline'
   },
   loginContainer: {
-    backgroundColor: COLORS.white,
-    paddingTop: 18
+    backgroundColor: COLORS.white
   },
   loginBox: {
     width: '100%',
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.white,
     height: dimen.size.ONBOARDING_BOTTOM_OVERLAY_CONTAINER,
     display: 'flex',
     flexDirection: 'column',
     alignContent: 'center',
     zIndex: 10,
     padding: 16,
+    paddingTop: 27,
     alignSelf: 'center',
     borderRadius: 16
   },
