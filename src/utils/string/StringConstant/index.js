@@ -139,6 +139,13 @@ const dynamicLinkAuthorNotFollowing = 'You cannot access this private post';
 const dynamicLinkAuthorBlocks = 'You cannot access this private post';
 const dynamicLinkPostExpired = 'This post has expired and has been deleted automatically';
 
+// Tutorial
+const tutorialAnonymousPostTitle = 'Anonymous Posts';
+const tutorialAnonymousPostDescription =
+  'Posts made by anonymous users will show up with a\nrandom profile picture and name but you can still\ninteract with the post as usual.';
+const tutorialCreateAnonymousPostTitle = 'Create an Anonymous Post';
+const tutorialCreateAnonymousPostDescription =
+  'Posting anonymously has never been easier\nwith the option to hide your account. Let’s\nget started!';
 export default {
   signInPrivacy,
   signInScreenHumanIdFoundation,
@@ -237,5 +244,10 @@ export default {
   dynamicLinkAuthorBlocks,
   dynamicLinkPostCannotBeFound,
   dynamicLinkAuthorNotFollowing,
-  dynamicLinkPostExpired
+  dynamicLinkPostExpired,
+
+  tutorialAnonymousPostTitle,
+  tutorialAnonymousPostDescription,
+  tutorialCreateAnonymousPostTitle,
+  tutorialCreateAnonymousPostDescription
 };

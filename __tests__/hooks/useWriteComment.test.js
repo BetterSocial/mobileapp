@@ -1,34 +1,48 @@
-import React from 'react';
 import {renderHook} from '@testing-library/react-hooks';
 import useWriteComment from '../../src/components/Comments/hooks/useWriteComment';
-import {Context} from '../../src/context/Store';
-import * as servicComment from '../../src/service/comment';
 
-describe('useWriteComment should run correctly', () => {
-  const dispatchComment = jest.fn();
-  const wrapper = ({children}) => (
-    <Context.Provider
-      value={{
-        comments: [{}, dispatchComment]
-      }}>
-      {children}
-    </Context.Provider>
-  );
-
-  it('useWriteComment updateComment handleUserName should run correctly', async () => {
-    const {result} = renderHook(useWriteComment, {wrapper});
-    expect(result.current.handleUserName({anon_user_info_emoji_name: 'bear'})).toEqual(
-      'Anonymous bear'
+describe('useWriteComment hook should run correctly', () => {
+  const dataAnonym = {
+    anon_user_info_emoji_name: 'cow',
+    anon_user_info_color_name: 'red'
+  };
+  const dataSigned = {
+    user: {
+      data: {
+        username: 'Agita'
+      }
+    }
+  };
+  const dataAnonym2 = {
+    data: {
+      anon_user_info_emoji_name: 'cow',
+      anon_user_info_color_name: 'red'
+    }
+  };
+  const dataSignedUserName = {
+    actor: {
+      data: {
+        username: 'Agita'
+      }
+    }
+  };
+  it('handleUserName should run correctly', () => {
+    const {result} = renderHook(useWriteComment);
+    expect(result.current.handleUserName(dataAnonym)).toEqual(
+      `Anonymous ${dataAnonym.anon_user_info_emoji_name}`
     );
-    expect(result.current.handleUserName({actor: {data: {username: 'Agita'}}})).toEqual('Agita');
+    expect(result.current.handleUserName(dataSignedUserName)).toEqual(
+      dataSignedUserName.actor.data.username
+    );
   });
-  it('useWriteComment updateComment handleUserNameReplyComment should run correctly', async () => {
-    const {result} = renderHook(useWriteComment, {wrapper});
-    expect(
-      result.current.handleUsernameReplyComment({data: {anon_user_info_emoji_name: 'bear'}})
-    ).toEqual('Anonymous bear');
-    expect(result.current.handleUsernameReplyComment({user: {data: {username: 'Agita'}}})).toEqual(
-      'Agita'
+
+  it('handleReplyUsername should run correctly', () => {
+    const {result} = renderHook(useWriteComment);
+    expect(result.current.handleUsernameReplyComment(dataAnonym2)).toEqual(
+      `Anonymous ${dataAnonym.anon_user_info_emoji_name}`
+    );
+    expect(result.current.handleUsernameReplyComment(dataSigned)).toEqual(
+      dataSigned.user.data.username
     );
   });
 });

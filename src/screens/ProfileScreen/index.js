@@ -35,7 +35,9 @@ import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
 import RenderItem from '../FeedScreen/RenderList';
 import ShareUtils from '../../utils/share';
+import StorageUtils from '../../utils/storage';
 import dimen from '../../utils/dimen';
+import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
 import useResetContext from '../../hooks/context/useResetContext';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
@@ -69,8 +71,6 @@ import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import ShadowFloatingButtons from '../../components/Button/ShadowFloatingButtons';
-import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
-import StorageUtils from '../../utils/storage';
 
 const {width} = Dimensions.get('screen');
 

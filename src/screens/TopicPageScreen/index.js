@@ -27,6 +27,7 @@ import useOnBottomNavigationTabPressHook, {
 } from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
 import NavHeader from './elements/NavHeader';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
+import {getTopics, getUserTopic} from '../../service/topics';
 
 const styles = StyleSheet.create({
   parentContainer: {
@@ -45,9 +46,18 @@ const TopicPageScreen = (props) => {
   const [isInitialLoading, setIsInitialLoading] = React.useState(true);
   const [userId, setUserId] = React.useState('');
   const [topicId, setTopicId] = React.useState('');
+  const [isFollow, setIsFollow] = React.useState(false);
+  const [topicDetail, setTopicDetail] = React.useState({});
+  const [memberCount, setMemberCount] = React.useState(0);
   const [isHeaderHide, setIsHeaderHide] = React.useState(false);
-  const offsetAnimation = React.useRef(new Animated.Value(0)).current;
-  const opacityAnimation = React.useRef(new Animated.Value(0)).current;
+  const opacityNavAnimation = React.useRef(new Animated.Value(0)).current;
+  const opacityHeaderAnimation = React.useRef(new Animated.Value(1)).current;
+
+  const animatedHeight = React.useRef(
+    new Animated.Value(
+      dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT + dimen.size.TOPIC_FEED_HEADER_HEIGHT
+    )
+  ).current;
 
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   const feeds = feedsContext.topicFeeds;
@@ -89,8 +99,33 @@ const TopicPageScreen = (props) => {
         SimpleToast.show('No more posts to show', SimpleToast.SHORT);
       }
     } finally {
-      setIsInitialLoading(false);
       setLoading(false);
+    }
+  };
+
+  const getTopicDetail = async (domain) => {
+    try {
+      const query = `?name=${domain}`;
+      const resultGetUserTopic = await getUserTopic(query);
+
+      if (resultGetUserTopic.data) {
+        setIsFollow(true);
+      } else {
+        setIsFollow(false);
+      }
+      const resultTopicDetail = await getTopics(domain);
+      if (resultTopicDetail.data) {
+        const detail = resultTopicDetail.data[0];
+        setTopicDetail(detail);
+        setMemberCount(Number(detail.followersCount));
+        setIsInitialLoading(false);
+      }
+    } catch (error) {
+      if (__DEV__) {
+        console.log(error);
+      }
+    } finally {
+      setIsInitialLoading(false);
     }
   };
 
@@ -106,10 +141,10 @@ const TopicPageScreen = (props) => {
       if (topicFeeds?.length > 0) {
         setTopicFeeds(topicFeeds, dispatch);
         setOffset(offsetFeeds);
-        setIsInitialLoading(false);
       } else {
         initialFetchTopicFeeds(topicFeeds?.length);
       }
+      getTopicDetail(idLower);
     } catch (error) {
       if (__DEV__) {
         console.log(error);
@@ -277,6 +312,30 @@ const TopicPageScreen = (props) => {
     }
   };
 
+  const showHeaderAnimation = () => {
+    interactionManagerRef.current = InteractionManager.runAfterInteractions(() => {
+      Animated.timing(animatedHeight, {
+        toValue:
+          dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT +
+          dimen.size.TOPIC_FEED_HEADER_HEIGHT +
+          normalize(4),
+        duration: 100,
+        useNativeDriver: false
+      }).start();
+      Animated.timing(opacityNavAnimation, {
+        toValue: 0,
+        duration: 100,
+        useNativeDriver: false
+      }).start();
+      Animated.timing(opacityHeaderAnimation, {
+        toValue: 1,
+        duration: 100,
+        useNativeDriver: false
+      }).start();
+    });
+    setIsHeaderHide(false);
+  };
+
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       showHeaderAnimation();
@@ -290,22 +349,6 @@ const TopicPageScreen = (props) => {
     };
   }, [navigation]);
 
-  const showHeaderAnimation = () => {
-    interactionManagerRef.current = InteractionManager.runAfterInteractions(() => {
-      Animated.timing(offsetAnimation, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: false
-      }).start();
-      Animated.timing(opacityAnimation, {
-        toValue: 0,
-        duration: 100,
-        useNativeDriver: false
-      }).start();
-    });
-    setIsHeaderHide(false);
-  };
-
   const handleOnScrollBeginDrag = (event) => {
     lastDragY = event.nativeEvent.contentOffset.y;
   };
@@ -318,13 +361,18 @@ const TopicPageScreen = (props) => {
         showHeaderAnimation();
       } else if (dy - 20 > 0) {
         interactionManagerAnimatedRef.current = InteractionManager.runAfterInteractions(() => {
-          Animated.timing(offsetAnimation, {
-            toValue: -(dimen.size.TOPIC_FEED_HEADER_HEIGHT + normalize(4)),
+          Animated.timing(animatedHeight, {
+            toValue: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2,
             duration: 100,
             useNativeDriver: false
           }).start();
-          Animated.timing(opacityAnimation, {
+          Animated.timing(opacityNavAnimation, {
             toValue: 1,
+            duration: 100,
+            useNativeDriver: false
+          }).start();
+          Animated.timing(opacityHeaderAnimation, {
+            toValue: 0,
             duration: 100,
             useNativeDriver: false
           }).start();
@@ -332,12 +380,16 @@ const TopicPageScreen = (props) => {
         setIsHeaderHide(true);
       }
     },
-    [offsetAnimation]
+    [animatedHeight]
   );
 
   const handleOnMemberPress = () => {
     const navigationParam = {
-      id: topicName
+      topicName,
+      isFollow,
+      topicDetail,
+      memberCount,
+      getTopicDetail
     };
 
     navigation.push('TopicMemberScreen', navigationParam);
@@ -365,13 +417,18 @@ const TopicPageScreen = (props) => {
     <SafeAreaProvider forceInset={{top: 'always'}} style={styles.parentContainer}>
       <StatusBar barStyle="dark-content" translucent={false} />
       <NavHeader
-        domain={topicName}
+        animatedHeight={animatedHeight}
         onShareCommunity={onShareCommunity}
         isHeaderHide={isHeaderHide}
-        opacityAnimation={opacityAnimation}
-        offsetAnimation={offsetAnimation}
+        opacityNavAnimation={opacityNavAnimation}
+        opacityHeaderAnimation={opacityHeaderAnimation}
         handleOnMemberPress={handleOnMemberPress}
-        isInitialLoading={isInitialLoading}
+        topicDetail={topicDetail}
+        memberCount={memberCount}
+        setMemberCount={setMemberCount}
+        setIsFollow={setIsFollow}
+        isFollow={isFollow}
+        getTopicDetail={getTopicDetail}
       />
       <TiktokScroll
         ref={listRef}

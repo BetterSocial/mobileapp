@@ -26,6 +26,7 @@ import {Button} from '../../components/Button';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {Header} from '../../components';
 import {Input} from '../../components/Input';
 import {ProgressBar} from '../../components/ProgressBar';
 import {colors} from '../../utils/colors';
@@ -34,7 +35,6 @@ import {requestCameraPermission, requestExternalStoragePermission} from '../../u
 import {setCapitalFirstLetter} from '../../utils/Utils';
 import {setImage, setImageUrl, setUsername} from '../../context/actions/users';
 import {verifyUsername} from '../../service/users';
-import {Header} from '../../components';
 
 const MAXIMUM_USERNAME_LENGTH = 19;
 const MINIMUM_USERNAME_LENGTH = 3;
@@ -241,11 +241,11 @@ const ChooseUsername = () => {
       [
         {
           text: 'Add profile picture',
+          style: 'cancel',
           onPress: () => onPhoto()
         },
         {
           text: 'Skip',
-          style: 'cancel',
           onPress: () => next()
         }
       ]
