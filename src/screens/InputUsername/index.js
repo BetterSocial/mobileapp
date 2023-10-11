@@ -241,11 +241,11 @@ const ChooseUsername = () => {
       [
         {
           text: 'Add profile picture',
+          style: 'cancel',
           onPress: () => onPhoto()
         },
         {
           text: 'Skip',
-          style: 'cancel',
           onPress: () => next()
         }
       ]
