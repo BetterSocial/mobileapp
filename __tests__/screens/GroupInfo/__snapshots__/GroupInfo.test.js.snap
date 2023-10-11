@@ -817,6 +817,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               "paddingVertical": 18,
             }
           }
+          testID="pressMessage"
         >
           <Text
             style={
@@ -846,6 +847,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               "paddingVertical": 18,
             }
           }
+          testID="pressMessageAnonym"
         >
           <Text
             style={
@@ -876,6 +878,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               "paddingVertical": 18,
             }
           }
+          testID="pressView"
         >
           <Text
             style={
@@ -906,6 +909,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               "paddingVertical": 18,
             }
           }
+          testID="pressRemove"
         >
           <Text
             style={
