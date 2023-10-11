@@ -1877,7 +1877,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
-                testID="onPress"
+                testID="click"
               >
                 <Text
                   style={
@@ -1914,7 +1914,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
-                testID="onPress"
+                testID="click"
               >
                 <Text
                   style={
@@ -1951,7 +1951,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
-                testID="onPress"
+                testID="click"
               >
                 <Text
                   style={
@@ -1988,7 +1988,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
-                testID="onPress"
+                testID="click"
               >
                 <Text
                   style={
@@ -2025,7 +2025,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
-                testID="onPress"
+                testID="click"
               >
                 <Text
                   style={
@@ -2062,7 +2062,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
-                testID="onPress"
+                testID="click"
               >
                 <Text
                   style={
@@ -2099,7 +2099,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
-                testID="onPress"
+                testID="click"
               >
                 <Text
                   style={
@@ -2361,7 +2361,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
-                testID="onPress"
+                testID="click"
               >
                 <Text
                   style={
@@ -2398,7 +2398,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
-                testID="onPress"
+                testID="click"
               >
                 <Text
                   style={
@@ -2435,7 +2435,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
-                testID="onPress"
+                testID="click"
               >
                 <Text
                   style={
@@ -2472,7 +2472,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
-                testID="onPress"
+                testID="click"
               >
                 <Text
                   style={
@@ -2509,7 +2509,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
-                testID="onPress"
+                testID="click"
               >
                 <Text
                   style={
@@ -2546,7 +2546,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
-                testID="onPress"
+                testID="click"
               >
                 <Text
                   style={
@@ -2583,7 +2583,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
-                testID="onPress"
+                testID="click"
               >
                 <Text
                   style={
