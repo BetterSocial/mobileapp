@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {useRecoilValue} from 'recoil';
-import {v4 as uuid} from 'uuid';
 
 import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../database/schema/ChannelListSchema';
