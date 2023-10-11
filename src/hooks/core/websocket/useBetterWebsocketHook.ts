@@ -45,7 +45,7 @@ const useBetterWebsocketHook = () => {
     return websocketUrl;
   };
 
-  const {lastJsonMessage} = useSimpleWebsocketHooks(initAuthorization(), null, null);
+  const {lastJsonMessage} = useSimpleWebsocketHooks(initAuthorization());
 
   return {lastJsonMessage};
 };
