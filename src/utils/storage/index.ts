@@ -23,7 +23,6 @@ interface IStorage {
   setForKey: (key: string, value: string) => void;
   getForKey: (key: string) => string;
   clearForKey: (key: string) => void;
-  clearAll: () => void;
 }
 /**
  * TYPES
@@ -56,18 +55,13 @@ const storageBuilder = (keyName: StorageKeysEnum): IStorage => {
     MMKVStorage.delete(`${keyName}_${key}`);
   };
 
-  const clearAll = () => {
-    MMKVStorage.clearAll();
-  };
-
   return {
     get,
     set,
     clear,
     setForKey,
     getForKey,
-    clearForKey,
-    clearAll
+    clearForKey
   };
 };
 
@@ -80,8 +74,17 @@ const StorageUtils = {
   feedPages: storageBuilder(StorageKeysEnum.FeedPages),
   myFeeds: storageBuilder(StorageKeysEnum.MyFeeds),
   myAnonymousFeed: storageBuilder(StorageKeysEnum.MyAnonymousFeed),
-  otherProfileFeed: storageBuilder(StorageKeysEnum.OtherProfileFeed)
+  otherProfileFeed: storageBuilder(StorageKeysEnum.OtherProfileFeed),
+  clearAll: () => MMKVStorage.clearAll()
 };
+
+const clearAll = () => {
+  const onboardingPassword = StorageUtils.onboardingPassword.get();
+  MMKVStorage.clearAll();
+  StorageUtils.onboardingPassword.set(onboardingPassword);
+};
+
+StorageUtils.clearAll = clearAll;
 
 export interface IStorageUtils {
   onboardingPassword: Storage;
@@ -89,5 +92,6 @@ export interface IStorageUtils {
   refreshToken: Storage;
   jwtToken: Storage;
   anonymousToken: Storage;
+  clearAll: () => void;
 }
 export default StorageUtils;

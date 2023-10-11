@@ -4,9 +4,10 @@ import {act, renderHook} from '@testing-library/react-hooks';
 import * as mainFeedAction from '../../src/context/actions/feeds';
 import * as post from '../../src/service/post';
 import * as vote from '../../src/service/vote';
+import StorageUtils from '../../src/utils/storage';
 import Store from '../../src/context/Store';
 import useCoreFeed from '../../src/screens/FeedScreen/hooks/useCoreFeed';
-import StorageUtils from '../../src/utils/storage';
+
 // import * as useCoreFeedAll from '../../src/screens/FeedScreen/hooks/useCoreFeed'
 
 jest.mock('../../src/utils/cache', () => ({
@@ -96,10 +97,12 @@ describe('Main Feed should run correctly', () => {
   it('checkCacheFeed should run correctly', async () => {
     const spyCache = jest.spyOn(StorageUtils.feedPages, 'get');
     const {result} = renderHook(() => useCoreFeed(), {wrapper: Store});
+    const spyGet = jest.spyOn(post, 'getMainFeedV2WithTargetFeed');
     act(() => {
       result.current.checkCacheFeed();
     });
     expect(spyCache).toHaveBeenCalledTimes(1);
+    expect(spyGet).toHaveBeenCalledTimes(1);
   });
 
   it('onBlockCompleted should run correctly', async () => {
