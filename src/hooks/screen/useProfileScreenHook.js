@@ -1,9 +1,11 @@
 import * as React from 'react';
-
+import netInfo from '@react-native-community/netinfo';
 import ProfileRepo from '../../service/repo/profileRepo';
 import useMyProfileFeedContextHook from '../context/useMyProfileFeedContext';
 import StorageUtils from '../../utils/storage';
 import useCoreFeed from '../../screens/FeedScreen/hooks/useCoreFeed';
+import {Context} from '../../context';
+import {setMyProfileAction} from '../../context/actions/setMyProfileAction';
 
 export const TAB_INDEX_SIGNED = 0;
 export const TAB_INDEX_ANONYMOUS = 1;
@@ -15,7 +17,9 @@ const useProfileScreenHook = () => {
   const [isLoadingFetchingSignedPosts] = React.useState(false);
   const {feeds, anonymousFeeds, setMyProfileAnonymousFeed} = useMyProfileFeedContextHook();
   const {mappingColorFeed} = useCoreFeed();
+  const [cacheProfile] = React.useState({});
   const isProfileTabSigned = profileTabIndex === TAB_INDEX_SIGNED;
+  const [, dispatchProfile] = React.useContext(Context).profile;
 
   const setTabIndexToSigned = () => setProfileTabIndex(TAB_INDEX_SIGNED);
 
@@ -27,6 +31,7 @@ const useProfileScreenHook = () => {
     const response = await ProfileRepo.getSelfAnonymousFeed(offset, limit);
     const {data: myAnonymousFeed} = response;
     const {mapNewData} = mappingColorFeed({dataFeed: myAnonymousFeed, dataCache: cacheFeed});
+    StorageUtils.myAnonymousFeed.set(JSON.stringify(mapNewData));
     setMyProfileAnonymousFeed(mapNewData);
     setIsLoadingFetchingAnonymousPosts(false);
   };
@@ -35,19 +40,33 @@ const useProfileScreenHook = () => {
     fetchAnonymousPost();
   };
 
-  const initData = () => {
+  const initMyAnonymousFeed = async () => {
     const cacheAnonymFeed = StorageUtils.myAnonymousFeed.get();
-    if (!cacheAnonymFeed) {
-      fetchAnonymousPost();
-    } else {
+    const status = await netInfo.fetch();
+    if (!status.isConnected) {
       const parseAnonymFeed = JSON.parse(cacheAnonymFeed);
       setMyProfileAnonymousFeed(parseAnonymFeed);
+    } else {
+      fetchAnonymousPost();
     }
   };
 
   React.useEffect(() => {
-    initData();
+    initMyAnonymousFeed();
   }, []);
+
+  const saveProfileCache = (cache) => {
+    if (cache && typeof cache === 'string') {
+      StorageUtils.profileData.set(cache);
+    }
+  };
+
+  const getProfileCache = () => {
+    const myCacheProfile = StorageUtils.profileData.get();
+    if (myCacheProfile) {
+      setMyProfileAction(JSON.parse(myCacheProfile), dispatchProfile);
+    }
+  };
 
   return {
     isLoadingFetchingAnonymousPosts,
@@ -59,7 +78,9 @@ const useProfileScreenHook = () => {
     fetchAnonymousPost,
     profileTabIndex,
     isProfileTabSigned,
-    initData
+    saveProfileCache,
+    getProfileCache,
+    cacheProfile
   };
 };
 

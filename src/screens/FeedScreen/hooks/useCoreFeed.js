@@ -3,15 +3,15 @@ import SimpleToast from 'react-native-simple-toast';
 import axios from 'axios';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
+import StorageUtils from '../../../utils/storage';
 import {Context} from '../../../context';
 import {FEEDS_CACHE} from '../../../utils/cache/constant';
+import {checkIsHasColor, hexToRgb} from '../../../utils/colors';
 import {downVote, upVote} from '../../../service/vote';
 import {getFeedDetail, getMainFeedV2WithTargetFeed} from '../../../service/post';
+import {listFeedColor} from '../../../configs/FeedColor';
 import {saveToCache} from '../../../utils/cache';
 import {setFeedByIndex, setMainFeeds, setTimer} from '../../../context/actions/feeds';
-import {listFeedColor} from '../../../configs/FeedColor';
-import StorageUtils from '../../../utils/storage';
-import {checkIsHasColor, hexToRgb} from '../../../utils/colors';
 
 const useCoreFeed = () => {
   const [loading, setLoading] = React.useState(false);
@@ -140,14 +140,15 @@ const useCoreFeed = () => {
 
   const checkCacheFeed = () => {
     const cacheFeed = StorageUtils.feedPages.get();
-    if (!cacheFeed) {
-      getDataFeeds();
-    } else {
+
+    if (cacheFeed) {
       const result = JSON.parse(cacheFeed);
       setMainFeeds(result.data, dispatch);
       setPostOffset(result.offset);
       setNextTargetFeed(result.feed);
     }
+
+    getDataFeeds();
   };
 
   const updateFeed = async (post, index) => {
@@ -204,6 +205,7 @@ const useCoreFeed = () => {
   const getRandomInt = (min, max) => {
     // Create byte array and fill with 1 random number
     const byteArray = new Uint8Array(1);
+    // eslint-disable-next-line no-undef
     crypto.getRandomValues(byteArray);
 
     const range = max - min + 1;
