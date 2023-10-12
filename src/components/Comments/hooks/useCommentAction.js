@@ -44,12 +44,13 @@ const useCommentAction = () => {
         }
       }
     } catch (e) {
-      if (__DEV__) console.log(e, 'error');
+      console.log(e, 'eman');
     }
   };
 
   return {
-    showAlertDelete
+    showAlertDelete,
+    onDeleteCommentClicked
   };
 };
 

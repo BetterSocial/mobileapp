@@ -8,7 +8,7 @@ const Btn = (props) => {
   const disable = props.disabled ? props.disabled : false;
   const disabledStyle = props.disabled ? styles.disabledbutton : {};
   return (
-    <TouchableOpacity testID="btn" disabled={disable} onPress={props.onPress}>
+    <TouchableOpacity disabled={disable} onPress={props.onPress} {...props}>
       <View style={{...styles.button, ...props.style, ...disabledStyle}}>
         <Text style={{...styles.buttonText, ...props.textStyling}}>{props.children}</Text>
       </View>

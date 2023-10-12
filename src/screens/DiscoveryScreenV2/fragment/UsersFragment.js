@@ -52,7 +52,6 @@ const UsersFragment = ({
   const isReady = useIsReady();
 
   const users = discovery.initialUsers;
-
   React.useEffect(() => {
     const parseToken = async () => {
       const id = await getUserId();
@@ -68,7 +67,8 @@ const UsersFragment = ({
       data: {
         user_id: myId,
         other_id: item.user_id,
-        username: item.username
+        username: item.username,
+        users
       }
     });
   };
@@ -77,12 +77,7 @@ const UsersFragment = ({
     if (from === FROM_FOLLOWED_USERS_INITIAL || from === FROM_UNFOLLOWED_USERS_INITIAL) {
       const newFollowedUsers = [...users];
       newFollowedUsers[index].user_id_follower = willFollow ? myId : null;
-      // const newInitialFollowedUsers = [...initialFollowedUsers]
-      // newInitialFollowedUsers[index].user_id_follower = willFollow ? myId : null
-
-      // FollowingAction.setFollowingUsers(newFollowedUsers, followingDispatch)
       DiscoveryAction.setDiscoveryInitialUsers(newFollowedUsers, discoveryDispatch);
-      // setInitialFollowedUsers(newInitialFollowedUsers)
     }
 
     if (from === FROM_FOLLOWED_USERS) {
@@ -135,16 +130,8 @@ const UsersFragment = ({
       }}
     />
   );
-
   const renderUsersItem = () => {
     if (isFirstTimeOpen) {
-      // let renderArray = []
-      // initialFollowedUsers.map((item, index) => renderArray.push(renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", item, index)))
-      // renderArray.push(<DiscoveryTitleSeparator key="user-title-separator" text="Suggested Users"/>)
-      // initialUnfollowedUsers.map((item, index) => renderArray.push(renderDiscoveryItem(FROM_UNFOLLOWED_USERS_INITIAL, "unfollowedUsers", item, index)))
-
-      // return renderArray
-
       if (withoutRecent) {
         return [
           initialUsers.map((item, index) =>

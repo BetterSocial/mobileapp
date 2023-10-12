@@ -20,7 +20,7 @@ const ItemList = ({label, active, onSelect, id}) => {
   return (
     <TouchableOpacity testID="click" style={styles.container} onPress={() => onActive()}>
       <Text style={styles.label}>{label}</Text>
-      {active && <Icon name="check-circle" size={20} color={colors.red} />}
+      {active && <Icon testID="active-icon" name="check-circle" size={20} color={colors.red} />}
     </TouchableOpacity>
   );
 };
