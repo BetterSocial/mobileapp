@@ -33,9 +33,6 @@ describe('useProfileScreenHook should run correctly', () => {
   it('fetchAnonymousPost should run correctly', async () => {
     const {result} = renderHook(useProfileScreenHook, {wrapper});
     const spyCache = jest.spyOn(StorageUtils.myAnonymousFeed, 'get').mockResolvedValue('[]');
-    const spyApiGet = jest
-      .spyOn(ProfileRepo, 'getSelfAnonymousFeed')
-      .mockResolvedValue({isSuccess: true, data: []});
     await result.current.fetchAnonymousPost(0, 10);
     expect(spyCache).toHaveBeenCalled();
     expect(result.current.isLoadingFetchingAnonymousPosts).toBeFalsy();

@@ -67,11 +67,6 @@ describe('SpecificIssue Block Component test should pass', () => {
         open: rbSheetOpenRefMock
       }
     };
-    const realUseState = React.useState;
-    const stubInitialState = [''];
-    const mockState = jest
-      .spyOn(React, 'useState')
-      .mockImplementationOnce(() => realUseState(stubInitialState));
 
     const {getByTestId} = render(
       <SpecificIssue

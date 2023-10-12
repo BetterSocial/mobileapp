@@ -1,64 +1,58 @@
 import * as React from 'react';
 import IconFA5 from 'react-native-vector-icons/FontAwesome5';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-
-import ItemList from '../../components/Blocking/ItemList';
-import {Button} from '../../components/Button';
+import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import PropTypes from 'prop-types';
+import ItemList from './ItemList';
+import {Button} from '../Button';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
 const ReportUser = React.forwardRef((props, ref) => {
-  const { onSelect, onSkip, loading} = props
-    const data = [
+  const {onSelect, onSkip} = props;
+  const data = [
     {
       id: 1,
-      label: 'It’s promotional spam',
+      label: 'It’s promotional spam'
     },
     {
       id: 2,
-      label: 'It’s intentional disinformation',
+      label: 'It’s intentional disinformation'
     },
     {
       id: 3,
-      label: 'The account is fake or not human',
+      label: 'The account is fake or not human'
     },
     {
       id: 4,
-      label: 'It’s private information (Doxxing)',
+      label: 'It’s private information (Doxxing)'
     },
     {
       id: 5,
-      label: 'It expresses intentions of self-harm',
+      label: 'It expresses intentions of self-harm'
     },
     {
       id: 6,
-      label: 'Violence/threats against humans or animals',
+      label: 'Violence/threats against humans or animals'
     },
     {
       id: 7,
-      label: 'Something else',
-    },
+      label: 'Something else'
+    }
   ];
   const [active, setActive] = React.useState([]);
   const [activeLabel, setActiveLabel] = React.useState([]);
 
   const onChoice = (id, value, type) => {
     if (type === 'add') {
-      let newArr = [...active, id];
-      let newArrLabel = [...activeLabel, value];
+      const newArr = [...active, id];
+      const newArrLabel = [...activeLabel, value];
       setActiveLabel(newArrLabel);
       setActive(newArr);
     } else {
-      let newArr = active.filter((e) => e !== id);
+      const newArr = active.filter((e) => e !== id);
       setActive(newArr);
-      let newArrLabel = activeLabel.filter((e) => e !== value);
+      const newArrLabel = activeLabel.filter((e) => e !== value);
       setActiveLabel(newArrLabel);
     }
   };
@@ -72,7 +66,7 @@ const ReportUser = React.forwardRef((props, ref) => {
       closeOnPressMask={true}
       customStyles={{
         container: styles.container,
-        draggableIcon: styles.draggableIcon,
+        draggableIcon: styles.draggableIcon
       }}>
       <ScrollView nestedScrollEnabled={true}>
         <TouchableOpacity style={styles.btnSkip} onPress={() => onSkip()}>
@@ -80,8 +74,7 @@ const ReportUser = React.forwardRef((props, ref) => {
           <IconFA5 name="chevron-right" size={17} color={'#000'} />
         </TouchableOpacity>
         <Text style={styles.title}>
-          Or select all which apply to specify the issue - provide more info on
-          next screen:
+          Or select all which apply to specify the issue - provide more info on next screen:
         </Text>
         {data.map((item) => (
           <ItemList
@@ -102,6 +95,13 @@ const ReportUser = React.forwardRef((props, ref) => {
   );
 });
 
+ReportUser.displayName = 'ReportUser';
+
+ReportUser.propTypes = {
+  onSelect: PropTypes.func,
+  onSkip: PropTypes.func
+};
+
 export default ReportUser;
 
 const styles = StyleSheet.create({
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[700],
     fontSize: 16,
     color: '#000',
-    marginLeft: 21,
+    marginLeft: 21
   },
   desc: {
     color: colors.gray,
@@ -117,13 +117,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginHorizontal: 21,
     marginTop: 17,
-    marginBottom: 29,
+    marginBottom: 29
   },
   btn: {
     paddingLeft: 18,
     paddingRight: 22,
     paddingTop: 8,
-    marginBottom: 30,
+    marginBottom: 30
   },
   btnSkip: {
     backgroundColor: '#E0E0E0',
@@ -131,20 +131,20 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 17,
     paddingVertical: 18,
-    marginVertical: 22,
+    marginVertical: 22
   },
   btnSkipText: {
     fontFamily: fonts.inter[700],
     fontSize: 14,
-    color: '#000',
+    color: '#000'
   },
   container: {
     height: '80%',
     borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
+    borderTopLeftRadius: 20
   },
   draggableIcon: {
     backgroundColor: colors.alto,
-    width: 60,
-  },
+    width: 60
+  }
 });
