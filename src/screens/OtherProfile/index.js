@@ -13,20 +13,21 @@ import {
   Text,
   TouchableNativeFeedback,
   TouchableOpacity,
-  View
+  View,
+  Pressable
 } from 'react-native';
 import {generateRandomId} from 'stream-chat-react-native';
 /* eslint-disable no-underscore-dangle */
 import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
-
+import PropTypes from 'prop-types';
+import netInfo from '@react-native-community/netinfo';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BlockIcon from '../../assets/icons/images/block-blue.svg';
 import BlockProfile from '../../components/Blocking/BlockProfile';
 import BottomSheetBio from '../ProfileScreen/elements/BottomSheetBio';
 import EnveloveBlueIcon from '../../assets/icons/images/envelove-blue.svg';
 import GlobalButton from '../../components/Button/GlobalButton';
-import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import ProfileHeader from '../ProfileScreen/elements/ProfileHeader';
 import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
 import RenderItem from '../ProfileScreen/elements/RenderItem';
@@ -57,8 +58,6 @@ import {sendAnonymousDMOtherProfile, sendSignedDMOtherProfile} from '../../servi
 import {setChannel} from '../../context/actions/setChannel';
 import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherProfileFeed';
 import {trimString} from '../../utils/string/TrimString';
-import {useAfterInteractions} from '../../hooks/useAfterInteractions';
-import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import StorageUtils from '../../utils/storage';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
@@ -90,12 +89,12 @@ const BioAndChat = (props) => {
         {bio === null || bio === undefined ? (
           <Text style={styles.bioText(isAnonimity)}>Send a message</Text>
         ) : (
-          <TouchableOpacity onPress={openBio}>
+          <Pressable onPress={openBio}>
             <Text linkStyle={styles.seeMore} style={styles.bioText(isAnonimity)}>
               {trimString(bio, 121)}{' '}
               {bio.length > 121 ? <Text style={{color: colors.blue}}>see more</Text> : null}
             </Text>
-          </TouchableOpacity>
+          </Pressable>
         )}
       </View>
       <TouchableOpacity
@@ -146,7 +145,6 @@ const OtherProfile = () => {
   const [user_id, setUserId] = React.useState('');
   const [username, setUsername] = React.useState('');
   const [other_id, setOtherId] = React.useState('');
-  const [isLoading, setIsLoading] = React.useState(true);
   const [isShowButton, setIsShowButton] = React.useState(false);
   const [opacity, setOpacity] = React.useState(0);
   const [reason, setReason] = React.useState([]);
@@ -167,18 +165,12 @@ const OtherProfile = () => {
   const [profile] = React.useContext(Context).profile;
   const [, dispatch] = React.useContext(Context).feeds;
   const [isLastPage, setIsLastPage] = React.useState(false);
-  const [, setIsHitApiFirstTime] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const [initLoading, setInitLoading] = React.useState(true);
   const [isAnonimity, setIsAnonimity] = React.useState(false);
-
   const {saveChatFromOtherProfile, savePendingChatFromOtherProfile} = useSaveAnonChatHook();
-
-  const create = useClientGetstream();
-  const {interactionsComplete} = useAfterInteractions();
-
   const {params} = route;
   const {feeds} = otherProfileFeeds;
-
   const [loadingGenerateAnon, setLoadingGenerateAnon] = React.useState(false);
   const [loadingSendDM, setLoadingSendDM] = React.useState(false);
   const [anonProfile, setAnonProfile] = React.useState();
@@ -200,7 +192,6 @@ const OtherProfile = () => {
 
   const sentAnonDM = async () => {
     try {
-      setIsLoading(true);
       setLoadingSendDM(true);
       const {
         anon_user_info_emoji_name,
@@ -229,7 +220,6 @@ const OtherProfile = () => {
       }
     } finally {
       setLoadingSendDM(false);
-      setIsLoading(false);
     }
   };
 
@@ -264,7 +254,6 @@ const OtherProfile = () => {
   const sendSignedDM = async () => {
     try {
       setLoadingSendDM(true);
-      setIsLoading(true);
       const signedMParams = {
         user_id: dataMain.user_id,
         message: dmChat
@@ -273,10 +262,11 @@ const OtherProfile = () => {
       await gotoChatRoom();
       setDMChat('');
     } catch (error) {
-      console.error(error);
+      if (__DEV__) {
+        console.log(error, 'error');
+      }
     } finally {
       setLoadingSendDM(false);
-      setIsLoading(false);
     }
   };
 
@@ -288,33 +278,38 @@ const OtherProfile = () => {
     }
   };
 
-  const getOtherFeeds = async (userId, offset = 0) => {
+  React.useEffect(() => {
+    setOtherId(params?.data?.other_id);
+  }, [params.data]);
+
+  const getOtherFeeds = async (offset = 0) => {
+    const otherId = other_id;
     try {
-      setIsHitApiFirstTime(true);
-      const cacheFeed = StorageUtils.otherProfileFeed.getForKey(userId);
-      const result = await getOtherFeedsInProfile(userId, offset);
+      const cacheFeed = StorageUtils.otherProfileFeed.getForKey(otherId);
+      if (cacheFeed) {
+        setOtherProfileFeed(JSON.parse(cacheFeed), dispatchOtherProfile);
+      }
+      const result = await getOtherFeedsInProfile(otherId, offset);
       const {data: feedOtherProfile} = result;
       const {mapNewData} = mappingColorFeed({
         dataFeed: feedOtherProfile,
         dataCache: cacheFeed
       });
-      console.log({mapNewData, cacheFeed}, 'sijak');
       if (Array.isArray(result.data) && result.data.length === 0) {
         setIsLastPage(true);
       }
       if (offset === 0) {
         setOtherProfileFeed(mapNewData, dispatchOtherProfile);
-        StorageUtils.otherProfileFeed.setForKey(userId, JSON.stringify(mapNewData));
+        StorageUtils.otherProfileFeed.setForKey(otherId, JSON.stringify(mapNewData));
       } else {
         const clonedFeeds = [...feeds, ...mapNewData];
         setOtherProfileFeed(clonedFeeds, dispatchOtherProfile);
-        StorageUtils.otherProfileFeed.setForKey(userId, JSON.stringify(clonedFeeds));
+        StorageUtils.otherProfileFeed.setForKey(otherId, JSON.stringify(clonedFeeds));
       }
       setLoading(false);
       setPostOffset(Number(result.offset));
     } catch (e) {
       setLoading(false);
-      console.log(e, 'error');
     }
   };
 
@@ -326,61 +321,95 @@ const OtherProfile = () => {
   }, []);
 
   React.useEffect(() => {
-    if (interactionsComplete) {
-      fetchOtherProfile(params?.data?.username);
-    }
-  }, [interactionsComplete]);
+    netInfo.addEventListener((state) => {
+      if (state.isConnected) {
+        initData();
+      } else {
+        handleOfflineMode();
+      }
+    });
+    initData();
+  }, []);
 
   React.useEffect(() => {
-    create();
-    setIsLoading(true);
+    getOtherFeeds();
+  }, [other_id]);
+
+  const initData = () => {
+    setInitLoading(true);
     setUserId(params.data.user_id);
     setUsername(params.data.username);
-    fetchOtherProfile(params.data.username);
-  }, [params.data]);
+    fetchOtherProfile();
+  };
 
   const checkUserBlockHandle = async (userId, callback) => {
-    try {
-      const sendData = {
-        user_id: userId
-      };
-      const processGetBlock = await checkUserBlock(sendData);
-      if (callback) callback();
-      if (processGetBlock.status === 200) {
-        setBlockStatus(processGetBlock.data.data);
-        setIsLoading(false);
+    const status = await netInfo.fetch();
+    if (status.isConnected) {
+      try {
+        const sendData = {
+          user_id: userId
+        };
+        const processGetBlock = await checkUserBlock(sendData);
+        if (callback) callback();
+        if (processGetBlock.status === 200) {
+          setBlockStatus(processGetBlock.data.data);
+        }
+      } catch (e) {
+        if (__DEV__) {
+          console.log(e, 'error');
+        }
       }
-    } catch (e) {
-      setIsLoading(false);
     }
   };
 
-  const handleGetOtherFeed = (result) => {
-    getOtherFeeds(result.data.user_id);
+  const handleSaveDataOtherProfile = (data) => {
+    setDataMain(data);
+    setDataMainBio(data.bio);
+    checkUserBlockHandle(data.user_id);
+    setOtherId(data.user_id);
+    setLoading(false);
+    setInitLoading(false);
   };
 
-  const fetchOtherProfile = async (usernames) => {
-    try {
-      const result = await getOtherProfile(usernames);
-      if (result.code === 200) {
-        setDataMain(result.data);
-        setDataMainBio(result.data.bio);
-        checkUserBlockHandle(result.data.user_id);
-        setOtherId(result.data.user_id);
-        handleGetOtherFeed(result);
+  const fetchOtherProfile = async () => {
+    const status = await netInfo.fetch();
+    if (status.isConnected) {
+      try {
+        handleOfflineMode();
+        const result = await getOtherProfile(params?.data?.username);
+        if (result.code === 200) {
+          handleSaveDataOtherProfile(result.data);
+        }
+        StorageUtils.otherProfileData.setForKey(
+          params?.data?.username,
+          JSON.stringify(result.data)
+        );
+      } catch (e) {
+        if (e.response && e.response.data && e.response.data.message) {
+          SimpleToast.show(e.response.data.message, SimpleToast.SHORT);
+        }
+        setLoading(false);
+        setInitLoading(false);
+        setBlockStatus({
+          ...blockStatus,
+          blocked: true
+        });
       }
-    } catch (e) {
-      if (e.response && e.response.data && e.response.data.message) {
-        SimpleToast.show(e.response.data.message, SimpleToast.SHORT);
-      }
-      setBlockStatus({
-        ...blockStatus,
-        blocked: true
-      });
-      setIsLoading(false);
+    } else {
+      handleOfflineMode();
     }
   };
 
+  const handleOfflineMode = async () => {
+    const cache = await StorageUtils.otherProfileData.getForKey(params?.data?.username);
+    if (cache) {
+      const data = JSON.parse(cache);
+      handleSaveDataOtherProfile(data);
+    } else {
+      setLoading(false);
+      setInitLoading(false);
+    }
+  };
   const onShare = async () => ShareUtils.shareUserLink(username);
 
   const handleSetUnFollow = async () => {
@@ -396,7 +425,7 @@ const OtherProfile = () => {
     };
     const result = await setUnFollow(data);
     if (result.code === 200) {
-      fetchOtherProfile(username);
+      fetchOtherProfile();
     }
   };
 
@@ -415,12 +444,15 @@ const OtherProfile = () => {
     };
     const result = await setFollow(data);
     if (result.code === 200) {
-      fetchOtherProfile(username);
+      fetchOtherProfile();
     }
   };
 
   const openBio = () => {
-    bottomSheetBio.current.open();
+    if (profile?.myProfile?.user_id !== other_id) {
+      return null;
+    }
+    return bottomSheetBio.current.open();
   };
 
   const toggleSwitch = async () => {
@@ -464,29 +496,27 @@ const OtherProfile = () => {
     const __renderFollowerDetail = () => {
       if (blockStatus.blocker) return <></>;
       return (
-        <React.Fragment>
-          <View style={styles.wrapFollower}>
-            <TouchableOpacity onPress={handleOpenFollowerUser} style={styles.wrapRow}>
-              <React.Fragment>
-                <Text style={styles.textTotal}>{dataMain.follower_symbol}</Text>
-                <Text style={styles.textFollow}>
-                  {getSingularOrPluralText(dataMain.follower_symbol, 'Follower', 'Followers')}
-                </Text>
-              </React.Fragment>
-            </TouchableOpacity>
-            {user_id === dataMain.user_id ? (
-              <View style={styles.following}>
-                <TouchableNativeFeedback
-                  onPress={() => goToFollowings(dataMain.user_id, dataMain.username)}>
-                  <View style={styles.wrapRow}>
-                    <Text style={styles.textTotal}>{dataMain.following_symbol}</Text>
-                    <Text style={styles.textFollow}>Following</Text>
-                  </View>
-                </TouchableNativeFeedback>
-              </View>
-            ) : null}
-          </View>
-        </React.Fragment>
+        <View style={styles.wrapFollower}>
+          <TouchableOpacity onPress={handleOpenFollowerUser} style={styles.wrapRow}>
+            <React.Fragment>
+              <Text style={styles.textTotal}>{dataMain.follower_symbol}</Text>
+              <Text style={styles.textFollow}>
+                {getSingularOrPluralText(dataMain.follower_symbol, 'Follower', 'Followers')}
+              </Text>
+            </React.Fragment>
+          </TouchableOpacity>
+          {user_id === dataMain.user_id ? (
+            <View style={styles.following}>
+              <TouchableNativeFeedback
+                onPress={() => goToFollowings(dataMain.user_id, dataMain.username)}>
+                <View style={styles.wrapRow}>
+                  <Text style={styles.textTotal}>{dataMain.following_symbol}</Text>
+                  <Text style={styles.textFollow}>Following</Text>
+                </View>
+              </TouchableNativeFeedback>
+            </View>
+          ) : null}
+        </View>
       );
     };
 
@@ -494,23 +524,19 @@ const OtherProfile = () => {
       if (user_id === dataMain.user_id) return <></>;
       if (dataMain.is_following)
         return (
-          <React.Fragment>
-            <GlobalButton onPress={() => handleSetUnFollow()}>
-              <View style={styles.buttonFollowing}>
-                <Text style={styles.textButtonFollowing}>Following</Text>
-              </View>
-            </GlobalButton>
-          </React.Fragment>
+          <GlobalButton onPress={() => handleSetUnFollow()}>
+            <View style={styles.buttonFollowing}>
+              <Text style={styles.textButtonFollowing}>Following</Text>
+            </View>
+          </GlobalButton>
         );
 
       return (
-        <React.Fragment>
-          <GlobalButton onPress={() => handleSetFollow()}>
-            <View style={styles.buttonFollow}>
-              <Text style={styles.textButtonFollow}>Follow</Text>
-            </View>
-          </GlobalButton>
-        </React.Fragment>
+        <GlobalButton onPress={() => handleSetFollow()}>
+          <View style={styles.buttonFollow}>
+            <Text style={styles.textButtonFollow}>Follow</Text>
+          </View>
+        </GlobalButton>
       );
     };
 
@@ -591,7 +617,7 @@ const OtherProfile = () => {
   const onCreateChannel = async () => {
     try {
       const members = [other_id, profile.myProfile.user_id];
-      setIsLoading(true);
+
       const clientChat = await client.client;
       const filter = {type: 'messaging', members: {$eq: members}};
       const sort = [{last_message_at: -1}];
@@ -612,19 +638,16 @@ const OtherProfile = () => {
         setChannel(channelChat, dispatchChannel);
       }
       await navigation.navigate('ChatDetailPage');
-      setTimeout(() => setIsLoading(false), 400);
     } catch (e) {
       if (__DEV__) {
         console.log(e);
       }
-      setIsLoading(false);
     }
   };
 
   const onBlockReaction = () => {
     blockUserRef.current.open();
   };
-
   const handleBlocking = async (message) => {
     setLoadingBlocking(true);
     let data = {
@@ -704,7 +727,7 @@ const OtherProfile = () => {
       dispatch
     );
 
-    getOtherFeeds(other_id);
+    getOtherFeeds();
   };
 
   const onPressDomain = (item) => {
@@ -769,17 +792,23 @@ const OtherProfile = () => {
     });
   };
 
-  const isFeedsShown = !blockStatus.blocked && !blockStatus.blocker;
   const __handleOnEndReached = () => {
     if (!isLastPage) {
-      getOtherFeeds(other_id, postOffset);
+      getOtherFeeds(postOffset);
     }
   };
 
   const handleRefresh = () => {
-    setLoading(true);
     setIsLastPage(false);
-    getOtherFeeds(other_id, 0);
+    getOtherFeeds(0);
+  };
+
+  const handleDataFeed = () => {
+    const isFeedsShown = !blockStatus.blocked && !blockStatus.blocker;
+    if (isFeedsShown) {
+      return feeds;
+    }
+    return [];
   };
 
   return (
@@ -792,42 +821,30 @@ const OtherProfile = () => {
           onShareClicked={onShare}
           username={dataMain.username}
         />
-        {isLoading ? (
-          <View
-            style={loadingSendDM ? styles.containerLoading : styles.containerLoadingBlockScreen}>
-            <LoadingWithoutModal text={loadingSendDM ? 'Initializing chat' : null} />
-          </View>
-        ) : (
-          <></>
-        )}
 
         <ProfileTiktokScroll
           keyboardShouldPersistTaps="handled"
           ref={flatListRef}
-          data={isFeedsShown ? feeds : []}
+          extraData={[feeds]}
+          data={handleDataFeed()}
           onScroll={handleScroll}
           onEndReach={__handleOnEndReached}
           onRefresh={handleRefresh}
           refreshing={loading}
-          snapToOffsets={(() => {
-            const posts = feeds.map(
-              (item, index) => headerHeightRef.current + index * dimen.size.PROFILE_ITEM_HEIGHT
-            );
-            return [0, ...posts];
-          })()}
           ListHeaderComponent={
-            <View
-              onLayout={(event) => {
-                const headerHeightLayout = event.nativeEvent.layout.height;
-                headerHeightRef.current = headerHeightLayout;
-              }}>
-              <View style={styles.content}>{__renderListHeader()}</View>
-            </View>
+            <>
+              {!initLoading ? (
+                <View
+                  onLayout={(event) => {
+                    const headerHeightLayout = event.nativeEvent.layout.height;
+                    headerHeightRef.current = headerHeightLayout;
+                  }}>
+                  <View style={styles.content}>{__renderListHeader()}</View>
+                </View>
+              ) : null}
+            </>
           }>
           {({item, index}) => {
-            const dummyItemHeight =
-              height - dimen.size.PROFILE_ITEM_HEIGHT - 44 - 16 - StatusBar.currentHeight;
-            if (item.dummy) return <View style={styles.dummyItem(dummyItemHeight)}></View>;
             return (
               <View style={{width: '100%'}}>
                 <RenderItem
@@ -849,6 +866,7 @@ const OtherProfile = () => {
             );
           }}
         </ProfileTiktokScroll>
+
         <BottomSheetBio
           username={dataMain.username}
           isOtherProfile={true}
@@ -1089,4 +1107,23 @@ const styles = StyleSheet.create({
     lineHeight: 22
   })
 });
+
+BioAndChat.propTypes = {
+  isAnonimity: PropTypes.bool,
+  bio: PropTypes.string,
+  openBio: PropTypes.bool,
+  isSignedMessageEnabled: PropTypes.bool,
+  showSignedMessageDisableToast: PropTypes.bool,
+  loadingGenerateAnon: PropTypes.bool,
+  avatarUrl: PropTypes.string,
+  anonProfile: PropTypes.object,
+  onSendDM: PropTypes.func,
+  setDMChat: PropTypes.func,
+  loadingSendDM: PropTypes.bool,
+  dmChat: PropTypes.string,
+  username: PropTypes.string,
+  toggleSwitch: PropTypes.func,
+  isAnonimityEnabled: PropTypes.bool
+};
+
 export default withInteractionsManaged(OtherProfile);
