@@ -1,23 +1,35 @@
 import * as React from 'react';
+import {Animated} from 'react-native';
+import PropTypes from 'prop-types';
+
 import Navigation from './Navigation';
 import Header from './Header';
-import {getTopics, getUserTopic} from '../../../service/topics';
 import useChatClientHook from '../../../utils/getstream/useChatClientHook';
 
 const NavHeader = (props) => {
-  const [isFollow, setIsFollow] = React.useState(false);
-  const [topicDetail, setTopicDetail] = React.useState({});
-  const [isLoading, setIsLoading] = React.useState(true);
+  const {
+    isFollow,
+    setIsFollow,
+    topicDetail,
+    memberCount,
+    setMemberCount,
+    animatedHeight,
+    getTopicDetail
+  } = props;
   const {followTopic} = useChatClientHook();
 
-  React.useEffect(() => {
-    initData();
-  }, []);
-
   const handleFollowTopic = async () => {
+    setIsFollow(!isFollow);
+    if (isFollow) {
+      setMemberCount(memberCount - 1);
+    } else {
+      setMemberCount(memberCount + 1);
+    }
     try {
-      const followed = await followTopic(props.domain);
+      const followed = await followTopic(topicDetail?.name);
+
       setIsFollow(followed);
+      getTopicDetail(topicDetail?.name);
     } catch (error) {
       if (__DEV__) {
         console.log(error);
@@ -25,35 +37,22 @@ const NavHeader = (props) => {
     }
   };
 
-  const initData = async () => {
-    try {
-      setIsLoading(true);
-      const query = `?name=${props.domain}`;
-      const resultGetUserTopic = await getUserTopic(query);
-      if (resultGetUserTopic.data) {
-        setIsFollow(true);
-      }
-      const resultTopicDetail = await getTopics(props.domain);
-      if (resultTopicDetail.data) {
-        const detail = resultTopicDetail.data[0];
-        setTopicDetail(detail);
-      }
-    } catch (error) {
-      if (__DEV__) {
-        console.log('err: ', error);
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  if (props.isInitialLoading || isLoading) return null;
   return (
-    <>
-      <Navigation isFollow={isFollow} detail={topicDetail} onPress={handleFollowTopic} {...props} />
-      <Header isFollow={isFollow} detail={topicDetail} onPress={handleFollowTopic} {...props} />
-    </>
+    <Animated.View style={{height: animatedHeight}}>
+      <Navigation onPress={handleFollowTopic} {...props} />
+      <Header onPress={handleFollowTopic} {...props} />
+    </Animated.View>
   );
+};
+
+NavHeader.propTypes = {
+  isFollow: PropTypes.bool,
+  setIsFollow: PropTypes.func,
+  topicDetail: PropTypes.object,
+  memberCount: PropTypes.number,
+  setMemberCount: PropTypes.func,
+  animatedHeight: PropTypes.number,
+  getTopicDetail: PropTypes.func
 };
 
 export default NavHeader;

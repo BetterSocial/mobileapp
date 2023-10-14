@@ -822,6 +822,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               "paddingVertical": 18,
             }
           }
+          testID="pressMessage"
         >
           <Text
             style={
@@ -851,6 +852,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               "paddingVertical": 18,
             }
           }
+          testID="pressMessageAnonym"
         >
           <Text
             style={
@@ -881,6 +883,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               "paddingVertical": 18,
             }
           }
+          testID="pressView"
         >
           <Text
             style={
@@ -911,6 +914,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               "paddingVertical": 18,
             }
           }
+          testID="pressRemove"
         >
           <Text
             style={
@@ -2141,7 +2145,6 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                       "opacity": 1,
                     }
                   }
-                  testID="btn"
                 >
                   <View
                     style={
@@ -2626,7 +2629,6 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                       "opacity": 1,
                     }
                   }
-                  testID="btn"
                 >
                   <View
                     style={
@@ -2808,6 +2810,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                   "paddingVertical": 19,
                 }
               }
+              testID="changeText"
               textAlignVertical="top"
               underlineColorAndroid="transparent"
               value=""
@@ -2876,7 +2879,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "opacity": 1,
                   }
                 }
-                testID="btn"
+                testID="button-report-test"
               >
                 <View
                   style={

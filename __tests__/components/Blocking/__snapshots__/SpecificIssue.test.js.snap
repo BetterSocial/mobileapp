@@ -147,6 +147,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
               "paddingVertical": 19,
             }
           }
+          testID="changeText"
           textAlignVertical="top"
           underlineColorAndroid="transparent"
           value=""
@@ -215,7 +216,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
                 "opacity": 1,
               }
             }
-            testID="btn"
+            testID="button-report-test"
           >
             <View
               style={
