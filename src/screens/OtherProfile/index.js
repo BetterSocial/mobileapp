@@ -283,7 +283,6 @@ const OtherProfile = () => {
   }, [params.data]);
 
   const getOtherFeeds = async (offset = 0) => {
-    console.log('masukman');
     const otherId = other_id;
     try {
       const cacheFeed = StorageUtils.otherProfileFeed.getForKey(otherId);
