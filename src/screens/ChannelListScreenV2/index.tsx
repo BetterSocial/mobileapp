@@ -14,12 +14,26 @@ import useRootChannelListHook from '../../hooks/screen/useRootChannelListHook';
 const ChannelListScreenV2 = () => {
   const navigation = useNavigation();
   const {profile} = useProfileHook();
-  const {anonymousChannelUnreadCount, signedChannelUnreadCount} = useRootChannelListHook();
+  const {
+    anonymousChannelUnreadCount,
+    signedChannelUnreadCount,
+    refreshAnonymousChannelList,
+    refreshSignedChannelList
+  } = useRootChannelListHook();
 
   const [selectedTab, setSelectedTab] = React.useState(0);
 
   const navigateToContactScreen = () => {
     navigation.navigate('ContactScreen');
+  };
+
+  const onTabSelected = (index: number) => {
+    setSelectedTab(index);
+    if (index === 0) {
+      refreshSignedChannelList();
+    } else if (index === 1) {
+      refreshAnonymousChannelList();
+    }
   };
 
   return (
@@ -31,20 +45,32 @@ const ChannelListScreenV2 = () => {
         </View>
         <HorizontalTab
           selectedTab={selectedTab}
-          onSelectedTabChange={setSelectedTab}
+          onSelectedTabChange={onTabSelected}
           tabs={[
-            <ChannelListTabItem
-              key={0}
-              name={`@${profile?.username}`}
-              picture={profile?.profile_pic_path}
-              unreadCount={signedChannelUnreadCount}
-            />,
-            <ChannelListTabItem
-              key={1}
-              name="Anonymous"
-              picture={AnonymousProfile}
-              unreadCount={anonymousChannelUnreadCount}
-            />
+            {
+              key: 0,
+              tabElement: (
+                <ChannelListTabItem
+                  key={0}
+                  name={`@${profile?.username}`}
+                  picture={profile?.profile_pic_path}
+                  unreadCount={signedChannelUnreadCount}
+                  testID="signed-channel-list-tab-item"
+                />
+              )
+            },
+            {
+              key: 1,
+              tabElement: (
+                <ChannelListTabItem
+                  key={1}
+                  name="Anonymous"
+                  picture={AnonymousProfile}
+                  unreadCount={anonymousChannelUnreadCount}
+                  testID="anonymous-channel-list-tab-item"
+                />
+              )
+            }
           ]}
         />
         <View style={{display: selectedTab === 0 ? 'flex' : 'none'}}>

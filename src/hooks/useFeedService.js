@@ -1,6 +1,7 @@
 import {useSetRecoilState} from 'recoil';
-import {getFeedNotification, setFeedChatsFromLocal} from '../service/feeds';
+
 import {feedChatAtom} from '../models/feeds/feedsNotification';
+import {getFeedNotification, setFeedChatsFromLocal} from '../service/feeds';
 
 const useFeedService = () => {
   const setFeedChatData = useSetRecoilState(feedChatAtom);

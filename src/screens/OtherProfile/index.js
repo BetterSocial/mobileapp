@@ -283,6 +283,7 @@ const OtherProfile = () => {
   }, [params.data]);
 
   const getOtherFeeds = async (offset = 0) => {
+    console.log('masukman');
     const otherId = other_id;
     try {
       const cacheFeed = StorageUtils.otherProfileFeed.getForKey(otherId);
@@ -390,10 +391,6 @@ const OtherProfile = () => {
         }
         setLoading(false);
         setInitLoading(false);
-        setBlockStatus({
-          ...blockStatus,
-          blocked: true
-        });
       }
     } else {
       handleOfflineMode();
@@ -403,6 +400,8 @@ const OtherProfile = () => {
   const handleOfflineMode = async () => {
     const cache = await StorageUtils.otherProfileData.getForKey(params?.data?.username);
     if (cache) {
+      console.log('cacheman', {cache});
+
       const data = JSON.parse(cache);
       handleSaveDataOtherProfile(data);
     } else {
