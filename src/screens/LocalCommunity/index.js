@@ -257,9 +257,11 @@ const LocalCommunity = () => {
       />
 
       <View style={styles.footer}>
-        <Text style={styles.textSmall}>
-          We value privacy and do not ask for location tracking access
-        </Text>
+        <View style={styles.textSmallContainer}>
+          <Text style={styles.textSmall}>
+            We value privacy and do not ask for location tracking access
+          </Text>
+        </View>
         <Button
           disabled={location.length < 1}
           style={location.length >= 1 ? null : styles.button}
@@ -399,15 +401,17 @@ const styles = StyleSheet.create({
     paddingLeft: 17
     // textTransform: 'capitalize',
   },
+  textSmallContainer: {
+    flex: 1,
+    justifyContent: 'center'
+  },
   textSmall: {
     fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: '400',
     fontSize: 10,
     textAlign: 'center',
-    color: colors.blackgrey,
-    marginBottom: 10,
-    marginTop: 12
+    color: colors.blackgrey
   },
   button: {
     backgroundColor: colors.gray
