@@ -16,6 +16,7 @@ export interface SignedPostNotification {
   isRead: boolean;
   isSeen: boolean;
   postMaker: PostMaker;
+  showToast: boolean;
   titlePost: string;
   totalComment: number;
   totalCommentBadge: number;

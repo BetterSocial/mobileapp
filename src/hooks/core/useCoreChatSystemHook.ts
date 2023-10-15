@@ -19,6 +19,7 @@ import {
   Comment,
   LatestChildrenComment
 } from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {GetstreamFeedListenerObject} from '../../../types/hooks/core/getstreamFeedListener/feedListenerObject';
 import {GetstreamWebsocket} from './websocket/types.d';
 import {InitialStartupAtom} from '../../service/initialStartup';
@@ -126,15 +127,42 @@ const useCoreChatSystemHook = () => {
     if (channel?.members?.length === 0) return Promise.reject(Error('no members'));
 
     const isAnonymous = channelType === 'ANONYMOUS';
+
+    let signedChannelProfile;
+    let signedChannelName;
+    let signedChannelImage;
+
+    if (!isAnonymous) {
+      signedChannelProfile = channel?.members?.find(
+        (member) => member?.user_id === signedProfileId
+      )?.user;
+
+      signedChannelName =
+        channel?.channel_type === 4
+          ? `Anonymous ${channel?.anon_user_info_emoji_name}`
+          : getChatName(channel?.name, signedChannelProfile?.username);
+      signedChannelImage =
+        channel?.members?.length > 2
+          ? DEFAULT_PROFILE_PIC_PATH
+          : channel?.members?.find((member) => member?.user_id !== signedProfileId)?.user?.image;
+    }
+
     const chatName = isAnonymous
       ? await getAnonymousChatName(channel?.members)
-      : channel?.members?.find((member) => member?.role === 'member')?.user;
+      : {
+          name: signedChannelName,
+          image: signedChannelImage ?? DEFAULT_PROFILE_PIC_PATH
+        };
 
     return new Promise((resolve, reject) => {
       try {
         channel.targetName = chatName?.name;
         channel.targetImage = chatName?.image;
-        channel.firstMessage = channel?.messages?.[0];
+        if (isAnonymous) {
+          channel.firstMessage = channel?.messages?.[0];
+        } else {
+          channel.firstMessage = channel?.messages?.[channel?.messages?.length - 1];
+        }
         channel.channel = {...channel};
         const channelList = ChannelList.fromChannelAPI(channel, isAnonymous ? 'ANON_PM' : 'PM');
         return resolve(channelList.saveIfLatest(localDb));
@@ -168,7 +196,7 @@ const useCoreChatSystemHook = () => {
       });
 
       channel?.messages?.forEach(async (message) => {
-        const chat = ChatSchema.fromGetAllAnonymousChannelAPI(channel?.id, message);
+        const chat = ChatSchema.fromGetAllChannelAPI(channel?.id, message);
         await chat.save(localDb);
       });
     } catch (e) {
@@ -368,7 +396,6 @@ const useCoreChatSystemHook = () => {
     const {type} = lastSignedMessage;
     if (type === 'health.check') return;
     if (type === 'notification.message_new') {
-      console.log('notification.message_new', lastSignedMessage);
       saveChannelListData(lastSignedMessage, 'PM').catch((e) => console.log(e));
     }
   }, [lastSignedMessage, localDb]);
