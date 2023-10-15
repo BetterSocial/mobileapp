@@ -53,6 +53,32 @@ const ChannelImage = ({
   const isAnonymousPostMaker = Boolean(postMaker?.anon_user_info_emoji_code);
   const isAnonymousOldPostMaker = Boolean(postMaker?.emoji_code);
 
+  const renderChatMainImage = () => {
+    if (isAnonymousPostMaker)
+      return (
+        <ChannelAnonymousImage
+          anonPostNotificationUserInfo={{
+            anon_user_info_emoji_code: postMaker?.anon_user_info_emoji_code,
+            anon_user_info_color_code: postMaker?.anon_user_info_color_code
+          }}
+          imageStyle={styles.image}
+        />
+      );
+
+    if (isAnonymousPostMaker || isAnonymousOldPostMaker)
+      return (
+        <ChannelAnonymousImage
+          anonPostNotificationUserInfo={{
+            anon_user_info_emoji_code: postMaker?.emoji_code,
+            anon_user_info_color_code: postMaker?.color_code
+          }}
+          imageStyle={styles.image}
+        />
+      );
+
+    return <FastImage source={{uri: mainPicture}} style={styles.image} />;
+  };
+
   const renderMainImage = () => {
     if (isAnonymousPostMaker)
       return (
@@ -95,7 +121,7 @@ const ChannelImage = ({
   if (type?.includes('PM')) {
     return (
       <View>
-        <FastImage source={{uri: mainPicture}} style={styles.image} />
+        {renderChatMainImage()}
         <View style={[styles.postNotificationImage, styles.anonPmNotificationImageContainer]}>
           <FastImage source={ChatIcon} style={styles.postNotificationIcon} />
         </View>
