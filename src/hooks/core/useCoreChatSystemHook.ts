@@ -22,6 +22,7 @@ import {
 import {GetstreamFeedListenerObject} from '../../../types/hooks/core/getstreamFeedListener/feedListenerObject';
 import {GetstreamWebsocket} from './websocket/types.d';
 import {InitialStartupAtom} from '../../service/initialStartup';
+import {SignedPostNotification} from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 import {getAnonymousChatName, getChatName} from '../../utils/string/StringUtils';
 
 type ChannelType = 'SIGNED' | 'ANONYMOUS';
@@ -53,9 +54,13 @@ const useCoreChatSystemHook = () => {
   const onSignedPostNotifReceived: (data: GetstreamFeedListenerObject) => Promise<void> = async (
     data
   ) => {
-    // TODO: Change this to get single signed post notification
-    console.log('onSignedPostNotifReceived', data);
-    onAnonPostNotifReceived(data);
+    try {
+      const activityId = data?.new[0]?.object?.id || data?.new[0]?.id;
+      await getSingleSignedPostNotification(activityId);
+    } catch (e) {
+      console.log('error getSingleSignedPostNotification');
+      console.log(e);
+    }
   };
 
   usePostNotificationListenerHook(onAnonPostNotifReceived, true);
@@ -269,6 +274,30 @@ const useCoreChatSystemHook = () => {
       return 0;
 
     return 0;
+  };
+
+  const getSingleSignedPostNotification = async (activityId) => {
+    if (!localDb) return;
+    let signedPostNotification: SignedPostNotification = null;
+
+    try {
+      signedPostNotification = await SignedMessageRepo.getSingleSignedPostNotifications(activityId);
+    } catch (e) {
+      console.log('error on getting signedPostNotifications');
+      console.log(e);
+    }
+
+    try {
+      if (!signedPostNotification) return;
+      const unreadCount = unreadCountProcessor(signedPostNotification);
+      const channelList = ChannelList.fromAnonymousPostNotificationAPI(signedPostNotification);
+      channelList.saveAndUpdateIncrementCount(localDb, unreadCount).catch((e) => console.log(e));
+
+      refresh('channelList');
+    } catch (e) {
+      console.log('error on saving signedPostNotifications');
+      console.log(e);
+    }
   };
 
   const getSingleAnonymousPostNotification = async (activityId) => {
