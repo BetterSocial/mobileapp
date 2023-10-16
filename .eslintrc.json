@@ -36,6 +36,7 @@
         "linebreak-style": "off",
         "no-console": "off",
         "import/prefer-default-export": "off",
+        "no-underscore-dangle": "off",
         "no-use-before-define": "warn",
         "no-param-reassign": "off",
         "react/prop-types": "off",

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {useRecoilValue} from 'recoil';
-import {v4 as uuid} from 'uuid';
 
 import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../database/schema/ChannelListSchema';
@@ -9,6 +8,8 @@ import ChatSchema from '../../database/schema/ChatSchema';
 import UseLocalDatabaseHook from '../../../types/database/localDatabase.types';
 import UserSchema from '../../database/schema/UserSchema';
 import useBetterWebsocketHook from './websocket/useBetterWebsocketHook';
+import useFetchAnonymousChannelHook from './chat/useFetchAnonymousChannelHook';
+import useFetchAnonymousPostNotificationHook from './chat/useFetchAnonymousPostNotificationHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import usePostNotificationListenerHook from './getstream/usePostNotificationListenerHook';
 import useProfileHook from './profile/useProfileHook';
@@ -24,6 +25,9 @@ import {getAnonymousChatName} from '../../utils/string/StringUtils';
 const useCoreChatSystemHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook() as UseLocalDatabaseHook;
   const {anonProfileId, signedProfileId} = useProfileHook();
+  const {getAllAnonymousChannels} = useFetchAnonymousChannelHook();
+  const {getAllAnonymousPostNotifications} = useFetchAnonymousPostNotificationHook();
+
   const initialStartup: any = useRecoilValue(InitialStartupAtom);
 
   const isEnteringApp =
@@ -91,82 +95,6 @@ const useCoreChatSystemHook = () => {
     refresh('chat');
     refresh('channelInfo');
     refresh('channelMember');
-  };
-
-  const helperAnonymousChannelPromiseBuilder = async (channel) => {
-    if (channel?.members?.length === 0) return Promise.reject(Error('no members'));
-
-    const chatName = await getAnonymousChatName(channel?.members);
-    return new Promise((resolve, reject) => {
-      try {
-        channel.targetName = chatName?.name;
-        channel.targetImage = chatName?.image;
-        channel.firstMessage = channel?.messages?.[0];
-        channel.channel = {...channel};
-        const channelList = ChannelList.fromAnonymousChannelAPI(channel);
-        return resolve(channelList.saveIfLatest(localDb));
-      } catch (e) {
-        console.log('error on helperAnonymousChannelPromiseBuilder');
-        return reject(e);
-      }
-    });
-  };
-
-  const saveAnonymousChannelData = async (channel) => {
-    if (!channel?.members || channel?.members?.length === 0) return;
-    try {
-      await helperAnonymousChannelPromiseBuilder(channel);
-    } catch (e) {
-      console.log('error on saveAnonymousChannelData helperAnonymousChannelPromiseBuilder');
-      console.log(e);
-    }
-
-    try {
-      channel?.members?.forEach(async (member) => {
-        const userMember = UserSchema.fromMemberWebsocketObject(member, channel.id);
-        const memberSchema = ChannelListMemberSchema.fromWebsocketObject(
-          channel?.id,
-          uuid(),
-          member
-        );
-        await memberSchema.save(localDb);
-        await userMember.saveOrUpdateIfExists(localDb);
-      });
-
-      channel?.messages?.forEach(async (message) => {
-        const chat = ChatSchema.fromGetAllAnonymousChannelAPI(channel?.id, message);
-        await chat.save(localDb);
-      });
-    } catch (e) {
-      console.log('error on saveAnonymousChannelData');
-      console.log(e);
-    }
-  };
-
-  const saveAllAnonymousChannelData = async (channels) => {
-    channels?.forEach(async (channel) => {
-      saveAnonymousChannelData(channel);
-    });
-  };
-
-  const getAllAnonymousChannels = async () => {
-    if (!localDb) return;
-    let anonymousChannel = [];
-
-    try {
-      anonymousChannel = await AnonymousMessageRepo.getAllAnonymousChannels();
-    } catch (e) {
-      console.log('error on getting anonymousChannel');
-      console.log(e);
-    }
-
-    try {
-      await saveAllAnonymousChannelData(anonymousChannel);
-      refresh('channelList');
-    } catch (e) {
-      console.log('error on saving anonymousChannel');
-      console.log(e);
-    }
   };
 
   const helperDetermineIsMyChildComment = (postNotification: AnonymousPostNotification) => {
@@ -241,32 +169,6 @@ const useCoreChatSystemHook = () => {
       const channelList = ChannelList.fromAnonymousPostNotificationAPI(anonymousPostNotification);
       channelList.saveAndUpdateIncrementCount(localDb, unreadCount).catch((e) => console.log(e));
 
-      refresh('channelList');
-    } catch (e) {
-      console.log('error on saving anonymousPostNotifications');
-      console.log(e);
-    }
-  };
-
-  const getAllAnonymousPostNotifications = async () => {
-    if (!localDb) return;
-    let anonymousPostNotifications = [];
-
-    try {
-      anonymousPostNotifications = await AnonymousMessageRepo.getAllAnonymousPostNotifications();
-    } catch (e) {
-      console.log('error on getting anonymousPostNotifications');
-      console.log(e);
-    }
-
-    try {
-      const allPromises = [];
-      anonymousPostNotifications.forEach((postNotification) => {
-        const channelList = ChannelList.fromAnonymousPostNotificationAPI(postNotification);
-        allPromises.push(channelList.saveIfLatest(localDb).catch((e) => console.log(e)));
-      });
-
-      await Promise.all(allPromises);
       refresh('channelList');
     } catch (e) {
       console.log('error on saving anonymousPostNotifications');
