@@ -1,13 +1,12 @@
 import {OneSignal} from 'react-native-onesignal';
 import {useEffect} from 'react';
-import {useSetRecoilState} from 'recoil';
+import {useNavigation} from '@react-navigation/core';
 
 import OneSignalUtil from '../../../service/onesignal';
-import onesignalNavigationAtom from '../../../atom/onesignalNavigationAtom';
 import {OneSignalTopicNotificationData} from './types.d';
 
 const useOneSignalSubscribeToCommunityHooks = () => {
-  const setOneSignalNavigationAtom = useSetRecoilState(onesignalNavigationAtom);
+  const navigation = useNavigation();
 
   const loginToOneSignal = async () => {
     try {
@@ -21,9 +20,8 @@ const useOneSignalSubscribeToCommunityHooks = () => {
     OneSignal.Notifications.addEventListener('click', (event) => {
       const additionalData = event?.notification?.additionalData as OneSignalTopicNotificationData;
       if (additionalData?.community) {
-        setOneSignalNavigationAtom({
-          screen: 'TopicPageScreen',
-          params: additionalData
+        navigation.navigate('TopicPageScreen', {
+          id: additionalData?.community
         });
       }
     });

@@ -2,8 +2,7 @@ import * as React from 'react';
 import NetInfo from '@react-native-community/netinfo';
 import {View} from 'react-native';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
-import {useNavigation} from '@react-navigation/core';
-import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
+import {useRecoilState, useRecoilValue} from 'recoil';
 
 import Blocked from '../screens/Blocked';
 import ChooseUsername from '../screens/InputUsername';
@@ -36,7 +35,6 @@ import Topics from '../screens/Topics';
 import WebsocketResearchScreen from '../screens/WebsocketResearchScreen';
 import WhotoFollow from '../screens/WhotoFollow';
 import api from '../service/config';
-import onesignalNavigationAtom from '../atom/onesignalNavigationAtom';
 import useCoreChatSystemHook from '../hooks/core/useCoreChatSystemHook';
 import useOneSignalSubscribeToCommunityHooks from '../hooks/core/onesignal/useOneSignalSubscribeToCommunityHooks';
 import {
@@ -60,33 +58,13 @@ import {useInitialStartup} from '../hooks/useInitialStartup';
 const RootStack = createNativeStackNavigator();
 
 const OneSignalNavigator = ({children}) => {
-  const navigation = useNavigation();
-  const oneSignalNavigationAtom = useRecoilValue(onesignalNavigationAtom);
-  const setOneSignalNavigationAtom = useSetRecoilState(onesignalNavigationAtom);
-
-  React.useEffect(() => {
-    if (oneSignalNavigationAtom.screen !== null) {
-      navigation.navigate(oneSignalNavigationAtom.screen, {
-        id: oneSignalNavigationAtom?.params?.community
-      });
-    }
-
-    return () => {
-      if (oneSignalNavigationAtom.screen !== null) {
-        setOneSignalNavigationAtom({
-          screen: null,
-          params: null
-        });
-      }
-    };
-  }, [oneSignalNavigationAtom.screen]);
+  useOneSignalSubscribeToCommunityHooks();
 
   return <>{children}</>;
 };
 
 export const RootNavigator = () => {
   useCoreChatSystemHook();
-  useOneSignalSubscribeToCommunityHooks();
 
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const [following, setFollowing] = useRecoilState(followersOrFollowingAtom);
