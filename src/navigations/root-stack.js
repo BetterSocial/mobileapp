@@ -17,6 +17,7 @@ import ImageViewerScreen from '../screens/ImageViewer';
 import LinkContextScreen from '../screens/LinkContextScreen';
 import LocalCommunity from '../screens/LocalCommunity';
 import NetworkStatusIndicator from '../components/NetworkStatusIndicator';
+import OneSignalNavigator from './OneSignalNavigator';
 import OtherProfile from '../screens/OtherProfile';
 import OtherProfilePostDetail from '../screens/OtherProfilePostDetail';
 import OtherProfileReplyComment from '../screens/OtherProfileReplyComment';
@@ -37,7 +38,6 @@ import WebsocketResearchScreen from '../screens/WebsocketResearchScreen';
 import WhotoFollow from '../screens/WhotoFollow';
 import api from '../service/config';
 import useCoreChatSystemHook from '../hooks/core/useCoreChatSystemHook';
-import useOneSignalSubscribeToCommunityHooks from '../hooks/core/onesignal/useOneSignalSubscribeToCommunityHooks';
 import {
   AddParticipant,
   ChannelScreen,
@@ -57,12 +57,6 @@ import {followersOrFollowingAtom} from '../screens/ChannelListScreen/model/follo
 import {useInitialStartup} from '../hooks/useInitialStartup';
 
 const RootStack = createNativeStackNavigator();
-
-const OneSignalNavigator = ({children}) => {
-  useOneSignalSubscribeToCommunityHooks();
-
-  return <>{children}</>;
-};
 
 export const RootNavigator = () => {
   useCoreChatSystemHook();
