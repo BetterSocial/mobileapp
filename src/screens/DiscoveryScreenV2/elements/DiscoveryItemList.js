@@ -13,7 +13,7 @@ import {fonts} from '../../../utils/fonts';
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 
 const DomainList = (props) => {
-  const {item, isHashtag, handleSetFollow, handleSetUnFollow, onPressBody, isDomain} = props;
+  const {item, isHashtag, handleSetFollow, handleSetUnFollow, onPressBody} = props;
 
   return (
     <View style={styles.container}>
@@ -192,14 +192,13 @@ const styles = StyleSheet.create({
 
 DomainList.propTypes = {
   item: PropTypes.object,
-  onPressList: PropTypes.func,
   isHashtag: PropTypes.bool,
-  isDomain: PropTypes.bool,
-  onPressBody: PropTypes.func
+  onPressBody: PropTypes.func,
+  handleSetFollow: PropTypes.func,
+  handleSetUnFollow: PropTypes.func
 };
 
 DomainList.defaultProps = {
-  onPressList: () => null,
   handleSetFollow: () => null,
   handleSetUnFollow: () => null,
   onPressBody: () => null

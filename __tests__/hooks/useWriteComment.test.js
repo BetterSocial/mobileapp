@@ -2,7 +2,6 @@ import React from 'react';
 import {renderHook} from '@testing-library/react-hooks';
 import useWriteComment from '../../src/components/Comments/hooks/useWriteComment';
 import {Context} from '../../src/context/Store';
-import * as servicComment from '../../src/service/comment';
 
 describe('useWriteComment should run correctly', () => {
   const dispatchComment = jest.fn();

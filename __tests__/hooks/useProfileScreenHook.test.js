@@ -5,7 +5,6 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import useProfileScreenHook from '../../src/hooks/screen/useProfileScreenHook';
 import {Context} from '../../src/context';
 import {myProfileMock} from '../../__mocks__/mockMyProfile';
-import ProfileRepo from '../../src/service/repo/profileRepo';
 import StorageUtils from '../../src/utils/storage';
 
 jest.mock('react-native-safe-area-context', () => mockSafeAreaContext);
