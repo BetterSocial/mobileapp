@@ -401,8 +401,6 @@ const OtherProfile = () => {
   const handleOfflineMode = async () => {
     const cache = await StorageUtils.otherProfileData.getForKey(params?.data?.username);
     if (cache) {
-      console.log('cacheman', {cache});
-
       const data = JSON.parse(cache);
       handleSaveDataOtherProfile(data);
     } else {
