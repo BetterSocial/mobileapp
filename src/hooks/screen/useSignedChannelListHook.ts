@@ -21,7 +21,6 @@ function useSignedChannelListScreenHook(): UseSignedChannelListScreenHook {
     //! REMOVE ANONYMOUSID
     const myAnonymousId = await getAnonymousUserId();
     const data = await ChannelList.getAll(localDb, myId, myAnonymousId);
-
     setChannels(data);
   };
 

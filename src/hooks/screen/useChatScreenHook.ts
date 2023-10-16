@@ -4,6 +4,7 @@ import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import {v4 as uuid} from 'uuid';
 
+import {atom, useRecoilState} from 'recoil';
 import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
 import ChatSchema from '../../database/schema/ChatSchema';
 import SignedMessageRepo from '../../service/repo/signedMessageRepo';
@@ -14,10 +15,10 @@ import {getAnonymousUserId} from '../../utils/users';
 import {getUserId} from '../../utils/token';
 import {randomString} from '../../utils/string/StringUtils';
 
-function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
+function useChatScreenHook(): UseChatScreenHook {
   const {localDb, chat, refresh} = useLocalDatabaseHook();
   const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen} = useChatUtilsHook();
-
+  const type = selectedChannel?.channelType === 'ANON_PM' ? 'ANONYMOUS' : 'SIGNED';
   const [chats, setChats] = React.useState<ChatSchema[]>([]);
 
   const initChatData = async () => {
@@ -44,7 +45,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     }
 
     let currentChatSchema = sendingChatSchema;
-
+    const userId = null;
     const myAnonymousId = await getAnonymousUserId();
     try {
       const randomId = uuid();
@@ -57,7 +58,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
           message,
           localDb
         );
-
+        console.log({currentChatSchema, myAnonymousId, chats}, 'kara');
         await currentChatSchema.save(localDb);
         refresh('chat');
         refresh('channelList');
