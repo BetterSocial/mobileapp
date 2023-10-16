@@ -4,7 +4,7 @@ import mockSafeAreaContext from 'react-native-safe-area-context/jest/mock';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import useProfileScreenHook from '../../src/hooks/screen/useProfileScreenHook';
 import {Context} from '../../src/context';
-import {myProfileMock} from '../../__mocks__/mockMyProfile';
+import {myProfileMock as profileMock} from '../../__mocks__/mockMyProfile';
 import StorageUtils from '../../src/utils/storage';
 
 jest.mock('react-native-safe-area-context', () => mockSafeAreaContext);
@@ -15,7 +15,7 @@ describe('useProfileScreenHook should run correctly', () => {
       value={{
         myProfileFeed: [{feeds: [], anonymousFeeds: []}, dispatch],
         feeds: [{feeds: []}, dispatch],
-        profile: [{myProfile: myProfileMock}, dispatch]
+        profile: [{myProfile: profileMock}, dispatch]
       }}>
       <SafeAreaProvider>{children}</SafeAreaProvider>
     </Context.Provider>
