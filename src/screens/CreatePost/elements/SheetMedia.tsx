@@ -2,9 +2,9 @@ import * as React from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {ActivityIndicator, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
+import MemoIcCamera from '../../../assets/icons/Ic_camera';
 import MemoIcCreatePoll from '../../../assets/icons/ic_create_poll';
-import MemoIc_camera from '../../../assets/icons/Ic_camera';
-import MemoIc_media from '../../../assets/icons/Ic_media';
+import MemoIcMedia from '../../../assets/icons/Ic_media';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 
@@ -52,13 +52,13 @@ const SheetMedia = ({
       )}
       <List
         label="Upload media from library"
-        icon={<MemoIc_media width={16.67} height={16.67} />}
+        icon={<MemoIcMedia width={16.67} height={16.67} />}
         onPress={uploadFromMedia}
         isLoading={isLoadingUploadingMedia}
       />
       <List
         label="Take a photo"
-        icon={<MemoIc_camera width={16.67} height={16.67} />}
+        icon={<MemoIcCamera width={16.67} height={16.67} />}
         onPress={takePhoto}
         isLoading={isLoadingUploadingPhoto}
       />
