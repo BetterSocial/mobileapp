@@ -77,9 +77,11 @@ const ChooseUsername = () => {
           selectionLimit: 1
         },
         (res) => {
-          if (res.uri) setImageUrl(res.uri, dispatch);
-          if (res.base64) {
-            setImage(`${res.base64}`, dispatch);
+          const uri = res?.assets?.[0]?.uri;
+          const base64 = res?.assets?.[0]?.base64;
+          if (uri) setImageUrl(uri, dispatch);
+          if (base64) {
+            setImage(`${base64}`, dispatch);
             bottomSheetChooseImageRef.current.close();
           }
         }
@@ -93,9 +95,11 @@ const ChooseUsername = () => {
     const {success, message} = await requestExternalStoragePermission();
     if (success) {
       launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
-        if (res.uri) setImageUrl(res.uri, dispatch);
-        if (res.base64) {
-          setImage(`${res.base64}`, dispatch);
+        const uri = res?.assets?.[0]?.uri;
+        const base64 = res?.assets?.[0]?.base64;
+        if (uri) setImageUrl(uri, dispatch);
+        if (base64) {
+          setImage(`${base64}`, dispatch);
           bottomSheetChooseImageRef.current.close();
         }
       });
