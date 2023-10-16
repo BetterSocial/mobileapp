@@ -313,7 +313,7 @@ const useCoreChatSystemHook = () => {
     try {
       if (!signedPostNotification) return;
       const unreadCount = unreadCountProcessor(signedPostNotification);
-      const channelList = ChannelList.fromAnonymousPostNotificationAPI(signedPostNotification);
+      const channelList = ChannelList.fromSignedPostNotificationAPI(signedPostNotification);
       channelList.saveAndUpdateIncrementCount(localDb, unreadCount).catch((e) => console.log(e));
 
       refresh('channelList');
