@@ -11387,6 +11387,12 @@ react-native-network-logger@^1.14.1:
   version "1.15.0"
   resolved "https://registry.yarnpkg.com/react-native-network-logger/-/react-native-network-logger-1.15.0.tgz#e333ac57f19875a5d4d797498b144a42b37e8a1e"
   integrity sha512-/nxAC6iCWf7dwD4LB6hTV64P/wnMj75oSDxgKKSJXDO1m0yGiZwMQzC9fcAydMM9lqKWRS5T4jPUPinZNu7VOQ==
+  
+react-native-onesignal@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-onesignal/-/react-native-onesignal-5.0.0.tgz#c51b950dc8997b0dedfa6083efde9a1e4470b5b3"
+  integrity sha512-kIouwQoeMXmJeVg8mdvbtTisNejtlMlKW8sU7KdzAge9ZRezTr6ryVPHroiMdjnYBvmZ4UzCtZZrS+Aqarepbw==
+  dependencies:
 
 react-native-permissions@^3.2.0:
   version "3.8.0"
