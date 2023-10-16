@@ -1,23 +1,28 @@
 import {OneSignal} from 'react-native-onesignal';
 
-import {TopicRepoItem, getFollowingTopic} from '../topics';
+import {getSubscribeableTopic} from '../topics';
 
-const addCommunityTags = (communities: string[] = []) => {
-  if (!communities) return;
-  try {
-    const communityString = communities?.join(',');
-    console.log('adding community tag', communityString);
-    OneSignal.User.addTag('better_community', communityString);
-  } catch (e) {
-    console.log('error adding community tag', e);
-  }
+type TopicTag = {
+  name: string;
 };
 
-const rebuildCommunityTags = async () => {
-  const response = await getFollowingTopic();
-  const communities = response?.data as TopicRepoItem[];
-  const communityNames = communities?.map((item) => item?.name);
-  addCommunityTags(communityNames);
+const rebuildAndSubscribeTags = async () => {
+  try {
+    const response = await getSubscribeableTopic();
+    const {topics = [], histories = []} = response?.data || {};
+
+    histories?.map((history: TopicTag) => {
+      OneSignal.User.removeTag(`better_community_${history?.name}`);
+      return null;
+    });
+
+    topics?.map((topic: TopicTag) => {
+      OneSignal.User.addTag(`better_community_${topic?.name}`, 'true');
+      return null;
+    });
+  } catch (e) {
+    console.log('error rebuilding and subscribing tags', e);
+  }
 };
 
 const login = async (userId) => {
@@ -25,8 +30,7 @@ const login = async (userId) => {
 };
 
 const OneSignalUtil = {
-  addCommunityTags,
-  rebuildCommunityTags,
+  rebuildAndSubscribeTags,
   login
 };
 

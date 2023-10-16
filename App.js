@@ -5,7 +5,7 @@ import Toast from 'react-native-toast-message';
 import {BackHandler, KeyboardAvoidingView, Platform, View} from 'react-native';
 import {HumanIDProvider} from '@human-internet/react-native-humanid';
 import {LogLevel, OneSignal} from 'react-native-onesignal';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {OverlayProvider, Streami18n} from 'stream-chat-react-native';
 import {RecoilDebugObserver} from 'reactotron-recoil-plugin';
 import {RecoilRoot} from 'recoil';
@@ -124,11 +124,6 @@ const App = () => {
   // requestPermission will show the native iOS or Android notification permission prompt.
   // We recommend removing the following code and instead using an In-App Message to prompt for notification permission
   OneSignal.Notifications.requestPermission(true);
-
-  // Method for listening for notification clicks
-  OneSignal.Notifications.addEventListener('click', (event) => {
-    console.log('OneSignal: notification clicked:', event);
-  });
 
   return (
     <>

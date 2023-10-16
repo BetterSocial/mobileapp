@@ -1,20 +1,37 @@
+import {OneSignal} from 'react-native-onesignal';
 import {useEffect} from 'react';
+import {useSetRecoilState} from 'recoil';
 
 import OneSignalUtil from '../../../service/onesignal';
-import {getUserId} from '../../../utils/users';
+import onesignalNavigationAtom from '../../../atom/onesignalNavigationAtom';
+import {OneSignalTopicNotificationData} from './types.d';
 
 const useOneSignalSubscribeToCommunityHooks = () => {
+  const setOneSignalNavigationAtom = useSetRecoilState(onesignalNavigationAtom);
+
   const loginToOneSignal = async () => {
     try {
-      const userId = await getUserId();
-      console.log('login to onesignal', userId);
-      OneSignalUtil.login(userId);
+      await OneSignalUtil.rebuildAndSubscribeTags();
     } catch (e) {
       console.log(e);
     }
   };
+
+  const addNotificationListener = async () => {
+    OneSignal.Notifications.addEventListener('click', (event) => {
+      const additionalData = event?.notification?.additionalData as OneSignalTopicNotificationData;
+      if (additionalData?.community) {
+        setOneSignalNavigationAtom({
+          screen: 'TopicPageScreen',
+          params: additionalData
+        });
+      }
+    });
+  };
+
   useEffect(() => {
     loginToOneSignal();
+    addNotificationListener();
   }, []);
 };
 
