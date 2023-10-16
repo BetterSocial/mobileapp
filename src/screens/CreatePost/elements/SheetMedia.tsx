@@ -8,22 +8,23 @@ import MemoIc_media from '../../../assets/icons/Ic_media';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 
-/**
- * @typedef {Object} SheetMediaProps
- * @property {React.MutableRefObject<RBSheet>} refMedia
- * @property {() => void} uploadFromMedia
- * @property {() => void} takePhoto
- * @property {() => void} createPoll
- * @property {Array} medias
- * @property {boolean} isLoadingUploadingMedia
- * @property {boolean} isLoadingUploadingPhoto
- */
+export type SheetMediaProps = {
+  refMedia: React.RefObject<RBSheet>;
+  uploadFromMedia: () => void;
+  takePhoto: () => void;
+  createPoll: () => void;
+  medias?: string[];
+  isLoadingUploadingMedia?: boolean;
+  isLoadingUploadingPhoto?: boolean;
+};
 
-/**
- *
- * @param {SheetMediaProps} param0
- * @returns
- */
+export type ListProps = {
+  icon: React.ReactNode;
+  label: string;
+  onPress: () => void;
+  isLoading?: boolean;
+};
+
 const SheetMedia = ({
   refMedia,
   uploadFromMedia,
@@ -32,7 +33,7 @@ const SheetMedia = ({
   medias = [],
   isLoadingUploadingMedia = false,
   isLoadingUploadingPhoto = false
-}) => (
+}: SheetMediaProps) => (
   <RBSheet
     ref={refMedia}
     closeOnDragDown={true}
@@ -65,20 +66,7 @@ const SheetMedia = ({
   </RBSheet>
 );
 
-/**
- * @typedef {Object} ListProps
- * @property {React.ReactNode} icon
- * @property {string} label
- * @property {() => void} onPress
- * @property {boolean} [isLoading]
- */
-
-/**
- *
- * @param {ListProps} param0
- * @returns
- */
-const List = ({icon, label, onPress, isLoading = false}) => (
+const List = ({icon, label, onPress, isLoading = false}: ListProps) => (
   <TouchableOpacity style={styles.list} onPress={onPress}>
     {icon}
     <Text style={styles.labelList}>{label}</Text>
