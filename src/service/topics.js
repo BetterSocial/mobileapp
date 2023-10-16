@@ -55,4 +55,20 @@ const getTopics = async (name, axiosOptions = {}) => {
   }
 };
 
-export {getUserTopic, putUserTopic, getFollowingTopic, getAllMemberTopic, getTopics};
+const getSubscribeableTopic = async () => {
+  try {
+    const result = await api.get('topics/subscribable');
+    return result.data;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+export {
+  getUserTopic,
+  putUserTopic,
+  getFollowingTopic,
+  getAllMemberTopic,
+  getTopics,
+  getSubscribeableTopic
+};
