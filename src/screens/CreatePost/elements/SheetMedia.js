@@ -8,6 +8,22 @@ import MemoIc_media from '../../../assets/icons/Ic_media';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 
+/**
+ * @typedef {Object} SheetMediaProps
+ * @property {React.MutableRefObject<RBSheet>} refMedia
+ * @property {() => void} uploadFromMedia
+ * @property {() => void} takePhoto
+ * @property {() => void} createPoll
+ * @property {Array} medias
+ * @property {boolean} isLoadingUploadingMedia
+ * @property {boolean} isLoadingUploadingPhoto
+ */
+
+/**
+ *
+ * @param {SheetMediaProps} param0
+ * @returns
+ */
 const SheetMedia = ({
   refMedia,
   uploadFromMedia,
@@ -48,6 +64,20 @@ const SheetMedia = ({
     </View>
   </RBSheet>
 );
+
+/**
+ * @typedef {Object} ListProps
+ * @property {React.ReactNode} icon
+ * @property {string} label
+ * @property {() => void} onPress
+ * @property {boolean} [isLoading]
+ */
+
+/**
+ *
+ * @param {ListProps} param0
+ * @returns
+ */
 const List = ({icon, label, onPress, isLoading = false}) => (
   <TouchableOpacity style={styles.list} onPress={onPress}>
     {icon}

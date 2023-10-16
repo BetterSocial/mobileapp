@@ -29,8 +29,8 @@ import SampleChatScreen from '../screens/WebsocketResearchScreen/SampleChatScree
 import Settings from '../screens/Settings';
 import SignIn from '../screens/SignInV2';
 import TermsAndCondition from '../screens/WebView/TermsAndCondition';
-import TopicPageScreen from '../screens/TopicPageScreen';
 import TopicMemberScreen from '../screens/TopicMemberScreen';
+import TopicPageScreen from '../screens/TopicPageScreen';
 import Topics from '../screens/Topics';
 import WebsocketResearchScreen from '../screens/WebsocketResearchScreen';
 import WhotoFollow from '../screens/WhotoFollow';
@@ -41,7 +41,6 @@ import {
   ChannelScreen,
   ChatDetailPage,
   ContactScreen,
-  CreateGroupScreen,
   DetailDomainScreen,
   DetailGroupImage,
   GroupInfo,
@@ -159,11 +158,6 @@ const AuthenticatedNavigator = () => {
       <AuthenticatedStack.Screen
         name="DomainScreen"
         component={DomainScreen}
-        options={{headerShown: false}}
-      />
-      <AuthenticatedStack.Screen
-        name="CreateGroupScreen"
-        component={CreateGroupScreen}
         options={{headerShown: false}}
       />
       <AuthenticatedStack.Screen
