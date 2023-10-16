@@ -392,10 +392,6 @@ const OtherProfile = () => {
         }
         setLoading(false);
         setInitLoading(false);
-        setBlockStatus({
-          ...blockStatus,
-          blocked: true
-        });
       }
     } else {
       handleOfflineMode();
