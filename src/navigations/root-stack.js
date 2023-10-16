@@ -43,7 +43,6 @@ import {
   ChannelScreen,
   ChatDetailPage,
   ContactScreen,
-  CreateGroupScreen,
   DetailDomainScreen,
   DetailGroupImage,
   GroupInfo,
@@ -167,11 +166,6 @@ const AuthenticatedNavigator = () => {
         <AuthenticatedStack.Screen
           name="DomainScreen"
           component={DomainScreen}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="CreateGroupScreen"
-          component={CreateGroupScreen}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
