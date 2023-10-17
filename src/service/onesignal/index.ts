@@ -21,7 +21,7 @@ const rebuildAndSubscribeTags = async () => {
       return null;
     });
   } catch (e) {
-    console.log('error rebuilding and subscribing tags', e);
+    console.log('error rebuilding and subscribing tags ', e?.message);
   }
 };
 
