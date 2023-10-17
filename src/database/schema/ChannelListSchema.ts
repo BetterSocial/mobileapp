@@ -106,7 +106,7 @@ class ChannelList implements BaseDbSchema {
 
   async save(db: SQLiteDatabase): Promise<void> {
     let jsonString: string | null = null;
-
+    console.log(this.id, this.channelPicture, this.rawJson, 'lapi');
     try {
       jsonString = JSON.stringify(this.rawJson);
       await db.executeSql(

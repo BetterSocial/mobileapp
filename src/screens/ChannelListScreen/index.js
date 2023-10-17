@@ -8,7 +8,6 @@ import useSignedChannelListScreenHook from '../../hooks/screen/useSignedChannelL
 
 const ChannelListScreen = () => {
   const {channels, goToChatScreen, goToPostDetailScreen} = useSignedChannelListScreenHook();
-  console.log({channels}, 'lusioa');
   return (
     <FlatList
       data={channels}

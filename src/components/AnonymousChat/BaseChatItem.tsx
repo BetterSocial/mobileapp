@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View} from 'react-native';
+import {View, Text} from 'react-native';
 
 import AnonymousIcon from '../../screens/ChannelListScreen/elements/components/AnonymousIcon';
 import ChatItemMyTextV2 from './child/ChatItemMyTextV2';
@@ -11,13 +11,24 @@ import {
 } from '../../../types/component/AnonymousChat/BaseChatItem.types';
 import {ChatStatus} from '../../../types/database/schema/ChannelList.types';
 import {calculateTime} from '../../utils/time';
+import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
+import BaseSystemChat from './BaseChatSystem';
 
 const BaseChatItem = ({item, index}: BaseChatItemComponentProps) => {
-  const {selectedChannel} = useChatScreenHook('ANONYMOUS');
+  const {selectedChannel} = useChatScreenHook();
+  const {selectedChannel: selectedChat} = useChatUtilsHook();
+  const isAnonymous = selectedChat?.channelType !== 'PM';
   const {anon_user_info_emoji_name, anon_user_info_emoji_code, anon_user_info_color_code} =
     selectedChannel?.rawJson?.channel || {};
 
-  if (item?.isMe)
+  const handleUserName = () => {
+    if (isAnonymous) {
+      return `Anonymous ${anon_user_info_emoji_name}`;
+    }
+    return selectedChat?.user?.username;
+  };
+
+  if (item?.isMe && item?.type === 'regular')
     return (
       <ChatItemMyTextV2
         AnonymousImage={
@@ -33,11 +44,15 @@ const BaseChatItem = ({item, index}: BaseChatItemComponentProps) => {
         isContinuous={item?.isContinuous}
         message={item?.message}
         time={calculateTime(item?.updatedAt, true)}
-        username={`Anonymous ${anon_user_info_emoji_name}`}
+        username={handleUserName()}
         type={BaseChatItemTypeProps.MY_ANON_CHAT}
         status={item?.status as ChatStatus}
       />
     );
+
+  if (item?.type === 'system') {
+    return <BaseSystemChat item={item} index={index} />;
+  }
 
   return (
     <ChatItemTargetText

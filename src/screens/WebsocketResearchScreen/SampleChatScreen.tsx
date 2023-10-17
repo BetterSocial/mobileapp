@@ -4,7 +4,6 @@
 import * as React from 'react';
 import {Dimensions, FlatList, KeyboardAvoidingView, Platform, StyleSheet, View} from 'react-native';
 
-import {useNavigation, useRoute} from '@react-navigation/core';
 import AnonymousInputMessage from '../../components/Chat/AnonymousInputMessage';
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
@@ -15,7 +14,7 @@ const {height} = Dimensions.get('window');
 
 const SampleChatScreen = () => {
   const {selectedChannel, chats, goBackFromChatScreen, goToChatInfoScreen, sendChat} =
-    useChatScreenHook('ANONYMOUS');
+    useChatScreenHook();
   console.log({selectedChannel}, 'sina');
   const styles = StyleSheet.create({
     keyboardAvoidingView: {
@@ -46,10 +45,10 @@ const SampleChatScreen = () => {
       borderTopWidth: 1
     }
   });
-
   const renderChatItem = React.useCallback(({item, index}) => {
     return <BaseChatItem item={item} index={index} />;
   }, []);
+  console.log({selectedChannel}, 'lapuk');
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

@@ -11,8 +11,8 @@ import SignedMessageRepo from '../../service/repo/signedMessageRepo';
 import UseChatScreenHook from '../../../types/hooks/screens/useChatScreenHook.types';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
-import {getAnonymousUserId} from '../../utils/users';
-import {getUserId} from '../../utils/token';
+import {getAnonymousUserId, getUserId} from '../../utils/users';
+// import {getUserId} from '../../utils/token';
 import {randomString} from '../../utils/string/StringUtils';
 
 function useChatScreenHook(): UseChatScreenHook {
@@ -25,6 +25,7 @@ function useChatScreenHook(): UseChatScreenHook {
     if (!localDb && !selectedChannel) return;
     const myUserId = await getUserId();
     const myAnonymousId = await getAnonymousUserId();
+
     const data = (await ChatSchema.getAll(
       localDb,
       selectedChannel?.id,
@@ -45,20 +46,26 @@ function useChatScreenHook(): UseChatScreenHook {
     }
 
     let currentChatSchema = sendingChatSchema;
-    const userId = null;
+    let userId = null;
+    const myUserId = await getUserId();
     const myAnonymousId = await getAnonymousUserId();
+    if (type === 'ANONYMOUS') {
+      userId = myAnonymousId;
+    } else {
+      userId = myUserId;
+    }
     try {
       const randomId = uuid();
 
       if (currentChatSchema === null) {
         currentChatSchema = await ChatSchema.generateSendingChat(
           randomId,
-          myAnonymousId,
+          userId,
           selectedChannel?.id,
           message,
           localDb
         );
-        console.log({currentChatSchema, myAnonymousId, chats}, 'kara');
+        console.log({currentChatSchema, userId, chats, myUserId}, 'kara');
         await currentChatSchema.save(localDb);
         refresh('chat');
         refresh('channelList');
@@ -70,7 +77,7 @@ function useChatScreenHook(): UseChatScreenHook {
       } else {
         response = await SignedMessageRepo.sendSignedMessage(selectedChannel?.id, message);
       }
-
+      console.log({response}, 'sinak');
       await currentChatSchema.updateChatSentStatus(localDb, response);
       refresh('chat');
       refresh('channelList');

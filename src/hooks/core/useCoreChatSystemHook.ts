@@ -74,7 +74,7 @@ const useCoreChatSystemHook = () => {
       channelType === 'ANON_PM'
         ? await getAnonymousChatName(websocketData?.channel?.members)
         : getChatName(websocketData?.channel?.name);
-
+    console.log({chatName, channelType, websocketData}, 'sisan');
     websocketData.targetName = chatName?.name;
     websocketData.targetImage = chatName?.image;
 
@@ -405,6 +405,7 @@ const useCoreChatSystemHook = () => {
     if (!lastJsonMessage && !localDb) return;
 
     const {type} = lastJsonMessage;
+    console.log({lastJsonMessage}, 'nehi');
     if (type === 'health.check') return;
     if (type === 'notification.message_new') {
       saveChannelListData(lastJsonMessage, 'ANON_PM').catch((e) => console.log(e));
