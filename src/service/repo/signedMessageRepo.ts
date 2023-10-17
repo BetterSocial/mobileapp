@@ -1,4 +1,3 @@
-import anonymousApi from '../anonymousConfig';
 import api from '../config';
 import {ChannelData} from '../../../types/repo/ChannelData';
 import {SignedPostNotification} from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
@@ -6,7 +5,7 @@ import {SignedPostNotification} from '../../../types/repo/SignedMessageRepo/Sign
 const baseUrl = {
   checkIsTargetAllowingAnonDM: 'chat/channels/check-allow-anon-dm-status',
   sendSignedMessage: '/chat/anonymous',
-  getAllSignedChannels: '/chat/channels',
+  getAllSignedChannels: '/chat/channels/signed',
   getAllSignedPostNotifications: '/feeds/feed-chat',
   getSingleSignedPostNotifications: (activityId: string) => `/feeds/feed-chat/${activityId}`,
   setChannelAsRead: (channelId: string) => `/chat/channels/${channelId}/read`
@@ -56,7 +55,7 @@ async function sendSignedMessage(channelId: string, message: string) {
 
 async function getAllSignedChannels() {
   try {
-    const response = await anonymousApi.get(baseUrl.getAllSignedChannels);
+    const response = await api.get(baseUrl.getAllSignedChannels);
 
     if (response.status === 200) {
       return Promise.resolve(response.data?.data);
