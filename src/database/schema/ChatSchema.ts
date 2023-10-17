@@ -209,7 +209,7 @@ class ChatSchema implements BaseDbSchema {
     });
   }
 
-  static fromGetAllAnonymousChannelAPI(channelId, json): ChatSchema {
+  static fromGetAllChannelAPI(channelId, json): ChatSchema {
     let rawJson = null;
 
     try {
