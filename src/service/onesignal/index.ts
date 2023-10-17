@@ -9,10 +9,10 @@ type TopicTag = {
 const rebuildAndSubscribeTags = async () => {
   try {
     const response = await getSubscribeableTopic();
-    const {topics = [], histories = []} = response?.data || {};
+    const {topics = [], history = []} = response?.data || {};
 
-    histories?.map((history: TopicTag) => {
-      OneSignal.User.removeTag(`better_community_${history?.name}`);
+    history?.map((historyItem: TopicTag) => {
+      OneSignal.User.removeTag(`better_community_${historyItem?.name}`);
       return null;
     });
 
@@ -25,13 +25,8 @@ const rebuildAndSubscribeTags = async () => {
   }
 };
 
-const login = async (userId) => {
-  OneSignal.login(userId);
-};
-
 const OneSignalUtil = {
-  rebuildAndSubscribeTags,
-  login
+  rebuildAndSubscribeTags
 };
 
 export default OneSignalUtil;
