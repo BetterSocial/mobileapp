@@ -4,7 +4,6 @@ import ChannelListScreenV2 from './ChannelListScreenV2';
 import ChannelScreen from './ChannelScreen';
 import ChatDetailPage from './ChatDetailPage';
 import ContactScreen from './ContactScreen';
-import CreateGroupScreen from './CreateGroupScreen';
 import DetailDomainScreen from './DetailDomain/DetailDomainScreen';
 import DetailGroupImage from './DetailGroupImage';
 import FeedScreen from './FeedScreen';
@@ -21,7 +20,6 @@ export {
   FeedScreen,
   NewsScreen,
   ProfileScreen,
-  CreateGroupScreen,
   ContactScreen,
   DetailDomainScreen,
   ChatDetailPage,
