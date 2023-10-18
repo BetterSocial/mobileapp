@@ -1,16 +1,7 @@
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 
 import MigrationVersion2 from '../../../../src/database/migration/file/migration_version_2';
-
-const mockDb: SQLiteDatabase = {
-  executeSql: jest.fn(),
-  dbName: '',
-  transaction: jest.fn(),
-  attach: jest.fn(),
-  close: jest.fn(),
-  detach: jest.fn(),
-  readTransaction: jest.fn()
-};
+import {mockDb} from '../../../../__utils__/mockedVariable/mockDb';
 
 beforeEach(() => {
   jest.clearAllMocks();
