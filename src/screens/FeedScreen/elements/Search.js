@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   newPostText: {
-    color: COLORS.holyTosca,
+    color: COLORS.holytosca,
     marginRight: 11,
     ...FONTS.h3
   },

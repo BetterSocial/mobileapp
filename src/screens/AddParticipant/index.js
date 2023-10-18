@@ -262,6 +262,6 @@ const styles = StyleSheet.create({
     marginTop: 16
   },
   subtitleStyle: (isIsset) => ({
-    color: isIsset ? COLORS.holyTosca : '#C4C4C4'
+    color: isIsset ? COLORS.holytosca : '#C4C4C4'
   })
 });
