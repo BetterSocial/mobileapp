@@ -117,6 +117,9 @@ const CreatePost = () => {
   const [locationId, setLocationIdState] = React.useState('');
   const [positionKeyboard, setPositionKeyboard] = React.useState('never');
   const [taggingUsers, setTaggingUsers] = React.useState([]);
+  const [isUploadingPhotoMedia, setIsUploadingPhotoMedia] = React.useState(false);
+  const [isUploadingPhotoCamera, setIsUploadingPhotoCamera] = React.useState(false);
+
   const {setHashtags} = useHastagMention('');
   const [client] = React.useContext(Context).client;
   const [user] = React.useContext(Context).profile;
@@ -305,19 +308,19 @@ const CreatePost = () => {
   };
 
   const uploadPhotoImage = async (pathImg) => {
-    const compressionResult = await Image.compress(pathImg, {
-      compressionMethod: 'auto'
-    });
-
-    const newArr = {
-      id: mediaStorage.length,
-      data: compressionResult
-    };
-
-    const asset = new FormData();
-    asset.append('photo', composeImageMeta(compressionResult));
-
     try {
+      const compressionResult = await Image.compress(pathImg, {
+        compressionMethod: 'auto'
+      });
+
+      const newArr = {
+        id: mediaStorage.length,
+        data: compressionResult
+      };
+
+      const asset = new FormData();
+      asset.append('photo', composeImageMeta(compressionResult));
+
       const responseUpload = await uploadPhoto(asset);
 
       setMediaStorage((val) => [...val, newArr]);
@@ -333,14 +336,18 @@ const CreatePost = () => {
       });
     }
   };
+
   const uploadMediaFromLibrary = async () => {
     const {success} = await requestExternalStoragePermission();
     if (success) {
       launchImageLibrary({mediaType: 'photo', includeBase64: true}, async (res) => {
+        const uri = res?.assets?.[0]?.uri;
         if (res.didCancel && __DEV__) {
           console.log('User cancelled image picker');
-        } else if (res.uri) {
-          await uploadPhotoImage(res.uri);
+        } else if (uri) {
+          setIsUploadingPhotoMedia(true);
+          await uploadPhotoImage(uri);
+          setIsUploadingPhotoMedia(false);
         } else if (__DEV__) {
           console.log('CreatePost (launchImageLibrary): ', res);
         }
@@ -364,10 +371,13 @@ const CreatePost = () => {
     const {success, message} = await requestCameraPermission();
     if (success) {
       launchCamera({mediaType: 'photo', includeBase64: true, selectionLimit: 1}, async (res) => {
+        const uri = res?.assets?.[0]?.uri;
         if (res.didCancel && __DEV__) {
           console.log('User cancelled image picker');
-        } else if (res.uri) {
-          await uploadPhotoImage(res.uri);
+        } else if (uri) {
+          setIsUploadingPhotoCamera(true);
+          await uploadPhotoImage(uri);
+          setIsUploadingPhotoCamera(false);
         }
       });
     } else {
@@ -830,6 +840,8 @@ const CreatePost = () => {
             uploadFromMedia={() => uploadMediaFromLibrary()}
             takePhoto={() => takePhoto()}
             createPoll={() => createPoll()}
+            isLoadingUploadingMedia={isUploadingPhotoMedia}
+            isLoadingUploadingPhoto={isUploadingPhotoCamera}
           />
           <SheetAddTopic
             refTopic={sheetTopicRef}
