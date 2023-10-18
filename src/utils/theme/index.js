@@ -20,7 +20,6 @@ export const COLORS = {
   gray4: '#4A4A4A',
   greyseries: '#333333',
   holytosca: '#00ADB5',
-  holyTosca: '#00ADB5',
   holytosca30percent: '#00ADB54D',
   lightBlue: '#2C67BC',
   lightgrey: '#F5F5F5',
@@ -28,7 +27,6 @@ export const COLORS = {
   pattens_blue: '#ddf2fe',
   porcelain: '#ecf0f1',
   red: '#FF2E63',
-  redalert: '#FF2E63',
   silver: '#BDBDBD',
   white: '#FFFFFF'
 };
