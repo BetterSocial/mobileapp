@@ -121,20 +121,22 @@ const UsersFragment = ({
     }
   };
 
-  const renderDiscoveryItem = (from, key, item, index) => (
-    <DomainList
-      key={`${key}-${index}`}
-      onPressBody={() => handleOnPress(item)}
-      handleSetFollow={() => handleFollow(from, true, item, index)}
-      handleSetUnFollow={() => handleFollow(from, false, item, index)}
-      item={{
-        name: item.username,
-        image: item.profile_pic_path,
-        isunfollowed: item.user_id_follower === null,
-        description: item.bio
-      }}
-    />
-  );
+  const renderDiscoveryItem = (from, key, item, index) => {
+    return (
+      <DomainList
+        key={`${key}-${index}`}
+        onPressBody={() => handleOnPress(item.user || item)}
+        handleSetFollow={() => handleFollow(from, true, item.user || item, index)}
+        handleSetUnFollow={() => handleFollow(from, false, item.user || item, index)}
+        item={{
+          name: item.user ? item.user.username : item.username,
+          image: item.user ? item.user.profile_pic_path : item.profile_pic_path,
+          isunfollowed: !item.user_id_follower,
+          description: item.user ? item.user.bio : item.bio
+        }}
+      />
+    );
+  };
 
   const renderUsersItem = () => {
     if (isFirstTimeOpen) {

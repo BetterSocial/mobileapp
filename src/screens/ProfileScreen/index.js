@@ -80,6 +80,7 @@ const Header = (props) => {
     changeImage,
     dataMain,
     goToFollowings,
+    goToFollowers,
     dataMainBio,
     changeBio,
     postRef,
@@ -107,6 +108,7 @@ const Header = (props) => {
               onFollowingContainerClicked={() =>
                 goToFollowings(dataMain.user_id, dataMain.username)
               }
+              onFollowersContainerClicked={() => goToFollowers(dataMain.user_id, dataMain.username)}
             />
           </View>
         </View>
@@ -308,6 +310,12 @@ const ProfileScreen = ({route}) => {
     navigation.navigate('Followings', {
       screen: 'TabFollowing',
       params: {user_id: userId, username}
+    });
+  };
+  const goToFollowers = (userId, username) => {
+    navigation.navigate('Followers', {
+      screen: 'TabFollowing',
+      params: {user_id: userId, username, isFollower: true}
     });
   };
 
@@ -625,6 +633,7 @@ const ProfileScreen = ({route}) => {
             changeImage={changeImage}
             dataMain={profile?.myProfile}
             goToFollowings={goToFollowings}
+            goToFollowers={goToFollowers}
             dataMainBio={profile?.myProfile?.bio}
             changeBio={changeBio}
             postRef={postRef}

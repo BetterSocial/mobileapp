@@ -2,20 +2,21 @@ import * as React from 'react';
 import Animated from 'react-native-reanimated';
 import {BackHandler, Platform, StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {useNavigation} from '@react-navigation/core';
+import {useNavigation, useRoute} from '@react-navigation/core';
 
 import DomainFragmentScreen from './elements/DomainFragmentScreen';
 import Followings from '.';
-import Header from '../../components/Header';
 import TopicFragmentScreen from './elements/TopicScreen/TopicFragmentScreen';
 import {Context} from '../../context';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {setNavbarTitle, showHeaderProfile} from '../../context/actions/setMyProfileAction';
 import {withInteractionsManagedNoStatusBar} from '../../components/WithInteractionManaged';
+import Search from '../DiscoveryScreenV2/elements/Search';
 
 function FollowingScreen() {
   const navigation = useNavigation();
+  const router = useRoute();
   const [profileState, dispatchNavbar] = React.useContext(Context).profile;
   const TAB_TOPIC = 'TabTopic';
   const TAB_FOLLOWING = 'TabFollowing';
@@ -26,12 +27,17 @@ function FollowingScreen() {
   const followingHeader = () => {
     if ((Platform.OS === 'ios' && profileState.isShowHeader) || Platform.OS === 'android') {
       return (
-        <Header
-          title={profileState.navbarTitle}
-          // containerStyle={styles.header}
-          titleStyle={S.headerTitle}
-          onPress={() => navigation.goBack()}
-          isCenter
+        // TODO: integrate search
+        <Search
+          // searchText={searchText}
+          // setSearchText={setSearchText}
+          // setDiscoveryLoadingData={setIsLoadingDiscovery}
+          // isFocus={isFocus}
+          // setIsFocus={setIsFocus}
+          // fetchDiscoveryData={fetchMember}
+          // onCancelToken={onTokenCancel}
+          placeholderText={profileState.navbarTitle}
+          // setIsFirstTimeOpen={setIsFirstTimeOpen}
         />
       );
     }
@@ -81,7 +87,7 @@ function FollowingScreen() {
   const listenTab = (tabProps) => {
     const {route} = tabProps;
     if (route.name === TAB_FOLLOWING) {
-      setNavbarTitle("Who you're following", dispatchNavbar);
+      setNavbarTitle('Search users', dispatchNavbar);
     }
     if (route.name === TAB_DOMAIN) {
       setNavbarTitle('Your Domains', dispatchNavbar);
@@ -119,38 +125,43 @@ function FollowingScreen() {
   }, []);
 
   const renderTabbar = (tabProps) => <MyTabBar navigation={navigation} {...tabProps} />;
+  const {params} = router;
 
   return (
     <View style={{flex: 1}}>
       {isAndroid ? <StatusBar translucent={false} /> : null}
       {followingHeader()}
       {/* <StatusBar translucent={false} /> */}
-      <Tabs.Navigator initialRouteName={TAB_FOLLOWING} tabBar={renderTabbar}>
-        <Tabs.Screen
-          name={TAB_FOLLOWING}
-          component={Followings}
-          options={{
-            title: 'User'
-          }}
-          listeners={listenTab}
-        />
-        <Tabs.Screen
-          name={TAB_DOMAIN}
-          component={DomainFragmentScreen}
-          options={{
-            title: 'Domains'
-          }}
-          listeners={listenTab}
-        />
-        <Tabs.Screen
-          name={TAB_TOPIC}
-          component={TopicFragmentScreen}
-          options={{
-            title: 'Communities'
-          }}
-          listeners={listenTab}
-        />
-      </Tabs.Navigator>
+      {!params.params.isFollower ? (
+        <Tabs.Navigator initialRouteName={TAB_FOLLOWING} tabBar={renderTabbar}>
+          <Tabs.Screen
+            name={TAB_FOLLOWING}
+            component={Followings}
+            options={{
+              title: 'User'
+            }}
+            listeners={listenTab}
+          />
+          <Tabs.Screen
+            name={TAB_DOMAIN}
+            component={DomainFragmentScreen}
+            options={{
+              title: 'Domains'
+            }}
+            listeners={listenTab}
+          />
+          <Tabs.Screen
+            name={TAB_TOPIC}
+            component={TopicFragmentScreen}
+            options={{
+              title: 'Communities'
+            }}
+            listeners={listenTab}
+          />
+        </Tabs.Navigator>
+      ) : (
+        <Followings />
+      )}
     </View>
   );
 }

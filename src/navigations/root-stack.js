@@ -183,6 +183,13 @@ const AuthenticatedNavigator = () => {
         }}
       />
       <AuthenticatedStack.Screen
+        name="Followers"
+        component={FollowingScreen}
+        options={{
+          headerShown: false
+        }}
+      />
+      <AuthenticatedStack.Screen
         name="DetailDomainScreen"
         component={DetailDomainScreen}
         options={{headerShown: false}}
