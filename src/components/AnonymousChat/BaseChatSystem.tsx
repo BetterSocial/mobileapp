@@ -1,15 +1,27 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {BaseChatItemComponentProps} from '../../../types/component/AnonymousChat/BaseChatItem.types';
+import dimen from '../../utils/dimen';
 
 const styles = StyleSheet.create({
-  containerMessage: {}
+  containerMessage: {
+    backgroundColor: '#F5F5F5',
+    marginHorizontal: dimen.normalizeDimen(20),
+    padding: dimen.normalizeDimen(5),
+    borderRadius: dimen.normalizeDimen(19),
+    marginVertical: dimen.normalizeDimen(5)
+  },
+  textSystem: {
+    fontSize: 14,
+    color: '#828282',
+    textAlign: 'center'
+  }
 });
 
 const BaseSystemChat: React.FC<BaseChatItemComponentProps> = ({item, index}) => {
   return (
-    <View key={index}>
-      <Text>{item.message} </Text>
+    <View style={styles.containerMessage} key={index}>
+      <Text style={styles.textSystem}>{item.message} </Text>
     </View>
   );
 };

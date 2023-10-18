@@ -48,7 +48,21 @@ const SampleChatScreen = () => {
   const renderChatItem = React.useCallback(({item, index}) => {
     return <BaseChatItem item={item} index={index} />;
   }, []);
-  console.log({selectedChannel}, 'lapuk');
+  console.log({selectedChannel, chats}, 'lapuk');
+
+  const handleDetailHeader = () => {
+    if (selectedChannel?.channelType === 'PM') {
+      return {
+        avatar: selectedChannel?.user?.profilePicture,
+        name: selectedChannel?.user?.username
+      };
+    }
+    return {
+      avatar: selectedChannel?.channelPicture,
+      name: selectedChannel?.name
+    };
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -58,8 +72,8 @@ const SampleChatScreen = () => {
         onAvatarPress={goToChatInfoScreen}
         onBackPress={goBackFromChatScreen}
         onThreeDotPress={goToChatInfoScreen}
-        avatar={selectedChannel?.channelPicture}
-        user={selectedChannel?.name}
+        avatar={handleDetailHeader().avatar}
+        user={handleDetailHeader().name}
       />
       <FlatList
         style={styles.chatContainer}
