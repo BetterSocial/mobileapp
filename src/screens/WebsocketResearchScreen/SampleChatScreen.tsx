@@ -15,7 +15,7 @@ const {height} = Dimensions.get('window');
 const SampleChatScreen = () => {
   const {selectedChannel, chats, goBackFromChatScreen, goToChatInfoScreen, sendChat} =
     useChatScreenHook();
-  console.log({selectedChannel}, 'sina');
+  console.log({selectedChannel}, 'sinaman');
   const styles = StyleSheet.create({
     keyboardAvoidingView: {
       flex: 1,
