@@ -4,8 +4,7 @@ import ChannelList from '../../database/schema/ChannelListSchema';
 import UseSignedChannelListScreenHook from '../../../types/hooks/screens/useSignedChannelListScreenHook.types';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
-import {getAnonymousUserId} from '../../utils/users';
-import {getUserId} from '../../utils/token';
+import {getAnonymousUserId, getUserId} from '../../utils/users';
 
 function useSignedChannelListScreenHook(): UseSignedChannelListScreenHook {
   const {localDb, channelList} = useLocalDatabaseHook();
@@ -21,7 +20,7 @@ function useSignedChannelListScreenHook(): UseSignedChannelListScreenHook {
     //! REMOVE ANONYMOUSID
     const myAnonymousId = await getAnonymousUserId();
     const data = await ChannelList.getAll(localDb, myId, myAnonymousId);
-
+    console.log({data}, 'naniks');
     setChannels(data);
   };
 

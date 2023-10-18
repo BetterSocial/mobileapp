@@ -10,14 +10,13 @@ import SignedMessageRepo from '../../service/repo/signedMessageRepo';
 import UseChatScreenHook from '../../../types/hooks/screens/useChatScreenHook.types';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
-import {getAnonymousUserId} from '../../utils/users';
-import {getUserId} from '../../utils/token';
+import {getAnonymousUserId, getUserId} from '../../utils/users';
 import {randomString} from '../../utils/string/StringUtils';
 
-function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
+function useChatScreenHook(): UseChatScreenHook {
   const {localDb, chat, refresh} = useLocalDatabaseHook();
   const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen} = useChatUtilsHook();
-
+  const type = selectedChannel?.channelType === 'ANON_PM' ? 'ANONYMOUS' : 'SIGNED';
   const [chats, setChats] = React.useState<ChatSchema[]>([]);
 
   const initChatData = async () => {
@@ -30,6 +29,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       myUserId,
       myAnonymousId
     )) as ChatSchema[];
+    console.log({data}, 'hello');
     setChats(data);
   };
 
@@ -44,15 +44,21 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     }
 
     let currentChatSchema = sendingChatSchema;
-
+    let userId = null;
+    const myUserId = await getUserId();
     const myAnonymousId = await getAnonymousUserId();
+    if (type === 'ANONYMOUS') {
+      userId = myAnonymousId;
+    } else {
+      userId = myUserId;
+    }
     try {
       const randomId = uuid();
 
       if (currentChatSchema === null) {
         currentChatSchema = await ChatSchema.generateSendingChat(
           randomId,
-          myAnonymousId,
+          userId,
           selectedChannel?.id,
           message,
           localDb
@@ -69,7 +75,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       } else {
         response = await SignedMessageRepo.sendSignedMessage(selectedChannel?.id, message);
       }
-
+      console.log({response}, 'response');
       await currentChatSchema.updateChatSentStatus(localDb, response);
       refresh('chat');
       refresh('channelList');

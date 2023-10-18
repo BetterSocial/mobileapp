@@ -254,7 +254,7 @@ class ChannelList implements BaseDbSchema {
   }
 
   static fromWebsocketObject(json, channelType: 'PM' | 'ANON_PM'): ChannelList {
-    console.log('from websocket object', json?.channel?.id);
+    console.log('from websocket object', json);
     return new ChannelList({
       id: json?.channel?.id,
       channelPicture: json?.targetImage,

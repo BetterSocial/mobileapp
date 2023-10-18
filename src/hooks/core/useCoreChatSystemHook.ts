@@ -29,7 +29,7 @@ type ChannelType = 'SIGNED' | 'ANONYMOUS';
 
 const useCoreChatSystemHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook() as UseLocalDatabaseHook;
-  const {anonProfileId, signedProfileId} = useProfileHook();
+  const {anonProfileId, signedProfileId, profile} = useProfileHook();
   const initialStartup: any = useRecoilValue(InitialStartupAtom);
 
   const isEnteringApp =
@@ -73,13 +73,17 @@ const useCoreChatSystemHook = () => {
     const chatName =
       channelType === 'ANON_PM'
         ? await getAnonymousChatName(websocketData?.channel?.members)
-        : getChatName(websocketData?.channel?.name);
-
-    websocketData.targetName = chatName?.name;
-    websocketData.targetImage = chatName?.image;
+        : getChatName(websocketData?.channel?.name, profile?.username);
+    if (channelType === 'ANON_PM') {
+      websocketData.targetName = chatName?.name;
+      websocketData.targetImage = chatName?.image;
+    } else {
+      websocketData.targetName = chatName;
+      websocketData.targetImage = websocketData.message?.user?.image;
+    }
 
     const channelList = ChannelList.fromWebsocketObject(websocketData, channelType);
-    console.log('channelList');
+    console.log('channelList', {channelList, websocketData, channelType, chatName, profile});
     console.log(JSON.stringify(channelList, null, 2));
 
     await channelList.save(localDb);
@@ -119,7 +123,9 @@ const useCoreChatSystemHook = () => {
   };
 
   const helperChannelPromiseBuilder = async (channel, channelType: ChannelType) => {
+    console.log(channel, 'masuka1');
     if (channel?.members?.length === 0) return Promise.reject(Error('no members'));
+    console.log('masuka', channel);
 
     const isAnonymous = channelType === 'ANONYMOUS';
 
@@ -141,7 +147,7 @@ const useCoreChatSystemHook = () => {
           ? DEFAULT_PROFILE_PIC_PATH
           : channel?.members?.find((member) => member?.user_id !== signedProfileId)?.user?.image;
     }
-
+    console.log(signedChannelName, 'lilin');
     const chatName = isAnonymous
       ? await getAnonymousChatName(channel?.members)
       : {
@@ -218,6 +224,7 @@ const useCoreChatSystemHook = () => {
     }
 
     try {
+      console.log({signedChannel}, 'supir');
       await saveAllChannelData(signedChannel, 'SIGNED');
       refresh('channelList');
     } catch (e) {

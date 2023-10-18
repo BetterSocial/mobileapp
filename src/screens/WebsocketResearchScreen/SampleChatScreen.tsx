@@ -14,7 +14,7 @@ const {height} = Dimensions.get('window');
 
 const SampleChatScreen = () => {
   const {selectedChannel, chats, goBackFromChatScreen, goToChatInfoScreen, sendChat} =
-    useChatScreenHook('ANONYMOUS');
+    useChatScreenHook();
   const styles = StyleSheet.create({
     keyboardAvoidingView: {
       flex: 1,
@@ -48,7 +48,20 @@ const SampleChatScreen = () => {
   const renderChatItem = React.useCallback(({item, index}) => {
     return <BaseChatItem item={item} index={index} />;
   }, []);
-
+  console.log({selectedChannel}, 'denim');
+  const handleDetailHeader = () => {
+    if (selectedChannel?.channelType === 'PM') {
+      return {
+        avatar: selectedChannel?.user?.profilePicture,
+        name: selectedChannel?.user?.username
+      };
+    }
+    return {
+      avatar: selectedChannel?.channelPicture,
+      name: selectedChannel?.name
+    };
+  };
+  console.log({chats}, 'chats');
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
