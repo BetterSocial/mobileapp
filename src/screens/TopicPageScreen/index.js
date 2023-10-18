@@ -60,7 +60,7 @@ const TopicPageScreen = (props) => {
   ).current;
 
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
-  const feeds = feedsContext.topicFeeds;
+  const feeds = feedsContext.topicFeeds?.filter((feed) => feed?.topics?.includes(topicName));
   const mainFeeds = feedsContext.feeds;
   const [offset, setOffset] = React.useState(0);
   const [client] = React.useContext(Context).client;
