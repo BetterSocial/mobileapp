@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useRecoilValue} from 'recoil';
+import {useRecoilState, useRecoilValue} from 'recoil';
 import {v4 as uuid} from 'uuid';
 
 import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
@@ -9,6 +9,7 @@ import ChatSchema from '../../database/schema/ChatSchema';
 import SignedMessageRepo from '../../service/repo/signedMessageRepo';
 import UseLocalDatabaseHook from '../../../types/database/localDatabase.types';
 import UserSchema from '../../database/schema/UserSchema';
+import migrationDbStatusAtom from '../../database/atom/migrationDbStatusAtom';
 import useBetterWebsocketHook from './websocket/useBetterWebsocketHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import usePostNotificationListenerHook from './getstream/usePostNotificationListenerHook';
@@ -30,6 +31,7 @@ type ChannelType = 'SIGNED' | 'ANONYMOUS';
 const useCoreChatSystemHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook() as UseLocalDatabaseHook;
   const {anonProfileId, signedProfileId} = useProfileHook();
+  const [migrationStatus] = useRecoilState(migrationDbStatusAtom);
   const initialStartup: any = useRecoilValue(InitialStartupAtom);
 
   const isEnteringApp =
@@ -422,13 +424,13 @@ const useCoreChatSystemHook = () => {
   }, [lastSignedMessage, localDb]);
 
   React.useEffect(() => {
-    if (isEnteringApp) {
+    if (isEnteringApp && migrationStatus === 'MIGRATED') {
       getAllSignedChannels().catch((e) => console.log(e));
       getAllSignedPostNotifications().catch((e) => console.log(e));
       getAllAnonymousChannels().catch((e) => console.log(e));
       getAllAnonymousPostNotifications().catch((e) => console.log(e));
     }
-  }, [localDb, isEnteringApp]);
+  }, [isEnteringApp, migrationStatus]);
 };
 
 export default useCoreChatSystemHook;
