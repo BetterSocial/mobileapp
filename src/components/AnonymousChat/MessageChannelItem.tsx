@@ -10,8 +10,8 @@ const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement
   item,
   onChannelPressed
 }) => {
-  const determineChatType = (data: ChannelList) => {
-    const isAnonymous = Boolean(item?.rawJson?.anon_user_info_emoji_code);
+  const determineChatType = () => {
+    const isAnonymous = Boolean(item?.rawJson?.channel?.anon_user_info_emoji_code);
     if (!isAnonymous) return BaseChannelItemTypeProps.SIGNED_PM;
     return BaseChannelItemTypeProps.ANON_PM;
   };

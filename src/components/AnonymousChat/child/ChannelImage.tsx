@@ -1,6 +1,6 @@
 import * as React from 'react';
 import FastImage from 'react-native-fast-image';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Text} from 'react-native';
 
 import AnonymousProfile from '../../../assets/images/AnonymousProfile.png';
 import ChannelAnonymousImage from './ChannelAnonymousImage';
@@ -50,27 +50,15 @@ const ChannelImage = ({
   });
 
   const isAnonymousCommenter = Boolean(anonPostNotificationUserInfo?.anon_user_info_emoji_code);
-  const isAnonymousPostMaker = Boolean(postMaker?.anon_user_info_emoji_code);
-  const isAnonymousOldPostMaker = Boolean(postMaker?.emoji_code);
+  const isAnonymousChat = Boolean(postMaker?.channel?.anon_user_info_emoji_code);
 
   const renderChatMainImage = () => {
-    if (isAnonymousPostMaker)
+    if (isAnonymousChat)
       return (
         <ChannelAnonymousImage
           anonPostNotificationUserInfo={{
-            anon_user_info_emoji_code: postMaker?.anon_user_info_emoji_code,
-            anon_user_info_color_code: postMaker?.anon_user_info_color_code
-          }}
-          imageStyle={styles.image}
-        />
-      );
-
-    if (isAnonymousPostMaker || isAnonymousOldPostMaker)
-      return (
-        <ChannelAnonymousImage
-          anonPostNotificationUserInfo={{
-            anon_user_info_emoji_code: postMaker?.emoji_code,
-            anon_user_info_color_code: postMaker?.color_code
+            anon_user_info_emoji_code: postMaker?.channel?.anon_user_info_emoji_code,
+            anon_user_info_color_code: postMaker?.channel?.anon_user_info_color_code
           }}
           imageStyle={styles.image}
         />
@@ -80,20 +68,9 @@ const ChannelImage = ({
   };
 
   const renderMainImage = () => {
-    if (isAnonymousPostMaker)
+    if (isAnonymousChat)
       return (
         <ChannelAnonymousImage anonPostNotificationUserInfo={postMaker} imageStyle={styles.image} />
-      );
-
-    if (isAnonymousOldPostMaker)
-      return (
-        <ChannelAnonymousImage
-          anonPostNotificationUserInfo={{
-            anon_user_info_emoji_code: postMaker.emoji_code,
-            anon_user_info_color_code: postMaker.color_code
-          }}
-          imageStyle={styles.image}
-        />
       );
 
     return <FastImage source={{uri: mainPicture}} style={styles.image} />;
@@ -122,6 +99,7 @@ const ChannelImage = ({
     return (
       <View>
         {renderChatMainImage()}
+        {/* {type === BaseChannelItemTypeProps.ANON_PM ? <Text>hehe</Text> : null} */}
         <View style={[styles.postNotificationImage, styles.anonPmNotificationImageContainer]}>
           <FastImage source={ChatIcon} style={styles.postNotificationIcon} />
         </View>

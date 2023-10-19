@@ -14,7 +14,6 @@ const ChannelAnonymousImage = ({anonPostNotificationUserInfo = null, imageStyle 
       textAlign: 'center'
     }
   });
-
   return (
     <View
       style={[

@@ -48,7 +48,6 @@ const SampleChatScreen = () => {
   const renderChatItem = React.useCallback(({item, index}) => {
     return <BaseChatItem item={item} index={index} />;
   }, []);
-  console.log({chats}, 'tulang4');
 
   return (
     <KeyboardAvoidingView
@@ -61,6 +60,7 @@ const SampleChatScreen = () => {
         onThreeDotPress={goToChatInfoScreen}
         avatar={selectedChannel?.channelPicture}
         user={selectedChannel?.name}
+        channel={selectedChannel}
       />
       <FlatList
         style={styles.chatContainer}

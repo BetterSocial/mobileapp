@@ -14,7 +14,8 @@ const ChatDetailHeader = ({
   user,
   onBackPress = () => console.log('onBackPress'),
   onThreeDotPress = () => console.log('onThreeDotPress'),
-  onAvatarPress = () => console.log('onAvatarPress')
+  onAvatarPress = () => console.log('onAvatarPress'),
+  channel
 }) => {
   const styles = StyleSheet.create({
     container: {
@@ -30,11 +31,14 @@ const ChatDetailHeader = ({
       height: 50,
       justifyContent: 'center'
     },
-    avatar: {
+    avatar: (bg) => ({
       width: 40,
       height: 40,
-      borderRadius: 20
-    },
+      borderRadius: 20,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: bg
+    }),
     textContainer: {
       display: 'flex',
       flexDirection: 'row',
@@ -57,13 +61,24 @@ const ChatDetailHeader = ({
     }
   });
 
+  const handleUserImage = () => {
+    if (channel?.rawJson?.channel?.anon_user_info_color_code) {
+      return (
+        <View style={styles.avatar(channel?.rawJson?.channel?.anon_user_info_color_code)}>
+          <Text>{channel?.rawJson?.channel?.anon_user_info_emoji_code}</Text>
+        </View>
+      );
+    }
+    return <FastImage style={styles.avatar} source={{uri: avatar}} />;
+  };
+
   return (
     <View style={styles.container}>
       <CustomPressable style={styles.backButton} onPress={onBackPress}>
         <IcArrowBackWhite width={20} height={12} />
       </CustomPressable>
       <CustomPressable style={styles.textContainer} onPress={onAvatarPress}>
-        <FastImage style={styles.avatar} source={{uri: avatar}} />
+        {handleUserImage()}
         <Text numberOfLines={1} ellipsizeMode="tail" style={styles.text}>
           {user}
         </Text>

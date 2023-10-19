@@ -62,19 +62,14 @@ const useCoreChatSystemHook = () => {
   usePostNotificationListenerHook(onAnonPostNotifReceived, true);
   usePostNotificationListenerHook(onSignedPostNotifReceived, false);
 
-  const {lastAnonymSignedMessage} = useBetterWebsocketHook();
+  const {lastAnonymSignedMessage, lastJsonMessage} = useBetterWebsocketHook();
 
   const saveChannelListData = async (
     websocketData: GetstreamWebsocket,
     channelType: 'ANON_PM' | 'PM'
   ) => {
-    console.log({channelType}, 'tulang1');
     if (!localDb) return;
-    // const chatName =
-    //   channelType === 'ANON_PM'
-    //     ? await getAnonymousChatName(websocketData?.channel?.members)
-    //     : getChatName(websocketData?.channel?.name, profile?.username);
-    if (channelType === 'ANON_PM') {
+    if (websocketData?.channel?.anon_user_info_emoji_name) {
       websocketData.targetName = `Anonymous ${websocketData?.channel?.anon_user_info_emoji_name}`;
       websocketData.targetImage = null;
     } else {
@@ -83,7 +78,6 @@ const useCoreChatSystemHook = () => {
     }
 
     const channelList = ChannelList.fromWebsocketObject(websocketData, channelType);
-    console.log({channelList}, 'tulang2');
     console.log('channelList', {
       channelList,
       websocketData,
@@ -413,16 +407,15 @@ const useCoreChatSystemHook = () => {
     }
   };
 
-  // React.useEffect(() => {
-  //   console.log({lastJsonMessage}, 'kapal1');
-  //   if (!lastJsonMessage && !localDb) return;
+  React.useEffect(() => {
+    if (!lastJsonMessage && !localDb) return;
 
-  //   const {type} = lastJsonMessage;
-  //   if (type === 'health.check') return;
-  //   if (type === 'notification.message_new') {
-  //     saveChannelListData(lastJsonMessage, 'ANON_PM').catch((e) => console.log(e));
-  //   }
-  // }, [lastJsonMessage, localDb]);
+    const {type} = lastJsonMessage;
+    if (type === 'health.check') return;
+    if (type === 'notification.message_new') {
+      saveChannelListData(lastJsonMessage, 'ANON_PM').catch((e) => console.log(e));
+    }
+  }, [lastJsonMessage, localDb]);
 
   React.useEffect(() => {
     console.log({lastAnonymSignedMessage}, 'kapal');
@@ -431,11 +424,10 @@ const useCoreChatSystemHook = () => {
     const {type} = lastAnonymSignedMessage;
     if (type === 'health.check') return;
     if (type === 'notification.message_new') {
-      console.log({lastAnonymSignedMessage}, 'tulang');
       const channelType = lastAnonymSignedMessage?.channel?.anon_user_info_color_name
         ? 'ANON_PM'
         : 'PM';
-      saveChannelListData(lastAnonymSignedMessage, channelType).catch((e) => console.log(e));
+      saveChannelListData(lastAnonymSignedMessage, 'PM').catch((e) => console.log(e));
     }
   }, [lastAnonymSignedMessage, localDb]);
 
