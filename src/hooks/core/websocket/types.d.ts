@@ -90,6 +90,10 @@ export type GetstreamChannel = {
   name: string;
   type: string;
   updated_at: string;
+  anon_user_info_color_code?: string;
+  anon_user_info_color_name?: string;
+  anon_user_info_emoji_code: '🐢';
+  anon_user_info_emoji_name: 'Turtle';
 };
 
 export type GetstreamWebsocket = {

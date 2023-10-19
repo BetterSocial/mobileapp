@@ -45,13 +45,14 @@ async function sendAnonymousMessage(channelId: string, message: string) {
   };
   try {
     const response = await anonymousApi.post(baseUrl.sendAnonymousMessage, payload);
+    console.log({response}, 'tulang9');
     if (response.status === 200) {
       return Promise.resolve(response.data?.data);
     }
 
     return Promise.reject(response.data?.data);
   } catch (e) {
-    console.log(e);
+    console.log(e, 'tulang10');
     return Promise.reject(e);
   }
 }

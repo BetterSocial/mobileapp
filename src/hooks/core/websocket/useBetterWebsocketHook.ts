@@ -67,12 +67,12 @@ const useBetterWebsocketHook = () => {
     shouldReconnect: (closeEvent) => true
   });
 
-  const {lastJsonMessage: lastSignedMessage} = useWebSocket(getSignedSockerUrl, {
+  const {lastJsonMessage: lastAnonymSignedMessage} = useWebSocket(getSignedSockerUrl, {
     onOpen: () => console.log('opened 456'),
     shouldReconnect: (closeEvent) => true
   });
 
-  return {lastJsonMessage, lastSignedMessage};
+  return {lastJsonMessage, lastAnonymSignedMessage};
 };
 
 export default useBetterWebsocketHook;

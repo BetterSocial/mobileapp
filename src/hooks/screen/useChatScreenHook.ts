@@ -63,11 +63,13 @@ function useChatScreenHook(): UseChatScreenHook {
           message,
           localDb
         );
-
+        console.log({selectedChannel, userId, type}, 'tulang5');
         await currentChatSchema.save(localDb);
+        console.log({currentChatSchema}, 'tulang7');
         refresh('chat');
         refresh('channelList');
       }
+      console.log({currentChatSchema}, 'tulang8');
 
       let response;
       if (type === 'ANONYMOUS') {
@@ -75,7 +77,7 @@ function useChatScreenHook(): UseChatScreenHook {
       } else {
         response = await SignedMessageRepo.sendSignedMessage(selectedChannel?.id, message);
       }
-      console.log({response}, 'response');
+      console.log({response}, 'tulang6');
       await currentChatSchema.updateChatSentStatus(localDb, response);
       refresh('chat');
       refresh('channelList');

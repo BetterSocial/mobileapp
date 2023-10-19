@@ -48,20 +48,8 @@ const SampleChatScreen = () => {
   const renderChatItem = React.useCallback(({item, index}) => {
     return <BaseChatItem item={item} index={index} />;
   }, []);
-  console.log({selectedChannel}, 'denim');
-  const handleDetailHeader = () => {
-    if (selectedChannel?.channelType === 'PM') {
-      return {
-        avatar: selectedChannel?.user?.profilePicture,
-        name: selectedChannel?.user?.username
-      };
-    }
-    return {
-      avatar: selectedChannel?.channelPicture,
-      name: selectedChannel?.name
-    };
-  };
-  console.log({chats}, 'chats');
+  console.log({chats}, 'tulang4');
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
