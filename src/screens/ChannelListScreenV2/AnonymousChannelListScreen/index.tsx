@@ -1,8 +1,6 @@
-/* eslint-disable import/extensions */
-/* eslint-disable import/no-unresolved */
-
+// eslint-disable-next-line no-use-before-define
 import * as React from 'react';
-import {ScrollView, View} from 'react-native';
+import {FlatList} from 'react-native';
 
 import MessageChannelItem from '../../../components/AnonymousChat/MessageChannelItem';
 import PostNotificationChannelItem from '../../../components/AnonymousChat/PostNotificationChannelItem';
@@ -10,26 +8,30 @@ import useAnonymousChannelListScreenHook from '../../../hooks/screen/useAnonymou
 
 const AnonymousChannelListScreen = () => {
   const {channels, goToChatScreen, goToPostDetailScreen} = useAnonymousChannelListScreenHook();
+
   return (
-    <ScrollView>
-      <View>
-        {channels?.map((item) => {
+    <FlatList
+      data={channels}
+      keyExtractor={(item) => item.id}
+      scrollEnabled={false}
+      listKey={'AnonymousChannelList'}
+      renderItem={({item}) => {
+        if (item?.channelType === 'ANON_PM') {
+          return <MessageChannelItem item={item} onChannelPressed={() => goToChatScreen(item)} />;
+        }
+
+        if (item?.channelType === 'ANON_POST_NOTIFICATION') {
           return (
-            <>
-              {item?.channelType === 'ANON_PM' && (
-                <MessageChannelItem item={item} onChannelPressed={() => goToChatScreen(item)} />
-              )}
-              {item?.channelType === 'ANON_POST_NOTIFICATION' && (
-                <PostNotificationChannelItem
-                  item={item}
-                  onChannelPressed={() => goToPostDetailScreen(item)}
-                />
-              )}
-            </>
+            <PostNotificationChannelItem
+              item={item}
+              onChannelPressed={() => goToPostDetailScreen(item)}
+            />
           );
-        })}
-      </View>
-    </ScrollView>
+        }
+
+        return null;
+      }}
+    />
   );
 };
 
