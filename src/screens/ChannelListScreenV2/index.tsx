@@ -1,5 +1,6 @@
+// eslint-disable-next-line no-use-before-define
 import * as React from 'react';
-import {ScrollView, StatusBar, View} from 'react-native';
+import {FlatList, StatusBar, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
 import AnonymousChannelListScreen from './AnonymousChannelListScreen';
@@ -23,6 +24,7 @@ const ChannelListScreenV2 = () => {
   } = useRootChannelListHook();
 
   const [selectedTab, setSelectedTab] = React.useState(0);
+  const {signedChannelUnreadCount, anonymousChannelUnreadCount} = useRootChannelListHook();
 
   const navigateToContactScreen = () => {
     navigation.navigate('ContactScreen');
@@ -40,47 +42,48 @@ const ChannelListScreenV2 = () => {
   return (
     <>
       <StatusBar translucent={false} />
-      <ScrollView contentContainerStyle={{flexGrow: 1}}>
-        <View style={{height: 52}}>
-          <Search animatedValue={0} onPress={navigateToContactScreen} />
-        </View>
-        <HorizontalTab
-          selectedTab={selectedTab}
-          onSelectedTabChange={onTabSelected}
-          tabs={[
-            {
-              key: 0,
-              tabElement: (
+      <FlatList
+        data={[]}
+        keyExtractor={(_e, i) => `dom${i.toString()}`}
+        ListEmptyComponent={null}
+        renderItem={null}
+        contentContainerStyle={{flexGrow: 1}}
+        ListHeaderComponent={
+          <>
+            <View style={{height: 52}}>
+              <Search animatedValue={0} onPress={navigateToContactScreen} />
+            </View>
+
+            <HorizontalTab
+              selectedTab={selectedTab}
+              onSelectedTabChange={setSelectedTab}
+              tabs={[
                 <ChannelListTabItem
                   key={0}
+                  testID="signed-channel-list-tab-item"
                   name={`@${profile?.username}`}
                   picture={profile?.profile_pic_path}
                   unreadCount={signedChannelUnreadCount}
-                  testID="signed-channel-list-tab-item"
-                />
-              )
-            },
-            {
-              key: 1,
-              tabElement: (
+                />,
                 <ChannelListTabItem
                   key={1}
+                  testID="anonymous-channel-list-tab-item"
                   name="Anonymous"
                   picture={AnonymousProfile}
                   unreadCount={anonymousChannelUnreadCount}
-                  testID="anonymous-channel-list-tab-item"
                 />
-              )
-            }
-          ]}
-        />
-        <View style={{display: selectedTab === 0 ? 'flex' : 'none'}}>
-          <ChannelListScreen />
-        </View>
-        <View style={{display: selectedTab === 1 ? 'flex' : 'none'}}>
-          <AnonymousChannelListScreen />
-        </View>
-      </ScrollView>
+              ]}
+            />
+
+            <View style={{display: selectedTab === 0 ? 'flex' : 'none'}}>
+              <ChannelListScreen />
+            </View>
+            <View style={{display: selectedTab === 1 ? 'flex' : 'none'}}>
+              <AnonymousChannelListScreen />
+            </View>
+          </>
+        }
+      />
     </>
   );
 };
