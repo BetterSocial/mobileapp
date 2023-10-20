@@ -3,7 +3,7 @@ import {InitAnonymousChatDataMember} from '../../../types/repo/AnonymousMessageR
 import {consoleSpy, promiseRejectSpy} from '../../../__utils__/spy';
 import {mockDb, mockDbExecuteSql, mockTransaction} from '../../../__utils__/mockedVariable/mockDb';
 
-let channelListMemberSchema;
+let channelListMemberSchema: ChannelListMemberSchema;
 
 const savePrepReplacementExpectation = [
   'id',
