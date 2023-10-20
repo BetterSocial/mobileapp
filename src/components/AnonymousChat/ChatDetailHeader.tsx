@@ -9,6 +9,50 @@ import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
+const styles = StyleSheet.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'row',
+    backgroundColor: colors.bondi_blue,
+    height: 50,
+    alignItems: 'center'
+  },
+  backButton: {
+    paddingLeft: 22,
+    paddingRight: 20,
+    height: 50,
+    justifyContent: 'center'
+  },
+  avatar: (bg?: string) => ({
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: bg
+  }),
+  textContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    flex: 1,
+    alignItems: 'center'
+  },
+  text: {
+    fontFamily: fonts.inter[600],
+    color: colors.white,
+    fontSize: 14,
+    lineHeight: 17,
+    marginLeft: 10,
+    flex: 1
+  },
+  threeDot: {
+    paddingRight: 22,
+    paddingLeft: 22,
+    justifyContent: 'center',
+    height: 50
+  }
+});
+
 const ChatDetailHeader = ({
   avatar = DEFAULT_PROFILE_PIC_PATH,
   user,
@@ -17,50 +61,6 @@ const ChatDetailHeader = ({
   onAvatarPress = () => console.log('onAvatarPress'),
   channel
 }) => {
-  const styles = StyleSheet.create({
-    container: {
-      display: 'flex',
-      flexDirection: 'row',
-      backgroundColor: colors.bondi_blue,
-      height: 50,
-      alignItems: 'center'
-    },
-    backButton: {
-      paddingLeft: 22,
-      paddingRight: 20,
-      height: 50,
-      justifyContent: 'center'
-    },
-    avatar: (bg) => ({
-      width: 40,
-      height: 40,
-      borderRadius: 20,
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: bg
-    }),
-    textContainer: {
-      display: 'flex',
-      flexDirection: 'row',
-      flex: 1,
-      alignItems: 'center'
-    },
-    text: {
-      fontFamily: fonts.inter[600],
-      color: colors.white,
-      fontSize: 14,
-      lineHeight: 17,
-      marginLeft: 10,
-      flex: 1
-    },
-    threeDot: {
-      paddingRight: 22,
-      paddingLeft: 22,
-      justifyContent: 'center',
-      height: 50
-    }
-  });
-
   const handleUserImage = () => {
     if (channel?.rawJson?.channel?.anon_user_info_color_code) {
       return (
@@ -69,7 +69,7 @@ const ChatDetailHeader = ({
         </View>
       );
     }
-    return <FastImage style={styles.avatar} source={{uri: avatar}} />;
+    return <FastImage style={styles.avatar()} source={{uri: avatar}} />;
   };
 
   return (

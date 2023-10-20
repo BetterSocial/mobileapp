@@ -48,7 +48,7 @@ const SampleChatScreen = () => {
   const renderChatItem = React.useCallback(({item, index}) => {
     return <BaseChatItem item={item} index={index} />;
   }, []);
-
+  console.log({selectedChannel}, 'nusuk');
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

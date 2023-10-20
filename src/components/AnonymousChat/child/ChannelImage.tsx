@@ -53,7 +53,7 @@ const ChannelImage = ({
   const isAnonymousChat = Boolean(postMaker?.channel?.anon_user_info_emoji_code);
 
   const renderChatMainImage = () => {
-    if (isAnonymousChat)
+    if (isAnonymousChat) {
       return (
         <ChannelAnonymousImage
           anonPostNotificationUserInfo={{
@@ -63,6 +63,7 @@ const ChannelImage = ({
           imageStyle={styles.image}
         />
       );
+    }
 
     return <FastImage source={{uri: mainPicture}} style={styles.image} />;
   };
@@ -99,7 +100,6 @@ const ChannelImage = ({
     return (
       <View>
         {renderChatMainImage()}
-        {/* {type === BaseChannelItemTypeProps.ANON_PM ? <Text>hehe</Text> : null} */}
         <View style={[styles.postNotificationImage, styles.anonPmNotificationImageContainer]}>
           <FastImage source={ChatIcon} style={styles.postNotificationIcon} />
         </View>
