@@ -26,7 +26,7 @@ import {withInteractionsManagedNoStatusBar} from '../../components/WithInteracti
 
 const DiscoveryScreenV2 = ({route}) => {
   const {tab} = route.params;
-  const [selectedScreen, setSelectedScreen] = React.useState(tab);
+  const [selectedScreen, setSelectedScreen] = React.useState(tab || 0);
   const [isLoadingDiscovery, setIsLoadingDiscovery] = React.useState({
     user: false,
     topic: false,
@@ -43,8 +43,11 @@ const DiscoveryScreenV2 = ({route}) => {
   const [searchText, setSearchText] = React.useState('');
   const [isFocus, setIsFocus] = React.useState(true);
   const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true);
+  const [tabs, setTabs] = React.useState({Users: 0, Communities: 0, Domains: 0, News: 0});
+  // const tabs = ['Users', 'Communities', 'Domains', 'News'];
 
-  const [, discoveryDispatch] = React.useContext(Context).discovery;
+  const [discoveryData, discoveryDispatch] = React.useContext(Context).discovery;
+  const [profileState] = React.useContext(Context).profile;
   const cancelTokenRef = React.useRef(axios.CancelToken.source());
 
   const handleScroll = React.useCallback(() => {
@@ -108,6 +111,19 @@ const DiscoveryScreenV2 = ({route}) => {
       }));
     });
   };
+
+  React.useEffect(() => {
+    // if (route.name === 'Followings') {
+    setTabs({
+      Users: discoveryData.initialUsers.filter((user) => user.user_id_follower !== null).length,
+      Communities: discoveryData.initialTopics.filter((user) => user.user_id_follower !== null)
+        .length,
+      Domains: discoveryData.initialDomains.filter((user) => user.user_id_follower !== null).length,
+      News: 0
+    });
+    console.log();
+    // }
+  }, [discoveryData]);
 
   const onCancelToken = () => {
     cancelTokenRef?.current?.cancel();
@@ -191,11 +207,19 @@ const DiscoveryScreenV2 = ({route}) => {
         setIsFirstTimeOpen={setIsFirstTimeOpen}
         fetchDiscoveryData={fetchDiscoveryData}
         onCancelToken={onCancelToken}
+        placeholderText={
+          route.name === 'Followings' || route.name === 'Followers'
+            ? profileState.navbarTitle
+            : undefined
+        }
       />
-      <DiscoveryTab
-        selectedScreen={selectedScreen}
-        onChangeScreen={(index) => setSelectedScreen(index)}
-      />
+      {route.name !== 'Followers' && (
+        <DiscoveryTab
+          selectedScreen={selectedScreen}
+          onChangeScreen={(index) => setSelectedScreen(index)}
+          tabs={tabs}
+        />
+      )}
       <ScrollView
         style={styles.fragmentContainer}
         contentContainerStyle={styles.fragmentContentContainer}
