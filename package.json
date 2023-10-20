@@ -135,6 +135,7 @@
     "@commitlint/cli": "^16.2.3",
     "@commitlint/config-conventional": "^16.2.1",
     "@react-native-community/eslint-config": "2.0.0",
+    "@testing-library/jest-native": "^5.4.3",
     "@testing-library/react-hooks": "8.0.1",
     "@testing-library/react-native": "^9.1.0",
     "@types/enzyme-adapter-react-16": "^1.0.6",
@@ -167,6 +168,7 @@
     "generate-changelog": "^1.8.0",
     "husky": "^7.0.0",
     "jest": "25.5.4",
+    "jest-dom": "^4.0.0",
     "lint-staged": ">=10",
     "metro-react-native-babel-preset": "0.64.0",
     "prettier": "^2.3.2",
@@ -185,9 +187,6 @@
   },
   "jest": {
     "preset": "react-native",
-    "setupFilesAfterEnv": [
-      "<rootDir>/jestSetup.js"
-    ],
     "moduleDirectories": [
       "<rootDir>/node_modules",
       "<rootDir>/src"

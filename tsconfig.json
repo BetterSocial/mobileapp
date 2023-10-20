@@ -1,4 +1,5 @@
 {
+  "include": ["./jestSetup.ts"],
   "compilerOptions": {
     "jsx": "react",
     "esModuleInterop": true
