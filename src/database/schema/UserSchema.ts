@@ -263,7 +263,7 @@ class UserSchema implements BaseDbSchema {
   get = async (db: SQLiteDatabase, id: string): Promise<UserSchema> => {
     const [{rows}] = await db.executeSql('SELECT * FROM users WHERE id = ?', [id]);
     if (rows?.length === 0) return null;
-    return Promise.resolve(rows[0].raw().map(this.fromDatabaseObject));
+    return Promise.resolve(UserSchema.fromDatabaseObject(rows[0].raw()[0]));
   };
 
   getAll = (db: any): Promise<UserSchema[]> => {

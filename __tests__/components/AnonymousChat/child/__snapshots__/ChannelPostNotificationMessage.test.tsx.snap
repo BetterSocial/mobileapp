@@ -1,0 +1,90 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TESTING ChatItemTargetText RENDER ANON_PM should match snapshot 1`] = `null`;
+
+exports[`TESTING ChatItemTargetText RENDER non ANON_PM with different profile id should match snapshot 1`] = `
+<Text
+  ellipsizeMode="tail"
+  numberOfLines={2}
+  style={
+    Object {
+      "color": "#828282",
+      "fontFamily": "Inter-Regular",
+      "fontSize": 12,
+      "lineHeight": 20,
+      "marginRight": 29,
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "color": "#828282",
+        "fontFamily": "Inter-SemiBold",
+        "fontSize": 12,
+        "lineHeight": 20,
+      }
+    }
+  >
+    commenterName commented: 
+  </Text>
+</Text>
+`;
+
+exports[`TESTING ChatItemTargetText RENDER non ANON_PM with no commenter name should match snapshot 1`] = `
+<Text
+  ellipsizeMode="tail"
+  numberOfLines={2}
+  style={
+    Object {
+      "color": "#828282",
+      "fontFamily": "Inter-Regular",
+      "fontSize": 12,
+      "lineHeight": 20,
+      "marginRight": 29,
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "color": "#828282",
+        "fontFamily": "Inter-SemiBold",
+        "fontSize": 12,
+        "lineHeight": 20,
+      }
+    }
+  >
+    No comments yet
+  </Text>
+</Text>
+`;
+
+exports[`TESTING ChatItemTargetText RENDER non ANON_PM with same profile id should match snapshot 1`] = `
+<Text
+  ellipsizeMode="tail"
+  numberOfLines={2}
+  style={
+    Object {
+      "color": "#828282",
+      "fontFamily": "Inter-Regular",
+      "fontSize": 12,
+      "lineHeight": 20,
+      "marginRight": 29,
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "color": "#828282",
+        "fontFamily": "Inter-SemiBold",
+        "fontSize": 12,
+        "lineHeight": 20,
+      }
+    }
+  >
+    No comments yet
+  </Text>
+</Text>
+`;

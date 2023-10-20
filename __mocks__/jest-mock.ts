@@ -1,4 +1,5 @@
 import 'react-native-gesture-handler/jestSetup';
+
 import * as ReactNative from 'react-native';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
@@ -74,7 +75,10 @@ jest.doMock('react-native', () => {
         flatten: jest.fn((e) => e)
       },
       Dimensions: {
-        get: () => jest.fn().mockReturnValue({width: 414, height: 818})
+        get: jest.fn().mockReturnValue({width: 300, height: 300})
+      },
+      PixelRatio: {
+        roundToNearestPixel: jest.fn().mockReturnValue(20)
       }
     },
     ReactNative

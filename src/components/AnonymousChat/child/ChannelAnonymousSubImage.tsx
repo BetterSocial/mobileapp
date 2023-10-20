@@ -27,11 +27,12 @@ const ChannelAnonymousSubImage = ({anonPostNotificationUserInfo = null}) => {
 
   return (
     <View
-      style={[
-        styles.postNotificationImage,
-        {backgroundColor: anonPostNotificationUserInfo?.anon_user_info_color_code}
-      ]}>
-      <Text style={styles.anonPostNotificationEmoji}>
+      testID="channel-anonymous-sub-image"
+      style={{
+        ...styles.postNotificationImage,
+        ...{backgroundColor: anonPostNotificationUserInfo?.anon_user_info_color_code}
+      }}>
+      <Text style={styles.anonPostNotificationEmoji} testID="channel-anonymous-sub-image-emoji">
         {anonPostNotificationUserInfo?.anon_user_info_emoji_code}
       </Text>
     </View>
