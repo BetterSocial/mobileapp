@@ -8,14 +8,12 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 
 const DomainList = (props) => {
-  const {onPressList, item, isHashtag, handleSetFollow, handleSetUnFollow, onPressBody, isDomain} =
-    props;
+  const {item, isHashtag, handleSetFollow, handleSetUnFollow, onPressBody} = props;
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => onPressBody(item)} style={styles.wrapProfile}>
