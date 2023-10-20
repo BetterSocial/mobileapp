@@ -473,271 +473,121 @@ describe('TESTING ChannelListSchema', () => {
       expect(result).toBe(0);
     });
   });
-  //   it('TEST update without transaction', async () => {
-  //     // Setup
 
-  //     // Execution
-  //     await userSchema.update(mockDb);
+  describe('TESTING static fromPostNotifObject', () => {
+    it('TEST should return ChannelListSchema', async () => {
+      // Setup
+      const postNotifObject = {
+        new: [
+          {
+            id: 'id',
+            channel_picture: 'channelPicture',
+            name: 'name',
+            description: 'description',
+            message: 'description',
+            unread_count: 0,
+            channel_type: 'channelType',
+            time: 'lastUpdatedAt',
+            actor: {
+              id: 'lastUpdatedBy'
+            }
+          }
+        ]
+      };
 
-  //     // Assertion
-  //     expect(mockDb.executeSql).toHaveBeenCalledTimes(1);
-  //     expect(mockDb.executeSql).toHaveBeenCalledWith(
-  //       expect.any(String),
-  //       updatePrepReplacementExpectation
-  //     );
-  //   });
+      const fromPostNotifObjectExpectation = {
+        ...fromDatabaseObjectExpectation,
+        createdAt: 'lastUpdatedAt',
+        channelType: 'ANON_POST_NOTIFICATION',
+        unreadCount: 1,
+        channelPicture: '',
+        name: '',
+        rawJson: expect.any(Object),
+        expiredAt: null
+      };
 
-  //   it('TEST update with transaction', async () => {
-  //     // Setup
+      // Execution
+      const result = await ChannelList.fromPostNotifObject(postNotifObject);
 
-  //     // Execution
-  //     await userSchema.update(mockDb, mockTransaction);
+      // Assertion
+      expect(result).toEqual(expect.objectContaining(fromPostNotifObjectExpectation));
+    });
+  });
 
-  //     // Assertion
-  //     expect(mockTransaction.executeSql).toHaveBeenCalledTimes(1);
-  //     expect(mockTransaction.executeSql).toHaveBeenCalledWith(
-  //       expect.any(String),
-  //       updatePrepReplacementExpectation
-  //     );
-  //   });
+  describe('TESTING static fromAnonymousPostNotificationAPI', () => {
+    it('TEST should return ChannelListSchema', async () => {
+      // Setup
+      const anonymousPostNotificationAPIObject = {
+        activity_id: 'id',
+        expired_at: 'expiredAt',
+        data: {
+          updated_at: 'lastUpdatedAt'
+        },
+        postMaker: {
+          data: {
+            profile_pic_url: 'channelPicture'
+          }
+        },
+        titlePost: 'name'
+      };
 
-  //   it('TEST update catch error', async () => {
-  //     // Setup
-  //     mockDbExecuteSql.mockImplementationOnce(() => {
-  //       throw new Error('error');
-  //     });
+      const anonymousPostNotificationAPIObjectExpectation = {
+        ...fromDatabaseObjectExpectation,
+        createdAt: expect.any(String),
+        channelType: 'ANON_POST_NOTIFICATION',
+        description: 'name',
+        unreadCount: 0,
+        rawJson: expect.any(Object),
+        members: null,
+        lastUpdatedBy: ''
+      };
 
-  //     // Execution
-  //     await userSchema.update(mockDb);
+      // Execution
+      const result = ChannelList.fromAnonymousPostNotificationAPI(
+        anonymousPostNotificationAPIObject
+      );
 
-  //     // Assertion
-  //     expect(consoleSpy).toBeCalled();
-  //   });
-  // });
+      // Assertion
+      expect(result).toEqual(
+        expect.objectContaining(anonymousPostNotificationAPIObjectExpectation)
+      );
+    });
+  });
 
-  // describe('TESTING isUserExists function', () => {
-  //   it('TEST isUserExists without transaction should return false if no row exists', async () => {
-  //     // Setup
-  //     mockDbExecuteSql.mockImplementationOnce(() => [{rows: []}, {}]);
+  describe('TESTING static fromInitAnonymousChatAPI', () => {
+    it('TEST should return ChannelListSchema', async () => {
+      // Setup
+      const initAnonymousChatAPIObject = {
+        message: {
+          cid: 'id',
+          message: 'message',
+          created_at: 'createdAt',
+          user: {
+            id: 'lastUpdatedBy'
+          }
+        },
+        targetName: 'name'
+      };
 
-  //     // Execution
-  //     const isUserExists = await userSchema.isUserExists(mockDb, 'userId', 'channelId');
+      const initAnonymousChatAPIObjectExpectation = {
+        ...fromDatabaseObjectExpectation,
+        createdAt: 'createdAt',
+        lastUpdatedAt: 'createdAt',
+        channelType: 'ANON_PM',
+        description: 'message',
+        unreadCount: 0,
+        rawJson: expect.any(Object),
+        user: null,
+        members: null,
+        channelPicture: '',
+        expiredAt: null
+      };
 
-  //     // Assertion
-  //     expect(mockDb.executeSql).toHaveBeenCalledTimes(1);
-  //     expect(mockDb.executeSql).toHaveBeenCalledWith(
-  //       expect.any(String),
-  //       expect.arrayContaining(isUserExistsPrepReplacementExpectation)
-  //     );
-  //     expect(isUserExists).toBe(false);
-  //   });
+      // Execution
+      const result = ChannelList.fromInitAnonymousChatAPI(initAnonymousChatAPIObject);
 
-  //   it('TEST isUserExists without transaction should return true if row exists', async () => {
-  //     // Setup
-  //     mockDbExecuteSql.mockImplementationOnce(() => [
-  //       {rows: [{data: 'data1'}, {data: 'data2'}]},
-  //       {}
-  //     ]);
-
-  //     // Execution
-  //     const isUserExists = await userSchema.isUserExists(mockDb, 'userId', 'channelId');
-
-  //     // Assertion
-  //     expect(mockDb.executeSql).toHaveBeenCalledTimes(1);
-  //     expect(mockDb.executeSql).toHaveBeenCalledWith(
-  //       expect.any(String),
-  //       expect.arrayContaining(isUserExistsPrepReplacementExpectation)
-  //     );
-  //     expect(isUserExists).toBe(true);
-  //   });
-
-  //   it('TEST isUserExists with transaction should return false is no row exists', async () => {
-  //     // Setup
-  //     mockTransactionExecuteSql.mockImplementationOnce(() => [{}, {rows: []}]);
-
-  //     // Execution
-  //     const isUserExists = await userSchema.isUserExists(
-  //       mockDb,
-  //       'userId',
-  //       'channelId',
-  //       mockTransaction
-  //     );
-
-  //     // Assertion
-  //     expect(mockTransaction.executeSql).toHaveBeenCalledTimes(1);
-  //     expect(mockTransaction.executeSql).toHaveBeenCalledWith(
-  //       expect.any(String),
-  //       expect.arrayContaining(isUserExistsPrepReplacementExpectation)
-  //     );
-  //     expect(isUserExists).toBe(false);
-  //   });
-
-  //   it('TEST isUserExists with transaction should return true is row exists', async () => {
-  //     // Setup
-  //     mockTransactionExecuteSql.mockImplementationOnce(() => [
-  //       {},
-  //       {rows: [{data: 'data1'}, {data: 'data2'}]}
-  //     ]);
-
-  //     // Execution
-  //     await userSchema.isUserExists(mockDb, 'userId', 'channelId', mockTransaction);
-
-  //     // Assertion
-  //     expect(mockTransaction.executeSql).toHaveBeenCalledTimes(1);
-  //     expect(mockTransaction.executeSql).toHaveBeenCalledWith(
-  //       expect.any(String),
-  //       expect.arrayContaining(isUserExistsPrepReplacementExpectation)
-  //     );
-  //   });
-
-  //   it('TEST isUserExists catch error', async () => {
-  //     // Setup
-  //     mockDbExecuteSql.mockImplementationOnce(() => {
-  //       throw new Error('error');
-  //     });
-
-  //     // Execution
-  //     const isUserExists = await userSchema.isUserExists(mockDb, 'userId', 'channelId');
-
-  //     // Assertion
-  //     expect(consoleSpy).toBeCalled();
-  //     expect(isUserExists).toBe(false);
-  //   });
-  // });
-
-  // describe('TESTING saveOrUpdateIfExists function', () => {
-  //   it('TEST saveOrUpdateIfExists should call update if user exists', async () => {
-  //     // Setup
-  //     mockTransactionExecuteSql.mockImplementationOnce(() => [
-  //       {},
-  //       {rows: [{data: 'data1'}, {data: 'data2'}]}
-  //     ]);
-
-  //     // Execution
-  //     await userSchema.saveOrUpdateIfExists(mockDb);
-
-  //     // Assertion
-  //     expect(mockTransaction.executeSql).toHaveBeenCalledTimes(1);
-  //     expect(mockTransaction.executeSql).toHaveBeenCalledWith(
-  //       expect.any(String),
-  //       expect.arrayContaining(isUserExistsPrepReplacementExpectation),
-  //       expect.any(Function)
-  //     );
-  //   });
-  // });
-
-  // describe('TESTING static fromWebsocketObject function', () => {
-  //   it('TEST fromWebsocketObject should return UserSchema', () => {
-  //     // Setup
-  //     const fromWebsocketObjectExpectation = {
-  //       id: expect.any(String),
-  //       channelId: 'channelId',
-  //       userId: 'userId',
-  //       username: 'username',
-  //       countryCode: '',
-  //       createdAt: 'createdAt',
-  //       updatedAt: 'updatedAt',
-  //       lastActiveAt: 'lastActiveAt',
-  //       profilePicture: 'profilePicture',
-  //       bio: '',
-  //       isBanned: false
-  //     };
-
-  //     // Execution
-  //     const result = UserSchema.fromWebsocketObject({
-  //       message: {
-  //         cid: 'messaging:channelId',
-  //         user: {
-  //           id: 'userId',
-  //           name: 'username',
-  //           last_active_at: 'lastActiveAt',
-  //           image: 'profilePicture'
-  //         },
-  //         created_at: 'createdAt',
-  //         updated_at: 'updatedAt'
-  //       },
-  //       is_banned: false
-  //     });
-
-  //     // Assertion
-  //     expect(result).toEqual(expect.objectContaining(fromWebsocketObjectExpectation));
-  //   });
-  // });
-
-  // describe('TESTING static fromMemberWebsoketObject function', () => {
-  //   it('TEST fromMemberWebsocketObject should return UserSchema', () => {
-  //     // Setup
-  //     const fromMemberWebsocketObjectExpectation = {
-  //       id: expect.any(String),
-  //       channelId: 'channelId',
-  //       userId: 'userId',
-  //       username: 'username',
-  //       countryCode: '',
-  //       createdAt: 'createdAt',
-  //       updatedAt: 'updatedAt',
-  //       lastActiveAt: 'lastActiveAt',
-  //       profilePicture: 'profilePicture',
-  //       bio: '',
-  //       isBanned: false
-  //     };
-
-  //     // Execution
-  //     const result = UserSchema.fromMemberWebsocketObject(
-  //       {
-  //         user: {
-  //           id: 'userId',
-  //           name: 'username',
-  //           last_active: 'lastActiveAt',
-  //           created_at: 'createdAt',
-  //           image: 'profilePicture'
-  //         },
-  //         created_at: 'createdAt',
-  //         updated_at: 'updatedAt',
-  //         banned: false
-  //       },
-  //       'channelId'
-  //     );
-
-  //     // Assertion
-  //     expect(result).toEqual(expect.objectContaining(fromMemberWebsocketObjectExpectation));
-  //   });
-  // });
-
-  // describe('TESTING static fromInitAnonymousChatAPI function', () => {
-  //   it('TEST fromAnonymousChatAPI should return UserSchema', () => {
-  //     // Setup
-  //     const fromAnonymousChatAPIExpectation = {
-  //       id: expect.any(String),
-  //       channelId: 'channelId',
-  //       userId: 'userId',
-  //       bio: 'bio',
-  //       countryCode: 'countryCode',
-  //       createdAt: 'createdAt',
-  //       lastActiveAt: 'lastActiveAt',
-  //       profilePicture: 'profilePicture',
-  //       updatedAt: 'updatedAt',
-  //       username: 'username',
-  //       isBanned: false
-  //     };
-
-  //     // Execution
-  //     const result = UserSchema.fromInitAnonymousChatAPI(
-  //       {
-  //         user_id: 'userId',
-  //         bio: 'bio',
-  //         country_code: 'countryCode',
-  //         created_at: 'createdAt',
-  //         last_active_at: 'lastActiveAt',
-  //         profile_pic_path: 'profilePicture',
-  //         updated_at: 'updatedAt',
-  //         username: 'username',
-  //         is_banned: false
-  //       },
-  //       'channelId'
-  //     );
-
-  //     // Assertion
-  //     expect(result).toEqual(expect.objectContaining(fromAnonymousChatAPIExpectation));
-  //   });
-  // });
+      // Assertion
+      expect(result).toEqual(expect.objectContaining(initAnonymousChatAPIObjectExpectation));
+    });
+  });
 });
