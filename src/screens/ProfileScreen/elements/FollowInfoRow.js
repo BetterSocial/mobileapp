@@ -1,10 +1,8 @@
 import * as React from 'react';
-import {StyleSheet, Text, TouchableNativeFeedback, View} from 'react-native';
-import SimpleToast from 'react-native-simple-toast';
+import {StyleSheet, Text, View} from 'react-native';
 import GlobalButton from '../../../components/Button/GlobalButton';
 
 import {colors} from '../../../utils/colors';
-import {fonts} from '../../../utils/fonts';
 import {getSingularOrPluralText} from '../../../utils/string/StringUtils';
 /**
  *
@@ -18,15 +16,21 @@ import {getSingularOrPluralText} from '../../../utils/string/StringUtils';
  * @property {String} follower
  * @property {String} following
  * @property {OnFollowingContainerClicked} onFollowingContainerClicked
+ * @property {onFollowersContainerClicked} onFollowersContainerClicked
  */
 /**
  *
  * @param {FollowInfoRowPropsParam} param0
  * @returns
  */
-const FollowInfoRow = ({follower, following, onFollowingContainerClicked}) => {
+const FollowInfoRow = ({
+  follower,
+  following,
+  onFollowingContainerClicked,
+  onFollowersContainerClicked
+}) => {
   const openFollower = () => {
-    SimpleToast.show('For privacy reasons, you cannot see who follows you', SimpleToast.LONG);
+    onFollowersContainerClicked();
   };
   return (
     <View style={styles.wrapFollower}>

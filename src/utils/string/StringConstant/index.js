@@ -146,6 +146,9 @@ const tutorialAnonymousPostDescription =
 const tutorialCreateAnonymousPostTitle = 'Create an Anonymous Post';
 const tutorialCreateAnonymousPostDescription =
   'Posting anonymously has never been easier\nwith the option to hide your account. Let’s\nget started!';
+// Follow Screen
+const followSearchUserLabel = 'Search User';
+
 export default {
   signInPrivacy,
   signInScreenHumanIdFoundation,
@@ -249,5 +252,7 @@ export default {
   tutorialAnonymousPostTitle,
   tutorialAnonymousPostDescription,
   tutorialCreateAnonymousPostTitle,
-  tutorialCreateAnonymousPostDescription
+  tutorialCreateAnonymousPostDescription,
+
+  followSearchUserLabel
 };

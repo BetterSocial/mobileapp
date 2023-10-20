@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import * as React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 import DiscoveryAction from '../../../context/actions/discoveryAction';
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
@@ -41,6 +41,8 @@ const TopicFragment = ({
   const [myId, setMyId] = React.useState('');
 
   const isReady = useIsReady();
+
+  const route = useRoute();
 
   const topics = discovery.initialTopics;
 
@@ -95,26 +97,45 @@ const TopicFragment = ({
 
   const __renderDiscoveryItem = (from, key, item, index) => (
     <View key={`${key}-${index}`} style={styles.domainContainer}>
-      <DomainList
-        handleSetFollow={() => handleFollow(from, true, item, index)}
-        handleSetUnFollow={() => handleFollow(from, false, item, index)}
-        key={`followedTopic-${index}`}
-        onPressBody={() => __handleOnTopicPress(item)}
-        isHashtag
-        item={{
-          name: item.name,
-          image: item.profile_pic_path,
-          isunfollowed: item.user_id_follower === null,
-          description: null
-        }}
-      />
+      {route.name === 'Followings' && item.user_id_follower !== null && (
+        <DomainList
+          handleSetFollow={() => handleFollow(from, true, item, index)}
+          handleSetUnFollow={() => handleFollow(from, false, item, index)}
+          key={`followedTopic-${index}`}
+          onPressBody={() => __handleOnTopicPress(item)}
+          isHashtag
+          item={{
+            name: item.name,
+            image: item.profile_pic_path,
+            isunfollowed: item.user_id_follower === null,
+            description: null
+          }}
+        />
+      )}
+      {route.name !== 'Followings' && (
+        <DomainList
+          handleSetFollow={() => handleFollow(from, true, item, index)}
+          handleSetUnFollow={() => handleFollow(from, false, item, index)}
+          key={`followedTopic-${index}`}
+          onPressBody={() => __handleOnTopicPress(item)}
+          isHashtag
+          item={{
+            name: item.name,
+            image: item.profile_pic_path,
+            isunfollowed: item.user_id_follower === null,
+            description: null
+          }}
+        />
+      )}
     </View>
   );
 
   const __renderTopicItems = () => {
     if (isFirstTimeOpen) {
       return [
-        <DiscoveryTitleSeparator key="topic-title-separator" text="Suggested Communities" />
+        route.name !== 'Followings' && (
+          <DiscoveryTitleSeparator key="topic-title-separator" text="Suggested Communities" />
+        )
       ].concat(
         topics.map((item, index) =>
           __renderDiscoveryItem(FROM_FOLLOWED_TOPIC_INITIAL, 'followedTopicDiscovery', item, index)
@@ -128,14 +149,15 @@ const TopicFragment = ({
           __renderDiscoveryItem(FROM_FOLLOWED_TOPIC, 'followedTopicDiscovery', item, index)
         )}
 
-        {unfollowedTopic.length > 0 && followedTopic.length > 0 && (
+        {route.name !== 'Followings' && unfollowedTopic.length > 0 && followedTopic.length > 0 && (
           <View style={styles.unfollowedHeaderContainer}>
             <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreTopics}</Text>
           </View>
         )}
-        {unfollowedTopic.map((item, index) =>
-          __renderDiscoveryItem(FROM_UNFOLLOWED_TOPIC, 'unfollowedTopicDiscovery', item, index)
-        )}
+        {route.name !== 'Followings' &&
+          unfollowedTopic.map((item, index) =>
+            __renderDiscoveryItem(FROM_UNFOLLOWED_TOPIC, 'unfollowedTopicDiscovery', item, index)
+          )}
       </>
     );
   };

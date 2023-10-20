@@ -34,6 +34,7 @@ const DiscoverySearch = ({
   setIsFocus = () => {},
   setIsFirstTimeOpen = () => {},
   fetchDiscoveryData = () => {},
+  fetchData,
   onCancelToken = () => {},
   hideBackIcon = false
 }) => {
@@ -109,7 +110,11 @@ const DiscoverySearch = ({
     setLastSearch(text);
     setAllLoading(true);
     setIsFirstTimeOpen(false);
-    fetchDiscoveryData(text);
+    if (fetchData !== undefined) {
+      fetchData(true, text);
+    } else {
+      fetchDiscoveryData(text);
+    }
 
     const result = await AsyncStorage.getItem(RECENT_SEARCH_TERMS);
 
