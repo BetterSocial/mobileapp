@@ -3,7 +3,6 @@ import * as React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
-import DiscoveryAction from '../../../context/actions/discoveryAction';
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import DomainList from '../elements/DiscoveryItemList';
 import FollowingAction from '../../../context/actions/following';
@@ -35,8 +34,8 @@ const DomainFragment = ({
   const navigation = useNavigation();
   const [myId, setMyId] = React.useState('');
   // const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
-  const [discovery, discoveryDispatch] = React.useContext(Context).discovery;
-  const [following, followingDispatch] = React.useContext(Context).following;
+  const [discovery] = React.useContext(Context).discovery;
+  const [, followingDispatch] = React.useContext(Context).following;
 
   const isReady = useIsReady();
 

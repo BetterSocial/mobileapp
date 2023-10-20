@@ -22,8 +22,6 @@ import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {withInteractionsManagedNoStatusBar} from '../../components/WithInteractionManaged';
 
-// const { height } = Dimensions.get('screen');
-
 const DiscoveryScreenV2 = ({route}) => {
   const {tab} = route.params;
   const [selectedScreen, setSelectedScreen] = React.useState(tab || 0);
@@ -44,7 +42,6 @@ const DiscoveryScreenV2 = ({route}) => {
   const [isFocus, setIsFocus] = React.useState(true);
   const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true);
   const [tabs, setTabs] = React.useState({Users: 0, Communities: 0, Domains: 0, News: 0});
-  // const tabs = ['Users', 'Communities', 'Domains', 'News'];
 
   const [discoveryData, discoveryDispatch] = React.useContext(Context).discovery;
   const [profileState] = React.useContext(Context).profile;
@@ -113,7 +110,6 @@ const DiscoveryScreenV2 = ({route}) => {
   };
 
   React.useEffect(() => {
-    // if (route.name === 'Followings') {
     setTabs({
       Users: discoveryData.initialUsers.filter((user) => user.user_id_follower !== null).length,
       Communities: discoveryData.initialTopics.filter((user) => user.user_id_follower !== null)
@@ -121,18 +117,12 @@ const DiscoveryScreenV2 = ({route}) => {
       Domains: discoveryData.initialDomains.filter((user) => user.user_id_follower !== null).length,
       News: 0
     });
-    console.log();
-    // }
   }, [discoveryData]);
 
   const onCancelToken = () => {
     cancelTokenRef?.current?.cancel();
     cancelTokenRef.current = axios.CancelToken.source();
   };
-
-  // React.useEffect(() => {
-  //     if (discoverySearchBarText.length > 1) DiscoveryAction.setDiscoveryFirstTimeOpen(false, discoveryDispatch)
-  // }, [discoverySearchBarText])
 
   const renderFragment = () => {
     if (selectedScreen === DISCOVERY_TAB_USERS)
@@ -253,7 +243,6 @@ const styles = StyleSheet.create({
 });
 
 export default withInteractionsManagedNoStatusBar(DiscoveryScreenV2);
-// export default React.memo(DiscoveryScreenV2)
 
 const DiscoveryContainer = ({children}) => {
   if (Platform.OS === 'ios') return <>{children}</>;
