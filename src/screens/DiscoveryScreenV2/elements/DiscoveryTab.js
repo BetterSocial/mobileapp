@@ -1,18 +1,41 @@
 import * as React from 'react';
 import {Dimensions, Keyboard, Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
 
+import {useRoute} from '@react-navigation/core';
 import {colors} from '../../../utils/colors';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
+import {setNavbarTitle} from '../../../context/actions/setMyProfileAction';
+import {Context} from '../../../context';
 
 const {width} = Dimensions.get('screen');
 
-const DiscoveryTab = ({onChangeScreen, selectedScreen = 0}) => {
+const DiscoveryTab = ({onChangeScreen, selectedScreen = 0, tabs}) => {
+  const route = useRoute();
+  const [, dispatchNavbar] = React.useContext(Context).profile;
   const handleTabOnClicked = React.useCallback((index) => {
     Keyboard.dismiss();
     onChangeScreen(index);
   }, []);
 
-  const tabs = ['Users', 'Communities', 'Domains', 'News'];
+  const changePlaceHolder = (index = 0) => {
+    switch (index) {
+      case 0:
+        setNavbarTitle('Search users', dispatchNavbar);
+        break;
+      case 1:
+        setNavbarTitle('Your Communities', dispatchNavbar);
+        break;
+      case 2:
+        setNavbarTitle('Your Domains', dispatchNavbar);
+        break;
+      default:
+    }
+  };
+
+  React.useEffect(() => {
+    if (route.name === 'Followings') changePlaceHolder();
+  }, []);
+
   return (
     <>
       <ScrollView
@@ -21,22 +44,29 @@ const DiscoveryTab = ({onChangeScreen, selectedScreen = 0}) => {
         keyboardShouldPersistTaps="handled"
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}>
-        {tabs.map((item, index) => (
-          <Pressable
-            key={`tabItem-${item}`}
-            android_ripple={{
-              color: colors.gray1
-            }}
-            style={styles.tabItem(index)}
-            onPress={() => handleTabOnClicked(index)}>
-            <View style={styles.tabItemContainer}>
-              <Text style={index === selectedScreen ? styles.tabItemTextFocus : styles.tabItemText}>
-                {item}
-              </Text>
-              <View style={index === selectedScreen ? styles.underlineFocus : {}}></View>
-            </View>
-          </Pressable>
-        ))}
+        {Object.keys(tabs).map((item, index) => {
+          if (route.name === 'Followings' && item === 'News') return null;
+          return (
+            <Pressable
+              key={`tabItem-${item}`}
+              android_ripple={{
+                color: colors.gray1
+              }}
+              style={styles.tabItem(index)}
+              onPress={() => {
+                handleTabOnClicked(index);
+                if (route.name === 'Followings') changePlaceHolder(index);
+              }}>
+              <View style={styles.tabItemContainer}>
+                <Text
+                  style={index === selectedScreen ? styles.tabItemTextFocus : styles.tabItemText}>
+                  {`${item} ${route.name === 'Followings' ? `(${tabs[item]})` : ''}`}
+                </Text>
+                <View style={index === selectedScreen ? styles.underlineFocus : {}}></View>
+              </View>
+            </Pressable>
+          );
+        })}
       </ScrollView>
     </>
   );
@@ -49,10 +79,10 @@ const styles = StyleSheet.create({
   },
   tabItem: (index) => ({
     flex: 1,
-    width: width / 4,
+    // width: width / 4 + 10,
     justifyContent: 'center',
     height: '100%',
-    paddingLeft: index !== 1 ? 20 : 0
+    paddingLeft: 20
   }),
   tabItemContainer: {
     alignSelf: 'flex-start'

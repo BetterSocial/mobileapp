@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 import * as React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 import DiscoveryAction from '../../../context/actions/discoveryAction';
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
@@ -34,11 +34,14 @@ const UsersFragment = ({
   setUnfollowedUsers = () => {},
   setSearchText = () => {},
   setIsFirstTimeOpen = () => {},
-  withoutRecent = false
+  withoutRecent = false,
+  showRecentSearch = true
 }) => {
   const [discovery, discoveryDispatch] = React.useContext(Context).discovery;
   const [profile] = React.useContext(Context).profile;
   const navigation = useNavigation();
+
+  const route = useRoute();
 
   const [myId, setMyId] = React.useState('');
   // const [initialFollowedUsers, setInitialFollowedUsers] = React.useState(
@@ -116,20 +119,31 @@ const UsersFragment = ({
     }
   };
 
-  const renderDiscoveryItem = (from, key, item, index) => (
-    <DomainList
-      key={`${key}-${index}`}
-      onPressBody={() => handleOnPress(item)}
-      handleSetFollow={() => handleFollow(from, true, item, index)}
-      handleSetUnFollow={() => handleFollow(from, false, item, index)}
-      item={{
-        name: item.username,
-        image: item.profile_pic_path,
-        isunfollowed: item.user_id_follower === null,
-        description: item.bio
-      }}
-    />
-  );
+  const renderDiscoveryItem = (from, key, item, index) => {
+    const isUnfollowed = item.user_id_follower !== null;
+
+    if (
+      (route.name === 'Followings' && item.user_id_follower !== null) ||
+      route.name !== 'Followings'
+    ) {
+      return (
+        <DomainList
+          key={`${key}-${index}`}
+          onPressBody={() => handleOnPress(item.user || item)}
+          handleSetFollow={() => handleFollow(from, true, item.user || item, index)}
+          handleSetUnFollow={() => handleFollow(from, false, item.user || item, index)}
+          item={{
+            name: item.user ? item.user.username : item.username,
+            image: item.user ? item.user.profile_pic_path : item.profile_pic_path,
+            isunfollowed: !isUnfollowed,
+            description: item.user ? item.user.bio : item.bio
+          }}
+        />
+      );
+    }
+    return null;
+  };
+
   const renderUsersItem = () => {
     if (isFirstTimeOpen) {
       if (withoutRecent) {
@@ -139,7 +153,11 @@ const UsersFragment = ({
           )
         ];
       }
-      return [<DiscoveryTitleSeparator key="user-title-separator" text="Suggested Users" />].concat(
+      return [
+        route.name !== 'Followings' && (
+          <DiscoveryTitleSeparator key="user-title-separator" text="Suggested Users" />
+        )
+      ].concat(
         users.map((item, index) =>
           // return renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", { ...item.user, user_id_follower: item.user_id_follower }, index)
           renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, 'followedUsers', item, index)
@@ -153,14 +171,18 @@ const UsersFragment = ({
           renderDiscoveryItem(FROM_FOLLOWED_USERS, 'followedUsers', item, index)
         )}
 
-        {unfollowedUsers.length > 0 && followedUsers.length > 0 && !withoutRecent && (
-          <View style={styles.unfollowedHeaderContainer}>
-            <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreUsers}</Text>
-          </View>
-        )}
-        {unfollowedUsers.map((item, index) =>
-          renderDiscoveryItem(FROM_UNFOLLOWED_USERS, 'unfollowedUsers', item, index)
-        )}
+        {route.name !== 'Followings' &&
+          unfollowedUsers.length > 0 &&
+          followedUsers.length > 0 &&
+          !withoutRecent && (
+            <View style={styles.unfollowedHeaderContainer}>
+              <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreUsers}</Text>
+            </View>
+          )}
+        {route.name !== 'Followings' &&
+          unfollowedUsers.map((item, index) =>
+            renderDiscoveryItem(FROM_UNFOLLOWED_USERS, 'unfollowedUsers', item, index)
+          )}
       </>
     );
   };
@@ -184,7 +206,7 @@ const UsersFragment = ({
     <View>
       {!withoutRecent && (
         <RecentSearch
-          shown={isFirstTimeOpen}
+          shown={showRecentSearch || isFirstTimeOpen}
           setSearchText={setSearchText}
           setIsFirstTimeOpen={setIsFirstTimeOpen}
         />
