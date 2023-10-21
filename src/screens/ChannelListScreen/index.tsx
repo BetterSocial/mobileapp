@@ -29,6 +29,14 @@ const ChannelListScreen = () => {
           );
         }
 
+        if (item?.channelType === 'GROUP') {
+          // group item
+        }
+
+        if (item?.channelType === 'TOPIC') {
+          // topic item
+        }
+
         return null;
       }}
     />
