@@ -7,11 +7,15 @@ import PostNotificationChannelItem from '../../../components/AnonymousChat/PostN
 import useAnonymousChannelListScreenHook from '../../../hooks/screen/useAnonymousChannelListHook';
 
 const AnonymousChannelListScreen = () => {
-  const {channels, goToChatScreen, goToPostDetailScreen} = useAnonymousChannelListScreenHook();
+  const {
+    channels: anonChannels,
+    goToChatScreen,
+    goToPostDetailScreen
+  } = useAnonymousChannelListScreenHook();
 
   return (
     <FlatList
-      data={channels}
+      data={anonChannels}
       keyExtractor={(item) => item.id}
       scrollEnabled={false}
       listKey={'AnonymousChannelList'}
