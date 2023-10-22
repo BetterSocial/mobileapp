@@ -11511,6 +11511,13 @@ react-native-swiper-flatlist@^3.0.14:
   resolved "https://registry.yarnpkg.com/react-native-swiper-flatlist/-/react-native-swiper-flatlist-3.2.2.tgz#df2f7dfbdbd6947ff922affa053f9f016e488ab2"
   integrity sha512-VVtxJCb2QHGA3ZpLiFqEHv6wyTlnlov5kL0dPKCb9Kc/W1wx8x2ZRFJU2Xja60CKbXDr5zwpxRayBm3bLgFEPg==
 
+react-native-switch@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/react-native-switch/-/react-native-switch-1.5.1.tgz#da032f66547053aa004c7a159422dbca8fadd944"
+  integrity sha512-nfuPrrPKzeZL1mQH0u1rlEGv9W1+okU/xOcNNaDNz/LhSdzWOZ04ogJ4iEj7Sth3hkBxv4XwFQZTgCc07we+cg==
+  dependencies:
+    prop-types "^15.6.0"
+
 react-native-tab-view@2.16.0:
   version "2.16.0"
   resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-2.16.0.tgz#cae72c7084394bd328fac5fefb86cd966df37a86"

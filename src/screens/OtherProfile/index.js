@@ -1,7 +1,6 @@
 import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import ToastMessage from 'react-native-toast-message';
-import ToggleSwitch from 'toggle-switch-react-native';
 import {
   Dimensions,
   Image,
@@ -34,6 +33,7 @@ import RenderItem from '../ProfileScreen/elements/RenderItem';
 import ReportUser from '../../components/Blocking/ReportUser';
 import ShareUtils from '../../utils/share';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
+import ToggleSwitch from '../../components/ToggleSwitch';
 import TextAreaChat from '../../components/TextAreaChat';
 import dimen from '../../utils/dimen';
 import useSaveAnonChatHook from '../../database/hooks/useSaveAnonChatHook';
@@ -119,13 +119,12 @@ const BioAndChat = (props) => {
       </TouchableOpacity>
       <TouchableOpacity onPress={toggleSwitch} style={styles.toggleSwitchContainer}>
         <ToggleSwitch
-          isOn={isAnonimity}
-          onToggle={toggleSwitch}
-          onColor={'#9DEDF1'}
-          label={isAnonimityEnabled || !isSignedMessageEnabled ? 'Anonymity' : 'Anonymity disabled'}
-          offColor="#F5F5F5"
-          size="small"
-          labelStyle={{color: isAnonimityEnabled ? colors.white : '#648ABF'}}
+          value={isAnonimity}
+          onValueChange={toggleSwitch}
+          labelLeft={
+            isAnonimityEnabled || !isSignedMessageEnabled ? 'Anonymity' : 'Anonymity disabled'
+          }
+          styleLabelLeft={{color: isAnonimityEnabled ? colors.white : '#648ABF'}}
         />
       </TouchableOpacity>
     </View>
