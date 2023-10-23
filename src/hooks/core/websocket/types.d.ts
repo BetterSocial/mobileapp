@@ -7,6 +7,10 @@ export type WebsocketUserDataType = {
 };
 
 export type GetstreamMessage = {
+  anon_user_info_color_code?: string;
+  anon_user_info_color_name?: string;
+  anon_user_info_emoji_code?: string;
+  anon_user_info_emoji_name?: string;
   attachments: any[];
   cid: string;
   created_at: string;
@@ -109,4 +113,8 @@ export type GetstreamWebsocket = {
   unread_count: number;
   targetName: string;
   targetImage: string;
+  isAnonymous?: boolean;
+  anon_user_info_emoji_name?: string;
+  anon_user_info_color_name?: string;
+  anon_user_info_emoji_code?: string;
 };

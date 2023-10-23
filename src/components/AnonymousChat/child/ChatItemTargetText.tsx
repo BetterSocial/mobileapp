@@ -6,6 +6,7 @@ import {ChatItemMyTextProps} from '../../../../types/component/AnonymousChat/Bas
 import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
+import AnonymousIcon from '../../../screens/ChannelListScreen/elements/components/AnonymousIcon';
 
 const {width} = Dimensions.get('screen');
 const styles = StyleSheet.create({
@@ -70,19 +71,35 @@ const ChatItemTargetText = ({
   username = 'Anonymous Clown',
   time = '4h',
   isContinuous = false,
-  message = 'Ultrices neque op semper blahbla blahri mauris amet, penatibus. pi Amet, mollis quam venenatis di'
+  message = 'Ultrices neque op semper blahbla blahri mauris amet, penatibus. pi Amet, mollis quam venenatis di',
+  anonEmojiCode,
+  anonEmojiColor
 }: ChatItemMyTextProps) => {
+  const renderAvatar = () => {
+    return (
+      <View>
+        <AnonymousIcon color={anonEmojiColor} emojiCode={anonEmojiCode} size={24} />
+      </View>
+    );
+  };
+
   return (
     <View style={styles.chatContainer}>
       {isContinuous ? (
         <View style={styles.avatar} />
       ) : (
-        <FastImage
-          style={styles.avatar}
-          source={{
-            uri: avatar
-          }}
-        />
+        <>
+          {anonEmojiCode ? (
+            renderAvatar()
+          ) : (
+            <FastImage
+              style={styles.avatar}
+              source={{
+                uri: avatar
+              }}
+            />
+          )}
+        </>
       )}
       <View style={styles.textContainer}>
         {!isContinuous && (

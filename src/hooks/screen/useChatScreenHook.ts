@@ -11,7 +11,6 @@ import UseChatScreenHook from '../../../types/hooks/screens/useChatScreenHook.ty
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import {getAnonymousUserId, getUserId} from '../../utils/users';
-import {randomString} from '../../utils/string/StringUtils';
 
 function useChatScreenHook(): UseChatScreenHook {
   const {localDb, chat, refresh} = useLocalDatabaseHook();
@@ -29,15 +28,10 @@ function useChatScreenHook(): UseChatScreenHook {
       myUserId,
       myAnonymousId
     )) as ChatSchema[];
-    console.log({data}, 'hello');
     setChats(data);
   };
 
-  const sendChat = async (
-    message: string = randomString(20),
-    iteration = 0,
-    sendingChatSchema: ChatSchema = null
-  ) => {
+  const sendChat = async (message: string, iteration = 0, sendingChatSchema: ChatSchema = null) => {
     if (iteration > 5) {
       SimpleToast.show("Can't send message, please check your connection");
       return;
@@ -69,7 +63,6 @@ function useChatScreenHook(): UseChatScreenHook {
         refresh('chat');
         refresh('channelList');
       }
-      console.log({currentChatSchema}, 'tulang8');
 
       let response;
       if (type === 'ANONYMOUS') {

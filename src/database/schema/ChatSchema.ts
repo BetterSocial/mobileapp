@@ -20,7 +20,7 @@ class ChatSchema implements BaseDbSchema {
 
   updatedAt: string;
 
-  rawJson: string;
+  rawJson: any;
 
   user: UserSchema | null;
 
@@ -85,7 +85,6 @@ class ChatSchema implements BaseDbSchema {
         this.updatedAt,
         this.rawJson
       ];
-
       await db.executeSql(insertQuery, insertParams);
     } catch (e) {
       console.log('error saving chat schema');
@@ -158,7 +157,6 @@ class ChatSchema implements BaseDbSchema {
 
   static fromDatabaseObject(dbObject: any): ChatSchema {
     let rawJson = null;
-
     try {
       rawJson = JSON.parse(dbObject?.raw_json || '{}');
     } catch (e) {
@@ -166,8 +164,7 @@ class ChatSchema implements BaseDbSchema {
       console.log(e);
     }
     const user = UserSchema.fromDatabaseObject(dbObject);
-
-    return new ChatSchema({
+    const chatSchema = new ChatSchema({
       id: dbObject.id,
       channelId: dbObject.channel_id,
       userId: dbObject?.user_id,
@@ -181,6 +178,7 @@ class ChatSchema implements BaseDbSchema {
       isMe: dbObject.is_me,
       isContinuous: dbObject.is_continuous
     });
+    return chatSchema;
   }
 
   static fromWebsocketObject(json): ChatSchema {
@@ -300,7 +298,7 @@ class ChatSchema implements BaseDbSchema {
         'sent',
         response?.message?.created_at,
         response?.message?.updated_at,
-        JSON.stringify(response),
+        JSON.stringify(response.message),
         response?.message?.id,
         this.id
       ];

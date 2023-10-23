@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {View} from 'react-native';
 
+import FastImage from 'react-native-fast-image';
 import AnonymousIcon from '../../screens/ChannelListScreen/elements/components/AnonymousIcon';
 import ChatItemMyTextV2 from './child/ChatItemMyTextV2';
 import ChatItemTargetText from './child/ChatItemTargetText';
@@ -12,20 +13,16 @@ import {
 import {ChatStatus} from '../../../types/database/schema/ChannelList.types';
 import {calculateTime} from '../../utils/time';
 import BaseSystemChat from './BaseChatSystem';
-import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
 
 const BaseChatItem = ({item, index}: BaseChatItemComponentProps) => {
-  const {selectedChannel} = useChatScreenHook();
-  const {selectedChannel: selectedChat} = useChatUtilsHook();
-  const isAnonymous = selectedChat?.channelType !== 'PM';
+  useChatScreenHook();
+  const {anon_user_info_emoji_code, anon_user_info_color_code} = item?.rawJson;
 
-  const {anon_user_info_emoji_name, anon_user_info_emoji_code, anon_user_info_color_code} =
-    selectedChannel?.rawJson?.channel || {};
   const handleUserName = () => {
-    if (isAnonymous) {
-      return `Anonymous ${anon_user_info_emoji_name}`;
+    if (item?.rawJson?.anon_user_info_emoji_name) {
+      return `${item?.rawJson?.anon_user_info_emoji_name}`;
     }
-    return selectedChat?.user?.username;
+    return item?.user?.username;
   };
 
   if (item?.isMe)
@@ -33,10 +30,14 @@ const BaseChatItem = ({item, index}: BaseChatItemComponentProps) => {
       <ChatItemMyTextV2
         AnonymousImage={
           <View style={{marginLeft: 8}}>
-            <AnonymousIcon
-              color={anon_user_info_color_code}
-              emojiCode={anon_user_info_emoji_code}
+            {/* <AnonymousIcon
+              color={channel?.anon_user_info_color_code}
+              emojiCode={channel?.anon_user_info_emoji_code}
               size={24}
+            /> */}
+            <FastImage
+              source={{uri: item?.user?.profilePicture}}
+              style={{height: 24, width: 24, borderRadius: 12}}
             />
           </View>
         }
@@ -56,11 +57,13 @@ const BaseChatItem = ({item, index}: BaseChatItemComponentProps) => {
 
   return (
     <ChatItemTargetText
+      anonEmojiCode={anon_user_info_emoji_code}
+      anonEmojiColor={anon_user_info_color_code}
       avatar={item?.user?.profilePicture}
       isContinuous={item?.isContinuous}
       message={item?.message}
       time={calculateTime(item?.updatedAt, true)}
-      username={item?.user?.username}
+      username={handleUserName()}
       type={BaseChatItemTypeProps.ANON_CHAT}
     />
   );

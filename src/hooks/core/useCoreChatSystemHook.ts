@@ -62,7 +62,7 @@ const useCoreChatSystemHook = () => {
   usePostNotificationListenerHook(onAnonPostNotifReceived, true);
   usePostNotificationListenerHook(onSignedPostNotifReceived, false);
 
-  const {lastAnonymSignedMessage, lastJsonMessage} = useBetterWebsocketHook();
+  const {lastSignedMessage, lastJsonMessage, ownerChannel} = useBetterWebsocketHook();
 
   const saveChannelListData = async (
     websocketData: GetstreamWebsocket,
@@ -70,6 +70,14 @@ const useCoreChatSystemHook = () => {
   ) => {
     if (!localDb) return;
     if (websocketData?.channel?.anon_user_info_emoji_name) {
+      if (
+        ownerChannel(websocketData?.channel?.members)?.user?.id === websocketData?.message?.user?.id
+      ) {
+        websocketData.anon_user_info_emoji_name = `Anonymous ${websocketData?.channel?.anon_user_info_emoji_name}`;
+        websocketData.anon_user_info_color_name = websocketData?.channel?.anon_user_info_color_name;
+        websocketData.anon_user_info_emoji_code = websocketData?.channel?.anon_user_info_emoji_code;
+        websocketData.anon_user_info_color_code = websocketData?.channel?.anon_user_info_color_code;
+      }
       websocketData.targetName = `Anonymous ${websocketData?.channel?.anon_user_info_emoji_name}`;
       websocketData.targetImage = null;
     } else {
@@ -79,7 +87,6 @@ const useCoreChatSystemHook = () => {
 
     const channelList = ChannelList.fromWebsocketObject(websocketData, channelType);
     await channelList.save(localDb);
-
     const user = UserSchema.fromWebsocketObject(websocketData);
     await user.saveOrUpdateIfExists(localDb);
 
@@ -384,17 +391,21 @@ const useCoreChatSystemHook = () => {
 
   React.useEffect(() => {
     if (!lastJsonMessage && !localDb) return;
+    console.log({lastJsonMessage}, 'nana12');
+    if (lastJsonMessage?.type === 'health.check') return;
     if (lastJsonMessage) {
       saveChannelListData(lastJsonMessage, 'ANON_PM').catch((e) => console.log(e));
     }
   }, [lastJsonMessage, localDb]);
 
   React.useEffect(() => {
-    if (!lastAnonymSignedMessage && !localDb) return;
-    if (lastAnonymSignedMessage) {
-      saveChannelListData(lastAnonymSignedMessage, 'PM').catch((e) => console.log(e));
+    if (!lastSignedMessage && !localDb) return;
+    console.log({lastSignedMessage}, 'nanaban');
+    if (lastSignedMessage?.type === 'health.check') return;
+    if (lastSignedMessage) {
+      saveChannelListData(lastSignedMessage, 'PM').catch((e) => console.log(e));
     }
-  }, [lastAnonymSignedMessage, localDb]);
+  }, [lastSignedMessage, localDb]);
 
   React.useEffect(() => {
     console.log({isEnteringApp}, 'nana');

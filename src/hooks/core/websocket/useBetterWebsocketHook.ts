@@ -9,6 +9,7 @@ import {getAnonymousUserId, getUserId} from '../../../utils/users';
 
 const useBetterWebsocketHook = () => {
   const generateUserDataUrlEncoded: (user: WebsocketUserDataType) => string = (user) => {
+    console.log(user, 'hello11');
     const userData = {
       user_id: user?.userId,
       user_details: {
@@ -67,12 +68,17 @@ const useBetterWebsocketHook = () => {
     shouldReconnect: (closeEvent) => true
   });
 
-  const {lastJsonMessage: lastAnonymSignedMessage} = useWebSocket(getSignedSockerUrl, {
+  const ownerChannel = (members = []) => {
+    const findOwner = members.find((member) => member.role === 'owner');
+    return findOwner;
+  };
+
+  const {lastJsonMessage: lastSignedMessage} = useWebSocket(getSignedSockerUrl, {
     onOpen: () => console.log('opened 456'),
     shouldReconnect: (closeEvent) => true
   });
 
-  return {lastJsonMessage, lastAnonymSignedMessage};
+  return {lastJsonMessage, lastSignedMessage, ownerChannel};
 };
 
 export default useBetterWebsocketHook;
