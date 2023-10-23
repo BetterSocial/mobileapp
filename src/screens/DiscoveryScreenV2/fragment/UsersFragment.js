@@ -35,7 +35,9 @@ const UsersFragment = ({
   setSearchText = () => {},
   setIsFirstTimeOpen = () => {},
   withoutRecent = false,
-  showRecentSearch = true
+  showRecentSearch = true,
+  fetchData = () => {},
+  searchText
 }) => {
   const [discovery, discoveryDispatch] = React.useContext(Context).discovery;
   const [profile] = React.useContext(Context).profile;
@@ -44,17 +46,15 @@ const UsersFragment = ({
   const route = useRoute();
 
   const [myId, setMyId] = React.useState('');
-  // const [initialFollowedUsers, setInitialFollowedUsers] = React.useState(
-  //     discovery.initialUsers.filter((item) => item.user_id_follower !== null)
-  // )
-
-  // const [initialUnfollowedUsers, setInitialUnfollowedUsers] = React.useState(
-  //     discovery.initialUsers.filter((item) => item.user_id_follower === null)
-  // )
 
   const isReady = useIsReady();
 
-  const users = discovery.initialUsers;
+  const users = React.useMemo(() => {
+    return discovery.initialUsers.map((item) => ({
+      ...item,
+      following: item.following !== undefined ? item.following : item.user_id_follower !== null
+    }));
+  }, [discovery.initialUsers]);
 
   React.useEffect(() => {
     const parseToken = async () => {
@@ -79,32 +79,44 @@ const UsersFragment = ({
   const handleFollow = async (from, willFollow, item, index) => {
     if (from === FROM_FOLLOWED_USERS_INITIAL || from === FROM_UNFOLLOWED_USERS_INITIAL) {
       const newFollowedUsers = [...users];
-      newFollowedUsers[index].user_id_follower = willFollow ? myId : null;
-      // const newInitialFollowedUsers = [...initialFollowedUsers]
-      // newInitialFollowedUsers[index].user_id_follower = willFollow ? myId : null
+      if (newFollowedUsers[index].user) {
+        newFollowedUsers[index].user.following = !!willFollow;
+      } else {
+        newFollowedUsers[index].following = !!willFollow;
+      }
 
-      // FollowingAction.setFollowingUsers(newFollowedUsers, followingDispatch)
       DiscoveryAction.setDiscoveryInitialUsers(newFollowedUsers, discoveryDispatch);
-      // setInitialFollowedUsers(newInitialFollowedUsers)
     }
 
     if (from === FROM_FOLLOWED_USERS) {
       const newFollowedUsers = [...followedUsers];
-      newFollowedUsers[index].user_id_follower = willFollow ? myId : null;
+      if (newFollowedUsers[index].user) {
+        newFollowedUsers[index].user.following = !!willFollow;
+      } else {
+        newFollowedUsers[index].following = !!willFollow;
+      }
 
       setFollowedUsers(newFollowedUsers);
     }
 
     if (from === FROM_UNFOLLOWED_USERS) {
       const newUnfollowedUsers = [...unfollowedUsers];
-      newUnfollowedUsers[index].user_id_follower = willFollow ? myId : null;
+      if (newUnfollowedUsers[index].user) {
+        newUnfollowedUsers[index].user.following = !!willFollow;
+      } else {
+        newUnfollowedUsers[index].following = !!willFollow;
+      }
 
       setUnfollowedUsers(newUnfollowedUsers);
     }
 
     if (from === FROM_USERS_INITIAL) {
       const newFollowedUsers = [...initialUsers];
-      newFollowedUsers[index].user_id_follower = willFollow ? myId : null;
+      if (newFollowedUsers[index].user) {
+        newFollowedUsers[index].user.following = !!willFollow;
+      } else {
+        newFollowedUsers[index].following = !!willFollow;
+      }
 
       setInitialUsers(newFollowedUsers);
     }
@@ -122,10 +134,11 @@ const UsersFragment = ({
     } else {
       await setUnFollow(data);
     }
+    if (searchText.length > 0) fetchData();
   };
 
   const renderDiscoveryItem = (from, key, item, index) => {
-    const isUnfollowed = item.user_id_follower !== null;
+    const isUnfollowed = item.user ? !item.user.following : !item.following;
 
     if (
       (route.name === 'Followings' && item.user_id_follower !== null) ||
@@ -140,7 +153,7 @@ const UsersFragment = ({
           item={{
             name: item.user ? item.user.username : item.username,
             image: item.user ? item.user.profile_pic_path : item.profile_pic_path,
-            isunfollowed: !isUnfollowed,
+            isunfollowed: isUnfollowed,
             description: item.user ? item.user.bio : item.bio
           }}
         />

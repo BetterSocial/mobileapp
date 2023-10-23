@@ -31,7 +31,9 @@ const TopicFragment = ({
   setIsFirstTimeOpen,
   setSearchText,
   setFollowedTopic,
-  setUnfollowedTopic
+  setUnfollowedTopic,
+  fetchData = () => {},
+  searchText
 }) => {
   const [discovery, discoveryDispatch] = React.useContext(Context).discovery;
   const {followTopic} = useChatClientHook();
@@ -44,7 +46,12 @@ const TopicFragment = ({
 
   const route = useRoute();
 
-  const topics = discovery.initialTopics;
+  const topics = React.useMemo(() => {
+    return discovery.initialTopics.map((item) => ({
+      ...item,
+      following: item.following !== undefined ? item.following : item.user_id_follower !== null
+    }));
+  }, [discovery.initialTopics]);
 
   React.useEffect(() => {
     const parseToken = async () => {
@@ -59,32 +66,33 @@ const TopicFragment = ({
   const handleFollow = async (from, willFollow, item, index) => {
     if (from === FROM_FOLLOWED_TOPIC_INITIAL) {
       const newFollowedTopics = [...topics];
-      newFollowedTopics[index].user_id_follower = willFollow ? myId : null;
+      newFollowedTopics[index].following = !!willFollow;
       DiscoveryAction.setDiscoveryInitialTopics(newFollowedTopics, discoveryDispatch);
     }
 
     if (from === FROM_UNFOLLOWED_TOPIC_INITIAL) {
       const newFollowedTopics = [...topics];
-      newFollowedTopics[index].user_id_follower = willFollow ? myId : null;
+      newFollowedTopics[index].following = !!willFollow;
 
       DiscoveryAction.setDiscoveryInitialTopics(newFollowedTopics, discoveryDispatch);
     }
 
     if (from === FROM_FOLLOWED_TOPIC) {
       const newFollowedTopics = [...followedTopic];
-      newFollowedTopics[index].user_id_follower = willFollow ? myId : null;
+      newFollowedTopics[index].following = !!willFollow;
 
       setFollowedTopic(newFollowedTopics);
     }
 
     if (from === FROM_UNFOLLOWED_TOPIC) {
       const newUnFollowedTopic = [...unfollowedTopic];
-      newUnFollowedTopic[index].user_id_follower = willFollow ? myId : null;
+      newUnFollowedTopic[index].following = !!willFollow;
 
       setUnfollowedTopic(newUnFollowedTopic);
     }
 
     followTopic(item?.name);
+    if (searchText.length > 0) fetchData();
   };
 
   const __handleOnTopicPress = (item) => {
@@ -107,7 +115,7 @@ const TopicFragment = ({
           item={{
             name: item.name,
             image: item.profile_pic_path,
-            isunfollowed: item.user_id_follower === null,
+            isunfollowed: !item.following,
             description: null
           }}
         />
@@ -122,7 +130,7 @@ const TopicFragment = ({
           item={{
             name: item.name,
             image: item.profile_pic_path,
-            isunfollowed: item.user_id_follower === null,
+            isunfollowed: !item.following,
             description: null
           }}
         />
