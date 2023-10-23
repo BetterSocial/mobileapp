@@ -12,6 +12,7 @@ const useOneSignalSubscribeToCommunityHooks = () => {
     try {
       await OneSignalUtil.rebuildAndSubscribeTags();
     } catch (e) {
+      console.log('error one signal login ');
       console.log(e);
     }
   };
