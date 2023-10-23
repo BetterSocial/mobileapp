@@ -21,7 +21,6 @@ function FollowersScreen() {
 
   const fetchFollower = async (withLoading, text) => {
     if (withLoading) setIsLoading(true);
-    // TODO: getfollowers
     const result = await getFollower(text);
     if (result.code === 200) {
       const newData = result.data.map((data) => ({
@@ -44,7 +43,6 @@ function FollowersScreen() {
   const followingHeader = () => {
     if ((Platform.OS === 'ios' && profileState.isShowHeader) || Platform.OS === 'android') {
       return (
-        // TODO: integrate search
         <Search
           searchText={searchText}
           setSearchText={setSearchText}
