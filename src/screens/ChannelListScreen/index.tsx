@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-use-before-define
 import * as React from 'react';
-import {FlatList, View} from 'react-native';
+import {FlatList} from 'react-native';
 
 import MessageChannelItem from '../../components/AnonymousChat/MessageChannelItem';
 import PostNotificationChannelItem from '../../components/AnonymousChat/PostNotificationChannelItem';
@@ -13,6 +13,8 @@ const ChannelListScreen = () => {
     <FlatList
       data={channels}
       keyExtractor={(item) => item.id}
+      scrollEnabled={false}
+      listKey={'ChannelList'}
       renderItem={({item}) => {
         if (item?.channelType === 'PM') {
           return <MessageChannelItem item={item} onChannelPressed={() => goToChatScreen(item)} />;
@@ -27,12 +29,15 @@ const ChannelListScreen = () => {
           );
         }
 
-        //! TODO:
-        //! ADD CONDITIONAL STATEMENT
-        // if (item?.channelType === 'TOPIC') {}
-        // if (item?.channelType === 'GROUP') {}
+        if (item?.channelType === 'GROUP') {
+          // group item
+        }
 
-        return <View />;
+        if (item?.channelType === 'TOPIC') {
+          // topic item
+        }
+
+        return null;
       }}
     />
   );
