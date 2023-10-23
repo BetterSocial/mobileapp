@@ -58,12 +58,16 @@ function useChatUtilsHook(): UseChatUtilsHook {
   };
 
   const goToChatScreen = (channel: ChannelList) => {
+    console.log({channel}, 'nehij');
     setChannelAsRead(channel);
 
     if (channel?.channelType?.includes('POST_NOTIFICATION'))
       return helperGoToPostDetailScreen(channel);
-
-    navigation.navigate('SampleChatScreen');
+    if (channel?.channelType === 'ANON_PM') {
+      navigation.navigate('SampleChatScreen');
+    } else {
+      navigation.navigate('SignedChatScreen');
+    }
     setChat({
       ...chat,
       selectedChannel: channel

@@ -70,19 +70,24 @@ const ChatItemTargetText = ({
   username = 'Anonymous Clown',
   time = '4h',
   isContinuous = false,
-  message = 'Ultrices neque op semper blahbla blahri mauris amet, penatibus. pi Amet, mollis quam venenatis di'
+  message = 'Ultrices neque op semper blahbla blahri mauris amet, penatibus. pi Amet, mollis quam venenatis di',
+  AnonymousImage
 }: ChatItemMyTextProps) => {
   return (
     <View style={styles.chatContainer}>
       {isContinuous ? (
         <View style={styles.avatar} />
       ) : (
-        <FastImage
-          style={styles.avatar}
-          source={{
-            uri: avatar
-          }}
-        />
+        <>
+          {AnonymousImage || (
+            <FastImage
+              style={styles.avatar}
+              source={{
+                uri: avatar
+              }}
+            />
+          )}
+        </>
       )}
       <View style={styles.textContainer}>
         {!isContinuous && (

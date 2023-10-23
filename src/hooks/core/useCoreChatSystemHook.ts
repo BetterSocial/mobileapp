@@ -29,7 +29,7 @@ type ChannelType = 'SIGNED' | 'ANONYMOUS';
 
 const useCoreChatSystemHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook() as UseLocalDatabaseHook;
-  const {anonProfileId, signedProfileId} = useProfileHook();
+  const {anonProfileId, signedProfileId, profile} = useProfileHook();
   const initialStartup: any = useRecoilValue(InitialStartupAtom);
 
   const isEnteringApp =
@@ -69,14 +69,14 @@ const useCoreChatSystemHook = () => {
     channelType: 'PM' | 'ANON_PM'
   ) => {
     if (!localDb) return;
-
-    const chatName =
-      channelType === 'ANON_PM'
-        ? await getAnonymousChatName(websocketData?.channel?.members)
-        : getChatName(websocketData?.channel?.name);
-
-    websocketData.targetName = chatName?.name;
-    websocketData.targetImage = chatName?.image;
+    if (websocketData?.channel?.anon_user_info_emoji_name) {
+      websocketData.targetName = `Anonymous ${websocketData?.channel?.anon_user_info_emoji_name}`;
+      websocketData.targetImage = null;
+      websocketData.isAnonymous = true;
+    } else {
+      websocketData.targetName = getChatName(websocketData?.channel?.name, profile?.username);
+      websocketData.targetImage = websocketData.message?.user?.image;
+    }
 
     const channelList = ChannelList.fromWebsocketObject(websocketData, channelType);
     console.log('channelList');
