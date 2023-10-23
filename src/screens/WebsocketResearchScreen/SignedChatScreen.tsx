@@ -12,9 +12,9 @@ import {colors} from '../../utils/colors';
 
 const {height} = Dimensions.get('window');
 
-const SampleChatScreen = () => {
+const SignedChatScreen = () => {
   const {selectedChannel, chats, goBackFromChatScreen, goToChatInfoScreen, sendChat} =
-    useChatScreenHook('ANONYMOUS');
+    useChatScreenHook('SIGNED');
   const styles = StyleSheet.create({
     keyboardAvoidingView: {
       flex: 1,
@@ -46,9 +46,11 @@ const SampleChatScreen = () => {
   });
 
   const renderChatItem = React.useCallback(({item, index}) => {
-    return <BaseChatItem item={item} index={index} />;
+    return <BaseChatItem type="SIGNED" item={item} index={index} />;
   }, []);
-  console.log({chats}, 'kakak1');
+
+  console.log({chats, selectedChannel}, 'kakak1');
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -59,7 +61,13 @@ const SampleChatScreen = () => {
         onBackPress={goBackFromChatScreen}
         onThreeDotPress={goToChatInfoScreen}
         avatar={selectedChannel?.channelPicture}
-        user={selectedChannel?.name}
+        user={
+          selectedChannel?.rawJson?.channel?.anon_user_info_emoji_code
+            ? `Anonymous ${selectedChannel?.rawJson?.channel?.anon_user_info_emoji_name} `
+            : selectedChannel?.user?.username
+        }
+        anon_user_info_emoji_code={selectedChannel?.rawJson?.channel?.anon_user_info_emoji_code}
+        anon_user_info_color_code={selectedChannel?.rawJson?.channel?.anon_user_info_color_code}
       />
       <FlatList
         style={styles.chatContainer}
@@ -78,4 +86,4 @@ const SampleChatScreen = () => {
   );
 };
 
-export default SampleChatScreen;
+export default SignedChatScreen;
