@@ -21,6 +21,7 @@ import {
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {withInteractionsManagedNoStatusBar} from '../../components/WithInteractionManaged';
+import FollowingAction from '../../context/actions/following';
 
 const DiscoveryScreenV2 = ({route}) => {
   const {tab} = route.params;
@@ -46,6 +47,7 @@ const DiscoveryScreenV2 = ({route}) => {
   const [discoveryData, discoveryDispatch] = React.useContext(Context).discovery;
   const [profileState] = React.useContext(Context).profile;
   const cancelTokenRef = React.useRef(axios.CancelToken.source());
+  const [, followingDispatch] = React.useContext(Context).following;
 
   const handleScroll = React.useCallback(() => {
     Keyboard.dismiss();
@@ -62,40 +64,66 @@ const DiscoveryScreenV2 = ({route}) => {
 
   const fetchDiscoveryData = async (text) => {
     const cancelToken = cancelTokenRef?.current?.token;
-    DiscoveryRepo.fetchDiscoveryDataUser(text, {cancelToken}).then(async (data) => {
-      if (data.success) {
-        setDiscoveryDataFollowedUsers(data?.followedUsers || []);
-        setDiscoveryDataUnfollowedUsers(data?.unfollowedUsers || []);
-      }
-      setIsLoadingDiscovery((prevState) => ({
-        ...prevState,
-        user: false
-      }));
-    });
+    if (text === undefined) {
+      const initialData = await DiscoveryRepo.fetchInitialDiscoveryUsers();
+      DiscoveryAction.setDiscoveryInitialUsers(initialData.suggestedUsers, discoveryDispatch);
+    } else {
+      DiscoveryRepo.fetchDiscoveryDataUser(text, {cancelToken}).then(async (data) => {
+        if (data.success) {
+          setDiscoveryDataFollowedUsers(
+            data?.followedUsers.map((item) => ({
+              ...item,
+              following: item.user_id_follower !== null
+            })) || []
+          );
+          setDiscoveryDataUnfollowedUsers(
+            data?.unfollowedUsers.map((item) => ({
+              ...item,
+              following: item.user_id_follower !== null
+            })) || []
+          );
+        }
+        setIsLoadingDiscovery((prevState) => ({
+          ...prevState,
+          user: false
+        }));
+      });
+    }
 
-    DiscoveryRepo.fetchDiscoveryDataDomain(text, {cancelToken}).then(async (data) => {
-      if (data.success) {
-        setDiscoveryDataFollowedDomains(data?.followedDomains || []);
-        setDiscoveryDataUnfollowedDomains(data?.unfollowedDomains || []);
-      }
+    if (text === undefined) {
+      const initialData = await DiscoveryRepo.fetchInitialDiscoveryDomains();
+      FollowingAction.setFollowingDomain(initialData.suggestedDomains, followingDispatch);
+      DiscoveryAction.setDiscoveryInitialDomains(initialData.suggestedDomains, discoveryDispatch);
+    } else {
+      DiscoveryRepo.fetchDiscoveryDataDomain(text, {cancelToken}).then(async (data) => {
+        if (data.success) {
+          setDiscoveryDataFollowedDomains(data?.followedDomains || []);
+          setDiscoveryDataUnfollowedDomains(data?.unfollowedDomains || []);
+        }
 
-      setIsLoadingDiscovery((prevState) => ({
-        ...prevState,
-        domain: false
-      }));
-    });
+        setIsLoadingDiscovery((prevState) => ({
+          ...prevState,
+          domain: false
+        }));
+      });
+    }
 
-    DiscoveryRepo.fetchDiscoveryDataTopic(text, {cancelToken}).then(async (data) => {
-      if (data.success) {
-        setDiscoveryDataFollowedTopics(data?.followedTopic);
-        setDiscoveryDataUnfollowedTopics(data?.unfollowedTopic);
-      }
+    if (text === undefined) {
+      const initialData = await DiscoveryRepo.fetchInitialDiscoveryTopics();
+      DiscoveryAction.setDiscoveryInitialTopics(initialData.suggestedTopics, discoveryDispatch);
+    } else {
+      DiscoveryRepo.fetchDiscoveryDataTopic(text, {cancelToken}).then(async (data) => {
+        if (data.success) {
+          setDiscoveryDataFollowedTopics(data?.followedTopic);
+          setDiscoveryDataUnfollowedTopics(data?.unfollowedTopic);
+        }
 
-      setIsLoadingDiscovery((prevState) => ({
-        ...prevState,
-        topic: false
-      }));
-    });
+        setIsLoadingDiscovery((prevState) => ({
+          ...prevState,
+          topic: false
+        }));
+      });
+    }
 
     DiscoveryRepo.fetchDiscoveryDataNews(text, {cancelToken}).then(async (data) => {
       if (data.success) {
@@ -137,6 +165,8 @@ const DiscoveryScreenV2 = ({route}) => {
           setFollowedUsers={setDiscoveryDataFollowedUsers}
           setUnfollowedUsers={setDiscoveryDataUnfollowedUsers}
           setSearchText={setSearchText}
+          fetchData={fetchDiscoveryData}
+          searchText={searchText}
         />
       );
 
@@ -152,6 +182,8 @@ const DiscoveryScreenV2 = ({route}) => {
           setFollowedTopic={setDiscoveryDataFollowedTopics}
           setUnfollowedTopic={setDiscoveryDataUnfollowedTopics}
           setSearchText={setSearchText}
+          fetchData={fetchDiscoveryData}
+          searchText={searchText}
         />
       );
 
@@ -167,6 +199,8 @@ const DiscoveryScreenV2 = ({route}) => {
           setFollowedDomains={setDiscoveryDataFollowedDomains}
           setUnfollowedDomains={setDiscoveryDataUnfollowedDomains}
           setSearchText={setSearchText}
+          fetchData={fetchDiscoveryData}
+          searchText={searchText}
         />
       );
 
