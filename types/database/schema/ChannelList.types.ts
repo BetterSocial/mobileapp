@@ -4,6 +4,7 @@ import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import {ChatListDetail} from './ChatListDetail.types';
 
 export interface UserSchema {
+  userId?: string;
   id: string;
   username: string;
   countryCode: string;

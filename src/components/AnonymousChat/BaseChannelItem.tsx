@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react';
 import {View} from 'react-native';
 
@@ -11,6 +12,7 @@ import {
   BaseChannelItemProps,
   BaseChannelItemTypeProps
 } from '../../../types/component/AnonymousChat/BaseChannelItem.types';
+import {Context} from '../../context';
 
 const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
   anonPostNotificationUserInfo = null,
@@ -30,10 +32,29 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
   type = BaseChannelItemTypeProps.ANON_PM,
   unreadCount = 0,
   upvote = 0,
+  isSystemMessage = false,
+  handleFollow,
   onPress = () => {
     console.log('onPress');
   }
 }) => {
+  const [profileContext] = (React.useContext(Context) as unknown as any).profile;
+  const [followContext] = (React.useContext(Context) as unknown as any).following;
+  const {myProfile} = profileContext;
+
+  let targetUser;
+  let isFollowing = false;
+  let hasFollowAction = false;
+  if (type === BaseChannelItemTypeProps.SIGNED_PM) {
+    targetUser = postMaker?.members?.find((member) => member?.user_id !== myProfile?.user_id)?.user;
+    hasFollowAction =
+      isSystemMessage && targetUser?.id && message?.toLowerCase()?.includes('follow');
+
+    isFollowing = Boolean(
+      followContext?.users?.find((user) => user?.user_id_followed === targetUser?.id)
+    );
+  }
+
   return (
     <CustomPressable onPress={onPress}>
       <View style={styles.chatContainer}>
@@ -54,6 +75,9 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
             time={time}
             unreadCount={unreadCount}
             isMe={isMe}
+            hasFollowAction={hasFollowAction}
+            isFollowing={isFollowing}
+            handleFollow={handleFollow}
           />
 
           {/* Post Notification Message */}
