@@ -34,6 +34,17 @@ describe('TESTING OneSignalUtil', () => {
     expect(OneSignal.User.addTag).toHaveBeenCalledTimes(2);
   });
 
+  it('TEST should call remove tag when calling removeAllSubscribedTags', async () => {
+    // Setup
+    getSubscribeableTopic.mockImplementationOnce(() => mockSubscribeableTopicResponse);
+
+    // Execution
+    await OneSignalUtil.removeAllSubscribedTags();
+
+    // Assertion
+    expect(OneSignal.User.removeTag).toHaveBeenCalledTimes(3);
+  });
+
   it('TEST should catch error', async () => {
     // Setup
     getSubscribeableTopic.mockImplementationOnce(() => {
