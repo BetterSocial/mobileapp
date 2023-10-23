@@ -2,12 +2,7 @@ import ChannelList from '../../../src/database/schema/ChannelListSchema';
 import ChannelListMemberSchema from '../../../src/database/schema/ChannelListMemberSchema';
 import UserSchema from '../../../src/database/schema/UserSchema';
 import {consoleSpy} from '../../../__utils__/spy';
-import {
-  mockDb,
-  mockDbExecuteSql,
-  mockTransaction,
-  mockTransactionExecuteSql
-} from '../../../__utils__/mockedVariable/mockDb';
+import {mockDb, mockDbExecuteSql} from '../../../__utils__/mockedVariable/mockDb';
 
 let channelListSchema;
 
@@ -25,21 +20,6 @@ const savePrepReplacementExpectation = [
   '{}'
 ];
 
-const updatePrepReplacementExpectation = [
-  'channelId',
-  'userId',
-  'username',
-  'countryCode',
-  'createdAt',
-  'updatedAt',
-  'lastActiveAt',
-  'profilePicture',
-  'bio',
-  false,
-  'channelId',
-  'userId'
-];
-
 const fromDatabaseObjectExpectation = {
   id: 'id',
   channelPicture: 'channelPicture',
@@ -54,8 +34,6 @@ const fromDatabaseObjectExpectation = {
   members: [],
   expiredAt: 'expiredAt'
 };
-
-const isUserExistsPrepReplacementExpectation = ['userId', 'channelId'];
 
 beforeEach(() => {
   jest.clearAllMocks();

@@ -1,11 +1,6 @@
 import ChatSchema from '../../../src/database/schema/ChatSchema';
 import {consoleSpy} from '../../../__utils__/spy';
-import {
-  mockDb,
-  mockDbExecuteSql,
-  mockTransaction,
-  mockTransactionExecuteSql
-} from '../../../__utils__/mockedVariable/mockDb';
+import {mockDb, mockDbExecuteSql} from '../../../__utils__/mockedVariable/mockDb';
 
 const chatSchema = new ChatSchema({
   id: 'id',

@@ -1,5 +1,3 @@
-import {SQLiteDatabase} from 'react-native-sqlite-storage';
-
 import MigrationVersion2 from '../../../../src/database/migration/file/migration_version_2';
 import {mockDb} from '../../../../__utils__/mockedVariable/mockDb';
 
