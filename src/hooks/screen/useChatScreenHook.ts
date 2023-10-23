@@ -41,6 +41,7 @@ function useChatScreenHook(): UseChatScreenHook {
     let userId = null;
     const myUserId = await getUserId();
     const myAnonymousId = await getAnonymousUserId();
+    console.log({type, selectedChannel}, 'nanam');
     if (type === 'ANONYMOUS') {
       userId = myAnonymousId;
     } else {
@@ -57,9 +58,7 @@ function useChatScreenHook(): UseChatScreenHook {
           message,
           localDb
         );
-        console.log({selectedChannel, userId, type}, 'tulang5');
         await currentChatSchema.save(localDb);
-        console.log({currentChatSchema}, 'tulang7');
         refresh('chat');
         refresh('channelList');
       }
@@ -70,14 +69,12 @@ function useChatScreenHook(): UseChatScreenHook {
       } else {
         response = await SignedMessageRepo.sendSignedMessage(selectedChannel?.id, message);
       }
-      console.log({response}, 'tulang6');
+      // console.log({response}, 'laka');
       await currentChatSchema.updateChatSentStatus(localDb, response);
       refresh('chat');
       refresh('channelList');
     } catch (e) {
-      console.log(e);
       if (e?.response?.data?.status === 'Channel is blocked') return;
-
       setTimeout(() => {
         sendChat(message, iteration + 1, currentChatSchema).catch((sendChatError) => {
           console.log(sendChatError);

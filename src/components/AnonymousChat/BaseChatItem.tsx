@@ -2,7 +2,6 @@ import * as React from 'react';
 import {View} from 'react-native';
 
 import FastImage from 'react-native-fast-image';
-import AnonymousIcon from '../../screens/ChannelListScreen/elements/components/AnonymousIcon';
 import ChatItemMyTextV2 from './child/ChatItemMyTextV2';
 import ChatItemTargetText from './child/ChatItemTargetText';
 import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
