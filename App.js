@@ -10,6 +10,10 @@ import DeviceInfo from 'react-native-device-info';
 import {appUpgradeVersionCheck} from 'app-upgrade-react-native-sdk';
 
 import {LogLevel, OneSignal} from 'react-native-onesignal';
+<<<<<<< HEAD
+=======
+import {NavigationContainer} from '@react-navigation/native';
+>>>>>>> f20e243223864ae4c7e088608122d0caffa446fa
 import {OverlayProvider, Streami18n} from 'stream-chat-react-native';
 import {RecoilDebugObserver} from 'reactotron-recoil-plugin';
 import {RecoilRoot} from 'recoil';
@@ -118,7 +122,7 @@ const App = () => {
   appUpgradeVersionCheck(appInfo, APP_UPGRADE_API_KEY, alertConfig);
 
   // Remove this method to stop OneSignal Debugging
-  OneSignal.Debug.setLogLevel(LogLevel.Verbose);
+  OneSignal.Debug.setLogLevel(ENV === 'Prod' ? LogLevel.None : LogLevel.Verbose);
 
   // OneSignal Initialization
   OneSignal.initialize(ONE_SIGNAL_APP_ID);
