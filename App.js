@@ -1,12 +1,11 @@
 import * as React from 'react';
+import DeviceInfo from 'react-native-device-info';
 import FlashMessage from 'react-native-flash-message';
 import Toast from 'react-native-toast-message';
 import {BackHandler, KeyboardAvoidingView, Platform, View} from 'react-native';
 import {HumanIDProvider} from '@human-internet/react-native-humanid';
+import {LogLevel, OneSignal} from 'react-native-onesignal';
 import {NavigationContainer} from '@react-navigation/native';
-
-import DeviceInfo from 'react-native-device-info';
-import {appUpgradeVersionCheck} from 'app-upgrade-react-native-sdk';
 import {OverlayProvider, Streami18n} from 'stream-chat-react-native';
 import {RecoilDebugObserver} from 'reactotron-recoil-plugin';
 import {RecoilRoot} from 'recoil';
@@ -15,15 +14,16 @@ import {
   useSafeAreaFrame,
   useSafeAreaInsets
 } from 'react-native-safe-area-context';
+import {appUpgradeVersionCheck} from 'app-upgrade-react-native-sdk';
 
 import Store from './src/context/Store';
+import {APP_UPGRADE_API_KEY, ENV, ONE_SIGNAL_APP_ID} from './src/libraries/Configs/ENVConfig';
 import {Analytics} from './src/libraries/analytics/firebaseAnalytics';
 import {RootNavigator} from './src/navigations/root-stack';
 import {fetchRemoteConfig} from './src/utils/FirebaseUtil';
 import {linking} from './src/navigations/linking';
 import {reactotronInstance} from './src/libraries/reactotron/reactotronInstance';
 import {toastConfig} from './src/configs/ToastConfig';
-import {APP_UPGRADE_API_KEY, ENV} from './src/libraries/Configs/ENVConfig';
 
 const App = () => {
   const {bottom, top} = useSafeAreaInsets();
@@ -114,6 +114,16 @@ const App = () => {
   };
 
   appUpgradeVersionCheck(appInfo, APP_UPGRADE_API_KEY, alertConfig);
+
+  // Remove this method to stop OneSignal Debugging
+  OneSignal.Debug.setLogLevel(ENV === 'Prod' ? LogLevel.None : LogLevel.Verbose);
+
+  // OneSignal Initialization
+  OneSignal.initialize(ONE_SIGNAL_APP_ID);
+
+  // requestPermission will show the native iOS or Android notification permission prompt.
+  // We recommend removing the following code and instead using an In-App Message to prompt for notification permission
+  OneSignal.Notifications.requestPermission(true);
 
   return (
     <>
