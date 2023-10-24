@@ -66,13 +66,6 @@ const useCoreChatSystemHook = () => {
 
   const {lastJsonMessage, lastSignedMessage} = useBetterWebsocketHook();
 
-  const channelImage = (websocket: GetstreamWebsocket) => {
-    const roleMember = websocket?.channel?.members?.find(
-      (channel) => channel?.user?.name === websocket?.targetName
-    );
-    return roleMember?.user;
-  };
-
   const saveChannelListData = async (
     websocketData: GetstreamWebsocket,
     channelType: 'PM' | 'ANON_PM'
