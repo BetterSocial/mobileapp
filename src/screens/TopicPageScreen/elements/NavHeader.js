@@ -3,7 +3,7 @@ import {Animated, Image, StyleSheet, TouchableOpacity, View} from 'react-native'
 import {useNavigation} from '@react-navigation/core';
 import PropTypes from 'prop-types';
 
-import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
+import MemoIcArrowBack from '../../../assets/arrow/Ic_arrow_back';
 import TopicDefaultIcon from '../../../assets/topic.png';
 import dimen from '../../../utils/dimen';
 import {normalize, normalizeFontSizeByWidth} from '../../../utils/fonts';
@@ -59,11 +59,24 @@ const NavHeader = (props) => {
   const backScreen = () => {
     navigation.goBack();
   };
+
+  const getBottomPostition = () => {
+    let bottom = 0;
+    if (isHeaderHide) {
+      bottom = dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2;
+    } else {
+      bottom = hideSeeMember
+        ? dimen.size.TOPIC_FEED_HEADER_HEIGHT
+        : dimen.size.TOPIC_FEED_HEADER_HEIGHT + normalize(4);
+    }
+    return (bottom - domainHeight) / 2;
+  };
+
   return (
     <Animated.View style={{height: animatedHeight}}>
       <View style={[styles.Nav(isHeaderHide)]}>
         <TouchableOpacity onPress={() => backScreen()} style={styles.backbutton}>
-          <MemoIc_arrow_back width={normalize(24)} height={normalize(24)} />
+          <MemoIcArrowBack width={normalize(24)} height={normalize(24)} />
         </TouchableOpacity>
         <View style={styles.containerAction}>
           {!isFollow && isHeaderHide ? (
@@ -96,7 +109,7 @@ const NavHeader = (props) => {
       </Animated.View>
       <Animated.View
         onLayout={onDomainLayout}
-        style={styles.domain(isHeaderHide, domainHeight, hideSeeMember)}>
+        style={[styles.domain(isHeaderHide), {bottom: getBottomPostition()}]}>
         <TopicDomainHeader {...props} />
       </Animated.View>
     </Animated.View>
@@ -151,21 +164,13 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center'
   },
-  domain: (isHeaderHide, domainHeight, hideSeeMember) => ({
+  domain: (isHeaderHide) => ({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'flex-start',
     marginRight: normalize(14),
     alignSelf: 'center',
     position: 'absolute',
-    bottom:
-      ((isHeaderHide
-        ? dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2
-        : hideSeeMember
-        ? dimen.size.TOPIC_FEED_HEADER_HEIGHT
-        : dimen.size.TOPIC_FEED_HEADER_HEIGHT + normalize(4)) -
-        domainHeight) /
-      2,
     left: normalize(isHeaderHide ? 32 : 48) + normalize(20) + normalize(8),
     zIndex: 99,
     backgroundColor: 'white'
