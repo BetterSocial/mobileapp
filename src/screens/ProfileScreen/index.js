@@ -296,7 +296,7 @@ const ProfileScreen = ({route}) => {
     Analytics.logEvent('profile_screen_btn_share', {
       id: 'btn_share'
     });
-    ShareUtils.shareUserLink(dataMain.username);
+    ShareUtils.shareUserLink(profile?.myProfile?.username);
   };
 
   const goToSettings = () => {
