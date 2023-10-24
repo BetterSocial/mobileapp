@@ -8,8 +8,7 @@ import useFollowUser from './hooks/useFollowUser';
 import useSignedChannelListScreenHook from '../../hooks/screen/useSignedChannelListHook';
 
 const ChannelListScreen = () => {
-  const {channels, goToChatScreen, goToPostDetailScreen, goToCommunityScreen} =
-    useSignedChannelListScreenHook();
+  const {channels, goToChatScreen, goToPostDetailScreen} = useSignedChannelListScreenHook();
   const {handleFollow} = useFollowUser();
 
   return (
