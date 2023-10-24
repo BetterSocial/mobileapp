@@ -568,7 +568,7 @@ PODS:
     - React-Core
   - RNCPushNotificationIOS (1.11.0):
     - React-Core
-  - RNDeviceInfo (10.11.0):
+  - RNDeviceInfo (10.6.0):
     - React-Core
   - RNFastImage (8.6.3):
     - React-Core
@@ -979,7 +979,7 @@ SPEC CHECKSUMS:
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: fa8275d5086566e22a26ddc385ab5772e7f9b1bd
-  FBReactNativeSpec: 35c98e8661ee0c117e11e7cfe02938caad0fa85b
+  FBReactNativeSpec: 06f53ebe914ec56cb10519a13f961a3d0d824a8b
   Firebase: fffddd0bab8677d07376538365faa93ff3889b39
   FirebaseABTesting: e66f1f80747792630d9b292966de206d5df9853b
   FirebaseAnalytics: 4641d7ae4220174f6ca5626163ffc5de2e90391e
@@ -1064,7 +1064,7 @@ SPEC CHECKSUMS:
   RNCClipboard: 3f0451a8100393908bea5c5c5b16f96d45f30bfc
   RNCPicker: 0bc2f0a29abcca7b7ed44a2d036aac9ab6d25700
   RNCPushNotificationIOS: 64218f3c776c03d7408284a819b2abfda1834bc8
-  RNDeviceInfo: bf8a32acbcb875f568217285d1793b0e8588c974
+  RNDeviceInfo: 475a4c447168d0ad4c807e48ef5e0963a0f4eb1b
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
   RNFBAnalytics: 9d82838d751736cc626f1265e8412ae62e93eb85
   RNFBApp: 3b002b58041b71034efd09ae7394af65a58df1e4
@@ -1095,4 +1095,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: afc99f05b45ed46beccf19346460228e62656155
 
-COCOAPODS: 1.13.0
+COCOAPODS: 1.12.1
