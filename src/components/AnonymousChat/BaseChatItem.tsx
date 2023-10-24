@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
 
 const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
   const {selectedChannel, handleUserName} = useChatScreenHook(type || 'ANONYMOUS');
+  const userAnonymous = 'AnonymousUser';
   const {anon_user_info_emoji_code, anon_user_info_color_code} =
     selectedChannel?.rawJson?.channel || {};
   const renderAnonymousIcon = () => (
@@ -36,15 +37,25 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
       />
     </View>
   );
+
+  const renderDefaultIcon = () => (
+    <View>
+      <FastImage style={styles.containerPicture} source={{uri: item?.user?.profilePicture}} />
+    </View>
+  );
+
   const handleImageUser = () => {
-    if (item?.user?.username !== 'AnonymousUser') {
-      return (
-        <View>
-          <FastImage style={styles.containerPicture} source={{uri: item?.user?.profilePicture}} />
-        </View>
-      );
+    if (type === 'ANONYMOUS') {
+      console.log('masuk1');
+      if (item?.user?.username !== userAnonymous) {
+        return renderDefaultIcon();
+      }
+      return renderAnonymousIcon();
     }
-    return renderAnonymousIcon();
+    if (item?.rawJson?.anon_user_info_emoji_code) {
+      return renderAnonymousIcon();
+    }
+    return null;
   };
 
   if (item?.isMe)
