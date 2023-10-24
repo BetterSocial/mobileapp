@@ -8,6 +8,7 @@ import UseChatUtilsHook from '../../../../types/hooks/screens/useChatUtilsHook.t
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import {ChannelList} from '../../../../types/database/schema/ChannelList.types';
 import {PostNotificationChannelList} from '../../../../types/database/schema/PostNotificationChannelList.types';
+import {ANON_PM} from '../constant';
 
 const chatAtom = atom({
   key: 'chatAtom',
@@ -62,7 +63,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
 
     if (channel?.channelType?.includes('POST_NOTIFICATION'))
       return helperGoToPostDetailScreen(channel);
-    if (channel?.channelType === 'ANON_PM') {
+    if (channel?.channelType === ANON_PM) {
       navigation.navigate('SampleChatScreen');
     } else {
       navigation.navigate('SignedChatScreen');

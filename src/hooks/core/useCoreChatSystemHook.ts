@@ -23,10 +23,11 @@ import {
 } from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {GetstreamFeedListenerObject} from '../../../types/hooks/core/getstreamFeedListener/feedListenerObject';
-import {GetstreamWebsocket} from './websocket/types.d';
+import {GetstreamWebsocket, MyChannelType} from './websocket/types.d';
 import {InitialStartupAtom} from '../../service/initialStartup';
 import {SignedPostNotification} from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 import {getAnonymousChatName, getChatName} from '../../utils/string/StringUtils';
+import {ANONYMOUS, ANON_PM} from './constant';
 
 type ChannelType = 'SIGNED' | 'ANONYMOUS';
 
@@ -73,10 +74,10 @@ const useCoreChatSystemHook = () => {
 
   const saveChannelListData = async (
     websocketData: GetstreamWebsocket,
-    channelType: 'PM' | 'ANON_PM'
+    channelType: MyChannelType
   ) => {
     if (!localDb) return;
-    if (channelType === 'ANON_PM') {
+    if (channelType === ANON_PM) {
       const chatName = await getAnonymousChatName(websocketData?.channel?.members);
       websocketData.targetName = chatName?.name;
       websocketData.targetImage = chatName?.image;
@@ -134,7 +135,7 @@ const useCoreChatSystemHook = () => {
   const helperChannelPromiseBuilder = async (channel, channelType: ChannelType) => {
     if (channel?.members?.length === 0) return Promise.reject(Error('no members'));
 
-    const isAnonymous = channelType === 'ANONYMOUS';
+    const isAnonymous = channelType === ANONYMOUS;
 
     let signedChannelProfile;
     let signedChannelName;
