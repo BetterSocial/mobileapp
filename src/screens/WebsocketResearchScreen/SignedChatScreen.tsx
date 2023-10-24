@@ -2,48 +2,17 @@
 /* eslint-disable import/no-unresolved */
 
 import * as React from 'react';
-import {Dimensions, FlatList, KeyboardAvoidingView, Platform, StyleSheet, View} from 'react-native';
+import {FlatList, KeyboardAvoidingView, Platform, View} from 'react-native';
 
 import AnonymousInputMessage from '../../components/Chat/AnonymousInputMessage';
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
 import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
-import {colors} from '../../utils/colors';
-
-const {height} = Dimensions.get('window');
+import {styles} from './SampleChatScreen';
 
 const SignedChatScreen = () => {
   const {selectedChannel, chats, goBackFromChatScreen, goToChatInfoScreen, sendChat} =
     useChatScreenHook('SIGNED');
-  const styles = StyleSheet.create({
-    keyboardAvoidingView: {
-      flex: 1,
-      backgroundColor: colors.white
-    },
-    container: {
-      display: 'flex',
-      flexDirection: 'column',
-      height: height - 85
-    },
-    chatContainer: {
-      display: 'flex',
-      height: '100%',
-      marginBottom: 72
-    },
-    inputContainer: {
-      backgroundColor: colors.white,
-      position: 'absolute',
-      bottom: 0,
-      // height: 50,
-      left: 0,
-      right: 0,
-      zIndex: 100,
-      padding: 8,
-      paddingBottom: 16,
-      borderTopColor: colors.lightgrey,
-      borderTopWidth: 1
-    }
-  });
 
   const renderChatItem = React.useCallback(({item, index}) => {
     return <BaseChatItem type="SIGNED" item={item} index={index} />;

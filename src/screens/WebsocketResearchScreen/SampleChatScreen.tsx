@@ -12,38 +12,39 @@ import {colors} from '../../utils/colors';
 
 const {height} = Dimensions.get('window');
 
+export const styles = StyleSheet.create({
+  keyboardAvoidingView: {
+    flex: 1,
+    backgroundColor: colors.white
+  },
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: height - 85
+  },
+  chatContainer: {
+    display: 'flex',
+    height: '100%',
+    marginBottom: 72
+  },
+  inputContainer: {
+    backgroundColor: colors.white,
+    position: 'absolute',
+    bottom: 0,
+    // height: 50,
+    left: 0,
+    right: 0,
+    zIndex: 100,
+    padding: 8,
+    paddingBottom: 16,
+    borderTopColor: colors.lightgrey,
+    borderTopWidth: 1
+  }
+});
+
 const SampleChatScreen = () => {
   const {selectedChannel, chats, goBackFromChatScreen, goToChatInfoScreen, sendChat} =
     useChatScreenHook('ANONYMOUS');
-  const styles = StyleSheet.create({
-    keyboardAvoidingView: {
-      flex: 1,
-      backgroundColor: colors.white
-    },
-    container: {
-      display: 'flex',
-      flexDirection: 'column',
-      height: height - 85
-    },
-    chatContainer: {
-      display: 'flex',
-      height: '100%',
-      marginBottom: 72
-    },
-    inputContainer: {
-      backgroundColor: colors.white,
-      position: 'absolute',
-      bottom: 0,
-      // height: 50,
-      left: 0,
-      right: 0,
-      zIndex: 100,
-      padding: 8,
-      paddingBottom: 16,
-      borderTopColor: colors.lightgrey,
-      borderTopWidth: 1
-    }
-  });
 
   const renderChatItem = React.useCallback(({item, index}) => {
     return <BaseChatItem item={item} index={index} />;
