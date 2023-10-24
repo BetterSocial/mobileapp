@@ -18,8 +18,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen} = useChatUtilsHook();
 
   const [chats, setChats] = React.useState<ChatSchema[]>([]);
-  const {anon_user_info_emoji_name, anon_user_info_emoji_code, anon_user_info_color_code} =
-    selectedChannel?.rawJson?.channel || {};
+  const {anon_user_info_emoji_name} = selectedChannel?.rawJson?.channel || {};
   const initChatData = async () => {
     if (!localDb && !selectedChannel) return;
     const myUserId = await getUserId();
