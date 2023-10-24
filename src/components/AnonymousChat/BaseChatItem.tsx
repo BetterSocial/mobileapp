@@ -46,7 +46,6 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
 
   const handleImageUser = () => {
     if (type === 'ANONYMOUS') {
-      console.log('masuk1');
       if (item?.user?.username !== userAnonymous) {
         return renderDefaultIcon();
       }

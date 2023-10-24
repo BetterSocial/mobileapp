@@ -49,8 +49,6 @@ const SignedChatScreen = () => {
     return <BaseChatItem type="SIGNED" item={item} index={index} />;
   }, []);
 
-  console.log({chats, selectedChannel}, 'kakak1');
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
