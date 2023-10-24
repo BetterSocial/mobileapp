@@ -14,6 +14,7 @@ import {ChatStatus} from '../../../types/database/schema/ChannelList.types';
 import {calculateTime} from '../../utils/time';
 import dimen from '../../utils/dimen';
 import BaseSystemChat from './BaseChatSystem';
+import {ANONYMOUS} from '../../hooks/core/constant';
 
 const styles = StyleSheet.create({
   containerPicture: {
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
 });
 
 const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
-  const {selectedChannel, handleUserName} = useChatScreenHook(type || 'ANONYMOUS');
+  const {selectedChannel, handleUserName} = useChatScreenHook(type || ANONYMOUS);
   const userAnonymous = 'AnonymousUser';
   const {anon_user_info_emoji_code, anon_user_info_color_code} =
     selectedChannel?.rawJson?.channel || {};
@@ -45,7 +46,7 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
   );
 
   const handleImageUser = () => {
-    if (type === 'ANONYMOUS') {
+    if (type === ANONYMOUS) {
       if (item?.user?.username !== userAnonymous) {
         return renderDefaultIcon();
       }
