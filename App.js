@@ -5,7 +5,7 @@ import Toast from 'react-native-toast-message';
 import {BackHandler, KeyboardAvoidingView, Platform, View} from 'react-native';
 import {HumanIDProvider} from '@human-internet/react-native-humanid';
 import {LogLevel, OneSignal} from 'react-native-onesignal';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import {OverlayProvider, Streami18n} from 'stream-chat-react-native';
 import {RecoilDebugObserver} from 'reactotron-recoil-plugin';
 import {RecoilRoot} from 'recoil';
