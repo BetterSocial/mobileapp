@@ -1,5 +1,6 @@
 import crashlytics from '@react-native-firebase/crashlytics';
 
+import OneSignalUtil from './onesignal';
 import api from './config';
 
 const getUserTopic = async (query) => {
@@ -15,6 +16,7 @@ const getUserTopic = async (query) => {
 const putUserTopic = async (data) => {
   try {
     const res = await api.put('/topics/follow-v2', data);
+    OneSignalUtil.rebuildAndSubscribeTags();
     return res.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
@@ -55,4 +57,20 @@ const getTopics = async (name, axiosOptions = {}) => {
   }
 };
 
-export {getUserTopic, putUserTopic, getFollowingTopic, getAllMemberTopic, getTopics};
+const getSubscribeableTopic = async () => {
+  try {
+    const result = await api.get('topics/subscribable');
+    return result.data;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+export {
+  getUserTopic,
+  putUserTopic,
+  getFollowingTopic,
+  getAllMemberTopic,
+  getTopics,
+  getSubscribeableTopic
+};
