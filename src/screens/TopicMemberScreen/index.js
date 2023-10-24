@@ -8,7 +8,6 @@ import ShareUtils from '../../utils/share';
 import dimen from '../../utils/dimen';
 import {getAllMemberTopic} from '../../service/topics';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {normalize} from '../../utils/fonts';
 import {colors} from '../../utils/colors';
 import Search from '../DiscoveryScreenV2/elements/Search';
 import StringConstant from '../../utils/string/StringConstant';
@@ -53,12 +52,11 @@ const TopicMemberScreen = () => {
   const interactionManagerRef = React.useRef(null);
   const interactionManagerAnimatedRef = React.useRef(null);
 
-  const opacityAnimationNav = React.useRef(new Animated.Value(0)).current;
   const opacityAnimationHeader = React.useRef(new Animated.Value(1)).current;
 
   const animatedHeight = React.useRef(
     new Animated.Value(
-      dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT + dimen.size.TOPIC_FEED_HEADER_HEIGHT + normalize(4)
+      dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT + dimen.size.TOPIC_FEED_HEADER_HEIGHT
     )
   ).current;
 
@@ -128,11 +126,6 @@ const TopicMemberScreen = () => {
         duration: 100,
         useNativeDriver: false
       }).start();
-      Animated.timing(opacityAnimationNav, {
-        toValue: 0,
-        duration: 100,
-        useNativeDriver: false
-      }).start();
       Animated.timing(opacityAnimationHeader, {
         toValue: 1,
         duration: 100,
@@ -167,11 +160,6 @@ const TopicMemberScreen = () => {
             duration: 100,
             useNativeDriver: false
           }).start();
-          Animated.timing(opacityAnimationNav, {
-            toValue: 1,
-            duration: 100,
-            useNativeDriver: false
-          }).start();
           Animated.timing(opacityAnimationHeader, {
             toValue: 0,
             duration: 100,
@@ -197,7 +185,6 @@ const TopicMemberScreen = () => {
         animatedHeight={animatedHeight}
         onShareCommunity={onCommunityShare}
         isHeaderHide={headerHide}
-        opacityNavAnimation={opacityAnimationNav}
         opacityHeaderAnimation={opacityAnimationHeader}
         hideSeeMember={true}
         topicDetail={topicDetail}

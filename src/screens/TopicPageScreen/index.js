@@ -50,12 +50,11 @@ const TopicPageScreen = (props) => {
   const [topicDetail, setTopicDetail] = React.useState({});
   const [memberCount, setMemberCount] = React.useState(0);
   const [isHeaderHide, setIsHeaderHide] = React.useState(false);
-  const opacityNavAnimation = React.useRef(new Animated.Value(0)).current;
   const opacityHeaderAnimation = React.useRef(new Animated.Value(1)).current;
 
   const animatedHeight = React.useRef(
     new Animated.Value(
-      dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT + dimen.size.TOPIC_FEED_HEADER_HEIGHT
+      dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT + dimen.size.TOPIC_FEED_HEADER_HEIGHT + normalize(4)
     )
   ).current;
 
@@ -188,7 +187,6 @@ const TopicPageScreen = (props) => {
   const refreshingData = async (offsetParam = offset) => {
     if (offsetParam >= 0) {
       try {
-        setLoading(true);
         const result = await getTopicPages(topicId, offsetParam);
         const {feeds: cacheFeedTopic} = TopicPageStorage.get(id?.toLowerCase());
 
@@ -322,11 +320,6 @@ const TopicPageScreen = (props) => {
         duration: 100,
         useNativeDriver: false
       }).start();
-      Animated.timing(opacityNavAnimation, {
-        toValue: 0,
-        duration: 100,
-        useNativeDriver: false
-      }).start();
       Animated.timing(opacityHeaderAnimation, {
         toValue: 1,
         duration: 100,
@@ -363,11 +356,6 @@ const TopicPageScreen = (props) => {
         interactionManagerAnimatedRef.current = InteractionManager.runAfterInteractions(() => {
           Animated.timing(animatedHeight, {
             toValue: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2,
-            duration: 100,
-            useNativeDriver: false
-          }).start();
-          Animated.timing(opacityNavAnimation, {
-            toValue: 1,
             duration: 100,
             useNativeDriver: false
           }).start();
@@ -420,7 +408,6 @@ const TopicPageScreen = (props) => {
         animatedHeight={animatedHeight}
         onShareCommunity={onShareCommunity}
         isHeaderHide={isHeaderHide}
-        opacityNavAnimation={opacityNavAnimation}
         opacityHeaderAnimation={opacityHeaderAnimation}
         handleOnMemberPress={handleOnMemberPress}
         topicDetail={topicDetail}
