@@ -58,7 +58,6 @@ function useChatUtilsHook(): UseChatUtilsHook {
   };
 
   const goToChatScreen = (channel: ChannelList) => {
-    console.log({channel}, 'nehij');
     setChannelAsRead(channel);
 
     if (channel?.channelType?.includes('POST_NOTIFICATION'))
