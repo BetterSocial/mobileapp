@@ -8,7 +8,6 @@ import useSignedChannelListScreenHook from '../../hooks/screen/useSignedChannelL
 
 const ChannelListScreen = () => {
   const {channels, goToChatScreen, goToPostDetailScreen} = useSignedChannelListScreenHook();
-
   return (
     <FlatList
       data={channels}

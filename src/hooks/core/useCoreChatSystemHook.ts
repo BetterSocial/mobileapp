@@ -66,23 +66,36 @@ const useCoreChatSystemHook = () => {
 
   const {lastJsonMessage, lastSignedMessage} = useBetterWebsocketHook();
 
+  const channelImage = (websocket: GetstreamWebsocket) => {
+    const roleMember = websocket?.channel?.members?.find(
+      (channel) => channel?.user?.name === websocket?.targetName
+    );
+    return roleMember?.user;
+  };
+
   const saveChannelListData = async (
     websocketData: GetstreamWebsocket,
     channelType: 'PM' | 'ANON_PM'
   ) => {
     if (!localDb) return;
-    if (websocketData?.channel?.anon_user_info_emoji_name) {
-      websocketData.targetName = `Anonymous ${websocketData?.channel?.anon_user_info_emoji_name}`;
-      websocketData.targetImage = null;
-      websocketData.isAnonymous = true;
+    if (channelType === 'ANON_PM') {
+      const chatName = await getAnonymousChatName(websocketData?.channel?.members);
+      websocketData.targetName = chatName?.name;
+      websocketData.targetImage = chatName?.image;
     } else {
-      websocketData.targetName = getChatName(websocketData?.channel?.name, profile?.username);
+      const chatName = await getChatName(websocketData?.channel?.name, profile?.username);
+      if (websocketData?.channel?.anon_user_info_emoji_name) {
+        websocketData.targetName = `Anonymous ${websocketData?.channel?.anon_user_info_emoji_name}`;
+      } else {
+        websocketData.targetName = chatName;
+      }
       websocketData.targetImage = websocketData.message?.user?.image;
+      websocketData.anon_user_info_color_name = websocketData?.channel?.anon_user_info_color_name;
+      websocketData.anon_user_info_emoji_code = websocketData?.channel?.anon_user_info_emoji_code;
+      websocketData.anon_user_info_color_code = websocketData?.channel?.anon_user_info_color_code;
     }
 
     const channelList = ChannelList.fromWebsocketObject(websocketData, channelType);
-    console.log('channelList');
-    console.log(JSON.stringify(channelList, null, 2));
 
     await channelList.save(localDb);
 
