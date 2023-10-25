@@ -54,7 +54,6 @@ const useSimpleWebsocket = (url, protocol = null) => {
     };
 
     socket.onmessage = (event: MessageEvent) => {
-      console.log('onmessage', event);
       try {
         const json = JSON.parse(event.data);
         setLastJsonMessage(json);
