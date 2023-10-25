@@ -7,68 +7,56 @@ import {fonts, normalizeFontSize} from '../../../utils/fonts';
 import {setNavbarTitle} from '../../../context/actions/setMyProfileAction';
 import {Context} from '../../../context';
 
-const {width} = Dimensions.get('screen');
+const windowWidth = Dimensions.get('window').width;
 
 const DiscoveryTab = ({onChangeScreen, selectedScreen = 0, tabs}) => {
-  const route = useRoute();
   const [, dispatchNavbar] = React.useContext(Context).profile;
+  const route = useRoute();
+
   const handleTabOnClicked = React.useCallback((index) => {
     Keyboard.dismiss();
     onChangeScreen(index);
   }, []);
 
-  const changePlaceHolder = (index = 0) => {
-    switch (index) {
-      case 0:
-        setNavbarTitle('Search users', dispatchNavbar);
-        break;
-      case 1:
-        setNavbarTitle('Your Communities', dispatchNavbar);
-        break;
-      case 2:
-        setNavbarTitle('Your Domains', dispatchNavbar);
-        break;
-      default:
-    }
+  const handleChangeTitle = (index = 0) => {
+    const title = ['Search users', 'Your Communities', 'Your Domains'][index] || '';
+    setNavbarTitle(title, dispatchNavbar);
   };
 
   React.useEffect(() => {
-    if (route.name === 'Followings') changePlaceHolder();
+    if (route.name === 'Followings') handleChangeTitle();
   }, []);
 
   return (
-    <>
-      <ScrollView
-        horizontal={true}
-        style={styles.tabContainer}
-        keyboardShouldPersistTaps="handled"
-        showsHorizontalScrollIndicator={false}
-        showsVerticalScrollIndicator={false}>
-        {Object.keys(tabs).map((item, index) => {
-          if (route.name === 'Followings' && item === 'News') return null;
-          return (
-            <Pressable
-              key={`tabItem-${item}`}
-              android_ripple={{
-                color: colors.gray1
-              }}
-              style={styles.tabItem(index)}
-              onPress={() => {
-                handleTabOnClicked(index);
-                if (route.name === 'Followings') changePlaceHolder(index);
-              }}>
-              <View style={styles.tabItemContainer}>
-                <Text
-                  style={index === selectedScreen ? styles.tabItemTextFocus : styles.tabItemText}>
-                  {`${item} ${route.name === 'Followings' ? `(${tabs[item]})` : ''}`}
-                </Text>
-                <View style={index === selectedScreen ? styles.underlineFocus : {}}></View>
-              </View>
-            </Pressable>
-          );
-        })}
-      </ScrollView>
-    </>
+    <ScrollView
+      horizontal={true}
+      style={styles.tabContainer}
+      keyboardShouldPersistTaps="handled"
+      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}>
+      {Object.keys(tabs).map((item, index) => {
+        if (route.name === 'Followings' && item === 'News') return null;
+        return (
+          <Pressable
+            key={`tabItem-${item}`}
+            android_ripple={{color: colors.gray1}}
+            style={[
+              styles.tabItem(route.name === 'Followings' ? 3 : 4),
+              index === selectedScreen ? styles.underlineFocus : {}
+            ]}
+            onPress={() => {
+              handleTabOnClicked(index);
+              handleChangeTitle(index);
+            }}>
+            <View style={styles.tabItemContainer}>
+              <Text style={index === selectedScreen ? styles.tabItemTextFocus : styles.tabItemText}>
+                {`${item} ${route.name === 'Followings' ? `(${tabs[item]})` : ''}`}
+              </Text>
+            </View>
+          </Pressable>
+        );
+      })}
+    </ScrollView>
   );
 };
 
@@ -77,37 +65,33 @@ const styles = StyleSheet.create({
     height: 48,
     backgroundColor: colors.white
   },
-  tabItem: (index) => ({
-    flex: 1,
-    // width: width / 4 + 10,
+  tabItem: (tabs) => ({
+    width: windowWidth / tabs,
     justifyContent: 'center',
-    height: '100%',
-    paddingLeft: 20
+    alignItems: 'center',
+    height: '100%'
   }),
   tabItemContainer: {
-    alignSelf: 'flex-start'
+    alignSelf: 'center'
   },
   tabItemText: {
     color: colors.alto,
     fontFamily: fonts.inter[500],
     fontSize: normalizeFontSize(12.5),
-    // lineHeight: 16.94,
     paddingVertical: 10,
-    textAlign: 'left'
+    textAlign: 'center'
   },
   tabItemTextFocus: {
     color: colors.black,
     fontFamily: fonts.inter[500],
     fontSize: normalizeFontSize(12.5),
     lineHeight: 16.94,
-    textAlign: 'left',
+    textAlign: 'center',
     paddingVertical: 10
   },
   underlineFocus: {
     borderBottomColor: colors.bondi_blue,
-    borderBottomWidth: 2,
-    top: 0,
-    position: 'relative'
+    borderBottomWidth: 2
   }
 });
 

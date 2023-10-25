@@ -33,7 +33,8 @@ const TopicFragment = ({
   setFollowedTopic,
   setUnfollowedTopic,
   fetchData = () => {},
-  searchText
+  searchText,
+  withoutRecent = false
 }) => {
   const [discovery, discoveryDispatch] = React.useContext(Context).discovery;
   const {followTopic} = useChatClientHook();
@@ -67,12 +68,14 @@ const TopicFragment = ({
     if (from === FROM_FOLLOWED_TOPIC_INITIAL) {
       const newFollowedTopics = [...topics];
       newFollowedTopics[index].following = !!willFollow;
+      newFollowedTopics[index].user_id_follower = myId;
       DiscoveryAction.setDiscoveryInitialTopics(newFollowedTopics, discoveryDispatch);
     }
 
     if (from === FROM_UNFOLLOWED_TOPIC_INITIAL) {
       const newFollowedTopics = [...topics];
       newFollowedTopics[index].following = !!willFollow;
+      newFollowedTopics[index].user_id_follower = myId;
 
       DiscoveryAction.setDiscoveryInitialTopics(newFollowedTopics, discoveryDispatch);
     }
@@ -80,6 +83,7 @@ const TopicFragment = ({
     if (from === FROM_FOLLOWED_TOPIC) {
       const newFollowedTopics = [...followedTopic];
       newFollowedTopics[index].following = !!willFollow;
+      newFollowedTopics[index].user_id_follower = myId;
 
       setFollowedTopic(newFollowedTopics);
     }
@@ -87,6 +91,7 @@ const TopicFragment = ({
     if (from === FROM_UNFOLLOWED_TOPIC) {
       const newUnFollowedTopic = [...unfollowedTopic];
       newUnFollowedTopic[index].following = !!willFollow;
+      newUnFollowedTopic[index].user_id_follower = myId;
 
       setUnfollowedTopic(newUnFollowedTopic);
     }
@@ -187,11 +192,13 @@ const TopicFragment = ({
 
   return (
     <View>
-      <RecentSearch
-        shown={isFirstTimeOpen}
-        setSearchText={setSearchText}
-        setIsFirstTimeOpen={setIsFirstTimeOpen}
-      />
+      {!withoutRecent && (
+        <RecentSearch
+          shown={isFirstTimeOpen}
+          setSearchText={setSearchText}
+          setIsFirstTimeOpen={setIsFirstTimeOpen}
+        />
+      )}
       {__renderTopicItems()}
     </View>
   );

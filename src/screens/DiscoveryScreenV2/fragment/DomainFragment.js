@@ -32,7 +32,8 @@ const DomainFragment = ({
   setSearchText,
   setIsFirstTimeOpen,
   fetchData = () => {},
-  searchText
+  searchText,
+  withoutRecent = false
 }) => {
   const navigation = useNavigation();
   const [myId, setMyId] = React.useState('');
@@ -84,6 +85,7 @@ const DomainFragment = ({
     if (from === FROM_FOLLOWED_DOMAIN_INITIAL) {
       const newFollowedDomains = [...domains];
       newFollowedDomains[index].following = !!willFollow;
+      newFollowedDomains[index].user_id_follower = myId;
 
       FollowingAction.setFollowingDomain(newFollowedDomains, followingDispatch);
       DiscoveryAction.setDiscoveryInitialDomains(newFollowedDomains, discoveryDispatch);
@@ -91,6 +93,7 @@ const DomainFragment = ({
     if (from === FROM_FOLLOWED_DOMAIN) {
       const newFollowedDomains = [...followedDomains];
       newFollowedDomains[index].following = !!willFollow;
+      newFollowedDomains[index].user_id_follower = myId;
 
       setFollowedDomains(newFollowedDomains);
     }
@@ -98,6 +101,7 @@ const DomainFragment = ({
     if (from === FROM_UNFOLLOWED_DOMAIN) {
       const newUnfollowedDomains = [...unfollowedDomains];
       newUnfollowedDomains[index].following = !!willFollow;
+      newUnfollowedDomains[index].user_id_follower = myId;
 
       setUnfollowedDomains(newUnfollowedDomains);
     }
@@ -205,11 +209,13 @@ const DomainFragment = ({
 
   return (
     <View>
-      <RecentSearch
-        shown={isFirstTimeOpen}
-        setSearchText={setSearchText}
-        setIsFirstTimeOpen={setIsFirstTimeOpen}
-      />
+      {!withoutRecent && (
+        <RecentSearch
+          shown={isFirstTimeOpen}
+          setSearchText={setSearchText}
+          setIsFirstTimeOpen={setIsFirstTimeOpen}
+        />
+      )}
       {__renderDomainItems()}
     </View>
   );
