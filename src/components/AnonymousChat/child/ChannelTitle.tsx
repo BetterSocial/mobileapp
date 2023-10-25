@@ -1,17 +1,28 @@
 import * as React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
+import ChannelFollowButton from './ChannelFollowButton';
 import baseStyles from '../BaseChannelItemStyles';
+import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 
-const ChannelTitle = ({type, name, time, message, unreadCount, isMe}) => {
+const ChannelTitle = ({
+  type,
+  name,
+  time,
+  message,
+  unreadCount,
+  isMe,
+  hasFollowAction = false,
+  isFollowing,
+  handleFollow
+}) => {
   const styles = StyleSheet.create({
     chatContentName: {
       fontFamily: fonts.inter[700],
       fontSize: 14.05,
       lineHeight: 22,
-      alignSelf: 'center',
       flex: 1
     },
     chatContentTime: {
@@ -61,35 +72,41 @@ const ChannelTitle = ({type, name, time, message, unreadCount, isMe}) => {
     postNotificationMessageBold: {
       fontFamily: fonts.inter[700]
     },
-    anonPmMessage: {
+    chatMessage: {
+      flexDirection: 'row',
       marginBottom: 0
     }
   });
 
+  const isSignedDM = type === BaseChannelItemTypeProps.SIGNED_PM;
+
   if (type?.includes('PM')) {
     return (
-      <>
-        <View style={baseStyles.chatContentSection}>
-          {/* Username */}
-          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.chatContentName}>
-            {name}
-          </Text>
-          {/* Time */}
-          <Text style={styles.chatContentTime}>{time}</Text>
+      <View style={baseStyles.chatContentSection}>
+        <View style={{flex: 1}}>
+          <View style={{flexDirection: 'row'}}>
+            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.chatContentName}>
+              {name}
+            </Text>
+            {!hasFollowAction && <Text style={styles.chatContentTime}>{time}</Text>}
+          </View>
+
+          <View style={styles.chatMessage}>
+            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.chatContentMessage}>
+              {`${isMe ? 'You: ' : ''}${message}`}
+            </Text>
+            {!hasFollowAction && unreadCount > 0 && (
+              <View style={styles.chatContentUnreadCountContainer}>
+                <Text style={styles.chatContentUnreadCount}>{unreadCount}</Text>
+              </View>
+            )}
+          </View>
         </View>
-        <View style={[baseStyles.chatContentSection, styles.anonPmMessage]}>
-          {/* Message */}
-          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.chatContentMessage}>
-            {`${isMe ? 'You: ' : ''}${message}`}
-          </Text>
-          {/* Unread Count */}
-          {unreadCount > 0 && (
-            <View style={styles.chatContentUnreadCountContainer}>
-              <Text style={styles.chatContentUnreadCount}>{unreadCount}</Text>
-            </View>
-          )}
-        </View>
-      </>
+
+        {isSignedDM && hasFollowAction && (
+          <ChannelFollowButton isFollowing={isFollowing} handleFollow={handleFollow} />
+        )}
+      </View>
     );
   }
 
