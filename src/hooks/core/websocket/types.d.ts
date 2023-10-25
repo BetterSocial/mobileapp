@@ -90,6 +90,10 @@ export type GetstreamChannel = {
   name: string;
   type: string;
   updated_at: string;
+  anon_user_info_emoji_name?: string;
+  anon_user_info_color_name?: string;
+  anon_user_info_emoji_code?: string;
+  anon_user_info_color_code?: string;
 };
 
 export type GetstreamWebsocket = {
@@ -105,4 +109,11 @@ export type GetstreamWebsocket = {
   unread_count: number;
   targetName: string;
   targetImage: string;
+  isAnonymous?: boolean;
+  anon_user_info_emoji_name?: string;
+  anon_user_info_color_name?: string;
+  anon_user_info_emoji_code?: string;
+  anon_user_info_color_code?: string;
 };
+
+export type MyChannelType = 'PM' | 'ANON_PM';

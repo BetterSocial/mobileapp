@@ -21,16 +21,17 @@ import {
 } from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {GetstreamFeedListenerObject} from '../../../types/hooks/core/getstreamFeedListener/feedListenerObject';
-import {GetstreamWebsocket} from './websocket/types.d';
+import {GetstreamWebsocket, MyChannelType} from './websocket/types.d';
 import {InitialStartupAtom} from '../../service/initialStartup';
 import {SignedPostNotification} from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 import {getAnonymousChatName, getChatName} from '../../utils/string/StringUtils';
+import {ANONYMOUS, ANON_PM} from './constant';
 
 type ChannelType = 'SIGNED' | 'ANONYMOUS';
 
 const useCoreChatSystemHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook() as UseLocalDatabaseHook;
-  const {anonProfileId, signedProfileId} = useProfileHook();
+  const {anonProfileId, signedProfileId, profile} = useProfileHook();
   const [migrationStatus] = useRecoilState(migrationDbStatusAtom);
   const initialStartup: any = useRecoilValue(InitialStartupAtom);
 
@@ -68,21 +69,27 @@ const useCoreChatSystemHook = () => {
 
   const saveChannelListData = async (
     websocketData: GetstreamWebsocket,
-    channelType: 'PM' | 'ANON_PM'
+    channelType: MyChannelType
   ) => {
     if (!localDb) return;
-
-    const chatName =
-      channelType === 'ANON_PM'
-        ? await getAnonymousChatName(websocketData?.channel?.members)
-        : getChatName(websocketData?.channel?.name);
-
-    websocketData.targetName = chatName?.name;
-    websocketData.targetImage = chatName?.image;
+    if (channelType === ANON_PM) {
+      const chatName = await getAnonymousChatName(websocketData?.channel?.members);
+      websocketData.targetName = chatName?.name;
+      websocketData.targetImage = chatName?.image;
+    } else {
+      const chatName = await getChatName(websocketData?.channel?.name, profile?.username);
+      if (websocketData?.channel?.anon_user_info_emoji_name) {
+        websocketData.targetName = `Anonymous ${websocketData?.channel?.anon_user_info_emoji_name}`;
+      } else {
+        websocketData.targetName = chatName;
+      }
+      websocketData.targetImage = websocketData.message?.user?.image;
+      websocketData.anon_user_info_color_name = websocketData?.channel?.anon_user_info_color_name;
+      websocketData.anon_user_info_emoji_code = websocketData?.channel?.anon_user_info_emoji_code;
+      websocketData.anon_user_info_color_code = websocketData?.channel?.anon_user_info_color_code;
+    }
 
     const channelList = ChannelList.fromWebsocketObject(websocketData, channelType);
-    console.log('channelList');
-    console.log(JSON.stringify(channelList, null, 2));
 
     await channelList.save(localDb);
 
@@ -123,7 +130,7 @@ const useCoreChatSystemHook = () => {
   const helperChannelPromiseBuilder = async (channel, channelType: ChannelType) => {
     if (channel?.members?.length === 0) return Promise.reject(Error('no members'));
 
-    const isAnonymous = channelType === 'ANONYMOUS';
+    const isAnonymous = channelType === ANONYMOUS;
 
     let signedChannelProfile;
     let signedChannelName;

@@ -26,6 +26,7 @@ import ProfileReplyComment from '../screens/ProfileReplyComment';
 import ReplyComment from '../screens/ReplyComment';
 import SampleChatInfoScreen from '../screens/WebsocketResearchScreen/SampleChatInfoScreen';
 import SampleChatScreen from '../screens/WebsocketResearchScreen/SampleChatScreen';
+import SignedChatScreen from '../screens/WebsocketResearchScreen/SignedChatScreen';
 import Settings from '../screens/Settings';
 import SignIn from '../screens/SignInV2';
 import TermsAndCondition from '../screens/WebView/TermsAndCondition';
@@ -301,6 +302,11 @@ const AuthenticatedNavigator = () => {
       <AuthenticatedStack.Screen
         name="SampleChatInfoScreen"
         component={SampleChatInfoScreen}
+        options={{headerShown: false}}
+      />
+      <AuthenticatedStack.Screen
+        name="SignedChatScreen"
+        component={SignedChatScreen}
         options={{headerShown: false}}
       />
     </AuthenticatedStack.Navigator>

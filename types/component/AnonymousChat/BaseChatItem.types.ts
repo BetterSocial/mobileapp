@@ -33,4 +33,5 @@ export interface ChatItemTargetText extends BaseChatItemProps {
 export interface BaseChatItemComponentProps {
   item: ChatSchema;
   index: number;
+  type: 'ANONYMOUS' | 'SIGNED';
 }

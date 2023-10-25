@@ -14,7 +14,9 @@ const ChatDetailHeader = ({
   user,
   onBackPress = () => console.log('onBackPress'),
   onThreeDotPress = () => console.log('onThreeDotPress'),
-  onAvatarPress = () => console.log('onAvatarPress')
+  onAvatarPress = () => console.log('onAvatarPress'),
+  anon_user_info_emoji_code,
+  anon_user_info_color_code
 }) => {
   const styles = StyleSheet.create({
     container: {
@@ -33,7 +35,9 @@ const ChatDetailHeader = ({
     avatar: {
       width: 40,
       height: 40,
-      borderRadius: 20
+      borderRadius: 40,
+      alignItems: 'center',
+      justifyContent: 'center'
     },
     textContainer: {
       display: 'flex',
@@ -63,7 +67,13 @@ const ChatDetailHeader = ({
         <IcArrowBackWhite width={20} height={12} />
       </CustomPressable>
       <CustomPressable style={styles.textContainer} onPress={onAvatarPress}>
-        <FastImage style={styles.avatar} source={{uri: avatar}} />
+        {anon_user_info_emoji_code ? (
+          <View style={[styles.avatar, {backgroundColor: anon_user_info_color_code}]}>
+            <Text>{anon_user_info_emoji_code} </Text>
+          </View>
+        ) : (
+          <FastImage style={styles.avatar} source={{uri: avatar}} />
+        )}
         <Text numberOfLines={1} ellipsizeMode="tail" style={styles.text}>
           {user}
         </Text>

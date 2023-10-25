@@ -2,53 +2,22 @@
 /* eslint-disable import/no-unresolved */
 
 import * as React from 'react';
-import {Dimensions, FlatList, KeyboardAvoidingView, Platform, StyleSheet, View} from 'react-native';
+import {FlatList, KeyboardAvoidingView, Platform, View} from 'react-native';
 
 import AnonymousInputMessage from '../../components/Chat/AnonymousInputMessage';
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
 import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
-import {colors} from '../../utils/colors';
+import {styles} from './SampleChatScreen';
 
-const {height} = Dimensions.get('window');
-
-export const styles = StyleSheet.create({
-  keyboardAvoidingView: {
-    flex: 1,
-    backgroundColor: colors.white
-  },
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: height - 85
-  },
-  chatContainer: {
-    display: 'flex',
-    height: '100%',
-    marginBottom: 72
-  },
-  inputContainer: {
-    backgroundColor: colors.white,
-    position: 'absolute',
-    bottom: 0,
-    // height: 50,
-    left: 0,
-    right: 0,
-    zIndex: 100,
-    padding: 8,
-    paddingBottom: 16,
-    borderTopColor: colors.lightgrey,
-    borderTopWidth: 1
-  }
-});
-
-const SampleChatScreen = () => {
+const SignedChatScreen = () => {
   const {selectedChannel, chats, goBackFromChatScreen, goToChatInfoScreen, sendChat} =
-    useChatScreenHook('ANONYMOUS');
+    useChatScreenHook('SIGNED');
 
   const renderChatItem = React.useCallback(({item, index}) => {
-    return <BaseChatItem item={item} index={index} />;
+    return <BaseChatItem type="SIGNED" item={item} index={index} />;
   }, []);
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -59,7 +28,13 @@ const SampleChatScreen = () => {
         onBackPress={goBackFromChatScreen}
         onThreeDotPress={goToChatInfoScreen}
         avatar={selectedChannel?.channelPicture}
-        user={selectedChannel?.name}
+        user={
+          selectedChannel?.rawJson?.channel?.anon_user_info_emoji_code
+            ? `Anonymous ${selectedChannel?.rawJson?.channel?.anon_user_info_emoji_name} `
+            : selectedChannel?.user?.username
+        }
+        anon_user_info_emoji_code={selectedChannel?.rawJson?.channel?.anon_user_info_emoji_code}
+        anon_user_info_color_code={selectedChannel?.rawJson?.channel?.anon_user_info_color_code}
       />
       <FlatList
         style={styles.chatContainer}
@@ -78,4 +53,4 @@ const SampleChatScreen = () => {
   );
 };
 
-export default SampleChatScreen;
+export default SignedChatScreen;

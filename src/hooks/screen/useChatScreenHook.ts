@@ -10,8 +10,7 @@ import SignedMessageRepo from '../../service/repo/signedMessageRepo';
 import UseChatScreenHook from '../../../types/hooks/screens/useChatScreenHook.types';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
-import {getAnonymousUserId} from '../../utils/users';
-import {getUserId} from '../../utils/token';
+import {getAnonymousUserId, getUserId} from '../../utils/users';
 import {randomString} from '../../utils/string/StringUtils';
 
 function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
@@ -19,7 +18,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen} = useChatUtilsHook();
 
   const [chats, setChats] = React.useState<ChatSchema[]>([]);
-
+  const {anon_user_info_emoji_name} = selectedChannel?.rawJson?.channel || {};
   const initChatData = async () => {
     if (!localDb && !selectedChannel) return;
     const myUserId = await getUserId();
@@ -44,15 +43,19 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     }
 
     let currentChatSchema = sendingChatSchema;
-
+    let userId = await getUserId();
     const myAnonymousId = await getAnonymousUserId();
+
+    if (type === 'ANONYMOUS') {
+      userId = myAnonymousId;
+    }
     try {
       const randomId = uuid();
 
       if (currentChatSchema === null) {
         currentChatSchema = await ChatSchema.generateSendingChat(
           randomId,
-          myAnonymousId,
+          userId,
           selectedChannel?.id,
           message,
           localDb
@@ -84,6 +87,12 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       }, 1000);
     }
   };
+  const handleUserName = (item) => {
+    if (item?.user?.username !== 'AnonymousUser') {
+      return item?.user?.username;
+    }
+    return `Anonymous ${anon_user_info_emoji_name}`;
+  };
 
   React.useEffect(() => {
     initChatData();
@@ -94,7 +103,8 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     selectedChannel,
     goBackFromChatScreen,
     goToChatInfoScreen,
-    sendChat
+    sendChat,
+    handleUserName
   };
 }
 
