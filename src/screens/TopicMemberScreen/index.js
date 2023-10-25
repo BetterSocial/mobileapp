@@ -8,7 +8,6 @@ import ShareUtils from '../../utils/share';
 import dimen from '../../utils/dimen';
 import {getAllMemberTopic} from '../../service/topics';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {normalize} from '../../utils/fonts';
 import {colors} from '../../utils/colors';
 import Search from '../DiscoveryScreenV2/elements/Search';
 import StringConstant from '../../utils/string/StringConstant';

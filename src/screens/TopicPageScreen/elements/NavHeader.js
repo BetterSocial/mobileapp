@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Animated, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Animated, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 import PropTypes from 'prop-types';
 
