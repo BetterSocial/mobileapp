@@ -44,24 +44,24 @@ const followClient = async (members, data, text, textOwnUser) => {
     });
     console.log({channel}, 'kalio');
     const messageClient = chatClient.channel('messaging', channel[0].id);
-    // messageClient.sendMessage({
-    //   user_id: data.user_id_follower,
-    //   text,
-    //   type: 'system'
-    // });
+    messageClient.sendMessage({
+      user_id: data.user_id_follower,
+      text,
+      isSystem: true
+    });
 
-    messageClient.update(
-      {
-        name: `${data.username_followed},${data.username_follower}`
-      },
-      {
-        text,
-        system_user: data.user_id_follower,
-        is_system_message: true,
-        textOwnUser
-      },
-      {skip_push: true}
-    );
+    // messageClient.update(
+    //   {
+    //     name: `${data.username_followed},${data.username_follower}`
+    //   },
+    //   {
+    //     text,
+    //     system_user: data.user_id_follower,
+    //     is_system_message: true,
+    //     textOwnUser
+    //   },
+    //   {skip_push: true}
+    // );
     // console.log({messageClient}, 'silat');
     return channel;
   } catch (error) {
