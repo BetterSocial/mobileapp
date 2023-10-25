@@ -90,19 +90,21 @@ const NavHeader = (props) => {
           )}
         </View>
       </View>
-      <Animated.View style={styles.Header(opacityHeaderAnimation)}>
+      <Animated.View style={styles.Header}>
         {!isHeaderHide ? (
           <>
-            <Image
+            <Animated.Image
               source={topicDetail?.icon_path ? {uri: topicDetail?.icon_path} : TopicDefaultIcon}
-              style={styles.image}
+              style={styles.image(opacityHeaderAnimation)}
             />
             <View style={styles.containerAction}>
-              {isFollow ? (
-                <ButtonFollowing handleSetUnFollow={handleFollowTopic} />
-              ) : (
-                <ButtonFollow handleSetFollow={handleFollowTopic} />
-              )}
+              <Animated.View style={{opacity: opacityHeaderAnimation}}>
+                {isFollow ? (
+                  <ButtonFollowing handleSetUnFollow={handleFollowTopic} />
+                ) : (
+                  <ButtonFollow handleSetFollow={handleFollowTopic} />
+                )}
+              </Animated.View>
             </View>
           </>
         ) : null}
@@ -142,23 +144,23 @@ const styles = StyleSheet.create({
     zIndex: 10,
     paddingHorizontal: normalizeFontSizeByWidth(20)
   }),
-  Header: (opacityHeaderAnimation) => ({
+  Header: {
     width: '100%',
     flexDirection: 'row',
     height: dimen.size.TOPIC_FEED_HEADER_HEIGHT,
     paddingHorizontal: normalize(20),
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: 'white',
-    opacity: opacityHeaderAnimation
-  }),
-  image: {
+    backgroundColor: 'white'
+  },
+  image: (opacityHeaderAnimation) => ({
     width: normalize(48),
     height: normalize(48),
     borderRadius: normalize(24),
     backgroundColor: 'lightgrey',
-    marginRight: 8
-  },
+    marginRight: 8,
+    opacity: opacityHeaderAnimation
+  }),
   backbutton: {
     paddingRight: 16,
     height: '100%',
