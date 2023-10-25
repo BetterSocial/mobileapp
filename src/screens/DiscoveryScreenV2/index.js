@@ -3,6 +3,7 @@ import axios from 'axios';
 import {Keyboard, Platform, ScrollView, StatusBar, StyleSheet} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
+import {useNavigation} from '@react-navigation/core';
 import DiscoveryAction from '../../context/actions/discoveryAction';
 import DiscoveryRepo from '../../service/discovery';
 import DiscoveryTab from './elements/DiscoveryTab';
@@ -22,6 +23,7 @@ import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {withInteractionsManagedNoStatusBar} from '../../components/WithInteractionManaged';
 import FollowingAction from '../../context/actions/following';
+import {Header} from '../../components';
 
 const DiscoveryScreenV2 = ({route}) => {
   const {tab} = route.params;
@@ -48,6 +50,8 @@ const DiscoveryScreenV2 = ({route}) => {
   const [profileState] = React.useContext(Context).profile;
   const cancelTokenRef = React.useRef(axios.CancelToken.source());
   const [, followingDispatch] = React.useContext(Context).following;
+
+  const navigation = useNavigation();
 
   const handleScroll = React.useCallback(() => {
     Keyboard.dismiss();
@@ -139,10 +143,15 @@ const DiscoveryScreenV2 = ({route}) => {
 
   React.useEffect(() => {
     setTabs({
-      Users: discoveryData.initialUsers.filter((user) => user.user_id_follower !== null).length,
-      Communities: discoveryData.initialTopics.filter((user) => user.user_id_follower !== null)
-        .length,
-      Domains: discoveryData.initialDomains.filter((user) => user.user_id_follower !== null).length,
+      Users: discoveryData.initialUsers.filter((user) =>
+        user.following !== undefined ? user.following : user.user_id_follower !== null
+      ).length,
+      Communities: discoveryData.initialTopics.filter((user) =>
+        user.following !== undefined ? user.following : user.user_id_follower !== null
+      ).length,
+      Domains: discoveryData.initialDomains.filter((user) =>
+        user.following !== undefined ? user.following : user.user_id_follower !== null
+      ).length,
       News: 0
     });
   }, [discoveryData]);
@@ -167,6 +176,7 @@ const DiscoveryScreenV2 = ({route}) => {
           setSearchText={setSearchText}
           fetchData={fetchDiscoveryData}
           searchText={searchText}
+          withoutRecent={route.name === 'Followings'}
         />
       );
 
@@ -184,6 +194,7 @@ const DiscoveryScreenV2 = ({route}) => {
           setSearchText={setSearchText}
           fetchData={fetchDiscoveryData}
           searchText={searchText}
+          withoutRecent={route.name === 'Followings'}
         />
       );
 
@@ -201,6 +212,7 @@ const DiscoveryScreenV2 = ({route}) => {
           setSearchText={setSearchText}
           fetchData={fetchDiscoveryData}
           searchText={searchText}
+          withoutRecent={route.name === 'Followings'}
         />
       );
 
@@ -218,30 +230,51 @@ const DiscoveryScreenV2 = ({route}) => {
 
     return <></>;
   };
-
   return (
     <DiscoveryContainer>
       <StatusBar translucent={false} />
-      <Search
-        searchText={searchText}
-        setSearchText={setSearchText}
-        setDiscoveryLoadingData={setIsLoadingDiscovery}
-        isFocus={isFocus}
-        setIsFocus={setIsFocus}
-        setIsFirstTimeOpen={setIsFirstTimeOpen}
-        fetchDiscoveryData={fetchDiscoveryData}
-        onCancelToken={onCancelToken}
-        placeholderText={
-          route.name === 'Followings' || route.name === 'Followers'
-            ? profileState.navbarTitle
-            : undefined
-        }
+      {route.name === 'Followings' ? (
+        <Header
+          title={
+            profileState.navbarTitle === 'Search users'
+              ? "Who you're following"
+              : profileState.navbarTitle
+          }
+          // containerStyle={styles.header}
+          titleStyle={styles.headerTitle}
+          onPress={() => navigation.goBack()}
+          isCenter
+        />
+      ) : (
+        <Search
+          searchText={searchText}
+          setSearchText={setSearchText}
+          setDiscoveryLoadingData={setIsLoadingDiscovery}
+          isFocus={isFocus}
+          setIsFocus={setIsFocus}
+          setIsFirstTimeOpen={setIsFirstTimeOpen}
+          fetchDiscoveryData={fetchDiscoveryData}
+          onCancelToken={onCancelToken}
+          placeholderText={route.name === 'Followings' ? profileState.navbarTitle : undefined}
+        />
+      )}
+      <DiscoveryTab
+        selectedScreen={selectedScreen}
+        onChangeScreen={(index) => setSelectedScreen(index)}
+        tabs={tabs}
       />
-      {route.name !== 'Followers' && (
-        <DiscoveryTab
-          selectedScreen={selectedScreen}
-          onChangeScreen={(index) => setSelectedScreen(index)}
-          tabs={tabs}
+      {route.name === 'Followings' && (
+        <Search
+          searchText={searchText}
+          setSearchText={setSearchText}
+          setDiscoveryLoadingData={setIsLoadingDiscovery}
+          isFocus={isFocus}
+          setIsFocus={setIsFocus}
+          setIsFirstTimeOpen={setIsFirstTimeOpen}
+          fetchDiscoveryData={fetchDiscoveryData}
+          onCancelToken={onCancelToken}
+          placeholderText={route.name === 'Followings' ? profileState.navbarTitle : undefined}
+          hideBackIcon
         />
       )}
       <ScrollView
@@ -273,7 +306,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingVertical: 4,
     fontFamily: fonts.inter[600]
-  }
+  },
+  headerTitle: {fontSize: 16, fontFamily: fonts.inter[600], textAlign: 'center'}
 });
 
 export default withInteractionsManagedNoStatusBar(DiscoveryScreenV2);

@@ -166,7 +166,7 @@ const DiscoverySearch = ({
   }, []);
 
   return (
-    <View style={styles.animatedViewContainer}>
+    <View style={styles.animatedViewContainer(hideBackIcon)}>
       <View style={styles.arrowContainer}>
         {!hideBackIcon && (
           <TouchableNativeFeedback
@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
     marginRight: 11,
     ...FONTS.h3
   },
-  animatedViewContainer: {
+  animatedViewContainer: (hideBackIcon) => ({
     flexDirection: 'row',
     backgroundColor: 'white',
     marginTop: 0,
@@ -302,9 +302,9 @@ const styles = StyleSheet.create({
     height: dimen.size.DISCOVERY_HEADER_HEIGHT,
     paddingTop: 7,
     paddingBottom: 7,
-    borderBottomWidth: 1,
+    borderBottomWidth: hideBackIcon ? 0 : 1,
     borderBottomColor: COLORS.alto
-  }
+  })
 });
 
 export default DiscoverySearch;

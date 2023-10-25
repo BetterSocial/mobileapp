@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {BackHandler, Platform, StatusBar, View} from 'react-native';
+import {BackHandler, Platform, StatusBar, StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
 import Followings from '.';
@@ -8,6 +8,8 @@ import {showHeaderProfile} from '../../context/actions/setMyProfileAction';
 import {withInteractionsManagedNoStatusBar} from '../../components/WithInteractionManaged';
 import Search from '../DiscoveryScreenV2/elements/Search';
 import {getFollower} from '../../service/profile';
+import {Header} from '../../components';
+import {fonts} from '../../utils/fonts';
 
 function FollowersScreen() {
   const navigation = useNavigation();
@@ -43,11 +45,12 @@ function FollowersScreen() {
   const followingHeader = () => {
     if ((Platform.OS === 'ios' && profileState.isShowHeader) || Platform.OS === 'android') {
       return (
-        <Search
-          searchText={searchText}
-          setSearchText={setSearchText}
-          fetchData={fetchFollower}
-          placeholderText={profileState.navbarTitle}
+        <Header
+          title="Who is following you"
+          // containerStyle={styles.header}
+          titleStyle={styles.headerTitle}
+          onPress={() => navigation.goBack()}
+          isCenter
         />
       );
     }
@@ -86,6 +89,14 @@ function FollowersScreen() {
       {isAndroid ? <StatusBar translucent={false} /> : null}
       {followingHeader()}
 
+      <Search
+        searchText={searchText}
+        setSearchText={setSearchText}
+        fetchData={fetchFollower}
+        placeholderText={profileState.navbarTitle}
+        hideBackIcon
+      />
+
       <Followings
         isLoading={isLoading}
         dataFollower={dataFollower}
@@ -94,5 +105,9 @@ function FollowersScreen() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  headerTitle: {fontSize: 16, fontFamily: fonts.inter[600], textAlign: 'center'}
+});
 
 export default withInteractionsManagedNoStatusBar(FollowersScreen);
