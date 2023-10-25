@@ -118,7 +118,7 @@ const App = () => {
   appUpgradeVersionCheck(appInfo, APP_UPGRADE_API_KEY, alertConfig);
 
   // Remove this method to stop OneSignal Debugging
-  OneSignal.Debug.setLogLevel(LogLevel.Verbose);
+  OneSignal.Debug.setLogLevel(ENV === 'Prod' ? LogLevel.None : LogLevel.Verbose);
 
   // OneSignal Initialization
   OneSignal.initialize(ONE_SIGNAL_APP_ID);

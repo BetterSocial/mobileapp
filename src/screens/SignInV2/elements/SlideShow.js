@@ -2,6 +2,7 @@ import * as React from 'react';
 import {Dimensions, StyleSheet, Text} from 'react-native';
 import {RFValue} from 'react-native-responsive-fontsize';
 import {SwiperFlatList} from 'react-native-swiper-flatlist';
+import PropTypes from 'prop-types';
 
 import FgOnboarding1 from '../../../assets/background/fg_onboarding_full_1.png';
 import FgOnboarding2 from '../../../assets/background/fg_onboarding_full_2.png';
@@ -162,6 +163,11 @@ const SlideShow = ({handleLogin, onContainerPress = () => {}}) => {
       }}
     />
   );
+};
+
+SlideShow.propTypes = {
+  handleLogin: PropTypes.func,
+  onContainerPress: PropTypes.func
 };
 
 export default SlideShow;
