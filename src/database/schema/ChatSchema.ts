@@ -20,7 +20,7 @@ class ChatSchema implements BaseDbSchema {
 
   updatedAt: string;
 
-  rawJson: string;
+  rawJson: any;
 
   user: UserSchema | null;
 

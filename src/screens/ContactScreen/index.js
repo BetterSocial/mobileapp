@@ -123,7 +123,6 @@ const ContactScreen = ({navigation}) => {
       const members = followed;
       const channelName = usernames;
       let typeChannel = 0;
-      console.log(members, 'moon')
       if (members.length > 2) {
         typeChannel = 1;
       }

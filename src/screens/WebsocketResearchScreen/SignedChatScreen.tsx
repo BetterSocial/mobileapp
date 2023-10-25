@@ -9,15 +9,16 @@ import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
 import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
 import {styles} from './SampleChatScreen';
+import {SIGNED} from '../../hooks/core/constant';
+import {Context} from '../../context';
 
 const SignedChatScreen = () => {
   const {selectedChannel, chats, goBackFromChatScreen, goToChatInfoScreen, sendChat} =
-    useChatScreenHook('SIGNED');
-
+    useChatScreenHook(SIGNED);
   const renderChatItem = React.useCallback(({item, index}) => {
     return <BaseChatItem type="SIGNED" item={item} index={index} />;
   }, []);
-
+  console.log({chats}, 'saya');
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
