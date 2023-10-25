@@ -28,6 +28,47 @@ const createChannel = async (channelType, members, channelName) => {
   }
 };
 
+const followClient = async (members, data, text, textOwnUser) => {
+  try {
+    const token = TokenStorage.get(ITokenEnum.token);
+    const id = await getUserId();
+    const user = {
+      id
+    };
+    const sort = [{last_message_at: -1}];
+    const filter = {type: 'messaging', members: {$eq: members}};
+    await chatClient.connectUser(user, token);
+    const channel = await chatClient.queryChannels(filter, sort, {
+      watch: true,
+      state: true
+    });
+    console.log({channel}, 'kalio');
+    const messageClient = chatClient.channel('messaging', channel[0].id);
+    // messageClient.sendMessage({
+    //   user_id: data.user_id_follower,
+    //   text,
+    //   type: 'system'
+    // });
+
+    messageClient.update(
+      {
+        name: `${data.username_followed},${data.username_follower}`
+      },
+      {
+        text,
+        system_user: data.user_id_follower,
+        is_system_message: true,
+        textOwnUser
+      },
+      {skip_push: true}
+    );
+    // console.log({messageClient}, 'silat');
+    return channel;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const sendSystemMessage = async (
   channelType,
   channelId,
@@ -122,5 +163,6 @@ export {
   sendSystemMessage,
   sendAnonymousDMOtherProfile,
   sendSignedDMOtherProfile,
-  getOrCreateAnonymousChannel
+  getOrCreateAnonymousChannel,
+  followClient
 };
