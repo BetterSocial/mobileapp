@@ -54,7 +54,7 @@ const UsersFragment = ({
       ...item,
       following: item.following !== undefined ? item.following : item.user_id_follower !== null
     }));
-  }, [discovery.initialUsers]);
+  }, [discovery]);
 
   React.useEffect(() => {
     const parseToken = async () => {
@@ -82,8 +82,10 @@ const UsersFragment = ({
       const newFollowedUsers = [...users];
       if (newFollowedUsers[index].user) {
         newFollowedUsers[index].user.following = !!willFollow;
+        newFollowedUsers[index].user.user_id_follower = myId;
       } else {
         newFollowedUsers[index].following = !!willFollow;
+        newFollowedUsers[index].user_id_follower = myId;
       }
 
       DiscoveryAction.setDiscoveryInitialUsers(newFollowedUsers, discoveryDispatch);
@@ -93,8 +95,10 @@ const UsersFragment = ({
       const newFollowedUsers = [...followedUsers];
       if (newFollowedUsers[index].user) {
         newFollowedUsers[index].user.following = !!willFollow;
+        newFollowedUsers[index].user.user_id_follower = myId;
       } else {
         newFollowedUsers[index].following = !!willFollow;
+        newFollowedUsers[index].user_id_follower = myId;
       }
 
       setFollowedUsers(newFollowedUsers);
@@ -104,8 +108,10 @@ const UsersFragment = ({
       const newUnfollowedUsers = [...unfollowedUsers];
       if (newUnfollowedUsers[index].user) {
         newUnfollowedUsers[index].user.following = !!willFollow;
+        newUnfollowedUsers[index].user.user_id_follower = myId;
       } else {
         newUnfollowedUsers[index].following = !!willFollow;
+        newUnfollowedUsers[index].user_id_follower = myId;
       }
 
       setUnfollowedUsers(newUnfollowedUsers);
@@ -115,8 +121,10 @@ const UsersFragment = ({
       const newFollowedUsers = [...initialUsers];
       if (newFollowedUsers[index].user) {
         newFollowedUsers[index].user.following = !!willFollow;
+        newFollowedUsers[index].user.user_id_follower = myId;
       } else {
         newFollowedUsers[index].following = !!willFollow;
+        newFollowedUsers[index].user_id_follower = myId;
       }
 
       setInitialUsers(newFollowedUsers);
@@ -166,9 +174,16 @@ const UsersFragment = ({
   const renderUsersItem = () => {
     if (isFirstTimeOpen) {
       if (withoutRecent) {
+        if (initialUsers.length !== 0) {
+          return [
+            initialUsers.map((item, index) =>
+              renderDiscoveryItem(FROM_USERS_INITIAL, 'topicUsers', item, index)
+            )
+          ];
+        }
         return [
-          initialUsers.map((item, index) =>
-            renderDiscoveryItem(FROM_USERS_INITIAL, 'topicUsers', item, index)
+          users.map((item, index) =>
+            renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, 'followedUsers', item, index)
           )
         ];
       }
