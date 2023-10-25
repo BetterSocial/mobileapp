@@ -1,13 +1,16 @@
-// eslint-disable-next-line no-use-before-define
+/* eslint-disable no-use-before-define */
 import * as React from 'react';
 import {FlatList} from 'react-native';
 
 import MessageChannelItem from '../../components/AnonymousChat/MessageChannelItem';
 import PostNotificationChannelItem from '../../components/AnonymousChat/PostNotificationChannelItem';
+import useFollowUser from './hooks/useFollowUser';
 import useSignedChannelListScreenHook from '../../hooks/screen/useSignedChannelListHook';
 
 const ChannelListScreen = () => {
   const {channels, goToChatScreen, goToPostDetailScreen} = useSignedChannelListScreenHook();
+  const {handleFollow} = useFollowUser();
+
   return (
     <FlatList
       data={channels}
@@ -16,7 +19,13 @@ const ChannelListScreen = () => {
       listKey={'ChannelList'}
       renderItem={({item}) => {
         if (item?.channelType === 'PM') {
-          return <MessageChannelItem item={item} onChannelPressed={() => goToChatScreen(item)} />;
+          return (
+            <MessageChannelItem
+              item={item}
+              onChannelPressed={() => goToChatScreen(item)}
+              handleFollow={() => handleFollow(item)}
+            />
+          );
         }
 
         if (item?.channelType === 'POST_NOTIFICATION') {
