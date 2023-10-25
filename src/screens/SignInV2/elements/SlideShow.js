@@ -1,7 +1,8 @@
 import * as React from 'react';
-import {Dimensions, StyleSheet, Text, View, TouchableWithoutFeedback} from 'react-native';
+import {Dimensions, StyleSheet, Text} from 'react-native';
 import {RFValue} from 'react-native-responsive-fontsize';
 import {SwiperFlatList} from 'react-native-swiper-flatlist';
+import PropTypes from 'prop-types';
 
 import FgOnboarding1 from '../../../assets/background/fg_onboarding_full_1.png';
 import FgOnboarding2 from '../../../assets/background/fg_onboarding_full_2.png';
@@ -13,15 +14,11 @@ import OnboardingText3 from '../../../assets/onboarding/OnboardingText3';
 import OnboardingText4 from '../../../assets/onboarding/OnboardingText4';
 import {COLORS} from '../../../utils/theme';
 import {SlideShowItem} from './SlideShowItem';
-import {fonts, normalizeFontSize, scaleFontSize} from '../../../utils/fonts';
+import {fonts} from '../../../utils/fonts';
 
-const {width: screenWidth, fontScale, scale} = Dimensions.get('window');
+const {fontScale} = Dimensions.get('window');
 
-const SlideShow = ({
-  onChangeNewIndex = (newIndex) => {},
-  handleLogin,
-  onContainerPress = () => {}
-}) => {
+const SlideShow = ({handleLogin, onContainerPress = () => {}}) => {
   const flatListRef = React.useRef(null);
 
   const data = [
@@ -168,6 +165,11 @@ const SlideShow = ({
   );
 };
 
+SlideShow.propTypes = {
+  handleLogin: PropTypes.func,
+  onContainerPress: PropTypes.func
+};
+
 export default SlideShow;
 
 const slideShowStyles = StyleSheet.create({
@@ -186,28 +188,5 @@ const slideShowStyles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginRight: 32,
     zIndex: 1000
-  }
-});
-
-const styles = StyleSheet.create({
-  containerCard: {
-    flex: 1,
-    backgroundColor: 'gray',
-    width: screenWidth
-  },
-  image: {flex: 1},
-  dot: {
-    width: 8,
-    height: 8,
-    marginHorizontal: 5
-  },
-  dotContainer: {
-    marginBottom: 6
-  },
-  onboardingItem: (backgroundColor) => {
-    return {
-      backgroundColor,
-      alignSelf: 'center'
-    };
   }
 });
