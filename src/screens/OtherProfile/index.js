@@ -345,6 +345,8 @@ const OtherProfile = () => {
         user_id: userId
       };
       const processGetBlock = await checkUserBlock(sendData);
+      console.log({userId, processGetBlock}, 'silat');
+
       if (callback) callback();
       if (processGetBlock.status === 200) {
         setBlockStatus(processGetBlock.data.data);
@@ -460,7 +462,7 @@ const OtherProfile = () => {
         SimpleToast.LONG
       );
     };
-
+    console.log({user_id, dataMain}, 'laliopo');
     const __renderFollowerDetail = () => {
       if (blockStatus.blocker) return <></>;
       return (

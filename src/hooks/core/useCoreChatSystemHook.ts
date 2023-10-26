@@ -238,7 +238,6 @@ const useCoreChatSystemHook = () => {
   const getAllAnonymousChannels = async () => {
     if (!localDb) return;
     let anonymousChannel = [];
-
     try {
       anonymousChannel = await AnonymousMessageRepo.getAllAnonymousChannels();
     } catch (e) {
