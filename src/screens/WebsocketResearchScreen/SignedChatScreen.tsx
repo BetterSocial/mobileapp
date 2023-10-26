@@ -18,7 +18,7 @@ const SignedChatScreen = () => {
   const renderChatItem = React.useCallback(({item, index}) => {
     return <BaseChatItem type="SIGNED" item={item} index={index} />;
   }, []);
-  console.log({chats}, 'saya');
+  console.log({chats, selectedChannel}, 'saya');
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -32,7 +32,7 @@ const SignedChatScreen = () => {
         user={
           selectedChannel?.rawJson?.channel?.anon_user_info_emoji_code
             ? `Anonymous ${selectedChannel?.rawJson?.channel?.anon_user_info_emoji_name} `
-            : selectedChannel?.user?.username
+            : selectedChannel?.rawJson?.targetName
         }
         anon_user_info_emoji_code={selectedChannel?.rawJson?.channel?.anon_user_info_emoji_code}
         anon_user_info_color_code={selectedChannel?.rawJson?.channel?.anon_user_info_color_code}

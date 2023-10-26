@@ -1,27 +1,28 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import SimpleToast from 'react-native-simple-toast';
 import ToastMessage from 'react-native-toast-message';
 import ToggleSwitch from 'toggle-switch-react-native';
+import netInfo from '@react-native-community/netinfo';
 import {
   Dimensions,
   Image,
   InteractionManager,
   Keyboard,
+  Pressable,
   SafeAreaView,
   StatusBar,
   StyleSheet,
   Text,
   TouchableNativeFeedback,
   TouchableOpacity,
-  View,
-  Pressable
+  View
 } from 'react-native';
 import {generateRandomId} from 'stream-chat-react-native';
 /* eslint-disable no-underscore-dangle */
 import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
-import PropTypes from 'prop-types';
-import netInfo from '@react-native-community/netinfo';
+
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BlockIcon from '../../assets/icons/images/block-blue.svg';
 import BlockProfile from '../../components/Blocking/BlockProfile';
@@ -34,8 +35,10 @@ import RenderItem from '../ProfileScreen/elements/RenderItem';
 import ReportUser from '../../components/Blocking/ReportUser';
 import ShareUtils from '../../utils/share';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
+import StorageUtils from '../../utils/storage';
 import TextAreaChat from '../../components/TextAreaChat';
 import dimen from '../../utils/dimen';
+import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
 import useSaveAnonChatHook from '../../database/hooks/useSaveAnonChatHook';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
@@ -59,8 +62,6 @@ import {setChannel} from '../../context/actions/setChannel';
 import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherProfileFeed';
 import {trimString} from '../../utils/string/TrimString';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import StorageUtils from '../../utils/storage';
-import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
 
 const {width, height} = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -353,6 +354,7 @@ const OtherProfile = () => {
         if (callback) callback();
         if (processGetBlock.status === 200) {
           setBlockStatus(processGetBlock.data.data);
+          setIsLoading(false);
         }
       } catch (e) {
         if (__DEV__) {
@@ -488,7 +490,7 @@ const OtherProfile = () => {
         SimpleToast.LONG
       );
     };
-
+    console.log({user_id, dataMain}, 'laliopo');
     const __renderFollowerDetail = () => {
       if (blockStatus.blocker) return <></>;
       return (

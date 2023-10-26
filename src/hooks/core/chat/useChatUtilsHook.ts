@@ -68,6 +68,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
     } else {
       navigation.navigate('SignedChatScreen');
     }
+    console.log({chat}, 'lili');
     setChat({
       ...chat,
       selectedChannel: channel
