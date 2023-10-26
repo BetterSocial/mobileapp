@@ -12,37 +12,37 @@ const styles = StyleSheet.create({
     width: 88,
     height: 36,
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: colors.bondi_blue,
     borderRadius: 8,
-    backgroundColor: colors.bondi_blue
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   textButtonFollowing: {
-    fontFamily: fonts.inter[600],
-    fontWeight: 'bold',
     fontSize: 12,
-    color: colors.bondi_blue
+    color: colors.bondi_blue,
+    fontFamily: fonts.inter[600],
+    fontWeight: 'bold'
   },
   textButtonFollow: {
-    fontFamily: fonts.inter[600],
-    fontWeight: 'bold',
     fontSize: 12,
-    color: colors.white
+    color: colors.white,
+    fontFamily: fonts.inter[600],
+    fontWeight: 'bold'
   },
   profilepicture: {
     width: 48,
     height: 48,
-    // backgroundColor: colors.bondi_blue,
-    borderRadius: 24,
-    resizeMode: 'cover',
     borderColor: colors.lightgrey,
-    borderWidth: 1
+    borderRadius: 24,
+    borderWidth: 1,
+    // backgroundColor: colors.bondi_blue,
+    resizeMode: 'cover'
   },
   wrapProfile: {
+    flex: 1,
+    width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    width: '100%',
-    flex: 1,
     paddingVertical: 5
   },
   imageProfile: {
@@ -51,10 +51,10 @@ const styles = StyleSheet.create({
     borderRadius: 48
   },
   wrapTextProfile: {
-    marginLeft: 12,
-    flexDirection: 'column',
     flex: 1,
-    justifyContent: 'space-between'
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    marginLeft: 12
   },
   textProfileUsername: {
     fontFamily: fonts.inter[500],
@@ -64,20 +64,20 @@ const styles = StyleSheet.create({
     lineHeight: 16.94
   },
   textProfileFullName: {
-    fontFamily: fonts.inter[400],
     fontSize: 12,
     color: colors.gray,
-    flexWrap: 'wrap',
-    lineHeight: 18
+    fontFamily: fonts.inter[400],
+    lineHeight: 18,
+    flexWrap: 'wrap'
   },
   buttonFollowing: {
     width: 88,
     height: 36,
     flexDirection: 'row',
-    justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 1,
+    justifyContent: 'center',
     borderColor: colors.bondi_blue,
+    borderWidth: 1,
     borderRadius: 8
   },
   card: {
@@ -149,7 +149,6 @@ DomainList.propTypes = {
 };
 
 DomainList.defaultProps = {
-  onPressList: () => null,
   handleSetFollow: () => null,
   handleSetUnFollow: () => null,
   onPressBody: () => null
