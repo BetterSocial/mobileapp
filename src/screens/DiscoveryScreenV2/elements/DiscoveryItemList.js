@@ -11,9 +11,11 @@ import {
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
+import TopicsProfilePictureEmptyState from '../../../assets/icon/TopicsProfilePictureEmptyState';
 
 const DomainList = (props) => {
-  const {item, isHashtag, handleSetFollow, handleSetUnFollow, onPressBody} = props;
+  const {item, isHashtag, handleSetFollow, handleSetUnFollow, onPressBody, DefaultImage} = props;
+
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => onPressBody(item)} style={styles.wrapProfile}>
@@ -29,6 +31,8 @@ const DomainList = (props) => {
                   width={48}
                   height={48}
                 />
+              ) : DefaultImage ? (
+                <TopicsProfilePictureEmptyState />
               ) : (
                 <MemoDomainProfilePicture width={48} height={48} />
               )}
@@ -153,7 +157,7 @@ const styles = StyleSheet.create({
   domainDescription: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.bondi_blue,
+    color: colors.gray,
     flexWrap: 'wrap',
     lineHeight: 18,
     // backgroundColor: 'green',
