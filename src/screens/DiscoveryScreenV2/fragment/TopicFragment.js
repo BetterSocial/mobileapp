@@ -17,6 +17,7 @@ import {colors} from '../../../utils/colors';
 import {convertTopicNameToTopicPageScreenParam} from '../../../utils/string/StringUtils';
 import {fonts} from '../../../utils/fonts';
 import {getUserId} from '../../../utils/users';
+import TopicsProfilePictureEmptyState from '../../../assets/icon/TopicsProfilePictureEmptyState';
 
 const FROM_FOLLOWED_TOPIC = 'fromfollowedtopics';
 const FROM_FOLLOWED_TOPIC_INITIAL = 'fromfollowedtopicsinitial';
@@ -108,40 +109,42 @@ const TopicFragment = ({
     navigation.push('TopicPageScreen', navigationParam);
   };
 
-  const __renderDiscoveryItem = (from, key, item, index) => (
-    <View key={`${key}-${index}`} style={styles.domainContainer}>
-      {route.name === 'Followings' && item.user_id_follower !== null && (
-        <DomainList
-          handleSetFollow={() => handleFollow(from, true, item, index)}
-          handleSetUnFollow={() => handleFollow(from, false, item, index)}
-          key={`followedTopic-${index}`}
-          onPressBody={() => __handleOnTopicPress(item)}
-          isHashtag
-          item={{
-            name: item.name,
-            image: item.profile_pic_path,
-            isunfollowed: !item.following,
-            description: null
-          }}
-        />
-      )}
-      {route.name !== 'Followings' && (
-        <DomainList
-          handleSetFollow={() => handleFollow(from, true, item, index)}
-          handleSetUnFollow={() => handleFollow(from, false, item, index)}
-          key={`followedTopic-${index}`}
-          onPressBody={() => __handleOnTopicPress(item)}
-          isHashtag
-          item={{
-            name: item.name,
-            image: item.profile_pic_path,
-            isunfollowed: !item.following,
-            description: null
-          }}
-        />
-      )}
-    </View>
-  );
+  const __renderDiscoveryItem = (from, key, item, index) => {
+    return (
+      <View key={`${key}-${index}`} style={styles.domainContainer}>
+        {route.name === 'Followings' && item.user_id_follower !== null && (
+          <DomainList
+            handleSetFollow={() => handleFollow(from, true, item, index)}
+            handleSetUnFollow={() => handleFollow(from, false, item, index)}
+            key={`followedTopic-${index}`}
+            onPressBody={() => __handleOnTopicPress(item)}
+            item={{
+              name: item.name,
+              image: item.icon_path,
+              isunfollowed: !item.following,
+              description: null
+            }}
+            DefaultImage={TopicsProfilePictureEmptyState}
+          />
+        )}
+        {route.name !== 'Followings' && (
+          <DomainList
+            handleSetFollow={() => handleFollow(from, true, item, index)}
+            handleSetUnFollow={() => handleFollow(from, false, item, index)}
+            key={`followedTopic-${index}`}
+            onPressBody={() => __handleOnTopicPress(item)}
+            item={{
+              name: item.name,
+              image: item.icon_path,
+              isunfollowed: !item.following,
+              description: null
+            }}
+            DefaultImage={TopicsProfilePictureEmptyState}
+          />
+        )}
+      </View>
+    );
+  };
 
   const __renderTopicItems = () => {
     if (isFirstTimeOpen) {
