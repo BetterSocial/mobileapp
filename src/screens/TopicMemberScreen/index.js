@@ -1,5 +1,12 @@
 import * as React from 'react';
-import {Animated, InteractionManager, ScrollView, StatusBar, StyleSheet} from 'react-native';
+import {
+  Animated,
+  InteractionManager,
+  Keyboard,
+  ScrollView,
+  StatusBar,
+  StyleSheet
+} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import axios from 'axios';
 
@@ -150,6 +157,7 @@ const TopicMemberScreen = () => {
 
   const handleScrollEvent = React.useCallback(
     (event) => {
+      Keyboard.dismiss();
       const {y} = event.nativeEvent.contentOffset;
       if (y <= 15) {
         showAnimationHeader();

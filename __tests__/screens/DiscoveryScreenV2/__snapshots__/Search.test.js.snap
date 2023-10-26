@@ -68,7 +68,6 @@ exports[`Testing Discovery Screen V2 Testing Discovery Search Bar Match Snapshot
     >
       <TextInput
         allowFontScaling={true}
-        autoFocus={true}
         focusable={true}
         multiline={false}
         onBlur={[Function]}
