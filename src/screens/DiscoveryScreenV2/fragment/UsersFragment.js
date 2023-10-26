@@ -16,6 +16,7 @@ import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 import {getUserId} from '../../../utils/users';
 import {setFollow, setUnFollow} from '../../../service/profile';
+import useProfileHook from '../../../hooks/core/profile/useProfileHook';
 
 const FROM_FOLLOWED_USERS = 'fromfollowedusers';
 const FROM_FOLLOWED_USERS_INITIAL = 'fromfollowedusersinitial';
@@ -39,7 +40,8 @@ const UsersFragment = ({
   const [discovery, discoveryDispatch] = React.useContext(Context).discovery;
   const [profile] = React.useContext(Context).profile;
   const navigation = useNavigation();
-
+  const {onFollowUser, onUnfollowUser} = useProfileHook();
+  const followSource = 'discoveryScreen';
   const [myId, setMyId] = React.useState('');
   // const [initialFollowedUsers, setInitialFollowedUsers] = React.useState(
   //     discovery.initialUsers.filter((item) => item.user_id_follower !== null)
@@ -105,19 +107,10 @@ const UsersFragment = ({
 
       setInitialUsers(newFollowedUsers);
     }
-
-    const data = {
-      user_id_follower: myId,
-      user_id_followed: item.user_id,
-      username_follower: profile.myProfile.username,
-      username_followed: item.username,
-      follow_source: 'discoveryScreen'
-    };
-
     if (willFollow) {
-      await setFollow(data);
+      await onFollowUser(item.user_id, item.username, followSource);
     } else {
-      await setUnFollow(data);
+      await onUnfollowUser(item.user_id, followSource);
     }
   };
 

@@ -425,6 +425,7 @@ const useCoreChatSystemHook = () => {
 
     const {type} = lastSignedMessage;
     if (type === 'health.check') return;
+    console.log({lastSignedMessage}, 'sipo');
     if (type === 'notification.message_new') {
       saveChannelListData(lastSignedMessage, 'PM').catch((e) => console.log(e));
     }
