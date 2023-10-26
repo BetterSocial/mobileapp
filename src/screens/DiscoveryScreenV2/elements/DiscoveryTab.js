@@ -19,7 +19,7 @@ const DiscoveryTab = ({onChangeScreen, selectedScreen = 0, tabs}) => {
   }, []);
 
   const handleChangeTitle = (index = 0) => {
-    const title = ['Search users', 'Your Communities', 'Your Domains'][index] || '';
+    const title = ['Search Users', 'Your Communities', 'Your Domains'][index] || '';
     setNavbarTitle(title, dispatchNavbar);
   };
 
