@@ -236,7 +236,7 @@ const DiscoveryScreenV2 = ({route}) => {
       {route.name === 'Followings' ? (
         <Header
           title={
-            profileState.navbarTitle === 'Search users'
+            profileState.navbarTitle === 'Search Users'
               ? "Who you're following"
               : profileState.navbarTitle
           }
