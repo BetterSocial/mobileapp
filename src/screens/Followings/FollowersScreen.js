@@ -4,7 +4,7 @@ import {useNavigation} from '@react-navigation/core';
 
 import Followings from '.';
 import {Context} from '../../context';
-import {showHeaderProfile} from '../../context/actions/setMyProfileAction';
+import {setNavbarTitle, showHeaderProfile} from '../../context/actions/setMyProfileAction';
 import {withInteractionsManagedNoStatusBar} from '../../components/WithInteractionManaged';
 import Search from '../DiscoveryScreenV2/elements/Search';
 import {getFollower} from '../../service/profile';
@@ -41,6 +41,10 @@ function FollowersScreen() {
       fetchFollower(true, searchText);
     }
   }, [searchText]);
+
+  React.useEffect(() => {
+    setNavbarTitle('Search Users', dispatchNavbar);
+  }, []);
 
   const followingHeader = () => {
     if ((Platform.OS === 'ios' && profileState.isShowHeader) || Platform.OS === 'android') {
