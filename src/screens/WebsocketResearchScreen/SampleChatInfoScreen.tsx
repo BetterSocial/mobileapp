@@ -25,6 +25,7 @@ import {ProfileContact} from '../../components/Items';
 import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {trimString} from '../../utils/string/TrimString';
+import {Context} from '../../context';
 
 export const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#fff', paddingBottom: 40},
@@ -167,7 +168,7 @@ export const styles = StyleSheet.create({
 
 const SampleChatInfoScreen = () => {
   const {channelInfo, goBack, onContactPressed} = useAnonymousChatInfoScreenHook();
-
+  const [profile] = React.useContext(Context).profile;
   const [isLoadingMembers] = React.useState<boolean>(false);
   const {signedProfileId} = useProfileHook();
 
@@ -183,7 +184,7 @@ const SampleChatInfoScreen = () => {
 
   const {anon_user_info_color_code, anon_user_info_emoji_code, anon_user_info_emoji_name} =
     channelInfo?.rawJson?.channel || {};
-  console.log({channelInfo}, 'channel');
+  console.log({channelInfo, profile}, 'channel');
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -222,7 +223,7 @@ const SampleChatInfoScreen = () => {
                         onPress={() => onContactPressed(item)}
                         fullname={item?.user?.name}
                         photo={item?.user?.profilePicture}
-                        showArrow={item?.role !== 'owner'}
+                        showArrow={item?.user_id !== profile?.myProfile?.user_id}
                         userId={signedProfileId}
                         ImageComponent={
                           item?.user?.image === '' ? (
