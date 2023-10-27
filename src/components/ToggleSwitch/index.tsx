@@ -1,40 +1,59 @@
 import * as React from 'react';
-import {StyleProp, StyleSheet, Text, View, TextProps} from 'react-native';
-import {Switch} from 'react-native-switch';
-
-interface ToggleSwitchProps {
-  value?: boolean;
-  labelLeft?: string;
-  labelRight?: string;
-  circleActiveColor?: string;
-  circleInActiveColor?: string;
-  backgroundActive?: string;
-  backgroundInactive?: string;
-  styleLabelLeft?: StyleProp<TextProps>;
-  styleLabelRight?: StyleProp<TextProps>;
-  activeTextColor?: string;
-  inactiveTextColor?: string;
-  onValueChange?: (value: boolean) => void;
-}
+import {
+  StyleSheet,
+  Animated,
+  TouchableOpacity,
+  Easing,
+  StyleProp,
+  Text,
+  TextStyle,
+  Platform
+} from 'react-native';
+import dimen from '../../utils/dimen';
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center'
   },
-  containerSwitch: {
-    borderWidth: 1,
-    width: 42,
-    height: 20,
-    borderColor: 'rgba(28, 26, 55, 0.11)',
-    shadowColor: 'rgba(28, 26, 55, 0.11)',
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 1,
-    shadowRadius: 4,
-    elevation: 2
+  basicStyle: {
+    height: dimen.normalizeDimen(16),
+    width: dimen.normalizeDimen(16),
+    borderRadius: dimen.normalizeDimen(16 / 2),
+    backgroundColor: '#2C67BC'
+  },
+  eahcStyles: {
+    fontSize: dimen.normalizeDimen(12),
+    color: '#f4f3f4',
+    position: 'absolute',
+    top: dimen.normalizeDimen(2),
+    left: dimen.normalizeDimen(3)
+  },
+
+  eahcStylesOf: {
+    fontSize: dimen.normalizeDimen(12),
+    color: '#f4f3f4',
+    position: 'absolute',
+    top: dimen.normalizeDimen(2),
+    right: dimen.normalizeDimen(3)
+  },
+  mainStyes: {
+    borderRadius: dimen.normalizeDimen(12),
+    backgroundColor: '#F5F5F5',
+    height: dimen.normalizeDimen(20),
+    width: dimen.normalizeDimen(42),
+    padding: dimen.normalizeDimen(2),
+    ...Platform.select({
+      ios: {
+        shadowColor: 'rgba(0,0,0,0.25)',
+        shadowOffset: {width: 0, height: 0},
+        shadowOpacity: dimen.normalizeDimen(1),
+        shadowRadius: dimen.normalizeDimen(1)
+      },
+      android: {
+        elevation: dimen.normalizeDimen(1)
+      }
+    })
   },
   labelLeft: {
     marginRight: 5,
@@ -47,39 +66,26 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 12,
     fontWeight: '400'
-  },
-  innerCircleActive: {
-    width: 16,
-    height: 16,
-    borderWidth: 0,
-    position: 'absolute',
-    right: 18.9
-  },
-  innerCircleInactive: {
-    width: 16,
-    height: 16,
-    borderWidth: 0,
-    position: 'absolute',
-    left: 17
-  },
-  activeText: {
-    fontSize: 12,
-    fontWeight: '400',
-    fontFamily: 'Inter',
-    position: 'absolute',
-    left: -10
-  },
-  inactiveText: {
-    fontSize: 12,
-    fontWeight: '400',
-    fontFamily: 'Inter',
-    position: 'absolute',
-    right: -10
   }
 });
 
+interface ToggleSwitchProps {
+  value?: boolean;
+  labelLeft?: string;
+  labelRight?: string;
+  circleActiveColor?: string;
+  circleInActiveColor?: string;
+  backgroundActive?: string;
+  backgroundInactive?: string;
+  styleLabelLeft?: StyleProp<TextStyle>;
+  styleLabelRight?: StyleProp<TextStyle>;
+  activeTextColor?: string;
+  inactiveTextColor?: string;
+  onValueChange?: (value: boolean) => void;
+}
+
 const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
-  value,
+  value = false,
   onValueChange,
   labelLeft,
   labelRight,
@@ -92,27 +98,102 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   activeTextColor = '#00ADB5',
   inactiveTextColor = '#2C67BC'
 }) => {
+  const positionButton = React.useMemo(() => new Animated.Value(0), []);
+
+  const startAnimToOff = () => {
+    Animated.timing(positionButton, {
+      toValue: 0,
+      duration: 500,
+      easing: Easing.ease,
+      useNativeDriver: false
+    }).start();
+  };
+
+  const startAnimToOn = () => {
+    Animated.timing(positionButton, {
+      toValue: 1,
+      duration: 500,
+      easing: Easing.ease,
+      useNativeDriver: false
+    }).start();
+  };
+
+  const positionInterPol = positionButton.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, dimen.normalizeDimen(22)]
+  });
+  const backgroundColorAnim = positionButton.interpolate({
+    inputRange: [0, 1],
+    outputRange: [backgroundInactive, backgroundActive]
+  });
+
+  const initialOpacityOn = positionButton.interpolate({inputRange: [0, 1], outputRange: [0, 1]});
+  const initialOpacityOff = positionButton.interpolate({inputRange: [0, 1], outputRange: [1, 0]});
+
+  const onPress = () => {
+    if (!value) {
+      startAnimToOff();
+    } else {
+      startAnimToOn();
+    }
+    if (onValueChange) onValueChange(!value);
+  };
+
+  if (value) {
+    startAnimToOn();
+  } else {
+    startAnimToOff();
+  }
+
   return (
-    <View style={styles.container}>
-      {labelLeft && <Text style={[styles.labelLeft, styleLabelLeft]}>{labelLeft}</Text>}
-      <Switch
-        value={value}
-        onValueChange={onValueChange}
-        backgroundActive={backgroundActive}
-        backgroundInactive={backgroundInactive}
-        circleActiveColor={circleActiveColor}
-        circleInActiveColor={circleInActiveColor}
-        innerCircleStyle={value ? styles.innerCircleActive : styles.innerCircleInactive}
-        activeTextStyle={[styles.activeText, {color: activeTextColor}]}
-        inactiveTextStyle={[styles.inactiveText, {color: inactiveTextColor}]}
-        activeText="On"
-        inActiveText="Off"
-        barHeight={20}
-        switchWidthMultiplier={1.4}
-        containerStyle={styles.containerSwitch}
-      />
-      {labelRight && <Text style={[styles.labelRight, styleLabelRight]}>{labelRight}</Text>}
-    </View>
+    <TouchableOpacity style={styles.container} activeOpacity={0.9} onPress={onPress}>
+      <Text style={[styles.labelLeft, styleLabelLeft]}>{labelLeft}</Text>
+      <Animated.View
+        style={[
+          styles.mainStyes,
+          {
+            backgroundColor: backgroundColorAnim
+          }
+        ]}>
+        <Animated.Text
+          style={[
+            styles.eahcStyles,
+            {
+              opacity: initialOpacityOn,
+              color: activeTextColor
+            }
+          ]}>
+          On
+        </Animated.Text>
+        <Animated.Text
+          style={[
+            styles.eahcStylesOf,
+            {
+              opacity: initialOpacityOff,
+              color: inactiveTextColor
+            }
+          ]}>
+          Off
+        </Animated.Text>
+        <Animated.View
+          style={[
+            styles.basicStyle,
+            {
+              transform: [
+                {
+                  translateX: positionInterPol
+                }
+              ],
+              backgroundColor: positionButton.interpolate({
+                inputRange: [0, 1],
+                outputRange: [circleInActiveColor, circleActiveColor]
+              })
+            }
+          ]}
+        />
+      </Animated.View>
+      <Text style={[styles.labelRight, styleLabelRight]}>{labelRight}</Text>
+    </TouchableOpacity>
   );
 };
 
