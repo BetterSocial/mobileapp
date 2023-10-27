@@ -44,11 +44,14 @@ const followClient = async (members, data, text, textOwnUser) => {
     });
     console.log({channel}, 'kalio');
     const messageClient = chatClient.channel('messaging', channel[0].id);
-    messageClient.sendMessage({
-      user_id: data.user_id_follower,
-      text,
-      isSystem: true
-    });
+    messageClient.sendMessage(
+      {
+        user_id: data.user_id_follower,
+        text,
+        isSystem: true
+      },
+      {skip_push: true}
+    );
 
     // messageClient.update(
     //   {

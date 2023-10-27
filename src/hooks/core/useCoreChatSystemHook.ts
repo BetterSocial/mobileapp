@@ -55,6 +55,17 @@ const useCoreChatSystemHook = () => {
     }
   };
 
+  const handleChannelImage = (members = []) => {
+    if (members.length > 2) {
+      return DEFAULT_PROFILE_PIC_PATH;
+    }
+    const findMember = members?.find((data) => data.user_id !== signedProfileId);
+    if (findMember) {
+      return findMember?.user?.image;
+    }
+    return DEFAULT_PROFILE_PIC_PATH;
+  };
+
   const onSignedPostNotifReceived: (data: GetstreamFeedListenerObject) => Promise<void> = async (
     data
   ) => {
@@ -77,6 +88,7 @@ const useCoreChatSystemHook = () => {
     channelType: MyChannelType
   ) => {
     if (!localDb) return;
+    console.log({websocketData}, 'sinak');
     if (channelType === ANON_PM) {
       const chatName = await getAnonymousChatName(websocketData?.channel?.members);
       websocketData.targetName = chatName?.name;
@@ -88,11 +100,12 @@ const useCoreChatSystemHook = () => {
       } else {
         websocketData.targetName = chatName;
       }
-      websocketData.targetImage = websocketData.message?.user?.image;
+      websocketData.targetImage = handleChannelImage(websocketData?.channel?.members);
       websocketData.anon_user_info_color_name = websocketData?.channel?.anon_user_info_color_name;
       websocketData.anon_user_info_emoji_code = websocketData?.channel?.anon_user_info_emoji_code;
       websocketData.anon_user_info_color_code = websocketData?.channel?.anon_user_info_color_code;
     }
+    console.log({websocketData}, 'silatman');
 
     const channelList = ChannelList.fromWebsocketObject(websocketData, channelType);
 
@@ -394,11 +407,9 @@ const useCoreChatSystemHook = () => {
     const {type} = lastJsonMessage;
     if (type === 'health.check') return;
     if (type === 'notification.message_new') {
-      setTimeout(() => {
-        saveChannelListData(lastJsonMessage, 'ANON_PM').catch((e) => console.log(e));
-      }, 500);
+      saveChannelListData(lastJsonMessage, 'ANON_PM').catch((e) => console.log(e));
     }
-  }, [lastJsonMessage, localDb]);
+  }, [lastJsonMessage]);
 
   React.useEffect(() => {
     if (!lastSignedMessage && !localDb) return;
@@ -407,11 +418,9 @@ const useCoreChatSystemHook = () => {
     if (type === 'health.check') return;
     if (type === 'notification.message_new') {
       console.log({lastSignedMessage}, 'nanak');
-      setTimeout(() => {
-        saveChannelListData(lastSignedMessage, 'PM').catch((e) => console.log(e));
-      }, 500);
+      saveChannelListData(lastSignedMessage, 'PM').catch((e) => console.log(e));
     }
-  }, [lastSignedMessage, localDb]);
+  }, [lastSignedMessage]);
 
   React.useEffect(() => {
     if (isEnteringApp && migrationStatus === 'MIGRATED') {

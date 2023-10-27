@@ -72,7 +72,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       } else {
         response = await SignedMessageRepo.sendSignedMessage(selectedChannel?.id, message);
       }
-
+      console.log({response}, 'nukul');
       await currentChatSchema.updateChatSentStatus(localDb, response);
       refresh('chat');
       refresh('channelList');

@@ -42,6 +42,7 @@ async function sendSignedMessage(channelId: string, message: string) {
   const payload = {channelId, message};
   try {
     const response = await api.post(baseUrl.sendSignedMessage, payload);
+    console.log({response}, 'nukul2');
     if (response.status === 200) {
       return Promise.resolve(response.data?.data);
     }
