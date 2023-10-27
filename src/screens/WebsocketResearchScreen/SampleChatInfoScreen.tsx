@@ -186,6 +186,26 @@ const SampleChatInfoScreen = () => {
   const {anon_user_info_color_code, anon_user_info_emoji_code, anon_user_info_emoji_name} =
     channelInfo?.rawJson?.channel || {};
   console.log({channelInfo, profile}, 'channel');
+
+  const renderImageComponent = (item) => {
+    if (!isContainUrl(item?.user?.image) || item?.user?.name === ANONYMOUS_USER) {
+      return (
+        <View style={styles.mr7}>
+          <AnonymousIcon
+            color={anon_user_info_color_code}
+            emojiCode={anon_user_info_emoji_code}
+            size={normalize(48)}
+          />
+        </View>
+      );
+    }
+    return (
+      <View style={styles.mr7}>
+        <FastImage style={styles.imageUser} source={{uri: item?.user?.image}} />
+      </View>
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -226,25 +246,7 @@ const SampleChatInfoScreen = () => {
                         photo={item?.user?.profilePicture}
                         showArrow={item?.user_id !== profile?.myProfile?.user_id}
                         userId={signedProfileId}
-                        ImageComponent={
-                          !isContainUrl(item?.user?.image) ||
-                          item?.user?.name === ANONYMOUS_USER ? (
-                            <View style={styles.mr7}>
-                              <AnonymousIcon
-                                color={anon_user_info_color_code}
-                                emojiCode={anon_user_info_emoji_code}
-                                size={normalize(48)}
-                              />
-                            </View>
-                          ) : (
-                            <View style={styles.mr7}>
-                              <FastImage
-                                style={styles.imageUser}
-                                source={{uri: item?.user?.image}}
-                              />
-                            </View>
-                          )
-                        }
+                        ImageComponent={renderImageComponent(item)}
                       />
                     </View>
                   )}

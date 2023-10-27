@@ -73,7 +73,7 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
       />
     );
 
-  if (item?.type === 'system') {
+  if (item?.type === 'system' || item?.rawJson?.message?.isSystem) {
     return <BaseSystemChat item={item} index={index} />;
   }
 
