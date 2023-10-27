@@ -26,6 +26,7 @@ import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {trimString} from '../../utils/string/TrimString';
 import {Context} from '../../context';
+import {isContainUrl} from '../../utils/Utils';
 
 export const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#fff', paddingBottom: 40},
@@ -172,7 +173,7 @@ const SampleChatInfoScreen = () => {
   const [isLoadingMembers] = React.useState<boolean>(false);
   // TODO: Change this into useUserAuthHook
   const {signedProfileId} = useProfileHook();
-
+  const ANONYMOUS_USER = 'AnonymousUser';
   const showImageProfile = () => {
     return (
       <Image
@@ -227,7 +228,8 @@ const SampleChatInfoScreen = () => {
                         showArrow={item?.user_id !== profile?.myProfile?.user_id}
                         userId={signedProfileId}
                         ImageComponent={
-                          item?.user?.image === '' ? (
+                          !isContainUrl(item?.user?.image) ||
+                          item?.user?.name === ANONYMOUS_USER ? (
                             <View style={styles.mr7}>
                               <AnonymousIcon
                                 color={anon_user_info_color_code}
