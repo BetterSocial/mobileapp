@@ -80,9 +80,7 @@ const NavHeader = (props) => {
         </TouchableOpacity>
         <View style={styles.containerAction}>
           {!isFollow && isHeaderHide ? (
-            <View style={{marginRight: normalize(10)}}>
-              <ButtonFollow handleSetFollow={handleFollowTopic} />
-            </View>
+            <ButtonFollow handleSetFollow={handleFollowTopic} />
           ) : (
             <TouchableOpacity onPress={onShareCommunity} style={styles.shareIconStyle}>
               <ShareIconCircle color="black" width={32} height={32} />
