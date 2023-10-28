@@ -185,7 +185,6 @@ const SampleChatInfoScreen = () => {
 
   const {anon_user_info_color_code, anon_user_info_emoji_code, anon_user_info_emoji_name} =
     channelInfo?.rawJson?.channel || {};
-  console.log({channelInfo, profile}, 'channel');
 
   const renderImageComponent = (item) => {
     if (!isContainUrl(item?.user?.image) || item?.user?.name === ANONYMOUS_USER) {
