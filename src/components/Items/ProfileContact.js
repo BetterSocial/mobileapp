@@ -23,6 +23,7 @@ const ProfileContact = ({
       borderless: false,
       borderRadius: 10
     }}
+    disabled={!showArrow}
     style={styles.pressable}>
     <View style={styles.container}>
       <View style={styles.profile}>
