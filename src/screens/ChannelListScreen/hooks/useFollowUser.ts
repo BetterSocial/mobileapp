@@ -24,7 +24,7 @@ const useFollowUser = () => {
   const [profileContext] = (React.useContext(Context) as unknown as any).profile;
   const {myProfile} = profileContext;
 
-  const [initialFollowingData] = React.useState([...(followContext?.users ?? [])]);
+  const initialFollowingDataRef = React.useRef([...(followContext?.users ?? [])]);
 
   const updateFollowingData = async () => {
     try {
@@ -110,14 +110,20 @@ const useFollowUser = () => {
     const targetUser = channel?.rawJson?.members?.find(
       (member) => member?.user_id !== myProfile?.user_id
     )?.user;
-    return Boolean(initialFollowingData?.find((user) => user?.user_id_followed === targetUser?.id));
+    return Boolean(
+      initialFollowingDataRef.current?.find((user) => user?.user_id_followed === targetUser?.id)
+    );
   };
 
   const isSystemMessage = (channel: ChannelList) => {
     return channel?.rawJson?.firstMessage?.type === 'system';
   };
 
-  return {handleFollow, isInitialFollowing, isSystemMessage};
+  const isSystemFollowMessage = (channel: ChannelList) => {
+    return isSystemMessage(channel) && channel?.description?.toLowerCase()?.includes('follow');
+  };
+
+  return {handleFollow, isInitialFollowing, isSystemMessage, isSystemFollowMessage};
 };
 
 export default useFollowUser;
