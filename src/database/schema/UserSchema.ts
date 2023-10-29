@@ -163,19 +163,14 @@ class UserSchema implements BaseDbSchema {
   };
 
   saveOrUpdateIfExists = async (db: SQLiteDatabase): Promise<void> => {
-    const resolver = (tx: Transaction) => {
-      const query = `SELECT * FROM ${UserSchema.getTableName()} WHERE user_id = ? AND channel_id = ? LIMIT 1`;
-      tx.executeSql(query, [this.userId, this.channelId], (isExistsTx, results) => {
-        const isExists = results?.rows?.length > 0;
-        if (isExists) {
-          this.update(db, isExistsTx);
-        } else {
-          this.save(db, isExistsTx);
-        }
-      });
-    };
-
-    db.transaction(resolver);
+    const query = `SELECT * FROM ${UserSchema.getTableName()} WHERE user_id = ? AND channel_id = ? LIMIT 1`;
+    const [results] = await db.executeSql(query, [this.userId, this.channelId]);
+    const isExists = results?.rows?.length > 0;
+    if (isExists) {
+      await this.update(db);
+    } else {
+      await this.save(db);
+    }
   };
 
   static async getAll(db: SQLiteDatabase): Promise<UserSchema[]> {
