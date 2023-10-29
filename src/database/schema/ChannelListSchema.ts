@@ -81,8 +81,6 @@ class ChannelList implements BaseDbSchema {
     return results.rows.raw()[0];
   };
 
-  //! TODO:
-  //! UPDATE ANONYMOUSID FOR SIGNED CHAT
   static getChannelInfo = async (
     db: SQLiteDatabase,
     channelId: string,
@@ -186,8 +184,6 @@ class ChannelList implements BaseDbSchema {
     }
   }
 
-  //! TODO:
-  //! UPDATE ANONYMOUSID FOR SIGNED CHAT
   static async getAll(
     db: SQLiteDatabase,
     myId: string,
