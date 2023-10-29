@@ -14,6 +14,7 @@ import useBetterWebsocketHook from './websocket/useBetterWebsocketHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import usePostNotificationListenerHook from './getstream/usePostNotificationListenerHook';
 import useProfileHook from './profile/useProfileHook';
+import {ANONYMOUS, ANON_PM} from './constant';
 import {
   AnonymousPostNotification,
   Comment,
@@ -25,7 +26,6 @@ import {GetstreamWebsocket, MyChannelType} from './websocket/types.d';
 import {InitialStartupAtom} from '../../service/initialStartup';
 import {SignedPostNotification} from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 import {getAnonymousChatName, getChatName} from '../../utils/string/StringUtils';
-import {ANONYMOUS, ANON_PM} from './constant';
 
 type ChannelType = 'SIGNED' | 'ANONYMOUS';
 

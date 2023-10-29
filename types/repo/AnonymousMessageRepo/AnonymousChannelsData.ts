@@ -40,6 +40,7 @@ export interface Member {
 export interface Message {
   id: string;
   text: string;
+  other_text?: string;
   html: string;
   type: string;
   user: User;
@@ -70,7 +71,7 @@ export interface Message {
   channelId?: string;
 }
 
-export interface AnonymousChannelData {
+export interface ChannelData {
   id: string;
   type: string;
   cid: string;
