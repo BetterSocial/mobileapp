@@ -10,7 +10,7 @@ import useSignedChannelListScreenHook from '../../hooks/screen/useSignedChannelL
 
 const ChannelListScreen = () => {
   const {channels, goToChatScreen, goToPostDetailScreen} = useSignedChannelListScreenHook();
-  const {handleFollow, isInitialFollowing, isSystemMessage} = useFollowUser();
+  const {handleFollow, isInitialFollowing, isSystemFollowMessage} = useFollowUser();
 
   return (
     <FlatList
@@ -20,7 +20,7 @@ const ChannelListScreen = () => {
       listKey={'ChannelList'}
       renderItem={({item}) => {
         if (item?.channelType === 'PM') {
-          const hasFollowButton = isSystemMessage(item) && !isInitialFollowing(item);
+          const hasFollowButton = isSystemFollowMessage(item) && !isInitialFollowing(item);
 
           return (
             <MessageChannelItem
