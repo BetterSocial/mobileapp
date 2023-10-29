@@ -32,7 +32,7 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
   type = BaseChannelItemTypeProps.ANON_PM,
   unreadCount = 0,
   upvote = 0,
-  isSystemMessage = false,
+  hasFollowButton = false,
   handleFollow,
   onPress = () => {
     console.log('onPress');
@@ -42,14 +42,11 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
   const [followContext] = (React.useContext(Context) as unknown as any).following;
   const {myProfile} = profileContext;
 
-  let targetUser;
   let isFollowing = false;
-  let hasFollowAction = false;
   if (type === BaseChannelItemTypeProps.SIGNED_PM) {
-    targetUser = postMaker?.members?.find((member) => member?.user_id !== myProfile?.user_id)?.user;
-    hasFollowAction =
-      isSystemMessage && targetUser?.id && message?.toLowerCase()?.includes('follow');
-
+    const targetUser = postMaker?.members?.find(
+      (member) => member?.user_id !== myProfile?.user_id
+    )?.user;
     isFollowing = Boolean(
       followContext?.users?.find((user) => user?.user_id_followed === targetUser?.id)
     );
@@ -75,7 +72,7 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
             time={time}
             unreadCount={unreadCount}
             isMe={isMe}
-            hasFollowAction={hasFollowAction}
+            hasFollowButton={hasFollowButton}
             isFollowing={isFollowing}
             handleFollow={handleFollow}
           />
