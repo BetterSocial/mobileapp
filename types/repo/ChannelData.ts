@@ -67,3 +67,5 @@ export interface Command {
   args: string;
   set: string;
 }
+
+export type ChannelType = 'PM' | 'ANON_PM' | 'GROUP' | 'TOPIC';
