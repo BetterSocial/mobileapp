@@ -76,7 +76,7 @@ const ChannelTitle = ({
     },
     chatMessage: {
       flexDirection: 'row',
-      paddingBottom: dimen.normalizeDimen(6)
+      marginBottom: 0
     }
   });
 
