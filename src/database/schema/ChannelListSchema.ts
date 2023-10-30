@@ -314,15 +314,20 @@ class ChannelList implements BaseDbSchema {
   }
 
   static fromChannelAPI(data: ChannelData, channelType: 'PM' | 'ANON_PM'): ChannelList {
+    const isPM = channelType === 'PM';
+    const isSystemMessage = data?.firstMessage?.type === 'system';
+    const isMe =
+      (data?.firstMessage?.user?.username ?? data?.firstMessage?.user?.name) !== data?.targetName;
+    let descriptionSystemMessage;
+
+    if (isPM && isSystemMessage && isMe) descriptionSystemMessage = data?.firstMessage?.other_text;
+
     return new ChannelList({
       id: data?.id,
       channelPicture: data?.targetImage,
       name: data?.targetName,
       description:
-        data?.firstMessage?.other_text ||
-        data?.firstMessage?.text ||
-        data?.firstMessage?.message ||
-        '',
+        descriptionSystemMessage || data?.firstMessage?.text || data?.firstMessage?.message || '',
       unreadCount: 0,
       channelType,
       lastUpdatedAt: data?.last_message_at,

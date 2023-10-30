@@ -132,19 +132,15 @@ const useCoreChatSystemHook = () => {
 
     const isAnonymous = channelType === ANONYMOUS;
 
-    let signedChannelProfile;
     let signedChannelName;
     let signedChannelImage;
 
     if (!isAnonymous) {
-      signedChannelProfile = channel?.members?.find(
-        (member) => member?.user_id === signedProfileId
-      )?.user;
-
+      const signedChannelUsername = profile?.username;
       signedChannelName =
         channel?.channel_type === 4
           ? `Anonymous ${channel?.anon_user_info_emoji_name}`
-          : getChatName(channel?.name, signedChannelProfile?.username);
+          : getChatName(channel?.name, signedChannelUsername);
       signedChannelImage =
         channel?.members?.length > 2
           ? DEFAULT_PROFILE_PIC_PATH

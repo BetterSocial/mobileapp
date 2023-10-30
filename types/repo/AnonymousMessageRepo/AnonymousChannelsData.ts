@@ -20,6 +20,7 @@ export interface User {
   online: boolean;
   image: string;
   name: string;
+  username?: string;
 }
 
 export interface Member {
