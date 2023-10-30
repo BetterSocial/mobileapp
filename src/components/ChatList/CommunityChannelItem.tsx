@@ -13,7 +13,7 @@ const CommunityChannelItem = (props: ChannelItemProps) => {
   const {channel: community, onChannelPressed} = props;
   const channelType = 'COMMUNITY';
   const channelPicture = community?.channelPicture;
-  const unreadCount = 2;
+  const unreadCount = community?.unreadCount;
   const hasBadge = unreadCount > 0;
 
   return (
@@ -33,7 +33,9 @@ const CommunityChannelItem = (props: ChannelItemProps) => {
               </ChannelContent.Time>
             </View>
             <View style={{flexDirection: 'row'}}>
-              <ChannelContent.Description>{community?.description}</ChannelContent.Description>
+              <ChannelContent.Description>
+                {community?.description ?? 'See latest post'}
+              </ChannelContent.Description>
               {hasBadge && <ChannelContent.Badge>{unreadCount}</ChannelContent.Badge>}
             </View>
           </ChannelContent>
