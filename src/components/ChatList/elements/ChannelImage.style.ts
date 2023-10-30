@@ -9,7 +9,7 @@ export const channelImageStyles = StyleSheet.create({
     width: dimen.normalizeDimen(48),
     height: dimen.normalizeDimen(48),
     marginTop: dimen.normalizeDimen(12),
-    marginBottom: dimen.normalizeDimen(6),
+    marginBottom: dimen.normalizeDimen(12),
     borderRadius: dimen.normalizeDimen(24)
   },
   containerDefaultImage: {
