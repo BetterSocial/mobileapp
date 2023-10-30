@@ -3,9 +3,10 @@ import {StyleSheet, Text, View} from 'react-native';
 
 import ChannelFollowButton from './ChannelFollowButton';
 import baseStyles from '../BaseChannelItemStyles';
+import dimen from '../../../utils/dimen';
 import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
 import {colors} from '../../../utils/colors';
-import {fonts} from '../../../utils/fonts';
+import {fonts, normalize} from '../../../utils/fonts';
 
 const ChannelTitle = ({
   type,
@@ -21,13 +22,14 @@ const ChannelTitle = ({
   const styles = StyleSheet.create({
     chatContentName: {
       fontFamily: fonts.inter[700],
-      fontSize: 14.05,
+      fontSize: normalize(14),
       lineHeight: 22,
-      flex: 1
+      flex: 1,
+      paddingBottom: 2
     },
     chatContentTime: {
       fontFamily: fonts.poppins[400],
-      fontSize: 14,
+      fontSize: normalize(14),
       lineHeight: 22,
       marginLeft: 20,
       color: colors.gray,
@@ -35,7 +37,7 @@ const ChannelTitle = ({
     },
     chatContentMessage: {
       fontFamily: fonts.inter[400],
-      fontSize: 14.05,
+      fontSize: normalize(14),
       lineHeight: 22,
       alignSelf: 'center',
       flex: 1,
@@ -52,7 +54,7 @@ const ChannelTitle = ({
     },
     chatContentUnreadCount: {
       fontFamily: fonts.inter[400],
-      fontSize: 12,
+      fontSize: normalize(12),
       lineHeight: 14.52,
       color: colors.white
     },
@@ -74,7 +76,7 @@ const ChannelTitle = ({
     },
     chatMessage: {
       flexDirection: 'row',
-      marginBottom: 0
+      paddingBottom: dimen.normalizeDimen(6)
     }
   });
 

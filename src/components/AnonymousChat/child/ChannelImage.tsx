@@ -21,17 +21,20 @@ const ChannelImage = ({
 }) => {
   const styles = StyleSheet.create({
     image: {
+      position: 'relative',
       width: dimen.normalizeDimen(48),
       height: dimen.normalizeDimen(48),
+      marginTop: dimen.normalizeDimen(12),
+      marginBottom: dimen.normalizeDimen(6),
       borderRadius: dimen.normalizeDimen(24)
     },
     postNotificationImage: {
+      position: 'absolute',
+      top: dimen.normalizeDimen(30 + 12),
+      right: 0,
       width: dimen.normalizeDimen(24),
       height: dimen.normalizeDimen(24),
-      borderRadius: 16,
-      position: 'absolute',
-      top: dimen.normalizeDimen(30),
-      right: 0,
+      borderRadius: dimen.normalizeDimen(12),
       borderWidth: 2,
       borderColor: colors.white,
       display: 'flex',
