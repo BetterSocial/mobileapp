@@ -30,8 +30,7 @@ import {Context} from '../../context';
 import {isContainUrl} from '../../utils/Utils';
 import ModalAction from '../GroupInfo/elements/ModalAction';
 import ModalActionAnonymous from '../GroupInfo/elements/ModalActionAnonymous';
-
-import useGroupInfo from '../GroupInfo/hooks/useGroupInfo';
+import BlockComponent from '../../components/BlockComponent';
 
 export const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#fff', paddingBottom: 40},
@@ -181,14 +180,14 @@ const SampleChatInfoScreen = () => {
     handlePressPopup,
     handleCloseSelectUser,
     openModal,
-    isAnonymousModalOpen
+    isAnonymousModalOpen,
+    blockModalRef
   } = useChatInfoScreenHook();
   const [profile] = React.useContext(Context).profile;
   const [isLoadingMembers] = React.useState<boolean>(false);
   const {signedProfileId} = useProfileHook();
   const {params}: any = useRoute();
   const ANONYMOUS_USER = 'AnonymousUser';
-  console.log({channelInfo, selectedUser}, 'nana');
   const showImageProfile = () => {
     return (
       <Image
@@ -198,12 +197,15 @@ const SampleChatInfoScreen = () => {
       />
     );
   };
-
+  console.log({channelInfo}, 'sultani');
   const {anon_user_info_color_code, anon_user_info_emoji_code, anon_user_info_emoji_name} =
     channelInfo?.rawJson?.channel || {};
 
   const renderImageComponent = (item) => {
-    if (!isContainUrl(item?.user?.image) || item?.user?.name === ANONYMOUS_USER) {
+    if (
+      (item?.user?.image && !isContainUrl(item?.user?.image)) ||
+      item?.user?.name === ANONYMOUS_USER
+    ) {
       return (
         <View style={styles.mr7}>
           <AnonymousIcon
@@ -257,7 +259,7 @@ const SampleChatInfoScreen = () => {
                         key={index}
                         item={item}
                         onPress={() => onContactPressed(item, params.from)}
-                        fullname={item?.user?.name}
+                        fullname={item?.user?.username || item?.user?.name}
                         photo={item?.user?.profilePicture}
                         showArrow={item?.user_id !== profile?.myProfile?.user_id}
                         userId={signedProfileId}
@@ -289,6 +291,7 @@ const SampleChatInfoScreen = () => {
         selectedUser={selectedUser}
         onPress={handlePressPopup}
       />
+      <BlockComponent ref={blockModalRef} screen="group_info" />
     </SafeAreaView>
   );
 };
