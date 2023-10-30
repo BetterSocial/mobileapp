@@ -286,13 +286,13 @@ const GroupInfo = () => {
             onPress={alertRemoveUser}
             isGroup={channelState?.channel?.data?.type === 'group'}
           />
-          {/* <ModalActionAnonymous
+          <ModalActionAnonymous
             name={selectedUser?.user?.anonymousUsername}
             isOpen={isAnonymousModalOpen}
             onCloseModal={handleCloseSelectUser}
             selectedUser={selectedUser}
             onPress={alertRemoveUser}
-          /> */}
+          />
 
           <Loading visible={isFetchingAllowAnonDM} />
 

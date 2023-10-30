@@ -22,7 +22,8 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
     handleCloseSelectUser,
     alertRemoveUser,
     isAnonymousModalOpen,
-    selectedUser
+    selectedUser,
+    blockModalRef
   } = useGroupInfo();
   const {localDb, channelList} = useLocalDatabaseHook();
   const {selectedChannel, goBack} = useChatUtilsHook();
@@ -31,7 +32,6 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   const [showPopupBlock, setShowPopupBlock] = React.useState(false);
   const [isAnonymous, setIsAnonymous] = React.useState(false);
   const [channelInfo, setChannelInfo] = React.useState(null);
-  console.log({isAnonymousModalOpen, openModal}, 'isak2');
   const initChatInfoData = async () => {
     if (!localDb) return;
     const myId = await getUserId();
@@ -42,13 +42,11 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
       myId,
       myAnonymousId
     );
-    console.log(data, 'nanak');
     setChannelInfo(data);
   };
 
   const onContactPressed = (item: ChannelListMemberSchema) => {
     if (params.from === SIGNED) {
-      console.log({item}, 'ninak');
       return handlePressContact(item);
     }
     return navigation.push('OtherProfile', {
@@ -89,7 +87,8 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
     handlePressPopup,
     openModal,
     handleCloseSelectUser,
-    isAnonymousModalOpen
+    isAnonymousModalOpen,
+    blockModalRef
   };
 }
 

@@ -13,6 +13,7 @@ interface UseAnonymousChatInfoScreenHook {
   handleCloseSelectUser: () => void;
   openModal: boolean;
   isAnonymousModalOpen: boolean;
+  blockModalRef: () => void;
 }
 
 export default UseAnonymousChatInfoScreenHook;

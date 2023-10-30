@@ -99,9 +99,7 @@ const useGroupInfo = () => {
       const sendData = {
         user_id: selectedUser.user_id
       };
-      console.log({sendData}, 'nuki');
       const processGetBlock = await checkUserBlock(sendData);
-      console.log({processGetBlock}, 'sukat');
       if (!processGetBlock.data.data.blocked && !processGetBlock.data.data.blocker) {
         return openChatMessage();
       }
@@ -327,7 +325,6 @@ const useGroupInfo = () => {
           }
         }
       };
-
       blockModalRef?.current?.openBlockComponent(blockComponentValue);
     } catch (e) {
       SimpleToast.show('failed to block anonymous user');

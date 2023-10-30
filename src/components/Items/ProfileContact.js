@@ -5,6 +5,7 @@ import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import MemoIc_Checklist from '../../assets/icons/Ic_Checklist';
 import {COLORS} from '../../utils/theme';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
+import {isContainUrl} from '../../utils/Utils';
 
 const ProfileContact = ({
   photo,
