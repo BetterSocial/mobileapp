@@ -16,9 +16,10 @@ import {
 } from 'react-native';
 
 import FastImage from 'react-native-fast-image';
+import {useRoute} from '@react-navigation/core';
 import AnonymousChatInfoHeader from '../../components/Header/AnonymousChatInfoHeader';
 import AnonymousIcon from '../ChannelListScreen/elements/components/AnonymousIcon';
-import useAnonymousChatInfoScreenHook from '../../hooks/screen/useAnonymousChatInfoHook';
+import useChatInfoScreenHook from '../../hooks/screen/useChatInfoHook';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
@@ -27,6 +28,10 @@ import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {trimString} from '../../utils/string/TrimString';
 import {Context} from '../../context';
 import {isContainUrl} from '../../utils/Utils';
+import ModalAction from '../GroupInfo/elements/ModalAction';
+import ModalActionAnonymous from '../GroupInfo/elements/ModalActionAnonymous';
+
+import useGroupInfo from '../GroupInfo/hooks/useGroupInfo';
 
 export const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#fff', paddingBottom: 40},
@@ -168,12 +173,23 @@ export const styles = StyleSheet.create({
 });
 
 const SampleChatInfoScreen = () => {
-  const {channelInfo, goBack, onContactPressed} = useAnonymousChatInfoScreenHook();
+  const {
+    channelInfo,
+    goBack,
+    onContactPressed,
+    selectedUser,
+    handlePressPopup,
+    handleCloseSelectUser,
+    openModal,
+    isAnonymousModalOpen
+  } = useChatInfoScreenHook();
   const [profile] = React.useContext(Context).profile;
   const [isLoadingMembers] = React.useState<boolean>(false);
   // TODO: Change this into useUserAuthHook
   const {signedProfileId} = useProfileHook();
+  const {params}: any = useRoute();
   const ANONYMOUS_USER = 'AnonymousUser';
+  console.log({channelInfo, selectedUser}, 'nana');
   const showImageProfile = () => {
     return (
       <Image
@@ -241,12 +257,13 @@ const SampleChatInfoScreen = () => {
                       <ProfileContact
                         key={index}
                         item={item}
-                        onPress={() => onContactPressed(item)}
+                        onPress={() => onContactPressed(item, params.from)}
                         fullname={item?.user?.name}
                         photo={item?.user?.profilePicture}
                         showArrow={item?.user_id !== profile?.myProfile?.user_id}
                         userId={signedProfileId}
                         ImageComponent={renderImageComponent(item)}
+                        from={params?.from}
                       />
                     </View>
                   )}
@@ -260,6 +277,19 @@ const SampleChatInfoScreen = () => {
           </View>
         </>
       )}
+      <ModalAction
+        onCloseModal={handleCloseSelectUser}
+        selectedUser={selectedUser}
+        isOpen={openModal}
+        onPress={handlePressPopup}
+      />
+      <ModalActionAnonymous
+        name={selectedUser?.user?.name}
+        isOpen={isAnonymousModalOpen}
+        onCloseModal={handleCloseSelectUser}
+        selectedUser={selectedUser}
+        onPress={handlePressPopup}
+      />
     </SafeAreaView>
   );
 };

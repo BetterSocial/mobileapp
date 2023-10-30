@@ -28,7 +28,7 @@ const createChannel = async (channelType, members, channelName) => {
   }
 };
 
-const followClient = async (members, data, text, textOwnUser) => {
+const followClient = async (members, data, text) => {
   try {
     const token = TokenStorage.get(ITokenEnum.token);
     const id = await getUserId();
@@ -42,7 +42,6 @@ const followClient = async (members, data, text, textOwnUser) => {
       watch: true,
       state: true
     });
-    console.log({channel}, 'kalio');
     const messageClient = chatClient.channel('messaging', channel[0].id);
     messageClient.sendMessage(
       {
@@ -52,20 +51,6 @@ const followClient = async (members, data, text, textOwnUser) => {
       },
       {skip_push: true}
     );
-
-    // messageClient.update(
-    //   {
-    //     name: `${data.username_followed},${data.username_follower}`
-    //   },
-    //   {
-    //     text,
-    //     system_user: data.user_id_follower,
-    //     is_system_message: true,
-    //     textOwnUser
-    //   },
-    //   {skip_push: true}
-    // );
-    // console.log({messageClient}, 'silat');
     return channel;
   } catch (error) {
     throw error;
