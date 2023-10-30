@@ -4,11 +4,12 @@ import {atom, useRecoilState} from 'recoil';
 import {useNavigation} from '@react-navigation/native';
 
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
+import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
 import UseChatUtilsHook from '../../../../types/hooks/screens/useChatUtilsHook.types';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
+import {ANON_PM} from '../constant';
 import {ChannelList} from '../../../../types/database/schema/ChannelList.types';
 import {PostNotificationChannelList} from '../../../../types/database/schema/PostNotificationChannelList.types';
-import {ANON_PM, SIGNED} from '../constant';
 
 const chatAtom = atom({
   key: 'chatAtom',
@@ -32,8 +33,9 @@ function useChatUtilsHook(): UseChatUtilsHook {
         console.log('setChannelAsRead error api', e?.response?.data);
       });
     } else {
-      //! TODO:
-      //! POST TO SIGNED CHAT API & MARK AS READ
+      SignedMessageRepo.setChannelAsRead(channel?.id).catch((e) => {
+        console.log('setSignedChannelAsRead error api', e?.response?.data);
+      });
     }
 
     refresh('channelList');
