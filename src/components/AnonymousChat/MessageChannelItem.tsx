@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-use-before-define
 import * as React from 'react';
 
 import BaseChannelItem from './BaseChannelItem';
@@ -8,10 +9,11 @@ import {calculateTime} from '../../utils/time';
 
 const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement = ({
   item,
-  onChannelPressed
+  onChannelPressed,
+  handleFollow
 }) => {
   const determineChatType = (data: ChannelList) => {
-    const isAnonymous = Boolean(item?.rawJson?.anon_user_info_emoji_code);
+    const isAnonymous = Boolean(data?.rawJson?.anon_user_info_emoji_code);
     if (!isAnonymous) return BaseChannelItemTypeProps.SIGNED_PM;
     return BaseChannelItemTypeProps.ANON_PM;
   };
@@ -29,6 +31,8 @@ const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement
       onPress={onChannelPressed}
       unreadCount={item?.unreadCount}
       isMe={item?.user?.isMe}
+      isSystemMessage={item?.rawJson?.firstMessage?.type === 'system'}
+      handleFollow={handleFollow}
     />
   );
 };
