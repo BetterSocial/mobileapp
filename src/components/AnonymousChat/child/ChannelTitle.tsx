@@ -3,7 +3,6 @@ import {StyleSheet, Text, View} from 'react-native';
 
 import ChannelFollowButton from './ChannelFollowButton';
 import baseStyles from '../BaseChannelItemStyles';
-import dimen from '../../../utils/dimen';
 import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
 import {colors} from '../../../utils/colors';
 import {fonts, normalize} from '../../../utils/fonts';
