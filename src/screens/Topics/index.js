@@ -11,6 +11,7 @@ import {
   View
 } from 'react-native';
 import {useNavigation} from '@react-navigation/core';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import CustomPressable from '../../components/CustomPressable';
 import ListTopic from './ListTopics';
@@ -38,6 +39,7 @@ const Topics = () => {
   const [, dispatch] = React.useContext(Context).topics;
   const [myTopic, setMyTopic] = React.useState({});
   const [isPreload, setIspreload] = React.useState(true);
+  const {bottom} = useSafeAreaInsets();
 
   const {isFetchingTopic, isTopicFetchError, getTopicsData, topicCollection} = useSignin();
   const getCacheTopic = async () => {
@@ -120,7 +122,7 @@ const Topics = () => {
           </View>
 
           {topics?.length > 0 && (
-            <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollViewStyle}>
+            <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollViewStyle(bottom)}>
               {topics
                 ? topics.map((topic, index) => (
                     <View key={index} style={styles.containerTopic}>
@@ -187,7 +189,9 @@ const Topics = () => {
   );
 };
 const styles = StyleSheet.create({
-  scrollViewStyle: {marginBottom: 100},
+  scrollViewStyle: (bottom) => ({
+    marginBottom: 100 - bottom
+  }),
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
