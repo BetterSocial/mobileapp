@@ -5,12 +5,11 @@ import {v4 as uuid} from 'uuid';
 
 import ChannelList from '../../../database/schema/ChannelListSchema';
 import ChatSchema from '../../../database/schema/ChatSchema';
-import api from '../../../service/config';
 import following from '../../../context/actions/following';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import {ChannelList as ChannelListData} from '../../../../types/database/schema/ChannelList.types';
 import {Context} from '../../../context';
-import {getFollowing, setUnFollow} from '../../../service/profile';
+import {followUser, getFollowing, setUnFollow} from '../../../service/profile';
 import {sendSystemMessage} from '../../../service/chat';
 
 interface FollowUserData {
@@ -33,9 +32,8 @@ const useFollowUser = () => {
 
   const updateFollowingData = async () => {
     try {
-      await getFollowing().then((response) => {
-        following.setFollowingUsers(response.data, followingDispatch);
-      });
+      const response = await getFollowing();
+      following.setFollowingUsers(response.data, followingDispatch);
     } catch (e) {
       if (__DEV__) {
         console.log('error: ', e);
@@ -60,41 +58,37 @@ const useFollowUser = () => {
       textOwnUser
     );
 
-    return new Promise((resolve, reject) => {
-      api
-        .post('/profiles/follow-user-v3', data)
-        .then(async (res) => {
-          try {
-            const randomId = uuid();
-            const chatSchema = await ChatSchema.generateSendingChat(
-              randomId,
-              myProfile?.user_id,
-              channelId,
-              textOwnUser,
-              localDb,
-              'system',
-              'sent'
-            );
+    try {
+      await followUser(data);
+    } catch (error) {
+      console.log('error follow user:', error);
+    }
 
-            const selectedChannel = (await ChannelList.getById(localDb, channelId)) as any;
-            selectedChannel.description = textOwnUser;
-            selectedChannel.createdAt = new Date().toISOString();
-            selectedChannel.lastUpdatedAt = new Date().toISOString();
-            const channelListSchema = ChannelList.fromDatabaseObject(selectedChannel);
+    try {
+      const randomId = uuid();
+      const chatSchema = await ChatSchema.generateSendingChat(
+        randomId,
+        myProfile?.user_id,
+        channelId,
+        textOwnUser,
+        localDb,
+        'system',
+        'sent'
+      );
 
-            await chatSchema.save(localDb);
-            await channelListSchema.save(localDb);
-            refresh('chat');
-            refresh('channelList');
-          } catch (e) {
-            console.log(e);
-          }
-          resolve(res.data);
-        })
-        .catch((err) => {
-          reject(err);
-        });
-    });
+      const selectedChannel = (await ChannelList.getById(localDb, channelId)) as any;
+      selectedChannel.description = textOwnUser;
+      selectedChannel.createdAt = new Date().toISOString();
+      selectedChannel.lastUpdatedAt = new Date().toISOString();
+      const channelListSchema = ChannelList.fromDatabaseObject(selectedChannel);
+
+      await chatSchema.save(localDb);
+      await channelListSchema.save(localDb);
+      refresh('chat');
+      refresh('channelList');
+    } catch (error) {
+      console.log('error saving data:', error);
+    }
   };
 
   const handleFollow = async (channel: ChannelListData) => {

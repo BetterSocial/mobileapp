@@ -101,6 +101,18 @@ export const setUnFollow = async (data) =>
       });
   });
 
+export const followUser = async (data) =>
+  new Promise((resolve, reject) => {
+    api
+      .post('/profiles/follow-user-v3', data)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+
 export const setFollow = async (data) => {
   const textTargetUser = `${data.username_follower} started following you. Send them a message now`;
   const textOwnUser = `You started following ${data.username_followed}. Send them a message now.`;
