@@ -3,6 +3,7 @@ import * as React from 'react';
 import {FlatList} from 'react-native';
 
 import CommunityChannelItem from '../../components/ChatList/CommunityChannelItem';
+import GroupChatChannelItem from '../../components/ChatList/GroupChatChannelItem';
 import MessageChannelItem from '../../components/AnonymousChat/MessageChannelItem';
 import PostNotificationChannelItem from '../../components/AnonymousChat/PostNotificationChannelItem';
 import useFollowUser from './hooks/useFollowUser';
@@ -40,7 +41,14 @@ const ChannelListScreen = () => {
         }
 
         if (item?.channelType === 'GROUP') {
-          // group item
+          return (
+            <GroupChatChannelItem
+              channel={item}
+              onChannelPressed={() => {
+                console.log('go to group chat screen');
+              }}
+            />
+          );
         }
 
         if (item?.channelType === 'TOPIC') {
