@@ -14,45 +14,48 @@ const ProfileContact = ({
   showArrow,
   userId,
   item,
-  ImageComponent = null
-}) => (
-  <Pressable
-    onPress={onPress}
-    android_ripple={{
-      color: COLORS.gray1,
-      borderless: false,
-      borderRadius: 10
-    }}
-    disabled={!showArrow}
-    style={styles.pressable}>
-    <View style={styles.container}>
-      <View style={styles.profile}>
-        {ImageComponent || (
-          <Image
-            testID="image"
-            style={styles.image}
-            source={{uri: photo !== '' ? photo : undefined}}
-          />
-        )}
-        <Text style={styles.fullname}>{fullname}</Text>
-      </View>
-      {showArrow && (
-        <>
-          {userId !== item.user_id && (
-            <View>
-              <Mi name="arrow-forward-ios" size={18} />
-            </View>
+  ImageComponent = null,
+  disabled = false
+}) => {
+  return (
+    <Pressable
+      onPress={onPress}
+      android_ripple={{
+        color: COLORS.gray1,
+        borderless: false,
+        borderRadius: 10
+      }}
+      disabled={!showArrow || disabled}
+      style={styles.pressable}>
+      <View style={styles.container}>
+        <View style={styles.profile}>
+          {ImageComponent || (
+            <Image
+              testID="image"
+              style={styles.image}
+              source={{uri: photo !== '' ? photo : undefined}}
+            />
           )}
-        </>
-      )}
-      {select && (
-        <View testID="selected">
-          <MemoIc_Checklist />
+          <Text style={styles.fullname}>{fullname}</Text>
         </View>
-      )}
-    </View>
-  </Pressable>
-);
+        {showArrow && (
+          <>
+            {userId !== item.user_id && (
+              <View>
+                <Mi name="arrow-forward-ios" size={18} />
+              </View>
+            )}
+          </>
+        )}
+        {select && (
+          <View testID="selected">
+            <MemoIc_Checklist />
+          </View>
+        )}
+      </View>
+    </Pressable>
+  );
+};
 
 export default ProfileContact;
 

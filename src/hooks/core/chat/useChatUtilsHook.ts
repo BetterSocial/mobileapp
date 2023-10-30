@@ -8,7 +8,7 @@ import UseChatUtilsHook from '../../../../types/hooks/screens/useChatUtilsHook.t
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import {ChannelList} from '../../../../types/database/schema/ChannelList.types';
 import {PostNotificationChannelList} from '../../../../types/database/schema/PostNotificationChannelList.types';
-import {ANON_PM} from '../constant';
+import {ANON_PM, SIGNED} from '../constant';
 
 const chatAtom = atom({
   key: 'chatAtom',
@@ -84,8 +84,8 @@ function useChatUtilsHook(): UseChatUtilsHook {
     });
   };
 
-  const goToChatInfoScreen = () => {
-    navigation.navigate('SampleChatInfoScreen');
+  const goToChatInfoScreen = (params) => {
+    navigation.navigate('SampleChatInfoScreen', params);
   };
 
   const goBack = () => {

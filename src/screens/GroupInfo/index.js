@@ -63,7 +63,7 @@ const GroupInfo = () => {
     blockModalRef,
     isFetchingAllowAnonDM
   } = useGroupInfo();
-
+  console.log({openModal}, 'open modal');
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       if (route?.params?.from === 'AddParticipant') {
@@ -286,13 +286,13 @@ const GroupInfo = () => {
             onPress={alertRemoveUser}
             isGroup={channelState?.channel?.data?.type === 'group'}
           />
-          <ModalActionAnonymous
+          {/* <ModalActionAnonymous
             name={selectedUser?.user?.anonymousUsername}
             isOpen={isAnonymousModalOpen}
             onCloseModal={handleCloseSelectUser}
             selectedUser={selectedUser}
             onPress={alertRemoveUser}
-          />
+          /> */}
 
           <Loading visible={isFetchingAllowAnonDM} />
 

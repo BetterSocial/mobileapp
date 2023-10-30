@@ -10,24 +10,37 @@ import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
 import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
 import {styles} from './SampleChatScreen';
 import {SIGNED} from '../../hooks/core/constant';
+import {setChannel} from '../../context/actions/setChannel';
 import {Context} from '../../context';
 
 const SignedChatScreen = () => {
   const {selectedChannel, chats, goBackFromChatScreen, goToChatInfoScreen, sendChat} =
     useChatScreenHook(SIGNED);
+  const [, dispatchChannel] = React.useContext(Context).channel;
   const renderChatItem = React.useCallback(({item, index}) => {
     return <BaseChatItem type="SIGNED" item={item} index={index} />;
   }, []);
   console.log({chats, selectedChannel}, 'saya');
+
+  const goToChatInfoPage = () => {
+    goToChatInfoScreen({from: SIGNED});
+  };
+
+  React.useEffect(() => {
+    if (selectedChannel) {
+      setChannel(selectedChannel, dispatchChannel);
+    }
+  }, [selectedChannel]);
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.keyboardAvoidingView}
       keyboardVerticalOffset={-500}>
       <ChatDetailHeader
-        onAvatarPress={goToChatInfoScreen}
+        onAvatarPress={goToChatInfoPage}
         onBackPress={goBackFromChatScreen}
-        onThreeDotPress={goToChatInfoScreen}
+        onThreeDotPress={goToChatInfoPage}
         avatar={selectedChannel?.channelPicture}
         user={
           selectedChannel?.rawJson?.channel?.anon_user_info_emoji_code
