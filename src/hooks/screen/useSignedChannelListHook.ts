@@ -30,8 +30,9 @@ function useSignedChannelListScreenHook(): UseSignedChannelListScreenHook {
   }, [localDb, channelList]);
 
   const goToCommunityScreen = (channel) => {
+    const topicName = channel?.name?.replace(/^#/, '');
     const navigationParam = {
-      id: convertTopicNameToTopicPageScreenParam(channel.name)
+      id: convertTopicNameToTopicPageScreenParam(topicName)
     };
 
     navigation.navigate('TopicPageScreen', navigationParam);
