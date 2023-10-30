@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {v4 as uuid} from 'uuid';
@@ -83,7 +84,16 @@ const useCoreChatSystemHook = () => {
       } else {
         websocketData.targetName = chatName;
       }
-      websocketData.targetImage = websocketData.message?.user?.image;
+
+      let selectedChannel;
+      try {
+        selectedChannel = (await ChannelList.getById(localDb, websocketData?.channel_id)) as any;
+      } catch (error) {
+        console.log('error on getting selectedChannel');
+      }
+
+      websocketData.targetImage =
+        selectedChannel?.channel_picture ?? websocketData.message?.user?.image;
       websocketData.anon_user_info_color_name = websocketData?.channel?.anon_user_info_color_name;
       websocketData.anon_user_info_emoji_code = websocketData?.channel?.anon_user_info_emoji_code;
       websocketData.anon_user_info_color_code = websocketData?.channel?.anon_user_info_color_code;
