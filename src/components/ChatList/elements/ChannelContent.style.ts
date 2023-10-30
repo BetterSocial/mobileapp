@@ -1,18 +1,19 @@
 import {StyleSheet} from 'react-native';
 
 import {colors} from '../../../utils/colors';
-import {fonts} from '../../../utils/fonts';
+import {fonts, normalize} from '../../../utils/fonts';
 
 export const channelContentStyles = StyleSheet.create({
   title: {
     fontFamily: fonts.inter[700],
-    fontSize: 14.05,
+    fontSize: normalize(14),
     lineHeight: 22,
-    flex: 1
+    flex: 1,
+    paddingBottom: 2
   },
   description: {
     fontFamily: fonts.inter[400],
-    fontSize: 14.05,
+    fontSize: normalize(14),
     lineHeight: 22,
     alignSelf: 'center',
     flex: 1,
@@ -20,7 +21,7 @@ export const channelContentStyles = StyleSheet.create({
   },
   time: {
     fontFamily: fonts.poppins[400],
-    fontSize: 14,
+    fontSize: normalize(14),
     lineHeight: 22,
     marginLeft: 20,
     color: colors.gray,
@@ -36,7 +37,7 @@ export const channelContentStyles = StyleSheet.create({
   },
   badge: {
     fontFamily: fonts.inter[400],
-    fontSize: 12,
+    fontSize: normalize(12),
     lineHeight: 14.52,
     color: colors.white
   }
