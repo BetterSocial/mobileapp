@@ -164,7 +164,6 @@ const ContactScreen = ({navigation}) => {
           }
         );
         await channelChat.addMembers(memberWithRoles);
-
         setChannel(channelChat, dispatchChannel);
       }
 
