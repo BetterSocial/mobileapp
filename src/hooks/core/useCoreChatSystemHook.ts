@@ -438,7 +438,6 @@ const useCoreChatSystemHook = () => {
     const {type} = lastSignedMessage;
     if (type === 'health.check') return;
     if (type === 'notification.message_new') {
-      console.log({lastSignedMessage}, 'nanak');
       saveChannelListData(lastSignedMessage, 'PM').catch((e) => console.log(e));
     }
   }, [lastSignedMessage]);
