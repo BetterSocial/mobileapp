@@ -57,6 +57,9 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
     }
     return null;
   };
+  if (item?.type === 'system' || item?.rawJson?.isSystem) {
+    return <BaseSystemChat item={item} index={index} />;
+  }
 
   if (item?.isMe)
     return (
@@ -72,10 +75,6 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
         status={item?.status as ChatStatus}
       />
     );
-
-  if (item?.type === 'system' || item?.rawJson?.message?.isSystem) {
-    return <BaseSystemChat item={item} index={index} />;
-  }
 
   return (
     <ChatItemTargetText
