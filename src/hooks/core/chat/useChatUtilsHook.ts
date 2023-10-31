@@ -9,6 +9,7 @@ import UseChatUtilsHook from '../../../../types/hooks/screens/useChatUtilsHook.t
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import {ANON_PM} from '../constant';
 import {ChannelList} from '../../../../types/database/schema/ChannelList.types';
+import {ChannelTypeEnum} from '../../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 import {PostNotificationChannelList} from '../../../../types/database/schema/PostNotificationChannelList.types';
 
 const chatAtom = atom({
@@ -24,18 +25,30 @@ function useChatUtilsHook(): UseChatUtilsHook {
   const navigation = useNavigation();
   const {selectedChannel} = chat;
 
-  const setChannelAsRead = (channel: ChannelList) => {
+  const setChannelAsRead = async (channel: ChannelList) => {
     if (!localDb) return;
     channel.setRead(localDb).catch((e) => console.log('setChannelAsRead error', e));
 
     if (channel?.channelType?.includes('ANON')) {
-      AnonymousMessageRepo.setChannelAsRead(channel?.id).catch((e) => {
-        console.log('setChannelAsRead error api', e?.response?.data);
-      });
+      try {
+        await AnonymousMessageRepo.setChannelAsRead(channel?.id);
+      } catch (error) {
+        console.log('setAnonChannelAsRead error api', error);
+      }
     } else {
-      SignedMessageRepo.setChannelAsRead(channel?.id).catch((e) => {
-        console.log('setSignedChannelAsRead error api', e?.response?.data);
-      });
+      const channelType = {
+        messaging: ChannelTypeEnum.Messaging,
+        group: ChannelTypeEnum.Group
+      };
+
+      try {
+        await SignedMessageRepo.setChannelAsRead(
+          channel?.id,
+          channelType[channel?.rawJson?.channel?.type]
+        );
+      } catch (error) {
+        console.log('setSignedChannelAsRead error api', error);
+      }
     }
 
     refresh('channelList');
