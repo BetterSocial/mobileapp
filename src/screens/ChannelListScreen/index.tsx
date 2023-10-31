@@ -45,12 +45,7 @@ const ChannelListScreen = () => {
 
         if (item?.channelType === 'GROUP') {
           return (
-            <GroupChatChannelItem
-              channel={item}
-              onChannelPressed={() => {
-                console.log('go to group chat screen');
-              }}
-            />
+            <GroupChatChannelItem channel={item} onChannelPressed={() => goToChatScreen(item)} />
           );
         }
 
