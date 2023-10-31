@@ -5,6 +5,7 @@ import ChannelListMemberSchema from './ChannelListMemberSchema';
 import UserSchema from './UserSchema';
 import {AnonymousChannelData} from '../../../types/repo/AnonymousMessageRepo/AnonymousChannelsData';
 import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
+import {ChannelType} from '../../../types/repo/ChannelData';
 import {MessageAnonymouslyData} from '../../../types/repo/AnonymousMessageRepo/MessageAnonymouslyData';
 import {ModifyAnonymousChatData} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 import {SignedPostNotification} from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
@@ -317,7 +318,7 @@ class ChannelList implements BaseDbSchema {
     });
   }
 
-  static fromChannelAPI(data: AnonymousChannelData, channelType: 'PM' | 'ANON_PM'): ChannelList {
+  static fromChannelAPI(data: AnonymousChannelData, channelType: ChannelType): ChannelList {
     return new ChannelList({
       id: data?.id,
       channelPicture: data?.targetImage,
