@@ -120,6 +120,10 @@ const TopicPageScreen = (props) => {
         setIsInitialLoading(false);
       }
     } catch (error) {
+      SimpleToast.show(
+        'There has been a problem. Please make sure you’re online. ',
+        SimpleToast.SHORT
+      );
       if (__DEV__) {
         console.log(error);
       }
@@ -352,7 +356,7 @@ const TopicPageScreen = (props) => {
       const dy = y - lastDragY;
       if (y <= 30) {
         showHeaderAnimation();
-      } else if (dy - 20 > 0) {
+      } else if (dy - 20 > dimen.size.TOPIC_CURRENT_ITEM_HEIGHT / 2) {
         interactionManagerAnimatedRef.current = InteractionManager.runAfterInteractions(() => {
           Animated.timing(animatedHeight, {
             toValue: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2,
@@ -405,6 +409,7 @@ const TopicPageScreen = (props) => {
     <SafeAreaProvider forceInset={{top: 'always'}} style={styles.parentContainer}>
       <StatusBar barStyle="dark-content" translucent={false} />
       <NavHeader
+        domain={topicName}
         animatedHeight={animatedHeight}
         onShareCommunity={onShareCommunity}
         isHeaderHide={isHeaderHide}
