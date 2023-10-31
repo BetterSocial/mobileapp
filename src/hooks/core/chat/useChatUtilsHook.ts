@@ -38,7 +38,8 @@ function useChatUtilsHook(): UseChatUtilsHook {
     } else {
       const channelType = {
         messaging: ChannelTypeEnum.Messaging,
-        group: ChannelTypeEnum.Group
+        group: ChannelTypeEnum.Group,
+        topics: ChannelTypeEnum.Community
       };
 
       try {
