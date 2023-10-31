@@ -28,13 +28,14 @@ const createChannel = async (channelType, members, channelName) => {
   }
 };
 
-const followClient = async (members, data, text) => {
+const followClient = async (members, data, text, textOwnMessage) => {
   try {
     const token = TokenStorage.get(ITokenEnum.token);
     const id = await getUserId();
     const user = {
       id
     };
+    console.log({user}, 'nehi');
     const sort = [{last_message_at: -1}];
     const filter = {type: 'messaging', members: {$eq: members}};
     await chatClient.connectUser(user, token);
@@ -42,17 +43,25 @@ const followClient = async (members, data, text) => {
       watch: true,
       state: true
     });
+    const message = {
+      user_id: data.user_id_follower,
+      text,
+      isSystem: true,
+      silent: true
+    };
+
+    const name = [data?.username_followed, data?.username_follower].join(',');
+    console.log({channel, data, name}, 'nehi2');
+
+    if (channel?.length <= 0) {
+      const newChannel = await createChannel('messaging', members, name);
+      return newChannel.sendMessage(message, {skip_push: true});
+    }
     const messageClient = chatClient.channel('messaging', channel[0].id);
-    messageClient.sendMessage(
-      {
-        user_id: data.user_id_follower,
-        text,
-        isSystem: true
-      },
-      {skip_push: true}
-    );
+    messageClient.sendMessage(message, {skip_push: true});
     return channel;
   } catch (error) {
+    console.log({error}, 'hemat');
     throw error;
   }
 };
