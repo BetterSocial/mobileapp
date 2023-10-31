@@ -14,7 +14,15 @@ import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureE
 import TopicsProfilePictureEmptyState from '../../../assets/icon/TopicsProfilePictureEmptyState';
 
 const DomainList = (props) => {
-  const {item, isHashtag, handleSetFollow, handleSetUnFollow, onPressBody, DefaultImage} = props;
+  const {
+    item,
+    isHashtag,
+    handleSetFollow,
+    handleSetUnFollow,
+    onPressBody,
+    DefaultImage,
+    isCommunity
+  } = props;
 
   return (
     <View style={styles.container}>
@@ -60,7 +68,7 @@ const DomainList = (props) => {
         <TouchableNativeFeedback onPress={handleSetFollow}>
           <View style={styles.followContainer}>
             <View style={styles.buttonFollow}>
-              <Text style={styles.textButtonFollow}>Follow</Text>
+              <Text style={styles.textButtonFollow}>{isCommunity ? 'Join' : 'Follow'}</Text>
             </View>
           </View>
         </TouchableNativeFeedback>
@@ -68,7 +76,7 @@ const DomainList = (props) => {
         <TouchableNativeFeedback onPress={handleSetUnFollow}>
           <View style={styles.followContainer}>
             <View style={styles.buttonFollowing}>
-              <Text style={styles.textButtonFollowing}>Following</Text>
+              <Text style={styles.textButtonFollowing}>{isCommunity ? 'Joined' : 'Following'}</Text>
             </View>
           </View>
         </TouchableNativeFeedback>

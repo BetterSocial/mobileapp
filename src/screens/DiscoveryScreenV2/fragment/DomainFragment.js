@@ -83,14 +83,18 @@ const DomainFragment = ({
 
   const __handleFollow = async (from, willFollow, item, index) => {
     if (from === FROM_FOLLOWED_DOMAIN_INITIAL) {
+      console.log('from 0');
       const newFollowedDomains = [...domains];
       newFollowedDomains[index].following = !!willFollow;
       newFollowedDomains[index].user_id_follower = myId;
+
+      console.log('newFollowedDomains', newFollowedDomains[index]);
 
       FollowingAction.setFollowingDomain(newFollowedDomains, followingDispatch);
       DiscoveryAction.setDiscoveryInitialDomains(newFollowedDomains, discoveryDispatch);
     }
     if (from === FROM_FOLLOWED_DOMAIN) {
+      console.log('from 1');
       const newFollowedDomains = [...followedDomains];
       newFollowedDomains[index].following = !!willFollow;
       newFollowedDomains[index].user_id_follower = myId;
@@ -99,18 +103,17 @@ const DomainFragment = ({
     }
 
     if (from === FROM_UNFOLLOWED_DOMAIN) {
+      console.log('from 2');
       const newUnfollowedDomains = [...unfollowedDomains];
       newUnfollowedDomains[index].following = !!willFollow;
       newUnfollowedDomains[index].user_id_follower = myId;
 
       setUnfollowedDomains(newUnfollowedDomains);
     }
-
     const data = {
-      domainId: item.domain_page_id,
+      domainId: item.domain_id_followed,
       source: 'discoveryScreen'
     };
-
     if (willFollow) {
       await followDomain(data);
     } else {
@@ -155,13 +158,19 @@ const DomainFragment = ({
   };
 
   const __renderDomainItems = () => {
+    const followingDomains = [];
+    const unfollowingDomains = [];
+
+    domains.forEach((item) => {
+      if (item.user_id_follower) {
+        followingDomains.push(item);
+      } else {
+        unfollowingDomains.push(item);
+      }
+    });
     if (isFirstTimeOpen)
       return [
-        route.name !== 'Followings' && (
-          <DiscoveryTitleSeparator text="Suggested Domains" key="domain-title-separator" />
-        )
-      ].concat(
-        domains.map((item, index) =>
+        followingDomains.map((item, index) =>
           __renderDiscoveryItem(
             FROM_FOLLOWED_DOMAIN_INITIAL,
             'followedDomainDiscovery',
@@ -169,7 +178,22 @@ const DomainFragment = ({
             index
           )
         )
-      );
+      ]
+        .concat([
+          route.name !== 'Followings' && (
+            <DiscoveryTitleSeparator text="Suggested Domains" key="domain-title-separator" />
+          )
+        ])
+        .concat(
+          unfollowingDomains.map((item, index) =>
+            __renderDiscoveryItem(
+              FROM_FOLLOWED_DOMAIN_INITIAL,
+              'followedDomainDiscovery',
+              {...item, user_id_follower: item.user_id_follower},
+              index + followingDomains.length
+            )
+          )
+        );
 
     return (
       <>
