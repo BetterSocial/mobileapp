@@ -58,7 +58,8 @@ const ChannelImage = ({
   const isAnonymousOldPostMaker = Boolean(postMaker?.emoji_code);
 
   const renderChatMainImage = () => {
-    if (isAnonymousPostMaker)
+    const isAnonymousChannel = type === BaseChannelItemTypeProps.ANON_PM;
+    if (!isAnonymousChannel && isAnonymousPostMaker)
       return (
         <ChannelAnonymousImage
           anonPostNotificationUserInfo={{
@@ -69,7 +70,7 @@ const ChannelImage = ({
         />
       );
 
-    if (isAnonymousPostMaker || isAnonymousOldPostMaker)
+    if (!isAnonymousChannel && isAnonymousOldPostMaker)
       return (
         <ChannelAnonymousImage
           anonPostNotificationUserInfo={{
