@@ -43,8 +43,7 @@ TopicDomainHeader.propTypes = {
   handleOnMemberPress: PropTypes.func,
   hideSeeMember: PropTypes.bool,
   isFollow: PropTypes.bool,
-  memberCount: PropTypes.number,
-  topicDetail: PropTypes.object
+  memberCount: PropTypes.number
 };
 
 const styles = StyleSheet.create({
