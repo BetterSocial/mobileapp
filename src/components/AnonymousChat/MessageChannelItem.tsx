@@ -20,10 +20,20 @@ const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement
 
   const type = determineChatType(item);
 
+  const handleMessage = () => {
+    if (item?.rawJson?.message?.isSystem) {
+      if (item?.rawJson?.message?.user?.id === item?.rawJson?.message?.userIdFollower) {
+        return item?.rawJson?.message?.textOwnMessage;
+      }
+      return item?.rawJson?.message?.text;
+    }
+    return item?.description;
+  };
+
   return (
     <BaseChannelItem
       type={type}
-      message={item?.description || ' '}
+      message={handleMessage()}
       name={item?.name}
       picture={item?.channelPicture}
       postMaker={item?.rawJson}

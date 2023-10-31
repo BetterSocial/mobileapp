@@ -26,6 +26,7 @@ import {Search} from './elements';
 import {setChannel} from '../../context/actions/setChannel';
 import {userPopulate} from '../../service/users';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
 
 const {width} = Dimensions.get('screen');
 
@@ -47,7 +48,6 @@ const ContactScreen = ({navigation}) => {
   const [selectedUsers, setSelectedUsers] = React.useState([]);
   const [isSearchMode, setIsSearchMode] = React.useState(false);
   const [isLoadingSearchResult, setIsLoadingSearchResult] = React.useState(false);
-
   const debounced = React.useCallback(
     debounce((changedText) => {
       // handleSearch(changedText)
@@ -144,7 +144,6 @@ const ContactScreen = ({navigation}) => {
         user_id: item,
         channel_role: 'channel_moderator'
       }));
-
       if (findChannels.length > 0) {
         setChannel(findChannels[0], dispatchChannel);
       } else {
@@ -165,10 +164,10 @@ const ContactScreen = ({navigation}) => {
           }
         );
         await channelChat.addMembers(memberWithRoles);
+
         setChannel(channelChat, dispatchChannel);
       }
-      setFollowed([profile.user_id]);
-      setUsernames([profile.username]);
+
       setLoading(false);
       await navigation.replace('ChatDetailPage');
     } catch (error) {

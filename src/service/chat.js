@@ -54,17 +54,16 @@ const followClient = async (members, data, text, textOwnMessage) => {
     };
 
     const name = [data?.username_followed, data?.username_follower].join(',');
-    console.log({channel, data, name, message}, 'nehi2');
 
     if (channel?.length <= 0) {
       const newChannel = await createChannel('messaging', members, name);
       return newChannel.sendMessage(message, {skip_push: true});
     }
     const messageClient = chatClient.channel('messaging', channel[0].id);
-    messageClient.sendMessage(message, {skip_push: true});
+    await messageClient.sendMessage(message, {skip_push: true});
+
     return channel;
   } catch (error) {
-    console.log({error}, 'hemat');
     throw error;
   }
 };
