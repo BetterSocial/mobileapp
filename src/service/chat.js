@@ -47,11 +47,14 @@ const followClient = async (members, data, text, textOwnMessage) => {
       user_id: data.user_id_follower,
       text,
       isSystem: true,
-      silent: true
+      silent: true,
+      textOwnMessage,
+      userIdFollowed: data?.user_id_followed,
+      userIdFollower: data?.user_id_follower
     };
 
     const name = [data?.username_followed, data?.username_follower].join(',');
-    console.log({channel, data, name}, 'nehi2');
+    console.log({channel, data, name, message}, 'nehi2');
 
     if (channel?.length <= 0) {
       const newChannel = await createChannel('messaging', members, name);

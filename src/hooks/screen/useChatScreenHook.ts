@@ -37,6 +37,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     iteration = 0,
     sendingChatSchema: ChatSchema = null
   ) => {
+    console.log(iteration, 'iteration');
     if (iteration > 5) {
       SimpleToast.show("Can't send message, please check your connection");
       return;

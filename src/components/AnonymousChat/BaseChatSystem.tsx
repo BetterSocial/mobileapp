@@ -19,9 +19,15 @@ const styles = StyleSheet.create({
 });
 
 const BaseSystemChat: React.FC<BaseChatItemComponentProps> = ({item, index}) => {
+  const handleText = () => {
+    if (item?.rawJson?.userIdFollower === item?.rawJson?.user?.id) {
+      return item?.rawJson?.textOwnMessage;
+    }
+    return item?.rawJson?.text;
+  };
   return (
     <View style={styles.containerMessage} key={index}>
-      <Text style={styles.textSystem}>{item.message} </Text>
+      <Text style={styles.textSystem}>{handleText()} </Text>
     </View>
   );
 };
