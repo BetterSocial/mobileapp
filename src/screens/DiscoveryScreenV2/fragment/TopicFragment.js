@@ -147,16 +147,37 @@ const TopicFragment = ({
   };
 
   const __renderTopicItems = () => {
+    const followingTopics = [];
+    const unfollowingTopics = [];
+
+    topics.forEach((item) => {
+      if (item.user_id_follower) {
+        followingTopics.push(item);
+      } else {
+        unfollowingTopics.push(item);
+      }
+    });
     if (isFirstTimeOpen) {
       return [
-        route.name !== 'Followings' && (
-          <DiscoveryTitleSeparator key="topic-title-separator" text="Suggested Communities" />
-        )
-      ].concat(
-        topics.map((item, index) =>
+        followingTopics.map((item, index) =>
           __renderDiscoveryItem(FROM_FOLLOWED_TOPIC_INITIAL, 'followedTopicDiscovery', item, index)
         )
-      );
+      ]
+        .concat([
+          route.name !== 'Followings' && (
+            <DiscoveryTitleSeparator key="topic-title-separator" text="Suggested Communities" />
+          )
+        ])
+        .concat(
+          unfollowingTopics.map((item, index) =>
+            __renderDiscoveryItem(
+              FROM_FOLLOWED_TOPIC_INITIAL,
+              'followedTopicDiscovery',
+              item,
+              index + followingTopics.length
+            )
+          )
+        );
     }
 
     return (
