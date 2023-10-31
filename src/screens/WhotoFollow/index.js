@@ -35,6 +35,7 @@ import {registerUser} from '../../service/users';
 import {setImage} from '../../context/actions/users';
 import {setToken} from '../../utils/token';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
+import dimen from '../../utils/dimen';
 
 const {width} = Dimensions.get('screen');
 
@@ -104,7 +105,7 @@ const WhotoFollow = () => {
             switch (type) {
               case VIEW_TYPE_DATA:
                 dim.width = width;
-                dim.height = 64;
+                dim.height = dimen.normalizeDimen(64);
                 break;
 
               case VIEW_TYPE_LABEL_TOPIC:

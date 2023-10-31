@@ -4,6 +4,7 @@ import {Animated, Pressable, StyleSheet, View} from 'react-native';
 import IconAdd from '../../../assets/icon/IconAdd';
 import IconCheck from '../../../assets/icon/IconCheck';
 import UserInfo from './UserInfo';
+import dimen from '../../../utils/dimen';
 
 const ItemUser = ({photo, username, bio, followed, onPress, userid}) => {
   const followIconFadeAnimation = React.useRef(new Animated.Value(0)).current;
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: 64,
+    height: dimen.normalizeDimen(64),
     paddingHorizontal: 20,
     width: '100%',
     flex: 1
