@@ -7,7 +7,8 @@ import {
   StyleProp,
   Text,
   TextStyle,
-  Platform
+  Platform,
+  TouchableOpacityProps
 } from 'react-native';
 import dimen from '../../utils/dimen';
 
@@ -81,6 +82,7 @@ interface ToggleSwitchProps {
   styleLabelRight?: StyleProp<TextStyle>;
   activeTextColor?: string;
   inactiveTextColor?: string;
+  conatinerStyle?: TouchableOpacityProps['style'];
   onValueChange?: (value: boolean) => void;
 }
 
@@ -96,7 +98,8 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   styleLabelLeft,
   styleLabelRight,
   activeTextColor = '#00ADB5',
-  inactiveTextColor = '#2C67BC'
+  inactiveTextColor = '#2C67BC',
+  conatinerStyle
 }) => {
   const positionButton = React.useMemo(() => new Animated.Value(0), []);
 
@@ -146,7 +149,10 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   }
 
   return (
-    <TouchableOpacity style={styles.container} activeOpacity={0.9} onPress={onPress}>
+    <TouchableOpacity
+      style={[styles.container, conatinerStyle]}
+      activeOpacity={0.9}
+      onPress={onPress}>
       <Text style={[styles.labelLeft, styleLabelLeft]}>{labelLeft}</Text>
       <Animated.View
         style={[
