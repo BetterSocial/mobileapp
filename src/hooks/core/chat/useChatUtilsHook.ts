@@ -4,11 +4,13 @@ import {atom, useRecoilState} from 'recoil';
 import {useNavigation} from '@react-navigation/native';
 
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
+import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
 import UseChatUtilsHook from '../../../../types/hooks/screens/useChatUtilsHook.types';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
-import {ChannelList} from '../../../../types/database/schema/ChannelList.types';
-import {PostNotificationChannelList} from '../../../../types/database/schema/PostNotificationChannelList.types';
 import {ANON_PM} from '../constant';
+import {ChannelList} from '../../../../types/database/schema/ChannelList.types';
+import {ChannelTypeEnum} from '../../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
+import {PostNotificationChannelList} from '../../../../types/database/schema/PostNotificationChannelList.types';
 
 const chatAtom = atom({
   key: 'chatAtom',
@@ -23,17 +25,31 @@ function useChatUtilsHook(): UseChatUtilsHook {
   const navigation = useNavigation();
   const {selectedChannel} = chat;
 
-  const setChannelAsRead = (channel: ChannelList) => {
+  const setChannelAsRead = async (channel: ChannelList) => {
     if (!localDb) return;
     channel.setRead(localDb).catch((e) => console.log('setChannelAsRead error', e));
 
     if (channel?.channelType?.includes('ANON')) {
-      AnonymousMessageRepo.setChannelAsRead(channel?.id).catch((e) => {
-        console.log('setChannelAsRead error api', e?.response?.data);
-      });
+      try {
+        await AnonymousMessageRepo.setChannelAsRead(channel?.id);
+      } catch (error) {
+        console.log('setAnonChannelAsRead error api', error);
+      }
     } else {
-      //! TODO:
-      //! POST TO SIGNED CHAT API & MARK AS READ
+      const channelType = {
+        messaging: ChannelTypeEnum.Messaging,
+        group: ChannelTypeEnum.Group,
+        topics: ChannelTypeEnum.Community
+      };
+
+      try {
+        await SignedMessageRepo.setChannelAsRead(
+          channel?.id,
+          channelType[channel?.rawJson?.channel?.type]
+        );
+      } catch (error) {
+        console.log('setSignedChannelAsRead error api', error);
+      }
     }
 
     refresh('channelList');

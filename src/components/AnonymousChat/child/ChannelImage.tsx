@@ -7,6 +7,7 @@ import ChannelAnonymousImage from './ChannelAnonymousImage';
 import ChannelAnonymousSubImage from './ChannelAnonymousSubImage';
 import ChatIcon from '../../../assets/chat-icon.png';
 import FeedIcon from '../../../assets/images/feed-icon.png';
+import dimen from '../../../utils/dimen';
 import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
 import {colors} from '../../../utils/colors';
 
@@ -20,17 +21,20 @@ const ChannelImage = ({
 }) => {
   const styles = StyleSheet.create({
     image: {
-      width: 48,
-      height: 48,
-      borderRadius: 24
+      position: 'relative',
+      width: dimen.normalizeDimen(48),
+      height: dimen.normalizeDimen(48),
+      marginTop: dimen.normalizeDimen(12),
+      marginBottom: dimen.normalizeDimen(12),
+      borderRadius: dimen.normalizeDimen(24)
     },
     postNotificationImage: {
-      width: 24,
-      height: 24,
-      borderRadius: 16,
       position: 'absolute',
-      top: 30,
+      top: dimen.normalizeDimen(30 + 12),
       right: 0,
+      width: dimen.normalizeDimen(24),
+      height: dimen.normalizeDimen(24),
+      borderRadius: dimen.normalizeDimen(12),
       borderWidth: 2,
       borderColor: colors.white,
       display: 'flex',
@@ -44,8 +48,8 @@ const ChannelImage = ({
       backgroundColor: colors.bondi_blue
     },
     postNotificationIcon: {
-      width: 12.5,
-      height: 12.5
+      width: dimen.normalizeDimen(12),
+      height: dimen.normalizeDimen(12)
     }
   });
 
@@ -54,7 +58,8 @@ const ChannelImage = ({
   const isAnonymousOldPostMaker = Boolean(postMaker?.emoji_code);
 
   const renderChatMainImage = () => {
-    if (isAnonymousPostMaker)
+    const isAnonymousChannel = type === BaseChannelItemTypeProps.ANON_PM;
+    if (!isAnonymousChannel && isAnonymousPostMaker)
       return (
         <ChannelAnonymousImage
           anonPostNotificationUserInfo={{
@@ -65,7 +70,7 @@ const ChannelImage = ({
         />
       );
 
-    if (isAnonymousPostMaker || isAnonymousOldPostMaker)
+    if (!isAnonymousChannel && isAnonymousOldPostMaker)
       return (
         <ChannelAnonymousImage
           anonPostNotificationUserInfo={{

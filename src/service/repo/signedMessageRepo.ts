@@ -1,6 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import api from '../config';
 import {ChannelData} from '../../../types/repo/ChannelData';
-import {SignedPostNotification} from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
+import {
+  ChannelTypeEnum,
+  SignedPostNotification
+} from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 
 const baseUrl = {
   checkIsTargetAllowingAnonDM: 'chat/channels/check-allow-anon-dm-status',
@@ -8,7 +12,7 @@ const baseUrl = {
   getAllSignedChannels: '/chat/channels/signed',
   getAllSignedPostNotifications: '/feeds/feed-chat',
   getSingleSignedPostNotifications: (activityId: string) => `/feeds/feed-chat/${activityId}`,
-  setChannelAsRead: (channelId: string) => `/chat/channels/${channelId}/read`
+  setChannelAsRead: '/chat/channels/read'
 };
 
 interface SignedMessageRepoTypes {
@@ -17,7 +21,7 @@ interface SignedMessageRepoTypes {
   getAllSignedChannels: () => Promise<ChannelData[]>;
   getAllSignedPostNotifications: () => Promise<SignedPostNotification[]>;
   getSingleSignedPostNotifications: (activityId: string) => Promise<SignedPostNotification>;
-  setChannelAsRead: (channelId: string) => Promise<boolean>;
+  setChannelAsRead: (channelId: string, channelType: ChannelTypeEnum) => Promise<boolean>;
 }
 
 async function checkIsTargetAllowingAnonDM(targetUserId: string) {
@@ -98,10 +102,10 @@ async function getSingleSignedPostNotifications(
   }
 }
 
-async function setChannelAsRead(channelId: string): Promise<boolean> {
+async function setChannelAsRead(channelId: string, channelType: ChannelTypeEnum): Promise<boolean> {
   try {
-    const data = {channelType: 'messaging'};
-    const response = await api.post(baseUrl.setChannelAsRead(channelId), data);
+    const data = {channelId, channelType};
+    const response = await api.post(baseUrl.setChannelAsRead, data);
     if (response.status === 200) {
       return Promise.resolve(true);
     }

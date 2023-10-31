@@ -10,10 +10,11 @@ import {calculateTime} from '../../utils/time';
 const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement = ({
   item,
   onChannelPressed,
+  hasFollowButton = false,
   handleFollow
 }) => {
   const determineChatType = (data: ChannelList) => {
-    const isAnonymous = Boolean(data?.rawJson?.anon_user_info_emoji_code);
+    const isAnonymous = Boolean(data?.channelType === 'ANON_PM');
     if (!isAnonymous) return BaseChannelItemTypeProps.SIGNED_PM;
     return BaseChannelItemTypeProps.ANON_PM;
   };
@@ -31,7 +32,7 @@ const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement
       onPress={onChannelPressed}
       unreadCount={item?.unreadCount}
       isMe={item?.user?.isMe}
-      isSystemMessage={item?.rawJson?.firstMessage?.type === 'system'}
+      hasFollowButton={hasFollowButton}
       handleFollow={handleFollow}
     />
   );

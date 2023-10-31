@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-use-before-define */
 import * as React from 'react';
 import {FlatList} from 'react-native';
@@ -12,7 +13,7 @@ import useSignedChannelListScreenHook from '../../hooks/screen/useSignedChannelL
 const ChannelListScreen = () => {
   const {channels, goToChatScreen, goToPostDetailScreen, goToCommunityScreen} =
     useSignedChannelListScreenHook();
-  const {handleFollow} = useFollowUser();
+  const {handleFollow, isInitialFollowing, isSystemFollowMessage} = useFollowUser();
 
   return (
     <FlatList
@@ -22,10 +23,13 @@ const ChannelListScreen = () => {
       listKey={'ChannelList'}
       renderItem={({item}) => {
         if (item?.channelType === 'PM') {
+          const hasFollowButton = isSystemFollowMessage(item) && !isInitialFollowing(item);
+
           return (
             <MessageChannelItem
               item={item}
               onChannelPressed={() => goToChatScreen(item)}
+              hasFollowButton={hasFollowButton}
               handleFollow={() => handleFollow(item)}
             />
           );
