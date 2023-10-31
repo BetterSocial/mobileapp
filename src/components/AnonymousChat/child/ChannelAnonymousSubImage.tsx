@@ -1,16 +1,17 @@
 import * as React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
+import dimen from '../../../utils/dimen';
 import {colors} from '../../../utils/colors';
 
 const ChannelAnonymousSubImage = ({anonPostNotificationUserInfo = null}) => {
   const styles = StyleSheet.create({
     postNotificationImage: {
-      width: 24,
-      height: 24,
-      borderRadius: 16,
+      width: dimen.normalizeDimen(24),
+      height: dimen.normalizeDimen(24),
+      borderRadius: dimen.normalizeDimen(12),
       position: 'absolute',
-      top: 30,
+      top: dimen.normalizeDimen(30 + 12),
       right: 0,
       borderWidth: 2,
       borderColor: colors.white,
