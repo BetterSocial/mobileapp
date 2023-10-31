@@ -11,6 +11,7 @@ import {ANON_PM} from '../constant';
 import {ChannelList} from '../../../../types/database/schema/ChannelList.types';
 import {ChannelTypeEnum} from '../../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 import {PostNotificationChannelList} from '../../../../types/database/schema/PostNotificationChannelList.types';
+import {convertTopicNameToTopicPageScreenParam} from '../../../utils/string/StringUtils';
 
 const chatAtom = atom({
   key: 'chatAtom',
@@ -55,7 +56,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
     refresh('channelList');
   };
 
-  const helperGoToPostDetailScreen = (channel: ChannelList) => {
+  const goToPostDetailScreen = (channel: ChannelList) => {
     setChannelAsRead(channel);
     const postNotificationChannel = channel as PostNotificationChannelList;
 
@@ -74,11 +75,20 @@ function useChatUtilsHook(): UseChatUtilsHook {
     });
   };
 
+  const goToCommunityScreen = (channel: ChannelList) => {
+    setChannelAsRead(channel);
+
+    const topicName = channel?.name?.replace(/^#/, '');
+    const navigationParam = {
+      id: convertTopicNameToTopicPageScreenParam(topicName)
+    };
+
+    navigation.navigate('TopicPageScreen', navigationParam);
+  };
+
   const goToChatScreen = (channel: ChannelList) => {
     setChannelAsRead(channel);
 
-    if (channel?.channelType?.includes('POST_NOTIFICATION'))
-      return helperGoToPostDetailScreen(channel);
     if (channel?.channelType === ANON_PM) {
       navigation.navigate('SampleChatScreen');
     } else {
@@ -111,7 +121,8 @@ function useChatUtilsHook(): UseChatUtilsHook {
     selectedChannel,
     goBack,
     goToChatScreen,
-    goToPostDetailScreen: helperGoToPostDetailScreen,
+    goToPostDetailScreen,
+    goToCommunityScreen,
     goToChatInfoScreen,
     goBackFromChatScreen
   };

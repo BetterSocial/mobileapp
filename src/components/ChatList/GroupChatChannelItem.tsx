@@ -13,7 +13,7 @@ const GroupChatChannelItem = (props: ChannelItemProps) => {
   const {channel: groupChat, onChannelPressed} = props;
   const channelType = 'GROUP';
   const channelPicture = groupChat?.channelPicture;
-  const unreadCount = 2;
+  const unreadCount = groupChat?.unreadCount;
   const hasBadge = unreadCount > 0;
 
   return (
