@@ -91,3 +91,9 @@ export interface PostMakerData {
   profile_pic_url?: string;
   username: string;
 }
+
+// eslint-disable-next-line no-shadow
+export enum ChannelTypeEnum {
+  Messaging = 1,
+  Group = 2
+}
