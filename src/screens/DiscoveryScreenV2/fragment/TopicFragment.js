@@ -117,6 +117,7 @@ const TopicFragment = ({
             handleSetFollow={() => handleFollow(from, true, item, index)}
             handleSetUnFollow={() => handleFollow(from, false, item, index)}
             key={`followedTopic-${index}`}
+            isCommunity={true}
             onPressBody={() => __handleOnTopicPress(item)}
             item={{
               name: item.name,
@@ -132,6 +133,7 @@ const TopicFragment = ({
             handleSetFollow={() => handleFollow(from, true, item, index)}
             handleSetUnFollow={() => handleFollow(from, false, item, index)}
             key={`followedTopic-${index}`}
+            isCommunity={true}
             onPressBody={() => __handleOnTopicPress(item)}
             item={{
               name: item.name,
