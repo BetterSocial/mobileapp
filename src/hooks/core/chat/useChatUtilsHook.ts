@@ -60,7 +60,6 @@ function useChatUtilsHook(): UseChatUtilsHook {
 
   const goToChatScreen = (channel: ChannelList) => {
     setChannelAsRead(channel);
-
     if (channel?.channelType?.includes('POST_NOTIFICATION'))
       return helperGoToPostDetailScreen(channel);
     if (channel?.channelType === ANON_PM) {
@@ -68,7 +67,6 @@ function useChatUtilsHook(): UseChatUtilsHook {
     } else {
       navigation.navigate('SignedChatScreen');
     }
-    console.log({chat}, 'lili');
     setChat({
       ...chat,
       selectedChannel: channel
