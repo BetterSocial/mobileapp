@@ -5,6 +5,7 @@ import ChannelListMemberSchema from './ChannelListMemberSchema';
 import UserSchema from './UserSchema';
 import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
 import {ChannelData} from '../../../types/repo/AnonymousMessageRepo/AnonymousChannelsData';
+import {ChannelType} from '../../../types/repo/ChannelData';
 import {MessageAnonymouslyData} from '../../../types/repo/AnonymousMessageRepo/MessageAnonymouslyData';
 import {ModifyAnonymousChatData} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 import {SignedPostNotification} from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
@@ -313,7 +314,7 @@ class ChannelList implements BaseDbSchema {
     });
   }
 
-  static fromChannelAPI(data: ChannelData, channelType: 'PM' | 'ANON_PM'): ChannelList {
+  static fromChannelAPI(data: ChannelData, channelType: ChannelType): ChannelList {
     const isPM = channelType === 'PM';
     const isSystemMessage = data?.firstMessage?.type === 'system';
     const isMe =
