@@ -187,16 +187,39 @@ const UsersFragment = ({
           )
         ];
       }
+
+      const followingUsers = [];
+      const unfollowingUsers = [];
+
+      users.forEach((item) => {
+        if (item.user?.user_id_follower || item.user_id_follower) {
+          followingUsers.push(item);
+        } else {
+          unfollowingUsers.push(item);
+        }
+      });
+
       return [
-        route.name !== 'Followings' && (
-          <DiscoveryTitleSeparator key="user-title-separator" text="Suggested Users" />
-        )
-      ].concat(
-        users.map((item, index) =>
-          // return renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", { ...item.user, user_id_follower: item.user_id_follower }, index)
+        followingUsers.map((item, index) =>
           renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, 'followedUsers', item, index)
         )
-      );
+      ]
+        .concat([
+          route.name !== 'Followings' && (
+            <DiscoveryTitleSeparator key="user-title-separator" text="Suggested Users" />
+          )
+        ])
+        .concat([
+          unfollowingUsers.map((item, index) =>
+            // return renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", { ...item.user, user_id_follower: item.user_id_follower }, index)
+            renderDiscoveryItem(
+              FROM_FOLLOWED_USERS_INITIAL,
+              'followedUsers',
+              item,
+              index + followingUsers.length
+            )
+          )
+        ]);
     }
 
     return (

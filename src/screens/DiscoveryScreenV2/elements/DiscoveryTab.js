@@ -66,24 +66,25 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white
   },
   tabItem: (tabs) => ({
-    width: windowWidth / tabs,
+    width: tabs === 4 ? undefined : windowWidth / tabs,
     justifyContent: 'center',
     alignItems: 'center',
-    height: '100%'
+    height: '100%',
+    paddingHorizontal: tabs === 4 ? 20 : undefined
   }),
   tabItemContainer: {
     alignSelf: 'center'
   },
   tabItemText: {
     color: colors.alto,
-    fontFamily: fonts.inter[500],
+    fontWeight: '500',
     fontSize: normalizeFontSize(12.5),
     paddingVertical: 10,
     textAlign: 'center'
   },
   tabItemTextFocus: {
     color: colors.black,
-    fontFamily: fonts.inter[500],
+    fontWeight: '500',
     fontSize: normalizeFontSize(12.5),
     lineHeight: 16.94,
     textAlign: 'center',

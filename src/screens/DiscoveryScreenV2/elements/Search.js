@@ -136,10 +136,6 @@ const DiscoverySearch = ({
   };
 
   React.useEffect(() => {
-    setIsSearchIconShown(!isFocus && !isTextAvailable);
-  }, [isTextAvailable, isFocus]);
-
-  React.useEffect(() => {
     debounceChangeText(searchText);
     setIsTextAvailable(searchText.length > 0);
   }, [searchText]);
@@ -185,11 +181,9 @@ const DiscoverySearch = ({
       </View>
       <View style={styles.searchContainer}>
         <View style={styles.wrapperSearch}>
-          {isSearchIconShown && (
-            <View style={styles.wrapperIcon}>
-              <MemoIcSearch width={16.67} height={16.67} />
-            </View>
-          )}
+          <View style={styles.wrapperIcon}>
+            <MemoIcSearch width={16.67} height={16.67} />
+          </View>
           <TextInput
             ref={discoverySearchBarRef}
             testID={TestIdConstant.discoveryScreenSearchBar}
