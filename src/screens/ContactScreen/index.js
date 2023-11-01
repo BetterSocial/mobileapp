@@ -26,7 +26,6 @@ import {Search} from './elements';
 import {setChannel} from '../../context/actions/setChannel';
 import {userPopulate} from '../../service/users';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
 
 const {width} = Dimensions.get('screen');
 

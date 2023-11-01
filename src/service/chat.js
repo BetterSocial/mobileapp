@@ -64,6 +64,7 @@ const followClient = async (members, data, text, textOwnMessage) => {
 
     return channel;
   } catch (error) {
+    console.log('error follow client', error);
     throw error;
   }
 };

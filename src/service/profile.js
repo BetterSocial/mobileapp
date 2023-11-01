@@ -1,5 +1,5 @@
 import api from './config';
-import {createChannel, followClient} from './chat';
+import {followClient} from './chat';
 
 export const getMyProfile = async () =>
   new Promise((resolve, reject) => {
