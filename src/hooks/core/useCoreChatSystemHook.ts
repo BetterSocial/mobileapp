@@ -15,7 +15,7 @@ import useBetterWebsocketHook from './websocket/useBetterWebsocketHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import usePostNotificationListenerHook from './getstream/usePostNotificationListenerHook';
 import useProfileHook from './profile/useProfileHook';
-import {ANONYMOUS, ANON_PM} from './constant';
+import {ANONYMOUS, SIGNED} from './constant';
 import {
   AnonymousPostNotification,
   Comment,
@@ -71,14 +71,16 @@ const useCoreChatSystemHook = () => {
 
   const saveChannelListData = async (
     websocketData: GetstreamWebsocket,
-    channelType: MyChannelType
+    channelCategory: MyChannelType
   ) => {
     if (!localDb) return;
-    if (channelType === ANON_PM) {
+
+    if (channelCategory === ANONYMOUS) {
       const chatName = await getAnonymousChatName(websocketData?.channel?.members);
       websocketData.targetName = chatName?.name;
       websocketData.targetImage = chatName?.image;
     } else {
+      const {type} = websocketData;
       const chatName = await getChatName(websocketData?.channel?.name, profile?.username);
       if (websocketData?.channel?.anon_user_info_emoji_name) {
         websocketData.targetName = `Anonymous ${websocketData?.channel?.anon_user_info_emoji_name}`;
@@ -93,16 +95,44 @@ const useCoreChatSystemHook = () => {
         console.log('error on getting selectedChannel');
       }
 
-      websocketData.targetImage =
-        selectedChannel?.channel_picture ?? websocketData.message?.user?.image;
+      const websocketChannelType = websocketData?.channel_type;
+      if (websocketChannelType === 'topics' || websocketChannelType === 'group') {
+        websocketData.targetImage = websocketData?.channel?.channel_image;
+      } else {
+        websocketData.targetImage =
+          selectedChannel?.channel_picture ?? websocketData.message?.user?.image;
+      }
+
+      if (type === 'notification.added_to_channel') {
+        websocketData.message.text = 'You have been added to this group';
+      }
+      if (type === 'notification.removed_from_channel') {
+        websocketData.message.text = 'You have been removed from this group';
+      }
+
       websocketData.anon_user_info_color_name = websocketData?.channel?.anon_user_info_color_name;
       websocketData.anon_user_info_emoji_code = websocketData?.channel?.anon_user_info_emoji_code;
       websocketData.anon_user_info_color_code = websocketData?.channel?.anon_user_info_color_code;
     }
 
-    const channelList = ChannelList.fromWebsocketObject(websocketData, channelType);
+    const isAnonymous = channelCategory === ANONYMOUS;
+    const channelType: {[key: string]: ChannelType} = {
+      messaging: isAnonymous ? 'ANON_PM' : 'PM',
+      group: 'GROUP',
+      topics: 'TOPIC'
+    };
+
+    const channelList = ChannelList.fromWebsocketObject(
+      websocketData,
+      channelType[websocketData?.channel_type]
+    );
 
     await channelList.save(localDb);
+
+    if (websocketData?.channel_type === 'topics') {
+      refresh('channelList');
+      return;
+    }
 
     const user = UserSchema.fromWebsocketObject(websocketData);
     await user.saveOrUpdateIfExists(localDb);
@@ -157,18 +187,19 @@ const useCoreChatSystemHook = () => {
         channel?.channel_type === 4
           ? `Anonymous ${channel?.anon_user_info_emoji_name}`
           : getChatName(channel?.name, signedChannelUsername);
-      signedChannelImage =
-        channel?.members?.length > 2
-          ? DEFAULT_PROFILE_PIC_PATH
-          : channel?.members?.find((member) => member?.user_id !== signedProfileId)?.user?.image;
+
+      if (channel?.type === 'group' || channel?.type === 'topics') {
+        signedChannelImage = channel?.channel_image;
+      } else {
+        signedChannelImage =
+          channel?.members?.find((member) => member?.user_id !== signedProfileId)?.user?.image ??
+          DEFAULT_PROFILE_PIC_PATH;
+      }
     }
 
     const chatName = isAnonymous
       ? await getAnonymousChatName(channel?.members)
-      : {
-          name: signedChannelName,
-          image: signedChannelImage ?? DEFAULT_PROFILE_PIC_PATH
-        };
+      : {name: signedChannelName, image: signedChannelImage};
 
     return new Promise((resolve, reject) => {
       try {
@@ -199,6 +230,8 @@ const useCoreChatSystemHook = () => {
       console.log('error on saveChannelData helperChannelPromiseBuilder');
       console.log(e);
     }
+
+    if (channel?.type === 'topics') return;
 
     try {
       channel?.members?.forEach(async (member) => {
@@ -429,7 +462,7 @@ const useCoreChatSystemHook = () => {
     const {type} = lastJsonMessage;
     if (type === 'health.check') return;
     if (type === 'notification.message_new') {
-      saveChannelListData(lastJsonMessage, 'ANON_PM').catch((e) => console.log(e));
+      saveChannelListData(lastJsonMessage, ANONYMOUS).catch((e) => console.log(e));
     }
   }, [lastJsonMessage, localDb]);
 
@@ -438,8 +471,8 @@ const useCoreChatSystemHook = () => {
 
     const {type} = lastSignedMessage;
     if (type === 'health.check') return;
-    if (type === 'notification.message_new') {
-      saveChannelListData(lastSignedMessage, 'PM').catch((e) => console.log(e));
+    if (type === 'notification.message_new' || type === 'notification.added_to_channel') {
+      saveChannelListData(lastSignedMessage, SIGNED).catch((e) => console.log(e));
     }
   }, [lastSignedMessage, localDb]);
 
