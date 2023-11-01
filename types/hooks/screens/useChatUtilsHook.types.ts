@@ -5,6 +5,7 @@ interface UseChatUtilsHook {
   goBack: () => void;
   goToChatScreen: (channel: ChannelList) => void;
   goToPostDetailScreen: (channel: ChannelList) => void;
+  goToCommunityScreen: (channel: ChannelList) => void;
   goToChatInfoScreen: () => void;
   goBackFromChatScreen: () => void;
   handleTextSystem: (item: any) => void;

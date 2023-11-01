@@ -13,8 +13,13 @@ const GroupChatChannelItem = (props: ChannelItemProps) => {
   const {channel: groupChat, onChannelPressed} = props;
   const channelType = 'GROUP';
   const channelPicture = groupChat?.channelPicture;
-  const unreadCount = 2;
+
+  const unreadCount = groupChat?.unreadCount;
   const hasBadge = unreadCount > 0;
+
+  const description = groupChat?.rawJson?.firstMessage;
+  const isSystemDescription = description?.type === 'system';
+  const sender = description?.user?.username ?? description?.user?.name;
 
   return (
     <CustomPressable onPress={onChannelPressed}>
@@ -33,7 +38,11 @@ const GroupChatChannelItem = (props: ChannelItemProps) => {
               </ChannelContent.Time>
             </View>
             <View style={{flexDirection: 'row'}}>
-              <ChannelContent.Description>{groupChat?.description}</ChannelContent.Description>
+              <ChannelContent.Description>
+                {isSystemDescription
+                  ? groupChat?.description
+                  : `${sender}: ${groupChat?.description}`}
+              </ChannelContent.Description>
               {hasBadge && <ChannelContent.Badge>{unreadCount}</ChannelContent.Badge>}
             </View>
           </ChannelContent>
