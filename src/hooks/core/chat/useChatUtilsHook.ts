@@ -106,13 +106,24 @@ function useChatUtilsHook(): UseChatUtilsHook {
     navigation.goBack();
   };
 
+  const handleTextSystem = (item) => {
+    if (
+      item?.rawJson?.userIdFollower === item?.rawJson?.user?.id ||
+      item?.rawJson?.message?.userIdFollower === item?.rawJson?.message?.user?.id
+    ) {
+      return item?.rawJson?.text || item?.rawJson?.message?.text;
+    }
+    return item?.rawJson?.textOwnMessage || item?.rawJson?.textOwnMessage;
+  };
+
   return {
     selectedChannel,
     goBack,
     goToChatScreen,
     goToPostDetailScreen: helperGoToPostDetailScreen,
     goToChatInfoScreen,
-    goBackFromChatScreen
+    goBackFromChatScreen,
+    handleTextSystem
   };
 }
 

@@ -36,10 +36,10 @@ const useSettings = () => {
       setMainFeeds([], feedDispatch);
       resetAllContext();
       resetLocalDB();
-      client?.disconnectUser();
       createClient(null, dispatch);
       clearLocalStorege();
       setFeedChatData([]);
+      client?.disconnectUser();
     } catch (e) {
       console.log('error', e);
     }
