@@ -12,6 +12,7 @@ import {styles} from './SampleChatScreen';
 import {SIGNED} from '../../hooks/core/constant';
 import {setChannel} from '../../context/actions/setChannel';
 import {Context} from '../../context';
+import {getChatName} from '../../utils/string/StringUtils';
 
 const SignedChatScreen = () => {
   const {selectedChannel, chats, goBackFromChatScreen, goToChatInfoScreen, sendChat} =
@@ -20,6 +21,8 @@ const SignedChatScreen = () => {
   const renderChatItem = React.useCallback(({item, index}) => {
     return <BaseChatItem type="SIGNED" item={item} index={index} />;
   }, []);
+  const [profile] = React.useContext(Context).profile;
+
   console.log({chats, selectedChannel}, 'saya');
 
   const goToChatInfoPage = () => {
@@ -45,7 +48,7 @@ const SignedChatScreen = () => {
         user={
           selectedChannel?.rawJson?.channel?.anon_user_info_emoji_code
             ? `Anonymous ${selectedChannel?.rawJson?.channel?.anon_user_info_emoji_name} `
-            : selectedChannel?.rawJson?.targetName
+            : getChatName(selectedChannel?.name, profile?.myProfile?.username)
         }
         anon_user_info_emoji_code={selectedChannel?.rawJson?.channel?.anon_user_info_emoji_code}
         anon_user_info_color_code={selectedChannel?.rawJson?.channel?.anon_user_info_color_code}
