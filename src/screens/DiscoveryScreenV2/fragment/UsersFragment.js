@@ -76,55 +76,68 @@ const UsersFragment = ({
     });
   };
 
+  const exhangeFollower = (newUserLists, willFollow, index) => {
+    if (newUserLists[index].user) {
+      newUserLists[index].user.following = !!willFollow;
+      newUserLists[index].user.user_id_follower = myId;
+    } else {
+      newUserLists[index].following = !!willFollow;
+      newUserLists[index].user_id_follower = myId;
+    }
+  };
+
   const handleFollow = async (from, willFollow, item, index) => {
     if (from === FROM_FOLLOWED_USERS_INITIAL || from === FROM_UNFOLLOWED_USERS_INITIAL) {
       const newFollowedUsers = [...users];
-      if (newFollowedUsers[index].user) {
-        newFollowedUsers[index].user.following = !!willFollow;
-        newFollowedUsers[index].user.user_id_follower = myId;
-      } else {
-        newFollowedUsers[index].following = !!willFollow;
-        newFollowedUsers[index].user_id_follower = myId;
-      }
+      // if (newFollowedUsers[index].user) {
+      //   newFollowedUsers[index].user.following = !!willFollow;
+      //   newFollowedUsers[index].user.user_id_follower = myId;
+      // } else {
+      //   newFollowedUsers[index].following = !!willFollow;
+      //   newFollowedUsers[index].user_id_follower = myId;
+      // }
+      exhangeFollower(newFollowedUsers, willFollow, index);
 
       DiscoveryAction.setDiscoveryInitialUsers(newFollowedUsers, discoveryDispatch);
     }
 
     if (from === FROM_FOLLOWED_USERS) {
       const newFollowedUsers = [...followedUsers];
-      if (newFollowedUsers[index].user) {
-        newFollowedUsers[index].user.following = !!willFollow;
-        newFollowedUsers[index].user.user_id_follower = myId;
-      } else {
-        newFollowedUsers[index].following = !!willFollow;
-        newFollowedUsers[index].user_id_follower = myId;
-      }
+      // if (newFollowedUsers[index].user) {
+      //   newFollowedUsers[index].user.following = !!willFollow;
+      //   newFollowedUsers[index].user.user_id_follower = myId;
+      // } else {
+      //   newFollowedUsers[index].following = !!willFollow;
+      //   newFollowedUsers[index].user_id_follower = myId;
+      // }
+      exhangeFollower(newFollowedUsers, willFollow, index);
 
       setFollowedUsers(newFollowedUsers);
     }
 
     if (from === FROM_UNFOLLOWED_USERS) {
       const newUnfollowedUsers = [...unfollowedUsers];
-      if (newUnfollowedUsers[index].user) {
-        newUnfollowedUsers[index].user.following = !!willFollow;
-        newUnfollowedUsers[index].user.user_id_follower = myId;
-      } else {
-        newUnfollowedUsers[index].following = !!willFollow;
-        newUnfollowedUsers[index].user_id_follower = myId;
-      }
-
+      // if (newUnfollowedUsers[index].user) {
+      //   newUnfollowedUsers[index].user.following = !!willFollow;
+      //   newUnfollowedUsers[index].user.user_id_follower = myId;
+      // } else {
+      //   newUnfollowedUsers[index].following = !!willFollow;
+      //   newUnfollowedUsers[index].user_id_follower = myId;
+      // }
+      exhangeFollower(newUnfollowedUsers, willFollow, index);
       setUnfollowedUsers(newUnfollowedUsers);
     }
 
     if (from === FROM_USERS_INITIAL) {
       const newFollowedUsers = [...initialUsers];
-      if (newFollowedUsers[index].user) {
-        newFollowedUsers[index].user.following = !!willFollow;
-        newFollowedUsers[index].user.user_id_follower = myId;
-      } else {
-        newFollowedUsers[index].following = !!willFollow;
-        newFollowedUsers[index].user_id_follower = myId;
-      }
+      // if (newFollowedUsers[index].user) {
+      //   newFollowedUsers[index].user.following = !!willFollow;
+      //   newFollowedUsers[index].user.user_id_follower = myId;
+      // } else {
+      //   newFollowedUsers[index].following = !!willFollow;
+      //   newFollowedUsers[index].user_id_follower = myId;
+      // }
+      exhangeFollower(newFollowedUsers, willFollow, index);
 
       setInitialUsers(newFollowedUsers);
     }
@@ -172,13 +185,6 @@ const UsersFragment = ({
 
   const renderUsersItem = () => {
     if (isFirstTimeOpen) {
-      // let renderArray = []
-      // initialFollowedUsers.map((item, index) => renderArray.push(renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", item, index)))
-      // renderArray.push(<DiscoveryTitleSeparator key="user-title-separator" text="Suggested Users"/>)
-      // initialUnfollowedUsers.map((item, index) => renderArray.push(renderDiscoveryItem(FROM_UNFOLLOWED_USERS_INITIAL, "unfollowedUsers", item, index)))
-
-      // return renderArray
-
       if (withoutRecent) {
         if (initialUsers.length !== 0) {
           return [
@@ -217,7 +223,6 @@ const UsersFragment = ({
         ])
         .concat([
           unfollowingUsers.map((item, index) =>
-            // return renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", { ...item.user, user_id_follower: item.user_id_follower }, index)
             renderDiscoveryItem(
               FROM_FOLLOWED_USERS_INITIAL,
               'followedUsers',
