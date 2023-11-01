@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Mi from 'react-native-vector-icons/MaterialIcons';
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
-
+import PropTypes from 'prop-types';
 import MemoIc_Checklist from '../../assets/icons/Ic_Checklist';
 import {COLORS} from '../../utils/theme';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
@@ -55,6 +55,10 @@ const ProfileContact = ({
       </View>
     </Pressable>
   );
+};
+
+ProfileContact.propTypes = {
+  disabled: PropTypes.bool
 };
 
 export default ProfileContact;
