@@ -5,31 +5,32 @@ import profileAtom from '../../../atom/profileAtom';
 import {Context} from '../../../context';
 import {ProfileContext} from '../../../../types/context/profilecontext.types';
 
-const useProfileHook = () => {
-  // TODO: Merge this with useUserAuthHook and delete this hook
+const useUserAuthHook = () => {
   const [profile] = React.useContext(Context).profile;
   const profileContext = profile as ProfileContext;
 
-  const [profileAtomState, setProfileId] = useRecoilState(profileAtom);
+  const [authAtomState, setAuth] = useRecoilState(profileAtom);
 
-  const {anonProfileId, signedProfileId} = profileAtomState;
+  const {anonProfileId, signedProfileId, token, anonymousToken} = authAtomState;
 
-  const reset = () => {
-    setProfileId({
+  const resetAuth = () =>
+    setAuth({
       signedProfileId: null,
       anonProfileId: null,
       token: null,
       anonymousToken: null
     });
-  };
 
   return {
     profile: profileContext.myProfile,
     signedProfileId,
     anonProfileId,
-    setProfileId,
-    reset
+    token,
+    anonymousToken,
+
+    resetAuth,
+    setAuth
   };
 };
 
-export default useProfileHook;
+export default useUserAuthHook;

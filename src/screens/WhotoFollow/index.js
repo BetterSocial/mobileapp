@@ -44,6 +44,7 @@ const VIEW_TYPE_LABEL_LOCATION = 2;
 const VIEW_TYPE_DATA = 3;
 
 const WhotoFollow = () => {
+  // TODO: Change this into useUserAuthHook
   const {setProfileId} = useProfileHook();
 
   const [users, setUsers] = React.useState([]);
@@ -199,7 +200,9 @@ const WhotoFollow = () => {
             const anonymousUserId = await JwtDecode(res.anonymousToken).user_id;
             setProfileId({
               anonProfileId: anonymousUserId,
-              signedProfileId: userId
+              signedProfileId: userId,
+              token: res.token,
+              anonymousToken: res.anonymousToken
             });
           } catch (e) {
             crashlytics().recordError(new Error(e));

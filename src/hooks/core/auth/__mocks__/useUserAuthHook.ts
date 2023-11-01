@@ -6,13 +6,17 @@ const mockSignedProfile = {
 
 const signedProfileId = 'signedProfileId';
 const anonProfileId = 'anonProfileId';
+const token = 'token';
+const anonymousToken = 'anonymousToken';
 
-const useProfileHook = {
+const useUserAuthHook = {
   profile: mockSignedProfile,
   signedProfileId,
   anonProfileId,
+  token,
+  anonymousToken,
   reset: jest.fn(),
-  setProfileId: jest.fn()
+  setAuth: jest.fn()
 };
 
-export default useProfileHook;
+export default useUserAuthHook;
