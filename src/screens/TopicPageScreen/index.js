@@ -59,7 +59,9 @@ const TopicPageScreen = (props) => {
   ).current;
 
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
-  const feeds = feedsContext.topicFeeds?.filter((feed) => feed?.topics?.includes(topicName));
+  const feeds = feedsContext.topicFeeds
+    ? feedsContext.topicFeeds.filter((feed) => feed?.topics?.includes(topicName))
+    : [];
   const mainFeeds = feedsContext.feeds;
   const [offset, setOffset] = React.useState(0);
   const [client] = React.useContext(Context).client;
@@ -356,7 +358,10 @@ const TopicPageScreen = (props) => {
       const dy = y - lastDragY;
       if (y <= 30) {
         showHeaderAnimation();
-      } else if (dy - 20 > dimen.size.TOPIC_CURRENT_ITEM_HEIGHT / 2) {
+      } else if (
+        dimen.size.TOPIC_CURRENT_ITEM_HEIGHT &&
+        dy - 20 > dimen.size.TOPIC_CURRENT_ITEM_HEIGHT / 2
+      ) {
         interactionManagerAnimatedRef.current = InteractionManager.runAfterInteractions(() => {
           Animated.timing(animatedHeight, {
             toValue: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2,

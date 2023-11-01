@@ -39,7 +39,7 @@ const TopicDomainHeader = (props) => {
 };
 
 TopicDomainHeader.propTypes = {
-  domain: PropTypes.string,
+  domain: PropTypes.string.isRequired,
   handleOnMemberPress: PropTypes.func,
   hideSeeMember: PropTypes.bool,
   isFollow: PropTypes.bool,
