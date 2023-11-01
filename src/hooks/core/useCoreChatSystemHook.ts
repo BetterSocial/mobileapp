@@ -426,8 +426,7 @@ const useCoreChatSystemHook = () => {
     if (!lastJsonMessage && !localDb) return;
 
     const {type} = lastJsonMessage;
-    if (type === 'health.check') return;
-    if (type === 'notification.message_new') {
+    if (type !== 'health.check' && type === 'notification.message_new') {
       setTimeout(() => {
         saveChannelListData(lastJsonMessage, 'ANON_PM').catch((e) => console.log(e));
       }, 500);
@@ -438,8 +437,7 @@ const useCoreChatSystemHook = () => {
     if (!lastSignedMessage && !localDb) return;
 
     const {type} = lastSignedMessage;
-    if (type === 'health.check') return;
-    if (type === 'notification.message_new') {
+    if (type !== 'health.check' && type === 'notification.message_new') {
       setTimeout(() => {
         saveChannelListData(lastSignedMessage, 'PM').catch((e) => console.log(e));
       }, 500);
