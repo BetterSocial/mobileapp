@@ -103,8 +103,8 @@ export const followUser = async (data) =>
   });
 
 export const setFollow = async (data) => {
-  const textTargetUser = `${data.username_follower} started following you. Send them a message now`;
-  const textOwnUser = `You started following ${data.username_followed}. Send them a message now.`;
+  const textTargetUser = `${data.username_follower} started following you.\n Send them a message now`;
+  const textOwnUser = `You started following ${data.username_followed}.\n Send them a message now.`;
   const members = [data.user_id_follower, data.user_id_followed];
   await followClient(members, data, textTargetUser, textOwnUser);
   return new Promise((resolve, reject) => {

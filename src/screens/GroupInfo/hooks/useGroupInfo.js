@@ -105,7 +105,7 @@ const useGroupInfo = () => {
       }
       return handleOpenProfile(selectedUser);
     } catch (e) {
-      console.log(e, 'eman');
+      console.log(e, 'erro');
     }
   };
 
@@ -131,7 +131,6 @@ const useGroupInfo = () => {
       }
     }
   };
-  console.log({isAnonymousModalOpen}, 'isak');
   const launchGallery = async () => {
     const {success} = await requestExternalStoragePermission();
     if (success) {
@@ -308,7 +307,7 @@ const useGroupInfo = () => {
         setChannel(channelChat, dispatchChannel);
       }
     } catch (e) {
-      console.log({e, client}, 'eman');
+      console.log({e, client}, 'error');
     }
   };
 
@@ -454,10 +453,8 @@ const useGroupInfo = () => {
       }. Please type reason for reporting this group below. Thank you!`
     });
   };
-  console.log({profile}, 'lasu');
   const handlePressContact = async (item) => {
     const isAnonymousUser = !isContainUrl(item?.user?.image);
-    console.log({item, isAnonymousUser}, 'ssasak');
 
     if (item?.user_id === profile?.myProfile?.user_id) return;
 

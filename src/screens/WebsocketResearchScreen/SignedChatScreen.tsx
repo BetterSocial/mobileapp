@@ -23,8 +23,6 @@ const SignedChatScreen = () => {
   }, []);
   const [profile] = React.useContext(Context).profile;
 
-  console.log({chats, selectedChannel}, 'saya');
-
   const goToChatInfoPage = () => {
     goToChatInfoScreen({from: SIGNED});
   };
