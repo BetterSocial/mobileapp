@@ -24,6 +24,7 @@ import {getAnonymousChatName} from '../../utils/string/StringUtils';
 
 const useCoreChatSystemHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook() as UseLocalDatabaseHook;
+  // TODO: Change this into useUserAuthHook
   const {anonProfileId, signedProfileId} = useProfileHook();
   const {getAllAnonymousChannels} = useFetchAnonymousChannelHook();
   const {getAllAnonymousPostNotifications} = useFetchAnonymousPostNotificationHook();

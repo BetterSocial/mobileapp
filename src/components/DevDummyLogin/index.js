@@ -14,12 +14,12 @@ import {
   View
 } from 'react-native';
 import {StackActions, useNavigation} from '@react-navigation/native';
-import {useSetRecoilState} from 'recoil';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useSetRecoilState} from 'recoil';
 
 import StorageUtils from '../../utils/storage';
 import TokenStorage from '../../utils/storage/custom/tokenStorage';
-import useProfileHook from '../../hooks/core/profile/useProfileHook';
+import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {InitialStartupAtom} from '../../service/initialStartup';
@@ -61,7 +61,7 @@ const S = StyleSheet.create({
 
 const DevDummyLogin = ({resetClickTime = () => {}}) => {
   const {ENABLE_DEV_ONLY_FEATURE} = configEnv;
-  const {setProfileId} = useProfileHook();
+  const {setAuth} = useUserAuthHook();
 
   const [dummyUsers] = React.useState([
     {name: 'fajarismv2', humanId: 'fajarismv2'},
@@ -158,9 +158,11 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
 
           const userId = await JwtDecode(response.token).user_id;
           const anonymousUserId = await JwtDecode(response.anonymousToken).user_id;
-          setProfileId({
+          setAuth({
             anonProfileId: anonymousUserId,
-            signedProfileId: userId
+            signedProfileId: userId,
+            token: response.token,
+            anonymousToken: response.anonymousToken
           });
 
           streamChat(response.token).then(() => {
