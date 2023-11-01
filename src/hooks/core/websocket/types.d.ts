@@ -43,6 +43,7 @@ export type GetstreamMessage = {
 
 export type GetstreamChannel = {
   channel_type: number;
+  channel_image?: string;
   cid: string;
   config: {
     automod: string;
@@ -116,4 +117,4 @@ export type GetstreamWebsocket = {
   anon_user_info_color_code?: string;
 };
 
-export type MyChannelType = 'PM' | 'ANON_PM';
+export type MyChannelType = 'SIGNED' | 'ANONYMOUS';
