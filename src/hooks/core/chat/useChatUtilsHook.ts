@@ -113,7 +113,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
     ) {
       return item?.rawJson?.text || item?.rawJson?.message?.text;
     }
-    return item?.rawJson?.textOwnMessage || item?.rawJson?.textOwnMessage;
+    return item?.rawJson?.textOwnMessage;
   };
 
   return {

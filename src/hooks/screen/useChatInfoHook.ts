@@ -16,7 +16,6 @@ import useGroupInfo from '../../screens/GroupInfo/hooks/useGroupInfo';
 function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   const {params}: any = useRoute();
   const {
-    handleOpenProfile,
     handlePressContact,
     openModal,
     handleCloseSelectUser,
@@ -30,7 +29,6 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   const [myUserId] = React.useContext(Context).profile;
   const navigation = useNavigation();
   const [showPopupBlock, setShowPopupBlock] = React.useState(false);
-  const [isAnonymous, setIsAnonymous] = React.useState(false);
   const [channelInfo, setChannelInfo] = React.useState(null);
   const initChatInfoData = async () => {
     if (!localDb) return;
@@ -79,7 +77,6 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
     channelInfo,
     goBack,
     onContactPressed,
-    isAnonymous,
     selectedUser,
     showPopupBlock,
     handleClosePopup,
