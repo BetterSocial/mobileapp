@@ -15,6 +15,9 @@ const {height} = Dimensions.get('window');
 const SampleChatScreen = () => {
   const {selectedChannel, chats, goBackFromChatScreen, goToChatInfoScreen, sendChat} =
     useAnonymousChatScreenHook();
+  const userTarget = selectedChannel?.rawJson?.channel?.members.find(
+    (channel) => channel.channel_role === 'channel_member'
+  );
   const styles = StyleSheet.create({
     keyboardAvoidingView: {
       flex: 1,
@@ -72,7 +75,13 @@ const SampleChatScreen = () => {
         renderItem={renderChatItem}
       />
       <View style={styles.inputContainer}>
-        <AnonymousInputMessage onSendButtonClicked={sendChat} />
+        <AnonymousInputMessage
+          onSendButtonClicked={sendChat}
+          emojiCode={selectedChannel?.rawJson.channel.anon_user_info_emoji_code}
+          emojiColor={selectedChannel?.rawJson.channel.anon_user_info_color_code}
+          username={selectedChannel?.name}
+          userId={userTarget?.user_id}
+        />
       </View>
     </KeyboardAvoidingView>
   );
