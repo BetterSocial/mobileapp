@@ -109,7 +109,6 @@ const useCoreChatSystemHook = () => {
       websocketData.anon_user_info_emoji_code = websocketData?.channel?.anon_user_info_emoji_code;
       websocketData.anon_user_info_color_code = websocketData?.channel?.anon_user_info_color_code;
     }
-    console.log({websocketData}, 'silatman');
 
     const channelList = ChannelList.fromWebsocketObject(websocketData, channelType);
 
