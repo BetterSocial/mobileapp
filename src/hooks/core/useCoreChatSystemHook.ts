@@ -90,7 +90,6 @@ const useCoreChatSystemHook = () => {
     channelType: MyChannelType
   ) => {
     if (!localDb) return;
-    console.log({websocketData}, 'sinak');
     if (channelType === ANON_PM) {
       const chatName = await getAnonymousChatName(websocketData?.channel?.members);
       websocketData.targetName = chatName?.name;
@@ -111,8 +110,7 @@ const useCoreChatSystemHook = () => {
         console.log('error on getting selectedChannel');
       }
 
-      websocketData.targetImage =
-        selectedChannel?.channel_picture ?? websocketData.message?.user?.image;
+      websocketData.targetImage = handleChannelImage(websocketData?.channel?.members);
       websocketData.anon_user_info_color_name = websocketData?.channel?.anon_user_info_color_name;
       websocketData.anon_user_info_emoji_code = websocketData?.channel?.anon_user_info_emoji_code;
       websocketData.anon_user_info_color_code = websocketData?.channel?.anon_user_info_color_code;
