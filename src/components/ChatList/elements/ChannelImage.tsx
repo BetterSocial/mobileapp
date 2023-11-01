@@ -17,9 +17,7 @@ const ChannelImage: ChannelImageProps = ({children}) => {
 };
 
 const Big: React.FC<ChannelImageMainProps> = ({type, image}) => {
-  const hasImage = false;
-
-  if (hasImage) {
+  if (image) {
     return (
       <FastImage
         source={{uri: image}}
