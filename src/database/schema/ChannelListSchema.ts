@@ -3,8 +3,9 @@ import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import BaseDbSchema from './BaseDbSchema';
 import ChannelListMemberSchema from './ChannelListMemberSchema';
 import UserSchema from './UserSchema';
-import {AnonymousChannelData} from '../../../types/repo/AnonymousMessageRepo/AnonymousChannelsData';
 import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
+import {ChannelData} from '../../../types/repo/AnonymousMessageRepo/AnonymousChannelsData';
+import {ChannelType} from '../../../types/repo/ChannelData';
 import {MessageAnonymouslyData} from '../../../types/repo/AnonymousMessageRepo/MessageAnonymouslyData';
 import {ModifyAnonymousChatData} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 import {SignedPostNotification} from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
@@ -81,8 +82,6 @@ class ChannelList implements BaseDbSchema {
     return results.rows.raw()[0];
   };
 
-  //! TODO:
-  //! UPDATE ANONYMOUSID FOR SIGNED CHAT
   static getChannelInfo = async (
     db: SQLiteDatabase,
     channelId: string,
@@ -186,8 +185,6 @@ class ChannelList implements BaseDbSchema {
     }
   }
 
-  //! TODO:
-  //! UPDATE ANONYMOUSID FOR SIGNED CHAT
   static async getAll(
     db: SQLiteDatabase,
     myId: string,
@@ -317,12 +314,21 @@ class ChannelList implements BaseDbSchema {
     });
   }
 
-  static fromChannelAPI(data: AnonymousChannelData, channelType: 'PM' | 'ANON_PM'): ChannelList {
+  static fromChannelAPI(data: ChannelData, channelType: ChannelType): ChannelList {
+    const isPM = channelType === 'PM';
+    const isSystemMessage = data?.firstMessage?.type === 'system';
+    const isMe =
+      (data?.firstMessage?.user?.username ?? data?.firstMessage?.user?.name) !== data?.targetName;
+    let descriptionSystemMessage;
+
+    if (isPM && isSystemMessage && isMe) descriptionSystemMessage = data?.firstMessage?.other_text;
+
     return new ChannelList({
       id: data?.id,
       channelPicture: data?.targetImage,
       name: data?.targetName,
-      description: data?.firstMessage?.text || data?.firstMessage?.message || '',
+      description:
+        descriptionSystemMessage || data?.firstMessage?.text || data?.firstMessage?.message || '',
       unreadCount: 0,
       channelType,
       lastUpdatedAt: data?.last_message_at,

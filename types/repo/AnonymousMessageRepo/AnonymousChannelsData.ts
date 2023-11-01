@@ -20,6 +20,7 @@ export interface User {
   online: boolean;
   image: string;
   name: string;
+  username?: string;
 }
 
 export interface Member {
@@ -40,6 +41,7 @@ export interface Member {
 export interface Message {
   id: string;
   text: string;
+  other_text?: string;
   html: string;
   type: string;
   user: User;
@@ -70,7 +72,7 @@ export interface Message {
   channelId?: string;
 }
 
-export interface AnonymousChannelData {
+export interface ChannelData {
   id: string;
   type: string;
   cid: string;

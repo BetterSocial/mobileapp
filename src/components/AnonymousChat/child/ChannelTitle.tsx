@@ -5,7 +5,7 @@ import ChannelFollowButton from './ChannelFollowButton';
 import baseStyles from '../BaseChannelItemStyles';
 import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
 import {colors} from '../../../utils/colors';
-import {fonts} from '../../../utils/fonts';
+import {fonts, normalize} from '../../../utils/fonts';
 
 const ChannelTitle = ({
   type,
@@ -14,20 +14,21 @@ const ChannelTitle = ({
   message,
   unreadCount,
   isMe,
-  hasFollowAction = false,
+  hasFollowButton = false,
   isFollowing,
   handleFollow
 }) => {
   const styles = StyleSheet.create({
     chatContentName: {
       fontFamily: fonts.inter[700],
-      fontSize: 14.05,
+      fontSize: normalize(14),
       lineHeight: 22,
-      flex: 1
+      flex: 1,
+      paddingBottom: 2
     },
     chatContentTime: {
       fontFamily: fonts.poppins[400],
-      fontSize: 14,
+      fontSize: normalize(14),
       lineHeight: 22,
       marginLeft: 20,
       color: colors.gray,
@@ -35,7 +36,7 @@ const ChannelTitle = ({
     },
     chatContentMessage: {
       fontFamily: fonts.inter[400],
-      fontSize: 14.05,
+      fontSize: normalize(14),
       lineHeight: 22,
       alignSelf: 'center',
       flex: 1,
@@ -52,7 +53,7 @@ const ChannelTitle = ({
     },
     chatContentUnreadCount: {
       fontFamily: fonts.inter[400],
-      fontSize: 12,
+      fontSize: normalize(12),
       lineHeight: 14.52,
       color: colors.white
     },
@@ -88,14 +89,14 @@ const ChannelTitle = ({
             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.chatContentName}>
               {name}
             </Text>
-            {!hasFollowAction && <Text style={styles.chatContentTime}>{time}</Text>}
+            {!hasFollowButton && <Text style={styles.chatContentTime}>{time}</Text>}
           </View>
 
           <View style={styles.chatMessage}>
             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.chatContentMessage}>
               {`${isMe ? 'You: ' : ''}${message}`}
             </Text>
-            {!hasFollowAction && unreadCount > 0 && (
+            {!hasFollowButton && unreadCount > 0 && (
               <View style={styles.chatContentUnreadCountContainer}>
                 <Text style={styles.chatContentUnreadCount}>{unreadCount}</Text>
               </View>
@@ -103,7 +104,7 @@ const ChannelTitle = ({
           </View>
         </View>
 
-        {isSignedDM && hasFollowAction && (
+        {isSignedDM && hasFollowButton && (
           <ChannelFollowButton isFollowing={isFollowing} handleFollow={handleFollow} />
         )}
       </View>

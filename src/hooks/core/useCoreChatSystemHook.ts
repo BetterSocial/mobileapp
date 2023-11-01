@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {v4 as uuid} from 'uuid';
@@ -14,20 +15,21 @@ import useBetterWebsocketHook from './websocket/useBetterWebsocketHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import usePostNotificationListenerHook from './getstream/usePostNotificationListenerHook';
 import useProfileHook from './profile/useProfileHook';
+import {ANONYMOUS, ANON_PM} from './constant';
 import {
   AnonymousPostNotification,
   Comment,
   LatestChildrenComment
 } from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
+import {ChannelType} from '../../../types/repo/ChannelData';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {GetstreamFeedListenerObject} from '../../../types/hooks/core/getstreamFeedListener/feedListenerObject';
 import {GetstreamWebsocket, MyChannelType} from './websocket/types.d';
 import {InitialStartupAtom} from '../../service/initialStartup';
 import {SignedPostNotification} from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 import {getAnonymousChatName, getChatName} from '../../utils/string/StringUtils';
-import {ANONYMOUS, ANON_PM} from './constant';
 
-type ChannelType = 'SIGNED' | 'ANONYMOUS';
+type ChannelCategory = 'SIGNED' | 'ANONYMOUS';
 
 const useCoreChatSystemHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook() as UseLocalDatabaseHook;
@@ -95,7 +97,16 @@ const useCoreChatSystemHook = () => {
       } else {
         websocketData.targetName = chatName;
       }
-      websocketData.targetImage = handleChannelImage(websocketData?.channel?.members);
+
+      let selectedChannel;
+      try {
+        selectedChannel = (await ChannelList.getById(localDb, websocketData?.channel_id)) as any;
+      } catch (error) {
+        console.log('error on getting selectedChannel');
+      }
+
+      websocketData.targetImage =
+        selectedChannel?.channel_picture ?? websocketData.message?.user?.image;
       websocketData.anon_user_info_color_name = websocketData?.channel?.anon_user_info_color_name;
       websocketData.anon_user_info_emoji_code = websocketData?.channel?.anon_user_info_emoji_code;
       websocketData.anon_user_info_color_code = websocketData?.channel?.anon_user_info_color_code;
@@ -140,24 +151,25 @@ const useCoreChatSystemHook = () => {
     refresh('channelMember');
   };
 
-  const helperChannelPromiseBuilder = async (channel, channelType: ChannelType) => {
+  const helperChannelPromiseBuilder = async (channel, channelCategory: ChannelCategory) => {
     if (channel?.members?.length === 0) return Promise.reject(Error('no members'));
 
-    const isAnonymous = channelType === ANONYMOUS;
+    const isAnonymous = channelCategory === ANONYMOUS;
+    const type: {[key: string]: ChannelType} = {
+      messaging: isAnonymous ? 'ANON_PM' : 'PM',
+      group: 'GROUP',
+      topics: 'TOPIC'
+    };
 
-    let signedChannelProfile;
     let signedChannelName;
     let signedChannelImage;
 
     if (!isAnonymous) {
-      signedChannelProfile = channel?.members?.find(
-        (member) => member?.user_id === signedProfileId
-      )?.user;
-
+      const signedChannelUsername = profile?.username;
       signedChannelName =
         channel?.channel_type === 4
           ? `Anonymous ${channel?.anon_user_info_emoji_name}`
-          : getChatName(channel?.name, signedChannelProfile?.username);
+          : getChatName(channel?.name, signedChannelUsername);
       signedChannelImage =
         channel?.members?.length > 2
           ? DEFAULT_PROFILE_PIC_PATH
@@ -181,7 +193,8 @@ const useCoreChatSystemHook = () => {
           channel.firstMessage = channel?.messages?.[channel?.messages?.length - 1];
         }
         channel.channel = {...channel};
-        const channelList = ChannelList.fromChannelAPI(channel, isAnonymous ? 'ANON_PM' : 'PM');
+        const channelType = channel?.type;
+        const channelList = ChannelList.fromChannelAPI(channel, type[channelType]);
         return resolve(channelList.saveIfLatest(localDb));
       } catch (e) {
         console.log('error on helperChannelPromiseBuilder');
@@ -190,11 +203,11 @@ const useCoreChatSystemHook = () => {
     });
   };
 
-  const saveChannelData = async (channel, channelType: ChannelType) => {
+  const saveChannelData = async (channel, channelCategory: ChannelCategory) => {
     if (!channel?.members || channel?.members?.length === 0) return;
 
     try {
-      await helperChannelPromiseBuilder(channel, channelType);
+      await helperChannelPromiseBuilder(channel, channelCategory);
     } catch (e) {
       console.log('error on saveChannelData helperChannelPromiseBuilder');
       console.log(e);
@@ -222,9 +235,9 @@ const useCoreChatSystemHook = () => {
     }
   };
 
-  const saveAllChannelData = async (channels, channelType: ChannelType) => {
+  const saveAllChannelData = async (channels, channelCategory: ChannelCategory) => {
     channels?.forEach(async (channel) => {
-      saveChannelData(channel, channelType);
+      saveChannelData(channel, channelCategory);
     });
   };
 

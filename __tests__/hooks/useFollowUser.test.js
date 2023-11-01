@@ -5,6 +5,7 @@ import {useIsFocused} from '@react-navigation/core';
 
 import following from '../../src/context/actions/following';
 import useFollowUser from '../../src/screens/ChannelListScreen/hooks/useFollowUser';
+import useLocalDatabaseHook from '../../src/database/hooks/useLocalDatabaseHook';
 import {Context} from '../../src/context';
 import {getFollowing, setUnFollow} from '../../src/service/profile';
 import {sendSystemMessage} from '../../src/service/chat';
@@ -12,6 +13,8 @@ import {sendSystemMessage} from '../../src/service/chat';
 jest.mock('@react-navigation/core', () => ({
   useIsFocused: jest.fn()
 }));
+
+jest.mock('../../src/database/hooks/useLocalDatabaseHook', () => jest.fn());
 
 jest.mock('../../src/context/actions/following', () => ({
   setFollowingUsers: jest.fn()
@@ -35,9 +38,14 @@ describe('useFollowUser', () => {
     following: [followContext, followingDispatch],
     profile: [profileContext]
   };
+  const localDb = 'local-db';
+  const refresh = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
+    useIsFocused.mockReturnValue(true);
+    useLocalDatabaseHook.mockReturnValue({localDb, refresh});
+    getFollowing.mockResolvedValue({data: []});
   });
 
   it('should call getFollowing and setFollowingUsers on mount', async () => {
