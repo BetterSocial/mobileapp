@@ -35,7 +35,6 @@ const followClient = async (members, data, text, textOwnMessage) => {
     const user = {
       id
     };
-    console.log({user}, 'nehi');
     const sort = [{last_message_at: -1}];
     const filter = {type: 'messaging', members: {$eq: members}};
     await chatClient.disconnectUser();

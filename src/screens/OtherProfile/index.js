@@ -490,7 +490,6 @@ const OtherProfile = () => {
         SimpleToast.LONG
       );
     };
-    console.log({user_id, dataMain}, 'laliopo');
     const __renderFollowerDetail = () => {
       if (blockStatus.blocker) return <></>;
       return (

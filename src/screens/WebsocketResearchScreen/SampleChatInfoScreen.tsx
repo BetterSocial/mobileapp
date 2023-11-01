@@ -198,7 +198,6 @@ const SampleChatInfoScreen = () => {
       />
     );
   };
-  console.log({channelInfo}, 'sultani');
   const {anon_user_info_color_code, anon_user_info_emoji_code, anon_user_info_emoji_name} =
     channelInfo?.rawJson?.channel || {};
 
