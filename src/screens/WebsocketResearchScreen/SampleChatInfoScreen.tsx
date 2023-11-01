@@ -160,6 +160,7 @@ const SampleChatInfoScreen = () => {
   const {channelInfo, goBack, onContactPressed} = useAnonymousChatInfoScreenHook();
 
   const [isLoadingMembers] = React.useState<boolean>(false);
+  // TODO: Change this into useUserAuthHook
   const {signedProfileId} = useProfileHook();
 
   const showImageProfile = () => {
