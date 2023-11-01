@@ -52,8 +52,6 @@ const SplashScreen = () => {
       const token = TokenStorage.get(ITokenEnum.token);
       const anonymousToken = TokenStorage.get(ITokenEnum.anonymousToken);
 
-      console.log('doVerifyUser', id, anonymousUserId, token, anonymousToken);
-
       setAuth({
         anonProfileId: anonymousUserId,
         profileId: id,
