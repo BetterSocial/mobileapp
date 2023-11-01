@@ -6,6 +6,8 @@ import {BaseChannelItemTypeProps} from '../../../types/component/AnonymousChat/B
 import {ChannelList} from '../../../types/database/schema/ChannelList.types';
 import {MessageChannelItemProps} from '../../../types/component/AnonymousChat/MessageChannelItem.types';
 import {calculateTime} from '../../utils/time';
+import {getChatName} from '../../utils/string/StringUtils';
+import {Context} from '../../context';
 
 const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement = ({
   item,
@@ -18,7 +20,7 @@ const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement
     if (!isAnonymous) return BaseChannelItemTypeProps.SIGNED_PM;
     return BaseChannelItemTypeProps.ANON_PM;
   };
-
+  const [profile] = React.useContext(Context).profile;
   const type = determineChatType(item);
 
   const handleMessage = () => {
@@ -35,7 +37,7 @@ const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement
     <BaseChannelItem
       type={type}
       message={handleMessage()}
-      name={item?.name}
+      name={getChatName(item?.name, profile?.myProfile?.username)}
       picture={item?.channelPicture}
       postMaker={item?.rawJson}
       time={calculateTime(item?.lastUpdatedAt, true)}
