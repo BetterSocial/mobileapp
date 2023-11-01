@@ -57,10 +57,11 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
     }
     return null;
   };
-  if (item?.type === 'system' || item?.rawJson?.isSystem) {
+  console.log({item}, 'iteman');
+
+  if (item?.type === 'system' || item?.rawJson?.isSystem || item?.rawJson?.message?.isSystem) {
     return <BaseSystemChat item={item} index={index} />;
   }
-
   if (item?.isMe)
     return (
       <ChatItemMyTextV2

@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {BaseChatItemComponentProps} from '../../../types/component/AnonymousChat/BaseChatItem.types';
 import dimen from '../../utils/dimen';
+import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
 
 const styles = StyleSheet.create({
   containerMessage: {
@@ -19,15 +20,11 @@ const styles = StyleSheet.create({
 });
 
 const BaseSystemChat: React.FC<BaseChatItemComponentProps> = ({item, index}) => {
-  const handleText = () => {
-    if (item?.rawJson?.userIdFollower === item?.rawJson?.user?.id) {
-      return item?.rawJson?.textOwnMessage;
-    }
-    return item?.rawJson?.text;
-  };
+  const {handleTextSystem} = useChatUtilsHook();
+
   return (
     <View style={styles.containerMessage} key={index}>
-      <Text style={styles.textSystem}>{handleText()} </Text>
+      <Text style={styles.textSystem}>{handleTextSystem(item)} </Text>
     </View>
   );
 };
