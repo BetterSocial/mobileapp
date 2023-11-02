@@ -47,12 +47,14 @@ const ChannelListScreenV2 = () => {
                   name={`@${profile?.username}`}
                   picture={profile?.profile_pic_path}
                   unreadCount={signedChannelUnreadCount}
+                  type="SIGNED"
                 />,
                 <ChannelListTabItem
                   key={1}
                   name="Anonymous"
                   picture={AnonymousProfile}
                   unreadCount={anonymousChannelUnreadCount}
+                  type="ANONYMOUS"
                 />
               ]}
             />

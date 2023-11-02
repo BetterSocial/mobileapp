@@ -31,8 +31,8 @@ export const channelImageStyles = StyleSheet.create({
   containerGreen: {
     backgroundColor: colors.bondi_blue
   },
-  containerBlue: {
-    backgroundColor: colors.lightblue
+  containerDarkBlue: {
+    backgroundColor: colors.darkBlue
   },
   badgeContainer: {
     position: 'absolute',

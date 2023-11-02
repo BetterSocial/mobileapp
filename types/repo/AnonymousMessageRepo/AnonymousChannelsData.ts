@@ -88,5 +88,6 @@ export interface ChannelData {
   messages: Message[];
   targetName: string;
   targetImage: string;
+  unreadCount?: number;
   firstMessage: Message;
 }

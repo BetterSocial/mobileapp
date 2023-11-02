@@ -2,13 +2,13 @@
 import * as React from 'react';
 
 import BaseChannelItem from './BaseChannelItem';
+import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
 import {BaseChannelItemTypeProps} from '../../../types/component/AnonymousChat/BaseChannelItem.types';
 import {ChannelList} from '../../../types/database/schema/ChannelList.types';
+import {Context} from '../../context';
 import {MessageChannelItemProps} from '../../../types/component/AnonymousChat/MessageChannelItem.types';
 import {calculateTime} from '../../utils/time';
 import {getChatName} from '../../utils/string/StringUtils';
-import {Context} from '../../context';
-import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
 
 const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement = ({
   item,
@@ -39,6 +39,7 @@ const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement
       isMe={item?.user?.isMe}
       hasFollowButton={hasFollowButton}
       handleFollow={handleFollow}
+      channelType={item?.channelType}
     />
   );
 };

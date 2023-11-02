@@ -22,6 +22,7 @@ export interface SignedPostNotification {
   totalCommentBadge: number;
   type: string;
   unreadComment: number;
+  unreadCount?: number;
   upvote: number;
 }
 export interface Comment {

@@ -32,7 +32,7 @@ export interface BaseChannelItemProps {
   isCommentExists?: boolean;
   isMe: boolean;
   isOwnSignedPost?: boolean;
-  message: string;
+  message: any;
   name: string;
   onPress?: () => void;
   picture: string;
@@ -46,4 +46,5 @@ export interface BaseChannelItemProps {
   upvote?: number;
   hasFollowButton?: boolean;
   handleFollow?: () => void;
+  channelType?: string;
 }

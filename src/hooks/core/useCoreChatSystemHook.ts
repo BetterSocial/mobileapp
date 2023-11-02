@@ -476,7 +476,7 @@ const useCoreChatSystemHook = () => {
     if (type === 'notification.message_new') {
       saveChannelListData(lastJsonMessage, ANONYMOUS).catch((e) => console.log(e));
     }
-  }, [lastJsonMessage]);
+  }, [lastJsonMessage, localDb]);
 
   React.useEffect(() => {
     if (!lastSignedMessage && !localDb) return;
@@ -486,7 +486,7 @@ const useCoreChatSystemHook = () => {
     if (type === 'notification.message_new' || type === 'notification.added_to_channel') {
       saveChannelListData(lastSignedMessage, SIGNED).catch((e) => console.log(e));
     }
-  }, [lastSignedMessage]);
+  }, [lastSignedMessage, localDb]);
 
   React.useEffect(() => {
     if (isEnteringApp && migrationStatus === 'MIGRATED') {
