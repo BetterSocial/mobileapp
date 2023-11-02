@@ -89,4 +89,8 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
   );
 };
 
-export default BaseChatItem;
+const isEqual = (prevProps, nextProps) => {
+  return nextProps.item === prevProps.item;
+};
+
+export default React.memo(BaseChatItem, isEqual);

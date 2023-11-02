@@ -14,6 +14,7 @@ const ChannelListScreen = () => {
   const {channels, goToChatScreen, goToPostDetailScreen, goToCommunityScreen} =
     useSignedChannelListScreenHook();
   const {handleFollow, isInitialFollowing, isSystemFollowMessage} = useFollowUser();
+  console.log({channels}, 'channels');
   return (
     <FlatList
       data={channels}
