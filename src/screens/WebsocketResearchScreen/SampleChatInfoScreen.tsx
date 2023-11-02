@@ -188,7 +188,19 @@ const SampleChatInfoScreen = () => {
   const {signedProfileId} = useProfileHook();
   const {params}: any = useRoute();
   const ANONYMOUS_USER = 'AnonymousUser';
+  const {anon_user_info_color_code, anon_user_info_emoji_code, anon_user_info_emoji_name} =
+    channelInfo?.rawJson?.channel || {};
+
   const showImageProfile = () => {
+    if (anon_user_info_color_code) {
+      return (
+        <AnonymousIcon
+          color={anon_user_info_color_code}
+          emojiCode={anon_user_info_emoji_code}
+          size={normalize(100)}
+        />
+      );
+    }
     return (
       <Image
         testID="image1"
@@ -197,8 +209,7 @@ const SampleChatInfoScreen = () => {
       />
     );
   };
-  const {anon_user_info_color_code, anon_user_info_emoji_code, anon_user_info_emoji_name} =
-    channelInfo?.rawJson?.channel || {};
+  console.log({channelInfo}, 'channel');
 
   const renderImageComponent = (item) => {
     if (
