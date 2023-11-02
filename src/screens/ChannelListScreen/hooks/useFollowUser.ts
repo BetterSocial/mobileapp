@@ -76,14 +76,9 @@ const useFollowUser = () => {
         'sent'
       );
 
-      const selectedChannel = (await ChannelList.getById(localDb, channelId)) as any;
-      selectedChannel.description = textOwnUser;
-      selectedChannel.createdAt = new Date().toISOString();
-      selectedChannel.lastUpdatedAt = new Date().toISOString();
-      const channelListSchema = ChannelList.fromDatabaseObject(selectedChannel);
+      await ChannelList.updateChannelDescription(localDb, channelId, textOwnUser);
 
       await chatSchema.save(localDb);
-      await channelListSchema.save(localDb);
       refresh('chat');
       refresh('channelList');
     } catch (error) {

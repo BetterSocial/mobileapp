@@ -250,8 +250,31 @@ class ChannelList implements BaseDbSchema {
     return 'channel_lists';
   }
 
+  static updateChannelDescription = async (
+    db: SQLiteDatabase,
+    channelId: string,
+    description: string
+  ) => {
+    try {
+      const updateQuery = `UPDATE ${ChannelList.getTableName()}
+        SET description = ?, created_at = ?, last_updated_at = ?
+        WHERE id = ?;`;
+
+      const updateReplacement = [
+        description,
+        new Date().toISOString(),
+        new Date().toISOString(),
+        channelId
+      ];
+
+      await db.executeSql(updateQuery, updateReplacement);
+    } catch (e) {
+      console.log();
+      console.log('error updating channel description', e);
+    }
+  };
+
   static fromWebsocketObject(json, channelType: ChannelType): ChannelList {
-    console.log('from websocket object', json?.channel?.id);
     return new ChannelList({
       id: json?.channel?.id,
       channelPicture: json?.targetImage,
@@ -329,7 +352,7 @@ class ChannelList implements BaseDbSchema {
       name: data?.targetName,
       description:
         descriptionSystemMessage || data?.firstMessage?.text || data?.firstMessage?.message || '',
-      unreadCount: 0,
+      unreadCount: data?.unreadCount ?? 0,
       channelType,
       lastUpdatedAt: data?.last_message_at,
       lastUpdatedBy: data?.firstMessage?.user?.id,
@@ -346,7 +369,7 @@ class ChannelList implements BaseDbSchema {
       channelPicture: data?.postMaker?.data?.profile_pic_url || '',
       name: data?.titlePost,
       description: data?.titlePost,
-      unreadCount: 0,
+      unreadCount: data?.unreadCount ?? 0,
       channelType: 'POST_NOTIFICATION',
       lastUpdatedAt: data?.data?.updated_at,
       lastUpdatedBy: '',

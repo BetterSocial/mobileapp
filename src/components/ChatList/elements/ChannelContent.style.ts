@@ -28,7 +28,7 @@ export const channelContentStyles = StyleSheet.create({
     alignSelf: 'flex-start'
   },
   containerBadge: {
-    backgroundColor: colors.bondi_blue,
+    backgroundColor: colors.darkBlue,
     width: 20,
     height: 20,
     borderRadius: 10,
@@ -37,7 +37,7 @@ export const channelContentStyles = StyleSheet.create({
   },
   badge: {
     fontFamily: fonts.inter[400],
-    fontSize: normalize(12),
+    fontSize: normalize(10),
     lineHeight: 14.52,
     color: colors.white
   }

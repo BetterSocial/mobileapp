@@ -16,7 +16,8 @@ const ChannelTitle = ({
   isMe,
   hasFollowButton = false,
   isFollowing,
-  handleFollow
+  handleFollow,
+  isAnonymousTab = false
 }) => {
   const styles = StyleSheet.create({
     chatContentName: {
@@ -43,7 +44,7 @@ const ChannelTitle = ({
       marginRight: 4
     },
     chatContentUnreadCountContainer: {
-      backgroundColor: colors.bondi_blue,
+      backgroundColor: isAnonymousTab ? colors.bondi_blue : colors.darkBlue,
       width: 20,
       height: 20,
       borderRadius: 10,
@@ -53,7 +54,7 @@ const ChannelTitle = ({
     },
     chatContentUnreadCount: {
       fontFamily: fonts.inter[400],
-      fontSize: normalize(12),
+      fontSize: normalize(10),
       lineHeight: 14.52,
       color: colors.white
     },
@@ -82,6 +83,8 @@ const ChannelTitle = ({
   const isSignedDM = type === BaseChannelItemTypeProps.SIGNED_PM;
 
   if (type?.includes('PM')) {
+    const isShowFollowButton = unreadCount <= 0 && hasFollowButton;
+
     return (
       <View style={baseStyles.chatContentSection}>
         <View style={{flex: 1}}>
@@ -89,14 +92,14 @@ const ChannelTitle = ({
             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.chatContentName}>
               {name}
             </Text>
-            {!hasFollowButton && <Text style={styles.chatContentTime}>{time}</Text>}
+            {!isShowFollowButton && <Text style={styles.chatContentTime}>{time}</Text>}
           </View>
 
           <View style={styles.chatMessage}>
             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.chatContentMessage}>
               {`${isMe ? 'You: ' : ''}${message}`}
             </Text>
-            {!hasFollowButton && unreadCount > 0 && (
+            {!isShowFollowButton && unreadCount > 0 && (
               <View style={styles.chatContentUnreadCountContainer}>
                 <Text style={styles.chatContentUnreadCount}>{unreadCount}</Text>
               </View>
@@ -104,7 +107,7 @@ const ChannelTitle = ({
           </View>
         </View>
 
-        {isSignedDM && hasFollowButton && (
+        {isSignedDM && isShowFollowButton && (
           <ChannelFollowButton isFollowing={isFollowing} handleFollow={handleFollow} />
         )}
       </View>

@@ -17,7 +17,8 @@ const ChannelImage = ({
   anonPostNotificationUserInfo = null,
   postMaker = null,
   isCommentExists = false,
-  type = BaseChannelItemTypeProps.ANON_PM
+  type = BaseChannelItemTypeProps.ANON_PM,
+  isAnonymousTab = false
 }) => {
   const styles = StyleSheet.create({
     image: {
@@ -42,14 +43,21 @@ const ChannelImage = ({
       alignItems: 'center'
     },
     myPostNotificationImageContainer: {
-      backgroundColor: colors.lightblue
+      backgroundColor: colors.bondi_blue
     },
     anonPmNotificationImageContainer: {
       backgroundColor: colors.bondi_blue
     },
     postNotificationIcon: {
+      width: dimen.normalizeDimen(12.5),
+      height: dimen.normalizeDimen(12.5)
+    },
+    chatIcon: {
       width: dimen.normalizeDimen(12),
       height: dimen.normalizeDimen(12)
+    },
+    backgroundDarkBlue: {
+      backgroundColor: colors.darkBlue
     }
   });
 
@@ -127,8 +135,12 @@ const ChannelImage = ({
     return (
       <View>
         {renderChatMainImage()}
-        <View style={[styles.postNotificationImage, styles.anonPmNotificationImageContainer]}>
-          <FastImage source={ChatIcon} style={styles.postNotificationIcon} />
+        <View
+          style={[
+            styles.postNotificationImage,
+            isAnonymousTab ? styles.anonPmNotificationImageContainer : styles.backgroundDarkBlue
+          ]}>
+          <FastImage source={ChatIcon} style={styles.chatIcon} />
         </View>
       </View>
     );
