@@ -10,6 +10,7 @@ const useRootChannelListHook = () => {
   const {localDb, chat, channelList} = useLocalDatabaseHook();
   const [signedChannelUnreadCount, setSignedChannelUnreadCount] = React.useState(0);
   const [anonymousChannelUnreadCount, setAnonymousChannelUnreadCount] = React.useState(0);
+  const [totalUnreadCount, setTotalUnreadCount] = React.useState(0);
 
   const getSignedChannelUnreadCount = async () => {
     if (!localDb) return;
@@ -49,12 +50,16 @@ const useRootChannelListHook = () => {
     getAnonymousChannelUnreadCount().catch((e) => console.log(e));
   }, [localDb, chat, channelList]);
 
+  React.useEffect(() => {
+    setTotalUnreadCount(signedChannelUnreadCount + anonymousChannelUnreadCount);
+  }, [signedChannelUnreadCount, anonymousChannelUnreadCount]);
+
   return {
     signedChannelUnreadCount,
-    totalUnreadCount: anonymousChannelUnreadCount + signedChannelUnreadCount,
     refreshAnonymousChannelList,
     refreshSignedChannelList,
-    anonymousChannelUnreadCount
+    anonymousChannelUnreadCount,
+    totalUnreadCount
   };
 };
 
