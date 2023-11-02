@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
 });
 
 const ChatItemTargetText = ({
-  avatar = DEFAULT_PROFILE_PIC_PATH,
+  avatar,
   username = 'Anonymous Clown',
   time = '4h',
   isContinuous = false,
@@ -84,7 +84,7 @@ const ChatItemTargetText = ({
               testID="chat-item-default-avatar"
               style={styles.avatar}
               source={{
-                uri: avatar
+                uri: avatar || DEFAULT_PROFILE_PIC_PATH
               }}
             />
           )}

@@ -290,6 +290,7 @@ const useCoreChatSystemHook = () => {
     }
 
     try {
+      console.log({signedChannel}, 'palo');
       await saveAllChannelData(signedChannel, 'SIGNED');
       refresh('channelList');
     } catch (e) {
