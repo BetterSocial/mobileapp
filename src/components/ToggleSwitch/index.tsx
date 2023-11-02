@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     left: dimen.normalizeDimen(3)
   },
 
-  eahcStylesOf: {
+  eachStylesOff: {
     fontSize: dimen.normalizeDimen(12),
     color: '#f4f3f4',
     position: 'absolute',
@@ -82,7 +82,9 @@ interface ToggleSwitchProps {
   styleLabelRight?: StyleProp<TextStyle>;
   activeTextColor?: string;
   inactiveTextColor?: string;
-  conatinerStyle?: TouchableOpacityProps['style'];
+  containerStyle?: TouchableOpacityProps['style'];
+  labelOff?: string;
+  labelOn?: string;
   onValueChange?: (value: boolean) => void;
 }
 
@@ -99,7 +101,9 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   styleLabelRight,
   activeTextColor = '#00ADB5',
   inactiveTextColor = '#2C67BC',
-  conatinerStyle
+  containerStyle,
+  labelOff = 'Off',
+  labelOn = 'On'
 }) => {
   const positionButton = React.useMemo(() => new Animated.Value(0), []);
 
@@ -150,7 +154,7 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
 
   return (
     <TouchableOpacity
-      style={[styles.container, conatinerStyle]}
+      style={[styles.container, containerStyle]}
       activeOpacity={0.9}
       onPress={onPress}>
       <Text style={[styles.labelLeft, styleLabelLeft]}>{labelLeft}</Text>
@@ -169,17 +173,17 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
               color: activeTextColor
             }
           ]}>
-          On
+          {labelOn}
         </Animated.Text>
         <Animated.Text
           style={[
-            styles.eahcStylesOf,
+            styles.eachStylesOff,
             {
               opacity: initialOpacityOff,
               color: inactiveTextColor
             }
           ]}>
-          Off
+          {labelOff}
         </Animated.Text>
         <Animated.View
           style={[
