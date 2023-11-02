@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 
 import FastImage from 'react-native-fast-image';
 import AnonymousIcon from '../../screens/ChannelListScreen/elements/components/AnonymousIcon';
