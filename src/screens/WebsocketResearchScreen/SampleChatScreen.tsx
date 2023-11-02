@@ -46,7 +46,7 @@ export const styles = StyleSheet.create({
 const SampleChatScreen = () => {
   const {selectedChannel, chats, goBackFromChatScreen, goToChatInfoScreen, sendChat} =
     useChatScreenHook(ANONYMOUS);
-
+  console.log({chats}, 'helpme2');
   const renderChatItem = React.useCallback(({item, index}) => {
     return <BaseChatItem item={item} index={index} />;
   }, []);
