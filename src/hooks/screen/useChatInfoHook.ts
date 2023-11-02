@@ -11,6 +11,7 @@ import {Context} from '../../context';
 import {SIGNED} from '../core/constant';
 import {isContainUrl} from '../../utils/Utils';
 import useGroupInfo from '../../screens/GroupInfo/hooks/useGroupInfo';
+import {Member} from '../../../types/database/schema/ChatListDetail.types';
 
 // import {} from '../../'
 function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
@@ -69,6 +70,16 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
     alertRemoveUser(status);
   };
 
+  const handleShowArrow = (item: Member) => {
+    if (params?.from === SIGNED) {
+      return item?.user_id !== myUserId?.myProfile?.user_id;
+    }
+    if (!isContainUrl(item?.user?.image)) {
+      return false;
+    }
+    return item?.user_id !== myUserId?.myProfile?.user_id;
+  };
+
   React.useEffect(() => {
     initChatInfoData();
   }, [localDb, channelList]);
@@ -85,7 +96,8 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
     openModal,
     handleCloseSelectUser,
     isAnonymousModalOpen,
-    blockModalRef
+    blockModalRef,
+    handleShowArrow
   };
 }
 

@@ -181,9 +181,9 @@ const SampleChatInfoScreen = () => {
     handleCloseSelectUser,
     openModal,
     isAnonymousModalOpen,
-    blockModalRef
+    blockModalRef,
+    handleShowArrow
   } = useChatInfoScreenHook();
-  const [profile] = React.useContext(Context).profile;
   const [isLoadingMembers] = React.useState<boolean>(false);
   const {signedProfileId} = useProfileHook();
   const {params}: any = useRoute();
@@ -260,7 +260,7 @@ const SampleChatInfoScreen = () => {
                         onPress={() => onContactPressed(item, params.from)}
                         fullname={item?.user?.username || item?.user?.name}
                         photo={item?.user?.profilePicture}
-                        showArrow={item?.user_id !== profile?.myProfile?.user_id}
+                        showArrow={handleShowArrow(item)}
                         userId={signedProfileId}
                         ImageComponent={renderImageComponent(item)}
                         from={params?.from}
