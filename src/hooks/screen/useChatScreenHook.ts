@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import 'react-native-get-random-values';
 
 import * as React from 'react';
@@ -67,9 +68,9 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       }
 
       let channelType = 1;
-      if (selectedChannel?.members?.length > 2) {
-        channelType = 2;
-      }
+      if (selectedChannel?.channelType?.toLowerCase() === 'group') channelType = 2;
+      if (selectedChannel?.rawJson?.channel?.channel_type === 4) channelType = 4;
+
       let response;
       if (type === 'ANONYMOUS') {
         response = await AnonymousMessageRepo.sendAnonymousMessage(selectedChannel?.id, message);
