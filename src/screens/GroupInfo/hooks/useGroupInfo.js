@@ -23,6 +23,7 @@ import {setParticipants} from '../../../context/actions/groupChat';
 import {uploadFile} from '../../../service/file';
 import TokenStorage, {ITokenEnum} from '../../../utils/storage/custom/tokenStorage';
 import {isContainUrl} from '../../../utils/Utils';
+import {ANONYMOUS_USER} from '../../../hooks/core/constant';
 
 const useGroupInfo = () => {
   const [groupChatState, groupPatchDispatch] = React.useContext(Context).groupChat;
@@ -454,8 +455,7 @@ const useGroupInfo = () => {
     });
   };
   const handlePressContact = async (item) => {
-    const isAnonymousUser = !isContainUrl(item?.user?.image);
-
+    const isAnonymousUser = !isContainUrl(item?.user?.image) || item?.user?.name === ANONYMOUS_USER;
     if (item?.user_id === profile?.myProfile?.user_id) return;
 
     if (anonUserEmojiName || isAnonymousUser) {

@@ -14,48 +14,54 @@ import {ChatStatus} from '../../../types/database/schema/ChannelList.types';
 import {calculateTime} from '../../utils/time';
 import dimen from '../../utils/dimen';
 import BaseSystemChat from './BaseChatSystem';
-import {ANONYMOUS} from '../../hooks/core/constant';
+import {ANONYMOUS, ANONYMOUS_USER} from '../../hooks/core/constant';
 
 const styles = StyleSheet.create({
   containerPicture: {
     height: dimen.normalizeDimen(24),
     width: dimen.normalizeDimen(24),
     borderRadius: dimen.normalizeDimen(12)
+  },
+  ml8: {
+    marginLeft: 8
   }
 });
 
 const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
   const {selectedChannel, handleUserName} = useChatScreenHook(type || ANONYMOUS);
-  const userAnonymous = 'AnonymousUser';
   const {anon_user_info_emoji_code, anon_user_info_color_code} =
     selectedChannel?.rawJson?.channel || {};
-  const renderAnonymousIcon = () => (
+  console.log({selectedChannel}, 'naka');
+  const renderAnonymousIcon = (anonColor: string, anonEmoji: string) => (
     <View style={{marginLeft: 8}}>
-      <AnonymousIcon
-        color={anon_user_info_color_code}
-        emojiCode={anon_user_info_emoji_code}
-        size={dimen.normalizeDimen(24)}
-      />
+      <AnonymousIcon color={anonColor} emojiCode={anonEmoji} size={dimen.normalizeDimen(24)} />
     </View>
   );
 
   const renderDefaultIcon = () => (
-    <View>
+    <View style={styles.ml8}>
       <FastImage style={styles.containerPicture} source={{uri: item?.user?.profilePicture}} />
     </View>
   );
 
   const handleImageUser = () => {
     if (type === ANONYMOUS) {
-      if (item?.user?.username !== userAnonymous) {
+      if (item?.user?.username !== ANONYMOUS_USER) {
         return renderDefaultIcon();
       }
-      return renderAnonymousIcon();
+      return renderAnonymousIcon(anon_user_info_color_code, anon_user_info_emoji_code);
     }
+
     if (item?.rawJson?.anon_user_info_emoji_code) {
-      return renderAnonymousIcon();
+      return renderAnonymousIcon(anon_user_info_color_code, anon_user_info_emoji_code);
     }
-    return null;
+    if (item?.rawJson?.user?.name === ANONYMOUS_USER) {
+      return renderAnonymousIcon(
+        selectedChannel?.rawJson?.anon_user_info_color_code,
+        selectedChannel?.rawJson?.anon_user_info_emoji_code
+      );
+    }
+    return renderDefaultIcon();
   };
 
   if (item?.type === 'system' || item?.rawJson?.isSystem || item?.rawJson?.message?.isSystem) {

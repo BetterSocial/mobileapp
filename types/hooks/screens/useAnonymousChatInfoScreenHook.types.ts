@@ -1,4 +1,5 @@
 import {ChannelList, ChannelListMemberSchema} from '../../database/schema/ChannelList.types';
+import {Member} from '../../database/schema/ChatListDetail.types';
 
 interface UseAnonymousChatInfoScreenHook {
   channelInfo: ChannelList;
@@ -14,6 +15,7 @@ interface UseAnonymousChatInfoScreenHook {
   openModal: boolean;
   isAnonymousModalOpen: boolean;
   blockModalRef: () => void;
+  handleShowArrow: (item: Member) => void;
 }
 
 export default UseAnonymousChatInfoScreenHook;

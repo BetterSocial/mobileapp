@@ -181,14 +181,26 @@ const SampleChatInfoScreen = () => {
     handleCloseSelectUser,
     openModal,
     isAnonymousModalOpen,
-    blockModalRef
+    blockModalRef,
+    handleShowArrow
   } = useChatInfoScreenHook();
-  const [profile] = React.useContext(Context).profile;
   const [isLoadingMembers] = React.useState<boolean>(false);
   const {signedProfileId} = useProfileHook();
   const {params}: any = useRoute();
   const ANONYMOUS_USER = 'AnonymousUser';
+  const {anon_user_info_color_code, anon_user_info_emoji_code} =
+    channelInfo?.rawJson?.channel || {};
+
   const showImageProfile = () => {
+    if (anon_user_info_color_code) {
+      return (
+        <AnonymousIcon
+          color={anon_user_info_color_code}
+          emojiCode={anon_user_info_emoji_code}
+          size={normalize(100)}
+        />
+      );
+    }
     return (
       <Image
         testID="image1"
@@ -197,8 +209,7 @@ const SampleChatInfoScreen = () => {
       />
     );
   };
-  const {anon_user_info_color_code, anon_user_info_emoji_code, anon_user_info_emoji_name} =
-    channelInfo?.rawJson?.channel || {};
+  console.log({channelInfo}, 'channel');
 
   const renderImageComponent = (item) => {
     if (
@@ -260,7 +271,7 @@ const SampleChatInfoScreen = () => {
                         onPress={() => onContactPressed(item, params.from)}
                         fullname={item?.user?.username || item?.user?.name}
                         photo={item?.user?.profilePicture}
-                        showArrow={item?.user_id !== profile?.myProfile?.user_id}
+                        showArrow={handleShowArrow(item)}
                         userId={signedProfileId}
                         ImageComponent={renderImageComponent(item)}
                         from={params?.from}
