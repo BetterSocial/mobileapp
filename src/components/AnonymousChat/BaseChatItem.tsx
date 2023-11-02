@@ -58,6 +58,9 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
     return null;
   };
 
+  if (item?.type === 'system' || item?.rawJson?.isSystem || item?.rawJson?.message?.isSystem) {
+    return <BaseSystemChat item={item} index={index} />;
+  }
   if (item?.isMe)
     return (
       <ChatItemMyTextV2
@@ -73,10 +76,6 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
       />
     );
 
-  if (item?.type === 'system') {
-    return <BaseSystemChat item={item} index={index} />;
-  }
-
   return (
     <ChatItemTargetText
       key={index}
@@ -90,4 +89,8 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
   );
 };
 
-export default BaseChatItem;
+const isEqual = (prevProps, nextProps) => {
+  return nextProps.item === prevProps.item;
+};
+
+export default React.memo(BaseChatItem, isEqual);

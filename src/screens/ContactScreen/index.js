@@ -47,7 +47,6 @@ const ContactScreen = ({navigation}) => {
   const [selectedUsers, setSelectedUsers] = React.useState([]);
   const [isSearchMode, setIsSearchMode] = React.useState(false);
   const [isLoadingSearchResult, setIsLoadingSearchResult] = React.useState(false);
-
   const debounced = React.useCallback(
     debounce((changedText) => {
       // handleSearch(changedText)
@@ -123,7 +122,6 @@ const ContactScreen = ({navigation}) => {
       const members = followed;
       const channelName = usernames;
       let typeChannel = 0;
-      console.log(members, 'moon')
       if (members.length > 2) {
         typeChannel = 1;
       }
@@ -145,7 +143,6 @@ const ContactScreen = ({navigation}) => {
         user_id: item,
         channel_role: 'channel_moderator'
       }));
-
       if (findChannels.length > 0) {
         setChannel(findChannels[0], dispatchChannel);
       } else {
@@ -168,8 +165,7 @@ const ContactScreen = ({navigation}) => {
         await channelChat.addMembers(memberWithRoles);
         setChannel(channelChat, dispatchChannel);
       }
-      setFollowed([profile.user_id]);
-      setUsernames([profile.username]);
+
       setLoading(false);
       await navigation.replace('ChatDetailPage');
     } catch (error) {

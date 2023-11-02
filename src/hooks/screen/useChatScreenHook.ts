@@ -66,11 +66,19 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
         refresh('channelList');
       }
 
+      let channelType = 1;
+      if (selectedChannel?.members?.length > 2) {
+        channelType = 2;
+      }
       let response;
       if (type === 'ANONYMOUS') {
         response = await AnonymousMessageRepo.sendAnonymousMessage(selectedChannel?.id, message);
       } else {
-        response = await SignedMessageRepo.sendSignedMessage(selectedChannel?.id, message);
+        response = await SignedMessageRepo.sendSignedMessage(
+          selectedChannel?.id,
+          message,
+          channelType
+        );
       }
 
       await currentChatSchema.updateChatSentStatus(localDb, response);

@@ -13,6 +13,7 @@ export interface UserSchema {
   bio: string;
   isBanned: boolean;
   isMe: boolean;
+  image?: string;
 }
 
 export interface ChannelListMemberSchema {

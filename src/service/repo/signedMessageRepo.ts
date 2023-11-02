@@ -8,7 +8,7 @@ import {
 
 const baseUrl = {
   checkIsTargetAllowingAnonDM: 'chat/channels/check-allow-anon-dm-status',
-  sendSignedMessage: '/chat/anonymous',
+  sendSignedMessage: '/chat/send-signed-message',
   getAllSignedChannels: '/chat/channels/signed',
   getAllSignedPostNotifications: '/feeds/feed-chat',
   getSingleSignedPostNotifications: (activityId: string) => `/feeds/feed-chat/${activityId}`,
@@ -17,7 +17,7 @@ const baseUrl = {
 
 interface SignedMessageRepoTypes {
   checkIsTargetAllowingAnonDM: (targetUserId: string) => Promise<any>;
-  sendSignedMessage: (channelId: string, message: string) => Promise<any>;
+  sendSignedMessage: (channelId: string, message: string, channelType: number) => Promise<any>;
   getAllSignedChannels: () => Promise<ChannelData[]>;
   getAllSignedPostNotifications: () => Promise<SignedPostNotification[]>;
   getSingleSignedPostNotifications: (activityId: string) => Promise<SignedPostNotification>;
@@ -42,10 +42,11 @@ async function checkIsTargetAllowingAnonDM(targetUserId: string) {
   }
 }
 
-async function sendSignedMessage(channelId: string, message: string) {
-  const payload = {channelId, message};
+async function sendSignedMessage(channelId: string, message: string, channelType: number) {
+  const payload = {channelId, message, channelType};
   try {
     const response = await api.post(baseUrl.sendSignedMessage, payload);
+
     if (response.status === 200) {
       return Promise.resolve(response.data?.data);
     }

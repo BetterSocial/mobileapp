@@ -9,6 +9,7 @@ import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
 import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
 import {colors} from '../../utils/colors';
+import {ANONYMOUS} from '../../hooks/core/constant';
 
 const {height} = Dimensions.get('window');
 
@@ -44,7 +45,7 @@ export const styles = StyleSheet.create({
 
 const SampleChatScreen = () => {
   const {selectedChannel, chats, goBackFromChatScreen, goToChatInfoScreen, sendChat} =
-    useChatScreenHook('ANONYMOUS');
+    useChatScreenHook(ANONYMOUS);
 
   const renderChatItem = React.useCallback(({item, index}) => {
     return <BaseChatItem item={item} index={index} />;

@@ -3,6 +3,7 @@ import moment from 'moment';
 import {atom, useRecoilState} from 'recoil';
 import {useNavigation} from '@react-navigation/native';
 
+import React from 'react';
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
 import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
 import UseChatUtilsHook from '../../../../types/hooks/screens/useChatUtilsHook.types';
@@ -12,6 +13,7 @@ import {ChannelList} from '../../../../types/database/schema/ChannelList.types';
 import {ChannelTypeEnum} from '../../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 import {PostNotificationChannelList} from '../../../../types/database/schema/PostNotificationChannelList.types';
 import {convertTopicNameToTopicPageScreenParam} from '../../../utils/string/StringUtils';
+import {Context} from '../../../context';
 
 const chatAtom = atom({
   key: 'chatAtom',
@@ -25,7 +27,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
   const {localDb, refresh} = useLocalDatabaseHook();
   const navigation = useNavigation();
   const {selectedChannel} = chat;
-
+  const [profile] = React.useContext(Context).profile;
   const setChannelAsRead = async (channel: ChannelList) => {
     if (!localDb) return;
     channel.setRead(localDb).catch((e) => console.log('setChannelAsRead error', e));
@@ -88,7 +90,6 @@ function useChatUtilsHook(): UseChatUtilsHook {
 
   const goToChatScreen = (channel: ChannelList) => {
     setChannelAsRead(channel);
-
     if (channel?.channelType === ANON_PM) {
       navigation.navigate('SampleChatScreen');
     } else {
@@ -109,12 +110,21 @@ function useChatUtilsHook(): UseChatUtilsHook {
     });
   };
 
-  const goToChatInfoScreen = () => {
-    navigation.navigate('SampleChatInfoScreen');
+  const goToChatInfoScreen = (params) => {
+    navigation.navigate('SampleChatInfoScreen', params);
   };
 
   const goBack = () => {
     navigation.goBack();
+  };
+  const handleTextSystem = (item) => {
+    if (
+      item?.rawJson?.userIdFollower === profile?.myProfile?.user_id ||
+      item?.rawJson?.message?.userIdFollower === profile?.myProfile?.user_id
+    ) {
+      return item?.rawJson?.textOwnMessage || item?.rawJson?.message?.textOwnMessage;
+    }
+    return item?.description || item?.message;
   };
 
   return {
@@ -124,7 +134,8 @@ function useChatUtilsHook(): UseChatUtilsHook {
     goToPostDetailScreen,
     goToCommunityScreen,
     goToChatInfoScreen,
-    goBackFromChatScreen
+    goBackFromChatScreen,
+    handleTextSystem
   };
 }
 

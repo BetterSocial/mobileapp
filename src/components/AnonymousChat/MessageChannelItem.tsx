@@ -6,6 +6,9 @@ import {BaseChannelItemTypeProps} from '../../../types/component/AnonymousChat/B
 import {ChannelList} from '../../../types/database/schema/ChannelList.types';
 import {MessageChannelItemProps} from '../../../types/component/AnonymousChat/MessageChannelItem.types';
 import {calculateTime} from '../../utils/time';
+import {getChatName} from '../../utils/string/StringUtils';
+import {Context} from '../../context';
+import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
 
 const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement = ({
   item,
@@ -18,14 +21,16 @@ const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement
     if (!isAnonymous) return BaseChannelItemTypeProps.SIGNED_PM;
     return BaseChannelItemTypeProps.ANON_PM;
   };
+  const {handleTextSystem} = useChatUtilsHook();
 
+  const [profile] = React.useContext(Context).profile;
   const type = determineChatType(item);
 
   return (
     <BaseChannelItem
       type={type}
-      message={item?.description || ' '}
-      name={item?.name}
+      message={handleTextSystem(item)}
+      name={getChatName(item?.name, profile?.myProfile?.username)}
       picture={item?.channelPicture}
       postMaker={item?.rawJson}
       time={calculateTime(item?.lastUpdatedAt, true)}
@@ -38,4 +43,8 @@ const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement
   );
 };
 
-export default MessageChannelItem;
+const isEqual = (prevProps, nextProps) => {
+  return nextProps.item === prevProps.item;
+};
+
+export default React.memo(MessageChannelItem, isEqual);

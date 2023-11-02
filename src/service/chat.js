@@ -28,6 +28,47 @@ const createChannel = async (channelType, members, channelName) => {
   }
 };
 
+const followClient = async (members, data, text, textOwnMessage) => {
+  try {
+    const token = TokenStorage.get(ITokenEnum.token);
+    const id = await getUserId();
+    const user = {
+      id
+    };
+    const sort = [{last_message_at: -1}];
+    const filter = {type: 'messaging', members: {$eq: members}};
+    await chatClient.disconnectUser();
+    await chatClient.connectUser(user, token);
+    const channel = await chatClient.queryChannels(filter, sort, {
+      watch: true,
+      state: true
+    });
+    const message = {
+      user_id: data.user_id_follower,
+      text,
+      isSystem: true,
+      silent: true,
+      textOwnMessage,
+      userIdFollowed: data?.user_id_followed,
+      userIdFollower: data?.user_id_follower
+    };
+
+    const name = [data?.username_followed, data?.username_follower].join(',');
+
+    if (channel?.length <= 0) {
+      const newChannel = await createChannel('messaging', members, name);
+      return newChannel.sendMessage(message, {skip_push: true});
+    }
+    const messageClient = chatClient.channel('messaging', channel[0].id);
+    await messageClient.sendMessage(message, {skip_push: true});
+
+    return channel;
+  } catch (error) {
+    console.log('error follow client', error);
+    throw error;
+  }
+};
+
 const sendSystemMessage = async (
   channelType,
   channelId,
@@ -122,5 +163,6 @@ export {
   sendSystemMessage,
   sendAnonymousDMOtherProfile,
   sendSignedDMOtherProfile,
-  getOrCreateAnonymousChannel
+  getOrCreateAnonymousChannel,
+  followClient
 };

@@ -12,7 +12,6 @@ const AnonymousChannelListScreen = () => {
     goToChatScreen,
     goToPostDetailScreen
   } = useAnonymousChannelListScreenHook();
-
   return (
     <FlatList
       data={anonChannels}

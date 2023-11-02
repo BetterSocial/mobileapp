@@ -1,5 +1,5 @@
 import api from './config';
-import {createChannel} from './chat';
+import {followClient} from './chat';
 
 export const getMyProfile = async () =>
   new Promise((resolve, reject) => {
@@ -103,26 +103,20 @@ export const followUser = async (data) =>
   });
 
 export const setFollow = async (data) => {
-  const textTargetUser = `${data.username_follower} started following you. Send them a message now`;
-  const textOwnUser = `You started following ${data.username_followed}. Send them a message now.`;
-  const chat = await createChannel(
-    'messaging',
-    [data.user_id_followed, data.user_id_follower],
-    `${data.username_followed},${data.username_follower}`
-  );
-  chat.update(
-    {
-      name: `${data.username_followed},${data.username_follower}`
-    },
-    {
-      text: textTargetUser,
-      system_user: data.user_id_follower,
-      is_from_prepopulated: true,
-      other_text: textOwnUser
-    },
-    {skip_push: true}
-  );
-  return followUser(data);
+  const textTargetUser = `${data.username_follower} started following you.\n Send them a message now`;
+  const textOwnUser = `You started following ${data.username_followed}.\n Send them a message now.`;
+  const members = [data.user_id_follower, data.user_id_followed];
+  await followClient(members, data, textTargetUser, textOwnUser);
+  return new Promise((resolve, reject) => {
+    api
+      .post('/profiles/follow-user-v3', data)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
 };
 
 export const updateImageProfile = async (data) =>

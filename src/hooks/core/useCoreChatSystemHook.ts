@@ -52,6 +52,17 @@ const useCoreChatSystemHook = () => {
     }
   };
 
+  const handleChannelImage = (members = []) => {
+    if (members.length > 2) {
+      return DEFAULT_PROFILE_PIC_PATH;
+    }
+    const findMember = members?.find((data) => data.user_id !== signedProfileId);
+    if (findMember) {
+      return findMember?.user?.image;
+    }
+    return DEFAULT_PROFILE_PIC_PATH;
+  };
+
   const onSignedPostNotifReceived: (data: GetstreamFeedListenerObject) => Promise<void> = async (
     data
   ) => {
@@ -95,6 +106,7 @@ const useCoreChatSystemHook = () => {
         console.log('error on getting selectedChannel');
       }
 
+      websocketData.targetImage = handleChannelImage(websocketData?.channel?.members);
       const websocketChannelType = websocketData?.channel_type;
       if (websocketChannelType === 'topics' || websocketChannelType === 'group') {
         websocketData.targetImage = websocketData?.channel?.channel_image;
@@ -284,7 +296,6 @@ const useCoreChatSystemHook = () => {
   const getAllAnonymousChannels = async () => {
     if (!localDb) return;
     let anonymousChannel = [];
-
     try {
       anonymousChannel = await AnonymousMessageRepo.getAllAnonymousChannels();
     } catch (e) {
@@ -464,7 +475,7 @@ const useCoreChatSystemHook = () => {
     if (type === 'notification.message_new') {
       saveChannelListData(lastJsonMessage, ANONYMOUS).catch((e) => console.log(e));
     }
-  }, [lastJsonMessage, localDb]);
+  }, [lastJsonMessage]);
 
   React.useEffect(() => {
     if (!lastSignedMessage && !localDb) return;
@@ -474,7 +485,7 @@ const useCoreChatSystemHook = () => {
     if (type === 'notification.message_new' || type === 'notification.added_to_channel') {
       saveChannelListData(lastSignedMessage, SIGNED).catch((e) => console.log(e));
     }
-  }, [lastSignedMessage, localDb]);
+  }, [lastSignedMessage]);
 
   React.useEffect(() => {
     if (isEnteringApp && migrationStatus === 'MIGRATED') {

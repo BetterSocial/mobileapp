@@ -21,6 +21,8 @@ import {requestExternalStoragePermission} from '../../../utils/permission';
 import {setChannel} from '../../../context/actions/setChannel';
 import {setParticipants} from '../../../context/actions/groupChat';
 import {uploadFile} from '../../../service/file';
+import TokenStorage, {ITokenEnum} from '../../../utils/storage/custom/tokenStorage';
+import {isContainUrl} from '../../../utils/Utils';
 
 const useGroupInfo = () => {
   const [groupChatState, groupPatchDispatch] = React.useContext(Context).groupChat;
@@ -42,7 +44,6 @@ const useGroupInfo = () => {
   const [isAnonymousModalOpen, setIsAnonymousModalOpen] = React.useState(false);
   const [isFetchingAllowAnonDM, setIsFetchingAllowAnonDM] = React.useState(false);
   const [, dispatchChannel] = React.useContext(Context).channel;
-
   const {goToChatScreen} = useChatUtilsHook();
   const {localDb} = useLocalDatabaseHook();
 
@@ -99,13 +100,12 @@ const useGroupInfo = () => {
         user_id: selectedUser.user_id
       };
       const processGetBlock = await checkUserBlock(sendData);
-
       if (!processGetBlock.data.data.blocked && !processGetBlock.data.data.blocker) {
         return openChatMessage();
       }
       return handleOpenProfile(selectedUser);
     } catch (e) {
-      console.log(e, 'eman');
+      console.log(e, 'erro');
     }
   };
 
@@ -131,7 +131,6 @@ const useGroupInfo = () => {
       }
     }
   };
-
   const launchGallery = async () => {
     const {success} = await requestExternalStoragePermission();
     if (success) {
@@ -256,7 +255,6 @@ const useGroupInfo = () => {
 
   const openChatMessage = async () => {
     await setOpenModal(false);
-
     const members = [profile.myProfile.user_id];
     members.push(selectedUser.user_id);
     const filter = {type: 'messaging', members: {$eq: members}};
@@ -265,43 +263,51 @@ const useGroupInfo = () => {
       user_id: item,
       channel_role: 'channel_moderator'
     }));
+    const user = {
+      id: profile?.myProfile?.user_id
+    };
+    const token = TokenStorage.get(ITokenEnum.token);
     await setOpenModal(false);
-    const filterMessage = await client.client.queryChannels(filter, sort, {
-      watch: true, // this is the default
-      state: true
-    });
-    navigation.reset({
-      index: 1,
-      routes: [
-        {
-          name: 'AuthenticatedStack',
-          params: {
-            screen: 'HomeTabs',
+    try {
+      await client.client.connectUser(user, token);
+      const filterMessage = await client.client.queryChannels(filter, sort, {
+        watch: true, // this is the default
+        state: true
+      });
+      navigation.reset({
+        index: 1,
+        routes: [
+          {
+            name: 'AuthenticatedStack',
             params: {
-              screen: 'ChannelList'
+              screen: 'HomeTabs',
+              params: {
+                screen: 'ChannelList'
+              }
+            }
+          },
+          {
+            name: 'AuthenticatedStack',
+            params: {
+              screen: 'ChatDetailPage'
             }
           }
-        },
-        {
-          name: 'AuthenticatedStack',
-          params: {
-            screen: 'ChatDetailPage'
-          }
-        }
-      ]
-    });
-    const generatedChannelId = generateRandomId();
-
-    if (filterMessage.length > 0) {
-      setChannel(filterMessage[0], dispatchChannel);
-    } else {
-      const channelChat = await client.client.channel('messaging', generatedChannelId, {
-        name: selectedUser.user.name,
-        type_channel: 1
+        ]
       });
-      await channelChat.create();
-      await channelChat.addMembers(memberWithRoles);
-      setChannel(channelChat, dispatchChannel);
+      const generatedChannelId = generateRandomId();
+      if (filterMessage.length > 0) {
+        setChannel(filterMessage[0], dispatchChannel);
+      } else {
+        const channelChat = await client.client.channel('messaging', generatedChannelId, {
+          name: selectedUser.user.name,
+          type_channel: 1
+        });
+        await channelChat.create();
+        await channelChat.addMembers(memberWithRoles);
+        setChannel(channelChat, dispatchChannel);
+      }
+    } catch (e) {
+      console.log({e, client}, 'error');
     }
   };
 
@@ -318,7 +324,6 @@ const useGroupInfo = () => {
           }
         }
       };
-
       blockModalRef?.current?.openBlockComponent(blockComponentValue);
     } catch (e) {
       SimpleToast.show('failed to block anonymous user');
@@ -448,11 +453,12 @@ const useGroupInfo = () => {
       }. Please type reason for reporting this group below. Thank you!`
     });
   };
-
   const handlePressContact = async (item) => {
-    if (item.user_id === profile.myProfile.user_id) return;
+    const isAnonymousUser = !isContainUrl(item?.user?.image);
 
-    if (anonUserEmojiName) {
+    if (item?.user_id === profile?.myProfile?.user_id) return;
+
+    if (anonUserEmojiName || isAnonymousUser) {
       const modifiedUser = {...item};
       modifiedUser.user.anonymousUsername = `Anonymous ${anonUserEmojiName}`;
       setSelectedUser(modifiedUser);
@@ -466,15 +472,15 @@ const useGroupInfo = () => {
   const handleOpenProfile = async (item) => {
     await setOpenModal(false);
     setTimeout(() => {
-      if (profile.myProfile.user_id === item.user_id) {
+      if (profile?.myProfile?.user_id === item?.user_id) {
         return null;
       }
 
       return navigation.push('OtherProfile', {
         data: {
           user_id: profile.myProfile.user_id,
-          other_id: item.user_id,
-          username: item.user?.name
+          other_id: item?.user_id,
+          username: item?.user?.name
         }
       });
     }, 500);

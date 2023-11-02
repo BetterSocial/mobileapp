@@ -15,15 +15,22 @@ import {
   View
 } from 'react-native';
 
+import FastImage from 'react-native-fast-image';
+import {useRoute} from '@react-navigation/core';
 import AnonymousChatInfoHeader from '../../components/Header/AnonymousChatInfoHeader';
 import AnonymousIcon from '../ChannelListScreen/elements/components/AnonymousIcon';
-import useAnonymousChatInfoScreenHook from '../../hooks/screen/useAnonymousChatInfoHook';
+import useChatInfoScreenHook from '../../hooks/screen/useChatInfoHook';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
 import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {trimString} from '../../utils/string/TrimString';
+import {Context} from '../../context';
+import {isContainUrl} from '../../utils/Utils';
+import ModalAction from '../GroupInfo/elements/ModalAction';
+import ModalActionAnonymous from '../GroupInfo/elements/ModalActionAnonymous';
+import BlockComponent from '../../components/BlockComponent';
 
 export const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#fff', paddingBottom: 40},
@@ -153,15 +160,34 @@ export const styles = StyleSheet.create({
   textAct: {
     color: '#FF2E63',
     fontSize: 14
+  },
+  mr7: {
+    marginRight: 7
+  },
+  imageUser: {
+    height: normalize(48),
+    width: normalize(48),
+    borderRadius: normalize(24)
   }
 });
 
 const SampleChatInfoScreen = () => {
-  const {channelInfo, goBack, onContactPressed} = useAnonymousChatInfoScreenHook();
-
+  const {
+    channelInfo,
+    goBack,
+    onContactPressed,
+    selectedUser,
+    handlePressPopup,
+    handleCloseSelectUser,
+    openModal,
+    isAnonymousModalOpen,
+    blockModalRef
+  } = useChatInfoScreenHook();
+  const [profile] = React.useContext(Context).profile;
   const [isLoadingMembers] = React.useState<boolean>(false);
   const {signedProfileId} = useProfileHook();
-
+  const {params}: any = useRoute();
+  const ANONYMOUS_USER = 'AnonymousUser';
   const showImageProfile = () => {
     return (
       <Image
@@ -171,9 +197,30 @@ const SampleChatInfoScreen = () => {
       />
     );
   };
-
   const {anon_user_info_color_code, anon_user_info_emoji_code, anon_user_info_emoji_name} =
     channelInfo?.rawJson?.channel || {};
+
+  const renderImageComponent = (item) => {
+    if (
+      (item?.user?.image && !isContainUrl(item?.user?.image)) ||
+      item?.user?.name === ANONYMOUS_USER
+    ) {
+      return (
+        <View style={styles.mr7}>
+          <AnonymousIcon
+            color={anon_user_info_color_code}
+            emojiCode={anon_user_info_emoji_code}
+            size={normalize(48)}
+          />
+        </View>
+      );
+    }
+    return (
+      <View style={styles.mr7}>
+        <FastImage style={styles.imageUser} source={{uri: item?.user?.image}} />
+      </View>
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -203,33 +250,20 @@ const SampleChatInfoScreen = () => {
                 <Text style={styles.countUser}>Participants ({channelInfo?.members?.length})</Text>
                 <FlatList
                   testID="participants"
-                  data={channelInfo?.members}
+                  data={channelInfo?.rawJson?.channel?.members}
                   keyExtractor={(item, index) => index?.toString()}
                   renderItem={({item, index}) => (
                     <View style={{height: normalize(72)}}>
                       <ProfileContact
                         key={index}
                         item={item}
-                        onPress={() => onContactPressed(item)}
-                        fullname={
-                          item?.user?.isMe
-                            ? `Anonymous ${anon_user_info_emoji_name} (You)`
-                            : item?.user?.username
-                        }
+                        onPress={() => onContactPressed(item, params.from)}
+                        fullname={item?.user?.username || item?.user?.name}
                         photo={item?.user?.profilePicture}
-                        showArrow={!item?.user?.isMe}
+                        showArrow={item?.user_id !== profile?.myProfile?.user_id}
                         userId={signedProfileId}
-                        ImageComponent={
-                          item?.user?.isMe && (
-                            <View style={{marginRight: 17}}>
-                              <AnonymousIcon
-                                color={anon_user_info_color_code}
-                                emojiCode={anon_user_info_emoji_code}
-                                size={normalize(48)}
-                              />
-                            </View>
-                          )
-                        }
+                        ImageComponent={renderImageComponent(item)}
+                        from={params?.from}
                       />
                     </View>
                   )}
@@ -243,6 +277,20 @@ const SampleChatInfoScreen = () => {
           </View>
         </>
       )}
+      <ModalAction
+        onCloseModal={handleCloseSelectUser}
+        selectedUser={selectedUser}
+        isOpen={openModal}
+        onPress={handlePressPopup}
+      />
+      <ModalActionAnonymous
+        name={selectedUser?.user?.name}
+        isOpen={isAnonymousModalOpen}
+        onCloseModal={handleCloseSelectUser}
+        selectedUser={selectedUser}
+        onPress={handlePressPopup}
+      />
+      <BlockComponent ref={blockModalRef} screen="group_info" />
     </SafeAreaView>
   );
 };
