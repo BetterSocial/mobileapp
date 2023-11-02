@@ -16,7 +16,8 @@ const ChannelTitle = ({
   isMe,
   hasFollowButton = false,
   isFollowing,
-  handleFollow
+  handleFollow,
+  isAnonymousTab = false
 }) => {
   const styles = StyleSheet.create({
     chatContentName: {
@@ -43,7 +44,7 @@ const ChannelTitle = ({
       marginRight: 4
     },
     chatContentUnreadCountContainer: {
-      backgroundColor: colors.bondi_blue,
+      backgroundColor: isAnonymousTab ? colors.bondi_blue : colors.darkBlue,
       width: 20,
       height: 20,
       borderRadius: 10,
@@ -53,7 +54,7 @@ const ChannelTitle = ({
     },
     chatContentUnreadCount: {
       fontFamily: fonts.inter[400],
-      fontSize: normalize(12),
+      fontSize: normalize(10),
       lineHeight: 14.52,
       color: colors.white
     },
