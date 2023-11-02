@@ -43,4 +43,8 @@ const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement
   );
 };
 
-export default MessageChannelItem;
+const isEqual = (prevProps, nextProps) => {
+  return nextProps.item === prevProps.item;
+};
+
+export default React.memo(MessageChannelItem, isEqual);
