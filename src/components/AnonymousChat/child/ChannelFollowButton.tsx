@@ -42,13 +42,13 @@ const styles = StyleSheet.create({
     paddingVertical: dimen.normalizeDimen(9.5),
     paddingHorizontal: dimen.normalizeDimen(14),
     borderRadius: 8,
-    backgroundColor: colors.bondi_blue
+    backgroundColor: colors.darkBlue
   },
   followingBtn: {
     paddingVertical: dimen.normalizeDimen(9.5),
     paddingHorizontal: dimen.normalizeDimen(4.5),
     borderWidth: 1,
-    borderColor: colors.bondi_blue,
+    borderColor: colors.darkBlue,
     borderRadius: 8
   },
   textFollowBtn: {

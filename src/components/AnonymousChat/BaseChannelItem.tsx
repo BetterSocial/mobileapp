@@ -34,6 +34,7 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
   upvote = 0,
   hasFollowButton = false,
   handleFollow,
+  channelType,
   onPress = () => {
     console.log('onPress');
   }
@@ -52,6 +53,11 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
     );
   }
 
+  const isAnonymousTab: boolean =
+    channelType === 'ANON_PM' ||
+    channelType === 'ANON_GROUP' ||
+    channelType === 'ANON_POST_NOTIFICATION';
+
   return (
     <CustomPressable onPress={onPress}>
       <View style={styles.chatContainer}>
@@ -62,6 +68,7 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
           anonPostNotificationUserInfo={anonPostNotificationUserInfo}
           isCommentExists={isCommentExists}
           postMaker={postMaker}
+          isAnonymousTab={isAnonymousTab}
         />
 
         <View style={styles.chatContentContainer}>
@@ -75,6 +82,7 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
             hasFollowButton={hasFollowButton}
             isFollowing={isFollowing}
             handleFollow={handleFollow}
+            isAnonymousTab={isAnonymousTab}
           />
 
           {/* Post Notification Message */}

@@ -56,7 +56,6 @@ const HorizontalTab = ({selectedTab, onSelectedTabChange, tabs = []}: Horizontal
       alignItems: 'center',
       justifyContent: 'center',
       height: 48,
-      borderBottomColor: colors.black,
       borderBottomWidth: 2,
       opacity: 1
     },
@@ -74,8 +73,15 @@ const HorizontalTab = ({selectedTab, onSelectedTabChange, tabs = []}: Horizontal
           testID={`horizontal-tab-${index}`}
           key={index?.toString()}
           onPress={() => onSelectedTabChange(index)}
-          style={index === selectedTab ? styles.activeTabItem : styles.tabItem}>
-          <View style={styles.childTabContainer}>{tab.tabElement}</View>
+          style={
+            index === selectedTab
+              ? [
+                  styles.activeTabItem,
+                  {borderBottomColor: index === 0 ? colors.darkBlue : colors.black}
+                ]
+              : styles.tabItem
+          }>
+          <View style={styles.childTabContainer}>{tab}</View>
         </CustomPressable>
       ))}
     </View>
