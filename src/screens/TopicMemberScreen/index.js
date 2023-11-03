@@ -14,6 +14,7 @@ import StringConstant from '../../utils/string/StringConstant';
 import UsersFragment from '../DiscoveryScreenV2/fragment/UsersFragment';
 import {Context} from '../../context';
 import NavHeader from '../TopicPageScreen/elements/NavHeader';
+import {normalize} from '../../utils/fonts';
 
 const styles = StyleSheet.create({
   parentContainer: {
@@ -54,9 +55,13 @@ const TopicMemberScreen = () => {
 
   const opacityAnimationHeader = React.useRef(new Animated.Value(1)).current;
 
+  const coverPath = topicDetail?.cover_path || null;
+
   const animatedHeight = React.useRef(
     new Animated.Value(
-      dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT + dimen.size.TOPIC_FEED_HEADER_HEIGHT
+      (coverPath
+        ? dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
+        : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER) + dimen.size.TOPIC_FEED_HEADER_HEIGHT
     )
   ).current;
 
@@ -122,7 +127,10 @@ const TopicMemberScreen = () => {
   const showAnimationHeader = () => {
     interactionManagerRef.current = InteractionManager.runAfterInteractions(() => {
       Animated.timing(animatedHeight, {
-        toValue: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT + dimen.size.TOPIC_FEED_HEADER_HEIGHT,
+        toValue:
+          (coverPath
+            ? dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
+            : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT) + dimen.size.TOPIC_FEED_HEADER_HEIGHT,
         duration: 100,
         useNativeDriver: false
       }).start();
@@ -134,6 +142,10 @@ const TopicMemberScreen = () => {
     });
     setHeaderHide(false);
   };
+
+  React.useEffect(() => {
+    showAnimationHeader();
+  }, [coverPath]);
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -169,7 +181,7 @@ const TopicMemberScreen = () => {
         setHeaderHide(true);
       }
     },
-    [animatedHeight]
+    [coverPath]
   );
 
   const onTokenCancel = () => {

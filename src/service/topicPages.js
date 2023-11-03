@@ -5,6 +5,7 @@ import api from './config';
 const getTopicPages = async (query, offset = 0) => {
   try {
     const res = await api.get(`/topic-pages/${query}?offset=${offset}`);
+    console.log('res: ', res);
     return res.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));

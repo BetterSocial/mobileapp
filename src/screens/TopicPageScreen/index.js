@@ -51,10 +51,15 @@ const TopicPageScreen = (props) => {
   const [memberCount, setMemberCount] = React.useState(0);
   const [isHeaderHide, setIsHeaderHide] = React.useState(false);
   const opacityHeaderAnimation = React.useRef(new Animated.Value(1)).current;
+  const coverPath = topicDetail?.cover_path || null;
 
   const animatedHeight = React.useRef(
     new Animated.Value(
-      dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT + dimen.size.TOPIC_FEED_HEADER_HEIGHT + normalize(4)
+      (coverPath
+        ? dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
+        : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT) +
+        dimen.size.TOPIC_FEED_HEADER_HEIGHT +
+        normalize(4)
     )
   ).current;
 
@@ -314,7 +319,9 @@ const TopicPageScreen = (props) => {
     interactionManagerRef.current = InteractionManager.runAfterInteractions(() => {
       Animated.timing(animatedHeight, {
         toValue:
-          dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT +
+          (coverPath
+            ? dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
+            : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT) +
           dimen.size.TOPIC_FEED_HEADER_HEIGHT +
           normalize(4),
         duration: 100,
@@ -330,6 +337,10 @@ const TopicPageScreen = (props) => {
   };
 
   React.useEffect(() => {
+    showHeaderAnimation();
+  }, [coverPath]);
+
+  React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       showHeaderAnimation();
     });
@@ -337,10 +348,9 @@ const TopicPageScreen = (props) => {
     return () => {
       if (interactionManagerRef.current) interactionManagerRef.current.cancel();
       if (interactionManagerAnimatedRef.current) interactionManagerAnimatedRef.current.cancel();
-
       unsubscribe();
     };
-  }, [navigation]);
+  }, [navigation, coverPath]);
 
   const handleOnScrollBeginDrag = (event) => {
     lastDragY = event.nativeEvent.contentOffset.y;
@@ -352,7 +362,10 @@ const TopicPageScreen = (props) => {
       const dy = y - lastDragY;
       if (y <= 30) {
         showHeaderAnimation();
-      } else if (dy - 20 > 0) {
+      } else if (
+        dimen.size.TOPIC_CURRENT_ITEM_HEIGHT &&
+        dy - 20 > dimen.size.TOPIC_CURRENT_ITEM_HEIGHT / 2
+      ) {
         interactionManagerAnimatedRef.current = InteractionManager.runAfterInteractions(() => {
           Animated.timing(animatedHeight, {
             toValue: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2,
@@ -368,7 +381,7 @@ const TopicPageScreen = (props) => {
         setIsHeaderHide(true);
       }
     },
-    [animatedHeight]
+    [animatedHeight, coverPath]
   );
 
   const handleOnMemberPress = () => {
