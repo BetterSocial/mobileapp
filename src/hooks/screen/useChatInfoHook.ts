@@ -8,7 +8,7 @@ import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import {ChannelListMemberSchema} from '../../../types/database/schema/ChannelList.types';
 import {getAnonymousUserId, getUserId} from '../../utils/users';
 import {Context} from '../../context';
-import {SIGNED} from '../core/constant';
+import {ANONYMOUS_USER, SIGNED} from '../core/constant';
 import {isContainUrl} from '../../utils/Utils';
 import useGroupInfo from '../../screens/GroupInfo/hooks/useGroupInfo';
 import {Member} from '../../../types/database/schema/ChatListDetail.types';
@@ -74,7 +74,7 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
     if (params?.from === SIGNED) {
       return item?.user_id !== myUserId?.myProfile?.user_id;
     }
-    if (!isContainUrl(item?.user?.image)) {
+    if (!isContainUrl(item?.user?.image) || item?.user?.name === ANONYMOUS_USER) {
       return false;
     }
     return item?.user_id !== myUserId?.myProfile?.user_id;

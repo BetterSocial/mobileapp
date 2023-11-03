@@ -10,7 +10,6 @@ import {uploadFile} from '../../../service/file';
 
 const useGroupSetting = ({navigation, route}) => {
   const [groupChatState] = React.useContext(Context).groupChat;
-  console.log({route, groupChatState}, 'route');
 
   const [channelState] = React.useContext(Context).channel;
   const [profile] = React.useContext(Context).profile;
@@ -57,6 +56,7 @@ const useGroupSetting = ({navigation, route}) => {
       } else if (channel?.data?.image) {
         dataEdit.image = channel?.data?.image;
       }
+      console.log({dataEdit}, 'nusu');
       updateDataEdit(dataEdit, withNavigation);
     } else if (withNavigation) navigation.goBack();
   };

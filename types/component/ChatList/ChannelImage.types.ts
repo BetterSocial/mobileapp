@@ -6,10 +6,10 @@ export type ChannelImageProps = React.FC & {
 };
 
 export type ChannelImageMainProps = {
-  type: 'COMMUNITY' | 'GROUP';
+  type: 'COMMUNITY' | 'GROUP' | 'GROUP_INFO';
   image?: string;
 };
 
 export type ChannelImageBadgeProps = {
-  type: 'COMMUNITY' | 'GROUP';
+  type: 'COMMUNITY' | 'GROUP' | 'GROUP_INFO';
 };
