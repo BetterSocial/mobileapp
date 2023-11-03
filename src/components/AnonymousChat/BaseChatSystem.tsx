@@ -35,8 +35,10 @@ const BaseSystemChat: React.FC<BaseChatItemComponentProps> = ({item, index}) => 
   };
 
   return (
-    <View style={styles.containerMessage} key={index}>
-      {messageText()}
+    <View style={{alignItems: 'center', justifyContent: 'center'}}>
+      <View style={styles.containerMessage} key={index}>
+        {messageText()}
+      </View>
     </View>
   );
 };
