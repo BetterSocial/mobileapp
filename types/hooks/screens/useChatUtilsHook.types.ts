@@ -9,6 +9,7 @@ interface UseChatUtilsHook {
   goToChatInfoScreen: () => void;
   goBackFromChatScreen: () => void;
   handleTextSystem: (item: any) => void;
+  splitSystemMessage: (message: string) => void;
 }
 
 export default UseChatUtilsHook;

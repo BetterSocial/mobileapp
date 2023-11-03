@@ -20,11 +20,21 @@ const styles = StyleSheet.create({
 });
 
 const BaseSystemChat: React.FC<BaseChatItemComponentProps> = ({item, index}) => {
-  const {handleTextSystem} = useChatUtilsHook();
+  const {handleTextSystem, splitSystemMessage} = useChatUtilsHook();
+
+  const messageText = () => {
+    return splitSystemMessage(handleTextSystem(item))?.map((message, key) => {
+      return (
+        <Text key={key} style={styles.textSystem}>
+          {message}.
+        </Text>
+      );
+    });
+  };
 
   return (
     <View style={styles.containerMessage} key={index}>
-      <Text style={styles.textSystem}>{handleTextSystem(item)} </Text>
+      {messageText()}
     </View>
   );
 };

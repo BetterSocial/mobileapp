@@ -8,6 +8,7 @@ import IcArrowBackWhite from '../../assets/arrow/Ic_arrow_back_white';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import {SIGNED} from '../../hooks/core/constant';
 
 const ChatDetailHeader = ({
   avatar = DEFAULT_PROFILE_PIC_PATH,
@@ -16,16 +17,17 @@ const ChatDetailHeader = ({
   onThreeDotPress = () => console.log('onThreeDotPress'),
   onAvatarPress = () => console.log('onAvatarPress'),
   anon_user_info_emoji_code,
-  anon_user_info_color_code
+  anon_user_info_color_code,
+  type
 }) => {
   const styles = StyleSheet.create({
-    container: {
+    container: (chatType?: string) => ({
       display: 'flex',
       flexDirection: 'row',
-      backgroundColor: colors.bondi_blue,
+      backgroundColor: chatType === SIGNED ? colors.darkBlue : colors.bondi_blue,
       height: 50,
       alignItems: 'center'
-    },
+    }),
     backButton: {
       paddingLeft: 22,
       paddingRight: 20,
@@ -62,7 +64,7 @@ const ChatDetailHeader = ({
   });
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container(type)}>
       <CustomPressable style={styles.backButton} onPress={onBackPress}>
         <IcArrowBackWhite width={20} height={12} />
       </CustomPressable>

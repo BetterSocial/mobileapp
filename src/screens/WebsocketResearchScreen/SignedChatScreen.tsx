@@ -19,7 +19,7 @@ const SignedChatScreen = () => {
     useChatScreenHook(SIGNED);
   const [, dispatchChannel] = React.useContext(Context).channel;
   const renderChatItem = React.useCallback(({item, index}) => {
-    return <BaseChatItem type="SIGNED" item={item} index={index} />;
+    return <BaseChatItem type={SIGNED} item={item} index={index} />;
   }, []);
   const [profile] = React.useContext(Context).profile;
 
@@ -43,6 +43,7 @@ const SignedChatScreen = () => {
         onBackPress={goBackFromChatScreen}
         onThreeDotPress={goToChatInfoPage}
         avatar={selectedChannel?.channelPicture}
+        type={SIGNED}
         user={
           selectedChannel?.rawJson?.channel?.anon_user_info_emoji_code
             ? `Anonymous ${selectedChannel?.rawJson?.channel?.anon_user_info_emoji_name} `
