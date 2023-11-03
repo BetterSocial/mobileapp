@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable import/extensions */
 /* eslint-disable import/no-unresolved */
 
@@ -8,20 +9,20 @@ import AnonymousInputMessage from '../../components/Chat/AnonymousInputMessage';
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
 import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
-import {styles} from './SampleChatScreen';
-import {SIGNED} from '../../hooks/core/constant';
-import {setChannel} from '../../context/actions/setChannel';
 import {Context} from '../../context';
+import {SIGNED} from '../../hooks/core/constant';
 import {getChatName} from '../../utils/string/StringUtils';
+import {setChannel} from '../../context/actions/setChannel';
+import {styles} from './SampleChatScreen';
 
 const SignedChatScreen = () => {
   const {selectedChannel, chats, goBackFromChatScreen, goToChatInfoScreen, sendChat} =
     useChatScreenHook(SIGNED);
-  const [, dispatchChannel] = React.useContext(Context).channel;
+  const [, dispatchChannel] = (React.useContext(Context) as unknown as any).channel;
   const renderChatItem = React.useCallback(({item, index}) => {
     return <BaseChatItem type={SIGNED} item={item} index={index} />;
   }, []);
-  const [profile] = React.useContext(Context).profile;
+  const [profile] = (React.useContext(Context) as unknown as any).profile;
 
   const goToChatInfoPage = () => {
     goToChatInfoScreen({from: SIGNED});

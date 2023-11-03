@@ -21,8 +21,8 @@ const GroupChatChannelItem = (props: ChannelItemProps) => {
   const unreadCount = groupChat?.unreadCount;
   const hasBadge = unreadCount > 0;
 
-  const description = groupChat?.rawJson?.firstMessage;
-  const isSystemDescription = description?.type === 'system';
+  const description = groupChat?.rawJson?.firstMessage ?? groupChat?.rawJson?.channel?.message;
+  const isSystemDescription = description?.isSystem ?? description?.type === 'system';
   const sender = description?.user?.username ?? description?.user?.name;
   const isMeAsSender = sender === myProfile?.username;
 

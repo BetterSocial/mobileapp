@@ -75,7 +75,7 @@ const Big: React.FC<ChannelImageMainProps> = ({type, image}) => {
 const Small: React.FC<ChannelImageBadgeProps> = ({type}) => {
   if (type === 'COMMUNITY') {
     return (
-      <View style={[styles.badgeContainer, styles.containerGreen]}>
+      <View style={[styles.badgeContainer, styles.containerDarkBlue]}>
         <FastImage
           source={CommunityIcon}
           resizeMode={FastImage.resizeMode.contain}

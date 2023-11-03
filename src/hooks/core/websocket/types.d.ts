@@ -25,6 +25,8 @@ export type GetstreamMessage = {
   shadowed: boolean;
   silent: boolean;
   text: string;
+  isSystem?: boolean;
+  textOwnMessage?: string;
   type: string;
   updated_at: string;
   user: {
