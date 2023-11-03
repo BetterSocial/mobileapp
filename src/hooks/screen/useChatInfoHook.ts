@@ -80,6 +80,11 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
     return item?.user_id !== myUserId?.myProfile?.user_id;
   };
 
+  const goToEditGroup = () => {
+    console.log('masuk', {selectedChannel});
+    navigation?.navigate('GroupSetting', selectedChannel);
+  };
+
   React.useEffect(() => {
     initChatInfoData();
   }, [localDb, channelList]);
@@ -97,7 +102,8 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
     handleCloseSelectUser,
     isAnonymousModalOpen,
     blockModalRef,
-    handleShowArrow
+    handleShowArrow,
+    goToEditGroup
   };
 }
 

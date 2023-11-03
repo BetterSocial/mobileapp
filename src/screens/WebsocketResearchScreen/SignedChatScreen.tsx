@@ -40,6 +40,7 @@ const SignedChatScreen = () => {
       style={styles.keyboardAvoidingView}
       keyboardVerticalOffset={-500}>
       <ChatDetailHeader
+        channel={selectedChannel}
         onAvatarPress={goToChatInfoPage}
         onBackPress={goBackFromChatScreen}
         onThreeDotPress={goToChatInfoPage}

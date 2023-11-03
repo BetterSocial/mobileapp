@@ -16,6 +16,7 @@ interface UseAnonymousChatInfoScreenHook {
   isAnonymousModalOpen: boolean;
   blockModalRef: () => void;
   handleShowArrow: (item: Member) => void;
+  goToEditGroup: () => void;
 }
 
 export default UseAnonymousChatInfoScreenHook;

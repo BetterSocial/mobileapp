@@ -10,14 +10,16 @@ import {uploadFile} from '../../../service/file';
 
 const useGroupSetting = ({navigation, route}) => {
   const [groupChatState] = React.useContext(Context).groupChat;
+  console.log({route, groupChatState}, 'route');
+
   const [channelState] = React.useContext(Context).channel;
   const [profile] = React.useContext(Context).profile;
-  const {participants} = groupChatState;
+  const [participants] = React.useState(route?.params?.rawJson?.channel?.members);
   const {channel} = channelState;
   const [groupName, setGroupName] = React.useState(
-    getChatName(route.params.username, profile.myProfile.username) || 'Set Group Name'
+    getChatName(route.params.name, profile.myProfile.username) || 'Set Group Name'
   );
-  const [countUser] = React.useState(Object.entries(participants).length);
+  const [countUser] = React.useState(route?.params?.rawJson?.channel?.members?.length || 0);
   const [changeName, setChangeName] = React.useState(false);
   const [changeImage, setChangeImage] = React.useState(false);
   const [base64Profile, setBase64Profile] = React.useState('');
