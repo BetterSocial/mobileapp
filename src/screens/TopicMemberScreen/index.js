@@ -1,5 +1,12 @@
 import * as React from 'react';
-import {Animated, InteractionManager, ScrollView, StatusBar, StyleSheet} from 'react-native';
+import {
+  Animated,
+  InteractionManager,
+  Keyboard,
+  ScrollView,
+  StatusBar,
+  StyleSheet
+} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import axios from 'axios';
 
@@ -14,7 +21,6 @@ import StringConstant from '../../utils/string/StringConstant';
 import UsersFragment from '../DiscoveryScreenV2/fragment/UsersFragment';
 import {Context} from '../../context';
 import NavHeader from '../TopicPageScreen/elements/NavHeader';
-import {normalize} from '../../utils/fonts';
 
 const styles = StyleSheet.create({
   parentContainer: {
@@ -61,7 +67,7 @@ const TopicMemberScreen = () => {
     new Animated.Value(
       (coverPath
         ? dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
-        : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER) + dimen.size.TOPIC_FEED_HEADER_HEIGHT
+        : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT) + dimen.size.TOPIC_FEED_HEADER_HEIGHT
     )
   ).current;
 
@@ -162,6 +168,7 @@ const TopicMemberScreen = () => {
 
   const handleScrollEvent = React.useCallback(
     (event) => {
+      Keyboard.dismiss();
       const {y} = event.nativeEvent.contentOffset;
       if (y <= 15) {
         showAnimationHeader();

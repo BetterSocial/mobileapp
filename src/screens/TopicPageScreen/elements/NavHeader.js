@@ -7,7 +7,7 @@ import MemoIcArrowBack from '../../../assets/arrow/Ic_arrow_back';
 import MemoIcArrowBackCircle from '../../../assets/arrow/Ic_arrow_back_circle';
 import TopicDefaultIcon from '../../../assets/topic.png';
 import dimen from '../../../utils/dimen';
-import {normalize, normalizeFontSize} from '../../../utils/fonts';
+import {normalize} from '../../../utils/fonts';
 import ShareIconCircle from '../../../assets/icons/Ic_share_circle';
 import ButtonFollow from './ButtonFollow';
 import TopicDomainHeader from './TopicDomainHeader';
@@ -78,11 +78,18 @@ const NavHeader = (props) => {
     return Math.round((containerHeight - domainHeight) / 2);
   };
 
+  const heightWithCoverImage = () => {
+    if (coverPath) {
+      return {height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER};
+    }
+    return null;
+  };
+
   return (
     <Animated.View style={{height: animatedHeight}}>
       <ImageBackground
         source={{uri: coverPath}}
-        style={[styles.Nav(isHeaderHide, coverPath)]}
+        style={[styles.Nav(isHeaderHide), heightWithCoverImage()]}
         imageStyle={{opacity: isHeaderHide ? 0 : 1}}>
         <TouchableOpacity onPress={() => backScreen()} style={styles.backbutton}>
           {coverPath && !isHeaderHide ? (
@@ -148,8 +155,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: isHeaderHide
       ? dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2
-      : hasCoverImage
-      ? dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
       : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT,
     justifyContent: 'space-between',
     alignItems: 'flex-start',
