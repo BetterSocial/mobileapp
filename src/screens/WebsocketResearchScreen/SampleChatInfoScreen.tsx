@@ -183,8 +183,7 @@ const SampleChatInfoScreen = () => {
     openModal,
     isAnonymousModalOpen,
     blockModalRef,
-    handleShowArrow,
-    goToEditGroup
+    handleShowArrow
   } = useChatInfoScreenHook();
   const [isLoadingMembers] = React.useState<boolean>(false);
   const {signedProfileId} = useProfileHook();

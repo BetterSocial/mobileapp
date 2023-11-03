@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
-
+import PropTypes from 'prop-types';
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {COLORS, SIZES} from '../../utils/theme';
@@ -45,6 +45,10 @@ const HeaderContact = ({
 };
 
 export default HeaderContact;
+
+HeaderContact.propTypes = {
+  onPressSub: PropTypes.func
+};
 
 const styles = StyleSheet.create({
   container: {
