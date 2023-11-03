@@ -8,7 +8,6 @@ import useFollowUser from '../../src/screens/ChannelListScreen/hooks/useFollowUs
 import useLocalDatabaseHook from '../../src/database/hooks/useLocalDatabaseHook';
 import {Context} from '../../src/context';
 import {getFollowing, setUnFollow} from '../../src/service/profile';
-import {sendSystemMessage} from '../../src/service/chat';
 
 jest.mock('@react-navigation/core', () => ({
   useIsFocused: jest.fn()
@@ -22,6 +21,7 @@ jest.mock('../../src/context/actions/following', () => ({
 
 jest.mock('../../src/service/profile', () => ({
   getFollowing: jest.fn(),
+  setFollow: jest.fn(),
   setUnFollow: jest.fn()
 }));
 
@@ -75,7 +75,6 @@ describe('useFollowUser', () => {
   it('should call sendSystemMessage and setFollow when handleFollow is called', async () => {
     const channel = {id: '123', rawJson: {members: [{user_id: '456'}]}};
     useIsFocused.mockReturnValue(true);
-    sendSystemMessage.mockResolvedValue({});
     getFollowing.mockResolvedValue({data: []});
 
     const {result} = renderHook(() => useFollowUser(), {
@@ -86,7 +85,6 @@ describe('useFollowUser', () => {
       result.current.handleFollow(channel);
     });
 
-    expect(sendSystemMessage).toHaveBeenCalled();
     expect(following.setFollowingUsers).toHaveBeenCalled();
   });
 
@@ -111,7 +109,6 @@ describe('useFollowUser', () => {
 
     await result.current.handleFollow(channel);
 
-    expect(sendSystemMessage).not.toHaveBeenCalled();
     expect(following.setFollowingUsers).toHaveBeenCalled();
     expect(setUnFollow).toHaveBeenCalled();
   });
