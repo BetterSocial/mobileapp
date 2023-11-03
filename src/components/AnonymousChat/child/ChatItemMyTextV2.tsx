@@ -156,8 +156,6 @@ const ChatItemMyTextV2 = ({
     isNewLine && styles.textContainerNewLine
   ];
 
-  console.log({chatType}, 'chats type');
-
   return (
     <View style={styles.chatContainer}>
       <View style={textContainerStyle}>

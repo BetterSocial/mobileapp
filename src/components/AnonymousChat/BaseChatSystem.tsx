@@ -8,9 +8,11 @@ const styles = StyleSheet.create({
   containerMessage: {
     backgroundColor: '#F5F5F5',
     marginHorizontal: dimen.normalizeDimen(20),
-    padding: dimen.normalizeDimen(5),
-    borderRadius: dimen.normalizeDimen(19),
-    marginVertical: dimen.normalizeDimen(5)
+    padding: dimen.normalizeDimen(8),
+    borderRadius: dimen.normalizeDimen(8),
+    marginVertical: dimen.normalizeDimen(5),
+    maxWidth: dimen.normalizeDimen(335),
+    flex: 1
   },
   textSystem: {
     fontSize: 14,
