@@ -13,12 +13,12 @@ const useGroupSetting = ({navigation, route}) => {
 
   const [channelState] = React.useContext(Context).channel;
   const [profile] = React.useContext(Context).profile;
-  const [participants] = React.useState(route?.params?.rawJson?.channel?.members);
+  const [participants, setParticipants] = React.useState([]);
   const {channel} = channelState;
   const [groupName, setGroupName] = React.useState(
     getChatName(route.params.name, profile.myProfile.username) || 'Set Group Name'
   );
-  const [countUser] = React.useState(route?.params?.rawJson?.channel?.members?.length || 0);
+  const [countUser, setCountUser] = React.useState(0);
   const [changeName, setChangeName] = React.useState(false);
   const [changeImage, setChangeImage] = React.useState(false);
   const [base64Profile, setBase64Profile] = React.useState('');
@@ -28,6 +28,13 @@ const useGroupSetting = ({navigation, route}) => {
     setGroupName(text);
     setChangeName(true);
   };
+
+  React.useEffect(() => {
+    if (route?.params) {
+      setParticipants(route?.params?.rawJson?.channel?.members);
+      setCountUser(route?.params?.rawJson?.channel?.members?.length || 0);
+    }
+  }, [route]);
 
   const submitData = async (withNavigation = true, withLoading = true) => {
     let changeImageUrl = '';
