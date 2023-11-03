@@ -12,6 +12,12 @@ export const channelImageStyles = StyleSheet.create({
     marginBottom: dimen.normalizeDimen(12),
     borderRadius: dimen.normalizeDimen(24)
   },
+  containerImageGroupINfo: {
+    position: 'relative',
+    width: dimen.normalizeDimen(100),
+    height: dimen.normalizeDimen(100),
+    borderRadius: dimen.normalizeDimen(50)
+  },
   containerDefaultImage: {
     display: 'flex',
     justifyContent: 'center',
@@ -24,6 +30,10 @@ export const channelImageStyles = StyleSheet.create({
   imageDefaultGroup: {
     width: dimen.normalizeDimen(24),
     height: dimen.normalizeDimen(24)
+  },
+  imageDefaultGroupInfo: {
+    width: dimen.normalizeDimen(50),
+    height: dimen.normalizeDimen(50)
   },
   containerGrey: {
     backgroundColor: colors.gray1

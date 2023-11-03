@@ -26,12 +26,12 @@ import {ProfileContact} from '../../components/Items';
 import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {trimString} from '../../utils/string/TrimString';
-import {Context} from '../../context';
 import {isContainUrl} from '../../utils/Utils';
 import ModalAction from '../GroupInfo/elements/ModalAction';
 import ModalActionAnonymous from '../GroupInfo/elements/ModalActionAnonymous';
 import BlockComponent from '../../components/BlockComponent';
-import {SIGNED} from '../../hooks/core/constant';
+import {CHANNEL_GROUP, GROUP_INFO} from '../../hooks/core/constant';
+import ChannelImage from '../../components/ChatList/elements/ChannelImage';
 
 export const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#fff', paddingBottom: 40},
@@ -192,8 +192,15 @@ const SampleChatInfoScreen = () => {
   const ANONYMOUS_USER = 'AnonymousUser';
   const {anon_user_info_color_code, anon_user_info_emoji_code} =
     channelInfo?.rawJson?.channel || {};
-
+  console.log({channelInfo}, 'lalak');
   const showImageProfile = () => {
+    if (channelInfo?.channelType === CHANNEL_GROUP) {
+      return (
+        <ChannelImage>
+          <ChannelImage.Big type={GROUP_INFO} image={channelInfo?.channelPicture} />
+        </ChannelImage>
+      );
+    }
     if (anon_user_info_color_code) {
       return (
         <AnonymousIcon
@@ -260,13 +267,9 @@ const SampleChatInfoScreen = () => {
                     Created {moment(channelInfo?.createdAt).format('MM/DD/YYYY')}
                   </Text>
                 </View>
-                {params?.from === SIGNED ? (
-                  <View>
-                    <TouchableOpacity onPress={goToEditGroup}>
-                      <Text>Edit</Text>
-                    </TouchableOpacity>
-                  </View>
-                ) : null}
+                {/* <TouchableOpacity onPress={goToEditGroup}>
+                  <Text>edit</Text>
+                </TouchableOpacity> */}
               </View>
               <View style={styles.lineTop} />
               <View style={styles.lineTop} />

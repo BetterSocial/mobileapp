@@ -26,7 +26,6 @@ const SignedChatScreen = () => {
   const goToChatInfoPage = () => {
     goToChatInfoScreen({from: SIGNED});
   };
-  console.log({chats, selectedChannel}, 'helpme');
   React.useEffect(() => {
     if (selectedChannel) {
       setChannel(selectedChannel, dispatchChannel);
