@@ -73,7 +73,7 @@ export const SlideShowItem = ({
       </TouchableWithoutFeedback>
     );
   };
-  console.log('height: ', height);
+
   return (
     <View style={styles.container}>
       <View
