@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     color: colors.white
   },
   textFollowing: {
-    color: colors.bondi_blue
+    color: colors.darkBlue
   }
 });
 
