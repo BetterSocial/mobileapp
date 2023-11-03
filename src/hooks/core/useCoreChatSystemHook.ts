@@ -85,6 +85,57 @@ const useCoreChatSystemHook = () => {
 
   const {lastJsonMessage, lastSignedMessage} = useBetterWebsocketHook();
 
+  const helperSignedChannelListData = async (websocketData: GetstreamWebsocket) => {
+    const {type} = websocketData;
+    const websocketMessage = websocketData?.message;
+
+    const chatName = await getChatName(websocketData?.channel?.name, profile?.username);
+    if (websocketData?.channel?.anon_user_info_emoji_name) {
+      websocketData.targetName = `Anonymous ${websocketData?.channel?.anon_user_info_emoji_name}`;
+    } else {
+      websocketData.targetName = chatName;
+    }
+
+    let selectedChannel;
+    try {
+      selectedChannel = (await ChannelList.getById(localDb, websocketData?.channel_id)) as any;
+    } catch (error) {
+      console.log('error on getting selectedChannel');
+    }
+
+    websocketData.targetImage = handleChannelImage(websocketData?.channel?.members);
+    const websocketChannelType = websocketData?.channel_type;
+    if (websocketChannelType === 'topics' || websocketChannelType === 'group') {
+      websocketData.targetImage = websocketData?.channel?.channel_image;
+    } else {
+      websocketData.targetImage = selectedChannel?.channel_picture ?? websocketMessage?.user?.image;
+    }
+
+    const isContainFollowingMessage = websocketMessage?.textOwnMessage
+      ?.toLowerCase()
+      ?.includes('you started following');
+    if (
+      websocketMessage?.isSystem &&
+      isContainFollowingMessage &&
+      selectedChannel?.last_updated_at
+    ) {
+      websocketData.channel.last_message_at = selectedChannel?.last_updated_at;
+    }
+
+    if (type === 'notification.added_to_channel') {
+      websocketData.message.text = 'You have been added to this group';
+    }
+    if (type === 'notification.removed_from_channel') {
+      websocketData.message.text = 'You have been removed from this group';
+    }
+
+    websocketData.anon_user_info_color_name = websocketData?.channel?.anon_user_info_color_name;
+    websocketData.anon_user_info_emoji_code = websocketData?.channel?.anon_user_info_emoji_code;
+    websocketData.anon_user_info_color_code = websocketData?.channel?.anon_user_info_color_code;
+
+    return websocketData;
+  };
+
   const saveChannelListData = async (
     websocketData: GetstreamWebsocket,
     channelCategory: MyChannelType
@@ -96,40 +147,7 @@ const useCoreChatSystemHook = () => {
       websocketData.targetName = chatName?.name;
       websocketData.targetImage = chatName?.image;
     } else {
-      const {type} = websocketData;
-      const chatName = await getChatName(websocketData?.channel?.name, profile?.username);
-      if (websocketData?.channel?.anon_user_info_emoji_name) {
-        websocketData.targetName = `Anonymous ${websocketData?.channel?.anon_user_info_emoji_name}`;
-      } else {
-        websocketData.targetName = chatName;
-      }
-      websocketData.targetImage = handleChannelImage(websocketData?.channel?.members);
-
-      let selectedChannel;
-      try {
-        selectedChannel = (await ChannelList.getById(localDb, websocketData?.channel_id)) as any;
-      } catch (error) {
-        console.log('error on getting selectedChannel');
-      }
-
-      const websocketChannelType = websocketData?.channel_type;
-      if (websocketChannelType === 'topics' || websocketChannelType === 'group') {
-        websocketData.targetImage = websocketData?.channel?.channel_image;
-      } else {
-        websocketData.targetImage =
-          selectedChannel?.channel_picture ?? websocketData.message?.user?.image;
-      }
-
-      if (type === 'notification.added_to_channel') {
-        websocketData.message.text = 'You have been added to this group';
-      }
-      if (type === 'notification.removed_from_channel') {
-        websocketData.message.text = 'You have been removed from this group';
-      }
-
-      websocketData.anon_user_info_color_name = websocketData?.channel?.anon_user_info_color_name;
-      websocketData.anon_user_info_emoji_code = websocketData?.channel?.anon_user_info_emoji_code;
-      websocketData.anon_user_info_color_code = websocketData?.channel?.anon_user_info_color_code;
+      websocketData = await helperSignedChannelListData(websocketData);
     }
 
     const isAnonymous = channelCategory === ANONYMOUS;
@@ -290,7 +308,6 @@ const useCoreChatSystemHook = () => {
     }
 
     try {
-      console.log({signedChannel}, 'palo');
       await saveAllChannelData(signedChannel, 'SIGNED');
       refresh('channelList');
     } catch (e) {
