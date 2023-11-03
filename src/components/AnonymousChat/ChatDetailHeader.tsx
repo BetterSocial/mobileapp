@@ -3,11 +3,13 @@ import FastImage from 'react-native-fast-image';
 import IconEP from 'react-native-vector-icons/Entypo';
 import {StyleSheet, Text, View} from 'react-native';
 
+import AnonymousIcon from '../../screens/ChannelListScreen/elements/components/AnonymousIcon';
 import CustomPressable from '../CustomPressable';
 import IcArrowBackWhite from '../../assets/arrow/Ic_arrow_back_white';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import dimen from '../../utils/dimen';
 
 const ChatDetailHeader = ({
   avatar = DEFAULT_PROFILE_PIC_PATH,
@@ -72,9 +74,11 @@ const ChatDetailHeader = ({
         style={styles.textContainer}
         onPress={onAvatarPress}>
         {anon_user_info_emoji_code ? (
-          <View style={[styles.avatar, {backgroundColor: anon_user_info_color_code}]}>
-            <Text>{anon_user_info_emoji_code} </Text>
-          </View>
+          <AnonymousIcon
+            color={anon_user_info_color_code}
+            emojiCode={anon_user_info_emoji_code}
+            size={dimen.normalizeDimen(40)}
+          />
         ) : (
           <FastImage testID="avatar" style={styles.avatar} source={{uri: avatar}} />
         )}
