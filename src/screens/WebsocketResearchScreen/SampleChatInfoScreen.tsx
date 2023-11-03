@@ -31,6 +31,7 @@ import {isContainUrl} from '../../utils/Utils';
 import ModalAction from '../GroupInfo/elements/ModalAction';
 import ModalActionAnonymous from '../GroupInfo/elements/ModalActionAnonymous';
 import BlockComponent from '../../components/BlockComponent';
+import {SIGNED} from '../../hooks/core/constant';
 
 export const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#fff', paddingBottom: 40},
@@ -182,7 +183,8 @@ const SampleChatInfoScreen = () => {
     openModal,
     isAnonymousModalOpen,
     blockModalRef,
-    handleShowArrow
+    handleShowArrow,
+    goToEditGroup
   } = useChatInfoScreenHook();
   const [isLoadingMembers] = React.useState<boolean>(false);
   const {signedProfileId} = useProfileHook();
@@ -241,7 +243,7 @@ const SampleChatInfoScreen = () => {
           <AnonymousChatInfoHeader
             isCenter
             onPress={goBack}
-            title={trimString(channelInfo?.name, 25)}
+            title={trimString(channelInfo?.name, 20)}
           />
           <View style={styles.lineTop} />
           <ScrollView nestedScrollEnabled={true}>
@@ -258,11 +260,13 @@ const SampleChatInfoScreen = () => {
                     Created {moment(channelInfo?.createdAt).format('MM/DD/YYYY')}
                   </Text>
                 </View>
-                <View>
-                  <TouchableOpacity>
-                    <Text>Edit</Text>
-                  </TouchableOpacity>
-                </View>
+                {params?.from === SIGNED ? (
+                  <View>
+                    <TouchableOpacity onPress={goToEditGroup}>
+                      <Text>Edit</Text>
+                    </TouchableOpacity>
+                  </View>
+                ) : null}
               </View>
               <View style={styles.lineTop} />
               <View style={styles.lineTop} />

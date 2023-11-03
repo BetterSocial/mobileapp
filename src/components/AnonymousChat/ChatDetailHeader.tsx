@@ -8,7 +8,51 @@ import IcArrowBackWhite from '../../assets/arrow/Ic_arrow_back_white';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import {SIGNED} from '../../hooks/core/constant';
+import {SIGNED, CHANNEL_GROUP} from '../../hooks/core/constant';
+import ChannelImage from '../ChatList/elements/ChannelImage';
+
+const styles = StyleSheet.create({
+  container: (chatType?: string) => ({
+    display: 'flex',
+    flexDirection: 'row',
+    backgroundColor: chatType === SIGNED ? colors.darkBlue : colors.bondi_blue,
+    height: 50,
+    alignItems: 'center'
+  }),
+  backButton: {
+    paddingLeft: 22,
+    paddingRight: 20,
+    height: 50,
+    justifyContent: 'center'
+  },
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 40,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  textContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    flex: 1,
+    alignItems: 'center'
+  },
+  text: {
+    fontFamily: fonts.inter[600],
+    color: colors.white,
+    fontSize: 14,
+    lineHeight: 17,
+    marginLeft: 10,
+    flex: 1
+  },
+  threeDot: {
+    paddingRight: 22,
+    paddingLeft: 22,
+    justifyContent: 'center',
+    height: 50
+  }
+});
 
 const ChatDetailHeader = ({
   avatar = DEFAULT_PROFILE_PIC_PATH,
@@ -18,50 +62,18 @@ const ChatDetailHeader = ({
   onAvatarPress = () => console.log('onAvatarPress'),
   anon_user_info_emoji_code,
   anon_user_info_color_code,
-  type
+  type,
+  channel
 }) => {
-  const styles = StyleSheet.create({
-    container: (chatType?: string) => ({
-      display: 'flex',
-      flexDirection: 'row',
-      backgroundColor: chatType === SIGNED ? colors.darkBlue : colors.bondi_blue,
-      height: 50,
-      alignItems: 'center'
-    }),
-    backButton: {
-      paddingLeft: 22,
-      paddingRight: 20,
-      height: 50,
-      justifyContent: 'center'
-    },
-    avatar: {
-      width: 40,
-      height: 40,
-      borderRadius: 40,
-      alignItems: 'center',
-      justifyContent: 'center'
-    },
-    textContainer: {
-      display: 'flex',
-      flexDirection: 'row',
-      flex: 1,
-      alignItems: 'center'
-    },
-    text: {
-      fontFamily: fonts.inter[600],
-      color: colors.white,
-      fontSize: 14,
-      lineHeight: 17,
-      marginLeft: 10,
-      flex: 1
-    },
-    threeDot: {
-      paddingRight: 22,
-      paddingLeft: 22,
-      justifyContent: 'center',
-      height: 50
-    }
-  });
+  console.log({channel}, 'channel man');
+
+  const handleDefaultImage = () => {
+    return (
+      <ChannelImage>
+        <ChannelImage.Big type={channel?.channelType} image={avatar} />
+      </ChannelImage>
+    );
+  };
 
   return (
     <View style={styles.container(type)}>
@@ -74,7 +86,7 @@ const ChatDetailHeader = ({
             <Text>{anon_user_info_emoji_code} </Text>
           </View>
         ) : (
-          <FastImage style={styles.avatar} source={{uri: avatar}} />
+          <>{handleDefaultImage()}</>
         )}
         <Text numberOfLines={1} ellipsizeMode="tail" style={styles.text}>
           {user}
