@@ -31,7 +31,6 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
   const {selectedChannel, handleUserName} = useChatScreenHook(type || ANONYMOUS);
   const {anon_user_info_emoji_code, anon_user_info_color_code} =
     selectedChannel?.rawJson?.channel || {};
-  console.log({selectedChannel}, 'naka');
   const renderAnonymousIcon = (anonColor: string, anonEmoji: string) => (
     <View style={{marginLeft: 8}}>
       <AnonymousIcon color={anonColor} emojiCode={anonEmoji} size={dimen.normalizeDimen(24)} />
@@ -79,6 +78,7 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
         username={handleUserName(item)}
         type={BaseChatItemTypeProps.MY_ANON_CHAT}
         status={item?.status as ChatStatus}
+        chatType={type}
       />
     );
 

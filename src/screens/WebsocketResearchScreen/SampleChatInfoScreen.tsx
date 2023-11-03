@@ -239,7 +239,11 @@ const SampleChatInfoScreen = () => {
       <StatusBar translucent={false} />
       {isLoadingMembers ? null : (
         <>
-          <AnonymousChatInfoHeader isCenter onPress={goBack} title={channelInfo?.name} />
+          <AnonymousChatInfoHeader
+            isCenter
+            onPress={goBack}
+            title={trimString(channelInfo?.name, 25)}
+          />
           <View style={styles.lineTop} />
           <ScrollView nestedScrollEnabled={true}>
             <SafeAreaView>
@@ -254,6 +258,11 @@ const SampleChatInfoScreen = () => {
                   <Text style={styles.dateCreate}>
                     Created {moment(channelInfo?.createdAt).format('MM/DD/YYYY')}
                   </Text>
+                </View>
+                <View>
+                  <TouchableOpacity>
+                    <Text>Edit</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
               <View style={styles.lineTop} />
