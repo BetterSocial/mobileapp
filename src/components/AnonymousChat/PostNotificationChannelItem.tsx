@@ -101,6 +101,7 @@ const PostNotificationChannelItem: (props: MessageChannelItemProps) => React.Rea
       time={calculateTime(item?.lastUpdatedAt, true)}
       unreadCount={postNotifItem?.unreadCount}
       upvote={item?.rawJson?.upvote}
+      channelType={item?.channelType}
     />
   );
 };
