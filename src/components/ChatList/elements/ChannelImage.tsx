@@ -10,20 +10,20 @@ import {
   ChannelImageMainProps,
   ChannelImageProps
 } from '../../../../types/component/ChatList/ChannelImage.types';
-import {channelImageStyles as styles} from './ChannelImage.style';
 import {GROUP_INFO} from '../../../hooks/core/constant';
+import {channelImageStyles as styles} from './ChannelImage.style';
 
 const ChannelImage: ChannelImageProps = ({children}) => {
   return <View>{children}</View>;
 };
 
-const Big: React.FC<ChannelImageMainProps> = ({type, image, imageStyle}) => {
+const Big: React.FC<ChannelImageMainProps> = ({type, image, style}) => {
   if (image) {
     return (
       <FastImage
         source={{uri: image}}
-        resizeMode={FastImage.resizeMode.contain}
-        style={[styles.containerImage, imageStyle]}
+        resizeMode={FastImage.resizeMode.cover}
+        style={style ?? styles.containerImage}
       />
     );
   }

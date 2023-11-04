@@ -14,13 +14,18 @@ import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
 const styles = StyleSheet.create({
-  container: (chatType?: string) => ({
+  container: {
     display: 'flex',
     flexDirection: 'row',
-    backgroundColor: chatType === SIGNED ? colors.darkBlue : colors.bondi_blue,
     height: 50,
     alignItems: 'center'
-  }),
+  },
+  bgDarkBlue: {
+    backgroundColor: colors.darkBlue
+  },
+  bgBondiBlue: {
+    backgroundColor: colors.bondi_blue
+  },
   backButton: {
     paddingLeft: 22,
     paddingRight: 20,
@@ -28,9 +33,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 40,
+    width: dimen.normalizeDimen(38),
+    height: dimen.normalizeDimen(38),
+    borderRadius: dimen.normalizeDimen(38),
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -72,39 +77,39 @@ const ChatDetailHeader = ({
   type,
   channel
 }) => {
-  console.log({channel}, 'channel man');
+  const bgHeaderStyle = () => {
+    if (type === SIGNED) return styles.bgDarkBlue;
+    return styles.bgBondiBlue;
+  };
 
-  const handleDefaultImage = () => {
+  const renderAvatar = () => {
+    if (anon_user_info_emoji_code) {
+      return (
+        <AnonymousIcon
+          color={anon_user_info_color_code}
+          emojiCode={anon_user_info_emoji_code}
+          size={dimen.normalizeDimen(38)}
+        />
+      );
+    }
+
     return (
       <ChannelImage>
-        <ChannelImage.Big
-          type={channel?.channelType}
-          image={avatar}
-          imageStyle={channel?.channelType !== CHANNEL_GROUP ? styles.avatarImage : {}}
-        />
+        <ChannelImage.Big type={channel?.channelType} image={avatar} style={styles.avatar} />
       </ChannelImage>
     );
   };
 
   return (
-    <View style={styles.container(type)}>
+    <View style={[styles.container, bgHeaderStyle()]}>
       <CustomPressable testID="pressable-back" style={styles.backButton} onPress={onBackPress}>
         <IcArrowBackWhite width={20} height={12} />
       </CustomPressable>
-
       <CustomPressable
         testID="pressable-avatar"
         style={styles.textContainer}
         onPress={onAvatarPress}>
-        {anon_user_info_emoji_code ? (
-          <AnonymousIcon
-            color={anon_user_info_color_code}
-            emojiCode={anon_user_info_emoji_code}
-            size={dimen.normalizeDimen(40)}
-          />
-        ) : (
-          <>{handleDefaultImage()}</>
-        )}
+        {renderAvatar()}
         <Text testID="username" numberOfLines={1} ellipsizeMode="tail" style={styles.text}>
           {user}
         </Text>
