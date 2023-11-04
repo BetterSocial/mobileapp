@@ -106,17 +106,6 @@ const useCoreChatSystemHook = () => {
       websocketData.targetImage = selectedChannel?.channel_picture ?? websocketMessage?.user?.image;
     }
 
-    const isContainFollowingMessage = websocketMessage?.textOwnMessage
-      ?.toLowerCase()
-      ?.includes('you started following');
-    if (
-      websocketMessage?.isSystem &&
-      isContainFollowingMessage &&
-      selectedChannel?.last_updated_at
-    ) {
-      websocketData.channel.last_message_at = selectedChannel?.last_updated_at;
-    }
-
     if (type === 'notification.added_to_channel') {
       websocketData.message.text = 'You have been added to this group';
     }
@@ -136,6 +125,7 @@ const useCoreChatSystemHook = () => {
     channelCategory: MyChannelType
   ) => {
     if (!localDb) return;
+    const websocketMessage = websocketData?.message;
 
     if (channelCategory === ANONYMOUS) {
       const chatName = await getAnonymousChatName(websocketData?.channel?.members);
@@ -152,12 +142,19 @@ const useCoreChatSystemHook = () => {
       topics: 'TOPIC'
     };
 
-    const channelList = ChannelList.fromWebsocketObject(
-      websocketData,
-      channelType[websocketData?.channel_type]
-    );
-
-    await channelList.save(localDb);
+    const isContainFollowingMessage = websocketData?.message?.textOwnMessage
+      ?.toLowerCase()
+      ?.includes('you started following');
+    if (websocketMessage?.isSystem && isContainFollowingMessage) {
+      const chat = ChatSchema.fromWebsocketObject(websocketData);
+      await chat.save(localDb);
+    } else {
+      const channelList = ChannelList.fromWebsocketObject(
+        websocketData,
+        channelType[websocketData?.channel_type]
+      );
+      await channelList.save(localDb);
+    }
 
     if (websocketData?.channel_type === 'topics') {
       refresh('channelList');
@@ -168,8 +165,8 @@ const useCoreChatSystemHook = () => {
     await user.saveOrUpdateIfExists(localDb);
 
     const isMyMessage =
-      websocketData?.message?.user?.id === signedProfileId ||
-      websocketData?.message?.user?.id === anonProfileId;
+      websocketMessage?.user?.id === signedProfileId ||
+      websocketMessage?.user?.id === anonProfileId;
 
     if (!isMyMessage) {
       const chat = ChatSchema.fromWebsocketObject(websocketData);
@@ -212,7 +209,10 @@ const useCoreChatSystemHook = () => {
     let signedChannelImage;
 
     if (!isAnonymous) {
-      const signedChannelUsername = profile?.username;
+      const myUserData = channel?.members?.find(
+        (member) => member?.user?.id === signedProfileId
+      )?.user;
+      const signedChannelUsername = myUserData?.username ?? myUserData?.name;
       signedChannelName =
         channel?.channel_type === 4
           ? `Anonymous ${channel?.anon_user_info_emoji_name}`
@@ -239,6 +239,7 @@ const useCoreChatSystemHook = () => {
           channel.firstMessage = channel?.messages?.[0];
         } else {
           channel.firstMessage = channel?.messages?.[channel?.messages?.length - 1];
+          channel.myUserId = signedProfileId;
         }
         channel.channel = {...channel};
         const channelType = channel?.type;
