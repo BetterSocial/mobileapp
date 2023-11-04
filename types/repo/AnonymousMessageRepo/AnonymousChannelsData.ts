@@ -49,6 +49,8 @@ export interface Message {
   latest_reactions: any[];
   own_reactions: any[];
   reaction_counts: any;
+  isSystem?: boolean;
+  textOwnMessage?: string;
   reaction_scores: any;
   reply_count: number;
   cid: string;
@@ -88,6 +90,7 @@ export interface ChannelData {
   messages: Message[];
   targetName: string;
   targetImage: string;
+  myUserId?: string;
   unreadCount?: number;
   firstMessage: Message;
 }

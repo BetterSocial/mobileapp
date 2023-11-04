@@ -43,7 +43,7 @@ const ChannelImage = ({
       alignItems: 'center'
     },
     myPostNotificationImageContainer: {
-      backgroundColor: colors.bondi_blue
+      backgroundColor: isAnonymousTab ? colors.bondi_blue : colors.darkBlue
     },
     anonPmNotificationImageContainer: {
       backgroundColor: colors.bondi_blue

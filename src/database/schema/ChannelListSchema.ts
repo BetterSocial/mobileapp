@@ -253,21 +253,30 @@ class ChannelList implements BaseDbSchema {
   static updateChannelDescription = async (
     db: SQLiteDatabase,
     channelId: string,
-    description: string
+    description: string,
+    isUpdateTimestamp = false
   ) => {
     try {
-      const updateQuery = `UPDATE ${ChannelList.getTableName()}
+      const queryTimestamp = `UPDATE ${ChannelList.getTableName()}
         SET description = ?, created_at = ?, last_updated_at = ?
         WHERE id = ?;`;
+      const queryWithoutTimestamp = `UPDATE ${ChannelList.getTableName()}
+        SET description = ?
+        WHERE id = ?;`;
 
-      const updateReplacement = [
+      const replacementTimestamp = [
         description,
         new Date().toISOString(),
         new Date().toISOString(),
         channelId
       ];
+      const replacementWithoutTimestamp = [description, channelId];
 
-      await db.executeSql(updateQuery, updateReplacement);
+      if (isUpdateTimestamp) {
+        await db.executeSql(queryTimestamp, replacementTimestamp);
+      } else {
+        await db.executeSql(queryWithoutTimestamp, replacementWithoutTimestamp);
+      }
     } catch (e) {
       console.log();
       console.log('error updating channel description', e);
@@ -339,23 +348,22 @@ class ChannelList implements BaseDbSchema {
 
   static fromChannelAPI(data: ChannelData, channelType: ChannelType): ChannelList {
     const isPM = channelType === 'PM';
-    const isSystemMessage = data?.firstMessage?.type === 'system';
-    const isMe =
-      (data?.firstMessage?.user?.username ?? data?.firstMessage?.user?.name) !== data?.targetName;
+    const firstMessage = data?.firstMessage;
+    const isSystemMessage = firstMessage?.type === 'system' || firstMessage?.isSystem;
+    const isMe = firstMessage?.user?.id === data?.myUserId;
     let descriptionSystemMessage;
 
-    if (isPM && isSystemMessage && isMe) descriptionSystemMessage = data?.firstMessage?.other_text;
+    if (isPM && isMe && isSystemMessage) descriptionSystemMessage = firstMessage?.textOwnMessage;
 
     return new ChannelList({
       id: data?.id,
       channelPicture: data?.targetImage,
       name: data?.targetName,
-      description:
-        descriptionSystemMessage || data?.firstMessage?.text || data?.firstMessage?.message || '',
+      description: descriptionSystemMessage || firstMessage?.text || firstMessage?.message || '',
       unreadCount: data?.unreadCount ?? 0,
       channelType,
       lastUpdatedAt: data?.last_message_at,
-      lastUpdatedBy: data?.firstMessage?.user?.id,
+      lastUpdatedBy: firstMessage?.user?.id,
       createdAt: data?.created_at,
       rawJson: data,
       user: null,
