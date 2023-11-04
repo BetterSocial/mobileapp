@@ -8,8 +8,8 @@ import AnonymousInputMessage from '../../components/Chat/AnonymousInputMessage';
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
 import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
-import {colors} from '../../utils/colors';
 import {ANONYMOUS} from '../../hooks/core/constant';
+import {colors} from '../../utils/colors';
 
 const {height} = Dimensions.get('window');
 
@@ -46,10 +46,11 @@ export const styles = StyleSheet.create({
 const SampleChatScreen = () => {
   const {selectedChannel, chats, goBackFromChatScreen, goToChatInfoScreen, sendChat} =
     useChatScreenHook(ANONYMOUS);
-  console.log({chats}, 'helpme2');
+
   const renderChatItem = React.useCallback(({item, index}) => {
     return <BaseChatItem item={item} index={index} />;
   }, []);
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -61,8 +62,10 @@ const SampleChatScreen = () => {
         onThreeDotPress={goToChatInfoScreen}
         avatar={selectedChannel?.channelPicture}
         user={selectedChannel?.name}
+        type={ANONYMOUS}
       />
       <FlatList
+        contentContainerStyle={{paddingBottom: 20}}
         style={styles.chatContainer}
         data={chats}
         inverted={true}
@@ -73,7 +76,7 @@ const SampleChatScreen = () => {
         renderItem={renderChatItem}
       />
       <View style={styles.inputContainer}>
-        <AnonymousInputMessage onSendButtonClicked={sendChat} />
+        <AnonymousInputMessage onSendButtonClicked={sendChat} type={ANONYMOUS} />
       </View>
     </KeyboardAvoidingView>
   );

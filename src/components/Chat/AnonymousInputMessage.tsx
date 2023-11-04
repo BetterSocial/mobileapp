@@ -42,7 +42,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginLeft: 8
   },
-  enableButton: {
+  enabledButtonSigned: {
+    backgroundColor: colors.darkBlue
+  },
+  enabledButtondAnon: {
     backgroundColor: colors.bondi_blue
   },
   disableButton: {
@@ -73,9 +76,10 @@ const styles = StyleSheet.create({
 
 export interface AnonymousInputMessageProps {
   onSendButtonClicked: (message: string) => void;
+  type: 'SIGNED' | 'ANONYMOUS';
 }
 
-const AnonymousInputMessage = ({onSendButtonClicked}: AnonymousInputMessageProps) => {
+const AnonymousInputMessage = ({onSendButtonClicked, type}: AnonymousInputMessageProps) => {
   const refEmoji = React.useRef(null);
   const [text, setText] = React.useState('');
 
@@ -95,18 +99,25 @@ const AnonymousInputMessage = ({onSendButtonClicked}: AnonymousInputMessageProps
     return text?.length === 0;
   };
 
+  const sendButtonStyle = () => {
+    const isDisabled = isDisableButton();
+    if (isDisabled) return styles.disableButton;
+    if (type === 'SIGNED') return styles.enabledButtonSigned;
+    return styles.enabledButtondAnon;
+  };
+
   return (
     <>
       <View style={styles.container}>
         <View style={styles.containerInput}>
           <TextInput multiline style={styles.input} onChangeText={onChangeInput} value={text} />
           <TouchableOpacity
-            style={[styles.btn, isDisableButton() ? styles.disableButton : styles.enableButton]}
+            style={[styles.btn, sendButtonStyle()]}
             disabled={isDisableButton()}
             onPress={handleSendMessage}>
             <IconSend
               style={styles.icSendButton}
-              fillBackground={isDisableButton() ? colors.gray1 : colors.bondi_blue}
+              fillBackground={sendButtonStyle()}
               fillIcon={colors.white}
             />
           </TouchableOpacity>
