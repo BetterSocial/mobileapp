@@ -1,29 +1,26 @@
 import * as React from 'react';
-import {View, StyleSheet} from 'react-native';
-
 import FastImage from 'react-native-fast-image';
+import {StyleSheet} from 'react-native';
+
 import AnonymousIcon from '../../screens/ChannelListScreen/elements/components/AnonymousIcon';
+import BaseSystemChat from './BaseChatSystem';
 import ChatItemMyTextV2 from './child/ChatItemMyTextV2';
 import ChatItemTargetText from './child/ChatItemTargetText';
+import dimen from '../../utils/dimen';
 import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
+import {ANONYMOUS, ANONYMOUS_USER} from '../../hooks/core/constant';
 import {
   BaseChatItemComponentProps,
   BaseChatItemTypeProps
 } from '../../../types/component/AnonymousChat/BaseChatItem.types';
 import {ChatStatus} from '../../../types/database/schema/ChannelList.types';
 import {calculateTime} from '../../utils/time';
-import dimen from '../../utils/dimen';
-import BaseSystemChat from './BaseChatSystem';
-import {ANONYMOUS, ANONYMOUS_USER} from '../../hooks/core/constant';
 
 const styles = StyleSheet.create({
   containerPicture: {
     height: dimen.normalizeDimen(24),
     width: dimen.normalizeDimen(24),
     borderRadius: dimen.normalizeDimen(12)
-  },
-  ml8: {
-    marginLeft: 8
   }
 });
 
@@ -32,15 +29,11 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
   const {anon_user_info_emoji_code, anon_user_info_color_code} =
     selectedChannel?.rawJson?.channel || {};
   const renderAnonymousIcon = (anonColor: string, anonEmoji: string) => (
-    <View style={{marginLeft: 8}}>
-      <AnonymousIcon color={anonColor} emojiCode={anonEmoji} size={dimen.normalizeDimen(24)} />
-    </View>
+    <AnonymousIcon color={anonColor} emojiCode={anonEmoji} size={dimen.normalizeDimen(24)} />
   );
 
   const renderDefaultIcon = () => (
-    <View style={styles.ml8}>
-      <FastImage style={styles.containerPicture} source={{uri: item?.user?.profilePicture}} />
-    </View>
+    <FastImage style={styles.containerPicture} source={{uri: item?.user?.profilePicture}} />
   );
 
   const handleImageUser = () => {
@@ -66,6 +59,7 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
   if (item?.type === 'system' || item?.rawJson?.isSystem || item?.rawJson?.message?.isSystem) {
     return <BaseSystemChat item={item} index={index} />;
   }
+
   if (item?.isMe)
     return (
       <ChatItemMyTextV2
