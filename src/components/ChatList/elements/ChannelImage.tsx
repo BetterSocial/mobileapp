@@ -30,7 +30,7 @@ const Big: React.FC<ChannelImageMainProps> = ({type, image}) => {
 
   if (type === 'COMMUNITY') {
     return (
-      <View style={[styles.containerImage, styles.containerDefaultImage, styles.containerGreen]}>
+      <View style={[styles.containerImage, styles.containerDefaultImage, styles.containerDarkBlue]}>
         <FastImage
           source={CommunityIcon}
           resizeMode={FastImage.resizeMode.contain}
