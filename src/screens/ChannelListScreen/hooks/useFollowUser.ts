@@ -2,13 +2,16 @@
 import React from 'react';
 import {useIsFocused} from '@react-navigation/core';
 
+import ChannelList from '../../../database/schema/ChannelListSchema';
 import following from '../../../context/actions/following';
+import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import {ChannelList as ChannelListData} from '../../../../types/database/schema/ChannelList.types';
 import {Context} from '../../../context';
 import {getFollowing, setFollow, setUnFollow} from '../../../service/profile';
 
 const useFollowUser = () => {
   const isFocused = useIsFocused();
+  const {localDb, refresh} = useLocalDatabaseHook();
   const [followContext, followingDispatch] = (React.useContext(Context) as unknown as any)
     .following;
   const [profileContext] = (React.useContext(Context) as unknown as any).profile;
@@ -41,7 +44,7 @@ const useFollowUser = () => {
       user_id_follower: myProfile?.user_id,
       user_id_followed: targetUser?.id,
       username_follower: myProfile?.username,
-      username_followed: targetUser?.username ?? targetUser?.name,
+      username_followed: targetUser?.username ?? targetUser?.name ?? channel?.name,
       follow_source: 'chat'
     };
 
@@ -67,7 +70,16 @@ const useFollowUser = () => {
     if (isFollowing) {
       await setUnFollow(data);
     } else {
-      await setFollow(data);
+      const res = await setFollow(data);
+      if (res?.code !== 200) return;
+
+      try {
+        const textOwnUser = `You started following ${data.username_followed}.\n Send them a message now.`;
+        await ChannelList.updateChannelDescription(localDb, channel?.id, textOwnUser);
+        refresh('channelList');
+      } catch (error) {
+        console.log('error saving data:', error);
+      }
     }
   };
 
