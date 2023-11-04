@@ -96,11 +96,30 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       }, 1000);
     }
   };
+
   const handleUserName = (item) => {
     if (item?.user?.username !== 'AnonymousUser') {
       return item?.user?.username;
     }
     return `Anonymous ${anon_user_info_emoji_name}`;
+  };
+
+  const updateChatContinuity = (chatsData: ChatSchema[]) => {
+    const updatedChats = chatsData.map((currentChat, currentIndex) => {
+      const previousChat = chatsData[currentIndex + 1];
+
+      if (previousChat) {
+        if (
+          currentChat?.userId === previousChat?.userId &&
+          (previousChat?.rawJson?.isSystem || previousChat?.rawJson?.type === 'system')
+        ) {
+          currentChat.isContinuous = false;
+        }
+      }
+      return currentChat;
+    });
+
+    return updatedChats;
   };
 
   React.useEffect(() => {
@@ -113,7 +132,8 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     goBackFromChatScreen,
     goToChatInfoScreen,
     sendChat,
-    handleUserName
+    handleUserName,
+    updateChatContinuity
   };
 }
 

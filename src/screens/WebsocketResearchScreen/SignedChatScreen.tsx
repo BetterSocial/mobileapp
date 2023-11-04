@@ -16,17 +16,27 @@ import {setChannel} from '../../context/actions/setChannel';
 import {styles} from './SampleChatScreen';
 
 const SignedChatScreen = () => {
-  const {selectedChannel, chats, goBackFromChatScreen, goToChatInfoScreen, sendChat} =
-    useChatScreenHook(SIGNED);
+  const {
+    selectedChannel,
+    chats,
+    goBackFromChatScreen,
+    goToChatInfoScreen,
+    sendChat,
+    updateChatContinuity
+  } = useChatScreenHook(SIGNED);
+
   const [, dispatchChannel] = (React.useContext(Context) as unknown as any).channel;
+  const [profile] = (React.useContext(Context) as unknown as any).profile;
+  const updatedChats = updateChatContinuity(chats);
+
   const renderChatItem = React.useCallback(({item, index}) => {
     return <BaseChatItem type={SIGNED} item={item} index={index} />;
   }, []);
-  const [profile] = (React.useContext(Context) as unknown as any).profile;
 
   const goToChatInfoPage = () => {
     goToChatInfoScreen({from: SIGNED});
   };
+
   React.useEffect(() => {
     if (selectedChannel) {
       setChannel(selectedChannel, dispatchChannel);
@@ -54,8 +64,9 @@ const SignedChatScreen = () => {
         anon_user_info_color_code={selectedChannel?.rawJson?.channel?.anon_user_info_color_code}
       />
       <FlatList
+        contentContainerStyle={{paddingBottom: 20}}
         style={styles.chatContainer}
-        data={chats}
+        data={updatedChats}
         inverted={true}
         initialNumToRender={20}
         alwaysBounceVertical={false}
@@ -64,7 +75,7 @@ const SignedChatScreen = () => {
         renderItem={renderChatItem}
       />
       <View style={styles.inputContainer}>
-        <AnonymousInputMessage onSendButtonClicked={sendChat} />
+        <AnonymousInputMessage onSendButtonClicked={sendChat} type={SIGNED} />
       </View>
     </KeyboardAvoidingView>
   );

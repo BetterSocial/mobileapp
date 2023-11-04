@@ -14,9 +14,9 @@ import IconChatClockGrey from '../../../assets/icon/IconChatClockGrey';
 import {ChatItemMyTextProps} from '../../../../types/component/AnonymousChat/BaseChatItem.types';
 import {ChatStatus} from '../../../../types/database/schema/ChannelList.types';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
+import {SIGNED} from '../../../hooks/core/constant';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
-import {SIGNED} from '../../../hooks/core/constant';
 
 const {width} = Dimensions.get('screen');
 
@@ -41,8 +41,13 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row'
   },
-  textContainer: (type) => ({
-    backgroundColor: type === SIGNED ? colors.darkBlue : colors.halfBaked,
+  containerSigned: {
+    backgroundColor: colors.babyBlue
+  },
+  containerAnon: {
+    backgroundColor: colors.halfBaked
+  },
+  textContainer: {
     paddingLeft: BUBBLE_LEFT_PADDING,
     paddingRight: BUBBLE_RIGHT_PADDING,
     paddingTop: 4,
@@ -50,7 +55,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderTopEndRadius: 0,
     flex: 1
-  }),
+  },
   textContainerNewLine: {
     paddingBottom: 14
   },
@@ -97,6 +102,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 6,
     right: 8
+  },
+  ml8: {
+    marginLeft: 8
   }
 });
 
@@ -147,12 +155,13 @@ const ChatItemMyTextV2 = ({
 
   const renderAvatar = React.useCallback(() => {
     if (isContinuous) return <View style={styles.avatar} />;
-    if (AnonymousImage) return AnonymousImage;
+    if (AnonymousImage) return <View style={styles.ml8}>{AnonymousImage}</View>;
     return <FastImage style={styles.avatar} source={{uri: avatar}} />;
   }, []);
 
   const textContainerStyle = [
-    styles.textContainer(chatType),
+    chatType === SIGNED ? styles.containerSigned : styles.containerAnon,
+    styles.textContainer,
     isNewLine && styles.textContainerNewLine
   ];
 

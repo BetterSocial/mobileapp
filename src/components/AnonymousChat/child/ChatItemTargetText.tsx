@@ -62,6 +62,9 @@ const styles = StyleSheet.create({
     fontSize: 10,
     lineHeight: 12.19,
     alignSelf: 'center'
+  },
+  mr8: {
+    marginRight: 8
   }
 });
 
@@ -73,22 +76,15 @@ const ChatItemTargetText = ({
   message = 'Ultrices neque op semper blahbla blahri mauris amet, penatibus. pi Amet, mollis quam venenatis di',
   AnonymousImage
 }: ChatItemMyTextProps) => {
+  const renderAvatar = React.useCallback(() => {
+    if (isContinuous) return <View style={styles.avatar} />;
+    if (AnonymousImage) return <View style={styles.mr8}>{AnonymousImage}</View>;
+    return <FastImage style={styles.avatar} source={{uri: avatar ?? DEFAULT_PROFILE_PIC_PATH}} />;
+  }, []);
+
   return (
     <View style={styles.chatContainer}>
-      {isContinuous ? (
-        <View style={styles.avatar} />
-      ) : (
-        <>
-          {AnonymousImage || (
-            <FastImage
-              style={styles.avatar}
-              source={{
-                uri: avatar || DEFAULT_PROFILE_PIC_PATH
-              }}
-            />
-          )}
-        </>
-      )}
+      {renderAvatar()}
       <View style={styles.textContainer}>
         {!isContinuous && (
           <View style={styles.chatTitleContainer}>
