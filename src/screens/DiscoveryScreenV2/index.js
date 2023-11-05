@@ -4,6 +4,7 @@ import {Keyboard, Platform, ScrollView, StatusBar, StyleSheet} from 'react-nativ
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 import {useNavigation} from '@react-navigation/core';
+import PropTypes from 'prop-types';
 import DiscoveryAction from '../../context/actions/discoveryAction';
 import DiscoveryRepo from '../../service/discovery';
 import DiscoveryTab from './elements/DiscoveryTab';
@@ -329,6 +330,10 @@ const styles = StyleSheet.create({
   },
   headerTitle: {fontSize: 16, fontFamily: fonts.inter[600], textAlign: 'center'}
 });
+
+DiscoveryScreenV2.propTypes = {
+  route: PropTypes.object
+};
 
 export default withInteractionsManagedNoStatusBar(DiscoveryScreenV2);
 

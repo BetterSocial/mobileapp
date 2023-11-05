@@ -12,6 +12,7 @@ import {
 import {debounce} from 'lodash';
 import {useNavigation} from '@react-navigation/core';
 
+import PropTypes from 'prop-types';
 import DiscoveryAction from '../../../context/actions/discoveryAction';
 import IconClear from '../../../assets/icon/IconClear';
 import MemoIcArrowBackWhite from '../../../assets/arrow/Ic_arrow_back_white';
@@ -29,7 +30,6 @@ const DiscoverySearch = ({
   setDiscoveryLoadingData = () => {},
   searchText = '',
   setSearchText = () => {},
-  isFocus = true,
   placeholderText = StringConstant.discoverySearchBarPlaceholder,
   setIsFocus = () => {},
   setIsFirstTimeOpen = () => {},
@@ -42,8 +42,6 @@ const DiscoverySearch = ({
   const [, discoveryDispatch] = React.useContext(Context).discovery;
   const discoverySearchBarRef = React.useRef(null);
 
-  const [isSearchIconShown, setIsSearchIconShown] = React.useState(false);
-  const [isTextAvailable, setIsTextAvailable] = React.useState(false);
   const [lastSearch, setLastSearch] = React.useState('');
 
   const debounced = React.useCallback(
@@ -88,16 +86,12 @@ const DiscoverySearch = ({
 
   const handleChangeText = (text) => {
     setSearchText(text);
-    setIsTextAvailable(text.length > 0);
     debounceChangeText(text);
   };
 
   const handleOnClearText = () => {
     setSearchText('');
     setLastSearch('');
-    // setIsTextAvailable(false)
-    // debounced.cancel()
-    // discoverySearchBarRef.current.focus()
   };
 
   const handleOnSubmitEditing = (event) => {
@@ -137,12 +131,10 @@ const DiscoverySearch = ({
 
   React.useEffect(() => {
     debounceChangeText(searchText);
-    setIsTextAvailable(searchText.length > 0);
   }, [searchText]);
 
   React.useEffect(() => {
     const unsubscribe = () => {
-      setIsTextAvailable(false);
       setSearchText('');
       DiscoveryAction.setDiscoveryData(
         {
@@ -300,5 +292,18 @@ const styles = StyleSheet.create({
     borderBottomColor: COLORS.alto
   })
 });
+
+DiscoverySearch.propTypes = {
+  setDiscoveryLoadingData: PropTypes.func,
+  searchText: PropTypes.string,
+  setSearchText: PropTypes.func,
+  placeholderText: PropTypes.string,
+  setIsFocus: PropTypes.func,
+  setIsFirstTimeOpen: PropTypes.func,
+  fetchDiscoveryData: PropTypes.func,
+  fetchData: PropTypes.func,
+  onCancelToken: PropTypes.func,
+  hideBackIcon: PropTypes.bool
+};
 
 export default DiscoverySearch;

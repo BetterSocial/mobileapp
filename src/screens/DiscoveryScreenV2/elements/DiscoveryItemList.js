@@ -11,7 +11,13 @@ import {
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
-import TopicsProfilePictureEmptyState from '../../../assets/icon/TopicsProfilePictureEmptyState';
+
+const renderDefaultImage = (DefaultImage) => {
+  if (DefaultImage) {
+    return <DefaultImage />;
+  }
+  return <MemoDomainProfilePicture width={48} height={48} />;
+};
 
 const DomainList = (props) => {
   const {
@@ -39,10 +45,8 @@ const DomainList = (props) => {
                   width={48}
                   height={48}
                 />
-              ) : DefaultImage ? (
-                <TopicsProfilePictureEmptyState />
               ) : (
-                <MemoDomainProfilePicture width={48} height={48} />
+                renderDefaultImage(DefaultImage)
               )}
             </React.Fragment>
           ) : null}
@@ -203,14 +207,16 @@ const styles = StyleSheet.create({
 
 DomainList.propTypes = {
   item: PropTypes.object,
-  onPressList: PropTypes.func,
   isHashtag: PropTypes.bool,
   isDomain: PropTypes.bool,
-  onPressBody: PropTypes.func
+  onPressBody: PropTypes.func,
+  DefaultImage: PropTypes.element,
+  isCommunity: PropTypes.bool,
+  handleSetFollow: PropTypes.func,
+  handleSetUnFollow: PropTypes.func
 };
 
 DomainList.defaultProps = {
-  onPressList: () => null,
   handleSetFollow: () => null,
   handleSetUnFollow: () => null,
   onPressBody: () => null

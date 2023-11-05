@@ -1,9 +1,11 @@
 import * as React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import PropTypes from 'prop-types';
 import GlobalButton from '../../../components/Button/GlobalButton';
 
 import {colors} from '../../../utils/colors';
 import {getSingularOrPluralText} from '../../../utils/string/StringUtils';
+
 /**
  *
  * @typedef {Function} OnFollowingContainerClicked
@@ -57,14 +59,11 @@ const FollowInfoRow = ({
 let styles = StyleSheet.create({
   following: {marginLeft: 18},
   textTotal: {
-    // fontFamily: fonts.inter[800],
-    // fontWeight: 'bold',
     fontSize: 14,
     color: colors.bondi_blue,
     paddingRight: 4
   },
   textFollow: {
-    // fontFamily: fonts.inter[800],
     fontSize: 14,
     color: colors.black,
     paddingRight: 4
@@ -80,5 +79,12 @@ let styles = StyleSheet.create({
     paddingVertical: 8
   }
 });
+
+FollowInfoRow.propTypes = {
+  follower: PropTypes.string,
+  following: PropTypes.string,
+  onFollowingContainerClicked: PropTypes.func,
+  onFollowersContainerClicked: PropTypes.func
+};
 
 export default React.memo(FollowInfoRow);

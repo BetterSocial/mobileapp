@@ -3,6 +3,7 @@ import * as React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
+import PropTypes from 'prop-types';
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import DomainList from '../elements/DiscoveryItemList';
 import FollowingAction from '../../../context/actions/following';
@@ -275,5 +276,19 @@ const styles = StyleSheet.create({
     marginLeft: 20
   }
 });
+
+DomainFragment.propTypes = {
+  isLoadingDiscoveryDomain: PropTypes.bool,
+  isFirstTimeOpen: PropTypes.bool,
+  followedDomains: PropTypes.array,
+  unfollowedDomains: PropTypes.array,
+  setFollowedDomains: PropTypes.func,
+  setUnfollowedDomains: PropTypes.func,
+  setSearchText: PropTypes.func,
+  setIsFirstTimeOpen: PropTypes.func,
+  fetchData: PropTypes.func,
+  searchText: PropTypes.string,
+  withoutRecent: PropTypes.bool
+};
 
 export default DomainFragment;
