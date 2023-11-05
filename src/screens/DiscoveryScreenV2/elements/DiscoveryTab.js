@@ -67,12 +67,12 @@ const styles = StyleSheet.create({
     height: 48,
     backgroundColor: colors.white
   },
-  tabItem: (tabs) => ({
-    width: tabs === 4 ? undefined : windowWidth / tabs,
+  tabItem: (numTabs) => ({
+    width: numTabs === 4 ? undefined : windowWidth / numTabs,
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%',
-    paddingHorizontal: tabs === 4 ? 20 : undefined
+    paddingHorizontal: numTabs === 4 ? 20 : undefined
   }),
   tabItemContainer: {
     alignSelf: 'center'
