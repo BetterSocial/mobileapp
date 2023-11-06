@@ -9,9 +9,9 @@ import CustomPressable from '../CustomPressable';
 import IcArrowBackWhite from '../../assets/arrow/Ic_arrow_back_white';
 import dimen from '../../utils/dimen';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
-import {SIGNED} from '../../hooks/core/constant';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import {SIGNED} from '../../hooks/core/constant';
 
 const styles = StyleSheet.create({
   container: {
@@ -58,6 +58,11 @@ const styles = StyleSheet.create({
     paddingLeft: 22,
     justifyContent: 'center',
     height: 50
+  },
+  avatarImage: {
+    height: dimen.normalizeDimen(40),
+    width: dimen.normalizeDimen(40),
+    borderRadius: dimen.normalizeDimen(20)
   }
 });
 
@@ -90,7 +95,7 @@ const ChatDetailHeader = ({
 
     return (
       <ChannelImage>
-        <ChannelImage.Big type={channel?.channelType} image={avatar} style={styles.avatar} />
+        <ChannelImage.Big style={styles.avatarImage} type={channel?.channelType} image={avatar} />
       </ChannelImage>
     );
   };

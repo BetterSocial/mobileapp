@@ -1,14 +1,10 @@
 import * as React from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {Platform, StyleSheet, Text, View} from 'react-native';
 
 import ArrowLeftIcon from '../../../../assets/icons/arrow-left.svg';
 import GlobalButton from '../../../components/Button/GlobalButton';
 import {COLORS, SIZES} from '../../../utils/theme';
+import dimen from '../../../utils/dimen';
 
 const Header = ({
   title,
@@ -24,19 +20,22 @@ const Header = ({
       return (
         <GlobalButton buttonStyle={styles.backContainer} onPress={onPress}>
           <View style={styles.content(-4)}>
-            <ArrowLeftIcon width={20} height={12} fill="#000" />
+            <ArrowLeftIcon
+              width={dimen?.normalizeDimen(20)}
+              height={dimen?.normalizeDimen(20)}
+              fill="#000"
+            />
           </View>
         </GlobalButton>
       );
-    } 
-      return (
-        <GlobalButton buttonStyle={styles.backContainer}  onPress={onPress}>
-          <View style={styles.content(-8)}>
-            <ArrowLeftIcon width={20} height={12} fill="#000" />
-          </View>
-        </GlobalButton>
-      );
-    
+    }
+    return (
+      <GlobalButton buttonStyle={styles.backContainer} onPress={onPress}>
+        <View style={styles.content(-8)}>
+          <ArrowLeftIcon width={20} height={12} fill="#000" />
+        </View>
+      </GlobalButton>
+    );
   };
   return (
     <View style={{...styles.container, ...containerStyle}}>
@@ -44,8 +43,13 @@ const Header = ({
       <View style={styles.containerTitle}>
         <Text style={{...styles.text, ...titleStyle}}>{title}</Text>
       </View>
-      <GlobalButton disabled={disabledNextBtn} buttonStyle={styles.nextContainer} onPress={onPressSub}>
-        <Text style={[styles.text, {color: disabledNextBtn ? COLORS.gray6: COLORS.holyTosca}]}>{subTitle}</Text>
+      <GlobalButton
+        disabled={disabledNextBtn}
+        buttonStyle={styles.nextContainer}
+        onPress={onPressSub}>
+        <Text style={[styles.text, {color: disabledNextBtn ? COLORS.gray6 : COLORS.holyTosca}]}>
+          {subTitle}
+        </Text>
       </GlobalButton>
     </View>
   );
@@ -58,11 +62,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: SIZES.base,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   content: (marginLeft) => ({
     padding: 10,
-    marginLeft,
+    marginLeft
   }),
   text: {
     fontFamily: 'Inter',
@@ -71,13 +75,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#000000',
     lineHeight: 20,
-    alignSelf: 'center',
+    alignSelf: 'center'
   },
   gap: {width: 20, height: 12},
   containerTitle: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   backContainer: {
     paddingLeft: 0

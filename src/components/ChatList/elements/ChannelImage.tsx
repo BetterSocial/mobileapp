@@ -34,7 +34,7 @@ const Big: React.FC<ChannelImageMainProps> = ({type, image, style}) => {
         <FastImage
           source={CommunityIcon}
           resizeMode={FastImage.resizeMode.contain}
-          style={styles.imageDefaultCommunity}
+          style={[styles.imageDefaultCommunity]}
         />
       </View>
     );
@@ -46,7 +46,7 @@ const Big: React.FC<ChannelImageMainProps> = ({type, image, style}) => {
         <FastImage
           source={GroupIcon}
           resizeMode={FastImage.resizeMode.contain}
-          style={styles.imageDefaultGroup}
+          style={[styles.imageDefaultGroup]}
         />
       </View>
     );
@@ -63,7 +63,7 @@ const Big: React.FC<ChannelImageMainProps> = ({type, image, style}) => {
         <FastImage
           source={GroupIcon}
           resizeMode={FastImage.resizeMode.contain}
-          style={styles.imageDefaultGroupInfo}
+          style={[styles.imageDefaultGroupInfo]}
         />
       </View>
     );
