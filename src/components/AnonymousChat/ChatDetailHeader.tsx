@@ -4,23 +4,28 @@ import IconEP from 'react-native-vector-icons/Entypo';
 import {StyleSheet, Text, View} from 'react-native';
 
 import AnonymousIcon from '../../screens/ChannelListScreen/elements/components/AnonymousIcon';
+import ChannelImage from '../ChatList/elements/ChannelImage';
 import CustomPressable from '../CustomPressable';
 import IcArrowBackWhite from '../../assets/arrow/Ic_arrow_back_white';
+import dimen from '../../utils/dimen';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import {CHANNEL_GROUP, GROUP_INFO, SIGNED} from '../../hooks/core/constant';
-import ChannelImage from '../ChatList/elements/ChannelImage';
-import dimen from '../../utils/dimen';
+import {CHANNEL_GROUP, SIGNED} from '../../hooks/core/constant';
 
 const styles = StyleSheet.create({
-  container: (chatType?: string) => ({
+  container: {
     display: 'flex',
     flexDirection: 'row',
-    backgroundColor: chatType === SIGNED ? colors.darkBlue : colors.bondi_blue,
     height: 50,
     alignItems: 'center'
-  }),
+  },
+  bgDarkBlue: {
+    backgroundColor: colors.darkBlue
+  },
+  bgBondiBlue: {
+    backgroundColor: colors.bondi_blue
+  },
   backButton: {
     paddingLeft: 22,
     paddingRight: 20,
@@ -28,9 +33,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 40,
+    width: dimen.normalizeDimen(38),
+    height: dimen.normalizeDimen(38),
+    borderRadius: dimen.normalizeDimen(38),
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -72,9 +77,22 @@ const ChatDetailHeader = ({
   type,
   channel
 }) => {
-  console.log({channel}, 'channel man');
+  const bgHeaderStyle = () => {
+    if (type === SIGNED) return styles.bgDarkBlue;
+    return styles.bgBondiBlue;
+  };
 
-  const handleDefaultImage = () => {
+  const renderAvatar = () => {
+    if (anon_user_info_emoji_code) {
+      return (
+        <AnonymousIcon
+          color={anon_user_info_color_code}
+          emojiCode={anon_user_info_emoji_code}
+          size={dimen.normalizeDimen(38)}
+        />
+      );
+    }
+
     return (
       <ChannelImage>
         <ChannelImage.Big
@@ -87,20 +105,12 @@ const ChatDetailHeader = ({
   };
 
   return (
-    <View style={styles.container(type)}>
+    <View style={[styles.container, bgHeaderStyle()]}>
       <CustomPressable style={styles.backButton} onPress={onBackPress}>
         <IcArrowBackWhite width={20} height={12} />
       </CustomPressable>
       <CustomPressable style={styles.textContainer} onPress={onAvatarPress}>
-        {anon_user_info_emoji_code ? (
-          <AnonymousIcon
-            color={anon_user_info_color_code}
-            emojiCode={anon_user_info_emoji_code}
-            size={dimen.normalizeDimen(40)}
-          />
-        ) : (
-          <>{handleDefaultImage()}</>
-        )}
+        {renderAvatar()}
         <Text numberOfLines={1} ellipsizeMode="tail" style={styles.text}>
           {user}
         </Text>
