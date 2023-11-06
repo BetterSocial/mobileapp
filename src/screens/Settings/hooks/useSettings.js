@@ -33,6 +33,7 @@ const useSettings = () => {
   const logout = async () => {
     try {
       await OneSignalUtil.removeAllSubscribedTags();
+      OneSignalUtil.removeExternalId();
       StorageUtils.clearAll();
       await removeFcmToken();
       removeAllCache();
