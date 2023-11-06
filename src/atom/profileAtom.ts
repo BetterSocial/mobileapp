@@ -4,7 +4,9 @@ const profileAtom = atom({
   key: 'profileAtom',
   default: {
     signedProfileId: null,
-    anonProfileId: null
+    anonProfileId: null,
+    token: null,
+    anonymousToken: null
   }
 });
 

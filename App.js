@@ -26,7 +26,7 @@ import {reactotronInstance} from './src/libraries/reactotron/reactotronInstance'
 import {toastConfig} from './src/configs/ToastConfig';
 
 const App = () => {
-  const {bottom, top} = useSafeAreaInsets();
+  const {top, bottom} = useSafeAreaInsets();
   const {height} = useSafeAreaFrame();
   const streami18n = new Streami18n({
     language: 'en'
@@ -121,10 +121,6 @@ const App = () => {
   // OneSignal Initialization
   OneSignal.initialize(ONE_SIGNAL_APP_ID);
 
-  // requestPermission will show the native iOS or Android notification permission prompt.
-  // We recommend removing the following code and instead using an In-App Message to prompt for notification permission
-  OneSignal.Notifications.requestPermission(true);
-
   return (
     <>
       <HumanIDProvider />
@@ -137,8 +133,8 @@ const App = () => {
             onStateChange={handleStateChange}
             ref={navigationRef}
             linking={linking}>
-            <View style={{paddingTop: top, paddingBottom: bottom}}>
-              <OverlayProvider bottomInset={bottom} i18nInstance={streami18n}>
+            <View>
+              <OverlayProvider topInset={top} bottomInset={bottom} i18nInstance={streami18n}>
                 <KeyboardAvoidingView enabled={Platform.OS === 'ios'} behavior="padding">
                   <RootNavigator areaHeight={height} />
                 </KeyboardAvoidingView>

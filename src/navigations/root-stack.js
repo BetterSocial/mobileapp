@@ -3,6 +3,7 @@ import NetInfo from '@react-native-community/netinfo';
 import {View} from 'react-native';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
 import {useRecoilState, useRecoilValue} from 'recoil';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import Blocked from '../screens/Blocked';
 import ChooseUsername from '../screens/InputUsername';
@@ -53,6 +54,7 @@ import {InitialStartupAtom, LoadingStartupContext} from '../service/initialStart
 import {NavigationConstants} from '../utils/constants';
 import {followersOrFollowingAtom} from '../screens/ChannelListScreen/model/followersOrFollowingAtom';
 import {useInitialStartup} from '../hooks/useInitialStartup';
+import FollowersScreen from '../screens/Followings/FollowersScreen';
 
 const RootStack = createNativeStackNavigator();
 
@@ -62,6 +64,7 @@ export const RootNavigator = () => {
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const [following, setFollowing] = useRecoilState(followersOrFollowingAtom);
   const loadingStartup = useInitialStartup();
+  const insets = useSafeAreaInsets();
 
   React.useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
@@ -90,11 +93,15 @@ export const RootNavigator = () => {
     };
   }, []);
 
+  const isUnauthenticated = initialStartup.id === null || initialStartup.id === '';
+
   return (
     <LoadingStartupContext.Provider value={loadingStartup.loadingUser}>
       <View
         style={{
-          height: '100%'
+          height: '100%',
+          paddingBottom: isUnauthenticated ? 0 : insets.bottom,
+          paddingTop: isUnauthenticated ? 0 : insets.top
         }}>
         <NetworkStatusIndicator hide={true} />
         {/* <StatusBar translucent backgroundColor="white" /> */}
@@ -180,6 +187,13 @@ const AuthenticatedNavigator = () => {
         <AuthenticatedStack.Screen
           name="Followings"
           component={FollowingScreen}
+          options={{
+            headerShown: false
+          }}
+        />
+        <AuthenticatedStack.Screen
+          name="Followers"
+          component={FollowersScreen}
           options={{
             headerShown: false
           }}

@@ -1,11 +1,11 @@
 import * as React from 'react';
-import {StyleSheet, Text, TouchableNativeFeedback, View} from 'react-native';
-import SimpleToast from 'react-native-simple-toast';
+import {StyleSheet, Text, View} from 'react-native';
+import PropTypes from 'prop-types';
 import GlobalButton from '../../../components/Button/GlobalButton';
 
 import {colors} from '../../../utils/colors';
-import {fonts} from '../../../utils/fonts';
 import {getSingularOrPluralText} from '../../../utils/string/StringUtils';
+
 /**
  *
  * @typedef {Function} OnFollowingContainerClicked
@@ -18,15 +18,21 @@ import {getSingularOrPluralText} from '../../../utils/string/StringUtils';
  * @property {String} follower
  * @property {String} following
  * @property {OnFollowingContainerClicked} onFollowingContainerClicked
+ * @property {onFollowersContainerClicked} onFollowersContainerClicked
  */
 /**
  *
  * @param {FollowInfoRowPropsParam} param0
  * @returns
  */
-const FollowInfoRow = ({follower, following, onFollowingContainerClicked}) => {
+const FollowInfoRow = ({
+  follower,
+  following,
+  onFollowingContainerClicked,
+  onFollowersContainerClicked
+}) => {
   const openFollower = () => {
-    SimpleToast.show('For privacy reasons, you cannot see who follows you', SimpleToast.LONG);
+    onFollowersContainerClicked();
   };
   return (
     <View style={styles.wrapFollower}>
@@ -53,14 +59,11 @@ const FollowInfoRow = ({follower, following, onFollowingContainerClicked}) => {
 let styles = StyleSheet.create({
   following: {marginLeft: 18},
   textTotal: {
-    // fontFamily: fonts.inter[800],
-    // fontWeight: 'bold',
     fontSize: 14,
     color: colors.bondi_blue,
     paddingRight: 4
   },
   textFollow: {
-    // fontFamily: fonts.inter[800],
     fontSize: 14,
     color: colors.black,
     paddingRight: 4
@@ -76,5 +79,12 @@ let styles = StyleSheet.create({
     paddingVertical: 8
   }
 });
+
+FollowInfoRow.propTypes = {
+  follower: PropTypes.string,
+  following: PropTypes.string,
+  onFollowingContainerClicked: PropTypes.func,
+  onFollowersContainerClicked: PropTypes.func
+};
 
 export default React.memo(FollowInfoRow);

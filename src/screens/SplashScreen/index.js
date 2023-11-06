@@ -5,7 +5,8 @@ import {Linking} from 'react-native';
 import {StackActions} from '@react-navigation/native';
 import {useNavigation} from '@react-navigation/core';
 
-import useProfileHook from '../../hooks/core/profile/useProfileHook';
+import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
+import TokenStorage, {ITokenEnum} from '../../utils/storage/custom/tokenStorage';
 import {getAnonymousUserId, getUserId} from '../../utils/users';
 import {getProfileByUsername} from '../../service/profile';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
@@ -21,7 +22,7 @@ const SplashScreen = () => {
     navigation.dispatch(StackActions.replace(selfUserId ? 'HomeTabs' : 'SignIn'));
   };
 
-  const {setProfileId} = useProfileHook();
+  const {setAuth} = useUserAuthHook();
 
   const getDiscoveryData = async (selfUserId) => {
     SplashScreenPackage.hide();
@@ -48,9 +49,14 @@ const SplashScreen = () => {
     try {
       const id = await getUserId();
       const anonymousUserId = await getAnonymousUserId();
-      setProfileId({
+      const token = TokenStorage.get(ITokenEnum.token);
+      const anonymousToken = TokenStorage.get(ITokenEnum.anonymousToken);
+
+      setAuth({
         anonProfileId: anonymousUserId,
-        profileId: id
+        profileId: id,
+        token,
+        anonymousToken
       });
 
       if (id !== null && id !== '') {

@@ -14,6 +14,7 @@ import MemoNews from '../assets/icon/News';
 import MemoProfileIcon from '../assets/icon/Profile';
 import profileAtom from '../atom/profileAtom';
 import useRootChannelListHook from '../hooks/screen/useRootChannelListHook';
+import TokenStorage, {ITokenEnum} from '../utils/storage/custom/tokenStorage';
 import {FeedScreen, NewsScreen, ProfileScreen} from '../screens';
 import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
 import {colors} from '../utils/colors';
@@ -179,9 +180,14 @@ function HomeBottomTabs({navigation}) {
   const updateProfileAtomId = async () => {
     const signedUserId = await getUserId();
     const anonUserId = await getAnonymousUserId();
+    const token = TokenStorage.get(ITokenEnum.token);
+    const anonymousToken = TokenStorage.get(ITokenEnum.anonymousToken);
+
     setProfileAtom({
       anonProfileId: anonUserId,
-      signedProfileId: signedUserId
+      signedProfileId: signedUserId,
+      token,
+      anonymousToken
     });
   };
 
