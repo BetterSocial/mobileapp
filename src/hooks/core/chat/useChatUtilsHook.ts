@@ -127,6 +127,18 @@ function useChatUtilsHook(): UseChatUtilsHook {
     return item?.description || item?.message;
   };
 
+  const splitSystemMessage = (message: string): string[] => {
+    const splitMessage = message?.split('.');
+    const pushMessage = [];
+    splitMessage?.forEach((systemMessage) => {
+      if (systemMessage && systemMessage.length > 0) {
+        const arrMessage = systemMessage?.trimStart()?.replace(/\n/g, '');
+        pushMessage.push(arrMessage);
+      }
+    });
+    return pushMessage;
+  };
+
   return {
     selectedChannel,
     goBack,
@@ -135,7 +147,8 @@ function useChatUtilsHook(): UseChatUtilsHook {
     goToCommunityScreen,
     goToChatInfoScreen,
     goBackFromChatScreen,
-    handleTextSystem
+    handleTextSystem,
+    splitSystemMessage
   };
 }
 

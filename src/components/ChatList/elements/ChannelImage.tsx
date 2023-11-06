@@ -11,6 +11,7 @@ import {
   ChannelImageProps
 } from '../../../../types/component/ChatList/ChannelImage.types';
 import {channelImageStyles as styles} from './ChannelImage.style';
+import {GROUP_INFO} from '../../../hooks/core/constant';
 
 const ChannelImage: ChannelImageProps = ({children}) => {
   return <View>{children}</View>;
@@ -46,6 +47,23 @@ const Big: React.FC<ChannelImageMainProps> = ({type, image}) => {
           source={GroupIcon}
           resizeMode={FastImage.resizeMode.contain}
           style={styles.imageDefaultGroup}
+        />
+      </View>
+    );
+  }
+
+  if (type === GROUP_INFO) {
+    return (
+      <View
+        style={[
+          styles.containerImageGroupINfo,
+          styles.containerDefaultImage,
+          styles.containerDarkBlue
+        ]}>
+        <FastImage
+          source={GroupIcon}
+          resizeMode={FastImage.resizeMode.contain}
+          style={styles.imageDefaultGroupInfo}
         />
       </View>
     );

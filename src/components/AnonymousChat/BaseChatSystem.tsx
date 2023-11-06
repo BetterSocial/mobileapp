@@ -8,9 +8,11 @@ const styles = StyleSheet.create({
   containerMessage: {
     backgroundColor: '#F5F5F5',
     marginHorizontal: dimen.normalizeDimen(20),
-    padding: dimen.normalizeDimen(5),
-    borderRadius: dimen.normalizeDimen(19),
-    marginVertical: dimen.normalizeDimen(5)
+    padding: dimen.normalizeDimen(8),
+    borderRadius: dimen.normalizeDimen(8),
+    marginVertical: dimen.normalizeDimen(5),
+    maxWidth: dimen.normalizeDimen(335),
+    flex: 1
   },
   textSystem: {
     fontSize: 14,
@@ -20,11 +22,23 @@ const styles = StyleSheet.create({
 });
 
 const BaseSystemChat: React.FC<BaseChatItemComponentProps> = ({item, index}) => {
-  const {handleTextSystem} = useChatUtilsHook();
+  const {handleTextSystem, splitSystemMessage} = useChatUtilsHook();
+
+  const messageText = () => {
+    return splitSystemMessage(handleTextSystem(item))?.map((message, key) => {
+      return (
+        <Text key={key} style={styles.textSystem}>
+          {message}.
+        </Text>
+      );
+    });
+  };
 
   return (
-    <View style={styles.containerMessage} key={index}>
-      <Text style={styles.textSystem}>{handleTextSystem(item)} </Text>
+    <View style={{alignItems: 'center', justifyContent: 'center'}}>
+      <View style={styles.containerMessage} key={index}>
+        {messageText()}
+      </View>
     </View>
   );
 };

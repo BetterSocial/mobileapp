@@ -16,6 +16,7 @@ import {ChatStatus} from '../../../../types/database/schema/ChannelList.types';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
+import {SIGNED} from '../../../hooks/core/constant';
 
 const {width} = Dimensions.get('screen');
 
@@ -40,8 +41,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row'
   },
-  textContainer: {
-    backgroundColor: colors.halfBaked,
+  textContainer: (type) => ({
+    backgroundColor: type === SIGNED ? colors.darkBlue : colors.halfBaked,
     paddingLeft: BUBBLE_LEFT_PADDING,
     paddingRight: BUBBLE_RIGHT_PADDING,
     paddingTop: 4,
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderTopEndRadius: 0,
     flex: 1
-  },
+  }),
   textContainerNewLine: {
     paddingBottom: 14
   },
@@ -115,7 +116,8 @@ const ChatItemMyTextV2 = ({
   isContinuous = false,
   message = 'Ultrices neque op semper blahbla blahri mauris amet, penatibus. pi Amet, mollis quam venenatis di',
   status = ChatStatus.PENDING,
-  AnonymousImage = null
+  AnonymousImage = null,
+  chatType
 }: ChatItemMyTextProps) => {
   const messageRef = React.useRef<Text>(null);
   const [isNewLine, setIsNewLine] = React.useState(true);
@@ -149,7 +151,10 @@ const ChatItemMyTextV2 = ({
     return <FastImage style={styles.avatar} source={{uri: avatar}} />;
   }, []);
 
-  const textContainerStyle = [styles.textContainer, isNewLine && styles.textContainerNewLine];
+  const textContainerStyle = [
+    styles.textContainer(chatType),
+    isNewLine && styles.textContainerNewLine
+  ];
 
   return (
     <View style={styles.chatContainer}>

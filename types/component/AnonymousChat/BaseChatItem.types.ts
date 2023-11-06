@@ -24,6 +24,7 @@ export interface ChatItemMyTextProps extends BaseChatItemProps {
   type?: BaseChatItemTypeProps.MY_ANON_CHAT;
   status: ChatStatus;
   AnonymousImage: React.ReactElement;
+  chatType?: string;
 }
 
 export interface ChatItemTargetText extends BaseChatItemProps {

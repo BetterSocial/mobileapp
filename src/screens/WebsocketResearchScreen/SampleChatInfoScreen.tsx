@@ -26,11 +26,12 @@ import {ProfileContact} from '../../components/Items';
 import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {trimString} from '../../utils/string/TrimString';
-import {Context} from '../../context';
 import {isContainUrl} from '../../utils/Utils';
 import ModalAction from '../GroupInfo/elements/ModalAction';
 import ModalActionAnonymous from '../GroupInfo/elements/ModalActionAnonymous';
 import BlockComponent from '../../components/BlockComponent';
+import {CHANNEL_GROUP, GROUP_INFO} from '../../hooks/core/constant';
+import ChannelImage from '../../components/ChatList/elements/ChannelImage';
 
 export const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#fff', paddingBottom: 40},
@@ -190,8 +191,15 @@ const SampleChatInfoScreen = () => {
   const ANONYMOUS_USER = 'AnonymousUser';
   const {anon_user_info_color_code, anon_user_info_emoji_code} =
     channelInfo?.rawJson?.channel || {};
-
+  console.log({channelInfo}, 'lalak');
   const showImageProfile = () => {
+    if (channelInfo?.channelType === CHANNEL_GROUP) {
+      return (
+        <ChannelImage>
+          <ChannelImage.Big type={GROUP_INFO} image={channelInfo?.channelPicture} />
+        </ChannelImage>
+      );
+    }
     if (anon_user_info_color_code) {
       return (
         <AnonymousIcon
@@ -238,7 +246,11 @@ const SampleChatInfoScreen = () => {
       <StatusBar translucent={false} />
       {isLoadingMembers ? null : (
         <>
-          <AnonymousChatInfoHeader isCenter onPress={goBack} title={channelInfo?.name} />
+          <AnonymousChatInfoHeader
+            isCenter
+            onPress={goBack}
+            title={trimString(channelInfo?.name, 20)}
+          />
           <View style={styles.lineTop} />
           <ScrollView nestedScrollEnabled={true}>
             <SafeAreaView>
@@ -254,6 +266,9 @@ const SampleChatInfoScreen = () => {
                     Created {moment(channelInfo?.createdAt).format('MM/DD/YYYY')}
                   </Text>
                 </View>
+                {/* <TouchableOpacity onPress={goToEditGroup}>
+                  <Text>edit</Text>
+                </TouchableOpacity> */}
               </View>
               <View style={styles.lineTop} />
               <View style={styles.lineTop} />
