@@ -95,11 +95,7 @@ const ChatDetailHeader = ({
 
     return (
       <ChannelImage>
-        <ChannelImage.Big
-          type={channel?.channelType}
-          image={avatar}
-          imageStyle={channel?.channelType !== CHANNEL_GROUP ? styles.avatarImage : {}}
-        />
+        <ChannelImage.Big style={styles.avatarImage} type={channel?.channelType} image={avatar} />
       </ChannelImage>
     );
   };
