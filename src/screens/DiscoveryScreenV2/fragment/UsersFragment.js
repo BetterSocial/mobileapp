@@ -1,8 +1,9 @@
 /* eslint-disable no-use-before-define */
 import * as React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
+import PropTypes from 'prop-types';
 import DiscoveryAction from '../../../context/actions/discoveryAction';
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import DomainList from '../elements/DiscoveryItemList';
@@ -34,24 +35,27 @@ const UsersFragment = ({
   setUnfollowedUsers = () => {},
   setSearchText = () => {},
   setIsFirstTimeOpen = () => {},
-  withoutRecent = false
+  withoutRecent = false,
+  showRecentSearch = true,
+  fetchData = () => {},
+  searchText
 }) => {
   const [discovery, discoveryDispatch] = React.useContext(Context).discovery;
   const [profile] = React.useContext(Context).profile;
   const navigation = useNavigation();
 
-  const [myId, setMyId] = React.useState('');
-  // const [initialFollowedUsers, setInitialFollowedUsers] = React.useState(
-  //     discovery.initialUsers.filter((item) => item.user_id_follower !== null)
-  // )
+  const route = useRoute();
 
-  // const [initialUnfollowedUsers, setInitialUnfollowedUsers] = React.useState(
-  //     discovery.initialUsers.filter((item) => item.user_id_follower === null)
-  // )
+  const [myId, setMyId] = React.useState('');
 
   const isReady = useIsReady();
 
-  const users = discovery.initialUsers;
+  const users = React.useMemo(() => {
+    return discovery.initialUsers.map((item) => ({
+      ...item,
+      following: item.following !== undefined ? item.following : item.user_id_follower !== null
+    }));
+  }, [discovery]);
 
   React.useEffect(() => {
     const parseToken = async () => {
@@ -73,35 +77,40 @@ const UsersFragment = ({
     });
   };
 
+  const exhangeFollower = (newUserLists, willFollow, index) => {
+    if (newUserLists[index].user) {
+      newUserLists[index].user.following = !!willFollow;
+      newUserLists[index].user.user_id_follower = myId;
+    } else {
+      newUserLists[index].following = !!willFollow;
+      newUserLists[index].user_id_follower = myId;
+    }
+  };
+
   const handleFollow = async (from, willFollow, item, index) => {
     if (from === FROM_FOLLOWED_USERS_INITIAL || from === FROM_UNFOLLOWED_USERS_INITIAL) {
       const newFollowedUsers = [...users];
-      newFollowedUsers[index].user_id_follower = willFollow ? myId : null;
-      // const newInitialFollowedUsers = [...initialFollowedUsers]
-      // newInitialFollowedUsers[index].user_id_follower = willFollow ? myId : null
+      exhangeFollower(newFollowedUsers, willFollow, index);
 
-      // FollowingAction.setFollowingUsers(newFollowedUsers, followingDispatch)
       DiscoveryAction.setDiscoveryInitialUsers(newFollowedUsers, discoveryDispatch);
-      // setInitialFollowedUsers(newInitialFollowedUsers)
     }
 
     if (from === FROM_FOLLOWED_USERS) {
       const newFollowedUsers = [...followedUsers];
-      newFollowedUsers[index].user_id_follower = willFollow ? myId : null;
+      exhangeFollower(newFollowedUsers, willFollow, index);
 
       setFollowedUsers(newFollowedUsers);
     }
 
     if (from === FROM_UNFOLLOWED_USERS) {
       const newUnfollowedUsers = [...unfollowedUsers];
-      newUnfollowedUsers[index].user_id_follower = willFollow ? myId : null;
-
+      exhangeFollower(newUnfollowedUsers, willFollow, index);
       setUnfollowedUsers(newUnfollowedUsers);
     }
 
     if (from === FROM_USERS_INITIAL) {
       const newFollowedUsers = [...initialUsers];
-      newFollowedUsers[index].user_id_follower = willFollow ? myId : null;
+      exhangeFollower(newFollowedUsers, willFollow, index);
 
       setInitialUsers(newFollowedUsers);
     }
@@ -119,45 +128,82 @@ const UsersFragment = ({
     } else {
       await setUnFollow(data);
     }
+    if (searchText.length > 0) fetchData();
   };
 
-  const renderDiscoveryItem = (from, key, item, index) => (
-    <DomainList
-      key={`${key}-${index}`}
-      onPressBody={() => handleOnPress(item)}
-      handleSetFollow={() => handleFollow(from, true, item, index)}
-      handleSetUnFollow={() => handleFollow(from, false, item, index)}
-      item={{
-        name: item.username,
-        image: item.profile_pic_path,
-        isunfollowed: item.user_id_follower === null,
-        description: item.bio
-      }}
-    />
-  );
+  const renderDiscoveryItem = (from, key, item, index) => {
+    const isUnfollowed = item.user ? !item.user.following : !item.following;
+
+    if (
+      (route.name === 'Followings' && item.user_id_follower !== null) ||
+      route.name !== 'Followings'
+    ) {
+      return (
+        <DomainList
+          key={`${key}-${index}`}
+          onPressBody={() => handleOnPress(item.user || item)}
+          handleSetFollow={() => handleFollow(from, true, item.user || item, index)}
+          handleSetUnFollow={() => handleFollow(from, false, item.user || item, index)}
+          item={{
+            name: item.user ? item.user.username : item.username,
+            image: item.user ? item.user.profile_pic_path : item.profile_pic_path,
+            isunfollowed: isUnfollowed,
+            description: item.user ? item.user.bio : item.bio
+          }}
+        />
+      );
+    }
+    return null;
+  };
 
   const renderUsersItem = () => {
     if (isFirstTimeOpen) {
-      // let renderArray = []
-      // initialFollowedUsers.map((item, index) => renderArray.push(renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", item, index)))
-      // renderArray.push(<DiscoveryTitleSeparator key="user-title-separator" text="Suggested Users"/>)
-      // initialUnfollowedUsers.map((item, index) => renderArray.push(renderDiscoveryItem(FROM_UNFOLLOWED_USERS_INITIAL, "unfollowedUsers", item, index)))
-
-      // return renderArray
-
       if (withoutRecent) {
+        if (initialUsers.length !== 0) {
+          return [
+            initialUsers.map((item, index) =>
+              renderDiscoveryItem(FROM_USERS_INITIAL, 'topicUsers', item, index)
+            )
+          ];
+        }
         return [
-          initialUsers.map((item, index) =>
-            renderDiscoveryItem(FROM_USERS_INITIAL, 'topicUsers', item, index)
+          users.map((item, index) =>
+            renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, 'followedUsers', item, index)
           )
         ];
       }
-      return [<DiscoveryTitleSeparator key="user-title-separator" text="Suggested Users" />].concat(
-        users.map((item, index) =>
-          // return renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", { ...item.user, user_id_follower: item.user_id_follower }, index)
+
+      const followingUsers = [];
+      const unfollowingUsers = [];
+
+      users.forEach((item) => {
+        if (item.user?.user_id_follower || item.user_id_follower) {
+          followingUsers.push(item);
+        } else {
+          unfollowingUsers.push(item);
+        }
+      });
+
+      return [
+        followingUsers.map((item, index) =>
           renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, 'followedUsers', item, index)
         )
-      );
+      ]
+        .concat([
+          route.name !== 'Followings' && (
+            <DiscoveryTitleSeparator key="user-title-separator" text="Suggested Users" />
+          )
+        ])
+        .concat([
+          unfollowingUsers.map((item, index) =>
+            renderDiscoveryItem(
+              FROM_FOLLOWED_USERS_INITIAL,
+              'followedUsers',
+              item,
+              index + followingUsers.length
+            )
+          )
+        ]);
     }
 
     return (
@@ -166,14 +212,18 @@ const UsersFragment = ({
           renderDiscoveryItem(FROM_FOLLOWED_USERS, 'followedUsers', item, index)
         )}
 
-        {unfollowedUsers.length > 0 && followedUsers.length > 0 && !withoutRecent && (
-          <View style={styles.unfollowedHeaderContainer}>
-            <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreUsers}</Text>
-          </View>
-        )}
-        {unfollowedUsers.map((item, index) =>
-          renderDiscoveryItem(FROM_UNFOLLOWED_USERS, 'unfollowedUsers', item, index)
-        )}
+        {route.name !== 'Followings' &&
+          unfollowedUsers.length > 0 &&
+          followedUsers.length > 0 &&
+          !withoutRecent && (
+            <View style={styles.unfollowedHeaderContainer}>
+              <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreUsers}</Text>
+            </View>
+          )}
+        {route.name !== 'Followings' &&
+          unfollowedUsers.map((item, index) =>
+            renderDiscoveryItem(FROM_UNFOLLOWED_USERS, 'unfollowedUsers', item, index)
+          )}
       </>
     );
   };
@@ -197,7 +247,7 @@ const UsersFragment = ({
     <View>
       {!withoutRecent && (
         <RecentSearch
-          shown={isFirstTimeOpen}
+          shown={showRecentSearch || isFirstTimeOpen}
           setSearchText={setSearchText}
           setIsFirstTimeOpen={setIsFirstTimeOpen}
         />
@@ -237,5 +287,22 @@ const styles = StyleSheet.create({
     display: 'none'
   }
 });
+
+UsersFragment.propTypes = {
+  isLoadingDiscoveryUser: PropTypes.bool,
+  isFirstTimeOpen: PropTypes.bool,
+  initialUsers: PropTypes.array,
+  setInitialUsers: PropTypes.func,
+  followedUsers: PropTypes.array,
+  setFollowedUsers: PropTypes.func,
+  unfollowedUsers: PropTypes.array,
+  setUnfollowedUsers: PropTypes.func,
+  setSearchText: PropTypes.func,
+  setIsFirstTimeOpen: PropTypes.func,
+  withoutRecent: PropTypes.bool,
+  showRecentSearch: PropTypes.bool,
+  fetchData: PropTypes.func,
+  searchText: PropTypes.string
+};
 
 export default UsersFragment;

@@ -3,6 +3,8 @@ import axios from 'axios';
 import {Keyboard, Platform, ScrollView, StatusBar, StyleSheet} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
+import {useNavigation} from '@react-navigation/core';
+import PropTypes from 'prop-types';
 import DiscoveryAction from '../../context/actions/discoveryAction';
 import DiscoveryRepo from '../../service/discovery';
 import DiscoveryTab from './elements/DiscoveryTab';
@@ -21,12 +23,12 @@ import {
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {withInteractionsManagedNoStatusBar} from '../../components/WithInteractionManaged';
-
-// const { height } = Dimensions.get('screen');
+import FollowingAction from '../../context/actions/following';
+import {Header} from '../../components';
 
 const DiscoveryScreenV2 = ({route}) => {
   const {tab} = route.params;
-  const [selectedScreen, setSelectedScreen] = React.useState(tab);
+  const [selectedScreen, setSelectedScreen] = React.useState(tab || 0);
   const [isLoadingDiscovery, setIsLoadingDiscovery] = React.useState({
     user: false,
     topic: false,
@@ -43,9 +45,14 @@ const DiscoveryScreenV2 = ({route}) => {
   const [searchText, setSearchText] = React.useState('');
   const [isFocus, setIsFocus] = React.useState(true);
   const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true);
+  const [tabs, setTabs] = React.useState({Users: 0, Communities: 0, Domains: 0, News: 0});
 
-  const [, discoveryDispatch] = React.useContext(Context).discovery;
+  const [discoveryData, discoveryDispatch] = React.useContext(Context).discovery;
+  const [profileState] = React.useContext(Context).profile;
   const cancelTokenRef = React.useRef(axios.CancelToken.source());
+  const [, followingDispatch] = React.useContext(Context).following;
+
+  const navigation = useNavigation();
 
   const handleScroll = React.useCallback(() => {
     Keyboard.dismiss();
@@ -61,62 +68,119 @@ const DiscoveryScreenV2 = ({route}) => {
   }, []);
 
   const fetchDiscoveryData = async (text) => {
-    const cancelToken = cancelTokenRef?.current?.token;
-    DiscoveryRepo.fetchDiscoveryDataUser(text, {cancelToken}).then(async (data) => {
+    const fetchDiscoveryInitialUsers = async () => {
+      const initialData = await DiscoveryRepo.fetchInitialDiscoveryUsers();
+      DiscoveryAction.setDiscoveryInitialUsers(initialData.suggestedUsers, discoveryDispatch);
+    };
+
+    const fetchDiscoveryDataUser = async () => {
+      const cancelToken = cancelTokenRef?.current?.token;
+      const data = await DiscoveryRepo.fetchDiscoveryDataUser(text, {cancelToken});
       if (data.success) {
-        setDiscoveryDataFollowedUsers(data?.followedUsers || []);
-        setDiscoveryDataUnfollowedUsers(data?.unfollowedUsers || []);
+        setDiscoveryDataFollowedUsers(
+          data?.followedUsers?.map((item) => ({
+            ...item,
+            following: item.user_id_follower !== null
+          })) || []
+        );
+        setDiscoveryDataUnfollowedUsers(
+          data?.unfollowedUsers?.map((item) => ({
+            ...item,
+            following: item.user_id_follower !== null
+          })) || []
+        );
       }
       setIsLoadingDiscovery((prevState) => ({
         ...prevState,
         user: false
       }));
-    });
+    };
 
-    DiscoveryRepo.fetchDiscoveryDataDomain(text, {cancelToken}).then(async (data) => {
+    const fetchDiscoveryInitialDomains = async () => {
+      const initialData = await DiscoveryRepo.fetchInitialDiscoveryDomains();
+      FollowingAction.setFollowingDomain(initialData.suggestedDomains, followingDispatch);
+      DiscoveryAction.setDiscoveryInitialDomains(initialData.suggestedDomains, discoveryDispatch);
+    };
+
+    const fetchDiscoveryDataDomain = async () => {
+      const cancelToken = cancelTokenRef?.current?.token;
+      const data = await DiscoveryRepo.fetchDiscoveryDataDomain(text, {cancelToken});
       if (data.success) {
         setDiscoveryDataFollowedDomains(data?.followedDomains || []);
         setDiscoveryDataUnfollowedDomains(data?.unfollowedDomains || []);
       }
-
       setIsLoadingDiscovery((prevState) => ({
         ...prevState,
         domain: false
       }));
-    });
+    };
 
-    DiscoveryRepo.fetchDiscoveryDataTopic(text, {cancelToken}).then(async (data) => {
+    const fetchDiscoveryInitialTopics = async () => {
+      const initialData = await DiscoveryRepo.fetchInitialDiscoveryTopics();
+      DiscoveryAction.setDiscoveryInitialTopics(initialData.suggestedTopics, discoveryDispatch);
+    };
+
+    const fetchDiscoveryDataTopic = async () => {
+      const cancelToken = cancelTokenRef?.current?.token;
+      const data = await DiscoveryRepo.fetchDiscoveryDataTopic(text, {cancelToken});
       if (data.success) {
         setDiscoveryDataFollowedTopics(data?.followedTopic);
         setDiscoveryDataUnfollowedTopics(data?.unfollowedTopic);
       }
-
       setIsLoadingDiscovery((prevState) => ({
         ...prevState,
         topic: false
       }));
-    });
+    };
 
-    DiscoveryRepo.fetchDiscoveryDataNews(text, {cancelToken}).then(async (data) => {
+    const fetchDiscoveryDataNews = async () => {
+      const cancelToken = cancelTokenRef?.current?.token;
+      const data = await DiscoveryRepo.fetchDiscoveryDataNews(text, {cancelToken});
       if (data.success) {
         setDiscoveryDataNews(data?.news);
       }
-
       setIsLoadingDiscovery((prevState) => ({
         ...prevState,
         news: false
       }));
-    });
+    };
+
+    if (text === undefined) {
+      await Promise.all([
+        fetchDiscoveryInitialUsers(),
+        fetchDiscoveryInitialDomains(),
+        fetchDiscoveryInitialTopics(),
+        fetchDiscoveryDataNews()
+      ]);
+    } else {
+      await Promise.all([
+        fetchDiscoveryDataUser(),
+        fetchDiscoveryDataDomain(),
+        fetchDiscoveryDataTopic(),
+        fetchDiscoveryDataNews()
+      ]);
+    }
   };
+
+  React.useEffect(() => {
+    setTabs({
+      Users: discoveryData.initialUsers.filter((user) =>
+        user.following !== undefined ? user.following : user.user_id_follower !== null
+      ).length,
+      Communities: discoveryData.initialTopics.filter((user) =>
+        user.following !== undefined ? user.following : user.user_id_follower !== null
+      ).length,
+      Domains: discoveryData.initialDomains.filter((user) =>
+        user.following !== undefined ? user.following : user.user_id_follower !== null
+      ).length,
+      News: 0
+    });
+  }, [discoveryData]);
 
   const onCancelToken = () => {
     cancelTokenRef?.current?.cancel();
     cancelTokenRef.current = axios.CancelToken.source();
   };
-
-  // React.useEffect(() => {
-  //     if (discoverySearchBarText.length > 1) DiscoveryAction.setDiscoveryFirstTimeOpen(false, discoveryDispatch)
-  // }, [discoverySearchBarText])
 
   const renderFragment = () => {
     if (selectedScreen === DISCOVERY_TAB_USERS)
@@ -131,6 +195,9 @@ const DiscoveryScreenV2 = ({route}) => {
           setFollowedUsers={setDiscoveryDataFollowedUsers}
           setUnfollowedUsers={setDiscoveryDataUnfollowedUsers}
           setSearchText={setSearchText}
+          fetchData={fetchDiscoveryData}
+          searchText={searchText}
+          withoutRecent={route.name === 'Followings'}
         />
       );
 
@@ -146,6 +213,9 @@ const DiscoveryScreenV2 = ({route}) => {
           setFollowedTopic={setDiscoveryDataFollowedTopics}
           setUnfollowedTopic={setDiscoveryDataUnfollowedTopics}
           setSearchText={setSearchText}
+          fetchData={fetchDiscoveryData}
+          searchText={searchText}
+          withoutRecent={route.name === 'Followings'}
         />
       );
 
@@ -161,6 +231,9 @@ const DiscoveryScreenV2 = ({route}) => {
           setFollowedDomains={setDiscoveryDataFollowedDomains}
           setUnfollowedDomains={setDiscoveryDataUnfollowedDomains}
           setSearchText={setSearchText}
+          fetchData={fetchDiscoveryData}
+          searchText={searchText}
+          withoutRecent={route.name === 'Followings'}
         />
       );
 
@@ -178,24 +251,53 @@ const DiscoveryScreenV2 = ({route}) => {
 
     return <></>;
   };
-
   return (
     <DiscoveryContainer>
       <StatusBar translucent={false} />
-      <Search
-        searchText={searchText}
-        setSearchText={setSearchText}
-        setDiscoveryLoadingData={setIsLoadingDiscovery}
-        isFocus={isFocus}
-        setIsFocus={setIsFocus}
-        setIsFirstTimeOpen={setIsFirstTimeOpen}
-        fetchDiscoveryData={fetchDiscoveryData}
-        onCancelToken={onCancelToken}
-      />
+      {route.name === 'Followings' ? (
+        <Header
+          title={
+            profileState.navbarTitle === 'Search Users'
+              ? "Who you're following"
+              : profileState.navbarTitle
+          }
+          // containerStyle={styles.header}
+          titleStyle={styles.headerTitle}
+          onPress={() => navigation.goBack()}
+          isCenter
+        />
+      ) : (
+        <Search
+          searchText={searchText}
+          setSearchText={setSearchText}
+          setDiscoveryLoadingData={setIsLoadingDiscovery}
+          isFocus={isFocus}
+          setIsFocus={setIsFocus}
+          setIsFirstTimeOpen={setIsFirstTimeOpen}
+          fetchDiscoveryData={fetchDiscoveryData}
+          onCancelToken={onCancelToken}
+          placeholderText={route.name === 'Followings' ? profileState.navbarTitle : undefined}
+        />
+      )}
       <DiscoveryTab
         selectedScreen={selectedScreen}
         onChangeScreen={(index) => setSelectedScreen(index)}
+        tabs={tabs}
       />
+      {route.name === 'Followings' && (
+        <Search
+          searchText={searchText}
+          setSearchText={setSearchText}
+          setDiscoveryLoadingData={setIsLoadingDiscovery}
+          isFocus={isFocus}
+          setIsFocus={setIsFocus}
+          setIsFirstTimeOpen={setIsFirstTimeOpen}
+          fetchDiscoveryData={fetchDiscoveryData}
+          onCancelToken={onCancelToken}
+          placeholderText={route.name === 'Followings' ? profileState.navbarTitle : undefined}
+          hideBackIcon
+        />
+      )}
       <ScrollView
         style={styles.fragmentContainer}
         contentContainerStyle={styles.fragmentContentContainer}
@@ -225,11 +327,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingVertical: 4,
     fontFamily: fonts.inter[600]
-  }
+  },
+  headerTitle: {fontSize: 16, fontFamily: fonts.inter[600], textAlign: 'center'}
 });
 
+DiscoveryScreenV2.propTypes = {
+  route: PropTypes.object
+};
+
 export default withInteractionsManagedNoStatusBar(DiscoveryScreenV2);
-// export default React.memo(DiscoveryScreenV2)
 
 const DiscoveryContainer = ({children}) => {
   if (Platform.OS === 'ios') return <>{children}</>;
