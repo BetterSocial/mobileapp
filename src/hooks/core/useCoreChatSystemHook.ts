@@ -150,7 +150,8 @@ const useCoreChatSystemHook = () => {
     const isContainFollowingMessage = websocketData?.message?.textOwnMessage
       ?.toLowerCase()
       ?.includes('you started following');
-    if (websocketMessage?.isSystem && isContainFollowingMessage) {
+    const isSystemMessage = websocketMessage?.isSystem || websocketData?.type === 'system';
+    if (isSystemMessage && isContainFollowingMessage) {
       const chat = ChatSchema.fromWebsocketObject(websocketData);
       await chat.save(localDb);
     } else {
