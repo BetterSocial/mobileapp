@@ -14,26 +14,26 @@ describe('Credder Rating testing', () => {
   });
 
   it('should render green icon if score is greater than 65', () => {
-    const {findByTestId, findByText} = render(<CredderRating score={90} />);
-    expect(findByTestId('credder-rating-green')).toBeTruthy();
-    expect(findByText('90%')).toBeTruthy();
+    const {getByTestId, getByText} = render(<CredderRating score={90} />);
+    expect(getByTestId('credder-rating-green')).toBeTruthy();
+    expect(getByText('90%')).toBeTruthy();
   });
 
   it('should render grey icon if score is not set or less than 0', () => {
-    const {findByTestId, findByText} = render(<CredderRating score={-1} />);
-    expect(findByTestId('credder-rating-grey')).toBeTruthy();
-    expect(findByText('n/a')).toBeTruthy();
+    const {getByTestId, getByText} = render(<CredderRating score={-1} />);
+    expect(getByTestId('credder-rating-grey')).toBeTruthy();
+    expect(getByText('n/a')).toBeTruthy();
   });
 
   it('should render red icon if score is 0 or less than 35', () => {
-    const {findByTestId, findByText} = render(<CredderRating score={0} />);
-    expect(findByTestId('credder-rating-red')).toBeTruthy();
-    expect(findByText('0%')).toBeTruthy();
+    const {getByTestId, getByText} = render(<CredderRating score={0} />);
+    expect(getByTestId('credder-rating-red')).toBeTruthy();
+    expect(getByText('0%')).toBeTruthy();
   });
 
   it('should render yellow icon if score is greater than 35 or less than 65', () => {
-    const {findByTestId, findByText} = render(<CredderRating score={65} />);
-    expect(findByTestId('credder-rating-yellow')).toBeTruthy();
-    expect(findByText('65%')).toBeTruthy();
+    const {getByTestId, getByText} = render(<CredderRating score={65} />);
+    expect(getByTestId('credder-rating-yellow')).toBeTruthy();
+    expect(getByText('65%')).toBeTruthy();
   });
 });
