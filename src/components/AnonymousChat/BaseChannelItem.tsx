@@ -42,12 +42,10 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
   const [profileContext] = (React.useContext(Context) as unknown as any).profile;
   const [followContext] = (React.useContext(Context) as unknown as any).following;
   const {myProfile} = profileContext;
-
   let isFollowing = false;
   if (type === BaseChannelItemTypeProps.SIGNED_PM) {
-    const targetUser = postMaker?.members?.find(
-      (member) => member?.user_id !== myProfile?.user_id
-    )?.user;
+    const members = postMaker?.members || postMaker?.channel?.members;
+    const targetUser = members?.find((member) => member?.user_id !== myProfile?.user_id)?.user;
     isFollowing = Boolean(
       followContext?.users?.find((user) => user?.user_id_followed === targetUser?.id)
     );
