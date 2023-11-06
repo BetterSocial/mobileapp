@@ -9,7 +9,7 @@ import IcArrowBackWhite from '../../assets/arrow/Ic_arrow_back_white';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import {SIGNED} from '../../hooks/core/constant';
+import {CHANNEL_GROUP, GROUP_INFO, SIGNED} from '../../hooks/core/constant';
 import ChannelImage from '../ChatList/elements/ChannelImage';
 import dimen from '../../utils/dimen';
 
@@ -53,6 +53,11 @@ const styles = StyleSheet.create({
     paddingLeft: 22,
     justifyContent: 'center',
     height: 50
+  },
+  avatarImage: {
+    height: dimen.normalizeDimen(40),
+    width: dimen.normalizeDimen(40),
+    borderRadius: dimen.normalizeDimen(20)
   }
 });
 
@@ -72,7 +77,11 @@ const ChatDetailHeader = ({
   const handleDefaultImage = () => {
     return (
       <ChannelImage>
-        <ChannelImage.Big type={channel?.channelType} image={avatar} />
+        <ChannelImage.Big
+          type={channel?.channelType}
+          image={avatar}
+          imageStyle={channel?.channelType !== CHANNEL_GROUP ? styles.avatarImage : {}}
+        />
       </ChannelImage>
     );
   };

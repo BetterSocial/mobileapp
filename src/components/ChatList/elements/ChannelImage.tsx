@@ -17,13 +17,13 @@ const ChannelImage: ChannelImageProps = ({children}) => {
   return <View>{children}</View>;
 };
 
-const Big: React.FC<ChannelImageMainProps> = ({type, image}) => {
+const Big: React.FC<ChannelImageMainProps> = ({type, image, imageStyle}) => {
   if (image) {
     return (
       <FastImage
         source={{uri: image}}
         resizeMode={FastImage.resizeMode.contain}
-        style={styles.containerImage}
+        style={[styles.containerImage, imageStyle]}
       />
     );
   }
@@ -34,7 +34,7 @@ const Big: React.FC<ChannelImageMainProps> = ({type, image}) => {
         <FastImage
           source={CommunityIcon}
           resizeMode={FastImage.resizeMode.contain}
-          style={styles.imageDefaultCommunity}
+          style={[styles.imageDefaultCommunity, imageStyle]}
         />
       </View>
     );
@@ -46,7 +46,7 @@ const Big: React.FC<ChannelImageMainProps> = ({type, image}) => {
         <FastImage
           source={GroupIcon}
           resizeMode={FastImage.resizeMode.contain}
-          style={styles.imageDefaultGroup}
+          style={[styles.imageDefaultGroup, imageStyle]}
         />
       </View>
     );
@@ -63,7 +63,7 @@ const Big: React.FC<ChannelImageMainProps> = ({type, image}) => {
         <FastImage
           source={GroupIcon}
           resizeMode={FastImage.resizeMode.contain}
-          style={styles.imageDefaultGroupInfo}
+          style={[styles.imageDefaultGroupInfo, imageStyle]}
         />
       </View>
     );
