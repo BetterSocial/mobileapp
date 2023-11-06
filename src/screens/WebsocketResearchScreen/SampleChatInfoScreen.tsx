@@ -241,7 +241,6 @@ const SampleChatInfoScreen = () => {
       </View>
     );
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -311,7 +310,11 @@ const SampleChatInfoScreen = () => {
         onPress={handlePressPopup}
       />
       <ModalActionAnonymous
-        name={selectedUser?.user?.name}
+        name={
+          selectedUser?.user?.name !== ANONYMOUS_USER
+            ? selectedUser?.user?.name
+            : selectedUser?.user?.username
+        }
         isOpen={isAnonymousModalOpen}
         onCloseModal={handleCloseSelectUser}
         selectedUser={selectedUser}

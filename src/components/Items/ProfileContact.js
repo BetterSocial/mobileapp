@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import MemoIc_Checklist from '../../assets/icons/Ic_Checklist';
 import {COLORS} from '../../utils/theme';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
+import {colors} from '../../utils/colors';
 
 const ProfileContact = ({
   photo,
@@ -36,7 +37,7 @@ const ProfileContact = ({
               source={{uri: photo !== '' ? photo : undefined}}
             />
           )}
-          <Text style={styles.fullname}>{fullname}</Text>
+          <Text style={styles.fullname(userId === item?.user_id)}>{fullname}</Text>
         </View>
         {showArrow && (
           <>
@@ -82,12 +83,12 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 15
   },
-  fullname: {
+  fullname: (isMe) => ({
     fontSize: normalizeFontSize(14),
     fontFamily: fonts.inter[500],
-    color: '#000',
+    color: isMe ? colors.darkBlue : 'black',
     lineHeight: normalizeFontSize(16.94)
-  },
+  }),
   pressable: {
     height: '100%'
   },

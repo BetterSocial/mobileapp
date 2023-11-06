@@ -23,15 +23,23 @@ const GroupChatChannelItem = (props: ChannelItemProps) => {
 
   const description = groupChat?.rawJson?.firstMessage ?? groupChat?.rawJson?.channel?.message;
   const isSystemDescription = description?.isSystem ?? description?.type === 'system';
-  const sender = description?.user?.username ?? description?.user?.name;
+  const sender = description?.user?.username || description?.user?.name;
   const isMeAsSender = sender === myProfile?.username;
-
+  console.log({sender, myProfile, description}, 'nuki');
   let channelDescription = groupChat?.description;
   if (!isSystemDescription) {
     channelDescription = isMeAsSender
       ? `You: ${channelDescription}`
       : `${sender}: ${channelDescription}`;
   }
+
+  // const handleChannelDescription = () => {
+  //   if (!isSystemDescription) {
+  //     return isMeAsSender ? `You: ${channelDescription}` : `${sender}: ${channelDescription}`;
+  //   }
+
+  //   return groupChat?.description;
+  // };
 
   return (
     <CustomPressable onPress={onChannelPressed}>

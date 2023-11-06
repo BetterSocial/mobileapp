@@ -70,7 +70,6 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       let channelType = 1;
       if (selectedChannel?.channelType?.toLowerCase() === 'group') channelType = 2;
       if (selectedChannel?.rawJson?.channel?.channel_type === 4) channelType = 4;
-
       let response;
       if (type === 'ANONYMOUS') {
         response = await AnonymousMessageRepo.sendAnonymousMessage(selectedChannel?.id, message);
@@ -81,6 +80,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
           channelType
         );
       }
+      console.log({channelType, response, selectedChannel}, 'susio');
 
       await currentChatSchema.updateChatSentStatus(localDb, response);
       refresh('chat');
