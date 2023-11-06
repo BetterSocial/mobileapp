@@ -32,14 +32,6 @@ const GroupChatChannelItem = (props: ChannelItemProps) => {
       : `${sender}: ${channelDescription}`;
   }
 
-  // const handleChannelDescription = () => {
-  //   if (!isSystemDescription) {
-  //     return isMeAsSender ? `You: ${channelDescription}` : `${sender}: ${channelDescription}`;
-  //   }
-
-  //   return groupChat?.description;
-  // };
-
   return (
     <CustomPressable onPress={onChannelPressed}>
       <View style={styles.channelContainer}>
