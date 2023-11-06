@@ -110,7 +110,7 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   const startAnimToOff = () => {
     Animated.timing(positionButton, {
       toValue: 0,
-      duration: 500,
+      duration: 150,
       easing: Easing.ease,
       useNativeDriver: false
     }).start();
@@ -119,7 +119,7 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   const startAnimToOn = () => {
     Animated.timing(positionButton, {
       toValue: 1,
-      duration: 500,
+      duration: 150,
       easing: Easing.ease,
       useNativeDriver: false
     }).start();
