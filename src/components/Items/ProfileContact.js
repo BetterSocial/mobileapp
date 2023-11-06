@@ -59,7 +59,10 @@ const ProfileContact = ({
 };
 
 ProfileContact.propTypes = {
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  item: {
+    user_id: PropTypes.string
+  }
 };
 
 export default ProfileContact;
