@@ -32,7 +32,11 @@ const Header = ({
     return (
       <GlobalButton buttonStyle={styles.backContainer} onPress={onPress}>
         <View style={styles.content(-8)}>
-          <ArrowLeftIcon width={20} height={12} fill="#000" />
+          <ArrowLeftIcon
+            width={dimen?.normalizeDimen(20)}
+            height={dimen?.normalizeDimen(20)}
+            fill="#000"
+          />
         </View>
       </GlobalButton>
     );
