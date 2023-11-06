@@ -11,7 +11,7 @@ import dimen from '../../utils/dimen';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import {CHANNEL_GROUP, SIGNED} from '../../hooks/core/constant';
+import {SIGNED} from '../../hooks/core/constant';
 
 const styles = StyleSheet.create({
   container: {
