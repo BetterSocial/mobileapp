@@ -42,15 +42,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginLeft: 8
   },
-  enabledButtonSigned: {
-    backgroundColor: colors.darkBlue
-  },
-  enabledButtondAnon: {
-    backgroundColor: colors.bondi_blue
-  },
-  disableButton: {
-    backgroundColor: colors.gray1
-  },
   previewPhotoContainer: {
     marginTop: 5,
     marginBottom: 5
@@ -99,12 +90,12 @@ const AnonymousInputMessage = ({onSendButtonClicked, type}: AnonymousInputMessag
     return text?.length === 0;
   };
 
-  const sendButtonStyle = () => {
+  const sendButtonStyle = React.useCallback(() => {
     const isDisabled = isDisableButton();
-    if (isDisabled) return styles.disableButton;
-    if (type === 'SIGNED') return styles.enabledButtonSigned;
-    return styles.enabledButtondAnon;
-  };
+    if (isDisabled) return colors.gray1;
+    if (type === 'SIGNED') return colors.darkBlue;
+    return colors.bondi_blue;
+  }, [isDisableButton()]);
 
   return (
     <>
@@ -112,7 +103,7 @@ const AnonymousInputMessage = ({onSendButtonClicked, type}: AnonymousInputMessag
         <View style={styles.containerInput}>
           <TextInput multiline style={styles.input} onChangeText={onChangeInput} value={text} />
           <TouchableOpacity
-            style={[styles.btn, sendButtonStyle()]}
+            style={styles.btn}
             disabled={isDisableButton()}
             onPress={handleSendMessage}>
             <IconSend
