@@ -110,6 +110,7 @@
     "react-native-svg": "^12.1.0",
     "react-native-svg-transformer": "^0.14.3",
     "react-native-swiper-flatlist": "^3.0.14",
+    "react-native-switch": "^1.5.1",
     "react-native-tab-view": "2.16.0",
     "react-native-toast-message": "^2.1.5",
     "react-native-use-websocket": "^0.2.6",

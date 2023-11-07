@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import * as React from 'react';
 import {Text, View, StyleSheet, TouchableOpacity, Pressable, Platform} from 'react-native';
-import ToggleSwitch from 'toggle-switch-react-native';
 import ToastMessage from 'react-native-toast-message';
 import TextAreaChat from '../../../components/TextAreaChat';
+import ToggleSwitch from '../../../components/ToggleSwitch';
 import {colors} from '../../../utils/colors';
 import {profileSettingsDMpermission} from '../../../service/profile';
 import {addDotAndRemoveNewline} from '../../../utils/string/TrimString';
@@ -106,14 +106,11 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
 
       <TouchableOpacity onPress={toggleSwitchAnon} style={styles.toggleSwitchAnon}>
         <ToggleSwitch
-          isOn={isAnonymity}
-          onToggle={toggleSwitchAnon}
-          onColor={'#9DEDF1'}
-          circleColor={isAnonymity ? '#00ADB5' : colors.white}
-          label={'Allow anonymous messages? '}
-          offColor="#F5F5F5"
-          size="small"
-          labelStyle={styles.toggleLabel}
+          value={isAnonymity}
+          onValueChange={toggleSwitchAnon}
+          labelLeft="Allow anonymous messages?"
+          circleActiveColor={colors.blue1}
+          activeTextColor={colors.blue1}
         />
       </TouchableOpacity>
 
@@ -122,14 +119,11 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
           onPress={toggleSwitchAnonAllowFollowing}
           style={styles.toggleSwitchAnonFollowing}>
           <ToggleSwitch
-            isOn={isAllowFollowingSendDM}
-            onToggle={toggleSwitchAnonAllowFollowing}
-            onColor={'#9DEDF1'}
-            label={'Only allow anon DMs from users you follow?'}
-            offColor="#F5F5F5"
-            circleColor={isAllowFollowingSendDM ? '#00ADB5' : colors.white}
-            size="small"
-            labelStyle={styles.toggleLabelFollowingDM}
+            value={isAllowFollowingSendDM}
+            onValueChange={toggleSwitchAnonAllowFollowing}
+            labelLeft="Only allow anon DMs from users you follow?"
+            circleActiveColor={colors.blue1}
+            activeTextColor={colors.blue1}
           />
         </TouchableOpacity>
       )}
