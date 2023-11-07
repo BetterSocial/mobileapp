@@ -1,17 +1,20 @@
 import * as React from 'react';
-import {Animated, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Animated, Platform, StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 import PropTypes from 'prop-types';
 
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import MemoIcArrowBack from '../../../assets/arrow/Ic_arrow_back';
+import MemoIcArrowBackCircle from '../../../assets/arrow/Ic_arrow_back_circle';
 import TopicDefaultIcon from '../../../assets/topic.png';
 import dimen from '../../../utils/dimen';
-import {normalize, normalizeFontSizeByWidth} from '../../../utils/fonts';
+import {normalize} from '../../../utils/fonts';
 import ShareIconCircle from '../../../assets/icons/Ic_share_circle';
 import ButtonFollow from './ButtonFollow';
 import TopicDomainHeader from './TopicDomainHeader';
 import ButtonFollowing from './ButtonFollowing';
 import useChatClientHook from '../../../utils/getstream/useChatClientHook';
+import {colors} from '../../../utils/colors';
 
 const NavHeader = (props) => {
   const {
@@ -28,7 +31,10 @@ const NavHeader = (props) => {
     isFollow
   } = props;
   const navigation = useNavigation();
+  const coverPath = topicDetail?.cover_path || null;
   const [domainHeight, setDomainHeight] = React.useState(0);
+  const {top} = useSafeAreaInsets();
+  const topPosition = Platform.OS === 'ios' ? top : 0;
 
   const {followTopic} = useChatClientHook();
 
@@ -51,32 +57,55 @@ const NavHeader = (props) => {
     }
   };
 
-  const onDomainLayout = (event) => {
-    const {height} = event.nativeEvent.layout;
-    setDomainHeight(height);
-  };
+  const onDomainLayout = React.useCallback(
+    (event) => {
+      const {height} = event.nativeEvent.layout;
+      setDomainHeight(Math.round(height));
+    },
+    [setDomainHeight]
+  );
 
   const backScreen = () => {
     navigation.goBack();
   };
 
   const getBottomPostition = () => {
-    let bottom = 0;
+    let containerHeight = 0;
     if (isHeaderHide) {
-      bottom = dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2;
+      containerHeight = dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2;
     } else {
-      bottom = hideSeeMember
-        ? dimen.size.TOPIC_FEED_HEADER_HEIGHT
-        : dimen.size.TOPIC_FEED_HEADER_HEIGHT + normalize(4);
+      containerHeight =
+        hideSeeMember || !isFollow
+          ? dimen.size.TOPIC_FEED_HEADER_HEIGHT
+          : dimen.size.TOPIC_FEED_HEADER_HEIGHT + normalize(4);
     }
-    return (bottom - domainHeight) / 2;
+    return Math.round((containerHeight - domainHeight) / 2);
+  };
+
+  const heightWithCoverImage = () => {
+    if (coverPath) {
+      return {height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER + topPosition};
+    }
+    return null;
   };
 
   return (
-    <Animated.View style={{height: animatedHeight}}>
-      <View style={[styles.Nav(isHeaderHide)]}>
+    <Animated.View style={{height: animatedHeight, backgroundColor: colors.lightgrey}}>
+      <StatusBar barStyle="dark-content" />
+      <View
+        source={{uri: coverPath}}
+        style={[styles.Nav(isHeaderHide, topPosition), heightWithCoverImage()]}
+        imageStyle={{opacity: isHeaderHide ? 0 : 1}}>
+        <Animated.Image
+          source={{uri: coverPath}}
+          style={[styles.headerImage(opacityHeaderAnimation), heightWithCoverImage()]}
+        />
         <TouchableOpacity onPress={() => backScreen()} style={styles.backbutton}>
-          <MemoIcArrowBack width={normalize(24)} height={normalize(24)} />
+          {coverPath && !isHeaderHide ? (
+            <MemoIcArrowBackCircle width={normalize(32)} height={normalize(32)} />
+          ) : (
+            <MemoIcArrowBack width={normalize(24)} height={normalize(24)} />
+          )}
         </TouchableOpacity>
         <View style={styles.containerAction}>
           {!isFollow && isHeaderHide ? (
@@ -107,11 +136,11 @@ const NavHeader = (props) => {
           </>
         ) : null}
       </Animated.View>
-      <Animated.View
+      <View
         onLayout={onDomainLayout}
         style={[styles.domain(isHeaderHide), {bottom: getBottomPostition()}]}>
         <TopicDomainHeader {...props} />
-      </Animated.View>
+      </View>
     </Animated.View>
   );
 };
@@ -131,26 +160,32 @@ NavHeader.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  Nav: (isHeaderHide) => ({
+  Nav: (isHeaderHide, top) => ({
     flexDirection: 'row',
-    height: isHeaderHide
-      ? dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2
-      : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT,
+    height:
+      (isHeaderHide
+        ? dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2
+        : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT) + top,
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     backgroundColor: 'white',
-    zIndex: 10,
-    paddingHorizontal: normalizeFontSizeByWidth(20)
+    paddingTop: dimen.normalizeDimen(12) + top,
+    zIndex: 10
   }),
   Header: {
     width: '100%',
     flexDirection: 'row',
     height: dimen.size.TOPIC_FEED_HEADER_HEIGHT,
-    paddingHorizontal: normalize(20),
+    paddingLeft: normalize(20),
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: 'white'
   },
+  headerImage: (opacityHeaderAnimation) => ({
+    width: '100%',
+    position: 'absolute',
+    opacity: opacityHeaderAnimation
+  }),
   image: (opacityHeaderAnimation) => ({
     width: normalize(48),
     height: normalize(48),
@@ -161,8 +196,8 @@ const styles = StyleSheet.create({
   }),
   backbutton: {
     paddingRight: 16,
-    height: '100%',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    paddingLeft: dimen.normalizeDimen(20)
   },
   domain: (isHeaderHide) => ({
     flex: 1,
@@ -171,14 +206,15 @@ const styles = StyleSheet.create({
     marginRight: normalize(14),
     alignSelf: 'center',
     position: 'absolute',
-    left: normalize(isHeaderHide ? 32 : 48) + normalize(20) + normalize(8),
+    left: normalize(isHeaderHide ? 32 : 48) + normalize(28),
     zIndex: 99,
-    backgroundColor: 'white'
+    backgroundColor: 'transparent'
   }),
   containerAction: {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingRight: dimen.normalizeDimen(20)
   },
   shareIconStyle: {},
   searchContainerStyle: {

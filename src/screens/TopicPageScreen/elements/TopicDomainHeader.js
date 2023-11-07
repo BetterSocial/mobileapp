@@ -23,7 +23,7 @@ const TopicDomainHeader = (props) => {
       <Text style={styles.domainText} numberOfLines={1} ellipsizeMode="tail">
         {`#${convertString(topicDetail?.name, ' ', '')}`}
       </Text>
-      <Pressable onPress={handlePress} style={{backgroundColor: colors.white}}>
+      <Pressable onPress={handlePress} style={{backgroundColor: 'transparent'}}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Image testID="imageTopicMember" source={TopicMemberIcon} style={styles.member} />
           <Text style={styles.domainMember}>{memberCount} Members</Text>
@@ -47,24 +47,17 @@ TopicDomainHeader.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  domain: (animatedValue) => ({
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    marginRight: 14,
-    alignSelf: 'center',
-    opacity: animatedValue
-  }),
   domainText: {
     fontSize: normalizeFontSize(16),
     fontFamily: fonts.inter[600],
     textAlign: 'left',
-    color: colors.black
+    color: colors.black,
+    backgroundColor: 'transparent'
   },
   member: {
     width: normalize(16),
     height: normalize(16),
-    marginRight: 5
+    marginRight: normalize(5)
   },
   domainMember: {
     fontSize: normalizeFontSize(12),
