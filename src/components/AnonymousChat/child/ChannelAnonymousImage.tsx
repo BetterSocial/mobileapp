@@ -17,14 +17,15 @@ const ChannelAnonymousImage = ({anonPostNotificationUserInfo = null, imageStyle 
 
   return (
     <View
-      style={[
-        imageStyle,
-        styles.postNotificationImage,
-        {
+      testID="anonPostNotificationImage"
+      style={{
+        ...imageStyle,
+        ...styles.postNotificationImage,
+        ...{
           backgroundColor: anonPostNotificationUserInfo?.anon_user_info_color_code
         }
-      ]}>
-      <Text style={styles.anonPostNotificationEmoji}>
+      }}>
+      <Text style={styles.anonPostNotificationEmoji} testID="anonPostNotificationEmoji">
         {anonPostNotificationUserInfo?.anon_user_info_emoji_code}
       </Text>
     </View>

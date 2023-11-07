@@ -11,6 +11,7 @@ const useProfileHook = {
   profile: mockSignedProfile,
   signedProfileId,
   anonProfileId,
+  reset: jest.fn(),
   setProfileId: jest.fn()
 };
 

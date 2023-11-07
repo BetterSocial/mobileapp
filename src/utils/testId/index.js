@@ -1,6 +1,7 @@
 const TestIdConstant = {
   iconDomainProfilePicture: 'iconDomainProfilePicture',
   iconDomainProfilePictureEmptyState: 'iconDomainProfilePictureEmptyState',
+  iconTopicsProfilePictureEmptyState: 'iconTopicsProfilePictureEmptyState',
 
   contentLinkHeaderPress: 'contentLinkHeaderPress',
   contentLinkContentPress: 'contentLinkContentPress',

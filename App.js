@@ -33,6 +33,7 @@ const App = () => {
   });
   const navigationRef = React.useRef();
   const routeNameRef = React.useRef();
+  const [currentScreen, setCurrentScreen] = React.useState('InitialScreenName');
 
   React.useEffect(() => {
     const init = async () => {
@@ -69,7 +70,9 @@ const App = () => {
     // log event
     const previousRouteName = routeNameRef.current;
     const currentRouteName = navigationRef.current?.getCurrentRoute?.()?.name;
-
+    if (Platform.OS === 'ios') {
+      setCurrentScreen(currentRouteName);
+    }
     if (currentRouteName && previousRouteName !== currentRouteName) {
       Analytics.trackingScreen(currentRouteName);
     }
@@ -121,10 +124,6 @@ const App = () => {
   // OneSignal Initialization
   OneSignal.initialize(ONE_SIGNAL_APP_ID);
 
-  // requestPermission will show the native iOS or Android notification permission prompt.
-  // We recommend removing the following code and instead using an In-App Message to prompt for notification permission
-  OneSignal.Notifications.requestPermission(true);
-
   return (
     <>
       <HumanIDProvider />
@@ -140,7 +139,7 @@ const App = () => {
             <View>
               <OverlayProvider topInset={top} bottomInset={bottom} i18nInstance={streami18n}>
                 <KeyboardAvoidingView enabled={Platform.OS === 'ios'} behavior="padding">
-                  <RootNavigator areaHeight={height} />
+                  <RootNavigator areaHeight={height} currentScreen={currentScreen} />
                 </KeyboardAvoidingView>
               </OverlayProvider>
             </View>

@@ -1,7 +1,7 @@
 import * as React from 'react';
-import ToggleSwitch from 'toggle-switch-react-native';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import ToggleSwitch from '../../../components/ToggleSwitch';
 import AnonymousAvatar from '../../../components/AnonymousAvatar';
 import AnonymousProfile from '../../../assets/images/AnonymousProfile.png';
 import AnonymousUsername from '../../../components/AnonymousUsername';
@@ -103,13 +103,14 @@ const UserProfile = ({
       <View style={styles.container}>
         {userProfile()}
         <ToggleSwitch
-          isOn={isAnonymous}
-          onColor={colors.blue}
-          label="Anonymity"
-          offColor="#F5F5F5"
-          size="small"
-          labelStyle={styles.switch}
-          onToggle={() => setTypeUser(!isAnonymous)}
+          value={isAnonymous}
+          onValueChange={() => setTypeUser(!isAnonymous)}
+          labelLeft="Anonymity"
+          backgroundActive={colors.lightgrey}
+          backgroundInactive={colors.lightgrey}
+          circleInActiveColor={colors.blue1}
+          inactiveTextColor={colors.blue1}
+          styleLabelLeft={styles.switch}
         />
       </View>
     </>
