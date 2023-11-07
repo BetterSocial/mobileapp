@@ -199,6 +199,7 @@ const TopicMemberScreen = () => {
         setSearchText={setSearchText}
         setDiscoveryLoadingData={setIsLoadingDiscovery}
         isFocus={isFocus}
+        autoFocus={false}
         setIsFocus={setIsFocus}
         fetchDiscoveryData={fetchMember}
         onCancelToken={onTokenCancel}

@@ -30,6 +30,7 @@ const DiscoverySearch = ({
   searchText = '',
   setSearchText = () => {},
   isFocus = true,
+  autoFocus = true,
   placeholderText = StringConstant.discoverySearchBarPlaceholder,
   setIsFocus = () => {},
   setIsFirstTimeOpen = () => {},
@@ -189,7 +190,7 @@ const DiscoverySearch = ({
             ref={discoverySearchBarRef}
             testID={TestIdConstant.discoveryScreenSearchBar}
             focusable={true}
-            autoFocus={true}
+            autoFocus={autoFocus}
             // value={discoverySearchBarText}
             value={searchText}
             onChangeText={handleChangeText}
