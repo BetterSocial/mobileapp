@@ -66,6 +66,18 @@ exports[`Testing Discovery Screen V2 Testing Discovery Search Bar Match Snapshot
         }
       }
     >
+      <View
+        style={
+          Object {
+            "alignSelf": "center",
+            "justifyContent": "center",
+            "marginLeft": 9.67,
+            "marginRight": 1.67,
+          }
+        }
+      >
+        <View />
+      </View>
       <TextInput
         allowFontScaling={true}
         autoFocus={true}

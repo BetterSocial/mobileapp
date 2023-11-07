@@ -3,6 +3,7 @@ import Toast from 'react-native-simple-toast';
 import {Alert} from 'react-native';
 import {useSetRecoilState} from 'recoil';
 
+import OneSignalUtil from '../../../service/onesignal';
 import StorageUtils from '../../../utils/storage';
 import StringConstant from '../../../utils/string/StringConstant';
 import useResetContext from '../../../hooks/context/useResetContext';
@@ -31,6 +32,8 @@ const useSettings = () => {
 
   const logout = async () => {
     try {
+      await OneSignalUtil.removeAllSubscribedTags();
+      OneSignalUtil.removeExternalId();
       StorageUtils.clearAll();
       await removeFcmToken();
       removeAllCache();

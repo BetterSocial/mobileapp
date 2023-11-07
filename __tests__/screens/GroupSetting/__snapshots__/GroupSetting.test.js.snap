@@ -67,7 +67,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
               Object {
                 "color": "#1E1F20",
                 "fontFamily": "Inter-SemiBold",
-                "fontSize": NaN,
+                "fontSize": 5.447470817120623,
                 "fontWeight": "bold",
                 "padding": 10,
                 "textAlign": "center",
@@ -102,7 +102,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
                 Object {
                   "color": "#1E1F20",
                   "fontFamily": "Inter-SemiBold",
-                  "fontSize": NaN,
+                  "fontSize": 5.447470817120623,
                   "fontWeight": "bold",
                   "padding": 10,
                   "textAlign": "center",
@@ -154,12 +154,12 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
               Object {
                 "alignItems": "center",
                 "backgroundColor": "#E0E0E0",
-                "borderRadius": NaN,
-                "height": NaN,
+                "borderRadius": 19.200000000000003,
+                "height": 38.400000000000006,
                 "justifyContent": "center",
                 "marginRight": 17,
                 "opacity": 1,
-                "width": NaN,
+                "width": 38.400000000000006,
               }
             }
             testID="updateImage"
@@ -172,9 +172,9 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
               }
               style={
                 Object {
-                  "borderRadius": NaN,
-                  "height": NaN,
-                  "width": NaN,
+                  "borderRadius": 19.200000000000003,
+                  "height": 38.400000000000006,
+                  "width": 38.400000000000006,
                 }
               }
             />
@@ -200,8 +200,8 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
                   "color": "#FFFFFF",
                   "flex": 1,
                   "fontFamily": "Inter-Regular",
-                  "fontSize": NaN,
-                  "lineHeight": NaN,
+                  "fontSize": 5.447470817120623,
+                  "lineHeight": 9.33852140077821,
                 }
               }
               testID="onInputChange"
@@ -216,8 +216,8 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
             Object {
               "color": "#FFFFFF",
               "fontFamily": "Inter-Regular",
-              "fontSize": NaN,
-              "lineHeight": NaN,
+              "fontSize": 4.669260700389105,
+              "lineHeight": 7.003891050583658,
             }
           }
         >
@@ -278,7 +278,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
         style={
           Object {
             "paddingTop": 12,
-            "width": undefined,
+            "width": 300,
           }
         }
       >
@@ -374,10 +374,10 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
                         }
                         style={
                           Object {
-                            "borderRadius": NaN,
-                            "height": NaN,
+                            "borderRadius": 19.200000000000003,
+                            "height": 38.400000000000006,
                             "marginRight": 17,
-                            "width": NaN,
+                            "width": 38.400000000000006,
                           }
                         }
                         testID="image"
@@ -387,8 +387,8 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
                           Object {
                             "color": "#000",
                             "fontFamily": "Inter-Medium",
-                            "fontSize": NaN,
-                            "lineHeight": NaN,
+                            "fontSize": 5.447470817120623,
+                            "lineHeight": 6.591439688715954,
                           }
                         }
                       >

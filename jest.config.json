@@ -5,7 +5,7 @@
   ],
   "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
   "verbose": true,
-  "setupFilesAfterEnv": ["<rootDir>/__mocks__/jest-mock.ts"],
+  "setupFilesAfterEnv": ["<rootDir>/__mocks__/jest-mock.ts", "./jestSetup.ts"],
   "moduleNameMapper": {
     "\\.svg": "<rootDir>/__mocks__/svgMock.js"
   }

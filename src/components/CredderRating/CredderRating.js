@@ -10,7 +10,7 @@ import {fonts} from '../../utils/fonts';
 
 const CredderRating = ({containerStyle = {}, score}) => {
   const renderCredderRatingIcon = () => {
-    if (!score || score < 0)
+    if ((!score && score !== 0) || score < 0)
       return (
         <View testID="credder-rating-grey" style={{alignSelf: 'center'}}>
           <CredderRatingGray />
@@ -37,7 +37,7 @@ const CredderRating = ({containerStyle = {}, score}) => {
   };
 
   const renderCredderRatingScore = () => {
-    if (!score || score < 0) return 'n/a';
+    if ((!score && score !== 0) || score < 0) return 'n/a';
     return `${score}%`;
   };
 

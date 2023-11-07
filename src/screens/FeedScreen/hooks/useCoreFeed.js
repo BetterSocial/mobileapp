@@ -4,14 +4,21 @@ import axios from 'axios';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import StorageUtils from '../../../utils/storage';
+import dimen from '../../../utils/dimen';
 import {Context} from '../../../context';
 import {FEEDS_CACHE} from '../../../utils/cache/constant';
+import {SOURCE_FEED_TAB} from '../../../utils/constants';
 import {checkIsHasColor, hexToRgb} from '../../../utils/colors';
 import {downVote, upVote} from '../../../service/vote';
-import {getFeedDetail, getMainFeedV2WithTargetFeed} from '../../../service/post';
+import {getFeedDetail, getMainFeedV2WithTargetFeed, viewTimePost} from '../../../service/post';
 import {listFeedColor} from '../../../configs/FeedColor';
 import {saveToCache} from '../../../utils/cache';
-import {setFeedByIndex, setMainFeeds, setTimer} from '../../../context/actions/feeds';
+import {
+  setFeedByIndex,
+  setMainFeeds,
+  setTimer,
+  setViewPostTimeIndex
+} from '../../../context/actions/feeds';
 
 const useCoreFeed = () => {
   const [loading, setLoading] = React.useState(false);
@@ -214,37 +221,66 @@ const useCoreFeed = () => {
     return min + (byteArray[0] % range);
   };
 
+  const sendViewPostTime = async (withResetTime = false) => {
+    const currentTime = new Date();
+    const diffTime = currentTime.getTime() - timer.getTime();
+    const id = feeds?.[viewPostTimeIndex]?.id;
+    if (!id) return;
+
+    viewTimePost(id, diffTime, SOURCE_FEED_TAB);
+    if (withResetTime) setTimer(new Date(), dispatch);
+  };
+
+  const getCurrentPostViewed = (momentumEvent) => {
+    const {y} = momentumEvent.nativeEvent.contentOffset;
+    const shownIndex = Math.ceil(y / dimen.size.FEED_CURRENT_ITEM_HEIGHT);
+    return shownIndex;
+  };
+
+  const updateViewPostTime = (momentumEvent) => {
+    setViewPostTimeIndex(getCurrentPostViewed(momentumEvent), dispatch);
+    setTimer(new Date(), dispatch);
+  };
+
+  const isSamePostViewed = (momentumEvent) => {
+    return getCurrentPostViewed(momentumEvent) === viewPostTimeIndex;
+  };
+
   return {
-    getDataFeeds,
-    loading,
+    bottom,
     countStack,
+    feeds,
+    isScroll,
+    loading,
+    myProfile,
+    nextTargetFeed,
     postOffset,
-    showNavbar,
     profileContext,
     searchHeight,
-    setSearchHeight,
+    showNavbar,
     timer,
     viewPostTimeIndex,
-    setPostOffset,
-    setShowNavbar,
-    myProfile,
-    bottom,
-    onDeleteBlockedPostCompleted,
-    onBlockCompleted,
+
     checkCacheFeed,
-    updateFeed,
-    setUpVote,
-    setDownVote,
-    saveSearchHeight,
-    setMainFeeds,
-    feeds,
+    getDataFeeds,
     handleDataFeeds,
-    handleUpdateFeed,
     handleScroll,
-    isScroll,
+    handleUpdateFeed,
+    isSamePostViewed,
+    mappingColorFeed,
+    onBlockCompleted,
+    onDeleteBlockedPostCompleted,
+    saveSearchHeight,
+    sendViewPostTime,
+    setDownVote,
     setIsLastPage,
-    nextTargetFeed,
-    mappingColorFeed
+    setMainFeeds,
+    setPostOffset,
+    setSearchHeight,
+    setShowNavbar,
+    setUpVote,
+    updateFeed,
+    updateViewPostTime
   };
 };
 
