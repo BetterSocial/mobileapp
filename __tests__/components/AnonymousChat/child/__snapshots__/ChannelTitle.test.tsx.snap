@@ -1,0 +1,762 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TESTING ChatItemTargetText RENDER ANON_PM should match snapshot 1`] = `
+Array [
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "display": "flex",
+        "flexDirection": "row",
+      }
+    }
+  >
+    <Text
+      ellipsizeMode="tail"
+      numberOfLines={1}
+      style={
+        Object {
+          "alignSelf": "center",
+          "flex": 1,
+          "fontFamily": "Inter-Bold",
+          "fontSize": 14.05,
+          "lineHeight": 22,
+        }
+      }
+    >
+      name
+    </Text>
+    <Text
+      style={
+        Object {
+          "alignSelf": "flex-start",
+          "color": "#828282",
+          "fontFamily": "Poppins-Regular",
+          "fontSize": 14,
+          "lineHeight": 22,
+          "marginLeft": 20,
+        }
+      }
+    >
+      time
+    </Text>
+  </View>,
+  <View
+    style={
+      Array [
+        Object {
+          "alignItems": "center",
+          "display": "flex",
+          "flexDirection": "row",
+        },
+        Object {
+          "marginBottom": 0,
+        },
+      ]
+    }
+  >
+    <Text
+      ellipsizeMode="tail"
+      numberOfLines={1}
+      style={
+        Object {
+          "alignSelf": "center",
+          "flex": 1,
+          "fontFamily": "Inter-Regular",
+          "fontSize": 14.05,
+          "lineHeight": 22,
+          "marginRight": 4,
+        }
+      }
+    >
+      message
+    </Text>
+  </View>,
+]
+`;
+
+exports[`TESTING ChatItemTargetText RENDER ANON_PM with isMe should match snapshot 1`] = `
+Array [
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "display": "flex",
+        "flexDirection": "row",
+      }
+    }
+  >
+    <Text
+      ellipsizeMode="tail"
+      numberOfLines={1}
+      style={
+        Object {
+          "alignSelf": "center",
+          "flex": 1,
+          "fontFamily": "Inter-Bold",
+          "fontSize": 14.05,
+          "lineHeight": 22,
+        }
+      }
+    >
+      name
+    </Text>
+    <Text
+      style={
+        Object {
+          "alignSelf": "flex-start",
+          "color": "#828282",
+          "fontFamily": "Poppins-Regular",
+          "fontSize": 14,
+          "lineHeight": 22,
+          "marginLeft": 20,
+        }
+      }
+    >
+      time
+    </Text>
+  </View>,
+  <View
+    style={
+      Array [
+        Object {
+          "alignItems": "center",
+          "display": "flex",
+          "flexDirection": "row",
+        },
+        Object {
+          "marginBottom": 0,
+        },
+      ]
+    }
+  >
+    <Text
+      ellipsizeMode="tail"
+      numberOfLines={1}
+      style={
+        Object {
+          "alignSelf": "center",
+          "flex": 1,
+          "fontFamily": "Inter-Regular",
+          "fontSize": 14.05,
+          "lineHeight": 22,
+          "marginRight": 4,
+        }
+      }
+    >
+      You: message
+    </Text>
+  </View>,
+]
+`;
+
+exports[`TESTING ChatItemTargetText RENDER ANON_PM with unreadcount should match snapshot 1`] = `
+Array [
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "display": "flex",
+        "flexDirection": "row",
+      }
+    }
+  >
+    <Text
+      ellipsizeMode="tail"
+      numberOfLines={1}
+      style={
+        Object {
+          "alignSelf": "center",
+          "flex": 1,
+          "fontFamily": "Inter-Bold",
+          "fontSize": 14.05,
+          "lineHeight": 22,
+        }
+      }
+    >
+      name
+    </Text>
+    <Text
+      style={
+        Object {
+          "alignSelf": "flex-start",
+          "color": "#828282",
+          "fontFamily": "Poppins-Regular",
+          "fontSize": 14,
+          "lineHeight": 22,
+          "marginLeft": 20,
+        }
+      }
+    >
+      time
+    </Text>
+  </View>,
+  <View
+    style={
+      Array [
+        Object {
+          "alignItems": "center",
+          "display": "flex",
+          "flexDirection": "row",
+        },
+        Object {
+          "marginBottom": 0,
+        },
+      ]
+    }
+  >
+    <Text
+      ellipsizeMode="tail"
+      numberOfLines={1}
+      style={
+        Object {
+          "alignSelf": "center",
+          "flex": 1,
+          "fontFamily": "Inter-Regular",
+          "fontSize": 14.05,
+          "lineHeight": 22,
+          "marginRight": 4,
+        }
+      }
+    >
+      message
+    </Text>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#00ADB5",
+          "borderRadius": 10,
+          "height": 20,
+          "justifyContent": "center",
+          "textAlign": "center",
+          "width": 20,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#ffffff",
+            "fontFamily": "Inter-Regular",
+            "fontSize": 12,
+            "lineHeight": 14.52,
+          }
+        }
+      >
+        1
+      </Text>
+    </View>
+  </View>,
+]
+`;
+
+exports[`TESTING ChatItemTargetText RENDER MY_ANON_POST with no messages should match snapshot 1`] = `
+Array [
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "display": "flex",
+        "flexDirection": "row",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "display": "flex",
+          "flexDirection": "row",
+        }
+      }
+    >
+      <Text
+        ellipsizeMode="tail"
+        numberOfLines={2}
+        style={
+          Array [
+            Object {
+              "alignSelf": "center",
+              "flex": 1,
+              "fontFamily": "Inter-Bold",
+              "fontSize": 14.05,
+              "lineHeight": 22,
+            },
+            Object {
+              "alignSelf": "flex-start",
+              "fontFamily": "Inter-Regular",
+            },
+          ]
+        }
+      >
+        <Text
+          style={
+            Object {
+              "fontFamily": "Inter-Bold",
+            }
+          }
+        >
+          Your media post 📸 🖼
+        </Text>
+      </Text>
+      <Text
+        style={
+          Object {
+            "alignSelf": "flex-start",
+            "color": "#828282",
+            "fontFamily": "Poppins-Regular",
+            "fontSize": 14,
+            "lineHeight": 22,
+            "marginLeft": 20,
+          }
+        }
+      >
+        time
+      </Text>
+    </View>
+  </View>,
+  <View
+    style={
+      Object {
+        "alignItems": "flex-end",
+        "alignSelf": "flex-start",
+        "display": "flex",
+        "justifyContent": "flex-start",
+        "position": "absolute",
+        "right": 20,
+        "top": 22,
+      }
+    }
+  />,
+]
+`;
+
+exports[`TESTING ChatItemTargetText RENDER MY_ANON_POST_NOTIFICATION should match snapshot 1`] = `
+Array [
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "display": "flex",
+        "flexDirection": "row",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "display": "flex",
+          "flexDirection": "row",
+        }
+      }
+    >
+      <Text
+        ellipsizeMode="tail"
+        numberOfLines={2}
+        style={
+          Array [
+            Object {
+              "alignSelf": "center",
+              "flex": 1,
+              "fontFamily": "Inter-Bold",
+              "fontSize": 14.05,
+              "lineHeight": 22,
+            },
+            Object {
+              "alignSelf": "flex-start",
+              "fontFamily": "Inter-Regular",
+            },
+          ]
+        }
+      >
+        <Text
+          style={
+            Object {
+              "fontFamily": "Inter-Bold",
+            }
+          }
+        >
+          Your post: 
+        </Text>
+        message
+      </Text>
+      <Text
+        style={
+          Object {
+            "alignSelf": "flex-start",
+            "color": "#828282",
+            "fontFamily": "Poppins-Regular",
+            "fontSize": 14,
+            "lineHeight": 22,
+            "marginLeft": 20,
+          }
+        }
+      >
+        time
+      </Text>
+    </View>
+  </View>,
+  <View
+    style={
+      Object {
+        "alignItems": "flex-end",
+        "alignSelf": "flex-start",
+        "display": "flex",
+        "justifyContent": "flex-start",
+        "position": "absolute",
+        "right": 20,
+        "top": 22,
+      }
+    }
+  />,
+]
+`;
+
+exports[`TESTING ChatItemTargetText RENDER MY_ANON_POST_NOTIFICATION_I_COMMENTED should match snapshot 1`] = `
+Array [
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "display": "flex",
+        "flexDirection": "row",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "display": "flex",
+          "flexDirection": "row",
+        }
+      }
+    >
+      <Text
+        ellipsizeMode="tail"
+        numberOfLines={2}
+        style={
+          Array [
+            Object {
+              "alignSelf": "center",
+              "flex": 1,
+              "fontFamily": "Inter-Bold",
+              "fontSize": 14.05,
+              "lineHeight": 22,
+            },
+            Object {
+              "alignSelf": "flex-start",
+              "fontFamily": "Inter-Regular",
+            },
+          ]
+        }
+      >
+        <Text
+          style={
+            Object {
+              "fontFamily": "Inter-Bold",
+            }
+          }
+        >
+          Your post: 
+        </Text>
+        message
+      </Text>
+      <Text
+        style={
+          Object {
+            "alignSelf": "flex-start",
+            "color": "#828282",
+            "fontFamily": "Poppins-Regular",
+            "fontSize": 14,
+            "lineHeight": 22,
+            "marginLeft": 20,
+          }
+        }
+      >
+        time
+      </Text>
+    </View>
+  </View>,
+  <View
+    style={
+      Object {
+        "alignItems": "flex-end",
+        "alignSelf": "flex-start",
+        "display": "flex",
+        "justifyContent": "flex-start",
+        "position": "absolute",
+        "right": 20,
+        "top": 22,
+      }
+    }
+  />,
+]
+`;
+
+exports[`TESTING ChatItemTargetText RENDER other type post with messages should match snapshot 1`] = `
+Array [
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "display": "flex",
+        "flexDirection": "row",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "display": "flex",
+          "flexDirection": "row",
+        }
+      }
+    >
+      <Text
+        ellipsizeMode="tail"
+        numberOfLines={2}
+        style={
+          Array [
+            Object {
+              "alignSelf": "center",
+              "flex": 1,
+              "fontFamily": "Inter-Bold",
+              "fontSize": 14.05,
+              "lineHeight": 22,
+            },
+            Object {
+              "alignSelf": "flex-start",
+              "fontFamily": "Inter-Regular",
+            },
+          ]
+        }
+      >
+        <Text
+          style={
+            Object {
+              "fontFamily": "Inter-Bold",
+            }
+          }
+        >
+          name's post: 
+        </Text>
+        message
+      </Text>
+      <Text
+        style={
+          Object {
+            "alignSelf": "flex-start",
+            "color": "#828282",
+            "fontFamily": "Poppins-Regular",
+            "fontSize": 14,
+            "lineHeight": 22,
+            "marginLeft": 20,
+          }
+        }
+      >
+        time
+      </Text>
+    </View>
+  </View>,
+  <View
+    style={
+      Object {
+        "alignItems": "flex-end",
+        "alignSelf": "flex-start",
+        "display": "flex",
+        "justifyContent": "flex-start",
+        "position": "absolute",
+        "right": 20,
+        "top": 22,
+      }
+    }
+  />,
+]
+`;
+
+exports[`TESTING ChatItemTargetText RENDER other type post with no messages should match snapshot 1`] = `
+Array [
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "display": "flex",
+        "flexDirection": "row",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "display": "flex",
+          "flexDirection": "row",
+        }
+      }
+    >
+      <Text
+        ellipsizeMode="tail"
+        numberOfLines={2}
+        style={
+          Array [
+            Object {
+              "alignSelf": "center",
+              "flex": 1,
+              "fontFamily": "Inter-Bold",
+              "fontSize": 14.05,
+              "lineHeight": 22,
+            },
+            Object {
+              "alignSelf": "flex-start",
+              "fontFamily": "Inter-Regular",
+            },
+          ]
+        }
+      >
+        <Text
+          style={
+            Object {
+              "fontFamily": "Inter-Bold",
+            }
+          }
+        >
+          name's media post 📸 🖼
+        </Text>
+      </Text>
+      <Text
+        style={
+          Object {
+            "alignSelf": "flex-start",
+            "color": "#828282",
+            "fontFamily": "Poppins-Regular",
+            "fontSize": 14,
+            "lineHeight": 22,
+            "marginLeft": 20,
+          }
+        }
+      >
+        time
+      </Text>
+    </View>
+  </View>,
+  <View
+    style={
+      Object {
+        "alignItems": "flex-end",
+        "alignSelf": "flex-start",
+        "display": "flex",
+        "justifyContent": "flex-start",
+        "position": "absolute",
+        "right": 20,
+        "top": 22,
+      }
+    }
+  />,
+]
+`;
+
+exports[`TESTING ChatItemTargetText RENDER other type post with unreadcount should match snapshot 1`] = `
+Array [
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "display": "flex",
+        "flexDirection": "row",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "display": "flex",
+          "flexDirection": "row",
+        }
+      }
+    >
+      <Text
+        ellipsizeMode="tail"
+        numberOfLines={2}
+        style={
+          Array [
+            Object {
+              "alignSelf": "center",
+              "flex": 1,
+              "fontFamily": "Inter-Bold",
+              "fontSize": 14.05,
+              "lineHeight": 22,
+            },
+            Object {
+              "alignSelf": "flex-start",
+              "fontFamily": "Inter-Regular",
+            },
+          ]
+        }
+      >
+        <Text
+          style={
+            Object {
+              "fontFamily": "Inter-Bold",
+            }
+          }
+        >
+          name's media post 📸 🖼
+        </Text>
+      </Text>
+      <Text
+        style={
+          Object {
+            "alignSelf": "flex-start",
+            "color": "#828282",
+            "fontFamily": "Poppins-Regular",
+            "fontSize": 14,
+            "lineHeight": 22,
+            "marginLeft": 20,
+          }
+        }
+      >
+        time
+      </Text>
+    </View>
+  </View>,
+  <View
+    style={
+      Object {
+        "alignItems": "flex-end",
+        "alignSelf": "flex-start",
+        "display": "flex",
+        "justifyContent": "flex-start",
+        "position": "absolute",
+        "right": 20,
+        "top": 22,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#00ADB5",
+          "borderRadius": 10,
+          "height": 20,
+          "justifyContent": "center",
+          "textAlign": "center",
+          "width": 20,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#ffffff",
+            "fontFamily": "Inter-Regular",
+            "fontSize": 12,
+            "lineHeight": 14.52,
+          }
+        }
+      >
+        1
+      </Text>
+    </View>
+  </View>,
+]
+`;

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import FastImage from 'react-native-fast-image';
-import ToggleSwitch from 'toggle-switch-react-native';
 import {
   ActivityIndicator,
   Platform,
@@ -10,6 +9,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+import ToggleSwitch from '../ToggleSwitch';
 
 import AnonUserInfoRepo from '../../service/repo/anonUserInfoRepo';
 import MemoSendComment from '../../assets/icon/IconSendComment';
@@ -71,13 +71,12 @@ const WriteComment = ({
         </Text>
         <View style={styles.anonimityContainer}>
           <ToggleSwitch
-            isOn={isAnonimity}
-            onColor={colors.bondi_blue}
-            label="Anonymity"
-            offColor="#F5F5F5"
-            size="small"
-            labelStyle={styles.switch}
-            onToggle={toggleSwitch}
+            value={isAnonimity}
+            onValueChange={toggleSwitch}
+            labelLeft="Anonymity"
+            backgroundActive={colors.lightgrey}
+            backgroundInactive={colors.lightgrey}
+            styleLabelLeft={styles.switch}
           />
         </View>
       </View>

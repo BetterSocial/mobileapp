@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TESTING ChannelAnonymousImage RENDER should match snapshot 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "#FF0000",
+      "display": "flex",
+      "justifyContent": "center",
+    }
+  }
+  testID="anonPostNotificationImage"
+>
+  <Text
+    style={
+      Object {
+        "alignSelf": "center",
+        "fontSize": 30,
+        "textAlign": "center",
+      }
+    }
+    testID="anonPostNotificationEmoji"
+  >
+    🐘
+  </Text>
+</View>
+`;
