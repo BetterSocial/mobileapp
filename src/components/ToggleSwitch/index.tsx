@@ -11,6 +11,7 @@ import {
   TouchableOpacityProps
 } from 'react-native';
 import dimen from '../../utils/dimen';
+import {normalizeFontSize} from '../../utils/fonts';
 
 const styles = StyleSheet.create({
   container: {
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
   textOn: {
     fontFamily: 'Inter',
     fontWeight: '400',
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     lineHeight: dimen.normalizeDimen(18),
     textAlign: 'center',
     textAlignVertical: 'center',
@@ -47,7 +48,7 @@ const styles = StyleSheet.create({
   textOff: {
     fontFamily: 'Inter',
     fontWeight: '400',
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     lineHeight: dimen.normalizeDimen(18),
     textAlign: 'center',
     textAlignVertical: 'center',
@@ -77,15 +78,15 @@ const styles = StyleSheet.create({
     })
   },
   labelLeft: {
-    marginRight: 5,
+    marginRight: dimen.normalizeDimen(5),
     color: '#FFFFFF',
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     fontWeight: '400'
   },
   labelRight: {
-    marginLeft: 5,
+    marginLeft: dimen.normalizeDimen(5),
     color: '#FFFFFF',
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     fontWeight: '400'
   }
 });
