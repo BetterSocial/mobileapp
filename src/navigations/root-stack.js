@@ -4,6 +4,7 @@ import {View} from 'react-native';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import PropTypes from 'prop-types';
 
 import Blocked from '../screens/Blocked';
 import ChooseUsername from '../screens/InputUsername';
@@ -58,7 +59,7 @@ import FollowersScreen from '../screens/Followings/FollowersScreen';
 
 const RootStack = createNativeStackNavigator();
 
-export const RootNavigator = () => {
+export const RootNavigator = (props) => {
   useCoreChatSystemHook();
 
   const initialStartup = useRecoilValue(InitialStartupAtom);
@@ -101,7 +102,11 @@ export const RootNavigator = () => {
         style={{
           height: '100%',
           paddingBottom: isUnauthenticated ? 0 : insets.bottom,
-          paddingTop: isUnauthenticated ? 0 : insets.top
+          paddingTop:
+            isUnauthenticated ||
+            ['TopicPageScreen', 'TopicMemberScreen'].includes(props.currentScreen)
+              ? 0
+              : insets.top
         }}>
         <NetworkStatusIndicator hide={true} />
         {/* <StatusBar translucent backgroundColor="white" /> */}
@@ -124,6 +129,10 @@ export const RootNavigator = () => {
       </View>
     </LoadingStartupContext.Provider>
   );
+};
+
+RootNavigator.propTypes = {
+  currentScreen: PropTypes.string
 };
 
 // region authenticatedStack
