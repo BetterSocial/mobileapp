@@ -4,6 +4,7 @@ import {View} from 'react-native';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import PropTypes from 'prop-types';
 
 import Blocked from '../screens/Blocked';
 import ChooseUsername from '../screens/InputUsername';
@@ -127,6 +128,10 @@ export const RootNavigator = (props) => {
       </View>
     </LoadingStartupContext.Provider>
   );
+};
+
+RootNavigator.propTypes = {
+  currentScreen: PropTypes.string
 };
 
 // region authenticatedStack
