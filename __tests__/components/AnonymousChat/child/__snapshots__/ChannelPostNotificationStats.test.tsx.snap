@@ -1,0 +1,224 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TESTING ChatItemTargetText RENDER not shown should match snapshot 1`] = `
+<View
+  style={
+    Object {
+      "height": 0,
+    }
+  }
+/>
+`;
+
+exports[`TESTING ChatItemTargetText RENDER type ANON_PM should match snapshot 1`] = `null`;
+
+exports[`TESTING ChatItemTargetText RENDER with block should match snapshot 1`] = `
+<View
+  style={
+    Object {
+      "display": "flex",
+      "flex": 1,
+      "flexDirection": "row",
+      "justifyContent": "space-between",
+      "marginRight": 45,
+      "marginTop": 7,
+      "minHeight": 24,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "display": "flex",
+        "flexDirection": "row",
+        "marginEnd": 15,
+      }
+    }
+  >
+    <View />
+    <Text
+      style={
+        Object {
+          "marginStart": 5,
+        }
+      }
+    >
+      1
+    </Text>
+  </View>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "display": "flex",
+        "flexDirection": "row",
+        "marginEnd": 15,
+      }
+    }
+  >
+    <View />
+    <Text
+      style={
+        Object {
+          "marginStart": 5,
+        }
+      }
+    >
+      0
+    </Text>
+  </View>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "display": "flex",
+        "flexDirection": "row",
+        "marginEnd": 15,
+      }
+    }
+  >
+    <View />
+    <Text
+      style={
+        Object {
+          "marginStart": 5,
+        }
+      }
+    >
+      1
+    </Text>
+  </View>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "display": "flex",
+        "flexDirection": "row",
+        "marginEnd": 15,
+      }
+    }
+  >
+    <Image
+      height={15}
+      source={
+        Object {
+          "testUri": "../../../src/assets/images/block.png",
+        }
+      }
+      style={Object {}}
+      width={15}
+    />
+    <Text
+      style={
+        Object {
+          "marginStart": 5,
+        }
+      }
+    >
+      1
+    </Text>
+  </View>
+</View>
+`;
+
+exports[`TESTING ChatItemTargetText RENDER with no block should match snapshot 1`] = `
+<View
+  style={
+    Object {
+      "display": "flex",
+      "flex": 1,
+      "flexDirection": "row",
+      "justifyContent": "space-between",
+      "marginRight": 45,
+      "marginTop": 7,
+      "minHeight": 24,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "display": "flex",
+        "flexDirection": "row",
+        "marginEnd": 15,
+      }
+    }
+  >
+    <View />
+    <Text
+      style={
+        Object {
+          "marginStart": 5,
+        }
+      }
+    >
+      1
+    </Text>
+  </View>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "display": "flex",
+        "flexDirection": "row",
+        "marginEnd": 15,
+      }
+    }
+  >
+    <View />
+    <Text
+      style={
+        Object {
+          "marginStart": 5,
+        }
+      }
+    >
+      0
+    </Text>
+  </View>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "display": "flex",
+        "flexDirection": "row",
+        "marginEnd": 15,
+      }
+    }
+  >
+    <View />
+    <Text
+      style={
+        Object {
+          "marginStart": 5,
+        }
+      }
+    >
+      1
+    </Text>
+  </View>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "display": "flex",
+        "flexDirection": "row",
+        "marginEnd": 15,
+      }
+    }
+  >
+    <View />
+    <Text
+      style={
+        Object {
+          "marginStart": 5,
+        }
+      }
+    >
+      0
+    </Text>
+  </View>
+</View>
+`;

@@ -12,6 +12,8 @@ import UseLocalDatabaseHook from '../../../types/database/localDatabase.types';
 import UserSchema from '../../database/schema/UserSchema';
 import migrationDbStatusAtom from '../../database/atom/migrationDbStatusAtom';
 import useBetterWebsocketHook from './websocket/useBetterWebsocketHook';
+import useFetchAnonymousChannelHook from './chat/useFetchAnonymousChannelHook';
+import useFetchAnonymousPostNotificationHook from './chat/useFetchAnonymousPostNotificationHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import usePostNotificationListenerHook from './getstream/usePostNotificationListenerHook';
 import useProfileHook from './profile/useProfileHook';
@@ -495,9 +497,10 @@ const useCoreChatSystemHook = () => {
     if (type === 'notification.message_new') {
       saveChannelListData(lastJsonMessage, ANONYMOUS).catch((e) => console.log(e));
     }
-  }, [lastJsonMessage, localDb]);
+  }, [JSON.stringify(lastJsonMessage), localDb]);
 
   React.useEffect(() => {
+    console.log({lastSignedMessage}, 'nehiman');
     if (!lastSignedMessage && !localDb) return;
 
     const {type} = lastSignedMessage;
@@ -505,7 +508,7 @@ const useCoreChatSystemHook = () => {
     if (type === 'notification.message_new' || type === 'notification.added_to_channel') {
       saveChannelListData(lastSignedMessage, SIGNED).catch((e) => console.log(e));
     }
-  }, [lastSignedMessage, localDb]);
+  }, [JSON.stringify(lastSignedMessage), localDb]);
 
   React.useEffect(() => {
     if (isEnteringApp && migrationStatus === 'MIGRATED') {

@@ -1,3 +1,408 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`GroupSetting should be run correctly Should match snapshot 1`] = `[Function]`;
+exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
+<RCTSafeAreaView
+  emulateUnlessSupported={true}
+  style={
+    Object {
+      "backgroundColor": "#fff",
+      "flex": 1,
+    }
+  }
+>
+  <RCTScrollView>
+    <View>
+      <View
+        style={
+          Array [
+            Object {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "justifyContent": "space-between",
+              "paddingVertical": 8,
+            },
+            Object {
+              "marginLeft": 22,
+              "marginRight": 20,
+            },
+          ]
+        }
+      >
+        <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "opacity": 1,
+              "padding": 10,
+              "paddingLeft": 0,
+            }
+          }
+          testID="onPressBtnHeader"
+        >
+          <View
+            style={
+              Object {
+                "padding": 10,
+              }
+            }
+          >
+            <SvgMock
+              fill="#000"
+              height={20}
+              width={20}
+            />
+          </View>
+        </View>
+        <Text
+          style={
+            Array [
+              Object {
+                "color": "#1E1F20",
+                "fontFamily": "Inter-SemiBold",
+                "fontSize": 5.447470817120623,
+                "fontWeight": "bold",
+                "padding": 10,
+                "textAlign": "center",
+              },
+              Object {},
+            ]
+          }
+        >
+          Settings
+        </Text>
+        <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "opacity": 1,
+              "padding": 10,
+              "paddingRight": 0,
+            }
+          }
+        >
+          <Text
+            style={
+              Array [
+                Object {
+                  "color": "#1E1F20",
+                  "fontFamily": "Inter-SemiBold",
+                  "fontSize": 5.447470817120623,
+                  "fontWeight": "bold",
+                  "padding": 10,
+                  "textAlign": "center",
+                },
+                Object {
+                  "color": "#00ADB5",
+                },
+                Object {
+                  "color": "#00ADB5",
+                },
+              ]
+            }
+          >
+            Skip
+          </Text>
+        </View>
+      </View>
+      <View
+        style={
+          Object {
+            "backgroundColor": "#00ADB5",
+            "borderTopColor": "#E0E0E0",
+            "borderTopWidth": 1,
+            "paddingHorizontal": 15,
+            "paddingVertical": 10,
+          }
+        }
+      >
+        <View
+          style={
+            Object {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "marginBottom": 5,
+            }
+          }
+        >
+          <View
+            accessible={true}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "#E0E0E0",
+                "borderRadius": 19.200000000000003,
+                "height": 38.400000000000006,
+                "justifyContent": "center",
+                "marginRight": 17,
+                "opacity": 1,
+                "width": 38.400000000000006,
+              }
+            }
+            testID="updateImage"
+          >
+            <Image
+              source={
+                Object {
+                  "uri": "data:image/jpg;base64,https://image.jpg",
+                }
+              }
+              style={
+                Object {
+                  "borderRadius": 19.200000000000003,
+                  "height": 38.400000000000006,
+                  "width": 38.400000000000006,
+                }
+              }
+            />
+          </View>
+          <View
+            style={
+              Object {
+                "flex": 1,
+                "paddingBottom": 5,
+                "paddingTop": 5,
+              }
+            }
+          >
+            <TextInput
+              allowFontScaling={true}
+              multiline={true}
+              onBlur={[Function]}
+              onChangeText={[Function]}
+              rejectResponderTermination={true}
+              selectTextOnFocus={true}
+              style={
+                Object {
+                  "color": "#FFFFFF",
+                  "flex": 1,
+                  "fontFamily": "Inter-Regular",
+                  "fontSize": 5.447470817120623,
+                  "lineHeight": 9.33852140077821,
+                }
+              }
+              testID="onInputChange"
+              textAlignVertical="top"
+              underlineColorAndroid="transparent"
+              value="No Name"
+            />
+          </View>
+        </View>
+        <Text
+          style={
+            Object {
+              "color": "#FFFFFF",
+              "fontFamily": "Inter-Regular",
+              "fontSize": 4.669260700389105,
+              "lineHeight": 7.003891050583658,
+            }
+          }
+        >
+          Provide a group name and group icon
+        </Text>
+      </View>
+      <View
+        style={
+          Object {
+            "flex": 1,
+          }
+        }
+        transition={
+          <Transition.Together>
+            <Transition.Change
+              interpolation="easeInOut"
+            />
+            <Transition.In
+              type="fade"
+            />
+          </Transition.Together>
+        }
+      >
+        <Modal
+          hardwareAccelerated={false}
+          transparent={true}
+          visible={false}
+        >
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "flex": 1,
+                "justifyContent": "center",
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "backgroundColor": "rgba(0, 0, 0, 0.22)",
+                  "borderRadius": 10,
+                  "padding": 50,
+                }
+              }
+            >
+              <ActivityIndicator
+                animating={true}
+                color="#00ADB5"
+                hidesWhenStopped={true}
+                size="large"
+              />
+            </View>
+          </View>
+        </Modal>
+      </View>
+      <View
+        style={
+          Object {
+            "paddingTop": 12,
+            "width": 300,
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "color": "#00ADB5",
+              "fontFamily": "Inter-SemiBold",
+              "fontSize": 14,
+              "lineHeight": 16.94,
+              "marginBottom": 4,
+              "marginLeft": 20,
+            }
+          }
+        >
+          Participants (1)
+        </Text>
+        <RCTScrollView
+          data={
+            Array [
+              "a3c59170-c110-4fac-929e-7834f6c6827f",
+            ]
+          }
+          disableVirtualization={false}
+          getItem={[Function]}
+          getItemCount={[Function]}
+          horizontal={false}
+          initialNumToRender={10}
+          keyExtractor={[Function]}
+          maxToRenderPerBatch={10}
+          onContentSizeChange={[Function]}
+          onEndReachedThreshold={2}
+          onLayout={[Function]}
+          onMomentumScrollEnd={[Function]}
+          onScroll={[Function]}
+          onScrollBeginDrag={[Function]}
+          onScrollEndDrag={[Function]}
+          removeClippedSubviews={false}
+          renderItem={[Function]}
+          scrollEventThrottle={50}
+          stickyHeaderIndices={Array []}
+          updateCellsBatchingPeriod={50}
+          viewabilityConfigCallbackPairs={Array []}
+          windowSize={21}
+        >
+          <View>
+            <View
+              onLayout={[Function]}
+              style={null}
+            >
+              <View
+                style={
+                  Object {
+                    "height": 72,
+                  }
+                }
+              >
+                <View
+                  accessible={true}
+                  collapsable={false}
+                  focusable={true}
+                  style={
+                    Object {
+                      "height": "100%",
+                    }
+                  }
+                >
+                  <View
+                    style={
+                      Object {
+                        "alignItems": "center",
+                        "flex": 1,
+                        "flexDirection": "row",
+                        "paddingHorizontal": 15,
+                        "paddingVertical": 12,
+                      }
+                    }
+                  >
+                    <View
+                      style={
+                        Object {
+                          "alignItems": "center",
+                          "flex": 1,
+                          "flexDirection": "row",
+                        }
+                      }
+                    >
+                      <Image
+                        source={
+                          Object {
+                            "uri": "https://res.cloudinary.com/hpjivutj2/image/upload/v1666664085/vcinqpjniuigf6mdnmzz.jpg",
+                          }
+                        }
+                        style={
+                          Object {
+                            "borderRadius": 19.200000000000003,
+                            "height": 38.400000000000006,
+                            "marginRight": 17,
+                            "width": 38.400000000000006,
+                          }
+                        }
+                        testID="image"
+                      />
+                      <Text
+                        style={
+                          Object {
+                            "color": "#000",
+                            "fontFamily": "Inter-Medium",
+                            "fontSize": 5.447470817120623,
+                            "lineHeight": 6.591439688715954,
+                          }
+                        }
+                      >
+                        BetterSocial_Team
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </View>
+        </RCTScrollView>
+      </View>
+    </View>
+  </RCTScrollView>
+</RCTSafeAreaView>
+`;

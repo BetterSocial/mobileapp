@@ -16,9 +16,9 @@ import {Context} from '../../context';
 
 const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
   anonPostNotificationUserInfo = null,
-  block = 11,
-  comments = 155,
-  downvote = 3,
+  block = 0,
+  comments = 0,
+  downvote = 0,
   isCommentExists = false,
   isMe = false,
   message = 'How have you been? Do you want to meet up sometime?',

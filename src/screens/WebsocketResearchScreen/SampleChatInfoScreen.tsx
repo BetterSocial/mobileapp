@@ -186,6 +186,7 @@ const SampleChatInfoScreen = () => {
     handleShowArrow
   } = useChatInfoScreenHook();
   const [isLoadingMembers] = React.useState<boolean>(false);
+  // TODO: Change this into useUserAuthHook
   const {signedProfileId} = useProfileHook();
   const {params}: any = useRoute();
   const ANONYMOUS_USER = 'AnonymousUser';

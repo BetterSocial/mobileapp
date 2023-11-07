@@ -20,7 +20,6 @@ const Header = ({title, onPress, titleStyle = {}, containerStyle = {}, isCenter}
             style={{
               ...styles.textIos,
               ...titleStyle,
-              fontSize: 20,
               textAlign: isCenter ? 'center' : 'left'
             }}>
             {title}
@@ -65,7 +64,7 @@ const styles = StyleSheet.create({
     color: colors.black,
     fontFamily: fonts.poppins[600],
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '600',
     marginRight: 15
   },
   gap: {width: 20, height: 12},

@@ -16,6 +16,7 @@ const PostNotificationChannelItem: (props: MessageChannelItemProps) => React.Rea
   item,
   onChannelPressed
 }) => {
+  // TODO: Change this into useUserAuthHook
   const {anonProfileId, signedProfileId} = useProfileHook();
 
   const postNotifItem = item as PostNotificationChannelList;

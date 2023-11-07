@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {FlatList, StyleSheet} from 'react-native';
 
-import DomainList from '../RenderList';
+import DomainList from '../../../DiscoveryScreenV2/elements/DiscoveryItemList';
 import TopicHeader from './TopicHeader';
 import useChatClientHook from '../../../../utils/getstream/useChatClientHook';
 import {getFollowingTopic} from '../../../../service/topics';

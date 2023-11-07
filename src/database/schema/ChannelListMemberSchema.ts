@@ -33,7 +33,8 @@ class ChannelListMemberSchema implements BaseDbSchema {
   }
 
   save = async (db: SQLiteDatabase, transaction: Transaction = null): Promise<void> => {
-    if (await this.checkIfExist(db)) return;
+    const isExist = await this.checkIfExist(db);
+    if (isExist) return;
 
     const insertQuery = `INSERT OR REPLACE INTO ${ChannelListMemberSchema.getTableName()} (
         id,

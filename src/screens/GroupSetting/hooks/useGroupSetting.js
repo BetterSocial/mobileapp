@@ -102,9 +102,11 @@ const useGroupSetting = ({navigation, route}) => {
 
   const handleResLaunchGallery = (res) => {
     if (!res.didCancel) {
+      const uri = res?.assets?.[0]?.uri;
+      const base64 = res?.assets?.[0]?.base64;
       setChangeImage(true);
-      setBase64Profile(res.base64);
-      setUrlImage(res.uri);
+      setBase64Profile(base64);
+      setUrlImage(uri);
     }
   };
 

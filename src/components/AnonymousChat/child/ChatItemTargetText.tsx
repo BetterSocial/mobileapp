@@ -87,13 +87,15 @@ const ChatItemTargetText = ({
       {renderAvatar()}
       <View style={styles.textContainer}>
         {!isContinuous && (
-          <View style={styles.chatTitleContainer}>
+          <View testID="chat-item-user-info" style={styles.chatTitleContainer}>
             <Text style={styles.userText}>{username}</Text>
             <View style={styles.dot} />
             <Text style={styles.timeText}>{time}</Text>
           </View>
         )}
-        <Text style={styles.text}>{message}</Text>
+        <Text testID="chat-item-message" style={styles.text}>
+          {message}
+        </Text>
       </View>
     </View>
   );

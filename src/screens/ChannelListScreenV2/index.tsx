@@ -14,6 +14,7 @@ import useRootChannelListHook from '../../hooks/screen/useRootChannelListHook';
 
 const ChannelListScreenV2 = () => {
   const navigation = useNavigation();
+  // TODO: Change this into useUserAuthHook
   const {profile} = useProfileHook();
 
   const [selectedTab, setSelectedTab] = React.useState(0);

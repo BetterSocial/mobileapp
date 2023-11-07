@@ -26,6 +26,7 @@ import {Button} from '../../components/Button';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {Header} from '../../components';
 import {Input} from '../../components/Input';
 import {ProgressBar} from '../../components/ProgressBar';
 import {colors} from '../../utils/colors';
@@ -34,7 +35,6 @@ import {requestCameraPermission, requestExternalStoragePermission} from '../../u
 import {setCapitalFirstLetter} from '../../utils/Utils';
 import {setImage, setImageUrl, setUsername} from '../../context/actions/users';
 import {verifyUsername} from '../../service/users';
-import {Header} from '../../components';
 
 const MAXIMUM_USERNAME_LENGTH = 19;
 const MINIMUM_USERNAME_LENGTH = 3;
@@ -77,9 +77,11 @@ const ChooseUsername = () => {
           selectionLimit: 1
         },
         (res) => {
-          if (res.uri) setImageUrl(res.uri, dispatch);
-          if (res.base64) {
-            setImage(`${res.base64}`, dispatch);
+          const uri = res?.assets?.[0]?.uri;
+          const base64 = res?.assets?.[0]?.base64;
+          if (uri) setImageUrl(uri, dispatch);
+          if (base64) {
+            setImage(`${base64}`, dispatch);
             bottomSheetChooseImageRef.current.close();
           }
         }
@@ -93,9 +95,11 @@ const ChooseUsername = () => {
     const {success, message} = await requestExternalStoragePermission();
     if (success) {
       launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
-        if (res.uri) setImageUrl(res.uri, dispatch);
-        if (res.base64) {
-          setImage(`${res.base64}`, dispatch);
+        const uri = res?.assets?.[0]?.uri;
+        const base64 = res?.assets?.[0]?.base64;
+        if (uri) setImageUrl(uri, dispatch);
+        if (base64) {
+          setImage(`${base64}`, dispatch);
           bottomSheetChooseImageRef.current.close();
         }
       });
@@ -241,11 +245,11 @@ const ChooseUsername = () => {
       [
         {
           text: 'Add profile picture',
+          style: 'cancel',
           onPress: () => onPhoto()
         },
         {
           text: 'Skip',
-          style: 'cancel',
           onPress: () => next()
         }
       ]

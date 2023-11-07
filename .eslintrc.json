@@ -18,7 +18,11 @@
     "sourceType": "module",
     "ecmaFeatures": {
       "jsx": true,
-      "modules": true
+      "modules": true,
+      "parserOptions": {
+        "project": ["./tsconfig.json"],
+        "tsconfigRootDir": "./"
+      }
     }
   },
   "overrides": [
@@ -27,15 +31,13 @@
       "plugins": ["@typescript-eslint"],
       "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
       "parser": "@typescript-eslint/parser",
-      "parserOptions": {
-        "project": ["./tsconfig.json"]
-      },
       "rules": {
         "@typescript-eslint/comma-dangle": "warn",
         "@typescript-eslint/object-curly-spacing": "warn",
         "linebreak-style": "off",
         "no-console": "off",
         "import/prefer-default-export": "off",
+        "no-underscore-dangle": "off",
         "no-use-before-define": "warn",
         "no-param-reassign": "off",
         "react/prop-types": "off",

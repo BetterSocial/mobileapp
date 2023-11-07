@@ -1,0 +1,354 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
+<RCTScrollView
+  contentContainerStyle={
+    Object {
+      "flexGrow": 1,
+    }
+  }
+>
+  <View>
+    <View
+      style={
+        Object {
+          "height": 52,
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "backgroundColor": "white",
+            "borderBottomColor": "#C4C4C4",
+            "borderBottomWidth": 1,
+            "flexDirection": "row",
+            "left": 0,
+            "marginBottom": 8,
+            "marginTop": 0,
+            "paddingBottom": 7,
+            "paddingTop": 7,
+            "position": "absolute",
+            "right": 0,
+            "top": 0,
+            "zIndex": 10,
+          }
+        }
+      >
+        <View
+          accessible={true}
+          collapsable={false}
+          focusable={true}
+          style={
+            Object {
+              "flex": 1,
+            }
+          }
+        >
+          <View
+            style={
+              Object {
+                "alignSelf": "center",
+                "backgroundColor": "#F5F5F5",
+                "borderRadius": 8,
+                "flex": 1,
+                "flexDirection": "row",
+                "height": 36,
+                "marginLeft": 20,
+                "marginRight": 12,
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "alignSelf": "center",
+                  "justifyContent": "center",
+                  "marginLeft": 8,
+                }
+              }
+            >
+              <View />
+            </View>
+            <Text
+              style={
+                Object {
+                  "alignSelf": "center",
+                  "color": "#C4C4C4",
+                  "flex": 1,
+                  "fontFamily": "Inter-Regular",
+                  "fontSize": 14,
+                  "lineHeight": 36,
+                  "paddingBottom": 0,
+                  "paddingStart": 10,
+                  "paddingTop": 0,
+                }
+              }
+            >
+              Search Users
+            </Text>
+          </View>
+        </View>
+        <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "justifyContent": "space-around",
+              "marginEnd": 8,
+              "opacity": 1,
+              "paddingBottom": 9,
+              "paddingLeft": 8,
+              "paddingRight": 12,
+              "paddingTop": 9,
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "color": "#00ADB5",
+                "fontFamily": "Inter-SemiBold",
+                "fontSize": 12,
+                "lineHeight": 14.52,
+                "marginRight": 11,
+              }
+            }
+          >
+            New Chat
+          </Text>
+          <View>
+            <View />
+          </View>
+        </View>
+      </View>
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#ffffff",
+          "borderBottomColor": "#E0E0E0",
+          "borderBottomWidth": 1,
+          "display": "flex",
+          "flexDirection": "row",
+          "justifyContent": "center",
+          "width": 300,
+        }
+      }
+    >
+      <View
+        accessible={true}
+        collapsable={false}
+        focusable={true}
+        style={
+          Object {
+            "alignItems": "center",
+            "borderBottomColor": "#000000",
+            "borderBottomWidth": 2,
+            "display": "flex",
+            "flex": 1,
+            "height": 48,
+            "justifyContent": "center",
+            "opacity": 1,
+          }
+        }
+        testID="horizontal-tab-0"
+      >
+        <View
+          style={
+            Object {
+              "display": "flex",
+              "maxWidth": 150,
+            }
+          }
+        >
+          <View
+            style={
+              Object {
+                "display": "flex",
+                "flexDirection": "row",
+                "justifyContent": "center",
+                "maxWidth": 110,
+                "paddingLeft": 20,
+                "paddingRight": 20,
+              }
+            }
+            testID="signed-channel-list-tab-item"
+          >
+            <View
+              style={
+                Array [
+                  Object {
+                    "overflow": "hidden",
+                  },
+                  Object {
+                    "borderRadius": 10,
+                    "height": 20,
+                    "marginEnd": 6,
+                    "width": 20,
+                  },
+                ]
+              }
+            >
+              <FastImageView
+                defaultSource={null}
+                resizeMode="cover"
+                source={null}
+              />
+            </View>
+            <Text
+              ellipsizeMode="tail"
+              numberOfLines={1}
+              style={
+                Object {
+                  "fontFamily": "Inter-Medium",
+                  "fontSize": 14,
+                }
+              }
+            >
+              as 
+              @undefined
+            </Text>
+          </View>
+        </View>
+      </View>
+      <View
+        accessible={true}
+        collapsable={false}
+        focusable={true}
+        style={
+          Object {
+            "alignItems": "center",
+            "borderBottomColor": "#00ADB5",
+            "display": "flex",
+            "flex": 1,
+            "height": 48,
+            "justifyContent": "center",
+            "opacity": 0.1,
+          }
+        }
+        testID="horizontal-tab-1"
+      >
+        <View
+          style={
+            Object {
+              "display": "flex",
+              "maxWidth": 150,
+            }
+          }
+        >
+          <View
+            style={
+              Object {
+                "display": "flex",
+                "flexDirection": "row",
+                "justifyContent": "center",
+                "maxWidth": 110,
+                "paddingLeft": 20,
+                "paddingRight": 20,
+              }
+            }
+            testID="anonymous-channel-list-tab-item"
+          >
+            <View
+              style={
+                Array [
+                  Object {
+                    "overflow": "hidden",
+                  },
+                  Object {
+                    "borderRadius": 10,
+                    "height": 20,
+                    "marginEnd": 6,
+                    "width": 20,
+                  },
+                ]
+              }
+            >
+              <FastImageView
+                defaultSource={null}
+                resizeMode="cover"
+                source={
+                  Object {
+                    "testUri": "../../../src/assets/images/AnonymousProfile.png",
+                  }
+                }
+              />
+            </View>
+            <Text
+              ellipsizeMode="tail"
+              numberOfLines={1}
+              style={
+                Object {
+                  "fontFamily": "Inter-Medium",
+                  "fontSize": 14,
+                }
+              }
+            >
+              as 
+              Anonymous
+            </Text>
+            <View
+              style={
+                Object {
+                  "alignItems": "center",
+                  "backgroundColor": "#FF2E63",
+                  "borderRadius": 8,
+                  "bottom": 4,
+                  "display": "flex",
+                  "height": 16,
+                  "justifyContent": "center",
+                  "width": 16,
+                }
+              }
+              testID="anonymous-channel-list-tab-item-unread-count"
+            >
+              <Text
+                style={
+                  Object {
+                    "color": "#ffffff",
+                    "fontFamily": "Inter-Medium",
+                    "fontSize": 10,
+                  }
+                }
+              >
+                3
+              </Text>
+            </View>
+          </View>
+        </View>
+      </View>
+    </View>
+    <View
+      style={
+        Object {
+          "display": "flex",
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "display": "none",
+        }
+      }
+    >
+      <RCTScrollView>
+        <View>
+          <View />
+        </View>
+      </RCTScrollView>
+    </View>
+  </View>
+</RCTScrollView>
+`;

@@ -8,7 +8,7 @@ const TARGET_MIGRATION_VERSION = 6;
  * PROCEED WITH CAUTION
  * Set to true if you want to drop all tables and recreate them
  */
-const DROP_ALL_DB = false;
+export const DROP_ALL_DB = false;
 
 const getCurrentMigrationVersion = async () => {
   const db = await LocalDatabase.getDBConnection();

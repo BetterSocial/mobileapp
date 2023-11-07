@@ -144,7 +144,7 @@ const useGroupInfo = () => {
         },
         (res) => {
           if (!res.didCancel) {
-            uploadImageBase64(res);
+            uploadImageBase64(res?.assets?.[0]?.base64);
           }
         }
       );

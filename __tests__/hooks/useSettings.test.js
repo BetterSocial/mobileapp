@@ -1,6 +1,7 @@
 import Toast from 'react-native-simple-toast';
 import {Alert} from 'react-native';
 import {act, renderHook} from '@testing-library/react-hooks';
+import {mockMMKVClearAll, mockMMKVGetString, mockMMKVSet} from 'react-native-mmkv';
 
 import * as cacheUtils from '../../src/utils/cache';
 import * as mainFeed from '../../src/context/actions/feeds';
@@ -23,10 +24,17 @@ describe('useSetting should run correctly', () => {
     const spyCacheUtils = jest.spyOn(cacheUtils, 'removeAllCache');
     const spyResetProfile = jest.spyOn(resetProfileAction, 'resetProfileFeed');
     const spyFeed = jest.spyOn(mainFeed, 'setMainFeeds');
+
+    mockMMKVGetString.mockReturnValueOnce('password');
+
     await result.current.logout();
     expect(spyCacheUtils).toHaveBeenCalled();
     expect(spyResetProfile).toHaveBeenCalled();
     expect(spyFeed).toHaveBeenCalled();
+
+    expect(mockMMKVGetString).toHaveBeenCalledWith('onboardingPassword');
+    expect(mockMMKVClearAll).toHaveBeenCalled();
+    expect(mockMMKVSet).toHaveBeenCalledWith('onboardingPassword', 'password');
   });
 
   it('doDelete accounst should run correctly', async () => {

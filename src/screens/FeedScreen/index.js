@@ -14,12 +14,11 @@ import useOnBottomNavigationTabPressHook, {
 } from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
 import {ButtonNewPost} from '../../components/Button';
 import {Context} from '../../context';
-import {DISCOVERY_TAB_TOPICS, SOURCE_FEED_TAB} from '../../utils/constants';
+import {DISCOVERY_TAB_TOPICS} from '../../utils/constants';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {normalizeFontSizeByWidth} from '../../utils/fonts';
 import {setFeedByIndex, setTimer} from '../../context/actions/feeds';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
-import {viewTimePost} from '../../service/post';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 let lastDragY = 0;
@@ -32,27 +31,32 @@ const FeedScreen = (props) => {
   const refBlockComponent = React.useRef();
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   const {interactionsComplete} = useAfterInteractions();
-  const {feeds, timer, viewPostTimeIndex} = feedsContext;
+  const {feeds} = feedsContext;
+
   const [isScroll, setIsScroll] = React.useState(false);
   const [updateIndex, setUpdateIndex] = React.useState(0);
   const {
-    getDataFeeds,
-    postOffset,
-    loading,
-    setShowNavbar,
-    showNavbar,
-    myProfile,
     bottom,
-    onDeleteBlockedPostCompleted,
-    onBlockCompleted,
-    checkCacheFeed,
-    setUpVote,
-    setDownVote,
-    saveSearchHeight,
+    loading,
+    myProfile,
+    nextTargetFeed,
+    postOffset,
     searchHeight,
+    showNavbar,
+
+    checkCacheFeed,
+    getDataFeeds,
     handleScroll,
+    isSamePostViewed,
+    onBlockCompleted,
+    onDeleteBlockedPostCompleted,
+    saveSearchHeight,
+    sendViewPostTime,
+    setDownVote,
     setIsLastPage,
-    nextTargetFeed
+    setShowNavbar,
+    setUpVote,
+    updateViewPostTime
   } = useCoreFeed();
   const interactionManagerRef = React.useRef(null);
   const interactionManagerAnimatedRef = React.useRef(null);
@@ -93,13 +97,6 @@ const FeedScreen = (props) => {
     setDownVote(post, index);
   };
 
-  const sendViewPost = () => {
-    const currentTime = new Date();
-    const diffTime = currentTime.getTime() - timer.getTime();
-    const id = feeds && feeds[viewPostTimeIndex]?.id;
-    if (id) viewTimePost(id, diffTime, SOURCE_FEED_TAB);
-  };
-
   const onNewPollFetched = (newPolls, index) => {
     setFeedByIndex(
       {
@@ -117,7 +114,7 @@ const FeedScreen = (props) => {
       item.og.domainImage,
       item.og.domain_page_id
     );
-    sendViewPost();
+    sendViewPostTime(true);
     props.navigation.navigate('DomainScreen', param);
   };
 
@@ -191,13 +188,11 @@ const FeedScreen = (props) => {
   );
 
   const handleSearchBarClicked = () => {
-    sendViewPost();
+    sendViewPostTime(true);
 
     navigation.navigate('DiscoveryScreen', {
       tab: DISCOVERY_TAB_TOPICS
     });
-
-    setTimer(new Date(), dispatch);
   };
 
   const saveSearchHeightHandle = (height) => {
@@ -227,6 +222,12 @@ const FeedScreen = (props) => {
     />
   );
 
+  const onWillSendViewPostTime = (event) => {
+    if (isSamePostViewed(event)) return;
+    sendViewPostTime();
+    updateViewPostTime(event);
+  };
+
   const renderItem = ({item, index}) => {
     if (item.dummy) return <React.Fragment key={index} />;
     if (updateMoreText && updateIndex === index) return null;
@@ -254,6 +255,7 @@ const FeedScreen = (props) => {
         refreshing={loading}
         renderItem={renderItem}
         onEndReachedThreshold={0.9}
+        onMomentumScrollEnd={onWillSendViewPostTime}
       />
       <ButtonNewPost onRefresh={onRefresh} />
       <BlockComponent

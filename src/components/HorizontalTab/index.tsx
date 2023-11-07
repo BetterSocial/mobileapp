@@ -6,7 +6,13 @@ import {colors} from '../../utils/colors';
 
 const {width} = Dimensions.get('screen');
 
-const HorizontalTab = ({selectedTab, onSelectedTabChange, tabs = []}) => {
+export type HorizontalTabProps = {
+  selectedTab: number;
+  onSelectedTabChange: (index: number) => void;
+  tabs: React.ReactNode[];
+};
+
+const HorizontalTab = ({selectedTab, onSelectedTabChange, tabs = []}: HorizontalTabProps) => {
   const styles = StyleSheet.create({
     tabs: {
       width,

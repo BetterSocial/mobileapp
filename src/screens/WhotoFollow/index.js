@@ -42,6 +42,7 @@ const VIEW_TYPE_LABEL_LOCATION = 2;
 const VIEW_TYPE_DATA = 3;
 
 const WhotoFollow = () => {
+  // TODO: Change this into useUserAuthHook
   const {setProfileId} = useProfileHook();
 
   const [users, setUsers] = React.useState([]);
@@ -196,7 +197,9 @@ const WhotoFollow = () => {
             const anonymousUserId = await JwtDecode(res.anonymousToken).user_id;
             setProfileId({
               anonProfileId: anonymousUserId,
-              signedProfileId: userId
+              signedProfileId: userId,
+              token: res.token,
+              anonymousToken: res.anonymousToken
             });
           } catch (e) {
             crashlytics().recordError(new Error(e));
@@ -288,7 +291,9 @@ const WhotoFollow = () => {
         <></>
       )}
       <View style={styles.footer}>
-        <Text style={styles.textSmall}>Others cannot see who you’re following.</Text>
+        <View style={styles.textSmallContainer}>
+          <Text style={styles.textSmall}>Others cannot see who you’re following.</Text>
+        </View>
         <Button onPress={() => register()}>FINISH</Button>
       </View>
       <Loading visible={fetchRegister} />
@@ -357,15 +362,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     zIndex: 1000
   },
+  textSmallContainer: {
+    flex: 1,
+    justifyContent: 'center'
+  },
   textSmall: {
     fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: '400',
     fontSize: 10,
     textAlign: 'center',
-    color: colors.blackgrey,
-    marginBottom: 10,
-    marginTop: 12
+    color: colors.blackgrey
   },
   containerCard: {
     flexDirection: 'row',

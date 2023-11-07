@@ -9,7 +9,7 @@ import TokenStorage from '../../utils/storage/custom/tokenStorage';
 import TopicPageStorage from '../../utils/storage/custom/topicPageStorage';
 import UserSchema from '../../database/schema/UserSchema';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
-import useProfileHook from '../core/profile/useProfileHook';
+import useUserAuthHook from '../core/auth/useUserAuthHook';
 import {Context} from '../../context';
 import {resetAllNews} from '../../context/actions/news';
 import {setMyProfileResetAll} from '../../context/actions/setMyProfileAction';
@@ -28,17 +28,14 @@ const useResetContext = () => {
   const setRefreshCount = useSetRecoilState(resetAtom);
   const refreshCount = useRecoilValue(resetAtom);
 
-  const {setProfileId} = useProfileHook();
+  const {resetAuth} = useUserAuthHook();
 
   const resetAllContext = () => {
     setRefreshCount(new Date().getTime());
     DiscoveryAction.resetAllDiscovery(discoveryDispatch);
     resetAllNews(newsDispatch);
     setMyProfileResetAll(profileDispatch);
-    setProfileId({
-      anonProfileId: null,
-      profileId: null
-    });
+    resetAuth();
   };
 
   const resetLocalDB = () => {

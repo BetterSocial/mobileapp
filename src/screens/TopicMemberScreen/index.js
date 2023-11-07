@@ -8,7 +8,6 @@ import ShareUtils from '../../utils/share';
 import dimen from '../../utils/dimen';
 import {getAllMemberTopic} from '../../service/topics';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {normalize} from '../../utils/fonts';
 import {colors} from '../../utils/colors';
 import Search from '../DiscoveryScreenV2/elements/Search';
 import StringConstant from '../../utils/string/StringConstant';
@@ -29,12 +28,15 @@ const styles = StyleSheet.create({
   }
 });
 
-let lastDragYTopicMember = 0;
-
-const TopicMemberScreen = (props) => {
+const TopicMemberScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  const topicName = route?.params?.id;
+  const topicName = route?.params?.topicName;
+  const topicDetail = route?.params?.topicDetail;
+  const getTopicDetail = route?.params?.getTopicDetail;
+  const [isFollow, setIsFollow] = React.useState(route?.params?.isFollow);
+  const [memberCount, setMemberCount] = React.useState(route?.params?.memberCount);
+
   const [profile] = React.useContext(Context).profile;
   const [isInitialLoading, setIsInitialLoading] = React.useState(true);
   const [headerHide, setHeaderHide] = React.useState(false);
@@ -50,8 +52,13 @@ const TopicMemberScreen = (props) => {
   const interactionManagerRef = React.useRef(null);
   const interactionManagerAnimatedRef = React.useRef(null);
 
-  const offsetAnimation = React.useRef(new Animated.Value(0)).current;
-  const opacityAnimation = React.useRef(new Animated.Value(0)).current;
+  const opacityAnimationHeader = React.useRef(new Animated.Value(1)).current;
+
+  const animatedHeight = React.useRef(
+    new Animated.Value(
+      dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT + dimen.size.TOPIC_FEED_HEADER_HEIGHT
+    )
+  ).current;
 
   const [isLoadingDiscovery, setIsLoadingDiscovery] = React.useState({
     user: false
@@ -112,6 +119,22 @@ const TopicMemberScreen = (props) => {
     ShareUtils.shareCommunity(topicName);
   };
 
+  const showAnimationHeader = () => {
+    interactionManagerRef.current = InteractionManager.runAfterInteractions(() => {
+      Animated.timing(animatedHeight, {
+        toValue: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT + dimen.size.TOPIC_FEED_HEADER_HEIGHT,
+        duration: 100,
+        useNativeDriver: false
+      }).start();
+      Animated.timing(opacityAnimationHeader, {
+        toValue: 1,
+        duration: 100,
+        useNativeDriver: false
+      }).start();
+    });
+    setHeaderHide(false);
+  };
+
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       showAnimationHeader();
@@ -125,45 +148,20 @@ const TopicMemberScreen = (props) => {
     };
   }, [navigation]);
 
-  const showAnimationHeader = () => {
-    interactionManagerRef.current = InteractionManager.runAfterInteractions(() => {
-      Animated.timing(offsetAnimation, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: false
-      }).start();
-      Animated.timing(opacityAnimation, {
-        toValue: 0,
-        duration: 100,
-        useNativeDriver: false
-      }).start();
-    });
-    setHeaderHide(false);
-  };
-
-  const handleOnScrollBeginDrag = (event) => {
-    lastDragYTopicMember = event.nativeEvent.contentOffset.y;
-  };
-
   const handleScrollEvent = React.useCallback(
     (event) => {
       const {y} = event.nativeEvent.contentOffset;
-      const dy = y - lastDragYTopicMember;
-      if (y <= 30) {
+      if (y <= 15) {
         showAnimationHeader();
-      } else if (dy - 20 > 0) {
+      } else {
         interactionManagerAnimatedRef.current = InteractionManager.runAfterInteractions(() => {
-          Animated.timing(offsetAnimation, {
-            toValue: -(
-              dimen.size.TOPIC_FEED_HEADER_HEIGHT +
-              dimen.size.DISCOVERY_HEADER_HEIGHT +
-              normalize(4)
-            ),
+          Animated.timing(animatedHeight, {
+            toValue: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2,
             duration: 100,
             useNativeDriver: false
           }).start();
-          Animated.timing(opacityAnimation, {
-            toValue: 1,
+          Animated.timing(opacityAnimationHeader, {
+            toValue: 0,
             duration: 100,
             useNativeDriver: false
           }).start();
@@ -171,7 +169,7 @@ const TopicMemberScreen = (props) => {
         setHeaderHide(true);
       }
     },
-    [offsetAnimation]
+    [animatedHeight]
   );
 
   const onTokenCancel = () => {
@@ -184,13 +182,17 @@ const TopicMemberScreen = (props) => {
     <SafeAreaProvider forceInset={{top: 'always'}} style={styles.parentContainer}>
       <StatusBar barStyle="dark-content" translucent={false} />
       <NavHeader
-        domain={topicName}
+        animatedHeight={animatedHeight}
         onShareCommunity={onCommunityShare}
         isHeaderHide={headerHide}
-        opacityAnimation={opacityAnimation}
-        offsetAnimation={offsetAnimation}
+        opacityHeaderAnimation={opacityAnimationHeader}
         hideSeeMember={true}
-        isInitialLoading={isInitialLoading}
+        topicDetail={topicDetail}
+        memberCount={memberCount}
+        setMemberCount={setMemberCount}
+        setIsFollow={setIsFollow}
+        isFollow={isFollow}
+        getTopicDetail={getTopicDetail}
       />
       <Search
         searchText={searchText}
@@ -208,8 +210,7 @@ const TopicMemberScreen = (props) => {
         style={styles.fragmentContainer}
         contentContainerStyle={styles.fragmentContentContainer}
         keyboardShouldPersistTaps="handled"
-        onScroll={handleScrollEvent}
-        onScrollBeginDrag={handleOnScrollBeginDrag}>
+        onScroll={handleScrollEvent}>
         <UsersFragment
           isLoadingDiscoveryUser={isLoadingDiscovery.user}
           isFirstTimeOpen={isFirstTimeOpen}

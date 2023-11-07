@@ -13,7 +13,8 @@ const HeaderContact = ({
   titleStyle = {},
   subtitleStyle = {},
   containerStyle = {},
-  onPressSub
+  onPressSub,
+  disabledNextBtn
 }) => {
   const renderHeader = () => {
     if (Platform.OS === 'android') {
@@ -37,8 +38,18 @@ const HeaderContact = ({
     <View style={[styles.container, containerStyle]}>
       {renderHeader()}
       <Text style={[styles.text, titleStyle]}>{title}</Text>
-      <GlobalButton buttonStyle={styles.noPaddingRight} onPress={onPressSub}>
-        <Text style={[styles.text, subtitleStyle]}>{subTitle}</Text>
+      <GlobalButton
+        disabled={disabledNextBtn}
+        buttonStyle={styles.noPaddingRight}
+        onPress={onPressSub}>
+        <Text
+          style={[
+            styles.text,
+            {color: disabledNextBtn ? COLORS.gray6 : COLORS.holyTosca},
+            subtitleStyle
+          ]}>
+          {subTitle}
+        </Text>
       </GlobalButton>
     </View>
   );

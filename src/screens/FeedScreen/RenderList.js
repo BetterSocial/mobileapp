@@ -2,7 +2,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
-import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 
 import Content from './Content';
 import ContentLink from './ContentLink';
@@ -28,7 +27,6 @@ const tabBarHeight = StatusBar.currentHeight;
 const FULL_WIDTH = Dimensions.get('screen').width;
 
 const RenderListFeed = (props) => {
-  const bottomHeight = useBottomTabBarHeight();
   const [isHaveSeeMore, setIsHaveSeeMore] = React.useState(false);
   const {
     item,
@@ -61,6 +59,7 @@ const RenderListFeed = (props) => {
     getTotalReaction,
     showScoreButton
   } = useFeed();
+
   const onPressDownVoteHandle = async () => {
     onPressDownVoteHook();
     let newStatus = !statusDownvote;
@@ -109,12 +108,7 @@ const RenderListFeed = (props) => {
   const contentLinkHeight = () => {
     const haveLength =
       getCommentLength(item.latest_reactions.comment) > 0 ? getHeightReaction() / 2.2 : 0;
-    return (
-      dimen.size.FEED_CURRENT_ITEM_HEIGHT -
-      getHeightHeader() -
-      getHeightFooter(bottomHeight) -
-      haveLength
-    );
+    return dimen.size.FEED_CURRENT_ITEM_HEIGHT - getHeightHeader() - getHeightFooter() - haveLength;
   };
   return (
     <View key={item.id} testID="dataScroll" style={styles.cardContainer}>
@@ -158,7 +152,7 @@ const RenderListFeed = (props) => {
             onNewPollFetched={onNewPollFetched}
           />
         )}
-        <View style={styles.footerWrapper(getHeightFooter(bottomHeight))}>
+        <View style={styles.footerWrapper(getHeightFooter())}>
           <Footer
             item={item}
             totalComment={getTotalReaction(item)}
@@ -230,13 +224,14 @@ RenderListFeed.propTypes = {
   onPress: PropTypes.func,
   onNewPollFetched: PropTypes.func,
   onPressDomain: PropTypes.func,
-  onPressComment: PropTypes.func,
   onPressBlock: PropTypes.func,
-  Handle: PropTypes.func,
   selfUserId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   onPressUpvote: PropTypes.func,
   onPressDownVote: PropTypes.func,
-  loading: PropTypes.bool
+  source: PropTypes.string,
+  hideThreeDot: PropTypes.bool,
+  showAnonymousOption: PropTypes.bool,
+  onHeaderOptionClicked: PropTypes.func
 };
 
 export default React.memo(

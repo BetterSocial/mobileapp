@@ -77,6 +77,17 @@ export const getFollowing = async () =>
         reject(err);
       });
   });
+export const getFollower = async (query) =>
+  new Promise((resolve, reject) => {
+    api
+      .get(`/profiles/followers/?q=${encodeURIComponent(query)}`)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
 
 export const setUnFollow = async (data) =>
   new Promise((resolve, reject) => {
