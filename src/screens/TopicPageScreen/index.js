@@ -67,7 +67,9 @@ const TopicPageScreen = (props) => {
   ).current;
 
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
-  const feeds = feedsContext.topicFeeds;
+  const feeds = feedsContext.topicFeeds
+    ? feedsContext.topicFeeds.filter((feed) => feed?.topics?.includes(topicName))
+    : [];
   const mainFeeds = feedsContext.feeds;
   const [offset, setOffset] = React.useState(0);
   const [client] = React.useContext(Context).client;
@@ -128,6 +130,10 @@ const TopicPageScreen = (props) => {
         setIsInitialLoading(false);
       }
     } catch (error) {
+      SimpleToast.show(
+        'There has been a problem. Please make sure you’re online. ',
+        SimpleToast.SHORT
+      );
       if (__DEV__) {
         console.log(error);
       }
@@ -421,6 +427,7 @@ const TopicPageScreen = (props) => {
   return (
     <SafeAreaProvider forceInset={{top: 'always'}} style={styles.parentContainer}>
       <NavHeader
+        domain={topicName}
         animatedHeight={animatedHeight}
         onShareCommunity={onShareCommunity}
         isHeaderHide={isHeaderHide}
