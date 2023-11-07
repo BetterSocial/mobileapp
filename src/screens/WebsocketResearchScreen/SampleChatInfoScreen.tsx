@@ -63,7 +63,6 @@ export const styles = StyleSheet.create({
     bottom: 5
   },
   countUser: (from) => ({
-    fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(16.94),
     color: from === SIGNED ? colors.darkBlue : colors.holytosca,
@@ -248,6 +247,11 @@ const SampleChatInfoScreen = () => {
       </View>
     );
   };
+
+  const countParticipat = () => {
+    return `(${channelInfo?.members?.length})`;
+  };
+
   console.log({selectedUser}, 'select');
   return (
     <SafeAreaView style={styles.container}>
@@ -280,9 +284,7 @@ const SampleChatInfoScreen = () => {
               <View style={styles.lineTop} />
               <View style={styles.lineTop} />
               <View style={styles.users}>
-                <Text style={styles.countUser(params?.from)}>
-                  Participants {channelInfo?.members?.length}
-                </Text>
+                <Text style={styles.countUser(params?.from)}>Participants {countParticipat()}</Text>
                 <FlatList
                   testID="participants"
                   data={channelInfo?.rawJson?.channel?.members}

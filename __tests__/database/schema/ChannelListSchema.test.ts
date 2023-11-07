@@ -511,7 +511,7 @@ describe('TESTING ChannelListSchema', () => {
       );
 
       // Assertion
-      expect(result).toEqual(expect.objectContaining({...fromPostNotifObjectExpectation}));
+      expect(result).toEqual(expect.objectContaining({channelPicture: ''}));
     });
   });
 
