@@ -55,6 +55,7 @@ import {InitialStartupAtom, LoadingStartupContext} from '../service/initialStart
 import {NavigationConstants} from '../utils/constants';
 import {followersOrFollowingAtom} from '../screens/ChannelListScreen/model/followersOrFollowingAtom';
 import {useInitialStartup} from '../hooks/useInitialStartup';
+import FollowersScreen from '../screens/Followings/FollowersScreen';
 
 const RootStack = createNativeStackNavigator();
 
@@ -195,6 +196,13 @@ const AuthenticatedNavigator = () => {
         <AuthenticatedStack.Screen
           name="Followings"
           component={FollowingScreen}
+          options={{
+            headerShown: false
+          }}
+        />
+        <AuthenticatedStack.Screen
+          name="Followers"
+          component={FollowersScreen}
           options={{
             headerShown: false
           }}

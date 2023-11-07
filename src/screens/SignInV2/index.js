@@ -20,9 +20,10 @@ import DevDummyLogin from '../../components/DevDummyLogin';
 import SlideShow from './elements/SlideShow';
 import TokenStorage from '../../utils/storage/custom/tokenStorage';
 import getRemoteConfig from '../../service/getRemoteConfig';
-import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import useSignin from './hooks/useSignin';
+import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
+import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {InitialStartupAtom} from '../../service/initialStartup';
 import {fonts} from '../../utils/fonts';
@@ -31,10 +32,9 @@ import {setDataHumenId} from '../../context/actions/users';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {verifyHumanIdExchangeToken} from '../../service/users';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {COLORS} from '../../utils/theme';
 
 const SignIn = () => {
-  const {setProfileId} = useProfileHook();
+  const {setAuth} = useUserAuthHook();
 
   const [, dispatch] = React.useContext(Context).users;
   const [clickTime, setClickTime] = React.useState(0);
@@ -72,9 +72,11 @@ const SignIn = () => {
           try {
             const userId = await JwtDecode(token).user_id;
             const anonymousUserId = await JwtDecode(anonymousToken).user_id;
-            setProfileId({
+            setAuth({
               anonProfileId: anonymousUserId,
-              signedProfileId: userId
+              signedProfileId: userId,
+              token,
+              anonymousToken
             });
           } catch (e) {
             crashlytics().recordError(new Error(e));

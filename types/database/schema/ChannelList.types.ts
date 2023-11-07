@@ -1,4 +1,6 @@
 /* eslint-disable no-shadow */
+import {SQLiteDatabase} from 'react-native-sqlite-storage';
+
 import {ChatListDetail} from './ChatListDetail.types';
 
 export interface UserSchema {
@@ -54,6 +56,7 @@ export interface ChatSchema {
   status: string;
   isMe: boolean;
   isContinuous: boolean;
+  getById: (db: SQLiteDatabase, id: string) => Promise<ChatSchema>;
 }
 
 export enum ChatStatus {
