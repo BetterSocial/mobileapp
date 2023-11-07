@@ -413,7 +413,7 @@ describe('TESTING ChannelListSchema', () => {
       ]);
 
       // Execution
-      const result = await ChannelList.getUnreadCount(mockDb);
+      const result = await ChannelList.getUnreadCount(mockDb, 'ANON');
 
       // Assertion
       expect(result).toBe(1);
@@ -431,7 +431,7 @@ describe('TESTING ChannelListSchema', () => {
       ]);
 
       // Execution
-      const result = await ChannelList.getUnreadCount(mockDb);
+      const result = await ChannelList.getUnreadCount(mockDb, 'ANON');
 
       // Assertion
       expect(result).toBe(0);
@@ -444,7 +444,7 @@ describe('TESTING ChannelListSchema', () => {
       });
 
       // Execution
-      const result = await ChannelList.getUnreadCount(mockDb);
+      const result = await ChannelList.getUnreadCount(mockDb, 'ANON');
 
       // Assertion
       expect(consoleSpy).toBeCalled();
@@ -485,7 +485,10 @@ describe('TESTING ChannelListSchema', () => {
       };
 
       // Execution
-      const result = await ChannelList.fromPostNotifObject(postNotifObject);
+      const result = await ChannelList.fromPostNotifObject(
+        postNotifObject,
+        'ANON_POST_NOTIFICATION'
+      );
 
       // Assertion
       expect(result).toEqual(expect.objectContaining(fromPostNotifObjectExpectation));

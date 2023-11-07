@@ -23,7 +23,6 @@ exports[`TESTING ChatItemTargetText RENDER continuous should match snapshot 1`] 
         "width": 24,
       }
     }
-    testID="chat-item-continuous-avatar"
   />
   <View
     style={
@@ -92,7 +91,6 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
           "uri": "https://www.google.com",
         }
       }
-      testID="chat-item-default-avatar"
     />
   </View>
   <View

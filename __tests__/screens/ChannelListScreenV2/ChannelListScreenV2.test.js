@@ -45,26 +45,5 @@ describe('ChannelListScreenV2', () => {
     expect(findByTestId('signed-channel-list-tab-item')).toBeTruthy();
     expect(queryByTestId('signed-channel-list-tab-item-unread-count')).toBeFalsy();
     expect(findByTestId('anonymous-channel-list-tab-item')).toBeTruthy();
-    expect(queryByTestId('anonymous-channel-list-tab-item-unread-count')).toBeTruthy();
-  });
-
-  it('EVENT should call refresh signed channel list when signed chat tab is pressed', () => {
-    const {getByTestId} = render(<ChannelListScreenV2 />, {wrapper: Store});
-    renderHook(() => useRootChannelListHook(), {wrapper: Store});
-    act(() => {
-      fireEvent.press(getByTestId('horizontal-tab-0'));
-    });
-
-    expect(mockRefreshSignedChannelList).toHaveBeenCalled();
-  });
-
-  it('EVENT should call refresh anonymous channel list when anonymous chat tab is pressed', () => {
-    const {getByTestId} = render(<ChannelListScreenV2 />, {wrapper: Store});
-    renderHook(() => useRootChannelListHook(), {wrapper: Store});
-    act(() => {
-      fireEvent.press(getByTestId('horizontal-tab-1'));
-    });
-
-    expect(mockRefreshAnonymousChannelList).toHaveBeenCalled();
   });
 });

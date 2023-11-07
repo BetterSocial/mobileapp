@@ -235,6 +235,32 @@ class ChatSchema implements BaseDbSchema {
     });
   }
 
+  static fromGetAllAnonymousChannelAPI(channelId, json): ChatSchema {
+    let rawJson = null;
+
+    try {
+      rawJson = JSON.stringify(json);
+    } catch (e) {
+      console.log('error stringify');
+      console.log(e);
+    }
+
+    return new ChatSchema({
+      id: json?.id,
+      channelId,
+      userId: json?.user?.id,
+      message: json?.text || json?.message,
+      type: json?.type,
+      createdAt: json?.created_at,
+      updatedAt: json?.created_at,
+      rawJson,
+      user: null,
+      status: 'sent',
+      isMe: false,
+      isContinuous: false
+    });
+  }
+
   static async generateSendingChat(
     id: string,
     userId: string,

@@ -10,6 +10,7 @@ export interface ChannelListTabItemProps {
   name: string;
   unreadCount: number;
   type: 'SIGNED' | 'ANONYMOUS';
+  testID?: string;
 }
 
 const {width} = Dimensions.get('screen');

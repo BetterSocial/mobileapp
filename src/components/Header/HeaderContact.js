@@ -5,6 +5,7 @@ import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {COLORS, SIZES} from '../../utils/theme';
 import GlobalButton from '../Button/GlobalButton';
+import dimen from '../../utils/dimen';
 
 const HeaderContact = ({
   title,
@@ -21,7 +22,11 @@ const HeaderContact = ({
       return (
         <GlobalButton testID="onPressAndroid" buttonStyle={styles.noPaddingLeft} onPress={onPress}>
           <View testID="android" style={styles.content(-4)}>
-            <ArrowLeftIcon width={20} height={20} fill="#000" />
+            <ArrowLeftIcon
+              width={dimen.normalizeDimen(20)}
+              height={dimen.normalizeDimen(20)}
+              fill="#000"
+            />
           </View>
         </GlobalButton>
       );
@@ -29,7 +34,11 @@ const HeaderContact = ({
     return (
       <GlobalButton testID="onPressIos" buttonStyle={styles.noPaddingLeft} onPress={onPress}>
         <View testID="ios" style={styles.content(-8)}>
-          <ArrowLeftIcon width={20} height={12} fill="#000" />
+          <ArrowLeftIcon
+            width={dimen.normalizeDimen(20)}
+            height={dimen.normalizeDimen(20)}
+            fill="#000"
+          />
         </View>
       </GlobalButton>
     );

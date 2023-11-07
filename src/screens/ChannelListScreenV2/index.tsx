@@ -49,6 +49,7 @@ const ChannelListScreenV2 = () => {
                   picture={profile?.profile_pic_path}
                   unreadCount={signedChannelUnreadCount}
                   type="SIGNED"
+                  testID="horizontal-tab-0"
                 />,
                 <ChannelListTabItem
                   key={1}
@@ -56,6 +57,7 @@ const ChannelListScreenV2 = () => {
                   picture={AnonymousProfile}
                   unreadCount={anonymousChannelUnreadCount}
                   type="ANONYMOUS"
+                  testID="horizontal-tab-1"
                 />
               ]}
             />

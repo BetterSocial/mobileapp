@@ -45,19 +45,21 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
               "paddingLeft": 0,
             }
           }
-          testID="onPressBtnHeader"
+          testID="onPressAndroid"
         >
           <View
             style={
               Object {
+                "marginLeft": -4,
                 "padding": 10,
               }
             }
+            testID="android"
           >
             <SvgMock
               fill="#000"
-              height={20}
-              width={20}
+              height={16}
+              width={16}
             />
           </View>
         </View>
@@ -294,14 +296,9 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
             }
           }
         >
-          Participants (1)
+          Participants (0)
         </Text>
         <RCTScrollView
-          data={
-            Array [
-              "a3c59170-c110-4fac-929e-7834f6c6827f",
-            ]
-          }
           disableVirtualization={false}
           getItem={[Function]}
           getItemCount={[Function]}
@@ -324,82 +321,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
           viewabilityConfigCallbackPairs={Array []}
           windowSize={21}
         >
-          <View>
-            <View
-              onLayout={[Function]}
-              style={null}
-            >
-              <View
-                style={
-                  Object {
-                    "height": 72,
-                  }
-                }
-              >
-                <View
-                  accessible={true}
-                  collapsable={false}
-                  focusable={true}
-                  style={
-                    Object {
-                      "height": "100%",
-                    }
-                  }
-                >
-                  <View
-                    style={
-                      Object {
-                        "alignItems": "center",
-                        "flex": 1,
-                        "flexDirection": "row",
-                        "paddingHorizontal": 15,
-                        "paddingVertical": 12,
-                      }
-                    }
-                  >
-                    <View
-                      style={
-                        Object {
-                          "alignItems": "center",
-                          "flex": 1,
-                          "flexDirection": "row",
-                        }
-                      }
-                    >
-                      <Image
-                        source={
-                          Object {
-                            "uri": "https://res.cloudinary.com/hpjivutj2/image/upload/v1666664085/vcinqpjniuigf6mdnmzz.jpg",
-                          }
-                        }
-                        style={
-                          Object {
-                            "borderRadius": 19.200000000000003,
-                            "height": 38.400000000000006,
-                            "marginRight": 17,
-                            "width": 38.400000000000006,
-                          }
-                        }
-                        testID="image"
-                      />
-                      <Text
-                        style={
-                          Object {
-                            "color": "#000",
-                            "fontFamily": "Inter-Medium",
-                            "fontSize": 5.447470817120623,
-                            "lineHeight": 6.591439688715954,
-                          }
-                        }
-                      >
-                        BetterSocial_Team
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              </View>
-            </View>
-          </View>
+          <View />
         </RCTScrollView>
       </View>
     </View>

@@ -1,254 +1,278 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`TESTING ChatItemTargetText RENDER ANON_PM should match snapshot 1`] = `
-Array [
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "display": "flex",
+      "flexDirection": "row",
+    }
+  }
+>
   <View
     style={
       Object {
-        "alignItems": "center",
-        "display": "flex",
-        "flexDirection": "row",
+        "flex": 1,
       }
     }
   >
-    <Text
-      ellipsizeMode="tail"
-      numberOfLines={1}
-      style={
-        Object {
-          "alignSelf": "center",
-          "flex": 1,
-          "fontFamily": "Inter-Bold",
-          "fontSize": 14.05,
-          "lineHeight": 22,
-        }
-      }
-    >
-      name
-    </Text>
-    <Text
-      style={
-        Object {
-          "alignSelf": "flex-start",
-          "color": "#828282",
-          "fontFamily": "Poppins-Regular",
-          "fontSize": 14,
-          "lineHeight": 22,
-          "marginLeft": 20,
-        }
-      }
-    >
-      time
-    </Text>
-  </View>,
-  <View
-    style={
-      Array [
-        Object {
-          "alignItems": "center",
-          "display": "flex",
-          "flexDirection": "row",
-        },
-        Object {
-          "marginBottom": 0,
-        },
-      ]
-    }
-  >
-    <Text
-      ellipsizeMode="tail"
-      numberOfLines={1}
-      style={
-        Object {
-          "alignSelf": "center",
-          "flex": 1,
-          "fontFamily": "Inter-Regular",
-          "fontSize": 14.05,
-          "lineHeight": 22,
-          "marginRight": 4,
-        }
-      }
-    >
-      message
-    </Text>
-  </View>,
-]
-`;
-
-exports[`TESTING ChatItemTargetText RENDER ANON_PM with isMe should match snapshot 1`] = `
-Array [
-  <View
-    style={
-      Object {
-        "alignItems": "center",
-        "display": "flex",
-        "flexDirection": "row",
-      }
-    }
-  >
-    <Text
-      ellipsizeMode="tail"
-      numberOfLines={1}
-      style={
-        Object {
-          "alignSelf": "center",
-          "flex": 1,
-          "fontFamily": "Inter-Bold",
-          "fontSize": 14.05,
-          "lineHeight": 22,
-        }
-      }
-    >
-      name
-    </Text>
-    <Text
-      style={
-        Object {
-          "alignSelf": "flex-start",
-          "color": "#828282",
-          "fontFamily": "Poppins-Regular",
-          "fontSize": 14,
-          "lineHeight": 22,
-          "marginLeft": 20,
-        }
-      }
-    >
-      time
-    </Text>
-  </View>,
-  <View
-    style={
-      Array [
-        Object {
-          "alignItems": "center",
-          "display": "flex",
-          "flexDirection": "row",
-        },
-        Object {
-          "marginBottom": 0,
-        },
-      ]
-    }
-  >
-    <Text
-      ellipsizeMode="tail"
-      numberOfLines={1}
-      style={
-        Object {
-          "alignSelf": "center",
-          "flex": 1,
-          "fontFamily": "Inter-Regular",
-          "fontSize": 14.05,
-          "lineHeight": 22,
-          "marginRight": 4,
-        }
-      }
-    >
-      You: message
-    </Text>
-  </View>,
-]
-`;
-
-exports[`TESTING ChatItemTargetText RENDER ANON_PM with unreadcount should match snapshot 1`] = `
-Array [
-  <View
-    style={
-      Object {
-        "alignItems": "center",
-        "display": "flex",
-        "flexDirection": "row",
-      }
-    }
-  >
-    <Text
-      ellipsizeMode="tail"
-      numberOfLines={1}
-      style={
-        Object {
-          "alignSelf": "center",
-          "flex": 1,
-          "fontFamily": "Inter-Bold",
-          "fontSize": 14.05,
-          "lineHeight": 22,
-        }
-      }
-    >
-      name
-    </Text>
-    <Text
-      style={
-        Object {
-          "alignSelf": "flex-start",
-          "color": "#828282",
-          "fontFamily": "Poppins-Regular",
-          "fontSize": 14,
-          "lineHeight": 22,
-          "marginLeft": 20,
-        }
-      }
-    >
-      time
-    </Text>
-  </View>,
-  <View
-    style={
-      Array [
-        Object {
-          "alignItems": "center",
-          "display": "flex",
-          "flexDirection": "row",
-        },
-        Object {
-          "marginBottom": 0,
-        },
-      ]
-    }
-  >
-    <Text
-      ellipsizeMode="tail"
-      numberOfLines={1}
-      style={
-        Object {
-          "alignSelf": "center",
-          "flex": 1,
-          "fontFamily": "Inter-Regular",
-          "fontSize": 14.05,
-          "lineHeight": 22,
-          "marginRight": 4,
-        }
-      }
-    >
-      message
-    </Text>
     <View
       style={
         Object {
-          "alignItems": "center",
-          "backgroundColor": "#00ADB5",
-          "borderRadius": 10,
-          "height": 20,
-          "justifyContent": "center",
-          "textAlign": "center",
-          "width": 20,
+          "flexDirection": "row",
         }
       }
     >
       <Text
+        ellipsizeMode="tail"
+        numberOfLines={1}
         style={
           Object {
-            "color": "#ffffff",
-            "fontFamily": "Inter-Regular",
-            "fontSize": 12,
-            "lineHeight": 14.52,
+            "flex": 1,
+            "fontFamily": "Inter-Bold",
+            "fontSize": 11.200000000000001,
+            "lineHeight": 22,
+            "paddingBottom": 2,
           }
         }
       >
-        1
+        name
+      </Text>
+      <Text
+        style={
+          Object {
+            "alignSelf": "flex-start",
+            "color": "#828282",
+            "fontFamily": "Poppins-Regular",
+            "fontSize": 11.200000000000001,
+            "lineHeight": 22,
+            "marginLeft": 20,
+          }
+        }
+      >
+        time
       </Text>
     </View>
-  </View>,
-]
+    <View
+      style={
+        Object {
+          "flexDirection": "row",
+          "marginBottom": 0,
+        }
+      }
+    >
+      <Text
+        ellipsizeMode="tail"
+        numberOfLines={1}
+        style={
+          Object {
+            "alignSelf": "center",
+            "flex": 1,
+            "fontFamily": "Inter-Regular",
+            "fontSize": 11.200000000000001,
+            "lineHeight": 22,
+            "marginRight": 4,
+          }
+        }
+      >
+        message
+      </Text>
+    </View>
+  </View>
+</View>
+`;
+
+exports[`TESTING ChatItemTargetText RENDER ANON_PM with isMe should match snapshot 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "display": "flex",
+      "flexDirection": "row",
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "flex": 1,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "flexDirection": "row",
+        }
+      }
+    >
+      <Text
+        ellipsizeMode="tail"
+        numberOfLines={1}
+        style={
+          Object {
+            "flex": 1,
+            "fontFamily": "Inter-Bold",
+            "fontSize": 11.200000000000001,
+            "lineHeight": 22,
+            "paddingBottom": 2,
+          }
+        }
+      >
+        name
+      </Text>
+      <Text
+        style={
+          Object {
+            "alignSelf": "flex-start",
+            "color": "#828282",
+            "fontFamily": "Poppins-Regular",
+            "fontSize": 11.200000000000001,
+            "lineHeight": 22,
+            "marginLeft": 20,
+          }
+        }
+      >
+        time
+      </Text>
+    </View>
+    <View
+      style={
+        Object {
+          "flexDirection": "row",
+          "marginBottom": 0,
+        }
+      }
+    >
+      <Text
+        ellipsizeMode="tail"
+        numberOfLines={1}
+        style={
+          Object {
+            "alignSelf": "center",
+            "flex": 1,
+            "fontFamily": "Inter-Regular",
+            "fontSize": 11.200000000000001,
+            "lineHeight": 22,
+            "marginRight": 4,
+          }
+        }
+      >
+        You: message
+      </Text>
+    </View>
+  </View>
+</View>
+`;
+
+exports[`TESTING ChatItemTargetText RENDER ANON_PM with unreadcount should match snapshot 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "display": "flex",
+      "flexDirection": "row",
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "flex": 1,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "flexDirection": "row",
+        }
+      }
+    >
+      <Text
+        ellipsizeMode="tail"
+        numberOfLines={1}
+        style={
+          Object {
+            "flex": 1,
+            "fontFamily": "Inter-Bold",
+            "fontSize": 11.200000000000001,
+            "lineHeight": 22,
+            "paddingBottom": 2,
+          }
+        }
+      >
+        name
+      </Text>
+      <Text
+        style={
+          Object {
+            "alignSelf": "flex-start",
+            "color": "#828282",
+            "fontFamily": "Poppins-Regular",
+            "fontSize": 11.200000000000001,
+            "lineHeight": 22,
+            "marginLeft": 20,
+          }
+        }
+      >
+        time
+      </Text>
+    </View>
+    <View
+      style={
+        Object {
+          "flexDirection": "row",
+          "marginBottom": 0,
+        }
+      }
+    >
+      <Text
+        ellipsizeMode="tail"
+        numberOfLines={1}
+        style={
+          Object {
+            "alignSelf": "center",
+            "flex": 1,
+            "fontFamily": "Inter-Regular",
+            "fontSize": 11.200000000000001,
+            "lineHeight": 22,
+            "marginRight": 4,
+          }
+        }
+      >
+        message
+      </Text>
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "backgroundColor": "#2C67BC",
+            "borderRadius": 10,
+            "height": 20,
+            "justifyContent": "center",
+            "textAlign": "center",
+            "width": 20,
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "color": "#ffffff",
+              "fontFamily": "Inter-Regular",
+              "fontSize": 8,
+              "lineHeight": 14.52,
+            }
+          }
+        >
+          1
+        </Text>
+      </View>
+    </View>
+  </View>
+</View>
 `;
 
 exports[`TESTING ChatItemTargetText RENDER MY_ANON_POST with no messages should match snapshot 1`] = `
@@ -276,11 +300,11 @@ Array [
         style={
           Array [
             Object {
-              "alignSelf": "center",
               "flex": 1,
               "fontFamily": "Inter-Bold",
-              "fontSize": 14.05,
+              "fontSize": 11.200000000000001,
               "lineHeight": 22,
+              "paddingBottom": 2,
             },
             Object {
               "alignSelf": "flex-start",
@@ -305,7 +329,7 @@ Array [
             "alignSelf": "flex-start",
             "color": "#828282",
             "fontFamily": "Poppins-Regular",
-            "fontSize": 14,
+            "fontSize": 11.200000000000001,
             "lineHeight": 22,
             "marginLeft": 20,
           }
@@ -356,11 +380,11 @@ Array [
         style={
           Array [
             Object {
-              "alignSelf": "center",
               "flex": 1,
               "fontFamily": "Inter-Bold",
-              "fontSize": 14.05,
+              "fontSize": 11.200000000000001,
               "lineHeight": 22,
+              "paddingBottom": 2,
             },
             Object {
               "alignSelf": "flex-start",
@@ -386,7 +410,7 @@ Array [
             "alignSelf": "flex-start",
             "color": "#828282",
             "fontFamily": "Poppins-Regular",
-            "fontSize": 14,
+            "fontSize": 11.200000000000001,
             "lineHeight": 22,
             "marginLeft": 20,
           }
@@ -437,11 +461,11 @@ Array [
         style={
           Array [
             Object {
-              "alignSelf": "center",
               "flex": 1,
               "fontFamily": "Inter-Bold",
-              "fontSize": 14.05,
+              "fontSize": 11.200000000000001,
               "lineHeight": 22,
+              "paddingBottom": 2,
             },
             Object {
               "alignSelf": "flex-start",
@@ -467,7 +491,7 @@ Array [
             "alignSelf": "flex-start",
             "color": "#828282",
             "fontFamily": "Poppins-Regular",
-            "fontSize": 14,
+            "fontSize": 11.200000000000001,
             "lineHeight": 22,
             "marginLeft": 20,
           }
@@ -518,11 +542,11 @@ Array [
         style={
           Array [
             Object {
-              "alignSelf": "center",
               "flex": 1,
               "fontFamily": "Inter-Bold",
-              "fontSize": 14.05,
+              "fontSize": 11.200000000000001,
               "lineHeight": 22,
+              "paddingBottom": 2,
             },
             Object {
               "alignSelf": "flex-start",
@@ -548,7 +572,7 @@ Array [
             "alignSelf": "flex-start",
             "color": "#828282",
             "fontFamily": "Poppins-Regular",
-            "fontSize": 14,
+            "fontSize": 11.200000000000001,
             "lineHeight": 22,
             "marginLeft": 20,
           }
@@ -599,11 +623,11 @@ Array [
         style={
           Array [
             Object {
-              "alignSelf": "center",
               "flex": 1,
               "fontFamily": "Inter-Bold",
-              "fontSize": 14.05,
+              "fontSize": 11.200000000000001,
               "lineHeight": 22,
+              "paddingBottom": 2,
             },
             Object {
               "alignSelf": "flex-start",
@@ -628,7 +652,7 @@ Array [
             "alignSelf": "flex-start",
             "color": "#828282",
             "fontFamily": "Poppins-Regular",
-            "fontSize": 14,
+            "fontSize": 11.200000000000001,
             "lineHeight": 22,
             "marginLeft": 20,
           }
@@ -679,11 +703,11 @@ Array [
         style={
           Array [
             Object {
-              "alignSelf": "center",
               "flex": 1,
               "fontFamily": "Inter-Bold",
-              "fontSize": 14.05,
+              "fontSize": 11.200000000000001,
               "lineHeight": 22,
+              "paddingBottom": 2,
             },
             Object {
               "alignSelf": "flex-start",
@@ -708,7 +732,7 @@ Array [
             "alignSelf": "flex-start",
             "color": "#828282",
             "fontFamily": "Poppins-Regular",
-            "fontSize": 14,
+            "fontSize": 11.200000000000001,
             "lineHeight": 22,
             "marginLeft": 20,
           }
@@ -735,7 +759,7 @@ Array [
       style={
         Object {
           "alignItems": "center",
-          "backgroundColor": "#00ADB5",
+          "backgroundColor": "#2C67BC",
           "borderRadius": 10,
           "height": 20,
           "justifyContent": "center",
@@ -749,7 +773,7 @@ Array [
           Object {
             "color": "#ffffff",
             "fontFamily": "Inter-Regular",
-            "fontSize": 12,
+            "fontSize": 8,
             "lineHeight": 14.52,
           }
         }
