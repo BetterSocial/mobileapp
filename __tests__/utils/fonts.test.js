@@ -19,7 +19,7 @@ describe('Util font should correct', () => {
     })
 
    it('normalizeFontSize should run correctly', () => {
-        expect(normalizeFontSize(14)).toEqual(5.447470817120623)
+        expect(normalizeFontSize(14)).toEqual(12.600000000000001)
 
    })
 

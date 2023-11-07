@@ -67,7 +67,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
               Object {
                 "color": "#1E1F20",
                 "fontFamily": "Inter-SemiBold",
-                "fontSize": 5.447470817120623,
+                "fontSize": 12.600000000000001,
                 "fontWeight": "bold",
                 "padding": 10,
                 "textAlign": "center",
@@ -102,7 +102,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
                 Object {
                   "color": "#1E1F20",
                   "fontFamily": "Inter-SemiBold",
-                  "fontSize": 5.447470817120623,
+                  "fontSize": 12.600000000000001,
                   "fontWeight": "bold",
                   "padding": 10,
                   "textAlign": "center",
@@ -200,8 +200,8 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
                   "color": "#FFFFFF",
                   "flex": 1,
                   "fontFamily": "Inter-Regular",
-                  "fontSize": 5.447470817120623,
-                  "lineHeight": 9.33852140077821,
+                  "fontSize": 12.600000000000001,
+                  "lineHeight": 21.6,
                 }
               }
               testID="onInputChange"
@@ -216,8 +216,8 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
             Object {
               "color": "#FFFFFF",
               "fontFamily": "Inter-Regular",
-              "fontSize": 4.669260700389105,
-              "lineHeight": 7.003891050583658,
+              "fontSize": 10.8,
+              "lineHeight": 16.2,
             }
           }
         >
@@ -387,8 +387,8 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
                           Object {
                             "color": "#000",
                             "fontFamily": "Inter-Medium",
-                            "fontSize": 5.447470817120623,
-                            "lineHeight": 6.591439688715954,
+                            "fontSize": 12.600000000000001,
+                            "lineHeight": 15.246000000000002,
                           }
                         }
                       >

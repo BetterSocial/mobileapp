@@ -1,4 +1,5 @@
 import {Dimensions, PixelRatio, Platform} from 'react-native';
+import dimen from '../dimen';
 
 export const fonts = {
   inter: {
@@ -33,12 +34,8 @@ export const normalize = (size) => {
   return normalizedSize;
 };
 
-export const normalizeFontSize = (fontSize) => {
-  const referenceHeight = 771;
-  const currentScreenHeight = Dimensions.get('screen').height;
-  const normalizedFontSize = (currentScreenHeight / referenceHeight) * fontSize;
-  return normalizedFontSize;
-};
+export const normalizeFontSize = (size, factor = 0.5) =>
+  size + (dimen.normalizeDimen(size) - size) * factor;
 
 export const normalizeFontSizeByWidth = (fontSize) => {
   const referenceWidth = 375;
