@@ -12,6 +12,7 @@ import {
 import {debounce} from 'lodash';
 import {useNavigation} from '@react-navigation/core';
 
+import PropTypes from 'prop-types';
 import DiscoveryAction from '../../../context/actions/discoveryAction';
 import IconClear from '../../../assets/icon/IconClear';
 import MemoIcArrowBackWhite from '../../../assets/arrow/Ic_arrow_back_white';
@@ -29,11 +30,11 @@ const DiscoverySearch = ({
   setDiscoveryLoadingData = () => {},
   searchText = '',
   setSearchText = () => {},
-  isFocus = true,
   placeholderText = StringConstant.discoverySearchBarPlaceholder,
   setIsFocus = () => {},
   setIsFirstTimeOpen = () => {},
   fetchDiscoveryData = () => {},
+  fetchData,
   onCancelToken = () => {},
   hideBackIcon = false
 }) => {
@@ -41,8 +42,6 @@ const DiscoverySearch = ({
   const [, discoveryDispatch] = React.useContext(Context).discovery;
   const discoverySearchBarRef = React.useRef(null);
 
-  const [isSearchIconShown, setIsSearchIconShown] = React.useState(false);
-  const [isTextAvailable, setIsTextAvailable] = React.useState(false);
   const [lastSearch, setLastSearch] = React.useState('');
 
   const debounced = React.useCallback(
@@ -87,16 +86,12 @@ const DiscoverySearch = ({
 
   const handleChangeText = (text) => {
     setSearchText(text);
-    setIsTextAvailable(text.length > 0);
     debounceChangeText(text);
   };
 
   const handleOnClearText = () => {
     setSearchText('');
     setLastSearch('');
-    // setIsTextAvailable(false)
-    // debounced.cancel()
-    // discoverySearchBarRef.current.focus()
   };
 
   const handleOnSubmitEditing = (event) => {
@@ -109,7 +104,11 @@ const DiscoverySearch = ({
     setLastSearch(text);
     setAllLoading(true);
     setIsFirstTimeOpen(false);
-    fetchDiscoveryData(text);
+    if (fetchData !== undefined) {
+      fetchData(true, text);
+    } else {
+      fetchDiscoveryData(text);
+    }
 
     const result = await AsyncStorage.getItem(RECENT_SEARCH_TERMS);
 
@@ -131,17 +130,11 @@ const DiscoverySearch = ({
   };
 
   React.useEffect(() => {
-    setIsSearchIconShown(!isFocus && !isTextAvailable);
-  }, [isTextAvailable, isFocus]);
-
-  React.useEffect(() => {
     debounceChangeText(searchText);
-    setIsTextAvailable(searchText.length > 0);
   }, [searchText]);
 
   React.useEffect(() => {
     const unsubscribe = () => {
-      setIsTextAvailable(false);
       setSearchText('');
       DiscoveryAction.setDiscoveryData(
         {
@@ -161,7 +154,7 @@ const DiscoverySearch = ({
   }, []);
 
   return (
-    <View style={styles.animatedViewContainer}>
+    <View style={styles.animatedViewContainer(hideBackIcon)}>
       <View style={styles.arrowContainer}>
         {!hideBackIcon && (
           <TouchableNativeFeedback
@@ -180,11 +173,9 @@ const DiscoverySearch = ({
       </View>
       <View style={styles.searchContainer}>
         <View style={styles.wrapperSearch}>
-          {isSearchIconShown && (
-            <View style={styles.wrapperIcon}>
-              <MemoIcSearch width={16.67} height={16.67} />
-            </View>
-          )}
+          <View style={styles.wrapperIcon}>
+            <MemoIcSearch width={16.67} height={16.67} />
+          </View>
           <TextInput
             ref={discoverySearchBarRef}
             testID={TestIdConstant.discoveryScreenSearchBar}
@@ -289,7 +280,7 @@ const styles = StyleSheet.create({
     marginRight: 11,
     ...FONTS.h3
   },
-  animatedViewContainer: {
+  animatedViewContainer: (hideBackIcon) => ({
     flexDirection: 'row',
     backgroundColor: 'white',
     marginTop: 0,
@@ -297,9 +288,22 @@ const styles = StyleSheet.create({
     height: dimen.size.DISCOVERY_HEADER_HEIGHT,
     paddingTop: 7,
     paddingBottom: 7,
-    borderBottomWidth: 1,
+    borderBottomWidth: hideBackIcon ? 0 : 1,
     borderBottomColor: COLORS.alto
-  }
+  })
 });
+
+DiscoverySearch.propTypes = {
+  setDiscoveryLoadingData: PropTypes.func,
+  searchText: PropTypes.string,
+  setSearchText: PropTypes.func,
+  placeholderText: PropTypes.string,
+  setIsFocus: PropTypes.func,
+  setIsFirstTimeOpen: PropTypes.func,
+  fetchDiscoveryData: PropTypes.func,
+  fetchData: PropTypes.func,
+  onCancelToken: PropTypes.func,
+  hideBackIcon: PropTypes.bool
+};
 
 export default DiscoverySearch;

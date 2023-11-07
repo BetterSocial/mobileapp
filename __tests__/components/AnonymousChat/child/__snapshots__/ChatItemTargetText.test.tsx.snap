@@ -1,0 +1,172 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TESTING ChatItemTargetText RENDER continuous should match snapshot 1`] = `
+<View
+  style={
+    Object {
+      "display": "flex",
+      "flexDirection": "row",
+      "marginBottom": 4,
+      "marginTop": 4,
+      "maxWidth": 300,
+      "paddingLeft": 10,
+      "paddingRight": 60,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "borderRadius": 12,
+        "height": 24,
+        "marginRight": 8,
+        "width": 24,
+      }
+    }
+    testID="chat-item-continuous-avatar"
+  />
+  <View
+    style={
+      Object {
+        "backgroundColor": "#F5F5F5",
+        "borderRadius": 8,
+        "borderTopStartRadius": 0,
+        "flex": 1,
+        "paddingBottom": 8,
+        "paddingLeft": 8,
+        "paddingRight": 8,
+        "paddingTop": 4,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "fontFamily": "Inter-Regular",
+          "fontSize": 16,
+          "lineHeight": 19.36,
+        }
+      }
+      testID="chat-item-message"
+    >
+      message
+    </Text>
+  </View>
+</View>
+`;
+
+exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 1`] = `
+<View
+  style={
+    Object {
+      "display": "flex",
+      "flexDirection": "row",
+      "marginBottom": 4,
+      "marginTop": 4,
+      "maxWidth": 300,
+      "paddingLeft": 10,
+      "paddingRight": 60,
+    }
+  }
+>
+  <View
+    style={
+      Array [
+        Object {
+          "overflow": "hidden",
+        },
+        Object {
+          "borderRadius": 12,
+          "height": 24,
+          "marginRight": 8,
+          "width": 24,
+        },
+      ]
+    }
+  >
+    <FastImageView
+      defaultSource={null}
+      resizeMode="cover"
+      source={
+        Object {
+          "uri": "https://www.google.com",
+        }
+      }
+      testID="chat-item-default-avatar"
+    />
+  </View>
+  <View
+    style={
+      Object {
+        "backgroundColor": "#F5F5F5",
+        "borderRadius": 8,
+        "borderTopStartRadius": 0,
+        "flex": 1,
+        "paddingBottom": 8,
+        "paddingLeft": 8,
+        "paddingRight": 8,
+        "paddingTop": 4,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "display": "flex",
+          "flexDirection": "row",
+        }
+      }
+      testID="chat-item-user-info"
+    >
+      <Text
+        style={
+          Object {
+            "fontFamily": "Inter-SemiBold",
+            "fontSize": 12,
+            "lineHeight": 19.36,
+          }
+        }
+      >
+        username
+      </Text>
+      <View
+        style={
+          Object {
+            "alignSelf": "center",
+            "backgroundColor": "#000000",
+            "borderRadius": 2,
+            "height": 3,
+            "marginLeft": 5,
+            "marginRight": 5,
+            "width": 3,
+          }
+        }
+      />
+      <Text
+        style={
+          Object {
+            "alignSelf": "center",
+            "fontFamily": "Inter-ExtraLight",
+            "fontSize": 10,
+            "lineHeight": 12.19,
+          }
+        }
+      >
+        time
+      </Text>
+    </View>
+    <Text
+      style={
+        Object {
+          "fontFamily": "Inter-Regular",
+          "fontSize": 16,
+          "lineHeight": 19.36,
+        }
+      }
+      testID="chat-item-message"
+    >
+      message
+    </Text>
+  </View>
+</View>
+`;

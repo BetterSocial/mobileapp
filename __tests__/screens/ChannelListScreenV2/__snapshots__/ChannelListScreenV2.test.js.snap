@@ -142,7 +142,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
           "display": "flex",
           "flexDirection": "row",
           "justifyContent": "center",
-          "width": undefined,
+          "width": 300,
         }
       }
     >
@@ -168,7 +168,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
           style={
             Object {
               "display": "flex",
-              "maxWidth": NaN,
+              "maxWidth": 150,
             }
           }
         >
@@ -178,7 +178,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
                 "display": "flex",
                 "flexDirection": "row",
                 "justifyContent": "center",
-                "maxWidth": NaN,
+                "maxWidth": 110,
                 "paddingLeft": 20,
                 "paddingRight": 20,
               }
@@ -243,7 +243,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
           style={
             Object {
               "display": "flex",
-              "maxWidth": NaN,
+              "maxWidth": 150,
             }
           }
         >
@@ -253,7 +253,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
                 "display": "flex",
                 "flexDirection": "row",
                 "justifyContent": "center",
-                "maxWidth": NaN,
+                "maxWidth": 110,
                 "paddingLeft": 20,
                 "paddingRight": 20,
               }
