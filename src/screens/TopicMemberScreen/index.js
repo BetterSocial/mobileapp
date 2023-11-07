@@ -194,7 +194,7 @@ const TopicMemberScreen = () => {
         setHeaderHide(true);
       }
     },
-    [coverPath]
+    [coverPath, animatedHeight]
   );
 
   const onTokenCancel = () => {

@@ -33,7 +33,7 @@ const App = () => {
   });
   const navigationRef = React.useRef();
   const routeNameRef = React.useRef();
-  const [currentScreen, setCurrentScreen] = React.useState('')
+  const [currentScreen, setCurrentScreen] = React.useState('InitialScreenName');
 
   React.useEffect(() => {
     const init = async () => {
