@@ -298,7 +298,6 @@ const useCoreChatSystemHook = () => {
 
     try {
       signedChannel = await SignedMessageRepo.getAllSignedChannels();
-      console.log('signedChannel', signedChannel);
     } catch (e) {
       console.log('error on getting signedChannel');
       console.log(e);
