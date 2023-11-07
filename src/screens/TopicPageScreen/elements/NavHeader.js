@@ -1,8 +1,9 @@
 import * as React from 'react';
-import {Animated, ImageBackground, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Animated, Platform, StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 import PropTypes from 'prop-types';
 
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import MemoIcArrowBack from '../../../assets/arrow/Ic_arrow_back';
 import MemoIcArrowBackCircle from '../../../assets/arrow/Ic_arrow_back_circle';
 import TopicDefaultIcon from '../../../assets/topic.png';
@@ -13,6 +14,7 @@ import ButtonFollow from './ButtonFollow';
 import TopicDomainHeader from './TopicDomainHeader';
 import ButtonFollowing from './ButtonFollowing';
 import useChatClientHook from '../../../utils/getstream/useChatClientHook';
+import {colors} from '../../../utils/colors';
 
 const NavHeader = (props) => {
   const {
@@ -31,6 +33,8 @@ const NavHeader = (props) => {
   const navigation = useNavigation();
   const coverPath = topicDetail?.cover_path || null;
   const [domainHeight, setDomainHeight] = React.useState(0);
+  const {top} = useSafeAreaInsets();
+  const topPosition = Platform.OS === 'ios' ? top : 0;
 
   const {followTopic} = useChatClientHook();
 
@@ -80,17 +84,22 @@ const NavHeader = (props) => {
 
   const heightWithCoverImage = () => {
     if (coverPath) {
-      return {height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER};
+      return {height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER + topPosition};
     }
     return null;
   };
 
   return (
-    <Animated.View style={{height: animatedHeight}}>
-      <ImageBackground
+    <Animated.View style={{height: animatedHeight, backgroundColor: colors.lightgrey}}>
+      <StatusBar barStyle="dark-content" />
+      <View
         source={{uri: coverPath}}
-        style={[styles.Nav(isHeaderHide), heightWithCoverImage()]}
+        style={[styles.Nav(isHeaderHide, topPosition), heightWithCoverImage()]}
         imageStyle={{opacity: isHeaderHide ? 0 : 1}}>
+        <Animated.Image
+          source={{uri: coverPath}}
+          style={[styles.headerImage(opacityHeaderAnimation), heightWithCoverImage()]}
+        />
         <TouchableOpacity onPress={() => backScreen()} style={styles.backbutton}>
           {coverPath && !isHeaderHide ? (
             <MemoIcArrowBackCircle width={normalize(32)} height={normalize(32)} />
@@ -107,7 +116,7 @@ const NavHeader = (props) => {
             </TouchableOpacity>
           )}
         </View>
-      </ImageBackground>
+      </View>
       <Animated.View style={styles.Header}>
         {!isHeaderHide ? (
           <>
@@ -151,27 +160,32 @@ NavHeader.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  Nav: (isHeaderHide, hasCoverImage) => ({
+  Nav: (isHeaderHide, top) => ({
     flexDirection: 'row',
-    height: isHeaderHide
-      ? dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2
-      : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT,
+    height:
+      (isHeaderHide
+        ? dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2
+        : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT) + top,
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     backgroundColor: 'white',
-    paddingVertical: dimen.normalizeDimen(12),
-    paddingHorizontal: dimen.normalizeDimen(20),
+    paddingTop: dimen.normalizeDimen(12) + top,
     zIndex: 10
   }),
   Header: {
     width: '100%',
     flexDirection: 'row',
     height: dimen.size.TOPIC_FEED_HEADER_HEIGHT,
-    paddingHorizontal: normalize(20),
+    paddingLeft: normalize(20),
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: 'white'
   },
+  headerImage: (opacityHeaderAnimation) => ({
+    width: '100%',
+    position: 'absolute',
+    opacity: opacityHeaderAnimation
+  }),
   image: (opacityHeaderAnimation) => ({
     width: normalize(48),
     height: normalize(48),
@@ -182,7 +196,8 @@ const styles = StyleSheet.create({
   }),
   backbutton: {
     paddingRight: 16,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    paddingLeft: dimen.normalizeDimen(20)
   },
   domain: (isHeaderHide) => ({
     flex: 1,
@@ -191,14 +206,15 @@ const styles = StyleSheet.create({
     marginRight: normalize(14),
     alignSelf: 'center',
     position: 'absolute',
-    left: normalize(isHeaderHide ? 32 : 48) + normalize(20) + normalize(8),
+    left: normalize(isHeaderHide ? 32 : 48) + normalize(28),
     zIndex: 99,
     backgroundColor: 'transparent'
   }),
   containerAction: {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingRight: dimen.normalizeDimen(20)
   },
   shareIconStyle: {},
   searchContainerStyle: {

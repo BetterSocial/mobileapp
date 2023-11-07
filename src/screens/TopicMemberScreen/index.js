@@ -4,13 +4,13 @@ import {
   InteractionManager,
   Keyboard,
   ScrollView,
-  StatusBar,
-  StyleSheet
+  StyleSheet,
+  Platform
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import axios from 'axios';
 
-import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {SafeAreaProvider, useSafeAreaInsets} from 'react-native-safe-area-context';
 import ShareUtils from '../../utils/share';
 import dimen from '../../utils/dimen';
 import {getAllMemberTopic} from '../../service/topics';
@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
 const TopicMemberScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
+  const {top} = useSafeAreaInsets();
   const topicName = route?.params?.topicName;
   const topicDetail = route?.params?.topicDetail;
   const getTopicDetail = route?.params?.getTopicDetail;
@@ -62,12 +63,15 @@ const TopicMemberScreen = () => {
   const opacityAnimationHeader = React.useRef(new Animated.Value(1)).current;
 
   const coverPath = topicDetail?.cover_path || null;
+  const topPosition = Platform.OS === 'ios' ? top : 0;
 
   const animatedHeight = React.useRef(
     new Animated.Value(
       (coverPath
         ? dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
-        : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT) + dimen.size.TOPIC_FEED_HEADER_HEIGHT
+        : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT) +
+        dimen.size.TOPIC_FEED_HEADER_HEIGHT +
+        topPosition
     )
   ).current;
 
@@ -136,7 +140,9 @@ const TopicMemberScreen = () => {
         toValue:
           (coverPath
             ? dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
-            : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT) + dimen.size.TOPIC_FEED_HEADER_HEIGHT,
+            : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT) +
+          dimen.size.TOPIC_FEED_HEADER_HEIGHT +
+          topPosition,
         duration: 100,
         useNativeDriver: false
       }).start();
@@ -175,7 +181,7 @@ const TopicMemberScreen = () => {
       } else {
         interactionManagerAnimatedRef.current = InteractionManager.runAfterInteractions(() => {
           Animated.timing(animatedHeight, {
-            toValue: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2,
+            toValue: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2 + topPosition,
             duration: 100,
             useNativeDriver: false
           }).start();
@@ -199,7 +205,6 @@ const TopicMemberScreen = () => {
   if (isInitialLoading) return null;
   return (
     <SafeAreaProvider forceInset={{top: 'always'}} style={styles.parentContainer}>
-      <StatusBar barStyle="dark-content" translucent={false} />
       <NavHeader
         animatedHeight={animatedHeight}
         onShareCommunity={onCommunityShare}
