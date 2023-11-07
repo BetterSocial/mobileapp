@@ -1,7 +1,7 @@
 import * as React from 'react';
 import _ from 'lodash';
 import SimpleToast from 'react-native-simple-toast';
-import {Animated, InteractionManager, Platform, StatusBar, StyleSheet} from 'react-native';
+import {Animated, InteractionManager, Platform, StyleSheet} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 import {SafeAreaProvider, useSafeAreaInsets} from 'react-native-safe-area-context';
