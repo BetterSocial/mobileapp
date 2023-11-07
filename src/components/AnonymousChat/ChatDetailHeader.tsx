@@ -8,8 +8,8 @@ import ChannelImage from '../ChatList/elements/ChannelImage';
 import CustomPressable from '../CustomPressable';
 import IcArrowBackWhite from '../../assets/arrow/Ic_arrow_back_white';
 import dimen from '../../utils/dimen';
-import {CHANNEL_GROUP, GROUP_INFO, SIGNED} from '../../hooks/core/constant';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {SIGNED} from '../../hooks/core/constant';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 

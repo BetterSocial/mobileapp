@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-use-before-define
 import * as React from 'react';
 import {Dimensions, StyleSheet, View} from 'react-native';
 
@@ -6,18 +7,7 @@ import {colors} from '../../utils/colors';
 
 const {width} = Dimensions.get('screen');
 
-export type HorizontalTabItemProps = {
-  key: number;
-  tabElement: React.ReactNode;
-};
-
-export type HorizontalTabProps = {
-  selectedTab: number;
-  onSelectedTabChange: (index: number) => void;
-  tabs: HorizontalTabItemProps[];
-};
-
-const HorizontalTab = ({selectedTab, onSelectedTabChange, tabs = []}: HorizontalTabProps) => {
+const HorizontalTab = ({selectedTab, onSelectedTabChange, tabs}) => {
   const styles = StyleSheet.create({
     tabs: {
       width,

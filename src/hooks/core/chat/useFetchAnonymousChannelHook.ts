@@ -1,4 +1,3 @@
-import * as React from 'react';
 import {v4 as uuid} from 'uuid';
 
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
@@ -7,11 +6,12 @@ import ChannelListMemberSchema from '../../../database/schema/ChannelListMemberS
 import ChatSchema from '../../../database/schema/ChatSchema';
 import UserSchema from '../../../database/schema/UserSchema';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
-import {ChannelData} from '../../../../types/repo/AnonymousMessageRepo/ChannelData';
+import {ChannelData} from '../../../../types/repo/ChannelData';
 import {getAnonymousChatName} from '../../../utils/string/StringUtils';
 
 const useFetchAnonymousChannelHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook();
+
   const __helperAnonymousChannelPromiseBuilder = async (channel) => {
     if (channel?.members?.length === 0) return Promise.reject(Error('no members'));
 
@@ -52,7 +52,7 @@ const useFetchAnonymousChannelHook = () => {
       });
 
       channel?.messages?.forEach(async (message) => {
-        const chat = ChatSchema.fromGetAllAnonymousChannelAPI(channel?.id, message);
+        const chat = ChatSchema.fromGetAllChannelAPI(channel?.id, message);
         await chat.save(localDb);
       });
     } catch (e) {

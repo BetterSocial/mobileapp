@@ -1,9 +1,9 @@
+import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import moment from 'moment';
 import {atom, useRecoilState} from 'recoil';
 import {useNavigation} from '@react-navigation/native';
 
-import React from 'react';
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
 import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
 import UseChatUtilsHook from '../../../../types/hooks/screens/useChatUtilsHook.types';
@@ -11,9 +11,9 @@ import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import {ANON_PM} from '../constant';
 import {ChannelList} from '../../../../types/database/schema/ChannelList.types';
 import {ChannelTypeEnum} from '../../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
+import {Context} from '../../../context';
 import {PostNotificationChannelList} from '../../../../types/database/schema/PostNotificationChannelList.types';
 import {convertTopicNameToTopicPageScreenParam} from '../../../utils/string/StringUtils';
-import {Context} from '../../../context';
 
 const chatAtom = atom({
   key: 'chatAtom',

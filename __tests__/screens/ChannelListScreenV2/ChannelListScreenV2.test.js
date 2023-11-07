@@ -52,7 +52,7 @@ describe('ChannelListScreenV2', () => {
     const {getByTestId} = render(<ChannelListScreenV2 />, {wrapper: Store});
     renderHook(() => useRootChannelListHook(), {wrapper: Store});
     act(() => {
-      fireEvent.press(getByTestId('horizontal-tab-0'));
+      fireEvent.press(getByTestId('signed-channel-list-tab-item'));
     });
 
     expect(mockRefreshSignedChannelList).toHaveBeenCalled();
@@ -62,7 +62,7 @@ describe('ChannelListScreenV2', () => {
     const {getByTestId} = render(<ChannelListScreenV2 />, {wrapper: Store});
     renderHook(() => useRootChannelListHook(), {wrapper: Store});
     act(() => {
-      fireEvent.press(getByTestId('horizontal-tab-1'));
+      fireEvent.press(getByTestId('anonymous-channel-list-tab-item'));
     });
 
     expect(mockRefreshAnonymousChannelList).toHaveBeenCalled();

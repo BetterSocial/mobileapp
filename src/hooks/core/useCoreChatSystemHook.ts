@@ -12,8 +12,6 @@ import UseLocalDatabaseHook from '../../../types/database/localDatabase.types';
 import UserSchema from '../../database/schema/UserSchema';
 import migrationDbStatusAtom from '../../database/atom/migrationDbStatusAtom';
 import useBetterWebsocketHook from './websocket/useBetterWebsocketHook';
-import useFetchAnonymousChannelHook from './chat/useFetchAnonymousChannelHook';
-import useFetchAnonymousPostNotificationHook from './chat/useFetchAnonymousPostNotificationHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import usePostNotificationListenerHook from './getstream/usePostNotificationListenerHook';
 import useProfileHook from './profile/useProfileHook';
@@ -37,8 +35,6 @@ const useCoreChatSystemHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook() as UseLocalDatabaseHook;
   // TODO: Change this into useUserAuthHook
   const {anonProfileId, signedProfileId, profile} = useProfileHook();
-  const {getAllAnonymousChannels} = useFetchAnonymousChannelHook();
-  const {getAllAnonymousPostNotifications} = useFetchAnonymousPostNotificationHook();
   const [migrationStatus] = useRecoilState(migrationDbStatusAtom);
   const initialStartup: any = useRecoilValue(InitialStartupAtom);
 
@@ -241,10 +237,8 @@ const useCoreChatSystemHook = () => {
       try {
         channel.targetName = chatName?.name;
         channel.targetImage = chatName?.image;
-        if (isAnonymous) {
-          channel.firstMessage = channel?.messages?.[0];
-        } else {
-          channel.firstMessage = channel?.messages?.[channel?.messages?.length - 1];
+        channel.firstMessage = channel?.messages?.[channel?.messages?.length - 1];
+        if (!isAnonymous) {
           channel.myUserId = signedProfileId;
         }
         channel.channel = {...channel};
@@ -304,6 +298,7 @@ const useCoreChatSystemHook = () => {
 
     try {
       signedChannel = await SignedMessageRepo.getAllSignedChannels();
+      console.log('signedChannel', signedChannel);
     } catch (e) {
       console.log('error on getting signedChannel');
       console.log(e);
@@ -462,6 +457,32 @@ const useCoreChatSystemHook = () => {
       refresh('channelList');
     } catch (e) {
       console.log('error on saving signedPostNotifications');
+      console.log(e);
+    }
+  };
+
+  const getAllAnonymousPostNotifications = async () => {
+    if (!localDb) return;
+    let anonymousPostNotifications = [];
+
+    try {
+      anonymousPostNotifications = await AnonymousMessageRepo.getAllAnonymousPostNotifications();
+    } catch (e) {
+      console.log('error on getting anonymousPostNotifications');
+      console.log(e);
+    }
+
+    try {
+      const allPromises = [];
+      anonymousPostNotifications.forEach((postNotification) => {
+        const channelList = ChannelList.fromAnonymousPostNotificationAPI(postNotification);
+        allPromises.push(channelList.saveIfLatest(localDb).catch((e) => console.log(e)));
+      });
+
+      await Promise.all(allPromises);
+      refresh('channelList');
+    } catch (e) {
+      console.log('error on saving anonymousPostNotifications');
       console.log(e);
     }
   };

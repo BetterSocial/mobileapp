@@ -1,5 +1,6 @@
 import React from 'react';
-import {render, act, fireEvent} from '@testing-library/react-native';
+import {act, fireEvent, render} from '@testing-library/react-native';
+
 import GroupSetting from '../../../src/screens/GroupSetting';
 import {Context} from '../../../src/context';
 
@@ -174,7 +175,7 @@ describe('GroupSetting should be run correctly', () => {
     expect(toJSON()).toMatchSnapshot();
   });
 
-  it('onPress heaeder should run correctly', () => {
+  it('onPress header android should run correctly', () => {
     const navigation = {
       push: jest.fn(),
       goBack: jest.fn()
@@ -187,7 +188,7 @@ describe('GroupSetting should be run correctly', () => {
 
     const {getByTestId} = render(<GroupSetting navigation={navigation} route={route} />, {wrapper});
     act(() => {
-      fireEvent.press(getByTestId('onPressBtnHeader'));
+      fireEvent.press(getByTestId('onPressAndroid'));
     });
     expect(navigation.goBack).toHaveBeenCalled();
   });

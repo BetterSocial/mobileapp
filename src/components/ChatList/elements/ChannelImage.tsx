@@ -7,13 +7,12 @@ import CommunityIcon from '../../../assets/hashtag.png';
 import GroupIcon from '../../../assets/group-icon.png';
 import {
   ChannelImageBadgeProps,
-  ChannelImageMainProps,
-  ChannelImageProps
+  ChannelImageMainProps
 } from '../../../../types/component/ChatList/ChannelImage.types';
 import {GROUP_INFO} from '../../../hooks/core/constant';
 import {channelImageStyles as styles} from './ChannelImage.style';
 
-const ChannelImage: ChannelImageProps = ({children}) => {
+const ChannelImage = ({children}) => {
   return <View>{children}</View>;
 };
 
@@ -34,7 +33,7 @@ const Big: React.FC<ChannelImageMainProps> = ({type, image, style}) => {
         <FastImage
           source={CommunityIcon}
           resizeMode={FastImage.resizeMode.contain}
-          style={[styles.imageDefaultCommunity, imageStyle]}
+          style={styles.imageDefaultCommunity}
         />
       </View>
     );
@@ -46,7 +45,7 @@ const Big: React.FC<ChannelImageMainProps> = ({type, image, style}) => {
         <FastImage
           source={GroupIcon}
           resizeMode={FastImage.resizeMode.contain}
-          style={[styles.imageDefaultGroup, imageStyle]}
+          style={styles.imageDefaultGroup}
         />
       </View>
     );
@@ -63,7 +62,7 @@ const Big: React.FC<ChannelImageMainProps> = ({type, image, style}) => {
         <FastImage
           source={GroupIcon}
           resizeMode={FastImage.resizeMode.contain}
-          style={[styles.imageDefaultGroupInfo, imageStyle]}
+          style={styles.imageDefaultGroupInfo}
         />
       </View>
     );

@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-use-before-define
 import * as React from 'react';
 import FastImage from 'react-native-fast-image';
 import {Dimensions, StyleSheet, Text, View} from 'react-native';
@@ -6,7 +7,7 @@ import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
 export interface ChannelListTabItemProps {
-  picture: string | null;
+  picture: string;
   name: string;
   unreadCount: number;
   testID: string;

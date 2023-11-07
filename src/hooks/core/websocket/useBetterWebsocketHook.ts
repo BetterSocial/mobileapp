@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Config from 'react-native-config';
+import useWebSocket from 'react-native-use-websocket';
 
 import useSimpleWebsocketHooks from './useSimpleWebsocketHooks';
 import TokenStorage, {ITokenEnum} from '../../../utils/storage/custom/tokenStorage';
@@ -33,6 +34,7 @@ const useBetterWebsocketHook = () => {
       '&X-Stream-Client=stream-chat-javascript-client-browser-4.2.0'
     );
   };
+
   const initAuthorization = async (isAnonymous: boolean) => {
     const token = TokenStorage.get(isAnonymous ? ITokenEnum.anonymousToken : ITokenEnum.token);
     const userId = isAnonymous ? await getAnonymousUserId() : await getUserId();
@@ -55,19 +57,11 @@ const useBetterWebsocketHook = () => {
     });
   };
 
-  const getAnonymousSocketUrl = React.useCallback(() => {
-    return getSocketUrl(true);
-  }, []);
-
   const getSignedSockerUrl = React.useCallback(() => {
     return getSocketUrl(false);
   }, []);
 
-  // const {lastJsonMessage} = useSimpleWebsocketHooks(initAuthorization());
-  const {lastJsonMessage} = useWebSocket(getAnonymousSocketUrl, {
-    onOpen: () => console.log('opened 123'),
-    shouldReconnect: (closeEvent) => true
-  });
+  const {lastJsonMessage} = useSimpleWebsocketHooks(initAuthorization());
 
   const {lastJsonMessage: lastSignedMessage} = useWebSocket(getSignedSockerUrl, {
     onOpen: () => console.log('opened 456'),

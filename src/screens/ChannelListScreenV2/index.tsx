@@ -14,29 +14,13 @@ import useRootChannelListHook from '../../hooks/screen/useRootChannelListHook';
 
 const ChannelListScreenV2 = () => {
   const navigation = useNavigation();
-  // TODO: Change this into useUserAuthHook
   const {profile} = useProfileHook();
-  const {
-    anonymousChannelUnreadCount,
-    signedChannelUnreadCount,
-    refreshAnonymousChannelList,
-    refreshSignedChannelList
-  } = useRootChannelListHook();
 
   const [selectedTab, setSelectedTab] = React.useState(0);
   const {signedChannelUnreadCount, anonymousChannelUnreadCount} = useRootChannelListHook();
 
   const navigateToContactScreen = () => {
     navigation.navigate('ContactScreen');
-  };
-
-  const onTabSelected = (index: number) => {
-    setSelectedTab(index);
-    if (index === 0) {
-      refreshSignedChannelList();
-    } else if (index === 1) {
-      refreshAnonymousChannelList();
-    }
   };
 
   return (

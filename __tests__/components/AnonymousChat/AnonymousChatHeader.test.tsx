@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {fireEvent, render} from '@testing-library/react-native';
 
-import AnonymousChatHeader from '../../../src/components/AnonymousChat/AnonymousChatHeader';
+import ChatDetailHeader from '../../../src/components/AnonymousChat/ChatDetailHeader';
 
 jest.mock('react-native/Libraries/Pressability/usePressability');
 const mockOnBackPress = jest.fn();
@@ -14,12 +14,12 @@ beforeEach(() => {
 
 describe('TESTING AnonymousChatHeader', () => {
   it('RENDER should match snapshot', () => {
-    const {toJSON} = render(<AnonymousChatHeader user="Username" />);
+    const {toJSON} = render(<ChatDetailHeader user="Username" />);
     expect(toJSON()).toMatchSnapshot();
   });
 
   it('RENDER should render elements with correct value', () => {
-    const {getByTestId, getByText} = render(<AnonymousChatHeader user="Username" />);
+    const {getByTestId, getByText} = render(<ChatDetailHeader user="Username" />);
     expect(getByTestId('username')).toBeTruthy();
     expect(getByText('Username')).toBeTruthy();
     expect(getByTestId('pressable-back')).toBeTruthy();
@@ -29,7 +29,7 @@ describe('TESTING AnonymousChatHeader', () => {
 
   it('EVENT should call onBackPress when pressing back button', () => {
     const {getByTestId} = render(
-      <AnonymousChatHeader
+      <ChatDetailHeader
         user="Username"
         onAvatarPress={mockOnAvatarPress}
         onBackPress={mockOnBackPress}
@@ -42,7 +42,7 @@ describe('TESTING AnonymousChatHeader', () => {
 
   it('EVENT should call onAvatarPress when pressing avatar', () => {
     const {getByTestId} = render(
-      <AnonymousChatHeader
+      <ChatDetailHeader
         user="Username"
         onAvatarPress={mockOnAvatarPress}
         onBackPress={mockOnBackPress}
@@ -55,7 +55,7 @@ describe('TESTING AnonymousChatHeader', () => {
 
   it('EVENT should call onThreeDotPress when pressing three dots button', () => {
     const {getByTestId} = render(
-      <AnonymousChatHeader
+      <ChatDetailHeader
         user="Username"
         onAvatarPress={mockOnAvatarPress}
         onBackPress={mockOnBackPress}
