@@ -133,7 +133,7 @@
 		88BB34952829E9FB0057417B /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88BB34922829E9DC0057417B /* Montserrat-Bold.ttf */; };
 		88BB6015299BC09D003FA042 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 88BB6014299BC09D003FA042 /* GoogleService-Info.plist */; };
 		88BB6018299BC0B3003FA042 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 88BB6016299BC0AF003FA042 /* GoogleService-Info.plist */; };
-		92D8142362E828E0BFD1A9D0 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		92D8142362E828E0BFD1A9D0 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		962349FAE6BEC6C5CCF1D8EB /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B850C19E4078D1315B6F2349 /* libPods-OneSignalNotificationServiceExtension.a */; };
 		979ACF72C62F81E69CB3A9BA /* libPods-BetterSocial-BetterSocialStaging.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB356EA485748D09E0EBC4C6 /* libPods-BetterSocial-BetterSocialStaging.a */; };
 		C4AE09052AC43A4800E13758 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AE09042AC43A4800E13758 /* NotificationService.swift */; };
@@ -341,7 +341,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				92D8142362E828E0BFD1A9D0 /* (null) in Frameworks */,
+				92D8142362E828E0BFD1A9D0 /* BuildFile in Frameworks */,
 				282571965F65F6F45FDB8E78 /* libPods-BetterSocial-BetterSocialDev.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
