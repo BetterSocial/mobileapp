@@ -475,13 +475,33 @@ describe('TESTING ChannelListSchema', () => {
 
       const fromPostNotifObjectExpectation = {
         ...fromDatabaseObjectExpectation,
-        createdAt: 'lastUpdatedAt',
-        channelType: 'ANON_POST_NOTIFICATION',
-        unreadCount: 1,
         channelPicture: '',
+        channelType: undefined,
+        createdAt: 'lastUpdatedAt',
+        description: 'description',
+        expiredAt: null,
+        id: 'id',
+        lastUpdatedAt: 'lastUpdatedAt',
+        lastUpdatedBy: 'lastUpdatedBy',
+        members: [],
         name: '',
-        rawJson: expect.any(Object),
-        expiredAt: null
+        rawJson: {
+          new: [
+            {
+              actor: {id: 'lastUpdatedBy'},
+              channel_picture: 'channelPicture',
+              channel_type: 'channelType',
+              description: 'description',
+              id: 'id',
+              message: 'description',
+              name: 'name',
+              time: 'lastUpdatedAt',
+              unread_count: 0
+            }
+          ]
+        },
+        unreadCount: 1,
+        user: null
       };
 
       // Execution
@@ -491,7 +511,7 @@ describe('TESTING ChannelListSchema', () => {
       );
 
       // Assertion
-      expect(result).toEqual(expect.objectContaining(fromPostNotifObjectExpectation));
+      expect(result).toEqual(expect.objectContaining({...fromPostNotifObjectExpectation}));
     });
   });
 

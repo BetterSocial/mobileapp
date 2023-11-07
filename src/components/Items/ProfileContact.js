@@ -6,6 +6,7 @@ import MemoIc_Checklist from '../../assets/icons/Ic_Checklist';
 import {COLORS} from '../../utils/theme';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {colors} from '../../utils/colors';
+import dimen from '../../utils/dimen';
 
 const ProfileContact = ({
   photo,
@@ -83,8 +84,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
-    paddingVertical: 12,
-    paddingHorizontal: 15
+    paddingVertical: dimen.normalizeDimen(12),
+    paddingHorizontal: dimen.normalizeDimen(15)
   },
   fullname: (isMe) => ({
     fontSize: normalizeFontSize(14),

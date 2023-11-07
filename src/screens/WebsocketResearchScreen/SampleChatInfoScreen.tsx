@@ -30,8 +30,11 @@ import {isContainUrl} from '../../utils/Utils';
 import ModalAction from '../GroupInfo/elements/ModalAction';
 import ModalActionAnonymous from '../GroupInfo/elements/ModalActionAnonymous';
 import BlockComponent from '../../components/BlockComponent';
-import {CHANNEL_GROUP, GROUP_INFO} from '../../hooks/core/constant';
+import {CHANNEL_GROUP, GROUP_INFO, SIGNED} from '../../hooks/core/constant';
 import ChannelImage from '../../components/ChatList/elements/ChannelImage';
+import {getChatName} from '../../utils/string/StringUtils';
+import {Context} from '../../context';
+import dimen from '../../utils/dimen';
 
 export const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#fff', paddingBottom: 40},
@@ -59,14 +62,14 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     bottom: 5
   },
-  countUser: {
+  countUser: (from) => ({
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(16.94),
-    color: colors.holytosca,
+    color: from === SIGNED ? colors.darkBlue : colors.holytosca,
     marginLeft: 20,
     marginBottom: 4
-  },
+  }),
   btnToMediaGroup: {
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(14),
@@ -86,7 +89,9 @@ export const styles = StyleSheet.create({
     fontSize: normalizeFontSize(24),
     fontFamily: fonts.inter[500],
     lineHeight: normalizeFontSize(29.05),
-    color: '#000'
+    color: '#000',
+    width: '100%',
+    paddingHorizontal: dimen.normalizeDimen(20)
   },
   lineTop: {
     backgroundColor: colors.alto,
@@ -95,8 +100,7 @@ export const styles = StyleSheet.create({
   containerGroupName: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingLeft: 20
+    alignItems: 'center'
   },
   containerPhoto: {
     justifyContent: 'center',
@@ -140,8 +144,7 @@ export const styles = StyleSheet.create({
   },
   gap: {
     height: 1,
-    backgroundColor: '#E0E0E0',
-    marginTop: 50
+    backgroundColor: '#E0E0E0'
   },
   actionGroup: {
     marginTop: 22
@@ -163,12 +166,15 @@ export const styles = StyleSheet.create({
     fontSize: 14
   },
   mr7: {
-    marginRight: 7
+    marginRight: dimen.normalizeDimen(12)
   },
   imageUser: {
     height: normalize(48),
     width: normalize(48),
     borderRadius: normalize(24)
+  },
+  parentContact: {
+    height: normalize(72)
   }
 });
 
@@ -188,11 +194,12 @@ const SampleChatInfoScreen = () => {
   const [isLoadingMembers] = React.useState<boolean>(false);
   // TODO: Change this into useUserAuthHook
   const {signedProfileId} = useProfileHook();
+  const [profile] = React.useContext(Context)?.profile;
   const {params}: any = useRoute();
   const ANONYMOUS_USER = 'AnonymousUser';
   const {anon_user_info_color_code, anon_user_info_emoji_code} =
     channelInfo?.rawJson?.channel || {};
-  console.log({channelInfo}, 'lalak');
+  console.log({channelInfo, profile}, 'lalak');
   const showImageProfile = () => {
     if (channelInfo?.channelType === CHANNEL_GROUP) {
       return (
@@ -241,6 +248,7 @@ const SampleChatInfoScreen = () => {
       </View>
     );
   };
+  console.log({selectedUser}, 'select');
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -249,7 +257,7 @@ const SampleChatInfoScreen = () => {
           <AnonymousChatInfoHeader
             isCenter
             onPress={goBack}
-            title={trimString(channelInfo?.name, 20)}
+            title={`${getChatName(channelInfo?.name, profile?.myProfile?.username)}`}
           />
           <View style={styles.lineTop} />
           <ScrollView nestedScrollEnabled={true}>
@@ -260,26 +268,27 @@ const SampleChatInfoScreen = () => {
               <View style={styles.row}>
                 <View style={styles.column}>
                   <View style={styles.containerGroupName}>
-                    <Text style={styles.groupName}>{trimString(channelInfo?.name, 20)}</Text>
+                    <Text numberOfLines={1} style={styles.groupName}>
+                      {getChatName(channelInfo?.name, profile?.myProfile?.username)}
+                    </Text>
                   </View>
                   <Text style={styles.dateCreate}>
                     Created {moment(channelInfo?.createdAt).format('MM/DD/YYYY')}
                   </Text>
                 </View>
-                {/* <TouchableOpacity onPress={goToEditGroup}>
-                  <Text>edit</Text>
-                </TouchableOpacity> */}
               </View>
               <View style={styles.lineTop} />
               <View style={styles.lineTop} />
               <View style={styles.users}>
-                <Text style={styles.countUser}>Participants ({channelInfo?.members?.length})</Text>
+                <Text style={styles.countUser(params?.from)}>
+                  Participants {channelInfo?.members?.length}
+                </Text>
                 <FlatList
                   testID="participants"
                   data={channelInfo?.rawJson?.channel?.members}
                   keyExtractor={(item, index) => index?.toString()}
                   renderItem={({item, index}) => (
-                    <View style={{height: normalize(72)}}>
+                    <View style={styles.parentContact}>
                       <ProfileContact
                         key={index}
                         item={item}
@@ -308,6 +317,7 @@ const SampleChatInfoScreen = () => {
         selectedUser={selectedUser}
         isOpen={openModal}
         onPress={handlePressPopup}
+        name={selectedUser?.user?.username || selectedUser?.user?.name}
       />
       <ModalActionAnonymous
         name={

@@ -4,6 +4,7 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import dimen from '../../utils/dimen';
 
 export interface AnonymousChatInfoHeaderProps {
   title: string;
@@ -18,14 +19,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    height: 50
     // padding: 10
   },
   content: {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
-    padding: 10
+    alignItems: 'center'
   },
   text: {
     color: colors.black,
@@ -37,28 +38,28 @@ const styles = StyleSheet.create({
     color: colors.black,
     fontFamily: fonts.poppins[600],
     fontSize: 16,
-    fontWeight: 'bold',
-    marginRight: 15
+    fontWeight: 'bold'
   },
   gap: {width: 20, height: 12},
   buttonBackContainer: {
     width: '100%'
   },
   buttonBackContainerIos: {
-    paddingVertical: 16,
     width: '100%'
   },
   backPadding: {
-    paddingRight: 15,
-    paddingVertical: 35,
-    paddingLeft: 20,
-    position: 'absolute',
     left: 0,
-    alignSelf: 'center',
-    zIndex: 10
+    position: 'absolute',
+    zIndex: 1,
+    height: dimen.normalizeDimen(50),
+    width: dimen.normalizeDimen(50),
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   flex: {
-    flex: 1
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: dimen.normalizeDimen(40)
   }
 });
 
