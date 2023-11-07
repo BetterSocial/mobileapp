@@ -21,29 +21,41 @@ const styles = StyleSheet.create({
     height: dimen.normalizeDimen(16),
     width: dimen.normalizeDimen(16),
     borderRadius: dimen.normalizeDimen(16 / 2),
-    backgroundColor: '#2C67BC'
-  },
-  eahcStyles: {
-    fontSize: dimen.normalizeDimen(12),
-    color: '#f4f3f4',
+    backgroundColor: '#2C67BC',
     position: 'absolute',
     top: dimen.normalizeDimen(2),
-    left: dimen.normalizeDimen(3)
+    bottom: dimen.normalizeDimen(2),
+    left: dimen.normalizeDimen(2),
+    right: dimen.normalizeDimen(2),
+    justifyContent: 'center',
+    alignItems: 'center'
   },
-
-  eachStylesOff: {
+  textOn: {
+    fontFamily: 'Inter',
+    fontWeight: '400',
     fontSize: dimen.normalizeDimen(12),
+    lineHeight: dimen.normalizeDimen(18),
+    textAlign: 'center',
     color: '#f4f3f4',
     position: 'absolute',
-    top: dimen.normalizeDimen(2),
-    right: dimen.normalizeDimen(3)
+    left: dimen.normalizeDimen(2)
+  },
+  textOff: {
+    fontFamily: 'Inter',
+    fontWeight: '400',
+    fontSize: dimen.normalizeDimen(12),
+    lineHeight: dimen.normalizeDimen(18),
+    textAlign: 'center',
+    color: '#f4f3f4',
+    position: 'absolute',
+    right: dimen.normalizeDimen(2)
   },
   mainStyes: {
+    position: 'relative',
     borderRadius: dimen.normalizeDimen(12),
     backgroundColor: '#F5F5F5',
     height: dimen.normalizeDimen(20),
     width: dimen.normalizeDimen(42),
-    padding: dimen.normalizeDimen(2),
     ...Platform.select({
       ios: {
         shadowColor: 'rgba(0,0,0,0.25)',
@@ -167,7 +179,7 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
         ]}>
         <Animated.Text
           style={[
-            styles.eahcStyles,
+            styles.textOn,
             {
               opacity: initialOpacityOn,
               color: activeTextColor
@@ -177,7 +189,7 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
         </Animated.Text>
         <Animated.Text
           style={[
-            styles.eachStylesOff,
+            styles.textOff,
             {
               opacity: initialOpacityOff,
               color: inactiveTextColor
