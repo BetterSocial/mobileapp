@@ -57,7 +57,7 @@ import {useInitialStartup} from '../hooks/useInitialStartup';
 
 const RootStack = createNativeStackNavigator();
 
-export const RootNavigator = () => {
+export const RootNavigator = (props) => {
   useCoreChatSystemHook();
 
   const initialStartup = useRecoilValue(InitialStartupAtom);
@@ -100,7 +100,11 @@ export const RootNavigator = () => {
         style={{
           height: '100%',
           paddingBottom: isUnauthenticated ? 0 : insets.bottom,
-          paddingTop: isUnauthenticated ? 0 : insets.top
+          paddingTop:
+            isUnauthenticated ||
+            ['TopicPageScreen', 'TopicMemberScreen'].includes(props.currentScreen)
+              ? 0
+              : insets.top
         }}>
         <NetworkStatusIndicator hide={true} />
         {/* <StatusBar translucent backgroundColor="white" /> */}

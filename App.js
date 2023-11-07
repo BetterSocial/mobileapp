@@ -33,6 +33,7 @@ const App = () => {
   });
   const navigationRef = React.useRef();
   const routeNameRef = React.useRef();
+  const [currentScreen, setCurrentScreen] = React.useState('')
 
   React.useEffect(() => {
     const init = async () => {
@@ -69,7 +70,9 @@ const App = () => {
     // log event
     const previousRouteName = routeNameRef.current;
     const currentRouteName = navigationRef.current?.getCurrentRoute?.()?.name;
-
+    if (Platform.OS === 'ios') {
+      setCurrentScreen(currentRouteName);
+    }
     if (currentRouteName && previousRouteName !== currentRouteName) {
       Analytics.trackingScreen(currentRouteName);
     }
@@ -140,7 +143,7 @@ const App = () => {
             <View>
               <OverlayProvider topInset={top} bottomInset={bottom} i18nInstance={streami18n}>
                 <KeyboardAvoidingView enabled={Platform.OS === 'ios'} behavior="padding">
-                  <RootNavigator areaHeight={height} />
+                  <RootNavigator areaHeight={height} currentScreen={currentScreen} />
                 </KeyboardAvoidingView>
               </OverlayProvider>
             </View>
