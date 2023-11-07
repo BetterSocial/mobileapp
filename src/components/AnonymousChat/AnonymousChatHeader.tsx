@@ -59,21 +59,25 @@ const AnonymousChatHeader = ({
 
   return (
     <View style={styles.container}>
-      <CustomPressable style={styles.backButton} onPress={onBackPress}>
+      <CustomPressable testID="pressable-back" style={styles.backButton} onPress={onBackPress}>
         <MemoIc_arrow_back_white width={20} height={12} />
       </CustomPressable>
-      <CustomPressable style={styles.textContainer} onPress={onAvatarPress}>
+      <CustomPressable
+        testID="pressable-avatar"
+        style={styles.textContainer}
+        onPress={onAvatarPress}>
         <FastImage
+          testID="avatar"
           style={styles.avatar}
           source={{
             uri: avatar
           }}
         />
-        <Text numberOfLines={1} ellipsizeMode="tail" style={styles.text}>
+        <Text testID="username" numberOfLines={1} ellipsizeMode="tail" style={styles.text}>
           {user}
         </Text>
       </CustomPressable>
-      <CustomPressable style={styles.threeDot} onPress={onThreeDotPress}>
+      <CustomPressable testID="pressable-option" style={styles.threeDot} onPress={onThreeDotPress}>
         <IconEP name="dots-three-vertical" size={20} color={colors.white} />
       </CustomPressable>
       <FastImage />

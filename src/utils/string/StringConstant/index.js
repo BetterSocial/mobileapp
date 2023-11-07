@@ -139,6 +139,9 @@ const dynamicLinkAuthorNotFollowing = 'You cannot access this private post';
 const dynamicLinkAuthorBlocks = 'You cannot access this private post';
 const dynamicLinkPostExpired = 'This post has expired and has been deleted automatically';
 
+// Follow Screen
+const followSearchUserLabel = 'Search User';
+
 export default {
   signInPrivacy,
   signInScreenHumanIdFoundation,
@@ -237,5 +240,7 @@ export default {
   dynamicLinkAuthorBlocks,
   dynamicLinkPostCannotBeFound,
   dynamicLinkAuthorNotFollowing,
-  dynamicLinkPostExpired
+  dynamicLinkPostExpired,
+
+  followSearchUserLabel
 };

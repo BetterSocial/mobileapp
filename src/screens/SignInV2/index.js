@@ -2,7 +2,7 @@ import * as React from 'react';
 import JwtDecode from 'jwt-decode';
 import SimpleToast from 'react-native-simple-toast';
 import crashlytics from '@react-native-firebase/crashlytics';
-import {BackHandler, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
+import {BackHandler, StatusBar, StyleSheet, View} from 'react-native';
 import {StackActions} from '@react-navigation/native';
 // eslint-disable-next-line import/no-unresolved
 import {colors} from 'react-native-swiper-flatlist/src/themes';
@@ -20,9 +20,10 @@ import DevDummyLogin from '../../components/DevDummyLogin';
 import SlideShow from './elements/SlideShow';
 import TokenStorage from '../../utils/storage/custom/tokenStorage';
 import getRemoteConfig from '../../service/getRemoteConfig';
-import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import useSignin from './hooks/useSignin';
+import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
+import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {InitialStartupAtom} from '../../service/initialStartup';
 import {fonts} from '../../utils/fonts';
@@ -33,7 +34,7 @@ import {verifyHumanIdExchangeToken} from '../../service/users';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 const SignIn = () => {
-  const {setProfileId} = useProfileHook();
+  const {setAuth} = useUserAuthHook();
 
   const [, dispatch] = React.useContext(Context).users;
   const [clickTime, setClickTime] = React.useState(0);
@@ -71,9 +72,11 @@ const SignIn = () => {
           try {
             const userId = await JwtDecode(token).user_id;
             const anonymousUserId = await JwtDecode(anonymousToken).user_id;
-            setProfileId({
+            setAuth({
               anonProfileId: anonymousUserId,
-              signedProfileId: userId
+              signedProfileId: userId,
+              token,
+              anonymousToken
             });
           } catch (e) {
             crashlytics().recordError(new Error(e));
@@ -143,15 +146,15 @@ const SignIn = () => {
   }, []);
 
   return (
-    <SafeAreaView style={S.container}>
-      <StatusBar translucent={false} />
+    <View style={S.container}>
+      <StatusBar translucent={true} backgroundColor="transparent" />
       <View style={S.containerSlideShow}>
         {clickTime >= 7 && isDemoLoginEnabled ? (
           <DevDummyLogin resetClickTime={resetClickTime} />
         ) : null}
         <SlideShow onContainerPress={onClickContainer} handleLogin={handleLogin} />
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -159,7 +162,8 @@ export default withInteractionsManaged(SignIn);
 
 const S = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: COLORS.blue
   },
   image: {
     width: 321,

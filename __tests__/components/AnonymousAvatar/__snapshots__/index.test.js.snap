@@ -10,9 +10,9 @@ exports[`AnonymousAvatar test Should match version 1 snapshot 1`] = `
   }
   style={
     Object {
-      "height": NaN,
+      "height": 38.400000000000006,
       "marginRight": 0,
-      "width": NaN,
+      "width": 38.400000000000006,
     }
   }
   width={15}

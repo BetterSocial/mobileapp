@@ -75,9 +75,10 @@ const ChatItemTargetText = ({
   return (
     <View style={styles.chatContainer}>
       {isContinuous ? (
-        <View style={styles.avatar} />
+        <View testID="chat-item-continuous-avatar" style={styles.avatar} />
       ) : (
         <FastImage
+          testID="chat-item-default-avatar"
           style={styles.avatar}
           source={{
             uri: avatar
@@ -86,13 +87,15 @@ const ChatItemTargetText = ({
       )}
       <View style={styles.textContainer}>
         {!isContinuous && (
-          <View style={styles.chatTitleContainer}>
+          <View testID="chat-item-user-info" style={styles.chatTitleContainer}>
             <Text style={styles.userText}>{username}</Text>
             <View style={styles.dot} />
             <Text style={styles.timeText}>{time}</Text>
           </View>
         )}
-        <Text style={styles.text}>{message}</Text>
+        <Text testID="chat-item-message" style={styles.text}>
+          {message}
+        </Text>
       </View>
     </View>
   );

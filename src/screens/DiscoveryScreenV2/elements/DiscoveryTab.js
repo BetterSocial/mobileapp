@@ -1,44 +1,64 @@
 import * as React from 'react';
 import {Dimensions, Keyboard, Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
 
+import {useRoute} from '@react-navigation/core';
+import PropTypes from 'prop-types';
 import {colors} from '../../../utils/colors';
-import {fonts, normalizeFontSize} from '../../../utils/fonts';
+import {normalizeFontSize} from '../../../utils/fonts';
+import {setNavbarTitle} from '../../../context/actions/setMyProfileAction';
+import {Context} from '../../../context';
 
-const {width} = Dimensions.get('screen');
+const windowWidth = Dimensions.get('window').width;
 
-const DiscoveryTab = ({onChangeScreen, selectedScreen = 0}) => {
+const DiscoveryTab = ({onChangeScreen, selectedScreen = 0, tabs}) => {
+  const [, dispatchNavbar] = React.useContext(Context).profile;
+  const route = useRoute();
+
   const handleTabOnClicked = React.useCallback((index) => {
     Keyboard.dismiss();
     onChangeScreen(index);
   }, []);
 
-  const tabs = ['Users', 'Communities', 'Domains', 'News'];
+  const handleChangeTitle = (index = 0) => {
+    const title = ['Search Users', 'Your Communities', 'Your Domains'][index] || '';
+    setNavbarTitle(title, dispatchNavbar);
+  };
+
+  React.useEffect(() => {
+    if (route.name === 'Followings') handleChangeTitle();
+  }, []);
+
   return (
-    <>
-      <ScrollView
-        horizontal={true}
-        style={styles.tabContainer}
-        keyboardShouldPersistTaps="handled"
-        showsHorizontalScrollIndicator={false}
-        showsVerticalScrollIndicator={false}>
-        {tabs.map((item, index) => (
+    <ScrollView
+      horizontal={true}
+      style={styles.tabContainer}
+      keyboardShouldPersistTaps="handled"
+      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}>
+      {Object.keys(tabs).map((item, index) => {
+        if (route.name === 'Followings' && item === 'News') return null;
+        const totalItem = route.name === 'Followings' ? `(${tabs[item]})` : '';
+        return (
           <Pressable
             key={`tabItem-${item}`}
-            android_ripple={{
-              color: colors.gray1
-            }}
-            style={styles.tabItem(index)}
-            onPress={() => handleTabOnClicked(index)}>
+            android_ripple={{color: colors.gray1}}
+            style={[
+              styles.tabItem(route.name === 'Followings' ? 3 : 4),
+              index === selectedScreen ? styles.underlineFocus : {}
+            ]}
+            onPress={() => {
+              handleTabOnClicked(index);
+              handleChangeTitle(index);
+            }}>
             <View style={styles.tabItemContainer}>
               <Text style={index === selectedScreen ? styles.tabItemTextFocus : styles.tabItemText}>
-                {item}
+                {`${item} ${totalItem}`}
               </Text>
-              <View style={index === selectedScreen ? styles.underlineFocus : {}}></View>
             </View>
           </Pressable>
-        ))}
-      </ScrollView>
-    </>
+        );
+      })}
+    </ScrollView>
   );
 };
 
@@ -47,38 +67,41 @@ const styles = StyleSheet.create({
     height: 48,
     backgroundColor: colors.white
   },
-  tabItem: (index) => ({
-    flex: 1,
-    width: width / 4,
+  tabItem: (numTabs) => ({
+    width: numTabs === 4 ? undefined : windowWidth / numTabs,
     justifyContent: 'center',
+    alignItems: 'center',
     height: '100%',
-    paddingLeft: index !== 1 ? 20 : 0
+    paddingHorizontal: numTabs === 4 ? 20 : undefined
   }),
   tabItemContainer: {
-    alignSelf: 'flex-start'
+    alignSelf: 'center'
   },
   tabItemText: {
     color: colors.alto,
-    fontFamily: fonts.inter[500],
+    fontWeight: '500',
     fontSize: normalizeFontSize(12.5),
-    // lineHeight: 16.94,
     paddingVertical: 10,
-    textAlign: 'left'
+    textAlign: 'center'
   },
   tabItemTextFocus: {
     color: colors.black,
-    fontFamily: fonts.inter[500],
+    fontWeight: '500',
     fontSize: normalizeFontSize(12.5),
     lineHeight: 16.94,
-    textAlign: 'left',
+    textAlign: 'center',
     paddingVertical: 10
   },
   underlineFocus: {
     borderBottomColor: colors.bondi_blue,
-    borderBottomWidth: 2,
-    top: 0,
-    position: 'relative'
+    borderBottomWidth: 2
   }
 });
+
+DiscoveryTab.propTypes = {
+  onChangeScreen: PropTypes.func,
+  selectedScreen: PropTypes.number,
+  tabs: PropTypes.object
+};
 
 export default DiscoveryTab;
