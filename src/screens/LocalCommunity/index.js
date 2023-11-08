@@ -403,7 +403,8 @@ const styles = StyleSheet.create({
     color: colors.blackgrey
   },
   button: {
-    backgroundColor: colors.gray
+    backgroundColor: colors.gray,
+    borderRadius: dimen.normalizeDimen(8)
   }
 });
 export default LocalCommunity;

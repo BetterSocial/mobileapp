@@ -215,17 +215,18 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
                 "opacity": 1,
               }
             }
+            testID="button-report-test"
           >
             <View
               style={
                 Object {
                   "alignItems": "center",
                   "backgroundColor": "#00ADB5",
-                  "borderRadius": 8,
+                  "borderRadius": 6.4,
                   "flexDirection": "row",
-                  "height": 50,
+                  "height": 40,
                   "justifyContent": "center",
-                  "paddingHorizontal": 25,
+                  "paddingHorizontal": 20,
                 }
               }
             >
