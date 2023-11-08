@@ -36,6 +36,7 @@ import {setImage} from '../../context/actions/users';
 import {setToken} from '../../utils/token';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import dimen from '../../utils/dimen';
+import {normalizeFontSize} from '../../utils/fonts';
 
 const {width} = Dimensions.get('screen');
 
@@ -113,7 +114,7 @@ const WhotoFollow = () => {
               case VIEW_TYPE_LABEL_LOCATION:
               default:
                 dim.width = width;
-                dim.height = 40;
+                dim.height = dimen.normalizeDimen(40);
                 break;
             }
           }
@@ -310,47 +311,45 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white
   },
   recyclerview: (bottom) => ({
-    marginBottom: 112 - bottom
+    marginBottom: dimen.normalizeDimen(112) - bottom
   }),
   wrapperHeader: {
-    paddingLeft: 22,
-    paddingRight: 22,
-    paddingTop: 22
+    paddingHorizontal: dimen.normalizeDimen(22),
+    paddingTop: dimen.normalizeDimen(22)
   },
   containerProgress: {
-    marginTop: 20,
-    marginBottom: 24,
-    paddingHorizontal: 20
+    marginTop: dimen.normalizeDimen(20),
+    marginBottom: dimen.normalizeDimen(24),
+    paddingHorizontal: dimen.normalizeDimen(20)
   },
   textWhoToFollow: {
     fontFamily: 'Inter-Bold',
     fontStyle: 'normal',
     fontWeight: '600',
-    fontSize: 36,
-    lineHeight: 43.57,
+    fontSize: normalizeFontSize(36),
+    lineHeight: normalizeFontSize(43.57),
     color: '#11243D',
-    marginHorizontal: 20
+    marginHorizontal: dimen.normalizeDimen(20)
   },
   textDescription: {
     fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: '400',
-    fontSize: 14,
-    lineHeight: 24,
+    fontSize: normalizeFontSize(14),
+    lineHeight: normalizeFontSize(24),
     color: colors.gray,
     opacity: 0.84,
-    marginTop: 8,
-    marginBottom: 12,
-    paddingHorizontal: 20
+    marginTop: dimen.normalizeDimen(8),
+    marginBottom: dimen.normalizeDimen(24),
+    paddingHorizontal: dimen.normalizeDimen(20)
   },
   footer: {
     position: 'absolute',
     bottom: 0,
-    height: 112,
+    height: dimen.normalizeDimen(112),
     width,
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingBottom: 20,
+    paddingHorizontal: dimen.normalizeDimen(20),
+    paddingBottom: dimen.normalizeDimen(20),
     backgroundColor: colors.white,
     shadowColor: colors.black,
     shadowOffset: {
@@ -373,7 +372,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: '400',
-    fontSize: 10,
+    fontSize: normalizeFontSize(10),
     textAlign: 'center',
     color: colors.blackgrey
   }
