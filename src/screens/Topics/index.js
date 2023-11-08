@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import CustomPressable from '../../components/CustomPressable';
 import ListTopic from './ListTopics';
 import StringConstant from '../../utils/string/StringConstant';
@@ -24,9 +25,10 @@ import {Header} from '../../components';
 import {ProgressBar} from '../../components/ProgressBar';
 import {TOPICS_PICK} from '../../utils/cache/constant';
 import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getSpecificCache} from '../../utils/cache';
 import {setTopics as setTopicsContext} from '../../context/actions/topics';
+import dimen from '../../utils/dimen';
 
 const {width} = Dimensions.get('screen');
 
@@ -38,6 +40,7 @@ const Topics = () => {
   const [, dispatch] = React.useContext(Context).topics;
   const [myTopic, setMyTopic] = React.useState({});
   const [isPreload, setIspreload] = React.useState(true);
+  const {bottom} = useSafeAreaInsets();
 
   const {isFetchingTopic, isTopicFetchError, getTopicsData, topicCollection} = useSignin();
   const getCacheTopic = async () => {
@@ -120,7 +123,7 @@ const Topics = () => {
           </View>
 
           {topics?.length > 0 && (
-            <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollViewStyle}>
+            <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollViewStyle(bottom)}>
               {topics
                 ? topics.map((topic, index) => (
                     <View key={index} style={styles.containerTopic}>
@@ -187,7 +190,9 @@ const Topics = () => {
   );
 };
 const styles = StyleSheet.create({
-  scrollViewStyle: {marginBottom: 100},
+  scrollViewStyle: (bottom) => ({
+    marginBottom: dimen.normalizeDimen(100) - bottom
+  }),
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -195,31 +200,30 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: Platform.OS === 'ios' ? 22 : 0,
+    padding: Platform.OS === 'ios' ? dimen.normalizeDimen(22) : 0,
     backgroundColor: colors.white
   },
   containerProgress: {
-    marginTop: 20,
-    marginBottom: 24,
-    paddingHorizontal: 20
+    marginTop: dimen.normalizeDimen(20),
+    marginBottom: dimen.normalizeDimen(24),
+    paddingHorizontal: dimen.normalizeDimen(20)
   },
   textPickYourTopic: {
     fontFamily: 'Inter-Bold',
     fontStyle: 'normal',
     fontWeight: '600',
-    fontSize: 36,
-    lineHeight: 43.57,
+    fontSize: normalizeFontSize(36),
+    lineHeight: normalizeFontSize(43.57),
     color: '#11243D',
-    marginHorizontal: 20
+    marginHorizontal: dimen.normalizeDimen(20)
   },
   footer: {
     position: 'absolute',
     bottom: 0,
-    height: 112,
+    height: dimen.normalizeDimen(112),
     width,
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingBottom: 20,
+    paddingHorizontal: dimen.normalizeDimen(20),
+    paddingBottom: dimen.normalizeDimen(20),
     backgroundColor: colors.white,
     shadowColor: colors.black,
     shadowOffset: {
@@ -237,45 +241,45 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: '400',
-    fontSize: 14,
-    lineHeight: 24,
+    fontSize: normalizeFontSize(14),
+    lineHeight: normalizeFontSize(24),
     color: colors.gray,
     opacity: 0.84,
-    marginTop: 8,
-    marginBottom: 24,
-    paddingHorizontal: 20
+    marginTop: dimen.normalizeDimen(8),
+    marginBottom: dimen.normalizeDimen(24),
+    paddingHorizontal: dimen.normalizeDimen(20)
   },
   containerTopic: {
     flexDirection: 'column',
-    marginBottom: 32
+    marginBottom: dimen.normalizeDimen(32)
   },
   title: {
     fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: 'bold',
-    fontSize: 18,
-    lineHeight: 22,
+    fontSize: normalizeFontSize(18),
+    lineHeight: normalizeFontSize(22),
     color: colors.black,
-    marginBottom: 13,
+    marginBottom: dimen.normalizeDimen(13),
     // textTransform: 'capitalize',
-    paddingHorizontal: 22
+    paddingHorizontal: dimen.normalizeDimen(22)
   },
   listTopic: {
     flexDirection: 'column',
-    marginBottom: 8,
-    paddingRight: 8
+    marginBottom: dimen.normalizeDimen(8),
+    paddingRight: dimen.normalizeDimen(8)
   },
 
   bgTopicSelectActive: {
     backgroundColor: colors.bondi_blue,
     // minWidth: 100,
-    paddingHorizontal: 15,
-    paddingVertical: 7,
-    borderRadius: 14,
+    paddingHorizontal: dimen.normalizeDimen(15),
+    paddingVertical: dimen.normalizeDimen(7),
+    borderRadius: dimen.normalizeDimen(14),
     flexDirection: 'row',
     // justifyContent: 'center',
-    marginRight: 8,
-    marginBottom: 10,
+    marginRight: dimen.normalizeDimen(8),
+    marginBottom: dimen.normalizeDimen(10),
     alignItems: 'center'
     // alignItems: 'center',
   },
@@ -283,20 +287,20 @@ const styles = StyleSheet.create({
   bgTopicSelectNotActive: {
     backgroundColor: colors.concrete,
     // minWidth: 100,
-    paddingHorizontal: 15,
-    paddingVertical: 7,
-    borderRadius: 14,
+    paddingHorizontal: dimen.normalizeDimen(15),
+    paddingVertical: dimen.normalizeDimen(7),
+    borderRadius: dimen.normalizeDimen(14),
     flexDirection: 'row',
     // justifyContent: 'center',
-    marginRight: 8,
-    marginBottom: 10,
+    marginRight: dimen.normalizeDimen(8),
+    marginBottom: dimen.normalizeDimen(10),
     alignItems: 'center'
   },
   textTopicActive: {
     fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: '500',
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     color: colors.white
     // paddingLeft: 5,
   },
@@ -304,7 +308,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: '500',
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     color: colors.mine_shaft
     // paddingLeft: 5,
   },
@@ -316,7 +320,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: '400',
-    fontSize: 10,
+    fontSize: normalizeFontSize(10),
     textAlign: 'center',
     color: colors.blackgrey
   },
@@ -324,13 +328,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.gray
   },
   scrollButtonParent: {
-    paddingHorizontal: 22
+    paddingHorizontal: dimen.normalizeDimen(22)
   },
   containerContent: {
-    paddingRight: 20
+    paddingRight: dimen.normalizeDimen(20)
   },
   reloadTopicButtonContainer: {
-    marginTop: 60
+    marginTop: dimen.normalizeDimen(60)
   },
   reloadTopicButton: {
     textAlign: 'center',

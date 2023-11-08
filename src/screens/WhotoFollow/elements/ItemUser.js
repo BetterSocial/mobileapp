@@ -1,14 +1,10 @@
 import * as React from 'react';
-import {
-  Animated,
-  Pressable,
-  StyleSheet,
-  View
-} from 'react-native';
+import {Animated, Pressable, StyleSheet, View} from 'react-native';
 
 import IconAdd from '../../../assets/icon/IconAdd';
 import IconCheck from '../../../assets/icon/IconCheck';
 import UserInfo from './UserInfo';
+import dimen from '../../../utils/dimen';
 
 const ItemUser = ({photo, username, bio, followed, onPress, userid}) => {
   const followIconFadeAnimation = React.useRef(new Animated.Value(0)).current;
@@ -17,12 +13,12 @@ const ItemUser = ({photo, username, bio, followed, onPress, userid}) => {
     if (followed.includes(userid)) {
       Animated.timing(followIconFadeAnimation, {
         toValue: 1,
-        duration: 250,
+        duration: 250
       }).start();
     } else {
       Animated.timing(followIconFadeAnimation, {
         toValue: 0,
-        duration: 250,
+        duration: 250
       }).start();
     }
   }, [followed, userid]);
@@ -33,11 +29,18 @@ const ItemUser = ({photo, username, bio, followed, onPress, userid}) => {
       <View style={styles.containerButton}>
         <Pressable onPress={onPress} style={styles.followAction(32, 32)}>
           <Animated.View style={{position: 'absolute', opacity: 1}}>
-            <IconAdd width={20} height={20} fill="#000000" />
+            <IconAdd
+              width={dimen.normalizeDimen(20)}
+              height={dimen.normalizeDimen(20)}
+              fill="#000000"
+            />
           </Animated.View>
-          <Animated.View
-            style={{position: 'absolute', opacity: followIconFadeAnimation}}>
-            <IconCheck width={32} height={32} fill="#23C5B6" />
+          <Animated.View style={{position: 'absolute', opacity: followIconFadeAnimation}}>
+            <IconCheck
+              width={dimen.normalizeDimen(32)}
+              height={dimen.normalizeDimen(32)}
+              fill="#23C5B6"
+            />
           </Animated.View>
         </Pressable>
       </View>
@@ -52,24 +55,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: 76,
-    paddingHorizontal: 20,
+    height: dimen.normalizeDimen(76),
+    paddingHorizontal: dimen.normalizeDimen(20),
     width: '100%',
-    flex: 1,
+    flex: 1
   },
   containerButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: dimen.normalizeDimen(32),
+    height: dimen.normalizeDimen(32),
+    borderRadius: dimen.normalizeDimen(16),
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 8,
+    marginLeft: dimen.normalizeDimen(8)
   },
   followAction: (width, height) => ({
-    height,
-    width,
+    height: dimen.normalizeDimen(height),
+    width: dimen.normalizeDimen(width),
     justifyContent: 'center',
-    alignItems: 'center',
-  }),
+    alignItems: 'center'
+  })
 });
