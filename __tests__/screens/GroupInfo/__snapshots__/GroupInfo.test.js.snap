@@ -2151,11 +2151,11 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                       Object {
                         "alignItems": "center",
                         "backgroundColor": "#00ADB5",
-                        "borderRadius": 8,
+                        "borderRadius": 6.4,
                         "flexDirection": "row",
-                        "height": 50,
+                        "height": 40,
                         "justifyContent": "center",
-                        "paddingHorizontal": 25,
+                        "paddingHorizontal": 20,
                       }
                     }
                   >
@@ -2635,11 +2635,11 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                       Object {
                         "alignItems": "center",
                         "backgroundColor": "#00ADB5",
-                        "borderRadius": 8,
+                        "borderRadius": 6.4,
                         "flexDirection": "row",
-                        "height": 50,
+                        "height": 40,
                         "justifyContent": "center",
-                        "paddingHorizontal": 25,
+                        "paddingHorizontal": 20,
                       }
                     }
                   >
@@ -2886,11 +2886,11 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     Object {
                       "alignItems": "center",
                       "backgroundColor": "#00ADB5",
-                      "borderRadius": 8,
+                      "borderRadius": 6.4,
                       "flexDirection": "row",
-                      "height": 50,
+                      "height": 40,
                       "justifyContent": "center",
-                      "paddingHorizontal": 25,
+                      "paddingHorizontal": 20,
                     }
                   }
                 >

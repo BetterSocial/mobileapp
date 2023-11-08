@@ -327,6 +327,7 @@ const styles = StyleSheet.create({
     color: colors.blackgrey
   },
   button: {
+    borderRadius: dimen.normalizeDimen(8),
     backgroundColor: colors.gray
   },
   scrollButtonParent: {
