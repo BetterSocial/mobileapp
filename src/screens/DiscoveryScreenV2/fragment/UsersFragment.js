@@ -1,5 +1,6 @@
 /* eslint-disable no-use-before-define */
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import {StyleSheet, Text, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
@@ -77,55 +78,40 @@ const UsersFragment = ({
     });
   };
 
+  const exhangeFollower = (newUserLists, willFollow, index) => {
+    if (newUserLists[index].user) {
+      newUserLists[index].user.following = !!willFollow;
+      newUserLists[index].user.user_id_follower = myId;
+    } else {
+      newUserLists[index].following = !!willFollow;
+      newUserLists[index].user_id_follower = myId;
+    }
+  };
+
   const handleFollow = async (from, willFollow, item, index) => {
     if (from === FROM_FOLLOWED_USERS_INITIAL || from === FROM_UNFOLLOWED_USERS_INITIAL) {
       const newFollowedUsers = [...users];
-      if (newFollowedUsers[index].user) {
-        newFollowedUsers[index].user.following = !!willFollow;
-        newFollowedUsers[index].user.user_id_follower = myId;
-      } else {
-        newFollowedUsers[index].following = !!willFollow;
-        newFollowedUsers[index].user_id_follower = myId;
-      }
+      exhangeFollower(newFollowedUsers, willFollow, index);
 
       DiscoveryAction.setDiscoveryInitialUsers(newFollowedUsers, discoveryDispatch);
     }
 
     if (from === FROM_FOLLOWED_USERS) {
       const newFollowedUsers = [...followedUsers];
-      if (newFollowedUsers[index].user) {
-        newFollowedUsers[index].user.following = !!willFollow;
-        newFollowedUsers[index].user.user_id_follower = myId;
-      } else {
-        newFollowedUsers[index].following = !!willFollow;
-        newFollowedUsers[index].user_id_follower = myId;
-      }
+      exhangeFollower(newFollowedUsers, willFollow, index);
 
       setFollowedUsers(newFollowedUsers);
     }
 
     if (from === FROM_UNFOLLOWED_USERS) {
       const newUnfollowedUsers = [...unfollowedUsers];
-      if (newUnfollowedUsers[index].user) {
-        newUnfollowedUsers[index].user.following = !!willFollow;
-        newUnfollowedUsers[index].user.user_id_follower = myId;
-      } else {
-        newUnfollowedUsers[index].following = !!willFollow;
-        newUnfollowedUsers[index].user_id_follower = myId;
-      }
-
+      exhangeFollower(newUnfollowedUsers, willFollow, index);
       setUnfollowedUsers(newUnfollowedUsers);
     }
 
     if (from === FROM_USERS_INITIAL) {
       const newFollowedUsers = [...initialUsers];
-      if (newFollowedUsers[index].user) {
-        newFollowedUsers[index].user.following = !!willFollow;
-        newFollowedUsers[index].user.user_id_follower = myId;
-      } else {
-        newFollowedUsers[index].following = !!willFollow;
-        newFollowedUsers[index].user_id_follower = myId;
-      }
+      exhangeFollower(newFollowedUsers, willFollow, index);
 
       setInitialUsers(newFollowedUsers);
     }
@@ -211,7 +197,6 @@ const UsersFragment = ({
         ])
         .concat([
           unfollowingUsers.map((item, index) =>
-            // return renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", { ...item.user, user_id_follower: item.user_id_follower }, index)
             renderDiscoveryItem(
               FROM_FOLLOWED_USERS_INITIAL,
               'followedUsers',
@@ -303,5 +288,22 @@ const styles = StyleSheet.create({
     display: 'none'
   }
 });
+
+UsersFragment.propTypes = {
+  isLoadingDiscoveryUser: PropTypes.bool,
+  isFirstTimeOpen: PropTypes.bool,
+  initialUsers: PropTypes.array,
+  setInitialUsers: PropTypes.func,
+  followedUsers: PropTypes.array,
+  setFollowedUsers: PropTypes.func,
+  unfollowedUsers: PropTypes.array,
+  setUnfollowedUsers: PropTypes.func,
+  setSearchText: PropTypes.func,
+  setIsFirstTimeOpen: PropTypes.func,
+  withoutRecent: PropTypes.bool,
+  showRecentSearch: PropTypes.bool,
+  fetchData: PropTypes.func,
+  searchText: PropTypes.string
+};
 
 export default UsersFragment;

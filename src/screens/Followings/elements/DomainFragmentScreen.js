@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {FlatList, StyleSheet} from 'react-native';
+import PropTypes from 'prop-types';
 import {followDomain, getFollowedDomain, unfollowDomain} from '../../../service/domain';
 import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
 import DomainList from '../../DiscoveryScreenV2/elements/DiscoveryItemList';
@@ -112,6 +113,13 @@ const DomainFragmentScreen = ({navigation}) => {
       style={styles.containerStyle}
     />
   );
+};
+
+DomainFragmentScreen.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+    setOptions: PropTypes.func.isRequired
+  }).isRequired
 };
 
 export default DomainFragmentScreen;

@@ -827,7 +827,8 @@ Header.propTypes = {
   postRef: PropTypes.object,
   profileTabIndex: PropTypes.number,
   setTabIndexToSigned: PropTypes.func,
-  setTabIndexToAnonymous: PropTypes.func
+  setTabIndexToAnonymous: PropTypes.func,
+  goToFollowers: PropTypes.func
 };
 
 ProfileScreen.propTypes = {

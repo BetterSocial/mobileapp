@@ -3,6 +3,7 @@ import * as React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
+import PropTypes from 'prop-types';
 import DiscoveryAction from '../../../context/actions/discoveryAction';
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import DomainList from '../elements/DiscoveryItemList';
@@ -257,5 +258,19 @@ const styles = StyleSheet.create({
     marginLeft: 20
   }
 });
+
+TopicFragment.propTypes = {
+  isLoadingDiscoveryTopic: PropTypes.bool,
+  followedTopic: PropTypes.array,
+  unfollowedTopic: PropTypes.array,
+  isFirstTimeOpen: PropTypes.bool,
+  setIsFirstTimeOpen: PropTypes.func,
+  setSearchText: PropTypes.func,
+  setFollowedTopic: PropTypes.func,
+  setUnfollowedTopic: PropTypes.func,
+  fetchData: PropTypes.func,
+  searchText: PropTypes.string,
+  withoutRecent: PropTypes.bool
+};
 
 export default TopicFragment;

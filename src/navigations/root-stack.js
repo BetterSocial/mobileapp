@@ -59,7 +59,7 @@ import FollowersScreen from '../screens/Followings/FollowersScreen';
 
 const RootStack = createNativeStackNavigator();
 
-export const RootNavigator = (props) => {
+export const RootNavigator = ({currentScreen}) => {
   useCoreChatSystemHook();
 
   const initialStartup = useRecoilValue(InitialStartupAtom);
@@ -96,17 +96,20 @@ export const RootNavigator = (props) => {
 
   const isUnauthenticated = initialStartup.id === null || initialStartup.id === '';
 
+  const getPaddingTop = (screenName) => {
+    if (isUnauthenticated || ['TopicPageScreen', 'TopicMemberScreen'].includes(screenName)) {
+      return 0;
+    }
+    return insets.top;
+  };
+
   return (
     <LoadingStartupContext.Provider value={loadingStartup.loadingUser}>
       <View
         style={{
           height: '100%',
           paddingBottom: isUnauthenticated ? 0 : insets.bottom,
-          paddingTop:
-            isUnauthenticated ||
-            ['TopicPageScreen', 'TopicMemberScreen'].includes(props.currentScreen)
-              ? 0
-              : insets.top
+          paddingTop: getPaddingTop(currentScreen)
         }}>
         <NetworkStatusIndicator hide={true} />
         {/* <StatusBar translucent backgroundColor="white" /> */}

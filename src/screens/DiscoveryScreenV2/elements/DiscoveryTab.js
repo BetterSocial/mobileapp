@@ -1,11 +1,12 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import {Dimensions, Keyboard, Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
-
 import {useRoute} from '@react-navigation/core';
-import {colors} from '../../../utils/colors';
-import {fonts, normalizeFontSize} from '../../../utils/fonts';
-import {setNavbarTitle} from '../../../context/actions/setMyProfileAction';
+
 import {Context} from '../../../context';
+import {colors} from '../../../utils/colors';
+import {normalizeFontSize} from '../../../utils/fonts';
+import {setNavbarTitle} from '../../../context/actions/setMyProfileAction';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -36,6 +37,7 @@ const DiscoveryTab = ({onChangeScreen, selectedScreen = 0, tabs}) => {
       showsVerticalScrollIndicator={false}>
       {Object.keys(tabs).map((item, index) => {
         if (route.name === 'Followings' && item === 'News') return null;
+        const totalItem = route.name === 'Followings' ? `(${tabs[item]})` : '';
         return (
           <Pressable
             key={`tabItem-${item}`}
@@ -50,7 +52,7 @@ const DiscoveryTab = ({onChangeScreen, selectedScreen = 0, tabs}) => {
             }}>
             <View style={styles.tabItemContainer}>
               <Text style={index === selectedScreen ? styles.tabItemTextFocus : styles.tabItemText}>
-                {`${item} ${route.name === 'Followings' ? `(${tabs[item]})` : ''}`}
+                {`${item} ${totalItem}`}
               </Text>
             </View>
           </Pressable>
@@ -65,12 +67,12 @@ const styles = StyleSheet.create({
     height: 48,
     backgroundColor: colors.white
   },
-  tabItem: (tabs) => ({
-    width: tabs === 4 ? undefined : windowWidth / tabs,
+  tabItem: (numTabs) => ({
+    width: numTabs === 4 ? undefined : windowWidth / numTabs,
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%',
-    paddingHorizontal: tabs === 4 ? 20 : undefined
+    paddingHorizontal: numTabs === 4 ? 20 : undefined
   }),
   tabItemContainer: {
     alignSelf: 'center'
@@ -95,5 +97,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2
   }
 });
+
+DiscoveryTab.propTypes = {
+  onChangeScreen: PropTypes.func,
+  selectedScreen: PropTypes.number,
+  tabs: PropTypes.object
+};
 
 export default DiscoveryTab;

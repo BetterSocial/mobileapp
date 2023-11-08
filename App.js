@@ -39,7 +39,7 @@ const App = () => {
   });
   const navigationRef = React.useRef();
   const routeNameRef = React.useRef();
-  const [currentScreen, setCurrentScreen] = React.useState('')
+  const [currentScreen, setCurrentScreen] = React.useState('InitialScreenName');
 
   React.useEffect(() => {
     try {
@@ -125,10 +125,6 @@ const App = () => {
 
   // OneSignal Initialization
   OneSignal.initialize(ONE_SIGNAL_APP_ID);
-
-  // requestPermission will show the native iOS or Android notification permission prompt.
-  // We recommend removing the following code and instead using an In-App Message to prompt for notification permission
-  OneSignal.Notifications.requestPermission(true);
 
   return (
     <>
