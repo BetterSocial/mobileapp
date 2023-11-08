@@ -302,13 +302,13 @@ const styles = StyleSheet.create({
     marginHorizontal: dimen.normalizeDimen(20)
   },
   footer: {
-    position: 'absolute',
-    bottom: 0,
-    height: dimen.normalizeDimen(112),
     width,
-    paddingHorizontal: dimen.normalizeDimen(20),
-    paddingBottom: dimen.normalizeDimen(20),
+    height: dimen.normalizeDimen(112),
+    flexDirection: 'column',
     backgroundColor: colors.white,
+    justifyContent: 'space-between',
+    paddingBottom: dimen.normalizeDimen(20),
+    paddingHorizontal: dimen.normalizeDimen(20),
     shadowColor: colors.black,
     shadowOffset: {
       width: 0,
@@ -318,8 +318,8 @@ const styles = StyleSheet.create({
     shadowRadius: 6.68,
 
     elevation: 11,
-    flexDirection: 'column',
-    justifyContent: 'space-between'
+    position: 'absolute',
+    bottom: 0
   },
   containerProgress: {
     marginTop: dimen.normalizeDimen(20),
@@ -395,10 +395,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   textSmall: {
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: '400',
     fontSize: normalizeFontSize(10),
+    fontWeight: '400',
+    fontStyle: 'normal',
+    fontFamily: 'Inter',
     textAlign: 'center',
     color: colors.blackgrey
   },
