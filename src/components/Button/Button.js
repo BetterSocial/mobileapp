@@ -19,7 +19,10 @@ const Btn = (props) => {
 };
 
 Btn.propTypes = {
+  disabled: PropTypes.bool,
+  children: PropTypes.node,
   onPress: PropTypes.func,
+  styles: PropTypes.object,
   textStyling: PropTypes.object
 };
 
