@@ -12,8 +12,6 @@ import UseLocalDatabaseHook from '../../../types/database/localDatabase.types';
 import UserSchema from '../../database/schema/UserSchema';
 import migrationDbStatusAtom from '../../database/atom/migrationDbStatusAtom';
 import useBetterWebsocketHook from './websocket/useBetterWebsocketHook';
-import useFetchAnonymousChannelHook from './chat/useFetchAnonymousChannelHook';
-import useFetchAnonymousPostNotificationHook from './chat/useFetchAnonymousPostNotificationHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import usePostNotificationListenerHook from './getstream/usePostNotificationListenerHook';
 import useProfileHook from './profile/useProfileHook';
@@ -500,7 +498,6 @@ const useCoreChatSystemHook = () => {
   }, [JSON.stringify(lastJsonMessage), localDb]);
 
   React.useEffect(() => {
-    console.log({lastSignedMessage}, 'nehiman');
     if (!lastSignedMessage && !localDb) return;
 
     const {type} = lastSignedMessage;

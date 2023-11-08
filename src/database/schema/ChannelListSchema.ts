@@ -218,6 +218,40 @@ class ChannelList implements BaseDbSchema {
     return results.rows.raw().map(ChannelList.fromDatabaseObject);
   }
 
+  static async getAllAnonymousChannelList(
+    db: SQLiteDatabase,
+    myId: string,
+    myAnonymousId: string
+  ): Promise<ChannelList[]> {
+    const [results] = await db.executeSql(
+      `SELECT 
+        A.*,
+        CASE last_updated_by
+          WHEN ? THEN 1
+          WHEN ? THEN 1
+          ELSE 0 END AS is_me,
+        B.id AS user_row_id,
+        B.user_id,
+        B.channel_id,
+        B.username,
+        B.country_code,
+        B.created_at AS user_created_at,
+        B.updated_at AS user_updated_at,
+        B.last_active_at,
+        B.profile_picture,
+        B.bio,
+        B.is_banned
+      FROM ${ChannelList.getTableName()} A
+      LEFT JOIN ${UserSchema.getTableName()} B
+      ON A.last_updated_by = B.user_id AND A.id = B.channel_id
+      WHERE (expired_at IS NULL OR datetime(expired_at) >= datetime('now')) AND A.description != ''
+      AND A.channel_type IN ('ANON_PM', 'ANON_POST_NOTIFICATION', 'ANON_GROUP')
+      ORDER BY last_updated_at DESC`,
+      [myId, myAnonymousId]
+    );
+    return results.rows.raw().map(ChannelList.fromDatabaseObject);
+  }
+
   static async getUnreadCount(
     db: SQLiteDatabase,
     channelCategory: 'SIGNED' | 'ANON'
@@ -332,7 +366,7 @@ class ChannelList implements BaseDbSchema {
   ): ChannelList {
     const object = json?.new[0];
     return new ChannelList({
-      id: object?.id,
+      id: `${object?.id}${channelType === 'ANON_POST_NOTIFICATION' ? '_anon' : ''}'}`,
       channelPicture: '',
       name: '',
       description: object?.message,
@@ -391,7 +425,7 @@ class ChannelList implements BaseDbSchema {
 
   static fromAnonymousPostNotificationAPI(data: AnonymousPostNotification): ChannelList {
     return new ChannelList({
-      id: data?.activity_id,
+      id: `${data?.activity_id}_anon`,
       channelPicture: data?.postMaker?.data?.profile_pic_url || '',
       name: data?.titlePost,
       description: data?.titlePost,

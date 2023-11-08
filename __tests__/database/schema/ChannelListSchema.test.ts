@@ -540,7 +540,8 @@ describe('TESTING ChannelListSchema', () => {
         unreadCount: 0,
         rawJson: expect.any(Object),
         members: null,
-        lastUpdatedBy: ''
+        lastUpdatedBy: '',
+        id: 'id_anon'
       };
 
       // Execution
