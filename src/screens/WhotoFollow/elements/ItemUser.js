@@ -29,10 +29,18 @@ const ItemUser = ({photo, username, bio, followed, onPress, userid}) => {
       <View style={styles.containerButton}>
         <Pressable onPress={onPress} style={styles.followAction(32, 32)}>
           <Animated.View style={{position: 'absolute', opacity: 1}}>
-            <IconAdd width={20} height={20} fill="#000000" />
+            <IconAdd
+              width={dimen.normalizeDimen(20)}
+              height={dimen.normalizeDimen(20)}
+              fill="#000000"
+            />
           </Animated.View>
           <Animated.View style={{position: 'absolute', opacity: followIconFadeAnimation}}>
-            <IconCheck width={32} height={32} fill="#23C5B6" />
+            <IconCheck
+              width={dimen.normalizeDimen(32)}
+              height={dimen.normalizeDimen(32)}
+              fill="#23C5B6"
+            />
           </Animated.View>
         </Pressable>
       </View>
@@ -48,22 +56,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     height: dimen.normalizeDimen(64),
-    paddingHorizontal: 20,
+    paddingHorizontal: dimen.normalizeDimen(20),
     width: '100%',
     flex: 1
   },
   containerButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: dimen.normalizeDimen(32),
+    height: dimen.normalizeDimen(32),
+    borderRadius: dimen.normalizeDimen(16),
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 8
+    marginLeft: dimen.normalizeDimen(8)
   },
   followAction: (width, height) => ({
-    height,
-    width,
+    height: dimen.normalizeDimen(height),
+    width: dimen.normalizeDimen(width),
     justifyContent: 'center',
     alignItems: 'center'
   })
