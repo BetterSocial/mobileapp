@@ -35,7 +35,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
     <View
       style={
         Object {
-          "height": 100,
+          "height": 112.5,
           "paddingTop": 10,
         }
       }
