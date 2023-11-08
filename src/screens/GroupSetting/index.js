@@ -67,7 +67,7 @@ const GroupSetting = ({navigation, route}) => {
         <View style={styles.users}>
           <Text style={styles.countUser}>{`Participants (${countUser})`}</Text>
           <FlatList
-            data={Object.keys(participants)}
+            data={participants}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item}) => (
               <View style={{height: 72}}>
@@ -93,7 +93,7 @@ export default GroupSetting;
 const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#fff'},
   subtitleStyle: {
-    color: COLORS.holyTosca
+    color: COLORS.holytosca
   },
   containerHeader: {marginLeft: 22, marginRight: 20},
   users: {

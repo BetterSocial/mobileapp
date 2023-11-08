@@ -107,6 +107,9 @@ jobs:
 #          name: decrypt api key playstore
 #          command: openssl aes-256-cbc -d -md sha256 -in fastlane/playstore-api-key.json.enc -out fastlane/playstore-api-key.json -pass pass:$PLAYSTORE_KEY_PASSWORD
       - run:
+          name: unset node-options
+          command: unset NODE_OPTIONS
+      - run:
           name: android build
           command: bundle exec fastlane android release --env <<parameters.env>> build_type:<< parameters.build-type >> release_notes:<< pipeline.parameters.release-notes >>
       - save_cache:
@@ -223,7 +226,7 @@ workflows:
       - release-android:
           context: mobile_dev
           env: dev
-          build-type: dev
+          build-type: debug
           requires:
             - node
       - release-ios:

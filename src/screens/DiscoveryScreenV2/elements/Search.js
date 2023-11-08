@@ -180,7 +180,6 @@ const DiscoverySearch = ({
             ref={discoverySearchBarRef}
             testID={TestIdConstant.discoveryScreenSearchBar}
             focusable={true}
-            autoFocus={true}
             // value={discoverySearchBarText}
             value={searchText}
             onChangeText={handleChangeText}
@@ -276,7 +275,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   newPostText: {
-    color: COLORS.holyTosca,
+    color: COLORS.holytosca,
     marginRight: 11,
     ...FONTS.h3
   },

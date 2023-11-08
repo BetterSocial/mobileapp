@@ -11,6 +11,7 @@ import {
   View
 } from 'react-native';
 import {useNavigation} from '@react-navigation/core';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import CustomPressable from '../../components/CustomPressable';
 import ListTopic from './ListTopics';
@@ -26,6 +27,7 @@ import {TOPICS_PICK} from '../../utils/cache/constant';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {getSpecificCache} from '../../utils/cache';
+import {Monitoring} from '../../libraries/monitoring/sentry';
 import {setTopics as setTopicsContext} from '../../context/actions/topics';
 
 const {width} = Dimensions.get('screen');
@@ -38,11 +40,13 @@ const Topics = () => {
   const [, dispatch] = React.useContext(Context).topics;
   const [myTopic, setMyTopic] = React.useState({});
   const [isPreload, setIspreload] = React.useState(true);
+  const {bottom} = useSafeAreaInsets();
 
   const {isFetchingTopic, isTopicFetchError, getTopicsData, topicCollection} = useSignin();
   const getCacheTopic = async () => {
     getSpecificCache(TOPICS_PICK, (cache) => {
       if (cache) {
+        Monitoring.logActions('set topics data from cache', cache);
         setTopics(cache);
         setIspreload(false);
       } else {
@@ -52,7 +56,6 @@ const Topics = () => {
     });
   };
   React.useEffect(() => {
-    // console.log(topicCollection, 'lusi')
     if (topicCollection.length > 0) {
       setTopics(topicCollection);
     }
@@ -98,6 +101,7 @@ const Topics = () => {
       handleSelectedLanguage={handleSelectedLanguage}
     />
   );
+
   const onBack = () => {
     navigation.goBack();
   };
@@ -120,7 +124,7 @@ const Topics = () => {
           </View>
 
           {topics?.length > 0 && (
-            <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollViewStyle}>
+            <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollViewStyle(bottom)}>
               {topics
                 ? topics.map((topic, index) => (
                     <View key={index} style={styles.containerTopic}>
@@ -187,7 +191,9 @@ const Topics = () => {
   );
 };
 const styles = StyleSheet.create({
-  scrollViewStyle: {marginBottom: 100},
+  scrollViewStyle: (bottom) => ({
+    marginBottom: 100 - bottom
+  }),
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -339,4 +345,4 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline'
   }
 });
-export default React.memo(Topics);
+export default Topics;

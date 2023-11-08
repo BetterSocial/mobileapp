@@ -8,11 +8,9 @@ const Btn = (props) => {
   const disable = props.disabled ? props.disabled : false;
   const disabledStyle = props.disabled ? styles.disabledbutton : {};
   return (
-    <TouchableOpacity disabled={disable} onPress={props.onPress}>
+    <TouchableOpacity disabled={disable} onPress={props.onPress} {...props}>
       <View style={{...styles.button, ...props.style, ...disabledStyle}}>
-        <Text style={{...styles.buttonText, ...props.textStyling}}>
-          {props.children}
-        </Text>
+        <Text style={{...styles.buttonText, ...props.textStyling}}>{props.children}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -26,16 +24,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 50,
     justifyContent: 'center',
-    alignItems:'center'
+    alignItems: 'center'
   },
   buttonText: {
     color: '#FFFFFF',
     fontSize: 18,
-    fontFamily: fonts.inter[600],
+    fontFamily: fonts.inter[600]
   },
   disabledbutton: {
-    backgroundColor: colors.gray1,
-  },
+    backgroundColor: colors.gray1
+  }
 });
 
 export default Btn;
