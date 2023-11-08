@@ -9,9 +9,9 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import ToggleSwitch from '../ToggleSwitch';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import AnonUserInfoRepo from '../../service/repo/anonUserInfoRepo';
 import MemoSendComment from '../../assets/icon/IconSendComment';
 import StringConstant from '../../utils/string/StringConstant';

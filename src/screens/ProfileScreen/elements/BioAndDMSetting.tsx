@@ -147,10 +147,8 @@ const styles = StyleSheet.create({
     fontWeight: Platform.OS === 'android' ? '700' : '600',
     lineHeight: 22
   },
-  toggleLabel: {color: colors.white, marginRight: 2, fontSize: 12},
-  toggleLabelFollowingDM: {color: colors.white, marginRight: 5, fontSize: 12},
-  toggleSwitchAnon: {display: 'flex', alignSelf: 'flex-end', paddingVertical: 12},
-  toggleSwitchAnonFollowing: {display: 'flex', alignSelf: 'flex-end', paddingBottom: 12}
+  toggleSwitchAnon: {display: 'flex', alignSelf: 'flex-end', paddingVertical: 6},
+  toggleSwitchAnonFollowing: {display: 'flex', alignSelf: 'flex-end', paddingBottom: 6}
 });
 
 export default BioAndDMSetting;
