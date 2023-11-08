@@ -119,4 +119,4 @@ const ChatDetailHeader = ({
   );
 };
 
-export default ChatDetailHeader;
+export default React.memo(ChatDetailHeader);

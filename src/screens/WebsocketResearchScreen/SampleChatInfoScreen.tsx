@@ -198,7 +198,7 @@ const SampleChatInfoScreen = () => {
   const ANONYMOUS_USER = 'AnonymousUser';
   const {anon_user_info_color_code, anon_user_info_emoji_code} =
     channelInfo?.rawJson?.channel || {};
-  console.log({channelInfo, profile}, 'lalak');
+
   const showImageProfile = () => {
     if (channelInfo?.channelType === CHANNEL_GROUP) {
       return (
@@ -224,7 +224,6 @@ const SampleChatInfoScreen = () => {
       />
     );
   };
-  console.log({channelInfo}, 'channel');
 
   const renderImageComponent = (item) => {
     if (
@@ -252,7 +251,6 @@ const SampleChatInfoScreen = () => {
     return `(${channelInfo?.members?.length})`;
   };
 
-  console.log({selectedUser}, 'select');
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />

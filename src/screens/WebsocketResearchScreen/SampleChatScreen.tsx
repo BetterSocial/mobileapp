@@ -56,14 +56,16 @@ const SampleChatScreen = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.keyboardAvoidingView}
       keyboardVerticalOffset={-500}>
-      <ChatDetailHeader
-        onAvatarPress={goToChatInfoScreen}
-        onBackPress={goBackFromChatScreen}
-        onThreeDotPress={goToChatInfoScreen}
-        avatar={selectedChannel?.channelPicture}
-        user={selectedChannel?.name}
-        type={ANONYMOUS}
-      />
+      {selectedChannel ? (
+        <ChatDetailHeader
+          onAvatarPress={goToChatInfoScreen}
+          onBackPress={goBackFromChatScreen}
+          onThreeDotPress={goToChatInfoScreen}
+          avatar={selectedChannel?.channelPicture}
+          user={selectedChannel?.name}
+          type={ANONYMOUS}
+        />
+      ) : null}
       <FlatList
         contentContainerStyle={{paddingBottom: 20}}
         style={styles.chatContainer}

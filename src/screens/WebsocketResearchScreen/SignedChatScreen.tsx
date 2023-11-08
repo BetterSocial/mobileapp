@@ -48,21 +48,24 @@ const SignedChatScreen = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.keyboardAvoidingView}
       keyboardVerticalOffset={-500}>
-      <ChatDetailHeader
-        channel={selectedChannel}
-        onAvatarPress={goToChatInfoPage}
-        onBackPress={goBackFromChatScreen}
-        onThreeDotPress={goToChatInfoPage}
-        avatar={selectedChannel?.channelPicture}
-        type={SIGNED}
-        user={
-          selectedChannel?.rawJson?.channel?.anon_user_info_emoji_code
-            ? `Anonymous ${selectedChannel?.rawJson?.channel?.anon_user_info_emoji_name} `
-            : getChatName(selectedChannel?.name, profile?.myProfile?.username)
-        }
-        anon_user_info_emoji_code={selectedChannel?.rawJson?.channel?.anon_user_info_emoji_code}
-        anon_user_info_color_code={selectedChannel?.rawJson?.channel?.anon_user_info_color_code}
-      />
+      {selectedChannel ? (
+        <ChatDetailHeader
+          channel={selectedChannel}
+          onAvatarPress={goToChatInfoPage}
+          onBackPress={goBackFromChatScreen}
+          onThreeDotPress={goToChatInfoPage}
+          avatar={selectedChannel?.channelPicture}
+          type={SIGNED}
+          user={
+            selectedChannel?.rawJson?.channel?.anon_user_info_emoji_code
+              ? `Anonymous ${selectedChannel?.rawJson?.channel?.anon_user_info_emoji_name} `
+              : getChatName(selectedChannel?.name, profile?.myProfile?.username)
+          }
+          anon_user_info_emoji_code={selectedChannel?.rawJson?.channel?.anon_user_info_emoji_code}
+          anon_user_info_color_code={selectedChannel?.rawJson?.channel?.anon_user_info_color_code}
+        />
+      ) : null}
+
       <FlatList
         contentContainerStyle={{paddingBottom: 20}}
         style={styles.chatContainer}

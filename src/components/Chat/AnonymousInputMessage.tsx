@@ -120,4 +120,4 @@ const AnonymousInputMessage = ({onSendButtonClicked, type}: AnonymousInputMessag
   );
 };
 
-export default AnonymousInputMessage;
+export default React.memo(AnonymousInputMessage);

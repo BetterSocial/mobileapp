@@ -76,4 +76,4 @@ const ChannelListTabItem = (props: ChannelListTabItemProps) => {
   );
 };
 
-export default ChannelListTabItem;
+export default React.memo(ChannelListTabItem);

@@ -22,13 +22,13 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
         selectedTab={0}
         tabs={
           Array [
-            <ChannelListTabItem
+            <Memo(ChannelListTabItem)
               name="@undefined"
               testID="horizontal-tab-0"
               type="SIGNED"
               unreadCount={0}
             />,
-            <ChannelListTabItem
+            <Memo(ChannelListTabItem)
               name="Anonymous"
               picture={
                 Object {

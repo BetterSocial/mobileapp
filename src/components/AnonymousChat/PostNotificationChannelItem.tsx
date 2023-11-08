@@ -106,4 +106,8 @@ const PostNotificationChannelItem: (props: MessageChannelItemProps) => React.Rea
   );
 };
 
-export default PostNotificationChannelItem;
+const isEqual = (prevProps, nextProps) => {
+  return nextProps.item === prevProps.item;
+};
+
+export default React.memo(PostNotificationChannelItem, isEqual);

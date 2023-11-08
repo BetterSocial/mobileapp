@@ -7,6 +7,8 @@ import {COLORS} from '../../utils/theme';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {colors} from '../../utils/colors';
 import dimen from '../../utils/dimen';
+import {ANONYMOUS_USER} from '../../hooks/core/constant';
+import {isContainUrl} from '../../utils/Utils';
 
 const ProfileContact = ({
   photo,
@@ -17,8 +19,16 @@ const ProfileContact = ({
   userId,
   item,
   ImageComponent = null,
-  disabled = false
+  disabled = false,
+  from
 }) => {
+  const handleYouText = () => {
+    if (!from && (!isContainUrl(item?.user?.image) || item?.user?.name === ANONYMOUS_USER)) {
+      return '(You)';
+    }
+    return '';
+  };
+
   return (
     <Pressable
       onPress={onPress}
@@ -38,7 +48,9 @@ const ProfileContact = ({
               source={{uri: photo !== '' ? photo : undefined}}
             />
           )}
-          <Text style={styles.fullname(userId === item?.user_id)}>{fullname}</Text>
+          <Text testID="name" style={styles.fullname(userId === item?.user_id)}>
+            {fullname} {handleYouText()}
+          </Text>
         </View>
         {showArrow && (
           <>
@@ -66,7 +78,7 @@ ProfileContact.propTypes = {
   }
 };
 
-export default ProfileContact;
+export default React.memo(ProfileContact);
 
 const styles = StyleSheet.create({
   profile: {
