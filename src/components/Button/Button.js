@@ -3,6 +3,7 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import dimen from '../../utils/dimen';
 
 const Btn = (props) => {
   const disable = props.disabled ? props.disabled : false;
@@ -19,10 +20,10 @@ const Btn = (props) => {
 const styles = StyleSheet.create({
   button: {
     backgroundColor: '#00ADB5',
-    paddingHorizontal: 25,
-    borderRadius: 8,
+    paddingHorizontal: dimen.normalizeDimen(25),
+    borderRadius: dimen.normalizeDimen(8),
     flexDirection: 'row',
-    height: 50,
+    height: dimen.normalizeDimen(50),
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -32,7 +33,8 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600]
   },
   disabledbutton: {
-    backgroundColor: colors.gray1
+    backgroundColor: colors.gray1,
+    borderRadius: dimen.normalizeDimen(8)
   }
 });
 
