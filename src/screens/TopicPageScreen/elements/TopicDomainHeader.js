@@ -9,7 +9,7 @@ import {convertString} from '../../../utils/string/StringUtils';
 import {colors} from '../../../utils/colors';
 
 const TopicDomainHeader = (props) => {
-  const {handleOnMemberPress, hideSeeMember, isFollow, memberCount, topicDetail} = props;
+  const {domain, handleOnMemberPress, hideSeeMember, isFollow, memberCount} = props;
   const handlePress = () => {
     if (isFollow) {
       handleOnMemberPress();
@@ -21,7 +21,7 @@ const TopicDomainHeader = (props) => {
   return (
     <View>
       <Text style={styles.domainText} numberOfLines={1} ellipsizeMode="tail">
-        {`#${convertString(topicDetail?.name, ' ', '')}`}
+        {`#${convertString(domain, ' ', '')}`}
       </Text>
       <Pressable onPress={handlePress} style={{backgroundColor: 'transparent'}}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -39,11 +39,11 @@ const TopicDomainHeader = (props) => {
 };
 
 TopicDomainHeader.propTypes = {
+  domain: PropTypes.string.isRequired,
   handleOnMemberPress: PropTypes.func,
   hideSeeMember: PropTypes.bool,
   isFollow: PropTypes.bool,
-  memberCount: PropTypes.number,
-  topicDetail: PropTypes.object
+  memberCount: PropTypes.number
 };
 
 const styles = StyleSheet.create({
