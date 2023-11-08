@@ -270,48 +270,6 @@ const styles = StyleSheet.create({
     paddingRight: dimen.normalizeDimen(8)
   },
 
-  bgTopicSelectActive: {
-    backgroundColor: colors.bondi_blue,
-    // minWidth: 100,
-    paddingHorizontal: dimen.normalizeDimen(15),
-    paddingVertical: dimen.normalizeDimen(7),
-    borderRadius: dimen.normalizeDimen(14),
-    flexDirection: 'row',
-    // justifyContent: 'center',
-    marginRight: dimen.normalizeDimen(8),
-    marginBottom: dimen.normalizeDimen(10),
-    alignItems: 'center'
-    // alignItems: 'center',
-  },
-
-  bgTopicSelectNotActive: {
-    backgroundColor: colors.concrete,
-    // minWidth: 100,
-    paddingHorizontal: dimen.normalizeDimen(15),
-    paddingVertical: dimen.normalizeDimen(7),
-    borderRadius: dimen.normalizeDimen(14),
-    flexDirection: 'row',
-    // justifyContent: 'center',
-    marginRight: dimen.normalizeDimen(8),
-    marginBottom: dimen.normalizeDimen(10),
-    alignItems: 'center'
-  },
-  textTopicActive: {
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: '500',
-    fontSize: normalizeFontSize(12),
-    color: colors.white
-    // paddingLeft: 5,
-  },
-  textTopicNotActive: {
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: '500',
-    fontSize: normalizeFontSize(12),
-    color: colors.mine_shaft
-    // paddingLeft: 5,
-  },
   textSmallContainer: {
     flex: 1,
     justifyContent: 'center'
