@@ -43,4 +43,8 @@ const BaseSystemChat: React.FC<BaseChatItemComponentProps> = ({item, index}) => 
   );
 };
 
-export default BaseSystemChat;
+const isEqual = (prevProps, nextProps) => {
+  return nextProps.item === prevProps.item;
+};
+
+export default React.memo(BaseSystemChat, isEqual);
