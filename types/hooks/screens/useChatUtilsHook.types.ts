@@ -8,8 +8,8 @@ interface UseChatUtilsHook {
   goToCommunityScreen: (channel: ChannelList) => void;
   goToChatInfoScreen: () => void;
   goBackFromChatScreen: () => void;
-  handleTextSystem: (item: any) => void;
-  splitSystemMessage: (message: string) => void;
+  handleTextSystem: (item: any) => string;
+  splitSystemMessage: (message: string) => string[];
 }
 
 export default UseChatUtilsHook;

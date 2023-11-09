@@ -7,7 +7,7 @@ interface UseChatScreenHook {
   goToChatInfoScreen: (params?: any) => void;
   sendChat: (message: string) => Promise<void>;
   selectedChannel: ChannelList;
-  handleUserName: (item: ChatSchema) => Promise<void>;
+  handleUserName: (item: ChatSchema) => string;
   updateChatContinuity: (chatsData: ChatSchema[]) => ChatSchema[];
 }
 
