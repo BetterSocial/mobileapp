@@ -36,7 +36,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const sendChat = async (
     message: string = randomString(20),
     iteration = 0,
-    sendingChatSchema: ChatSchema = null
+    sendingChatSchema: ChatSchema | null = null
   ) => {
     if (iteration > 5) {
       SimpleToast.show("Can't send message, please check your connection");
