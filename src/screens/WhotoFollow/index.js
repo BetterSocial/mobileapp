@@ -177,65 +177,70 @@ const WhotoFollow = () => {
       follow_source: 'onboarding'
     };
 
-    const profilePic = usersState?.photoUrl;
-    if (profilePic && profilePic !== DEFAULT_PROFILE_PIC_PATH) {
-      try {
+    try {
+      const profilePic = usersState?.photoUrl;
+      if (profilePic && profilePic !== DEFAULT_PROFILE_PIC_PATH) {
         const uploadedImageUrl = await ImageUtils.uploadImageWithoutAuth(
           data?.users?.profile_pic_path
         );
         data.users.profile_pic_path = uploadedImageUrl?.data?.url;
-        console.log('uploadedImageUrl', uploadedImageUrl);
-      } catch (e) {
-        console.log('error upload', e);
       }
-    }
 
-    registerUser(data)
-      .then(async (res) => {
-        setFetchRegister(false);
-        if (res.code === 200) {
-          TokenStorage.set(res);
-          setToken(res.token);
-          try {
-            const userId = await JwtDecode(res.token).user_id;
-            const anonymousUserId = await JwtDecode(res.anonymousToken).user_id;
-            setProfileId({
-              anonProfileId: anonymousUserId,
-              signedProfileId: userId,
-              token: res.token,
-              anonymousToken: res.anonymousToken
+      registerUser(data)
+        .then(async (res) => {
+          setFetchRegister(false);
+          if (res.code === 200) {
+            TokenStorage.set(res);
+            setToken(res.token);
+            try {
+              const userId = await JwtDecode(res.token).user_id;
+              const anonymousUserId = await JwtDecode(res.anonymousToken).user_id;
+              setProfileId({
+                anonProfileId: anonymousUserId,
+                signedProfileId: userId,
+                token: res.token,
+                anonymousToken: res.anonymousToken
+              });
+            } catch (e) {
+              crashlytics().recordError(new Error(e));
+            }
+            showMessage({
+              message: 'Welcome to Better Social',
+              type: 'success',
+              backgroundColor: colors.holytosca
             });
-          } catch (e) {
-            crashlytics().recordError(new Error(e));
+            setTimeout(() => {
+              create();
+              setImage(null, usersDispatch);
+              setInitialValue({id: res.token});
+            }, 2000);
+          } else {
+            crashlytics().recordError(new Error(res));
+            showMessage({
+              message: 'Cannot connect to server, please try again later',
+              type: 'danger',
+              backgroundColor: colors.red
+            });
           }
-          showMessage({
-            message: 'Welcome to BetterSocial',
-            type: 'success',
-            backgroundColor: colors.holytosca
-          });
-          setTimeout(() => {
-            create();
-            setImage(null, usersDispatch);
-            setInitialValue({id: res.token});
-          }, 2000);
-        } else {
-          crashlytics().recordError(new Error(res));
+        })
+        .catch((error) => {
+          crashlytics().recordError(new Error(error.response));
+          setFetchRegister(false);
           showMessage({
             message: 'Cannot connect to server, please try again later',
             type: 'danger',
             backgroundColor: colors.red
           });
-        }
-      })
-      .catch((error) => {
-        crashlytics().recordError(new Error(error.response));
-        setFetchRegister(false);
-        showMessage({
-          message: 'Cannot connect to server, please try again later',
-          type: 'danger',
-          backgroundColor: colors.red
         });
+    } catch (e) {
+      crashlytics().recordError(new Error(e));
+      setFetchRegister(false);
+      showMessage({
+        message: 'Cannot connect to server, please try again later',
+        type: 'danger',
+        backgroundColor: colors.red
       });
+    }
   };
 
   const rowRenderer = (type, item, index, extendedState) => {
