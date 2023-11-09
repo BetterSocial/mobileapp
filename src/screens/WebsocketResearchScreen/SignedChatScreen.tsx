@@ -5,7 +5,7 @@
 import * as React from 'react';
 import {FlatList, KeyboardAvoidingView, Platform, View} from 'react-native';
 
-import AnonymousInputMessage from '../../components/Chat/AnonymousInputMessage';
+import InputMessageV2 from '../../components/Chat/InputMessageV2';
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
 import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
@@ -78,7 +78,12 @@ const SignedChatScreen = () => {
         renderItem={renderChatItem}
       />
       <View style={styles.inputContainer}>
-        <AnonymousInputMessage onSendButtonClicked={sendChat} type={SIGNED} />
+        <InputMessageV2
+          onSendButtonClicked={sendChat}
+          type={SIGNED}
+          username={selectedChannel?.name}
+          profileImage={profile?.myProfile?.profile_pic_path}
+        />
       </View>
     </KeyboardAvoidingView>
   );
