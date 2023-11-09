@@ -25,7 +25,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
       style={
         Object {
           "color": "#828282",
-          "fontSize": 4.669260700389105,
+          "fontSize": 10.8,
           "marginLeft": 2,
         }
       }
@@ -35,7 +35,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
     <View
       style={
         Object {
-          "height": 100,
+          "height": 112.5,
           "paddingTop": 10,
         }
       }
@@ -104,7 +104,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
                 "color": "#000000",
                 "flex": 1,
                 "fontFamily": "Inter-Regular",
-                "fontSize": 5.447470817120623,
+                "fontSize": 12.600000000000001,
                 "marginBottom": 6,
                 "marginLeft": 0,
                 "marginTop": 6,
@@ -117,7 +117,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
           <Text
             style={
               Object {
-                "fontSize": 5.447470817120623,
+                "fontSize": 12.600000000000001,
                 "textAlignVertical": "center",
               }
             }
@@ -193,7 +193,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
                 "color": "#000000",
                 "flex": 1,
                 "fontFamily": "Inter-Regular",
-                "fontSize": 5.447470817120623,
+                "fontSize": 12.600000000000001,
                 "marginBottom": 0,
                 "marginLeft": 0,
                 "marginTop": 0,
@@ -206,7 +206,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
           <Text
             style={
               Object {
-                "fontSize": 5.447470817120623,
+                "fontSize": 12.600000000000001,
                 "textAlignVertical": "center",
               }
             }
@@ -232,7 +232,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
         Object {
           "color": "#828282",
           "fontFamily": "Inter-Regular",
-          "fontSize": 4.669260700389105,
+          "fontSize": 10.8,
           "lineHeight": 16,
         }
       }
@@ -257,7 +257,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
           "color": "#828282",
           "flex": 1,
           "fontFamily": "Inter-Regular",
-          "fontSize": 4.669260700389105,
+          "fontSize": 10.8,
           "lineHeight": 16,
         }
       }
