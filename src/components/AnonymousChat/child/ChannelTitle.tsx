@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-use-before-define
 import * as React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
@@ -59,13 +60,9 @@ const ChannelTitle = ({
       color: colors.white
     },
     chatContentUnreadCountPostNotificationContainer: {
-      display: 'flex',
       position: 'absolute',
-      top: 22,
-      right: 20,
-      alignItems: 'flex-end',
-      justifyContent: 'flex-start',
-      alignSelf: 'flex-start'
+      top: 24,
+      alignSelf: 'flex-end'
     },
     postNotificationMessage: {
       fontFamily: fonts.inter[400],
@@ -127,27 +124,27 @@ const ChannelTitle = ({
   };
 
   return (
-    <>
-      <View style={baseStyles.chatContentSection}>
-        <View style={{display: 'flex', flexDirection: 'row'}}>
-          <Text
-            numberOfLines={2}
-            ellipsizeMode="tail"
-            style={[styles.chatContentName, styles.postNotificationMessage]}>
-            <Text style={styles.postNotificationMessageBold}>{getTitle()}</Text>
-            {message}
-          </Text>
+    <View style={baseStyles.chatContentSection}>
+      <View style={{display: 'flex', flexDirection: 'row'}}>
+        <Text
+          numberOfLines={2}
+          ellipsizeMode="tail"
+          style={[styles.chatContentName, styles.postNotificationMessage]}>
+          <Text style={styles.postNotificationMessageBold}>{getTitle()}</Text>
+          {message}
+        </Text>
+        <View style={{position: 'relative'}}>
           <Text style={styles.chatContentTime}>{time}</Text>
+          {unreadCount > 0 && (
+            <View style={styles.chatContentUnreadCountPostNotificationContainer}>
+              <View style={styles.chatContentUnreadCountContainer}>
+                <Text style={styles.chatContentUnreadCount}>{unreadCount}</Text>
+              </View>
+            </View>
+          )}
         </View>
       </View>
-      <View style={styles.chatContentUnreadCountPostNotificationContainer}>
-        {unreadCount > 0 && (
-          <View style={styles.chatContentUnreadCountContainer}>
-            <Text style={styles.chatContentUnreadCount}>{unreadCount}</Text>
-          </View>
-        )}
-      </View>
-    </>
+    </View>
   );
 };
 

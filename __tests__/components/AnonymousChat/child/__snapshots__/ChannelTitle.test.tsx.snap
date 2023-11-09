@@ -276,53 +276,59 @@ exports[`TESTING ChatItemTargetText RENDER ANON_PM with unreadcount should match
 `;
 
 exports[`TESTING ChatItemTargetText RENDER MY_ANON_POST with no messages should match snapshot 1`] = `
-Array [
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "display": "flex",
+      "flexDirection": "row",
+    }
+  }
+>
   <View
     style={
       Object {
-        "alignItems": "center",
         "display": "flex",
         "flexDirection": "row",
       }
     }
   >
-    <View
+    <Text
+      ellipsizeMode="tail"
+      numberOfLines={2}
       style={
-        Object {
-          "display": "flex",
-          "flexDirection": "row",
-        }
+        Array [
+          Object {
+            "flex": 1,
+            "fontFamily": "Inter-Bold",
+            "fontSize": 11.200000000000001,
+            "lineHeight": 22,
+            "paddingBottom": 2,
+          },
+          Object {
+            "alignSelf": "flex-start",
+            "fontFamily": "Inter-Regular",
+          },
+        ]
       }
     >
       <Text
-        ellipsizeMode="tail"
-        numberOfLines={2}
         style={
-          Array [
-            Object {
-              "flex": 1,
-              "fontFamily": "Inter-Bold",
-              "fontSize": 11.200000000000001,
-              "lineHeight": 22,
-              "paddingBottom": 2,
-            },
-            Object {
-              "alignSelf": "flex-start",
-              "fontFamily": "Inter-Regular",
-            },
-          ]
+          Object {
+            "fontFamily": "Inter-Bold",
+          }
         }
       >
-        <Text
-          style={
-            Object {
-              "fontFamily": "Inter-Bold",
-            }
-          }
-        >
-          Your media post 📸 🖼
-        </Text>
+        Your media post 📸 🖼
       </Text>
+    </Text>
+    <View
+      style={
+        Object {
+          "position": "relative",
+        }
+      }
+    >
       <Text
         style={
           Object {
@@ -338,72 +344,65 @@ Array [
         time
       </Text>
     </View>
-  </View>,
-  <View
-    style={
-      Object {
-        "alignItems": "flex-end",
-        "alignSelf": "flex-start",
-        "display": "flex",
-        "justifyContent": "flex-start",
-        "position": "absolute",
-        "right": 20,
-        "top": 22,
-      }
-    }
-  />,
-]
+  </View>
+</View>
 `;
 
 exports[`TESTING ChatItemTargetText RENDER MY_ANON_POST_NOTIFICATION should match snapshot 1`] = `
-Array [
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "display": "flex",
+      "flexDirection": "row",
+    }
+  }
+>
   <View
     style={
       Object {
-        "alignItems": "center",
         "display": "flex",
         "flexDirection": "row",
       }
     }
   >
-    <View
+    <Text
+      ellipsizeMode="tail"
+      numberOfLines={2}
       style={
-        Object {
-          "display": "flex",
-          "flexDirection": "row",
-        }
+        Array [
+          Object {
+            "flex": 1,
+            "fontFamily": "Inter-Bold",
+            "fontSize": 11.200000000000001,
+            "lineHeight": 22,
+            "paddingBottom": 2,
+          },
+          Object {
+            "alignSelf": "flex-start",
+            "fontFamily": "Inter-Regular",
+          },
+        ]
       }
     >
       <Text
-        ellipsizeMode="tail"
-        numberOfLines={2}
         style={
-          Array [
-            Object {
-              "flex": 1,
-              "fontFamily": "Inter-Bold",
-              "fontSize": 11.200000000000001,
-              "lineHeight": 22,
-              "paddingBottom": 2,
-            },
-            Object {
-              "alignSelf": "flex-start",
-              "fontFamily": "Inter-Regular",
-            },
-          ]
+          Object {
+            "fontFamily": "Inter-Bold",
+          }
         }
       >
-        <Text
-          style={
-            Object {
-              "fontFamily": "Inter-Bold",
-            }
-          }
-        >
-          Your post: 
-        </Text>
-        message
+        Your post: 
       </Text>
+      message
+    </Text>
+    <View
+      style={
+        Object {
+          "position": "relative",
+        }
+      }
+    >
       <Text
         style={
           Object {
@@ -419,72 +418,65 @@ Array [
         time
       </Text>
     </View>
-  </View>,
-  <View
-    style={
-      Object {
-        "alignItems": "flex-end",
-        "alignSelf": "flex-start",
-        "display": "flex",
-        "justifyContent": "flex-start",
-        "position": "absolute",
-        "right": 20,
-        "top": 22,
-      }
-    }
-  />,
-]
+  </View>
+</View>
 `;
 
 exports[`TESTING ChatItemTargetText RENDER MY_ANON_POST_NOTIFICATION_I_COMMENTED should match snapshot 1`] = `
-Array [
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "display": "flex",
+      "flexDirection": "row",
+    }
+  }
+>
   <View
     style={
       Object {
-        "alignItems": "center",
         "display": "flex",
         "flexDirection": "row",
       }
     }
   >
-    <View
+    <Text
+      ellipsizeMode="tail"
+      numberOfLines={2}
       style={
-        Object {
-          "display": "flex",
-          "flexDirection": "row",
-        }
+        Array [
+          Object {
+            "flex": 1,
+            "fontFamily": "Inter-Bold",
+            "fontSize": 11.200000000000001,
+            "lineHeight": 22,
+            "paddingBottom": 2,
+          },
+          Object {
+            "alignSelf": "flex-start",
+            "fontFamily": "Inter-Regular",
+          },
+        ]
       }
     >
       <Text
-        ellipsizeMode="tail"
-        numberOfLines={2}
         style={
-          Array [
-            Object {
-              "flex": 1,
-              "fontFamily": "Inter-Bold",
-              "fontSize": 11.200000000000001,
-              "lineHeight": 22,
-              "paddingBottom": 2,
-            },
-            Object {
-              "alignSelf": "flex-start",
-              "fontFamily": "Inter-Regular",
-            },
-          ]
+          Object {
+            "fontFamily": "Inter-Bold",
+          }
         }
       >
-        <Text
-          style={
-            Object {
-              "fontFamily": "Inter-Bold",
-            }
-          }
-        >
-          Your post: 
-        </Text>
-        message
+        Your post: 
       </Text>
+      message
+    </Text>
+    <View
+      style={
+        Object {
+          "position": "relative",
+        }
+      }
+    >
       <Text
         style={
           Object {
@@ -500,72 +492,65 @@ Array [
         time
       </Text>
     </View>
-  </View>,
-  <View
-    style={
-      Object {
-        "alignItems": "flex-end",
-        "alignSelf": "flex-start",
-        "display": "flex",
-        "justifyContent": "flex-start",
-        "position": "absolute",
-        "right": 20,
-        "top": 22,
-      }
-    }
-  />,
-]
+  </View>
+</View>
 `;
 
 exports[`TESTING ChatItemTargetText RENDER other type post with messages should match snapshot 1`] = `
-Array [
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "display": "flex",
+      "flexDirection": "row",
+    }
+  }
+>
   <View
     style={
       Object {
-        "alignItems": "center",
         "display": "flex",
         "flexDirection": "row",
       }
     }
   >
-    <View
+    <Text
+      ellipsizeMode="tail"
+      numberOfLines={2}
       style={
-        Object {
-          "display": "flex",
-          "flexDirection": "row",
-        }
+        Array [
+          Object {
+            "flex": 1,
+            "fontFamily": "Inter-Bold",
+            "fontSize": 11.200000000000001,
+            "lineHeight": 22,
+            "paddingBottom": 2,
+          },
+          Object {
+            "alignSelf": "flex-start",
+            "fontFamily": "Inter-Regular",
+          },
+        ]
       }
     >
       <Text
-        ellipsizeMode="tail"
-        numberOfLines={2}
         style={
-          Array [
-            Object {
-              "flex": 1,
-              "fontFamily": "Inter-Bold",
-              "fontSize": 11.200000000000001,
-              "lineHeight": 22,
-              "paddingBottom": 2,
-            },
-            Object {
-              "alignSelf": "flex-start",
-              "fontFamily": "Inter-Regular",
-            },
-          ]
+          Object {
+            "fontFamily": "Inter-Bold",
+          }
         }
       >
-        <Text
-          style={
-            Object {
-              "fontFamily": "Inter-Bold",
-            }
-          }
-        >
-          name's post: 
-        </Text>
-        message
+        name's post: 
       </Text>
+      message
+    </Text>
+    <View
+      style={
+        Object {
+          "position": "relative",
+        }
+      }
+    >
       <Text
         style={
           Object {
@@ -581,71 +566,64 @@ Array [
         time
       </Text>
     </View>
-  </View>,
-  <View
-    style={
-      Object {
-        "alignItems": "flex-end",
-        "alignSelf": "flex-start",
-        "display": "flex",
-        "justifyContent": "flex-start",
-        "position": "absolute",
-        "right": 20,
-        "top": 22,
-      }
-    }
-  />,
-]
+  </View>
+</View>
 `;
 
 exports[`TESTING ChatItemTargetText RENDER other type post with no messages should match snapshot 1`] = `
-Array [
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "display": "flex",
+      "flexDirection": "row",
+    }
+  }
+>
   <View
     style={
       Object {
-        "alignItems": "center",
         "display": "flex",
         "flexDirection": "row",
       }
     }
   >
-    <View
+    <Text
+      ellipsizeMode="tail"
+      numberOfLines={2}
       style={
-        Object {
-          "display": "flex",
-          "flexDirection": "row",
-        }
+        Array [
+          Object {
+            "flex": 1,
+            "fontFamily": "Inter-Bold",
+            "fontSize": 11.200000000000001,
+            "lineHeight": 22,
+            "paddingBottom": 2,
+          },
+          Object {
+            "alignSelf": "flex-start",
+            "fontFamily": "Inter-Regular",
+          },
+        ]
       }
     >
       <Text
-        ellipsizeMode="tail"
-        numberOfLines={2}
         style={
-          Array [
-            Object {
-              "flex": 1,
-              "fontFamily": "Inter-Bold",
-              "fontSize": 11.200000000000001,
-              "lineHeight": 22,
-              "paddingBottom": 2,
-            },
-            Object {
-              "alignSelf": "flex-start",
-              "fontFamily": "Inter-Regular",
-            },
-          ]
+          Object {
+            "fontFamily": "Inter-Bold",
+          }
         }
       >
-        <Text
-          style={
-            Object {
-              "fontFamily": "Inter-Bold",
-            }
-          }
-        >
-          name's media post 📸 🖼
-        </Text>
+        name's media post 📸 🖼
       </Text>
+    </Text>
+    <View
+      style={
+        Object {
+          "position": "relative",
+        }
+      }
+    >
       <Text
         style={
           Object {
@@ -661,71 +639,64 @@ Array [
         time
       </Text>
     </View>
-  </View>,
-  <View
-    style={
-      Object {
-        "alignItems": "flex-end",
-        "alignSelf": "flex-start",
-        "display": "flex",
-        "justifyContent": "flex-start",
-        "position": "absolute",
-        "right": 20,
-        "top": 22,
-      }
-    }
-  />,
-]
+  </View>
+</View>
 `;
 
 exports[`TESTING ChatItemTargetText RENDER other type post with unreadcount should match snapshot 1`] = `
-Array [
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "display": "flex",
+      "flexDirection": "row",
+    }
+  }
+>
   <View
     style={
       Object {
-        "alignItems": "center",
         "display": "flex",
         "flexDirection": "row",
       }
     }
   >
-    <View
+    <Text
+      ellipsizeMode="tail"
+      numberOfLines={2}
       style={
-        Object {
-          "display": "flex",
-          "flexDirection": "row",
-        }
+        Array [
+          Object {
+            "flex": 1,
+            "fontFamily": "Inter-Bold",
+            "fontSize": 11.200000000000001,
+            "lineHeight": 22,
+            "paddingBottom": 2,
+          },
+          Object {
+            "alignSelf": "flex-start",
+            "fontFamily": "Inter-Regular",
+          },
+        ]
       }
     >
       <Text
-        ellipsizeMode="tail"
-        numberOfLines={2}
         style={
-          Array [
-            Object {
-              "flex": 1,
-              "fontFamily": "Inter-Bold",
-              "fontSize": 11.200000000000001,
-              "lineHeight": 22,
-              "paddingBottom": 2,
-            },
-            Object {
-              "alignSelf": "flex-start",
-              "fontFamily": "Inter-Regular",
-            },
-          ]
+          Object {
+            "fontFamily": "Inter-Bold",
+          }
         }
       >
-        <Text
-          style={
-            Object {
-              "fontFamily": "Inter-Bold",
-            }
-          }
-        >
-          name's media post 📸 🖼
-        </Text>
+        name's media post 📸 🖼
       </Text>
+    </Text>
+    <View
+      style={
+        Object {
+          "position": "relative",
+        }
+      }
+    >
       <Text
         style={
           Object {
@@ -740,47 +711,43 @@ Array [
       >
         time
       </Text>
-    </View>
-  </View>,
-  <View
-    style={
-      Object {
-        "alignItems": "flex-end",
-        "alignSelf": "flex-start",
-        "display": "flex",
-        "justifyContent": "flex-start",
-        "position": "absolute",
-        "right": 20,
-        "top": 22,
-      }
-    }
-  >
-    <View
-      style={
-        Object {
-          "alignItems": "center",
-          "backgroundColor": "#2C67BC",
-          "borderRadius": 10,
-          "height": 20,
-          "justifyContent": "center",
-          "textAlign": "center",
-          "width": 20,
-        }
-      }
-    >
-      <Text
+      <View
         style={
           Object {
-            "color": "#ffffff",
-            "fontFamily": "Inter-Regular",
-            "fontSize": 8,
-            "lineHeight": 14.52,
+            "alignSelf": "flex-end",
+            "position": "absolute",
+            "top": 24,
           }
         }
       >
-        1
-      </Text>
+        <View
+          style={
+            Object {
+              "alignItems": "center",
+              "backgroundColor": "#2C67BC",
+              "borderRadius": 10,
+              "height": 20,
+              "justifyContent": "center",
+              "textAlign": "center",
+              "width": 20,
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "color": "#ffffff",
+                "fontFamily": "Inter-Regular",
+                "fontSize": 8,
+                "lineHeight": 14.52,
+              }
+            }
+          >
+            1
+          </Text>
+        </View>
+      </View>
     </View>
-  </View>,
-]
+  </View>
+</View>
 `;
