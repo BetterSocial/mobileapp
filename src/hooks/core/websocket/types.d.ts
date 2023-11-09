@@ -111,7 +111,7 @@ export type GetstreamWebsocket = {
   unread_channels: number;
   unread_count: number;
   targetName: string;
-  targetImage: string;
+  targetImage?: string;
   isAnonymous?: boolean;
   anon_user_info_emoji_name?: string;
   anon_user_info_color_name?: string;
