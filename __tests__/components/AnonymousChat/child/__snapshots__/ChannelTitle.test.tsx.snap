@@ -31,7 +31,7 @@ exports[`TESTING ChatItemTargetText RENDER ANON_PM should match snapshot 1`] = `
           Object {
             "flex": 1,
             "fontFamily": "Inter-Bold",
-            "fontSize": 11.200000000000001,
+            "fontSize": 12.600000000000001,
             "lineHeight": 22,
             "paddingBottom": 2,
           }
@@ -45,7 +45,7 @@ exports[`TESTING ChatItemTargetText RENDER ANON_PM should match snapshot 1`] = `
             "alignSelf": "flex-start",
             "color": "#828282",
             "fontFamily": "Poppins-Regular",
-            "fontSize": 11.200000000000001,
+            "fontSize": 12.600000000000001,
             "lineHeight": 22,
             "marginLeft": 20,
           }
@@ -70,7 +70,7 @@ exports[`TESTING ChatItemTargetText RENDER ANON_PM should match snapshot 1`] = `
             "alignSelf": "center",
             "flex": 1,
             "fontFamily": "Inter-Regular",
-            "fontSize": 11.200000000000001,
+            "fontSize": 12.600000000000001,
             "lineHeight": 22,
             "marginRight": 4,
           }
@@ -114,7 +114,7 @@ exports[`TESTING ChatItemTargetText RENDER ANON_PM with isMe should match snapsh
           Object {
             "flex": 1,
             "fontFamily": "Inter-Bold",
-            "fontSize": 11.200000000000001,
+            "fontSize": 12.600000000000001,
             "lineHeight": 22,
             "paddingBottom": 2,
           }
@@ -128,7 +128,7 @@ exports[`TESTING ChatItemTargetText RENDER ANON_PM with isMe should match snapsh
             "alignSelf": "flex-start",
             "color": "#828282",
             "fontFamily": "Poppins-Regular",
-            "fontSize": 11.200000000000001,
+            "fontSize": 12.600000000000001,
             "lineHeight": 22,
             "marginLeft": 20,
           }
@@ -153,7 +153,7 @@ exports[`TESTING ChatItemTargetText RENDER ANON_PM with isMe should match snapsh
             "alignSelf": "center",
             "flex": 1,
             "fontFamily": "Inter-Regular",
-            "fontSize": 11.200000000000001,
+            "fontSize": 12.600000000000001,
             "lineHeight": 22,
             "marginRight": 4,
           }
@@ -197,7 +197,7 @@ exports[`TESTING ChatItemTargetText RENDER ANON_PM with unreadcount should match
           Object {
             "flex": 1,
             "fontFamily": "Inter-Bold",
-            "fontSize": 11.200000000000001,
+            "fontSize": 12.600000000000001,
             "lineHeight": 22,
             "paddingBottom": 2,
           }
@@ -211,7 +211,7 @@ exports[`TESTING ChatItemTargetText RENDER ANON_PM with unreadcount should match
             "alignSelf": "flex-start",
             "color": "#828282",
             "fontFamily": "Poppins-Regular",
-            "fontSize": 11.200000000000001,
+            "fontSize": 12.600000000000001,
             "lineHeight": 22,
             "marginLeft": 20,
           }
@@ -236,7 +236,7 @@ exports[`TESTING ChatItemTargetText RENDER ANON_PM with unreadcount should match
             "alignSelf": "center",
             "flex": 1,
             "fontFamily": "Inter-Regular",
-            "fontSize": 11.200000000000001,
+            "fontSize": 12.600000000000001,
             "lineHeight": 22,
             "marginRight": 4,
           }
@@ -262,7 +262,7 @@ exports[`TESTING ChatItemTargetText RENDER ANON_PM with unreadcount should match
             Object {
               "color": "#ffffff",
               "fontFamily": "Inter-Regular",
-              "fontSize": 8,
+              "fontSize": 9,
               "lineHeight": 14.52,
             }
           }
@@ -301,7 +301,7 @@ exports[`TESTING ChatItemTargetText RENDER MY_ANON_POST with no messages should 
           Object {
             "flex": 1,
             "fontFamily": "Inter-Bold",
-            "fontSize": 11.200000000000001,
+            "fontSize": 12.600000000000001,
             "lineHeight": 22,
             "paddingBottom": 2,
           },
@@ -335,7 +335,7 @@ exports[`TESTING ChatItemTargetText RENDER MY_ANON_POST with no messages should 
             "alignSelf": "flex-start",
             "color": "#828282",
             "fontFamily": "Poppins-Regular",
-            "fontSize": 11.200000000000001,
+            "fontSize": 12.600000000000001,
             "lineHeight": 22,
             "marginLeft": 20,
           }
@@ -374,7 +374,7 @@ exports[`TESTING ChatItemTargetText RENDER MY_ANON_POST_NOTIFICATION should matc
           Object {
             "flex": 1,
             "fontFamily": "Inter-Bold",
-            "fontSize": 11.200000000000001,
+            "fontSize": 12.600000000000001,
             "lineHeight": 22,
             "paddingBottom": 2,
           },
@@ -409,7 +409,7 @@ exports[`TESTING ChatItemTargetText RENDER MY_ANON_POST_NOTIFICATION should matc
             "alignSelf": "flex-start",
             "color": "#828282",
             "fontFamily": "Poppins-Regular",
-            "fontSize": 11.200000000000001,
+            "fontSize": 12.600000000000001,
             "lineHeight": 22,
             "marginLeft": 20,
           }
@@ -448,7 +448,7 @@ exports[`TESTING ChatItemTargetText RENDER MY_ANON_POST_NOTIFICATION_I_COMMENTED
           Object {
             "flex": 1,
             "fontFamily": "Inter-Bold",
-            "fontSize": 11.200000000000001,
+            "fontSize": 12.600000000000001,
             "lineHeight": 22,
             "paddingBottom": 2,
           },
@@ -483,7 +483,7 @@ exports[`TESTING ChatItemTargetText RENDER MY_ANON_POST_NOTIFICATION_I_COMMENTED
             "alignSelf": "flex-start",
             "color": "#828282",
             "fontFamily": "Poppins-Regular",
-            "fontSize": 11.200000000000001,
+            "fontSize": 12.600000000000001,
             "lineHeight": 22,
             "marginLeft": 20,
           }
@@ -522,7 +522,7 @@ exports[`TESTING ChatItemTargetText RENDER other type post with messages should 
           Object {
             "flex": 1,
             "fontFamily": "Inter-Bold",
-            "fontSize": 11.200000000000001,
+            "fontSize": 12.600000000000001,
             "lineHeight": 22,
             "paddingBottom": 2,
           },
@@ -557,7 +557,7 @@ exports[`TESTING ChatItemTargetText RENDER other type post with messages should 
             "alignSelf": "flex-start",
             "color": "#828282",
             "fontFamily": "Poppins-Regular",
-            "fontSize": 11.200000000000001,
+            "fontSize": 12.600000000000001,
             "lineHeight": 22,
             "marginLeft": 20,
           }
@@ -596,7 +596,7 @@ exports[`TESTING ChatItemTargetText RENDER other type post with no messages shou
           Object {
             "flex": 1,
             "fontFamily": "Inter-Bold",
-            "fontSize": 11.200000000000001,
+            "fontSize": 12.600000000000001,
             "lineHeight": 22,
             "paddingBottom": 2,
           },
@@ -630,7 +630,7 @@ exports[`TESTING ChatItemTargetText RENDER other type post with no messages shou
             "alignSelf": "flex-start",
             "color": "#828282",
             "fontFamily": "Poppins-Regular",
-            "fontSize": 11.200000000000001,
+            "fontSize": 12.600000000000001,
             "lineHeight": 22,
             "marginLeft": 20,
           }
@@ -669,7 +669,7 @@ exports[`TESTING ChatItemTargetText RENDER other type post with unreadcount shou
           Object {
             "flex": 1,
             "fontFamily": "Inter-Bold",
-            "fontSize": 11.200000000000001,
+            "fontSize": 12.600000000000001,
             "lineHeight": 22,
             "paddingBottom": 2,
           },
@@ -703,7 +703,7 @@ exports[`TESTING ChatItemTargetText RENDER other type post with unreadcount shou
             "alignSelf": "flex-start",
             "color": "#828282",
             "fontFamily": "Poppins-Regular",
-            "fontSize": 11.200000000000001,
+            "fontSize": 12.600000000000001,
             "lineHeight": 22,
             "marginLeft": 20,
           }
@@ -738,7 +738,7 @@ exports[`TESTING ChatItemTargetText RENDER other type post with unreadcount shou
               Object {
                 "color": "#ffffff",
                 "fontFamily": "Inter-Regular",
-                "fontSize": 8,
+                "fontSize": 9,
                 "lineHeight": 14.52,
               }
             }
