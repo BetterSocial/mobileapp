@@ -39,7 +39,6 @@ const SignedChatScreen = () => {
 
   React.useEffect(() => {
     if (selectedChannel) {
-      console.log({selectedChannel}, 'nana 5');
       setChannel(selectedChannel, dispatchChannel);
     }
   }, [selectedChannel]);

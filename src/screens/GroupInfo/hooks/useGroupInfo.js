@@ -275,7 +275,6 @@ const useGroupInfo = () => {
         watch: true, // this is the default
         state: true
       });
-      console.log({channelChat: filterMessage}, 'nana2');
       navigation.reset({
         index: 1,
         routes: [

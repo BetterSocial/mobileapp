@@ -30,7 +30,6 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       myUserId,
       myAnonymousId
     )) as ChatSchema[];
-    console.log({data, id: selectedChannel?.id}, 'nana10');
     setChats(data);
   };
 

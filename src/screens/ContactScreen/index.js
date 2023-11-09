@@ -144,8 +144,6 @@ const ContactScreen = ({navigation}) => {
         channel_role: 'channel_moderator'
       }));
       if (findChannels.length > 0) {
-        console.log({channelChat: findChannels[0]}, 'nana1');
-
         setChannel(findChannels[0], dispatchChannel);
       } else {
         const channelChat = await clientChat.channel(type, generatedChannelId, {
@@ -165,7 +163,6 @@ const ContactScreen = ({navigation}) => {
           }
         );
         await channelChat.addMembers(memberWithRoles);
-        console.log({channelChat}, 'nana1');
         setChannel(channelChat, dispatchChannel);
       }
 
