@@ -152,40 +152,7 @@ const WhotoFollow = () => {
       });
   }, []);
 
-  const register = async () => {
-    setFetchRegister(true);
-    Analytics.logEvent('onb_select_follows_btn_add', {
-      onb_whofollow_users_selected: followed
-    });
-    const data = {
-      users: {
-        username: usersState.username,
-        human_id: usersState.userId,
-        country_code: usersState.countryCode,
-        // human_id: randomString(16),
-        // country_code: 'US',
-        profile_pic_path: usersState.photoUrl,
-        status: 'A'
-      },
-      local_community: localCommunity.local_community,
-      topics: topics.topics,
-      follows: followed,
-      follow_source: 'onboarding'
-    };
-
-    const profilePic = usersState?.photoUrl;
-    if (profilePic && profilePic !== DEFAULT_PROFILE_PIC_PATH) {
-      try {
-        const uploadedImageUrl = await ImageUtils.uploadImageWithoutAuth(
-          data?.users?.profile_pic_path
-        );
-        data.users.profile_pic_path = uploadedImageUrl?.data?.url;
-        console.log('uploadedImageUrl', uploadedImageUrl);
-      } catch (e) {
-        console.log('error upload', e);
-      }
-    }
-
+  const registerAction = (data) => {
     registerUser(data)
       .then(async (res) => {
         setFetchRegister(false);
@@ -232,6 +199,45 @@ const WhotoFollow = () => {
           backgroundColor: colors.red
         });
       });
+  };
+
+  const register = async () => {
+    setFetchRegister(true);
+    Analytics.logEvent('onb_select_follows_btn_add', {
+      onb_whofollow_users_selected: followed
+    });
+    const data = {
+      users: {
+        username: usersState.username,
+        human_id: usersState.userId,
+        country_code: usersState.countryCode,
+        // human_id: randomString(16),
+        // country_code: 'US',
+        profile_pic_path: usersState.photoUrl,
+        status: 'A'
+      },
+      local_community: localCommunity.local_community,
+      topics: topics.topics,
+      follows: followed,
+      follow_source: 'onboarding'
+    };
+
+    const profilePic = usersState?.photoUrl;
+    if (profilePic && profilePic !== DEFAULT_PROFILE_PIC_PATH) {
+      try {
+        const uploadedImageUrl = await ImageUtils.uploadImageWithoutAuth(
+          data?.users?.profile_pic_path
+        );
+        data.users.profile_pic_path = uploadedImageUrl?.data?.url;
+        console.log('uploadedImageUrl', uploadedImageUrl);
+
+        registerAction(data);
+      } catch (e) {
+        console.log('error upload', e);
+      }
+    } else {
+      registerAction(data);
+    }
   };
 
   const rowRenderer = (type, item, index, extendedState) => {
