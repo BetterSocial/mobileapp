@@ -147,6 +147,7 @@ const getOrCreateAnonymousChannel = async (userId) => {
 
   try {
     const response = await anonymousApi.post('/chat/channels', payload);
+    console.log({response}, 'nana15');
     if (response?.status === 200) {
       return Promise.resolve(response.data);
     }

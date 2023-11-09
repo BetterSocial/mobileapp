@@ -145,10 +145,10 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 Object {
                   "alignItems": "center",
                   "backgroundColor": "#E0E0E0",
-                  "borderRadius": 40,
-                  "height": 80,
+                  "borderRadius": 45,
+                  "height": 90,
                   "justifyContent": "center",
-                  "width": 80,
+                  "width": 90,
                 }
               }
               testID="image3"
@@ -187,8 +187,8 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                   Object {
                     "color": "#000",
                     "fontFamily": "Inter-Medium",
-                    "fontSize": 9.33852140077821,
-                    "lineHeight": 11.303501945525293,
+                    "fontSize": 21.6,
+                    "lineHeight": 26.145000000000003,
                   }
                 }
               />
@@ -198,8 +198,8 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 Object {
                   "color": "#000",
                   "fontFamily": "Inter-Regular",
-                  "fontSize": 5.447470817120623,
-                  "lineHeight": 6.591439688715954,
+                  "fontSize": 12.600000000000001,
+                  "lineHeight": 15.246000000000002,
                   "marginBottom": 9,
                   "marginLeft": 20,
                   "marginTop": 4,
@@ -265,8 +265,8 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               Object {
                 "color": "#00ADB5",
                 "fontFamily": "Inter-SemiBold",
-                "fontSize": 5.447470817120623,
-                "lineHeight": 6.591439688715954,
+                "fontSize": 12.600000000000001,
+                "lineHeight": 15.246000000000002,
               }
             }
             testID="groupMedia"
@@ -390,8 +390,8 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               Object {
                 "color": "#00ADB5",
                 "fontFamily": "Inter-SemiBold",
-                "fontSize": 5.447470817120623,
-                "lineHeight": 6.591439688715954,
+                "fontSize": 12.600000000000001,
+                "lineHeight": 15.246000000000002,
                 "marginBottom": 4,
                 "marginLeft": 20,
               }
@@ -584,7 +584,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
         "borderRadius": 8,
         "bottom": 5,
         "justifyContent": "center",
-        "padding": 6.4,
+        "padding": 7.2,
         "position": "absolute",
         "width": "auto",
       }
@@ -612,8 +612,8 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
           Object {
             "color": "#00ADB5",
             "fontFamily": "Inter-SemiBold",
-            "fontSize": 5.447470817120623,
-            "lineHeight": 7.782101167315175,
+            "fontSize": 12.600000000000001,
+            "lineHeight": 18,
           }
         }
       >

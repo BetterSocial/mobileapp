@@ -67,7 +67,8 @@ export const styles = StyleSheet.create({
     lineHeight: normalizeFontSize(16.94),
     color: from === SIGNED ? colors.darkBlue : colors.holytosca,
     marginLeft: 20,
-    marginBottom: 4
+    marginBottom: 4,
+    fontWeight: 'bold'
   }),
   btnToMediaGroup: {
     fontFamily: fonts.inter[600],
@@ -86,11 +87,11 @@ export const styles = StyleSheet.create({
   },
   groupName: {
     fontSize: normalizeFontSize(24),
-    fontFamily: fonts.inter[500],
     lineHeight: normalizeFontSize(29.05),
     color: '#000',
     width: '100%',
-    paddingHorizontal: dimen.normalizeDimen(20)
+    paddingHorizontal: dimen.normalizeDimen(20),
+    fontWeight: 'bold'
   },
   lineTop: {
     backgroundColor: colors.alto,

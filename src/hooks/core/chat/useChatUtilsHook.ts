@@ -89,6 +89,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
   };
 
   const goToChatScreen = (channel: ChannelList) => {
+    console.log({channel, chat}, 'nana');
     setChannelAsRead(channel);
     if (channel?.channelType === ANON_PM) {
       navigation.navigate('SampleChatScreen');

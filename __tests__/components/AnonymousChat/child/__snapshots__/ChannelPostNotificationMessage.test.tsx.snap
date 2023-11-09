@@ -10,7 +10,7 @@ exports[`TESTING ChatItemTargetText RENDER non ANON_PM with different profile id
     Object {
       "color": "#828282",
       "fontFamily": "Inter-Regular",
-      "fontSize": 9.600000000000001,
+      "fontSize": 10.8,
       "lineHeight": 20,
       "marginRight": 29,
     }
@@ -21,7 +21,7 @@ exports[`TESTING ChatItemTargetText RENDER non ANON_PM with different profile id
       Object {
         "color": "#828282",
         "fontFamily": "Inter-SemiBold",
-        "fontSize": 9.600000000000001,
+        "fontSize": 10.8,
         "lineHeight": 20,
       }
     }
@@ -39,7 +39,7 @@ exports[`TESTING ChatItemTargetText RENDER non ANON_PM with no commenter name sh
     Object {
       "color": "#828282",
       "fontFamily": "Inter-Regular",
-      "fontSize": 9.600000000000001,
+      "fontSize": 10.8,
       "lineHeight": 20,
       "marginRight": 29,
     }
@@ -50,7 +50,7 @@ exports[`TESTING ChatItemTargetText RENDER non ANON_PM with no commenter name sh
       Object {
         "color": "#828282",
         "fontFamily": "Inter-SemiBold",
-        "fontSize": 9.600000000000001,
+        "fontSize": 10.8,
         "lineHeight": 20,
       }
     }
@@ -68,7 +68,7 @@ exports[`TESTING ChatItemTargetText RENDER non ANON_PM with same profile id shou
     Object {
       "color": "#828282",
       "fontFamily": "Inter-Regular",
-      "fontSize": 9.600000000000001,
+      "fontSize": 10.8,
       "lineHeight": 20,
       "marginRight": 29,
     }
@@ -79,7 +79,7 @@ exports[`TESTING ChatItemTargetText RENDER non ANON_PM with same profile id shou
       Object {
         "color": "#828282",
         "fontFamily": "Inter-SemiBold",
-        "fontSize": 9.600000000000001,
+        "fontSize": 10.8,
         "lineHeight": 20,
       }
     }

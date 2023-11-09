@@ -101,9 +101,10 @@ const styles = StyleSheet.create({
   },
   fullname: (isMe) => ({
     fontSize: normalizeFontSize(14),
-    fontFamily: fonts.inter[500],
+
     color: isMe ? colors.darkBlue : 'black',
-    lineHeight: normalizeFontSize(16.94)
+    lineHeight: normalizeFontSize(16.94),
+    fontWeight: 'bold'
   }),
   pressable: {
     height: '100%'
