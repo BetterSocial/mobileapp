@@ -67,7 +67,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
               Object {
                 "color": "#1E1F20",
                 "fontFamily": "Inter-SemiBold",
-                "fontSize": 5.447470817120623,
+                "fontSize": 12.600000000000001,
                 "fontWeight": "bold",
                 "padding": 10,
                 "textAlign": "center",
@@ -102,7 +102,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
                 Object {
                   "color": "#1E1F20",
                   "fontFamily": "Inter-SemiBold",
-                  "fontSize": 5.447470817120623,
+                  "fontSize": 12.600000000000001,
                   "fontWeight": "bold",
                   "padding": 10,
                   "textAlign": "center",
@@ -154,12 +154,12 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
               Object {
                 "alignItems": "center",
                 "backgroundColor": "#E0E0E0",
-                "borderRadius": 19.200000000000003,
-                "height": 38.400000000000006,
+                "borderRadius": 21.6,
+                "height": 43.2,
                 "justifyContent": "center",
                 "marginRight": 17,
                 "opacity": 1,
-                "width": 38.400000000000006,
+                "width": 43.2,
               }
             }
             testID="updateImage"
@@ -172,9 +172,9 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
               }
               style={
                 Object {
-                  "borderRadius": 19.200000000000003,
-                  "height": 38.400000000000006,
-                  "width": 38.400000000000006,
+                  "borderRadius": 21.6,
+                  "height": 43.2,
+                  "width": 43.2,
                 }
               }
             />
@@ -200,8 +200,8 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
                   "color": "#FFFFFF",
                   "flex": 1,
                   "fontFamily": "Inter-Regular",
-                  "fontSize": 5.447470817120623,
-                  "lineHeight": 9.33852140077821,
+                  "fontSize": 12.600000000000001,
+                  "lineHeight": 21.6,
                 }
               }
               testID="onInputChange"
@@ -216,8 +216,8 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
             Object {
               "color": "#FFFFFF",
               "fontFamily": "Inter-Regular",
-              "fontSize": 4.669260700389105,
-              "lineHeight": 7.003891050583658,
+              "fontSize": 10.8,
+              "lineHeight": 16.2,
             }
           }
         >
@@ -298,9 +298,29 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
         </Text>
         <RCTScrollView
           data={
-            Array [
-              "a3c59170-c110-4fac-929e-7834f6c6827f",
-            ]
+            Object {
+              "a3c59170-c110-4fac-929e-7834f6c6827f": Object {
+                "banned": false,
+                "channel_role": "channel_moderator",
+                "created_at": "2022-09-30T22:49:45.911054Z",
+                "is_moderator": true,
+                "role": "admin",
+                "shadow_banned": false,
+                "updated_at": "2022-09-30T22:49:45.911054Z",
+                "user": Object {
+                  "banned": false,
+                  "created_at": "2021-11-29T05:40:40.828927Z",
+                  "id": "a3c59170-c110-4fac-929e-7834f6c6827f",
+                  "image": "https://res.cloudinary.com/hpjivutj2/image/upload/v1666664085/vcinqpjniuigf6mdnmzz.jpg",
+                  "last_active": "2021-12-06T03:54:03.677683Z",
+                  "name": "BetterSocial_Team",
+                  "online": false,
+                  "role": "admin",
+                  "updated_at": "2022-11-02T15:30:30.170297Z",
+                },
+                "user_id": "a3c59170-c110-4fac-929e-7834f6c6827f",
+              },
+            }
           }
           disableVirtualization={false}
           getItem={[Function]}
@@ -324,82 +344,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
           viewabilityConfigCallbackPairs={Array []}
           windowSize={21}
         >
-          <View>
-            <View
-              onLayout={[Function]}
-              style={null}
-            >
-              <View
-                style={
-                  Object {
-                    "height": 72,
-                  }
-                }
-              >
-                <View
-                  accessible={true}
-                  collapsable={false}
-                  focusable={true}
-                  style={
-                    Object {
-                      "height": "100%",
-                    }
-                  }
-                >
-                  <View
-                    style={
-                      Object {
-                        "alignItems": "center",
-                        "flex": 1,
-                        "flexDirection": "row",
-                        "paddingHorizontal": 15,
-                        "paddingVertical": 12,
-                      }
-                    }
-                  >
-                    <View
-                      style={
-                        Object {
-                          "alignItems": "center",
-                          "flex": 1,
-                          "flexDirection": "row",
-                        }
-                      }
-                    >
-                      <Image
-                        source={
-                          Object {
-                            "uri": "https://res.cloudinary.com/hpjivutj2/image/upload/v1666664085/vcinqpjniuigf6mdnmzz.jpg",
-                          }
-                        }
-                        style={
-                          Object {
-                            "borderRadius": 19.200000000000003,
-                            "height": 38.400000000000006,
-                            "marginRight": 17,
-                            "width": 38.400000000000006,
-                          }
-                        }
-                        testID="image"
-                      />
-                      <Text
-                        style={
-                          Object {
-                            "color": "#000",
-                            "fontFamily": "Inter-Medium",
-                            "fontSize": 5.447470817120623,
-                            "lineHeight": 6.591439688715954,
-                          }
-                        }
-                      >
-                        BetterSocial_Team
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              </View>
-            </View>
-          </View>
+          <View />
         </RCTScrollView>
       </View>
     </View>

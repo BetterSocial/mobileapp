@@ -55,8 +55,8 @@ const AddParticipant = ({navigation, route}) => {
   };
   const filterDataUser = (dataUsers) => {
     return dataUsers.filter((itm1) => {
-      return !Object.keys(participants).some((itm2) => {
-        return itm1.user_id === itm2;
+      return !participants.some((itm2) => {
+        return itm1.user_id === itm2.user_id;
       });
     });
   };
@@ -262,6 +262,6 @@ const styles = StyleSheet.create({
     marginTop: 16
   },
   subtitleStyle: (isIsset) => ({
-    color: isIsset ? COLORS.holyTosca : '#C4C4C4'
+    color: isIsset ? COLORS.holytosca : '#C4C4C4'
   })
 });
