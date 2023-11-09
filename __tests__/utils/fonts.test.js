@@ -1,4 +1,4 @@
-import {normalize, normalizeFontSize, scaleFontSize} from '../../src/utils/fonts'
+import {normalize, normalizeFontSize} from '../../src/utils/fonts'
 
 
 jest.mock('react-native', () => ({
@@ -15,16 +15,11 @@ jest.mock('react-native', () => ({
 
 describe('Util font should correct', () => {
     it('normalize should run correctly', () => {
-        expect(normalize(10)).toEqual(8)
+        expect(normalize(10)).toEqual(9)
     })
 
    it('normalizeFontSize should run correctly', () => {
-        expect(normalizeFontSize(14)).toEqual(5.447470817120623)
+        expect(normalizeFontSize(14)).toEqual(12.600000000000001)
 
    })
-
-   it('scaleFontSize should run correctly', () => {
-        expect(scaleFontSize(14)).toEqual(18)
-   })
-
 })

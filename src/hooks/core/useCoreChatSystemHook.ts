@@ -21,7 +21,7 @@ import {
   Comment,
   LatestChildrenComment
 } from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
-import {ChannelType} from '../../../types/repo/ChannelData';
+import {ChannelData, ChannelType} from '../../../types/repo/ChannelData';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {GetstreamFeedListenerObject} from '../../../types/hooks/core/getstreamFeedListener/feedListenerObject';
 import {GetstreamWebsocket, MyChannelType} from './websocket/types.d';
@@ -317,7 +317,7 @@ const useCoreChatSystemHook = () => {
 
   const getAllAnonymousChannels = async () => {
     if (!localDb) return;
-    let anonymousChannel = [];
+    let anonymousChannel: ChannelData[] = [];
     try {
       anonymousChannel = await AnonymousMessageRepo.getAllAnonymousChannels();
     } catch (e) {
@@ -335,8 +335,8 @@ const useCoreChatSystemHook = () => {
   };
 
   const helperDetermineIsMyChildComment = (postNotification: AnonymousPostNotification) => {
-    let latestComment: Comment = null;
-    let latestCommentLatestChild: LatestChildrenComment = null;
+    let latestComment: Comment | null = null;
+    let latestCommentLatestChild: LatestChildrenComment | null = null;
     const postHasComment = postNotification?.comments?.length > 0;
     let isMyComment = false;
     let isMyChildComment = false;
@@ -389,7 +389,7 @@ const useCoreChatSystemHook = () => {
 
   const getSingleSignedPostNotification = async (activityId) => {
     if (!localDb) return;
-    let signedPostNotification: SignedPostNotification = null;
+    let signedPostNotification: SignedPostNotification | null = null;
 
     try {
       signedPostNotification = await SignedMessageRepo.getSingleSignedPostNotifications(activityId);
@@ -413,7 +413,7 @@ const useCoreChatSystemHook = () => {
 
   const getSingleAnonymousPostNotification = async (activityId) => {
     if (!localDb) return;
-    let anonymousPostNotification: AnonymousPostNotification = null;
+    let anonymousPostNotification: AnonymousPostNotification | null = null;
 
     try {
       anonymousPostNotification = await AnonymousMessageRepo.getSingleAnonymousPostNotifications(
@@ -439,7 +439,7 @@ const useCoreChatSystemHook = () => {
 
   const getAllSignedPostNotifications = async () => {
     if (!localDb) return;
-    let signedPostNotifications = [];
+    let signedPostNotifications: SignedPostNotification[] = [];
 
     try {
       signedPostNotifications = await SignedMessageRepo.getAllSignedPostNotifications();
@@ -465,7 +465,7 @@ const useCoreChatSystemHook = () => {
 
   const getAllAnonymousPostNotifications = async () => {
     if (!localDb) return;
-    let anonymousPostNotifications = [];
+    let anonymousPostNotifications: AnonymousPostNotification[] = [];
 
     try {
       anonymousPostNotifications = await AnonymousMessageRepo.getAllAnonymousPostNotifications();

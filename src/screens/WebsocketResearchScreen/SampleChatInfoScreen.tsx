@@ -66,8 +66,9 @@ export const styles = StyleSheet.create({
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(16.94),
     color: from === SIGNED ? colors.darkBlue : colors.holytosca,
-    marginLeft: 20,
-    marginBottom: 4
+    marginLeft: dimen.normalizeDimen(20),
+    marginBottom: dimen.normalizeDimen(4),
+    fontWeight: 'bold'
   }),
   btnToMediaGroup: {
     fontFamily: fonts.inter[600],
@@ -86,11 +87,11 @@ export const styles = StyleSheet.create({
   },
   groupName: {
     fontSize: normalizeFontSize(24),
-    fontFamily: fonts.inter[500],
     lineHeight: normalizeFontSize(29.05),
     color: '#000',
     width: '100%',
-    paddingHorizontal: dimen.normalizeDimen(20)
+    paddingHorizontal: dimen.normalizeDimen(20),
+    fontWeight: 'bold'
   },
   lineTop: {
     backgroundColor: colors.alto,
@@ -199,7 +200,7 @@ const SampleChatInfoScreen = () => {
   const {anon_user_info_color_code, anon_user_info_emoji_code} =
     channelInfo?.rawJson?.channel || {};
 
-  const showImageProfile = () => {
+  const showImageProfile = (): React.ReactNode => {
     if (channelInfo?.channelType === CHANNEL_GROUP) {
       return (
         <ChannelImage>

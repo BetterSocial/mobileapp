@@ -4,7 +4,7 @@ import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import PropTypes from 'prop-types';
 import MemoIc_Checklist from '../../assets/icons/Ic_Checklist';
 import {COLORS} from '../../utils/theme';
-import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
+import {normalize, normalizeFontSize} from '../../utils/fonts';
 import {colors} from '../../utils/colors';
 import dimen from '../../utils/dimen';
 import {ANONYMOUS_USER} from '../../hooks/core/constant';
@@ -75,7 +75,15 @@ ProfileContact.propTypes = {
   disabled: PropTypes.bool,
   item: {
     user_id: PropTypes.string
-  }
+  },
+  photo: PropTypes.string,
+  fullname: PropTypes.string,
+  onPress: PropTypes.func,
+  select: PropTypes.bool,
+  showArrow: PropTypes.bool,
+  userId: PropTypes.string,
+  ImageComponent: PropTypes.node,
+  from: PropTypes.string
 };
 
 export default React.memo(ProfileContact);
@@ -101,9 +109,10 @@ const styles = StyleSheet.create({
   },
   fullname: (isMe) => ({
     fontSize: normalizeFontSize(14),
-    fontFamily: fonts.inter[500],
+
     color: isMe ? colors.darkBlue : 'black',
-    lineHeight: normalizeFontSize(16.94)
+    lineHeight: normalizeFontSize(16.94),
+    fontWeight: 'bold'
   }),
   pressable: {
     height: '100%'

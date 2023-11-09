@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold'
   },
-  gap: {width: 20, height: 12},
+  gap: {width: dimen.normalizeDimen(42)},
   buttonBackContainer: {
     width: '100%'
   },
@@ -52,14 +52,20 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 1,
     height: dimen.normalizeDimen(50),
-    width: dimen.normalizeDimen(50),
+    width: '15%',
     justifyContent: 'center',
     alignItems: 'center'
+    // backgroundColor: 'blue'
   },
   flex: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: dimen.normalizeDimen(40)
+
+    width: '100%'
+  },
+  textContainer: {
+    width: '100%',
+    paddingHorizontal: dimen.normalizeDimen(55)
   }
 });
 
@@ -77,27 +83,24 @@ const AnonymousChatInfoHeader = ({
           <ArrowLeftIcon />
         </TouchableOpacity>
         <View style={styles.flex}>
-          <Text
-            numberOfLines={1}
-            style={{
-              ...styles.textIos,
-              ...titleStyle,
-              fontSize: 20,
-              textAlign: isCenter ? 'center' : 'left'
-            }}>
-            {title}
-          </Text>
+          <View style={styles.textContainer}>
+            <Text
+              numberOfLines={1}
+              style={{
+                ...styles.textIos,
+                ...titleStyle,
+                fontSize: 20,
+                textAlign: isCenter ? 'center' : 'left'
+              }}>
+              {title}
+            </Text>
+          </View>
         </View>
       </View>
     </View>
   );
 
-  return (
-    <View style={{...styles.container, ...containerStyle}}>
-      {renderHeader()}
-      <View style={styles.gap} />
-    </View>
-  );
+  return <View style={{...styles.container, ...containerStyle}}>{renderHeader()}</View>;
 };
 
 export default React.memo(AnonymousChatInfoHeader);

@@ -110,14 +110,14 @@ function useChatUtilsHook(): UseChatUtilsHook {
     });
   };
 
-  const goToChatInfoScreen = (params) => {
+  const goToChatInfoScreen = (params?: object) => {
     navigation.navigate('SampleChatInfoScreen', params);
   };
 
   const goBack = () => {
     navigation.goBack();
   };
-  const handleTextSystem = (item) => {
+  const handleTextSystem = (item): string => {
     if (
       item?.rawJson?.userIdFollower === profile?.myProfile?.user_id ||
       item?.rawJson?.message?.userIdFollower === profile?.myProfile?.user_id
@@ -129,10 +129,10 @@ function useChatUtilsHook(): UseChatUtilsHook {
 
   const splitSystemMessage = (message: string): string[] => {
     const splitMessage = message?.split('.');
-    const pushMessage = [];
+    const pushMessage: string[] = [];
     splitMessage?.forEach((systemMessage) => {
       if (systemMessage && systemMessage.length > 0) {
-        const arrMessage = systemMessage?.trimStart()?.replace(/\n/g, '');
+        const arrMessage: string = systemMessage?.trimStart()?.replace(/\n/g, '');
         pushMessage.push(arrMessage);
       }
     });
