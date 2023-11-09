@@ -1,5 +1,11 @@
 import * as React from 'react';
-import {View, Text, StyleSheet, TouchableNativeFeedback, ActivityIndicator} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableNativeFeedback,
+  ActivityIndicator,
+} from 'react-native';
 
 import {fonts} from '../../../utils/fonts';
 import {colors} from '../../../utils/colors';
@@ -38,11 +44,9 @@ const BottomSheetChooseImage = React.forwardRef((props, ref) => (
   </BottomSheet>
 ));
 
-BottomSheetChooseImage.displayName = 'BottomSheetChooseImage';
-
 const styles = StyleSheet.create({
   containerBottomSheet: {
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   card: {
     height: 52,
@@ -53,18 +57,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12
+    marginBottom: 12,
   },
   wrapCardImage: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   textCard: {
     fontFamily: fonts.inter[500],
     fontSize: 14,
     color: colors.black,
-    paddingLeft: 9
-  }
+    paddingLeft: 9,
+  },
 });
 
 export default BottomSheetChooseImage;

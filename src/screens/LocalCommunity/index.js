@@ -8,54 +8,114 @@ import {
   TouchableNativeFeedback,
   View
 } from 'react-native';
+import {debounce} from 'lodash';
+import {showMessage} from 'react-native-flash-message';
+import {useNavigation} from '@react-navigation/core';
 
 import PinIcon from '../../../assets/icons/pin.svg';
 import PlusIcon from '../../../assets/icons/plus.svg';
 import StringConstant from '../../utils/string/StringConstant';
 import TrashIcon from '../../../assets/icons/trash.svg';
+import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
+import {Context} from '../../context';
 import {Header} from '../../components';
 import {ProgressBar} from '../../components/ProgressBar';
 import {SearchModal} from '../../components/Search';
 import {colors} from '../../utils/colors';
 import {locationValidation} from '../../utils/Utils';
-import useLocalCommunity from './hooks/useLocalCommunity';
-import dimen from '../../utils/dimen';
-import {normalizeFontSize} from '../../utils/fonts';
+import {post} from '../../api/server';
+import {setLocalCommunity} from '../../context/actions/localCommunity';
 
 const {width} = Dimensions.get('screen');
 const LocalCommunity = () => {
-  const {
-    search,
-    setSearch,
-    setIsVisibleSecondLocation,
-    isVisibleSecondLocation,
-    onPressSecondLocation,
-    setIsVisibleFirstLocation,
-    isVisibleFirstLocation,
-    onPressFirstLocation,
-    location,
-    onBack,
-    handleKeyExtractor,
-    optionsSearch,
-    isLoading,
-    onChangeLocationSearchText,
-    handleSelectedSearch,
-    handleDelete,
-    onPressTouchable,
-    next
-  } = useLocalCommunity();
+  const navigation = useNavigation();
+  const [search, setSearch] = React.useState('');
+  const [location, setLocation] = React.useState([]);
+  const [optionsSearch, setOptionsSearch] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [isVisibleFirstLocation, setIsVisibleFirstLocation] = React.useState(false);
+  const [isVisibleSecondLocation, setIsVisibleSecondLocation] = React.useState(false);
+  const [locationPost, setLocationPost] = React.useState([]);
+  const [locationLog, setLocationLog] = React.useState([]);
+
+  const [, dispatch] = React.useContext(Context).localCommunity;
+
+  const handleSearch = (value) => {
+    const params = {
+      name: value
+    };
+
+    post({url: '/location/list_v2', params})
+      .then((res) => {
+        setIsLoading(false);
+        if (res.status === 200) {
+          setOptionsSearch(res.data.body);
+        }
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const doOnLocationSearchTextDebounce = React.useCallback(debounce(handleSearch, 500), []);
+
+  const onChangeLocationSearchText = (text) => {
+    if (text.length >= 3) {
+      doOnLocationSearchTextDebounce(text);
+      setOptionsSearch([]);
+      setIsLoading(true);
+    } else {
+      setIsLoading(false);
+      doOnLocationSearchTextDebounce.cancel();
+      setOptionsSearch([]);
+    }
+
+    setSearch(text);
+  };
+
+  const capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1);
+
+  const handleSelectedSearch = async (val, index) => {
+    const tempLocation = [...location];
+    if (tempLocation.length <= 1) {
+      tempLocation.push(val);
+    } else {
+      tempLocation[index] = val;
+    }
+    setSearch(capitalizeFirstLetter(val.neighborhood));
+    setOptionsSearch([]);
+    const locLog = [];
+    const returnTempLocation = await tempLocation.map((item) => {
+      locLog.push({
+        location: `${item.city}, ${item.zip}`,
+        location_level: item.location_level
+      });
+      return item.location_id;
+    });
+    await setLocation(tempLocation);
+    await setLocationPost(returnTempLocation);
+    await setLocationLog(locLog);
+  };
 
   const renderItem = ({index, item}) => {
+    const onPressTouchable = () => {
+      setSearch('');
+      if (index === 0) {
+        setIsVisibleFirstLocation(true);
+      } else if (index === 1) {
+        setIsVisibleSecondLocation(true);
+      }
+    };
+
     return (
-      <TouchableNativeFeedback testID="onPressLocation" onPress={() => onPressTouchable(index)}>
+      <TouchableNativeFeedback onPress={onPressTouchable}>
         <View style={styles.containerLocation}>
           <View style={styles.containerRow}>
             <PinIcon width={14} height={20} fill="#000000" />
             <Text style={styles.textLocation}>{locationValidation(item)}</Text>
           </View>
           <TouchableNativeFeedback
-            testID="deleteLocation"
             onPress={() => handleDelete(item.location_id)}
             background={TouchableNativeFeedback.Ripple(colors.gray1, true, 20)}>
             <TrashIcon width={18} height={20} fill="#000000" />
@@ -63,6 +123,53 @@ const LocalCommunity = () => {
         </View>
       </TouchableNativeFeedback>
     );
+  };
+
+  const handleDelete = async (val) => {
+    const tempLocation = [...location];
+    const index = tempLocation.findIndex((data) => data.location_id === val);
+    if (index > -1) {
+      tempLocation.splice(index, 1);
+    }
+    const locLog = [];
+    const returnTempLocation = await tempLocation.map((item) => {
+      locLog.push({
+        location: `${item.city}, ${item.zip}`,
+        location_level: item.location_level
+      });
+      return item.location_id;
+    });
+    await setLocation(tempLocation);
+    await setLocationPost(returnTempLocation);
+    await setLocationLog(locLog);
+  };
+  const next = () => {
+    if (location.length > 0) {
+      setLocalCommunity(locationPost, dispatch);
+      Analytics.logEvent('onb_select_location', {
+        location: locationLog
+      });
+      navigation.navigate('Topics');
+    } else {
+      showMessage({
+        message: 'please add a local community',
+        type: 'danger'
+      });
+    }
+  };
+
+  const onPressFirstLocation = (status) => {
+    setIsVisibleFirstLocation(status);
+    setSearch('');
+  };
+
+  const onPressSecondLocation = (status) => {
+    setIsVisibleSecondLocation(status);
+    setSearch('');
+  };
+
+  const onBack = () => {
+    navigation.goBack();
   };
 
   return (
@@ -77,19 +184,17 @@ const LocalCommunity = () => {
           {StringConstant.onboardingLocalCommunityHeadline}
         </Text>
         <Text style={styles.textDesc}>{StringConstant.onboardingLocalCommunitySubHeadline}</Text>
-        <FlatList data={location} renderItem={renderItem} keyExtractor={handleKeyExtractor} />
+        <FlatList
+          data={location}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => index.toString()}
+        />
 
         {/* First Location */}
         {location.length <= 0 ? (
-          <TouchableNativeFeedback
-            testID="onPressFirstLocation"
-            onPress={() => onPressFirstLocation(true)}>
+          <TouchableNativeFeedback onPress={() => onPressFirstLocation(true)}>
             <View style={styles.card}>
-              <PlusIcon
-                width={dimen.normalizeDimen(18)}
-                height={dimen.normalizeDimen(18)}
-                fill="#000000"
-              />
+              <PlusIcon width={18} height={18} fill="#000000" />
               <View style={styles.columnButton}>
                 <Text style={styles.textAddLocation}>
                   {StringConstant.onboardingLocalCommunityPrimaryLocationTitle}
@@ -104,15 +209,9 @@ const LocalCommunity = () => {
 
         {/* second Location */}
         {location.length === 1 ? (
-          <TouchableNativeFeedback
-            testID="onPressSecondLocation"
-            onPress={() => onPressSecondLocation(true)}>
+          <TouchableNativeFeedback onPress={() => onPressSecondLocation(true)}>
             <View style={styles.card}>
-              <PlusIcon
-                width={dimen.normalizeDimen(18)}
-                height={dimen.normalizeDimen(18)}
-                fill="#000000"
-              />
+              <PlusIcon width={18} height={18} fill="#000000" />
               <View style={styles.columnButton}>
                 <Text style={styles.textAddLocation}>
                   {StringConstant.onboardingLocalCommunitySecondaryLocationTitle}
@@ -164,7 +263,6 @@ const LocalCommunity = () => {
           </Text>
         </View>
         <Button
-          testID="btn"
           disabled={location.length < 1}
           style={location.length >= 1 ? null : styles.button}
           onPress={() => next()}>
@@ -179,38 +277,34 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white
   },
-  header: {
-    paddingHorizontal: dimen.normalizeDimen(22),
-    paddingTop: dimen.normalizeDimen(22),
-    paddingBottom: dimen.normalizeDimen(5)
-  },
+  header: {paddingHorizontal: 22, paddingTop: 22, paddingBottom: 5},
   textFindYourLocalCommunity: {
     fontFamily: 'Inter-Bold',
     fontStyle: 'normal',
     fontWeight: '600',
-    fontSize: normalizeFontSize(36),
-    lineHeight: normalizeFontSize(43.57),
+    fontSize: 36,
+    lineHeight: 43.57,
     color: '#11243D',
-    marginHorizontal: dimen.normalizeDimen(20)
+    marginHorizontal: 20
   },
   containerInfo: {
-    marginTop: dimen.normalizeDimen(55),
+    marginTop: 55,
     backgroundColor: colors.pattens_blue,
-    width: width - dimen.normalizeDimen(44),
-    minHeight: dimen.normalizeDimen(96),
+    width: width - 44,
+    minHeight: 96,
     flexDirection: 'row',
-    borderRadius: dimen.normalizeDimen(4),
+    borderRadius: 4,
     justifyContent: 'space-between',
-    padding: dimen.normalizeDimen(14)
+    padding: 14
   },
   widthDescription: {
-    width: width - dimen.normalizeDimen(100),
-    marginLeft: dimen.normalizeDimen(12)
+    width: width - 100,
+    marginLeft: 12
   },
   circleIcon: {
-    width: dimen.normalizeDimen(30),
-    height: dimen.normalizeDimen(30),
-    borderRadius: dimen.normalizeDimen(30),
+    width: 30,
+    height: 30,
+    borderRadius: 30,
     backgroundColor: colors.french_pass,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -219,10 +313,11 @@ const styles = StyleSheet.create({
   footer: {
     position: 'absolute',
     bottom: 0,
-    height: dimen.normalizeDimen(112),
+    height: 112,
     width,
-    paddingHorizontal: dimen.normalizeDimen(20),
-    paddingBottom: dimen.normalizeDimen(20),
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingBottom: 20,
     backgroundColor: colors.white,
     shadowColor: colors.black,
     shadowOffset: {
@@ -237,57 +332,57 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   containerProgress: {
-    marginTop: dimen.normalizeDimen(20),
-    marginBottom: dimen.normalizeDimen(24),
-    paddingHorizontal: dimen.normalizeDimen(20)
+    marginTop: 20,
+    marginBottom: 24,
+    paddingHorizontal: 20
   },
   textDesc: {
     fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: '400',
-    fontSize: normalizeFontSize(14),
-    lineHeight: normalizeFontSize(24),
+    fontSize: 14,
+    lineHeight: 24,
     color: colors.gray,
     opacity: 0.84,
-    marginTop: dimen.normalizeDimen(8),
-    marginBottom: dimen.normalizeDimen(24),
-    paddingHorizontal: dimen.normalizeDimen(20)
+    marginTop: 8,
+    marginBottom: 24,
+    paddingHorizontal: 20
   },
 
   card: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: dimen.normalizeDimen(22)
+    paddingHorizontal: 22
   },
   columnButton: {
     flexDirection: 'column',
-    marginLeft: dimen.normalizeDimen(14)
+    marginLeft: 14
   },
   textAddLocation: {
     fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: 'bold',
-    fontSize: normalizeFontSize(14),
-    lineHeight: normalizeFontSize(24),
-    letterSpacing: normalizeFontSize(-0.28),
-    marginTop: dimen.normalizeDimen(13),
+    fontSize: 14,
+    lineHeight: 24,
+    letterSpacing: -0.28,
+    marginTop: 13,
     color: colors.black
   },
   textSearchYourFavorite: {
     fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: 'normal',
-    fontSize: normalizeFontSize(12),
-    lineHeight: normalizeFontSize(24),
-    letterSpacing: normalizeFontSize(-0.28),
-    marginBottom: dimen.normalizeDimen(10),
+    fontSize: 12,
+    lineHeight: 24,
+    letterSpacing: -0.28,
+    marginBottom: 10,
     color: colors.silver
   },
   containerLocation: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: dimen.normalizeDimen(22)
+    paddingHorizontal: 22
   },
   containerRow: {
     flexDirection: 'row',
@@ -297,12 +392,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: 'bold',
-    fontSize: normalizeFontSize(14),
-    lineHeight: normalizeFontSize(24),
-    letterSpacing: normalizeFontSize(-0.28),
-    marginVertical: dimen.normalizeDimen(22),
+    fontSize: 14,
+    lineHeight: 24,
+    letterSpacing: -0.28,
+    marginTop: 22,
+    marginBottom: 22,
     color: colors.black,
-    paddingLeft: dimen.normalizeDimen(17)
+    paddingLeft: 17
     // textTransform: 'capitalize',
   },
   textSmallContainer: {
@@ -313,13 +409,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: '400',
-    fontSize: normalizeFontSize(10),
+    fontSize: 10,
     textAlign: 'center',
     color: colors.blackgrey
   },
   button: {
-    backgroundColor: colors.gray,
-    borderRadius: dimen.normalizeDimen(8)
+    backgroundColor: colors.gray
   }
 });
 export default LocalCommunity;

@@ -24,7 +24,6 @@ const useCommentAction = () => {
       ]);
     }
   };
-
   const onDeleteCommentClicked = async (item, backToPrevPage, callback) => {
     try {
       const response = await deleteComment(item?.id);
@@ -32,9 +31,6 @@ const useCommentAction = () => {
       if (response?.success) {
         if (params.getComment && typeof params.getComment === 'function') {
           params.getComment();
-        }
-        if (params.getCommentParent && typeof params.getCommentParent === 'function') {
-          params.getCommentParent();
         }
         if (backToPrevPage) {
           goBack();
@@ -44,13 +40,14 @@ const useCommentAction = () => {
         }
       }
     } catch (e) {
-      console.log(e, 'eman');
+      if (__DEV__) {
+        console.log(e, 'eman');
+      }
     }
   };
 
   return {
-    showAlertDelete,
-    onDeleteCommentClicked
+    showAlertDelete
   };
 };
 

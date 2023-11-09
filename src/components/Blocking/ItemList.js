@@ -18,9 +18,9 @@ const ItemList = ({label, active, onSelect, id}) => {
     }
   };
   return (
-    <TouchableOpacity testID="click" style={styles.container} onPress={() => onActive()}>
+    <TouchableOpacity style={styles.container} onPress={() => onActive()}>
       <Text style={styles.label}>{label}</Text>
-      {active && <Icon testID="active-icon" name="check-circle" size={20} color={colors.red} />}
+      {active && <Icon name="check-circle" size={20} color={colors.red} />}
     </TouchableOpacity>
   );
 };
@@ -34,13 +34,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingRight: 20
+    paddingRight: 20,
   },
   label: {
     fontFamily: fonts.inter[400],
     fontSize: 14,
     paddingHorizontal: 20,
     color: '#000',
-    flex: 1
-  }
+    flex: 1,
+  },
 });

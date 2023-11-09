@@ -323,7 +323,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16
   },
   subtitleStyle: (selectedUsers) => ({
-    color: selectedUsers.length > 0 ? COLORS.holytosca : COLORS.gray4,
+    color: selectedUsers.length > 0 ? COLORS.holyTosca : COLORS.gray4,
     marginEnd: 8
   })
 });

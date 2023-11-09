@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-unresolved
 import 'react-native-get-random-values';
 
 import * as React from 'react';

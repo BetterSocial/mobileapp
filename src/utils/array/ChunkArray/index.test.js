@@ -1,13 +1,4 @@
-import {joinTopicIntoTopicList} from '.';
-
-describe('joinTopicIntoTopicList should run correctly', () => {
-  const topics = ['#ellon', '#apple'];
-  it('joinTopicIntoTopicList should run correctly', () => {
-    expect(joinTopicIntoTopicList('#microsoft', topics)).toEqual([
-      '#ellon',
-      '#apple',
-      '#microsoft'
-    ]);
-    expect(joinTopicIntoTopicList('#ellon', topics)).toEqual(['#ellon', '#apple']);
-  });
+import {ChunkArray} from './index';
+it('test array chunk', () => {
+  expect(ChunkArray([1, 2, 3, 4, 5], 2)).toEqual([[1, 2], [3, 4], [5]]);
 });

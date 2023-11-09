@@ -21,7 +21,6 @@ const SpecificIssue = ({refSpecificIssue, onPress, onSkip, loading}) => {
       <View>
         <Text style={styles.title}>Please specify the issue</Text>
         <TextInput
-          testID="changeText"
           style={styles.input}
           value={message}
           onChangeText={(v) => setMessage(v)}

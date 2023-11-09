@@ -1,9 +1,9 @@
 /* eslint-disable no-use-before-define */
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import {StyleSheet, Text, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
+import PropTypes from 'prop-types';
 import DiscoveryAction from '../../../context/actions/discoveryAction';
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import DomainList from '../elements/DiscoveryItemList';
@@ -72,8 +72,7 @@ const UsersFragment = ({
       data: {
         user_id: myId,
         other_id: item.user_id,
-        username: item.username,
-        users
+        username: item.username
       }
     });
   };

@@ -18,30 +18,22 @@ const ModalAction = (props) => {
       {...props}>
       <View style={styles.modalContainer}>
         <TouchableOpacity
-          testID="pressMessage"
           onPress={() => onPress('message', selectedUser)}
           style={styles.buttonStyle}>
           <Text style={styles.textButton}>Message {name}</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          testID="pressMessageAnonym"
           onPress={() => onPress('message-anonymously', selectedUser)}
           style={styles.buttonStyle}>
           <Text style={selectedUser?.allow_anon_dm ? styles.textButton : styles.disabledTextButton}>
             Message Anonymously
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          testID="pressView"
-          onPress={() => onPress('view')}
-          style={styles.buttonStyle}>
+        <TouchableOpacity onPress={() => onPress('view')} style={styles.buttonStyle}>
           <Text style={styles.textButton}>View {name}&apos;s Profile </Text>
         </TouchableOpacity>
         {isGroup && (
-          <TouchableOpacity
-            testID="pressRemove"
-            onPress={() => onPress('remove')}
-            style={styles.buttonStyle}>
+          <TouchableOpacity onPress={() => onPress('remove')} style={styles.buttonStyle}>
             <Text style={styles.textButton}>Remove {name} </Text>
           </TouchableOpacity>
         )}

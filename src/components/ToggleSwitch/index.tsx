@@ -11,7 +11,6 @@ import {
   TouchableOpacityProps
 } from 'react-native';
 import dimen from '../../utils/dimen';
-import {normalizeFontSize} from '../../utils/fonts';
 
 const styles = StyleSheet.create({
   container: {
@@ -34,30 +33,22 @@ const styles = StyleSheet.create({
   textOn: {
     fontFamily: 'Inter',
     fontWeight: '400',
-    fontSize: normalizeFontSize(12),
+    fontSize: dimen.normalizeDimen(12),
     lineHeight: dimen.normalizeDimen(18),
     textAlign: 'center',
-    textAlignVertical: 'center',
     color: '#f4f3f4',
     position: 'absolute',
-    top: dimen.normalizeDimen(1),
-    left: dimen.normalizeDimen(2),
-    width: dimen.normalizeDimen(22),
-    height: dimen.normalizeDimen(18)
+    left: dimen.normalizeDimen(2)
   },
   textOff: {
     fontFamily: 'Inter',
     fontWeight: '400',
-    fontSize: normalizeFontSize(12),
+    fontSize: dimen.normalizeDimen(12),
     lineHeight: dimen.normalizeDimen(18),
     textAlign: 'center',
-    textAlignVertical: 'center',
     color: '#f4f3f4',
     position: 'absolute',
-    top: dimen.normalizeDimen(1),
-    right: dimen.normalizeDimen(2),
-    width: dimen.normalizeDimen(22),
-    height: dimen.normalizeDimen(18)
+    right: dimen.normalizeDimen(2)
   },
   mainStyes: {
     position: 'relative',
@@ -78,15 +69,15 @@ const styles = StyleSheet.create({
     })
   },
   labelLeft: {
-    marginRight: dimen.normalizeDimen(5),
+    marginRight: 5,
     color: '#FFFFFF',
-    fontSize: normalizeFontSize(12),
+    fontSize: 12,
     fontWeight: '400'
   },
   labelRight: {
-    marginLeft: dimen.normalizeDimen(5),
+    marginLeft: 5,
     color: '#FFFFFF',
-    fontSize: normalizeFontSize(12),
+    fontSize: 12,
     fontWeight: '400'
   }
 });
@@ -178,7 +169,7 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
       style={[styles.container, containerStyle]}
       activeOpacity={0.9}
       onPress={onPress}>
-      {labelLeft && <Text style={[styles.labelLeft, styleLabelLeft]}>{labelLeft}</Text>}
+      <Text style={[styles.labelLeft, styleLabelLeft]}>{labelLeft}</Text>
       <Animated.View
         style={[
           styles.mainStyes,
@@ -223,7 +214,7 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
           ]}
         />
       </Animated.View>
-      {labelRight && <Text style={[styles.labelRight, styleLabelRight]}>{labelRight}</Text>}
+      <Text style={[styles.labelRight, styleLabelRight]}>{labelRight}</Text>
     </TouchableOpacity>
   );
 };

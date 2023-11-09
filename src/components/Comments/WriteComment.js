@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import ToggleSwitch from '../ToggleSwitch';
 
 import AnonUserInfoRepo from '../../service/repo/anonUserInfoRepo';
@@ -18,7 +17,6 @@ import StringConstant from '../../utils/string/StringConstant';
 import {Context} from '../../context';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 
 const WriteComment = ({
   value = null,
@@ -35,8 +33,8 @@ const WriteComment = ({
   const [isAnonimity, setIsAnonimity] = React.useState(false);
   const isCommentEnabled = value.length > 0;
   const [loadingUser, setLoadingUser] = React.useState(false);
+  const isDisableSubmit = !isCommentEnabled || loadingPost;
   const [anonimityData, setAnoimityData] = React.useState({});
-  const storageKey = 'isAnonymByDefault';
   const getAnonUser = React.useCallback(async () => {
     setLoadingUser(true);
     try {
@@ -61,21 +59,8 @@ const WriteComment = ({
   const toggleSwitch = () => {
     setIsAnonimity((prevState) => !prevState);
     getAnonUser();
-    if (isAnonimity) saveToStorage('null');
-    if (!isAnonimity) saveToStorage('true');
   };
 
-  React.useEffect(() => {
-    AsyncStorage.getItem(storageKey).then((data) => {
-      if (data === 'true') {
-        setIsAnonimity(true);
-        getAnonUser();
-      }
-    });
-  }, []);
-  const saveToStorage = (valueData) => {
-    AsyncStorage.setItem(storageKey, valueData);
-  };
   return (
     <View style={styles.columnContainer}>
       <View style={styles.connectorTop(inReplyCommentView, showProfileConnector)} />
@@ -113,8 +98,6 @@ const WriteComment = ({
               style={styles.image}
               source={{
                 uri: profile.myProfile.profile_pic_path
-                  ? profile.myProfile.profile_pic_path
-                  : DEFAULT_PROFILE_PIC_PATH
               }}
             />
           </>
@@ -134,12 +117,10 @@ const WriteComment = ({
         <TouchableOpacity
           testID="iscommentenable"
           onPress={() => onPress(isAnonimity, anonimityData)}
-          style={styles.btn(!isCommentEnabled || loadingUser || loadingPost)}
-          disabled={!isCommentEnabled || loadingUser || loadingPost}>
+          style={styles.btn(isDisableSubmit || loadingUser)}
+          disabled={isDisableSubmit || loadingUser}>
           <MemoSendComment
-            fillBackground={
-              !isCommentEnabled || loadingUser || loadingPost ? '#C4C4C4' : colors.bondi_blue
-            }
+            fillBackground={isDisableSubmit || loadingUser ? '#C4C4C4' : colors.bondi_blue}
           />
         </TouchableOpacity>
       </View>

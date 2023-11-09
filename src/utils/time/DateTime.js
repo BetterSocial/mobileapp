@@ -5,13 +5,13 @@ import Moment from 'moment';
  * @returns {String}
  */
 const format = (time) => {
-  if (time === undefined || time === null) return '';
+  if (time === undefined || time === null) throw new Error('Param "time" is not defined or null');
 
   return Moment(time).format('MMM D, YYYY');
 };
 
 const DateTimeUtils = {
-  format
+  format,
 };
 
 export default DateTimeUtils;

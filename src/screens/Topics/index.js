@@ -11,7 +11,6 @@ import {
   View
 } from 'react-native';
 import {useNavigation} from '@react-navigation/core';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import CustomPressable from '../../components/CustomPressable';
 import ListTopic from './ListTopics';
@@ -25,11 +24,9 @@ import {Header} from '../../components';
 import {ProgressBar} from '../../components/ProgressBar';
 import {TOPICS_PICK} from '../../utils/cache/constant';
 import {colors} from '../../utils/colors';
-import {fonts, normalizeFontSize} from '../../utils/fonts';
+import {fonts} from '../../utils/fonts';
 import {getSpecificCache} from '../../utils/cache';
-import {Monitoring} from '../../libraries/monitoring/sentry';
 import {setTopics as setTopicsContext} from '../../context/actions/topics';
-import dimen from '../../utils/dimen';
 
 const {width} = Dimensions.get('screen');
 
@@ -41,13 +38,11 @@ const Topics = () => {
   const [, dispatch] = React.useContext(Context).topics;
   const [myTopic, setMyTopic] = React.useState({});
   const [isPreload, setIspreload] = React.useState(true);
-  const {bottom} = useSafeAreaInsets();
 
   const {isFetchingTopic, isTopicFetchError, getTopicsData, topicCollection} = useSignin();
   const getCacheTopic = async () => {
     getSpecificCache(TOPICS_PICK, (cache) => {
       if (cache) {
-        Monitoring.logActions('set topics data from cache', cache);
         setTopics(cache);
         setIspreload(false);
       } else {
@@ -57,6 +52,7 @@ const Topics = () => {
     });
   };
   React.useEffect(() => {
+    // console.log(topicCollection, 'lusi')
     if (topicCollection.length > 0) {
       setTopics(topicCollection);
     }
@@ -102,7 +98,6 @@ const Topics = () => {
       handleSelectedLanguage={handleSelectedLanguage}
     />
   );
-
   const onBack = () => {
     navigation.goBack();
   };
@@ -125,7 +120,7 @@ const Topics = () => {
           </View>
 
           {topics?.length > 0 && (
-            <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollViewStyle(bottom)}>
+            <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollViewStyle}>
               {topics
                 ? topics.map((topic, index) => (
                     <View key={index} style={styles.containerTopic}>
@@ -192,9 +187,7 @@ const Topics = () => {
   );
 };
 const styles = StyleSheet.create({
-  scrollViewStyle: (bottom) => ({
-    marginBottom: dimen.normalizeDimen(100) - bottom
-  }),
+  scrollViewStyle: {marginBottom: 100},
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -202,30 +195,31 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: Platform.OS === 'ios' ? dimen.normalizeDimen(22) : 0,
+    padding: Platform.OS === 'ios' ? 22 : 0,
     backgroundColor: colors.white
   },
   containerProgress: {
-    marginTop: dimen.normalizeDimen(20),
-    marginBottom: dimen.normalizeDimen(24),
-    paddingHorizontal: dimen.normalizeDimen(20)
+    marginTop: 20,
+    marginBottom: 24,
+    paddingHorizontal: 20
   },
   textPickYourTopic: {
     fontFamily: 'Inter-Bold',
     fontStyle: 'normal',
     fontWeight: '600',
-    fontSize: normalizeFontSize(36),
-    lineHeight: normalizeFontSize(43.57),
+    fontSize: 36,
+    lineHeight: 43.57,
     color: '#11243D',
-    marginHorizontal: dimen.normalizeDimen(20)
+    marginHorizontal: 20
   },
   footer: {
     position: 'absolute',
     bottom: 0,
-    height: dimen.normalizeDimen(112),
+    height: 112,
     width,
-    paddingHorizontal: dimen.normalizeDimen(20),
-    paddingBottom: dimen.normalizeDimen(20),
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingBottom: 20,
     backgroundColor: colors.white,
     shadowColor: colors.black,
     shadowOffset: {
@@ -243,45 +237,45 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: '400',
-    fontSize: normalizeFontSize(14),
-    lineHeight: normalizeFontSize(24),
+    fontSize: 14,
+    lineHeight: 24,
     color: colors.gray,
     opacity: 0.84,
-    marginTop: dimen.normalizeDimen(8),
-    marginBottom: dimen.normalizeDimen(24),
-    paddingHorizontal: dimen.normalizeDimen(20)
+    marginTop: 8,
+    marginBottom: 24,
+    paddingHorizontal: 20
   },
   containerTopic: {
     flexDirection: 'column',
-    marginBottom: dimen.normalizeDimen(32)
+    marginBottom: 32
   },
   title: {
     fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: 'bold',
-    fontSize: normalizeFontSize(18),
-    lineHeight: normalizeFontSize(22),
+    fontSize: 18,
+    lineHeight: 22,
     color: colors.black,
-    marginBottom: dimen.normalizeDimen(13),
+    marginBottom: 13,
     // textTransform: 'capitalize',
-    paddingHorizontal: dimen.normalizeDimen(22)
+    paddingHorizontal: 22
   },
   listTopic: {
     flexDirection: 'column',
-    marginBottom: dimen.normalizeDimen(8),
-    paddingRight: dimen.normalizeDimen(8)
+    marginBottom: 8,
+    paddingRight: 8
   },
 
   bgTopicSelectActive: {
     backgroundColor: colors.bondi_blue,
     // minWidth: 100,
-    paddingHorizontal: dimen.normalizeDimen(15),
-    paddingVertical: dimen.normalizeDimen(7),
-    borderRadius: dimen.normalizeDimen(14),
+    paddingHorizontal: 15,
+    paddingVertical: 7,
+    borderRadius: 14,
     flexDirection: 'row',
     // justifyContent: 'center',
-    marginRight: dimen.normalizeDimen(8),
-    marginBottom: dimen.normalizeDimen(10),
+    marginRight: 8,
+    marginBottom: 10,
     alignItems: 'center'
     // alignItems: 'center',
   },
@@ -289,20 +283,20 @@ const styles = StyleSheet.create({
   bgTopicSelectNotActive: {
     backgroundColor: colors.concrete,
     // minWidth: 100,
-    paddingHorizontal: dimen.normalizeDimen(15),
-    paddingVertical: dimen.normalizeDimen(7),
-    borderRadius: dimen.normalizeDimen(14),
+    paddingHorizontal: 15,
+    paddingVertical: 7,
+    borderRadius: 14,
     flexDirection: 'row',
     // justifyContent: 'center',
-    marginRight: dimen.normalizeDimen(8),
-    marginBottom: dimen.normalizeDimen(10),
+    marginRight: 8,
+    marginBottom: 10,
     alignItems: 'center'
   },
   textTopicActive: {
     fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: '500',
-    fontSize: normalizeFontSize(12),
+    fontSize: 12,
     color: colors.white
     // paddingLeft: 5,
   },
@@ -310,7 +304,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: '500',
-    fontSize: normalizeFontSize(12),
+    fontSize: 12,
     color: colors.mine_shaft
     // paddingLeft: 5,
   },
@@ -322,22 +316,21 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: '400',
-    fontSize: normalizeFontSize(10),
+    fontSize: 10,
     textAlign: 'center',
     color: colors.blackgrey
   },
   button: {
-    borderRadius: dimen.normalizeDimen(8),
     backgroundColor: colors.gray
   },
   scrollButtonParent: {
-    paddingHorizontal: dimen.normalizeDimen(22)
+    paddingHorizontal: 22
   },
   containerContent: {
-    paddingRight: dimen.normalizeDimen(20)
+    paddingRight: 20
   },
   reloadTopicButtonContainer: {
-    marginTop: dimen.normalizeDimen(60)
+    marginTop: 60
   },
   reloadTopicButton: {
     textAlign: 'center',
@@ -346,4 +339,4 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline'
   }
 });
-export default Topics;
+export default React.memo(Topics);

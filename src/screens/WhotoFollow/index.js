@@ -14,7 +14,6 @@ import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
 import {useSetRecoilState} from 'recoil';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import ImageUtils from '../../utils/image';
 import ItemUser from './elements/ItemUser';
@@ -35,8 +34,6 @@ import {registerUser} from '../../service/users';
 import {setImage} from '../../context/actions/users';
 import {setToken} from '../../utils/token';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
-import dimen from '../../utils/dimen';
-import {normalizeFontSize} from '../../utils/fonts';
 
 const {width} = Dimensions.get('screen');
 
@@ -64,7 +61,6 @@ const WhotoFollow = () => {
   const create = useClientGetstream();
 
   const navigation = useNavigation();
-  const {bottom} = useSafeAreaInsets();
 
   React.useEffect(() => {
     setIsLoading(true);
@@ -107,14 +103,14 @@ const WhotoFollow = () => {
             switch (type) {
               case VIEW_TYPE_DATA:
                 dim.width = width;
-                dim.height = dimen.normalizeDimen(64);
+                dim.height = 76;
                 break;
 
               case VIEW_TYPE_LABEL_TOPIC:
               case VIEW_TYPE_LABEL_LOCATION:
               default:
                 dim.width = width;
-                dim.height = dimen.normalizeDimen(40);
+                dim.height = 40;
                 break;
             }
           }
@@ -280,7 +276,7 @@ const WhotoFollow = () => {
       {isLoading ? <ActivityIndicator size="small" color="#0000ff" /> : null}
       {isRecyclerViewShown ? (
         <RecyclerListView
-          style={styles.recyclerview(bottom)}
+          style={styles.recyclerview}
           layoutProvider={layoutProvider}
           dataProvider={dataProvider}
           extendedState={{
@@ -310,46 +306,48 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white
   },
-  recyclerview: (bottom) => ({
-    marginBottom: dimen.normalizeDimen(112) - bottom
-  }),
+  recyclerview: {
+    marginBottom: 112
+  },
   wrapperHeader: {
-    paddingHorizontal: dimen.normalizeDimen(22),
-    paddingTop: dimen.normalizeDimen(22)
+    paddingLeft: 22,
+    paddingRight: 22,
+    paddingTop: 22
   },
   containerProgress: {
-    marginTop: dimen.normalizeDimen(20),
-    marginBottom: dimen.normalizeDimen(24),
-    paddingHorizontal: dimen.normalizeDimen(20)
+    marginTop: 20,
+    marginBottom: 24,
+    paddingHorizontal: 20
   },
   textWhoToFollow: {
     fontFamily: 'Inter-Bold',
     fontStyle: 'normal',
     fontWeight: '600',
-    fontSize: normalizeFontSize(36),
-    lineHeight: normalizeFontSize(43.57),
+    fontSize: 36,
+    lineHeight: 43.57,
     color: '#11243D',
-    marginHorizontal: dimen.normalizeDimen(20)
+    marginHorizontal: 20
   },
   textDescription: {
     fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: '400',
-    fontSize: normalizeFontSize(14),
-    lineHeight: normalizeFontSize(24),
+    fontSize: 14,
+    lineHeight: 24,
     color: colors.gray,
     opacity: 0.84,
-    marginTop: dimen.normalizeDimen(8),
-    marginBottom: dimen.normalizeDimen(24),
-    paddingHorizontal: dimen.normalizeDimen(20)
+    marginTop: 8,
+    marginBottom: 24,
+    paddingHorizontal: 20
   },
   footer: {
     position: 'absolute',
     bottom: 0,
-    height: dimen.normalizeDimen(112),
+    height: 112,
     width,
-    paddingHorizontal: dimen.normalizeDimen(20),
-    paddingBottom: dimen.normalizeDimen(20),
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingBottom: 20,
     backgroundColor: colors.white,
     shadowColor: colors.black,
     shadowOffset: {
@@ -372,9 +370,123 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: '400',
-    fontSize: normalizeFontSize(10),
+    fontSize: 10,
     textAlign: 'center',
     color: colors.blackgrey
+  },
+  containerCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: 4,
+    paddingBottom: 4,
+    marginBottom: 8
+  },
+  cardLeft: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  textRounded: {
+    fontFamily: 'Inter-Black',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: 24,
+    color: '#FFFFFF'
+  },
+  containerTextCard: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginLeft: 8
+  },
+
+  button: {
+    height: 36,
+    backgroundColor: '#11516F',
+    paddingVertical: 10,
+    paddingHorizontal: 25,
+    borderRadius: 8,
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
+  textStyling: {
+    fontFamily: 'Inter',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    fontSize: 12,
+    textAlign: 'center',
+    color: '#FFFFFF'
+  },
+  textFullName: {
+    fontFamily: 'Poppins',
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    fontSize: 14,
+    color: '#000000',
+    lineHeight: 21,
+    alignSelf: 'flex-start'
+  },
+  textUsername: {
+    fontFamily: 'Inter',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    fontSize: 12,
+    color: '#000000',
+    lineHeight: 15,
+    alignSelf: 'flex-start'
+  },
+  headerList: {
+    height: 40,
+    paddingLeft: 22,
+    paddingRight: 22,
+    backgroundColor: '#F2F2F2',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    marginBottom: 12,
+    marginTop: 12
+  },
+  titleHeader: {
+    fontFamily: 'Poppins',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: 12,
+    lineHeight: 18,
+    color: '#4F4F4F'
+  },
+  flatList: {
+    paddingLeft: 22,
+    paddingRight: 22
+  },
+  tinyLogo: {
+    width: 48,
+    height: 48,
+    borderRadius: 48
+  },
+  containerButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  textBold: {
+    fontFamily: 'Poppins',
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    fontSize: 12,
+    lineHeight: 18,
+    color: '#4F4F4F',
+    textTransform: 'capitalize'
+  },
+  followAction: (awidth, height) => ({
+    height,
+    width: awidth,
+    backgroundColor: 'red',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }),
+  listUser: {
+    marginBottom: 112
   }
 });
 export default WhotoFollow;

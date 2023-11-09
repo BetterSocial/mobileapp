@@ -147,7 +147,6 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
               "paddingVertical": 19,
             }
           }
-          testID="changeText"
           textAlignVertical="top"
           underlineColorAndroid="transparent"
           value=""
@@ -216,18 +215,17 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
                 "opacity": 1,
               }
             }
-            testID="button-report-test"
           >
             <View
               style={
                 Object {
                   "alignItems": "center",
                   "backgroundColor": "#00ADB5",
-                  "borderRadius": 6.4,
+                  "borderRadius": 8,
                   "flexDirection": "row",
-                  "height": 40,
+                  "height": 50,
                   "justifyContent": "center",
-                  "paddingHorizontal": 20,
+                  "paddingHorizontal": 25,
                 }
               }
             >
