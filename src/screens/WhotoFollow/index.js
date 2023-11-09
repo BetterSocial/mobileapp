@@ -233,8 +233,13 @@ const WhotoFollow = () => {
           });
         });
     } catch (e) {
-      console.error('Error during registration:', e);
-      // Handle the error appropriately here
+      crashlytics().recordError(new Error(e));
+      setFetchRegister(false);
+      showMessage({
+        message: 'Cannot connect to server, please try again later',
+        type: 'danger',
+        backgroundColor: colors.red
+      });
     }
   };
 
