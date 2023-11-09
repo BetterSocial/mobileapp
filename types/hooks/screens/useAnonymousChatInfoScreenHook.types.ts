@@ -4,7 +4,7 @@ import {Member} from '../../database/schema/ChatListDetail.types';
 interface UseAnonymousChatInfoScreenHook {
   channelInfo: ChannelList;
   goBack: () => void;
-  onContactPressed: (item: ChannelListMemberSchema) => void;
+  onContactPressed: (item: ChannelListMemberSchema, from?: string) => void;
   isAnonymous: boolean;
   selectedUser: ChannelListMemberSchema;
   showPopupBlock: boolean;
