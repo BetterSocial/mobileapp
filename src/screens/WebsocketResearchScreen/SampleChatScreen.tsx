@@ -4,7 +4,7 @@
 import * as React from 'react';
 import {Dimensions, FlatList, StyleSheet, View} from 'react-native';
 
-import AnonymousInputMessage from '../../components/Chat/AnonymousInputMessage';
+import InputMessageV2 from '../../components/Chat/InputMessageV2';
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
 import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
@@ -93,7 +93,13 @@ const SampleChatScreen = () => {
         renderItem={renderChatItem}
       />
       <View style={styles.inputContainer}>
-        <AnonymousInputMessage onSendButtonClicked={sendChat} type={ANONYMOUS} />
+        <InputMessageV2
+          onSendButtonClicked={sendChat}
+          type={ANONYMOUS}
+          emojiCode={selectedChannel?.rawJson.channel.anon_user_info_emoji_code}
+          emojiColor={selectedChannel?.rawJson.channel.anon_user_info_color_code}
+          username={selectedChannel?.name}
+        />
       </View>
     </View>
   );
