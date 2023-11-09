@@ -11,6 +11,11 @@ import SignedMessageRepo from '../../service/repo/signedMessageRepo';
 import UseChatScreenHook from '../../../types/hooks/screens/useChatScreenHook.types';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
+import {
+  CHANNEL_TYPE_ANONYMOUS,
+  CHANNEL_TYPE_GROUP,
+  CHANNEL_TYPE_PERSONAL
+} from '../../utils/constants';
 import {getAnonymousUserId, getUserId} from '../../utils/users';
 import {randomString} from '../../utils/string/StringUtils';
 
@@ -67,9 +72,10 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
         refresh('channelList');
       }
 
-      let channelType = 1;
-      if (selectedChannel?.channelType?.toLowerCase() === 'group') channelType = 2;
-      if (selectedChannel?.rawJson?.channel?.channel_type === 4) channelType = 4;
+      let channelType = CHANNEL_TYPE_PERSONAL;
+      if (selectedChannel?.channelType?.toLowerCase() === 'group') channelType = CHANNEL_TYPE_GROUP;
+      if (selectedChannel?.rawJson?.channel?.channel_type === 4)
+        channelType = CHANNEL_TYPE_ANONYMOUS;
       let response;
       if (type === 'ANONYMOUS') {
         response = await AnonymousMessageRepo.sendAnonymousMessage(selectedChannel?.id, message);
