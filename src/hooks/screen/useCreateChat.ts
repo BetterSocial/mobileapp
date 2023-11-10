@@ -18,11 +18,11 @@ const useCreateChat = () => {
       const chatData = await createChannelJson(initChannel, selectedUser);
 
       const channelList = await ChannelList.fromMessageSignedAPI(chatData);
-      channelList.saveIfLatest(localDb).catch((e) => console.log(e, 'nakal e'));
+      channelList.saveIfLatest(localDb);
       handleMemberSchema(initChannel);
       goToChatScreen(channelList, from);
     } catch (e) {
-      console.log({e}, 'eman');
+      console.log({e}, 'error create chat');
     }
   };
 

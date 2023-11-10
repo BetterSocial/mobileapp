@@ -71,7 +71,6 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
         refresh('channelList');
       }
       let channelType = CHANNEL_TYPE_PERSONAL;
-      console.log({selectedChannel: selectedChannel?.rawJson?.channel?.type}, 'naniks');
       if (
         selectedChannel?.channelType?.toLowerCase() === 'group' ||
         selectedChannel?.rawJson?.channel?.type === 'group'

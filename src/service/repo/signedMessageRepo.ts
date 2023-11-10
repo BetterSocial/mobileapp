@@ -126,7 +126,6 @@ async function createSignedChat(members: string[]) {
       members
     };
     const response = await api.post(baseUrl.createSignedChat, body);
-    console.log({response}, 'pola');
     if (response.status === 200) {
       return Promise.resolve(response.data);
     }
