@@ -88,29 +88,33 @@ function useChatUtilsHook(): UseChatUtilsHook {
     navigation.navigate('TopicPageScreen', navigationParam);
   };
 
+  const openChatFromGroup = () => {
+    navigation.reset({
+      index: 1,
+      routes: [
+        {
+          name: 'AuthenticatedStack',
+          params: {
+            screen: 'HomeTabs',
+            params: {
+              screen: 'ChannelList'
+            }
+          }
+        },
+        {
+          name: 'AuthenticatedStack',
+          params: {
+            screen: 'SignedChatScreen'
+          }
+        }
+      ]
+    });
+  };
+
   const goToChatScreen = (channel: ChannelList, from?: string) => {
     setChannelAsRead(channel);
     if (from === GROUP_INFO) {
-      navigation.reset({
-        index: 1,
-        routes: [
-          {
-            name: 'AuthenticatedStack',
-            params: {
-              screen: 'HomeTabs',
-              params: {
-                screen: 'ChannelList'
-              }
-            }
-          },
-          {
-            name: 'AuthenticatedStack',
-            params: {
-              screen: 'ChatDetailPage'
-            }
-          }
-        ]
-      });
+      openChatFromGroup();
     }
     if (channel?.channelType === ANON_PM) {
       navigation.navigate('SampleChatScreen');

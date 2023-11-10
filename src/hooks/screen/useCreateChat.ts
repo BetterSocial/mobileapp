@@ -20,11 +20,14 @@ const useCreateChat = () => {
       console.log({initChannel, chatData}, 'nakal');
 
       const channelList = ChannelList.fromMessageSignedAPI(chatData);
-      await channelList.saveIfLatest(localDb);
-
+      console.log({channelList}, 'nakal2');
+      await channelList.saveIfLatest(localDb).catch((e) => console.log(e, 'nakal e'));
+      console.log('nakal3');
       handleMemberSchema(initChannel);
       goToChatScreen(channelList, GROUP_INFO);
-    } catch (e) {}
+    } catch (e) {
+      console.log({e}, 'eman');
+    }
   };
 
   const createChannelJson = (response, selectedUser) => {
