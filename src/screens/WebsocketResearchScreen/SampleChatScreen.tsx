@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable import/extensions */
 /* eslint-disable import/no-unresolved */
 
@@ -11,6 +12,8 @@ import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
 import {ANONYMOUS} from '../../hooks/core/constant';
 import {colors} from '../../utils/colors';
 import dimen from '../../utils/dimen';
+import BaseSystemChat from '../../components/AnonymousChat/BaseChatSystem';
+import useProfileHook from '../../hooks/core/profile/useProfileHook';
 
 const {height} = Dimensions.get('window');
 
@@ -90,6 +93,14 @@ const SampleChatScreen = () => {
         bounces={false}
         onLayout={scrollToEnd}
         keyExtractor={(item, index) => item?.id || index.toString()}
+        ListFooterComponent={
+          ownerChat === anonProfileId ? (
+            <BaseSystemChat
+              componentType="SINGLE"
+              messageSingle={`You’re anonymously messaging ${selectedChannel?.name}. They are still able to block you`}
+            />
+          ) : null
+        }
         renderItem={renderChatItem}
       />
       <View style={styles.inputContainer}>
