@@ -537,10 +537,11 @@ const OtherProfile = () => {
 
     const onCreateChat = () => {
       const channelName = [username, profile?.myProfile?.username].join(',');
+
       const selectedUser = {
         user: {
           name: channelName,
-          image: DEFAULT_PROFILE_PIC_PATH
+          image: dataMain.profile_pic_path ?? DEFAULT_PROFILE_PIC_PATH
         }
       };
       const members = [other_id, profile.myProfile.user_id];

@@ -118,10 +118,14 @@ const ContactScreen = ({navigation}) => {
   const handleCreateChannel = async () => {
     try {
       const mappingUserName = selectedUsers?.map((user) => user?.username).join(',');
+      let image = DEFAULT_PROFILE_PIC_PATH;
+      if (selectedUsers.length === 1) {
+        image = selectedUsers[0]?.profile_pic_path;
+      }
       const dataSelected = {
         user: {
           name: mappingUserName,
-          image: DEFAULT_PROFILE_PIC_PATH
+          image
         }
       };
       createSignChat(followed, dataSelected);
