@@ -8,23 +8,19 @@ import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import UserSchema from '../../database/schema/UserSchema';
 import ChannelListMemberSchema from '../../database/schema/ChannelListMemberSchema';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
-import {GROUP_INFO} from '../core/constant';
 
 const useCreateChat = () => {
   const {localDb} = useLocalDatabaseHook();
   const {goToChatScreen} = useChatUtilsHook();
-  const createSignChat = async (members: string[], selectedUser) => {
+  const createSignChat = async (members: string[], selectedUser, from) => {
     try {
       const initChannel = await SignedMessageRepo.createSignedChat(members);
       const chatData = await createChannelJson(initChannel, selectedUser);
-      console.log({initChannel, chatData}, 'nakal');
 
-      const channelList = ChannelList.fromMessageSignedAPI(chatData);
-      console.log({channelList}, 'nakal2');
-      await channelList.saveIfLatest(localDb).catch((e) => console.log(e, 'nakal e'));
-      console.log('nakal3');
+      const channelList = await ChannelList.fromMessageSignedAPI(chatData);
+      channelList.saveIfLatest(localDb).catch((e) => console.log(e, 'nakal e'));
       handleMemberSchema(initChannel);
-      goToChatScreen(channelList, GROUP_INFO);
+      goToChatScreen(channelList, from);
     } catch (e) {
       console.log({e}, 'eman');
     }
@@ -68,8 +64,7 @@ const useCreateChat = () => {
         await memberSchema.save(localDb);
       });
     } catch (e) {
-      console.log('error on memberSchema');
-      console.log(e);
+      console.log(e, 'error on memberSchema');
     }
   };
 
@@ -83,7 +78,6 @@ const useCreateChat = () => {
       const response = await getOrCreateAnonymousChannel(selectedUser?.user_id);
       const chatData = await createChannelJson(response, selectedUser);
       const channelList = ChannelList.fromMessageAnonymouslyAPI(chatData);
-      console.log({chatData}, 'nakal2');
       await channelList.saveIfLatest(localDb);
       handleMemberSchema(response);
       goToChatScreen(channelList);

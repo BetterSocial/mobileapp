@@ -55,7 +55,6 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     if (type === 'ANONYMOUS') {
       userId = myAnonymousId;
     }
-    console.log({sendingChatSchema, selectedChannel}, 'sending');
     try {
       const randomId = uuid();
 
@@ -67,16 +66,23 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
           message,
           localDb
         );
-
-        await currentChatSchema.save(localDb);
+        currentChatSchema.save(localDb);
         refresh('chat');
         refresh('channelList');
       }
-
       let channelType = CHANNEL_TYPE_PERSONAL;
-      if (selectedChannel?.channelType?.toLowerCase() === 'group') channelType = CHANNEL_TYPE_GROUP;
-      if (selectedChannel?.rawJson?.channel?.channel_type === 4)
+      console.log({selectedChannel: selectedChannel?.rawJson?.channel?.type}, 'naniks');
+      if (
+        selectedChannel?.channelType?.toLowerCase() === 'group' ||
+        selectedChannel?.rawJson?.channel?.type === 'group'
+      ) {
+        channelType = CHANNEL_TYPE_GROUP;
+      }
+
+      if (selectedChannel?.rawJson?.channel?.channel_type === 4) {
         channelType = CHANNEL_TYPE_ANONYMOUS;
+      }
+
       let response;
       if (type === 'ANONYMOUS') {
         response = await AnonymousMessageRepo.sendAnonymousMessage(selectedChannel?.id, message);
@@ -91,7 +97,6 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       refresh('chat');
       refresh('channelList');
     } catch (e) {
-      console.log(e, 'eman');
       if (e?.response?.data?.status === 'Channel is blocked') return;
 
       setTimeout(() => {

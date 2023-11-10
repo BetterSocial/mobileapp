@@ -61,6 +61,7 @@ import {trimString} from '../../utils/string/TrimString';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import StorageUtils from '../../utils/storage';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
+import useCreateChat from '../../hooks/screen/useCreateChat';
 
 const {width, height} = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -177,7 +178,7 @@ const OtherProfile = () => {
   const {mappingColorFeed} = useCoreFeed();
   const isSignedMessageEnabled = dataMain.isSignedMessageEnabled ?? true;
   const isAnonimityEnabled = dataMain.isAnonMessageEnabled && isSignedMessageEnabled;
-
+  const {createSignChat} = useCreateChat();
   React.useEffect(() => {
     setDMChat('');
   }, [isSignedMessageEnabled]);
@@ -534,12 +535,24 @@ const OtherProfile = () => {
       );
     };
 
+    const onCreateChat = () => {
+      const channelName = [username, profile?.myProfile?.username].join(',');
+      const selectedUser = {
+        user: {
+          name: channelName,
+          image: DEFAULT_PROFILE_PIC_PATH
+        }
+      };
+      const members = [other_id, profile.myProfile.user_id];
+      createSignChat(members, selectedUser);
+    };
+
     const __renderMessageAndFollowButtonGroup = () => {
       if (blockStatus.blocker) return <></>;
       return (
         <React.Fragment>
           {__renderFollowingButton()}
-          <GlobalButton onPress={onCreateChannel}>
+          <GlobalButton onPress={onCreateChat}>
             <View style={styles.btnMsg}>
               <EnveloveBlueIcon width={20} height={20} fill={colors.bondi_blue} />
             </View>

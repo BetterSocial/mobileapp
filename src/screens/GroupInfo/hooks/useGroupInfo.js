@@ -5,25 +5,18 @@ import {generateRandomId} from 'stream-chat-react-native-core';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {openComposer} from 'react-native-email-link';
 import {useNavigation} from '@react-navigation/core';
-import {v4 as uuid} from 'uuid';
 
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
-import ChannelList from '../../../database/schema/ChannelListSchema';
-import ChannelListMemberSchema from '../../../database/schema/ChannelListMemberSchema';
-import UserSchema from '../../../database/schema/UserSchema';
-import useChatUtilsHook from '../../../hooks/core/chat/useChatUtilsHook';
-import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import {Context} from '../../../context';
 import {checkUserBlock} from '../../../service/profile';
 import {getChatName} from '../../../utils/string/StringUtils';
-import {getOrCreateAnonymousChannel} from '../../../service/chat';
 import {requestExternalStoragePermission} from '../../../utils/permission';
 import {setChannel} from '../../../context/actions/setChannel';
 import {setParticipants} from '../../../context/actions/groupChat';
 import {uploadFile} from '../../../service/file';
 import TokenStorage, {ITokenEnum} from '../../../utils/storage/custom/tokenStorage';
 import {isContainUrl} from '../../../utils/Utils';
-import {ANONYMOUS_USER} from '../../../hooks/core/constant';
+import {ANONYMOUS_USER, GROUP_INFO} from '../../../hooks/core/constant';
 import useCreateChat from '../../../hooks/screen/useCreateChat';
 
 const useGroupInfo = () => {
@@ -46,8 +39,6 @@ const useGroupInfo = () => {
   const [isAnonymousModalOpen, setIsAnonymousModalOpen] = React.useState(false);
   const [isFetchingAllowAnonDM, setIsFetchingAllowAnonDM] = React.useState(false);
   const [, dispatchChannel] = React.useContext(Context).channel;
-  const {goToChatScreen} = useChatUtilsHook();
-  const {localDb} = useLocalDatabaseHook();
   const {createSignChat, handleAnonymousMessage} = useCreateChat();
   const blockModalRef = React.useRef(null);
 
@@ -105,8 +96,7 @@ const useGroupInfo = () => {
       members.push(profile?.myProfile?.user_id, selectedUser?.user_id);
       const processGetBlock = await checkUserBlock(sendData);
       if (!processGetBlock.data.data.blocked && !processGetBlock.data.data.blocker) {
-        createSignChat(members, selectedUser);
-        return null;
+        return createSignChat(members, selectedUser, GROUP_INFO);
       }
       return handleOpenProfile(selectedUser);
     } catch (e) {

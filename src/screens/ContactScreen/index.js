@@ -27,6 +27,7 @@ import {setChannel} from '../../context/actions/setChannel';
 import {userPopulate} from '../../service/users';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import useCreateChat from '../../hooks/screen/useCreateChat';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 
 const {width} = Dimensions.get('screen');
 
@@ -116,78 +117,17 @@ const ContactScreen = ({navigation}) => {
   }, [dataProvider]);
   const handleCreateChannel = async () => {
     try {
-      console.log({followed}, 'lakas');
       const mappingUserName = selectedUsers?.map((user) => user?.username).join(',');
       const dataSelected = {
         user: {
           name: mappingUserName,
-          image: null
+          image: DEFAULT_PROFILE_PIC_PATH
         }
       };
-      console.log({dataSelected}, 'dataman');
       createSignChat(followed, dataSelected);
-    } catch (e) {}
-    // try {
-    //   if (followed.length < 1) {
-    //     Alert.alert('Warning', 'Please choose min one user');
-    //   }
-    //   setLoading(true);
-    //   const members = followed;
-    //   const channelName = usernames;
-    //   let typeChannel = 0;
-    //   if (members.length > 2) {
-    //     typeChannel = 1;
-    //   }
-    //   const clientChat = await client.client;
-
-    //   let type = 'messaging';
-    //   if (members.length > 2) {
-    //     type = 'group';
-    //   }
-    //   const filter = {type, members: {$eq: members}};
-    //   const sort = [{last_message_at: -1}];
-    //   const findChannels = await clientChat.queryChannels(filter, sort, {
-    //     watch: true,
-    //     state: true
-    //   });
-
-    //   const generatedChannelId = generateRandomId();
-    //   const memberWithRoles = members.map((item) => ({
-    //     user_id: item,
-    //     channel_role: 'channel_moderator'
-    //   }));
-    //   if (findChannels.length > 0) {
-    //     setChannel(findChannels[0], dispatchChannel);
-    //   } else {
-    //     const channelChat = await clientChat.channel(type, generatedChannelId, {
-    //       name: channelName.join(', '),
-    //       type_channel: typeChannel
-    //     });
-    //     await channelChat.create();
-    //     channelChat.update(
-    //       {
-    //         name: channelName.join(', ')
-    //       },
-    //       {
-    //         text: 'You created this group',
-    //         system_user: profile?.myProfile?.user_id,
-    //         is_from_prepopulated: true,
-    //         other_text: `${profile?.myProfile?.username} created this group`
-    //       }
-    //     );
-    //     await channelChat.addMembers(memberWithRoles);
-    //     setChannel(channelChat, dispatchChannel);
-    //   }
-
-    //   setLoading(false);
-    //   await navigation.replace('ChatDetailPage');
-    // } catch (error) {
-    //   showMessage({
-    //     message: 'Failed creating new chat',
-    //     type: 'danger'
-    //   });
-    //   setLoading(false);
-    // }
+    } catch (e) {
+      console.log(e, 'error signed chat');
+    }
   };
 
   const rowRenderer = (type, item, index, extendedState) => (
