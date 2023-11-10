@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable import/extensions */
 /* eslint-disable import/no-unresolved */
 
@@ -10,6 +11,8 @@ import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
 import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
 import {ANONYMOUS} from '../../hooks/core/constant';
 import {colors} from '../../utils/colors';
+import BaseSystemChat from '../../components/AnonymousChat/BaseChatSystem';
+import useProfileHook from '../../hooks/core/profile/useProfileHook';
 
 const {height} = Dimensions.get('window');
 
@@ -46,6 +49,10 @@ export const styles = StyleSheet.create({
 const SampleChatScreen = () => {
   const {selectedChannel, chats, goBackFromChatScreen, goToChatInfoScreen, sendChat} =
     useChatScreenHook(ANONYMOUS);
+  const {anonProfileId} = useProfileHook();
+  const ownerChat = selectedChannel?.rawJson?.channel?.members?.find(
+    (item) => item.role === 'owner'
+  ).user_id;
 
   const renderChatItem = React.useCallback(({item, index}) => {
     return <BaseChatItem item={item} index={index} />;
@@ -75,6 +82,14 @@ const SampleChatScreen = () => {
         alwaysBounceVertical={false}
         bounces={false}
         keyExtractor={(item, index) => item?.id || index.toString()}
+        ListFooterComponent={
+          ownerChat === anonProfileId ? (
+            <BaseSystemChat
+              componentType="SINGLE"
+              messageSingle={`You’re anonymously messaging ${selectedChannel?.name}. They are still able to block you`}
+            />
+          ) : null
+        }
         renderItem={renderChatItem}
       />
       <View style={styles.inputContainer}>
