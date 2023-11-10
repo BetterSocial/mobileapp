@@ -490,8 +490,7 @@ const useCoreChatSystemHook = () => {
   };
 
   React.useEffect(() => {
-    if (!localDb) return;
-    if (!lastAnonymousMessage) return;
+    if (!lastAnonymousMessage || !localDb) return;
 
     const {type} = lastAnonymousMessage;
     if (type === 'health.check') return;
@@ -501,8 +500,7 @@ const useCoreChatSystemHook = () => {
   }, [JSON.stringify(lastAnonymousMessage), localDb]);
 
   React.useEffect(() => {
-    if (!localDb) return;
-    if (!lastSignedMessage) return;
+    if (!lastSignedMessage || !localDb) return;
 
     const {type} = lastSignedMessage;
     if (type === 'health.check') return;

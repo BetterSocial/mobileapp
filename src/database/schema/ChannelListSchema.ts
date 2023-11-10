@@ -476,6 +476,24 @@ class ChannelList implements BaseDbSchema {
       members: null
     });
   }
+
+  static fromMessageSignedAPI(data: MessageAnonymouslyData): ChannelList {
+    return new ChannelList({
+      id: data?.channel?.id,
+      channelPicture: data?.appAdditionalData?.targetImage,
+      name: data?.appAdditionalData?.targetName,
+      description: data?.appAdditionalData?.message,
+      unreadCount: 0,
+      channelType: 'PM',
+      lastUpdatedAt: data?.channel?.last_message_at,
+      lastUpdatedBy: '',
+      createdAt: data?.channel?.created_at,
+      rawJson: data?.appAdditionalData?.rawJson,
+      user: null,
+      expiredAt: null,
+      members: null
+    });
+  }
 }
 
 export default ChannelList;

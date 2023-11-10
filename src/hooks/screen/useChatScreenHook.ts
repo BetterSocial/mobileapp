@@ -50,6 +50,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     if (type === 'ANONYMOUS') {
       userId = myAnonymousId;
     }
+    console.log({sendingChatSchema, selectedChannel}, 'sending');
     try {
       const randomId = uuid();
 
@@ -84,7 +85,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       refresh('chat');
       refresh('channelList');
     } catch (e) {
-      console.log(e);
+      console.log(e, 'eman');
       if (e?.response?.data?.status === 'Channel is blocked') return;
 
       setTimeout(() => {
