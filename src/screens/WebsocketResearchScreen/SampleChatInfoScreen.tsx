@@ -226,10 +226,7 @@ const SampleChatInfoScreen = () => {
   };
 
   const renderImageComponent = (item) => {
-    if (
-      (item?.user?.image && !isContainUrl(item?.user?.image)) ||
-      item?.user?.name === ANONYMOUS_USER
-    ) {
+    if (!isContainUrl(item?.user?.image) || item?.user?.name === ANONYMOUS_USER) {
       return (
         <View style={styles.mr7}>
           <AnonymousIcon

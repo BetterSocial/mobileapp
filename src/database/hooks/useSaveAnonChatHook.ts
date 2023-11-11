@@ -11,6 +11,7 @@ import {
   ModifyAnonymousChatData
 } from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 import {getAnonymousChatName} from '../../utils/string/StringUtils';
+import {GROUP_INFO} from '../../hooks/core/constant';
 
 const useSaveAnonChatHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook();
@@ -24,7 +25,7 @@ const useSaveAnonChatHook = () => {
     return channelListSchema;
   };
 
-  const helperGoToAnonymousChat = async (object: InitAnonymousChatData) => {
+  const helperGoToAnonymousChat = async (object: InitAnonymousChatData, type: string) => {
     const channelListSchema = await helperFindChatById(object);
     goToChatScreen(channelListSchema);
   };
@@ -32,7 +33,8 @@ const useSaveAnonChatHook = () => {
   const saveChatFromOtherProfile = async (
     object: InitAnonymousChatData,
     status = 'sent',
-    withNavigate = false
+    withNavigate = false,
+    type: string
   ) => {
     if (!localDb) return;
 
@@ -84,7 +86,7 @@ const useSaveAnonChatHook = () => {
     refresh('channelList');
     refresh('chat');
 
-    if (withNavigate) helperGoToAnonymousChat(object);
+    if (withNavigate) helperGoToAnonymousChat(object, type);
   };
 
   const helperUpdateChannelListDescription = async (object: InitAnonymousChatData) => {
