@@ -11,7 +11,6 @@ import {
   ModifyAnonymousChatData
 } from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 import {getAnonymousChatName} from '../../utils/string/StringUtils';
-import {GROUP_INFO} from '../../hooks/core/constant';
 
 const useSaveAnonChatHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook();
@@ -33,7 +32,7 @@ const useSaveAnonChatHook = () => {
   const saveChatFromOtherProfile = async (
     object: InitAnonymousChatData,
     status = 'sent',
-    withNavigate = false,
+    withNavigate,
     type: string
   ) => {
     if (!localDb) return;
