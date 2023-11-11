@@ -4,6 +4,7 @@ import {useNavigation} from '@react-navigation/core';
 import PropTypes from 'prop-types';
 
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import FastImage from 'react-native-fast-image';
 import MemoIcArrowBack from '../../../assets/arrow/Ic_arrow_back';
 import MemoIcArrowBackCircle from '../../../assets/arrow/Ic_arrow_back_circle';
 import TopicDefaultIcon from '../../../assets/topic.png';
@@ -15,6 +16,7 @@ import TopicDomainHeader from './TopicDomainHeader';
 import ButtonFollowing from './ButtonFollowing';
 import useChatClientHook from '../../../utils/getstream/useChatClientHook';
 import {colors} from '../../../utils/colors';
+import Search from '../../DiscoveryScreenV2/elements/Search';
 
 const NavHeader = (props) => {
   const {
@@ -28,11 +30,23 @@ const NavHeader = (props) => {
     isHeaderHide,
     topicDetail,
     setIsFollow,
-    isFollow
+    isFollow,
+    hasSearch,
+    searchText,
+    setSearchText,
+    setDiscoveryLoadingData,
+    isFocus,
+    setIsFocus,
+    fetchDiscoveryData,
+    onCancelToken,
+    placeholderText,
+    setIsFirstTimeOpen,
+    getSearchLayout
   } = props;
   const navigation = useNavigation();
   const coverPath = topicDetail?.cover_path || null;
   const [domainHeight, setDomainHeight] = React.useState(0);
+  const [searchHeight, setSearchHeight] = React.useState(0);
   const {top} = useSafeAreaInsets();
   const topPosition = Platform.OS === 'ios' ? top : 0;
 
@@ -65,6 +79,15 @@ const NavHeader = (props) => {
     [setDomainHeight]
   );
 
+  const onSearchLayout = React.useCallback(
+    (event) => {
+      const {height} = event.nativeEvent.layout;
+      setSearchHeight(Math.round(height));
+      getSearchLayout(Math.round(height));
+    },
+    [setSearchHeight]
+  );
+
   const backScreen = () => {
     navigation.goBack();
   };
@@ -79,7 +102,7 @@ const NavHeader = (props) => {
           ? dimen.size.TOPIC_FEED_HEADER_HEIGHT
           : dimen.size.TOPIC_FEED_HEADER_HEIGHT + normalize(4);
     }
-    return Math.round((containerHeight - domainHeight) / 2);
+    return Math.round((containerHeight - domainHeight) / 2) + searchHeight;
   };
 
   const heightWithCoverImage = () => {
@@ -90,11 +113,11 @@ const NavHeader = (props) => {
   };
 
   return (
-    <Animated.View style={{height: animatedHeight, backgroundColor: colors.lightgrey}}>
+    <Animated.View style={styles.container(animatedHeight)}>
       <StatusBar barStyle="dark-content" />
       <View
         source={{uri: coverPath}}
-        style={[styles.Nav(isHeaderHide, topPosition), heightWithCoverImage()]}
+        style={[styles.navContainer(isHeaderHide, topPosition), heightWithCoverImage()]}
         imageStyle={{opacity: isHeaderHide ? 0 : 1}}>
         <Animated.Image
           source={{uri: coverPath}}
@@ -117,13 +140,15 @@ const NavHeader = (props) => {
           )}
         </View>
       </View>
-      <Animated.View style={styles.Header}>
+      <Animated.View style={[styles.headerContainer]}>
         {!isHeaderHide ? (
           <>
-            <Animated.Image
-              source={topicDetail?.icon_path ? {uri: topicDetail?.icon_path} : TopicDefaultIcon}
-              style={styles.image(opacityHeaderAnimation)}
-            />
+            <Animated.View style={{opacity: opacityHeaderAnimation}}>
+              <FastImage
+                source={topicDetail?.icon_path ? {uri: topicDetail?.icon_path} : TopicDefaultIcon}
+                style={styles.image}
+              />
+            </Animated.View>
             <View style={styles.containerAction}>
               <Animated.View style={{opacity: opacityHeaderAnimation}}>
                 {isFollow ? (
@@ -141,6 +166,25 @@ const NavHeader = (props) => {
         style={[styles.domain(isHeaderHide), {bottom: getBottomPostition()}]}>
         <TopicDomainHeader {...props} />
       </View>
+
+      {hasSearch && (
+        <View onLayout={onSearchLayout} style={styles.search}>
+          <Search
+            getSearchLayout={setSearchHeight}
+            searchText={searchText}
+            setSearchText={setSearchText}
+            setDiscoveryLoadingData={setDiscoveryLoadingData}
+            isFocus={isFocus}
+            setIsFocus={setIsFocus}
+            fetchDiscoveryData={fetchDiscoveryData}
+            onCancelToken={onCancelToken}
+            placeholderText={placeholderText}
+            setIsFirstTimeOpen={setIsFirstTimeOpen}
+            hideBackIcon={true}
+            autoFocus={false}
+          />
+        </View>
+      )}
     </Animated.View>
   );
 };
@@ -156,11 +200,29 @@ NavHeader.propTypes = {
   setMemberCount: PropTypes.func,
   memberCount: PropTypes.number,
   topicDetail: PropTypes.object,
-  setIsFollow: PropTypes.func
+  setIsFollow: PropTypes.func,
+
+  searchText: PropTypes.string,
+  setSearchText: PropTypes.func,
+  setDiscoveryLoadingData: PropTypes.func,
+  isFocus: PropTypes.bool,
+  setIsFocus: PropTypes.func,
+  fetchDiscoveryData: PropTypes.func,
+  onCancelToken: PropTypes.func,
+  placeholderText: PropTypes.string,
+  setIsFirstTimeOpen: PropTypes.func
 };
 
 const styles = StyleSheet.create({
-  Nav: (isHeaderHide, top) => ({
+  container: (animatedHeight) => ({
+    width: '100%',
+    height: animatedHeight,
+    backgroundColor: colors.lightgrey,
+    position: 'absolute',
+    zIndex: 80,
+    overflow: 'hidden'
+  }),
+  navContainer: (isHeaderHide, top) => ({
     flexDirection: 'row',
     height:
       (isHeaderHide
@@ -172,7 +234,7 @@ const styles = StyleSheet.create({
     paddingTop: dimen.normalizeDimen(12) + top,
     zIndex: 10
   }),
-  Header: {
+  headerContainer: {
     width: '100%',
     flexDirection: 'row',
     height: dimen.size.TOPIC_FEED_HEADER_HEIGHT,
@@ -186,14 +248,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     opacity: opacityHeaderAnimation
   }),
-  image: (opacityHeaderAnimation) => ({
+  image: {
     width: normalize(48),
     height: normalize(48),
     borderRadius: normalize(24),
     backgroundColor: 'lightgrey',
-    marginRight: 8,
-    opacity: opacityHeaderAnimation
-  }),
+    marginRight: 8
+  },
   backbutton: {
     paddingRight: 16,
     justifyContent: 'center',
@@ -210,6 +271,13 @@ const styles = StyleSheet.create({
     zIndex: 99,
     backgroundColor: 'transparent'
   }),
+  search: {
+    width: '100%',
+    position: 'absolute',
+    zIndex: 99,
+    backgroundColor: 'transparent',
+    bottom: 0
+  },
   containerAction: {
     flexDirection: 'row',
     justifyContent: 'center',

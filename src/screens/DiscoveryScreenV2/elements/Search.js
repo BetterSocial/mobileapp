@@ -36,7 +36,8 @@ const DiscoverySearch = ({
   fetchDiscoveryData = () => {},
   fetchData,
   onCancelToken = () => {},
-  hideBackIcon = false
+  hideBackIcon = false,
+  autoFocus = true
 }) => {
   const navigation = useNavigation();
   const [, discoveryDispatch] = React.useContext(Context).discovery;
@@ -180,7 +181,7 @@ const DiscoverySearch = ({
             ref={discoverySearchBarRef}
             testID={TestIdConstant.discoveryScreenSearchBar}
             focusable={true}
-            autoFocus={true}
+            autoFocus={autoFocus}
             // value={discoverySearchBarText}
             value={searchText}
             onChangeText={handleChangeText}
