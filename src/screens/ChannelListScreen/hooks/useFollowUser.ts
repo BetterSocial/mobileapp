@@ -1,17 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from 'react';
+import React, {useCallback} from 'react';
 import {useIsFocused} from '@react-navigation/core';
 
-import ChannelList from '../../../database/schema/ChannelListSchema';
 import following from '../../../context/actions/following';
-import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import {ChannelList as ChannelListData} from '../../../../types/database/schema/ChannelList.types';
 import {Context} from '../../../context';
 import {getFollowing, setFollow, setUnFollow} from '../../../service/profile';
 
 const useFollowUser = () => {
   const isFocused = useIsFocused();
-  const {localDb, refresh} = useLocalDatabaseHook();
   const [followContext, followingDispatch] = (React.useContext(Context) as unknown as any)
     .following;
   const [profileContext] = (React.useContext(Context) as unknown as any).profile;
@@ -35,6 +32,13 @@ const useFollowUser = () => {
     updateFollowingData();
   }, [isFocused]);
 
+  const isFollowing = (channel: ChannelListData): boolean => {
+    const targetUser = channel?.rawJson?.channel?.members?.find(
+      (member) => member?.user_id !== myProfile?.user_id
+    )?.user;
+    return Boolean(followContext?.users?.find((user) => user?.user_id_followed === targetUser?.id));
+  };
+
   const handleFollow = async (channel: ChannelListData) => {
     const targetUser = channel?.rawJson?.channel?.members?.find(
       (member) => member?.user_id !== myProfile?.user_id
@@ -48,12 +52,10 @@ const useFollowUser = () => {
       follow_source: 'chat'
     };
 
-    const isFollowing = followContext?.users?.find(
-      (user) => user?.user_id_followed === targetUser?.id
-    );
+    const isFollowingUser = isFollowing(channel);
     const payload = {...followContext};
 
-    if (isFollowing) {
+    if (isFollowingUser) {
       payload?.users?.splice(
         payload?.users?.findIndex((user) => user?.user_id_followed === targetUser?.id),
         1
@@ -67,30 +69,21 @@ const useFollowUser = () => {
 
     following.setFollowingUsers(payload?.users, followingDispatch);
 
-    if (isFollowing) {
+    if (isFollowingUser) {
       await setUnFollow(data);
     } else {
-      const res = await setFollow(data);
-      if (res?.code !== 200) return;
-
-      try {
-        const textOwnUser = `You started following ${data.username_followed}.\n Send them a message now.`;
-        await ChannelList.updateChannelDescription(localDb, channel?.id, textOwnUser);
-        refresh('channelList');
-      } catch (error) {
-        console.log('error saving data:', error);
-      }
+      await setFollow(data);
     }
   };
 
-  const isInitialFollowing = (channel: ChannelListData) => {
+  const isInitialFollowing = useCallback((channel: ChannelListData) => {
     const targetUser = channel?.rawJson?.members?.find(
       (member) => member?.user_id !== myProfile?.user_id
     )?.user;
     return Boolean(
       initialFollowingDataRef.current?.find((user) => user?.user_id_followed === targetUser?.id)
     );
-  };
+  }, []);
 
   const isSystemMessage = (channel: ChannelListData) => {
     return channel?.rawJson?.firstMessage?.type === 'system';
@@ -100,7 +93,13 @@ const useFollowUser = () => {
     return isSystemMessage(channel) && channel?.description?.toLowerCase()?.includes('follow');
   };
 
-  return {handleFollow, isInitialFollowing, isSystemMessage, isSystemFollowMessage};
+  return {
+    handleFollow,
+    isInitialFollowing,
+    isFollowing,
+    isSystemMessage,
+    isSystemFollowMessage
+  };
 };
 
 export default useFollowUser;

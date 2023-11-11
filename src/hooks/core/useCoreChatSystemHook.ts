@@ -24,7 +24,7 @@ import {
 import {ChannelData, ChannelType} from '../../../types/repo/ChannelData';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {GetstreamFeedListenerObject} from '../../../types/hooks/core/getstreamFeedListener/feedListenerObject';
-import {GetstreamWebsocket, MyChannelType} from './websocket/types.d';
+import {GetstreamMessage, GetstreamWebsocket, MyChannelType} from './websocket/types.d';
 import {InitialStartupAtom} from '../../service/initialStartup';
 import {SignedPostNotification} from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 import {getAnonymousChatName, getChatName} from '../../utils/string/StringUtils';
@@ -80,6 +80,16 @@ const useCoreChatSystemHook = () => {
 
   const {lastAnonymousMessage, lastSignedMessage} = useBetterWebsocketHook();
 
+  const getUnreadCount = (message: GetstreamMessage, selectedChannel): number => {
+    const isMyMessage =
+      message?.user?.id === signedProfileId || message?.user?.id === anonProfileId;
+
+    const hasUnreadMessage = selectedChannel?.unread_count <= 0;
+    if (isMyMessage) return 0;
+    if (hasUnreadMessage) return selectedChannel?.unread_count + 1;
+    return 1;
+  };
+
   const helperSignedChannelListData = async (websocketData: GetstreamWebsocket) => {
     const {type} = websocketData;
     const websocketMessage = websocketData?.message;
@@ -113,6 +123,7 @@ const useCoreChatSystemHook = () => {
       websocketData.message.text = 'You have been removed from this group';
     }
 
+    websocketData.unread_count = getUnreadCount(websocketMessage, selectedChannel);
     websocketData.anon_user_info_color_name = websocketData?.channel?.anon_user_info_color_name;
     websocketData.anon_user_info_emoji_code = websocketData?.channel?.anon_user_info_emoji_code;
     websocketData.anon_user_info_color_code = websocketData?.channel?.anon_user_info_color_code;
@@ -147,6 +158,13 @@ const useCoreChatSystemHook = () => {
       ?.includes('you started following');
     const isSystemMessage = websocketMessage?.isSystem || websocketData?.type === 'system';
     if (isSystemMessage && isContainFollowingMessage) {
+      const textOwnUser = 'You started following this user.\n Send them a message now.';
+      await ChannelList.updateChannelDescription(
+        localDb,
+        websocketData?.channel_id,
+        websocketData?.message?.textOwnMessage ?? textOwnUser,
+        websocketData
+      );
       const chat = ChatSchema.fromWebsocketObject(websocketData);
       await chat.save(localDb);
     } else {
@@ -259,8 +277,7 @@ const useCoreChatSystemHook = () => {
     try {
       await helperChannelPromiseBuilder(channel, channelCategory);
     } catch (e) {
-      console.log('error on saveChannelData helperChannelPromiseBuilder');
-      console.log(e);
+      console.log('error on saveChannelData helperChannelPromiseBuilder:', e);
     }
 
     if (channel?.type === 'topics') return;
@@ -286,8 +303,7 @@ const useCoreChatSystemHook = () => {
         })
       );
     } catch (e) {
-      console.log('error on saveChannelData');
-      console.log(e);
+      console.log('error on saveChannelData:', e);
     }
   };
 
@@ -321,16 +337,14 @@ const useCoreChatSystemHook = () => {
     try {
       anonymousChannel = await AnonymousMessageRepo.getAllAnonymousChannels();
     } catch (e) {
-      console.log('error on getting anonymousChannel');
-      console.log(e);
+      console.log('error on getting anonymousChannel:', e);
     }
 
     try {
       await saveAllChannelData(anonymousChannel, 'ANONYMOUS');
       refresh('channelList');
     } catch (e) {
-      console.log('error on saving anonymousChannel');
-      console.log(e);
+      console.log('error on saving anonymousChannel:', e);
     }
   };
 
