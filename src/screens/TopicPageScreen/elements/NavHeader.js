@@ -210,7 +210,9 @@ NavHeader.propTypes = {
   fetchDiscoveryData: PropTypes.func,
   onCancelToken: PropTypes.func,
   placeholderText: PropTypes.string,
-  setIsFirstTimeOpen: PropTypes.func
+  setIsFirstTimeOpen: PropTypes.func,
+  getSearchLayout: PropTypes.func,
+  hasSearch: PropTypes.bool
 };
 
 const styles = StyleSheet.create({
