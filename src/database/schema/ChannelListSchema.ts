@@ -289,23 +289,33 @@ class ChannelList implements BaseDbSchema {
     db: SQLiteDatabase,
     channelId: string,
     description: string,
+    json,
     isUpdateTimestamp = false
   ) => {
+    let rawJson: string | null = null;
+
+    try {
+      rawJson = JSON.stringify(json);
+    } catch (e) {
+      console.log('error stringify:', e);
+    }
+
     try {
       const queryTimestamp = `UPDATE ${ChannelList.getTableName()}
-        SET description = ?, created_at = ?, last_updated_at = ?
+        SET description = ?, created_at = ?, last_updated_at = ?, raw_json = ?
         WHERE id = ?;`;
       const queryWithoutTimestamp = `UPDATE ${ChannelList.getTableName()}
-        SET description = ?
+        SET description = ?, raw_json = ?
         WHERE id = ?;`;
 
       const replacementTimestamp = [
         description,
         new Date().toISOString(),
         new Date().toISOString(),
+        rawJson,
         channelId
       ];
-      const replacementWithoutTimestamp = [description, channelId];
+      const replacementWithoutTimestamp = [description, rawJson, channelId];
 
       if (isUpdateTimestamp) {
         await db.executeSql(queryTimestamp, replacementTimestamp);
@@ -313,7 +323,6 @@ class ChannelList implements BaseDbSchema {
         await db.executeSql(queryWithoutTimestamp, replacementWithoutTimestamp);
       }
     } catch (e) {
-      console.log();
       console.log('error updating channel description', e);
     }
   };

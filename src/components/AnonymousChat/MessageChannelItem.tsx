@@ -25,19 +25,23 @@ const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement
     if (!isAnonymous) return BaseChannelItemTypeProps.SIGNED_PM;
     return BaseChannelItemTypeProps.ANON_PM;
   };
-  const {handleTextSystem} = useChatUtilsHook();
 
+  const checkIsMe = (data: ChannelList, type: BaseChannelItemTypeProps): boolean => {
+    const rawJson = data?.rawJson;
+    const lastMessage = rawJson?.firstMessage ?? rawJson?.message;
+    const isSystemMessage = lastMessage?.isSystem || lastMessage?.type === 'system';
+
+    if (type === BaseChannelItemTypeProps.SIGNED_PM) {
+      if (isSystemMessage) return false;
+      return lastMessage?.user?.id === signedProfileId;
+    }
+    return item?.user?.isMe ?? false;
+  };
+
+  const {handleTextSystem} = useChatUtilsHook();
   const [profile] = (React.useContext(Context) as unknown as any).profile;
   const type = determineChatType(item);
-
-  const lastMessage = item?.rawJson?.firstMessage ?? item?.rawJson?.message;
-  const isSystemMessage = lastMessage?.isSystem ?? lastMessage?.type === 'system';
-  let isMe;
-  if (type === BaseChannelItemTypeProps.SIGNED_PM && !isSystemMessage) {
-    isMe = lastMessage?.user?.id === signedProfileId;
-  } else {
-    isMe = item?.user?.isMe;
-  }
+  const isMe = checkIsMe(item, type);
 
   return (
     <BaseChannelItem
