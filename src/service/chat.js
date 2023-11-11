@@ -133,7 +133,6 @@ const sendSignedDMOtherProfile = async ({user_id, message}) => {
   };
 
   const response = await api.post('/chat/init-chat', payload);
-
   if (response.status === 200) {
     return Promise.resolve(response.data?.data);
   }

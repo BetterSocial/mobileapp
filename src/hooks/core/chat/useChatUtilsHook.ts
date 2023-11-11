@@ -88,7 +88,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
     navigation.navigate('TopicPageScreen', navigationParam);
   };
 
-  const openChatFromGroup = () => {
+  const openChat = (screen: string) => {
     navigation.reset({
       index: 1,
       routes: [
@@ -104,22 +104,19 @@ function useChatUtilsHook(): UseChatUtilsHook {
         {
           name: 'AuthenticatedStack',
           params: {
-            screen: 'SignedChatScreen'
+            screen
           }
         }
       ]
     });
   };
 
-  const goToChatScreen = (channel: ChannelList, from?: string) => {
+  const goToChatScreen = (channel: ChannelList) => {
     setChannelAsRead(channel);
-    if (from === GROUP_INFO) {
-      openChatFromGroup();
-    }
     if (channel?.channelType === ANON_PM) {
-      navigation.navigate('SampleChatScreen');
+      openChat('SampleChatScreen');
     } else {
-      navigation.navigate('SignedChatScreen');
+      openChat('SignedChatScreen');
     }
     setChat({
       ...chat,

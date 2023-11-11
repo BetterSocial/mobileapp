@@ -1,18 +1,8 @@
 /* eslint-disable no-param-reassign */
 import * as React from 'react';
-import {
-  Alert,
-  Dimensions,
-  RefreshControl,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  View
-} from 'react-native';
+import {Dimensions, RefreshControl, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
 import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
 import {debounce} from 'lodash';
-import {generateRandomId} from 'stream-chat-react-native-core';
-import {showMessage} from 'react-native-flash-message';
 import PropTypes from 'prop-types';
 import ContactPreview from './elements/ContactPreview';
 import Header from '../../components/Header/HeaderContact';
@@ -23,7 +13,6 @@ import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {Loading} from '../../components';
 import {Search} from './elements';
-import {setChannel} from '../../context/actions/setChannel';
 import {userPopulate} from '../../service/users';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import useCreateChat from '../../hooks/screen/useCreateChat';
@@ -35,8 +24,6 @@ const ContactScreen = ({navigation}) => {
   const [loading, setLoading] = React.useState(false);
   const [users, setUsers] = React.useState([]);
   const [profile] = React.useContext(Context).profile;
-  const [, dispatchChannel] = React.useContext(Context).channel;
-  const [client] = React.useContext(Context).client;
   const [isRecyclerViewShown, setIsRecyclerViewShown] = React.useState(false);
   const [layoutProvider, setLayoutProvider] = React.useState(() => {});
   const [refreshing, setRefreshing] = React.useState(false);
@@ -49,7 +36,7 @@ const ContactScreen = ({navigation}) => {
   const [selectedUsers, setSelectedUsers] = React.useState([]);
   const [isSearchMode, setIsSearchMode] = React.useState(false);
   const [isLoadingSearchResult, setIsLoadingSearchResult] = React.useState(false);
-  const {createSignChat} = useCreateChat();
+  const {createSignChat, loadingCreateChat} = useCreateChat();
   const debounced = React.useCallback(
     debounce((changedText) => {
       // handleSearch(changedText)
@@ -256,7 +243,7 @@ const ContactScreen = ({navigation}) => {
             onHandleSelected={(value) => handleSelected(value)}
           />
         )}
-        <Loading visible={loading} />
+        <Loading visible={loading || loadingCreateChat} />
       </View>
     </SafeAreaView>
   );

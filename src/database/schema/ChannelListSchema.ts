@@ -9,6 +9,7 @@ import {ChannelType} from '../../../types/repo/ChannelData';
 import {MessageAnonymouslyData} from '../../../types/repo/AnonymousMessageRepo/MessageAnonymouslyData';
 import {ModifyAnonymousChatData} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 import {SignedPostNotification} from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
+import {CHANNEL_GROUP, PM} from '../../hooks/core/constant';
 
 class ChannelList implements BaseDbSchema {
   id: string;
@@ -487,13 +488,14 @@ class ChannelList implements BaseDbSchema {
   }
 
   static fromMessageSignedAPI(data: MessageAnonymouslyData): ChannelList {
+    const isGroup = data?.members?.length > 2;
     return new ChannelList({
       id: data?.channel?.id,
-      channelPicture: data?.appAdditionalData?.targetImage,
+      channelPicture: isGroup ? null : data?.appAdditionalData?.targetImage,
       name: data?.appAdditionalData?.targetName,
       description: data?.appAdditionalData?.message,
       unreadCount: 0,
-      channelType: 'PM',
+      channelType: isGroup ? CHANNEL_GROUP : PM,
       lastUpdatedAt: data?.channel?.last_message_at,
       lastUpdatedBy: '',
       createdAt: data?.channel?.created_at,
