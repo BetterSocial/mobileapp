@@ -1,3 +1,4 @@
+import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import {v4 as uuid} from 'uuid';
 
@@ -8,31 +9,37 @@ import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import UserSchema from '../../database/schema/UserSchema';
 import ChannelListMemberSchema from '../../database/schema/ChannelListMemberSchema';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
+import {GROUP_INFO} from '../core/constant';
 
 const useCreateChat = () => {
+  const [loadingCreateChat, setLoadingCreateChat] = React.useState(false);
   const {localDb} = useLocalDatabaseHook();
   const {goToChatScreen} = useChatUtilsHook();
   const createSignChat = async (members: string[], selectedUser, from) => {
     try {
+      setLoadingCreateChat(true);
       const initChannel = await SignedMessageRepo.createSignedChat(members);
       const chatData = await createChannelJson(initChannel, selectedUser);
 
       const channelList = await ChannelList.fromMessageSignedAPI(chatData);
       channelList.saveIfLatest(localDb);
       handleMemberSchema(initChannel);
+      setLoadingCreateChat(false);
       goToChatScreen(channelList, from);
     } catch (e) {
+      setLoadingCreateChat(false);
       console.log({e}, 'error create chat');
     }
   };
 
   const createChannelJson = (response, selectedUser) => {
+    const channelWithMember = {...response.channel, members: response.members};
     const targetRawJson = {
       type: 'notification.message_new',
       cid: response?.channel?.id,
       channel_id: '',
       channel_type: 'messaging',
-      channel: response?.channel,
+      channel: channelWithMember,
       created_at: response?.channel,
       targetName: selectedUser?.user?.name,
       targetImage: selectedUser?.user?.image
@@ -80,7 +87,7 @@ const useCreateChat = () => {
       const channelList = ChannelList.fromMessageAnonymouslyAPI(chatData);
       await channelList.saveIfLatest(localDb);
       handleMemberSchema(response);
-      goToChatScreen(channelList);
+      goToChatScreen(channelList, GROUP_INFO);
     } catch (e) {
       SimpleToast.show(e || 'Failed to message this user anonymously');
     }
@@ -88,7 +95,8 @@ const useCreateChat = () => {
 
   return {
     createSignChat,
-    handleAnonymousMessage
+    handleAnonymousMessage,
+    loadingCreateChat
   };
 };
 

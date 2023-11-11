@@ -199,7 +199,6 @@ const SampleChatInfoScreen = () => {
   const ANONYMOUS_USER = 'AnonymousUser';
   const {anon_user_info_color_code, anon_user_info_emoji_code} =
     channelInfo?.rawJson?.channel || {};
-
   const showImageProfile = (): React.ReactNode => {
     if (channelInfo?.channelType === CHANNEL_GROUP) {
       return (
