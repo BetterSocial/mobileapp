@@ -37,6 +37,7 @@ const useBetterWebsocketHook = (): IUseBetterWebsocketHook => {
       '&X-Stream-Client=stream-chat-javascript-client-browser-4.2.0'
     );
   };
+
   const initAuthorization = async (isAnonymous: boolean) => {
     const token =
       TokenStorage.get(isAnonymous ? ITokenEnum.anonymousToken : ITokenEnum.token) ?? '';

@@ -26,6 +26,8 @@ import {colors} from '../../utils/colors';
 import {locationValidation} from '../../utils/Utils';
 import {post} from '../../api/server';
 import {setLocalCommunity} from '../../context/actions/localCommunity';
+import dimen from '../../utils/dimen';
+import {normalizeFontSize} from '../../utils/fonts';
 
 const {width} = Dimensions.get('screen');
 const LocalCommunity = () => {
@@ -194,7 +196,11 @@ const LocalCommunity = () => {
         {location.length <= 0 ? (
           <TouchableNativeFeedback onPress={() => onPressFirstLocation(true)}>
             <View style={styles.card}>
-              <PlusIcon width={18} height={18} fill="#000000" />
+              <PlusIcon
+                width={dimen.normalizeDimen(18)}
+                height={dimen.normalizeDimen(18)}
+                fill="#000000"
+              />
               <View style={styles.columnButton}>
                 <Text style={styles.textAddLocation}>
                   {StringConstant.onboardingLocalCommunityPrimaryLocationTitle}
@@ -211,7 +217,11 @@ const LocalCommunity = () => {
         {location.length === 1 ? (
           <TouchableNativeFeedback onPress={() => onPressSecondLocation(true)}>
             <View style={styles.card}>
-              <PlusIcon width={18} height={18} fill="#000000" />
+              <PlusIcon
+                width={dimen.normalizeDimen(18)}
+                height={dimen.normalizeDimen(18)}
+                fill="#000000"
+              />
               <View style={styles.columnButton}>
                 <Text style={styles.textAddLocation}>
                   {StringConstant.onboardingLocalCommunitySecondaryLocationTitle}
@@ -277,48 +287,28 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white
   },
-  header: {paddingHorizontal: 22, paddingTop: 22, paddingBottom: 5},
+  header: {
+    paddingHorizontal: dimen.normalizeDimen(22),
+    paddingTop: dimen.normalizeDimen(22),
+    paddingBottom: dimen.normalizeDimen(5)
+  },
   textFindYourLocalCommunity: {
     fontFamily: 'Inter-Bold',
     fontStyle: 'normal',
     fontWeight: '600',
-    fontSize: 36,
-    lineHeight: 43.57,
+    fontSize: normalizeFontSize(36),
+    lineHeight: normalizeFontSize(43.57),
     color: '#11243D',
-    marginHorizontal: 20
-  },
-  containerInfo: {
-    marginTop: 55,
-    backgroundColor: colors.pattens_blue,
-    width: width - 44,
-    minHeight: 96,
-    flexDirection: 'row',
-    borderRadius: 4,
-    justifyContent: 'space-between',
-    padding: 14
-  },
-  widthDescription: {
-    width: width - 100,
-    marginLeft: 12
-  },
-  circleIcon: {
-    width: 30,
-    height: 30,
-    borderRadius: 30,
-    backgroundColor: colors.french_pass,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
+    marginHorizontal: dimen.normalizeDimen(20)
   },
   footer: {
-    position: 'absolute',
-    bottom: 0,
-    height: 112,
     width,
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingBottom: 20,
+    height: dimen.normalizeDimen(112),
+    flexDirection: 'column',
     backgroundColor: colors.white,
+    justifyContent: 'space-between',
+    paddingBottom: dimen.normalizeDimen(20),
+    paddingHorizontal: dimen.normalizeDimen(20),
     shadowColor: colors.black,
     shadowOffset: {
       width: 0,
@@ -328,61 +318,61 @@ const styles = StyleSheet.create({
     shadowRadius: 6.68,
 
     elevation: 11,
-    flexDirection: 'column',
-    justifyContent: 'space-between'
+    position: 'absolute',
+    bottom: 0
   },
   containerProgress: {
-    marginTop: 20,
-    marginBottom: 24,
-    paddingHorizontal: 20
+    marginTop: dimen.normalizeDimen(20),
+    marginBottom: dimen.normalizeDimen(24),
+    paddingHorizontal: dimen.normalizeDimen(20)
   },
   textDesc: {
     fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: '400',
-    fontSize: 14,
-    lineHeight: 24,
+    fontSize: normalizeFontSize(14),
+    lineHeight: normalizeFontSize(24),
     color: colors.gray,
     opacity: 0.84,
-    marginTop: 8,
-    marginBottom: 24,
-    paddingHorizontal: 20
+    marginTop: dimen.normalizeDimen(8),
+    marginBottom: dimen.normalizeDimen(24),
+    paddingHorizontal: dimen.normalizeDimen(20)
   },
 
   card: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 22
+    paddingHorizontal: dimen.normalizeDimen(22)
   },
   columnButton: {
     flexDirection: 'column',
-    marginLeft: 14
+    marginLeft: dimen.normalizeDimen(14)
   },
   textAddLocation: {
     fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: 'bold',
-    fontSize: 14,
-    lineHeight: 24,
-    letterSpacing: -0.28,
-    marginTop: 13,
+    fontSize: normalizeFontSize(14),
+    lineHeight: normalizeFontSize(24),
+    letterSpacing: normalizeFontSize(-0.28),
+    marginTop: dimen.normalizeDimen(13),
     color: colors.black
   },
   textSearchYourFavorite: {
     fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: 'normal',
-    fontSize: 12,
-    lineHeight: 24,
-    letterSpacing: -0.28,
-    marginBottom: 10,
+    fontSize: normalizeFontSize(12),
+    lineHeight: normalizeFontSize(24),
+    letterSpacing: normalizeFontSize(-0.28),
+    marginBottom: dimen.normalizeDimen(10),
     color: colors.silver
   },
   containerLocation: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 22
+    paddingHorizontal: dimen.normalizeDimen(22)
   },
   containerRow: {
     flexDirection: 'row',
@@ -392,13 +382,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: 'bold',
-    fontSize: 14,
-    lineHeight: 24,
-    letterSpacing: -0.28,
-    marginTop: 22,
-    marginBottom: 22,
+    fontSize: normalizeFontSize(14),
+    lineHeight: normalizeFontSize(24),
+    letterSpacing: normalizeFontSize(-0.28),
+    marginVertical: dimen.normalizeDimen(22),
     color: colors.black,
-    paddingLeft: 17
+    paddingLeft: dimen.normalizeDimen(17)
     // textTransform: 'capitalize',
   },
   textSmallContainer: {
@@ -406,15 +395,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   textSmall: {
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
+    fontSize: normalizeFontSize(10),
     fontWeight: '400',
-    fontSize: 10,
+    fontStyle: 'normal',
+    fontFamily: 'Inter',
     textAlign: 'center',
     color: colors.blackgrey
   },
   button: {
-    backgroundColor: colors.gray
+    backgroundColor: colors.gray,
+    borderRadius: dimen.normalizeDimen(8)
   }
 });
 export default LocalCommunity;

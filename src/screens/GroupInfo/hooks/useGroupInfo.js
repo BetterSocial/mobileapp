@@ -5,25 +5,19 @@ import {generateRandomId} from 'stream-chat-react-native-core';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {openComposer} from 'react-native-email-link';
 import {useNavigation} from '@react-navigation/core';
-import {v4 as uuid} from 'uuid';
 
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
-import ChannelList from '../../../database/schema/ChannelListSchema';
-import ChannelListMemberSchema from '../../../database/schema/ChannelListMemberSchema';
-import UserSchema from '../../../database/schema/UserSchema';
-import useChatUtilsHook from '../../../hooks/core/chat/useChatUtilsHook';
-import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import {Context} from '../../../context';
 import {checkUserBlock} from '../../../service/profile';
 import {getChatName} from '../../../utils/string/StringUtils';
-import {getOrCreateAnonymousChannel} from '../../../service/chat';
 import {requestExternalStoragePermission} from '../../../utils/permission';
 import {setChannel} from '../../../context/actions/setChannel';
 import {setParticipants} from '../../../context/actions/groupChat';
 import {uploadFile} from '../../../service/file';
 import TokenStorage, {ITokenEnum} from '../../../utils/storage/custom/tokenStorage';
 import {isContainUrl} from '../../../utils/Utils';
-import {ANONYMOUS_USER} from '../../../hooks/core/constant';
+import {ANONYMOUS_USER, GROUP_INFO} from '../../../hooks/core/constant';
+import useCreateChat from '../../../hooks/screen/useCreateChat';
 
 const useGroupInfo = () => {
   const [groupChatState, groupPatchDispatch] = React.useContext(Context).groupChat;
@@ -45,9 +39,7 @@ const useGroupInfo = () => {
   const [isAnonymousModalOpen, setIsAnonymousModalOpen] = React.useState(false);
   const [isFetchingAllowAnonDM, setIsFetchingAllowAnonDM] = React.useState(false);
   const [, dispatchChannel] = React.useContext(Context).channel;
-  const {goToChatScreen} = useChatUtilsHook();
-  const {localDb} = useLocalDatabaseHook();
-
+  const {createSignChat, handleAnonymousMessage} = useCreateChat();
   const blockModalRef = React.useRef(null);
 
   const anonUserEmojiName = channelState?.channel?.data?.anon_user_info_emoji_name;
@@ -100,9 +92,11 @@ const useGroupInfo = () => {
       const sendData = {
         user_id: selectedUser.user_id
       };
+      const members = [];
+      members.push(profile?.myProfile?.user_id, selectedUser?.user_id);
       const processGetBlock = await checkUserBlock(sendData);
       if (!processGetBlock.data.data.blocked && !processGetBlock.data.data.blocker) {
-        return openChatMessage();
+        return createSignChat(members, selectedUser, GROUP_INFO);
       }
       return handleOpenProfile(selectedUser);
     } catch (e) {
@@ -333,58 +327,8 @@ const useGroupInfo = () => {
   };
 
   const handleMessageAnonymously = async () => {
-    if (!selectedUser?.allow_anon_dm) {
-      SimpleToast.show('This user does not allow anonymous messages');
-      return;
-    }
-
-    try {
-      setOpenModal(false);
-      const response = await getOrCreateAnonymousChannel(selectedUser?.user_id);
-      const targetRawJson = {
-        type: 'notification.message_new',
-        cid: response?.channel?.id,
-        channel_id: '',
-        channel_type: 'messaging',
-        channel: response?.channel,
-        created_at: response?.channel,
-        targetName: selectedUser?.user?.name,
-        targetImage: selectedUser?.user?.image
-      };
-      const channelList = ChannelList.fromMessageAnonymouslyAPI({
-        channel: response?.channel,
-        members: response?.members,
-        appAdditionalData: {
-          rawJson: targetRawJson,
-          message: '',
-          targetName: selectedUser?.user?.name,
-          targetImage: selectedUser?.user?.image
-        }
-      });
-
-      await channelList.saveIfLatest(localDb);
-      try {
-        response?.members?.forEach(async (member) => {
-          const userMember = UserSchema.fromMemberWebsocketObject(member, response?.channel?.id);
-          await userMember.saveOrUpdateIfExists(localDb);
-
-          const memberSchema = ChannelListMemberSchema.fromWebsocketObject(
-            response?.channel?.id,
-            uuid(),
-            member
-          );
-          await memberSchema.save(localDb);
-        });
-      } catch (e) {
-        console.log('error on memberSchema');
-        console.log(e);
-      }
-
-      setOpenModal(false);
-      goToChatScreen(channelList);
-    } catch (e) {
-      SimpleToast.show(e || 'Failed to message this user anonymously');
-    }
+    setOpenModal(false);
+    handleAnonymousMessage(selectedUser);
   };
 
   /**

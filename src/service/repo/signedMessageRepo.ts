@@ -12,7 +12,8 @@ const baseUrl = {
   getAllSignedChannels: '/chat/channels/signed',
   getAllSignedPostNotifications: '/feeds/feed-chat',
   getSingleSignedPostNotifications: (activityId: string) => `/feeds/feed-chat/${activityId}`,
-  setChannelAsRead: '/chat/channels/read'
+  setChannelAsRead: '/chat/channels/read',
+  createSignedChat: '/chat/channels-signed'
 };
 
 interface SignedMessageRepoTypes {
@@ -22,6 +23,7 @@ interface SignedMessageRepoTypes {
   getAllSignedPostNotifications: () => Promise<SignedPostNotification[]>;
   getSingleSignedPostNotifications: (activityId: string) => Promise<SignedPostNotification>;
   setChannelAsRead: (channelId: string, channelType: ChannelTypeEnum) => Promise<boolean>;
+  createSignedChat: (body: string[]) => Promise<any>;
 }
 
 async function checkIsTargetAllowingAnonDM(targetUserId: string) {
@@ -118,13 +120,31 @@ async function setChannelAsRead(channelId: string, channelType: ChannelTypeEnum)
   }
 }
 
+async function createSignedChat(members: string[]) {
+  try {
+    const body = {
+      members
+    };
+    const response = await api.post(baseUrl.createSignedChat, body);
+    if (response.status === 200) {
+      return Promise.resolve(response.data);
+    }
+
+    return Promise.reject(response.status);
+  } catch (e) {
+    console.log(e);
+    return Promise.reject(e);
+  }
+}
+
 const SignedMessageRepo: SignedMessageRepoTypes = {
   checkIsTargetAllowingAnonDM,
   sendSignedMessage,
   getAllSignedChannels,
   getAllSignedPostNotifications,
   getSingleSignedPostNotifications,
-  setChannelAsRead
+  setChannelAsRead,
+  createSignedChat
 };
 
 export default SignedMessageRepo;

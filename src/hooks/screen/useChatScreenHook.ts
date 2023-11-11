@@ -66,16 +66,22 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
           message,
           localDb
         );
-
-        await currentChatSchema.save(localDb);
+        currentChatSchema.save(localDb);
         refresh('chat');
         refresh('channelList');
       }
-
       let channelType = CHANNEL_TYPE_PERSONAL;
-      if (selectedChannel?.channelType?.toLowerCase() === 'group') channelType = CHANNEL_TYPE_GROUP;
-      if (selectedChannel?.rawJson?.channel?.channel_type === 4)
+      if (
+        selectedChannel?.channelType?.toLowerCase() === 'group' ||
+        selectedChannel?.rawJson?.channel?.type === 'group'
+      ) {
+        channelType = CHANNEL_TYPE_GROUP;
+      }
+
+      if (selectedChannel?.rawJson?.channel?.channel_type === 4) {
         channelType = CHANNEL_TYPE_ANONYMOUS;
+      }
+
       let response;
       if (type === 'ANONYMOUS') {
         response = await AnonymousMessageRepo.sendAnonymousMessage(selectedChannel?.id, message);
@@ -90,7 +96,6 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       refresh('chat');
       refresh('channelList');
     } catch (e) {
-      console.log(e);
       if (e?.response?.data?.status === 'Channel is blocked') return;
 
       setTimeout(() => {

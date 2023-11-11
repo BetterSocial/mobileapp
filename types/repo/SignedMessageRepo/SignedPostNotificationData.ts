@@ -95,7 +95,7 @@ export interface PostMakerData {
 
 // eslint-disable-next-line no-shadow
 export enum ChannelTypeEnum {
-  Messaging = 1,
-  Group = 2,
+  Messaging = 0,
+  Group = 1,
   Community = 3
 }
