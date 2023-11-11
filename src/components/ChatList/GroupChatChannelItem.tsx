@@ -31,6 +31,7 @@ const GroupChatChannelItem = (props: ChannelItemProps) => {
       ? `You: ${channelDescription}`
       : `${sender}: ${channelDescription}`;
   }
+  if (!sender) channelDescription = '';
 
   return (
     <CustomPressable onPress={onChannelPressed}>

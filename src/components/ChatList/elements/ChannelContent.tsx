@@ -2,13 +2,10 @@
 import React from 'react';
 import {Text, View} from 'react-native';
 
-import {
-  ChannelContentProps,
-  ChannelContentTextProps
-} from '../../../../types/component/ChatList/ChannelContent.types';
+import {ChannelContentTextProps} from '../../../../types/component/ChatList/ChannelContent.types';
 import {channelContentStyles as styles} from './ChannelContent.style';
 
-const ChannelContent: ChannelContentProps = ({children}) => {
+const ChannelContent = ({children}) => {
   return <View>{children}</View>;
 };
 
