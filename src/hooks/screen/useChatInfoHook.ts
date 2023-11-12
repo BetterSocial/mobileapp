@@ -25,8 +25,8 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
     selectedUser,
     blockModalRef
   } = useGroupInfo();
-  const {localDb, channelList} = useLocalDatabaseHook();
-  const [loadingChannelInfo, setLoadingChannelInfo] = React.useState<boolean>(true);
+  const {localDb} = useLocalDatabaseHook();
+  const [loadingChannelInfo, setLoadingChannelInfo] = React.useState<boolean>(false);
   const {selectedChannel, goBack} = useChatUtilsHook();
   const [myUserId] = React.useContext(Context).profile;
   const navigation = useNavigation();
@@ -84,13 +84,12 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   };
 
   const goToEditGroup = () => {
-    console.log('masuk', {selectedChannel});
     navigation?.navigate('GroupSetting', selectedChannel);
   };
 
   React.useEffect(() => {
     initChatInfoData();
-  }, [localDb, channelList]);
+  }, []);
 
   return {
     channelInfo,

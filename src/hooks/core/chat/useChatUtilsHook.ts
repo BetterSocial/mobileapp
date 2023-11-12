@@ -111,17 +111,24 @@ function useChatUtilsHook(): UseChatUtilsHook {
     });
   };
 
-  const goToChatScreen = (channel: ChannelList) => {
-    setChannelAsRead(channel);
-    if (channel?.channelType === ANON_PM) {
-      openChat('SampleChatScreen');
-    } else {
-      openChat('SignedChatScreen');
-    }
+  const goToChatScreen = (channel: ChannelList, from) => {
     setChat({
       ...chat,
       selectedChannel: channel
     });
+    setChannelAsRead(channel);
+    if (channel?.channelType === ANON_PM) {
+      if (from === GROUP_INFO) {
+        return openChat('SampleChatScreen');
+      }
+      navigation.navigate('SampleChatScreen');
+    } else {
+      if (from === GROUP_INFO) {
+        return openChat('SignedChatScreen');
+      }
+      navigation.navigate('SignedChatScreen');
+    }
+
     return null;
   };
 
