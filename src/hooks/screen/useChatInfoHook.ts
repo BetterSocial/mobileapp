@@ -33,18 +33,19 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   const [showPopupBlock, setShowPopupBlock] = React.useState(false);
   const [channelInfo, setChannelInfo] = React.useState(null);
   const initChatInfoData = async () => {
-    if (!localDb) return;
-    setLoadingChannelInfo(true);
-    const myId = await getUserId();
-    const myAnonymousId = await getAnonymousUserId();
-    const data = await ChannelList.getChannelInfo(
-      localDb,
-      selectedChannel?.id,
-      myId,
-      myAnonymousId
-    );
-    setChannelInfo(data);
-    setLoadingChannelInfo(false);
+    if (localDb) {
+      setLoadingChannelInfo(true);
+      const myId = await getUserId();
+      const myAnonymousId = await getAnonymousUserId();
+      const data = await ChannelList.getChannelInfo(
+        localDb,
+        selectedChannel?.id,
+        myId,
+        myAnonymousId
+      );
+      setChannelInfo(data);
+      setLoadingChannelInfo(false);
+    }
   };
 
   const onContactPressed = (item: ChannelListMemberSchema) => {
