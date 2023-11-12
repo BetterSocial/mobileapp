@@ -189,7 +189,8 @@ const SampleChatInfoScreen = () => {
     openModal,
     isAnonymousModalOpen,
     blockModalRef,
-    handleShowArrow
+    handleShowArrow,
+    loadingChannelInfo
   } = useChatInfoScreenHook();
   const [isLoadingMembers] = React.useState<boolean>(false);
   // TODO: Change this into useUserAuthHook
@@ -251,7 +252,7 @@ const SampleChatInfoScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
-      {isLoadingMembers ? null : (
+      {isLoadingMembers || loadingChannelInfo ? null : (
         <>
           <AnonymousChatInfoHeader
             isCenter

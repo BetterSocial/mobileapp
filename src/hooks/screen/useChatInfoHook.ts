@@ -26,6 +26,7 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
     blockModalRef
   } = useGroupInfo();
   const {localDb, channelList} = useLocalDatabaseHook();
+  const [loadingChannelInfo, setLoadingChannelInfo] = React.useState<boolean>(true);
   const {selectedChannel, goBack} = useChatUtilsHook();
   const [myUserId] = React.useContext(Context).profile;
   const navigation = useNavigation();
@@ -33,6 +34,7 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   const [channelInfo, setChannelInfo] = React.useState(null);
   const initChatInfoData = async () => {
     if (!localDb) return;
+    setLoadingChannelInfo(true);
     const myId = await getUserId();
     const myAnonymousId = await getAnonymousUserId();
     const data = await ChannelList.getChannelInfo(
@@ -42,6 +44,7 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
       myAnonymousId
     );
     setChannelInfo(data);
+    setLoadingChannelInfo(false);
   };
 
   const onContactPressed = (item: ChannelListMemberSchema) => {
@@ -103,7 +106,8 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
     isAnonymousModalOpen,
     blockModalRef,
     handleShowArrow,
-    goToEditGroup
+    goToEditGroup,
+    loadingChannelInfo
   };
 }
 
