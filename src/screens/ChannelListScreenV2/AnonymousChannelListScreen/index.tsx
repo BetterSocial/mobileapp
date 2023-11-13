@@ -17,7 +17,6 @@ const AnonymousChannelListScreen = () => {
       data={anonChannels}
       keyExtractor={(item) => item.id}
       scrollEnabled={false}
-      listKey={'AnonymousChannelList'}
       renderItem={({item}) => {
         if (item?.channelType === 'ANON_PM') {
           return <MessageChannelItem item={item} onChannelPressed={() => goToChatScreen(item)} />;
