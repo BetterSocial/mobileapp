@@ -2,7 +2,7 @@ import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import moment from 'moment';
 import {atom, useRecoilState} from 'recoil';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, CommonActions} from '@react-navigation/native';
 
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
 import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
@@ -89,39 +89,47 @@ function useChatUtilsHook(): UseChatUtilsHook {
   };
 
   const openChat = (screen: string) => {
-    navigation.reset({
-      index: 1,
-      routes: [
-        {
-          name: 'AuthenticatedStack',
-          params: {
-            screen: 'HomeTabs',
+    navigation.dispatch({
+      ...CommonActions.reset({
+        routes: [
+          {
+            name: 'AuthenticatedStack',
             params: {
-              screen: 'ChannelList'
+              screen: 'HomeTabs',
+              params: {
+                screen: 'ChannelList'
+              }
+            }
+          },
+          {
+            name: 'AuthenticatedStack',
+            params: {
+              screen
             }
           }
-        },
-        {
-          name: 'AuthenticatedStack',
-          params: {
-            screen
-          }
-        }
-      ]
+        ]
+      })
     });
   };
 
-  const goToChatScreen = (channel: ChannelList) => {
-    setChannelAsRead(channel);
-    if (channel?.channelType === ANON_PM) {
-      openChat('SampleChatScreen');
-    } else {
-      openChat('SignedChatScreen');
-    }
+  const goToChatScreen = (channel: ChannelList, from) => {
     setChat({
       ...chat,
       selectedChannel: channel
     });
+    setChannelAsRead(channel);
+    if (channel?.channelType === ANON_PM) {
+      if (from === GROUP_INFO) {
+        return openChat('SampleChatScreen');
+      }
+      navigation.navigate('SampleChatScreen');
+    } else {
+      if (from === GROUP_INFO) {
+        return openChat('SignedChatScreen');
+      }
+      navigation.navigate('SignedChatScreen');
+    }
+
     return null;
   };
 
