@@ -20,7 +20,6 @@ const ChannelListScreen = () => {
       data={channels}
       keyExtractor={(item) => item.id}
       scrollEnabled={false}
-      listKey={'ChannelList'}
       renderItem={({item}) => {
         if (item?.channelType === 'PM') {
           const isFromAnonymous = item?.rawJson?.channel?.channel_type === 4;

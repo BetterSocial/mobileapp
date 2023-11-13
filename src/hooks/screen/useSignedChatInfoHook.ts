@@ -20,8 +20,6 @@ function useSignedChatInfoScreenHook(): UseSignedChatInfoScreenHook {
     if (!localDb) return;
     const myId = await getUserId();
 
-    //! TODO:
-    //! REMOVE ANONYMOUSID
     const myAnonymousId = await getAnonymousUserId();
     const data = await ChannelList.getChannelInfo(
       localDb,

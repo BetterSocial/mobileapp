@@ -9,13 +9,12 @@ import ChannelListScreen from '../ChannelListScreen';
 import ChannelListTabItem from '../../components/HorizontalTab/ChannelListTabItem';
 import HorizontalTab from '../../components/HorizontalTab';
 import Search from '../ChannelListScreen/elements/Search';
-import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import useRootChannelListHook from '../../hooks/screen/useRootChannelListHook';
+import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
 
 const ChannelListScreenV2 = () => {
   const navigation = useNavigation();
-  // TODO: Change this into useUserAuthHook
-  const {profile} = useProfileHook();
+  const {profile} = useUserAuthHook();
 
   const [selectedTab, setSelectedTab] = React.useState(0);
   const {signedChannelUnreadCount, anonymousChannelUnreadCount} = useRootChannelListHook();
