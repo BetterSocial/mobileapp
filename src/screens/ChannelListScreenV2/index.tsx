@@ -9,12 +9,15 @@ import ChannelListScreen from '../ChannelListScreen';
 import ChannelListTabItem from '../../components/HorizontalTab/ChannelListTabItem';
 import HorizontalTab from '../../components/HorizontalTab';
 import Search from '../ChannelListScreen/elements/Search';
+import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import useRootChannelListHook from '../../hooks/screen/useRootChannelListHook';
 import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
 
 const ChannelListScreenV2 = () => {
+  const {refresh} = useLocalDatabaseHook();
   const navigation = useNavigation();
   const {profile} = useUserAuthHook();
+  const isFocused = navigation.isFocused();
 
   const [selectedTab, setSelectedTab] = React.useState(0);
   const {signedChannelUnreadCount, anonymousChannelUnreadCount} = useRootChannelListHook();
@@ -22,6 +25,10 @@ const ChannelListScreenV2 = () => {
   const navigateToContactScreen = () => {
     navigation.navigate('ContactScreen');
   };
+
+  React.useEffect(() => {
+    if (isFocused) refresh('channelList');
+  }, [isFocused]);
 
   return (
     <>
