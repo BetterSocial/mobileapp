@@ -308,8 +308,16 @@ const useCoreChatSystemHook = () => {
   };
 
   const saveAllChannelData = async (channels, channelCategory: ChannelCategory) => {
-    channels?.forEach(async (channel) => {
-      saveChannelData(channel, channelCategory);
+    const filteredChannels = channels.filter((channel) => {
+      const isLocationChannel = channel?.channel_type === 2 || channel?.type_channel === 2;
+      const isDeletedChannel =
+        channel?.firstMessage?.type === 'deleted' || channel?.members?.length < 2;
+
+      return !isLocationChannel && !isDeletedChannel;
+    });
+
+    filteredChannels.forEach(async (channel) => {
+      await saveChannelData(channel, channelCategory);
     });
   };
 
