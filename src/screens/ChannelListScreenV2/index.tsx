@@ -1,15 +1,20 @@
-import * as React from 'react';
-import {ScrollView, StatusBar, View} from 'react-native';
+import messaging from '@react-native-firebase/messaging';
 import {useNavigation} from '@react-navigation/core';
+import * as React from 'react';
+import {Alert, PushNotificationPermissions, ScrollView, StatusBar, View} from 'react-native';
 
-import AnonymousChannelListScreen from './AnonymousChannelListScreen';
+import {openSettings} from 'react-native-permissions';
+import PushNotification from 'react-native-push-notification';
 import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
-import ChannelListScreen from '../ChannelListScreen';
-import ChannelListTabItem from '../../components/HorizontalTab/ChannelListTabItem';
 import HorizontalTab from '../../components/HorizontalTab';
-import Search from '../ChannelListScreen/elements/Search';
+import ChannelListTabItem from '../../components/HorizontalTab/ChannelListTabItem';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import useRootChannelListHook from '../../hooks/screen/useRootChannelListHook';
+import {fcmTokenService} from '../../service/users';
+import StorageUtils from '../../utils/storage';
+import ChannelListScreen from '../ChannelListScreen';
+import Search from '../ChannelListScreen/elements/Search';
+import AnonymousChannelListScreen from './AnonymousChannelListScreen';
 
 const ChannelListScreenV2 = () => {
   const navigation = useNavigation();
@@ -36,6 +41,81 @@ const ChannelListScreenV2 = () => {
       refreshAnonymousChannelList();
     }
   };
+
+  const requestPermission = async () => {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      const fcmToken = await messaging().getToken();
+      const payload = {
+        fcm_token: fcmToken
+      };
+      fcmTokenService(payload);
+    }
+  };
+
+  React.useEffect(() => {
+    const checkNotif = async () => {
+      PushNotification.checkPermissions(
+        (
+          data: PushNotificationPermissions & {
+            authorizationStatus?: number;
+          }
+        ) => {
+          if (!navigation.isFocused()) return;
+          const lastPromptTime = StorageUtils.lastPromptNotification.get();
+
+          // For testing purpose,  (20000 milliseconds)
+          const promptInterval = 20000;
+          const currentTime = new Date().getTime();
+          if (lastPromptTime && currentTime - parseFloat(lastPromptTime) < promptInterval) {
+            return; // Don't show the prompt if the interval has not passed
+          }
+
+          const needsPermission =
+            data.alert === false || data.badge === false || data.sound === false;
+
+          const showAlert = (onPressAction: () => void) =>
+            Alert.alert(
+              "Don't Miss New Message",
+              'Allow notification to know when friends send you messages',
+              [
+                {text: 'Not now', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                {text: 'Allow', onPress: onPressAction}
+              ]
+            );
+
+          switch (data.authorizationStatus) {
+            case 1:
+              if (needsPermission) {
+                StorageUtils.lastPromptNotification.set(currentTime.toString());
+                showAlert(() => openSettings().catch(() => console.warn('cannot open settings')));
+              } else {
+                requestPermission();
+              }
+              break;
+            case 2:
+              if (needsPermission) {
+                StorageUtils.lastPromptNotification.set(currentTime.toString());
+                showAlert(() => openSettings().catch(() => console.warn('cannot open settings')));
+              }
+              break;
+            case 3:
+              StorageUtils.lastPromptNotification.set(currentTime.toString());
+              showAlert(() => requestPermission());
+              break;
+            default:
+              break;
+          }
+        }
+      );
+    };
+
+    checkNotif();
+  }, [navigation?.isFocused?.()]);
 
   return (
     <>

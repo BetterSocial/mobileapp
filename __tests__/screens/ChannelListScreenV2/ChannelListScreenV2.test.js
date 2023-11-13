@@ -1,14 +1,61 @@
 /* eslint-disable react/display-name */
-import * as React from 'react';
 import {act, fireEvent, render, renderHook} from '@testing-library/react-native';
+import * as React from 'react';
+import mock from 'react-native-permissions/mock';
 
-import ChannelListScreenV2 from '../../../src/screens/ChannelListScreenV2';
 import Store from '../../../src/context/Store';
 import useRootChannelListHook from '../../../src/hooks/screen/useRootChannelListHook';
+import ChannelListScreenV2 from '../../../src/screens/ChannelListScreenV2';
 
 jest.mock('react-native/Libraries/Pressability/usePressability');
 jest.mock('../../../src/screens/ChannelListScreen', () => {
   return () => <></>;
+});
+
+jest.mock('react-native-push-notification', () => ({
+  configure: jest.fn(),
+  onRegister: jest.fn(),
+  onNotification: jest.fn(),
+  addEventListener: jest.fn(),
+  requestPermissions: jest.fn()
+}));
+
+jest.mock('react-native-permissions', () => {
+  return mock;
+});
+
+jest.mock('@react-navigation/native', () => {
+  return {
+    ...jest.requireActual('@react-navigation/native'),
+    useNavigation: () => ({
+      isFocused: jest.fn().mockImplementation(() => true) // Or a function that returns false
+    })
+  };
+});
+
+jest.mock('react-native', () => ({
+  ...jest.requireActual('react-native'),
+  Alert: {alert: jest.fn()}
+}));
+
+jest.mock('@react-native-firebase/messaging', () => {
+  return {
+    ...jest.requireActual('@react-native-firebase/messaging'),
+    messaging: () => ({
+      requestPermission: jest.fn(),
+      getToken: jest.fn()
+    })
+  };
+});
+
+jest.mock('react-native-push-notification', () => ({
+  checkPermissions: jest.fn()
+}));
+
+describe('ChannelListScreenV2 requestPermission', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 });
 
 beforeEach(() => {
