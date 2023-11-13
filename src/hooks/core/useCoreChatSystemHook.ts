@@ -298,6 +298,7 @@ const useCoreChatSystemHook = () => {
 
       await Promise.all(
         (channel?.messages || []).map(async (message) => {
+          if (message?.type === 'deleted') return;
           const chat = ChatSchema.fromGetAllChannelAPI(channel?.id, message);
           await chat.save(localDb);
         })
@@ -310,10 +311,10 @@ const useCoreChatSystemHook = () => {
   const saveAllChannelData = async (channels, channelCategory: ChannelCategory) => {
     const filteredChannels = channels.filter((channel) => {
       const isLocationChannel = channel?.channel_type === 2 || channel?.type_channel === 2;
-      const isDeletedChannel =
-        channel?.firstMessage?.type === 'deleted' || channel?.members?.length < 2;
+      const isDeletedMessage = channel?.firstMessage?.type === 'deleted';
+      const isSelfChatChannel = channel?.type === 'messaging' && channel?.members?.length < 2;
 
-      return !isLocationChannel && !isDeletedChannel;
+      return !isLocationChannel && !(isDeletedMessage || isSelfChatChannel);
     });
 
     filteredChannels.forEach(async (channel) => {
