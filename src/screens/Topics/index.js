@@ -16,20 +16,20 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import CustomPressable from '../../components/CustomPressable';
 import ListTopic from './ListTopics';
 import StringConstant from '../../utils/string/StringConstant';
+import dimen from '../../utils/dimen';
 import useSignin from '../SignInV2/hooks/useSignin';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {Header} from '../../components';
+import {Monitoring} from '../../libraries/monitoring/sentry';
 import {ProgressBar} from '../../components/ProgressBar';
 import {TOPICS_PICK} from '../../utils/cache/constant';
 import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getSpecificCache} from '../../utils/cache';
-import {Monitoring} from '../../libraries/monitoring/sentry';
 import {setTopics as setTopicsContext} from '../../context/actions/topics';
-import dimen from '../../utils/dimen';
 
 const {width} = Dimensions.get('screen');
 
@@ -272,48 +272,6 @@ const styles = StyleSheet.create({
     paddingRight: dimen.normalizeDimen(8)
   },
 
-  bgTopicSelectActive: {
-    backgroundColor: colors.bondi_blue,
-    // minWidth: 100,
-    paddingHorizontal: dimen.normalizeDimen(15),
-    paddingVertical: dimen.normalizeDimen(7),
-    borderRadius: dimen.normalizeDimen(14),
-    flexDirection: 'row',
-    // justifyContent: 'center',
-    marginRight: dimen.normalizeDimen(8),
-    marginBottom: dimen.normalizeDimen(10),
-    alignItems: 'center'
-    // alignItems: 'center',
-  },
-
-  bgTopicSelectNotActive: {
-    backgroundColor: colors.concrete,
-    // minWidth: 100,
-    paddingHorizontal: dimen.normalizeDimen(15),
-    paddingVertical: dimen.normalizeDimen(7),
-    borderRadius: dimen.normalizeDimen(14),
-    flexDirection: 'row',
-    // justifyContent: 'center',
-    marginRight: dimen.normalizeDimen(8),
-    marginBottom: dimen.normalizeDimen(10),
-    alignItems: 'center'
-  },
-  textTopicActive: {
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: '500',
-    fontSize: normalizeFontSize(12),
-    color: colors.white
-    // paddingLeft: 5,
-  },
-  textTopicNotActive: {
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: '500',
-    fontSize: normalizeFontSize(12),
-    color: colors.mine_shaft
-    // paddingLeft: 5,
-  },
   textSmallContainer: {
     flex: 1,
     justifyContent: 'center'
@@ -327,8 +285,8 @@ const styles = StyleSheet.create({
     color: colors.blackgrey
   },
   button: {
-    borderRadius: dimen.normalizeDimen(8),
-    backgroundColor: colors.gray
+    backgroundColor: colors.gray,
+    borderRadius: dimen.normalizeDimen(8)
   },
   scrollButtonParent: {
     paddingHorizontal: dimen.normalizeDimen(22)

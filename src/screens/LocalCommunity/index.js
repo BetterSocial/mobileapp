@@ -13,14 +13,14 @@ import PinIcon from '../../../assets/icons/pin.svg';
 import PlusIcon from '../../../assets/icons/plus.svg';
 import StringConstant from '../../utils/string/StringConstant';
 import TrashIcon from '../../../assets/icons/trash.svg';
+import dimen from '../../utils/dimen';
+import useLocalCommunity from './hooks/useLocalCommunity';
 import {Button} from '../../components/Button';
 import {Header} from '../../components';
 import {ProgressBar} from '../../components/ProgressBar';
 import {SearchModal} from '../../components/Search';
 import {colors} from '../../utils/colors';
 import {locationValidation} from '../../utils/Utils';
-import useLocalCommunity from './hooks/useLocalCommunity';
-import dimen from '../../utils/dimen';
 import {normalizeFontSize} from '../../utils/fonts';
 
 const {width} = Dimensions.get('screen');
@@ -193,37 +193,14 @@ const styles = StyleSheet.create({
     color: '#11243D',
     marginHorizontal: dimen.normalizeDimen(20)
   },
-  containerInfo: {
-    marginTop: dimen.normalizeDimen(55),
-    backgroundColor: colors.pattens_blue,
-    width: width - dimen.normalizeDimen(44),
-    minHeight: dimen.normalizeDimen(96),
-    flexDirection: 'row',
-    borderRadius: dimen.normalizeDimen(4),
-    justifyContent: 'space-between',
-    padding: dimen.normalizeDimen(14)
-  },
-  widthDescription: {
-    width: width - dimen.normalizeDimen(100),
-    marginLeft: dimen.normalizeDimen(12)
-  },
-  circleIcon: {
-    width: dimen.normalizeDimen(30),
-    height: dimen.normalizeDimen(30),
-    borderRadius: dimen.normalizeDimen(30),
-    backgroundColor: colors.french_pass,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
   footer: {
-    position: 'absolute',
-    bottom: 0,
-    height: dimen.normalizeDimen(112),
     width,
-    paddingHorizontal: dimen.normalizeDimen(20),
-    paddingBottom: dimen.normalizeDimen(20),
+    height: dimen.normalizeDimen(112),
+    flexDirection: 'column',
     backgroundColor: colors.white,
+    justifyContent: 'space-between',
+    paddingBottom: dimen.normalizeDimen(20),
+    paddingHorizontal: dimen.normalizeDimen(20),
     shadowColor: colors.black,
     shadowOffset: {
       width: 0,
@@ -233,8 +210,8 @@ const styles = StyleSheet.create({
     shadowRadius: 6.68,
 
     elevation: 11,
-    flexDirection: 'column',
-    justifyContent: 'space-between'
+    position: 'absolute',
+    bottom: 0
   },
   containerProgress: {
     marginTop: dimen.normalizeDimen(20),
@@ -310,10 +287,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   textSmall: {
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: '400',
     fontSize: normalizeFontSize(10),
+    fontWeight: '400',
+    fontStyle: 'normal',
+    fontFamily: 'Inter',
     textAlign: 'center',
     color: colors.blackgrey
   },

@@ -13,14 +13,15 @@ import {
 import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
-import {useSetRecoilState} from 'recoil';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useSetRecoilState} from 'recoil';
 
 import ImageUtils from '../../utils/image';
 import ItemUser from './elements/ItemUser';
 import Label from './elements/Label';
 import Loading from '../Loading';
 import TokenStorage from '../../utils/storage/custom/tokenStorage';
+import dimen from '../../utils/dimen';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
@@ -31,12 +32,11 @@ import {InitialStartupAtom} from '../../service/initialStartup';
 import {ProgressBar} from '../../components/ProgressBar';
 import {colors} from '../../utils/colors';
 import {get} from '../../api/server';
+import {normalizeFontSize} from '../../utils/fonts';
 import {registerUser} from '../../service/users';
 import {setImage} from '../../context/actions/users';
 import {setToken} from '../../utils/token';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
-import dimen from '../../utils/dimen';
-import {normalizeFontSize} from '../../utils/fonts';
 
 const {width} = Dimensions.get('screen');
 
