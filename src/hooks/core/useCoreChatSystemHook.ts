@@ -451,55 +451,37 @@ const useCoreChatSystemHook = () => {
     }
   };
 
-  const getAllSignedPostNotifications = async () => {
+  const saveNotifications = async (notifications: any[], fromNotificationAPI: any) => {
     if (!localDb) return;
-    let signedPostNotifications: SignedPostNotification[] = [];
+    const allPromises: Promise<void>[] = notifications.map((notification) => {
+      const channelList = fromNotificationAPI(notification);
+      return channelList.saveIfLatest(localDb);
+    });
 
     try {
-      signedPostNotifications = await SignedMessageRepo.getAllSignedPostNotifications();
-    } catch (e) {
-      console.log('error on getting signedPostNotifications');
-      console.log(e);
-    }
-
-    try {
-      const allPromises = [];
-      signedPostNotifications.forEach((postNotification) => {
-        const channelList = ChannelList.fromSignedPostNotificationAPI(postNotification);
-        allPromises.push(channelList.saveIfLatest(localDb).catch((e) => console.log(e)));
-      });
-
       await Promise.all(allPromises);
       refresh('channelList');
     } catch (e) {
-      console.log('error on saving signedPostNotifications');
-      console.log(e);
+      console.log('error on saving notifications:', e);
+    }
+  };
+
+  const getAllSignedPostNotifications = async () => {
+    try {
+      const signedPostNotifications = await SignedMessageRepo.getAllSignedPostNotifications();
+      saveNotifications(signedPostNotifications, ChannelList.fromSignedPostNotificationAPI);
+    } catch (e) {
+      console.log('error on getting signedPostNotifications:', e);
     }
   };
 
   const getAllAnonymousPostNotifications = async () => {
-    if (!localDb) return;
-    let anonymousPostNotifications: AnonymousPostNotification[] = [];
-
     try {
-      anonymousPostNotifications = await AnonymousMessageRepo.getAllAnonymousPostNotifications();
+      const anonymousPostNotifications =
+        await AnonymousMessageRepo.getAllAnonymousPostNotifications();
+      saveNotifications(anonymousPostNotifications, ChannelList.fromAnonymousPostNotificationAPI);
     } catch (e) {
-      console.log('error on getting anonymousPostNotifications');
-      console.log(e);
-    }
-
-    try {
-      const allPromises = [];
-      anonymousPostNotifications.forEach((postNotification) => {
-        const channelList = ChannelList.fromAnonymousPostNotificationAPI(postNotification);
-        allPromises.push(channelList.saveIfLatest(localDb).catch((e) => console.log(e)));
-      });
-
-      await Promise.all(allPromises);
-      refresh('channelList');
-    } catch (e) {
-      console.log('error on saving anonymousPostNotifications');
-      console.log(e);
+      console.log('error on getting anonymousPostNotifications', e);
     }
   };
 

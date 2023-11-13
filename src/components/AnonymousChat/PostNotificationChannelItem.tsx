@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import BaseChannelItem from './BaseChannelItem';
 import useChannelHook from '../../hooks/screen/useChannelHook';
-import useProfileHook from '../../hooks/core/profile/useProfileHook';
+import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
 import {
   Comment,
   PostNotificationChannelList,
@@ -16,8 +16,7 @@ const PostNotificationChannelItem: (props: MessageChannelItemProps) => React.Rea
   item,
   onChannelPressed
 }) => {
-  // TODO: Change this into useUserAuthHook
-  const {anonProfileId, signedProfileId} = useProfileHook();
+  const {anonProfileId, signedProfileId} = useUserAuthHook();
 
   const postNotifItem = item as PostNotificationChannelList;
   let commenterName = '';
