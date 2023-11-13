@@ -59,13 +59,13 @@ const ChannelListScreenV2 = () => {
 
   React.useEffect(() => {
     const checkNotif = async () => {
+      if (!navigation.isFocused()) return;
       PushNotification.checkPermissions(
         (
           data: PushNotificationPermissions & {
             authorizationStatus?: number;
           }
         ) => {
-          if (!navigation.isFocused()) return;
           const lastPromptTime = StorageUtils.lastPromptNotification.get();
 
           // For testing purpose,  (20000 milliseconds)
