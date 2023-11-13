@@ -27,15 +27,19 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const {anon_user_info_emoji_name} = selectedChannel?.rawJson?.channel || {};
   const initChatData = async () => {
     if (!localDb && !selectedChannel) return;
-    const myUserId = await getUserId();
-    const myAnonymousId = await getAnonymousUserId();
-    const data = (await ChatSchema.getAll(
-      localDb,
-      selectedChannel?.id,
-      myUserId,
-      myAnonymousId
-    )) as ChatSchema[];
-    setChats(data);
+    try {
+      const myUserId = await getUserId();
+      const myAnonymousId = await getAnonymousUserId();
+      const data = (await ChatSchema.getAll(
+        localDb,
+        selectedChannel?.id,
+        myUserId,
+        myAnonymousId
+      )) as ChatSchema[];
+      setChats(data);
+    } catch (e) {
+      console.log(e, 'error get all chat');
+    }
   };
 
   const sendChat = async (
