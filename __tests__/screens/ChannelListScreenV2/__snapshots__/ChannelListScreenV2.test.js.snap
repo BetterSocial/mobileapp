@@ -440,7 +440,6 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
           horizontal={false}
           initialNumToRender={10}
           keyExtractor={[Function]}
-          listKey="AnonymousChannelList"
           maxToRenderPerBatch={10}
           onContentSizeChange={[Function]}
           onEndReachedThreshold={2}
