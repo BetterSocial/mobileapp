@@ -15,7 +15,8 @@ const AnonymousIcon = ({color, emojiCode, size, withBorder = false}) => {
       borderColor: COLORS.white,
       display: 'flex',
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
+      overflow: 'hidden'
     },
     anonPostNotificationEmoji: {
       display: 'flex',
