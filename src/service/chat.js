@@ -28,21 +28,25 @@ const createChannel = async (channelType, members, channelName) => {
   }
 };
 
+const connectUser = async () => {
+  const token = TokenStorage.get(ITokenEnum.token);
+  const id = await getUserId();
+  const user = {id};
+  await chatClient.disconnectUser();
+  await chatClient.connectUser(user, token);
+};
+
+const queryChannels = async (members) => {
+  const sort = [{last_message_at: -1}];
+  const filter = {type: 'messaging', members: {$eq: members}};
+  const result = await chatClient.queryChannels(filter, sort, {watch: true, state: true});
+  return result;
+};
+
 const followClient = async (members, data, text, textOwnMessage) => {
   try {
-    const token = TokenStorage.get(ITokenEnum.token);
-    const id = await getUserId();
-    const user = {
-      id
-    };
-    const sort = [{last_message_at: -1}];
-    const filter = {type: 'messaging', members: {$eq: members}};
-    await chatClient.disconnectUser();
-    await chatClient.connectUser(user, token);
-    const channel = await chatClient.queryChannels(filter, sort, {
-      watch: true,
-      state: true
-    });
+    await connectUser();
+    const channels = await queryChannels(members);
     const message = {
       user_id: data.user_id_follower,
       text,
@@ -55,14 +59,14 @@ const followClient = async (members, data, text, textOwnMessage) => {
 
     const name = [data?.username_followed, data?.username_follower].join(',');
 
-    if (channel?.length <= 0) {
+    if (channels?.length <= 0) {
       const newChannel = await createChannel('messaging', members, name);
       return newChannel.sendMessage(message, {skip_push: true});
     }
-    const messageClient = chatClient.channel('messaging', channel[0].id);
+    const messageClient = chatClient.channel('messaging', channels[0].id);
     await messageClient.sendMessage(message, {skip_push: true});
 
-    return channel;
+    return channels;
   } catch (error) {
     console.log('error follow client', error);
     throw error;

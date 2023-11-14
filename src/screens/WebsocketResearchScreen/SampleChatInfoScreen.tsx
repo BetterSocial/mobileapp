@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable import/extensions */
 /* eslint-disable import/no-unresolved */
 
 import * as React from 'react';
+import FastImage from 'react-native-fast-image';
 import moment from 'moment';
 import {
   FlatList,
@@ -14,27 +16,25 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-
-import FastImage from 'react-native-fast-image';
 import {useRoute} from '@react-navigation/core';
+
 import AnonymousChatInfoHeader from '../../components/Header/AnonymousChatInfoHeader';
 import AnonymousIcon from '../ChannelListScreen/elements/components/AnonymousIcon';
+import BlockComponent from '../../components/BlockComponent';
+import ChannelImage from '../../components/ChatList/elements/ChannelImage';
+import ModalAction from '../GroupInfo/elements/ModalAction';
+import ModalActionAnonymous from '../GroupInfo/elements/ModalActionAnonymous';
+import dimen from '../../utils/dimen';
 import useChatInfoScreenHook from '../../hooks/screen/useChatInfoHook';
-import useProfileHook from '../../hooks/core/profile/useProfileHook';
+import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
+import {CHANNEL_GROUP, GROUP_INFO, SIGNED} from '../../hooks/core/constant';
+import {Context} from '../../context';
 import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
 import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
-import {trimString} from '../../utils/string/TrimString';
-import {isContainUrl} from '../../utils/Utils';
-import ModalAction from '../GroupInfo/elements/ModalAction';
-import ModalActionAnonymous from '../GroupInfo/elements/ModalActionAnonymous';
-import BlockComponent from '../../components/BlockComponent';
-import {CHANNEL_GROUP, GROUP_INFO, SIGNED} from '../../hooks/core/constant';
-import ChannelImage from '../../components/ChatList/elements/ChannelImage';
 import {getChatName} from '../../utils/string/StringUtils';
-import {Context} from '../../context';
-import dimen from '../../utils/dimen';
+import {isContainUrl} from '../../utils/Utils';
 
 export const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#fff', paddingBottom: 40},
@@ -193,9 +193,8 @@ const SampleChatInfoScreen = () => {
     loadingChannelInfo
   } = useChatInfoScreenHook();
   const [isLoadingMembers] = React.useState<boolean>(false);
-  // TODO: Change this into useUserAuthHook
-  const {signedProfileId} = useProfileHook();
-  const [profile] = React.useContext(Context)?.profile;
+  const {signedProfileId} = useUserAuthHook();
+  const [profile] = (React.useContext(Context) as unknown as any)?.profile;
   const {params}: any = useRoute();
   const ANONYMOUS_USER = 'AnonymousUser';
   const {anon_user_info_color_code, anon_user_info_emoji_code} =

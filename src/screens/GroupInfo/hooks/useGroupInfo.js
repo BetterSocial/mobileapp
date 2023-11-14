@@ -7,17 +7,17 @@ import {openComposer} from 'react-native-email-link';
 import {useNavigation} from '@react-navigation/core';
 
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
+import useCreateChat from '../../../hooks/screen/useCreateChat';
+import TokenStorage, {ITokenEnum} from '../../../utils/storage/custom/tokenStorage';
+import {ANONYMOUS_USER} from '../../../hooks/core/constant';
 import {Context} from '../../../context';
 import {checkUserBlock} from '../../../service/profile';
 import {getChatName} from '../../../utils/string/StringUtils';
+import {isContainUrl} from '../../../utils/Utils';
 import {requestExternalStoragePermission} from '../../../utils/permission';
 import {setChannel} from '../../../context/actions/setChannel';
 import {setParticipants} from '../../../context/actions/groupChat';
 import {uploadFile} from '../../../service/file';
-import TokenStorage, {ITokenEnum} from '../../../utils/storage/custom/tokenStorage';
-import {isContainUrl} from '../../../utils/Utils';
-import {ANONYMOUS_USER, GROUP_INFO} from '../../../hooks/core/constant';
-import useCreateChat from '../../../hooks/screen/useCreateChat';
 
 const useGroupInfo = () => {
   const [groupChatState, groupPatchDispatch] = React.useContext(Context).groupChat;

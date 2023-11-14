@@ -9,7 +9,7 @@ interface UseAnonymousChatInfoScreenHook {
   selectedUser: ChannelListMemberSchema;
   showPopupBlock: boolean;
   handleClosePopup: () => void;
-  isAnonymousUser: (item: any) => void;
+  isAnonymousUser: (item: any) => boolean;
   handlePressPopup: (status: string) => void;
   handleCloseSelectUser: () => void;
   openModal: boolean;
