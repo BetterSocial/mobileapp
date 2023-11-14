@@ -291,7 +291,7 @@ const SampleChatInfoScreen = () => {
                         key={index}
                         item={item}
                         onPress={() => onContactPressed(item, params.from)}
-                        fullname={item?.user?.username || item?.user?.name}
+                        fullname={item?.user?.name || item?.user?.username}
                         photo={item?.user?.profilePicture}
                         showArrow={handleShowArrow(item)}
                         userId={signedProfileId}
