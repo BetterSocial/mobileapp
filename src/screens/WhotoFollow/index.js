@@ -13,14 +13,15 @@ import {
 import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useSetRecoilState} from 'recoil';
 
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import ImageUtils from '../../utils/image';
 import ItemUser from './elements/ItemUser';
 import Label from './elements/Label';
 import Loading from '../Loading';
 import TokenStorage from '../../utils/storage/custom/tokenStorage';
+import dimen from '../../utils/dimen';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
@@ -31,12 +32,11 @@ import {InitialStartupAtom} from '../../service/initialStartup';
 import {ProgressBar} from '../../components/ProgressBar';
 import {colors} from '../../utils/colors';
 import {get} from '../../api/server';
+import {normalizeFontSize} from '../../utils/fonts';
 import {registerUser} from '../../service/users';
 import {setImage} from '../../context/actions/users';
 import {setToken} from '../../utils/token';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
-import dimen from '../../utils/dimen';
-import {normalizeFontSize} from '../../utils/fonts';
 
 const {width} = Dimensions.get('screen');
 
@@ -177,65 +177,70 @@ const WhotoFollow = () => {
       follow_source: 'onboarding'
     };
 
-    const profilePic = usersState?.photoUrl;
-    if (profilePic && profilePic !== DEFAULT_PROFILE_PIC_PATH) {
-      try {
+    try {
+      const profilePic = usersState?.photoUrl;
+      if (profilePic && profilePic !== DEFAULT_PROFILE_PIC_PATH) {
         const uploadedImageUrl = await ImageUtils.uploadImageWithoutAuth(
           data?.users?.profile_pic_path
         );
         data.users.profile_pic_path = uploadedImageUrl?.data?.url;
-        console.log('uploadedImageUrl', uploadedImageUrl);
-      } catch (e) {
-        console.log('error upload', e);
       }
-    }
 
-    registerUser(data)
-      .then(async (res) => {
-        setFetchRegister(false);
-        if (res.code === 200) {
-          TokenStorage.set(res);
-          setToken(res.token);
-          try {
-            const userId = await JwtDecode(res.token).user_id;
-            const anonymousUserId = await JwtDecode(res.anonymousToken).user_id;
-            setProfileId({
-              anonProfileId: anonymousUserId,
-              signedProfileId: userId,
-              token: res.token,
-              anonymousToken: res.anonymousToken
+      registerUser(data)
+        .then(async (res) => {
+          setFetchRegister(false);
+          if (res.code === 200) {
+            TokenStorage.set(res);
+            setToken(res.token);
+            try {
+              const userId = await JwtDecode(res.token).user_id;
+              const anonymousUserId = await JwtDecode(res.anonymousToken).user_id;
+              setProfileId({
+                anonProfileId: anonymousUserId,
+                signedProfileId: userId,
+                token: res.token,
+                anonymousToken: res.anonymousToken
+              });
+            } catch (e) {
+              crashlytics().recordError(new Error(e));
+            }
+            showMessage({
+              message: 'Welcome to Better Social',
+              type: 'success',
+              backgroundColor: colors.holytosca
             });
-          } catch (e) {
-            crashlytics().recordError(new Error(e));
+            setTimeout(() => {
+              create();
+              setImage(null, usersDispatch);
+              setInitialValue({id: res.token});
+            }, 2000);
+          } else {
+            crashlytics().recordError(new Error(res));
+            showMessage({
+              message: 'Cannot connect to server, please try again later',
+              type: 'danger',
+              backgroundColor: colors.red
+            });
           }
-          showMessage({
-            message: 'Welcome to Better Social',
-            type: 'success',
-            backgroundColor: colors.holytosca
-          });
-          setTimeout(() => {
-            create();
-            setImage(null, usersDispatch);
-            setInitialValue({id: res.token});
-          }, 2000);
-        } else {
-          crashlytics().recordError(new Error(res));
+        })
+        .catch((error) => {
+          crashlytics().recordError(new Error(error.response));
+          setFetchRegister(false);
           showMessage({
             message: 'Cannot connect to server, please try again later',
             type: 'danger',
             backgroundColor: colors.red
           });
-        }
-      })
-      .catch((error) => {
-        crashlytics().recordError(new Error(error.response));
-        setFetchRegister(false);
-        showMessage({
-          message: 'Cannot connect to server, please try again later',
-          type: 'danger',
-          backgroundColor: colors.red
         });
+    } catch (e) {
+      crashlytics().recordError(new Error(e));
+      setFetchRegister(false);
+      showMessage({
+        message: 'Cannot connect to server, please try again later',
+        type: 'danger',
+        backgroundColor: colors.red
       });
+    }
   };
 
   const rowRenderer = (type, item, index, extendedState) => {

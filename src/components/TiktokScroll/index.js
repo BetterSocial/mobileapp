@@ -22,6 +22,14 @@ class TiktokScroll extends React.Component {
     });
   }
 
+  componentDidMount() {
+    if (this.props.contentInsetAdjustmentBehavior === 'never') {
+      setTimeout(() => {
+        this.scrollToTop();
+      }, 200);
+    }
+  }
+
   render() {
     const {
       data,
@@ -30,6 +38,7 @@ class TiktokScroll extends React.Component {
       refreshing,
       onEndReach,
       contentHeight = 548,
+      contentInsetAdjustmentBehavior = 'automatic',
       onScroll,
       onScrollBeginDrag,
       onMomentumScrollEnd,
@@ -40,7 +49,7 @@ class TiktokScroll extends React.Component {
 
     return (
       <FlatList
-        contentInsetAdjustmentBehavior="automatic"
+        contentInsetAdjustmentBehavior={contentInsetAdjustmentBehavior}
         contentContainerStyle={[
           styles.flatlistContainer,
           {paddingTop: showSearchBar ? searchHeight : 0}
@@ -86,7 +95,8 @@ TiktokScroll.propTypes = {
   onEndReach: PropTypes.func,
   onScroll: PropTypes.func,
   searchHeight: PropTypes.number,
-  showSearchBar: PropTypes.bool
+  showSearchBar: PropTypes.bool,
+  contentInsetAdjustmentBehavior: PropTypes.string
 };
 
 TiktokScroll.defaultProps = {

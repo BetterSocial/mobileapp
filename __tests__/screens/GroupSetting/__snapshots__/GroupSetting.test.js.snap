@@ -298,9 +298,29 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
         </Text>
         <RCTScrollView
           data={
-            Array [
-              "a3c59170-c110-4fac-929e-7834f6c6827f",
-            ]
+            Object {
+              "a3c59170-c110-4fac-929e-7834f6c6827f": Object {
+                "banned": false,
+                "channel_role": "channel_moderator",
+                "created_at": "2022-09-30T22:49:45.911054Z",
+                "is_moderator": true,
+                "role": "admin",
+                "shadow_banned": false,
+                "updated_at": "2022-09-30T22:49:45.911054Z",
+                "user": Object {
+                  "banned": false,
+                  "created_at": "2021-11-29T05:40:40.828927Z",
+                  "id": "a3c59170-c110-4fac-929e-7834f6c6827f",
+                  "image": "https://res.cloudinary.com/hpjivutj2/image/upload/v1666664085/vcinqpjniuigf6mdnmzz.jpg",
+                  "last_active": "2021-12-06T03:54:03.677683Z",
+                  "name": "BetterSocial_Team",
+                  "online": false,
+                  "role": "admin",
+                  "updated_at": "2022-11-02T15:30:30.170297Z",
+                },
+                "user_id": "a3c59170-c110-4fac-929e-7834f6c6827f",
+              },
+            }
           }
           disableVirtualization={false}
           getItem={[Function]}
@@ -324,82 +344,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
           viewabilityConfigCallbackPairs={Array []}
           windowSize={21}
         >
-          <View>
-            <View
-              onLayout={[Function]}
-              style={null}
-            >
-              <View
-                style={
-                  Object {
-                    "height": 72,
-                  }
-                }
-              >
-                <View
-                  accessible={true}
-                  collapsable={false}
-                  focusable={true}
-                  style={
-                    Object {
-                      "height": "100%",
-                    }
-                  }
-                >
-                  <View
-                    style={
-                      Object {
-                        "alignItems": "center",
-                        "flex": 1,
-                        "flexDirection": "row",
-                        "paddingHorizontal": 15,
-                        "paddingVertical": 12,
-                      }
-                    }
-                  >
-                    <View
-                      style={
-                        Object {
-                          "alignItems": "center",
-                          "flex": 1,
-                          "flexDirection": "row",
-                        }
-                      }
-                    >
-                      <Image
-                        source={
-                          Object {
-                            "uri": "https://res.cloudinary.com/hpjivutj2/image/upload/v1666664085/vcinqpjniuigf6mdnmzz.jpg",
-                          }
-                        }
-                        style={
-                          Object {
-                            "borderRadius": 21.6,
-                            "height": 43.2,
-                            "marginRight": 17,
-                            "width": 43.2,
-                          }
-                        }
-                        testID="image"
-                      />
-                      <Text
-                        style={
-                          Object {
-                            "color": "#000",
-                            "fontFamily": "Inter-Medium",
-                            "fontSize": 12.600000000000001,
-                            "lineHeight": 15.246000000000002,
-                          }
-                        }
-                      >
-                        BetterSocial_Team
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              </View>
-            </View>
-          </View>
+          <View />
         </RCTScrollView>
       </View>
     </View>
