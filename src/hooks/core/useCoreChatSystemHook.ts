@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react';
 import {useRecoilState, useRecoilValue} from 'recoil';
+import {useRoute} from '@react-navigation/native';
 
 import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../database/schema/ChannelListSchema';
@@ -38,6 +39,7 @@ const useCoreChatSystemHook = () => {
     useFetchPostNotificationHook();
   const [migrationStatus] = useRecoilState(migrationDbStatusAtom);
   const initialStartup: any = useRecoilValue(InitialStartupAtom);
+  const {params} = useRoute();
 
   const isEnteringApp =
     initialStartup?.id !== null && initialStartup?.id !== undefined && initialStartup?.id !== '';
@@ -331,7 +333,6 @@ const useCoreChatSystemHook = () => {
 
   React.useEffect(() => {
     if (!lastSignedMessage || !localDb) return;
-
     const {type} = lastSignedMessage;
     if (type === 'health.check') return;
     if (type === 'notification.message_new' || type === 'notification.added_to_channel') {
@@ -340,7 +341,8 @@ const useCoreChatSystemHook = () => {
   }, [JSON.stringify(lastSignedMessage), localDb]);
 
   React.useEffect(() => {
-    if (isEnteringApp && migrationStatus === 'MIGRATED') {
+    const isResetNav = params?.isReset;
+    if (isEnteringApp && migrationStatus === 'MIGRATED' && !isResetNav) {
       getAllSignedChannels().catch((e) => console.log(e));
       getAllSignedPostNotifications().catch((e) => console.log(e));
       getAllAnonymousChannels().catch((e) => console.log(e));

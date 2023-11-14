@@ -96,7 +96,7 @@ const useGroupInfo = () => {
       members.push(profile?.myProfile?.user_id, selectedUser?.user_id);
       const processGetBlock = await checkUserBlock(sendData);
       if (!processGetBlock.data.data.blocked && !processGetBlock.data.data.blocker) {
-        return createSignChat(members, selectedUser, GROUP_INFO);
+        return createSignChat(members, selectedUser);
       }
       return handleOpenProfile(selectedUser);
     } catch (e) {

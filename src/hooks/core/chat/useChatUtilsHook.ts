@@ -97,14 +97,16 @@ function useChatUtilsHook(): UseChatUtilsHook {
             params: {
               screen: 'HomeTabs',
               params: {
-                screen: 'ChannelList'
+                screen: 'ChannelList',
+                isReset: true
               }
             }
           },
           {
             name: 'AuthenticatedStack',
             params: {
-              screen
+              screen,
+              isReset: true
             }
           }
         ]
