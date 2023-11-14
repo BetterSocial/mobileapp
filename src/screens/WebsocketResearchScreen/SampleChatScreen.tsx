@@ -44,12 +44,17 @@ export const styles = StyleSheet.create({
 });
 
 const SampleChatScreen = () => {
+  const flatlistRef = React.useRef<FlatList>();
   const {selectedChannel, chats, goBackFromChatScreen, goToChatInfoScreen, sendChat} =
     useChatScreenHook(ANONYMOUS);
 
   const renderChatItem = React.useCallback(({item, index}) => {
     return <BaseChatItem item={item} index={index} />;
   }, []);
+
+  const scrollToEnd = () => {
+    flatlistRef.current?.scrollToEnd();
+  };
 
   return (
     <KeyboardAvoidingView
@@ -74,6 +79,7 @@ const SampleChatScreen = () => {
         initialNumToRender={20}
         alwaysBounceVertical={false}
         bounces={false}
+        onLayout={scrollToEnd}
         keyExtractor={(item, index) => item?.id || index.toString()}
         renderItem={renderChatItem}
       />
