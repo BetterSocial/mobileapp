@@ -86,6 +86,7 @@ const useSimpleWebsocket = (url, protocol = undefined) => {
   };
 
   React.useEffect(() => {
+    setupWebsocket();
     const unsubscribeId = setInterval(setupInternetConnectionChecking, 5000);
     return () => {
       clearInterval(unsubscribeId);
