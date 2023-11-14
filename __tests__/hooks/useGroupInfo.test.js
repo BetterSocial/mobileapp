@@ -611,7 +611,7 @@ describe('useGroupInfo should run correctly', () => {
   it('onRemoveUser should run correctly', async () => {
     const {result} = renderHook(() => useGroupInfo(), {wrapper});
     await result.current.setSelectedUser({user_id: '123', name: 'agita', user: {name: 'agita'}});
-    await result.current.setNewParticipan([
+    await result.current.setNewParticipant([
       {user_id: '123', name: 'agita', user: {name: 'agita'}},
       {user_id: '1234', name: 'elon', user: {name: 'elon'}}
     ]);
@@ -629,7 +629,7 @@ describe('useGroupInfo should run correctly', () => {
   it('error onRemoveUser should run correctly', async () => {
     const {result} = renderHook(() => useGroupInfo(), {wrapper: wrapperError});
     await result.current.setSelectedUser({user_id: '123', name: 'agita', user: {name: 'agita'}});
-    await result.current.setNewParticipan([
+    await result.current.setNewParticipant([
       {user_id: '123', name: 'agita', user: {name: 'agita'}},
       {user_id: '1234', name: 'elon', user: {name: 'elon'}}
     ]);

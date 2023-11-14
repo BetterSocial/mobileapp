@@ -194,7 +194,7 @@ const SampleChatInfoScreen = () => {
   } = useChatInfoScreenHook();
   const [isLoadingMembers] = React.useState<boolean>(false);
   const {signedProfileId} = useUserAuthHook();
-  const [profile] = (React.useContext(Context) as unknown as any)?.profile;
+  const [profile] = (React.useContext(Context) as unknown as any).profile;
   const {params}: any = useRoute();
   const ANONYMOUS_USER = 'AnonymousUser';
   const {anon_user_info_color_code, anon_user_info_emoji_code} =
