@@ -113,24 +113,29 @@ const useFetchChannelHook = () => {
     }
   };
 
-  const saveAllChannelData = async (channels, channelCategory: ChannelCategory) => {
-    const filteredChannels = channels.filter((channel) => {
+  const filterChannels = (channels) => {
+    return channels.filter((channel) => {
       const isLocationChannel = channel?.channel_type === 2 || channel?.type_channel === 2;
-      const isDeletedMessage = channel?.firstMessage?.type === 'deleted';
       const isSelfChatChannel = channel?.type === 'messaging' && channel?.members?.length < 2;
       const isCommunityChannel = channel?.type === 'topics';
-      const isDeletedCommunityMessage = channel?.messages[channel?.messages?.length - 1]?.text
+
+      const isDeletedMessage = channel?.firstMessage?.type === 'deleted';
+      const hasDeletedMessage = channel?.messages[channel?.messages?.length - 1]?.text
         ?.toLowerCase()
         ?.includes('this message was deleted');
 
-      return (
-        !isLocationChannel &&
-        !(isDeletedMessage || isSelfChatChannel) &&
-        !((isDeletedMessage || isDeletedCommunityMessage) && isCommunityChannel)
-      );
-    });
+      const isDeletedMessageOrSelfChat = isDeletedMessage || isSelfChatChannel;
+      const isDeletedOrHasDeletedMessage = isDeletedMessage || hasDeletedMessage;
+      const isCommunityHasDeletedMessage = isDeletedOrHasDeletedMessage && isCommunityChannel;
 
-    filteredChannels.forEach(async (channel) => {
+      return !isLocationChannel && !isDeletedMessageOrSelfChat && !isCommunityHasDeletedMessage;
+    });
+  };
+
+  const saveAllChannelData = async (channels, channelCategory: ChannelCategory) => {
+    const filteredChannels = filterChannels(channels);
+
+    filteredChannels?.forEach(async (channel) => {
       await saveChannelData(channel, channelCategory);
     });
   };
