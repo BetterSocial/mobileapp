@@ -7,17 +7,17 @@ import {openComposer} from 'react-native-email-link';
 import {useNavigation} from '@react-navigation/core';
 
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
+import useCreateChat from '../../../hooks/screen/useCreateChat';
+import TokenStorage, {ITokenEnum} from '../../../utils/storage/custom/tokenStorage';
+import {ANONYMOUS_USER} from '../../../hooks/core/constant';
 import {Context} from '../../../context';
 import {checkUserBlock} from '../../../service/profile';
 import {getChatName} from '../../../utils/string/StringUtils';
+import {isContainUrl} from '../../../utils/Utils';
 import {requestExternalStoragePermission} from '../../../utils/permission';
 import {setChannel} from '../../../context/actions/setChannel';
 import {setParticipants} from '../../../context/actions/groupChat';
 import {uploadFile} from '../../../service/file';
-import TokenStorage, {ITokenEnum} from '../../../utils/storage/custom/tokenStorage';
-import {isContainUrl} from '../../../utils/Utils';
-import {ANONYMOUS_USER, GROUP_INFO} from '../../../hooks/core/constant';
-import useCreateChat from '../../../hooks/screen/useCreateChat';
 
 const useGroupInfo = () => {
   const [groupChatState, groupPatchDispatch] = React.useContext(Context).groupChat;
@@ -34,7 +34,7 @@ const useGroupInfo = () => {
   const createChat = channelState.channel?.data?.created_at;
   const countUser = Object.entries(participants).length;
   const [selectedUser, setSelectedUser] = React.useState(null);
-  const [newParticipant, setNewParticipan] = React.useState([]);
+  const [newParticipant, setNewParticipant] = React.useState([]);
   const [openModal, setOpenModal] = React.useState(false);
   const [isAnonymousModalOpen, setIsAnonymousModalOpen] = React.useState(false);
   const [isFetchingAllowAnonDM, setIsFetchingAllowAnonDM] = React.useState(false);
@@ -63,7 +63,7 @@ const useGroupInfo = () => {
     setIsLoadingMembers(true);
     try {
       const result = await channel.queryMembers({});
-      setNewParticipan(result.members);
+      setNewParticipant(result.members);
       setParticipants(result.members, groupPatchDispatch);
 
       setIsLoadingMembers(false);
@@ -100,7 +100,7 @@ const useGroupInfo = () => {
       }
       return handleOpenProfile(selectedUser);
     } catch (e) {
-      console.log(e, 'erro');
+      console.log('error:', e);
     }
   };
 
@@ -153,7 +153,7 @@ const useGroupInfo = () => {
         newData.push(newObj);
       });
     }
-    setNewParticipan(newData);
+    setNewParticipant(newData);
   };
 
   const handleSelectUser = async (user) => {
@@ -224,7 +224,7 @@ const useGroupInfo = () => {
       const updateParticipant = newParticipant.filter(
         (participant) => participant.user_id !== selectedUser.user_id
       );
-      setNewParticipan(updateParticipant);
+      setNewParticipant(updateParticipant);
       updateMemberName(result.members);
       await channel.sendMessage(
         {
@@ -239,7 +239,7 @@ const useGroupInfo = () => {
         `${profile.myProfile.username} removed you from this group`,
         selectedUser.user_id
       );
-      setNewParticipan(result.members);
+      setNewParticipant(result.members);
       setParticipants(result.members, groupPatchDispatch);
     } catch (e) {
       if (__DEV__) {
@@ -383,7 +383,7 @@ const useGroupInfo = () => {
           }
         ]
       });
-      setNewParticipan(response.members);
+      setNewParticipant(response.members);
     } catch (e) {
       console.log(e, 'sayu');
     }
@@ -474,7 +474,7 @@ const useGroupInfo = () => {
     setSelectedUser,
     openChatMessage,
     generateSystemChat,
-    setNewParticipan,
+    setNewParticipant,
     isAnonymousModalOpen,
     setIsAnonymousModalOpen,
     blockModalRef,

@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {render, cleanup} from '@testing-library/react-native';
+import {cleanup, render} from '@testing-library/react-native';
+
 import ProfileContact from '../../../src/components/Items/ProfileContact';
 import {SIGNED} from '../../../src/hooks/core/constant';
 
@@ -10,7 +11,7 @@ describe('ProfileContact component should run correctly', () => {
 
   it('should match snapshot', () => {
     const onPress = jest.fn();
-    const {toJSON, getAllByText, getByTestId, getAllByTestId} = render(
+    const {toJSON, getByTestId, getAllByTestId} = render(
       <ProfileContact
         photo={'https://image.jpg'}
         fullname="Agita Firstawan"

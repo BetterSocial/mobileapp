@@ -70,28 +70,12 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
 >
   <View
     style={
-      Array [
-        Object {
-          "overflow": "hidden",
-        },
-        Object {
-          "borderRadius": 12,
-          "height": 24,
-          "marginRight": 8,
-          "width": 24,
-        },
-      ]
+      Object {
+        "marginRight": 8,
+      }
     }
   >
-    <FastImageView
-      defaultSource={null}
-      resizeMode="cover"
-      source={
-        Object {
-          "uri": "https://www.google.com",
-        }
-      }
-    />
+    https://www.google.com
   </View>
   <View
     style={

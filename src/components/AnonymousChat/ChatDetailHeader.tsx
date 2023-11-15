@@ -9,9 +9,9 @@ import CustomPressable from '../CustomPressable';
 import IcArrowBackWhite from '../../assets/arrow/Ic_arrow_back_white';
 import dimen from '../../utils/dimen';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {SIGNED} from '../../hooks/core/constant';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import {SIGNED} from '../../hooks/core/constant';
 
 const styles = StyleSheet.create({
   container: {
@@ -72,8 +72,8 @@ const ChatDetailHeader = ({
   onBackPress = () => console.log('onBackPress'),
   onThreeDotPress = () => console.log('onThreeDotPress'),
   onAvatarPress = () => console.log('onAvatarPress'),
-  anon_user_info_emoji_code,
-  anon_user_info_color_code,
+  anon_user_info_emoji_code = null,
+  anon_user_info_color_code = null,
   type,
   channel
 }) => {

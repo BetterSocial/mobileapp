@@ -14,6 +14,7 @@ import {
   BaseChatItemTypeProps
 } from '../../../types/component/AnonymousChat/BaseChatItem.types';
 import {ChatStatus} from '../../../types/database/schema/ChannelList.types';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {calculateTime} from '../../utils/time';
 
 const styles = StyleSheet.create({
@@ -26,34 +27,46 @@ const styles = StyleSheet.create({
 
 const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
   const {selectedChannel, handleUserName} = useChatScreenHook(type || ANONYMOUS);
-  const {anon_user_info_emoji_code, anon_user_info_color_code} =
-    selectedChannel?.rawJson?.channel || {};
-  const renderAnonymousIcon = (anonColor: string, anonEmoji: string) => (
+
+  const renderAnonymousAvatar = (anonColor: string, anonEmoji: string) => (
     <AnonymousIcon color={anonColor} emojiCode={anonEmoji} size={dimen.normalizeDimen(24)} />
   );
 
-  const renderDefaultIcon = () => (
-    <FastImage style={styles.containerPicture} source={{uri: item?.user?.profilePicture}} />
+  const renderSignedAvatar = () => (
+    <FastImage
+      style={styles.containerPicture}
+      source={{uri: item?.user?.profilePicture ?? DEFAULT_PROFILE_PIC_PATH}}
+    />
   );
 
-  const handleImageUser = () => {
-    if (type === ANONYMOUS) {
-      if (item?.user?.username !== ANONYMOUS_USER) {
-        return renderDefaultIcon();
-      }
-      return renderAnonymousIcon(anon_user_info_color_code, anon_user_info_emoji_code);
-    }
+  const handleAvatar = () => {
+    const selectedJson = selectedChannel?.rawJson;
+    const itemJson = item?.rawJson;
 
-    if (item?.rawJson?.anon_user_info_emoji_code) {
-      return renderAnonymousIcon(anon_user_info_color_code, anon_user_info_emoji_code);
-    }
-    if (item?.rawJson?.user?.name === ANONYMOUS_USER) {
-      return renderAnonymousIcon(
-        selectedChannel?.rawJson?.anon_user_info_color_code,
-        selectedChannel?.rawJson?.anon_user_info_emoji_code
+    if (type === ANONYMOUS) {
+      if (!item?.isMe && item?.user?.username !== ANONYMOUS_USER) return renderSignedAvatar();
+
+      return renderAnonymousAvatar(
+        selectedJson?.channel?.anon_user_info_color_code,
+        selectedJson?.channel?.anon_user_info_emoji_code
       );
     }
-    return renderDefaultIcon();
+
+    if (itemJson?.anon_user_info_emoji_code) {
+      return renderAnonymousAvatar(
+        itemJson?.anon_user_info_color_code,
+        itemJson?.anon_user_info_emoji_code
+      );
+    }
+
+    if (itemJson?.user?.name === ANONYMOUS_USER) {
+      return renderAnonymousAvatar(
+        selectedJson?.anon_user_info_color_code ?? selectedJson?.channel?.anon_user_info_color_code,
+        selectedJson?.anon_user_info_emoji_code ?? selectedJson?.channel?.anon_user_info_emoji_code
+      );
+    }
+
+    return renderSignedAvatar();
   };
 
   if (item?.type === 'system' || item?.rawJson?.isSystem || item?.rawJson?.message?.isSystem) {
@@ -64,8 +77,7 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
     return (
       <ChatItemMyTextV2
         key={index}
-        AnonymousImage={handleImageUser()}
-        avatar=""
+        avatar={handleAvatar()}
         isContinuous={item?.isContinuous}
         message={item?.message}
         time={calculateTime(item?.updatedAt, true)}
@@ -79,7 +91,7 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
   return (
     <ChatItemTargetText
       key={index}
-      AnonymousImage={handleImageUser()}
+      avatar={handleAvatar()}
       isContinuous={item?.isContinuous}
       message={item?.message}
       time={calculateTime(item?.updatedAt, true)}
