@@ -12,7 +12,7 @@ export enum BaseChatItemTypeProps {
 }
 
 export interface BaseChatItemProps {
-  avatar: string;
+  avatar: React.ReactElement;
   username: string;
   time: string;
   isContinuous: boolean;
@@ -22,9 +22,7 @@ export interface BaseChatItemProps {
 
 export interface ChatItemMyTextProps extends BaseChatItemProps {
   status?: ChatStatus;
-  AnonymousImage: React.ReactElement;
   chatType?: string;
-  avatar?: string;
 }
 
 export interface ChatItemTargetText extends BaseChatItemProps {
