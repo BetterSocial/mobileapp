@@ -45,11 +45,19 @@ export const styles = StyleSheet.create({
 
 const SampleChatScreen = () => {
   const flatlistRef = React.useRef<FlatList>();
-  const {selectedChannel, chats, goBackFromChatScreen, goToChatInfoScreen, sendChat} =
-    useChatScreenHook(ANONYMOUS);
+  const {
+    selectedChannel,
+    chats,
+    goBackFromChatScreen,
+    goToChatInfoScreen,
+    sendChat,
+    updateChatContinuity
+  } = useChatScreenHook(ANONYMOUS);
+
+  const updatedChats = updateChatContinuity(chats);
 
   const renderChatItem = React.useCallback(({item, index}) => {
-    return <BaseChatItem item={item} index={index} />;
+    return <BaseChatItem type={ANONYMOUS} item={item} index={index} />;
   }, []);
 
   const scrollToEnd = () => {
@@ -74,7 +82,7 @@ const SampleChatScreen = () => {
       <FlatList
         contentContainerStyle={{paddingBottom: 20}}
         style={styles.chatContainer}
-        data={chats}
+        data={updatedChats}
         inverted={true}
         initialNumToRender={20}
         alwaysBounceVertical={false}

@@ -1,9 +1,7 @@
 import * as React from 'react';
-import FastImage from 'react-native-fast-image';
 import {Dimensions, StyleSheet, Text, View} from 'react-native';
 
 import {ChatItemMyTextProps} from '../../../../types/component/AnonymousChat/BaseChatItem.types';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 
@@ -69,17 +67,15 @@ const styles = StyleSheet.create({
 });
 
 const ChatItemTargetText = ({
-  avatar,
-  username = 'Anonymous Clown',
+  username = 'Anonymous User',
   time = '4h',
   isContinuous = false,
-  message = 'Ultrices neque op semper blahbla blahri mauris amet, penatibus. pi Amet, mollis quam venenatis di',
-  AnonymousImage
+  message = '',
+  avatar
 }: ChatItemMyTextProps) => {
   const renderAvatar = React.useCallback(() => {
     if (isContinuous) return <View style={styles.avatar} />;
-    if (AnonymousImage) return <View style={styles.mr8}>{AnonymousImage}</View>;
-    return <FastImage style={styles.avatar} source={{uri: avatar ?? DEFAULT_PROFILE_PIC_PATH}} />;
+    return <View style={styles.mr8}>{avatar}</View>;
   }, []);
 
   return (
