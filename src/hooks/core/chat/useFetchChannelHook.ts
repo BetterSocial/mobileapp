@@ -118,8 +118,16 @@ const useFetchChannelHook = () => {
       const isLocationChannel = channel?.channel_type === 2 || channel?.type_channel === 2;
       const isDeletedMessage = channel?.firstMessage?.type === 'deleted';
       const isSelfChatChannel = channel?.type === 'messaging' && channel?.members?.length < 2;
+      const isCommunityChannel = channel?.type === 'topics';
+      const isDeletedCommunityMessage = channel?.messages[channel?.messages?.length - 1]?.text
+        ?.toLowerCase()
+        ?.includes('this message was deleted');
 
-      return !isLocationChannel && !(isDeletedMessage || isSelfChatChannel);
+      return (
+        !isLocationChannel &&
+        !(isDeletedMessage || isSelfChatChannel) &&
+        !((isDeletedMessage || isDeletedCommunityMessage) && isCommunityChannel)
+      );
     });
 
     filteredChannels.forEach(async (channel) => {
