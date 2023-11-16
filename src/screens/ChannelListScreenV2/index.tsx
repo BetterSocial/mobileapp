@@ -80,11 +80,12 @@ const ChannelListScreenV2 = () => {
 
           const showAlert = (onPressAction: () => void) =>
             Alert.alert(
-              "Don't Miss New Message",
-              'Allow notification to know when friends send you messages',
+              "Don't Miss New Messages",
+              `Allow notifications to know 
+when friends send you messages.`,
               [
-                {text: 'Not now', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-                {text: 'Allow', onPress: onPressAction}
+                {text: 'Not now', onPress: () => console.log('Cancel Pressed')},
+                {text: 'Allow', onPress: onPressAction, isPreferred: true}
               ]
             );
 
