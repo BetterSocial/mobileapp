@@ -14,6 +14,7 @@ import {ChannelTypeEnum} from '../../../../types/repo/SignedMessageRepo/SignedPo
 import {Context} from '../../../context';
 import {PostNotificationChannelList} from '../../../../types/database/schema/PostNotificationChannelList.types';
 import {convertTopicNameToTopicPageScreenParam} from '../../../utils/string/StringUtils';
+import useCustomBackButton from '../../screen/useCustomBackButton';
 
 const chatAtom = atom({
   key: 'chatAtom',
@@ -28,6 +29,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
   const navigation = useNavigation();
   const {selectedChannel} = chat;
   const [profile] = React.useContext(Context).profile;
+  const {handleBack} = useCustomBackButton();
   const setChannelAsRead = async (channel: ChannelList) => {
     if (!localDb) return;
     channel.setRead(localDb).catch((e) => console.log('setChannelAsRead error', e));
@@ -136,14 +138,12 @@ function useChatUtilsHook(): UseChatUtilsHook {
   };
 
   const goBackFromChatScreen = async () => {
-    await Keyboard.dismiss();
-    setTimeout(() => {
-      navigation.goBack();
+    handleBack(() => {
       setChat({
         ...chat,
         selectedChannel: null
       });
-    }, 350);
+    });
   };
 
   const goToChatInfoScreen = (params?: object) => {

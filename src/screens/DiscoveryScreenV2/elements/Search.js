@@ -25,6 +25,7 @@ import {Context} from '../../../context/Store';
 import {RECENT_SEARCH_TERMS} from '../../../utils/cache/constant';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
+import useCustomBackButton from '../../../hooks/screen/useCustomBackButton';
 
 const DiscoverySearch = ({
   setDiscoveryLoadingData = () => {},
@@ -41,7 +42,7 @@ const DiscoverySearch = ({
   const navigation = useNavigation();
   const [, discoveryDispatch] = React.useContext(Context).discovery;
   const discoverySearchBarRef = React.useRef(null);
-
+  const {handleBack} = useCustomBackButton();
   const [lastSearch, setLastSearch] = React.useState('');
 
   const debounced = React.useCallback(
@@ -51,11 +52,6 @@ const DiscoverySearch = ({
 
     []
   );
-
-  const handleBackPress = () => {
-    Keyboard.dismiss();
-    if (navigation.canGoBack()) navigation.goBack();
-  };
 
   const handleFocus = (isFocusParam) => {
     setIsFocus(isFocusParam);
@@ -159,7 +155,7 @@ const DiscoverySearch = ({
         {!hideBackIcon && (
           <TouchableNativeFeedback
             testID={TestIdConstant.discoveryScreenBackArrow}
-            onPress={handleBackPress}>
+            onPress={handleBack}>
             <View style={styles.backArrow}>
               <MemoIcArrowBackWhite
                 width={20}

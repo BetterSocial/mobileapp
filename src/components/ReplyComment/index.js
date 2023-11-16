@@ -23,6 +23,7 @@ import useWriteComment from '../Comments/hooks/useWriteComment';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import useCommentAction from '../Comments/hooks/useCommentAction';
+import useCustomBackButton from '../../hooks/screen/useCustomBackButton';
 
 const ReplyCommentId = ({
   itemProp,
@@ -60,6 +61,7 @@ const ReplyCommentId = ({
   });
   const {handleUsernameReplyComment} = useWriteComment();
   const {showAlertDelete} = useCommentAction();
+  const {handleBack} = useCustomBackButton();
   React.useEffect(() => {
     if (setTextComment && typeof setTextComment === 'function') {
       setTextComment(temporaryText);
@@ -78,13 +80,12 @@ const ReplyCommentId = ({
     }
   };
 
-  const navigationGoBack = () => navigation.goBack();
   if (!item) return null;
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
       <View style={styles.header}>
-        <TouchableOpacity testID="backButton" onPress={navigationGoBack} style={styles.backArrow}>
+        <TouchableOpacity testID="backButton" onPress={handleBack} style={styles.backArrow}>
           <ArrowLeftIcon width={20} height={20} fill="#000" />
         </TouchableOpacity>
         <Text testID="usernameText" style={styles.headerText}>

@@ -8,12 +8,13 @@ import {SOURCE_FEED_TAB, SOURCE_MY_PROFILE, SOURCE_PDP} from '../../../utils/con
 import {getUserId} from '../../../utils/users';
 import {setTimer} from '../../../context/actions/feeds';
 import {viewTimePost} from '../../../service/post';
+import useCustomBackHandle from '../../../hooks/screen/useCustomBackButton';
 
 const useFeedHeader = ({actor, source}) => {
   const navigation = useNavigation();
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   const {feeds, timer, viewPostTimeIndex} = feedsContext;
-
+  const {handleBack} = useCustomBackHandle();
   const userId = actor?.id;
   const {username, profile_pic_url} = actor?.data || {};
 
@@ -67,11 +68,12 @@ const useFeedHeader = ({actor, source}) => {
   };
 
   const onBackNormalUser = () => {
-    if (viewPostTimeIndex >= 0) id = feeds[viewPostTimeIndex]?.id;
-    if (source && id) sendViewTimePost(id);
+    handleBack(() => {
+      if (viewPostTimeIndex >= 0) id = feeds[viewPostTimeIndex]?.id;
+      if (source && id) sendViewTimePost(id);
 
-    resetTimer();
-    navigation.goBack();
+      resetTimer();
+    });
   };
 
   return {
