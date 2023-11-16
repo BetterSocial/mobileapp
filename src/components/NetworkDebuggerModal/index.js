@@ -1,13 +1,12 @@
-import Modal from 'react-native-modal';
-// eslint-disable-next-line import/no-unresolved
-import NetworkLogger, {startNetworkLogging} from 'react-native-network-logger';
 import React, {useState} from 'react';
 import {SafeAreaView, StyleSheet, Text, TouchableOpacity} from 'react-native';
-import {useRecoilValue} from 'recoil';
 
+import Modal from 'react-native-modal';
+import NetworkLogger, {startNetworkLogging} from 'react-native-network-logger';
+import {useRecoilValue} from 'recoil';
+import {useUserWhitelist} from '../../hooks/useUserWhitelist';
 import {ENV} from '../../libraries/Configs/ENVConfig';
 import {debugAtom} from '../../service/debug';
-import {useUserWhitelist} from '../../hooks/useUserWhitelist';
 
 const NetworkDebuggerModal = ({onPress}) => {
   const [isNetworkModalVisible, setIsNetworkVIsible] = useState(false);
@@ -21,7 +20,6 @@ const NetworkDebuggerModal = ({onPress}) => {
     setIsNetworkVIsible(true);
   };
 
-  console.log(isDebug);
   React.useEffect(() => {
     if ((isWhitelisted && isDebug) || ENV !== 'Prod') {
       startNetworkLogging({forceEnable: true});
@@ -71,7 +69,7 @@ const styles = StyleSheet.create({
   },
   content: {
     fontSize: 9,
-    // fontFamily: 'Gilroy-Bold',
+    fontFamily: 'Gilroy-Bold',
     textAlign: 'center',
     color: 'white'
   },

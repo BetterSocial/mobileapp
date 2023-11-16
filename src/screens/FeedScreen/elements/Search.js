@@ -6,13 +6,7 @@ import StringConstant from '../../../utils/string/StringConstant';
 import {fonts} from '../../../utils/fonts';
 import {COLORS, FONTS, SIZES} from '../../../utils/theme';
 
-const Search = ({
-  animatedValue,
-  onContainerClicked = () => {},
-  getSearchLayout,
-  children,
-  containerStyle
-}) => {
+const Search = ({animatedValue, onContainerClicked = () => {}, getSearchLayout}) => {
   const onSearchLayout = (event) => {
     const {height} = event.nativeEvent.layout;
     if (getSearchLayout) {
@@ -20,33 +14,27 @@ const Search = ({
     }
   };
 
-  if (children) {
-    return (
-      <Animated.View
-        onLayout={onSearchLayout}
-        style={[HeaderStyles.animatedViewContainer(animatedValue), containerStyle]}>
-        <View style={[HeaderStyles.wrapperSearch, {backgroundColor: 'white'}]}>{children}</View>
-      </Animated.View>
-    );
-  }
-
   return (
-    <Animated.View
-      onLayout={onSearchLayout}
-      style={[HeaderStyles.animatedViewContainer(animatedValue), containerStyle]}>
-      <Pressable onPress={onContainerClicked} style={HeaderStyles.searchContainer}>
-        <View style={HeaderStyles.wrapperSearch}>
-          <View style={HeaderStyles.wrapperIcon}>
+    <Animated.View onLayout={onSearchLayout} style={styles.animatedViewContainer(animatedValue)}>
+      <Pressable onPress={onContainerClicked} style={styles.searchContainer}>
+        <View style={styles.wrapperSearch}>
+          <View style={styles.wrapperIcon}>
             <MemoIc_search width={16.67} height={16.67} />
           </View>
-          <Text style={HeaderStyles.inputText}>{StringConstant.newsTabHeaderPlaceholder}</Text>
+          <Text style={styles.inputText}>{StringConstant.newsTabHeaderPlaceholder}</Text>
         </View>
       </Pressable>
     </Animated.View>
   );
 };
 
-export const HeaderStyles = StyleSheet.create({
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    marginBottom: SIZES.base,
+    marginHorizontal: SIZES.base
+  },
   searchContainer: {
     flex: 1
   },
@@ -98,7 +86,7 @@ export const HeaderStyles = StyleSheet.create({
     justifyContent: 'center'
   },
   newPostText: {
-    color: COLORS.holytosca,
+    color: COLORS.holyTosca,
     marginRight: 11,
     ...FONTS.h3
   },

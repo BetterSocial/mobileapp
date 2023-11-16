@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   newPostText: {
-    color: COLORS.holytosca,
+    color: COLORS.holyTosca,
     marginRight: 11,
     fontFamily: 'Inter-SemiBold',
     fontSize: 12,

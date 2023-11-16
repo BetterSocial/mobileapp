@@ -55,9 +55,6 @@ const NavigationConstants = {
 
 const POST_VERSION = 2;
 
-const TUTOR_POST_ANON = 'tutor_post_anon';
-const TUTOR_CREATE_POST_ANON = 'tutor_creat_post_anon';
-
 export {
   ANALYTICS_SHARE_POST_FEED_ID,
   ANALYTICS_SHARE_POST_FEED_SCREEN,
@@ -102,7 +99,5 @@ export {
   POST_CHECK_FEED_EXPIRED,
   POST_CHECK_AUTHOR_BLOCKED,
   FEED_CHAT_KEY,
-  NavigationConstants,
-  TUTOR_POST_ANON,
-  TUTOR_CREATE_POST_ANON
+  NavigationConstants
 };

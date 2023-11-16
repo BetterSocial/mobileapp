@@ -47,7 +47,6 @@ const ReplyCommentId = ({
     updateFeed,
     scrollViewRef,
     createComment,
-    onSaveHeight,
     getThisComment
   } = useReplyComment({
     itemProp,
@@ -66,8 +65,6 @@ const ReplyCommentId = ({
       setTextComment(temporaryText);
     }
   }, [temporaryText]);
-
-  const updateComment = () => getThisComment(true);
 
   React.useEffect(() => {
     if (itemProp) {
@@ -95,10 +92,7 @@ const ReplyCommentId = ({
         </Text>
         <View style={styles.btn} />
       </View>
-      <ScrollView
-        onContentSizeChange={onSaveHeight}
-        ref={scrollViewRef}
-        contentContainerStyle={styles.commentScrollView}>
+      <ScrollView ref={scrollViewRef} contentContainerStyle={styles.commentScrollView}>
         <View style={styles.containerComment}>
           <ReplyCommentItem
             indexFeed={indexFeed}
@@ -119,7 +113,7 @@ const ReplyCommentId = ({
                     <ConnectorWrapper index={index}>
                       <Pressable
                         onLongPress={() => {
-                          showAlertDelete(itemReply, false, updateComment);
+                          showAlertDelete(itemReply, false, () => getThisComment(true));
                         }}
                         style={styles.childCommentWrapper}>
                         <Comment
@@ -135,7 +129,7 @@ const ReplyCommentId = ({
                           level={parseInt(level, 10) + 1}
                           updateVote={updateVote}
                           onLongPress={() => {
-                            showAlertDelete(itemReply, false, updateComment);
+                            showAlertDelete(itemReply, false, () => getThisComment(true));
                           }}
                         />
                         {itemReply.children_counts.comment > 0 && (

@@ -16,10 +16,6 @@ jest.mock('../../../src/hooks/useAfterInteractions', () => ({
   })
 }));
 
-jest.mock('@react-native-clipboard/clipboard', () => ({
-  setString: jest.fn()
-}));
-
 const mockedGoBack = jest.fn();
 
 jest.mock('@react-navigation/native', () => ({

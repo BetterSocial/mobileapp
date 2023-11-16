@@ -147,7 +147,6 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
               "paddingVertical": 19,
             }
           }
-          testID="changeText"
           textAlignVertical="top"
           underlineColorAndroid="transparent"
           value=""

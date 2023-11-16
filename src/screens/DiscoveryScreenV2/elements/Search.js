@@ -24,7 +24,7 @@ import {COLORS, FONTS, SIZES} from '../../../utils/theme';
 import {Context} from '../../../context/Store';
 import {RECENT_SEARCH_TERMS} from '../../../utils/cache/constant';
 import {colors} from '../../../utils/colors';
-import {fonts, normalizeFontSize} from '../../../utils/fonts';
+import {fonts} from '../../../utils/fonts';
 
 const DiscoverySearch = ({
   setDiscoveryLoadingData = () => {},
@@ -36,8 +36,7 @@ const DiscoverySearch = ({
   fetchDiscoveryData = () => {},
   fetchData,
   onCancelToken = () => {},
-  hideBackIcon = false,
-  autoFocus = true
+  hideBackIcon = false
 }) => {
   const navigation = useNavigation();
   const [, discoveryDispatch] = React.useContext(Context).discovery;
@@ -181,7 +180,7 @@ const DiscoverySearch = ({
             ref={discoverySearchBarRef}
             testID={TestIdConstant.discoveryScreenSearchBar}
             focusable={true}
-            autoFocus={autoFocus}
+            autoFocus={true}
             // value={discoverySearchBarText}
             value={searchText}
             onChangeText={handleChangeText}
@@ -215,27 +214,9 @@ const DiscoverySearch = ({
   );
 };
 
-DiscoverySearch.propTypes = {
-  setDiscoveryLoadingData: PropTypes.func,
-  searchText: PropTypes.string,
-  setSearchText: PropTypes.func,
-  placeholderText: PropTypes.string,
-  setIsFocus: PropTypes.func,
-  setIsFirstTimeOpen: PropTypes.func,
-  fetchDiscoveryData: PropTypes.func,
-  fetchData: PropTypes.func,
-  onCancelToken: PropTypes.func,
-  hideBackIcon: PropTypes.bool,
-  autoFocus: PropTypes.bool
-};
-
 const styles = StyleSheet.create({
   arrowContainer: {paddingLeft: 20},
-  backArrow: {
-    flex: 1,
-    justifyContent: 'center',
-    marginRight: dimen.normalizeDimen(9)
-  },
+  backArrow: {flex: 1, justifyContent: 'center', marginRight: 9},
   container: {
     flexDirection: 'row',
     backgroundColor: 'white',
@@ -245,45 +226,48 @@ const styles = StyleSheet.create({
   clearIconContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: dimen.normalizeDimen(-20.5),
-    paddingHorizontal: dimen.normalizeDimen(30),
+    marginRight: -20.5,
+    paddingRight: 30,
+    paddingLeft: 30,
     zIndex: 1000
   },
   searchContainer: {
     flex: 1,
-    marginRight: dimen.normalizeDimen(20)
+    marginRight: 20
   },
   wrapperSearch: {
     flex: 1,
     backgroundColor: '#F5F5F5',
-    borderRadius: dimen.normalizeDimen(8),
+    borderRadius: 8,
     alignSelf: 'center',
     flexDirection: 'row',
-    height: dimen.normalizeDimen(36),
-    paddingRight: dimen.normalizeDimen(8)
+    height: 36,
+    paddingRight: 8
   },
   wrapperButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
     marginEnd: SIZES.base,
-    paddingHorizontal: dimen.normalizeDimen(8),
-    paddingVertical: dimen.normalizeDimen(9)
+    paddingLeft: 8,
+    paddingRight: 8,
+    paddingTop: 9,
+    paddingBottom: 9
   },
   input: {
-    marginRight: dimen.normalizeDimen(16),
-    paddingStart: dimen.normalizeDimen(8),
+    marginRight: 16,
+    paddingStart: 8,
     flex: 1,
-    fontSize: normalizeFontSize(14),
+    fontSize: 14,
     fontFamily: fonts.inter[400],
     alignSelf: 'center',
-    height: dimen.normalizeDimen(33),
+    height: 33,
     paddingTop: 0,
     paddingBottom: 0
   },
   wrapperIcon: {
-    marginLeft: dimen.normalizeDimen(9.67),
-    marginRight: dimen.normalizeDimen(1.67),
+    marginLeft: 9.67,
+    marginRight: 1.67,
     alignSelf: 'center',
     justifyContent: 'center'
   },
@@ -292,8 +276,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   newPostText: {
-    color: COLORS.holytosca,
-    marginRight: dimen.normalizeDimen(11),
+    color: COLORS.holyTosca,
+    marginRight: 11,
     ...FONTS.h3
   },
   animatedViewContainer: (hideBackIcon) => ({
@@ -302,8 +286,9 @@ const styles = StyleSheet.create({
     marginTop: 0,
     zIndex: 10,
     height: dimen.size.DISCOVERY_HEADER_HEIGHT,
-    paddingVertical: dimen.normalizeDimen(7),
-    borderBottomWidth: hideBackIcon ? 0 : dimen.normalizeDimen(1),
+    paddingTop: 7,
+    paddingBottom: 7,
+    borderBottomWidth: hideBackIcon ? 0 : 1,
     borderBottomColor: COLORS.alto
   })
 });

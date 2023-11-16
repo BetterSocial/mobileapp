@@ -108,8 +108,23 @@ function HomeBottomTabs({navigation}) {
     // Should the initial notification be popped automatically
     // default: true
     popInitialNotification: true,
-    requestPermissions: false
+    requestPermissions: true
   });
+
+  const requestPermission = async () => {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      const fcmToken = await messaging().getToken();
+      const payload = {
+        fcm_token: fcmToken
+      };
+      fcmTokenService(payload);
+    }
+  };
 
   const pushNotifIos = (message) => {
     if (__DEV__) {
@@ -180,12 +195,8 @@ function HomeBottomTabs({navigation}) {
 
   React.useEffect(() => {
     createChannel();
+    requestPermission();
     updateProfileAtomId();
-
-    messaging().setBackgroundMessageHandler(async (remoteMessage) => {
-      console.log('Message handled in the background!', remoteMessage);
-      handlePushNotif(remoteMessage);
-    });
 
     messaging().setBackgroundMessageHandler(async (remoteMessage) => {
       console.log('Message handled in the background!', remoteMessage);

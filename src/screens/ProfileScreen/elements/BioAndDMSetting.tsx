@@ -17,14 +17,14 @@ type BioAndDMSettingProps = {
   onlyReceivedDmFromUserFollowing: boolean;
 };
 
-const BioAndDMSetting = ({
+const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
   bio,
   changeBio,
   avatarUrl,
   following,
   allowAnonDm,
   onlyReceivedDmFromUserFollowing
-}: BioAndDMSettingProps) => {
+}) => {
   const [isAnonymity, setIsAnonymity] = React.useState(allowAnonDm);
   const [isAllowFollowingSendDM, setIsAllowFollowingSendDM] = React.useState(
     onlyReceivedDmFromUserFollowing

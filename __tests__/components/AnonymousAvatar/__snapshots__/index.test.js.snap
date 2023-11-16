@@ -30,7 +30,6 @@ exports[`AnonymousAvatar test Should match version 2 snapshot 1`] = `
       "width": 15,
     }
   }
-  testID="newVersion"
 >
   <Text
     style={

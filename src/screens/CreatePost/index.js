@@ -5,7 +5,6 @@
 import * as React from 'react';
 import PSL from 'psl';
 import Toast from 'react-native-simple-toast';
-import {Image} from 'react-native-compressor';
 import _, {debounce} from 'lodash';
 import {
   Alert,
@@ -19,9 +18,10 @@ import {
   Text,
   View
 } from 'react-native';
+import {Image} from 'react-native-compressor';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {openSettings} from 'react-native-permissions';
 import {showMessage} from 'react-native-flash-message';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {useNavigation, useRoute} from '@react-navigation/core';
 
 import ContentLink from './elements/ContentLink';
@@ -125,7 +125,6 @@ const CreatePost = () => {
   const [user] = React.useContext(Context).profile;
   const [allTaggingUser, setAllTaggingUser] = React.useState([]);
   const animatedReminder = React.useRef(new Animated.Value(0)).current;
-
   const debounced = React.useCallback(
     debounce((changedText) => {
       if (isContainUrl(changedText)) {
@@ -323,6 +322,7 @@ const CreatePost = () => {
       asset.append('photo', composeImageMeta(compressionResult));
 
       const responseUpload = await uploadPhoto(asset);
+
       setMediaStorage((val) => [...val, newArr]);
       setDataImage((val) => [...val, responseUpload.data.url]);
       sheetMediaRef.current.close();
@@ -366,6 +366,7 @@ const CreatePost = () => {
       );
     }
   };
+
   const takePhoto = async () => {
     const {success, message} = await requestCameraPermission();
     if (success) {
@@ -935,7 +936,7 @@ const styles = StyleSheet.create({
     height
   }),
   reminderContainer: {
-    backgroundColor: colors.blue,
+    backgroundColor: '#2F80ED',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 7,

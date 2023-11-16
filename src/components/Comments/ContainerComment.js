@@ -78,12 +78,6 @@ const ContainerComment = ({
       updateVote();
     }
   };
-  const handlePaddingBottom = () => {
-    if (!itemParent?.message || itemParent?.message === '') {
-      return calculatePaddingBtm() + calculationText(itemParent?.message).containerHeight;
-    }
-    return calculatePaddingBtm();
-  };
 
   return (
     <View style={[styles.container]}>
@@ -92,7 +86,7 @@ const ContainerComment = ({
           styles.containerComment,
           {
             minHeight: calculateMinHeight() + calculatePaddingBtm(),
-            paddingBottom: handlePaddingBottom()
+            paddingBottom: calculatePaddingBtm()
           }
         ]}>
         <View style={styles.lineBeforeProfile} />

@@ -7,7 +7,7 @@ const LoadingWithoutModal = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.content(!!props.text)}>
-        <ActivityIndicator size="large" color={COLORS.holytosca} />
+        <ActivityIndicator size="large" color={COLORS.holyTosca} />
         {props?.text && <Text style={styles.text}>{props.text}</Text>}
       </View>
     </View>

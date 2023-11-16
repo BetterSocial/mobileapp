@@ -39,8 +39,9 @@ const Content = ({
     onLayoutTopicChip,
     heightTopic,
     amountLineTopic,
-    onPollLayout,
-    heightPoll
+    heightPoll,
+    handleMarginVertical,
+    onPollLayout
   } = useCalculationContent();
   const [amountCut, setAmountCut] = React.useState(0);
   const [textCut, setTextCut] = React.useState(null);
@@ -250,7 +251,11 @@ const Content = ({
       ) : null}
 
       {item && item.post_type === POST_TYPE_POLL ? (
-        <View style={styles.containerMainText(handleContainerText().isShort)}>
+        <View
+          style={[
+            styles.containerMainText(handleContainerText().isShort),
+            {marginVertical: handleMarginVertical(message)}
+          ]}>
           <ContentPoll
             message={item.message}
             images_url={item.images_url}
@@ -267,7 +272,7 @@ const Content = ({
         </View>
       ) : null}
       {images_url.length > 0 && (
-        <View style={styles.containerImage}>
+        <View style={[styles.containerImage]}>
           <ImageLayouter
             isFeed={true}
             images={images_url}
@@ -331,12 +336,6 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginLeft: 13
   },
-
-  containerFeedText: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 5
-  },
   feedDate: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
@@ -398,6 +397,6 @@ export const styles = StyleSheet.create({
     opacity: 1
   }),
   mv5: {
-    marginVertical: 5
+    marginVertical: 6
   }
 });

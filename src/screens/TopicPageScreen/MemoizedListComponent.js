@@ -117,7 +117,7 @@ const RenderListFeed = (props) => {
     <View style={[styles.cardContainer()]}>
       <View style={styles.cardMain}>
         <Header
-          headerStyle={styles.headerStyle}
+          headerStyle={styles.ml3}
           hideThreeDot={true}
           props={item}
           height={getHeightHeader()}
@@ -203,8 +203,8 @@ const styles = StyleSheet.create({
     maxHeight: heightReaction,
     marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0
   }),
-  headerStyle: {
-    marginHorizontal: 9
+  ml3: {
+    marginLeft: 3
   }
 });
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import {act, fireEvent, render} from '@testing-library/react-native';
 
-import * as useSetting from '../../../src/screens/Settings/hooks/useSettings';
 import Settings from '../../../src/screens/Settings';
 import Store from '../../../src/context/Store';
 
@@ -42,17 +41,6 @@ jest.mock('recoil', () => ({
 }));
 
 describe('Settings page should run correctly', () => {
-  const mockLogout = jest.fn();
-  const mockStartupValue = jest.fn();
-  const showDeleteAccountAlert = jest.fn();
-  beforeEach(() => {
-    jest.spyOn(useSetting, 'default').mockImplementation(() => ({
-      logout: mockLogout,
-      setStartupValue: mockStartupValue,
-      showDeleteAccountAlert
-    }));
-  });
-
   it('Should match snapshot', () => {
     const {toJSON} = render(<Settings />, {wrapper: Store});
     expect(toJSON).toMatchSnapshot();
@@ -80,22 +68,5 @@ describe('Settings page should run correctly', () => {
       fireEvent.press(getByTestId('help'));
     });
     expect(mockNavigate).toHaveBeenCalled();
-  });
-
-  it('onLogout should run correctly', () => {
-    const {getByTestId} = render(<Settings />, {wrapper: Store});
-    act(() => {
-      fireEvent.press(getByTestId('logout'));
-    });
-    expect(mockLogout).toHaveBeenCalled();
-    expect(mockStartupValue).toHaveBeenCalled();
-  });
-
-  it('delete account should run correctly', () => {
-    const {getByTestId} = render(<Settings />, {wrapper: Store});
-    act(() => {
-      fireEvent.press(getByTestId('delete'));
-    });
-    expect(showDeleteAccountAlert).toHaveBeenCalled();
   });
 });

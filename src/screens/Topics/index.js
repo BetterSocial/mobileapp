@@ -11,25 +11,24 @@ import {
   View
 } from 'react-native';
 import {useNavigation} from '@react-navigation/core';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import CustomPressable from '../../components/CustomPressable';
 import ListTopic from './ListTopics';
 import StringConstant from '../../utils/string/StringConstant';
-import dimen from '../../utils/dimen';
 import useSignin from '../SignInV2/hooks/useSignin';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {Header} from '../../components';
-import {Monitoring} from '../../libraries/monitoring/sentry';
 import {ProgressBar} from '../../components/ProgressBar';
 import {TOPICS_PICK} from '../../utils/cache/constant';
 import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getSpecificCache} from '../../utils/cache';
 import {setTopics as setTopicsContext} from '../../context/actions/topics';
+import dimen from '../../utils/dimen';
 
 const {width} = Dimensions.get('screen');
 
@@ -47,7 +46,6 @@ const Topics = () => {
   const getCacheTopic = async () => {
     getSpecificCache(TOPICS_PICK, (cache) => {
       if (cache) {
-        Monitoring.logActions('set topics data from cache', cache);
         setTopics(cache);
         setIspreload(false);
       } else {
@@ -57,6 +55,7 @@ const Topics = () => {
     });
   };
   React.useEffect(() => {
+    // console.log(topicCollection, 'lusi')
     if (topicCollection.length > 0) {
       setTopics(topicCollection);
     }
@@ -102,7 +101,6 @@ const Topics = () => {
       handleSelectedLanguage={handleSelectedLanguage}
     />
   );
-
   const onBack = () => {
     navigation.goBack();
   };
@@ -304,4 +302,4 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline'
   }
 });
-export default Topics;
+export default React.memo(Topics);
