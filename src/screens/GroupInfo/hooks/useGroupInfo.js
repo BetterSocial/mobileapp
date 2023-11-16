@@ -360,6 +360,7 @@ const useGroupInfo = () => {
       handleMessageAnonymously();
     }
   };
+
   const onLeaveGroup = () => {
     Alert.alert('', 'Exit this group?', [{text: 'Cancel'}, {text: 'Exit', onPress: leaveGroup}]);
   };
@@ -472,12 +473,12 @@ const useGroupInfo = () => {
     onReportGroup,
     setUsername,
     setSelectedUser,
-    openChatMessage,
     generateSystemChat,
     setNewParticipant,
     isAnonymousModalOpen,
     setIsAnonymousModalOpen,
     blockModalRef,
+    openChatMessage,
     isFetchingAllowAnonDM
   };
 };

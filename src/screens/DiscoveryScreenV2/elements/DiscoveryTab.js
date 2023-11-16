@@ -1,12 +1,12 @@
 import * as React from 'react';
-import {Dimensions, Keyboard, Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
-
-import {useRoute} from '@react-navigation/core';
 import PropTypes from 'prop-types';
+import {Dimensions, Keyboard, Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {useRoute} from '@react-navigation/core';
+
+import {Context} from '../../../context';
 import {colors} from '../../../utils/colors';
 import {normalizeFontSize} from '../../../utils/fonts';
 import {setNavbarTitle} from '../../../context/actions/setMyProfileAction';
-import {Context} from '../../../context';
 
 const windowWidth = Dimensions.get('window').width;
 
