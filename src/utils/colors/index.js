@@ -29,7 +29,8 @@ export const colors = {
   blockColor: '#FF2E63',
   darkBlue: '#2C67BC',
   blueSea10: '#55C2FF',
-  greenDark: '#004346'
+  greenDark: '#004346',
+  babyBlue: '#7B9DCD'
 };
 
 export const hexToRgb = (hex, opacity = 1) => {

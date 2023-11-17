@@ -19,6 +19,8 @@ exports[`TESTING ChatItemTargetText RENDER continuous should match snapshot 1`] 
       Array [
         Object {
           "backgroundColor": "#88CDD0",
+        },
+        Object {
           "borderRadius": 8,
           "borderTopEndRadius": 0,
           "flex": 1,
@@ -91,6 +93,8 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
       Array [
         Object {
           "backgroundColor": "#88CDD0",
+        },
+        Object {
           "borderRadius": 8,
           "borderTopEndRadius": 0,
           "flex": 1,
@@ -178,28 +182,12 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
   </View>
   <View
     style={
-      Array [
-        Object {
-          "overflow": "hidden",
-        },
-        Object {
-          "borderRadius": 12,
-          "height": 24,
-          "marginLeft": 8,
-          "width": 24,
-        },
-      ]
+      Object {
+        "marginLeft": 8,
+      }
     }
   >
-    <FastImageView
-      defaultSource={null}
-      resizeMode="cover"
-      source={
-        Object {
-          "uri": "https://www.google.com",
-        }
-      }
-    />
+    https://www.google.com
   </View>
 </View>
 `;

@@ -1,18 +1,8 @@
 /* eslint-disable no-param-reassign */
 import * as React from 'react';
-import {
-  Alert,
-  Dimensions,
-  RefreshControl,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  View
-} from 'react-native';
+import {Dimensions, RefreshControl, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
 import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
 import {debounce} from 'lodash';
-import {generateRandomId} from 'stream-chat-react-native-core';
-import {showMessage} from 'react-native-flash-message';
 import PropTypes from 'prop-types';
 import ContactPreview from './elements/ContactPreview';
 import Header from '../../components/Header/HeaderContact';
@@ -23,9 +13,10 @@ import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {Loading} from '../../components';
 import {Search} from './elements';
-import {setChannel} from '../../context/actions/setChannel';
 import {userPopulate} from '../../service/users';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import useCreateChat from '../../hooks/screen/useCreateChat';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 
 const {width} = Dimensions.get('screen');
 
@@ -33,8 +24,6 @@ const ContactScreen = ({navigation}) => {
   const [loading, setLoading] = React.useState(false);
   const [users, setUsers] = React.useState([]);
   const [profile] = React.useContext(Context).profile;
-  const [, dispatchChannel] = React.useContext(Context).channel;
-  const [client] = React.useContext(Context).client;
   const [isRecyclerViewShown, setIsRecyclerViewShown] = React.useState(false);
   const [layoutProvider, setLayoutProvider] = React.useState(() => {});
   const [refreshing, setRefreshing] = React.useState(false);
@@ -47,7 +36,7 @@ const ContactScreen = ({navigation}) => {
   const [selectedUsers, setSelectedUsers] = React.useState([]);
   const [isSearchMode, setIsSearchMode] = React.useState(false);
   const [isLoadingSearchResult, setIsLoadingSearchResult] = React.useState(false);
-
+  const {createSignChat, loadingCreateChat} = useCreateChat();
   const debounced = React.useCallback(
     debounce((changedText) => {
       // handleSearch(changedText)
@@ -113,70 +102,22 @@ const ContactScreen = ({navigation}) => {
       setIsRecyclerViewShown(true);
     }
   }, [dataProvider]);
-
   const handleCreateChannel = async () => {
     try {
-      if (followed.length < 1) {
-        Alert.alert('Warning', 'Please choose min one user');
+      const mappingUserName = selectedUsers?.map((user) => user?.username).join(',');
+      let image = DEFAULT_PROFILE_PIC_PATH;
+      if (selectedUsers.length === 1) {
+        image = selectedUsers[0]?.profile_pic_path;
       }
-      setLoading(true);
-      const members = followed;
-      const channelName = usernames;
-      let typeChannel = 0;
-      if (members.length > 2) {
-        typeChannel = 1;
-      }
-      const clientChat = await client.client;
-
-      let type = 'messaging';
-      if (members.length > 2) {
-        type = 'group';
-      }
-      const filter = {type, members: {$eq: members}};
-      const sort = [{last_message_at: -1}];
-      const findChannels = await clientChat.queryChannels(filter, sort, {
-        watch: true,
-        state: true
-      });
-
-      const generatedChannelId = generateRandomId();
-      const memberWithRoles = members.map((item) => ({
-        user_id: item,
-        channel_role: 'channel_moderator'
-      }));
-
-      if (findChannels.length > 0) {
-        setChannel(findChannels[0], dispatchChannel);
-      } else {
-        const channelChat = await clientChat.channel(type, generatedChannelId, {
-          name: channelName.join(', '),
-          type_channel: typeChannel
-        });
-        await channelChat.create();
-        channelChat.update(
-          {
-            name: channelName.join(', ')
-          },
-          {
-            text: 'You created this group',
-            system_user: profile?.myProfile?.user_id,
-            is_from_prepopulated: true,
-            other_text: `${profile?.myProfile?.username} created this group`
-          }
-        );
-        await channelChat.addMembers(memberWithRoles);
-        setChannel(channelChat, dispatchChannel);
-      }
-      setFollowed([profile.user_id]);
-      setUsernames([profile.username]);
-      setLoading(false);
-      await navigation.replace('ChatDetailPage');
-    } catch (error) {
-      showMessage({
-        message: 'Failed creating new chat',
-        type: 'danger'
-      });
-      setLoading(false);
+      const dataSelected = {
+        user: {
+          name: mappingUserName,
+          image
+        }
+      };
+      createSignChat(followed, dataSelected);
+    } catch (e) {
+      console.log(e, 'error signed chat');
     }
   };
 
@@ -302,7 +243,7 @@ const ContactScreen = ({navigation}) => {
             onHandleSelected={(value) => handleSelected(value)}
           />
         )}
-        <Loading visible={loading} />
+        <Loading visible={loading || loadingCreateChat} />
       </View>
     </SafeAreaView>
   );

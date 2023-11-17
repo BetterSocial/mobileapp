@@ -2,7 +2,7 @@
 import LocalDatabase from '..';
 import allMigrationsFile from './file/index';
 
-export const TARGET_MIGRATION_VERSION = 5;
+export const TARGET_MIGRATION_VERSION = 6;
 
 /**
  * PROCEED WITH CAUTION
@@ -79,14 +79,14 @@ const migrateDb = async () => {
   }
 
   const currentMigrationVersion = await getCurrentMigrationVersion();
-  if (currentMigrationVersion === TARGET_MIGRATION_VERSION) return;
+  if (currentMigrationVersion >= TARGET_MIGRATION_VERSION) return;
 
   console.log('===== MIGRATING DB =====');
 
   for (let version = currentMigrationVersion; version <= TARGET_MIGRATION_VERSION; version += 1) {
     try {
       const migration = allMigrationsFile[version];
-      await migration.up(db);
+      await migration?.up(db);
       await incrementMigrationVersion(version);
     } catch (e) {
       console.log('error migrating db');

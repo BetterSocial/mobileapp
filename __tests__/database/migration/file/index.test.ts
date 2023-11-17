@@ -7,6 +7,6 @@ describe('TESTING all migration file', () => {
     // Execution
 
     // Assertion
-    expect(allMigrations.length).toEqual(6);
+    expect(allMigrations.length).toEqual(7);
   });
 });

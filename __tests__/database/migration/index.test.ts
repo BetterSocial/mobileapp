@@ -6,6 +6,6 @@ describe('TESTING migration file', () => {
   });
 
   it('TEST should check TARGET_MIGRATION_VERSION to 5', () => {
-    expect(TARGET_MIGRATION_VERSION).toBe(5);
+    expect(TARGET_MIGRATION_VERSION).toBe(6);
   });
 });
