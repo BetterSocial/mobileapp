@@ -30,11 +30,12 @@ import {Header} from '../../components';
 import {Input} from '../../components/Input';
 import {ProgressBar} from '../../components/ProgressBar';
 import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
 import {setCapitalFirstLetter} from '../../utils/Utils';
 import {setImage, setImageUrl, setUsername} from '../../context/actions/users';
 import {verifyUsername} from '../../service/users';
+import dimen from '../../utils/dimen';
 
 const MAXIMUM_USERNAME_LENGTH = 19;
 const MINIMUM_USERNAME_LENGTH = 3;
@@ -284,8 +285,8 @@ const ChooseUsername = () => {
                         : DEFAULT_PROFILE_PIC_PATH,
                       cache: 'reload'
                     }}
-                    width={52}
-                    height={52}
+                    width={dimen.normalizeDimen(52)}
+                    height={dimen.normalizeDimen(52)}
                     style={styles.image}
                   />
                   <View style={styles.icon}>
@@ -321,13 +322,13 @@ const ChooseUsername = () => {
             </View>
           </View>
         </TouchableWithoutFeedback>
-
         <View style={styles.gap} />
-        <View style={styles.footer}>
-          <Button disabled={isNextButtonDisabled()} onPress={() => checkProfilePicture()}>
-            {StringConstant.onboardingChooseUsernameButtonStateNext}
-          </Button>
-        </View>
+      </View>
+      <View style={styles.footer}>
+        <View style={styles.textSmallContainer} />
+        <Button disabled={isNextButtonDisabled()} onPress={() => checkProfilePicture()}>
+          {StringConstant.onboardingChooseUsernameButtonStateNext}
+        </Button>
       </View>
       <BottomSheetChooseImage
         ref={bottomSheetChooseImageRef}
@@ -343,97 +344,97 @@ export default ChooseUsername;
 const styles = StyleSheet.create({
   containerInput: {
     flexDirection: 'row',
-    marginTop: 28,
-    marginBottom: 20
+    marginTop: dimen.normalizeDimen(28),
+    marginBottom: dimen.normalizeDimen(20)
   },
   input: {
-    borderWidth: 1,
-    borderRadius: 8,
+    borderWidth: dimen.normalizeDimen(1),
+    borderRadius: dimen.normalizeDimen(8),
     borderColor: '#BDBDBD',
-    paddingHorizontal: 23,
-    paddingVertical: 13,
+    paddingHorizontal: dimen.normalizeDimen(23),
+    paddingVertical: dimen.normalizeDimen(13),
     width: '100%'
   },
   container: {
     flex: 1,
     backgroundColor: colors.white
   },
-  btnNext: {marginTop: 16},
+  btnNext: {marginTop: dimen.normalizeDimen(16)},
   gap: {flex: 1},
   icon: {
-    width: 14,
-    height: 14,
+    width: dimen.normalizeDimen(14),
+    height: dimen.normalizeDimen(14),
     position: 'absolute',
-    bottom: -5,
-    left: 19
+    bottom: dimen.normalizeDimen(-5),
+    left: dimen.normalizeDimen(19)
   },
   image: {
-    height: 52,
-    width: 52,
-    borderRadius: 26
+    height: dimen.normalizeDimen(52),
+    width: dimen.normalizeDimen(52),
+    borderRadius: dimen.normalizeDimen(26)
   },
   title: {
     fontFamily: 'Inter-Bold',
     fontStyle: 'normal',
     fontWeight: '600',
-    fontSize: 36,
-    lineHeight: 43.57,
+    fontSize: normalizeFontSize(36),
+    lineHeight: normalizeFontSize(43.57),
     color: '#11243D',
-    marginTop: 24
+    marginTop: dimen.normalizeDimen(24)
   },
   desc: {
     fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: '400',
-    fontSize: 14,
-    lineHeight: 24,
+    fontSize: normalizeFontSize(14),
+    lineHeight: normalizeFontSize(24),
     color: colors.gray,
     opacity: 0.84,
-    marginTop: 8,
-    marginBottom: 12
+    marginTop: dimen.normalizeDimen(8),
+    marginBottom: dimen.normalizeDimen(12)
   },
   btnImage: {
-    width: 23,
-    height: 23,
+    width: dimen.normalizeDimen(23),
+    height: dimen.normalizeDimen(23),
     justifyContent: 'center',
     alignItems: 'center'
   },
   constainerInfo: {
     backgroundColor: 'rgba(47, 128, 237, 0.2)',
     flexDirection: 'row',
-    borderRadius: 8,
+    borderRadius: dimen.normalizeDimen(8),
     width: '100%',
-    paddingHorizontal: 7,
-    paddingVertical: 8
+    paddingHorizontal: dimen.normalizeDimen(7),
+    paddingVertical: dimen.normalizeDimen(8)
   },
   infoText: {
     fontFamily: 'Inter-Regular',
     fontStyle: 'normal',
     fontWeight: '400',
-    fontSize: 14,
+    fontSize: normalizeFontSize(14),
     color: COLORS.blue,
     // marginLeft: 12,
-    lineHeight: 24,
-    paddingHorizontal: 4
+    lineHeight: normalizeFontSize(24),
+    paddingHorizontal: dimen.normalizeDimen(4)
     // width: width - 95,
     // backgroundColor: 'red'
   },
   containerAddIcon: {
-    marginRight: 13
+    marginRight: dimen.normalizeDimen(13)
   },
   content: {
-    paddingTop: 20,
-    paddingHorizontal: 20
+    paddingTop: dimen.normalizeDimen(20),
+    paddingHorizontal: dimen.normalizeDimen(20)
   },
   keyboardavoidingview: {
     flex: 1,
     justifyContent: 'flex-end'
   },
   textMessage: (color) => ({
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     color,
     fontFamily: fonts.inter[400],
-    marginTop: 6
+    marginTop: dimen.normalizeDimen(6)
   }),
   parentIcon: {
     width: '10%',
@@ -444,19 +445,15 @@ const styles = StyleSheet.create({
     width: '90%'
   },
   footer: {
-    paddingHorizontal: 20,
-    paddingVertical: 20,
+    position: 'absolute',
+    bottom: 0,
+    height: dimen.normalizeDimen(112),
+    width: '100%',
+    paddingHorizontal: dimen.normalizeDimen(20),
+    paddingBottom: dimen.normalizeDimen(20),
     backgroundColor: colors.white,
-    justifyContent: 'flex-end'
+    flexDirection: 'column',
+    justifyContent: 'space-between'
   },
-  textSmall: {
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    fontSize: 10,
-    textAlign: 'center',
-    color: colors.emperor,
-    marginBottom: 20,
-    marginTop: 10
-  }
+  textSmallContainer: {flex: 1}
 });

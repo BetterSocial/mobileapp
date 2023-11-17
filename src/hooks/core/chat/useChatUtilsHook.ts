@@ -2,13 +2,13 @@ import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import moment from 'moment';
 import {atom, useRecoilState} from 'recoil';
-import {useNavigation} from '@react-navigation/native';
-
+import {useNavigation, CommonActions} from '@react-navigation/native';
+import {Keyboard} from 'react-native';
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
 import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
 import UseChatUtilsHook from '../../../../types/hooks/screens/useChatUtilsHook.types';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
-import {ANON_PM} from '../constant';
+import {ANON_PM, GROUP_INFO} from '../constant';
 import {ChannelList} from '../../../../types/database/schema/ChannelList.types';
 import {ChannelTypeEnum} from '../../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 import {Context} from '../../../context';
@@ -88,36 +88,72 @@ function useChatUtilsHook(): UseChatUtilsHook {
     navigation.navigate('TopicPageScreen', navigationParam);
   };
 
-  const goToChatScreen = (channel: ChannelList) => {
-    setChannelAsRead(channel);
-    if (channel?.channelType === ANON_PM) {
-      navigation.navigate('SampleChatScreen');
-    } else {
-      navigation.navigate('SignedChatScreen');
-    }
+  const openChat = (screen: string) => {
+    navigation.dispatch({
+      ...CommonActions.reset({
+        routes: [
+          {
+            name: 'AuthenticatedStack',
+            params: {
+              screen: 'HomeTabs',
+              params: {
+                screen: 'ChannelList',
+                isReset: true
+              }
+            }
+          },
+          {
+            name: 'AuthenticatedStack',
+            params: {
+              screen,
+              isReset: true
+            }
+          }
+        ]
+      })
+    });
+  };
+
+  const goToChatScreen = (channel: ChannelList, from) => {
     setChat({
       ...chat,
       selectedChannel: channel
     });
+    setChannelAsRead(channel);
+    if (channel?.channelType === ANON_PM) {
+      if (from === GROUP_INFO) {
+        return openChat('SampleChatScreen');
+      }
+      navigation.navigate('SampleChatScreen');
+    } else {
+      if (from === GROUP_INFO) {
+        return openChat('SignedChatScreen');
+      }
+      navigation.navigate('SignedChatScreen');
+    }
+
     return null;
   };
 
-  const goBackFromChatScreen = () => {
-    navigation.goBack();
-    setChat({
-      ...chat,
-      selectedChannel: null
-    });
+  const goBackFromChatScreen = async () => {
+    await Keyboard.dismiss();
+    setTimeout(() => {
+      navigation.goBack();
+      setChat({
+        ...chat,
+        selectedChannel: null
+      });
+    }, 350);
   };
 
-  const goToChatInfoScreen = (params) => {
+  const goToChatInfoScreen = (params?: object) => {
     navigation.navigate('SampleChatInfoScreen', params);
   };
 
   const goBack = () => {
     navigation.goBack();
   };
-  const handleTextSystem = (item) => {
+  const handleTextSystem = (item): string => {
     if (
       item?.rawJson?.userIdFollower === profile?.myProfile?.user_id ||
       item?.rawJson?.message?.userIdFollower === profile?.myProfile?.user_id
@@ -129,10 +165,10 @@ function useChatUtilsHook(): UseChatUtilsHook {
 
   const splitSystemMessage = (message: string): string[] => {
     const splitMessage = message?.split('.');
-    const pushMessage = [];
+    const pushMessage: string[] = [];
     splitMessage?.forEach((systemMessage) => {
       if (systemMessage && systemMessage.length > 0) {
-        const arrMessage = systemMessage?.trimStart()?.replace(/\n/g, '');
+        const arrMessage: string = systemMessage?.trimStart()?.replace(/\n/g, '');
         pushMessage.push(arrMessage);
       }
     });

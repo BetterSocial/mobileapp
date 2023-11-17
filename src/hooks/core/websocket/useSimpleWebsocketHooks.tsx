@@ -12,7 +12,7 @@ export type UseSimpleWebsocketProps = {
 
 const {featLog} = getFeatureLoggerInstance(EFeatureLogFlag.useSimpleWebsocketHook);
 
-const useSimpleWebsocket = (url, protocol = null) => {
+const useSimpleWebsocket = (url, protocol = undefined) => {
   const setupReconnectTimeoutId = React.useRef(null);
   const websocketRef = React.useRef<WebSocket | null>(null);
   const isInternetConnectedRef = React.useRef(true);

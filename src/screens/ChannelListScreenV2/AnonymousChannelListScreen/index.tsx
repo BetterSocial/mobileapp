@@ -12,28 +12,30 @@ const AnonymousChannelListScreen = () => {
     goToChatScreen,
     goToPostDetailScreen
   } = useAnonymousChannelListScreenHook();
+
+  const renderChannelItem = ({item}) => {
+    if (item?.channelType === 'ANON_PM') {
+      return <MessageChannelItem item={item} onChannelPressed={() => goToChatScreen(item)} />;
+    }
+
+    if (item?.channelType === 'ANON_POST_NOTIFICATION') {
+      return (
+        <PostNotificationChannelItem
+          item={item}
+          onChannelPressed={() => goToPostDetailScreen(item)}
+        />
+      );
+    }
+
+    return null;
+  };
+
   return (
     <FlatList
       data={anonChannels}
       keyExtractor={(item) => item.id}
       scrollEnabled={false}
-      listKey={'AnonymousChannelList'}
-      renderItem={({item}) => {
-        if (item?.channelType === 'ANON_PM') {
-          return <MessageChannelItem item={item} onChannelPressed={() => goToChatScreen(item)} />;
-        }
-
-        if (item?.channelType === 'ANON_POST_NOTIFICATION') {
-          return (
-            <PostNotificationChannelItem
-              item={item}
-              onChannelPressed={() => goToPostDetailScreen(item)}
-            />
-          );
-        }
-
-        return null;
-      }}
+      renderItem={renderChannelItem}
     />
   );
 };

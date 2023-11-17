@@ -14,53 +14,50 @@ const ChannelListScreen = () => {
   const {channels, goToChatScreen, goToPostDetailScreen, goToCommunityScreen} =
     useSignedChannelListScreenHook();
   const {handleFollow, isInitialFollowing} = useFollowUser();
+
+  const renderChannelItem = ({item}) => {
+    if (item?.channelType === 'PM') {
+      const isFromAnonymous = item?.rawJson?.channel?.channel_type === 4;
+      const hasFollowButton = !isFromAnonymous && !isInitialFollowing(item);
+
+      return (
+        <MessageChannelItem
+          item={item}
+          onChannelPressed={() => goToChatScreen(item)}
+          hasFollowButton={hasFollowButton}
+          handleFollow={() => handleFollow(item)}
+        />
+      );
+    }
+
+    if (item?.channelType === 'POST_NOTIFICATION') {
+      return (
+        <PostNotificationChannelItem
+          item={item}
+          onChannelPressed={() => goToPostDetailScreen(item)}
+        />
+      );
+    }
+
+    if (item?.channelType === 'GROUP') {
+      return <GroupChatChannelItem channel={item} onChannelPressed={() => goToChatScreen(item)} />;
+    }
+
+    if (item?.channelType === 'TOPIC') {
+      return (
+        <CommunityChannelItem channel={item} onChannelPressed={() => goToCommunityScreen(item)} />
+      );
+    }
+
+    return null;
+  };
+
   return (
     <FlatList
       data={channels}
       keyExtractor={(item) => item.id}
       scrollEnabled={false}
-      listKey={'ChannelList'}
-      renderItem={({item}) => {
-        if (item?.channelType === 'PM') {
-          const isFromAnonymous = item?.rawJson?.channel?.channel_type === 4;
-          const hasFollowButton = !isFromAnonymous && !isInitialFollowing(item);
-
-          return (
-            <MessageChannelItem
-              item={item}
-              onChannelPressed={() => goToChatScreen(item)}
-              hasFollowButton={hasFollowButton}
-              handleFollow={() => handleFollow(item)}
-            />
-          );
-        }
-
-        if (item?.channelType === 'POST_NOTIFICATION') {
-          return (
-            <PostNotificationChannelItem
-              item={item}
-              onChannelPressed={() => goToPostDetailScreen(item)}
-            />
-          );
-        }
-
-        if (item?.channelType === 'GROUP') {
-          return (
-            <GroupChatChannelItem channel={item} onChannelPressed={() => goToChatScreen(item)} />
-          );
-        }
-
-        if (item?.channelType === 'TOPIC') {
-          return (
-            <CommunityChannelItem
-              channel={item}
-              onChannelPressed={() => goToCommunityScreen(item)}
-            />
-          );
-        }
-
-        return null;
-      }}
+      renderItem={renderChannelItem}
     />
   );
 };

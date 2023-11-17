@@ -12,6 +12,7 @@ import {ANONYMOUS_USER, SIGNED} from '../core/constant';
 import {isContainUrl} from '../../utils/Utils';
 import useGroupInfo from '../../screens/GroupInfo/hooks/useGroupInfo';
 import {Member} from '../../../types/database/schema/ChatListDetail.types';
+import StorageUtils from '../../utils/storage';
 
 // import {} from '../../'
 function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
@@ -25,23 +26,37 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
     selectedUser,
     blockModalRef
   } = useGroupInfo();
-  const {localDb, channelList} = useLocalDatabaseHook();
+  const {localDb} = useLocalDatabaseHook();
+  const [loadingChannelInfo, setLoadingChannelInfo] = React.useState<boolean>(false);
   const {selectedChannel, goBack} = useChatUtilsHook();
   const [myUserId] = React.useContext(Context).profile;
   const navigation = useNavigation();
   const [showPopupBlock, setShowPopupBlock] = React.useState(false);
   const [channelInfo, setChannelInfo] = React.useState(null);
   const initChatInfoData = async () => {
-    if (!localDb) return;
-    const myId = await getUserId();
-    const myAnonymousId = await getAnonymousUserId();
-    const data = await ChannelList.getChannelInfo(
-      localDb,
-      selectedChannel?.id,
-      myId,
-      myAnonymousId
-    );
-    setChannelInfo(data);
+    if (localDb) {
+      setLoadingChannelInfo(true);
+      fetchingCache();
+      const myId = await getUserId();
+      const myAnonymousId = await getAnonymousUserId();
+      const data = await ChannelList.getChannelInfo(
+        localDb,
+        selectedChannel?.id,
+        myId,
+        myAnonymousId
+      );
+      setChannelInfo(data);
+      StorageUtils.chatInfo.setForKey(selectedChannel?.id, JSON.stringify(data));
+      setLoadingChannelInfo(false);
+    }
+  };
+
+  const fetchingCache = () => {
+    const cacheChatInfo = StorageUtils.chatInfo.getForKey(selectedChannel?.id);
+    if (cacheChatInfo) {
+      setChannelInfo(JSON.parse(cacheChatInfo));
+      setLoadingChannelInfo(false);
+    }
   };
 
   const onContactPressed = (item: ChannelListMemberSchema) => {
@@ -81,13 +96,12 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   };
 
   const goToEditGroup = () => {
-    console.log('masuk', {selectedChannel});
     navigation?.navigate('GroupSetting', selectedChannel);
   };
 
   React.useEffect(() => {
     initChatInfoData();
-  }, [localDb, channelList]);
+  }, []);
 
   return {
     channelInfo,
@@ -103,7 +117,8 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
     isAnonymousModalOpen,
     blockModalRef,
     handleShowArrow,
-    goToEditGroup
+    goToEditGroup,
+    loadingChannelInfo
   };
 }
 

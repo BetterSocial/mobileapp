@@ -6,11 +6,11 @@ import {colors} from '../../../utils/colors';
 export const channelImageStyles = StyleSheet.create({
   containerImage: {
     position: 'relative',
-    width: dimen.normalizeDimen(45),
-    height: dimen.normalizeDimen(45),
+    width: dimen.normalizeDimen(48),
+    height: dimen.normalizeDimen(48),
     marginTop: dimen.normalizeDimen(12),
     marginBottom: dimen.normalizeDimen(12),
-    borderRadius: dimen.normalizeDimen(23)
+    borderRadius: dimen.normalizeDimen(24)
   },
   containerImageGroupINfo: {
     position: 'relative',

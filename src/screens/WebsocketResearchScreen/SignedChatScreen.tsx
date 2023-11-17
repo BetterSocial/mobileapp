@@ -25,6 +25,7 @@ const SignedChatScreen = () => {
     updateChatContinuity
   } = useChatScreenHook(SIGNED);
 
+  const flatlistRef = React.useRef<FlatList>();
   const [, dispatchChannel] = (React.useContext(Context) as unknown as any).channel;
   const [profile] = (React.useContext(Context) as unknown as any).profile;
   const updatedChats = updateChatContinuity(chats);
@@ -35,6 +36,10 @@ const SignedChatScreen = () => {
 
   const goToChatInfoPage = () => {
     goToChatInfoScreen({from: SIGNED});
+  };
+
+  const scrollToEnd = () => {
+    flatlistRef.current?.scrollToEnd();
   };
 
   React.useEffect(() => {
@@ -74,6 +79,7 @@ const SignedChatScreen = () => {
         initialNumToRender={20}
         alwaysBounceVertical={false}
         bounces={false}
+        onLayout={scrollToEnd}
         keyExtractor={(item, index) => item?.id || index.toString()}
         renderItem={renderChatItem}
       />

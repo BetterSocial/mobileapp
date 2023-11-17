@@ -483,8 +483,7 @@ describe('useGroupInfo should run correctly', () => {
     expect(result.current.openModal).toBeFalsy();
 
     expect(spy).toHaveBeenCalled();
-    expect(mockedResetNavigation).toHaveBeenCalled();
-    expect(mockDispatchChannel).toHaveBeenCalled();
+    expect(mockedPushNavigation).toHaveBeenCalled();
   });
 
   it('error checkUserIsBlockHandle no block test 1 sshould run correctly', async () => {
@@ -516,8 +515,7 @@ describe('useGroupInfo should run correctly', () => {
     expect(result.current.openModal).toBeFalsy();
 
     expect(spy).toHaveBeenCalled();
-    expect(mockedResetNavigation).toHaveBeenCalled();
-    expect(mockDispatchChannel).toHaveBeenCalled();
+    expect(mockedPushNavigation).toHaveBeenCalled();
   });
 
   it('checkUserIsBlockHandle block sshould run correctly', async () => {
@@ -546,8 +544,7 @@ describe('useGroupInfo should run correctly', () => {
     const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper: wrapper2});
     await result.current.setSelectedUser({user_id: '123', user: {name: 'agita'}});
     await result.current.openChatMessage();
-    expect(mockedResetNavigation).toHaveBeenCalled();
-    expect(mockDispatchChannel).toHaveBeenCalled();
+    expect(mockedPushNavigation).toHaveBeenCalled();
   });
   it('openChatMessage with channel sshould run correctly', async () => {
     const navigation = {
@@ -614,7 +611,7 @@ describe('useGroupInfo should run correctly', () => {
   it('onRemoveUser should run correctly', async () => {
     const {result} = renderHook(() => useGroupInfo(), {wrapper});
     await result.current.setSelectedUser({user_id: '123', name: 'agita', user: {name: 'agita'}});
-    await result.current.setNewParticipan([
+    await result.current.setNewParticipant([
       {user_id: '123', name: 'agita', user: {name: 'agita'}},
       {user_id: '1234', name: 'elon', user: {name: 'elon'}}
     ]);
@@ -632,7 +629,7 @@ describe('useGroupInfo should run correctly', () => {
   it('error onRemoveUser should run correctly', async () => {
     const {result} = renderHook(() => useGroupInfo(), {wrapper: wrapperError});
     await result.current.setSelectedUser({user_id: '123', name: 'agita', user: {name: 'agita'}});
-    await result.current.setNewParticipan([
+    await result.current.setNewParticipant([
       {user_id: '123', name: 'agita', user: {name: 'agita'}},
       {user_id: '1234', name: 'elon', user: {name: 'elon'}}
     ]);

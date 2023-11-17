@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+// eslint-disable-next-line no-use-before-define
 import * as React from 'react';
 import {View} from 'react-native';
 
@@ -21,17 +22,17 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
   downvote = 0,
   isCommentExists = false,
   isMe = false,
-  message = 'How have you been? Do you want to meet up sometime?',
-  name = 'Amanda Amanda Amanda Amanda Amanda Amanda',
-  picture = 'https://fastly.picsum.photos/id/173/400/400.jpg?hmac=TU_DMkn7FSRRwiEpVveLvmyATg-y4hNrNKT-Cs4VQ1M',
+  message = '',
+  name = '',
+  picture = 'https://res.cloudinary.com/hpjivutj2/image/upload/v1696816963/anonymous-profile.png',
   postMaker = null,
   postNotificationMessageText = '',
   postNotificationMessageUser = null,
-  postNotificationPicture = 'https://fastly.picsum.photos/id/912/400/400.jpg?hmac=Wg3Y7jTiQxHr_NpRsTrHG58kBfZQGNeH2tCl5u2Ipr0',
-  time = '12:00 PM',
+  postNotificationPicture = 'https://res.cloudinary.com/hpjivutj2/image/upload/v1696816963/anonymous-profile.png',
+  time = '',
   type = BaseChannelItemTypeProps.ANON_PM,
   unreadCount = 0,
-  upvote = 15,
+  upvote = 0,
   hasFollowButton = false,
   handleFollow,
   channelType,

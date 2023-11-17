@@ -11,6 +11,11 @@ import SignedMessageRepo from '../../service/repo/signedMessageRepo';
 import UseChatScreenHook from '../../../types/hooks/screens/useChatScreenHook.types';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
+import {
+  CHANNEL_TYPE_ANONYMOUS,
+  CHANNEL_TYPE_GROUP,
+  CHANNEL_TYPE_PERSONAL
+} from '../../utils/constants';
 import {getAnonymousUserId, getUserId} from '../../utils/users';
 import {randomString} from '../../utils/string/StringUtils';
 
@@ -21,22 +26,26 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const [chats, setChats] = React.useState<ChatSchema[]>([]);
   const {anon_user_info_emoji_name} = selectedChannel?.rawJson?.channel || {};
   const initChatData = async () => {
-    if (!localDb && !selectedChannel) return;
-    const myUserId = await getUserId();
-    const myAnonymousId = await getAnonymousUserId();
-    const data = (await ChatSchema.getAll(
-      localDb,
-      selectedChannel?.id,
-      myUserId,
-      myAnonymousId
-    )) as ChatSchema[];
-    setChats(data);
+    if (!localDb || !selectedChannel) return;
+    try {
+      const myUserId = await getUserId();
+      const myAnonymousId = await getAnonymousUserId();
+      const data = (await ChatSchema.getAll(
+        localDb,
+        selectedChannel?.id,
+        myUserId,
+        myAnonymousId
+      )) as ChatSchema[];
+      setChats(data);
+    } catch (e) {
+      console.log(e, 'error get all chat');
+    }
   };
 
   const sendChat = async (
     message: string = randomString(20),
     iteration = 0,
-    sendingChatSchema: ChatSchema = null
+    sendingChatSchema: ChatSchema | null = null
   ) => {
     if (iteration > 5) {
       SimpleToast.show("Can't send message, please check your connection");
@@ -61,15 +70,22 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
           message,
           localDb
         );
-
-        await currentChatSchema.save(localDb);
+        currentChatSchema.save(localDb);
         refresh('chat');
         refresh('channelList');
       }
+      let channelType = CHANNEL_TYPE_PERSONAL;
+      if (
+        selectedChannel?.channelType?.toLowerCase() === 'group' ||
+        selectedChannel?.rawJson?.channel?.type === 'group'
+      ) {
+        channelType = CHANNEL_TYPE_GROUP;
+      }
 
-      let channelType = 1;
-      if (selectedChannel?.channelType?.toLowerCase() === 'group') channelType = 2;
-      if (selectedChannel?.rawJson?.channel?.channel_type === 4) channelType = 4;
+      if (selectedChannel?.rawJson?.channel?.channel_type === 4) {
+        channelType = CHANNEL_TYPE_ANONYMOUS;
+      }
+
       let response;
       if (type === 'ANONYMOUS') {
         response = await AnonymousMessageRepo.sendAnonymousMessage(selectedChannel?.id, message);
@@ -80,13 +96,10 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
           channelType
         );
       }
-      console.log({channelType, response, selectedChannel}, 'susio');
-
       await currentChatSchema.updateChatSentStatus(localDb, response);
       refresh('chat');
       refresh('channelList');
     } catch (e) {
-      console.log(e);
       if (e?.response?.data?.status === 'Channel is blocked') return;
 
       setTimeout(() => {
@@ -97,7 +110,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     }
   };
 
-  const handleUserName = (item) => {
+  const handleUserName = (item): string => {
     if (item?.user?.username !== 'AnonymousUser') {
       return item?.user?.username;
     }

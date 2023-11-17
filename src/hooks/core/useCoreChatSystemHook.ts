@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react';
 import {useRecoilState, useRecoilValue} from 'recoil';
-import {v4 as uuid} from 'uuid';
+import {useRoute} from '@react-navigation/native';
 
 import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../database/schema/ChannelListSchema';
@@ -12,6 +12,8 @@ import UseLocalDatabaseHook from '../../../types/database/localDatabase.types';
 import UserSchema from '../../database/schema/UserSchema';
 import migrationDbStatusAtom from '../../database/atom/migrationDbStatusAtom';
 import useBetterWebsocketHook from './websocket/useBetterWebsocketHook';
+import useFetchChannelHook from './chat/useFetchChannelHook';
+import useFetchPostNotificationHook from './chat/useFetchPostNotificationHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import usePostNotificationListenerHook from './getstream/usePostNotificationListenerHook';
 import useProfileHook from './profile/useProfileHook';
@@ -24,18 +26,20 @@ import {
 import {ChannelType} from '../../../types/repo/ChannelData';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {GetstreamFeedListenerObject} from '../../../types/hooks/core/getstreamFeedListener/feedListenerObject';
-import {GetstreamWebsocket, MyChannelType} from './websocket/types.d';
+import {GetstreamMessage, GetstreamWebsocket, MyChannelType} from './websocket/types.d';
 import {InitialStartupAtom} from '../../service/initialStartup';
 import {SignedPostNotification} from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 import {getAnonymousChatName, getChatName} from '../../utils/string/StringUtils';
 
-type ChannelCategory = 'SIGNED' | 'ANONYMOUS';
-
 const useCoreChatSystemHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook() as UseLocalDatabaseHook;
   const {anonProfileId, signedProfileId, profile} = useProfileHook();
+  const {getAllSignedChannels, getAllAnonymousChannels} = useFetchChannelHook();
+  const {getAllSignedPostNotifications, getAllAnonymousPostNotifications} =
+    useFetchPostNotificationHook();
   const [migrationStatus] = useRecoilState(migrationDbStatusAtom);
   const initialStartup: any = useRecoilValue(InitialStartupAtom);
+  const {params} = useRoute();
 
   const isEnteringApp =
     initialStartup?.id !== null && initialStartup?.id !== undefined && initialStartup?.id !== '';
@@ -80,6 +84,16 @@ const useCoreChatSystemHook = () => {
 
   const {lastAnonymousMessage, lastSignedMessage} = useBetterWebsocketHook();
 
+  const getUnreadCount = (message: GetstreamMessage, selectedChannel): number => {
+    const isMyMessage =
+      message?.user?.id === signedProfileId || message?.user?.id === anonProfileId;
+
+    const hasUnreadMessage = selectedChannel?.unread_count <= 0;
+    if (isMyMessage) return 0;
+    if (hasUnreadMessage) return selectedChannel?.unread_count + 1;
+    return 1;
+  };
+
   const helperSignedChannelListData = async (websocketData: GetstreamWebsocket) => {
     const {type} = websocketData;
     const websocketMessage = websocketData?.message;
@@ -113,6 +127,7 @@ const useCoreChatSystemHook = () => {
       websocketData.message.text = 'You have been removed from this group';
     }
 
+    websocketData.unread_count = getUnreadCount(websocketMessage, selectedChannel);
     websocketData.anon_user_info_color_name = websocketData?.channel?.anon_user_info_color_name;
     websocketData.anon_user_info_emoji_code = websocketData?.channel?.anon_user_info_emoji_code;
     websocketData.anon_user_info_color_code = websocketData?.channel?.anon_user_info_color_code;
@@ -147,6 +162,13 @@ const useCoreChatSystemHook = () => {
       ?.includes('you started following');
     const isSystemMessage = websocketMessage?.isSystem || websocketData?.type === 'system';
     if (isSystemMessage && isContainFollowingMessage) {
+      const textOwnUser = 'You started following this user.\n Send them a message now.';
+      await ChannelList.updateChannelDescription(
+        localDb,
+        websocketData?.channel_id,
+        websocketData?.message?.textOwnMessage ?? textOwnUser,
+        websocketData
+      );
       const chat = ChatSchema.fromWebsocketObject(websocketData);
       await chat.save(localDb);
     } else {
@@ -196,147 +218,9 @@ const useCoreChatSystemHook = () => {
     refresh('channelMember');
   };
 
-  const helperChannelPromiseBuilder = async (channel, channelCategory: ChannelCategory) => {
-    if (channel?.members?.length === 0) return Promise.reject(Error('no members'));
-
-    const isAnonymous = channelCategory === ANONYMOUS;
-    const type: {[key: string]: ChannelType} = {
-      messaging: isAnonymous ? 'ANON_PM' : 'PM',
-      group: 'GROUP',
-      topics: 'TOPIC'
-    };
-
-    let signedChannelName;
-    let signedChannelImage;
-
-    if (!isAnonymous) {
-      const myUserData = channel?.members?.find(
-        (member) => member?.user?.id === signedProfileId
-      )?.user;
-      const signedChannelUsername = myUserData?.username ?? myUserData?.name;
-      signedChannelName =
-        channel?.channel_type === 4
-          ? `Anonymous ${channel?.anon_user_info_emoji_name}`
-          : getChatName(channel?.name, signedChannelUsername);
-
-      if (channel?.type === 'group' || channel?.type === 'topics') {
-        signedChannelImage = channel?.channel_image;
-      } else {
-        signedChannelImage =
-          channel?.members?.find((member) => member?.user_id !== signedProfileId)?.user?.image ??
-          DEFAULT_PROFILE_PIC_PATH;
-      }
-    }
-
-    const chatName = isAnonymous
-      ? await getAnonymousChatName(channel?.members)
-      : {name: signedChannelName, image: signedChannelImage};
-
-    channel.targetName = chatName?.name;
-    channel.targetImage = chatName?.image;
-    if (isAnonymous) {
-      channel.firstMessage = channel?.messages?.[0];
-    } else {
-      channel.firstMessage = channel?.messages?.[channel?.messages?.length - 1];
-      channel.myUserId = signedProfileId;
-    }
-    channel.channel = {...channel};
-    const channelType = channel?.type;
-
-    try {
-      const channelList = ChannelList.fromChannelAPI(channel, type[channelType]);
-      await channelList.saveIfLatest(localDb);
-      refresh('channelList');
-    } catch (e) {
-      console.log('error on helperChannelPromiseBuilder');
-    }
-    return null;
-  };
-
-  const saveChannelData = async (channel, channelCategory: ChannelCategory) => {
-    if (!channel?.members || channel?.members?.length === 0) return;
-
-    try {
-      await helperChannelPromiseBuilder(channel, channelCategory);
-    } catch (e) {
-      console.log('error on saveChannelData helperChannelPromiseBuilder');
-      console.log(e);
-    }
-
-    if (channel?.type === 'topics') return;
-
-    try {
-      await Promise.all(
-        (channel?.members || []).map(async (member) => {
-          const userMember = UserSchema.fromMemberWebsocketObject(member, channel?.id);
-          const memberSchema = ChannelListMemberSchema.fromWebsocketObject(
-            channel?.id,
-            uuid(),
-            member
-          );
-          await userMember.saveOrUpdateIfExists(localDb);
-          await memberSchema.save(localDb);
-        })
-      );
-
-      await Promise.all(
-        (channel?.messages || []).map(async (message) => {
-          const chat = ChatSchema.fromGetAllChannelAPI(channel?.id, message);
-          await chat.save(localDb);
-        })
-      );
-    } catch (e) {
-      console.log('error on saveChannelData');
-      console.log(e);
-    }
-  };
-
-  const saveAllChannelData = async (channels, channelCategory: ChannelCategory) => {
-    channels?.forEach(async (channel) => {
-      saveChannelData(channel, channelCategory);
-    });
-  };
-
-  const getAllSignedChannels = async () => {
-    if (!localDb) return;
-    let signedChannel;
-
-    try {
-      signedChannel = await SignedMessageRepo.getAllSignedChannels();
-    } catch (e) {
-      console.log('error on getting signedChannel:', e);
-    }
-
-    try {
-      await saveAllChannelData(signedChannel ?? [], 'SIGNED');
-      refresh('channelList');
-    } catch (e) {
-      console.log('error on saving signedChannel:', e);
-    }
-  };
-
-  const getAllAnonymousChannels = async () => {
-    if (!localDb) return;
-    let anonymousChannel = [];
-    try {
-      anonymousChannel = await AnonymousMessageRepo.getAllAnonymousChannels();
-    } catch (e) {
-      console.log('error on getting anonymousChannel');
-      console.log(e);
-    }
-
-    try {
-      await saveAllChannelData(anonymousChannel, 'ANONYMOUS');
-      refresh('channelList');
-    } catch (e) {
-      console.log('error on saving anonymousChannel');
-      console.log(e);
-    }
-  };
-
   const helperDetermineIsMyChildComment = (postNotification: AnonymousPostNotification) => {
-    let latestComment: Comment = null;
-    let latestCommentLatestChild: LatestChildrenComment = null;
+    let latestComment: Comment | null = null;
+    let latestCommentLatestChild: LatestChildrenComment | null = null;
     const postHasComment = postNotification?.comments?.length > 0;
     let isMyComment = false;
     let isMyChildComment = false;
@@ -389,7 +273,7 @@ const useCoreChatSystemHook = () => {
 
   const getSingleSignedPostNotification = async (activityId) => {
     if (!localDb) return;
-    let signedPostNotification: SignedPostNotification = null;
+    let signedPostNotification: SignedPostNotification | null = null;
 
     try {
       signedPostNotification = await SignedMessageRepo.getSingleSignedPostNotifications(activityId);
@@ -413,7 +297,7 @@ const useCoreChatSystemHook = () => {
 
   const getSingleAnonymousPostNotification = async (activityId) => {
     if (!localDb) return;
-    let anonymousPostNotification: AnonymousPostNotification = null;
+    let anonymousPostNotification: AnonymousPostNotification | null = null;
 
     try {
       anonymousPostNotification = await AnonymousMessageRepo.getSingleAnonymousPostNotifications(
@@ -437,61 +321,8 @@ const useCoreChatSystemHook = () => {
     }
   };
 
-  const getAllSignedPostNotifications = async () => {
-    if (!localDb) return;
-    let signedPostNotifications = [];
-
-    try {
-      signedPostNotifications = await SignedMessageRepo.getAllSignedPostNotifications();
-    } catch (e) {
-      console.log('error on getting signedPostNotifications');
-      console.log(e);
-    }
-
-    try {
-      const allPromises = [];
-      signedPostNotifications.forEach((postNotification) => {
-        const channelList = ChannelList.fromSignedPostNotificationAPI(postNotification);
-        allPromises.push(channelList.saveIfLatest(localDb).catch((e) => console.log(e)));
-      });
-
-      await Promise.all(allPromises);
-      refresh('channelList');
-    } catch (e) {
-      console.log('error on saving signedPostNotifications');
-      console.log(e);
-    }
-  };
-
-  const getAllAnonymousPostNotifications = async () => {
-    if (!localDb) return;
-    let anonymousPostNotifications = [];
-
-    try {
-      anonymousPostNotifications = await AnonymousMessageRepo.getAllAnonymousPostNotifications();
-    } catch (e) {
-      console.log('error on getting anonymousPostNotifications');
-      console.log(e);
-    }
-
-    try {
-      const allPromises = [];
-      anonymousPostNotifications.forEach((postNotification) => {
-        const channelList = ChannelList.fromAnonymousPostNotificationAPI(postNotification);
-        allPromises.push(channelList.saveIfLatest(localDb).catch((e) => console.log(e)));
-      });
-
-      await Promise.all(allPromises);
-      refresh('channelList');
-    } catch (e) {
-      console.log('error on saving anonymousPostNotifications');
-      console.log(e);
-    }
-  };
-
   React.useEffect(() => {
-    if (!localDb) return;
-    if (!lastAnonymousMessage) return;
+    if (!lastAnonymousMessage || !localDb) return;
 
     const {type} = lastAnonymousMessage;
     if (type === 'health.check') return;
@@ -501,9 +332,7 @@ const useCoreChatSystemHook = () => {
   }, [JSON.stringify(lastAnonymousMessage), localDb]);
 
   React.useEffect(() => {
-    if (!localDb) return;
-    if (!lastSignedMessage) return;
-
+    if (!lastSignedMessage || !localDb) return;
     const {type} = lastSignedMessage;
     if (type === 'health.check') return;
     if (type === 'notification.message_new' || type === 'notification.added_to_channel') {
@@ -512,7 +341,8 @@ const useCoreChatSystemHook = () => {
   }, [JSON.stringify(lastSignedMessage), localDb]);
 
   React.useEffect(() => {
-    if (isEnteringApp && migrationStatus === 'MIGRATED') {
+    const isResetNav = params?.isReset;
+    if (isEnteringApp && migrationStatus === 'MIGRATED' && !isResetNav) {
       getAllSignedChannels().catch((e) => console.log(e));
       getAllSignedPostNotifications().catch((e) => console.log(e));
       getAllAnonymousChannels().catch((e) => console.log(e));

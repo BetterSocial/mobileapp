@@ -67,7 +67,15 @@ const HeaderContact = ({
 export default HeaderContact;
 
 HeaderContact.propTypes = {
-  onPressSub: PropTypes.func
+  onPressSub: PropTypes.func,
+  title: PropTypes.string,
+  subTitle: PropTypes.string,
+  onPress: PropTypes.func,
+  titleStyle: PropTypes.object,
+  subtitleStyle: PropTypes.object,
+  containerStyle: PropTypes.object,
+
+  disabledNextBtn: PropTypes.bool
 };
 
 const styles = StyleSheet.create({

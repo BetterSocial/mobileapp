@@ -86,8 +86,6 @@ class ChannelListMemberSchema implements BaseDbSchema {
     }
   };
 
-  //! TODO:
-  //! UPDATE ANONYMOUSID FOR SIGNED CHAT
   static async getAll(
     db: SQLiteDatabase,
     channelId: string,
@@ -175,8 +173,6 @@ class ChannelListMemberSchema implements BaseDbSchema {
 
   static fromMessageAnonymousChatAPI = ChannelListMemberSchema.fromWebsocketObject;
 
-  //! TODO:
-  //! UPDATE ANONYMOUS DATA MEMBER FOR SIGNED CHAT
   static fromInitAnonymousChatAPI = (
     channelId: string,
     messageId: string,
