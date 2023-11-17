@@ -2,14 +2,7 @@ import messaging from '@react-native-firebase/messaging';
 // eslint-disable-next-line no-use-before-define
 import * as React from 'react';
 import {useNavigation} from '@react-navigation/core';
-import {
-  Alert,
-  PushNotificationPermissions,
-  ScrollView,
-  StatusBar,
-  View,
-  FlatList
-} from 'react-native';
+import {Alert, PushNotificationPermissions, StatusBar, View, FlatList} from 'react-native';
 
 import {openSettings} from 'react-native-permissions';
 import PushNotification from 'react-native-push-notification';
