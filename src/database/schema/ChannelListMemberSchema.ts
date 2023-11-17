@@ -173,8 +173,6 @@ class ChannelListMemberSchema implements BaseDbSchema {
 
   static fromMessageAnonymousChatAPI = ChannelListMemberSchema.fromWebsocketObject;
 
-  //! TODO:
-  //! UPDATE ANONYMOUS DATA MEMBER FOR SIGNED CHAT
   static fromInitAnonymousChatAPI = (
     channelId: string,
     messageId: string,

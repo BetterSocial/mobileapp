@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
-
+import PropTypes from 'prop-types';
 import ArrowLeftIcon from '../../../../assets/icons/arrow-left.svg';
 import GlobalButton from '../../../components/Button/GlobalButton';
 import {COLORS, SIZES} from '../../../utils/theme';
@@ -60,6 +60,18 @@ const Header = ({
 };
 
 export default Header;
+
+Header.propTypes = {
+  onPressSub: PropTypes.func,
+  title: PropTypes.string,
+  subTitle: PropTypes.string,
+  onPress: PropTypes.func,
+  titleStyle: PropTypes.object,
+  subtitleStyle: PropTypes.object,
+  containerStyle: PropTypes.object,
+
+  disabledNextBtn: PropTypes.bool
+};
 
 const styles = StyleSheet.create({
   container: {

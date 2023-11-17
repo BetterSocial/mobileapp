@@ -15,7 +15,6 @@ import {
   View,
   Pressable
 } from 'react-native';
-import {generateRandomId} from 'stream-chat-react-native';
 /* eslint-disable no-underscore-dangle */
 import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
@@ -55,7 +54,6 @@ import {getFeedDetail} from '../../service/post';
 import {getSingularOrPluralText} from '../../utils/string/StringUtils';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {sendAnonymousDMOtherProfile, sendSignedDMOtherProfile} from '../../service/chat';
-import {setChannel} from '../../context/actions/setChannel';
 import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherProfileFeed';
 import {trimString} from '../../utils/string/TrimString';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
@@ -159,9 +157,6 @@ const OtherProfile = () => {
 
   const headerHeightRef = React.useRef(0);
   const interactionManagerRef = React.useRef(null);
-
-  const [client] = React.useContext(Context).client;
-  const [, dispatchChannel] = React.useContext(Context).channel;
   const [otherProfileFeeds, dispatchOtherProfile] = React.useContext(Context).otherProfileFeed;
   const [profile] = React.useContext(Context).profile;
   const [, dispatch] = React.useContext(Context).feeds;
