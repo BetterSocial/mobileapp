@@ -67,7 +67,6 @@ Header.propTypes = {
   subTitle: PropTypes.string,
   onPress: PropTypes.func,
   titleStyle: PropTypes.object,
-  subtitleStyle: PropTypes.object,
   containerStyle: PropTypes.object,
 
   disabledNextBtn: PropTypes.bool
