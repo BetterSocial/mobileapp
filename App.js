@@ -140,9 +140,7 @@ const App = () => {
             linking={linking}>
             <View>
               <OverlayProvider topInset={top} bottomInset={bottom} i18nInstance={streami18n}>
-                <KeyboardAvoidingView enabled={Platform.OS === 'ios'} behavior="padding">
-                  <RootNavigator areaHeight={height} currentScreen={currentScreen} />
-                </KeyboardAvoidingView>
+                <RootNavigator areaHeight={height} currentScreen={currentScreen} />
               </OverlayProvider>
             </View>
           </NavigationContainer>

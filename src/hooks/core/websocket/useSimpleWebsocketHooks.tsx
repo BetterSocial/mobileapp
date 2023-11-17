@@ -3,6 +3,7 @@ import * as React from 'react';
 import axios from 'axios';
 
 import getFeatureLoggerInstance, {EFeatureLogFlag} from '../../../utils/log/FeatureLog';
+import {GetstreamWebsocket} from './types.d';
 
 export type UseSimpleWebsocketProps = {
   url: string;
@@ -11,12 +12,12 @@ export type UseSimpleWebsocketProps = {
 
 const {featLog} = getFeatureLoggerInstance(EFeatureLogFlag.useSimpleWebsocketHook);
 
-const useSimpleWebsocket = (url, protocol = null) => {
+const useSimpleWebsocket = (url, protocol = undefined) => {
   const setupReconnectTimeoutId = React.useRef(null);
   const websocketRef = React.useRef<WebSocket | null>(null);
   const isInternetConnectedRef = React.useRef(true);
 
-  const [lastJsonMessage, setLastJsonMessage] = React.useState({});
+  const [lastJsonMessage, setLastJsonMessage] = React.useState<GetstreamWebsocket>();
 
   const closeSocket = () => {
     featLog('============= socket closes ===========');

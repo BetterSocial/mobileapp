@@ -42,7 +42,6 @@ const GroupSetting = ({navigation, route}) => {
     console.log('name', name);
     return name === 'AnonymousUser' ? anonymousName : name;
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -73,8 +72,8 @@ const GroupSetting = ({navigation, route}) => {
               <View style={{height: 72}}>
                 <ProfileContact
                   key={item}
-                  fullname={getProfileName(participants[item].user.name)}
-                  photo={participants[item].user.image}
+                  fullname={getProfileName(item?.user?.name)}
+                  photo={item?.user?.image}
                 />
               </View>
             )}

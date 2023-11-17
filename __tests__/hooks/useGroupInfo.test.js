@@ -271,44 +271,8 @@ describe('useGroupInfo should run correctly', () => {
     update: jest.fn().mockRejectedValue({success: false})
   };
 
-  const mockChannelMessage = {
-    cid: 'messaging:c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
-    data: {
-      cid: 'messaging:c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
-      created_at: '2022-09-30T22:49:45.59342Z',
-      createdBy: {
-        banned: false,
-        created_at: '2022-06-10T13:11:53.396427Z',
-        id: 'c6c91b04-795c-404e-b012-ea28813a2006',
-        image:
-          'https://res.cloudinary.com/hpjivutj2/image/upload/v1659099243/pbdv3jlyd4mhmtis6kqx.jpg',
-        last_active: '2022-06-10T13:11:58.020555Z',
-        name: 'Agita',
-        online: false,
-        role: 'user',
-        updated_at: '2023-01-24T01:41:19.021868Z'
-      },
-      disabled: false,
-      frozen: false,
-      hidden: false,
-      id: 'c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
-      last_message_at: '2023-01-24T01:00:59.432027Z',
-      member_count: 4,
-      name: 'Agita, elon',
-      type: 'messaging',
-      updated_at: '2023-01-24T01:41:46.237211Z'
-    },
-    disconnected: false,
-    id: 'c47d45f2-0dd9-4eaa-1600-4ff6e518199a',
-    initialized: true,
-    isTyping: false,
-    lastKeyStroke: undefined,
-    lastTypingEvent: null,
-    queryMembers: mockQueryMember,
-    removeMembers: mockRemoveMember,
-    sendMessage: mockSendMessage
-  };
-
+  const mockChannelMessage = {...mockChannel, data: {...mockChannel.data, type: 'messaging'}};
+  const imageUrl = 'https://image.jpg';
   const mockDispatchChannel = jest.fn();
   const mockAddCreate = jest.fn();
   const moctAddMemeber = jest.fn();
@@ -327,7 +291,8 @@ describe('useGroupInfo should run correctly', () => {
               queryChannels: jest.fn().mockResolvedValue([mockChannel]),
               channel: jest
                 .fn()
-                .mockResolvedValue({create: mockAddCreate, addMembers: moctAddMemeber})
+                .mockResolvedValue({create: mockAddCreate, addMembers: moctAddMemeber}),
+              connectUser: jest.fn().mockResolvedValue({success: true})
             }
           },
           jest.fn()
@@ -552,8 +517,7 @@ describe('useGroupInfo should run correctly', () => {
     expect(result.current.openModal).toBeFalsy();
 
     expect(spy).toHaveBeenCalled();
-    expect(mockedResetNavigation).toHaveBeenCalled();
-    expect(mockDispatchChannel).toHaveBeenCalled();
+    expect(mockedPushNavigation).toHaveBeenCalled();
   });
 
   it('error checkUserIsBlockHandle no block test 1 sshould run correctly', async () => {
@@ -580,15 +544,12 @@ describe('useGroupInfo should run correctly', () => {
       .spyOn(serviceProfile, 'checkUserBlock')
       .mockResolvedValue({data: {data: {blocked: false, blocker: false}}});
     const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper: wrapper2});
-    await result.current.setSelectedUser({user_id: '123', user: {name: 'agita'}});
+    await result.current.setSelectedUser({user_id: '123', user: {name: 'agita', image: imageUrl}});
     await result.current.checkUserIsBlockHandle();
     expect(result.current.openModal).toBeFalsy();
 
     expect(spy).toHaveBeenCalled();
-    expect(mockedResetNavigation).toHaveBeenCalled();
-    expect(mockDispatchChannel).toHaveBeenCalled();
-    expect(mockAddCreate).toHaveBeenCalled();
-    expect(moctAddMemeber).toHaveBeenCalled();
+    expect(mockedPushNavigation).toHaveBeenCalled();
   });
 
   it('checkUserIsBlockHandle block sshould run correctly', async () => {
@@ -617,10 +578,7 @@ describe('useGroupInfo should run correctly', () => {
     const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper: wrapper2});
     await result.current.setSelectedUser({user_id: '123', user: {name: 'agita'}});
     await result.current.openChatMessage();
-    expect(mockedResetNavigation).toHaveBeenCalled();
-    expect(mockDispatchChannel).toHaveBeenCalled();
-    expect(mockAddCreate).toHaveBeenCalled();
-    expect(moctAddMemeber).toHaveBeenCalled();
+    expect(mockedPushNavigation).toHaveBeenCalled();
   });
   it('openChatMessage with channel sshould run correctly', async () => {
     const navigation = {
@@ -629,7 +587,10 @@ describe('useGroupInfo should run correctly', () => {
       reset: jest.fn()
     };
     const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper});
-    await result.current.setSelectedUser({user_id: '123', user: {name: 'agita'}});
+    await result.current.setSelectedUser({
+      user_id: '123',
+      user: {name: 'agita', image: imageUrl}
+    });
     await result.current.openChatMessage();
     expect(mockedResetNavigation).toHaveBeenCalled();
     expect(mockDispatchChannel).toHaveBeenCalled();
@@ -684,7 +645,7 @@ describe('useGroupInfo should run correctly', () => {
   it('onRemoveUser should run correctly', async () => {
     const {result} = renderHook(() => useGroupInfo(), {wrapper});
     await result.current.setSelectedUser({user_id: '123', name: 'agita', user: {name: 'agita'}});
-    await result.current.setNewParticipan([
+    await result.current.setNewParticipant([
       {user_id: '123', name: 'agita', user: {name: 'agita'}},
       {user_id: '1234', name: 'elon', user: {name: 'elon'}}
     ]);
@@ -701,7 +662,7 @@ describe('useGroupInfo should run correctly', () => {
   it('error onRemoveUser should run correctly', async () => {
     const {result} = renderHook(() => useGroupInfo(), {wrapper: wrapperError});
     await result.current.setSelectedUser({user_id: '123', name: 'agita', user: {name: 'agita'}});
-    await result.current.setNewParticipan([
+    await result.current.setNewParticipant([
       {user_id: '123', name: 'agita', user: {name: 'agita'}},
       {user_id: '1234', name: 'elon', user: {name: 'elon'}}
     ]);
@@ -765,16 +726,22 @@ describe('useGroupInfo should run correctly', () => {
 
   it('handlePressContact type group hould run correctly', async () => {
     const {result} = renderHook(() => useGroupInfo(), {wrapper});
-    await result.current.handlePressContact({user_id: '123', user: {name: 'agita'}});
+    await result.current.handlePressContact({
+      user_id: '123',
+      user: {name: 'agita', image: imageUrl}
+    });
     expect(result.current.openModal).toBeTruthy();
   });
   it('handlePressContact type message hould run correctly', async () => {
     const {result} = renderHook(() => useGroupInfo(), {wrapper: wrapper2});
-    await result.current.handlePressContact({user_id: '123', user: {name: 'agita'}});
+    await result.current.handlePressContact({
+      user_id: '123',
+      user: {name: 'agita', image: imageUrl}
+    });
     expect(result.current.openModal).toBeTruthy();
     expect(result.current.selectedUser).toEqual({
       user_id: '123',
-      user: {name: 'agita'},
+      user: {name: 'agita', image: imageUrl},
       allow_anon_dm: true
     });
     expect(mockedPushNavigation).toHaveBeenCalled();

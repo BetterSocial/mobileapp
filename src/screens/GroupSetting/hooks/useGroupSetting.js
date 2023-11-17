@@ -10,15 +10,15 @@ import {uploadFile} from '../../../service/file';
 
 const useGroupSetting = ({navigation, route}) => {
   const [groupChatState] = React.useContext(Context).groupChat;
+
   const [channelState] = React.useContext(Context).channel;
   const [profile] = React.useContext(Context).profile;
-  const {participants} = groupChatState;
+  const [participants, setParticipants] = React.useState([]);
   const {channel} = channelState;
   const [groupName, setGroupName] = React.useState(
-    getChatName(route.params.username, profile.myProfile.username) || 'Set Group Name'
+    getChatName(route.params.name, profile.myProfile.username) || 'Set Group Name'
   );
-  console.log(participants, 'lala');
-  const [countUser] = React.useState(Object.entries(participants).length);
+  const [countUser, setCountUser] = React.useState(0);
   const [changeName, setChangeName] = React.useState(false);
   const [changeImage, setChangeImage] = React.useState(false);
   const [base64Profile, setBase64Profile] = React.useState('');
@@ -28,6 +28,13 @@ const useGroupSetting = ({navigation, route}) => {
     setGroupName(text);
     setChangeName(true);
   };
+
+  React.useEffect(() => {
+    if (route?.params) {
+      setParticipants(route?.params?.rawJson?.channel?.members);
+      setCountUser(route?.params?.rawJson?.channel?.members?.length || 0);
+    }
+  }, [route]);
 
   const submitData = async (withNavigation = true, withLoading = true) => {
     let changeImageUrl = '';
@@ -56,6 +63,7 @@ const useGroupSetting = ({navigation, route}) => {
       } else if (channel?.data?.image) {
         dataEdit.image = channel?.data?.image;
       }
+      console.log({dataEdit}, 'nusu');
       updateDataEdit(dataEdit, withNavigation);
     } else if (withNavigation) navigation.goBack();
   };
