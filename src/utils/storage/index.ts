@@ -16,7 +16,8 @@ enum StorageKeysEnum {
   OtherProfileFeed = 'otherprofilefeed',
   ProfileData = 'profiledata',
   OtherProfileData = 'otherprofiledata',
-  chatInfo = 'chatInfo'
+  chatInfo = 'chatInfo',
+  LastPromptNotification = 'lastPromptNotification'
 }
 
 interface IStorage {
@@ -81,6 +82,7 @@ const StorageUtils = {
   profileData: storageBuilder(StorageKeysEnum.ProfileData),
   otherProfileData: storageBuilder(StorageKeysEnum.OtherProfileData),
   chatInfo: storageBuilder(StorageKeysEnum.chatInfo),
+  lastPromptNotification: storageBuilder(StorageKeysEnum.LastPromptNotification),
   clearAll: () => MMKVStorage.clearAll()
 };
 
@@ -99,6 +101,7 @@ export interface IStorageUtils {
   jwtToken: Storage;
   anonymousToken: Storage;
   chatInfo: Storage;
+  lastPromptNotification: Storage;
   clearAll: () => void;
 }
 export default StorageUtils;

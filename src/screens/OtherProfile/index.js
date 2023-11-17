@@ -63,8 +63,9 @@ import StorageUtils from '../../utils/storage';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
 import useCreateChat from '../../hooks/screen/useCreateChat';
 import {ANON_PM, SIGNED} from '../../hooks/core/constant';
+import useDiscovery from '../DiscoveryScreenV2/hooks/useDiscovery';
 
-const {width, height} = Dimensions.get('screen');
+const {width} = Dimensions.get('screen');
 // let headerHeight = 0;
 
 const BioAndChat = (props) => {
@@ -140,7 +141,6 @@ const OtherProfile = () => {
   const reportUserRef = React.useRef();
   const specificIssueRef = React.useRef();
   const flatListRef = React.useRef();
-
   const [dataMain, setDataMain] = React.useState({});
   const [, setDataMainBio] = React.useState('');
   const [user_id, setUserId] = React.useState('');
@@ -180,6 +180,7 @@ const OtherProfile = () => {
   const isSignedMessageEnabled = dataMain.isSignedMessageEnabled ?? true;
   const isAnonimityEnabled = dataMain.isAnonMessageEnabled && isSignedMessageEnabled;
   const {createSignChat} = useCreateChat();
+  const {handleUpdateDiscoveryUser} = useDiscovery();
   React.useEffect(() => {
     setDMChat('');
   }, [isSignedMessageEnabled]);
@@ -355,11 +356,13 @@ const OtherProfile = () => {
     setInitLoading(false);
   };
 
-  const fetchOtherProfile = async () => {
+  const fetchOtherProfile = async (preventCache = false) => {
     const status = await netInfo.fetch();
     if (status.isConnected) {
       try {
-        handleOfflineMode();
+        if (!preventCache) {
+          handleOfflineMode();
+        }
         const result = await getOtherProfile(params?.data?.username);
         if (result.code === 200) {
           handleSaveDataOtherProfile(result.data);
@@ -405,7 +408,8 @@ const OtherProfile = () => {
     };
     const result = await setUnFollow(data);
     if (result.code === 200) {
-      fetchOtherProfile();
+      handleUpdateDiscoveryUser(other_id, false);
+      fetchOtherProfile(true);
     }
   };
 
@@ -424,7 +428,8 @@ const OtherProfile = () => {
     };
     const result = await setFollow(data);
     if (result.code === 200) {
-      fetchOtherProfile();
+      handleUpdateDiscoveryUser(other_id, true);
+      fetchOtherProfile(true);
     }
   };
 

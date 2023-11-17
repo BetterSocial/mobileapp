@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     lineHeight: normalizeFontSize(18)
   },
   container: {
-    backgroundColor: COLORS.holyTosca,
+    backgroundColor: COLORS.holytosca,
     borderTopWidth: 1,
     borderTopColor: COLORS.alto,
     paddingVertical: 10,

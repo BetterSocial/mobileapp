@@ -299,6 +299,31 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
           Participants (0)
         </Text>
         <RCTScrollView
+          data={
+            Object {
+              "a3c59170-c110-4fac-929e-7834f6c6827f": Object {
+                "banned": false,
+                "channel_role": "channel_moderator",
+                "created_at": "2022-09-30T22:49:45.911054Z",
+                "is_moderator": true,
+                "role": "admin",
+                "shadow_banned": false,
+                "updated_at": "2022-09-30T22:49:45.911054Z",
+                "user": Object {
+                  "banned": false,
+                  "created_at": "2021-11-29T05:40:40.828927Z",
+                  "id": "a3c59170-c110-4fac-929e-7834f6c6827f",
+                  "image": "https://res.cloudinary.com/hpjivutj2/image/upload/v1666664085/vcinqpjniuigf6mdnmzz.jpg",
+                  "last_active": "2021-12-06T03:54:03.677683Z",
+                  "name": "BetterSocial_Team",
+                  "online": false,
+                  "role": "admin",
+                  "updated_at": "2022-11-02T15:30:30.170297Z",
+                },
+                "user_id": "a3c59170-c110-4fac-929e-7834f6c6827f",
+              },
+            }
+          }
           disableVirtualization={false}
           getItem={[Function]}
           getItemCount={[Function]}
