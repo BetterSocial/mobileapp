@@ -56,6 +56,7 @@ import {NavigationConstants} from '../utils/constants';
 import {followersOrFollowingAtom} from '../screens/ChannelListScreen/model/followersOrFollowingAtom';
 import {useInitialStartup} from '../hooks/useInitialStartup';
 import FollowersScreen from '../screens/Followings/FollowersScreen';
+import KeyboardWrapper from './KeyboardWrapper';
 
 const RootStack = createNativeStackNavigator();
 
@@ -111,24 +112,24 @@ export const RootNavigator = ({currentScreen}) => {
         }}>
         <NetworkStatusIndicator hide={true} />
         {/* <StatusBar translucent backgroundColor="white" /> */}
-        <KeyboardAvoidingView style={{flex: 1}} enabled={Platform.OS === 'ios'} behavior="padding">
-          <RootStack.Navigator
-            screenOptions={{
-              headerShown: false,
-              safeAreaInsets: {
-                top: 0,
-                bottom: 0,
-                left: 0,
-                right: 0
-              }
-            }}>
-            {initialStartup.id !== null && initialStartup.id !== '' ? (
-              <RootStack.Screen name="AuthenticatedStack" component={AuthenticatedNavigator} />
-            ) : (
-              <RootStack.Screen name="UnauthenticatedStack" component={UnauthenticatedNavigator} />
-            )}
-          </RootStack.Navigator>
-        </KeyboardAvoidingView>
+        {/* <KeyboardAvoidingView style={{flex: 1}} enabled={Platform.OS === 'ios'} behavior="padding"> */}
+        <RootStack.Navigator
+          screenOptions={{
+            headerShown: false,
+            safeAreaInsets: {
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0
+            }
+          }}>
+          {initialStartup.id !== null && initialStartup.id !== '' ? (
+            <RootStack.Screen name="AuthenticatedStack" component={AuthenticatedNavigator} />
+          ) : (
+            <RootStack.Screen name="UnauthenticatedStack" component={UnauthenticatedNavigator} />
+          )}
+        </RootStack.Navigator>
+        {/* </KeyboardAvoidingView> */}
       </View>
     </LoadingStartupContext.Provider>
   );
@@ -140,6 +141,14 @@ RootNavigator.propTypes = {
 
 // region authenticatedStack
 const AuthenticatedStack = createNativeStackNavigator();
+
+const pdpWrapper = (props) => {
+  return (
+    <KeyboardWrapper>
+      <PostDetailPage {...props} />
+    </KeyboardWrapper>
+  );
+};
 
 const AuthenticatedNavigator = () => {
   return (
@@ -292,7 +301,11 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="PostDetailPage"
-          component={PostDetailPage}
+          component={(props) => (
+            <KeyboardWrapper>
+              <PostDetailPage {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
@@ -317,17 +330,29 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="SampleChatScreen"
-          component={SampleChatScreen}
+          component={(props) => (
+            <KeyboardWrapper>
+              <SampleChatScreen {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="SampleChatInfoScreen"
-          component={SampleChatInfoScreen}
+          component={(props) => (
+            <KeyboardWrapper>
+              <SampleChatInfoScreen {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="SignedChatScreen"
-          component={SignedChatScreen}
+          component={(props) => (
+            <KeyboardWrapper>
+              <SignedChatScreen {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
       </AuthenticatedStack.Navigator>

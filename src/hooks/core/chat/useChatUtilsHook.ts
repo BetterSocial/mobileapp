@@ -136,14 +136,11 @@ function useChatUtilsHook(): UseChatUtilsHook {
   };
 
   const goBackFromChatScreen = async () => {
-    await Keyboard.dismiss();
-    setTimeout(() => {
-      navigation.goBack();
-      setChat({
-        ...chat,
-        selectedChannel: null
-      });
-    }, 350);
+    navigation.goBack();
+    setChat({
+      ...chat,
+      selectedChannel: null
+    });
   };
 
   const goToChatInfoScreen = (params?: object) => {
