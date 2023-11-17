@@ -20,10 +20,12 @@ import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
 import {colors} from '../utils/colors';
 import {fcmTokenService} from '../service/users';
 import {getAnonymousUserId, getUserId} from '../utils/users';
+import useCoreChatSystemHook from '../hooks/core/useCoreChatSystemHook';
 
 const Tab = createBottomTabNavigator();
 
 function HomeBottomTabs({navigation}) {
+  useCoreChatSystemHook();
   const isIos = Platform.OS === 'ios';
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const otherProfileData = useRecoilValue(otherProfileAtom);

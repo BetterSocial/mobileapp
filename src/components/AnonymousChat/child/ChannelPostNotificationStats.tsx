@@ -9,12 +9,11 @@ import MemoIc_comment from '../../../assets/icons/Ic_comment';
 import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
 
 const ChannelPostNotificationStats = ({
+  type = BaseChannelItemTypeProps.ANON_PM,
   upvote = 0,
   downvote = 0,
   comments = 0,
-  block = 0,
-  type = BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION,
-  shown = false
+  block = 0
 }) => {
   const styles = StyleSheet.create({
     descriptionContainer: {
@@ -40,9 +39,9 @@ const ChannelPostNotificationStats = ({
     }
   });
 
-  if (type === BaseChannelItemTypeProps.ANON_PM) return <></>;
+  const isMyPost = type?.includes('MY_SIGNED_POST') || type?.includes('MY_ANON_POST');
 
-  if (!shown) return <View style={{height: 0}}></View>;
+  if (!isMyPost) return <View style={{height: 0}} />;
 
   return (
     <View style={styles.descriptionContainer}>

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import FastImage from 'react-native-fast-image';
 import {
   Dimensions,
   NativeSyntheticEvent,
@@ -13,7 +12,7 @@ import IconChatCheckMark from '../../../assets/icon/IconChatCheckMark';
 import IconChatClockGrey from '../../../assets/icon/IconChatClockGrey';
 import {ChatItemMyTextProps} from '../../../../types/component/AnonymousChat/BaseChatItem.types';
 import {ChatStatus} from '../../../../types/database/schema/ChannelList.types';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
+import {SIGNED} from '../../../hooks/core/constant';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 
@@ -40,8 +39,13 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row'
   },
+  containerSigned: {
+    backgroundColor: colors.babyBlue
+  },
+  containerAnon: {
+    backgroundColor: colors.halfBaked
+  },
   textContainer: {
-    backgroundColor: colors.halfBaked,
     paddingLeft: BUBBLE_LEFT_PADDING,
     paddingRight: BUBBLE_RIGHT_PADDING,
     paddingTop: 4,
@@ -96,6 +100,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 6,
     right: 8
+  },
+  ml8: {
+    marginLeft: 8
   }
 });
 
@@ -109,13 +116,13 @@ const targetLastLineWidth =
   BUBBLE_RIGHT_PADDING;
 
 const ChatItemMyTextV2 = ({
-  avatar = DEFAULT_PROFILE_PIC_PATH,
-  username = 'Anonymous Clown',
+  username = 'Anonymous User',
   time = '4h',
   isContinuous = false,
-  message = 'Ultrices neque op semper blahbla blahri mauris amet, penatibus. pi Amet, mollis quam venenatis di',
+  message = '',
   status = ChatStatus.PENDING,
-  AnonymousImage = null
+  avatar,
+  chatType
 }: ChatItemMyTextProps) => {
   const messageRef = React.useRef<Text>(null);
   const [isNewLine, setIsNewLine] = React.useState(true);
@@ -145,11 +152,14 @@ const ChatItemMyTextV2 = ({
 
   const renderAvatar = React.useCallback(() => {
     if (isContinuous) return <View style={styles.avatar} />;
-    if (AnonymousImage) return AnonymousImage;
-    return <FastImage style={styles.avatar} source={{uri: avatar}} />;
+    return <View style={styles.ml8}>{avatar}</View>;
   }, []);
 
-  const textContainerStyle = [styles.textContainer, isNewLine && styles.textContainerNewLine];
+  const textContainerStyle = [
+    chatType === SIGNED ? styles.containerSigned : styles.containerAnon,
+    styles.textContainer,
+    isNewLine && styles.textContainerNewLine
+  ];
 
   return (
     <View style={styles.chatContainer}>

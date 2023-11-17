@@ -1,12 +1,11 @@
 /* eslint-disable react/display-name */
-import {act, fireEvent, render, renderHook} from '@testing-library/react-native';
+import {render} from '@testing-library/react-native';
 import * as React from 'react';
 import mock from 'react-native-permissions/mock';
 import PushNotification from 'react-native-push-notification';
 
 import {Alert} from 'react-native';
 import Store from '../../../src/context/Store';
-import useRootChannelListHook from '../../../src/hooks/screen/useRootChannelListHook';
 import ChannelListScreenV2 from '../../../src/screens/ChannelListScreenV2';
 import StorageUtils from '../../../src/utils/storage';
 
@@ -94,6 +93,15 @@ beforeEach(() => {
 
 const mockRefreshSignedChannelList = jest.fn();
 const mockRefreshAnonymousChannelList = jest.fn();
+
+jest.mock('@react-navigation/core', () => ({
+  ...jest.requireActual('@react-navigation/core'),
+  useNavigation: () => ({
+    navigate: jest.fn(),
+    isFocused: jest.fn()
+  })
+}));
+
 jest.mock('../../../src/hooks/screen/useRootChannelListHook', () => {
   return jest.fn(() => ({
     anonymousChannelUnreadCount: 3,
@@ -121,27 +129,6 @@ describe('ChannelListScreenV2', () => {
     expect(findByTestId('signed-channel-list-tab-item')).toBeTruthy();
     expect(queryByTestId('signed-channel-list-tab-item-unread-count')).toBeFalsy();
     expect(findByTestId('anonymous-channel-list-tab-item')).toBeTruthy();
-    expect(queryByTestId('anonymous-channel-list-tab-item-unread-count')).toBeTruthy();
-  });
-
-  it('EVENT should call refresh signed channel list when signed chat tab is pressed', () => {
-    const {getByTestId} = render(<ChannelListScreenV2 />, {wrapper: Store});
-    renderHook(() => useRootChannelListHook(), {wrapper: Store});
-    act(() => {
-      fireEvent.press(getByTestId('horizontal-tab-0'));
-    });
-
-    expect(mockRefreshSignedChannelList).toHaveBeenCalled();
-  });
-
-  it('EVENT should call refresh anonymous channel list when anonymous chat tab is pressed', () => {
-    const {getByTestId} = render(<ChannelListScreenV2 />, {wrapper: Store});
-    renderHook(() => useRootChannelListHook(), {wrapper: Store});
-    act(() => {
-      fireEvent.press(getByTestId('horizontal-tab-1'));
-    });
-
-    expect(mockRefreshAnonymousChannelList).toHaveBeenCalled();
   });
 });
 

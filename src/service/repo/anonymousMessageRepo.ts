@@ -1,6 +1,6 @@
 import anonymousApi from '../anonymousConfig';
 import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
-import {ChannelData} from '../../../types/repo/AnonymousMessageRepo/ChannelData';
+import {ChannelData} from '../../../types/repo/ChannelData';
 
 const baseUrl = {
   checkIsTargetAllowingAnonDM: 'chat/channels/check-allow-anon-dm-status',

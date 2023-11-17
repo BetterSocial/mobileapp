@@ -15,7 +15,6 @@ import {
   View,
   Pressable
 } from 'react-native';
-import {generateRandomId} from 'stream-chat-react-native';
 /* eslint-disable no-underscore-dangle */
 import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
@@ -55,13 +54,14 @@ import {getFeedDetail} from '../../service/post';
 import {getSingularOrPluralText} from '../../utils/string/StringUtils';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {sendAnonymousDMOtherProfile, sendSignedDMOtherProfile} from '../../service/chat';
-import {setChannel} from '../../context/actions/setChannel';
 import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherProfileFeed';
 import {trimString} from '../../utils/string/TrimString';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import StorageUtils from '../../utils/storage';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
 import useDiscovery from '../DiscoveryScreenV2/hooks/useDiscovery';
+import useCreateChat from '../../hooks/screen/useCreateChat';
+import {ANON_PM, SIGNED} from '../../hooks/core/constant';
 
 const {width} = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -157,9 +157,6 @@ const OtherProfile = () => {
 
   const headerHeightRef = React.useRef(0);
   const interactionManagerRef = React.useRef(null);
-
-  const [client] = React.useContext(Context).client;
-  const [, dispatchChannel] = React.useContext(Context).channel;
   const [otherProfileFeeds, dispatchOtherProfile] = React.useContext(Context).otherProfileFeed;
   const [profile] = React.useContext(Context).profile;
   const [, dispatch] = React.useContext(Context).feeds;
@@ -178,6 +175,7 @@ const OtherProfile = () => {
   const isSignedMessageEnabled = dataMain.isSignedMessageEnabled ?? true;
   const isAnonimityEnabled = dataMain.isAnonMessageEnabled && isSignedMessageEnabled;
   const {handleUpdateDiscoveryUser} = useDiscovery();
+  const {createSignChat} = useCreateChat();
   React.useEffect(() => {
     setDMChat('');
   }, [isSignedMessageEnabled]);
@@ -208,7 +206,7 @@ const OtherProfile = () => {
         anon_user_info_color_code
       };
       const response = await sendAnonymousDMOtherProfile(anonDMParams);
-      await saveChatFromOtherProfile(response, 'sent', true);
+      await saveChatFromOtherProfile(response, 'sent', true, ANON_PM);
       setDMChat('');
     } catch (e) {
       if (e?.response?.data?.status === 'Channel is blocked') {
@@ -232,24 +230,6 @@ const OtherProfile = () => {
     }
   };
 
-  const gotoChatRoom = async () => {
-    const type = 'messaging';
-    const sort = [{last_message_at: -1}];
-
-    const members = [profile.myProfile.user_id, dataMain.user_id];
-    const filter = {type, members: {$eq: members}};
-
-    const clientChat = await client.client;
-
-    const findChannels = await clientChat.queryChannels(filter, sort, {
-      watch: true,
-      state: true
-    });
-
-    setChannel(findChannels[0], dispatchChannel);
-    await navigation.navigate('ChatDetailPage');
-  };
-
   const sendSignedDM = async () => {
     try {
       setLoadingSendDM(true);
@@ -257,8 +237,9 @@ const OtherProfile = () => {
         user_id: dataMain.user_id,
         message: dmChat
       };
-      await sendSignedDMOtherProfile(signedMParams);
-      await gotoChatRoom();
+      const response = await sendSignedDMOtherProfile(signedMParams);
+      const newResponse = {...response, members: response?.message?.members};
+      await saveChatFromOtherProfile(newResponse, 'sent', true, SIGNED);
       setDMChat('');
     } catch (error) {
       if (__DEV__) {
@@ -491,7 +472,6 @@ const OtherProfile = () => {
         SimpleToast.LONG
       );
     };
-
     const __renderFollowerDetail = () => {
       if (blockStatus.blocker) return <></>;
       return (
@@ -539,12 +519,25 @@ const OtherProfile = () => {
       );
     };
 
+    const onCreateChat = () => {
+      const channelName = [username, profile?.myProfile?.username].join(',');
+
+      const selectedUser = {
+        user: {
+          name: channelName,
+          image: dataMain.profile_pic_path ?? DEFAULT_PROFILE_PIC_PATH
+        }
+      };
+      const members = [other_id, profile.myProfile.user_id];
+      createSignChat(members, selectedUser);
+    };
+
     const __renderMessageAndFollowButtonGroup = () => {
       if (blockStatus.blocker) return <></>;
       return (
         <React.Fragment>
           {__renderFollowingButton()}
-          <GlobalButton onPress={onCreateChannel}>
+          <GlobalButton onPress={onCreateChat}>
             <View style={styles.btnMsg}>
               <EnveloveBlueIcon width={20} height={20} fill={colors.bondi_blue} />
             </View>
@@ -611,37 +604,6 @@ const OtherProfile = () => {
 
   const toTop = () => {
     flatListRef.current.scrollToTop();
-  };
-
-  const onCreateChannel = async () => {
-    try {
-      const members = [other_id, profile.myProfile.user_id];
-
-      const clientChat = await client.client;
-      const filter = {type: 'messaging', members: {$eq: members}};
-      const sort = [{last_message_at: -1}];
-      const channels = await clientChat.queryChannels(filter, sort, {
-        watch: true,
-        state: true
-      });
-
-      if (channels.length > 0) {
-        setChannel(channels[0], dispatchChannel);
-      } else {
-        const membersUsername = [profile.myProfile.username, username].join(', ');
-        const channelChat = await clientChat.channel('messaging', generateRandomId(), {
-          name: membersUsername,
-          members
-        });
-        await channelChat.watch();
-        setChannel(channelChat, dispatchChannel);
-      }
-      await navigation.navigate('ChatDetailPage');
-    } catch (e) {
-      if (__DEV__) {
-        console.log(e);
-      }
-    }
   };
 
   const onBlockReaction = () => {

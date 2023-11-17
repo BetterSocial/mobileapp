@@ -7,15 +7,15 @@ exports[`TESTING ChannelAnonymousImage RENDER should match snapshot 1`] = `
       "alignItems": "center",
       "backgroundColor": "#FF0000",
       "borderColor": "#ffffff",
-      "borderRadius": 16,
+      "borderRadius": 9.600000000000001,
       "borderWidth": 2,
       "display": "flex",
-      "height": 24,
+      "height": 19.200000000000003,
       "justifyContent": "center",
       "position": "absolute",
       "right": 0,
-      "top": 30,
-      "width": 24,
+      "top": 33.6,
+      "width": 19.200000000000003,
     }
   }
   testID="channel-anonymous-sub-image"

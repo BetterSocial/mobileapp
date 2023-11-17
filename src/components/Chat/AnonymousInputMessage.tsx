@@ -26,9 +26,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.lightgrey,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 9,
-    paddingTop: 4,
-    paddingBottom: 4,
+    paddingHorizontal: 9,
     borderRadius: 8
   },
   input: {
@@ -43,12 +41,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     marginLeft: 8
-  },
-  enableButton: {
-    backgroundColor: colors.bondi_blue
-  },
-  disableButton: {
-    backgroundColor: colors.gray1
   },
   previewPhotoContainer: {
     marginTop: 5,
@@ -75,9 +67,10 @@ const styles = StyleSheet.create({
 
 export interface AnonymousInputMessageProps {
   onSendButtonClicked: (message: string) => void;
+  type: 'SIGNED' | 'ANONYMOUS';
 }
 
-const AnonymousInputMessage = ({onSendButtonClicked}: AnonymousInputMessageProps) => {
+const AnonymousInputMessage = ({onSendButtonClicked, type}: AnonymousInputMessageProps) => {
   const refEmoji = React.useRef(null);
   const [text, setText] = React.useState('');
 
@@ -97,18 +90,25 @@ const AnonymousInputMessage = ({onSendButtonClicked}: AnonymousInputMessageProps
     return text?.length === 0;
   };
 
+  const sendButtonStyle = React.useCallback(() => {
+    const isDisabled = isDisableButton();
+    if (isDisabled) return colors.gray1;
+    if (type === 'SIGNED') return colors.darkBlue;
+    return colors.bondi_blue;
+  }, [isDisableButton()]);
+
   return (
     <>
       <View style={styles.container}>
         <View style={styles.containerInput}>
           <TextInput multiline style={styles.input} onChangeText={onChangeInput} value={text} />
           <TouchableOpacity
-            style={[styles.btn, isDisableButton() ? styles.disableButton : styles.enableButton]}
+            style={styles.btn}
             disabled={isDisableButton()}
             onPress={handleSendMessage}>
             <IconSend
               style={styles.icSendButton}
-              fillBackground={isDisableButton() ? colors.gray1 : colors.bondi_blue}
+              fillBackground={sendButtonStyle()}
               fillIcon={colors.white}
             />
           </TouchableOpacity>
@@ -120,4 +120,4 @@ const AnonymousInputMessage = ({onSendButtonClicked}: AnonymousInputMessageProps
   );
 };
 
-export default AnonymousInputMessage;
+export default React.memo(AnonymousInputMessage);

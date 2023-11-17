@@ -39,6 +39,7 @@ export interface User {
   online: boolean;
   name: string;
   image: string;
+  username: string;
 }
 
 export interface Message {
