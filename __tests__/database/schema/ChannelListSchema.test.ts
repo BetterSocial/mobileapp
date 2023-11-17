@@ -473,37 +473,6 @@ describe('TESTING ChannelListSchema', () => {
         ]
       };
 
-      const fromPostNotifObjectExpectation = {
-        ...fromDatabaseObjectExpectation,
-        channelPicture: '',
-        channelType: undefined,
-        createdAt: 'lastUpdatedAt',
-        description: 'description',
-        expiredAt: null,
-        id: 'id',
-        lastUpdatedAt: 'lastUpdatedAt',
-        lastUpdatedBy: 'lastUpdatedBy',
-        members: [],
-        name: '',
-        rawJson: {
-          new: [
-            {
-              actor: {id: 'lastUpdatedBy'},
-              channel_picture: 'channelPicture',
-              channel_type: 'channelType',
-              description: 'description',
-              id: 'id',
-              message: 'description',
-              name: 'name',
-              time: 'lastUpdatedAt',
-              unread_count: 0
-            }
-          ]
-        },
-        unreadCount: 1,
-        user: null
-      };
-
       // Execution
       const result = await ChannelList.fromPostNotifObject(
         postNotifObject,

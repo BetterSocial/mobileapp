@@ -606,37 +606,6 @@ const OtherProfile = () => {
     flatListRef.current.scrollToTop();
   };
 
-  const onCreateChannel = async () => {
-    try {
-      const members = [other_id, profile.myProfile.user_id];
-
-      const clientChat = await client.client;
-      const filter = {type: 'messaging', members: {$eq: members}};
-      const sort = [{last_message_at: -1}];
-      const channels = await clientChat.queryChannels(filter, sort, {
-        watch: true,
-        state: true
-      });
-
-      if (channels.length > 0) {
-        setChannel(channels[0], dispatchChannel);
-      } else {
-        const membersUsername = [profile.myProfile.username, username].join(', ');
-        const channelChat = await clientChat.channel('messaging', generateRandomId(), {
-          name: membersUsername,
-          members
-        });
-        await channelChat.watch();
-        setChannel(channelChat, dispatchChannel);
-      }
-      await navigation.navigate('ChatDetailPage');
-    } catch (e) {
-      if (__DEV__) {
-        console.log(e);
-      }
-    }
-  };
-
   const onBlockReaction = () => {
     blockUserRef.current.open();
   };

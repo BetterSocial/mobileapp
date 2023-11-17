@@ -86,8 +86,6 @@ class ChannelListMemberSchema implements BaseDbSchema {
     }
   };
 
-  //! TODO:
-  //! UPDATE ANONYMOUSID FOR SIGNED CHAT
   static async getAll(
     db: SQLiteDatabase,
     channelId: string,
