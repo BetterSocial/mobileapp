@@ -58,7 +58,7 @@ const ChannelListScreenV2 = () => {
           const lastPromptTime = StorageUtils.lastPromptNotification.get();
 
           // For testing purpose,  (20000 milliseconds)
-          const promptInterval = 20000;
+          const promptInterval = 48 * 3600000;
           const currentTime = new Date().getTime();
           if (lastPromptTime && currentTime - parseFloat(lastPromptTime) < promptInterval) {
             return; // Don't show the prompt if the interval has not passed
