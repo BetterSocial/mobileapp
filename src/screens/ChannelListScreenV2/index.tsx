@@ -17,6 +17,11 @@ import StorageUtils from '../../utils/storage';
 import ChannelListScreen from '../ChannelListScreen';
 import Search from '../ChannelListScreen/elements/Search';
 import AnonymousChannelListScreen from './AnonymousChannelListScreen';
+import {
+  PERMISSION_STATUS_ACCEPTED,
+  PERMISSION_STATUS_BLOCKED,
+  PERMISSION_STATUS_PENDING
+} from '../../utils/constants';
 
 const ChannelListScreenV2 = () => {
   const {refresh} = useLocalDatabaseHook();
@@ -56,9 +61,7 @@ const ChannelListScreenV2 = () => {
           }
         ) => {
           const lastPromptTime = StorageUtils.lastPromptNotification.get();
-
-          // For testing purpose,  (20000 milliseconds)
-          const promptInterval = 48 * 3600000;
+          const promptInterval = 48 * 60 * 60 * 1000;
           const currentTime = new Date().getTime();
           if (lastPromptTime && currentTime - parseFloat(lastPromptTime) < promptInterval) {
             return; // Don't show the prompt if the interval has not passed
@@ -79,21 +82,22 @@ when friends send you messages.`,
             );
 
           switch (data.authorizationStatus) {
-            case 1:
+            case PERMISSION_STATUS_ACCEPTED:
               if (needsPermission) {
+                // THIS CASE IT'S TRIGGERED WHEN USER MANUALLY DISABLED THE NOTIFICATION
                 StorageUtils.lastPromptNotification.set(currentTime.toString());
                 showAlert(() => openSettings().catch(() => console.warn('cannot open settings')));
               } else {
                 requestPermission();
               }
               break;
-            case 2:
+            case PERMISSION_STATUS_BLOCKED:
               if (needsPermission) {
                 StorageUtils.lastPromptNotification.set(currentTime.toString());
                 showAlert(() => openSettings().catch(() => console.warn('cannot open settings')));
               }
               break;
-            case 3:
+            case PERMISSION_STATUS_PENDING:
               StorageUtils.lastPromptNotification.set(currentTime.toString());
               showAlert(() => requestPermission());
               break;
