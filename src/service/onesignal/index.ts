@@ -17,25 +17,23 @@ const rebuildAndSubscribeTags = async () => {
     const {topics = [], history = []} = response?.data || {};
 
     return new Promise((resolve) => {
-      history?.map((historyItem: TopicTag) => {
-        Monitoring.logActions('remove tag', `better_community_${historyItem?.name}`);
+      history?.forEach((historyItem: TopicTag) => {
         OneSignal.User.removeTag(`better_community_${historyItem?.name}`);
-        return null;
+        Monitoring.logActions('remove tag', `better_community_${historyItem?.name}`);
       });
 
       setTimeout(() => {
-        topics?.map((topic: TopicTag) => {
-          Monitoring.logActions('add tag', `better_community_${topic?.name}`);
+        topics?.forEach((topic: TopicTag) => {
           OneSignal.User.addTag(`better_community_${topic?.name}`, 'true');
-          return null;
+          Monitoring.logActions('add tag', `better_community_${topic?.name}`);
         });
 
         resolve(null);
-      }, 2000);
+      }, SET_TAG_TIMEOUT);
     });
   } catch (e) {
     console.log('error rebuilding and subscribing tags ', e?.message);
-    Monitoring.logError('error rebuilding and subscribing tags ', e?.message);
+    Monitoring.logError('error rebuilding and subscribing tags ', e);
     return null;
   }
 };
@@ -45,9 +43,8 @@ const removeAllSubscribedTags = async () => {
     const response = await getSubscribeableTopic();
     const {history = []} = response?.data || {};
 
-    history?.map((topic: TopicTag) => {
+    history?.forEach((topic: TopicTag) => {
       OneSignal.User.removeTag(`better_community_${topic?.name}`);
-      return null;
     });
   } catch (e) {
     console.log('error removing all subscribed tags ', e?.message);
