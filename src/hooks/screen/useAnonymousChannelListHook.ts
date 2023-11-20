@@ -17,7 +17,7 @@ function useAnonymousChannelListScreenHook(): UseAnonymousChannelListScreenHook 
     if (!localDb) return;
     const myId = await getUserId();
     const myAnonymousId = await getAnonymousUserId();
-    const data = await ChannelList.getAll(localDb, myId, myAnonymousId);
+    const data = await ChannelList.getAllAnonymousChannelList(localDb, myId, myAnonymousId);
     setChannels(data);
   };
 

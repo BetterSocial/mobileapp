@@ -63,7 +63,6 @@ const GroupInfo = () => {
     blockModalRef,
     isFetchingAllowAnonDM
   } = useGroupInfo();
-
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       if (route?.params?.from === 'AddParticipant') {

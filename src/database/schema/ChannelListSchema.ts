@@ -3,10 +3,13 @@ import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import BaseDbSchema from './BaseDbSchema';
 import ChannelListMemberSchema from './ChannelListMemberSchema';
 import UserSchema from './UserSchema';
-import {AnonymousChannelData} from '../../../types/repo/AnonymousMessageRepo/AnonymousChannelsData';
 import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
+import {ChannelData} from '../../../types/repo/AnonymousMessageRepo/AnonymousChannelsData';
+import {ChannelType} from '../../../types/repo/ChannelData';
 import {MessageAnonymouslyData} from '../../../types/repo/AnonymousMessageRepo/MessageAnonymouslyData';
 import {ModifyAnonymousChatData} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
+import {SignedPostNotification} from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
+import {CHANNEL_GROUP, PM} from '../../hooks/core/constant';
 
 class ChannelList implements BaseDbSchema {
   id: string;
@@ -106,7 +109,7 @@ class ChannelList implements BaseDbSchema {
 
     try {
       jsonString = JSON.stringify(this.rawJson);
-      db.executeSql(
+      await db.executeSql(
         `INSERT OR REPLACE INTO ${ChannelList.getTableName()} (
           id,
           channel_picture,
@@ -216,12 +219,55 @@ class ChannelList implements BaseDbSchema {
     return results.rows.raw().map(ChannelList.fromDatabaseObject);
   }
 
-  static async getUnreadCount(db: SQLiteDatabase): Promise<number> {
+  static async getAllAnonymousChannelList(
+    db: SQLiteDatabase,
+    myId: string,
+    myAnonymousId: string
+  ): Promise<ChannelList[]> {
+    const [results] = await db.executeSql(
+      `SELECT 
+        A.*,
+        CASE last_updated_by
+          WHEN ? THEN 1
+          WHEN ? THEN 1
+          ELSE 0 END AS is_me,
+        B.id AS user_row_id,
+        B.user_id,
+        B.channel_id,
+        B.username,
+        B.country_code,
+        B.created_at AS user_created_at,
+        B.updated_at AS user_updated_at,
+        B.last_active_at,
+        B.profile_picture,
+        B.bio,
+        B.is_banned
+      FROM ${ChannelList.getTableName()} A
+      LEFT JOIN ${UserSchema.getTableName()} B
+      ON A.last_updated_by = B.user_id AND A.id = B.channel_id
+      WHERE (expired_at IS NULL OR datetime(expired_at) >= datetime('now')) AND A.description != ''
+      AND A.channel_type IN ('ANON_PM', 'ANON_POST_NOTIFICATION', 'ANON_GROUP')
+      ORDER BY last_updated_at DESC`,
+      [myId, myAnonymousId]
+    );
+    return results.rows.raw().map(ChannelList.fromDatabaseObject);
+  }
+
+  static async getUnreadCount(
+    db: SQLiteDatabase,
+    channelCategory: 'SIGNED' | 'ANON'
+  ): Promise<number> {
     try {
-      const [results] = await db.executeSql(
-        `SELECT SUM(unread_count) as unread_count FROM ${ChannelList.getTableName()}
-        WHERE expired_at IS NULL OR datetime(expired_at) >= datetime('now')`
-      );
+      const signedQuery = "('PM', 'GROUP', 'TOPIC', 'POST_NOTIFICATION', 'FOLLOW')";
+      const anonQuery = "('ANON_PM', 'ANON_GROUP', 'ANON_POST_NOTIFICATION')";
+
+      const selectQuery = `SELECT SUM(unread_count) as unread_count
+        FROM ${ChannelList.getTableName()}
+        WHERE channel_type IN ${channelCategory === 'ANON' ? anonQuery : signedQuery}
+        AND expired_at IS NULL
+        OR datetime(expired_at) >= datetime('now')`;
+
+      const [results] = await db.executeSql(selectQuery);
 
       return Promise.resolve(results?.rows?.raw()[0]?.unread_count || 0);
     } catch (e) {
@@ -239,14 +285,56 @@ class ChannelList implements BaseDbSchema {
     return 'channel_lists';
   }
 
-  static fromWebsocketObject(json): ChannelList {
+  static updateChannelDescription = async (
+    db: SQLiteDatabase,
+    channelId: string,
+    description: string,
+    json,
+    isUpdateTimestamp = false
+  ) => {
+    let rawJson: string | null = null;
+
+    try {
+      rawJson = JSON.stringify(json);
+    } catch (e) {
+      console.log('error stringify:', e);
+    }
+
+    try {
+      const queryTimestamp = `UPDATE ${ChannelList.getTableName()}
+        SET description = ?, created_at = ?, last_updated_at = ?, raw_json = ?
+        WHERE id = ?;`;
+      const queryWithoutTimestamp = `UPDATE ${ChannelList.getTableName()}
+        SET description = ?, raw_json = ?
+        WHERE id = ?;`;
+
+      const replacementTimestamp = [
+        description,
+        new Date().toISOString(),
+        new Date().toISOString(),
+        rawJson,
+        channelId
+      ];
+      const replacementWithoutTimestamp = [description, rawJson, channelId];
+
+      if (isUpdateTimestamp) {
+        await db.executeSql(queryTimestamp, replacementTimestamp);
+      } else {
+        await db.executeSql(queryWithoutTimestamp, replacementWithoutTimestamp);
+      }
+    } catch (e) {
+      console.log('error updating channel description', e);
+    }
+  };
+
+  static fromWebsocketObject(json, channelType: ChannelType): ChannelList {
     return new ChannelList({
       id: json?.channel?.id,
       channelPicture: json?.targetImage,
       name: json?.targetName,
       description: json?.message?.text || json?.message?.message,
       unreadCount: json?.unread_count,
-      channelType: 'ANON_PM',
+      channelType,
       lastUpdatedAt: json?.channel?.last_message_at,
       lastUpdatedBy: json?.message?.user?.id,
       createdAt: json?.channel?.created_at,
@@ -282,15 +370,18 @@ class ChannelList implements BaseDbSchema {
     });
   }
 
-  static fromPostNotifObject(json): ChannelList {
+  static fromPostNotifObject(
+    json,
+    channelType: 'POST_NOTIFICATION' | 'ANON_POST_NOTIFICATION'
+  ): ChannelList {
     const object = json?.new[0];
     return new ChannelList({
-      id: object?.id,
+      id: `${object?.id}${channelType === 'ANON_POST_NOTIFICATION' ? '_anon' : ''}'}`,
       channelPicture: '',
       name: '',
       description: object?.message,
       unreadCount: 1,
-      channelType: 'ANON_POST_NOTIFICATION',
+      channelType,
       lastUpdatedAt: object?.time,
       lastUpdatedBy: object?.actor?.id,
       createdAt: object?.time,
@@ -299,16 +390,24 @@ class ChannelList implements BaseDbSchema {
     });
   }
 
-  static fromAnonymousChannelAPI(data: AnonymousChannelData): ChannelList {
+  static fromChannelAPI(data: ChannelData, channelType: ChannelType): ChannelList {
+    const isPM = channelType === 'PM';
+    const firstMessage = data?.firstMessage;
+    const isSystemMessage = firstMessage?.type === 'system' || firstMessage?.isSystem;
+    const isMe = firstMessage?.user?.id === data?.myUserId;
+    let descriptionSystemMessage;
+
+    if (isPM && isMe && isSystemMessage) descriptionSystemMessage = firstMessage?.textOwnMessage;
+
     return new ChannelList({
       id: data?.id,
       channelPicture: data?.targetImage,
       name: data?.targetName,
-      description: data?.firstMessage?.text || data?.firstMessage?.message || '',
-      unreadCount: 0,
-      channelType: 'ANON_PM',
+      description: descriptionSystemMessage || firstMessage?.text || firstMessage?.message || '',
+      unreadCount: data?.unreadCount ?? 0,
+      channelType,
       lastUpdatedAt: data?.last_message_at,
-      lastUpdatedBy: data?.firstMessage?.user?.id,
+      lastUpdatedBy: firstMessage?.user?.id,
       createdAt: data?.created_at,
       rawJson: data,
       user: null,
@@ -316,9 +415,27 @@ class ChannelList implements BaseDbSchema {
     });
   }
 
-  static fromAnonymousPostNotificationAPI(data: AnonymousPostNotification): ChannelList {
+  static fromSignedPostNotificationAPI(data: SignedPostNotification): ChannelList {
     return new ChannelList({
       id: data?.activity_id,
+      channelPicture: data?.postMaker?.data?.profile_pic_url || '',
+      name: data?.titlePost,
+      description: data?.titlePost,
+      unreadCount: data?.unreadCount ?? 0,
+      channelType: 'POST_NOTIFICATION',
+      lastUpdatedAt: data?.data?.updated_at,
+      lastUpdatedBy: '',
+      createdAt: new Date().toISOString(),
+      rawJson: data,
+      user: null,
+      members: null,
+      expiredAt: data?.expired_at
+    });
+  }
+
+  static fromAnonymousPostNotificationAPI(data: AnonymousPostNotification): ChannelList {
+    return new ChannelList({
+      id: `${data?.activity_id}_anon`,
       channelPicture: data?.postMaker?.data?.profile_pic_url || '',
       name: data?.titlePost,
       description: data?.titlePost,
@@ -360,6 +477,25 @@ class ChannelList implements BaseDbSchema {
       description: data?.appAdditionalData?.message,
       unreadCount: 0,
       channelType: 'ANON_PM',
+      lastUpdatedAt: data?.channel?.last_message_at,
+      lastUpdatedBy: '',
+      createdAt: data?.channel?.created_at,
+      rawJson: data?.appAdditionalData?.rawJson,
+      user: null,
+      expiredAt: null,
+      members: null
+    });
+  }
+
+  static fromMessageSignedAPI(data: MessageAnonymouslyData): ChannelList {
+    const isGroup = data?.members?.length > 2;
+    return new ChannelList({
+      id: data?.channel?.id,
+      channelPicture: isGroup ? null : data?.appAdditionalData?.targetImage,
+      name: data?.appAdditionalData?.targetName,
+      description: data?.appAdditionalData?.message,
+      unreadCount: 0,
+      channelType: isGroup ? CHANNEL_GROUP : PM,
       lastUpdatedAt: data?.channel?.last_message_at,
       lastUpdatedBy: '',
       createdAt: data?.channel?.created_at,

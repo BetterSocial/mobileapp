@@ -1,40 +1,50 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react';
-import {useRecoilValue} from 'recoil';
+import {useRecoilState, useRecoilValue} from 'recoil';
+import {useRoute} from '@react-navigation/native';
 
 import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../database/schema/ChannelListSchema';
 import ChannelListMemberSchema from '../../database/schema/ChannelListMemberSchema';
 import ChatSchema from '../../database/schema/ChatSchema';
+import SignedMessageRepo from '../../service/repo/signedMessageRepo';
 import UseLocalDatabaseHook from '../../../types/database/localDatabase.types';
 import UserSchema from '../../database/schema/UserSchema';
+import migrationDbStatusAtom from '../../database/atom/migrationDbStatusAtom';
 import useBetterWebsocketHook from './websocket/useBetterWebsocketHook';
-import useFetchAnonymousChannelHook from './chat/useFetchAnonymousChannelHook';
-import useFetchAnonymousPostNotificationHook from './chat/useFetchAnonymousPostNotificationHook';
+import useFetchChannelHook from './chat/useFetchChannelHook';
+import useFetchPostNotificationHook from './chat/useFetchPostNotificationHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import usePostNotificationListenerHook from './getstream/usePostNotificationListenerHook';
 import useProfileHook from './profile/useProfileHook';
+import {ANONYMOUS, SIGNED} from './constant';
 import {
   AnonymousPostNotification,
   Comment,
   LatestChildrenComment
 } from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
+import {ChannelType} from '../../../types/repo/ChannelData';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {GetstreamFeedListenerObject} from '../../../types/hooks/core/getstreamFeedListener/feedListenerObject';
+import {GetstreamMessage, GetstreamWebsocket, MyChannelType} from './websocket/types.d';
 import {InitialStartupAtom} from '../../service/initialStartup';
-import {getAnonymousChatName} from '../../utils/string/StringUtils';
+import {SignedPostNotification} from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
+import {getAnonymousChatName, getChatName} from '../../utils/string/StringUtils';
 
 const useCoreChatSystemHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook() as UseLocalDatabaseHook;
-  // TODO: Change this into useUserAuthHook
-  const {anonProfileId, signedProfileId} = useProfileHook();
-  const {getAllAnonymousChannels} = useFetchAnonymousChannelHook();
-  const {getAllAnonymousPostNotifications} = useFetchAnonymousPostNotificationHook();
-
+  const {anonProfileId, signedProfileId, profile} = useProfileHook();
+  const {getAllSignedChannels, getAllAnonymousChannels} = useFetchChannelHook();
+  const {getAllSignedPostNotifications, getAllAnonymousPostNotifications} =
+    useFetchPostNotificationHook();
+  const [migrationStatus] = useRecoilState(migrationDbStatusAtom);
   const initialStartup: any = useRecoilValue(InitialStartupAtom);
+  const {params} = useRoute();
 
   const isEnteringApp =
     initialStartup?.id !== null && initialStartup?.id !== undefined && initialStartup?.id !== '';
 
-  const onPostNotifReceived: (data: GetstreamFeedListenerObject) => Promise<void> = async (
+  const onAnonPostNotifReceived: (data: GetstreamFeedListenerObject) => Promise<void> = async (
     data
   ) => {
     try {
@@ -46,43 +56,153 @@ const useCoreChatSystemHook = () => {
     }
   };
 
-  usePostNotificationListenerHook(onPostNotifReceived);
-  const {lastJsonMessage} = useBetterWebsocketHook();
+  const handleChannelImage = (members) => {
+    if (members?.length > 2) {
+      return DEFAULT_PROFILE_PIC_PATH;
+    }
+    const findMember = members?.find((data) => data?.user_id !== signedProfileId);
+    if (findMember) {
+      return findMember?.user?.image;
+    }
+    return DEFAULT_PROFILE_PIC_PATH;
+  };
 
-  const saveChannelListData = async () => {
+  const onSignedPostNotifReceived: (data: GetstreamFeedListenerObject) => Promise<void> = async (
+    data
+  ) => {
+    try {
+      const activityId = data?.new[0]?.object?.id || data?.new[0]?.id;
+      await getSingleSignedPostNotification(activityId);
+    } catch (e) {
+      console.log('error getSingleSignedPostNotification');
+      console.log(e);
+    }
+  };
+
+  usePostNotificationListenerHook(onAnonPostNotifReceived, true);
+  usePostNotificationListenerHook(onSignedPostNotifReceived, false);
+
+  const {lastAnonymousMessage, lastSignedMessage} = useBetterWebsocketHook();
+
+  const getUnreadCount = (message: GetstreamMessage, selectedChannel): number => {
+    const isMyMessage =
+      message?.user?.id === signedProfileId || message?.user?.id === anonProfileId;
+
+    const hasUnreadMessage = selectedChannel?.unread_count <= 0;
+    if (isMyMessage) return 0;
+    if (hasUnreadMessage) return selectedChannel?.unread_count + 1;
+    return 1;
+  };
+
+  const helperSignedChannelListData = async (websocketData: GetstreamWebsocket) => {
+    const {type} = websocketData;
+    const websocketMessage = websocketData?.message;
+
+    const chatName = await getChatName(websocketData?.channel?.name, profile?.username);
+    if (websocketData?.channel?.anon_user_info_emoji_name) {
+      websocketData.targetName = `Anonymous ${websocketData?.channel?.anon_user_info_emoji_name}`;
+    } else {
+      websocketData.targetName = chatName;
+    }
+
+    let selectedChannel;
+    try {
+      selectedChannel = (await ChannelList.getById(localDb, websocketData?.channel_id)) as any;
+    } catch (error) {
+      console.log('error on getting selectedChannel');
+    }
+
+    websocketData.targetImage = handleChannelImage(websocketData?.channel?.members);
+    const websocketChannelType = websocketData?.channel_type;
+    if (websocketChannelType === 'topics' || websocketChannelType === 'group') {
+      websocketData.targetImage = websocketData?.channel?.channel_image;
+    } else {
+      websocketData.targetImage = selectedChannel?.channel_picture ?? websocketMessage?.user?.image;
+    }
+
+    if (type === 'notification.added_to_channel') {
+      websocketData.message.text = 'You have been added to this group';
+    }
+    if (type === 'notification.removed_from_channel') {
+      websocketData.message.text = 'You have been removed from this group';
+    }
+
+    websocketData.unread_count = getUnreadCount(websocketMessage, selectedChannel);
+    websocketData.anon_user_info_color_name = websocketData?.channel?.anon_user_info_color_name;
+    websocketData.anon_user_info_emoji_code = websocketData?.channel?.anon_user_info_emoji_code;
+    websocketData.anon_user_info_color_code = websocketData?.channel?.anon_user_info_color_code;
+
+    return websocketData;
+  };
+
+  const saveChannelListData = async (
+    websocketData: GetstreamWebsocket,
+    channelCategory: MyChannelType
+  ) => {
     if (!localDb) return;
+    const websocketMessage = websocketData?.message;
 
-    const chatName = await getAnonymousChatName(lastJsonMessage?.channel?.members);
+    if (channelCategory === ANONYMOUS) {
+      const chatName = await getAnonymousChatName(websocketData?.channel?.members);
+      websocketData.targetName = chatName?.name;
+      websocketData.targetImage = chatName?.image;
+    } else {
+      websocketData = await helperSignedChannelListData(websocketData);
+    }
 
-    lastJsonMessage.targetName = chatName?.name;
-    lastJsonMessage.targetImage = chatName?.image;
+    const isAnonymous = channelCategory === ANONYMOUS;
+    const channelType: {[key: string]: ChannelType} = {
+      messaging: isAnonymous ? 'ANON_PM' : 'PM',
+      group: 'GROUP',
+      topics: 'TOPIC'
+    };
 
-    const channelList = ChannelList.fromWebsocketObject(lastJsonMessage);
+    const isContainFollowingMessage = websocketData?.message?.textOwnMessage
+      ?.toLowerCase()
+      ?.includes('you started following');
+    const isSystemMessage = websocketMessage?.isSystem || websocketData?.type === 'system';
+    if (isSystemMessage && isContainFollowingMessage) {
+      const textOwnUser = 'You started following this user.\n Send them a message now.';
+      await ChannelList.updateChannelDescription(
+        localDb,
+        websocketData?.channel_id,
+        websocketData?.message?.textOwnMessage ?? textOwnUser,
+        websocketData
+      );
+      const chat = ChatSchema.fromWebsocketObject(websocketData);
+      await chat.save(localDb);
+    } else {
+      const channelList = ChannelList.fromWebsocketObject(
+        websocketData,
+        channelType[websocketData?.channel_type]
+      );
+      await channelList.save(localDb);
+    }
 
-    await channelList.save(localDb);
+    if (websocketData?.channel_type === 'topics') {
+      refresh('channelList');
+      return;
+    }
 
-    const user = UserSchema.fromWebsocketObject(lastJsonMessage);
+    const user = UserSchema.fromWebsocketObject(websocketData);
     await user.saveOrUpdateIfExists(localDb);
 
     const isMyMessage =
-      lastJsonMessage?.message?.user?.id === signedProfileId ||
-      lastJsonMessage?.message?.user?.id === anonProfileId;
+      websocketMessage?.user?.id === signedProfileId ||
+      websocketMessage?.user?.id === anonProfileId;
 
     if (!isMyMessage) {
-      const chat = ChatSchema.fromWebsocketObject(lastJsonMessage);
+      const chat = ChatSchema.fromWebsocketObject(websocketData);
       await chat.save(localDb);
     }
     try {
-      lastJsonMessage?.channel?.members?.forEach(async (member) => {
-        const userMember = UserSchema.fromMemberWebsocketObject(
-          member,
-          lastJsonMessage?.channel?.id
-        );
+      websocketData?.channel?.members?.forEach(async (member) => {
+        const userMember = UserSchema.fromMemberWebsocketObject(member, websocketData?.channel?.id);
         await userMember.saveOrUpdateIfExists(localDb);
 
         const memberSchema = ChannelListMemberSchema.fromWebsocketObject(
-          lastJsonMessage?.channel?.id,
-          lastJsonMessage?.message?.id,
+          websocketData?.channel?.id,
+          websocketData?.message?.id,
           member
         );
         await memberSchema.save(localDb);
@@ -99,8 +219,8 @@ const useCoreChatSystemHook = () => {
   };
 
   const helperDetermineIsMyChildComment = (postNotification: AnonymousPostNotification) => {
-    let latestComment: Comment = null;
-    let latestCommentLatestChild: LatestChildrenComment = null;
+    let latestComment: Comment | null = null;
+    let latestCommentLatestChild: LatestChildrenComment | null = null;
     const postHasComment = postNotification?.comments?.length > 0;
     let isMyComment = false;
     let isMyChildComment = false;
@@ -151,9 +271,33 @@ const useCoreChatSystemHook = () => {
     return 0;
   };
 
+  const getSingleSignedPostNotification = async (activityId) => {
+    if (!localDb) return;
+    let signedPostNotification: SignedPostNotification | null = null;
+
+    try {
+      signedPostNotification = await SignedMessageRepo.getSingleSignedPostNotifications(activityId);
+    } catch (e) {
+      console.log('error on getting signedPostNotifications');
+      console.log(e);
+    }
+
+    try {
+      if (!signedPostNotification) return;
+      const unreadCount = unreadCountProcessor(signedPostNotification);
+      const channelList = ChannelList.fromSignedPostNotificationAPI(signedPostNotification);
+      channelList.saveAndUpdateIncrementCount(localDb, unreadCount).catch((e) => console.log(e));
+
+      refresh('channelList');
+    } catch (e) {
+      console.log('error on saving signedPostNotifications');
+      console.log(e);
+    }
+  };
+
   const getSingleAnonymousPostNotification = async (activityId) => {
     if (!localDb) return;
-    let anonymousPostNotification: AnonymousPostNotification = null;
+    let anonymousPostNotification: AnonymousPostNotification | null = null;
 
     try {
       anonymousPostNotification = await AnonymousMessageRepo.getSingleAnonymousPostNotifications(
@@ -178,21 +322,33 @@ const useCoreChatSystemHook = () => {
   };
 
   React.useEffect(() => {
-    if (!lastJsonMessage && !localDb) return;
+    if (!lastAnonymousMessage || !localDb) return;
 
-    const {type} = lastJsonMessage;
+    const {type} = lastAnonymousMessage;
     if (type === 'health.check') return;
     if (type === 'notification.message_new') {
-      saveChannelListData().catch((e) => console.log(e));
+      saveChannelListData(lastAnonymousMessage, ANONYMOUS).catch((e) => console.log(e));
     }
-  }, [lastJsonMessage, localDb]);
+  }, [JSON.stringify(lastAnonymousMessage), localDb]);
 
   React.useEffect(() => {
-    if (isEnteringApp) {
-      getAllAnonymousPostNotifications().catch((e) => console.log(e));
-      getAllAnonymousChannels().catch((e) => console.log(e));
+    if (!lastSignedMessage || !localDb) return;
+    const {type} = lastSignedMessage;
+    if (type === 'health.check') return;
+    if (type === 'notification.message_new' || type === 'notification.added_to_channel') {
+      saveChannelListData(lastSignedMessage, SIGNED).catch((e) => console.log(e));
     }
-  }, [localDb, isEnteringApp]);
+  }, [JSON.stringify(lastSignedMessage), localDb]);
+
+  React.useEffect(() => {
+    const isResetNav = params?.isReset;
+    if (isEnteringApp && migrationStatus === 'MIGRATED' && !isResetNav) {
+      getAllSignedChannels().catch((e) => console.log(e));
+      getAllSignedPostNotifications().catch((e) => console.log(e));
+      getAllAnonymousChannels().catch((e) => console.log(e));
+      getAllAnonymousPostNotifications().catch((e) => console.log(e));
+    }
+  }, [isEnteringApp, migrationStatus]);
 };
 
 export default useCoreChatSystemHook;

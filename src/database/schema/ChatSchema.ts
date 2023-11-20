@@ -20,7 +20,7 @@ class ChatSchema implements BaseDbSchema {
 
   updatedAt: string;
 
-  rawJson: string;
+  rawJson: any;
 
   user: UserSchema | null;
 
@@ -209,6 +209,32 @@ class ChatSchema implements BaseDbSchema {
     });
   }
 
+  static fromGetAllChannelAPI(channelId, json): ChatSchema {
+    let rawJson = null;
+
+    try {
+      rawJson = JSON.stringify(json);
+    } catch (e) {
+      console.log('error stringify');
+      console.log(e);
+    }
+
+    return new ChatSchema({
+      id: json?.id,
+      channelId,
+      userId: json?.user?.id,
+      message: (json?.text || json?.message) ?? '',
+      type: json?.type,
+      createdAt: json?.created_at,
+      updatedAt: json?.created_at,
+      rawJson,
+      user: null,
+      status: 'sent',
+      isMe: false,
+      isContinuous: false
+    });
+  }
+
   static fromGetAllAnonymousChannelAPI(channelId, json): ChatSchema {
     let rawJson = null;
 
@@ -240,7 +266,9 @@ class ChatSchema implements BaseDbSchema {
     userId: string,
     channelId: string,
     message: string,
-    localDb: SQLiteDatabase
+    localDb: SQLiteDatabase,
+    type: 'regular' | 'system' = 'regular',
+    status: 'pending' | 'sent' = 'pending'
   ): Promise<ChatSchema> {
     let newRandomId = id;
     const existingChat = await ChatSchema.getByid(localDb, newRandomId);
@@ -251,11 +279,11 @@ class ChatSchema implements BaseDbSchema {
     return new ChatSchema({
       channelId,
       message,
-      status: 'pending',
+      status,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       id: newRandomId,
-      type: 'regular',
+      type,
       rawJson: null,
       user: null,
       userId,

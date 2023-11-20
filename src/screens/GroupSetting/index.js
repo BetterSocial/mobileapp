@@ -42,7 +42,6 @@ const GroupSetting = ({navigation, route}) => {
     console.log('name', name);
     return name === 'AnonymousUser' ? anonymousName : name;
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -67,14 +66,14 @@ const GroupSetting = ({navigation, route}) => {
         <View style={styles.users}>
           <Text style={styles.countUser}>{`Participants (${countUser})`}</Text>
           <FlatList
-            data={Object.keys(participants)}
+            data={participants}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item}) => (
               <View style={{height: 72}}>
                 <ProfileContact
                   key={item}
-                  fullname={getProfileName(participants[item].user.name)}
-                  photo={participants[item].user.image}
+                  fullname={getProfileName(item?.user?.name)}
+                  photo={item?.user?.image}
                 />
               </View>
             )}
