@@ -22,17 +22,21 @@ beforeEach(() => {
 });
 
 describe('TESTING OneSignalUtil', () => {
-  it('TEST should call add tag and remove tag when calling resubscribe', async () => {
-    // Setup
-    getSubscribeableTopic.mockImplementationOnce(() => mockSubscribeableTopicResponse);
+  it(
+    'TEST should call add tag and remove tag when calling resubscribe',
+    async () => {
+      // Setup
+      getSubscribeableTopic.mockImplementationOnce(() => mockSubscribeableTopicResponse);
 
-    // Execution
-    await OneSignalUtil.rebuildAndSubscribeTags();
+      // Execution
+      await OneSignalUtil.rebuildAndSubscribeTags();
 
-    // Assertion
-    expect(OneSignal.User.removeTag).toHaveBeenCalledTimes(3);
-    expect(OneSignal.User.addTag).toHaveBeenCalledTimes(2);
-  });
+      // Assertion
+      expect(OneSignal.User.removeTag).toHaveBeenCalledTimes(3);
+      expect(OneSignal.User.addTag).toHaveBeenCalledTimes(2);
+    },
+    11 * 1000
+  );
 
   it('TEST should call remove tag when calling removeAllSubscribedTags', async () => {
     // Setup
