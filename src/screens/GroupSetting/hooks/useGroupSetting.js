@@ -37,48 +37,47 @@ const useGroupSetting = ({navigation, route}) => {
   }, [route]);
 
   const submitData = async (withNavigation = true, withLoading = true) => {
-    let changeImageUrl = '';
-    if (changeImage) {
-      if (withLoading) setIsLoading(true);
-      try {
-        const res = await uploadFile(`data:image/jpeg;base64,${base64Profile}`);
-        changeImageUrl = res.data.url;
-      } catch (e) {
-        setIsLoading(false);
-        return;
-      }
-    }
-
-    if (changeName || changeImage) {
-      if (withLoading) setIsLoading(true);
-      let dataEdit = {
-        name: groupName
-        // ...(changeImage && {image: base64Profile}),
-      };
-      if (changeName) {
-        dataEdit = {...dataEdit, isEditName: true};
-      }
-      if (changeImage) {
-        dataEdit.image = changeImageUrl;
-      } else if (channel?.data?.image) {
-        dataEdit.image = channel?.data?.image;
-      }
-      console.log({dataEdit}, 'nusu');
-      updateDataEdit(dataEdit, withNavigation);
-    } else if (withNavigation) navigation.goBack();
+    // let changeImageUrl = '';
+    // if (changeImage) {
+    //   if (withLoading) setIsLoading(true);
+    //   try {
+    //     const res = await uploadFile(`data:image/jpeg;base64,${base64Profile}`);
+    //     changeImageUrl = res.data.url;
+    //   } catch (e) {
+    //     setIsLoading(false);
+    //     return;
+    //   }
+    // }
+    // if (changeName || changeImage) {
+    //   if (withLoading) setIsLoading(true);
+    //   let dataEdit = {
+    //     name: groupName
+    //     // ...(changeImage && {image: base64Profile}),
+    //   };
+    //   if (changeName) {
+    //     dataEdit = {...dataEdit, isEditName: true};
+    //   }
+    //   if (changeImage) {
+    //     dataEdit.image = changeImageUrl;
+    //   } else if (channel?.data?.image) {
+    //     dataEdit.image = channel?.data?.image;
+    //   }
+    //   console.log({dataEdit}, 'nusu');
+    //   updateDataEdit(dataEdit, withNavigation);
+    // } else if (withNavigation) navigation.goBack();
   };
 
   const updateDataEdit = async (dataEdit, withNavigation) => {
-    try {
-      await channel.update(dataEdit);
-      if (withNavigation) navigation.navigate('ChatDetailPage');
-    } catch (e) {
-      if (__DEV__) {
-        console.log(`error : ${e}`);
-      }
-      SimpleToast.show(StringConstant.groupSettingUpdateFailed);
-    }
-    setIsLoading(false);
+    // try {
+    //   await channel.update(dataEdit);
+    //   if (withNavigation) navigation.navigate('ChatDetailPage');
+    // } catch (e) {
+    //   if (__DEV__) {
+    //     console.log(`error : ${e}`);
+    //   }
+    //   SimpleToast.show(StringConstant.groupSettingUpdateFailed);
+    // }
+    // setIsLoading(false);
   };
 
   const lounchGalery = async () => {
@@ -140,8 +139,7 @@ const useGroupSetting = ({navigation, route}) => {
     setUrlImage,
     isLoading,
     setIsLoading,
-    handleResLaunchGallery,
-    updateDataEdit
+    handleResLaunchGallery
   };
 };
 

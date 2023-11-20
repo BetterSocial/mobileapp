@@ -39,7 +39,6 @@ const GroupSetting = ({navigation, route}) => {
 
   const anonymousName = `Anonymous ${channelState?.data?.anon_user_info_emoji_name}`;
   const getProfileName = (name) => {
-    console.log('name', name);
     return name === 'AnonymousUser' ? anonymousName : name;
   };
   return (
@@ -74,6 +73,7 @@ const GroupSetting = ({navigation, route}) => {
                   key={item}
                   fullname={getProfileName(item?.user?.name)}
                   photo={item?.user?.image}
+                  item={item}
                 />
               </View>
             )}

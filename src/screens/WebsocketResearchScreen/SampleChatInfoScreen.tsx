@@ -35,6 +35,7 @@ import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {getChatName} from '../../utils/string/StringUtils';
 import {isContainUrl} from '../../utils/Utils';
+import MemoIc_pencil from '../../assets/icons/Ic_pencil';
 
 export const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#fff', paddingBottom: 40},
@@ -89,7 +90,6 @@ export const styles = StyleSheet.create({
     fontSize: normalizeFontSize(24),
     lineHeight: normalizeFontSize(29.05),
     color: '#000',
-    width: '100%',
     paddingHorizontal: dimen.normalizeDimen(20),
     fontWeight: 'bold'
   },
@@ -175,6 +175,10 @@ export const styles = StyleSheet.create({
   },
   parentContact: {
     height: normalize(72)
+  },
+  editBtn: {
+    padding: dimen.normalizeDimen(10),
+    marginRight: dimen.normalizeDimen(10)
   }
 });
 
@@ -190,7 +194,8 @@ const SampleChatInfoScreen = () => {
     isAnonymousModalOpen,
     blockModalRef,
     handleShowArrow,
-    loadingChannelInfo
+    loadingChannelInfo,
+    goToEditGroup
   } = useChatInfoScreenHook();
   const [isLoadingMembers] = React.useState<boolean>(false);
   const {signedProfileId} = useUserAuthHook();
@@ -270,6 +275,15 @@ const SampleChatInfoScreen = () => {
                     <Text numberOfLines={1} style={styles.groupName}>
                       {getChatName(channelInfo?.name, profile?.myProfile?.username)}
                     </Text>
+                    {params?.from === SIGNED ? (
+                      <TouchableOpacity style={styles.editBtn} onPress={goToEditGroup}>
+                        <MemoIc_pencil
+                          height={dimen.normalizeDimen(20)}
+                          width={dimen.normalizeDimen(20)}
+                          color={colors.darkBlue}
+                        />
+                      </TouchableOpacity>
+                    ) : null}
                   </View>
                   <Text style={styles.dateCreate}>
                     Created {moment(channelInfo?.createdAt).format('MM/DD/YYYY')}
