@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {ViewStyle, KeyboardAvoidingView, Platform, ScrollView} from 'react-native';
+import {ViewStyle, KeyboardAvoidingView, Platform} from 'react-native';
 import dimen from '../utils/dimen';
 
 type Props = {

@@ -142,14 +142,6 @@ RootNavigator.propTypes = {
 // region authenticatedStack
 const AuthenticatedStack = createNativeStackNavigator();
 
-const pdpWrapper = (props) => {
-  return (
-    <KeyboardWrapper>
-      <PostDetailPage {...props} />
-    </KeyboardWrapper>
-  );
-};
-
 const AuthenticatedNavigator = () => {
   return (
     <OneSignalNavigator>
