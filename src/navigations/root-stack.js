@@ -161,142 +161,246 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="TermsAndCondition"
-          component={TermsAndCondition}
+          component={(props) => (
+            <KeyboardWrapper>
+              <TermsAndCondition {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="PrivacyPolicies"
-          component={PrivacyPolicies}
+          component={(props) => (
+            <KeyboardWrapper>
+              <PrivacyPolicies {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="Settings"
-          component={Settings}
+          component={(props) => (
+            <KeyboardWrapper>
+              <Settings {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="HelpCenter"
-          component={HelpCenter}
+          component={(props) => (
+            <KeyboardWrapper>
+              <HelpCenter {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="ProfileScreen"
-          component={ProfileScreen}
+          component={(props) => (
+            <KeyboardWrapper>
+              <ProfileScreen {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen name="ImageViewer" component={ImageViewerScreen} />
         <AuthenticatedStack.Screen
           name="DomainScreen"
-          component={DomainScreen}
+          component={(props) => (
+            <KeyboardWrapper>
+              <DomainScreen {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="ContactScreen"
-          component={ContactScreen}
+          component={(props) => (
+            <KeyboardWrapper>
+              <ContactScreen {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="OtherProfile"
-          component={OtherProfile}
+          component={(props) => (
+            <KeyboardWrapper>
+              <OtherProfile {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name={NavigationConstants.CREATE_POST_SCREEN}
-          component={CreatePost}
+          component={(props) => (
+            <KeyboardWrapper>
+              <CreatePost {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="Followings"
-          component={FollowingScreen}
+          component={(props) => (
+            <KeyboardWrapper>
+              <FollowingScreen {...props} />
+            </KeyboardWrapper>
+          )}
           options={{
             headerShown: false
           }}
         />
         <AuthenticatedStack.Screen
           name="Followers"
-          component={FollowersScreen}
+          component={(props) => (
+            <KeyboardWrapper>
+              <FollowersScreen {...props} />
+            </KeyboardWrapper>
+          )}
           options={{
             headerShown: false
           }}
         />
         <AuthenticatedStack.Screen
           name="DetailDomainScreen"
-          component={DetailDomainScreen}
+          component={(props) => (
+            <KeyboardWrapper>
+              <DetailDomainScreen {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="LinkContextScreen"
-          component={LinkContextScreen}
+          component={(props) => (
+            <KeyboardWrapper>
+              <LinkContextScreen {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="TopicPageScreen"
-          component={TopicPageScreen}
+          component={(props) => (
+            <KeyboardWrapper>
+              <TopicPageScreen {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="TopicMemberScreen"
-          component={TopicMemberScreen}
+          component={(props) => (
+            <KeyboardWrapper>
+              <TopicMemberScreen {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="DiscoveryScreen"
-          component={DiscoveryScreenV2}
+          component={(props) => (
+            <KeyboardWrapper>
+              <DiscoveryScreenV2 {...props} />
+            </KeyboardWrapper>
+          )}
           options={{
             headerShown: false
           }}
         />
         <AuthenticatedStack.Screen
           name="BlockScreen"
-          component={Blocked}
+          component={(props) => (
+            <KeyboardWrapper>
+              <Blocked {...props} />
+            </KeyboardWrapper>
+          )}
           options={{
             headerShown: false
           }}
         />
         <AuthenticatedStack.Screen
           name="GroupSetting"
-          component={GroupSetting}
+          component={(props) => (
+            <KeyboardWrapper>
+              <GroupSetting {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="AddParticipant"
-          component={AddParticipant}
+          component={(props) => (
+            <KeyboardWrapper>
+              <AddParticipant {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="GroupMedia"
-          component={GroupMedia}
+          component={(props) => (
+            <KeyboardWrapper>
+              <GroupMedia {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="GroupInfo"
-          component={GroupInfo}
+          component={(props) => (
+            <KeyboardWrapper>
+              <GroupInfo {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="DetailGroupImage"
-          component={DetailGroupImage}
+          component={(props) => (
+            <KeyboardWrapper>
+              <DetailGroupImage {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="ChatDetailPage"
-          component={ChatDetailPage}
+          component={(props) => (
+            <KeyboardWrapper>
+              <ChatDetailPage {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="ReplyComment"
-          component={ReplyComment}
+          component={(props) => (
+            <KeyboardWrapper>
+              <ReplyComment {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
 
         <AuthenticatedStack.Screen
           name="ProfileReplyComment"
-          component={ProfileReplyComment}
+          component={(props) => (
+            <KeyboardWrapper>
+              <ProfileReplyComment {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="OtherProfileReplyComment"
-          component={OtherProfileReplyComment}
+          component={(props) => (
+            <KeyboardWrapper>
+              <OtherProfileReplyComment {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
@@ -310,22 +414,38 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="ProfilePostDetailPage"
-          component={ProfilePostDetail}
+          component={(props) => (
+            <KeyboardWrapper>
+              <ProfilePostDetail {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="OtherProfilePostDetailPage"
-          component={OtherProfilePostDetail}
+          component={(props) => (
+            <KeyboardWrapper>
+              <OtherProfilePostDetail {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="ChannelScreen"
-          component={ChannelScreen}
+          component={(props) => (
+            <KeyboardWrapper>
+              <ChannelScreen {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="WebsocketResearchScreen"
-          component={WebsocketResearchScreen}
+          component={(props) => (
+            <KeyboardWrapper>
+              <WebsocketResearchScreen {...props} />
+            </KeyboardWrapper>
+          )}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
