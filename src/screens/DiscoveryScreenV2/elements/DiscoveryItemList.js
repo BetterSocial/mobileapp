@@ -33,6 +33,51 @@ const DomainList = (props) => {
     isBlockedSection
   } = props;
 
+  const renderButonAction = () => {
+    if (isBlockedSection) {
+      if (item.isUnblocked) {
+        return (
+          <TouchableNativeFeedback testID="isUnblock" onPress={handleSetBlock}>
+            <View style={styles.followContainer}>
+              <View style={styles.buttonBlockUser}>
+                <Text style={styles.textButtonBlockUser}>Block</Text>
+              </View>
+            </View>
+          </TouchableNativeFeedback>
+        );
+      }
+      return (
+        <TouchableNativeFeedback testID="isBlock" onPress={handleSetUnblock}>
+          <View style={styles.followContainer}>
+            <View style={styles.buttonBlock}>
+              <Text style={styles.textButtonBlock}>Blocked</Text>
+            </View>
+          </View>
+        </TouchableNativeFeedback>
+      );
+    }
+    if (item.isunfollowed) {
+      return (
+        <TouchableNativeFeedback onPress={handleSetFollow}>
+          <View style={styles.followContainer}>
+            <View style={styles.buttonFollow}>
+              <Text style={styles.textButtonFollow}>{isCommunity ? 'Join' : 'Follow'}</Text>
+            </View>
+          </View>
+        </TouchableNativeFeedback>
+      );
+    }
+    return (
+      <TouchableNativeFeedback onPress={handleSetUnFollow}>
+        <View style={styles.followContainer}>
+          <View style={styles.buttonFollowing}>
+            <Text style={styles.textButtonFollowing}>{isCommunity ? 'Joined' : 'Following'}</Text>
+          </View>
+        </View>
+      </TouchableNativeFeedback>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -76,41 +121,7 @@ const DomainList = (props) => {
           </View>
         </View>
       </TouchableOpacity>
-      {isBlockedSection ? (
-        item.isUnblocked ? (
-          <TouchableNativeFeedback testID="isUnblock" onPress={handleSetBlock}>
-            <View style={styles.followContainer}>
-              <View style={styles.buttonBlockUser}>
-                <Text style={styles.textButtonBlockUser}>Block</Text>
-              </View>
-            </View>
-          </TouchableNativeFeedback>
-        ) : (
-          <TouchableNativeFeedback testID="isBlock" onPress={handleSetUnblock}>
-            <View style={styles.followContainer}>
-              <View style={styles.buttonBlock}>
-                <Text style={styles.textButtonBlock}>Blocked</Text>
-              </View>
-            </View>
-          </TouchableNativeFeedback>
-        )
-      ) : item.isunfollowed ? (
-        <TouchableNativeFeedback onPress={handleSetFollow}>
-          <View style={styles.followContainer}>
-            <View style={styles.buttonFollow}>
-              <Text style={styles.textButtonFollow}>{isCommunity ? 'Join' : 'Follow'}</Text>
-            </View>
-          </View>
-        </TouchableNativeFeedback>
-      ) : (
-        <TouchableNativeFeedback onPress={handleSetUnFollow}>
-          <View style={styles.followContainer}>
-            <View style={styles.buttonFollowing}>
-              <Text style={styles.textButtonFollowing}>{isCommunity ? 'Joined' : 'Following'}</Text>
-            </View>
-          </View>
-        </TouchableNativeFeedback>
-      )}
+      {renderButonAction()}
     </View>
   );
 };
