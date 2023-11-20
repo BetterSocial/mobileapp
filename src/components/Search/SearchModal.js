@@ -26,7 +26,7 @@ const SearchModal = (props) => {
         <View style={styles.space} />
         <View style={styles.content}>
           <View style={styles.header}>
-            <Pressable onPress={props.onClose} style={styles.closeButton}>
+            <Pressable testID="onCloseModal" onPress={props.onClose} style={styles.closeButton}>
               <CrossIcon width={18} height={18} fill="#000" />
             </Pressable>
             <Text style={styles.textSearch}>{StringConstant.searchModalTitle}</Text>
@@ -53,6 +53,7 @@ const SearchModal = (props) => {
               <View style={styles.box}>
                 {props.options.map((value) => (
                   <TouchableNativeFeedback
+                    testID="selectLocation"
                     key={value?.location_id}
                     onPress={() => props.onSelect(value)}>
                     <View style={styles.list}>
