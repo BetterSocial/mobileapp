@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable import/extensions */
 /* eslint-disable import/no-unresolved */
 
 import * as React from 'react';
+import FastImage from 'react-native-fast-image';
 import moment from 'moment';
 import {
   FlatList,
@@ -14,16 +16,25 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+import {useRoute} from '@react-navigation/core';
 
 import AnonymousChatInfoHeader from '../../components/Header/AnonymousChatInfoHeader';
 import AnonymousIcon from '../ChannelListScreen/elements/components/AnonymousIcon';
-import useAnonymousChatInfoScreenHook from '../../hooks/screen/useAnonymousChatInfoHook';
-import useProfileHook from '../../hooks/core/profile/useProfileHook';
+import BlockComponent from '../../components/BlockComponent';
+import ChannelImage from '../../components/ChatList/elements/ChannelImage';
+import ModalAction from '../GroupInfo/elements/ModalAction';
+import ModalActionAnonymous from '../GroupInfo/elements/ModalActionAnonymous';
+import dimen from '../../utils/dimen';
+import useChatInfoScreenHook from '../../hooks/screen/useChatInfoHook';
+import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
+import {CHANNEL_GROUP, GROUP_INFO, SIGNED} from '../../hooks/core/constant';
+import {Context} from '../../context';
 import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
 import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
-import {trimString} from '../../utils/string/TrimString';
+import {getChatName} from '../../utils/string/StringUtils';
+import {isContainUrl} from '../../utils/Utils';
 
 export const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#fff', paddingBottom: 40},
@@ -51,14 +62,14 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     bottom: 5
   },
-  countUser: {
-    fontFamily: fonts.inter[600],
+  countUser: (from) => ({
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(16.94),
-    color: colors.holytosca,
-    marginLeft: 20,
-    marginBottom: 4
-  },
+    color: from === SIGNED ? colors.darkBlue : colors.holytosca,
+    marginLeft: dimen.normalizeDimen(20),
+    marginBottom: dimen.normalizeDimen(4),
+    fontWeight: 'bold'
+  }),
   btnToMediaGroup: {
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(14),
@@ -76,9 +87,11 @@ export const styles = StyleSheet.create({
   },
   groupName: {
     fontSize: normalizeFontSize(24),
-    fontFamily: fonts.inter[500],
     lineHeight: normalizeFontSize(29.05),
-    color: '#000'
+    color: '#000',
+    width: '100%',
+    paddingHorizontal: dimen.normalizeDimen(20),
+    fontWeight: 'bold'
   },
   lineTop: {
     backgroundColor: colors.alto,
@@ -87,8 +100,7 @@ export const styles = StyleSheet.create({
   containerGroupName: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingLeft: 20
+    alignItems: 'center'
   },
   containerPhoto: {
     justifyContent: 'center',
@@ -132,8 +144,7 @@ export const styles = StyleSheet.create({
   },
   gap: {
     height: 1,
-    backgroundColor: '#E0E0E0',
-    marginTop: 50
+    backgroundColor: '#E0E0E0'
   },
   actionGroup: {
     marginTop: 22
@@ -153,17 +164,58 @@ export const styles = StyleSheet.create({
   textAct: {
     color: '#FF2E63',
     fontSize: 14
+  },
+  mr7: {
+    marginRight: dimen.normalizeDimen(12)
+  },
+  imageUser: {
+    height: normalize(48),
+    width: normalize(48),
+    borderRadius: normalize(24)
+  },
+  parentContact: {
+    height: normalize(72)
   }
 });
 
 const SampleChatInfoScreen = () => {
-  const {channelInfo, goBack, onContactPressed} = useAnonymousChatInfoScreenHook();
-
+  const {
+    channelInfo,
+    goBack,
+    onContactPressed,
+    selectedUser,
+    handlePressPopup,
+    handleCloseSelectUser,
+    openModal,
+    isAnonymousModalOpen,
+    blockModalRef,
+    handleShowArrow,
+    loadingChannelInfo
+  } = useChatInfoScreenHook();
   const [isLoadingMembers] = React.useState<boolean>(false);
-  // TODO: Change this into useUserAuthHook
-  const {signedProfileId} = useProfileHook();
-
-  const showImageProfile = () => {
+  const {signedProfileId} = useUserAuthHook();
+  const [profile] = (React.useContext(Context) as unknown as any).profile;
+  const {params}: any = useRoute();
+  const ANONYMOUS_USER = 'AnonymousUser';
+  const {anon_user_info_color_code, anon_user_info_emoji_code} =
+    channelInfo?.rawJson?.channel || {};
+  const showImageProfile = (): React.ReactNode => {
+    if (channelInfo?.channelType === CHANNEL_GROUP) {
+      return (
+        <ChannelImage>
+          <ChannelImage.Big type={GROUP_INFO} image={channelInfo?.channelPicture} />
+        </ChannelImage>
+      );
+    }
+    if (anon_user_info_color_code) {
+      return (
+        <AnonymousIcon
+          color={anon_user_info_color_code}
+          emojiCode={anon_user_info_emoji_code}
+          size={normalize(100)}
+        />
+      );
+    }
     return (
       <Image
         testID="image1"
@@ -173,15 +225,39 @@ const SampleChatInfoScreen = () => {
     );
   };
 
-  const {anon_user_info_color_code, anon_user_info_emoji_code, anon_user_info_emoji_name} =
-    channelInfo?.rawJson?.channel || {};
+  const renderImageComponent = (item) => {
+    if (!isContainUrl(item?.user?.image) || item?.user?.name === ANONYMOUS_USER) {
+      return (
+        <View style={styles.mr7}>
+          <AnonymousIcon
+            color={anon_user_info_color_code}
+            emojiCode={anon_user_info_emoji_code}
+            size={normalize(48)}
+          />
+        </View>
+      );
+    }
+    return (
+      <View style={styles.mr7}>
+        <FastImage style={styles.imageUser} source={{uri: item?.user?.image}} />
+      </View>
+    );
+  };
+
+  const countParticipat = () => {
+    return `(${channelInfo?.members?.length})`;
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
-      {isLoadingMembers ? null : (
+      {isLoadingMembers || loadingChannelInfo ? null : (
         <>
-          <AnonymousChatInfoHeader isCenter onPress={goBack} title={channelInfo?.name} />
+          <AnonymousChatInfoHeader
+            isCenter
+            onPress={goBack}
+            title={`${getChatName(channelInfo?.name, profile?.myProfile?.username)}`}
+          />
           <View style={styles.lineTop} />
           <ScrollView nestedScrollEnabled={true}>
             <SafeAreaView>
@@ -191,7 +267,9 @@ const SampleChatInfoScreen = () => {
               <View style={styles.row}>
                 <View style={styles.column}>
                   <View style={styles.containerGroupName}>
-                    <Text style={styles.groupName}>{trimString(channelInfo?.name, 20)}</Text>
+                    <Text numberOfLines={1} style={styles.groupName}>
+                      {getChatName(channelInfo?.name, profile?.myProfile?.username)}
+                    </Text>
                   </View>
                   <Text style={styles.dateCreate}>
                     Created {moment(channelInfo?.createdAt).format('MM/DD/YYYY')}
@@ -201,36 +279,23 @@ const SampleChatInfoScreen = () => {
               <View style={styles.lineTop} />
               <View style={styles.lineTop} />
               <View style={styles.users}>
-                <Text style={styles.countUser}>Participants ({channelInfo?.members?.length})</Text>
+                <Text style={styles.countUser(params?.from)}>Participants {countParticipat()}</Text>
                 <FlatList
                   testID="participants"
-                  data={channelInfo?.members}
+                  data={channelInfo?.rawJson?.channel?.members}
                   keyExtractor={(item, index) => index?.toString()}
                   renderItem={({item, index}) => (
-                    <View style={{height: normalize(72)}}>
+                    <View style={styles.parentContact}>
                       <ProfileContact
                         key={index}
                         item={item}
-                        onPress={() => onContactPressed(item)}
-                        fullname={
-                          item?.user?.isMe
-                            ? `Anonymous ${anon_user_info_emoji_name} (You)`
-                            : item?.user?.username
-                        }
+                        onPress={() => onContactPressed(item, params.from)}
+                        fullname={item?.user?.name || item?.user?.username}
                         photo={item?.user?.profilePicture}
-                        showArrow={!item?.user?.isMe}
+                        showArrow={handleShowArrow(item)}
                         userId={signedProfileId}
-                        ImageComponent={
-                          item?.user?.isMe && (
-                            <View style={{marginRight: 17}}>
-                              <AnonymousIcon
-                                color={anon_user_info_color_code}
-                                emojiCode={anon_user_info_emoji_code}
-                                size={normalize(48)}
-                              />
-                            </View>
-                          )
-                        }
+                        ImageComponent={renderImageComponent(item)}
+                        from={params?.from}
                       />
                     </View>
                   )}
@@ -244,6 +309,25 @@ const SampleChatInfoScreen = () => {
           </View>
         </>
       )}
+      <ModalAction
+        onCloseModal={handleCloseSelectUser}
+        selectedUser={selectedUser}
+        isOpen={openModal}
+        onPress={handlePressPopup}
+        name={selectedUser?.user?.username || selectedUser?.user?.name}
+      />
+      <ModalActionAnonymous
+        name={
+          selectedUser?.user?.name !== ANONYMOUS_USER
+            ? selectedUser?.user?.name
+            : selectedUser?.user?.username
+        }
+        isOpen={isAnonymousModalOpen}
+        onCloseModal={handleCloseSelectUser}
+        selectedUser={selectedUser}
+        onPress={handlePressPopup}
+      />
+      <BlockComponent ref={blockModalRef} screen="group_info" />
     </SafeAreaView>
   );
 };

@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import BaseChannelItem from './BaseChannelItem';
-import useProfileHook from '../../hooks/core/profile/useProfileHook';
-import {BaseChannelItemTypeProps} from '../../../types/component/AnonymousChat/BaseChannelItem.types';
+import useChannelHook from '../../hooks/screen/useChannelHook';
+import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
 import {
   Comment,
   PostNotificationChannelList,
@@ -12,12 +12,11 @@ import {MessageChannelItemProps} from '../../../types/component/AnonymousChat/Me
 import {calculateTime} from '../../utils/time';
 import {capitalizeFirstText} from '../../utils/string/StringUtils';
 
-const AnonPostNotificationChannelItem: (props: MessageChannelItemProps) => React.ReactElement = ({
+const PostNotificationChannelItem: (props: MessageChannelItemProps) => React.ReactElement = ({
   item,
   onChannelPressed
 }) => {
-  // TODO: Change this into useUserAuthHook
-  const {anonProfileId, signedProfileId} = useProfileHook();
+  const {anonProfileId, signedProfileId} = useUserAuthHook();
 
   const postNotifItem = item as PostNotificationChannelList;
   let commenterName = '';
@@ -29,27 +28,16 @@ const AnonPostNotificationChannelItem: (props: MessageChannelItemProps) => React
   let level1FirstComment: Reaction = null;
   let level2FirstComment: Reaction = null;
 
-  const helperDeterminePostType = (
-    isOwnPost: boolean,
-    isOwningReaction: boolean
-  ): BaseChannelItemTypeProps => {
-    let type = BaseChannelItemTypeProps.ANON_POST_NOTIFICATION;
-    if (isOwnPost && isOwningReaction)
-      type = BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_I_COMMENTED;
-    else if (isOwnPost) type = BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION;
-    else if (isOwningReaction) type = BaseChannelItemTypeProps.ANON_POST_NOTIFICATION_I_COMMENTED;
-
-    return type;
-  };
-
   const helperDetermineCommenterName = () => {
     const anonymousCommenterName = firstComment?.reaction?.data?.anon_user_info_emoji_name;
     const firstCommenterId = firstComment?.reaction?.user_id;
     const isFirstCommenterMe =
       firstCommenterId === signedProfileId || firstCommenterId === anonProfileId;
 
-    if (firstComment?.reaction?.isOwningReaction) commenterName = 'You';
-    else if (anonymousCommenterName) {
+    if (firstComment?.reaction?.isOwningReaction) {
+      commenterName = 'You';
+      postNotificationPicture = firstComment?.reaction?.user?.data?.profile_pic_url;
+    } else if (anonymousCommenterName) {
       commenterName = `Anonymous ${capitalizeFirstText(anonymousCommenterName)}`;
     } else {
       commenterName = firstComment?.reaction?.user?.data?.username;
@@ -63,9 +51,7 @@ const AnonPostNotificationChannelItem: (props: MessageChannelItemProps) => React
 
   if (postNotifItem?.rawJson?.comments?.length > 0) {
     firstComment = postNotifItem?.rawJson?.comments[0];
-    anonymousPostNotificationUserInfo = {
-      ...firstComment?.reaction?.data
-    };
+    anonymousPostNotificationUserInfo = {...firstComment?.reaction?.data};
 
     helperDetermineCommenterName();
 
@@ -90,15 +76,17 @@ const AnonPostNotificationChannelItem: (props: MessageChannelItemProps) => React
   const isOwnPost = postNotifItem?.rawJson?.isOwnPost;
   const isOwnSignedPost = item?.rawJson?.isOwnSignedPost;
 
-  const type = helperDeterminePostType(isOwnPost, firstComment?.reaction?.isOwningReaction);
+  const {determinePostType} = useChannelHook();
+  const type = determinePostType(postNotifItem);
 
   return (
     <BaseChannelItem
+      type={type}
       anonPostNotificationUserInfo={anonymousPostNotificationUserInfo}
       block={item?.rawJson?.block}
       comments={item?.rawJson?.comments?.length}
       downvote={item?.rawJson?.downvote}
-      isCommentExists={!!firstComment}
+      isCommentExists={Boolean(firstComment)}
       isMe={item?.user?.isMe || isOwnSignedPost || isOwnPost}
       isOwnSignedPost={isOwnSignedPost}
       message={item?.description}
@@ -109,13 +97,16 @@ const AnonPostNotificationChannelItem: (props: MessageChannelItemProps) => React
       postNotificationMessageText={postNotificationMessageText}
       postNotificationMessageUser={commenterName}
       postNotificationPicture={postNotificationPicture}
-      showPostNotificationStats={isOwnPost}
       time={calculateTime(item?.lastUpdatedAt, true)}
-      type={type}
       unreadCount={postNotifItem?.unreadCount}
       upvote={item?.rawJson?.upvote}
+      channelType={item?.channelType}
     />
   );
 };
 
-export default AnonPostNotificationChannelItem;
+const isEqual = (prevProps, nextProps) => {
+  return nextProps.item === prevProps.item;
+};
+
+export default React.memo(PostNotificationChannelItem, isEqual);

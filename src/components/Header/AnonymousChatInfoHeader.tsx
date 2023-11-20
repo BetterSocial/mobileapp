@@ -4,6 +4,7 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import dimen from '../../utils/dimen';
 
 export interface AnonymousChatInfoHeaderProps {
   title: string;
@@ -18,14 +19,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    height: 50
     // padding: 10
   },
   content: {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
-    padding: 10
+    alignItems: 'center'
   },
   text: {
     color: colors.black,
@@ -37,28 +38,34 @@ const styles = StyleSheet.create({
     color: colors.black,
     fontFamily: fonts.poppins[600],
     fontSize: 16,
-    fontWeight: 'bold',
-    marginRight: 15
+    fontWeight: 'bold'
   },
-  gap: {width: 20, height: 12},
+  gap: {width: dimen.normalizeDimen(42)},
   buttonBackContainer: {
     width: '100%'
   },
   buttonBackContainerIos: {
-    paddingVertical: 16,
     width: '100%'
   },
   backPadding: {
-    paddingRight: 15,
-    paddingVertical: 35,
-    paddingLeft: 20,
-    position: 'absolute',
     left: 0,
-    alignSelf: 'center',
-    zIndex: 10
+    position: 'absolute',
+    zIndex: 1,
+    height: dimen.normalizeDimen(50),
+    width: '15%',
+    justifyContent: 'center',
+    alignItems: 'center'
+    // backgroundColor: 'blue'
   },
   flex: {
-    flex: 1
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    width: '100%'
+  },
+  textContainer: {
+    width: '100%',
+    paddingHorizontal: dimen.normalizeDimen(55)
   }
 });
 
@@ -76,27 +83,24 @@ const AnonymousChatInfoHeader = ({
           <ArrowLeftIcon />
         </TouchableOpacity>
         <View style={styles.flex}>
-          <Text
-            numberOfLines={1}
-            style={{
-              ...styles.textIos,
-              ...titleStyle,
-              fontSize: 20,
-              textAlign: isCenter ? 'center' : 'left'
-            }}>
-            {title}
-          </Text>
+          <View style={styles.textContainer}>
+            <Text
+              numberOfLines={1}
+              style={{
+                ...styles.textIos,
+                ...titleStyle,
+                fontSize: 20,
+                textAlign: isCenter ? 'center' : 'left'
+              }}>
+              {title}
+            </Text>
+          </View>
         </View>
       </View>
     </View>
   );
 
-  return (
-    <View style={{...styles.container, ...containerStyle}}>
-      {renderHeader()}
-      <View style={styles.gap} />
-    </View>
-  );
+  return <View style={{...styles.container, ...containerStyle}}>{renderHeader()}</View>;
 };
 
 export default React.memo(AnonymousChatInfoHeader);

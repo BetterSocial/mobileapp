@@ -15,7 +15,8 @@ enum StorageKeysEnum {
   MyAnonymousFeed = 'myanonymousfeed',
   OtherProfileFeed = 'otherprofilefeed',
   ProfileData = 'profiledata',
-  OtherProfileData = 'otherprofiledata'
+  OtherProfileData = 'otherprofiledata',
+  LastPromptNotification = 'lastPromptNotification'
 }
 
 interface IStorage {
@@ -79,6 +80,7 @@ const StorageUtils = {
   otherProfileFeed: storageBuilder(StorageKeysEnum.OtherProfileFeed),
   profileData: storageBuilder(StorageKeysEnum.ProfileData),
   otherProfileData: storageBuilder(StorageKeysEnum.OtherProfileData),
+  lastPromptNotification: storageBuilder(StorageKeysEnum.LastPromptNotification),
   clearAll: () => MMKVStorage.clearAll()
 };
 
@@ -96,6 +98,7 @@ export interface IStorageUtils {
   refreshToken: Storage;
   jwtToken: Storage;
   anonymousToken: Storage;
+  lastPromptNotification: Storage;
   clearAll: () => void;
 }
 export default StorageUtils;

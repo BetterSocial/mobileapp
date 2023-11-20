@@ -2,6 +2,7 @@ import * as React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
 import {COLORS} from '../../../../utils/theme';
+import dimen from '../../../../utils/dimen';
 
 const AnonymousIcon = ({color, emojiCode, size, withBorder = false}) => {
   const styles = StyleSheet.create({
@@ -14,11 +15,12 @@ const AnonymousIcon = ({color, emojiCode, size, withBorder = false}) => {
       borderColor: COLORS.white,
       display: 'flex',
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
+      overflow: 'hidden'
     },
     anonPostNotificationEmoji: {
       display: 'flex',
-      fontSize: size * 0.75,
+      fontSize: dimen.normalizeDimen(size / 2),
       width: size,
       alignSelf: 'center',
       textAlign: 'center',

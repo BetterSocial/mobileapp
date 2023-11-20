@@ -1,10 +1,11 @@
 import * as React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, Text, View} from 'react-native';
 import PropTypes from 'prop-types';
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {COLORS, SIZES} from '../../utils/theme';
 import GlobalButton from '../Button/GlobalButton';
+import dimen from '../../utils/dimen';
 
 const HeaderContact = ({
   title,
@@ -17,10 +18,27 @@ const HeaderContact = ({
   disabledNextBtn
 }) => {
   const renderHeader = () => {
+    if (Platform.OS === 'android') {
+      return (
+        <GlobalButton testID="onPressAndroid" buttonStyle={styles.noPaddingLeft} onPress={onPress}>
+          <View testID="android" style={styles.content(-4)}>
+            <ArrowLeftIcon
+              width={dimen.normalizeDimen(20)}
+              height={dimen.normalizeDimen(20)}
+              fill="#000"
+            />
+          </View>
+        </GlobalButton>
+      );
+    }
     return (
-      <GlobalButton testID="onPressBtnHeader" buttonStyle={styles.noPaddingLeft} onPress={onPress}>
-        <View style={styles.content}>
-          <ArrowLeftIcon width={20} height={20} fill="#000" />
+      <GlobalButton testID="onPressIos" buttonStyle={styles.noPaddingLeft} onPress={onPress}>
+        <View testID="ios" style={styles.content(-8)}>
+          <ArrowLeftIcon
+            width={dimen.normalizeDimen(20)}
+            height={dimen.normalizeDimen(20)}
+            fill="#000"
+          />
         </View>
       </GlobalButton>
     );
@@ -49,13 +67,14 @@ const HeaderContact = ({
 export default HeaderContact;
 
 HeaderContact.propTypes = {
+  onPressSub: PropTypes.func,
   title: PropTypes.string,
   subTitle: PropTypes.string,
   onPress: PropTypes.func,
   titleStyle: PropTypes.object,
   subtitleStyle: PropTypes.object,
   containerStyle: PropTypes.object,
-  onPressSub: PropTypes.func,
+
   disabledNextBtn: PropTypes.bool
 };
 
@@ -66,9 +85,10 @@ const styles = StyleSheet.create({
     paddingVertical: SIZES.base,
     alignItems: 'center'
   },
-  content: {
-    padding: 10
-  },
+  content: (marginLeft) => ({
+    padding: 10,
+    marginLeft
+  }),
   text: {
     color: COLORS.black,
     fontFamily: fonts.inter[600],

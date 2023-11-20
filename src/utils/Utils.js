@@ -49,11 +49,14 @@ export const validationURL = (str) => {
 };
 
 export const getUrl = (str) => {
-  const url = str.match(/(https?\:\/\/)?([^\.\s]+)?[^\.\s]+\.[^\s]+/gi);
-  if (Array.isArray(url)) {
-    return url[0];
+  if (str) {
+    const url = str.match(/(https?\:\/\/)?([^\.\s]+)?[^\.\s]+\.[^\s]+/gi);
+    if (Array.isArray(url)) {
+      return url[0];
+    }
+    return str;
   }
-  return str;
+  return null;
 };
 
 export const isContainUrl = (str) => {

@@ -43,6 +43,7 @@ const UsersFragment = ({
   const [discovery, discoveryDispatch] = React.useContext(Context).discovery;
   const [profile] = React.useContext(Context).profile;
   const navigation = useNavigation();
+  const [client] = React.useContext(Context).client;
 
   const route = useRoute();
 
@@ -124,9 +125,9 @@ const UsersFragment = ({
     };
 
     if (willFollow) {
-      await setFollow(data);
+      await setFollow(data, client);
     } else {
-      await setUnFollow(data);
+      await setUnFollow(data, client);
     }
     if (searchText.length > 0) fetchData();
   };

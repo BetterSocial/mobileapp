@@ -1,25 +1,27 @@
-import * as React from 'react';
 import Config from 'react-native-config';
 
 import useSimpleWebsocketHooks from './useSimpleWebsocketHooks';
 import TokenStorage, {ITokenEnum} from '../../../utils/storage/custom/tokenStorage';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
-import {getAnonymousUserId} from '../../../utils/users';
+import {GetstreamWebsocket, WebsocketUserDataType} from './types.d';
+import {getAnonymousUserId, getUserId} from '../../../utils/users';
 
-const useBetterWebsocketHook = () => {
-  const generateUserDataUrlEncoded: (userId: string, token: string) => string = (
-    userId: string,
-    token: string
-  ) => {
+interface IUseBetterWebsocketHook {
+  lastAnonymousMessage?: GetstreamWebsocket;
+  lastSignedMessage?: GetstreamWebsocket;
+}
+
+const useBetterWebsocketHook = (): IUseBetterWebsocketHook => {
+  const generateUserDataUrlEncoded: (user: WebsocketUserDataType) => string = (user) => {
     const userData = {
-      user_id: userId,
+      user_id: user?.userId,
       user_details: {
-        id: userId,
-        name: 'AnonymousUser',
-        image: DEFAULT_PROFILE_PIC_PATH,
+        id: user?.userId,
+        name: user?.isAnonymous ? 'AnonymousUser' : user?.name,
+        image: user?.isAnonymous ? DEFAULT_PROFILE_PIC_PATH : user?.image,
         invisible: true
       },
-      user_token: token,
+      user_token: user?.token,
       server_determines_connection_id: true
     };
 
@@ -36,18 +38,25 @@ const useBetterWebsocketHook = () => {
     );
   };
 
-  const initAuthorization = async () => {
-    const token: string = TokenStorage.get(ITokenEnum.anonymousToken);
-    const userId: string = await getAnonymousUserId();
+  const initAuthorization = async (isAnonymous: boolean) => {
+    const token =
+      TokenStorage.get(isAnonymous ? ITokenEnum.anonymousToken : ITokenEnum.token) ?? '';
+    const userId = isAnonymous ? await getAnonymousUserId() : await getUserId();
 
-    const urlEncodedData = generateUserDataUrlEncoded(userId, token);
+    const urlEncodedData = generateUserDataUrlEncoded({
+      userId,
+      token,
+      isAnonymous
+    });
+
     const websocketUrl = generateWebsocketUrl(urlEncodedData, token);
     return websocketUrl;
   };
 
-  const {lastJsonMessage} = useSimpleWebsocketHooks(initAuthorization());
+  const {lastJsonMessage: lastAnonymousMessage} = useSimpleWebsocketHooks(initAuthorization(true));
+  const {lastJsonMessage: lastSignedMessage} = useSimpleWebsocketHooks(initAuthorization(false));
 
-  return {lastJsonMessage};
+  return {lastAnonymousMessage, lastSignedMessage};
 };
 
 export default useBetterWebsocketHook;
