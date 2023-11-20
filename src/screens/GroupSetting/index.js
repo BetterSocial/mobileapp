@@ -92,7 +92,7 @@ export default GroupSetting;
 const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#fff'},
   subtitleStyle: {
-    color: COLORS.holyTosca
+    color: COLORS.holytosca
   },
   containerHeader: {marginLeft: 22, marginRight: 20},
   users: {
