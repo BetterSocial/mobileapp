@@ -13,7 +13,6 @@ import {isContainUrl} from '../../utils/Utils';
 import useGroupInfo from '../../screens/GroupInfo/hooks/useGroupInfo';
 import {Member} from '../../../types/database/schema/ChatListDetail.types';
 
-// import {} from '../../'
 function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   const {params}: any = useRoute();
   const {
