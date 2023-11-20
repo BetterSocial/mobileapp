@@ -2,6 +2,7 @@ import crashlytics from '@react-native-firebase/crashlytics';
 
 import OneSignalUtil from './onesignal';
 import api from './config';
+import {Monitoring} from '../libraries/monitoring/sentry';
 
 const getUserTopic = async (query) => {
   try {
@@ -62,6 +63,7 @@ const getSubscribeableTopic = async () => {
     const result = await api.get('topics/subscribable');
     return result.data;
   } catch (e) {
+    Monitoring.logError('Error getSubscribeableTopic API', e);
     throw new Error(e);
   }
 };
