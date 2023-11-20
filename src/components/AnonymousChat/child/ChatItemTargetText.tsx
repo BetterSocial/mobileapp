@@ -1,9 +1,7 @@
 import * as React from 'react';
-import FastImage from 'react-native-fast-image';
 import {Dimensions, StyleSheet, Text, View} from 'react-native';
 
 import {ChatItemMyTextProps} from '../../../../types/component/AnonymousChat/BaseChatItem.types';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 
@@ -62,29 +60,27 @@ const styles = StyleSheet.create({
     fontSize: 10,
     lineHeight: 12.19,
     alignSelf: 'center'
+  },
+  mr8: {
+    marginRight: 8
   }
 });
 
 const ChatItemTargetText = ({
-  avatar = DEFAULT_PROFILE_PIC_PATH,
-  username = 'Anonymous Clown',
+  username = 'Anonymous User',
   time = '4h',
   isContinuous = false,
-  message = 'Ultrices neque op semper blahbla blahri mauris amet, penatibus. pi Amet, mollis quam venenatis di'
+  message = '',
+  avatar
 }: ChatItemMyTextProps) => {
+  const renderAvatar = React.useCallback(() => {
+    if (isContinuous) return <View style={styles.avatar} />;
+    return <View style={styles.mr8}>{avatar}</View>;
+  }, []);
+
   return (
     <View style={styles.chatContainer}>
-      {isContinuous ? (
-        <View testID="chat-item-continuous-avatar" style={styles.avatar} />
-      ) : (
-        <FastImage
-          testID="chat-item-default-avatar"
-          style={styles.avatar}
-          source={{
-            uri: avatar
-          }}
-        />
-      )}
+      {renderAvatar()}
       <View style={styles.textContainer}>
         {!isContinuous && (
           <View testID="chat-item-user-info" style={styles.chatTitleContainer}>

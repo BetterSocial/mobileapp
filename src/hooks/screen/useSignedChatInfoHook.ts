@@ -2,24 +2,24 @@ import * as React from 'react';
 import {useNavigation} from '@react-navigation/core';
 
 import ChannelList from '../../database/schema/ChannelListSchema';
-import UseAnonymousChatInfoScreenHook from '../../../types/hooks/screens/useAnonymousChatInfoScreenHook.types';
+import UseSignedChatInfoScreenHook from '../../../types/hooks/screens/useSignedChatInfoScreenHook.types';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import {ChannelListMemberSchema} from '../../../types/database/schema/ChannelList.types';
 import {getAnonymousUserId} from '../../utils/users';
 import {getUserId} from '../../utils/token';
 
-function useAnonymousChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
+function useSignedChatInfoScreenHook(): UseSignedChatInfoScreenHook {
   const {localDb, channelList} = useLocalDatabaseHook();
   const {selectedChannel, goBack} = useChatUtilsHook();
-
   const navigation = useNavigation();
 
   const [channelInfo, setChannelInfo] = React.useState(null);
 
-  const initChatInfoData = async () => {
+  const initializeChatInfoData = async () => {
     if (!localDb) return;
     const myId = await getUserId();
+
     const myAnonymousId = await getAnonymousUserId();
     const data = await ChannelList.getChannelInfo(
       localDb,
@@ -27,12 +27,13 @@ function useAnonymousChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
       myId,
       myAnonymousId
     );
+
     setChannelInfo(data);
   };
 
   const onContactPressed = (item: ChannelListMemberSchema) => {
     if (!item?.user?.isMe)
-      navigation.push('OtherProfile', {
+      navigation.navigate('OtherProfile', {
         data: {
           user_id: item?.userId,
           other_id: item?.userId,
@@ -42,7 +43,7 @@ function useAnonymousChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   };
 
   React.useEffect(() => {
-    initChatInfoData();
+    initializeChatInfoData();
   }, [localDb, channelList]);
 
   return {
@@ -52,4 +53,4 @@ function useAnonymousChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   };
 }
 
-export default useAnonymousChatInfoScreenHook;
+export default useSignedChatInfoScreenHook;

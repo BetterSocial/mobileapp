@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// eslint-disable-next-line no-use-before-define
 import * as React from 'react';
 import {View} from 'react-native';
 
@@ -11,6 +13,7 @@ import {
   BaseChannelItemProps,
   BaseChannelItemTypeProps
 } from '../../../types/component/AnonymousChat/BaseChannelItem.types';
+import {Context} from '../../context';
 
 const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
   anonPostNotificationUserInfo = null,
@@ -19,7 +22,6 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
   downvote = 0,
   isCommentExists = false,
   isMe = false,
-  isOwnSignedPost = false,
   message = '',
   name = '',
   picture = 'https://res.cloudinary.com/hpjivutj2/image/upload/v1696816963/anonymous-profile.png',
@@ -27,43 +29,65 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
   postNotificationMessageText = '',
   postNotificationMessageUser = null,
   postNotificationPicture = 'https://res.cloudinary.com/hpjivutj2/image/upload/v1696816963/anonymous-profile.png',
-  showPostNotificationStats = false,
-  time = '12:00 PM',
+  time = '',
   type = BaseChannelItemTypeProps.ANON_PM,
   unreadCount = 0,
   upvote = 0,
+  hasFollowButton = false,
+  handleFollow,
+  channelType,
   onPress = () => {
     console.log('onPress');
   }
 }) => {
+  const [profileContext] = (React.useContext(Context) as unknown as any).profile;
+  const [followContext] = (React.useContext(Context) as unknown as any).following;
+  const {myProfile} = profileContext;
+  let isFollowing = false;
+  if (type === BaseChannelItemTypeProps.SIGNED_PM) {
+    const members = postMaker?.members || postMaker?.channel?.members;
+    const targetUser = members?.find((member) => member?.user_id !== myProfile?.user_id)?.user;
+    isFollowing = Boolean(
+      followContext?.users?.find((user) => user?.user_id_followed === targetUser?.id)
+    );
+  }
+
+  const isAnonymousTab: boolean =
+    channelType === 'ANON_PM' ||
+    channelType === 'ANON_GROUP' ||
+    channelType === 'ANON_POST_NOTIFICATION';
+
   return (
     <CustomPressable onPress={onPress}>
       <View style={styles.chatContainer}>
         <ChannelImage
+          type={type}
           mainPicture={picture}
           postNotificationPicture={postNotificationPicture}
-          type={type}
           anonPostNotificationUserInfo={anonPostNotificationUserInfo}
           isCommentExists={isCommentExists}
           postMaker={postMaker}
-          isOwnSignedPost={isOwnSignedPost}
+          isAnonymousTab={isAnonymousTab}
         />
 
         <View style={styles.chatContentContainer}>
           <ChannelTitle
-            name={name}
-            time={time}
             type={type}
+            name={name}
             message={message}
-            isMe={isMe}
+            time={time}
             unreadCount={unreadCount}
+            isMe={isMe}
+            hasFollowButton={hasFollowButton}
+            isFollowing={isFollowing}
+            handleFollow={handleFollow}
+            isAnonymousTab={isAnonymousTab}
           />
 
+          {/* Post Notification Message */}
           <View style={styles.chatContentSection}>
-            {/* Post Notification Message */}
             <ChannelPostNotificationMessage
               type={type}
-              commenterId={''}
               commenterName={postNotificationMessageUser}
               message={postNotificationMessageText}
             />
@@ -77,7 +101,6 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
               upvote={upvote}
               downvote={downvote}
               comments={comments}
-              shown={showPostNotificationStats}
             />
           </View>
         </View>

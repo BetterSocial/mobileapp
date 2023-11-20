@@ -28,6 +28,51 @@ const createChannel = async (channelType, members, channelName) => {
   }
 };
 
+const connectUser = async () => {
+  const token = TokenStorage.get(ITokenEnum.token);
+  const id = await getUserId();
+  const user = {id};
+  await chatClient.disconnectUser();
+  await chatClient.connectUser(user, token);
+};
+
+const queryChannels = async (members) => {
+  const sort = [{last_message_at: -1}];
+  const filter = {type: 'messaging', members: {$eq: members}};
+  const result = await chatClient.queryChannels(filter, sort, {watch: true, state: true});
+  return result;
+};
+
+const followClient = async (members, data, text, textOwnMessage) => {
+  try {
+    await connectUser();
+    const channels = await queryChannels(members);
+    const message = {
+      user_id: data.user_id_follower,
+      text,
+      isSystem: true,
+      silent: true,
+      textOwnMessage,
+      userIdFollowed: data?.user_id_followed,
+      userIdFollower: data?.user_id_follower
+    };
+
+    const name = [data?.username_followed, data?.username_follower].join(',');
+
+    if (channels?.length <= 0) {
+      const newChannel = await createChannel('messaging', members, name);
+      return newChannel.sendMessage(message, {skip_push: true});
+    }
+    const messageClient = chatClient.channel('messaging', channels[0].id);
+    await messageClient.sendMessage(message, {skip_push: true});
+
+    return channels;
+  } catch (error) {
+    console.log('error follow client', error);
+    throw error;
+  }
+};
+
 const sendSystemMessage = async (
   channelType,
   channelId,
@@ -92,7 +137,6 @@ const sendSignedDMOtherProfile = async ({user_id, message}) => {
   };
 
   const response = await api.post('/chat/init-chat', payload);
-
   if (response.status === 200) {
     return Promise.resolve(response.data?.data);
   }
@@ -122,5 +166,6 @@ export {
   sendSystemMessage,
   sendAnonymousDMOtherProfile,
   sendSignedDMOtherProfile,
-  getOrCreateAnonymousChannel
+  getOrCreateAnonymousChannel,
+  followClient
 };

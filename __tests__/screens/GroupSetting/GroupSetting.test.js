@@ -187,7 +187,7 @@ describe('GroupSetting should be run correctly', () => {
 
     const {getByTestId} = render(<GroupSetting navigation={navigation} route={route} />, {wrapper});
     act(() => {
-      fireEvent.press(getByTestId('onPressBtnHeader'));
+      fireEvent.press(getByTestId('onPressAndroid'));
     });
     expect(navigation.goBack).toHaveBeenCalled();
   });

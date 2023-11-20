@@ -2,7 +2,7 @@ import * as React from 'react';
 import DeviceInfo from 'react-native-device-info';
 import FlashMessage from 'react-native-flash-message';
 import Toast from 'react-native-toast-message';
-import {BackHandler, KeyboardAvoidingView, Platform, View} from 'react-native';
+import {BackHandler, Platform, View} from 'react-native';
 import {HumanIDProvider} from '@human-internet/react-native-humanid';
 import {LogLevel, OneSignal} from 'react-native-onesignal';
 import {NavigationContainer} from '@react-navigation/native';
@@ -138,9 +138,7 @@ const App = () => {
             linking={linking}>
             <View>
               <OverlayProvider topInset={top} bottomInset={bottom} i18nInstance={streami18n}>
-                <KeyboardAvoidingView enabled={Platform.OS === 'ios'} behavior="padding">
-                  <RootNavigator areaHeight={height} currentScreen={currentScreen} />
-                </KeyboardAvoidingView>
+                <RootNavigator areaHeight={height} currentScreen={currentScreen} />
               </OverlayProvider>
             </View>
           </NavigationContainer>

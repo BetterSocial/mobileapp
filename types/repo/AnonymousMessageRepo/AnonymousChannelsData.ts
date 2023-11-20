@@ -20,6 +20,7 @@ export interface User {
   online: boolean;
   image: string;
   name: string;
+  username?: string;
 }
 
 export interface Member {
@@ -40,6 +41,7 @@ export interface Member {
 export interface Message {
   id: string;
   text: string;
+  other_text?: string;
   html: string;
   type: string;
   user: User;
@@ -47,6 +49,8 @@ export interface Message {
   latest_reactions: any[];
   own_reactions: any[];
   reaction_counts: any;
+  isSystem?: boolean;
+  textOwnMessage?: string;
   reaction_scores: any;
   reply_count: number;
   cid: string;
@@ -70,7 +74,7 @@ export interface Message {
   channelId?: string;
 }
 
-export interface AnonymousChannelData {
+export interface ChannelData {
   id: string;
   type: string;
   cid: string;
@@ -86,5 +90,7 @@ export interface AnonymousChannelData {
   messages: Message[];
   targetName: string;
   targetImage: string;
+  myUserId?: string;
+  unreadCount?: number;
   firstMessage: Message;
 }

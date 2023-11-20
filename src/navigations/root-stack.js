@@ -1,6 +1,6 @@
 import * as React from 'react';
 import NetInfo from '@react-native-community/netinfo';
-import {View} from 'react-native';
+import {View, KeyboardAvoidingView, Platform} from 'react-native';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -29,6 +29,7 @@ import ProfileReplyComment from '../screens/ProfileReplyComment';
 import ReplyComment from '../screens/ReplyComment';
 import SampleChatInfoScreen from '../screens/WebsocketResearchScreen/SampleChatInfoScreen';
 import SampleChatScreen from '../screens/WebsocketResearchScreen/SampleChatScreen';
+import SignedChatScreen from '../screens/WebsocketResearchScreen/SignedChatScreen';
 import Settings from '../screens/Settings';
 import SignIn from '../screens/SignInV2';
 import TermsAndCondition from '../screens/WebView/TermsAndCondition';
@@ -38,7 +39,6 @@ import Topics from '../screens/Topics';
 import WebsocketResearchScreen from '../screens/WebsocketResearchScreen';
 import WhotoFollow from '../screens/WhotoFollow';
 import api from '../service/config';
-import useCoreChatSystemHook from '../hooks/core/useCoreChatSystemHook';
 import {
   AddParticipant,
   ChannelScreen,
@@ -60,8 +60,6 @@ import FollowersScreen from '../screens/Followings/FollowersScreen';
 const RootStack = createNativeStackNavigator();
 
 export const RootNavigator = ({currentScreen}) => {
-  useCoreChatSystemHook();
-
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const [following, setFollowing] = useRecoilState(followersOrFollowingAtom);
   const loadingStartup = useInitialStartup();
@@ -113,22 +111,24 @@ export const RootNavigator = ({currentScreen}) => {
         }}>
         <NetworkStatusIndicator hide={true} />
         {/* <StatusBar translucent backgroundColor="white" /> */}
-        <RootStack.Navigator
-          screenOptions={{
-            headerShown: false,
-            safeAreaInsets: {
-              top: 0,
-              bottom: 0,
-              left: 0,
-              right: 0
-            }
-          }}>
-          {initialStartup.id !== null && initialStartup.id !== '' ? (
-            <RootStack.Screen name="AuthenticatedStack" component={AuthenticatedNavigator} />
-          ) : (
-            <RootStack.Screen name="UnauthenticatedStack" component={UnauthenticatedNavigator} />
-          )}
-        </RootStack.Navigator>
+        <KeyboardAvoidingView style={{flex: 1}} enabled={Platform.OS === 'ios'} behavior="padding">
+          <RootStack.Navigator
+            screenOptions={{
+              headerShown: false,
+              safeAreaInsets: {
+                top: 0,
+                bottom: 0,
+                left: 0,
+                right: 0
+              }
+            }}>
+            {initialStartup.id !== null && initialStartup.id !== '' ? (
+              <RootStack.Screen name="AuthenticatedStack" component={AuthenticatedNavigator} />
+            ) : (
+              <RootStack.Screen name="UnauthenticatedStack" component={UnauthenticatedNavigator} />
+            )}
+          </RootStack.Navigator>
+        </KeyboardAvoidingView>
       </View>
     </LoadingStartupContext.Provider>
   );
@@ -323,6 +323,11 @@ const AuthenticatedNavigator = () => {
         <AuthenticatedStack.Screen
           name="SampleChatInfoScreen"
           component={SampleChatInfoScreen}
+          options={{headerShown: false}}
+        />
+        <AuthenticatedStack.Screen
+          name="SignedChatScreen"
+          component={SignedChatScreen}
           options={{headerShown: false}}
         />
       </AuthenticatedStack.Navigator>
