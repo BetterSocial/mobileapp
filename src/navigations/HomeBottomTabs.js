@@ -1,26 +1,25 @@
-import * as React from 'react';
-import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import messaging from '@react-native-firebase/messaging';
-import {Platform, StyleSheet, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import * as React from 'react';
+import {Platform, StyleSheet, View} from 'react-native';
+import PushNotification from 'react-native-push-notification';
 import {useRecoilState, useRecoilValue} from 'recoil';
 
-import ChannelListScreenV2 from '../screens/ChannelListScreenV2';
-import FirebaseConfig from '../configs/FirebaseConfig';
 import MemoFeed from '../assets/icon/Feed';
 import MemoHome from '../assets/icon/Home';
 import MemoNews from '../assets/icon/News';
 import MemoProfileIcon from '../assets/icon/Profile';
 import profileAtom from '../atom/profileAtom';
+import FirebaseConfig from '../configs/FirebaseConfig';
+import useCoreChatSystemHook from '../hooks/core/useCoreChatSystemHook';
 import useRootChannelListHook from '../hooks/screen/useRootChannelListHook';
-import TokenStorage, {ITokenEnum} from '../utils/storage/custom/tokenStorage';
 import {FeedScreen, NewsScreen, ProfileScreen} from '../screens';
+import ChannelListScreenV2 from '../screens/ChannelListScreenV2';
 import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
 import {colors} from '../utils/colors';
-import {fcmTokenService} from '../service/users';
+import TokenStorage, {ITokenEnum} from '../utils/storage/custom/tokenStorage';
 import {getAnonymousUserId, getUserId} from '../utils/users';
-import useCoreChatSystemHook from '../hooks/core/useCoreChatSystemHook';
 
 const Tab = createBottomTabNavigator();
 
@@ -108,23 +107,8 @@ function HomeBottomTabs({navigation}) {
     // Should the initial notification be popped automatically
     // default: true
     popInitialNotification: true,
-    requestPermissions: true
+    requestPermissions: false
   });
-
-  const requestPermission = async () => {
-    const authStatus = await messaging().requestPermission();
-    const enabled =
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
-    if (enabled) {
-      const fcmToken = await messaging().getToken();
-      const payload = {
-        fcm_token: fcmToken
-      };
-      fcmTokenService(payload);
-    }
-  };
 
   const pushNotifIos = (message) => {
     if (__DEV__) {
@@ -195,7 +179,6 @@ function HomeBottomTabs({navigation}) {
 
   React.useEffect(() => {
     createChannel();
-    requestPermission();
     updateProfileAtomId();
 
     messaging().setBackgroundMessageHandler(async (remoteMessage) => {

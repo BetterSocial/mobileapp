@@ -1,13 +1,6 @@
 import * as React from 'react';
-import {
-  Animated,
-  InteractionManager,
-  Keyboard,
-  ScrollView,
-  StyleSheet,
-  Platform
-} from 'react-native';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {Animated, ScrollView, StyleSheet, Platform} from 'react-native';
+import {useRoute} from '@react-navigation/native';
 import axios from 'axios';
 
 import {SafeAreaProvider, useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -16,7 +9,6 @@ import dimen from '../../utils/dimen';
 import {getAllMemberTopic} from '../../service/topics';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {colors} from '../../utils/colors';
-import Search from '../DiscoveryScreenV2/elements/Search';
 import StringConstant from '../../utils/string/StringConstant';
 import UsersFragment from '../DiscoveryScreenV2/fragment/UsersFragment';
 import {Context} from '../../context';
@@ -31,13 +23,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white
   },
   fragmentContentContainer: {
-    flexGrow: 1
+    // flexGrow: 1,
+    backgroundColor: 'white'
   }
 });
 
 const TopicMemberScreen = () => {
   const route = useRoute();
-  const navigation = useNavigation();
   const {top} = useSafeAreaInsets();
   const topicName = route?.params?.topicName;
   const topicDetail = route?.params?.topicDetail;
@@ -48,7 +40,7 @@ const TopicMemberScreen = () => {
   const [profile] = React.useContext(Context).profile;
   const [isInitialLoading, setIsInitialLoading] = React.useState(true);
   const [headerHide, setHeaderHide] = React.useState(false);
-
+  const [searchHeight, setSearchHeight] = React.useState(0);
   const [searchText, setSearchText] = React.useState('');
   const [initalMember, setInitialMember] = React.useState([]);
   const [topicDataFollowedUsers, setTopicDataFollowedUsers] = React.useState([]);
@@ -56,27 +48,50 @@ const TopicMemberScreen = () => {
   const [isFocus, setIsFocus] = React.useState(true);
   const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true);
   const cancelTokenRef = React.useRef(axios.CancelToken.source());
-
-  const interactionManagerRef = React.useRef(null);
-  const interactionManagerAnimatedRef = React.useRef(null);
-
-  const opacityAnimationHeader = React.useRef(new Animated.Value(1)).current;
-
-  const coverPath = topicDetail?.cover_path || null;
-  const topPosition = Platform.OS === 'ios' ? top : 0;
-
-  const animatedHeight = React.useRef(
-    new Animated.Value(
-      (coverPath
-        ? dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
-        : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT) +
-        dimen.size.TOPIC_FEED_HEADER_HEIGHT +
-        topPosition
-    )
-  ).current;
+  const scrollY = React.useRef(new Animated.Value(0)).current;
 
   const [isLoadingDiscovery, setIsLoadingDiscovery] = React.useState({
     user: false
+  });
+
+  const pathCover = topicDetail?.cover_path || null;
+  const positionTop = Platform.OS === 'ios' ? top : 0;
+
+  const navigationHeight = pathCover
+    ? dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
+    : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT;
+  const headerShowHeight =
+    navigationHeight + dimen.size.TOPIC_FEED_HEADER_HEIGHT + positionTop + searchHeight;
+  const headerHideHeight = dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2 + positionTop + searchHeight;
+
+  const animatedHeight = scrollY.interpolate({
+    inputRange: [0, headerHideHeight],
+    outputRange: [headerShowHeight, headerHideHeight],
+    extrapolate: 'clamp'
+  });
+
+  const opacityAnimationHeader = scrollY.interpolate({
+    inputRange: [0, 100],
+    outputRange: [1, 0],
+    extrapolate: 'clamp'
+  });
+
+  React.useEffect(() => {
+    const listener = scrollY.addListener(({value}) => {
+      if (value >= 0 && value <= headerHideHeight) {
+        setHeaderHide(false);
+      } else if (value >= headerHideHeight) {
+        setHeaderHide(true);
+      }
+    });
+
+    return () => {
+      scrollY.removeListener(listener);
+    };
+  }, [scrollY]);
+
+  const handleScroll = Animated.event([{nativeEvent: {contentOffset: {y: scrollY}}}], {
+    useNativeDriver: false
   });
 
   const fetchMember = async (text = '') => {
@@ -134,69 +149,6 @@ const TopicMemberScreen = () => {
     ShareUtils.shareCommunity(topicName);
   };
 
-  const showAnimationHeader = () => {
-    interactionManagerRef.current = InteractionManager.runAfterInteractions(() => {
-      Animated.timing(animatedHeight, {
-        toValue:
-          (coverPath
-            ? dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
-            : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT) +
-          dimen.size.TOPIC_FEED_HEADER_HEIGHT +
-          topPosition,
-        duration: 100,
-        useNativeDriver: false
-      }).start();
-      Animated.timing(opacityAnimationHeader, {
-        toValue: 1,
-        duration: 100,
-        useNativeDriver: false
-      }).start();
-    });
-    setHeaderHide(false);
-  };
-
-  React.useEffect(() => {
-    showAnimationHeader();
-  }, [coverPath]);
-
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      showAnimationHeader();
-    });
-
-    return () => {
-      if (interactionManagerRef.current) interactionManagerRef.current.cancel();
-      if (interactionManagerAnimatedRef.current) interactionManagerAnimatedRef.current.cancel();
-
-      unsubscribe();
-    };
-  }, [navigation]);
-
-  const handleScrollEvent = React.useCallback(
-    (event) => {
-      Keyboard.dismiss();
-      const {y} = event.nativeEvent.contentOffset;
-      if (y <= 15) {
-        showAnimationHeader();
-      } else {
-        interactionManagerAnimatedRef.current = InteractionManager.runAfterInteractions(() => {
-          Animated.timing(animatedHeight, {
-            toValue: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2 + topPosition,
-            duration: 100,
-            useNativeDriver: false
-          }).start();
-          Animated.timing(opacityAnimationHeader, {
-            toValue: 0,
-            duration: 100,
-            useNativeDriver: false
-          }).start();
-        });
-        setHeaderHide(true);
-      }
-    },
-    [coverPath, animatedHeight]
-  );
-
   const onTokenCancel = () => {
     cancelTokenRef?.current?.cancel();
     cancelTokenRef.current = axios.CancelToken.source();
@@ -206,6 +158,7 @@ const TopicMemberScreen = () => {
   return (
     <SafeAreaProvider forceInset={{top: 'always'}} style={styles.parentContainer}>
       <NavHeader
+        domain={topicName}
         animatedHeight={animatedHeight}
         onShareCommunity={onCommunityShare}
         isHeaderHide={headerHide}
@@ -217,8 +170,7 @@ const TopicMemberScreen = () => {
         setIsFollow={setIsFollow}
         isFollow={isFollow}
         getTopicDetail={getTopicDetail}
-      />
-      <Search
+        hasSearch={true}
         searchText={searchText}
         setSearchText={setSearchText}
         setDiscoveryLoadingData={setIsLoadingDiscovery}
@@ -228,13 +180,17 @@ const TopicMemberScreen = () => {
         onCancelToken={onTokenCancel}
         placeholderText={StringConstant.topicMemberPlaceholder}
         setIsFirstTimeOpen={setIsFirstTimeOpen}
-        hideBackIcon={true}
+        getSearchLayout={setSearchHeight}
       />
       <ScrollView
+        decelerationRate="fast"
+        scrollEventThrottle={1}
         style={styles.fragmentContainer}
-        contentContainerStyle={styles.fragmentContentContainer}
+        contentContainerStyle={[styles.fragmentContentContainer, {paddingTop: headerShowHeight}]}
         keyboardShouldPersistTaps="handled"
-        onScroll={handleScrollEvent}>
+        keyboardDismissMode="on-drag"
+        removeClippedSubviews={true}
+        onScroll={handleScroll}>
         <UsersFragment
           isLoadingDiscoveryUser={isLoadingDiscovery.user}
           isFirstTimeOpen={isFirstTimeOpen}

@@ -3258,6 +3258,11 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-native-push-notification@^8.1.4":
+  version "8.1.4"
+  resolved "https://registry.yarnpkg.com/@types/react-native-push-notification/-/react-native-push-notification-8.1.4.tgz#5adcddab82beeac6f1256eeb54160bca1714d080"
+  integrity sha512-qXu/NcQ7YSk5ZveDMNKFBQkLt9W5FCde3be+h8fYbEnmvd5O+v5m318XGhh8AMPXURAV9pSB5Ads08Wc0KTS7A==
+
 "@types/react-native-sqlite-storage@^6.0.0":
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/@types/react-native-sqlite-storage/-/react-native-sqlite-storage-6.0.0.tgz#3d183123f1200744f84b699704a3221ded4cb04b"
@@ -11449,6 +11454,7 @@ react-native-onesignal@^5.0.0:
   resolved "https://registry.yarnpkg.com/react-native-onesignal/-/react-native-onesignal-5.0.0.tgz#c51b950dc8997b0dedfa6083efde9a1e4470b5b3"
   integrity sha512-kIouwQoeMXmJeVg8mdvbtTisNejtlMlKW8sU7KdzAge9ZRezTr6ryVPHroiMdjnYBvmZ4UzCtZZrS+Aqarepbw==
   dependencies:
+    invariant "^2.2.2"
 
 react-native-permissions@^3.2.0:
   version "3.8.0"
