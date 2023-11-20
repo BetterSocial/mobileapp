@@ -6,8 +6,8 @@ import 'react-native-gesture-handler';
 import './src/libraries/reactotron/reactotronInstance';
 
 import * as Sentry from '@sentry/react-native';
-import DeviceInfo from 'react-native-device-info';
 import config from 'react-native-config';
+import DeviceInfo, {getReadableVersion} from 'react-native-device-info';
 import {AppRegistry} from 'react-native';
 import {configureHumanID} from '@human-internet/react-native-humanid';
 import {enableScreens} from 'react-native-screens';
@@ -32,7 +32,7 @@ Sentry.init({
   // We recommend adjusting this value in production.
   environment: getEnvironmentName(),
   tracesSampleRate: 1.0,
-  release: `${code[0]}.${code[1]}.${code[2]}`,
+  release: getReadableVersion(),
   dist: code[3],
   enableNativeCrashHandling: true,
   enableNative: false

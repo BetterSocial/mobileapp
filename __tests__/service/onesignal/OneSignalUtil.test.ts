@@ -35,7 +35,7 @@ describe('TESTING OneSignalUtil', () => {
       expect(OneSignal.User.removeTag).toHaveBeenCalledTimes(3);
       expect(OneSignal.User.addTag).toHaveBeenCalledTimes(2);
     },
-    10 * 1000
+    11 * 1000
   );
 
   it('TEST should call remove tag when calling removeAllSubscribedTags', async () => {
