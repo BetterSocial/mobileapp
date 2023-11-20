@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: normalizeFontSize(36),
     lineHeight: normalizeFontSize(43.57),
-    color: '#11243D',
+    color: colors.bunting,
     marginHorizontal: dimen.normalizeDimen(20)
   },
   footer: {
