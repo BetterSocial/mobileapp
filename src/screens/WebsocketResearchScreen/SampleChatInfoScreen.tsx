@@ -247,7 +247,7 @@ const SampleChatInfoScreen = () => {
   const countParticipat = () => {
     return `(${channelInfo?.members?.length})`;
   };
-
+  console.log({loadingChannelInfo}, 'lapuk');
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
