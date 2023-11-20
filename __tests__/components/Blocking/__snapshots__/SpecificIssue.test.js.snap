@@ -104,7 +104,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
                 "width": 35,
               },
               Object {
-                "backgroundColor": "#E0E0E0",
+                "backgroundColor": "#E8EBED",
                 "width": 60,
               },
             ]
@@ -134,9 +134,9 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
           rejectResponderTermination={true}
           style={
             Object {
-              "backgroundColor": "#F5F5F5",
+              "backgroundColor": "#FFFFFF",
               "borderRadius": 8,
-              "color": "#828282",
+              "color": "#69707C",
               "fontFamily": "Inter-Regular",
               "height": 233,
               "marginLeft": 17,
@@ -222,7 +222,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
               style={
                 Object {
                   "alignItems": "center",
-                  "backgroundColor": "#00ADB5",
+                  "backgroundColor": "#4782D7",
                   "borderRadius": 6.4,
                   "flexDirection": "row",
                   "height": 40,
@@ -234,7 +234,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
               <Text
                 style={
                   Object {
-                    "color": "#FFFFFF",
+                    "color": "#ffffff",
                     "fontFamily": "Inter-SemiBold",
                     "fontSize": 18,
                   }

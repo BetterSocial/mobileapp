@@ -91,7 +91,7 @@ exports[`Tabbar should run correctly tabbar should match with snapshot 1`] = `
     <View
       style={
         Object {
-          "borderBottomColor": "#00ADB5",
+          "borderBottomColor": "#003848",
           "borderBottomWidth": 1,
         }
       }
