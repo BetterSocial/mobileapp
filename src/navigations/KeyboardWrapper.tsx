@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {ViewStyle, KeyboardAvoidingView, Platform, Keyboard} from 'react-native';
+import {ViewStyle, KeyboardAvoidingView, Platform} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = {
