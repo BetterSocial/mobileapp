@@ -418,7 +418,8 @@ const TopicPageScreen = (props) => {
         onScroll={handleScroll}
         scrollEventThrottle={16}
         showSearchBar={true}
-        searchHeight={headerShowHeight}
+        searchHeight={isHeaderHide ? headerHideHeight : headerShowHeight}
+        snap
         contentOffset={{x: 0, y: topPosition}}
         contentInsetAdjustmentBehavior={feeds?.length > 1 ? 'automatic' : 'never'}
       />
