@@ -36,21 +36,6 @@ const ChannelListScreenV2 = () => {
     navigation.navigate('ContactScreen');
   };
 
-  const requestPermission = async () => {
-    const authStatus = await messaging().requestPermission();
-    const enabled =
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
-    if (enabled) {
-      const fcmToken = await messaging().getToken();
-      const payload = {
-        fcm_token: fcmToken
-      };
-      fcmTokenService(payload);
-    }
-  };
-
   React.useEffect(() => {
     const checkNotif = async () => {
       if (!navigation.isFocused()) return;
@@ -114,6 +99,21 @@ when friends send you messages.`,
   React.useEffect(() => {
     if (isFocused) refresh('channelList');
   }, [isFocused]);
+
+  const requestPermission = async () => {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      const fcmToken = await messaging().getToken();
+      const payload = {
+        fcm_token: fcmToken
+      };
+      fcmTokenService(payload);
+    }
+  };
 
   React.useEffect(() => {
     const checkNotif = async () => {
