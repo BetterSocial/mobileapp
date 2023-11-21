@@ -8,10 +8,11 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import {colors} from '../../../utils/colors';
-import {fonts} from '../../../utils/fonts';
+
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 import TopicsProfilePictureEmptyState from '../../../assets/icon/TopicsProfilePictureEmptyState';
+import {colors} from '../../../utils/colors';
+import {fonts} from '../../../utils/fonts';
 
 const renderDefaultImage = (DefaultImage) => {
   if (DefaultImage) {

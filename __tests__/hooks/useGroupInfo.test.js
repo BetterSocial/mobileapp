@@ -9,6 +9,7 @@ import * as serviceProfile from '../../src/service/profile';
 import AnonymousMessageRepo from '../../src/service/repo/anonymousMessageRepo';
 import useGroupInfo from '../../src/screens/GroupInfo/hooks/useGroupInfo';
 import {Context} from '../../src/context';
+import ImageUtils from '../../src/utils/image';
 
 // eslint-disable-next-line global-require
 jest.mock('react-native-permissions', () => require('react-native-permissions/mock'));
@@ -32,6 +33,11 @@ jest.mock('recoil', () => ({
   atom: jest.fn(),
   useRecoilState: jest.fn(() => [{}, jest.fn()])
 }));
+jest.mock('react-native-compressor', () => {
+  return {
+    compress: jest.fn(() => 'file:///imag.jpg')
+  };
+});
 
 describe('useGroupInfo should run correctly', () => {
   afterEach(cleanup);
@@ -446,28 +452,32 @@ describe('useGroupInfo should run correctly', () => {
     expect(spyGallery).toHaveBeenCalled();
   });
 
-  it('uploadImageBase64 should run correctly', async () => {
+  it('uploadImage should run correctly', async () => {
     const navigation = {
       push: jest.fn(),
       navigate: jest.fn()
     };
-    const spyService = jest.spyOn(serviceFile, 'uploadFile');
+    const spyService = jest
+      .spyOn(ImageUtils, 'uploadImage')
+      .mockImplementation(() => ({data: {url: 'https://detik.jpg'}}));
     const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper});
-    await result.current.uploadImageBase64({base64: '1234'});
+    await result.current.uploadImage('file:///imag.jpg');
     expect(spyService).toHaveBeenCalled();
     expect(result.current.uploadedImage).toEqual('https://detik.jpg');
     expect(result.current.isUploadingImage).toBeFalsy();
   });
 
-  it('error uploadImageBase64 should run correctly', async () => {
+  it('error uploadImage should run correctly', async () => {
     const navigation = {
       push: jest.fn(),
       navigate: jest.fn()
     };
-    const spyService = jest.spyOn(serviceFile, 'uploadFile');
+    const spyService = jest
+      .spyOn(ImageUtils, 'uploadImage')
+      .mockImplementation(() => ({data: {url: 'https://detik.jpg'}}));
     const spyConsole = jest.spyOn(console, 'log');
     const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper: wrapperError});
-    await result.current.uploadImageBase64({base64: '1234'});
+    await result.current.uploadImage('file:///imag.jpg');
     expect(spyService).toHaveBeenCalled();
     expect(result.current.uploadedImage).toEqual('https://detik.jpg');
     expect(spyConsole).toHaveBeenCalled();

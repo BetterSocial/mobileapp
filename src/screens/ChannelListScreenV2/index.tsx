@@ -1,27 +1,27 @@
-import messaging from '@react-native-firebase/messaging';
-// eslint-disable-next-line no-use-before-define
 import * as React from 'react';
-import {useNavigation} from '@react-navigation/core';
-import {Alert, PushNotificationPermissions, StatusBar, View, FlatList} from 'react-native';
-
-import {openSettings} from 'react-native-permissions';
 import PushNotification from 'react-native-push-notification';
-import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
-import HorizontalTab from '../../components/HorizontalTab';
-import ChannelListTabItem from '../../components/HorizontalTab/ChannelListTabItem';
-import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
-import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
-import useRootChannelListHook from '../../hooks/screen/useRootChannelListHook';
-import {fcmTokenService} from '../../service/users';
-import StorageUtils from '../../utils/storage';
-import ChannelListScreen from '../ChannelListScreen';
-import Search from '../ChannelListScreen/elements/Search';
+// eslint-disable-next-line no-use-before-define
+import messaging from '@react-native-firebase/messaging';
+import {Alert, FlatList, PushNotificationPermissions, StatusBar, View} from 'react-native';
+import {openSettings} from 'react-native-permissions';
+import {useNavigation} from '@react-navigation/core';
+
 import AnonymousChannelListScreen from './AnonymousChannelListScreen';
+import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
+import ChannelListScreen from '../ChannelListScreen';
+import ChannelListTabItem from '../../components/HorizontalTab/ChannelListTabItem';
+import HorizontalTab from '../../components/HorizontalTab';
+import Search from '../ChannelListScreen/elements/Search';
+import StorageUtils from '../../utils/storage';
+import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
+import useRootChannelListHook from '../../hooks/screen/useRootChannelListHook';
+import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
 import {
   PERMISSION_STATUS_ACCEPTED,
   PERMISSION_STATUS_BLOCKED,
   PERMISSION_STATUS_PENDING
 } from '../../utils/constants';
+import {fcmTokenService} from '../../service/users';
 
 const ChannelListScreenV2 = () => {
   const {refresh} = useLocalDatabaseHook();

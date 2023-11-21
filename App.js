@@ -1,15 +1,11 @@
-import {HumanIDProvider} from '@human-internet/react-native-humanid';
-import {NavigationContainer} from '@react-navigation/native';
 import * as React from 'react';
-import Toast from 'react-native-toast-message';
-
-import {BackHandler, View, KeyboardAvoidingView, Platform} from 'react-native';
-import FlashMessage from 'react-native-flash-message';
-
 import DeviceInfo from 'react-native-device-info';
-import {appUpgradeVersionCheck} from 'app-upgrade-react-native-sdk';
-
+import FlashMessage from 'react-native-flash-message';
+import Toast from 'react-native-toast-message';
+import {BackHandler, KeyboardAvoidingView, Platform, View} from 'react-native';
+import {HumanIDProvider} from '@human-internet/react-native-humanid';
 import {LogLevel, OneSignal} from 'react-native-onesignal';
+import {NavigationContainer} from '@react-navigation/native';
 import {OverlayProvider, Streami18n} from 'stream-chat-react-native';
 import {RecoilDebugObserver} from 'reactotron-recoil-plugin';
 import {RecoilRoot} from 'recoil';
@@ -18,17 +14,20 @@ import {
   useSafeAreaFrame,
   useSafeAreaInsets
 } from 'react-native-safe-area-context';
-import {reactotronInstance} from './src/libraries/reactotron/reactotronInstance';
+import {appUpgradeVersionCheck} from 'app-upgrade-react-native-sdk';
 
+import NetworkDebuggerModal from './src/components/NetworkDebuggerModal';
 import Store from './src/context/Store';
-
+import useFirebaseRemoteConfig from './src/libraries/Configs/RemoteConfig';
+import getFeatureLoggerInstance, {EFeatureLogFlag} from './src/utils/log/FeatureLog';
 import {APP_UPGRADE_API_KEY, ENV, ONE_SIGNAL_APP_ID} from './src/libraries/Configs/ENVConfig';
 import {Analytics} from './src/libraries/analytics/firebaseAnalytics';
 import {RootNavigator} from './src/navigations/root-stack';
 import {linking} from './src/navigations/linking';
+import {reactotronInstance} from './src/libraries/reactotron/reactotronInstance';
 import {toastConfig} from './src/configs/ToastConfig';
-import NetworkDebuggerModal from './src/components/NetworkDebuggerModal';
-import useFirebaseRemoteConfig from './src/libraries/Configs/RemoteConfig';
+
+const {featLog} = getFeatureLoggerInstance(EFeatureLogFlag.navigation);
 
 const App = () => {
   const {top, bottom} = useSafeAreaInsets();
@@ -80,7 +79,7 @@ const App = () => {
     }
 
     if (__DEV__) {
-      console.log('current screen name: ', currentRouteName);
+      featLog('current screen name: ', currentRouteName);
       console.tron.log('current screen name: ', currentRouteName);
     }
 

@@ -31,6 +31,12 @@ jest.mock('stream-chat-react-native-core', () => ({
   generateRandomId: jest.fn(() => 'random-id')
 }));
 
+jest.mock('react-native-compressor', () => {
+  return {
+    compress: jest.fn(() => 'file:///imag.jpg')
+  };
+});
+
 describe('GroupInfo should run correctly', () => {
   const mockMyProfile = {
     bio: 'Fe mobile engineer',
