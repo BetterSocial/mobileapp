@@ -26,7 +26,7 @@ const BottomSheetImage = React.forwardRef((props, ref) => (
             <MediaIcon width={16.67} height={16.67} fill={colors.black} />
             <Text style={styles.textCard}>Upload from library</Text>
           </View>
-          {props.isLoadingUpdateImageGalery ? (
+          {props.isLoadingUpdateImageGallery ? (
             <ActivityIndicator size="small" color="#0000ff" />
           ) : null}
         </View>
