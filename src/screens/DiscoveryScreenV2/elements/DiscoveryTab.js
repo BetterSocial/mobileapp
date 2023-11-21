@@ -34,6 +34,7 @@ const DiscoveryTab = ({onChangeScreen, selectedScreen = 0, tabs}) => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         howsHorizontalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
         horizontal={true}>
         {Object.keys(tabs).map((item, index) => {
           if (route.name === 'Followings' && item === 'News') return null;
