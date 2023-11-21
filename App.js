@@ -2,7 +2,7 @@ import * as React from 'react';
 import DeviceInfo from 'react-native-device-info';
 import FlashMessage from 'react-native-flash-message';
 import Toast from 'react-native-toast-message';
-import {BackHandler, KeyboardAvoidingView, Platform, View} from 'react-native';
+import {BackHandler, Platform, View} from 'react-native';
 import {HumanIDProvider} from '@human-internet/react-native-humanid';
 import {LogLevel, OneSignal} from 'react-native-onesignal';
 import {NavigationContainer} from '@react-navigation/native';
@@ -17,6 +17,7 @@ import {
 import {appUpgradeVersionCheck} from 'app-upgrade-react-native-sdk';
 
 import Store from './src/context/Store';
+import getFeatureLoggerInstance, {EFeatureLogFlag} from './src/utils/log/FeatureLog';
 import {APP_UPGRADE_API_KEY, ENV, ONE_SIGNAL_APP_ID} from './src/libraries/Configs/ENVConfig';
 import {Analytics} from './src/libraries/analytics/firebaseAnalytics';
 import {RootNavigator} from './src/navigations/root-stack';
@@ -24,6 +25,8 @@ import {fetchRemoteConfig} from './src/utils/FirebaseUtil';
 import {linking} from './src/navigations/linking';
 import {reactotronInstance} from './src/libraries/reactotron/reactotronInstance';
 import {toastConfig} from './src/configs/ToastConfig';
+
+const {featLog} = getFeatureLoggerInstance(EFeatureLogFlag.navigation);
 
 const App = () => {
   const {top, bottom} = useSafeAreaInsets();
@@ -78,7 +81,7 @@ const App = () => {
     }
 
     if (__DEV__) {
-      console.log('current screen name: ', currentRouteName);
+      featLog('current screen name: ', currentRouteName);
       console.tron.log('current screen name: ', currentRouteName);
     }
 
@@ -138,9 +141,7 @@ const App = () => {
             linking={linking}>
             <View>
               <OverlayProvider topInset={top} bottomInset={bottom} i18nInstance={streami18n}>
-                <KeyboardAvoidingView enabled={Platform.OS === 'ios'} behavior="padding">
-                  <RootNavigator areaHeight={height} currentScreen={currentScreen} />
-                </KeyboardAvoidingView>
+                <RootNavigator areaHeight={height} currentScreen={currentScreen} />
               </OverlayProvider>
             </View>
           </NavigationContainer>

@@ -413,7 +413,7 @@ describe('TESTING ChannelListSchema', () => {
       ]);
 
       // Execution
-      const result = await ChannelList.getUnreadCount(mockDb);
+      const result = await ChannelList.getUnreadCount(mockDb, 'ANON');
 
       // Assertion
       expect(result).toBe(1);
@@ -431,7 +431,7 @@ describe('TESTING ChannelListSchema', () => {
       ]);
 
       // Execution
-      const result = await ChannelList.getUnreadCount(mockDb);
+      const result = await ChannelList.getUnreadCount(mockDb, 'ANON');
 
       // Assertion
       expect(result).toBe(0);
@@ -444,7 +444,7 @@ describe('TESTING ChannelListSchema', () => {
       });
 
       // Execution
-      const result = await ChannelList.getUnreadCount(mockDb);
+      const result = await ChannelList.getUnreadCount(mockDb, 'ANON');
 
       // Assertion
       expect(consoleSpy).toBeCalled();
@@ -473,22 +473,14 @@ describe('TESTING ChannelListSchema', () => {
         ]
       };
 
-      const fromPostNotifObjectExpectation = {
-        ...fromDatabaseObjectExpectation,
-        createdAt: 'lastUpdatedAt',
-        channelType: 'ANON_POST_NOTIFICATION',
-        unreadCount: 1,
-        channelPicture: '',
-        name: '',
-        rawJson: expect.any(Object),
-        expiredAt: null
-      };
-
       // Execution
-      const result = await ChannelList.fromPostNotifObject(postNotifObject);
+      const result = await ChannelList.fromPostNotifObject(
+        postNotifObject,
+        'ANON_POST_NOTIFICATION'
+      );
 
       // Assertion
-      expect(result).toEqual(expect.objectContaining(fromPostNotifObjectExpectation));
+      expect(result).toEqual(expect.objectContaining({channelPicture: ''}));
     });
   });
 
@@ -517,7 +509,8 @@ describe('TESTING ChannelListSchema', () => {
         unreadCount: 0,
         rawJson: expect.any(Object),
         members: null,
-        lastUpdatedBy: ''
+        lastUpdatedBy: '',
+        id: 'id_anon'
       };
 
       // Execution

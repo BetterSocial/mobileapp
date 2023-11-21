@@ -9,7 +9,8 @@ export interface ChannelListTabItemProps {
   picture: string | null;
   name: string;
   unreadCount: number;
-  testID: string;
+  type: 'SIGNED' | 'ANONYMOUS';
+  testID?: string;
 }
 
 const {width} = Dimensions.get('screen');
@@ -26,7 +27,8 @@ const ChannelListTabItem = (props: ChannelListTabItemProps) => {
     },
     name: {
       fontFamily: fonts.inter[500],
-      fontSize: 14
+      fontSize: 14,
+      color: props.type === 'SIGNED' ? colors.darkBlue : colors.black
     },
     picture: {
       width: 20,
@@ -74,4 +76,4 @@ const ChannelListTabItem = (props: ChannelListTabItemProps) => {
   );
 };
 
-export default ChannelListTabItem;
+export default React.memo(ChannelListTabItem);
