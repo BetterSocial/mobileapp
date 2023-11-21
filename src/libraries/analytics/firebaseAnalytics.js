@@ -1,11 +1,15 @@
 import analytics from '@react-native-firebase/analytics';
 
+import getFeatureLoggerInstance, {EFeatureLogFlag} from '../../utils/log/FeatureLog';
+
+const {featLog} = getFeatureLoggerInstance(EFeatureLogFlag.firebaseUtils);
+
 const FirebaseAnalytics = () => ({
   logEvent(eventName, param) {
     analytics().logEvent(eventName, param);
     if (__DEV__) {
-      console.log('Log event: ', eventName);
-      console.log('log Event params: ', param);
+      featLog('Log event: ', eventName);
+      featLog('log Event params: ', param);
     }
   },
   trackingScreen(routeName) {
