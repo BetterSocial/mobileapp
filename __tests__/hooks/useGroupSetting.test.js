@@ -7,6 +7,7 @@ import * as serviceFile from '../../src/service/file';
 import * as servicePermission from '../../src/utils/permission';
 import useGroupSetting from '../../src/screens/GroupSetting/hooks/useGroupSetting';
 import {Context} from '../../src/context/Store';
+import ImageUtils from '../../src/utils/image';
 
 jest.mock('react-native-permissions', () => require('react-native-permissions/mock'));
 
@@ -239,30 +240,29 @@ describe('use groupSetting should run correctly', () => {
     expect(result.current.renderHeaderSubtitleText()).toEqual('Skip');
   });
 
-  // TODO: Need to fixing the test with new upload logic
-  // it('submitData should run correctly', async () => {
-  //   const navigation = {
-  //     navigate: jest.fn(),
-  //     push: jest.fn(),
-  //     goBack: jest.fn()
-  //   };
-  //   const route = {
-  //     params: {
-  //       username: 'agita'
-  //     }
-  //   };
-  //   const spyUploadFile = jest
-  //     .spyOn(serviceFile, 'uploadFile')
-  //     .mockImplementation(() => ({data: {url: 'https://image.jpg'}}));
-  //   const {result} = renderHook(() => useGroupSetting({navigation, route}), {wrapper});
-  //   await result.current.setChangeImage(true);
-  //   await result.current.submitData(true, true);
-  //   expect(spyUploadFile).toHaveBeenCalled();
-  //   expect(result.current.isLoading).toBeFalsy();
-  //   await result.current.setChangeImage(false);
-  //   await result.current.submitData(true, false);
-  //   expect(navigation.goBack).toHaveBeenCalled();
-  // });
+  it('submitData should run correctly', async () => {
+    const navigation = {
+      navigate: jest.fn(),
+      push: jest.fn(),
+      goBack: jest.fn()
+    };
+    const route = {
+      params: {
+        username: 'agita'
+      }
+    };
+    const spyService = jest
+      .spyOn(ImageUtils, 'uploadImage')
+      .mockImplementation(() => ({data: {url: 'https://image.jpg'}}));
+    const {result} = renderHook(() => useGroupSetting({navigation, route}), {wrapper});
+    await result.current.setChangeImage(true);
+    await result.current.submitData(true, true);
+    expect(spyService).toHaveBeenCalled();
+    expect(result.current.isLoading).toBeFalsy();
+    await result.current.setChangeImage(false);
+    await result.current.submitData(true, false);
+    expect(navigation.goBack).toHaveBeenCalled();
+  });
 
   it('handleResLaunchGallery should run correctly', () => {
     const navigation = {
