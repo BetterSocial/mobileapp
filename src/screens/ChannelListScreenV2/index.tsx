@@ -9,14 +9,19 @@ import PushNotification from 'react-native-push-notification';
 import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
 import HorizontalTab from '../../components/HorizontalTab';
 import ChannelListTabItem from '../../components/HorizontalTab/ChannelListTabItem';
+import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
+import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
 import useRootChannelListHook from '../../hooks/screen/useRootChannelListHook';
 import {fcmTokenService} from '../../service/users';
 import StorageUtils from '../../utils/storage';
 import ChannelListScreen from '../ChannelListScreen';
 import Search from '../ChannelListScreen/elements/Search';
 import AnonymousChannelListScreen from './AnonymousChannelListScreen';
-import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
-import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
+import {
+  PERMISSION_STATUS_ACCEPTED,
+  PERMISSION_STATUS_BLOCKED,
+  PERMISSION_STATUS_PENDING
+} from '../../utils/constants';
 
 const ChannelListScreenV2 = () => {
   const {refresh} = useLocalDatabaseHook();
@@ -30,6 +35,66 @@ const ChannelListScreenV2 = () => {
   const navigateToContactScreen = () => {
     navigation.navigate('ContactScreen');
   };
+
+  React.useEffect(() => {
+    const checkNotif = async () => {
+      if (!navigation.isFocused()) return;
+      PushNotification.checkPermissions(
+        (
+          data: PushNotificationPermissions & {
+            authorizationStatus?: number;
+          }
+        ) => {
+          const lastPromptTime = StorageUtils.lastPromptNotification.get();
+          const promptInterval = 48 * 60 * 60 * 1000;
+          const currentTime = new Date().getTime();
+          if (lastPromptTime && currentTime - parseFloat(lastPromptTime) < promptInterval) {
+            return; // Don't show the prompt if the interval has not passed
+          }
+
+          const needsPermission =
+            data.alert === false || data.badge === false || data.sound === false;
+
+          const showAlert = (onPressAction: () => void) =>
+            Alert.alert(
+              "Don't Miss New Messages",
+              `Allow notifications to know 
+when friends send you messages.`,
+              [
+                {text: 'Not now', onPress: () => console.log('Cancel Pressed')},
+                {text: 'Allow', onPress: onPressAction, isPreferred: true}
+              ]
+            );
+
+          switch (data.authorizationStatus) {
+            case PERMISSION_STATUS_ACCEPTED:
+              if (needsPermission) {
+                // THIS CASE IT'S TRIGGERED WHEN USER MANUALLY DISABLED THE NOTIFICATION
+                StorageUtils.lastPromptNotification.set(currentTime.toString());
+                showAlert(() => openSettings().catch(() => console.warn('cannot open settings')));
+              } else {
+                requestPermission();
+              }
+              break;
+            case PERMISSION_STATUS_BLOCKED:
+              if (needsPermission) {
+                StorageUtils.lastPromptNotification.set(currentTime.toString());
+                showAlert(() => openSettings().catch(() => console.warn('cannot open settings')));
+              }
+              break;
+            case PERMISSION_STATUS_PENDING:
+              StorageUtils.lastPromptNotification.set(currentTime.toString());
+              showAlert(() => requestPermission());
+              break;
+            default:
+              break;
+          }
+        }
+      );
+    };
+
+    checkNotif();
+  }, [navigation?.isFocused?.()]);
 
   React.useEffect(() => {
     if (isFocused) refresh('channelList');
