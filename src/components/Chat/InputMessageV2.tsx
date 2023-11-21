@@ -1,26 +1,18 @@
 import * as React from 'react';
-import {
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
-  Text,
-  ViewStyle,
-  Image,
-  Alert
-} from 'react-native';
+import {Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
 import IconSend from '../../assets/icon/IconSendComment';
-import SheetEmoji from './SheetEmoji';
 import {colors} from '../../utils/colors';
 import dimen from '../../utils/dimen';
-import ToggleSwitch from '../ToggleSwitch';
 import {normalizeFontSize} from '../../utils/fonts';
+import ToggleSwitch from '../ToggleSwitch';
+import SheetEmoji from './SheetEmoji';
 
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    alignItems: 'flex-end'
   },
   container: {
     flex: 1,
@@ -33,40 +25,44 @@ const styles = StyleSheet.create({
     borderRadius: dimen.normalizeDimen(24 / 2),
     justifyContent: 'center',
     alignItems: 'center',
-    flexShrink: 0
+    flexShrink: 0,
+    marginBottom: dimen.normalizeDimen(4)
   },
   icSendButton: {
     alignSelf: 'center'
   },
-  btnPicture: {
-    paddingVertical: dimen.normalizeDimen(7),
-    paddingRight: dimen.normalizeDimen(7),
-    paddingLeft: dimen.normalizeDimen(6)
-  },
   containerInput: {
+    flex: 1,
     backgroundColor: colors.lightgrey,
     flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: dimen.normalizeDimen(4),
+    alignItems: 'flex-end',
+    paddingVertical: dimen.normalizeDimen(6),
     paddingHorizontal: dimen.normalizeDimen(8),
     borderRadius: dimen.normalizeDimen(12),
-    minHeight: dimen.normalizeDimen(32)
+    minHeight: dimen.normalizeDimen(32),
+    marginHorizontal: dimen.normalizeDimen(6),
+    textAlignVertical: 'center'
   },
   input: {
     flex: 1,
     backgroundColor: colors.lightgrey,
-    maxHeight: dimen.normalizeDimen(100),
     color: colors.black,
+    fontFamily: 'Inter',
     fontSize: normalizeFontSize(14),
+    fontStyle: 'normal',
     fontWeight: '400',
-    marginRight: dimen.normalizeDimen(6)
+    lineHeight: normalizeFontSize(20),
+    marginRight: dimen.normalizeDimen(12),
+    paddingTop: 0,
+    paddingBottom: 0,
+    maxHeight: dimen.normalizeDimen(92),
+    textAlignVertical: 'center'
   },
   btn: {
     borderRadius: dimen.normalizeDimen(32 / 2),
     width: dimen.normalizeDimen(32),
     height: dimen.normalizeDimen(32),
-    display: 'flex',
-    justifyContent: 'center'
+    display: 'flex'
   },
   enableButton: {
     backgroundColor: colors.bondi_blue
@@ -108,7 +104,7 @@ export interface InputMessageV2Props {
   emojiColor?: string;
   username?: string;
   profileImage?: string;
-  toggleConfirm?: () => void;
+  onToggleConfirm?: () => void;
 }
 
 const InputMessageV2 = ({
@@ -117,12 +113,11 @@ const InputMessageV2 = ({
   emojiColor,
   profileImage,
   username,
-  toggleConfirm,
+  onToggleConfirm,
   type
 }: InputMessageV2Props) => {
   const refEmoji = React.useRef(null);
   const [inputFocus, setInputFocus] = React.useState(false);
-  const [alignItemsInput, setAlignItemsInput] = React.useState('center');
   const [text, setText] = React.useState('');
 
   const onChangeInput = (v) => {
@@ -158,49 +153,38 @@ const InputMessageV2 = ({
         {
           text: 'Cancel'
         },
-        {text: 'Yes, move to other chat', onPress: () => toggleConfirm}
+        {text: 'Yes, move to other chat', onPress: onToggleConfirm}
       ]
     );
   };
 
   return (
-    <View style={[styles.main, {alignItems: alignItemsInput as ViewStyle['alignItems']}]}>
+    <View style={styles.main}>
       {emojiCode ? (
         <View style={[styles.btnEmoji, {backgroundColor: emojiColor}]}>
-          <Text>{emojiCode}</Text>
+          <Text style={{textAlign: 'center', textAlignVertical: 'center'}}>{emojiCode}</Text>
         </View>
       ) : (
         <Image source={{uri: profileImage}} style={styles.btnEmoji} />
       )}
-      <View style={styles.container}>
-        <View style={styles.containerInput}>
-          <TextInput
-            multiline
-            style={styles.input}
-            onChangeText={onChangeInput}
-            value={text}
-            onFocus={() => setInputFocus(true)}
-            onBlur={() => setInputFocus(false)}
-            onContentSizeChange={(e) => {
-              const {contentSize} = e.nativeEvent;
-              if (contentSize.height >= 20) {
-                setAlignItemsInput('flex-end');
-              } else {
-                setAlignItemsInput('center');
-              }
-            }}
-          />
-          <ToggleSwitch
-            labelLeft={!inputFocus ? 'Anonymity' : undefined}
-            containerStyle={{alignSelf: alignItemsInput as ViewStyle['alignItems']}}
-            styleLabelLeft={[
-              styles.labelToggle,
-              {color: type === 'ANONYMOUS' ? colors.gray : colors.blue}
-            ]}
-            onValueChange={toggleChnage}
-            value={type === 'ANONYMOUS'}
-          />
-        </View>
+      <View style={styles.containerInput}>
+        <TextInput
+          multiline
+          style={styles.input}
+          onChangeText={onChangeInput}
+          value={text}
+          onFocus={() => setInputFocus(true)}
+          onBlur={() => setInputFocus(false)}
+        />
+        <ToggleSwitch
+          labelLeft={!inputFocus ? 'Anonymity' : undefined}
+          styleLabelLeft={[
+            styles.labelToggle,
+            {color: type === 'ANONYMOUS' ? colors.gray : colors.blue}
+          ]}
+          onValueChange={toggleChnage}
+          value={type === 'ANONYMOUS'}
+        />
       </View>
       <TouchableOpacity
         style={[styles.btn, isDisableButton() ? styles.disableButton : styles.enableButton]}

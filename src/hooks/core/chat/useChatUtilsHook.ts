@@ -27,7 +27,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
   const {localDb, refresh} = useLocalDatabaseHook();
   const navigation = useNavigation();
   const {selectedChannel} = chat;
-  const [profile] = React.useContext(Context).profile;
+  const [profile] = (React.useContext(Context) as any).profile;
   const setChannelAsRead = async (channel: ChannelList) => {
     if (!localDb) return;
     channel.setRead(localDb).catch((e) => console.log('setChannelAsRead error', e));
@@ -135,6 +135,18 @@ function useChatUtilsHook(): UseChatUtilsHook {
     return null;
   };
 
+  const goToMoveChat = (channel: ChannelList) => {
+    setChat({
+      ...chat,
+      selectedChannel: channel
+    });
+    setChannelAsRead(channel);
+    if (channel?.channelType === ANON_PM) {
+      return openChat('SampleChatScreen');
+    }
+    return openChat('SignedChatScreen');
+  };
+
   const goBackFromChatScreen = async () => {
     await Keyboard.dismiss();
     setTimeout(() => {
@@ -179,6 +191,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
     selectedChannel,
     goBack,
     goToChatScreen,
+    goToMoveChat,
     goToPostDetailScreen,
     goToCommunityScreen,
     goToChatInfoScreen,
