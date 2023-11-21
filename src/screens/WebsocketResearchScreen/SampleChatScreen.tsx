@@ -5,14 +5,16 @@
 import * as React from 'react';
 import {Dimensions, FlatList, KeyboardAvoidingView, Platform, StyleSheet, View} from 'react-native';
 
-import InputMessageV2 from '../../components/Chat/InputMessageV2';
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
-import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
-import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
-import {ANONYMOUS} from '../../hooks/core/constant';
-import {colors} from '../../utils/colors';
 import BaseSystemChat from '../../components/AnonymousChat/BaseChatSystem';
+import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
+import InputMessageV2 from '../../components/Chat/InputMessageV2';
+import useMoveChatTypeHook from '../../hooks/core/chat/useMoveChatTypeHook';
+import {ANONYMOUS} from '../../hooks/core/constant';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
+import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
+import {colors} from '../../utils/colors';
+import Loading from '../Loading';
 
 const {height} = Dimensions.get('window');
 
@@ -40,7 +42,6 @@ export const styles = StyleSheet.create({
     right: 0,
     zIndex: 100,
     padding: 8,
-    paddingBottom: 16,
     borderTopColor: colors.lightgrey,
     borderTopWidth: 1
   }
@@ -57,11 +58,17 @@ const SampleChatScreen = () => {
     updateChatContinuity
   } = useChatScreenHook(ANONYMOUS);
 
+  const {moveToSignedChannel} = useMoveChatTypeHook();
+
   const updatedChats = updateChatContinuity(chats);
+  const [loading, setLoading] = React.useState(false);
   const {anonProfileId} = useProfileHook();
   const ownerChat = selectedChannel?.rawJson?.channel?.members?.find(
-    (item) => item.role === 'owner'
-  ).user_id;
+    (item: any) => item.user_id === anonProfileId
+  );
+  const memberChat = selectedChannel?.rawJson?.channel?.members?.find(
+    (item: any) => item.user_id !== anonProfileId
+  );
 
   const renderChatItem = React.useCallback(({item, index}) => {
     return <BaseChatItem type={ANONYMOUS} item={item} index={index} />;
@@ -69,6 +76,20 @@ const SampleChatScreen = () => {
 
   const scrollToEnd = () => {
     flatlistRef.current?.scrollToEnd();
+  };
+
+  const moveChatSigned = async () => {
+    try {
+      setLoading(true);
+      await moveToSignedChannel({
+        oldChannelId: selectedChannel?.id,
+        targetUserId: memberChat.user_id
+      });
+    } catch (e) {
+      console.log('error moving chat to signed channel', e);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -97,7 +118,7 @@ const SampleChatScreen = () => {
         onLayout={scrollToEnd}
         keyExtractor={(item, index) => item?.id || index.toString()}
         ListFooterComponent={
-          ownerChat === anonProfileId ? (
+          ownerChat ? (
             <BaseSystemChat
               componentType="SINGLE"
               messageSingle={`You’re anonymously messaging ${selectedChannel?.name}. They are still able to block you`}
@@ -113,8 +134,10 @@ const SampleChatScreen = () => {
           emojiCode={selectedChannel?.rawJson.channel.anon_user_info_emoji_code}
           emojiColor={selectedChannel?.rawJson.channel.anon_user_info_color_code}
           username={selectedChannel?.name}
+          onToggleConfirm={moveChatSigned}
         />
       </View>
+      <Loading visible={loading} />
     </KeyboardAvoidingView>
   );
 };
