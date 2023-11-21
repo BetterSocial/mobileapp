@@ -134,6 +134,14 @@ const DiscoverySearch = ({
   }, [searchText]);
 
   React.useEffect(() => {
+    if (discoverySearchBarRef?.current) {
+      setTimeout(() => {
+        discoverySearchBarRef?.current?.focus();
+      }, 500);
+    }
+  }, []);
+
+  React.useEffect(() => {
     const unsubscribe = () => {
       setSearchText('');
       DiscoveryAction.setDiscoveryData(
@@ -179,8 +187,6 @@ const DiscoverySearch = ({
           <TextInput
             ref={discoverySearchBarRef}
             testID={TestIdConstant.discoveryScreenSearchBar}
-            focusable={true}
-            autoFocus={true}
             // value={discoverySearchBarText}
             value={searchText}
             onChangeText={handleChangeText}
