@@ -452,33 +452,36 @@ describe('useGroupInfo should run correctly', () => {
     expect(spyGallery).toHaveBeenCalled();
   });
 
-  // TODO: Need to fixing the test with new upload logic
-  // it('uploadImage should run correctly', async () => {
-  //   const navigation = {
-  //     push: jest.fn(),
-  //     navigate: jest.fn()
-  //   };
-  //   const spyService = jest.spyOn(ImageUtils, 'uploadImage');
-  //   const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper});
-  //   await result.current.uploadImage('file:///imag.jpg');
-  //   expect(spyService).toHaveBeenCalled();
-  //   expect(result.current.uploadedImage).toEqual('https://detik.jpg');
-  //   expect(result.current.isUploadingImage).toBeFalsy();
-  // });
+  it('uploadImage should run correctly', async () => {
+    const navigation = {
+      push: jest.fn(),
+      navigate: jest.fn()
+    };
+    const spyService = jest
+      .spyOn(ImageUtils, 'uploadImage')
+      .mockImplementation(() => ({data: {url: 'https://detik.jpg'}}));
+    const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper});
+    await result.current.uploadImage('file:///imag.jpg');
+    expect(spyService).toHaveBeenCalled();
+    expect(result.current.uploadedImage).toEqual('https://detik.jpg');
+    expect(result.current.isUploadingImage).toBeFalsy();
+  });
 
-  // it('error uploadImage should run correctly', async () => {
-  //   const navigation = {
-  //     push: jest.fn(),
-  //     navigate: jest.fn()
-  //   };
-  //   const spyService = jest.spyOn(ImageUtils, 'uploadImage');
-  //   const spyConsole = jest.spyOn(console, 'log');
-  //   const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper: wrapperError});
-  //   await result.current.uploadImage('file:///imag.jpg');
-  //   expect(spyService).toHaveBeenCalled();
-  //   expect(result.current.uploadedImage).toEqual('https://detik.jpg');
-  //   expect(spyConsole).toHaveBeenCalled();
-  // });
+  it('error uploadImage should run correctly', async () => {
+    const navigation = {
+      push: jest.fn(),
+      navigate: jest.fn()
+    };
+    const spyService = jest
+      .spyOn(ImageUtils, 'uploadImage')
+      .mockImplementation(() => ({data: {url: 'https://detik.jpg'}}));
+    const spyConsole = jest.spyOn(console, 'log');
+    const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper: wrapperError});
+    await result.current.uploadImage('file:///imag.jpg');
+    expect(spyService).toHaveBeenCalled();
+    expect(result.current.uploadedImage).toEqual('https://detik.jpg');
+    expect(spyConsole).toHaveBeenCalled();
+  });
 
   it('handleOpenProfile should run correctly', async () => {
     const navigation = {
