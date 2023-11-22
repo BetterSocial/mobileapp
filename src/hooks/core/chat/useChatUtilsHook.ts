@@ -21,8 +21,14 @@ const chatAtom = atom({
   }
 });
 
+const selectedChannelKeyTab = atom({
+  key: 'selectedChannelKeyTab',
+  default: 0
+});
+
 function useChatUtilsHook(): UseChatUtilsHook {
   const [chat, setChat] = useRecoilState(chatAtom);
+  const [selectedChannelKey, setSelectedChannelKey] = useRecoilState(selectedChannelKeyTab);
   const {localDb, refresh} = useLocalDatabaseHook();
   const navigation = useNavigation();
   const {selectedChannel} = chat;
@@ -141,8 +147,10 @@ function useChatUtilsHook(): UseChatUtilsHook {
     });
     setChannelAsRead(channel);
     if (channel?.channelType === ANON_PM) {
+      setSelectedChannelKey(1);
       return openChat('SampleChatScreen');
     }
+    setSelectedChannelKey(0);
     return openChat('SignedChatScreen');
   };
 
@@ -185,6 +193,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
 
   return {
     selectedChannel,
+    selectedChannelKey,
     goBack,
     goToChatScreen,
     goToMoveChat,
