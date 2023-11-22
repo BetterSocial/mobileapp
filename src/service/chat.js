@@ -174,6 +174,33 @@ const moveChatToSigned = async ({oldChannelId, targetUserId}) => {
   }
 };
 
+const moveChatToAnon = async ({
+  anon_user_info_color_code,
+  anon_user_info_color_name,
+  anon_user_info_emoji_code,
+  anon_user_info_emoji_name,
+  oldChannelId,
+  targetUserId
+}) => {
+  try {
+    const response = await anonymousApi.post('/chat/move-to-anon', {
+      anon_user_info_color_code,
+      anon_user_info_color_name,
+      anon_user_info_emoji_code,
+      anon_user_info_emoji_name,
+      oldChannelId,
+      targetUserId
+    });
+    if (response.status === 200) {
+      return Promise.resolve(response.data);
+    }
+    return Promise.reject(response.data);
+  } catch (e) {
+    if (e?.response?.data?.message) return Promise.reject(e?.response?.data?.message);
+    return Promise.reject(e);
+  }
+};
+
 export {
   createChannel,
   sendSystemMessage,
@@ -181,5 +208,6 @@ export {
   sendSignedDMOtherProfile,
   getOrCreateAnonymousChannel,
   followClient,
-  moveChatToSigned
+  moveChatToSigned,
+  moveChatToAnon
 };

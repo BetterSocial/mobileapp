@@ -5,15 +5,16 @@ import ChannelListMemberSchema from '../../../database/schema/ChannelListMemberS
 import ChannelList from '../../../database/schema/ChannelListSchema';
 import ChatSchema from '../../../database/schema/ChatSchema';
 import UserSchema from '../../../database/schema/UserSchema';
-import {moveChatToSigned} from '../../../service/chat';
+import {moveChatToSigned, moveChatToAnon} from '../../../service/chat';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
 import {getAnonymousChatName, getChatName} from '../../../utils/string/StringUtils';
 import useUserAuthHook from '../auth/useUserAuthHook';
 import {ANONYMOUS, ANON_PM} from '../constant';
 import useChatUtilsHook from './useChatUtilsHook';
+import {generateAnonProfileOtherProfile} from '../../../service/anonymousProfile';
 
 type ChannelCategory = 'SIGNED' | 'ANONYMOUS';
-interface MoveToSignedChannelParams {
+interface MoveToChatChannelParams {
   targetUserId: string;
   oldChannelId: string;
 }
@@ -71,9 +72,12 @@ const useMoveChatTypeHook = () => {
     channel.channel = {...channel};
     const channelType = channel?.type;
 
-    const channelList = ChannelList.fromChannelAPI(channel, type[channelType]);
+    const channelList = ChannelList.fromChannelAPI(channel, type[channelType], channel?.members);
     await channelList.saveIfLatest(localDb);
     refresh('channelList');
+    refresh('chat');
+    refresh('channelInfo');
+    refresh('channelMember');
     goToMoveChat(channelList);
     return channelList;
   };
@@ -111,39 +115,46 @@ const useMoveChatTypeHook = () => {
     }
   };
 
-  const moveToSignedChannel = async ({targetUserId, oldChannelId}: MoveToSignedChannelParams) => {
+  const moveToSignedChannel = async ({targetUserId, oldChannelId}: MoveToChatChannelParams) => {
     if (!localDb) return;
     try {
       const result = await moveChatToSigned({targetUserId, oldChannelId});
-      const messages = result?.data?.messageHistories?.map((item) => {
+      const messages = result?.data?.messageHistories?.map((item: any) => {
         return item?.message;
       });
       const channel = {
         ...result?.data?.channel,
-        members: result?.data?.members,
+        members: result?.data?.better_channel_members,
         messages
       };
       await saveChannelData(channel, 'SIGNED');
-      refresh('channelList');
     } catch (err) {
       console.log('error on moveToSignedChannel', err);
     }
   };
 
-  const moveToAnonymousChannel = async () => {
+  const moveToAnonymousChannel = async ({targetUserId, oldChannelId}: MoveToChatChannelParams) => {
     if (!localDb) return;
     try {
-      const result = await moveChatToSigned({targetUserId: '', oldChannelId: ''});
-      const messages = result?.data?.messageHistories?.map((item) => {
+      const anonProfileResult = await generateAnonProfileOtherProfile(targetUserId);
+      const result = await moveChatToAnon({
+        targetUserId,
+        oldChannelId,
+        anon_user_info_color_code: anonProfileResult.anon_user_info_color_code,
+        anon_user_info_color_name: anonProfileResult.anon_user_info_color_name,
+        anon_user_info_emoji_code: anonProfileResult.anon_user_info_emoji_code,
+        anon_user_info_emoji_name: anonProfileResult.anon_user_info_emoji_name
+      });
+
+      const messages = result?.data?.messageHistories?.map((item: any) => {
         return item?.message;
       });
       const channel = {
         ...result?.data?.channel,
-        members: result?.data?.members,
+        members: result?.data?.better_channel_members,
         messages
       };
       await saveChannelData(channel, 'ANONYMOUS');
-      refresh('channelList');
     } catch (err) {
       console.log('error on moveToAnonymousChannel', err);
     }
