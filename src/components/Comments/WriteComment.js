@@ -51,7 +51,6 @@ const WriteComment = ({
       setLoadingUser(false);
       return setAnoimityData({});
     } catch (e) {
-      console.log(e, 'error');
       return setAnoimityData({});
     }
   }, [isAnonimity, postId]);
