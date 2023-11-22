@@ -1,24 +1,24 @@
+import * as React from 'react';
+import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import messaging from '@react-native-firebase/messaging';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import * as React from 'react';
 import {Platform, StyleSheet, View} from 'react-native';
-import PushNotification from 'react-native-push-notification';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useRecoilState, useRecoilValue} from 'recoil';
 
+import ChannelListScreenV2 from '../screens/ChannelListScreenV2';
+import FirebaseConfig from '../configs/FirebaseConfig';
 import MemoFeed from '../assets/icon/Feed';
 import MemoHome from '../assets/icon/Home';
 import MemoNews from '../assets/icon/News';
 import MemoProfileIcon from '../assets/icon/Profile';
 import profileAtom from '../atom/profileAtom';
-import FirebaseConfig from '../configs/FirebaseConfig';
 import useCoreChatSystemHook from '../hooks/core/useCoreChatSystemHook';
 import useRootChannelListHook from '../hooks/screen/useRootChannelListHook';
+import TokenStorage, {ITokenEnum} from '../utils/storage/custom/tokenStorage';
 import {FeedScreen, NewsScreen, ProfileScreen} from '../screens';
-import ChannelListScreenV2 from '../screens/ChannelListScreenV2';
 import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
 import {colors} from '../utils/colors';
-import TokenStorage, {ITokenEnum} from '../utils/storage/custom/tokenStorage';
 import {getAnonymousUserId, getUserId} from '../utils/users';
 
 const Tab = createBottomTabNavigator();
@@ -138,7 +138,7 @@ function HomeBottomTabs({navigation}) {
     PushNotification.createChannel(
       {
         channelId: 'bettersosialid', // (required)
-        channelName: 'bettersosial-chat', // (required)
+        channelName: 'New Messages & Comments', // (required)
         playSound: true, // (optional) default: true
         soundName: 'default', // (optional) See `soundName` parameter of `localNotification` function
         importance: 4, // (optional) default: 4. Int value of the Android notification importance
@@ -180,6 +180,11 @@ function HomeBottomTabs({navigation}) {
   React.useEffect(() => {
     createChannel();
     updateProfileAtomId();
+
+    messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+      console.log('Message handled in the background!', remoteMessage);
+      handlePushNotif(remoteMessage);
+    });
 
     messaging().setBackgroundMessageHandler(async (remoteMessage) => {
       console.log('Message handled in the background!', remoteMessage);

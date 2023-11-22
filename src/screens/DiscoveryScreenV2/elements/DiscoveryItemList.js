@@ -8,9 +8,11 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+
+import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
+import TopicsProfilePictureEmptyState from '../../../assets/icon/TopicsProfilePictureEmptyState';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
-import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 
 const renderDefaultImage = (DefaultImage) => {
   if (DefaultImage) {
@@ -97,6 +99,8 @@ const DomainList = (props) => {
                   width={48}
                   height={48}
                 />
+              ) : DefaultImage ? (
+                <TopicsProfilePictureEmptyState />
               ) : (
                 <View testID="noimage">{renderDefaultImage(DefaultImage)}</View>
               )}
