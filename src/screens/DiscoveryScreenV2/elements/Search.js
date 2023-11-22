@@ -36,8 +36,7 @@ const DiscoverySearch = ({
   fetchDiscoveryData = () => {},
   fetchData,
   onCancelToken = () => {},
-  hideBackIcon = false,
-  autoFocus = true
+  hideBackIcon = false
 }) => {
   const navigation = useNavigation();
   const [, discoveryDispatch] = React.useContext(Context).discovery;
