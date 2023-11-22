@@ -14,6 +14,12 @@ jest.mock('../../../src/hooks/useAfterInteractions', () => ({
   })
 }));
 
+jest.mock('react-native-compressor', () => {
+  return {
+    compress: jest.fn(() => 'file:///imag.jpg')
+  };
+});
+
 describe('GroupSetting should be run correctly', () => {
   const cid = 'messaging:c47d45f2-0dd9-4eaa-1600-4ff6e518199a';
   const channel_created_at = '2022-09-30T22:49:45.59342Z';

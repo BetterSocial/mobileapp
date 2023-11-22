@@ -13,14 +13,13 @@ import MemoHome from '../assets/icon/Home';
 import MemoNews from '../assets/icon/News';
 import MemoProfileIcon from '../assets/icon/Profile';
 import profileAtom from '../atom/profileAtom';
+import useCoreChatSystemHook from '../hooks/core/useCoreChatSystemHook';
 import useRootChannelListHook from '../hooks/screen/useRootChannelListHook';
 import TokenStorage, {ITokenEnum} from '../utils/storage/custom/tokenStorage';
 import {FeedScreen, NewsScreen, ProfileScreen} from '../screens';
 import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
 import {colors} from '../utils/colors';
-import {fcmTokenService} from '../service/users';
 import {getAnonymousUserId, getUserId} from '../utils/users';
-import useCoreChatSystemHook from '../hooks/core/useCoreChatSystemHook';
 
 const Tab = createBottomTabNavigator();
 
@@ -108,23 +107,8 @@ function HomeBottomTabs({navigation}) {
     // Should the initial notification be popped automatically
     // default: true
     popInitialNotification: true,
-    requestPermissions: true
+    requestPermissions: false
   });
-
-  const requestPermission = async () => {
-    const authStatus = await messaging().requestPermission();
-    const enabled =
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
-    if (enabled) {
-      const fcmToken = await messaging().getToken();
-      const payload = {
-        fcm_token: fcmToken
-      };
-      fcmTokenService(payload);
-    }
-  };
 
   const pushNotifIos = (message) => {
     if (__DEV__) {
@@ -154,7 +138,7 @@ function HomeBottomTabs({navigation}) {
     PushNotification.createChannel(
       {
         channelId: 'bettersosialid', // (required)
-        channelName: 'bettersosial-chat', // (required)
+        channelName: 'New Messages & Comments', // (required)
         playSound: true, // (optional) default: true
         soundName: 'default', // (optional) See `soundName` parameter of `localNotification` function
         importance: 4, // (optional) default: 4. Int value of the Android notification importance
@@ -195,8 +179,12 @@ function HomeBottomTabs({navigation}) {
 
   React.useEffect(() => {
     createChannel();
-    requestPermission();
     updateProfileAtomId();
+
+    messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+      console.log('Message handled in the background!', remoteMessage);
+      handlePushNotif(remoteMessage);
+    });
 
     messaging().setBackgroundMessageHandler(async (remoteMessage) => {
       console.log('Message handled in the background!', remoteMessage);
