@@ -69,7 +69,7 @@ const SignedChatScreen = () => {
       ) : null}
 
       <FlatList
-        contentContainerStyle={{paddingBottom: 20}}
+        contentContainerStyle={styles.contentContainerStyle}
         style={styles.chatContainer}
         data={updatedChats}
         inverted={true}
