@@ -1,12 +1,10 @@
 import React from 'react';
 
-import {ViewStyle, KeyboardAvoidingView, Platform} from 'react-native';
+import {KeyboardAvoidingView, Platform} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = {
   children: any;
-  keyboardVerticalOffset?: number;
-  contentContainerStyle?: ViewStyle;
 };
 
 const KeyboardWrapper = ({children}: Props): JSX.Element => {
