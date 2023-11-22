@@ -16,6 +16,7 @@ import StorageUtils from '../../utils/storage';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import useRootChannelListHook from '../../hooks/screen/useRootChannelListHook';
 import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
+import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
 import {
   PERMISSION_STATUS_ACCEPTED,
   PERMISSION_STATUS_BLOCKED,
@@ -29,7 +30,9 @@ const ChannelListScreenV2 = () => {
   const {profile} = useUserAuthHook();
   const isFocused = navigation.isFocused();
 
-  const [selectedTab, setSelectedTab] = React.useState(0);
+  const {selectedChannelKey} = useChatUtilsHook();
+
+  const [selectedTab, setSelectedTab] = React.useState(selectedChannelKey || 0);
   const {signedChannelUnreadCount, anonymousChannelUnreadCount} = useRootChannelListHook();
 
   const navigateToContactScreen = () => {
