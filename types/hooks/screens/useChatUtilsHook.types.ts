@@ -2,6 +2,7 @@ import {ChannelList} from '../../database/schema/ChannelList.types';
 
 interface UseChatUtilsHook {
   selectedChannel: ChannelList | null;
+  selectedChannelKey: number;
   goBack: () => void;
   goToChatScreen: (channel: ChannelList, from?: string) => void;
   goToMoveChat: (channel: ChannelList) => void;
