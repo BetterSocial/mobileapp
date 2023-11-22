@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#0000'
   },
   buttonContainer: {
-    backgroundColor: colors.holytosca,
+    backgroundColor: colors.darkBlue,
     // height: dimen.size.TOPIC_FEED_POST_BUTTON_HEIGHT,
     borderRadius: dimen.size.FEED_ACTION_BUTTON_RADIUS,
     justifyContent: 'center'
