@@ -2,7 +2,7 @@
 export const colors = {
   bondi_blue: '#00ADB5',
   white: '#ffffff',
-  black: '#0C0C0C',
+  black: '#000000',
   emperor: '#4F4F4F',
   gray: '#69707C',
   gray1: '#9B9FA9',
@@ -15,7 +15,7 @@ export const colors = {
   silver: '#BDBDBD',
   french_pass: '#b6e4fd',
   pattens_blue: '#ddf2fe',
-  blue: '#2C67BC',
+  blue: '#2F80ED',
   lightblue: '#55C2FF',
   blue1: '#4782D7',
   red: '#FF2E63',
