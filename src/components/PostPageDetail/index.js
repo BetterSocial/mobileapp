@@ -89,6 +89,13 @@ const PostPageDetailIdComponent = (props) => {
       }, 300);
     }
   };
+
+  React.useEffect(() => {
+    if (route.params?.data) {
+      setItem(route.params?.data);
+    }
+  }, [route.params?.data]);
+
   React.useEffect(() => {
     getComment();
   }, []);
@@ -129,7 +136,6 @@ const PostPageDetailIdComponent = (props) => {
 
   const getDetailFeed = async () => {
     if (!route.params.isCaching) {
-      setLoading(true);
       try {
         const data = await getFeedDetail(feedId);
         setItem(data?.data);
@@ -140,6 +146,7 @@ const PostPageDetailIdComponent = (props) => {
           }, 300);
         }
       } catch (e) {
+        setLoading(false);
         Toast.show(
           e?.response?.data?.message || 'Failed to load feed - please try again',
           Toast.LONG
@@ -148,9 +155,9 @@ const PostPageDetailIdComponent = (props) => {
       }
     } else {
       setItem(route.params.data);
+      setLoading(false);
     }
   };
-
   const updateParentPost = (data) => {
     setItem(data);
     updateAllContent(data);
@@ -568,6 +575,7 @@ const PostPageDetailIdComponent = (props) => {
 
           <ScrollView
             ref={scrollViewRef}
+            keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
             nestedScrollEnabled={true}>
             <ScrollView
