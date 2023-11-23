@@ -378,7 +378,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
                 numberOfLines={1}
                 style={
                   Object {
-                    "color": "#0C0C0C",
+                    "color": "#000000",
                     "fontFamily": "Inter-Medium",
                     "fontSize": 14,
                   }

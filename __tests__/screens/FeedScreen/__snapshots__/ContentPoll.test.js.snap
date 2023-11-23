@@ -101,7 +101,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
           <Text
             style={
               Object {
-                "color": "#0C0C0C",
+                "color": "#000000",
                 "flex": 1,
                 "fontFamily": "Inter-Regular",
                 "fontSize": 12.600000000000001,
@@ -190,7 +190,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
           <Text
             style={
               Object {
-                "color": "#0C0C0C",
+                "color": "#000000",
                 "flex": 1,
                 "fontFamily": "Inter-Regular",
                 "fontSize": 12.600000000000001,
