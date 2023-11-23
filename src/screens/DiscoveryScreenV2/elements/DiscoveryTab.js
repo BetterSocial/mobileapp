@@ -16,7 +16,6 @@ const DiscoveryTab = ({onChangeScreen, selectedScreen = 0, tabs}) => {
   const route = useRoute();
 
   const handleTabOnClicked = React.useCallback((index) => {
-    Keyboard.dismiss();
     onChangeScreen(index);
   }, []);
 
