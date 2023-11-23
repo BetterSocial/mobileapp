@@ -91,12 +91,6 @@ const PostPageDetailIdComponent = (props) => {
   };
 
   React.useEffect(() => {
-    if (route.params?.data) {
-      setItem(route.params?.data);
-    }
-  }, [route.params?.data]);
-
-  React.useEffect(() => {
     getComment();
   }, []);
   const handleVote = (data = {}) => {
@@ -137,6 +131,7 @@ const PostPageDetailIdComponent = (props) => {
   const getDetailFeed = async () => {
     if (!route.params.isCaching) {
       try {
+        setLoading(true);
         const data = await getFeedDetail(feedId);
         setItem(data?.data);
         setLoading(false);
