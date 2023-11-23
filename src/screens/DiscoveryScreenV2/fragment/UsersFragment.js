@@ -133,7 +133,6 @@ const UsersFragment = ({
   };
 
   const renderDiscoveryItem = (from, key, item, index) => {
-    console.log(item.karma_score);
     const isUnfollowed = item.user ? !item.user.following : !item.following;
 
     if (
