@@ -25,19 +25,71 @@ const DomainList = (props) => {
     isHashtag,
     handleSetFollow,
     handleSetUnFollow,
+    handleSetBlock,
+    handleSetUnblock,
     onPressBody,
     DefaultImage,
-    isCommunity
+    isCommunity,
+    isBlockedSection
   } = props;
+
+  const renderButonAction = () => {
+    if (isBlockedSection) {
+      if (item.isUnblocked) {
+        return (
+          <TouchableNativeFeedback testID="isUnblock" onPress={handleSetBlock}>
+            <View style={styles.followContainer}>
+              <View style={styles.buttonBlockUser}>
+                <Text style={styles.textButtonBlockUser}>Block</Text>
+              </View>
+            </View>
+          </TouchableNativeFeedback>
+        );
+      }
+      return (
+        <TouchableNativeFeedback testID="isBlock" onPress={handleSetUnblock}>
+          <View style={styles.followContainer}>
+            <View style={styles.buttonBlock}>
+              <Text style={styles.textButtonBlock}>Blocked</Text>
+            </View>
+          </View>
+        </TouchableNativeFeedback>
+      );
+    }
+    if (item.isunfollowed) {
+      return (
+        <TouchableNativeFeedback onPress={handleSetFollow}>
+          <View style={styles.followContainer}>
+            <View style={styles.buttonFollow}>
+              <Text style={styles.textButtonFollow}>{isCommunity ? 'Join' : 'Follow'}</Text>
+            </View>
+          </View>
+        </TouchableNativeFeedback>
+      );
+    }
+    return (
+      <TouchableNativeFeedback onPress={handleSetUnFollow}>
+        <View style={styles.followContainer}>
+          <View style={styles.buttonFollowing}>
+            <Text style={styles.textButtonFollowing}>{isCommunity ? 'Joined' : 'Following'}</Text>
+          </View>
+        </View>
+      </TouchableNativeFeedback>
+    );
+  };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => onPressBody(item)} style={styles.wrapProfile}>
+      <TouchableOpacity
+        testID="pressbody"
+        onPress={() => onPressBody(item)}
+        style={styles.wrapProfile}>
         <View style={styles.card}>
           {!isHashtag ? (
             <React.Fragment>
               {item.image && typeof item.image === 'string' && item.image.length > 0 ? (
                 <Image
+                  testID="images"
                   source={{
                     uri: item.image
                   }}
@@ -46,19 +98,20 @@ const DomainList = (props) => {
                   height={48}
                 />
               ) : (
-                renderDefaultImage(DefaultImage)
+                <View testID="noimage">{renderDefaultImage(DefaultImage)}</View>
               )}
             </React.Fragment>
           ) : null}
 
           <View style={isHashtag ? styles.wrapTextProfileTopic : styles.wrapTextProfile}>
-            <Text numberOfLines={1} style={styles.textProfileUsername}>
+            <Text testID="name" numberOfLines={1} style={styles.textProfileUsername}>
               {isHashtag && '#'}
               {item.name}
             </Text>
 
             {item.description !== null && (
               <Text
+                testID="desc"
                 style={item.isDomain ? styles.textProfileFullName : styles.domainDescription}
                 numberOfLines={1}
                 ellipsizeMode={'tail'}>
@@ -68,23 +121,7 @@ const DomainList = (props) => {
           </View>
         </View>
       </TouchableOpacity>
-      {item.isunfollowed ? (
-        <TouchableNativeFeedback onPress={handleSetFollow}>
-          <View style={styles.followContainer}>
-            <View style={styles.buttonFollow}>
-              <Text style={styles.textButtonFollow}>{isCommunity ? 'Join' : 'Follow'}</Text>
-            </View>
-          </View>
-        </TouchableNativeFeedback>
-      ) : (
-        <TouchableNativeFeedback onPress={handleSetUnFollow}>
-          <View style={styles.followContainer}>
-            <View style={styles.buttonFollowing}>
-              <Text style={styles.textButtonFollowing}>{isCommunity ? 'Joined' : 'Following'}</Text>
-            </View>
-          </View>
-        </TouchableNativeFeedback>
-      )}
+      {renderButonAction()}
     </View>
   );
 };
@@ -202,6 +239,39 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center'
     // backgroundColor: 'blue'
+  },
+  buttonBlockUser: {
+    width: 88,
+    height: 36,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
+    borderColor: colors.bondi_blue,
+    borderWidth: 1
+  },
+  textButtonBlock: {
+    fontFamily: fonts.inter[600],
+    fontWeight: 'bold',
+    fontSize: 12,
+    color: colors.white
+  },
+  textButtonBlockUser: {
+    fontFamily: fonts.inter[600],
+    fontWeight: 'bold',
+    fontSize: 12,
+    color: colors.bondi_blue
+  },
+  buttonBlock: {
+    width: 88,
+    height: 36,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.blockColor,
+    borderRadius: 8,
+    backgroundColor: colors.blockColor
   }
 });
 
@@ -213,7 +283,10 @@ DomainList.propTypes = {
   DefaultImage: PropTypes.element,
   isCommunity: PropTypes.bool,
   handleSetFollow: PropTypes.func,
-  handleSetUnFollow: PropTypes.func
+  handleSetUnFollow: PropTypes.func,
+  isBlockedSection: PropTypes.bool,
+  handleSetBlock: PropTypes.func,
+  handleSetUnblock: PropTypes.func
 };
 
 DomainList.defaultProps = {
