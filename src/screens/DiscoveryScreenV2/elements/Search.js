@@ -230,8 +230,7 @@ DiscoverySearch.propTypes = {
   fetchDiscoveryData: PropTypes.func,
   fetchData: PropTypes.func,
   onCancelToken: PropTypes.func,
-  hideBackIcon: PropTypes.bool,
-  autoFocus: PropTypes.bool
+  hideBackIcon: PropTypes.bool
 };
 
 const styles = StyleSheet.create({
