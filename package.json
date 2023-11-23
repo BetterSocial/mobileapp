@@ -74,6 +74,7 @@
     "react-native-activity-feed": "^1.0.3",
     "react-native-autolink": "^4.0.0",
     "react-native-bundle-splitter": "^2.2.1",
+    "react-native-circular-progress": "^1.3.9",
     "react-native-compressor": "^1.6.1",
     "react-native-config": "^1.5.0",
     "react-native-device-info": "10.6.0",

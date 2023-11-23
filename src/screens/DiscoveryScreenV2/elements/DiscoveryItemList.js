@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+import {AnimatedCircularProgress} from 'react-native-circular-progress';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
@@ -30,24 +31,51 @@ const DomainList = (props) => {
     isCommunity
   } = props;
 
+  const renderProfilePicture = () => {
+    if (item.karmaScore) {
+      return (
+        <AnimatedCircularProgress
+          size={54}
+          width={3}
+          fill={item.karmaScore}
+          tintColor="#ACD91A"
+          backgroundColor="#E8EBED"
+          tintTransparency={true}
+          rotation={360}>
+          {() => (
+            <Image
+              source={{
+                uri: item.image
+              }}
+              style={styles.profilepicture}
+              width={48}
+              height={48}
+            />
+          )}
+        </AnimatedCircularProgress>
+      );
+    }
+    return (
+      <Image
+        source={{
+          uri: item.image
+        }}
+        style={styles.profilepicture}
+        width={48}
+        height={48}
+      />
+    );
+  };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => onPressBody(item)} style={styles.wrapProfile}>
         <View style={styles.card}>
           {!isHashtag ? (
             <React.Fragment>
-              {item.image && typeof item.image === 'string' && item.image.length > 0 ? (
-                <Image
-                  source={{
-                    uri: item.image
-                  }}
-                  style={styles.profilepicture}
-                  width={48}
-                  height={48}
-                />
-              ) : (
-                renderDefaultImage(DefaultImage)
-              )}
+              {item.image && typeof item.image === 'string' && item.image.length > 0
+                ? renderProfilePicture()
+                : renderDefaultImage(DefaultImage)}
             </React.Fragment>
           ) : null}
 
