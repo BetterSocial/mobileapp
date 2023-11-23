@@ -35,7 +35,9 @@ import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
 import RenderItem from '../FeedScreen/RenderList';
 import ShareUtils from '../../utils/share';
+import StorageUtils from '../../utils/storage';
 import dimen from '../../utils/dimen';
+import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
 import useResetContext from '../../hooks/context/useResetContext';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
@@ -69,8 +71,7 @@ import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import ShadowFloatingButtons from '../../components/Button/ShadowFloatingButtons';
-import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
-import StorageUtils from '../../utils/storage';
+import ImageCompressionUtils from '../../utils/image/compress';
 
 const {width} = Dimensions.get('screen');
 
@@ -167,7 +168,7 @@ const ProfileScreen = ({route}) => {
   const [opacity, setOpacity] = React.useState(0);
   const [tempBio, setTempBio] = React.useState('');
   const [tempFullName, setTempFullName] = React.useState('');
-  const [isLoadingUpdateImageGalery, setIsLoadingUpdateImageGalery] = React.useState(false);
+  const [isLoadingUpdateImageGallery, setIsLoadingUpdateImageGallery] = React.useState(false);
   const [isLoadingUpdateImageCamera, setIsLoadingUpdateImageCamera] = React.useState(false);
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0);
@@ -228,7 +229,6 @@ const ProfileScreen = ({route}) => {
     const status = await netInfo.fetch();
     if (status.isConnected) {
       getMyFeeds(0, LIMIT_PROFILE_FEED);
-      console.log('masuka');
     } else {
       setMyProfileFeed(JSON.parse(cacheFeed), myProfileDispatch);
     }
@@ -419,20 +419,21 @@ const ProfileScreen = ({route}) => {
     });
   };
 
-  const handleUpdateImage = (value, type) => {
+  const handleUpdateImage = async (imgBase64, type) => {
     if (type === 'gallery') {
-      setIsLoadingUpdateImageGalery(true);
+      setIsLoadingUpdateImageGallery(true);
     } else {
       setIsLoadingUpdateImageCamera(true);
     }
+    const compressionResult = await ImageCompressionUtils.compress(imgBase64, 'base64');
     const data = {
-      profile_pic_path: value
+      profile_pic_path: compressionResult
     };
 
     updateImageProfile(data)
       .then(async (res) => {
         if (type === 'gallery') {
-          setIsLoadingUpdateImageGalery(false);
+          setIsLoadingUpdateImageGallery(false);
         } else {
           setIsLoadingUpdateImageCamera(false);
         }
@@ -445,7 +446,7 @@ const ProfileScreen = ({route}) => {
       })
       .catch(() => {
         if (type === 'gallery') {
-          setIsLoadingUpdateImageGalery(false);
+          setIsLoadingUpdateImageGallery(false);
         } else {
           setIsLoadingUpdateImageCamera(false);
         }
@@ -687,7 +688,7 @@ const ProfileScreen = ({route}) => {
         onOpenImageGalery={() => onOpenImageGalery()}
         onOpenCamera={() => onOpenCamera()}
         handleRemoveImageProfile={() => handleRemoveImageProfile()}
-        isLoadingUpdateImageGalery={isLoadingUpdateImageGalery}
+        isLoadingUpdateImageGallery={isLoadingUpdateImageGallery}
         isLoadingUpdateImageCamera={isLoadingUpdateImageCamera}
         isLoadingRemoveImage={isLoadingRemoveImage}
       />

@@ -1,27 +1,28 @@
+import * as React from 'react';
+import PushNotification from 'react-native-push-notification';
 // eslint-disable-next-line no-use-before-define
 import messaging from '@react-native-firebase/messaging';
-import {useNavigation} from '@react-navigation/core';
-import * as React from 'react';
 import {Alert, FlatList, PushNotificationPermissions, StatusBar, View} from 'react-native';
-
 import {openSettings} from 'react-native-permissions';
-import PushNotification from 'react-native-push-notification';
-import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
-import HorizontalTab from '../../components/HorizontalTab';
-import ChannelListTabItem from '../../components/HorizontalTab/ChannelListTabItem';
-import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
-import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
-import useRootChannelListHook from '../../hooks/screen/useRootChannelListHook';
-import {fcmTokenService} from '../../service/users';
-import StorageUtils from '../../utils/storage';
-import ChannelListScreen from '../ChannelListScreen';
-import Search from '../ChannelListScreen/elements/Search';
+import {useNavigation} from '@react-navigation/core';
+
 import AnonymousChannelListScreen from './AnonymousChannelListScreen';
+import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
+import ChannelListScreen from '../ChannelListScreen';
+import ChannelListTabItem from '../../components/HorizontalTab/ChannelListTabItem';
+import HorizontalTab from '../../components/HorizontalTab';
+import Search from '../ChannelListScreen/elements/Search';
+import StorageUtils from '../../utils/storage';
+import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
+import useRootChannelListHook from '../../hooks/screen/useRootChannelListHook';
+import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
+import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
 import {
   PERMISSION_STATUS_ACCEPTED,
   PERMISSION_STATUS_BLOCKED,
   PERMISSION_STATUS_PENDING
 } from '../../utils/constants';
+import {fcmTokenService} from '../../service/users';
 
 const ChannelListScreenV2 = () => {
   const {refresh} = useLocalDatabaseHook();
@@ -29,26 +30,13 @@ const ChannelListScreenV2 = () => {
   const {profile} = useUserAuthHook();
   const isFocused = navigation.isFocused();
 
-  const [selectedTab, setSelectedTab] = React.useState(0);
+  const {selectedChannelKey} = useChatUtilsHook();
+
+  const [selectedTab, setSelectedTab] = React.useState(selectedChannelKey || 0);
   const {signedChannelUnreadCount, anonymousChannelUnreadCount} = useRootChannelListHook();
 
   const navigateToContactScreen = () => {
     navigation.navigate('ContactScreen');
-  };
-
-  const requestPermission = async () => {
-    const authStatus = await messaging().requestPermission();
-    const enabled =
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
-    if (enabled) {
-      const fcmToken = await messaging().getToken();
-      const payload = {
-        fcm_token: fcmToken
-      };
-      fcmTokenService(payload);
-    }
   };
 
   React.useEffect(() => {
@@ -114,6 +102,82 @@ when friends send you messages.`,
   React.useEffect(() => {
     if (isFocused) refresh('channelList');
   }, [isFocused]);
+
+  const requestPermission = async () => {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      const fcmToken = await messaging().getToken();
+      const payload = {
+        fcm_token: fcmToken
+      };
+      fcmTokenService(payload);
+    }
+  };
+
+  React.useEffect(() => {
+    const checkNotif = async () => {
+      if (!navigation.isFocused()) return;
+      PushNotification.checkPermissions(
+        (
+          data: PushNotificationPermissions & {
+            authorizationStatus?: number;
+          }
+        ) => {
+          const lastPromptTime = StorageUtils.lastPromptNotification.get();
+
+          // For testing purpose,  (20000 milliseconds)
+          const promptInterval = 20000;
+          const currentTime = new Date().getTime();
+          if (lastPromptTime && currentTime - parseFloat(lastPromptTime) < promptInterval) {
+            return; // Don't show the prompt if the interval has not passed
+          }
+
+          const needsPermission =
+            data.alert === false || data.badge === false || data.sound === false;
+
+          const showAlert = (onPressAction: () => void) =>
+            Alert.alert(
+              "Don't Miss New Messages",
+              `Allow notifications to know 
+when friends send you messages.`,
+              [
+                {text: 'Not now', onPress: () => console.log('Cancel Pressed')},
+                {text: 'Allow', onPress: onPressAction, isPreferred: true}
+              ]
+            );
+
+          switch (data.authorizationStatus) {
+            case 1:
+              if (needsPermission) {
+                StorageUtils.lastPromptNotification.set(currentTime.toString());
+                showAlert(() => openSettings().catch(() => console.warn('cannot open settings')));
+              } else {
+                requestPermission();
+              }
+              break;
+            case 2:
+              if (needsPermission) {
+                StorageUtils.lastPromptNotification.set(currentTime.toString());
+                showAlert(() => openSettings().catch(() => console.warn('cannot open settings')));
+              }
+              break;
+            case 3:
+              StorageUtils.lastPromptNotification.set(currentTime.toString());
+              showAlert(() => requestPermission());
+              break;
+            default:
+              break;
+          }
+        }
+      );
+    };
+
+    checkNotif();
+  }, [navigation?.isFocused?.()]);
 
   return (
     <>
