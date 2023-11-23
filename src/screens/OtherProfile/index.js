@@ -20,6 +20,7 @@ import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
 import PropTypes from 'prop-types';
 import netInfo from '@react-native-community/netinfo';
+import {AnimatedCircularProgress} from 'react-native-circular-progress';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BlockIcon from '../../assets/icons/images/block-blue.svg';
 import BlockProfile from '../../components/Blocking/BlockProfile';
@@ -543,12 +544,30 @@ const OtherProfile = () => {
     return (
       <>
         <View style={styles.headerImageContainer}>
-          <Image
+          {/* <Image
             style={styles.profileImage}
             source={{
               uri: dataMain.profile_pic_path ?? DEFAULT_PROFILE_PIC_PATH
             }}
-          />
+          /> */}
+          <AnimatedCircularProgress
+            size={110}
+            width={6}
+            fill={dataMain.karma_score}
+            tintColor="#ACD91A"
+            backgroundColor="#E8EBED"
+            tintTransparency={true}
+            style={{marginRight: 22}}
+            rotation={360}>
+            {() => (
+              <Image
+                style={styles.profileImage}
+                source={{
+                  uri: dataMain.profile_pic_path ?? DEFAULT_PROFILE_PIC_PATH
+                }}
+              />
+            )}
+          </AnimatedCircularProgress>
 
           <View>
             <View style={styles.rightHeaderContentContainer}>
@@ -883,8 +902,7 @@ const styles = StyleSheet.create({
   profileImage: {
     width: 100,
     height: 100,
-    borderRadius: 100,
-    marginRight: 22
+    borderRadius: 100
   },
   containerProfile: {
     marginTop: 24
@@ -1000,7 +1018,7 @@ const styles = StyleSheet.create({
     height: dimen.size.PROFILE_ACTION_BUTTON_RADIUS,
     right: 20,
     bottom: dimen.size.FEED_ACTION_BUTTON_HEIGHT_FROM_BOTTOM,
-    backgroundColor: colors.bondi_blue,
+    backgroundColor: colors.darkBlue,
     borderRadius: 30,
     flexDirection: 'row',
     justifyContent: 'center',

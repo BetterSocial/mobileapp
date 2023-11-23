@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {View, Text, StyleSheet, TouchableNativeFeedback, ActivityIndicator} from 'react-native';
+import PropTypes from 'prop-types';
 
 import {fonts} from '../../../utils/fonts';
 import {colors} from '../../../utils/colors';
@@ -26,7 +27,7 @@ const BottomSheetImage = React.forwardRef((props, ref) => (
             <MediaIcon width={16.67} height={16.67} fill={colors.black} />
             <Text style={styles.textCard}>Upload from library</Text>
           </View>
-          {props.isLoadingUpdateImageGalery ? (
+          {props.isLoadingUpdateImageGallery ? (
             <ActivityIndicator size="small" color="#0000ff" />
           ) : null}
         </View>
@@ -82,5 +83,15 @@ const styles = StyleSheet.create({
     paddingLeft: 9
   }
 });
+
+BottomSheetImage.propTypes = {
+  onViewProfilePicture: PropTypes.func,
+  onOpenImageGalery: PropTypes.func,
+  isLoadingUpdateImageGallery: PropTypes.bool,
+  onOpenCamera: PropTypes.func,
+  isLoadingUpdateImageCamera: PropTypes.bool,
+  handleRemoveImageProfile: PropTypes.func,
+  isLoadingRemoveImage: PropTypes.bool
+};
 
 export default BottomSheetImage;

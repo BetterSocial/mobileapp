@@ -71,6 +71,8 @@ import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import ShadowFloatingButtons from '../../components/Button/ShadowFloatingButtons';
+import ImageCompressionUtils from '../../utils/image/compress';
+import {KarmaScore} from './elements/KarmaScore';
 
 const {width} = Dimensions.get('screen');
 
@@ -96,12 +98,20 @@ const Header = (props) => {
         headerHeightRef.current = headerHeightLayout;
       }}>
       <View style={styles.content}>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row', alignContent: 'center', alignItems: 'center'}}>
           <ProfilePicture
             onImageContainerClick={changeImage}
             profilePicPath={dataMain.profile_pic_path}
+            karmaScore={Math.floor(dataMain.karma_score)}
           />
-          <View style={{marginLeft: 20}}>
+          <View
+            style={{
+              flexDirection: 'column',
+              paddingHorizontal: 14,
+              paddingVertical: 5,
+              justifyContent: 'center'
+            }}>
+            <KarmaScore score={Math.floor(dataMain.karma_score)} />
             <FollowInfoRow
               follower={dataMain.follower_symbol}
               following={dataMain.following_symbol}
@@ -167,7 +177,7 @@ const ProfileScreen = ({route}) => {
   const [opacity, setOpacity] = React.useState(0);
   const [tempBio, setTempBio] = React.useState('');
   const [tempFullName, setTempFullName] = React.useState('');
-  const [isLoadingUpdateImageGalery, setIsLoadingUpdateImageGalery] = React.useState(false);
+  const [isLoadingUpdateImageGallery, setIsLoadingUpdateImageGallery] = React.useState(false);
   const [isLoadingUpdateImageCamera, setIsLoadingUpdateImageCamera] = React.useState(false);
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0);
@@ -228,7 +238,6 @@ const ProfileScreen = ({route}) => {
     const status = await netInfo.fetch();
     if (status.isConnected) {
       getMyFeeds(0, LIMIT_PROFILE_FEED);
-      console.log('masuka');
     } else {
       setMyProfileFeed(JSON.parse(cacheFeed), myProfileDispatch);
     }
@@ -419,20 +428,21 @@ const ProfileScreen = ({route}) => {
     });
   };
 
-  const handleUpdateImage = (value, type) => {
+  const handleUpdateImage = async (imgBase64, type) => {
     if (type === 'gallery') {
-      setIsLoadingUpdateImageGalery(true);
+      setIsLoadingUpdateImageGallery(true);
     } else {
       setIsLoadingUpdateImageCamera(true);
     }
+    const compressionResult = await ImageCompressionUtils.compress(imgBase64, 'base64');
     const data = {
-      profile_pic_path: value
+      profile_pic_path: compressionResult
     };
 
     updateImageProfile(data)
       .then(async (res) => {
         if (type === 'gallery') {
-          setIsLoadingUpdateImageGalery(false);
+          setIsLoadingUpdateImageGallery(false);
         } else {
           setIsLoadingUpdateImageCamera(false);
         }
@@ -445,7 +455,7 @@ const ProfileScreen = ({route}) => {
       })
       .catch(() => {
         if (type === 'gallery') {
-          setIsLoadingUpdateImageGalery(false);
+          setIsLoadingUpdateImageGallery(false);
         } else {
           setIsLoadingUpdateImageCamera(false);
         }
@@ -687,7 +697,7 @@ const ProfileScreen = ({route}) => {
         onOpenImageGalery={() => onOpenImageGalery()}
         onOpenCamera={() => onOpenCamera()}
         handleRemoveImageProfile={() => handleRemoveImageProfile()}
-        isLoadingUpdateImageGalery={isLoadingUpdateImageGalery}
+        isLoadingUpdateImageGallery={isLoadingUpdateImageGallery}
         isLoadingUpdateImageCamera={isLoadingUpdateImageCamera}
         isLoadingRemoveImage={isLoadingRemoveImage}
       />
@@ -722,7 +732,8 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: 'column',
     paddingHorizontal: 20,
-    backgroundColor: colors.white
+    backgroundColor: colors.white,
+    marginTop: 14
   },
   dummyItem: (heightItem) => ({
     height: heightItem,
@@ -744,7 +755,7 @@ const styles = StyleSheet.create({
     width: dimen.size.PROFILE_ACTION_BUTTON_RADIUS,
     height: dimen.size.PROFILE_ACTION_BUTTON_RADIUS,
 
-    backgroundColor: colors.bondi_blue,
+    backgroundColor: colors.darkBlue,
     borderRadius: 30,
     flexDirection: 'row',
     justifyContent: 'center',
