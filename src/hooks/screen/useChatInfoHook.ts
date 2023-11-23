@@ -12,9 +12,7 @@ import {ANONYMOUS_USER, SIGNED} from '../core/constant';
 import {isContainUrl} from '../../utils/Utils';
 import useGroupInfo from '../../screens/GroupInfo/hooks/useGroupInfo';
 import {Member} from '../../../types/database/schema/ChatListDetail.types';
-import StorageUtils from '../../utils/storage';
 
-// import {} from '../../'
 function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   const {params}: any = useRoute();
   const {
@@ -36,7 +34,6 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   const initChatInfoData = async () => {
     if (localDb) {
       setLoadingChannelInfo(true);
-      fetchingCache();
       const myId = await getUserId();
       const myAnonymousId = await getAnonymousUserId();
       const data = await ChannelList.getChannelInfo(
@@ -46,15 +43,6 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
         myAnonymousId
       );
       setChannelInfo(data);
-      StorageUtils.chatInfo.setForKey(selectedChannel?.id, JSON.stringify(data));
-      setLoadingChannelInfo(false);
-    }
-  };
-
-  const fetchingCache = () => {
-    const cacheChatInfo = StorageUtils.chatInfo.getForKey(selectedChannel?.id);
-    if (cacheChatInfo) {
-      setChannelInfo(JSON.parse(cacheChatInfo));
       setLoadingChannelInfo(false);
     }
   };

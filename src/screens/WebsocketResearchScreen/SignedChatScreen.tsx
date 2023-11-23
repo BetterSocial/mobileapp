@@ -3,7 +3,7 @@
 /* eslint-disable import/no-unresolved */
 
 import * as React from 'react';
-import {FlatList, KeyboardAvoidingView, Platform, View} from 'react-native';
+import {FlatList, View} from 'react-native';
 
 import AnonymousInputMessage from '../../components/Chat/AnonymousInputMessage';
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
@@ -49,10 +49,7 @@ const SignedChatScreen = () => {
   }, [selectedChannel]);
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.keyboardAvoidingView}
-      keyboardVerticalOffset={-500}>
+    <View style={styles.keyboardAvoidingView}>
       {selectedChannel ? (
         <ChatDetailHeader
           channel={selectedChannel}
@@ -86,7 +83,7 @@ const SignedChatScreen = () => {
       <View style={styles.inputContainer}>
         <AnonymousInputMessage onSendButtonClicked={sendChat} type={SIGNED} />
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 
