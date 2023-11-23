@@ -32,7 +32,6 @@ import RenderItem from '../ProfileScreen/elements/RenderItem';
 import ReportUser from '../../components/Blocking/ReportUser';
 import ShareUtils from '../../utils/share';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
-import ToggleSwitch from '../../components/ToggleSwitch';
 import TextAreaChat from '../../components/TextAreaChat';
 import dimen from '../../utils/dimen';
 import useSaveAnonChatHook from '../../database/hooks/useSaveAnonChatHook';
