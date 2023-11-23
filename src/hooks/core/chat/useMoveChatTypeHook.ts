@@ -9,7 +9,7 @@ import {moveChatToSigned, moveChatToAnon} from '../../../service/chat';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
 import {getAnonymousChatName, getChatName} from '../../../utils/string/StringUtils';
 import useUserAuthHook from '../auth/useUserAuthHook';
-import {ANONYMOUS, ANON_PM} from '../constant';
+import {ANONYMOUS} from '../constant';
 import useChatUtilsHook from './useChatUtilsHook';
 import {generateAnonProfileOtherProfile} from '../../../service/anonymousProfile';
 
