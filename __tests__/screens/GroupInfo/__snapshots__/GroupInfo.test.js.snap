@@ -15,7 +15,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
     style={
       Object {
         "alignItems": "center",
-        "backgroundColor": "white",
+        "backgroundColor": "#ffffff",
         "flexDirection": "row",
         "justifyContent": "space-between",
       }
@@ -72,7 +72,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
             numberOfLines={1}
             style={
               Object {
-                "color": "#000000",
+                "color": "#0C0C0C",
                 "fontFamily": "Poppins-SemiBold",
                 "fontSize": 16,
                 "fontWeight": "600",
@@ -102,6 +102,11 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
     }
   />
   <RCTScrollView
+    contentContainerStyle={
+      Object {
+        "paddingBottom": 30,
+      }
+    }
     nestedScrollEnabled={true}
   >
     <View>
@@ -263,7 +268,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
             onStartShouldSetResponder={[Function]}
             style={
               Object {
-                "color": "#00ADB5",
+                "color": "#003848",
                 "fontFamily": "Inter-SemiBold",
                 "fontSize": 12.600000000000001,
                 "lineHeight": 15.246000000000002,
@@ -388,7 +393,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
           <Text
             style={
               Object {
-                "color": "#00ADB5",
+                "color": "#003848",
                 "fontFamily": "Inter-SemiBold",
                 "fontSize": 12.600000000000001,
                 "lineHeight": 15.246000000000002,
@@ -580,7 +585,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
       Object {
         "alignItems": "center",
         "alignSelf": "center",
-        "backgroundColor": "#F5F5F5",
+        "backgroundColor": "#FFFFFF",
         "borderRadius": 8,
         "bottom": 5,
         "justifyContent": "center",
@@ -610,7 +615,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
       <Text
         style={
           Object {
-            "color": "#00ADB5",
+            "color": "#003848",
             "fontFamily": "Inter-SemiBold",
             "fontSize": 12.600000000000001,
             "lineHeight": 18,
@@ -817,6 +822,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               "paddingVertical": 18,
             }
           }
+          testID="pressMessage"
         >
           <Text
             style={
@@ -846,6 +852,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               "paddingVertical": 18,
             }
           }
+          testID="pressMessageAnonym"
         >
           <Text
             style={
@@ -876,6 +883,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               "paddingVertical": 18,
             }
           }
+          testID="pressView"
         >
           <Text
             style={
@@ -906,6 +914,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               "paddingVertical": 18,
             }
           }
+          testID="pressRemove"
         >
           <Text
             style={
@@ -1215,7 +1224,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
             <Text
               style={
                 Object {
-                  "color": "#828282",
+                  "color": "#69707C",
                   "fontFamily": "Inter-Regular",
                   "fontSize": 12,
                   "marginBottom": 29,
@@ -1282,7 +1291,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#828282",
+                      "color": "#69707C",
                       "flex": 1,
                       "fontFamily": "Inter-Regular",
                       "fontSize": 12,
@@ -1346,7 +1355,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#828282",
+                      "color": "#69707C",
                       "flex": 1,
                       "fontFamily": "Inter-Regular",
                       "fontSize": 12,
@@ -1514,7 +1523,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
             <Text
               style={
                 Object {
-                  "color": "#828282",
+                  "color": "#69707C",
                   "fontFamily": "Inter-Regular",
                   "fontSize": 12,
                   "marginBottom": 29,
@@ -1581,7 +1590,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#828282",
+                      "color": "#69707C",
                       "flex": 1,
                       "fontFamily": "Inter-Regular",
                       "fontSize": 12,
@@ -1645,7 +1654,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#828282",
+                      "color": "#69707C",
                       "flex": 1,
                       "fontFamily": "Inter-Regular",
                       "fontSize": 12,
@@ -1873,6 +1882,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -1909,6 +1919,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -1945,6 +1956,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -1981,6 +1993,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2017,6 +2030,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2053,6 +2067,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2089,6 +2104,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2134,7 +2150,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     style={
                       Object {
                         "alignItems": "center",
-                        "backgroundColor": "#00ADB5",
+                        "backgroundColor": "#4782D7",
                         "borderRadius": 6.4,
                         "flexDirection": "row",
                         "height": 40,
@@ -2146,7 +2162,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     <Text
                       style={
                         Object {
-                          "color": "#FFFFFF",
+                          "color": "#ffffff",
                           "fontFamily": "Inter-SemiBold",
                           "fontSize": 18,
                         }
@@ -2350,6 +2366,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2386,6 +2403,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2422,6 +2440,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2458,6 +2477,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2494,6 +2514,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2530,6 +2551,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2566,6 +2588,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2611,7 +2634,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     style={
                       Object {
                         "alignItems": "center",
-                        "backgroundColor": "#00ADB5",
+                        "backgroundColor": "#4782D7",
                         "borderRadius": 6.4,
                         "flexDirection": "row",
                         "height": 40,
@@ -2623,7 +2646,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     <Text
                       style={
                         Object {
-                          "color": "#FFFFFF",
+                          "color": "#ffffff",
                           "fontFamily": "Inter-SemiBold",
                           "fontSize": 18,
                         }
@@ -2774,9 +2797,9 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               rejectResponderTermination={true}
               style={
                 Object {
-                  "backgroundColor": "#F5F5F5",
+                  "backgroundColor": "#FFFFFF",
                   "borderRadius": 8,
-                  "color": "#828282",
+                  "color": "#69707C",
                   "fontFamily": "Inter-Regular",
                   "height": 233,
                   "marginLeft": 17,
@@ -2787,6 +2810,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                   "paddingVertical": 19,
                 }
               }
+              testID="changeText"
               textAlignVertical="top"
               underlineColorAndroid="transparent"
               value=""
@@ -2861,7 +2885,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                   style={
                     Object {
                       "alignItems": "center",
-                      "backgroundColor": "#00ADB5",
+                      "backgroundColor": "#4782D7",
                       "borderRadius": 6.4,
                       "flexDirection": "row",
                       "height": 40,
@@ -2873,7 +2897,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                   <Text
                     style={
                       Object {
-                        "color": "#FFFFFF",
+                        "color": "#ffffff",
                         "fontFamily": "Inter-SemiBold",
                         "fontSize": 18,
                       }

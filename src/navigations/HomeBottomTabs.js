@@ -143,7 +143,7 @@ function HomeBottomTabs({navigation}) {
     PushNotification.createChannel(
       {
         channelId: 'bettersosialid', // (required)
-        channelName: 'bettersosial-chat', // (required)
+        channelName: 'New Messages & Comments', // (required)
         playSound: true, // (optional) default: true
         soundName: 'default', // (optional) See `soundName` parameter of `localNotification` function
         importance: 4, // (optional) default: 4. Int value of the Android notification importance
@@ -185,6 +185,11 @@ function HomeBottomTabs({navigation}) {
   React.useEffect(() => {
     createChannel();
     updateProfileAtomId();
+
+    messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+      console.log('Message handled in the background!', remoteMessage);
+      handlePushNotif(remoteMessage);
+    });
 
     messaging().setBackgroundMessageHandler(async (remoteMessage) => {
       console.log('Message handled in the background!', remoteMessage);

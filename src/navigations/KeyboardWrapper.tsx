@@ -4,7 +4,7 @@ import {KeyboardAvoidingView, Platform} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = {
-  children: any;
+  children: React.ReactNode;
 };
 
 const KeyboardWrapper = ({children}: Props): JSX.Element => {
