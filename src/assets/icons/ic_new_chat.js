@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import Svg, {Path} from 'react-native-svg';
 
 function IcNewChat(props) {
@@ -13,6 +14,10 @@ function IcNewChat(props) {
     </Svg>
   );
 }
+
+IcNewChat.propTypes = {
+  color: PropTypes.string
+};
 
 const MemoIcNewChat = React.memo(IcNewChat);
 export default MemoIcNewChat;
