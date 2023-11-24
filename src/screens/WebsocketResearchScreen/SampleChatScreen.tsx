@@ -45,7 +45,6 @@ export const styles = StyleSheet.create({
     borderTopWidth: 1
   },
   contentContainerStyle: {
-    paddingTop: dimen.normalizeDimen(60),
     backgroundColor: 'transparent'
   }
 });
