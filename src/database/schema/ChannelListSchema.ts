@@ -285,6 +285,13 @@ class ChannelList implements BaseDbSchema {
     return 'channel_lists';
   }
 
+  static updateChannelInfo = async (
+    db: SQLiteDatabase,
+    channelId: string,
+    description: string,
+    json
+  ) => {};
+
   static updateChannelDescription = async (
     db: SQLiteDatabase,
     channelId: string,

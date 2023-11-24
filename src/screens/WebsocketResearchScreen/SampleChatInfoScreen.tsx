@@ -63,7 +63,7 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     bottom: 5
   },
-  countUser: (from) => ({
+  countUser: (from: string) => ({
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(16.94),
     color: from === SIGNED ? colors.darkBlue : colors.holytosca,
@@ -179,6 +179,9 @@ export const styles = StyleSheet.create({
   editBtn: {
     padding: dimen.normalizeDimen(10),
     marginRight: dimen.normalizeDimen(10)
+  },
+  chatNameContainer: {
+    width: '90%'
   }
 });
 
@@ -253,6 +256,13 @@ const SampleChatInfoScreen = () => {
     return `(${channelInfo?.members?.length})`;
   };
 
+  const handleWidthChatName = () => {
+    if (params?.from === SIGNED) {
+      return styles.chatNameContainer;
+    }
+    return {};
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -272,9 +282,11 @@ const SampleChatInfoScreen = () => {
               <View style={styles.row}>
                 <View style={styles.column}>
                   <View style={styles.containerGroupName}>
-                    <Text numberOfLines={1} style={styles.groupName}>
-                      {getChatName(channelInfo?.name, profile?.myProfile?.username)}
-                    </Text>
+                    <View style={handleWidthChatName()}>
+                      <Text numberOfLines={1} style={styles.groupName}>
+                        {getChatName(channelInfo?.name, profile?.myProfile?.username)}
+                      </Text>
+                    </View>
                     {params?.from === SIGNED ? (
                       <TouchableOpacity style={styles.editBtn} onPress={goToEditGroup}>
                         <MemoIc_pencil

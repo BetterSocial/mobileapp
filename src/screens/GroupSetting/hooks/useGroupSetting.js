@@ -2,13 +2,15 @@ import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import {launchImageLibrary} from 'react-native-image-picker';
 
+import {Linking} from 'react-native';
 import StringConstant from '../../../utils/string/StringConstant';
 import {Context} from '../../../context';
 import {getChatName} from '../../../utils/string/StringUtils';
 import {requestExternalStoragePermission} from '../../../utils/permission';
 import {uploadFile} from '../../../service/file';
+import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
 
-const useGroupSetting = ({navigation, route}) => {
+const useGroupSetting = ({route}) => {
   const [groupChatState] = React.useContext(Context).groupChat;
 
   const [channelState] = React.useContext(Context).channel;
@@ -35,8 +37,16 @@ const useGroupSetting = ({navigation, route}) => {
       setCountUser(route?.params?.rawJson?.channel?.members?.length || 0);
     }
   }, [route]);
-
+  console.log({params: route?.params}, 'nikal');
   const submitData = async (withNavigation = true, withLoading = true) => {
+    const body = {
+      channel_id: route?.params?.id,
+      channel_name: groupName,
+      channel_image: urlImage
+    };
+    console.log({body}, 'bodyman');
+    const response = await SignedMessageRepo.editChannel(body);
+    console.log({response}, 'lasia');
     // let changeImageUrl = '';
     // if (changeImage) {
     //   if (withLoading) setIsLoading(true);
@@ -95,6 +105,7 @@ const useGroupSetting = ({navigation, route}) => {
         }
       );
     } else {
+      Linking.openSettings();
       SimpleToast.show(message, SimpleToast.SHORT);
     }
   };

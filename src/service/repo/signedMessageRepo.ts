@@ -142,6 +142,7 @@ async function createSignedChat(members: string[]) {
 
 async function editChannel(body: EditChannelPostTyoe) {
   try {
+    console.log({body}, 'bodyman');
     const response = await api.post(baseUrl.editChannel, body);
     if (response.status === 200) {
       return Promise.resolve(response.data);
