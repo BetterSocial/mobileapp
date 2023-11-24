@@ -17,6 +17,7 @@ enum StorageKeysEnum {
   ProfileData = 'profiledata',
   OtherProfileData = 'otherprofiledata',
   LastPromptNotification = 'lastPromptNotification',
+  LastSelectedMenu = 'lastSelectedMenu',
   chatInfo = 'chatInfo'
 }
 
@@ -82,6 +83,7 @@ const StorageUtils = {
   profileData: storageBuilder(StorageKeysEnum.ProfileData),
   otherProfileData: storageBuilder(StorageKeysEnum.OtherProfileData),
   lastPromptNotification: storageBuilder(StorageKeysEnum.LastPromptNotification),
+  lastSelectedMenu: storageBuilder(StorageKeysEnum.LastSelectedMenu),
   chatInfo: storageBuilder(StorageKeysEnum.chatInfo),
   clearAll: () => MMKVStorage.clearAll()
 };

@@ -5,7 +5,6 @@ exports[`TESTING ChatItemTargetText RENDER continuous should match snapshot 1`] 
   style={
     Object {
       "display": "flex",
-      "flexDirection": "row",
       "marginBottom": 4,
       "marginTop": 4,
       "maxWidth": 300,
@@ -16,57 +15,105 @@ exports[`TESTING ChatItemTargetText RENDER continuous should match snapshot 1`] 
 >
   <View
     style={
-      Array [
-        Object {
-          "backgroundColor": "#88CDD0",
-        },
-        Object {
-          "borderRadius": 8,
-          "borderTopEndRadius": 0,
-          "flex": 1,
-          "paddingBottom": 4,
-          "paddingLeft": 8,
-          "paddingRight": 8,
-          "paddingTop": 4,
-        },
-      ]
+      Object {
+        "flexDirection": "row",
+      }
     }
   >
-    <Text
+    <ContextMenu
+      actions={
+        Array [
+          Object {
+            "systemIcon": "arrow.turn.up.left",
+            "title": "Reply",
+          },
+          Object {
+            "systemIcon": "square.on.square",
+            "title": "Copy Message",
+          },
+          Object {
+            "destructive": true,
+            "systemIcon": "trash",
+            "title": "Delete Message",
+          },
+        ]
+      }
+      onPress={[Function]}
+      previewBackgroundColor="transparent"
       style={
         Object {
-          "fontFamily": "Inter-Regular",
-          "fontSize": 16,
-          "lineHeight": 19.36,
-          "marginBottom": 4,
+          "flex": 1,
         }
       }
     >
-      message
-    </Text>
+      <View
+        style={
+          Object {
+            "borderRadius": 8,
+          }
+        }
+      >
+        <View
+          style={
+            Array [
+              Object {
+                "backgroundColor": "#003848",
+              },
+              Object {
+                "borderRadius": 8,
+                "borderTopEndRadius": 0,
+                "flex": 1,
+                "paddingBottom": 4,
+                "paddingLeft": 8,
+                "paddingRight": 8,
+                "paddingTop": 4,
+              },
+              Object {
+                "paddingBottom": 14,
+              },
+            ]
+          }
+        >
+          <Text
+            onTextLayout={[Function]}
+            style={
+              Object {
+                "color": "#ffffff",
+                "fontFamily": "Inter-Regular",
+                "fontSize": 16,
+                "lineHeight": 19.36,
+                "marginBottom": 4,
+              }
+            }
+          >
+            message
+          </Text>
+          <View
+            style={
+              Object {
+                "alignSelf": "flex-end",
+                "bottom": 6,
+                "position": "absolute",
+                "right": 8,
+              }
+            }
+          >
+            <View />
+          </View>
+        </View>
+      </View>
+    </ContextMenu>
     <View
       style={
         Object {
-          "alignSelf": "flex-end",
-          "bottom": 6,
-          "position": "absolute",
-          "right": 8,
+          "borderRadius": 12,
+          "height": 24,
+          "marginLeft": 8,
+          "width": 24,
         }
       }
-    >
-      <View />
-    </View>
+    />
   </View>
-  <View
-    style={
-      Object {
-        "borderRadius": 12,
-        "height": 24,
-        "marginLeft": 8,
-        "width": 24,
-      }
-    }
-  />
 </View>
 `;
 
@@ -75,7 +122,6 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
   style={
     Object {
       "display": "flex",
-      "flexDirection": "row",
       "marginBottom": 4,
       "marginTop": 4,
       "maxWidth": 300,
@@ -86,100 +132,173 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
 >
   <View
     style={
-      Array [
-        Object {
-          "backgroundColor": "#88CDD0",
-        },
-        Object {
-          "borderRadius": 8,
-          "borderTopEndRadius": 0,
-          "flex": 1,
-          "paddingBottom": 4,
-          "paddingLeft": 8,
-          "paddingRight": 8,
-          "paddingTop": 4,
-        },
-      ]
+      Object {
+        "flexDirection": "row",
+      }
     }
   >
-    <View
+    <ContextMenu
+      actions={
+        Array [
+          Object {
+            "systemIcon": "arrow.turn.up.left",
+            "title": "Reply",
+          },
+          Object {
+            "systemIcon": "square.on.square",
+            "title": "Copy Message",
+          },
+          Object {
+            "destructive": true,
+            "systemIcon": "trash",
+            "title": "Delete Message",
+          },
+        ]
+      }
+      onPress={[Function]}
+      previewBackgroundColor="transparent"
       style={
         Object {
-          "display": "flex",
-          "flexDirection": "row",
+          "flex": 1,
         }
       }
     >
-      <Text
-        style={
-          Object {
-            "fontFamily": "Inter-SemiBold",
-            "fontSize": 12,
-            "lineHeight": 19.36,
-          }
-        }
-      >
-        username
-      </Text>
       <View
         style={
           Object {
-            "alignSelf": "center",
-            "backgroundColor": "#0C0C0C",
-            "borderRadius": 2,
-            "height": 3,
-            "marginLeft": 5,
-            "marginRight": 5,
-            "width": 3,
-          }
-        }
-      />
-      <Text
-        style={
-          Object {
-            "alignSelf": "center",
-            "fontFamily": "Inter-ExtraLight",
-            "fontSize": 10,
-            "lineHeight": 12.19,
+            "borderRadius": 8,
           }
         }
       >
-        time
-      </Text>
-    </View>
-    <Text
-      style={
-        Object {
-          "fontFamily": "Inter-Regular",
-          "fontSize": 16,
-          "lineHeight": 19.36,
-          "marginBottom": 4,
-        }
-      }
-    >
-      message
-    </Text>
+        <View
+          style={
+            Array [
+              Object {
+                "backgroundColor": "#003848",
+              },
+              Object {
+                "borderRadius": 8,
+                "borderTopEndRadius": 0,
+                "flex": 1,
+                "paddingBottom": 4,
+                "paddingLeft": 8,
+                "paddingRight": 8,
+                "paddingTop": 4,
+              },
+              Object {
+                "paddingBottom": 14,
+              },
+            ]
+          }
+        >
+          <View
+            style={
+              Object {
+                "display": "flex",
+                "flexDirection": "row",
+              }
+            }
+          >
+            <Text
+              style={
+                Object {
+                  "color": "#ffffff",
+                  "fontFamily": "Inter-SemiBold",
+                  "fontSize": 12,
+                  "lineHeight": 19.36,
+                }
+              }
+            >
+              username
+            </Text>
+            <View
+              style={
+                Object {
+                  "alignSelf": "center",
+                  "backgroundColor": "#ffffff",
+                  "borderRadius": 2,
+                  "height": 3,
+                  "marginLeft": 5,
+                  "marginRight": 5,
+                  "width": 3,
+                }
+              }
+            />
+            <Text
+              style={
+                Object {
+                  "alignSelf": "center",
+                  "color": "#ffffff",
+                  "fontFamily": "Inter-ExtraLight",
+                  "fontSize": 10,
+                  "lineHeight": 12.19,
+                }
+              }
+            >
+              time
+            </Text>
+          </View>
+          <Text
+            onTextLayout={[Function]}
+            style={
+              Object {
+                "color": "#ffffff",
+                "fontFamily": "Inter-Regular",
+                "fontSize": 16,
+                "lineHeight": 19.36,
+                "marginBottom": 4,
+              }
+            }
+          >
+            message
+          </Text>
+          <View
+            style={
+              Object {
+                "alignSelf": "flex-end",
+                "bottom": 6,
+                "position": "absolute",
+                "right": 8,
+              }
+            }
+          >
+            <View />
+          </View>
+        </View>
+      </View>
+    </ContextMenu>
     <View
       style={
         Object {
-          "alignSelf": "flex-end",
-          "bottom": 6,
-          "position": "absolute",
-          "right": 8,
+          "marginLeft": 8,
         }
       }
     >
-      <View />
+      <View
+        style={
+          Array [
+            Object {
+              "overflow": "hidden",
+            },
+            Object {
+              "borderRadius": 12,
+              "height": 24,
+              "width": 24,
+            },
+          ]
+        }
+      >
+        <FastImageView
+          defaultSource={null}
+          resizeMode="cover"
+          source={
+            Object {
+              "uri": "https://res.cloudinary.com/hpjivutj2/image/upload/v1680929851/default-profile-picture_vrmmdn.png",
+            }
+          }
+        />
+      </View>
     </View>
-  </View>
-  <View
-    style={
-      Object {
-        "marginLeft": 8,
-      }
-    }
-  >
-    https://www.google.com
   </View>
 </View>
 `;

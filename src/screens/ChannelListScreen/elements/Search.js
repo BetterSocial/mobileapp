@@ -1,16 +1,20 @@
+/* eslint-disable no-use-before-define */
 /* eslint-disable no-underscore-dangle */
 import * as React from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, Animated, Pressable} from 'react-native';
+import PropTypes from 'prop-types';
+import {Pressable, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
 import MemoIcNewChat from '../../../assets/icons/ic_new_chat';
-import MemoIc_search from '../../../assets/icons/Ic_search';
-import {fonts} from '../../../utils/fonts';
+import MemoIcSearch from '../../../assets/icons/Ic_search';
 import StringConstant from '../../../utils/string/StringConstant';
-import {COLORS, SIZES} from '../../../utils/theme';
+import dimen from '../../../utils/dimen';
 import {DISCOVERY_TAB_USERS} from '../../../utils/constants';
+import {SIZES} from '../../../utils/theme';
+import {colors} from '../../../utils/colors';
+import {fonts} from '../../../utils/fonts';
 
-const Search = ({onPress, animatedValue}) => {
+const Search = ({route, onPress}) => {
   const navigation = useNavigation();
 
   const __handleOnSearchClicked = () => {
@@ -19,28 +23,30 @@ const Search = ({onPress, animatedValue}) => {
     });
   };
 
+  const themeColor = () => {
+    if (route?.name === 'SignedChannelList') return colors.darkBlue;
+    return colors.anon_primary;
+  };
+
   return (
-    <Animated.View style={styles.animatedViewContainer(animatedValue)}>
+    <View style={styles.animatedViewContainer}>
       <Pressable onPress={__handleOnSearchClicked} style={styles.searchPressableContainer}>
         <View style={styles.wrapperSearch}>
           <View style={styles.wrapperIcon}>
-            <MemoIc_search width={16.67} height={16.67} />
+            <MemoIcSearch width={16.67} height={16.67} />
           </View>
-          <Text
-            // placeholder={StringConstant.chatTabHeaderPlaceholder}
-            // placeholderTextColor={COLORS.gray1}
-            style={styles.input}>
-            {StringConstant.chatTabHeaderPlaceholder}
-          </Text>
+          <Text style={styles.input}>{StringConstant.chatTabHeaderPlaceholder}</Text>
         </View>
       </Pressable>
       <TouchableOpacity style={styles.wrapperButton} onPress={onPress}>
-        <Text style={styles.newPostText}>{StringConstant.chatTabHeaderCreateChatButtonText}</Text>
+        <Text style={[styles.newPostText, {color: themeColor()}]}>
+          {StringConstant.chatTabHeaderCreateChatButtonText}
+        </Text>
         <View>
-          <MemoIcNewChat height={17} width={15} style={styles.newChatIcon} />
+          <MemoIcNewChat height={18} width={16} color={themeColor()} style={styles.newChatIcon} />
         </View>
       </TouchableOpacity>
-    </Animated.View>
+    </View>
   );
 };
 
@@ -68,7 +74,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     marginEnd: SIZES.base,
-    paddingLeft: 8,
     paddingRight: 12,
     paddingTop: 9,
     paddingBottom: 9
@@ -82,7 +87,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 14,
     alignSelf: 'center',
-    color: COLORS.gray1
+    color: colors.gray1
   },
   wrapperIcon: {
     marginLeft: 8,
@@ -90,8 +95,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   newPostText: {
-    color: COLORS.holytosca,
-    marginRight: 11,
+    marginRight: dimen.normalizeDimen(5),
     fontFamily: 'Inter-SemiBold',
     fontSize: 12,
     lineHeight: 14.52
@@ -99,11 +103,10 @@ const styles = StyleSheet.create({
   newChatIcon: {
     marginTop: 0
   },
-  animatedViewContainer: (animatedValue) => ({
+  animatedViewContainer: {
     flexDirection: 'row',
     backgroundColor: 'white',
     marginBottom: SIZES.base,
-    marginTop: animatedValue,
     position: 'absolute',
     top: 0,
     left: 0,
@@ -112,8 +115,13 @@ const styles = StyleSheet.create({
     paddingTop: 7,
     paddingBottom: 7,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.gray1
-  })
+    borderBottomColor: colors.alto
+  }
 });
+
+Search.propTypes = {
+  route: PropTypes.object.isRequired,
+  onPress: PropTypes.func.isRequired
+};
 
 export default Search;
