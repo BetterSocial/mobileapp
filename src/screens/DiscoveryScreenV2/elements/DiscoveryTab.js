@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Dimensions, Keyboard, Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
 
 import {useRoute} from '@react-navigation/core';
 import PropTypes from 'prop-types';
