@@ -17,7 +17,6 @@ import {isContainUrl} from '../../../utils/Utils';
 import {requestExternalStoragePermission} from '../../../utils/permission';
 import {setChannel} from '../../../context/actions/setChannel';
 import {setParticipants} from '../../../context/actions/groupChat';
-import {uploadFile} from '../../../service/file';
 import ImageUtils from '../../../utils/image';
 
 const useGroupInfo = () => {
