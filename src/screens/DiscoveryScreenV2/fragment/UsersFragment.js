@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {StyleSheet, Text, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
+import {useNetInfo} from '@react-native-community/netinfo';
 import DiscoveryAction from '../../../context/actions/discoveryAction';
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import DomainList from '../elements/DiscoveryItemList';
@@ -44,6 +45,7 @@ const UsersFragment = ({
   const [profile] = React.useContext(Context).profile;
   const navigation = useNavigation();
   const [client] = React.useContext(Context).client;
+  const netInfo = useNetInfo();
 
   const route = useRoute();
 
@@ -93,44 +95,63 @@ const UsersFragment = ({
     if (from === FROM_FOLLOWED_USERS_INITIAL || from === FROM_UNFOLLOWED_USERS_INITIAL) {
       const newFollowedUsers = [...users];
       exhangeFollower(newFollowedUsers, willFollow, index);
-
       DiscoveryAction.setDiscoveryInitialUsers(newFollowedUsers, discoveryDispatch);
+      if (!netInfo.isConnected)
+        setTimeout(() => {
+          exhangeFollower(newFollowedUsers, !willFollow, index);
+          DiscoveryAction.setDiscoveryInitialUsers(newFollowedUsers, discoveryDispatch);
+        }, 2000);
     }
 
     if (from === FROM_FOLLOWED_USERS) {
       const newFollowedUsers = [...followedUsers];
       exhangeFollower(newFollowedUsers, willFollow, index);
-
       setFollowedUsers(newFollowedUsers);
+      if (!netInfo.isConnected)
+        setTimeout(() => {
+          exhangeFollower(newFollowedUsers, !willFollow, index);
+          setFollowedUsers(newFollowedUsers);
+        }, 2000);
     }
 
     if (from === FROM_UNFOLLOWED_USERS) {
       const newUnfollowedUsers = [...unfollowedUsers];
       exhangeFollower(newUnfollowedUsers, willFollow, index);
       setUnfollowedUsers(newUnfollowedUsers);
+      if (!netInfo.isConnected)
+        setTimeout(() => {
+          exhangeFollower(newUnfollowedUsers, !willFollow, index);
+          setUnfollowedUsers(newUnfollowedUsers);
+        }, 2000);
     }
 
     if (from === FROM_USERS_INITIAL) {
       const newFollowedUsers = [...initialUsers];
       exhangeFollower(newFollowedUsers, willFollow, index);
-
       setInitialUsers(newFollowedUsers);
+      if (!netInfo.isConnected)
+        setTimeout(() => {
+          exhangeFollower(newFollowedUsers, !willFollow, index);
+          setInitialUsers(newFollowedUsers);
+        }, 2000);
     }
 
-    const data = {
-      user_id_follower: myId,
-      user_id_followed: item.user_id,
-      username_follower: profile.myProfile.username,
-      username_followed: item.username,
-      follow_source: 'discoveryScreen'
-    };
+    if (netInfo.isConnected) {
+      const data = {
+        user_id_follower: myId,
+        user_id_followed: item.user_id,
+        username_follower: profile.myProfile.username,
+        username_followed: item.username,
+        follow_source: 'discoveryScreen'
+      };
 
-    if (willFollow) {
-      await setFollow(data, client);
-    } else {
-      await setUnFollow(data, client);
+      if (willFollow) {
+        await setFollow(data, client);
+      } else {
+        await setUnFollow(data, client);
+      }
+      if (searchText.length > 0) fetchData();
     }
-    if (searchText.length > 0) fetchData();
   };
 
   const renderDiscoveryItem = (from, key, item, index) => {
@@ -150,7 +171,8 @@ const UsersFragment = ({
             name: item.user ? item.user.username : item.username,
             image: item.user ? item.user.profile_pic_path : item.profile_pic_path,
             isunfollowed: isUnfollowed,
-            description: item.user ? item.user.bio : item.bio
+            description: item.user ? item.user.bio : item.bio,
+            karmaScore: item.karma_score
           }}
         />
       );

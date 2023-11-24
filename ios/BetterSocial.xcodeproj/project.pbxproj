@@ -176,7 +176,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				C4AE09092AC43A4800E13758 /* OneSignalNotificationServiceExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -726,8 +725,8 @@
 			buildPhases = (
 				6FAD019AC5D030B60C288001 /* [CP] Check Pods Manifest.lock */,
 				C4AE08FE2AC43A4800E13758 /* Sources */,
-				C4AE08FF2AC43A4800E13758 /* Frameworks */,
 				C4AE09002AC43A4800E13758 /* Resources */,
+				CC326BE194B68508452D7DF2 /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1702,7 +1701,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C4AE09052AC43A4800E13758 /* NotificationService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

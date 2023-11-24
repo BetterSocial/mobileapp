@@ -19,7 +19,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
       </View>
       <HorizontalTab
         onSelectedTabChange={[Function]}
-        selectedTab={0}
+        selectedTab={Object {}}
         tabs={
           Array [
             <Memo(ChannelListTabItem)
@@ -45,7 +45,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
       <View
         style={
           Object {
-            "display": "flex",
+            "display": "none",
           }
         }
       >
@@ -222,7 +222,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
           Object {
             "alignItems": "center",
             "backgroundColor": "#ffffff",
-            "borderBottomColor": "#E0E0E0",
+            "borderBottomColor": "#E8EBED",
             "borderBottomWidth": 1,
             "display": "flex",
             "flexDirection": "row",
@@ -247,7 +247,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
                 "opacity": 1,
               },
               Object {
-                "borderBottomColor": "#2C67BC",
+                "borderBottomColor": "#4782D7",
               },
             ]
           }
@@ -299,7 +299,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
                 numberOfLines={1}
                 style={
                   Object {
-                    "color": "#2C67BC",
+                    "color": "#4782D7",
                     "fontFamily": "Inter-Medium",
                     "fontSize": 14,
                   }
@@ -378,7 +378,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
                 numberOfLines={1}
                 style={
                   Object {
-                    "color": "#000000",
+                    "color": "#0C0C0C",
                     "fontFamily": "Inter-Medium",
                     "fontSize": 14,
                   }
@@ -421,7 +421,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
       <View
         style={
           Object {
-            "display": "flex",
+            "display": "none",
           }
         }
       />

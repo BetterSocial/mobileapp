@@ -122,12 +122,14 @@ const FeedScreen = (props) => {
     getDataFeedsHandle(postOffset, false, nextTargetFeed);
   };
 
-  const refreshMoreText = (index) => {
+  const refreshMoreText = (index, haveSeeMore) => {
     setUpdateIndex(index);
-    setUpdateMoreText(true);
-    setTimeout(() => {
-      setUpdateMoreText(false);
-    }, 1);
+    if (haveSeeMore) {
+      setUpdateMoreText(true);
+      setTimeout(() => {
+        setUpdateMoreText(false);
+      }, 1);
+    }
   };
 
   const onPress = (item, haveSeeMore, index) => {
@@ -135,9 +137,9 @@ const FeedScreen = (props) => {
       isalreadypolling: item.isalreadypolling,
       feedId: item.id,
       data: item,
-      isCaching: false,
+      isCaching: true,
       haveSeeMore,
-      refreshParent: () => refreshMoreText(index)
+      refreshParent: () => refreshMoreText(index, haveSeeMore)
     });
   };
 

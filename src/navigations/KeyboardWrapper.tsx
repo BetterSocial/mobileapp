@@ -1,20 +1,21 @@
 import React from 'react';
 
-import {ViewStyle, KeyboardAvoidingView, Platform} from 'react-native';
-import dimen from '../utils/dimen';
+import {KeyboardAvoidingView, Platform} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = {
-  children: any;
-  keyboardVerticalOffset?: number;
-  contentContainerStyle?: ViewStyle;
+  children: React.ReactNode;
 };
 
-const KeyboardWrapper = ({children, keyboardVerticalOffset}: Props): JSX.Element => {
+const KeyboardWrapper = ({children}: Props): JSX.Element => {
+  const isIos = Platform.OS === 'ios';
+  const insets = useSafeAreaInsets();
+
   return (
     <KeyboardAvoidingView
       style={{flex: 1}}
-      keyboardVerticalOffset={keyboardVerticalOffset || dimen.normalizeDimen(40)}
-      {...(Platform.OS === 'ios' ? {behavior: 'padding'} : {})}>
+      keyboardVerticalOffset={insets.top}
+      behavior={isIos ? 'padding' : undefined}>
       {children}
     </KeyboardAvoidingView>
   );

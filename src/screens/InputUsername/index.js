@@ -200,13 +200,13 @@ const ChooseUsername = () => {
     switch (type) {
       case 'fetch':
         return (
-          <Text style={styles.textMessage('#BDBDBD')}>
+          <Text style={styles.textMessage(colors.silver)}>
             {` ${StringConstant.onboardingChooseUsernameLabelCheckingAvailability}`}
           </Text>
         );
       case 'available':
         return (
-          <Text style={styles.textMessage(colors.holytosca)}>
+          <Text style={styles.textMessage(colors.signed_primary)}>
             {` ${StringConstant.onboardingChooseUsernameLabelUserAvailable(user)}`}
           </Text>
         );
@@ -350,7 +350,7 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: dimen.normalizeDimen(1),
     borderRadius: dimen.normalizeDimen(8),
-    borderColor: '#BDBDBD',
+    borderColor: colors.silver,
     paddingHorizontal: dimen.normalizeDimen(23),
     paddingVertical: dimen.normalizeDimen(13),
     width: '100%'
@@ -379,7 +379,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: normalizeFontSize(36),
     lineHeight: normalizeFontSize(43.57),
-    color: '#11243D',
+    color: colors.bunting,
     marginTop: dimen.normalizeDimen(24)
   },
   desc: {
