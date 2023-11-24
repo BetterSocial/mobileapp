@@ -104,7 +104,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
                 "width": 35,
               },
               Object {
-                "backgroundColor": "#E0E0E0",
+                "backgroundColor": "#E8EBED",
                 "width": 60,
               },
             ]

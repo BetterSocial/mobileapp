@@ -96,7 +96,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
   <View
     style={
       Object {
-        "backgroundColor": "#E0E0E0",
+        "backgroundColor": "#E8EBED",
         "height": 1,
       }
     }
@@ -144,7 +144,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               style={
                 Object {
                   "alignItems": "center",
-                  "backgroundColor": "#E0E0E0",
+                  "backgroundColor": "#E8EBED",
                   "borderRadius": 45,
                   "height": 90,
                   "justifyContent": "center",
@@ -237,7 +237,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
         <View
           style={
             Object {
-              "backgroundColor": "#E0E0E0",
+              "backgroundColor": "#E8EBED",
               "height": 1,
             }
           }
@@ -373,7 +373,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
         <View
           style={
             Object {
-              "backgroundColor": "#E0E0E0",
+              "backgroundColor": "#E8EBED",
               "height": 1,
             }
           }
@@ -1193,7 +1193,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                       "width": 35,
                     },
                     Object {
-                      "backgroundColor": "#E0E0E0",
+                      "backgroundColor": "#E8EBED",
                       "width": 60,
                     },
                   ]
@@ -1492,7 +1492,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                       "width": 35,
                     },
                     Object {
-                      "backgroundColor": "#E0E0E0",
+                      "backgroundColor": "#E8EBED",
                       "width": 60,
                     },
                   ]
@@ -1790,7 +1790,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "width": 35,
                   },
                   Object {
-                    "backgroundColor": "#E0E0E0",
+                    "backgroundColor": "#E8EBED",
                     "width": 60,
                   },
                 ]
@@ -2267,7 +2267,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "width": 35,
                   },
                   Object {
-                    "backgroundColor": "#E0E0E0",
+                    "backgroundColor": "#E8EBED",
                     "width": 60,
                   },
                 ]
@@ -2744,7 +2744,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "width": 35,
                   },
                   Object {
-                    "backgroundColor": "#E0E0E0",
+                    "backgroundColor": "#E8EBED",
                     "width": 60,
                   },
                 ]

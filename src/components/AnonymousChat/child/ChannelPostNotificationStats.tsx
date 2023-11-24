@@ -7,6 +7,7 @@ import MemoIc_arrow_upvote_on from '../../../assets/arrow/Ic_upvote_on';
 import MemoIc_block_inactive from '../../../assets/block/Ic_block_inactive';
 import MemoIc_comment from '../../../assets/icons/Ic_comment';
 import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
+import {colors} from '../../../utils/colors';
 
 const ChannelPostNotificationStats = ({
   type = BaseChannelItemTypeProps.ANON_PM,
@@ -46,7 +47,12 @@ const ChannelPostNotificationStats = ({
   return (
     <View style={styles.descriptionContainer}>
       <View style={styles.iconContainer}>
-        <MemoIc_arrow_upvote_on style={styles.iconMargin} width={15} height={15} />
+        <MemoIc_arrow_upvote_on
+          style={styles.iconMargin}
+          color={colors.darkBlue}
+          width={15}
+          height={15}
+        />
         <Text style={styles.textVoteMargin}>{upvote}</Text>
       </View>
       <View style={styles.iconContainer}>
