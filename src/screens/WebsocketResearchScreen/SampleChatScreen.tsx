@@ -122,7 +122,7 @@ const SampleChatScreen = () => {
           ownerChat ? (
             <BaseSystemChat
               componentType="SINGLE"
-              messageSingle={`You’re anonymously messaging ${selectedChannel?.name}. They are still able to block you`}
+              messageSingle={`You’re anonymously messaging ${selectedChannel?.name}.\nThey are still able to block you`}
             />
           ) : null
         }
