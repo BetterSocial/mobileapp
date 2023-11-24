@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import Svg, {Path} from 'react-native-svg';
 
 function IcUpvoteOn(props) {
@@ -13,5 +14,11 @@ function IcUpvoteOn(props) {
     </Svg>
   );
 }
+
+IcUpvoteOn.propTypes = {
+  color: PropTypes.string,
+  width: PropTypes.number,
+  height: PropTypes.number
+};
 
 export default IcUpvoteOn;
