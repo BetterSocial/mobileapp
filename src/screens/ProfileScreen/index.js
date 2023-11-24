@@ -194,6 +194,7 @@ const ProfileScreen = ({route}) => {
   const {refreshCount} = useResetContext();
   const {mappingColorFeed} = useCoreFeed();
   const LIMIT_PROFILE_FEED = 10;
+  const TYPE_GALLERY = 'gallery';
 
   const {feeds} = myProfileFeed;
   const {
@@ -385,7 +386,7 @@ const ProfileScreen = ({route}) => {
         mediaType: 'photo',
         includeBase64: true
       }).then((imageRes) => {
-        handleUpdateImage(`data:image/jpeg;base64,${imageRes.data}`, 'gallery');
+        handleUpdateImage(`data:image/jpeg;base64,${imageRes.data}`, TYPE_GALLERY);
       });
     } else {
       openAlertPermission(
@@ -429,37 +430,49 @@ const ProfileScreen = ({route}) => {
   };
 
   const handleUpdateImage = async (imgBase64, type) => {
-    if (type === 'gallery') {
-      setIsLoadingUpdateImageGallery(true);
-    } else {
-      setIsLoadingUpdateImageCamera(true);
-    }
-    const compressionResult = await ImageCompressionUtils.compress(imgBase64, 'base64');
-    const data = {
-      profile_pic_path: compressionResult
-    };
+    try {
+      if (type === TYPE_GALLERY) {
+        setIsLoadingUpdateImageGallery(true);
+      } else {
+        setIsLoadingUpdateImageCamera(true);
+      }
+      const compressionResult = await ImageCompressionUtils.compress(imgBase64, 'base64');
+      const data = {
+        profile_pic_path: compressionResult
+      };
 
-    updateImageProfile(data)
-      .then(async (res) => {
-        if (type === 'gallery') {
-          setIsLoadingUpdateImageGallery(false);
-        } else {
-          setIsLoadingUpdateImageCamera(false);
-        }
-        if (res.code === 200) {
-          closeImageBs();
-          getMyFeeds();
-          const profilePicture = await fetchMyProfile(true);
-          updateUserClient(profilePicture);
-        }
-      })
-      .catch(() => {
-        if (type === 'gallery') {
-          setIsLoadingUpdateImageGallery(false);
-        } else {
-          setIsLoadingUpdateImageCamera(false);
-        }
+      updateImageProfile(data)
+        .then(async (res) => {
+          if (type === TYPE_GALLERY) {
+            setIsLoadingUpdateImageGallery(false);
+          } else {
+            setIsLoadingUpdateImageCamera(false);
+          }
+          if (res.code === 200) {
+            closeImageBs();
+            getMyFeeds();
+            const profilePicture = await fetchMyProfile(true);
+            updateUserClient(profilePicture);
+          }
+        })
+        .catch(() => {
+          if (type === TYPE_GALLERY) {
+            setIsLoadingUpdateImageGallery(false);
+          } else {
+            setIsLoadingUpdateImageCamera(false);
+          }
+        });
+    } catch (error) {
+      showMessage({
+        message: 'Failed to update profile',
+        type: 'danger'
       });
+      if (type === TYPE_GALLERY) {
+        setIsLoadingUpdateImageGallery(false);
+      } else {
+        setIsLoadingUpdateImageCamera(false);
+      }
+    }
   };
 
   const handleRemoveImageProfile = async () => {
