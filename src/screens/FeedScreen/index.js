@@ -137,7 +137,7 @@ const FeedScreen = (props) => {
       isalreadypolling: item.isalreadypolling,
       feedId: item.id,
       data: item,
-      isCaching: false,
+      isCaching: true,
       haveSeeMore,
       refreshParent: () => refreshMoreText(index, haveSeeMore)
     });
