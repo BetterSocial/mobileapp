@@ -1,6 +1,5 @@
 /* eslint-disable no-use-before-define */
 import * as React from 'react';
-import FastImage from 'react-native-fast-image';
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import messaging from '@react-native-firebase/messaging';
@@ -8,10 +7,10 @@ import {Platform, StyleSheet, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useRecoilState, useRecoilValue} from 'recoil';
 
+import AnonymousChatFill from '../assets/icon/AnonymousChatFill';
+import AnonymousChatOutline from '../assets/icon/AnonymousChatOutline';
 import ChannelListScreenV2 from '../screens/ChannelListScreenV2';
 import FirebaseConfig from '../configs/FirebaseConfig';
-import IcAnonFilled from '../assets/ic_anon_menu_filled.png';
-import IcAnonOutline from '../assets/ic_anon_menu_outline.png';
 import MemoFeed from '../assets/icon/Feed';
 import MemoNews from '../assets/icon/News';
 import MemoProfileIcon from '../assets/icon/Profile';
@@ -224,9 +223,9 @@ function HomeBottomTabs({navigation}) {
       return (
         <View style={styles.center}>
           {focused ? (
-            <FastImage source={IcAnonFilled} style={styles.icon} resizeMode="contain" />
+            <AnonymousChatFill fill={colors.anon_primary} stroke={colors.anon_primary} />
           ) : (
-            <FastImage source={IcAnonOutline} style={styles.icon} resizeMode="contain" />
+            <AnonymousChatOutline fill={color} />
           )}
         </View>
       );
