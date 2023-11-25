@@ -1,6 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import {Dimensions, Keyboard, Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {useRoute} from '@react-navigation/core';
 
 import {Context} from '../../../context';
