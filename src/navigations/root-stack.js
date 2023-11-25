@@ -2,7 +2,7 @@
 import * as React from 'react';
 import NetInfo from '@react-native-community/netinfo';
 import PropTypes from 'prop-types';
-import Animated, {Easing, useAnimatedStyle, withTiming} from 'react-native-reanimated';
+import {View} from 'react-native';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -56,6 +56,7 @@ import {
 } from '../screens';
 import {InitialStartupAtom, LoadingStartupContext} from '../service/initialStartup';
 import {NavigationConstants} from '../utils/constants';
+import {colors} from '../utils/colors';
 import {followersOrFollowingAtom} from '../screens/ChannelListScreen/model/followersOrFollowingAtom';
 import {useInitialStartup} from '../hooks/useInitialStartup';
 
@@ -99,31 +100,27 @@ export const RootNavigator = ({currentScreen}) => {
   const getPaddingTop = (screenName) => {
     'worklet';
 
-    if (
-      isUnauthenticated ||
-      ['TopicPageScreen', 'TopicMemberScreen', 'SampleChatScreen'].includes(screenName)
-    ) {
+    if (isUnauthenticated || ['TopicPageScreen', 'TopicMemberScreen'].includes(screenName)) {
       return 0;
     }
     return insets.top;
   };
 
-  const animatedInset = useAnimatedStyle(() => {
-    return {
-      paddingTop: withTiming(getPaddingTop(currentScreen), {
-        duration: 300,
-        easing: Easing.inOut(Easing.quad)
-      })
-    };
-  });
+  const getInsetTopColor = () => {
+    'worklet';
+
+    return currentScreen === 'SampleChatScreen' ? colors.anon_primary : colors.white;
+  };
 
   return (
     <LoadingStartupContext.Provider value={loadingStartup.loadingUser}>
-      <Animated.View
-        style={[
-          {height: '100%', paddingBottom: isUnauthenticated ? 0 : insets.bottom},
-          animatedInset
-        ]}>
+      <View
+        style={{
+          height: '100%',
+          paddingBottom: isUnauthenticated ? 0 : insets.bottom,
+          paddingTop: getPaddingTop(currentScreen),
+          backgroundColor: getInsetTopColor()
+        }}>
         <NetworkStatusIndicator hide={true} />
 
         <RootStack.Navigator
@@ -142,7 +139,17 @@ export const RootNavigator = ({currentScreen}) => {
             <RootStack.Screen name="UnauthenticatedStack" component={UnauthenticatedNavigator} />
           )}
         </RootStack.Navigator>
-      </Animated.View>
+        <View
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            bottom: 0,
+            height: insets.bottom,
+            backgroundColor: colors.white
+          }}
+        />
+      </View>
     </LoadingStartupContext.Provider>
   );
 };

@@ -3,16 +3,13 @@
 /* eslint-disable import/no-unresolved */
 
 import * as React from 'react';
-import Animated, {Easing, useAnimatedStyle, withTiming} from 'react-native-reanimated';
 import {Dimensions, FlatList, StatusBar, StyleSheet, View} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import BaseSystemChat from '../../components/AnonymousChat/BaseChatSystem';
 import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
 import InputMessageV2 from '../../components/Chat/InputMessageV2';
 import Loading from '../Loading';
-import dimen from '../../utils/dimen';
 import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
 import useMoveChatTypeHook from '../../hooks/core/chat/useMoveChatTypeHook';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
@@ -50,16 +47,6 @@ export const styles = StyleSheet.create({
 });
 
 const SampleChatScreen = () => {
-  const inset = useSafeAreaInsets();
-  const animatedInset = useAnimatedStyle(() => {
-    return {
-      backgroundColor: colors.anon_primary,
-      paddingTop: withTiming(inset.top, {
-        duration: 300,
-        easing: Easing.inOut(Easing.quad)
-      })
-    };
-  });
   const flatlistRef = React.useRef<FlatList>();
   const {
     selectedChannel,
@@ -105,7 +92,7 @@ const SampleChatScreen = () => {
   };
 
   return (
-    <Animated.View style={[{flex: 1}, animatedInset]}>
+    <>
       <StatusBar barStyle="light-content" backgroundColor={colors.anon_primary} />
 
       <View style={styles.keyboardAvoidingView}>
@@ -151,7 +138,7 @@ const SampleChatScreen = () => {
         </View>
         <Loading visible={loading} />
       </View>
-    </Animated.View>
+    </>
   );
 };
 
