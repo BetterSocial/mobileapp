@@ -249,7 +249,7 @@ const SampleChatInfoScreen = () => {
   };
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar translucent={false} />
+      <StatusBar barStyle={'dark-content'} translucent={false} />
       {isLoadingMembers || loadingChannelInfo ? null : (
         <>
           <AnonymousChatInfoHeader

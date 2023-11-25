@@ -2,7 +2,6 @@
 /* eslint-disable import/no-unresolved */
 
 import * as React from 'react';
-import Animated, {Easing, useAnimatedStyle, withTiming} from 'react-native-reanimated';
 import {
   Dimensions,
   FlatList,
@@ -12,7 +11,6 @@ import {
   StyleSheet,
   View
 } from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import AnonymousInputMessage from '../../components/Chat/AnonymousInputMessage';
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
@@ -54,16 +52,6 @@ export const styles = StyleSheet.create({
 });
 
 const SampleChatScreen = () => {
-  const inset = useSafeAreaInsets();
-  const animatedInset = useAnimatedStyle(() => {
-    return {
-      backgroundColor: colors.anon_primary,
-      paddingTop: withTiming(inset.top, {
-        duration: 300,
-        easing: Easing.inOut(Easing.quad)
-      })
-    };
-  });
   const flatlistRef = React.useRef<FlatList>();
   const {
     selectedChannel,
@@ -85,7 +73,7 @@ const SampleChatScreen = () => {
   };
 
   return (
-    <Animated.View style={[{flex: 1}, animatedInset]}>
+    <>
       <StatusBar barStyle="light-content" backgroundColor={colors.anon_primary} />
 
       <KeyboardAvoidingView
@@ -118,7 +106,7 @@ const SampleChatScreen = () => {
           <AnonymousInputMessage onSendButtonClicked={sendChat} type={ANONYMOUS} />
         </View>
       </KeyboardAvoidingView>
-    </Animated.View>
+    </>
   );
 };
 
