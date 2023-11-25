@@ -29,14 +29,10 @@ exports[`TESTING ChatItemTargetText RENDER continuous should match snapshot 1`] 
           "paddingRight": 8,
           "paddingTop": 4,
         },
-        Object {
-          "paddingBottom": 14,
-        },
       ]
     }
   >
     <Text
-      onTextLayout={[Function]}
       style={
         Object {
           "fontFamily": "Inter-Regular",
@@ -103,9 +99,6 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
           "paddingRight": 8,
           "paddingTop": 4,
         },
-        Object {
-          "paddingBottom": 14,
-        },
       ]
     }
   >
@@ -155,7 +148,6 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
       </Text>
     </View>
     <Text
-      onTextLayout={[Function]}
       style={
         Object {
           "fontFamily": "Inter-Regular",
