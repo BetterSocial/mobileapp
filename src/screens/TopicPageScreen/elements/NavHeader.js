@@ -49,7 +49,7 @@ const NavHeader = (props) => {
   const [searchHeight, setSearchHeight] = React.useState(0);
   const {top} = useSafeAreaInsets();
   const topPosition = Platform.OS === 'ios' ? top : 0;
-  console.log('coverPath: ', coverPath);
+
   const {followTopic} = useChatClientHook();
 
   const handleFollowTopic = async () => {
