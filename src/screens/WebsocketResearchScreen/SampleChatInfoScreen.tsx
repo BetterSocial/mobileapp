@@ -204,6 +204,7 @@ const SampleChatInfoScreen = () => {
   const {signedProfileId} = useUserAuthHook();
   const [profile] = (React.useContext(Context) as unknown as any).profile;
   const {params}: any = useRoute();
+  const isEditable = channelInfo?.rawJson?.channelType === 1;
   const ANONYMOUS_USER = 'AnonymousUser';
   const {anon_user_info_color_code, anon_user_info_emoji_code} =
     channelInfo?.rawJson?.channel || {};
@@ -287,7 +288,7 @@ const SampleChatInfoScreen = () => {
                         {getChatName(channelInfo?.name, profile?.myProfile?.username)}
                       </Text>
                     </View>
-                    {params?.from === SIGNED ? (
+                    {params?.from === SIGNED && isEditable ? (
                       <TouchableOpacity style={styles.editBtn} onPress={goToEditGroup}>
                         <MemoIc_pencil
                           height={dimen.normalizeDimen(20)}

@@ -3,16 +3,27 @@ import SimpleToast from 'react-native-simple-toast';
 import {launchImageLibrary} from 'react-native-image-picker';
 
 import {Linking} from 'react-native';
-import StringConstant from '../../../utils/string/StringConstant';
+import {useNavigation} from '@react-navigation/core';
+import {useRecoilState, atom} from 'recoil';
 import {Context} from '../../../context';
 import {getChatName} from '../../../utils/string/StringUtils';
 import {requestExternalStoragePermission} from '../../../utils/permission';
-import {uploadFile} from '../../../service/file';
 import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
+import ChannelList from '../../../database/schema/ChannelListSchema';
+import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
+import {CHAT_ATOM} from '../../../hooks/core/constant';
+import StringConstant from '../../../utils/string/StringConstant';
+
+const chatAtom = atom({
+  key: CHAT_ATOM,
+  default: {
+    selectedChannel: null
+  }
+});
 
 const useGroupSetting = ({route}) => {
   const [groupChatState] = React.useContext(Context).groupChat;
-
+  const navigation = useNavigation();
   const [channelState] = React.useContext(Context).channel;
   const [profile] = React.useContext(Context).profile;
   const [participants, setParticipants] = React.useState([]);
@@ -20,75 +31,68 @@ const useGroupSetting = ({route}) => {
   const [groupName, setGroupName] = React.useState(
     getChatName(route.params.name, profile.myProfile.username) || 'Set Group Name'
   );
+  const {localDb, refresh} = useLocalDatabaseHook();
+
   const [countUser, setCountUser] = React.useState(0);
   const [changeName, setChangeName] = React.useState(false);
   const [changeImage, setChangeImage] = React.useState(false);
   const [base64Profile, setBase64Profile] = React.useState('');
   const [urlImage, setUrlImage] = React.useState(channel?.data?.image);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [chat, setChat] = useRecoilState(chatAtom);
   const updateName = (text) => {
     setGroupName(text);
     setChangeName(true);
   };
 
   React.useEffect(() => {
+    console.log({route}, 'lebron');
     if (route?.params) {
       setParticipants(route?.params?.rawJson?.channel?.members);
       setCountUser(route?.params?.rawJson?.channel?.members?.length || 0);
     }
   }, [route]);
-  console.log({params: route?.params}, 'nikal');
   const submitData = async (withNavigation = true, withLoading = true) => {
-    const body = {
-      channel_id: route?.params?.id,
-      channel_name: groupName,
-      channel_image: urlImage
-    };
-    console.log({body}, 'bodyman');
-    const response = await SignedMessageRepo.editChannel(body);
-    console.log({response}, 'lasia');
-    // let changeImageUrl = '';
-    // if (changeImage) {
-    //   if (withLoading) setIsLoading(true);
-    //   try {
-    //     const res = await uploadFile(`data:image/jpeg;base64,${base64Profile}`);
-    //     changeImageUrl = res.data.url;
-    //   } catch (e) {
-    //     setIsLoading(false);
-    //     return;
-    //   }
-    // }
-    // if (changeName || changeImage) {
-    //   if (withLoading) setIsLoading(true);
-    //   let dataEdit = {
-    //     name: groupName
-    //     // ...(changeImage && {image: base64Profile}),
-    //   };
-    //   if (changeName) {
-    //     dataEdit = {...dataEdit, isEditName: true};
-    //   }
-    //   if (changeImage) {
-    //     dataEdit.image = changeImageUrl;
-    //   } else if (channel?.data?.image) {
-    //     dataEdit.image = channel?.data?.image;
-    //   }
-    //   console.log({dataEdit}, 'nusu');
-    //   updateDataEdit(dataEdit, withNavigation);
-    // } else if (withNavigation) navigation.goBack();
+    try {
+      const body = {
+        channel_id: route?.params?.id,
+        channel_name: groupName,
+        channel_image: urlImage
+      };
+      console.log({body}, 'bodyman');
+      const response = await SignedMessageRepo.editChannel(body);
+      let newChannel = response.data?.channel;
+      newChannel = {...chat.selectedChannel, ...newChannel};
+      ChannelList.updateChannelInfo(
+        localDb,
+        body.channel_id,
+        body.channel_name,
+        body.channel_image,
+        response
+      );
+      console.log({newChannel}, 'nehiks');
+      if (newChannel) {
+        setChat({
+          ...chat,
+          selectedChannel: newChannel
+        });
+      }
+      refresh('channelList');
+      refresh('chat');
+      refresh('channelInfo');
+      if (withNavigation) {
+        navigation.goBack();
+      }
+    } catch (e) {
+      SimpleToast.show(StringConstant.groupSettingUpdateFailed);
+    }
   };
 
-  const updateDataEdit = async (dataEdit, withNavigation) => {
-    // try {
-    //   await channel.update(dataEdit);
-    //   if (withNavigation) navigation.navigate('ChatDetailPage');
-    // } catch (e) {
-    //   if (__DEV__) {
-    //     console.log(`error : ${e}`);
-    //   }
-    //   SimpleToast.show(StringConstant.groupSettingUpdateFailed);
-    // }
-    // setIsLoading(false);
-  };
+  // const handleChannelType = (channelType) => {
+  //   if(channelType === 1) {
+  //     return
+  //   }
+  // };
 
   const lounchGalery = async () => {
     const {success, message} = await requestExternalStoragePermission();
