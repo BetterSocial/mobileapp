@@ -35,7 +35,9 @@ import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
 import RenderItem from '../FeedScreen/RenderList';
 import ShareUtils from '../../utils/share';
+import StorageUtils from '../../utils/storage';
 import dimen from '../../utils/dimen';
+import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
 import useResetContext from '../../hooks/context/useResetContext';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
@@ -69,8 +71,8 @@ import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import ShadowFloatingButtons from '../../components/Button/ShadowFloatingButtons';
-import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
-import StorageUtils from '../../utils/storage';
+import ImageCompressionUtils from '../../utils/image/compress';
+import {KarmaScore} from './elements/KarmaScore';
 
 const {width} = Dimensions.get('screen');
 
@@ -96,12 +98,20 @@ const Header = (props) => {
         headerHeightRef.current = headerHeightLayout;
       }}>
       <View style={styles.content}>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row', alignContent: 'center', alignItems: 'center'}}>
           <ProfilePicture
             onImageContainerClick={changeImage}
             profilePicPath={dataMain.profile_pic_path}
+            karmaScore={Math.floor(dataMain.karma_score)}
           />
-          <View style={{marginLeft: 20}}>
+          <View
+            style={{
+              flexDirection: 'column',
+              paddingHorizontal: 14,
+              paddingVertical: 5,
+              justifyContent: 'center'
+            }}>
+            <KarmaScore score={Math.floor(dataMain.karma_score)} />
             <FollowInfoRow
               follower={dataMain.follower_symbol}
               following={dataMain.following_symbol}
@@ -167,7 +177,7 @@ const ProfileScreen = ({route}) => {
   const [opacity, setOpacity] = React.useState(0);
   const [tempBio, setTempBio] = React.useState('');
   const [tempFullName, setTempFullName] = React.useState('');
-  const [isLoadingUpdateImageGalery, setIsLoadingUpdateImageGalery] = React.useState(false);
+  const [isLoadingUpdateImageGallery, setIsLoadingUpdateImageGallery] = React.useState(false);
   const [isLoadingUpdateImageCamera, setIsLoadingUpdateImageCamera] = React.useState(false);
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0);
@@ -184,6 +194,7 @@ const ProfileScreen = ({route}) => {
   const {refreshCount} = useResetContext();
   const {mappingColorFeed} = useCoreFeed();
   const LIMIT_PROFILE_FEED = 10;
+  const TYPE_GALLERY = 'gallery';
 
   const {feeds} = myProfileFeed;
   const {
@@ -228,7 +239,6 @@ const ProfileScreen = ({route}) => {
     const status = await netInfo.fetch();
     if (status.isConnected) {
       getMyFeeds(0, LIMIT_PROFILE_FEED);
-      console.log('masuka');
     } else {
       setMyProfileFeed(JSON.parse(cacheFeed), myProfileDispatch);
     }
@@ -376,7 +386,7 @@ const ProfileScreen = ({route}) => {
         mediaType: 'photo',
         includeBase64: true
       }).then((imageRes) => {
-        handleUpdateImage(`data:image/jpeg;base64,${imageRes.data}`, 'gallery');
+        handleUpdateImage(`data:image/jpeg;base64,${imageRes.data}`, TYPE_GALLERY);
       });
     } else {
       openAlertPermission(
@@ -419,37 +429,50 @@ const ProfileScreen = ({route}) => {
     });
   };
 
-  const handleUpdateImage = (value, type) => {
-    if (type === 'gallery') {
-      setIsLoadingUpdateImageGalery(true);
-    } else {
-      setIsLoadingUpdateImageCamera(true);
-    }
-    const data = {
-      profile_pic_path: value
-    };
+  const handleUpdateImage = async (imgBase64, type) => {
+    try {
+      if (type === TYPE_GALLERY) {
+        setIsLoadingUpdateImageGallery(true);
+      } else {
+        setIsLoadingUpdateImageCamera(true);
+      }
+      const compressionResult = await ImageCompressionUtils.compress(imgBase64, 'base64');
+      const data = {
+        profile_pic_path: compressionResult
+      };
 
-    updateImageProfile(data)
-      .then(async (res) => {
-        if (type === 'gallery') {
-          setIsLoadingUpdateImageGalery(false);
-        } else {
-          setIsLoadingUpdateImageCamera(false);
-        }
-        if (res.code === 200) {
-          closeImageBs();
-          getMyFeeds();
-          const profilePicture = await fetchMyProfile(true);
-          updateUserClient(profilePicture);
-        }
-      })
-      .catch(() => {
-        if (type === 'gallery') {
-          setIsLoadingUpdateImageGalery(false);
-        } else {
-          setIsLoadingUpdateImageCamera(false);
-        }
+      updateImageProfile(data)
+        .then(async (res) => {
+          if (type === TYPE_GALLERY) {
+            setIsLoadingUpdateImageGallery(false);
+          } else {
+            setIsLoadingUpdateImageCamera(false);
+          }
+          if (res.code === 200) {
+            closeImageBs();
+            getMyFeeds();
+            const profilePicture = await fetchMyProfile(true);
+            updateUserClient(profilePicture);
+          }
+        })
+        .catch(() => {
+          if (type === TYPE_GALLERY) {
+            setIsLoadingUpdateImageGallery(false);
+          } else {
+            setIsLoadingUpdateImageCamera(false);
+          }
+        });
+    } catch (error) {
+      showMessage({
+        message: 'Failed to update profile',
+        type: 'danger'
       });
+      if (type === TYPE_GALLERY) {
+        setIsLoadingUpdateImageGallery(false);
+      } else {
+        setIsLoadingUpdateImageCamera(false);
+      }
+    }
   };
 
   const handleRemoveImageProfile = async () => {
@@ -687,7 +710,7 @@ const ProfileScreen = ({route}) => {
         onOpenImageGalery={() => onOpenImageGalery()}
         onOpenCamera={() => onOpenCamera()}
         handleRemoveImageProfile={() => handleRemoveImageProfile()}
-        isLoadingUpdateImageGalery={isLoadingUpdateImageGalery}
+        isLoadingUpdateImageGallery={isLoadingUpdateImageGallery}
         isLoadingUpdateImageCamera={isLoadingUpdateImageCamera}
         isLoadingRemoveImage={isLoadingRemoveImage}
       />
@@ -722,7 +745,8 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: 'column',
     paddingHorizontal: 20,
-    backgroundColor: colors.white
+    backgroundColor: colors.white,
+    marginTop: 14
   },
   dummyItem: (heightItem) => ({
     height: heightItem,

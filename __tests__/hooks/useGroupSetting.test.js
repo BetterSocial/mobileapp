@@ -7,6 +7,7 @@ import * as serviceFile from '../../src/service/file';
 import * as servicePermission from '../../src/utils/permission';
 import useGroupSetting from '../../src/screens/GroupSetting/hooks/useGroupSetting';
 import {Context} from '../../src/context/Store';
+import ImageUtils from '../../src/utils/image';
 
 jest.mock('react-native-permissions', () => require('react-native-permissions/mock'));
 
@@ -17,6 +18,12 @@ jest.mock('react-native-image-picker', () => ({
 jest.mock('react-native-simple-toast', () => ({
   show: jest.fn()
 }));
+
+jest.mock('react-native-compressor', () => {
+  return {
+    compress: jest.fn(() => 'file:///imag.jpg')
+  };
+});
 
 describe('use groupSetting should run correctly', () => {
   const mockDataEdit = jest.fn();
@@ -244,13 +251,13 @@ describe('use groupSetting should run correctly', () => {
         username: 'agita'
       }
     };
-    const spyUploadFile = jest
-      .spyOn(serviceFile, 'uploadFile')
+    const spyService = jest
+      .spyOn(ImageUtils, 'uploadImage')
       .mockImplementation(() => ({data: {url: 'https://image.jpg'}}));
     const {result} = renderHook(() => useGroupSetting({navigation, route}), {wrapper});
     await result.current.setChangeImage(true);
     await result.current.submitData(true, true);
-    expect(spyUploadFile).toHaveBeenCalled();
+    expect(spyService).toHaveBeenCalled();
     expect(result.current.isLoading).toBeFalsy();
     await result.current.setChangeImage(false);
     await result.current.submitData(true, false);

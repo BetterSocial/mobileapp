@@ -55,4 +55,36 @@ describe('SpecificIssue Block Component test should pass', () => {
     );
     expect(findByTestId('loading-indicator-test')).toBeTruthy();
   });
+
+  it('should render with loading', async () => {
+    const rbSheetOpenRefMock = jest.fn();
+    const onPressMock = jest.fn();
+    const onSkipMock = jest.fn();
+    const loading = true;
+
+    const ref = {
+      current: {
+        open: rbSheetOpenRefMock
+      }
+    };
+    const realUseState = React.useState;
+    const stubInitialState = [''];
+    const mockState = jest
+      .spyOn(React, 'useState')
+      .mockImplementationOnce(() => realUseState(stubInitialState));
+
+    const {getByTestId} = render(
+      <SpecificIssue
+        onPress={onPressMock}
+        onSkip={onSkipMock}
+        refSpecificIssue={ref}
+        loading={loading}
+      />
+    );
+    await fireEvent.changeText(getByTestId('changeText'));
+    await fireEvent.press(getByTestId('button-skip-test'));
+    await fireEvent.press(getByTestId('button-report-test'));
+    expect(onSkipMock).toHaveBeenCalled();
+    expect(onPressMock).toHaveBeenCalled();
+  });
 });

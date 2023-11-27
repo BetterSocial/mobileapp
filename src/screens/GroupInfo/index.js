@@ -27,6 +27,7 @@ import ModalActionAnonymous from './elements/ModalActionAnonymous';
 import ReportGroup from '../../assets/images/report.png';
 import useGroupInfo from './hooks/useGroupInfo';
 import {CHANNEL_TYPE_ANONYMOUS} from '../../utils/constants';
+import {COLORS} from '../../utils/theme';
 import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
 import {colors} from '../../utils/colors';
@@ -48,19 +49,19 @@ const GroupInfo = () => {
     handleOnNameChange,
     handleOnImageClicked,
     newParticipant,
-    selectedUser,
-    handleCloseSelectUser,
-    openModal,
     alertRemoveUser,
     memberName,
     onLeaveGroup,
     profile,
     channelState,
-    handlePressContact,
     setUsername,
     onReportGroup,
     isAnonymousModalOpen,
     blockModalRef,
+    handleCloseSelectUser,
+    handlePressContact,
+    selectedUser,
+    openModal,
     isFetchingAllowAnonDM
   } = useGroupInfo();
   React.useEffect(() => {
@@ -173,6 +174,10 @@ const GroupInfo = () => {
     handleMember();
   }, []);
 
+  React.useEffect(() => {
+    getMembersList();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -181,7 +186,7 @@ const GroupInfo = () => {
         <>
           <Header isCenter onPress={() => navigation.goBack()} title={memberName()} />
           <View style={styles.lineTop} />
-          <ScrollView nestedScrollEnabled={true}>
+          <ScrollView contentContainerStyle={styles.scrollContainer} nestedScrollEnabled={true}>
             <SafeAreaView>
               <TouchableOpacity testID="imageClick" onPress={handleOnImageClicked}>
                 <View style={styles.containerPhoto}>{showImageProfile()}</View>
@@ -448,5 +453,18 @@ export const styles = StyleSheet.create({
   },
   scrollContainer: {
     paddingBottom: 30
+  },
+  modalActUser: {
+    padding: 16,
+    paddingLeft: 27,
+    paddingRight: 70
+  },
+  textActUser: {
+    fontFamily: 'Inter',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    fontSize: 18,
+    color: COLORS.black000,
+    paddingVertical: 20
   }
 });
