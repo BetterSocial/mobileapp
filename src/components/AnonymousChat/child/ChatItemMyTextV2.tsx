@@ -1,12 +1,5 @@
 import * as React from 'react';
-import {
-  Dimensions,
-  NativeSyntheticEvent,
-  StyleSheet,
-  Text,
-  TextLayoutEventData,
-  View
-} from 'react-native';
+import {Dimensions, StyleSheet, Text, View} from 'react-native';
 
 import IconChatCheckMark from '../../../assets/icon/IconChatCheckMark';
 import IconChatClockGrey from '../../../assets/icon/IconChatClockGrey';
@@ -125,15 +118,6 @@ const ChatItemMyTextV2 = ({
   chatType
 }: ChatItemMyTextProps) => {
   const messageRef = React.useRef<Text>(null);
-  const [isNewLine, setIsNewLine] = React.useState(true);
-
-  const onTextLayout = (event: NativeSyntheticEvent<TextLayoutEventData>) => {
-    const {lines} = event.nativeEvent;
-    const lastLine = lines[lines.length - 1];
-    const lastLineWidth = lastLine?.width;
-    const isCalculatedNewLine = targetLastLineWidth - lastLineWidth < 24;
-    setIsNewLine(isCalculatedNewLine);
-  };
 
   const renderIcon = React.useCallback(() => {
     if (status === ChatStatus.PENDING)
@@ -155,15 +139,16 @@ const ChatItemMyTextV2 = ({
     return <View style={styles.ml8}>{avatar}</View>;
   }, []);
 
-  const textContainerStyle = [
-    chatType === SIGNED ? styles.containerSigned : styles.containerAnon,
-    styles.textContainer,
-    isNewLine && styles.textContainerNewLine
-  ];
+  const handleTextContainerStyle = () => {
+    if (chatType === SIGNED) {
+      return [styles.containerSigned, styles.textContainer];
+    }
+    return [styles.containerAnon, styles.textContainer];
+  };
 
   return (
     <View style={styles.chatContainer}>
-      <View style={textContainerStyle}>
+      <View style={handleTextContainerStyle()}>
         {!isContinuous && (
           <View style={styles.chatTitleContainer}>
             <Text style={styles.userText}>{username}</Text>
@@ -171,7 +156,7 @@ const ChatItemMyTextV2 = ({
             <Text style={styles.timeText}>{time}</Text>
           </View>
         )}
-        <Text ref={messageRef} style={styles.text} onTextLayout={onTextLayout}>
+        <Text ref={messageRef} style={styles.text}>
           {`${message}`}
         </Text>
 

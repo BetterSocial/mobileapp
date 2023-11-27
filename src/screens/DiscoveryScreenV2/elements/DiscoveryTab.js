@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Dimensions, Keyboard, Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
 
 import {useRoute} from '@react-navigation/core';
 import PropTypes from 'prop-types';
@@ -16,7 +16,6 @@ const DiscoveryTab = ({onChangeScreen, selectedScreen = 0, tabs}) => {
   const route = useRoute();
 
   const handleTabOnClicked = React.useCallback((index) => {
-    Keyboard.dismiss();
     onChangeScreen(index);
   }, []);
 
@@ -34,6 +33,7 @@ const DiscoveryTab = ({onChangeScreen, selectedScreen = 0, tabs}) => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         howsHorizontalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
         horizontal={true}>
         {Object.keys(tabs).map((item, index) => {
           if (route.name === 'Followings' && item === 'News') return null;
