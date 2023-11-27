@@ -230,7 +230,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="TopicPageScreen"
-          component={withKeyboardWrapper(TopicPageScreen)}
+          component={TopicPageScreen}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
