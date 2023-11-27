@@ -11,8 +11,9 @@ import {requestExternalStoragePermission} from '../../../utils/permission';
 import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
 import ChannelList from '../../../database/schema/ChannelListSchema';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
-import {CHAT_ATOM} from '../../../hooks/core/constant';
+import {CHANNEL_GROUP, CHAT_ATOM} from '../../../hooks/core/constant';
 import StringConstant from '../../../utils/string/StringConstant';
+import {CHANNEL_TYPE_PERSONAL} from '../../../utils/constants';
 
 const chatAtom = atom({
   key: CHAT_ATOM,
@@ -32,7 +33,7 @@ const useGroupSetting = ({route}) => {
     getChatName(route.params.name, profile.myProfile.username) || 'Set Group Name'
   );
   const {localDb, refresh} = useLocalDatabaseHook();
-
+  const [loadingUpdate, setLoadingUpdate] = React.useState(false);
   const [countUser, setCountUser] = React.useState(0);
   const [changeName, setChangeName] = React.useState(false);
   const [changeImage, setChangeImage] = React.useState(false);
@@ -40,20 +41,29 @@ const useGroupSetting = ({route}) => {
   const [urlImage, setUrlImage] = React.useState(channel?.data?.image);
   const [isLoading, setIsLoading] = React.useState(false);
   const [chat, setChat] = useRecoilState(chatAtom);
+  const {selectedChannel} = chat;
   const updateName = (text) => {
     setGroupName(text);
     setChangeName(true);
   };
 
   React.useEffect(() => {
-    console.log({route}, 'lebron');
+    console.log({chat}, 'lebron');
     if (route?.params) {
       setParticipants(route?.params?.rawJson?.channel?.members);
       setCountUser(route?.params?.rawJson?.channel?.members?.length || 0);
     }
   }, [route]);
-  const submitData = async (withNavigation = true, withLoading = true) => {
+
+  React.useEffect(() => {
+    if (selectedChannel) {
+      setUrlImage(selectedChannel?.channelPicture);
+    }
+  }, [selectedChannel]);
+
+  const submitData = async (withNavigation = true) => {
     try {
+      setLoadingUpdate(true);
       const body = {
         channel_id: route?.params?.id,
         channel_name: groupName,
@@ -62,7 +72,12 @@ const useGroupSetting = ({route}) => {
       console.log({body}, 'bodyman');
       const response = await SignedMessageRepo.editChannel(body);
       let newChannel = response.data?.channel;
-      newChannel = {...chat.selectedChannel, ...newChannel};
+      newChannel = {
+        ...chat.selectedChannel,
+        ...newChannel,
+        channelType: handleChannelType(newChannel?.channelType),
+        channelPicture: body.channel_image
+      };
       ChannelList.updateChannelInfo(
         localDb,
         body.channel_id,
@@ -80,19 +95,24 @@ const useGroupSetting = ({route}) => {
       refresh('channelList');
       refresh('chat');
       refresh('channelInfo');
+      console.log('masukman', withNavigation);
+
       if (withNavigation) {
         navigation.goBack();
       }
+      setLoadingUpdate(false);
     } catch (e) {
+      setLoadingUpdate(false);
       SimpleToast.show(StringConstant.groupSettingUpdateFailed);
     }
   };
 
-  // const handleChannelType = (channelType) => {
-  //   if(channelType === 1) {
-  //     return
-  //   }
-  // };
+  const handleChannelType = (channelType) => {
+    if (channelType === 1) {
+      return CHANNEL_GROUP;
+    }
+    return channelType;
+  };
 
   const lounchGalery = async () => {
     const {success, message} = await requestExternalStoragePermission();
@@ -154,7 +174,8 @@ const useGroupSetting = ({route}) => {
     setUrlImage,
     isLoading,
     setIsLoading,
-    handleResLaunchGallery
+    handleResLaunchGallery,
+    loadingUpdate
   };
 };
 

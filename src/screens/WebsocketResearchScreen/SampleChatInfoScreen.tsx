@@ -36,6 +36,7 @@ import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {getChatName} from '../../utils/string/StringUtils';
 import {isContainUrl} from '../../utils/Utils';
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
+import {channelImageStyles} from '../../components/ChatList/elements/ChannelImage.style';
 
 export const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#fff', paddingBottom: 40},
@@ -212,7 +213,11 @@ const SampleChatInfoScreen = () => {
     if (channelInfo?.channelType === CHANNEL_GROUP) {
       return (
         <ChannelImage>
-          <ChannelImage.Big type={GROUP_INFO} image={channelInfo?.channelPicture} />
+          <ChannelImage.Big
+            style={channelImageStyles.containerImageGroupINfo}
+            type={GROUP_INFO}
+            image={channelInfo?.channelPicture}
+          />
         </ChannelImage>
       );
     }
