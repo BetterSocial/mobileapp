@@ -1,7 +1,7 @@
 import * as React from 'react';
 import _ from 'lodash';
 import SimpleToast from 'react-native-simple-toast';
-import {Animated, InteractionManager, Platform, StyleSheet} from 'react-native';
+import {Animated, Platform, StyleSheet} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 import {SafeAreaProvider, useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -32,10 +32,23 @@ import {getTopics, getUserTopic} from '../../service/topics';
 const styles = StyleSheet.create({
   parentContainer: {
     flex: 1
+  },
+  header: {
+    backgroundColor: 'lightblue',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 40,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 2
+  },
+  headerText: {
+    fontSize: 20,
+    fontWeight: 'bold'
   }
 });
-
-let lastDragY = 0;
 
 const TopicPageScreen = (props) => {
   const route = useRoute();
@@ -50,22 +63,6 @@ const TopicPageScreen = (props) => {
   const [topicDetail, setTopicDetail] = React.useState({});
   const [memberCount, setMemberCount] = React.useState(0);
   const [isHeaderHide, setIsHeaderHide] = React.useState(false);
-  const opacityHeaderAnimation = React.useRef(new Animated.Value(1)).current;
-  const coverPath = topicDetail?.cover_path || null;
-  const {top} = useSafeAreaInsets();
-  const topPosition = Platform.OS === 'ios' ? top : 0;
-
-  const animatedHeight = React.useRef(
-    new Animated.Value(
-      (coverPath
-        ? dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
-        : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT) +
-        dimen.size.TOPIC_FEED_HEADER_HEIGHT +
-        topPosition +
-        normalize(4)
-    )
-  ).current;
-
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   const feeds = feedsContext.topicFeeds
     ? feedsContext.topicFeeds.filter((feed) => feed?.topics?.includes(topicName))
@@ -74,13 +71,53 @@ const TopicPageScreen = (props) => {
   const [offset, setOffset] = React.useState(0);
   const [client] = React.useContext(Context).client;
   const refBlockComponent = React.useRef();
-  const interactionManagerRef = React.useRef(null);
-  const interactionManagerAnimatedRef = React.useRef(null);
+  const scrollY = React.useRef(new Animated.Value(0)).current;
   const {mappingColorFeed} = useCoreFeed();
   const {listRef} = useOnBottomNavigationTabPressHook(LIST_VIEW_TYPE.TIKTOK_SCROLL, onRefresh);
 
   const topicWithPrefix = route.params.id;
   const id = removePrefixTopic(topicWithPrefix);
+
+  const coverPath = topicDetail?.cover_path || null;
+  const {top} = useSafeAreaInsets();
+  const topPosition = Platform.OS === 'ios' ? top : 0;
+
+  const navigationHeight = coverPath
+    ? dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
+    : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT;
+  const headerShowHeight =
+    navigationHeight + dimen.size.TOPIC_FEED_HEADER_HEIGHT + topPosition + normalize(4);
+  const headerHideHeight = dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2 + topPosition;
+
+  const headerHeight = scrollY.interpolate({
+    inputRange: [0, headerHideHeight],
+    outputRange: [headerShowHeight, headerHideHeight],
+    extrapolate: 'clamp'
+  });
+
+  const opacityHeader = scrollY.interpolate({
+    inputRange: [0, 100],
+    outputRange: [1, 0],
+    extrapolate: 'clamp'
+  });
+
+  React.useEffect(() => {
+    const listener = scrollY.addListener(({value}) => {
+      if (value >= 0 && value <= headerHideHeight) {
+        setIsHeaderHide(false);
+      } else if (value >= headerHideHeight) {
+        setIsHeaderHide(true);
+      }
+    });
+
+    return () => {
+      scrollY.removeListener(listener);
+    };
+  }, [scrollY]);
+
+  const handleScroll = Animated.event([{nativeEvent: {contentOffset: {y: scrollY}}}], {
+    useNativeDriver: false
+  });
 
   const initialFetchTopicFeeds = async (cacheLength = 0) => {
     try {
@@ -324,76 +361,6 @@ const TopicPageScreen = (props) => {
     }
   };
 
-  const showHeaderAnimation = () => {
-    interactionManagerRef.current = InteractionManager.runAfterInteractions(() => {
-      Animated.timing(animatedHeight, {
-        toValue:
-          (coverPath
-            ? dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
-            : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT) +
-          dimen.size.TOPIC_FEED_HEADER_HEIGHT +
-          topPosition +
-          normalize(4),
-        duration: 100,
-        useNativeDriver: false
-      }).start();
-      Animated.timing(opacityHeaderAnimation, {
-        toValue: 1,
-        duration: 100,
-        useNativeDriver: false
-      }).start();
-    });
-    setIsHeaderHide(false);
-  };
-
-  React.useEffect(() => {
-    showHeaderAnimation();
-  }, [coverPath]);
-
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      showHeaderAnimation();
-    });
-
-    return () => {
-      if (interactionManagerRef.current) interactionManagerRef.current.cancel();
-      if (interactionManagerAnimatedRef.current) interactionManagerAnimatedRef.current.cancel();
-      unsubscribe();
-    };
-  }, [navigation, coverPath]);
-
-  const handleOnScrollBeginDrag = (event) => {
-    lastDragY = event.nativeEvent.contentOffset.y;
-  };
-
-  const handleScrollEvent = React.useCallback(
-    (event) => {
-      const {y} = event.nativeEvent.contentOffset;
-      const dy = y - lastDragY;
-      if (y <= 30) {
-        showHeaderAnimation();
-      } else if (
-        dimen.size.TOPIC_CURRENT_ITEM_HEIGHT &&
-        dy - 20 > dimen.size.TOPIC_CURRENT_ITEM_HEIGHT / 2
-      ) {
-        interactionManagerAnimatedRef.current = InteractionManager.runAfterInteractions(() => {
-          Animated.timing(animatedHeight, {
-            toValue: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2 + topPosition,
-            duration: 100,
-            useNativeDriver: false
-          }).start();
-          Animated.timing(opacityHeaderAnimation, {
-            toValue: 0,
-            duration: 100,
-            useNativeDriver: false
-          }).start();
-        });
-        setIsHeaderHide(true);
-      }
-    },
-    [animatedHeight, coverPath]
-  );
-
   const handleOnMemberPress = () => {
     const navigationParam = {
       topicName,
@@ -428,10 +395,10 @@ const TopicPageScreen = (props) => {
     <SafeAreaProvider forceInset={{top: 'always'}} style={styles.parentContainer}>
       <NavHeader
         domain={topicName}
-        animatedHeight={animatedHeight}
+        animatedHeight={headerHeight}
         onShareCommunity={onShareCommunity}
         isHeaderHide={isHeaderHide}
-        opacityHeaderAnimation={opacityHeaderAnimation}
+        opacityHeaderAnimation={opacityHeader}
         handleOnMemberPress={handleOnMemberPress}
         topicDetail={topicDetail}
         memberCount={memberCount}
@@ -448,8 +415,13 @@ const TopicPageScreen = (props) => {
         onRefresh={onRefresh}
         refreshing={loading}
         renderItem={renderItem}
-        onScroll={handleScrollEvent}
-        onScrollBeginDrag={handleOnScrollBeginDrag}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+        showSearchBar={true}
+        searchHeight={isHeaderHide ? headerHideHeight : headerShowHeight}
+        snap
+        contentOffset={{x: 0, y: topPosition}}
+        contentInsetAdjustmentBehavior={feeds?.length > 1 ? 'automatic' : 'never'}
       />
       <ButtonAddPostTopic topicName={topicName} onRefresh={onRefresh} />
       <BlockComponent
