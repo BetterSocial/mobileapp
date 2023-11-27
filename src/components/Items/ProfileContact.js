@@ -7,8 +7,6 @@ import {COLORS} from '../../utils/theme';
 import {normalize, normalizeFontSize} from '../../utils/fonts';
 import {colors} from '../../utils/colors';
 import dimen from '../../utils/dimen';
-import {ANONYMOUS_USER} from '../../hooks/core/constant';
-import {isContainUrl} from '../../utils/Utils';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
 
 const ProfileContact = ({
