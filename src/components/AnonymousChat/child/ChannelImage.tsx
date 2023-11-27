@@ -65,11 +65,10 @@ const ChannelImage = ({
   const isAnonymousCommenter = Boolean(anonPostNotificationUserInfo?.anon_user_info_emoji_code);
   const isAnonymousPostMaker = Boolean(postMaker?.anon_user_info_emoji_code);
   const isAnonymousOldPostMaker = Boolean(postMaker?.emoji_code);
+  const {anonProfileId} = useProfileHook();
 
   const renderChatMainImage = () => {
     const isAnonymousChannel = type === BaseChannelItemTypeProps.ANON_PM;
-
-    const {anonProfileId} = useProfileHook();
     const memberChat = postMaker?.members?.find((item: any) => item.user_id !== anonProfileId);
     const betterSocialMember = postMaker?.better_channel_member;
 
