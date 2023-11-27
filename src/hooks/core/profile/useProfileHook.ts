@@ -7,7 +7,9 @@ import {ProfileContext} from '../../../../types/context/profilecontext.types';
 
 const useProfileHook = () => {
   // TODO: Merge this with useUserAuthHook and delete this hook
-  const [profile] = React.useContext(Context).profile;
+  const contextValue = React.useContext(Context);
+  const profile = contextValue ? contextValue.profile : null;
+
   const profileContext = profile as ProfileContext;
 
   const [profileAtomState, setProfileId] = useRecoilState(profileAtom);
@@ -24,7 +26,7 @@ const useProfileHook = () => {
   };
 
   return {
-    profile: profileContext.myProfile,
+    profile: profileContext ? profileContext.myProfile : null,
     signedProfileId,
     anonProfileId,
     setProfileId,

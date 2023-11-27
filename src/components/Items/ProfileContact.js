@@ -9,6 +9,7 @@ import {colors} from '../../utils/colors';
 import dimen from '../../utils/dimen';
 import {ANONYMOUS_USER} from '../../hooks/core/constant';
 import {isContainUrl} from '../../utils/Utils';
+import useProfileHook from '../../hooks/core/profile/useProfileHook';
 
 const ProfileContact = ({
   photo,
@@ -22,8 +23,9 @@ const ProfileContact = ({
   disabled = false,
   from
 }) => {
+  const {anonProfileId, signedProfileId} = useProfileHook();
   const handleYouText = () => {
-    if (!from && (!isContainUrl(item?.user?.image) || item?.user?.name === ANONYMOUS_USER)) {
+    if (anonProfileId === item?.user_id || signedProfileId === item?.user_id) {
       return '(You)';
     }
     return '';
