@@ -13,6 +13,7 @@ import ChannelList from '../../../database/schema/ChannelListSchema';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import {CHANNEL_GROUP, CHAT_ATOM} from '../../../hooks/core/constant';
 import StringConstant from '../../../utils/string/StringConstant';
+import {uploadFile} from '../../../service/file';
 
 const chatAtom = atom({
   key: CHAT_ATOM,
@@ -67,7 +68,12 @@ const useGroupSetting = ({route}) => {
         channel_name: groupName
       };
       if (urlImage) {
-        body = {...body, channel_image: urlImage};
+        try {
+          const res = await uploadFile(`data:image/jpeg;base64,${base64Profile}`);
+          body = {...body, channel_image: res.data.url};
+        } catch (e) {
+          console.log(e, 'error upload');
+        }
       }
       const response = await SignedMessageRepo.editChannel(body);
       let newChannel = response.data?.channel;
@@ -75,14 +81,13 @@ const useGroupSetting = ({route}) => {
         ...chat.selectedChannel,
         ...newChannel,
         channelType: handleChannelType(newChannel?.channelType),
-        channelPicture: body.channel_image
+        channelPicture: body?.channel_image
       };
       ChannelList.updateChannelInfo(
         localDb,
         body.channel_id,
         body.channel_name,
-        body.channel_image,
-        response
+        body.channel_image
       );
       if (newChannel) {
         setChat({
@@ -90,9 +95,10 @@ const useGroupSetting = ({route}) => {
           selectedChannel: newChannel
         });
       }
-      refresh('channelList');
-      refresh('chat');
       refresh('channelInfo');
+      refresh('chat');
+
+      refresh('channelList');
 
       if (withNavigation) {
         navigation.goBack();

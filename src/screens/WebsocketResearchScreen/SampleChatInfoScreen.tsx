@@ -216,7 +216,6 @@ const SampleChatInfoScreen = () => {
     (item: any) => item.user_id !== anonProfileId
   );
   const betterSocialMember = channelInfo?.rawJson?.better_channel_member;
-
   const showImageProfile = (): React.ReactNode => {
     if (channelInfo?.channelType === CHANNEL_GROUP) {
       return (
