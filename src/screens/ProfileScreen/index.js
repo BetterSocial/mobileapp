@@ -72,7 +72,6 @@ import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import ShadowFloatingButtons from '../../components/Button/ShadowFloatingButtons';
 import ImageCompressionUtils from '../../utils/image/compress';
-import {KarmaScore} from './elements/KarmaScore';
 
 const {width} = Dimensions.get('screen');
 
@@ -98,20 +97,12 @@ const Header = (props) => {
         headerHeightRef.current = headerHeightLayout;
       }}>
       <View style={styles.content}>
-        <View style={{flexDirection: 'row', alignContent: 'center', alignItems: 'center'}}>
+        <View style={{flexDirection: 'row'}}>
           <ProfilePicture
             onImageContainerClick={changeImage}
             profilePicPath={dataMain.profile_pic_path}
-            karmaScore={Math.floor(dataMain.karma_score)}
           />
-          <View
-            style={{
-              flexDirection: 'column',
-              paddingHorizontal: 14,
-              paddingVertical: 5,
-              justifyContent: 'center'
-            }}>
-            <KarmaScore score={Math.floor(dataMain.karma_score)} />
+          <View style={{marginLeft: 20}}>
             <FollowInfoRow
               follower={dataMain.follower_symbol}
               following={dataMain.following_symbol}
@@ -745,8 +736,7 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: 'column',
     paddingHorizontal: 20,
-    backgroundColor: colors.white,
-    marginTop: 14
+    backgroundColor: colors.white
   },
   dummyItem: (heightItem) => ({
     height: heightItem,
