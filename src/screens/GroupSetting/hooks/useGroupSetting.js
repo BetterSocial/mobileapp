@@ -47,7 +47,6 @@ const useGroupSetting = ({route}) => {
   };
 
   React.useEffect(() => {
-    console.log({chat}, 'lebron');
     if (route?.params) {
       setParticipants(route?.params?.rawJson?.channel?.members);
       setCountUser(route?.params?.rawJson?.channel?.members?.length || 0);
@@ -70,7 +69,6 @@ const useGroupSetting = ({route}) => {
       if (urlImage) {
         body = {...body, channel_image: urlImage};
       }
-      console.log({body}, 'bodyman');
       const response = await SignedMessageRepo.editChannel(body);
       let newChannel = response.data?.channel;
       newChannel = {
@@ -86,7 +84,6 @@ const useGroupSetting = ({route}) => {
         body.channel_image,
         response
       );
-      console.log({newChannel}, 'nehiks');
       if (newChannel) {
         setChat({
           ...chat,
@@ -96,7 +93,6 @@ const useGroupSetting = ({route}) => {
       refresh('channelList');
       refresh('chat');
       refresh('channelInfo');
-      console.log('masukman', withNavigation);
 
       if (withNavigation) {
         navigation.goBack();

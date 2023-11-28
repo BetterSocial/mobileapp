@@ -1,9 +1,11 @@
+import React from 'react';
 import * as launchGallery from 'react-native-image-picker';
 import {act, renderHook} from '@testing-library/react-hooks';
 
 import * as servicePermission from '../../src/utils/permission';
 import useGroupSetting from '../../src/screens/GroupSetting/hooks/useGroupSetting';
 import {Context} from '../../src/context/Store';
+import {Linking} from 'react-native';
 
 jest.mock('react-native-permissions', () => require('react-native-permissions/mock'));
 
@@ -208,10 +210,10 @@ describe('use groupSetting should run correctly', () => {
         username: 'agita'
       }
     };
-    const spyLog = jest.spyOn(console, 'log');
+    const spySetting = jest.spyOn(Linking, 'openSettings');
     const {result} = renderHook(() => useGroupSetting({navigation, route}), {wrapper});
     await result.current.lounchGalery();
-    expect(spyLog).toHaveBeenCalled();
+    expect(spySetting).toHaveBeenCalled();
   });
 
   it('renderHeaderSubtitleText should return correctly', async () => {
