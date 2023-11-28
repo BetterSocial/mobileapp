@@ -107,7 +107,9 @@ const SignedChatScreen = () => {
           keyExtractor={(item, index) => item?.id || index.toString()}
           renderItem={renderChatItem}
         />
-      ) : null}
+      ) : (
+        <View style={styles.chatContainer} />
+      )}
       <View style={styles.inputContainer}>
         <InputMessageV2
           onSendButtonClicked={sendChat}

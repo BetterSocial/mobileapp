@@ -138,7 +138,9 @@ const SampleChatScreen = () => {
             }
             renderItem={renderChatItem}
           />
-        ) : null}
+        ) : (
+          <View style={styles.chatContainer} />
+        )}
         <View style={styles.inputContainer}>
           <InputMessageV2
             onSendButtonClicked={sendChat}
