@@ -205,7 +205,7 @@ const SampleChatInfoScreen = () => {
   const {signedProfileId} = useUserAuthHook();
   const [profile] = (React.useContext(Context) as unknown as any).profile;
   const {params}: any = useRoute();
-  const isEditable = channelInfo?.rawJson?.channelType === 1;
+  const isEditable = channelInfo?.rawJson?.channel?.channelType === 1;
   const ANONYMOUS_USER = 'AnonymousUser';
   const {anon_user_info_color_code, anon_user_info_emoji_code} =
     channelInfo?.rawJson?.channel || {};

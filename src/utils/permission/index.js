@@ -94,6 +94,16 @@ export const requestExternalStoragePermission = async () => {
         success: true
       };
     }
+    if (
+      requestResult['android.permission.READ_EXTERNAL_STORAGE'] === 'unavailable' ||
+      requestResult['ios.permission.PHOTO_LIBRARY'] === 'unavailable' ||
+      requestResult['android.permission.READ_MEDIA_IMAGES'] === 'unavailable'
+    ) {
+      return {
+        message: StringConstant.externalStoragePermissionUnavailable,
+        success: false
+      };
+    }
     return {
       message: StringConstant.externalStoragePermissionDenied,
       success: false

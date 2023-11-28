@@ -13,7 +13,6 @@ import ChannelList from '../../../database/schema/ChannelListSchema';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import {CHANNEL_GROUP, CHAT_ATOM} from '../../../hooks/core/constant';
 import StringConstant from '../../../utils/string/StringConstant';
-import {CHANNEL_TYPE_PERSONAL} from '../../../utils/constants';
 
 const chatAtom = atom({
   key: CHAT_ATOM,
@@ -64,11 +63,13 @@ const useGroupSetting = ({route}) => {
   const submitData = async (withNavigation = true) => {
     try {
       setLoadingUpdate(true);
-      const body = {
+      let body = {
         channel_id: route?.params?.id,
-        channel_name: groupName,
-        channel_image: urlImage
+        channel_name: groupName
       };
+      if (urlImage) {
+        body = {...body, channel_image: urlImage};
+      }
       console.log({body}, 'bodyman');
       const response = await SignedMessageRepo.editChannel(body);
       let newChannel = response.data?.channel;
@@ -115,7 +116,7 @@ const useGroupSetting = ({route}) => {
   };
 
   const lounchGalery = async () => {
-    const {success, message} = await requestExternalStoragePermission();
+    const {success} = await requestExternalStoragePermission();
     if (success) {
       launchImageLibrary(
         {
@@ -130,7 +131,6 @@ const useGroupSetting = ({route}) => {
       );
     } else {
       Linking.openSettings();
-      SimpleToast.show(message, SimpleToast.SHORT);
     }
   };
 
