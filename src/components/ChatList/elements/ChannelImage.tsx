@@ -41,7 +41,13 @@ const Big: React.FC<ChannelImageMainProps> = ({type, image, style}) => {
 
   if (type === CHANNEL_GROUP) {
     return (
-      <View style={[styles.containerImage, styles.containerDefaultImage, styles.containerDarkBlue]}>
+      <View
+        style={[
+          styles.containerImage,
+          styles.containerDefaultImage,
+          styles.containerDarkBlue,
+          style
+        ]}>
         <FastImage
           source={GroupIcon}
           resizeMode={FastImage.resizeMode.contain}

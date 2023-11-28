@@ -5,14 +5,17 @@
 import * as React from 'react';
 import {FlatList, View} from 'react-native';
 
-import AnonymousInputMessage from '../../components/Chat/AnonymousInputMessage';
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
-import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
+import InputMessageV2 from '../../components/Chat/InputMessageV2';
 import {Context} from '../../context';
-import {SIGNED} from '../../hooks/core/constant';
-import {getChatName} from '../../utils/string/StringUtils';
 import {setChannel} from '../../context/actions/setChannel';
+import useMoveChatTypeHook from '../../hooks/core/chat/useMoveChatTypeHook';
+import {SIGNED} from '../../hooks/core/constant';
+import useProfileHook from '../../hooks/core/profile/useProfileHook';
+import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
+import {getChatName} from '../../utils/string/StringUtils';
+import Loading from '../Loading';
 import {styles} from './SampleChatScreen';
 
 const SignedChatScreen = () => {
@@ -22,13 +25,22 @@ const SignedChatScreen = () => {
     goBackFromChatScreen,
     goToChatInfoScreen,
     sendChat,
-    updateChatContinuity
+    updateChatContinuity,
+    loadingChat
   } = useChatScreenHook(SIGNED);
 
   const flatlistRef = React.useRef<FlatList>();
+  const [loading, setLoading] = React.useState(false);
   const [, dispatchChannel] = (React.useContext(Context) as unknown as any).channel;
   const [profile] = (React.useContext(Context) as unknown as any).profile;
   const updatedChats = updateChatContinuity(chats);
+  const {signedProfileId} = useProfileHook();
+
+  const {moveToAnonymousChannel} = useMoveChatTypeHook();
+
+  const memberChat = selectedChannel?.rawJson?.channel?.members?.find(
+    (item: any) => item.user_id !== signedProfileId
+  );
 
   const renderChatItem = React.useCallback(({item, index}) => {
     return <BaseChatItem type={SIGNED} item={item} index={index} />;
@@ -40,6 +52,20 @@ const SignedChatScreen = () => {
 
   const scrollToEnd = () => {
     flatlistRef.current?.scrollToEnd();
+  };
+
+  const moveChatToAnon = async () => {
+    try {
+      setLoading(true);
+      await moveToAnonymousChannel({
+        oldChannelId: selectedChannel?.id,
+        targetUserId: memberChat.user_id
+      });
+    } catch (e) {
+      console.log('error moving chat to signed channel', e);
+    } finally {
+      setLoading(false);
+    }
   };
 
   React.useEffect(() => {
@@ -69,21 +95,30 @@ const SignedChatScreen = () => {
         />
       ) : null}
 
-      <FlatList
-        contentContainerStyle={styles.contentContainerStyle}
-        style={styles.chatContainer}
-        data={updatedChats}
-        inverted={true}
-        initialNumToRender={20}
-        alwaysBounceVertical={false}
-        bounces={false}
-        onLayout={scrollToEnd}
-        keyExtractor={(item, index) => item?.id || index.toString()}
-        renderItem={renderChatItem}
-      />
+      {!loadingChat ? (
+        <FlatList
+          contentContainerStyle={styles.contentContainerStyle}
+          style={styles.chatContainer}
+          data={updatedChats}
+          inverted={true}
+          initialNumToRender={10}
+          alwaysBounceVertical={false}
+          bounces={false}
+          onLayout={scrollToEnd}
+          keyExtractor={(item, index) => item?.id || index.toString()}
+          renderItem={renderChatItem}
+        />
+      ) : null}
       <View style={styles.inputContainer}>
-        <AnonymousInputMessage onSendButtonClicked={sendChat} type={SIGNED} />
+        <InputMessageV2
+          onSendButtonClicked={sendChat}
+          type={SIGNED}
+          username={selectedChannel?.name}
+          profileImage={profile?.myProfile?.profile_pic_path}
+          onToggleConfirm={moveChatToAnon}
+        />
       </View>
+      <Loading visible={loading} />
     </View>
   );
 };

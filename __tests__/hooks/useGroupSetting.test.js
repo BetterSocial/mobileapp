@@ -2,10 +2,10 @@ import React from 'react';
 import * as launchGallery from 'react-native-image-picker';
 import {act, renderHook} from '@testing-library/react-hooks';
 
+import {Linking} from 'react-native';
 import * as servicePermission from '../../src/utils/permission';
 import useGroupSetting from '../../src/screens/GroupSetting/hooks/useGroupSetting';
 import {Context} from '../../src/context/Store';
-import {Linking} from 'react-native';
 
 jest.mock('react-native-permissions', () => require('react-native-permissions/mock'));
 
@@ -16,6 +16,12 @@ jest.mock('react-native-image-picker', () => ({
 jest.mock('react-native-simple-toast', () => ({
   show: jest.fn()
 }));
+
+jest.mock('react-native-compressor', () => {
+  return {
+    compress: jest.fn(() => 'file:///imag.jpg')
+  };
+});
 
 describe('use groupSetting should run correctly', () => {
   const mockDataEdit = jest.fn();

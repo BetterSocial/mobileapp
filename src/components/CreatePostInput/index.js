@@ -45,7 +45,7 @@ const CreatePostInput = ({
   React.useEffect(() => {
     if (inputRef?.current) {
       setTimeout(() => {
-        inputRef.current.focus();
+        // inputRef.current.focus();
       }, 500);
     }
   }, []);

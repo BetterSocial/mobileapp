@@ -37,6 +37,7 @@ import {getChatName} from '../../utils/string/StringUtils';
 import {isContainUrl} from '../../utils/Utils';
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
 import {channelImageStyles} from '../../components/ChatList/elements/ChannelImage.style';
+import useProfileHook from '../../hooks/core/profile/useProfileHook';
 
 export const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#fff', paddingBottom: 40},
@@ -209,6 +210,12 @@ const SampleChatInfoScreen = () => {
   const ANONYMOUS_USER = 'AnonymousUser';
   const {anon_user_info_color_code, anon_user_info_emoji_code} =
     channelInfo?.rawJson?.channel || {};
+  const {anonProfileId} = useProfileHook();
+  const memberChat = channelInfo?.rawJson?.channel?.members?.find(
+    (item: any) => item.user_id !== anonProfileId
+  );
+  const betterSocialMember = channelInfo?.rawJson?.better_channel_member;
+
   const showImageProfile = (): React.ReactNode => {
     if (channelInfo?.channelType === CHANNEL_GROUP) {
       return (
@@ -243,11 +250,20 @@ const SampleChatInfoScreen = () => {
     if (!isContainUrl(item?.user?.image) || item?.user?.name === ANONYMOUS_USER) {
       return (
         <View style={styles.mr7}>
-          <AnonymousIcon
-            color={anon_user_info_color_code}
-            emojiCode={anon_user_info_emoji_code}
-            size={normalize(48)}
-          />
+          {betterSocialMember &&
+          item.user_id === betterSocialMember[memberChat?.user_id]?.user_id ? (
+            <AnonymousIcon
+              color={betterSocialMember[memberChat?.user_id]?.anon_user_info_color_code}
+              emojiCode={betterSocialMember[memberChat?.user_id]?.anon_user_info_emoji_code}
+              size={normalize(48)}
+            />
+          ) : (
+            <AnonymousIcon
+              color={anon_user_info_color_code}
+              emojiCode={anon_user_info_emoji_code}
+              size={normalize(48)}
+            />
+          )}
         </View>
       );
     }
@@ -271,7 +287,7 @@ const SampleChatInfoScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar translucent={false} />
+      <StatusBar barStyle={'dark-content'} translucent={false} />
       {isLoadingMembers || loadingChannelInfo ? null : (
         <>
           <AnonymousChatInfoHeader
