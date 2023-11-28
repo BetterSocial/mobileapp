@@ -180,10 +180,11 @@ export const styles = StyleSheet.create({
   },
   editBtn: {
     padding: dimen.normalizeDimen(10),
-    marginRight: dimen.normalizeDimen(10)
+    marginRight: dimen.normalizeDimen(10),
+    width: '15%'
   },
   chatNameContainer: {
-    width: '90%'
+    width: '85%'
   }
 });
 
