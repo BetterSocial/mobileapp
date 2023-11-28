@@ -9,7 +9,6 @@ import {
   View
 } from 'react-native';
 
-import {AnimatedCircularProgress} from 'react-native-circular-progress';
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 import TopicsProfilePictureEmptyState from '../../../assets/icon/TopicsProfilePictureEmptyState';
 import {colors} from '../../../utils/colors';
@@ -80,43 +79,6 @@ const DomainList = (props) => {
       </TouchableNativeFeedback>
     );
   };
-  const renderProfilePicture = () => {
-    if (item.karmaScore) {
-      return (
-        <AnimatedCircularProgress
-          size={54}
-          width={3}
-          fill={item.karmaScore}
-          tintColor="#ACD91A"
-          backgroundColor="#E8EBED"
-          tintTransparency={true}
-          rotation={360}>
-          {() => (
-            <Image
-              testID="images"
-              source={{
-                uri: item.image
-              }}
-              style={styles.profilepicture}
-              width={48}
-              height={48}
-            />
-          )}
-        </AnimatedCircularProgress>
-      );
-    }
-    return (
-      <Image
-        testID="images"
-        source={{
-          uri: item.image
-        }}
-        style={styles.profilepicture}
-        width={48}
-        height={48}
-      />
-    );
-  };
 
   return (
     <View style={styles.container}>
@@ -128,7 +90,15 @@ const DomainList = (props) => {
           {!isHashtag ? (
             <React.Fragment>
               {item.image && typeof item.image === 'string' && item.image.length > 0 ? (
-                renderProfilePicture()
+                <Image
+                  testID="images"
+                  source={{
+                    uri: item.image
+                  }}
+                  style={styles.profilepicture}
+                  width={48}
+                  height={48}
+                />
               ) : DefaultImage ? (
                 <TopicsProfilePictureEmptyState />
               ) : (
