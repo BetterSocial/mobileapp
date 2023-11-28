@@ -70,7 +70,6 @@ const SignedChatScreen = () => {
 
   React.useEffect(() => {
     if (selectedChannel) {
-      console.log({selectedChannel}, 'selected channel');
       setChannel(selectedChannel, dispatchChannel);
     }
   }, [selectedChannel]);

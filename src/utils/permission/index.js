@@ -7,7 +7,6 @@ export const checkCameraPermission = async () => {
   const result = await check(
     Platform.OS === 'android' ? PERMISSIONS.ANDROID.CAMERA : PERMISSIONS.IOS.CAMERA
   );
-  console.log({result}, 'lapak');
   let message = '';
   let success = false;
   switch (result) {
