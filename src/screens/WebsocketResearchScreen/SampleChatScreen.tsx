@@ -2,7 +2,7 @@
 /* eslint-disable import/no-unresolved */
 
 import * as React from 'react';
-import {Dimensions, FlatList, KeyboardAvoidingView, Platform, StyleSheet, View} from 'react-native';
+import {Dimensions, FlatList, StyleSheet, View} from 'react-native';
 
 import AnonymousInputMessage from '../../components/Chat/AnonymousInputMessage';
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
@@ -10,6 +10,7 @@ import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
 import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
 import {ANONYMOUS} from '../../hooks/core/constant';
 import {colors} from '../../utils/colors';
+import dimen from '../../utils/dimen';
 
 const {height} = Dimensions.get('window');
 
@@ -25,8 +26,7 @@ export const styles = StyleSheet.create({
   },
   chatContainer: {
     display: 'flex',
-    height: '100%',
-    marginBottom: 72
+    height: '100%'
   },
   inputContainer: {
     backgroundColor: colors.white,
@@ -40,6 +40,10 @@ export const styles = StyleSheet.create({
     paddingBottom: 16,
     borderTopColor: colors.lightgrey,
     borderTopWidth: 1
+  },
+  contentContainerStyle: {
+    paddingTop: dimen.normalizeDimen(60),
+    backgroundColor: 'transparent'
   }
 });
 
@@ -65,10 +69,7 @@ const SampleChatScreen = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.keyboardAvoidingView}
-      keyboardVerticalOffset={-500}>
+    <View style={styles.keyboardAvoidingView}>
       {selectedChannel ? (
         <ChatDetailHeader
           onAvatarPress={goToChatInfoScreen}
@@ -80,7 +81,7 @@ const SampleChatScreen = () => {
         />
       ) : null}
       <FlatList
-        contentContainerStyle={{paddingBottom: 20}}
+        contentContainerStyle={styles.contentContainerStyle}
         style={styles.chatContainer}
         data={updatedChats}
         inverted={true}
@@ -94,7 +95,7 @@ const SampleChatScreen = () => {
       <View style={styles.inputContainer}>
         <AnonymousInputMessage onSendButtonClicked={sendChat} type={ANONYMOUS} />
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 
