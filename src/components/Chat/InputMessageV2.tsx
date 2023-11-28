@@ -147,8 +147,8 @@ const InputMessageV2 = ({
     Alert.alert(
       '',
       type === 'ANONYMOUS'
-        ? `Switch back to regular chat? Message ${username} using your username.`
-        : `Switch to anonymous chat? Message ${username} anonymously instead.`,
+        ? `Switch back to regular chat?\nMessage ${username} using your username.`
+        : 'Switch to anonymous chat?\nMessage this user anonymously instead.',
       [
         {
           text: 'Cancel'
