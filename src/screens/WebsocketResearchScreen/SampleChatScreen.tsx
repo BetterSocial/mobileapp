@@ -55,7 +55,8 @@ const SampleChatScreen = () => {
     goBackFromChatScreen,
     goToChatInfoScreen,
     sendChat,
-    updateChatContinuity
+    updateChatContinuity,
+    loadingChat
   } = useChatScreenHook(ANONYMOUS);
 
   const updatedChats = updateChatContinuity(chats);
@@ -80,18 +81,20 @@ const SampleChatScreen = () => {
           type={ANONYMOUS}
         />
       ) : null}
-      <FlatList
-        contentContainerStyle={styles.contentContainerStyle}
-        style={styles.chatContainer}
-        data={updatedChats}
-        inverted={true}
-        initialNumToRender={20}
-        alwaysBounceVertical={false}
-        bounces={false}
-        onLayout={scrollToEnd}
-        keyExtractor={(item, index) => item?.id || index.toString()}
-        renderItem={renderChatItem}
-      />
+      {!loadingChat ? (
+        <FlatList
+          contentContainerStyle={styles.contentContainerStyle}
+          style={styles.chatContainer}
+          data={updatedChats}
+          inverted={true}
+          initialNumToRender={20}
+          alwaysBounceVertical={false}
+          bounces={false}
+          onLayout={scrollToEnd}
+          keyExtractor={(item, index) => item?.id || index.toString()}
+          renderItem={renderChatItem}
+        />
+      ) : null}
       <View style={styles.inputContainer}>
         <AnonymousInputMessage onSendButtonClicked={sendChat} type={ANONYMOUS} />
       </View>
