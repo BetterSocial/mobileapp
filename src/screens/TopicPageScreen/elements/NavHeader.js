@@ -119,10 +119,9 @@ const NavHeader = (props) => {
         source={{uri: coverPath}}
         style={[styles.navContainer(isHeaderHide, topPosition), heightWithCoverImage()]}
         imageStyle={{opacity: isHeaderHide ? 0 : 1}}>
-        <Animated.Image
-          source={{uri: coverPath}}
-          style={[styles.headerImage(opacityHeaderAnimation), heightWithCoverImage()]}
-        />
+        <Animated.View style={styles.headerImage(opacityHeaderAnimation)}>
+          <FastImage source={{uri: coverPath}} style={heightWithCoverImage()} />
+        </Animated.View>
         <TouchableOpacity onPress={() => backScreen()} style={styles.backbutton}>
           {coverPath && !isHeaderHide ? (
             <MemoIcArrowBackCircle width={normalize(32)} height={normalize(32)} />

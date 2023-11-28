@@ -92,7 +92,6 @@ end
         upload_to_play_store_internal_testing
         upload_aab_to_firebase_distribution(release_notes: options[:release_notes])
       else
-      puts 'testing'
         assemble(build_type: options[:build_type])
         upload_apk_to_firebase_distribution(release_notes: options[:release_notes], build_type: options[:build_type])
       end
