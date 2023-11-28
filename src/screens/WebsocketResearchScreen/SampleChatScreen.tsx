@@ -55,8 +55,7 @@ const SampleChatScreen = () => {
     goBackFromChatScreen,
     goToChatInfoScreen,
     sendChat,
-    updateChatContinuity,
-    loadingChat
+    updateChatContinuity
   } = useChatScreenHook(ANONYMOUS);
 
   const updatedChats = updateChatContinuity(chats);
