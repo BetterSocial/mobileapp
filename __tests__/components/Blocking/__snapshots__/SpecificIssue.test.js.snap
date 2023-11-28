@@ -134,7 +134,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
           rejectResponderTermination={true}
           style={
             Object {
-              "backgroundColor": "#FFFFFF",
+              "backgroundColor": "#F5F6F7",
               "borderRadius": 8,
               "color": "#69707C",
               "fontFamily": "Inter-Regular",

@@ -73,6 +73,8 @@ const SampleChatScreen = () => {
     return <BaseChatItem type={ANONYMOUS} item={item} index={index} />;
   }, []);
 
+  const betterSocialMember = selectedChannel?.rawJson?.better_channel_member;
+
   const scrollToEnd = () => {
     flatlistRef.current?.scrollToEnd();
   };
@@ -104,6 +106,12 @@ const SampleChatScreen = () => {
             avatar={selectedChannel?.channelPicture}
             user={selectedChannel?.name}
             type={ANONYMOUS}
+            anon_user_info_emoji_code={
+              betterSocialMember && betterSocialMember[memberChat?.user_id]?.anon_user_info_emoji_code
+            }
+            anon_user_info_color_code={
+              betterSocialMember && betterSocialMember[memberChat?.user_id]?.anon_user_info_color_code
+            }
           />
         ) : null}
         <FlatList
@@ -120,7 +128,7 @@ const SampleChatScreen = () => {
             ownerChat ? (
               <BaseSystemChat
                 componentType="SINGLE"
-                messageSingle={`You’re anonymously messaging ${selectedChannel?.name}. They are still able to block you`}
+                messageSingle={`You’re anonymously messaging ${selectedChannel?.name}.\nThey are still able to block you`}
               />
             ) : null
           }
