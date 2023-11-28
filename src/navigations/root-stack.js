@@ -190,7 +190,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="Settings"
-          component={withKeyboardWrapper(Settings)}
+          component={Settings}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
@@ -350,7 +350,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="SampleChatInfoScreen"
-          component={withKeyboardWrapper(SampleChatInfoScreen)}
+          component={SampleChatInfoScreen}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen

@@ -54,7 +54,8 @@ const SampleChatScreen = () => {
     goBackFromChatScreen,
     goToChatInfoScreen,
     sendChat,
-    updateChatContinuity
+    updateChatContinuity,
+    loadingChat
   } = useChatScreenHook(ANONYMOUS);
 
   const {moveToSignedChannel} = useMoveChatTypeHook();
@@ -107,33 +108,37 @@ const SampleChatScreen = () => {
             user={selectedChannel?.name}
             type={ANONYMOUS}
             anon_user_info_emoji_code={
-              betterSocialMember && betterSocialMember[memberChat?.user_id]?.anon_user_info_emoji_code
+              betterSocialMember &&
+              betterSocialMember[memberChat?.user_id]?.anon_user_info_emoji_code
             }
             anon_user_info_color_code={
-              betterSocialMember && betterSocialMember[memberChat?.user_id]?.anon_user_info_color_code
+              betterSocialMember &&
+              betterSocialMember[memberChat?.user_id]?.anon_user_info_color_code
             }
           />
         ) : null}
-        <FlatList
-          contentContainerStyle={{paddingBottom: 20}}
-          style={styles.chatContainer}
-          data={updatedChats}
-          inverted={true}
-          initialNumToRender={20}
-          alwaysBounceVertical={false}
-          bounces={false}
-          onLayout={scrollToEnd}
-          keyExtractor={(item, index) => item?.id || index.toString()}
-          ListFooterComponent={
-            ownerChat ? (
-              <BaseSystemChat
-                componentType="SINGLE"
-                messageSingle={`You’re anonymously messaging ${selectedChannel?.name}.\nThey are still able to block you`}
-              />
-            ) : null
-          }
-          renderItem={renderChatItem}
-        />
+        {!loadingChat ? (
+          <FlatList
+            contentContainerStyle={{paddingBottom: 20}}
+            style={styles.chatContainer}
+            data={updatedChats}
+            inverted={true}
+            initialNumToRender={20}
+            alwaysBounceVertical={false}
+            bounces={false}
+            onLayout={scrollToEnd}
+            keyExtractor={(item, index) => item?.id || index.toString()}
+            ListFooterComponent={
+              ownerChat ? (
+                <BaseSystemChat
+                  componentType="SINGLE"
+                  messageSingle={`You’re anonymously messaging ${selectedChannel?.name}. They are still able to block you`}
+                />
+              ) : null
+            }
+            renderItem={renderChatItem}
+          />
+        ) : null}
         <View style={styles.inputContainer}>
           <InputMessageV2
             onSendButtonClicked={sendChat}
