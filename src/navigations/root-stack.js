@@ -160,12 +160,12 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="TermsAndCondition"
-          component={withKeyboardWrapper(TermsAndCondition)}
+          component={TermsAndCondition}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="PrivacyPolicies"
-          component={withKeyboardWrapper(PrivacyPolicies)}
+          component={PrivacyPolicies}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
@@ -330,7 +330,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="SampleChatInfoScreen"
-          component={SampleChatInfoScreen}
+          component={withKeyboardWrapper(SampleChatInfoScreen)}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen

@@ -81,20 +81,19 @@ const SampleChatScreen = () => {
           type={ANONYMOUS}
         />
       ) : null}
-      {!loadingChat ? (
-        <FlatList
-          contentContainerStyle={styles.contentContainerStyle}
-          style={styles.chatContainer}
-          data={updatedChats}
-          inverted={true}
-          initialNumToRender={20}
-          alwaysBounceVertical={false}
-          bounces={false}
-          onLayout={scrollToEnd}
-          keyExtractor={(item, index) => item?.id || index.toString()}
-          renderItem={renderChatItem}
-        />
-      ) : null}
+      <FlatList
+        contentContainerStyle={styles.contentContainerStyle}
+        style={styles.chatContainer}
+        data={updatedChats}
+        inverted={true}
+        initialNumToRender={20}
+        alwaysBounceVertical={false}
+        bounces={false}
+        onLayout={scrollToEnd}
+        keyExtractor={(item, index) => item?.id || index.toString()}
+        renderItem={renderChatItem}
+      />
+
       <View style={styles.inputContainer}>
         <AnonymousInputMessage onSendButtonClicked={sendChat} type={ANONYMOUS} />
       </View>

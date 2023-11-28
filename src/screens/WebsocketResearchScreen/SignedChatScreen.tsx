@@ -22,8 +22,7 @@ const SignedChatScreen = () => {
     goBackFromChatScreen,
     goToChatInfoScreen,
     sendChat,
-    updateChatContinuity,
-    loadingChat
+    updateChatContinuity
   } = useChatScreenHook(SIGNED);
 
   const flatlistRef = React.useRef<FlatList>();
@@ -69,20 +68,19 @@ const SignedChatScreen = () => {
         />
       ) : null}
 
-      {!loadingChat ? (
-        <FlatList
-          contentContainerStyle={styles.contentContainerStyle}
-          style={styles.chatContainer}
-          data={updatedChats}
-          inverted={true}
-          initialNumToRender={10}
-          alwaysBounceVertical={false}
-          bounces={false}
-          onLayout={scrollToEnd}
-          keyExtractor={(item, index) => item?.id || index.toString()}
-          renderItem={renderChatItem}
-        />
-      ) : null}
+      <FlatList
+        contentContainerStyle={styles.contentContainerStyle}
+        style={styles.chatContainer}
+        data={updatedChats}
+        inverted={true}
+        initialNumToRender={10}
+        alwaysBounceVertical={false}
+        bounces={false}
+        onLayout={scrollToEnd}
+        keyExtractor={(item, index) => item?.id || index.toString()}
+        renderItem={renderChatItem}
+      />
+
       <View style={styles.inputContainer}>
         <AnonymousInputMessage onSendButtonClicked={sendChat} type={SIGNED} />
       </View>
