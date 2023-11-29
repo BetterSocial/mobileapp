@@ -17,6 +17,12 @@ jest.mock('react-native-simple-toast', () => ({
   show: jest.fn()
 }));
 
+jest.mock('react-native-compressor', () => ({
+  Image: {
+    compressor: jest.fn()
+  }
+}));
+
 describe('use groupSetting should run correctly', () => {
   const mockDataEdit = jest.fn();
   const mockContext = {
