@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Animated, Platform, Pressable, StyleSheet, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-
+import PropTypes from 'prop-types';
 import MemoIc_search from '../../assets/icons/Ic_search';
 import StringConstant from '../../utils/string/StringConstant';
 import {COLORS, FONTS, SIZES} from '../../utils/theme';
@@ -36,6 +36,10 @@ const Search = ({animatedValue}) => {
       </Pressable>
     </Animated.View>
   );
+};
+
+Search.propTypes = {
+  animatedValue: PropTypes.number
 };
 
 const styles = StyleSheet.create({
