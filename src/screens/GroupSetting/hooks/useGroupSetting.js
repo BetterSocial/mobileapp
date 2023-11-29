@@ -66,8 +66,9 @@ const useGroupSetting = ({route}) => {
       if (urlImage) {
         try {
           const res = await uploadPhotoImage(urlImage);
-          console.log({res}, 'nana');
-          body = {...body, channel_image: res.data.url};
+          if (res) {
+            body = {...body, channel_image: res.data.url};
+          }
         } catch (e) {
           console.log(e, 'error upload');
         }

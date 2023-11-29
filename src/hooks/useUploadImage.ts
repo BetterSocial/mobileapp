@@ -8,15 +8,12 @@ const useUploadImage = () => {
       const compressionResult = await Image.compress(pathImg, {
         compressionMethod: 'auto'
       });
-      console.log('kaki', compressionResult);
       const asset = new FormData();
       asset.append('photo', composeImageMeta(compressionResult));
-
       const responseUpload = await uploadPhoto(asset);
-      console.log({responseUpload}, 'lahap');
       return responseUpload;
     } catch (e) {
-      console.log(e);
+      return undefined;
     }
   };
 
