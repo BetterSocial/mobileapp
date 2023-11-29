@@ -68,9 +68,6 @@ exports[`TESTING ChatItemTargetText RENDER continuous should match snapshot 1`] 
                 "paddingRight": 8,
                 "paddingTop": 4,
               },
-              Object {
-                "paddingBottom": 14,
-              },
             ]
           }
         >
@@ -184,9 +181,6 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
                 "paddingLeft": 8,
                 "paddingRight": 8,
                 "paddingTop": 4,
-              },
-              Object {
-                "paddingBottom": 14,
               },
             ]
           }
