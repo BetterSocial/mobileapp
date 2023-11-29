@@ -56,12 +56,13 @@ const useGroupSetting = ({route}) => {
   }, [selectedChannel]);
 
   const submitData = async (withNavigation = true) => {
-    if (!changeImage || changeName) return navigation.goBack();
+    if (!changeImage && !changeName) return navigation.goBack();
     try {
       setLoadingUpdate(true);
       let body = {
         channel_id: route?.params?.id,
-        channel_name: groupName
+        channel_name: groupName,
+        channel_image: urlImage
       };
       if (urlImage) {
         try {
