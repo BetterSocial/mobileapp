@@ -6,6 +6,7 @@ import MemoIc_pencil from '../../../assets/icons/Ic_pencil';
 import {COLORS} from '../../../utils/theme';
 import {Context} from '../../../context';
 import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
+import {colors} from '../../../utils/colors';
 
 const EditGroup = ({
   editName,
@@ -25,7 +26,6 @@ const EditGroup = ({
       inputChatNameRef.current.focus();
     }
   }, [inputChatNameRef, isFocusChatName]);
-
   const renderImage = (source) => {
     if (source && source.indexOf('file:///') > -1) {
       return <Image testID="fileImage" source={{uri: source}} style={styles.image} />;
@@ -107,15 +107,15 @@ const styles = StyleSheet.create({
     marginBottom: 5
   },
   textDesc: {
-    color: COLORS.white,
+    color: colors.white,
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(12),
     lineHeight: normalizeFontSize(18)
   },
   container: {
-    backgroundColor: COLORS.holytosca,
+    backgroundColor: colors.darkBlue,
     borderTopWidth: 1,
-    borderTopColor: COLORS.alto,
+    borderTopColor: colors.alto,
     paddingVertical: 10,
     paddingHorizontal: 15
   },
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     width: normalize(48),
     height: normalize(48),
     borderRadius: normalize(24),
-    backgroundColor: COLORS.alto,
+    backgroundColor: colors.alto,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 17

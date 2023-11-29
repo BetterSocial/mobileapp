@@ -93,21 +93,19 @@ const SignedChatScreen = () => {
           anon_user_info_color_code={selectedChannel?.rawJson?.channel?.anon_user_info_color_code}
         />
       ) : null}
+      <FlatList
+        contentContainerStyle={styles.contentContainerStyle}
+        style={styles.chatContainer}
+        data={updatedChats}
+        inverted={true}
+        initialNumToRender={10}
+        alwaysBounceVertical={false}
+        bounces={false}
+        onLayout={scrollToEnd}
+        keyExtractor={(item, index) => item?.id || index.toString()}
+        renderItem={renderChatItem}
+      />
 
-      {!loadingChat ? (
-        <FlatList
-          contentContainerStyle={styles.contentContainerStyle}
-          style={styles.chatContainer}
-          data={updatedChats}
-          inverted={true}
-          initialNumToRender={10}
-          alwaysBounceVertical={false}
-          bounces={false}
-          onLayout={scrollToEnd}
-          keyExtractor={(item, index) => item?.id || index.toString()}
-          renderItem={renderChatItem}
-        />
-      ) : null}
       <View style={styles.inputContainer}>
         <InputMessageV2
           onSendButtonClicked={sendChat}
