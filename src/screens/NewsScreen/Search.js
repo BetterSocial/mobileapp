@@ -1,24 +1,14 @@
 import * as React from 'react';
-import {
-  Animated,
-  Platform,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
-} from 'react-native';
+import {Animated, Platform, Pressable, StyleSheet, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-
-import MemoIc_pencil from '../../assets/icons/Ic_pencil';
+import PropTypes from 'prop-types';
 import MemoIc_search from '../../assets/icons/Ic_search';
 import StringConstant from '../../utils/string/StringConstant';
 import {COLORS, FONTS, SIZES} from '../../utils/theme';
-import {DISCOVERY_TAB_DOMAINS, DISCOVERY_TAB_NEWS} from '../../utils/constants';
+import {DISCOVERY_TAB_NEWS} from '../../utils/constants';
 import {fonts} from '../../utils/fonts';
 
-const Search = ({onPress, animatedValue}) => {
+const Search = ({animatedValue}) => {
   const navigation = useNavigation();
 
   const handleOnContainerPress = () => {
@@ -46,6 +36,10 @@ const Search = ({onPress, animatedValue}) => {
       </Pressable>
     </Animated.View>
   );
+};
+
+Search.propTypes = {
+  animatedValue: PropTypes.number
 };
 
 const styles = StyleSheet.create({
