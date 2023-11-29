@@ -2,15 +2,29 @@ import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import {launchImageLibrary} from 'react-native-image-picker';
 
-import StringConstant from '../../../utils/string/StringConstant';
+import {Linking} from 'react-native';
+import {useNavigation} from '@react-navigation/core';
+import {useRecoilState, atom} from 'recoil';
 import {Context} from '../../../context';
 import {getChatName} from '../../../utils/string/StringUtils';
 import {requestExternalStoragePermission} from '../../../utils/permission';
+import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
+import ChannelList from '../../../database/schema/ChannelListSchema';
+import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
+import {CHANNEL_GROUP, CHAT_ATOM} from '../../../hooks/core/constant';
+import StringConstant from '../../../utils/string/StringConstant';
 import {uploadFile} from '../../../service/file';
 
-const useGroupSetting = ({navigation, route}) => {
-  const [groupChatState] = React.useContext(Context).groupChat;
+const chatAtom = atom({
+  key: CHAT_ATOM,
+  default: {
+    selectedChannel: null
+  }
+});
 
+const useGroupSetting = ({route}) => {
+  const [groupChatState] = React.useContext(Context).groupChat;
+  const navigation = useNavigation();
   const [channelState] = React.useContext(Context).channel;
   const [profile] = React.useContext(Context).profile;
   const [participants, setParticipants] = React.useState([]);
@@ -18,12 +32,16 @@ const useGroupSetting = ({navigation, route}) => {
   const [groupName, setGroupName] = React.useState(
     getChatName(route.params.name, profile.myProfile.username) || 'Set Group Name'
   );
+  const {localDb, refresh} = useLocalDatabaseHook();
+  const [loadingUpdate, setLoadingUpdate] = React.useState(false);
   const [countUser, setCountUser] = React.useState(0);
   const [changeName, setChangeName] = React.useState(false);
   const [changeImage, setChangeImage] = React.useState(false);
   const [base64Profile, setBase64Profile] = React.useState('');
   const [urlImage, setUrlImage] = React.useState(channel?.data?.image);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [chat, setChat] = useRecoilState(chatAtom);
+  const {selectedChannel} = chat;
   const updateName = (text) => {
     setGroupName(text);
     setChangeName(true);
@@ -36,53 +54,71 @@ const useGroupSetting = ({navigation, route}) => {
     }
   }, [route]);
 
-  const submitData = async (withNavigation = true, withLoading = true) => {
-    let changeImageUrl = '';
-    if (changeImage) {
-      if (withLoading) setIsLoading(true);
-      try {
-        const res = await uploadFile(`data:image/jpeg;base64,${base64Profile}`);
-        changeImageUrl = res.data.url;
-      } catch (e) {
-        setIsLoading(false);
-        return;
-      }
+  React.useEffect(() => {
+    if (selectedChannel) {
+      setUrlImage(selectedChannel?.channelPicture);
     }
+  }, [selectedChannel]);
 
-    if (changeName || changeImage) {
-      if (withLoading) setIsLoading(true);
-      let dataEdit = {
-        name: groupName
-        // ...(changeImage && {image: base64Profile}),
-      };
-      if (changeName) {
-        dataEdit = {...dataEdit, isEditName: true};
-      }
-      if (changeImage) {
-        dataEdit.image = changeImageUrl;
-      } else if (channel?.data?.image) {
-        dataEdit.image = channel?.data?.image;
-      }
-      console.log({dataEdit}, 'nusu');
-      updateDataEdit(dataEdit, withNavigation);
-    } else if (withNavigation) navigation.goBack();
-  };
-
-  const updateDataEdit = async (dataEdit, withNavigation) => {
+  const submitData = async (withNavigation = true) => {
     try {
-      await channel.update(dataEdit);
-      if (withNavigation) navigation.navigate('ChatDetailPage');
-    } catch (e) {
-      if (__DEV__) {
-        console.log(`error : ${e}`);
+      setLoadingUpdate(true);
+      let body = {
+        channel_id: route?.params?.id,
+        channel_name: groupName
+      };
+      if (urlImage) {
+        try {
+          const res = await uploadFile(`data:image/jpeg;base64,${base64Profile}`);
+          body = {...body, channel_image: res.data.url};
+        } catch (e) {
+          console.log(e, 'error upload');
+        }
       }
+      const response = await SignedMessageRepo.editChannel(body);
+      let newChannel = response.data?.channel;
+      newChannel = {
+        ...chat.selectedChannel,
+        ...newChannel,
+        channelType: handleChannelType(newChannel?.channelType),
+        channelPicture: body?.channel_image
+      };
+      ChannelList.updateChannelInfo(
+        localDb,
+        body.channel_id,
+        body.channel_name,
+        body.channel_image
+      );
+      if (newChannel) {
+        setChat({
+          ...chat,
+          selectedChannel: newChannel
+        });
+      }
+      refresh('channelInfo');
+      refresh('chat');
+
+      refresh('channelList');
+
+      if (withNavigation) {
+        navigation.goBack();
+      }
+      setLoadingUpdate(false);
+    } catch (e) {
+      setLoadingUpdate(false);
       SimpleToast.show(StringConstant.groupSettingUpdateFailed);
     }
-    setIsLoading(false);
+  };
+
+  const handleChannelType = (channelType) => {
+    if (channelType === 1) {
+      return CHANNEL_GROUP;
+    }
+    return channelType;
   };
 
   const lounchGalery = async () => {
-    const {success, message} = await requestExternalStoragePermission();
+    const {success} = await requestExternalStoragePermission();
     if (success) {
       launchImageLibrary(
         {
@@ -96,7 +132,7 @@ const useGroupSetting = ({navigation, route}) => {
         }
       );
     } else {
-      SimpleToast.show(message, SimpleToast.SHORT);
+      Linking.openSettings();
     }
   };
 
@@ -141,7 +177,7 @@ const useGroupSetting = ({navigation, route}) => {
     isLoading,
     setIsLoading,
     handleResLaunchGallery,
-    updateDataEdit
+    loadingUpdate
   };
 };
 

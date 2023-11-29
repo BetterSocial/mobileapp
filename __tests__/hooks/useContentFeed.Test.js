@@ -8,6 +8,8 @@ import {colors} from '../../src/utils/colors';
 
 describe('it should run correctly', () => {
   beforeEach(() => {
+    // eslint-disable-next-line no-import-assign
+    reactString.hasOwnProperty = () => Object.hasOwnProperty;
     jest.spyOn(reactString, 'default');
   });
 

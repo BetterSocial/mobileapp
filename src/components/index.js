@@ -19,5 +19,5 @@ export {
   Gap,
   Header,
   CustomMessageSystem,
-  Skeleton,
+  Skeleton
 };

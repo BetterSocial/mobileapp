@@ -9,6 +9,7 @@ interface UseChatScreenHook {
   selectedChannel: ChannelList;
   handleUserName: (item: ChatSchema) => string;
   updateChatContinuity: (chatsData: ChatSchema[]) => ChatSchema[];
+  loadingChat: boolean;
 }
 
 export default UseChatScreenHook;

@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     borderRadius: 5
   },
   animated: (width) => ({
-    backgroundColor: colors.bondi_blue,
+    backgroundColor: colors.signed_primary,
     borderRadius: 5,
     width
   })
