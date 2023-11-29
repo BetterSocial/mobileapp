@@ -14,7 +14,7 @@ import {Context} from '../../../context';
 import {PostNotificationChannelList} from '../../../../types/database/schema/PostNotificationChannelList.types';
 import {convertTopicNameToTopicPageScreenParam} from '../../../utils/string/StringUtils';
 
-const chatAtom = atom({
+export const chatAtom = atom({
   key: CHAT_ATOM,
   default: {
     selectedChannel: null
