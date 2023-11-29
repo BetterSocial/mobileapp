@@ -61,6 +61,7 @@ const useGroupSetting = ({route}) => {
   }, [selectedChannel]);
 
   const submitData = async (withNavigation = true) => {
+    if (!changeImage || changeName) return navigation.goBack();
     try {
       setLoadingUpdate(true);
       let body = {
