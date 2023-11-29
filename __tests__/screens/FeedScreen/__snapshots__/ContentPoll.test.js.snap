@@ -52,7 +52,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
         onStartShouldSetResponder={[Function]}
         style={
           Object {
-            "backgroundColor": "#FFFFFF",
+            "backgroundColor": "#F5F5F5",
             "borderRadius": 8,
             "flex": 1,
             "flexDirection": "row",
@@ -139,7 +139,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
         onStartShouldSetResponder={[Function]}
         style={
           Object {
-            "backgroundColor": "#FFFFFF",
+            "backgroundColor": "#F5F5F5",
             "borderRadius": 8,
             "flex": 1,
             "flexDirection": "row",

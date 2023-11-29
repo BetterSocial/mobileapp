@@ -14,6 +14,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
       >
         <Search
           animatedValue={0}
+          isAnon={false}
           onPress={[Function]}
         />
       </View>
@@ -201,7 +202,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
             <Text
               style={
                 Object {
-                  "color": "#00ADB5",
+                  "color": "#4782D7",
                   "fontFamily": "Inter-SemiBold",
                   "fontSize": 12,
                   "lineHeight": 14.52,
@@ -378,7 +379,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
                 numberOfLines={1}
                 style={
                   Object {
-                    "color": "#000000",
+                    "color": "#003848",
                     "fontFamily": "Inter-Medium",
                     "fontSize": 14,
                   }

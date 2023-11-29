@@ -9,9 +9,11 @@ import {fonts} from '../../../utils/fonts';
 import StringConstant from '../../../utils/string/StringConstant';
 import {COLORS, SIZES} from '../../../utils/theme';
 import {DISCOVERY_TAB_USERS} from '../../../utils/constants';
+import {useDynamicColors} from '../../../hooks/useToggleColors';
 
-const Search = ({onPress, animatedValue}) => {
+const Search = ({onPress, animatedValue, isAnon}) => {
   const navigation = useNavigation();
+  const dynamicColors = useDynamicColors(isAnon);
 
   const __handleOnSearchClicked = () => {
     navigation.push('DiscoveryScreen', {
@@ -35,9 +37,16 @@ const Search = ({onPress, animatedValue}) => {
         </View>
       </Pressable>
       <TouchableOpacity style={styles.wrapperButton} onPress={onPress}>
-        <Text style={styles.newPostText}>{StringConstant.chatTabHeaderCreateChatButtonText}</Text>
+        <Text style={styles.newPostText(dynamicColors)}>
+          {StringConstant.chatTabHeaderCreateChatButtonText}
+        </Text>
         <View>
-          <MemoIcNewChat height={17} width={15} style={styles.newChatIcon} />
+          <MemoIcNewChat
+            height={17}
+            width={15}
+            style={styles.newChatIcon}
+            color={dynamicColors.primary}
+          />
         </View>
       </TouchableOpacity>
     </Animated.View>
@@ -89,13 +98,13 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center'
   },
-  newPostText: {
-    color: COLORS.holyTosca,
+  newPostText: (dynamicColors) => ({
+    color: dynamicColors.primary,
     marginRight: 11,
     fontFamily: 'Inter-SemiBold',
     fontSize: 12,
     lineHeight: 14.52
-  },
+  }),
   newChatIcon: {
     marginTop: 0
   },

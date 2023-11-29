@@ -27,7 +27,7 @@ exports[`TESTING ChatItemTargetText RENDER continuous should match snapshot 1`] 
   <View
     style={
       Object {
-        "backgroundColor": "#FFFFFF",
+        "backgroundColor": "#F5F5F5",
         "borderRadius": 8,
         "borderTopStartRadius": 0,
         "flex": 1,
@@ -80,7 +80,7 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
   <View
     style={
       Object {
-        "backgroundColor": "#FFFFFF",
+        "backgroundColor": "#F5F5F5",
         "borderRadius": 8,
         "borderTopStartRadius": 0,
         "flex": 1,

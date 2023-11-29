@@ -6,7 +6,7 @@ export const colors = {
   emperor: '#4F4F4F',
   gray: '#69707C',
   gray1: '#9B9FA9',
-  lightgrey: '#FFFFFF',
+  lightgrey: '#F5F5F5',
   concrete: '#F2F2F2',
   mine_shaft: '#333333',
   bunting: '#11243D',

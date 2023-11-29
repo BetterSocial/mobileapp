@@ -72,7 +72,7 @@ const HorizontalTab = ({selectedTab, onSelectedTabChange, tabs = []}: Horizontal
             index === selectedTab
               ? [
                   styles.activeTabItem,
-                  {borderBottomColor: index === 0 ? colors.darkBlue : colors.black}
+                  {borderBottomColor: index === 0 ? colors.darkBlue : colors.anon_primary}
                 ]
               : styles.tabItem
           }>
