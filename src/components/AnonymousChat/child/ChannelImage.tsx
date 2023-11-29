@@ -76,8 +76,8 @@ const ChannelImage = ({
       isAnonymousChannel &&
       isAnonymousPostMaker &&
       betterSocialMember &&
-      betterSocialMember[memberChat?.user_id].anon_user_info_emoji_code &&
-      betterSocialMember[memberChat?.user_id].anon_user_info_color_code
+      betterSocialMember?.[memberChat?.user_id]?.anon_user_info_emoji_code &&
+      betterSocialMember?.[memberChat?.user_id]?.anon_user_info_color_code
     ) {
       return (
         <ChannelAnonymousImage

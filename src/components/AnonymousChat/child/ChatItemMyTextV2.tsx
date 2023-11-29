@@ -164,11 +164,12 @@ const ChatItemMyTextV2 = ({
     return <View style={styles.ml8}>{avatar}</View>;
   }, []);
 
-  const textContainerStyle = [
-    chatType === SIGNED ? styles.containerSigned : styles.containerAnon,
-    styles.textContainer,
-    isNewLine && styles.textContainerNewLine
-  ];
+  const handleTextContainerStyle = () => {
+    if (chatType === SIGNED) {
+      return [styles.containerSigned, styles.textContainer];
+    }
+    return [styles.containerAnon, styles.textContainer];
+  };
 
   return (
     <View style={styles.chatContainer}>
@@ -183,7 +184,7 @@ const ChatItemMyTextV2 = ({
           ]}
           onPress={(e) => onContextMenuPressed(e, message)}>
           <View style={{borderRadius: 8}}>
-            <View style={textContainerStyle}>
+            <View style={handleTextContainerStyle()}>
               {!isContinuous && (
                 <View style={styles.chatTitleContainer}>
                   <Text style={styles.userText}>{username}</Text>
