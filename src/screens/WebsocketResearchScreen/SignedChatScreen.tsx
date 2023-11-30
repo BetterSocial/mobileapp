@@ -5,6 +5,7 @@
 import * as React from 'react';
 import {FlatList, View} from 'react-native';
 
+import ToastMessage from 'react-native-toast-message';
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
 import InputMessageV2 from '../../components/Chat/InputMessageV2';
@@ -55,6 +56,14 @@ const SignedChatScreen = () => {
 
   const moveChatToAnon = async () => {
     try {
+      if (selectedChannel?.channelType === 'GROUP') {
+        ToastMessage.show({
+          type: 'asNative',
+          text1: 'Coming soon: Anonymous messages are not enabled yet within group chats',
+          position: 'bottom'
+        });
+        return;
+      }
       setLoading(true);
       await moveToAnonymousChannel({
         oldChannelId: selectedChannel?.id,
