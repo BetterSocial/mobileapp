@@ -99,3 +99,9 @@ export enum ChannelTypeEnum {
   Group = 1,
   Community = 3
 }
+
+export interface EditChannelPostTyoe {
+  channel_id: string;
+  channel_name?: string;
+  channel_image?: string;
+}

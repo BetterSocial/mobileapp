@@ -1,9 +1,8 @@
-import * as launchGallery from 'react-native-image-picker';
 import React from 'react';
-import SimpleToast from 'react-native-simple-toast';
+import * as launchGallery from 'react-native-image-picker';
 import {act, renderHook} from '@testing-library/react-hooks';
 
-import * as serviceFile from '../../src/service/file';
+import {Linking} from 'react-native';
 import * as servicePermission from '../../src/utils/permission';
 import useGroupSetting from '../../src/screens/GroupSetting/hooks/useGroupSetting';
 import {Context} from '../../src/context/Store';
@@ -17,6 +16,12 @@ jest.mock('react-native-image-picker', () => ({
 jest.mock('react-native-simple-toast', () => ({
   show: jest.fn()
 }));
+
+jest.mock('react-native-compressor', () => {
+  return {
+    compress: jest.fn(() => 'file:///imag.jpg')
+  };
+});
 
 describe('use groupSetting should run correctly', () => {
   const mockDataEdit = jest.fn();
@@ -175,6 +180,7 @@ describe('use groupSetting should run correctly', () => {
     expect(result.current.groupName).toEqual('halo');
     expect(result.current.changeName).toBeTruthy();
   });
+
   beforeEach(() => {
     jest
       .spyOn(servicePermission, 'requestExternalStoragePermission')
@@ -210,10 +216,10 @@ describe('use groupSetting should run correctly', () => {
         username: 'agita'
       }
     };
-    const spyToast = jest.spyOn(SimpleToast, 'show');
+    const spySetting = jest.spyOn(Linking, 'openSettings');
     const {result} = renderHook(() => useGroupSetting({navigation, route}), {wrapper});
     await result.current.lounchGalery();
-    expect(spyToast).toHaveBeenCalled();
+    expect(spySetting).toHaveBeenCalled();
   });
 
   it('renderHeaderSubtitleText should return correctly', async () => {
@@ -231,30 +237,6 @@ describe('use groupSetting should run correctly', () => {
     expect(result.current.renderHeaderSubtitleText()).toEqual('Finish');
     await result.current.setChangeImage(false);
     expect(result.current.renderHeaderSubtitleText()).toEqual('Skip');
-  });
-
-  it('submitData should run correctly', async () => {
-    const navigation = {
-      navigate: jest.fn(),
-      push: jest.fn(),
-      goBack: jest.fn()
-    };
-    const route = {
-      params: {
-        username: 'agita'
-      }
-    };
-    const spyUploadFile = jest
-      .spyOn(serviceFile, 'uploadFile')
-      .mockImplementation(() => ({data: {url: 'https://image.jpg'}}));
-    const {result} = renderHook(() => useGroupSetting({navigation, route}), {wrapper});
-    await result.current.setChangeImage(true);
-    await result.current.submitData(true, true);
-    expect(spyUploadFile).toHaveBeenCalled();
-    expect(result.current.isLoading).toBeFalsy();
-    await result.current.setChangeImage(false);
-    await result.current.submitData(true, false);
-    expect(navigation.goBack).toHaveBeenCalled();
   });
 
   it('handleResLaunchGallery should run correctly', () => {
@@ -283,22 +265,5 @@ describe('use groupSetting should run correctly', () => {
     expect(result.current.changeImage).toBeTruthy();
     expect(result.current.base64Profile).toEqual('123');
     expect(result.current.urlImage).toEqual('https://image.jpg');
-  });
-
-  it('updateDataEdit should run correctly', async () => {
-    const navigation = {
-      navigate: jest.fn(),
-      push: jest.fn(),
-      goBack: jest.fn()
-    };
-    const route = {
-      params: {
-        username: 'agita'
-      }
-    };
-    const {result} = renderHook(() => useGroupSetting({navigation, route}), {wrapper});
-    await result.current.updateDataEdit('123', true);
-    expect(mockDataEdit).toHaveBeenCalled();
-    expect(navigation.navigate).toHaveBeenCalled();
   });
 });

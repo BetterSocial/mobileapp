@@ -1,21 +1,23 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import moment from 'moment';
+import {CommonActions, useNavigation} from '@react-navigation/native';
 import {atom, useRecoilState} from 'recoil';
-import {useNavigation, CommonActions} from '@react-navigation/native';
+
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
 import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
 import UseChatUtilsHook from '../../../../types/hooks/screens/useChatUtilsHook.types';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
-import {ANON_PM, GROUP_INFO} from '../constant';
+import {ANON_PM, CHAT_ATOM, GROUP_INFO} from '../constant';
 import {ChannelList} from '../../../../types/database/schema/ChannelList.types';
 import {ChannelTypeEnum} from '../../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 import {Context} from '../../../context';
 import {PostNotificationChannelList} from '../../../../types/database/schema/PostNotificationChannelList.types';
 import {convertTopicNameToTopicPageScreenParam} from '../../../utils/string/StringUtils';
 
-const chatAtom = atom({
-  key: 'chatAtom',
+export const chatAtom = atom({
+  key: CHAT_ATOM,
   default: {
     selectedChannel: null
   }
@@ -32,7 +34,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
   const {localDb, refresh} = useLocalDatabaseHook();
   const navigation = useNavigation();
   const {selectedChannel} = chat;
-  const [profile] = (React.useContext(Context) as any).profile;
+  const [profile] = (React.useContext(Context) as unknown as any).profile;
   const setChannelAsRead = async (channel: ChannelList) => {
     if (!localDb) return;
     channel.setRead(localDb).catch((e) => console.log('setChannelAsRead error', e));
@@ -162,6 +164,10 @@ function useChatUtilsHook(): UseChatUtilsHook {
     });
   };
 
+  const goToContactScreen = () => {
+    navigation.navigate('ContactScreen');
+  };
+
   const goToChatInfoScreen = (params?: object) => {
     navigation.navigate('SampleChatInfoScreen', params);
   };
@@ -199,6 +205,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
     goToMoveChat,
     goToPostDetailScreen,
     goToCommunityScreen,
+    goToContactScreen,
     goToChatInfoScreen,
     goBackFromChatScreen,
     handleTextSystem,

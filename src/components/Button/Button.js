@@ -28,7 +28,7 @@ Btn.propTypes = {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#00ADB5',
+    backgroundColor: colors.signed_primary,
     paddingHorizontal: dimen.normalizeDimen(25),
     borderRadius: dimen.normalizeDimen(8),
     flexDirection: 'row',
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   buttonText: {
-    color: '#FFFFFF',
+    color: colors.white,
     fontSize: 18,
     fontFamily: fonts.inter[600]
   },

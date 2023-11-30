@@ -285,6 +285,22 @@ class ChannelList implements BaseDbSchema {
     return 'channel_lists';
   }
 
+  static updateChannelInfo = async (
+    db: SQLiteDatabase,
+    channelId: string,
+    name: string,
+    image: string
+  ) => {
+    try {
+      const replacementImageName = [image, name, channelId];
+      const queryUpdateChannel = `UPDATE ${ChannelList.getTableName()}
+        SET channel_picture = ?, name = ? WHERE id = ?;`;
+      await db.executeSql(queryUpdateChannel, replacementImageName);
+    } catch (e) {
+      console.log(e, 'error update channel');
+    }
+  };
+
   static updateChannelDescription = async (
     db: SQLiteDatabase,
     channelId: string,
