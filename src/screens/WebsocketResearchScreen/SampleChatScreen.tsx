@@ -145,7 +145,7 @@ const SampleChatScreen = () => {
           onToggleConfirm={moveChatSigned}
         />
       </View>
-      <Loading visible={loading} /
+      <Loading visible={loading} />
     </View>
   );
 };

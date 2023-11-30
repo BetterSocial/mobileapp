@@ -40,8 +40,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: dimen.normalizeDimen(8),
     borderRadius: dimen.normalizeDimen(12),
     minHeight: dimen.normalizeDimen(32),
-    marginHorizontal: dimen.normalizeDimen(6),
-    textAlignVertical: 'center'
+    marginHorizontal: dimen.normalizeDimen(6)
   },
   input: {
     flex: 1,
@@ -51,12 +50,11 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(14),
     fontStyle: 'normal',
     fontWeight: '400',
-    lineHeight: normalizeFontSize(20),
     marginRight: dimen.normalizeDimen(12),
-    paddingTop: 0,
-    paddingBottom: 0,
-    maxHeight: dimen.normalizeDimen(92),
-    textAlignVertical: 'center'
+    minHeight: dimen.normalizeDimen(20),
+    maxHeight: dimen.normalizeDimen(80),
+    textAlignVertical: 'center',
+    paddingTop: dimen.normalizeDimen(2)
   },
   btn: {
     borderRadius: dimen.normalizeDimen(32 / 2),
@@ -105,6 +103,7 @@ export interface InputMessageV2Props {
   username?: string;
   profileImage?: string;
   onToggleConfirm?: () => void;
+  isShowToggle?: boolean;
 }
 
 const InputMessageV2 = ({
@@ -114,7 +113,8 @@ const InputMessageV2 = ({
   profileImage,
   username,
   onToggleConfirm,
-  type
+  type,
+  isShowToggle = true
 }: InputMessageV2Props) => {
   const refEmoji = React.useRef(null);
   const [inputFocus, setInputFocus] = React.useState(false);
@@ -175,16 +175,19 @@ const InputMessageV2 = ({
           value={text}
           onFocus={() => setInputFocus(true)}
           onBlur={() => setInputFocus(false)}
+          numberOfLines={4}
         />
-        <ToggleSwitch
-          labelLeft={!inputFocus ? 'Anonymity' : undefined}
-          styleLabelLeft={[
-            styles.labelToggle,
-            {color: type === 'ANONYMOUS' ? colors.gray : colors.blue}
-          ]}
-          onValueChange={toggleChnage}
-          value={type === 'ANONYMOUS'}
-        />
+        {isShowToggle && (
+          <ToggleSwitch
+            labelLeft={!inputFocus ? 'Anonymity' : undefined}
+            styleLabelLeft={[
+              styles.labelToggle,
+              {color: type === 'ANONYMOUS' ? colors.gray : colors.blue}
+            ]}
+            onValueChange={toggleChnage}
+            value={type === 'ANONYMOUS'}
+          />
+        )}
       </View>
       <TouchableOpacity
         style={[styles.btn, isDisableButton() ? styles.disableButton : styles.enableButton]}
