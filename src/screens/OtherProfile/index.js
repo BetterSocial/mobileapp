@@ -90,9 +90,7 @@ const BioAndChat = (props) => {
           <Text style={styles.bioText(isAnonimity)}>Send a message</Text>
         ) : (
           <Pressable onPress={openBio}>
-            <Text linkStyle={styles.seeMore} style={styles.bioText(isAnonimity)}>
-              {bio}
-            </Text>
+            <Text style={styles.bioText(isAnonimity)}>{bio}</Text>
           </Pressable>
         )}
       </View>
