@@ -18,6 +18,7 @@ import {
 } from '../../utils/constants';
 import {getAnonymousUserId, getUserId} from '../../utils/users';
 import {randomString} from '../../utils/string/StringUtils';
+import ImageUtils from '../../utils/image';
 
 function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const {localDb, chat, refresh} = useLocalDatabaseHook();
@@ -49,6 +50,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
 
   const sendChat = async (
     message: string = randomString(20),
+    attachments: [],
     iteration = 0,
     sendingChatSchema: ChatSchema | null = null
   ) => {
@@ -73,6 +75,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
           userId,
           selectedChannel?.id,
           message,
+          attachments,
           localDb
         );
         currentChatSchema.save(localDb);
@@ -95,10 +98,26 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       if (type === 'ANONYMOUS') {
         response = await AnonymousMessageRepo.sendAnonymousMessage(selectedChannel?.id, message);
       } else {
+        const allAttachmentPromises: Promise<void>[] = attachments.map(async (item) => {
+          if (item.type === 'image') {
+            const uploadedImageUrl = await ImageUtils.uploadImageWithoutAuth(item.asset_url);
+            return {
+              ...item,
+              asset_url: uploadedImageUrl.data.url,
+              thumb_url: uploadedImageUrl.data.url
+            };
+          }
+
+          return item;
+        });
+
+        const newAttachments = await Promise.all(allAttachmentPromises);
+
         response = await SignedMessageRepo.sendSignedMessage(
           selectedChannel?.id,
           message,
-          channelType
+          channelType,
+          newAttachments
         );
       }
       await currentChatSchema.updateChatSentStatus(localDb, response);
@@ -108,7 +127,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       if (e?.response?.data?.status === 'Channel is blocked') return;
 
       setTimeout(() => {
-        sendChat(message, iteration + 1, currentChatSchema).catch((sendChatError) => {
+        sendChat(message, attachments, iteration + 1, currentChatSchema).catch((sendChatError) => {
           console.log(sendChatError);
         });
       }, 1000);

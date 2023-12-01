@@ -1,6 +1,5 @@
 // eslint-disable-next-line no-use-before-define
 import * as React from 'react';
-import ContextMenu from 'react-native-context-menu-view';
 import {
   Dimensions,
   NativeSyntheticEvent,
@@ -9,6 +8,8 @@ import {
   TextLayoutEventData,
   View
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
+import ContextMenu from 'react-native-context-menu-view';
 
 import IconChatCheckMark from '../../../assets/icon/IconChatCheckMark';
 import IconChatClockGrey from '../../../assets/icon/IconChatClockGrey';
@@ -18,6 +19,7 @@ import {ChatStatus} from '../../../../types/database/schema/ChannelList.types';
 import {SIGNED} from '../../../hooks/core/constant';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
+import dimen from '../../../utils/dimen';
 
 const {width} = Dimensions.get('screen');
 
@@ -25,8 +27,8 @@ const AVATAR_SIZE = 24;
 const CONTAINER_LEFT_PADDING = 60;
 const CONTAINER_RIGHT_PADDING = 10;
 const AVATAR_LEFT_MARGIN = 8;
-const BUBBLE_LEFT_PADDING = 8;
-const BUBBLE_RIGHT_PADDING = 8;
+const BUBBLE_LEFT_PADDING = 4;
+const BUBBLE_RIGHT_PADDING = 4;
 
 const styles = StyleSheet.create({
   chatContainer: {
@@ -72,6 +74,8 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 16,
     lineHeight: 19.36,
+    marginLeft: 4,
+    marginRight: 4,
     marginBottom: 4,
     color: colors.white
   },
@@ -111,6 +115,32 @@ const styles = StyleSheet.create({
   },
   ml8: {
     marginLeft: 8
+  },
+  attachmentContainer: {
+    width: '100%',
+    height: 268,
+    borderRadius: 8,
+    overflow: 'hidden',
+    flexDirection: 'row',
+    flexWrap: 'wrap'
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover'
+  },
+  moreOverlay: {
+    position: 'absolute',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  moreText: {
+    fontSize: dimen.normalizeDimen(16),
+    fontFamily: fonts.inter[400],
+    color: colors.white
   }
 });
 
@@ -128,6 +158,7 @@ const ChatItemMyTextV2 = ({
   time = '4h',
   isContinuous = false,
   message = '',
+  attachments = [],
   status = ChatStatus.PENDING,
   avatar,
   chatType
@@ -193,9 +224,43 @@ const ChatItemMyTextV2 = ({
                 </View>
               )}
 
-              <Text ref={messageRef} style={styles.text} onTextLayout={onTextLayout}>
-                {`${message}`}
-              </Text>
+              {attachments.length > 0 && (
+                <View style={styles.attachmentContainer}>
+                  {attachments
+                    .filter((item, index) => index <= 3)
+                    .map((item, index) => (
+                      <View
+                        key={item.thumb_url}
+                        style={{
+                          width: `${
+                            (attachments.length >= 3 && index > 0) || attachments.length >= 4
+                              ? 50
+                              : 100
+                          }%`,
+                          height: `${attachments.length >= 3 ? 50 : 100 / attachments.length}%`,
+                          position: 'relative',
+                          overflow: 'hidden'
+                        }}>
+                        <FastImage
+                          style={styles.image}
+                          source={{
+                            uri: item.thumb_url
+                          }}
+                        />
+                        {attachments.length > 4 && index === 3 && (
+                          <View style={styles.moreOverlay}>
+                            <Text style={styles.moreText}>+{attachments.length - 4}</Text>
+                          </View>
+                        )}
+                      </View>
+                    ))}
+                </View>
+              )}
+              {message?.trim() !== '' && (
+                <Text ref={messageRef} style={styles.text} onTextLayout={onTextLayout}>
+                  {`${message}`}
+                </Text>
+              )}
 
               {renderIcon()}
             </View>

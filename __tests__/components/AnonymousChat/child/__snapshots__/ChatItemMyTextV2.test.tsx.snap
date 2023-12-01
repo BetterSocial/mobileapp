@@ -64,8 +64,8 @@ exports[`TESTING ChatItemTargetText RENDER continuous should match snapshot 1`] 
                 "borderTopEndRadius": 0,
                 "flex": 1,
                 "paddingBottom": 4,
-                "paddingLeft": 8,
-                "paddingRight": 8,
+                "paddingLeft": 4,
+                "paddingRight": 4,
                 "paddingTop": 4,
               },
             ]
@@ -80,6 +80,8 @@ exports[`TESTING ChatItemTargetText RENDER continuous should match snapshot 1`] 
                 "fontSize": 16,
                 "lineHeight": 19.36,
                 "marginBottom": 4,
+                "marginLeft": 4,
+                "marginRight": 4,
               }
             }
           >
@@ -178,8 +180,8 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
                 "borderTopEndRadius": 0,
                 "flex": 1,
                 "paddingBottom": 4,
-                "paddingLeft": 8,
-                "paddingRight": 8,
+                "paddingLeft": 4,
+                "paddingRight": 4,
                 "paddingTop": 4,
               },
             ]
@@ -241,6 +243,8 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
                 "fontSize": 16,
                 "lineHeight": 19.36,
                 "marginBottom": 4,
+                "marginLeft": 4,
+                "marginRight": 4,
               }
             }
           >

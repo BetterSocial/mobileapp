@@ -73,13 +73,14 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
     return <BaseSystemChat item={item} index={index} />;
   }
 
-  if (item?.isMe)
+  if (item?.isMe) {
     return (
       <ChatItemMyTextV2
         key={index}
         avatar={handleAvatar()}
         isContinuous={item?.isContinuous}
         message={item?.message}
+        attachments={item?.attachmentJson}
         time={calculateTime(item?.updatedAt, true)}
         username={handleUserName(item)}
         type={BaseChatItemTypeProps.MY_ANON_CHAT}
@@ -87,6 +88,7 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
         chatType={type}
       />
     );
+  }
 
   return (
     <ChatItemTargetText

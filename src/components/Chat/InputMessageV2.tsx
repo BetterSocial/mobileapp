@@ -1,12 +1,18 @@
 import * as React from 'react';
 import {Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import ImagePicker from 'react-native-image-crop-picker';
+import DocumentPicker from 'react-native-document-picker';
 
 import IconSend from '../../assets/icon/IconSendComment';
+import IconPlusAttachment from '../../assets/icon/IconPlusAttachment';
 import {colors} from '../../utils/colors';
 import dimen from '../../utils/dimen';
 import {normalizeFontSize} from '../../utils/fonts';
 import ToggleSwitch from '../ToggleSwitch';
 import SheetEmoji from './SheetEmoji';
+import BottomSheetAttachment from '../../screens/ProfileScreen/elements/BottomSheetAttachment';
+import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
+import ImageUtils from '../../utils/image';
 
 const styles = StyleSheet.create({
   main: {
@@ -117,14 +123,127 @@ const InputMessageV2 = ({
   isShowToggle = true
 }: InputMessageV2Props) => {
   const refEmoji = React.useRef(null);
+  const refAttachment = React.useRef(null);
   const [inputFocus, setInputFocus] = React.useState(false);
   const [text, setText] = React.useState('');
+  const [isLoadingUploadImageMedia, setIsLoadingUploadImageMedia] = React.useState(false);
+  const [isLoadingUploadImageCamera, setIsLoadingUploadImageCamera] = React.useState(false);
+
+  const handleUploadMedia = async (paths) => {
+    setIsLoadingUploadImageMedia(true);
+
+    const resultUrls = paths.map((path) => ({
+      type: 'image',
+      asset_url: path,
+      thumb_url: path,
+      myCustomField: 'image'
+    }));
+    console.warn('resultUrls', resultUrls);
+    onSendButtonClicked(' ', resultUrls);
+    setIsLoadingUploadImageMedia(false);
+  };
+
+  const handleUploadCamera = async (path) => {
+    setIsLoadingUploadImageCamera(true);
+
+    const resultUrls = [];
+    const uploadedImageUrl = await ImageUtils.uploadImageWithoutAuth(path);
+    resultUrls.push({
+      type: 'image',
+      asset_url: uploadedImageUrl,
+      thumb_url: uploadedImageUrl,
+      myCustomField: 'image'
+    });
+
+    onSendButtonClicked(' ', resultUrls);
+    setIsLoadingUploadImageCamera(false);
+  };
+
+  const openSettingApp = () => {
+    Linking.openSettings();
+  };
+
+  const openAlertPermission = (message) => {
+    Alert.alert('Permission Denied', message, [
+      {text: 'Open Settings', onPress: openSettingApp},
+      {text: 'Close'}
+    ]);
+  };
+
+  const onOpenMedia = async () => {
+    const {success} = await requestExternalStoragePermission();
+    if (success) {
+      ImagePicker.openPicker({
+        width: 512,
+        height: 512,
+        cropping: true,
+        multiple: true,
+        maxFiles: 20
+      }).then(async (images) => {
+        const allPromises: Promise<void>[] = images.map(async (image) => {
+          const imageCropped = await ImagePicker.openCropper({
+            path: image.path,
+            width: 512,
+            height: 512
+          });
+          return imageCropped.path;
+        });
+
+        const newImages = await Promise.all(allPromises);
+
+        handleUploadMedia(newImages, 'gallery');
+      });
+    } else {
+      openAlertPermission(
+        'We’re not able to access your photos, please adjust your permission settings for BetterSocial.'
+      );
+    }
+  };
+
+  const onOpenCamera = async () => {
+    const {success} = await requestCameraPermission();
+    if (success) {
+      ImagePicker.openCamera({
+        width: 512,
+        height: 512,
+        cropping: true,
+        mediaType: 'photo'
+      }).then((imageRes) => {
+        handleUploadCamera(imageRes.path);
+      });
+    } else {
+      openAlertPermission(
+        'We’re not able to access your camera, please adjust your permission settings for BetterSocial.'
+      );
+    }
+  };
+
+  const onOpenFile = async () => {
+    const {success} = await requestExternalStoragePermission();
+    if (success) {
+      DocumentPicker.pickSingle({
+        presentationStyle: 'fullScreen',
+        copyTo: 'cachesDirectory'
+      }).then((pickerResult) => {
+        console.warn('pickerResult', pickerResult);
+        //
+      });
+    } else {
+      openAlertPermission(
+        'We’re not able to access your document library, please adjust your permission settings for BetterSocial.'
+      );
+    }
+  };
 
   const onChangeInput = (v) => {
     setText(v);
   };
   const onSelectEmoji = () => {
     refEmoji.current.close();
+  };
+
+  const onSelectAttachment = () => {
+    refAttachment.current.open();
   };
 
   const handleSendMessage = () => {
@@ -158,6 +277,11 @@ const InputMessageV2 = ({
     );
   };
 
+  const plusButtonStyle = React.useCallback(() => {
+    if (type === 'SIGNED') return colors.darkBlue;
+    return colors.bondi_blue;
+  }, []);
+
   return (
     <View style={styles.main}>
       {emojiCode ? (
@@ -189,17 +313,36 @@ const InputMessageV2 = ({
           />
         )}
       </View>
-      <TouchableOpacity
-        style={[styles.btn, isDisableButton() ? styles.disableButton : styles.enableButton]}
-        disabled={isDisableButton()}
-        onPress={handleSendMessage}>
-        <IconSend
-          style={styles.icSendButton}
-          fillBackground={sendButtonStyle()}
-          fillIcon={colors.white}
-        />
-      </TouchableOpacity>
+      {text?.trim() !== '' && (
+        <TouchableOpacity
+          style={[styles.btn, isDisableButton() ? styles.disableButton : styles.enableButton]}
+          disabled={isDisableButton()}
+          onPress={handleSendMessage}>
+          <IconSend
+            style={styles.icSendButton}
+            fillBackground={sendButtonStyle()}
+            fillIcon={colors.white}
+          />
+        </TouchableOpacity>
+      )}
+      {text?.trim() === '' && (
+        <TouchableOpacity style={styles.btn} onPress={onSelectAttachment}>
+          <IconPlusAttachment style={styles.icSendButton} fillIcon={plusButtonStyle()} />
+        </TouchableOpacity>
+      )}
       <SheetEmoji ref={refEmoji} selectEmoji={onSelectEmoji} />
+
+      <BottomSheetAttachment
+        ref={refAttachment}
+        onOpenMedia={onOpenMedia}
+        onOpenGIF={onSelectEmoji}
+        onOpenCamera={onOpenCamera}
+        onOpenFile={onOpenFile}
+        isLoadingUploadMedia={isLoadingUploadImageMedia}
+        isLoadingUploadGIF={false}
+        isLoadingUploadCamera={isLoadingUploadImageCamera}
+        isLoadingUploadFile={false}
+      />
     </View>
   );
 };
