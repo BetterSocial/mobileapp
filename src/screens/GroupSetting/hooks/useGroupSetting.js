@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import {launchImageLibrary} from 'react-native-image-picker';
@@ -6,7 +7,7 @@ import {Linking} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 import {useRecoilState} from 'recoil';
 import {Context} from '../../../context';
-import {getChatName} from '../../../utils/string/StringUtils';
+import {getChatName, isValidUrl} from '../../../utils/string/StringUtils';
 import {requestExternalStoragePermission} from '../../../utils/permission';
 import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
 import ChannelList from '../../../database/schema/ChannelListSchema';
@@ -54,7 +55,6 @@ const useGroupSetting = ({route}) => {
       setUrlImage(selectedChannel?.channelPicture);
     }
   }, [selectedChannel]);
-
   const submitData = async (withNavigation = true) => {
     if (!changeImage && !changeName) return navigation.goBack();
     try {
@@ -64,7 +64,7 @@ const useGroupSetting = ({route}) => {
         channel_name: groupName,
         channel_image: urlImage
       };
-      if (urlImage) {
+      if (urlImage && !isValidUrl(urlImage)) {
         try {
           const res = await uploadPhotoImage(urlImage);
           if (res) {

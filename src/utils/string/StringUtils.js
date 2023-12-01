@@ -398,6 +398,11 @@ const onOpenLink = (url) => {
   });
 };
 
+const isValidUrl = (url) => {
+  const urlPattern = /^(https?:\/\/)?([\da-zA-Z.-]+)\.([a-zA-Z]{2,6})([/\w.-]*)*\/?$/;
+  return urlPattern.test(url);
+};
+
 export {
   capitalizeFirstText,
   convertString,
@@ -418,5 +423,6 @@ export {
   isLocationMatch,
   styles,
   getCaptionWithLinkStyle,
-  getAnonymousChatName
+  getAnonymousChatName,
+  isValidUrl
 };
