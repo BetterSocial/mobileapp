@@ -91,9 +91,8 @@ const BioAndChat = (props) => {
           <Text style={styles.bioText(dynamicColors)}>Send a message</Text>
         ) : (
           <Pressable onPress={openBio}>
-            <Text linkStyle={styles.seeMore} style={styles.bioText(dynamicColors)}>
-              {trimString(bio, 121)}{' '}
-              {bio.length > 121 ? <Text style={{color: colors.blue}}>see more</Text> : null}
+            <Text linkStyle={styles.seeMore} style={styles.bioText(isAnonimity)}>
+              {bio}
             </Text>
           </Pressable>
         )}
