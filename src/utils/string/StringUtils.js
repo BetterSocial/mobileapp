@@ -14,8 +14,7 @@ import {getAnonymousUserId} from '../users';
 import {getUserId} from '../token';
 
 const NO_POLL_UUID = '00000000-0000-0000-0000-000000000000';
-const urlRegex =
-  /^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(\:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i;
+const urlRegex = /(https?:\/\/\S+)+/g;
 const getPollTime = (pollExpiredAtString, currentMoment = moment()) => {
   const pollExpiredMoment = moment(pollExpiredAtString);
   const diff = pollExpiredMoment.diff(currentMoment);
