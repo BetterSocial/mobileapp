@@ -18,7 +18,12 @@ const baseUrl = {
 
 interface SignedMessageRepoTypes {
   checkIsTargetAllowingAnonDM: (targetUserId: string) => Promise<any>;
-  sendSignedMessage: (channelId: string, message: string, channelType: number) => Promise<any>;
+  sendSignedMessage: (
+    channelId: string,
+    message: string,
+    channelType: number,
+    attachments: any
+  ) => Promise<any>;
   getAllSignedChannels: () => Promise<ChannelData[]>;
   getAllSignedPostNotifications: () => Promise<SignedPostNotification[]>;
   getSingleSignedPostNotifications: (activityId: string) => Promise<SignedPostNotification>;
@@ -44,8 +49,14 @@ async function checkIsTargetAllowingAnonDM(targetUserId: string) {
   }
 }
 
-async function sendSignedMessage(channelId: string, message: string, channelType: number) {
-  const payload = {channelId, message, channelType};
+async function sendSignedMessage(
+  channelId: string,
+  message: string,
+  channelType: number,
+  attachments: any
+) {
+  const payload = {channelId, message, channelType, attachments};
+  console.warn('payload', payload);
   try {
     const response = await api.post(baseUrl.sendSignedMessage, payload);
 
