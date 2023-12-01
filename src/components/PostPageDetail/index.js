@@ -34,6 +34,7 @@ import {setFeedByIndex} from '../../context/actions/feeds';
 import {showScoreAlertDialog} from '../../utils/Utils';
 import {useFeedDataContext} from '../../hooks/useFeedDataContext';
 import {withInteractionsManaged} from '../WithInteractionManaged';
+import {useGetPostById, useUpvoteMutation} from '../../screens/FeedScreen/hooks/useNewFeed';
 
 const {width, height} = Dimensions.get('window');
 
@@ -73,6 +74,8 @@ const PostPageDetailIdComponent = (props) => {
     usePostDetail();
   const {updateFeedContext} = usePostContextHook(contextSource);
   const {updateFeedContext: updateTopicContext} = usePostContextHook(CONTEXT_SOURCE.TOPIC_FEEDS);
+  const {mutateAsync, error} = useUpvoteMutation();
+  console.log('errorMuteate', error);
 
   const {handleUserName} = useWriteComment();
   const getComment = async (scrollToBottom, noNeedLoading) => {
@@ -128,43 +131,10 @@ const PostPageDetailIdComponent = (props) => {
     }
   };
 
-  const getDetailFeed = async () => {
-    if (!route.params.isCaching) {
-      try {
-        setLoading(true);
-        const data = await getFeedDetail(feedId);
-        setItem(data?.data);
-        setLoading(false);
-        if (route.params.is_from_pn) {
-          setTimeout(() => {
-            onBottomPage();
-          }, 300);
-        }
-      } catch (e) {
-        setLoading(false);
-        Toast.show(
-          e?.response?.data?.message || 'Failed to load feed - please try again',
-          Toast.LONG
-        );
-        navigation.goBack();
-      }
-    } else {
-      setItem(route.params.data);
-      setLoading(false);
-    }
-  };
   const updateParentPost = (data) => {
-    setItem(data);
+    // setItem(data);
     updateAllContent(data);
   };
-
-  React.useEffect(() => {
-    initial();
-  }, [item]);
-
-  React.useEffect(() => {
-    getDetailFeed();
-  }, []);
 
   const updateFeed = async (isSort) => {
     try {
@@ -427,8 +397,10 @@ const PostPageDetailIdComponent = (props) => {
       status,
       feed_group: 'main_feed'
     };
-    const processData = await upVote(data);
-    findVoteAndUpdate(processData, 'upvote');
+    await mutateAsync({
+      post: data
+    });
+    // findVoteAndUpdate(processData, 'upvote');
   };
   const setDownVote = async (status) => {
     const data = {
@@ -491,7 +463,6 @@ const PostPageDetailIdComponent = (props) => {
   const handleRefreshChildComment = async () => {
     await getComment(false, true);
   };
-
   const checkVotes = () => {
     const findUpvote =
       item &&
@@ -499,6 +470,7 @@ const PostPageDetailIdComponent = (props) => {
       item.own_reactions.upvotes &&
       Array.isArray(item.own_reactions.upvotes) &&
       item.own_reactions.upvotes.find((reaction) => reaction.user_id === profile.myProfile.user_id);
+
     const findDownvote =
       item &&
       item.own_reactions &&
@@ -520,8 +492,18 @@ const PostPageDetailIdComponent = (props) => {
     }
   };
 
+  const {data: dataFeed, dataUpdatedAt} = useGetPostById(feedId);
+
+  React.useEffect(() => {
+    setItem(dataFeed || parentData);
+  }, [parentData, dataFeed]);
+
   React.useEffect(() => {
     checkVotes();
+  }, [item]);
+
+  React.useEffect(() => {
+    initial();
   }, [item]);
 
   React.useEffect(

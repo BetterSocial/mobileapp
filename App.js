@@ -1,32 +1,56 @@
+import {HumanIDProvider} from '@human-internet/react-native-humanid';
+import {NavigationContainer} from '@react-navigation/native';
+import {appUpgradeVersionCheck} from 'app-upgrade-react-native-sdk';
 import * as React from 'react';
+import {BackHandler, Platform, View} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import FlashMessage from 'react-native-flash-message';
-import Toast from 'react-native-toast-message';
-import {BackHandler, Platform, View} from 'react-native';
-import {HumanIDProvider} from '@human-internet/react-native-humanid';
 import {LogLevel, OneSignal} from 'react-native-onesignal';
-import {NavigationContainer} from '@react-navigation/native';
-import {OverlayProvider, Streami18n} from 'stream-chat-react-native';
-import {RecoilDebugObserver} from 'reactotron-recoil-plugin';
-import {RecoilRoot} from 'recoil';
 import {
   SafeAreaProvider,
   useSafeAreaFrame,
   useSafeAreaInsets
 } from 'react-native-safe-area-context';
-import {appUpgradeVersionCheck} from 'app-upgrade-react-native-sdk';
+import Toast from 'react-native-toast-message';
+import {RecoilDebugObserver} from 'reactotron-recoil-plugin';
+import {RecoilRoot} from 'recoil';
+import {OverlayProvider, Streami18n} from 'stream-chat-react-native';
 
+import {QueryCache, QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import {toastConfig} from './src/configs/ToastConfig';
 import Store from './src/context/Store';
-import getFeatureLoggerInstance, {EFeatureLogFlag} from './src/utils/log/FeatureLog';
 import {APP_UPGRADE_API_KEY, ENV, ONE_SIGNAL_APP_ID} from './src/libraries/Configs/ENVConfig';
 import {Analytics} from './src/libraries/analytics/firebaseAnalytics';
+import {reactotronInstance} from './src/libraries/reactotron/reactotronInstance';
+import {linking} from './src/navigations/linking';
 import {RootNavigator} from './src/navigations/root-stack';
 import {fetchRemoteConfig} from './src/utils/FirebaseUtil';
-import {linking} from './src/navigations/linking';
-import {reactotronInstance} from './src/libraries/reactotron/reactotronInstance';
-import {toastConfig} from './src/configs/ToastConfig';
+import getFeatureLoggerInstance, {EFeatureLogFlag} from './src/utils/log/FeatureLog';
+
+const queryCache = new QueryCache({
+  // Optional global error handler
+  onError: (error, query) => {
+    console.error(`Something went wrong with the query ${query.queryKey}:`, error);
+  },
+
+  // Optional global success handler
+  onSuccess: (data, query) => {
+    console.log(`Query ${query.queryKey} succeeded with data:`, data);
+  },
+
+  // Optional handler that runs when queries are either resolved or rejected
+  onSettled: (data, error, query) => {
+    console.log(`Query ${query.queryKey} settled with data:`, data, 'and error:', error);
+  }
+});
 
 const {featLog} = getFeatureLoggerInstance(EFeatureLogFlag.navigation);
+export const queryClient = new QueryClient(queryCache);
+if (__DEV__) {
+  import('react-query-native-devtools').then(({addPlugin}) => {
+    addPlugin({queryClient});
+  });
+}
 
 const App = () => {
   const {top, bottom} = useSafeAreaInsets();
@@ -131,22 +155,24 @@ const App = () => {
     <>
       <HumanIDProvider />
       {/* <RealmProvider> */}
-      <RecoilRoot>
-        {__DEV__ ? <RecoilDebugObserver instance={reactotronInstance} /> : null}
-        <Store>
-          <NavigationContainer
-            onReady={onReadyState}
-            onStateChange={handleStateChange}
-            ref={navigationRef}
-            linking={linking}>
-            <View>
-              <OverlayProvider topInset={top} bottomInset={bottom} i18nInstance={streami18n}>
-                <RootNavigator areaHeight={height} currentScreen={currentScreen} />
-              </OverlayProvider>
-            </View>
-          </NavigationContainer>
-        </Store>
-      </RecoilRoot>
+      <QueryClientProvider client={queryClient}>
+        <RecoilRoot>
+          {__DEV__ ? <RecoilDebugObserver instance={reactotronInstance} /> : null}
+          <Store>
+            <NavigationContainer
+              onReady={onReadyState}
+              onStateChange={handleStateChange}
+              ref={navigationRef}
+              linking={linking}>
+              <View>
+                <OverlayProvider topInset={top} bottomInset={bottom} i18nInstance={streami18n}>
+                  <RootNavigator areaHeight={height} currentScreen={currentScreen} />
+                </OverlayProvider>
+              </View>
+            </NavigationContainer>
+          </Store>
+        </RecoilRoot>
+      </QueryClientProvider>
       {/* </RealmProvider> */}
       <Toast config={toastConfig} />
       <FlashMessage position="top" />

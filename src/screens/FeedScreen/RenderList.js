@@ -43,6 +43,8 @@ const RenderListFeed = (props) => {
     showAnonymousOption = false,
     onHeaderOptionClicked = () => {}
   } = props;
+
+  console.log('item actor', item);
   const {
     totalVote,
     getHeightReaction,

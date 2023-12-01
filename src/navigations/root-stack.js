@@ -23,7 +23,7 @@ import OneSignalNavigator from './OneSignalNavigator';
 import OtherProfile from '../screens/OtherProfile';
 import OtherProfilePostDetail from '../screens/OtherProfilePostDetail';
 import OtherProfileReplyComment from '../screens/OtherProfileReplyComment';
-import PostDetailPage from '../screens/PostPageDetail';
+import PostDetailPage from '../screens/PostPageDetail/index2';
 import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
 import ProfilePostDetail from '../screens/ProfilePostDetail';
 import ProfileReplyComment from '../screens/ProfileReplyComment';

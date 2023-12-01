@@ -6,7 +6,7 @@ import ChatDetailPage from './ChatDetailPage';
 import ContactScreen from './ContactScreen';
 import DetailDomainScreen from './DetailDomain/DetailDomainScreen';
 import DetailGroupImage from './DetailGroupImage';
-import FeedScreen from './FeedScreen';
+import FeedScreen from './FeedScreen/newIndex';
 import GroupInfo from './GroupInfo';
 import GroupMedia from './GroupInfo/GroupMedia';
 import GroupSetting from './GroupSetting';
