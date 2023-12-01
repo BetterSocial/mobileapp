@@ -398,7 +398,10 @@ const onOpenLink = (url) => {
 };
 
 const isValidUrl = (url) => {
-  return urlRegex.test(url);
+  if (url && typeof url === 'string') {
+    return urlRegex.test(url);
+  }
+  return false;
 };
 
 export {
