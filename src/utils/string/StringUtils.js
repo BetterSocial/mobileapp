@@ -14,7 +14,7 @@ import {getAnonymousUserId} from '../users';
 import {getUserId} from '../token';
 
 const NO_POLL_UUID = '00000000-0000-0000-0000-000000000000';
-
+const urlRegex = /(https?:\/\/\S+)+/g;
 const getPollTime = (pollExpiredAtString, currentMoment = moment()) => {
   const pollExpiredMoment = moment(pollExpiredAtString);
   const diff = pollExpiredMoment.diff(currentMoment);
@@ -384,8 +384,7 @@ const getDurationTimeText = (selectedtime) => {
 };
 
 const getCaptionWithLinkStyle = (text) => {
-  const linkRegex = /(https?:\/\/\S+)+/g;
-  return reactStringReplace(text, linkRegex, (match) => (
+  return reactStringReplace(text, urlRegex, (match) => (
     <HighlightText text={match} onPress={() => onOpenLink(match)} />
   ));
 };
@@ -396,6 +395,13 @@ const onOpenLink = (url) => {
       Linking.openURL(url);
     }
   });
+};
+
+const isValidUrl = (url) => {
+  if (url && typeof url === 'string') {
+    return urlRegex.test(url);
+  }
+  return false;
 };
 
 export {
@@ -418,5 +424,6 @@ export {
   isLocationMatch,
   styles,
   getCaptionWithLinkStyle,
-  getAnonymousChatName
+  getAnonymousChatName,
+  isValidUrl
 };
