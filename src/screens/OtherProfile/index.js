@@ -32,7 +32,6 @@ import RenderItem from '../ProfileScreen/elements/RenderItem';
 import ReportUser from '../../components/Blocking/ReportUser';
 import ShareUtils from '../../utils/share';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
-import ToggleSwitch from '../../components/ToggleSwitch';
 import TextAreaChat from '../../components/TextAreaChat';
 import dimen from '../../utils/dimen';
 import useSaveAnonChatHook from '../../database/hooks/useSaveAnonChatHook';
@@ -61,6 +60,7 @@ import StorageUtils from '../../utils/storage';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
 import useCreateChat from '../../hooks/screen/useCreateChat';
 import {ANON_PM, SIGNED} from '../../hooks/core/constant';
+import {ToggleSwitchAnon, useDynamicColors} from '../../hooks/useToggleColors';
 
 const {width, height} = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -83,11 +83,12 @@ const BioAndChat = (props) => {
     toggleSwitch,
     isAnonimityEnabled
   } = props;
+  const dynamicColors = useDynamicColors(isAnonimity);
   return (
-    <View style={styles.bioAndSendChatContainer(isAnonimity)}>
+    <View style={styles.bioAndSendChatContainer(dynamicColors)}>
       <View style={styles.containerBio}>
         {bio === null || bio === undefined ? (
-          <Text style={styles.bioText(isAnonimity)}>Send a message</Text>
+          <Text style={styles.bioText(dynamicColors)}>Send a message</Text>
         ) : (
           <Pressable onPress={openBio}>
             <Text linkStyle={styles.seeMore} style={styles.bioText(isAnonimity)}>
@@ -115,16 +116,13 @@ const BioAndChat = (props) => {
           }
         />
       </TouchableOpacity>
-      <TouchableOpacity onPress={toggleSwitch} style={styles.toggleSwitchContainer}>
-        <ToggleSwitch
-          value={isAnonimity}
-          onValueChange={toggleSwitch}
-          labelLeft={
-            isAnonimityEnabled || !isSignedMessageEnabled ? 'Anonymity' : 'Anonymity disabled'
-          }
-          styleLabelLeft={{color: isAnonimityEnabled ? colors.white : '#648ABF'}}
-        />
-      </TouchableOpacity>
+      <ToggleSwitchAnon
+        value={isAnonimity}
+        onValueChange={toggleSwitch}
+        labelLeft={
+          isAnonimityEnabled || !isSignedMessageEnabled ? 'Anonymity' : 'Anonymity disabled'
+        }
+      />
     </View>
   );
 };
@@ -1049,14 +1047,14 @@ const styles = StyleSheet.create({
   toggleSwitchContainer: {display: 'flex', alignSelf: 'flex-end', paddingVertical: 10},
   rightHeaderContentContainer: {display: 'flex', flexDirection: 'row'},
   headerImageContainer: {display: 'flex', flexDirection: 'row', marginBottom: 20},
-  bioAndSendChatContainer: (isAnonimity) => ({
-    backgroundColor: isAnonimity ? colors.bondi_blue : colors.blue1,
+  bioAndSendChatContainer: (dynamicColors) => ({
+    backgroundColor: dynamicColors.primary,
     borderRadius: 15,
     paddingHorizontal: 10,
     paddingTop: 10
   }),
-  bioText: (isAnonimity) => ({
-    color: isAnonimity ? colors.greenDark : colors.white,
+  bioText: (dynamicColors) => ({
+    color: dynamicColors.text,
     fontSize: 14,
     fontWeight: '600',
     lineHeight: 22
