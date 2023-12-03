@@ -11,6 +11,8 @@ import {fonts} from '../../../utils/fonts';
 import {sendAnonymousDMOtherProfile, sendSignedDMOtherProfile} from '../../../service/chat';
 import {trimString} from '../../../utils/string/TrimString';
 
+const CHANNEL_BLOCKED = 'Channel is blocked';
+
 const BioAndChat = (props) => {
   const {
     isAnonimity,
@@ -76,7 +78,7 @@ const BioAndChat = (props) => {
       await saveChatFromOtherProfile(response, 'sent', true, ANON_PM);
       setDmChat('');
     } catch (e) {
-      if (e?.response?.data?.status === 'Channel is blocked') {
+      if (e?.response?.data?.status === CHANNEL_BLOCKED) {
         const response = e?.response?.data?.data;
         await savePendingChatFromOtherProfile(response, true);
         setDmChat('');
@@ -174,14 +176,14 @@ BioAndChat.propTypes = {
   isAnonimity: PropTypes.bool,
   bio: PropTypes.string,
   openBio: PropTypes.bool,
-  dataMain: PropTypes.object,
+  dataMain: PropTypes.object.isRequired,
   isSignedMessageEnabled: PropTypes.bool,
   showSignedMessageDisableToast: PropTypes.bool,
   loadingGenerateAnon: PropTypes.bool,
   avatarUrl: PropTypes.string,
-  anonProfile: PropTypes.object,
-  username: PropTypes.string,
-  toggleSwitch: PropTypes.func,
+  anonProfile: PropTypes.object.isRequired,
+  username: PropTypes.string.isRequired,
+  toggleSwitch: PropTypes.func.isRequired,
   isAnonimityEnabled: PropTypes.bool
 };
 
