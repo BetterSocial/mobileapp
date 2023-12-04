@@ -15,7 +15,11 @@ import {
 import AnonymousInputMessage from '../../components/Chat/AnonymousInputMessage';
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
+import ChatReplyPreview from '../../components/AnonymousChat/child/ChatReplyPreview';
+import Loading from '../Loading';
 import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
+import useMessageHook from '../../hooks/screen/useMessageHook';
+import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {ANONYMOUS} from '../../hooks/core/constant';
 import {colors} from '../../utils/colors';
 
@@ -30,6 +34,10 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     height: height - 85
+  },
+  flatlistContainer: {
+    paddingTop: 5,
+    paddingBottom: 20
   },
   chatContainer: {
     display: 'flex',
@@ -61,8 +69,17 @@ const SampleChatScreen = () => {
     sendChat,
     updateChatContinuity
   } = useChatScreenHook(ANONYMOUS);
-
+  const {replyPreview, clearReplyPreview} = useMessageHook();
   const updatedChats = updateChatContinuity(chats);
+  const [loading, setLoading] = React.useState(false);
+  const {anonProfileId} = useProfileHook();
+
+  const ownerChat = selectedChannel?.rawJson?.channel?.members?.find(
+    (item: any) => item.user_id === anonProfileId
+  );
+  const memberChat = selectedChannel?.rawJson?.channel?.members?.find(
+    (item: any) => item.user_id !== anonProfileId
+  );
 
   const renderChatItem = React.useCallback(({item, index}) => {
     return <BaseChatItem type={ANONYMOUS} item={item} index={index} />;
@@ -71,6 +88,12 @@ const SampleChatScreen = () => {
   const scrollToEnd = () => {
     flatlistRef.current?.scrollToEnd();
   };
+
+  React.useEffect(() => {
+    return () => {
+      clearReplyPreview();
+    };
+  }, []);
 
   return (
     <>
@@ -91,7 +114,7 @@ const SampleChatScreen = () => {
           />
         ) : null}
         <FlatList
-          contentContainerStyle={{paddingBottom: 20}}
+          contentContainerStyle={styles.flatlistContainer}
           style={styles.chatContainer}
           data={updatedChats}
           inverted={true}
@@ -102,9 +125,12 @@ const SampleChatScreen = () => {
           keyExtractor={(item, index) => item?.id || index.toString()}
           renderItem={renderChatItem}
         />
+
+        {replyPreview && <ChatReplyPreview />}
         <View style={styles.inputContainer}>
           <AnonymousInputMessage onSendButtonClicked={sendChat} type={ANONYMOUS} />
         </View>
+        <Loading visible={loading} />
       </KeyboardAvoidingView>
     </>
   );

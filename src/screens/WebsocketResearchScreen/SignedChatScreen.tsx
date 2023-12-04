@@ -8,7 +8,11 @@ import {FlatList, View} from 'react-native';
 import AnonymousInputMessage from '../../components/Chat/AnonymousInputMessage';
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
+import ChatReplyPreview from '../../components/AnonymousChat/child/ChatReplyPreview';
+import Loading from '../Loading';
 import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
+import useMessageHook from '../../hooks/screen/useMessageHook';
+import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {Context} from '../../context';
 import {SIGNED} from '../../hooks/core/constant';
 import {getChatName} from '../../utils/string/StringUtils';
@@ -16,6 +20,7 @@ import {setChannel} from '../../context/actions/setChannel';
 import {styles} from './SampleChatScreen';
 
 const SignedChatScreen = () => {
+  const flatlistRef = React.useRef<FlatList>();
   const {
     selectedChannel,
     chats,
@@ -24,11 +29,17 @@ const SignedChatScreen = () => {
     sendChat,
     updateChatContinuity
   } = useChatScreenHook(SIGNED);
+  const {replyPreview, clearReplyPreview} = useMessageHook();
+  const updatedChats = updateChatContinuity(chats);
+  const [loading, setLoading] = React.useState(false);
+  const {signedProfileId} = useProfileHook();
 
-  const flatlistRef = React.useRef<FlatList>();
   const [, dispatchChannel] = (React.useContext(Context) as unknown as any).channel;
   const [profile] = (React.useContext(Context) as unknown as any).profile;
-  const updatedChats = updateChatContinuity(chats);
+
+  const memberChat = selectedChannel?.rawJson?.channel?.members?.find(
+    (item: any) => item.user_id !== signedProfileId
+  );
 
   const renderChatItem = React.useCallback(({item, index}) => {
     return <BaseChatItem type={SIGNED} item={item} index={index} />;
@@ -47,6 +58,12 @@ const SignedChatScreen = () => {
       setChannel(selectedChannel, dispatchChannel);
     }
   }, [selectedChannel]);
+
+  React.useEffect(() => {
+    return () => {
+      clearReplyPreview();
+    };
+  }, []);
 
   return (
     <View style={styles.keyboardAvoidingView}>
@@ -69,7 +86,7 @@ const SignedChatScreen = () => {
       ) : null}
 
       <FlatList
-        contentContainerStyle={{paddingBottom: 20}}
+        contentContainerStyle={styles.flatlistContainer}
         style={styles.chatContainer}
         data={updatedChats}
         inverted={true}
@@ -80,9 +97,12 @@ const SignedChatScreen = () => {
         keyExtractor={(item, index) => item?.id || index.toString()}
         renderItem={renderChatItem}
       />
+
+      {replyPreview && <ChatReplyPreview />}
       <View style={styles.inputContainer}>
         <AnonymousInputMessage onSendButtonClicked={sendChat} type={SIGNED} />
       </View>
+      <Loading visible={loading} />
     </View>
   );
 };
