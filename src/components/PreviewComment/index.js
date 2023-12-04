@@ -72,7 +72,7 @@ const PreviewComment = ({comment, time, image, totalComment, onPress, user, item
             <View style={styles.containerUsername}>
               <CommentUserName isPreviewComment comment={item} user={user} />
               <Gap width={4} />
-              <Dot size={4} color={'#828282'} />
+              <Dot size={4} color={COLORS.blackgrey} />
               <Gap width={4} />
               <Text style={styles.time}>{calculateTime(time).replace('ago', '')}</Text>
             </View>
@@ -121,7 +121,7 @@ export const styles = StyleSheet.create({
   username: {
     fontFamily: fonts.inter[700],
     fontSize: normalizeFontSize(10),
-    color: '#828282',
+    color: COLORS.blackgrey,
     marginLeft: SIZES.base
   },
   profile: {
@@ -131,7 +131,7 @@ export const styles = StyleSheet.create({
   time: {
     fontFamily: fonts.inter[400],
     fontSize: 10,
-    color: '#828282',
+    color: COLORS.blackgrey,
     lineHeight: 12
   },
   containerUsername: {

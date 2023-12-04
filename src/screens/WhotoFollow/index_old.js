@@ -8,7 +8,7 @@ import {
   TouchableNativeFeedback,
   TouchableHighlight,
   Dimensions,
-  ActivityIndicator,
+  ActivityIndicator
 } from 'react-native';
 
 import {showMessage} from 'react-native-flash-message';
@@ -27,9 +27,10 @@ import {Context} from '../../context';
 import {setAccessToken, setRefreshToken, setToken} from '../../utils/token';
 import {colors} from '../../utils/colors';
 import ListUser from './elements/ListUser';
-import { Analytics } from '../../libraries/analytics/firebaseAnalytics';
+import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
+import {COLORS} from '../../utils/theme';
 
-const { width } = Dimensions.get('screen');
+const {width} = Dimensions.get('screen');
 function compire(prevProps, nextProps) {
   return JSON.stringify(prevProps) === JSON.stringify(nextProps);
 }
@@ -72,12 +73,11 @@ const WhotoFollow = () => {
         </TouchableNativeFeedback>
       );
     }
-      return (
-        <TouchableHighlight onPress={() => navigation.goBack()}>
-          <ArrowLeftIcon width={20} height={12} fill="#000" />
-        </TouchableHighlight>
-      );
-
+    return (
+      <TouchableHighlight onPress={() => navigation.goBack()}>
+        <ArrowLeftIcon width={20} height={12} fill="#000" />
+      </TouchableHighlight>
+    );
   };
 
   const handleSelected = (value) => {
@@ -110,7 +110,7 @@ const WhotoFollow = () => {
   const register = () => {
     setFetchRegister(true);
     Analytics.logEvent('onb_select_follows_btn_add', {
-      onb_whofollow_users_selected: followed,
+      onb_whofollow_users_selected: followed
     });
     const data = {
       users: {
@@ -118,12 +118,12 @@ const WhotoFollow = () => {
         human_id: usersState.userId,
         country_code: usersState.countryCode,
         profile_pic_path: usersState.photo,
-        status: 'A',
+        status: 'A'
       },
       local_community: localCommunity.local_community,
       topics: topics.topics,
       follows: followed,
-      follow_source: 'onboarding',
+      follow_source: 'onboarding'
     };
 
     registerUser(data)
@@ -136,7 +136,7 @@ const WhotoFollow = () => {
           showMessage({
             message: 'Welcome to Better Social',
             type: 'success',
-            backgroundColor: colors.holytosca,
+            backgroundColor: colors.holytosca
           });
           setTimeout(() => {
             navigation.dispatch(StackActions.replace('HomeTabs'));
@@ -146,18 +146,18 @@ const WhotoFollow = () => {
           if (typeof res.message === 'object') {
             showMessage({
               message: res.message[0].message,
-              type: 'danger',
+              type: 'danger'
             });
           } else if (typeof res.message === 'string') {
             showMessage({
               message: res.message,
-              type: 'danger',
+              type: 'danger'
             });
           } else {
             showMessage({
               message: 'please complete the data',
               type: 'danger',
-              backgroundColor: colors.red,
+              backgroundColor: colors.red
             });
           }
         }
@@ -168,7 +168,7 @@ const WhotoFollow = () => {
         showMessage({
           message: 'please complete the data',
           type: 'danger',
-          backgroundColor: colors.red,
+          backgroundColor: colors.red
         });
       });
   };
@@ -182,15 +182,12 @@ const WhotoFollow = () => {
       <View style={styles.content}>
         <Text style={styles.textWhoToFollow}>Who to follow</Text>
         <Text style={styles.textDescription}>
-          Interesting people to follow. You can edit this anytime, and others
-          cannot see who you follow.
+          Interesting people to follow. You can edit this anytime, and others cannot see who you
+          follow.
         </Text>
       </View>
       {isLoading ? <ActivityIndicator size="small" color="#0000ff" /> : null}
-      <VirtualizedView
-        style={styles.listUser}
-        onRefresh={onRefresh}
-        refreshing={refreshing}>
+      <VirtualizedView style={styles.listUser} onRefresh={onRefresh} refreshing={refreshing}>
         <MemoListUser
           users={users}
           followed={followed}
@@ -208,22 +205,22 @@ const WhotoFollow = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#fff'
   },
   content: {
-    padding: 22,
+    padding: 22
   },
   wrapperHeader: {
     paddingLeft: 22,
     paddingRight: 22,
-    paddingTop: 22,
+    paddingTop: 22
   },
 
   containerProgress: {
     marginTop: 36,
     paddingLeft: 22,
     paddingRight: 22,
-    paddingTop: 22,
+    paddingTop: 22
   },
   textWhoToFollow: {
     fontFamily: 'Poppins',
@@ -231,7 +228,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 36,
     lineHeight: 44,
-    color: '#11243D',
+    color: '#11243D'
   },
   textDescription: {
     fontFamily: 'Poppins',
@@ -239,9 +236,9 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     fontSize: 12,
     lineHeight: 20,
-    color: '#828282',
+    color: COLORS.blackgrey,
     marginTop: 20,
-    opacity: 0.84,
+    opacity: 0.84
   },
   footer: {
     position: 'absolute',
@@ -255,14 +252,14 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 5,
+      height: 5
     },
     shadowOpacity: 0.36,
     shadowRadius: 6.68,
 
     elevation: 11,
     flexDirection: 'column',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-end'
   },
   containerCard: {
     flexDirection: 'row',
@@ -270,23 +267,23 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingTop: 4,
     paddingBottom: 4,
-    marginBottom: 8,
+    marginBottom: 8
   },
   cardLeft: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   textRounded: {
     fontFamily: 'Inter-Black',
     fontStyle: 'normal',
     fontWeight: 'normal',
     fontSize: 24,
-    color: '#FFFFFF',
+    color: '#FFFFFF'
   },
   containerTextCard: {
     flexDirection: 'column',
     alignItems: 'center',
-    marginLeft: 8,
+    marginLeft: 8
   },
 
   button: {
@@ -296,7 +293,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
     borderRadius: 8,
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   textStyling: {
     fontFamily: 'Inter',
@@ -304,7 +301,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 12,
     textAlign: 'center',
-    color: '#FFFFFF',
+    color: '#FFFFFF'
   },
   textFullName: {
     fontFamily: 'Poppins',
@@ -313,7 +310,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#000000',
     lineHeight: 21,
-    alignSelf: 'flex-start',
+    alignSelf: 'flex-start'
     // textTransform: 'capitalize',
   },
   textUsername: {
@@ -323,7 +320,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#000000',
     lineHeight: 15,
-    alignSelf: 'flex-start',
+    alignSelf: 'flex-start'
   },
   headerList: {
     height: 40,
@@ -333,7 +330,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     marginBottom: 12,
-    marginTop: 12,
+    marginTop: 12
   },
   titleHeader: {
     fontFamily: 'Poppins',
@@ -341,16 +338,16 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     fontSize: 12,
     lineHeight: 18,
-    color: '#4F4F4F',
+    color: '#4F4F4F'
   },
   flatList: {
     paddingLeft: 22,
-    paddingRight: 22,
+    paddingRight: 22
   },
   tinyLogo: {
     width: 48,
     height: 48,
-    borderRadius: 48,
+    borderRadius: 48
   },
   containerButton: {
     width: 32,
@@ -359,7 +356,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   textBold: {
     fontFamily: 'Poppins',
@@ -368,17 +365,17 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 18,
     color: '#4F4F4F',
-    textTransform: 'capitalize',
+    textTransform: 'capitalize'
   },
   followAction: (awidth, height) => ({
     height,
     width: awidth,
     backgroundColor: 'red',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   }),
   listUser: {
-    marginBottom: 90,
-  },
+    marginBottom: 90
+  }
 });
 export default WhotoFollow;

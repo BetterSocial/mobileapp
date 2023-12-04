@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 12,
     lineHeight: 18,
-    color: '#828282',
+    color: COLORS.blackgrey,
     flexShrink: 1
   },
   point: {
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     paddingRight: 20
   },
   followerNumber: {
-    color: '#828282',
+    color: COLORS.blackgrey,
     fontSize: 12,
     fontFamily: fonts.inter[700]
   }

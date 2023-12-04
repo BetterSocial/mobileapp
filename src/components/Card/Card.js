@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   },
   contentDomain: {flexDirection: 'row', alignItems: 'center'},
   containerDomain: {justifyContent: 'space-around'},
-  date: {fontSize: 12, color: '#828282'},
+  date: {fontSize: 12, color: COLORS.blackgrey},
   domain: {
     fontSize: 16,
     lineHeight: 16,
