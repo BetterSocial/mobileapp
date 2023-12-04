@@ -61,7 +61,7 @@ const chatTabHeaderCreateChatButtonText = 'New Chat';
 
 // News TabSearch Communities
 
-const newsTabHeaderPlaceholder = 'Search Domains';
+const newsTabHeaderPlaceholder = 'Search Recent Articles';
 const newsTabHeaderCreatePostButtonText = 'New Post';
 
 // Link Detail Page
