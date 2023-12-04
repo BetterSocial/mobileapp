@@ -103,7 +103,6 @@ const useFetchChannelHook = () => {
 
       await Promise.all(
         (channel?.messages || []).map(async (message) => {
-          if (message?.type === 'deleted') return;
           const chat = ChatSchema.fromGetAllChannelAPI(channel?.id, message);
           await chat.save(localDb);
         })
@@ -124,11 +123,10 @@ const useFetchChannelHook = () => {
         ?.toLowerCase()
         ?.includes('this message was deleted');
 
-      const isDeletedMessageOrSelfChat = isDeletedMessage || isSelfChatChannel;
       const isDeletedOrHasDeletedMessage = isDeletedMessage || hasDeletedMessage;
       const isCommunityHasDeletedMessage = isDeletedOrHasDeletedMessage && isCommunityChannel;
 
-      return !isLocationChannel && !isDeletedMessageOrSelfChat && !isCommunityHasDeletedMessage;
+      return !isLocationChannel && !isSelfChatChannel && !isCommunityHasDeletedMessage;
     });
   };
 
