@@ -1,26 +1,21 @@
+/* eslint-disable consistent-return */
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import {launchImageLibrary} from 'react-native-image-picker';
 
 import {Linking} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
-import {useRecoilState, atom} from 'recoil';
+import {useRecoilState} from 'recoil';
 import {Context} from '../../../context';
-import {getChatName} from '../../../utils/string/StringUtils';
+import {getChatName, isValidUrl} from '../../../utils/string/StringUtils';
 import {requestExternalStoragePermission} from '../../../utils/permission';
 import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
 import ChannelList from '../../../database/schema/ChannelListSchema';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
-import {CHANNEL_GROUP, CHAT_ATOM} from '../../../hooks/core/constant';
+import {CHANNEL_GROUP} from '../../../hooks/core/constant';
 import StringConstant from '../../../utils/string/StringConstant';
-import {uploadFile} from '../../../service/file';
-
-const chatAtom = atom({
-  key: CHAT_ATOM,
-  default: {
-    selectedChannel: null
-  }
-});
+import {chatAtom} from '../../../hooks/core/chat/useChatUtilsHook';
+import useUploadImage from '../../../hooks/useUploadImage';
 
 const useGroupSetting = ({route}) => {
   const [groupChatState] = React.useContext(Context).groupChat;
@@ -41,6 +36,7 @@ const useGroupSetting = ({route}) => {
   const [urlImage, setUrlImage] = React.useState(channel?.data?.image);
   const [isLoading, setIsLoading] = React.useState(false);
   const [chat, setChat] = useRecoilState(chatAtom);
+  const {uploadPhotoImage} = useUploadImage();
   const {selectedChannel} = chat;
   const updateName = (text) => {
     setGroupName(text);
@@ -59,18 +55,21 @@ const useGroupSetting = ({route}) => {
       setUrlImage(selectedChannel?.channelPicture);
     }
   }, [selectedChannel]);
-
   const submitData = async (withNavigation = true) => {
+    if (!changeImage && !changeName) return navigation.goBack();
     try {
       setLoadingUpdate(true);
       let body = {
         channel_id: route?.params?.id,
-        channel_name: groupName
+        channel_name: groupName,
+        channel_image: urlImage
       };
-      if (urlImage) {
+      if (urlImage && !isValidUrl(urlImage)) {
         try {
-          const res = await uploadFile(`data:image/jpeg;base64,${base64Profile}`);
-          body = {...body, channel_image: res.data.url};
+          const res = await uploadPhotoImage(urlImage);
+          if (res) {
+            body = {...body, channel_image: res.data.url};
+          }
         } catch (e) {
           console.log(e, 'error upload');
         }

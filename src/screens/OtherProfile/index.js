@@ -32,7 +32,6 @@ import RenderItem from '../ProfileScreen/elements/RenderItem';
 import ReportUser from '../../components/Blocking/ReportUser';
 import ShareUtils from '../../utils/share';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
-import TextAreaChat from '../../components/TextAreaChat';
 import StorageUtils from '../../utils/storage';
 import dimen from '../../utils/dimen';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
