@@ -35,6 +35,8 @@ export interface Message {
   pin_expires: any;
   members: string[];
   message: string;
+  message_type?: string;
+  reply_data?: any;
   anon_user_info_color_code: string;
   anon_user_info_color_name: string;
   anon_user_info_emoji_code: string;
@@ -75,6 +77,7 @@ export interface InitAnonymousChatData {
 export interface ModifyAnonymousChatData extends InitAnonymousChatData {
   targetName: string;
   targetImage: string;
+  reply_data: any;
 }
 
 export interface InitAnonymousChatResponse {

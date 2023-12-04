@@ -89,7 +89,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
     navigation.navigate('TopicPageScreen', navigationParam);
   };
 
-  const openChat = (screen: string) => {
+  const openChat = (screen: string, from?: string) => {
     navigation.dispatch({
       ...CommonActions.reset({
         routes: [
@@ -98,7 +98,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
             params: {
               screen: 'HomeTabs',
               params: {
-                screen: 'ChannelList',
+                screen: from ?? 'ChannelList',
                 isReset: true
               }
             }
@@ -123,12 +123,12 @@ function useChatUtilsHook(): UseChatUtilsHook {
     setChannelAsRead(channel);
     if (channel?.channelType === ANON_PM) {
       if (from === GROUP_INFO) {
-        return openChat('SampleChatScreen');
+        return openChat('SampleChatScreen', 'AnonymousChannelList');
       }
       navigation.navigate('SampleChatScreen');
     } else {
       if (from === GROUP_INFO) {
-        return openChat('SignedChatScreen');
+        return openChat('SignedChatScreen', 'SignedChannelList');
       }
       navigation.navigate('SignedChatScreen');
     }
