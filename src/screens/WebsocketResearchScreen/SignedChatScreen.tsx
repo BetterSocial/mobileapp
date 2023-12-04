@@ -56,14 +56,6 @@ const SignedChatScreen = () => {
 
   const moveChatToAnon = async () => {
     try {
-      if (selectedChannel?.channelType === 'GROUP') {
-        ToastMessage.show({
-          type: 'asNative',
-          text1: 'Coming soon: Anonymous messages are not enabled yet within group chats',
-          position: 'bottom'
-        });
-        return;
-      }
       setLoading(true);
       await moveToAnonymousChannel({
         oldChannelId: selectedChannel?.id,
@@ -121,6 +113,11 @@ const SignedChatScreen = () => {
           username={selectedChannel?.name}
           profileImage={profile?.myProfile?.profile_pic_path}
           onToggleConfirm={moveChatToAnon}
+          messageDisable={
+            selectedChannel?.channelType === 'GROUP'
+              ? 'Coming soon: Anonymous messages are not enabled yet within group chats'
+              : null
+          }
         />
       </View>
     </View>
