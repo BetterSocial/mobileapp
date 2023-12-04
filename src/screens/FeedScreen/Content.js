@@ -71,9 +71,6 @@ const Content = ({
 
       return result >= 0 ? result : 0;
     }
-    if (getCommentLength(item.latest_reactions.comment) > 0) {
-      return Math.floor(layoutHeight / lineHeight);
-    }
     return Math.round(layoutHeight / lineHeight);
   };
 
