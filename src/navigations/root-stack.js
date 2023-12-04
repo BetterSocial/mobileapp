@@ -267,7 +267,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="BlockScreen"
-          component={withKeyboardWrapper(Blocked)}
+          component={Blocked}
           options={{
             headerShown: false
           }}

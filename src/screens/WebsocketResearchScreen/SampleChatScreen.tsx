@@ -2,21 +2,14 @@
 /* eslint-disable import/no-unresolved */
 
 import * as React from 'react';
-import {
-  Dimensions,
-  FlatList,
-  KeyboardAvoidingView,
-  Platform,
-  StatusBar,
-  StyleSheet,
-  View
-} from 'react-native';
+import {Dimensions, FlatList, StatusBar, StyleSheet, View} from 'react-native';
 
 import AnonymousInputMessage from '../../components/Chat/AnonymousInputMessage';
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
 import ChatReplyPreview from '../../components/AnonymousChat/child/ChatReplyPreview';
 import Loading from '../Loading';
+import dimen from '../../utils/dimen';
 import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
 import useMessageHook from '../../hooks/screen/useMessageHook';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
@@ -41,8 +34,7 @@ export const styles = StyleSheet.create({
   },
   chatContainer: {
     display: 'flex',
-    height: '100%',
-    marginBottom: 72
+    height: '100%'
   },
   inputContainer: {
     backgroundColor: colors.white,
@@ -56,6 +48,10 @@ export const styles = StyleSheet.create({
     paddingBottom: 16,
     borderTopColor: colors.lightgrey,
     borderTopWidth: 1
+  },
+  contentContainerStyle: {
+    paddingTop: dimen.normalizeDimen(60),
+    backgroundColor: 'transparent'
   }
 });
 
@@ -99,10 +95,7 @@ const SampleChatScreen = () => {
     <>
       <StatusBar barStyle="light-content" backgroundColor={colors.anon_primary} />
 
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.keyboardAvoidingView}
-        keyboardVerticalOffset={-500}>
+      <View style={styles.keyboardAvoidingView}>
         {selectedChannel ? (
           <ChatDetailHeader
             onAvatarPress={goToChatInfoScreen}
@@ -131,7 +124,7 @@ const SampleChatScreen = () => {
           <AnonymousInputMessage onSendButtonClicked={sendChat} type={ANONYMOUS} />
         </View>
         <Loading visible={loading} />
-      </KeyboardAvoidingView>
+      </View>
     </>
   );
 };
