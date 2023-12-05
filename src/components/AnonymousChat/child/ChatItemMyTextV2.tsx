@@ -1,8 +1,18 @@
+// eslint-disable-next-line no-use-before-define
 import * as React from 'react';
-import {Dimensions, StyleSheet, Text, View} from 'react-native';
+import ContextMenu from 'react-native-context-menu-view';
+import {
+  Dimensions,
+  NativeSyntheticEvent,
+  StyleSheet,
+  Text,
+  TextLayoutEventData,
+  View
+} from 'react-native';
 
 import IconChatCheckMark from '../../../assets/icon/IconChatCheckMark';
 import IconChatClockGrey from '../../../assets/icon/IconChatClockGrey';
+import useMessageHook from '../../../hooks/screen/useMessageHook';
 import {ChatItemMyTextProps} from '../../../../types/component/AnonymousChat/BaseChatItem.types';
 import {ChatStatus} from '../../../../types/database/schema/ChannelList.types';
 import {SIGNED} from '../../../hooks/core/constant';
@@ -21,22 +31,24 @@ const BUBBLE_RIGHT_PADDING = 8;
 const styles = StyleSheet.create({
   chatContainer: {
     display: 'flex',
-    flexDirection: 'row',
     marginTop: 4,
     marginBottom: 4,
     maxWidth: width,
     paddingLeft: CONTAINER_LEFT_PADDING,
     paddingRight: CONTAINER_RIGHT_PADDING
   },
+  wrapper: {
+    flexDirection: 'row'
+  },
   chatTitleContainer: {
     display: 'flex',
     flexDirection: 'row'
   },
   containerSigned: {
-    backgroundColor: colors.babyBlue
+    backgroundColor: colors.darkBlue
   },
   containerAnon: {
-    backgroundColor: colors.halfBaked
+    backgroundColor: colors.anon_primary
   },
   textContainer: {
     paddingLeft: BUBBLE_LEFT_PADDING,
@@ -53,13 +65,15 @@ const styles = StyleSheet.create({
   userText: {
     fontFamily: fonts.inter[600],
     fontSize: 12,
-    lineHeight: 19.36
+    lineHeight: 19.36,
+    color: colors.white
   },
   text: {
     fontFamily: fonts.inter[400],
     fontSize: 16,
     lineHeight: 19.36,
-    marginBottom: 4
+    marginBottom: 4,
+    color: colors.white
   },
   avatar: {
     width: AVATAR_SIZE,
@@ -73,14 +87,15 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     marginLeft: 5,
     marginRight: 5,
-    backgroundColor: colors.black,
+    backgroundColor: colors.white,
     alignSelf: 'center'
   },
   timeText: {
     fontFamily: fonts.inter[200],
     fontSize: 10,
     lineHeight: 12.19,
-    alignSelf: 'center'
+    alignSelf: 'center',
+    color: colors.white
   },
   icon: {
     alignSelf: 'flex-end',
@@ -117,19 +132,29 @@ const ChatItemMyTextV2 = ({
   avatar,
   chatType
 }: ChatItemMyTextProps) => {
+  const {onContextMenuPressed} = useMessageHook();
   const messageRef = React.useRef<Text>(null);
+  const [isNewLine, setIsNewLine] = React.useState(true);
+
+  const onTextLayout = (event: NativeSyntheticEvent<TextLayoutEventData>) => {
+    const {lines} = event.nativeEvent;
+    const lastLine = lines[lines.length - 1];
+    const lastLineWidth = lastLine?.width;
+    const isCalculatedNewLine = targetLastLineWidth - lastLineWidth < 24;
+    setIsNewLine(isCalculatedNewLine);
+  };
 
   const renderIcon = React.useCallback(() => {
     if (status === ChatStatus.PENDING)
       return (
         <View style={styles.icon}>
-          <IconChatClockGrey width={12} height={12} />
+          <IconChatClockGrey color={colors.silver} width={12} height={12} />
         </View>
       );
 
     return (
       <View style={styles.icon}>
-        <IconChatCheckMark />
+        <IconChatCheckMark color={colors.silver} />
       </View>
     );
   }, []);
@@ -148,21 +173,37 @@ const ChatItemMyTextV2 = ({
 
   return (
     <View style={styles.chatContainer}>
-      <View style={handleTextContainerStyle()}>
-        {!isContinuous && (
-          <View style={styles.chatTitleContainer}>
-            <Text style={styles.userText}>{username}</Text>
-            <View style={styles.dot} />
-            <Text style={styles.timeText}>{time}</Text>
-          </View>
-        )}
-        <Text ref={messageRef} style={styles.text}>
-          {`${message}`}
-        </Text>
+      <View style={styles.wrapper}>
+        <ContextMenu
+          previewBackgroundColor="transparent"
+          style={{flex: 1}}
+          actions={[
+            {title: 'Reply', systemIcon: 'arrow.turn.up.left'},
+            {title: 'Copy Message', systemIcon: 'square.on.square'},
+            {title: 'Delete Message', systemIcon: 'trash', destructive: true}
+          ]}
+          onPress={(e) => onContextMenuPressed(e, message)}>
+          <View style={{borderRadius: 8}}>
+            <View style={handleTextContainerStyle()}>
+              {!isContinuous && (
+                <View style={styles.chatTitleContainer}>
+                  <Text style={styles.userText}>{username}</Text>
+                  <View style={styles.dot} />
+                  <Text style={styles.timeText}>{time}</Text>
+                </View>
+              )}
 
-        {renderIcon()}
+              <Text ref={messageRef} style={styles.text} onTextLayout={onTextLayout}>
+                {`${message}`}
+              </Text>
+
+              {renderIcon()}
+            </View>
+          </View>
+        </ContextMenu>
+
+        {renderAvatar()}
       </View>
-      {renderAvatar()}
     </View>
   );
 };

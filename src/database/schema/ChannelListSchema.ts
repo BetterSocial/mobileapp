@@ -285,6 +285,22 @@ class ChannelList implements BaseDbSchema {
     return 'channel_lists';
   }
 
+  static updateChannelInfo = async (
+    db: SQLiteDatabase,
+    channelId: string,
+    name: string,
+    image: string
+  ) => {
+    try {
+      const replacementImageName = [image, name, channelId];
+      const queryUpdateChannel = `UPDATE ${ChannelList.getTableName()}
+        SET channel_picture = ?, name = ? WHERE id = ?;`;
+      await db.executeSql(queryUpdateChannel, replacementImageName);
+    } catch (e) {
+      console.log(e, 'error update channel');
+    }
+  };
+
   static updateChannelDescription = async (
     db: SQLiteDatabase,
     channelId: string,
@@ -390,7 +406,11 @@ class ChannelList implements BaseDbSchema {
     });
   }
 
-  static fromChannelAPI(data: ChannelData, channelType: ChannelType): ChannelList {
+  static fromChannelAPI(
+    data: ChannelData,
+    channelType: ChannelType,
+    members?: ChannelData['members']
+  ): ChannelList {
     const isPM = channelType === 'PM';
     const firstMessage = data?.firstMessage;
     const isSystemMessage = firstMessage?.type === 'system' || firstMessage?.isSystem;
@@ -411,7 +431,7 @@ class ChannelList implements BaseDbSchema {
       createdAt: data?.created_at,
       rawJson: data,
       user: null,
-      members: null
+      members: members || null
     });
   }
 

@@ -57,7 +57,8 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     overflow: 'hidden',
     marginEnd: 11,
-    marginBottom: 4
+    marginBottom: 4,
+    opacity: 0.6
   },
   topicText: {
     fontFamily: fonts.inter[500],
