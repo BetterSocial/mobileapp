@@ -150,6 +150,8 @@ const useCoreChatSystemHook = () => {
       websocketData = await helperSignedChannelListData(websocketData);
     }
 
+    websocketData.reply_data = websocketMessage?.reply_data;
+
     const isAnonymous = channelCategory === ANONYMOUS;
     const channelType: {[key: string]: ChannelType} = {
       messaging: isAnonymous ? 'ANON_PM' : 'PM',
@@ -333,6 +335,7 @@ const useCoreChatSystemHook = () => {
 
   React.useEffect(() => {
     if (!lastSignedMessage || !localDb) return;
+
     const {type} = lastSignedMessage;
     if (type === 'health.check') return;
     if (type === 'notification.message_new' || type === 'notification.added_to_channel') {

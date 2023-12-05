@@ -2,7 +2,8 @@ import * as React from 'react';
 import DeviceInfo from 'react-native-device-info';
 import FlashMessage from 'react-native-flash-message';
 import Toast from 'react-native-toast-message';
-import {BackHandler, KeyboardAvoidingView, Platform, View} from 'react-native';
+import {BackHandler, Platform, View} from 'react-native';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {HumanIDProvider} from '@human-internet/react-native-humanid';
 import {LogLevel, OneSignal} from 'react-native-onesignal';
 import {NavigationContainer} from '@react-navigation/native';
@@ -132,17 +133,19 @@ const App = () => {
       <RecoilRoot>
         {__DEV__ ? <RecoilDebugObserver instance={reactotronInstance} /> : null}
         <Store>
-          <NavigationContainer
-            onReady={onReadyState}
-            onStateChange={handleStateChange}
-            ref={navigationRef}
-            linking={linking}>
-            <View>
-              <OverlayProvider topInset={top} bottomInset={bottom} i18nInstance={streami18n}>
-                <RootNavigator areaHeight={height} currentScreen={currentScreen} />
-              </OverlayProvider>
-            </View>
-          </NavigationContainer>
+          <GestureHandlerRootView style={{flex: 1}}>
+            <NavigationContainer
+              onReady={onReadyState}
+              onStateChange={handleStateChange}
+              ref={navigationRef}
+              linking={linking}>
+              <View>
+                <OverlayProvider topInset={top} bottomInset={bottom} i18nInstance={streami18n}>
+                  <RootNavigator areaHeight={height} currentScreen={currentScreen} />
+                </OverlayProvider>
+              </View>
+            </NavigationContainer>
+          </GestureHandlerRootView>
         </Store>
         <NetworkDebuggerModal />
       </RecoilRoot>
