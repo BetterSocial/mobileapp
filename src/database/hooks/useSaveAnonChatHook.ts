@@ -6,12 +6,12 @@ import ChatSchema from '../schema/ChatSchema';
 import UserSchema from '../schema/UserSchema';
 import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
 import useLocalDatabaseHook from './useLocalDatabaseHook';
+import {GROUP_INFO} from '../../hooks/core/constant';
 import {
   InitAnonymousChatData,
   ModifyAnonymousChatData
 } from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 import {getAnonymousChatName} from '../../utils/string/StringUtils';
-import {GROUP_INFO} from '../../hooks/core/constant';
 
 const useSaveAnonChatHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook();
@@ -34,13 +34,14 @@ const useSaveAnonChatHook = () => {
     object: InitAnonymousChatData,
     status = 'sent',
     withNavigate,
-    type: string
+    type?: string
   ) => {
     if (!localDb) return;
 
     const chatName = await getAnonymousChatName(object?.members);
     const initAnonymousChat: ModifyAnonymousChatData = {
       ...object,
+      reply_data: object.message?.reply_data,
       targetName: chatName?.name,
       targetImage: chatName?.image
     };

@@ -3,41 +3,42 @@
 /* eslint-disable import/no-unresolved */
 
 import * as React from 'react';
+import ToastMessage from 'react-native-toast-message';
 import {FlatList, View} from 'react-native';
 
-import ToastMessage from 'react-native-toast-message';
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
+import ChatReplyPreview from '../../components/AnonymousChat/child/ChatReplyPreview';
 import InputMessageV2 from '../../components/Chat/InputMessageV2';
-import {Context} from '../../context';
-import {setChannel} from '../../context/actions/setChannel';
-import useMoveChatTypeHook from '../../hooks/core/chat/useMoveChatTypeHook';
-import {SIGNED} from '../../hooks/core/constant';
-import useProfileHook from '../../hooks/core/profile/useProfileHook';
-import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
-import {getChatName} from '../../utils/string/StringUtils';
 import Loading from '../Loading';
+import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
+import useMessageHook from '../../hooks/screen/useMessageHook';
+import useMoveChatTypeHook from '../../hooks/core/chat/useMoveChatTypeHook';
+import useProfileHook from '../../hooks/core/profile/useProfileHook';
+import {Context} from '../../context';
+import {SIGNED} from '../../hooks/core/constant';
+import {getChatName} from '../../utils/string/StringUtils';
+import {setChannel} from '../../context/actions/setChannel';
 import {styles} from './SampleChatScreen';
 
 const SignedChatScreen = () => {
+  const flatlistRef = React.useRef<FlatList>();
   const {
     selectedChannel,
     chats,
     goBackFromChatScreen,
     goToChatInfoScreen,
     sendChat,
-    updateChatContinuity,
-    loadingChat
+    updateChatContinuity
   } = useChatScreenHook(SIGNED);
+  const {replyPreview, clearReplyPreview} = useMessageHook();
+  const {moveToAnonymousChannel} = useMoveChatTypeHook();
+  const {signedProfileId} = useProfileHook();
+  const updatedChats = updateChatContinuity(chats);
 
-  const flatlistRef = React.useRef<FlatList>();
   const [loading, setLoading] = React.useState(false);
   const [, dispatchChannel] = (React.useContext(Context) as unknown as any).channel;
   const [profile] = (React.useContext(Context) as unknown as any).profile;
-  const updatedChats = updateChatContinuity(chats);
-  const {signedProfileId} = useProfileHook();
-
-  const {moveToAnonymousChannel} = useMoveChatTypeHook();
 
   const memberChat = selectedChannel?.rawJson?.channel?.members?.find(
     (item: any) => item.user_id !== signedProfileId
@@ -75,6 +76,12 @@ const SignedChatScreen = () => {
     }
   }, [selectedChannel]);
 
+  React.useEffect(() => {
+    return () => {
+      clearReplyPreview();
+    };
+  }, []);
+
   return (
     <View style={styles.keyboardAvoidingView}>
       {selectedChannel ? (
@@ -95,7 +102,7 @@ const SignedChatScreen = () => {
         />
       ) : null}
       <FlatList
-        contentContainerStyle={styles.contentContainerStyle}
+        contentContainerStyle={styles.flatlistContainer}
         style={styles.chatContainer}
         data={updatedChats}
         inverted={true}
@@ -107,6 +114,7 @@ const SignedChatScreen = () => {
         renderItem={renderChatItem}
       />
 
+      {replyPreview && <ChatReplyPreview type={SIGNED} />}
       <View style={styles.inputContainer}>
         <InputMessageV2
           onSendButtonClicked={sendChat}

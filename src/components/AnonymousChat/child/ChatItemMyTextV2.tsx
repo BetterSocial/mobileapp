@@ -2,126 +2,36 @@
 import * as React from 'react';
 import ContextMenu from 'react-native-context-menu-view';
 import {
+  Animated,
   Dimensions,
   NativeSyntheticEvent,
-  StyleSheet,
   Text,
   TextLayoutEventData,
   View
 } from 'react-native';
+import {Swipeable} from 'react-native-gesture-handler';
+import {useAnimatedStyle, useSharedValue} from 'react-native-reanimated';
 
+import ChatReplyView from './ChatReplyView';
 import IconChatCheckMark from '../../../assets/icon/IconChatCheckMark';
 import IconChatClockGrey from '../../../assets/icon/IconChatClockGrey';
 import useMessageHook from '../../../hooks/screen/useMessageHook';
 import {ChatItemMyTextProps} from '../../../../types/component/AnonymousChat/BaseChatItem.types';
 import {ChatStatus} from '../../../../types/database/schema/ChannelList.types';
-import {SIGNED} from '../../../hooks/core/constant';
 import {colors} from '../../../utils/colors';
-import {fonts} from '../../../utils/fonts';
+import {
+  containerStyle,
+  dotStyle,
+  messageStyle,
+  styles,
+  targetLastLine,
+  textContainerStyle,
+  textStyle
+} from './ChatItemText.style';
+import {replyIcon} from './ChatItemTargetText';
 
 const {width} = Dimensions.get('screen');
-
-const AVATAR_SIZE = 24;
-const CONTAINER_LEFT_PADDING = 60;
-const CONTAINER_RIGHT_PADDING = 10;
-const AVATAR_LEFT_MARGIN = 8;
-const BUBBLE_LEFT_PADDING = 8;
-const BUBBLE_RIGHT_PADDING = 8;
-
-const styles = StyleSheet.create({
-  chatContainer: {
-    display: 'flex',
-    marginTop: 4,
-    marginBottom: 4,
-    maxWidth: width,
-    paddingLeft: CONTAINER_LEFT_PADDING,
-    paddingRight: CONTAINER_RIGHT_PADDING
-  },
-  wrapper: {
-    flexDirection: 'row'
-  },
-  chatTitleContainer: {
-    display: 'flex',
-    flexDirection: 'row'
-  },
-  containerSigned: {
-    backgroundColor: colors.darkBlue
-  },
-  containerAnon: {
-    backgroundColor: colors.anon_primary
-  },
-  textContainer: {
-    paddingLeft: BUBBLE_LEFT_PADDING,
-    paddingRight: BUBBLE_RIGHT_PADDING,
-    paddingTop: 4,
-    paddingBottom: 4,
-    borderRadius: 8,
-    borderTopEndRadius: 0,
-    flex: 1
-  },
-  textContainerNewLine: {
-    paddingBottom: 14
-  },
-  userText: {
-    fontFamily: fonts.inter[600],
-    fontSize: 12,
-    lineHeight: 19.36,
-    color: colors.white
-  },
-  text: {
-    fontFamily: fonts.inter[400],
-    fontSize: 16,
-    lineHeight: 19.36,
-    marginBottom: 4,
-    color: colors.white
-  },
-  avatar: {
-    width: AVATAR_SIZE,
-    height: AVATAR_SIZE,
-    borderRadius: 12,
-    marginLeft: AVATAR_LEFT_MARGIN
-  },
-  dot: {
-    width: 3,
-    height: 3,
-    borderRadius: 2,
-    marginLeft: 5,
-    marginRight: 5,
-    backgroundColor: colors.white,
-    alignSelf: 'center'
-  },
-  timeText: {
-    fontFamily: fonts.inter[200],
-    fontSize: 10,
-    lineHeight: 12.19,
-    alignSelf: 'center',
-    color: colors.white
-  },
-  icon: {
-    alignSelf: 'flex-end',
-    position: 'absolute',
-    bottom: 6,
-    right: 8
-  },
-  iconNewLine: {
-    alignSelf: 'flex-end',
-    position: 'absolute',
-    bottom: 6,
-    right: 8
-  },
-  ml8: {
-    marginLeft: 8
-  }
-});
-
-const targetLastLineWidth =
-  width -
-  CONTAINER_LEFT_PADDING -
-  CONTAINER_RIGHT_PADDING -
-  AVATAR_SIZE -
-  AVATAR_LEFT_MARGIN -
-  BUBBLE_LEFT_PADDING -
-  BUBBLE_RIGHT_PADDING;
+const targetLastLineWidth = width - targetLastLine;
 
 const ChatItemMyTextV2 = ({
   username = 'Anonymous User',
@@ -130,11 +40,19 @@ const ChatItemMyTextV2 = ({
   message = '',
   status = ChatStatus.PENDING,
   avatar,
-  chatType
+  chatType,
+  messageType,
+  data
 }: ChatItemMyTextProps) => {
-  const {onContextMenuPressed} = useMessageHook();
-  const messageRef = React.useRef<Text>(null);
+  const {setReplyPreview, onContextMenuPressed} = useMessageHook();
+
+  const swipeableRef = React.useRef<Swipeable | null>(null);
   const [isNewLine, setIsNewLine] = React.useState(true);
+  const bubblePosition = useSharedValue(0);
+
+  const isReply = messageType === 'reply';
+  const isReplyPrompt = messageType === 'reply_prompt';
+  const isShowUserInfo = !isContinuous || isReplyPrompt || isReply;
 
   const onTextLayout = (event: NativeSyntheticEvent<TextLayoutEventData>) => {
     const {lines} = event.nativeEvent;
@@ -143,6 +61,10 @@ const ChatItemMyTextV2 = ({
     const isCalculatedNewLine = targetLastLineWidth - lastLineWidth < 24;
     setIsNewLine(isCalculatedNewLine);
   };
+
+  const animatedBubbleStyle = useAnimatedStyle(() => ({
+    transform: [{translateX: bubblePosition.value}]
+  }));
 
   const renderIcon = React.useCallback(() => {
     if (status === ChatStatus.PENDING)
@@ -159,52 +81,74 @@ const ChatItemMyTextV2 = ({
     );
   }, []);
 
+  const contextMenuActions = [
+    {title: 'Reply', systemIcon: 'arrow.turn.up.left'},
+    {title: 'Copy Message', systemIcon: 'square.on.square'},
+    {title: 'Delete Message', systemIcon: 'trash', destructive: true}
+  ];
+
   const renderAvatar = React.useCallback(() => {
-    if (isContinuous) return <View style={styles.avatar} />;
+    if (!isShowUserInfo) return <View style={styles.avatar} />;
     return <View style={styles.ml8}>{avatar}</View>;
   }, []);
 
-  const handleTextContainerStyle = () => {
-    if (chatType === SIGNED) {
-      return [styles.containerSigned, styles.textContainer];
-    }
-    return [styles.containerAnon, styles.textContainer];
+  const onSwipeToReply = (direction) => {
+    if (direction === 'right') return;
+    if (swipeableRef.current) swipeableRef.current?.close();
+    setReplyPreview({
+      username,
+      time,
+      message,
+      messageId: data?.id,
+      chatType,
+      messageType: 'regular'
+    });
   };
 
   return (
-    <View style={styles.chatContainer}>
-      <View style={styles.wrapper}>
-        <ContextMenu
-          previewBackgroundColor="transparent"
-          style={{flex: 1}}
-          actions={[
-            {title: 'Reply', systemIcon: 'arrow.turn.up.left'},
-            {title: 'Copy Message', systemIcon: 'square.on.square'},
-            {title: 'Delete Message', systemIcon: 'trash', destructive: true}
-          ]}
-          onPress={(e) => onContextMenuPressed(e, message)}>
-          <View style={{borderRadius: 8}}>
-            <View style={handleTextContainerStyle()}>
-              {!isContinuous && (
-                <View style={styles.chatTitleContainer}>
-                  <Text style={styles.userText}>{username}</Text>
-                  <View style={styles.dot} />
-                  <Text style={styles.timeText}>{time}</Text>
-                </View>
-              )}
+    <Swipeable
+      testID="swipeable"
+      ref={swipeableRef}
+      friction={3}
+      overshootFriction={2}
+      onSwipeableOpen={onSwipeToReply}
+      renderLeftActions={replyIcon}>
+      <View style={containerStyle(true, isReplyPrompt)}>
+        <Animated.View style={[styles.wrapper, animatedBubbleStyle]}>
+          <ContextMenu
+            previewBackgroundColor="transparent"
+            style={{flex: 1}}
+            actions={contextMenuActions}
+            onPress={(e) => onContextMenuPressed(e, data, chatType)}>
+            <View style={styles.radius8}>
+              <View style={textContainerStyle(true, chatType, isNewLine)}>
+                {isShowUserInfo && (
+                  <View style={styles.chatTitleContainer}>
+                    <Text style={[styles.userText, textStyle(true)]}>{username}</Text>
+                    <View style={dotStyle(true)} />
+                    <Text style={[styles.timeText, textStyle(true)]}>{time}</Text>
+                  </View>
+                )}
 
-              <Text ref={messageRef} style={styles.text} onTextLayout={onTextLayout}>
-                {`${message}`}
-              </Text>
+                <ChatReplyView
+                  type={chatType}
+                  messageType={messageType}
+                  replyData={data?.reply_data}
+                />
 
-              {renderIcon()}
+                <Text style={messageStyle(true, messageType)} onTextLayout={onTextLayout}>
+                  {`${message}`}
+                </Text>
+
+                {renderIcon()}
+              </View>
             </View>
-          </View>
-        </ContextMenu>
+          </ContextMenu>
 
-        {renderAvatar()}
+          {renderAvatar()}
+        </Animated.View>
       </View>
-    </View>
+    </Swipeable>
   );
 };
 

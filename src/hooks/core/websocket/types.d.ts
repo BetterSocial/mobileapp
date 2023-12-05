@@ -27,6 +27,7 @@ export type GetstreamMessage = {
   text: string;
   isSystem?: boolean;
   textOwnMessage?: string;
+  reply_data?: any;
   type: string;
   updated_at: string;
   user: {
@@ -112,6 +113,7 @@ export type GetstreamWebsocket = {
   unread_channels: number;
   unread_count: number;
   targetName: string;
+  reply_data?: any;
   targetImage?: string;
   isAnonymous?: boolean;
   anon_user_info_emoji_name?: string;
