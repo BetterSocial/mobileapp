@@ -198,7 +198,7 @@ class ChatSchema implements BaseDbSchema {
       channelId: json?.channel_id,
       userId: json?.message?.user?.id,
       message: json?.message?.text || json?.message?.message,
-      type: json?.message?.type,
+      type: json?.message?.message_type ?? json?.message?.type,
       createdAt: json?.message?.created_at,
       updatedAt: json?.message?.created_at,
       rawJson,
