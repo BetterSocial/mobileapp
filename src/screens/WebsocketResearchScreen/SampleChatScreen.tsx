@@ -38,16 +38,13 @@ export const styles = StyleSheet.create({
   },
   inputContainer: {
     backgroundColor: colors.white,
-    position: 'absolute',
-    bottom: 0,
-    // height: 50,
-    left: 0,
-    right: 0,
     zIndex: 100,
     padding: 8,
-    paddingBottom: 16,
     borderTopColor: colors.lightgrey,
-    borderTopWidth: 1
+    borderTopWidth: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   contentContainerStyle: {
     paddingTop: dimen.normalizeDimen(60),
