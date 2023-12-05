@@ -1,11 +1,12 @@
 import * as React from 'react';
 import {View, Text, StyleSheet, ActivityIndicator} from 'react-native';
-
+import PropTypes from 'prop-types';
 import {fonts} from '../../../utils/fonts';
 import {colors} from '../../../utils/colors';
 import {Button} from '../../../components/Button';
 import {BottomSheet} from '../../../components/BottomSheet';
 import AutoFocusTextArea from '../../../components/TextArea/AutoFocusTextArea';
+import dimen from '../../../utils/dimen';
 
 // eslint-disable-next-line react/display-name
 const BottomSheetBio = React.forwardRef((props, ref) => {
@@ -25,12 +26,16 @@ const BottomSheetBio = React.forwardRef((props, ref) => {
             placeholder="Message prompt"
             keyboardAppearDelay={500}
             editable={!props.isOtherProfile}
+            maxLength={350}
           />
           <Text style={styles.description}>{props.value ? props.value.length : 0}/350</Text>
           {props.error ? <Text style={styles.errorText}>{props.error}</Text> : null}
         </View>
         {!props.isOtherProfile && (
-          <Button style={styles.button} textStyling={styles.textStyling} onPress={props.handleSave}>
+          <Button
+            btnStyle={styles.button}
+            textStyling={styles.textStyling}
+            onPress={props.handleSave}>
             {props.isLoadingUpdateBio ? <ActivityIndicator size="small" color="#0000ff" /> : 'Save'}
           </Button>
         )}
@@ -38,6 +43,10 @@ const BottomSheetBio = React.forwardRef((props, ref) => {
     </View>
   );
 });
+
+BottomSheetBio.propTypes = {
+  handleSave: PropTypes.func
+};
 
 const styles = StyleSheet.create({
   bottomsheet: {
@@ -66,8 +75,8 @@ const styles = StyleSheet.create({
     marginTop: 7
   },
   button: {
-    marginTop: 33,
-    backgroundColor: colors.bondi_blue
+    backgroundColor: colors.bondi_blue,
+    marginTop: dimen.normalizeDimen(33)
   },
   textStyling: {
     fontFamily: fonts.inter[600],
