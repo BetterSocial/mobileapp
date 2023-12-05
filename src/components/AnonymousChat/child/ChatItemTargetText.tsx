@@ -66,11 +66,11 @@ const ChatItemTargetText = ({
     if (direction === 'right') return;
     if (swipeableRef.current) swipeableRef.current?.close();
     setReplyPreview({
-      username: 'Anonymous User',
-      time: '4h',
+      username,
+      time,
       message,
-      messageId: 'sdfs',
-      chatType: '',
+      messageId: data?.id,
+      chatType,
       messageType: 'regular'
     });
   };
@@ -91,7 +91,7 @@ const ChatItemTargetText = ({
             previewBackgroundColor="transparent"
             style={{flex: 1}}
             actions={contextMenuActions}
-            onPress={(e) => onContextMenuPressed(e, data?.id, message)}>
+            onPress={(e) => onContextMenuPressed(e, data, chatType)}>
             <View style={styles.radius8}>
               <View style={textContainerStyle(false)}>
                 {isShowUserInfo && (

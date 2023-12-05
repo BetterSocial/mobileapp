@@ -7,8 +7,8 @@ interface UseMessageHook {
   clearReplyPreview: () => void;
   onContextMenuPressed: (
     e: NativeSyntheticEvent<ContextMenuOnPressNativeEvent>,
-    messageId: string,
-    message: string
+    data: any,
+    type: 'ANONYMOUS' | 'SIGNED'
   ) => void;
 }
 

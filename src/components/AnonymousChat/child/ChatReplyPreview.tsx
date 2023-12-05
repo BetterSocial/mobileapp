@@ -9,11 +9,15 @@ import useMessageHook from '../../../hooks/screen/useMessageHook';
 import {colors} from '../../../utils/colors';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
 
-const ChatReplyPreview = () => {
+interface ChatReplyPreviewProps {
+  type: 'SIGNED' | 'ANONYMOUS';
+}
+
+const ChatReplyPreview = ({type}: ChatReplyPreviewProps) => {
   const {replyPreview, clearReplyPreview} = useMessageHook();
 
   const textContainerStyle = [
-    replyPreview?.chatType === 'SIGNED' ? styles.containerSigned : styles.containerAnon,
+    type === 'SIGNED' ? styles.containerSigned : styles.containerAnon,
     styles.textContainer
   ];
 

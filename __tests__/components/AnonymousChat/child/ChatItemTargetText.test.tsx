@@ -51,7 +51,8 @@ describe('TESTING ChatItemTargetText', () => {
   it('should call setReplyPreview when swiped to the left', () => {
     const setReplyPreview = jest.fn();
     const contextValue = {
-      chat: [{replyTarget: null}, setReplyPreview]
+      chat: [{replyTarget: null}, setReplyPreview],
+      profile: [{myProfile: {}}]
     };
 
     const {getByTestId} = render(
@@ -77,7 +78,8 @@ describe('TESTING ChatItemTargetText', () => {
   it('should match snapshot', () => {
     const setReplyPreview = jest.fn();
     const contextValue = {
-      chat: [{replyTarget: null}, setReplyPreview]
+      chat: [{replyTarget: null}, setReplyPreview],
+      profile: [{myProfile: {}}]
     };
 
     const tree = render(

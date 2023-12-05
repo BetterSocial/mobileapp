@@ -98,7 +98,7 @@ const SignedChatScreen = () => {
         renderItem={renderChatItem}
       />
 
-      {replyPreview && <ChatReplyPreview />}
+      {replyPreview && <ChatReplyPreview type={SIGNED} />}
       <View style={styles.inputContainer}>
         <AnonymousInputMessage onSendButtonClicked={sendChat} type={SIGNED} />
       </View>

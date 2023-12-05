@@ -116,7 +116,7 @@ const SampleChatScreen = () => {
           renderItem={renderChatItem}
         />
 
-        {replyPreview && <ChatReplyPreview />}
+        {replyPreview && <ChatReplyPreview type={ANONYMOUS} />}
         <View style={styles.inputContainer}>
           <AnonymousInputMessage onSendButtonClicked={sendChat} type={ANONYMOUS} />
         </View>

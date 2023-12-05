@@ -8,13 +8,13 @@ import {calculateTime} from '../../../utils/time';
 import {colors} from '../../../utils/colors';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
 
-interface ChatPromptPreviewProps {
+interface ChatReplyViewProps {
   type: 'SIGNED' | 'ANONYMOUS';
   messageType: string;
   replyData;
 }
 
-const ChatReplyView = ({type, messageType, replyData}: ChatPromptPreviewProps) => {
+const ChatReplyView = ({type, messageType, replyData}: ChatReplyViewProps) => {
   const isReply = messageType === 'reply';
   const isReplyPrompt = messageType === 'reply_prompt';
   if (!isReply && !isReplyPrompt) return null;

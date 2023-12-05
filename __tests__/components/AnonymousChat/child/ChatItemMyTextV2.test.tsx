@@ -51,7 +51,8 @@ describe('TESTING ChatItemMyTextV2', () => {
   it('should call setReplyPreview when swiped', () => {
     const setReplyPreview = jest.fn();
     const contextValue = {
-      chat: [{replyTarget: null}, setReplyPreview]
+      chat: [{replyTarget: null}, setReplyPreview],
+      profile: [{myProfile: {}}]
     };
 
     const {getByTestId} = render(
@@ -78,7 +79,8 @@ describe('TESTING ChatItemMyTextV2', () => {
 
   it('should display the username and time when isContinuous is false', () => {
     const contextValue = {
-      chat: [{replyTarget: null}, jest.fn()]
+      chat: [{replyTarget: null}, jest.fn()],
+      profile: [{myProfile: {}}]
     };
 
     const {getByText} = render(
@@ -102,7 +104,8 @@ describe('TESTING ChatItemMyTextV2', () => {
 
   it('should not display the username and time when isContinuous is true', () => {
     const contextValue = {
-      chat: [{replyTarget: null}, jest.fn()]
+      chat: [{replyTarget: null}, jest.fn()],
+      profile: [{myProfile: {}}]
     };
 
     const {queryByText} = render(
@@ -126,7 +129,8 @@ describe('TESTING ChatItemMyTextV2', () => {
 
   it('should display the message', () => {
     const contextValue = {
-      chat: [{replyTarget: null}, jest.fn()]
+      chat: [{replyTarget: null}, jest.fn()],
+      profile: [{myProfile: {}}]
     };
 
     const {getByText} = render(
@@ -150,7 +154,8 @@ describe('TESTING ChatItemMyTextV2', () => {
   it('should match snapshot', () => {
     const setReplyPreview = jest.fn();
     const contextValue = {
-      chat: [{replyTarget: null}, setReplyPreview]
+      chat: [{replyTarget: null}, setReplyPreview],
+      profile: [{myProfile: {}}]
     };
 
     const tree = render(
