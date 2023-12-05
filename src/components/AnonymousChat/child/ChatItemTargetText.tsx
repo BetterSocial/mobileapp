@@ -1,6 +1,9 @@
+// eslint-disable-next-line no-use-before-define
 import * as React from 'react';
+import ContextMenu from 'react-native-context-menu-view';
 import {Dimensions, StyleSheet, Text, View} from 'react-native';
 
+import useMessageHook from '../../../hooks/screen/useMessageHook';
 import {ChatItemMyTextProps} from '../../../../types/component/AnonymousChat/BaseChatItem.types';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
@@ -9,12 +12,14 @@ const {width} = Dimensions.get('screen');
 const styles = StyleSheet.create({
   chatContainer: {
     display: 'flex',
-    flexDirection: 'row',
     marginTop: 4,
     marginBottom: 4,
     maxWidth: width,
     paddingRight: 60,
     paddingLeft: 10
+  },
+  wrapper: {
+    flexDirection: 'row'
   },
   chatTitleContainer: {
     display: 'flex',
@@ -73,6 +78,8 @@ const ChatItemTargetText = ({
   message = '',
   avatar
 }: ChatItemMyTextProps) => {
+  const {onContextMenuPressed} = useMessageHook();
+
   const renderAvatar = React.useCallback(() => {
     if (isContinuous) return <View style={styles.avatar} />;
     return <View style={styles.mr8}>{avatar}</View>;
@@ -80,18 +87,33 @@ const ChatItemTargetText = ({
 
   return (
     <View style={styles.chatContainer}>
-      {renderAvatar()}
-      <View style={styles.textContainer}>
-        {!isContinuous && (
-          <View testID="chat-item-user-info" style={styles.chatTitleContainer}>
-            <Text style={styles.userText}>{username}</Text>
-            <View style={styles.dot} />
-            <Text style={styles.timeText}>{time}</Text>
+      <View style={styles.wrapper}>
+        {renderAvatar()}
+
+        <ContextMenu
+          previewBackgroundColor="transparent"
+          style={{flex: 1}}
+          actions={[
+            {title: 'Reply', systemIcon: 'arrow.turn.up.left'},
+            {title: 'Copy Message', systemIcon: 'square.on.square'}
+          ]}
+          onPress={(e) => onContextMenuPressed(e, message)}>
+          <View style={{borderRadius: 8}}>
+            <View style={styles.textContainer}>
+              {!isContinuous && (
+                <View testID="chat-item-user-info" style={styles.chatTitleContainer}>
+                  <Text style={styles.userText}>{username}</Text>
+                  <View style={styles.dot} />
+                  <Text style={styles.timeText}>{time}</Text>
+                </View>
+              )}
+
+              <Text testID="chat-item-message" style={styles.text}>
+                {message}
+              </Text>
+            </View>
           </View>
-        )}
-        <Text testID="chat-item-message" style={styles.text}>
-          {message}
-        </Text>
+        </ContextMenu>
       </View>
     </View>
   );

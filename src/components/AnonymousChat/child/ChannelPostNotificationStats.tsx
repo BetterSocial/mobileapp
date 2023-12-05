@@ -1,12 +1,13 @@
 import * as React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 
+import IcBlockInactive from '../../../assets/block/Ic_block_inactive';
+import IcComment from '../../../assets/icons/Ic_comment';
+import IcDownvoteOn from '../../../assets/arrow/Ic_downvote_on';
+import IcUpvoteOn from '../../../assets/arrow/Ic_upvote_on';
 import Imageblock from '../../../assets/images/block.png';
-import MemoIc_arrow_down_vote_on from '../../../assets/arrow/Ic_downvote_on';
-import MemoIc_arrow_upvote_on from '../../../assets/arrow/Ic_upvote_on';
-import MemoIc_block_inactive from '../../../assets/block/Ic_block_inactive';
-import MemoIc_comment from '../../../assets/icons/Ic_comment';
 import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
+import {colors} from '../../../utils/colors';
 
 const ChannelPostNotificationStats = ({
   type = BaseChannelItemTypeProps.ANON_PM,
@@ -46,22 +47,22 @@ const ChannelPostNotificationStats = ({
   return (
     <View style={styles.descriptionContainer}>
       <View style={styles.iconContainer}>
-        <MemoIc_arrow_upvote_on style={styles.iconMargin} width={15} height={15} />
+        <IcUpvoteOn color={colors.darkBlue} width={15} height={15} />
         <Text style={styles.textVoteMargin}>{upvote}</Text>
       </View>
       <View style={styles.iconContainer}>
-        <MemoIc_arrow_down_vote_on style={styles.iconMargin} width={15} height={15} />
+        <IcDownvoteOn style={styles.iconMargin} width={15} height={15} />
         <Text style={styles.textVoteMargin}>{downvote}</Text>
       </View>
       <View style={styles.iconContainer}>
-        <MemoIc_comment style={styles.iconMargin} width={15} height={15} />
+        <IcComment style={styles.iconMargin} width={15} height={15} />
         <Text style={styles.textVoteMargin}>{comments}</Text>
       </View>
       <View style={styles.iconContainer}>
         {Number(block) > 0 ? (
           <Image source={Imageblock} style={styles.iconMargin} width={15} height={15} />
         ) : (
-          <MemoIc_block_inactive style={styles.iconMargin} width={15} height={15} />
+          <IcBlockInactive style={styles.iconMargin} width={15} height={15} />
         )}
         <Text style={styles.textVoteMargin}>{String(block)}</Text>
       </View>
