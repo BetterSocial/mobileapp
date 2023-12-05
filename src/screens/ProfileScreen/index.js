@@ -228,7 +228,6 @@ const ProfileScreen = ({route}) => {
     const status = await netInfo.fetch();
     if (status.isConnected) {
       getMyFeeds(0, LIMIT_PROFILE_FEED);
-      console.log('masuka');
     } else {
       setMyProfileFeed(JSON.parse(cacheFeed), myProfileDispatch);
     }
@@ -480,6 +479,7 @@ const ProfileScreen = ({route}) => {
   };
 
   const debounceModalOpen = debounce(() => {
+    setTempBio(profile?.myProfile?.bio);
     bottomSheetBioRef.current.open();
   }, 350);
 
@@ -603,7 +603,6 @@ const ProfileScreen = ({route}) => {
     if (isProfileTabSigned) return getMyFeeds();
     return reloadFetchAnonymousPost();
   };
-
   return (
     <SafeAreaProvider style={styles.container} forceInset={{top: 'always'}}>
       <StatusBar translucent={false} />
