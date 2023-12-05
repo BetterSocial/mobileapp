@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {View, Text, StyleSheet, ActivityIndicator} from 'react-native';
-
+import PropTypes from 'prop-types';
 import {fonts} from '../../../utils/fonts';
 import {colors} from '../../../utils/colors';
 import {Button} from '../../../components/Button';
@@ -43,6 +43,10 @@ const BottomSheetBio = React.forwardRef((props, ref) => {
     </View>
   );
 });
+
+BottomSheetBio.propTypes = {
+  handleSave: PropTypes.func
+};
 
 const styles = StyleSheet.create({
   bottomsheet: {
