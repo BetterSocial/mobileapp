@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
+import ToastMessage from 'react-native-toast-message';
 import IconSend from '../../assets/icon/IconSendComment';
 import {colors} from '../../utils/colors';
 import dimen from '../../utils/dimen';
@@ -104,6 +105,7 @@ export interface InputMessageV2Props {
   profileImage?: string;
   onToggleConfirm?: () => void;
   isShowToggle?: boolean;
+  messageDisable?: string | null;
 }
 
 const InputMessageV2 = ({
@@ -114,7 +116,8 @@ const InputMessageV2 = ({
   username,
   onToggleConfirm,
   type,
-  isShowToggle = true
+  isShowToggle = true,
+  messageDisable
 }: InputMessageV2Props) => {
   const refEmoji = React.useRef(null);
   const [inputFocus, setInputFocus] = React.useState(false);
@@ -144,6 +147,15 @@ const InputMessageV2 = ({
   }, [isDisableButton()]);
 
   const toggleChnage = () => {
+    if (messageDisable) {
+      ToastMessage.show({
+        type: 'asNative',
+        text1: messageDisable,
+        position: 'bottom'
+      });
+      return;
+    }
+
     Alert.alert(
       '',
       type === 'ANONYMOUS'
