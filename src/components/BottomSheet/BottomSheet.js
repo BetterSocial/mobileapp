@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {StyleSheet, View} from 'react-native';
-
+import PropTypes from 'prop-types';
 import RBSheet from 'react-native-raw-bottom-sheet';
 
 import {colors} from '../../utils/colors';
@@ -25,6 +25,11 @@ const BottomSheet = React.forwardRef((props, ref) => {
 });
 
 BottomSheet.displayName = 'BottomSheet';
+
+BottomSheet.propTypes = {
+  height: PropTypes.number,
+  viewstyle: PropTypes.object
+};
 
 export default BottomSheet;
 
