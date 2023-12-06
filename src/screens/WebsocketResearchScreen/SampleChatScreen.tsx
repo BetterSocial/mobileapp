@@ -89,7 +89,8 @@ const SampleChatScreen = () => {
       setLoading(true);
       await moveToSignedChannel({
         oldChannelId: selectedChannel?.id,
-        targetUserId: memberChat.user_id
+        targetUserId: memberChat.user_id,
+        source: 'userId'
       });
     } catch (e) {
       console.log('error moving chat to signed channel', e);

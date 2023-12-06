@@ -145,8 +145,6 @@ const useMoveChatTypeHook = () => {
             source
           }));
 
-      console.log('result', JSON.stringify(result));
-
       const messages = result?.data?.messageHistories?.map((item: any) => item?.message);
       const channel = {
         ...result?.data?.channel,
@@ -161,12 +159,12 @@ const useMoveChatTypeHook = () => {
   };
 
   const moveToSignedChannel = async (params: MoveToChatChannelParams): Promise<void> => {
-    await moveToChannel({...params, source: 'userId'}, 'SIGNED');
+    await moveToChannel(params, 'SIGNED');
   };
 
   const moveToAnonymousChannel = async (params: MoveToChatChannelParams): Promise<void> => {
     const anonProfileResult = await generateAnonProfileOtherProfile(params.targetUserId);
-    await moveToChannel({...params, anonProfileResult, source: 'userId'}, 'ANONYMOUS');
+    await moveToChannel({...params, anonProfileResult}, 'ANONYMOUS');
   };
 
   return {

@@ -59,7 +59,8 @@ const SignedChatScreen = () => {
       setLoading(true);
       await moveToAnonymousChannel({
         oldChannelId: selectedChannel?.id,
-        targetUserId: memberChat.user_id
+        targetUserId: memberChat.user_id,
+        source: 'userId'
       });
     } catch (e) {
       console.log('error moving chat to signed channel', e);
