@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, Text, StyleSheet, ActivityIndicator, Dimensions} from 'react-native';
+import {View, Text, StyleSheet, ActivityIndicator} from 'react-native';
 import PropTypes from 'prop-types';
 import {fonts} from '../../../utils/fonts';
 import {colors} from '../../../utils/colors';
