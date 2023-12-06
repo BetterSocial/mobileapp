@@ -17,6 +17,7 @@ type ChannelCategory = 'SIGNED' | 'ANONYMOUS';
 interface MoveToChatChannelParams {
   targetUserId: string;
   oldChannelId: string;
+  source: 'userId';
 }
 
 const useMoveChatTypeHook = () => {
@@ -124,7 +125,8 @@ const useMoveChatTypeHook = () => {
     {
       targetUserId,
       oldChannelId,
-      anonProfileResult
+      anonProfileResult,
+      source
     }: MoveToChatChannelParams & {anonProfileResult?: any},
     channelCategory: ChannelCategory
   ): Promise<void> => {
@@ -132,14 +134,15 @@ const useMoveChatTypeHook = () => {
 
     try {
       const result = await (channelCategory === 'SIGNED'
-        ? moveChatToSigned({targetUserId, oldChannelId})
+        ? moveChatToSigned({targetUserId, oldChannelId, source})
         : moveChatToAnon({
             targetUserId,
             oldChannelId,
             anon_user_info_color_code: anonProfileResult?.anon_user_info_color_code,
             anon_user_info_color_name: anonProfileResult?.anon_user_info_color_name,
             anon_user_info_emoji_code: anonProfileResult?.anon_user_info_emoji_code,
-            anon_user_info_emoji_name: anonProfileResult?.anon_user_info_emoji_name
+            anon_user_info_emoji_name: anonProfileResult?.anon_user_info_emoji_name,
+            source
           }));
 
       const messages = result?.data?.messageHistories?.map((item: any) => item?.message);

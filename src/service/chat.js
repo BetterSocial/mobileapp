@@ -161,9 +161,9 @@ const getOrCreateAnonymousChannel = async (userId) => {
   }
 };
 
-const moveChatToSigned = async ({oldChannelId, targetUserId}) => {
+const moveChatToSigned = async ({oldChannelId, targetUserId, source}) => {
   try {
-    const response = await api.post('/chat/move-to-sign', {oldChannelId, targetUserId});
+    const response = await api.post('/chat/move-to-sign', {oldChannelId, targetUserId, source});
     if (response.status === 200) {
       return Promise.resolve(response.data);
     }
@@ -180,7 +180,8 @@ const moveChatToAnon = async ({
   anon_user_info_emoji_code,
   anon_user_info_emoji_name,
   oldChannelId,
-  targetUserId
+  targetUserId,
+  source
 }) => {
   try {
     const response = await anonymousApi.post('/chat/move-to-anon', {
@@ -189,7 +190,8 @@ const moveChatToAnon = async ({
       anon_user_info_emoji_code,
       anon_user_info_emoji_name,
       oldChannelId,
-      targetUserId
+      targetUserId,
+      source
     });
     if (response.status === 200) {
       return Promise.resolve(response.data);
