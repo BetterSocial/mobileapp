@@ -57,6 +57,6 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[500],
     fontSize: 14,
     color: colors.black,
-    lineHeight: 24
+    lineHeight: 21
   }
 });
