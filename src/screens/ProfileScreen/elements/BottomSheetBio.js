@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, Text, StyleSheet, ActivityIndicator} from 'react-native';
+import {View, Text, StyleSheet, ActivityIndicator, Dimensions} from 'react-native';
 import PropTypes from 'prop-types';
 import {fonts} from '../../../utils/fonts';
 import {colors} from '../../../utils/colors';
@@ -12,12 +12,7 @@ import dimen from '../../../utils/dimen';
 const BottomSheetBio = React.forwardRef((props, ref) => {
   return (
     <View>
-      <BottomSheet
-        ref={ref}
-        closeOnPressMask={true}
-        height={380}
-        // pullBottom
-        viewstyle={styles.bottomsheet}>
+      <BottomSheet ref={ref} closeOnPressMask={true} height={355} viewstyle={styles.bottomsheet}>
         <View style={styles.containerBottomSheet}>
           <Text style={styles.title}>{props.username} Edit prompt</Text>
           <AutoFocusTextArea
@@ -50,7 +45,7 @@ BottomSheetBio.propTypes = {
 
 const styles = StyleSheet.create({
   bottomsheet: {
-    paddingBottom: 20
+    paddingBottom: dimen.normalizeDimen(20)
   },
   containerBottomSheet: {
     flexDirection: 'column'
@@ -60,7 +55,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 24,
     color: colors.black,
-    marginBottom: 16
+    marginBottom: dimen.normalizeDimen(12)
   },
   description: {
     fontFamily: fonts.inter[400],
@@ -72,29 +67,16 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 12,
     color: colors.red,
-    marginTop: 7
+    marginTop: dimen.normalizeDimen(7)
   },
   button: {
     backgroundColor: colors.bondi_blue,
-    marginTop: dimen.normalizeDimen(33)
+    marginTop: dimen.normalizeDimen(20)
   },
   textStyling: {
     fontFamily: fonts.inter[600],
     fontSize: 18,
     color: colors.white
-  },
-  input: {
-    backgroundColor: colors.lightgrey,
-    paddingVertical: 16,
-    paddingHorizontal: 12,
-    height: 150,
-    justifyContent: 'flex-start',
-    overflow: 'scroll',
-    borderRadius: 8,
-    fontFamily: fonts.inter[500],
-    fontSize: 14,
-    color: colors.black,
-    lineHeight: 24
   }
 });
 export default React.memo(BottomSheetBio);
