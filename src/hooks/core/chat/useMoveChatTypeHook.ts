@@ -17,6 +17,7 @@ type ChannelCategory = 'SIGNED' | 'ANONYMOUS';
 interface MoveToChatChannelParams {
   targetUserId: string;
   oldChannelId: string;
+  source: 'userId';
 }
 
 const useMoveChatTypeHook = () => {
@@ -124,7 +125,8 @@ const useMoveChatTypeHook = () => {
     {
       targetUserId,
       oldChannelId,
-      anonProfileResult
+      anonProfileResult,
+      source
     }: MoveToChatChannelParams & {anonProfileResult?: any},
     channelCategory: ChannelCategory
   ): Promise<void> => {
@@ -132,15 +134,18 @@ const useMoveChatTypeHook = () => {
 
     try {
       const result = await (channelCategory === 'SIGNED'
-        ? moveChatToSigned({targetUserId, oldChannelId})
+        ? moveChatToSigned({targetUserId, oldChannelId, source})
         : moveChatToAnon({
             targetUserId,
             oldChannelId,
             anon_user_info_color_code: anonProfileResult?.anon_user_info_color_code,
             anon_user_info_color_name: anonProfileResult?.anon_user_info_color_name,
             anon_user_info_emoji_code: anonProfileResult?.anon_user_info_emoji_code,
-            anon_user_info_emoji_name: anonProfileResult?.anon_user_info_emoji_name
+            anon_user_info_emoji_name: anonProfileResult?.anon_user_info_emoji_name,
+            source
           }));
+
+      console.log('result', JSON.stringify(result));
 
       const messages = result?.data?.messageHistories?.map((item: any) => item?.message);
       const channel = {
@@ -156,12 +161,12 @@ const useMoveChatTypeHook = () => {
   };
 
   const moveToSignedChannel = async (params: MoveToChatChannelParams): Promise<void> => {
-    await moveToChannel(params, 'SIGNED');
+    await moveToChannel({...params, source: 'userId'}, 'SIGNED');
   };
 
   const moveToAnonymousChannel = async (params: MoveToChatChannelParams): Promise<void> => {
     const anonProfileResult = await generateAnonProfileOtherProfile(params.targetUserId);
-    await moveToChannel({...params, anonProfileResult}, 'ANONYMOUS');
+    await moveToChannel({...params, anonProfileResult, source: 'userId'}, 'ANONYMOUS');
   };
 
   return {
