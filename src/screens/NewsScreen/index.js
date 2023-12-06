@@ -7,7 +7,7 @@ import {
   StatusBar,
   StyleSheet
 } from 'react-native';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 
 import BlockDomainComponent from '../../components/BlockDomain';
@@ -226,7 +226,7 @@ const NewsScreen = () => {
   const keyExtractor = React.useCallback((item, index) => index.toString(), []);
 
   return (
-    <SafeAreaProvider style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
       <Search animatedValue={offset} />
       <Animated.View style={{paddingTop: Platform.OS === 'android' ? paddingContainer : 0}}>
@@ -271,7 +271,7 @@ const NewsScreen = () => {
         screen="news_screen"
         getValueBlock={onBlockedDomain}
       />
-    </SafeAreaProvider>
+    </SafeAreaView>
   );
 };
 
