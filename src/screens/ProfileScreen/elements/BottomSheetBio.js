@@ -48,8 +48,7 @@ const styles = StyleSheet.create({
     paddingBottom: dimen.normalizeDimen(20)
   },
   containerBottomSheet: {
-    flexDirection: 'column',
-    paddingBottom: dimen.normalizeDimen(20)
+    flexDirection: 'column'
   },
   title: {
     fontFamily: fonts.inter[400],
@@ -71,7 +70,8 @@ const styles = StyleSheet.create({
     marginTop: dimen.normalizeDimen(7)
   },
   button: {
-    backgroundColor: colors.bondi_blue
+    backgroundColor: colors.bondi_blue,
+    marginTop: dimen.normalizeDimen(20)
   },
   textStyling: {
     fontFamily: fonts.inter[600],
