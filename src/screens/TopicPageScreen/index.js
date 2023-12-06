@@ -1,35 +1,34 @@
-import * as React from 'react';
-import _ from 'lodash';
-import SimpleToast from 'react-native-simple-toast';
-import {Animated, Platform, StyleSheet} from 'react-native';
-import {SafeAreaProvider, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import _ from 'lodash';
+import * as React from 'react';
+import {Animated, Platform, StyleSheet, View} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import SimpleToast from 'react-native-simple-toast';
 
 import BlockComponent from '../../components/BlockComponent';
 import ButtonAddPostTopic from '../../components/Button/ButtonAddPostTopic';
-import MemoizedListComponent from './MemoizedListComponent';
-import NavHeader from './elements/NavHeader';
-import ShareUtils from '../../utils/share';
 import TiktokScroll from '../../components/TiktokScroll';
-import TopicPageStorage from '../../utils/storage/custom/topicPageStorage';
-import dimen from '../../utils/dimen';
-import removePrefixTopic from '../../utils/topics/removePrefixTopic';
-import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
-import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
-import useViewPostTimeHook from '../FeedScreen/hooks/useViewPostTimeHook';
+import {Context} from '../../context';
+import {setFeedByIndex, setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
 } from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
-import {Context} from '../../context';
-import {downVote, upVote} from '../../service/vote';
 import {getFeedDetail} from '../../service/post';
 import {getTopicPages} from '../../service/topicPages';
 import {getTopics, getUserTopic} from '../../service/topics';
-import {getUserId} from '../../utils/users';
-import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import {downVote, upVote} from '../../service/vote';
+import dimen from '../../utils/dimen';
 import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
-import {setFeedByIndex, setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
-import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import ShareUtils from '../../utils/share';
+import TopicPageStorage from '../../utils/storage/custom/topicPageStorage';
+import removePrefixTopic from '../../utils/topics/removePrefixTopic';
+import {getUserId} from '../../utils/users';
+import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
+import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
+import useViewPostTimeHook from '../FeedScreen/hooks/useViewPostTimeHook';
+import MemoizedListComponent from './MemoizedListComponent';
+import NavHeader from './elements/NavHeader';
 
 const styles = StyleSheet.create({
   parentContainer: {
@@ -106,6 +105,12 @@ const TopicPageScreen = (props) => {
   const opacityHeader = scrollY.interpolate({
     inputRange: [0, 100],
     outputRange: [1, 0],
+    extrapolate: 'clamp'
+  });
+
+  const opacityImage = scrollY.interpolate({
+    inputRange: [0, 100],
+    outputRange: [0, 1],
     extrapolate: 'clamp'
   });
 
@@ -398,10 +403,11 @@ const TopicPageScreen = (props) => {
     />
   );
 
-  if (isInitialLoading) return null;
   return (
-    <SafeAreaProvider forceInset={{top: 'always'}} style={styles.parentContainer}>
+    <View>
       <NavHeader
+        isLoading={isInitialLoading}
+        opacityImage={opacityImage}
         domain={topicName}
         animatedHeight={headerHeight}
         onShareCommunity={onShareCommunity}
@@ -442,7 +448,7 @@ const TopicPageScreen = (props) => {
         refreshAnonymous={onDeleteBlockedPostCompleted}
         screen="topic_screen"
       />
-    </SafeAreaProvider>
+    </View>
   );
 };
-export default withInteractionsManaged(TopicPageScreen);
+export default TopicPageScreen;

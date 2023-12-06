@@ -1,26 +1,36 @@
-import * as React from 'react';
-import {Animated, Platform, StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 import PropTypes from 'prop-types';
+import * as React from 'react';
+import {
+  Animated,
+  StatusBar,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  useWindowDimensions
+} from 'react-native';
 
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {BlurView} from '@react-native-community/blur';
 import FastImage from 'react-native-fast-image';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import MemoIcArrowBack from '../../../assets/arrow/Ic_arrow_back';
 import MemoIcArrowBackCircle from '../../../assets/arrow/Ic_arrow_back_circle';
+import ShareIconCircle from '../../../assets/icons/Ic_share_circle';
 import TopicDefaultIcon from '../../../assets/topic.png';
+import {Shimmer} from '../../../components/Shimmer/Shimmer';
+import {colors} from '../../../utils/colors';
 import dimen from '../../../utils/dimen';
 import {normalize} from '../../../utils/fonts';
-import ShareIconCircle from '../../../assets/icons/Ic_share_circle';
-import ButtonFollow from './ButtonFollow';
-import TopicDomainHeader from './TopicDomainHeader';
-import ButtonFollowing from './ButtonFollowing';
 import useChatClientHook from '../../../utils/getstream/useChatClientHook';
-import {colors} from '../../../utils/colors';
 import Search from '../../DiscoveryScreenV2/elements/Search';
+import ButtonFollow from './ButtonFollow';
+import ButtonFollowing from './ButtonFollowing';
+import TopicDomainHeader from './TopicDomainHeader';
 
 const NavHeader = (props) => {
   const {
     hideSeeMember,
+    isLoading,
     animatedHeight,
     opacityHeaderAnimation,
     onShareCommunity,
@@ -41,14 +51,15 @@ const NavHeader = (props) => {
     onCancelToken,
     placeholderText,
     setIsFirstTimeOpen,
-    getSearchLayout
+    getSearchLayout,
+    opacityImage
   } = props;
   const navigation = useNavigation();
   const coverPath = topicDetail?.cover_path || null;
   const [domainHeight, setDomainHeight] = React.useState(0);
   const [searchHeight, setSearchHeight] = React.useState(0);
-  const {top} = useSafeAreaInsets();
-  const topPosition = Platform.OS === 'ios' ? top : 0;
+  const insets = useSafeAreaInsets();
+  const {width: displayWidth} = useWindowDimensions();
 
   const {followTopic} = useChatClientHook();
 
@@ -107,17 +118,23 @@ const NavHeader = (props) => {
 
   const heightWithCoverImage = () => {
     if (coverPath) {
-      return {height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER + topPosition};
+      return {height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER};
     }
     return null;
   };
 
+  const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
+
   return (
-    <Animated.View style={styles.container(animatedHeight)}>
+    <View style={{}}>
       <StatusBar barStyle="dark-content" />
       <View
-        source={{uri: coverPath}}
-        style={[styles.navContainer(isHeaderHide, topPosition), heightWithCoverImage()]}
+        style={[
+          styles.navContainer(isHeaderHide),
+          {
+            height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
+          }
+        ]}
         imageStyle={{opacity: isHeaderHide ? 0 : 1}}>
         <Animated.Image
           source={{uri: coverPath}}
@@ -140,32 +157,32 @@ const NavHeader = (props) => {
           )}
         </View>
       </View>
-      <Animated.View style={[styles.headerContainer]}>
-        {!isHeaderHide ? (
-          <>
-            <Animated.View style={{opacity: opacityHeaderAnimation}}>
-              <FastImage
-                source={topicDetail?.icon_path ? {uri: topicDetail?.icon_path} : TopicDefaultIcon}
-                style={styles.image}
-              />
-            </Animated.View>
-            <View style={styles.containerAction}>
-              <Animated.View style={{opacity: opacityHeaderAnimation}}>
-                {isFollow ? (
-                  <ButtonFollowing handleSetUnFollow={handleFollowTopic} />
-                ) : (
-                  <ButtonFollow handleSetFollow={handleFollowTopic} />
-                )}
-              </Animated.View>
-            </View>
-          </>
-        ) : null}
-      </Animated.View>
-      <View
-        onLayout={onDomainLayout}
-        style={[styles.domain(isHeaderHide), {bottom: getBottomPostition()}]}>
-        <TopicDomainHeader {...props} />
+      <View style={[styles.headerContainer]}>
+        <Animated.View style={{opacity: opacityHeaderAnimation}}>
+          <FastImage
+            source={topicDetail?.icon_path ? {uri: topicDetail?.icon_path} : TopicDefaultIcon}
+            style={styles.image}
+          />
+        </Animated.View>
+        <View style={styles.containerAction}>
+          <Animated.View style={{opacity: opacityHeaderAnimation}}>
+            {isLoading ? (
+              <Shimmer width={normalize(100)} height={normalize(36)} />
+            ) : isFollow ? (
+              <ButtonFollowing handleSetUnFollow={handleFollowTopic} />
+            ) : (
+              <ButtonFollow handleSetFollow={handleFollowTopic} />
+            )}
+          </Animated.View>
+        </View>
       </View>
+      <Animated.View
+        style={[
+          styles.domain(isHeaderHide),
+          {bottom: normalize(20), opacity: opacityHeaderAnimation}
+        ]}>
+        <TopicDomainHeader {...props} />
+      </Animated.View>
 
       {hasSearch && (
         <View onLayout={onSearchLayout} style={styles.search}>
@@ -185,7 +202,7 @@ const NavHeader = (props) => {
           />
         </View>
       )}
-    </Animated.View>
+    </View>
   );
 };
 
@@ -196,12 +213,13 @@ NavHeader.propTypes = {
   hideSeeMember: PropTypes.bool,
   animatedHeight: PropTypes.number,
   opacityHeaderAnimation: PropTypes.number,
+  opacityImage: PropTypes.number,
   getTopicDetail: PropTypes.func,
   setMemberCount: PropTypes.func,
   memberCount: PropTypes.number,
   topicDetail: PropTypes.object,
   setIsFollow: PropTypes.func,
-
+  isLoading: PropTypes.bool,
   searchText: PropTypes.string,
   setSearchText: PropTypes.func,
   setDiscoveryLoadingData: PropTypes.func,
@@ -226,14 +244,12 @@ const styles = StyleSheet.create({
   }),
   navContainer: (isHeaderHide, top) => ({
     flexDirection: 'row',
-    height:
-      (isHeaderHide
-        ? dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2
-        : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT) + top,
+    height: isHeaderHide
+      ? dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2
+      : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT,
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     backgroundColor: 'white',
-    paddingTop: dimen.normalizeDimen(12) + top,
     zIndex: 10
   }),
   headerContainer: {
