@@ -8,6 +8,7 @@ import TopicMemberIcon from '../../../assets/images/topic-member-picture.png';
 import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
 import {convertString} from '../../../utils/string/StringUtils';
 import {colors} from '../../../utils/colors';
+import {Shimmer} from '../../../components/Shimmer/Shimmer';
 
 const TopicDomainHeader = (props) => {
   const {domain, handleOnMemberPress, hideSeeMember, isFollow, memberCount} = props;
@@ -27,12 +28,22 @@ const TopicDomainHeader = (props) => {
       <Pressable onPress={handlePress} style={{backgroundColor: 'transparent'}}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <FastImage testID="imageTopicMember" source={TopicMemberIcon} style={styles.member} />
-          <Text style={styles.domainMember}>{memberCount} Members</Text>
+          {props.isLoading ? (
+            <Shimmer height={10} width={normalize(25)} />
+          ) : (
+            <Text style={styles.domainMember}>{memberCount}</Text>
+          )}
+          <Text style={styles.domainMember}> Members</Text>
         </View>
-        {isFollow && !hideSeeMember && (
-          <Text style={styles.seeMemberText} numberOfLines={1} ellipsizeMode="tail">
-            See community member
-          </Text>
+        {props.isLoading ? (
+          <Shimmer height={10} width={normalize(60)} />
+        ) : (
+          isFollow &&
+          !hideSeeMember && (
+            <Text style={styles.seeMemberText} numberOfLines={1} ellipsizeMode="tail">
+              See community member
+            </Text>
+          )
         )}
       </Pressable>
     </View>
@@ -44,7 +55,8 @@ TopicDomainHeader.propTypes = {
   handleOnMemberPress: PropTypes.func,
   hideSeeMember: PropTypes.bool,
   isFollow: PropTypes.bool,
-  memberCount: PropTypes.number
+  memberCount: PropTypes.number,
+  isLoading: PropTypes.bool
 };
 
 const styles = StyleSheet.create({

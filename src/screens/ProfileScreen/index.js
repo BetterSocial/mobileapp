@@ -1,8 +1,8 @@
-import * as React from 'react';
-import ImagePicker from 'react-native-image-crop-picker';
-import PropTypes from 'prop-types';
-import Toast from 'react-native-simple-toast';
 import netInfo from '@react-native-community/netinfo';
+import {useNavigation} from '@react-navigation/core';
+import {debounce} from 'lodash';
+import PropTypes from 'prop-types';
+import * as React from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -15,32 +15,21 @@ import {
   TouchableNativeFeedback,
   View
 } from 'react-native';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {debounce} from 'lodash';
 import {showMessage} from 'react-native-flash-message';
-import {useNavigation} from '@react-navigation/core';
+import ImagePicker from 'react-native-image-crop-picker';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import Toast from 'react-native-simple-toast';
 
-import AnonymousTab from './elements/AnonymousTab';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
-import BioAndDMSetting from './elements/BioAndDMSetting';
 import BlockComponent from '../../components/BlockComponent';
-import BottomSheetBio from './elements/BottomSheetBio';
-import BottomSheetImage from './elements/BottomSheetImage';
-import BottomSheetRealname from './elements/BottomSheetRealname';
-import CustomPressable from '../../components/CustomPressable';
-import FollowInfoRow from './elements/FollowInfoRow';
-import ImageCompressionUtils from '../../utils/image/compress';
-import LinkAndSocialMedia from './elements/LinkAndSocialMedia';
-import ProfileHeader from './elements/ProfileHeader';
-import ProfilePicture from './elements/ProfilePicture';
-import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
-import RenderItem from '../FeedScreen/RenderList';
+import {ButtonNewPost} from '../../components/Button';
 import ShadowFloatingButtons from '../../components/Button/ShadowFloatingButtons';
-import ShareUtils from '../../utils/share';
-import StorageUtils from '../../utils/storage';
-import dimen from '../../utils/dimen';
-import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
-import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
+import CustomPressable from '../../components/CustomPressable';
+import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import {Context} from '../../context';
+import {setFeedByIndex} from '../../context/actions/feeds';
+import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
+import {setMyProfileAction} from '../../context/actions/setMyProfileAction';
 import useResetContext from '../../hooks/context/useResetContext';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
@@ -49,11 +38,9 @@ import useProfileScreenHook, {
   TAB_INDEX_ANONYMOUS,
   TAB_INDEX_SIGNED
 } from '../../hooks/screen/useProfileScreenHook';
+import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
-import {ButtonNewPost} from '../../components/Button';
-import {Context} from '../../context';
-import {DEFAULT_PROFILE_PIC_PATH, SOURCE_MY_PROFILE} from '../../utils/constants';
-import {KarmaScore} from './elements/KarmaScore';
+import {deleteAnonymousPost, deletePost} from '../../service/post';
 import {
   changeRealName,
   getMyProfile,
@@ -62,24 +49,31 @@ import {
   updateBioProfile,
   updateImageProfile
 } from '../../service/profile';
-import {colors} from '../../utils/colors';
-import {deleteAnonymousPost, deletePost} from '../../service/post';
 import {downVote, upVote} from '../../service/vote';
+import {colors} from '../../utils/colors';
+import {DEFAULT_PROFILE_PIC_PATH, SOURCE_MY_PROFILE} from '../../utils/constants';
+import dimen from '../../utils/dimen';
 import {fonts} from '../../utils/fonts';
+import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
+import ImageCompressionUtils from '../../utils/image/compress';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
-import {setFeedByIndex} from '../../context/actions/feeds';
-import {setMyProfileAction} from '../../context/actions/setMyProfileAction';
-import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
-import {useAfterInteractions} from '../../hooks/useAfterInteractions';
-import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
-import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import ShadowFloatingButtons from '../../components/Button/ShadowFloatingButtons';
-import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
+import ShareUtils from '../../utils/share';
 import StorageUtils from '../../utils/storage';
-import BottomSheetMenu from '../../components/BottomSheet/BottomSheetMenu';
-import ShareAndroidIcon from '../../assets/icons/images/share-for-android.svg';
-import TrashRed from '../../assets/icons/images/trash-red.svg';
+import RenderItem from '../FeedScreen/RenderList';
+import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
+import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
+import AnonymousTab from './elements/AnonymousTab';
+import BioAndDMSetting from './elements/BioAndDMSetting';
+import BottomSheetBio from './elements/BottomSheetBio';
+import BottomSheetImage from './elements/BottomSheetImage';
+import BottomSheetRealname from './elements/BottomSheetRealname';
+import FollowInfoRow from './elements/FollowInfoRow';
+import {KarmaScore} from './elements/KarmaScore';
+import LinkAndSocialMedia from './elements/LinkAndSocialMedia';
+import ProfileHeader from './elements/ProfileHeader';
+import ProfilePicture from './elements/ProfilePicture';
+import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
 
 const {width} = Dimensions.get('screen');
 
@@ -614,7 +608,7 @@ const ProfileScreen = ({route}) => {
     return reloadFetchAnonymousPost();
   };
   return (
-    <SafeAreaProvider style={styles.container} forceInset={{top: 'always'}}>
+    <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
       <StatusBar translucent={false} />
       <ProfileHeader
         showArrow={isNotFromHomeTab}
@@ -715,7 +709,7 @@ const ProfileScreen = ({route}) => {
       ) : null}
 
       <BlockComponent ref={refBlockComponent} refresh={getMyFeeds} screen="my_profile" />
-    </SafeAreaProvider>
+    </SafeAreaView>
   );
 };
 

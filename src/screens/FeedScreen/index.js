@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Animated, InteractionManager, StatusBar, StyleSheet} from 'react-native';
+import {Animated, InteractionManager, SafeAreaView, StatusBar, StyleSheet} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 
@@ -232,7 +232,7 @@ const FeedScreen = (props) => {
   };
 
   return (
-    <SafeAreaProvider style={styles.container} forceInset={{top: 'always'}}>
+    <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
       <StatusBar translucent={false} />
       <Search
         getSearchLayout={saveSearchHeightHandle}
@@ -263,7 +263,7 @@ const FeedScreen = (props) => {
         refreshAnonymous={onDeleteBlockedPostCompletedHandle}
         screen="screen_feed"
       />
-    </SafeAreaProvider>
+    </SafeAreaView>
   );
 };
 
