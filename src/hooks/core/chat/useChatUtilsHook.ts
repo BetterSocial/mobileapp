@@ -1,32 +1,40 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import moment from 'moment';
+import {CommonActions, useNavigation} from '@react-navigation/native';
 import {atom, useRecoilState} from 'recoil';
-import {useNavigation, CommonActions} from '@react-navigation/native';
+
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
 import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
 import UseChatUtilsHook from '../../../../types/hooks/screens/useChatUtilsHook.types';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
-import {ANON_PM, GROUP_INFO} from '../constant';
+import {ANON_PM, CHAT_ATOM, GROUP_INFO} from '../constant';
 import {ChannelList} from '../../../../types/database/schema/ChannelList.types';
 import {ChannelTypeEnum} from '../../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 import {Context} from '../../../context';
 import {PostNotificationChannelList} from '../../../../types/database/schema/PostNotificationChannelList.types';
 import {convertTopicNameToTopicPageScreenParam} from '../../../utils/string/StringUtils';
 
-const chatAtom = atom({
-  key: 'chatAtom',
+export const chatAtom = atom({
+  key: CHAT_ATOM,
   default: {
     selectedChannel: null
   }
 });
 
+const selectedChannelKeyTab = atom({
+  key: 'selectedChannelKeyTab',
+  default: 0
+});
+
 function useChatUtilsHook(): UseChatUtilsHook {
   const [chat, setChat] = useRecoilState(chatAtom);
+  const [selectedChannelKey, setSelectedChannelKey] = useRecoilState(selectedChannelKeyTab);
   const {localDb, refresh} = useLocalDatabaseHook();
   const navigation = useNavigation();
   const {selectedChannel} = chat;
-  const [profile] = React.useContext(Context).profile;
+  const [profile] = (React.useContext(Context) as unknown as any).profile;
   const setChannelAsRead = async (channel: ChannelList) => {
     if (!localDb) return;
     channel.setRead(localDb).catch((e) => console.log('setChannelAsRead error', e));
@@ -87,7 +95,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
     navigation.navigate('TopicPageScreen', navigationParam);
   };
 
-  const openChat = (screen: string) => {
+  const openChat = (screen: string, from?: string) => {
     navigation.dispatch({
       ...CommonActions.reset({
         routes: [
@@ -96,7 +104,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
             params: {
               screen: 'HomeTabs',
               params: {
-                screen: 'ChannelList',
+                screen: from ?? 'ChannelList',
                 isReset: true
               }
             }
@@ -121,17 +129,31 @@ function useChatUtilsHook(): UseChatUtilsHook {
     setChannelAsRead(channel);
     if (channel?.channelType === ANON_PM) {
       if (from === GROUP_INFO) {
-        return openChat('SampleChatScreen');
+        return openChat('SampleChatScreen', 'AnonymousChannelList');
       }
       navigation.navigate('SampleChatScreen');
     } else {
       if (from === GROUP_INFO) {
-        return openChat('SignedChatScreen');
+        return openChat('SignedChatScreen', 'SignedChannelList');
       }
       navigation.navigate('SignedChatScreen');
     }
 
     return null;
+  };
+
+  const goToMoveChat = (channel: ChannelList) => {
+    setChat({
+      ...chat,
+      selectedChannel: channel
+    });
+    setChannelAsRead(channel);
+    if (channel?.channelType === ANON_PM) {
+      setSelectedChannelKey(1);
+      return openChat('SampleChatScreen');
+    }
+    setSelectedChannelKey(0);
+    return openChat('SignedChatScreen');
   };
 
   const goBackFromChatScreen = async () => {
@@ -140,6 +162,10 @@ function useChatUtilsHook(): UseChatUtilsHook {
       ...chat,
       selectedChannel: null
     });
+  };
+
+  const goToContactScreen = () => {
+    navigation.navigate('ContactScreen');
   };
 
   const goToChatInfoScreen = (params?: object) => {
@@ -173,10 +199,13 @@ function useChatUtilsHook(): UseChatUtilsHook {
 
   return {
     selectedChannel,
+    selectedChannelKey,
     goBack,
     goToChatScreen,
+    goToMoveChat,
     goToPostDetailScreen,
     goToCommunityScreen,
+    goToContactScreen,
     goToChatInfoScreen,
     goBackFromChatScreen,
     handleTextSystem,

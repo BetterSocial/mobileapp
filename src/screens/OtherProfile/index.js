@@ -897,6 +897,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  toggleSwitchContainer: {display: 'flex', alignSelf: 'flex-end', paddingVertical: 10},
+  bioAndSendChatContainer: (dynamicColors) => ({
+    backgroundColor: dynamicColors.primary,
+    borderRadius: 15,
+    paddingHorizontal: 10,
+    paddingTop: 10
+  }),
+  bioText: (dynamicColors) => ({
+    color: dynamicColors.text,
+    fontSize: 14,
+    fontWeight: '600',
+    lineHeight: 22
+  }),
   rightHeaderContentContainer: {
     display: 'flex',
     flexDirection: 'row'
