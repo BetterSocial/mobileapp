@@ -35,6 +35,8 @@ import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {getChatName} from '../../utils/string/StringUtils';
 import {isContainUrl} from '../../utils/Utils';
+import MemoIc_pencil from '../../assets/icons/Ic_pencil';
+import {channelImageStyles} from '../../components/ChatList/elements/ChannelImage.style';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
 
 export const styles = StyleSheet.create({
@@ -63,7 +65,7 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     bottom: 5
   },
-  countUser: (from) => ({
+  countUser: (from: string) => ({
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(16.94),
     color: from === SIGNED ? colors.darkBlue : colors.holytosca,
@@ -90,7 +92,6 @@ export const styles = StyleSheet.create({
     fontSize: normalizeFontSize(24),
     lineHeight: normalizeFontSize(29.05),
     color: '#000',
-    width: '100%',
     paddingHorizontal: dimen.normalizeDimen(20),
     fontWeight: 'bold'
   },
@@ -176,6 +177,14 @@ export const styles = StyleSheet.create({
   },
   parentContact: {
     height: normalize(72)
+  },
+  editBtn: {
+    padding: dimen.normalizeDimen(10),
+    marginRight: dimen.normalizeDimen(10),
+    width: '15%'
+  },
+  chatNameContainer: {
+    width: '85%'
   }
 });
 
@@ -191,12 +200,14 @@ const SampleChatInfoScreen = () => {
     isAnonymousModalOpen,
     blockModalRef,
     handleShowArrow,
-    loadingChannelInfo
+    loadingChannelInfo,
+    goToEditGroup
   } = useChatInfoScreenHook();
   const [isLoadingMembers] = React.useState<boolean>(false);
   const {signedProfileId} = useUserAuthHook();
   const [profile] = (React.useContext(Context) as unknown as any).profile;
   const {params}: any = useRoute();
+  const isEditable = channelInfo?.rawJson?.channel?.channelType === 1;
   const ANONYMOUS_USER = 'AnonymousUser';
   const {anon_user_info_color_code, anon_user_info_emoji_code} =
     channelInfo?.rawJson?.channel || {};
@@ -205,12 +216,15 @@ const SampleChatInfoScreen = () => {
     (item: any) => item.user_id !== anonProfileId
   );
   const betterSocialMember = channelInfo?.rawJson?.better_channel_member;
-
   const showImageProfile = (): React.ReactNode => {
     if (channelInfo?.channelType === CHANNEL_GROUP) {
       return (
         <ChannelImage>
-          <ChannelImage.Big type={GROUP_INFO} image={channelInfo?.channelPicture} />
+          <ChannelImage.Big
+            style={channelImageStyles.containerImageGroupINfo}
+            type={GROUP_INFO}
+            image={channelInfo?.channelPicture}
+          />
         </ChannelImage>
       );
     }
@@ -263,9 +277,17 @@ const SampleChatInfoScreen = () => {
   const countParticipat = () => {
     return `(${channelInfo?.members?.length})`;
   };
+
+  const handleWidthChatName = () => {
+    if (params?.from === SIGNED) {
+      return styles.chatNameContainer;
+    }
+    return {};
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar translucent={false} />
+      <StatusBar barStyle={'dark-content'} translucent={false} />
       {isLoadingMembers || loadingChannelInfo ? null : (
         <>
           <AnonymousChatInfoHeader
@@ -282,9 +304,20 @@ const SampleChatInfoScreen = () => {
               <View style={styles.row}>
                 <View style={styles.column}>
                   <View style={styles.containerGroupName}>
-                    <Text numberOfLines={1} style={styles.groupName}>
-                      {getChatName(channelInfo?.name, profile?.myProfile?.username)}
-                    </Text>
+                    <View style={handleWidthChatName()}>
+                      <Text numberOfLines={1} style={styles.groupName}>
+                        {getChatName(channelInfo?.name, profile?.myProfile?.username)}
+                      </Text>
+                    </View>
+                    {params?.from === SIGNED && isEditable ? (
+                      <TouchableOpacity style={styles.editBtn} onPress={goToEditGroup}>
+                        <MemoIc_pencil
+                          height={dimen.normalizeDimen(20)}
+                          width={dimen.normalizeDimen(20)}
+                          color={colors.darkBlue}
+                        />
+                      </TouchableOpacity>
+                    ) : null}
                   </View>
                   <Text style={styles.dateCreate}>
                     Created {moment(channelInfo?.createdAt).format('MM/DD/YYYY')}

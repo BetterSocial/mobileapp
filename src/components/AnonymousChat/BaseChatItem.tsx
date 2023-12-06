@@ -9,10 +9,7 @@ import ChatItemTargetText from './child/ChatItemTargetText';
 import dimen from '../../utils/dimen';
 import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
 import {ANONYMOUS, ANONYMOUS_USER} from '../../hooks/core/constant';
-import {
-  BaseChatItemComponentProps,
-  BaseChatItemTypeProps
-} from '../../../types/component/AnonymousChat/BaseChatItem.types';
+import {BaseChatItemComponentProps} from '../../../types/component/AnonymousChat/BaseChatItem.types';
 import {ChatStatus} from '../../../types/database/schema/ChannelList.types';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {calculateTime} from '../../utils/time';
@@ -82,9 +79,10 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
         message={item?.message}
         time={calculateTime(item?.updatedAt, true)}
         username={handleUserName(item)}
-        type={BaseChatItemTypeProps.MY_ANON_CHAT}
         status={item?.status as ChatStatus}
-        chatType={type}
+        chatType={type ?? ANONYMOUS}
+        messageType={item?.type}
+        data={item?.rawJson}
       />
     );
 
@@ -92,11 +90,13 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
     <ChatItemTargetText
       key={index}
       avatar={handleAvatar()}
-      isContinuous={item?.isContinuous}
+      isContinuous={item?.isContinuous ?? false}
       message={item?.message}
       time={calculateTime(item?.updatedAt, true)}
       username={handleUserName(item)}
-      type={BaseChatItemTypeProps.ANON_CHAT}
+      chatType={type ?? ANONYMOUS}
+      messageType={item?.type ?? 'regular'}
+      data={item?.rawJson}
     />
   );
 };

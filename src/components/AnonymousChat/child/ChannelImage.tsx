@@ -44,10 +44,10 @@ const ChannelImage = ({
       alignItems: 'center'
     },
     myPostNotificationImageContainer: {
-      backgroundColor: isAnonymousTab ? colors.bondi_blue : colors.darkBlue
+      backgroundColor: isAnonymousTab ? colors.anon_primary : colors.darkBlue
     },
     anonPmNotificationImageContainer: {
-      backgroundColor: colors.bondi_blue
+      backgroundColor: colors.anon_primary
     },
     postNotificationIcon: {
       width: dimen.normalizeDimen(12.5),
@@ -76,8 +76,8 @@ const ChannelImage = ({
       isAnonymousChannel &&
       isAnonymousPostMaker &&
       betterSocialMember &&
-      betterSocialMember[memberChat?.user_id].anon_user_info_emoji_code &&
-      betterSocialMember[memberChat?.user_id].anon_user_info_color_code
+      betterSocialMember?.[memberChat?.user_id]?.anon_user_info_emoji_code &&
+      betterSocialMember?.[memberChat?.user_id]?.anon_user_info_color_code
     ) {
       return (
         <ChannelAnonymousImage
@@ -175,8 +175,14 @@ const ChannelImage = ({
   if (type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_I_COMMENTED_ANONYMOUSLY) {
     return (
       <View>
-        <FastImage source={AnonymousProfile} style={styles.image} />
-        <FastImage source={AnonymousProfile} style={styles.postNotificationImage} />
+        <FastImage
+          source={AnonymousProfile}
+          style={[styles.image, styles.anonPmNotificationImageContainer]}
+        />
+        <FastImage
+          source={AnonymousProfile}
+          style={[styles.postNotificationImage, styles.anonPmNotificationImageContainer]}
+        />
       </View>
     );
   }
@@ -184,7 +190,10 @@ const ChannelImage = ({
   if (type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_COMMENTED_ANONYMOUSLY) {
     return (
       <View>
-        <FastImage source={AnonymousProfile} style={styles.image} />
+        <FastImage
+          source={AnonymousProfile}
+          style={[styles.image, styles.anonPmNotificationImageContainer]}
+        />
         <ChannelAnonymousSubImage
           anonPostNotificationUserInfo={{
             anon_user_info_emoji_code: anonPostNotificationUserInfo?.anon_user_info_emoji_code,
@@ -201,7 +210,10 @@ const ChannelImage = ({
   ) {
     return (
       <View>
-        <FastImage source={AnonymousProfile} style={styles.image} />
+        <FastImage
+          source={AnonymousProfile}
+          style={[styles.image, styles.anonPmNotificationImageContainer]}
+        />
         {renderMyPostNotificationSubImage()}
       </View>
     );
@@ -210,7 +222,10 @@ const ChannelImage = ({
   if (type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION) {
     return (
       <View>
-        <FastImage source={AnonymousProfile} style={styles.image} />
+        <FastImage
+          source={AnonymousProfile}
+          style={[styles.image, styles.anonPmNotificationImageContainer]}
+        />
         <View style={[styles.postNotificationImage, styles.myPostNotificationImageContainer]}>
           <FastImage source={FeedIcon} style={styles.postNotificationIcon} />
         </View>
@@ -225,7 +240,10 @@ const ChannelImage = ({
     return (
       <View>
         {renderMainImage()}
-        <FastImage source={AnonymousProfile} style={styles.postNotificationImage} />
+        <FastImage
+          source={AnonymousProfile}
+          style={[styles.postNotificationImage, styles.anonPmNotificationImageContainer]}
+        />
       </View>
     );
   }

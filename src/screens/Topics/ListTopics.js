@@ -8,7 +8,7 @@ const ListTopics = ({item, i, myTopic, handleSelectedLanguage}) => (
     key={i}
     style={[
       styles.bgTopicSelectNotActive,
-      {backgroundColor: myTopic[item.topic_id] ? colors.bondi_blue : colors.concrete}
+      {backgroundColor: myTopic[item.topic_id] ? colors.signed_primary : colors.concrete}
     ]}>
     <Text>{item.icon}</Text>
     <Text
