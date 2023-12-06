@@ -39,6 +39,9 @@ const ChannelListHeaderItem = (props: ChannelListTabItemProps) => {
       height: dimen.normalizeDimen(20),
       marginRight: dimen.normalizeDimen(6),
       borderRadius: dimen.normalizeDimen(10)
+    },
+    anonBgColor: {
+      backgroundColor: colors.anon_primary
     }
   });
 
@@ -47,7 +50,7 @@ const ChannelListHeaderItem = (props: ChannelListTabItemProps) => {
       {typeof picture === 'string' ? (
         <FastImage source={{uri: picture}} style={styles.picture} />
       ) : (
-        <FastImage source={picture} style={styles.picture} />
+        <FastImage source={picture} style={[styles.picture, styles.anonBgColor]} />
       )}
       <Text numberOfLines={1} ellipsizeMode="tail" style={styles.name}>
         as {name}

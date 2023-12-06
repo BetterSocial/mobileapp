@@ -15,7 +15,8 @@ const baseUrl = {
   getSingleSignedPostNotifications: (activityId: string) => `/feeds/feed-chat/${activityId}`,
   setChannelAsRead: '/chat/channels/read',
   createSignedChat: '/chat/channels-signed',
-  editChannel: '/chat/channel-detail'
+  editChannel: '/chat/channel-detail',
+  deleteMessage: (messageId: string) => `/chat/message/${messageId}`
 };
 
 interface SignedMessageRepoTypes {
@@ -27,6 +28,7 @@ interface SignedMessageRepoTypes {
   setChannelAsRead: (channelId: string, channelType: ChannelTypeEnum) => Promise<boolean>;
   createSignedChat: (body: string[]) => Promise<any>;
   editChannel: (body: EditChannelPostTyoe) => Promise<any>;
+  deleteMessage: (messageId: string) => Promise<any>;
 }
 
 async function checkIsTargetAllowingAnonDM(targetUserId: string) {
@@ -154,6 +156,20 @@ async function editChannel(body: EditChannelPostTyoe) {
   }
 }
 
+async function deleteMessage(messageId: string) {
+  try {
+    const response = await api.delete(baseUrl.deleteMessage(messageId));
+    if (response.status === 200) {
+      return Promise.resolve(response.data);
+    }
+
+    return Promise.reject(response.data?.status);
+  } catch (e) {
+    console.log(e);
+    return Promise.reject(e);
+  }
+}
+
 const SignedMessageRepo: SignedMessageRepoTypes = {
   checkIsTargetAllowingAnonDM,
   sendSignedMessage,
@@ -162,7 +178,8 @@ const SignedMessageRepo: SignedMessageRepoTypes = {
   getSingleSignedPostNotifications,
   setChannelAsRead,
   createSignedChat,
-  editChannel
+  editChannel,
+  deleteMessage
 };
 
 export default SignedMessageRepo;

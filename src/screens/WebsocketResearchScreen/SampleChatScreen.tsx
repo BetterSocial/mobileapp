@@ -8,9 +8,11 @@ import {Dimensions, FlatList, StatusBar, StyleSheet, View} from 'react-native';
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import BaseSystemChat from '../../components/AnonymousChat/BaseChatSystem';
 import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
+import ChatReplyPreview from '../../components/AnonymousChat/child/ChatReplyPreview';
 import InputMessageV2 from '../../components/Chat/InputMessageV2';
 import Loading from '../Loading';
 import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
+import useMessageHook from '../../hooks/screen/useMessageHook';
 import useMoveChatTypeHook from '../../hooks/core/chat/useMoveChatTypeHook';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {ANONYMOUS} from '../../hooks/core/constant';
@@ -28,18 +30,23 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     height: height - 85
   },
+  flatlistContainer: {
+    paddingTop: 5,
+    paddingBottom: 20
+  },
   chatContainer: {
     display: 'flex',
     height: '100%'
   },
   inputContainer: {
     backgroundColor: colors.white,
-    width: '100%',
-    height: 50,
     zIndex: 100,
     padding: 8,
     borderTopColor: colors.lightgrey,
-    borderTopWidth: 1
+    borderTopWidth: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   contentContainerStyle: {
     backgroundColor: 'transparent'
@@ -54,10 +61,9 @@ const SampleChatScreen = () => {
     goBackFromChatScreen,
     goToChatInfoScreen,
     sendChat,
-    updateChatContinuity,
-    loadingChat
+    updateChatContinuity
   } = useChatScreenHook(ANONYMOUS);
-
+  const {replyPreview, clearReplyPreview} = useMessageHook();
   const {moveToSignedChannel} = useMoveChatTypeHook();
 
   const updatedChats = updateChatContinuity(chats);
@@ -93,6 +99,11 @@ const SampleChatScreen = () => {
       setLoading(false);
     }
   };
+  React.useEffect(() => {
+    return () => {
+      clearReplyPreview();
+    };
+  }, []);
 
   return (
     <>
@@ -118,7 +129,7 @@ const SampleChatScreen = () => {
           />
         ) : null}
         <FlatList
-          contentContainerStyle={{paddingBottom: 20}}
+          contentContainerStyle={styles.flatlistContainer}
           style={styles.chatContainer}
           data={updatedChats}
           inverted={true}
@@ -138,6 +149,7 @@ const SampleChatScreen = () => {
           renderItem={renderChatItem}
         />
 
+        {replyPreview && <ChatReplyPreview type={ANONYMOUS} />}
         <View style={styles.inputContainer}>
           <InputMessageV2
             onSendButtonClicked={sendChat}
