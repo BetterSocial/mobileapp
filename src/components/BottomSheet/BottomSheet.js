@@ -31,7 +31,8 @@ export default BottomSheet;
 const styles = StyleSheet.create({
   container: {
     paddingTop: dimen.normalizeDimen(10),
-    paddingHorizontal: dimen.normalizeDimen(20)
+    paddingHorizontal: dimen.normalizeDimen(20),
+    paddingBottom: dimen.normalizeDimen(20)
   },
   containerSheet: (pullBottom) => ({
     borderTopRightRadius: 20,

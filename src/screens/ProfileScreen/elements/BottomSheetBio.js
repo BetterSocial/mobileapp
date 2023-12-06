@@ -12,7 +12,7 @@ import dimen from '../../../utils/dimen';
 const BottomSheetBio = React.forwardRef((props, ref) => {
   return (
     <View>
-      <BottomSheet ref={ref} closeOnPressMask={true} height={355} viewstyle={styles.bottomsheet}>
+      <BottomSheet ref={ref} closeOnPressMask={true} height={355}>
         <View style={styles.containerBottomSheet}>
           <Text style={styles.title}>{props.username} Edit prompt</Text>
           <AutoFocusTextArea
@@ -44,11 +44,9 @@ BottomSheetBio.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  bottomsheet: {
-    paddingBottom: dimen.normalizeDimen(20)
-  },
   containerBottomSheet: {
-    flexDirection: 'column'
+    flexDirection: 'column',
+    marginBottom: dimen.normalizeDimen(20)
   },
   title: {
     fontFamily: fonts.inter[400],
@@ -70,8 +68,7 @@ const styles = StyleSheet.create({
     marginTop: dimen.normalizeDimen(7)
   },
   button: {
-    backgroundColor: colors.bondi_blue,
-    marginTop: dimen.normalizeDimen(20)
+    backgroundColor: colors.bondi_blue
   },
   textStyling: {
     fontFamily: fonts.inter[600],
