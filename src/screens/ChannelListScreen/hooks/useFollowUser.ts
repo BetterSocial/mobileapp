@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, {useCallback} from 'react';
+import React from 'react';
 import {useIsFocused} from '@react-navigation/core';
 
 import following from '../../../context/actions/following';
@@ -14,7 +14,7 @@ const useFollowUser = () => {
   const [profileContext] = (React.useContext(Context) as unknown as any).profile;
   const {myProfile} = profileContext;
 
-  const initialFollowingDataRef = React.useRef([...(followContext?.users ?? [])]);
+  const initialFollowingDataRef = React.useRef<any[]>([]);
 
   const updateFollowingData = async () => {
     try {
@@ -27,6 +27,15 @@ const useFollowUser = () => {
       throw new Error(e);
     }
   };
+
+  React.useEffect(() => {
+    if (followContext?.users && initialFollowingDataRef.current.length === 0) {
+      initialFollowingDataRef.current = [...followContext.users];
+    }
+    return () => {
+      initialFollowingDataRef.current = [];
+    };
+  }, [followContext]);
 
   React.useEffect(() => {
     updateFollowingData();
@@ -76,14 +85,14 @@ const useFollowUser = () => {
     }
   };
 
-  const isInitialFollowing = useCallback((channel: ChannelListData) => {
+  const isInitialFollowing = (channel: ChannelListData) => {
     const targetUser = channel?.rawJson?.members?.find(
       (member) => member?.user_id !== myProfile?.user_id
     )?.user;
     return Boolean(
       initialFollowingDataRef.current?.find((user) => user?.user_id_followed === targetUser?.id)
     );
-  }, []);
+  };
 
   const isSystemMessage = (channel: ChannelListData) => {
     return channel?.rawJson?.firstMessage?.type === 'system';

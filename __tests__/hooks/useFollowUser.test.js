@@ -2,6 +2,7 @@
 import React from 'react';
 import {act, renderHook} from '@testing-library/react-hooks';
 import {useIsFocused} from '@react-navigation/core';
+import {waitFor} from '@testing-library/react-native';
 
 import following from '../../src/context/actions/following';
 import useFollowUser from '../../src/screens/ChannelListScreen/hooks/useFollowUser';
@@ -29,6 +30,11 @@ jest.mock('../../src/service/chat', () => ({
   sendSystemMessage: jest.fn()
 }));
 
+jest.mock('react', () => ({
+  ...jest.requireActual('react'),
+  useRef: jest.fn().mockReturnValue({current: []})
+}));
+
 describe('useFollowUser', () => {
   const myProfile = {user_id: '123', username: 'testuser'};
   const followContext = {users: []};
@@ -46,30 +52,41 @@ describe('useFollowUser', () => {
     useIsFocused.mockReturnValue(true);
     useLocalDatabaseHook.mockReturnValue({localDb, refresh});
     getFollowing.mockResolvedValue({data: []});
+    followContext.users = ['user1', 'user2'];
   });
 
-  it('should call getFollowing and setFollowingUsers on mount', async () => {
+  it('should not re-assign initialFollowingData when followContext changes', async () => {
+    followContext.users = ['user1', 'user2'];
     useIsFocused.mockReturnValue(true);
     getFollowing.mockResolvedValue({data: []});
 
-    renderHook(() => useFollowUser(), {
+    const {result, rerender} = renderHook(() => useFollowUser(), {
       wrapper: ({children}) => <Context.Provider value={contextValue}>{children}</Context.Provider>
     });
 
-    expect(useIsFocused).toHaveBeenCalled();
-    expect(getFollowing).toHaveBeenCalled();
+    // Save the initial following data
+    const {initialFollowingData} = result.current;
+
+    // Change followContext.users
+    followContext.users = ['user1', 'user2', 'user3'];
+    rerender();
+
+    expect(result.current.initialFollowingData).toBe(initialFollowingData);
   });
 
-  it('should not call setFollowingUsers when not focused', async () => {
-    useIsFocused.mockReturnValue(false);
-    getFollowing.mockResolvedValue({data: []});
+  it('should return true from isInitialFollowing for users that were initially followed', async () => {
+    followContext.users = ['user1', 'user2'];
+    useIsFocused.mockReturnValue(true);
+    getFollowing.mockResolvedValue({data: ['user1', 'user2']});
 
-    renderHook(() => useFollowUser(), {
+    const {result} = renderHook(() => useFollowUser(), {
       wrapper: ({children}) => <Context.Provider value={contextValue}>{children}</Context.Provider>
     });
 
-    expect(useIsFocused).toHaveBeenCalled();
-    expect(following.setFollowingUsers).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(result.current.isInitialFollowing('user1')).toBe(true);
+      expect(result.current.isInitialFollowing('user2')).toBe(true);
+    });
   });
 
   it('should call sendSystemMessage and setFollow when handleFollow is called', async () => {
