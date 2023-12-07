@@ -8,9 +8,9 @@ import {fonts, normalizeFontSize} from '../../../utils/fonts';
 const AVATAR_SIZE = 24;
 const CONTAINER_LEFT_PADDING = 60;
 const CONTAINER_RIGHT_PADDING = 10;
-const AVATAR_LEFT_MARGIN = 8;
-const BUBBLE_LEFT_PADDING = 8;
-const BUBBLE_RIGHT_PADDING = 8;
+const AVATAR_LEFT_MARGIN = 4;
+const BUBBLE_LEFT_PADDING = 4;
+const BUBBLE_RIGHT_PADDING = 4;
 
 export const targetLastLine =
   CONTAINER_LEFT_PADDING -
@@ -88,7 +88,7 @@ export const styles = StyleSheet.create({
     width: dimen.normalizeDimen(24),
     height: dimen.normalizeDimen(24),
     borderRadius: 15,
-    marginLeft: AVATAR_LEFT_MARGIN
+    marginLeft: dimen.normalizeDimen(AVATAR_LEFT_MARGIN)
   },
   dot: {
     width: 3,
@@ -133,11 +133,11 @@ export const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: colors.lightgrey
   },
-  ml8: {
-    marginLeft: dimen.normalizeDimen(8)
+  mlBuble: {
+    marginLeft: dimen.normalizeDimen(BUBBLE_LEFT_PADDING)
   },
-  mr8: {
-    marginRight: dimen.normalizeDimen(8)
+  mrBuble: {
+    marginRight: dimen.normalizeDimen(BUBBLE_RIGHT_PADDING)
   },
   radius8: {
     borderRadius: 8

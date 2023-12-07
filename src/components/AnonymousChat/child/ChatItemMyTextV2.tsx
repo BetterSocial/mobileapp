@@ -89,7 +89,7 @@ const ChatItemMyTextV2 = ({
 
   const renderAvatar = React.useCallback(() => {
     if (!isShowUserInfo) return <View style={styles.avatar} />;
-    return <View style={styles.ml8}>{avatar}</View>;
+    return <View style={styles.mlBuble}>{avatar}</View>;
   }, []);
 
   const onSwipeToReply = (direction) => {

@@ -186,7 +186,7 @@ exports[`TESTING ChatItemMyTextV2 should match snapshot 1`] = `
       <View
         style={
           Object {
-            "marginLeft": 6.4,
+            "marginLeft": 3.2,
           }
         }
       >

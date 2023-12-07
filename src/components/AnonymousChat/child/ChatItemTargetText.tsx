@@ -59,7 +59,7 @@ const ChatItemTargetText = ({
 
   const renderAvatar = React.useCallback(() => {
     if (!isShowUserInfo) return <View style={styles.avatar} />;
-    return <View style={styles.mr8}>{avatar}</View>;
+    return <View style={styles.mrBuble}>{avatar}</View>;
   }, []);
 
   const onSwipeToReply = (direction) => {

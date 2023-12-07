@@ -110,7 +110,6 @@ const SampleChatScreen = () => {
           inverted={true}
           initialNumToRender={20}
           alwaysBounceVertical={false}
-          bounces={false}
           onLayout={scrollToEnd}
           keyExtractor={(item, index) => item?.id || index.toString()}
           renderItem={renderChatItem}

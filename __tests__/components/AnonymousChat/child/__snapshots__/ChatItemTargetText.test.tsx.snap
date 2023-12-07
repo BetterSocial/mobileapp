@@ -34,7 +34,7 @@ exports[`TESTING ChatItemTargetText should match snapshot 1`] = `
       <View
         style={
           Object {
-            "marginRight": 6.4,
+            "marginRight": 3.2,
           }
         }
       >
