@@ -4,12 +4,12 @@ import BaseDbSchema from './BaseDbSchema';
 import ChannelListMemberSchema from './ChannelListMemberSchema';
 import UserSchema from './UserSchema';
 import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
+import {CHANNEL_GROUP, PM} from '../../hooks/core/constant';
 import {ChannelData} from '../../../types/repo/AnonymousMessageRepo/AnonymousChannelsData';
 import {ChannelType} from '../../../types/repo/ChannelData';
 import {MessageAnonymouslyData} from '../../../types/repo/AnonymousMessageRepo/MessageAnonymouslyData';
 import {ModifyAnonymousChatData} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 import {SignedPostNotification} from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
-import {CHANNEL_GROUP, PM} from '../../hooks/core/constant';
 
 class ChannelList implements BaseDbSchema {
   id: string;
@@ -406,7 +406,7 @@ class ChannelList implements BaseDbSchema {
       description: descriptionSystemMessage || firstMessage?.text || firstMessage?.message || '',
       unreadCount: data?.unreadCount ?? 0,
       channelType,
-      lastUpdatedAt: data?.last_message_at,
+      lastUpdatedAt: data?.last_message_at ?? data?.created_at,
       lastUpdatedBy: firstMessage?.user?.id,
       createdAt: data?.created_at,
       rawJson: data,
