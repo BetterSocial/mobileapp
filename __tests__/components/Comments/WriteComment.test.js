@@ -4,6 +4,7 @@ import WriteComment, {styles} from '../../../src/components/Comments/WriteCommen
 import Store from '../../../src/context/Store';
 import {fonts} from '../../../src/utils/fonts';
 import {colors} from '../../../src/utils/colors';
+import { COLORS } from '../../../src/utils/theme';
 
 describe('WriteComment should run correctly', () => {
   afterEach(cleanup);
@@ -51,7 +52,7 @@ describe('WriteComment should run correctly', () => {
     });
     expect(styles.container(true)).toEqual({
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: COLORS.white,
       width: '100%',
       paddingRight: 10,
       paddingLeft: 50,
@@ -60,7 +61,7 @@ describe('WriteComment should run correctly', () => {
     });
     expect(styles.container(false)).toEqual({
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: COLORS.white,
       width: '100%',
       paddingRight: 10,
       paddingLeft: 20,
@@ -68,7 +69,7 @@ describe('WriteComment should run correctly', () => {
       zIndex: 100
     });
     expect(styles.btn(true)).toEqual({
-      backgroundColor: '#f2f2f2',
+      backgroundColor: COLORS.concrete,
       borderRadius: 18,
       width: 35,
       height: 35,

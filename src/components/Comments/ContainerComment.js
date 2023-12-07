@@ -17,6 +17,7 @@ import {deleteComment} from '../../service/comment';
 import {getUserId} from '../../utils/users';
 import usePostDetail from '../PostPageDetail/hooks/usePostDetail';
 import ListComment from './ListComment';
+import {COLORS} from '../../utils/theme';
 
 const ContainerComment = ({
   feedId,
@@ -176,7 +177,7 @@ export const ReplyComment = ({
   );
 };
 export const ContainerReply = ({children, isGrandchild}) => (
-  <View style={[{borderColor: isGrandchild ? '#fff' : colors.gray1}]}>{children}</View>
+  <View style={[{borderColor: isGrandchild ? COLORS.white : colors.gray1}]}>{children}</View>
 );
 
 export const isEqual = (prevProps, nextProps) => prevProps.comments === nextProps.comments;
@@ -221,7 +222,7 @@ export const styles = StyleSheet.create({
   },
   containerComment: {
     borderLeftWidth: 1,
-    borderLeftColor: '#C4C4C4',
+    borderLeftColor: COLORS.gray1,
     marginTop: 0
   }
 });

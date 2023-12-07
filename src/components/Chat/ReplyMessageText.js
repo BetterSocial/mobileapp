@@ -12,6 +12,7 @@ import {calculateTime} from '../../utils/time';
 import Dot from '../Dot';
 import ActionChat from './ActionChat';
 import ProfileMessage from './ProfileMessage';
+import {COLORS} from '../../utils/theme';
 
 const ReplyMessageText = ({
   image,
@@ -164,14 +165,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: fonts.inter[600],
     lineHeight: 14.53,
-    color: isMe ? '#000' : colors.elm,
+    color: isMe ? COLORS.black : colors.elm,
     marginRight: 5.7,
   }),
   time: (isMe) => ({
     fontSize: 10,
     fontFamily: fonts.inter[600],
     lineHeight: 12,
-    color: isMe ? '#000' : colors.elm,
+    color: isMe ? COLORS.black : colors.elm,
     marginLeft: 5,
   }),
   quotedProfileName: {
@@ -179,7 +180,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   message: (isMe) => ({
-    color: isMe ? '#000' : colors.elm,
+    color: isMe ? COLORS.black : colors.elm,
     marginTop: 4,
     fontSize: 16,
     fontFamily: fonts.inter[400],

@@ -3,6 +3,7 @@ import { View, TouchableOpacity, StyleSheet  } from 'react-native'
 import Animated from 'react-native-reanimated';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
+import { COLORS } from '../../utils/theme';
 
 const S = StyleSheet.create({
     container: {
@@ -19,7 +20,7 @@ const S = StyleSheet.create({
     toptabcontainer: {
       flexDirection: 'row',
       backgroundColor: colors.white,
-      borderBottomColor: '#00000050',
+      borderBottomColor: COLORS.black30percent,
       borderBottomWidth: 1,
       paddingHorizontal: 4,
     },

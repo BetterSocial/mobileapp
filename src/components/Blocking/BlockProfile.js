@@ -6,6 +6,7 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import ItemListLarge from './ItemListLarge';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import { COLORS } from '../../utils/theme';
 
 const BlockProfile = ({refBlockUser, onSelect, username, isBlocker}) => {
   let data = [
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: fonts.inter[600],
     fontSize: 18,
-    color: '#000',
+    color: COLORS.black,
     marginLeft: 21
   },
   desc: {

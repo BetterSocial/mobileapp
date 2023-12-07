@@ -17,6 +17,7 @@ import {colors} from '../../../utils/colors';
 import InstagramIcon from '../../../assets/social-media/instagram.svg';
 import TwitterIcon from '../../../assets/social-media/twitter.svg';
 import ShareUtils from '../../../utils/share/index';
+import {COLORS} from '../../../utils/theme';
 
 interface LinkProps {
   username: string;
@@ -163,7 +164,7 @@ const LinkAndSocialMedia: React.FC<LinkProps> = ({username, prompt}) => {
 
 const styles = StyleSheet.create({
   linkAndSocialMediaContainer: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: COLORS.lightgrey,
     marginTop: 19,
     borderRadius: 15,
     padding: 10
@@ -197,7 +198,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   copyLinkContainer: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: COLORS.lightgrey,
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',

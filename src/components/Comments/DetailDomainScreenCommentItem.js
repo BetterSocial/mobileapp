@@ -11,6 +11,7 @@ import {calculateTime} from '../../utils/time';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
+import {COLORS} from '../../utils/theme';
 
 const DetailDomainScreenCommentItem = ({
   user,
@@ -156,14 +157,14 @@ const styles = StyleSheet.create({
   username: {
     fontFamily: fonts.inter[700],
     fontSize: 12,
-    color: '#828282',
+    color: COLORS.blackgrey,
     lineHeight: 14,
     marginLeft: 16,
   },
   post: {
     fontFamily: fonts.inter[400],
     fontSize: 16,
-    color: '#333333',
+    color: COLORS.mine_shaft,
     marginLeft: 28,
   },
   profile: {
@@ -186,7 +187,7 @@ const styles = StyleSheet.create({
   btnReplyText: {
     fontFamily: fonts.inter[400],
     fontSize: 13,
-    color: '#C4C4C4',
+    color: COLORS.gray1,
     marginLeft: 8.98,
     marginRight: 14,
   },
@@ -204,7 +205,7 @@ const styles = StyleSheet.create({
   time: {
     fontFamily: fonts.inter[400],
     fontSize: 10,
-    color: '#828282',
+    color: COLORS.blackgrey,
     lineHeight: 12,
   },
   containerUsername: {

@@ -11,6 +11,7 @@ import {
 import MemoIcClearCircle from '../../../assets/icons/ic_clear_circle';
 import {MAX_POLLING_CHARACTER_ALLOWED} from '../../../utils/constants';
 import {colors} from '../../../utils/colors';
+import {COLORS} from '../../../utils/theme';
 
 export default function PollItem({
   index = 0,
@@ -26,7 +27,7 @@ export default function PollItem({
     <View
       style={isTextInputFocus ? S.focuspollitemcontainer : S.pollitemcontainer}>
       <TextInput
-        placeholderTextColor={'#828282'}
+        placeholderTextColor={COLORS.blackgrey}
         placeholder={`Choice ${index + 1}`}
         style={S.pollitemtextinput}
         onFocus={() => setIsTextInputFocus(true)}

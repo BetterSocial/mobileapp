@@ -71,6 +71,7 @@ import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import ShadowFloatingButtons from '../../components/Button/ShadowFloatingButtons';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
 import StorageUtils from '../../utils/storage';
+import { COLORS } from '../../utils/theme';
 
 const {width} = Dimensions.get('screen');
 
@@ -806,14 +807,14 @@ const styles = StyleSheet.create({
     paddingLeft: 0
   },
   tooltipText: {
-    color: '#828282',
+    color: COLORS.blackgrey,
     fontFamily: 'Inter',
     fontSize: 12,
     fontStyle: 'normal',
     fontWeight: '400'
   },
   flatlistContainer: {
-    backgroundColor: 'white'
+    backgroundColor: COLORS.white
   }
 });
 

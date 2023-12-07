@@ -13,7 +13,7 @@ import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
 import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
 import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
 import useComment from './hooks/useComment';
-import {FONTS} from '../../utils/theme';
+import {COLORS, FONTS} from '../../utils/theme';
 import {calculateTime} from '../../utils/time';
 import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
@@ -103,12 +103,12 @@ const Comment = ({
 
   const voteStyle = () => {
     if (totalVote > 0) {
-      return '#00ADB5';
+      return COLORS.holytosca;
     }
     if (totalVote < 0) {
-      return '#FF2E63';
+      return COLORS.red;
     }
-    return '#C4C4C4';
+    return COLORS.gray1;
   };
   return (
     <View
@@ -246,14 +246,14 @@ const styles = StyleSheet.create({
   username: {
     fontFamily: fonts.inter[700],
     fontSize: normalizeFontSize(12),
-    color: '#828282',
+    color: COLORS.blackgrey,
     lineHeight: 14,
     marginLeft: 16
   },
   post: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
-    color: '#333333',
+    color: COLORS.mine_shaft,
     marginLeft: 28
   },
   profile: {
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
   btnReplyText: {
     fontFamily: fonts.inter[400],
     fontSize: 13,
-    color: '#C4C4C4',
+    color: COLORS.gray1,
     marginLeft: 8.98,
     marginRight: 14
   },
@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
   time: {
     fontFamily: fonts.inter[400],
     fontSize: 10,
-    color: '#828282',
+    color: COLORS.blackgrey,
     lineHeight: 12
   },
   containerUsername: {

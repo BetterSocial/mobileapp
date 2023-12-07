@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     cardHeaderDomainName: {
         fontSize: 14,
         lineHeight: 16,
-        color: '#000000',
+        color: COLORS.black,
         fontWeight: 'bold',
         fontFamily: fonts.inter[600],
         flexShrink: 1,

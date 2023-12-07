@@ -61,6 +61,7 @@ import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
 import useCreateChat from '../../hooks/screen/useCreateChat';
 import {ANON_PM, SIGNED} from '../../hooks/core/constant';
 import {ToggleSwitchAnon, useDynamicColors} from '../../hooks/useToggleColors';
+import {COLORS} from '../../utils/theme';
 
 const {width, height} = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -861,7 +862,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0'
+    borderBottomColor: COLORS.alto
   },
   dummyItem: (heightItem) => ({
     height: heightItem
@@ -892,7 +893,7 @@ const styles = StyleSheet.create({
   wrapImageProfile: {
     marginTop: 24,
     flexDirection: 'column',
-    backgroundColor: 'red'
+    backgroundColor: COLORS.red
   },
   nameProfile: {
     fontFamily: fonts.inter[800],
@@ -954,7 +955,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: 'white'
+    backgroundColor: COLORS.white
   },
   wrapButton: {
     flex: 1,

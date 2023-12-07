@@ -28,6 +28,7 @@ import {post} from '../../api/server';
 import {setLocalCommunity} from '../../context/actions/localCommunity';
 import dimen from '../../utils/dimen';
 import {normalizeFontSize} from '../../utils/fonts';
+import { COLORS } from '../../utils/theme';
 
 const {width} = Dimensions.get('screen');
 const LocalCommunity = () => {
@@ -298,7 +299,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: normalizeFontSize(36),
     lineHeight: normalizeFontSize(43.57),
-    color: '#11243D',
+    color: COLORS.bunting,
     marginHorizontal: dimen.normalizeDimen(20)
   },
   footer: {

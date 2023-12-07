@@ -90,7 +90,7 @@ const GroupSetting = ({navigation, route}) => {
 export default GroupSetting;
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#fff'},
+  container: {flex: 1, backgroundColor: COLORS.white},
   subtitleStyle: {
     color: COLORS.holyTosca
   },

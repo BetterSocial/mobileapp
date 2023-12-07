@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   },
   containerFollowers: { flexDirection: 'row' },
   followers: {
-    color: '#00ADB5',
+    color: COLORS.holyTosca,
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(16),
     fontWeight: '700',
@@ -121,10 +121,10 @@ const styles = StyleSheet.create({
   }),
   headerDomain: {
     flexDirection: 'column',
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     paddingHorizontal: 20,
     borderTopColor: 'transparent',
-    // shadowColor: '#000',
+    // shadowColor: COLORS.black,
     // shadowOffset: {width: 0, height: 1},
     // shadowOpacity: 0.8,
     // shadowRadius: 1,
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
   },
   buttonPrimary: {
     height: normalize(36),
-    backgroundColor: '#00ADB5',
+    backgroundColor: COLORS.holyTosca,
     // flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -178,14 +178,14 @@ const styles = StyleSheet.create({
   },
   followButtonText: {
     fontSize: normalizeFontSize(14),
-    color: 'white',
+    color: COLORS.white,
     paddingHorizontal: 25,
   },
   domainName: {
     fontSize: RFValue(20),
     fontFamily: fonts.inter[700],
     lineHeight: RFValue(24.2),
-    color: '#000000',
+    color: COLORS.black,
     // flex: 1,
     flexShrink: 1
   },
@@ -202,12 +202,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 10,
     height: 10,
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     top: 23,
     zIndex: 10000000,
     left: 10,
     transform: [{ rotate: '45deg' }],
-    shadowColor: '#000',
+    shadowColor: COLORS.black,
     shadowOffset: {
       width: 2,
       height: 2,

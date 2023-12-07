@@ -77,6 +77,7 @@ import {getUrl, isContainUrl} from '../../utils/Utils';
 import {getUserId} from '../../utils/users';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
 import {uploadPhoto} from '../../service/file';
+import {COLORS} from '../../utils/theme';
 
 const IS_GEO_SELECT_ENABLED = false;
 
@@ -887,7 +888,7 @@ export default CreatePost;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.white,
     position: 'relative'
   },
   input: {
@@ -936,7 +937,7 @@ const styles = StyleSheet.create({
     height
   }),
   reminderContainer: {
-    backgroundColor: '#2F80ED',
+    backgroundColor: COLORS.blue,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 7,
@@ -944,7 +945,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 10
   },
   whiteText: {
-    color: 'white',
+    color: COLORS.white,
     fontSize: normalizeFontSize(10),
     textAlign: 'center'
   }

@@ -26,6 +26,7 @@ import {createChildCommentV3} from '../../service/comment';
 import {fonts} from '../../utils/fonts';
 import {getComment} from '../../utils/getstream/getComment';
 import {getFeedDetail} from '../../service/post';
+import {COLORS} from '../../utils/theme';
 
 const ReplyCommentId = ({itemProp, indexFeed, level, updateParent}) => {
   console.log('indexFeed');
@@ -306,8 +307,8 @@ const styles = StyleSheet.create({
   container: {
     height: 'auto',
     flex: 1,
-    backgroundColor: '#fff'
-    // backgroundColor: 'blue',
+    backgroundColor: COLORS.white
+    // backgroundColor: COLORS.blue,
   },
   containerComment: {
     marginTop: 8,
@@ -327,7 +328,7 @@ const styles = StyleSheet.create({
   containerReply: () => ({
     borderLeftWidth: 1,
     width: '100%'
-    // backgroundColor: 'red',
+    // backgroundColor: COLORS.red,
     // flex: 1,
   }),
   seeRepliesContainer: (isLast) => ({
@@ -345,13 +346,13 @@ const styles = StyleSheet.create({
     borderRadius: 20
   },
   btnText: {
-    color: '#fff'
+    color: COLORS.white
   },
   headerText: {
     fontFamily: fonts.inter[600],
     fontSize: 14,
     marginLeft: -24,
-    color: '#000',
+    color: COLORS.black,
     alignSelf: 'center'
   },
   image: {
@@ -359,9 +360,9 @@ const styles = StyleSheet.create({
     height: 48
   },
   input: {
-    backgroundColor: '#F2F2F2',
+    backgroundColor: COLORS.concrete,
     flex: 1,
-    color: '#000',
+    color: COLORS.black,
     padding: 10,
     marginLeft: 20,
     borderRadius: 8
@@ -375,7 +376,7 @@ const styles = StyleSheet.create({
   post: {
     fontFamily: fonts.inter[400],
     fontSize: 16,
-    color: '#333333',
+    color: COLORS.mine_shaft,
     marginLeft: 28
   },
   mainLeftConnector: {

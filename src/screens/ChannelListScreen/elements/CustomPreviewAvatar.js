@@ -11,6 +11,7 @@ import Hashtag from '../../../assets/hashtag.png';
 import {CHANNEL_TYPE_ANONYMOUS} from '../../../utils/constants';
 import {colors} from '../../../utils/colors';
 import {getGroupMemberCount} from '../../../utils/string/StringUtils';
+import {COLORS} from '../../../utils/theme';
 
 const CustomPreviewAvatar = ({channel}) => {
   const channel_type = channel?.data?.channel_type;
@@ -49,7 +50,7 @@ const CustomPreviewAvatar = ({channel}) => {
           source={{uri: channel.data.image, priority: FastImage.priority.normal}}
           style={styles.image}
         />
-        <View style={styles.typeContainer('#55C2FF')}>
+        <View style={styles.typeContainer(COLORS.blueSea)}>
           <FastImage
             resizeMode={FastImage.resizeMode.contain}
             style={styles.iconChatStyle}

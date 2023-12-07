@@ -56,7 +56,7 @@ const Search = ({onPress, animatedValue, isAnon}) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     marginBottom: SIZES.base
   },
   searchPressableContainer: {
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   wrapperSearch: {
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: '#F5F5F5',
+    backgroundColor: COLORS.lightgrey,
     marginLeft: 20,
     marginRight: 12,
     borderRadius: 8,
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   },
   animatedViewContainer: (animatedValue) => ({
     flexDirection: 'row',
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     marginBottom: SIZES.base,
     marginTop: animatedValue,
     position: 'absolute',

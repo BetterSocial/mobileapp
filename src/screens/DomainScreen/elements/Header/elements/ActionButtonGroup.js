@@ -4,6 +4,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import GlobalButton from '../../../../../components/Button/GlobalButton'
 import { colors } from '../../../../../utils/colors'
 import { fonts, normalize, normalizeFontSize } from '../../../../../utils/fonts'
+import { COLORS } from '../../../../../utils/theme'
 
 const ActionButtonGroup = ({ follow, handleFollow, handleUnfollow, isBlocked, onPressBlock, onPressUnblock }) => {
     const __renderFollowButton = () => {
@@ -50,7 +51,7 @@ const ActionButtonGroup = ({ follow, handleFollow, handleUnfollow, isBlocked, on
 const styles = StyleSheet.create({
     blockButtonText: {
         fontSize: normalizeFontSize(12),
-        color: '#FF2E63',
+        color: COLORS.red,
         paddingHorizontal: 0,
     },
     buttonBlock: {
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
         // width: normalize(88),
         borderWidth: 0.5,
         borderRadius: 8,
-        borderColor: '#FF2E63',
+        borderColor: COLORS.red,
         overflow: 'hidden',
         justifyContent: 'center',
         alignItems: 'center',
@@ -71,11 +72,11 @@ const styles = StyleSheet.create({
         // width: normalize(88),
         borderWidth: 0.5,
         borderRadius: 8,
-        borderColor: '#FF2E63',
+        borderColor: COLORS.red,
         overflow: 'hidden',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#FF2E63',
+        backgroundColor: COLORS.red,
     },
     buttonFollow: {
         flex: 1,
@@ -129,7 +130,7 @@ const styles = StyleSheet.create({
     },
     unblockButtonText: {
         fontSize: normalizeFontSize(12),
-        color: 'white',
+        color: COLORS.white,
         paddingHorizontal: 0,
     },
 })

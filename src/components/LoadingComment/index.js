@@ -6,6 +6,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import PropTypes from 'prop-types';
 import { colors, } from '../../utils/colors'
 import { fonts } from '../../utils/fonts'
+import { COLORS } from '../../utils/theme';
 
 
 
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
     username: {
         fontFamily: fonts.inter[700],
         fontSize: 12,
-        color: '#828282',
+        color: COLORS.blackgrey,
         lineHeight: 14,
         marginLeft: 16,
       },
@@ -49,13 +50,13 @@ const styles = StyleSheet.create({
       time: {
         fontFamily: fonts.inter[400],
         fontSize: 10,
-        color: '#828282',
+        color: COLORS.blackgrey,
         lineHeight: 12,
       },
       post: {
         fontFamily: fonts.inter[400],
         fontSize: 16,
-        color: '#333333',
+        color: COLORS.mine_shaft,
         marginLeft: 20,
       },
 })

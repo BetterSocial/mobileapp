@@ -17,6 +17,7 @@ import StringConstant from '../../utils/string/StringConstant';
 import {Context} from '../../context';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
 
 const WriteComment = ({
   value = null,
@@ -119,7 +120,7 @@ const WriteComment = ({
           style={styles.btn(isDisableSubmit || loadingUser)}
           disabled={isDisableSubmit || loadingUser}>
           <MemoSendComment
-            fillBackground={isDisableSubmit || loadingUser ? '#C4C4C4' : colors.bondi_blue}
+            fillBackground={isDisableSubmit || loadingUser ? COLORS.gray1 : colors.bondi_blue}
           />
         </TouchableOpacity>
       </View>
@@ -160,7 +161,7 @@ export const styles = StyleSheet.create({
   },
   container: (inReplyCommentView) => ({
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.white,
     width: '100%',
     paddingRight: 10,
     paddingLeft: inReplyCommentView ? 50 : 20,
@@ -180,7 +181,7 @@ export const styles = StyleSheet.create({
     flex: 1
   },
   btn: (isDisableSubmit) => ({
-    backgroundColor: !isDisableSubmit ? colors.bondi_blue : '#f2f2f2',
+    backgroundColor: !isDisableSubmit ? colors.bondi_blue : COLORS.concrete,
     borderRadius: 18,
     width: 35,
     height: 35,

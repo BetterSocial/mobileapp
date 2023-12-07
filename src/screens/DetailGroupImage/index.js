@@ -17,6 +17,7 @@ import Icon from 'react-native-vector-icons/Octicons';
 import {calculateTime} from '../../utils/time';
 import ModalImageSingleDetail from '../../components/Chat/ModalImageSingleDetail';
 import {useNavigation} from '@react-navigation/native';
+import {COLORS} from '../../utils/theme';
 
 const width = Dimensions.get('screen').width;
 
@@ -105,13 +106,13 @@ const styles = StyleSheet.create({
   name: {
     fontFamily: fonts.inter[600],
     fontSize: 14,
-    color: '#fff',
+    color: COLORS.white,
     lineHeight: 16.94,
   },
   time: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: '#fff',
+    color: COLORS.white,
     lineHeight: 18,
   },
 });

@@ -28,6 +28,7 @@ import {setAccessToken, setRefreshToken, setToken} from '../../utils/token';
 import {colors} from '../../utils/colors';
 import ListUser from './elements/ListUser';
 import { Analytics } from '../../libraries/analytics/firebaseAnalytics';
+import {COLORS} from '../../utils/theme';
 
 const { width } = Dimensions.get('screen');
 function compire(prevProps, nextProps) {
@@ -68,13 +69,13 @@ const WhotoFollow = () => {
         <TouchableNativeFeedback
           onPress={() => navigation.goBack()}
           background={TouchableNativeFeedback.Ripple(colors.gray1, true, 20)}>
-          <ArrowLeftIcon width={20} height={12} fill="#000" />
+          <ArrowLeftIcon width={20} height={12} fill={COLORS.black} />
         </TouchableNativeFeedback>
       );
     }
       return (
         <TouchableHighlight onPress={() => navigation.goBack()}>
-          <ArrowLeftIcon width={20} height={12} fill="#000" />
+          <ArrowLeftIcon width={20} height={12} fill={COLORS.black} />
         </TouchableHighlight>
       );
 
@@ -186,7 +187,7 @@ const WhotoFollow = () => {
           cannot see who you follow.
         </Text>
       </View>
-      {isLoading ? <ActivityIndicator size="small" color="#0000ff" /> : null}
+      {isLoading ? <ActivityIndicator size="small" color={COLORS.blue} /> : null}
       <VirtualizedView
         style={styles.listUser}
         onRefresh={onRefresh}
@@ -208,7 +209,7 @@ const WhotoFollow = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.white,
   },
   content: {
     padding: 22,
@@ -231,7 +232,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 36,
     lineHeight: 44,
-    color: '#11243D',
+    color: COLORS.bunting,
   },
   textDescription: {
     fontFamily: 'Poppins',
@@ -239,7 +240,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     fontSize: 12,
     lineHeight: 20,
-    color: '#828282',
+    color: COLORS.blackgrey,
     marginTop: 20,
     opacity: 0.84,
   },
@@ -251,8 +252,8 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
     paddingBottom: 20,
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#000',
+    backgroundColor: COLORS.white,
+    shadowColor: COLORS.black,
     shadowOffset: {
       width: 0,
       height: 5,
@@ -281,7 +282,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     fontSize: 24,
-    color: '#FFFFFF',
+    color: COLORS.white,
   },
   containerTextCard: {
     flexDirection: 'column',
@@ -291,7 +292,7 @@ const styles = StyleSheet.create({
 
   button: {
     height: 36,
-    backgroundColor: '#11516F',
+    backgroundColor: COLORS.blueTanzanite,
     paddingVertical: 10,
     paddingHorizontal: 25,
     borderRadius: 8,
@@ -304,14 +305,14 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 12,
     textAlign: 'center',
-    color: '#FFFFFF',
+    color: COLORS.white,
   },
   textFullName: {
     fontFamily: 'Poppins',
     fontStyle: 'normal',
     fontWeight: 'bold',
     fontSize: 14,
-    color: '#000000',
+    color: COLORS.black,
     lineHeight: 21,
     alignSelf: 'flex-start',
     // textTransform: 'capitalize',
@@ -321,7 +322,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: '500',
     fontSize: 12,
-    color: '#000000',
+    color: COLORS.black,
     lineHeight: 15,
     alignSelf: 'flex-start',
   },
@@ -329,7 +330,7 @@ const styles = StyleSheet.create({
     height: 40,
     paddingLeft: 22,
     paddingRight: 22,
-    backgroundColor: '#F2F2F2',
+    backgroundColor: COLORS.concrete,
     flexDirection: 'column',
     justifyContent: 'center',
     marginBottom: 12,
@@ -341,7 +342,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     fontSize: 12,
     lineHeight: 18,
-    color: '#4F4F4F',
+    color: COLORS.emperor,
   },
   flatList: {
     paddingLeft: 22,
@@ -355,7 +356,7 @@ const styles = StyleSheet.create({
   containerButton: {
     width: 32,
     height: 32,
-    // backgroundColor : 'red',
+    // backgroundColor : COLORS.red,
     borderRadius: 16,
     flexDirection: 'column',
     justifyContent: 'center',
@@ -367,13 +368,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 12,
     lineHeight: 18,
-    color: '#4F4F4F',
+    color: COLORS.emperor,
     textTransform: 'capitalize',
   },
   followAction: (awidth, height) => ({
     height,
     width: awidth,
-    backgroundColor: 'red',
+    backgroundColor: COLORS.red,
     justifyContent: 'center',
     alignItems: 'center',
   }),

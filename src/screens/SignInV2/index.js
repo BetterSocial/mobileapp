@@ -179,7 +179,7 @@ const S = StyleSheet.create({
     paddingTop: 26
   },
   btn: {
-    backgroundColor: '#023B60',
+    backgroundColor: COLORS.blueLoyal,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 5,
@@ -198,12 +198,12 @@ const S = StyleSheet.create({
     marginTop: 16
   },
   humanID: {
-    color: '#11243D',
+    color: COLORS.bunting,
     // fontWeight: 'bold',
     textDecorationLine: 'underline'
   },
-  btnText: {fontSize: 17, color: '#fff', fontWeight: 'bold'},
-  humen: {fontSize: 17, color: '#fff', fontWeight: '100'},
+  btnText: {fontSize: 17, color: COLORS.white, fontWeight: 'bold'},
+  humen: {fontSize: 17, color: COLORS.white, fontWeight: '100'},
   btnSign: {
     borderRadius: 10
   }

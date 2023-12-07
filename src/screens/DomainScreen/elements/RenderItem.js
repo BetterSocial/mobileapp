@@ -238,8 +238,8 @@ const RenderItem = ({
 
 const styles = StyleSheet.create({
   containerText: { paddingHorizontal: 16 },
-  iconPlush: { fontSize: normalizeFontSize(24), color: '#00ADB5' },
-  views: { color: '#828282' },
+  iconPlush: { fontSize: normalizeFontSize(24), color: COLORS.holyTosca },
+  views: { color: COLORS.holyTosca },
   containerDetail: { flex: 1 },
   contentContainer: { flex: 1 },
   contentDetail: { flexDirection: 'row', alignItems: 'center' },
@@ -275,7 +275,7 @@ const styles = StyleSheet.create({
   wrapperText: {
     backgroundColor: 'white',
     borderRadius: 8,
-    borderColor: '#00ADB5',
+    borderColor: COLORS.holyTosca,
     width: normalize(36),
     height: normalize(36),
     justifyContent: 'center',
@@ -303,13 +303,13 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(14),
     fontFamily: fonts.inter[600],
     lineHeight: normalizeFontSize(16.9),
-    color: '#000000',
+    color: COLORS.black,
   },
   headerDomainDate: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(12),
     lineHeight: normalizeFontSize(18),
-    color: '#828282',
+    color: COLORS.blackgrey,
   },
   domainItemTitle: {
     fontSize: normalizeFontSize(16),
@@ -340,9 +340,9 @@ const styles = StyleSheet.create({
     paddingTop: 8,
   },
   wrapperTextUnFollow: {
-    backgroundColor: '#00ADB5',
+    backgroundColor: COLORS.holyTosca,
     borderRadius: 8,
-    borderColor: '#00ADB5',
+    borderColor: COLORS.holyTosca,
     width: 36,
     height: 36,
     justifyContent: 'center',

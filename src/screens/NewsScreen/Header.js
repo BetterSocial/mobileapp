@@ -110,9 +110,9 @@ const styles = StyleSheet.create({
     borderRadius: 45,
   },
   wrapperText: {
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     borderRadius: 8,
-    borderColor: '#00ADB5',
+    borderColor: COLORS.holyTosca,
     width: 32,
     height: 32,
     justifyContent: 'center',

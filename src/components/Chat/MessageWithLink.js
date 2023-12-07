@@ -12,6 +12,7 @@ import { calculateTime } from '../../utils/time';
 import Dot from '../Dot';
 import ActionChat from './ActionChat';
 import ProfileMessage from './ProfileMessage';
+import { COLORS } from '../../utils/theme';
 
 const MessageWithLink = ({
   image,
@@ -77,14 +78,14 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 4,
   },
   title: {
-    color: '#000',
+    color: COLORS.black,
     fontFamily: fonts.inter[600],
     fontSize: 14,
     lineHeight: 16.94,
     marginTop: 5,
   },
   authorName: (isMe) => ({
-    color: isMe ? '#fff' : colors.gray,
+    color: isMe ? COLORS.white : colors.gray,
     fontFamily: fonts.inter[400],
     fontSize: 12,
     marginBottom: 5,
@@ -103,7 +104,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: fonts.inter[600],
     lineHeight: 14.53,
-    color: '#000',
+    color: COLORS.black,
     marginRight: 5.7,
   },
   containerImage: {
@@ -113,11 +114,11 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontFamily: fonts.inter[600],
     lineHeight: 12,
-    color: '#000',
+    color: COLORS.black,
     marginLeft: 5,
   },
   message: {
-    color: '#000',
+    color: COLORS.black,
     marginTop: 4,
     fontSize: 16,
     fontFamily: fonts.inter[400],

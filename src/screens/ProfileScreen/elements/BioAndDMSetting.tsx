@@ -7,6 +7,7 @@ import ToggleSwitch from '../../../components/ToggleSwitch';
 import {colors} from '../../../utils/colors';
 import {profileSettingsDMpermission} from '../../../service/profile';
 import {addDotAndRemoveNewline} from '../../../utils/string/TrimString';
+import { COLORS } from '../../../utils/theme';
 
 type BioAndDMSettingProps = {
   bio: string;
@@ -140,7 +141,7 @@ const styles = StyleSheet.create({
   },
   editPromptLabel: {color: colors.blueSea10, textDecorationLine: 'underline'},
   bioText: {
-    color: '#F5F5F5',
+    color: COLORS.lightgrey,
     fontFamily: 'Inter',
     fontSize: 14,
     fontStyle: 'normal',

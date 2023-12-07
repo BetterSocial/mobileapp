@@ -23,6 +23,7 @@ import useWriteComment from '../Comments/hooks/useWriteComment';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import useCommentAction from '../Comments/hooks/useCommentAction';
+import {COLORS} from '../../utils/theme';
 
 const ReplyCommentId = ({
   itemProp,
@@ -183,7 +184,7 @@ export const styles = StyleSheet.create({
   container: {
     height: 'auto',
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: COLORS.white
     // backgroundColor: 'blue',
   },
   containerComment: {
@@ -221,13 +222,13 @@ export const styles = StyleSheet.create({
     borderRadius: 20
   },
   btnText: {
-    color: '#fff'
+    color: COLORS.white
   },
   headerText: {
     fontFamily: fonts.inter[600],
     fontSize: 14,
     marginLeft: -24,
-    color: '#000',
+    color: COLORS.black,
     alignSelf: 'center'
   },
   image: {
@@ -235,9 +236,9 @@ export const styles = StyleSheet.create({
     height: 48
   },
   input: {
-    backgroundColor: '#F2F2F2',
+    backgroundColor: COLORS.concrete,
     flex: 1,
-    color: '#000',
+    color: COLORS.b,
     padding: 10,
     marginLeft: 20,
     borderRadius: 8
@@ -251,7 +252,7 @@ export const styles = StyleSheet.create({
   post: {
     fontFamily: fonts.inter[400],
     fontSize: 16,
-    color: '#333333',
+    color: COLORS.mine_shaft,
     marginLeft: 28
   },
   mainLeftConnector: {

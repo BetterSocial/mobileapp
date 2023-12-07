@@ -4,6 +4,7 @@ import { generateRandomId } from 'stream-chat-react-native-core';
 
 import { colors } from '../colors';
 import { fonts } from '../fonts';
+import { COLORS } from '../theme';
 
 const handleMention = (text, setFormattedContent) => {
     const retLines = text.split("\n");
@@ -47,7 +48,7 @@ const handleMention = (text, setFormattedContent) => {
 
 const styles = StyleSheet.create({
     mention: {
-        color: '#2F80ED',
+        color: COLORS.blue,
         fontFamily: fonts.inter[500],
         fontWeight: "500",
     },

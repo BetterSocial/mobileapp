@@ -5,6 +5,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import ItemListLarge from './ItemListLarge';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import { COLORS } from '../../utils/theme';
 
 const BlockPostAnonymous = ({refBlockPostAnonymous, onSelect}) => {
   const data = [
@@ -61,7 +62,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: fonts.inter[600],
     fontSize: 18,
-    color: '#000',
+    color: COLORS.black,
     marginLeft: 21
   },
   desc: {
