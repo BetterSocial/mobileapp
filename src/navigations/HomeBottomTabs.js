@@ -20,11 +20,15 @@ import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
 import {colors} from '../utils/colors';
 import TokenStorage, {ITokenEnum} from '../utils/storage/custom/tokenStorage';
 import {getAnonymousUserId, getUserId} from '../utils/users';
+import {chatAtom} from '../hooks/core/chat/useChatUtilsHook';
+import SignedMessageRepo from '../service/repo/signedMessageRepo';
 
 const Tab = createBottomTabNavigator();
 
 function HomeBottomTabs({navigation}) {
   useCoreChatSystemHook();
+  const [chat, setChat] = useRecoilState(chatAtom);
+
   const isIos = Platform.OS === 'ios';
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const otherProfileData = useRecoilValue(otherProfileAtom);
@@ -75,15 +79,17 @@ function HomeBottomTabs({navigation}) {
       });
     }
     if (notification.data.type === 'message.new') {
-      helperNavigationResetWithData({
-        name: 'AuthenticatedStack',
-        params: {
-          screen: 'ChatDetailPage',
-          params: {
-            data: notification.data
-          }
-        }
+      console.log(notification, 'lapak');
+      const response = await SignedMessageRepo.getChatDetail(
+        notification?.data?.channel_type,
+        notification?.data?.channel_id
+      );
+      console.log({response}, 'lusia');
+      setChat({
+        ...chat,
+        selectedChannel: response.data.channel
       });
+      navigation.navigate('SignedChatScreen');
     }
   };
 
