@@ -12,7 +12,7 @@ const Btn = (props) => {
   return (
     <TouchableOpacity
       disabled={disable}
-      style={{...styles.button, ...props.btnStyle, ...props.styles, ...disabledStyle}}
+      style={{...styles.button, ...props.styles, ...disabledStyle}}
       onPress={props.onPress}
       {...props}>
       <Text style={{...styles.buttonText, ...props.textStyling}}>{props.children}</Text>
@@ -25,8 +25,7 @@ Btn.propTypes = {
   children: PropTypes.node,
   onPress: PropTypes.func,
   styles: PropTypes.object,
-  textStyling: PropTypes.object,
-  btnStyle: PropTypes.object
+  textStyling: PropTypes.object
 };
 
 const styles = StyleSheet.create({
