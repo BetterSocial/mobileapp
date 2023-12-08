@@ -11,6 +11,7 @@ import SignedMessageRepo from '../../service/repo/signedMessageRepo';
 import UseChatScreenHook from '../../../types/hooks/screens/useChatScreenHook.types';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
+import useMessageHook from './useMessageHook';
 import {
   CHANNEL_TYPE_ANONYMOUS,
   CHANNEL_TYPE_GROUP,
@@ -22,6 +23,7 @@ import {randomString} from '../../utils/string/StringUtils';
 function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const {localDb, chat, refresh} = useLocalDatabaseHook();
   const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen} = useChatUtilsHook();
+  const {replyPreview, clearReplyPreview} = useMessageHook();
 
   const [chats, setChats] = React.useState<ChatSchema[]>([]);
   const {anon_user_info_emoji_name} = selectedChannel?.rawJson?.channel || {};
@@ -52,13 +54,15 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       return;
     }
 
+    const replyData = replyPreview;
+    let json;
     let currentChatSchema = sendingChatSchema;
     let userId = await getUserId();
     const myAnonymousId = await getAnonymousUserId();
 
-    if (type === 'ANONYMOUS') {
-      userId = myAnonymousId;
-    }
+    if (type === 'ANONYMOUS') userId = myAnonymousId;
+    if (replyData) json = {reply_data: replyData};
+
     try {
       const randomId = uuid();
 
@@ -68,12 +72,18 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
           userId,
           selectedChannel?.id,
           message,
-          localDb
+          localDb,
+          replyData ? 'reply' : 'regular',
+          'pending',
+          json
         );
         currentChatSchema.save(localDb);
         refresh('chat');
         refresh('channelList');
       }
+
+      clearReplyPreview();
+
       let channelType = CHANNEL_TYPE_PERSONAL;
       if (
         selectedChannel?.channelType?.toLowerCase() === 'group' ||
@@ -88,14 +98,21 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
 
       let response;
       if (type === 'ANONYMOUS') {
-        response = await AnonymousMessageRepo.sendAnonymousMessage(selectedChannel?.id, message);
+        response = await AnonymousMessageRepo.sendAnonymousMessage(
+          selectedChannel?.id,
+          message,
+          replyData?.id
+        );
       } else {
         response = await SignedMessageRepo.sendSignedMessage(
           selectedChannel?.id,
           message,
-          channelType
+          channelType,
+          replyData?.id
         );
       }
+
+      response.reply_data = response?.message?.reply_data;
       await currentChatSchema.updateChatSentStatus(localDb, response);
       refresh('chat');
       refresh('channelList');

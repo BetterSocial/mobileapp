@@ -6,6 +6,7 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import IconClear from '../../../assets/icon/IconClear';
 import dimen from '../../../utils/dimen';
 import useMessageHook from '../../../hooks/screen/useMessageHook';
+import {calculateTime} from '../../../utils/time';
 import {colors} from '../../../utils/colors';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
 
@@ -28,13 +29,13 @@ const ChatReplyPreview = ({type}: ChatReplyPreviewProps) => {
       style={styles.container}>
       <View style={textContainerStyle}>
         <View style={styles.chatTitleContainer}>
-          <Text style={styles.userText}>{replyPreview?.username}</Text>
+          <Text style={styles.userText}>{replyPreview?.user?.username}</Text>
           <View style={styles.dot} />
-          <Text style={styles.timeText}>{replyPreview?.time}</Text>
+          <Text style={styles.timeText}>{calculateTime(replyPreview?.updated_at, true)}</Text>
         </View>
 
         <Text style={styles.text} numberOfLines={1}>
-          {`${replyPreview?.message}`}
+          {replyPreview?.message}
         </Text>
       </View>
 

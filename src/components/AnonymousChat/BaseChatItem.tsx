@@ -77,7 +77,7 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
         avatar={handleAvatar()}
         isContinuous={item?.isContinuous}
         message={item?.message}
-        time={calculateTime(item?.updatedAt, true)}
+        time={item?.updatedAt}
         username={handleUserName(item)}
         status={item?.status as ChatStatus}
         chatType={type ?? ANONYMOUS}
@@ -92,7 +92,7 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
       avatar={handleAvatar()}
       isContinuous={item?.isContinuous ?? false}
       message={item?.message}
-      time={calculateTime(item?.updatedAt, true)}
+      time={item?.updatedAt}
       username={handleUserName(item)}
       chatType={type ?? ANONYMOUS}
       messageType={item?.type ?? 'regular'}

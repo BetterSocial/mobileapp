@@ -18,6 +18,8 @@ import IconChatClockGrey from '../../../assets/icon/IconChatClockGrey';
 import useMessageHook from '../../../hooks/screen/useMessageHook';
 import {ChatItemMyTextProps} from '../../../../types/component/AnonymousChat/BaseChatItem.types';
 import {ChatStatus} from '../../../../types/database/schema/ChannelList.types';
+import {MessageType} from '../../../../types/hooks/screens/useMessageHook.types';
+import {calculateTime} from '../../../utils/time';
 import {colors} from '../../../utils/colors';
 import {
   containerStyle,
@@ -96,12 +98,12 @@ const ChatItemMyTextV2 = ({
     if (direction === 'right') return;
     if (swipeableRef.current) swipeableRef.current?.close();
     setReplyPreview({
-      username,
-      time,
+      id: data?.id,
+      user: {username},
       message,
-      messageId: data?.id,
-      chatType,
-      messageType: 'regular'
+      message_type: messageType as MessageType,
+      updated_at: time,
+      chatType
     });
   };
 
@@ -126,7 +128,9 @@ const ChatItemMyTextV2 = ({
                   <View style={styles.chatTitleContainer}>
                     <Text style={[styles.userText, textStyle(true)]}>{username}</Text>
                     <View style={dotStyle(true)} />
-                    <Text style={[styles.timeText, textStyle(true)]}>{time}</Text>
+                    <Text testID="timestamp" style={[styles.timeText, textStyle(true)]}>
+                      {calculateTime(time, true)}
+                    </Text>
                   </View>
                 )}
 

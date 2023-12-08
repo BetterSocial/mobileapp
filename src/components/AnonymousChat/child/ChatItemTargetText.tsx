@@ -9,6 +9,8 @@ import {useAnimatedStyle, useSharedValue} from 'react-native-reanimated';
 import ChatReplyView from './ChatReplyView';
 import useMessageHook from '../../../hooks/screen/useMessageHook';
 import {ChatItemMyTextProps} from '../../../../types/component/AnonymousChat/BaseChatItem.types';
+import {MessageType} from '../../../../types/hooks/screens/useMessageHook.types';
+import {calculateTime} from '../../../utils/time';
 import {colors} from '../../../utils/colors';
 import {
   containerStyle,
@@ -66,12 +68,12 @@ const ChatItemTargetText = ({
     if (direction === 'right') return;
     if (swipeableRef.current) swipeableRef.current?.close();
     setReplyPreview({
-      username,
-      time,
+      id: data?.id,
+      user: {username},
       message,
-      messageId: data?.id,
-      chatType,
-      messageType: 'regular'
+      message_type: messageType as MessageType,
+      updated_at: time,
+      chatType
     });
   };
 
@@ -98,14 +100,18 @@ const ChatItemTargetText = ({
                   <View testID="chat-item-user-info" style={styles.chatTitleContainer}>
                     <Text style={[styles.userText, textStyle(false)]}>{username}</Text>
                     <View style={dotStyle(false)} />
-                    <Text style={[styles.timeText, textStyle(false)]}>{time}</Text>
+                    <Text testID="timestamp" style={[styles.timeText, textStyle(false)]}>
+                      {calculateTime(time, true)}
+                    </Text>
                   </View>
                 )}
+
                 <ChatReplyView
                   type={chatType}
                   messageType={messageType}
                   replyData={data?.reply_data}
                 />
+
                 <Text testID="chat-item-message" style={messageStyle(false, messageType)}>
                   {message}
                 </Text>

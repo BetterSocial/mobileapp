@@ -7,26 +7,23 @@ import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
 import ChatSchema from '../../database/schema/ChatSchema';
 import ShareUtils from '../../utils/share';
 import SignedMessageRepo from '../../service/repo/signedMessageRepo';
-import UseMessageHook from '../../../types/hooks/screens/useMessageHook.types';
-import useChatScreenHook from './useChatScreenHook';
+import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
-import {ANONYMOUS} from '../core/constant';
 import {Context} from '../../context';
-import {calculateTime} from '../../utils/time';
+import {ReplyMessage, UseMessageHook} from '../../../types/hooks/screens/useMessageHook.types';
 import {setReplyTarget} from '../../context/actions/chat';
 
 function useMessageHook(): UseMessageHook {
   const {localDb, refresh} = useLocalDatabaseHook();
-  const {handleUserName} = useChatScreenHook(ANONYMOUS);
+  const {selectedChannel} = useChatUtilsHook();
   const [replyPreview, dispatch] = (useContext(Context) as unknown as any).chat;
+  const {anon_user_info_emoji_name} = selectedChannel?.rawJson?.channel || {};
 
   const setReplyPreview = useCallback((messageItem) => {
-    console.log('Reply Message');
     setReplyTarget(messageItem, dispatch);
   }, []);
 
   const clearReplyPreview = useCallback(() => {
-    console.log('clear Reply target');
     setReplyTarget(null, dispatch);
   }, []);
 
@@ -45,6 +42,13 @@ function useMessageHook(): UseMessageHook {
     }
   };
 
+  const getUserName = (item): string => {
+    if (item?.user?.username !== 'AnonymousUser') {
+      return item?.user?.username;
+    }
+    return `Anonymous ${anon_user_info_emoji_name}`;
+  };
+
   const onContextMenuPressed = (
     e: NativeSyntheticEvent<ContextMenuOnPressNativeEvent>,
     data,
@@ -54,13 +58,13 @@ function useMessageHook(): UseMessageHook {
     data = data?.message?.user ? data?.message : data;
 
     if (event.index === 0) {
-      const messageItem = {
-        username: handleUserName(data),
-        time: calculateTime(data?.updated_at, true),
+      const messageItem: ReplyMessage = {
+        id: data?.id,
+        user: {username: getUserName(data)},
         message: data?.message ?? data?.text,
-        messageId: data?.id,
-        chatType: type,
-        messageType: 'regular'
+        message_type: 'regular',
+        updated_at: data?.updated_at,
+        chatType: type
       };
       setReplyPreview(messageItem);
     }

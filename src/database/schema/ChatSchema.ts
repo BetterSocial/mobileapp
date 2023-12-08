@@ -267,13 +267,24 @@ class ChatSchema implements BaseDbSchema {
     channelId: string,
     message: string,
     localDb: SQLiteDatabase,
-    type: 'regular' | 'system' = 'regular',
-    status: 'pending' | 'sent' = 'pending'
+    type: 'regular' | 'system' | 'reply' = 'regular',
+    status: 'pending' | 'sent' = 'pending',
+    json: string | null = null
   ): Promise<ChatSchema> {
     let newRandomId = id;
+    let rawJson: string | null = null;
+
     const existingChat = await ChatSchema.getByid(localDb, newRandomId);
     if (existingChat) {
       newRandomId = uuid();
+    }
+
+    if (json) {
+      try {
+        rawJson = JSON.stringify(json);
+      } catch (e) {
+        console.log('error stringify', e);
+      }
     }
 
     return new ChatSchema({
@@ -284,7 +295,7 @@ class ChatSchema implements BaseDbSchema {
       updatedAt: new Date().toISOString(),
       id: newRandomId,
       type,
-      rawJson: null,
+      rawJson,
       user: null,
       userId,
       isMe: true,

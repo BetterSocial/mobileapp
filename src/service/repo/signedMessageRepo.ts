@@ -6,6 +6,14 @@ import {
   SignedPostNotification
 } from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 
+type SendPayloadType = {
+  channelId: string;
+  message: string;
+  channelType: number;
+  messageType?: string;
+  replyMessageId?: string;
+};
+
 const baseUrl = {
   checkIsTargetAllowingAnonDM: 'chat/channels/check-allow-anon-dm-status',
   sendSignedMessage: '/chat/send-signed-message',
@@ -19,7 +27,12 @@ const baseUrl = {
 
 interface SignedMessageRepoTypes {
   checkIsTargetAllowingAnonDM: (targetUserId: string) => Promise<any>;
-  sendSignedMessage: (channelId: string, message: string, channelType: number) => Promise<any>;
+  sendSignedMessage: (
+    channelId: string,
+    message: string,
+    channelType: number,
+    replyMessageId?: string
+  ) => Promise<any>;
   getAllSignedChannels: () => Promise<ChannelData[]>;
   getAllSignedPostNotifications: () => Promise<SignedPostNotification[]>;
   getSingleSignedPostNotifications: (activityId: string) => Promise<SignedPostNotification>;
@@ -46,12 +59,22 @@ async function checkIsTargetAllowingAnonDM(targetUserId: string) {
   }
 }
 
-async function sendSignedMessage(channelId: string, message: string, channelType: number) {
-  const payload = {channelId, message, channelType};
+async function sendSignedMessage(
+  channelId: string,
+  message: string,
+  channelType: number,
+  replyMessageId?: string
+) {
+  let payload: SendPayloadType = {channelId, message, channelType};
+  if (replyMessageId) {
+    payload = {...payload, messageType: 'reply', replyMessageId};
+  }
+
   try {
     const response = await api.post(baseUrl.sendSignedMessage, payload);
 
     if (response.status === 200) {
+      console.log('modifiedResponse', payload, response?.data);
       return Promise.resolve(response.data?.data);
     }
 

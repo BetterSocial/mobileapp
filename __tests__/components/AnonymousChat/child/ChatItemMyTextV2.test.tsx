@@ -83,7 +83,7 @@ describe('TESTING ChatItemMyTextV2', () => {
       profile: [{myProfile: {}}]
     };
 
-    const {getByText} = render(
+    const {getByText, getByTestId} = render(
       <Context.Provider value={contextValue}>
         <ChatItemMyTextV2
           avatar={avatar}
@@ -99,7 +99,7 @@ describe('TESTING ChatItemMyTextV2', () => {
     );
 
     expect(getByText('username')).toBeTruthy();
-    expect(getByText('time')).toBeTruthy();
+    expect(getByTestId('timestamp')).toBeTruthy();
   });
 
   it('should not display the username and time when isContinuous is true', () => {
