@@ -301,12 +301,7 @@ class ChatSchema implements BaseDbSchema {
     type: 'regular' | 'system' = 'regular',
     status: 'pending' | 'sent' = 'pending'
   ): Promise<ChatSchema | null> {
-    const newRandomId = id;
-    const existingChat = await ChatSchema.getByid(localDb, newRandomId);
-    if (existingChat) {
-      return null;
-    }
-
+    const newRandomId = uuid();
     return new ChatSchema({
       channelId,
       message,

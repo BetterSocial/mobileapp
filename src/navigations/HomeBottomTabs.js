@@ -89,15 +89,13 @@ function HomeBottomTabs({navigation}) {
       const newChat = await ChatSchema.generateReceiveChat(
         response.data.channel.id,
         response.data.messages?.[0]?.user?.id,
-        response.data.channel.cid,
+        response.data.channel.id,
         response.data.messages?.[0]?.text,
         localDb,
         'regular',
         'sent'
       );
-      if (newChat) {
-        newChat.save(localDb);
-      }
+      newChat.save(localDb);
       console.log({data: response.data, newChat}, 'nana');
       goToChatScreen(response.data.channel);
     }
