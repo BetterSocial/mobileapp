@@ -28,7 +28,7 @@ const BottomSheetBio = React.forwardRef((props, ref) => {
         </View>
         {!props.isOtherProfile && (
           <Button
-            btnStyle={styles.button}
+            styles={styles.button}
             textStyling={styles.textStyling}
             onPress={props.handleSave}>
             {props.isLoadingUpdateBio ? <ActivityIndicator size="small" color="#0000ff" /> : 'Save'}
