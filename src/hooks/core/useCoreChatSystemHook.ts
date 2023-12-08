@@ -170,12 +170,16 @@ const useCoreChatSystemHook = () => {
         websocketData
       );
       const chat = ChatSchema.fromWebsocketObject(websocketData);
+      console.log(chat, 'humble');
       await chat.save(localDb);
     } else {
+      const chat = ChatSchema.fromWebsocketObject(websocketData);
       const channelList = ChannelList.fromWebsocketObject(
         websocketData,
         channelType[websocketData?.channel_type]
       );
+      console.log('jalan', {chat: JSON.parse(chat.rawJson), channelList});
+
       await channelList.save(localDb);
     }
 
@@ -193,6 +197,7 @@ const useCoreChatSystemHook = () => {
 
     if (!isMyMessage) {
       const chat = ChatSchema.fromWebsocketObject(websocketData);
+      console.log('masuk bu', {chat, websocketData});
       await chat.save(localDb);
     }
     try {

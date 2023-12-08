@@ -20,21 +20,23 @@ import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
 import {colors} from '../utils/colors';
 import TokenStorage, {ITokenEnum} from '../utils/storage/custom/tokenStorage';
 import {getAnonymousUserId, getUserId} from '../utils/users';
-import {chatAtom} from '../hooks/core/chat/useChatUtilsHook';
+import useChatUtilsHook, {chatAtom} from '../hooks/core/chat/useChatUtilsHook';
 import SignedMessageRepo from '../service/repo/signedMessageRepo';
+import ChatSchema from '../database/schema/ChatSchema';
+import useLocalDatabaseHook from '../database/hooks/useLocalDatabaseHook';
 
 const Tab = createBottomTabNavigator();
 
 function HomeBottomTabs({navigation}) {
   useCoreChatSystemHook();
   const [chat, setChat] = useRecoilState(chatAtom);
-
+  const {localDb} = useLocalDatabaseHook();
   const isIos = Platform.OS === 'ios';
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const otherProfileData = useRecoilValue(otherProfileAtom);
   const [, setProfileAtom] = useRecoilState(profileAtom);
   const {totalUnreadCount} = useRootChannelListHook();
-
+  const {goToChatScreen} = useChatUtilsHook();
   let isOpenNotification = false;
 
   const helperNavigationResetWithData = (screenData) => {
@@ -84,12 +86,20 @@ function HomeBottomTabs({navigation}) {
         notification?.data?.channel_type,
         notification?.data?.channel_id
       );
-      console.log({response}, 'lusia');
-      setChat({
-        ...chat,
-        selectedChannel: response.data.channel
-      });
-      navigation.navigate('SignedChatScreen');
+      const newChat = await ChatSchema.generateReceiveChat(
+        response.data.channel.id,
+        response.data.messages?.[0]?.user?.id,
+        response.data.channel.cid,
+        response.data.messages?.[0]?.text,
+        localDb,
+        'regular',
+        'sent'
+      );
+      if (newChat) {
+        newChat.save(localDb);
+      }
+      console.log({data: response.data, newChat}, 'nana');
+      goToChatScreen(response.data.channel);
     }
   };
 

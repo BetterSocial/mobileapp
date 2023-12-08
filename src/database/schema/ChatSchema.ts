@@ -292,6 +292,37 @@ class ChatSchema implements BaseDbSchema {
     });
   }
 
+  static async generateReceiveChat(
+    id: string,
+    userId: string,
+    channelId: string,
+    message: string,
+    localDb: SQLiteDatabase,
+    type: 'regular' | 'system' = 'regular',
+    status: 'pending' | 'sent' = 'pending'
+  ): Promise<ChatSchema | null> {
+    const newRandomId = id;
+    const existingChat = await ChatSchema.getByid(localDb, newRandomId);
+    if (existingChat) {
+      return null;
+    }
+
+    return new ChatSchema({
+      channelId,
+      message,
+      status,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      id: newRandomId,
+      type,
+      rawJson: null,
+      user: null,
+      userId,
+      isMe: false,
+      isContinuous: false
+    });
+  }
+
   static fromInitAnonymousChatAPI(data: ModifyAnonymousChatData, status = 'sent'): ChatSchema {
     let rawJson = null;
 

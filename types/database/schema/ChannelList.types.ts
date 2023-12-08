@@ -43,6 +43,7 @@ export interface ChannelList {
   user: UserSchema | null;
   members: ChannelListMemberSchema[] | null;
   setRead: (db: any) => Promise<void>;
+  channel_type: number;
 }
 
 export interface ChatSchema {

@@ -47,7 +47,7 @@ const SignedChatScreen = () => {
       setChannel(selectedChannel, dispatchChannel);
     }
   }, [selectedChannel]);
-
+  console.log({selectedChannel}, 'huhu');
   return (
     <View style={styles.keyboardAvoidingView}>
       {selectedChannel ? (
