@@ -106,7 +106,6 @@ exports[`TESTING ChatItemTargetText should match snapshot 1`] = `
                 Object {
                   "borderTopStartRadius": 0,
                 },
-                undefined,
               ]
             }
           >
@@ -177,6 +176,7 @@ exports[`TESTING ChatItemTargetText should match snapshot 1`] = `
               style={
                 Array [
                   Object {
+                    "flex": 1,
                     "fontFamily": "Inter-Regular",
                     "fontSize": 14.4,
                     "lineHeight": 19.36,

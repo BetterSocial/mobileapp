@@ -65,15 +65,13 @@ export const styles = StyleSheet.create({
   textContainerTargetText: {
     borderTopStartRadius: 0
   },
-  textContainerNewLine: {
-    paddingBottom: 14
-  },
   userText: {
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(12),
     lineHeight: 19.36
   },
   text: {
+    flex: 1,
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(16),
     lineHeight: 19.36,
@@ -110,10 +108,7 @@ export const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   icon: {
-    alignSelf: 'flex-end',
-    position: 'absolute',
-    bottom: 6,
-    right: 8
+    alignSelf: 'flex-end'
   },
   iconNewLine: {
     alignSelf: 'flex-end',
@@ -151,16 +146,11 @@ export const containerStyle = (isMyText: boolean, isReplyPrompt: boolean) => [
   isReplyPrompt && !isMyText && styles.chatContainerPromptTargetText
 ];
 
-export const textContainerStyle = (
-  isMyText: boolean,
-  type?: 'ANONYMOUS' | 'SIGNED',
-  isNewLine?: boolean
-) => [
+export const textContainerStyle = (isMyText: boolean, type?: 'ANONYMOUS' | 'SIGNED') => [
   styles.textContainer,
   type === SIGNED && styles.textContainerSigned,
   type === ANONYMOUS && styles.textContainerAnon,
-  isMyText ? styles.textContainerMyText : styles.textContainerTargetText,
-  isNewLine && styles.textContainerNewLine
+  isMyText ? styles.textContainerMyText : styles.textContainerTargetText
 ];
 
 export const dotStyle = (isMyText: boolean) => [
