@@ -190,7 +190,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="Settings"
-          component={withKeyboardWrapper(Settings)}
+          component={Settings}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
@@ -250,7 +250,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="TopicPageScreen"
-          component={withKeyboardWrapper(TopicPageScreen)}
+          component={TopicPageScreen}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen

@@ -47,6 +47,7 @@ export type GetstreamMessage = {
 export type GetstreamChannel = {
   channel_type: number;
   channel_image?: string;
+  image?: string;
   cid: string;
   config: {
     automod: string;

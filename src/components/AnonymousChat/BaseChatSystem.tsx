@@ -21,17 +21,25 @@ const styles = StyleSheet.create({
   }
 });
 
-const BaseSystemChat: React.FC<BaseChatItemComponentProps> = ({item, index}) => {
+const BaseSystemChat: React.FC<BaseChatItemComponentProps> = ({
+  item,
+  index,
+  messageSingle,
+  componentType = 'GROUP'
+}) => {
   const {handleTextSystem, splitSystemMessage} = useChatUtilsHook();
 
   const messageText = () => {
-    return splitSystemMessage(handleTextSystem(item))?.map((message, key) => {
-      return (
-        <Text key={key} style={styles.textSystem}>
-          {message}.
-        </Text>
-      );
-    });
+    if (componentType === 'GROUP') {
+      return splitSystemMessage(handleTextSystem(item))?.map((message, key) => {
+        return (
+          <Text key={key} style={styles.textSystem}>
+            {message}.
+          </Text>
+        );
+      });
+    }
+    return <Text style={styles.textSystem}>{messageSingle}.</Text>;
   };
 
   return (

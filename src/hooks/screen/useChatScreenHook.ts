@@ -22,11 +22,12 @@ import {randomString} from '../../utils/string/StringUtils';
 function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const {localDb, chat, refresh} = useLocalDatabaseHook();
   const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen} = useChatUtilsHook();
-
+  const [loadingChat, setLoadingChat] = React.useState(true);
   const [chats, setChats] = React.useState<ChatSchema[]>([]);
   const {anon_user_info_emoji_name} = selectedChannel?.rawJson?.channel || {};
   const initChatData = async () => {
     if (!localDb || !selectedChannel) return;
+    setLoadingChat(true);
     try {
       const myUserId = await getUserId();
       const myAnonymousId = await getAnonymousUserId();
@@ -37,7 +38,11 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
         myAnonymousId
       )) as ChatSchema[];
       setChats(data);
+      setTimeout(() => {
+        setLoadingChat(false);
+      }, 350);
     } catch (e) {
+      setLoadingChat(false);
       console.log(e, 'error get all chat');
     }
   };
@@ -146,7 +151,8 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     goToChatInfoScreen,
     sendChat,
     handleUserName,
-    updateChatContinuity
+    updateChatContinuity,
+    loadingChat
   };
 }
 
