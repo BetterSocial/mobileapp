@@ -6,6 +6,7 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import IconClear from '../../../assets/icon/IconClear';
 import dimen from '../../../utils/dimen';
 import useMessageHook from '../../../hooks/screen/useMessageHook';
+import {ScrollContext} from '../../../hooks/screen/useChatScreenHook';
 import {calculateTime} from '../../../utils/time';
 import {colors} from '../../../utils/colors';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
@@ -15,7 +16,12 @@ interface ChatReplyPreviewProps {
 }
 
 const ChatReplyPreview = ({type}: ChatReplyPreviewProps) => {
+  const scrollContext = React.useContext(ScrollContext);
   const {replyPreview, clearReplyPreview} = useMessageHook();
+
+  const handleTap = () => {
+    if (replyPreview?.id) scrollContext?.handleScrollTo(replyPreview?.id);
+  };
 
   const textContainerStyle = [
     type === 'SIGNED' ? styles.containerSigned : styles.containerAnon,
@@ -27,7 +33,10 @@ const ChatReplyPreview = ({type}: ChatReplyPreviewProps) => {
       entering={SlideInDown.duration(150)}
       exiting={SlideOutDown.duration(80)}
       style={styles.container}>
-      <View style={textContainerStyle}>
+      <TouchableOpacity
+        activeOpacity={replyPreview?.id ? 0.75 : 1}
+        onPress={handleTap}
+        style={textContainerStyle}>
         <View style={styles.chatTitleContainer}>
           <Text style={styles.userText}>{replyPreview?.user?.username}</Text>
           <View style={styles.dot} />
@@ -37,7 +46,7 @@ const ChatReplyPreview = ({type}: ChatReplyPreviewProps) => {
         <Text style={styles.text} numberOfLines={1}>
           {replyPreview?.message}
         </Text>
-      </View>
+      </TouchableOpacity>
 
       <TouchableOpacity
         onPress={clearReplyPreview}

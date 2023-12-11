@@ -40,6 +40,7 @@ const useCoreChatSystemHook = () => {
   const [migrationStatus] = useRecoilState(migrationDbStatusAtom);
   const initialStartup: any = useRecoilValue(InitialStartupAtom);
   const {params} = useRoute();
+  const [processedMessageId, setProcessedMessageId] = React.useState<string | null>(null);
 
   const isEnteringApp =
     initialStartup?.id !== null && initialStartup?.id !== undefined && initialStartup?.id !== '';
@@ -326,20 +327,32 @@ const useCoreChatSystemHook = () => {
   React.useEffect(() => {
     if (!lastAnonymousMessage || !localDb) return;
 
-    const {type} = lastAnonymousMessage;
+    const {type, message} = lastAnonymousMessage;
     if (type === 'health.check') return;
+    if (processedMessageId === message?.id) return;
+
     if (type === 'notification.message_new') {
-      saveChannelListData(lastAnonymousMessage, ANONYMOUS).catch((e) => console.log(e));
+      // to prevent being processed twice (websocket response appears twice)
+      setProcessedMessageId(message?.id);
+      saveChannelListData(lastAnonymousMessage, ANONYMOUS)
+        .catch((e) => console.log(e))
+        .finally(() => setProcessedMessageId(null));
     }
   }, [JSON.stringify(lastAnonymousMessage), localDb]);
 
   React.useEffect(() => {
     if (!lastSignedMessage || !localDb) return;
 
-    const {type} = lastSignedMessage;
+    const {type, message} = lastSignedMessage;
     if (type === 'health.check') return;
+    if (processedMessageId === message?.id) return;
+
     if (type === 'notification.message_new' || type === 'notification.added_to_channel') {
-      saveChannelListData(lastSignedMessage, SIGNED).catch((e) => console.log(e));
+      // to prevent being processed twice (websocket response appears twice)
+      setProcessedMessageId(message?.id);
+      saveChannelListData(lastSignedMessage, SIGNED)
+        .catch((e) => console.log(e))
+        .finally(() => setProcessedMessageId(null));
     }
   }, [JSON.stringify(lastSignedMessage), localDb]);
 

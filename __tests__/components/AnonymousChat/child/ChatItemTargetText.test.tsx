@@ -10,29 +10,22 @@ import {Context} from '../../../../src/context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../../../src/utils/constants';
 
 jest.spyOn(React, 'useRef').mockReturnValue({current: {close: jest.fn()}});
-jest.mock('react-native-reanimated', () => ({
-  ...jest.requireActual('react-native-reanimated'),
-  useSharedValue: jest.fn(() => ({value: 0})),
-  useAnimatedStyle: jest.fn(() => ({})),
-  View: require('react-native/Libraries/Components/View/View').View,
-  Animated: {
-    View: require('react-native/Libraries/Components/View/View').View
-  }
-}));
-jest.mock('react-native-gesture-handler', () => {
-  const originalModule = jest.requireActual('react-native-gesture-handler');
-  const {View} = require('react-native');
-  const React = require('react');
 
-  return {
-    ...originalModule,
-    Swipeable: React.forwardRef(({children, ...props}, ref) => {
-      React.useImperativeHandle(ref, () => ({
-        close: jest.fn()
-      }));
+const avatar = (
+  <FastImage
+    style={{height: 24, width: 24, borderRadius: 12}}
+    source={{uri: DEFAULT_PROFILE_PIC_PATH}}
+  />
+);
 
-      return <View {...props}>{children}</View>;
-    })
+let setReplyPreview;
+let contextValue;
+
+beforeEach(() => {
+  setReplyPreview = jest.fn();
+  contextValue = {
+    chat: [{replyTarget: null}, setReplyPreview],
+    profile: [{myProfile: {}}]
   };
 });
 
@@ -40,63 +33,31 @@ afterEach(() => {
   jest.restoreAllMocks();
 });
 
-describe('TESTING ChatItemTargetText', () => {
-  const avatar = (
-    <FastImage
-      style={{height: 24, width: 24, borderRadius: 12}}
-      source={{uri: DEFAULT_PROFILE_PIC_PATH}}
-    />
+const renderChatItemTargetText = () =>
+  render(
+    <Context.Provider value={contextValue}>
+      <ChatItemTargetText
+        avatar={avatar}
+        username="username"
+        isContinuous={false}
+        message="message"
+        time="time"
+        chatType="SIGNED"
+        messageType="regular"
+        data={{}}
+      />
+    </Context.Provider>
   );
 
+describe('TESTING ChatItemTargetText', () => {
   it('should call setReplyPreview when swiped to the left', () => {
-    const setReplyPreview = jest.fn();
-    const contextValue = {
-      chat: [{replyTarget: null}, setReplyPreview],
-      profile: [{myProfile: {}}]
-    };
-
-    const {getByTestId} = render(
-      <Context.Provider value={contextValue}>
-        <ChatItemTargetText
-          avatar={avatar}
-          username="username"
-          isContinuous={false}
-          message="message"
-          time="time"
-          chatType="SIGNED"
-          messageType="regular"
-          data={{}}
-        />
-      </Context.Provider>
-    );
-
+    const {getByTestId} = renderChatItemTargetText();
     fireEvent(getByTestId('swipeable'), 'onSwipeableOpen', 'left');
-
     expect(setReplyPreview).toHaveBeenCalled();
   });
 
   it('should match snapshot', () => {
-    const setReplyPreview = jest.fn();
-    const contextValue = {
-      chat: [{replyTarget: null}, setReplyPreview],
-      profile: [{myProfile: {}}]
-    };
-
-    const tree = render(
-      <Context.Provider value={contextValue}>
-        <ChatItemTargetText
-          avatar={avatar}
-          username="username"
-          isContinuous={false}
-          message="message"
-          time="time"
-          chatType="SIGNED"
-          messageType="regular"
-          data={{}}
-        />
-      </Context.Provider>
-    ).toJSON();
-
+    const tree = renderChatItemTargetText().toJSON();
     expect(tree).toMatchSnapshot();
   });
 });

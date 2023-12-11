@@ -10,9 +10,9 @@ import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
 import ChatReplyPreview from '../../components/AnonymousChat/child/ChatReplyPreview';
 import Loading from '../Loading';
 import dimen from '../../utils/dimen';
-import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
 import useMessageHook from '../../hooks/screen/useMessageHook';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
+import useChatScreenHook, {ScrollContext} from '../../hooks/screen/useChatScreenHook';
 import {ANONYMOUS} from '../../hooks/core/constant';
 import {colors} from '../../utils/colors';
 
@@ -53,14 +53,15 @@ export const styles = StyleSheet.create({
 });
 
 const SampleChatScreen = () => {
-  const flatlistRef = React.useRef<FlatList>();
   const {
     selectedChannel,
     chats,
     goBackFromChatScreen,
     goToChatInfoScreen,
     sendChat,
-    updateChatContinuity
+    updateChatContinuity,
+    flatListRef: scrollRef,
+    scrollContext
   } = useChatScreenHook(ANONYMOUS);
   const {replyPreview, clearReplyPreview} = useMessageHook();
   const updatedChats = updateChatContinuity(chats);
@@ -78,10 +79,6 @@ const SampleChatScreen = () => {
     return <BaseChatItem type={ANONYMOUS} item={item} index={index} />;
   }, []);
 
-  const scrollToEnd = () => {
-    flatlistRef.current?.scrollToEnd();
-  };
-
   React.useEffect(() => {
     return () => {
       clearReplyPreview();
@@ -89,7 +86,7 @@ const SampleChatScreen = () => {
   }, []);
 
   return (
-    <>
+    <ScrollContext.Provider value={scrollContext}>
       <StatusBar barStyle="light-content" backgroundColor={colors.anon_primary} />
 
       <View style={styles.keyboardAvoidingView}>
@@ -104,13 +101,13 @@ const SampleChatScreen = () => {
           />
         ) : null}
         <FlatList
+          ref={scrollRef}
           contentContainerStyle={styles.flatlistContainer}
           style={styles.chatContainer}
           data={updatedChats}
           inverted={true}
           initialNumToRender={20}
           alwaysBounceVertical={false}
-          onLayout={scrollToEnd}
           keyExtractor={(item, index) => item?.id || index.toString()}
           renderItem={renderChatItem}
         />
@@ -121,7 +118,7 @@ const SampleChatScreen = () => {
         </View>
         <Loading visible={loading} />
       </View>
-    </>
+    </ScrollContext.Provider>
   );
 };
 

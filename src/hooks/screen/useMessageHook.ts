@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {Alert, NativeSyntheticEvent} from 'react-native';
 import {ContextMenuOnPressNativeEvent} from 'react-native-context-menu-view';
+import {useAnimatedStyle, useSharedValue} from 'react-native-reanimated';
 import {useCallback, useContext} from 'react';
 
 import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
@@ -18,6 +19,8 @@ function useMessageHook(): UseMessageHook {
   const {selectedChannel} = useChatUtilsHook();
   const [replyPreview, dispatch] = (useContext(Context) as unknown as any).chat;
   const {anon_user_info_emoji_name} = selectedChannel?.rawJson?.channel || {};
+  const bubblePosition = useSharedValue(0);
+  const pulseAnimation = useSharedValue(1);
 
   const setReplyPreview = useCallback((messageItem) => {
     setReplyTarget(messageItem, dispatch);
@@ -79,11 +82,27 @@ function useMessageHook(): UseMessageHook {
     }
   };
 
+  const animatedBubbleStyle = useAnimatedStyle(() => {
+    'worklet';
+
+    return {transform: [{translateX: bubblePosition.value}]};
+  });
+
+  const animatedPulseStyle = useAnimatedStyle(() => {
+    'worklet';
+
+    return {transform: [{scale: pulseAnimation.value}]};
+  });
+
   return {
     replyPreview: replyPreview?.replyTarget,
     setReplyPreview,
     clearReplyPreview,
-    onContextMenuPressed
+    onContextMenuPressed,
+    bubblePosition,
+    pulseAnimation,
+    animatedBubbleStyle,
+    animatedPulseStyle
   };
 }
 

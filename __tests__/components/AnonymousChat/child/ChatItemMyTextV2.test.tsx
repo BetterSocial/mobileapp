@@ -10,29 +10,22 @@ import {Context} from '../../../../src/context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../../../src/utils/constants';
 
 jest.spyOn(React, 'useRef').mockReturnValue({current: {close: jest.fn()}});
-jest.mock('react-native-reanimated', () => ({
-  ...jest.requireActual('react-native-reanimated'),
-  useSharedValue: jest.fn(() => ({value: 0})),
-  useAnimatedStyle: jest.fn(() => ({})),
-  View: require('react-native/Libraries/Components/View/View').View,
-  Animated: {
-    View: require('react-native/Libraries/Components/View/View').View
-  }
-}));
-jest.mock('react-native-gesture-handler', () => {
-  const originalModule = jest.requireActual('react-native-gesture-handler');
-  const {View} = require('react-native');
-  const React = require('react');
 
-  return {
-    ...originalModule,
-    Swipeable: React.forwardRef(({children, ...props}, ref) => {
-      React.useImperativeHandle(ref, () => ({
-        close: jest.fn()
-      }));
+const avatar = (
+  <FastImage
+    style={{height: 24, width: 24, borderRadius: 12}}
+    source={{uri: DEFAULT_PROFILE_PIC_PATH}}
+  />
+);
 
-      return <View {...props}>{children}</View>;
-    })
+let setReplyPreview;
+let contextValue;
+
+beforeEach(() => {
+  setReplyPreview = jest.fn();
+  contextValue = {
+    chat: [{replyTarget: null}, setReplyPreview],
+    profile: [{myProfile: {}}]
   };
 });
 
@@ -40,139 +33,50 @@ afterEach(() => {
   jest.restoreAllMocks();
 });
 
-describe('TESTING ChatItemMyTextV2', () => {
-  const avatar = (
-    <FastImage
-      style={{height: 24, width: 24, borderRadius: 12}}
-      source={{uri: DEFAULT_PROFILE_PIC_PATH}}
-    />
+const renderChatItemMyTextV2 = (isContinous = false) =>
+  render(
+    <Context.Provider value={contextValue}>
+      <ChatItemMyTextV2
+        avatar={avatar}
+        username="username"
+        isContinuous={isContinous}
+        message="message"
+        time="time"
+        chatType="SIGNED"
+        messageType="regular"
+        data={{}}
+      />
+    </Context.Provider>
   );
 
+describe('TESTING ChatItemMyTextV2', () => {
   it('should call setReplyPreview when swiped', () => {
-    const setReplyPreview = jest.fn();
-    const contextValue = {
-      chat: [{replyTarget: null}, setReplyPreview],
-      profile: [{myProfile: {}}]
-    };
-
-    const {getByTestId} = render(
-      <Context.Provider value={contextValue}>
-        <ChatItemMyTextV2
-          avatar={avatar}
-          username="username"
-          isContinuous={false}
-          message="message"
-          time="time"
-          chatType="SIGNED"
-          messageType="regular"
-          data={{}}
-        />
-      </Context.Provider>
-    );
-
+    const {getByTestId} = renderChatItemMyTextV2();
     act(() => {
       fireEvent(getByTestId('swipeable'), 'onSwipeableOpen', 'left');
     });
-
     expect(setReplyPreview).toHaveBeenCalled();
   });
 
   it('should display the username and time when isContinuous is false', () => {
-    const contextValue = {
-      chat: [{replyTarget: null}, jest.fn()],
-      profile: [{myProfile: {}}]
-    };
-
-    const {getByText, getByTestId} = render(
-      <Context.Provider value={contextValue}>
-        <ChatItemMyTextV2
-          avatar={avatar}
-          username="username"
-          isContinuous={false}
-          message="message"
-          time="time"
-          chatType="SIGNED"
-          messageType="regular"
-          data={{}}
-        />
-      </Context.Provider>
-    );
-
+    const {getByText, getByTestId} = renderChatItemMyTextV2();
     expect(getByText('username')).toBeTruthy();
     expect(getByTestId('timestamp')).toBeTruthy();
   });
 
   it('should not display the username and time when isContinuous is true', () => {
-    const contextValue = {
-      chat: [{replyTarget: null}, jest.fn()],
-      profile: [{myProfile: {}}]
-    };
-
-    const {queryByText} = render(
-      <Context.Provider value={contextValue}>
-        <ChatItemMyTextV2
-          avatar={avatar}
-          username="username"
-          isContinuous={true}
-          message="message"
-          time="time"
-          chatType="SIGNED"
-          messageType="regular"
-          data={{}}
-        />
-      </Context.Provider>
-    );
-
+    const {queryByText} = renderChatItemMyTextV2(true);
     expect(queryByText('username')).toBeNull();
     expect(queryByText('time')).toBeNull();
   });
 
   it('should display the message', () => {
-    const contextValue = {
-      chat: [{replyTarget: null}, jest.fn()],
-      profile: [{myProfile: {}}]
-    };
-
-    const {getByText} = render(
-      <Context.Provider value={contextValue}>
-        <ChatItemMyTextV2
-          avatar={avatar}
-          username="username"
-          isContinuous={false}
-          message="message"
-          time="time"
-          chatType="SIGNED"
-          messageType="regular"
-          data={{}}
-        />
-      </Context.Provider>
-    );
-
+    const {getByText} = renderChatItemMyTextV2();
     expect(getByText('message')).toBeTruthy();
   });
 
   it('should match snapshot', () => {
-    const setReplyPreview = jest.fn();
-    const contextValue = {
-      chat: [{replyTarget: null}, setReplyPreview],
-      profile: [{myProfile: {}}]
-    };
-
-    const tree = render(
-      <Context.Provider value={contextValue}>
-        <ChatItemMyTextV2
-          avatar={avatar}
-          username="username"
-          isContinuous={false}
-          message="message"
-          time="time"
-          chatType="SIGNED"
-          messageType="regular"
-          data={{}}
-        />
-      </Context.Provider>
-    ).toJSON();
-
+    const tree = renderChatItemMyTextV2().toJSON();
     expect(tree).toMatchSnapshot();
   });
 });

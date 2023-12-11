@@ -74,7 +74,6 @@ async function sendSignedMessage(
     const response = await api.post(baseUrl.sendSignedMessage, payload);
 
     if (response.status === 200) {
-      console.log('modifiedResponse', payload, response?.data);
       return Promise.resolve(response.data?.data);
     }
 

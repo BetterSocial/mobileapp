@@ -2,14 +2,15 @@
 import * as React from 'react';
 import ContextMenu from 'react-native-context-menu-view';
 import Icon from 'react-native-vector-icons/Entypo';
-import {Animated, Text, View} from 'react-native';
+import Animated, {withDelay, withSequence, withTiming} from 'react-native-reanimated';
 import {Swipeable} from 'react-native-gesture-handler';
-import {useAnimatedStyle, useSharedValue} from 'react-native-reanimated';
+import {Text, View, ViewStyle} from 'react-native';
 
 import ChatReplyView from './ChatReplyView';
 import useMessageHook from '../../../hooks/screen/useMessageHook';
 import {ChatItemMyTextProps} from '../../../../types/component/AnonymousChat/BaseChatItem.types';
 import {MessageType} from '../../../../types/hooks/screens/useMessageHook.types';
+import {ScrollContext} from '../../../hooks/screen/useChatScreenHook';
 import {calculateTime} from '../../../utils/time';
 import {colors} from '../../../utils/colors';
 import {
@@ -41,18 +42,29 @@ const ChatItemTargetText = ({
   messageType,
   data
 }: ChatItemMyTextProps) => {
-  const {setReplyPreview, onContextMenuPressed} = useMessageHook();
-
+  const {
+    setReplyPreview,
+    onContextMenuPressed,
+    pulseAnimation,
+    animatedBubbleStyle,
+    animatedPulseStyle
+  } = useMessageHook();
+  const scrollContext = React.useContext(ScrollContext);
   const swipeableRef = React.useRef<Swipeable | null>(null);
-  const bubblePosition = useSharedValue(0);
+
+  React.useEffect(() => {
+    if (scrollContext?.selectedMessageId === data?.id) {
+      pulseAnimation.value = withSequence(
+        withDelay(300, withTiming(1.1, {duration: 200})),
+        withTiming(1, {duration: 200})
+      );
+      scrollContext?.setSelectedMessageId(null);
+    }
+  }, [scrollContext?.selectedMessageId]);
 
   const isReply = messageType === 'reply';
   const isReplyPrompt = messageType === 'reply_prompt';
   const isShowUserInfo = !isContinuous || isReplyPrompt || isReply;
-
-  const animatedBubbleStyle = useAnimatedStyle(() => ({
-    transform: [{translateX: bubblePosition.value}]
-  }));
 
   const contextMenuActions = [
     {title: 'Reply', systemIcon: 'arrow.turn.up.left'},
@@ -86,7 +98,12 @@ const ChatItemTargetText = ({
       onSwipeableOpen={onSwipeToReply}
       renderLeftActions={replyIcon}>
       <View style={containerStyle(false, isReplyPrompt)}>
-        <Animated.View style={[styles.wrapper, animatedBubbleStyle]}>
+        <Animated.View
+          style={[
+            styles.wrapper,
+            animatedBubbleStyle as ViewStyle,
+            animatedPulseStyle as ViewStyle
+          ]}>
           {renderAvatar()}
 
           <ContextMenu

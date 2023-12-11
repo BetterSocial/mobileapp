@@ -3,6 +3,7 @@ import 'react-native-get-random-values';
 
 import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
+import {FlatList} from 'react-native';
 import {v4 as uuid} from 'uuid';
 
 import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
@@ -20,11 +21,19 @@ import {
 import {getAnonymousUserId, getUserId} from '../../utils/users';
 import {randomString} from '../../utils/string/StringUtils';
 
+interface ScrollContextProps {
+  selectedMessageId: string | null;
+  setSelectedMessageId: (id: string | null) => void;
+  handleScrollTo: (id: string) => void;
+}
+export const ScrollContext = React.createContext<ScrollContextProps | null>(null);
+
 function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const {localDb, chat, refresh} = useLocalDatabaseHook();
+  const [selectedMessageId, setSelectedMessageId] = React.useState<string | null>(null);
   const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen} = useChatUtilsHook();
   const {replyPreview, clearReplyPreview} = useMessageHook();
-
+  const flatListRef = React.useRef<FlatList>(null);
   const [chats, setChats] = React.useState<ChatSchema[]>([]);
   const {anon_user_info_emoji_name} = selectedChannel?.rawJson?.channel || {};
   const initChatData = async () => {
@@ -41,6 +50,14 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       setChats(data);
     } catch (e) {
       console.log(e, 'error get all chat');
+    }
+  };
+
+  const handleScrollTo = (messageId: string) => {
+    const index = chats.findIndex((message) => message?.id === messageId);
+    if (index !== -1) {
+      flatListRef.current?.scrollToIndex({index});
+      setSelectedMessageId(messageId);
     }
   };
 
@@ -163,7 +180,13 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     goToChatInfoScreen,
     sendChat,
     handleUserName,
-    updateChatContinuity
+    updateChatContinuity,
+    flatListRef,
+    scrollContext: {
+      selectedMessageId,
+      setSelectedMessageId,
+      handleScrollTo
+    }
   };
 }
 

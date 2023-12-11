@@ -1,16 +1,16 @@
 // eslint-disable-next-line no-use-before-define
 import * as React from 'react';
 import ContextMenu from 'react-native-context-menu-view';
+import Animated, {withDelay, withSequence, withTiming} from 'react-native-reanimated';
 import {
-  Animated,
   Dimensions,
   NativeSyntheticEvent,
   Text,
   TextLayoutEventData,
-  View
+  View,
+  ViewStyle
 } from 'react-native';
 import {Swipeable} from 'react-native-gesture-handler';
-import {useAnimatedStyle, useSharedValue} from 'react-native-reanimated';
 
 import ChatReplyView from './ChatReplyView';
 import IconChatCheckMark from '../../../assets/icon/IconChatCheckMark';
@@ -19,6 +19,7 @@ import useMessageHook from '../../../hooks/screen/useMessageHook';
 import {ChatItemMyTextProps} from '../../../../types/component/AnonymousChat/BaseChatItem.types';
 import {ChatStatus} from '../../../../types/database/schema/ChannelList.types';
 import {MessageType} from '../../../../types/hooks/screens/useMessageHook.types';
+import {ScrollContext} from '../../../hooks/screen/useChatScreenHook';
 import {calculateTime} from '../../../utils/time';
 import {colors} from '../../../utils/colors';
 import {
@@ -46,11 +47,27 @@ const ChatItemMyTextV2 = ({
   messageType,
   data
 }: ChatItemMyTextProps) => {
-  const {setReplyPreview, onContextMenuPressed} = useMessageHook();
+  const {
+    setReplyPreview,
+    onContextMenuPressed,
+    pulseAnimation,
+    animatedBubbleStyle,
+    animatedPulseStyle
+  } = useMessageHook();
+  const scrollContext = React.useContext(ScrollContext);
 
   const swipeableRef = React.useRef<Swipeable | null>(null);
   const [isNewLine, setIsNewLine] = React.useState(true);
-  const bubblePosition = useSharedValue(0);
+
+  React.useEffect(() => {
+    if (scrollContext?.selectedMessageId === data?.id) {
+      pulseAnimation.value = withSequence(
+        withDelay(300, withTiming(1.1, {duration: 200})),
+        withTiming(1, {duration: 200})
+      );
+      scrollContext?.setSelectedMessageId(null);
+    }
+  }, [scrollContext?.selectedMessageId]);
 
   const isReply = messageType === 'reply';
   const isReplyPrompt = messageType === 'reply_prompt';
@@ -63,10 +80,6 @@ const ChatItemMyTextV2 = ({
     const isCalculatedNewLine = targetLastLineWidth - lastLineWidth < 24;
     setIsNewLine(isCalculatedNewLine);
   };
-
-  const animatedBubbleStyle = useAnimatedStyle(() => ({
-    transform: [{translateX: bubblePosition.value}]
-  }));
 
   const renderIcon = React.useCallback(() => {
     if (status === ChatStatus.PENDING)
@@ -116,7 +129,12 @@ const ChatItemMyTextV2 = ({
       onSwipeableOpen={onSwipeToReply}
       renderLeftActions={replyIcon}>
       <View style={containerStyle(true, isReplyPrompt)}>
-        <Animated.View style={[styles.wrapper, animatedBubbleStyle]}>
+        <Animated.View
+          style={[
+            styles.wrapper,
+            animatedBubbleStyle as ViewStyle,
+            animatedPulseStyle as ViewStyle
+          ]}>
           <ContextMenu
             previewBackgroundColor="transparent"
             style={{flex: 1}}

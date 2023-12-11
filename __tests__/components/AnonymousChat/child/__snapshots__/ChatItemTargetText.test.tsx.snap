@@ -26,9 +26,25 @@ exports[`TESTING ChatItemTargetText should match snapshot 1`] = `
   >
     <View
       style={
-        Object {
-          "flexDirection": "row",
-        }
+        Array [
+          Object {
+            "flexDirection": "row",
+          },
+          Object {
+            "transform": Array [
+              Object {
+                "translateX": 0,
+              },
+            ],
+          },
+          Object {
+            "transform": Array [
+              Object {
+                "scale": 1,
+              },
+            ],
+          },
+        ]
       }
     >
       <View

@@ -1,7 +1,12 @@
+import Animated from 'react-native-reanimated';
 import {ContextMenuOnPressNativeEvent} from 'react-native-context-menu-view';
 import {NativeSyntheticEvent} from 'react-native';
 
 export type MessageType = 'regular' | 'reply' | 'reply_prompt' | 'deleted';
+
+interface AnimatedStyle {
+  transform: Array<{translateX?: number; scale?: number}>;
+}
 
 export interface ReplyUser {
   username: string;
@@ -25,4 +30,8 @@ export interface UseMessageHook {
     data: any,
     type: 'ANONYMOUS' | 'SIGNED'
   ) => void;
+  bubblePosition: Animated.SharedValue<number>;
+  pulseAnimation: Animated.SharedValue<number>;
+  animatedBubbleStyle: AnimatedStyle;
+  animatedPulseStyle: AnimatedStyle;
 }
