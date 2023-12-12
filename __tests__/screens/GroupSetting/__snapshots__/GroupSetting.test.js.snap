@@ -5,7 +5,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
   emulateUnlessSupported={true}
   style={
     Object {
-      "backgroundColor": "#fff",
+      "backgroundColor": "#FFFFFF",
       "flex": 1,
     }
   }
