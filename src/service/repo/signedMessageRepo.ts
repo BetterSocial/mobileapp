@@ -142,9 +142,8 @@ async function createSignedChat(members: string[]) {
 
 async function getChatDetail(type: string, id: string) {
   try {
+    const url = baseUrl.chatDetail(type, id);
     const response = await api.get(baseUrl.chatDetail(type, id));
-    console.log(response, 'sapina');
-
     return Promise.resolve(response.data);
   } catch (e) {
     return Promise.reject(e);

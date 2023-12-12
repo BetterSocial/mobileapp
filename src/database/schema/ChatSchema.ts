@@ -299,15 +299,17 @@ class ChatSchema implements BaseDbSchema {
     message: string,
     localDb: SQLiteDatabase,
     type: 'regular' | 'system' = 'regular',
-    status: 'pending' | 'sent' = 'pending'
+    status: 'pending' | 'sent' = 'pending',
+    createdAt: string,
+    updatedAt: string
   ): Promise<ChatSchema | null> {
     const newRandomId = uuid();
     return new ChatSchema({
       channelId,
       message,
       status,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      createdAt,
+      updatedAt,
       id: newRandomId,
       type,
       rawJson: null,

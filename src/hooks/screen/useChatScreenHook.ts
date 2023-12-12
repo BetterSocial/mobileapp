@@ -5,6 +5,7 @@ import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import {v4 as uuid} from 'uuid';
 
+import {useRoute} from '@react-navigation/core';
 import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
 import ChatSchema from '../../database/schema/ChatSchema';
 import SignedMessageRepo from '../../service/repo/signedMessageRepo';
@@ -22,7 +23,7 @@ import {randomString} from '../../utils/string/StringUtils';
 function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const {localDb, chat, refresh} = useLocalDatabaseHook();
   const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen} = useChatUtilsHook();
-
+  const {params}: any = useRoute();
   const [chats, setChats] = React.useState<ChatSchema[]>([]);
   const {anon_user_info_emoji_name} = selectedChannel?.rawJson?.channel || {};
   const initChatData = async () => {
@@ -118,7 +119,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   };
 
   const updateChatContinuity = (chatsData: ChatSchema[]) => {
-    const updatedChats = chatsData.map((currentChat, currentIndex) => {
+    const updatedChats = chatsData?.map((currentChat, currentIndex) => {
       const previousChat = chatsData[currentIndex + 1];
 
       if (previousChat) {
@@ -135,9 +136,20 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     return updatedChats;
   };
 
+  const initDataPn = () => {
+    console.log('boban', params);
+    setChats(params?.messages);
+  };
+
   React.useEffect(() => {
     initChatData();
-  }, [localDb, chat, selectedChannel]);
+
+    // if (!params?.data) {
+    //   initChatData();
+    // } else {
+    //   initDataPn();
+    // }
+  }, [localDb, chat, selectedChannel, JSON.stringify(params)]);
 
   return {
     chats,

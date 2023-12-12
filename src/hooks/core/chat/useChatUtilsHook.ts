@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import moment from 'moment';
@@ -113,7 +114,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
     });
   };
 
-  const goToChatScreen = (channel: ChannelList, from) => {
+  const goToChatScreen = (channel: ChannelList, from: string, data: any) => {
     setChat({
       ...chat,
       selectedChannel: channel
@@ -123,15 +124,13 @@ function useChatUtilsHook(): UseChatUtilsHook {
       if (from === GROUP_INFO) {
         return openChat('SampleChatScreen');
       }
-      navigation.navigate('SampleChatScreen');
+      navigation.navigate('SampleChatScreen', {data});
     } else {
       if (from === GROUP_INFO) {
         return openChat('SignedChatScreen');
       }
-      navigation.navigate('SignedChatScreen');
+      navigation.navigate('SignedChatScreen', {data});
     }
-
-    return null;
   };
 
   const goBackFromChatScreen = async () => {

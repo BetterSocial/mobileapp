@@ -30,7 +30,7 @@ const Tab = createBottomTabNavigator();
 function HomeBottomTabs({navigation}) {
   useCoreChatSystemHook();
   const [chat, setChat] = useRecoilState(chatAtom);
-  const {localDb} = useLocalDatabaseHook();
+  const {localDb, refresh} = useLocalDatabaseHook();
   const isIos = Platform.OS === 'ios';
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const otherProfileData = useRecoilValue(otherProfileAtom);
@@ -81,22 +81,35 @@ function HomeBottomTabs({navigation}) {
       });
     }
     if (notification.data.type === 'message.new') {
-      console.log(notification, 'lapak');
       const response = await SignedMessageRepo.getChatDetail(
         notification?.data?.channel_type,
         notification?.data?.channel_id
       );
-      const newChat = await ChatSchema.generateReceiveChat(
-        response.data.channel.id,
-        response.data.messages?.[0]?.user?.id,
-        response.data.channel.id,
-        response.data.messages?.[0]?.text,
+      const myUserId = await getUserId();
+      const myAnonymousId = await getAnonymousUserId();
+      const chats = await ChatSchema.getAll(
         localDb,
-        'regular',
-        'sent'
+        response.data.channel.id,
+        myUserId,
+        myAnonymousId
       );
-      newChat.save(localDb);
-      console.log({data: response.data, newChat}, 'nana');
+      console.log(response.data.messages, 'lupai');
+      response.data.messages?.forEach(async (message) => {
+        const findId = chats?.find((chatData) => chatData?.id === message?.id);
+        console.log(findId, 'teman');
+        if (!findId) {
+          const newChat = await ChatSchema.generateReceiveChat(
+            response.data.channel.id,
+            response.data.messages?.[0]?.user?.id,
+            response.data.channel.id,
+            response.data.messages?.[0]?.text,
+            localDb,
+            'regular',
+            'sent'
+          );
+          newChat.save(localDb);
+        }
+      });
       goToChatScreen(response.data.channel);
     }
   };
