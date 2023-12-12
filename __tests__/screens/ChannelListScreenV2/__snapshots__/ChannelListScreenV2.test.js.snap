@@ -105,7 +105,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
         <View
           style={
             Object {
-              "backgroundColor": "white",
+              "backgroundColor": "#FFFFFF",
               "borderBottomColor": "#C4C4C4",
               "borderBottomWidth": 1,
               "flexDirection": "row",
