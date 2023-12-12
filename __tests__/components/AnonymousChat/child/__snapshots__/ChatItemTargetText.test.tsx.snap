@@ -203,6 +203,7 @@ exports[`TESTING ChatItemTargetText should match snapshot 1`] = `
                     "color": "#000000",
                   },
                   false,
+                  false,
                 ]
               }
               testID="chat-item-message"

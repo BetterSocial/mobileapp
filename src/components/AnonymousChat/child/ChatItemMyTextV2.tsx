@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-use-before-define
 import * as React from 'react';
-import ContextMenu from 'react-native-context-menu-view';
 import Animated, {withDelay, withSequence, withTiming} from 'react-native-reanimated';
+import ContextMenu, {ContextMenuAction} from 'react-native-context-menu-view';
 import {
   Dimensions,
   NativeSyntheticEvent,
@@ -96,11 +96,14 @@ const ChatItemMyTextV2 = ({
     );
   }, []);
 
-  const contextMenuActions = [
+  const contextMenuActions: ContextMenuAction[] = [
     {title: 'Reply', systemIcon: 'arrow.turn.up.left'},
-    {title: 'Copy Message', systemIcon: 'square.on.square'},
-    {title: 'Delete Message', systemIcon: 'trash', destructive: true}
+    {title: 'Copy Message', systemIcon: 'square.on.square'}
   ];
+
+  if (messageType !== 'deleted') {
+    contextMenuActions.push({title: 'Delete Message', systemIcon: 'trash', destructive: true});
+  }
 
   const renderAvatar = React.useCallback(() => {
     if (!isShowUserInfo) return <View style={styles.avatar} />;
@@ -111,7 +114,7 @@ const ChatItemMyTextV2 = ({
     if (direction === 'right') return;
     if (swipeableRef.current) swipeableRef.current?.close();
     setReplyPreview({
-      id: data?.id,
+      id: data?.id ?? data?.message?.id,
       user: {username},
       message,
       message_type: messageType as MessageType,

@@ -79,8 +79,13 @@ export const styles = StyleSheet.create({
     lineHeight: 19.36,
     marginBottom: 4
   },
-  deletedText: {
+  deletedMyText: {
     color: colors.light_silver,
+    fontSize: normalizeFontSize(15),
+    fontStyle: 'italic'
+  },
+  deletedTargetText: {
+    color: colors.blackgrey,
     fontSize: normalizeFontSize(15),
     fontStyle: 'italic'
   },
@@ -175,5 +180,6 @@ export const textStyle = (isMyText: boolean) => [
 export const messageStyle = (isMyText: boolean, messageType?: string) => [
   styles.text,
   isMyText ? {color: colors.white} : {color: colors.black},
-  messageType === 'deleted' && styles.deletedText
+  isMyText && messageType === 'deleted' && styles.deletedMyText,
+  !isMyText && messageType === 'deleted' && styles.deletedTargetText
 ];

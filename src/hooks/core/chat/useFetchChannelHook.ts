@@ -63,6 +63,10 @@ const useFetchChannelHook = () => {
       channel.firstMessage = channel?.messages?.[channel?.messages?.length - 1];
       channel.myUserId = signedProfileId;
     }
+
+    const isDeletedMessage = channel.firstMessage?.message_type === 'deleted';
+    if (isDeletedMessage) channel.firstMessage.text = 'This message has been deleted';
+
     channel.channel = {...channel};
     const channelType = channel?.type;
 
@@ -103,6 +107,11 @@ const useFetchChannelHook = () => {
 
       await Promise.all(
         (channel?.messages || []).map(async (message) => {
+          const isDeletedMessage = message?.message_type === 'deleted';
+          const isDeletedHelper = Boolean(message?.deleted_message_id);
+          if (isDeletedMessage && isDeletedHelper) return;
+
+          if (isDeletedMessage) message.text = 'This message has been deleted';
           const chat = ChatSchema.fromGetAllChannelAPI(channel?.id, message);
           await chat.save(localDb);
         })

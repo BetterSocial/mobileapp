@@ -62,17 +62,20 @@ function useMessageHook(): UseMessageHook {
 
     if (event.index === 0) {
       const messageItem: ReplyMessage = {
-        id: data?.id,
+        id: data?.id ?? data?.message?.id,
         user: {username: getUserName(data)},
-        message: data?.message ?? data?.text,
-        message_type: 'regular',
-        updated_at: data?.updated_at,
+        message: data?.text ?? data?.message,
+        message_type: data?.message_type ?? data?.message?.message_type,
+        updated_at: data?.updated_at ?? data?.message?.updated_at,
         chatType: type
       };
       setReplyPreview(messageItem);
     }
     if (event.index === 1) {
-      ShareUtils.copyTextToClipboard(data?.message);
+      const isDeleted = data?.message_type === 'deleted';
+      const message = data?.text ?? data?.message;
+      const textToCopy = isDeleted ? '' : message;
+      ShareUtils.copyTextToClipboard(textToCopy);
     }
     if (event.index === 2) {
       Alert.alert('Delete Message?', '', [

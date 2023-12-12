@@ -18,6 +18,7 @@ interface ChatReplyPreviewProps {
 const ChatReplyPreview = ({type}: ChatReplyPreviewProps) => {
   const scrollContext = React.useContext(ScrollContext);
   const {replyPreview, clearReplyPreview} = useMessageHook();
+  const isDeleted = replyPreview?.message_type === 'deleted';
 
   const handleTap = () => {
     if (replyPreview?.id) scrollContext?.handleScrollTo(replyPreview?.id);
@@ -27,6 +28,8 @@ const ChatReplyPreview = ({type}: ChatReplyPreviewProps) => {
     type === 'SIGNED' ? styles.containerSigned : styles.containerAnon,
     styles.textContainer
   ];
+
+  const messageStyle = [styles.text, isDeleted && styles.deletedText];
 
   return (
     <Animated.View
@@ -43,7 +46,7 @@ const ChatReplyPreview = ({type}: ChatReplyPreviewProps) => {
           <Text style={styles.timeText}>{calculateTime(replyPreview?.updated_at, true)}</Text>
         </View>
 
-        <Text style={styles.text} numberOfLines={1}>
+        <Text style={messageStyle} numberOfLines={1}>
           {replyPreview?.message}
         </Text>
       </TouchableOpacity>
@@ -85,7 +88,7 @@ const styles = StyleSheet.create({
   },
   userText: {
     fontFamily: fonts.inter[600],
-    fontSize: 12,
+    fontSize: normalizeFontSize(10),
     lineHeight: 19.36,
     color: colors.white
   },
@@ -100,14 +103,14 @@ const styles = StyleSheet.create({
   },
   timeText: {
     fontFamily: fonts.inter[200],
-    fontSize: 10,
+    fontSize: normalizeFontSize(10),
     lineHeight: 12.19,
     alignSelf: 'center',
     color: colors.white
   },
   text: {
     fontFamily: fonts.inter[400],
-    fontSize: normalizeFontSize(16),
+    fontSize: normalizeFontSize(14),
     lineHeight: 19.36,
     marginBottom: 4,
     color: colors.white
@@ -115,6 +118,10 @@ const styles = StyleSheet.create({
   containerDismiss: {
     marginLeft: 5,
     padding: 5
+  },
+  deletedText: {
+    color: colors.light_silver,
+    fontStyle: 'italic'
   }
 });
 

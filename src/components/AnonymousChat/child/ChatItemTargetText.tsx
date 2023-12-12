@@ -80,7 +80,7 @@ const ChatItemTargetText = ({
     if (direction === 'right') return;
     if (swipeableRef.current) swipeableRef.current?.close();
     setReplyPreview({
-      id: data?.id,
+      id: data?.id ?? data?.message?.id,
       user: {username},
       message,
       message_type: messageType as MessageType,

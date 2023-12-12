@@ -180,6 +180,7 @@ exports[`TESTING ChatItemMyTextV2 should match snapshot 1`] = `
                     "color": "#ffffff",
                   },
                   false,
+                  false,
                 ]
               }
             >

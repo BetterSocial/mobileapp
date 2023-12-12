@@ -142,6 +142,29 @@ const useCoreChatSystemHook = () => {
   ) => {
     if (!localDb) return;
     const websocketMessage = websocketData?.message;
+    const isDeletedMessage = websocketMessage?.message_type === 'deleted';
+
+    if (isDeletedMessage) {
+      const selectedChat = await ChatSchema.getByid(
+        localDb,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        websocketMessage.deleted_message_id!
+      );
+      const selectedCreatedAt = selectedChat.createdAt;
+      const selectedUpdatedAt = selectedChat.updatedAt;
+
+      websocketMessage.id = websocketMessage.deleted_message_id ?? '';
+      websocketMessage.text = 'This message has been deleted';
+      websocketMessage.created_at = selectedCreatedAt ?? websocketMessage.created_at;
+      websocketMessage.updated_at = selectedUpdatedAt ?? websocketMessage.updated_at;
+
+      ChatSchema.updateDeletedRepliedChat(
+        localDb,
+        websocketData?.channel_id,
+        websocketMessage.deleted_message_id ?? '',
+        selectedChat.createdAt
+      );
+    }
 
     if (channelCategory === ANONYMOUS) {
       const chatName = await getAnonymousChatName(websocketData?.channel?.members);
