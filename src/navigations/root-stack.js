@@ -214,7 +214,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="Followings"
-          component={withKeyboardWrapper(FollowingScreen)}
+          component={withSafeAreaView(withKeyboardWrapper(FollowingScreen))}
           options={{
             headerShown: false
           }}
@@ -248,7 +248,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="DiscoveryScreen"
-          component={withKeyboardWrapper(DiscoveryScreenV2)}
+          component={withSafeAreaView(withKeyboardWrapper(DiscoveryScreenV2))}
           options={{
             headerShown: false
           }}
