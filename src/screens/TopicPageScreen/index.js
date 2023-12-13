@@ -15,6 +15,7 @@ import TopicPageStorage from '../../utils/storage/custom/topicPageStorage';
 import dimen from '../../utils/dimen';
 import removePrefixTopic from '../../utils/topics/removePrefixTopic';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
+import useViewPostTimeHook from '../FeedScreen/hooks/useViewPostTimeHook';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
 } from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
@@ -68,11 +69,16 @@ const TopicPageScreen = (props) => {
     ? feedsContext.topicFeeds.filter((feed) => feed?.topics?.includes(topicName))
     : [];
   const mainFeeds = feedsContext.feeds;
+  const {timer, viewPostTimeIndex} = feedsContext;
+
   const [offset, setOffset] = React.useState(0);
   const [client] = React.useContext(Context).client;
   const refBlockComponent = React.useRef();
   const scrollY = React.useRef(new Animated.Value(0)).current;
   const {mappingColorFeed} = useCoreFeed();
+
+  const {onWillSendViewPostTime} = useViewPostTimeHook(dispatch, timer, viewPostTimeIndex);
+
   const {listRef} = useOnBottomNavigationTabPressHook(LIST_VIEW_TYPE.TIKTOK_SCROLL, onRefresh);
 
   const topicWithPrefix = route.params.id;
@@ -422,6 +428,7 @@ const TopicPageScreen = (props) => {
         snap
         contentOffset={{x: 0, y: topPosition}}
         contentInsetAdjustmentBehavior={feeds?.length > 1 ? 'automatic' : 'never'}
+        onMomentumScrollEnd={(event) => onWillSendViewPostTime(event, feeds)}
       />
       <ButtonAddPostTopic topicName={topicName} onRefresh={onRefresh} />
       <BlockComponent
