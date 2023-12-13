@@ -13,12 +13,6 @@ const useFeedUtilsHook = () => {
     momentumEvent: NativeSyntheticEvent<NativeScrollEvent>,
     viewPostTimeIndex: number
   ): boolean => {
-    console.log(
-      'isSamePostViewed',
-      getCurrentPostViewed(momentumEvent),
-      viewPostTimeIndex,
-      getCurrentPostViewed(momentumEvent) === viewPostTimeIndex
-    );
     return getCurrentPostViewed(momentumEvent) === viewPostTimeIndex;
   };
 
