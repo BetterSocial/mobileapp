@@ -1,7 +1,9 @@
 import * as React from 'react';
 
 import {channelReducer, channelState} from './reducers/channelReducer';
+import {chatReducer, chatState} from './reducers/chatReducer';
 import {clientReducer, clientState} from './reducers/clientReducer';
+import {commentReducer, commentState} from './reducers/commentReducer';
 import {discoveryReducer, discoveryState} from './reducers/discoveryReducer';
 import {domainReducer, domainState} from './reducers/domainReducer';
 import {feedsReducer, feedsState} from './reducers/FeedReducer';
@@ -17,7 +19,6 @@ import {otherProfileFeedReducer, otherProfileFeedState} from './reducers/OtherPr
 import {topicsReducer, topicsState} from './reducers/topicsReducer';
 import {unReadMessageReducer, unReadMessageState} from './reducers/unReadMessageReducer';
 import {usersReducer, usersState} from './reducers/userReducer';
-import {commentReducer, commentState} from './reducers/commentReducer';
 
 /**
  *
@@ -43,7 +44,8 @@ const Store = ({children}) => {
     users: React.useReducer(usersReducer, usersState),
     domains: React.useReducer(domainReducer, domainState),
     initialStartup: React.useReducer(initialStartupReducer, initialStartupState),
-    comments: React.useReducer(commentReducer, commentState)
+    comments: React.useReducer(commentReducer, commentState),
+    chat: React.useReducer(chatReducer, chatState)
   };
   return <Context.Provider value={rootReducer}>{children}</Context.Provider>;
 };

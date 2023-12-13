@@ -15,7 +15,7 @@ export const colors = {
   silver: '#BDBDBD',
   french_pass: '#b6e4fd',
   pattens_blue: '#ddf2fe',
-  blue: '#2F80ED',
+  blue: '#4782D7',
   lightblue: '#55C2FF',
   blue1: '#4782D7',
   red: '#FF2E63',

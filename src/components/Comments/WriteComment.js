@@ -9,11 +9,11 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import ToggleSwitch from '../ToggleSwitch';
 
 import AnonUserInfoRepo from '../../service/repo/anonUserInfoRepo';
 import MemoSendComment from '../../assets/icon/IconSendComment';
 import StringConstant from '../../utils/string/StringConstant';
+import {ToggleSwitchAnon} from '../../hooks/useToggleColors';
 import {Context} from '../../context';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
@@ -70,13 +70,11 @@ const WriteComment = ({
           {username}
         </Text>
         <View style={styles.anonimityContainer}>
-          <ToggleSwitch
+          <ToggleSwitchAnon
             value={isAnonimity}
             onValueChange={toggleSwitch}
             labelLeft="Anonymity"
-            backgroundActive={colors.lightgrey}
-            backgroundInactive={colors.lightgrey}
-            styleLabelLeft={styles.switch}
+            labelColor={COLORS.gray8}
           />
         </View>
       </View>
@@ -238,10 +236,5 @@ export const styles = StyleSheet.create({
   },
   emojyStyle: {
     fontSize: 18
-  },
-  switch: {
-    fontFamily: fonts.inter[400],
-    fontSize: 12,
-    color: colors.gray
   }
 });

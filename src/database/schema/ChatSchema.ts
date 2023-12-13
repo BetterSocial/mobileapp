@@ -184,7 +184,7 @@ class ChatSchema implements BaseDbSchema {
   }
 
   static fromWebsocketObject(json): ChatSchema {
-    let rawJson = null;
+    let rawJson: string | null = null;
 
     try {
       rawJson = JSON.stringify(json);
@@ -198,7 +198,7 @@ class ChatSchema implements BaseDbSchema {
       channelId: json?.channel_id,
       userId: json?.message?.user?.id,
       message: json?.message?.text || json?.message?.message,
-      type: json?.message?.type,
+      type: json?.message?.message_type ?? json?.message?.type,
       createdAt: json?.message?.created_at,
       updatedAt: json?.message?.created_at,
       rawJson,
@@ -210,7 +210,7 @@ class ChatSchema implements BaseDbSchema {
   }
 
   static fromGetAllChannelAPI(channelId, json): ChatSchema {
-    let rawJson = null;
+    let rawJson: string | null = null;
 
     try {
       rawJson = JSON.stringify(json);
@@ -224,7 +224,7 @@ class ChatSchema implements BaseDbSchema {
       channelId,
       userId: json?.user?.id,
       message: (json?.text || json?.message) ?? '',
-      type: json?.type,
+      type: json?.message_type ?? json?.type,
       createdAt: json?.created_at,
       updatedAt: json?.created_at,
       rawJson,
@@ -236,7 +236,7 @@ class ChatSchema implements BaseDbSchema {
   }
 
   static fromGetAllAnonymousChannelAPI(channelId, json): ChatSchema {
-    let rawJson = null;
+    let rawJson: string | null = null;
 
     try {
       rawJson = JSON.stringify(json);
@@ -293,7 +293,7 @@ class ChatSchema implements BaseDbSchema {
   }
 
   static fromInitAnonymousChatAPI(data: ModifyAnonymousChatData, status = 'sent'): ChatSchema {
-    let rawJson = null;
+    let rawJson: string | null = null;
 
     try {
       rawJson = JSON.stringify(data);
@@ -312,7 +312,7 @@ class ChatSchema implements BaseDbSchema {
       rawJson,
       status,
       isContinuous: false,
-      type: 'regular',
+      type: data?.message?.message_type ?? data?.message?.type,
       user: null,
       userId: data?.message?.user?.id
     });
@@ -338,6 +338,29 @@ class ChatSchema implements BaseDbSchema {
       console.log('error updatedRandomId', this.id, response?.message?.id);
       console.log('error updating chat status');
       console.log(e);
+    }
+  };
+
+  static async deleteChat(localDb: SQLiteDatabase, messageId: string): Promise<ChatSchema> {
+    const existingChat = await ChatSchema.getByid(localDb, messageId);
+    return new ChatSchema({
+      ...existingChat,
+      type: 'deleted',
+      message: 'This message has been deleted'
+    });
+  }
+
+  static updateDeletedChatType = async (db: SQLiteDatabase, messageId: string) => {
+    try {
+      const updateQuery = `UPDATE ${ChatSchema.getTableName()}
+        SET type = ?, message = ?
+        WHERE id = ?;`;
+
+      const updateReplacement = ['deleted', 'This message has been deleted', messageId];
+
+      await db.executeSql(updateQuery, updateReplacement);
+    } catch (e) {
+      console.log('error updating deleted chat:', e);
     }
   };
 

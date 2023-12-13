@@ -1,13 +1,14 @@
 import * as React from 'react';
-
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import ToggleSwitch from '../../../components/ToggleSwitch';
+
 import AnonymousAvatar from '../../../components/AnonymousAvatar';
 import AnonymousProfile from '../../../assets/images/AnonymousProfile.png';
 import AnonymousUsername from '../../../components/AnonymousUsername';
+import {ToggleSwitchAnon} from '../../../hooks/useToggleColors';
 import {POST_VERSION} from '../../../utils/constants';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
+import {COLORS} from '../../../utils/theme';
 
 const styles = StyleSheet.create({
   container: {
@@ -29,16 +30,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: colors.gray
   },
-  switch: {
-    fontFamily: fonts.inter[400],
-    fontSize: 12,
-    color: colors.gray
-  },
   image: {
     marginRight: 8,
     width: 32,
     height: 32,
     borderRadius: 16
+  },
+  anonImageBg: {
+    backgroundColor: colors.anon_primary
   },
   containerMessage: {
     flex: 1,
@@ -79,7 +78,12 @@ const UserProfile = ({
     if (isAnonymous) {
       return (
         <View style={styles.profile}>
-          <Image source={AnonymousProfile} width={32} height={32} style={styles.image} />
+          <Image
+            source={AnonymousProfile}
+            width={32}
+            height={32}
+            style={[styles.image, styles.anonImageBg]}
+          />
           <View>
             <Text style={styles.username}>Anonymous</Text>
             <Text style={styles.desc}>Username not visible</Text>
@@ -99,21 +103,15 @@ const UserProfile = ({
     );
   };
   return (
-    <>
-      <View style={styles.container}>
-        {userProfile()}
-        <ToggleSwitch
-          value={isAnonymous}
-          onValueChange={() => setTypeUser(!isAnonymous)}
-          labelLeft="Anonymity"
-          backgroundActive={colors.lightgrey}
-          backgroundInactive={colors.lightgrey}
-          circleInActiveColor={colors.blue1}
-          inactiveTextColor={colors.blue1}
-          styleLabelLeft={styles.switch}
-        />
-      </View>
-    </>
+    <View style={styles.container}>
+      {userProfile()}
+      <ToggleSwitchAnon
+        value={isAnonymous}
+        onValueChange={() => setTypeUser(!isAnonymous)}
+        labelLeft="Anonymity"
+        labelColor={COLORS.gray8}
+      />
+    </View>
   );
 };
 
