@@ -24,12 +24,14 @@ import {
   LatestChildrenComment
 } from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
 import {ChannelType} from '../../../types/repo/ChannelData';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {Context} from '../../context';
+import {DEFAULT_PROFILE_PIC_PATH, DELETED_MESSAGE_TEXT} from '../../utils/constants';
 import {GetstreamFeedListenerObject} from '../../../types/hooks/core/getstreamFeedListener/feedListenerObject';
 import {GetstreamMessage, GetstreamWebsocket, MyChannelType} from './websocket/types.d';
 import {InitialStartupAtom} from '../../service/initialStartup';
 import {SignedPostNotification} from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 import {getAnonymousChatName, getChatName} from '../../utils/string/StringUtils';
+import {setReplyTarget} from '../../context/actions/chat';
 
 const useCoreChatSystemHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook() as UseLocalDatabaseHook;
@@ -40,6 +42,7 @@ const useCoreChatSystemHook = () => {
   const [migrationStatus] = useRecoilState(migrationDbStatusAtom);
   const initialStartup: any = useRecoilValue(InitialStartupAtom);
   const {params} = useRoute();
+  const [replyPreview, dispatch] = (React.useContext(Context) as unknown as any).chat;
   const [processedMessageId, setProcessedMessageId] = React.useState<string | null>(null);
 
   const isEnteringApp =
@@ -154,7 +157,7 @@ const useCoreChatSystemHook = () => {
       const selectedUpdatedAt = selectedChat.updatedAt;
 
       websocketMessage.id = websocketMessage.deleted_message_id ?? '';
-      websocketMessage.text = 'This message has been deleted';
+      websocketMessage.text = DELETED_MESSAGE_TEXT;
       websocketMessage.created_at = selectedCreatedAt ?? websocketMessage.created_at;
       websocketMessage.updated_at = selectedUpdatedAt ?? websocketMessage.updated_at;
 
@@ -164,6 +167,14 @@ const useCoreChatSystemHook = () => {
         websocketMessage.deleted_message_id ?? '',
         selectedChat.createdAt
       );
+
+      const {replyTarget} = replyPreview;
+      if (replyTarget && replyTarget?.id === websocketMessage?.deleted_message_id) {
+        const newReplyPreview = {...replyTarget};
+        newReplyPreview.message = DELETED_MESSAGE_TEXT;
+        newReplyPreview.message_type = 'deleted';
+        setReplyTarget(newReplyPreview, dispatch);
+      }
     }
 
     if (channelCategory === ANONYMOUS) {

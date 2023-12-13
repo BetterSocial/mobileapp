@@ -1,3 +1,4 @@
+import SimpleToast from 'react-native-simple-toast';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {Alert, NativeSyntheticEvent} from 'react-native';
 import {ContextMenuOnPressNativeEvent} from 'react-native-context-menu-view';
@@ -11,6 +12,7 @@ import SignedMessageRepo from '../../service/repo/signedMessageRepo';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import {Context} from '../../context';
+import {DELETED_MESSAGE_TEXT} from '../../utils/constants';
 import {ReplyMessage, UseMessageHook} from '../../../types/hooks/screens/useMessageHook.types';
 import {setReplyTarget} from '../../context/actions/chat';
 
@@ -30,18 +32,36 @@ function useMessageHook(): UseMessageHook {
     setReplyTarget(null, dispatch);
   }, []);
 
-  const deleteMessage = async (messageId: string, type: 'ANONYMOUS' | 'SIGNED') => {
+  const deleteMessage = async (messageId: string, type: 'ANONYMOUS' | 'SIGNED', iteration = 0) => {
     if (!localDb) return;
+
+    if (iteration > 5) {
+      SimpleToast.show("Can't delete message, please check your connection");
+      return;
+    }
+
     try {
+      ChatSchema.updateDeletedChatType(localDb, messageId);
+      refresh('chat');
+
+      const {replyTarget} = replyPreview;
+      if (replyTarget && replyTarget?.id === messageId) {
+        const newReplyPreview = {...replyTarget};
+        newReplyPreview.message = DELETED_MESSAGE_TEXT;
+        newReplyPreview.message_type = 'deleted';
+        setReplyPreview(newReplyPreview);
+      }
+
       if (type === 'ANONYMOUS') {
         await AnonymousMessageRepo.deleteMessage(messageId);
       } else {
         await SignedMessageRepo.deleteMessage(messageId);
       }
-      ChatSchema.updateDeletedChatType(localDb, messageId);
-      refresh('chat');
     } catch (error) {
       console.log('error on delete message:', error);
+      setTimeout(() => {
+        deleteMessage(messageId, type, iteration + 1).catch((e) => console.log(e));
+      }, 1000);
     }
   };
 

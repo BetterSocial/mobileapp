@@ -3,6 +3,7 @@ import {v4 as uuid} from 'uuid';
 
 import BaseDbSchema from './BaseDbSchema';
 import UserSchema from './UserSchema';
+import {DELETED_MESSAGE_TEXT} from '../../utils/constants';
 import {ModifyAnonymousChatData} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 
 class ChatSchema implements BaseDbSchema {
@@ -354,21 +355,19 @@ class ChatSchema implements BaseDbSchema {
 
   static updateDeletedChatType = async (db: SQLiteDatabase, messageId: string) => {
     try {
-      const updatedText = 'This message has been deleted';
-
       const selectQuery = `SELECT raw_json FROM ${ChatSchema.getTableName()} WHERE id = ?;`;
       const resultSet = await db.executeSql(selectQuery, [messageId]);
       const result = resultSet[0].rows.item(0);
       const rawJson = JSON.parse(result.raw_json);
       rawJson.message_type = 'deleted';
-      rawJson.text = updatedText;
+      rawJson.text = DELETED_MESSAGE_TEXT;
       const updatedRawJson = JSON.stringify(rawJson);
 
       const updateQuery = `UPDATE ${ChatSchema.getTableName()}
         SET type = ?, message = ?, raw_json = ?
         WHERE id = ?;`;
 
-      const updateReplacement = ['deleted', updatedText, updatedRawJson, messageId];
+      const updateReplacement = ['deleted', DELETED_MESSAGE_TEXT, updatedRawJson, messageId];
 
       await db.executeSql(updateQuery, updateReplacement);
     } catch (e) {
@@ -383,8 +382,6 @@ class ChatSchema implements BaseDbSchema {
     createdAt: string
   ) => {
     try {
-      const updatedText = 'This message has been deleted';
-
       const selectQuery = `SELECT id, raw_json FROM ${ChatSchema.getTableName()} WHERE channel_id = ? AND created_at > ?;`;
       const resultSet = await db.executeSql(selectQuery, [channelId, createdAt]);
       const {rows} = resultSet[0];
@@ -399,8 +396,8 @@ class ChatSchema implements BaseDbSchema {
         // Check if messageId matches
         if (rawJson.reply_data && rawJson.reply_data.id === messageId) {
           const newJson = {...rawJson};
-          newJson.reply_data.text = updatedText;
-          newJson.message.reply_data.text = updatedText;
+          newJson.reply_data.text = DELETED_MESSAGE_TEXT;
+          newJson.message.reply_data.text = DELETED_MESSAGE_TEXT;
           newJson.reply_data.message_type = 'deleted';
           newJson.updated = true;
           const updatedRawJson = JSON.stringify(newJson);

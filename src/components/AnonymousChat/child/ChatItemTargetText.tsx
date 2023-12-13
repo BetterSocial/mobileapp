@@ -1,8 +1,8 @@
 // eslint-disable-next-line no-use-before-define
 import * as React from 'react';
-import ContextMenu from 'react-native-context-menu-view';
 import Icon from 'react-native-vector-icons/Entypo';
 import Animated, {withDelay, withSequence, withTiming} from 'react-native-reanimated';
+import ContextMenu, {ContextMenuAction} from 'react-native-context-menu-view';
 import {Swipeable} from 'react-native-gesture-handler';
 import {Text, View, ViewStyle} from 'react-native';
 
@@ -66,10 +66,13 @@ const ChatItemTargetText = ({
   const isReplyPrompt = messageType === 'reply_prompt';
   const isShowUserInfo = !isContinuous || isReplyPrompt || isReply;
 
-  const contextMenuActions = [
-    {title: 'Reply', systemIcon: 'arrow.turn.up.left'},
-    {title: 'Copy Message', systemIcon: 'square.on.square'}
+  const contextMenuActions: ContextMenuAction[] = [
+    {title: 'Reply', systemIcon: 'arrow.turn.up.left'}
   ];
+
+  if (messageType !== 'deleted') {
+    contextMenuActions.push({title: 'Copy Message', systemIcon: 'square.on.square'});
+  }
 
   const renderAvatar = React.useCallback(() => {
     if (!isShowUserInfo) return <View style={styles.avatar} />;

@@ -97,11 +97,11 @@ const ChatItemMyTextV2 = ({
   }, []);
 
   const contextMenuActions: ContextMenuAction[] = [
-    {title: 'Reply', systemIcon: 'arrow.turn.up.left'},
-    {title: 'Copy Message', systemIcon: 'square.on.square'}
+    {title: 'Reply', systemIcon: 'arrow.turn.up.left'}
   ];
 
   if (messageType !== 'deleted') {
+    contextMenuActions.push({title: 'Copy Message', systemIcon: 'square.on.square'});
     contextMenuActions.push({title: 'Delete Message', systemIcon: 'trash', destructive: true});
   }
 

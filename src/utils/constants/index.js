@@ -59,6 +59,8 @@ const NavigationConstants = {
 
 const POST_VERSION = 2;
 
+const DELETED_MESSAGE_TEXT = 'This message has been deleted';
+
 export {
   ANALYTICS_SHARE_POST_FEED_ID,
   ANALYTICS_SHARE_POST_FEED_SCREEN,
@@ -106,5 +108,6 @@ export {
   POST_CHECK_FEED_EXPIRED,
   POST_CHECK_AUTHOR_BLOCKED,
   FEED_CHAT_KEY,
-  NavigationConstants
+  NavigationConstants,
+  DELETED_MESSAGE_TEXT
 };

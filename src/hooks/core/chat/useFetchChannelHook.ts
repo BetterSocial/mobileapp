@@ -10,7 +10,7 @@ import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import useUserAuthHook from '../auth/useUserAuthHook';
 import {ANONYMOUS} from '../constant';
 import {ChannelData, ChannelType} from '../../../../types/repo/ChannelData';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
+import {DEFAULT_PROFILE_PIC_PATH, DELETED_MESSAGE_TEXT} from '../../../utils/constants';
 import {getAnonymousChatName, getChatName} from '../../../utils/string/StringUtils';
 
 type ChannelCategory = 'SIGNED' | 'ANONYMOUS';
@@ -65,7 +65,7 @@ const useFetchChannelHook = () => {
     }
 
     const isDeletedMessage = channel.firstMessage?.message_type === 'deleted';
-    if (isDeletedMessage) channel.firstMessage.text = 'This message has been deleted';
+    if (isDeletedMessage) channel.firstMessage.text = DELETED_MESSAGE_TEXT;
 
     channel.channel = {...channel};
     const channelType = channel?.type;
@@ -111,7 +111,7 @@ const useFetchChannelHook = () => {
           const isDeletedHelper = Boolean(message?.deleted_message_id);
           if (isDeletedMessage && isDeletedHelper) return;
 
-          if (isDeletedMessage) message.text = 'This message has been deleted';
+          if (isDeletedMessage) message.text = DELETED_MESSAGE_TEXT;
           const chat = ChatSchema.fromGetAllChannelAPI(channel?.id, message);
           await chat.save(localDb);
         })
