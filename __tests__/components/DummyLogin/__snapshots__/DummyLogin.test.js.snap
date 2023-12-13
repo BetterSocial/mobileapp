@@ -490,46 +490,6 @@ Array [
             </View>
           </View>
           <View
-            testID="dev-dummy-login-fajarus1"
-          >
-            <View
-              accessible={true}
-              focusable={true}
-              onClick={[Function]}
-              onResponderGrant={[Function]}
-              onResponderMove={[Function]}
-              onResponderRelease={[Function]}
-              onResponderTerminate={[Function]}
-              onResponderTerminationRequest={[Function]}
-              onStartShouldSetResponder={[Function]}
-              style={
-                Object {
-                  "opacity": 1,
-                }
-              }
-            >
-              <View
-                style={
-                  Object {
-                    "backgroundColor": "#6A6A6A",
-                    "height": 2,
-                    "width": "100%",
-                  }
-                }
-              />
-              <Text
-                style={
-                  Object {
-                    "paddingHorizontal": 16,
-                    "paddingVertical": 8,
-                  }
-                }
-              >
-                fajarus1
-              </Text>
-            </View>
-          </View>
-          <View
             testID="dev-dummy-login-agita"
           >
             <View
@@ -650,86 +610,6 @@ Array [
             </View>
           </View>
           <View
-            testID="dev-dummy-login-agita2"
-          >
-            <View
-              accessible={true}
-              focusable={true}
-              onClick={[Function]}
-              onResponderGrant={[Function]}
-              onResponderMove={[Function]}
-              onResponderRelease={[Function]}
-              onResponderTerminate={[Function]}
-              onResponderTerminationRequest={[Function]}
-              onStartShouldSetResponder={[Function]}
-              style={
-                Object {
-                  "opacity": 1,
-                }
-              }
-            >
-              <View
-                style={
-                  Object {
-                    "backgroundColor": "#6A6A6A",
-                    "height": 2,
-                    "width": "100%",
-                  }
-                }
-              />
-              <Text
-                style={
-                  Object {
-                    "paddingHorizontal": 16,
-                    "paddingVertical": 8,
-                  }
-                }
-              >
-                agita2
-              </Text>
-            </View>
-          </View>
-          <View
-            testID="dev-dummy-login-agita3"
-          >
-            <View
-              accessible={true}
-              focusable={true}
-              onClick={[Function]}
-              onResponderGrant={[Function]}
-              onResponderMove={[Function]}
-              onResponderRelease={[Function]}
-              onResponderTerminate={[Function]}
-              onResponderTerminationRequest={[Function]}
-              onStartShouldSetResponder={[Function]}
-              style={
-                Object {
-                  "opacity": 1,
-                }
-              }
-            >
-              <View
-                style={
-                  Object {
-                    "backgroundColor": "#6A6A6A",
-                    "height": 2,
-                    "width": "100%",
-                  }
-                }
-              />
-              <Text
-                style={
-                  Object {
-                    "paddingHorizontal": 16,
-                    "paddingVertical": 8,
-                  }
-                }
-              >
-                agita3
-              </Text>
-            </View>
-          </View>
-          <View
             testID="dev-dummy-login-BetterSocial_Team"
           >
             <View
@@ -770,7 +650,7 @@ Array [
             </View>
           </View>
           <View
-            testID="dev-dummy-login-JSmithWrites"
+            testID="dev-dummy-login-smith.confessions"
           >
             <View
               accessible={true}
@@ -805,12 +685,12 @@ Array [
                   }
                 }
               >
-                JSmithWrites
+                smith.confessions
               </Text>
             </View>
           </View>
           <View
-            testID="dev-dummy-login-SophiaZ"
+            testID="dev-dummy-login-swat_confessions"
           >
             <View
               accessible={true}
@@ -845,12 +725,12 @@ Array [
                   }
                 }
               >
-                SophiaZ
+                swat_confessions
               </Text>
             </View>
           </View>
           <View
-            testID="dev-dummy-login-LuckyNumber8"
+            testID="dev-dummy-login-Carl_confessions"
           >
             <View
               accessible={true}
@@ -885,7 +765,87 @@ Array [
                   }
                 }
               >
-                LuckyNumber8
+                Carl_confessions
+              </Text>
+            </View>
+          </View>
+          <View
+            testID="dev-dummy-login-Mac_confessions"
+          >
+            <View
+              accessible={true}
+              focusable={true}
+              onClick={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                Object {
+                  "opacity": 1,
+                }
+              }
+            >
+              <View
+                style={
+                  Object {
+                    "backgroundColor": "#6A6A6A",
+                    "height": 2,
+                    "width": "100%",
+                  }
+                }
+              />
+              <Text
+                style={
+                  Object {
+                    "paddingHorizontal": 16,
+                    "paddingVertical": 8,
+                  }
+                }
+              >
+                Mac_confessions
+              </Text>
+            </View>
+          </View>
+          <View
+            testID="dev-dummy-login-fandm_confessions"
+          >
+            <View
+              accessible={true}
+              focusable={true}
+              onClick={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                Object {
+                  "opacity": 1,
+                }
+              }
+            >
+              <View
+                style={
+                  Object {
+                    "backgroundColor": "#6A6A6A",
+                    "height": 2,
+                    "width": "100%",
+                  }
+                }
+              />
+              <Text
+                style={
+                  Object {
+                    "paddingHorizontal": 16,
+                    "paddingVertical": 8,
+                  }
+                }
+              >
+                fandm_confessions
               </Text>
             </View>
           </View>
@@ -1010,7 +970,7 @@ Array [
             </View>
           </View>
           <View
-            testID="dev-dummy-login-GraceFul"
+            testID="dev-dummy-login-trinity_confessions"
           >
             <View
               accessible={true}
@@ -1045,7 +1005,7 @@ Array [
                   }
                 }
               >
-                GraceFul
+                trinity_confessions
               </Text>
             </View>
           </View>
@@ -1206,6 +1166,86 @@ Array [
                 }
               >
                 AlwaysinCrimson
+              </Text>
+            </View>
+          </View>
+          <View
+            testID="dev-dummy-login-moni"
+          >
+            <View
+              accessible={true}
+              focusable={true}
+              onClick={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                Object {
+                  "opacity": 1,
+                }
+              }
+            >
+              <View
+                style={
+                  Object {
+                    "backgroundColor": "#6A6A6A",
+                    "height": 2,
+                    "width": "100%",
+                  }
+                }
+              />
+              <Text
+                style={
+                  Object {
+                    "paddingHorizontal": 16,
+                    "paddingVertical": 8,
+                  }
+                }
+              >
+                moni
+              </Text>
+            </View>
+          </View>
+          <View
+            testID="dev-dummy-login-usup"
+          >
+            <View
+              accessible={true}
+              focusable={true}
+              onClick={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                Object {
+                  "opacity": 1,
+                }
+              }
+            >
+              <View
+                style={
+                  Object {
+                    "backgroundColor": "#6A6A6A",
+                    "height": 2,
+                    "width": "100%",
+                  }
+                }
+              />
+              <Text
+                style={
+                  Object {
+                    "paddingHorizontal": 16,
+                    "paddingVertical": 8,
+                  }
+                }
+              >
+                usup
               </Text>
             </View>
           </View>

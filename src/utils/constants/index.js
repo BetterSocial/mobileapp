@@ -67,6 +67,8 @@ const MESSAGE_TYPE_REGULAR = 'regular';
 const MESSAGE_TYPE_REPLY = 'reply';
 const MESSAGE_TYPE_REPLY_PROMPT = 'reply_prompt';
 const MESSAGE_TYPE_DELETED = 'deleted';
+const TUTOR_POST_ANON = 'tutor_post_anon';
+const TUTOR_CREATE_POST_ANON = 'tutor_creat_post_anon';
 
 export {
   ANALYTICS_SHARE_POST_FEED_ID,
@@ -123,5 +125,7 @@ export {
   MESSAGE_TYPE_REGULAR,
   MESSAGE_TYPE_REPLY,
   MESSAGE_TYPE_REPLY_PROMPT,
-  MESSAGE_TYPE_DELETED
+  MESSAGE_TYPE_DELETED,
+  TUTOR_POST_ANON,
+  TUTOR_CREATE_POST_ANON
 };

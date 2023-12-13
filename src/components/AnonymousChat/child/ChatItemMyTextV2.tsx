@@ -2,15 +2,8 @@
 import * as React from 'react';
 import Animated, {withDelay, withSequence, withTiming} from 'react-native-reanimated';
 import ContextMenu, {ContextMenuAction} from 'react-native-context-menu-view';
-import {
-  Dimensions,
-  NativeSyntheticEvent,
-  Text,
-  TextLayoutEventData,
-  View,
-  ViewStyle
-} from 'react-native';
 import {Swipeable} from 'react-native-gesture-handler';
+import {Text, View, ViewStyle} from 'react-native';
 
 import ChatReplyView from './ChatReplyView';
 import IconChatCheckMark from '../../../assets/icon/IconChatCheckMark';
@@ -35,14 +28,10 @@ import {
   dotStyle,
   messageStyle,
   styles,
-  targetLastLine,
   textContainerStyle,
   textStyle
 } from './ChatItemText.style';
 import {replyIcon} from './ChatItemTargetText';
-
-const {width} = Dimensions.get('screen');
-const targetLastLineWidth = width - targetLastLine;
 
 const ChatItemMyTextV2 = ({
   username = 'Anonymous User',
@@ -63,9 +52,7 @@ const ChatItemMyTextV2 = ({
     animatedPulseStyle
   } = useMessageHook();
   const scrollContext = React.useContext(ScrollContext);
-
   const swipeableRef = React.useRef<Swipeable>(null);
-  const [isNewLine, setIsNewLine] = React.useState(true);
 
   React.useEffect(() => {
     if (scrollContext?.selectedMessageId === data?.id) {
@@ -81,14 +68,6 @@ const ChatItemMyTextV2 = ({
   const isReplyPrompt = messageType === MESSAGE_TYPE_REPLY_PROMPT;
   const isShowUserInfo = !isContinuous || isReplyPrompt || isReply;
 
-  const onTextLayout = (event: NativeSyntheticEvent<TextLayoutEventData>) => {
-    const {lines} = event.nativeEvent;
-    const lastLine = lines[lines.length - 1];
-    const lastLineWidth = lastLine?.width;
-    const isCalculatedNewLine = targetLastLineWidth - lastLineWidth < 24;
-    setIsNewLine(isCalculatedNewLine);
-  };
-
   const renderIcon = React.useCallback(() => {
     if (status === ChatStatus.PENDING)
       return (
@@ -99,7 +78,7 @@ const ChatItemMyTextV2 = ({
 
     return (
       <View style={styles.icon}>
-        <IconChatCheckMark color={colors.silver} />
+        <IconChatCheckMark color={colors.silver} width={12} height={12} />
       </View>
     );
   }, [status]);
@@ -155,7 +134,7 @@ const ChatItemMyTextV2 = ({
             actions={contextMenuActions}
             onPress={(e) => onContextMenuPressed(e, data, chatType)}>
             <View style={styles.radius8}>
-              <View style={textContainerStyle(true, chatType, isNewLine)}>
+              <View style={textContainerStyle(true, chatType)}>
                 {isShowUserInfo && (
                   <View style={styles.chatTitleContainer}>
                     <Text style={[styles.userText, textStyle(true)]}>{username}</Text>
@@ -172,11 +151,10 @@ const ChatItemMyTextV2 = ({
                   replyData={data?.reply_data}
                 />
 
-                <Text style={messageStyle(true, messageType)} onTextLayout={onTextLayout}>
-                  {`${message}`}
-                </Text>
-
-                {renderIcon()}
+                <View style={{flexDirection: 'row'}}>
+                  <Text style={messageStyle(true, messageType)}>{message}</Text>
+                  {renderIcon()}
+                </View>
               </View>
             </View>
           </ContextMenu>

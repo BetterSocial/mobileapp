@@ -18,6 +18,7 @@ interface UseChatScreenHook {
     setSelectedMessageId: (messageId: string | null) => void;
     handleScrollTo: (messageId: string) => void;
   };
+  loadingChat: boolean;
 }
 
 export default UseChatScreenHook;

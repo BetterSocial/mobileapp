@@ -47,7 +47,7 @@ const useFetchChannelHook = () => {
           : getChatName(channel?.name, signedChannelUsername);
 
       if (channel?.type === 'group' || channel?.type === 'topics') {
-        signedChannelImage = channel?.channel_image;
+        signedChannelImage = channel?.channel_image ?? channel.image;
       } else {
         signedChannelImage =
           channel?.members?.find((member) => member?.user_id !== signedProfileId)?.user?.image ??
@@ -160,7 +160,6 @@ const useFetchChannelHook = () => {
     } catch (e) {
       console.log('error on getting signedChannel:', e);
     }
-
     try {
       await saveAllChannelData(signedChannel ?? [], 'SIGNED');
       refresh('channelList');

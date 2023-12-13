@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
 });
 
 const ChatDetailHeader = ({
-  avatar = DEFAULT_PROFILE_PIC_PATH,
+  avatar,
   user,
   onBackPress = () => console.log('onBackPress'),
   onThreeDotPress = () => console.log('onThreeDotPress'),
@@ -97,7 +97,6 @@ const ChatDetailHeader = ({
         />
       );
     }
-
     return (
       <ChannelImage>
         <ChannelImage.Big style={styles.avatarImage} type={channel?.channelType} image={avatar} />

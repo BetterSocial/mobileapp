@@ -5,12 +5,13 @@
 import * as React from 'react';
 import {FlatList, View} from 'react-native';
 
-import AnonymousInputMessage from '../../components/Chat/AnonymousInputMessage';
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
 import ChatReplyPreview from '../../components/AnonymousChat/child/ChatReplyPreview';
+import InputMessageV2 from '../../components/Chat/InputMessageV2';
 import Loading from '../Loading';
 import useMessageHook from '../../hooks/screen/useMessageHook';
+import useMoveChatTypeHook from '../../hooks/core/chat/useMoveChatTypeHook';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import useChatScreenHook, {ScrollContext} from '../../hooks/screen/useChatScreenHook';
 import {Context} from '../../context';
@@ -31,10 +32,11 @@ const SignedChatScreen = () => {
     scrollContext
   } = useChatScreenHook(SIGNED);
   const {replyPreview, clearReplyPreview} = useMessageHook();
-  const updatedChats = updateChatContinuity(chats);
-  const [loading, setLoading] = React.useState(false);
+  const {moveToAnonymousChannel} = useMoveChatTypeHook();
   const {signedProfileId} = useProfileHook();
+  const updatedChats = updateChatContinuity(chats);
 
+  const [loading, setLoading] = React.useState(false);
   const [, dispatchChannel] = (React.useContext(Context) as unknown as any).channel;
   const [profile] = (React.useContext(Context) as unknown as any).profile;
 
@@ -48,6 +50,21 @@ const SignedChatScreen = () => {
 
   const goToChatInfoPage = () => {
     goToChatInfoScreen({from: SIGNED});
+  };
+
+  const moveChatToAnon = async () => {
+    try {
+      setLoading(true);
+      await moveToAnonymousChannel({
+        oldChannelId: selectedChannel?.id,
+        targetUserId: memberChat.user_id,
+        source: 'userId'
+      });
+    } catch (e) {
+      console.log('error moving chat to signed channel', e);
+    } finally {
+      setLoading(false);
+    }
   };
 
   React.useEffect(() => {
@@ -89,7 +106,7 @@ const SignedChatScreen = () => {
           style={styles.chatContainer}
           data={updatedChats}
           inverted={true}
-          initialNumToRender={20}
+          initialNumToRender={10}
           alwaysBounceVertical={false}
           keyExtractor={(item, index) => item?.id || index.toString()}
           renderItem={renderChatItem}
@@ -97,7 +114,18 @@ const SignedChatScreen = () => {
 
         {replyPreview && <ChatReplyPreview type={SIGNED} />}
         <View style={styles.inputContainer}>
-          <AnonymousInputMessage onSendButtonClicked={sendChat} type={SIGNED} />
+          <InputMessageV2
+            onSendButtonClicked={sendChat}
+            type={SIGNED}
+            username={selectedChannel?.name}
+            profileImage={profile?.myProfile?.profile_pic_path}
+            onToggleConfirm={moveChatToAnon}
+            messageDisable={
+              selectedChannel?.channelType === 'GROUP'
+                ? 'Coming soon: Anonymous messages are not enabled yet within group chats'
+                : null
+            }
+          />
         </View>
         <Loading visible={loading} />
       </View>

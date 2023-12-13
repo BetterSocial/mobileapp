@@ -123,7 +123,8 @@ const useCoreChatSystemHook = () => {
     websocketData.targetImage = handleChannelImage(websocketData?.channel?.members);
     const websocketChannelType = websocketData?.channel_type;
     if (websocketChannelType === 'topics' || websocketChannelType === 'group') {
-      websocketData.targetImage = websocketData?.channel?.channel_image;
+      websocketData.targetImage =
+        websocketData?.channel?.channel_image ?? websocketData.channel?.image;
     } else {
       websocketData.targetImage = selectedChannel?.channel_picture ?? websocketMessage?.user?.image;
     }
