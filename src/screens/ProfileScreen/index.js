@@ -17,14 +17,13 @@ import {
 } from 'react-native';
 import {showMessage} from 'react-native-flash-message';
 import ImagePicker from 'react-native-image-crop-picker';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import Toast from 'react-native-simple-toast';
-
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BlockComponent from '../../components/BlockComponent';
 import {ButtonNewPost} from '../../components/Button';
 import ShadowFloatingButtons from '../../components/Button/ShadowFloatingButtons';
 import CustomPressable from '../../components/CustomPressable';
+import PostOptionModal from '../../components/Modal/PostOptionModal';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {Context} from '../../context';
 import {setFeedByIndex} from '../../context/actions/feeds';
@@ -55,21 +54,18 @@ import {DEFAULT_PROFILE_PIC_PATH, SOURCE_MY_PROFILE} from '../../utils/constants
 import dimen from '../../utils/dimen';
 import {fonts} from '../../utils/fonts';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
-import ImageCompressionUtils from '../../utils/image/compress';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
 import ShareUtils from '../../utils/share';
 import StorageUtils from '../../utils/storage';
 import RenderItem from '../FeedScreen/RenderList';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
-import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
 import AnonymousTab from './elements/AnonymousTab';
 import BioAndDMSetting from './elements/BioAndDMSetting';
 import BottomSheetBio from './elements/BottomSheetBio';
 import BottomSheetImage from './elements/BottomSheetImage';
 import BottomSheetRealname from './elements/BottomSheetRealname';
 import FollowInfoRow from './elements/FollowInfoRow';
-import {KarmaScore} from './elements/KarmaScore';
 import LinkAndSocialMedia from './elements/LinkAndSocialMedia';
 import ProfileHeader from './elements/ProfileHeader';
 import ProfilePicture from './elements/ProfilePicture';
@@ -99,20 +95,12 @@ const Header = (props) => {
         headerHeightRef.current = headerHeightLayout;
       }}>
       <View style={styles.content}>
-        <View style={{flexDirection: 'row', alignContent: 'center', alignItems: 'center'}}>
+        <View style={{flexDirection: 'row'}}>
           <ProfilePicture
             onImageContainerClick={changeImage}
             profilePicPath={dataMain.profile_pic_path}
-            karmaScore={Math.floor(dataMain.karma_score)}
           />
-          <View
-            style={{
-              flexDirection: 'column',
-              paddingHorizontal: 14,
-              paddingVertical: 5,
-              justifyContent: 'center'
-            }}>
-            <KarmaScore score={Math.floor(dataMain.karma_score)} />
+          <View style={{marginLeft: 20}}>
             <FollowInfoRow
               follower={dataMain.follower_symbol}
               following={dataMain.following_symbol}
@@ -178,11 +166,13 @@ const ProfileScreen = ({route}) => {
   const [opacity, setOpacity] = React.useState(0);
   const [tempBio, setTempBio] = React.useState('');
   const [tempFullName, setTempFullName] = React.useState('');
-  const [isLoadingUpdateImageGallery, setIsLoadingUpdateImageGallery] = React.useState(false);
+  const [isLoadingUpdateImageGalery, setIsLoadingUpdateImageGalery] = React.useState(false);
   const [isLoadingUpdateImageCamera, setIsLoadingUpdateImageCamera] = React.useState(false);
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0);
+  const [isLastPage, setIsLastPage] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const [isPostOptionModalOpen, setIsOptionModalOpen] = React.useState(false);
   const [selectedPostForOption, setSelectedPostForOption] = React.useState(null);
   const [isFetchingList, setIsFetchingList] = React.useState(false);
   const {interactionsComplete} = useAfterInteractions();
@@ -193,8 +183,6 @@ const ProfileScreen = ({route}) => {
   const {refreshCount} = useResetContext();
   const {mappingColorFeed} = useCoreFeed();
   const LIMIT_PROFILE_FEED = 10;
-  const refBottomSheet = React.useRef();
-  const TYPE_GALLERY = 'gallery';
 
   const {feeds} = myProfileFeed;
   const {
@@ -206,8 +194,6 @@ const ProfileScreen = ({route}) => {
     reloadFetchAnonymousPost,
     getProfileCache
   } = useProfileScreenHook();
-
-  const {fetchNextFeeds} = useFeedPreloadHook(mainFeeds?.length, () => getMyFeeds(postOffset));
   // eslint-disable-next-line consistent-return
   React.useEffect(() => {
     if (interactionsComplete) {
@@ -241,6 +227,7 @@ const ProfileScreen = ({route}) => {
     const status = await netInfo.fetch();
     if (status.isConnected) {
       getMyFeeds(0, LIMIT_PROFILE_FEED);
+      console.log('masuka');
     } else {
       setMyProfileFeed(JSON.parse(cacheFeed), myProfileDispatch);
     }
@@ -280,9 +267,13 @@ const ProfileScreen = ({route}) => {
     try {
       setIsFetchingList(true);
       setIsHitApiFirstTime(true);
+      const cacheFeed = StorageUtils.myFeeds.get();
       const result = await getSelfFeedsInProfile(offset, limit);
       const {data: dataMyFeed} = result;
-      const mapNewData = mappingColorFeed(dataMyFeed);
+      const {mapNewData} = mappingColorFeed({dataFeed: dataMyFeed, dataCache: cacheFeed});
+      if (Array.isArray(result.data) && result.data.length === 0) {
+        setIsLastPage(true);
+      }
       if (offset === 0) {
         StorageUtils.myFeeds.set(JSON.stringify(mapNewData));
         setMyProfileFeed(mapNewData, myProfileDispatch);
@@ -384,7 +375,7 @@ const ProfileScreen = ({route}) => {
         mediaType: 'photo',
         includeBase64: true
       }).then((imageRes) => {
-        handleUpdateImage(`data:image/jpeg;base64,${imageRes.data}`, TYPE_GALLERY);
+        handleUpdateImage(`data:image/jpeg;base64,${imageRes.data}`, 'gallery');
       });
     } else {
       openAlertPermission(
@@ -427,50 +418,37 @@ const ProfileScreen = ({route}) => {
     });
   };
 
-  const handleUpdateImage = async (imgBase64, type) => {
-    try {
-      if (type === TYPE_GALLERY) {
-        setIsLoadingUpdateImageGallery(true);
-      } else {
-        setIsLoadingUpdateImageCamera(true);
-      }
-      const compressionResult = await ImageCompressionUtils.compress(imgBase64, 'base64');
-      const data = {
-        profile_pic_path: compressionResult
-      };
-
-      updateImageProfile(data)
-        .then(async (res) => {
-          if (type === TYPE_GALLERY) {
-            setIsLoadingUpdateImageGallery(false);
-          } else {
-            setIsLoadingUpdateImageCamera(false);
-          }
-          if (res.code === 200) {
-            closeImageBs();
-            getMyFeeds();
-            const profilePicture = await fetchMyProfile(true);
-            updateUserClient(profilePicture);
-          }
-        })
-        .catch(() => {
-          if (type === TYPE_GALLERY) {
-            setIsLoadingUpdateImageGallery(false);
-          } else {
-            setIsLoadingUpdateImageCamera(false);
-          }
-        });
-    } catch (error) {
-      showMessage({
-        message: 'Failed to update profile',
-        type: 'danger'
-      });
-      if (type === TYPE_GALLERY) {
-        setIsLoadingUpdateImageGallery(false);
-      } else {
-        setIsLoadingUpdateImageCamera(false);
-      }
+  const handleUpdateImage = (value, type) => {
+    if (type === 'gallery') {
+      setIsLoadingUpdateImageGalery(true);
+    } else {
+      setIsLoadingUpdateImageCamera(true);
     }
+    const data = {
+      profile_pic_path: value
+    };
+
+    updateImageProfile(data)
+      .then(async (res) => {
+        if (type === 'gallery') {
+          setIsLoadingUpdateImageGalery(false);
+        } else {
+          setIsLoadingUpdateImageCamera(false);
+        }
+        if (res.code === 200) {
+          closeImageBs();
+          getMyFeeds();
+          const profilePicture = await fetchMyProfile(true);
+          updateUserClient(profilePicture);
+        }
+      })
+      .catch(() => {
+        if (type === 'gallery') {
+          setIsLoadingUpdateImageGalery(false);
+        } else {
+          setIsLoadingUpdateImageCamera(false);
+        }
+      });
   };
 
   const handleRemoveImageProfile = async () => {
@@ -501,7 +479,6 @@ const ProfileScreen = ({route}) => {
   };
 
   const debounceModalOpen = debounce(() => {
-    setTempBio(profile?.myProfile?.bio);
     bottomSheetBioRef.current.open();
   }, 350);
 
@@ -580,12 +557,29 @@ const ProfileScreen = ({route}) => {
     await downVote(post);
   };
 
+  const handleOnEndReached = () => {
+    if (!isLastPage) {
+      getMyFeeds(postOffset);
+    }
+  };
+
   function handleRefresh() {
     setLoading(true);
+    setIsLastPage(false);
     getMyFeeds(0, LIMIT_PROFILE_FEED);
     reloadFetchAnonymousPost();
     fetchMyProfile(true);
   }
+
+  const onHeaderOptionClosed = () => {
+    setSelectedPostForOption(null);
+    setIsOptionModalOpen(false);
+  };
+
+  const onHeaderOptionClicked = (post) => {
+    setSelectedPostForOption(post);
+    setIsOptionModalOpen(true);
+  };
 
   const removePostByIdFromContext = () => {
     const deletedIndex = feeds?.findIndex((find) => selectedPostForOption?.id === find?.id);
@@ -595,6 +589,7 @@ const ProfileScreen = ({route}) => {
   };
 
   const onDeletePost = async () => {
+    setIsOptionModalOpen(false);
     removePostByIdFromContext();
 
     let response;
@@ -607,8 +602,9 @@ const ProfileScreen = ({route}) => {
     if (isProfileTabSigned) return getMyFeeds();
     return reloadFetchAnonymousPost();
   };
+
   return (
-    <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
+    <View style={styles.container} forceInset={{top: 'always'}}>
       <StatusBar translucent={false} />
       <ProfileHeader
         showArrow={isNotFromHomeTab}
@@ -624,12 +620,12 @@ const ProfileScreen = ({route}) => {
         style={styles.flatlistContainer}
         onScroll={handleScroll}
         ListFooterComponent={isFetchingList ? <ActivityIndicator /> : null}
+        onEndReach={handleOnEndReached}
         initialNumToRender={2}
         maxToRenderPerBatch={2}
         updateCellsBatchingPeriod={10}
         removeClippedSubviews
         windowSize={10}
-        onMomentumScrollEnd={(event) => fetchNextFeeds(event)}
         ListHeaderComponent={
           <Header
             headerHeightRef={headerHeightRef}
@@ -662,9 +658,7 @@ const ProfileScreen = ({route}) => {
               source={SOURCE_MY_PROFILE}
               hideThreeDot={false}
               showAnonymousOption={true}
-              onDeletePost={() => onDeletePost()}
-              isSelf={item.is_self}
-              isShowDelete={true}
+              onHeaderOptionClicked={() => onHeaderOptionClicked(item)}
             />
           );
         }}
@@ -692,7 +686,7 @@ const ProfileScreen = ({route}) => {
         onOpenImageGalery={() => onOpenImageGalery()}
         onOpenCamera={() => onOpenCamera()}
         handleRemoveImageProfile={() => handleRemoveImageProfile()}
-        isLoadingUpdateImageGallery={isLoadingUpdateImageGallery}
+        isLoadingUpdateImageGalery={isLoadingUpdateImageGalery}
         isLoadingUpdateImageCamera={isLoadingUpdateImageCamera}
         isLoadingRemoveImage={isLoadingRemoveImage}
       />
@@ -709,7 +703,12 @@ const ProfileScreen = ({route}) => {
       ) : null}
 
       <BlockComponent ref={refBlockComponent} refresh={getMyFeeds} screen="my_profile" />
-    </SafeAreaView>
+      <PostOptionModal
+        isOpen={isPostOptionModalOpen}
+        onClose={onHeaderOptionClosed}
+        onDeleteClicked={onDeletePost}
+      />
+    </View>
   );
 };
 
@@ -722,8 +721,7 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: 'column',
     paddingHorizontal: 20,
-    backgroundColor: colors.white,
-    marginTop: 14
+    backgroundColor: colors.white
   },
   dummyItem: (heightItem) => ({
     height: heightItem,
