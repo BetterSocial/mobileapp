@@ -19,7 +19,6 @@ import {showMessage} from 'react-native-flash-message';
 import ImagePicker from 'react-native-image-crop-picker';
 import Toast from 'react-native-simple-toast';
 
-import {SafeAreaView} from 'react-native-safe-area-context';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BlockComponent from '../../components/BlockComponent';
 import {ButtonNewPost} from '../../components/Button';
@@ -606,7 +605,7 @@ const ProfileScreen = ({route}) => {
   };
 
   return (
-    <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
+    <View style={styles.container} forceInset={{top: 'always'}}>
       <StatusBar translucent={false} />
       <ProfileHeader
         showArrow={isNotFromHomeTab}
@@ -710,7 +709,7 @@ const ProfileScreen = ({route}) => {
         onClose={onHeaderOptionClosed}
         onDeleteClicked={onDeletePost}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 
