@@ -1,6 +1,8 @@
 import * as React from 'react';
 import ImagePicker from 'react-native-image-crop-picker';
+import PropTypes from 'prop-types';
 import Toast from 'react-native-simple-toast';
+import netInfo from '@react-native-community/netinfo';
 import {
   ActivityIndicator,
   Alert,
@@ -13,12 +15,11 @@ import {
   TouchableNativeFeedback,
   View
 } from 'react-native';
-import PropTypes from 'prop-types';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {debounce} from 'lodash';
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
-import netInfo from '@react-native-community/netinfo';
+
 import AnonymousTab from './elements/AnonymousTab';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BioAndDMSetting from './elements/BioAndDMSetting';
@@ -28,16 +29,19 @@ import BottomSheetImage from './elements/BottomSheetImage';
 import BottomSheetRealname from './elements/BottomSheetRealname';
 import CustomPressable from '../../components/CustomPressable';
 import FollowInfoRow from './elements/FollowInfoRow';
+import ImageCompressionUtils from '../../utils/image/compress';
 import LinkAndSocialMedia from './elements/LinkAndSocialMedia';
 import PostOptionModal from '../../components/Modal/PostOptionModal';
 import ProfileHeader from './elements/ProfileHeader';
 import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
 import RenderItem from '../FeedScreen/RenderList';
+import ShadowFloatingButtons from '../../components/Button/ShadowFloatingButtons';
 import ShareUtils from '../../utils/share';
 import StorageUtils from '../../utils/storage';
 import dimen from '../../utils/dimen';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
+import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
 import useResetContext from '../../hooks/context/useResetContext';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
@@ -70,8 +74,6 @@ import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import ShadowFloatingButtons from '../../components/Button/ShadowFloatingButtons';
-import ImageCompressionUtils from '../../utils/image/compress';
 
 const {width} = Dimensions.get('screen');
 
@@ -197,6 +199,8 @@ const ProfileScreen = ({route}) => {
     reloadFetchAnonymousPost,
     getProfileCache
   } = useProfileScreenHook();
+
+  const {fetchNextFeeds} = useFeedPreloadHook(mainFeeds?.length, () => getMyFeeds(postOffset));
   // eslint-disable-next-line consistent-return
   React.useEffect(() => {
     if (interactionsComplete) {
@@ -635,12 +639,12 @@ const ProfileScreen = ({route}) => {
         style={styles.flatlistContainer}
         onScroll={handleScroll}
         ListFooterComponent={isFetchingList ? <ActivityIndicator /> : null}
-        onEndReach={handleOnEndReached}
         initialNumToRender={2}
         maxToRenderPerBatch={2}
         updateCellsBatchingPeriod={10}
         removeClippedSubviews
         windowSize={10}
+        onMomentumScrollEnd={(event) => fetchNextFeeds(event)}
         ListHeaderComponent={
           <Header
             headerHeightRef={headerHeightRef}

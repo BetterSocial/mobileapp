@@ -36,6 +36,8 @@ import StorageUtils from '../../utils/storage';
 import dimen from '../../utils/dimen';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
 import useCreateChat from '../../hooks/screen/useCreateChat';
+import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
+import useViewPostTimeHook from '../FeedScreen/hooks/useViewPostTimeHook';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {blockUser, unblockUserApi} from '../../service/blocking';
@@ -87,19 +89,23 @@ const OtherProfile = () => {
   const interactionManagerRef = React.useRef(null);
   const [otherProfileFeeds, dispatchOtherProfile] = React.useContext(Context).otherProfileFeed;
   const [profile] = React.useContext(Context).profile;
-  const [, dispatch] = React.useContext(Context).feeds;
+  const [mainFeeds, dispatch] = React.useContext(Context).feeds;
   const [isLastPage, setIsLastPage] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [initLoading, setInitLoading] = React.useState(true);
   const [isAnonimity, setIsAnonimity] = React.useState(false);
   const {params} = route;
   const {feeds} = otherProfileFeeds;
+  const {timer, viewPostTimeIndex} = mainFeeds;
   const [loadingGenerateAnon, setLoadingGenerateAnon] = React.useState(false);
   const [anonProfile, setAnonProfile] = React.useState();
   const {mappingColorFeed} = useCoreFeed();
   const isSignedMessageEnabled = dataMain.isSignedMessageEnabled ?? true;
   const isAnonimityEnabled = dataMain.isAnonMessageEnabled && isSignedMessageEnabled;
   const {createSignChat} = useCreateChat();
+
+  const {onWillSendViewPostTime} = useViewPostTimeHook(dispatch, timer, viewPostTimeIndex);
+  const {fetchNextFeeds} = useFeedPreloadHook(feeds?.length, () => getOtherFeeds(postOffset));
 
   const generateAnonProfile = async () => {
     setLoadingGenerateAnon(true);
@@ -606,12 +612,6 @@ const OtherProfile = () => {
     });
   };
 
-  const __handleOnEndReached = () => {
-    if (!isLastPage) {
-      getOtherFeeds(postOffset);
-    }
-  };
-
   const handleRefresh = () => {
     setIsLastPage(false);
     getOtherFeeds(0);
@@ -642,9 +642,12 @@ const OtherProfile = () => {
           extraData={[feeds]}
           data={handleDataFeed()}
           onScroll={handleScroll}
-          onEndReach={__handleOnEndReached}
           onRefresh={handleRefresh}
           refreshing={loading}
+          onMomentumScrollEnd={(event) => {
+            onWillSendViewPostTime(event, feeds);
+            fetchNextFeeds(event);
+          }}
           ListHeaderComponent={
             <>
               {!initLoading ? (
