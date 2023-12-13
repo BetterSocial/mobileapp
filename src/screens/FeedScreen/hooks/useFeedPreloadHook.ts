@@ -8,14 +8,12 @@ const useFeedPreloadHook = (feedLength: number, fetchCallback: () => void) => {
 
   function __shouldFetchNextFeeds(momentumEvent: NativeSyntheticEvent<NativeScrollEvent>): boolean {
     const shownIndex = getCurrentPostViewed(momentumEvent);
-    console.log(`shown index ${shownIndex} vs ${feedLength}`);
     return feedLength - shownIndex <= FEEDS_DIFF_TO_FETCH;
   }
 
   function fetchNextFeeds(momentumEvent: NativeSyntheticEvent<NativeScrollEvent>) {
     const shouldFetch = __shouldFetchNextFeeds(momentumEvent);
     if (shouldFetch && fetchCallback) {
-      console.log('fetch next feeds');
       fetchCallback();
     }
   }
