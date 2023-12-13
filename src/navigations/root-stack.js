@@ -17,6 +17,7 @@ import FollowingScreen from '../screens/Followings/FollowingScreen';
 import HelpCenter from '../screens/WebView/HelpCenter';
 import HomeBottomTabs from './HomeBottomTabs';
 import ImageViewerScreen from '../screens/ImageViewer';
+import VideoViewerScreen from '../screens/VideoViewer';
 import KeyboardWrapper from './KeyboardWrapper';
 import LinkContextScreen from '../screens/LinkContextScreen';
 import LocalCommunity from '../screens/LocalCommunity';
@@ -204,6 +205,7 @@ const AuthenticatedNavigator = () => {
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen name="ImageViewer" component={ImageViewerScreen} />
+        <AuthenticatedStack.Screen name="VideoViewer" component={VideoViewerScreen} />
         <AuthenticatedStack.Screen
           name="DomainScreen"
           component={withKeyboardWrapper(DomainScreen)}

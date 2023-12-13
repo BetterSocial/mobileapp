@@ -60,7 +60,8 @@ function useMessageHook(): UseMessageHook {
         message: data?.message ?? data?.text,
         messageId: data?.id,
         chatType: type,
-        messageType: 'regular'
+        messageType: 'regular',
+        attachments: data?.attachments
       };
       setReplyPreview(messageItem);
     }
@@ -75,11 +76,29 @@ function useMessageHook(): UseMessageHook {
     }
   };
 
+  const onOpenMediaPreview = (medias, index, navigation) => {
+    if (medias.find((media) => media.type === 'video')) {
+      navigation.push('VideoViewer', {
+        title: 'Video',
+        url: medias[index].video_path
+      });
+    } else {
+      navigation.push('ImageViewer', {
+        title: 'Photo',
+        index,
+        images: medias
+          .filter((media) => media.type === 'photo')
+          .map((media) => ({url: media.asset_url}))
+      });
+    }
+  };
+
   return {
     replyPreview: replyPreview?.replyTarget,
     setReplyPreview,
     clearReplyPreview,
-    onContextMenuPressed
+    onContextMenuPressed,
+    onOpenMediaPreview
   };
 }
 

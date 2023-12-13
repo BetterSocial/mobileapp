@@ -17,7 +17,7 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* BetterSocialTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* BetterSocialTests.m */; };
-		2E7357E3EDC718B14778FD80 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		2E7357E3EDC718B14778FD80 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		845147C0275632A000F1BF16 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		845147C1275632B300F1BF16 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		845C6E802758AFC500C9F384 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DD32758A00C00C9F384 /* Inter-Regular.ttf */; };
@@ -135,7 +135,7 @@
 		88BB6015299BC09D003FA042 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 88BB6014299BC09D003FA042 /* GoogleService-Info.plist */; };
 		88BB6018299BC0B3003FA042 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 88BB6016299BC0AF003FA042 /* GoogleService-Info.plist */; };
 		895588D8DAA81DCBB9A9EDA0 /* libPods-BetterSocial-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F9080EEFD52E9AE93B2EB1E3 /* libPods-BetterSocial-tvOSTests.a */; };
-		92D8142362E828E0BFD1A9D0 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		92D8142362E828E0BFD1A9D0 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		BB713F145613AF30A53AC77D /* libPods-BetterSocial-BetterSocialTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A00352A589D59C45332961CB /* libPods-BetterSocial-BetterSocialTests.a */; };
 		E97154A42976870A0021A505 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		E97154A52976870B0021A505 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -323,7 +323,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2E7357E3EDC718B14778FD80 /* BuildFile in Frameworks */,
+				2E7357E3EDC718B14778FD80 /* (null) in Frameworks */,
 				895588D8DAA81DCBB9A9EDA0 /* libPods-BetterSocial-tvOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -348,7 +348,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				92D8142362E828E0BFD1A9D0 /* BuildFile in Frameworks */,
+				92D8142362E828E0BFD1A9D0 /* (null) in Frameworks */,
 				140B3EFDAF3C6F6A17D21477 /* libPods-BetterSocial-BetterSocialDev.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -761,7 +761,7 @@
 						TestTargetID = 2D02E47A1E0B4A5D006451C7;
 					};
 					888DAA1429B48C8900311304 = {
-						DevelopmentTeam = J22M3M9VYU;
+						DevelopmentTeam = 578K4HCZ2Y;
 						ProvisioningStyle = Automatic;
 					};
 					889CAB5E27D46CD6007F5892 = {
@@ -2064,11 +2064,9 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BetterSocial/BetterSocial.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 301;
-				DEVELOPMENT_TEAM = J22M3M9VYU;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = J22M3M9VYU;
+				DEVELOPMENT_TEAM = 578K4HCZ2Y;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = "$(SRCROOT)/BetterSocialStaging/Info.plist";
@@ -2082,8 +2080,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.BetterSocial;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "match AdHoc org.reactjs.native.example.BetterSocial";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AdHoc org.reactjs.native.example.BetterSocial";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -2098,11 +2095,9 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BetterSocialStaging/BetterSocialStagingRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 301;
-				DEVELOPMENT_TEAM = J22M3M9VYU;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = J22M3M9VYU;
+				DEVELOPMENT_TEAM = 578K4HCZ2Y;
 				EXCLUDED_ARCHS = "";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				INFOPLIST_FILE = "$(SRCROOT)/BetterSocialStaging/Info.plist";
@@ -2116,8 +2111,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.BetterSocial;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "match AdHoc org.reactjs.native.example.BetterSocial";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AdHoc org.reactjs.native.example.BetterSocial";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

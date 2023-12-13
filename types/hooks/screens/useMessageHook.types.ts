@@ -10,6 +10,7 @@ interface UseMessageHook {
     data: any,
     type: 'ANONYMOUS' | 'SIGNED'
   ) => void;
+  onOpenMediaPreview: (medias: any, index: number, navigation: any) => void;
 }
 
 export default UseMessageHook;

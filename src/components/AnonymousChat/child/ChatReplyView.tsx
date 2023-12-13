@@ -41,7 +41,9 @@ const ChatReplyView = ({type, messageType, replyData}: ChatReplyViewProps) => {
         )}
       </View>
 
-      <Text style={textStyle}>{replyData?.message}</Text>
+      <Text style={textStyle}>
+        {replyData?.attachments.length > 0 ? 'Photo' : replyData?.message}
+      </Text>
     </View>
   );
 };

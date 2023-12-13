@@ -1,13 +1,13 @@
 import * as React from 'react';
 import {View, Text, StyleSheet, TouchableNativeFeedback, ActivityIndicator} from 'react-native';
 
-import {fonts} from '../../../utils/fonts';
-import {colors} from '../../../utils/colors';
-import {BottomSheet} from '../../../components/BottomSheet';
-import MediasIcon from '../../../assets/icons/images/medias.svg';
-import GIFIcon from '../../../assets/icons/images/gif.svg';
-import FileIcon from '../../../assets/icons/images/file.svg';
-import CameraIcon from '../../../assets/icons/images/camera.svg';
+import {fonts} from '../../utils/fonts';
+import {colors} from '../../utils/colors';
+import {BottomSheet} from '../BottomSheet';
+import MediasIcon from '../../assets/icons/images/medias.svg';
+import GIFIcon from '../../assets/icons/images/gif.svg';
+import FileIcon from '../../assets/icons/images/file.svg';
+import CameraIcon from '../../assets/icons/images/camera.svg';
 
 const BottomSheetAttachment = React.forwardRef((props, ref) => (
   <BottomSheet ref={ref} closeOnPressMask={true} height={300} viewstyle={styles.container}>

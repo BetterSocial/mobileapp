@@ -1,14 +1,16 @@
 // eslint-disable-next-line no-use-before-define
 import * as React from 'react';
 import ContextMenu from 'react-native-context-menu-view';
-import {Animated, Text, View} from 'react-native';
+import {Animated, Text, TouchableOpacity, View} from 'react-native';
 import {Swipeable} from 'react-native-gesture-handler';
 import {useAnimatedStyle, useSharedValue} from 'react-native-reanimated';
 import FastImage from 'react-native-fast-image';
 
+import {useNavigation} from '@react-navigation/core';
 import ChatReplyView from './ChatReplyView';
 import IconChatCheckMark from '../../../assets/icon/IconChatCheckMark';
 import IconChatClockGrey from '../../../assets/icon/IconChatClockGrey';
+import IconVideoPlay from '../../../assets/icon/IconVideoPlay';
 import useMessageHook from '../../../hooks/screen/useMessageHook';
 import {ChatItemMyTextProps} from '../../../../types/component/AnonymousChat/BaseChatItem.types';
 import {ChatStatus} from '../../../../types/database/schema/ChannelList.types';
@@ -35,7 +37,8 @@ const ChatItemMyTextV2 = ({
   messageType,
   data
 }: ChatItemMyTextProps) => {
-  const {setReplyPreview, onContextMenuPressed} = useMessageHook();
+  const navigation = useNavigation();
+  const {setReplyPreview, onContextMenuPressed, onOpenMediaPreview} = useMessageHook();
 
   const swipeableRef = React.useRef<Swipeable | null>(null);
   const bubblePosition = useSharedValue(0);
@@ -51,13 +54,13 @@ const ChatItemMyTextV2 = ({
   const renderIcon = React.useCallback(() => {
     if (status === ChatStatus.PENDING)
       return (
-        <View style={styles.icon}>
+        <View style={styles.iconNewLine}>
           <IconChatClockGrey color={colors.silver} width={12} height={12} />
         </View>
       );
 
     return (
-      <View style={styles.icon}>
+      <View style={styles.iconNewLine}>
         <IconChatCheckMark color={colors.silver} width={12} height={12} />
       </View>
     );
@@ -83,7 +86,8 @@ const ChatItemMyTextV2 = ({
       message,
       messageId: data?.id,
       chatType,
-      messageType: 'regular'
+      messageType: 'regular',
+      attachments
     });
   };
 
@@ -101,7 +105,8 @@ const ChatItemMyTextV2 = ({
             previewBackgroundColor="transparent"
             style={{flex: 1}}
             actions={contextMenuActions}
-            onPress={(e) => onContextMenuPressed(e, data, chatType)}>
+            onPress={(e) => onContextMenuPressed(e, data, chatType)}
+            disabled={attachments.length > 1}>
             <View style={styles.radius8}>
               <View style={textContainerStyle(true, chatType)}>
                 {isShowUserInfo && (
@@ -111,12 +116,12 @@ const ChatItemMyTextV2 = ({
                     <Text style={[styles.timeText, textStyle(true)]}>{time}</Text>
                   </View>
                 )}
-                {attachments.length > 0 && (
+                {attachments.length > 0 && messageType !== 'deleted' && (
                   <View style={styles.attachmentContainer}>
                     {attachments
                       .filter((item, index) => index <= 3)
                       .map((item, index) => (
-                        <View
+                        <TouchableOpacity
                           key={item.thumb_url}
                           style={{
                             width: `${
@@ -127,7 +132,13 @@ const ChatItemMyTextV2 = ({
                             height: `${attachments.length >= 3 ? 50 : 100 / attachments.length}%`,
                             position: 'relative',
                             overflow: 'hidden'
-                          }}>
+                          }}
+                          activeOpacity={1}
+                          onPress={
+                            attachments.length > 0
+                              ? () => onOpenMediaPreview(attachments, index, navigation)
+                              : null
+                          }>
                           <FastImage
                             style={styles.image}
                             source={{
@@ -139,7 +150,13 @@ const ChatItemMyTextV2 = ({
                               <Text style={styles.moreText}>+{attachments.length - 4}</Text>
                             </View>
                           )}
-                        </View>
+                          {/* Video Play Icon */}
+                          {item.video_path && (
+                            <View style={styles.moreOverlay}>
+                              <IconVideoPlay />
+                            </View>
+                          )}
+                        </TouchableOpacity>
                       ))}
                   </View>
                 )}
@@ -151,7 +168,9 @@ const ChatItemMyTextV2 = ({
                 />
 
                 <View style={{flexDirection: 'row'}}>
-                  <Text style={messageStyle(true, messageType)}>{message}</Text>
+                  {message?.trim() !== '' && (
+                    <Text style={messageStyle(true, messageType)}>{message}</Text>
+                  )}
                   {renderIcon()}
                 </View>
               </View>

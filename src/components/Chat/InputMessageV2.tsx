@@ -1,19 +1,32 @@
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-restricted-syntax */
 import * as React from 'react';
-import {Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {
+  Alert,
+  Image,
+  Linking,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import DocumentPicker from 'react-native-document-picker';
-
+import {createThumbnail} from 'react-native-create-thumbnail';
 import ToastMessage from 'react-native-toast-message';
+
 import IconSend from '../../assets/icon/IconSendComment';
 import IconPlusAttachment from '../../assets/icon/IconPlusAttachment';
 import {colors} from '../../utils/colors';
 import dimen from '../../utils/dimen';
 import {normalizeFontSize} from '../../utils/fonts';
 import ToggleSwitch from '../ToggleSwitch';
-import SheetEmoji from './SheetEmoji';
-import BottomSheetAttachment from '../../screens/ProfileScreen/elements/BottomSheetAttachment';
+import BottomSheetAttachment from './BottomSheetAttachment';
+import BottomSheetGif from './BottomSheetGif';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
 import ImageUtils from '../../utils/image';
+import {ANONYMOUS, SIGNED} from '../../hooks/core/constant';
 
 const styles = StyleSheet.create({
   main: {
@@ -103,7 +116,7 @@ const styles = StyleSheet.create({
 });
 
 export interface InputMessageV2Props {
-  onSendButtonClicked: (message: string) => void;
+  onSendButtonClicked: (message: string, attachments: any) => void;
   type: 'SIGNED' | 'ANONYMOUS';
   emojiCode?: string;
   emojiColor?: string;
@@ -125,21 +138,22 @@ const InputMessageV2 = ({
   isShowToggle = true,
   messageDisable
 }: InputMessageV2Props) => {
-  const refEmoji = React.useRef(null);
   const refAttachment = React.useRef(null);
+  const refGif = React.useRef(null);
   const [inputFocus, setInputFocus] = React.useState(false);
   const [text, setText] = React.useState('');
   const [isLoadingUploadImageMedia, setIsLoadingUploadImageMedia] = React.useState(false);
   const [isLoadingUploadImageCamera, setIsLoadingUploadImageCamera] = React.useState(false);
 
-  const handleUploadMedia = async (paths) => {
+  const handleUploadMedia = async (medias) => {
     setIsLoadingUploadImageMedia(true);
 
-    const resultUrls = paths.map((path) => ({
-      type: 'image',
-      asset_url: path,
-      thumb_url: path,
-      myCustomField: 'image'
+    const resultUrls = medias.map((media) => ({
+      type: media.type,
+      asset_url: media.path,
+      thumb_url: media.path,
+      myCustomField: media.type,
+      video_path: media?.pathVideo ?? null
     }));
     console.warn('resultUrls', resultUrls);
     onSendButtonClicked(' ', resultUrls);
@@ -149,7 +163,7 @@ const InputMessageV2 = ({
   const handleUploadCamera = async (path) => {
     setIsLoadingUploadImageCamera(true);
 
-    const resultUrls = [];
+    const resultUrls: any = [];
     const uploadedImageUrl = await ImageUtils.uploadImageWithoutAuth(path);
     resultUrls.push({
       type: 'image',
@@ -160,6 +174,21 @@ const InputMessageV2 = ({
 
     onSendButtonClicked(' ', resultUrls);
     setIsLoadingUploadImageCamera(false);
+  };
+
+  const handleSelectGIF = (gifPath, gifPathSmall) => {
+    onCloseGIF();
+    const resultUrls = [
+      {
+        type: 'gif',
+        asset_url: gifPath,
+        thumb_url: gifPathSmall,
+        myCustomField: 'gif',
+        gif_path: gifPath
+      }
+    ];
+    console.warn('resultUrls', resultUrls);
+    onSendButtonClicked(' ', resultUrls);
   };
 
   const openSettingApp = () => {
@@ -173,28 +202,56 @@ const InputMessageV2 = ({
     ]);
   };
 
+  const processImage = async (image) => {
+    const imageCropped = await ImagePicker.openCropper({
+      mediaType: 'photo',
+      path: image.path,
+      cropperChooseText: 'Next',
+      freeStyleCropEnabled: true
+    });
+    return imageCropped.path;
+  };
+
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  const getVideoThumbnail = async (videoPath) => {
+    try {
+      const thumbnail = await createThumbnail({
+        url: videoPath,
+        timeStamp: 1000
+      });
+      return thumbnail.path;
+    } catch (error) {
+      console.error('Error generating thumbnail', error);
+      return null;
+    }
+  };
+
+  const processMediasSequentially = async (medias, delayTime) => {
+    const newMedias: any = [];
+    for (const media of medias) {
+      if (media?.mime?.includes('video')) {
+        const thumbnailPath = await getVideoThumbnail(media.path);
+        newMedias.push({type: 'video', path: thumbnailPath, pathVideo: media.path});
+      } else {
+        const croppedImage = await processImage(media);
+        newMedias.push({type: 'photo', path: croppedImage});
+        await delay(delayTime);
+      }
+    }
+    return newMedias;
+  };
+
   const onOpenMedia = async () => {
     const {success} = await requestExternalStoragePermission();
     if (success) {
       ImagePicker.openPicker({
-        width: 512,
-        height: 512,
-        cropping: true,
         multiple: true,
         maxFiles: 20
-      }).then(async (images) => {
-        const allPromises: Promise<void>[] = images.map(async (image) => {
-          const imageCropped = await ImagePicker.openCropper({
-            path: image.path,
-            width: 512,
-            height: 512
-          });
-          return imageCropped.path;
-        });
+      }).then(async (medias) => {
+        const newMedias = await processMediasSequentially(medias, 200);
 
-        const newImages = await Promise.all(allPromises);
-
-        handleUploadMedia(newImages, 'gallery');
+        handleUploadMedia(newMedias);
       });
     } else {
       openAlertPermission(
@@ -207,12 +264,15 @@ const InputMessageV2 = ({
     const {success} = await requestCameraPermission();
     if (success) {
       ImagePicker.openCamera({
-        width: 512,
-        height: 512,
-        cropping: true,
         mediaType: 'photo'
-      }).then((imageRes) => {
-        handleUploadCamera(imageRes.path);
+      }).then(async (imageRes) => {
+        const imageCropped = await ImagePicker.openCropper({
+          mediaType: 'photo',
+          path: imageRes.path,
+          cropperChooseText: 'Next',
+          freeStyleCropEnabled: true
+        });
+        handleUploadCamera(imageCropped.path);
       });
     } else {
       openAlertPermission(
@@ -241,8 +301,16 @@ const InputMessageV2 = ({
   const onChangeInput = (v) => {
     setText(v);
   };
-  const onSelectEmoji = () => {
-    refEmoji.current.close();
+
+  const onOpenGIF = () => {
+    refAttachment.current.close();
+    setTimeout(() => {
+      refGif.current.open();
+    }, 500);
+  };
+
+  const onCloseGIF = () => {
+    refGif.current.close();
   };
 
   const onSelectAttachment = () => {
@@ -250,7 +318,7 @@ const InputMessageV2 = ({
   };
 
   const handleSendMessage = () => {
-    onSendButtonClicked(text);
+    onSendButtonClicked(text, []);
     setText('');
   };
 
@@ -261,11 +329,11 @@ const InputMessageV2 = ({
   const sendButtonStyle = React.useCallback(() => {
     const isDisabled = isDisableButton();
     if (isDisabled) return colors.gray1;
-    if (type === 'SIGNED') return colors.darkBlue;
+    if (type === SIGNED) return colors.darkBlue;
     return colors.bondi_blue;
   }, [isDisableButton()]);
 
-  const toggleChnage = () => {
+  const toggleChange = () => {
     if (messageDisable) {
       ToastMessage.show({
         type: 'asNative',
@@ -277,7 +345,7 @@ const InputMessageV2 = ({
 
     Alert.alert(
       '',
-      type === 'ANONYMOUS'
+      type === ANONYMOUS
         ? `Switch back to regular chat?\nMessage ${username} using your username.`
         : 'Switch to anonymous chat?\nMessage this user anonymously instead.',
       [
@@ -290,7 +358,7 @@ const InputMessageV2 = ({
   };
 
   const plusButtonStyle = React.useCallback(() => {
-    if (type === 'SIGNED') return colors.darkBlue;
+    if (type === SIGNED) return colors.darkBlue;
     return colors.bondi_blue;
   }, []);
 
@@ -318,10 +386,10 @@ const InputMessageV2 = ({
             labelLeft={!inputFocus ? 'Anonymity' : undefined}
             styleLabelLeft={[
               styles.labelToggle,
-              {color: type === 'ANONYMOUS' ? colors.gray : colors.blue}
+              {color: type === ANONYMOUS ? colors.gray : colors.blue}
             ]}
-            onValueChange={toggleChnage}
-            value={type === 'ANONYMOUS'}
+            onValueChange={toggleChange}
+            value={type === ANONYMOUS}
           />
         )}
       </View>
@@ -342,12 +410,11 @@ const InputMessageV2 = ({
           <IconPlusAttachment style={styles.icSendButton} fillIcon={plusButtonStyle()} />
         </TouchableOpacity>
       )}
-      <SheetEmoji ref={refEmoji} selectEmoji={onSelectEmoji} />
 
       <BottomSheetAttachment
         ref={refAttachment}
         onOpenMedia={onOpenMedia}
-        onOpenGIF={onSelectEmoji}
+        onOpenGIF={onOpenGIF}
         onOpenCamera={onOpenCamera}
         onOpenFile={onOpenFile}
         isLoadingUploadMedia={isLoadingUploadImageMedia}
@@ -355,6 +422,8 @@ const InputMessageV2 = ({
         isLoadingUploadCamera={isLoadingUploadImageCamera}
         isLoadingUploadFile={false}
       />
+
+      <BottomSheetGif ref={refGif} onCancel={onCloseGIF} onSelect={handleSelectGIF} />
     </View>
   );
 };

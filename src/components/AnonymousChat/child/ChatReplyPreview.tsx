@@ -3,11 +3,13 @@ import React from 'react';
 import Animated, {SlideInDown, SlideOutDown} from 'react-native-reanimated';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
+import FastImage from 'react-native-fast-image';
 import IconClear from '../../../assets/icon/IconClear';
 import dimen from '../../../utils/dimen';
 import useMessageHook from '../../../hooks/screen/useMessageHook';
 import {colors} from '../../../utils/colors';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
+import IconVideoPlay from '../../../assets/icon/IconVideoPlay';
 
 interface ChatReplyPreviewProps {
   type: 'SIGNED' | 'ANONYMOUS';
@@ -27,15 +29,33 @@ const ChatReplyPreview = ({type}: ChatReplyPreviewProps) => {
       exiting={SlideOutDown.duration(80)}
       style={styles.container}>
       <View style={textContainerStyle}>
-        <View style={styles.chatTitleContainer}>
-          <Text style={styles.userText}>{replyPreview?.username}</Text>
-          <View style={styles.dot} />
-          <Text style={styles.timeText}>{replyPreview?.time}</Text>
-        </View>
+        <View>
+          <View style={styles.chatTitleContainer}>
+            <Text style={styles.userText}>{replyPreview?.username}</Text>
+            <View style={styles.dot} />
+            <Text style={styles.timeText}>{replyPreview?.time}</Text>
+          </View>
 
-        <Text style={styles.text} numberOfLines={1}>
-          {`${replyPreview?.message}`}
-        </Text>
+          <Text
+            style={[styles.text, replyPreview?.attachments.length > 0 ? {fontStyle: 'italic'} : {}]}
+            numberOfLines={1}>
+            {replyPreview?.attachments.length > 0 ? 'Photo' : `${replyPreview?.message}`}
+          </Text>
+        </View>
+        {replyPreview?.attachments.length > 0 && (
+          <View style={styles.mediaContainer}>
+            <FastImage
+              source={{uri: replyPreview?.attachments[0]?.asset_url}}
+              style={styles.mediaImage}
+              resizeMode="cover"
+            />
+            {replyPreview?.attachments[0].video_path && (
+              <View style={styles.mediaOverlay}>
+                <IconVideoPlay width={24} height={24} />
+              </View>
+            )}
+          </View>
+        )}
       </View>
 
       <TouchableOpacity
@@ -67,7 +87,8 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: dimen.normalizeDimen(4),
     paddingHorizontal: dimen.normalizeDimen(8),
-    borderRadius: 8
+    borderRadius: 8,
+    overflow: 'hidden'
   },
   chatTitleContainer: {
     display: 'flex',
@@ -105,6 +126,25 @@ const styles = StyleSheet.create({
   containerDismiss: {
     marginLeft: 5,
     padding: 5
+  },
+  mediaContainer: {
+    width: 44,
+    height: 44,
+    position: 'absolute',
+    right: 0,
+    top: 0
+  },
+  mediaImage: {
+    width: '100%',
+    height: '100%'
+  },
+  mediaOverlay: {
+    position: 'absolute',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
 
