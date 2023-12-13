@@ -17,7 +17,6 @@ import MemoIcArrowBack from '../../../assets/arrow/Ic_arrow_back';
 import MemoIcArrowBackCircle from '../../../assets/arrow/Ic_arrow_back_circle';
 import ShareIconCircle from '../../../assets/icons/Ic_share_circle';
 import TopicDefaultIcon from '../../../assets/topic.png';
-import {Shimmer} from '../../../components/Shimmer/Shimmer';
 import {colors} from '../../../utils/colors';
 import dimen from '../../../utils/dimen';
 import {normalize} from '../../../utils/fonts';
@@ -26,6 +25,7 @@ import Search from '../../DiscoveryScreenV2/elements/Search';
 import ButtonFollow from './ButtonFollow';
 import ButtonFollowing from './ButtonFollowing';
 import TopicDomainHeader from './TopicDomainHeader';
+import {Shimmer} from '../../../components/Shimmer/Shimmer';
 
 const NavHeader = (props) => {
   const {
@@ -136,17 +136,68 @@ const NavHeader = (props) => {
           }
         ]}
         imageStyle={{opacity: isHeaderHide ? 0 : 1}}>
-        <Animated.View style={styles.headerImage(opacityHeaderAnimation)}>
-          <FastImage source={{uri: coverPath}} style={heightWithCoverImage()} />
-        </Animated.View>
-        <TouchableOpacity onPress={() => backScreen()} style={styles.backbutton}>
-          {coverPath && !isHeaderHide ? (
-            <MemoIcArrowBackCircle width={normalize(32)} height={normalize(32)} />
-          ) : (
-            <MemoIcArrowBack width={normalize(24)} height={normalize(24)} />
-          )}
-        </TouchableOpacity>
-        <View style={styles.containerAction}>
+        {isLoading ? (
+          <Shimmer width={displayWidth} height={dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER} />
+        ) : (
+          <>
+            <View
+              style={{
+                width: '100%',
+                height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
+              }}>
+              <FastImage
+                source={{uri: coverPath}}
+                style={{
+                  height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
+                }}
+              />
+              <AnimatedBlurView
+                style={[
+                  StyleSheet.absoluteFillObject,
+                  {
+                    opacity: opacityImage
+                  }
+                ]}
+                blurType="light"
+              />
+            </View>
+          </>
+        )}
+
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingTop: insets.top,
+            zIndex: 2,
+            position: 'absolute'
+          }}>
+          <TouchableOpacity onPress={() => backScreen()} style={styles.backbutton}>
+            {coverPath && !isHeaderHide ? (
+              <MemoIcArrowBackCircle width={normalize(32)} height={normalize(32)} />
+            ) : (
+              <MemoIcArrowBack width={normalize(24)} height={normalize(24)} />
+            )}
+          </TouchableOpacity>
+          <Animated.View
+            style={{
+              opacity: opacityImage
+            }}>
+            <TopicDomainHeader {...props} />
+          </Animated.View>
+        </View>
+
+        <View
+          style={
+            (styles.containerAction,
+            {
+              paddingTop: insets.top,
+              paddingRight: dimen.normalizeDimen(20),
+              zIndex: 2,
+              position: 'absolute',
+              right: 0
+            })
+          }>
           {!isFollow && isHeaderHide ? (
             <ButtonFollow handleSetFollow={handleFollowTopic} />
           ) : (

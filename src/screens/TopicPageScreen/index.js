@@ -2,9 +2,9 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import _ from 'lodash';
 import * as React from 'react';
 import {Animated, Platform, StyleSheet, View} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import SimpleToast from 'react-native-simple-toast';
 
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import BlockComponent from '../../components/BlockComponent';
 import ButtonAddPostTopic from '../../components/Button/ButtonAddPostTopic';
 import TiktokScroll from '../../components/TiktokScroll';
@@ -417,26 +417,30 @@ const TopicPageScreen = (props) => {
         isFollow={isFollow}
         getTopicDetail={getTopicDetail}
       />
-      <TiktokScroll
-        ref={listRef}
-        contentHeight={dimen.size.TOPIC_CURRENT_ITEM_HEIGHT + normalizeFontSizeByWidth(4)}
-        data={feeds}
-        onEndReach={onEndReach}
-        onRefresh={onRefresh}
-        refreshing={loading}
-        renderItem={renderItem}
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-        showSearchBar={true}
-        searchHeight={isHeaderHide ? headerHideHeight : headerShowHeight}
-        snap
-        contentOffset={{x: 0, y: topPosition}}
-        contentInsetAdjustmentBehavior={feeds?.length > 1 ? 'automatic' : 'never'}
-        onMomentumScrollEnd={(event) => {
-          onWillSendViewPostTime(event, feeds);
-          fetchNextFeeds(event);
-        }}
-      />
+
+      <View
+        style={{
+          marginTop: isHeaderHide ? -dimen.size.TOPIC_FEED_HEADER_HEIGHT : 0
+        }}>
+        <TiktokScroll
+          ref={listRef}
+          contentHeight={dimen.size.TOPIC_CURRENT_ITEM_HEIGHT + normalizeFontSizeByWidth(4)}
+          data={feeds}
+          onEndReach={onEndReach}
+          onRefresh={onRefresh}
+          refreshing={loading}
+          renderItem={renderItem}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+          showSearchBar={true}
+          snap
+          contentInsetAdjustmentBehavior={feeds?.length > 1 ? 'automatic' : 'never'}
+          onMomentumScrollEnd={(event) => {
+            onWillSendViewPostTime(event, feeds);
+            fetchNextFeeds(event);
+          }}
+        />
+      </View>
       <ButtonAddPostTopic topicName={topicName} onRefresh={onRefresh} />
       <BlockComponent
         ref={refBlockComponent}
