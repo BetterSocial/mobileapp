@@ -606,7 +606,7 @@ PODS:
     - RNFBApp
   - RNFS (2.20.0):
     - React-Core
-  - RNGestureHandler (1.10.3):
+  - RNGestureHandler (2.9.0):
     - React-Core
   - RNImageCropPicker (0.36.4):
     - React-Core
@@ -621,7 +621,7 @@ PODS:
     - React-Core
   - RNReactNativeHapticFeedback (1.14.0):
     - React-Core
-  - RNReanimated (2.2.0):
+  - RNReanimated (2.17.0):
     - DoubleConversion
     - FBLazyVector
     - FBReactNativeSpec
@@ -1080,11 +1080,11 @@ SPEC CHECKSUMS:
   RNFBPerf: a808db9203bfeab16eb2305934a0c44c92cfcf03
   RNFBRemoteConfig: 4f1fdad0c86324fdf593443699484305e826e314
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
-  RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
+  RNGestureHandler: 071d7a9ad81e8b83fe7663b303d132406a7d8f39
   RNImageCropPicker: 73891a709e6fd8a47d32104d942757971f220aee
   RNPermissions: 215c54462104b3925b412b0fb3c9c497b21c358b
   RNReactNativeHapticFeedback: 1e3efeca9628ff9876ee7cdd9edec1b336913f8c
-  RNReanimated: 9c13c86454bfd54dab7505c1a054470bfecd2563
+  RNReanimated: 39e61976e5b5c8a891ea8916fb264ae176e8765d
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
   RNSentry: 4fb2cd7d2d6cb94423c24884488206ef881da136
   RNShare: 4df87d1791f50a2c7b1d89432fb9bbb7c02a9c9a

@@ -114,7 +114,7 @@ const sendAnonymousDMOtherProfile = async ({
   message
 }) => {
   const payload = {
-    members: [user_id],
+    member: user_id,
     message,
     anon_user_info_emoji_name,
     anon_user_info_emoji_code,
@@ -122,7 +122,7 @@ const sendAnonymousDMOtherProfile = async ({
     anon_user_info_color_code
   };
 
-  const response = await anonymousApi.post('/chat/init-chat-anonymous', payload);
+  const response = await anonymousApi.post('/chat/init-chat-anonymous-v2', payload);
 
   if (response.status === 200) {
     return Promise.resolve(response.data?.data);
@@ -132,11 +132,11 @@ const sendAnonymousDMOtherProfile = async ({
 
 const sendSignedDMOtherProfile = async ({user_id, message}) => {
   const payload = {
-    members: [user_id],
+    member: user_id,
     message
   };
 
-  const response = await api.post('/chat/init-chat', payload);
+  const response = await api.post('/chat/init-chat-signed-v2', payload);
   if (response.status === 200) {
     return Promise.resolve(response.data?.data);
   }
@@ -161,9 +161,9 @@ const getOrCreateAnonymousChannel = async (userId) => {
   }
 };
 
-const moveChatToSigned = async ({oldChannelId, targetUserId}) => {
+const moveChatToSigned = async ({oldChannelId, targetUserId, source}) => {
   try {
-    const response = await api.post('/chat/move-to-sign', {oldChannelId, targetUserId});
+    const response = await api.post('/chat/move-to-sign', {oldChannelId, targetUserId, source});
     if (response.status === 200) {
       return Promise.resolve(response.data);
     }
@@ -180,7 +180,8 @@ const moveChatToAnon = async ({
   anon_user_info_emoji_code,
   anon_user_info_emoji_name,
   oldChannelId,
-  targetUserId
+  targetUserId,
+  source
 }) => {
   try {
     const response = await anonymousApi.post('/chat/move-to-anon', {
@@ -189,7 +190,8 @@ const moveChatToAnon = async ({
       anon_user_info_emoji_code,
       anon_user_info_emoji_name,
       oldChannelId,
-      targetUserId
+      targetUserId,
+      source
     });
     if (response.status === 200) {
       return Promise.resolve(response.data);

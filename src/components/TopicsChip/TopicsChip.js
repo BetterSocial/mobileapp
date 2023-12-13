@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     marginLeft: 12
   },
   topicItemContainer: {
-    backgroundColor: colors.lightgrey,
+    backgroundColor: colors.lightgrey60,
     borderRadius: 14,
     overflow: 'hidden',
     marginEnd: 11,

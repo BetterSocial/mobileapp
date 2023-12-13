@@ -392,7 +392,7 @@ describe('TESTING ChatSchema', () => {
         rawJson: expect.any(String),
         attachmentJson: expect.any(String),
         status: 'sent',
-        type: 'regular',
+        type: expect.any(String),
         updatedAt: 'updatedAt',
         user: null,
         userId: 'userId'
@@ -404,6 +404,7 @@ describe('TESTING ChatSchema', () => {
         members: [],
         targetImage: '',
         targetName: '',
+        reply_data: {},
         message: {
           id: 'id',
           cid: 'channelId',

@@ -20,7 +20,9 @@ const IconChatCheckMark = (props) => (
 );
 
 IconChatCheckMark.propTypes = {
-  color: PropTypes.string
+  color: PropTypes.string,
+  width: PropTypes.number,
+  height: PropTypes.number
 };
 
 export default IconChatCheckMark;
