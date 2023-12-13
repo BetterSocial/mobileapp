@@ -4,6 +4,7 @@ import {Dimensions, StyleSheet, Text, View} from 'react-native';
 
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
 
 export interface ChannelListTabItemProps {
   picture: string | null;
@@ -28,7 +29,7 @@ const ChannelListTabItem = (props: ChannelListTabItemProps) => {
     name: {
       fontFamily: fonts.inter[500],
       fontSize: 14,
-      color: props.type === 'SIGNED' ? colors.darkBlue : colors.anon_primary
+      color: props.type === 'SIGNED' ? COLORS.signed_primary : COLORS.anon_primary
     },
     picture: {
       width: 20,

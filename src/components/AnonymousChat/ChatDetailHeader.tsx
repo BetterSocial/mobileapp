@@ -13,6 +13,7 @@ import {ANONYMOUS, SIGNED} from '../../hooks/core/constant';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
 
 const styles = StyleSheet.create({
   container: {
@@ -80,7 +81,7 @@ const ChatDetailHeader = ({
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      backgroundColor: withTiming(type === ANONYMOUS ? colors.anon_primary : colors.white, {
+      backgroundColor: withTiming(type === ANONYMOUS ? COLORS.anon_primary : colors.white, {
         duration: 400,
         easing: Easing.inOut(Easing.quad)
       })

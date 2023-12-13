@@ -10,6 +10,7 @@ import FeedIcon from '../../../assets/images/feed-icon.png';
 import dimen from '../../../utils/dimen';
 import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
 import {colors} from '../../../utils/colors';
+import {COLORS} from '../../../utils/theme';
 
 const ChannelImage = ({
   mainPicture,
@@ -43,10 +44,10 @@ const ChannelImage = ({
       alignItems: 'center'
     },
     myPostNotificationImageContainer: {
-      backgroundColor: isAnonymousTab ? colors.anon_primary : colors.darkBlue
+      backgroundColor: isAnonymousTab ? COLORS.anon_primary : COLORS.signed_primary
     },
     anonPmNotificationImageContainer: {
-      backgroundColor: colors.anon_primary
+      backgroundColor: COLORS.anon_primary
     },
     postNotificationIcon: {
       width: dimen.normalizeDimen(12.5),
@@ -57,7 +58,7 @@ const ChannelImage = ({
       height: dimen.normalizeDimen(12)
     },
     backgroundDarkBlue: {
-      backgroundColor: colors.darkBlue
+      backgroundColor: COLORS.signed_primary
     }
   });
 

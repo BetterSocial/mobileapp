@@ -24,8 +24,8 @@ const Search = ({route, onPress}) => {
   };
 
   const themeColor = () => {
-    if (route?.name === 'SignedChannelList') return colors.darkBlue;
-    return colors.anon_primary;
+    if (route?.name === 'SignedChannelList') return COLORS.signed_primary;
+    return COLORS.anon_primary;
   };
 
   return (

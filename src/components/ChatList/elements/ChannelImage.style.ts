@@ -2,6 +2,7 @@ import {StyleSheet} from 'react-native';
 
 import dimen from '../../../utils/dimen';
 import {colors} from '../../../utils/colors';
+import {COLORS} from '../../../utils/theme';
 
 export const channelImageStyles = StyleSheet.create({
   containerImage: {
@@ -39,10 +40,10 @@ export const channelImageStyles = StyleSheet.create({
     backgroundColor: colors.gray1
   },
   containerGreen: {
-    backgroundColor: colors.bondi_blue
+    backgroundColor: COLORS.anon_primary
   },
   containerDarkBlue: {
-    backgroundColor: colors.darkBlue
+    backgroundColor: COLORS.signed_primary
   },
   badgeContainer: {
     position: 'absolute',

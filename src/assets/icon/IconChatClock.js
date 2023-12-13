@@ -1,6 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import Svg, {Path} from 'react-native-svg';
+import {COLORS} from '../../utils/theme';
 
 const IconChatClock = (props) => (
   <Svg
@@ -14,7 +15,7 @@ const IconChatClock = (props) => (
       fillRule="evenodd"
       clipRule="evenodd"
       d="M20 12a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm2 0c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10Zm-9-5a1 1 0 1 0-2 0v5a1 1 0 0 0 .4.8l4 3a1 1 0 0 0 1.2-1.6L13 11.5V7Z"
-      fill={props.color ?? '#000'}
+      fill={props.color ?? COLORS.black}
     />
   </Svg>
 );

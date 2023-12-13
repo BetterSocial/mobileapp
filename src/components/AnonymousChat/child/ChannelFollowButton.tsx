@@ -5,22 +5,30 @@ import {Pressable, StyleSheet, Text, View} from 'react-native';
 import dimen from '../../../utils/dimen';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
+import {COLORS} from '../../../utils/theme';
 
 interface Props {
   isFollowing: boolean;
   handleFollow?: () => void;
+  isAnonymousTab?: boolean;
 }
 
 const ChannelFollowButton = (props: Props) => {
-  const {isFollowing, handleFollow} = props;
+  const {isFollowing, handleFollow, isAnonymousTab = false} = props;
 
   return (
     <Pressable onPress={handleFollow}>
       <View style={styles.followContainer}>
         <View
-          style={[styles.containerFollowBtn, isFollowing ? styles.followingBtn : styles.followBtn]}>
+          style={[
+            styles.containerFollowBtn,
+            isFollowing ? styles.followingBtn(isAnonymousTab) : styles.followBtn(isAnonymousTab)
+          ]}>
           <Text
-            style={[styles.textFollowBtn, isFollowing ? styles.textFollowing : styles.textFollow]}>
+            style={[
+              styles.textFollowBtn,
+              isFollowing ? styles.textFollowing(isAnonymousTab) : styles.textFollow
+            ]}>
             {isFollowing ? 'Following' : 'Follow'}
           </Text>
         </View>
@@ -38,19 +46,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  followBtn: {
+  followBtn: (isAnonymousTab) => ({
     paddingVertical: dimen.normalizeDimen(9.5),
     paddingHorizontal: dimen.normalizeDimen(14),
     borderRadius: 8,
-    backgroundColor: colors.darkBlue
-  },
-  followingBtn: {
+    backgroundColor: isAnonymousTab ? COLORS.anon_primary : COLORS.signed_primary
+  }),
+  followingBtn: (isAnonymousTab) => ({
     paddingVertical: dimen.normalizeDimen(9.5),
     paddingHorizontal: dimen.normalizeDimen(4.5),
     borderWidth: 1,
-    borderColor: colors.darkBlue,
+    borderColor: isAnonymousTab ? COLORS.anon_primary : COLORS.signed_primary,
     borderRadius: 8
-  },
+  }),
   textFollowBtn: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
@@ -59,9 +67,9 @@ const styles = StyleSheet.create({
   textFollow: {
     color: colors.white
   },
-  textFollowing: {
-    color: colors.darkBlue
-  }
+  textFollowing: (isAnonymousTab) => ({
+    color: isAnonymousTab ? COLORS.anon_primary : COLORS.signed_primary
+  })
 });
 
 export default ChannelFollowButton;

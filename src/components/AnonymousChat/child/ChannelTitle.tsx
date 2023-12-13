@@ -7,6 +7,7 @@ import baseStyles from '../BaseChannelItemStyles';
 import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
 import {colors} from '../../../utils/colors';
 import {fonts, normalize} from '../../../utils/fonts';
+import {COLORS} from '../../../utils/theme';
 
 const ChannelTitle = ({
   type,
@@ -45,7 +46,7 @@ const ChannelTitle = ({
       marginRight: 4
     },
     chatContentUnreadCountContainer: {
-      backgroundColor: isAnonymousTab ? colors.anon_primary : colors.darkBlue,
+      backgroundColor: isAnonymousTab ? COLORS.anon_primary : COLORS.signed_primary,
       width: 20,
       height: 20,
       borderRadius: 10,
@@ -105,7 +106,11 @@ const ChannelTitle = ({
         </View>
 
         {isSignedDM && isShowFollowButton && (
-          <ChannelFollowButton isFollowing={isFollowing} handleFollow={handleFollow} />
+          <ChannelFollowButton
+            isFollowing={isFollowing}
+            handleFollow={handleFollow}
+            isAnonymousTab={isAnonymousTab}
+          />
         )}
       </View>
     );

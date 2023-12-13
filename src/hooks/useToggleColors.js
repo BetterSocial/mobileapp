@@ -35,7 +35,9 @@ export const ToggleSwitchAnon = ({value, onValueChange, labelLeft, labelColor}) 
         onValueChange={onValueChange}
         labelLeft={labelLeft || 'Anonimity'}
         circleActiveColor={dynamicColors.primary}
+        circleInActiveColor={dynamicColors.primary}
         activeTextColor={dynamicColors.primary}
+        inactiveTextColor={dynamicColors.primary}
         styleLabelLeft={{color: labelColor || dynamicColors.text}}
       />
     </TouchableOpacity>

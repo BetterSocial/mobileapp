@@ -4,6 +4,7 @@ import {StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
 import IconSend from '../../assets/icon/IconSendComment';
 import SheetEmoji from './SheetEmoji';
 import {colors} from '../../utils/colors';
+import {COLORS} from '../../utils/theme';
 
 const styles = StyleSheet.create({
   container: {
@@ -93,7 +94,7 @@ const AnonymousInputMessage = ({onSendButtonClicked, type}: AnonymousInputMessag
   const sendButtonStyle = React.useCallback(() => {
     const isDisabled = isDisableButton();
     if (isDisabled) return colors.gray1;
-    if (type === 'SIGNED') return colors.darkBlue;
+    if (type === 'SIGNED') return COLORS.signed_primary;
     return colors.bondi_blue;
   }, [isDisableButton()]);
 

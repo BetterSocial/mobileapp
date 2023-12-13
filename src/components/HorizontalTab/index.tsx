@@ -4,6 +4,7 @@ import {Dimensions, StyleSheet, View} from 'react-native';
 
 import CustomPressable from '../CustomPressable';
 import {colors} from '../../utils/colors';
+import {COLORS} from '../../utils/theme';
 
 const {width} = Dimensions.get('screen');
 
@@ -72,7 +73,7 @@ const HorizontalTab = ({selectedTab, onSelectedTabChange, tabs = []}: Horizontal
             index === selectedTab
               ? [
                   styles.activeTabItem,
-                  {borderBottomColor: index === 0 ? colors.darkBlue : colors.anon_primary}
+                  {borderBottomColor: index === 0 ? COLORS.signed_primary : COLORS.anon_primary}
                 ]
               : styles.tabItem
           }>

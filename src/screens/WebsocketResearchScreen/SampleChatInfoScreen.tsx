@@ -66,7 +66,7 @@ export const styles = StyleSheet.create({
   countUser: (from) => ({
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(16.94),
-    color: from === SIGNED ? colors.darkBlue : colors.holytosca,
+    color: from === SIGNED ? COLORS.signed_primary : COLORS.anon_primary,
     marginLeft: dimen.normalizeDimen(20),
     marginBottom: dimen.normalizeDimen(4),
     fontWeight: 'bold'

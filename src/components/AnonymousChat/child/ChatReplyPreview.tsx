@@ -8,6 +8,7 @@ import dimen from '../../../utils/dimen';
 import useMessageHook from '../../../hooks/screen/useMessageHook';
 import {colors} from '../../../utils/colors';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
+import {COLORS} from '../../../utils/theme';
 
 interface ChatReplyPreviewProps {
   type: 'SIGNED' | 'ANONYMOUS';
@@ -58,10 +59,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.lightgrey
   },
   containerSigned: {
-    backgroundColor: colors.darkBlue
+    backgroundColor: COLORS.signed_primary
   },
   containerAnon: {
-    backgroundColor: colors.anon_primary
+    backgroundColor: COLORS.anon_primary
   },
   textContainer: {
     flex: 1,

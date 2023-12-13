@@ -4,6 +4,7 @@ import dimen from '../../../utils/dimen';
 import {ANONYMOUS, SIGNED} from '../../../hooks/core/constant';
 import {colors} from '../../../utils/colors';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
+import {COLORS} from '../../../utils/theme';
 
 const AVATAR_SIZE = 24;
 const CONTAINER_LEFT_PADDING = 60;
@@ -54,10 +55,10 @@ export const styles = StyleSheet.create({
     borderRadius: 8
   },
   textContainerSigned: {
-    backgroundColor: colors.darkBlue
+    backgroundColor: COLORS.signed_primary
   },
   textContainerAnon: {
-    backgroundColor: colors.anon_primary
+    backgroundColor: COLORS.anon_primary
   },
   textContainerMyText: {
     borderTopEndRadius: 0

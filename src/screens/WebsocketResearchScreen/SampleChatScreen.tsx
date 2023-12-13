@@ -15,6 +15,7 @@ import useMessageHook from '../../hooks/screen/useMessageHook';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {ANONYMOUS} from '../../hooks/core/constant';
 import {colors} from '../../utils/colors';
+import {COLORS} from '../../utils/theme';
 
 const {height} = Dimensions.get('window');
 
@@ -90,7 +91,7 @@ const SampleChatScreen = () => {
 
   return (
     <>
-      <StatusBar barStyle="light-content" backgroundColor={colors.anon_primary} />
+      <StatusBar barStyle="light-content" backgroundColor={COLORS.anon_primary} />
 
       <View style={styles.keyboardAvoidingView}>
         {selectedChannel ? (

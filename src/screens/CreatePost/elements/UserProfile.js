@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     borderRadius: 16
   },
   anonImageBg: {
-    backgroundColor: colors.anon_primary
+    backgroundColor: COLORS.anon_primary
   },
   containerMessage: {
     flex: 1,
