@@ -15,6 +15,7 @@ import TopicPageStorage from '../../utils/storage/custom/topicPageStorage';
 import dimen from '../../utils/dimen';
 import removePrefixTopic from '../../utils/topics/removePrefixTopic';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
+import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
 import useViewPostTimeHook from '../FeedScreen/hooks/useViewPostTimeHook';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
@@ -78,6 +79,7 @@ const TopicPageScreen = (props) => {
   const {mappingColorFeed} = useCoreFeed();
 
   const {onWillSendViewPostTime} = useViewPostTimeHook(dispatch, timer, viewPostTimeIndex);
+  const {fetchNextFeeds} = useFeedPreloadHook(feeds?.length, () => refreshingData(offset));
 
   const {listRef} = useOnBottomNavigationTabPressHook(LIST_VIEW_TYPE.TIKTOK_SCROLL, onRefresh);
 
@@ -428,7 +430,10 @@ const TopicPageScreen = (props) => {
         snap
         contentOffset={{x: 0, y: topPosition}}
         contentInsetAdjustmentBehavior={feeds?.length > 1 ? 'automatic' : 'never'}
-        onMomentumScrollEnd={(event) => onWillSendViewPostTime(event, feeds)}
+        onMomentumScrollEnd={(event) => {
+          onWillSendViewPostTime(event, feeds);
+          fetchNextFeeds(event);
+        }}
       />
       <ButtonAddPostTopic topicName={topicName} onRefresh={onRefresh} />
       <BlockComponent
