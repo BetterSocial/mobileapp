@@ -561,12 +561,6 @@ const ProfileScreen = ({route}) => {
     await downVote(post);
   };
 
-  const handleOnEndReached = () => {
-    if (!isLastPage) {
-      getMyFeeds(postOffset);
-    }
-  };
-
   function handleRefresh() {
     setLoading(true);
     setIsLastPage(false);
