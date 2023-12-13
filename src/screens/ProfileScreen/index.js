@@ -173,7 +173,6 @@ const ProfileScreen = ({route}) => {
   const [isLoadingUpdateImageCamera, setIsLoadingUpdateImageCamera] = React.useState(false);
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0);
-  const [isLastPage, setIsLastPage] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [isPostOptionModalOpen, setIsOptionModalOpen] = React.useState(false);
   const [selectedPostForOption, setSelectedPostForOption] = React.useState(null);
@@ -275,9 +274,6 @@ const ProfileScreen = ({route}) => {
       const result = await getSelfFeedsInProfile(offset, limit);
       const {data: dataMyFeed} = result;
       const {mapNewData} = mappingColorFeed({dataFeed: dataMyFeed, dataCache: cacheFeed});
-      if (Array.isArray(result.data) && result.data.length === 0) {
-        setIsLastPage(true);
-      }
       if (offset === 0) {
         StorageUtils.myFeeds.set(JSON.stringify(mapNewData));
         setMyProfileFeed(mapNewData, myProfileDispatch);
@@ -563,7 +559,6 @@ const ProfileScreen = ({route}) => {
 
   function handleRefresh() {
     setLoading(true);
-    setIsLastPage(false);
     getMyFeeds(0, LIMIT_PROFILE_FEED);
     reloadFetchAnonymousPost();
     fetchMyProfile(true);
