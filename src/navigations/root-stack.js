@@ -62,7 +62,7 @@ import KeyboardWrapper from './KeyboardWrapper';
 
 const RootStack = createNativeStackNavigator();
 
-export const RootNavigator = ({currentScreen}) => {
+export const RootNavigator = () => {
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const [following, setFollowing] = useRecoilState(followersOrFollowingAtom);
   const loadingStartup = useInitialStartup();
@@ -94,8 +94,6 @@ export const RootNavigator = ({currentScreen}) => {
       unsubscribe();
     };
   }, []);
-
-  const isUnauthenticated = initialStartup.id === null || initialStartup.id === '';
 
   return (
     <LoadingStartupContext.Provider value={loadingStartup.loadingUser}>
@@ -144,7 +142,7 @@ const AuthenticatedNavigator = () => {
 
   const withSafeAreaView = (Component) => {
     return (props) => (
-      <SafeAreaView>
+      <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
         <Component {...props} />
       </SafeAreaView>
     );
@@ -335,7 +333,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="SignedChatScreen"
-          component={withKeyboardWrapper(SignedChatScreen)}
+          component={withSafeAreaView(withKeyboardWrapper(SignedChatScreen))}
           options={{headerShown: false}}
         />
       </AuthenticatedStack.Navigator>
