@@ -91,7 +91,6 @@ const OtherProfile = () => {
   const [otherProfileFeeds, dispatchOtherProfile] = React.useContext(Context).otherProfileFeed;
   const [profile] = React.useContext(Context).profile;
   const [mainFeeds, dispatch] = React.useContext(Context).feeds;
-  const [isLastPage, setIsLastPage] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [initLoading, setInitLoading] = React.useState(true);
   const [isAnonimity, setIsAnonimity] = React.useState(false);
@@ -142,9 +141,6 @@ const OtherProfile = () => {
         dataFeed: feedOtherProfile,
         dataCache: cacheFeed
       });
-      if (Array.isArray(result.data) && result.data.length === 0) {
-        setIsLastPage(true);
-      }
       if (offset === 0) {
         setOtherProfileFeed(mapNewData, dispatchOtherProfile);
         StorageUtils.otherProfileFeed.setForKey(otherId, JSON.stringify(mapNewData));
@@ -621,7 +617,6 @@ const OtherProfile = () => {
   };
 
   const handleRefresh = () => {
-    setIsLastPage(false);
     getOtherFeeds(0);
   };
 
