@@ -12,7 +12,7 @@ import SignedMessageRepo from '../../service/repo/signedMessageRepo';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import {Context} from '../../context';
-import {DELETED_MESSAGE_TEXT} from '../../utils/constants';
+import {DELETED_MESSAGE_TEXT, MESSAGE_TYPE_DELETED} from '../../utils/constants';
 import {ReplyMessage, UseMessageHook} from '../../../types/hooks/screens/useMessageHook.types';
 import {setReplyTarget} from '../../context/actions/chat';
 
@@ -30,6 +30,32 @@ function useMessageHook(): UseMessageHook {
 
   const clearReplyPreview = useCallback(() => {
     setReplyTarget(null, dispatch);
+  }, []);
+
+  const getUserName = (item): string => {
+    if (item?.user?.username !== 'AnonymousUser') {
+      return item?.user?.username;
+    }
+    return `Anonymous ${anon_user_info_emoji_name}`;
+  };
+
+  const replyMessage = useCallback((data, type: 'ANONYMOUS' | 'SIGNED') => {
+    const messageItem: ReplyMessage = {
+      id: data?.id ?? data?.message?.id,
+      user: {username: getUserName(data)},
+      message: data?.text ?? data?.message,
+      message_type: data?.message_type ?? data?.message?.message_type,
+      updated_at: data?.updated_at ?? data?.message?.updated_at,
+      chatType: type
+    };
+    setReplyPreview(messageItem);
+  }, []);
+
+  const copyMessage = useCallback((data) => {
+    const isDeleted = data?.message_type === MESSAGE_TYPE_DELETED;
+    const message = data?.text ?? data?.message;
+    const textToCopy = isDeleted ? '' : message;
+    ShareUtils.copyTextToClipboard(textToCopy);
   }, []);
 
   const deleteMessage = async (messageId: string, type: 'ANONYMOUS' | 'SIGNED', iteration = 0) => {
@@ -65,13 +91,6 @@ function useMessageHook(): UseMessageHook {
     }
   };
 
-  const getUserName = (item): string => {
-    if (item?.user?.username !== 'AnonymousUser') {
-      return item?.user?.username;
-    }
-    return `Anonymous ${anon_user_info_emoji_name}`;
-  };
-
   const onContextMenuPressed = (
     e: NativeSyntheticEvent<ContextMenuOnPressNativeEvent>,
     data,
@@ -81,21 +100,10 @@ function useMessageHook(): UseMessageHook {
     data = data?.message?.user ? data?.message : data;
 
     if (event.index === 0) {
-      const messageItem: ReplyMessage = {
-        id: data?.id ?? data?.message?.id,
-        user: {username: getUserName(data)},
-        message: data?.text ?? data?.message,
-        message_type: data?.message_type ?? data?.message?.message_type,
-        updated_at: data?.updated_at ?? data?.message?.updated_at,
-        chatType: type
-      };
-      setReplyPreview(messageItem);
+      replyMessage(data, type);
     }
     if (event.index === 1) {
-      const isDeleted = data?.message_type === 'deleted';
-      const message = data?.text ?? data?.message;
-      const textToCopy = isDeleted ? '' : message;
-      ShareUtils.copyTextToClipboard(textToCopy);
+      copyMessage(data);
     }
     if (event.index === 2) {
       Alert.alert('Delete Message?', '', [
