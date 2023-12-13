@@ -10,7 +10,11 @@ import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import useUserAuthHook from '../auth/useUserAuthHook';
 import {ANONYMOUS} from '../constant';
 import {ChannelData, ChannelType} from '../../../../types/repo/ChannelData';
-import {DEFAULT_PROFILE_PIC_PATH, DELETED_MESSAGE_TEXT} from '../../../utils/constants';
+import {
+  DEFAULT_PROFILE_PIC_PATH,
+  DELETED_MESSAGE_TEXT,
+  MESSAGE_TYPE_DELETED
+} from '../../../utils/constants';
 import {getAnonymousChatName, getChatName} from '../../../utils/string/StringUtils';
 
 type ChannelCategory = 'SIGNED' | 'ANONYMOUS';
@@ -64,7 +68,7 @@ const useFetchChannelHook = () => {
       channel.myUserId = signedProfileId;
     }
 
-    const isDeletedMessage = channel.firstMessage?.message_type === 'deleted';
+    const isDeletedMessage = channel.firstMessage?.message_type === MESSAGE_TYPE_DELETED;
     if (isDeletedMessage) channel.firstMessage.text = DELETED_MESSAGE_TEXT;
 
     channel.channel = {...channel};
@@ -107,7 +111,7 @@ const useFetchChannelHook = () => {
 
       await Promise.all(
         (channel?.messages || []).map(async (message) => {
-          const isDeletedMessage = message?.message_type === 'deleted';
+          const isDeletedMessage = message?.message_type === MESSAGE_TYPE_DELETED;
           const isDeletedHelper = Boolean(message?.deleted_message_id);
           if (isDeletedMessage && isDeletedHelper) return;
 
@@ -127,7 +131,7 @@ const useFetchChannelHook = () => {
       const isSelfChatChannel = channel?.type === 'messaging' && channel?.members?.length < 2;
       const isCommunityChannel = channel?.type === 'topics';
 
-      const isDeletedMessage = channel?.firstMessage?.type === 'deleted';
+      const isDeletedMessage = channel?.firstMessage?.type === MESSAGE_TYPE_DELETED;
       const hasDeletedMessage = channel?.messages[channel?.messages?.length - 1]?.text
         ?.toLowerCase()
         ?.includes('this message was deleted');

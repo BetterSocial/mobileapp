@@ -3,7 +3,7 @@ import {v4 as uuid} from 'uuid';
 
 import BaseDbSchema from './BaseDbSchema';
 import UserSchema from './UserSchema';
-import {DELETED_MESSAGE_TEXT} from '../../utils/constants';
+import {DELETED_MESSAGE_TEXT, MESSAGE_TYPE_DELETED} from '../../utils/constants';
 import {ModifyAnonymousChatData} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 
 class ChatSchema implements BaseDbSchema {
@@ -359,7 +359,7 @@ class ChatSchema implements BaseDbSchema {
       const resultSet = await db.executeSql(selectQuery, [messageId]);
       const result = resultSet[0].rows.item(0);
       const rawJson = JSON.parse(result.raw_json);
-      rawJson.message_type = 'deleted';
+      rawJson.message_type = MESSAGE_TYPE_DELETED;
       rawJson.text = DELETED_MESSAGE_TEXT;
       const updatedRawJson = JSON.stringify(rawJson);
 
@@ -398,7 +398,7 @@ class ChatSchema implements BaseDbSchema {
           const newJson = {...rawJson};
           newJson.reply_data.text = DELETED_MESSAGE_TEXT;
           newJson.message.reply_data.text = DELETED_MESSAGE_TEXT;
-          newJson.reply_data.message_type = 'deleted';
+          newJson.reply_data.message_type = MESSAGE_TYPE_DELETED;
           newJson.updated = true;
           const updatedRawJson = JSON.stringify(newJson);
 

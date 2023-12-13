@@ -6,6 +6,8 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import IconClear from '../../../assets/icon/IconClear';
 import dimen from '../../../utils/dimen';
 import useMessageHook from '../../../hooks/screen/useMessageHook';
+import {MESSAGE_TYPE_DELETED} from '../../../utils/constants';
+import {SIGNED} from '../../../hooks/core/constant';
 import {ScrollContext} from '../../../hooks/screen/useChatScreenHook';
 import {calculateTime} from '../../../utils/time';
 import {colors} from '../../../utils/colors';
@@ -18,14 +20,14 @@ interface ChatReplyPreviewProps {
 const ChatReplyPreview = ({type}: ChatReplyPreviewProps) => {
   const scrollContext = React.useContext(ScrollContext);
   const {replyPreview, clearReplyPreview} = useMessageHook();
-  const isDeleted = replyPreview?.message_type === 'deleted';
+  const isDeleted = replyPreview?.message_type === MESSAGE_TYPE_DELETED;
 
   const handleTap = () => {
     if (replyPreview?.id) scrollContext?.handleScrollTo(replyPreview?.id);
   };
 
   const textContainerStyle = [
-    type === 'SIGNED' ? styles.containerSigned : styles.containerAnon,
+    type === SIGNED ? styles.containerSigned : styles.containerAnon,
     styles.textContainer
   ];
 
@@ -47,7 +49,7 @@ const ChatReplyPreview = ({type}: ChatReplyPreviewProps) => {
         </View>
 
         <Text style={messageStyle} numberOfLines={1}>
-          {replyPreview?.message}
+          {replyPreview?.message ?? ''}
         </Text>
       </TouchableOpacity>
 

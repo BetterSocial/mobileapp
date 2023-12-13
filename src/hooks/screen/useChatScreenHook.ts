@@ -13,10 +13,13 @@ import UseChatScreenHook from '../../../types/hooks/screens/useChatScreenHook.ty
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import useMessageHook from './useMessageHook';
+import {ANONYMOUS} from '../core/constant';
 import {
   CHANNEL_TYPE_ANONYMOUS,
   CHANNEL_TYPE_GROUP,
-  CHANNEL_TYPE_PERSONAL
+  CHANNEL_TYPE_PERSONAL,
+  MESSAGE_TYPE_REGULAR,
+  MESSAGE_TYPE_REPLY
 } from '../../utils/constants';
 import {getAnonymousUserId, getUserId} from '../../utils/users';
 import {randomString} from '../../utils/string/StringUtils';
@@ -77,7 +80,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     let userId = await getUserId();
     const myAnonymousId = await getAnonymousUserId();
 
-    if (type === 'ANONYMOUS') userId = myAnonymousId;
+    if (type === ANONYMOUS) userId = myAnonymousId;
     if (replyData) json = {reply_data: replyData};
 
     try {
@@ -90,7 +93,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
           selectedChannel?.id,
           message,
           localDb,
-          replyData ? 'reply' : 'regular',
+          replyData ? MESSAGE_TYPE_REPLY : MESSAGE_TYPE_REGULAR,
           'pending',
           json
         );
@@ -114,7 +117,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       }
 
       let response;
-      if (type === 'ANONYMOUS') {
+      if (type === ANONYMOUS) {
         response = await AnonymousMessageRepo.sendAnonymousMessage(
           selectedChannel?.id,
           message,

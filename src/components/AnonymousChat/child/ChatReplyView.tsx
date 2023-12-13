@@ -3,22 +3,22 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import dimen from '../../../utils/dimen';
+import {ChatReplyViewProps} from '../../../../types/component/AnonymousChat/ChatReplyView.types';
+import {
+  MESSAGE_TYPE_DELETED,
+  MESSAGE_TYPE_REPLY,
+  MESSAGE_TYPE_REPLY_PROMPT
+} from '../../../utils/constants';
 import {SIGNED} from '../../../hooks/core/constant';
 import {ScrollContext} from '../../../hooks/screen/useChatScreenHook';
 import {calculateTime} from '../../../utils/time';
 import {colors} from '../../../utils/colors';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
 
-interface ChatReplyViewProps {
-  type: 'SIGNED' | 'ANONYMOUS';
-  messageType: string;
-  replyData;
-}
-
 const ChatReplyView = ({type, messageType, replyData}: ChatReplyViewProps) => {
   const scrollContext = React.useContext(ScrollContext);
-  const isReply = messageType === 'reply';
-  const isReplyPrompt = messageType === 'reply_prompt';
+  const isReply = messageType === MESSAGE_TYPE_REPLY;
+  const isReplyPrompt = messageType === MESSAGE_TYPE_REPLY_PROMPT;
   if (!isReply && !isReplyPrompt) return null;
   if (!replyData?.message) return null;
 
@@ -33,7 +33,10 @@ const ChatReplyView = ({type, messageType, replyData}: ChatReplyViewProps) => {
     type === SIGNED ? styles.containerSigned : styles.containerAnon
   ];
 
-  const textStyle = [styles.text, replyData?.message_type === 'deleted' && styles.deletedText];
+  const textStyle = [
+    styles.text,
+    replyData?.message_type === MESSAGE_TYPE_DELETED && styles.deletedText
+  ];
 
   return (
     <TouchableOpacity

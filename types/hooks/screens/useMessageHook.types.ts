@@ -9,6 +9,7 @@ interface AnimatedStyle {
 }
 
 export interface ReplyUser {
+  name?: string;
   username: string;
 }
 
@@ -16,6 +17,7 @@ export interface ReplyMessage {
   id: string;
   user: ReplyUser;
   message: string;
+  text?: string;
   message_type: MessageType;
   updated_at: string;
   chatType?: 'ANONYMOUS' | 'SIGNED';

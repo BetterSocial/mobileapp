@@ -25,7 +25,11 @@ import {
 } from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
 import {ChannelType} from '../../../types/repo/ChannelData';
 import {Context} from '../../context';
-import {DEFAULT_PROFILE_PIC_PATH, DELETED_MESSAGE_TEXT} from '../../utils/constants';
+import {
+  DEFAULT_PROFILE_PIC_PATH,
+  DELETED_MESSAGE_TEXT,
+  MESSAGE_TYPE_DELETED
+} from '../../utils/constants';
 import {GetstreamFeedListenerObject} from '../../../types/hooks/core/getstreamFeedListener/feedListenerObject';
 import {GetstreamMessage, GetstreamWebsocket, MyChannelType} from './websocket/types.d';
 import {InitialStartupAtom} from '../../service/initialStartup';
@@ -139,13 +143,9 @@ const useCoreChatSystemHook = () => {
     return websocketData;
   };
 
-  const saveChannelListData = async (
-    websocketData: GetstreamWebsocket,
-    channelCategory: MyChannelType
-  ) => {
-    if (!localDb) return;
+  const helperWebsocketForDeletedMessage = async (websocketData: GetstreamWebsocket) => {
     const websocketMessage = websocketData?.message;
-    const isDeletedMessage = websocketMessage?.message_type === 'deleted';
+    const isDeletedMessage = websocketMessage?.message_type === MESSAGE_TYPE_DELETED;
 
     if (isDeletedMessage) {
       const selectedChat = await ChatSchema.getByid(
@@ -172,10 +172,20 @@ const useCoreChatSystemHook = () => {
       if (replyTarget && replyTarget?.id === websocketMessage?.deleted_message_id) {
         const newReplyPreview = {...replyTarget};
         newReplyPreview.message = DELETED_MESSAGE_TEXT;
-        newReplyPreview.message_type = 'deleted';
+        newReplyPreview.message_type = MESSAGE_TYPE_DELETED;
         setReplyTarget(newReplyPreview, dispatch);
       }
     }
+  };
+
+  const saveChannelListData = async (
+    websocketData: GetstreamWebsocket,
+    channelCategory: MyChannelType
+  ) => {
+    if (!localDb) return;
+    const websocketMessage = websocketData?.message;
+
+    helperWebsocketForDeletedMessage(websocketData);
 
     if (channelCategory === ANONYMOUS) {
       const chatName = await getAnonymousChatName(websocketData?.channel?.members);

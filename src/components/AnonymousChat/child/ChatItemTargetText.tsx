@@ -8,6 +8,13 @@ import {Text, View, ViewStyle} from 'react-native';
 
 import ChatReplyView from './ChatReplyView';
 import useMessageHook from '../../../hooks/screen/useMessageHook';
+import {
+  CONTEXT_MENU_COPY,
+  CONTEXT_MENU_REPLY,
+  MESSAGE_TYPE_DELETED,
+  MESSAGE_TYPE_REPLY,
+  MESSAGE_TYPE_REPLY_PROMPT
+} from '../../../utils/constants';
 import {ChatItemMyTextProps} from '../../../../types/component/AnonymousChat/BaseChatItem.types';
 import {MessageType} from '../../../../types/hooks/screens/useMessageHook.types';
 import {ScrollContext} from '../../../hooks/screen/useChatScreenHook';
@@ -50,7 +57,7 @@ const ChatItemTargetText = ({
     animatedPulseStyle
   } = useMessageHook();
   const scrollContext = React.useContext(ScrollContext);
-  const swipeableRef = React.useRef<Swipeable | null>(null);
+  const swipeableRef = React.useRef<Swipeable>(null);
 
   React.useEffect(() => {
     if (scrollContext?.selectedMessageId === data?.id) {
@@ -62,35 +69,38 @@ const ChatItemTargetText = ({
     }
   }, [scrollContext?.selectedMessageId]);
 
-  const isReply = messageType === 'reply';
-  const isReplyPrompt = messageType === 'reply_prompt';
+  const isReply = messageType === MESSAGE_TYPE_REPLY;
+  const isReplyPrompt = messageType === MESSAGE_TYPE_REPLY_PROMPT;
   const isShowUserInfo = !isContinuous || isReplyPrompt || isReply;
 
   const contextMenuActions: ContextMenuAction[] = [
-    {title: 'Reply', systemIcon: 'arrow.turn.up.left'}
+    {title: CONTEXT_MENU_REPLY, systemIcon: 'arrow.turn.up.left'}
   ];
 
-  if (messageType !== 'deleted') {
-    contextMenuActions.push({title: 'Copy Message', systemIcon: 'square.on.square'});
+  if (messageType !== MESSAGE_TYPE_DELETED) {
+    contextMenuActions.push({title: CONTEXT_MENU_COPY, systemIcon: 'square.on.square'});
   }
 
   const renderAvatar = React.useCallback(() => {
     if (!isShowUserInfo) return <View style={styles.avatar} />;
     return <View style={styles.mrBuble}>{avatar}</View>;
-  }, []);
+  }, [isShowUserInfo, avatar]);
 
-  const onSwipeToReply = (direction) => {
-    if (direction === 'right') return;
-    if (swipeableRef.current) swipeableRef.current?.close();
-    setReplyPreview({
-      id: data?.id ?? data?.message?.id,
-      user: {username},
-      message,
-      message_type: messageType as MessageType,
-      updated_at: time,
-      chatType
-    });
-  };
+  const onSwipeToReply = React.useCallback(
+    (direction: 'left' | 'right') => {
+      if (direction === 'right') return;
+      if (swipeableRef.current) swipeableRef.current?.close();
+      setReplyPreview({
+        id: data?.id ?? data?.message?.id,
+        user: {username},
+        message,
+        message_type: messageType as MessageType,
+        updated_at: time,
+        chatType
+      });
+    },
+    [data, username, time, message, messageType, chatType]
+  );
 
   return (
     <Swipeable

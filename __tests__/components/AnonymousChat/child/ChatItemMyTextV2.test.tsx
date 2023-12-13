@@ -8,6 +8,7 @@ import {act, fireEvent, render} from '@testing-library/react-native';
 import ChatItemMyTextV2 from '../../../../src/components/AnonymousChat/child/ChatItemMyTextV2';
 import {Context} from '../../../../src/context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../../../src/utils/constants';
+import {SIGNED} from '../../../../src/hooks/core/constant';
 
 jest.spyOn(React, 'useRef').mockReturnValue({current: {close: jest.fn()}});
 
@@ -20,9 +21,11 @@ const avatar = (
 
 let setReplyPreview;
 let contextValue;
+let timestamp;
 
 beforeEach(() => {
   setReplyPreview = jest.fn();
+  timestamp = new Date().toISOString();
   contextValue = {
     chat: [{replyTarget: null}, setReplyPreview],
     profile: [{myProfile: {}}]
@@ -41,10 +44,17 @@ const renderChatItemMyTextV2 = (isContinous = false) =>
         username="username"
         isContinuous={isContinous}
         message="message"
-        time="time"
-        chatType="SIGNED"
+        time={timestamp}
+        chatType={SIGNED}
         messageType="regular"
-        data={{}}
+        data={{
+          id: 'id986',
+          user: {username: 'username'},
+          message: 'message',
+          message_type: 'regular',
+          updated_at: timestamp,
+          chatType: SIGNED
+        }}
       />
     </Context.Provider>
   );
@@ -52,10 +62,21 @@ const renderChatItemMyTextV2 = (isContinous = false) =>
 describe('TESTING ChatItemMyTextV2', () => {
   it('should call setReplyPreview when swiped', () => {
     const {getByTestId} = renderChatItemMyTextV2();
+    const expected = {
+      payload: {
+        id: 'id986',
+        message: 'message',
+        message_type: 'regular',
+        chatType: 'SIGNED',
+        updated_at: timestamp,
+        user: {username: 'username'}
+      },
+      type: 'SET_REPLY_TARGET'
+    };
     act(() => {
       fireEvent(getByTestId('swipeable'), 'onSwipeableOpen', 'left');
     });
-    expect(setReplyPreview).toHaveBeenCalled();
+    expect(setReplyPreview).toHaveBeenCalledWith(expected);
   });
 
   it('should display the username and time when isContinuous is false', () => {

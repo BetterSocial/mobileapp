@@ -2,6 +2,7 @@ import {StyleSheet} from 'react-native';
 
 import dimen from '../../../utils/dimen';
 import {ANONYMOUS, SIGNED} from '../../../hooks/core/constant';
+import {MESSAGE_TYPE_DELETED} from '../../../utils/constants';
 import {colors} from '../../../utils/colors';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
 
@@ -180,6 +181,6 @@ export const textStyle = (isMyText: boolean) => [
 export const messageStyle = (isMyText: boolean, messageType?: string) => [
   styles.text,
   isMyText ? {color: colors.white} : {color: colors.black},
-  isMyText && messageType === 'deleted' && styles.deletedMyText,
-  !isMyText && messageType === 'deleted' && styles.deletedTargetText
+  isMyText && messageType === MESSAGE_TYPE_DELETED && styles.deletedMyText,
+  !isMyText && messageType === MESSAGE_TYPE_DELETED && styles.deletedTargetText
 ];
