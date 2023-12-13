@@ -4,6 +4,7 @@ import axios from 'axios';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import StorageUtils from '../../../utils/storage';
+import useFeedPreloadHook from './useFeedPreloadHook';
 import useViewPostTimeHook from './useViewPostTimeHook';
 import {Context} from '../../../context';
 import {FEEDS_CACHE} from '../../../utils/cache/constant';
@@ -34,6 +35,10 @@ const useCoreFeed = () => {
     timer,
     viewPostTimeIndex
   );
+
+  const {fetchNextFeeds} = useFeedPreloadHook(feeds.length, () => {
+    getDataFeeds(postOffset, false, nextTargetFeed);
+  });
 
   const getDataFeeds = async (offsetFeed = 0, useLoading = false, targetFeed = null) => {
     setCountStack(null);
@@ -241,6 +246,7 @@ const useCoreFeed = () => {
     viewPostTimeIndex,
 
     checkCacheFeed,
+    fetchNextFeeds,
     getDataFeeds,
     handleDataFeeds,
     handleScroll,
