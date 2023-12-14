@@ -182,7 +182,7 @@ describe('Logic feed should run correctly', () => {
   it('initialSetup should run correctly', async () => {
     const {result} = renderHook(useFeed);
     await result.current.setTotalVote(1);
-    expect(result.current.handleTextCountStyle()).toEqual('#00ADB5');
+    expect(result.current.handleTextCountStyle()).toEqual('#003848');
     await result.current.setTotalVote(-1);
     expect(result.current.handleTextCountStyle()).toEqual('#FF2E63');
     await result.current.setTotalVote(0);

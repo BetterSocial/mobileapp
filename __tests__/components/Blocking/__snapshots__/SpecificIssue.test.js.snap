@@ -233,7 +233,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
               <Text
                 style={
                   Object {
-                    "color": "#ffffff",
+                    "color": "#FFFFFF",
                     "fontFamily": "Inter-SemiBold",
                     "fontSize": 18,
                   }

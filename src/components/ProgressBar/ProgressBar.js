@@ -2,6 +2,7 @@ import * as React from 'react';
 import {LogBox, View, StyleSheet, Animated} from 'react-native';
 
 import {colors} from '../../utils/colors';
+import {COLORS} from '../../utils/theme';
 
 function useInterval(callback, delay) {
   const savedCallback = React.useRef();
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
     borderRadius: 5
   },
   animated: (width) => ({
-    backgroundColor: colors.signed_primary,
+    backgroundColor: COLORS.signed_primary,
     borderRadius: 5,
     width
   })

@@ -5,7 +5,7 @@ exports[`TESTING AnonymousChatHeader RENDER should match snapshot 1`] = `
   style={
     Object {
       "alignItems": "center",
-      "backgroundColor": "#00ADB5",
+      "backgroundColor": "#003848",
       "display": "flex",
       "flexDirection": "row",
       "height": 50,

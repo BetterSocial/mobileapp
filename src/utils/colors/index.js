@@ -1,6 +1,6 @@
 // https://chir.ag/projects/name-that-color/
 export const colors = {
-  bondi_blue: '#00ADB5',
+  bondi_blue: '#003848',
   white: '#ffffff',
   black: '#000000',
   emperor: '#4F4F4F',

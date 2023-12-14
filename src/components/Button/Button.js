@@ -2,9 +2,9 @@ import * as React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
 
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import dimen from '../../utils/dimen';
+import {COLORS} from '../../utils/theme';
 
 const Btn = (props) => {
   const disable = props.disabled ? props.disabled : false;
@@ -28,7 +28,7 @@ Btn.propTypes = {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: colors.signed_primary,
+    backgroundColor: COLORS.signed_primary,
     paddingHorizontal: dimen.normalizeDimen(25),
     borderRadius: dimen.normalizeDimen(8),
     flexDirection: 'row',
@@ -37,12 +37,12 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   buttonText: {
-    color: colors.white,
+    color: COLORS.white,
     fontSize: 18,
     fontFamily: fonts.inter[600]
   },
   disabledbutton: {
-    backgroundColor: colors.gray1,
+    backgroundColor: COLORS.gray9,
     borderRadius: dimen.normalizeDimen(8)
   }
 });

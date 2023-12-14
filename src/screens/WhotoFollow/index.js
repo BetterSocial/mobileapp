@@ -278,7 +278,7 @@ const WhotoFollow = () => {
           {'Find interesting people to follow.\nYou can edit this anytime.'}
         </Text>
       </View>
-      {isLoading ? <ActivityIndicator size="small" color={colors.signed_primary} /> : null}
+      {isLoading ? <ActivityIndicator size="small" color={COLORS.signed_primary} /> : null}
       {isRecyclerViewShown ? (
         <RecyclerListView
           style={styles.recyclerview(bottom)}

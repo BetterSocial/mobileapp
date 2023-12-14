@@ -200,37 +200,37 @@ const ChooseUsername = () => {
     switch (type) {
       case 'fetch':
         return (
-          <Text style={styles.textMessage(colors.silver)}>
+          <Text style={styles.textMessage(COLORS.silver)}>
             {` ${StringConstant.onboardingChooseUsernameLabelCheckingAvailability}`}
           </Text>
         );
       case 'available':
         return (
-          <Text style={styles.textMessage(colors.signed_primary)}>
+          <Text style={styles.textMessage(COLORS.signed_primary)}>
             {` ${StringConstant.onboardingChooseUsernameLabelUserAvailable(user)}`}
           </Text>
         );
       case 'notavailable':
         return (
-          <Text style={styles.textMessage(colors.red)}>
+          <Text style={styles.textMessage(COLORS.red)}>
             {` ${StringConstant.onboardingChooseUsernameLabelUserTaken(user)}`}
           </Text>
         );
       case 'typing':
         return (
-          <Text style={styles.textMessage(colors.red)}>
+          <Text style={styles.textMessage(COLORS.red)}>
             {` ${StringConstant.onboardingChooseUsernameLabelMinimumChar}`}
           </Text>
         );
       case 'max':
         return (
-          <Text style={styles.textMessage(colors.red)}>
+          <Text style={styles.textMessage(COLORS.red)}>
             {` ${StringConstant.onboardingChooseUsernameLabelMaximumChar}`}
           </Text>
         );
       case 'nan':
         return (
-          <Text style={styles.textMessage(colors.red)}>
+          <Text style={styles.textMessage(COLORS.red)}>
             {` ${StringConstant.onboardingChooseUsernameLabelJustANumber}`}
           </Text>
         );
@@ -350,14 +350,14 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: dimen.normalizeDimen(1),
     borderRadius: dimen.normalizeDimen(8),
-    borderColor: colors.silver,
+    borderColor: COLORS.silver,
     paddingHorizontal: dimen.normalizeDimen(23),
     paddingVertical: dimen.normalizeDimen(13),
     width: '100%'
   },
   container: {
     flex: 1,
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   btnNext: {marginTop: dimen.normalizeDimen(16)},
   gap: {flex: 1},
