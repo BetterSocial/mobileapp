@@ -13,7 +13,7 @@ Array [
       style={
         Object {
           "backgroundColor": "#FFFFFF",
-          "borderBottomColor": "#E8EBED",
+          "borderBottomColor": "#E0E0E0",
           "borderBottomWidth": 1,
           "flexDirection": "row",
           "left": 0,
@@ -114,7 +114,7 @@ Array [
                 "marginRight": 4,
               },
               Object {
-                "color": "#003848",
+                "color": "#107793",
               },
             ]
           }
@@ -171,8 +171,8 @@ Array [
           style={
             Object {
               "alignItems": "center",
-              "backgroundColor": "#ffffff",
-              "borderBottomColor": "#003848",
+              "backgroundColor": "#FFFFFF",
+              "borderBottomColor": "#107793",
               "borderBottomWidth": 2,
               "flexDirection": "row",
               "height": 38.400000000000006,
@@ -198,7 +198,7 @@ Array [
                     "width": 16,
                   },
                   Object {
-                    "backgroundColor": "#003848",
+                    "backgroundColor": "#107793",
                   },
                 ],
               ]
@@ -219,7 +219,7 @@ Array [
             numberOfLines={1}
             style={
               Object {
-                "color": "#003848",
+                "color": "#107793",
                 "fontFamily": "Inter-Medium",
                 "fontSize": 12.600000000000001,
               }

@@ -34,6 +34,6 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: 14,
     lineHeight: 20,
-    color: COLORS.holytosca
+    color: COLORS.holyTosca
   }
 });

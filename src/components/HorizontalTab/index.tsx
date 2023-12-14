@@ -3,7 +3,6 @@ import * as React from 'react';
 import {Dimensions, StyleSheet, View} from 'react-native';
 
 import CustomPressable from '../CustomPressable';
-import {colors} from '../../utils/colors';
 import {COLORS} from '../../utils/theme';
 
 const {width} = Dimensions.get('screen');
@@ -18,17 +17,17 @@ const HorizontalTab = ({selectedTab, onSelectedTabChange, tabs = []}: Horizontal
   const styles = StyleSheet.create({
     tabs: {
       width,
-      borderBottomColor: colors.alto,
+      borderBottomColor: COLORS.alto,
       borderBottomWidth: 1,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: colors.white,
+      backgroundColor: COLORS.white,
       display: 'flex'
     },
     tabsFixed: {
       width,
-      borderBottomColor: colors.alto,
+      borderBottomColor: COLORS.alto,
       borderBottomWidth: 1,
       paddingLeft: 20,
       paddingRight: 20,
@@ -36,7 +35,7 @@ const HorizontalTab = ({selectedTab, onSelectedTabChange, tabs = []}: Horizontal
       position: 'absolute',
       top: 42,
       zIndex: 2000,
-      backgroundColor: colors.white
+      backgroundColor: COLORS.white
     },
     tabItem: {
       display: 'flex',
@@ -44,7 +43,7 @@ const HorizontalTab = ({selectedTab, onSelectedTabChange, tabs = []}: Horizontal
       alignItems: 'center',
       justifyContent: 'center',
       height: 48,
-      borderBottomColor: colors.bondi_blue,
+      borderBottomColor: COLORS.holyTosca,
       opacity: 0.1
     },
     activeTabItem: {
@@ -59,7 +58,7 @@ const HorizontalTab = ({selectedTab, onSelectedTabChange, tabs = []}: Horizontal
     childTabContainer: {
       display: 'flex',
       maxWidth: width / tabs.length
-      //   backgroundColor: colors.red
+      //   backgroundColor: COLORS.red
     }
   });
 
@@ -73,7 +72,7 @@ const HorizontalTab = ({selectedTab, onSelectedTabChange, tabs = []}: Horizontal
             index === selectedTab
               ? [
                   styles.activeTabItem,
-                  {borderBottomColor: index === 0 ? COLORS.signed_primary : COLORS.anon_primary}
+                  {borderBottomColor: index === 0 ? COLORS.blue : COLORS.holyTosca}
                 ]
               : styles.tabItem
           }>

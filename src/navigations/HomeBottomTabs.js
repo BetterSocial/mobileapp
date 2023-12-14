@@ -22,7 +22,6 @@ import useRootChannelListHook from '../hooks/screen/useRootChannelListHook';
 import TokenStorage, {ITokenEnum} from '../utils/storage/custom/tokenStorage';
 import {ChannelListScreen, FeedScreen, NewsScreen, ProfileScreen} from '../screens';
 import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
-import {colors} from '../utils/colors';
 import {getAnonymousUserId, getUserId} from '../utils/users';
 import {COLORS} from '../utils/theme';
 
@@ -224,7 +223,7 @@ function HomeBottomTabs({navigation}) {
       return (
         <View style={styles.center}>
           {focused ? (
-            <AnonymousChatFill fill={COLORS.anon_primary} stroke={COLORS.anon_primary} />
+            <AnonymousChatFill fill={COLORS.holyTosca} stroke={COLORS.holyTosca} />
           ) : (
             <AnonymousChatOutline fill={color} />
           )}
@@ -270,7 +269,7 @@ function HomeBottomTabs({navigation}) {
 
   const menuIndicator = (nav, route) => {
     const isAnonChatMenu = route.name === 'AnonymousChannelList';
-    const activeColor = isAnonChatMenu ? COLORS.anon_primary : COLORS.signed_primary;
+    const activeColor = isAnonChatMenu ? COLORS.holyTosca : COLORS.blue;
     const style = {backgroundColor: nav.isFocused() ? activeColor : 'transparent'};
     return <View style={[styles.badge, style]} />;
   };
@@ -280,14 +279,14 @@ function HomeBottomTabs({navigation}) {
       <Tab.Navigator
         initialRouteName={getInitialRouteName()}
         tabBarOptions={{
-          inactiveTintColor: colors.gray1,
+          inactiveTintColor: COLORS.gray9,
           safeAreaInsets: {top: 0, bottom: 0, left: 0, right: 0}
         }}
         screenOptions={({navigation: nav, route}) => ({
           tabBarLabel: () => menuIndicator(nav, route),
           tabBarIcon: ({focused, color}) => renderTabBarIcon(route, focused, color),
           tabBarActiveTintColor:
-            route.name === 'AnonymousChannelList' ? COLORS.anon_primary : COLORS.signed_primary
+            route.name === 'AnonymousChannelList' ? COLORS.holyTosca : COLORS.blue
         })}>
         <Tab.Screen
           name="SignedChannelList"

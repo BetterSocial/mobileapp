@@ -3,7 +3,6 @@ import FastImage from 'react-native-fast-image';
 import {StyleSheet, Text, View} from 'react-native';
 
 import dimen from '../../utils/dimen';
-import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 
@@ -26,14 +25,14 @@ const ChannelListHeaderItem = (props: ChannelListTabItemProps) => {
       paddingRight: dimen.normalizeDimen(30),
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: colors.white,
+      backgroundColor: COLORS.white,
       borderBottomWidth: 2,
-      borderBottomColor: type === 'SIGNED' ? COLORS.signed_primary : COLORS.anon_primary
+      borderBottomColor: type === 'SIGNED' ? COLORS.blue : COLORS.holyTosca
     },
     name: {
       fontFamily: fonts.inter[500],
       fontSize: normalizeFontSize(14),
-      color: type === 'SIGNED' ? COLORS.signed_primary : COLORS.anon_primary
+      color: type === 'SIGNED' ? COLORS.blue : COLORS.holyTosca
     },
     picture: {
       width: dimen.normalizeDimen(20),
@@ -42,7 +41,7 @@ const ChannelListHeaderItem = (props: ChannelListTabItemProps) => {
       borderRadius: dimen.normalizeDimen(10)
     },
     anonBgColor: {
-      backgroundColor: COLORS.anon_primary
+      backgroundColor: COLORS.holyTosca
     }
   });
 

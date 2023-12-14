@@ -11,7 +11,6 @@ import IcArrowBackWhite from '../../assets/arrow/Ic_arrow_back_white';
 import dimen from '../../utils/dimen';
 import {ANONYMOUS, SIGNED} from '../../hooks/core/constant';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 
@@ -22,7 +21,7 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: colors.alto
+    borderBottomColor: COLORS.alto
   },
   backButton: {
     paddingLeft: 22,
@@ -75,13 +74,13 @@ const ChatDetailHeader = ({
   channel
 }) => {
   const contentColor = () => {
-    if (type === SIGNED) return colors.black;
-    return colors.white;
+    if (type === SIGNED) return COLORS.black;
+    return COLORS.white;
   };
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      backgroundColor: withTiming(type === ANONYMOUS ? COLORS.anon_primary : colors.white, {
+      backgroundColor: withTiming(type === ANONYMOUS ? COLORS.holyTosca : COLORS.white, {
         duration: 400,
         easing: Easing.inOut(Easing.quad)
       })

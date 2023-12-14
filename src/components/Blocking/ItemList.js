@@ -3,7 +3,6 @@ import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 
@@ -21,7 +20,7 @@ const ItemList = ({label, active, onSelect, id}) => {
   return (
     <TouchableOpacity style={styles.container} onPress={() => onActive()}>
       <Text style={styles.label}>{label}</Text>
-      {active && <Icon name="check-circle" size={20} color={colors.red} />}
+      {active && <Icon name="check-circle" size={20} color={COLORS.red} />}
     </TouchableOpacity>
   );
 };
@@ -35,13 +34,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingRight: 20,
+    paddingRight: 20
   },
   label: {
     fontFamily: fonts.inter[400],
     fontSize: 14,
     paddingHorizontal: 20,
     color: COLORS.black,
-    flex: 1,
-  },
+    flex: 1
+  }
 });

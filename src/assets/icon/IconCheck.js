@@ -4,7 +4,7 @@ import {COLORS} from '../../utils/theme';
 
 const IconCheck = (props) => (
   <Svg width={32} height={32} fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-    <Rect width={32} height={32} rx={16} fill={COLORS.signed_primary} />
+    <Rect width={32} height={32} rx={16} fill={COLORS.blue} />
     <Path
       fillRule="evenodd"
       clipRule="evenodd"

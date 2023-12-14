@@ -6,7 +6,6 @@ import AnonymousProfile from '../../../assets/images/AnonymousProfile.png';
 import AnonymousUsername from '../../../components/AnonymousUsername';
 import {ToggleSwitchAnon} from '../../../hooks/useToggleColors';
 import {POST_VERSION} from '../../../utils/constants';
-import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
 
@@ -20,7 +19,7 @@ const styles = StyleSheet.create({
   },
   profile: {flexDirection: 'row', alignItems: 'center'},
   username: {
-    color: colors.black,
+    color: COLORS.black,
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 14
@@ -28,7 +27,7 @@ const styles = StyleSheet.create({
   desc: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.gray
+    color: COLORS.gray8
   },
   image: {
     marginRight: 8,
@@ -37,7 +36,7 @@ const styles = StyleSheet.create({
     borderRadius: 16
   },
   anonImageBg: {
-    backgroundColor: COLORS.anon_primary
+    backgroundColor: COLORS.holyTosca
   },
   containerMessage: {
     flex: 1,

@@ -2,7 +2,6 @@ import {StyleSheet} from 'react-native';
 
 import dimen from '../../../utils/dimen';
 import {ANONYMOUS, SIGNED} from '../../../hooks/core/constant';
-import {colors} from '../../../utils/colors';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
 
@@ -51,14 +50,14 @@ export const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: dimen.normalizeDimen(6),
     paddingVertical: dimen.normalizeDimen(4),
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     borderRadius: 8
   },
   textContainerSigned: {
-    backgroundColor: COLORS.signed_primary
+    backgroundColor: COLORS.blue
   },
   textContainerAnon: {
-    backgroundColor: COLORS.anon_primary
+    backgroundColor: COLORS.holyTosca
   },
   textContainerMyText: {
     borderTopEndRadius: 0
@@ -81,7 +80,7 @@ export const styles = StyleSheet.create({
     marginBottom: 4
   },
   deletedText: {
-    color: colors.light_silver,
+    color: COLORS.lightSilver,
     fontSize: normalizeFontSize(15),
     fontStyle: 'italic'
   },
@@ -99,10 +98,10 @@ export const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   dotMyText: {
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   dotTargetText: {
-    backgroundColor: colors.black
+    backgroundColor: COLORS.black
   },
   timeText: {
     fontFamily: fonts.inter[200],
@@ -132,7 +131,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 20,
-    backgroundColor: colors.lightgrey
+    backgroundColor: COLORS.lightgrey
   },
   ml8: {
     marginLeft: dimen.normalizeDimen(8)
@@ -170,11 +169,11 @@ export const dotStyle = (isMyText: boolean) => [
 ];
 
 export const textStyle = (isMyText: boolean) => [
-  isMyText ? {color: colors.white} : {color: colors.black}
+  isMyText ? {color: COLORS.white} : {color: COLORS.black}
 ];
 
 export const messageStyle = (isMyText: boolean, messageType?: string) => [
   styles.text,
-  isMyText ? {color: colors.white} : {color: colors.black},
+  isMyText ? {color: COLORS.white} : {color: COLORS.black},
   messageType === 'deleted' && styles.deletedText
 ];

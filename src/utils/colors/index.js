@@ -8,12 +8,12 @@ export const colors = {
   gray1: '#9B9FA9',
   lightgrey: '#F5F5F5',
   concrete: '#F2F2F2',
-  mine_shaft: '#333333',
+  mineShaft: '#333333',
   bunting: '#11243D',
   alto: '#E8EBED',
   porcelain: '#ecf0f1',
   silver: '#BDBDBD',
-  french_pass: '#b6e4fd',
+  frenchPass: '#b6e4fd',
   pattens_blue: '#ddf2fe',
   blue: '#4782D7',
   lightblue: '#55C2FF',
@@ -37,7 +37,7 @@ export const colors = {
   anon_primary: '#003848',
   anon_secondary: '#154B5B',
   radical_red: '#FF3466',
-  light_silver: '#D2D4DB'
+  lightSilver: '#D2D4DB'
 };
 
 export const hexToRgb = (hex, opacity = 1) => {

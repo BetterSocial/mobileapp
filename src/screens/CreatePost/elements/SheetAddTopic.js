@@ -6,7 +6,6 @@ import {ScrollView, StyleSheet, Text, TextInput, TouchableNativeFeedback, View} 
 import Card from './Card';
 import TopicItem from '../../../components/TopicItem';
 import {Button} from '../../../components/Button';
-import {colors} from '../../../utils/colors';
 import {convertString} from '../../../utils/string/StringUtils';
 import {fonts} from '../../../utils/fonts';
 import {getTopics} from '../../../service/topics';
@@ -204,7 +203,7 @@ const styles = StyleSheet.create({
     paddingBottom: 38
   },
   content: {
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     paddingHorizontal: 16,
     paddingTop: 17,
     minHeight: 150,
@@ -213,13 +212,13 @@ const styles = StyleSheet.create({
     paddingBottom: 16
   },
   title: {
-    color: colors.black,
+    color: COLORS.black,
     fontFamily: fonts.inter[600],
     fontSize: 18,
     fontWeight: 'bold'
   },
   containerTag: {
-    backgroundColor: colors.white,
+    backgroundColor: COLORS.white,
     borderRadius: 14,
     paddingHorizontal: 16,
     paddingVertical: 7.33,
@@ -251,7 +250,7 @@ const styles = StyleSheet.create({
   textDesc: {
     fontSize: 10,
     fontFamily: fonts.inter[400],
-    color: colors.gray,
+    color: COLORS.gray8,
     marginTop: 5,
     marginBottom: 21
   },
@@ -260,7 +259,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20
   },
   draggableIcon: {
-    backgroundColor: colors.alto
+    backgroundColor: COLORS.alto
   },
   topicItem: {
     marginBottom: 12

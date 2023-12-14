@@ -9,7 +9,6 @@ import DefaultChatGroupProfilePicture from '../../../assets/images/default-chat-
 import GroupIcon from '../../../assets/group-icon.png';
 import Hashtag from '../../../assets/hashtag.png';
 import {CHANNEL_TYPE_ANONYMOUS} from '../../../utils/constants';
-import {colors} from '../../../utils/colors';
 import {getGroupMemberCount} from '../../../utils/string/StringUtils';
 import {COLORS} from '../../../utils/theme';
 
@@ -175,7 +174,7 @@ const styles = StyleSheet.create({
   typeContainer: (background) => ({
     height: 24,
     width: 24,
-    backgroundColor: background || colors.bondi_blue,
+    backgroundColor: background || COLORS.holyTosca,
     borderRadius: 12,
     position: 'absolute',
     bottom: -6,
@@ -184,14 +183,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
     borderWidth: 1,
-    borderColor: 'white'
+    borderColor: COLORS.white
   }),
   iconChatStyle: {
     height: 12,
     width: 12
   },
   whiteText: {
-    color: 'white',
+    color: COLORS.white,
     textAlign: 'center',
     fontSize: 12,
     padding: 0,
@@ -203,7 +202,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     right: 0,
     borderWidth: 2,
-    borderColor: colors.white,
+    borderColor: COLORS.white,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center'

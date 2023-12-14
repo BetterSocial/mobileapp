@@ -10,7 +10,6 @@ import GlobalButton from '../Button/GlobalButton';
 import MemoIc_arrow_back_white from '../../assets/arrow/Ic_arrow_back_white';
 import {CHANNEL_TYPE_ANONYMOUS} from '../../utils/constants';
 import {Context} from '../../context';
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {getChatName, getGroupMemberCount} from '../../utils/string/StringUtils';
 import {COLORS} from '../../utils/theme';
@@ -128,7 +127,7 @@ export default Header;
 const styles = StyleSheet.create({
   container: {
     height: 50,
-    backgroundColor: colors.holytosca,
+    backgroundColor: COLORS.holyTosca,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 22,

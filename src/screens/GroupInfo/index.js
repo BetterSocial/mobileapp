@@ -29,7 +29,6 @@ import useGroupInfo from './hooks/useGroupInfo';
 import {CHANNEL_TYPE_ANONYMOUS} from '../../utils/constants';
 import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
-import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 
@@ -124,7 +123,7 @@ const GroupInfo = () => {
     }
     return (
       <View testID="image5" style={styles.btnUpdatePhoto}>
-        <MemoIc_pencil width={50} height={50} color={colors.gray1} />
+        <MemoIc_pencil width={50} height={50} color={COLORS.gray9} />
       </View>
     );
   };
@@ -197,7 +196,7 @@ const GroupInfo = () => {
                   </Text>
                 </View>
                 <TouchableOpacity onPress={handleOnNameChange} style={styles.pencilIconTouchable}>
-                  <MemoIc_pencil width={20} height={20} color={colors.gray1} />
+                  <MemoIc_pencil width={20} height={20} color={COLORS.gray9} />
                 </TouchableOpacity>
               </View>
               <View style={styles.lineTop} />
@@ -321,11 +320,11 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(20),
-    color: colors.holytosca
+    color: COLORS.holyTosca
   },
   btnAdd: {
     padding: normalize(8),
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     width: 'auto',
     justifyContent: 'center',
     alignItems: 'center',
@@ -338,7 +337,7 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(16.94),
-    color: colors.holytosca,
+    color: COLORS.holyTosca,
     marginLeft: 20,
     marginBottom: 4
   },
@@ -351,7 +350,7 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(16.94),
-    color: colors.holytosca
+    color: COLORS.holyTosca
   },
   containerMedia: (isIsset) => ({
     paddingHorizontal: 20,
@@ -374,7 +373,7 @@ export const styles = StyleSheet.create({
     color: COLORS.black
   },
   lineTop: {
-    backgroundColor: colors.alto,
+    backgroundColor: COLORS.alto,
     height: 1
   },
   containerGroupName: {
@@ -393,7 +392,7 @@ export const styles = StyleSheet.create({
     width: normalize(100),
     height: normalize(100),
     borderRadius: normalize(50),
-    backgroundColor: colors.alto,
+    backgroundColor: COLORS.alto,
     justifyContent: 'center',
     alignItems: 'center'
   },

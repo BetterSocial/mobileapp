@@ -67,7 +67,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
           style={
             Array [
               Object {
-                "color": "#1E1F20",
+                "color": "#0C0C0C",
                 "fontFamily": "Inter-SemiBold",
                 "fontSize": 12.600000000000001,
                 "fontWeight": "bold",
@@ -102,7 +102,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
             style={
               Array [
                 Object {
-                  "color": "#1E1F20",
+                  "color": "#0C0C0C",
                   "fontFamily": "Inter-SemiBold",
                   "fontSize": 12.600000000000001,
                   "fontWeight": "bold",
@@ -110,10 +110,10 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
                   "textAlign": "center",
                 },
                 Object {
-                  "color": "#003848",
+                  "color": "#107793",
                 },
                 Object {
-                  "color": "#003848",
+                  "color": "#107793",
                 },
               ]
             }
@@ -125,7 +125,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
       <View
         style={
           Object {
-            "backgroundColor": "#003848",
+            "backgroundColor": "#107793",
             "borderTopColor": "#E0E0E0",
             "borderTopWidth": 1,
             "paddingHorizontal": 15,
@@ -268,7 +268,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
             >
               <ActivityIndicator
                 animating={true}
-                color="#003848"
+                color="#107793"
                 hidesWhenStopped={true}
                 size="large"
               />
@@ -287,7 +287,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
         <Text
           style={
             Object {
-              "color": "#003848",
+              "color": "#107793",
               "fontFamily": "Inter-SemiBold",
               "fontSize": 14,
               "lineHeight": 16.94,

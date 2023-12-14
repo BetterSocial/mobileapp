@@ -4,9 +4,8 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import {ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
 import {Button} from '../Button';
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import { COLORS } from '../../utils/theme';
+import {COLORS} from '../../utils/theme';
 
 const SpecificIssue = ({refSpecificIssue, onPress, onSkip, loading}) => {
   const [message, setMessage] = React.useState('');
@@ -81,7 +80,7 @@ const styles = StyleSheet.create({
     color: COLORS.black
   },
   input: {
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     marginLeft: 17,
     marginRight: 23,
     borderRadius: 8,
@@ -91,7 +90,7 @@ const styles = StyleSheet.create({
     paddingRight: 13,
     paddingLeft: 19,
     fontFamily: fonts.inter[400],
-    color: colors.gray
+    color: COLORS.gray8
   },
   container: {
     height: 'auto',
@@ -99,7 +98,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20
   },
   draggableIcon: {
-    backgroundColor: colors.alto,
+    backgroundColor: COLORS.alto,
     width: 60
   }
 });

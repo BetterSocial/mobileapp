@@ -12,8 +12,7 @@ import {
 } from 'react-native';
 import dimen from '../../utils/dimen';
 import {normalizeFontSize} from '../../utils/fonts';
-import {colors} from '../../utils/colors';
-import { COLORS } from '../../utils/theme';
+import {COLORS} from '../../utils/theme';
 
 const styles = StyleSheet.create({
   container: {
@@ -24,7 +23,7 @@ const styles = StyleSheet.create({
     height: dimen.normalizeDimen(16),
     width: dimen.normalizeDimen(16),
     borderRadius: dimen.normalizeDimen(16 / 2),
-    backgroundColor: colors.blue1,
+    backgroundColor: COLORS.blue,
     position: 'absolute',
     top: dimen.normalizeDimen(2),
     bottom: dimen.normalizeDimen(2),
@@ -117,13 +116,13 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   labelLeft,
   labelRight,
   circleActiveColor = COLORS.holyTosca,
-  circleInActiveColor = colors.blue1,
+  circleInActiveColor = COLORS.blue,
   backgroundActive = COLORS.lightgrey,
   backgroundInactive = COLORS.lightgrey,
   styleLabelLeft,
   styleLabelRight,
   activeTextColor = COLORS.holyTosca,
-  inactiveTextColor = colors.blue1,
+  inactiveTextColor = COLORS.blue,
   containerStyle,
   labelOff = 'Off',
   labelOn = 'On'

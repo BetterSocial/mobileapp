@@ -24,7 +24,6 @@ import {Context} from '../../context';
 import {Header} from '../../components';
 import {ProgressBar} from '../../components/ProgressBar';
 import {TOPICS_PICK} from '../../utils/cache/constant';
-import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getSpecificCache} from '../../utils/cache';
 import {setTopics as setTopicsContext} from '../../context/actions/topics';
@@ -185,7 +184,7 @@ const Topics = () => {
         </React.Fragment>
       )}
 
-      {isFetchingTopic && <ActivityIndicator size={'large'} color={colors.gray} />}
+      {isFetchingTopic && <ActivityIndicator size={'large'} color={COLORS.gray8} />}
     </SafeAreaView>
   );
 };
@@ -201,7 +200,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: Platform.OS === 'ios' ? dimen.normalizeDimen(22) : 0,
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   containerProgress: {
     marginTop: dimen.normalizeDimen(20),
@@ -214,7 +213,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: normalizeFontSize(36),
     lineHeight: normalizeFontSize(43.57),
-    color: colors.bunting,
+    color: COLORS.bunting,
     marginHorizontal: dimen.normalizeDimen(20)
   },
   footer: {
@@ -224,8 +223,8 @@ const styles = StyleSheet.create({
     width,
     paddingHorizontal: dimen.normalizeDimen(20),
     paddingBottom: dimen.normalizeDimen(20),
-    backgroundColor: colors.white,
-    shadowColor: colors.black,
+    backgroundColor: COLORS.white,
+    shadowColor: COLORS.black,
     shadowOffset: {
       width: 0,
       height: 5
@@ -243,7 +242,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(24),
-    color: colors.gray,
+    color: COLORS.gray8,
     opacity: 0.84,
     marginTop: dimen.normalizeDimen(8),
     marginBottom: dimen.normalizeDimen(24),
@@ -259,7 +258,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: normalizeFontSize(18),
     lineHeight: normalizeFontSize(22),
-    color: colors.black,
+    color: COLORS.black,
     marginBottom: dimen.normalizeDimen(13),
     // textTransform: 'capitalize',
     paddingHorizontal: dimen.normalizeDimen(22)
@@ -280,10 +279,10 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: normalizeFontSize(10),
     textAlign: 'center',
-    color: colors.blackgrey
+    color: COLORS.blackgrey
   },
   button: {
-    backgroundColor: colors.gray,
+    backgroundColor: COLORS.gray,
     borderRadius: dimen.normalizeDimen(8)
   },
   scrollButtonParent: {

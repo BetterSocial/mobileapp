@@ -3,7 +3,6 @@ import React from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 
 import dimen from '../../../utils/dimen';
-import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
 
@@ -50,13 +49,13 @@ const styles = StyleSheet.create({
     paddingVertical: dimen.normalizeDimen(9.5),
     paddingHorizontal: dimen.normalizeDimen(14),
     borderRadius: 8,
-    backgroundColor: isAnonymousTab ? COLORS.anon_primary : COLORS.signed_primary
+    backgroundColor: isAnonymousTab ? COLORS.holyTosca : COLORS.blue
   }),
   followingBtn: (isAnonymousTab) => ({
     paddingVertical: dimen.normalizeDimen(9.5),
     paddingHorizontal: dimen.normalizeDimen(4.5),
     borderWidth: 1,
-    borderColor: isAnonymousTab ? COLORS.anon_primary : COLORS.signed_primary,
+    borderColor: isAnonymousTab ? COLORS.holyTosca : COLORS.blue,
     borderRadius: 8
   }),
   textFollowBtn: {
@@ -65,10 +64,10 @@ const styles = StyleSheet.create({
     fontSize: 12
   },
   textFollow: {
-    color: colors.white
+    color: COLORS.white
   },
   textFollowing: (isAnonymousTab) => ({
-    color: isAnonymousTab ? COLORS.anon_primary : COLORS.signed_primary
+    color: isAnonymousTab ? COLORS.holyTosca : COLORS.blue
   })
 });
 

@@ -15,7 +15,6 @@ import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
 import useComment from './hooks/useComment';
 import {COLORS, FONTS} from '../../utils/theme';
 import {calculateTime} from '../../utils/time';
-import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
 import {removeWhiteSpace} from '../../utils/Utils';
@@ -103,7 +102,7 @@ const Comment = ({
 
   const voteStyle = () => {
     if (totalVote > 0) {
-      return COLORS.holytosca;
+      return COLORS.holyTosca;
     }
     if (totalVote < 0) {
       return COLORS.red;
@@ -174,7 +173,7 @@ const Comment = ({
           onLongPress={handleOnLongPress}
           style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}
           onPress={() => onBlockComponent(comment)}>
-          <IconEn name="block" size={15.02} color={colors.gray1} />
+          <IconEn name="block" size={15.02} color={COLORS.gray9} />
         </ButtonHightlight>
 
         <TouchableOpacity activeOpacity={1} onPress={onDownVote} testID="btnDownvote">
@@ -237,7 +236,7 @@ const styles = StyleSheet.create({
   container: ({isLast, style, level, showLeftConnector}) => ({
     width: '100%',
     borderLeftWidth: showLeftConnector ? 1 : 0,
-    borderLeftColor: isLast ? (level === 0 ? colors.gray1 : 'transparent') : colors.gray1,
+    borderLeftColor: isLast ? (level === 0 ? COLORS.gray9 : 'transparent') : COLORS.gray9,
     ...style
   }),
   flexStartContainer: {
@@ -253,7 +252,7 @@ const styles = StyleSheet.create({
   post: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
-    color: COLORS.mine_shaft,
+    color: COLORS.mineShaft,
     marginLeft: 28
   },
   profile: {

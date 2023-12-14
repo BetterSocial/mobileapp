@@ -40,7 +40,7 @@ const ItemUser = ({photo, username, bio, followed, onPress, userid}) => {
             <IconCheck
               width={dimen.normalizeDimen(32)}
               height={dimen.normalizeDimen(32)}
-              fill={COLORS.signed_primary}
+              fill={COLORS.blue}
             />
           </Animated.View>
         </Pressable>

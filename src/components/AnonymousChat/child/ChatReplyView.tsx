@@ -5,8 +5,8 @@ import {StyleSheet, Text, View} from 'react-native';
 import dimen from '../../../utils/dimen';
 import {SIGNED} from '../../../hooks/core/constant';
 import {calculateTime} from '../../../utils/time';
-import {colors} from '../../../utils/colors';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
+import {COLORS} from '../../../utils/theme';
 
 interface ChatReplyViewProps {
   type: 'SIGNED' | 'ANONYMOUS';
@@ -48,10 +48,10 @@ const ChatReplyView = ({type, messageType, replyData}: ChatReplyViewProps) => {
 
 const styles = StyleSheet.create({
   containerSigned: {
-    backgroundColor: colors.signed_secondary
+    backgroundColor: COLORS.blueSecondary
   },
   containerAnon: {
-    backgroundColor: colors.anon_secondary
+    backgroundColor: COLORS.holyToscaSecondary
   },
   textContainer: {
     flex: 1,
@@ -69,14 +69,14 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(12),
     lineHeight: 19.36,
-    color: colors.white
+    color: COLORS.white
   },
   dot: {
     width: 3,
     height: 3,
     borderRadius: 2,
     marginHorizontal: dimen.normalizeDimen(5),
-    backgroundColor: colors.white,
+    backgroundColor: COLORS.white,
     alignSelf: 'center'
   },
   timeText: {
@@ -84,17 +84,17 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(10),
     lineHeight: 12.19,
     alignSelf: 'center',
-    color: colors.white
+    color: COLORS.white
   },
   text: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
     lineHeight: 19.36,
     marginBottom: 4,
-    color: colors.white
+    color: COLORS.white
   },
   deletedText: {
-    color: colors.light_silver,
+    color: COLORS.lightSilver,
     fontSize: normalizeFontSize(15),
     fontStyle: 'italic'
   }

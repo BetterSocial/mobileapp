@@ -60,7 +60,6 @@ import {
 } from '../../utils/constants';
 import {PROFILE_CACHE} from '../../utils/cache/constant';
 import {ShowingAudience, createPost} from '../../service/post';
-import {colors} from '../../utils/colors';
 import {composeImageMeta} from '../../utils/string/file';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {
@@ -892,7 +891,7 @@ const styles = StyleSheet.create({
     position: 'relative'
   },
   input: {
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     paddingVertical: 16,
     paddingHorizontal: 12,
     minHeight: 100,
@@ -900,23 +899,23 @@ const styles = StyleSheet.create({
     overflow: 'scroll'
   },
   hastagText: {
-    color: colors.gray1,
+    color: COLORS.gray9,
     fontSize: 14,
     fontFamily: fonts.inter[400]
   },
   listText: {
-    color: colors.black,
+    color: COLORS.black,
     fontSize: 14,
     fontFamily: fonts.inter[400]
   },
   label: {
-    color: colors.black,
+    color: COLORS.black,
     fontFamily: fonts.inter[600],
     fontWeight: 'bold'
   },
   desc: {fontSize: 14, fontFamily: fonts.poppins[400]},
   labelButtonAddMedia: {
-    color: colors.black,
+    color: COLORS.black,
     fontFamily: fonts.inter[600],
     fontSize: 14,
     fontWeight: 'bold'
@@ -929,7 +928,7 @@ const styles = StyleSheet.create({
     paddingBottom: 13
   },
   userTarget: {
-    color: colors.bondi_blue,
+    color: COLORS.holyTosca,
     fontSize: 14,
     fontFamily: fonts.poppins[400]
   },

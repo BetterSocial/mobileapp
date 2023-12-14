@@ -129,7 +129,7 @@ exports[`TESTING ChatItemTargetText should match snapshot 1`] = `
                     },
                     Array [
                       Object {
-                        "color": "#000000",
+                        "color": "#0C0C0C",
                       },
                     ],
                   ]
@@ -148,7 +148,7 @@ exports[`TESTING ChatItemTargetText should match snapshot 1`] = `
                       "width": 3,
                     },
                     Object {
-                      "backgroundColor": "#000000",
+                      "backgroundColor": "#0C0C0C",
                     },
                   ]
                 }
@@ -164,7 +164,7 @@ exports[`TESTING ChatItemTargetText should match snapshot 1`] = `
                     },
                     Array [
                       Object {
-                        "color": "#000000",
+                        "color": "#0C0C0C",
                       },
                     ],
                   ]
@@ -183,7 +183,7 @@ exports[`TESTING ChatItemTargetText should match snapshot 1`] = `
                     "marginBottom": 4,
                   },
                   Object {
-                    "color": "#000000",
+                    "color": "#0C0C0C",
                   },
                   false,
                 ]

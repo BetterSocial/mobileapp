@@ -9,7 +9,6 @@ import {useAnimatedStyle, useSharedValue} from 'react-native-reanimated';
 import ChatReplyView from './ChatReplyView';
 import useMessageHook from '../../../hooks/screen/useMessageHook';
 import {ChatItemMyTextProps} from '../../../../types/component/AnonymousChat/BaseChatItem.types';
-import {colors} from '../../../utils/colors';
 import {
   containerStyle,
   dotStyle,
@@ -18,12 +17,13 @@ import {
   textContainerStyle,
   textStyle
 } from './ChatItemText.style';
+import {COLORS} from '../../../utils/theme';
 
 export const replyIcon = () => {
   return (
     <View style={styles.containerReply}>
       <View style={styles.containerReplyIcon}>
-        <Icon name={'reply'} size={20} color={colors.black} />
+        <Icon name={'reply'} size={20} color={COLORS.black} />
       </View>
     </View>
   );

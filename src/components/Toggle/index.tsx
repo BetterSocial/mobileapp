@@ -15,7 +15,7 @@ interface ToggleProps {
 }
 
 const Toggle: React.FC<ToggleProps> = ({
-  activeColor = COLORS.waterspout,
+  activeColor = COLORS.waterSpout,
   inactiveColor = COLORS.lightgrey,
   activeButtonColor = COLORS.holyTosca,
   inactiveButtonColor = COLORS.alto,

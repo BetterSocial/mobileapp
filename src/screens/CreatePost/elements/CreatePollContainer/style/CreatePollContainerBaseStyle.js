@@ -1,12 +1,12 @@
 import {StyleSheet} from 'react-native';
 
-import {colors} from '../../../../../utils/colors';
+import {COLORS} from '../../../../../utils/theme';
 
 const CreatePollContainerBaseStyle = StyleSheet.create({
   createpollcontainer: {
     borderWidth: 1,
     borderRadius: 4,
-    borderColor: colors.gray1,
+    borderColor: COLORS.gray9,
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
@@ -29,12 +29,12 @@ const CreatePollContainerBaseStyle = StyleSheet.create({
   },
 
   addpollitemplusicon: {
-    color: colors.black,
+    color: COLORS.black,
     alignSelf: 'center'
   },
 
   removepolltext: {
-    color: colors.redalert,
+    color: COLORS.red,
     fontWeight: '600',
     fontFamily: 'Inter-SemiBold'
   },
@@ -44,7 +44,7 @@ const CreatePollContainerBaseStyle = StyleSheet.create({
     width: '100%',
     height: 1,
     marginVertical: 8,
-    backgroundColor: colors.gray1
+    backgroundColor: COLORS.gray9
   },
 
   row: {
@@ -63,15 +63,15 @@ const CreatePollContainerBaseStyle = StyleSheet.create({
   },
 
   polldurationbutton: {
-    backgroundColor: colors.white,
-    color: colors.white,
+    backgroundColor: COLORS.white,
+    color: COLORS.white,
     paddingVertical: 4,
     borderRadius: 4
   },
 
   polldurationbuttontext: {
-    color: colors.white,
-    backgroundColor: colors.holytosca,
+    color: COLORS.white,
+    backgroundColor: COLORS.holyTosca,
     paddingHorizontal: 22,
     paddingVertical: 8,
     borderRadius: 6,

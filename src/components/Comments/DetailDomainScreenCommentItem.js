@@ -8,7 +8,6 @@ import MemoCommentReply from '../../assets/icon/CommentReply';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
 import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
 import {calculateTime} from '../../utils/time';
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
 import {COLORS} from '../../utils/theme';
@@ -26,7 +25,8 @@ const DetailDomainScreenCommentItem = ({
   showLeftConnector = true,
   disableOnTextPress = false,
   onVoteUp,
-  onVoteDown}) => {
+  onVoteDown
+}) => {
   const navigation = useNavigation();
   const refBlockComponent = React.useRef();
   const [yourselfId, setYourselfId] = React.useState('');
@@ -35,7 +35,7 @@ const DetailDomainScreenCommentItem = ({
     if (level >= 2 || disableOnTextPress) {
       return;
     }
-    if(onPress) {
+    if (onPress) {
       onPress();
     }
   };
@@ -51,18 +51,18 @@ const DetailDomainScreenCommentItem = ({
       data: {
         user_id: selfUserId,
         other_id: user.id,
-        username: user.data.username,
-      },
+        username: user.data.username
+      }
     });
   };
 
   const onBlock = (comment) => {
     refBlockComponent.current.openBlockComponent({
-      anonimity : false,
-      actor : comment.user,
-      id : comment.id,
-    })
-  }
+      anonimity: false,
+      actor: comment.user,
+      id: comment.id
+    });
+  };
 
   React.useEffect(() => {
     const parseToken = async () => {
@@ -81,16 +81,12 @@ const DetailDomainScreenCommentItem = ({
         style,
         level,
         isLastInParent,
-        showLeftConnector,
+        showLeftConnector
       })}>
       <TouchableOpacity onPress={openProfile}>
         <View style={styles.profile}>
           <Image
-            source={
-              photo
-                ? {uri: photo}
-                : require('../../assets/images/ProfileDefault.png')
-            }
+            source={photo ? {uri: photo} : require('../../assets/images/ProfileDefault.png')}
             style={styles.image}
           />
           <View style={styles.containerUsername}>
@@ -114,7 +110,7 @@ const DetailDomainScreenCommentItem = ({
         <TouchableOpacity
           style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}
           onPress={() => onBlock(comment)}>
-          <IconEn name="block" size={15.02} color={colors.gray1} />
+          <IconEn name="block" size={15.02} color={COLORS.gray9} />
         </TouchableOpacity>
 
         <TouchableOpacity onPress={onVoteDown} style={[styles.arrowup, styles.btn]}>
@@ -125,7 +121,11 @@ const DetailDomainScreenCommentItem = ({
         </TouchableOpacity>
       </View>
 
-      <BlockComponent ref={refBlockComponent} refresh={() => {}} screen="detail_domain_comment_item"/>
+      <BlockComponent
+        ref={refBlockComponent}
+        refresh={() => {}}
+        screen="detail_domain_comment_item"
+      />
     </View>
   );
 };
@@ -137,79 +137,75 @@ const styles = StyleSheet.create({
     // width: 30,
     height: 30,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   image: {
     width: 24,
     height: 24,
-    borderRadius: 12,
+    borderRadius: 12
   },
   container: ({isLast, style, level, isLastInParent}) => ({
     width: '100%',
     borderLeftWidth: isLastInParent ? 0 : 1,
-    borderLeftColor: isLast
-      ? level === 0
-        ? colors.gray1
-        : 'transparent'
-      : colors.gray1,
-    ...style,
+    borderLeftColor: isLast ? (level === 0 ? COLORS.gray9 : 'transparent') : COLORS.gray9,
+    ...style
   }),
   username: {
     fontFamily: fonts.inter[700],
     fontSize: 12,
     color: COLORS.blackgrey,
     lineHeight: 14,
-    marginLeft: 16,
+    marginLeft: 16
   },
   post: {
     fontFamily: fonts.inter[400],
     fontSize: 16,
-    color: COLORS.mine_shaft,
-    marginLeft: 28,
+    color: COLORS.mineShaft,
+    marginLeft: 28
   },
   profile: {
     flexDirection: 'row',
-    marginLeft: -13,
+    marginLeft: -13
   },
   constainerFooter: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     marginTop: 11.13,
     marginBottom: 12,
-    marginLeft: 30,
+    marginLeft: 30
   },
   btnReply: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    flex: 1,
+    flex: 1
   },
   btnReplyText: {
     fontFamily: fonts.inter[400],
     fontSize: 13,
     color: COLORS.gray1,
     marginLeft: 8.98,
-    marginRight: 14,
+    marginRight: 14
   },
   btnBlock: (isMySelf) => ({
     paddingHorizontal: 14,
-    display: isMySelf ? 'none' : 'flex',
+    display: isMySelf ? 'none' : 'flex'
   }),
   arrowup: {
-    paddingHorizontal: 14,
+    paddingHorizontal: 14
   },
   arrowdown: {
-    paddingHorizontal: 14,
+    paddingHorizontal: 14
   },
   gap: {marginBottom: 8},
   time: {
     fontFamily: fonts.inter[400],
     fontSize: 10,
     color: COLORS.blackgrey,
-    lineHeight: 12,
+    lineHeight: 12
   },
   containerUsername: {
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center'
+  }
 });

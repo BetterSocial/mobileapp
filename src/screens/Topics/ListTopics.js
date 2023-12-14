@@ -8,13 +8,13 @@ const ListTopics = ({item, i, myTopic, handleSelectedLanguage}) => (
     key={i}
     style={[
       styles.bgTopicSelectNotActive,
-      {backgroundColor: myTopic[item.topic_id] ? COLORS.signed_primary : COLORS.concrete}
+      {backgroundColor: myTopic[item.topic_id] ? COLORS.blue : COLORS.concrete}
     ]}>
     <Text>{item.icon}</Text>
     <Text
       style={[
         styles.textTopicNotActive,
-        {color: myTopic[item.topic_id] ? COLORS.white : COLORS.mine_shaft}
+        {color: myTopic[item.topic_id] ? COLORS.white : COLORS.mineShaft}
       ]}>
       #{item.name}
     </Text>
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: '500',
     fontSize: 12,
-    color: COLORS.mine_shaft
+    color: COLORS.mineShaft
     // paddingLeft: 5,
   }
 });

@@ -1,14 +1,14 @@
 import {StyleSheet} from 'react-native';
 
 import dimen from '../../utils/dimen';
-import {colors} from '../../utils/colors';
+import {COLORS} from '../../utils/theme';
 
 const BaseChatItemStyles = StyleSheet.create({
   chatContainer: {
     display: 'flex',
     flexDirection: 'row',
     paddingLeft: dimen.normalizeDimen(20),
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   chatContentContainer: {
     flex: 1,
@@ -16,7 +16,7 @@ const BaseChatItemStyles = StyleSheet.create({
     paddingBottom: dimen.normalizeDimen(14),
     paddingStart: dimen.normalizeDimen(15),
     paddingEnd: dimen.normalizeDimen(20),
-    borderBottomColor: colors.alto,
+    borderBottomColor: COLORS.alto,
     borderBottomWidth: 1
   },
   chatContentSection: {

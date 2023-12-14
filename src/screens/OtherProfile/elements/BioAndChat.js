@@ -5,11 +5,11 @@ import {Pressable, StyleSheet, Text, TouchableOpacity, View} from 'react-native'
 import TextAreaChat from '../../../components/TextAreaChat';
 import useSaveAnonChatHook from '../../../database/hooks/useSaveAnonChatHook';
 import {ANON_PM, SIGNED} from '../../../hooks/core/constant';
-import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 import {sendAnonymousDMOtherProfile, sendSignedDMOtherProfile} from '../../../service/chat';
 import {trimString} from '../../../utils/string/TrimString';
 import {ToggleSwitchAnon, useDynamicColors} from '../../../hooks/useToggleColors';
+import {COLORS} from '../../../utils/theme';
 
 const CHANNEL_BLOCKED = 'Channel is blocked';
 
@@ -107,7 +107,7 @@ const BioAndChat = (props) => {
           <Pressable onPress={openBio}>
             <Text linkStyle={styles.seeMore} style={styles.bioText(dynamicColors)}>
               {trimString(bio, 121)}{' '}
-              {bio.length > 121 ? <Text style={{color: colors.blue}}>see more</Text> : null}
+              {bio.length > 121 ? <Text style={{color: COLORS.blue}}>see more</Text> : null}
             </Text>
           </Pressable>
         )}
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
   seeMore: {
     fontFamily: fonts.inter[500],
     fontSize: 14,
-    color: colors.black
+    color: COLORS.black
   },
   toggleSwitchContainer: {
     display: 'flex',

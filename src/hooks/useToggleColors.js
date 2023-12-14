@@ -10,13 +10,13 @@ const styles = StyleSheet.create({
 
 const Colors = {
   anon: {
-    primary: COLORS.anon_primary,
-    secondary: COLORS.anon_secondary,
+    primary: COLORS.holyTosca,
+    secondary: COLORS.holyToscaSecondary,
     text: COLORS.white
   },
   signed: {
-    primary: COLORS.signed_primary,
-    secondary: COLORS.signed_secondary,
+    primary: COLORS.blue,
+    secondary: COLORS.blueSecondary,
     text: COLORS.white
   }
 };

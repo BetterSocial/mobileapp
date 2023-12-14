@@ -1,27 +1,19 @@
 import * as React from 'react';
-import {
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {Image, Pressable, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
 import Gap from '../../components/Gap';
 import GlobalButton from '../../components/Button/GlobalButton';
 import MemoIc_rectangle_gradient from '../../assets/Ic_rectangle_gradient';
-import { Avatar } from '../../components';
-import { COLORS, FONTS, SIZES } from '../../utils/theme';
-import { Context } from '../../context';
-import { FeedCredderRating } from '../../components/CredderRating';
-import { calculateTime } from '../../utils/time';
-import { colors } from '../../utils/colors';
-import { fonts } from '../../utils/fonts';
-import { setDomainData, setProfileDomain } from '../../context/actions/domainAction';
+import {Avatar} from '../../components';
+import {COLORS, FONTS, SIZES} from '../../utils/theme';
+import {Context} from '../../context';
+import {FeedCredderRating} from '../../components/CredderRating';
+import {calculateTime} from '../../utils/time';
+import {fonts} from '../../utils/fonts';
+import {setDomainData, setProfileDomain} from '../../context/actions/domainAction';
 
-const Header = ({ image, domain, time, item }) => {
+const Header = ({image, domain, time, item}) => {
   const [domainStore, dispatchDomain] = React.useContext(Context).domains;
   const navigation = useNavigation();
   const onHeaderPressed = () => {
@@ -33,29 +25,34 @@ const Header = ({ image, domain, time, item }) => {
       item: {
         ...item,
         og: {
-          domain: item.domain.name,
-        },
-      },
+          domain: item.domain.name
+        }
+      }
     });
   };
 
   return (
-    <GlobalButton testID='headerBtn' buttonStyle={styles.noPl} onPress={onHeaderPressed}>
+    <GlobalButton testID="headerBtn" buttonStyle={styles.noPl} onPress={onHeaderPressed}>
       <View style={styles.container}>
         <Avatar image={image} style={styles.avatar} />
         <Gap width={8} />
         <View style={styles.row}>
           <View style={styles.domainNameContainer}>
-            <Text style={styles.domain} numberOfLines={1}>{domain}</Text>
+            <Text style={styles.domain} numberOfLines={1}>
+              {domain}
+            </Text>
             <View style={styles.point} />
             <Text style={styles.domainPostDate} numberOfLines={1}>
               {/* {new Date(time).toLocaleDateString()} */}
               {calculateTime(time)}
             </Text>
             <View style={styles.point} />
-            <FeedCredderRating containerStyle={{ height: 16, alignSelf: 'center' }} 
-              score={item?.domain?.credderScore} scoreSize={12}
-              iconSize={16} />
+            <FeedCredderRating
+              containerStyle={{height: 16, alignSelf: 'center'}}
+              score={item?.domain?.credderScore}
+              scoreSize={12}
+              iconSize={16}
+            />
           </View>
           {/* <MemoIc_rectangle_gradient width={SIZES.width * 0.43} height={20} /> */}
         </View>
@@ -68,7 +65,7 @@ const styles = StyleSheet.create({
   avatar: {
     width: 24,
     height: 24,
-    alignSelf: 'center',
+    alignSelf: 'center'
   },
   container: {
     flexDirection: 'row',
@@ -76,25 +73,25 @@ const styles = StyleSheet.create({
     // marginLeft: 12,
     paddingTop: 8.5,
     paddingBottom: 8.5,
-    display: 'flex',
+    display: 'flex'
   },
   domain: {
     lineHeight: 14.52,
     fontSize: 12,
     fontFamily: fonts.inter[600],
-    flexShrink: 1,
+    flexShrink: 1
   },
   domainNameContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   domainPostDate: {
     lineHeight: 14.52,
     fontSize: 12,
     fontFamily: fonts.inter[400],
-    color: colors.gray,
+    color: COLORS.gray8
   },
-  wrapperItem: { backgroundColor: 'white', marginBottom: 16 },
+  wrapperItem: {backgroundColor: COLORS.white, marginBottom: 16},
   wrapperImage: {
     borderRadius: 45,
     borderWidth: 0.2,
@@ -102,12 +99,12 @@ const styles = StyleSheet.create({
     width: 46,
     height: 46,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   image: {
     height: 46,
     width: 46,
-    borderRadius: 45,
+    borderRadius: 45
   },
   wrapperText: {
     backgroundColor: COLORS.white,
@@ -117,7 +114,7 @@ const styles = StyleSheet.create({
     height: 32,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 0.5,
+    borderWidth: 0.5
   },
   point: {
     width: 3,
@@ -126,7 +123,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.gray,
     marginLeft: 6,
     marginRight: 6,
-    marginTop: 1,
+    marginTop: 1
   },
   noPl: {
     padding: 0
@@ -134,8 +131,8 @@ const styles = StyleSheet.create({
   row: {
     flex: 1,
     justifyContent: 'center',
-    marginRight: 8,
+    marginRight: 8
   }
 });
 
-export default React.memo (Header);
+export default React.memo(Header);

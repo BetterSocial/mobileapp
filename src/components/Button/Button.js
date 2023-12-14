@@ -28,7 +28,7 @@ Btn.propTypes = {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: COLORS.signed_primary,
+    backgroundColor: COLORS.blue,
     paddingHorizontal: dimen.normalizeDimen(25),
     borderRadius: dimen.normalizeDimen(8),
     flexDirection: 'row',

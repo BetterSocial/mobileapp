@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, StyleSheet, TouchableNativeFeedback, Text} from 'react-native';
-import {colors} from '../../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
+import {COLORS} from '../../../utils/theme';
 
 const ButtonFollow = ({handleSetFollow}) => {
   return (
@@ -22,13 +22,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 6,
     borderRadius: 8,
-    backgroundColor: colors.bondi_blue
+    backgroundColor: COLORS.holyTosca
   },
   textButtonFollow: {
     fontFamily: fonts.inter[500],
     fontWeight: 'bold',
     fontSize: normalizeFontSize(12),
-    color: colors.white,
+    color: COLORS.white,
     lineHeight: 24
   }
 });

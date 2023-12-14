@@ -18,7 +18,6 @@ import IconChatClockGrey from '../../../assets/icon/IconChatClockGrey';
 import useMessageHook from '../../../hooks/screen/useMessageHook';
 import {ChatItemMyTextProps} from '../../../../types/component/AnonymousChat/BaseChatItem.types';
 import {ChatStatus} from '../../../../types/database/schema/ChannelList.types';
-import {colors} from '../../../utils/colors';
 import {
   containerStyle,
   dotStyle,
@@ -29,6 +28,7 @@ import {
   textStyle
 } from './ChatItemText.style';
 import {replyIcon} from './ChatItemTargetText';
+import {COLORS} from '../../../utils/theme';
 
 const {width} = Dimensions.get('screen');
 const targetLastLineWidth = width - targetLastLine;
@@ -70,13 +70,13 @@ const ChatItemMyTextV2 = ({
     if (status === ChatStatus.PENDING)
       return (
         <View style={styles.icon}>
-          <IconChatClockGrey color={colors.silver} width={12} height={12} />
+          <IconChatClockGrey color={COLORS.silver} width={12} height={12} />
         </View>
       );
 
     return (
       <View style={styles.icon}>
-        <IconChatCheckMark color={colors.silver} />
+        <IconChatCheckMark color={COLORS.silver} />
       </View>
     );
   }, []);

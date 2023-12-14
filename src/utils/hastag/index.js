@@ -2,7 +2,6 @@ import * as React from 'react';
 import { StyleSheet, Text } from 'react-native';
 import { generateRandomId } from 'stream-chat-react-native-core';
 
-import { colors } from '../colors';
 import { fonts } from '../fonts';
 import { COLORS } from '../theme';
 

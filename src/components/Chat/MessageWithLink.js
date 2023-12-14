@@ -1,28 +1,17 @@
 import * as React from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import {TouchableWithoutFeedback, StyleSheet, Text, View, Image} from 'react-native';
 
 import Autolink from 'react-native-autolink';
 
-import MemoIc_read from '../../assets/chats/Ic_read';
-import { colors } from '../../utils/colors';
-import { fonts } from '../../utils/fonts';
-import { trimString } from '../../utils/string/TrimString';
-import { calculateTime } from '../../utils/time';
+import {fonts} from '../../utils/fonts';
+import {trimString} from '../../utils/string/TrimString';
+import {calculateTime} from '../../utils/time';
 import Dot from '../Dot';
 import ActionChat from './ActionChat';
 import ProfileMessage from './ProfileMessage';
-import { COLORS } from '../../utils/theme';
+import {COLORS} from '../../utils/theme';
 
-const MessageWithLink = ({
-  image,
-  name,
-  time,
-  message,
-  read,
-  isMe,
-  attachments,
-}) => {
+const MessageWithLink = ({image, name, time, message, read, isMe, attachments}) => {
   const [onAction, setOnAction] = React.useState(false);
   return (
     <ActionChat isMe={isMe} active={onAction}>
@@ -43,18 +32,14 @@ const MessageWithLink = ({
             </View>
             <View style={styles.containerPreview(isMe)}>
               <View style={styles.previewText}>
-                <Text style={styles.title}>
-                  {trimString(attachments[0].title, 40)}
-                </Text>
-                <Text style={styles.authorName(isMe)}>
-                  {attachments[0].author_name}
-                </Text>
+                <Text style={styles.title}>{trimString(attachments[0].title, 40)}</Text>
+                <Text style={styles.authorName(isMe)}>{attachments[0].author_name}</Text>
               </View>
               <Image
                 width={70}
                 height={64}
                 style={styles.imageLink}
-                source={{ uri: attachments[0].thumb_url }}
+                source={{uri: attachments[0].thumb_url}}
               />
             </View>
             <Autolink text={message} style={styles.message} />
@@ -69,80 +54,80 @@ export default MessageWithLink;
 
 const styles = StyleSheet.create({
   previewText: {
-    flex: 1,
+    flex: 1
   },
   imageLink: {
     width: 70,
     height: 64,
     borderBottomRightRadius: 4,
-    borderTopRightRadius: 4,
+    borderTopRightRadius: 4
   },
   title: {
     color: COLORS.black,
     fontFamily: fonts.inter[600],
     fontSize: 14,
     lineHeight: 16.94,
-    marginTop: 5,
+    marginTop: 5
   },
   authorName: (isMe) => ({
-    color: isMe ? COLORS.white : colors.gray,
+    color: isMe ? COLORS.white : COLORS.gray8,
     fontFamily: fonts.inter[400],
     fontSize: 12,
     marginBottom: 5,
-    lineHeight: 18,
+    lineHeight: 18
   }),
   containerPreview: (isMe) => ({
-    backgroundColor: isMe ? colors.tradewind : colors.lightgrey,
+    backgroundColor: isMe ? COLORS.tradewind : COLORS.lightgrey,
     marginHorizontal: -4,
     borderRadius: 4,
     paddingLeft: 6,
     flexDirection: 'row',
     flex: 1,
-    marginTop: 8,
+    marginTop: 8
   }),
   name: {
     fontSize: 12,
     fontFamily: fonts.inter[600],
     lineHeight: 14.53,
     color: COLORS.black,
-    marginRight: 5.7,
+    marginRight: 5.7
   },
   containerImage: {
-    paddingTop: 5,
+    paddingTop: 5
   },
   time: {
     fontSize: 10,
     fontFamily: fonts.inter[600],
     lineHeight: 12,
     color: COLORS.black,
-    marginLeft: 5,
+    marginLeft: 5
   },
   message: {
     color: COLORS.black,
     marginTop: 4,
     fontSize: 16,
     fontFamily: fonts.inter[400],
-    lineHeight: 19.36,
+    lineHeight: 19.36
   },
   container: {
     flexDirection: 'row',
     flex: 1,
     marginHorizontal: 20,
-    marginVertical: 4,
+    marginVertical: 4
   },
   containerChat: (isMe) => ({
-    backgroundColor: isMe ? colors.halfBaked : colors.lightgrey,
+    backgroundColor: isMe ? COLORS.halfBaked : COLORS.lightgrey,
     paddingVertical: 8,
     paddingLeft: 8,
     paddingRight: 9.35,
     flex: 1,
     borderRadius: 8,
-    marginLeft: 8,
+    marginLeft: 8
   }),
   user: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
-  userDetail: { flexDirection: 'row', alignItems: 'center' },
+  userDetail: {flexDirection: 'row', alignItems: 'center'}
 });
