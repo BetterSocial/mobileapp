@@ -247,7 +247,6 @@ const SampleChatInfoScreen = () => {
   const countParticipat = () => {
     return `(${channelInfo?.members?.length})`;
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />

@@ -6,12 +6,11 @@ exports[`Testing Discovery Screen V2 Testing Discovery Search Bar Match Snapshot
     Object {
       "backgroundColor": "white",
       "borderBottomColor": "#E0E0E0",
-      "borderBottomWidth": 1,
+      "borderBottomWidth": 0.8,
       "flexDirection": "row",
       "height": 48,
       "marginTop": 0,
-      "paddingBottom": 7,
-      "paddingTop": 7,
+      "paddingVertical": 5.6000000000000005,
       "zIndex": 10,
     }
   }
@@ -37,7 +36,7 @@ exports[`Testing Discovery Screen V2 Testing Discovery Search Bar Match Snapshot
         Object {
           "flex": 1,
           "justifyContent": "center",
-          "marginRight": 9,
+          "marginRight": 7.2,
         }
       }
       testID="discoveryScreenBackArrow"
@@ -49,7 +48,7 @@ exports[`Testing Discovery Screen V2 Testing Discovery Search Bar Match Snapshot
     style={
       Object {
         "flex": 1,
-        "marginRight": 20,
+        "marginRight": 16,
       }
     }
   >
@@ -58,11 +57,11 @@ exports[`Testing Discovery Screen V2 Testing Discovery Search Bar Match Snapshot
         Object {
           "alignSelf": "center",
           "backgroundColor": "#F5F5F5",
-          "borderRadius": 8,
+          "borderRadius": 6.4,
           "flex": 1,
           "flexDirection": "row",
-          "height": 36,
-          "paddingRight": 8,
+          "height": 28.8,
+          "paddingRight": 6.4,
         }
       }
     >
@@ -71,8 +70,8 @@ exports[`Testing Discovery Screen V2 Testing Discovery Search Bar Match Snapshot
           Object {
             "alignSelf": "center",
             "justifyContent": "center",
-            "marginLeft": 9.67,
-            "marginRight": 1.67,
+            "marginLeft": 7.736000000000001,
+            "marginRight": 1.336,
           }
         }
       >
@@ -80,8 +79,6 @@ exports[`Testing Discovery Screen V2 Testing Discovery Search Bar Match Snapshot
       </View>
       <TextInput
         allowFontScaling={true}
-        autoFocus={true}
-        focusable={true}
         multiline={false}
         onBlur={[Function]}
         onChangeText={[Function]}
@@ -96,11 +93,11 @@ exports[`Testing Discovery Screen V2 Testing Discovery Search Bar Match Snapshot
             "alignSelf": "center",
             "flex": 1,
             "fontFamily": "Inter-Regular",
-            "fontSize": 14,
-            "height": 33,
-            "marginRight": 16,
+            "fontSize": 12.600000000000001,
+            "height": 26.400000000000002,
+            "marginRight": 12.8,
             "paddingBottom": 0,
-            "paddingStart": 8,
+            "paddingStart": 6.4,
             "paddingTop": 0,
           }
         }
@@ -122,10 +119,9 @@ exports[`Testing Discovery Screen V2 Testing Discovery Search Bar Match Snapshot
           Object {
             "alignItems": "center",
             "justifyContent": "center",
-            "marginRight": -20.5,
+            "marginRight": -16.400000000000002,
             "opacity": 1,
-            "paddingLeft": 30,
-            "paddingRight": 30,
+            "paddingHorizontal": 24,
             "zIndex": 1000,
           }
         }
