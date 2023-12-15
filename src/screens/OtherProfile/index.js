@@ -57,6 +57,7 @@ import {getSingularOrPluralText} from '../../utils/string/StringUtils';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherProfileFeed';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import {CircleGradient} from '../../components/Karma/CircleGradient';
 
 const {width} = Dimensions.get('screen');
 
@@ -408,12 +409,16 @@ const OtherProfile = () => {
     return (
       <>
         <View style={styles.headerImageContainer}>
-          <Image
-            style={styles.profileImage}
-            source={{
-              uri: dataMain.profile_pic_path ?? DEFAULT_PROFILE_PIC_PATH
-            }}
-          />
+          <View style={{marginRight: 22}}>
+            <CircleGradient fill={dataMain.karma_score} size={100} width={3}>
+              <Image
+                style={styles.profileImage}
+                source={{
+                  uri: dataMain.profile_pic_path ?? DEFAULT_PROFILE_PIC_PATH
+                }}
+              />
+            </CircleGradient>
+          </View>
 
           <View>
             <View style={styles.rightHeaderContentContainer}>
@@ -739,10 +744,12 @@ const styles = StyleSheet.create({
     marginLeft: 18
   },
   profileImage: {
-    width: 100,
-    height: 100,
+    width: 94,
+    height: 94,
     borderRadius: 100,
-    marginRight: 22
+    // marginLeft: 3,
+    marginTop: 3,
+    marginBottom: 3
   },
   containerProfile: {
     marginTop: 24
