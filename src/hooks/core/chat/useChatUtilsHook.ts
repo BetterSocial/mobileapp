@@ -86,10 +86,10 @@ function useChatUtilsHook(): UseChatUtilsHook {
 
   const goToCommunityScreen = (channel: ChannelList) => {
     setChannelAsRead(channel);
-
     const topicName = channel?.name?.replace(/^#/, '');
     const navigationParam = {
-      id: convertTopicNameToTopicPageScreenParam(topicName)
+      id: convertTopicNameToTopicPageScreenParam(topicName),
+      channelPicture: channel.channelPicture
     };
 
     navigation.navigate('TopicPageScreen', navigationParam);
@@ -124,7 +124,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
   const goToChatScreen = (channel: ChannelList, from) => {
     setChat({
       ...chat,
-      selectedChannel: channel
+      selectedChannel: channel as unknown as null
     });
     setChannelAsRead(channel);
     if (channel?.channelType === ANON_PM) {
@@ -145,7 +145,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
   const goToMoveChat = (channel: ChannelList) => {
     setChat({
       ...chat,
-      selectedChannel: channel
+      selectedChannel: channel as unknown as null
     });
     setChannelAsRead(channel);
     if (channel?.channelType === ANON_PM) {

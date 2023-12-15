@@ -17,6 +17,7 @@ import MemoIcArrowBack from '../../../assets/arrow/Ic_arrow_back';
 import MemoIcArrowBackCircle from '../../../assets/arrow/Ic_arrow_back_circle';
 import ShareIconCircle from '../../../assets/icons/Ic_share_circle';
 import TopicDefaultIcon from '../../../assets/topic.png';
+import {Shimmer} from '../../../components/Shimmer/Shimmer';
 import {colors} from '../../../utils/colors';
 import dimen from '../../../utils/dimen';
 import {normalize} from '../../../utils/fonts';
@@ -25,13 +26,11 @@ import Search from '../../DiscoveryScreenV2/elements/Search';
 import ButtonFollow from './ButtonFollow';
 import ButtonFollowing from './ButtonFollowing';
 import TopicDomainHeader from './TopicDomainHeader';
-import {Shimmer} from '../../../components/Shimmer/Shimmer';
 
 const NavHeader = (props) => {
   const {
-    hideSeeMember,
     isLoading,
-    animatedHeight,
+    initialData,
     opacityHeaderAnimation,
     onShareCommunity,
     getTopicDetail,
@@ -56,7 +55,6 @@ const NavHeader = (props) => {
   } = props;
   const navigation = useNavigation();
   const coverPath = topicDetail?.cover_path || null;
-  const [domainHeight, setDomainHeight] = React.useState(0);
   const [searchHeight, setSearchHeight] = React.useState(0);
   const insets = useSafeAreaInsets();
   const {width: displayWidth} = useWindowDimensions();
@@ -82,14 +80,6 @@ const NavHeader = (props) => {
     }
   };
 
-  const onDomainLayout = React.useCallback(
-    (event) => {
-      const {height} = event.nativeEvent.layout;
-      setDomainHeight(Math.round(height));
-    },
-    [setDomainHeight]
-  );
-
   const onSearchLayout = React.useCallback(
     (event) => {
       const {height} = event.nativeEvent.layout;
@@ -101,26 +91,6 @@ const NavHeader = (props) => {
 
   const backScreen = () => {
     navigation.goBack();
-  };
-
-  const getBottomPostition = () => {
-    let containerHeight = 0;
-    if (isHeaderHide) {
-      containerHeight = dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2;
-    } else {
-      containerHeight =
-        hideSeeMember || !isFollow
-          ? dimen.size.TOPIC_FEED_HEADER_HEIGHT
-          : dimen.size.TOPIC_FEED_HEADER_HEIGHT + normalize(4);
-    }
-    return Math.round((containerHeight - domainHeight) / 2) + searchHeight;
-  };
-
-  const heightWithCoverImage = () => {
-    if (coverPath) {
-      return {height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER};
-    }
-    return null;
   };
 
   const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
@@ -210,7 +180,13 @@ const NavHeader = (props) => {
       <View style={[styles.headerContainer]}>
         <Animated.View style={{opacity: opacityHeaderAnimation}}>
           <FastImage
-            source={topicDetail?.icon_path ? {uri: topicDetail?.icon_path} : TopicDefaultIcon}
+            source={
+              initialData.channelPicutre
+                ? {uri: initialData.channelPicutre}
+                : topicDetail?.icon_path
+                ? {uri: topicDetail?.icon_path}
+                : TopicDefaultIcon
+            }
             style={styles.image}
           />
         </Animated.View>
@@ -257,6 +233,7 @@ const NavHeader = (props) => {
 };
 
 NavHeader.propTypes = {
+  initialData: PropTypes.object,
   onShareCommunity: PropTypes.func,
   isHeaderHide: PropTypes.bool,
   isFollow: PropTypes.bool,
