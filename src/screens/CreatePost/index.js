@@ -77,6 +77,7 @@ import {getUserId} from '../../utils/users';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
 import {uploadPhoto} from '../../service/file';
 import {COLORS} from '../../utils/theme';
+import {useDynamicColors} from '../../hooks/useToggleColors';
 
 const IS_GEO_SELECT_ENABLED = false;
 
@@ -830,7 +831,10 @@ const CreatePost = () => {
             </>
           )}
           <Gap style={styles.height(25)} />
-          <Button disabled={isButtonDisabled()} onPress={postV2}>
+          <Button
+            disabled={isButtonDisabled()}
+            onPress={postV2}
+            style={styles.buttonPost(useDynamicColors(typeUser))}>
             Post
           </Button>
           <Gap style={styles.height(18)} />
@@ -936,7 +940,7 @@ const styles = StyleSheet.create({
     height
   }),
   reminderContainer: {
-    backgroundColor: COLORS.blue,
+    backgroundColor: COLORS.holyTosca,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 7,
@@ -947,5 +951,8 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontSize: normalizeFontSize(10),
     textAlign: 'center'
-  }
+  },
+  buttonPost: (color) => ({
+    backgroundColor: color.primary
+  })
 });

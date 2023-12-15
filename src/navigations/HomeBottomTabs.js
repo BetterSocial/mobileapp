@@ -280,6 +280,7 @@ function HomeBottomTabs({navigation}) {
         initialRouteName={getInitialRouteName()}
         tabBarOptions={{
           inactiveTintColor: COLORS.gray9,
+          activeTintColor: COLORS.blue,
           safeAreaInsets: {top: 0, bottom: 0, left: 0, right: 0}
         }}
         screenOptions={({navigation: nav, route}) => ({
