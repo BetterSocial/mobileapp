@@ -12,10 +12,10 @@ const BottomOverlayPagination = ({count, active}) => {
           return (
             <View
               key={`pagination-${index}`}
-              style={styles.paginationItem(active === index)}></View>;
+              style={styles.paginationItem(active === index)}></View>
           );
         })}
-    </View>;
+    </View>
   );
 };
 

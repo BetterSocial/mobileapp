@@ -26,7 +26,7 @@ const RecentSearchItems = (prop) => {
       }}>
       <Text style={styles.text}>{text}</Text>
       <IcArrowUpRight style={styles.icon} />
-    </Pressable>;
+    </Pressable>
   );
 };
 

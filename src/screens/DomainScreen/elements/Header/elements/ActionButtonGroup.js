@@ -15,7 +15,7 @@ const ActionButtonGroup = ({follow, handleFollow, handleUnfollow, isBlocked, onP
           <View style={styles.buttonFollowing}>
             <Text style={styles.textButtonFollowing}>Following</Text>
           </View>
-        </GlobalButton>;
+        </GlobalButton>
       );
 
     return (
@@ -23,7 +23,7 @@ const ActionButtonGroup = ({follow, handleFollow, handleUnfollow, isBlocked, onP
         <View style={styles.buttonFollow}>
           <Text style={styles.textButtonFollow}>Follow</Text>
         </View>
-      </GlobalButton>;
+      </GlobalButton>
     );
   };
 
@@ -36,7 +36,7 @@ const ActionButtonGroup = ({follow, handleFollow, handleUnfollow, isBlocked, onP
           <View style={styles.buttonBlock}>
             <Text style={styles.blockButtonText}>Block</Text>
           </View>
-        </GlobalButton>;
+        </GlobalButton>
       );
 
     return (
@@ -46,7 +46,7 @@ const ActionButtonGroup = ({follow, handleFollow, handleUnfollow, isBlocked, onP
         <View style={styles.buttonUnblock}>
           <Text style={styles.unblockButtonText}>Blocked</Text>
         </View>
-      </GlobalButton>;
+      </GlobalButton>
     );
   };
 
@@ -54,7 +54,7 @@ const ActionButtonGroup = ({follow, handleFollow, handleUnfollow, isBlocked, onP
     <View style={styles.container}>
       {__renderFollowButton()}
       {__renderBlockButton()}
-    </View>;
+    </View>
   );
 };
 

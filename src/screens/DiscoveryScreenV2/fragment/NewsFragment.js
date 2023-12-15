@@ -65,7 +65,7 @@ const NewsFragment = ({
                 item={item}
                 selfUserId={myId}
                 // onPressContent={onContentClicked}
-              />;
+              />
             );
         })
       );
@@ -101,7 +101,7 @@ const NewsFragment = ({
           item={contentParam}
           onPressShare={share.shareNews}
           // onPressContent={onContentClicked}
-        />;
+        />
       );
     });
   };
@@ -112,13 +112,13 @@ const NewsFragment = ({
     return (
       <View style={styles.fragmentContainer}>
         <LoadingWithoutModal />
-      </View>;
+      </View>
     );
   if (news.length === 0 && !isFirstTimeOpen)
     return (
       <View style={styles.noDataFoundContainer}>
         <Text style={styles.noDataFoundText}>No news found</Text>
-      </View>;
+      </View>
     );
 
   return (

@@ -29,7 +29,7 @@ const DiscoveryTitleSeparator = (prop) => {
         // marginTop: 15,
       }}>
       {text}
-    </Text>;
+    </Text>
   );
 };
 

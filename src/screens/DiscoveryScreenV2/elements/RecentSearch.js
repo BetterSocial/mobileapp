@@ -90,7 +90,7 @@ const RecentSearch = (param) => {
             onItemClicked={() => fetchDiscoveryData(item)}
           />
         ))}
-      </View>;
+      </View>
     );
 
   return <></>;

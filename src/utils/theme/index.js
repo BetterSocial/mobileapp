@@ -1,7 +1,7 @@
 export const COLORS = {
   alto: '#E0E0E0',
   black: '#0C0C0C',
-  black000: '#00000',
+  black000: '#000000',
   black30percent: 'rgba(0,0,0,0.3)',
   black43: '#434343',
   blackgrey: '#828282',
