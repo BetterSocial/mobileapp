@@ -1,10 +1,32 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
-<RCTScrollView
-  ListEmptyComponent={null}
-  ListHeaderComponent={
-    <React.Fragment>
+<View>
+  <View
+    style={
+      Object {
+        "height": 52,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "backgroundColor": "white",
+          "borderBottomColor": "#E8EBED",
+          "borderBottomWidth": 1,
+          "flexDirection": "row",
+          "left": 0,
+          "marginBottom": 8,
+          "paddingBottom": 7,
+          "paddingTop": 7,
+          "position": "absolute",
+          "right": 0,
+          "top": 0,
+          "zIndex": 10,
+        }
+      }
+    >
       <View
         style={
           Object {
@@ -17,20 +39,133 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
           onPress={[Function]}
         />
       </View>
-      <HorizontalTab
-        onSelectedTabChange={[Function]}
-        selectedTab={Object {}}
-        tabs={
-          Array [
-            <Memo(ChannelListTabItem)
-              name="@undefined"
-              testID="horizontal-tab-0"
-              type="SIGNED"
-              unreadCount={0}
-            />,
-            <Memo(ChannelListTabItem)
-              name="Anonymous"
-              picture={
+      <View
+        accessible={true}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "alignItems": "center",
+            "flexDirection": "row",
+            "justifyContent": "space-around",
+            "marginEnd": 8,
+            "opacity": 1,
+            "paddingBottom": 9,
+            "paddingRight": 12,
+            "paddingTop": 9,
+          }
+        }
+      >
+        <Text
+          style={
+            Array [
+              Object {
+                "fontFamily": "Inter-SemiBold",
+                "fontSize": 12,
+                "lineHeight": 14.52,
+                "marginRight": 4,
+              },
+              Object {
+                "color": "#003848",
+              },
+            ]
+          }
+        >
+          New Chat
+        </Text>
+        <View>
+          <View />
+        </View>
+      </View>
+    </View>
+  </View>
+  <RCTScrollView
+    ListHeaderComponent={
+      <Memo(ChannelListHeaderItem)
+        name="Anonymous"
+        picture={
+          Object {
+            "testUri": "../../../src/assets/images/AnonymousProfile.png",
+          }
+        }
+        testID="horizontal-tab-1"
+        type="ANONYMOUS"
+      />
+    }
+    data={Array []}
+    disableVirtualization={false}
+    getItem={[Function]}
+    getItemCount={[Function]}
+    horizontal={false}
+    initialNumToRender={10}
+    keyExtractor={[Function]}
+    maxToRenderPerBatch={10}
+    onContentSizeChange={[Function]}
+    onEndReachedThreshold={2}
+    onLayout={[Function]}
+    onMomentumScrollEnd={[Function]}
+    onScroll={[Function]}
+    onScrollBeginDrag={[Function]}
+    onScrollEndDrag={[Function]}
+    removeClippedSubviews={false}
+    renderItem={[Function]}
+    scrollEventThrottle={50}
+    stickyHeaderIndices={Array []}
+    updateCellsBatchingPeriod={50}
+    viewabilityConfigCallbackPairs={Array []}
+    windowSize={21}
+  >
+    <View>
+      <View
+        onLayout={[Function]}
+      >
+        <View
+          style={
+            Object {
+              "alignItems": "center",
+              "backgroundColor": "#ffffff",
+              "borderBottomColor": "#003848",
+              "borderBottomWidth": 2,
+              "flexDirection": "row",
+              "height": 38.400000000000006,
+              "justifyContent": "center",
+              "marginBottom": 1.6,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+            }
+          }
+          testID="horizontal-tab-1"
+        >
+          <View
+            style={
+              Array [
+                Object {
+                  "overflow": "hidden",
+                },
+                Array [
+                  Object {
+                    "borderRadius": 8,
+                    "height": 16,
+                    "marginRight": 4.800000000000001,
+                    "width": 16,
+                  },
+                  Object {
+                    "backgroundColor": "#003848",
+                  },
+                ],
+              ]
+            }
+          >
+            <FastImageView
+              defaultSource={null}
+              resizeMode="cover"
+              source={
                 Object {
                   "testUri": "../../../src/assets/images/AnonymousProfile.png",
                 }
@@ -454,6 +589,6 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
         />
       </View>
     </View>
-  </View>
-</RCTScrollView>
+  </RCTScrollView>
+</View>
 `;
