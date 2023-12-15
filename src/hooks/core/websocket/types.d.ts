@@ -29,6 +29,8 @@ export type GetstreamMessage = {
   textOwnMessage?: string;
   reply_data?: any;
   type: string;
+  message_type?: string;
+  deleted_message_id?: string;
   updated_at: string;
   user: {
     banned: boolean;

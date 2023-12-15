@@ -3,7 +3,6 @@
 /* eslint-disable import/no-unresolved */
 
 import * as React from 'react';
-import ToastMessage from 'react-native-toast-message';
 import {FlatList, View} from 'react-native';
 
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
@@ -11,10 +10,10 @@ import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
 import ChatReplyPreview from '../../components/AnonymousChat/child/ChatReplyPreview';
 import InputMessageV2 from '../../components/Chat/InputMessageV2';
 import Loading from '../Loading';
-import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
 import useMessageHook from '../../hooks/screen/useMessageHook';
 import useMoveChatTypeHook from '../../hooks/core/chat/useMoveChatTypeHook';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
+import useChatScreenHook, {ScrollContext} from '../../hooks/screen/useChatScreenHook';
 import {Context} from '../../context';
 import {SIGNED} from '../../hooks/core/constant';
 import {getChatName} from '../../utils/string/StringUtils';
@@ -22,14 +21,15 @@ import {setChannel} from '../../context/actions/setChannel';
 import {styles} from './SampleChatScreen';
 
 const SignedChatScreen = () => {
-  const flatlistRef = React.useRef<FlatList>();
   const {
     selectedChannel,
     chats,
     goBackFromChatScreen,
     goToChatInfoScreen,
     sendChat,
-    updateChatContinuity
+    updateChatContinuity,
+    flatListRef: scrollRef,
+    scrollContext
   } = useChatScreenHook(SIGNED);
   const {replyPreview, clearReplyPreview} = useMessageHook();
   const {moveToAnonymousChannel} = useMoveChatTypeHook();
@@ -50,10 +50,6 @@ const SignedChatScreen = () => {
 
   const goToChatInfoPage = () => {
     goToChatInfoScreen({from: SIGNED});
-  };
-
-  const scrollToEnd = () => {
-    flatlistRef.current?.scrollToEnd();
   };
 
   const moveChatToAnon = async () => {
@@ -84,54 +80,56 @@ const SignedChatScreen = () => {
   }, []);
 
   return (
-    <View style={styles.keyboardAvoidingView}>
-      {selectedChannel ? (
-        <ChatDetailHeader
-          channel={selectedChannel}
-          onAvatarPress={goToChatInfoPage}
-          onBackPress={goBackFromChatScreen}
-          onThreeDotPress={goToChatInfoPage}
-          avatar={selectedChannel?.channelPicture}
-          type={SIGNED}
-          user={
-            selectedChannel?.rawJson?.channel?.anon_user_info_emoji_code
-              ? `Anonymous ${selectedChannel?.rawJson?.channel?.anon_user_info_emoji_name} `
-              : getChatName(selectedChannel?.name, profile?.myProfile?.username)
-          }
-          anon_user_info_emoji_code={selectedChannel?.rawJson?.channel?.anon_user_info_emoji_code}
-          anon_user_info_color_code={selectedChannel?.rawJson?.channel?.anon_user_info_color_code}
-        />
-      ) : null}
-      <FlatList
-        contentContainerStyle={styles.flatlistContainer}
-        style={styles.chatContainer}
-        data={updatedChats}
-        inverted={true}
-        initialNumToRender={10}
-        alwaysBounceVertical={false}
-        bounces={false}
-        onLayout={scrollToEnd}
-        keyExtractor={(item, index) => item?.id || index.toString()}
-        renderItem={renderChatItem}
-      />
+    <ScrollContext.Provider value={scrollContext}>
+      <View style={styles.keyboardAvoidingView}>
+        {selectedChannel ? (
+          <ChatDetailHeader
+            channel={selectedChannel}
+            onAvatarPress={goToChatInfoPage}
+            onBackPress={goBackFromChatScreen}
+            onThreeDotPress={goToChatInfoPage}
+            avatar={selectedChannel?.channelPicture}
+            type={SIGNED}
+            user={
+              selectedChannel?.rawJson?.channel?.anon_user_info_emoji_code
+                ? `Anonymous ${selectedChannel?.rawJson?.channel?.anon_user_info_emoji_name} `
+                : getChatName(selectedChannel?.name, profile?.myProfile?.username)
+            }
+            anon_user_info_emoji_code={selectedChannel?.rawJson?.channel?.anon_user_info_emoji_code}
+            anon_user_info_color_code={selectedChannel?.rawJson?.channel?.anon_user_info_color_code}
+          />
+        ) : null}
 
-      {replyPreview && <ChatReplyPreview type={SIGNED} />}
-      <View style={styles.inputContainer}>
-        <InputMessageV2
-          onSendButtonClicked={sendChat}
-          type={SIGNED}
-          username={selectedChannel?.name}
-          profileImage={profile?.myProfile?.profile_pic_path}
-          onToggleConfirm={moveChatToAnon}
-          messageDisable={
-            selectedChannel?.channelType === 'GROUP'
-              ? 'Coming soon: Anonymous messages are not enabled yet within group chats'
-              : null
-          }
+        <FlatList
+          ref={scrollRef}
+          contentContainerStyle={styles.flatlistContainer}
+          style={styles.chatContainer}
+          data={updatedChats}
+          inverted={true}
+          initialNumToRender={10}
+          alwaysBounceVertical={false}
+          keyExtractor={(item, index) => item?.id || index.toString()}
+          renderItem={renderChatItem}
         />
+
+        {replyPreview && <ChatReplyPreview type={SIGNED} />}
+        <View style={styles.inputContainer}>
+          <InputMessageV2
+            onSendButtonClicked={sendChat}
+            type={SIGNED}
+            username={selectedChannel?.name}
+            profileImage={profile?.myProfile?.profile_pic_path}
+            onToggleConfirm={moveChatToAnon}
+            messageDisable={
+              selectedChannel?.channelType === 'GROUP'
+                ? 'Coming soon: Anonymous messages are not enabled yet within group chats'
+                : null
+            }
+          />
+        </View>
+        <Loading visible={loading} />
       </View>
-      <Loading visible={loading} />
-    </View>
+    </ScrollContext.Provider>
   );
 };
 

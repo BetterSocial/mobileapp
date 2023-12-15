@@ -11,6 +11,7 @@ import Search from '../ChannelListScreen/elements/Search';
 import useAnonymousChannelListScreenHook from '../../hooks/screen/useAnonymousChannelListHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import useRootChannelListHook from '../../hooks/screen/useRootChannelListHook';
+import {ANON_PM, ANON_POST_NOTIFICATION} from '../../hooks/core/constant';
 
 const ChannelListScreenV2 = ({route}) => {
   const {refresh} = useLocalDatabaseHook();
@@ -32,11 +33,11 @@ const ChannelListScreenV2 = ({route}) => {
   }, [isFocused]);
 
   const renderChannelItem = ({item}) => {
-    if (item?.channelType === 'ANON_PM') {
+    if (item?.channelType === ANON_PM) {
       return <MessageChannelItem item={item} onChannelPressed={() => goToChatScreen(item)} />;
     }
 
-    if (item?.channelType === 'ANON_POST_NOTIFICATION') {
+    if (item?.channelType === ANON_POST_NOTIFICATION) {
       return (
         <PostNotificationChannelItem
           item={item}

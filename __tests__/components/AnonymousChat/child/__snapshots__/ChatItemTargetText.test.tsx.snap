@@ -1,5 +1,245 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`TESTING ChatItemMyTextV2 should match snapshot 1`] = `
+<View
+  friction={3}
+  onSwipeableOpen={[Function]}
+  overshootFriction={2}
+  renderLeftActions={[Function]}
+  testID="swipeable"
+>
+  <View
+    style={
+      Array [
+        Object {
+          "display": "flex",
+          "marginVertical": 2.4000000000000004,
+        },
+        Object {
+          "paddingLeft": 60,
+          "paddingRight": 10,
+        },
+        false,
+        false,
+      ]
+    }
+  >
+    <View
+      style={
+        Array [
+          Object {
+            "flexDirection": "row",
+          },
+          Object {
+            "transform": Array [
+              Object {
+                "translateX": 0,
+              },
+            ],
+          },
+          Object {
+            "transform": Array [
+              Object {
+                "scale": 1,
+              },
+            ],
+          },
+        ]
+      }
+    >
+      <ContextMenu
+        actions={
+          Array [
+            Object {
+              "systemIcon": "arrow.turn.up.left",
+              "title": "Reply",
+            },
+            Object {
+              "systemIcon": "square.on.square",
+              "title": "Copy Message",
+            },
+            Object {
+              "destructive": true,
+              "systemIcon": "trash",
+              "title": "Delete Message",
+            },
+          ]
+        }
+        onPress={[Function]}
+        previewBackgroundColor="transparent"
+        style={
+          Object {
+            "flex": 1,
+          }
+        }
+      >
+        <View
+          style={
+            Object {
+              "borderRadius": 8,
+            }
+          }
+        >
+          <View
+            style={
+              Array [
+                Object {
+                  "backgroundColor": "#F5F6F7",
+                  "borderRadius": 8,
+                  "flex": 1,
+                  "paddingHorizontal": 4.800000000000001,
+                  "paddingVertical": 3.2,
+                },
+                Object {
+                  "backgroundColor": "#4782D7",
+                },
+                false,
+                Object {
+                  "borderTopEndRadius": 0,
+                },
+              ]
+            }
+          >
+            <View
+              style={
+                Object {
+                  "display": "flex",
+                  "flexDirection": "row",
+                }
+              }
+            >
+              <Text
+                style={
+                  Array [
+                    Object {
+                      "fontFamily": "Inter-SemiBold",
+                      "fontSize": 10.8,
+                      "lineHeight": 19.36,
+                    },
+                    Array [
+                      Object {
+                        "color": "#ffffff",
+                      },
+                    ],
+                  ]
+                }
+              >
+                username
+              </Text>
+              <View
+                style={
+                  Array [
+                    Object {
+                      "alignSelf": "center",
+                      "borderRadius": 2,
+                      "height": 3,
+                      "marginHorizontal": 4,
+                      "width": 3,
+                    },
+                    Object {
+                      "backgroundColor": "#ffffff",
+                    },
+                  ]
+                }
+              />
+              <Text
+                style={
+                  Array [
+                    Object {
+                      "alignSelf": "center",
+                      "fontFamily": "Inter-ExtraLight",
+                      "fontSize": 9,
+                      "lineHeight": 12.19,
+                    },
+                    Array [
+                      Object {
+                        "color": "#ffffff",
+                      },
+                    ],
+                  ]
+                }
+                testID="timestamp"
+              >
+                1m ago
+              </Text>
+            </View>
+            <View
+              style={
+                Object {
+                  "flexDirection": "row",
+                }
+              }
+            >
+              <Text
+                style={
+                  Array [
+                    Object {
+                      "flex": 1,
+                      "fontFamily": "Inter-Regular",
+                      "fontSize": 14.4,
+                      "lineHeight": 19.36,
+                      "marginBottom": 4,
+                    },
+                    Object {
+                      "color": "#ffffff",
+                    },
+                    false,
+                    false,
+                  ]
+                }
+              >
+                message
+              </Text>
+              <View
+                style={
+                  Object {
+                    "alignSelf": "flex-end",
+                  }
+                }
+              >
+                <View />
+              </View>
+            </View>
+          </View>
+        </View>
+      </ContextMenu>
+      <View
+        style={
+          Object {
+            "marginLeft": 3.2,
+          }
+        }
+      >
+        <View
+          style={
+            Array [
+              Object {
+                "overflow": "hidden",
+              },
+              Object {
+                "borderRadius": 12,
+                "height": 24,
+                "width": 24,
+              },
+            ]
+          }
+        >
+          <FastImageView
+            defaultSource={null}
+            resizeMode="cover"
+            source={
+              Object {
+                "uri": "https://res.cloudinary.com/hpjivutj2/image/upload/v1680929851/default-profile-picture_vrmmdn.png",
+              }
+            }
+          />
+        </View>
+      </View>
+    </View>
+  </View>
+</View>
+`;
+
 exports[`TESTING ChatItemTargetText should match snapshot 1`] = `
 <View
   friction={3}
@@ -26,15 +266,31 @@ exports[`TESTING ChatItemTargetText should match snapshot 1`] = `
   >
     <View
       style={
-        Object {
-          "flexDirection": "row",
-        }
+        Array [
+          Object {
+            "flexDirection": "row",
+          },
+          Object {
+            "transform": Array [
+              Object {
+                "translateX": 0,
+              },
+            ],
+          },
+          Object {
+            "transform": Array [
+              Object {
+                "scale": 1,
+              },
+            ],
+          },
+        ]
       }
     >
       <View
         style={
           Object {
-            "marginRight": 6.4,
+            "marginRight": 3.2,
           }
         }
       >
@@ -168,8 +424,9 @@ exports[`TESTING ChatItemTargetText should match snapshot 1`] = `
                     ],
                   ]
                 }
+                testID="timestamp"
               >
-                time
+                1m ago
               </Text>
             </View>
             <Text
@@ -185,6 +442,7 @@ exports[`TESTING ChatItemTargetText should match snapshot 1`] = `
                   Object {
                     "color": "#000000",
                   },
+                  false,
                   false,
                 ]
               }

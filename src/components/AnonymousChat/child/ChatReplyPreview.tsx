@@ -6,6 +6,10 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import IconClear from '../../../assets/icon/IconClear';
 import dimen from '../../../utils/dimen';
 import useMessageHook from '../../../hooks/screen/useMessageHook';
+import {MESSAGE_TYPE_DELETED} from '../../../utils/constants';
+import {SIGNED} from '../../../hooks/core/constant';
+import {ScrollContext} from '../../../hooks/screen/useChatScreenHook';
+import {calculateTime} from '../../../utils/time';
 import {colors} from '../../../utils/colors';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
 
@@ -14,29 +18,40 @@ interface ChatReplyPreviewProps {
 }
 
 const ChatReplyPreview = ({type}: ChatReplyPreviewProps) => {
+  const scrollContext = React.useContext(ScrollContext);
   const {replyPreview, clearReplyPreview} = useMessageHook();
+  const isDeleted = replyPreview?.message_type === MESSAGE_TYPE_DELETED;
+
+  const handleTap = () => {
+    if (replyPreview?.id) scrollContext?.handleScrollTo(replyPreview?.id);
+  };
 
   const textContainerStyle = [
-    type === 'SIGNED' ? styles.containerSigned : styles.containerAnon,
+    type === SIGNED ? styles.containerSigned : styles.containerAnon,
     styles.textContainer
   ];
+
+  const messageStyle = [styles.text, isDeleted && styles.deletedText];
 
   return (
     <Animated.View
       entering={SlideInDown.duration(150)}
       exiting={SlideOutDown.duration(80)}
       style={styles.container}>
-      <View style={textContainerStyle}>
+      <TouchableOpacity
+        activeOpacity={replyPreview?.id ? 0.75 : 1}
+        onPress={handleTap}
+        style={textContainerStyle}>
         <View style={styles.chatTitleContainer}>
-          <Text style={styles.userText}>{replyPreview?.username}</Text>
+          <Text style={styles.userText}>{replyPreview?.user?.username}</Text>
           <View style={styles.dot} />
-          <Text style={styles.timeText}>{replyPreview?.time}</Text>
+          <Text style={styles.timeText}>{calculateTime(replyPreview?.updated_at, true)}</Text>
         </View>
 
-        <Text style={styles.text} numberOfLines={1}>
-          {`${replyPreview?.message}`}
+        <Text style={messageStyle} numberOfLines={1}>
+          {replyPreview?.message ?? ''}
         </Text>
-      </View>
+      </TouchableOpacity>
 
       <TouchableOpacity
         onPress={clearReplyPreview}
@@ -75,7 +90,7 @@ const styles = StyleSheet.create({
   },
   userText: {
     fontFamily: fonts.inter[600],
-    fontSize: 12,
+    fontSize: normalizeFontSize(10),
     lineHeight: 19.36,
     color: colors.white
   },
@@ -90,14 +105,14 @@ const styles = StyleSheet.create({
   },
   timeText: {
     fontFamily: fonts.inter[200],
-    fontSize: 10,
+    fontSize: normalizeFontSize(10),
     lineHeight: 12.19,
     alignSelf: 'center',
     color: colors.white
   },
   text: {
     fontFamily: fonts.inter[400],
-    fontSize: normalizeFontSize(16),
+    fontSize: normalizeFontSize(14),
     lineHeight: 19.36,
     marginBottom: 4,
     color: colors.white
@@ -105,6 +120,10 @@ const styles = StyleSheet.create({
   containerDismiss: {
     marginLeft: 5,
     padding: 5
+  },
+  deletedText: {
+    color: colors.light_silver,
+    fontStyle: 'italic'
   }
 });
 
