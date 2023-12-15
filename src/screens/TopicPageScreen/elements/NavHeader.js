@@ -55,9 +55,9 @@ const NavHeader = (props) => {
   } = props;
   const navigation = useNavigation();
   const coverPath = topicDetail?.cover_path || null;
-  const [searchHeight, setSearchHeight] = React.useState(0);
   const insets = useSafeAreaInsets();
   const {width: displayWidth} = useWindowDimensions();
+  const isUserFollow = initialData?.isFollowing ? initialData.isFollowing : isFollow;
 
   const {followTopic} = useChatClientHook();
 
@@ -80,15 +80,6 @@ const NavHeader = (props) => {
     }
   };
 
-  const onSearchLayout = React.useCallback(
-    (event) => {
-      const {height} = event.nativeEvent.layout;
-      setSearchHeight(Math.round(height));
-      getSearchLayout(Math.round(height));
-    },
-    [setSearchHeight]
-  );
-
   const backScreen = () => {
     navigation.goBack();
   };
@@ -96,124 +87,127 @@ const NavHeader = (props) => {
   const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 
   return (
-    <View style={{}}>
-      <StatusBar barStyle="dark-content" />
-      <View
-        style={[
-          styles.navContainer(isHeaderHide),
-          {
-            height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
-          }
-        ]}
-        imageStyle={{opacity: isHeaderHide ? 0 : 1}}>
-        {isLoading ? (
-          <Shimmer width={displayWidth} height={dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER} />
-        ) : (
-          <>
-            <View
-              style={{
-                width: '100%',
-                height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
-              }}>
-              <FastImage
-                source={{uri: coverPath}}
+    <View>
+      <View style={{}}>
+        <StatusBar barStyle="dark-content" />
+        <View
+          style={[
+            styles.navContainer(isHeaderHide),
+            {
+              height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
+            }
+          ]}
+          imageStyle={{opacity: isHeaderHide ? 0 : 1}}>
+          {initialData?.coverImage === undefined && isLoading ? (
+            <Shimmer width={displayWidth} height={dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER} />
+          ) : (
+            <>
+              <View
                 style={{
+                  width: '100%',
                   height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
-                }}
-              />
-              <AnimatedBlurView
-                style={[
-                  StyleSheet.absoluteFillObject,
-                  {
-                    opacity: opacityImage
+                }}>
+                <FastImage
+                  source={
+                    initialData?.coverImage ? {uri: initialData.coverImage} : {uri: coverPath}
                   }
-                ]}
-                blurType="light"
-              />
+                  style={{
+                    height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
+                  }}
+                />
+                <AnimatedBlurView
+                  style={[
+                    StyleSheet.absoluteFillObject,
+                    {
+                      opacity: opacityImage
+                    }
+                  ]}
+                  blurType="light"
+                />
+              </View>
+            </>
+          )}
+
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              paddingTop: hasSearch ? insets.top : insets.top - dimen.normalizeDimen(8),
+              zIndex: 2,
+              position: 'absolute'
+            }}>
+            <TouchableOpacity onPress={() => backScreen()} style={styles.backbutton}>
+              <MemoIcArrowBackCircle width={normalize(32)} height={normalize(32)} />
+            </TouchableOpacity>
+            <Animated.View
+              style={{
+                opacity: opacityImage
+              }}>
+              <TopicDomainHeader {...props} />
+            </Animated.View>
+          </View>
+
+          <View
+            style={
+              (styles.containerAction,
+              {
+                paddingTop: insets.top,
+                paddingRight: dimen.normalizeDimen(20),
+                zIndex: 2,
+                position: 'absolute',
+                right: 0
+              })
+            }>
+            {!isUserFollow && isHeaderHide ? (
+              <ButtonFollow handleSetFollow={handleFollowTopic} />
+            ) : (
+              <TouchableOpacity onPress={onShareCommunity} style={styles.shareIconStyle}>
+                <ShareIconCircle color="black" width={32} height={32} />
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
+        {!hasSearch && (
+          <>
+            <View style={[styles.headerContainer]}>
+              <Animated.View style={{opacity: opacityHeaderAnimation}}>
+                <FastImage
+                  source={
+                    initialData?.channelPicutre
+                      ? {uri: initialData?.channelPicutre}
+                      : topicDetail?.icon_path
+                      ? {uri: topicDetail?.icon_path}
+                      : TopicDefaultIcon
+                  }
+                  style={styles.image}
+                />
+              </Animated.View>
+              <View style={styles.containerAction}>
+                <Animated.View style={{opacity: opacityHeaderAnimation}}>
+                  {isUserFollow === undefined && isLoading ? (
+                    <Shimmer width={normalize(100)} height={normalize(36)} />
+                  ) : isUserFollow ? (
+                    <ButtonFollowing handleSetUnFollow={handleFollowTopic} />
+                  ) : (
+                    <ButtonFollow handleSetFollow={handleFollowTopic} />
+                  )}
+                </Animated.View>
+              </View>
             </View>
+            <Animated.View
+              style={[
+                styles.domain(isHeaderHide),
+                {bottom: normalize(20), opacity: opacityHeaderAnimation}
+              ]}>
+              <TopicDomainHeader {...props} />
+            </Animated.View>
           </>
         )}
-
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            paddingTop: insets.top,
-            zIndex: 2,
-            position: 'absolute'
-          }}>
-          <TouchableOpacity onPress={() => backScreen()} style={styles.backbutton}>
-            {coverPath && !isHeaderHide ? (
-              <MemoIcArrowBackCircle width={normalize(32)} height={normalize(32)} />
-            ) : (
-              <MemoIcArrowBack width={normalize(24)} height={normalize(24)} />
-            )}
-          </TouchableOpacity>
-          <Animated.View
-            style={{
-              opacity: opacityImage
-            }}>
-            <TopicDomainHeader {...props} />
-          </Animated.View>
-        </View>
-
-        <View
-          style={
-            (styles.containerAction,
-            {
-              paddingTop: insets.top,
-              paddingRight: dimen.normalizeDimen(20),
-              zIndex: 2,
-              position: 'absolute',
-              right: 0
-            })
-          }>
-          {!isFollow && isHeaderHide ? (
-            <ButtonFollow handleSetFollow={handleFollowTopic} />
-          ) : (
-            <TouchableOpacity onPress={onShareCommunity} style={styles.shareIconStyle}>
-              <ShareIconCircle color="black" width={32} height={32} />
-            </TouchableOpacity>
-          )}
-        </View>
       </View>
-      <View style={[styles.headerContainer]}>
-        <Animated.View style={{opacity: opacityHeaderAnimation}}>
-          <FastImage
-            source={
-              initialData.channelPicutre
-                ? {uri: initialData.channelPicutre}
-                : topicDetail?.icon_path
-                ? {uri: topicDetail?.icon_path}
-                : TopicDefaultIcon
-            }
-            style={styles.image}
-          />
-        </Animated.View>
-        <View style={styles.containerAction}>
-          <Animated.View style={{opacity: opacityHeaderAnimation}}>
-            {isLoading ? (
-              <Shimmer width={normalize(100)} height={normalize(36)} />
-            ) : isFollow ? (
-              <ButtonFollowing handleSetUnFollow={handleFollowTopic} />
-            ) : (
-              <ButtonFollow handleSetFollow={handleFollowTopic} />
-            )}
-          </Animated.View>
-        </View>
-      </View>
-      <Animated.View
-        style={[
-          styles.domain(isHeaderHide),
-          {bottom: normalize(20), opacity: opacityHeaderAnimation}
-        ]}>
-        <TopicDomainHeader {...props} />
-      </Animated.View>
 
       {hasSearch && (
-        <View onLayout={onSearchLayout} style={styles.search}>
+        <View style={{}}>
           <Search
-            getSearchLayout={setSearchHeight}
             searchText={searchText}
             setSearchText={setSearchText}
             setDiscoveryLoadingData={setDiscoveryLoadingData}
