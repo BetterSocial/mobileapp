@@ -6,7 +6,7 @@ import IconCheck from '../../../assets/icon/IconCheck';
 import UserInfo from './UserInfo';
 import dimen from '../../../utils/dimen';
 
-const ItemUser = ({photo, username, bio, followed, onPress, userid}) => {
+const ItemUser = ({photo, username, bio, followed, onPress, userid, karmaScore}) => {
   const followIconFadeAnimation = React.useRef(new Animated.Value(0)).current;
 
   React.useEffect(() => {
@@ -25,7 +25,7 @@ const ItemUser = ({photo, username, bio, followed, onPress, userid}) => {
 
   return (
     <View style={styles.containerCard}>
-      <UserInfo photo={photo} bio={bio} username={username} />
+      <UserInfo photo={photo} bio={bio} username={username} karmaScore={karmaScore} />
       <View style={styles.containerButton}>
         <Pressable onPress={onPress} style={styles.followAction(32, 32)}>
           <Animated.View style={{position: 'absolute', opacity: 1}}>
