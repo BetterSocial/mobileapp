@@ -2,12 +2,10 @@ import * as React from 'react';
 import {StyleSheet, TouchableNativeFeedback, View} from 'react-native';
 
 import FastImage from 'react-native-fast-image';
-import {AnimatedCircularProgress} from 'react-native-circular-progress';
 import Image from '../../../components/Image';
 import MemoIcAddCircle from '../../../assets/icons/ic_add_circle';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
 import {normalize} from '../../../utils/fonts';
-import {renderCircleColor} from '../../../components/Karma/utils';
 import {CircleGradient} from '../../../components/Karma/CircleGradient';
 
 /**
