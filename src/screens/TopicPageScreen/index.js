@@ -406,6 +406,9 @@ const TopicPageScreen = (props) => {
   return (
     <View>
       <NavHeader
+        initialData={{
+          channelPicutre: params.channelPicture
+        }}
         isLoading={isInitialLoading}
         opacityImage={opacityImage}
         domain={topicName}
