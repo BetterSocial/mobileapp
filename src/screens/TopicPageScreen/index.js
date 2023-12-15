@@ -407,7 +407,10 @@ const TopicPageScreen = (props) => {
     <View>
       <NavHeader
         initialData={{
-          channelPicutre: params.channelPicture
+          channelPicutre: params.channelPicture,
+          coverImage: params.coverImage,
+          isFollowing: params.isFollowing,
+          memberCount: params.memberCount
         }}
         isLoading={isInitialLoading}
         opacityImage={opacityImage}
