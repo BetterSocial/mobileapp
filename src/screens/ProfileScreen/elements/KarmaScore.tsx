@@ -7,6 +7,8 @@ import {AnimatedCircularProgress} from 'react-native-circular-progress';
 import BetterScore from '../../../assets/Logogram.png';
 import MemoIc_question_mark from '../../../assets/icons/Ic_question_mark';
 import {normalize} from '../../../utils/fonts';
+import {renderCircleColor} from '../../../components/Karma/utils';
+import {CircleGradient} from '../../../components/Karma/CircleGradient';
 
 type KarmaScoreProps = {
   score: number;
@@ -24,24 +26,15 @@ export const KarmaScore = ({score}: KarmaScoreProps) => {
           alignItems: 'center',
           alignSelf: 'flex-start'
         }}>
-        <AnimatedCircularProgress
-          size={28}
-          width={3}
-          fill={score}
-          tintColor="#ACD91A"
-          backgroundColor="#E8EBED"
-          tintTransparency={true}
-          style={{marginRight: 8}}
-          rotation={360}>
-          {() => (
+        <View style={{marginRight: 8}}>
+          <CircleGradient size={normalize(28)} width={normalize(3)} fill={score}>
             <FastImage
               resizeMode={FastImage.resizeMode.center}
               source={BetterScore}
               style={{width: 28, height: 28}}
             />
-          )}
-        </AnimatedCircularProgress>
-
+          </CircleGradient>
+        </View>
         <Text
           style={{
             fontWeight: '500',

@@ -13,7 +13,9 @@ import {AnimatedCircularProgress} from 'react-native-circular-progress';
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 import TopicsProfilePictureEmptyState from '../../../assets/icon/TopicsProfilePictureEmptyState';
 import {colors} from '../../../utils/colors';
-import {fonts} from '../../../utils/fonts';
+import {fonts, normalize} from '../../../utils/fonts';
+import {renderCircleColor} from '../../../components/Karma/utils';
+import {CircleGradient} from '../../../components/Karma/CircleGradient';
 
 const renderDefaultImage = (DefaultImage) => {
   if (DefaultImage) {
@@ -83,26 +85,17 @@ const DomainList = (props) => {
   const renderProfilePicture = () => {
     if (item.karmaScore) {
       return (
-        <AnimatedCircularProgress
-          size={54}
-          width={3}
-          fill={item.karmaScore}
-          tintColor="#ACD91A"
-          backgroundColor="#E8EBED"
-          tintTransparency={true}
-          rotation={360}>
-          {() => (
-            <Image
-              testID="images"
-              source={{
-                uri: item.image
-              }}
-              style={styles.profilepicture}
-              width={48}
-              height={48}
-            />
-          )}
-        </AnimatedCircularProgress>
+        <CircleGradient fill={item.karmaScore} size={normalize(51)} width={normalize(3)}>
+          <Image
+            testID="images"
+            source={{
+              uri: item.image
+            }}
+            style={styles.profilepicture}
+            width={48}
+            height={48}
+          />
+        </CircleGradient>
       );
     }
     return (

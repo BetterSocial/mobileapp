@@ -6,6 +6,9 @@ import {AnimatedCircularProgress} from 'react-native-circular-progress';
 import Image from '../../../components/Image';
 import MemoIcAddCircle from '../../../assets/icons/ic_add_circle';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
+import {normalize} from '../../../utils/fonts';
+import {renderCircleColor} from '../../../components/Karma/utils';
+import {CircleGradient} from '../../../components/Karma/CircleGradient';
 
 /**
  * @typedef {Object} ProfilePicturePropsParam
@@ -17,6 +20,7 @@ import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
  *
  * @param {ProfilePicturePropsParam} props
  */
+
 const ProfilePicture = ({
   onImageContainerClick,
   profilePicPath,
@@ -29,42 +33,20 @@ const ProfilePicture = ({
     return <MemoIcAddCircle width={48} height={48} style={styles.addCircle} />;
   };
   return (
-    <View
-      style={[
-        styles.wrapImageProfile,
-        {
-          flex: 1,
-          backgroundColor: 'transparent',
-          borderColor: 'white',
-          borderRadius: 100,
-          overflow: 'hidden',
-          shadowColor: 'black',
-          shadowRadius: 10,
-          shadowOpacity: 1
-        }
-      ]}>
+    <View style={styles.wrapImageProfile}>
       <TouchableNativeFeedback onPress={onImageContainerClick}>
-        <AnimatedCircularProgress
-          size={110}
-          width={6}
-          fill={karmaScore}
-          tintColor="#ACD91A"
-          backgroundColor="#E8EBED"
-          tintTransparency={true}
-          rotation={360}>
-          {() => (
-            <View style={styles.profileImageContainer}>
-              <Image
-                style={styles.profileImage}
-                source={{
-                  uri: profilePicPath ? `${profilePicPath}` : DEFAULT_PROFILE_PIC_PATH
-                }}
-                resizeMode={FastImage.resizeMode.stretch}
-              />
-              {renderAddIcon()}
-            </View>
-          )}
-        </AnimatedCircularProgress>
+        <CircleGradient fill={karmaScore} size={normalize(100)} width={normalize(3)}>
+          <View style={styles.profileImageContainer}>
+            <Image
+              style={styles.profileImage}
+              source={{
+                uri: profilePicPath ? `${profilePicPath}` : DEFAULT_PROFILE_PIC_PATH
+              }}
+              resizeMode={FastImage.resizeMode.stretch}
+            />
+            {renderAddIcon()}
+          </View>
+        </CircleGradient>
       </TouchableNativeFeedback>
     </View>
   );
@@ -73,14 +55,17 @@ const ProfilePicture = ({
 let styles = StyleSheet.create({
   addCircle: {position: 'absolute', top: 25, left: 25},
   profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 100
-    // marginBottom: 12
+    width: 94,
+    height: 94,
+    borderRadius: 100,
+    marginLeft: 3,
+    marginTop: 3,
+    marginBottom: 3
   },
   profileImageContainer: {
     width: 100,
     borderRadius: 100
+    // zIndex: 1000
   },
   wrapImageProfile: {
     // marginTop: 14,

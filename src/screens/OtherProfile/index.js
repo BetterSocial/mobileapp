@@ -49,7 +49,7 @@ import {
 } from '../../service/profile';
 import {colors} from '../../utils/colors';
 import {downVote, upVote} from '../../service/vote';
-import {fonts} from '../../utils/fonts';
+import {fonts, normalize} from '../../utils/fonts';
 import {generateAnonProfileOtherProfile} from '../../service/anonymousProfile';
 import {getFeedDetail} from '../../service/post';
 import {getSingularOrPluralText} from '../../utils/string/StringUtils';
@@ -62,6 +62,8 @@ import StorageUtils from '../../utils/storage';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
 import useCreateChat from '../../hooks/screen/useCreateChat';
 import {ANON_PM, SIGNED} from '../../hooks/core/constant';
+import {renderCircleColor} from '../../components/Karma/utils';
+import {CircleGradient} from '../../components/Karma/CircleGradient';
 
 const {width, height} = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -546,30 +548,16 @@ const OtherProfile = () => {
     return (
       <>
         <View style={styles.headerImageContainer}>
-          {/* <Image
-            style={styles.profileImage}
-            source={{
-              uri: dataMain.profile_pic_path ?? DEFAULT_PROFILE_PIC_PATH
-            }}
-          /> */}
-          <AnimatedCircularProgress
-            size={110}
-            width={6}
-            fill={dataMain.karma_score}
-            tintColor="#ACD91A"
-            backgroundColor="#E8EBED"
-            tintTransparency={true}
-            style={{marginRight: 22}}
-            rotation={360}>
-            {() => (
+          <View style={{marginRight: 22}}>
+            <CircleGradient fill={dataMain.karma_score} size={100} width={3}>
               <Image
                 style={styles.profileImage}
                 source={{
                   uri: dataMain.profile_pic_path ?? DEFAULT_PROFILE_PIC_PATH
                 }}
               />
-            )}
-          </AnimatedCircularProgress>
+            </CircleGradient>
+          </View>
 
           <View>
             <View style={styles.rightHeaderContentContainer}>
@@ -902,9 +890,12 @@ const styles = StyleSheet.create({
     marginLeft: 18
   },
   profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 100
+    width: 94,
+    height: 94,
+    borderRadius: 100,
+    // marginLeft: 3,
+    marginTop: 3,
+    marginBottom: 3
   },
   containerProfile: {
     marginTop: 24
