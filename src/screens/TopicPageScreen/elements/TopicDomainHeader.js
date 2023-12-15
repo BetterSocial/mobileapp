@@ -12,14 +12,17 @@ import {Shimmer} from '../../../components/Shimmer/Shimmer';
 
 const TopicDomainHeader = (props) => {
   const {domain, handleOnMemberPress, hideSeeMember, isFollow, memberCount} = props;
+  const isUserFollow = props?.initialData?.isFollowing ? props.initialData.isFollowing : isFollow;
+
+  console.log('props?.initialData?.memberCount', props?.initialData?.memberCount);
+
   const handlePress = () => {
-    if (isFollow) {
+    if (isUserFollow) {
       handleOnMemberPress();
     } else {
       SimpleToast.show('Only community members can see other members', SimpleToast.SHORT);
     }
   };
-
   return (
     <View>
       <Text style={styles.domainText} numberOfLines={1} ellipsizeMode="tail">
@@ -28,17 +31,19 @@ const TopicDomainHeader = (props) => {
       <Pressable onPress={handlePress} style={{backgroundColor: 'transparent'}}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <FastImage testID="imageTopicMember" source={TopicMemberIcon} style={styles.member} />
-          {props.isLoading ? (
+          {props?.initialData?.memberCount === undefined && props.isLoading ? (
             <Shimmer height={10} width={normalize(25)} />
           ) : (
-            <Text style={styles.domainMember}>{memberCount}</Text>
+            <Text style={styles.domainMember}>
+              {props?.initialData?.memberCount || memberCount}
+            </Text>
           )}
           <Text style={styles.domainMember}> Members</Text>
         </View>
-        {props.isLoading ? (
+        {props?.initialData?.memberCount === undefined && props.isLoading ? (
           <Shimmer height={10} width={normalize(60)} />
         ) : (
-          isFollow &&
+          isUserFollow &&
           !hideSeeMember && (
             <Text style={styles.seeMemberText} numberOfLines={1} ellipsizeMode="tail">
               See community member
