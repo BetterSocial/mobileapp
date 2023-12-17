@@ -1,31 +1,31 @@
 import * as React from 'react';
 import {ActivityIndicator, Modal, StyleSheet, View} from 'react-native';
-import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {COLORS} from '../../utils/theme';
 
-const Loading = ({visible}) => {
+const Loading = ({visible, color = COLORS.holyTosca}) => {
   return (
     <Modal transparent visible={visible}>
       <View style={styles.container}>
         <View style={styles.content}>
-          <ActivityIndicator size="large" color={COLORS.holyTosca} />
+          <ActivityIndicator size="large" color={color} />
         </View>
       </View>
     </Modal>
   );
 };
 
-export default withInteractionsManaged (React.memo (Loading));
+export default withInteractionsManaged(React.memo(Loading));
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   content: {
     backgroundColor: 'rgba(0, 0, 0, 0.22)',
     padding: 50,
-    borderRadius: 10,
-  },
+    borderRadius: 10
+  }
 });

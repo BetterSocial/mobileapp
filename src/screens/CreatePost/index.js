@@ -795,6 +795,7 @@ const CreatePost = () => {
                 setIsPollMultipleChoice(ismultiplechoice)
               }
               expiredobject={postExpired[expiredSelect].expiredobject}
+              isAnonimity={typeUser}
             />
           )}
           <Gap style={styles.height(26)} />
@@ -853,6 +854,7 @@ const CreatePost = () => {
             topics={listTopic}
             chatTopics={listTopicChat}
             onClose={() => sheetTopicRef.current.close()}
+            isAnonimity={typeUser}
             // saveOnClose={(v, chatTopic) => onSaveTopic(v, chatTopic)}
           />
           <SheetExpiredPost
@@ -860,6 +862,7 @@ const CreatePost = () => {
             data={postExpired}
             select={expiredSelect}
             onSelect={onSetExpiredSelect}
+            isAnonimity={typeUser}
           />
           <SheetGeographic
             geoRef={sheetGeoRef}
@@ -880,7 +883,7 @@ const CreatePost = () => {
           />
         </View>
       </ScrollView>
-      <Loading visible={loading} />
+      <Loading visible={loading} color={useDynamicColors(typeUser).primary} />
       <WarningAnimatedMessage isSHow={typeUser} />
     </SafeAreaView>
   );

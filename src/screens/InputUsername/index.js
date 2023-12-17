@@ -20,7 +20,6 @@ import {useNavigation} from '@react-navigation/core';
 import BottomSheetChooseImage from './elements/BottomSheetChooseImage';
 import MemoOnboardingChangeProfilePlusIcon from '../../assets/icon/OnboardingChangeProfilePlusIcon';
 import StringConstant from '../../utils/string/StringConstant';
-import WarningIcon from '../../assets/icon-svg/warning_circle_blue.svg';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
 import {COLORS} from '../../utils/theme';
@@ -35,6 +34,7 @@ import {setCapitalFirstLetter} from '../../utils/Utils';
 import {setImage, setImageUrl, setUsername} from '../../context/actions/users';
 import {verifyUsername} from '../../service/users';
 import dimen from '../../utils/dimen';
+import IconWarningCircle from '../../assets/icon/IconWarningCircle';
 
 const MAXIMUM_USERNAME_LENGTH = 19;
 const MINIMUM_USERNAME_LENGTH = 3;
@@ -289,7 +289,7 @@ const ChooseUsername = () => {
                     style={styles.image}
                   />
                   <View style={styles.icon}>
-                    <MemoOnboardingChangeProfilePlusIcon />
+                    <MemoOnboardingChangeProfilePlusIcon color={COLORS.blue} />
                   </View>
                 </View>
               </TouchableOpacity>
@@ -311,7 +311,7 @@ const ChooseUsername = () => {
             </View>
             <View style={styles.constainerInfo}>
               <View style={styles.parentIcon}>
-                <WarningIcon />
+                <IconWarningCircle />
               </View>
               <View style={styles.parentInfo}>
                 <Text style={styles.infoText}>
@@ -399,7 +399,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   constainerInfo: {
-    backgroundColor: 'rgba(47, 128, 237, 0.2)',
+    backgroundColor: COLORS.blue20percent,
     flexDirection: 'row',
     borderRadius: dimen.normalizeDimen(8),
     width: '100%',

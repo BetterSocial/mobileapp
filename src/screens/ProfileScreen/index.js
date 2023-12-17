@@ -127,9 +127,11 @@ const Header = (props) => {
       <View>
         <View style={styles.tabs} ref={postRef}>
           <CustomPressable
-            style={styles.tabItem(profileTabIndex === TAB_INDEX_SIGNED)}
+            style={styles.tabItem(profileTabIndex === TAB_INDEX_SIGNED, true)}
             onPress={setTabIndexToSigned}>
-            <Text style={styles.postText(profileTabIndex === TAB_INDEX_SIGNED)}>Signed Posts</Text>
+            <Text style={styles.postText(profileTabIndex === TAB_INDEX_SIGNED, true)}>
+              Signed Posts
+            </Text>
           </CustomPressable>
           <CustomPressable
             style={styles.tabItem(profileTabIndex === TAB_INDEX_ANONYMOUS)}
@@ -728,11 +730,11 @@ const styles = StyleSheet.create({
     height: heightItem,
     backgroundColor: COLORS.white
   }),
-  postText: (isActive) => ({
+  postText: (isActive, isSigned) => ({
     fontFamily: isActive ? fonts.inter[600] : fonts.inter[400],
     fontSize: 14,
     lineHeight: 17,
-    color: isActive ? COLORS.holyTosca : COLORS.blackgrey,
+    color: isActive ? (isSigned ? COLORS.blue : COLORS.holyTosca) : COLORS.blackgrey,
     paddingHorizontal: 16,
     textAlign: 'center'
   }),
@@ -768,12 +770,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: COLORS.white
   },
-  tabItem: (isActive) => ({
+  tabItem: (isActive, isSigned) => ({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     height: 48,
-    borderBottomColor: COLORS.holyTosca,
+    borderBottomColor: isSigned ? COLORS.blue : COLORS.holyTosca,
     borderBottomWidth: isActive ? 2 : 0
   }),
   tabsFixed: {

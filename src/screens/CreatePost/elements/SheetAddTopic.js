@@ -11,8 +11,9 @@ import {fonts} from '../../../utils/fonts';
 import {getTopics} from '../../../service/topics';
 import {isEmptyOrSpaces} from '../../../utils/Utils';
 import {COLORS} from '../../../utils/theme';
+import {useDynamicColors} from '../../../hooks/useToggleColors';
 
-const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics}) => {
+const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics, isAnonimity = false}) => {
   const [dataTopic, setTopic] = React.useState('');
   const [listTopics, setlistTopics] = React.useState([]);
   const [chatTopic, setChatTopic] = React.useState([]);
@@ -21,6 +22,7 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics}) => {
   const rbSheetHeight = 330;
   const [, setWidthInput] = React.useState(0);
   const inputRef = React.useRef();
+  const dynamicColor = useDynamicColors(isAnonimity);
 
   React.useEffect(() => {
     KeyEvent.onKeyUpListener((keyEvent) => {
@@ -188,7 +190,9 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics}) => {
           <Text style={styles.textDesc}>
             Hit space to finish adding a community. Add up to 5 communities.
           </Text>
-          <Button onPress={() => save()}>Save</Button>
+          <Button onPress={() => save()} style={{backgroundColor: dynamicColor.primary}}>
+            Save
+          </Button>
         </ScrollView>
       </View>
     </RBSheet>

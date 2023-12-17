@@ -55,6 +55,7 @@ import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder
 import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherProfileFeed';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {COLORS} from '../../utils/theme';
+import {useDynamicColors} from '../../hooks/useToggleColors';
 
 const {width} = Dimensions.get('screen');
 
@@ -100,6 +101,7 @@ const OtherProfile = () => {
   const isSignedMessageEnabled = dataMain.isSignedMessageEnabled ?? true;
   const isAnonimityEnabled = dataMain.isAnonMessageEnabled && isSignedMessageEnabled;
   const {createSignChat} = useCreateChat();
+  const dynamicColor = useDynamicColors(isAnonimity);
 
   const generateAnonProfile = async () => {
     setLoadingGenerateAnon(true);
@@ -334,7 +336,7 @@ const OtherProfile = () => {
         <View style={styles.wrapFollower}>
           <TouchableOpacity onPress={handleOpenFollowerUser} style={styles.wrapRow}>
             <React.Fragment>
-              <Text style={styles.textTotal}>{dataMain.follower_symbol}</Text>
+              <Text style={styles.textTotal(dynamicColor)}>{dataMain.follower_symbol}</Text>
               <Text style={styles.textFollow}>
                 {getSingularOrPluralText(dataMain.follower_symbol, 'Follower', 'Followers')}
               </Text>
@@ -360,8 +362,8 @@ const OtherProfile = () => {
       if (dataMain.is_following)
         return (
           <GlobalButton onPress={() => handleSetUnFollow()}>
-            <View style={styles.buttonFollowing}>
-              <Text style={styles.textButtonFollowing}>Following</Text>
+            <View style={styles.buttonFollowing(dynamicColor)}>
+              <Text style={styles.textButtonFollowing(dynamicColor)}>Following</Text>
             </View>
           </GlobalButton>
         );
@@ -394,8 +396,8 @@ const OtherProfile = () => {
         <React.Fragment>
           {__renderFollowingButton()}
           <GlobalButton onPress={onCreateChat}>
-            <View style={styles.btnMsg}>
-              <EnveloveBlueIcon width={20} height={20} fill={COLORS.holyTosca} />
+            <View style={styles.btnMsg(dynamicColor)}>
+              <EnveloveBlueIcon width={20} height={20} fill={dynamicColor.primary} />
             </View>
           </GlobalButton>
         </React.Fragment>
@@ -769,13 +771,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
-  textTotal: {
+  textTotal: (dynamicColor) => ({
     fontFamily: fonts.inter[800],
     fontWeight: 'bold',
     fontSize: 14,
-    color: COLORS.holyTosca,
+    color: dynamicColor.primary,
     paddingRight: 4
-  },
+  }),
   textFollow: {
     fontSize: 14,
     color: COLORS.black,
@@ -814,16 +816,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end'
   },
-  buttonFollowing: {
+  buttonFollowing: (dynamicColor) => ({
     width: 88,
     height: 36,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: COLORS.holyTosca,
+    borderColor: dynamicColor.primary,
     borderRadius: 8
-  },
+  }),
   buttonFollow: {
     width: 88,
     height: 36,
@@ -834,12 +836,12 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.holyTosca,
     color: COLORS.white
   },
-  textButtonFollowing: {
+  textButtonFollowing: (dynamicColor) => ({
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: COLORS.holyTosca
-  },
+    color: dynamicColor.primary
+  }),
   textButtonFollow: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
@@ -874,16 +876,16 @@ const styles = StyleSheet.create({
     // padding: 20,
     flex: 1
   },
-  btnMsg: {
+  btnMsg: (dynamicColor) => ({
     width: 36,
     height: 36,
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: COLORS.holyTosca,
+    borderColor: dynamicColor.primary,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'
-  },
+  }),
   containerLoading: {
     height: '100%',
     width: '100%',

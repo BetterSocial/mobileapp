@@ -5,8 +5,10 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
+import {useDynamicColors} from '../../hooks/useToggleColors';
 
-const FlatListItem = ({value, index, select, onSelect, icon, desc}) => {
+const FlatListItem = ({value, index, select, onSelect, icon, desc, isAnonimity = false}) => {
+  const dynamicColor = useDynamicColors(isAnonimity);
   if (icon) {
     return (
       <TouchableOpacity testID="onselect" style={styles.container} onPress={() => onSelect(index)}>
@@ -17,7 +19,7 @@ const FlatListItem = ({value, index, select, onSelect, icon, desc}) => {
             <Text style={styles.desc}>{desc}</Text>
           </View>
         </View>
-        {index === select && <Icon name="check-circle" color={COLORS.holyTosca} size={20} />}
+        {index === select && <Icon name="check-circle" color={dynamicColor.primary} size={20} />}
       </TouchableOpacity>
     );
   }
@@ -25,7 +27,7 @@ const FlatListItem = ({value, index, select, onSelect, icon, desc}) => {
     <TouchableOpacity testID="noicon" style={styles.container} onPress={() => onSelect(index)}>
       <Text style={styles.label}>{value}</Text>
       {index === select && (
-        <Icon testID="circle-icon" name="check-circle" color={COLORS.holyTosca} size={20} />
+        <Icon testID="circle-icon" name="check-circle" color={dynamicColor.primary} size={20} />
       )}
     </TouchableOpacity>
   );

@@ -60,7 +60,7 @@ let styles = StyleSheet.create({
   following: {marginLeft: 18},
   textTotal: {
     fontSize: 14,
-    color: COLORS.holyTosca,
+    color: COLORS.blue,
     paddingRight: 4
   },
   textFollow: {

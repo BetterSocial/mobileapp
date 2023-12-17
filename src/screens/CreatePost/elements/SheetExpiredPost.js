@@ -7,7 +7,7 @@ import FlatListItem from '../../../components/FlatListItem';
 import {fonts} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
 
-const SheetExpiredPost = ({refExpired, data, select, onSelect}) => (
+const SheetExpiredPost = ({refExpired, data, select, onSelect, isAnonimity = false}) => (
   <RBSheet
     ref={refExpired}
     closeOnDragDown={true}
@@ -25,6 +25,7 @@ const SheetExpiredPost = ({refExpired, data, select, onSelect}) => (
           index={index}
           select={select}
           onSelect={onSelect}
+          isAnonimity={isAnonimity}
         />
       ))}
     </View>
