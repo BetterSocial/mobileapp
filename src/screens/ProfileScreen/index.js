@@ -73,7 +73,6 @@ import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {COLORS} from '../../utils/theme';
 
 const {width} = Dimensions.get('screen');
 
@@ -610,7 +609,7 @@ const ProfileScreen = ({route}) => {
     return reloadFetchAnonymousPost();
   };
   return (
-    <SafeAreaProvider style={styles.container} forceInset={{top: 'always'}}>
+    <View style={styles.container} forceInset={{top: 'always'}}>
       <StatusBar translucent={false} />
       <ProfileHeader
         showArrow={isNotFromHomeTab}
@@ -711,7 +710,7 @@ const ProfileScreen = ({route}) => {
       ) : null}
 
       <BlockComponent ref={refBlockComponent} refresh={getMyFeeds} screen="my_profile" />
-    </SafeAreaProvider>
+    </View>
   );
 };
 
