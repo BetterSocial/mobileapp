@@ -77,9 +77,6 @@ import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import ShadowFloatingButtons from '../../components/Button/ShadowFloatingButtons';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
 import StorageUtils from '../../utils/storage';
-import BottomSheetMenu from '../../components/BottomSheet/BottomSheetMenu';
-import ShareAndroidIcon from '../../assets/icons/images/share-for-android.svg';
-import TrashRed from '../../assets/icons/images/trash-red.svg';
 
 const {width} = Dimensions.get('screen');
 
@@ -199,7 +196,6 @@ const ProfileScreen = ({route}) => {
   const {refreshCount} = useResetContext();
   const {mappingColorFeed} = useCoreFeed();
   const LIMIT_PROFILE_FEED = 10;
-  const refBottomSheet = React.useRef();
   const TYPE_GALLERY = 'gallery';
 
   const {feeds} = myProfileFeed;
