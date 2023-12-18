@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
+import PropTypes from 'prop-types';
 import {normalize} from '../../../utils/fonts';
 import {CircleGradient} from '../../../components/Karma/CircleGradient';
 
@@ -23,6 +24,13 @@ const UserInfo = ({photo, username, bio, karmaScore}) => (
     </View>
   </View>
 );
+
+UserInfo.propTypes = {
+  photo: PropTypes.string,
+  username: PropTypes.string,
+  bio: PropTypes.string,
+  karmaScore: PropTypes.number
+};
 
 const styles = StyleSheet.create({
   cardLeft: {
