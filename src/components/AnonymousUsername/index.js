@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StyleSheet, Text} from 'react-native';
+import {StyleSheet, Text, TextStyle} from 'react-native';
 
 import {COLORS} from '../../utils/theme';
 import {POST_VERSION} from '../../utils/constants';
@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
  * @typedef {Object} AnonymousUsernameComponentProps
  * @property {string} version
  * @property {AnonUserInfoTypes} anonUserInfo
+ * @property {TextStyle} style
  */
 
 /**
@@ -44,7 +45,7 @@ const AnonymousUsername = (props) => {
     );
   }
 
-  return <Text style={styles.feedUsername}>Anonymous</Text>;
+  return <Text style={[styles.feedUsername, props.style]}>Anonymous</Text>;
 };
 
 export default AnonymousUsername;

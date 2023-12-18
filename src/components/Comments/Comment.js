@@ -22,6 +22,14 @@ import BlockComponent from '../BlockComponent';
 import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
 import CommentUserName from '../CommentUsername/CommentUsername';
 import ProfilePicture from '../../screens/ProfileScreen/elements/ProfilePicture';
+import SendDMBlack from '../../assets/icons/images/send-dm-black.svg';
+import SendDMAnonBlock from '../../assets/icons/images/send-dm-anon-black.svg';
+import MemoSendDM from '../../assets/icon/SendDM';
+import BottomSheetMenu from '../BottomSheet/BottomSheetMenu';
+import useDMMessage from '../../hooks/core/chat/useDMMessage';
+import useCreateChat from '../../hooks/screen/useCreateChat';
+import {Context} from '../../context';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 
 const Comment = ({
   user,
@@ -38,6 +46,7 @@ const Comment = ({
   onLongPress,
   updateVote
 }) => {
+  const refSheet = React.useRef();
   const navigation = useNavigation();
   const refBlockComponent = React.useRef();
   const [yourselfId, setYourselfId] = React.useState('');
@@ -46,6 +55,15 @@ const Comment = ({
     level,
     updateVote
   });
+  const [loading, setLoading] = React.useState({
+    loadingDm: false,
+    loadingDmAnon: false
+  });
+
+  const [profile] = React.useContext(Context).profile;
+  const {createSignChat} = useCreateChat();
+  const {sendMessageDM} = useDMMessage();
+
   const onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
       return;
@@ -110,6 +128,61 @@ const Comment = ({
     }
     return COLORS.balance_gray;
   };
+
+  const username = comment?.data?.anon_user_info_color_name
+    ? `Anonymous ${comment.data?.anon_user_info_emoji_name}`
+    : user?.data?.username;
+
+  const onPressDM = async () => {
+    try {
+      setLoading({...loading, loadingDm: true});
+      if (!comment?.data?.anon_user_info_color_name) {
+        const channelName = [username, profile?.myProfile?.username].join(',');
+        const selectedUser = {
+          user: {
+            name: channelName,
+            image: comment?.user?.data?.profile_pic_url || DEFAULT_PROFILE_PIC_PATH
+          }
+        };
+        const members = [comment?.user?.id, profile.myProfile.user_id];
+        await createSignChat(members, selectedUser);
+      } else {
+        await sendMessageDM(comment?.id, 'comment', 'SIGNED');
+      }
+    } catch (e) {
+      console.warn(e);
+    } finally {
+      refSheet.current.close();
+      setLoading({...loading, loadingDm: false});
+    }
+  };
+
+  const onPressDMAnon = async () => {
+    try {
+      setLoading({...loading, loadingDmAnon: true});
+      await sendMessageDM(comment?.id, 'comment', 'ANONYMOUS');
+    } catch (e) {
+      console.warn(e);
+    } finally {
+      refSheet.current.close();
+      setLoading({...loading, loadingDmAnon: false});
+    }
+  };
+
+  const dataSheet = [
+    {
+      id: 1,
+      name: loading.loadingDm ? 'Loading...' : `Message ${username}`,
+      icon: <SendDMBlack />,
+      onPress: onPressDM
+    },
+    {
+      id: 2,
+      name: loading.loadingDmAnon ? 'Loading...' : `Message ${username} anonymously`,
+      icon: <SendDMAnonBlock />,
+      onPress: onPressDMAnon
+    }
+  ];
 
   return (
     <View
@@ -182,6 +255,13 @@ const Comment = ({
         <ButtonHightlight
           onLongPress={handleOnLongPress}
           style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}
+          onPress={() => refSheet.current.open()}>
+          <MemoSendDM width={20} height={18} />
+        </ButtonHightlight>
+
+        <ButtonHightlight
+          onLongPress={handleOnLongPress}
+          style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}
           onPress={() => onBlockComponent(comment)}>
           <IconEn name="block" size={15.02} color={COLORS.balance_gray} />
         </ButtonHightlight>
@@ -199,7 +279,7 @@ const Comment = ({
           </ButtonHightlight>
         </TouchableOpacity>
 
-        <Text style={styles.vote(voteStyle())}>{totalVote}</Text>
+        {totalVote != 0 && <Text style={styles.vote(voteStyle())}>{totalVote}</Text>}
         <TouchableOpacity activeOpacity={1} testID="upvoteBtn">
           <ButtonHightlight
             onLongPress={handleOnLongPress}
@@ -215,6 +295,7 @@ const Comment = ({
       </View>
 
       <BlockComponent ref={refBlockComponent} screen={'feed_comment_item'} />
+      <BottomSheetMenu refSheet={refSheet} dataSheet={dataSheet} height={182} />
     </View>
   );
 };
