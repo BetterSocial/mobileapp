@@ -1,26 +1,34 @@
 /* eslint-disable global-require */
-import * as React from 'react';
-import IconEn from 'react-native-vector-icons/Entypo';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import * as React from 'react';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import IconEn from 'react-native-vector-icons/Entypo';
 
-import BlockComponent from '../BlockComponent';
-import ButtonHightlight from '../ButtonHighlight';
-import MemoCommentReply from '../../assets/icon/CommentReply';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
-import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
 import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
+import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
 import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
-import useUpdateComment from './hooks/useUpdateComment';
-import {COLORS, FONTS} from '../../utils/theme';
-import {calculateTime} from '../../utils/time';
-import {fonts, normalizeFontSize} from '../../utils/fonts';
-import {getUserId} from '../../utils/users';
+import MemoCommentReply from '../../assets/icon/CommentReply';
+import MemoSendDM from '../../assets/icon/SendDM';
+import SendDMAnonBlock from '../../assets/icons/images/send-dm-anon-black.svg';
+import SendDMBlack from '../../assets/icons/images/send-dm-black.svg';
+import {Context} from '../../context';
+import useDMMessage from '../../hooks/core/chat/useDMMessage';
+import useCreateChat from '../../hooks/screen/useCreateChat';
+import ProfilePicture from '../../screens/ProfileScreen/elements/ProfilePicture';
 import {iVoteComment, voteCommentV2} from '../../service/vote';
 import {removeWhiteSpace} from '../../utils/Utils';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
+import {COLORS, FONTS} from '../../utils/theme';
+import {calculateTime} from '../../utils/time';
+import {getUserId} from '../../utils/users';
+import BlockComponent from '../BlockComponent';
+import BottomSheetMenu from '../BottomSheet/BottomSheetMenu';
+import ButtonHightlight from '../ButtonHighlight';
 import CommentUserName from '../CommentUsername/CommentUsername';
-import ProfilePicture from '../../screens/ProfileScreen/elements/ProfilePicture';
+import useUpdateComment from './hooks/useUpdateComment';
 
 const ReplyCommentItem = ({
   user,
@@ -38,6 +46,7 @@ const ReplyCommentItem = ({
   updateVoteParent,
   onLongPress
 }) => {
+  const refSheet = React.useRef();
   const navigation = useNavigation();
   const refBlockComponent = React.useRef();
   const [yourselfId, setYourselfId] = React.useState('');
@@ -46,6 +55,15 @@ const ReplyCommentItem = ({
     comment.data.count_upvote - comment.data.count_downvote
   );
   const [statusVote, setStatusVote] = React.useState('');
+  const [loading, setLoading] = React.useState({
+    loadingDm: false,
+    loadingDmAnon: false
+  });
+
+  const [profile] = React.useContext(Context).profile;
+  const {createSignChat} = useCreateChat();
+  const {sendMessageDM} = useDMMessage();
+
   const onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
       console.log('');
@@ -141,6 +159,61 @@ const ReplyCommentItem = ({
     }
   };
 
+  const username = comment?.data?.anon_user_info_color_name
+    ? `Anonymous ${comment.data?.anon_user_info_emoji_name}`
+    : user?.data?.username;
+
+  const onPressDM = async () => {
+    try {
+      setLoading({...loading, loadingDm: true});
+      if (!comment?.data?.anon_user_info_color_name) {
+        const channelName = [username, profile?.myProfile?.username].join(',');
+        const selectedUser = {
+          user: {
+            name: channelName,
+            image: comment?.user?.data?.profile_pic_url || DEFAULT_PROFILE_PIC_PATH
+          }
+        };
+        const members = [comment?.user?.id, profile.myProfile.user_id];
+        await createSignChat(members, selectedUser);
+      } else {
+        await sendMessageDM(comment?.id, 'comment', 'SIGNED');
+      }
+    } catch (e) {
+      console.warn(e);
+    } finally {
+      refSheet.current.close();
+      setLoading({...loading, loadingDm: false});
+    }
+  };
+
+  const onPressDMAnon = async () => {
+    try {
+      setLoading({...loading, loadingDmAnon: true});
+      await sendMessageDM(comment?.id, 'comment', 'ANONYMOUS');
+    } catch (e) {
+      console.warn(e);
+    } finally {
+      refSheet.current.close();
+      setLoading({...loading, loadingDmAnon: false});
+    }
+  };
+
+  const dataSheet = [
+    {
+      id: 1,
+      name: loading.loadingDm ? 'Loading...' : `Message ${username}`,
+      icon: <SendDMBlack />,
+      onPress: onPressDM
+    },
+    {
+      id: 2,
+      name: loading.loadingDmAnon ? 'Loading...' : `Message ${username} anonymously`,
+      icon: <SendDMAnonBlock />,
+      onPress: onPressDMAnon
+    }
+  ];
+
   return (
     <TouchableOpacity
       onLongPress={handleLongPress}
@@ -217,6 +290,14 @@ const ReplyCommentItem = ({
             <IconEn name="block" size={15.02} color={COLORS.balance_gray} />
           </ButtonHightlight>
         </TouchableOpacity>
+        <TouchableOpacity onPress={() => onBlock(comment)} testID="btnBlock" activeOpacity={1}>
+          <ButtonHightlight
+            onLongPress={handleLongPress}
+            onPress={() => refSheet.current.open()}
+            style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}>
+            <MemoSendDM />
+          </ButtonHightlight>
+        </TouchableOpacity>
 
         <TouchableOpacity onPress={onDownVote} testID="downvoteBtn">
           <ButtonHightlight
@@ -230,7 +311,7 @@ const ReplyCommentItem = ({
             )}
           </ButtonHightlight>
         </TouchableOpacity>
-        <Text style={styles.vote(voteStyle())}>{totalVote}</Text>
+        {totalVote !== 0 && <Text style={styles.vote(voteStyle())}>{totalVote}</Text>}
         <TouchableOpacity onPress={onUpVote} testID="upvotebtn" activeOpacity={1}>
           <ButtonHightlight
             onLongPress={handleLongPress}
@@ -245,6 +326,7 @@ const ReplyCommentItem = ({
         </TouchableOpacity>
       </View>
 
+      <BottomSheetMenu refSheet={refSheet} dataSheet={dataSheet} height={182} />
       <BlockComponent ref={refBlockComponent} refresh={() => {}} screen="reply_screen" />
     </TouchableOpacity>
   );

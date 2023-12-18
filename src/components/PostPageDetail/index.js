@@ -14,6 +14,7 @@ import {
 import Toast from 'react-native-simple-toast';
 
 import {Footer} from '..';
+
 import {Context} from '../../context';
 import {saveComment} from '../../context/actions/comment';
 import {setFeedByIndex} from '../../context/actions/feeds';
