@@ -290,7 +290,10 @@ const ReplyCommentItem = ({
             <IconEn name="block" size={15.02} color={COLORS.balance_gray} />
           </ButtonHightlight>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => onBlock(comment)} testID="btnBlock" activeOpacity={1}>
+        <TouchableOpacity
+          onPress={() => refSheet.current.open()}
+          testID="sendDMbtn"
+          activeOpacity={1}>
           <ButtonHightlight
             onLongPress={handleLongPress}
             onPress={() => refSheet.current.open()}
