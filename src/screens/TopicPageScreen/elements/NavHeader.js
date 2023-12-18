@@ -13,7 +13,6 @@ import {
 import {BlurView} from '@react-native-community/blur';
 import FastImage from 'react-native-fast-image';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import MemoIcArrowBack from '../../../assets/arrow/Ic_arrow_back';
 import MemoIcArrowBackCircle from '../../../assets/arrow/Ic_arrow_back_circle';
 import ShareIconCircle from '../../../assets/icons/Ic_share_circle';
 import TopicDefaultIcon from '../../../assets/topic.png';
@@ -57,7 +56,6 @@ const NavHeader = (props) => {
   const coverPath = topicDetail?.cover_path || null;
   const insets = useSafeAreaInsets();
   const {width: displayWidth} = useWindowDimensions();
-  const isUserFollow = initialData?.isFollowing ? initialData.isFollowing : isFollow;
 
   const {followTopic} = useChatClientHook();
 
@@ -122,23 +120,23 @@ const NavHeader = (props) => {
                       opacity: opacityImage
                     }
                   ]}
-                  blurType="light"
+                  blurType="thinMaterialDark"
                 />
               </View>
             </>
           )}
-
           <View
             style={{
               flexDirection: 'row',
-              alignItems: 'center',
-              paddingTop: hasSearch ? insets.top : insets.top - dimen.normalizeDimen(8),
+              alignItems: 'flex-start',
+              paddingTop: insets.top,
               zIndex: 2,
               position: 'absolute'
             }}>
             <TouchableOpacity onPress={() => backScreen()} style={styles.backbutton}>
               <MemoIcArrowBackCircle width={normalize(32)} height={normalize(32)} />
             </TouchableOpacity>
+
             <Animated.View
               style={{
                 opacity: opacityImage
@@ -146,11 +144,11 @@ const NavHeader = (props) => {
               <TopicDomainHeader {...props} />
             </Animated.View>
           </View>
-
           <View
             style={
               (styles.containerAction,
               {
+                alignItems: 'flex-start',
                 paddingTop: insets.top,
                 paddingRight: dimen.normalizeDimen(20),
                 zIndex: 2,
@@ -158,7 +156,7 @@ const NavHeader = (props) => {
                 right: 0
               })
             }>
-            {!isUserFollow && isHeaderHide ? (
+            {!isFollow && isHeaderHide ? (
               <ButtonFollow handleSetFollow={handleFollowTopic} />
             ) : (
               <TouchableOpacity onPress={onShareCommunity} style={styles.shareIconStyle}>
@@ -184,9 +182,9 @@ const NavHeader = (props) => {
               </Animated.View>
               <View style={styles.containerAction}>
                 <Animated.View style={{opacity: opacityHeaderAnimation}}>
-                  {isUserFollow === undefined && isLoading ? (
+                  {isFollow === undefined && isLoading ? (
                     <Shimmer width={normalize(100)} height={normalize(36)} />
-                  ) : isUserFollow ? (
+                  ) : isFollow ? (
                     <ButtonFollowing handleSetUnFollow={handleFollowTopic} />
                   ) : (
                     <ButtonFollow handleSetFollow={handleFollowTopic} />
