@@ -188,7 +188,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="ProfileScreen"
-          component={withKeyboardWrapper(ProfileScreen)}
+          component={withSafeAreaView(withKeyboardWrapper(ProfileScreen))}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen name="ImageViewer" component={ImageViewerScreen} />
@@ -298,27 +298,27 @@ const AuthenticatedNavigator = () => {
 
         <AuthenticatedStack.Screen
           name="ProfileReplyComment"
-          component={withKeyboardWrapper(ProfileReplyComment)}
+          component={withSafeAreaView(withKeyboardWrapper(ProfileReplyComment))}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="OtherProfileReplyComment"
-          component={withKeyboardWrapper(OtherProfileReplyComment)}
+          component={withSafeAreaView(withKeyboardWrapper(OtherProfileReplyComment))}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="PostDetailPage"
-          component={withKeyboardWrapper(PostDetailPage)}
+          component={withSafeAreaView(withKeyboardWrapper(PostDetailPage))}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="ProfilePostDetailPage"
-          component={withKeyboardWrapper(ProfilePostDetail)}
+          component={withSafeAreaView(withKeyboardWrapper(ProfilePostDetail))}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="OtherProfilePostDetailPage"
-          component={withKeyboardWrapper(OtherProfilePostDetail)}
+          component={withSafeAreaView(withKeyboardWrapper(OtherProfilePostDetail))}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen

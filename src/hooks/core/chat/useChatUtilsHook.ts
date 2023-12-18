@@ -87,7 +87,6 @@ function useChatUtilsHook(): UseChatUtilsHook {
   const goToCommunityScreen = (channel: ChannelList) => {
     setChannelAsRead(channel);
     const topicName = channel?.name?.replace(/^#/, '');
-    console.log('channel.rawJson.coverImage', channel.rawJson.cover_image);
     const navigationParam = {
       id: convertTopicNameToTopicPageScreenParam(topicName),
       channelPicture: channel.channelPicture,

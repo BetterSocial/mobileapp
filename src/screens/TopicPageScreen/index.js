@@ -60,7 +60,7 @@ const TopicPageScreen = (props) => {
   const [isInitialLoading, setIsInitialLoading] = React.useState(true);
   const [userId, setUserId] = React.useState('');
   const [topicId, setTopicId] = React.useState('');
-  const [isFollow, setIsFollow] = React.useState(false);
+  const [isFollow, setIsFollow] = React.useState(params.isFollowing);
   const [topicDetail, setTopicDetail] = React.useState({});
   const [memberCount, setMemberCount] = React.useState(0);
   const [isHeaderHide, setIsHeaderHide] = React.useState(false);
@@ -94,7 +94,7 @@ const TopicPageScreen = (props) => {
     : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT;
   const headerShowHeight =
     navigationHeight + dimen.size.TOPIC_FEED_HEADER_HEIGHT + topPosition + normalize(4);
-  const headerHideHeight = dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2 + topPosition;
+  const headerHideHeight = dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2;
 
   const headerHeight = scrollY.interpolate({
     inputRange: [0, headerHideHeight],
@@ -400,7 +400,7 @@ const TopicPageScreen = (props) => {
   );
 
   return (
-    <View>
+    <>
       <NavHeader
         initialData={{
           channelPicutre: params.channelPicture,
@@ -446,6 +446,29 @@ const TopicPageScreen = (props) => {
             fetchNextFeeds(event);
           }}
         />
+
+        <View
+          style={{
+            marginTop: isHeaderHide ? -dimen.size.TOPIC_FEED_HEADER_HEIGHT : 0,
+            minHeight: 548,
+            height: 700
+          }}>
+          <TiktokScroll
+            ref={listRef}
+            contentHeight={dimen.size.TOPIC_CURRENT_ITEM_HEIGHT + normalizeFontSizeByWidth(4)}
+            data={feeds}
+            onEndReach={onEndReach}
+            onRefresh={onRefresh}
+            refreshing={loading}
+            renderItem={renderItem}
+            onScroll={handleScroll}
+            scrollEventThrottle={16}
+            showSearchBar={true}
+            snap
+            contentInsetAdjustmentBehavior={feeds?.length > 1 ? 'automatic' : 'never'}
+            onMomentumScrollEnd={(event) => onWillSendViewPostTime(event, feeds)}
+          />
+        </View>
       </View>
       <ButtonAddPostTopic topicName={topicName} onRefresh={onRefresh} />
       <BlockComponent
@@ -454,7 +477,7 @@ const TopicPageScreen = (props) => {
         refreshAnonymous={onDeleteBlockedPostCompleted}
         screen="topic_screen"
       />
-    </View>
+    </>
   );
 };
 export default TopicPageScreen;
