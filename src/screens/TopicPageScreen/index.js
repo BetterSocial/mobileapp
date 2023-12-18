@@ -2,32 +2,34 @@ import * as React from 'react';
 import _ from 'lodash';
 import SimpleToast from 'react-native-simple-toast';
 import {Animated, Platform, StyleSheet} from 'react-native';
+import {SafeAreaProvider, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
-import {SafeAreaProvider, useSafeAreaInsets} from 'react-native-safe-area-context';
 import BlockComponent from '../../components/BlockComponent';
 import ButtonAddPostTopic from '../../components/Button/ButtonAddPostTopic';
 import MemoizedListComponent from './MemoizedListComponent';
+import NavHeader from './elements/NavHeader';
 import ShareUtils from '../../utils/share';
 import TiktokScroll from '../../components/TiktokScroll';
 import TopicPageStorage from '../../utils/storage/custom/topicPageStorage';
 import dimen from '../../utils/dimen';
 import removePrefixTopic from '../../utils/topics/removePrefixTopic';
+import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
+import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
+import useViewPostTimeHook from '../FeedScreen/hooks/useViewPostTimeHook';
+import useOnBottomNavigationTabPressHook, {
+  LIST_VIEW_TYPE
+} from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
 import {Context} from '../../context';
 import {downVote, upVote} from '../../service/vote';
 import {getFeedDetail} from '../../service/post';
 import {getTopicPages} from '../../service/topicPages';
+import {getTopics, getUserTopic} from '../../service/topics';
 import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {setFeedByIndex, setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
-import useOnBottomNavigationTabPressHook, {
-  LIST_VIEW_TYPE
-} from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
-import NavHeader from './elements/NavHeader';
-import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
-import {getTopics, getUserTopic} from '../../service/topics';
 
 const styles = StyleSheet.create({
   parentContainer: {
@@ -37,7 +39,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'lightblue',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 40,
+    paddingTop: dimen.normalizeDimen(40),
     position: 'absolute',
     top: 0,
     left: 0,
@@ -45,7 +47,7 @@ const styles = StyleSheet.create({
     zIndex: 2
   },
   headerText: {
-    fontSize: 20,
+    fontSize: normalizeFontSizeByWidth(20),
     fontWeight: 'bold'
   }
 });
@@ -68,11 +70,17 @@ const TopicPageScreen = (props) => {
     ? feedsContext.topicFeeds.filter((feed) => feed?.topics?.includes(topicName))
     : [];
   const mainFeeds = feedsContext.feeds;
+  const {timer, viewPostTimeIndex} = feedsContext;
+
   const [offset, setOffset] = React.useState(0);
   const [client] = React.useContext(Context).client;
   const refBlockComponent = React.useRef();
   const scrollY = React.useRef(new Animated.Value(0)).current;
   const {mappingColorFeed} = useCoreFeed();
+
+  const {onWillSendViewPostTime} = useViewPostTimeHook(dispatch, timer, viewPostTimeIndex);
+  const {fetchNextFeeds} = useFeedPreloadHook(feeds?.length, () => refreshingData(offset));
+
   const {listRef} = useOnBottomNavigationTabPressHook(LIST_VIEW_TYPE.TIKTOK_SCROLL, onRefresh);
 
   const topicWithPrefix = route.params.id;
@@ -122,11 +130,7 @@ const TopicPageScreen = (props) => {
   const initialFetchTopicFeeds = async (cacheLength = 0) => {
     try {
       const resultGetTopicPages = await getTopicPages(id?.toLowerCase(), 0);
-      const {data: cacheFeedTopic} = TopicPageStorage.get(id?.toLowerCase());
-      const {mapNewData} = mappingColorFeed({
-        dataFeed: resultGetTopicPages?.data,
-        dataCache: cacheFeedTopic
-      });
+      const mapNewData = mappingColorFeed(resultGetTopicPages?.data);
       const {data = [], offset: offsetFeeds = 0} = resultGetTopicPages || {};
       setTopicFeeds(mapNewData, dispatch);
       setOffset(offsetFeeds);
@@ -242,7 +246,7 @@ const TopicPageScreen = (props) => {
         const {feeds: cacheFeedTopic} = TopicPageStorage.get(id?.toLowerCase());
 
         const {data, offset: offsetFeeds} = result;
-        const {mapNewData} = mappingColorFeed({dataFeed: data, dataCache: cacheFeedTopic});
+        const mapNewData = mappingColorFeed(data);
         if (result.code === 200) {
           if (offsetParam === 0) {
             TopicPageStorage.set(id?.toLowerCase(), mapNewData, offsetFeeds);
@@ -422,6 +426,10 @@ const TopicPageScreen = (props) => {
         snap
         contentOffset={{x: 0, y: topPosition}}
         contentInsetAdjustmentBehavior={feeds?.length > 1 ? 'automatic' : 'never'}
+        onMomentumScrollEnd={(event) => {
+          onWillSendViewPostTime(event, feeds);
+          fetchNextFeeds(event);
+        }}
       />
       <ButtonAddPostTopic topicName={topicName} onRefresh={onRefresh} />
       <BlockComponent

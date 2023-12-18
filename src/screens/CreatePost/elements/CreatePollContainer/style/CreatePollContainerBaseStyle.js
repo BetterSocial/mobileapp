@@ -34,7 +34,7 @@ const CreatePollContainerBaseStyle = StyleSheet.create({
   },
 
   removepolltext: {
-    color: colors.redalert,
+    color: colors.red,
     fontWeight: '600',
     fontFamily: 'Inter-SemiBold'
   },

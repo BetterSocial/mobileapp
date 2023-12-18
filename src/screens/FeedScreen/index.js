@@ -9,6 +9,7 @@ import Search from './elements/Search';
 import TiktokScroll from '../../components/TiktokScroll';
 import dimen from '../../utils/dimen';
 import useCoreFeed from './hooks/useCoreFeed';
+import useViewPostTimeHook from './hooks/useViewPostTimeHook';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
 } from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
@@ -17,7 +18,7 @@ import {Context} from '../../context';
 import {DISCOVERY_TAB_TOPICS} from '../../utils/constants';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {normalizeFontSizeByWidth} from '../../utils/fonts';
-import {setFeedByIndex, setTimer} from '../../context/actions/feeds';
+import {setFeedByIndex} from '../../context/actions/feeds';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
@@ -39,15 +40,15 @@ const FeedScreen = (props) => {
     bottom,
     loading,
     myProfile,
-    nextTargetFeed,
-    postOffset,
     searchHeight,
     showNavbar,
+    timer,
+    viewPostTimeIndex,
 
     checkCacheFeed,
+    fetchNextFeeds,
     getDataFeeds,
     handleScroll,
-    isSamePostViewed,
     onBlockCompleted,
     onDeleteBlockedPostCompleted,
     saveSearchHeight,
@@ -55,9 +56,11 @@ const FeedScreen = (props) => {
     setDownVote,
     setIsLastPage,
     setShowNavbar,
-    setUpVote,
-    updateViewPostTime
+    setUpVote
   } = useCoreFeed();
+
+  const {onWillSendViewPostTime} = useViewPostTimeHook(dispatch, timer, viewPostTimeIndex);
+
   const interactionManagerRef = React.useRef(null);
   const interactionManagerAnimatedRef = React.useRef(null);
   const getDataFeedsHandle = async (offsetFeed = 0, useLoading = false, targetFeed = null) => {
@@ -116,10 +119,6 @@ const FeedScreen = (props) => {
     );
     sendViewPostTime(true);
     props.navigation.navigate('DomainScreen', param);
-  };
-
-  const onEndReach = () => {
-    getDataFeedsHandle(postOffset, false, nextTargetFeed);
   };
 
   const refreshMoreText = (index, haveSeeMore) => {
@@ -226,12 +225,6 @@ const FeedScreen = (props) => {
     />
   );
 
-  const onWillSendViewPostTime = (event) => {
-    if (isSamePostViewed(event)) return;
-    sendViewPostTime();
-    updateViewPostTime(event);
-  };
-
   const renderItem = ({item, index}) => {
     if (item.dummy) return <React.Fragment key={index} />;
     if (updateMoreText && updateIndex === index) return null;
@@ -250,7 +243,6 @@ const FeedScreen = (props) => {
         ref={listRef}
         contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT + normalizeFontSizeByWidth(4)}
         data={feeds}
-        onEndReach={onEndReach}
         onRefresh={onRefresh}
         onScroll={handleScrollEvent}
         onScrollBeginDrag={handleOnScrollBeginDrag}
@@ -259,7 +251,10 @@ const FeedScreen = (props) => {
         refreshing={loading}
         renderItem={renderItem}
         onEndReachedThreshold={0.9}
-        onMomentumScrollEnd={onWillSendViewPostTime}
+        onMomentumScrollEnd={(momentumEvent) => {
+          onWillSendViewPostTime(momentumEvent, feeds);
+          fetchNextFeeds(momentumEvent);
+        }}
       />
       <ButtonNewPost onRefresh={onRefresh} />
       <BlockComponent

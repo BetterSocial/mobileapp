@@ -8,7 +8,7 @@ const Loading = ({visible}) => {
     <Modal transparent visible={visible}>
       <View style={styles.container}>
         <View style={styles.content}>
-          <ActivityIndicator size="large" color={COLORS.holyTosca} />
+          <ActivityIndicator size="large" color={COLORS.holytosca} />
         </View>
       </View>
     </Modal>

@@ -5,7 +5,7 @@ import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
 import dimen from '../../utils/dimen';
 import {POST_VERSION} from '../../utils/constants';
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   imageAnonimity: {
     marginRight: 0,
     width: dimen.size.FEED_HEADER_IMAGE_RADIUS,
@@ -50,6 +50,7 @@ const AnonymousAvatar = (props) => {
   if (version >= POST_VERSION) {
     return (
       <View
+        testID="newVersion"
         style={{...styles.avatarV2Background(anonUserInfo.colorCode, radius), ...containerStyle}}>
         <Text style={styles.avatarV2Emoji(emojiRadius)}>{anonUserInfo.emojiCode}</Text>
       </View>

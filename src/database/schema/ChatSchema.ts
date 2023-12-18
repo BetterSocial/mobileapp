@@ -3,6 +3,7 @@ import {v4 as uuid} from 'uuid';
 
 import BaseDbSchema from './BaseDbSchema';
 import UserSchema from './UserSchema';
+import {DELETED_MESSAGE_TEXT, MESSAGE_TYPE_DELETED} from '../../utils/constants';
 import {ModifyAnonymousChatData} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 
 class ChatSchema implements BaseDbSchema {
@@ -197,7 +198,7 @@ class ChatSchema implements BaseDbSchema {
   }
 
   static fromWebsocketObject(json): ChatSchema {
-    let rawJson = null;
+    let rawJson: string | null = null;
 
     try {
       rawJson = JSON.stringify(json);
@@ -211,7 +212,7 @@ class ChatSchema implements BaseDbSchema {
       channelId: json?.channel_id,
       userId: json?.message?.user?.id,
       message: json?.message?.text || json?.message?.message,
-      type: json?.message?.type,
+      type: json?.message?.message_type ?? json?.message?.type,
       createdAt: json?.message?.created_at,
       updatedAt: json?.message?.created_at,
       rawJson,
@@ -223,7 +224,7 @@ class ChatSchema implements BaseDbSchema {
   }
 
   static fromGetAllChannelAPI(channelId, json): ChatSchema {
-    let rawJson = null;
+    let rawJson: string | null = null;
 
     try {
       rawJson = JSON.stringify(json);
@@ -237,7 +238,7 @@ class ChatSchema implements BaseDbSchema {
       channelId,
       userId: json?.user?.id,
       message: (json?.text || json?.message) ?? '',
-      type: json?.type,
+      type: json?.message_type ?? json?.type,
       createdAt: json?.created_at,
       updatedAt: json?.created_at,
       rawJson,
@@ -249,7 +250,7 @@ class ChatSchema implements BaseDbSchema {
   }
 
   static fromGetAllAnonymousChannelAPI(channelId, json): ChatSchema {
-    let rawJson = null;
+    let rawJson: string | null = null;
 
     try {
       rawJson = JSON.stringify(json);
@@ -280,13 +281,24 @@ class ChatSchema implements BaseDbSchema {
     channelId: string,
     message: string,
     localDb: SQLiteDatabase,
-    type: 'regular' | 'system' = 'regular',
-    status: 'pending' | 'sent' = 'pending'
+    type: 'regular' | 'system' | 'reply' = 'regular',
+    status: 'pending' | 'sent' = 'pending',
+    json: string | null = null
   ): Promise<ChatSchema> {
     let newRandomId = id;
+    let rawJson: string | null = null;
+
     const existingChat = await ChatSchema.getByid(localDb, newRandomId);
     if (existingChat) {
       newRandomId = uuid();
+    }
+
+    if (json) {
+      try {
+        rawJson = JSON.stringify(json);
+      } catch (e) {
+        console.log('error stringify', e);
+      }
     }
 
     return new ChatSchema({
@@ -297,7 +309,7 @@ class ChatSchema implements BaseDbSchema {
       updatedAt: new Date().toISOString(),
       id: newRandomId,
       type,
-      rawJson: null,
+      rawJson,
       user: null,
       userId,
       isMe: true,
@@ -306,7 +318,7 @@ class ChatSchema implements BaseDbSchema {
   }
 
   static fromInitAnonymousChatAPI(data: ModifyAnonymousChatData, status = 'sent'): ChatSchema {
-    let rawJson = null;
+    let rawJson: string | null = null;
 
     try {
       rawJson = JSON.stringify(data);
@@ -325,7 +337,7 @@ class ChatSchema implements BaseDbSchema {
       rawJson,
       status,
       isContinuous: false,
-      type: 'regular',
+      type: data?.message?.message_type ?? data?.message?.type,
       user: null,
       userId: data?.message?.user?.id
     });
@@ -351,6 +363,67 @@ class ChatSchema implements BaseDbSchema {
       console.log('error updatedRandomId', this.id, response?.message?.id);
       console.log('error updating chat status');
       console.log(e);
+    }
+  };
+
+  static updateDeletedChatType = async (db: SQLiteDatabase, messageId: string) => {
+    try {
+      const selectQuery = `SELECT raw_json FROM ${ChatSchema.getTableName()} WHERE id = ?;`;
+      const resultSet = await db.executeSql(selectQuery, [messageId]);
+      const result = resultSet[0].rows.item(0);
+      const rawJson = JSON.parse(result.raw_json);
+      rawJson.message_type = MESSAGE_TYPE_DELETED;
+      rawJson.text = DELETED_MESSAGE_TEXT;
+      const updatedRawJson = JSON.stringify(rawJson);
+
+      const updateQuery = `UPDATE ${ChatSchema.getTableName()}
+        SET type = ?, message = ?, raw_json = ?
+        WHERE id = ?;`;
+
+      const updateReplacement = ['deleted', DELETED_MESSAGE_TEXT, updatedRawJson, messageId];
+
+      await db.executeSql(updateQuery, updateReplacement);
+    } catch (e) {
+      console.log('error updating deleted chat:', e);
+    }
+  };
+
+  static updateDeletedRepliedChat = async (
+    db: SQLiteDatabase,
+    channelId: string,
+    messageId: string,
+    createdAt: string
+  ) => {
+    try {
+      const selectQuery = `SELECT id, raw_json FROM ${ChatSchema.getTableName()} WHERE channel_id = ? AND created_at > ?;`;
+      const resultSet = await db.executeSql(selectQuery, [channelId, createdAt]);
+      const {rows} = resultSet[0];
+
+      const updatePromises: Promise<any>[] = [];
+
+      // eslint-disable-next-line no-plusplus
+      for (let i = 0; i < rows.length; i++) {
+        const result = rows.item(i);
+        const rawJson = JSON.parse(result.raw_json);
+
+        // Check if messageId matches
+        if (rawJson.reply_data && rawJson.reply_data.id === messageId) {
+          const newJson = {...rawJson};
+          newJson.reply_data.text = DELETED_MESSAGE_TEXT;
+          newJson.message.reply_data.text = DELETED_MESSAGE_TEXT;
+          newJson.reply_data.message_type = MESSAGE_TYPE_DELETED;
+          newJson.updated = true;
+          const updatedRawJson = JSON.stringify(newJson);
+
+          // Update the chat
+          const updateQuery = `UPDATE ${ChatSchema.getTableName()} SET raw_json = ? WHERE id = ?;`;
+          updatePromises.push(db.executeSql(updateQuery, [updatedRawJson, result.id]));
+        }
+      }
+
+      await Promise.all(updatePromises);
+    } catch (e) {
+      console.log('error updating related chat:', e);
     }
   };
 
