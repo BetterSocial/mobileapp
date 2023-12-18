@@ -629,7 +629,6 @@ PODS:
     - RCT-Folly
     - RCTRequired
     - RCTTypeSafety
-    - React
     - React-callinvoker
     - React-Core
     - React-Core/DevSupport
@@ -647,7 +646,6 @@ PODS:
     - React-RCTNetwork
     - React-RCTSettings
     - React-RCTText
-    - React-RCTVibration
     - ReactCommon/turbomodule/core
     - Yoga
   - RNScreens (2.18.1):
@@ -984,7 +982,7 @@ SPEC CHECKSUMS:
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: fa8275d5086566e22a26ddc385ab5772e7f9b1bd
-  FBReactNativeSpec: 35c98e8661ee0c117e11e7cfe02938caad0fa85b
+  FBReactNativeSpec: 67b2d6bbfc2d9d96dbbf28ccd1a4a2a97c04a29f
   Firebase: fffddd0bab8677d07376538365faa93ff3889b39
   FirebaseABTesting: e66f1f80747792630d9b292966de206d5df9853b
   FirebaseAnalytics: 4641d7ae4220174f6ca5626163ffc5de2e90391e
@@ -1101,4 +1099,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: afc99f05b45ed46beccf19346460228e62656155
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1
