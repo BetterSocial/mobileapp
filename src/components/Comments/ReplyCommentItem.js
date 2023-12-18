@@ -121,11 +121,11 @@ const ReplyCommentItem = ({
     }
   };
 
-  const onBlock = (commentBlock) => {
+  const onBlock = () => {
     refBlockComponent.current.openBlockComponent({
       anonimity: false,
-      actor: commentBlock.user,
-      id: commentBlock.id
+      actor: comment.user,
+      id: comment.id
     });
   };
   React.useEffect(() => {
@@ -274,10 +274,10 @@ const ReplyCommentItem = ({
             </ButtonHightlight>
           </TouchableOpacity>
         )}
-        <TouchableOpacity onPress={() => onBlock(comment)} testID="btnBlock" activeOpacity={1}>
+        <TouchableOpacity onPress={onBlock} testID="btnBlock" activeOpacity={1}>
           <ButtonHightlight
             onLongPress={handleLongPress}
-            onPress={() => onBlock(comment)}
+            onPress={onBlock}
             style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}>
             <IconEn name="block" size={15.02} color={colors.gray1} />
           </ButtonHightlight>

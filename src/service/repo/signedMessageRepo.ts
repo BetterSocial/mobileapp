@@ -3,8 +3,17 @@ import api from '../config';
 import {ChannelData} from '../../../types/repo/ChannelData';
 import {
   ChannelTypeEnum,
+  EditChannelPostTyoe,
   SignedPostNotification
 } from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
+
+type SendPayloadType = {
+  channelId: string;
+  message: string;
+  channelType: number;
+  messageType?: string;
+  replyMessageId?: string;
+};
 
 const baseUrl = {
   checkIsTargetAllowingAnonDM: 'chat/channels/check-allow-anon-dm-status',
@@ -13,17 +22,26 @@ const baseUrl = {
   getAllSignedPostNotifications: '/feeds/feed-chat',
   getSingleSignedPostNotifications: (activityId: string) => `/feeds/feed-chat/${activityId}`,
   setChannelAsRead: '/chat/channels/read',
-  createSignedChat: '/chat/channels-signed'
+  createSignedChat: '/chat/channels-signed',
+  editChannel: '/chat/channel-detail',
+  deleteMessage: (messageId: string) => `/chat/message/${messageId}`
 };
 
 interface SignedMessageRepoTypes {
   checkIsTargetAllowingAnonDM: (targetUserId: string) => Promise<any>;
-  sendSignedMessage: (channelId: string, message: string, channelType: number) => Promise<any>;
+  sendSignedMessage: (
+    channelId: string,
+    message: string,
+    channelType: number,
+    replyMessageId?: string
+  ) => Promise<any>;
   getAllSignedChannels: () => Promise<ChannelData[]>;
   getAllSignedPostNotifications: () => Promise<SignedPostNotification[]>;
   getSingleSignedPostNotifications: (activityId: string) => Promise<SignedPostNotification>;
   setChannelAsRead: (channelId: string, channelType: ChannelTypeEnum) => Promise<boolean>;
   createSignedChat: (body: string[]) => Promise<any>;
+  editChannel: (body: EditChannelPostTyoe) => Promise<any>;
+  deleteMessage: (messageId: string) => Promise<any>;
 }
 
 async function checkIsTargetAllowingAnonDM(targetUserId: string) {
@@ -44,8 +62,17 @@ async function checkIsTargetAllowingAnonDM(targetUserId: string) {
   }
 }
 
-async function sendSignedMessage(channelId: string, message: string, channelType: number) {
-  const payload = {channelId, message, channelType};
+async function sendSignedMessage(
+  channelId: string,
+  message: string,
+  channelType: number,
+  replyMessageId?: string
+) {
+  let payload: SendPayloadType = {channelId, message, channelType};
+  if (replyMessageId) {
+    payload = {...payload, messageType: 'reply', replyMessageId};
+  }
+
   try {
     const response = await api.post(baseUrl.sendSignedMessage, payload);
 
@@ -137,6 +164,34 @@ async function createSignedChat(members: string[]) {
   }
 }
 
+async function editChannel(body: EditChannelPostTyoe) {
+  try {
+    const response = await api.post(baseUrl.editChannel, body);
+    if (response.status === 200) {
+      return Promise.resolve(response.data);
+    }
+
+    return Promise.reject(response.status);
+  } catch (e) {
+    console.log(e);
+    return Promise.reject(e);
+  }
+}
+
+async function deleteMessage(messageId: string) {
+  try {
+    const response = await api.delete(baseUrl.deleteMessage(messageId));
+    if (response.status === 200) {
+      return Promise.resolve(response.data);
+    }
+
+    return Promise.reject(response.data?.status);
+  } catch (e) {
+    console.log(e);
+    return Promise.reject(e);
+  }
+}
+
 const SignedMessageRepo: SignedMessageRepoTypes = {
   checkIsTargetAllowingAnonDM,
   sendSignedMessage,
@@ -144,7 +199,9 @@ const SignedMessageRepo: SignedMessageRepoTypes = {
   getAllSignedPostNotifications,
   getSingleSignedPostNotifications,
   setChannelAsRead,
-  createSignedChat
+  createSignedChat,
+  editChannel,
+  deleteMessage
 };
 
 export default SignedMessageRepo;

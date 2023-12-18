@@ -21,6 +21,7 @@ import BottomSheetChooseImage from './elements/BottomSheetChooseImage';
 import MemoOnboardingChangeProfilePlusIcon from '../../assets/icon/OnboardingChangeProfilePlusIcon';
 import StringConstant from '../../utils/string/StringConstant';
 import WarningIcon from '../../assets/icon-svg/warning_circle_blue.svg';
+import dimen from '../../utils/dimen';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
 import {COLORS} from '../../utils/theme';
@@ -35,7 +36,6 @@ import {requestCameraPermission, requestExternalStoragePermission} from '../../u
 import {setCapitalFirstLetter} from '../../utils/Utils';
 import {setImage, setImageUrl, setUsername} from '../../context/actions/users';
 import {verifyUsername} from '../../service/users';
-import dimen from '../../utils/dimen';
 
 const MAXIMUM_USERNAME_LENGTH = 19;
 const MINIMUM_USERNAME_LENGTH = 3;
@@ -200,13 +200,13 @@ const ChooseUsername = () => {
     switch (type) {
       case 'fetch':
         return (
-          <Text style={styles.textMessage('#BDBDBD')}>
+          <Text style={styles.textMessage(colors.silver)}>
             {` ${StringConstant.onboardingChooseUsernameLabelCheckingAvailability}`}
           </Text>
         );
       case 'available':
         return (
-          <Text style={styles.textMessage(colors.holytosca)}>
+          <Text style={styles.textMessage(colors.signed_primary)}>
             {` ${StringConstant.onboardingChooseUsernameLabelUserAvailable(user)}`}
           </Text>
         );
@@ -350,7 +350,7 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: dimen.normalizeDimen(1),
     borderRadius: dimen.normalizeDimen(8),
-    borderColor: '#BDBDBD',
+    borderColor: colors.silver,
     paddingHorizontal: dimen.normalizeDimen(23),
     paddingVertical: dimen.normalizeDimen(13),
     width: '100%'
@@ -379,7 +379,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: normalizeFontSize(36),
     lineHeight: normalizeFontSize(43.57),
-    color: '#11243D',
+    color: colors.bunting,
     marginTop: dimen.normalizeDimen(24)
   },
   desc: {

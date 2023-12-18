@@ -33,6 +33,15 @@ jest.mock('react-native-reanimated', () => ({
   createAnimatedComponent: (component) => jest.fn().mockReturnValue(component),
   __reanimatedWorkletInit: jest.fn(),
   ScrollView: 'ScrollView',
+  Animated: {
+    View: 'Animated.View',
+    Text: 'Animated.Text',
+    Image: 'Animated.Image',
+    ScrollView: 'Animated.ScrollView',
+    FlatList: 'Animated.FlatList',
+    SectionList: 'Animated.SectionList',
+    createAnimatedComponent: (component) => jest.fn().mockReturnValue(component)
+  },
   Extrapolate: jest.fn().mockReturnValue('clamp')
 }));
 
@@ -43,5 +52,9 @@ jest.mock('@react-native-community/netinfo', () => ({
 }));
 
 global.__reanimatedWorkletInit = jest.fn();
+global.ReanimatedDataMock = {
+  now: () => Date.now()
+};
+
 console.warn = jest.fn(mockConsoleMethod(console.warn));
 console.error = jest.fn(mockConsoleMethod(console.error));

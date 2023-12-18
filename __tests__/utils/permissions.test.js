@@ -6,6 +6,14 @@ jest.mock('react-native-permissions', () => {
   return mock;
 });
 
+const mockPermission = (value) => {
+  return {
+    'android.permission.READ_EXTERNAL_STORAGE': value,
+    'ios.permission.PHOTO_LIBRARY': value,
+    'android.permission.READ_MEDIA_IMAGES': value
+  };
+};
+
 describe('Util permission should correct', () => {
   beforeAll(() => {
     jest.mock('react-native/Libraries/Utilities/Platform', () => ({
@@ -48,27 +56,21 @@ describe('requestExternalStoragePermission shpuld run correctly', () => {
     }));
   });
   it('requestExternalStoragePermission granted should run correctly', async () => {
-    jest.spyOn(mock, 'check').mockResolvedValue('granted');
+    jest.spyOn(mock, 'requestMultiple').mockResolvedValue(mockPermission('granted'));
     const checkPermission = await requestExternalStoragePermission();
     expect(mock.check).toHaveBeenCalled();
     expect(checkPermission.message).toEqual(StringConstant.cameraPermissionGranted);
   });
   it('requestExternalStoragePermission unavailable should run correctly', async () => {
-    jest.spyOn(mock, 'check').mockResolvedValue('unavailable');
+    jest.spyOn(mock, 'requestMultiple').mockResolvedValue(mockPermission('unavailable'));
     const checkPermission = await requestExternalStoragePermission();
     expect(mock.check).toHaveBeenCalled();
-    expect(checkPermission.message).toEqual(StringConstant.cameraPermissionUnavailable);
+    expect(checkPermission.message).toEqual(StringConstant.externalStoragePermissionUnavailable);
   });
   it('requestExternalStoragePermission denied should run correctly', async () => {
-    jest.spyOn(mock, 'check').mockResolvedValue('denied');
+    jest.spyOn(mock, 'requestMultiple').mockResolvedValue(mockPermission('denied'));
     const checkPermission = await requestExternalStoragePermission();
     expect(mock.check).toHaveBeenCalled();
-    expect(checkPermission.message).toEqual(StringConstant.cameraPermissionGranted);
-  });
-  it('requestExternalStoragePermission default should run correctly', async () => {
-    jest.spyOn(mock, 'check').mockResolvedValue('default');
-    const checkPermission = await requestExternalStoragePermission();
-    expect(mock.check).toHaveBeenCalled();
-    expect(checkPermission.message).toEqual('');
+    expect(checkPermission.message).toEqual(StringConstant.externalStoragePermissionDenied);
   });
 });

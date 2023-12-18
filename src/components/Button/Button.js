@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {Text, StyleSheet, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
 
 import {colors} from '../../utils/colors';
@@ -10,10 +10,12 @@ const Btn = (props) => {
   const disable = props.disabled ? props.disabled : false;
   const disabledStyle = props.disabled ? styles.disabledbutton : {};
   return (
-    <TouchableOpacity disabled={disable} onPress={props.onPress} {...props}>
-      <View style={{...styles.button, ...props.style, ...disabledStyle}}>
-        <Text style={{...styles.buttonText, ...props.textStyling}}>{props.children}</Text>
-      </View>
+    <TouchableOpacity
+      disabled={disable}
+      style={{...styles.button, ...props.styles, ...disabledStyle}}
+      onPress={props.onPress}
+      {...props}>
+      <Text style={{...styles.buttonText, ...props.textStyling}}>{props.children}</Text>
     </TouchableOpacity>
   );
 };
@@ -28,7 +30,7 @@ Btn.propTypes = {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#00ADB5',
+    backgroundColor: colors.signed_primary,
     paddingHorizontal: dimen.normalizeDimen(25),
     borderRadius: dimen.normalizeDimen(8),
     flexDirection: 'row',
@@ -37,7 +39,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   buttonText: {
-    color: '#FFFFFF',
+    color: colors.white,
     fontSize: 18,
     fontFamily: fonts.inter[600]
   },

@@ -27,7 +27,10 @@ export type GetstreamMessage = {
   text: string;
   isSystem?: boolean;
   textOwnMessage?: string;
+  reply_data?: any;
   type: string;
+  message_type?: string;
+  deleted_message_id?: string;
   updated_at: string;
   user: {
     banned: boolean;
@@ -46,6 +49,7 @@ export type GetstreamMessage = {
 export type GetstreamChannel = {
   channel_type: number;
   channel_image?: string;
+  image?: string;
   cid: string;
   config: {
     automod: string;
@@ -111,6 +115,7 @@ export type GetstreamWebsocket = {
   unread_channels: number;
   unread_count: number;
   targetName: string;
+  reply_data?: any;
   targetImage?: string;
   isAnonymous?: boolean;
   anon_user_info_emoji_name?: string;
