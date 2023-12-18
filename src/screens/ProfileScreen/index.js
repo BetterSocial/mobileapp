@@ -31,7 +31,6 @@ import CustomPressable from '../../components/CustomPressable';
 import FollowInfoRow from './elements/FollowInfoRow';
 import ImageCompressionUtils from '../../utils/image/compress';
 import LinkAndSocialMedia from './elements/LinkAndSocialMedia';
-import PostOptionModal from '../../components/Modal/PostOptionModal';
 import ProfileHeader from './elements/ProfileHeader';
 import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
@@ -75,6 +74,12 @@ import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import ShadowFloatingButtons from '../../components/Button/ShadowFloatingButtons';
+import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
+import StorageUtils from '../../utils/storage';
+import BottomSheetMenu from '../../components/BottomSheet/BottomSheetMenu';
+import ShareAndroidIcon from '../../assets/icons/images/share-for-android.svg';
+import TrashRed from '../../assets/icons/images/trash-red.svg';
 
 const {width} = Dimensions.get('screen');
 
@@ -184,7 +189,6 @@ const ProfileScreen = ({route}) => {
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
-  const [isPostOptionModalOpen, setIsOptionModalOpen] = React.useState(false);
   const [selectedPostForOption, setSelectedPostForOption] = React.useState(null);
   const [isFetchingList, setIsFetchingList] = React.useState(false);
   const {interactionsComplete} = useAfterInteractions();
@@ -195,6 +199,7 @@ const ProfileScreen = ({route}) => {
   const {refreshCount} = useResetContext();
   const {mappingColorFeed} = useCoreFeed();
   const LIMIT_PROFILE_FEED = 10;
+  const refBottomSheet = React.useRef();
   const TYPE_GALLERY = 'gallery';
 
   const {feeds} = myProfileFeed;
@@ -588,16 +593,6 @@ const ProfileScreen = ({route}) => {
     fetchMyProfile(true);
   }
 
-  const onHeaderOptionClosed = () => {
-    setSelectedPostForOption(null);
-    setIsOptionModalOpen(false);
-  };
-
-  const onHeaderOptionClicked = (post) => {
-    setSelectedPostForOption(post);
-    setIsOptionModalOpen(true);
-  };
-
   const removePostByIdFromContext = () => {
     const deletedIndex = feeds?.findIndex((find) => selectedPostForOption?.id === find?.id);
     const newData = [...feeds];
@@ -606,7 +601,6 @@ const ProfileScreen = ({route}) => {
   };
 
   const onDeletePost = async () => {
-    setIsOptionModalOpen(false);
     removePostByIdFromContext();
 
     let response;
@@ -674,7 +668,9 @@ const ProfileScreen = ({route}) => {
               source={SOURCE_MY_PROFILE}
               hideThreeDot={false}
               showAnonymousOption={true}
-              onHeaderOptionClicked={() => onHeaderOptionClicked(item)}
+              onDeletePost={() => onDeletePost()}
+              isSelf={item.is_self}
+              isShowDelete={true}
             />
           );
         }}
@@ -719,11 +715,6 @@ const ProfileScreen = ({route}) => {
       ) : null}
 
       <BlockComponent ref={refBlockComponent} refresh={getMyFeeds} screen="my_profile" />
-      <PostOptionModal
-        isOpen={isPostOptionModalOpen}
-        onClose={onHeaderOptionClosed}
-        onDeleteClicked={onDeletePost}
-      />
     </SafeAreaProvider>
   );
 };

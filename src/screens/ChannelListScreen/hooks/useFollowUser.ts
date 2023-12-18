@@ -39,6 +39,12 @@ const useFollowUser = () => {
     return Boolean(followContext?.users?.find((user) => user?.user_id_followed === targetUser?.id));
   };
 
+  const isFollowingUser = (user_id_followed: string): boolean => {
+    return Boolean(
+      followContext?.users?.find((user) => user?.user_id_followed === user_id_followed)
+    );
+  };
+
   const handleFollow = async (channel: ChannelListData) => {
     const targetUser = channel?.rawJson?.channel?.members?.find(
       (member) => member?.user_id !== myProfile?.user_id
@@ -97,6 +103,7 @@ const useFollowUser = () => {
     handleFollow,
     isInitialFollowing,
     isFollowing,
+    isFollowingUser,
     isSystemMessage,
     isSystemFollowMessage
   };

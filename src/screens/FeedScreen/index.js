@@ -220,6 +220,8 @@ const FeedScreen = (props) => {
       searchHeight={searchHeight}
       bottomArea={bottom}
       isScroll={isScroll}
+      hideThreeDot={false}
+      isSelf={item.is_self}
     />
   );
 
