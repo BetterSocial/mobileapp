@@ -90,7 +90,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
       channelPicture: channel.channelPicture,
       coverImage: channel.rawJson.cover_image,
       isFollowing: channel.rawJson.is_following,
-      memberCount: channel.rawJson.member_count
+      memberCount: channel.rawJson.topic_follower_count
     };
 
     navigation.navigate('TopicPageScreen', navigationParam);
