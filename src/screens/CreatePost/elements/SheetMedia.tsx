@@ -5,8 +5,8 @@ import {ActivityIndicator, StyleSheet, Text, TouchableOpacity, View} from 'react
 import MemoIcCamera from '../../../assets/icons/Ic_camera';
 import MemoIcCreatePoll from '../../../assets/icons/ic_create_poll';
 import MemoIcMedia from '../../../assets/icons/Ic_media';
-import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
+import {COLORS} from '../../../utils/theme';
 
 export type SheetMediaProps = {
   refMedia: React.RefObject<RBSheet>;
@@ -70,7 +70,11 @@ const List = ({icon, label, onPress, isLoading = false}: ListProps) => (
   <TouchableOpacity style={styles.list} onPress={onPress}>
     {icon}
     <Text style={styles.labelList}>{label}</Text>
-    {isLoading ? <ActivityIndicator size="small" color="#0000ff" style={styles.loader} /> : <></>}
+    {isLoading ? (
+      <ActivityIndicator size="small" color={COLORS.darkBlue} style={styles.loader} />
+    ) : (
+      <></>
+    )}
   </TouchableOpacity>
 );
 export default SheetMedia;
@@ -85,7 +89,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingVertical: 17.67,
     paddingLeft: 21.67,
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     borderRadius: 8,
     marginBottom: 12,
     alignItems: 'center'
@@ -93,7 +97,7 @@ const styles = StyleSheet.create({
   labelList: {
     fontFamily: fonts.inter[500],
     fontSize: 14,
-    color: colors.black,
+    color: COLORS.black,
     paddingLeft: 8,
     flex: 1
   },
@@ -102,7 +106,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20
   },
   draggableIcon: {
-    backgroundColor: colors.alto
+    backgroundColor: COLORS.alto
   },
   loader: {
     marginRight: 10

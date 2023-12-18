@@ -4,12 +4,12 @@ import Fa from 'react-native-vector-icons/FontAwesome';
 import {useChatContext, useMessageInputContext} from 'stream-chat-react-native';
 import {debounce} from 'lodash';
 import MemoIcPicture from '../../assets/icons/Ic_Picture';
-import {colors} from '../../utils/colors';
 import IconSend from '../../assets/icon/IconSendComment';
 import SheetEmoji from './SheetEmoji';
 
 import {Context} from '../../context/Store';
 import {deleteDraftChat, getDraftChat, saveDraftChat} from '../../service/draftChat';
+import {COLORS} from '../../utils/theme';
 
 const InputMessage = () => {
   const [channelClient] = React.useContext(Context).channel;
@@ -83,7 +83,7 @@ const InputMessage = () => {
             disabled={isDisableButton()}
             onPress={handleSendMessage}>
             <IconSend
-              fillBackground={isDisableButton() ? colors.gray1 : colors.bondi_blue}
+              fillBackground={isDisableButton() ? COLORS.gray9 : COLORS.holyTosca}
               style={styles.icSendButton}
             />
           </TouchableOpacity>
@@ -97,7 +97,7 @@ const InputMessage = () => {
             renderItem={({item, index}) => (
               <View key={index}>
                 <TouchableOpacity onPress={() => handleDelete(item)} style={styles.containerDelete}>
-                  <Fa name="trash" color={'white'} size={18} />
+                  <Fa name="trash" color={COLORS.white} size={18} />
                 </TouchableOpacity>
                 <Image style={styles.imageStyle} resizeMode="contain" source={{uri: item.url}} />
               </View>
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     paddingLeft: 6
   },
   containerInput: {
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 9,
@@ -139,10 +139,10 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    backgroundColor: colors.lightgrey
+    backgroundColor: COLORS.lightgrey
   },
   btn: (disable) => ({
-    backgroundColor: disable ? colors.gray1 : colors.bondi_blue,
+    backgroundColor: disable ? COLORS.gray9 : COLORS.holyTosca,
     borderRadius: 18,
     width: 35,
     height: 35,
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     right: 0,
     height: 25,
     width: 25,
-    backgroundColor: colors.holytosca,
+    backgroundColor: COLORS.holyTosca,
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 100,

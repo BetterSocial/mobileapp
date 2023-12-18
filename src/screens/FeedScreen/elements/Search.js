@@ -47,12 +47,18 @@ const Search = ({
 };
 
 export const HeaderStyles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    backgroundColor: COLORS.white,
+    marginBottom: SIZES.base,
+    marginHorizontal: SIZES.base
+  },
   searchContainer: {
     flex: 1
   },
   wrapperSearch: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: COLORS.lightgrey,
     marginLeft: 20,
     marginRight: 20,
     borderRadius: 8,

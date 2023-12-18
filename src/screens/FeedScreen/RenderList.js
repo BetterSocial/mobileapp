@@ -8,7 +8,6 @@ import {Context} from '../../context';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {followUserAnon, setFollow, setUnFollow, unfollowUserAnon} from '../../service/profile';
 import {showScoreAlertDialog} from '../../utils/Utils';
-import {colors} from '../../utils/colors';
 import {
   ANALYTICS_SHARE_POST_FEED_ID,
   ANALYTICS_SHARE_POST_FEED_SCREEN,
@@ -26,8 +25,8 @@ import Content from './Content';
 import ContentLink from './ContentLink';
 import Header from './Header';
 import useFeed from './hooks/useFeed';
-import following from '../../context/actions/following';
 import {setFeedByIndex} from '../../context/actions/feeds';
+import {COLORS} from '../../utils/theme';
 
 const tabBarHeight = StatusBar.currentHeight;
 const FULL_WIDTH = Dimensions.get('screen').width;
@@ -305,8 +304,8 @@ const styles = StyleSheet.create({
   cardContainer: {
     width: FULL_WIDTH,
     borderBottomWidth: 0,
-    borderBottomColor: colors.lightgrey,
-    backgroundColor: 'white',
+    borderBottomColor: COLORS.lightgrey,
+    backgroundColor: COLORS.white,
     height: dimen.size.FEED_CURRENT_ITEM_HEIGHT,
     marginBottom: normalizeFontSizeByWidth(4)
   },

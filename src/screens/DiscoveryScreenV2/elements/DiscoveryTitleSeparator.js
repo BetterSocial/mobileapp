@@ -1,31 +1,36 @@
 import * as React from 'react';
-import { Text } from 'react-native';
+import {Text} from 'react-native';
 
-import { colors } from "../../../utils/colors"
-import { fonts } from "../../../utils/fonts"
+import {fonts} from '../../../utils/fonts'
+import {COLORS} from '../../../utils/theme';
 
 /**
  * @typedef {Object} DiscoveryTitleSeparatorProp
  * @property {String} text
  */
 /**
- * 
- * @param {DiscoveryTitleSeparatorProp} prop 
+ *
+ * @param {DiscoveryTitleSeparatorProp} prop
  */
 const DiscoveryTitleSeparator = (prop) => {
-    const { text } = prop
-    return <Text style={{
+  const {text} = prop;
+  return (
+    <Text
+      style={{
         fontSize: 12,
         lineHeight: 18,
-        fontFamily : fonts.poppins[600],
-        color: colors.black,
+        fontFamily: fonts.poppins[600],
+        color: COLORS.black,
         paddingLeft: 20,
         paddingRight: 20,
         paddingTop: 11,
         paddingBottom: 11,
-        backgroundColor: colors.lightgrey,
+        backgroundColor: COLORS.lightgrey
         // marginTop: 15,
-    }}>{text}</Text>
-}
+      }}>
+      {text}
+    </Text>
+  );
+};
 
-export default DiscoveryTitleSeparator
+export default DiscoveryTitleSeparator;

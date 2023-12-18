@@ -4,9 +4,9 @@ import {Text, View, StyleSheet, TouchableOpacity, Pressable, Platform} from 'rea
 import ToastMessage from 'react-native-toast-message';
 import TextAreaChat from '../../../components/TextAreaChat';
 import ToggleSwitch from '../../../components/ToggleSwitch';
-import {colors} from '../../../utils/colors';
 import {profileSettingsDMpermission} from '../../../service/profile';
 import {addDotAndRemoveNewline} from '../../../utils/string/TrimString';
+import {COLORS} from '../../../utils/theme';
 
 type BioAndDMSettingProps = {
   bio: string;
@@ -109,8 +109,8 @@ const BioAndDMSetting = ({
           value={isAnonymity}
           onValueChange={toggleSwitchAnon}
           labelLeft="Allow anonymous messages?"
-          circleActiveColor={colors.blue1}
-          activeTextColor={colors.blue1}
+          circleActiveColor={COLORS.blue}
+          activeTextColor={COLORS.blue}
         />
       </TouchableOpacity>
 
@@ -122,8 +122,8 @@ const BioAndDMSetting = ({
             value={isAllowFollowingSendDM}
             onValueChange={toggleSwitchAnonAllowFollowing}
             labelLeft="Only allow anon DMs from users you follow?"
-            circleActiveColor={colors.blue1}
-            activeTextColor={colors.blue1}
+            circleActiveColor={COLORS.blue}
+            activeTextColor={COLORS.blue}
           />
         </TouchableOpacity>
       )}
@@ -133,14 +133,14 @@ const BioAndDMSetting = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.darkBlue,
+    backgroundColor: COLORS.blue,
     borderRadius: 15,
     paddingHorizontal: 12,
     marginTop: 20
   },
-  editPromptLabel: {color: colors.blueSea10, textDecorationLine: 'underline'},
+  editPromptLabel: {color: COLORS.blueSea, textDecorationLine: 'underline'},
   bioText: {
-    color: '#F5F5F5',
+    color: COLORS.lightgrey,
     fontFamily: 'Inter',
     fontSize: 14,
     fontStyle: 'normal',

@@ -27,7 +27,7 @@ exports[`Item List block should run correctly should match snapshot 1`] = `
   <Text
     style={
       Object {
-        "color": "#000",
+        "color": "#000000",
         "flex": 1,
         "fontFamily": "Inter-Regular",
         "fontSize": 14,
@@ -41,7 +41,6 @@ exports[`Item List block should run correctly should match snapshot 1`] = `
     color="#FF2E63"
     name="check-circle"
     size={20}
-    testID="active-icon"
   />
 </View>
 `;

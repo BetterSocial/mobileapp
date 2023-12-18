@@ -56,9 +56,9 @@ import {
 } from '../screens';
 import {InitialStartupAtom, LoadingStartupContext} from '../service/initialStartup';
 import {NavigationConstants} from '../utils/constants';
-import {colors} from '../utils/colors';
 import {followersOrFollowingAtom} from '../screens/ChannelListScreen/model/followersOrFollowingAtom';
 import {useInitialStartup} from '../hooks/useInitialStartup';
+import {COLORS} from '../utils/theme';
 
 const RootStack = createNativeStackNavigator();
 
@@ -109,7 +109,7 @@ export const RootNavigator = ({currentScreen}) => {
   const getInsetTopColor = () => {
     'worklet';
 
-    return currentScreen === 'SampleChatScreen' ? colors.anon_primary : colors.white;
+    return currentScreen === 'SampleChatScreen' ? COLORS.holyTosca : COLORS.white;
   };
 
   return (
@@ -146,7 +146,7 @@ export const RootNavigator = ({currentScreen}) => {
             right: 0,
             bottom: 0,
             height: insets.bottom,
-            backgroundColor: colors.white
+            backgroundColor: COLORS.white
           }}
         />
       </View>

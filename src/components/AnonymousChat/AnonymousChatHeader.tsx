@@ -6,8 +6,8 @@ import {StyleSheet, Text, View} from 'react-native';
 import CustomPressable from '../CustomPressable';
 import MemoIc_arrow_back_white from '../../assets/arrow/Ic_arrow_back_white';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
 
 const AnonymousChatHeader = ({
   avatar = DEFAULT_PROFILE_PIC_PATH,
@@ -20,7 +20,7 @@ const AnonymousChatHeader = ({
     container: {
       display: 'flex',
       flexDirection: 'row',
-      backgroundColor: colors.bondi_blue,
+      backgroundColor: COLORS.holyTosca,
       height: 50,
       alignItems: 'center'
     },
@@ -43,7 +43,7 @@ const AnonymousChatHeader = ({
     },
     text: {
       fontFamily: fonts.inter[600],
-      color: colors.white,
+      color: COLORS.white,
       fontSize: 14,
       lineHeight: 17,
       marginLeft: 10,
@@ -78,7 +78,7 @@ const AnonymousChatHeader = ({
         </Text>
       </CustomPressable>
       <CustomPressable testID="pressable-option" style={styles.threeDot} onPress={onThreeDotPress}>
-        <IconEP name="dots-three-vertical" size={20} color={colors.white} />
+        <IconEP name="dots-three-vertical" size={20} color={COLORS.white} />
       </CustomPressable>
       <FastImage />
     </View>
