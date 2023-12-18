@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {ActivityIndicator, Modal, StyleSheet, View} from 'react-native';
-import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {COLORS} from '../../utils/theme';
 
 const Loading = ({visible}) => {
@@ -15,17 +15,17 @@ const Loading = ({visible}) => {
   );
 };
 
-export default withInteractionsManaged (React.memo (Loading));
+export default withInteractionsManaged(React.memo(Loading));
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   content: {
     backgroundColor: 'rgba(0, 0, 0, 0.22)',
     padding: 50,
-    borderRadius: 10,
-  },
+    borderRadius: 10
+  }
 });

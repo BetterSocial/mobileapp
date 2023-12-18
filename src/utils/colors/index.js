@@ -30,7 +30,11 @@ export const colors = {
   darkBlue: '#2C67BC',
   blueSea10: '#55C2FF',
   greenDark: '#004346',
-  babyBlue: '#7B9DCD'
+  babyBlue: '#7B9DCD',
+  bluePrimary: '#4782D7',
+  greySubtile: '#69707C',
+  greySubtile1: '#9B9FA9',
+  greySubtile2: '#E8EBED',
 };
 
 export const hexToRgb = (hex, opacity = 1) => {
