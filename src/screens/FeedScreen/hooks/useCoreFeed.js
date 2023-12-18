@@ -5,13 +5,12 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import StorageUtils from '../../../utils/storage';
 import dimen from '../../../utils/dimen';
+import useMappingPostColorHook from './useMappingColorHook';
 import {Context} from '../../../context';
 import {FEEDS_CACHE} from '../../../utils/cache/constant';
 import {SOURCE_FEED_TAB} from '../../../utils/constants';
-import {checkIsHasColor, hexToRgb} from '../../../utils/colors';
 import {downVote, upVote} from '../../../service/vote';
 import {getFeedDetail, getMainFeedV2WithTargetFeed, viewTimePost} from '../../../service/post';
-import {listFeedColor} from '../../../configs/FeedColor';
 import {saveToCache} from '../../../utils/cache';
 import {
   setFeedByIndex,
@@ -34,6 +33,7 @@ const useCoreFeed = () => {
   const {feeds, timer, viewPostTimeIndex} = feedsContext;
   const {myProfile} = profileContext;
   const {bottom} = useSafeAreaInsets();
+  const {mappingColorFeed} = useMappingPostColorHook();
 
   const getDataFeeds = async (offsetFeed = 0, useLoading = false, targetFeed = null) => {
     setCountStack(null);
@@ -55,56 +55,10 @@ const useCoreFeed = () => {
     }
   };
 
-  const handleBgContentFeed = (feed) => {
-    if (feed.anon_user_info_color_code) {
-      const rgb = hexToRgb(feed?.anon_user_info_color_code, 0.25);
-      const color = {
-        bg: `${rgb}`,
-        color: 'rgba(0,0,0)'
-      };
-      return color;
-    }
-    const randomIndex = getRandomInt(0, listFeedColor.length);
-    let newColor = listFeedColor[randomIndex];
-    newColor = {
-      ...newColor,
-      bg: hexToRgb(newColor.bg, 0.25),
-      color: 'rgba(0,0,0)'
-    };
-    return newColor;
-  };
-
-  const mappingColorFeed = ({dataFeed, dataCache}) => {
-    if (dataCache && typeof dataCache === 'string') {
-      dataCache = JSON.parse(dataCache);
-    }
-    const mapNewData = dataFeed?.map((feed) => {
-      const cacheBg = dataCache?.find((cache) => cache?.id === feed?.id);
-      if (cacheBg?.bg) {
-        const isHexColor = checkIsHasColor(cacheBg.bg);
-        if (isHexColor) {
-          return {...feed, bg: hexToRgb(cacheBg.bg, 0.25)};
-        }
-        return {...feed, bg: cacheBg?.bg};
-      }
-      return {...feed, ...handleBgContentFeed(feed)};
-    });
-
-    return {
-      mapNewData
-    };
-  };
-
   const handleDataFeeds = (dataFeeds, offsetFeed = 0) => {
     if (dataFeeds.data.length > 0) {
       const {data} = dataFeeds;
-      let stringCacheFeed = StorageUtils.feedPages.get();
-      if (stringCacheFeed) {
-        stringCacheFeed = JSON.parse(stringCacheFeed);
-      } else {
-        stringCacheFeed = {};
-      }
-      const {mapNewData} = mappingColorFeed({dataFeed: data, dataCache: stringCacheFeed?.data});
+      const mapNewData = mappingColorFeed(data);
       let saveData = {
         offsetFeed: dataFeeds.offset,
         data: mapNewData,
@@ -208,18 +162,6 @@ const useCoreFeed = () => {
       );
     }
   }, [isLastPage, isScroll]);
-
-  const getRandomInt = (min, max) => {
-    // Create byte array and fill with 1 random number
-    const byteArray = new Uint8Array(1);
-    // eslint-disable-next-line no-undef
-    crypto.getRandomValues(byteArray);
-
-    const range = max - min + 1;
-    const max_range = 256;
-    if (byteArray[0] >= Math.floor(max_range / range) * range) return getRandomInt(min, max);
-    return min + (byteArray[0] % range);
-  };
 
   const sendViewPostTime = async (withResetTime = false) => {
     const currentTime = new Date();

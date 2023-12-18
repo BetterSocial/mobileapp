@@ -2,32 +2,32 @@ import * as React from 'react';
 import _ from 'lodash';
 import SimpleToast from 'react-native-simple-toast';
 import {Animated, Platform, StyleSheet} from 'react-native';
+import {SafeAreaProvider, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
-import {SafeAreaProvider, useSafeAreaInsets} from 'react-native-safe-area-context';
 import BlockComponent from '../../components/BlockComponent';
 import ButtonAddPostTopic from '../../components/Button/ButtonAddPostTopic';
 import MemoizedListComponent from './MemoizedListComponent';
+import NavHeader from './elements/NavHeader';
 import ShareUtils from '../../utils/share';
 import TiktokScroll from '../../components/TiktokScroll';
 import TopicPageStorage from '../../utils/storage/custom/topicPageStorage';
 import dimen from '../../utils/dimen';
 import removePrefixTopic from '../../utils/topics/removePrefixTopic';
+import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
+import useOnBottomNavigationTabPressHook, {
+  LIST_VIEW_TYPE
+} from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
 import {Context} from '../../context';
 import {downVote, upVote} from '../../service/vote';
 import {getFeedDetail} from '../../service/post';
 import {getTopicPages} from '../../service/topicPages';
+import {getTopics, getUserTopic} from '../../service/topics';
 import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {setFeedByIndex, setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
-import useOnBottomNavigationTabPressHook, {
-  LIST_VIEW_TYPE
-} from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
-import NavHeader from './elements/NavHeader';
-import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
-import {getTopics, getUserTopic} from '../../service/topics';
 
 const styles = StyleSheet.create({
   parentContainer: {
@@ -122,11 +122,7 @@ const TopicPageScreen = (props) => {
   const initialFetchTopicFeeds = async (cacheLength = 0) => {
     try {
       const resultGetTopicPages = await getTopicPages(id?.toLowerCase(), 0);
-      const {data: cacheFeedTopic} = TopicPageStorage.get(id?.toLowerCase());
-      const {mapNewData} = mappingColorFeed({
-        dataFeed: resultGetTopicPages?.data,
-        dataCache: cacheFeedTopic
-      });
+      const mapNewData = mappingColorFeed(resultGetTopicPages?.data);
       const {data = [], offset: offsetFeeds = 0} = resultGetTopicPages || {};
       setTopicFeeds(mapNewData, dispatch);
       setOffset(offsetFeeds);
@@ -242,7 +238,7 @@ const TopicPageScreen = (props) => {
         const {feeds: cacheFeedTopic} = TopicPageStorage.get(id?.toLowerCase());
 
         const {data, offset: offsetFeeds} = result;
-        const {mapNewData} = mappingColorFeed({dataFeed: data, dataCache: cacheFeedTopic});
+        const mapNewData = mappingColorFeed(data);
         if (result.code === 200) {
           if (offsetParam === 0) {
             TopicPageStorage.set(id?.toLowerCase(), mapNewData, offsetFeeds);

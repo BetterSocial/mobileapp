@@ -2,8 +2,9 @@ import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 
 import StorageUtils from '../../../utils/storage';
+import useMappingPostColorHook from '../../FeedScreen/hooks/useMappingColorHook';
 import {Context} from '../../../context';
-import {checkUserBlock, getOtherProfile} from '../../../service/profile';
+import {checkUserBlock, getOtherFeedsInProfile, getOtherProfile} from '../../../service/profile';
 import {setOtherProfileFeed} from '../../../context/actions/otherProfileFeed';
 
 const useOtherProfileScreenHooks = (targetUserProfileId: string, username: string) => {
@@ -16,6 +17,7 @@ const useOtherProfileScreenHooks = (targetUserProfileId: string, username: strin
   const [isBlocking, setIsBlocking] = React.useState<boolean | undefined>(undefined);
   const [otherProfileData, setOtherProfileData] = React.useState<any>({});
   const [, setOtherProfileUserId] = React.useState<string>('');
+  const [postOffset, setPostOffset] = React.useState(0);
 
   /**
    * Other Profile Context
@@ -23,6 +25,11 @@ const useOtherProfileScreenHooks = (targetUserProfileId: string, username: strin
   const [otherProfileFeeds, dispatchOtherProfile] = (React.useContext(Context) as any)
     ?.otherProfileFeed;
   const {feeds} = otherProfileFeeds;
+
+  /**
+   * Hook
+   */
+  const {mappingColorFeed} = useMappingPostColorHook();
 
   const getCache = async () => {
     const isBlockedFromCache = StorageUtils.blockedStatus.getForKey(targetUserProfileId) === 'true';
@@ -52,8 +59,24 @@ const useOtherProfileScreenHooks = (targetUserProfileId: string, username: strin
     setIsBlocking(isBlockingFromCache);
   };
 
-  const fetchFeeds = async () => {
+  const fetchFeeds = async (offset = 0) => {
     setIsLoading(true);
+    try {
+      const result = await getOtherFeedsInProfile(targetUserProfileId, offset);
+      const {data: feedOtherProfile} = result;
+      const mapNewData = mappingColorFeed(feedOtherProfile);
+      if (offset === 0) {
+        setOtherProfileFeed(mapNewData, dispatchOtherProfile);
+        StorageUtils.otherProfileFeed.setForKey(targetUserProfileId, JSON.stringify(mapNewData));
+      } else {
+        const clonedFeeds = [...feeds, ...mapNewData];
+        setOtherProfileFeed(clonedFeeds, dispatchOtherProfile);
+        StorageUtils.otherProfileFeed.setForKey(targetUserProfileId, JSON.stringify(clonedFeeds));
+      }
+      setPostOffset(Number(result.offset));
+    } catch (e) {
+      console.log('error', e);
+    }
     setIsLoading(false);
   };
 
@@ -122,7 +145,9 @@ const useOtherProfileScreenHooks = (targetUserProfileId: string, username: strin
     isBlocking,
     isLoading,
     isProfileFetching,
+    postOffset,
 
+    refetchFeeds: fetchFeeds,
     refetchOtherProfile: () => fetchOtherProfileData(),
     refetchBlockStatus: () => fetchBlockStatus(false),
 

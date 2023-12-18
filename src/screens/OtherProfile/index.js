@@ -1,7 +1,6 @@
 import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import ToastMessage from 'react-native-toast-message';
-import netInfo from '@react-native-community/netinfo';
 import {
   Dimensions,
   Image,
@@ -32,9 +31,7 @@ import RenderItem from '../ProfileScreen/elements/RenderItem';
 import ReportUser from '../../components/Blocking/ReportUser';
 import ShareUtils from '../../utils/share';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
-import StorageUtils from '../../utils/storage';
 import dimen from '../../utils/dimen';
-import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
 import useCreateChat from '../../hooks/screen/useCreateChat';
 import useOtherProfileScreenHooks from './hooks/useOtherProfileScreenHooks';
 import {Context} from '../../context';
@@ -45,10 +42,10 @@ import {downVote, upVote} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
 import {generateAnonProfileOtherProfile} from '../../service/anonymousProfile';
 import {getFeedDetail} from '../../service/post';
-import {getOtherFeedsInProfile, setFollow, setUnFollow} from '../../service/profile';
 import {getSingularOrPluralText} from '../../utils/string/StringUtils';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherProfileFeed';
+import {setFollow, setUnFollow} from '../../service/profile';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 const {width} = Dimensions.get('screen');
@@ -70,7 +67,6 @@ const OtherProfile = () => {
   const [reason, setReason] = React.useState([]);
   const [yourselfId] = React.useState('');
   const [loadingBlocking, setLoadingBlocking] = React.useState(false);
-  const [postOffset, setPostOffset] = React.useState(0);
 
   const headerHeightRef = React.useRef(0);
   const interactionManagerRef = React.useRef(null);
@@ -82,7 +78,6 @@ const OtherProfile = () => {
   const {params} = route;
   const [loadingGenerateAnon, setLoadingGenerateAnon] = React.useState(false);
   const [anonProfile, setAnonProfile] = React.useState();
-  const {mappingColorFeed} = useCoreFeed();
   const {createSignChat} = useCreateChat();
 
   const {
@@ -92,7 +87,9 @@ const OtherProfile = () => {
     isBlocking,
     isLoading,
     isProfileFetching,
+    postOffset,
 
+    refetchFeeds,
     refetchBlockStatus,
     refetchOtherProfile,
     setOtherProfileData: setDataMain
@@ -122,36 +119,6 @@ const OtherProfile = () => {
     setOtherId(params?.data?.other_id);
   }, [params.data]);
 
-  const getOtherFeeds = async (offset = 0) => {
-    const otherId = other_id;
-    try {
-      const cacheFeed = StorageUtils.otherProfileFeed.getForKey(otherId);
-      if (cacheFeed) {
-        setOtherProfileFeed(JSON.parse(cacheFeed), dispatchOtherProfile);
-      }
-      const result = await getOtherFeedsInProfile(otherId, offset);
-      const {data: feedOtherProfile} = result;
-      const {mapNewData} = mappingColorFeed({
-        dataFeed: feedOtherProfile,
-        dataCache: cacheFeed
-      });
-      if (Array.isArray(result.data) && result.data.length === 0) {
-        setIsLastPage(true);
-      }
-      if (offset === 0) {
-        setOtherProfileFeed(mapNewData, dispatchOtherProfile);
-        StorageUtils.otherProfileFeed.setForKey(otherId, JSON.stringify(mapNewData));
-      } else {
-        const clonedFeeds = [...feeds, ...mapNewData];
-        setOtherProfileFeed(clonedFeeds, dispatchOtherProfile);
-        StorageUtils.otherProfileFeed.setForKey(otherId, JSON.stringify(clonedFeeds));
-      }
-      setPostOffset(Number(result.offset));
-    } catch (e) {
-      console.log('error', e);
-    }
-  };
-
   React.useEffect(() => {
     return () => {
       if (interactionManagerRef.current) interactionManagerRef.current.cancel();
@@ -162,10 +129,6 @@ const OtherProfile = () => {
   React.useEffect(() => {
     initData();
   }, []);
-
-  React.useEffect(() => {
-    getOtherFeeds();
-  }, [other_id]);
 
   const initData = () => {
     setUserId(params.data.user_id);
@@ -467,7 +430,7 @@ const OtherProfile = () => {
       dispatch
     );
 
-    getOtherFeeds();
+    refetchFeeds();
   };
 
   const onPressDomain = (item) => {
@@ -534,13 +497,13 @@ const OtherProfile = () => {
 
   const __handleOnEndReached = () => {
     if (!isLastPage) {
-      getOtherFeeds(postOffset);
+      refetchFeeds(postOffset);
     }
   };
 
   const handleRefresh = () => {
     setIsLastPage(false);
-    getOtherFeeds(0);
+    refetchFeeds(0);
   };
 
   const handleDataFeed = () => {

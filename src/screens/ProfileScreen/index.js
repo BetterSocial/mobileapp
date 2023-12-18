@@ -1,6 +1,8 @@
 import * as React from 'react';
 import ImagePicker from 'react-native-image-crop-picker';
+import PropTypes from 'prop-types';
 import Toast from 'react-native-simple-toast';
+import netInfo from '@react-native-community/netinfo';
 import {
   ActivityIndicator,
   Alert,
@@ -13,12 +15,11 @@ import {
   TouchableNativeFeedback,
   View
 } from 'react-native';
-import PropTypes from 'prop-types';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {debounce} from 'lodash';
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
-import netInfo from '@react-native-community/netinfo';
+
 import AnonymousTab from './elements/AnonymousTab';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BioAndDMSetting from './elements/BioAndDMSetting';
@@ -34,8 +35,11 @@ import ProfileHeader from './elements/ProfileHeader';
 import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
 import RenderItem from '../FeedScreen/RenderList';
+import ShadowFloatingButtons from '../../components/Button/ShadowFloatingButtons';
 import ShareUtils from '../../utils/share';
+import StorageUtils from '../../utils/storage';
 import dimen from '../../utils/dimen';
+import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
 import useResetContext from '../../hooks/context/useResetContext';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
@@ -68,9 +72,6 @@ import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import ShadowFloatingButtons from '../../components/Button/ShadowFloatingButtons';
-import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
-import StorageUtils from '../../utils/storage';
 
 const {width} = Dimensions.get('screen');
 
@@ -268,10 +269,9 @@ const ProfileScreen = ({route}) => {
     try {
       setIsFetchingList(true);
       setIsHitApiFirstTime(true);
-      const cacheFeed = StorageUtils.myFeeds.get();
       const result = await getSelfFeedsInProfile(offset, limit);
       const {data: dataMyFeed} = result;
-      const {mapNewData} = mappingColorFeed({dataFeed: dataMyFeed, dataCache: cacheFeed});
+      const mapNewData = mappingColorFeed(dataMyFeed);
       if (Array.isArray(result.data) && result.data.length === 0) {
         setIsLastPage(true);
       }

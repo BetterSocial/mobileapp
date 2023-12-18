@@ -18,7 +18,8 @@ enum StorageKeysEnum {
   OtherProfileData = 'otherprofiledata',
   LastPromptNotification = 'lastPromptNotification',
   BlockedStatus = 'blockedStatus',
-  BlockingStatus = 'blockingStatus'
+  BlockingStatus = 'blockingStatus',
+  Feed = 'feed'
 }
 
 interface IStorage {
@@ -85,6 +86,7 @@ const StorageUtils = {
   lastPromptNotification: storageBuilder(StorageKeysEnum.LastPromptNotification),
   blockingStatus: storageBuilder(StorageKeysEnum.BlockingStatus),
   blockedStatus: storageBuilder(StorageKeysEnum.BlockedStatus),
+  feed: storageBuilder(StorageKeysEnum.Feed),
   clearAll: () => MMKVStorage.clearAll()
 };
 
