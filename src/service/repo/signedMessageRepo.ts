@@ -7,6 +7,15 @@ import {
   SignedPostNotification
 } from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 
+type SendPayloadType = {
+  channelId: string;
+  message: string;
+  channelType: number;
+  messageType?: string;
+  attachments?: any;
+  replyMessageId?: string;
+};
+
 const baseUrl = {
   checkIsTargetAllowingAnonDM: 'chat/channels/check-allow-anon-dm-status',
   sendSignedMessage: '/chat/send-signed-message',
@@ -25,7 +34,8 @@ interface SignedMessageRepoTypes {
     channelId: string,
     message: string,
     channelType: number,
-    attachments: any
+    attachments: any,
+    replyMessageId?: string
   ) => Promise<any>;
   getAllSignedChannels: () => Promise<ChannelData[]>;
   getAllSignedPostNotifications: () => Promise<SignedPostNotification[]>;
@@ -58,10 +68,14 @@ async function sendSignedMessage(
   channelId: string,
   message: string,
   channelType: number,
-  attachments: any
+  attachments: any,
+  replyMessageId?: string
 ) {
-  const payload = {channelId, message, channelType, attachments};
-  console.warn('payload', payload);
+  let payload: SendPayloadType = {channelId, message, channelType, attachments};
+  if (replyMessageId) {
+    payload = {...payload, messageType: 'reply', replyMessageId};
+  }
+
   try {
     const response = await api.post(baseUrl.sendSignedMessage, payload);
 

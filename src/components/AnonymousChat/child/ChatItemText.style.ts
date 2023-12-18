@@ -2,15 +2,16 @@ import {StyleSheet} from 'react-native';
 
 import dimen from '../../../utils/dimen';
 import {ANONYMOUS, SIGNED} from '../../../hooks/core/constant';
+import {MESSAGE_TYPE_DELETED} from '../../../utils/constants';
 import {colors} from '../../../utils/colors';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
 
 const AVATAR_SIZE = 24;
 const CONTAINER_LEFT_PADDING = 60;
 const CONTAINER_RIGHT_PADDING = 10;
-const AVATAR_LEFT_MARGIN = 8;
-const BUBBLE_LEFT_PADDING = 8;
-const BUBBLE_RIGHT_PADDING = 8;
+const AVATAR_LEFT_MARGIN = 4;
+const BUBBLE_LEFT_PADDING = 4;
+const BUBBLE_RIGHT_PADDING = 4;
 
 export const targetLastLine =
   CONTAINER_LEFT_PADDING -
@@ -77,8 +78,13 @@ export const styles = StyleSheet.create({
     lineHeight: 19.36,
     marginBottom: 4
   },
-  deletedText: {
+  deletedMyText: {
     color: colors.light_silver,
+    fontSize: normalizeFontSize(15),
+    fontStyle: 'italic'
+  },
+  deletedTargetText: {
+    color: colors.blackgrey,
     fontSize: normalizeFontSize(15),
     fontStyle: 'italic'
   },
@@ -86,7 +92,7 @@ export const styles = StyleSheet.create({
     width: dimen.normalizeDimen(24),
     height: dimen.normalizeDimen(24),
     borderRadius: 15,
-    marginLeft: AVATAR_LEFT_MARGIN
+    marginLeft: dimen.normalizeDimen(AVATAR_LEFT_MARGIN)
   },
   dot: {
     width: 3,
@@ -128,11 +134,11 @@ export const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: colors.lightgrey
   },
-  ml8: {
-    marginLeft: dimen.normalizeDimen(8)
+  mlBuble: {
+    marginLeft: dimen.normalizeDimen(BUBBLE_LEFT_PADDING)
   },
-  mr8: {
-    marginRight: dimen.normalizeDimen(8)
+  mrBuble: {
+    marginRight: dimen.normalizeDimen(BUBBLE_RIGHT_PADDING)
   },
   radius8: {
     borderRadius: 8
@@ -191,5 +197,6 @@ export const textStyle = (isMyText: boolean) => [
 export const messageStyle = (isMyText: boolean, messageType?: string) => [
   styles.text,
   isMyText ? {color: colors.white} : {color: colors.black},
-  messageType === 'deleted' && styles.deletedText
+  isMyText && messageType === MESSAGE_TYPE_DELETED && styles.deletedMyText,
+  !isMyText && messageType === MESSAGE_TYPE_DELETED && styles.deletedTargetText
 ];

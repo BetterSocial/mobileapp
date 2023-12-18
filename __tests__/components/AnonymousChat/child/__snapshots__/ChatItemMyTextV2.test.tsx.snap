@@ -26,9 +26,25 @@ exports[`TESTING ChatItemMyTextV2 should match snapshot 1`] = `
   >
     <View
       style={
-        Object {
-          "flexDirection": "row",
-        }
+        Array [
+          Object {
+            "flexDirection": "row",
+          },
+          Object {
+            "transform": Array [
+              Object {
+                "translateX": 0,
+              },
+            ],
+          },
+          Object {
+            "transform": Array [
+              Object {
+                "scale": 1,
+              },
+            ],
+          },
+        ]
       }
     >
       <ContextMenu
@@ -143,8 +159,9 @@ exports[`TESTING ChatItemMyTextV2 should match snapshot 1`] = `
                     ],
                   ]
                 }
+                testID="timestamp"
               >
-                time
+                1m ago
               </Text>
             </View>
             <View
@@ -167,6 +184,7 @@ exports[`TESTING ChatItemMyTextV2 should match snapshot 1`] = `
                     Object {
                       "color": "#ffffff",
                     },
+                    false,
                     false,
                   ]
                 }
@@ -192,7 +210,7 @@ exports[`TESTING ChatItemMyTextV2 should match snapshot 1`] = `
       <View
         style={
           Object {
-            "marginLeft": 6.4,
+            "marginLeft": 3.2,
           }
         }
       >

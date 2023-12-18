@@ -29,8 +29,16 @@ class ProfileTiktokScroll extends React.Component {
   // }
 
   render() {
-    const {data, children, onRefresh, refreshing, onEndReach, onScroll, ListHeaderComponent} =
-      this.props;
+    const {
+      data,
+      children,
+      onRefresh,
+      refreshing,
+      onEndReach,
+      onScroll,
+      ListHeaderComponent,
+      onMomentumScrollEnd
+    } = this.props;
     return (
       <FlatList
         contentInsetAdjustmentBehavior="automatic"
@@ -53,6 +61,7 @@ class ProfileTiktokScroll extends React.Component {
         maxToRenderPerBatch={2}
         onEndReachedThreshold={0.5}
         updateCellsBatchingPeriod={10}
+        onMomentumScrollEnd={onMomentumScrollEnd}
         removeClippedSubviews
         windowSize={10}
         viewabilityConfig={{
@@ -78,7 +87,8 @@ ProfileTiktokScroll.propTypes = {
   refreshing: PropTypes.bool,
   snapToOffsets: PropTypes.arrayOf(PropTypes.number),
   stickyHeaderIndices: PropTypes.arrayOf(PropTypes.number),
-  StickyHeaderComponent: PropTypes.element
+  StickyHeaderComponent: PropTypes.element,
+  onMomentumScrollEnd: PropTypes.func
 };
 
 ProfileTiktokScroll.defaultProps = {

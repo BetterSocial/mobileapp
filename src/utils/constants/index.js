@@ -59,8 +59,17 @@ const NavigationConstants = {
 
 const POST_VERSION = 2;
 
+const DELETED_MESSAGE_TEXT = 'This message has been deleted';
+const CONTEXT_MENU_REPLY = 'Reply';
+const CONTEXT_MENU_COPY = 'Copy Message';
+const CONTEXT_MENU_DELETE = 'Delete Message';
+const MESSAGE_TYPE_REGULAR = 'regular';
+const MESSAGE_TYPE_REPLY = 'reply';
+const MESSAGE_TYPE_REPLY_PROMPT = 'reply_prompt';
+const MESSAGE_TYPE_DELETED = 'deleted';
 const TUTOR_POST_ANON = 'tutor_post_anon';
 const TUTOR_CREATE_POST_ANON = 'tutor_creat_post_anon';
+const FEEDS_DIFF_TO_FETCH = 5;
 
 export {
   ANALYTICS_SHARE_POST_FEED_ID,
@@ -82,6 +91,7 @@ export {
   DISCOVERY_TAB_TOPICS,
   DISCOVERY_TAB_USERS,
   ENABLE_DEV_ONLY_FEATURE,
+  FEEDS_DIFF_TO_FETCH,
   KEY_ACCESS_TOKEN,
   KEY_ANONYMOUS_TOKEN,
   KEY_REFRESH_TOKEN,
@@ -110,6 +120,14 @@ export {
   POST_CHECK_AUTHOR_BLOCKED,
   FEED_CHAT_KEY,
   NavigationConstants,
+  DELETED_MESSAGE_TEXT,
+  CONTEXT_MENU_REPLY,
+  CONTEXT_MENU_COPY,
+  CONTEXT_MENU_DELETE,
+  MESSAGE_TYPE_REGULAR,
+  MESSAGE_TYPE_REPLY,
+  MESSAGE_TYPE_REPLY_PROMPT,
+  MESSAGE_TYPE_DELETED,
   TUTOR_POST_ANON,
   TUTOR_CREATE_POST_ANON
 };

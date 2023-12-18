@@ -1,47 +1,94 @@
+import SimpleToast from 'react-native-simple-toast';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {Alert, NativeSyntheticEvent} from 'react-native';
 import {ContextMenuOnPressNativeEvent} from 'react-native-context-menu-view';
+import {useAnimatedStyle, useSharedValue} from 'react-native-reanimated';
 import {useCallback, useContext} from 'react';
 
 import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
 import ChatSchema from '../../database/schema/ChatSchema';
 import ShareUtils from '../../utils/share';
 import SignedMessageRepo from '../../service/repo/signedMessageRepo';
-import UseMessageHook from '../../../types/hooks/screens/useMessageHook.types';
-import useChatScreenHook from './useChatScreenHook';
+import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
-import {ANONYMOUS} from '../core/constant';
 import {Context} from '../../context';
-import {calculateTime} from '../../utils/time';
+import {DELETED_MESSAGE_TEXT, MESSAGE_TYPE_DELETED} from '../../utils/constants';
+import {ReplyMessage, UseMessageHook} from '../../../types/hooks/screens/useMessageHook.types';
 import {setReplyTarget} from '../../context/actions/chat';
 
 function useMessageHook(): UseMessageHook {
   const {localDb, refresh} = useLocalDatabaseHook();
-  const {handleUserName} = useChatScreenHook(ANONYMOUS);
+  const {selectedChannel} = useChatUtilsHook();
   const [replyPreview, dispatch] = (useContext(Context) as unknown as any).chat;
+  const {anon_user_info_emoji_name} = selectedChannel?.rawJson?.channel || {};
+  const bubblePosition = useSharedValue(0);
+  const pulseAnimation = useSharedValue(1);
 
   const setReplyPreview = useCallback((messageItem) => {
-    console.log('Reply Message');
     setReplyTarget(messageItem, dispatch);
   }, []);
 
   const clearReplyPreview = useCallback(() => {
-    console.log('clear Reply target');
     setReplyTarget(null, dispatch);
   }, []);
 
-  const deleteMessage = async (messageId: string, type: 'ANONYMOUS' | 'SIGNED') => {
+  const getUserName = (item): string => {
+    if (item?.user?.username !== 'AnonymousUser') {
+      return item?.user?.username;
+    }
+    return `Anonymous ${anon_user_info_emoji_name}`;
+  };
+
+  const replyMessage = useCallback((data, type: 'ANONYMOUS' | 'SIGNED') => {
+    const messageItem: ReplyMessage = {
+      id: data?.id ?? data?.message?.id,
+      user: {username: getUserName(data)},
+      message: data?.text ?? data?.message,
+      message_type: data?.message_type ?? data?.message?.message_type,
+      updated_at: data?.updated_at ?? data?.message?.updated_at,
+      chatType: type,
+      attachments: data?.attachments ?? []
+    };
+    setReplyPreview(messageItem);
+  }, []);
+
+  const copyMessage = useCallback((data) => {
+    const isDeleted = data?.message_type === MESSAGE_TYPE_DELETED;
+    const message = data?.text ?? data?.message;
+    const textToCopy = isDeleted ? '' : message;
+    ShareUtils.copyTextToClipboard(textToCopy);
+  }, []);
+
+  const deleteMessage = async (messageId: string, type: 'ANONYMOUS' | 'SIGNED', iteration = 0) => {
     if (!localDb) return;
+
+    if (iteration > 5) {
+      SimpleToast.show("Can't delete message, please check your connection");
+      return;
+    }
+
     try {
+      ChatSchema.updateDeletedChatType(localDb, messageId);
+      refresh('chat');
+
+      const {replyTarget} = replyPreview;
+      if (replyTarget && replyTarget?.id === messageId) {
+        const newReplyPreview = {...replyTarget};
+        newReplyPreview.message = DELETED_MESSAGE_TEXT;
+        newReplyPreview.message_type = 'deleted';
+        setReplyPreview(newReplyPreview);
+      }
+
       if (type === 'ANONYMOUS') {
         await AnonymousMessageRepo.deleteMessage(messageId);
       } else {
         await SignedMessageRepo.deleteMessage(messageId);
       }
-      ChatSchema.updateDeletedChatType(localDb, messageId);
-      refresh('chat');
     } catch (error) {
       console.log('error on delete message:', error);
+      setTimeout(() => {
+        deleteMessage(messageId, type, iteration + 1).catch((e) => console.log(e));
+      }, 1000);
     }
   };
 
@@ -54,19 +101,10 @@ function useMessageHook(): UseMessageHook {
     data = data?.message?.user ? data?.message : data;
 
     if (event.index === 0) {
-      const messageItem = {
-        username: handleUserName(data),
-        time: calculateTime(data?.updated_at, true),
-        message: data?.message ?? data?.text,
-        messageId: data?.id,
-        chatType: type,
-        messageType: 'regular',
-        attachments: data?.attachments
-      };
-      setReplyPreview(messageItem);
+      replyMessage(data, type);
     }
     if (event.index === 1) {
-      ShareUtils.copyTextToClipboard(data?.message);
+      copyMessage(data);
     }
     if (event.index === 2) {
       Alert.alert('Delete Message?', '', [
@@ -93,12 +131,28 @@ function useMessageHook(): UseMessageHook {
     }
   };
 
+  const animatedBubbleStyle = useAnimatedStyle(() => {
+    'worklet';
+
+    return {transform: [{translateX: bubblePosition.value}]};
+  });
+
+  const animatedPulseStyle = useAnimatedStyle(() => {
+    'worklet';
+
+    return {transform: [{scale: pulseAnimation.value}]};
+  });
+
   return {
     replyPreview: replyPreview?.replyTarget,
     setReplyPreview,
     clearReplyPreview,
     onContextMenuPressed,
-    onOpenMediaPreview
+    onOpenMediaPreview,
+    bubblePosition,
+    pulseAnimation,
+    animatedBubbleStyle,
+    animatedPulseStyle
   };
 }
 

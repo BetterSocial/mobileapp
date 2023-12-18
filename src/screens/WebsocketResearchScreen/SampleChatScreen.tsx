@@ -11,10 +11,10 @@ import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
 import ChatReplyPreview from '../../components/AnonymousChat/child/ChatReplyPreview';
 import InputMessageV2 from '../../components/Chat/InputMessageV2';
 import Loading from '../Loading';
-import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
 import useMessageHook from '../../hooks/screen/useMessageHook';
 import useMoveChatTypeHook from '../../hooks/core/chat/useMoveChatTypeHook';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
+import useChatScreenHook, {ScrollContext} from '../../hooks/screen/useChatScreenHook';
 import {ANONYMOUS} from '../../hooks/core/constant';
 import {colors} from '../../utils/colors';
 
@@ -54,14 +54,15 @@ export const styles = StyleSheet.create({
 });
 
 const SampleChatScreen = () => {
-  const flatlistRef = React.useRef<FlatList>();
   const {
     selectedChannel,
     chats,
     goBackFromChatScreen,
     goToChatInfoScreen,
     sendChat,
-    updateChatContinuity
+    updateChatContinuity,
+    flatListRef: scrollRef,
+    scrollContext
   } = useChatScreenHook(ANONYMOUS);
   const {replyPreview, clearReplyPreview} = useMessageHook();
   const {moveToSignedChannel} = useMoveChatTypeHook();
@@ -81,10 +82,6 @@ const SampleChatScreen = () => {
   }, []);
 
   const betterSocialMember = selectedChannel?.rawJson?.better_channel_member;
-
-  const scrollToEnd = () => {
-    flatlistRef.current?.scrollToEnd();
-  };
 
   const moveChatSigned = async () => {
     try {
@@ -107,7 +104,7 @@ const SampleChatScreen = () => {
   }, []);
 
   return (
-    <>
+    <ScrollContext.Provider value={scrollContext}>
       <StatusBar barStyle="light-content" backgroundColor={colors.anon_primary} />
 
       <View style={styles.keyboardAvoidingView}>
@@ -130,14 +127,13 @@ const SampleChatScreen = () => {
           />
         ) : null}
         <FlatList
+          ref={scrollRef}
           contentContainerStyle={styles.flatlistContainer}
           style={styles.chatContainer}
           data={updatedChats}
           inverted={true}
-          initialNumToRender={20}
+          initialNumToRender={10}
           alwaysBounceVertical={false}
-          bounces={false}
-          onLayout={scrollToEnd}
           keyExtractor={(item, index) => item?.id || index.toString()}
           ListFooterComponent={
             ownerChat ? (
@@ -163,7 +159,7 @@ const SampleChatScreen = () => {
         </View>
         <Loading visible={loading} />
       </View>
-    </>
+    </ScrollContext.Provider>
   );
 };
 

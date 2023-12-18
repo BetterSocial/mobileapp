@@ -77,9 +77,9 @@ const useSimpleWebsocket = (url, protocol = undefined) => {
       featLog('=========== CONNECTION CHECKED: true ===============');
       setupWebsocket();
     } catch (e) {
-      console.log('error checking connection');
-      console.log(e);
-      console.log('=========== CONNECTION CHECKED: false ===============');
+      featLog('error checking connection');
+      featLog(e);
+      featLog('=========== CONNECTION CHECKED: false ===============');
       isInternetConnectedRef.current = false;
       closeSocket();
     }

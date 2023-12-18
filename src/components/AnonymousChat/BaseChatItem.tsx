@@ -12,7 +12,6 @@ import {ANONYMOUS, ANONYMOUS_USER} from '../../hooks/core/constant';
 import {BaseChatItemComponentProps} from '../../../types/component/AnonymousChat/BaseChatItem.types';
 import {ChatStatus} from '../../../types/database/schema/ChannelList.types';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
-import {calculateTime} from '../../utils/time';
 
 const styles = StyleSheet.create({
   containerPicture: {
@@ -78,7 +77,7 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
         isContinuous={item?.isContinuous}
         message={item?.message}
         attachments={item?.attachmentJson}
-        time={calculateTime(item?.updatedAt, true)}
+        time={item?.updatedAt}
         username={handleUserName(item)}
         status={item?.status as ChatStatus}
         chatType={type ?? ANONYMOUS}
@@ -94,7 +93,8 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
       avatar={handleAvatar()}
       isContinuous={item?.isContinuous ?? false}
       message={item?.message}
-      time={calculateTime(item?.updatedAt, true)}
+      attachments={item?.attachmentJson}
+      time={item?.updatedAt}
       username={handleUserName(item)}
       chatType={type ?? ANONYMOUS}
       messageType={item?.type ?? 'regular'}

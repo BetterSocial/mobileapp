@@ -1,19 +1,30 @@
 // eslint-disable-next-line no-use-before-define
 import * as React from 'react';
-import ContextMenu from 'react-native-context-menu-view';
-import {Animated, Text, TouchableOpacity, View} from 'react-native';
+import Animated, {withDelay, withSequence, withTiming} from 'react-native-reanimated';
+import ContextMenu, {ContextMenuAction} from 'react-native-context-menu-view';
 import {Swipeable} from 'react-native-gesture-handler';
-import {useAnimatedStyle, useSharedValue} from 'react-native-reanimated';
+import {Text, TouchableOpacity, View, ViewStyle} from 'react-native';
 import FastImage from 'react-native-fast-image';
-
 import {useNavigation} from '@react-navigation/core';
+
 import ChatReplyView from './ChatReplyView';
 import IconChatCheckMark from '../../../assets/icon/IconChatCheckMark';
 import IconChatClockGrey from '../../../assets/icon/IconChatClockGrey';
 import IconVideoPlay from '../../../assets/icon/IconVideoPlay';
 import useMessageHook from '../../../hooks/screen/useMessageHook';
+import {
+  CONTEXT_MENU_COPY,
+  CONTEXT_MENU_DELETE,
+  CONTEXT_MENU_REPLY,
+  MESSAGE_TYPE_DELETED,
+  MESSAGE_TYPE_REPLY,
+  MESSAGE_TYPE_REPLY_PROMPT
+} from '../../../utils/constants';
 import {ChatItemMyTextProps} from '../../../../types/component/AnonymousChat/BaseChatItem.types';
 import {ChatStatus} from '../../../../types/database/schema/ChannelList.types';
+import {MessageType} from '../../../../types/hooks/screens/useMessageHook.types';
+import {ScrollContext} from '../../../hooks/screen/useChatScreenHook';
+import {calculateTime} from '../../../utils/time';
 import {colors} from '../../../utils/colors';
 import {
   containerStyle,
@@ -38,18 +49,30 @@ const ChatItemMyTextV2 = ({
   data
 }: ChatItemMyTextProps) => {
   const navigation = useNavigation();
-  const {setReplyPreview, onContextMenuPressed, onOpenMediaPreview} = useMessageHook();
+  const {
+    setReplyPreview,
+    onContextMenuPressed,
+    onOpenMediaPreview,
+    pulseAnimation,
+    animatedBubbleStyle,
+    animatedPulseStyle
+  } = useMessageHook();
+  const scrollContext = React.useContext(ScrollContext);
+  const swipeableRef = React.useRef<Swipeable>(null);
 
-  const swipeableRef = React.useRef<Swipeable | null>(null);
-  const bubblePosition = useSharedValue(0);
+  React.useEffect(() => {
+    if (scrollContext?.selectedMessageId === data?.id) {
+      pulseAnimation.value = withSequence(
+        withDelay(300, withTiming(1.1, {duration: 200})),
+        withTiming(1, {duration: 200})
+      );
+      scrollContext?.setSelectedMessageId(null);
+    }
+  }, [scrollContext?.selectedMessageId]);
 
-  const isReply = messageType === 'reply';
-  const isReplyPrompt = messageType === 'reply_prompt';
+  const isReply = messageType === MESSAGE_TYPE_REPLY;
+  const isReplyPrompt = messageType === MESSAGE_TYPE_REPLY_PROMPT;
   const isShowUserInfo = !isContinuous || isReplyPrompt || isReply;
-
-  const animatedBubbleStyle = useAnimatedStyle(() => ({
-    transform: [{translateX: bubblePosition.value}]
-  }));
 
   const renderIcon = React.useCallback(() => {
     if (status === ChatStatus.PENDING)
@@ -64,32 +87,38 @@ const ChatItemMyTextV2 = ({
         <IconChatCheckMark color={colors.silver} width={12} height={12} />
       </View>
     );
-  }, []);
+  }, [status]);
 
-  const contextMenuActions = [
-    {title: 'Reply', systemIcon: 'arrow.turn.up.left'},
-    {title: 'Copy Message', systemIcon: 'square.on.square'},
-    {title: 'Delete Message', systemIcon: 'trash', destructive: true}
+  const contextMenuActions: ContextMenuAction[] = [
+    {title: CONTEXT_MENU_REPLY, systemIcon: 'arrow.turn.up.left'}
   ];
+
+  if (messageType !== MESSAGE_TYPE_DELETED) {
+    contextMenuActions.push({title: CONTEXT_MENU_COPY, systemIcon: 'square.on.square'});
+    contextMenuActions.push({title: CONTEXT_MENU_DELETE, systemIcon: 'trash', destructive: true});
+  }
 
   const renderAvatar = React.useCallback(() => {
     if (!isShowUserInfo) return <View style={styles.avatar} />;
-    return <View style={styles.ml8}>{avatar}</View>;
-  }, []);
+    return <View style={styles.mlBuble}>{avatar}</View>;
+  }, [isShowUserInfo, avatar]);
 
-  const onSwipeToReply = (direction) => {
-    if (direction === 'right') return;
-    if (swipeableRef.current) swipeableRef.current?.close();
-    setReplyPreview({
-      username,
-      time,
-      message,
-      messageId: data?.id,
-      chatType,
-      messageType: 'regular',
-      attachments
-    });
-  };
+  const onSwipeToReply = React.useCallback(
+    (direction: 'left' | 'right') => {
+      if (direction === 'right') return;
+      if (swipeableRef.current) swipeableRef.current?.close();
+      setReplyPreview({
+        id: data?.id ?? data?.message?.id,
+        user: {username},
+        message,
+        message_type: messageType as MessageType,
+        updated_at: time,
+        chatType,
+        attachments
+      });
+    },
+    [data, username, time, message, messageType, chatType, attachments]
+  );
 
   return (
     <Swipeable
@@ -100,7 +129,12 @@ const ChatItemMyTextV2 = ({
       onSwipeableOpen={onSwipeToReply}
       renderLeftActions={replyIcon}>
       <View style={containerStyle(true, isReplyPrompt)}>
-        <Animated.View style={[styles.wrapper, animatedBubbleStyle]}>
+        <Animated.View
+          style={[
+            styles.wrapper,
+            animatedBubbleStyle as ViewStyle,
+            animatedPulseStyle as ViewStyle
+          ]}>
           <ContextMenu
             previewBackgroundColor="transparent"
             style={{flex: 1}}
@@ -113,7 +147,9 @@ const ChatItemMyTextV2 = ({
                   <View style={styles.chatTitleContainer}>
                     <Text style={[styles.userText, textStyle(true)]}>{username}</Text>
                     <View style={dotStyle(true)} />
-                    <Text style={[styles.timeText, textStyle(true)]}>{time}</Text>
+                    <Text testID="timestamp" style={[styles.timeText, textStyle(true)]}>
+                      {calculateTime(time, true)}
+                    </Text>
                   </View>
                 )}
                 {attachments.length > 0 && messageType !== 'deleted' && (
