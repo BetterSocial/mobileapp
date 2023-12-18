@@ -120,7 +120,8 @@ const NavHeader = (props) => {
                       opacity: opacityImage
                     }
                   ]}
-                  blurType="thinMaterialDark"
+                  blurAmount={1}
+                  blurType="dark"
                 />
               </View>
             </>

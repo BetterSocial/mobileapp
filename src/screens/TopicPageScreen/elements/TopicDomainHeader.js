@@ -97,9 +97,9 @@ const styles = StyleSheet.create({
   }),
   seeMemberText: () => ({
     fontSize: normalizeFontSize(12),
-    fontFamily: fonts.inter[700],
+    fontFamily: fonts.inter[500],
     textAlign: 'left',
-    color: colors.babyBlue,
+    color: colors.signed_primary,
     marginTop: normalize(1)
   })
 });
