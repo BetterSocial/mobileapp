@@ -54,6 +54,7 @@ import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {ButtonNewPost} from '../../components/Button';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH, SOURCE_MY_PROFILE} from '../../utils/constants';
+import {KarmaScore} from './elements/KarmaScore';
 import {
   changeRealName,
   getMyProfile,
@@ -74,7 +75,6 @@ import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {KarmaScore} from './elements/KarmaScore';
 
 const {width} = Dimensions.get('screen');
 
@@ -281,10 +281,9 @@ const ProfileScreen = ({route}) => {
     try {
       setIsFetchingList(true);
       setIsHitApiFirstTime(true);
-      const cacheFeed = StorageUtils.myFeeds.get();
       const result = await getSelfFeedsInProfile(offset, limit);
       const {data: dataMyFeed} = result;
-      const {mapNewData} = mappingColorFeed({dataFeed: dataMyFeed, dataCache: cacheFeed});
+      const mapNewData = mappingColorFeed(dataMyFeed);
       if (offset === 0) {
         StorageUtils.myFeeds.set(JSON.stringify(mapNewData));
         setMyProfileFeed(mapNewData, myProfileDispatch);

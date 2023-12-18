@@ -1,12 +1,13 @@
 import React from 'react';
-import {renderHook} from '@testing-library/react-hooks';
 import mockSafeAreaContext from 'react-native-safe-area-context/jest/mock';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {renderHook} from '@testing-library/react-hooks';
+
+import ProfileRepo from '../../src/service/repo/profileRepo';
+import StorageUtils from '../../src/utils/storage';
 import useProfileScreenHook from '../../src/hooks/screen/useProfileScreenHook';
 import {Context} from '../../src/context';
 import {myProfileMock} from '../../__mocks__/mockMyProfile';
-import ProfileRepo from '../../src/service/repo/profileRepo';
-import StorageUtils from '../../src/utils/storage';
 
 jest.mock('react-native-safe-area-context', () => mockSafeAreaContext);
 describe('useProfileScreenHook should run correctly', () => {
@@ -32,12 +33,10 @@ describe('useProfileScreenHook should run correctly', () => {
 
   it('fetchAnonymousPost should run correctly', async () => {
     const {result} = renderHook(useProfileScreenHook, {wrapper});
-    const spyCache = jest.spyOn(StorageUtils.myAnonymousFeed, 'get').mockResolvedValue('[]');
     const spyApiGet = jest
       .spyOn(ProfileRepo, 'getSelfAnonymousFeed')
       .mockResolvedValue({isSuccess: true, data: []});
     await result.current.fetchAnonymousPost(0, 10);
-    expect(spyCache).toHaveBeenCalled();
     expect(result.current.isLoadingFetchingAnonymousPosts).toBeFalsy();
   });
 });
