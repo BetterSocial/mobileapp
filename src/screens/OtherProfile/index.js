@@ -56,6 +56,7 @@ import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherPr
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {COLORS} from '../../utils/theme';
 import {useDynamicColors} from '../../hooks/useToggleColors';
+import IconEnvelope from '../../assets/icon/IconEnvelope';
 
 const {width} = Dimensions.get('screen');
 
@@ -312,13 +313,13 @@ const OtherProfile = () => {
     const __renderBlockIcon = () => {
       if (blockStatus.blocker)
         return (
-          <View style={styles.buttonFollowing}>
-            <Text style={styles.textButtonFollowing}>Blocked</Text>
+          <View style={styles.buttonFollowing(dynamicColor)}>
+            <Text style={styles.textButtonFollowing(dynamicColor)}>Blocked</Text>
           </View>
         );
 
       return (
-        <View style={{...styles.btnMsg, borderColor: COLORS.gray9}}>
+        <View style={{...styles.btnMsg(dynamicColor), borderColor: COLORS.gray9}}>
           <BlockIcon width={20} height={20} style={{color: COLORS.gray9}} />
         </View>
       );
@@ -397,7 +398,7 @@ const OtherProfile = () => {
           {__renderFollowingButton()}
           <GlobalButton onPress={onCreateChat}>
             <View style={styles.btnMsg(dynamicColor)}>
-              <EnveloveBlueIcon width={20} height={20} fill={dynamicColor.primary} />
+              <IconEnvelope color={dynamicColor.primary} />
             </View>
           </GlobalButton>
         </React.Fragment>

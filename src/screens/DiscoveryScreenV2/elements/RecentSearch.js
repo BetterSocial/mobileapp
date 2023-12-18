@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   recentTitle: {
     fontSize: 14,
     fontFamily: fonts.inter[600],
-    color: COLORS.holyTosca,
+    color: COLORS.blue,
     alignSelf: 'center',
     flex: 1
   },

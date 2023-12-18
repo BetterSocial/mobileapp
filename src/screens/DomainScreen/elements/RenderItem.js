@@ -216,8 +216,8 @@ const RenderItem = ({
 
 const styles = StyleSheet.create({
   containerText: {paddingHorizontal: 16},
-  iconPlush: {fontSize: normalizeFontSize(24), color: COLORS.blue},
-  views: {color: COLORS.blue},
+  iconPlush: {fontSize: normalizeFontSize(24), color: COLORS.holyTosca},
+  views: {color: COLORS.holyTosca},
   containerDetail: {flex: 1},
   contentContainer: {flex: 1},
   contentDetail: {flexDirection: 'row', alignItems: 'center'},
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
   wrapperText: {
     backgroundColor: COLORS.white,
     borderRadius: 8,
-    borderColor: COLORS.blue,
+    borderColor: COLORS.holyTosca,
     width: normalize(36),
     height: normalize(36),
     justifyContent: 'center',
@@ -318,9 +318,9 @@ const styles = StyleSheet.create({
     paddingTop: 8
   },
   wrapperTextUnFollow: {
-    backgroundColor: COLORS.blue,
+    backgroundColor: COLORS.holyTosca,
     borderRadius: 8,
-    borderColor: COLORS.blue,
+    borderColor: COLORS.holyTosca,
     width: 36,
     height: 36,
     justifyContent: 'center',

@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     marginTop: 6
   },
   followersNumber: {
-    color: COLORS.blue,
+    color: COLORS.holyTosca,
     fontFamily: fonts.inter[700],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(17)
