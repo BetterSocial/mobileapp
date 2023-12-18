@@ -8,7 +8,6 @@ import useWriteComment from '../../components/Comments/hooks/useWriteComment';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import {Context} from '../../context';
 import {setFeedByIndex} from '../../context/actions/feeds';
-import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {followUserAnon, setFollow, setUnFollow, unfollowUserAnon} from '../../service/profile';
 import {showScoreAlertDialog} from '../../utils/Utils';
 import {
@@ -24,7 +23,6 @@ import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {getCommentLength} from '../../utils/getstream';
 import ShareUtils from '../../utils/share';
 import {COLORS} from '../../utils/theme';
-import useFollowUser from '../ChannelListScreen/hooks/useFollowUser';
 import Content from './Content';
 import ContentLink from './ContentLink';
 import Header from './Header';
@@ -92,11 +90,8 @@ const RenderListFeed = (props) => {
   };
 
   const [feedsContext, feedsContextDispatch] = React.useContext(Context).feeds;
-  const [followContext, followingDispatch] = React.useContext(Context).following;
   const [profileContext] = React.useContext(Context).profile;
   const {myProfile} = profileContext;
-  const {anonProfileId, signedProfileId} = useProfileHook();
-  const {isFollowingUser} = useFollowUser();
 
   const onPressDownVoteHandle = async () => {
     onPressDownVoteHook();
@@ -150,15 +145,9 @@ const RenderListFeed = (props) => {
     return getHeightFooter();
   };
 
-  const handleFollowUnfollow = async (value, isComment = false) => {
-    // is value true user aleady follow
-    // is value false user not follow yet
-
-    const user_id = isComment ? item?.latest_reactions?.comment[0].user_id : item?.actor?.id;
-    const username = isComment
-      ? item?.latest_reactions?.comment[0]?.user?.data?.username
-      : item?.actor?.data?.username;
-
+  const handleFollowUnfollow = async () => {
+    const user_id = item?.actor?.id;
+    const username = item?.actor?.data?.username;
     const data = {
       user_id_follower: myProfile?.user_id,
       user_id_followed: user_id,
@@ -166,17 +155,14 @@ const RenderListFeed = (props) => {
       username_followed: username,
       follow_source: 'feed'
     };
-
     const dataFollowAnon = {
       follow_source: 'post',
       post_id: item?.id
     };
-
     const indexFeed = feedsContext?.feeds?.findIndex((feed) => {
       return feed?.id === item?.id;
     });
     const feedData = feedsContext?.feeds[indexFeed];
-
     if (feedData?.is_following_target) {
       if (!feedData?.anon_user_info_color_name) {
         feedsContext?.feeds.forEach((feed, index) => {
@@ -245,7 +231,7 @@ const RenderListFeed = (props) => {
           isShowDelete={isShowDelete}
           isSelf={isSelf}
           isFollow={item?.is_following_target}
-          onPressFollUnFoll={(value) => handleFollowUnfollow(value, false)}
+          onPressFollUnFoll={handleFollowUnfollow}
         />
         {item.post_type === POST_TYPE_LINK && (
           <ContentLink
