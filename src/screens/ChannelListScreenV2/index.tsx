@@ -36,14 +36,14 @@ const ChannelListScreenV2 = ({route}) => {
       return <MessageChannelItem item={item} onChannelPressed={() => goToChatScreen(item)} />;
     }
 
-    if (item?.channelType === 'ANON_POST_NOTIFICATION') {
-      return (
-        <PostNotificationChannelItem
-          item={item}
-          onChannelPressed={() => goToPostDetailScreen(item)}
-        />
-      );
-    }
+    // if (item?.channelType === 'ANON_POST_NOTIFICATION') {
+    //   return (
+    //     <PostNotificationChannelItem
+    //       item={item}
+    //       onChannelPressed={() => goToPostDetailScreen(item)}
+    //     />
+    //   );
+    // }
 
     return null;
   };

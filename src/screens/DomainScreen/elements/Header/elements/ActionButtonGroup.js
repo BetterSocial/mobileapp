@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    backgroundColor: COLORS.holyTosca,
+    backgroundColor: COLORS.blue,
     color: COLORS.white
   },
   buttonFollowing: {
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: COLORS.holyTosca,
+    borderColor: COLORS.blue,
     borderRadius: 8
   },
   container: {

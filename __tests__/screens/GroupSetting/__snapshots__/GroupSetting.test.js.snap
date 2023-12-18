@@ -268,7 +268,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
             >
               <ActivityIndicator
                 animating={true}
-                color="#107793"
+                color="#4782D7"
                 hidesWhenStopped={true}
                 size="large"
               />

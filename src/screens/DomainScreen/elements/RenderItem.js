@@ -216,8 +216,8 @@ const RenderItem = ({
 
 const styles = StyleSheet.create({
   containerText: {paddingHorizontal: 16},
-  iconPlush: {fontSize: normalizeFontSize(24), color: COLORS.holyTosca},
-  views: {color: COLORS.holyTosca},
+  iconPlush: {fontSize: normalizeFontSize(24), color: COLORS.blue},
+  views: {color: COLORS.blue},
   containerDetail: {flex: 1},
   contentContainer: {flex: 1},
   contentDetail: {flexDirection: 'row', alignItems: 'center'},
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
   domainImage: {height: normalize(200), marginBottom: 14},
   domainImageEmptyState: {height: normalize(135), marginBottom: 14},
   wrapperItem: {
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     borderBottomWidth: 4,
     borderBottomColor: COLORS.gray6,
     height: dimen.size.DOMAIN_CURRENT_HEIGHT - 2
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
   wrapperImage: {
     borderRadius: normalize(45),
     borderWidth: 0.2,
-    borderColor: 'rgba(0,0,0,0.5)',
+    borderColor: COLORS.black50percent,
     width: normalize(48),
     height: normalize(48),
     justifyContent: 'center',
@@ -251,9 +251,9 @@ const styles = StyleSheet.create({
     borderRadius: normalize(45)
   },
   wrapperText: {
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     borderRadius: 8,
-    borderColor: COLORS.holyTosca,
+    borderColor: COLORS.blue,
     width: normalize(36),
     height: normalize(36),
     justifyContent: 'center',
@@ -318,9 +318,9 @@ const styles = StyleSheet.create({
     paddingTop: 8
   },
   wrapperTextUnFollow: {
-    backgroundColor: COLORS.holyTosca,
+    backgroundColor: COLORS.blue,
     borderRadius: 8,
-    borderColor: COLORS.holyTosca,
+    borderColor: COLORS.blue,
     width: 36,
     height: 36,
     justifyContent: 'center',

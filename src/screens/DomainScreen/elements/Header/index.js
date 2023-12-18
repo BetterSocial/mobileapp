@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   },
   containerFollowers: {flexDirection: 'row'},
   followers: {
-    color: COLORS.holyTosca,
+    color: COLORS.blue,
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(16),
     fontWeight: '700'
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
   },
   buttonPrimary: {
     height: normalize(36),
-    backgroundColor: COLORS.holyTosca,
+    backgroundColor: COLORS.blue,
     // flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
     // marginLeft: 5.67,
     marginLeft: 3.67,
     top: 0,
-    color: COLORS.holyTosca
+    color: COLORS.blue
   },
   circleImage: {
     height: normalize(100),

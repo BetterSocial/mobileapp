@@ -295,13 +295,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   newPostText: {
-    color: COLORS.holyTosca,
+    color: COLORS.blue,
     marginRight: dimen.normalizeDimen(11),
     ...FONTS.h3
   },
   animatedViewContainer: (hideBackIcon) => ({
     flexDirection: 'row',
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     marginTop: 0,
     zIndex: 10,
     height: dimen.size.DISCOVERY_HEADER_HEIGHT,

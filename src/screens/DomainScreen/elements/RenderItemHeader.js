@@ -155,9 +155,9 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start'
   },
   wrapperTextUnFollow: {
-    backgroundColor: COLORS.holyTosca,
+    backgroundColor: COLORS.blue,
     borderRadius: 8,
-    borderColor: COLORS.holyTosca,
+    borderColor: COLORS.blue,
     width: 28,
     height: 28,
     justifyContent: 'center',
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
   wrapperText: {
     backgroundColor: COLORS.white,
     borderRadius: 8,
-    borderColor: COLORS.holyTosca,
+    borderColor: COLORS.blue,
     width: 28,
     height: 28,
     justifyContent: 'center',

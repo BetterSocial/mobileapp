@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    backgroundColor: COLORS.holyTosca
+    backgroundColor: COLORS.blue
   },
   container: {
     height: 64,
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: COLORS.holyTosca
+    color: COLORS.blue
   },
   textButtonFollow: {
     fontFamily: fonts.inter[600],
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
   profilepicture: {
     width: 48,
     height: 48,
-    // backgroundColor: COLORS.holyTosca,
+    // backgroundColor: COLORS.blue,
     borderRadius: 24,
     resizeMode: 'cover',
     borderColor: COLORS.lightgrey,
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: COLORS.holyTosca,
+    borderColor: COLORS.blue,
     borderRadius: 8
   },
   card: {
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    borderColor: COLORS.holyTosca,
+    borderColor: COLORS.blue,
     borderWidth: 1
   },
   textButtonBlock: {
@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: COLORS.holyTosca
+    color: COLORS.blue
   },
   buttonBlock: {
     width: 88,

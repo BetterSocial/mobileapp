@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 6,
     borderRadius: 8,
-    backgroundColor: COLORS.holyTosca
+    backgroundColor: COLORS.blue
   },
   textButtonFollow: {
     fontFamily: fonts.inter[500],

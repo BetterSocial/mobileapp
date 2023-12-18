@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10
   },
   underlineFocus: {
-    borderBottomColor: COLORS.holyTosca,
+    borderBottomColor: COLORS.blue,
     borderBottomWidth: 2
   }
 });
