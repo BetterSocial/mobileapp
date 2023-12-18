@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {Animated, Pressable, StyleSheet, View} from 'react-native';
 
+import PropTypes from 'prop-types';
 import IconAdd from '../../../assets/icon/IconAdd';
 import IconCheck from '../../../assets/icon/IconCheck';
 import UserInfo from './UserInfo';
@@ -49,6 +50,15 @@ const ItemUser = ({photo, username, bio, followed, onPress, userid, karmaScore})
 };
 
 // const MemoItemUser = React.memo(ItemUser, isPropsEqual);
+ItemUser.propTypes = {
+  photo: PropTypes.string,
+  username: PropTypes.string,
+  bio: PropTypes.string,
+  followed: PropTypes.array,
+  onPress: PropTypes.func,
+  userid: PropTypes.string,
+  karmaScore: PropTypes.number
+};
 export default ItemUser;
 const styles = StyleSheet.create({
   containerCard: {
