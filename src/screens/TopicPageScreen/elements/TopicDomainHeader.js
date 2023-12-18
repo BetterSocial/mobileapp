@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(12),
     fontFamily: fonts.inter[500],
     textAlign: 'left',
-    color: colors.signed_primary,
+    color: colors.blue,
     marginTop: normalize(1)
   })
 });
