@@ -757,6 +757,7 @@ const CreatePost = () => {
             topicChats={listTopicChat}
             allTaggedUser={allTaggingUser}
             setAllTaggedUser={setAllTaggingUser}
+            isAnonimity={typeUser}
           />
           {typeUser && (
             <Animated.View style={[{opacity: animatedReminder}, styles.reminderContainer]}>
@@ -880,6 +881,7 @@ const CreatePost = () => {
             backRef={sheetBackRef}
             goBack={() => navigation.goBack()}
             continueToEdit={() => sheetBackRef.current.close()}
+            isAnonimity={typeUser}
           />
         </View>
       </ScrollView>

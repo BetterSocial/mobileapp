@@ -7,8 +7,10 @@ import {Button} from '../../../components/Button';
 import Gap from '../../../components/Gap';
 import {fonts} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
+import {useDynamicColors} from '../../../hooks/useToggleColors';
 
-const SheetCloseBtn = ({backRef, goBack, continueToEdit}) => {
+const SheetCloseBtn = ({backRef, goBack, continueToEdit, isAnonimity = false}) => {
+  const dynamicColors = useDynamicColors(isAnonimity);
   return (
     <RBSheet
       ref={backRef}
@@ -21,7 +23,7 @@ const SheetCloseBtn = ({backRef, goBack, continueToEdit}) => {
       <View style={styles.container}>
         <Text style={styles.header}>Are you sure?</Text>
         <Gap style={styles.gap(30)} />
-        <Button onPress={continueToEdit}>
+        <Button onPress={continueToEdit} style={{backgroundColor: dynamicColors.primary}}>
           <Text>Continue editing</Text>
         </Button>
         <Gap style={styles.gap(10)} />

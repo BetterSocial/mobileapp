@@ -131,11 +131,7 @@ Array [
     ListHeaderComponent={
       <Memo(ChannelListHeaderItem)
         name="Anonymous"
-        picture={
-          Object {
-            "testUri": "../../../src/assets/images/AnonymousProfile.png",
-          }
-        }
+        picture={[Function]}
         testID="horizontal-tab-1"
         type="ANONYMOUS"
       />
@@ -184,36 +180,7 @@ Array [
           }
           testID="horizontal-tab-1"
         >
-          <View
-            style={
-              Array [
-                Object {
-                  "overflow": "hidden",
-                },
-                Array [
-                  Object {
-                    "borderRadius": 8,
-                    "height": 16,
-                    "marginRight": 4.800000000000001,
-                    "width": 16,
-                  },
-                  Object {
-                    "backgroundColor": "#107793",
-                  },
-                ],
-              ]
-            }
-          >
-            <FastImageView
-              defaultSource={null}
-              resizeMode="cover"
-              source={
-                Object {
-                  "testUri": "../../../src/assets/images/AnonymousProfile.png",
-                }
-              }
-            />
-          </View>
+          <View />
           <Text
             ellipsizeMode="tail"
             numberOfLines={1}

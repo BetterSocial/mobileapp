@@ -2,7 +2,6 @@ import * as React from 'react';
 import FastImage from 'react-native-fast-image';
 import {StyleSheet, View} from 'react-native';
 
-import AnonymousProfile from '../../../assets/images/AnonymousProfile.png';
 import ChannelAnonymousImage from './ChannelAnonymousImage';
 import ChannelAnonymousSubImage from './ChannelAnonymousSubImage';
 import ChatIcon from '../../../assets/chat-icon.png';
@@ -10,6 +9,7 @@ import FeedIcon from '../../../assets/images/feed-icon.png';
 import dimen from '../../../utils/dimen';
 import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
 import {COLORS} from '../../../utils/theme';
+import AnonymousIcon from '../../../assets/icon/AnonymousIcon';
 
 const ChannelImage = ({
   mainPicture,
@@ -150,14 +150,20 @@ const ChannelImage = ({
   if (type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_I_COMMENTED_ANONYMOUSLY) {
     return (
       <View>
-        <FastImage
-          source={AnonymousProfile}
-          style={[styles.image, styles.anonPmNotificationImageContainer]}
+        <AnonymousIcon
+          fill={COLORS.holyToscaSecondary}
+          width={dimen.normalizeDimen(48)}
+          height={dimen.normalizeDimen(48)}
+          marginTop={dimen.normalizeDimen(12)}
+          marginBottom={dimen.normalizeDimen(11)}
         />
-        <FastImage
-          source={AnonymousProfile}
-          style={[styles.postNotificationImage, styles.anonPmNotificationImageContainer]}
-        />
+        <View style={styles.postNotificationImage}>
+          <AnonymousIcon
+            fill={COLORS.holyTosca}
+            width={dimen.normalizeDimen(21)}
+            height={dimen.normalizeDimen(21)}
+          />
+        </View>
       </View>
     );
   }
@@ -165,9 +171,12 @@ const ChannelImage = ({
   if (type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_COMMENTED_ANONYMOUSLY) {
     return (
       <View>
-        <FastImage
-          source={AnonymousProfile}
-          style={[styles.image, styles.anonPmNotificationImageContainer]}
+        <AnonymousIcon
+          fill={COLORS.holyToscaSecondary}
+          width={dimen.normalizeDimen(48)}
+          height={dimen.normalizeDimen(48)}
+          marginTop={dimen.normalizeDimen(12)}
+          marginBottom={dimen.normalizeDimen(11)}
         />
         <ChannelAnonymousSubImage
           anonPostNotificationUserInfo={{
@@ -185,9 +194,12 @@ const ChannelImage = ({
   ) {
     return (
       <View>
-        <FastImage
-          source={AnonymousProfile}
-          style={[styles.image, styles.anonPmNotificationImageContainer]}
+        <AnonymousIcon
+          fill={COLORS.holyToscaSecondary}
+          width={dimen.normalizeDimen(48)}
+          height={dimen.normalizeDimen(48)}
+          marginTop={dimen.normalizeDimen(12)}
+          marginBottom={dimen.normalizeDimen(11)}
         />
         {renderMyPostNotificationSubImage()}
       </View>
@@ -197,9 +209,12 @@ const ChannelImage = ({
   if (type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION) {
     return (
       <View>
-        <FastImage
-          source={AnonymousProfile}
-          style={[styles.image, styles.anonPmNotificationImageContainer]}
+        <AnonymousIcon
+          fill={COLORS.holyToscaSecondary}
+          width={dimen.normalizeDimen(48)}
+          height={dimen.normalizeDimen(48)}
+          marginTop={dimen.normalizeDimen(12)}
+          marginBottom={dimen.normalizeDimen(11)}
         />
         <View style={[styles.postNotificationImage, styles.myPostNotificationImageContainer]}>
           <FastImage source={FeedIcon} style={styles.postNotificationIcon} />
@@ -215,10 +230,13 @@ const ChannelImage = ({
     return (
       <View>
         {renderMainImage()}
-        <FastImage
-          source={AnonymousProfile}
-          style={[styles.postNotificationImage, styles.anonPmNotificationImageContainer]}
-        />
+        <View style={styles.postNotificationImage}>
+          <AnonymousIcon
+            fill={COLORS.holyTosca}
+            width={dimen.normalizeDimen(21)}
+            height={dimen.normalizeDimen(21)}
+          />
+        </View>
       </View>
     );
   }

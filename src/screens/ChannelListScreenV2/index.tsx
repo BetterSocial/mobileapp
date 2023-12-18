@@ -11,6 +11,7 @@ import Search from '../ChannelListScreen/elements/Search';
 import useAnonymousChannelListScreenHook from '../../hooks/screen/useAnonymousChannelListHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import useRootChannelListHook from '../../hooks/screen/useRootChannelListHook';
+import AnonymousIcon from '../../assets/icon/AnonymousIcon';
 
 const ChannelListScreenV2 = ({route}) => {
   const {refresh} = useLocalDatabaseHook();
@@ -36,14 +37,14 @@ const ChannelListScreenV2 = ({route}) => {
       return <MessageChannelItem item={item} onChannelPressed={() => goToChatScreen(item)} />;
     }
 
-    // if (item?.channelType === 'ANON_POST_NOTIFICATION') {
-    //   return (
-    //     <PostNotificationChannelItem
-    //       item={item}
-    //       onChannelPressed={() => goToPostDetailScreen(item)}
-    //     />
-    //   );
-    // }
+    if (item?.channelType === 'ANON_POST_NOTIFICATION') {
+      return (
+        <PostNotificationChannelItem
+          item={item}
+          onChannelPressed={() => goToPostDetailScreen(item)}
+        />
+      );
+    }
 
     return null;
   };
@@ -61,7 +62,7 @@ const ChannelListScreenV2 = ({route}) => {
         ListHeaderComponent={
           <ChannelListHeaderItem
             name="Anonymous"
-            picture={AnonymousProfile}
+            picture={AnonymousIcon}
             type="ANONYMOUS"
             testID="horizontal-tab-1"
           />
