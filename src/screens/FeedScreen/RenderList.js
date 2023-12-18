@@ -5,7 +5,6 @@ import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
 
 import {Footer, Gap, PreviewComment} from '../../components';
 import {Context} from '../../context';
-import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {followUserAnon, setFollow, setUnFollow, unfollowUserAnon} from '../../service/profile';
 import {showScoreAlertDialog} from '../../utils/Utils';
 import {colors} from '../../utils/colors';
@@ -21,12 +20,10 @@ import dimen from '../../utils/dimen';
 import {normalizeFontSizeByWidth} from '../../utils/fonts';
 import {getCommentLength} from '../../utils/getstream';
 import ShareUtils from '../../utils/share';
-import useFollowUser from '../ChannelListScreen/hooks/useFollowUser';
 import Content from './Content';
 import ContentLink from './ContentLink';
 import Header from './Header';
 import useFeed from './hooks/useFeed';
-import following from '../../context/actions/following';
 import {setFeedByIndex} from '../../context/actions/feeds';
 
 const tabBarHeight = StatusBar.currentHeight;
@@ -69,11 +66,8 @@ const RenderListFeed = (props) => {
   } = useFeed();
 
   const [feedsContext, feedsContextDispatch] = React.useContext(Context).feeds;
-  const [followContext, followingDispatch] = React.useContext(Context).following;
   const [profileContext] = React.useContext(Context).profile;
   const {myProfile} = profileContext;
-  const {anonProfileId, signedProfileId} = useProfileHook();
-  const {isFollowingUser} = useFollowUser();
 
   const onPressDownVoteHandle = async () => {
     onPressDownVoteHook();

@@ -25,7 +25,6 @@ import SendDMBlack from '../../assets/icons/images/send-dm-black.svg';
 import SendDMAnonBlock from '../../assets/icons/images/send-dm-anon-black.svg';
 import MemoSendDM from '../../assets/icon/SendDM';
 import BottomSheetMenu from '../BottomSheet/BottomSheetMenu';
-import {initChatFrom, initChatFromPost} from '../../service/chat';
 import useDMMessage from '../../hooks/core/chat/useDMMessage';
 import useCreateChat from '../../hooks/screen/useCreateChat';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
