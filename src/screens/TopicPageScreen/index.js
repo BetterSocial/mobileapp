@@ -130,11 +130,7 @@ const TopicPageScreen = (props) => {
   const initialFetchTopicFeeds = async (cacheLength = 0) => {
     try {
       const resultGetTopicPages = await getTopicPages(id?.toLowerCase(), 0);
-      const {data: cacheFeedTopic} = TopicPageStorage.get(id?.toLowerCase());
-      const {mapNewData} = mappingColorFeed({
-        dataFeed: resultGetTopicPages?.data,
-        dataCache: cacheFeedTopic
-      });
+      const mapNewData = mappingColorFeed(resultGetTopicPages?.data);
       const {data = [], offset: offsetFeeds = 0} = resultGetTopicPages || {};
       setTopicFeeds(mapNewData, dispatch);
       setOffset(offsetFeeds);
@@ -250,7 +246,7 @@ const TopicPageScreen = (props) => {
         const {feeds: cacheFeedTopic} = TopicPageStorage.get(id?.toLowerCase());
 
         const {data, offset: offsetFeeds} = result;
-        const {mapNewData} = mappingColorFeed({dataFeed: data, dataCache: cacheFeedTopic});
+        const mapNewData = mappingColorFeed(data);
         if (result.code === 200) {
           if (offsetParam === 0) {
             TopicPageStorage.set(id?.toLowerCase(), mapNewData, offsetFeeds);

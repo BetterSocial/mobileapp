@@ -55,7 +55,7 @@ const useSimpleWebsocket = (url, protocol = undefined) => {
     };
 
     socket.onerror = (event: Event) => {
-      console.log('onerror', event);
+      // console.log('onerror', event);
     };
 
     socket.onmessage = (event: MessageEvent) => {
