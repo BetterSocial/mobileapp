@@ -4,7 +4,7 @@ import FastImage from 'react-native-fast-image';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import BetterScore from '../../../assets/Logogram.png';
-import MemoIc_question_mark from '../../../assets/icons/Ic_question_mark';
+import MemoIcQuestionMark from '../../../assets/icons/Ic_question_mark';
 import {normalize} from '../../../utils/fonts';
 import {CircleGradient} from '../../../components/Karma/CircleGradient';
 
@@ -92,7 +92,7 @@ export const KarmaScore = ({score}: KarmaScoreProps) => {
             </View>
           }>
           <View style={{}}>
-            <MemoIc_question_mark width={normalize(13)} height={normalize(13)} />
+            <MemoIcQuestionMark width={normalize(13)} height={normalize(13)} />
           </View>
         </Tooltip>
       </View>

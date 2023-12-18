@@ -2,22 +2,12 @@ import * as React from 'react';
 import {StyleSheet, TouchableNativeFeedback, View} from 'react-native';
 
 import FastImage from 'react-native-fast-image';
+import PropTypes from 'prop-types';
 import Image from '../../../components/Image';
 import MemoIcAddCircle from '../../../assets/icons/ic_add_circle';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
 import {normalize} from '../../../utils/fonts';
 import {CircleGradient} from '../../../components/Karma/CircleGradient';
-
-/**
- * @typedef {Object} ProfilePicturePropsParam
- * @property {function} onImageContainerClick
- * @property {String} profilePicPath
- * @property {Boolean} disabledAddIcon
- */
-/**
- *
- * @param {ProfilePicturePropsParam} props
- */
 
 const ProfilePicture = ({
   onImageContainerClick,
@@ -63,12 +53,17 @@ let styles = StyleSheet.create({
   profileImageContainer: {
     width: 100,
     borderRadius: 100
-    // zIndex: 1000
   },
   wrapImageProfile: {
-    // marginTop: 14,
     flexDirection: 'column'
   }
 });
+
+ProfilePicture.propTypes = {
+  onImageContainerClick: PropTypes.func,
+  profilePicPath: PropTypes.string,
+  disabledAddIcon: PropTypes.bool,
+  karmaScore: PropTypes.number
+};
 
 export default ProfilePicture;

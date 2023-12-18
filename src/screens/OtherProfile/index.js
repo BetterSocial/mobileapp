@@ -50,7 +50,7 @@ import {
 } from '../../service/profile';
 import {colors} from '../../utils/colors';
 import {downVote, upVote} from '../../service/vote';
-import {fonts} from '../../utils/fonts';
+import {fonts, normalize} from '../../utils/fonts';
 import {generateAnonProfileOtherProfile} from '../../service/anonymousProfile';
 import {getFeedDetail} from '../../service/post';
 import {getSingularOrPluralText} from '../../utils/string/StringUtils';
@@ -409,8 +409,11 @@ const OtherProfile = () => {
     return (
       <>
         <View style={styles.headerImageContainer}>
-          <View style={{marginRight: 22}}>
-            <CircleGradient fill={dataMain.karma_score} size={100} width={3}>
+          <View style={{marginRight: normalize(22)}}>
+            <CircleGradient
+              fill={dataMain.karma_score ?? 0}
+              size={normalize(100)}
+              width={normalize(2)}>
               <Image
                 style={styles.profileImage}
                 source={{
