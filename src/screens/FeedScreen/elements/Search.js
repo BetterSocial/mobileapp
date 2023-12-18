@@ -31,7 +31,7 @@ const Search = ({animatedValue, onContainerClicked = () => {}, getSearchLayout})
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     marginBottom: SIZES.base,
     marginHorizontal: SIZES.base
   },
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   },
   wrapperSearch: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: COLORS.lightgrey,
     marginLeft: 20,
     marginRight: 20,
     borderRadius: 8,

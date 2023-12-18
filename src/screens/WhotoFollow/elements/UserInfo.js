@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
+import { COLORS } from '../../../utils/theme';
 
 const UserInfo = ({ photo, username, bio }) => <View style={styles.cardLeft}>
     <Image
@@ -36,13 +37,13 @@ const styles = StyleSheet.create({
         fontStyle: 'normal',
         fontWeight: 'bold',
         fontSize: 14,
-        color: '#000000',
+        color: COLORS.black,
         lineHeight: 21,
         alignSelf: 'flex-start',
     },
     textUsername: {
         fontSize: 14,
-        color: '#000000',
+        color: COLORS.black,
         lineHeight: 21,
         alignSelf: 'flex-start',
         width: '100%',

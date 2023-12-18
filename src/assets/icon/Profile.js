@@ -2,9 +2,9 @@ import React from 'react';
 import {Image, StyleSheet} from 'react-native';
 
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
-import {colors} from '../../utils/colors';
 import {Context} from '../../context';
 import {LoadingStartupContext} from '../../service/initialStartup';
+import {COLORS} from '../../utils/theme';
 
 const ProfileIcon = () => {
   const [myProfile] = React.useContext(Context).profile;
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     width: 19,
     height: 19,
     borderWidth: 0.25,
-    borderColor: colors.gray1
+    borderColor: COLORS.gray9
   }
 });
 

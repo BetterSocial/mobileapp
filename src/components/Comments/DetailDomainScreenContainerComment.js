@@ -1,31 +1,29 @@
 import * as React from 'react';
 import moment from 'moment';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
 import Comment from './Comment';
 import ConnectorWrapper from './ConnectorWrapper';
 import DetailDomainScreenCommentItem from './DetailDomainScreenCommentItem';
 import StringConstant from '../../utils/string/StringConstant';
-import { colors } from '../../utils/colors';
-import { downVoteDomain, upVoteDomain } from '../../service/vote';
+import {downVoteDomain, upVoteDomain} from '../../service/vote';
 import ButtonHightlight from '../ButtonHighlight';
+import {COLORS} from '../../utils/theme';
 
-const DetailDomainScreenContainerComment = ({ comments, indexFeed, updateParent, refreshNews }) => {
+const DetailDomainScreenContainerComment = ({comments, indexFeed, updateParent, refreshNews}) => {
   const [totalVote, setTotalVote] = React.useState(0);
   const [voteStatus, setVoteStatus] = React.useState('none');
   const navigation = useNavigation();
-  let isLast = (index, item) => {
-    return (
-      index === comments.length - 1 && (item.children_counts.comment || 0) === 0
-    );
+  const isLast = (index, item) => {
+    return index === comments.length - 1 && (item.children_counts.comment || 0) === 0;
   };
 
-  let isLastInParent = (index, item) => {
+  const isLastInParent = (index, item) => {
     return index === comments.length - 1;
   };
 
-  let hideLeftConnector = (index, item) => {
+  const hideLeftConnector = (index, item) => {
     return index === comments.length - 1;
   };
 
@@ -33,67 +31,66 @@ const DetailDomainScreenContainerComment = ({ comments, indexFeed, updateParent,
     await upVoteDomain({
       activity_id: item.id,
       feed_group: 'domain',
-      domain: item.domain.name,
+      domain: item.domain.name
     });
     if (voteStatus === 'none') {
       setVoteStatus('upvote');
-      setTotalVote((vote) => vote + 1)
+      setTotalVote((vote) => vote + 1);
     }
-    if(voteStatus === 'upvote') {
-      setVoteStatus('none')
-      setTotalVote((vote) => vote - 1)
+    if (voteStatus === 'upvote') {
+      setVoteStatus('none');
+      setTotalVote((vote) => vote - 1);
     }
-    if(voteStatus === 'downvote') {
-      setVoteStatus('upvote')
-      setTotalVote((vote) => vote + 2)
+    if (voteStatus === 'downvote') {
+      setVoteStatus('upvote');
+      setTotalVote((vote) => vote + 2);
     }
-    onRefreshNews()
-  }
+    onRefreshNews();
+  };
 
   const onVoteDown = async () => {
     await downVoteDomain({
       activity_id: item.id,
       status: !statusUpvote,
       feed_group: 'domain',
-      domain: item.domain.name,
+      domain: item.domain.name
     });
     if (voteStatus === 'none') {
       setVoteStatus('downvote');
-      setTotalVote((vote) => vote - 1)
+      setTotalVote((vote) => vote - 1);
     }
-    if(voteStatus === 'downvote') {
-      setVoteStatus('none')
-      setTotalVote((vote) => vote + 1)
+    if (voteStatus === 'downvote') {
+      setVoteStatus('none');
+      setTotalVote((vote) => vote + 1);
     }
-    if(voteStatus === 'upvote') {
-      setVoteStatus('downvote')
-      setTotalVote((vote) => vote - 2)
+    if (voteStatus === 'upvote') {
+      setVoteStatus('downvote');
+      setTotalVote((vote) => vote - 2);
     }
-    onRefreshNews()
-
-  }
+    onRefreshNews();
+  };
 
   const onRefreshNews = () => {
-    if(refreshNews && typeof refreshNews === 'function') {
-      refreshNews()
+    if (refreshNews && typeof refreshNews === 'function') {
+      refreshNews();
     }
-  }
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.lineBeforeProfile} />
       {comments.map((item, index) => {
         (item.latest_children.comment || []).sort((current, next) => {
-          let currentMoment = moment(current.updated_at);
-          let nextMoment = moment(next.updated_at);
+          const currentMoment = moment(current.updated_at);
+          const nextMoment = moment(next.updated_at);
           return currentMoment.diff(nextMoment);
         });
 
         return (
           <View>
-            <View key={'p' + index}>
+            <View key={`p${index}`}>
               <DetailDomainScreenCommentItem
-                key={'p' + index}
+                key={`p${index}`}
                 comment={item}
                 // username={item.user.data.username}
                 user={item.user}
@@ -104,10 +101,10 @@ const DetailDomainScreenContainerComment = ({ comments, indexFeed, updateParent,
                 isLastInParent={isLastInParent(index, item)}
                 onPress={() => {
                   navigation.navigate('ReplyComment', {
-                    item: item,
+                    item,
                     level: 0,
-                    indexFeed: indexFeed,
-                    updateParent: updateParent
+                    indexFeed,
+                    updateParent
                   });
                 }}
                 onVoteDown={() => onVoteDown(item)}
@@ -139,13 +136,11 @@ const ReplyComment = ({
   hideLeftConnector,
   updateParent
 }) => {
-  let isLast = (item, index) => {
-    return (
-      index === countComment - 1 && (item.children_counts.comment || 0) === 0
-    );
+  const isLast = (item, index) => {
+    return index === countComment - 1 && (item.children_counts.comment || 0) === 0;
   };
 
-  let isLastInParent = (index) => {
+  const isLastInParent = (index) => {
     return index === countComment - 1;
   };
 
@@ -154,26 +149,25 @@ const ReplyComment = ({
       {data.map((item, index) => {
         const showCommentView = () =>
           navigation.navigate('ReplyComment', {
-            item: item,
+            item,
             level: 1,
-            indexFeed: indexFeed,
-            updateParent: updateParent
+            indexFeed,
+            updateParent
           });
 
         const showChildCommentView = () =>
           navigation.navigate('ReplyComment', {
-            item: item,
+            item,
             level: 2,
-            indexFeed: indexFeed,
-            updateParent: updateParent
-
+            indexFeed,
+            updateParent
           });
 
         return (
           <ConnectorWrapper index={index}>
-            <View key={'c' + index} style={styles.levelOneCommentWrapper}>
+            <View key={`c${index}`} style={styles.levelOneCommentWrapper}>
               <Comment
-                key={'c' + index}
+                key={`c${index}`}
                 comment={item}
                 // username={item.user.data.username}
                 user={item.user}
@@ -185,14 +179,11 @@ const ReplyComment = ({
               />
               {item.children_counts.comment > 0 && (
                 <>
-                  <View
-                    style={styles.seeRepliesContainer(isLastInParent(index))}>
+                  <View style={styles.seeRepliesContainer(isLastInParent(index))}>
                     <View style={styles.connector} />
                     <ButtonHightlight onPress={showChildCommentView}>
                       <Text style={styles.seeRepliesText}>
-                        {StringConstant.postDetailPageSeeReplies(
-                          item.children_counts.comment || 0,
-                        )}
+                        {StringConstant.postDetailPageSeeReplies(item.children_counts.comment || 0)}
                       </Text>
                     </ButtonHightlight>
                   </View>
@@ -205,12 +196,12 @@ const ReplyComment = ({
     </ContainerReply>
   );
 };
-const ContainerReply = ({ children, isGrandchild, hideLeftConnector }) => {
+const ContainerReply = ({children, isGrandchild, hideLeftConnector}) => {
   return (
     <View
       style={[
         styles.containerReply(hideLeftConnector),
-        { borderColor: isGrandchild ? '#fff' : colors.gray1 },
+        {borderColor: isGrandchild ? COLORS.white : COLORS.gray9}
       ]}>
       {children}
     </View>
@@ -221,25 +212,25 @@ export default DetailDomainScreenContainerComment;
 const styles = StyleSheet.create({
   container: {
     paddingLeft: 30,
-    paddingRight: 8,
+    paddingRight: 8
   },
   lineBeforeProfile: {
     height: 8.5,
     borderLeftWidth: 1,
-    borderLeftColor: '#C4C4C4',
+    borderLeftColor: COLORS.gray1
   },
   containerReply: (hideLeftConnector) => ({
-    borderLeftWidth: 1,
+    borderLeftWidth: 1
   }),
   seeRepliesContainer: (isLast) => ({
     display: 'flex',
     flexDirection: 'row',
     paddingBottom: 14,
-    borderLeftColor: isLast ? 'transparent' : colors.gray1,
-    borderLeftWidth: 1,
+    borderLeftColor: isLast ? 'transparent' : COLORS.gray9,
+    borderLeftWidth: 1
   }),
   seeRepliesText: {
-    color: colors.blue,
+    color: COLORS.blue
   },
   connector: {
     width: 15,
@@ -247,13 +238,13 @@ const styles = StyleSheet.create({
     borderLeftWidth: 1,
     borderBottomWidth: 1,
     borderBottomLeftRadius: 21,
-    borderLeftColor: colors.gray1,
-    borderBottomColor: colors.gray1,
+    borderLeftColor: COLORS.gray9,
+    borderBottomColor: COLORS.gray9,
     marginRight: 4,
-    marginLeft: -1,
+    marginLeft: -1
   },
   levelOneCommentWrapper: {
     flex: 1,
-    marginLeft: 0,
-  },
+    marginLeft: 0
+  }
 });

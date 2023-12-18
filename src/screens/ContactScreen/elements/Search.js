@@ -47,11 +47,11 @@ const Search = ({onPress, animatedValue, onChangeText, text, onClearText, isLoad
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: 'white'
+    backgroundColor: COLORS.white
   },
   wrapperSearch: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: COLORS.lightgrey,
     marginLeft: 15,
     marginRight: 15,
     borderRadius: SIZES.radius,
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     paddingRight: 8,
     paddingTop: 9,
     paddingBottom: 9
-    // backgroundColor: 'red',
+    // backgroundColor: COLORS.red,
   },
   input: {
     marginLeft: 28,
@@ -84,8 +84,8 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: '500',
     fontSize: 14,
-    color: '#000000'
-    // backgroundColor: 'red'
+    color: COLORS.black
+    // backgroundColor: COLORS.red
   },
   wrapperIcon: {
     position: 'absolute',
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   },
   animatedViewContainer: (animatedValue) => ({
     flexDirection: 'row',
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     marginTop: animatedValue,
     top: 0,
     left: 0,

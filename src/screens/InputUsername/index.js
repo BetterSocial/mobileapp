@@ -20,7 +20,6 @@ import {useNavigation} from '@react-navigation/core';
 import BottomSheetChooseImage from './elements/BottomSheetChooseImage';
 import MemoOnboardingChangeProfilePlusIcon from '../../assets/icon/OnboardingChangeProfilePlusIcon';
 import StringConstant from '../../utils/string/StringConstant';
-import WarningIcon from '../../assets/icon-svg/warning_circle_blue.svg';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
 import {COLORS} from '../../utils/theme';
@@ -29,13 +28,13 @@ import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {Header} from '../../components';
 import {Input} from '../../components/Input';
 import {ProgressBar} from '../../components/ProgressBar';
-import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
 import {setCapitalFirstLetter} from '../../utils/Utils';
 import {setImage, setImageUrl, setUsername} from '../../context/actions/users';
 import {verifyUsername} from '../../service/users';
 import dimen from '../../utils/dimen';
+import IconWarningCircle from '../../assets/icon/IconWarningCircle';
 
 const MAXIMUM_USERNAME_LENGTH = 19;
 const MINIMUM_USERNAME_LENGTH = 3;
@@ -154,7 +153,7 @@ const ChooseUsername = () => {
         return showMessage({
           message: StringConstant.onboardingChooseUsernameErrorCannotBeEmpty,
           type: 'danger',
-          backgroundColor: colors.red
+          backgroundColor: COLORS.red
         });
       }
 
@@ -162,7 +161,7 @@ const ChooseUsername = () => {
         return showMessage({
           message: StringConstant.onboardingChooseUsernameLabelMinimumChar,
           type: 'danger',
-          backgroundColor: colors.red
+          backgroundColor: COLORS.red
         });
       }
 
@@ -170,7 +169,7 @@ const ChooseUsername = () => {
         return showMessage({
           message: StringConstant.onboardingChooseUsernameLabelMaximumChar,
           type: 'danger',
-          backgroundColor: colors.red
+          backgroundColor: COLORS.red
         });
       }
 
@@ -178,7 +177,7 @@ const ChooseUsername = () => {
         return showMessage({
           message: StringConstant.onboardingChooseUsernameLabelUserTaken(username),
           type: 'danger',
-          backgroundColor: colors.red
+          backgroundColor: COLORS.red
         });
       }
 
@@ -186,7 +185,7 @@ const ChooseUsername = () => {
         return showMessage({
           message: StringConstant.onboardingChooseUsernameLabelJustANumber,
           type: 'danger',
-          backgroundColor: colors.red
+          backgroundColor: COLORS.red
         });
       }
     }
@@ -200,37 +199,37 @@ const ChooseUsername = () => {
     switch (type) {
       case 'fetch':
         return (
-          <Text style={styles.textMessage('#BDBDBD')}>
+          <Text style={styles.textMessage(COLORS.silver)}>
             {` ${StringConstant.onboardingChooseUsernameLabelCheckingAvailability}`}
           </Text>
         );
       case 'available':
         return (
-          <Text style={styles.textMessage(colors.holytosca)}>
+          <Text style={styles.textMessage(COLORS.blue)}>
             {` ${StringConstant.onboardingChooseUsernameLabelUserAvailable(user)}`}
           </Text>
         );
       case 'notavailable':
         return (
-          <Text style={styles.textMessage(colors.red)}>
+          <Text style={styles.textMessage(COLORS.red)}>
             {` ${StringConstant.onboardingChooseUsernameLabelUserTaken(user)}`}
           </Text>
         );
       case 'typing':
         return (
-          <Text style={styles.textMessage(colors.red)}>
+          <Text style={styles.textMessage(COLORS.red)}>
             {` ${StringConstant.onboardingChooseUsernameLabelMinimumChar}`}
           </Text>
         );
       case 'max':
         return (
-          <Text style={styles.textMessage(colors.red)}>
+          <Text style={styles.textMessage(COLORS.red)}>
             {` ${StringConstant.onboardingChooseUsernameLabelMaximumChar}`}
           </Text>
         );
       case 'nan':
         return (
-          <Text style={styles.textMessage(colors.red)}>
+          <Text style={styles.textMessage(COLORS.red)}>
             {` ${StringConstant.onboardingChooseUsernameLabelJustANumber}`}
           </Text>
         );
@@ -290,7 +289,7 @@ const ChooseUsername = () => {
                     style={styles.image}
                   />
                   <View style={styles.icon}>
-                    <MemoOnboardingChangeProfilePlusIcon />
+                    <MemoOnboardingChangeProfilePlusIcon color={COLORS.blue} />
                   </View>
                 </View>
               </TouchableOpacity>
@@ -312,7 +311,7 @@ const ChooseUsername = () => {
             </View>
             <View style={styles.constainerInfo}>
               <View style={styles.parentIcon}>
-                <WarningIcon />
+                <IconWarningCircle />
               </View>
               <View style={styles.parentInfo}>
                 <Text style={styles.infoText}>
@@ -350,14 +349,14 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: dimen.normalizeDimen(1),
     borderRadius: dimen.normalizeDimen(8),
-    borderColor: '#BDBDBD',
+    borderColor: COLORS.silver,
     paddingHorizontal: dimen.normalizeDimen(23),
     paddingVertical: dimen.normalizeDimen(13),
     width: '100%'
   },
   container: {
     flex: 1,
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   btnNext: {marginTop: dimen.normalizeDimen(16)},
   gap: {flex: 1},
@@ -379,7 +378,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: normalizeFontSize(36),
     lineHeight: normalizeFontSize(43.57),
-    color: '#11243D',
+    color: COLORS.bunting,
     marginTop: dimen.normalizeDimen(24)
   },
   desc: {
@@ -388,7 +387,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(24),
-    color: colors.gray,
+    color: COLORS.gray8,
     opacity: 0.84,
     marginTop: dimen.normalizeDimen(8),
     marginBottom: dimen.normalizeDimen(12)
@@ -400,7 +399,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   constainerInfo: {
-    backgroundColor: 'rgba(47, 128, 237, 0.2)',
+    backgroundColor: COLORS.blue20percent,
     flexDirection: 'row',
     borderRadius: dimen.normalizeDimen(8),
     width: '100%',
@@ -451,7 +450,7 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: dimen.normalizeDimen(20),
     paddingBottom: dimen.normalizeDimen(20),
-    backgroundColor: colors.white,
+    backgroundColor: COLORS.white,
     flexDirection: 'column',
     justifyContent: 'space-between'
   },

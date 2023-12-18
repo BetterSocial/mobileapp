@@ -29,7 +29,6 @@ import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {Header} from '../../components';
 import {InitialStartupAtom} from '../../service/initialStartup';
 import {ProgressBar} from '../../components/ProgressBar';
-import {colors} from '../../utils/colors';
 import {get} from '../../api/server';
 import {registerUser} from '../../service/users';
 import {setImage} from '../../context/actions/users';
@@ -37,6 +36,7 @@ import {setToken} from '../../utils/token';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import dimen from '../../utils/dimen';
 import {normalizeFontSize} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
 
 const {width} = Dimensions.get('screen');
 
@@ -211,7 +211,7 @@ const WhotoFollow = () => {
           showMessage({
             message: 'Welcome to Better Social',
             type: 'success',
-            backgroundColor: colors.holytosca
+            backgroundColor: COLORS.holyTosca
           });
           setTimeout(() => {
             create();
@@ -223,7 +223,7 @@ const WhotoFollow = () => {
           showMessage({
             message: 'Cannot connect to server, please try again later',
             type: 'danger',
-            backgroundColor: colors.red
+            backgroundColor: COLORS.red
           });
         }
       })
@@ -233,7 +233,7 @@ const WhotoFollow = () => {
         showMessage({
           message: 'Cannot connect to server, please try again later',
           type: 'danger',
-          backgroundColor: colors.red
+          backgroundColor: COLORS.red
         });
       });
   };
@@ -277,7 +277,7 @@ const WhotoFollow = () => {
           {'Find interesting people to follow.\nYou can edit this anytime.'}
         </Text>
       </View>
-      {isLoading ? <ActivityIndicator size="small" color="#0000ff" /> : null}
+      {isLoading ? <ActivityIndicator size="small" color={COLORS.blue} /> : null}
       {isRecyclerViewShown ? (
         <RecyclerListView
           style={styles.recyclerview(bottom)}
@@ -308,7 +308,7 @@ const WhotoFollow = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   recyclerview: (bottom) => ({
     marginBottom: dimen.normalizeDimen(112) - bottom
@@ -328,7 +328,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: normalizeFontSize(36),
     lineHeight: normalizeFontSize(43.57),
-    color: '#11243D',
+    color: COLORS.bunting,
     marginHorizontal: dimen.normalizeDimen(20)
   },
   textDescription: {
@@ -337,7 +337,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(24),
-    color: colors.gray,
+    color: COLORS.gray8,
     opacity: 0.84,
     marginTop: dimen.normalizeDimen(8),
     marginBottom: dimen.normalizeDimen(24),
@@ -350,8 +350,8 @@ const styles = StyleSheet.create({
     width,
     paddingHorizontal: dimen.normalizeDimen(20),
     paddingBottom: dimen.normalizeDimen(20),
-    backgroundColor: colors.white,
-    shadowColor: colors.black,
+    backgroundColor: COLORS.white,
+    shadowColor: COLORS.black,
     shadowOffset: {
       width: 0,
       height: 5
@@ -374,7 +374,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: normalizeFontSize(10),
     textAlign: 'center',
-    color: colors.blackgrey
+    color: COLORS.blackgrey
   }
 });
 export default WhotoFollow;

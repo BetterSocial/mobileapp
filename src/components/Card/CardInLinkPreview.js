@@ -97,18 +97,18 @@ Card.propTypes = {
 
 const styles = StyleSheet.create({
   link: {
-    color: '#2f80ed',
+    color: COLORS.blue,
     textDecorationLine: 'underline',
     marginStart: 8,
     fontSize: 12,
   },
   contentDomain: { flexDirection: 'row', alignItems: 'center' },
   containerDomain: { justifyContent: 'space-around' },
-  date: { fontSize: 12, color: '#828282' },
+  date: { fontSize: 12, color: COLORS.blackgrey },
   domain: {
     fontSize: 16,
     lineHeight: 16,
-    color: '#000000',
+    color: COLORS.black,
     fontWeight: 'bold',
     fontFamily: fonts.inter[600],
   },
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'blue',
   },
   title: {
-    color: '#000000',
+    color: COLORS.black,
     fontWeight: '600',
     fontSize: 14,
     lineHeight: 17,
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   openLinkText: {
-    color: '#2f80ed',
+    color: COLORS.blue,
     textDecorationLine: 'underline',
     marginStart: 8,
     fontSize: 12,

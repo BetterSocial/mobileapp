@@ -90,7 +90,7 @@ const GroupSetting = ({navigation, route}) => {
 export default GroupSetting;
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#fff'},
+  container: {flex: 1, backgroundColor: COLORS.white},
   subtitleStyle: {
     color: COLORS.holyTosca
   },
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: 14,
     lineHeight: 16.94,
-    color: COLORS.holytosca,
+    color: COLORS.holyTosca,
     marginLeft: 20,
     marginBottom: 4
   }

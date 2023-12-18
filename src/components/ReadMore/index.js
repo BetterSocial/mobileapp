@@ -1,11 +1,11 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import {colors} from '../../utils/colors';
 import useReadmore from './hooks/useReadmore';
+import {COLORS} from '../../utils/theme';
 
 const styles = StyleSheet.create({
   moreText: {
-    color: colors.bondi_blue
+    color: COLORS.holyTosca
   }
 });
 

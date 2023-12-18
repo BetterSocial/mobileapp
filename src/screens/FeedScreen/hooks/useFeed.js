@@ -5,6 +5,7 @@ import dimen from '../../../utils/dimen';
 import {Context} from '../../../context';
 import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
 import {normalizeFontSizeByWidth} from '../../../utils/fonts';
+import {COLORS} from '../../../utils/theme';
 
 const useFeed = () => {
   const navigation = useNavigation();
@@ -96,13 +97,13 @@ const useFeed = () => {
 
   const handleTextCountStyle = () => {
     if (totalVote > 0) {
-      return '#00ADB5';
+      return COLORS.holyTosca;
     }
     if (totalVote < 0) {
-      return '#FF2E63';
+      return COLORS.red;
     }
 
-    return '#C4C4C4';
+    return COLORS.gray1;
   };
 
   const getTotalReaction = (feedDetail) => {

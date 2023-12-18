@@ -5,6 +5,7 @@ import IconAdd from '../../../assets/icon/IconAdd';
 import IconCheck from '../../../assets/icon/IconCheck';
 import UserInfo from './UserInfo';
 import dimen from '../../../utils/dimen';
+import {COLORS} from '../../../utils/theme';
 
 const ItemUser = ({photo, username, bio, followed, onPress, userid}) => {
   const followIconFadeAnimation = React.useRef(new Animated.Value(0)).current;
@@ -39,7 +40,7 @@ const ItemUser = ({photo, username, bio, followed, onPress, userid}) => {
             <IconCheck
               width={dimen.normalizeDimen(32)}
               height={dimen.normalizeDimen(32)}
-              fill="#23C5B6"
+              fill={COLORS.blue}
             />
           </Animated.View>
         </Pressable>

@@ -2,8 +2,8 @@ import * as React from 'react';
 import FastImage from 'react-native-fast-image';
 import {Dimensions, StyleSheet, Text, View} from 'react-native';
 
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
 
 export interface ChannelListTabItemProps {
   picture: string | null;
@@ -28,7 +28,7 @@ const ChannelListTabItem = (props: ChannelListTabItemProps) => {
     name: {
       fontFamily: fonts.inter[500],
       fontSize: 14,
-      color: props.type === 'SIGNED' ? colors.darkBlue : colors.black
+      color: props.type === 'SIGNED' ? COLORS.blue : COLORS.holyTosca
     },
     picture: {
       width: 20,
@@ -43,13 +43,13 @@ const ChannelListTabItem = (props: ChannelListTabItemProps) => {
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: 8,
-      backgroundColor: colors.red,
+      backgroundColor: COLORS.red,
       bottom: 4
     },
     unreadCount: {
       fontFamily: fonts.inter[500],
       fontSize: 10,
-      color: colors.white
+      color: COLORS.white
     }
   });
 
