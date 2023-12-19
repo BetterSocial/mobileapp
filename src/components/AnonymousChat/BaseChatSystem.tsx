@@ -3,10 +3,11 @@ import {View, Text, StyleSheet} from 'react-native';
 import {BaseChatItemComponentProps} from '../../../types/component/AnonymousChat/BaseChatItem.types';
 import dimen from '../../utils/dimen';
 import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
+import {COLORS} from '../../utils/theme';
 
 const styles = StyleSheet.create({
   containerMessage: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: COLORS.lightgrey,
     marginHorizontal: dimen.normalizeDimen(20),
     padding: dimen.normalizeDimen(8),
     borderRadius: dimen.normalizeDimen(8),
@@ -16,7 +17,7 @@ const styles = StyleSheet.create({
   },
   textSystem: {
     fontSize: 14,
-    color: '#828282',
+    color: COLORS.blackgrey,
     textAlign: 'center'
   }
 });

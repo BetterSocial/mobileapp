@@ -15,10 +15,11 @@ import ToggleSwitch from '../ToggleSwitch';
 import AnonUserInfoRepo from '../../service/repo/anonUserInfoRepo';
 import MemoSendComment from '../../assets/icon/IconSendComment';
 import StringConstant from '../../utils/string/StringConstant';
+import {ToggleSwitchAnon} from '../../hooks/useToggleColors';
 import {Context} from '../../context';
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {COLORS} from '../../utils/theme';
 
 const WriteComment = ({
   value = null,
@@ -84,13 +85,11 @@ const WriteComment = ({
           {username}
         </Text>
         <View style={styles.anonimityContainer}>
-          <ToggleSwitch
+          <ToggleSwitchAnon
             value={isAnonimity}
             onValueChange={toggleSwitch}
             labelLeft="Anonymity"
-            backgroundActive={colors.lightgrey}
-            backgroundInactive={colors.lightgrey}
-            styleLabelLeft={styles.switch}
+            labelColor={COLORS.gray8}
           />
         </View>
       </View>
@@ -99,7 +98,7 @@ const WriteComment = ({
         {isAnonimity ? (
           <>
             {loadingUser ? (
-              <ActivityIndicator size={'small'} color={colors.bondi_blue} />
+              <ActivityIndicator size={'small'} color={COLORS.holyTosca} />
             ) : (
               <View style={[styles.image, {backgroundColor: anonimityData.colorCode}]}>
                 <Text style={styles.emojyStyle}>{anonimityData.emojiCode}</Text>
@@ -123,7 +122,7 @@ const WriteComment = ({
           testID="changeinput"
           ref={commentInputRef}
           placeholder={StringConstant.commentBoxDefaultPlaceholder}
-          placeholderTextColor={colors.gray}
+          placeholderTextColor={COLORS.gray8}
           style={[styles.text, styles.content]}
           onChangeText={onChangeText}
           value={value}
@@ -137,7 +136,7 @@ const WriteComment = ({
           disabled={!isCommentEnabled || loadingUser || loadingPost}>
           <MemoSendComment
             fillBackground={
-              !isCommentEnabled || loadingUser || loadingPost ? '#C4C4C4' : colors.bondi_blue
+              !isCommentEnabled || loadingUser || loadingPost ? COLORS.gray1 : COLORS.holyTosca
             }
           />
         </TouchableOpacity>
@@ -152,13 +151,13 @@ export const styles = StyleSheet.create({
   columnContainer: {
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: colors.white,
+    backgroundColor: COLORS.white,
     flex: 1,
     width: '100%',
     position: 'absolute',
     bottom: 0,
     borderTopWidth: 1,
-    borderTopColor: colors.gray1,
+    borderTopColor: COLORS.gray9,
     // zIndex: 1,
     paddingBottom: 14
   },
@@ -169,17 +168,17 @@ export const styles = StyleSheet.create({
     marginTop: 7,
     lineHeight: 15,
     fontSize: 12,
-    color: colors.gray
+    color: COLORS.gray8
   }),
   replyToTitle: {
     fontFamily: fonts.inter[600],
     lineHeight: 15,
     fontSize: 12,
-    color: colors.black
+    color: COLORS.black
   },
   container: (inReplyCommentView) => ({
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.white,
     width: '100%',
     paddingRight: 10,
     paddingLeft: inReplyCommentView ? 50 : 20,
@@ -190,7 +189,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     // alignItems: 'center',
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     marginLeft: 8,
     borderRadius: 8,
     paddingLeft: 6,
@@ -199,7 +198,7 @@ export const styles = StyleSheet.create({
     flex: 1
   },
   btn: (isDisableSubmit) => ({
-    backgroundColor: !isDisableSubmit ? colors.bondi_blue : '#f2f2f2',
+    backgroundColor: !isDisableSubmit ? COLORS.holyTosca : COLORS.concrete,
     borderRadius: 18,
     width: 35,
     height: 35,
@@ -222,7 +221,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     fontSize: 12,
     fontFamily: fonts.inter[400],
-    color: colors.black,
+    color: COLORS.black,
     maxHeight: 100,
     paddingTop: Platform.OS === 'ios' ? 10 : 5,
     paddingBottom: Platform.OS === 'ios' ? 10 : 5
@@ -233,7 +232,7 @@ export const styles = StyleSheet.create({
   connectorTop: (inReplyCommentView, showProfileConnector) => ({
     height: showProfileConnector ? 36 : 0,
     width: 1,
-    backgroundColor: colors.gray1,
+    backgroundColor: COLORS.gray9,
     position: 'absolute',
     top: 0,
     left: inReplyCommentView ? 60 : 30,
@@ -242,7 +241,7 @@ export const styles = StyleSheet.create({
   connectorBottom: (inReplyCommentView, showProfileConnector) => ({
     height: showProfileConnector ? 20 : 0,
     width: 1,
-    backgroundColor: colors.gray1,
+    backgroundColor: COLORS.gray9,
     position: 'absolute',
     top: 0,
     left: inReplyCommentView ? 60 : 30,
@@ -256,10 +255,5 @@ export const styles = StyleSheet.create({
   },
   emojyStyle: {
     fontSize: 18
-  },
-  switch: {
-    fontFamily: fonts.inter[400],
-    fontSize: 12,
-    color: colors.gray
   }
 });

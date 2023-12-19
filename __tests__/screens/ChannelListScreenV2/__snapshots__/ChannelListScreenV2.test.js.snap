@@ -12,8 +12,8 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
     <View
       style={
         Object {
-          "backgroundColor": "white",
-          "borderBottomColor": "#E8EBED",
+          "backgroundColor": "#FFFFFF",
+          "borderBottomColor": "#E0E0E0",
           "borderBottomWidth": 1,
           "flexDirection": "row",
           "left": 0,
@@ -114,7 +114,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
                 "marginRight": 4,
               },
               Object {
-                "color": "#003848",
+                "color": "#107793",
               },
             ]
           }
@@ -131,11 +131,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
     ListHeaderComponent={
       <Memo(ChannelListHeaderItem)
         name="Anonymous"
-        picture={
-          Object {
-            "testUri": "../../../src/assets/images/AnonymousProfile.png",
-          }
-        }
+        picture={[Function]}
         testID="horizontal-tab-1"
         type="ANONYMOUS"
       />
@@ -171,8 +167,8 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
           style={
             Object {
               "alignItems": "center",
-              "backgroundColor": "#ffffff",
-              "borderBottomColor": "#003848",
+              "backgroundColor": "#FFFFFF",
+              "borderBottomColor": "#107793",
               "borderBottomWidth": 2,
               "flexDirection": "row",
               "height": 38.400000000000006,
@@ -184,42 +180,13 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
           }
           testID="horizontal-tab-1"
         >
-          <View
-            style={
-              Array [
-                Object {
-                  "overflow": "hidden",
-                },
-                Array [
-                  Object {
-                    "borderRadius": 8,
-                    "height": 16,
-                    "marginRight": 4.800000000000001,
-                    "width": 16,
-                  },
-                  Object {
-                    "backgroundColor": "#003848",
-                  },
-                ],
-              ]
-            }
-          >
-            <FastImageView
-              defaultSource={null}
-              resizeMode="cover"
-              source={
-                Object {
-                  "testUri": "../../../src/assets/images/AnonymousProfile.png",
-                }
-              }
-            />
-          </View>
+          <View />
           <Text
             ellipsizeMode="tail"
             numberOfLines={1}
             style={
               Object {
-                "color": "#003848",
+                "color": "#107793",
                 "fontFamily": "Inter-Medium",
                 "fontSize": 12.600000000000001,
               }

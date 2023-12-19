@@ -3,8 +3,8 @@ import {StyleSheet, View} from 'react-native';
 import PropTypes from 'prop-types';
 import RBSheet from 'react-native-raw-bottom-sheet';
 
-import {colors} from '../../utils/colors';
 import dimen from '../../utils/dimen';
+import {COLORS} from '../../utils/theme';
 
 const BottomSheet = React.forwardRef((props, ref) => {
   const {pullBottom = false} = props;
@@ -45,6 +45,6 @@ const styles = StyleSheet.create({
     justifyContent: pullBottom ? 'flex-end' : 'flex-start'
   }),
   draggableIcon: {
-    backgroundColor: colors.alto
+    backgroundColor: COLORS.alto
   }
 });

@@ -18,10 +18,10 @@ import {
   POST_TYPE_STANDARD
 } from '../../utils/constants';
 import {Footer, Gap, PreviewComment} from '../../components';
-import {colors} from '../../utils/colors';
 import {getCommentLength, getCountCommentWithChild} from '../../utils/getstream';
 import {showScoreAlertDialog} from '../../utils/Utils';
 import {normalizeFontSizeByWidth} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
 
 const FULL_WIDTH = Dimensions.get('screen').width;
 const tabBarHeight = StatusBar.currentHeight;
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     height: dimen.size.TOPIC_CURRENT_ITEM_HEIGHT,
     width: FULL_WIDTH,
     marginBottom: normalizeFontSizeByWidth(4),
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   }),
   cardMain: {
     height: '100%',

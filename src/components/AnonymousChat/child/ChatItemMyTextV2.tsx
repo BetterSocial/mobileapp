@@ -22,7 +22,6 @@ import {ChatStatus} from '../../../../types/database/schema/ChannelList.types';
 import {MessageType} from '../../../../types/hooks/screens/useMessageHook.types';
 import {ScrollContext} from '../../../hooks/screen/useChatScreenHook';
 import {calculateTime} from '../../../utils/time';
-import {colors} from '../../../utils/colors';
 import {
   containerStyle,
   dotStyle,
@@ -32,6 +31,7 @@ import {
   textStyle
 } from './ChatItemText.style';
 import {replyIcon} from './ChatItemTargetText';
+import {COLORS} from '../../../utils/theme';
 
 const ChatItemMyTextV2 = ({
   username = 'Anonymous User',
@@ -72,13 +72,13 @@ const ChatItemMyTextV2 = ({
     if (status === ChatStatus.PENDING)
       return (
         <View style={styles.icon}>
-          <IconChatClockGrey color={colors.silver} width={12} height={12} />
+          <IconChatClockGrey color={COLORS.silver} width={12} height={12} />
         </View>
       );
 
     return (
       <View style={styles.icon}>
-        <IconChatCheckMark color={colors.silver} width={12} height={12} />
+        <IconChatCheckMark color={COLORS.silver} />
       </View>
     );
   }, [status]);

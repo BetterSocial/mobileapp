@@ -1,10 +1,10 @@
 import {StyleSheet} from 'react-native';
 
-import {colors} from '../../utils/colors';
+import {COLORS} from '../../utils/theme';
 
 export const S = StyleSheet.create({
   container: {
-    backgroundColor: colors.white,
+    backgroundColor: COLORS.white,
     borderRadius: 8,
     display: 'flex',
     flexDirection: 'row',
@@ -16,7 +16,7 @@ export const S = StyleSheet.create({
     borderRadius: 50,
     height: 30,
     width: 30,
-    backgroundColor: colors.gray1,
+    backgroundColor: COLORS.gray9,
     marginRight: 6
   },
   textArea: {

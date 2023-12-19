@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import {COLORS} from '../utils/theme';
 
 export const toastConfig = {
   center: ({text1, text2}) => (
@@ -17,12 +18,12 @@ export const toastConfig = {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 10,
     borderRadius: 10,
-    borderColor: '#f2f2f2',
+    borderColor: COLORS.concrete,
     borderWidth: 1
   },
   centerText: {
@@ -32,7 +33,7 @@ const styles = StyleSheet.create({
 
 const styleAsNative = StyleSheet.create({
   container: {
-    backgroundColor: '#4D4D4D',
+    backgroundColor: COLORS.gray5,
     borderRadius: 45,
     paddingHorizontal: 30,
     paddingVertical: 5,
@@ -42,7 +43,7 @@ const styleAsNative = StyleSheet.create({
     alignItems: 'center'
   },
   text: {
-    color: '#FFF',
+    color: COLORS.white,
     textAlign: 'center',
     fontFamily: 'Inter',
     fontSize: 12,

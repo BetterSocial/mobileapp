@@ -3,8 +3,8 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import {StyleSheet, Text, View} from 'react-native';
 
 import FlatListItem from '../../../components/FlatListItem';
-import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
+import {COLORS} from '../../../utils/theme';
 
 const SheetGeographic = ({geoRef, data, select, onSelect}) => {
   const renderLocationString = (value) => {
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     paddingBottom: 38
   },
   header: {
-    color: colors.black,
+    color: COLORS.black,
     fontFamily: fonts.inter[600],
     fontSize: 18,
     fontWeight: 'bold',
@@ -59,6 +59,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20
   },
   draggableIcon: {
-    backgroundColor: colors.alto
+    backgroundColor: COLORS.alto
   }
 });
