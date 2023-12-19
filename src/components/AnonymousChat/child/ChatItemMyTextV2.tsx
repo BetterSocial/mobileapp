@@ -38,6 +38,7 @@ const ChatItemMyTextV2 = ({
   time = '4h',
   isContinuous = false,
   message = '',
+  attachments = [],
   status = ChatStatus.PENDING,
   avatar,
   chatType,

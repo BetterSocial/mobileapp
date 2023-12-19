@@ -78,7 +78,7 @@
     "react-native-config": "^1.5.0",
     "react-native-context-menu-view": "^1.11.0",
     "react-native-device-info": "10.6.0",
-    "react-native-document-picker": "5.0.2",
+    "react-native-document-picker": "^9.0.1",
     "react-native-email-link": "https://github.com/agit26milan/react-native-email-link.git",
     "react-native-emoji-selector": "^0.2.0",
     "react-native-fast-image": "^8.5.11",
