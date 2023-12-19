@@ -51,7 +51,6 @@ export const avatar = (
   />
 );
 
-global.__reanimatedWorkletInit = jest.fn();
 jest.spyOn(React, 'useRef').mockReturnValue({current: {close: jest.fn()}});
 
 beforeEach(() => {

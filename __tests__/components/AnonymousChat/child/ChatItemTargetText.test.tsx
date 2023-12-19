@@ -15,7 +15,6 @@ import {
   timestamp
 } from './ChatItemMyTextV2.test';
 
-global.__reanimatedWorkletInit = jest.fn();
 jest.spyOn(React, 'useRef').mockReturnValue({current: {close: jest.fn()}});
 
 beforeEach(() => {
