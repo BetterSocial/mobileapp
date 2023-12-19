@@ -134,13 +134,23 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
           replyData?.id
         );
       } else {
-        const allAttachmentPromises: Promise<void>[] = attachments.map(async (item) => {
+        const allAttachmentPromises: Promise<void>[] = attachments.map(async (item: any) => {
           if (item.type === 'image') {
-            const uploadedImageUrl = await ImageUtils.uploadImageWithoutAuth(item.asset_url);
+            const uploadedImageUrl = await ImageUtils.uploadImage(item.asset_url);
             return {
               ...item,
               asset_url: uploadedImageUrl.data.url,
               thumb_url: uploadedImageUrl.data.url
+            };
+          }
+          if (item.type === 'video') {
+            const uploadedImageUrl = await ImageUtils.uploadImage(item.asset_url);
+            const uploadedVideoUrl = await ImageUtils.uploadImage(item.video_path);
+            return {
+              ...item,
+              asset_url: uploadedImageUrl.data.url,
+              thumb_url: uploadedImageUrl.data.url,
+              video_path: uploadedVideoUrl.data.url
             };
           }
 

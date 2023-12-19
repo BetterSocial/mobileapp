@@ -5,9 +5,11 @@ import ContextMenu, {ContextMenuAction} from 'react-native-context-menu-view';
 import {Swipeable} from 'react-native-gesture-handler';
 import {Text, View, ViewStyle} from 'react-native';
 
+import {useNavigation} from '@react-navigation/core';
 import ChatReplyView from './ChatReplyView';
 import IconChatCheckMark from '../../../assets/icon/IconChatCheckMark';
 import IconChatClockGrey from '../../../assets/icon/IconChatClockGrey';
+import IconVideoPlay from '../../../assets/icon/IconVideoPlay';
 import useMessageHook from '../../../hooks/screen/useMessageHook';
 import {
   CONTEXT_MENU_COPY,
@@ -72,13 +74,13 @@ const ChatItemMyTextV2 = ({
   const renderIcon = React.useCallback(() => {
     if (status === ChatStatus.PENDING)
       return (
-        <View style={styles.icon}>
+        <View style={styles.iconNewLine}>
           <IconChatClockGrey color={colors.silver} width={12} height={12} />
         </View>
       );
 
     return (
-      <View style={styles.icon}>
+      <View style={styles.iconNewLine}>
         <IconChatCheckMark color={colors.silver} width={12} height={12} />
       </View>
     );
@@ -133,7 +135,8 @@ const ChatItemMyTextV2 = ({
             previewBackgroundColor="transparent"
             style={{flex: 1}}
             actions={contextMenuActions}
-            onPress={(e) => onContextMenuPressed(e, data, chatType)}>
+            onPress={(e) => onContextMenuPressed(e, data, chatType)}
+            disabled={attachments.length > 1}>
             <View style={styles.radius8}>
               <View style={textContainerStyle(true, chatType)}>
                 {isShowUserInfo && (
@@ -153,7 +156,9 @@ const ChatItemMyTextV2 = ({
                 />
 
                 <View style={{flexDirection: 'row'}}>
-                  <Text style={messageStyle(true, messageType)}>{message}</Text>
+                  {message?.trim() !== '' && (
+                    <Text style={messageStyle(true, messageType)}>{message}</Text>
+                  )}
                   {renderIcon()}
                 </View>
               </View>

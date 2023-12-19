@@ -65,6 +65,7 @@ exports[`TESTING ChatItemMyTextV2 should match snapshot 1`] = `
             },
           ]
         }
+        disabled={false}
         onPress={[Function]}
         previewBackgroundColor="transparent"
         style={
@@ -194,6 +195,9 @@ exports[`TESTING ChatItemMyTextV2 should match snapshot 1`] = `
                 style={
                   Object {
                     "alignSelf": "flex-end",
+                    "bottom": 6,
+                    "position": "absolute",
+                    "right": 8,
                   }
                 }
               >
