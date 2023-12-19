@@ -76,11 +76,7 @@ const useFetchChannelHook = () => {
 
     try {
       const channelList = ChannelList.fromChannelAPI(channel, type[channelType]);
-      if (channel?.type === 'topics') {
-        await channelList.save(localDb);
-      } else {
-        await channelList.saveIfLatest(localDb);
-      }
+      await channelList.saveIfLatest(localDb);
       refresh('channelList');
     } catch (e) {
       console.log('error on helperChannelPromiseBuilder');

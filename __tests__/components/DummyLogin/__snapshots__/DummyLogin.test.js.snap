@@ -490,46 +490,6 @@ Array [
             </View>
           </View>
           <View
-            testID="dev-dummy-login-fajartest01"
-          >
-            <View
-              accessible={true}
-              focusable={true}
-              onClick={[Function]}
-              onResponderGrant={[Function]}
-              onResponderMove={[Function]}
-              onResponderRelease={[Function]}
-              onResponderTerminate={[Function]}
-              onResponderTerminationRequest={[Function]}
-              onStartShouldSetResponder={[Function]}
-              style={
-                Object {
-                  "opacity": 1,
-                }
-              }
-            >
-              <View
-                style={
-                  Object {
-                    "backgroundColor": "#6A6A6A",
-                    "height": 2,
-                    "width": "100%",
-                  }
-                }
-              />
-              <Text
-                style={
-                  Object {
-                    "paddingHorizontal": 16,
-                    "paddingVertical": 8,
-                  }
-                }
-              >
-                fajartest01
-              </Text>
-            </View>
-          </View>
-          <View
             testID="dev-dummy-login-agita"
           >
             <View

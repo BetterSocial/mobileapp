@@ -1,39 +1,39 @@
+import * as React from 'react';
+import Toast from 'react-native-simple-toast';
+import moment from 'moment';
+import {Dimensions, Keyboard, ScrollView, StatusBar, StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
-import moment from 'moment';
-import * as React from 'react';
-import {Dimensions, Keyboard, ScrollView, StatusBar, StyleSheet, View} from 'react-native';
-import Toast from 'react-native-simple-toast';
 
-import {Footer} from '..';
-import {Context} from '../../context';
-import {saveComment} from '../../context/actions/comment';
-import {setFeedByIndex} from '../../context/actions/feeds';
-import {useFeedDataContext} from '../../hooks/useFeedDataContext';
-import usePostContextHook, {CONTEXT_SOURCE} from '../../hooks/usePostContextHooks';
+import BlockComponent from '../BlockComponent';
+import ContainerComment from '../Comments/ContainerComment';
+import Content from './elements/Content';
 import Header from '../../screens/FeedScreen/Header';
+import LoadingWithoutModal from '../LoadingWithoutModal';
+import ShareUtils from '../../utils/share';
+import StringConstant from '../../utils/string/StringConstant';
+import WriteComment from '../Comments/WriteComment';
 import useFeed from '../../screens/FeedScreen/hooks/useFeed';
-import {createCommentParentV3, getCommentList} from '../../service/comment';
-import {getFeedDetail} from '../../service/post';
-import {downVote, upVote} from '../../service/vote';
-import {showScoreAlertDialog} from '../../utils/Utils';
+import usePostDetail from './hooks/usePostDetail';
+import useWriteComment from '../Comments/hooks/useWriteComment';
+import usePostContextHook, {CONTEXT_SOURCE} from '../../hooks/usePostContextHooks';
 import {
   ANALYTICS_SHARE_POST_FEED_ID,
   ANALYTICS_SHARE_POST_PDP_SCREEN,
   SOURCE_PDP
 } from '../../utils/constants';
+import {Context} from '../../context';
+import {Footer} from '..';
+import {createCommentParentV3, getCommentList} from '../../service/comment';
+import {downVote, upVote} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
 import {getCountCommentWithChildInDetailPage} from '../../utils/getstream';
-import ShareUtils from '../../utils/share';
-import StringConstant from '../../utils/string/StringConstant';
-import BlockComponent from '../BlockComponent';
-import ContainerComment from '../Comments/ContainerComment';
-import WriteComment from '../Comments/WriteComment';
-import useWriteComment from '../Comments/hooks/useWriteComment';
-import LoadingWithoutModal from '../LoadingWithoutModal';
+import {getFeedDetail} from '../../service/post';
+import {saveComment} from '../../context/actions/comment';
+import {setFeedByIndex} from '../../context/actions/feeds';
+import {showScoreAlertDialog} from '../../utils/Utils';
+import {useFeedDataContext} from '../../hooks/useFeedDataContext';
 import {withInteractionsManaged} from '../WithInteractionManaged';
-import Content from './elements/Content';
-import usePostDetail from './hooks/usePostDetail';
 
 const {width, height} = Dimensions.get('window');
 
@@ -561,7 +561,7 @@ const PostPageDetailIdComponent = (props) => {
         <React.Fragment>
           <Header
             isPostDetail={true}
-            hideThreeDot={false}
+            hideThreeDot={true}
             props={item}
             isBackButton={true}
             source={SOURCE_PDP}
@@ -610,7 +610,6 @@ const PostPageDetailIdComponent = (props) => {
                   onPressScore={handleOnPressScore}
                   onPressBlock={() => refBlockComponent.current.openBlockComponent(item)}
                   isSelf={profile.myProfile.user_id === item.actor?.id}
-                  isShowDM
                 />
               </View>
             </ScrollView>

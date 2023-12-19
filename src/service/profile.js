@@ -113,30 +113,6 @@ export const followUser = async (data) =>
       });
   });
 
-export const followUserAnon = async (data) =>
-  new Promise((resolve, reject) => {
-    api
-      .post('/profiles/follow-anonymous-user', data)
-      .then((res) => {
-        resolve(res.data);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
-
-export const unfollowUserAnon = async (data) =>
-  new Promise((resolve, reject) => {
-    api
-      .post('/profiles/unfollow-anonymous-user', data)
-      .then((res) => {
-        resolve(res.data);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
-
 export const setFollow = async (data) => {
   const textTargetUser = `${data.username_follower} started following you.\nSend them a message now`;
   const textOwnUser = `You started following ${data.username_followed}.\nSend them a message now.`;
