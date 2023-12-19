@@ -178,6 +178,21 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
           newAttachments
         );
       } else {
+        const allAttachmentPromises: Promise<void>[] = attachments.map(async (item) => {
+          if (item.type === 'image') {
+            const uploadedImageUrl = await ImageUtils.uploadImageWithoutAuth(item.asset_url);
+            return {
+              ...item,
+              asset_url: uploadedImageUrl.data.url,
+              thumb_url: uploadedImageUrl.data.url
+            };
+          }
+
+          return item;
+        });
+
+        const newAttachments = await Promise.all(allAttachmentPromises);
+
         response = await SignedMessageRepo.sendSignedMessage(
           selectedChannel?.id,
           message,
