@@ -260,6 +260,7 @@ const WhotoFollow = () => {
             followed={extendedState.followed}
             userid={item.user_id}
             onPress={() => handleSelected(item.user_id)}
+            karmaScore={item.karma_score}
           />
         );
     }

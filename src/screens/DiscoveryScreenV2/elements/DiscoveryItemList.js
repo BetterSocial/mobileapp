@@ -12,7 +12,8 @@ import {
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 import TopicsProfilePictureEmptyState from '../../../assets/icon/TopicsProfilePictureEmptyState';
 import {colors} from '../../../utils/colors';
-import {fonts} from '../../../utils/fonts';
+import {fonts, normalize} from '../../../utils/fonts';
+import {CircleGradient} from '../../../components/Karma/CircleGradient';
 
 const renderDefaultImage = (DefaultImage) => {
   if (DefaultImage) {
@@ -80,27 +81,50 @@ const DomainList = (props) => {
     );
   };
 
+  const renderProfilePicture = () => {
+    if (item.karmaScore) {
+      return (
+        <CircleGradient
+          testId="images"
+          fill={item.karmaScore}
+          size={normalize(51)}
+          width={normalize(2.3)}>
+          <Image
+            testId="images"
+            source={{
+              uri: item.image
+            }}
+            style={styles.profilepicture}
+            width={48}
+            height={48}
+          />
+        </CircleGradient>
+      );
+    }
+    return (
+      <Image
+        testId="images"
+        source={{
+          uri: item.image
+        }}
+        style={styles.profilepicture}
+        width={48}
+        height={48}
+      />
+    );
+  };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
         testID="pressbody"
         onPress={() => onPressBody(item)}
         style={styles.wrapProfile}>
-        <View style={styles.card}>
+        <View style={styles.card} testID="images">
           {!isHashtag ? (
             <React.Fragment>
               {item.image && typeof item.image === 'string' && item.image.length > 0 ? (
-                <Image
-                  testID="images"
-                  source={{
-                    uri: item.image
-                  }}
-                  style={styles.profilepicture}
-                  width={48}
-                  height={48}
-                />
-              ) : DefaultImage ? (
-                <TopicsProfilePictureEmptyState />
+                renderProfilePicture()
               ) : (
                 <View testID="noimage">{renderDefaultImage(DefaultImage)}</View>
               )}

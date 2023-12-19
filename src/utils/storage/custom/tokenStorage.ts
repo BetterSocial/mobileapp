@@ -15,7 +15,7 @@ export enum ITokenEnum {
 
 interface ITokenStorage {
   set: (response: ITokenResponse) => void;
-  get: (tokenEnum: ITokenEnum) => string | null;
+  get: (tokenEnum: ITokenEnum) => string | null | undefined;
   clear: () => void;
 }
 

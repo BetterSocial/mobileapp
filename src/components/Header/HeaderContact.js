@@ -83,7 +83,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: SIZES.base,
     alignItems: 'center'
   },
   content: (marginLeft) => ({

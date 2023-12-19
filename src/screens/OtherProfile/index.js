@@ -1,7 +1,6 @@
 import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import ToastMessage from 'react-native-toast-message';
-import netInfo from '@react-native-community/netinfo';
 import {
   Dimensions,
   Image,
@@ -32,30 +31,24 @@ import RenderItem from '../ProfileScreen/elements/RenderItem';
 import ReportUser from '../../components/Blocking/ReportUser';
 import ShareUtils from '../../utils/share';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
-import StorageUtils from '../../utils/storage';
 import dimen from '../../utils/dimen';
-import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
 import useCreateChat from '../../hooks/screen/useCreateChat';
 import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
+import useOtherProfileScreenHooks from './hooks/useOtherProfileScreenHooks';
 import useViewPostTimeHook from '../FeedScreen/hooks/useViewPostTimeHook';
+import {CircleGradient} from '../../components/Karma/CircleGradient';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {blockUser, unblockUserApi} from '../../service/blocking';
-import {
-  checkUserBlock,
-  getOtherFeedsInProfile,
-  getOtherProfile,
-  setFollow,
-  setUnFollow
-} from '../../service/profile';
 import {colors} from '../../utils/colors';
 import {downVote, upVote} from '../../service/vote';
-import {fonts} from '../../utils/fonts';
+import {fonts, normalize} from '../../utils/fonts';
 import {generateAnonProfileOtherProfile} from '../../service/anonymousProfile';
 import {getFeedDetail} from '../../service/post';
 import {getSingularOrPluralText} from '../../utils/string/StringUtils';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherProfileFeed';
+import {setFollow, setUnFollow} from '../../service/profile';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 const {width} = Dimensions.get('screen');
@@ -69,8 +62,6 @@ const OtherProfile = () => {
   const specificIssueRef = React.useRef();
   const flatListRef = React.useRef();
 
-  const [dataMain, setDataMain] = React.useState({});
-  const [, setDataMainBio] = React.useState('');
   const [user_id, setUserId] = React.useState('');
   const [username, setUsername] = React.useState('');
   const [other_id, setOtherId] = React.useState('');
@@ -78,33 +69,40 @@ const OtherProfile = () => {
   const [opacity, setOpacity] = React.useState(0);
   const [reason, setReason] = React.useState([]);
   const [yourselfId] = React.useState('');
-  const [blockStatus, setBlockStatus] = React.useState({
-    blocked: false,
-    blocker: false
-  });
   const [loadingBlocking, setLoadingBlocking] = React.useState(false);
-  const [postOffset, setPostOffset] = React.useState(0);
 
   const headerHeightRef = React.useRef(0);
   const interactionManagerRef = React.useRef(null);
-  const [otherProfileFeeds, dispatchOtherProfile] = React.useContext(Context).otherProfileFeed;
+  const [mainFeeds, dispatchOtherProfile] = React.useContext(Context).otherProfileFeed;
   const [profile] = React.useContext(Context).profile;
-  const [mainFeeds, dispatch] = React.useContext(Context).feeds;
-  const [loading, setLoading] = React.useState(false);
-  const [initLoading, setInitLoading] = React.useState(true);
+  const {timer, viewPostTimeIndex} = mainFeeds;
+  const [, dispatch] = React.useContext(Context).feeds;
   const [isAnonimity, setIsAnonimity] = React.useState(false);
   const {params} = route;
-  const {feeds} = otherProfileFeeds;
-  const {timer, viewPostTimeIndex} = mainFeeds;
   const [loadingGenerateAnon, setLoadingGenerateAnon] = React.useState(false);
   const [anonProfile, setAnonProfile] = React.useState();
-  const {mappingColorFeed} = useCoreFeed();
-  const isSignedMessageEnabled = dataMain.isSignedMessageEnabled ?? true;
-  const isAnonimityEnabled = dataMain.isAnonMessageEnabled && isSignedMessageEnabled;
   const {createSignChat} = useCreateChat();
 
+  const {
+    feeds,
+    otherProfileData: dataMain,
+    isBlocked,
+    isBlocking,
+    isLoading,
+    isProfileFetching,
+    postOffset,
+
+    refetchFeeds,
+    refetchBlockStatus,
+    refetchOtherProfile,
+    setOtherProfileData: setDataMain
+  } = useOtherProfileScreenHooks(params?.data?.other_id, params?.data?.username);
+
+  const isSignedMessageEnabled = dataMain.isSignedMessageEnabled ?? true;
+  const isAnonimityEnabled = dataMain.isAnonMessageEnabled && isSignedMessageEnabled;
+
   const {onWillSendViewPostTime} = useViewPostTimeHook(dispatch, timer, viewPostTimeIndex);
-  const {fetchNextFeeds} = useFeedPreloadHook(feeds?.length, () => getOtherFeeds(postOffset));
+  const {fetchNextFeeds} = useFeedPreloadHook(feeds?.length, () => refetchFeeds(postOffset));
 
   const generateAnonProfile = async () => {
     setLoadingGenerateAnon(true);
@@ -127,34 +125,6 @@ const OtherProfile = () => {
     setOtherId(params?.data?.other_id);
   }, [params.data]);
 
-  const getOtherFeeds = async (offset = 0) => {
-    const otherId = other_id;
-    try {
-      const cacheFeed = StorageUtils.otherProfileFeed.getForKey(otherId);
-      if (cacheFeed) {
-        setOtherProfileFeed(JSON.parse(cacheFeed), dispatchOtherProfile);
-      }
-      const result = await getOtherFeedsInProfile(otherId, offset);
-      const {data: feedOtherProfile} = result;
-      const {mapNewData} = mappingColorFeed({
-        dataFeed: feedOtherProfile,
-        dataCache: cacheFeed
-      });
-      if (offset === 0) {
-        setOtherProfileFeed(mapNewData, dispatchOtherProfile);
-        StorageUtils.otherProfileFeed.setForKey(otherId, JSON.stringify(mapNewData));
-      } else {
-        const clonedFeeds = [...feeds, ...mapNewData];
-        setOtherProfileFeed(clonedFeeds, dispatchOtherProfile);
-        StorageUtils.otherProfileFeed.setForKey(otherId, JSON.stringify(clonedFeeds));
-      }
-      setLoading(false);
-      setPostOffset(Number(result.offset));
-    } catch (e) {
-      setLoading(false);
-    }
-  };
-
   React.useEffect(() => {
     return () => {
       if (interactionManagerRef.current) interactionManagerRef.current.cancel();
@@ -163,91 +133,14 @@ const OtherProfile = () => {
   }, []);
 
   React.useEffect(() => {
-    netInfo.addEventListener((state) => {
-      if (state.isConnected) {
-        initData();
-      } else {
-        handleOfflineMode();
-      }
-    });
     initData();
   }, []);
 
-  React.useEffect(() => {
-    getOtherFeeds();
-  }, [other_id]);
-
   const initData = () => {
-    setInitLoading(true);
     setUserId(params.data.user_id);
     setUsername(params.data.username);
-    fetchOtherProfile();
   };
 
-  const checkUserBlockHandle = async (userId, callback) => {
-    const status = await netInfo.fetch();
-    if (status.isConnected) {
-      try {
-        const sendData = {
-          user_id: userId
-        };
-        const processGetBlock = await checkUserBlock(sendData);
-        if (callback) callback();
-        if (processGetBlock.status === 200) {
-          setBlockStatus(processGetBlock.data.data);
-        }
-      } catch (e) {
-        if (__DEV__) {
-          console.log(e, 'error');
-        }
-      }
-    }
-  };
-
-  const handleSaveDataOtherProfile = (data) => {
-    setDataMain(data);
-    setDataMainBio(data.bio);
-    checkUserBlockHandle(data.user_id);
-    setOtherId(data.user_id);
-    setLoading(false);
-    setInitLoading(false);
-  };
-
-  const fetchOtherProfile = async () => {
-    const status = await netInfo.fetch();
-    if (status.isConnected) {
-      try {
-        handleOfflineMode();
-        const result = await getOtherProfile(params?.data?.username);
-        if (result.code === 200) {
-          handleSaveDataOtherProfile(result.data);
-        }
-        StorageUtils.otherProfileData.setForKey(
-          params?.data?.username,
-          JSON.stringify(result.data)
-        );
-      } catch (e) {
-        if (e.response && e.response.data && e.response.data.message) {
-          SimpleToast.show(e.response.data.message, SimpleToast.SHORT);
-        }
-        setLoading(false);
-        setInitLoading(false);
-      }
-    } else {
-      handleOfflineMode();
-    }
-  };
-
-  const handleOfflineMode = async () => {
-    const cache = await StorageUtils.otherProfileData.getForKey(params?.data?.username);
-    if (cache) {
-      const data = JSON.parse(cache);
-      handleSaveDataOtherProfile(data);
-    } else {
-      setLoading(false);
-      setInitLoading(false);
-    }
-  };
   const onShare = async () => ShareUtils.shareUserLink(username);
 
   const handleSetUnFollow = async () => {
@@ -263,7 +156,7 @@ const OtherProfile = () => {
     };
     const result = await setUnFollow(data);
     if (result.code === 200) {
-      fetchOtherProfile();
+      refetchOtherProfile();
     }
   };
 
@@ -282,7 +175,7 @@ const OtherProfile = () => {
     };
     const result = await setFollow(data);
     if (result.code === 200) {
-      fetchOtherProfile();
+      refetchOtherProfile();
     }
   };
 
@@ -310,7 +203,7 @@ const OtherProfile = () => {
 
   const __renderListHeader = () => {
     const __renderBlockIcon = () => {
-      if (blockStatus.blocker)
+      if (isBlocking)
         return (
           <View style={styles.buttonFollowing}>
             <Text style={styles.textButtonFollowing}>Blocked</Text>
@@ -331,7 +224,7 @@ const OtherProfile = () => {
       );
     };
     const __renderFollowerDetail = () => {
-      if (blockStatus.blocker) return <></>;
+      if (isBlocking) return <></>;
       return (
         <View style={styles.wrapFollower}>
           <TouchableOpacity onPress={handleOpenFollowerUser} style={styles.wrapRow}>
@@ -391,7 +284,7 @@ const OtherProfile = () => {
     };
 
     const __renderMessageAndFollowButtonGroup = () => {
-      if (blockStatus.blocker) return <></>;
+      if (isBlocking) return <></>;
       return (
         <React.Fragment>
           {__renderFollowingButton()}
@@ -404,16 +297,23 @@ const OtherProfile = () => {
       );
     };
 
-    if (blockStatus.blocked) return <></>;
+    if (isBlocked) return <></>;
     return (
       <>
         <View style={styles.headerImageContainer}>
-          <Image
-            style={styles.profileImage}
-            source={{
-              uri: dataMain.profile_pic_path ?? DEFAULT_PROFILE_PIC_PATH
-            }}
-          />
+          <View style={{marginRight: normalize(22)}}>
+            <CircleGradient
+              fill={dataMain.karma_score ?? 0}
+              size={normalize(100)}
+              width={normalize(2)}>
+              <Image
+                style={styles.profileImage}
+                source={{
+                  uri: dataMain.profile_pic_path ?? DEFAULT_PROFILE_PIC_PATH
+                }}
+              />
+            </CircleGradient>
+          </View>
 
           <View>
             <View style={styles.rightHeaderContentContainer}>
@@ -479,7 +379,7 @@ const OtherProfile = () => {
       blockUserRef.current.close();
       specificIssueRef.current.close();
       reportUserRef.current.close();
-      checkUserBlockHandle(dataMain.user_id);
+      refetchBlockStatus();
       setLoadingBlocking(false);
     } else {
       setLoadingBlocking(false);
@@ -490,13 +390,13 @@ const OtherProfile = () => {
     try {
       const processPostApi = await unblockUserApi({userId: dataMain.user_id});
       if (processPostApi.code === 200) {
-        checkUserBlockHandle(dataMain.user_id);
+        refetchBlockStatus();
         blockUserRef.current.close();
         specificIssueRef.current.close();
         reportUserRef.current.close();
       }
     } catch (e) {
-      checkUserBlockHandle(dataMain.user_id);
+      refetchBlockStatus();
       blockUserRef.current.close();
       specificIssueRef.current.close();
       reportUserRef.current.close();
@@ -543,7 +443,7 @@ const OtherProfile = () => {
       dispatch
     );
 
-    getOtherFeeds();
+    refetchFeeds();
   };
 
   const onPressDomain = (item) => {
@@ -609,11 +509,12 @@ const OtherProfile = () => {
   };
 
   const handleRefresh = () => {
-    getOtherFeeds(0);
+    refetchFeeds(0);
   };
 
   const handleDataFeed = () => {
-    const isFeedsShown = !blockStatus.blocked && !blockStatus.blocker;
+    if (isProfileFetching) return [];
+    const isFeedsShown = !(isBlocking || isBlocked);
     if (isFeedsShown) {
       return feeds;
     }
@@ -638,14 +539,14 @@ const OtherProfile = () => {
           data={handleDataFeed()}
           onScroll={handleScroll}
           onRefresh={handleRefresh}
-          refreshing={loading}
+          refreshing={isLoading}
           onMomentumScrollEnd={(event) => {
             onWillSendViewPostTime(event, feeds);
             fetchNextFeeds(event);
           }}
           ListHeaderComponent={
             <>
-              {!initLoading ? (
+              {!isProfileFetching ? (
                 <View
                   onLayout={(event) => {
                     const headerHeightLayout = event.nativeEvent.layout.height;
@@ -689,7 +590,7 @@ const OtherProfile = () => {
           onSelect={onBlocking}
           refBlockUser={blockUserRef}
           username={username}
-          isBlocker={blockStatus.blocker}
+          isBlocker={isBlocking}
         />
         <ReportUser ref={reportUserRef} onSelect={onNextQuestion} onSkip={skipQuestion} />
         <SpecificIssue
@@ -739,10 +640,12 @@ const styles = StyleSheet.create({
     marginLeft: 18
   },
   profileImage: {
-    width: 100,
-    height: 100,
+    width: 94,
+    height: 94,
     borderRadius: 100,
-    marginRight: 22
+    // marginLeft: 3,
+    marginTop: 3,
+    marginBottom: 3
   },
   containerProfile: {
     marginTop: 24

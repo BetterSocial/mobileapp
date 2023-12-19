@@ -31,7 +31,6 @@ import CustomPressable from '../../components/CustomPressable';
 import FollowInfoRow from './elements/FollowInfoRow';
 import ImageCompressionUtils from '../../utils/image/compress';
 import LinkAndSocialMedia from './elements/LinkAndSocialMedia';
-import PostOptionModal from '../../components/Modal/PostOptionModal';
 import ProfileHeader from './elements/ProfileHeader';
 import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
@@ -54,6 +53,7 @@ import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {ButtonNewPost} from '../../components/Button';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH, SOURCE_MY_PROFILE} from '../../utils/constants';
+import {KarmaScore} from './elements/KarmaScore';
 import {
   changeRealName,
   getMyProfile,
@@ -74,6 +74,9 @@ import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import ShadowFloatingButtons from '../../components/Button/ShadowFloatingButtons';
+import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
+import StorageUtils from '../../utils/storage';
 
 const {width} = Dimensions.get('screen');
 
@@ -99,12 +102,20 @@ const Header = (props) => {
         headerHeightRef.current = headerHeightLayout;
       }}>
       <View style={styles.content}>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row', alignContent: 'center', alignItems: 'center'}}>
           <ProfilePicture
             onImageContainerClick={changeImage}
             profilePicPath={dataMain.profile_pic_path}
+            karmaScore={Math.floor(dataMain.karma_score)}
           />
-          <View style={{marginLeft: 20}}>
+          <View
+            style={{
+              flexDirection: 'column',
+              paddingHorizontal: 14,
+              paddingVertical: 5,
+              justifyContent: 'center'
+            }}>
+            <KarmaScore score={Math.floor(dataMain.karma_score)} />
             <FollowInfoRow
               follower={dataMain.follower_symbol}
               following={dataMain.following_symbol}
@@ -175,7 +186,6 @@ const ProfileScreen = ({route}) => {
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
-  const [isPostOptionModalOpen, setIsOptionModalOpen] = React.useState(false);
   const [selectedPostForOption, setSelectedPostForOption] = React.useState(null);
   const [isFetchingList, setIsFetchingList] = React.useState(false);
   const {interactionsComplete} = useAfterInteractions();
@@ -272,10 +282,9 @@ const ProfileScreen = ({route}) => {
     try {
       setIsFetchingList(true);
       setIsHitApiFirstTime(true);
-      const cacheFeed = StorageUtils.myFeeds.get();
       const result = await getSelfFeedsInProfile(offset, limit);
       const {data: dataMyFeed} = result;
-      const {mapNewData} = mappingColorFeed({dataFeed: dataMyFeed, dataCache: cacheFeed});
+      const mapNewData = mappingColorFeed(dataMyFeed);
       if (offset === 0) {
         StorageUtils.myFeeds.set(JSON.stringify(mapNewData));
         setMyProfileFeed(mapNewData, myProfileDispatch);
@@ -580,16 +589,6 @@ const ProfileScreen = ({route}) => {
     fetchMyProfile(true);
   }
 
-  const onHeaderOptionClosed = () => {
-    setSelectedPostForOption(null);
-    setIsOptionModalOpen(false);
-  };
-
-  const onHeaderOptionClicked = (post) => {
-    setSelectedPostForOption(post);
-    setIsOptionModalOpen(true);
-  };
-
   const removePostByIdFromContext = () => {
     const deletedIndex = feeds?.findIndex((find) => selectedPostForOption?.id === find?.id);
     const newData = [...feeds];
@@ -598,7 +597,6 @@ const ProfileScreen = ({route}) => {
   };
 
   const onDeletePost = async () => {
-    setIsOptionModalOpen(false);
     removePostByIdFromContext();
 
     let response;
@@ -612,7 +610,7 @@ const ProfileScreen = ({route}) => {
     return reloadFetchAnonymousPost();
   };
   return (
-    <SafeAreaProvider style={styles.container} forceInset={{top: 'always'}}>
+    <View style={styles.container} forceInset={{top: 'always'}}>
       <StatusBar translucent={false} />
       <ProfileHeader
         showArrow={isNotFromHomeTab}
@@ -666,7 +664,9 @@ const ProfileScreen = ({route}) => {
               source={SOURCE_MY_PROFILE}
               hideThreeDot={false}
               showAnonymousOption={true}
-              onHeaderOptionClicked={() => onHeaderOptionClicked(item)}
+              onDeletePost={() => onDeletePost()}
+              isSelf={item.is_self}
+              isShowDelete={true}
             />
           );
         }}
@@ -711,12 +711,7 @@ const ProfileScreen = ({route}) => {
       ) : null}
 
       <BlockComponent ref={refBlockComponent} refresh={getMyFeeds} screen="my_profile" />
-      <PostOptionModal
-        isOpen={isPostOptionModalOpen}
-        onClose={onHeaderOptionClosed}
-        onDeleteClicked={onDeletePost}
-      />
-    </SafeAreaProvider>
+    </View>
   );
 };
 
@@ -729,7 +724,8 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: 'column',
     paddingHorizontal: 20,
-    backgroundColor: colors.white
+    backgroundColor: colors.white,
+    marginTop: 14
   },
   dummyItem: (heightItem) => ({
     height: heightItem,
