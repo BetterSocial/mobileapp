@@ -180,17 +180,11 @@ function useChatUtilsHook(): UseChatUtilsHook {
   };
   const handleTextSystem = (item): string => {
     let message = item?.description || item?.message;
-    if (message === ' ') {
-      message = 'sent media 🎆🌆🌉';
-    }
     if (
       item?.rawJson?.userIdFollower === profile?.myProfile?.user_id ||
       item?.rawJson?.message?.userIdFollower === profile?.myProfile?.user_id
     ) {
       message = item?.rawJson?.textOwnMessage || item?.rawJson?.message?.textOwnMessage;
-      if (message === ' ') {
-        message = 'sent media 🎆🌆🌉';
-      }
     }
     return message;
   };

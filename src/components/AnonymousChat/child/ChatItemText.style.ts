@@ -45,11 +45,12 @@ export const styles = StyleSheet.create({
   },
   chatTitleContainer: {
     display: 'flex',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    marginBottom: dimen.normalizeDimen(4)
   },
   textContainer: {
     flex: 1,
-    paddingHorizontal: dimen.normalizeDimen(6),
+    paddingHorizontal: dimen.normalizeDimen(4),
     paddingVertical: dimen.normalizeDimen(4),
     backgroundColor: colors.lightgrey,
     borderRadius: 8
@@ -75,8 +76,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(16),
-    lineHeight: 19.36,
-    marginBottom: 4
+    lineHeight: 19.36
   },
   deletedMyText: {
     color: colors.light_silver,

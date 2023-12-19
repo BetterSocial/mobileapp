@@ -1,3 +1,4 @@
+/* eslint-disable no-unexpected-multiline */
 // eslint-disable-next-line no-use-before-define
 import * as React from 'react';
 import Animated, {withDelay, withSequence, withTiming} from 'react-native-reanimated';
@@ -10,6 +11,7 @@ import ChatReplyView from './ChatReplyView';
 import IconChatCheckMark from '../../../assets/icon/IconChatCheckMark';
 import IconChatClockGrey from '../../../assets/icon/IconChatClockGrey';
 import IconVideoPlay from '../../../assets/icon/IconVideoPlay';
+import IconFile from '../../../assets/icon/IconFile';
 import useMessageHook from '../../../hooks/screen/useMessageHook';
 import {
   CONTEXT_MENU_COPY,
@@ -34,6 +36,7 @@ import {
   textStyle
 } from './ChatItemText.style';
 import {replyIcon} from './ChatItemTargetText';
+import {formatBytes} from '../../../utils/string/StringUtils';
 
 const ChatItemMyTextV2 = ({
   username = 'Anonymous User',
@@ -156,7 +159,7 @@ const ChatItemMyTextV2 = ({
                 />
 
                 <View style={{flexDirection: 'row'}}>
-                  {message?.trim() !== '' && (
+                  {attachments.length <= 0 && (
                     <Text style={messageStyle(true, messageType)}>{message}</Text>
                   )}
                   {renderIcon()}

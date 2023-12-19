@@ -153,10 +153,11 @@ const InputMessageV2 = ({
       asset_url: media.path,
       thumb_url: media.path,
       myCustomField: media.type,
-      video_path: media?.pathVideo ?? null
+      video_path: media?.pathVideo ?? null,
+      video_name: media?.nameVideo ?? null,
+      video_type: media?.typeVideo ?? null
     }));
-    console.warn('resultUrls', resultUrls);
-    onSendButtonClicked(' ', resultUrls);
+    onSendButtonClicked('Sent media 🎆🌆🌉', resultUrls);
     setIsLoadingUploadImageMedia(false);
   };
 
@@ -172,7 +173,7 @@ const InputMessageV2 = ({
       myCustomField: 'image'
     });
 
-    onSendButtonClicked(' ', resultUrls);
+    onSendButtonClicked('Sent media 🎆🌆🌉', resultUrls);
     setIsLoadingUploadImageCamera(false);
   };
 
@@ -187,8 +188,23 @@ const InputMessageV2 = ({
         gif_path: gifPath
       }
     ];
+    onSendButtonClicked('Sent GIF 🎆🌆🌉', resultUrls);
+  };
+
+  const handleFile = (file) => {
+    const resultUrls = [
+      {
+        type: 'file',
+        myCustomField: 'file',
+        asset_url: file.uri,
+        thumb_url: file.uri,
+        file_name: file.name,
+        file_size: file.size,
+        file_path: file.uri
+      }
+    ];
     console.warn('resultUrls', resultUrls);
-    onSendButtonClicked(' ', resultUrls);
+    onSendButtonClicked('Sent a file 📁', resultUrls);
   };
 
   const openSettingApp = () => {
@@ -201,18 +217,6 @@ const InputMessageV2 = ({
       {text: 'Close'}
     ]);
   };
-
-  const processImage = async (image) => {
-    const imageCropped = await ImagePicker.openCropper({
-      mediaType: 'photo',
-      path: image.path,
-      cropperChooseText: 'Next',
-      freeStyleCropEnabled: true
-    });
-    return imageCropped.path;
-  };
-
-  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const getVideoThumbnail = async (videoPath) => {
     try {
@@ -227,29 +231,38 @@ const InputMessageV2 = ({
     }
   };
 
-  const processMediasSequentially = async (medias, delayTime) => {
-    const newMedias: any = [];
-    for (const media of medias) {
-      if (media?.mime?.includes('video')) {
-        const thumbnailPath = await getVideoThumbnail(media.path);
-        newMedias.push({type: 'video', path: thumbnailPath, pathVideo: media.path});
-      } else {
-        const croppedImage = await processImage(media);
-        newMedias.push({type: 'photo', path: croppedImage});
-        await delay(delayTime);
-      }
-    }
-    return newMedias;
-  };
-
   const onOpenMedia = async () => {
     const {success} = await requestExternalStoragePermission();
     if (success) {
       ImagePicker.openPicker({
         multiple: true,
-        maxFiles: 20
+        maxFiles: 20,
+        sortOrder: 'asc',
+        smartAlbums: ['RecentlyAdded', 'UserLibrary']
       }).then(async (medias) => {
-        const newMedias = await processMediasSequentially(medias, 200);
+        const newMedias: any = [];
+        for (const media of medias) {
+          if (media?.mime?.includes('video')) {
+            const thumbnailPath = await getVideoThumbnail(media.path);
+            newMedias.push({
+              type: 'video',
+              path: thumbnailPath,
+              pathVideo: media.path,
+              nameVideo: media.filename,
+              typeVideo: media.mime
+            });
+          } else {
+            const imageCropped = await ImagePicker.openCropper({
+              mediaType: 'photo',
+              path: media.path,
+              width: media.width,
+              height: media.height,
+              cropperChooseText: 'Next',
+              freeStyleCropEnabled: true
+            });
+            newMedias.push({type: 'image', path: imageCropped.path});
+          }
+        }
 
         handleUploadMedia(newMedias);
       });
@@ -269,6 +282,8 @@ const InputMessageV2 = ({
         const imageCropped = await ImagePicker.openCropper({
           mediaType: 'photo',
           path: imageRes.path,
+          width: imageRes.width,
+          height: imageRes.height,
           cropperChooseText: 'Next',
           freeStyleCropEnabled: true
         });
@@ -285,11 +300,9 @@ const InputMessageV2 = ({
     const {success} = await requestExternalStoragePermission();
     if (success) {
       DocumentPicker.pickSingle({
-        presentationStyle: 'fullScreen',
-        copyTo: 'cachesDirectory'
+        presentationStyle: 'fullScreen'
       }).then((pickerResult) => {
-        console.warn('pickerResult', pickerResult);
-        //
+        handleFile(pickerResult);
       });
     } else {
       openAlertPermission(

@@ -85,7 +85,7 @@ async function sendSignedMessage(
 
     return Promise.reject(response.data?.data);
   } catch (e) {
-    console.log(e);
+    console.log(e?.response);
     return Promise.reject(e);
   }
 }
