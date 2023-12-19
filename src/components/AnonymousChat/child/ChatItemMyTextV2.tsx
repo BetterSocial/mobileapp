@@ -4,9 +4,10 @@ import * as React from 'react';
 import Animated, {withDelay, withSequence, withTiming} from 'react-native-reanimated';
 import ContextMenu, {ContextMenuAction} from 'react-native-context-menu-view';
 import {Swipeable} from 'react-native-gesture-handler';
-import {Text, View, ViewStyle} from 'react-native';
+import {Linking, Text, TouchableOpacity, View, ViewStyle} from 'react-native';
+import FastImage from 'react-native-fast-image';
+import {useNavigation, useNavigation} from '@react-navigation/core';
 
-import {useNavigation} from '@react-navigation/core';
 import ChatReplyView from './ChatReplyView';
 import IconChatCheckMark from '../../../assets/icon/IconChatCheckMark';
 import IconChatClockGrey from '../../../assets/icon/IconChatClockGrey';
@@ -50,9 +51,11 @@ const ChatItemMyTextV2 = ({
   messageType,
   data
 }: ChatItemMyTextProps) => {
+  const navigation = useNavigation();
   const {
     setReplyPreview,
     onContextMenuPressed,
+    onOpenMediaPreview,
     pulseAnimation,
     animatedBubbleStyle,
     animatedPulseStyle
@@ -113,10 +116,11 @@ const ChatItemMyTextV2 = ({
         message,
         message_type: messageType as MessageType,
         updated_at: time,
-        chatType
+        chatType,
+        attachments
       });
     },
-    [data, username, time, message, messageType, chatType]
+    [data, username, time, message, messageType, chatType, attachments]
   );
 
   return (
@@ -149,6 +153,81 @@ const ChatItemMyTextV2 = ({
                     <Text testID="timestamp" style={[styles.timeText, textStyle(true)]}>
                       {calculateTime(time, true)}
                     </Text>
+                  </View>
+                )}
+                {attachments.length > 0 && messageType !== 'deleted' && (
+                  <View
+                    style={[
+                      styles.attachmentContainer,
+                      attachments?.find((item) => item.type === 'file') ? {height: 'auto'} : {}
+                    ]}>
+                    {attachments
+                      .filter((item, index) => index <= 3)
+                      .map((item, index) =>
+                        item.type === 'file' ? (
+                          <TouchableOpacity
+                            key={index}
+                            style={{flex: 1}}
+                            activeOpacity={1}
+                            onPress={() => Linking.openURL(item.file_path)}>
+                            <View style={styles.attachmentFileContainer}>
+                              <View style={styles.attachmentFileContent}>
+                                <Text style={styles.attachmentFileName}>{item.file_name}</Text>
+                                <View>
+                                  <Text style={styles.attachmentFileInfo}>
+                                    {formatBytes(item.file_size)} •{' '}
+                                    {item.file_name
+                                      ?.split('.')
+                                      [item.file_name?.split('.')?.length - 1]?.toUpperCase()}
+                                  </Text>
+                                </View>
+                              </View>
+                              <View style={styles.attachmentFileIcon}>
+                                <IconFile />
+                              </View>
+                            </View>
+                          </TouchableOpacity>
+                        ) : (
+                          <TouchableOpacity
+                            key={index}
+                            style={{
+                              width: `${
+                                (attachments.length >= 3 && index > 0) || attachments.length >= 4
+                                  ? 50
+                                  : 100
+                              }%`,
+                              height: `${attachments.length >= 3 ? 50 : 100 / attachments.length}%`,
+                              position: 'relative',
+                              overflow: 'hidden'
+                            }}
+                            activeOpacity={1}
+                            onPress={
+                              attachments.length > 0 && item.type !== 'gif'
+                                ? () => onOpenMediaPreview(attachments, index, navigation)
+                                : null
+                            }>
+                            {item.type !== 'file' && (
+                              <FastImage
+                                style={styles.image}
+                                source={{
+                                  uri: item.thumb_url
+                                }}
+                              />
+                            )}
+                            {attachments.length > 4 && index === 3 && (
+                              <View style={styles.moreOverlay}>
+                                <Text style={styles.moreText}>+{attachments.length - 4}</Text>
+                              </View>
+                            )}
+                            {/* Video Play Icon */}
+                            {item.video_path && (
+                              <View style={styles.moreOverlay}>
+                                <IconVideoPlay />
+                              </View>
+                            )}
+                          </TouchableOpacity>
+                        )
+                      )}
                   </View>
                 )}
 

@@ -21,6 +21,7 @@ export interface ReplyMessage {
   message_type: MessageType;
   updated_at: string;
   chatType?: 'ANONYMOUS' | 'SIGNED';
+  attachments?: any;
 }
 
 export interface UseMessageHook {
@@ -32,6 +33,7 @@ export interface UseMessageHook {
     data: any,
     type: 'ANONYMOUS' | 'SIGNED'
   ) => void;
+  onOpenMediaPreview: (medias: any, index: number, navigation: any) => void;
   bubblePosition: Animated.SharedValue<number>;
   pulseAnimation: Animated.SharedValue<number>;
   animatedBubbleStyle: AnimatedStyle;

@@ -44,6 +44,7 @@ const ChatItemTargetText = ({
   time = '4h',
   isContinuous = false,
   message = '',
+  attachments = [],
   avatar,
   chatType,
   messageType,
@@ -96,10 +97,11 @@ const ChatItemTargetText = ({
         message,
         message_type: messageType as MessageType,
         updated_at: time,
-        chatType
+        chatType,
+        attachments
       });
     },
-    [data, username, time, message, messageType, chatType]
+    [data, username, time, message, messageType, chatType, attachments]
   );
 
   return (

@@ -93,6 +93,7 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
       avatar={handleAvatar()}
       isContinuous={item?.isContinuous ?? false}
       message={item?.message}
+      attachments={item?.attachmentJson}
       time={item?.updatedAt}
       username={handleUserName(item)}
       chatType={type ?? ANONYMOUS}

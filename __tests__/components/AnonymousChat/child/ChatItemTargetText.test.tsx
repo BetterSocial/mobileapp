@@ -15,10 +15,17 @@ import {
   timestamp
 } from './ChatItemMyTextV2.test';
 
+global.__reanimatedWorkletInit = jest.fn();
 jest.spyOn(React, 'useRef').mockReturnValue({current: {close: jest.fn()}});
 
 beforeEach(() => {
   setupTests();
+});
+
+jest.mock('react-native-compressor', () => {
+  return {
+    compress: jest.fn(() => 'file:///imag.jpg')
+  };
 });
 
 afterEach(() => {
@@ -34,7 +41,8 @@ const renderChatItemTargetText = (isContinous = false) =>
     chatType: SIGNED,
     data: expectedReplyPreview.payload,
     isContinuous: isContinous,
-    time: timestamp
+    time: timestamp,
+    attachments: []
   });
 
 describe('TESTING ChatItemTargetText', () => {

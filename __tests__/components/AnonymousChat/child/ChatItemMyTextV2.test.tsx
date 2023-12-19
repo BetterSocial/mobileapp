@@ -38,7 +38,8 @@ export const expectedReplyPreview = {
     message_type: MESSAGE_TYPE_REGULAR,
     chatType: SIGNED,
     updated_at: timestamp,
-    user: {username: 'username'}
+    user: {username: 'username'},
+    attachments: []
   },
   type: 'SET_REPLY_TARGET'
 };
@@ -50,10 +51,17 @@ export const avatar = (
   />
 );
 
+global.__reanimatedWorkletInit = jest.fn();
 jest.spyOn(React, 'useRef').mockReturnValue({current: {close: jest.fn()}});
 
 beforeEach(() => {
   setupTests();
+});
+
+jest.mock('react-native-compressor', () => {
+  return {
+    compress: jest.fn(() => 'file:///imag.jpg')
+  };
 });
 
 afterEach(() => {
@@ -69,7 +77,8 @@ const renderChatItemMyTextV2 = (isContinous = false) =>
     time: timestamp,
     chatType: SIGNED,
     messageType: 'regular',
-    data: expectedReplyPreview.payload
+    data: expectedReplyPreview.payload,
+    attachments: []
   });
 
 describe('TESTING ChatItemMyTextV2', () => {

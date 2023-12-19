@@ -177,8 +177,8 @@ class ChatSchema implements BaseDbSchema {
   }
 
   static fromDatabaseObject(dbObject: any): ChatSchema {
-    let rawJson = null;
-    let attachmentJson = null;
+    let rawJson: string | null = null;
+    let attachmentJson: string | null = null;
 
     try {
       rawJson = JSON.parse(dbObject?.raw_json || '{}');
@@ -386,6 +386,8 @@ class ChatSchema implements BaseDbSchema {
       isContinuous: false,
       attachmentJson,
       type: data?.message?.message_type ?? data?.message?.type,
+      attachmentJson,
+      type: 'regular',
       user: null,
       userId: data?.message?.user?.id
     });
