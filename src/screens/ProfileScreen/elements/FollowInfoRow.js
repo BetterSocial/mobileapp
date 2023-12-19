@@ -70,11 +70,13 @@ let styles = StyleSheet.create({
   },
   wrapFollower: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginTop: 12
   },
   wrapRow: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingVertical: 8
   }
 });
 

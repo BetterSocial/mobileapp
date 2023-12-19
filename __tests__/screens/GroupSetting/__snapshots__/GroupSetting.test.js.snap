@@ -19,6 +19,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
               "alignItems": "center",
               "flexDirection": "row",
               "justifyContent": "space-between",
+              "paddingVertical": 8,
             },
             Object {
               "marginLeft": 22,

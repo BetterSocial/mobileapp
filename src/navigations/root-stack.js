@@ -1,14 +1,47 @@
 /* eslint-disable react/display-name */
+import * as React from 'react';
 import NetInfo from '@react-native-community/netinfo';
 import PropTypes from 'prop-types';
-import * as React from 'react';
-import {SafeAreaView, View} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {View} from 'react-native';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
 import {useRecoilState, useRecoilValue} from 'recoil';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
+import Blocked from '../screens/Blocked';
+import ChooseUsername from '../screens/InputUsername';
+import CreatePost from '../screens/CreatePost';
+import DiscoveryScreenV2 from '../screens/DiscoveryScreenV2';
+import DomainScreen from '../screens/DomainScreen';
+import FollowersScreen from '../screens/Followings/FollowersScreen';
+import FollowingScreen from '../screens/Followings/FollowingScreen';
+import HelpCenter from '../screens/WebView/HelpCenter';
+import HomeBottomTabs from './HomeBottomTabs';
+import ImageViewerScreen from '../screens/ImageViewer';
+import ChooseUsername from '../screens/InputUsername';
+import LinkContextScreen from '../screens/LinkContextScreen';
+import LocalCommunity from '../screens/LocalCommunity';
 import NetworkStatusIndicator from '../components/NetworkStatusIndicator';
-import {useInitialStartup} from '../hooks/useInitialStartup';
+import OneSignalNavigator from './OneSignalNavigator';
+import OtherProfile from '../screens/OtherProfile';
+import OtherProfilePostDetail from '../screens/OtherProfilePostDetail';
+import OtherProfileReplyComment from '../screens/OtherProfileReplyComment';
+import PostDetailPage from '../screens/PostPageDetail';
+import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
+import ProfilePostDetail from '../screens/ProfilePostDetail';
+import ProfileReplyComment from '../screens/ProfileReplyComment';
+import ReplyComment from '../screens/ReplyComment';
+import SampleChatInfoScreen from '../screens/WebsocketResearchScreen/SampleChatInfoScreen';
+import SampleChatScreen from '../screens/WebsocketResearchScreen/SampleChatScreen';
+import Settings from '../screens/Settings';
+import SignIn from '../screens/SignInV2';
+import SignedChatScreen from '../screens/WebsocketResearchScreen/SignedChatScreen';
+import TermsAndCondition from '../screens/WebView/TermsAndCondition';
+import TopicMemberScreen from '../screens/TopicMemberScreen';
+import TopicPageScreen from '../screens/TopicPageScreen';
+import Topics from '../screens/Topics';
+import WebsocketResearchScreen from '../screens/WebsocketResearchScreen';
+import WhotoFollow from '../screens/WhotoFollow';
+import api from '../service/config';
 import {
   AddParticipant,
   ChannelScreen,
@@ -21,48 +54,15 @@ import {
   GroupSetting,
   ProfileScreen
 } from '../screens';
-import Blocked from '../screens/Blocked';
-import {followersOrFollowingAtom} from '../screens/ChannelListScreen/model/followersOrFollowingAtom';
-import CreatePost from '../screens/CreatePost';
-import DiscoveryScreenV2 from '../screens/DiscoveryScreenV2';
-import DomainScreen from '../screens/DomainScreen';
-import FollowersScreen from '../screens/Followings/FollowersScreen';
-import FollowingScreen from '../screens/Followings/FollowingScreen';
-import ImageViewerScreen from '../screens/ImageViewer';
-import ChooseUsername from '../screens/InputUsername';
-import LinkContextScreen from '../screens/LinkContextScreen';
-import LocalCommunity from '../screens/LocalCommunity';
-import OtherProfile from '../screens/OtherProfile';
-import OtherProfilePostDetail from '../screens/OtherProfilePostDetail';
-import OtherProfileReplyComment from '../screens/OtherProfileReplyComment';
-import PostDetailPage from '../screens/PostPageDetail';
-import ProfilePostDetail from '../screens/ProfilePostDetail';
-import ProfileReplyComment from '../screens/ProfileReplyComment';
-import ReplyComment from '../screens/ReplyComment';
-import Settings from '../screens/Settings';
-import SignIn from '../screens/SignInV2';
-import TopicMemberScreen from '../screens/TopicMemberScreen';
-import TopicPageScreen from '../screens/TopicPageScreen';
-import Topics from '../screens/Topics';
-import HelpCenter from '../screens/WebView/HelpCenter';
-import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
-import TermsAndCondition from '../screens/WebView/TermsAndCondition';
-import WebsocketResearchScreen from '../screens/WebsocketResearchScreen';
-import SampleChatInfoScreen from '../screens/WebsocketResearchScreen/SampleChatInfoScreen';
-import SampleChatScreen from '../screens/WebsocketResearchScreen/SampleChatScreen';
-import SignedChatScreen from '../screens/WebsocketResearchScreen/SignedChatScreen';
-import WhotoFollow from '../screens/WhotoFollow';
-import api from '../service/config';
 import {InitialStartupAtom, LoadingStartupContext} from '../service/initialStartup';
-import {colors} from '../utils/colors';
 import {NavigationConstants} from '../utils/constants';
-import HomeBottomTabs from './HomeBottomTabs';
-import KeyboardWrapper from './KeyboardWrapper';
-import OneSignalNavigator from './OneSignalNavigator';
+import {colors} from '../utils/colors';
+import {followersOrFollowingAtom} from '../screens/ChannelListScreen/model/followersOrFollowingAtom';
+import {useInitialStartup} from '../hooks/useInitialStartup';
 
 const RootStack = createNativeStackNavigator();
 
-export const RootNavigator = () => {
+export const RootNavigator = ({currentScreen}) => {
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const [following, setFollowing] = useRecoilState(followersOrFollowingAtom);
   const loadingStartup = useInitialStartup();
@@ -95,11 +95,31 @@ export const RootNavigator = () => {
     };
   }, []);
 
+  const isUnauthenticated = initialStartup.id === null || initialStartup.id === '';
+
+  const getPaddingTop = (screenName) => {
+    'worklet';
+
+    if (isUnauthenticated || ['TopicPageScreen', 'TopicMemberScreen'].includes(screenName)) {
+      return 0;
+    }
+    return insets.top;
+  };
+
+  const getInsetTopColor = () => {
+    'worklet';
+
+    return currentScreen === 'SampleChatScreen' ? colors.anon_primary : colors.white;
+  };
+
   return (
     <LoadingStartupContext.Provider value={loadingStartup.loadingUser}>
       <View
         style={{
-          height: '100%'
+          height: '100%',
+          paddingBottom: isUnauthenticated ? 0 : insets.bottom,
+          paddingTop: getPaddingTop(currentScreen),
+          backgroundColor: getInsetTopColor()
         }}>
         <NetworkStatusIndicator hide={true} />
 
@@ -150,14 +170,6 @@ const AuthenticatedNavigator = () => {
     );
   };
 
-  const withSafeAreaView = (Component) => {
-    return (props) => (
-      <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
-        <Component {...props} />
-      </SafeAreaView>
-    );
-  };
-
   return (
     <OneSignalNavigator>
       <AuthenticatedStack.Navigator initialRouteName="HomeTabs">
@@ -188,7 +200,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="ProfileScreen"
-          component={withSafeAreaView(withKeyboardWrapper(ProfileScreen))}
+          component={withKeyboardWrapper(ProfileScreen)}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen name="ImageViewer" component={ImageViewerScreen} />
@@ -215,7 +227,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="Followings"
-          component={withSafeAreaView(withKeyboardWrapper(FollowingScreen))}
+          component={withKeyboardWrapper(FollowingScreen)}
           options={{
             headerShown: false
           }}
@@ -249,7 +261,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="DiscoveryScreen"
-          component={withSafeAreaView(withKeyboardWrapper(DiscoveryScreenV2))}
+          component={withKeyboardWrapper(DiscoveryScreenV2)}
           options={{
             headerShown: false
           }}
@@ -299,27 +311,27 @@ const AuthenticatedNavigator = () => {
 
         <AuthenticatedStack.Screen
           name="ProfileReplyComment"
-          component={withSafeAreaView(withKeyboardWrapper(ProfileReplyComment))}
+          component={withKeyboardWrapper(ProfileReplyComment)}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="OtherProfileReplyComment"
-          component={withSafeAreaView(withKeyboardWrapper(OtherProfileReplyComment))}
+          component={withKeyboardWrapper(OtherProfileReplyComment)}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="PostDetailPage"
-          component={withSafeAreaView(withKeyboardWrapper(PostDetailPage))}
+          component={withKeyboardWrapper(PostDetailPage)}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="ProfilePostDetailPage"
-          component={withSafeAreaView(withKeyboardWrapper(ProfilePostDetail))}
+          component={withKeyboardWrapper(ProfilePostDetail)}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="OtherProfilePostDetailPage"
-          component={withSafeAreaView(withKeyboardWrapper(OtherProfilePostDetail))}
+          component={withKeyboardWrapper(OtherProfilePostDetail)}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
@@ -344,7 +356,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="SignedChatScreen"
-          component={withSafeAreaView(withKeyboardWrapper(SignedChatScreen))}
+          component={withKeyboardWrapper(SignedChatScreen)}
           options={{headerShown: false}}
         />
       </AuthenticatedStack.Navigator>

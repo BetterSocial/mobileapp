@@ -1,10 +1,9 @@
 import * as React from 'react';
 import netInfo from '@react-native-community/netinfo';
-
 import ProfileRepo from '../../service/repo/profileRepo';
+import useMyProfileFeedContextHook from '../context/useMyProfileFeedContext';
 import StorageUtils from '../../utils/storage';
 import useCoreFeed from '../../screens/FeedScreen/hooks/useCoreFeed';
-import useMyProfileFeedContextHook from '../context/useMyProfileFeedContext';
 import {Context} from '../../context';
 import {setMyProfileAction} from '../../context/actions/setMyProfileAction';
 
@@ -28,9 +27,10 @@ const useProfileScreenHook = () => {
 
   const fetchAnonymousPost = async (offset = 0, limit = 10) => {
     setIsLoadingFetchingAnonymousPosts(true);
+    const cacheFeed = StorageUtils.myAnonymousFeed.get();
     const response = await ProfileRepo.getSelfAnonymousFeed(offset, limit);
     const {data: myAnonymousFeed} = response;
-    const mapNewData = mappingColorFeed(myAnonymousFeed);
+    const {mapNewData} = mappingColorFeed({dataFeed: myAnonymousFeed, dataCache: cacheFeed});
     StorageUtils.myAnonymousFeed.set(JSON.stringify(mapNewData));
     setMyProfileAnonymousFeed(mapNewData);
     setIsLoadingFetchingAnonymousPosts(false);

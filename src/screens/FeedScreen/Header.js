@@ -6,15 +6,7 @@ import * as React from 'react';
 import Image from 'react-native-fast-image';
 import PropsTypes from 'prop-types';
 import moment from 'moment';
-import {
-  Dimensions,
-  Platform,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View
-} from 'react-native';
+import {Dimensions, Platform, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import AnonymousAvatar from '../../components/AnonymousAvatar';
@@ -36,11 +28,7 @@ import useFeedHeader from './hooks/useFeedHeader';
 import {DEFAULT_PROFILE_PIC_PATH, PRIVACY_PUBLIC} from '../../utils/constants';
 import {calculateTime} from '../../utils/time';
 import {colors} from '../../utils/colors';
-import {fonts, normalizeFontSize} from '../../utils/fonts';
-import ShareAndroidIcon from '../../assets/icons/images/share-for-android.svg';
-import TrashRed from '../../assets/icons/images/trash-red.svg';
-import BottomSheetMenu from '../../components/BottomSheet/BottomSheetMenu';
-import ShareUtils from '../../utils/share';
+import {fonts} from '../../utils/fonts';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -112,37 +100,13 @@ const _renderAnonimity = ({
   height,
   headerStyle,
   showAnonymousOption = false,
+  onHeaderOptionClicked = () => {},
+  hideThreeDot,
   version = 1,
   anonUserInfo = {},
-  isPostDetail,
-  isFollow = false,
-  onPressFollUnFoll = () => {},
-  onDeletePost = () => {},
-  isShowDelete = false,
-  isSelf = false
+  isPostDetail
 }) => {
   const navigation = useNavigation();
-  const refSheet = React.useRef();
-  const dataSheet = [
-    {
-      id: 1,
-      name: 'Share link',
-      icon: <ShareAndroidIcon />
-    }
-  ];
-
-  if (isShowDelete) {
-    dataSheet.push({
-      id: 2,
-      name: 'Delete post',
-      icon: <TrashRed />,
-      onPress: () => {
-        refSheet.current.close();
-        onDeletePost();
-      },
-      style: {color: colors.red}
-    });
-  }
 
   return (
     <SafeAreaView>
@@ -171,25 +135,17 @@ const _renderAnonimity = ({
 
           <View style={[styles.containerFeedProfile]}>
             <View style={[styles.containerFeedName, {alignItems: 'center'}]}>
-              <AnonymousUsername version={version} anonUserInfo={anonUserInfo} style={{flex: 0}} />
-              {!isSelf && (
-                <React.Fragment>
-                  <View style={styles.point} />
-                  <TouchableOpacity onPress={() => onPressFollUnFoll(isFollow)}>
-                    <Text style={isFollow ? styles.textFollowing : styles.textFollow}>
-                      {isFollow ? 'Following' : 'Follow'}
-                    </Text>
-                  </TouchableOpacity>
-                </React.Fragment>
-              )}
+              <AnonymousUsername version={version} anonUserInfo={anonUserInfo} />
             </View>
-            <GlobalButton
-              buttonStyle={{position: 'absolute', right: 0, top: -8}}
-              onPress={() => refSheet.current.open()}>
-              <View style={{zIndex: 1000}}>
-                <ElipsisIcon width={4} height={14} fill={colors.blackgrey} />
-              </View>
-            </GlobalButton>
+            {showAnonymousOption && !hideThreeDot && (
+              <GlobalButton
+                buttonStyle={{position: 'absolute', right: 0, top: -8}}
+                onPress={onHeaderOptionClicked}>
+                <View style={{zIndex: 1000}}>
+                  <ElipsisIcon width={4} height={14} fill={colors.blackgrey} />
+                </View>
+              </GlobalButton>
+            )}
             <View style={styles.containerFeedText}>
               <Text style={styles.feedDate}>{calculateTime(time)}</Text>
               <View style={styles.point} />
@@ -207,11 +163,6 @@ const _renderAnonimity = ({
           </View>
         </View>
       </View>
-      <BottomSheetMenu
-        refSheet={refSheet}
-        dataSheet={dataSheet}
-        height={isShowDelete ? 182 : 130}
-      />
     </SafeAreaView>
   );
 };
@@ -226,35 +177,10 @@ const _renderProfileNormal = ({
   height,
   source,
   headerStyle,
-  isPostDetail,
-  isFollow = false,
-  onPressFollUnFoll = () => {},
-  onDeletePost = () => {},
-  isShowDelete = false,
-  isSelf = false
+  onHeaderOptionClicked = () => {},
+  hideThreeDot,
+  isPostDetail
 }) => {
-  const refSheet = React.useRef();
-  const dataSheet = [
-    {
-      id: 1,
-      name: 'Share link',
-      icon: <ShareAndroidIcon />,
-      onPress: () => ShareUtils.shareUserLink(username)
-    }
-  ];
-
-  if (isShowDelete) {
-    dataSheet.push({
-      id: 2,
-      name: 'Delete post',
-      icon: <TrashRed />,
-      onPress: () => {
-        refSheet.current.close();
-        onDeletePost();
-      },
-      style: {color: colors.red}
-    });
-  }
   const {navigateToProfile, username, profile_pic_url, onBackNormalUser} = useFeedHeader({
     actor,
     source
@@ -290,28 +216,18 @@ const _renderProfileNormal = ({
             onPress={navigateToProfile}
             style={[styles.containerFeedProfile, {paddingBottom: 5}]}>
             <View style={[styles.containerFeedName, {alignItems: 'flex-end'}]}>
-              <View style={styles.contentFeedName}>
-                <Text style={styles.feedUsername}>
-                  {username || StringConstant.feedDeletedUserName}
-                </Text>
-                {!isSelf && (
-                  <React.Fragment>
-                    <View style={styles.point} />
-                    <TouchableOpacity onPress={() => onPressFollUnFoll(isFollow)}>
-                      <Text style={isFollow ? styles.textFollowing : styles.textFollow}>
-                        {isFollow ? 'Following' : 'Follow'}
-                      </Text>
-                    </TouchableOpacity>
-                  </React.Fragment>
-                )}
-              </View>
+              <Text style={styles.feedUsername}>
+                {username || StringConstant.feedDeletedUserName}
+              </Text>
 
               <GlobalButton
                 buttonStyle={{marginLeft: 'auto', paddingBottom: 0, alignSelf: 'center'}}
-                onPress={() => refSheet.current.open()}>
-                <View style={{zIndex: 1000}}>
-                  <ElipsisIcon width={4} height={14} fill={colors.blackgrey} />
-                </View>
+                onPress={onHeaderOptionClicked}>
+                {hideThreeDot ? null : (
+                  <View style={{zIndex: 1000}}>
+                    <ElipsisIcon width={4} height={14} fill={colors.blackgrey} />
+                  </View>
+                )}
               </GlobalButton>
             </View>
             <View style={[styles.containerFeedText, {paddingBottom: 0}]}>
@@ -333,11 +249,6 @@ const _renderProfileNormal = ({
           </GlobalButton>
         </View>
       </View>
-      <BottomSheetMenu
-        refSheet={refSheet}
-        dataSheet={dataSheet}
-        height={isShowDelete ? 182 : 130}
-      />
     </SafeAreaView>
   );
 };
@@ -348,13 +259,10 @@ const Header = ({
   height,
   source = null,
   headerStyle,
+  onHeaderOptionClicked = () => {},
   showAnonymousOption = false,
-  isPostDetail,
-  isFollow = false,
-  onPressFollUnFoll = () => {},
-  onDeletePost = () => {},
-  isShowDelete = false,
-  isSelf = false
+  hideThreeDot,
+  isPostDetail
 }) => {
   const {
     anonimity,
@@ -381,6 +289,8 @@ const Header = ({
       height,
       headerStyle,
       showAnonymousOption,
+      onHeaderOptionClicked: () => onHeaderOptionClicked(props),
+      hideThreeDot,
       version,
       anonUserInfo: {
         colorCode: anon_user_info_color_code,
@@ -388,12 +298,7 @@ const Header = ({
         emojiCode: anon_user_info_emoji_code,
         emojiName: anon_user_info_emoji_name
       },
-      isPostDetail,
-      isFollow,
-      onPressFollUnFoll,
-      onDeletePost,
-      isShowDelete,
-      isSelf
+      isPostDetail
     });
   }
   return _renderProfileNormal({
@@ -407,12 +312,9 @@ const Header = ({
     height,
     source,
     headerStyle,
-    isPostDetail,
-    isFollow,
-    onPressFollUnFoll,
-    onDeletePost,
-    isShowDelete,
-    isSelf
+    onHeaderOptionClicked: () => onHeaderOptionClicked(props),
+    hideThreeDot,
+    isPostDetail
   });
 };
 
@@ -444,7 +346,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
     lineHeight: 16.94,
-    color: colors.black
+    color: colors.black,
+    flex: 1
   },
   containerFeedText: {
     flexDirection: 'row',
@@ -532,22 +435,7 @@ const styles = StyleSheet.create({
   avatarImage: {height: 48, width: 48, borderRadius: 24},
   postDetail: (isPostDetail) => ({
     paddingLeft: isPostDetail ? 10 : 0
-  }),
-  contentFeedName: {
-    flexDirection: 'row'
-  },
-  textFollow: {
-    color: colors.bluePrimary,
-    fontSize: normalizeFontSize(14),
-    fontStyle: 'normal',
-    fontWeight: '500'
-  },
-  textFollowing: {
-    color: colors.greySubtile1,
-    fontSize: normalizeFontSize(14),
-    fontStyle: 'normal',
-    fontWeight: '500'
-  }
+  })
 });
 
 Header.propsTypes = {

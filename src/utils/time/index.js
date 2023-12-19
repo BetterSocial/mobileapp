@@ -20,24 +20,24 @@ export const calculateTime = (time, formatForChatTab = false) => {
   }
 
   if (minutes < 60) {
-    return minutes === 0 ? '1m' : `${minutes}m`;
+    return minutes === 0 ? '1m ago' : `${minutes}m ago`;
   }
 
   if (hours < 24) {
-    return `${hours}h`;
+    return `${hours}h ago`;
   }
 
   if (days === 1) {
-    return formatForChatTab ? `${days}d` : '1d';
+    return formatForChatTab ? `${days}d ago` : 'Yesterday';
   }
 
   if (days >= 2 && days <= 6) {
-    return `${days}d`;
+    return `${days}d ago`;
   }
 
   if (days >= 7 && days <= 13) {
-    return '1w';
+    return '1w ago';
   }
 
-  return `${weeks}w`;
+  return `${weeks}w ago`;
 };

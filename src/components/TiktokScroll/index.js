@@ -16,7 +16,7 @@ class TiktokScroll extends React.Component {
   }
 
   scrollToTop() {
-    this.flatListScrollRef?.current?.scrollToOffset?.({
+    this.flatListScrollRef.current.scrollToOffset({
       offset: 0,
       animated: true
     });

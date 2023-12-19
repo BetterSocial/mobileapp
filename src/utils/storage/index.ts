@@ -18,18 +18,15 @@ enum StorageKeysEnum {
   OtherProfileData = 'otherprofiledata',
   LastPromptNotification = 'lastPromptNotification',
   LastSelectedMenu = 'lastSelectedMenu',
-  chatInfo = 'chatInfo',
-  BlockedStatus = 'blockedStatus',
-  BlockingStatus = 'blockingStatus',
-  Feed = 'feed'
+  chatInfo = 'chatInfo'
 }
 
 interface IStorage {
-  get: () => string | undefined;
+  get: () => string;
   set: (value: string) => void;
   clear: () => void;
   setForKey: (key: string, value: string) => void;
-  getForKey: (key: string) => string | undefined;
+  getForKey: (key: string) => string;
   clearForKey: (key: string) => void;
 }
 /**
@@ -88,16 +85,13 @@ const StorageUtils = {
   lastPromptNotification: storageBuilder(StorageKeysEnum.LastPromptNotification),
   lastSelectedMenu: storageBuilder(StorageKeysEnum.LastSelectedMenu),
   chatInfo: storageBuilder(StorageKeysEnum.chatInfo),
-  blockingStatus: storageBuilder(StorageKeysEnum.BlockingStatus),
-  blockedStatus: storageBuilder(StorageKeysEnum.BlockedStatus),
-  feed: storageBuilder(StorageKeysEnum.Feed),
   clearAll: () => MMKVStorage.clearAll()
 };
 
 const clearAll = () => {
   const onboardingPassword = StorageUtils.onboardingPassword.get();
   MMKVStorage.clearAll();
-  StorageUtils.onboardingPassword.set(onboardingPassword || '');
+  StorageUtils.onboardingPassword.set(onboardingPassword);
 };
 
 StorageUtils.clearAll = clearAll;

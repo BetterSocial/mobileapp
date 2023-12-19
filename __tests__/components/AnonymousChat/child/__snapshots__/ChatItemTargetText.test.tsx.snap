@@ -161,7 +161,7 @@ exports[`TESTING ChatItemMyTextV2 should match snapshot 1`] = `
                 }
                 testID="timestamp"
               >
-                1m
+                1m ago
               </Text>
             </View>
             <View
@@ -427,7 +427,7 @@ exports[`TESTING ChatItemTargetText should match snapshot 1`] = `
                 }
                 testID="timestamp"
               >
-                1m
+                1m ago
               </Text>
             </View>
             <Text
