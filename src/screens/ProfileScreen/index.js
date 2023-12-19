@@ -194,7 +194,6 @@ const ProfileScreen = ({route}) => {
   const {refreshCount} = useResetContext();
   const {mappingColorFeed} = useCoreFeed();
   const LIMIT_PROFILE_FEED = 10;
-  const refBottomSheet = React.useRef();
   const TYPE_GALLERY = 'gallery';
 
   const {feeds} = myProfileFeed;

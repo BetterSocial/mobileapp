@@ -6,7 +6,6 @@ import {Dimensions, Keyboard, ScrollView, StatusBar, StyleSheet, View} from 'rea
 import Toast from 'react-native-simple-toast';
 
 import {Footer} from '..';
-import ShareAndroidIcon from '../../assets/icons/images/share-for-android.svg';
 import {Context} from '../../context';
 import {saveComment} from '../../context/actions/comment';
 import {setFeedByIndex} from '../../context/actions/feeds';
