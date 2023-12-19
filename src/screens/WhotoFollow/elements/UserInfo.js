@@ -3,7 +3,6 @@ import {Image, StyleSheet, Text, View} from 'react-native';
 import PropTypes from 'prop-types';
 import {normalize} from '../../../utils/fonts';
 import {CircleGradient} from '../../../components/Karma/CircleGradient';
-import {COLORS} from '../../../utils/theme';
 
 const UserInfo = ({photo, username, bio, karmaScore}) => (
   <View style={styles.cardLeft}>
@@ -55,13 +54,13 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'bold',
     fontSize: 14,
-    color: COLORS.black,
+    color: '#000000',
     lineHeight: 21,
     alignSelf: 'flex-start'
   },
   textUsername: {
     fontSize: 14,
-    color: COLORS.black,
+    color: '#000000',
     lineHeight: 21,
     alignSelf: 'flex-start',
     width: '100%',

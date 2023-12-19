@@ -1,12 +1,11 @@
 import * as React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {COLORS} from '../../../utils/theme';
 
 const Label = ({
   label,
-  containerBgColor = COLORS.concrete,
-  titleHeaderColor = COLORS.whiteSmoke,
-  textColor = COLORS.emperor
+  containerBgColor = '#F2F2F2',
+  titleHeaderColor = '#F4F4F4',
+  textColor = '#4F4F4F'
 }) => (
   <View style={styles.headerList(containerBgColor)}>
     <Text style={styles.titleHeader(titleHeaderColor)}>

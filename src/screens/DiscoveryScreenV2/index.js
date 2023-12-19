@@ -22,9 +22,9 @@ import {
   DISCOVERY_TAB_USERS
 } from '../../utils/constants';
 import {Header} from '../../components';
+import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {withInteractionsManagedNoStatusBar} from '../../components/WithInteractionManaged';
-import {COLORS} from '../../utils/theme';
 
 const DiscoveryScreenV2 = ({route}) => {
   const {tab} = route.params;
@@ -311,13 +311,13 @@ const DiscoveryScreenV2 = ({route}) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.white,
+    backgroundColor: '#fff',
     flex: 1,
     paddingTop: 60
   },
   fragmentContainer: {
     height: '100%',
-    backgroundColor: COLORS.white
+    backgroundColor: colors.white
   },
   fragmentContentContainer: {
     // height: '100%'

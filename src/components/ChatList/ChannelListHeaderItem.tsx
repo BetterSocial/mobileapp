@@ -4,12 +4,11 @@ import {StyleSheet, Text, View} from 'react-native';
 
 import dimen from '../../utils/dimen';
 import {SIGNED} from '../../hooks/core/constant';
+import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
-import {COLORS} from '../../utils/theme';
-import AnonymousIcon from '../../assets/icon/AnonymousIcon';
 
 export interface ChannelListTabItemProps {
-  picture: any;
+  picture: string | null;
   name: string;
   type: 'SIGNED' | 'ANONYMOUS';
   testID?: string;
@@ -27,14 +26,14 @@ const ChannelListHeaderItem = (props: ChannelListTabItemProps) => {
       paddingRight: dimen.normalizeDimen(30),
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: COLORS.white,
+      backgroundColor: colors.white,
       borderBottomWidth: 2,
-      borderBottomColor: type === 'SIGNED' ? COLORS.blue : COLORS.holyTosca
+      borderBottomColor: type === SIGNED ? colors.darkBlue : colors.anon_primary
     },
     name: {
       fontFamily: fonts.inter[500],
       fontSize: normalizeFontSize(14),
-      color: type === 'SIGNED' ? COLORS.blue : COLORS.holyTosca
+      color: type === SIGNED ? colors.darkBlue : colors.anon_primary
     },
     picture: {
       width: dimen.normalizeDimen(20),
@@ -43,7 +42,7 @@ const ChannelListHeaderItem = (props: ChannelListTabItemProps) => {
       borderRadius: dimen.normalizeDimen(10)
     },
     anonBgColor: {
-      backgroundColor: COLORS.holyTosca
+      backgroundColor: colors.anon_primary
     }
   });
 
@@ -52,12 +51,7 @@ const ChannelListHeaderItem = (props: ChannelListTabItemProps) => {
       {typeof picture === 'string' ? (
         <FastImage source={{uri: picture}} style={styles.picture} />
       ) : (
-        <AnonymousIcon
-          fill={COLORS.holyTosca}
-          width={dimen.normalizeDimen(20)}
-          height={dimen.normalizeDimen(20)}
-          marginRight={dimen.normalizeDimen(6)}
-        />
+        <FastImage source={picture} style={[styles.picture, styles.anonBgColor]} />
       )}
       <Text numberOfLines={1} ellipsizeMode="tail" style={styles.name}>
         as {name}

@@ -1,7 +1,7 @@
 import {StyleSheet} from 'react-native';
 
+import {colors} from '../../../utils/colors';
 import {fonts, normalize} from '../../../utils/fonts';
-import {COLORS} from '../../../utils/theme';
 
 export const channelContentStyles = StyleSheet.create({
   title: {
@@ -24,11 +24,11 @@ export const channelContentStyles = StyleSheet.create({
     fontSize: normalize(14),
     lineHeight: 22,
     marginLeft: 20,
-    color: COLORS.gray8,
+    color: colors.gray,
     alignSelf: 'flex-start'
   },
   containerBadge: {
-    backgroundColor: COLORS.blue,
+    backgroundColor: colors.darkBlue,
     width: 20,
     height: 20,
     borderRadius: 10,
@@ -39,6 +39,6 @@ export const channelContentStyles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: normalize(10),
     lineHeight: 14.52,
-    color: COLORS.white
+    color: colors.white
   }
 });

@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   bottomAnchorTextContainer: {
-    backgroundColor: COLORS.holyTosca,
+    backgroundColor: COLORS.bondi_blue,
     padding: 11,
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8

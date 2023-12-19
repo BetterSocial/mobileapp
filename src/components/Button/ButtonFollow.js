@@ -1,15 +1,15 @@
-import React from 'react';
-import {View, StyleSheet, TouchableNativeFeedback, Text} from 'react-native';
-import {fonts} from '../../utils/fonts';
-import {COLORS} from '../../utils/theme';
+import React from 'react'
+import { View, StyleSheet, TouchableNativeFeedback, Text } from 'react-native'
+import { colors } from '../../utils/colors'
+import { fonts } from '../../utils/fonts'
 
-const ButtonFollow = ({handleSetFollow}) => (
-  <TouchableNativeFeedback onPress={handleSetFollow}>
-    <View style={styles.buttonFollow}>
-      <Text style={styles.textButtonFollow}>Follow</Text>
-    </View>
-  </TouchableNativeFeedback>
-);
+const ButtonFollow = ({ handleSetFollow }) => (
+    <TouchableNativeFeedback onPress={handleSetFollow}>
+      <View style={styles.buttonFollow}>
+        <Text style={styles.textButtonFollow}>Follow</Text>
+      </View>
+    </TouchableNativeFeedback>
+  )
 
 const styles = StyleSheet.create({
   buttonFollow: {
@@ -19,14 +19,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    backgroundColor: COLORS.holyTosca
+    backgroundColor: colors.bondi_blue,
   },
   textButtonFollow: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: COLORS.white
-  }
-});
+    color: colors.white,
+  },
+})
 
-export default ButtonFollow;
+export default ButtonFollow

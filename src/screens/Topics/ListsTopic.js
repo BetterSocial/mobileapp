@@ -1,10 +1,10 @@
 import React from 'react';
 import {Pressable, StyleSheet, Text} from 'react-native';
-import {COLORS} from '../../utils/theme';
+import {colors} from '../../utils/colors';
 
 const styles = StyleSheet.create({
   bgTopicSelectNotActive: (isActive) => ({
-    backgroundColor: isActive ? COLORS.holyTosca : COLORS.concrete,
+    backgroundColor: isActive ? colors.bondi_blue : colors.concrete,
     // minWidth: 100,
     paddingHorizontal: 15,
     paddingVertical: 7,
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: '500',
     fontSize: 12,
-    color: isActive ? COLORS.white : COLORS.mineShaft
+    color: isActive ? colors.white : colors.mine_shaft
     // paddingLeft: 5,
   })
 });

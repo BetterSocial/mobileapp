@@ -4,7 +4,6 @@ import {StyleSheet, Text, TouchableNativeFeedback, View} from 'react-native';
 import Card from '../../../screens/CreatePost/elements/Card';
 import {convertString} from '../../../utils/string/StringUtils';
 import {fonts} from '../../../utils/fonts';
-import {COLORS} from '../../../utils/theme';
 
 const TopicSuggestions = ({
   topicChats = [],
@@ -64,14 +63,14 @@ const TopicSuggestions = ({
 const styles = StyleSheet.create({
   cardContainer: {marginTop: -16},
   suggestions: {
-    color: COLORS.black,
+    color: '#000000',
     fontFamily: fonts.inter[500],
     fontWeight: '500',
     fontSize: 12,
     lineHeight: 18
   },
   topicSuggestionContainer: {marginBottom: 5},
-  view: {height: 1, marginTop: 5, backgroundColor: COLORS.gray1}
+  view: {height: 1, marginTop: 5, backgroundColor: '#C4C4C4'}
 });
 
 export default TopicSuggestions;

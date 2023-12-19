@@ -1,15 +1,17 @@
 import * as React from 'react';
-import {TouchableWithoutFeedback, Image, StyleSheet, Text, View} from 'react-native';
+import {TouchableWithoutFeedback} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+import MemoIc_read from '../../assets/chats/Ic_read';
+import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {trimString} from '../../utils/string/TrimString';
 import {calculateTime} from '../../utils/time';
 import Dot from '../Dot';
 import ActionChat from './ActionChat';
 import ProfileMessage from './ProfileMessage';
-import {COLORS} from '../../utils/theme';
 
 const ReplyMessageText = ({
   image,
@@ -23,7 +25,7 @@ const ReplyMessageText = ({
   replyTime,
   messageReply,
   isMyQuote,
-  attachments
+  attachments,
 }) => {
   const [onAction, setOnAction] = React.useState(false);
   return (
@@ -54,7 +56,9 @@ const ReplyMessageText = ({
                 </View>
               </View>
             </View>
-            <Text style={[styles.message(true), styles.messageMargin]}>{message}</Text>
+            <Text style={[styles.message(true), styles.messageMargin]}>
+              {message}
+            </Text>
           </View>
         </TouchableWithoutFeedback>
       </View>
@@ -70,7 +74,7 @@ const QuotedMessage = ({
   replyTime,
   messageReply,
   isMyQuote,
-  attachments
+  attachments,
 }) => {
   const imgExists = () => {
     return (
@@ -92,8 +96,10 @@ const QuotedMessage = ({
         <View style={styles.quotedProfile}>
           <ProfileMessage image={otherPhoto} />
           <View style={styles.quotedProfileName}>
-            <Text style={[styles.name(false), styles.gapReply]}>{otherName}</Text>
-            <Dot color={COLORS.elm} />
+            <Text style={[styles.name(false), styles.gapReply]}>
+              {otherName}
+            </Text>
+            <Dot color={colors.elm} />
             <Text style={styles.time(false)}>{calculateTime(replyTime)}</Text>
           </View>
         </View>
@@ -101,7 +107,7 @@ const QuotedMessage = ({
           <Text style={styles.message(false)}>
             {textIsExists() && (
               <>
-                <Icon name="photo" color={COLORS.elm} size={15} /> Photo
+                <Icon name="photo" color={colors.elm} size={15} /> Photo
               </>
             )}
             {!textIsExists() && trimString(messageReply, textMore())}
@@ -112,7 +118,7 @@ const QuotedMessage = ({
         <Image
           style={styles.assetImage}
           source={{
-            uri: attachments.asset_url
+            uri: attachments.asset_url,
           }}
         />
       )}
@@ -125,68 +131,68 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 4,
     paddingLeft: 6,
-    borderRadius: 8
+    borderRadius: 8,
   },
   assetImage: {
     width: 48,
     height: 48,
     borderTopRightRadius: 8,
-    borderBottomRightRadius: 8
+    borderBottomRightRadius: 8,
   },
   containerQuoted: (isMe) => ({
-    backgroundColor: isMe ? COLORS.tradewind : COLORS.alto,
+    backgroundColor: isMe ? colors.tradewind : colors.alto,
     flexDirection: 'row',
     flex: 1,
-    borderRadius: 8
+    borderRadius: 8,
   }),
   quotedProfile: {
     flexDirection: 'row',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
   quotedMessage: {
     borderLeftWidth: 1,
-    borderLeftColor: COLORS.gray8,
+    borderLeftColor: colors.gray,
     marginLeft: 12,
     paddingLeft: 28,
     paddingBottom: 6,
-    marginTop: -9
+    marginTop: -9,
   },
   gapReply: {
-    marginLeft: 18
+    marginLeft: 18,
   },
   name: (isMe) => ({
     fontSize: 12,
     fontFamily: fonts.inter[600],
     lineHeight: 14.53,
-    color: isMe ? COLORS.black : COLORS.elm,
-    marginRight: 5.7
+    color: isMe ? '#000' : colors.elm,
+    marginRight: 5.7,
   }),
   time: (isMe) => ({
     fontSize: 10,
     fontFamily: fonts.inter[600],
     lineHeight: 12,
-    color: isMe ? COLORS.black : COLORS.elm,
-    marginLeft: 5
+    color: isMe ? '#000' : colors.elm,
+    marginLeft: 5,
   }),
   quotedProfileName: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   message: (isMe) => ({
-    color: isMe ? COLORS.black : COLORS.elm,
+    color: isMe ? '#000' : colors.elm,
     marginTop: 4,
     fontSize: 16,
     fontFamily: fonts.inter[400],
-    lineHeight: 19.36
+    lineHeight: 19.36,
   }),
   container: {
     flexDirection: 'row',
     flex: 1,
     marginLeft: 10,
-    marginRight: 20
+    marginRight: 20,
   },
   containerChat: (isMe) => ({
-    backgroundColor: isMe ? COLORS.halfBaked : COLORS.lightgrey,
+    backgroundColor: isMe ? colors.halfBaked : colors.lightgrey,
     paddingTop: 4,
     paddingBottom: 8,
     paddingLeft: 4,
@@ -194,37 +200,37 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 8,
     marginVertical: 4,
-    marginLeft: 8
+    marginLeft: 8,
   }),
   user: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginLeft: 18
+    marginLeft: 18,
   },
   lineLeft: {
     borderLeftWidth: 1,
-    borderLeftColor: COLORS.gray8,
-    borderBottomColor: COLORS.gray8,
+    borderLeftColor: colors.gray,
+    borderBottomColor: colors.gray,
     borderBottomWidth: 1,
     borderBottomLeftRadius: 8,
     width: 10,
     height: 24,
-    marginTop: -1
+    marginTop: -1,
   },
   userDetail: {
     flexDirection: 'row',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
   userPosision: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: 16
+    marginLeft: 16,
   },
   userMargin: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    marginTop: 10
+    marginTop: 10,
   },
-  messageMargin: {marginLeft: 70, marginTop: -4}
+  messageMargin: {marginLeft: 70, marginTop: -4},
 });

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {LogBox, View, StyleSheet, Animated} from 'react-native';
 
-import {COLORS} from '../../utils/theme';
+import {colors} from '../../utils/colors';
 
 function useInterval(callback, delay) {
   const savedCallback = React.useRef();
@@ -68,18 +68,18 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: COLORS.porcelain,
+    backgroundColor: colors.porcelain,
     borderRadius: 5
   },
   progressBar: {
     flexDirection: 'row',
     height: 8,
     width: '100%',
-    backgroundColor: COLORS.alto,
+    backgroundColor: colors.alto,
     borderRadius: 5
   },
   animated: (width) => ({
-    backgroundColor: COLORS.blue,
+    backgroundColor: colors.signed_primary,
     borderRadius: 5,
     width
   })

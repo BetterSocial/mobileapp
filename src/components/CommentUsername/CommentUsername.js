@@ -1,14 +1,14 @@
 import React from 'react';
 import {Text, StyleSheet, View} from 'react-native';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
+import {SIZES} from '../../utils/theme';
 import dimen from '../../utils/dimen';
-import {COLORS, SIZES} from '../../utils/theme';
 
 const styles = StyleSheet.create({
   username: {
     fontFamily: fonts.inter[700],
     fontSize: normalizeFontSize(12),
-    color: COLORS.blackgrey,
+    color: '#828282',
     lineHeight: 14,
     marginLeft: 16,
     maxWidth: dimen.normalizeDimen(170)
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   dot: {
     fontFamily: fonts.inter[700],
     fontSize: normalizeFontSize(12),
-    color: COLORS.blackgrey
+    color: '#828282'
   }
 });
 

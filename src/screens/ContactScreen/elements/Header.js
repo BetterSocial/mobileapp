@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'bold',
     fontSize: 16,
-    color: COLORS.black,
+    color: '#000000',
     lineHeight: 20,
     alignSelf: 'center'
   },

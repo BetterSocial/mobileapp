@@ -1,14 +1,14 @@
 import {StyleSheet} from 'react-native';
 
 import dimen from '../../utils/dimen';
-import {COLORS} from '../../utils/theme';
+import {colors} from '../../utils/colors';
 
 export const channelItemStyles = StyleSheet.create({
   channelContainer: {
     display: 'flex',
     flexDirection: 'row',
     paddingLeft: dimen.normalizeDimen(20),
-    backgroundColor: COLORS.white
+    backgroundColor: colors.white
   },
   contentContainer: {
     flex: 1,
@@ -16,7 +16,7 @@ export const channelItemStyles = StyleSheet.create({
     paddingBottom: dimen.normalizeDimen(14),
     paddingStart: dimen.normalizeDimen(15),
     paddingEnd: dimen.normalizeDimen(20),
-    borderBottomColor: COLORS.alto,
+    borderBottomColor: colors.alto,
     borderBottomWidth: 1
   }
 });

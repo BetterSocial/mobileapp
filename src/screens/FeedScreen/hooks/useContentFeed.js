@@ -2,8 +2,8 @@
 import React from 'react';
 import {Text} from 'react-native';
 import reactStringReplace from 'react-string-replace';
+import {colors} from '../../../utils/colors';
 import {getUserId} from '../../../utils/token';
-import {COLORS} from '../../../utils/theme';
 
 const useContentFeed = ({navigation}) => {
   // eslint-disable-next-line consistent-return
@@ -31,7 +31,7 @@ const useContentFeed = ({navigation}) => {
     if (isShortText) {
       return 'rgba(0, 0, 0, 0.5)';
     }
-    return COLORS.blue;
+    return colors.blue;
   };
 
   const hashtagAtComponent = (message, substring, isShortText) => {

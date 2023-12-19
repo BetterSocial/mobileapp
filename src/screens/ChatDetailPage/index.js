@@ -208,7 +208,7 @@ const CustomDateHeader = () => null;
 export default withInteractionsManaged(ChatDetailPage);
 const styles = StyleSheet.create({
   date: {
-    color: COLORS.white,
+    color: '#fff',
     fontFamily: fonts.inter[500],
     fontSize: 14,
     lineHeight: 16.94

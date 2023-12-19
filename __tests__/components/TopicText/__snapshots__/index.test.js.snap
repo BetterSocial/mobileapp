@@ -6,11 +6,11 @@ exports[`Testing Topic Text Match snapshot 1`] = `
   style={
     Array [
       Object {
-        "color": "#4782D7",
+        "color": "#2F80ED",
         "fontFamily": "Inter-Medium",
       },
       Object {
-        "color": "#4782D7",
+        "color": "#2F80ED",
       },
     ]
   }

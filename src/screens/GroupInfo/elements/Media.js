@@ -4,7 +4,6 @@ import {FlatList} from 'react-native';
 import {StyleSheet, View} from 'react-native';
 import {Context} from '../../../context';
 import useMedia from './useMedia';
-import {COLORS} from '../../../utils/theme';
 
 const Media = () => {
   const [groupChatState] = React.useContext(Context).groupChat;
@@ -39,7 +38,7 @@ export default Media;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: '#fff',
     alignItems: 'center',
     flexWrap: 'nowrap',
     paddingTop: 8,

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Pressable} from 'react-native';
 
-import {COLORS} from '../../utils/theme';
+import {colors} from '../../utils/colors';
 
 /**
  * @typedef {import('react-native').PressableProps} CustomPressableProps
@@ -19,7 +19,7 @@ const CustomPressable = (props) => {
       onPress={onPress}
       style={style}
       android_ripple={{
-        color: COLORS.gray9,
+        color: colors.gray1,
         borderless: false,
         radius: 100
       }}

@@ -1,10 +1,10 @@
 import React from 'react';
 import {StyleSheet, Text} from 'react-native';
-import {COLORS} from '../../utils/theme';
+import {colors} from '../../utils/colors';
 
 const styles = StyleSheet.create({
   hightlightText: {
-    color: COLORS.blue
+    color: colors.blue
   }
 });
 

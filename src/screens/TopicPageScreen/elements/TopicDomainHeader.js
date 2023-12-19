@@ -7,7 +7,6 @@ import {Shimmer} from '../../../components/Shimmer/Shimmer';
 import {colors} from '../../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
 import {convertString} from '../../../utils/string/StringUtils';
-import {COLORS} from '../../../utils/theme';
 
 const TopicDomainHeader = (props) => {
   const {domain, handleOnMemberPress, hideSeeMember, isFollow, memberCount} = props;
@@ -82,7 +81,7 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(16),
     fontFamily: fonts.inter[600],
     textAlign: 'left',
-    color: isHeaderHide ? COLORS.white : COLORS.black,
+    color: isHeaderHide ? colors.white : colors.black,
     backgroundColor: 'transparent'
   }),
   member: {
@@ -94,13 +93,13 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(12),
     fontFamily: fonts.inter[400],
     textAlign: 'left',
-    color: isHeaderHide ? COLORS.white : COLORS.blackgrey
+    color: isHeaderHide ? colors.white : colors.blackgrey
   }),
   seeMemberText: () => ({
     fontSize: normalizeFontSize(12),
     fontFamily: fonts.inter[500],
     textAlign: 'left',
-    color: COLORS.blue,
+    color: colors.signed_primary,
     marginTop: normalize(1)
   })
 });

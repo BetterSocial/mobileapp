@@ -4,7 +4,6 @@ import {StyleSheet, View} from 'react-native';
 import {Context} from '../../../context';
 
 import ItemLink from './ItemLink';
-import {COLORS} from '../../../utils/theme';
 
 const Link = () => {
   const [groupChatState] = React.useContext(Context).groupChat;
@@ -36,7 +35,7 @@ export default Link;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: '#fff',
     paddingHorizontal: 20,
     paddingTop: 8,
   },

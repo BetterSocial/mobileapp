@@ -19,6 +19,7 @@ import {ChatItemMyTextProps} from '../../../../types/component/AnonymousChat/Bas
 import {MessageType} from '../../../../types/hooks/screens/useMessageHook.types';
 import {ScrollContext} from '../../../hooks/screen/useChatScreenHook';
 import {calculateTime} from '../../../utils/time';
+import {colors} from '../../../utils/colors';
 import {
   containerStyle,
   dotStyle,
@@ -27,13 +28,12 @@ import {
   textContainerStyle,
   textStyle
 } from './ChatItemText.style';
-import {COLORS} from '../../../utils/theme';
 
 export const replyIcon = () => {
   return (
     <View style={styles.containerReply}>
       <View style={styles.containerReplyIcon}>
-        <Icon name={'reply'} size={20} color={COLORS.black} />
+        <Icon name={'reply'} size={20} color={colors.black} />
       </View>
     </View>
   );

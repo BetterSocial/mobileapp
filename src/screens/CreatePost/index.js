@@ -60,6 +60,7 @@ import {
 } from '../../utils/constants';
 import {PROFILE_CACHE} from '../../utils/cache/constant';
 import {ShowingAudience, createPost} from '../../service/post';
+import {colors} from '../../utils/colors';
 import {composeImageMeta} from '../../utils/string/file';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {
@@ -78,8 +79,6 @@ import {requestCameraPermission, requestExternalStoragePermission} from '../../u
 import {uploadPhoto} from '../../service/file';
 import ImageUtils from '../../utils/image';
 import ImageCompressionUtils from '../../utils/image/compress';
-import {COLORS} from '../../utils/theme';
-import {useDynamicColors} from '../../hooks/useToggleColors';
 
 const IS_GEO_SELECT_ENABLED = false;
 
@@ -752,7 +751,6 @@ const CreatePost = () => {
             topicChats={listTopicChat}
             allTaggedUser={allTaggingUser}
             setAllTaggedUser={setAllTaggingUser}
-            isAnonimity={typeUser}
           />
           {typeUser && (
             <Animated.View style={[{opacity: animatedReminder}, styles.reminderContainer]}>
@@ -791,7 +789,6 @@ const CreatePost = () => {
                 setIsPollMultipleChoice(ismultiplechoice)
               }
               expiredobject={postExpired[expiredSelect].expiredobject}
-              isAnonimity={typeUser}
             />
           )}
           <Gap style={styles.height(26)} />
@@ -828,10 +825,7 @@ const CreatePost = () => {
             </>
           )}
           <Gap style={styles.height(25)} />
-          <Button
-            disabled={isButtonDisabled()}
-            onPress={postV2}
-            style={styles.buttonPost(useDynamicColors(typeUser))}>
+          <Button disabled={isButtonDisabled()} onPress={postV2}>
             Post
           </Button>
           <Gap style={styles.height(18)} />
@@ -850,7 +844,6 @@ const CreatePost = () => {
             topics={listTopic}
             chatTopics={listTopicChat}
             onClose={() => sheetTopicRef.current.close()}
-            isAnonimity={typeUser}
             // saveOnClose={(v, chatTopic) => onSaveTopic(v, chatTopic)}
           />
           <SheetExpiredPost
@@ -858,7 +851,6 @@ const CreatePost = () => {
             data={postExpired}
             select={expiredSelect}
             onSelect={onSetExpiredSelect}
-            isAnonimity={typeUser}
           />
           <SheetGeographic
             geoRef={sheetGeoRef}
@@ -876,11 +868,10 @@ const CreatePost = () => {
             backRef={sheetBackRef}
             goBack={() => navigation.goBack()}
             continueToEdit={() => sheetBackRef.current.close()}
-            isAnonimity={typeUser}
           />
         </View>
       </ScrollView>
-      <Loading visible={loading} color={useDynamicColors(typeUser).primary} />
+      <Loading visible={loading} />
       <WarningAnimatedMessage isSHow={typeUser} />
     </SafeAreaView>
   );
@@ -891,11 +882,11 @@ export default CreatePost;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: '#fff',
     position: 'relative'
   },
   input: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: colors.lightgrey,
     paddingVertical: 16,
     paddingHorizontal: 12,
     minHeight: 100,
@@ -903,23 +894,23 @@ const styles = StyleSheet.create({
     overflow: 'scroll'
   },
   hastagText: {
-    color: COLORS.gray9,
+    color: colors.gray1,
     fontSize: 14,
     fontFamily: fonts.inter[400]
   },
   listText: {
-    color: COLORS.black,
+    color: colors.black,
     fontSize: 14,
     fontFamily: fonts.inter[400]
   },
   label: {
-    color: COLORS.black,
+    color: colors.black,
     fontFamily: fonts.inter[600],
     fontWeight: 'bold'
   },
   desc: {fontSize: 14, fontFamily: fonts.poppins[400]},
   labelButtonAddMedia: {
-    color: COLORS.black,
+    color: colors.black,
     fontFamily: fonts.inter[600],
     fontSize: 14,
     fontWeight: 'bold'
@@ -932,7 +923,7 @@ const styles = StyleSheet.create({
     paddingBottom: 13
   },
   userTarget: {
-    color: COLORS.holyTosca,
+    color: colors.bondi_blue,
     fontSize: 14,
     fontFamily: fonts.poppins[400]
   },
@@ -940,7 +931,7 @@ const styles = StyleSheet.create({
     height
   }),
   reminderContainer: {
-    backgroundColor: COLORS.holyTosca,
+    backgroundColor: colors.blue,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 7,
@@ -948,11 +939,8 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 10
   },
   whiteText: {
-    color: COLORS.white,
+    color: 'white',
     fontSize: normalizeFontSize(10),
     textAlign: 'center'
-  },
-  buttonPost: (color) => ({
-    backgroundColor: color.primary
-  })
+  }
 });

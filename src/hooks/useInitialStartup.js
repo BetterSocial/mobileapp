@@ -28,7 +28,6 @@ import {traceMetricScreen} from '../libraries/performance/firebasePerformance';
 import {useClientGetstream} from '../utils/getstream/ClientGetStram';
 import useCoreFeed from '../screens/FeedScreen/hooks/useCoreFeed';
 import StorageUtils from '../utils/storage';
-import {COLORS} from '../utils/theme';
 
 export const useInitialStartup = () => {
   const [, newsDispatch] = React.useContext(Context).news;
@@ -163,7 +162,7 @@ export const useInitialStartup = () => {
     LogBox.ignoreAllLogs();
 
     // statusbar
-    if (Platform.OS === 'android') StatusBar.setBackgroundColor(COLORS.white);
+    if (Platform.OS === 'android') StatusBar.setBackgroundColor('#ffffff');
     StatusBar.setBarStyle('dark-content', true);
 
     doGetAccessToken();

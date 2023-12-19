@@ -1,12 +1,11 @@
 import * as React from 'react';
 import {StyleSheet, View} from 'react-native';
 import dimen from '../../utils/dimen';
-import { COLORS } from '../../utils/theme';
 
 const styles = StyleSheet.create({
   container: {
     elevation: 3,
-    shadowColor: COLORS.black,
+    shadowColor: '#000',
     shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.8,
     shadowRadius: 1,

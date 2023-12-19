@@ -7,18 +7,18 @@ import {
   Text,
   View,
   ImageBackground,
-  StatusBar
+  StatusBar,
 } from 'react-native';
 
-import Icon from 'react-native-vector-icons/Octicons';
-import {useNavigation} from '@react-navigation/native';
 import MemoIc_arrow_back_white from '../../assets/arrow/Ic_arrow_back_white';
+import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import Icon from 'react-native-vector-icons/Octicons';
 import {calculateTime} from '../../utils/time';
 import ModalImageSingleDetail from '../../components/Chat/ModalImageSingleDetail';
-import {COLORS} from '../../utils/theme';
+import {useNavigation} from '@react-navigation/native';
 
-const {width} = Dimensions.get('screen');
+const width = Dimensions.get('screen').width;
 
 const ShowDetailGroupImage = (props) => {
   const [images] = React.useState(props.route.params.images);
@@ -43,7 +43,8 @@ const ShowDetailGroupImage = (props) => {
         <View style={styles.user}>
           <Text style={styles.name}>{name}</Text>
           <Text style={styles.time}>
-            {images.length} photos <Icon name="primitive-dot" size={6} color="#fff" />{' '}
+            {images.length} photos{' '}
+            <Icon name="primitive-dot" size={6} color="#fff" />{' '}
             {calculateTime(time)}{' '}
           </Text>
         </View>
@@ -52,8 +53,13 @@ const ShowDetailGroupImage = (props) => {
         data={images}
         initialScrollIndex={indexScroll}
         renderItem={({item, index}) => (
-          <TouchableOpacity key={index} onPress={() => openDetail(item.asset_url)}>
-            <ImageBackground resizeMode="cover" style={styles.image} source={{uri: item.asset_url}}>
+          <TouchableOpacity
+            key={index}
+            onPress={() => openDetail(item.asset_url)}>
+            <ImageBackground
+              resizeMode="cover"
+              style={styles.image}
+              source={{uri: item.asset_url}}>
               <Text style={styles.time}>{calculateTime(time)}</Text>
             </ImageBackground>
           </TouchableOpacity>
@@ -74,38 +80,38 @@ export default ShowDetailGroupImage;
 
 const styles = StyleSheet.create({
   image: {
-    width,
+    width: width,
     height: 417,
     marginTop: 8,
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
     paddingBottom: 10,
-    paddingRight: 10
+    paddingRight: 10,
   },
   container: {
-    flex: 1
+    flex: 1,
   },
   header: {
-    backgroundColor: COLORS.holyTosca,
+    backgroundColor: colors.holytosca,
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 20,
     paddingTop: 6,
-    paddingBottom: 7
+    paddingBottom: 7,
   },
   user: {
-    marginLeft: 18
+    marginLeft: 18,
   },
   name: {
     fontFamily: fonts.inter[600],
     fontSize: 14,
-    color: COLORS.white,
-    lineHeight: 16.94
+    color: '#fff',
+    lineHeight: 16.94,
   },
   time: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.white,
-    lineHeight: 18
-  }
+    color: '#fff',
+    lineHeight: 18,
+  },
 });

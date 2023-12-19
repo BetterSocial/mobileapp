@@ -13,8 +13,9 @@ import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
 import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
 import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
 import useComment from './hooks/useComment';
-import {COLORS, FONTS} from '../../utils/theme';
+import {FONTS} from '../../utils/theme';
 import {calculateTime} from '../../utils/time';
+import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
 import {removeWhiteSpace} from '../../utils/Utils';
@@ -120,12 +121,12 @@ const Comment = ({
 
   const voteStyle = () => {
     if (totalVote > 0) {
-      return COLORS.holyTosca;
+      return '#00ADB5';
     }
     if (totalVote < 0) {
-      return COLORS.red;
+      return '#FF2E63';
     }
-    return COLORS.gray1;
+    return '#C4C4C4';
   };
 
   const username = comment?.data?.anon_user_info_color_name
@@ -254,7 +255,7 @@ const Comment = ({
           onLongPress={handleOnLongPress}
           style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}
           onPress={() => onBlockComponent(comment)}>
-          <IconEn name="block" size={15.02} color={COLORS.gray9} />
+          <IconEn name="block" size={15.02} color={colors.gray1} />
         </ButtonHightlight>
 
         <TouchableOpacity activeOpacity={1} onPress={onDownVote} testID="btnDownvote">
@@ -318,7 +319,7 @@ const styles = StyleSheet.create({
   container: ({isLast, style, level, showLeftConnector}) => ({
     width: '100%',
     borderLeftWidth: showLeftConnector ? 1 : 0,
-    borderLeftColor: isLast ? (level === 0 ? COLORS.gray9 : 'transparent') : COLORS.gray9,
+    borderLeftColor: isLast ? (level === 0 ? colors.gray1 : 'transparent') : colors.gray1,
     ...style
   }),
   flexStartContainer: {
@@ -327,14 +328,14 @@ const styles = StyleSheet.create({
   username: {
     fontFamily: fonts.inter[700],
     fontSize: normalizeFontSize(12),
-    color: COLORS.blackgrey,
+    color: '#828282',
     lineHeight: 14,
     marginLeft: 16
   },
   post: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
-    color: COLORS.mineShaft,
+    color: '#333333',
     marginLeft: 28
   },
   profile: {
@@ -358,7 +359,7 @@ const styles = StyleSheet.create({
   btnReplyText: {
     fontFamily: fonts.inter[400],
     fontSize: 13,
-    color: COLORS.gray1,
+    color: '#C4C4C4',
     marginLeft: 8.98,
     marginRight: 14
   },
@@ -376,7 +377,7 @@ const styles = StyleSheet.create({
   time: {
     fontFamily: fonts.inter[400],
     fontSize: 10,
-    color: COLORS.blackgrey,
+    color: '#828282',
     lineHeight: 12
   },
   containerUsername: {

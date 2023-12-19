@@ -9,7 +9,6 @@ import MemoIc_arrow_right from '../../../../assets/icons/Ic_arrow_right';
 import PollItem from '../PollItem';
 import {MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED} from '../../../../utils/constants';
 import {getDurationTimeText} from '../../../../utils/string/StringUtils';
-import {useDynamicColors} from '../../../../hooks/useToggleColors';
 
 function CreatePollContainer({
   onremoveallpoll = () => {},
@@ -21,10 +20,8 @@ function CreatePollContainer({
   selectedtime = {day: 1, hour: 0, minute: 0},
   ontimechanged = () => {},
   polls,
-  expiredobject = {day: 7, hour: 24},
-  isAnonimity = false
+  expiredobject = {day: 7, hour: 24}
 }) {
-  const dynamicColor = useDynamicColors(isAnonimity);
   const arrayContentToString = (arr) => {
     const newArray = arr.reduce((acc, current) => {
       acc.push(`${current}`);
@@ -79,9 +76,7 @@ function CreatePollContainer({
       <TouchableOpacity style={S.polldurationbutton} onPress={() => setIsDurationModalShown(true)}>
         <View style={S.row}>
           <Text style={S.fillparenttext}>Duration</Text>
-          <Text style={[S.polldurationbuttontext, {backgroundColor: dynamicColor.primary}]}>
-            {getDurationTimeText(selectedtime)}
-          </Text>
+          <Text style={S.polldurationbuttontext}>{getDurationTimeText(selectedtime)}</Text>
           <MemoIc_arrow_right width={8} height={12} style={S.rightarrow} />
         </View>
       </TouchableOpacity>

@@ -3,12 +3,12 @@ import {ActivityIndicator, Modal, StyleSheet, View} from 'react-native';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {COLORS} from '../../utils/theme';
 
-const Loading = ({visible, color = COLORS.blue}) => {
+const Loading = ({visible}) => {
   return (
     <Modal transparent visible={visible}>
       <View style={styles.container}>
         <View style={styles.content}>
-          <ActivityIndicator size="large" color={color} />
+          <ActivityIndicator size="large" color={COLORS.holytosca} />
         </View>
       </View>
     </Modal>

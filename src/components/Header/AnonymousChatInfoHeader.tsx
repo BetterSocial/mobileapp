@@ -2,9 +2,9 @@ import * as React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
+import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import dimen from '../../utils/dimen';
-import {COLORS} from '../../utils/theme';
 
 export interface AnonymousChatInfoHeaderProps {
   title: string;
@@ -29,13 +29,13 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   text: {
-    color: COLORS.black,
+    color: colors.black,
     fontFamily: fonts.poppins[600],
     fontSize: 14,
     fontWeight: 'bold'
   },
   textIos: {
-    color: COLORS.black,
+    color: colors.black,
     fontFamily: fonts.poppins[600],
     fontSize: 16,
     fontWeight: 'bold'

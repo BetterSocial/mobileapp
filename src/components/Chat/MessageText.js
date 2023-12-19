@@ -1,12 +1,13 @@
 import * as React from 'react';
-import {TouchableWithoutFeedback, StyleSheet, Text, View} from 'react-native';
+import {TouchableWithoutFeedback} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 
+import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {calculateTime} from '../../utils/time';
 import Dot from '../Dot';
 import ActionChat from './ActionChat';
 import ProfileMessage from './ProfileMessage';
-import {COLORS} from '../../utils/theme';
 
 const MessageText = ({image, name, time, message, read, isMe, all}) => {
   const [onAction, setOnAction] = React.useState(false);
@@ -43,45 +44,45 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: fonts.inter[600],
     lineHeight: 14.53,
-    color: COLORS.black,
-    marginRight: 5.7
+    color: '#000',
+    marginRight: 5.7,
   },
   containerImage: {
-    paddingTop: 5
+    paddingTop: 5,
   },
   time: {
     fontSize: 10,
     fontFamily: fonts.inter[600],
     lineHeight: 12,
-    color: COLORS.black,
-    marginLeft: 5
+    color: '#000',
+    marginLeft: 5,
   },
   message: {
-    color: COLORS.black,
+    color: '#000',
     marginTop: 4,
     fontSize: 16,
     fontFamily: fonts.inter[400],
-    lineHeight: 19.36
+    lineHeight: 19.36,
   },
   container: {
     flexDirection: 'row',
     flex: 1,
     marginHorizontal: 20,
-    marginVertical: 4
+    marginVertical: 4,
   },
   containerChat: (isMe) => ({
-    backgroundColor: isMe ? COLORS.halfBaked : COLORS.lightgrey,
+    backgroundColor: isMe ? colors.halfBaked : colors.lightgrey,
     paddingVertical: 8,
     paddingLeft: 8,
     paddingRight: 9.35,
     flex: 1,
     borderRadius: 8,
-    marginLeft: 8
+    marginLeft: 8,
   }),
   user: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
-  userDetail: {flexDirection: 'row', alignItems: 'center'}
+  userDetail: {flexDirection: 'row', alignItems: 'center'},
 });

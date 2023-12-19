@@ -2,7 +2,6 @@ import * as React from 'react';
 import {TextInput, View, StyleSheet} from 'react-native';
 
 import SearchIcon from '../../../assets/icons/search.svg';
-import {COLORS} from '../../utils/theme';
 
 const Search = (props) => {
   return (
@@ -20,9 +19,9 @@ const Search = (props) => {
 const styles = StyleSheet.create({
   inputContainer: {
     height: 48,
-    backgroundColor: COLORS.white,
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: COLORS.silver,
+    borderColor: '#BDBDBD',
     borderRadius: 8,
     flexDirection: 'row',
     alignItems: 'center',
@@ -36,7 +35,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     fontSize: 13,
     letterSpacing: -0.28,
-    color: COLORS.silver,
+    color: '#BDBDBD',
     marginLeft: 5,
   },
 });

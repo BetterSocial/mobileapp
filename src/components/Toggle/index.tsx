@@ -1,7 +1,6 @@
 import React, {useCallback} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {useSharedValue, useAnimatedStyle, withTiming} from 'react-native-reanimated';
-import {COLORS} from '../../utils/theme';
 
 interface ToggleProps {
   activeColor?: string;
@@ -15,10 +14,10 @@ interface ToggleProps {
 }
 
 const Toggle: React.FC<ToggleProps> = ({
-  activeColor = COLORS.waterSpout,
-  inactiveColor = COLORS.lightgrey,
-  activeButtonColor = COLORS.holyTosca,
-  inactiveButtonColor = COLORS.alto,
+  activeColor = '#9DEDF1',
+  inactiveColor = '#F5F5F5',
+  activeButtonColor = '#00ADB5',
+  inactiveButtonColor = '#E0E0E0',
   onPress,
   label,
   labelStyle,
@@ -76,12 +75,12 @@ const styles = StyleSheet.create({
   },
   offText: {
     marginHorizontal: 3.5,
-    color: COLORS.alto,
+    color: '#E0E0E0',
     fontSize: 10
   },
   onText: {
     marginHorizontal: 3.5,
-    color: COLORS.holyTosca,
+    color: '#00ADB5',
     fontSize: 10
   }
 });

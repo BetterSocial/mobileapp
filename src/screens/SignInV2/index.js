@@ -5,6 +5,7 @@ import crashlytics from '@react-native-firebase/crashlytics';
 import {BackHandler, StatusBar, StyleSheet, View} from 'react-native';
 import {StackActions} from '@react-navigation/native';
 // eslint-disable-next-line import/no-unresolved
+import {colors} from 'react-native-swiper-flatlist/src/themes';
 import {
   logIn,
   onCancel,
@@ -178,7 +179,7 @@ const S = StyleSheet.create({
     paddingTop: 26
   },
   btn: {
-    backgroundColor: COLORS.blueLoyal,
+    backgroundColor: '#023B60',
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 5,
@@ -193,16 +194,16 @@ const S = StyleSheet.create({
     fontSize: 12,
     width: 250,
     textAlign: 'center',
-    color: COLORS.gray8,
+    color: colors.gray,
     marginTop: 16
   },
   humanID: {
-    color: COLORS.bunting,
+    color: '#11243D',
     // fontWeight: 'bold',
     textDecorationLine: 'underline'
   },
-  btnText: {fontSize: 17, color: COLORS.white, fontWeight: 'bold'},
-  humen: {fontSize: 17, color: COLORS.white, fontWeight: '100'},
+  btnText: {fontSize: 17, color: '#fff', fontWeight: 'bold'},
+  humen: {fontSize: 17, color: '#fff', fontWeight: '100'},
   btnSign: {
     borderRadius: 10
   }

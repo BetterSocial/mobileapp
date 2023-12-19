@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {View, StyleSheet} from 'react-native';
 
-import {COLORS} from '../../utils/theme';
+import {colors} from '../../utils/colors';
 
 const ConnectorWrapper = ({children, index}) => (
   <View style={styles.wrapper}>
@@ -22,8 +22,8 @@ export const styles = StyleSheet.create({
     borderLeftWidth: 1,
     borderBottomWidth: 2,
     borderBottomLeftRadius: 21,
-    borderLeftColor: index === 0 ? COLORS.gray9 : 'transparent',
-    borderBottomColor: index === 0 ? COLORS.gray9 : 'transparent'
+    borderLeftColor: index === 0 ? colors.gray1 : 'transparent',
+    borderBottomColor: index === 0 ? colors.gray1 : 'transparent'
   })
 });
 

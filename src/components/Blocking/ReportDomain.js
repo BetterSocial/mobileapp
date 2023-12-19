@@ -1,55 +1,61 @@
 import * as React from 'react';
-import {TouchableOpacity, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  TouchableOpacity,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
 import RBSheet from 'react-native-raw-bottom-sheet';
 import IconFA5 from 'react-native-vector-icons/FontAwesome5';
 
-import {Button} from '../Button';
-import ItemList from './ItemList';
+import {Button} from '../../components/Button';
+import ItemList from '../../components/Blocking/ItemList';
+import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import {COLORS} from '../../utils/theme';
 
 const ReportDomain = React.forwardRef((props, ref) => {
-  const {onSelect, onSkip} = props;
+  const {onSelect, onSkip} = props
   const data = [
     {
       id: 1,
-      label: 'It’s spreading fake news'
+      label: 'It’s spreading fake news',
     },
     {
       id: 2,
-      label: 'It’s is pretending to be a domain it is not'
+      label: 'It’s is pretending to be a domain it is not',
     },
     {
       id: 3,
-      label: 'It’s phishing'
+      label: 'It’s phishing',
     },
     {
       id: 4,
-      label: 'It’s promotional spam'
+      label: 'It’s promotional spam',
     },
     {
       id: 5,
-      label: 'Violence/threats against humans or animals'
+      label: 'Violence/threats against humans or animals',
     },
     {
       id: 7,
-      label: 'Something else'
-    }
+      label: 'Something else',
+    },
   ];
   const [active, setActive] = React.useState([]);
   const [activeLabel, setActiveLabel] = React.useState([]);
 
   const onChoice = (id, value, type) => {
     if (type === 'add') {
-      const newArr = [...active, id];
-      const newArrLabel = [...activeLabel, value];
+      let newArr = [...active, id];
+      let newArrLabel = [...activeLabel, value];
       setActiveLabel(newArrLabel);
       setActive(newArr);
     } else {
-      const newArr = active.filter((e) => e !== id);
+      let newArr = active.filter((e) => e !== id);
       setActive(newArr);
-      const newArrLabel = activeLabel.filter((e) => e !== value);
+      let newArrLabel = activeLabel.filter((e) => e !== value);
       setActiveLabel(newArrLabel);
     }
   };
@@ -65,16 +71,19 @@ const ReportDomain = React.forwardRef((props, ref) => {
         closeOnPressMask={true}
         customStyles={{
           container: styles.container,
-          draggableIcon: styles.draggableIcon
+          draggableIcon: styles.draggableIcon,
         }}>
         <View style={styles.content}>
           <ScrollView nestedScrollEnabled={true}>
             <TouchableOpacity style={styles.btnSkip} onPress={() => onSkip()}>
-              <Text style={styles.btnSkipText}>Skip & just block this account</Text>
-              <IconFA5 name="chevron-right" size={17} color={COLORS.black} />
+              <Text style={styles.btnSkipText}>
+                Skip & just block this account
+              </Text>
+              <IconFA5 name="chevron-right" size={17} color={'#000'} />
             </TouchableOpacity>
             <Text style={styles.title}>
-              Or select all which apply to specify the issue - provide more info on next screen:
+              Or select all which apply to specify the issue - provide more info
+              on next screen:
             </Text>
             {data.map((item) => (
               <ItemList
@@ -95,7 +104,7 @@ const ReportDomain = React.forwardRef((props, ref) => {
       </RBSheet>
     </View>
   );
-});
+})
 
 export default ReportDomain;
 
@@ -104,43 +113,43 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: fonts.inter[700],
     fontSize: 16,
-    color: COLORS.black,
-    marginLeft: 21
+    color: '#000',
+    marginLeft: 21,
   },
   desc: {
-    color: COLORS.gray8,
+    color: colors.gray,
     fontFamily: fonts.inter[400],
     fontSize: 12,
     marginHorizontal: 21,
     marginTop: 17,
-    marginBottom: 29
+    marginBottom: 29,
   },
   btn: {
     paddingLeft: 18,
     paddingRight: 22,
     paddingTop: 8,
-    marginBottom: 30
+    marginBottom: 30,
   },
   btnSkip: {
-    backgroundColor: COLORS.alto,
+    backgroundColor: '#E0E0E0',
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 17,
     paddingVertical: 18,
-    marginVertical: 22
+    marginVertical: 22,
   },
   btnSkipText: {
     fontFamily: fonts.inter[700],
     fontSize: 14,
-    color: COLORS.black
+    color: '#000',
   },
   container: {
     height: '80%',
     borderTopRightRadius: 20,
-    borderTopLeftRadius: 20
+    borderTopLeftRadius: 20,
   },
   draggableIcon: {
-    backgroundColor: COLORS.alto,
-    width: 60
-  }
+    backgroundColor: colors.alto,
+    width: 60,
+  },
 });

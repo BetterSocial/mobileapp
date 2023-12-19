@@ -7,7 +7,7 @@ const LoadingWithoutModal = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.content(!!props.text)}>
-        <ActivityIndicator size="large" color={COLORS.blue} />
+        <ActivityIndicator size="large" color={COLORS.holytosca} />
         {props?.text && <Text style={styles.text}>{props.text}</Text>}
       </View>
     </View>
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     borderRadius: 10
   }),
   text: {
-    color: COLORS.white,
+    color: '#fff',
     fontSize: 16,
     marginTop: 10
   }

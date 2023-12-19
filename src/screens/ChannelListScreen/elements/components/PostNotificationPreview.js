@@ -17,12 +17,11 @@ import MemoIc_comment from '../../../../assets/icons/Ic_comment';
 import {Context} from '../../../../context';
 import {calculateTime} from '../../../../utils/time';
 import {normalizeFontSize} from '../../../../utils/fonts';
-import {COLORS} from '../../../../utils/theme';
 
 const styles = StyleSheet.create({
   containerCard: {
     paddingHorizontal: 16,
-    backgroundColor: COLORS.white,
+    backgroundColor: 'white',
     borderBottomWidth: 1,
     paddingVertical: 12,
     justifyContent: 'center'
@@ -43,13 +42,13 @@ const styles = StyleSheet.create({
   },
   lastContentContainer: {
     marginLeft: 'auto',
-    backgroundColor: COLORS.red
+    backgroundColor: 'red'
   },
   titleContainer: {
     maxWidth: '70%'
   },
   subtitleStyle: {
-    // color: COLORS.gray,
+    // color: '#6A6A6A',
     flex: 1,
     // marginTop:3,
     fontSize: 12
@@ -97,12 +96,12 @@ const styles = StyleSheet.create({
     width: 12
   },
   iconContainerStyle: {
-    backgroundColor: COLORS.blueSea
+    backgroundColor: '#55C2FF'
   },
   typeContainer: {
     height: 24,
     width: 24,
-    backgroundColor: COLORS.blueSea,
+    backgroundColor: '#55C2FF',
     borderRadius: 12,
     position: 'absolute',
     bottom: -6,
@@ -111,10 +110,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
     borderWidth: 1,
-    borderColor: COLORS.white
+    borderColor: 'white'
   },
   blockMention: {
-    backgroundColor: COLORS.red,
+    backgroundColor: '#FF2E63',
     paddingHorizontal: 16,
     paddingVertical: 6,
     flexDirection: 'row'
@@ -131,12 +130,12 @@ const styles = StyleSheet.create({
   errorTitleText: {
     fontSize: normalizeFontSize(12),
     fontWeight: 'bold',
-    color: COLORS.white
+    color: 'white'
   },
   errorSubtitleText: {
     fontSize: normalizeFontSize(10),
     fontWeight: '400',
-    color: COLORS.white
+    color: 'white'
   }
 });
 

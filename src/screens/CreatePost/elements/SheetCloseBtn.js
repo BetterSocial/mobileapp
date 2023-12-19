@@ -5,12 +5,10 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 
 import {Button} from '../../../components/Button';
 import Gap from '../../../components/Gap';
+import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
-import {COLORS} from '../../../utils/theme';
-import {useDynamicColors} from '../../../hooks/useToggleColors';
 
-const SheetCloseBtn = ({backRef, goBack, continueToEdit, isAnonimity = false}) => {
-  const dynamicColors = useDynamicColors(isAnonimity);
+const SheetCloseBtn = ({backRef, goBack, continueToEdit}) => {
   return (
     <RBSheet
       ref={backRef}
@@ -23,14 +21,14 @@ const SheetCloseBtn = ({backRef, goBack, continueToEdit, isAnonimity = false}) =
       <View style={styles.container}>
         <Text style={styles.header}>Are you sure?</Text>
         <Gap style={styles.gap(30)} />
-        <Button onPress={continueToEdit} style={{backgroundColor: dynamicColors.primary}}>
+        <Button onPress={continueToEdit}>
           <Text>Continue editing</Text>
         </Button>
         <Gap style={styles.gap(10)} />
         <Button
           onPress={goBack}
-          style={{backgroundColor: COLORS.porcelain}}
-          textStyling={{color: COLORS.black}}>
+          styles={{backgroundColor: colors.porcelain}}
+          textStyling={{color: colors.black}}>
           <Text>Discard post</Text>
         </Button>
       </View>
@@ -47,7 +45,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20
   },
   header: {
-    color: COLORS.black,
+    color: colors.black,
     fontFamily: fonts.inter[600],
     fontSize: 18,
     fontWeight: 'bold'
@@ -59,7 +57,7 @@ const styles = StyleSheet.create({
     height: 240
   },
   draggableIcon: {
-    backgroundColor: COLORS.alto
+    backgroundColor: colors.alto
   },
   gap: (height) => ({
     height

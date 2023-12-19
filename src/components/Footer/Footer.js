@@ -17,11 +17,12 @@ import ShareBlack from '../../assets/icons/images/share-black.svg';
 import {Context} from '../../context';
 import useDMMessage from '../../hooks/core/chat/useDMMessage';
 import useCreateChat from '../../hooks/screen/useCreateChat';
+import {colors} from '../../utils/colors';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import dimen from '../../utils/dimen';
 import {normalizeFontSize} from '../../utils/fonts';
+import {FONTS} from '../../utils/theme';
 import BottomSheetMenu from '../BottomSheet/BottomSheetMenu';
-import {COLORS, FONTS} from '../../utils/theme';
 
 const Footer = ({
   item,
@@ -68,12 +69,12 @@ const Footer = ({
 
   const voteStyle = () => {
     if (totalVote > 0) {
-      return COLORS.holyTosca;
+      return '#00ADB5';
     }
     if (totalVote < 0) {
-      return COLORS.red;
+      return '#FF2E63';
     }
-    return COLORS.gray1;
+    return '#C4C4C4';
   };
 
   const username = item?.anon_user_info_emoji_name
@@ -254,7 +255,7 @@ const styles = StyleSheet.create({
   },
   text: {
     ...FONTS.body3,
-    color: COLORS.gray1
+    color: '#C4C4C4'
   },
   vote: (colorBasedCount) => ({
     ...FONTS.body3,
@@ -283,7 +284,7 @@ const styles = StyleSheet.create({
   textDM: {
     fontSize: normalizeFontSize(12),
     fontWeight: '600',
-    color: COLORS.greySubtile9,
+    color: colors.greySubtile1,
     marginLeft: dimen.normalizeDimen(4),
     textAlignVertical: 'center'
   },
@@ -291,7 +292,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: COLORS.white,
+    backgroundColor: colors.white,
     width: dimen.normalizeDimen(50),
     height: dimen.normalizeDimen(26),
     elevation: dimen.normalizeDimen(2),

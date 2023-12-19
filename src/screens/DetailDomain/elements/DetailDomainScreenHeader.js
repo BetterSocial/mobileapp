@@ -83,9 +83,9 @@ const styles = StyleSheet.create({
   headerDomainInfoContainer: {flex: 1, marginRight: 8},
   headerDomainDateContainer: {flexDirection: 'row', alignItems: 'center', flexShrink: 1},
   wrapperText: {
-    backgroundColor: COLORS.white,
+    backgroundColor: 'white',
     borderRadius: 8,
-    borderColor: COLORS.holyTosca,
+    borderColor: '#00ADB5',
     width: 28,
     height: 28,
     justifyContent: 'center',
@@ -104,13 +104,13 @@ const styles = StyleSheet.create({
   headerDomainName: {
     fontSize: 14,
     fontFamily: fonts.inter[600],
-    color: COLORS.black
+    color: '#000000'
   },
   headerDomainDate: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
     lineHeight: 18,
-    color: COLORS.blackgrey,
+    color: '#828282',
     flexShrink: 1
   },
   point: {
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     paddingRight: 20
   },
   followerNumber: {
-    color: COLORS.blackgrey,
+    color: '#828282',
     fontSize: 12,
     fontFamily: fonts.inter[700]
   }

@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { StyleSheet, Text, TextProps } from 'react-native'
-import {COLORS} from '../../utils/theme';
 
 /**
  * 
@@ -16,7 +15,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 14,
         lineHeight: 17,
-        color: COLORS.black,
+        color: '#000000',
     },
 });
 

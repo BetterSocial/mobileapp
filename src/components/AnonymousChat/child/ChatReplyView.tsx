@@ -12,8 +12,8 @@ import {
 import {SIGNED} from '../../../hooks/core/constant';
 import {ScrollContext} from '../../../hooks/screen/useChatScreenHook';
 import {calculateTime} from '../../../utils/time';
+import {colors} from '../../../utils/colors';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
-import {COLORS} from '../../../utils/theme';
 
 const ChatReplyView = ({type, messageType, replyData}: ChatReplyViewProps) => {
   const scrollContext = React.useContext(ScrollContext);
@@ -62,10 +62,10 @@ const ChatReplyView = ({type, messageType, replyData}: ChatReplyViewProps) => {
 
 const styles = StyleSheet.create({
   containerSigned: {
-    backgroundColor: COLORS.blueSecondary
+    backgroundColor: colors.signed_secondary
   },
   containerAnon: {
-    backgroundColor: COLORS.holyToscaSecondary
+    backgroundColor: colors.anon_secondary
   },
   textContainer: {
     flex: 1,
@@ -83,14 +83,14 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(12),
     lineHeight: 19.36,
-    color: COLORS.white
+    color: colors.white
   },
   dot: {
     width: 3,
     height: 3,
     borderRadius: 2,
     marginHorizontal: dimen.normalizeDimen(5),
-    backgroundColor: COLORS.white,
+    backgroundColor: colors.white,
     alignSelf: 'center'
   },
   timeText: {
@@ -98,17 +98,17 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(10),
     lineHeight: 12.19,
     alignSelf: 'center',
-    color: COLORS.white
+    color: colors.white
   },
   text: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
     lineHeight: 19.36,
     marginBottom: 4,
-    color: COLORS.white
+    color: colors.white
   },
   deletedText: {
-    color: COLORS.lightSilver,
+    color: colors.light_silver,
     fontSize: normalizeFontSize(15),
     fontStyle: 'italic'
   }

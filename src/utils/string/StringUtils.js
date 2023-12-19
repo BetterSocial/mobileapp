@@ -12,7 +12,6 @@ import TopicText from '../../components/TopicText';
 import removePrefixTopic from '../topics/removePrefixTopic';
 import {getAnonymousUserId} from '../users';
 import {getUserId} from '../token';
-import {COLORS} from '../theme';
 
 const NO_POLL_UUID = '00000000-0000-0000-0000-000000000000';
 const urlRegex = /(https?:\/\/\S+)+/g;
@@ -236,7 +235,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
     lineHeight: 17,
-    color: COLORS.black
+    color: '#000000'
     // textTransform: 'capitalize',
   }
 });

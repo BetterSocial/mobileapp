@@ -1,6 +1,6 @@
 import React from 'react';
 import {Pressable, StyleSheet, Text} from 'react-native';
-import {COLORS} from '../../utils/theme';
+import {colors} from '../../utils/colors';
 
 const ListTopics = ({item, i, myTopic, handleSelectedLanguage}) => (
   <Pressable
@@ -8,13 +8,13 @@ const ListTopics = ({item, i, myTopic, handleSelectedLanguage}) => (
     key={i}
     style={[
       styles.bgTopicSelectNotActive,
-      {backgroundColor: myTopic[item.topic_id] ? COLORS.blue : COLORS.concrete}
+      {backgroundColor: myTopic[item.topic_id] ? colors.signed_primary : colors.concrete}
     ]}>
     <Text>{item.icon}</Text>
     <Text
       style={[
         styles.textTopicNotActive,
-        {color: myTopic[item.topic_id] ? COLORS.white : COLORS.mineShaft}
+        {color: myTopic[item.topic_id] ? colors.white : colors.mine_shaft}
       ]}>
       #{item.name}
     </Text>
@@ -23,7 +23,7 @@ const ListTopics = ({item, i, myTopic, handleSelectedLanguage}) => (
 
 const styles = StyleSheet.create({
   bgTopicSelectNotActive: {
-    backgroundColor: COLORS.concrete,
+    backgroundColor: colors.concrete,
     // minWidth: 100,
     paddingHorizontal: 15,
     paddingVertical: 7,
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: '500',
     fontSize: 12,
-    color: COLORS.mineShaft
+    color: colors.mine_shaft
     // paddingLeft: 5,
   }
 });

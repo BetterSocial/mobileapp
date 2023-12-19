@@ -6,14 +6,13 @@ import {ScrollView, StyleSheet, Text, TextInput, TouchableNativeFeedback, View} 
 import Card from './Card';
 import TopicItem from '../../../components/TopicItem';
 import {Button} from '../../../components/Button';
+import {colors} from '../../../utils/colors';
 import {convertString} from '../../../utils/string/StringUtils';
 import {fonts} from '../../../utils/fonts';
 import {getTopics} from '../../../service/topics';
 import {isEmptyOrSpaces} from '../../../utils/Utils';
-import {COLORS} from '../../../utils/theme';
-import {useDynamicColors} from '../../../hooks/useToggleColors';
 
-const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics, isAnonimity = false}) => {
+const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics}) => {
   const [dataTopic, setTopic] = React.useState('');
   const [listTopics, setlistTopics] = React.useState([]);
   const [chatTopic, setChatTopic] = React.useState([]);
@@ -22,7 +21,6 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics, isAnonimit
   const rbSheetHeight = 330;
   const [, setWidthInput] = React.useState(0);
   const inputRef = React.useRef();
-  const dynamicColor = useDynamicColors(isAnonimity);
 
   React.useEffect(() => {
     KeyEvent.onKeyUpListener((keyEvent) => {
@@ -169,7 +167,7 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics, isAnonimit
                     <View style={{marginBottom: 5}}>
                       <Text
                         style={{
-                          color: COLORS.black,
+                          color: '#000000',
                           fontFamily: fonts.inter[500],
                           fontWeight: '500',
                           fontSize: 12,
@@ -178,7 +176,7 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics, isAnonimit
                         #{convertString(item.name, ' ', '')}
                       </Text>
                       {index !== topicSuggestion.length - 1 && (
-                        <View style={{height: 1, marginTop: 5, backgroundColor: COLORS.gray1}} />
+                        <View style={{height: 1, marginTop: 5, backgroundColor: '#C4C4C4'}} />
                       )}
                     </View>
                   </TouchableNativeFeedback>
@@ -190,9 +188,7 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics, isAnonimit
           <Text style={styles.textDesc}>
             Hit space to finish adding a community. Add up to 5 communities.
           </Text>
-          <Button onPress={() => save()} style={{backgroundColor: dynamicColor.primary}}>
-            Save
-          </Button>
+          <Button onPress={() => save()}>Save</Button>
         </ScrollView>
       </View>
     </RBSheet>
@@ -207,7 +203,7 @@ const styles = StyleSheet.create({
     paddingBottom: 38
   },
   content: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: colors.lightgrey,
     paddingHorizontal: 16,
     paddingTop: 17,
     minHeight: 150,
@@ -216,13 +212,13 @@ const styles = StyleSheet.create({
     paddingBottom: 16
   },
   title: {
-    color: COLORS.black,
+    color: colors.black,
     fontFamily: fonts.inter[600],
     fontSize: 18,
     fontWeight: 'bold'
   },
   containerTag: {
-    backgroundColor: COLORS.white,
+    backgroundColor: colors.white,
     borderRadius: 14,
     paddingHorizontal: 16,
     paddingVertical: 7.33,
@@ -254,7 +250,7 @@ const styles = StyleSheet.create({
   textDesc: {
     fontSize: 10,
     fontFamily: fonts.inter[400],
-    color: COLORS.gray8,
+    color: colors.gray,
     marginTop: 5,
     marginBottom: 21
   },
@@ -263,7 +259,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20
   },
   draggableIcon: {
-    backgroundColor: COLORS.alto
+    backgroundColor: colors.alto
   },
   topicItem: {
     marginBottom: 12

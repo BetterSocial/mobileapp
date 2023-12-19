@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {StyleSheet, TouchableOpacity} from 'react-native';
+import {colors} from '../utils/colors';
 import ToggleSwitch from '../components/ToggleSwitch';
-import {COLORS} from '../utils/theme';
 
 const styles = StyleSheet.create({
   toggleSwitchContainer: {display: 'flex', alignSelf: 'flex-end', paddingVertical: 10}
@@ -10,14 +10,14 @@ const styles = StyleSheet.create({
 
 const Colors = {
   anon: {
-    primary: COLORS.holyTosca,
-    secondary: COLORS.holyToscaSecondary,
-    text: COLORS.white
+    primary: colors.anon_primary,
+    secondary: colors.anon_secondary,
+    text: colors.white
   },
   signed: {
-    primary: COLORS.blue,
-    secondary: COLORS.blueSecondary,
-    text: COLORS.white
+    primary: colors.signed_primary,
+    secondary: colors.signed_secondary,
+    text: colors.white
   }
 };
 
@@ -26,7 +26,7 @@ export const useDynamicColors = (isAnon) => {
   return Colors[status];
 };
 
-export const ToggleSwitchAnon = ({value, onValueChange, labelLeft, labelColor}) => {
+export const ToggleSwitchAnon = ({value, onValueChange, labelLeft}) => {
   const dynamicColors = useDynamicColors(value);
   return (
     <TouchableOpacity onPress={onValueChange} style={styles.toggleSwitchContainer}>
@@ -35,10 +35,8 @@ export const ToggleSwitchAnon = ({value, onValueChange, labelLeft, labelColor}) 
         onValueChange={onValueChange}
         labelLeft={labelLeft || 'Anonimity'}
         circleActiveColor={dynamicColors.primary}
-        circleInActiveColor={dynamicColors.primary}
         activeTextColor={dynamicColors.primary}
-        inactiveTextColor={dynamicColors.primary}
-        styleLabelLeft={{color: labelColor || dynamicColors.text}}
+        styleLabelLeft={{color: dynamicColors.text}}
       />
     </TouchableOpacity>
   );
@@ -47,6 +45,5 @@ export const ToggleSwitchAnon = ({value, onValueChange, labelLeft, labelColor}) 
 ToggleSwitchAnon.propTypes = {
   value: PropTypes.bool,
   onValueChange: PropTypes.node,
-  labelLeft: PropTypes.string,
-  labelColor: PropTypes.string
+  labelLeft: PropTypes.string
 };

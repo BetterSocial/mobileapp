@@ -2,7 +2,7 @@ import * as React from 'react';
 import {cleanup, render} from '@testing-library/react-native';
 
 import ConnectorWrapper, {styles} from '../../../src/components/Comments/ConnectorWrapper';
-import {COLORS} from '../../../src/utils/theme';
+import {colors} from '../../../src/utils/colors';
 
 jest.useFakeTimers();
 
@@ -21,8 +21,8 @@ describe('Connector Wrapper should run correctly', () => {
       borderLeftWidth: 1,
       borderBottomWidth: 2,
       borderBottomLeftRadius: 21,
-      borderLeftColor: COLORS.gray9,
-      borderBottomColor: COLORS.gray9
+      borderLeftColor: colors.gray1,
+      borderBottomColor: colors.gray1
     });
 
     expect(styles.connector(1)).toEqual({

@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 
 import SearchIcon from '../../../assets/icons/search.svg';
-import {COLORS} from '../../utils/theme';
 
 const SearchAutoComplete = (props) => {
   return (
@@ -46,9 +45,9 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     height: 48,
-    backgroundColor: COLORS.white,
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: COLORS.silver,
+    borderColor: '#BDBDBD',
     borderRadius: 8,
     flexDirection: 'row',
     alignItems: 'center',
@@ -62,14 +61,14 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     fontSize: 13,
     letterSpacing: -0.28,
-    color: COLORS.silver,
+    color: '#BDBDBD',
     marginLeft: 5,
   },
   box: {
     minHeight: 20,
-    backgroundColor: COLORS.white,
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: COLORS.silver,
+    borderColor: '#BDBDBD',
     borderRadius: 8,
     flexDirection: 'column',
     marginBottom: 2,
@@ -81,7 +80,7 @@ const styles = StyleSheet.create({
   },
   list: {
     minHeight: 35,
-    backgroundColor: COLORS.platinum,
+    backgroundColor: '#e6e6e6',
     paddingLeft: 13,
     paddingRight: 13,
     paddingTop: 2,

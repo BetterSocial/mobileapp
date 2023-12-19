@@ -7,7 +7,6 @@ import AutoFocusTextArea from '../TextArea/AutoFocusTextArea';
 import CrossIcon from '../../../assets/icons/cross.svg';
 import StringConstant from '../../utils/string/StringConstant';
 import {displayFormattedSearchLocationsV2} from '../../utils/string/StringUtils';
-import {COLORS} from '../../utils/theme';
 
 const {width} = Dimensions.get('screen');
 
@@ -110,15 +109,15 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center',
     letterSpacing: -0.28,
-    color: COLORS.black,
+    color: '#000000',
     paddingLeft: 11
   },
   inputContainer: {
     height: 48,
     width: width - 44,
-    backgroundColor: COLORS.white,
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: COLORS.silver,
+    borderColor: '#BDBDBD',
     borderRadius: 8,
     flexDirection: 'row',
     alignItems: 'center',
@@ -136,12 +135,12 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     fontSize: 14,
     letterSpacing: -0.28,
-    color: COLORS.black,
+    color: '#000000',
     marginLeft: 5
   },
   box: {
     minHeight: 20,
-    backgroundColor: COLORS.white,
+    backgroundColor: '#FFFFFF',
     borderRadius: 8,
     flexDirection: 'column',
     marginBottom: 2,
@@ -164,7 +163,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
     lineHeight: 17,
-    color: COLORS.black,
+    color: '#000000',
     textTransform: 'capitalize'
   },
   label: {
@@ -173,7 +172,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 14,
     lineHeight: 17,
-    color: COLORS.black,
+    color: '#000000',
     textTransform: 'capitalize'
   }
 });

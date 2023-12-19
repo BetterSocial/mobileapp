@@ -2,11 +2,11 @@ import * as React from 'react';
 import {View, Text, StyleSheet, ActivityIndicator} from 'react-native';
 import PropTypes from 'prop-types';
 import {fonts} from '../../../utils/fonts';
+import {colors} from '../../../utils/colors';
 import {Button} from '../../../components/Button';
 import {BottomSheet} from '../../../components/BottomSheet';
 import AutoFocusTextArea from '../../../components/TextArea/AutoFocusTextArea';
 import dimen from '../../../utils/dimen';
-import {COLORS} from '../../../utils/theme';
 
 // eslint-disable-next-line react/display-name
 const BottomSheetBio = React.forwardRef((props, ref) => {
@@ -27,12 +27,11 @@ const BottomSheetBio = React.forwardRef((props, ref) => {
           {props.error ? <Text style={styles.errorText}>{props.error}</Text> : null}
         </View>
         {!props.isOtherProfile && (
-          <Button style={styles.button} textStyling={styles.textStyling} onPress={props.handleSave}>
-            {props.isLoadingUpdateBio ? (
-              <ActivityIndicator size="small" color={COLORS.darkBlue} />
-            ) : (
-              'Save'
-            )}
+          <Button
+            styles={styles.button}
+            textStyling={styles.textStyling}
+            onPress={props.handleSave}>
+            {props.isLoadingUpdateBio ? <ActivityIndicator size="small" color="#0000ff" /> : 'Save'}
           </Button>
         )}
       </BottomSheet>
@@ -53,42 +52,28 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontWeight: 'bold',
     fontSize: 24,
-    color: COLORS.black,
+    color: colors.black,
     marginBottom: dimen.normalizeDimen(12)
   },
   description: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.gray,
+    color: colors.gray,
     marginTop: 7
   },
   errorText: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.red,
+    color: colors.red,
     marginTop: dimen.normalizeDimen(7)
   },
   button: {
-    marginTop: 33,
-    backgroundColor: COLORS.holyTosca
+    backgroundColor: colors.bondi_blue
   },
   textStyling: {
     fontFamily: fonts.inter[600],
     fontSize: 18,
-    color: COLORS.white
-  },
-  input: {
-    backgroundColor: COLORS.lightgrey,
-    paddingVertical: 16,
-    paddingHorizontal: 12,
-    height: 150,
-    justifyContent: 'flex-start',
-    overflow: 'scroll',
-    borderRadius: 8,
-    fontFamily: fonts.inter[500],
-    fontSize: 14,
-    color: COLORS.black,
-    lineHeight: 24
+    color: colors.white
   }
 });
 export default React.memo(BottomSheetBio);

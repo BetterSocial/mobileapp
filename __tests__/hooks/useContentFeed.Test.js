@@ -4,7 +4,7 @@ import {act, renderHook} from '@testing-library/react-hooks';
 import * as reactString from 'react-string-replace';
 import * as serviceToken from '../../src/utils/token';
 import useContentFeed from '../../src/screens/FeedScreen/hooks/useContentFeed';
-import {COLORS} from '../../src/utils/theme';
+import {colors} from '../../src/utils/colors';
 
 describe('it should run correctly', () => {
   beforeEach(() => {
@@ -37,7 +37,7 @@ describe('it should run correctly', () => {
     const {result} = renderHook(() => useContentFeed({navigation}));
     expect(result.current.hashtagAtComponent('#Human @agita')[1].props.children).toEqual('#Human');
     expect(result.current.hashtagAtComponent('#Human @agita')[1].props.style).toEqual({
-      color: COLORS.blue
+      color: colors.blue
     });
     expect(result.current.hashtagAtComponent('#Human @agita')[3].props.children).toEqual('@agita');
     expect(
@@ -55,6 +55,6 @@ describe('it should run correctly', () => {
     const {result} = renderHook(() => useContentFeed({navigation}));
 
     expect(result.current.hanldeShortTextColor(true)).toEqual('rgba(0, 0, 0, 0.5)');
-    expect(result.current.hanldeShortTextColor(false)).toEqual(COLORS.blue);
+    expect(result.current.hanldeShortTextColor(false)).toEqual(colors.blue);
   });
 });

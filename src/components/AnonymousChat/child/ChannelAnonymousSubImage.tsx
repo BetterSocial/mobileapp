@@ -2,7 +2,7 @@ import * as React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
 import dimen from '../../../utils/dimen';
-import {COLORS} from '../../../utils/theme';
+import {colors} from '../../../utils/colors';
 
 const ChannelAnonymousSubImage = ({anonPostNotificationUserInfo = null}) => {
   const styles = StyleSheet.create({
@@ -14,7 +14,7 @@ const ChannelAnonymousSubImage = ({anonPostNotificationUserInfo = null}) => {
       top: dimen.normalizeDimen(30 + 12),
       right: 0,
       borderWidth: 2,
-      borderColor: COLORS.white,
+      borderColor: colors.white,
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center'

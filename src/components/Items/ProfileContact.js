@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import MemoIc_Checklist from '../../assets/icons/Ic_Checklist';
 import {COLORS} from '../../utils/theme';
 import {normalize, normalizeFontSize} from '../../utils/fonts';
+import {colors} from '../../utils/colors';
 import dimen from '../../utils/dimen';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
 
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
   fullname: (isMe) => ({
     fontSize: normalizeFontSize(14),
 
-    color: isMe ? COLORS.blue : COLORS.black,
+    color: isMe ? colors.darkBlue : 'black',
     lineHeight: normalizeFontSize(16.94),
     fontWeight: 'bold'
   }),

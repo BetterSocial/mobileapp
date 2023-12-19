@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import dimen from '../../utils/dimen';
 import {normalizeFontSize} from '../../utils/fonts';
-import {COLORS} from '../../utils/theme';
+import {colors} from '../../utils/colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     height: dimen.normalizeDimen(16),
     width: dimen.normalizeDimen(16),
     borderRadius: dimen.normalizeDimen(16 / 2),
-    backgroundColor: COLORS.blue,
+    backgroundColor: colors.blue1,
     position: 'absolute',
     top: dimen.normalizeDimen(2),
     bottom: dimen.normalizeDimen(2),
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     lineHeight: dimen.normalizeDimen(18),
     textAlign: 'center',
     textAlignVertical: 'center',
-    color: COLORS.whiteSmoke,
+    color: '#f4f3f4',
     position: 'absolute',
     top: dimen.normalizeDimen(1),
     left: dimen.normalizeDimen(2),
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     lineHeight: dimen.normalizeDimen(18),
     textAlign: 'center',
     textAlignVertical: 'center',
-    color: COLORS.whiteSmoke,
+    color: '#f4f3f4',
     position: 'absolute',
     top: dimen.normalizeDimen(1),
     right: dimen.normalizeDimen(2),
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   mainStyes: {
     position: 'relative',
     borderRadius: dimen.normalizeDimen(12),
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: '#F5F5F5',
     height: dimen.normalizeDimen(20),
     width: dimen.normalizeDimen(42),
     ...Platform.select({
@@ -80,13 +80,13 @@ const styles = StyleSheet.create({
   },
   labelLeft: {
     marginRight: dimen.normalizeDimen(5),
-    color: COLORS.white,
+    color: '#FFFFFF',
     fontSize: normalizeFontSize(12),
     fontWeight: '400'
   },
   labelRight: {
     marginLeft: dimen.normalizeDimen(5),
-    color: COLORS.white,
+    color: '#FFFFFF',
     fontSize: normalizeFontSize(12),
     fontWeight: '400'
   }
@@ -115,14 +115,14 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   onValueChange,
   labelLeft,
   labelRight,
-  circleActiveColor = COLORS.holyTosca,
-  circleInActiveColor = COLORS.blue,
-  backgroundActive = COLORS.lightgrey,
-  backgroundInactive = COLORS.lightgrey,
+  circleActiveColor = '#00ADB5',
+  circleInActiveColor = colors.blue1,
+  backgroundActive = '#F5F5F5',
+  backgroundInactive = '#F5F5F5',
   styleLabelLeft,
   styleLabelRight,
-  activeTextColor = COLORS.holyTosca,
-  inactiveTextColor = COLORS.blue,
+  activeTextColor = '#00ADB5',
+  inactiveTextColor = colors.blue1,
   containerStyle,
   labelOff = 'Off',
   labelOn = 'On'

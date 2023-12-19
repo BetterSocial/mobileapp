@@ -3,8 +3,8 @@ import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import GlobalButton from '../../../../components/Button/GlobalButton';
 
+import {colors} from '../../../../utils/colors';
 import {fonts} from '../../../../utils/fonts';
-import {COLORS} from '../../../../utils/theme';
 
 // data needed name, description, image
 const styles = StyleSheet.create({
@@ -12,30 +12,30 @@ const styles = StyleSheet.create({
     width: 88,
     height: 36,
     flexDirection: 'row',
-    backgroundColor: COLORS.holyTosca,
+    backgroundColor: colors.bondi_blue,
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center'
   },
   textButtonFollowing: {
     fontSize: 12,
-    color: COLORS.holyTosca,
+    color: colors.bondi_blue,
     fontFamily: fonts.inter[600],
     fontWeight: 'bold'
   },
   textButtonFollow: {
     fontSize: 12,
-    color: COLORS.white,
+    color: colors.white,
     fontFamily: fonts.inter[600],
     fontWeight: 'bold'
   },
   profilepicture: {
     width: 48,
     height: 48,
-    borderColor: COLORS.lightgrey,
+    borderColor: colors.lightgrey,
     borderRadius: 24,
     borderWidth: 1,
-    // backgroundColor: COLORS.holyTosca,
+    // backgroundColor: colors.bondi_blue,
     resizeMode: 'cover'
   },
   wrapProfile: {
@@ -60,12 +60,12 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[500],
     fontWeight: 'bold',
     fontSize: 14,
-    color: COLORS.black,
+    color: colors.black,
     lineHeight: 16.94
   },
   textProfileFullName: {
     fontSize: 12,
-    color: COLORS.gray8,
+    color: colors.gray,
     fontFamily: fonts.inter[400],
     lineHeight: 18,
     flexWrap: 'wrap'
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    borderColor: COLORS.holyTosca,
+    borderColor: colors.bondi_blue,
     borderWidth: 1,
     borderRadius: 8
   },

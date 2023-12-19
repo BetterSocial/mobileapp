@@ -17,11 +17,14 @@ import MemoIcArrowBackCircle from '../../../assets/arrow/Ic_arrow_back_circle';
 import ShareIconCircle from '../../../assets/icons/Ic_share_circle';
 import TopicDefaultIcon from '../../../assets/topic.png';
 import {Shimmer} from '../../../components/Shimmer/Shimmer';
+import {colors} from '../../../utils/colors';
 import dimen from '../../../utils/dimen';
 import {normalize} from '../../../utils/fonts';
 import useChatClientHook from '../../../utils/getstream/useChatClientHook';
 import Search from '../../DiscoveryScreenV2/elements/Search';
-import {COLORS} from '../../../utils/theme';
+import ButtonFollow from './ButtonFollow';
+import ButtonFollowing from './ButtonFollowing';
+import TopicDomainHeader from './TopicDomainHeader';
 
 const NavHeader = (props) => {
   const {
@@ -254,7 +257,7 @@ const styles = StyleSheet.create({
   container: (animatedHeight) => ({
     width: '100%',
     height: animatedHeight,
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: colors.lightgrey,
     position: 'absolute',
     zIndex: 80,
     overflow: 'hidden'
@@ -266,8 +269,7 @@ const styles = StyleSheet.create({
       : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT,
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    paddingTop: dimen.normalizeDimen(12) + top,
-    backgroundColor: COLORS.white,
+    backgroundColor: 'white',
     zIndex: 10
   }),
   headerContainer: {

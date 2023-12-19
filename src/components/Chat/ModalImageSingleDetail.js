@@ -16,13 +16,12 @@ import MemoIc_arrow_back_white from '../../assets/arrow/Ic_arrow_back_white';
 import MemoIc_arrow_turn_right from '../../assets/arrow/Ic_arrow_turn_right';
 import {fonts} from '../../utils/fonts';
 import {calculateTime} from '../../utils/time';
-import {COLORS} from '../../utils/theme';
 
 const width = Dimensions.get('screen').width;
 
 const ModalImageSingleDetail = ({onBack, visible, img, name, time}) => {
   React.useEffect(() => {
-    StatusBar.setBackgroundColor(COLORS.black);
+    StatusBar.setBackgroundColor('#000');
     StatusBar.setBarStyle('light-content', true);
   }, []);
   return (
@@ -42,7 +41,7 @@ const ModalImageSingleDetail = ({onBack, visible, img, name, time}) => {
             <MemoIc_arrow_turn_right width={20} height={20} />
           </TouchableOpacity>
           <TouchableOpacity>
-            <Icon name="dots-three-vertical" color={COLORS.white} size={17} />
+            <Icon name="dots-three-vertical" color="#fff" size={17} />
           </TouchableOpacity>
         </View>
       </View>
@@ -73,10 +72,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  container: {flex: 1, backgroundColor: COLORS.black, justifyContent: 'center'},
+  container: {flex: 1, backgroundColor: '#000', justifyContent: 'center'},
   image: {width: width, height: 417},
   header: {
-    backgroundColor: COLORS.black,
+    backgroundColor: '#000',
     flexDirection: 'row',
     alignItems: 'center',
     paddingRight: 26,
@@ -91,13 +90,13 @@ const styles = StyleSheet.create({
   name: {
     fontFamily: fonts.inter[600],
     fontSize: 14,
-    color: COLORS.white,
+    color: '#fff',
     lineHeight: 16.94,
   },
   time: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.white,
+    color: '#fff',
     lineHeight: 18,
   },
 });

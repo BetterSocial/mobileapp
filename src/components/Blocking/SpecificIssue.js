@@ -4,8 +4,8 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import {ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
 import {Button} from '../Button';
+import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import {COLORS} from '../../utils/theme';
 
 const SpecificIssue = ({refSpecificIssue, onPress, onSkip, loading}) => {
   const [message, setMessage] = React.useState('');
@@ -31,7 +31,7 @@ const SpecificIssue = ({refSpecificIssue, onPress, onSkip, loading}) => {
         />
         <TouchableOpacity testID="button-skip-test" style={styles.btnSkip} onPress={() => onSkip()}>
           <Text style={styles.btnSkipText}>Skip & just block this account</Text>
-          <IconFA5 name="chevron-right" size={17} color={COLORS.black} />
+          <IconFA5 name="chevron-right" size={17} color={'#000'} />
         </TouchableOpacity>
         <View style={styles.containerBtn}>
           <Button testID="button-report-test" onPress={() => onPress(message)}>
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: fonts.inter[700],
     fontSize: 18,
-    color: COLORS.black,
+    color: '#000',
     marginLeft: 21,
     marginTop: 18
   },
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     paddingTop: 8
   },
   btnSkip: {
-    backgroundColor: COLORS.alto,
+    backgroundColor: '#E0E0E0',
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 17,
@@ -78,10 +78,10 @@ const styles = StyleSheet.create({
   btnSkipText: {
     fontFamily: fonts.inter[700],
     fontSize: 14,
-    color: COLORS.black
+    color: '#000'
   },
   input: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: colors.lightgrey,
     marginLeft: 17,
     marginRight: 23,
     borderRadius: 8,
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     paddingRight: 13,
     paddingLeft: 19,
     fontFamily: fonts.inter[400],
-    color: COLORS.gray8
+    color: colors.gray
   },
   container: {
     height: 'auto',
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20
   },
   draggableIcon: {
-    backgroundColor: COLORS.alto,
+    backgroundColor: colors.alto,
     width: 60
   }
 });

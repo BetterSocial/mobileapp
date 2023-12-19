@@ -3,6 +3,7 @@ import * as React from 'react';
 import {FlatList, StatusBar, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
+import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
 import ChannelListHeaderItem from '../../components/ChatList/ChannelListHeaderItem';
 import MessageChannelItem from '../../components/AnonymousChat/MessageChannelItem';
 import PostNotificationChannelItem from '../../components/AnonymousChat/PostNotificationChannelItem';
@@ -11,7 +12,6 @@ import useAnonymousChannelListScreenHook from '../../hooks/screen/useAnonymousCh
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import useRootChannelListHook from '../../hooks/screen/useRootChannelListHook';
 import {ANON_PM, ANON_POST_NOTIFICATION} from '../../hooks/core/constant';
-import AnonymousIcon from '../../assets/icon/AnonymousIcon';
 
 const ChannelListScreenV2 = ({route}) => {
   const {refresh} = useLocalDatabaseHook();
@@ -62,7 +62,7 @@ const ChannelListScreenV2 = ({route}) => {
         ListHeaderComponent={
           <ChannelListHeaderItem
             name="Anonymous"
-            picture={AnonymousIcon}
+            picture={AnonymousProfile}
             type="ANONYMOUS"
             testID="horizontal-tab-1"
           />

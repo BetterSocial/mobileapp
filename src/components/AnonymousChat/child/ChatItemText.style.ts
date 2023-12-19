@@ -3,8 +3,8 @@ import {StyleSheet} from 'react-native';
 import dimen from '../../../utils/dimen';
 import {ANONYMOUS, SIGNED} from '../../../hooks/core/constant';
 import {MESSAGE_TYPE_DELETED} from '../../../utils/constants';
+import {colors} from '../../../utils/colors';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
-import {COLORS} from '../../../utils/theme';
 
 const AVATAR_SIZE = 24;
 const CONTAINER_LEFT_PADDING = 60;
@@ -51,14 +51,14 @@ export const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: dimen.normalizeDimen(6),
     paddingVertical: dimen.normalizeDimen(4),
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: colors.lightgrey,
     borderRadius: 8
   },
   textContainerSigned: {
-    backgroundColor: COLORS.blue
+    backgroundColor: colors.darkBlue
   },
   textContainerAnon: {
-    backgroundColor: COLORS.holyTosca
+    backgroundColor: colors.anon_primary
   },
   textContainerMyText: {
     borderTopEndRadius: 0
@@ -78,13 +78,13 @@ export const styles = StyleSheet.create({
     lineHeight: 19.36,
     marginBottom: 4
   },
-  deletedText: {
-    color: COLORS.lightSilver,
+  deletedMyText: {
+    color: colors.light_silver,
     fontSize: normalizeFontSize(15),
     fontStyle: 'italic'
   },
   deletedTargetText: {
-    color: COLORS.blackgrey,
+    color: colors.blackgrey,
     fontSize: normalizeFontSize(15),
     fontStyle: 'italic'
   },
@@ -102,10 +102,10 @@ export const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   dotMyText: {
-    backgroundColor: COLORS.white
+    backgroundColor: colors.white
   },
   dotTargetText: {
-    backgroundColor: COLORS.black
+    backgroundColor: colors.black
   },
   timeText: {
     fontFamily: fonts.inter[200],
@@ -132,7 +132,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 20,
-    backgroundColor: COLORS.lightgrey
+    backgroundColor: colors.lightgrey
   },
   mlBuble: {
     marginLeft: dimen.normalizeDimen(BUBBLE_LEFT_PADDING)
@@ -165,11 +165,12 @@ export const dotStyle = (isMyText: boolean) => [
 ];
 
 export const textStyle = (isMyText: boolean) => [
-  isMyText ? {color: COLORS.white} : {color: COLORS.black}
+  isMyText ? {color: colors.white} : {color: colors.black}
 ];
 
 export const messageStyle = (isMyText: boolean, messageType?: string) => [
   styles.text,
-  isMyText ? {color: COLORS.white} : {color: COLORS.black},
-  messageType === 'deleted' && styles.deletedText
+  isMyText ? {color: colors.white} : {color: colors.black},
+  isMyText && messageType === MESSAGE_TYPE_DELETED && styles.deletedMyText,
+  !isMyText && messageType === MESSAGE_TYPE_DELETED && styles.deletedTargetText
 ];

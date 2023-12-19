@@ -5,6 +5,7 @@ import MemoIc_pencil from '../../assets/icons/Ic_pencil';
 import dimen from '../../utils/dimen';
 import {COLORS} from '../../utils/theme';
 import {fonts} from '../../utils/fonts';
+import {colors} from '../../utils/colors';
 
 /**
  *
@@ -93,7 +94,7 @@ export default BaseButtonAddPost;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.blue,
+    backgroundColor: colors.darkBlue,
     width: dimen.size.FEED_ACTION_BUTTON_RADIUS,
     height: dimen.size.FEED_ACTION_BUTTON_RADIUS,
     borderRadius: dimen.size.FEED_ACTION_BUTTON_RADIUS,
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: fonts.inter[500],
-    color: COLORS.white,
+    color: '#fff',
     fontSize: 12,
     marginLeft: 9.67
   }

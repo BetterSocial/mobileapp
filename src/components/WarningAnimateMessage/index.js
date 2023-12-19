@@ -2,7 +2,6 @@ import React from 'react'
 import { Animated, StyleSheet, Text, Easing, Dimensions, View, TouchableOpacity } from 'react-native';
 import { getSpecificCache, saveToCache } from '../../utils/cache';
 import { OPEN_FIRST_TIME } from '../../utils/cache/constant';
-import { COLORS } from '../../utils/theme';
 
 
 const WarningAnimatedMessage = ({isSHow, top = 100, left = 110}) => {
@@ -85,8 +84,8 @@ const styles = StyleSheet.create({
         elevation: 1,
         borderRadius: 8,
         width: 259,
-        backgroundColor: COLORS.white,
-        borderColor: COLORS.concrete,
+        backgroundColor: 'white',
+        borderColor: '#f2f2f2',
         borderWidth: 1,
     },
     parentContainer: {
@@ -103,7 +102,7 @@ const styles = StyleSheet.create({
      borderLeftWidth: 10,
      borderTopColor: 'transparent',
      borderRightColor: 'transparent',
-     borderBottomColor: COLORS.concrete,
+     borderBottomColor: '#f2f2f2',
      borderLeftColor: 'transparent',
      position:'absolute'
    },

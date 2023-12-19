@@ -9,8 +9,8 @@ import DefaultChatGroupProfilePicture from '../../../assets/images/default-chat-
 import GroupIcon from '../../../assets/group-icon.png';
 import Hashtag from '../../../assets/hashtag.png';
 import {CHANNEL_TYPE_ANONYMOUS} from '../../../utils/constants';
+import {colors} from '../../../utils/colors';
 import {getGroupMemberCount} from '../../../utils/string/StringUtils';
-import {COLORS} from '../../../utils/theme';
 
 const CustomPreviewAvatar = ({channel}) => {
   const channel_type = channel?.data?.channel_type;
@@ -49,7 +49,7 @@ const CustomPreviewAvatar = ({channel}) => {
           source={{uri: channel.data.image, priority: FastImage.priority.normal}}
           style={styles.image}
         />
-        <View style={styles.typeContainer(COLORS.blueSea)}>
+        <View style={styles.typeContainer('#55C2FF')}>
           <FastImage
             resizeMode={FastImage.resizeMode.contain}
             style={styles.iconChatStyle}
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   typeContainer: (background) => ({
     height: 24,
     width: 24,
-    backgroundColor: background || COLORS.holyTosca,
+    backgroundColor: background || colors.bondi_blue,
     borderRadius: 12,
     position: 'absolute',
     bottom: -6,
@@ -183,14 +183,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
     borderWidth: 1,
-    borderColor: COLORS.white
+    borderColor: 'white'
   }),
   iconChatStyle: {
     height: 12,
     width: 12
   },
   whiteText: {
-    color: COLORS.white,
+    color: 'white',
     textAlign: 'center',
     fontSize: 12,
     padding: 0,
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     right: 0,
     borderWidth: 2,
-    borderColor: COLORS.white,
+    borderColor: colors.white,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center'

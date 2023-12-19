@@ -84,7 +84,7 @@ exports[`TESTING ChatItemMyTextV2 should match snapshot 1`] = `
             style={
               Array [
                 Object {
-                  "backgroundColor": "#F5F5F5",
+                  "backgroundColor": "#F5F6F7",
                   "borderRadius": 8,
                   "flex": 1,
                   "paddingHorizontal": 4.800000000000001,
@@ -118,7 +118,7 @@ exports[`TESTING ChatItemMyTextV2 should match snapshot 1`] = `
                     },
                     Array [
                       Object {
-                        "color": "#FFFFFF",
+                        "color": "#ffffff",
                       },
                     ],
                   ]
@@ -137,7 +137,7 @@ exports[`TESTING ChatItemMyTextV2 should match snapshot 1`] = `
                       "width": 3,
                     },
                     Object {
-                      "backgroundColor": "#FFFFFF",
+                      "backgroundColor": "#ffffff",
                     },
                   ]
                 }
@@ -153,14 +153,14 @@ exports[`TESTING ChatItemMyTextV2 should match snapshot 1`] = `
                     },
                     Array [
                       Object {
-                        "color": "#FFFFFF",
+                        "color": "#ffffff",
                       },
                     ],
                   ]
                 }
                 testID="timestamp"
               >
-                1m
+                1m ago
               </Text>
             </View>
             <View
@@ -181,8 +181,9 @@ exports[`TESTING ChatItemMyTextV2 should match snapshot 1`] = `
                       "marginBottom": 4,
                     },
                     Object {
-                      "color": "#FFFFFF",
+                      "color": "#ffffff",
                     },
+                    false,
                     false,
                   ]
                 }
@@ -350,7 +351,7 @@ exports[`TESTING ChatItemTargetText should match snapshot 1`] = `
             style={
               Array [
                 Object {
-                  "backgroundColor": "#F5F5F5",
+                  "backgroundColor": "#F5F6F7",
                   "borderRadius": 8,
                   "flex": 1,
                   "paddingHorizontal": 4.800000000000001,
@@ -425,7 +426,7 @@ exports[`TESTING ChatItemTargetText should match snapshot 1`] = `
                 }
                 testID="timestamp"
               >
-                1m
+                1m ago
               </Text>
             </View>
             <Text
@@ -441,6 +442,7 @@ exports[`TESTING ChatItemTargetText should match snapshot 1`] = `
                   Object {
                     "color": "#000000",
                   },
+                  false,
                   false,
                 ]
               }

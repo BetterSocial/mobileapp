@@ -29,8 +29,7 @@ const Big: React.FC<ChannelImageMainProps> = ({type, image, style}) => {
 
   if (type === CHANNEL_COMMUNITY) {
     return (
-      <View
-        style={[styles.containerImage, styles.containerDefaultImage, styles.containerBigDarkBlue]}>
+      <View style={[styles.containerImage, styles.containerDefaultImage, styles.containerDarkBlue]}>
         <FastImage
           source={CommunityIcon}
           resizeMode={FastImage.resizeMode.contain}
@@ -46,7 +45,7 @@ const Big: React.FC<ChannelImageMainProps> = ({type, image, style}) => {
         style={[
           styles.containerImage,
           styles.containerDefaultImage,
-          styles.containerBigDarkBlue,
+          styles.containerDarkBlue,
           style
         ]}>
         <FastImage
@@ -64,7 +63,7 @@ const Big: React.FC<ChannelImageMainProps> = ({type, image, style}) => {
         style={[
           styles.containerImageGroupINfo,
           styles.containerDefaultImage,
-          styles.containerBigDarkBlue
+          styles.containerDarkBlue
         ]}>
         <FastImage
           source={GroupIcon}

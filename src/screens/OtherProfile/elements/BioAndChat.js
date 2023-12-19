@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import {Pressable, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import TextAreaChat from '../../../components/TextAreaChat';
+import ToggleSwitch from '../../../components/ToggleSwitch';
 import useSaveAnonChatHook from '../../../database/hooks/useSaveAnonChatHook';
 import {ANON_PM, SIGNED} from '../../../hooks/core/constant';
+import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 import {sendAnonymousDMOtherProfile, sendSignedDMOtherProfile} from '../../../service/chat';
 import {trimString} from '../../../utils/string/TrimString';
-import {COLORS} from '../../../utils/theme';
-import {ToggleSwitchAnon, useDynamicColors} from '../../../hooks/useToggleColors';
 
 const CHANNEL_BLOCKED = 'Channel is blocked';
 
@@ -31,7 +31,6 @@ const BioAndChat = (props) => {
   const {saveChatFromOtherProfile, savePendingChatFromOtherProfile} = useSaveAnonChatHook();
   const [dmChat, setDmChat] = React.useState('');
   const [loadingSendDM, setLoadingSendDM] = React.useState(false);
-  const dynamicColors = useDynamicColors(isAnonimity);
 
   React.useEffect(() => {
     setDmChat('');
@@ -99,15 +98,15 @@ const BioAndChat = (props) => {
   };
 
   return (
-    <View style={styles.bioAndSendChatContainer(dynamicColors)}>
+    <View style={styles.bioAndSendChatContainer(isAnonimity)}>
       <View style={styles.containerBio}>
         {bio === null || bio === undefined ? (
-          <Text style={styles.bioText(dynamicColors)}>Send a message</Text>
+          <Text style={styles.bioText(isAnonimity)}>Send a message</Text>
         ) : (
           <Pressable onPress={openBio}>
-            <Text linkStyle={styles.seeMore} style={styles.bioText(dynamicColors)}>
+            <Text linkStyle={styles.seeMore} style={styles.bioText(isAnonimity)}>
               {trimString(bio, 121)}{' '}
-              {bio.length > 121 ? <Text style={{color: COLORS.blue}}>see more</Text> : null}
+              {bio.length > 121 ? <Text style={{color: colors.blue}}>see more</Text> : null}
             </Text>
           </Pressable>
         )}
@@ -131,20 +130,23 @@ const BioAndChat = (props) => {
           }
         />
       </TouchableOpacity>
-      <ToggleSwitchAnon
-        value={isAnonimity}
-        onValueChange={toggleSwitch}
-        labelLeft={
-          isAnonimityEnabled || !isSignedMessageEnabled ? 'Anonymity' : 'Anonymity disabled'
-        }
-      />
+      <TouchableOpacity onPress={toggleSwitch} style={styles.toggleSwitchContainer}>
+        <ToggleSwitch
+          value={isAnonimity}
+          onValueChange={toggleSwitch}
+          labelLeft={
+            isAnonimityEnabled || !isSignedMessageEnabled ? 'Anonymity' : 'Anonymity disabled'
+          }
+          styleLabelLeft={{color: isAnonimityEnabled ? colors.white : '#648ABF'}}
+        />
+      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  bioAndSendChatContainer: (dynamicColors) => ({
-    backgroundColor: dynamicColors.primary,
+  bioAndSendChatContainer: (isAnonimity) => ({
+    backgroundColor: isAnonimity ? colors.bondi_blue : colors.blue1,
     borderRadius: 15,
     paddingHorizontal: 10,
     paddingTop: 10
@@ -152,8 +154,8 @@ const styles = StyleSheet.create({
   containerBio: {
     marginBottom: 10
   },
-  bioText: (dynamicColors) => ({
-    color: dynamicColors.text,
+  bioText: (isAnonimity) => ({
+    color: isAnonimity ? colors.greenDark : colors.white,
     fontSize: 14,
     fontWeight: '600',
     lineHeight: 22
@@ -161,7 +163,7 @@ const styles = StyleSheet.create({
   seeMore: {
     fontFamily: fonts.inter[500],
     fontSize: 14,
-    color: COLORS.black
+    color: colors.black
   },
   toggleSwitchContainer: {
     display: 'flex',

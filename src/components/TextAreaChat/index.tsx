@@ -1,10 +1,10 @@
 import * as React from 'react';
 import {View, TextInput, ActivityIndicator, Text, TouchableOpacity} from 'react-native';
 import FastImage from 'react-native-fast-image';
+import {colors} from '../../utils/colors';
 import MemoSendComment from '../../assets/icon/IconSendComment';
 import {PhotoProfileProps, TextAreaChatProps} from './typings';
 import {S} from './styles';
-import {COLORS} from '../../utils/theme';
 
 const PhotoProfile = ({
   anonUser,
@@ -23,7 +23,7 @@ const PhotoProfile = ({
           {backgroundColor: loadingAnonUser ? 'transparent' : anon_user_info_color_code}
         ]}>
         {loadingAnonUser ? (
-          <ActivityIndicator size={'small'} color={COLORS.holyTosca} />
+          <ActivityIndicator size={'small'} color={colors.bondi_blue} />
         ) : (
           <Text style={S.emojiStyle}>{anon_user_info_emoji_code}</Text>
         )}
@@ -59,7 +59,7 @@ const TextAreaChat = ({
 
   const isButtonActive = message && !disabledButton;
 
-  const iconSendBackgroundColor = isAnonimity ? COLORS.holyTosca : COLORS.blue;
+  const iconSendBackgroundColor = isAnonimity ? colors.bondi_blue : colors.blue1;
 
   const onChangeText = (text: string) => {
     setMessage(text);
@@ -88,9 +88,9 @@ const TextAreaChat = ({
         placeholder={placeholder}
         style={[
           S.textArea,
-          {color: disabledInput ? COLORS.gray9 : COLORS.black, minHeight, maxHeight}
+          {color: disabledInput ? colors.gray1 : colors.black, minHeight, maxHeight}
         ]}
-        placeholderTextColor={COLORS.gray1}
+        placeholderTextColor={'#C4C4C4'}
         value={message}
         editable={!disabledInput}
       />
@@ -99,8 +99,8 @@ const TextAreaChat = ({
         disabled={!message || disabledButton}
         style={[S.sendIconContainer]}>
         <MemoSendComment
-          fillBackground={isButtonActive ? iconSendBackgroundColor : COLORS.gray9}
-          fillIcon={COLORS.white}
+          fillBackground={isButtonActive ? iconSendBackgroundColor : colors.gray1}
+          fillIcon={colors.white}
         />
       </TouchableOpacity>
     </View>

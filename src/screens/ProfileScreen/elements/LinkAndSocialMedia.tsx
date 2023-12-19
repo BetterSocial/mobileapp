@@ -13,10 +13,10 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import config from 'react-native-config';
 import Share from 'react-native-share';
+import {colors} from '../../../utils/colors';
 import InstagramIcon from '../../../assets/social-media/instagram.svg';
 import TwitterIcon from '../../../assets/social-media/twitter.svg';
 import ShareUtils from '../../../utils/share/index';
-import {COLORS} from '../../../utils/theme';
 
 interface LinkProps {
   username: string;
@@ -160,26 +160,26 @@ const LinkAndSocialMedia: React.FC<LinkProps> = ({username, prompt}) => {
 
 const styles = StyleSheet.create({
   linkAndSocialMediaContainer: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: '#F5F5F5',
     marginTop: 19,
     borderRadius: 15,
     padding: 10
   },
   linkAndSocialMediaTitle: {
-    color: COLORS.blue,
+    color: colors.darkBlue,
     fontWeight: '700',
     textAlign: 'center',
     fontSize: 12
   },
   shareStepContainer: {
-    backgroundColor: COLORS.white,
+    backgroundColor: colors.white,
     flex: 1,
     padding: 10,
     borderRadius: 8,
     marginVertical: 10
   },
   shareStepLabel: {
-    color: COLORS.blue,
+    color: colors.darkBlue,
     fontWeight: '600',
     textAlign: 'center',
     fontSize: 12,
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   copyLinkContainer: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: '#F5F5F5',
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
@@ -202,9 +202,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginHorizontal: 8
   },
-  copyLinkUrl: {padding: 10, flex: 1, fontWeight: '600', color: COLORS.gray9, fontSize: 9},
-  copyLinkButtonLabel: {color: COLORS.white, fontWeight: '600', fontSize: 12},
-  copyLinkButton: {alignSelf: 'center', backgroundColor: COLORS.blue},
+  copyLinkUrl: {padding: 10, flex: 1, fontWeight: '600', color: colors.gray1, fontSize: 9},
+  copyLinkButtonLabel: {color: colors.white, fontWeight: '600', fontSize: 12},
+  copyLinkButton: {alignSelf: 'center', backgroundColor: colors.darkBlue},
   instagramContainer: {
     paddingVertical: 9,
     paddingHorizontal: 12,
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   buttonSocialMediaLabel: {
-    color: COLORS.white,
+    color: colors.white,
     fontWeight: '600',
     textAlign: 'center',
     marginRight: 6,
@@ -228,8 +228,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#26A7DE'
   },
-  elseWhereButton: {alignSelf: 'center', flex: 1, backgroundColor: COLORS.blue},
-  elseWhereLabel: {color: COLORS.white, fontWeight: '600', textAlign: 'center', fontSize: 12}
+  elseWhereButton: {alignSelf: 'center', flex: 1, backgroundColor: colors.darkBlue},
+  elseWhereLabel: {color: colors.white, fontWeight: '600', textAlign: 'center', fontSize: 12}
 });
 
 export default LinkAndSocialMedia;

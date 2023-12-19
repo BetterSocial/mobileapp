@@ -14,8 +14,8 @@ import IconChatClockGrey from '../../../assets/icon/IconChatClockGrey';
 import {ChatItemMyTextProps} from '../../../../types/component/AnonymousChat/BaseChatItem.types';
 import {ChatStatus} from '../../../../types/database/schema/ChannelList.types';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
+import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
-import {COLORS} from '../../../utils/theme';
 
 const {width} = Dimensions.get('screen');
 
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   textContainer: {
-    backgroundColor: COLORS.halfBaked,
+    backgroundColor: colors.halfBaked,
     paddingLeft: BUBBLE_LEFT_PADDING,
     paddingRight: BUBBLE_RIGHT_PADDING,
     paddingTop: 4,
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     marginLeft: 5,
     marginRight: 5,
-    backgroundColor: COLORS.black,
+    backgroundColor: colors.black,
     alignSelf: 'center'
   },
   timeText: {

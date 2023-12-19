@@ -5,7 +5,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
   emulateUnlessSupported={true}
   style={
     Object {
-      "backgroundColor": "#FFFFFF",
+      "backgroundColor": "#fff",
       "flex": 1,
     }
   }
@@ -66,7 +66,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
           style={
             Array [
               Object {
-                "color": "#000000",
+                "color": "#1E1F20",
                 "fontFamily": "Inter-SemiBold",
                 "fontSize": 12.600000000000001,
                 "fontWeight": "bold",
@@ -101,7 +101,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
             style={
               Array [
                 Object {
-                  "color": "#000000",
+                  "color": "#1E1F20",
                   "fontFamily": "Inter-SemiBold",
                   "fontSize": 12.600000000000001,
                   "fontWeight": "bold",
@@ -109,7 +109,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
                   "textAlign": "center",
                 },
                 Object {
-                  "color": undefined,
+                  "color": "#00ADB5",
                 },
                 Object {
                   "color": "#4782D7",
@@ -125,7 +125,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
         style={
           Object {
             "backgroundColor": "#4782D7",
-            "borderTopColor": "#E0E0E0",
+            "borderTopColor": "#E8EBED",
             "borderTopWidth": 1,
             "paddingHorizontal": 15,
             "paddingVertical": 10,
@@ -154,7 +154,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
             style={
               Object {
                 "alignItems": "center",
-                "backgroundColor": "#E0E0E0",
+                "backgroundColor": "#E8EBED",
                 "borderRadius": 21.6,
                 "height": 43.2,
                 "justifyContent": "center",
@@ -214,7 +214,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
         <Text
           style={
             Object {
-              "color": "#FFFFFF",
+              "color": "#ffffff",
               "fontFamily": "Inter-Regular",
               "fontSize": 10.8,
               "lineHeight": 16.2,
@@ -266,7 +266,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
             >
               <ActivityIndicator
                 animating={true}
-                color="#4782D7"
+                color="#00ADB5"
                 hidesWhenStopped={true}
                 size="large"
               />
@@ -285,7 +285,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
         <Text
           style={
             Object {
-              "color": "#107793",
+              "color": "#4782D7",
               "fontFamily": "Inter-SemiBold",
               "fontSize": 14,
               "lineHeight": 16.94,

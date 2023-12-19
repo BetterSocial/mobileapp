@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {COLORS} from '../../../utils/theme';
 
 const Label = ({label}) => (
     <View style={styles.headerList}>
@@ -17,7 +16,7 @@ const styles = StyleSheet.create({
     height: 40,
     paddingLeft: 22,
     paddingRight: 22,
-    backgroundColor: COLORS.concrete,
+    backgroundColor: '#F2F2F2',
     flexDirection: 'column',
     justifyContent: 'center',
     // marginBottom: 12,
@@ -29,7 +28,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     fontSize: 12,
     lineHeight: 18,
-    color: COLORS.emperor,
+    color: '#4F4F4F',
   },
   textBold: {
     fontFamily: 'Poppins',
@@ -37,6 +36,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 12,
     lineHeight: 18,
-    color: COLORS.emperor,
+    color: '#4F4F4F',
   },
 });

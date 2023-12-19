@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Platform, TouchableOpacity} from 'react-native';
 import ShareIOSIcon from '../../assets/icons/images/share.svg';
 import ShareAndroidIcon from '../../assets/icons/images/share-for-android.svg';
-import {COLORS} from '../../utils/theme';
+import {colors} from '../../utils/colors';
 
 interface ShareButtonIconProps {
   onPress: () => void;
@@ -13,7 +13,7 @@ interface ShareButtonIconProps {
 
 const ShareButtonIcon: React.FC<ShareButtonIconProps> = ({
   onPress,
-  fill = COLORS.black,
+  fill = colors.black,
   width = 20,
   height = 20
 }) => {

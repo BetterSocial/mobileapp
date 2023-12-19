@@ -1,7 +1,6 @@
 import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import ToastMessage from 'react-native-toast-message';
-import netInfo from '@react-native-community/netinfo';
 import {
   Dimensions,
   Image,
@@ -24,6 +23,7 @@ import BioAndChat from './elements/BioAndChat';
 import BlockIcon from '../../assets/icons/images/block-blue.svg';
 import BlockProfile from '../../components/Blocking/BlockProfile';
 import BottomSheetBio from '../ProfileScreen/elements/BottomSheetBio';
+import EnveloveBlueIcon from '../../assets/icons/images/envelove-blue.svg';
 import GlobalButton from '../../components/Button/GlobalButton';
 import ProfileHeader from '../ProfileScreen/elements/ProfileHeader';
 import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
@@ -40,7 +40,7 @@ import {CircleGradient} from '../../components/Karma/CircleGradient';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {blockUser, unblockUserApi} from '../../service/blocking';
-import {setFollow, setUnFollow} from '../../service/profile';
+import {colors} from '../../utils/colors';
 import {downVote, upVote} from '../../service/vote';
 import {fonts, normalize} from '../../utils/fonts';
 import {generateAnonProfileOtherProfile} from '../../service/anonymousProfile';
@@ -48,9 +48,8 @@ import {getFeedDetail} from '../../service/post';
 import {getSingularOrPluralText} from '../../utils/string/StringUtils';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherProfileFeed';
+import {setFollow, setUnFollow} from '../../service/profile';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {COLORS} from '../../utils/theme';
-import IconEnvelope from '../../assets/icon/IconEnvelope';
 
 const {width} = Dimensions.get('screen');
 
@@ -206,14 +205,14 @@ const OtherProfile = () => {
     const __renderBlockIcon = () => {
       if (isBlocking)
         return (
-          <View style={styles.buttonFollowing(dynamicColor)}>
-            <Text style={styles.textButtonFollowing(dynamicColor)}>Blocked</Text>
+          <View style={styles.buttonFollowing}>
+            <Text style={styles.textButtonFollowing}>Blocked</Text>
           </View>
         );
 
       return (
-        <View style={{...styles.btnMsg(dynamicColor), borderColor: COLORS.gray9}}>
-          <BlockIcon width={20} height={20} style={{color: COLORS.gray9}} />
+        <View style={{...styles.btnMsg, borderColor: colors.gray1}}>
+          <BlockIcon width={20} height={20} style={{color: colors.gray1}} />
         </View>
       );
     };
@@ -230,7 +229,7 @@ const OtherProfile = () => {
         <View style={styles.wrapFollower}>
           <TouchableOpacity onPress={handleOpenFollowerUser} style={styles.wrapRow}>
             <React.Fragment>
-              <Text style={styles.textTotal(dynamicColor)}>{dataMain.follower_symbol}</Text>
+              <Text style={styles.textTotal}>{dataMain.follower_symbol}</Text>
               <Text style={styles.textFollow}>
                 {getSingularOrPluralText(dataMain.follower_symbol, 'Follower', 'Followers')}
               </Text>
@@ -256,8 +255,8 @@ const OtherProfile = () => {
       if (dataMain.is_following)
         return (
           <GlobalButton onPress={() => handleSetUnFollow()}>
-            <View style={styles.buttonFollowing(dynamicColor)}>
-              <Text style={styles.textButtonFollowing(dynamicColor)}>Following</Text>
+            <View style={styles.buttonFollowing}>
+              <Text style={styles.textButtonFollowing}>Following</Text>
             </View>
           </GlobalButton>
         );
@@ -290,8 +289,8 @@ const OtherProfile = () => {
         <React.Fragment>
           {__renderFollowingButton()}
           <GlobalButton onPress={onCreateChat}>
-            <View style={styles.btnMsg(dynamicColor)}>
-              <IconEnvelope color={dynamicColor.primary} />
+            <View style={styles.btnMsg}>
+              <EnveloveBlueIcon width={20} height={20} fill={colors.bondi_blue} />
             </View>
           </GlobalButton>
         </React.Fragment>
@@ -603,7 +602,7 @@ const OtherProfile = () => {
         {isShowButton ? (
           <TouchableNativeFeedback onPress={toTop}>
             <View style={{...styles.btnBottom, opacity}}>
-              <ArrowUpWhiteIcon width={12} height={20} fill={COLORS.white} />
+              <ArrowUpWhiteIcon width={12} height={20} fill={colors.white} />
             </View>
           </TouchableNativeFeedback>
         ) : null}
@@ -615,13 +614,13 @@ const OtherProfile = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white
+    backgroundColor: colors.white
   },
   content: {
     flexDirection: 'column',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.alto
+    borderBottomColor: '#E0E0E0'
   },
   dummyItem: (heightItem) => ({
     height: heightItem
@@ -637,7 +636,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
     lineHeight: 22,
-    color: COLORS.black,
+    color: colors.black,
     marginLeft: 18
   },
   profileImage: {
@@ -654,14 +653,14 @@ const styles = StyleSheet.create({
   wrapImageProfile: {
     marginTop: 24,
     flexDirection: 'column',
-    backgroundColor: COLORS.red
+    backgroundColor: 'red'
   },
   nameProfile: {
     fontFamily: fonts.inter[800],
     fontWeight: 'bold',
     fontSize: 14,
     lineHeight: 17,
-    color: COLORS.black
+    color: colors.black
   },
   wrapFollower: {
     flexDirection: 'row',
@@ -671,21 +670,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
-  textTotal: (dynamicColor) => ({
+  textTotal: {
     fontFamily: fonts.inter[800],
     fontWeight: 'bold',
     fontSize: 14,
-    color: dynamicColor.primary,
+    color: colors.bondi_blue,
     paddingRight: 4
-  }),
+  },
   textFollow: {
     fontSize: 14,
-    color: COLORS.black,
+    color: colors.black,
     paddingRight: 4
   },
   tabs: {
     width,
-    borderBottomColor: COLORS.alto,
+    borderBottomColor: colors.alto,
     borderBottomWidth: 1,
     paddingLeft: 20,
     paddingRight: 20,
@@ -695,10 +694,10 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[800],
     fontWeight: 'bold',
     fontSize: 14,
-    color: COLORS.black,
+    color: colors.black,
     paddingBottom: 12,
     borderBottomWidth: 2,
-    borderBottomColor: COLORS.holyTosca
+    borderBottomColor: colors.bondi_blue
   },
   wrapNameAndbackButton: {
     flexDirection: 'row',
@@ -708,7 +707,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: COLORS.white
+    backgroundColor: 'white'
   },
   wrapButton: {
     flex: 1,
@@ -716,16 +715,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end'
   },
-  buttonFollowing: (dynamicColor) => ({
+  buttonFollowing: {
     width: 88,
     height: 36,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: dynamicColor.primary,
+    borderColor: colors.bondi_blue,
     borderRadius: 8
-  }),
+  },
   buttonFollow: {
     width: 88,
     height: 36,
@@ -733,20 +732,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    backgroundColor: COLORS.holyTosca,
-    color: COLORS.white
+    backgroundColor: colors.bondi_blue,
+    color: colors.white
   },
-  textButtonFollowing: (dynamicColor) => ({
+  textButtonFollowing: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: dynamicColor.primary
-  }),
+    color: colors.bondi_blue
+  },
   textButtonFollow: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: COLORS.white
+    color: colors.white
   },
   btnBottom: {
     position: 'absolute',
@@ -754,7 +753,7 @@ const styles = StyleSheet.create({
     height: dimen.size.PROFILE_ACTION_BUTTON_RADIUS,
     right: 20,
     bottom: dimen.size.FEED_ACTION_BUTTON_HEIGHT_FROM_BOTTOM,
-    backgroundColor: COLORS.blue,
+    backgroundColor: colors.darkBlue,
     borderRadius: 30,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -762,7 +761,7 @@ const styles = StyleSheet.create({
   },
   tabsFixed: {
     width,
-    borderBottomColor: COLORS.alto,
+    borderBottomColor: colors.alto,
     borderBottomWidth: 1,
     paddingLeft: 20,
     paddingRight: 20,
@@ -770,22 +769,22 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     zIndex: 2000,
-    backgroundColor: COLORS.white
+    backgroundColor: colors.white
   },
   containerFlatFeed: {
     // padding: 20,
     flex: 1
   },
-  btnMsg: (dynamicColor) => ({
+  btnMsg: {
     width: 36,
     height: 36,
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: dynamicColor.primary,
+    borderColor: colors.bondi_blue,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'
-  }),
+  },
   containerLoading: {
     height: '100%',
     width: '100%',

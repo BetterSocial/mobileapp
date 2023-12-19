@@ -19,6 +19,7 @@ import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {ProfileContact} from '../../components/Items';
 import {fonts} from '../../utils/fonts';
+import {colors} from '../../utils/colors';
 
 const {width} = Dimensions.get('screen');
 
@@ -91,7 +92,7 @@ const GroupSetting = ({navigation, route}) => {
 export default GroupSetting;
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: COLORS.white},
+  container: {flex: 1, backgroundColor: '#fff'},
   subtitleStyle: {
     color: COLORS.holytosca
   },
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: 14,
     lineHeight: 16.94,
-    color: COLORS.holyTosca,
+    color: colors.darkBlue,
     marginLeft: 20,
     marginBottom: 4
   }

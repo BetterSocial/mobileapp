@@ -4,8 +4,8 @@ import {StyleSheet, Text, View} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 
 import ItemListLarge from './ItemListLarge';
+import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import {COLORS} from '../../utils/theme';
 
 const BlockProfile = ({refBlockUser, onSelect, username, isBlocker}) => {
   let data = [
@@ -78,11 +78,11 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: fonts.inter[600],
     fontSize: 18,
-    color: COLORS.black,
+    color: '#000',
     marginLeft: 21
   },
   desc: {
-    color: COLORS.gray8,
+    color: colors.gray,
     fontFamily: fonts.inter[400],
     fontSize: 12,
     marginHorizontal: 21,
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20
   },
   draggableIcon: {
-    backgroundColor: COLORS.alto,
+    backgroundColor: colors.alto,
     width: 60
   }
 });

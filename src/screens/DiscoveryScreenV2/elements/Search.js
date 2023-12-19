@@ -23,6 +23,7 @@ import dimen from '../../../utils/dimen';
 import {COLORS, FONTS, SIZES} from '../../../utils/theme';
 import {Context} from '../../../context/Store';
 import {RECENT_SEARCH_TERMS} from '../../../utils/cache/constant';
+import {colors} from '../../../utils/colors';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
 
 const DiscoverySearch = ({
@@ -171,7 +172,7 @@ const DiscoverySearch = ({
               <MemoIcArrowBackWhite
                 width={20}
                 height={12}
-                fill={COLORS.black}
+                fill={colors.black}
                 style={{alignSelf: 'center'}}
               />
             </View>
@@ -210,7 +211,7 @@ const DiscoverySearch = ({
               radius: 35
             }}>
             <View style={styles.wrapperDeleteIcon}>
-              <IconClear width={9} height={10} iconColor={COLORS.black} />
+              <IconClear width={9} height={10} iconColor={colors.black} />
             </View>
           </TouchableOpacity>
         </View>
@@ -241,7 +242,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flexDirection: 'row',
-    backgroundColor: COLORS.white,
+    backgroundColor: 'white',
     marginBottom: SIZES.base,
     marginHorizontal: SIZES.base
   },
@@ -259,7 +260,7 @@ const styles = StyleSheet.create({
   },
   wrapperSearch: {
     flex: 1,
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: '#F5F5F5',
     borderRadius: dimen.normalizeDimen(8),
     alignSelf: 'center',
     flexDirection: 'row',
@@ -296,13 +297,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   newPostText: {
-    color: COLORS.blue,
+    color: COLORS.holytosca,
     marginRight: dimen.normalizeDimen(11),
     ...FONTS.h3
   },
   animatedViewContainer: (hideBackIcon) => ({
     flexDirection: 'row',
-    backgroundColor: COLORS.white,
+    backgroundColor: 'white',
     marginTop: 0,
     zIndex: 10,
     height: dimen.size.DISCOVERY_HEADER_HEIGHT,

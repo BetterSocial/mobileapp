@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {StatusBar, View, StyleSheet, Platform} from 'react-native';
-import {COLORS} from '../../utils/theme';
 
 const STATUSBAR_HEIGHT = StatusBar.currentHeight;
 const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 56;
@@ -15,7 +14,7 @@ const styles = StyleSheet.create({
     height: STATUSBAR_HEIGHT,
   },
   appBar: {
-    backgroundColor: COLORS.greenMantis,
+    backgroundColor: '#79B45D',
     height: APPBAR_HEIGHT,
   },
 });
