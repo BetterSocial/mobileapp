@@ -45,11 +45,12 @@ export const styles = StyleSheet.create({
   },
   chatTitleContainer: {
     display: 'flex',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    marginBottom: dimen.normalizeDimen(4)
   },
   textContainer: {
     flex: 1,
-    paddingHorizontal: dimen.normalizeDimen(6),
+    paddingHorizontal: dimen.normalizeDimen(4),
     paddingVertical: dimen.normalizeDimen(4),
     backgroundColor: colors.lightgrey,
     borderRadius: 8
@@ -75,8 +76,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(16),
-    lineHeight: 19.36,
-    marginBottom: 4
+    lineHeight: 19.36
   },
   deletedMyText: {
     color: colors.light_silver,
@@ -168,6 +168,34 @@ export const styles = StyleSheet.create({
     fontSize: dimen.normalizeDimen(16),
     fontFamily: fonts.inter[400],
     color: colors.white
+  },
+  attachmentFileContainer: {
+    backgroundColor: colors.alto,
+    justifyContent: 'center',
+    minHeight: dimen.normalizeDimen(64),
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  attachmentFileContent: {
+    flex: 1,
+    padding: dimen.normalizeDimen(6)
+  },
+  attachmentFileName: {
+    fontSize: dimen.normalizeDimen(14),
+    fontFamily: fonts.inter[600],
+    color: colors.black
+  },
+  attachmentFileInfo: {
+    fontSize: dimen.normalizeDimen(12),
+    fontFamily: fonts.inter[400],
+    color: colors.gray
+  },
+  attachmentFileIcon: {
+    backgroundColor: colors.light_silver,
+    width: dimen.normalizeDimen(64),
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
 

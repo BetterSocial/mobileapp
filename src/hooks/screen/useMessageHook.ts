@@ -125,7 +125,7 @@ function useMessageHook(): UseMessageHook {
         title: 'Photo',
         index,
         images: medias
-          .filter((media) => media.type === 'photo')
+          .filter((media) => media.type === 'image')
           .map((media) => ({url: media.asset_url}))
       });
     }
