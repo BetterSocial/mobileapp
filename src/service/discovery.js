@@ -165,6 +165,7 @@ const fetchInitialDiscoveryTopics = async (limit = 25, page = 0) => {
  * @property {String} profile_pic_asset_id
  * @property {String} bio
  * @property {String} common
+ * @property {Object} community_info
  */
 /**
  * @typedef {Object} FetchInitialDiscoveryUsersResponse
