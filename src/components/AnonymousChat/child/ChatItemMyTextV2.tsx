@@ -166,7 +166,7 @@ const ChatItemMyTextV2 = ({
                       .map((item, index) =>
                         item.type === 'file' ? (
                           <TouchableOpacity
-                            key={index}
+                            key={item.file_path}
                             style={{flex: 1}}
                             activeOpacity={1}
                             onPress={() => Linking.openURL(item.file_path)}>
@@ -189,7 +189,7 @@ const ChatItemMyTextV2 = ({
                           </TouchableOpacity>
                         ) : (
                           <TouchableOpacity
-                            key={index}
+                            key={item.thumb_url}
                             style={{
                               width: `${
                                 (attachments.length >= 3 && index > 0) || attachments.length >= 4

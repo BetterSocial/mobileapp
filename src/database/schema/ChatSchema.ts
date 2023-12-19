@@ -386,8 +386,6 @@ class ChatSchema implements BaseDbSchema {
       isContinuous: false,
       attachmentJson,
       type: data?.message?.message_type ?? data?.message?.type,
-      attachmentJson,
-      type: 'regular',
       user: null,
       userId: data?.message?.user?.id
     });

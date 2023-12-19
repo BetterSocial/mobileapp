@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import Svg, {G, Defs, ClipPath, Path, Rect} from 'react-native-svg';
 
 function PlusAttachment(props) {
@@ -21,6 +22,10 @@ function PlusAttachment(props) {
     </Svg>
   );
 }
+
+PlusAttachment.propTypes = {
+  fillIcon: PropTypes.string
+};
 
 const MemoPlusAttachment = React.memo(PlusAttachment);
 export default MemoPlusAttachment;

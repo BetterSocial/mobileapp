@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import {View, Text, StyleSheet, TouchableNativeFeedback, ActivityIndicator} from 'react-native';
 
 import {fonts} from '../../utils/fonts';
@@ -89,5 +90,16 @@ const styles = StyleSheet.create({
     paddingLeft: 9
   }
 });
+
+BottomSheetAttachment.propTypes = {
+  onOpenMedia: PropTypes.func,
+  isLoadingUploadMedia: PropTypes.bool,
+  onOpenGIF: PropTypes.func,
+  isLoadingUploadGIF: PropTypes.bool,
+  onOpenCamera: PropTypes.func,
+  isLoadingUploadCamera: PropTypes.bool,
+  onOpenFile: PropTypes.func,
+  isLoadingUploadFile: PropTypes.bool
+};
 
 export default BottomSheetAttachment;
