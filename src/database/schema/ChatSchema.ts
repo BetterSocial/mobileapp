@@ -62,6 +62,7 @@ class ChatSchema implements BaseDbSchema {
 
   save = async (db: SQLiteDatabase) => {
     try {
+      const indexing = `CREATE INDEX IF NOT EXISTS index_chat ON ${ChatSchema.getTableName()} (channel_id)`;
       const insertQuery = `INSERT OR REPLACE INTO ${ChatSchema.getTableName()} (
         id,
         channel_id,
@@ -85,6 +86,7 @@ class ChatSchema implements BaseDbSchema {
         this.updatedAt,
         this.rawJson
       ];
+      await db.executeSql(indexing);
 
       await db.executeSql(insertQuery, insertParams);
     } catch (e) {

@@ -78,38 +78,33 @@ const useFetchChannelHook = () => {
 
   const saveChannelData = async (channel, channelCategory: ChannelCategory) => {
     if (!channel?.members || channel?.members?.length === 0) return;
-
-    try {
-      await helperChannelPromiseBuilder(channel, channelCategory);
-    } catch (e) {
-      console.log('error on saveChannelData helperChannelPromiseBuilder:', e);
-    }
-
     if (channel?.type === 'topics') return;
 
     try {
-      await Promise.all(
-        (channel?.members || []).map(async (member) => {
-          const userMember = UserSchema.fromMemberWebsocketObject(member, channel?.id);
-          const memberSchema = ChannelListMemberSchema.fromWebsocketObject(
-            channel?.id,
-            uuid(),
-            member
-          );
-          await userMember.saveOrUpdateIfExists(localDb);
-          await memberSchema.save(localDb);
-        })
-      );
+      (channel?.members || []).map(async (member) => {
+        const userMember = UserSchema.fromMemberWebsocketObject(member, channel?.id);
+        const memberSchema = ChannelListMemberSchema.fromWebsocketObject(
+          channel?.id,
+          uuid(),
+          member
+        );
+        userMember.saveOrUpdateIfExists(localDb);
+        memberSchema.save(localDb);
+      });
 
-      await Promise.all(
-        (channel?.messages || []).map(async (message) => {
-          if (message?.type === 'deleted') return;
-          const chat = ChatSchema.fromGetAllChannelAPI(channel?.id, message);
-          await chat.save(localDb);
-        })
-      );
+      (channel?.messages || []).map(async (message) => {
+        if (message?.type === 'deleted') return;
+        const chat = ChatSchema.fromGetAllChannelAPI(channel?.id, message);
+        chat.save(localDb);
+      });
     } catch (e) {
       console.log('error on saveChannelData:', e);
+    }
+
+    try {
+      helperChannelPromiseBuilder(channel, channelCategory);
+    } catch (e) {
+      console.log('error on saveChannelData helperChannelPromiseBuilder:', e);
     }
   };
 

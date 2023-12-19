@@ -109,7 +109,7 @@ when friends send you messages.`,
     };
 
     checkNotif();
-  }, [navigation?.isFocused?.()]);
+  }, [isFocused]);
 
   React.useEffect(() => {
     if (isFocused) refresh('channelList');
