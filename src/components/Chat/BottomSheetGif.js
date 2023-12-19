@@ -37,9 +37,13 @@ const BottomSheetGif = React.forwardRef((props, ref) => {
 
   const onLoad = async () => {
     setIsLoading(true);
-    const result = await getGifFeatured();
-    if (result.code === 200) {
-      setList(result.data);
+    try {
+      const result = await getGifFeatured();
+      if (result.code === 200) {
+        setList(result.data);
+      }
+    } catch (error) {
+      console.error(error);
     }
     setIsLoading(false);
   };
