@@ -45,21 +45,23 @@ export const CircleGradient = (props: {
         }}>
         {props.children}
       </LinearGradient>
-      <Svg
-        height={props.size}
-        width={props.size}
-        style={{position: 'absolute', transform: [{rotateZ: '-90deg'}]}}>
-        <Circle
-          cx={props.size / 2}
-          cy={props.size / 2}
-          r={r + 1}
-          stroke="#E8EBED"
-          strokeWidth={props.width + 1}
-          strokeDasharray={`${props.fill === 100 ? 0.5 : circleCircumference}`}
-          strokeDashoffset={`${circleStrokeDashoffset * -1}`}
-          fill="none"
-        />
-      </Svg>
+      {props.fill !== 100 && (
+        <Svg
+          height={props.size}
+          width={props.size}
+          style={{position: 'absolute', transform: [{rotateZ: '-90deg'}]}}>
+          <Circle
+            cx={props.size / 2}
+            cy={props.size / 2}
+            r={r + 1}
+            stroke="#E8EBED"
+            strokeWidth={props.width + 1}
+            strokeDasharray={circleCircumference}
+            strokeDashoffset={`${circleStrokeDashoffset * -1}`}
+            fill="none"
+          />
+        </Svg>
+      )}
     </View>
   );
 };
