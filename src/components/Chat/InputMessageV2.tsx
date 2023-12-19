@@ -148,7 +148,6 @@ const InputMessageV2 = ({
   const [isLoadingUploadImageCamera, setIsLoadingUploadImageCamera] = React.useState(false);
 
   const handleUploadMedia = async (medias) => {
-  const handleUploadMedia = async (medias) => {
     setIsLoadingUploadImageMedia(true);
 
     const resultUrls = medias.map((media) => ({
@@ -327,8 +326,7 @@ const InputMessageV2 = ({
 
   const onCloseGIF = () => {
     refGif.current.close();
-
-
+  };
   const onSelectAttachment = () => {
     refAttachment.current.open();
   };
@@ -350,7 +348,6 @@ const InputMessageV2 = ({
     return colors.bondi_blue;
   }, [isDisableButton()]);
 
-  const toggleChange = () => {
   const toggleChange = () => {
     if (messageDisable) {
       ToastMessage.show({
@@ -408,8 +405,6 @@ const InputMessageV2 = ({
             ]}
             onValueChange={toggleChange}
             value={type === ANONYMOUS}
-            onValueChange={toggleChange}
-            value={type === ANONYMOUS}
           />
         )}
       </View>
@@ -434,7 +429,6 @@ const InputMessageV2 = ({
       <BottomSheetAttachment
         ref={refAttachment}
         onOpenMedia={onOpenMedia}
-        onOpenGIF={onOpenGIF}
         onOpenGIF={onOpenGIF}
         onOpenCamera={onOpenCamera}
         onOpenFile={onOpenFile}
