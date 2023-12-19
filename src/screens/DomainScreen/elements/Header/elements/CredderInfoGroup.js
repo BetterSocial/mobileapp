@@ -73,14 +73,14 @@ const styles = StyleSheet.create({
     },
     tooltipShadowContainer: {
         paddingHorizontal: 10,
-        shadowColor: '#000',
+        shadowColor: COLORS.black,
         shadowOffset: {
             width: 0,
             height: 12,
         },
         shadowOpacity: 0.58,
         shadowRadius: 16,
-        shadowColor: 'black',
+        shadowColor: COLORS.black,
         // shadowRadius: 3.84,
         // shadowRadius: 10,
         elevation: 16,

@@ -5,6 +5,7 @@ import {StyleSheet, Text, View} from 'react-native';
 
 import FeedIcon from '../../../../assets/images/feed-icon.png';
 import dimen from '../../../../utils/dimen';
+import {COLORS} from '../../../../utils/theme';
 
 const styles = StyleSheet.create({
   iconStyle: {
@@ -12,12 +13,12 @@ const styles = StyleSheet.create({
     width: 12
   },
   iconContainerStyle: {
-    backgroundColor: '#55C2FF'
+    backgroundColor: COLORS.blueSea
   },
   typeContainer: {
     height: 24,
     width: 24,
-    backgroundColor: '#55C2FF',
+    backgroundColor: COLORS.blueSea,
     borderRadius: 12,
     position: 'absolute',
     bottom: -6,
@@ -26,7 +27,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
     borderWidth: 1,
-    borderColor: 'white'
+    borderColor: COLORS.white
   },
   avatarAnonymous: {
     height: 48,

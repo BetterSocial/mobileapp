@@ -2,8 +2,8 @@ import * as React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, ScrollView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
 
 const TopicsChip = ({topics = [], fontSize = 24, onLayout, topicContainer}) => {
   const navigation = useNavigation();
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     marginLeft: 12
   },
   topicItemContainer: {
-    backgroundColor: colors.lightgrey60,
+    backgroundColor: COLORS.lightgrey,
     borderRadius: 14,
     overflow: 'hidden',
     marginEnd: 11,
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 13,
     paddingVertical: 4.5,
     borderRadius: 14,
-    color: colors.blue
+    color: COLORS.blue
   },
   contentStyle: {
     paddingRight: 12

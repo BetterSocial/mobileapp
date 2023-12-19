@@ -54,11 +54,10 @@ import SignedChatScreen from '../screens/WebsocketResearchScreen/SignedChatScree
 import WhotoFollow from '../screens/WhotoFollow';
 import api from '../service/config';
 import {InitialStartupAtom, LoadingStartupContext} from '../service/initialStartup';
-import {colors} from '../utils/colors';
+import {followersOrFollowingAtom} from '../screens/ChannelListScreen/model/followersOrFollowingAtom';
+import {useInitialStartup} from '../hooks/useInitialStartup';
+import {COLORS} from '../utils/theme';
 import {NavigationConstants} from '../utils/constants';
-import HomeBottomTabs from './HomeBottomTabs';
-import KeyboardWrapper from './KeyboardWrapper';
-import OneSignalNavigator from './OneSignalNavigator';
 
 const RootStack = createNativeStackNavigator();
 

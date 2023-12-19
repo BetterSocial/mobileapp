@@ -4,7 +4,7 @@ exports[`Testing Discovery Screen V2 Testing Discovery Search Bar Match Snapshot
 <View
   style={
     Object {
-      "backgroundColor": "white",
+      "backgroundColor": "#FFFFFF",
       "borderBottomColor": "#E0E0E0",
       "borderBottomWidth": 0.8,
       "flexDirection": "row",

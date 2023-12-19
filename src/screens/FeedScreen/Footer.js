@@ -12,7 +12,7 @@ import MemoIcShare from '../../assets/icons/Ic_share';
 import MemoIcComment from '../../assets/icons/Ic_comment';
 import MemoIcArrowDownVoteOn from '../../assets/arrow/Ic_downvote_on';
 import MemoIcArrowUpvoteOn from '../../assets/arrow/Ic_upvote_on';
-import {colors} from '../../utils/colors';
+import {COLORS} from '../../utils/theme';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     paddingBottom: 16.12,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
-    borderBottomColor: colors.gray1
+    borderBottomColor: COLORS.gray9
   },
   rowSpaceBeetwen: {
     flexDirection: 'row',
@@ -103,12 +103,12 @@ const styles = StyleSheet.create({
 
 const handleTextCountColor = (totalVote) => {
   if (totalVote > 0) {
-    return '#00ADB5';
+    return COLORS.holyTosca;
   }
   if (totalVote < 0) {
-    return '#FF2E63';
+    return COLORS.red;
   }
-  return '#C4C4C4';
+  return COLORS.gray1;
 };
 
 Footer.propTypes = {

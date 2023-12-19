@@ -31,16 +31,16 @@ import {CHANNEL_GROUP, GROUP_INFO, SIGNED} from '../../hooks/core/constant';
 import {Context} from '../../context';
 import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
-import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {getChatName} from '../../utils/string/StringUtils';
 import {isContainUrl} from '../../utils/Utils';
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
 import {channelImageStyles} from '../../components/ChatList/elements/ChannelImage.style';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
+import {COLORS} from '../../utils/theme';
 
 export const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#fff', paddingBottom: 40},
+  container: {flex: 1, backgroundColor: COLORS.white, paddingBottom: 40},
   users: {
     paddingTop: 12
   },
@@ -52,11 +52,11 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(20),
-    color: colors.holytosca
+    color: COLORS.holyTosca
   },
   btnAdd: {
     padding: normalize(8),
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     width: 'auto',
     justifyContent: 'center',
     alignItems: 'center',
@@ -68,7 +68,7 @@ export const styles = StyleSheet.create({
   countUser: (from: string) => ({
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(16.94),
-    color: from === SIGNED ? colors.darkBlue : colors.holytosca,
+    color: from === SIGNED ? COLORS.blue : COLORS.holyTosca,
     marginLeft: dimen.normalizeDimen(20),
     marginBottom: dimen.normalizeDimen(4),
     fontWeight: 'bold'
@@ -77,26 +77,26 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(16.94),
-    color: colors.holytosca
+    color: COLORS.holyTosca
   },
   dateCreate: {
     marginLeft: 20,
     fontSize: normalizeFontSize(14),
     fontFamily: fonts.inter[400],
     lineHeight: normalizeFontSize(16.94),
-    color: '#000',
+    color: COLORS.black,
     marginTop: 4,
     marginBottom: 9
   },
   groupName: {
     fontSize: normalizeFontSize(24),
     lineHeight: normalizeFontSize(29.05),
-    color: '#000',
+    color: COLORS.black,
     paddingHorizontal: dimen.normalizeDimen(20),
     fontWeight: 'bold'
   },
   lineTop: {
-    backgroundColor: colors.alto,
+    backgroundColor: COLORS.alto,
     height: 1
   },
   containerGroupName: {
@@ -114,7 +114,7 @@ export const styles = StyleSheet.create({
     width: normalize(100),
     height: normalize(100),
     borderRadius: normalize(50),
-    backgroundColor: colors.alto,
+    backgroundColor: COLORS.alto,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -146,7 +146,7 @@ export const styles = StyleSheet.create({
   },
   gap: {
     height: 1,
-    backgroundColor: '#E0E0E0'
+    backgroundColor: COLORS.alto
   },
   actionGroup: {
     marginTop: 22
@@ -164,7 +164,7 @@ export const styles = StyleSheet.create({
     marginRight: 26
   },
   textAct: {
-    color: '#FF2E63',
+    color: COLORS.red,
     fontSize: 14
   },
   mr7: {
@@ -314,7 +314,7 @@ const SampleChatInfoScreen = () => {
                         <MemoIc_pencil
                           height={dimen.normalizeDimen(20)}
                           width={dimen.normalizeDimen(20)}
-                          color={colors.darkBlue}
+                          color={COLORS.blue}
                         />
                       </TouchableOpacity>
                     ) : null}

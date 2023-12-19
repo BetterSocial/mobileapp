@@ -10,9 +10,9 @@ import GlobalButton from '../Button/GlobalButton';
 import MemoIc_arrow_back_white from '../../assets/arrow/Ic_arrow_back_white';
 import {CHANNEL_TYPE_ANONYMOUS} from '../../utils/constants';
 import {Context} from '../../context';
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {getChatName, getGroupMemberCount} from '../../utils/string/StringUtils';
+import {COLORS} from '../../utils/theme';
 
 const Header = ({onBack}) => {
   const navigation = useNavigation();
@@ -115,7 +115,7 @@ const Header = ({onBack}) => {
               focusChatName: true
             })
           }>
-          <IconEP name="dots-three-vertical" size={12.87} color={'#fff'} />
+          <IconEP name="dots-three-vertical" size={12.87} color={COLORS.white} />
         </GlobalButton>
       </View>
     </View>
@@ -127,7 +127,7 @@ export default Header;
 const styles = StyleSheet.create({
   container: {
     height: 50,
-    backgroundColor: colors.holytosca,
+    backgroundColor: COLORS.holyTosca,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 22,
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
   name: {
     marginLeft: 11,
     fontFamily: fonts.inter[600],
-    color: '#fff',
+    color: COLORS.white,
     fontSize: 14,
     width: '70%'
   },

@@ -5,8 +5,8 @@ import {StyleSheet, Text, View} from 'react-native';
 import ChannelFollowButton from './ChannelFollowButton';
 import baseStyles from '../BaseChannelItemStyles';
 import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
-import {colors} from '../../../utils/colors';
 import {fonts, normalize} from '../../../utils/fonts';
+import {COLORS} from '../../../utils/theme';
 
 const ChannelTitle = ({
   type,
@@ -33,7 +33,7 @@ const ChannelTitle = ({
       fontSize: normalize(14),
       lineHeight: 22,
       marginLeft: 20,
-      color: colors.gray,
+      color: COLORS.gray8,
       alignSelf: 'flex-start'
     },
     chatContentMessage: {
@@ -45,7 +45,7 @@ const ChannelTitle = ({
       marginRight: 4
     },
     chatContentUnreadCountContainer: {
-      backgroundColor: isAnonymousTab ? colors.anon_primary : colors.darkBlue,
+      backgroundColor: isAnonymousTab ? COLORS.holyTosca : COLORS.blue,
       width: 20,
       height: 20,
       borderRadius: 10,
@@ -57,7 +57,7 @@ const ChannelTitle = ({
       fontFamily: fonts.inter[400],
       fontSize: normalize(10),
       lineHeight: 14.52,
-      color: colors.white
+      color: COLORS.white
     },
     chatContentUnreadCountPostNotificationContainer: {
       position: 'absolute',
@@ -105,7 +105,11 @@ const ChannelTitle = ({
         </View>
 
         {isSignedDM && isShowFollowButton && (
-          <ChannelFollowButton isFollowing={isFollowing} handleFollow={handleFollow} />
+          <ChannelFollowButton
+            isFollowing={isFollowing}
+            handleFollow={handleFollow}
+            isAnonymousTab={isAnonymousTab}
+          />
         )}
       </View>
     );

@@ -6,6 +6,7 @@ import {Gap} from '../../../components';
 import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
 import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
 import {trimString} from '../../../utils/string/TrimString';
+import {COLORS} from '../../../utils/theme';
 
 const Header = ({title}) => {
   const navigation = useNavigation();
@@ -37,6 +38,6 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(16),
     fontFamily: fonts.inter[600],
     lineHeight: normalizeFontSize(19.36),
-    color: '#000'
+    color: COLORS.black
   }
 });

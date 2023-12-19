@@ -3,16 +3,15 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
+import {useDynamicColors} from '../../hooks/useToggleColors';
 
-const FlatListItem = ({value, index, select, onSelect, icon, desc}) => {
+const FlatListItem = ({value, index, select, onSelect, icon, desc, isAnonimity = false}) => {
+  const dynamicColor = useDynamicColors(isAnonimity);
   if (icon) {
     return (
-      <TouchableOpacity
-        testID='onselect'
-        style={styles.container}
-        onPress={() => onSelect(index)}>
+      <TouchableOpacity testID="onselect" style={styles.container} onPress={() => onSelect(index)}>
         <View style={styles.contentText}>
           {icon}
           <View style={styles.containerLabel}>
@@ -20,17 +19,15 @@ const FlatListItem = ({value, index, select, onSelect, icon, desc}) => {
             <Text style={styles.desc}>{desc}</Text>
           </View>
         </View>
-        {index === select && (
-          <Icon name="check-circle" color={colors.bondi_blue} size={20} />
-        )}
+        {index === select && <Icon name="check-circle" color={dynamicColor.primary} size={20} />}
       </TouchableOpacity>
     );
   }
   return (
-    <TouchableOpacity testID='noicon' style={styles.container} onPress={() => onSelect(index)}>
+    <TouchableOpacity testID="noicon" style={styles.container} onPress={() => onSelect(index)}>
       <Text style={styles.label}>{value}</Text>
       {index === select && (
-        <Icon testID='circle-icon' name="check-circle" color={colors.bondi_blue} size={20} />
+        <Icon testID="circle-icon" name="check-circle" color={dynamicColor.primary} size={20} />
       )}
     </TouchableOpacity>
   );
@@ -44,38 +41,38 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: colors.alto,
+    borderBottomColor: COLORS.alto,
     paddingHorizontal: 20,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   label: {
     fontFamily: fonts.inter[400],
     fontSize: 14,
     fontWeight: '400',
-    color: colors.black,
+    color: COLORS.black
   },
   desc: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
     fontWeight: '400',
-    color: colors.gray,
-    flexWrap: 'wrap',
+    color: COLORS.gray8,
+    flexWrap: 'wrap'
   },
   labelIcon: {
     fontFamily: fonts.inter[500],
     fontSize: 14,
     fontWeight: '500',
-    color: colors.black,
+    color: COLORS.black
   },
   contentText: {
     flexDirection: 'row',
     alignItems: 'center',
     flexWrap: 'nowrap',
-    width: 'auto',
+    width: 'auto'
   },
   containerLabel: {
     paddingLeft: 12,
     flexWrap: 'nowrap',
-    width: '88%',
-  },
+    width: '88%'
+  }
 });

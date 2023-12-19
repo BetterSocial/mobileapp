@@ -6,7 +6,6 @@ import MemoIc_pencil from '../../../assets/icons/Ic_pencil';
 import {COLORS} from '../../../utils/theme';
 import {Context} from '../../../context';
 import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
-import {colors} from '../../../utils/colors';
 
 const EditGroup = ({
   editName,
@@ -107,15 +106,15 @@ const styles = StyleSheet.create({
     marginBottom: 5
   },
   textDesc: {
-    color: colors.white,
+    color: COLORS.white,
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(12),
     lineHeight: normalizeFontSize(18)
   },
   container: {
-    backgroundColor: colors.darkBlue,
+    backgroundColor: COLORS.blue,
     borderTopWidth: 1,
-    borderTopColor: colors.alto,
+    borderTopColor: COLORS.alto,
     paddingVertical: 10,
     paddingHorizontal: 15
   },
@@ -123,7 +122,7 @@ const styles = StyleSheet.create({
     width: normalize(48),
     height: normalize(48),
     borderRadius: normalize(24),
-    backgroundColor: colors.alto,
+    backgroundColor: COLORS.alto,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 17

@@ -4,6 +4,7 @@ import {WebView} from 'react-native-webview';
 
 import Header from '../../components/Header';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import {COLORS} from '../../utils/theme';
 
 const HelpCenter = ({navigation}) => (
   <View style={styles.container}>
@@ -18,7 +19,7 @@ const HelpCenter = ({navigation}) => (
       style={styles.webview}
       renderLoading={() => (
         <View style={styles.loading}>
-          <ActivityIndicator size="large" color="#00ADB5" />
+          <ActivityIndicator size="large" color={COLORS.holyTosca} />
         </View>
       )}
     />
@@ -31,7 +32,7 @@ const styles = StyleSheet.create({
   container: {
     // paddingHorizontal: 20,
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: COLORS.white
   },
   header: {padding: 0, paddingHorizontal: 16, paddingBottom: 8},
   loading: {flex: 1, position: 'relative'}
