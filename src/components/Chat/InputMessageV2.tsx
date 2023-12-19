@@ -1,5 +1,7 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-restricted-syntax */
 import * as React from 'react';
 import {
   Alert,
@@ -145,6 +147,7 @@ const InputMessageV2 = ({
   const [isLoadingUploadImageMedia, setIsLoadingUploadImageMedia] = React.useState(false);
   const [isLoadingUploadImageCamera, setIsLoadingUploadImageCamera] = React.useState(false);
 
+  const handleUploadMedia = async (medias) => {
   const handleUploadMedia = async (medias) => {
     setIsLoadingUploadImageMedia(true);
 
@@ -324,13 +327,14 @@ const InputMessageV2 = ({
 
   const onCloseGIF = () => {
     refGif.current.close();
-  };
+
 
   const onSelectAttachment = () => {
     refAttachment.current.open();
   };
 
   const handleSendMessage = () => {
+    onSendButtonClicked(text, []);
     onSendButtonClicked(text, []);
     setText('');
   };
@@ -346,6 +350,7 @@ const InputMessageV2 = ({
     return colors.bondi_blue;
   }, [isDisableButton()]);
 
+  const toggleChange = () => {
   const toggleChange = () => {
     if (messageDisable) {
       ToastMessage.show({
@@ -403,6 +408,8 @@ const InputMessageV2 = ({
             ]}
             onValueChange={toggleChange}
             value={type === ANONYMOUS}
+            onValueChange={toggleChange}
+            value={type === ANONYMOUS}
           />
         )}
       </View>
@@ -427,6 +434,7 @@ const InputMessageV2 = ({
       <BottomSheetAttachment
         ref={refAttachment}
         onOpenMedia={onOpenMedia}
+        onOpenGIF={onOpenGIF}
         onOpenGIF={onOpenGIF}
         onOpenCamera={onOpenCamera}
         onOpenFile={onOpenFile}

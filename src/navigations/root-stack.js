@@ -206,7 +206,6 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen name="ImageViewer" component={ImageViewerScreen} />
         <AuthenticatedStack.Screen name="VideoViewer" component={VideoViewerScreen} />
-        <AuthenticatedStack.Screen name="VideoViewer" component={VideoViewerScreen} />
         <AuthenticatedStack.Screen
           name="DomainScreen"
           component={withKeyboardWrapper(DomainScreen)}

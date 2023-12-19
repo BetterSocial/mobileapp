@@ -184,6 +184,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
       message = item?.rawJson?.textOwnMessage || item?.rawJson?.message?.textOwnMessage;
     }
     return message;
+    return message;
   };
 
   const splitSystemMessage = (message: string): string[] => {

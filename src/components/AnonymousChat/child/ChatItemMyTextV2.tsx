@@ -6,7 +6,7 @@ import ContextMenu, {ContextMenuAction} from 'react-native-context-menu-view';
 import {Swipeable} from 'react-native-gesture-handler';
 import {Linking, Text, TouchableOpacity, View, ViewStyle} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {useNavigation, useNavigation} from '@react-navigation/core';
+import {useNavigation} from '@react-navigation/core';
 
 import ChatReplyView from './ChatReplyView';
 import IconChatCheckMark from '../../../assets/icon/IconChatCheckMark';
