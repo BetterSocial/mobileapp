@@ -19,7 +19,6 @@ import MemoIcSearch from '../../../assets/icons/Ic_search';
 import {Context} from '../../../context/Store';
 import DiscoveryAction from '../../../context/actions/discoveryAction';
 import {RECENT_SEARCH_TERMS} from '../../../utils/cache/constant';
-import {colors} from '../../../utils/colors';
 import dimen from '../../../utils/dimen';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
 import StringConstant from '../../../utils/string/StringConstant';
