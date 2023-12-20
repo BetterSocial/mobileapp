@@ -19,9 +19,9 @@ import {Button} from '../../components/Button';
 import {Header} from '../../components';
 import {ProgressBar} from '../../components/ProgressBar';
 import {SearchModal} from '../../components/Search';
-import {colors} from '../../utils/colors';
 import {locationValidation} from '../../utils/Utils';
 import {normalizeFontSize} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
 
 const {width} = Dimensions.get('screen');
 const LocalCommunity = () => {
@@ -57,7 +57,7 @@ const LocalCommunity = () => {
           <TouchableNativeFeedback
             testID="deleteLocation"
             onPress={() => handleDelete(item.location_id)}
-            background={TouchableNativeFeedback.Ripple(colors.gray1, true, 20)}>
+            background={TouchableNativeFeedback.Ripple(COLORS.gray9, true, 20)}>
             <TrashIcon width={18} height={20} fill="#000000" />
           </TouchableNativeFeedback>
         </View>
@@ -166,7 +166,7 @@ const LocalCommunity = () => {
         <Button
           testID="btn"
           disabled={location.length < 1}
-          style={location.length >= 1 ? null : styles.button}
+          styles={location.length >= 1 ? null : styles.button}
           onPress={() => next()}>
           NEXT
         </Button>
@@ -177,7 +177,7 @@ const LocalCommunity = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   header: {
     paddingHorizontal: dimen.normalizeDimen(22),
@@ -190,18 +190,18 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: normalizeFontSize(36),
     lineHeight: normalizeFontSize(43.57),
-    color: '#11243D',
+    color: COLORS.bunting,
     marginHorizontal: dimen.normalizeDimen(20)
   },
   footer: {
     width,
     height: dimen.normalizeDimen(112),
     flexDirection: 'column',
-    backgroundColor: colors.white,
+    backgroundColor: COLORS.white,
     justifyContent: 'space-between',
     paddingBottom: dimen.normalizeDimen(20),
     paddingHorizontal: dimen.normalizeDimen(20),
-    shadowColor: colors.black,
+    shadowColor: COLORS.black,
     shadowOffset: {
       width: 0,
       height: 5
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(24),
-    color: colors.gray,
+    color: COLORS.gray8,
     opacity: 0.84,
     marginTop: dimen.normalizeDimen(8),
     marginBottom: dimen.normalizeDimen(24),
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
     lineHeight: normalizeFontSize(24),
     letterSpacing: normalizeFontSize(-0.28),
     marginTop: dimen.normalizeDimen(13),
-    color: colors.black
+    color: COLORS.black
   },
   textSearchYourFavorite: {
     fontFamily: 'Inter',
@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
     lineHeight: normalizeFontSize(24),
     letterSpacing: normalizeFontSize(-0.28),
     marginBottom: dimen.normalizeDimen(10),
-    color: colors.silver
+    color: COLORS.silver
   },
   containerLocation: {
     flexDirection: 'row',
@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
     lineHeight: normalizeFontSize(24),
     letterSpacing: normalizeFontSize(-0.28),
     marginVertical: dimen.normalizeDimen(22),
-    color: colors.black,
+    color: COLORS.black,
     paddingLeft: dimen.normalizeDimen(17)
     // textTransform: 'capitalize',
   },
@@ -292,10 +292,10 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontFamily: 'Inter',
     textAlign: 'center',
-    color: colors.blackgrey
+    color: COLORS.blackgrey
   },
   button: {
-    backgroundColor: colors.gray,
+    backgroundColor: COLORS.gray8,
     borderRadius: dimen.normalizeDimen(8)
   }
 });

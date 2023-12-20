@@ -5,7 +5,7 @@ exports[`TESTING AnonymousChatHeader RENDER should match snapshot 1`] = `
   style={
     Object {
       "alignItems": "center",
-      "backgroundColor": "#00ADB5",
+      "backgroundColor": "#107793",
       "display": "flex",
       "flexDirection": "row",
       "height": 50,
@@ -72,7 +72,7 @@ exports[`TESTING AnonymousChatHeader RENDER should match snapshot 1`] = `
       numberOfLines={1}
       style={
         Object {
-          "color": "#ffffff",
+          "color": "#FFFFFF",
           "flex": 1,
           "fontFamily": "Inter-SemiBold",
           "fontSize": 14,
@@ -100,7 +100,7 @@ exports[`TESTING AnonymousChatHeader RENDER should match snapshot 1`] = `
     testID="pressable-option"
   >
     <Icon
-      color="#ffffff"
+      color="#FFFFFF"
       name="dots-three-vertical"
       size={20}
     />

@@ -6,7 +6,6 @@ import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {COLORS, SIZES} from '../../utils/theme';
 import GlobalButton from '../Button/GlobalButton';
 import dimen from '../../utils/dimen';
-import {colors} from '../../utils/colors';
 
 const HeaderContact = ({
   title,
@@ -56,7 +55,7 @@ const HeaderContact = ({
           style={[
             styles.text,
             subtitleStyle,
-            {color: disabledNextBtn ? COLORS.gray6 : colors.darkBlue}
+            {color: disabledNextBtn ? COLORS.gray6 : COLORS.blue}
           ]}>
           {subTitle}
         </Text>

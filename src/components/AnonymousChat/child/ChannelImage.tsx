@@ -2,15 +2,14 @@ import * as React from 'react';
 import FastImage from 'react-native-fast-image';
 import {StyleSheet, View} from 'react-native';
 
-import AnonymousProfile from '../../../assets/images/AnonymousProfile.png';
 import ChannelAnonymousImage from './ChannelAnonymousImage';
 import ChannelAnonymousSubImage from './ChannelAnonymousSubImage';
 import ChatIcon from '../../../assets/chat-icon.png';
 import FeedIcon from '../../../assets/images/feed-icon.png';
 import dimen from '../../../utils/dimen';
 import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
-import {colors} from '../../../utils/colors';
-import useProfileHook from '../../../hooks/core/profile/useProfileHook';
+import {COLORS} from '../../../utils/theme';
+import AnonymousIcon from '../../../assets/icon/AnonymousIcon';
 
 const ChannelImage = ({
   mainPicture,
@@ -38,16 +37,16 @@ const ChannelImage = ({
       height: dimen.normalizeDimen(24),
       borderRadius: dimen.normalizeDimen(12),
       borderWidth: 2,
-      borderColor: colors.white,
+      borderColor: COLORS.white,
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center'
     },
     myPostNotificationImageContainer: {
-      backgroundColor: isAnonymousTab ? colors.anon_primary : colors.darkBlue
+      backgroundColor: isAnonymousTab ? COLORS.holyTosca : COLORS.blue
     },
     anonPmNotificationImageContainer: {
-      backgroundColor: colors.anon_primary
+      backgroundColor: COLORS.holyTosca
     },
     postNotificationIcon: {
       width: dimen.normalizeDimen(12.5),
@@ -58,7 +57,7 @@ const ChannelImage = ({
       height: dimen.normalizeDimen(12)
     },
     backgroundDarkBlue: {
-      backgroundColor: colors.darkBlue
+      backgroundColor: COLORS.blue
     }
   });
 
@@ -175,14 +174,20 @@ const ChannelImage = ({
   if (type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_I_COMMENTED_ANONYMOUSLY) {
     return (
       <View>
-        <FastImage
-          source={AnonymousProfile}
-          style={[styles.image, styles.anonPmNotificationImageContainer]}
+        <AnonymousIcon
+          fill={COLORS.holyToscaSecondary}
+          width={dimen.normalizeDimen(48)}
+          height={dimen.normalizeDimen(48)}
+          marginTop={dimen.normalizeDimen(12)}
+          marginBottom={dimen.normalizeDimen(11)}
         />
-        <FastImage
-          source={AnonymousProfile}
-          style={[styles.postNotificationImage, styles.anonPmNotificationImageContainer]}
-        />
+        <View style={styles.postNotificationImage}>
+          <AnonymousIcon
+            fill={COLORS.holyTosca}
+            width={dimen.normalizeDimen(21)}
+            height={dimen.normalizeDimen(21)}
+          />
+        </View>
       </View>
     );
   }
@@ -190,9 +195,12 @@ const ChannelImage = ({
   if (type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_COMMENTED_ANONYMOUSLY) {
     return (
       <View>
-        <FastImage
-          source={AnonymousProfile}
-          style={[styles.image, styles.anonPmNotificationImageContainer]}
+        <AnonymousIcon
+          fill={COLORS.holyToscaSecondary}
+          width={dimen.normalizeDimen(48)}
+          height={dimen.normalizeDimen(48)}
+          marginTop={dimen.normalizeDimen(12)}
+          marginBottom={dimen.normalizeDimen(11)}
         />
         <ChannelAnonymousSubImage
           anonPostNotificationUserInfo={{
@@ -210,9 +218,12 @@ const ChannelImage = ({
   ) {
     return (
       <View>
-        <FastImage
-          source={AnonymousProfile}
-          style={[styles.image, styles.anonPmNotificationImageContainer]}
+        <AnonymousIcon
+          fill={COLORS.holyToscaSecondary}
+          width={dimen.normalizeDimen(48)}
+          height={dimen.normalizeDimen(48)}
+          marginTop={dimen.normalizeDimen(12)}
+          marginBottom={dimen.normalizeDimen(11)}
         />
         {renderMyPostNotificationSubImage()}
       </View>
@@ -222,9 +233,12 @@ const ChannelImage = ({
   if (type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION) {
     return (
       <View>
-        <FastImage
-          source={AnonymousProfile}
-          style={[styles.image, styles.anonPmNotificationImageContainer]}
+        <AnonymousIcon
+          fill={COLORS.holyToscaSecondary}
+          width={dimen.normalizeDimen(48)}
+          height={dimen.normalizeDimen(48)}
+          marginTop={dimen.normalizeDimen(12)}
+          marginBottom={dimen.normalizeDimen(11)}
         />
         <View style={[styles.postNotificationImage, styles.myPostNotificationImageContainer]}>
           <FastImage source={FeedIcon} style={styles.postNotificationIcon} />
@@ -240,10 +254,13 @@ const ChannelImage = ({
     return (
       <View>
         {renderMainImage()}
-        <FastImage
-          source={AnonymousProfile}
-          style={[styles.postNotificationImage, styles.anonPmNotificationImageContainer]}
-        />
+        <View style={styles.postNotificationImage}>
+          <AnonymousIcon
+            fill={COLORS.holyTosca}
+            width={dimen.normalizeDimen(21)}
+            height={dimen.normalizeDimen(21)}
+          />
+        </View>
       </View>
     );
   }

@@ -10,8 +10,7 @@ import MemoIcSearch from '../../../assets/icons/Ic_search';
 import StringConstant from '../../../utils/string/StringConstant';
 import dimen from '../../../utils/dimen';
 import {DISCOVERY_TAB_USERS} from '../../../utils/constants';
-import {SIZES} from '../../../utils/theme';
-import {colors} from '../../../utils/colors';
+import {COLORS, SIZES} from '../../../utils/theme';
 import {fonts} from '../../../utils/fonts';
 
 const Search = ({route, onPress}) => {
@@ -24,8 +23,8 @@ const Search = ({route, onPress}) => {
   };
 
   const themeColor = () => {
-    if (route?.name === 'SignedChannelList') return colors.darkBlue;
-    return colors.anon_primary;
+    if (route?.name === 'SignedChannelList') return COLORS.blue;
+    return COLORS.holyTosca;
   };
 
   return (
@@ -53,7 +52,7 @@ const Search = ({route, onPress}) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     marginBottom: SIZES.base
   },
   searchPressableContainer: {
@@ -62,7 +61,7 @@ const styles = StyleSheet.create({
   wrapperSearch: {
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: '#F5F5F5',
+    backgroundColor: COLORS.lightgrey,
     marginLeft: 20,
     marginRight: 12,
     borderRadius: 8,
@@ -87,7 +86,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 14,
     alignSelf: 'center',
-    color: colors.gray1
+    color: COLORS.gray9
   },
   wrapperIcon: {
     marginLeft: 8,
@@ -105,7 +104,7 @@ const styles = StyleSheet.create({
   },
   animatedViewContainer: {
     flexDirection: 'row',
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     marginBottom: SIZES.base,
     position: 'absolute',
     top: 0,
@@ -115,7 +114,7 @@ const styles = StyleSheet.create({
     paddingTop: 7,
     paddingBottom: 7,
     borderBottomWidth: 1,
-    borderBottomColor: colors.alto
+    borderBottomColor: COLORS.alto
   }
 });
 

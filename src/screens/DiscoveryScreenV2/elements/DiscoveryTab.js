@@ -4,10 +4,10 @@ import {Dimensions, Pressable, ScrollView, StyleSheet, Text, View} from 'react-n
 import {useRoute} from '@react-navigation/core';
 
 import {Context} from '../../../context';
-import {colors} from '../../../utils/colors';
 import {normalizeFontSize} from '../../../utils/fonts';
 import {setNavbarTitle} from '../../../context/actions/setMyProfileAction';
 import dimen from '../../../utils/dimen';
+import {COLORS} from '../../../utils/theme';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -41,7 +41,7 @@ const DiscoveryTab = ({onChangeScreen, selectedScreen = 0, tabs}) => {
           return (
             <Pressable
               key={`tabItem-${item}`}
-              android_ripple={{color: colors.gray1}}
+              android_ripple={{color: COLORS.gray9}}
               style={[
                 styles.tabItem(route.name === 'Followings' ? 3 : 4),
                 index === selectedScreen ? styles.underlineFocus : {}
@@ -67,7 +67,7 @@ const DiscoveryTab = ({onChangeScreen, selectedScreen = 0, tabs}) => {
 const styles = StyleSheet.create({
   tabContainer: {
     height: dimen.normalizeDimen(38),
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   tabItem: (numTabs) => ({
     width: numTabs === 4 ? undefined : windowWidth / numTabs,
@@ -80,14 +80,14 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   tabItemText: {
-    color: colors.alto,
+    color: COLORS.alto,
     fontWeight: '500',
     fontSize: normalizeFontSize(12.5),
     paddingVertical: 10,
     textAlign: 'center'
   },
   tabItemTextFocus: {
-    color: colors.black,
+    color: COLORS.black,
     fontWeight: '500',
     fontSize: normalizeFontSize(12.5),
     lineHeight: 16.94,
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10
   },
   underlineFocus: {
-    borderBottomColor: colors.bondi_blue,
+    borderBottomColor: COLORS.blue,
     borderBottomWidth: 2
   }
 });

@@ -10,7 +10,18 @@ import MemoIc_block_inactive from '../../assets/block/Ic_block_inactive';
 import MemoIc_comment from '../../assets/icons/Ic_comment';
 import MemoIc_share from '../../assets/icons/Ic_share';
 import Memoic_globe from '../../assets/icons/ic_globe';
-import {FONTS} from '../../utils/theme';
+import MemoIc_senddm from '../../assets/icons/ic_send_dm';
+import SendDMAnonBlock from '../../assets/icons/images/send-dm-anon-black.svg';
+import SendDMBlack from '../../assets/icons/images/send-dm-black.svg';
+import ShareBlack from '../../assets/icons/images/share-black.svg';
+import {Context} from '../../context';
+import useDMMessage from '../../hooks/core/chat/useDMMessage';
+import useCreateChat from '../../hooks/screen/useCreateChat';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import dimen from '../../utils/dimen';
+import {normalizeFontSize} from '../../utils/fonts';
+import BottomSheetMenu from '../BottomSheet/BottomSheetMenu';
+import {COLORS, FONTS} from '../../utils/theme';
 
 const Footer = ({
   onPressShare,
@@ -46,12 +57,12 @@ const Footer = ({
 
   const voteStyle = () => {
     if (totalVote > 0) {
-      return '#00ADB5';
+      return COLORS.holyTosca;
     }
     if (totalVote < 0) {
-      return '#FF2E63';
+      return COLORS.red;
     }
-    return '#C4C4C4';
+    return COLORS.gray1;
   };
   return (
     <View style={[styles.rowSpaceBeetwen, styles.container]}>
@@ -155,7 +166,7 @@ const styles = StyleSheet.create({
   },
   text: {
     ...FONTS.body3,
-    color: '#C4C4C4'
+    color: COLORS.gray1
   },
   vote: (colorBasedCount) => ({
     ...FONTS.body3,
@@ -175,12 +186,40 @@ const styles = StyleSheet.create({
     paddingRight: 13.5,
     paddingLeft: 18
   },
-  btnComment: {
+  btnDM: {
+    height: '100%',
+    paddingLeft: dimen.normalizeDimen(20),
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  textDM: {
+    fontSize: normalizeFontSize(12),
+    fontWeight: '600',
+    color: COLORS.greySubtile9,
+    marginLeft: dimen.normalizeDimen(4),
+    textAlignVertical: 'center'
+  },
+  card: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: COLORS.white,
+    width: dimen.normalizeDimen(50),
+    height: dimen.normalizeDimen(26),
+    elevation: dimen.normalizeDimen(2),
+    borderRadius: dimen.normalizeDimen(13),
+    padding: dimen.normalizeDimen(4),
+    shadowColor: 'rgba(0, 0, 0, 0.30)',
+    shadowOffset: {width: 0, height: 3},
+    shadowOpacity: dimen.normalizeDimen(0.7),
+    shadowRadius: dimen.normalizeDimen(2)
+  },
+  btnComment: (isShowDM, isSelf) => ({
     height: '100%',
     justifyContent: 'center',
     paddingLeft: 13.5,
     paddingRight: 10
-  },
+  }),
   btnBlock: {
     height: '100%',
     justifyContent: 'center',

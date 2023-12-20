@@ -1,18 +1,28 @@
 import React from 'react';
 import {Text, StyleSheet} from 'react-native';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
-import {SIZES} from '../../utils/theme';
+import dimen from '../../utils/dimen';
+import {COLORS, SIZES} from '../../utils/theme';
 
 const styles = StyleSheet.create({
   username: {
     fontFamily: fonts.inter[700],
     fontSize: normalizeFontSize(12),
-    color: '#828282',
+    color: COLORS.blackgrey,
     lineHeight: 14,
     marginLeft: 16
   },
   previewContainer: {
     marginLeft: SIZES.base
+  },
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  dot: {
+    fontFamily: fonts.inter[700],
+    fontSize: normalizeFontSize(12),
+    color: COLORS.blackgrey
   }
 });
 

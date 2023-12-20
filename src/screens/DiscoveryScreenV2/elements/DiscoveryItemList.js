@@ -11,7 +11,7 @@ import {
 
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 import TopicsProfilePictureEmptyState from '../../../assets/icon/TopicsProfilePictureEmptyState';
-import {colors} from '../../../utils/colors';
+import {COLORS} from '../../../utils/theme';
 import {fonts} from '../../../utils/fonts';
 
 const renderDefaultImage = (DefaultImage) => {
@@ -139,32 +139,32 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    backgroundColor: colors.bondi_blue
+    backgroundColor: COLORS.blue
   },
   container: {
     height: 64,
     flexDirection: 'row',
-    backgroundColor: 'white'
+    backgroundColor: COLORS.white
   },
   textButtonFollowing: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: colors.bondi_blue
+    color: COLORS.blue
   },
   textButtonFollow: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: colors.white
+    color: COLORS.white
   },
   profilepicture: {
     width: 48,
     height: 48,
-    // backgroundColor: colors.bondi_blue,
+    // backgroundColor: COLORS.blue,
     borderRadius: 24,
     resizeMode: 'cover',
-    borderColor: colors.lightgrey,
+    borderColor: COLORS.lightgrey,
     borderWidth: 1
   },
   wrapProfile: {
@@ -194,14 +194,14 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[500],
     fontWeight: 'bold',
     fontSize: 14,
-    color: colors.black,
+    color: COLORS.black,
     lineHeight: 16.94
     // backgroundColor: 'red',
   },
   textProfileFullName: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.gray,
+    color: COLORS.gray8,
     flexWrap: 'wrap',
     lineHeight: 18,
     // backgroundColor: 'green',
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
   domainDescription: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.gray,
+    color: COLORS.gray8,
     flexWrap: 'wrap',
     lineHeight: 18,
     // backgroundColor: 'green',
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: colors.bondi_blue,
+    borderColor: COLORS.blue,
     borderRadius: 8
   },
   card: {
@@ -251,20 +251,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    borderColor: colors.bondi_blue,
+    borderColor: COLORS.blue,
     borderWidth: 1
   },
   textButtonBlock: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: colors.white
+    color: COLORS.white
   },
   textButtonBlockUser: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: colors.bondi_blue
+    color: COLORS.blue
   },
   buttonBlock: {
     width: 88,
@@ -273,9 +273,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: colors.blockColor,
+    borderColor: COLORS.red,
     borderRadius: 8,
-    backgroundColor: colors.blockColor
+    backgroundColor: COLORS.red
   }
 });
 

@@ -27,8 +27,12 @@ import StringConstant from '../../utils/string/StringConstant';
 import useFeedHeader from './hooks/useFeedHeader';
 import {DEFAULT_PROFILE_PIC_PATH, PRIVACY_PUBLIC} from '../../utils/constants';
 import {calculateTime} from '../../utils/time';
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
+import ShareAndroidIcon from '../../assets/icons/images/share-for-android.svg';
+import TrashRed from '../../assets/icons/images/trash-red.svg';
+import BottomSheetMenu from '../../components/BottomSheet/BottomSheetMenu';
+import ShareUtils from '../../utils/share';
+import {COLORS} from '../../utils/theme';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -107,6 +111,27 @@ const _renderAnonimity = ({
   isPostDetail
 }) => {
   const navigation = useNavigation();
+  const refSheet = React.useRef();
+  const dataSheet = [
+    {
+      id: 1,
+      name: 'Share link',
+      icon: <ShareAndroidIcon />
+    }
+  ];
+
+  if (isShowDelete) {
+    dataSheet.push({
+      id: 2,
+      name: 'Delete post',
+      icon: <TrashRed />,
+      onPress: () => {
+        refSheet.current.close();
+        onDeletePost();
+      },
+      style: {color: COLORS.red}
+    });
+  }
 
   return (
     <SafeAreaView>
@@ -137,15 +162,13 @@ const _renderAnonimity = ({
             <View style={[styles.containerFeedName, {alignItems: 'center'}]}>
               <AnonymousUsername version={version} anonUserInfo={anonUserInfo} />
             </View>
-            {showAnonymousOption && !hideThreeDot && (
-              <GlobalButton
-                buttonStyle={{position: 'absolute', right: 0, top: -8}}
-                onPress={onHeaderOptionClicked}>
-                <View style={{zIndex: 1000}}>
-                  <ElipsisIcon width={4} height={14} fill={colors.blackgrey} />
-                </View>
-              </GlobalButton>
-            )}
+            <GlobalButton
+              buttonStyle={{position: 'absolute', right: 0, top: -8}}
+              onPress={() => refSheet.current.open()}>
+              <View style={{zIndex: 1000}}>
+                <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
+              </View>
+            </GlobalButton>
             <View style={styles.containerFeedText}>
               <Text style={styles.feedDate}>{calculateTime(time)}</Text>
               <View style={styles.point} />
@@ -181,6 +204,28 @@ const _renderProfileNormal = ({
   hideThreeDot,
   isPostDetail
 }) => {
+  const refSheet = React.useRef();
+  const dataSheet = [
+    {
+      id: 1,
+      name: 'Share link',
+      icon: <ShareAndroidIcon />,
+      onPress: () => ShareUtils.shareUserLink(username)
+    }
+  ];
+
+  if (isShowDelete) {
+    dataSheet.push({
+      id: 2,
+      name: 'Delete post',
+      icon: <TrashRed />,
+      onPress: () => {
+        refSheet.current.close();
+        onDeletePost();
+      },
+      style: {color: COLORS.red}
+    });
+  }
   const {navigateToProfile, username, profile_pic_url, onBackNormalUser} = useFeedHeader({
     actor,
     source
@@ -222,12 +267,10 @@ const _renderProfileNormal = ({
 
               <GlobalButton
                 buttonStyle={{marginLeft: 'auto', paddingBottom: 0, alignSelf: 'center'}}
-                onPress={onHeaderOptionClicked}>
-                {hideThreeDot ? null : (
-                  <View style={{zIndex: 1000}}>
-                    <ElipsisIcon width={4} height={14} fill={colors.blackgrey} />
-                  </View>
-                )}
+                onPress={() => refSheet.current.open()}>
+                <View style={{zIndex: 1000}}>
+                  <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
+                </View>
               </GlobalButton>
             </View>
             <View style={[styles.containerFeedText, {paddingBottom: 0}]}>
@@ -346,8 +389,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
     lineHeight: 16.94,
-    color: colors.black,
-    flex: 1
+    color: COLORS.black
   },
   containerFeedText: {
     flexDirection: 'row',
@@ -359,21 +401,21 @@ const styles = StyleSheet.create({
   feedDate: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.blackgrey,
+    color: COLORS.blackgrey,
     lineHeight: 18
   },
   feedDateLocation: {
     flex: 1,
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.blackgrey,
+    color: COLORS.blackgrey,
     lineHeight: 18
   },
   point: {
     width: 2,
     height: 2,
     borderRadius: 4,
-    backgroundColor: colors.gray,
+    backgroundColor: COLORS.gray8,
     marginLeft: 8,
     marginRight: 8,
     alignSelf: 'center',
@@ -387,26 +429,26 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 14,
     lineHeight: 24,
-    color: colors.black
+    color: COLORS.black
   },
   textComment: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
     lineHeight: 18,
-    color: colors.gray
+    color: COLORS.gray8
   },
   usernameComment: {
     fontFamily: fonts.inter[500],
     fontWeight: '900',
     fontSize: 12,
     lineHeight: 24,
-    color: colors.black
+    color: COLORS.black
   },
   usernameTextComment: {
     fontFamily: fonts.inter[500],
     fontSize: 12,
     lineHeight: 24,
-    color: colors.gray
+    color: COLORS.gray8
   },
   item: {
     width: screenWidth - 20,
@@ -435,7 +477,22 @@ const styles = StyleSheet.create({
   avatarImage: {height: 48, width: 48, borderRadius: 24},
   postDetail: (isPostDetail) => ({
     paddingLeft: isPostDetail ? 10 : 0
-  })
+  }),
+  contentFeedName: {
+    flexDirection: 'row'
+  },
+  textFollow: {
+    color: COLORS.blue,
+    fontSize: normalizeFontSize(14),
+    fontStyle: 'normal',
+    fontWeight: '500'
+  },
+  textFollowing: {
+    color: COLORS.grey9,
+    fontSize: normalizeFontSize(14),
+    fontStyle: 'normal',
+    fontWeight: '500'
+  }
 });
 
 Header.propsTypes = {

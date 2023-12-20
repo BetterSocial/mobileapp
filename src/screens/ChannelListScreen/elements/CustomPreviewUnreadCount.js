@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import {colors} from '../../../utils/colors';
+import {COLORS} from '../../../utils/theme';
 
 const styles = StyleSheet.create({
   unreadContainer: {
@@ -9,12 +9,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.bondi_blue,
+    backgroundColor: COLORS.holyTosca,
     marginRight: 12,
     marginLeft: 'auto'
   },
   unreadText: {
-    color: colors.white,
+    color: COLORS.white,
     textAlign: 'center',
     fontSize: 10,
     fontFamily: 'Inter'

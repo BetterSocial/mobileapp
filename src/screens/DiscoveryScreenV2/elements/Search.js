@@ -1,6 +1,8 @@
 /* eslint-disable no-use-before-define */
-import * as React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/core';
+import {debounce} from 'lodash';
+import * as React from 'react';
 import {
   Keyboard,
   StyleSheet,
@@ -9,22 +11,19 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import {debounce} from 'lodash';
-import {useNavigation} from '@react-navigation/core';
 
 import PropTypes from 'prop-types';
-import DiscoveryAction from '../../../context/actions/discoveryAction';
-import IconClear from '../../../assets/icon/IconClear';
 import MemoIcArrowBackWhite from '../../../assets/arrow/Ic_arrow_back_white';
+import IconClear from '../../../assets/icon/IconClear';
 import MemoIcSearch from '../../../assets/icons/Ic_search';
+import {Context} from '../../../context/Store';
+import DiscoveryAction from '../../../context/actions/discoveryAction';
+import {RECENT_SEARCH_TERMS} from '../../../utils/cache/constant';
+import dimen from '../../../utils/dimen';
+import {fonts, normalizeFontSize} from '../../../utils/fonts';
 import StringConstant from '../../../utils/string/StringConstant';
 import TestIdConstant from '../../../utils/testId';
-import dimen from '../../../utils/dimen';
 import {COLORS, FONTS, SIZES} from '../../../utils/theme';
-import {Context} from '../../../context/Store';
-import {RECENT_SEARCH_TERMS} from '../../../utils/cache/constant';
-import {colors} from '../../../utils/colors';
-import {fonts, normalizeFontSize} from '../../../utils/fonts';
 
 const DiscoverySearch = ({
   setDiscoveryLoadingData = () => {},
@@ -172,7 +171,7 @@ const DiscoverySearch = ({
               <MemoIcArrowBackWhite
                 width={20}
                 height={12}
-                fill={colors.black}
+                fill={COLORS.black}
                 style={{alignSelf: 'center'}}
               />
             </View>
@@ -211,7 +210,7 @@ const DiscoverySearch = ({
               radius: 35
             }}>
             <View style={styles.wrapperDeleteIcon}>
-              <IconClear width={9} height={10} iconColor={colors.black} />
+              <IconClear width={9} height={10} iconColor={COLORS.black} />
             </View>
           </TouchableOpacity>
         </View>
@@ -242,15 +241,14 @@ const styles = StyleSheet.create({
   },
   container: {
     flexDirection: 'row',
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     marginBottom: SIZES.base,
     marginHorizontal: SIZES.base
   },
   clearIconContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: dimen.normalizeDimen(-20.5),
-    paddingHorizontal: dimen.normalizeDimen(30),
+    paddingRight: dimen.normalizeDimen(8),
     zIndex: 1000
   },
   searchContainer: {
@@ -259,7 +257,7 @@ const styles = StyleSheet.create({
   },
   wrapperSearch: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: COLORS.lightgrey,
     borderRadius: dimen.normalizeDimen(8),
     alignSelf: 'center',
     flexDirection: 'row',
@@ -296,13 +294,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   newPostText: {
-    color: COLORS.holytosca,
+    color: COLORS.blue,
     marginRight: dimen.normalizeDimen(11),
     ...FONTS.h3
   },
   animatedViewContainer: (hideBackIcon) => ({
     flexDirection: 'row',
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     marginTop: 0,
     zIndex: 10,
     height: dimen.size.DISCOVERY_HEADER_HEIGHT,

@@ -17,10 +17,10 @@ import Header from '../../components/Header';
 import Loading from '../Loading';
 import ProfileSettingItem from './element/ProfileSettingItem';
 import useSettings from './hooks/useSettings';
-import {colors} from '../../utils/colors';
 import {debugAtom} from '../../service/debug';
 import {fonts} from '../../utils/fonts';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import {COLORS} from '../../utils/theme';
 
 const {width} = Dimensions.get('screen');
 
@@ -106,7 +106,7 @@ const Settings = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   containerHeader: {padding: 16},
   header: {
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 14,
-    color: colors.black
+    color: COLORS.black
   },
   floatLeft: {
     position: 'absolute',
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   textVersion: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.black
+    color: COLORS.black
   }
 });
 export default withInteractionsManaged(React.memo(Settings));

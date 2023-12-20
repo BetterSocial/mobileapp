@@ -20,9 +20,9 @@ import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from '../Comments/WriteComment';
 import useReplyComment from './hooks/useReplyComment';
 import useWriteComment from '../Comments/hooks/useWriteComment';
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import useCommentAction from '../Comments/hooks/useCommentAction';
+import {COLORS} from '../../utils/theme';
 
 const ReplyCommentId = ({
   itemProp,
@@ -178,7 +178,7 @@ const ReplyCommentId = ({
 export const ContainerReply = ({children, isGrandchild = true, key}) => (
   <View
     key={key}
-    style={[styles.containerReply, {borderColor: isGrandchild ? 'transparent' : colors.gray1}]}>
+    style={[styles.containerReply, {borderColor: isGrandchild ? 'transparent' : COLORS.gray9}]}>
     {children}
   </View>
 );
@@ -189,7 +189,7 @@ export const styles = StyleSheet.create({
   container: {
     height: 'auto',
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: COLORS.white
     // backgroundColor: 'blue',
   },
   containerComment: {
@@ -216,10 +216,10 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     paddingBottom: 14,
-    borderLeftColor: isLast ? 'transparent' : colors.gray1
+    borderLeftColor: isLast ? 'transparent' : COLORS.gray9
   }),
   seeRepliesText: {
-    color: colors.blue
+    color: COLORS.blue
   },
   btn: {
     paddingVertical: 8,
@@ -227,13 +227,13 @@ export const styles = StyleSheet.create({
     borderRadius: 20
   },
   btnText: {
-    color: '#fff'
+    color: COLORS.white
   },
   headerText: {
     fontFamily: fonts.inter[600],
     fontSize: 14,
     marginLeft: -24,
-    color: '#000',
+    color: COLORS.black,
     alignSelf: 'center'
   },
   image: {
@@ -241,9 +241,9 @@ export const styles = StyleSheet.create({
     height: 48
   },
   input: {
-    backgroundColor: '#F2F2F2',
+    backgroundColor: COLORS.concrete,
     flex: 1,
-    color: '#000',
+    color: COLORS.b,
     padding: 10,
     marginLeft: 20,
     borderRadius: 8
@@ -257,14 +257,14 @@ export const styles = StyleSheet.create({
   post: {
     fontFamily: fonts.inter[400],
     fontSize: 16,
-    color: '#333333',
+    color: COLORS.mineShaft,
     marginLeft: 28
   },
   mainLeftConnector: {
     height: '100%',
     width: 1,
     position: 'absolute',
-    backgroundColor: colors.gray1,
+    backgroundColor: COLORS.gray9,
     left: 46,
     zIndex: -100
   },
@@ -274,8 +274,8 @@ export const styles = StyleSheet.create({
     borderLeftWidth: 1.5,
     borderBottomWidth: 1.5,
     // borderBottomLeftRadius: 1,
-    borderLeftColor: colors.gray1,
-    borderBottomColor: colors.gray1,
+    borderLeftColor: COLORS.gray9,
+    borderBottomColor: COLORS.gray9,
     marginRight: 4,
     marginLeft: -1,
     borderBottomLeftRadius: 15 / 2,
@@ -283,14 +283,14 @@ export const styles = StyleSheet.create({
     // marginTop: 1
   },
   childCommentWrapper: {
-    borderLeftColor: colors.gray1,
+    borderLeftColor: COLORS.gray9,
     borderLeftWidth: 1,
     flex: 1
   },
   childLevelMainConnector: {
     flex: 1,
     borderLeftWidth: 1,
-    borderLeftColor: colors.gray1,
+    borderLeftColor: COLORS.gray9,
     marginLeft: 24
   },
   backArrow: {

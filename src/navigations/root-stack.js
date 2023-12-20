@@ -57,7 +57,7 @@ import {
 } from '../screens';
 import {InitialStartupAtom, LoadingStartupContext} from '../service/initialStartup';
 import {NavigationConstants} from '../utils/constants';
-import {colors} from '../utils/colors';
+import {COLORS} from '../utils/theme';
 import {followersOrFollowingAtom} from '../screens/ChannelListScreen/model/followersOrFollowingAtom';
 import {useInitialStartup} from '../hooks/useInitialStartup';
 
@@ -140,16 +140,6 @@ export const RootNavigator = ({currentScreen}) => {
             <RootStack.Screen name="UnauthenticatedStack" component={UnauthenticatedNavigator} />
           )}
         </RootStack.Navigator>
-        <View
-          style={{
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            bottom: 0,
-            height: insets.bottom,
-            backgroundColor: colors.white
-          }}
-        />
       </View>
     </LoadingStartupContext.Provider>
   );
@@ -161,6 +151,14 @@ RootNavigator.propTypes = {
 
 // region authenticatedStack
 const AuthenticatedStack = createNativeStackNavigator();
+
+const withSafeAreaView = (Component) => {
+  return (props) => (
+    <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+      <Component {...props} />
+    </SafeAreaView>
+  );
+};
 
 const AuthenticatedNavigator = () => {
   const withKeyboardWrapper = (Component) => {
@@ -347,7 +345,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="SampleChatScreen"
-          component={withKeyboardWrapper(SampleChatScreen)}
+          component={withSafeAreaView(withKeyboardWrapper(SampleChatScreen))}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen

@@ -11,9 +11,9 @@ import {MESSAGE_TYPE_DELETED} from '../../../utils/constants';
 import {SIGNED} from '../../../hooks/core/constant';
 import {ScrollContext} from '../../../hooks/screen/useChatScreenHook';
 import {calculateTime} from '../../../utils/time';
-import {colors} from '../../../utils/colors';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
 import IconVideoPlay from '../../../assets/icon/IconVideoPlay';
+import {COLORS} from '../../../utils/theme';
 
 interface ChatReplyPreviewProps {
   type: 'SIGNED' | 'ANONYMOUS';
@@ -75,7 +75,7 @@ const ChatReplyPreview = ({type}: ChatReplyPreviewProps) => {
         onPress={clearReplyPreview}
         activeOpacity={0.75}
         style={styles.containerDismiss}>
-        <IconClear fill={colors.black} width={12} height={12} />
+        <IconClear fill={COLORS.black} width={12} height={12} />
       </TouchableOpacity>
     </Animated.View>
   );
@@ -88,13 +88,13 @@ const styles = StyleSheet.create({
     paddingLeft: dimen.normalizeDimen(8),
     paddingRight: dimen.normalizeDimen(5),
     alignItems: 'center',
-    backgroundColor: colors.lightgrey
+    backgroundColor: COLORS.lightgrey
   },
   containerSigned: {
-    backgroundColor: colors.darkBlue
+    backgroundColor: COLORS.blue
   },
   containerAnon: {
-    backgroundColor: colors.anon_primary
+    backgroundColor: COLORS.holyTosca
   },
   textContainer: {
     flex: 1,
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(10),
     lineHeight: 19.36,
-    color: colors.white
+    color: COLORS.white
   },
   dot: {
     width: 3,
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     marginLeft: 5,
     marginRight: 5,
-    backgroundColor: colors.white,
+    backgroundColor: COLORS.white,
     alignSelf: 'center'
   },
   timeText: {
@@ -127,14 +127,14 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(10),
     lineHeight: 12.19,
     alignSelf: 'center',
-    color: colors.white
+    color: COLORS.white
   },
   text: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
     lineHeight: 19.36,
     marginBottom: 4,
-    color: colors.white
+    color: COLORS.white
   },
   containerDismiss: {
     marginLeft: 5,
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   deletedText: {
-    color: colors.light_silver,
+    color: COLORS.lightSilver,
     fontStyle: 'italic'
   }
 });

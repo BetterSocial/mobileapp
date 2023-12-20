@@ -16,14 +16,14 @@ import useMoveChatTypeHook from '../../hooks/core/chat/useMoveChatTypeHook';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import useChatScreenHook, {ScrollContext} from '../../hooks/screen/useChatScreenHook';
 import {ANONYMOUS} from '../../hooks/core/constant';
-import {colors} from '../../utils/colors';
+import {COLORS} from '../../utils/theme';
 
 const {height} = Dimensions.get('window');
 
 export const styles = StyleSheet.create({
   keyboardAvoidingView: {
     flex: 1,
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   container: {
     display: 'flex',
@@ -39,10 +39,10 @@ export const styles = StyleSheet.create({
     height: '100%'
   },
   inputContainer: {
-    backgroundColor: colors.white,
+    backgroundColor: COLORS.white,
     zIndex: 100,
     padding: 8,
-    borderTopColor: colors.lightgrey,
+    borderTopColor: COLORS.lightgrey,
     borderTopWidth: 1,
     flexDirection: 'row',
     alignItems: 'center',
@@ -105,7 +105,7 @@ const SampleChatScreen = () => {
 
   return (
     <ScrollContext.Provider value={scrollContext}>
-      <StatusBar barStyle="light-content" backgroundColor={colors.anon_primary} />
+      <StatusBar barStyle="light-content" backgroundColor={COLORS.holyTosca} />
 
       <View style={styles.keyboardAvoidingView}>
         {selectedChannel ? (

@@ -3,12 +3,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
 
-import Content from './Content';
-import ContentLink from './ContentLink';
-import Header from './Header';
-import ShareUtils from '../../utils/share';
-import dimen from '../../utils/dimen';
-import useFeed from './hooks/useFeed';
+import {Footer, Gap, PreviewComment} from '../../components';
+import {Context} from '../../context';
+import {followUserAnon, setFollow, setUnFollow, unfollowUserAnon} from '../../service/profile';
+import {showScoreAlertDialog} from '../../utils/Utils';
 import {
   ANALYTICS_SHARE_POST_FEED_ID,
   ANALYTICS_SHARE_POST_FEED_SCREEN,
@@ -21,7 +19,14 @@ import {Footer, Gap, PreviewComment} from '../../components';
 import {colors} from '../../utils/colors';
 import {getCommentLength} from '../../utils/getstream';
 import {normalizeFontSizeByWidth} from '../../utils/fonts';
-import {showScoreAlertDialog} from '../../utils/Utils';
+import {getCommentLength} from '../../utils/getstream';
+import ShareUtils from '../../utils/share';
+import Content from './Content';
+import ContentLink from './ContentLink';
+import Header from './Header';
+import useFeed from './hooks/useFeed';
+import {setFeedByIndex} from '../../context/actions/feeds';
+import {COLORS} from '../../utils/theme';
 
 const tabBarHeight = StatusBar.currentHeight;
 const FULL_WIDTH = Dimensions.get('screen').width;
@@ -204,8 +209,8 @@ const styles = StyleSheet.create({
   cardContainer: {
     width: FULL_WIDTH,
     borderBottomWidth: 0,
-    borderBottomColor: colors.lightgrey,
-    backgroundColor: 'white',
+    borderBottomColor: COLORS.lightgrey,
+    backgroundColor: COLORS.white,
     height: dimen.size.FEED_CURRENT_ITEM_HEIGHT,
     marginBottom: normalizeFontSizeByWidth(4)
   },

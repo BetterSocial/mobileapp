@@ -14,7 +14,6 @@ import useChatClientHook from '../../../utils/getstream/useChatClientHook';
 import useIsReady from '../../../hooks/useIsReady';
 import {COLORS} from '../../../utils/theme';
 import {Context} from '../../../context/Store';
-import {colors} from '../../../utils/colors';
 import {convertTopicNameToTopicPageScreenParam} from '../../../utils/string/StringUtils';
 import {fonts} from '../../../utils/fonts';
 import {getUserId} from '../../../utils/users';
@@ -234,11 +233,11 @@ const TopicFragment = ({
 const styles = StyleSheet.create({
   fragmentContainer: {
     flex: 1,
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   noDataFoundContainer: {
     flex: 1,
-    backgroundColor: colors.white,
+    backgroundColor: COLORS.white,
     justifyContent: 'center'
   },
   noDataFoundText: {

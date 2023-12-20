@@ -8,8 +8,8 @@ import MemoIcPlus from '../../../../assets/icons/ic_plus';
 import MemoIc_arrow_right from '../../../../assets/icons/Ic_arrow_right';
 import PollItem from '../PollItem';
 import {MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED} from '../../../../utils/constants';
-import {colors} from '../../../../utils/colors';
 import {getDurationTimeText} from '../../../../utils/string/StringUtils';
+import {COLORS} from '../../../../utils/theme';
 
 function CreatePollContainer({
   onremoveallpoll = () => {},
@@ -98,7 +98,7 @@ function CreatePollContainer({
                 <WheelPicker
                   data={days}
                   selectedItem={selectedtime.day}
-                  indicatorColor={colors.holytosca}
+                  indicatorColor={COLORS.holyTosca}
                   indicatorWidth={3}
                   onItemSelected={(value) => setPickerDay(value)}
                   isCyclic={true}
@@ -111,7 +111,7 @@ function CreatePollContainer({
                 <WheelPicker
                   data={hour}
                   selectedItem={selectedtime.hour}
-                  indicatorColor={colors.holytosca}
+                  indicatorColor={COLORS.holyTosca}
                   indicatorWidth={3}
                   onItemSelected={(value) => setPickerHour(value)}
                   isCyclic={true}
@@ -125,7 +125,7 @@ function CreatePollContainer({
                   data={minute}
                   selectedItem={selectedtime.minute}
                   onItemSelected={(value) => setPickerMinute(value)}
-                  indicatorColor={colors.holytosca}
+                  indicatorColor={COLORS.holyTosca}
                   indicatorWidth={3}
                   isCyclic={true}
                 />

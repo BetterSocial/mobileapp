@@ -34,6 +34,9 @@ import {setFeedByIndex} from '../../context/actions/feeds';
 import {showScoreAlertDialog} from '../../utils/Utils';
 import {useFeedDataContext} from '../../hooks/useFeedDataContext';
 import {withInteractionsManaged} from '../WithInteractionManaged';
+import Content from './elements/Content';
+import usePostDetail from './hooks/usePostDetail';
+import {COLORS} from '../../utils/theme';
 
 const {width, height} = Dimensions.get('window');
 
@@ -658,7 +661,7 @@ export default withInteractionsManaged(React.memo(PostPageDetailIdComponent));
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.white,
     flex: 1
   },
   containerText: {
@@ -668,10 +671,10 @@ const styles = StyleSheet.create({
   textDesc: {
     fontFamily: fonts.inter[400],
     fontSize: 16,
-    color: '#000'
+    color: COLORS.black
   },
   more: {
-    color: '#0e24b3',
+    color: COLORS.blueZaffre,
     fontFamily: fonts.inter[400],
     fontSize: 14
   },
@@ -683,8 +686,8 @@ const styles = StyleSheet.create({
       height: 1
     },
     shadowOpacity: 0.5,
-    backgroundColor: 'white',
-    borderBottomColor: '#C4C4C4',
+    backgroundColor: COLORS.white,
+    borderBottomColor: COLORS.gray1,
     marginBottom: -1
   },
   gap: {height: 16},
@@ -701,7 +704,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     width: '100%',
     borderBottomWidth: 1,
-    borderBottomColor: '#C4C4C4'
+    borderBottomColor: COLORS.gray1
   },
   scrollContent: {
     paddingBottom: 0
