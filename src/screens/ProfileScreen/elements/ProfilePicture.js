@@ -6,8 +6,9 @@ import PropTypes from 'prop-types';
 import Image from '../../../components/Image';
 import MemoIcAddCircle from '../../../assets/icons/ic_add_circle';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
-import {normalize} from '../../../utils/fonts';
+import {normalize, normalizeFontSize} from '../../../utils/fonts';
 import {CircleGradient} from '../../../components/Karma/CircleGradient';
+import dimen from '../../../utils/dimen';
 
 const ProfilePicture = ({
   onImageContainerClick,
@@ -23,7 +24,7 @@ const ProfilePicture = ({
   return (
     <View style={styles.wrapImageProfile}>
       <TouchableNativeFeedback onPress={onImageContainerClick}>
-        <CircleGradient fill={karmaScore} size={normalize(100)} width={normalize(2)}>
+        <CircleGradient fill={karmaScore} size={normalize(100)} width={normalize(2.2)}>
           <View style={styles.profileImageContainer}>
             <Image
               style={styles.profileImage}
