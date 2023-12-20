@@ -202,7 +202,7 @@ describe('TESTING ChatSchema', () => {
       await chatSchema.save(mockDb);
 
       // Assertion
-      expect(mockDb.executeSql).toHaveBeenCalledTimes(1);
+      expect(mockDb.executeSql).toHaveBeenCalledTimes(2);
       expect(mockDb.executeSql).toHaveBeenCalledWith(
         expect.any(String),
         savePrepReplacementExpectation
