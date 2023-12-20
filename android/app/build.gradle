@@ -272,6 +272,8 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:26.7.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-crashlytics'
+
+    compile project(':react-native-image-picker')
 }
 
 // Run this once to be able to run the application with BUCK
