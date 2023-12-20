@@ -30,40 +30,38 @@ const TopicDomainHeader = (props) => {
       <Text style={styles.domainText(shouldDisplay)} numberOfLines={1} ellipsizeMode="tail">
         {`#${convertString(domain, ' ', '')}`}
       </Text>
-      <Pressable onPress={handlePress} style={{backgroundColor: 'transparent'}}>
-        <View style={{flexDirection: 'row', alignItems: 'center', marginTop: normalize(1)}}>
-          <CommunityIcon
-            color={shouldDisplay ? '#FFFFFF' : undefined}
-            style={{
-              marginRight: normalize(5),
-              height: normalize(8)
-            }}
-          />
-          {props?.initialData?.memberCount === undefined && props.isLoading ? (
-            <Shimmer height={10} width={normalize(25)} />
-          ) : (
-            <Text style={styles.domainMember(shouldDisplay)}>
-              {props?.initialData?.memberCount || memberCount}
-            </Text>
-          )}
-          <Text style={styles.domainMember(shouldDisplay)}> Members</Text>
-        </View>
+      <View style={{flexDirection: 'row', alignItems: 'center', marginTop: normalize(1)}}>
+        <CommunityIcon
+          color={shouldDisplay ? '#FFFFFF' : undefined}
+          style={{
+            marginRight: normalize(5),
+            height: normalize(8)
+          }}
+        />
         {props?.initialData?.memberCount === undefined && props.isLoading ? (
-          <Shimmer height={10} width={normalize(60)} />
+          <Shimmer height={10} width={normalize(25)} />
         ) : (
-          isFollow &&
-          !hideSeeMember && (
-            <Pressable onPress={handlePress} style={{backgroundColor: 'transparent'}}>
-              <Text
-                style={styles.seeMemberText(props.isHeaderHide)}
-                numberOfLines={1}
-                ellipsizeMode="tail">
-                See community members
-              </Text>
-            </Pressable>
-          )
+          <Text style={styles.domainMember(shouldDisplay)}>
+            {props?.initialData?.memberCount || memberCount}
+          </Text>
         )}
-      </Pressable>
+        <Text style={styles.domainMember(shouldDisplay)}> Members</Text>
+      </View>
+      {props?.initialData?.memberCount === undefined && props.isLoading ? (
+        <Shimmer height={10} width={normalize(60)} />
+      ) : (
+        isFollow &&
+        !hideSeeMember && (
+          <Pressable onPress={handlePress} style={{backgroundColor: 'transparent'}}>
+            <Text
+              style={styles.seeMemberText(props.isHeaderHide)}
+              numberOfLines={1}
+              ellipsizeMode="tail">
+              See community members
+            </Text>
+          </Pressable>
+        )
+      )}
     </View>
   );
 };
