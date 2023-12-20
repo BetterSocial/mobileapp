@@ -25,9 +25,9 @@ export const KarmaScore = ({score}: KarmaScoreProps) => {
           alignSelf: 'flex-start'
         }}>
         <View style={{marginRight: 8}}>
-          <CircleGradient size={normalize(28)} width={normalize(2.3)} fill={score}>
+          <CircleGradient size={normalize(28)} width={normalize(2.8)} fill={score}>
             <FastImage
-              resizeMode={FastImage.resizeMode.center}
+              resizeMode={FastImage.resizeMode.cover}
               source={BetterScore}
               style={{width: 28, height: 28}}
             />

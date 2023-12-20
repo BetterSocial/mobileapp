@@ -411,7 +411,7 @@ const OtherProfile = () => {
             <CircleGradient
               fill={dataMain.karma_score ?? 0}
               size={normalize(100)}
-              width={normalize(2)}>
+              width={normalize(3)}>
               <Image
                 style={styles.profileImage}
                 source={{
@@ -749,12 +749,9 @@ const styles = StyleSheet.create({
     marginLeft: 18
   },
   profileImage: {
-    width: 94,
-    height: 94,
-    borderRadius: 100,
-    // marginLeft: 3,
-    marginTop: 3,
-    marginBottom: 3
+    width: 95,
+    height: 95,
+    borderRadius: 100
   },
   containerProfile: {
     marginTop: 24

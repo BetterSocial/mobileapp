@@ -86,7 +86,7 @@ const DomainList = (props) => {
           testId="images"
           fill={item.karmaScore}
           size={normalize(51)}
-          width={normalize(2.3)}>
+          width={normalize(2)}>
           <Image
             testId="images"
             source={{

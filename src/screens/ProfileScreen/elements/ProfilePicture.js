@@ -23,7 +23,7 @@ const ProfilePicture = ({
   return (
     <View style={styles.wrapImageProfile}>
       <TouchableNativeFeedback onPress={onImageContainerClick}>
-        <CircleGradient fill={karmaScore} size={normalize(100)} width={normalize(2)}>
+        <CircleGradient fill={karmaScore} size={normalize(100)} width={normalize(2.2)}>
           <View style={styles.profileImageContainer}>
             <Image
               style={styles.profileImage}
