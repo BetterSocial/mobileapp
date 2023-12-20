@@ -166,7 +166,7 @@ const LocalCommunity = () => {
         <Button
           testID="btn"
           disabled={location.length < 1}
-          style={location.length >= 1 ? null : styles.button}
+          styles={location.length >= 1 ? null : styles.button}
           onPress={() => next()}>
           NEXT
         </Button>
