@@ -216,6 +216,7 @@ const RenderListFeed = (props) => {
             isSelf={item.anonimity ? false : userId === item?.actor?.id}
             onPressScore={showScoreAlertDialog}
             showScoreButton={showScoreButton}
+            isShowDM
           />
         </View>
         <BlurredLayer
