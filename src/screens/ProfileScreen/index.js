@@ -74,9 +74,6 @@ import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import ShadowFloatingButtons from '../../components/Button/ShadowFloatingButtons';
-import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
-import StorageUtils from '../../utils/storage';
 
 const {width} = Dimensions.get('screen');
 
