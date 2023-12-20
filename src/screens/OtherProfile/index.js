@@ -1,6 +1,7 @@
 import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import ToastMessage from 'react-native-toast-message';
+import netInfo from '@react-native-community/netinfo';
 import {
   Dimensions,
   Image,
@@ -12,15 +13,14 @@ import {
   Text,
   TouchableNativeFeedback,
   TouchableOpacity,
-  View,
-  Pressable
+  View
 } from 'react-native';
 /* eslint-disable no-underscore-dangle */
 import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
-import PropTypes from 'prop-types';
-import netInfo from '@react-native-community/netinfo';
+
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
+import BioAndChat from './elements/BioAndChat';
 import BlockIcon from '../../assets/icons/images/block-blue.svg';
 import BlockProfile from '../../components/Blocking/BlockProfile';
 import BottomSheetBio from '../ProfileScreen/elements/BottomSheetBio';
@@ -32,10 +32,12 @@ import RenderItem from '../ProfileScreen/elements/RenderItem';
 import ReportUser from '../../components/Blocking/ReportUser';
 import ShareUtils from '../../utils/share';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
-import ToggleSwitch from '../../components/ToggleSwitch';
-import TextAreaChat from '../../components/TextAreaChat';
+import StorageUtils from '../../utils/storage';
 import dimen from '../../utils/dimen';
-import useSaveAnonChatHook from '../../database/hooks/useSaveAnonChatHook';
+import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
+import useCreateChat from '../../hooks/screen/useCreateChat';
+import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
+import useViewPostTimeHook from '../FeedScreen/hooks/useViewPostTimeHook';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {blockUser, unblockUserApi} from '../../service/blocking';
@@ -53,79 +55,10 @@ import {generateAnonProfileOtherProfile} from '../../service/anonymousProfile';
 import {getFeedDetail} from '../../service/post';
 import {getSingularOrPluralText} from '../../utils/string/StringUtils';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
-import {sendAnonymousDMOtherProfile, sendSignedDMOtherProfile} from '../../service/chat';
 import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherProfileFeed';
-import {trimString} from '../../utils/string/TrimString';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import StorageUtils from '../../utils/storage';
-import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
-import useCreateChat from '../../hooks/screen/useCreateChat';
-import {ANON_PM, SIGNED} from '../../hooks/core/constant';
 
-const {width, height} = Dimensions.get('screen');
-// let headerHeight = 0;
-
-const BioAndChat = (props) => {
-  const {
-    isAnonimity,
-    bio,
-    openBio,
-    isSignedMessageEnabled,
-    showSignedMessageDisableToast,
-    loadingGenerateAnon,
-    avatarUrl,
-    anonProfile,
-    onSendDM,
-    setDMChat,
-    loadingSendDM,
-    dmChat,
-    username,
-    toggleSwitch,
-    isAnonimityEnabled
-  } = props;
-  return (
-    <View style={styles.bioAndSendChatContainer(isAnonimity)}>
-      <View style={styles.containerBio}>
-        {bio === null || bio === undefined ? (
-          <Text style={styles.bioText(isAnonimity)}>Send a message</Text>
-        ) : (
-          <Pressable onPress={openBio}>
-            <Text style={styles.bioText(isAnonimity)}>{bio}</Text>
-          </Pressable>
-        )}
-      </View>
-      <TouchableOpacity
-        disabled={isSignedMessageEnabled}
-        activeOpacity={1}
-        onPress={showSignedMessageDisableToast}>
-        <TextAreaChat
-          isAnonimity={isAnonimity}
-          loadingAnonUser={loadingGenerateAnon}
-          avatarUrl={avatarUrl}
-          anonUser={anonProfile}
-          placeholder="Send a direct message"
-          disabledInput={!isSignedMessageEnabled}
-          onSend={onSendDM}
-          onChangeMessage={setDMChat}
-          disabledButton={loadingSendDM || !isSignedMessageEnabled || loadingGenerateAnon}
-          defaultValue={
-            isSignedMessageEnabled ? dmChat : `Only users ${username} follows can send messages`
-          }
-        />
-      </TouchableOpacity>
-      <TouchableOpacity onPress={toggleSwitch} style={styles.toggleSwitchContainer}>
-        <ToggleSwitch
-          value={isAnonimity}
-          onValueChange={toggleSwitch}
-          labelLeft={
-            isAnonimityEnabled || !isSignedMessageEnabled ? 'Anonymity' : 'Anonymity disabled'
-          }
-          styleLabelLeft={{color: isAnonimityEnabled ? colors.white : '#648ABF'}}
-        />
-      </TouchableOpacity>
-    </View>
-  );
-};
+const {width} = Dimensions.get('screen');
 
 const OtherProfile = () => {
   const navigation = useNavigation();
@@ -156,64 +89,28 @@ const OtherProfile = () => {
   const interactionManagerRef = React.useRef(null);
   const [otherProfileFeeds, dispatchOtherProfile] = React.useContext(Context).otherProfileFeed;
   const [profile] = React.useContext(Context).profile;
-  const [, dispatch] = React.useContext(Context).feeds;
-  const [isLastPage, setIsLastPage] = React.useState(false);
+  const [mainFeeds, dispatch] = React.useContext(Context).feeds;
   const [loading, setLoading] = React.useState(false);
   const [initLoading, setInitLoading] = React.useState(true);
   const [isAnonimity, setIsAnonimity] = React.useState(false);
-  const {saveChatFromOtherProfile, savePendingChatFromOtherProfile} = useSaveAnonChatHook();
   const {params} = route;
   const {feeds} = otherProfileFeeds;
+  const {timer, viewPostTimeIndex} = mainFeeds;
   const [loadingGenerateAnon, setLoadingGenerateAnon] = React.useState(false);
-  const [loadingSendDM, setLoadingSendDM] = React.useState(false);
   const [anonProfile, setAnonProfile] = React.useState();
-  const [dmChat, setDMChat] = React.useState();
   const {mappingColorFeed} = useCoreFeed();
   const isSignedMessageEnabled = dataMain.isSignedMessageEnabled ?? true;
   const isAnonimityEnabled = dataMain.isAnonMessageEnabled && isSignedMessageEnabled;
   const {createSignChat} = useCreateChat();
-  React.useEffect(() => {
-    setDMChat('');
-  }, [isSignedMessageEnabled]);
+
+  const {onWillSendViewPostTime} = useViewPostTimeHook(dispatch, timer, viewPostTimeIndex);
+  const {fetchNextFeeds} = useFeedPreloadHook(feeds?.length, () => getOtherFeeds(postOffset));
 
   const generateAnonProfile = async () => {
     setLoadingGenerateAnon(true);
     const anonProfileResult = await generateAnonProfileOtherProfile(other_id);
     setLoadingGenerateAnon(false);
     setAnonProfile(anonProfileResult);
-  };
-
-  const sentAnonDM = async () => {
-    try {
-      setLoadingSendDM(true);
-      const {
-        anon_user_info_emoji_name,
-        anon_user_info_emoji_code,
-        anon_user_info_color_name,
-        anon_user_info_color_code
-      } = anonProfile ?? {};
-
-      const anonDMParams = {
-        user_id: dataMain.user_id,
-        message: dmChat,
-        anon_user_info_emoji_name,
-        anon_user_info_emoji_code,
-        anon_user_info_color_name,
-        anon_user_info_color_code
-      };
-      const response = await sendAnonymousDMOtherProfile(anonDMParams);
-      await saveChatFromOtherProfile(response, 'sent', true, ANON_PM);
-      setDMChat('');
-    } catch (e) {
-      if (e?.response?.data?.status === 'Channel is blocked') {
-        const response = e?.response?.data?.data;
-        await savePendingChatFromOtherProfile(response, true);
-        setDMChat('');
-        return;
-      }
-    } finally {
-      setLoadingSendDM(false);
-    }
   };
 
   const showSignedMessageDisableToast = () => {
@@ -223,34 +120,6 @@ const OtherProfile = () => {
         text1: `Only users ${dataMain.username} follows can send messages`,
         position: 'bottom'
       });
-    }
-  };
-
-  const sendSignedDM = async () => {
-    try {
-      setLoadingSendDM(true);
-      const signedMParams = {
-        user_id: dataMain.user_id,
-        message: dmChat
-      };
-      const response = await sendSignedDMOtherProfile(signedMParams);
-      const newResponse = {...response, members: response?.message?.members};
-      await saveChatFromOtherProfile(newResponse, 'sent', true, SIGNED);
-      setDMChat('');
-    } catch (error) {
-      if (__DEV__) {
-        console.log(error, 'error');
-      }
-    } finally {
-      setLoadingSendDM(false);
-    }
-  };
-
-  const onSendDM = async () => {
-    if (isAnonimity) {
-      await sentAnonDM();
-    } else {
-      await sendSignedDM();
     }
   };
 
@@ -271,9 +140,6 @@ const OtherProfile = () => {
         dataFeed: feedOtherProfile,
         dataCache: cacheFeed
       });
-      if (Array.isArray(result.data) && result.data.length === 0) {
-        setIsLastPage(true);
-      }
       if (offset === 0) {
         setOtherProfileFeed(mapNewData, dispatchOtherProfile);
         StorageUtils.otherProfileFeed.setForKey(otherId, JSON.stringify(mapNewData));
@@ -563,15 +429,12 @@ const OtherProfile = () => {
           isAnonimity={isAnonimity}
           bio={dataMain.bio}
           openBio={openBio}
+          dataMain={dataMain}
           isSignedMessageEnabled={isSignedMessageEnabled}
           showSignedMessageDisableToast={showSignedMessageDisableToast}
           loadingGenerateAnon={loadingGenerateAnon}
           avatarUrl={profile.myProfile.profile_pic_path}
           anonProfile={anonProfile}
-          onSendDM={onSendDM}
-          setDMChat={setDMChat}
-          loadingSendDM={loadingSendDM}
-          dmChat={dmChat}
           username={dataMain.username}
           toggleSwitch={toggleSwitch}
           isAnonimityEnabled={isAnonimityEnabled}
@@ -745,14 +608,7 @@ const OtherProfile = () => {
     });
   };
 
-  const __handleOnEndReached = () => {
-    if (!isLastPage) {
-      getOtherFeeds(postOffset);
-    }
-  };
-
   const handleRefresh = () => {
-    setIsLastPage(false);
     getOtherFeeds(0);
   };
 
@@ -781,9 +637,12 @@ const OtherProfile = () => {
           extraData={[feeds]}
           data={handleDataFeed()}
           onScroll={handleScroll}
-          onEndReach={__handleOnEndReached}
           onRefresh={handleRefresh}
           refreshing={loading}
+          onMomentumScrollEnd={(event) => {
+            onWillSendViewPostTime(event, feeds);
+            fetchNextFeeds(event);
+          }}
           ListHeaderComponent={
             <>
               {!initLoading ? (
@@ -920,14 +779,6 @@ const styles = StyleSheet.create({
     color: colors.black,
     paddingRight: 4
   },
-  containerBio: {
-    marginBottom: 10
-  },
-  seeMore: {
-    fontFamily: fonts.inter[500],
-    fontSize: 14,
-    color: colors.black
-  },
   tabs: {
     width,
     borderBottomColor: colors.alto,
@@ -1044,39 +895,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  toggleSwitchContainer: {display: 'flex', alignSelf: 'flex-end', paddingVertical: 10},
-  rightHeaderContentContainer: {display: 'flex', flexDirection: 'row'},
-  headerImageContainer: {display: 'flex', flexDirection: 'row', marginBottom: 20},
-  bioAndSendChatContainer: (isAnonimity) => ({
-    backgroundColor: isAnonimity ? colors.bondi_blue : colors.blue1,
-    borderRadius: 15,
-    paddingHorizontal: 10,
-    paddingTop: 10
-  }),
-  bioText: (isAnonimity) => ({
-    color: isAnonimity ? colors.greenDark : colors.white,
-    fontSize: 14,
-    fontWeight: '600',
-    lineHeight: 22
-  })
+  rightHeaderContentContainer: {
+    display: 'flex',
+    flexDirection: 'row'
+  },
+  headerImageContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginBottom: 20
+  }
 });
-
-BioAndChat.propTypes = {
-  isAnonimity: PropTypes.bool,
-  bio: PropTypes.string,
-  openBio: PropTypes.bool,
-  isSignedMessageEnabled: PropTypes.bool,
-  showSignedMessageDisableToast: PropTypes.bool,
-  loadingGenerateAnon: PropTypes.bool,
-  avatarUrl: PropTypes.string,
-  anonProfile: PropTypes.object,
-  onSendDM: PropTypes.func,
-  setDMChat: PropTypes.func,
-  loadingSendDM: PropTypes.bool,
-  dmChat: PropTypes.string,
-  username: PropTypes.string,
-  toggleSwitch: PropTypes.func,
-  isAnonimityEnabled: PropTypes.bool
-};
 
 export default withInteractionsManaged(OtherProfile);
