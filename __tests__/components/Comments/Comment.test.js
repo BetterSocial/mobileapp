@@ -4,6 +4,7 @@ import {fireEvent, render} from '@testing-library/react-native';
 import * as UserUtil from '../../../src/utils/users';
 import * as serviceVote from '../../../src/service/vote';
 import Comment, {isEqual} from '../../../src/components/Comments/Comment';
+import Store from '../../../src/context/Store';
 
 jest.mock('react-native/Libraries/Pressability/usePressability');
 jest.mock('react-native/Libraries/Components/Pressable/Pressable');
@@ -96,7 +97,8 @@ describe('Comment test should run correctly', () => {
         findCommentAndUpdate={findComment}
         updateVote={updateVote}
         time={time}
-      />
+      />,
+      {wrapper: Store}
     );
     expect(toJSON).toMatchSnapshot();
   });
@@ -116,7 +118,8 @@ describe('Comment test should run correctly', () => {
         findCommentAndUpdate={findComment}
         updateVote={updateVote}
         time={time}
-      />
+      />,
+      {wrapper: Store}
     );
     fireEvent.press(getByTestId('textPress'));
     expect(onPress).toHaveBeenCalled();
@@ -130,7 +133,8 @@ describe('Comment test should run correctly', () => {
         findCommentAndUpdate={findComment}
         updateVote={updateVote}
         time={time}
-      />
+      />,
+      {wrapper: Store}
     );
     fireEvent.press(getByTestIdLevel2('textPress'));
     expect(onPress).toHaveBeenCalled();
@@ -152,7 +156,8 @@ describe('Comment test should run correctly', () => {
         findCommentAndUpdate={findComment}
         updateVote={updateVote}
         time={time}
-      />
+      />,
+      {wrapper: Store}
     );
     fireEvent.press(getByTestId('openProfile'));
     expect(spyGeUserId).toHaveBeenCalled();
@@ -173,7 +178,8 @@ describe('Comment test should run correctly', () => {
         findCommentAndUpdate={findComment}
         updateVote={updateVote}
         time={time}
-      />
+      />,
+      {wrapper: Store}
     );
     fireEvent.press(getByTestId('textPress'));
     expect(onPress).toHaveBeenCalled();
@@ -187,7 +193,8 @@ describe('Comment test should run correctly', () => {
         findCommentAndUpdate={findComment}
         updateVote={updateVote}
         time={time}
-      />
+      />,
+      {wrapper: Store}
     );
     fireEvent.press(getByTestIdLevel2('textPress'));
     expect(onPress).toHaveBeenCalled();
@@ -211,7 +218,8 @@ describe('Comment test should run correctly', () => {
         findCommentAndUpdate={findComment}
         updateVote={updateVote}
         time={time}
-      />
+      />,
+      {wrapper: Store}
     );
     fireEvent.press(getByTestId('upvoteBtn'));
     expect(setState).toHaveBeenCalled();
