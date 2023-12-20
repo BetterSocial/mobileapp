@@ -46,7 +46,8 @@ function useMessageHook(): UseMessageHook {
       message: data?.text ?? data?.message,
       message_type: data?.message_type ?? data?.message?.message_type,
       updated_at: data?.updated_at ?? data?.message?.updated_at,
-      chatType: type
+      chatType: type,
+      attachments: data?.attachments ?? []
     };
     setReplyPreview(messageItem);
   }, []);
@@ -113,6 +114,23 @@ function useMessageHook(): UseMessageHook {
     }
   };
 
+  const onOpenMediaPreview = (medias, index, navigation) => {
+    if (medias.find((media) => media.type === 'video')) {
+      navigation.push('VideoViewer', {
+        title: 'Video',
+        url: medias[index].video_path
+      });
+    } else {
+      navigation.push('ImageViewer', {
+        title: 'Photo',
+        index,
+        images: medias
+          .filter((media) => media.type === 'image')
+          .map((media) => ({url: media.asset_url}))
+      });
+    }
+  };
+
   const animatedBubbleStyle = useAnimatedStyle(() => {
     'worklet';
 
@@ -130,6 +148,7 @@ function useMessageHook(): UseMessageHook {
     setReplyPreview,
     clearReplyPreview,
     onContextMenuPressed,
+    onOpenMediaPreview,
     bubblePosition,
     pulseAnimation,
     animatedBubbleStyle,

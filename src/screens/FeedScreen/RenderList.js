@@ -15,7 +15,9 @@ import {
   POST_TYPE_STANDARD,
   SOURCE_FEED_TAB
 } from '../../utils/constants';
-import dimen from '../../utils/dimen';
+import {Footer, Gap, PreviewComment} from '../../components';
+import {colors} from '../../utils/colors';
+import {getCommentLength} from '../../utils/getstream';
 import {normalizeFontSizeByWidth} from '../../utils/fonts';
 import {getCommentLength} from '../../utils/getstream';
 import ShareUtils from '../../utils/share';
@@ -44,9 +46,7 @@ const RenderListFeed = (props) => {
     source = SOURCE_FEED_TAB,
     hideThreeDot = true,
     showAnonymousOption = false,
-    onDeletePost,
-    isShowDelete,
-    isSelf
+    onHeaderOptionClicked = () => {}
   } = props;
   const {
     totalVote,
@@ -64,10 +64,6 @@ const RenderListFeed = (props) => {
     getTotalReaction,
     showScoreButton
   } = useFeed();
-
-  const [feedsContext, feedsContextDispatch] = React.useContext(Context).feeds;
-  const [profileContext] = React.useContext(Context).profile;
-  const {myProfile} = profileContext;
 
   const onPressDownVoteHandle = async () => {
     onPressDownVoteHook();
@@ -119,78 +115,6 @@ const RenderListFeed = (props) => {
       getCommentLength(item.latest_reactions.comment) > 0 ? getHeightReaction() / 2.2 : 0;
     return dimen.size.FEED_CURRENT_ITEM_HEIGHT - getHeightHeader() - getHeightFooter() - haveLength;
   };
-
-  const handleFollowUnfollow = async () => {
-    const user_id = item?.actor?.id;
-    const username = item?.actor?.data?.username;
-    const data = {
-      user_id_follower: myProfile?.user_id,
-      user_id_followed: user_id,
-      username_follower: myProfile?.username,
-      username_followed: username,
-      follow_source: 'feed'
-    };
-    const dataFollowAnon = {
-      follow_source: 'post',
-      post_id: item?.id
-    };
-    const indexFeed = feedsContext?.feeds?.findIndex((feed) => {
-      return feed?.id === item?.id;
-    });
-    const feedData = feedsContext?.feeds[indexFeed];
-    if (feedData?.is_following_target) {
-      if (!feedData?.anon_user_info_color_name) {
-        feedsContext?.feeds.forEach((feed, index) => {
-          if (feed?.actor?.id === user_id) {
-            setFeedByIndex(
-              {
-                index,
-                singleFeed: {...feedsContext?.feeds[index], is_following_target: false}
-              },
-              feedsContextDispatch
-            );
-          }
-        });
-        await setUnFollow(data);
-      } else {
-        const newFeed = {...feedsContext?.feeds[indexFeed], is_following_target: false};
-        setFeedByIndex(
-          {
-            index: indexFeed,
-            singleFeed: newFeed
-          },
-          feedsContextDispatch
-        );
-        await unfollowUserAnon(dataFollowAnon);
-      }
-    } else {
-      if (!feedData?.anon_user_info_color_name) {
-        feedsContext?.feeds.forEach((feed, index) => {
-          if (feed?.actor?.id === user_id) {
-            setFeedByIndex(
-              {
-                index,
-                singleFeed: {...feedsContext?.feeds[index], is_following_target: true}
-              },
-              feedsContextDispatch
-            );
-          }
-        });
-        await setFollow(data);
-      } else {
-        const newFeed = {...feedsContext?.feeds[indexFeed], is_following_target: true};
-        setFeedByIndex(
-          {
-            index: indexFeed,
-            singleFeed: newFeed
-          },
-          feedsContextDispatch
-        );
-        await followUserAnon(dataFollowAnon);
-      }
-    }
-  };
-
   return (
     <View key={item.id} testID="dataScroll" style={styles.cardContainer}>
       <View style={[styles.cardMain]}>
@@ -201,11 +125,7 @@ const RenderListFeed = (props) => {
           source={source}
           headerStyle={styles.mh9}
           showAnonymousOption={showAnonymousOption}
-          onDeletePost={onDeletePost}
-          isShowDelete={isShowDelete}
-          isSelf={isSelf}
-          isFollow={item?.is_following_target}
-          onPressFollUnFoll={handleFollowUnfollow}
+          onHeaderOptionClicked={onHeaderOptionClicked}
         />
         {item.post_type === POST_TYPE_LINK && (
           <ContentLink
@@ -256,8 +176,7 @@ const RenderListFeed = (props) => {
             statusVote={voteStatus}
             showScoreButton={showScoreButton}
             onPressScore={() => showScoreAlertDialog(item)}
-            isSelf={isSelf}
-            isShowDM
+            isSelf={item.anonimity ? false : selfUserId === item.actor.id}
           />
         </View>
         {getCommentLength(item.latest_reactions.comment) > 0 && (
@@ -317,8 +236,7 @@ RenderListFeed.propTypes = {
   source: PropTypes.string,
   hideThreeDot: PropTypes.bool,
   showAnonymousOption: PropTypes.bool,
-  onDeletePost: PropTypes.func,
-  isSelf: PropTypes.bool
+  onHeaderOptionClicked: PropTypes.func
 };
 
 export default React.memo(

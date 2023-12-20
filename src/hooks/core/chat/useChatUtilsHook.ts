@@ -86,13 +86,10 @@ function useChatUtilsHook(): UseChatUtilsHook {
 
   const goToCommunityScreen = (channel: ChannelList) => {
     setChannelAsRead(channel);
+
     const topicName = channel?.name?.replace(/^#/, '');
     const navigationParam = {
-      id: convertTopicNameToTopicPageScreenParam(topicName),
-      channelPicture: channel.channelPicture,
-      coverImage: channel.rawJson.cover_image,
-      isFollowing: channel.rawJson.is_following,
-      memberCount: channel.rawJson.topic_follower_count
+      id: convertTopicNameToTopicPageScreenParam(topicName)
     };
 
     navigation.navigate('TopicPageScreen', navigationParam);
@@ -127,7 +124,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
   const goToChatScreen = (channel: ChannelList, from) => {
     setChat({
       ...chat,
-      selectedChannel: channel as unknown as null
+      selectedChannel: channel
     });
     setChannelAsRead(channel);
     if (channel?.channelType === ANON_PM) {
@@ -148,7 +145,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
   const goToMoveChat = (channel: ChannelList) => {
     setChat({
       ...chat,
-      selectedChannel: channel as unknown as null
+      selectedChannel: channel
     });
     setChannelAsRead(channel);
     if (channel?.channelType === ANON_PM) {
@@ -179,13 +176,14 @@ function useChatUtilsHook(): UseChatUtilsHook {
     navigation.goBack();
   };
   const handleTextSystem = (item): string => {
+    let message = item?.description || item?.message;
     if (
       item?.rawJson?.userIdFollower === profile?.myProfile?.user_id ||
       item?.rawJson?.message?.userIdFollower === profile?.myProfile?.user_id
     ) {
-      return item?.rawJson?.textOwnMessage || item?.rawJson?.message?.textOwnMessage;
+      message = item?.rawJson?.textOwnMessage || item?.rawJson?.message?.textOwnMessage;
     }
-    return item?.description || item?.message;
+    return message;
   };
 
   const splitSystemMessage = (message: string): string[] => {

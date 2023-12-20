@@ -1,4 +1,3 @@
-import {useNavigation} from '@react-navigation/native';
 import * as React from 'react';
 import {
   Animated,
@@ -6,26 +5,27 @@ import {
   InteractionManager,
   Platform,
   StatusBar,
-  StyleSheet,
-  View
+  StyleSheet
 } from 'react-native';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {useNavigation} from '@react-navigation/native';
 
 import BlockDomainComponent from '../../components/BlockDomain';
-import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {Context} from '../../context';
-import {setIFollow, setNews} from '../../context/actions/news';
+import RenderItem from './RenderItem';
+import Search from './Search';
+import ShareUtils from '../../utils/share';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
 } from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
-import {useAfterInteractions} from '../../hooks/useAfterInteractions';
-import {getDomainIdIFollow, getDomains} from '../../service/domain';
-import {downVoteDomain, upVoteDomain} from '../../service/vote';
-import {getSpecificCache, saveToCache} from '../../utils/cache';
-import {NEWS_CACHE} from '../../utils/cache/constant';
-import ShareUtils from '../../utils/share';
 import {COLORS} from '../../utils/theme';
-import RenderItem from './RenderItem';
-import Search from './Search';
+import {Context} from '../../context';
+import {NEWS_CACHE} from '../../utils/cache/constant';
+import {downVoteDomain, upVoteDomain} from '../../service/vote';
+import {getDomainIdIFollow, getDomains} from '../../service/domain';
+import {getSpecificCache, saveToCache} from '../../utils/cache';
+import {setIFollow, setNews} from '../../context/actions/news';
+import {useAfterInteractions} from '../../hooks/useAfterInteractions';
+import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 const NewsScreen = () => {
   const navigation = useNavigation();
@@ -226,7 +226,7 @@ const NewsScreen = () => {
   const keyExtractor = React.useCallback((item, index) => index.toString(), []);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaProvider style={styles.container}>
       <StatusBar translucent={false} />
       <Search animatedValue={offset} />
       <Animated.View style={{paddingTop: Platform.OS === 'android' ? paddingContainer : 0}}>
@@ -271,7 +271,7 @@ const NewsScreen = () => {
         screen="news_screen"
         getValueBlock={onBlockedDomain}
       />
-    </View>
+    </SafeAreaProvider>
   );
 };
 

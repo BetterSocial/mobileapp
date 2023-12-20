@@ -31,6 +31,7 @@ import CustomPressable from '../../components/CustomPressable';
 import FollowInfoRow from './elements/FollowInfoRow';
 import ImageCompressionUtils from '../../utils/image/compress';
 import LinkAndSocialMedia from './elements/LinkAndSocialMedia';
+import PostOptionModal from '../../components/Modal/PostOptionModal';
 import ProfileHeader from './elements/ProfileHeader';
 import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
@@ -53,7 +54,6 @@ import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {ButtonNewPost} from '../../components/Button';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH, SOURCE_MY_PROFILE} from '../../utils/constants';
-import {KarmaScore} from './elements/KarmaScore';
 import {
   changeRealName,
   getMyProfile,
@@ -98,20 +98,12 @@ const Header = (props) => {
         headerHeightRef.current = headerHeightLayout;
       }}>
       <View style={styles.content}>
-        <View style={{flexDirection: 'row', alignContent: 'center', alignItems: 'center'}}>
+        <View style={{flexDirection: 'row'}}>
           <ProfilePicture
             onImageContainerClick={changeImage}
             profilePicPath={dataMain.profile_pic_path}
-            karmaScore={Math.floor(dataMain.karma_score)}
           />
-          <View
-            style={{
-              flexDirection: 'column',
-              paddingHorizontal: 14,
-              paddingVertical: 5,
-              justifyContent: 'center'
-            }}>
-            <KarmaScore score={Math.floor(dataMain.karma_score)} />
+          <View style={{marginLeft: 20}}>
             <FollowInfoRow
               follower={dataMain.follower_symbol}
               following={dataMain.following_symbol}
@@ -184,6 +176,7 @@ const ProfileScreen = ({route}) => {
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
+  const [isPostOptionModalOpen, setIsOptionModalOpen] = React.useState(false);
   const [selectedPostForOption, setSelectedPostForOption] = React.useState(null);
   const [isFetchingList, setIsFetchingList] = React.useState(false);
   const {interactionsComplete} = useAfterInteractions();
@@ -280,9 +273,10 @@ const ProfileScreen = ({route}) => {
     try {
       setIsFetchingList(true);
       setIsHitApiFirstTime(true);
+      const cacheFeed = StorageUtils.myFeeds.get();
       const result = await getSelfFeedsInProfile(offset, limit);
       const {data: dataMyFeed} = result;
-      const mapNewData = mappingColorFeed(dataMyFeed);
+      const {mapNewData} = mappingColorFeed({dataFeed: dataMyFeed, dataCache: cacheFeed});
       if (offset === 0) {
         StorageUtils.myFeeds.set(JSON.stringify(mapNewData));
         setMyProfileFeed(mapNewData, myProfileDispatch);
@@ -587,6 +581,16 @@ const ProfileScreen = ({route}) => {
     fetchMyProfile(true);
   }
 
+  const onHeaderOptionClosed = () => {
+    setSelectedPostForOption(null);
+    setIsOptionModalOpen(false);
+  };
+
+  const onHeaderOptionClicked = (post) => {
+    setSelectedPostForOption(post);
+    setIsOptionModalOpen(true);
+  };
+
   const removePostByIdFromContext = () => {
     const deletedIndex = feeds?.findIndex((find) => selectedPostForOption?.id === find?.id);
     const newData = [...feeds];
@@ -595,6 +599,7 @@ const ProfileScreen = ({route}) => {
   };
 
   const onDeletePost = async () => {
+    setIsOptionModalOpen(false);
     removePostByIdFromContext();
 
     let response;
@@ -608,7 +613,7 @@ const ProfileScreen = ({route}) => {
     return reloadFetchAnonymousPost();
   };
   return (
-    <View style={styles.container} forceInset={{top: 'always'}}>
+    <SafeAreaProvider style={styles.container} forceInset={{top: 'always'}}>
       <StatusBar translucent={false} />
       <ProfileHeader
         showArrow={isNotFromHomeTab}
@@ -662,9 +667,7 @@ const ProfileScreen = ({route}) => {
               source={SOURCE_MY_PROFILE}
               hideThreeDot={false}
               showAnonymousOption={true}
-              onDeletePost={() => onDeletePost()}
-              isSelf={item.is_self}
-              isShowDelete={true}
+              onHeaderOptionClicked={() => onHeaderOptionClicked(item)}
             />
           );
         }}
@@ -709,7 +712,12 @@ const ProfileScreen = ({route}) => {
       ) : null}
 
       <BlockComponent ref={refBlockComponent} refresh={getMyFeeds} screen="my_profile" />
-    </View>
+      <PostOptionModal
+        isOpen={isPostOptionModalOpen}
+        onClose={onHeaderOptionClosed}
+        onDeleteClicked={onDeletePost}
+      />
+    </SafeAreaProvider>
   );
 };
 

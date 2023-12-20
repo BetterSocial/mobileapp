@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, StyleSheet, View} from 'react-native';
+import {Text, StyleSheet} from 'react-native';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import dimen from '../../utils/dimen';
 import {COLORS, SIZES} from '../../utils/theme';
@@ -10,8 +10,7 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(12),
     color: COLORS.blackgrey,
     lineHeight: 14,
-    marginLeft: 16,
-    maxWidth: dimen.normalizeDimen(170)
+    marginLeft: 16
   },
   previewContainer: {
     marginLeft: SIZES.base
@@ -42,7 +41,7 @@ const styles = StyleSheet.create({
 const CommentUsername = ({comment, user, isPreviewComment}) => {
   if (isPreviewComment) {
     return (
-      <Text style={[styles.username, styles.previewContainer]} numberOfLines={1}>
+      <Text style={[styles.username, styles.previewContainer]}>
         {comment.data?.anon_user_info_color_name
           ? `Anonymous ${comment.data?.anon_user_info_emoji_name}`
           : user?.data?.username}{' '}
@@ -50,15 +49,12 @@ const CommentUsername = ({comment, user, isPreviewComment}) => {
     );
   }
   return (
-    <View style={styles.container}>
-      <Text style={styles.username}>
-        {comment.data?.anon_user_info_color_name
-          ? `Anonymous ${comment.data?.anon_user_info_emoji_name}`
-          : user?.data?.username}{' '}
-        {comment.is_you ? '(You)' : ''} {comment.is_author ? '(Post Author)' : ''}
-      </Text>
-      <Text style={styles.dot}> •</Text>
-    </View>
+    <Text style={styles.username}>
+      {comment.data?.anon_user_info_color_name
+        ? `Anonymous ${comment.data?.anon_user_info_emoji_name}`
+        : user?.data?.username}{' '}
+      {comment.is_you ? '(You)' : ''} {comment.is_author ? '(Post Author)' : ''} •
+    </Text>
   );
 };
 

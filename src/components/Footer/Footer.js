@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
@@ -24,7 +24,6 @@ import BottomSheetMenu from '../BottomSheet/BottomSheetMenu';
 import {COLORS, FONTS} from '../../utils/theme';
 
 const Footer = ({
-  item,
   onPressShare,
   onPressComment,
   totalComment,
@@ -38,18 +37,8 @@ const Footer = ({
   blockStatus,
   loadingVote,
   showScoreButton = false,
-  onPressScore,
-  isShowDM = false
+  onPressScore
 }) => {
-  const {sendMessageDM} = useDMMessage();
-  const [profile] = React.useContext(Context).profile;
-  const [loading, setLoading] = React.useState({
-    loadingDm: false,
-    loadingDmAnon: false
-  });
-  const {createSignChat} = useCreateChat();
-
-  const refSheet = React.useRef();
   const handleBlockUi = () => {
     if (isSelf) {
       return <View testID="isself" />;
@@ -75,99 +64,23 @@ const Footer = ({
     }
     return COLORS.gray1;
   };
-
-  const username = item?.anon_user_info_emoji_name
-    ? `Anonymous ${item?.anon_user_info_emoji_name}`
-    : item?.actor?.data?.username;
-
-  const onPressDM = async () => {
-    try {
-      setLoading({...loading, loadingDm: true});
-      if (!item?.anon_user_info_emoji_name) {
-        const channelName = [username, profile?.myProfile?.username].join(',');
-        const selectedUser = {
-          user: {
-            name: channelName,
-            image: item?.actor?.data?.profile_pic_url || DEFAULT_PROFILE_PIC_PATH
-          }
-        };
-        const members = [item?.actor?.id, profile.myProfile.user_id];
-        await createSignChat(members, selectedUser);
-      } else {
-        await sendMessageDM(item.id, 'post', 'SIGNED');
-      }
-    } catch (e) {
-      console.warn(e);
-    } finally {
-      refSheet.current.close();
-      setLoading({...loading, loadingDm: false});
-    }
-  };
-
-  const onPressDMAnon = async () => {
-    try {
-      setLoading({...loading, loadingDmAnon: true});
-      await sendMessageDM(item.id, 'post', 'ANONYMOUS');
-    } catch (e) {
-      console.warn(e);
-    } finally {
-      refSheet.current.close();
-      setLoading({...loading, loadingDmAnon: false});
-    }
-  };
-
-  const dataSheet = [
-    {
-      id: 1,
-      name: loading.loadingDm ? 'Loading...' : `Message ${username}`,
-      icon: <SendDMBlack />,
-      onPress: onPressDM
-    },
-    {
-      id: 2,
-      name: loading.loadingDmAnon ? 'Loading...' : `Message ${username} anonymously`,
-      icon: <SendDMAnonBlock />,
-      onPress: onPressDMAnon
-    },
-    {
-      id: 3,
-      name: 'Share link',
-      icon: <ShareBlack />,
-      onPress: onPressShare
-    }
-  ];
-
   return (
     <View style={[styles.rowSpaceBeetwen, styles.container]}>
       <View style={styles.leftGroupContainer}>
-        {isShowDM && !isSelf ? (
-          <TouchableOpacity
-            testID="sendDM"
-            style={styles.btn}
-            onPress={() => refSheet.current.open()}>
-            <View style={styles.btnDM}>
-              <View style={styles.card}>
-                <MemoIc_senddm height={20} width={21} />
-                <Text style={styles.textDM}>DM</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity testID="shareBtn" style={styles.btn} onPress={onPressShare}>
-            <View style={styles.btnShare}>
-              <MemoIc_share height={20} width={21} />
-            </View>
-          </TouchableOpacity>
-        )}
+        <TouchableOpacity testID="shareBtn" style={styles.btn} onPress={onPressShare}>
+          <View style={styles.btnShare}>
+            <MemoIc_share height={20} width={21} />
+          </View>
+        </TouchableOpacity>
         {disableComment ? (
           <View testID="disableComment" style={styles.btn}>
-            <View style={styles.btnComment(isShowDM, isSelf)}>
+            <View style={styles.btnComment}>
               <MemoIc_comment height={24} width={25} />
             </View>
           </View>
         ) : (
           <TouchableOpacity testID="availableComment" style={styles.btn} onPress={onPressComment}>
-            <View style={styles.btnComment(isShowDM, isSelf)}>
+            <View style={styles.btnComment}>
               <MemoIc_comment height={24} width={25} />
             </View>
           </TouchableOpacity>
@@ -231,7 +144,6 @@ const Footer = ({
           </View>
         </TouchableOpacity>
       </View>
-      <BottomSheetMenu refSheet={refSheet} dataSheet={dataSheet} />
     </View>
   );
 };
@@ -305,8 +217,8 @@ const styles = StyleSheet.create({
   btnComment: (isShowDM, isSelf) => ({
     height: '100%',
     justifyContent: 'center',
-    paddingLeft: isShowDM && !isSelf ? 20 : 13.5,
-    paddingRight: isShowDM && !isSelf ? 6 : 10
+    paddingLeft: 13.5,
+    paddingRight: 10
   }),
   btnBlock: {
     height: '100%',

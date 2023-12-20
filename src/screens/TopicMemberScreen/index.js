@@ -88,7 +88,7 @@ const TopicMemberScreen = () => {
     return () => {
       scrollY.removeListener(listener);
     };
-  }, []);
+  }, [scrollY]);
 
   const handleScroll = Animated.event([{nativeEvent: {contentOffset: {y: scrollY}}}], {
     useNativeDriver: false
@@ -154,6 +154,7 @@ const TopicMemberScreen = () => {
     cancelTokenRef.current = axios.CancelToken.source();
   };
 
+  if (isInitialLoading) return null;
   return (
     <SafeAreaProvider forceInset={{top: 'always'}} style={styles.parentContainer}>
       <NavHeader
@@ -185,7 +186,7 @@ const TopicMemberScreen = () => {
         decelerationRate="fast"
         scrollEventThrottle={1}
         style={styles.fragmentContainer}
-        contentContainerStyle={[styles.fragmentContentContainer]}
+        contentContainerStyle={[styles.fragmentContentContainer, {paddingTop: headerShowHeight}]}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
         removeClippedSubviews={true}
@@ -207,4 +208,4 @@ const TopicMemberScreen = () => {
     </SafeAreaProvider>
   );
 };
-export default TopicMemberScreen;
+export default withInteractionsManaged(TopicMemberScreen);

@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import SimpleToast from 'react-native-simple-toast';
@@ -70,24 +69,23 @@ TopicDomainHeader.propTypes = {
   handleOnMemberPress: PropTypes.func,
   hideSeeMember: PropTypes.bool,
   isFollow: PropTypes.bool,
-  memberCount: PropTypes.number,
-  isLoading: PropTypes.bool
+  memberCount: PropTypes.number
 };
 
 const styles = StyleSheet.create({
-  domainText: (isHeaderHide) => ({
+  domainText: {
     fontSize: normalizeFontSize(16),
     fontFamily: fonts.inter[600],
     textAlign: 'left',
     color: isHeaderHide ? COLORS.white : COLORS.black,
     backgroundColor: 'transparent'
-  }),
+  },
   member: {
     width: normalize(16),
     height: normalize(16),
     marginRight: normalize(5)
   },
-  domainMember: (isHeaderHide) => ({
+  domainMember: {
     fontSize: normalizeFontSize(12),
     fontFamily: fonts.inter[400],
     textAlign: 'left',

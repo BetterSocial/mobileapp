@@ -5,18 +5,14 @@ import {normalize} from '../../../utils/fonts';
 import {CircleGradient} from '../../../components/Karma/CircleGradient';
 import {COLORS} from '../../../utils/theme';
 
-const UserInfo = ({photo, username, bio, karmaScore}) => (
+const UserInfo = ({photo, username, bio}) => (
   <View style={styles.cardLeft}>
-    <CircleGradient fill={karmaScore} size={normalize(50)} width={normalize(2.3)}>
-      <Image
-        style={styles.tinyLogo}
-        source={{
-          uri: photo
-        }}
-        width={48}
-        height={48}
-      />
-    </CircleGradient>
+    <Image
+      style={styles.tinyLogo}
+      source={{
+        uri: photo
+      }}
+    />
     <View style={styles.containerTextCard}>
       <Text style={styles.textFullName}>{username}</Text>
       <Text style={styles.textUsername} numberOfLines={1}>
@@ -25,13 +21,6 @@ const UserInfo = ({photo, username, bio, karmaScore}) => (
     </View>
   </View>
 );
-
-UserInfo.propTypes = {
-  photo: PropTypes.string,
-  username: PropTypes.string,
-  bio: PropTypes.string,
-  karmaScore: PropTypes.number
-};
 
 const styles = StyleSheet.create({
   cardLeft: {

@@ -54,7 +54,7 @@ const ChatReplyView = ({type, messageType, replyData}: ChatReplyViewProps) => {
       </View>
 
       <Text style={textStyle} numberOfLines={isReply ? 1 : undefined}>
-        {replyData?.text ?? replyData?.message}
+        {replyData?.attachments.length > 0 ? 'Photo' : replyData?.text ?? replyData?.message}
       </Text>
     </TouchableOpacity>
   );

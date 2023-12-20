@@ -1,34 +1,35 @@
-import {useNavigation, useRoute} from '@react-navigation/native';
-import _ from 'lodash';
 import * as React from 'react';
-import {Animated, Platform, StyleSheet, View} from 'react-native';
+import _ from 'lodash';
 import SimpleToast from 'react-native-simple-toast';
+import {Animated, Platform, StyleSheet} from 'react-native';
+import {SafeAreaProvider, useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import BlockComponent from '../../components/BlockComponent';
 import ButtonAddPostTopic from '../../components/Button/ButtonAddPostTopic';
-import TiktokScroll from '../../components/TiktokScroll';
-import {Context} from '../../context';
-import {setFeedByIndex, setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
-import useOnBottomNavigationTabPressHook, {
-  LIST_VIEW_TYPE
-} from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
-import {getFeedDetail} from '../../service/post';
-import {getTopicPages} from '../../service/topicPages';
-import {getTopics, getUserTopic} from '../../service/topics';
-import {downVote, upVote} from '../../service/vote';
-import dimen from '../../utils/dimen';
-import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
-import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import MemoizedListComponent from './MemoizedListComponent';
+import NavHeader from './elements/NavHeader';
 import ShareUtils from '../../utils/share';
+import TiktokScroll from '../../components/TiktokScroll';
 import TopicPageStorage from '../../utils/storage/custom/topicPageStorage';
+import dimen from '../../utils/dimen';
 import removePrefixTopic from '../../utils/topics/removePrefixTopic';
-import {getUserId} from '../../utils/users';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
 import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
 import useViewPostTimeHook from '../FeedScreen/hooks/useViewPostTimeHook';
-import MemoizedListComponent from './MemoizedListComponent';
-import NavHeader from './elements/NavHeader';
+import useOnBottomNavigationTabPressHook, {
+  LIST_VIEW_TYPE
+} from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
+import {Context} from '../../context';
+import {downVote, upVote} from '../../service/vote';
+import {getFeedDetail} from '../../service/post';
+import {getTopicPages} from '../../service/topicPages';
+import {getTopics, getUserTopic} from '../../service/topics';
+import {getUserId} from '../../utils/users';
+import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
+import {setFeedByIndex, setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
+import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 const styles = StyleSheet.create({
   parentContainer: {
@@ -60,7 +61,7 @@ const TopicPageScreen = (props) => {
   const [isInitialLoading, setIsInitialLoading] = React.useState(true);
   const [userId, setUserId] = React.useState('');
   const [topicId, setTopicId] = React.useState('');
-  const [isFollow, setIsFollow] = React.useState(params.isFollowing);
+  const [isFollow, setIsFollow] = React.useState(false);
   const [topicDetail, setTopicDetail] = React.useState({});
   const [memberCount, setMemberCount] = React.useState(0);
   const [isHeaderHide, setIsHeaderHide] = React.useState(false);
@@ -94,7 +95,7 @@ const TopicPageScreen = (props) => {
     : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT;
   const headerShowHeight =
     navigationHeight + dimen.size.TOPIC_FEED_HEADER_HEIGHT + topPosition + normalize(4);
-  const headerHideHeight = dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2;
+  const headerHideHeight = dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2 + topPosition;
 
   const headerHeight = scrollY.interpolate({
     inputRange: [0, headerHideHeight],
@@ -105,12 +106,6 @@ const TopicPageScreen = (props) => {
   const opacityHeader = scrollY.interpolate({
     inputRange: [0, 100],
     outputRange: [1, 0],
-    extrapolate: 'clamp'
-  });
-
-  const opacityImage = scrollY.interpolate({
-    inputRange: [0, 100],
-    outputRange: [0, 1],
     extrapolate: 'clamp'
   });
 
@@ -135,7 +130,11 @@ const TopicPageScreen = (props) => {
   const initialFetchTopicFeeds = async (cacheLength = 0) => {
     try {
       const resultGetTopicPages = await getTopicPages(id?.toLowerCase(), 0);
-      const mapNewData = mappingColorFeed(resultGetTopicPages?.data);
+      const {data: cacheFeedTopic} = TopicPageStorage.get(id?.toLowerCase());
+      const {mapNewData} = mappingColorFeed({
+        dataFeed: resultGetTopicPages?.data,
+        dataCache: cacheFeedTopic
+      });
       const {data = [], offset: offsetFeeds = 0} = resultGetTopicPages || {};
       setTopicFeeds(mapNewData, dispatch);
       setOffset(offsetFeeds);
@@ -251,7 +250,7 @@ const TopicPageScreen = (props) => {
         const {feeds: cacheFeedTopic} = TopicPageStorage.get(id?.toLowerCase());
 
         const {data, offset: offsetFeeds} = result;
-        const mapNewData = mappingColorFeed(data);
+        const {mapNewData} = mappingColorFeed({dataFeed: data, dataCache: cacheFeedTopic});
         if (result.code === 200) {
           if (offsetParam === 0) {
             TopicPageStorage.set(id?.toLowerCase(), mapNewData, offsetFeeds);
@@ -399,17 +398,10 @@ const TopicPageScreen = (props) => {
     />
   );
 
+  if (isInitialLoading) return null;
   return (
-    <>
+    <SafeAreaProvider forceInset={{top: 'always'}} style={styles.parentContainer}>
       <NavHeader
-        initialData={{
-          channelPicutre: params.channelPicture,
-          coverImage: params.coverImage,
-          isFollowing: params.isFollowing,
-          memberCount: params.memberCount
-        }}
-        isLoading={isInitialLoading}
-        opacityImage={opacityImage}
         domain={topicName}
         animatedHeight={headerHeight}
         onShareCommunity={onShareCommunity}
@@ -423,29 +415,26 @@ const TopicPageScreen = (props) => {
         isFollow={isFollow}
         getTopicDetail={getTopicDetail}
       />
-
-      <View
-        style={{
-          marginTop: isHeaderHide ? -dimen.size.TOPIC_FEED_HEADER_HEIGHT : 0,
-          minHeight: 548,
-          height: 700
-        }}>
-        <TiktokScroll
-          ref={listRef}
-          contentHeight={dimen.size.TOPIC_CURRENT_ITEM_HEIGHT + normalizeFontSizeByWidth(4)}
-          data={feeds}
-          onEndReach={onEndReach}
-          onRefresh={onRefresh}
-          refreshing={loading}
-          renderItem={renderItem}
-          onScroll={handleScroll}
-          scrollEventThrottle={16}
-          showSearchBar={true}
-          snap
-          contentInsetAdjustmentBehavior={feeds?.length > 1 ? 'automatic' : 'never'}
-          onMomentumScrollEnd={(event) => onWillSendViewPostTime(event, feeds)}
-        />
-      </View>
+      <TiktokScroll
+        ref={listRef}
+        contentHeight={dimen.size.TOPIC_CURRENT_ITEM_HEIGHT + normalizeFontSizeByWidth(4)}
+        data={feeds}
+        onEndReach={onEndReach}
+        onRefresh={onRefresh}
+        refreshing={loading}
+        renderItem={renderItem}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+        showSearchBar={true}
+        searchHeight={isHeaderHide ? headerHideHeight : headerShowHeight}
+        snap
+        contentOffset={{x: 0, y: topPosition}}
+        contentInsetAdjustmentBehavior={feeds?.length > 1 ? 'automatic' : 'never'}
+        onMomentumScrollEnd={(event) => {
+          onWillSendViewPostTime(event, feeds);
+          fetchNextFeeds(event);
+        }}
+      />
       <ButtonAddPostTopic topicName={topicName} onRefresh={onRefresh} />
       <BlockComponent
         ref={refBlockComponent}
@@ -453,7 +442,7 @@ const TopicPageScreen = (props) => {
         refreshAnonymous={onDeleteBlockedPostCompleted}
         screen="topic_screen"
       />
-    </>
+    </SafeAreaProvider>
   );
 };
-export default TopicPageScreen;
+export default withInteractionsManaged(TopicPageScreen);

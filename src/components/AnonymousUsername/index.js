@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StyleSheet, Text, TextStyle} from 'react-native';
+import {StyleSheet, Text} from 'react-native';
 
 import {POST_VERSION} from '../../utils/constants';
 import {fonts} from '../../utils/fonts';
@@ -20,7 +20,6 @@ const styles = StyleSheet.create({
  * @typedef {Object} AnonymousUsernameComponentProps
  * @property {string} version
  * @property {AnonUserInfoTypes} anonUserInfo
- * @property {TextStyle} style
  */
 
 /**
@@ -34,11 +33,11 @@ const AnonymousUsername = (props) => {
     return (
       <Text
         testID="newVersion"
-        style={[styles.feedUsername, props.style]}>{`Anonymous ${anonUserInfo.emojiName}`}</Text>
+        style={styles.feedUsername}>{`Anonymous ${anonUserInfo.emojiName}`}</Text>
     );
   }
 
-  return <Text style={[styles.feedUsername, props.style]}>Anonymous</Text>;
+  return <Text style={styles.feedUsername}>Anonymous</Text>;
 };
 
 export default AnonymousUsername;

@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     bottom: normalize(30),
     right: 0,
     zIndex: 99,
-    backgroundColor:  COLORS.black
+    backgroundColor: COLORS.black
   },
   buttonContainer: {
     backgroundColor: COLORS.blue,

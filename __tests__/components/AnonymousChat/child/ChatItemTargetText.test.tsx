@@ -21,6 +21,12 @@ beforeEach(() => {
   setupTests();
 });
 
+jest.mock('react-native-compressor', () => {
+  return {
+    compress: jest.fn(() => 'file:///imag.jpg')
+  };
+});
+
 afterEach(() => {
   jest.restoreAllMocks();
 });
@@ -34,7 +40,8 @@ const renderChatItemTargetText = (isContinous = false) =>
     chatType: SIGNED,
     data: expectedReplyPreview.payload,
     isContinuous: isContinous,
-    time: timestamp
+    time: timestamp,
+    attachments: []
   });
 
 describe('TESTING ChatItemTargetText', () => {
