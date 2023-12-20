@@ -1,35 +1,32 @@
 import * as React from 'react';
-import {
-  Animated,
-  Platform,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-
-import MemoIc_pencil from '../../assets/icons/Ic_pencil';
+import {Animated, Platform, Pressable, StyleSheet, Text, View} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import PropTypes from 'prop-types';
 import MemoIc_search from '../../assets/icons/Ic_search';
 import StringConstant from '../../utils/string/StringConstant';
 import {COLORS, FONTS, SIZES} from '../../utils/theme';
-import { DISCOVERY_TAB_DOMAINS, DISCOVERY_TAB_NEWS } from '../../utils/constants';
+import {DISCOVERY_TAB_NEWS} from '../../utils/constants';
 import {fonts} from '../../utils/fonts';
 
-const Search = ({onPress, animatedValue}) => {
-  const navigation = useNavigation()
-  
-  const __handleOnContainerPress = () => {
+const Search = ({animatedValue}) => {
+  const navigation = useNavigation();
+
+  const handleOnContainerPress = () => {
     navigation.push('DiscoveryScreen', {
       tab: DISCOVERY_TAB_NEWS
-    })
-  }
+    });
+  };
 
   return (
-    <Animated.View style={[styles.animatedViewContainer(animatedValue), {position: Platform.OS === 'android' ? 'absolute' : 'relative'}]}>
-      <Pressable testID='containerPress' style={styles.pressableContainer} onPress={__handleOnContainerPress}>
+    <Animated.View
+      style={[
+        styles.animatedViewContainer(animatedValue),
+        {position: Platform.OS === 'android' ? 'absolute' : 'relative'}
+      ]}>
+      <Pressable
+        testID="containerPress"
+        style={styles.pressableContainer}
+        onPress={handleOnContainerPress}>
         <View style={styles.wrapperSearch}>
           <View style={styles.wrapperIcon}>
             <MemoIc_search width={16.67} height={16.67} />
@@ -41,15 +38,19 @@ const Search = ({onPress, animatedValue}) => {
   );
 };
 
+Search.propTypes = {
+  animatedValue: PropTypes.number
+};
+
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     backgroundColor: 'white',
     marginBottom: SIZES.base,
-    marginHorizontal: SIZES.base,
+    marginHorizontal: SIZES.base
   },
   pressableContainer: {
-    flex: 1,
+    flex: 1
   },
   wrapperSearch: {
     flex: 1,
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignSelf: 'center',
     flexDirection: 'row',
-    height: 36,
+    height: 36
   },
   wrapperButton: {
     flexDirection: 'row',
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
     paddingRight: 8,
     paddingTop: 9,
-    paddingBottom: 9,
+    paddingBottom: 9
   },
   input: {
     marginRight: 16,
@@ -86,12 +87,12 @@ const styles = StyleSheet.create({
   wrapperIcon: {
     marginLeft: 8,
     alignSelf: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   newPostText: {
     color: COLORS.holyTosca,
     marginRight: 11,
-    ...FONTS.h3,
+    ...FONTS.h3
   },
   animatedViewContainer: (animatedValue) => ({
     flexDirection: 'row',
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: COLORS.alto,
     height: 50
-  }),
+  })
 });
 
-export default React.memo (Search);
+export default React.memo(Search);
