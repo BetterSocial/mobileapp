@@ -35,6 +35,7 @@ export const colors = {
   greySubtile: '#69707C',
   greySubtile1: '#9B9FA9',
   greySubtile2: '#E8EBED',
+  lightgrey60: 'rgba(245, 245, 245, 0.6)'
 };
 
 export const hexToRgb = (hex, opacity = 1) => {
