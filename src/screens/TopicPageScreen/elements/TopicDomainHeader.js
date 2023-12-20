@@ -1,12 +1,13 @@
-import PropTypes from 'prop-types';
 import * as React from 'react';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import PropTypes from 'prop-types';
 import SimpleToast from 'react-native-simple-toast';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
+
 import CommunityIcon from '../../../assets/icon/CommunityIcon';
 import {Shimmer} from '../../../components/Shimmer/Shimmer';
 import {colors} from '../../../utils/colors';
-import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
 import {convertString} from '../../../utils/string/StringUtils';
+import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
 
 const TopicDomainHeader = (props) => {
   const {domain, handleOnMemberPress, hideSeeMember, isFollow, memberCount} = props;
@@ -52,12 +53,14 @@ const TopicDomainHeader = (props) => {
         ) : (
           isFollow &&
           !hideSeeMember && (
-            <Text
-              style={styles.seeMemberText(props.isHeaderHide)}
-              numberOfLines={1}
-              ellipsizeMode="tail">
-              See community members
-            </Text>
+            <Pressable onPress={handlePress} style={{backgroundColor: 'transparent'}}>
+              <Text
+                style={styles.seeMemberText(props.isHeaderHide)}
+                numberOfLines={1}
+                ellipsizeMode="tail">
+                See community members
+              </Text>
+            </Pressable>
           )
         )}
       </Pressable>

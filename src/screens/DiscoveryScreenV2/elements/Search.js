@@ -1,6 +1,7 @@
 /* eslint-disable no-use-before-define */
 import * as React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import PropTypes from 'prop-types';
 import {
   Keyboard,
   StyleSheet,
@@ -12,7 +13,6 @@ import {
 import {debounce} from 'lodash';
 import {useNavigation} from '@react-navigation/core';
 
-import PropTypes from 'prop-types';
 import DiscoveryAction from '../../../context/actions/discoveryAction';
 import IconClear from '../../../assets/icon/IconClear';
 import MemoIcArrowBackWhite from '../../../assets/arrow/Ic_arrow_back_white';
@@ -249,8 +249,6 @@ const styles = StyleSheet.create({
   clearIconContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    // marginRight: dimen.normalizeDimen(-20.5),
-    // paddingHorizontal: dimen.normalizeDimen(30),
     paddingRight: dimen.normalizeDimen(8),
     zIndex: 1000
   },
