@@ -8,6 +8,7 @@ type SendPayloadType = {
   message: string;
   messageType?: string;
   replyMessageId?: string;
+  attachments?: any;
 };
 
 const baseUrl = {
@@ -25,6 +26,7 @@ interface AnonymousMessageRepoTypes {
   sendAnonymousMessage: (
     channelId: string,
     message: string,
+    attachments: any,
     replyMessageId?: string
   ) => Promise<any>;
   getAllAnonymousChannels: () => Promise<ChannelData[]>;
@@ -52,8 +54,13 @@ async function checkIsTargetAllowingAnonDM(targetUserId: string) {
   }
 }
 
-async function sendAnonymousMessage(channelId: string, message: string, replyMessageId?: string) {
-  let payload: SendPayloadType = {channelId, message};
+async function sendAnonymousMessage(
+  channelId: string,
+  message: string,
+  attachments: any,
+  replyMessageId?: string
+) {
+  let payload: SendPayloadType = {channelId, message, attachments};
   if (replyMessageId) {
     payload = {...payload, messageType: 'reply', replyMessageId};
   }

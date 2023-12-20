@@ -113,6 +113,23 @@ function useMessageHook(): UseMessageHook {
     }
   };
 
+  const onOpenMediaPreview = (medias, index, navigation) => {
+    if (medias.find((media) => media.type === 'video')) {
+      navigation.push('VideoViewer', {
+        title: 'Video',
+        url: medias[index].video_path
+      });
+    } else {
+      navigation.push('ImageViewer', {
+        title: 'Photo',
+        index,
+        images: medias
+          .filter((media) => media.type === 'image')
+          .map((media) => ({url: media.asset_url}))
+      });
+    }
+  };
+
   const animatedBubbleStyle = useAnimatedStyle(() => {
     'worklet';
 
@@ -130,6 +147,7 @@ function useMessageHook(): UseMessageHook {
     setReplyPreview,
     clearReplyPreview,
     onContextMenuPressed,
+    onOpenMediaPreview,
     bubblePosition,
     pulseAnimation,
     animatedBubbleStyle,

@@ -29,6 +29,7 @@ import DomainScreen from '../screens/DomainScreen';
 import FollowersScreen from '../screens/Followings/FollowersScreen';
 import FollowingScreen from '../screens/Followings/FollowingScreen';
 import ImageViewerScreen from '../screens/ImageViewer';
+import VideoViewerScreen from '../screens/VideoViewer';
 import ChooseUsername from '../screens/InputUsername';
 import LinkContextScreen from '../screens/LinkContextScreen';
 import LocalCommunity from '../screens/LocalCommunity';
@@ -182,6 +183,7 @@ const AuthenticatedNavigator = () => {
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen name="ImageViewer" component={ImageViewerScreen} />
+        <AuthenticatedStack.Screen name="VideoViewer" component={VideoViewerScreen} />
         <AuthenticatedStack.Screen
           name="DomainScreen"
           component={withKeyboardWrapper(DomainScreen)}
