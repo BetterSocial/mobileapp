@@ -178,7 +178,7 @@ const UsersFragment = ({
             image: item.user ? item.user.profile_pic_path : item.profile_pic_path,
             isunfollowed: isUnfollowed,
             description: item.user ? item.user.bio : item.bio,
-            karmaScore: item.karma_score
+            karmaScore: item.user ? item.user.karma_score : item.karma_score
           }}
         />
       );

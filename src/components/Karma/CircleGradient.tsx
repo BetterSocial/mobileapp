@@ -11,7 +11,7 @@ export const CircleGradient = (props: {
   children: React.ReactNode;
   testId?: string;
 }) => {
-  const r = props.size / 2 - props.width;
+  const r = props.size / 2 - props.width / 1.9;
   const circleCircumference = 2 * Math.PI * r;
 
   const [circleStrokeDashoffset, setCircleStrokeDashoffset] = React.useState(
@@ -29,7 +29,7 @@ export const CircleGradient = (props: {
         width: props.size,
         height: props.size,
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'baseline',
         borderRadius: 9999
       }}>
       <LinearGradient
@@ -53,7 +53,7 @@ export const CircleGradient = (props: {
           <Circle
             cx={props.size / 2}
             cy={props.size / 2}
-            r={r + 1}
+            r={r}
             stroke="#E8EBED"
             strokeWidth={props.width + 1}
             strokeDasharray={circleCircumference}
