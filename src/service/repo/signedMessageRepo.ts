@@ -63,7 +63,7 @@ async function sendSignedMessage(channelId: string, message: string, channelType
 async function getAllSignedChannels() {
   try {
     const response = await api.get(baseUrl.getAllSignedChannels);
-
+    console.log(response.status, 'lakio');
     if (response.status === 200) {
       return Promise.resolve(response.data?.data);
     }

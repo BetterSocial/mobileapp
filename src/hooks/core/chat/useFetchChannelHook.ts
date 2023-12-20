@@ -81,6 +81,11 @@ const useFetchChannelHook = () => {
     if (channel?.type === 'topics') return;
 
     try {
+      (channel?.messages || []).map(async (message) => {
+        if (message?.type === 'deleted') return;
+        const chat = ChatSchema.fromGetAllChannelAPI(channel?.id, message);
+        chat.save(localDb);
+      });
       (channel?.members || []).map(async (member) => {
         const userMember = UserSchema.fromMemberWebsocketObject(member, channel?.id);
         const memberSchema = ChannelListMemberSchema.fromWebsocketObject(
@@ -90,12 +95,6 @@ const useFetchChannelHook = () => {
         );
         userMember.saveOrUpdateIfExists(localDb);
         memberSchema.save(localDb);
-      });
-
-      (channel?.messages || []).map(async (message) => {
-        if (message?.type === 'deleted') return;
-        const chat = ChatSchema.fromGetAllChannelAPI(channel?.id, message);
-        chat.save(localDb);
       });
     } catch (e) {
       console.log('error on saveChannelData:', e);
@@ -129,15 +128,14 @@ const useFetchChannelHook = () => {
 
   const saveAllChannelData = async (channels, channelCategory: ChannelCategory) => {
     const filteredChannels = filterChannels(channels);
-
-    filteredChannels?.forEach(async (channel) => {
-      await saveChannelData(channel, channelCategory);
+    filteredChannels?.forEach((channel) => {
+      saveChannelData(channel, channelCategory);
     });
   };
 
   const getAllSignedChannels = async () => {
     if (!localDb) return;
-    let signedChannel;
+    let signedChannel: ChannelData[] = [];
 
     try {
       signedChannel = await SignedMessageRepo.getAllSignedChannels();
@@ -146,7 +144,7 @@ const useFetchChannelHook = () => {
     }
 
     try {
-      await saveAllChannelData(signedChannel ?? [], 'SIGNED');
+      await saveAllChannelData(signedChannel, 'SIGNED');
       refresh('channelList');
     } catch (e) {
       console.log('error on saving signedChannel:', e);

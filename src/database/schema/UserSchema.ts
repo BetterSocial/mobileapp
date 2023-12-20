@@ -169,8 +169,6 @@ class UserSchema implements BaseDbSchema {
         const isExists = results?.rows?.length > 0;
         if (isExists) {
           this.update(db, isExistsTx);
-        } else {
-          this.save(db, isExistsTx);
         }
       });
     };
@@ -227,7 +225,7 @@ class UserSchema implements BaseDbSchema {
       userId: json?.user?.id,
       username: json?.user?.name,
       countryCode: '',
-      createdAt: json?.user?.created_at,
+      createdAt: json?.created_at,
       updatedAt: json?.updated_at,
       lastActiveAt: json?.user?.last_active,
       profilePicture: json?.user?.image,
