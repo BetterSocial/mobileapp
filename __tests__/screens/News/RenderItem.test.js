@@ -168,7 +168,7 @@ describe('RenderItem news should run correctly', () => {
       />,
       {wrapper: Store}
     );
-    fireEvent.press(getByTestId('sendDM'));
+    fireEvent.press(getByTestId('shareBtn'));
     expect(onPressShare).toHaveBeenCalled();
   });
   it('onComment should run correctly', () => {
