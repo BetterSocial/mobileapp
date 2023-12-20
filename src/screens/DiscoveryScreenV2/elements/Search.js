@@ -1,6 +1,8 @@
 /* eslint-disable no-use-before-define */
-import * as React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/core';
+import {debounce} from 'lodash';
+import * as React from 'react';
 import {
   Keyboard,
   StyleSheet,
@@ -9,21 +11,19 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import {debounce} from 'lodash';
-import {useNavigation} from '@react-navigation/core';
 
 import PropTypes from 'prop-types';
-import DiscoveryAction from '../../../context/actions/discoveryAction';
-import IconClear from '../../../assets/icon/IconClear';
 import MemoIcArrowBackWhite from '../../../assets/arrow/Ic_arrow_back_white';
+import IconClear from '../../../assets/icon/IconClear';
 import MemoIcSearch from '../../../assets/icons/Ic_search';
+import {Context} from '../../../context/Store';
+import DiscoveryAction from '../../../context/actions/discoveryAction';
+import {RECENT_SEARCH_TERMS} from '../../../utils/cache/constant';
+import dimen from '../../../utils/dimen';
+import {fonts, normalizeFontSize} from '../../../utils/fonts';
 import StringConstant from '../../../utils/string/StringConstant';
 import TestIdConstant from '../../../utils/testId';
-import dimen from '../../../utils/dimen';
 import {COLORS, FONTS, SIZES} from '../../../utils/theme';
-import {Context} from '../../../context/Store';
-import {RECENT_SEARCH_TERMS} from '../../../utils/cache/constant';
-import {fonts, normalizeFontSize} from '../../../utils/fonts';
 
 const DiscoverySearch = ({
   setDiscoveryLoadingData = () => {},
@@ -248,8 +248,6 @@ const styles = StyleSheet.create({
   clearIconContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    // marginRight: dimen.normalizeDimen(-20.5),
-    // paddingHorizontal: dimen.normalizeDimen(30),
     paddingRight: dimen.normalizeDimen(8),
     zIndex: 1000
   },

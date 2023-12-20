@@ -4,66 +4,63 @@ import {Pressable, StyleSheet, Text, View} from 'react-native';
 import SimpleToast from 'react-native-simple-toast';
 import CommunityIcon from '../../../assets/icon/CommunityIcon';
 import {Shimmer} from '../../../components/Shimmer/Shimmer';
-import {colors} from '../../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
 import {convertString} from '../../../utils/string/StringUtils';
 import {COLORS} from '../../../utils/theme';
 
 const TopicDomainHeader = (props) => {
   const {domain, handleOnMemberPress, hideSeeMember, isFollow, memberCount} = props;
-  const isUserFollow = props?.initialData?.isFollowing ? props.initialData.isFollowing : isFollow;
 
   const handlePress = () => {
-    if (isUserFollow) {
+    if (isFollow) {
       handleOnMemberPress();
     } else {
       SimpleToast.show('Only community members can see other members', SimpleToast.SHORT);
     }
   };
+  const shouldDisplay = !(props.topicDetail?.cover_path?.length > 0)
+    ? false
+    : props.hasSearch
+    ? props.topicDetail?.cover_path?.length > 0
+    : props.isHeaderHide;
+
   return (
-    <View
-      style={{
-        alignContent: 'flex-start',
-        alignItems: 'flex-start'
-      }}>
-      <Text
-        style={styles.domainText(props.isHeaderHide || props.hasSearch)}
-        numberOfLines={1}
-        ellipsizeMode="tail">
+    <View>
+      <Text style={styles.domainText(shouldDisplay)} numberOfLines={1} ellipsizeMode="tail">
         {`#${convertString(domain, ' ', '')}`}
       </Text>
-      <Pressable onPress={handlePress} style={{backgroundColor: 'transparent'}}>
-        <View style={{flexDirection: 'row', alignItems: 'center', marginTop: normalize(1)}}>
-          <CommunityIcon
-            color={props.isHeaderHide || props.hasSearch ? '#FFFFFF' : undefined}
-            style={{
-              marginRight: normalize(5),
-              height: normalize(8)
-            }}
-          />
-          {props?.initialData?.memberCount === undefined && props.isLoading ? (
-            <Shimmer height={10} width={normalize(25)} />
-          ) : (
-            <Text style={styles.domainMember(props.isHeaderHide || props.hasSearch)}>
-              {props?.initialData?.memberCount || memberCount}
-            </Text>
-          )}
-          <Text style={styles.domainMember(props.isHeaderHide || props.hasSearch)}> Members</Text>
-        </View>
+      <View style={{flexDirection: 'row', alignItems: 'center', marginTop: normalize(1)}}>
+        <CommunityIcon
+          color={shouldDisplay ? '#FFFFFF' : undefined}
+          style={{
+            marginRight: normalize(5),
+            height: normalize(8)
+          }}
+        />
         {props?.initialData?.memberCount === undefined && props.isLoading ? (
-          <Shimmer height={10} width={normalize(60)} />
+          <Shimmer height={10} width={normalize(25)} />
         ) : (
-          isUserFollow &&
-          !hideSeeMember && (
+          <Text style={styles.domainMember(shouldDisplay)}>
+            {props?.initialData?.memberCount || memberCount}
+          </Text>
+        )}
+        <Text style={styles.domainMember(shouldDisplay)}> Members</Text>
+      </View>
+      {props?.initialData?.memberCount === undefined && props.isLoading ? (
+        <Shimmer height={10} width={normalize(60)} />
+      ) : (
+        isFollow &&
+        !hideSeeMember && (
+          <Pressable onPress={handlePress} style={{backgroundColor: 'transparent'}}>
             <Text
               style={styles.seeMemberText(props.isHeaderHide)}
               numberOfLines={1}
               ellipsizeMode="tail">
               See community members
             </Text>
-          )
-        )}
-      </Pressable>
+          </Pressable>
+        )
+      )}
     </View>
   );
 };
