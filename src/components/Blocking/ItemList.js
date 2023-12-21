@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
 
 const ItemList = ({label, active, onSelect, id}) => {
   const [type, setType] = React.useState('add');
@@ -30,7 +31,7 @@ export default ItemList;
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 18,
-    borderBottomColor: '#E0E0E0',
+    borderBottomColor: COLORS.alto,
     borderBottomWidth: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 14,
     paddingHorizontal: 20,
-    color: '#000',
+    color: COLORS.black,
     flex: 1
   }
 });

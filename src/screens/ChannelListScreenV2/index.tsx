@@ -1,3 +1,5 @@
+/* eslint-disable import/no-named-as-default */
+/* eslint-disable import/no-named-as-default-member */
 // eslint-disable-next-line no-use-before-define
 import * as React from 'react';
 import {FlatList, StatusBar, View} from 'react-native';

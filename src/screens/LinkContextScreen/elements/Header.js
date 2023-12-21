@@ -196,17 +196,17 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(14),
     fontFamily: fonts.inter[600],
     lineHeight: normalizeFontSize(16.9),
-    color: '#000000'
+    color: COLORS.black
   },
   headerDomainDate: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(12),
     lineHeight: normalizeFontSize(18),
-    color: '#828282',
+    color: COLORS.blackgrey,
     flexShrink: 1
   },
   headerFollowerText: {
-    color: '#828282',
+    color: COLORS.blackgrey,
     fontSize: 12,
     fontFamily: fonts.inter[700]
   },
@@ -227,9 +227,9 @@ const styles = StyleSheet.create({
     marginLeft: -4
   },
   wrapperText: {
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     borderRadius: 8,
-    borderColor: '#00ADB5',
+    borderColor: COLORS.holytosca,
     width: 28,
     height: 28,
     justifyContent: 'center',
@@ -237,9 +237,9 @@ const styles = StyleSheet.create({
     borderWidth: 0.5
   },
   wrapperTextUnFollow: {
-    backgroundColor: '#00ADB5',
+    backgroundColor: COLORS.holytosca,
     borderRadius: 8,
-    borderColor: '#00ADB5',
+    borderColor: COLORS.holytosca,
     width: 28,
     height: 28,
     justifyContent: 'center',

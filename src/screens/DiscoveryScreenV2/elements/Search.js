@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flexDirection: 'row',
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     marginBottom: SIZES.base,
     marginHorizontal: SIZES.base
   },
@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
   },
   wrapperSearch: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: COLORS.lightgrey,
     borderRadius: dimen.normalizeDimen(8),
     alignSelf: 'center',
     flexDirection: 'row',

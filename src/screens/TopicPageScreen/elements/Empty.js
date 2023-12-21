@@ -3,6 +3,7 @@ import React from 'react';
 import {View, Text, Image, StyleSheet, Platform, Dimensions} from 'react-native';
 import {Gap} from '../../../components';
 import {fonts} from '../../../utils/fonts';
+import {COLORS} from '../../../utils/theme';
 
 const Empty = () => (
   <View style={styles.container}>
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontWeight: '400',
     lineHeight: 16,
-    color: '#000000',
+    color: COLORS.black,
     textAlign: 'center'
   }
 });

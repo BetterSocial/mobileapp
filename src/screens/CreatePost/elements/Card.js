@@ -1,13 +1,14 @@
 import React from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
 import { colors } from '../../../utils/colors';
+import { COLORS } from '../../../utils/theme';
 const Card = props => {
   return (
     // <View style={{ ...styles.card, ...props.style }}></View>
     <View // Parent
       style={{
         // No backgroundColor
-        shadowColor: '#000',
+        shadowColor: COLORS.black,
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.5,
         // shadowRadius: 10,
@@ -22,7 +23,7 @@ const Card = props => {
           borderRadius: 10,
           // To round image corners
           overflow: 'hidden',
-          borderColor: '#bdbdbd',
+          borderColor: COLORS.silver,
           borderWidth: 0.5,
           // https://github.com/facebook/react-native/issues/10049#issuecomment-366426897
           backgroundColor: colors.lightgrey,
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     elevation: 3,
     // background color must be set
-    backgroundColor: "#0000", // invisible color
+    backgroundColor: COLORS.black, // invisible color
     zIndex: 999,
   }
 });

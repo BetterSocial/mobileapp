@@ -50,6 +50,7 @@ import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder
 import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherProfileFeed';
 import {setFollow, setUnFollow} from '../../service/profile';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import {COLORS} from '../../utils/theme';
 
 const {width} = Dimensions.get('screen');
 
@@ -620,7 +621,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0'
+    borderBottomColor: COLORS.alto
   },
   dummyItem: (heightItem) => ({
     height: heightItem
@@ -650,7 +651,7 @@ const styles = StyleSheet.create({
   wrapImageProfile: {
     marginTop: 24,
     flexDirection: 'column',
-    backgroundColor: 'red'
+    backgroundColor: COLORS.red
   },
   nameProfile: {
     fontFamily: fonts.inter[800],
@@ -704,7 +705,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: 'white'
+    backgroundColor: COLORS.white
   },
   wrapButton: {
     flex: 1,

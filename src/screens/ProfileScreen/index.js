@@ -74,6 +74,7 @@ import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import {COLORS} from '../../utils/theme';
 
 const {width} = Dimensions.get('screen');
 
@@ -806,14 +807,14 @@ const styles = StyleSheet.create({
     paddingLeft: 0
   },
   tooltipText: {
-    color: '#828282',
+    color: COLORS.blackgrey,
     fontFamily: 'Inter',
     fontSize: 12,
     fontStyle: 'normal',
     fontWeight: '400'
   },
   flatlistContainer: {
-    backgroundColor: 'white'
+    backgroundColor: COLORS.white
   }
 });
 

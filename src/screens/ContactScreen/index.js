@@ -250,7 +250,7 @@ const ContactScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     flex: 1
   },
   recyclerview: {

@@ -10,22 +10,19 @@ import MemoIcSearch from '../../../assets/icons/Ic_search';
 import StringConstant from '../../../utils/string/StringConstant';
 import dimen from '../../../utils/dimen';
 import {DISCOVERY_TAB_USERS} from '../../../utils/constants';
-import {SIZES} from '../../../utils/theme';
+import {COLORS, SIZES} from '../../../utils/theme';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
+import {useDynamicColors} from '../../../hooks/useToggleColors';
 
-const Search = ({route, onPress}) => {
+const Search = ({route, onPress, isAnon}) => {
   const navigation = useNavigation();
+  const dynamicColors = useDynamicColors(isAnon);
 
   const __handleOnSearchClicked = () => {
     navigation.push('DiscoveryScreen', {
       tab: DISCOVERY_TAB_USERS
     });
-  };
-
-  const themeColor = () => {
-    if (route?.name === 'SignedChannelList') return colors.darkBlue;
-    return colors.anon_primary;
   };
 
   return (
@@ -39,11 +36,16 @@ const Search = ({route, onPress}) => {
         </View>
       </Pressable>
       <TouchableOpacity style={styles.wrapperButton} onPress={onPress}>
-        <Text style={[styles.newPostText, {color: themeColor()}]}>
+        <Text style={styles.newPostText(dynamicColors)}>
           {StringConstant.chatTabHeaderCreateChatButtonText}
         </Text>
         <View>
-          <MemoIcNewChat height={18} width={16} color={themeColor()} style={styles.newChatIcon} />
+          <MemoIcNewChat
+            height={17}
+            width={15}
+            style={styles.newChatIcon}
+            color={dynamicColors.primary}
+          />
         </View>
       </TouchableOpacity>
     </View>
@@ -53,7 +55,7 @@ const Search = ({route, onPress}) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     marginBottom: SIZES.base
   },
   searchPressableContainer: {
@@ -62,7 +64,7 @@ const styles = StyleSheet.create({
   wrapperSearch: {
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: '#F5F5F5',
+    backgroundColor: COLORS.lightgrey,
     marginLeft: 20,
     marginRight: 12,
     borderRadius: 8,
@@ -94,18 +96,19 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center'
   },
-  newPostText: {
-    marginRight: dimen.normalizeDimen(5),
+  newPostText: (dynamicColors) => ({
+    color: dynamicColors.primary,
+    marginRight: 11,
     fontFamily: 'Inter-SemiBold',
     fontSize: 12,
     lineHeight: 14.52
-  },
+  }),
   newChatIcon: {
     marginTop: 0
   },
   animatedViewContainer: {
     flexDirection: 'row',
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     marginBottom: SIZES.base,
     position: 'absolute',
     top: 0,

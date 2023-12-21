@@ -7,6 +7,7 @@ import MemoIc_block from '../../assets/chats/Ic_block';
 import MemoIc_copy from '../../assets/chats/Ic_copy';
 import MemoIC_trash from '../../assets/chats/IC_trash';
 import {colors} from '../../utils/colors';
+import {COLORS} from '../../utils/theme';
 
 const ActionChat = ({children, isMe, active, all}) => {
   return (
@@ -40,7 +41,7 @@ export default ActionChat;
 
 const styles = StyleSheet.create({
   container: (active) => ({
-    backgroundColor: active ? 'rgba(0, 173, 181, 0.2)' : '#fff',
+    backgroundColor: active ? 'rgba(0, 173, 181, 0.2)' : COLORS.white,
   }),
   btn: {
     paddingVertical: 10,

@@ -20,6 +20,7 @@ import ModalImageSingleDetail from './ModalImageSingleDetail';
 import ProfileMessage from './ProfileMessage';
 import ActionChat from './ActionChat';
 import {TouchableWithoutFeedback} from 'react-native';
+import {COLORS} from '../../utils/theme';
 
 const MessageWithImage = ({
   image,
@@ -185,7 +186,7 @@ const styles = StyleSheet.create({
   textMore: {
     fontSize: 24,
     fontFamily: fonts.inter[400],
-    color: '#fff',
+    color: COLORS.white,
   },
   singleImage: {
     flex: 1,
@@ -194,7 +195,7 @@ const styles = StyleSheet.create({
     marginVertical: 4,
     borderRadius: 8,
   },
-  flexlist: {backgroundColor: '#fff', borderRadius: 8},
+  flexlist: {backgroundColor: COLORS.white, borderRadius: 8},
   containerManyEmage: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -233,18 +234,18 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: fonts.inter[600],
     lineHeight: 14.53,
-    color: '#000',
+    color: COLORS.black,
     marginRight: 5.7,
   },
   time: {
     fontSize: 10,
     fontFamily: fonts.inter[600],
     lineHeight: 12,
-    color: '#000',
+    color: COLORS.black,
     marginLeft: 5,
   },
   message: {
-    color: '#000',
+    color: COLORS.black,
     marginTop: 4,
     fontSize: 16,
     fontFamily: fonts.inter[400],

@@ -51,7 +51,7 @@ const Header = ({
         disabled={disabledNextBtn}
         buttonStyle={styles.nextContainer}
         onPress={onPressSub}>
-        <Text style={[styles.text, {color: disabledNextBtn ? COLORS.gray6 : COLORS.holyTosca}]}>
+        <Text style={[styles.text, {color: disabledNextBtn ? COLORS.gray6 : COLORS.holytosca}]}>
           {subTitle}
         </Text>
       </GlobalButton>
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'bold',
     fontSize: 16,
-    color: '#000000',
+    color: COLORS.black,
     lineHeight: 20,
     alignSelf: 'center'
   },

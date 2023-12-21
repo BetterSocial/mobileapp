@@ -24,7 +24,7 @@ const RenderItem = ({item, selectedUsers, onChange, index}) => {
           // backgroundColor:
           //   isInArray(item, selectedUsers) > -1
           //     ? 'rgba(0, 173, 181, 0.15)'
-          //     : '#FFFFFF',
+          //     : COLORS.white,
         }}>
         <Avatar image={item.profile_pic_path} />
         <Gap width={SIZES.base * 2} />

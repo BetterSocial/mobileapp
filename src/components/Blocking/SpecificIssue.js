@@ -6,6 +6,7 @@ import {ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View} 
 import {Button} from '../Button';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import { COLORS } from '../../utils/theme';
 
 const SpecificIssue = ({refSpecificIssue, onPress, onSkip, loading}) => {
   const [message, setMessage] = React.useState('');
@@ -31,7 +32,7 @@ const SpecificIssue = ({refSpecificIssue, onPress, onSkip, loading}) => {
         />
         <TouchableOpacity testID="button-skip-test" style={styles.btnSkip} onPress={() => onSkip()}>
           <Text style={styles.btnSkipText}>Skip & just block this account</Text>
-          <IconFA5 name="chevron-right" size={17} color={'#000'} />
+          <IconFA5 name="chevron-right" size={17} color={COLORS.black} />
         </TouchableOpacity>
         <View style={styles.containerBtn}>
           <Button testID="button-report-test" onPress={() => onPress(message)}>
@@ -53,7 +54,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: fonts.inter[700],
     fontSize: 18,
-    color: '#000',
+    color: COLORS.black,
     marginLeft: 21,
     marginTop: 18
   },
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
     paddingTop: 8
   },
   btnSkip: {
-    backgroundColor: '#E0E0E0',
+    backgroundColor: COLORS.alto,
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 17,
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
   btnSkipText: {
     fontFamily: fonts.inter[700],
     fontSize: 14,
-    color: '#000'
+    color: COLORS.black
   },
   input: {
     backgroundColor: colors.lightgrey,

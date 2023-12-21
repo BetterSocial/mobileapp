@@ -13,6 +13,7 @@ import {Context} from '../../context';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {getChatName, getGroupMemberCount} from '../../utils/string/StringUtils';
+import {COLORS} from '../../utils/theme';
 
 const Header = ({onBack}) => {
   const navigation = useNavigation();
@@ -115,7 +116,7 @@ const Header = ({onBack}) => {
               focusChatName: true
             })
           }>
-          <IconEP name="dots-three-vertical" size={12.87} color={'#fff'} />
+          <IconEP name="dots-three-vertical" size={12.87} color={COLORS.white} />
         </GlobalButton>
       </View>
     </View>
@@ -157,7 +158,7 @@ const styles = StyleSheet.create({
   name: {
     marginLeft: 11,
     fontFamily: fonts.inter[600],
-    color: '#fff',
+    color: COLORS.white,
     fontSize: 14,
     width: '70%'
   },

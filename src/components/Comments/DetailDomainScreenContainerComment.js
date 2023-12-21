@@ -10,6 +10,7 @@ import StringConstant from '../../utils/string/StringConstant';
 import { colors } from '../../utils/colors';
 import { downVoteDomain, upVoteDomain } from '../../service/vote';
 import ButtonHightlight from '../ButtonHighlight';
+import { COLORS } from '../../utils/theme';
 
 const DetailDomainScreenContainerComment = ({ comments, indexFeed, updateParent, refreshNews }) => {
   const [totalVote, setTotalVote] = React.useState(0);
@@ -210,7 +211,7 @@ const ContainerReply = ({ children, isGrandchild, hideLeftConnector }) => {
     <View
       style={[
         styles.containerReply(hideLeftConnector),
-        { borderColor: isGrandchild ? '#fff' : colors.gray1 },
+        { borderColor: isGrandchild ? COLORS.white : colors.gray1 },
       ]}>
       {children}
     </View>
@@ -226,7 +227,7 @@ const styles = StyleSheet.create({
   lineBeforeProfile: {
     height: 8.5,
     borderLeftWidth: 1,
-    borderLeftColor: '#C4C4C4',
+    borderLeftColor: COLORS.gray1,
   },
   containerReply: (hideLeftConnector) => ({
     borderLeftWidth: 1,

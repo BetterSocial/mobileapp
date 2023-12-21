@@ -21,8 +21,8 @@ import {colors} from '../../utils/colors';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import dimen from '../../utils/dimen';
 import {normalizeFontSize} from '../../utils/fonts';
-import {FONTS} from '../../utils/theme';
 import BottomSheetMenu from '../BottomSheet/BottomSheetMenu';
+import {COLORS, FONTS} from '../../utils/theme';
 
 const Footer = ({
   item,
@@ -69,12 +69,12 @@ const Footer = ({
 
   const voteStyle = () => {
     if (totalVote > 0) {
-      return '#00ADB5';
+      return COLORS.holytosca;
     }
     if (totalVote < 0) {
-      return '#FF2E63';
+      return COLORS.red;
     }
-    return '#C4C4C4';
+    return COLORS.gray1;
   };
 
   const username = item?.anon_user_info_emoji_name
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
   },
   text: {
     ...FONTS.body3,
-    color: '#C4C4C4'
+    color: COLORS.gray1
   },
   vote: (colorBasedCount) => ({
     ...FONTS.body3,

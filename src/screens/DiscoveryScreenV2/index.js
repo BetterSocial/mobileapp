@@ -25,6 +25,7 @@ import {Header} from '../../components';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {withInteractionsManagedNoStatusBar} from '../../components/WithInteractionManaged';
+import {COLORS} from '../../utils/theme';
 
 const DiscoveryScreenV2 = ({route}) => {
   const {tab} = route.params;
@@ -311,7 +312,7 @@ const DiscoveryScreenV2 = ({route}) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.white,
     flex: 1,
     paddingTop: 60
   },

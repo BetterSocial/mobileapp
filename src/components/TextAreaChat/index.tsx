@@ -5,6 +5,7 @@ import {colors} from '../../utils/colors';
 import MemoSendComment from '../../assets/icon/IconSendComment';
 import {PhotoProfileProps, TextAreaChatProps} from './typings';
 import {S} from './styles';
+import {COLORS} from '../../utils/theme';
 
 const PhotoProfile = ({
   anonUser,
@@ -90,7 +91,7 @@ const TextAreaChat = ({
           S.textArea,
           {color: disabledInput ? colors.gray1 : colors.black, minHeight, maxHeight}
         ]}
-        placeholderTextColor={'#C4C4C4'}
+        placeholderTextColor={COLORS.gray1}
         value={message}
         editable={!disabledInput}
       />

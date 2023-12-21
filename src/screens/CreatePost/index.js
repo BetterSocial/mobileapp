@@ -5,7 +5,6 @@
 import * as React from 'react';
 import PSL from 'psl';
 import Toast from 'react-native-simple-toast';
-import {Image} from 'react-native-compressor';
 import _, {debounce} from 'lodash';
 import {
   Alert,
@@ -61,7 +60,6 @@ import {
 import {PROFILE_CACHE} from '../../utils/cache/constant';
 import {ShowingAudience, createPost} from '../../service/post';
 import {colors} from '../../utils/colors';
-import {composeImageMeta} from '../../utils/string/file';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {
   getDurationId,
@@ -76,9 +74,9 @@ import {getSpecificCache} from '../../utils/cache';
 import {getUrl, isContainUrl} from '../../utils/Utils';
 import {getUserId} from '../../utils/users';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
-import {uploadPhoto} from '../../service/file';
 import ImageUtils from '../../utils/image';
 import ImageCompressionUtils from '../../utils/image/compress';
+import {COLORS} from '../../utils/theme';
 
 const IS_GEO_SELECT_ENABLED = false;
 
@@ -882,7 +880,7 @@ export default CreatePost;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.white,
     position: 'relative'
   },
   input: {
@@ -931,7 +929,7 @@ const styles = StyleSheet.create({
     height
   }),
   reminderContainer: {
-    backgroundColor: colors.blue,
+    backgroundColor: COLORS.blue,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 7,
@@ -939,7 +937,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 10
   },
   whiteText: {
-    color: 'white',
+    color: COLORS.white,
     fontSize: normalizeFontSize(10),
     textAlign: 'center'
   }

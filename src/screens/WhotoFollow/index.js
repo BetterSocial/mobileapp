@@ -37,6 +37,7 @@ import {registerUser} from '../../service/users';
 import {setImage} from '../../context/actions/users';
 import {setToken} from '../../utils/token';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
+import {COLORS} from '../../utils/theme';
 
 const {width} = Dimensions.get('screen');
 
@@ -334,7 +335,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: normalizeFontSize(36),
     lineHeight: normalizeFontSize(43.57),
-    color: '#11243D',
+    color: COLORS.bunting,
     marginHorizontal: dimen.normalizeDimen(20)
   },
   textDescription: {

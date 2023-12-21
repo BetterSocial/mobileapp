@@ -32,6 +32,7 @@ import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
 import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
 
 const GroupInfo = () => {
   const navigation = useNavigation();
@@ -310,7 +311,7 @@ const GroupInfo = () => {
 export default GroupInfo;
 
 export const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#fff', paddingBottom: 40},
+  container: {flex: 1, backgroundColor: COLORS.white, paddingBottom: 40},
   users: {
     paddingTop: 12
   },
@@ -367,7 +368,7 @@ export const styles = StyleSheet.create({
     fontSize: normalizeFontSize(14),
     fontFamily: fonts.inter[400],
     lineHeight: normalizeFontSize(16.94),
-    color: '#000',
+    color: COLORS.black,
     marginTop: 4,
     marginBottom: 9
   },
@@ -375,7 +376,7 @@ export const styles = StyleSheet.create({
     fontSize: normalizeFontSize(24),
     fontFamily: fonts.inter[500],
     lineHeight: normalizeFontSize(29.05),
-    color: '#000'
+    color: COLORS.black
   },
   lineTop: {
     backgroundColor: colors.alto,
@@ -429,7 +430,7 @@ export const styles = StyleSheet.create({
   },
   gap: {
     height: 1,
-    backgroundColor: '#E0E0E0',
+    backgroundColor: COLORS.alto,
     marginTop: 50
   },
   actionGroup: {
@@ -448,7 +449,7 @@ export const styles = StyleSheet.create({
     marginRight: 26
   },
   textAct: {
-    color: '#FF2E63',
+    color: COLORS.red,
     fontSize: 14
   },
   scrollContainer: {

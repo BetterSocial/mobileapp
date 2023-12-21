@@ -3,6 +3,7 @@ import {Image, Linking, TouchableOpacity, StyleSheet, Text, View} from 'react-na
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 import {trimString} from '../../../utils/string/TrimString';
+import {COLORS} from '../../../utils/theme';
 
 const ItemLink = ({domain, link, title, image}) => {
   return (
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: 14,
     lineHeight: 16.94,
-    color: '#000'
+    color: COLORS.white
   },
   domain: {
     fontFamily: fonts.inter[400],

@@ -1,14 +1,7 @@
 import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
-import {
-  Image,
-  Linking,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { RFValue } from 'react-native-responsive-fontsize'
+import {Image, Linking, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {RFValue} from 'react-native-responsive-fontsize';
 
 import ActionButtonGroup from './elements/ActionButtonGroup';
 import CredderInfoGroup from './elements/CredderInfoGroup';
@@ -16,9 +9,9 @@ import DomainFollowerNumber from './elements/DomainFollowerNumber';
 import MemoDomainProfilePicture from '../../../../assets/icon/DomainProfilePictureEmptyState';
 import MemoIc_interface from '../../../../assets/icons/Ic_interface';
 import StringConstant from '../../../../utils/string/StringConstant';
-import { COLORS, SIZES } from '../../../../utils/theme';
-import { Gap, SingleSidedShadowBox } from '../../../../components';
-import { fonts, normalize, normalizeFontSize } from '../../../../utils/fonts';
+import {COLORS, SIZES} from '../../../../utils/theme';
+import {Gap, SingleSidedShadowBox} from '../../../../components';
+import {fonts, normalize, normalizeFontSize} from '../../../../utils/fonts';
 
 const Header = ({
   image,
@@ -50,27 +43,27 @@ const Header = ({
             <>
               <View style={styles.circleImageWrapper} />
               <Image
-                source={{ uri: image }}
+                source={{uri: image}}
                 style={[styles.circleImage, StyleSheet.absoluteFillObject]}
               />
             </>
           ) : (
-            <MemoDomainProfilePicture height={normalize(100)} width={normalize(100)}/>
+            <MemoDomainProfilePicture height={normalize(100)} width={normalize(100)} />
           )}
         </View>
         <View style={styles.wrapperHeader}>
           <View style={{...styles.row, ...styles.domainNameContainer}}>
-            <Text style={styles.domainName} ellipsizeMode="tail" numberOfLines={1}>{domain}</Text>
+            <Text style={styles.domainName} ellipsizeMode="tail" numberOfLines={1}>
+              {domain}
+            </Text>
             <View style={{alignSelf: 'center'}}>
-              <TouchableOpacity
-                style={styles.openInBrowserIcon}
-                onPress={openDomainLink}>
+              <TouchableOpacity style={styles.openInBrowserIcon} onPress={openDomainLink}>
                 <MemoIc_interface width={17} height={17} />
               </TouchableOpacity>
             </View>
           </View>
           <DomainFollowerNumber followers={followers} />
-          <CredderInfoGroup score={item.domain.credderScore}/>
+          <CredderInfoGroup score={item.domain.credderScore} />
         </View>
       </View>
       <Gap height={normalize(14)} />
@@ -85,56 +78,57 @@ const Header = ({
         handleUnfollow={handleUnfollow}
         isBlocked={isBlocked}
         onPressBlock={onPressBlock}
-        onPressUnblock={onPressUnblock} />
+        onPressUnblock={onPressUnblock}
+      />
       <Gap height={normalize(12)} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  icon: { flexDirection: 'row', alignItems: 'center' },
+  icon: {flexDirection: 'row', alignItems: 'center'},
   desc: {
     fontSize: normalizeFontSize(14),
     fontFamily: fonts.inter[400],
-    lineHeight: normalizeFontSize(16),
+    lineHeight: normalizeFontSize(16)
   },
-  containerFollowers: { flexDirection: 'row' },
+  containerFollowers: {flexDirection: 'row'},
   followers: {
-    color: '#00ADB5',
+    color: COLORS.holytosca,
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(16),
-    fontWeight: '700',
+    fontWeight: '700'
   },
-  wrapperDomain: { flexDirection: 'row', marginTop: 8 },
-  iconDomain: { marginStart: 8, justifyContent: 'center' },
+  wrapperDomain: {flexDirection: 'row', marginTop: 8},
+  iconDomain: {marginStart: 8, justifyContent: 'center'},
   domainNameContainer: {
-    width: '100%',
+    width: '100%'
   },
   domain: {
     fontSize: normalizeFontSize(24),
     fontFamily: fonts.inter[600],
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   actionText: (color) => ({
     fontSize: normalizeFontSize(14),
-    color,
+    color
   }),
   headerDomain: {
     flexDirection: 'column',
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     paddingHorizontal: 20,
     borderTopColor: 'transparent',
-    // shadowColor: '#000',
+    // shadowColor: COLORS.black,
     // shadowOffset: {width: 0, height: 1},
     // shadowOpacity: 0.8,
     // shadowRadius: 1,
-    paddingTop: 15,
+    paddingTop: 15
   },
   container: {
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
-  image: { height: '100%', width: '100%', borderRadius: 45 },
-  containerImage: { flex: 1.3 },
+  image: {height: '100%', width: '100%', borderRadius: 45},
+  containerImage: {flex: 1.3},
   boxImage: {
     borderRadius: 45,
     borderWidth: 0.2,
@@ -142,28 +136,28 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   buttonPrimary: {
     height: normalize(36),
-    backgroundColor: '#00ADB5',
+    backgroundColor: COLORS.holytosca,
     // flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 8,
+    borderRadius: 8
   },
   wrapperHeader: {
     flex: 1,
     justifyContent: 'flex-start',
     // alignItems: 'center',
     flexDirection: 'column',
-    marginLeft: 28,
+    marginLeft: 28
   },
   width: (wid) => ({
-    width: wid,
+    width: wid
   }),
   height: (height) => ({
-    height,
+    height
   }),
   wrapperImage: {
     borderRadius: normalize(50),
@@ -171,51 +165,51 @@ const styles = StyleSheet.create({
     width: normalize(100),
     height: normalize(100),
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   row: {
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   followButtonText: {
     fontSize: normalizeFontSize(14),
-    color: 'white',
-    paddingHorizontal: 25,
+    color: COLORS.white,
+    paddingHorizontal: 25
   },
   domainName: {
     fontSize: RFValue(20),
     fontFamily: fonts.inter[700],
     lineHeight: RFValue(24.2),
-    color: '#000000',
+    color: COLORS.black,
     // flex: 1,
     flexShrink: 1
   },
   domainDescription: {
     fontFamily: fonts.inter[400],
     lineHeight: normalizeFontSize(17),
-    fontSize: normalizeFontSize(14),
+    fontSize: normalizeFontSize(14)
     // lineHeight: 17,
   },
   shadowBox: {
-    paddingBottom: 8,
+    paddingBottom: 8
   },
   arrow: {
     position: 'absolute',
     width: 10,
     height: 10,
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     top: 23,
     zIndex: 10000000,
     left: 10,
-    transform: [{ rotate: '45deg' }],
-    shadowColor: '#000',
+    transform: [{rotate: '45deg'}],
+    shadowColor: COLORS.black,
     shadowOffset: {
       width: 2,
-      height: 2,
+      height: 2
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
 
-    elevation: 5,
+    elevation: 5
   },
   openInBrowserIcon: {
     padding: normalize(4),
@@ -231,15 +225,15 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderRadius: normalize(100),
     resizeMode: 'cover',
-    zIndex: -10000,
+    zIndex: -10000
   },
   circleImageWrapper: {
     height: normalize(100),
     width: normalize(100),
     borderRadius: normalize(50),
     borderWidth: 0.2,
-    borderColor: 'rgba(0,0,0,0.5)',
-  },
+    borderColor: 'rgba(0,0,0,0.5)'
+  }
 });
 
 export default Header;

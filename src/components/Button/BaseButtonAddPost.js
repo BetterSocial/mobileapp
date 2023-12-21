@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: fonts.inter[500],
-    color: '#fff',
+    color: COLORS.white,
     fontSize: 12,
     marginLeft: 9.67
   }

@@ -73,6 +73,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
             style={
               Object {
                 "color": "#000000",
+                "color": "#000000",
                 "fontFamily": "Poppins-SemiBold",
                 "fontSize": 16,
                 "fontWeight": "600",

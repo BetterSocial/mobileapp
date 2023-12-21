@@ -4,6 +4,7 @@ import {StyleSheet, TouchableOpacity, View} from 'react-native';
 
 import {colors} from '../../../../utils/colors';
 import {fonts} from '../../../../utils/fonts';
+import {COLORS} from '../../../../utils/theme';
 
 const MyTabBar = ({state, descriptors, position, navigation}) => {
   const getLabel = (options, route) => {
@@ -57,7 +58,7 @@ const S = StyleSheet.create({
   toptabcontainer: {
     flexDirection: 'row',
     backgroundColor: colors.white,
-    borderBottomColor: '#00000050',
+    borderBottomColor: COLORS.black30percent,
     borderBottomWidth: 1,
     paddingHorizontal: 4
   },

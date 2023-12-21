@@ -6,6 +6,7 @@ import {Dimensions, RefreshControl, StyleSheet} from 'react-native';
 import ItemUser from './ItemUser';
 import Label from './Label';
 import {searchChatUsers} from '../../../service/users';
+import {COLORS} from '../../../utils/theme';
 
 const VIEW_TYPE_LABEL = 1;
 const VIEW_TYPE_DATA = 2;
@@ -161,7 +162,7 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: '#FFFFFF'
+    backgroundColor: COLORS.white
   },
   recyclerview: {
     // height: height - 180,

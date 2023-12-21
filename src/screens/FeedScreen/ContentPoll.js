@@ -334,7 +334,7 @@ const stylesComponent = (pollLength) =>
     },
     voteFont: {
       fontSize: normalizeFontSize(12),
-      color: '#828282',
+      color: COLORS.blackgrey,
       marginLeft: 2
     }
   });

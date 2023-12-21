@@ -38,9 +38,10 @@ import {isContainUrl} from '../../utils/Utils';
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
 import {channelImageStyles} from '../../components/ChatList/elements/ChannelImage.style';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
+import {COLORS} from '../../utils/theme';
 
 export const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#fff', paddingBottom: 40},
+  container: {flex: 1, backgroundColor: COLORS.white, paddingBottom: 40},
   users: {
     paddingTop: 12
   },
@@ -84,14 +85,15 @@ export const styles = StyleSheet.create({
     fontSize: normalizeFontSize(14),
     fontFamily: fonts.inter[400],
     lineHeight: normalizeFontSize(16.94),
-    color: '#000',
+    color: COLORS.black,
     marginTop: 4,
     marginBottom: 9
   },
   groupName: {
     fontSize: normalizeFontSize(24),
     lineHeight: normalizeFontSize(29.05),
-    color: '#000',
+    color: COLORS.black,
+    width: '100%',
     paddingHorizontal: dimen.normalizeDimen(20),
     fontWeight: 'bold'
   },
@@ -146,7 +148,7 @@ export const styles = StyleSheet.create({
   },
   gap: {
     height: 1,
-    backgroundColor: '#E0E0E0'
+    backgroundColor: COLORS.alto
   },
   actionGroup: {
     marginTop: 22
@@ -164,7 +166,7 @@ export const styles = StyleSheet.create({
     marginRight: 26
   },
   textAct: {
-    color: '#FF2E63',
+    color: COLORS.red,
     fontSize: 14
   },
   mr7: {

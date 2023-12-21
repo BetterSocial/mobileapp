@@ -7,6 +7,7 @@ import {fonts} from '../../utils/fonts';
 import Header from './elements/Header';
 import Link from './elements/Link';
 import Media from './elements/Media';
+import {COLORS} from '../../utils/theme';
 
 const GroupMedia = () => {
   const Tab = createMaterialTopTabNavigator();
@@ -79,12 +80,12 @@ const GroupMedia = () => {
 export default GroupMedia;
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#fff'},
+  container: {flex: 1, backgroundColor: COLORS.white},
 
   toptabcontainer: {
     flexDirection: 'row',
     backgroundColor: colors.white,
-    borderBottomColor: '#00000050',
+    borderBottomColor: COLORS.black30percent,
     borderBottomWidth: 1,
     paddingHorizontal: 4
   },

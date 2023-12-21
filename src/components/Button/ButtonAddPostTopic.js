@@ -7,6 +7,7 @@ import {colors} from '../../utils/colors';
 import dimen from '../../utils/dimen';
 import {normalize} from '../../utils/fonts';
 import ShadowFloatingButtons from './ShadowFloatingButtons';
+import {COLORS} from '../../utils/theme';
 
 const ButtonAddPostTopic = ({topicName, onRefresh}) => {
   const {toCreatePostWithTopic} = useBetterNavigationHook();
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
     bottom: normalize(30),
     right: 0,
     zIndex: 99,
-    backgroundColor: '#0000'
+    backgroundColor: COLORS.black
   },
   buttonContainer: {
     backgroundColor: colors.darkBlue,
