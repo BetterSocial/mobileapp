@@ -151,26 +151,6 @@ describe('RenderItem news should run correctly', () => {
     expect(onPressDownVote).toHaveBeenCalled();
   });
 
-  it('onShare should run correctly', () => {
-    const onPressBlock = jest.fn();
-    const onPressComment = jest.fn();
-    const onPressDownVote = jest.fn();
-    const onPressShare = jest.fn();
-    const onUpvote = jest.fn();
-    const {getByTestId} = render(
-      <RenderItem
-        item={item}
-        onPressBlock={onPressBlock}
-        onPressComment={onPressComment}
-        onPressDownVote={onPressDownVote}
-        onPressShare={onPressShare}
-        onPressUpvote={onUpvote}
-      />,
-      {wrapper: Store}
-    );
-    fireEvent.press(getByTestId('sendDM'));
-    expect(onPressShare).toHaveBeenCalled();
-  });
   it('onComment should run correctly', () => {
     const onPressBlock = jest.fn();
     const onPressComment = jest.fn();

@@ -84,7 +84,7 @@ exports[`TESTING ChatItemMyTextV2 should match snapshot 1`] = `
             style={
               Array [
                 Object {
-                  "backgroundColor": "#F5F6F7",
+                  "backgroundColor": "#F5F5F5",
                   "borderRadius": 8,
                   "flex": 1,
                   "paddingHorizontal": 4.800000000000001,
@@ -160,7 +160,7 @@ exports[`TESTING ChatItemMyTextV2 should match snapshot 1`] = `
                 }
                 testID="timestamp"
               >
-                1m ago
+                1m
               </Text>
             </View>
             <View
@@ -351,7 +351,7 @@ exports[`TESTING ChatItemTargetText should match snapshot 1`] = `
             style={
               Array [
                 Object {
-                  "backgroundColor": "#F5F6F7",
+                  "backgroundColor": "#F5F5F5",
                   "borderRadius": 8,
                   "flex": 1,
                   "paddingHorizontal": 4.800000000000001,
@@ -426,7 +426,7 @@ exports[`TESTING ChatItemTargetText should match snapshot 1`] = `
                 }
                 testID="timestamp"
               >
-                1m ago
+                1m
               </Text>
             </View>
             <Text

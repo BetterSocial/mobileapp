@@ -12,7 +12,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
     <View
       style={
         Object {
-          "backgroundColor": "white",
+          "backgroundColor": "#FFFFFF",
           "borderBottomColor": "#E8EBED",
           "borderBottomWidth": 1,
           "flexDirection": "row",
@@ -106,17 +106,13 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
       >
         <Text
           style={
-            Array [
-              Object {
-                "fontFamily": "Inter-SemiBold",
-                "fontSize": 12,
-                "lineHeight": 14.52,
-                "marginRight": 4,
-              },
-              Object {
-                "color": "#003848",
-              },
-            ]
+            Object {
+              "color": "#4782D7",
+              "fontFamily": "Inter-SemiBold",
+              "fontSize": 12,
+              "lineHeight": 14.52,
+              "marginRight": 11,
+            }
           }
         >
           New Chat

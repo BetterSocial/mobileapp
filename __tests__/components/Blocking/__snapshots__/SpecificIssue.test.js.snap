@@ -115,7 +115,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
         <Text
           style={
             Object {
-              "color": "#000",
+              "color": "#1E1F20",
               "fontFamily": "Inter-Bold",
               "fontSize": 18,
               "marginLeft": 21,
@@ -134,7 +134,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
           rejectResponderTermination={true}
           style={
             Object {
-              "backgroundColor": "#F5F6F7",
+              "backgroundColor": "#F5F5F5",
               "borderRadius": 8,
               "color": "#69707C",
               "fontFamily": "Inter-Regular",
@@ -178,7 +178,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
           <Text
             style={
               Object {
-                "color": "#000",
+                "color": "#1E1F20",
                 "fontFamily": "Inter-Bold",
                 "fontSize": 14,
               }
@@ -187,7 +187,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
             Skip & just block this account
           </Text>
           <Icon
-            color="#000"
+            color="#1E1F20"
             name="chevron-right"
             size={17}
           />

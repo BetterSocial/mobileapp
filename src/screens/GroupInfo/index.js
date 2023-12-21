@@ -32,7 +32,6 @@ import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
 import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
-import {COLORS} from '../../utils/theme';
 
 const GroupInfo = () => {
   const navigation = useNavigation();

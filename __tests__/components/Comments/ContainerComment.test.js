@@ -14,6 +14,7 @@ import ContainerComment, {
 import {Context} from '../../../src/context/Store';
 import {colors} from '../../../src/utils/colors';
 import {feedsState} from '../../../src/context/reducers/FeedReducer';
+import {myProfileMock} from '../../../__mocks__/mockMyProfile';
 
 jest.mock('react-native/Libraries/Pressability/usePressability');
 jest.mock('react-native/Libraries/Components/Pressable/Pressable');
@@ -28,6 +29,18 @@ jest.mock('react-native-safe-area-context', () => {
 });
 
 describe('ContainerComment should run correctly', () => {
+  const wrapper = ({children}) => (
+    <Context.Provider
+      value={{
+        profile: [
+          {isShowHeader: true, myProfile: myProfileMock, navbarTitle: "Who you're following"}
+        ],
+        feeds: [feedsState, () => jest.fn()]
+      }}>
+      {children}
+    </Context.Provider>
+  );
+
   const comments = [
     {
       activity_id: 'eeb07336-8fe8-11ed-b458-0e0d34fb440f',
@@ -137,22 +150,17 @@ describe('ContainerComment should run correctly', () => {
     const navigateToReplyView = jest.fn();
     const findCommentAndUpdate = jest.fn();
 
-    const contextValue = {
-      feeds: [feedsState, () => jest.fn()]
-    };
-
     const {toJSON} = render(
-      <Context.Provider value={contextValue}>
-        <ContainerComment
-          refreshChildComment={refreshChildComment}
-          navigateToReplyView={navigateToReplyView}
-          findCommentAndUpdate={findCommentAndUpdate}
-          refreshComment={refreshComment}
-          comments={comments}
-          indexFeed={undefined}
-          isLoading={false}
-        />
-      </Context.Provider>
+      <ContainerComment
+        refreshChildComment={refreshChildComment}
+        navigateToReplyView={navigateToReplyView}
+        findCommentAndUpdate={findCommentAndUpdate}
+        refreshComment={refreshComment}
+        comments={comments}
+        indexFeed={undefined}
+        isLoading={false}
+      />,
+      {wrapper}
     );
     expect(toJSON).toMatchSnapshot();
   });
@@ -163,22 +171,17 @@ describe('ContainerComment should run correctly', () => {
     const navigateToReplyView = jest.fn();
     const findCommentAndUpdate = jest.fn();
 
-    const contextValue = {
-      feeds: [feedsState, () => jest.fn()]
-    };
-
     const {getByTestId} = render(
-      <Context.Provider value={contextValue}>
-        <ContainerComment
-          refreshChildComment={refreshChildComment}
-          navigateToReplyView={navigateToReplyView}
-          findCommentAndUpdate={findCommentAndUpdate}
-          refreshComment={refreshComment}
-          comments={comments}
-          indexFeed={undefined}
-          isLoading={false}
-        />
-      </Context.Provider>
+      <ContainerComment
+        refreshChildComment={refreshChildComment}
+        navigateToReplyView={navigateToReplyView}
+        findCommentAndUpdate={findCommentAndUpdate}
+        refreshComment={refreshComment}
+        comments={comments}
+        indexFeed={undefined}
+        isLoading={false}
+      />,
+      {wrapper}
     );
     fireEvent.press(getByTestId('memoComment'));
     expect(navigateToReplyView).toHaveBeenCalled();
@@ -217,22 +220,17 @@ describe('ContainerComment should run correctly', () => {
     const navigateToReplyView = jest.fn();
     const findCommentAndUpdate = jest.fn();
 
-    const contextValue = {
-      feeds: [feedsState, () => jest.fn()]
-    };
-
     const {getAllByTestId} = render(
-      <Context.Provider value={contextValue}>
-        <ContainerComment
-          refreshChildComment={refreshChildComment}
-          navigateToReplyView={navigateToReplyView}
-          findCommentAndUpdate={findCommentAndUpdate}
-          refreshComment={refreshComment}
-          comments={comments}
-          indexFeed={undefined}
-          isLoading={false}
-        />
-      </Context.Provider>
+      <ContainerComment
+        refreshChildComment={refreshChildComment}
+        navigateToReplyView={navigateToReplyView}
+        findCommentAndUpdate={findCommentAndUpdate}
+        refreshComment={refreshComment}
+        comments={comments}
+        indexFeed={undefined}
+        isLoading={false}
+      />,
+      {wrapper}
     );
     expect(getAllByTestId('memoComment')).toHaveLength(1);
   });
@@ -252,7 +250,8 @@ describe('ContainerComment should run correctly', () => {
         findCommentAndUpdate={findCommentAndUpdate}
         navigateToReplyView={navigateToReplyView}
         data={comments2[0].latest_children.comment}
-      />
+      />,
+      {wrapper}
     );
     expect(toJSON).toMatchSnapshot();
   });
@@ -268,7 +267,8 @@ describe('ContainerComment should run correctly', () => {
         findCommentAndUpdate={findCommentAndUpdate}
         navigateToReplyView={navigateToReplyView}
         data={comments2[0].latest_children.comment}
-      />
+      />,
+      {wrapper}
     );
     fireEvent.press(getByTestId('memoComment'));
     expect(navigateToReplyView).toHaveBeenCalled();
@@ -276,6 +276,17 @@ describe('ContainerComment should run correctly', () => {
 });
 
 describe('useContainerHooks should run correctly', () => {
+  const wrapper = ({children}) => (
+    <Context.Provider
+      value={{
+        profile: [
+          {isShowHeader: true, myProfile: myProfileMock, navbarTitle: "Who you're following"}
+        ],
+        feeds: [feedsState, () => jest.fn()]
+      }}>
+      {children}
+    </Context.Provider>
+  );
   const comments2 = [
     {
       activity_id: 'eeb07336-8fe8-11ed-b458-0e0d34fb440f',
@@ -406,20 +417,20 @@ describe('useContainerHooks should run correctly', () => {
   ];
 
   it('isLastInParent function should run correctly', () => {
-    const {result} = renderHook(() => useContainerComment());
+    const {result} = renderHook(() => useContainerComment(), {wrapper});
 
     expect(result.current.isLastInParent(0, comments2[0].latest_children.comment)).toBeTruthy();
     expect(result.current.isLastInParent(0, twoComments)).toBeFalsy();
   });
 
   it('hideLeftConnector function should run correctly', () => {
-    const {result} = renderHook(() => useContainerComment());
+    const {result} = renderHook(() => useContainerComment(), {wrapper});
     expect(result.current.hideLeftConnector(0, comments2[0].latest_children.comment)).toBeTruthy();
     expect(result.current.hideLeftConnector(0, twoComments)).toBeFalsy();
   });
 
   it('isLast should run correctly', () => {
-    const {result} = renderHook(() => useContainerComment());
+    const {result} = renderHook(() => useContainerComment(), {wrapper});
     expect(result.current.isLast(0, comments2[0], twoComments)).toBeFalsy();
   });
 });
