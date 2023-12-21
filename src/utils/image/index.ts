@@ -12,21 +12,49 @@ const compressAndPrepareFormData = async (imagePath: string) => {
 };
 
 const uploadImage = async (imagePath: string) => {
-  const formData = await compressAndPrepareFormData(imagePath);
+  try {
+    const formData = await compressAndPrepareFormData(imagePath);
 
-  const imageUrl = await uploadPhoto(formData);
-  return imageUrl;
+    const imageUrl = await uploadPhoto(formData);
+    return imageUrl;
+  } catch (error) {
+    console.log(error);
+    return imagePath;
+  }
+};
+
+const uploadFile = async (uri: string, name: string, type: string) => {
+  try {
+    const formData = new FormData();
+    formData.append('photo', {
+      uri,
+      name,
+      type
+    });
+
+    const url = await uploadPhoto(formData);
+    return url;
+  } catch (error) {
+    console.log(error?.response);
+    return uri;
+  }
 };
 
 const uploadImageWithoutAuth = async (imagePath: string) => {
-  const formData = await compressAndPrepareFormData(imagePath);
+  try {
+    const formData = await compressAndPrepareFormData(imagePath);
 
-  const imageUrl = await uploadPhotoWithoutAuth(formData);
-  return imageUrl;
+    const imageUrl = await uploadPhotoWithoutAuth(formData);
+    return imageUrl;
+  } catch (error) {
+    console.log(error);
+    return imagePath;
+  }
 };
 
 const ImageUtils = {
   uploadImage,
+  uploadFile,
   uploadImageWithoutAuth
 };
 

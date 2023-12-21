@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-properties */
 /* eslint-disable no-param-reassign,no-useless-escape */
 import * as React from 'react';
 import moment from 'moment';
@@ -189,6 +190,18 @@ const getChatName = (usernames, me) => {
     return userArraysWithoutMe[0].trim();
   }
   return 'No name';
+};
+
+const formatBytes = (bytes, decimals = 2) => {
+  if (!+bytes) return '0 Bytes';
+
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 };
 
 const getAnonymousChatName = async (members) => {
@@ -406,6 +419,7 @@ export {
   displayFormattedSearchLocationsV2,
   getCaptionWithTopicStyle,
   getChatName,
+  formatBytes,
   getGroupMemberCount,
   getPollTime,
   getSingularOrPluralText,

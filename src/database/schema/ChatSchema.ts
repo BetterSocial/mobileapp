@@ -30,6 +30,8 @@ class ChatSchema implements BaseDbSchema {
 
   isContinuous: boolean;
 
+  attachmentJson: any;
+
   constructor({
     id,
     channelId,
@@ -42,7 +44,8 @@ class ChatSchema implements BaseDbSchema {
     user,
     status,
     isMe,
-    isContinuous
+    isContinuous,
+    attachmentJson
   }) {
     if (!id) throw new Error('ChatSchema must have an id');
 
@@ -58,6 +61,7 @@ class ChatSchema implements BaseDbSchema {
     this.status = status;
     this.isMe = isMe;
     this.isContinuous = isContinuous;
+    this.attachmentJson = attachmentJson;
   }
 
   save = async (db: SQLiteDatabase) => {
@@ -71,8 +75,9 @@ class ChatSchema implements BaseDbSchema {
         status,
         created_at,
         updated_at,
-        raw_json
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+        raw_json,
+        attachment_json
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
 
       const insertParams = [
         this.id,
@@ -83,7 +88,8 @@ class ChatSchema implements BaseDbSchema {
         this.status,
         this.createdAt,
         this.updatedAt,
-        this.rawJson
+        this.rawJson,
+        this.attachmentJson
       ];
 
       await db.executeSql(insertQuery, insertParams);
@@ -158,9 +164,16 @@ class ChatSchema implements BaseDbSchema {
 
   static fromDatabaseObject(dbObject: any): ChatSchema {
     let rawJson = null;
+    let attachmentJson = null;
 
     try {
       rawJson = JSON.parse(dbObject?.raw_json || '{}');
+    } catch (e) {
+      console.log('error parse');
+      console.log(e);
+    }
+    try {
+      attachmentJson = JSON.parse(dbObject?.attachment_json || '[]');
     } catch (e) {
       console.log('error parse');
       console.log(e);
@@ -179,15 +192,23 @@ class ChatSchema implements BaseDbSchema {
       user,
       status: dbObject.status,
       isMe: dbObject.is_me,
-      isContinuous: dbObject.is_continuous
+      isContinuous: dbObject.is_continuous,
+      attachmentJson
     });
   }
 
   static fromWebsocketObject(json): ChatSchema {
-    let rawJson = null;
+    let rawJson: string | null = null;
+    let attachmentJson: string | null = null;
 
     try {
       rawJson = JSON.stringify(json);
+    } catch (e) {
+      console.log('error stringify');
+      console.log(e);
+    }
+    try {
+      attachmentJson = JSON.stringify(json?.message?.attachments);
     } catch (e) {
       console.log('error stringify');
       console.log(e);
@@ -205,15 +226,23 @@ class ChatSchema implements BaseDbSchema {
       user: null,
       status: 'sent',
       isMe: false,
-      isContinuous: false
+      isContinuous: false,
+      attachmentJson
     });
   }
 
   static fromGetAllChannelAPI(channelId, json): ChatSchema {
-    let rawJson = null;
+    let rawJson: string | null = null;
+    let attachmentJson: string | null = null;
 
     try {
       rawJson = JSON.stringify(json);
+    } catch (e) {
+      console.log('error stringify');
+      console.log(e);
+    }
+    try {
+      attachmentJson = JSON.stringify(json?.attachments);
     } catch (e) {
       console.log('error stringify');
       console.log(e);
@@ -231,15 +260,23 @@ class ChatSchema implements BaseDbSchema {
       user: null,
       status: 'sent',
       isMe: false,
-      isContinuous: false
+      isContinuous: false,
+      attachmentJson
     });
   }
 
   static fromGetAllAnonymousChannelAPI(channelId, json): ChatSchema {
-    let rawJson = null;
+    let rawJson: string | null = null;
+    let attachmentJson: string | null = null;
 
     try {
       rawJson = JSON.stringify(json);
+    } catch (e) {
+      console.log('error stringify');
+      console.log(e);
+    }
+    try {
+      attachmentJson = JSON.stringify(json?.attachments);
     } catch (e) {
       console.log('error stringify');
       console.log(e);
@@ -257,7 +294,8 @@ class ChatSchema implements BaseDbSchema {
       user: null,
       status: 'sent',
       isMe: false,
-      isContinuous: false
+      isContinuous: false,
+      attachmentJson
     });
   }
 
@@ -266,6 +304,7 @@ class ChatSchema implements BaseDbSchema {
     userId: string,
     channelId: string,
     message: string,
+    attachments: any,
     localDb: SQLiteDatabase,
     type: 'regular' | 'system' = 'regular',
     status: 'pending' | 'sent' = 'pending'
@@ -288,15 +327,23 @@ class ChatSchema implements BaseDbSchema {
       user: null,
       userId,
       isMe: true,
-      isContinuous: true
+      isContinuous: true,
+      attachmentJson: JSON.stringify(attachments)
     });
   }
 
   static fromInitAnonymousChatAPI(data: ModifyAnonymousChatData, status = 'sent'): ChatSchema {
-    let rawJson = null;
+    let rawJson: string | null = null;
+    let attachmentJson: string | null = null;
 
     try {
       rawJson = JSON.stringify(data);
+    } catch (e) {
+      console.log('error stringify');
+      console.log(e);
+    }
+    try {
+      attachmentJson = JSON.stringify(data?.message?.attachments);
     } catch (e) {
       console.log('error stringify');
       console.log(e);
@@ -312,7 +359,8 @@ class ChatSchema implements BaseDbSchema {
       rawJson,
       status,
       isContinuous: false,
-      type: 'regular',
+      attachmentJson,
+      type: data?.message?.message_type ?? data?.message?.type,
       user: null,
       userId: data?.message?.user?.id
     });
@@ -321,7 +369,7 @@ class ChatSchema implements BaseDbSchema {
   updateChatSentStatus = async (db: SQLiteDatabase, response: any) => {
     try {
       const updateQuery = `UPDATE ${ChatSchema.getTableName()}
-        SET status = ?, created_at = ?, updated_at = ?, raw_json = ?, id = ?
+        SET status = ?, created_at = ?, updated_at = ?, raw_json = ?, id = ?, attachment_json = ?
         WHERE id = ?;`;
 
       const updateReplacement = [
@@ -330,8 +378,10 @@ class ChatSchema implements BaseDbSchema {
         response?.message?.updated_at,
         JSON.stringify(response),
         response?.message?.id,
+        JSON.stringify(response?.message?.attachments),
         this.id
       ];
+      console.warn('updateReplacement', JSON.stringify(updateReplacement));
 
       await db.executeSql(updateQuery, updateReplacement);
     } catch (e) {

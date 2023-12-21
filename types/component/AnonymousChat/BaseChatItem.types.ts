@@ -17,6 +17,7 @@ export interface BaseChatItemProps {
   time: string;
   isContinuous: boolean;
   message: string;
+  attachments?: any;
   type?: BaseChatItemTypeProps;
 }
 

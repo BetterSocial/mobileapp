@@ -18,6 +18,14 @@ import {
 } from '../../utils/constants';
 import {getAnonymousUserId, getUserId} from '../../utils/users';
 import {randomString} from '../../utils/string/StringUtils';
+import ImageUtils from '../../utils/image';
+
+interface ScrollContextProps {
+  selectedMessageId: string | null;
+  setSelectedMessageId: (id: string | null) => void;
+  handleScrollTo: (id: string) => void;
+}
+export const ScrollContext = React.createContext<ScrollContextProps | null>(null);
 
 function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const {localDb, chat, refresh} = useLocalDatabaseHook();
@@ -44,6 +52,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
 
   const sendChat = async (
     message: string = randomString(20),
+    attachments: [],
     iteration = 0,
     sendingChatSchema: ChatSchema | null = null
   ) => {
@@ -68,7 +77,11 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
           userId,
           selectedChannel?.id,
           message,
-          localDb
+          attachments,
+          localDb,
+          replyData ? MESSAGE_TYPE_REPLY : MESSAGE_TYPE_REGULAR,
+          'pending',
+          json
         );
         currentChatSchema.save(localDb);
         refresh('chat');
@@ -87,13 +100,63 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       }
 
       let response;
-      if (type === 'ANONYMOUS') {
-        response = await AnonymousMessageRepo.sendAnonymousMessage(selectedChannel?.id, message);
+
+      const allAttachmentPromises: Promise<void>[] = attachments.map(async (item: any) => {
+        if (item.type === 'image') {
+          const uploadedImageUrl = await ImageUtils.uploadImage(item.asset_url);
+          return {
+            ...item,
+            asset_url: uploadedImageUrl.data.url,
+            thumb_url: uploadedImageUrl.data.url
+          };
+        }
+        if (item.type === 'video') {
+          const uploadedImageUrl = await ImageUtils.uploadImage(item.asset_url);
+          const uploadedUrl = await ImageUtils.uploadFile(
+            item.video_path,
+            item.video_name,
+            item.video_type
+          );
+          return {
+            ...item,
+            asset_url: uploadedImageUrl.data.url,
+            thumb_url: uploadedImageUrl.data.url,
+            video_path: uploadedUrl.data.url
+          };
+        }
+        if (item.type === 'file') {
+          const uploadedUrl = await ImageUtils.uploadFile(
+            item.file_path,
+            item.file_name,
+            item.file_type
+          );
+          return {
+            ...item,
+            asset_url: uploadedUrl.data.url,
+            thumb_url: uploadedUrl.data.url,
+            file_path: uploadedUrl.data.url
+          };
+        }
+
+        return item;
+      });
+
+      const newAttachments = await Promise.all(allAttachmentPromises);
+
+      if (type === ANONYMOUS) {
+        response = await AnonymousMessageRepo.sendAnonymousMessage(
+          selectedChannel?.id,
+          message,
+          replyData?.id,
+          newAttachments
+        );
       } else {
         response = await SignedMessageRepo.sendSignedMessage(
           selectedChannel?.id,
           message,
-          channelType
+          channelType,
+          newAttachments,
+          replyData?.id
         );
       }
       await currentChatSchema.updateChatSentStatus(localDb, response);
@@ -103,7 +166,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       if (e?.response?.data?.status === 'Channel is blocked') return;
 
       setTimeout(() => {
-        sendChat(message, iteration + 1, currentChatSchema).catch((sendChatError) => {
+        sendChat(message, attachments, iteration + 1, currentChatSchema).catch((sendChatError) => {
           console.log(sendChatError);
         });
       }, 1000);
