@@ -11,7 +11,7 @@ export const CircleGradient = (props: {
   children: React.ReactNode;
   testId?: string;
 }) => {
-  const r = props.size / 2 - props.width / 1.9;
+  const r = props.size / 2 - props.width;
   const circleCircumference = 2 * Math.PI * r;
 
   const [circleStrokeDashoffset, setCircleStrokeDashoffset] = React.useState(
@@ -30,7 +30,8 @@ export const CircleGradient = (props: {
         height: props.size,
         justifyContent: 'center',
         alignItems: 'baseline',
-        borderRadius: 9999
+        borderRadius: 9999,
+        position: 'relative'
       }}>
       <LinearGradient
         colors={renderCircleColor(props.fill)}
@@ -47,12 +48,16 @@ export const CircleGradient = (props: {
       </LinearGradient>
       {props.fill !== 100 && (
         <Svg
-          height={props.size}
-          width={props.size}
-          style={{position: 'absolute', transform: [{rotateZ: '-90deg'}]}}>
+          height={props.size + Math.ceil(props.width)}
+          width={props.size + Math.ceil(props.width)}
+          viewBox={`0 0 ${props.size} ${props.size}`}
+          style={{
+            position: 'absolute',
+            transform: [{rotateZ: '-90deg'}]
+          }}>
           <Circle
-            cx={props.size / 2}
-            cy={props.size / 2}
+            cx={props.size / 2 + 0.2}
+            cy={props.size / 2 - 1.7}
             r={r}
             stroke="#E8EBED"
             strokeWidth={props.width + 1}

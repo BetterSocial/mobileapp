@@ -3,10 +3,10 @@ import {Text, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
-import BetterScore from '../../../assets/Logogram.png';
 import MemoIcQuestionMark from '../../../assets/icons/Ic_question_mark';
 import {normalize} from '../../../utils/fonts';
 import {CircleGradient} from '../../../components/Karma/CircleGradient';
+import {BetterSocialLogoGram} from '../../../assets';
 
 type KarmaScoreProps = {
   score: number;
@@ -25,12 +25,8 @@ export const KarmaScore = ({score}: KarmaScoreProps) => {
           alignSelf: 'flex-start'
         }}>
         <View style={{marginRight: 8}}>
-          <CircleGradient size={normalize(28)} width={normalize(2.8)} fill={score}>
-            <FastImage
-              resizeMode={FastImage.resizeMode.cover}
-              source={BetterScore}
-              style={{width: 28, height: 28}}
-            />
+          <CircleGradient size={normalize(28)} width={normalize(3)} fill={score}>
+            <BetterSocialLogoGram />
           </CircleGradient>
         </View>
         <Text

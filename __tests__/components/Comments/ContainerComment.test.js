@@ -206,9 +206,11 @@ describe('ContainerComment should run correctly', () => {
 
   it('ContainerReply should match snapshot', () => {
     const {toJSON, getAllByTestId} = render(
-      <ContainerReply>
-        <View testID="children" />{' '}
-      </ContainerReply>
+      <Context.Provider value={{profile: [{}, () => jest.fn()]}}>
+        <ContainerReply>
+          <View testID="children" />{' '}
+        </ContainerReply>
+      </Context.Provider>
     );
     expect(toJSON).toMatchSnapshot();
     expect(getAllByTestId('children')).toHaveLength(1);
