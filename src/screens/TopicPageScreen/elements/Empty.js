@@ -1,20 +1,15 @@
+/* eslint-disable global-require */
 import React from 'react';
-import {
-  View, Text, Image, StyleSheet, Platform, Dimensions,
-} from 'react-native';
-import { Gap } from '../../../components';
-import { fonts } from '../../../utils/fonts';
+import {View, Text, Image, StyleSheet, Platform, Dimensions} from 'react-native';
+import {Gap} from '../../../components';
+import {fonts} from '../../../utils/fonts';
 
 const Empty = () => (
   <View style={styles.container}>
-    <Image
-      style={styles.image}
-      source={require('../../../assets/ic_empty.png')}
-    />
+    <Image style={styles.image} source={require('../../../assets/ic_empty.png')} />
     <Gap height={20} />
-    <View style={{ width: 241, alignItems: 'center', justifyContent: 'center' }}>
-      <Text style={styles.text}>No posts yet - start this topic off by
-        posting about it</Text>
+    <View style={{width: 241, alignItems: 'center', justifyContent: 'center'}}>
+      <Text style={styles.text}>No posts yet - start this topic off by posting about it</Text>
     </View>
   </View>
 );
@@ -28,7 +23,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 300,
-    height: 300,
+    height: 300
   },
   text: {
     fontSize: 14,
