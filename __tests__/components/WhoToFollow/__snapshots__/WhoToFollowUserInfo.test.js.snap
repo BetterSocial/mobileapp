@@ -13,10 +13,11 @@ exports[`Testing Who To Follow Item User Match Snapshot 1`] = `
   <View
     style={
       Object {
-        "alignItems": "center",
+        "alignItems": "baseline",
         "borderRadius": 9999,
         "height": 45,
         "justifyContent": "center",
+        "position": "relative",
         "width": 45,
       }
     }
