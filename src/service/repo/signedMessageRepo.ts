@@ -12,6 +12,7 @@ type SendPayloadType = {
   message: string;
   channelType: number;
   messageType?: string;
+  attachments?: any;
   replyMessageId?: string;
 };
 
@@ -33,6 +34,7 @@ interface SignedMessageRepoTypes {
     channelId: string,
     message: string,
     channelType: number,
+    attachments: any,
     replyMessageId?: string
   ) => Promise<any>;
   getAllSignedChannels: () => Promise<ChannelData[]>;
@@ -66,9 +68,10 @@ async function sendSignedMessage(
   channelId: string,
   message: string,
   channelType: number,
+  attachments: any,
   replyMessageId?: string
 ) {
-  let payload: SendPayloadType = {channelId, message, channelType};
+  let payload: SendPayloadType = {channelId, message, channelType, attachments};
   if (replyMessageId) {
     payload = {...payload, messageType: 'reply', replyMessageId};
   }
@@ -82,7 +85,7 @@ async function sendSignedMessage(
 
     return Promise.reject(response.data?.data);
   } catch (e) {
-    console.log(e);
+    console.log(e?.response);
     return Promise.reject(e);
   }
 }
