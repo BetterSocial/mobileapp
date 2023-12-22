@@ -24,7 +24,7 @@ const ProfilePicture = ({
   return (
     <View style={styles.wrapImageProfile}>
       <TouchableNativeFeedback onPress={onImageContainerClick}>
-        <CircleGradient fill={karmaScore} size={normalize(100)} width={normalize(2.2)}>
+        <CircleGradient fill={karmaScore} size={normalize(100)} width={normalize(6)}>
           <View style={styles.profileImageContainer}>
             <Image
               style={styles.profileImage}
@@ -44,12 +44,11 @@ const ProfilePicture = ({
 let styles = StyleSheet.create({
   addCircle: {position: 'absolute', top: 25, left: 25},
   profileImage: {
-    width: 97,
-    height: 97,
+    width: dimen.normalizeDimen(92),
+    height: dimen.normalizeDimen(92),
     borderRadius: 100,
-    marginLeft: 1.4,
-    marginTop: 2,
-    marginBottom: 2
+    marginLeft: dimen.normalizeDimen(2.5),
+    marginTop: dimen.normalizeDimen(2.75)
   },
   profileImageContainer: {
     width: 100,
