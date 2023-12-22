@@ -2,6 +2,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {renderCircleColor} from './utils';
 import {GradientCircularProgress} from './GradientCircularProgress';
+import { COLORS } from '../../utils/theme';
 
 export const CircleGradient = (props: {
   size: number;
@@ -24,7 +25,7 @@ export const CircleGradient = (props: {
         position: 'relative'
       }}>
       <GradientCircularProgress
-        emptyColor="#E8EBED"
+        emptyColor={COLORS.gray5}
         size={props.size}
         progress={props.fill}
         startColor={color[2]}
