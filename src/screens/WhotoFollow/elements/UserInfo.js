@@ -6,14 +6,14 @@ import {CircleGradient} from '../../../components/Karma/CircleGradient';
 
 const UserInfo = ({photo, username, bio, karmaScore}) => (
   <View style={styles.cardLeft}>
-    <CircleGradient fill={karmaScore} size={normalize(50)} width={normalize(2.3)}>
+    <CircleGradient fill={karmaScore} size={normalize(50)} width={normalize(3)}>
       <Image
         style={styles.tinyLogo}
         source={{
           uri: photo
         }}
-        width={48}
-        height={48}
+        width={45}
+        height={45}
       />
     </CircleGradient>
     <View style={styles.containerTextCard}>
@@ -39,9 +39,11 @@ const styles = StyleSheet.create({
     flex: 1
   },
   tinyLogo: {
-    width: 48,
-    height: 48,
-    borderRadius: 48
+    width: 45,
+    height: 45,
+    borderRadius: 48,
+    marginLeft: 3,
+    marginTop: 3
   },
   containerTextCard: {
     flexDirection: 'column',
