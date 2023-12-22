@@ -12,6 +12,7 @@ export const Image = () => <View />;
 export const Line = () => <View />;
 export const LinearGradient = () => <View />;
 export const Mask = () => <View />;
+export const Svg = () => <View />;
 export const Path = () => <View />;
 export const Pattern = () => <View />;
 export const Polygon = () => <View />;

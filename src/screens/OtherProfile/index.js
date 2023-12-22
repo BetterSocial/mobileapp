@@ -751,7 +751,9 @@ const styles = StyleSheet.create({
   profileImage: {
     width: 95,
     height: 95,
-    borderRadius: 100
+    borderRadius: 100,
+    marginLeft: 3.2,
+    marginTop: 3.2
   },
   containerProfile: {
     marginTop: 24
