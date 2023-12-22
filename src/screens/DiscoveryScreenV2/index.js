@@ -27,6 +27,12 @@ import {fonts} from '../../utils/fonts';
 import {withInteractionsManagedNoStatusBar} from '../../components/WithInteractionManaged';
 import {COLORS} from '../../utils/theme';
 
+const DiscoveryContainer = ({children}) => {
+  if (Platform.OS === 'ios') return <>{children}</>;
+
+  return <SafeAreaView style={{flex: 1}}>{children}</SafeAreaView>;
+};
+
 const DiscoveryScreenV2 = ({route}) => {
   const {tab} = route.params;
   const [selectedScreen, setSelectedScreen] = React.useState(tab || 0);
@@ -337,9 +343,3 @@ DiscoveryScreenV2.propTypes = {
 };
 
 export default withInteractionsManagedNoStatusBar(DiscoveryScreenV2);
-
-const DiscoveryContainer = ({children}) => {
-  if (Platform.OS === 'ios') return <>{children}</>;
-
-  return <SafeAreaView style={{flex: 1}}>{children}</SafeAreaView>;
-};
