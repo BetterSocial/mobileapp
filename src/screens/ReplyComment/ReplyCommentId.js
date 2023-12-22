@@ -21,7 +21,6 @@ import ReplyCommentItem from '../../components/Comments/ReplyCommentItem';
 import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from '../../components/Comments/WriteComment';
 import {Context} from '../../context';
-import {colors} from '../../utils/colors';
 import {createChildCommentV3} from '../../service/comment';
 import {fonts} from '../../utils/fonts';
 import {getComment} from '../../utils/getstream/getComment';
@@ -296,7 +295,7 @@ const ContainerReply = ({children, isGrandchild = true, hideLeftConnector, key})
     key={key}
     style={[
       styles.containerReply(hideLeftConnector),
-      {borderColor: isGrandchild ? 'transparent' : colors.gray1}
+      {borderColor: isGrandchild ? 'transparent' : COLORS.gray1}
     ]}>
     {children}
   </View>
@@ -335,10 +334,10 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     paddingBottom: 14,
-    borderLeftColor: isLast ? 'transparent' : colors.gray1
+    borderLeftColor: isLast ? 'transparent' : COLORS.gray1
   }),
   seeRepliesText: {
-    color: colors.blue
+    color: COLORS.blue
   },
   btn: {
     paddingVertical: 8,
@@ -383,7 +382,7 @@ const styles = StyleSheet.create({
     height: '100%',
     width: 1,
     position: 'absolute',
-    backgroundColor: colors.gray1,
+    backgroundColor: COLORS.gray1,
     left: 46,
     zIndex: -100
   },
@@ -393,20 +392,20 @@ const styles = StyleSheet.create({
     borderLeftWidth: 1,
     borderBottomWidth: 1,
     borderBottomLeftRadius: 21,
-    borderLeftColor: colors.gray1,
-    borderBottomColor: colors.gray1,
+    borderLeftColor: COLORS.gray1,
+    borderBottomColor: COLORS.gray1,
     marginRight: 4,
     marginLeft: -1
   },
   childCommentWrapper: {
-    borderLeftColor: colors.gray1,
+    borderLeftColor: COLORS.gray1,
     borderLeftWidth: 1,
     flex: 1
   },
   childLevelMainConnector: {
     flex: 1,
     borderLeftWidth: 1,
-    borderLeftColor: colors.gray1,
+    borderLeftColor: COLORS.gray1,
     marginLeft: 24
   },
   backArrow: {

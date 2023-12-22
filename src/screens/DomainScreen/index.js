@@ -23,7 +23,6 @@ import {
   getProfileDomain,
   unfollowDomain
 } from '../../service/domain';
-import {colors} from '../../utils/colors';
 import {downVoteDomain, upVoteDomain} from '../../service/vote';
 import {getUserId} from '../../utils/users';
 import {
@@ -323,7 +322,7 @@ const styles = StyleSheet.create({
   list: {flex: 1},
   dummyItem: (heightParam) => ({
     height: heightParam,
-    backgroundColor: colors.gray1
+    backgroundColor: COLORS.gray1
   }),
   container: {
     flex: 1,

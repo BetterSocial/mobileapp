@@ -20,7 +20,6 @@ import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from '../Comments/WriteComment';
 import useReplyComment from './hooks/useReplyComment';
 import useWriteComment from '../Comments/hooks/useWriteComment';
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import useCommentAction from '../Comments/hooks/useCommentAction';
 import {COLORS} from '../../utils/theme';
@@ -173,7 +172,7 @@ const ReplyCommentId = ({
 export const ContainerReply = ({children, isGrandchild = true, key}) => (
   <View
     key={key}
-    style={[styles.containerReply, {borderColor: isGrandchild ? 'transparent' : colors.gray1}]}>
+    style={[styles.containerReply, {borderColor: isGrandchild ? 'transparent' : COLORS.gray1}]}>
     {children}
   </View>
 );
@@ -211,10 +210,10 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     paddingBottom: 14,
-    borderLeftColor: isLast ? 'transparent' : colors.gray1
+    borderLeftColor: isLast ? 'transparent' : COLORS.gray1
   }),
   seeRepliesText: {
-    color: colors.blue
+    color: COLORS.blue
   },
   btn: {
     paddingVertical: 8,
@@ -259,7 +258,7 @@ export const styles = StyleSheet.create({
     height: '100%',
     width: 1,
     position: 'absolute',
-    backgroundColor: colors.gray1,
+    backgroundColor: COLORS.gray1,
     left: 46,
     zIndex: -100
   },
@@ -269,8 +268,8 @@ export const styles = StyleSheet.create({
     borderLeftWidth: 1.5,
     borderBottomWidth: 1.5,
     // borderBottomLeftRadius: 1,
-    borderLeftColor: colors.gray1,
-    borderBottomColor: colors.gray1,
+    borderLeftColor: COLORS.gray1,
+    borderBottomColor: COLORS.gray1,
     marginRight: 4,
     marginLeft: -1,
     borderBottomLeftRadius: 15 / 2,
@@ -278,14 +277,14 @@ export const styles = StyleSheet.create({
     // marginTop: 1
   },
   childCommentWrapper: {
-    borderLeftColor: colors.gray1,
+    borderLeftColor: COLORS.gray1,
     borderLeftWidth: 1,
     flex: 1
   },
   childLevelMainConnector: {
     flex: 1,
     borderLeftWidth: 1,
-    borderLeftColor: colors.gray1,
+    borderLeftColor: COLORS.gray1,
     marginLeft: 24
   },
   backArrow: {

@@ -45,7 +45,6 @@ import {
   setFollow,
   setUnFollow
 } from '../../service/profile';
-import {colors} from '../../utils/colors';
 import {downVote, upVote} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
 import {generateAnonProfileOtherProfile} from '../../service/anonymousProfile';
@@ -94,7 +93,7 @@ const BioAndChat = (props) => {
           <Pressable onPress={openBio}>
             <Text linkStyle={styles.seeMore} style={styles.bioText(dynamicColors)}>
               {trimString(bio, 121)}{' '}
-              {bio.length > 121 ? <Text style={{color: colors.blue}}>see more</Text> : null}
+              {bio.length > 121 ? <Text style={{color: COLORS.blue}}>see more</Text> : null}
             </Text>
           </Pressable>
         )}
@@ -454,8 +453,8 @@ const OtherProfile = () => {
         );
 
       return (
-        <View style={{...styles.btnMsg, borderColor: colors.gray1}}>
-          <BlockIcon width={20} height={20} style={{color: colors.gray1}} />
+        <View style={{...styles.btnMsg, borderColor: COLORS.gray1}}>
+          <BlockIcon width={20} height={20} style={{color: COLORS.gray1}} />
         </View>
       );
     };
@@ -533,7 +532,7 @@ const OtherProfile = () => {
           {__renderFollowingButton()}
           <GlobalButton onPress={onCreateChat}>
             <View style={styles.btnMsg}>
-              <EnveloveBlueIcon width={20} height={20} fill={colors.bondi_blue} />
+              <EnveloveBlueIcon width={20} height={20} fill={COLORS.bondi_blue} />
             </View>
           </GlobalButton>
         </React.Fragment>
@@ -844,7 +843,7 @@ const OtherProfile = () => {
         {isShowButton ? (
           <TouchableNativeFeedback onPress={toTop}>
             <View style={{...styles.btnBottom, opacity}}>
-              <ArrowUpWhiteIcon width={12} height={20} fill={colors.white} />
+              <ArrowUpWhiteIcon width={12} height={20} fill={COLORS.white} />
             </View>
           </TouchableNativeFeedback>
         ) : null}
@@ -856,7 +855,7 @@ const OtherProfile = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   content: {
     flexDirection: 'column',
@@ -878,7 +877,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
     lineHeight: 22,
-    color: colors.black,
+    color: COLORS.black,
     marginLeft: 18
   },
   profileImage: {
@@ -900,7 +899,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
     lineHeight: 17,
-    color: colors.black
+    color: COLORS.black
   },
   wrapFollower: {
     flexDirection: 'row',
@@ -914,12 +913,12 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[800],
     fontWeight: 'bold',
     fontSize: 14,
-    color: colors.bondi_blue,
+    color: COLORS.bondi_blue,
     paddingRight: 4
   },
   textFollow: {
     fontSize: 14,
-    color: colors.black,
+    color: COLORS.black,
     paddingRight: 4
   },
   containerBio: {
@@ -928,11 +927,11 @@ const styles = StyleSheet.create({
   seeMore: {
     fontFamily: fonts.inter[500],
     fontSize: 14,
-    color: colors.black
+    color: COLORS.black
   },
   tabs: {
     width,
-    borderBottomColor: colors.alto,
+    borderBottomColor: COLORS.alto,
     borderBottomWidth: 1,
     paddingLeft: 20,
     paddingRight: 20,
@@ -942,10 +941,10 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[800],
     fontWeight: 'bold',
     fontSize: 14,
-    color: colors.black,
+    color: COLORS.black,
     paddingBottom: 12,
     borderBottomWidth: 2,
-    borderBottomColor: colors.bondi_blue
+    borderBottomColor: COLORS.bondi_blue
   },
   wrapNameAndbackButton: {
     flexDirection: 'row',
@@ -970,7 +969,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: colors.bondi_blue,
+    borderColor: COLORS.bondi_blue,
     borderRadius: 8
   },
   buttonFollow: {
@@ -980,20 +979,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    backgroundColor: colors.bondi_blue,
-    color: colors.white
+    backgroundColor: COLORS.bondi_blue,
+    color: COLORS.white
   },
   textButtonFollowing: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: colors.bondi_blue
+    color: COLORS.bondi_blue
   },
   textButtonFollow: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: colors.white
+    color: COLORS.white
   },
   btnBottom: {
     position: 'absolute',
@@ -1001,7 +1000,7 @@ const styles = StyleSheet.create({
     height: dimen.size.PROFILE_ACTION_BUTTON_RADIUS,
     right: 20,
     bottom: dimen.size.FEED_ACTION_BUTTON_HEIGHT_FROM_BOTTOM,
-    backgroundColor: colors.darkBlue,
+    backgroundColor: COLORS.darkBlue,
     borderRadius: 30,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -1009,7 +1008,7 @@ const styles = StyleSheet.create({
   },
   tabsFixed: {
     width,
-    borderBottomColor: colors.alto,
+    borderBottomColor: COLORS.alto,
     borderBottomWidth: 1,
     paddingLeft: 20,
     paddingRight: 20,
@@ -1017,7 +1016,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     zIndex: 2000,
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   containerFlatFeed: {
     // padding: 20,
@@ -1028,7 +1027,7 @@ const styles = StyleSheet.create({
     height: 36,
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: colors.bondi_blue,
+    borderColor: COLORS.bondi_blue,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'

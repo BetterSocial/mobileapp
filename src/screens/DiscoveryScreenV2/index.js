@@ -20,7 +20,6 @@ import {
   DISCOVERY_TAB_TOPICS,
   DISCOVERY_TAB_USERS
 } from '../../utils/constants';
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {withInteractionsManagedNoStatusBar} from '../../components/WithInteractionManaged';
 import FollowingAction from '../../context/actions/following';
@@ -318,7 +317,7 @@ const styles = StyleSheet.create({
   },
   fragmentContainer: {
     height: '100%',
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   fragmentContentContainer: {
     // height: '100%'

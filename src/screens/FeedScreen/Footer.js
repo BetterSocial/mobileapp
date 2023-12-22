@@ -12,7 +12,6 @@ import MemoIcShare from '../../assets/icons/Ic_share';
 import MemoIcComment from '../../assets/icons/Ic_comment';
 import MemoIcArrowDownVoteOn from '../../assets/arrow/Ic_downvote_on';
 import MemoIcArrowUpvoteOn from '../../assets/arrow/Ic_upvote_on';
-import {colors} from '../../utils/colors';
 import {COLORS} from '../../utils/theme';
 
 const {width: screenWidth} = Dimensions.get('window');
@@ -80,7 +79,7 @@ const styles = StyleSheet.create({
     paddingBottom: 16.12,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
-    borderBottomColor: colors.gray1
+    borderBottomColor: COLORS.gray1
   },
   rowSpaceBeetwen: {
     flexDirection: 'row',

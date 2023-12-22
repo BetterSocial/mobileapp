@@ -2,8 +2,8 @@ import * as React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
 import AnonymousIcon from '../../../assets/icon/AnonymousIcon';
-import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
+import {COLORS} from '../../../utils/theme';
 
 const styles = StyleSheet.create({
   anonymousIcon: {
@@ -23,13 +23,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 17,
     textAlign: 'center',
-    color: isActive ? colors.bondi_blue : colors.blackgrey
+    color: isActive ? COLORS.bondi_blue : COLORS.blackgrey
   }),
   anonymousPostTextSubtitle: (isActive) => ({
     fontFamily: isActive ? fonts.inter[600] : fonts.inter[400],
     fontSize: 10,
     textAlign: 'center',
-    color: isActive ? colors.bondi_blue : colors.blackgrey
+    color: isActive ? COLORS.bondi_blue : COLORS.blackgrey
   })
 });
 
@@ -37,7 +37,7 @@ const AnonymousTab = ({isActive = false}) => {
   return (
     <View style={styles.anonymousContainer}>
       <AnonymousIcon
-        fill={isActive ? colors.bondi_blue : colors.blackgrey}
+        fill={isActive ? COLORS.bondi_blue : COLORS.blackgrey}
         width={17}
         height={17}
       />

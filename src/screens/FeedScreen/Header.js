@@ -27,8 +27,8 @@ import StringConstant from '../../utils/string/StringConstant';
 import useFeedHeader from './hooks/useFeedHeader';
 import {DEFAULT_PROFILE_PIC_PATH, PRIVACY_PUBLIC} from '../../utils/constants';
 import {calculateTime} from '../../utils/time';
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -142,7 +142,7 @@ const _renderAnonimity = ({
                 buttonStyle={{position: 'absolute', right: 0, top: -8}}
                 onPress={onHeaderOptionClicked}>
                 <View style={{zIndex: 1000}}>
-                  <ElipsisIcon width={4} height={14} fill={colors.blackgrey} />
+                  <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
                 </View>
               </GlobalButton>
             )}
@@ -225,7 +225,7 @@ const _renderProfileNormal = ({
                 onPress={onHeaderOptionClicked}>
                 {hideThreeDot ? null : (
                   <View style={{zIndex: 1000}}>
-                    <ElipsisIcon width={4} height={14} fill={colors.blackgrey} />
+                    <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
                   </View>
                 )}
               </GlobalButton>
@@ -346,7 +346,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
     lineHeight: 16.94,
-    color: colors.black,
+    color: COLORS.black,
     flex: 1
   },
   containerFeedText: {
@@ -359,21 +359,21 @@ const styles = StyleSheet.create({
   feedDate: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.blackgrey,
+    color: COLORS.blackgrey,
     lineHeight: 18
   },
   feedDateLocation: {
     flex: 1,
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.blackgrey,
+    color: COLORS.blackgrey,
     lineHeight: 18
   },
   point: {
     width: 2,
     height: 2,
     borderRadius: 4,
-    backgroundColor: colors.gray,
+    backgroundColor: COLORS.gray,
     marginLeft: 8,
     marginRight: 8,
     alignSelf: 'center',
@@ -387,26 +387,26 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 14,
     lineHeight: 24,
-    color: colors.black
+    color: COLORS.black
   },
   textComment: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
     lineHeight: 18,
-    color: colors.gray
+    color: COLORS.gray
   },
   usernameComment: {
     fontFamily: fonts.inter[500],
     fontWeight: '900',
     fontSize: 12,
     lineHeight: 24,
-    color: colors.black
+    color: COLORS.black
   },
   usernameTextComment: {
     fontFamily: fonts.inter[500],
     fontSize: 12,
     lineHeight: 24,
-    color: colors.gray
+    color: COLORS.gray
   },
   item: {
     width: screenWidth - 20,

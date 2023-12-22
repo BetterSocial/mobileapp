@@ -5,8 +5,8 @@ import Icon from 'react-native-vector-icons/AntDesign';
 
 import {ButtonAddMedia} from '../../../components/Button';
 import Gap from '../../../components/Gap';
-import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
+import {COLORS} from '../../../utils/theme';
 
 const ShowMedia = ({onRemoveAll, onRemoveItem, onAddMedia, data}) => {
   return (
@@ -51,7 +51,7 @@ const ShowImage = ({data, onPress}) => {
 
 const styles = StyleSheet.create({
   textBtnRemove: {
-    color: colors.red,
+    color: COLORS.red,
     fontSize: 14,
     fontFamily: fonts.inter[600],
     textAlign: 'center',
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   image: {borderRadius: 8},
   icon: {marginTop: -8, marginRight: -8},
   btnIcon: {
-    color: colors.black,
+    color: COLORS.black,
     fontSize: 12,
     fontFamily: fonts.inter[400],
     width: 91,

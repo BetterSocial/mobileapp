@@ -6,8 +6,8 @@ import IconChatClockGrey from '../../../assets/icon/IconChatClockGrey';
 import {ChatItemMyTextProps} from '../../../../types/component/AnonymousChat/BaseChatItem.types';
 import {ChatStatus} from '../../../../types/database/schema/ChannelList.types';
 import {SIGNED} from '../../../hooks/core/constant';
-import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
+import {COLORS} from '../../../utils/theme';
 
 const {width} = Dimensions.get('screen');
 
@@ -33,10 +33,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   containerSigned: {
-    backgroundColor: colors.babyBlue
+    backgroundColor: COLORS.babyBlue
   },
   containerAnon: {
-    backgroundColor: colors.halfBaked
+    backgroundColor: COLORS.halfBaked
   },
   textContainer: {
     paddingLeft: BUBBLE_LEFT_PADDING,
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     marginLeft: 5,
     marginRight: 5,
-    backgroundColor: colors.black,
+    backgroundColor: COLORS.black,
     alignSelf: 'center'
   },
   timeText: {

@@ -7,7 +7,6 @@ import MemoizedIcArrowRightTail from '../../../../assets/arrow/ic_arrow_right_ta
 import StringConstant from '../../../../utils/string/StringConstant';
 import dimen from '../../../../utils/dimen';
 import {COLORS} from '../../../../utils/theme';
-import {colors} from '../../../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../../../utils/fonts';
 import {openUrl} from '../../../../utils/Utils';
 import {imageConst} from '../../../../components/Image';
@@ -143,7 +142,7 @@ const bottomOverlayStyles = StyleSheet.create({
     fontFamily: fonts.inter[700]
   },
   link: {
-    color: colors.blue,
+    color: COLORS.blue,
     textDecorationLine: 'underline'
   },
   loginContainer: {

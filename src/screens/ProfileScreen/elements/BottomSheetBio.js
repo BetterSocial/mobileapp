@@ -2,10 +2,10 @@ import * as React from 'react';
 import {View, Text, StyleSheet, ActivityIndicator} from 'react-native';
 
 import {fonts} from '../../../utils/fonts';
-import {colors} from '../../../utils/colors';
 import {Button} from '../../../components/Button';
 import {BottomSheet} from '../../../components/BottomSheet';
 import AutoFocusTextArea from '../../../components/TextArea/AutoFocusTextArea';
+import {COLORS} from '../../../utils/theme';
 
 // eslint-disable-next-line react/display-name
 const BottomSheetBio = React.forwardRef((props, ref) => {
@@ -50,32 +50,32 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontWeight: 'bold',
     fontSize: 24,
-    color: colors.black,
+    color: COLORS.black,
     marginBottom: 16
   },
   description: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.gray,
+    color: COLORS.gray,
     marginTop: 7
   },
   errorText: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.red,
+    color: COLORS.red,
     marginTop: 7
   },
   button: {
     marginTop: 33,
-    backgroundColor: colors.bondi_blue
+    backgroundColor: COLORS.bondi_blue
   },
   textStyling: {
     fontFamily: fonts.inter[600],
     fontSize: 18,
-    color: colors.white
+    color: COLORS.white
   },
   input: {
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     paddingVertical: 16,
     paddingHorizontal: 12,
     height: 150,
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     fontFamily: fonts.inter[500],
     fontSize: 14,
-    color: colors.black,
+    color: COLORS.black,
     lineHeight: 24
   }
 });

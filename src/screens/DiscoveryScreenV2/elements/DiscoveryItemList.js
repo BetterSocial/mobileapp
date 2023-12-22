@@ -8,9 +8,9 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
+import {COLORS} from '../../../utils/theme';
 
 const renderDefaultImage = (DefaultImage) => {
   if (DefaultImage) {
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    backgroundColor: colors.bondi_blue
+    backgroundColor: COLORS.bondi_blue
   },
   container: {
     height: 64,
@@ -146,21 +146,21 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: colors.bondi_blue
+    color: COLORS.bondi_blue
   },
   textButtonFollow: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: colors.white
+    color: COLORS.white
   },
   profilepicture: {
     width: 48,
     height: 48,
-    // backgroundColor: colors.bondi_blue,
+    // backgroundColor: COLORS.bondi_blue,
     borderRadius: 24,
     resizeMode: 'cover',
-    borderColor: colors.lightgrey,
+    borderColor: COLORS.lightgrey,
     borderWidth: 1
   },
   wrapProfile: {
@@ -190,14 +190,14 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[500],
     fontWeight: 'bold',
     fontSize: 14,
-    color: colors.black,
+    color: COLORS.black,
     lineHeight: 16.94
     // backgroundColor: 'red',
   },
   textProfileFullName: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.gray,
+    color: COLORS.gray,
     flexWrap: 'wrap',
     lineHeight: 18,
     // backgroundColor: 'green',
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
   domainDescription: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.gray,
+    color: COLORS.gray,
     flexWrap: 'wrap',
     lineHeight: 18,
     // backgroundColor: 'green',
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: colors.bondi_blue,
+    borderColor: COLORS.bondi_blue,
     borderRadius: 8
   },
   card: {
@@ -247,20 +247,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    borderColor: colors.bondi_blue,
+    borderColor: COLORS.bondi_blue,
     borderWidth: 1
   },
   textButtonBlock: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: colors.white
+    color: COLORS.white
   },
   textButtonBlockUser: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: colors.bondi_blue
+    color: COLORS.bondi_blue
   },
   buttonBlock: {
     width: 88,
@@ -269,9 +269,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: colors.blockColor,
+    borderColor: COLORS.blockColor,
     borderRadius: 8,
-    backgroundColor: colors.blockColor
+    backgroundColor: COLORS.blockColor
   }
 });
 

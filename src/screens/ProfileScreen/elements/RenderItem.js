@@ -21,7 +21,7 @@ import {Footer, PreviewComment} from '../../../components';
 import {getCountCommentWithChild} from '../../../utils/getstream';
 import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
 import {showScoreAlertDialog} from '../../../utils/Utils';
-import { COLORS } from '../../../utils/theme';
+import {COLORS} from '../../../utils/theme';
 
 const {height} = Dimensions.get('window');
 

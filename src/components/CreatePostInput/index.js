@@ -6,11 +6,11 @@ import {debounce} from 'lodash';
 import MentionSuggestions from './elements/MentionSuggestions';
 import TopicSuggestions from './elements/TopicSuggestions';
 import useHastagMention from '../../screens/CreatePost/elements/useHastagMention';
-import {colors} from '../../utils/colors';
 import {getTopics} from '../../service/topics';
 import {getUserForTagging} from '../../service/mention';
 import {isEmptyOrSpaces} from '../../utils/Utils';
 import {joinTopicIntoTopicList} from '../../utils/array/ChunkArray';
+import {COLORS} from '../../utils/theme';
 
 const CreatePostInput = ({
   allTaggedUser = [],
@@ -240,7 +240,7 @@ const CreatePostInput = ({
 
 const styles = StyleSheet.create({
   input: {
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     paddingVertical: 16,
     paddingHorizontal: 12,
     minHeight: 100,

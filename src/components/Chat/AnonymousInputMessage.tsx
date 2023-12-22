@@ -3,12 +3,12 @@ import {StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
 
 import IconSend from '../../assets/icon/IconSendComment';
 import SheetEmoji from './SheetEmoji';
-import {colors} from '../../utils/colors';
+import {COLORS} from '../../utils/theme';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   btnEmoji: {
     paddingVertical: 7,
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     paddingLeft: 6
   },
   containerInput: {
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 9,
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     maxHeight: 100
   },
   btn: {
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     right: 0,
     height: 25,
     width: 25,
-    backgroundColor: colors.holytosca,
+    backgroundColor: COLORS.holytosca,
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 100,
@@ -92,9 +92,9 @@ const AnonymousInputMessage = ({onSendButtonClicked, type}: AnonymousInputMessag
 
   const sendButtonStyle = React.useCallback(() => {
     const isDisabled = isDisableButton();
-    if (isDisabled) return colors.gray1;
-    if (type === 'SIGNED') return colors.darkBlue;
-    return colors.bondi_blue;
+    if (isDisabled) return COLORS.gray1;
+    if (type === 'SIGNED') return COLORS.darkBlue;
+    return COLORS.bondi_blue;
   }, [isDisableButton()]);
 
   return (
@@ -109,7 +109,7 @@ const AnonymousInputMessage = ({onSendButtonClicked, type}: AnonymousInputMessag
             <IconSend
               style={styles.icSendButton}
               fillBackground={sendButtonStyle()}
-              fillIcon={colors.white}
+              fillIcon={COLORS.white}
             />
           </TouchableOpacity>
         </View>

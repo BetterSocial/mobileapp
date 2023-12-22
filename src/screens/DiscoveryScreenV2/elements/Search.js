@@ -23,7 +23,6 @@ import dimen from '../../../utils/dimen';
 import {COLORS, FONTS, SIZES} from '../../../utils/theme';
 import {Context} from '../../../context/Store';
 import {RECENT_SEARCH_TERMS} from '../../../utils/cache/constant';
-import {colors} from '../../../utils/colors';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
 
 const DiscoverySearch = ({
@@ -172,7 +171,7 @@ const DiscoverySearch = ({
               <MemoIcArrowBackWhite
                 width={20}
                 height={12}
-                fill={colors.black}
+                fill={COLORS.black}
                 style={{alignSelf: 'center'}}
               />
             </View>
@@ -211,7 +210,7 @@ const DiscoverySearch = ({
               radius: 35
             }}>
             <View style={styles.wrapperDeleteIcon}>
-              <IconClear width={9} height={10} iconColor={colors.black} />
+              <IconClear width={9} height={10} iconColor={COLORS.black} />
             </View>
           </TouchableOpacity>
         </View>

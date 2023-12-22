@@ -3,9 +3,8 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import {StyleSheet, Text, View} from 'react-native';
 
 import ItemListLarge from './ItemListLarge';
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import { COLORS } from '../../utils/theme';
+import {COLORS} from '../../utils/theme';
 
 const BlockPostAnonymous = ({refBlockPostAnonymous, onSelect}) => {
   const data = [
@@ -66,7 +65,7 @@ const styles = StyleSheet.create({
     marginLeft: 21
   },
   desc: {
-    color: colors.gray,
+    color: COLORS.gray,
     fontFamily: fonts.inter[400],
     fontSize: 12,
     marginHorizontal: 21,
@@ -79,7 +78,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20
   },
   draggableIcon: {
-    backgroundColor: colors.alto,
+    backgroundColor: COLORS.alto,
     width: 60
   }
 });

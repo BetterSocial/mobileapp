@@ -3,8 +3,7 @@ import {render, cleanup, fireEvent} from '@testing-library/react-native';
 import WriteComment, {styles} from '../../../src/components/Comments/WriteComment';
 import Store from '../../../src/context/Store';
 import {fonts} from '../../../src/utils/fonts';
-import {colors} from '../../../src/utils/colors';
-import { COLORS } from '../../../src/utils/theme';
+import {COLORS} from '../../../src/utils/theme';
 
 describe('WriteComment should run correctly', () => {
   afterEach(cleanup);
@@ -39,7 +38,7 @@ describe('WriteComment should run correctly', () => {
       marginTop: 7,
       lineHeight: 15,
       fontSize: 12,
-      color: colors.gray
+      color: COLORS.gray
     });
     expect(styles.replyToContainer(false)).toEqual({
       marginLeft: 60,
@@ -48,7 +47,7 @@ describe('WriteComment should run correctly', () => {
       marginTop: 7,
       lineHeight: 15,
       fontSize: 12,
-      color: colors.gray
+      color: COLORS.gray
     });
     expect(styles.container(true)).toEqual({
       flex: 1,
@@ -79,7 +78,7 @@ describe('WriteComment should run correctly', () => {
       alignSelf: 'flex-end'
     });
     expect(styles.btn(false)).toEqual({
-      backgroundColor: colors.bondi_blue,
+      backgroundColor: COLORS.bondi_blue,
       borderRadius: 18,
       width: 35,
       height: 35,
@@ -92,7 +91,7 @@ describe('WriteComment should run correctly', () => {
     expect(styles.connectorTop(true, true)).toEqual({
       height: 36,
       width: 1,
-      backgroundColor: colors.gray1,
+      backgroundColor: COLORS.gray1,
       position: 'absolute',
       top: 0,
       left: 60,
@@ -102,7 +101,7 @@ describe('WriteComment should run correctly', () => {
     expect(styles.connectorTop(false, false)).toEqual({
       height: 0,
       width: 1,
-      backgroundColor: colors.gray1,
+      backgroundColor: COLORS.gray1,
       position: 'absolute',
       top: 0,
       left: 30,
@@ -112,7 +111,7 @@ describe('WriteComment should run correctly', () => {
     expect(styles.connectorBottom(true, true)).toEqual({
       height: 20,
       width: 1,
-      backgroundColor: colors.gray1,
+      backgroundColor: COLORS.gray1,
       position: 'absolute',
       top: 0,
       left: 60,
@@ -122,7 +121,7 @@ describe('WriteComment should run correctly', () => {
     expect(styles.connectorBottom(false, false)).toEqual({
       height: 0,
       width: 1,
-      backgroundColor: colors.gray1,
+      backgroundColor: COLORS.gray1,
       position: 'absolute',
       top: 0,
       left: 30,

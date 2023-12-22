@@ -2,7 +2,6 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import * as React from 'react';
 import {SafeAreaView, StatusBar, StyleSheet, View, TouchableOpacity} from 'react-native';
 import Animated from 'react-native-reanimated';
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import Header from './elements/Header';
 import Link from './elements/Link';
@@ -84,7 +83,7 @@ const styles = StyleSheet.create({
 
   toptabcontainer: {
     flexDirection: 'row',
-    backgroundColor: colors.white,
+    backgroundColor: COLORS.white,
     borderBottomColor: COLORS.black30percent,
     borderBottomWidth: 1,
     paddingHorizontal: 4
@@ -105,7 +104,7 @@ const styles = StyleSheet.create({
   },
 
   viewborderbottom: {
-    borderBottomColor: colors.holytosca,
+    borderBottomColor: COLORS.holytosca,
     borderBottomWidth: 2
   }
 });

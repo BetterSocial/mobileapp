@@ -31,7 +31,6 @@ import {CHANNEL_GROUP, GROUP_INFO, SIGNED} from '../../hooks/core/constant';
 import {Context} from '../../context';
 import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
-import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {getChatName} from '../../utils/string/StringUtils';
 import {isContainUrl} from '../../utils/Utils';
@@ -50,11 +49,11 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(20),
-    color: colors.holytosca
+    color: COLORS.holytosca
   },
   btnAdd: {
     padding: normalize(8),
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     width: 'auto',
     justifyContent: 'center',
     alignItems: 'center',
@@ -66,7 +65,7 @@ export const styles = StyleSheet.create({
   countUser: (from) => ({
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(16.94),
-    color: from === SIGNED ? colors.darkBlue : colors.holytosca,
+    color: from === SIGNED ? COLORS.darkBlue : COLORS.holytosca,
     marginLeft: dimen.normalizeDimen(20),
     marginBottom: dimen.normalizeDimen(4),
     fontWeight: 'bold'
@@ -75,7 +74,7 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(16.94),
-    color: colors.holytosca
+    color: COLORS.holytosca
   },
   dateCreate: {
     marginLeft: 20,
@@ -95,7 +94,7 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   lineTop: {
-    backgroundColor: colors.alto,
+    backgroundColor: COLORS.alto,
     height: 1
   },
   containerGroupName: {
@@ -113,7 +112,7 @@ export const styles = StyleSheet.create({
     width: normalize(100),
     height: normalize(100),
     borderRadius: normalize(50),
-    backgroundColor: colors.alto,
+    backgroundColor: COLORS.alto,
     justifyContent: 'center',
     alignItems: 'center'
   },

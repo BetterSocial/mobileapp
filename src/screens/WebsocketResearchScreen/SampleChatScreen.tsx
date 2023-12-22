@@ -9,7 +9,6 @@ import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
 import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
 import {ANONYMOUS} from '../../hooks/core/constant';
-import {colors} from '../../utils/colors';
 import dimen from '../../utils/dimen';
 
 const {height} = Dimensions.get('window');
@@ -17,7 +16,7 @@ const {height} = Dimensions.get('window');
 export const styles = StyleSheet.create({
   keyboardAvoidingView: {
     flex: 1,
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   container: {
     display: 'flex',
@@ -29,7 +28,7 @@ export const styles = StyleSheet.create({
     height: '100%'
   },
   inputContainer: {
-    backgroundColor: colors.white,
+    backgroundColor: COLORS.white,
     position: 'absolute',
     bottom: 0,
     // height: 50,
@@ -38,7 +37,7 @@ export const styles = StyleSheet.create({
     zIndex: 100,
     padding: 8,
     paddingBottom: 16,
-    borderTopColor: colors.lightgrey,
+    borderTopColor: COLORS.lightgrey,
     borderTopWidth: 1
   },
   contentContainerStyle: {

@@ -15,8 +15,8 @@ import ButtonFollow from './ButtonFollow';
 import TopicDomainHeader from './TopicDomainHeader';
 import ButtonFollowing from './ButtonFollowing';
 import useChatClientHook from '../../../utils/getstream/useChatClientHook';
-import {colors} from '../../../utils/colors';
 import Search from '../../DiscoveryScreenV2/elements/Search';
+import {COLORS} from '../../../utils/theme';
 
 const NavHeader = (props) => {
   const {
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
   container: (animatedHeight) => ({
     width: '100%',
     height: animatedHeight,
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     position: 'absolute',
     zIndex: 80,
     overflow: 'hidden'
