@@ -86,7 +86,7 @@ const DomainList = (props) => {
           testId="images"
           fill={item.karmaScore}
           size={normalize(51)}
-          width={normalize(2)}>
+          width={normalize(3)}>
           <Image
             testId="images"
             source={{
@@ -187,7 +187,9 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     resizeMode: 'cover',
     borderColor: colors.lightgrey,
-    borderWidth: 1
+    borderWidth: 1,
+    marginLeft: 2,
+    marginTop: 2
   },
   wrapProfile: {
     flexDirection: 'row',

@@ -21,79 +21,45 @@ exports[`Testing Who To Follow Item User Match Snapshot 1`] = `
         "width": 45,
       }
     }
+    testID="circleGradient"
   >
     <View
       style={
         Object {
-          "alignItems": "center",
-          "borderRadius": 9999,
           "height": 45,
-          "justifyContent": "center",
+          "position": "relative",
           "width": 45,
         }
       }
     >
-      <BVLinearGradient
-        borderRadii={
-          Array [
-            9999,
-            9999,
-            9999,
-            9999,
-            9999,
-            9999,
-            9999,
-            9999,
-          ]
-        }
-        colors={
-          Array [
-            4292804639,
-            4294291641,
-            4292804639,
-          ]
-        }
-        endPoint={
-          Array [
-            1,
-            1,
-          ]
-        }
-        locations={null}
-        startPoint={
-          Array [
-            0,
-            1,
-          ]
-        }
+      <View />
+      <View
         style={
           Object {
-            "bottom": 0,
-            "left": 0,
             "position": "absolute",
-            "right": 0,
-            "top": 0,
           }
         }
-      />
-      <Image
-        height={48}
-        source={
-          Object {
-            "uri": "https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png",
+      >
+        <Image
+          height={45}
+          source={
+            Object {
+              "uri": "https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png",
+            }
           }
-        }
-        style={
-          Object {
-            "borderRadius": 48,
-            "height": 48,
-            "width": 48,
+          style={
+            Object {
+              "borderRadius": 48,
+              "height": 45,
+              "marginLeft": 3,
+              "marginTop": 3,
+              "width": 45,
+            }
           }
-        }
-        width={48}
-      />
+          width={45}
+        />
+      </View>
     </View>
-    <View />
   </View>
   <View
     style={
