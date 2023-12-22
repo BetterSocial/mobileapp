@@ -1,14 +1,8 @@
-import * as React from "react"
-import Svg, { Path } from "react-native-svg"
+import * as React from 'react';
+import Svg, {Path} from 'react-native-svg';
 
 const IconAdd = (props) => (
-  <Svg
-    width={20}
-    height={20}
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
+  <Svg width={20} height={20} fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
     <Path
       fillRule="evenodd"
       clipRule="evenodd"
@@ -16,6 +10,6 @@ const IconAdd = (props) => (
       fill="#000"
     />
   </Svg>
-)
+);
 
-export default IconAdd
+export default IconAdd;

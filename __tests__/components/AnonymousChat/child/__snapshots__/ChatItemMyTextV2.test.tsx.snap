@@ -65,6 +65,7 @@ exports[`TESTING ChatItemMyTextV2 should match snapshot 1`] = `
             },
           ]
         }
+        disabled={false}
         onPress={[Function]}
         previewBackgroundColor="transparent"
         style={
@@ -87,7 +88,7 @@ exports[`TESTING ChatItemMyTextV2 should match snapshot 1`] = `
                   "backgroundColor": "#F5F5F5",
                   "borderRadius": 8,
                   "flex": 1,
-                  "paddingHorizontal": 4.800000000000001,
+                  "paddingHorizontal": 3.2,
                   "paddingVertical": 3.2,
                 },
                 Object {
@@ -105,6 +106,7 @@ exports[`TESTING ChatItemMyTextV2 should match snapshot 1`] = `
                 Object {
                   "display": "flex",
                   "flexDirection": "row",
+                  "marginBottom": 3.2,
                 }
               }
             >
@@ -178,7 +180,6 @@ exports[`TESTING ChatItemMyTextV2 should match snapshot 1`] = `
                       "fontFamily": "Inter-Regular",
                       "fontSize": 14.4,
                       "lineHeight": 19.36,
-                      "marginBottom": 4,
                     },
                     Object {
                       "color": "#ffffff",
@@ -194,6 +195,9 @@ exports[`TESTING ChatItemMyTextV2 should match snapshot 1`] = `
                 style={
                   Object {
                     "alignSelf": "flex-end",
+                    "bottom": 6,
+                    "position": "absolute",
+                    "right": 8,
                   }
                 }
               >
