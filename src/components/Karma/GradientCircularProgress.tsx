@@ -63,7 +63,7 @@ const GradientCircularProgress = ({
             fill="none"
             stroke="url(#firstHalfGradient)"
             strokeDasharray={`${firstHalfProg * halfCircumference},${halfCircumference}`}
-            strokeLinecap="square"
+            strokeLinecap="butt"
             d={`
                 M ${WIDTH / 2} ${strokeWidth / 2}
                 a ${DIAMETER / 2} ${DIAMETER / 2} 0 1 1 0 ${DIAMETER}
@@ -77,7 +77,7 @@ const GradientCircularProgress = ({
             fill="none"
             stroke="url(#secondHalfGradient)"
             strokeDasharray={`${secondHalfProg * halfCircumference},${halfCircumference}`}
-            strokeLinecap="square"
+            strokeLinecap="butt"
             d={`
               M ${WIDTH / 2} ${WIDTH - strokeWidth / 2}
               a ${DIAMETER / 2} ${DIAMETER / 2} 0 0 1 0 -${DIAMETER}
