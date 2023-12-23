@@ -25,7 +25,7 @@ export const KarmaScore = ({score}: KarmaScoreProps) => {
           alignSelf: 'flex-start'
         }}>
         <View style={{marginRight: 8}}>
-          <CircleGradient size={normalize(28)} width={normalize(3)} fill={score}>
+          <CircleGradient size={normalize(28)} width={normalize(6)} fill={score}>
             <BetterSocialLogoGram />
           </CircleGradient>
         </View>
