@@ -17,6 +17,7 @@ const baseUrl = {
   getAllAnonymousPostNotifications: '/feeds/feed-chat/anonymous',
   getSingleAnonymousPostNotifications: (activityId: string) => `/feeds/feed-chat/${activityId}`,
   setChannelAsRead: (channelId: string) => `/chat/channels/${channelId}/read`,
+  createAnonymousChat: '/chat/new-chat-anonymous',
   deleteMessage: (messageId: string) => `/chat/message/${messageId}`
 };
 
@@ -31,6 +32,7 @@ interface AnonymousMessageRepoTypes {
   getAllAnonymousPostNotifications: () => Promise<AnonymousPostNotification[]>;
   getSingleAnonymousPostNotifications: (activityId: string) => Promise<AnonymousPostNotification>;
   setChannelAsRead: (channelId: string) => Promise<boolean>;
+  createAnonymousChat: (targetUserId: string) => Promise<any>;
   deleteMessage: (messageId: string) => Promise<any>;
 }
 
@@ -134,6 +136,21 @@ async function setChannelAsRead(channelId: string): Promise<boolean> {
   }
 }
 
+async function createAnonymousChat(targetUserId: string) {
+  try {
+    const body = {targetUserId};
+    const response = await anonymousApi.post(baseUrl.createAnonymousChat, body);
+    if (response.status === 200) {
+      return Promise.resolve(response.data);
+    }
+
+    return Promise.reject(response.status);
+  } catch (e) {
+    console.log(e);
+    return Promise.reject(e);
+  }
+}
+
 async function deleteMessage(messageId: string) {
   try {
     const response = await anonymousApi.delete(baseUrl.deleteMessage(messageId));
@@ -155,6 +172,7 @@ const AnonymousMessageRepo: AnonymousMessageRepoTypes = {
   getAllAnonymousPostNotifications,
   getSingleAnonymousPostNotifications,
   setChannelAsRead,
+  createAnonymousChat,
   deleteMessage
 };
 

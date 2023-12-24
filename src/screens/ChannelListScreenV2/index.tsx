@@ -11,7 +11,7 @@ import Search from '../ChannelListScreen/elements/Search';
 import useAnonymousChannelListScreenHook from '../../hooks/screen/useAnonymousChannelListHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import useRootChannelListHook from '../../hooks/screen/useRootChannelListHook';
-import {ANON_PM, ANON_POST_NOTIFICATION} from '../../hooks/core/constant';
+import {ANONYMOUS, ANON_PM, ANON_POST_NOTIFICATION} from '../../hooks/core/constant';
 
 const ChannelListScreenV2 = ({route}) => {
   const {refresh} = useLocalDatabaseHook();
@@ -53,7 +53,7 @@ const ChannelListScreenV2 = ({route}) => {
     <>
       <StatusBar translucent={false} />
       <View style={{height: 52}}>
-        <Search route={route} onPress={goToContactScreen} />
+        <Search route={route} onPress={() => goToContactScreen({from: ANONYMOUS})} />
       </View>
 
       <FlatList

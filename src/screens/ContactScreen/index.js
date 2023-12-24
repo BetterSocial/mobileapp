@@ -1,22 +1,27 @@
+/* eslint-disable no-use-before-define */
 /* eslint-disable no-param-reassign */
 import * as React from 'react';
-import {Dimensions, RefreshControl, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
-import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
-import {debounce} from 'lodash';
 import PropTypes from 'prop-types';
+import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
+import {Dimensions, RefreshControl, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
+import {debounce} from 'lodash';
+import {useRoute} from '@react-navigation/core';
+
 import ContactPreview from './elements/ContactPreview';
 import Header from '../../components/Header/HeaderContact';
 import ItemUser from './elements/ItemUser';
 import SearchRecyclerView from './elements/SearchRecyclerView';
 import StringConstant from '../../utils/string/StringConstant';
-import {COLORS} from '../../utils/theme';
+import dimen from '../../utils/dimen';
+import useCreateChat from '../../hooks/screen/useCreateChat';
+import {ANONYMOUS} from '../../hooks/core/constant';
 import {Context} from '../../context';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {Loading} from '../../components';
 import {Search} from './elements';
+import {colors} from '../../utils/colors';
 import {userPopulate} from '../../service/users';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import useCreateChat from '../../hooks/screen/useCreateChat';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 
 const {width} = Dimensions.get('screen');
 
@@ -36,7 +41,10 @@ const ContactScreen = ({navigation}) => {
   const [selectedUsers, setSelectedUsers] = React.useState([]);
   const [isSearchMode, setIsSearchMode] = React.useState(false);
   const [isLoadingSearchResult, setIsLoadingSearchResult] = React.useState(false);
-  const {createSignChat, loadingCreateChat} = useCreateChat();
+  const {createSignChat, createAnonymousChat, loadingCreateChat} = useCreateChat();
+  const route = useRoute();
+  const {from: sourceScreen} = route.params;
+
   const debounced = React.useCallback(
     debounce((changedText) => {
       // handleSearch(changedText)
@@ -115,7 +123,11 @@ const ContactScreen = ({navigation}) => {
           image
         }
       };
-      createSignChat(followed, dataSelected);
+      if (sourceScreen === ANONYMOUS) {
+        createAnonymousChat(followed[0], dataSelected);
+      } else {
+        createSignChat(followed, dataSelected);
+      }
     } catch (e) {
       console.log(e, 'error signed chat');
     }
@@ -128,33 +140,51 @@ const ContactScreen = ({navigation}) => {
       username={item.username}
       followed={extendedState.followed}
       userid={item.user_id}
-      onPress={() => handleSelected(item)}
+      onPress={() => handleSelected(item, sourceScreen)}
     />
   );
-  // }
-  const handleSelected = (value) => {
+
+  const handleSelected = (value, parentScreen) => {
     const copyFollowed = [...followed];
     const copyUsername = [...usernames];
     const copyUsers = [...selectedUsers];
-    const index = copyFollowed.indexOf(value.user_id);
-    if (index > -1) {
-      copyFollowed.splice(index, 1);
-    } else {
-      copyFollowed.push(value.user_id);
-    }
 
-    const indexName = copyUsername.indexOf(value.username);
-    if (indexName > -1) {
-      copyUsername.splice(index, 1);
-    } else {
-      copyUsername.push(value.username);
-    }
+    if (parentScreen === 'ANONYMOUS') {
+      const index = copyFollowed.indexOf(value.user_id);
+      if (index > -1) {
+        copyFollowed.splice(index, 1);
+        copyUsername.splice(index, 1);
+        copyUsers.splice(index, 1);
+      } else {
+        copyFollowed.length = 0;
+        copyUsername.length = 0;
+        copyUsers.length = 0;
 
-    const indexSelectedUser = copyUsers.findIndex((item) => item.user_id === value.user_id);
-    if (indexSelectedUser > -1) {
-      copyUsers.splice(indexSelectedUser, 1);
+        copyFollowed.push(value.user_id);
+        copyUsername.push(value.username);
+        copyUsers.push(value);
+      }
     } else {
-      copyUsers.push(value);
+      const index = copyFollowed.indexOf(value.user_id);
+      if (index > -1) {
+        copyFollowed.splice(index, 1);
+      } else {
+        copyFollowed.push(value.user_id);
+      }
+
+      const indexName = copyUsername.indexOf(value.username);
+      if (indexName > -1) {
+        copyUsername.splice(index, 1);
+      } else {
+        copyUsername.push(value.username);
+      }
+
+      const indexSelectedUser = copyUsers.findIndex((item) => item.user_id === value.user_id);
+      if (indexSelectedUser > -1) {
+        copyUsers.splice(indexSelectedUser, 1);
+      } else {
+        copyUsers.push(value);
+      }
     }
 
     setSelectedUsers(copyUsers);
@@ -195,9 +225,14 @@ const ContactScreen = ({navigation}) => {
       <View style={{flex: 1}}>
         <StatusBar translucent={false} />
         <Header
-          title={StringConstant.chatTabHeaderCreateChatButtonText}
+          title={
+            sourceScreen === ANONYMOUS
+              ? StringConstant.chatTabHeaderCreateAnonChatButtonText
+              : StringConstant.chatTabHeaderCreateChatButtonText
+          }
           containerStyle={styles.containerStyle}
           subTitle={'Next'}
+          subtitleStyle={selectedUsers.length > 0 && styles.subtitleStyle(sourceScreen)}
           onPressSub={() => handleCreateChannel()}
           onPress={() => navigation.goBack()}
           disabledNextBtn={selectedUsers.length <= 0}
@@ -214,7 +249,10 @@ const ContactScreen = ({navigation}) => {
 
         <View>
           {selectedUsers && (
-            <ContactPreview users={selectedUsers} onPress={(user) => handleSelected(user)} />
+            <ContactPreview
+              users={selectedUsers}
+              onPress={(user) => handleSelected(user, sourceScreen)}
+            />
           )}
         </View>
 
@@ -240,7 +278,7 @@ const ContactScreen = ({navigation}) => {
             selectedUsers={selectedUsers}
             usernames={usernames}
             setLoading={setIsLoadingSearchResult}
-            onHandleSelected={(value) => handleSelected(value)}
+            onHandleSelected={(value) => handleSelected(value, sourceScreen)}
           />
         )}
         <Loading visible={loading || loadingCreateChat} />
@@ -263,9 +301,9 @@ const styles = StyleSheet.create({
   containerStyle: {
     marginHorizontal: 16
   },
-  subtitleStyle: (selectedUsers) => ({
-    color: selectedUsers.length > 0 ? COLORS.holyTosca : COLORS.gray4,
-    marginEnd: 8
+  subtitleStyle: (sourceScreen) => ({
+    color: sourceScreen === ANONYMOUS ? colors.anon_primary : colors.signed_primary,
+    marginEnd: dimen.normalizeDimen(8)
   })
 });
 

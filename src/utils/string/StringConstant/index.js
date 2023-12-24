@@ -58,6 +58,7 @@ const createPostFailedGeneralError = 'Your post failed - Please try again';
 // Chat Tab
 const chatTabHeaderPlaceholder = 'Search Users';
 const chatTabHeaderCreateChatButtonText = 'New Chat';
+const chatTabHeaderCreateAnonChatButtonText = 'New Anonymous Chat';
 
 // News TabSearch Communities
 
@@ -187,6 +188,7 @@ export default {
 
   chatTabHeaderPlaceholder,
   chatTabHeaderCreateChatButtonText,
+  chatTabHeaderCreateAnonChatButtonText,
 
   newsTabHeaderPlaceholder,
   newsTabHeaderCreatePostButtonText,

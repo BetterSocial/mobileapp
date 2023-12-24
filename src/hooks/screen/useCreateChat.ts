@@ -1,20 +1,23 @@
+/* eslint-disable no-use-before-define */
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import {v4 as uuid} from 'uuid';
 
-import {getOrCreateAnonymousChannel} from '../../service/chat';
-import SignedMessageRepo from '../../service/repo/signedMessageRepo';
+import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../database/schema/ChannelListSchema';
-import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
-import UserSchema from '../../database/schema/UserSchema';
 import ChannelListMemberSchema from '../../database/schema/ChannelListMemberSchema';
+import SignedMessageRepo from '../../service/repo/signedMessageRepo';
+import UserSchema from '../../database/schema/UserSchema';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
+import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import {GROUP_INFO} from '../core/constant';
+import {getOrCreateAnonymousChannel} from '../../service/chat';
 
 const useCreateChat = () => {
   const [loadingCreateChat, setLoadingCreateChat] = React.useState(false);
   const {localDb} = useLocalDatabaseHook();
   const {goToChatScreen} = useChatUtilsHook();
+
   const createSignChat = async (members: string[], selectedUser, from) => {
     try {
       setLoadingCreateChat(true);
@@ -26,6 +29,23 @@ const useCreateChat = () => {
       handleMemberSchema(initChannel);
       setLoadingCreateChat(false);
       goToChatScreen(channelList, from);
+    } catch (e) {
+      setLoadingCreateChat(false);
+      console.log({e}, 'error create chat');
+    }
+  };
+
+  const createAnonymousChat = async (targetUserId, selectedUser) => {
+    try {
+      setLoadingCreateChat(true);
+      const initChannel = await AnonymousMessageRepo.createAnonymousChat(targetUserId);
+      const chatData = await createChannelJson(initChannel?.data, selectedUser);
+
+      const channelList = await ChannelList.fromMessageSignedAPI(chatData);
+      channelList.saveIfLatest(localDb);
+      handleMemberSchema(initChannel?.data);
+      setLoadingCreateChat(false);
+      goToChatScreen(channelList);
     } catch (e) {
       setLoadingCreateChat(false);
       console.log({e}, 'error create chat');
@@ -95,6 +115,7 @@ const useCreateChat = () => {
 
   return {
     createSignChat,
+    createAnonymousChat,
     handleAnonymousMessage,
     loadingCreateChat
   };

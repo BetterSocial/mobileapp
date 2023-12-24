@@ -15,6 +15,7 @@ import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import useRootChannelListHook from '../../hooks/screen/useRootChannelListHook';
 import useSignedChannelListScreenHook from '../../hooks/screen/useSignedChannelListHook';
 import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
+import {SIGNED} from '../../hooks/core/constant';
 
 const ChannelListScreen = ({route}) => {
   const {refresh} = useLocalDatabaseHook();
@@ -74,7 +75,7 @@ const ChannelListScreen = ({route}) => {
     <>
       <StatusBar translucent={false} />
       <View style={{height: 52}}>
-        <Search route={route} onPress={goToContactScreen} />
+        <Search route={route} onPress={() => goToContactScreen({from: SIGNED})} />
       </View>
 
       <FlatList
