@@ -107,7 +107,7 @@ const Comment = ({
     if (totalVote < 0) {
       return COLORS.red;
     }
-    return COLORS.gray1;
+    return COLORS.balance_gray;
   };
   return (
     <View
@@ -173,7 +173,7 @@ const Comment = ({
           onLongPress={handleOnLongPress}
           style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}
           onPress={() => onBlockComponent(comment)}>
-          <IconEn name="block" size={15.02} color={COLORS.gray1} />
+          <IconEn name="block" size={15.02} color={COLORS.balance_gray} />
         </ButtonHightlight>
 
         <TouchableOpacity activeOpacity={1} onPress={onDownVote} testID="btnDownvote">
@@ -236,7 +236,11 @@ const styles = StyleSheet.create({
   container: ({isLast, style, level, showLeftConnector}) => ({
     width: '100%',
     borderLeftWidth: showLeftConnector ? 1 : 0,
-    borderLeftColor: isLast ? (level === 0 ? COLORS.gray1 : 'transparent') : COLORS.gray1,
+    borderLeftColor: isLast
+      ? level === 0
+        ? COLORS.balance_gray
+        : 'transparent'
+      : COLORS.balance_gray,
     ...style
   }),
   flexStartContainer: {
@@ -276,7 +280,7 @@ const styles = StyleSheet.create({
   btnReplyText: {
     fontFamily: fonts.inter[400],
     fontSize: 13,
-    color: COLORS.gray1,
+    color: COLORS.balance_gray,
     marginLeft: 8.98,
     marginRight: 14
   },

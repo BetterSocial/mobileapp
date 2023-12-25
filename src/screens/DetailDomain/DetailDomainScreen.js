@@ -19,7 +19,7 @@ import {getDomainDetailById} from '../../service/domain';
 import {getMyProfile} from '../../service/profile';
 import {getUserId} from '../../utils/users';
 import {updateComment} from '../../context/actions/news';
-import { COLORS } from '../../utils/theme';
+import {COLORS} from '../../utils/theme';
 
 const {width} = Dimensions.get('window');
 

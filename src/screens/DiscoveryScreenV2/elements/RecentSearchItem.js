@@ -21,7 +21,7 @@ const RecentSearchItems = (prop) => {
       style={styles.pressableContainer}
       onPress={onItemClicked}
       android_ripple={{
-        color: COLORS.gray1,
+        color: COLORS.balance_gray,
         borderless: false
       }}>
       <Text style={styles.text}>{text}</Text>

@@ -18,7 +18,7 @@ const CustomPressable = (props) => {
       onPress={onPress}
       style={style}
       android_ripple={{
-        color: COLORS.gray1,
+        color: COLORS.balance_gray,
         borderless: false,
         radius: 100
       }}

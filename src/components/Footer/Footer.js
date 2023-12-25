@@ -46,12 +46,12 @@ const Footer = ({
 
   const voteStyle = () => {
     if (totalVote > 0) {
-      return COLORS.holyTosca;
+      return COLORS.anon_primary;
     }
     if (totalVote < 0) {
       return COLORS.red;
     }
-    return COLORS.gray1;
+    return COLORS.balance_gray;
   };
   return (
     <View style={[styles.rowSpaceBeetwen, styles.container]}>
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
   },
   text: {
     ...FONTS.body3,
-    color: COLORS.gray1
+    color: COLORS.balance_gray
   },
   vote: (colorBasedCount) => ({
     ...FONTS.body3,

@@ -16,12 +16,6 @@ export const COLORS = {
   concrete: '#F2F2F2',
   emperor: '#4F4F4F',
   french_pass: '#b6e4fd',
-  gray: '#6A6A6A',
-  gray1: '#C4C4C4',
-  gray4: '#4A4A4A',
-  gray5: '#4D4D4D',
-  gray6: '#F2F2F2',
-  gray7: '#7A7A7A',
   greenMantis: '#79B45D',
   greyseries: '#333333',
   lightgrey: '#F5F5F5',
@@ -50,7 +44,8 @@ export const COLORS = {
   anon_primary: '#107793',
   anon_secondary: '#3A9BB6',
   radical_red: '#FF3466',
-  light_silver: '#D2D4DB'
+  light_silver: '#D2D4DB',
+  balance_gray: '#9B9FA9'
 };
 export const SIZES = {
   // global sizes

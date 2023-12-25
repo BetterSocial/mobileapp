@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
   wrapperText: {
     backgroundColor: COLORS.white,
     borderRadius: 8,
-    borderColor: COLORS.holyTosca,
+    borderColor: COLORS.anon_primary,
     width: 28,
     height: 28,
     justifyContent: 'center',
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     alignItems: 'center',
     borderBottomWidth: 0.5,
-    borderBottomColor: COLORS.gray1,
+    borderBottomColor: COLORS.balance_gray,
     height: 64
   },
   backNavigationContainer: {

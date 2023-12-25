@@ -41,7 +41,7 @@ const DiscoveryTab = ({onChangeScreen, selectedScreen = 0, tabs}) => {
           return (
             <Pressable
               key={`tabItem-${item}`}
-              android_ripple={{color: COLORS.gray1}}
+              android_ripple={{color: COLORS.balance_gray}}
               style={[
                 styles.tabItem(route.name === 'Followings' ? 3 : 4),
                 index === selectedScreen ? styles.underlineFocus : {}
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10
   },
   underlineFocus: {
-    borderBottomColor: COLORS.bondi_blue,
+    borderBottomColor: COLORS.anon_primary,
     borderBottomWidth: 2
   }
 });

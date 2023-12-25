@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     alignItems: 'center',
     borderBottomWidth: 0.5,
-    borderBottomColor: COLORS.gray1,
+    borderBottomColor: COLORS.balance_gray,
     paddingBottom: 8,
     paddingTop: 8
   },

@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     height: 3,
     borderRadius: 4,
     marginTop: 1,
-    backgroundColor: COLORS.gray1,
+    backgroundColor: COLORS.balance_gray,
     marginLeft: 6,
     marginRight: 6
   },

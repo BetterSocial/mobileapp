@@ -50,7 +50,7 @@ const S = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     borderWidth: 1,
-    borderColor: COLORS.gray1,
+    borderColor: COLORS.balance_gray,
     borderRadius: 10,
     marginVertical: 4,
     paddingHorizontal: 8
@@ -84,7 +84,7 @@ const S = StyleSheet.create({
   pollitemtextcount: {
     fontSize: 12,
     alignSelf: 'center',
-    color: COLORS.gray1,
+    color: COLORS.balance_gray,
     marginEnd: 8,
     marginStart: 8
   }

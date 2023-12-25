@@ -15,7 +15,7 @@ export const S = StyleSheet.create({
     borderRadius: 50,
     height: 30,
     width: 30,
-    backgroundColor: COLORS.gray1,
+    backgroundColor: COLORS.balance_gray,
     marginRight: 6
   },
   textArea: {

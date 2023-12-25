@@ -732,7 +732,7 @@ const styles = StyleSheet.create({
     fontFamily: isActive ? fonts.inter[600] : fonts.inter[400],
     fontSize: 14,
     lineHeight: 17,
-    color: isActive ? COLORS.bondi_blue : COLORS.blackgrey,
+    color: isActive ? COLORS.anon_primary : COLORS.blackgrey,
     paddingHorizontal: 16,
     textAlign: 'center'
   }),
@@ -773,7 +773,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: 48,
-    borderBottomColor: COLORS.bondi_blue,
+    borderBottomColor: COLORS.anon_primary,
     borderBottomWidth: isActive ? 2 : 0
   }),
   tabsFixed: {

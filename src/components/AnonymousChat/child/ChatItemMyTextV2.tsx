@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.signed_primary
   },
   containerAnon: {
-    backgroundColor: COLORS.halfBaked
+    backgroundColor: COLORS.anon_primary
   },
   textContainer: {
     paddingLeft: BUBBLE_LEFT_PADDING,
@@ -53,13 +53,15 @@ const styles = StyleSheet.create({
   userText: {
     fontFamily: fonts.inter[600],
     fontSize: 12,
-    lineHeight: 19.36
+    lineHeight: 19.36,
+    color: COLORS.white
   },
   text: {
     fontFamily: fonts.inter[400],
     fontSize: 16,
     lineHeight: 19.36,
-    marginBottom: 4
+    marginBottom: 4,
+    color: COLORS.white
   },
   avatar: {
     width: AVATAR_SIZE,
@@ -73,14 +75,15 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     marginLeft: 5,
     marginRight: 5,
-    backgroundColor: COLORS.black,
+    backgroundColor: COLORS.white,
     alignSelf: 'center'
   },
   timeText: {
     fontFamily: fonts.inter[200],
     fontSize: 10,
     lineHeight: 12.19,
-    alignSelf: 'center'
+    alignSelf: 'center',
+    color: COLORS.white
   },
   icon: {
     alignSelf: 'flex-end',

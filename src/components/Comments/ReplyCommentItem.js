@@ -131,7 +131,7 @@ const ReplyCommentItem = ({
     if (totalVote < 0) {
       return COLORS.red;
     }
-    return COLORS.gray1;
+    return COLORS.balance_gray;
   };
 
   const handleLongPress = () => {
@@ -205,7 +205,7 @@ const ReplyCommentItem = ({
             onLongPress={handleLongPress}
             onPress={() => onBlock(comment)}
             style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}>
-            <IconEn name="block" size={15.02} color={COLORS.gray1} />
+            <IconEn name="block" size={15.02} color={COLORS.balance_gray} />
           </ButtonHightlight>
         </TouchableOpacity>
 
@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
   container: ({isLast, style, showLeftConnector}) => ({
     width: '100%',
     borderLeftWidth: showLeftConnector ? 1 : 0,
-    borderLeftColor: isLast ? 'transparent' : COLORS.gray1,
+    borderLeftColor: isLast ? 'transparent' : COLORS.balance_gray,
     ...style
   }),
   username: {
@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
   btnReplyText: {
     fontFamily: fonts.inter[400],
     fontSize: 13,
-    color: COLORS.gray1,
+    color: COLORS.balance_gray,
     marginLeft: 8.98,
     marginRight: 14
   },

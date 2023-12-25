@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginHorizontal: 8
   },
-  copyLinkUrl: {padding: 10, flex: 1, fontWeight: '600', color: COLORS.gray1, fontSize: 9},
+  copyLinkUrl: {padding: 10, flex: 1, fontWeight: '600', color: COLORS.balance_gray, fontSize: 9},
   copyLinkButtonLabel: {color: COLORS.white, fontWeight: '600', fontSize: 12},
   copyLinkButton: {alignSelf: 'center', backgroundColor: COLORS.signed_primary},
   instagramContainer: {

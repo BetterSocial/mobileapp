@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
   wrapperItem: {
     backgroundColor: 'white',
     borderBottomWidth: 4,
-    borderBottomColor: COLORS.gray6,
+    borderBottomColor: COLORS.balance_gray,
     height: dimen.size.DOMAIN_CURRENT_HEIGHT - 2
   },
   wrapperImage: {
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     height: normalize(52),
     // flexBasis: 52,
-    borderBottomColor: COLORS.gray1,
+    borderBottomColor: COLORS.balance_gray,
     borderBottomWidth: 1
   },
   headerDomainName: {
@@ -311,7 +311,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     alignItems: 'center',
     borderBottomWidth: 0.5,
-    borderBottomColor: COLORS.gray1,
+    borderBottomColor: COLORS.balance_gray,
     paddingBottom: 8,
     paddingTop: 8
   },
