@@ -14,7 +14,6 @@ import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
 import useUpdateComment from './hooks/useUpdateComment';
 import {COLORS, FONTS} from '../../utils/theme';
 import {calculateTime} from '../../utils/time';
-import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
 import {iVoteComment, voteCommentV2} from '../../service/vote';
@@ -127,7 +126,7 @@ const ReplyCommentItem = ({
 
   const voteStyle = () => {
     if (totalVote > 0) {
-      return COLORS.holyTosca;
+      return COLORS.anon_primary;
     }
     if (totalVote < 0) {
       return COLORS.red;
@@ -206,7 +205,7 @@ const ReplyCommentItem = ({
             onLongPress={handleLongPress}
             onPress={() => onBlock(comment)}
             style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}>
-            <IconEn name="block" size={15.02} color={colors.gray1} />
+            <IconEn name="block" size={15.02} color={COLORS.gray1} />
           </ButtonHightlight>
         </TouchableOpacity>
 
@@ -268,7 +267,7 @@ const styles = StyleSheet.create({
   container: ({isLast, style, showLeftConnector}) => ({
     width: '100%',
     borderLeftWidth: showLeftConnector ? 1 : 0,
-    borderLeftColor: isLast ? 'transparent' : colors.gray1,
+    borderLeftColor: isLast ? 'transparent' : COLORS.gray1,
     ...style
   }),
   username: {

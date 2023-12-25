@@ -2,8 +2,8 @@ import * as React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
 
 const Header = ({title, onPress, titleStyle = {}, containerStyle = {}, isCenter}) => {
   const renderHeader = () => (
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
     // padding: 10
   },
   content: {
@@ -55,13 +55,13 @@ const styles = StyleSheet.create({
     padding: 10
   },
   text: {
-    color: colors.black,
+    color: COLORS.black,
     fontFamily: fonts.poppins[600],
     fontSize: 14,
     fontWeight: 'bold'
   },
   textIos: {
-    color: colors.black,
+    color: COLORS.black,
     fontFamily: fonts.poppins[600],
     fontSize: 16,
     fontWeight: '600',

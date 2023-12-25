@@ -1000,7 +1000,7 @@ const styles = StyleSheet.create({
     height: dimen.size.PROFILE_ACTION_BUTTON_RADIUS,
     right: 20,
     bottom: dimen.size.FEED_ACTION_BUTTON_HEIGHT_FROM_BOTTOM,
-    backgroundColor: COLORS.darkBlue,
+    backgroundColor: COLORS.signed_primary,
     borderRadius: 30,
     flexDirection: 'row',
     justifyContent: 'center',

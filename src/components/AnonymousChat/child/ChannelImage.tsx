@@ -43,7 +43,7 @@ const ChannelImage = ({
       alignItems: 'center'
     },
     myPostNotificationImageContainer: {
-      backgroundColor: isAnonymousTab ? COLORS.anon_primary : COLORS.darkBlue
+      backgroundColor: isAnonymousTab ? COLORS.anon_primary : COLORS.signed_primary
     },
     anonPmNotificationImageContainer: {
       backgroundColor: COLORS.anon_primary
@@ -56,8 +56,8 @@ const ChannelImage = ({
       width: dimen.normalizeDimen(12),
       height: dimen.normalizeDimen(12)
     },
-    backgroundDarkBlue: {
-      backgroundColor: COLORS.darkBlue
+    backgroundsigned_primary: {
+      backgroundColor: COLORS.signed_primary
     }
   });
 
@@ -138,7 +138,9 @@ const ChannelImage = ({
         <View
           style={[
             styles.postNotificationImage,
-            isAnonymousTab ? styles.anonPmNotificationImageContainer : styles.backgroundDarkBlue
+            isAnonymousTab
+              ? styles.anonPmNotificationImageContainer
+              : styles.backgroundsigned_primary
           ]}>
           <FastImage source={ChatIcon} style={styles.chatIcon} />
         </View>

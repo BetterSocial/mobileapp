@@ -11,7 +11,6 @@ export const COLORS = {
   blueTanzanite: '#11516F',
   blueSea: '#55C2FF',
   blueZaffre: '#0E24B3',
-  bondi_blue: '#00ADB5',
   brilliance: '#FCFCFC',
   bunting: '#11243D',
   concrete: '#F2F2F2',
@@ -25,11 +24,6 @@ export const COLORS = {
   gray7: '#7A7A7A',
   greenMantis: '#79B45D',
   greyseries: '#333333',
-  holytosca: '#00ADB5',
-  holyTosca: '#00ADB5',
-  holytosca15percent: '#00ADB526',
-  holytosca30percent: '#00ADB54D',
-  lightBlue: '#2F80ED',
   lightgrey: '#F5F5F5',
   mine_shaft: '#333333',
   pattens_blue: '#ddf2fe',
@@ -42,10 +36,19 @@ export const COLORS = {
   white: '#FFFFFF',
   whiteSmoke: '#F4F4F4',
 
+  //from colors
+  blue1: '#4782D7',
+  halfBaked: '#88CDD0',
+  tradewind: '#58B1B5',
+  elm: '#22878B',
+  blockColor: '#FF2E63',
+  greenDark: '#004346',
+  babyBlue: '#7B9DCD',
+
   signed_primary: '#4782D7',
   signed_secondary: '#6295DD',
-  anon_primary: '#003848',
-  anon_secondary: '#154B5B',
+  anon_primary: '#107793',
+  anon_secondary: '#3A9BB6',
   radical_red: '#FF3466',
   light_silver: '#D2D4DB'
 };
@@ -78,6 +81,19 @@ export const FONTS = {
   body3: {fontFamily: 'Inter-Regular', fontSize: SIZES.body3, lineHeight: 22},
   body4: {fontFamily: 'Inter-Regular', fontSize: SIZES.body4, lineHeight: 22},
   comment: {fontFamily: 'Inter-Regular', fontSize: SIZES.body3, lineHeight: 19}
+};
+
+export const hexToRgb = (hex, opacity = 1) => {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  const r = parseInt(result[1], 16);
+  const g = parseInt(result[2], 16);
+  const b = parseInt(result[3], 16);
+  return result ? `rgba(${r},${g},${b},${opacity})` : null;
+};
+
+export const checkIsHasColor = (color) => {
+  const regex = /^#[0-9a-f]{3,6}$/i;
+  return regex.test(color);
 };
 
 const appTheme = {COLORS, SIZES, FONTS};

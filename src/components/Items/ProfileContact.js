@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   fullname: (isMe) => ({
     fontSize: normalizeFontSize(14),
 
-    color: isMe ? COLORS.darkBlue : 'black',
+    color: isMe ? COLORS.signed_primary : 'black',
     lineHeight: normalizeFontSize(16.94),
     fontWeight: 'bold'
   }),

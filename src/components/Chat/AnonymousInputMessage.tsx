@@ -93,7 +93,7 @@ const AnonymousInputMessage = ({onSendButtonClicked, type}: AnonymousInputMessag
   const sendButtonStyle = React.useCallback(() => {
     const isDisabled = isDisableButton();
     if (isDisabled) return COLORS.gray1;
-    if (type === 'SIGNED') return COLORS.darkBlue;
+    if (type === 'SIGNED') return COLORS.signed_primary;
     return COLORS.bondi_blue;
   }, [isDisableButton()]);
 

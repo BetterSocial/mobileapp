@@ -1,30 +1,13 @@
 import * as React from 'react';
-import {
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, Pressable, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import NewsEmptyState from '../../../assets/images/news-empty-state.png';
-import RenderItemHeader from './RenderItemHeader'
+import RenderItemHeader from './RenderItemHeader';
 import dimen from '../../../utils/dimen';
-import theme, { COLORS, FONTS, SIZES } from '../../../utils/theme';
-import {
-  Footer,
-  Gap,
-  PreviewComment,
-  SingleSidedShadowBox,
-} from '../../../components';
-import { colors } from '../../../utils/colors';
-import { fonts, normalize, normalizeFontSize } from '../../../utils/fonts';
-import {
-  getCountComment,
-  getCountCommentWithChild,
-  getCountVote,
-} from '../../../utils/getstream';
+import theme, {COLORS, FONTS, SIZES} from '../../../utils/theme';
+import {Footer, Gap, PreviewComment, SingleSidedShadowBox} from '../../../components';
+import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
+import {getCountComment, getCountCommentWithChild, getCountVote} from '../../../utils/getstream';
 
 const RenderItem = ({
   item,
@@ -67,9 +50,7 @@ const RenderItem = ({
     const validationStatusVote = () => {
       if (item.reaction_counts !== undefined || null) {
         if (item.latest_reactions.upvotes !== undefined) {
-          let upvote = item.latest_reactions.upvotes.filter(
-            (vote) => vote.user_id === selfUserId,
-          );
+          let upvote = item.latest_reactions.upvotes.filter((vote) => vote.user_id === selfUserId);
           if (upvote !== undefined) {
             setVoteStatus('upvote');
             setStatusUpvote(true);
@@ -78,7 +59,7 @@ const RenderItem = ({
 
         if (item.latest_reactions.downvotes !== undefined) {
           let downvotes = item.latest_reactions.downvotes.filter(
-            (vote) => vote.user_id === selfUserId,
+            (vote) => vote.user_id === selfUserId
           );
           if (downvotes !== undefined) {
             setVoteStatus('downvote');
@@ -116,8 +97,7 @@ const RenderItem = ({
     initialVote();
   }, [item]);
 
-  const onFollowDomainPressed = () => {
-  };
+  const onFollowDomainPressed = () => {};
 
   const onDownvoteClick = () => {
     setStatusDowvote((prev) => {
@@ -126,7 +106,7 @@ const RenderItem = ({
         activity_id: item.id,
         status: prev,
         feed_group: 'domain',
-        domain: item.domain.name,
+        domain: item.domain.name
       });
       if (prev) {
         setVoteStatus('downvote');
@@ -142,7 +122,7 @@ const RenderItem = ({
       }
       return prev;
     });
-  }
+  };
 
   const onUpvoteClick = () => {
     setStatusUpvote((prev) => {
@@ -151,7 +131,7 @@ const RenderItem = ({
         activity_id: item.id,
         status: prev,
         feed_group: 'domain',
-        domain: item.domain.name,
+        domain: item.domain.name
       });
       if (prev) {
         setVoteStatus('upvote');
@@ -167,7 +147,7 @@ const RenderItem = ({
       }
       return prev;
     });
-  }
+  };
 
   return (
     <SingleSidedShadowBox>
@@ -179,23 +159,19 @@ const RenderItem = ({
           handleUnfollow={handleUnfollow}
           follow={follow}
           follower={follower}
-          score={score} />
+          score={score}
+        />
         <Pressable onPress={() => onPressComment(item)} style={styles.contentContainer}>
           {/* <View> */}
-          <View
-            style={styles.titleContainer}>
-            <Text style={styles.domainItemTitle} numberOfLines={2} ellipsizeMode="tail">{item.content.title}</Text>
+          <View style={styles.titleContainer}>
+            <Text style={styles.domainItemTitle} numberOfLines={2} ellipsizeMode="tail">
+              {item.content.title}
+            </Text>
           </View>
           {item.content.image ? (
-            <Image
-              source={{ uri: item.content.image }}
-              style={styles.domainImage}
-            />
+            <Image source={{uri: item.content.image}} style={styles.domainImage} />
           ) : (
-            <Image
-              source={NewsEmptyState}
-              style={styles.domainImageEmptyState}
-            />
+            <Image source={NewsEmptyState} style={styles.domainImageEmptyState} />
           )}
           <View style={styles.descriptionContainer}>
             <Text style={styles.domainItemDescription} ellipsizeMode="tail" numberOfLines={4}>
@@ -237,21 +213,21 @@ const RenderItem = ({
 };
 
 const styles = StyleSheet.create({
-  containerText: { paddingHorizontal: 16 },
-  iconPlush: { fontSize: normalizeFontSize(24), color: COLORS.holyTosca },
-  views: { color: COLORS.holyTosca },
-  containerDetail: { flex: 1 },
-  contentContainer: { flex: 1 },
-  contentDetail: { flexDirection: 'row', alignItems: 'center' },
-  content: { flexDirection: 'row', paddingHorizontal: 16 },
+  containerText: {paddingHorizontal: 16},
+  iconPlush: {fontSize: normalizeFontSize(24), color: COLORS.anon_primary},
+  views: {color: COLORS.anon_primary},
+  containerDetail: {flex: 1},
+  contentContainer: {flex: 1},
+  contentDetail: {flexDirection: 'row', alignItems: 'center'},
+  content: {flexDirection: 'row', paddingHorizontal: 16},
   descriptionContainer: {
     paddingHorizontal: 20,
     height: 0,
     flex: 1,
-    marginBottom: 14,
+    marginBottom: 14
   },
-  domainImage: { height: normalize(200), marginBottom: 14 },
-  domainImageEmptyState: { height: normalize(135), marginBottom: 14 },
+  domainImage: {height: normalize(200), marginBottom: 14},
+  domainImageEmptyState: {height: normalize(135), marginBottom: 14},
   wrapperItem: {
     backgroundColor: 'white',
     borderBottomWidth: 4,
@@ -265,56 +241,56 @@ const styles = StyleSheet.create({
     width: normalize(48),
     height: normalize(48),
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   image: {
     height: normalize(48),
     width: normalize(48),
-    borderRadius: normalize(45),
+    borderRadius: normalize(45)
   },
   wrapperText: {
     backgroundColor: 'white',
     borderRadius: 8,
-    borderColor: COLORS.holyTosca,
+    borderColor: COLORS.anon_primary,
     width: normalize(36),
     height: normalize(36),
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: normalize(0.5),
+    borderWidth: normalize(0.5)
   },
   point: {
     width: 3,
     height: 3,
     borderRadius: 4,
-    backgroundColor: colors.gray,
+    backgroundColor: COLORS.gray,
     marginLeft: 8,
-    marginRight: 8,
+    marginRight: 8
   },
-  height: (height) => ({ height }),
-  width: (width) => ({ width }),
+  height: (height) => ({height}),
+  width: (width) => ({width}),
   wrapperFooter: {
     paddingHorizontal: 8,
     height: normalize(52),
     // flexBasis: 52,
     borderBottomColor: COLORS.gray1,
-    borderBottomWidth: 1,
+    borderBottomWidth: 1
   },
   headerDomainName: {
     fontSize: normalizeFontSize(14),
     fontFamily: fonts.inter[600],
     lineHeight: normalizeFontSize(16.9),
-    color: COLORS.black,
+    color: COLORS.black
   },
   headerDomainDate: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(12),
     lineHeight: normalizeFontSize(18),
-    color: COLORS.blackgrey,
+    color: COLORS.blackgrey
   },
   domainItemTitle: {
     fontSize: normalizeFontSize(16),
     fontFamily: fonts.inter[700],
-    lineHeight: normalizeFontSize(24),
+    lineHeight: normalizeFontSize(24)
   },
   domainItemDescription: {
     fontFamily: fonts.inter[400],
@@ -323,12 +299,12 @@ const styles = StyleSheet.create({
     // fontSize: 16,
     // lineHeight: 23,
     // backgroundColor: 'red',
-    flex: 1,
+    flex: 1
     // height: 50,
   },
   domainIndicatorContainer: {
     marginLeft: -4,
-    justifyContent: 'flex-start',
+    justifyContent: 'flex-start'
   },
   container: {
     flexDirection: 'row',
@@ -337,19 +313,19 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderBottomColor: COLORS.gray1,
     paddingBottom: 8,
-    paddingTop: 8,
+    paddingTop: 8
   },
   wrapperTextUnFollow: {
-    backgroundColor: COLORS.holyTosca,
+    backgroundColor: COLORS.anon_primary,
     borderRadius: 8,
-    borderColor: COLORS.holyTosca,
+    borderColor: COLORS.anon_primary,
     width: 36,
     height: 36,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 0.5,
+    borderWidth: 0.5
   },
-  previewCommentContainer: { zIndex: 1000 },
+  previewCommentContainer: {zIndex: 1000},
   titleContainer: {
     paddingHorizontal: 20,
     marginTop: 14,

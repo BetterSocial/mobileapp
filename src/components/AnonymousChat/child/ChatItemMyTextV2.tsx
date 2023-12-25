@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   containerSigned: {
-    backgroundColor: COLORS.babyBlue
+    backgroundColor: COLORS.signed_primary
   },
   containerAnon: {
     backgroundColor: COLORS.halfBaked

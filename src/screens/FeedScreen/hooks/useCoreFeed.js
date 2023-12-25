@@ -8,7 +8,7 @@ import dimen from '../../../utils/dimen';
 import {Context} from '../../../context';
 import {FEEDS_CACHE} from '../../../utils/cache/constant';
 import {SOURCE_FEED_TAB} from '../../../utils/constants';
-import {checkIsHasColor, hexToRgb} from '../../../utils/colors';
+import {checkIsHasColor, hexToRgb} from '../../../utils/theme';
 import {downVote, upVote} from '../../../service/vote';
 import {getFeedDetail, getMainFeedV2WithTargetFeed, viewTimePost} from '../../../service/post';
 import {listFeedColor} from '../../../configs/FeedColor';

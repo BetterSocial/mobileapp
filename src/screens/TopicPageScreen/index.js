@@ -28,13 +28,14 @@ import useOnBottomNavigationTabPressHook, {
 import NavHeader from './elements/NavHeader';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
 import {getTopics, getUserTopic} from '../../service/topics';
+import {COLORS} from '../../utils/theme';
 
 const styles = StyleSheet.create({
   parentContainer: {
     flex: 1
   },
   header: {
-    backgroundColor: 'lightblue',
+    backgroundColor: COLORS.signed_primary,
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 40,

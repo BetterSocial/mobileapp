@@ -3,8 +3,8 @@ import {StyleSheet, Text, View} from 'react-native';
 import PropTypes from 'prop-types';
 import GlobalButton from '../../../components/Button/GlobalButton';
 
-import {colors} from '../../../utils/colors';
 import {getSingularOrPluralText} from '../../../utils/string/StringUtils';
+import {COLORS} from '../../../utils/theme';
 
 /**
  *
@@ -60,12 +60,12 @@ let styles = StyleSheet.create({
   following: {marginLeft: 18},
   textTotal: {
     fontSize: 14,
-    color: colors.bondi_blue,
+    color: COLORS.anon_primary,
     paddingRight: 4
   },
   textFollow: {
     fontSize: 14,
-    color: colors.black,
+    color: COLORS.black,
     paddingRight: 4
   },
   wrapFollower: {

@@ -13,7 +13,6 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import config from 'react-native-config';
 import Share from 'react-native-share';
-import {colors} from '../../../utils/colors';
 import InstagramIcon from '../../../assets/social-media/instagram.svg';
 import TwitterIcon from '../../../assets/social-media/twitter.svg';
 import ShareUtils from '../../../utils/share/index';
@@ -170,20 +169,20 @@ const styles = StyleSheet.create({
     padding: 10
   },
   linkAndSocialMediaTitle: {
-    color: colors.darkBlue,
+    color: COLORS.signed_primary,
     fontWeight: '700',
     textAlign: 'center',
     fontSize: 12
   },
   shareStepContainer: {
-    backgroundColor: colors.white,
+    backgroundColor: COLORS.white,
     flex: 1,
     padding: 10,
     borderRadius: 8,
     marginVertical: 10
   },
   shareStepLabel: {
-    color: colors.darkBlue,
+    color: COLORS.signed_primary,
     fontWeight: '600',
     textAlign: 'center',
     fontSize: 12,
@@ -206,9 +205,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginHorizontal: 8
   },
-  copyLinkUrl: {padding: 10, flex: 1, fontWeight: '600', color: colors.gray1, fontSize: 9},
-  copyLinkButtonLabel: {color: colors.white, fontWeight: '600', fontSize: 12},
-  copyLinkButton: {alignSelf: 'center', backgroundColor: colors.darkBlue},
+  copyLinkUrl: {padding: 10, flex: 1, fontWeight: '600', color: COLORS.gray1, fontSize: 9},
+  copyLinkButtonLabel: {color: COLORS.white, fontWeight: '600', fontSize: 12},
+  copyLinkButton: {alignSelf: 'center', backgroundColor: COLORS.signed_primary},
   instagramContainer: {
     paddingVertical: 9,
     paddingHorizontal: 12,
@@ -220,7 +219,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   buttonSocialMediaLabel: {
-    color: colors.white,
+    color: COLORS.white,
     fontWeight: '600',
     textAlign: 'center',
     marginRight: 6,
@@ -232,8 +231,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#26A7DE'
   },
-  elseWhereButton: {alignSelf: 'center', flex: 1, backgroundColor: colors.darkBlue},
-  elseWhereLabel: {color: colors.white, fontWeight: '600', textAlign: 'center', fontSize: 12}
+  elseWhereButton: {alignSelf: 'center', flex: 1, backgroundColor: COLORS.signed_primary},
+  elseWhereLabel: {color: COLORS.white, fontWeight: '600', textAlign: 'center', fontSize: 12}
 });
 
 export default LinkAndSocialMedia;

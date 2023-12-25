@@ -93,7 +93,7 @@ export default BaseButtonAddPost;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.darkBlue,
+    backgroundColor: COLORS.signed_primary,
     width: dimen.size.FEED_ACTION_BUTTON_RADIUS,
     height: dimen.size.FEED_ACTION_BUTTON_RADIUS,
     borderRadius: dimen.size.FEED_ACTION_BUTTON_RADIUS,

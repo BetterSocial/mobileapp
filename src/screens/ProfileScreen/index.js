@@ -744,7 +744,7 @@ const styles = StyleSheet.create({
     width: dimen.size.PROFILE_ACTION_BUTTON_RADIUS,
     height: dimen.size.PROFILE_ACTION_BUTTON_RADIUS,
 
-    backgroundColor: COLORS.darkBlue,
+    backgroundColor: COLORS.signed_primary,
     borderRadius: 30,
     flexDirection: 'row',
     justifyContent: 'center',

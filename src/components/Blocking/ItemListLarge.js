@@ -5,7 +5,6 @@ import IconFA5 from 'react-native-vector-icons/FontAwesome5';
 import IconEn from 'react-native-vector-icons/Entypo';
 
 import Handcuffs from '../../assets/icon-svg/handcuffs.svg';
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 
@@ -36,32 +35,32 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 22,
     borderTopColor: COLORS.alto,
-    borderTopWidth: 1,
+    borderTopWidth: 1
   },
   content: {
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   btn: {
     justifyContent: 'center',
     alignItems: 'flex-end',
     width: 20,
-    marginLeft: 15,
+    marginLeft: 15
   },
   header: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   label: {
     marginLeft: 15,
     fontFamily: fonts.inter[500],
     color: COLORS.black,
-    fontSize: 14,
+    fontSize: 14
   },
   desc: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.gray,
+    color: COLORS.gray,
     marginTop: 5,
-    flex: 1,
-  },
+    flex: 1
+  }
 });

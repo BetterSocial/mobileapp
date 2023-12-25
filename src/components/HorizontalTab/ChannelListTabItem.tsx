@@ -29,7 +29,7 @@ const ChannelListTabItem = (props: ChannelListTabItemProps) => {
     name: {
       fontFamily: fonts.inter[500],
       fontSize: 14,
-      color: props.type === 'SIGNED' ? COLORS.darkBlue : COLORS.anon_primary
+      color: props.type === 'SIGNED' ? COLORS.signed_primary : COLORS.anon_primary
     },
     picture: {
       width: 20,

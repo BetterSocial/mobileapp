@@ -10,6 +10,7 @@ import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
 import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
 import {ANONYMOUS} from '../../hooks/core/constant';
 import dimen from '../../utils/dimen';
+import {COLORS} from '../../utils/theme';
 
 const {height} = Dimensions.get('window');
 

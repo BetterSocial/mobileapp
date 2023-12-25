@@ -7,11 +7,10 @@ import {
   Text,
   View,
   ImageBackground,
-  StatusBar,
+  StatusBar
 } from 'react-native';
 
 import MemoIc_arrow_back_white from '../../assets/arrow/Ic_arrow_back_white';
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import Icon from 'react-native-vector-icons/Octicons';
 import {calculateTime} from '../../utils/time';
@@ -44,8 +43,7 @@ const ShowDetailGroupImage = (props) => {
         <View style={styles.user}>
           <Text style={styles.name}>{name}</Text>
           <Text style={styles.time}>
-            {images.length} photos{' '}
-            <Icon name="primitive-dot" size={6} color="#fff" />{' '}
+            {images.length} photos <Icon name="primitive-dot" size={6} color="#fff" />{' '}
             {calculateTime(time)}{' '}
           </Text>
         </View>
@@ -54,13 +52,8 @@ const ShowDetailGroupImage = (props) => {
         data={images}
         initialScrollIndex={indexScroll}
         renderItem={({item, index}) => (
-          <TouchableOpacity
-            key={index}
-            onPress={() => openDetail(item.asset_url)}>
-            <ImageBackground
-              resizeMode="cover"
-              style={styles.image}
-              source={{uri: item.asset_url}}>
+          <TouchableOpacity key={index} onPress={() => openDetail(item.asset_url)}>
+            <ImageBackground resizeMode="cover" style={styles.image} source={{uri: item.asset_url}}>
               <Text style={styles.time}>{calculateTime(time)}</Text>
             </ImageBackground>
           </TouchableOpacity>
@@ -87,32 +80,32 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
     paddingBottom: 10,
-    paddingRight: 10,
+    paddingRight: 10
   },
   container: {
-    flex: 1,
+    flex: 1
   },
   header: {
-    backgroundColor: colors.holytosca,
+    backgroundColor: COLORS.anon_primary,
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 20,
     paddingTop: 6,
-    paddingBottom: 7,
+    paddingBottom: 7
   },
   user: {
-    marginLeft: 18,
+    marginLeft: 18
   },
   name: {
     fontFamily: fonts.inter[600],
     fontSize: 14,
     color: COLORS.white,
-    lineHeight: 16.94,
+    lineHeight: 16.94
   },
   time: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
     color: COLORS.white,
-    lineHeight: 18,
-  },
+    lineHeight: 18
+  }
 });

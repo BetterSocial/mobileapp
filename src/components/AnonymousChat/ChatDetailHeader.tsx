@@ -20,11 +20,11 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center'
   },
-  bgDarkBlue: {
-    backgroundColor: COLORS.darkBlue
+  bgsigned_primary: {
+    backgroundColor: COLORS.signed_primary
   },
   bgBondiBlue: {
-    backgroundColor: COLORS.bondi_blue
+    backgroundColor: COLORS.anon_primary
   },
   backButton: {
     paddingLeft: 22,
@@ -78,7 +78,7 @@ const ChatDetailHeader = ({
   channel
 }) => {
   const bgHeaderStyle = () => {
-    if (type === SIGNED) return styles.bgDarkBlue;
+    if (type === SIGNED) return styles.bgsigned_primary;
     return styles.bgBondiBlue;
   };
 
