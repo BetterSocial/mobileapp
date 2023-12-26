@@ -274,7 +274,7 @@ function HomeBottomTabs({navigation}) {
 
   const menuIndicator = (nav, route) => {
     const isAnonChatMenu = route.name === 'AnonymousChannelList';
-    const activeColor = isAnonChatMenu ? COLORS.anon_primary : COLORS.darkBlue;
+    const activeColor = isAnonChatMenu ? COLORS.anon_primary : COLORS.signed_primary;
     const style = {backgroundColor: nav.isFocused() ? activeColor : 'transparent'};
     return <View style={[styles.badge, style]} />;
   };
@@ -285,13 +285,14 @@ function HomeBottomTabs({navigation}) {
         initialRouteName={getInitialRouteName()}
         tabBarOptions={{
           inactiveTintColor: COLORS.blackgrey,
-          safeAreaInsets: {top: 0, bottom: 0, left: 0, right: 0}
+          safeAreaInsets: {top: 0, bottom: 0, left: 0, right: 0},
+          activeTintColor: COLORS.signed_primary
         }}
         screenOptions={({navigation: nav, route}) => ({
           tabBarLabel: () => menuIndicator(nav, route),
           tabBarIcon: ({focused, color}) => renderTabBarIcon(route, focused, color),
           tabBarActiveTintColor:
-            route.name === 'AnonymousChannelList' ? COLORS.anon_primary : COLORS.darkBlue
+            route.name === 'AnonymousChannelList' ? COLORS.anon_primary : COLORS.signed_primary
         })}>
         <Tab.Screen
           name="SignedChannelList"

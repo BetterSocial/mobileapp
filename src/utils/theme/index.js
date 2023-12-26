@@ -28,7 +28,7 @@ export const COLORS = {
   whiteSmoke: '#F4F4F4',
 
   //new color
-  signed_primary: '#4782D7',
+  signed_primary: 'pink',
   signed_secondary: '#6295DD',
   anon_primary: '#107793',
   anon_secondary: '#3A9BB6',

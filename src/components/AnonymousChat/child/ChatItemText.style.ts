@@ -170,7 +170,7 @@ export const styles = StyleSheet.create({
     color: COLORS.white
   },
   attachmentFileContainer: {
-    backgroundColor: COLORS.alto,
+    backgroundColor: COLORS.gray,
     justifyContent: 'center',
     minHeight: dimen.normalizeDimen(64),
     flexDirection: 'row',

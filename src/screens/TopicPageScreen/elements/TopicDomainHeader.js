@@ -53,10 +53,7 @@ const TopicDomainHeader = (props) => {
         isFollow &&
         !hideSeeMember && (
           <Pressable onPress={handlePress} style={{backgroundColor: 'transparent'}}>
-            <Text
-              style={styles.seeMemberText(props.isHeaderHide)}
-              numberOfLines={1}
-              ellipsizeMode="tail">
+            <Text style={styles.seeMemberText} numberOfLines={1} ellipsizeMode="tail">
               See community members
             </Text>
           </Pressable>

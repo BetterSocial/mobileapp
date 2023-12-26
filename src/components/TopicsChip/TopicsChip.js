@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 13,
     paddingVertical: 4.5,
     borderRadius: 14,
-    color: COLORS.blue
+    color: COLORS.signed_primary
   },
   contentStyle: {
     paddingRight: 12
