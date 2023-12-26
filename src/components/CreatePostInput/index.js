@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import {StyleSheet, Text, TextInput} from 'react-native';
 import {debounce} from 'lodash';
@@ -14,14 +15,14 @@ import {COLORS} from '../../utils/theme';
 
 const CreatePostInput = ({
   allTaggedUser = [],
-  message = '',
+  message,
   topics = [],
   topicChats = [],
-  setAllTaggedUser = () => {},
-  setMessage = () => {},
-  setPositionKeyboard = () => {},
-  setTopics = () => {},
-  setTopicChats = () => {}
+  setAllTaggedUser,
+  setPositionKeyboard,
+  setTopics,
+  setTopicChats,
+  setMessage
 }) => {
   const [positionEndCursor, setPositionEndCursor] = React.useState(0);
   const [topicSearch, setTopicSearch] = React.useState([]);
@@ -29,23 +30,18 @@ const CreatePostInput = ({
   const [hashtagPosition, setHashtagPosition] = React.useState(0);
   const [positionTopicSearch, setPositionTopicSearch] = React.useState(0);
   const [lastTopicInCursor, setLastTopicInCursor] = React.useState('');
-  const [shouldUpdateHashtag, setShouldUpdateHashtag] = React.useState(0);
   const inputRef = React.useRef();
   const {formattedText, handleStateHashtag, handleStateMention, setHashtags, updateHashtag} =
     useHastagMention('');
 
   React.useEffect(() => {
-    setShouldUpdateHashtag(new Date().valueOf());
+    if (new Date().valueOf() > 0) updateHashtag(message, topics, setTopics, positionEndCursor);
   }, [message]);
-
-  React.useEffect(() => {
-    if (shouldUpdateHashtag > 0) updateHashtag(message, topics, setTopics, positionEndCursor);
-  }, [shouldUpdateHashtag]);
 
   React.useEffect(() => {
     if (inputRef?.current) {
       setTimeout(() => {
-        inputRef.current.focus();
+        // inputRef.current.focus();
       }, 500);
     }
   }, []);
@@ -119,6 +115,7 @@ const CreatePostInput = ({
     newTopics.splice(newTopics?.lastIndexOf(lastTopicInCursor), 1);
     setTopics(newTopics);
   };
+
   const handlePostTextChanged = (v) => {
     setMessage(v);
     // updateHashtag(v, topics, setTopics, positionEndCursor)
@@ -132,57 +129,62 @@ const CreatePostInput = ({
     const isHashtagDetected = v.includes('#') && positionHashtag > positionMention;
 
     if (isHashtagDetected) {
-      const spaceStatus = v.includes(' ', positionHashtag);
-      const detectEnter = v.includes('\n', positionHashtag);
-      const textSearch = v.substring(positionHashtag + 1);
-      setHashtagPosition(positionHashtag);
-      /**
-       * cari posisi kursor dimana
-       * cek apakah posisi sebelum kursor # atau bukan
-       * ambil semua value setelah posisi #
-       */
-      if (!spaceStatus && !detectEnter) {
-        setPositionTopicSearch(positionHashtag);
-        searchTopicDebounced(textSearch);
-        setPositionKeyboard('always');
-        setLastTopicInCursor(textSearch);
-      } else {
-        resetTopicSearch();
-        setPositionKeyboard('never');
-        cancelAllRequest();
-        const removeCharacterAfterSpace = textSearch.split(' ')[0];
-        const hashtagLastCharIndex = positionHashtag + removeCharacterAfterSpace?.length;
-        if (hashtagLastCharIndex === positionEndCursor - 1) {
-          const newTopics = joinTopicIntoTopicList(removeCharacterAfterSpace, topics);
-          setTopics(newTopics);
-          // setHashtags(newTopics)
-        }
-
-        setLastTopicInCursor('');
-      }
-
-      // handleStateHashtag(v, setTopics, positionEndCursor);
+      handleHashtagDetection(v, positionHashtag);
     } else if (isMentionDetected) {
-      const spaceStatus = v.includes(' ', positionMention);
-      const detectEnter = v.includes('\n', positionMention);
-      const textSearch = v.substring(positionMention + 1);
-      setHashtagPosition(positionMention);
-      if (!spaceStatus && !detectEnter) {
-        setPositionTopicSearch(positionMention);
-        searchUserDebounced(textSearch);
-        setPositionKeyboard('always');
-      } else {
-        resetListUsersForTagging();
-        setPositionKeyboard('never');
-        cancelAllRequest();
-      }
-      // handleStateMention(v);
+      handleMentionDetection(v, positionMention);
     } else {
       resetTopicSearch();
       resetListUsersForTagging();
       setPositionKeyboard('never');
       cancelAllRequest();
       // handleStateHashtag(v, setTopics)
+    }
+  };
+
+  const handleHashtagDetection = (v, positionHashtag) => {
+    const spaceStatus = v.includes(' ', positionHashtag);
+    const detectEnter = v.includes('\n', positionHashtag);
+    const textSearch = v.substring(positionHashtag + 1);
+    setHashtagPosition(positionHashtag);
+    /**
+     * cari posisi kursor dimana
+     * cek apakah posisi sebelum kursor # atau bukan
+     * ambil semua value setelah posisi #
+     */
+    if (!spaceStatus && !detectEnter) {
+      setPositionTopicSearch(positionHashtag);
+      searchTopicDebounced(textSearch);
+      setPositionKeyboard('always');
+      setLastTopicInCursor(textSearch);
+    } else {
+      resetTopicSearch();
+      setPositionKeyboard('never');
+      cancelAllRequest();
+      const removeCharacterAfterSpace = textSearch.split(' ')[0];
+      const hashtagLastCharIndex = positionHashtag + removeCharacterAfterSpace?.length;
+      if (hashtagLastCharIndex === positionEndCursor - 1) {
+        const newTopics = joinTopicIntoTopicList(removeCharacterAfterSpace, topics);
+        setTopics(newTopics);
+        // setHashtags(newTopics)
+      }
+
+      setLastTopicInCursor('');
+    }
+  };
+
+  const handleMentionDetection = (v, positionMention) => {
+    const spaceStatus = v.includes(' ', positionMention);
+    const detectEnter = v.includes('\n', positionMention);
+    const textSearch = v.substring(positionMention + 1);
+    setHashtagPosition(positionMention);
+    if (!spaceStatus && !detectEnter) {
+      setPositionTopicSearch(positionMention);
+      searchUserDebounced(textSearch);
+      setPositionKeyboard('always');
+    } else {
+      resetListUsersForTagging();
+      setPositionKeyboard('never');
+      cancelAllRequest();
     }
   };
 
@@ -248,5 +250,17 @@ const styles = StyleSheet.create({
     overflow: 'scroll'
   }
 });
+
+CreatePostInput.propTypes = {
+  allTaggedUser: PropTypes.array,
+  topics: PropTypes.array,
+  topicChats: PropTypes.array,
+  setAllTaggedUser: PropTypes.func,
+  setPositionKeyboard: PropTypes.func,
+  setTopics: PropTypes.func,
+  setTopicChats: PropTypes.func,
+  message: PropTypes.string,
+  setMessage: PropTypes.func
+};
 
 export default CreatePostInput;

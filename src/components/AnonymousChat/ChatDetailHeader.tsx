@@ -1,15 +1,16 @@
 import * as React from 'react';
 import FastImage from 'react-native-fast-image';
 import IconEP from 'react-native-vector-icons/Entypo';
-import {StyleSheet, Text, View} from 'react-native';
+import Animated, {Easing, useAnimatedStyle, withTiming} from 'react-native-reanimated';
+import {StyleSheet, Text} from 'react-native';
 
 import AnonymousIcon from '../../screens/ChannelListScreen/elements/components/AnonymousIcon';
 import ChannelImage from '../ChatList/elements/ChannelImage';
 import CustomPressable from '../CustomPressable';
 import IcArrowBackWhite from '../../assets/arrow/Ic_arrow_back_white';
 import dimen from '../../utils/dimen';
+import {ANONYMOUS, SIGNED} from '../../hooks/core/constant';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
-import {SIGNED} from '../../hooks/core/constant';
 import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 
@@ -24,7 +25,10 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.signed_primary
   },
   bgBondiBlue: {
-    backgroundColor: COLORS.anon_primary
+    backgroundColor: COLORS.anon_primary,
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.gray
   },
   backButton: {
     paddingLeft: 22,
@@ -67,7 +71,7 @@ const styles = StyleSheet.create({
 });
 
 const ChatDetailHeader = ({
-  avatar = DEFAULT_PROFILE_PIC_PATH,
+  avatar,
   user,
   onBackPress = () => console.log('onBackPress'),
   onThreeDotPress = () => console.log('onThreeDotPress'),
@@ -81,6 +85,19 @@ const ChatDetailHeader = ({
     if (type === SIGNED) return styles.bgsigned_primary;
     return styles.bgBondiBlue;
   };
+  const contentColor = () => {
+    if (type === SIGNED) return COLORS.black;
+    return COLORS.white;
+  };
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      backgroundColor: withTiming(type === ANONYMOUS ? COLORS.anon_primary : COLORS.white, {
+        duration: 400,
+        easing: Easing.inOut(Easing.quad)
+      })
+    };
+  });
 
   const renderAvatar = () => {
     if (anon_user_info_emoji_code) {
@@ -92,7 +109,6 @@ const ChatDetailHeader = ({
         />
       );
     }
-
     return (
       <ChannelImage>
         <ChannelImage.Big style={styles.avatarImage} type={channel?.channelType} image={avatar} />
@@ -101,21 +117,21 @@ const ChatDetailHeader = ({
   };
 
   return (
-    <View style={[styles.container, bgHeaderStyle()]}>
+    <Animated.View style={[styles.container, animatedStyle]}>
       <CustomPressable style={styles.backButton} onPress={onBackPress}>
-        <IcArrowBackWhite width={20} height={12} />
+        <IcArrowBackWhite iconColor={contentColor()} width={20} height={12} />
       </CustomPressable>
       <CustomPressable style={styles.textContainer} onPress={onAvatarPress}>
         {renderAvatar()}
-        <Text numberOfLines={1} ellipsizeMode="tail" style={styles.text}>
+        <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.text, {color: contentColor()}]}>
           {user}
         </Text>
       </CustomPressable>
       <CustomPressable style={styles.threeDot} onPress={onThreeDotPress}>
-        <IconEP name="dots-three-vertical" size={20} color={COLORS.white} />
+        <IconEP name="dots-three-vertical" size={20} color={contentColor()} />
       </CustomPressable>
       <FastImage />
-    </View>
+    </Animated.View>
   );
 };
 

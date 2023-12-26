@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-properties */
 /* eslint-disable no-param-reassign,no-useless-escape */
 import * as React from 'react';
 import moment from 'moment';
@@ -15,7 +16,7 @@ import {getUserId} from '../token';
 import {COLORS} from '../theme';
 
 const NO_POLL_UUID = '00000000-0000-0000-0000-000000000000';
-
+const urlRegex = /(https?:\/\/\S+)+/g;
 const getPollTime = (pollExpiredAtString, currentMoment = moment()) => {
   const pollExpiredMoment = moment(pollExpiredAtString);
   const diff = pollExpiredMoment.diff(currentMoment);
@@ -65,9 +66,8 @@ const detectStateInCity = (city) => {
  * @returns {String}
  */
 const displayCityName = (city, state) => {
-  if (city === null || city === undefined || city === '') throw new Error('City must be defined');
-  if (state === null || state === undefined || state === '')
-    throw new Error('State must be defined');
+  if (city === null || city === undefined || city === '') return null;
+  if (state === null || state === undefined || state === '') return null;
   if (detectStateInCity(city)) return city;
 
   return `${city}, ${state}`;
@@ -164,6 +164,7 @@ const displayFormattedSearchLocationsV2 = (searchQuery, locationObject) => {
   return null;
 };
 
+// eslint-disable-next-line consistent-return
 const getChatName = (usernames, me) => {
   if (!usernames) {
     return 'No Name';
@@ -189,7 +190,18 @@ const getChatName = (usernames, me) => {
   if (userArraysWithoutMe.length === 1) {
     return userArraysWithoutMe[0].trim();
   }
-  return 'No name';
+};
+
+const formatBytes = (bytes, decimals = 2) => {
+  if (!+bytes) return '0 Bytes';
+
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 };
 
 const getAnonymousChatName = async (members) => {
@@ -386,8 +398,7 @@ const getDurationTimeText = (selectedtime) => {
 };
 
 const getCaptionWithLinkStyle = (text) => {
-  const linkRegex = /(https?:\/\/\S+)+/g;
-  return reactStringReplace(text, linkRegex, (match) => (
+  return reactStringReplace(text, urlRegex, (match) => (
     <HighlightText text={match} onPress={() => onOpenLink(match)} />
   ));
 };
@@ -400,6 +411,13 @@ const onOpenLink = (url) => {
   });
 };
 
+const isValidUrl = (url) => {
+  if (url && typeof url === 'string') {
+    return urlRegex.test(url);
+  }
+  return false;
+};
+
 export {
   capitalizeFirstText,
   convertString,
@@ -407,6 +425,7 @@ export {
   displayFormattedSearchLocationsV2,
   getCaptionWithTopicStyle,
   getChatName,
+  formatBytes,
   getGroupMemberCount,
   getPollTime,
   getSingularOrPluralText,
@@ -420,5 +439,6 @@ export {
   isLocationMatch,
   styles,
   getCaptionWithLinkStyle,
-  getAnonymousChatName
+  getAnonymousChatName,
+  isValidUrl
 };

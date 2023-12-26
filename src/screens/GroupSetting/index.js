@@ -32,14 +32,14 @@ const GroupSetting = ({navigation, route}) => {
     updateName,
     submitData,
     lounchGalery,
-    renderHeaderSubtitleText
+    renderHeaderSubtitleText,
+    loadingUpdate
   } = useGroupSetting({navigation, route});
   const isFocusChatName = route?.params?.focusChatName;
   const [channelState] = React.useContext(Context).channel;
 
   const anonymousName = `Anonymous ${channelState?.data?.anon_user_info_emoji_name}`;
   const getProfileName = (name) => {
-    console.log('name', name);
     return name === 'AnonymousUser' ? anonymousName : name;
   };
   return (
@@ -51,8 +51,9 @@ const GroupSetting = ({navigation, route}) => {
           containerStyle={styles.containerHeader}
           subTitle={renderHeaderSubtitleText()}
           subtitleStyle={styles.subtitleStyle}
-          onPressSub={submitData}
+          onPressSub={() => submitData(true)}
           onPress={() => navigation.goBack()}
+          disabledNextBtn={loadingUpdate}
         />
         <EditGroup
           imageUri={urlImage}
@@ -60,7 +61,6 @@ const GroupSetting = ({navigation, route}) => {
           setEditName={updateName}
           onUpdateImage={lounchGalery}
           isFocusChatName={isFocusChatName}
-          saveGroupName={() => submitData(false, false)}
         />
         <Loading visible={isLoading} />
         <View style={styles.users}>
@@ -74,6 +74,7 @@ const GroupSetting = ({navigation, route}) => {
                   key={item}
                   fullname={getProfileName(item?.user?.name)}
                   photo={item?.user?.image}
+                  item={item}
                 />
               </View>
             )}

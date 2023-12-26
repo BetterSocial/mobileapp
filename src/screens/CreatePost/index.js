@@ -5,6 +5,7 @@
 import * as React from 'react';
 import PSL from 'psl';
 import Toast from 'react-native-simple-toast';
+import {Image} from 'react-native-compressor';
 import _, {debounce} from 'lodash';
 import {
   Alert,
@@ -18,10 +19,9 @@ import {
   Text,
   View
 } from 'react-native';
-import {Image} from 'react-native-compressor';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {openSettings} from 'react-native-permissions';
 import {showMessage} from 'react-native-flash-message';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {useNavigation, useRoute} from '@react-navigation/core';
 
 import ContentLink from './elements/ContentLink';
@@ -77,6 +77,8 @@ import {getUserId} from '../../utils/users';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
 import {uploadPhoto} from '../../service/file';
 import {COLORS} from '../../utils/theme';
+import ImageUtils from '../../utils/image';
+import ImageCompressionUtils from '../../utils/image/compress';
 
 const IS_GEO_SELECT_ENABLED = false;
 
@@ -125,6 +127,7 @@ const CreatePost = () => {
   const [user] = React.useContext(Context).profile;
   const [allTaggingUser, setAllTaggingUser] = React.useState([]);
   const animatedReminder = React.useRef(new Animated.Value(0)).current;
+
   const debounced = React.useCallback(
     debounce((changedText) => {
       if (isContainUrl(changedText)) {
@@ -309,20 +312,13 @@ const CreatePost = () => {
 
   const uploadPhotoImage = async (pathImg) => {
     try {
-      const compressionResult = await Image.compress(pathImg, {
-        compressionMethod: 'auto'
-      });
-
+      const compressionResult = await ImageCompressionUtils.compress(pathImg);
       const newArr = {
         id: mediaStorage.length,
         data: compressionResult
       };
 
-      const asset = new FormData();
-      asset.append('photo', composeImageMeta(compressionResult));
-
-      const responseUpload = await uploadPhoto(asset);
-
+      const responseUpload = await ImageUtils.uploadImage(pathImg);
       setMediaStorage((val) => [...val, newArr]);
       setDataImage((val) => [...val, responseUpload.data.url]);
       sheetMediaRef.current.close();
@@ -366,7 +362,6 @@ const CreatePost = () => {
       );
     }
   };
-
   const takePhoto = async () => {
     const {success, message} = await requestCameraPermission();
     if (success) {

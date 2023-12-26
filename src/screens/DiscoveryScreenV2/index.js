@@ -1,14 +1,15 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import {Keyboard, Platform, ScrollView, StatusBar, StyleSheet} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-
 import {useNavigation} from '@react-navigation/core';
-import PropTypes from 'prop-types';
+
 import DiscoveryAction from '../../context/actions/discoveryAction';
 import DiscoveryRepo from '../../service/discovery';
 import DiscoveryTab from './elements/DiscoveryTab';
 import DomainFragment from './fragment/DomainFragment';
+import FollowingAction from '../../context/actions/following';
 import NewsFragment from './fragment/NewsFragment';
 import Search from './elements/Search';
 import TopicFragment from './fragment/TopicFragment';
@@ -22,7 +23,6 @@ import {
 } from '../../utils/constants';
 import {fonts} from '../../utils/fonts';
 import {withInteractionsManagedNoStatusBar} from '../../components/WithInteractionManaged';
-import FollowingAction from '../../context/actions/following';
 import {Header} from '../../components';
 import {COLORS} from '../../utils/theme';
 

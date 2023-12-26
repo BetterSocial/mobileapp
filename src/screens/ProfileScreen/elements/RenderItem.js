@@ -66,8 +66,7 @@ const Item = ({
   selfUserId,
   onPressDomain,
   onNewPollFetched,
-  index = -1,
-  onHeaderOptionClicked = () => {}
+  index = -1
 }) => {
   const [isReaction, setReaction] = React.useState(false);
   const [previewComment, setPreviewComment] = React.useState({});
@@ -141,7 +140,6 @@ const Item = ({
   return (
     <View key={item.id} style={styles.cardContainer}>
       <Header
-        onHeaderOptionClicked={onHeaderOptionClicked}
         headerStyle={styles.headerContainer}
         props={item}
         height={getHeightHeader()}

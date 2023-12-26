@@ -10,7 +10,11 @@ import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import useUserAuthHook from '../auth/useUserAuthHook';
 import {ANONYMOUS} from '../constant';
 import {ChannelData, ChannelType} from '../../../../types/repo/ChannelData';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
+import {
+  DEFAULT_PROFILE_PIC_PATH,
+  DELETED_MESSAGE_TEXT,
+  MESSAGE_TYPE_DELETED
+} from '../../../utils/constants';
 import {getAnonymousChatName, getChatName} from '../../../utils/string/StringUtils';
 
 type ChannelCategory = 'SIGNED' | 'ANONYMOUS';
@@ -43,7 +47,7 @@ const useFetchChannelHook = () => {
           : getChatName(channel?.name, signedChannelUsername);
 
       if (channel?.type === 'group' || channel?.type === 'topics') {
-        signedChannelImage = channel?.channel_image;
+        signedChannelImage = channel?.channel_image ?? channel.image;
       } else {
         signedChannelImage =
           channel?.members?.find((member) => member?.user_id !== signedProfileId)?.user?.image ??
@@ -63,12 +67,20 @@ const useFetchChannelHook = () => {
       channel.firstMessage = channel?.messages?.[channel?.messages?.length - 1];
       channel.myUserId = signedProfileId;
     }
+
+    const isDeletedMessage = channel.firstMessage?.message_type === MESSAGE_TYPE_DELETED;
+    if (isDeletedMessage) channel.firstMessage.text = DELETED_MESSAGE_TEXT;
+
     channel.channel = {...channel};
     const channelType = channel?.type;
 
     try {
       const channelList = ChannelList.fromChannelAPI(channel, type[channelType]);
-      await channelList.saveIfLatest(localDb);
+      if (channel?.type === 'topics') {
+        await channelList.save(localDb);
+      } else {
+        await channelList.saveIfLatest(localDb);
+      }
       refresh('channelList');
     } catch (e) {
       console.log('error on helperChannelPromiseBuilder');
@@ -103,7 +115,11 @@ const useFetchChannelHook = () => {
 
       await Promise.all(
         (channel?.messages || []).map(async (message) => {
-          if (message?.type === 'deleted') return;
+          const isDeletedMessage = message?.message_type === MESSAGE_TYPE_DELETED;
+          const isDeletedHelper = Boolean(message?.deleted_message_id);
+          if (isDeletedMessage && isDeletedHelper) return;
+
+          if (isDeletedMessage) message.text = DELETED_MESSAGE_TEXT;
           const chat = ChatSchema.fromGetAllChannelAPI(channel?.id, message);
           await chat.save(localDb);
         })
@@ -119,16 +135,15 @@ const useFetchChannelHook = () => {
       const isSelfChatChannel = channel?.type === 'messaging' && channel?.members?.length < 2;
       const isCommunityChannel = channel?.type === 'topics';
 
-      const isDeletedMessage = channel?.firstMessage?.type === 'deleted';
+      const isDeletedMessage = channel?.firstMessage?.type === MESSAGE_TYPE_DELETED;
       const hasDeletedMessage = channel?.messages[channel?.messages?.length - 1]?.text
         ?.toLowerCase()
         ?.includes('this message was deleted');
 
-      const isDeletedMessageOrSelfChat = isDeletedMessage || isSelfChatChannel;
       const isDeletedOrHasDeletedMessage = isDeletedMessage || hasDeletedMessage;
       const isCommunityHasDeletedMessage = isDeletedOrHasDeletedMessage && isCommunityChannel;
 
-      return !isLocationChannel && !isDeletedMessageOrSelfChat && !isCommunityHasDeletedMessage;
+      return !isLocationChannel && !isSelfChatChannel && !isCommunityHasDeletedMessage;
     });
   };
 
@@ -149,7 +164,6 @@ const useFetchChannelHook = () => {
     } catch (e) {
       console.log('error on getting signedChannel:', e);
     }
-
     try {
       await saveAllChannelData(signedChannel ?? [], 'SIGNED');
       refresh('channelList');

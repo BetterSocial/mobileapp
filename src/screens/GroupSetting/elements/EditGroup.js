@@ -25,7 +25,6 @@ const EditGroup = ({
       inputChatNameRef.current.focus();
     }
   }, [inputChatNameRef, isFocusChatName]);
-
   const renderImage = (source) => {
     if (source && source.indexOf('file:///') > -1) {
       return <Image testID="fileImage" source={{uri: source}} style={styles.image} />;

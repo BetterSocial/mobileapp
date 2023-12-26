@@ -8,7 +8,7 @@ import {COLORS} from '../theme';
 const handleMention = (text, setFormattedContent) => {
   const retLines = text.split('\n');
   const arrText = [];
-  for (let i = 0; i < retLines.length; i++) {
+  for (let i = 0; i < retLines.length; i += 1) {
     arrText.push(retLines[i]);
     if (i !== retLines.length - 1) {
       arrText.push('\n');
@@ -29,16 +29,14 @@ const handleMention = (text, setFormattedContent) => {
           </Text>
         );
         if (index !== contentLength - 1) {
-          formattedText.push(mention, ' ');
-        } else {
-          formattedText.push(mention);
+          return formattedText.push(mention, ' ');
         }
-      } else {
-        if (index !== contentLength - 1) {
-          return formattedText.push(word, ' ');
-        }
-        return formattedText.push(word);
+        return formattedText.push(mention);
       }
+      if (index !== contentLength - 1) {
+        return formattedText.push(word, ' ');
+      }
+      return formattedText.push(word);
     });
   });
   setFormattedContent(formattedText);

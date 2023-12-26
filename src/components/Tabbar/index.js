@@ -80,6 +80,7 @@ const Tabbar = ({state, descriptors, navigation, position}) => {
             accessibilityState={isFocused ? {selected: true} : {}}
             accessibilityLabel={options.tabBarAccessibilityLabel}
             testID={options.tabBarTestID}
+            key={index}
             onPress={onPress}
             style={S.singletab}>
             <Animated.Text style={{opacity, ...S.singletabtext}}>{label}</Animated.Text>

@@ -24,12 +24,18 @@ import {
   LatestChildrenComment
 } from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
 import {ChannelType} from '../../../types/repo/ChannelData';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {Context} from '../../context';
+import {
+  DEFAULT_PROFILE_PIC_PATH,
+  DELETED_MESSAGE_TEXT,
+  MESSAGE_TYPE_DELETED
+} from '../../utils/constants';
 import {GetstreamFeedListenerObject} from '../../../types/hooks/core/getstreamFeedListener/feedListenerObject';
 import {GetstreamMessage, GetstreamWebsocket, MyChannelType} from './websocket/types.d';
 import {InitialStartupAtom} from '../../service/initialStartup';
 import {SignedPostNotification} from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 import {getAnonymousChatName, getChatName} from '../../utils/string/StringUtils';
+import {setReplyTarget} from '../../context/actions/chat';
 
 const useCoreChatSystemHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook() as UseLocalDatabaseHook;
@@ -40,6 +46,8 @@ const useCoreChatSystemHook = () => {
   const [migrationStatus] = useRecoilState(migrationDbStatusAtom);
   const initialStartup: any = useRecoilValue(InitialStartupAtom);
   const {params} = useRoute();
+  const [replyPreview, dispatch] = (React.useContext(Context) as unknown as any).chat;
+  const [processedMessageId, setProcessedMessageId] = React.useState<string | null>(null);
 
   const isEnteringApp =
     initialStartup?.id !== null && initialStartup?.id !== undefined && initialStartup?.id !== '';
@@ -115,7 +123,8 @@ const useCoreChatSystemHook = () => {
     websocketData.targetImage = handleChannelImage(websocketData?.channel?.members);
     const websocketChannelType = websocketData?.channel_type;
     if (websocketChannelType === 'topics' || websocketChannelType === 'group') {
-      websocketData.targetImage = websocketData?.channel?.channel_image;
+      websocketData.targetImage =
+        websocketData?.channel?.channel_image ?? websocketData.channel?.image;
     } else {
       websocketData.targetImage = selectedChannel?.channel_picture ?? websocketMessage?.user?.image;
     }
@@ -135,12 +144,49 @@ const useCoreChatSystemHook = () => {
     return websocketData;
   };
 
+  const helperWebsocketForDeletedMessage = async (websocketData: GetstreamWebsocket) => {
+    const websocketMessage = websocketData?.message;
+    const isDeletedMessage = websocketMessage?.message_type === MESSAGE_TYPE_DELETED;
+
+    if (isDeletedMessage) {
+      const selectedChat = await ChatSchema.getByid(
+        localDb,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        websocketMessage.deleted_message_id!
+      );
+      const selectedCreatedAt = selectedChat.createdAt;
+      const selectedUpdatedAt = selectedChat.updatedAt;
+
+      websocketMessage.id = websocketMessage.deleted_message_id ?? '';
+      websocketMessage.text = DELETED_MESSAGE_TEXT;
+      websocketMessage.created_at = selectedCreatedAt ?? websocketMessage.created_at;
+      websocketMessage.updated_at = selectedUpdatedAt ?? websocketMessage.updated_at;
+
+      ChatSchema.updateDeletedRepliedChat(
+        localDb,
+        websocketData?.channel_id,
+        websocketMessage.deleted_message_id ?? '',
+        selectedChat.createdAt
+      );
+
+      const {replyTarget} = replyPreview;
+      if (replyTarget && replyTarget?.id === websocketMessage?.deleted_message_id) {
+        const newReplyPreview = {...replyTarget};
+        newReplyPreview.message = DELETED_MESSAGE_TEXT;
+        newReplyPreview.message_type = MESSAGE_TYPE_DELETED;
+        setReplyTarget(newReplyPreview, dispatch);
+      }
+    }
+  };
+
   const saveChannelListData = async (
     websocketData: GetstreamWebsocket,
     channelCategory: MyChannelType
   ) => {
     if (!localDb) return;
     const websocketMessage = websocketData?.message;
+
+    helperWebsocketForDeletedMessage(websocketData);
 
     if (channelCategory === ANONYMOUS) {
       const chatName = await getAnonymousChatName(websocketData?.channel?.members);
@@ -149,6 +195,8 @@ const useCoreChatSystemHook = () => {
     } else {
       websocketData = await helperSignedChannelListData(websocketData);
     }
+
+    websocketData.reply_data = websocketMessage?.reply_data;
 
     const isAnonymous = channelCategory === ANONYMOUS;
     const channelType: {[key: string]: ChannelType} = {
@@ -324,19 +372,32 @@ const useCoreChatSystemHook = () => {
   React.useEffect(() => {
     if (!lastAnonymousMessage || !localDb) return;
 
-    const {type} = lastAnonymousMessage;
+    const {type, message} = lastAnonymousMessage;
     if (type === 'health.check') return;
+    if (processedMessageId === message?.id) return;
+
     if (type === 'notification.message_new') {
-      saveChannelListData(lastAnonymousMessage, ANONYMOUS).catch((e) => console.log(e));
+      // to prevent being processed twice (websocket response appears twice)
+      setProcessedMessageId(message?.id);
+      saveChannelListData(lastAnonymousMessage, ANONYMOUS)
+        .catch((e) => console.log(e))
+        .finally(() => setProcessedMessageId(null));
     }
   }, [JSON.stringify(lastAnonymousMessage), localDb]);
 
   React.useEffect(() => {
     if (!lastSignedMessage || !localDb) return;
-    const {type} = lastSignedMessage;
+
+    const {type, message} = lastSignedMessage;
     if (type === 'health.check') return;
+    if (processedMessageId === message?.id) return;
+
     if (type === 'notification.message_new' || type === 'notification.added_to_channel') {
-      saveChannelListData(lastSignedMessage, SIGNED).catch((e) => console.log(e));
+      // to prevent being processed twice (websocket response appears twice)
+      setProcessedMessageId(message?.id);
+      saveChannelListData(lastSignedMessage, SIGNED)
+        .catch((e) => console.log(e))
+        .finally(() => setProcessedMessageId(null));
     }
   }, [JSON.stringify(lastSignedMessage), localDb]);
 

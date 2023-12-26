@@ -3,7 +3,7 @@ import {Platform, StyleSheet, Text, View} from 'react-native';
 import PropTypes from 'prop-types';
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
-import {COLORS, SIZES} from '../../utils/theme';
+import {COLORS} from '../../utils/theme';
 import GlobalButton from '../Button/GlobalButton';
 import dimen from '../../utils/dimen';
 
@@ -82,7 +82,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: SIZES.base,
     alignItems: 'center'
   },
   content: (marginLeft) => ({

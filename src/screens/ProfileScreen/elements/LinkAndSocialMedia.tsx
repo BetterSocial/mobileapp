@@ -83,10 +83,7 @@ const InstagramButton = ({socialMessage}: {socialMessage: string}) => {
         };
         await Share.shareSingle(shareOptions);
       } else {
-        await Share.open({
-          url: 'https://www.instagram.com/direct/inbox/',
-          message: `${socialMessage}`
-        });
+        await Linking.openURL('https://www.instagram.com/direct/inbox/');
       }
     } catch (error) {
       console.error({shareInstagramStory: error});

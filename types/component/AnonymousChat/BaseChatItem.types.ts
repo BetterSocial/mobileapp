@@ -17,12 +17,15 @@ export interface BaseChatItemProps {
   time: string;
   isContinuous: boolean;
   message: string;
+  attachments?: any;
   type?: BaseChatItemTypeProps;
 }
 
 export interface ChatItemMyTextProps extends BaseChatItemProps {
   status?: ChatStatus;
-  chatType?: string;
+  chatType: 'SIGNED' | 'ANONYMOUS';
+  messageType: string;
+  data: any;
 }
 
 export interface ChatItemTargetText extends BaseChatItemProps {
@@ -30,7 +33,9 @@ export interface ChatItemTargetText extends BaseChatItemProps {
 }
 
 export interface BaseChatItemComponentProps {
-  item: ChatSchema;
-  index: number;
+  item?: ChatSchema;
+  index?: number;
   type?: 'ANONYMOUS' | 'SIGNED';
+  messageSingle?: string;
+  componentType?: 'SINGLE' | 'GROUP';
 }

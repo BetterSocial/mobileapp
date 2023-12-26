@@ -3,6 +3,7 @@ export const COLORS = {
   black: '#1E1F20',
   black000: '#000',
   black30percent: 'rgba(0,0,0,0.3)',
+  black80percent: 'rgba(0,0,0,0.8)',
   black43: '#434343',
   blue: '#2F80ED',
   blueLoyal: '#023B60',
@@ -37,7 +38,10 @@ export const COLORS = {
   gray: '#E8EBED',
   lightgrey: '#F5F6F7',
   redalert: '#FF2E63',
-  blackgrey: '#828282'
+  blackgrey: '#828282',
+  greySubtile1: '#9B9FA9',
+  elm: '#22878B',
+  halfBaked: '#88CDD0'
 };
 export const SIZES = {
   // global sizes

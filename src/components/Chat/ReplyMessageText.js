@@ -5,7 +5,6 @@ import {Image, StyleSheet, Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import MemoIc_read from '../../assets/chats/Ic_read';
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {trimString} from '../../utils/string/TrimString';
 import {calculateTime} from '../../utils/time';
@@ -96,7 +95,7 @@ const QuotedMessage = ({
           <ProfileMessage image={otherPhoto} />
           <View style={styles.quotedProfileName}>
             <Text style={[styles.name(false), styles.gapReply]}>{otherName}</Text>
-            <Dot color={colors.elm} />
+            <Dot color={COLORS.elm} />
             <Text style={styles.time(false)}>{calculateTime(replyTime)}</Text>
           </View>
         </View>
@@ -104,7 +103,7 @@ const QuotedMessage = ({
           <Text style={styles.message(false)}>
             {textIsExists() && (
               <>
-                <Icon name="photo" color={colors.elm} size={15} /> Photo
+                <Icon name="photo" color={COLORS.elm} size={15} /> Photo
               </>
             )}
             {!textIsExists() && trimString(messageReply, textMore())}
@@ -137,7 +136,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 8
   },
   containerQuoted: (isMe) => ({
-    backgroundColor: isMe ? colors.tradewind : COLORS.lightgrey,
+    backgroundColor: isMe ? COLORS.tradewind : COLORS.lightgrey,
     flexDirection: 'row',
     flex: 1,
     borderRadius: 8
@@ -161,14 +160,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: fonts.inter[600],
     lineHeight: 14.53,
-    color: isMe ? COLORS.black : colors.elm,
+    color: isMe ? COLORS.black : COLORS.elm,
     marginRight: 5.7
   }),
   time: (isMe) => ({
     fontSize: 10,
     fontFamily: fonts.inter[600],
     lineHeight: 12,
-    color: isMe ? COLORS.black : colors.elm,
+    color: isMe ? COLORS.black : COLORS.elm,
     marginLeft: 5
   }),
   quotedProfileName: {
@@ -176,7 +175,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   message: (isMe) => ({
-    color: isMe ? COLORS.black : colors.elm,
+    color: isMe ? COLORS.black : COLORS.elm,
     marginTop: 4,
     fontSize: 16,
     fontFamily: fonts.inter[400],
@@ -189,7 +188,7 @@ const styles = StyleSheet.create({
     marginRight: 20
   },
   containerChat: (isMe) => ({
-    backgroundColor: isMe ? colors.halfBaked : colors.lightgrey,
+    backgroundColor: isMe ? COLORS.halfBaked : COLORS.lightgrey,
     paddingTop: 4,
     paddingBottom: 8,
     paddingLeft: 4,

@@ -23,6 +23,7 @@ export default class AutoFocusTextArea extends React.Component {
   render() {
     return (
       <TextInput
+        testID="textAreaTest"
         ref={this.inputElement}
         value={this.props.value}
         onChangeText={this.props.onChangeText}

@@ -117,7 +117,7 @@ const RenderListFeed = (props) => {
     <View style={[styles.cardContainer()]}>
       <View style={styles.cardMain}>
         <Header
-          headerStyle={styles.ml3}
+          headerStyle={styles.headerStyle}
           hideThreeDot={true}
           props={item}
           height={getHeightHeader()}
@@ -166,6 +166,7 @@ const RenderListFeed = (props) => {
             isSelf={item.anonimity ? false : userId === item?.actor?.id}
             onPressScore={showScoreAlertDialog}
             showScoreButton={showScoreButton}
+            isShowDM
           />
         </View>
         {getCommentLength(item.latest_reactions.comment) > 0 && (
@@ -203,8 +204,8 @@ const styles = StyleSheet.create({
     maxHeight: heightReaction,
     marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0
   }),
-  ml3: {
-    marginLeft: 3
+  headerStyle: {
+    marginHorizontal: 9
   }
 });
 

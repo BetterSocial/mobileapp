@@ -19,7 +19,6 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
               "alignItems": "center",
               "flexDirection": "row",
               "justifyContent": "space-between",
-              "paddingVertical": 8,
             },
             Object {
               "marginLeft": 22,
@@ -193,7 +192,6 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
             <TextInput
               allowFontScaling={true}
               multiline={true}
-              onBlur={[Function]}
               onChangeText={[Function]}
               rejectResponderTermination={true}
               selectTextOnFocus={true}

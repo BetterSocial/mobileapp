@@ -10,20 +10,57 @@ exports[`Testing Who To Follow Item User Match Snapshot 1`] = `
     }
   }
 >
-  <Image
-    source={
-      Object {
-        "uri": "https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png",
-      }
-    }
+  <View
     style={
       Object {
-        "borderRadius": 48,
-        "height": 48,
-        "width": 48,
+        "alignItems": "baseline",
+        "borderRadius": 9999,
+        "height": 45,
+        "justifyContent": "center",
+        "position": "relative",
+        "width": 45,
       }
     }
-  />
+    testID="circleGradient"
+  >
+    <View
+      style={
+        Object {
+          "height": 45,
+          "position": "relative",
+          "width": 45,
+        }
+      }
+    >
+      <View />
+      <View
+        style={
+          Object {
+            "position": "absolute",
+          }
+        }
+      >
+        <Image
+          height={45}
+          source={
+            Object {
+              "uri": "https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png",
+            }
+          }
+          style={
+            Object {
+              "borderRadius": 48,
+              "height": 45,
+              "marginLeft": 3,
+              "marginTop": 3,
+              "width": 45,
+            }
+          }
+          width={45}
+        />
+      </View>
+    </View>
+  </View>
   <View
     style={
       Object {

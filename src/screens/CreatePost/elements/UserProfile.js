@@ -1,10 +1,10 @@
 import * as React from 'react';
-
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import ToggleSwitch from '../../../components/ToggleSwitch';
+
 import AnonymousAvatar from '../../../components/AnonymousAvatar';
 import AnonymousProfile from '../../../assets/images/AnonymousProfile.png';
 import AnonymousUsername from '../../../components/AnonymousUsername';
+import ToggleSwitch from '../../../components/ToggleSwitch';
 import {POST_VERSION} from '../../../utils/constants';
 import {fonts} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
@@ -39,6 +39,9 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16
+  },
+  anonImageBg: {
+    backgroundColor: COLORS.anon_primary
   },
   containerMessage: {
     flex: 1,
@@ -79,7 +82,12 @@ const UserProfile = ({
     if (isAnonymous) {
       return (
         <View style={styles.profile}>
-          <Image source={AnonymousProfile} width={32} height={32} style={styles.image} />
+          <Image
+            source={AnonymousProfile}
+            width={32}
+            height={32}
+            style={[styles.image, styles.anonImageBg]}
+          />
           <View>
             <Text style={styles.username}>Anonymous</Text>
             <Text style={styles.desc}>Username not visible</Text>

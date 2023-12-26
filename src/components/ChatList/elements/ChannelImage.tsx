@@ -9,7 +9,7 @@ import {
   ChannelImageBadgeProps,
   ChannelImageMainProps
 } from '../../../../types/component/ChatList/ChannelImage.types';
-import {GROUP_INFO} from '../../../hooks/core/constant';
+import {CHANNEL_COMMUNITY, CHANNEL_GROUP, GROUP_INFO} from '../../../hooks/core/constant';
 import {channelImageStyles as styles} from './ChannelImage.style';
 
 const ChannelImage = ({children}) => {
@@ -27,7 +27,7 @@ const Big: React.FC<ChannelImageMainProps> = ({type, image, style}) => {
     );
   }
 
-  if (type === 'COMMUNITY') {
+  if (type === CHANNEL_COMMUNITY) {
     return (
       <View
         style={[
@@ -44,13 +44,14 @@ const Big: React.FC<ChannelImageMainProps> = ({type, image, style}) => {
     );
   }
 
-  if (type === 'GROUP') {
+  if (type === CHANNEL_GROUP) {
     return (
       <View
         style={[
           styles.containerImage,
           styles.containerDefaultImage,
-          styles.containersigned_primary
+          styles.containersigned_primary,
+          style
         ]}>
         <FastImage
           source={GroupIcon}
@@ -82,7 +83,7 @@ const Big: React.FC<ChannelImageMainProps> = ({type, image, style}) => {
 };
 
 const Small: React.FC<ChannelImageBadgeProps> = ({type}) => {
-  if (type === 'COMMUNITY') {
+  if (type === CHANNEL_COMMUNITY) {
     return (
       <View style={[styles.badgeContainer, styles.containersigned_primary]}>
         <FastImage
@@ -94,7 +95,7 @@ const Small: React.FC<ChannelImageBadgeProps> = ({type}) => {
     );
   }
 
-  if (type === 'GROUP') {
+  if (type === CHANNEL_GROUP) {
     return (
       <View style={[styles.badgeContainer, styles.containersigned_primary]}>
         <FastImage

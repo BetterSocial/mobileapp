@@ -83,11 +83,15 @@ const Settings = () => {
             text="Websocket Research"
             onPress={() => navigation.navigate('WebsocketResearchScreen')}
           /> */}
-          <ProfileSettingItem text="Delete Account" onPress={showDeleteAccountAlert} />
-          <ProfileSettingItem text="Logout" onPress={doLogout} />
+          <ProfileSettingItem
+            testID="delete"
+            text="Delete Account"
+            onPress={showDeleteAccountAlert}
+          />
+          <ProfileSettingItem testID="logout" text="Logout" onPress={doLogout} />
         </View>
         <View>
-          <TouchableOpacity onPress={turnOnDebugMode}>
+          <TouchableOpacity testID="debugmode" onPress={turnOnDebugMode}>
             <View style={styles.versionContainer}>
               <Text style={styles.textVersion}>{`Version ${VersionNumber.appVersion}`}</Text>
             </View>

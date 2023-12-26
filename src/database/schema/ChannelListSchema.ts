@@ -4,12 +4,12 @@ import BaseDbSchema from './BaseDbSchema';
 import ChannelListMemberSchema from './ChannelListMemberSchema';
 import UserSchema from './UserSchema';
 import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
+import {CHANNEL_GROUP, PM} from '../../hooks/core/constant';
 import {ChannelData} from '../../../types/repo/AnonymousMessageRepo/AnonymousChannelsData';
 import {ChannelType} from '../../../types/repo/ChannelData';
 import {MessageAnonymouslyData} from '../../../types/repo/AnonymousMessageRepo/MessageAnonymouslyData';
 import {ModifyAnonymousChatData} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 import {SignedPostNotification} from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
-import {CHANNEL_GROUP, PM} from '../../hooks/core/constant';
 
 class ChannelList implements BaseDbSchema {
   id: string;
@@ -285,6 +285,22 @@ class ChannelList implements BaseDbSchema {
     return 'channel_lists';
   }
 
+  static updateChannelInfo = async (
+    db: SQLiteDatabase,
+    channelId: string,
+    name: string,
+    image: string
+  ) => {
+    try {
+      const replacementImageName = [image, name, channelId];
+      const queryUpdateChannel = `UPDATE ${ChannelList.getTableName()}
+        SET channel_picture = ?, name = ? WHERE id = ?;`;
+      await db.executeSql(queryUpdateChannel, replacementImageName);
+    } catch (e) {
+      console.log(e, 'error update channel');
+    }
+  };
+
   static updateChannelDescription = async (
     db: SQLiteDatabase,
     channelId: string,
@@ -390,7 +406,11 @@ class ChannelList implements BaseDbSchema {
     });
   }
 
-  static fromChannelAPI(data: ChannelData, channelType: ChannelType): ChannelList {
+  static fromChannelAPI(
+    data: ChannelData,
+    channelType: ChannelType,
+    members?: ChannelData['members']
+  ): ChannelList {
     const isPM = channelType === 'PM';
     const firstMessage = data?.firstMessage;
     const isSystemMessage = firstMessage?.type === 'system' || firstMessage?.isSystem;
@@ -406,12 +426,12 @@ class ChannelList implements BaseDbSchema {
       description: descriptionSystemMessage || firstMessage?.text || firstMessage?.message || '',
       unreadCount: data?.unreadCount ?? 0,
       channelType,
-      lastUpdatedAt: data?.last_message_at,
+      lastUpdatedAt: data?.last_message_at ?? data?.created_at,
       lastUpdatedBy: firstMessage?.user?.id,
       createdAt: data?.created_at,
       rawJson: data,
       user: null,
-      members: null
+      members: members || null
     });
   }
 

@@ -102,6 +102,11 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
     }
   />
   <RCTScrollView
+    contentContainerStyle={
+      Object {
+        "paddingBottom": 30,
+      }
+    }
     nestedScrollEnabled={true}
   >
     <View>
@@ -817,6 +822,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               "paddingVertical": 18,
             }
           }
+          testID="pressMessage"
         >
           <Text
             style={
@@ -846,6 +852,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               "paddingVertical": 18,
             }
           }
+          testID="pressMessageAnonym"
         >
           <Text
             style={
@@ -876,6 +883,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               "paddingVertical": 18,
             }
           }
+          testID="pressView"
         >
           <Text
             style={
@@ -906,6 +914,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               "paddingVertical": 18,
             }
           }
+          testID="pressRemove"
         >
           <Text
             style={
@@ -1873,6 +1882,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -1909,6 +1919,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -1945,6 +1956,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -1981,6 +1993,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2017,6 +2030,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2053,6 +2067,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2089,6 +2104,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2126,37 +2142,30 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                   onStartShouldSetResponder={[Function]}
                   style={
                     Object {
+                      "alignItems": "center",
+                      "backgroundColor": "#4782D7",
+                      "borderRadius": 6.4,
+                      "flexDirection": "row",
+                      "height": 40,
+                      "justifyContent": "center",
                       "opacity": 1,
+                      "paddingHorizontal": 20,
                     }
                   }
                 >
-                  <View
+                  <Text
                     style={
                       Object {
-                        "alignItems": "center",
-                        "backgroundColor": "#4782D7",
-                        "borderRadius": 6.4,
-                        "flexDirection": "row",
-                        "height": 40,
-                        "justifyContent": "center",
-                        "paddingHorizontal": 20,
+                        "color": "#FFFFFF",
+                        "fontFamily": "Inter-SemiBold",
+                        "fontSize": 18,
                       }
                     }
                   >
-                    <Text
-                      style={
-                        Object {
-                          "color": "#FFFFFF",
-                          "fontFamily": "Inter-SemiBold",
-                          "fontSize": 18,
-                        }
-                      }
-                    >
-                      <Text>
-                        Provide info on next screen
-                      </Text>
+                    <Text>
+                      Provide info on next screen
                     </Text>
-                  </View>
+                  </Text>
                 </View>
               </View>
             </View>
@@ -2350,6 +2359,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2386,6 +2396,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2422,6 +2433,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2458,6 +2470,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2494,6 +2507,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2530,6 +2544,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2566,6 +2581,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "paddingVertical": 18,
                   }
                 }
+                testID="click"
               >
                 <Text
                   style={
@@ -2603,37 +2619,30 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                   onStartShouldSetResponder={[Function]}
                   style={
                     Object {
+                      "alignItems": "center",
+                      "backgroundColor": "#4782D7",
+                      "borderRadius": 6.4,
+                      "flexDirection": "row",
+                      "height": 40,
+                      "justifyContent": "center",
                       "opacity": 1,
+                      "paddingHorizontal": 20,
                     }
                   }
                 >
-                  <View
+                  <Text
                     style={
                       Object {
-                        "alignItems": "center",
-                        "backgroundColor": "#4782D7",
-                        "borderRadius": 6.4,
-                        "flexDirection": "row",
-                        "height": 40,
-                        "justifyContent": "center",
-                        "paddingHorizontal": 20,
+                        "color": "#FFFFFF",
+                        "fontFamily": "Inter-SemiBold",
+                        "fontSize": 18,
                       }
                     }
                   >
-                    <Text
-                      style={
-                        Object {
-                          "color": "#FFFFFF",
-                          "fontFamily": "Inter-SemiBold",
-                          "fontSize": 18,
-                        }
-                      }
-                    >
-                      <Text>
-                        Provide info on next screen
-                      </Text>
+                    <Text>
+                      Provide info on next screen
                     </Text>
-                  </View>
+                  </Text>
                 </View>
               </View>
             </View>
@@ -2787,6 +2796,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                   "paddingVertical": 19,
                 }
               }
+              testID="changeText"
               textAlignVertical="top"
               underlineColorAndroid="transparent"
               value=""
@@ -2852,38 +2862,31 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 onStartShouldSetResponder={[Function]}
                 style={
                   Object {
+                    "alignItems": "center",
+                    "backgroundColor": "#4782D7",
+                    "borderRadius": 6.4,
+                    "flexDirection": "row",
+                    "height": 40,
+                    "justifyContent": "center",
                     "opacity": 1,
+                    "paddingHorizontal": 20,
                   }
                 }
                 testID="button-report-test"
               >
-                <View
+                <Text
                   style={
                     Object {
-                      "alignItems": "center",
-                      "backgroundColor": "#4782D7",
-                      "borderRadius": 6.4,
-                      "flexDirection": "row",
-                      "height": 40,
-                      "justifyContent": "center",
-                      "paddingHorizontal": 20,
+                      "color": "#FFFFFF",
+                      "fontFamily": "Inter-SemiBold",
+                      "fontSize": 18,
                     }
                   }
                 >
-                  <Text
-                    style={
-                      Object {
-                        "color": "#FFFFFF",
-                        "fontFamily": "Inter-SemiBold",
-                        "fontSize": 18,
-                      }
-                    }
-                  >
-                    <Text>
-                      File Report
-                    </Text>
+                  <Text>
+                    File Report
                   </Text>
-                </View>
+                </Text>
               </View>
             </View>
           </View>

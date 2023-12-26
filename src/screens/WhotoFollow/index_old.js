@@ -25,7 +25,6 @@ import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {registerUser} from '../../service/users';
 import {Context} from '../../context';
 import {setAccessToken, setRefreshToken, setToken} from '../../utils/token';
-import {colors} from '../../utils/colors';
 import ListUser from './elements/ListUser';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {COLORS} from '../../utils/theme';

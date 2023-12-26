@@ -6,7 +6,15 @@ import * as React from 'react';
 import Image from 'react-native-fast-image';
 import PropsTypes from 'prop-types';
 import moment from 'moment';
-import {Dimensions, Platform, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import AnonymousAvatar from '../../components/AnonymousAvatar';
@@ -27,7 +35,11 @@ import StringConstant from '../../utils/string/StringConstant';
 import useFeedHeader from './hooks/useFeedHeader';
 import {DEFAULT_PROFILE_PIC_PATH, PRIVACY_PUBLIC} from '../../utils/constants';
 import {calculateTime} from '../../utils/time';
-import {fonts} from '../../utils/fonts';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
+import ShareAndroidIcon from '../../assets/icons/images/share-for-android.svg';
+import TrashRed from '../../assets/icons/images/trash-red.svg';
+import BottomSheetMenu from '../../components/BottomSheet/BottomSheetMenu';
+import ShareUtils from '../../utils/share';
 import {COLORS} from '../../utils/theme';
 
 const {width: screenWidth} = Dimensions.get('window');
@@ -100,13 +112,37 @@ const _renderAnonimity = ({
   height,
   headerStyle,
   showAnonymousOption = false,
-  onHeaderOptionClicked = () => {},
-  hideThreeDot,
   version = 1,
   anonUserInfo = {},
-  isPostDetail
+  isPostDetail,
+  isFollow = false,
+  onPressFollUnFoll = () => {},
+  onDeletePost = () => {},
+  isShowDelete = false,
+  isSelf = false
 }) => {
   const navigation = useNavigation();
+  const refSheet = React.useRef();
+  const dataSheet = [
+    {
+      id: 1,
+      name: 'Share link',
+      icon: <ShareAndroidIcon />
+    }
+  ];
+
+  if (isShowDelete) {
+    dataSheet.push({
+      id: 2,
+      name: 'Delete post',
+      icon: <TrashRed />,
+      onPress: () => {
+        refSheet.current.close();
+        onDeletePost();
+      },
+      style: {color: COLORS.red}
+    });
+  }
 
   return (
     <SafeAreaView>
@@ -135,17 +171,25 @@ const _renderAnonimity = ({
 
           <View style={[styles.containerFeedProfile]}>
             <View style={[styles.containerFeedName, {alignItems: 'center'}]}>
-              <AnonymousUsername version={version} anonUserInfo={anonUserInfo} />
+              <AnonymousUsername version={version} anonUserInfo={anonUserInfo} style={{flex: 0}} />
+              {!isSelf && (
+                <React.Fragment>
+                  <View style={styles.point} />
+                  <TouchableOpacity onPress={() => onPressFollUnFoll(isFollow)}>
+                    <Text style={isFollow ? styles.textFollowing : styles.textFollow}>
+                      {isFollow ? 'Following' : 'Follow'}
+                    </Text>
+                  </TouchableOpacity>
+                </React.Fragment>
+              )}
             </View>
-            {showAnonymousOption && !hideThreeDot && (
-              <GlobalButton
-                buttonStyle={{position: 'absolute', right: 0, top: -8}}
-                onPress={onHeaderOptionClicked}>
-                <View style={{zIndex: 1000}}>
-                  <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
-                </View>
-              </GlobalButton>
-            )}
+            <GlobalButton
+              buttonStyle={{position: 'absolute', right: 0, top: -8}}
+              onPress={() => refSheet.current.open()}>
+              <View style={{zIndex: 1000}}>
+                <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
+              </View>
+            </GlobalButton>
             <View style={styles.containerFeedText}>
               <Text style={styles.feedDate}>{calculateTime(time)}</Text>
               <View style={styles.point} />
@@ -163,6 +207,11 @@ const _renderAnonimity = ({
           </View>
         </View>
       </View>
+      <BottomSheetMenu
+        refSheet={refSheet}
+        dataSheet={dataSheet}
+        height={isShowDelete ? 182 : 130}
+      />
     </SafeAreaView>
   );
 };
@@ -177,10 +226,35 @@ const _renderProfileNormal = ({
   height,
   source,
   headerStyle,
-  onHeaderOptionClicked = () => {},
-  hideThreeDot,
-  isPostDetail
+  isPostDetail,
+  isFollow = false,
+  onPressFollUnFoll = () => {},
+  onDeletePost = () => {},
+  isShowDelete = false,
+  isSelf = false
 }) => {
+  const refSheet = React.useRef();
+  const dataSheet = [
+    {
+      id: 1,
+      name: 'Share link',
+      icon: <ShareAndroidIcon />,
+      onPress: () => ShareUtils.shareUserLink(username)
+    }
+  ];
+
+  if (isShowDelete) {
+    dataSheet.push({
+      id: 2,
+      name: 'Delete post',
+      icon: <TrashRed />,
+      onPress: () => {
+        refSheet.current.close();
+        onDeletePost();
+      },
+      style: {color: COLORS.red}
+    });
+  }
   const {navigateToProfile, username, profile_pic_url, onBackNormalUser} = useFeedHeader({
     actor,
     source
@@ -206,7 +280,7 @@ const _renderProfileNormal = ({
             <View style={{}}>
               <Image
                 source={{
-                  uri: profile_pic_url ?? DEFAULT_PROFILE_PIC_PATH
+                  uri: profile_pic_url || DEFAULT_PROFILE_PIC_PATH
                 }}
                 style={styles.avatarImage}
               />
@@ -216,18 +290,28 @@ const _renderProfileNormal = ({
             onPress={navigateToProfile}
             style={[styles.containerFeedProfile, {paddingBottom: 5}]}>
             <View style={[styles.containerFeedName, {alignItems: 'flex-end'}]}>
-              <Text style={styles.feedUsername}>
-                {username || StringConstant.feedDeletedUserName}
-              </Text>
+              <View style={styles.contentFeedName}>
+                <Text style={styles.feedUsername}>
+                  {username || StringConstant.feedDeletedUserName}
+                </Text>
+                {!isSelf && (
+                  <React.Fragment>
+                    <View style={styles.point} />
+                    <TouchableOpacity onPress={() => onPressFollUnFoll(isFollow)}>
+                      <Text style={isFollow ? styles.textFollowing : styles.textFollow}>
+                        {isFollow ? 'Following' : 'Follow'}
+                      </Text>
+                    </TouchableOpacity>
+                  </React.Fragment>
+                )}
+              </View>
 
               <GlobalButton
                 buttonStyle={{marginLeft: 'auto', paddingBottom: 0, alignSelf: 'center'}}
-                onPress={onHeaderOptionClicked}>
-                {hideThreeDot ? null : (
-                  <View style={{zIndex: 1000}}>
-                    <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
-                  </View>
-                )}
+                onPress={() => refSheet.current.open()}>
+                <View style={{zIndex: 1000}}>
+                  <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
+                </View>
               </GlobalButton>
             </View>
             <View style={[styles.containerFeedText, {paddingBottom: 0}]}>
@@ -249,6 +333,11 @@ const _renderProfileNormal = ({
           </GlobalButton>
         </View>
       </View>
+      <BottomSheetMenu
+        refSheet={refSheet}
+        dataSheet={dataSheet}
+        height={isShowDelete ? 182 : 130}
+      />
     </SafeAreaView>
   );
 };
@@ -259,10 +348,13 @@ const Header = ({
   height,
   source = null,
   headerStyle,
-  onHeaderOptionClicked = () => {},
   showAnonymousOption = false,
-  hideThreeDot,
-  isPostDetail
+  isPostDetail,
+  isFollow = false,
+  onPressFollUnFoll = () => {},
+  onDeletePost = () => {},
+  isShowDelete = false,
+  isSelf = false
 }) => {
   const {
     anonimity,
@@ -289,8 +381,6 @@ const Header = ({
       height,
       headerStyle,
       showAnonymousOption,
-      onHeaderOptionClicked: () => onHeaderOptionClicked(props),
-      hideThreeDot,
       version,
       anonUserInfo: {
         colorCode: anon_user_info_color_code,
@@ -298,7 +388,12 @@ const Header = ({
         emojiCode: anon_user_info_emoji_code,
         emojiName: anon_user_info_emoji_name
       },
-      isPostDetail
+      isPostDetail,
+      isFollow,
+      onPressFollUnFoll,
+      onDeletePost,
+      isShowDelete,
+      isSelf
     });
   }
   return _renderProfileNormal({
@@ -312,9 +407,12 @@ const Header = ({
     height,
     source,
     headerStyle,
-    onHeaderOptionClicked: () => onHeaderOptionClicked(props),
-    hideThreeDot,
-    isPostDetail
+    isPostDetail,
+    isFollow,
+    onPressFollUnFoll,
+    onDeletePost,
+    isShowDelete,
+    isSelf
   });
 };
 
@@ -346,8 +444,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
     lineHeight: 16.94,
-    color: COLORS.black,
-    flex: 1
+    color: COLORS.black
   },
   containerFeedText: {
     flexDirection: 'row',
@@ -373,7 +470,7 @@ const styles = StyleSheet.create({
     width: 2,
     height: 2,
     borderRadius: 4,
-    backgroundColor: COLORS.blackgrey,
+    backgroundColor: COLORS.gray,
     marginLeft: 8,
     marginRight: 8,
     alignSelf: 'center',
@@ -393,7 +490,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 12,
     lineHeight: 18,
-    color: COLORS.blackgrey
+    color: COLORS.gray
   },
   usernameComment: {
     fontFamily: fonts.inter[500],
@@ -406,7 +503,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[500],
     fontSize: 12,
     lineHeight: 24,
-    color: COLORS.blackgrey
+    color: COLORS.gray
   },
   item: {
     width: screenWidth - 20,
@@ -435,7 +532,22 @@ const styles = StyleSheet.create({
   avatarImage: {height: 48, width: 48, borderRadius: 24},
   postDetail: (isPostDetail) => ({
     paddingLeft: isPostDetail ? 10 : 0
-  })
+  }),
+  contentFeedName: {
+    flexDirection: 'row'
+  },
+  textFollow: {
+    color: COLORS.bluePrimary,
+    fontSize: normalizeFontSize(14),
+    fontStyle: 'normal',
+    fontWeight: '500'
+  },
+  textFollowing: {
+    color: COLORS.greySubtile1,
+    fontSize: normalizeFontSize(14),
+    fontStyle: 'normal',
+    fontWeight: '500'
+  }
 });
 
 Header.propsTypes = {
