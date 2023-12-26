@@ -899,7 +899,7 @@ const styles = StyleSheet.create({
     overflow: 'scroll'
   },
   hastagText: {
-    color: COLORS.gray1,
+    color: COLORS.lightgrey,
     fontSize: 14,
     fontFamily: fonts.inter[400]
   },

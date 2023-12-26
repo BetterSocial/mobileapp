@@ -44,7 +44,7 @@ const ChannelListTabItem = (props: ChannelListTabItemProps) => {
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: 8,
-      backgroundColor: COLORS.red,
+      backgroundColor: COLORS.redalert,
       bottom: 4
     },
     unreadCount: {

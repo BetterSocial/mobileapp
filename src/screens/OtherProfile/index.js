@@ -453,8 +453,8 @@ const OtherProfile = () => {
         );
 
       return (
-        <View style={{...styles.btnMsg, borderColor: COLORS.gray1}}>
-          <BlockIcon width={20} height={20} style={{color: COLORS.gray1}} />
+        <View style={{...styles.btnMsg, borderColor: COLORS.lightgrey}}>
+          <BlockIcon width={20} height={20} style={{color: COLORS.lightgrey}} />
         </View>
       );
     };
@@ -861,7 +861,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.alto
+    borderBottomColor: COLORS.lightgrey
   },
   dummyItem: (heightItem) => ({
     height: heightItem
@@ -892,7 +892,7 @@ const styles = StyleSheet.create({
   wrapImageProfile: {
     marginTop: 24,
     flexDirection: 'column',
-    backgroundColor: COLORS.red
+    backgroundColor: COLORS.redalert
   },
   nameProfile: {
     fontFamily: fonts.inter[800],
@@ -931,7 +931,7 @@ const styles = StyleSheet.create({
   },
   tabs: {
     width,
-    borderBottomColor: COLORS.alto,
+    borderBottomColor: COLORS.lightgrey,
     borderBottomWidth: 1,
     paddingLeft: 20,
     paddingRight: 20,
@@ -1008,7 +1008,7 @@ const styles = StyleSheet.create({
   },
   tabsFixed: {
     width,
-    borderBottomColor: COLORS.alto,
+    borderBottomColor: COLORS.lightgrey,
     borderBottomWidth: 1,
     paddingLeft: 20,
     paddingRight: 20,

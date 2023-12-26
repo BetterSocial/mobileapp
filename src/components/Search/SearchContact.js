@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   newPostText: {
-    color: COLORS.holyTosca,
+    color: COLORS.anon_primary,
     marginRight: 11,
     ...FONTS.h4
   },
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     zIndex: 10,
     padding: 7,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.gray1
+    borderBottomColor: COLORS.lightgrey
   })
 });
 

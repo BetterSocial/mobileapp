@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     paddingVertical: 32,
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: COLORS.alto,
+    borderColor: COLORS.lightgrey,
     borderRadius: 8,
     borderStyle: 'dashed'
   }

@@ -83,7 +83,7 @@ const InputMessage = () => {
             disabled={isDisableButton()}
             onPress={handleSendMessage}>
             <IconSend
-              fillBackground={isDisableButton() ? COLORS.gray1 : COLORS.bondi_blue}
+              fillBackground={isDisableButton() ? COLORS.lightgrey : COLORS.bondi_blue}
               style={styles.icSendButton}
             />
           </TouchableOpacity>
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.lightgrey
   },
   btn: (disable) => ({
-    backgroundColor: disable ? COLORS.gray1 : COLORS.bondi_blue,
+    backgroundColor: disable ? COLORS.lightgrey : COLORS.bondi_blue,
     borderRadius: 18,
     width: 35,
     height: 35,
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     right: 0,
     height: 25,
     width: 25,
-    backgroundColor: COLORS.holytosca,
+    backgroundColor: COLORS.anon_primary,
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 100,

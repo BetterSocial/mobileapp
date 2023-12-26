@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: 15,
     paddingHorizontal: 22,
-    borderTopColor: COLORS.alto,
+    borderTopColor: COLORS.lightgrey,
     borderTopWidth: 1
   },
   content: {
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   desc: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.gray,
+    color: COLORS.blackgrey,
     marginTop: 5,
     flex: 1
   }

@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     borderRadius: 8
   },
   deletePostText: {
-    color: COLORS.red
+    color: COLORS.redalert
   }
 });
 

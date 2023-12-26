@@ -106,7 +106,7 @@ const WriteComment = ({
           testID="changeinput"
           ref={commentInputRef}
           placeholder={StringConstant.commentBoxDefaultPlaceholder}
-          placeholderTextColor={COLORS.gray}
+          placeholderTextColor={COLORS.blackgrey}
           style={[styles.text, styles.content]}
           onChangeText={onChangeText}
           value={value}
@@ -119,7 +119,9 @@ const WriteComment = ({
           style={styles.btn(isDisableSubmit || loadingUser)}
           disabled={isDisableSubmit || loadingUser}>
           <MemoSendComment
-            fillBackground={isDisableSubmit || loadingUser ? COLORS.gray1 : COLORS.bondi_blue}
+            fillBackground={
+              isDisableSubmit || loadingUser ? COLORS.balance_gray : COLORS.bondi_blue
+            }
           />
         </TouchableOpacity>
       </View>
@@ -139,7 +141,7 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     borderTopWidth: 1,
-    borderTopColor: COLORS.gray1,
+    borderTopColor: COLORS.balance_gray,
     // zIndex: 1,
     paddingBottom: 14
   },
@@ -150,7 +152,7 @@ export const styles = StyleSheet.create({
     marginTop: 7,
     lineHeight: 15,
     fontSize: 12,
-    color: COLORS.gray
+    color: COLORS.blackgrey
   }),
   replyToTitle: {
     fontFamily: fonts.inter[600],
@@ -214,7 +216,7 @@ export const styles = StyleSheet.create({
   connectorTop: (inReplyCommentView, showProfileConnector) => ({
     height: showProfileConnector ? 36 : 0,
     width: 1,
-    backgroundColor: COLORS.gray1,
+    backgroundColor: COLORS.balance_gray,
     position: 'absolute',
     top: 0,
     left: inReplyCommentView ? 60 : 30,
@@ -223,7 +225,7 @@ export const styles = StyleSheet.create({
   connectorBottom: (inReplyCommentView, showProfileConnector) => ({
     height: showProfileConnector ? 20 : 0,
     width: 1,
-    backgroundColor: COLORS.gray1,
+    backgroundColor: COLORS.balance_gray,
     position: 'absolute',
     top: 0,
     left: inReplyCommentView ? 60 : 30,
@@ -241,6 +243,6 @@ export const styles = StyleSheet.create({
   switch: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.gray
+    color: COLORS.blackgrey
   }
 });

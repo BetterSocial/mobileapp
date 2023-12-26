@@ -22,8 +22,8 @@ export const styles = StyleSheet.create({
     borderLeftWidth: 1,
     borderBottomWidth: 2,
     borderBottomLeftRadius: 21,
-    borderLeftColor: index === 0 ? COLORS.gray1 : 'transparent',
-    borderBottomColor: index === 0 ? COLORS.gray1 : 'transparent'
+    borderLeftColor: index === 0 ? COLORS.balance_gray : 'transparent',
+    borderBottomColor: index === 0 ? COLORS.balance_gray : 'transparent'
   })
 });
 

@@ -122,7 +122,7 @@ const GroupInfo = () => {
     }
     return (
       <View testID="image5" style={styles.btnUpdatePhoto}>
-        <MemoIc_pencil width={50} height={50} color={COLORS.gray1} />
+        <MemoIc_pencil width={50} height={50} color={COLORS.lightgrey} />
       </View>
     );
   };
@@ -195,7 +195,7 @@ const GroupInfo = () => {
                   </Text>
                 </View>
                 <TouchableOpacity onPress={handleOnNameChange} style={styles.pencilIconTouchable}>
-                  <MemoIc_pencil width={20} height={20} color={COLORS.gray1} />
+                  <MemoIc_pencil width={20} height={20} color={COLORS.lightgrey} />
                 </TouchableOpacity>
               </View>
               <View style={styles.lineTop} />
@@ -319,7 +319,7 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(20),
-    color: COLORS.holytosca
+    color: COLORS.anon_primary
   },
   btnAdd: {
     padding: normalize(8),
@@ -336,7 +336,7 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(16.94),
-    color: COLORS.holytosca,
+    color: COLORS.anon_primary,
     marginLeft: 20,
     marginBottom: 4
   },
@@ -349,7 +349,7 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(16.94),
-    color: COLORS.holytosca
+    color: COLORS.anon_primary
   },
   containerMedia: (isIsset) => ({
     paddingHorizontal: 20,
@@ -372,7 +372,7 @@ export const styles = StyleSheet.create({
     color: COLORS.black
   },
   lineTop: {
-    backgroundColor: COLORS.alto,
+    backgroundColor: COLORS.lightgrey,
     height: 1
   },
   containerGroupName: {
@@ -391,7 +391,7 @@ export const styles = StyleSheet.create({
     width: normalize(100),
     height: normalize(100),
     borderRadius: normalize(50),
-    backgroundColor: COLORS.alto,
+    backgroundColor: COLORS.lightgrey,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -423,7 +423,7 @@ export const styles = StyleSheet.create({
   },
   gap: {
     height: 1,
-    backgroundColor: COLORS.alto,
+    backgroundColor: COLORS.lightgrey,
     marginTop: 50
   },
   actionGroup: {
@@ -442,7 +442,7 @@ export const styles = StyleSheet.create({
     marginRight: 26
   },
   textAct: {
-    color: COLORS.red,
+    color: COLORS.redalert,
     fontSize: 14
   },
   scrollContainer: {

@@ -685,7 +685,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.5,
     backgroundColor: COLORS.white,
-    borderBottomColor: COLORS.gray1,
+    borderBottomColor: COLORS.balance_gray,
     marginBottom: -1
   },
   gap: {height: 16},
@@ -702,7 +702,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     width: '100%',
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.gray1
+    borderBottomColor: COLORS.balance_gray
   },
   scrollContent: {
     paddingBottom: 0

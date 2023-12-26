@@ -30,7 +30,7 @@ const Search = ({onPress, animatedValue, isAnon}) => {
           </View>
           <Text
             // placeholder={StringConstant.chatTabHeaderPlaceholder}
-            // placeholderTextColor={COLORS.gray1}
+            // placeholderTextColor={COLORS.lightgrey}
             style={styles.input}>
             {StringConstant.chatTabHeaderPlaceholder}
           </Text>
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 14,
     alignSelf: 'center',
-    color: COLORS.gray1
+    color: COLORS.blackgrey
   },
   wrapperIcon: {
     marginLeft: 8,
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     paddingTop: 7,
     paddingBottom: 7,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.gray1
+    borderBottomColor: COLORS.lightgrey
   })
 });
 

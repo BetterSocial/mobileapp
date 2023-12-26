@@ -295,7 +295,7 @@ const ContainerReply = ({children, isGrandchild = true, hideLeftConnector, key})
     key={key}
     style={[
       styles.containerReply(hideLeftConnector),
-      {borderColor: isGrandchild ? 'transparent' : COLORS.gray1}
+      {borderColor: isGrandchild ? 'transparent' : COLORS.lightgrey}
     ]}>
     {children}
   </View>
@@ -327,14 +327,14 @@ const styles = StyleSheet.create({
   containerReply: () => ({
     borderLeftWidth: 1,
     width: '100%'
-    // backgroundColor: COLORS.red,
+    // backgroundColor: COLORS.redalert,
     // flex: 1,
   }),
   seeRepliesContainer: (isLast) => ({
     display: 'flex',
     flexDirection: 'row',
     paddingBottom: 14,
-    borderLeftColor: isLast ? 'transparent' : COLORS.gray1
+    borderLeftColor: isLast ? 'transparent' : COLORS.lightgrey
   }),
   seeRepliesText: {
     color: COLORS.blue
@@ -382,7 +382,7 @@ const styles = StyleSheet.create({
     height: '100%',
     width: 1,
     position: 'absolute',
-    backgroundColor: COLORS.gray1,
+    backgroundColor: COLORS.lightgrey,
     left: 46,
     zIndex: -100
   },
@@ -392,20 +392,20 @@ const styles = StyleSheet.create({
     borderLeftWidth: 1,
     borderBottomWidth: 1,
     borderBottomLeftRadius: 21,
-    borderLeftColor: COLORS.gray1,
-    borderBottomColor: COLORS.gray1,
+    borderLeftColor: COLORS.lightgrey,
+    borderBottomColor: COLORS.lightgrey,
     marginRight: 4,
     marginLeft: -1
   },
   childCommentWrapper: {
-    borderLeftColor: COLORS.gray1,
+    borderLeftColor: COLORS.lightgrey,
     borderLeftWidth: 1,
     flex: 1
   },
   childLevelMainConnector: {
     flex: 1,
     borderLeftWidth: 1,
-    borderLeftColor: COLORS.gray1,
+    borderLeftColor: COLORS.lightgrey,
     marginLeft: 24
   },
   backArrow: {

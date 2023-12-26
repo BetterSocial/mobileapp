@@ -51,7 +51,7 @@ const ShowImage = ({data, onPress}) => {
 
 const styles = StyleSheet.create({
   textBtnRemove: {
-    color: COLORS.red,
+    color: COLORS.redalert,
     fontSize: 14,
     fontFamily: fonts.inter[600],
     textAlign: 'center',

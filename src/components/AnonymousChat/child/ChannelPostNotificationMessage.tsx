@@ -15,14 +15,14 @@ const ChannelPostNotificationMessage = ({
       fontFamily: fonts.inter[400],
       fontSize: normalize(12),
       lineHeight: 20,
-      color: COLORS.gray,
+      color: COLORS.blackgrey,
       marginRight: 29
     },
     chatContentPostNotificationMessageBold: {
       fontFamily: fonts.inter[600],
       fontSize: normalize(12),
       lineHeight: 20,
-      color: COLORS.gray
+      color: COLORS.blackgrey
     }
   });
 

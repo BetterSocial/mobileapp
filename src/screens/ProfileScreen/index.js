@@ -732,7 +732,7 @@ const styles = StyleSheet.create({
     fontFamily: isActive ? fonts.inter[600] : fonts.inter[400],
     fontSize: 14,
     lineHeight: 17,
-    color: isActive ? COLORS.anon_primary : COLORS.blackgrey,
+    color: isActive ? COLORS.signed_primary : COLORS.blackgrey,
     paddingHorizontal: 16,
     textAlign: 'center'
   }),
@@ -761,7 +761,7 @@ const styles = StyleSheet.create({
   },
   tabs: {
     width,
-    borderBottomColor: COLORS.alto,
+    borderBottomColor: COLORS.lightgrey,
     borderBottomWidth: 1,
     flexDirection: 'row',
     alignItems: 'center',
@@ -773,12 +773,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: 48,
-    borderBottomColor: COLORS.anon_primary,
+    borderBottomColor: COLORS.signed_primary,
     borderBottomWidth: isActive ? 2 : 0
   }),
   tabsFixed: {
     width,
-    borderBottomColor: COLORS.alto,
+    borderBottomColor: COLORS.lightgrey,
     borderBottomWidth: 1,
     paddingLeft: 20,
     paddingRight: 20,

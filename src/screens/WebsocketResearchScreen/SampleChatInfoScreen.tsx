@@ -49,7 +49,7 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(20),
-    color: COLORS.holytosca
+    color: COLORS.anon_primary
   },
   btnAdd: {
     padding: normalize(8),
@@ -65,7 +65,7 @@ export const styles = StyleSheet.create({
   countUser: (from) => ({
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(16.94),
-    color: from === SIGNED ? COLORS.signed_primary : COLORS.holytosca,
+    color: from === SIGNED ? COLORS.signed_primary : COLORS.anon_primary,
     marginLeft: dimen.normalizeDimen(20),
     marginBottom: dimen.normalizeDimen(4),
     fontWeight: 'bold'
@@ -74,7 +74,7 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(16.94),
-    color: COLORS.holytosca
+    color: COLORS.anon_primary
   },
   dateCreate: {
     marginLeft: 20,
@@ -94,7 +94,7 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   lineTop: {
-    backgroundColor: COLORS.alto,
+    backgroundColor: COLORS.lightgrey,
     height: 1
   },
   containerGroupName: {
@@ -112,7 +112,7 @@ export const styles = StyleSheet.create({
     width: normalize(100),
     height: normalize(100),
     borderRadius: normalize(50),
-    backgroundColor: COLORS.alto,
+    backgroundColor: COLORS.lightgrey,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -144,7 +144,7 @@ export const styles = StyleSheet.create({
   },
   gap: {
     height: 1,
-    backgroundColor: COLORS.alto
+    backgroundColor: COLORS.lightgrey
   },
   actionGroup: {
     marginTop: 22
@@ -162,7 +162,7 @@ export const styles = StyleSheet.create({
     marginRight: 26
   },
   textAct: {
-    color: COLORS.red,
+    color: COLORS.redalert,
     fontSize: 14
   },
   mr7: {

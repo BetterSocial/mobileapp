@@ -116,7 +116,7 @@ const bottomOverlayStyles = StyleSheet.create({
     backgroundColor: 'white',
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: COLORS.gray1,
+    borderColor: COLORS.lightgrey,
     paddingBottom: 16
   },
   descTitle: {
@@ -162,7 +162,7 @@ const bottomOverlayStyles = StyleSheet.create({
     borderRadius: 16
   },
   nextButton: {
-    backgroundColor: COLORS.blueOnboarding,
+    backgroundColor: COLORS.signed_primary,
     // backgroundColor: 'red',
     width: dimen.size.ONBOARDING_BOTTOM_OVERLAY_NEXT_BUTTON_SIZE,
     height: dimen.size.ONBOARDING_BOTTOM_OVERLAY_NEXT_BUTTON_SIZE,
@@ -179,7 +179,7 @@ const bottomOverlayStyles = StyleSheet.create({
     lineHeight: normalize(28),
     fontSize: normalizeFontSize(22),
     fontFamily: fonts.inter[600],
-    color: COLORS.blueOnboarding,
+    color: COLORS.signed_primary,
     alignSelf: 'flex-start'
   },
   paddingContainer: {

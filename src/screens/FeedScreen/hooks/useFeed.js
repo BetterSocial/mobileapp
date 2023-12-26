@@ -97,13 +97,13 @@ const useFeed = () => {
 
   const handleTextCountStyle = () => {
     if (totalVote > 0) {
-      return COLORS.holyTosca;
+      return COLORS.anon_primary;
     }
     if (totalVote < 0) {
-      return COLORS.red;
+      return COLORS.redalert;
     }
 
-    return COLORS.gray1;
+    return COLORS.lightgrey;
   };
 
   const getTotalReaction = (feedDetail) => {

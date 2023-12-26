@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 12,
     lineHeight: 18,
-    color: COLORS.gray
+    color: COLORS.blackgrey
   },
   link: {
     fontFamily: fonts.inter[400],
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 4
   },
   detail: {
-    backgroundColor: COLORS.alto,
+    backgroundColor: COLORS.lightgrey,
     borderRadius: 4,
     flexDirection: 'row',
     justifyContent: 'space-between'

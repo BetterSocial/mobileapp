@@ -39,6 +39,6 @@ const styles = StyleSheet.create({
     justifyContent: pullBottom ? 'flex-end' : 'flex-start'
   }),
   draggableIcon: {
-    backgroundColor: COLORS.alto
+    backgroundColor: COLORS.lightgrey
   }
 });

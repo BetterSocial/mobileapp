@@ -5,7 +5,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
   emulateUnlessSupported={true}
   style={
     Object {
-      "backgroundColor": "#fff",
+      "backgroundColor": "#FFFFFF",
       "flex": 1,
       "paddingBottom": 40,
     }
@@ -15,7 +15,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
     style={
       Object {
         "alignItems": "center",
-        "backgroundColor": "#ffffff",
+        "backgroundColor": "#FFFFFF",
         "flexDirection": "row",
         "justifyContent": "space-between",
       }
@@ -72,7 +72,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
             numberOfLines={1}
             style={
               Object {
-                "color": "#000000",
+                "color": "#1E1F20",
                 "fontFamily": "Poppins-SemiBold",
                 "fontSize": 16,
                 "fontWeight": "600",
@@ -96,7 +96,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
   <View
     style={
       Object {
-        "backgroundColor": "#E8EBED",
+        "backgroundColor": "#F5F6F7",
         "height": 1,
       }
     }
@@ -144,7 +144,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               style={
                 Object {
                   "alignItems": "center",
-                  "backgroundColor": "#E8EBED",
+                  "backgroundColor": "#F5F6F7",
                   "borderRadius": 45,
                   "height": 90,
                   "justifyContent": "center",
@@ -185,7 +185,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               <Text
                 style={
                   Object {
-                    "color": "#000",
+                    "color": "#1E1F20",
                     "fontFamily": "Inter-Medium",
                     "fontSize": 21.6,
                     "lineHeight": 26.145000000000003,
@@ -196,7 +196,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
             <Text
               style={
                 Object {
-                  "color": "#000",
+                  "color": "#1E1F20",
                   "fontFamily": "Inter-Regular",
                   "fontSize": 12.600000000000001,
                   "lineHeight": 15.246000000000002,
@@ -237,7 +237,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
         <View
           style={
             Object {
-              "backgroundColor": "#E8EBED",
+              "backgroundColor": "#F5F6F7",
               "height": 1,
             }
           }
@@ -263,7 +263,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
             onStartShouldSetResponder={[Function]}
             style={
               Object {
-                "color": "#003848",
+                "color": "#107793",
                 "fontFamily": "Inter-SemiBold",
                 "fontSize": 12.600000000000001,
                 "lineHeight": 15.246000000000002,
@@ -373,7 +373,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
         <View
           style={
             Object {
-              "backgroundColor": "#E8EBED",
+              "backgroundColor": "#F5F6F7",
               "height": 1,
             }
           }
@@ -388,7 +388,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
           <Text
             style={
               Object {
-                "color": "#003848",
+                "color": "#107793",
                 "fontFamily": "Inter-SemiBold",
                 "fontSize": 12.600000000000001,
                 "lineHeight": 15.246000000000002,
@@ -432,7 +432,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
         <View
           style={
             Object {
-              "backgroundColor": "#E0E0E0",
+              "backgroundColor": "#F5F6F7",
               "height": 1,
               "marginTop": 50,
             }
@@ -580,7 +580,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
       Object {
         "alignItems": "center",
         "alignSelf": "center",
-        "backgroundColor": "#F5F5F5",
+        "backgroundColor": "#F5F6F7",
         "borderRadius": 8,
         "bottom": 5,
         "justifyContent": "center",
@@ -610,7 +610,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
       <Text
         style={
           Object {
-            "color": "#003848",
+            "color": "#107793",
             "fontFamily": "Inter-SemiBold",
             "fontSize": 12.600000000000001,
             "lineHeight": 18,
@@ -654,7 +654,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
         >
           <ActivityIndicator
             animating={true}
-            color="#00ADB5"
+            color="#107793"
             hidesWhenStopped={true}
             size="large"
           />
@@ -687,7 +687,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
       >
         <ActivityIndicator
           animating={true}
-          color="#00ADB5"
+          color="#107793"
           hidesWhenStopped={true}
           size="large"
         />
@@ -850,7 +850,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
           <Text
             style={
               Object {
-                "color": "#C4C4C4",
+                "color": "#F5F6F7",
                 "fontSize": 16,
                 "fontWeight": "bold",
               }
@@ -1081,7 +1081,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
       >
         <ActivityIndicator
           animating={true}
-          color="#00ADB5"
+          color="#107793"
           hidesWhenStopped={true}
           size="large"
         />
@@ -1193,7 +1193,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                       "width": 35,
                     },
                     Object {
-                      "backgroundColor": "#E8EBED",
+                      "backgroundColor": "#F5F6F7",
                       "width": 60,
                     },
                   ]
@@ -1203,7 +1203,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
             <Text
               style={
                 Object {
-                  "color": "#000",
+                  "color": "#1E1F20",
                   "fontFamily": "Inter-SemiBold",
                   "fontSize": 18,
                   "marginLeft": 21,
@@ -1215,7 +1215,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
             <Text
               style={
                 Object {
-                  "color": "#69707C",
+                  "color": "#828282",
                   "fontFamily": "Inter-Regular",
                   "fontSize": 12,
                   "marginBottom": 29,
@@ -1238,7 +1238,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               onStartShouldSetResponder={[Function]}
               style={
                 Object {
-                  "borderTopColor": "#E0E0E0",
+                  "borderTopColor": "#F5F6F7",
                   "borderTopWidth": 1,
                   "opacity": 1,
                   "paddingHorizontal": 22,
@@ -1255,14 +1255,14 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 }
               >
                 <Icon
-                  color="#000"
+                  color="#1E1F20"
                   name="block"
                   size={17}
                 />
                 <Text
                   style={
                     Object {
-                      "color": "#000",
+                      "color": "#1E1F20",
                       "fontFamily": "Inter-Medium",
                       "fontSize": 14,
                       "marginLeft": 15,
@@ -1282,7 +1282,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#69707C",
+                      "color": "#828282",
                       "flex": 1,
                       "fontFamily": "Inter-Regular",
                       "fontSize": 12,
@@ -1306,7 +1306,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               onStartShouldSetResponder={[Function]}
               style={
                 Object {
-                  "borderTopColor": "#E0E0E0",
+                  "borderTopColor": "#F5F6F7",
                   "borderTopWidth": 1,
                   "opacity": 1,
                   "paddingHorizontal": 22,
@@ -1326,7 +1326,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#000",
+                      "color": "#1E1F20",
                       "fontFamily": "Inter-Medium",
                       "fontSize": 14,
                       "marginLeft": 15,
@@ -1346,7 +1346,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#69707C",
+                      "color": "#828282",
                       "flex": 1,
                       "fontFamily": "Inter-Regular",
                       "fontSize": 12,
@@ -1377,7 +1377,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                   }
                 >
                   <Icon
-                    color="#000"
+                    color="#1E1F20"
                     name="chevron-right"
                     size={17}
                   />
@@ -1492,7 +1492,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                       "width": 35,
                     },
                     Object {
-                      "backgroundColor": "#E8EBED",
+                      "backgroundColor": "#F5F6F7",
                       "width": 60,
                     },
                   ]
@@ -1502,7 +1502,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
             <Text
               style={
                 Object {
-                  "color": "#000",
+                  "color": "#1E1F20",
                   "fontFamily": "Inter-SemiBold",
                   "fontSize": 18,
                   "marginLeft": 21,
@@ -1514,7 +1514,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
             <Text
               style={
                 Object {
-                  "color": "#69707C",
+                  "color": "#828282",
                   "fontFamily": "Inter-Regular",
                   "fontSize": 12,
                   "marginBottom": 29,
@@ -1537,7 +1537,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               onStartShouldSetResponder={[Function]}
               style={
                 Object {
-                  "borderTopColor": "#E0E0E0",
+                  "borderTopColor": "#F5F6F7",
                   "borderTopWidth": 1,
                   "opacity": 1,
                   "paddingHorizontal": 22,
@@ -1554,14 +1554,14 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 }
               >
                 <Icon
-                  color="#000"
+                  color="#1E1F20"
                   name="block"
                   size={17}
                 />
                 <Text
                   style={
                     Object {
-                      "color": "#000",
+                      "color": "#1E1F20",
                       "fontFamily": "Inter-Medium",
                       "fontSize": 14,
                       "marginLeft": 15,
@@ -1581,7 +1581,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#69707C",
+                      "color": "#828282",
                       "flex": 1,
                       "fontFamily": "Inter-Regular",
                       "fontSize": 12,
@@ -1605,7 +1605,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               onStartShouldSetResponder={[Function]}
               style={
                 Object {
-                  "borderTopColor": "#E0E0E0",
+                  "borderTopColor": "#F5F6F7",
                   "borderTopWidth": 1,
                   "opacity": 1,
                   "paddingHorizontal": 22,
@@ -1625,7 +1625,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#000",
+                      "color": "#1E1F20",
                       "fontFamily": "Inter-Medium",
                       "fontSize": 14,
                       "marginLeft": 15,
@@ -1645,7 +1645,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#69707C",
+                      "color": "#828282",
                       "flex": 1,
                       "fontFamily": "Inter-Regular",
                       "fontSize": 12,
@@ -1676,7 +1676,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                   }
                 >
                   <Icon
-                    color="#000"
+                    color="#1E1F20"
                     name="chevron-right"
                     size={17}
                   />
@@ -1790,7 +1790,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "width": 35,
                   },
                   Object {
-                    "backgroundColor": "#E8EBED",
+                    "backgroundColor": "#F5F6F7",
                     "width": 60,
                   },
                 ]
@@ -1813,7 +1813,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 onStartShouldSetResponder={[Function]}
                 style={
                   Object {
-                    "backgroundColor": "#E0E0E0",
+                    "backgroundColor": "#F5F6F7",
                     "flexDirection": "row",
                     "justifyContent": "space-between",
                     "marginVertical": 22,
@@ -1826,7 +1826,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#000",
+                      "color": "#1E1F20",
                       "fontFamily": "Inter-Bold",
                       "fontSize": 14,
                     }
@@ -1835,7 +1835,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                   Skip & just block this account
                 </Text>
                 <Icon
-                  color="#000"
+                  color="#1E1F20"
                   name="chevron-right"
                   size={17}
                 />
@@ -1843,7 +1843,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               <Text
                 style={
                   Object {
-                    "color": "#000",
+                    "color": "#1E1F20",
                     "fontFamily": "Inter-Bold",
                     "fontSize": 16,
                     "marginLeft": 21,
@@ -1864,7 +1864,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 onStartShouldSetResponder={[Function]}
                 style={
                   Object {
-                    "borderBottomColor": "#E0E0E0",
+                    "borderBottomColor": "#F5F6F7",
                     "borderBottomWidth": 1,
                     "flexDirection": "row",
                     "justifyContent": "space-between",
@@ -1877,7 +1877,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#000",
+                      "color": "#1E1F20",
                       "flex": 1,
                       "fontFamily": "Inter-Regular",
                       "fontSize": 14,
@@ -1900,7 +1900,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 onStartShouldSetResponder={[Function]}
                 style={
                   Object {
-                    "borderBottomColor": "#E0E0E0",
+                    "borderBottomColor": "#F5F6F7",
                     "borderBottomWidth": 1,
                     "flexDirection": "row",
                     "justifyContent": "space-between",
@@ -1913,7 +1913,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#000",
+                      "color": "#1E1F20",
                       "flex": 1,
                       "fontFamily": "Inter-Regular",
                       "fontSize": 14,
@@ -1936,7 +1936,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 onStartShouldSetResponder={[Function]}
                 style={
                   Object {
-                    "borderBottomColor": "#E0E0E0",
+                    "borderBottomColor": "#F5F6F7",
                     "borderBottomWidth": 1,
                     "flexDirection": "row",
                     "justifyContent": "space-between",
@@ -1949,7 +1949,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#000",
+                      "color": "#1E1F20",
                       "flex": 1,
                       "fontFamily": "Inter-Regular",
                       "fontSize": 14,
@@ -1972,7 +1972,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 onStartShouldSetResponder={[Function]}
                 style={
                   Object {
-                    "borderBottomColor": "#E0E0E0",
+                    "borderBottomColor": "#F5F6F7",
                     "borderBottomWidth": 1,
                     "flexDirection": "row",
                     "justifyContent": "space-between",
@@ -1985,7 +1985,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#000",
+                      "color": "#1E1F20",
                       "flex": 1,
                       "fontFamily": "Inter-Regular",
                       "fontSize": 14,
@@ -2008,7 +2008,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 onStartShouldSetResponder={[Function]}
                 style={
                   Object {
-                    "borderBottomColor": "#E0E0E0",
+                    "borderBottomColor": "#F5F6F7",
                     "borderBottomWidth": 1,
                     "flexDirection": "row",
                     "justifyContent": "space-between",
@@ -2021,7 +2021,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#000",
+                      "color": "#1E1F20",
                       "flex": 1,
                       "fontFamily": "Inter-Regular",
                       "fontSize": 14,
@@ -2044,7 +2044,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 onStartShouldSetResponder={[Function]}
                 style={
                   Object {
-                    "borderBottomColor": "#E0E0E0",
+                    "borderBottomColor": "#F5F6F7",
                     "borderBottomWidth": 1,
                     "flexDirection": "row",
                     "justifyContent": "space-between",
@@ -2057,7 +2057,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#000",
+                      "color": "#1E1F20",
                       "flex": 1,
                       "fontFamily": "Inter-Regular",
                       "fontSize": 14,
@@ -2080,7 +2080,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 onStartShouldSetResponder={[Function]}
                 style={
                   Object {
-                    "borderBottomColor": "#E0E0E0",
+                    "borderBottomColor": "#F5F6F7",
                     "borderBottomWidth": 1,
                     "flexDirection": "row",
                     "justifyContent": "space-between",
@@ -2093,7 +2093,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#000",
+                      "color": "#1E1F20",
                       "flex": 1,
                       "fontFamily": "Inter-Regular",
                       "fontSize": 14,
@@ -2146,7 +2146,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     <Text
                       style={
                         Object {
-                          "color": "#ffffff",
+                          "color": "#FFFFFF",
                           "fontFamily": "Inter-SemiBold",
                           "fontSize": 18,
                         }
@@ -2267,7 +2267,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "width": 35,
                   },
                   Object {
-                    "backgroundColor": "#E8EBED",
+                    "backgroundColor": "#F5F6F7",
                     "width": 60,
                   },
                 ]
@@ -2290,7 +2290,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 onStartShouldSetResponder={[Function]}
                 style={
                   Object {
-                    "backgroundColor": "#E0E0E0",
+                    "backgroundColor": "#F5F6F7",
                     "flexDirection": "row",
                     "justifyContent": "space-between",
                     "marginVertical": 22,
@@ -2303,7 +2303,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#000",
+                      "color": "#1E1F20",
                       "fontFamily": "Inter-Bold",
                       "fontSize": 14,
                     }
@@ -2312,7 +2312,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                   Skip & just block this post
                 </Text>
                 <Icon
-                  color="#000"
+                  color="#1E1F20"
                   name="chevron-right"
                   size={17}
                 />
@@ -2320,7 +2320,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               <Text
                 style={
                   Object {
-                    "color": "#000",
+                    "color": "#1E1F20",
                     "fontFamily": "Inter-Bold",
                     "fontSize": 16,
                     "marginLeft": 21,
@@ -2341,7 +2341,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 onStartShouldSetResponder={[Function]}
                 style={
                   Object {
-                    "borderBottomColor": "#E0E0E0",
+                    "borderBottomColor": "#F5F6F7",
                     "borderBottomWidth": 1,
                     "flexDirection": "row",
                     "justifyContent": "space-between",
@@ -2354,7 +2354,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#000",
+                      "color": "#1E1F20",
                       "flex": 1,
                       "fontFamily": "Inter-Regular",
                       "fontSize": 14,
@@ -2377,7 +2377,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 onStartShouldSetResponder={[Function]}
                 style={
                   Object {
-                    "borderBottomColor": "#E0E0E0",
+                    "borderBottomColor": "#F5F6F7",
                     "borderBottomWidth": 1,
                     "flexDirection": "row",
                     "justifyContent": "space-between",
@@ -2390,7 +2390,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#000",
+                      "color": "#1E1F20",
                       "flex": 1,
                       "fontFamily": "Inter-Regular",
                       "fontSize": 14,
@@ -2413,7 +2413,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 onStartShouldSetResponder={[Function]}
                 style={
                   Object {
-                    "borderBottomColor": "#E0E0E0",
+                    "borderBottomColor": "#F5F6F7",
                     "borderBottomWidth": 1,
                     "flexDirection": "row",
                     "justifyContent": "space-between",
@@ -2426,7 +2426,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#000",
+                      "color": "#1E1F20",
                       "flex": 1,
                       "fontFamily": "Inter-Regular",
                       "fontSize": 14,
@@ -2449,7 +2449,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 onStartShouldSetResponder={[Function]}
                 style={
                   Object {
-                    "borderBottomColor": "#E0E0E0",
+                    "borderBottomColor": "#F5F6F7",
                     "borderBottomWidth": 1,
                     "flexDirection": "row",
                     "justifyContent": "space-between",
@@ -2462,7 +2462,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#000",
+                      "color": "#1E1F20",
                       "flex": 1,
                       "fontFamily": "Inter-Regular",
                       "fontSize": 14,
@@ -2485,7 +2485,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 onStartShouldSetResponder={[Function]}
                 style={
                   Object {
-                    "borderBottomColor": "#E0E0E0",
+                    "borderBottomColor": "#F5F6F7",
                     "borderBottomWidth": 1,
                     "flexDirection": "row",
                     "justifyContent": "space-between",
@@ -2498,7 +2498,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#000",
+                      "color": "#1E1F20",
                       "flex": 1,
                       "fontFamily": "Inter-Regular",
                       "fontSize": 14,
@@ -2521,7 +2521,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 onStartShouldSetResponder={[Function]}
                 style={
                   Object {
-                    "borderBottomColor": "#E0E0E0",
+                    "borderBottomColor": "#F5F6F7",
                     "borderBottomWidth": 1,
                     "flexDirection": "row",
                     "justifyContent": "space-between",
@@ -2534,7 +2534,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#000",
+                      "color": "#1E1F20",
                       "flex": 1,
                       "fontFamily": "Inter-Regular",
                       "fontSize": 14,
@@ -2557,7 +2557,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 onStartShouldSetResponder={[Function]}
                 style={
                   Object {
-                    "borderBottomColor": "#E0E0E0",
+                    "borderBottomColor": "#F5F6F7",
                     "borderBottomWidth": 1,
                     "flexDirection": "row",
                     "justifyContent": "space-between",
@@ -2570,7 +2570,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#000",
+                      "color": "#1E1F20",
                       "flex": 1,
                       "fontFamily": "Inter-Regular",
                       "fontSize": 14,
@@ -2623,7 +2623,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     <Text
                       style={
                         Object {
-                          "color": "#ffffff",
+                          "color": "#FFFFFF",
                           "fontFamily": "Inter-SemiBold",
                           "fontSize": 18,
                         }
@@ -2744,7 +2744,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                     "width": 35,
                   },
                   Object {
-                    "backgroundColor": "#E8EBED",
+                    "backgroundColor": "#F5F6F7",
                     "width": 60,
                   },
                 ]
@@ -2755,7 +2755,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
             <Text
               style={
                 Object {
-                  "color": "#000",
+                  "color": "#1E1F20",
                   "fontFamily": "Inter-Bold",
                   "fontSize": 18,
                   "marginLeft": 21,
@@ -2774,9 +2774,9 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               rejectResponderTermination={true}
               style={
                 Object {
-                  "backgroundColor": "#F5F5F5",
+                  "backgroundColor": "#F5F6F7",
                   "borderRadius": 8,
-                  "color": "#69707C",
+                  "color": "#828282",
                   "fontFamily": "Inter-Regular",
                   "height": 233,
                   "marginLeft": 17,
@@ -2803,7 +2803,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               onStartShouldSetResponder={[Function]}
               style={
                 Object {
-                  "backgroundColor": "#E0E0E0",
+                  "backgroundColor": "#F5F6F7",
                   "flexDirection": "row",
                   "justifyContent": "space-between",
                   "marginVertical": 22,
@@ -2817,7 +2817,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
               <Text
                 style={
                   Object {
-                    "color": "#000",
+                    "color": "#1E1F20",
                     "fontFamily": "Inter-Bold",
                     "fontSize": 14,
                   }
@@ -2826,7 +2826,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                 Skip & just block this account
               </Text>
               <Icon
-                color="#000"
+                color="#1E1F20"
                 name="chevron-right"
                 size={17}
               />
@@ -2873,7 +2873,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
                   <Text
                     style={
                       Object {
-                        "color": "#ffffff",
+                        "color": "#FFFFFF",
                         "fontFamily": "Inter-SemiBold",
                         "fontSize": 18,
                       }

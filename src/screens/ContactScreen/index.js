@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16
   },
   subtitleStyle: (selectedUsers) => ({
-    color: selectedUsers.length > 0 ? COLORS.holyTosca : COLORS.gray4,
+    color: selectedUsers.length > 0 ? COLORS.anon_primary : COLORS.gray4,
     marginEnd: 8
   })
 });

@@ -27,12 +27,12 @@ const styles = StyleSheet.create({
   desc: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.gray
+    color: COLORS.blackgrey
   },
   switch: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.gray
+    color: COLORS.blackgrey
   },
   image: {
     marginRight: 8,

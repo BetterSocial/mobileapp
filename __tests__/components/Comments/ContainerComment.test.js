@@ -196,7 +196,7 @@ describe('ContainerComment should run correctly', () => {
       display: 'flex',
       flexDirection: 'row',
       paddingBottom: 14,
-      borderLeftColor: COLORS.gray1,
+      borderLeftColor: COLORS.balance_gray,
       borderLeftWidth: 1
     });
   });

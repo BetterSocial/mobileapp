@@ -17,7 +17,7 @@ const HorizontalTab = ({selectedTab, onSelectedTabChange, tabs = []}: Horizontal
   const styles = StyleSheet.create({
     tabs: {
       width,
-      borderBottomColor: COLORS.alto,
+      borderBottomColor: COLORS.lightgrey,
       borderBottomWidth: 1,
       flexDirection: 'row',
       alignItems: 'center',
@@ -27,7 +27,7 @@ const HorizontalTab = ({selectedTab, onSelectedTabChange, tabs = []}: Horizontal
     },
     tabsFixed: {
       width,
-      borderBottomColor: COLORS.alto,
+      borderBottomColor: COLORS.lightgrey,
       borderBottomWidth: 1,
       paddingLeft: 20,
       paddingRight: 20,
@@ -58,7 +58,7 @@ const HorizontalTab = ({selectedTab, onSelectedTabChange, tabs = []}: Horizontal
     childTabContainer: {
       display: 'flex',
       maxWidth: width / tabs.length
-      //   backgroundColor: COLORS.red
+      //   backgroundColor: COLORS.redalert
     }
   });
 

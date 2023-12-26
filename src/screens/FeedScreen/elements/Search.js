@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     // height: 36,
     paddingTop: 0,
     paddingBottom: 0,
-    color: COLORS.gray1,
+    color: COLORS.blackgrey,
     alignSelf: 'center'
   },
   wrapperIcon: {
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   newPostText: {
-    color: COLORS.holyTosca,
+    color: COLORS.anon_primary,
     marginRight: 11,
     ...FONTS.h3
   },
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     paddingTop: 7,
     paddingBottom: 7,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.alto
+    borderBottomColor: COLORS.lightgrey
   })
 });
 

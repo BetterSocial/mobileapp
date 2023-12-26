@@ -177,7 +177,7 @@ const stylesComponent = (pollLength) =>
       width: 4,
       height: 4,
       borderRadius: 4,
-      backgroundColor: COLORS.gray,
+      backgroundColor: COLORS.blackgrey,
       marginLeft: 8,
       marginRight: 8
     },
@@ -198,7 +198,7 @@ const stylesComponent = (pollLength) =>
       fontFamily: fonts.inter[400],
       fontSize: normalizeFontSize(12),
       lineHeight: 18,
-      color: COLORS.gray
+      color: COLORS.blackgrey
     },
     usernameComment: {
       fontFamily: fonts.inter[500],
@@ -211,7 +211,7 @@ const stylesComponent = (pollLength) =>
       fontFamily: fonts.inter[500],
       fontSize: normalizeFontSize(12),
       lineHeight: 24,
-      color: COLORS.gray
+      color: COLORS.blackgrey
     },
     item: {
       width: screenWidth - 20,
@@ -297,7 +297,7 @@ const stylesComponent = (pollLength) =>
       height: 12,
       alignSelf: 'center',
       borderRadius: 6,
-      backgroundColor: COLORS.holytosca,
+      backgroundColor: COLORS.anon_primary,
       marginEnd: 12
     },
     totalVotesContainer: {
@@ -309,7 +309,7 @@ const stylesComponent = (pollLength) =>
       alignSelf: 'center'
     },
     seeresultstext: {
-      color: COLORS.holytosca,
+      color: COLORS.anon_primary,
       fontFamily: fonts.inter[500],
       fontSize: normalizeFontSize(14)
     },

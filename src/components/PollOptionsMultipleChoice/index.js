@@ -51,7 +51,7 @@ const PollOptionsMultipleChoice = ({
             styles.barStyle,
             {
               width: `${handleStyleBar(optionPercentage)}%`,
-              backgroundColor: isMax ? COLORS.bondi_blue : COLORS.gray1
+              backgroundColor: isMax ? COLORS.bondi_blue : COLORS.lightgrey
             }
           ]}
         />
@@ -65,7 +65,7 @@ const PollOptionsMultipleChoice = ({
             styles.barStyle,
             {
               width: `${handleStyleBar(optionPercentage)}%`,
-              backgroundColor: isMyPoll() ? COLORS.bondi_blue : COLORS.gray1
+              backgroundColor: isMyPoll() ? COLORS.bondi_blue : COLORS.lightgrey
             }
           ]}
         />
@@ -112,7 +112,7 @@ const PollOptionsMultipleChoice = ({
               testID="checkbox"
               value={selected}
               boxType="square"
-              tintColors={{true: COLORS.holytosca, false: COLORS.black}}
+              tintColors={{true: COLORS.anon_primary, false: COLORS.black}}
               style={checkboxStyle}
             />
           )}

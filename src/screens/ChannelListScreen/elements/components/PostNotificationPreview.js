@@ -43,13 +43,13 @@ const styles = StyleSheet.create({
   },
   lastContentContainer: {
     marginLeft: 'auto',
-    backgroundColor: COLORS.red
+    backgroundColor: COLORS.redalert
   },
   titleContainer: {
     maxWidth: '70%'
   },
   subtitleStyle: {
-    // color: COLORS.gray,
+    // color: COLORS.blackgrey,
     flex: 1,
     // marginTop:3,
     fontSize: 12
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.white
   },
   blockMention: {
-    backgroundColor: COLORS.red,
+    backgroundColor: COLORS.redalert,
     paddingHorizontal: 16,
     paddingVertical: 6,
     flexDirection: 'row'

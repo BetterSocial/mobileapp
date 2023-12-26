@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20
   },
   draggableIcon: {
-    backgroundColor: COLORS.alto,
+    backgroundColor: COLORS.lightgrey,
     width: 60
   }
 });

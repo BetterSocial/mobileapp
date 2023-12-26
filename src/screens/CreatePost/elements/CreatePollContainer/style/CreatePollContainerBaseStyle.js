@@ -6,7 +6,7 @@ const CreatePollContainerBaseStyle = StyleSheet.create({
   createpollcontainer: {
     borderWidth: 1,
     borderRadius: 4,
-    borderColor: COLORS.gray1,
+    borderColor: COLORS.lightgrey,
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
@@ -44,7 +44,7 @@ const CreatePollContainerBaseStyle = StyleSheet.create({
     width: '100%',
     height: 1,
     marginVertical: 8,
-    backgroundColor: COLORS.gray1
+    backgroundColor: COLORS.lightgrey
   },
 
   row: {
@@ -71,7 +71,7 @@ const CreatePollContainerBaseStyle = StyleSheet.create({
 
   polldurationbuttontext: {
     color: COLORS.white,
-    backgroundColor: COLORS.holytosca,
+    backgroundColor: COLORS.anon_primary,
     paddingHorizontal: 22,
     paddingVertical: 8,
     borderRadius: 6,

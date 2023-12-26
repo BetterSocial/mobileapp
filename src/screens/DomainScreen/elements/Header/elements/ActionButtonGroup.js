@@ -69,7 +69,7 @@ const ActionButtonGroup = ({
 const styles = StyleSheet.create({
   blockButtonText: {
     fontSize: normalizeFontSize(12),
-    color: COLORS.red,
+    color: COLORS.redalert,
     paddingHorizontal: 0
   },
   buttonBlock: {
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     // width: normalize(88),
     borderWidth: 0.5,
     borderRadius: 8,
-    borderColor: COLORS.red,
+    borderColor: COLORS.redalert,
     overflow: 'hidden',
     justifyContent: 'center',
     alignItems: 'center',
@@ -90,11 +90,11 @@ const styles = StyleSheet.create({
     // width: normalize(88),
     borderWidth: 0.5,
     borderRadius: 8,
-    borderColor: COLORS.red,
+    borderColor: COLORS.redalert,
     overflow: 'hidden',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: COLORS.red
+    backgroundColor: COLORS.redalert
   },
   buttonFollow: {
     flex: 1,

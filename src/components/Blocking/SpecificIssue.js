@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     paddingTop: 8
   },
   btnSkip: {
-    backgroundColor: COLORS.alto,
+    backgroundColor: COLORS.lightgrey,
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 17,
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     paddingRight: 13,
     paddingLeft: 19,
     fontFamily: fonts.inter[400],
-    color: COLORS.gray
+    color: COLORS.blackgrey
   },
   container: {
     height: 'auto',
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20
   },
   draggableIcon: {
-    backgroundColor: COLORS.alto,
+    backgroundColor: COLORS.lightgrey,
     width: 60
   }
 });

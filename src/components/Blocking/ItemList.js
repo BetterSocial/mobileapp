@@ -20,7 +20,7 @@ const ItemList = ({label, active, onSelect, id}) => {
   return (
     <TouchableOpacity style={styles.container} onPress={() => onActive()}>
       <Text style={styles.label}>{label}</Text>
-      {active && <Icon name="check-circle" size={20} color={COLORS.red} />}
+      {active && <Icon name="check-circle" size={20} color={COLORS.redalert} />}
     </TouchableOpacity>
   );
 };
@@ -30,7 +30,7 @@ export default ItemList;
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 18,
-    borderBottomColor: COLORS.alto,
+    borderBottomColor: COLORS.lightgrey,
     borderBottomWidth: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',

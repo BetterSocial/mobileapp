@@ -127,7 +127,7 @@ export default Header;
 const styles = StyleSheet.create({
   container: {
     height: 50,
-    backgroundColor: COLORS.holytosca,
+    backgroundColor: COLORS.anon_primary,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 22,

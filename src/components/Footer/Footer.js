@@ -49,7 +49,7 @@ const Footer = ({
       return COLORS.anon_primary;
     }
     if (totalVote < 0) {
-      return COLORS.red;
+      return COLORS.redalert;
     }
     return COLORS.balance_gray;
   };

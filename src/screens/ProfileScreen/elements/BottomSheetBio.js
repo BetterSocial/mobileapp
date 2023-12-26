@@ -56,13 +56,13 @@ const styles = StyleSheet.create({
   description: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.gray,
+    color: COLORS.blackgrey,
     marginTop: 7
   },
   errorText: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.red,
+    color: COLORS.redalert,
     marginTop: 7
   },
   button: {

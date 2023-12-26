@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     right: 0,
     height: 25,
     width: 25,
-    backgroundColor: COLORS.holytosca,
+    backgroundColor: COLORS.anon_primary,
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 100,
@@ -92,7 +92,7 @@ const AnonymousInputMessage = ({onSendButtonClicked, type}: AnonymousInputMessag
 
   const sendButtonStyle = React.useCallback(() => {
     const isDisabled = isDisableButton();
-    if (isDisabled) return COLORS.gray1;
+    if (isDisabled) return COLORS.lightgrey;
     if (type === 'SIGNED') return COLORS.signed_primary;
     return COLORS.bondi_blue;
   }, [isDisableButton()]);

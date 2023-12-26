@@ -24,7 +24,7 @@ export const channelContentStyles = StyleSheet.create({
     fontSize: normalize(14),
     lineHeight: 22,
     marginLeft: 20,
-    color: COLORS.gray,
+    color: COLORS.blackgrey,
     alignSelf: 'flex-start'
   },
   containerBadge: {

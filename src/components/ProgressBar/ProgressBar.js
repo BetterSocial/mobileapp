@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 8,
     width: '100%',
-    backgroundColor: COLORS.alto,
+    backgroundColor: COLORS.lightgrey,
     borderRadius: 5
   },
   animated: (width) => ({

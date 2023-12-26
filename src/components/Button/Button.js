@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600]
   },
   disabledbutton: {
-    backgroundColor: COLORS.gray1,
+    backgroundColor: COLORS.lightgrey,
     borderRadius: dimen.normalizeDimen(8)
   }
 });

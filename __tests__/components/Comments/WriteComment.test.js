@@ -38,7 +38,7 @@ describe('WriteComment should run correctly', () => {
       marginTop: 7,
       lineHeight: 15,
       fontSize: 12,
-      color: COLORS.gray
+      color: COLORS.blackgrey
     });
     expect(styles.replyToContainer(false)).toEqual({
       marginLeft: 60,
@@ -47,7 +47,7 @@ describe('WriteComment should run correctly', () => {
       marginTop: 7,
       lineHeight: 15,
       fontSize: 12,
-      color: COLORS.gray
+      color: COLORS.blackgrey
     });
     expect(styles.container(true)).toEqual({
       flex: 1,
@@ -91,7 +91,7 @@ describe('WriteComment should run correctly', () => {
     expect(styles.connectorTop(true, true)).toEqual({
       height: 36,
       width: 1,
-      backgroundColor: COLORS.gray1,
+      backgroundColor: COLORS.balance_gray,
       position: 'absolute',
       top: 0,
       left: 60,
@@ -101,7 +101,7 @@ describe('WriteComment should run correctly', () => {
     expect(styles.connectorTop(false, false)).toEqual({
       height: 0,
       width: 1,
-      backgroundColor: COLORS.gray1,
+      backgroundColor: COLORS.balance_gray,
       position: 'absolute',
       top: 0,
       left: 30,
@@ -111,7 +111,7 @@ describe('WriteComment should run correctly', () => {
     expect(styles.connectorBottom(true, true)).toEqual({
       height: 20,
       width: 1,
-      backgroundColor: COLORS.gray1,
+      backgroundColor: COLORS.balance_gray,
       position: 'absolute',
       top: 0,
       left: 60,
@@ -121,7 +121,7 @@ describe('WriteComment should run correctly', () => {
     expect(styles.connectorBottom(false, false)).toEqual({
       height: 0,
       width: 1,
-      backgroundColor: COLORS.gray1,
+      backgroundColor: COLORS.balance_gray,
       position: 'absolute',
       top: 0,
       left: 30,

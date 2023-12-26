@@ -98,7 +98,7 @@ function CreatePollContainer({
                 <WheelPicker
                   data={days}
                   selectedItem={selectedtime.day}
-                  indicatorColor={COLORS.holytosca}
+                  indicatorColor={COLORS.anon_primary}
                   indicatorWidth={3}
                   onItemSelected={(value) => setPickerDay(value)}
                   isCyclic={true}
@@ -111,7 +111,7 @@ function CreatePollContainer({
                 <WheelPicker
                   data={hour}
                   selectedItem={selectedtime.hour}
-                  indicatorColor={COLORS.holytosca}
+                  indicatorColor={COLORS.anon_primary}
                   indicatorWidth={3}
                   onItemSelected={(value) => setPickerHour(value)}
                   isCyclic={true}
@@ -125,7 +125,7 @@ function CreatePollContainer({
                   data={minute}
                   selectedItem={selectedtime.minute}
                   onItemSelected={(value) => setPickerMinute(value)}
-                  indicatorColor={COLORS.holytosca}
+                  indicatorColor={COLORS.anon_primary}
                   indicatorWidth={3}
                   isCyclic={true}
                 />

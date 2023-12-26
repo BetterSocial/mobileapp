@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     marginLeft: 21
   },
   desc: {
-    color: COLORS.gray,
+    color: COLORS.blackgrey,
     fontFamily: fonts.inter[400],
     fontSize: 12,
     marginHorizontal: 21,
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20
   },
   draggableIcon: {
-    backgroundColor: COLORS.alto,
+    backgroundColor: COLORS.lightgrey,
     width: 60
   }
 });

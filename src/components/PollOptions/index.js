@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
       top: 0,
       left: 0,
       borderRadius: 6,
-      backgroundColor: isMyPoll ? COLORS.bondi_blue : COLORS.gray1
+      backgroundColor: isMyPoll ? COLORS.bondi_blue : COLORS.lightgrey
     };
   },
   expiredPercentageBar: (percent, isMax = false) => {
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
       top: 0,
       left: 0,
       borderRadius: 6,
-      backgroundColor: isMax ? COLORS.blueSea : COLORS.gray1
+      backgroundColor: isMax ? COLORS.blueSea : COLORS.lightgrey
     };
   },
   totalpolltext: {
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
     height: 12,
     alignSelf: 'center',
     borderRadius: 6,
-    backgroundColor: COLORS.holytosca,
+    backgroundColor: COLORS.anon_primary,
     marginEnd: 8
   },
   totalVotesContainer: {

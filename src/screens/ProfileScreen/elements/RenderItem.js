@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: dimen.size.PROFILE_ITEM_HEIGHT,
     maxHeight: dimen.size.PROFILE_ITEM_HEIGHT,
-    shadowColor: COLORS.gray1,
+    shadowColor: COLORS.lightgrey,
     shadowOffset: {
       width: 1,
       height: 8
@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
     // paddingHorizontal: 9
   },
   paddingHorizontal: {paddingHorizontal: 20},
-  lineAffterFooter: {backgroundColor: COLORS.gray1, height: 1},
+  lineAffterFooter: {backgroundColor: COLORS.lightgrey, height: 1},
   footerWrapper: (h) => ({height: h, paddingHorizontal: 0}),
   contentReaction: (heightReaction) => ({
     height: heightReaction

@@ -4,6 +4,7 @@ import {act, renderHook} from '@testing-library/react-hooks';
 import * as reactString from 'react-string-replace';
 import * as serviceToken from '../../src/utils/token';
 import useContentFeed from '../../src/screens/FeedScreen/hooks/useContentFeed';
+import {COLORS} from '../../src/utils/theme';
 
 describe('it should run correctly', () => {
   beforeEach(() => {

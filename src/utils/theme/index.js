@@ -4,7 +4,6 @@ export const COLORS = {
   black000: '#000',
   black30percent: 'rgba(0,0,0,0.3)',
   black43: '#434343',
-  blackgrey: '#828282',
   blue: '#2F80ED',
   blueLoyal: '#023B60',
   blueOnboarding: '#4782D7',
@@ -18,34 +17,27 @@ export const COLORS = {
   french_pass: '#b6e4fd',
   greenMantis: '#79B45D',
   greyseries: '#333333',
-  lightgrey: '#F5F5F5',
   mine_shaft: '#333333',
   pattens_blue: '#ddf2fe',
   platinum: '#E6E6E6',
   porcelain: '#ecf0f1',
-  red: '#FF2E63',
-  redalert: '#FF2E63',
   silver: '#BDBDBD',
   waterspout: '#9DEDF1',
   white: '#FFFFFF',
   whiteSmoke: '#F4F4F4',
 
-  //from colors
-  blue1: '#4782D7',
-  halfBaked: '#88CDD0',
-  tradewind: '#58B1B5',
-  elm: '#22878B',
-  blockColor: '#FF2E63',
-  greenDark: '#004346',
-  babyBlue: '#7B9DCD',
-
+  //new color
   signed_primary: '#4782D7',
   signed_secondary: '#6295DD',
   anon_primary: '#107793',
   anon_secondary: '#3A9BB6',
   radical_red: '#FF3466',
   light_silver: '#D2D4DB',
-  balance_gray: '#9B9FA9'
+  balance_gray: '#9B9FA9',
+  gray: '#E8EBED',
+  lightgrey: '#F5F6F7',
+  redalert: '#FF2E63',
+  blackgrey: '#828282'
 };
 export const SIZES = {
   // global sizes

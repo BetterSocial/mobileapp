@@ -345,7 +345,7 @@ export const styles = StyleSheet.create({
     width: 4,
     height: 4,
     borderRadius: 4,
-    backgroundColor: COLORS.gray,
+    backgroundColor: COLORS.blackgrey,
     marginLeft: 8,
     marginRight: 8
   },

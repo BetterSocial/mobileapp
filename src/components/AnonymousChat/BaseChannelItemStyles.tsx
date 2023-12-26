@@ -16,7 +16,7 @@ const BaseChatItemStyles = StyleSheet.create({
     paddingBottom: dimen.normalizeDimen(14),
     paddingStart: dimen.normalizeDimen(15),
     paddingEnd: dimen.normalizeDimen(20),
-    borderBottomColor: COLORS.alto,
+    borderBottomColor: COLORS.lightgrey,
     borderBottomWidth: 1
   },
   chatContentSection: {

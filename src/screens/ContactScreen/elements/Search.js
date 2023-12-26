@@ -33,7 +33,7 @@ const Search = ({onPress, animatedValue, onChangeText, text, onClearText, isLoad
         <MemoIc_search width={20} height={20} />
       </View>
       <View style={styles.wrapperSecondaryIcon}>
-        {isLoading && <ActivityIndicator style={styles.loader} color={COLORS.gray} />}
+        {isLoading && <ActivityIndicator style={styles.loader} color={COLORS.blackgrey} />}
         {!isLoading && (
           <Pressable onPress={onClearText}>
             <IcClearCircle width={20} height={20} />
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     paddingRight: 8,
     paddingTop: 9,
     paddingBottom: 9
-    // backgroundColor: COLORS.red,
+    // backgroundColor: COLORS.redalert,
   },
   input: {
     marginLeft: 28,
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 14,
     color: COLORS.black
-    // backgroundColor: COLORS.red
+    // backgroundColor: COLORS.redalert
   },
   wrapperIcon: {
     position: 'absolute',
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   newPostText: {
-    color: COLORS.holyTosca,
+    color: COLORS.anon_primary,
     marginRight: 11,
     ...FONTS.h4
   },
@@ -116,9 +116,9 @@ const styles = StyleSheet.create({
     zIndex: 10,
     padding: 7,
     borderBottomWidth: 0.5,
-    borderBottomColor: COLORS.gray1,
+    borderBottomColor: COLORS.lightgrey,
     borderTopWidth: 0.5,
-    borderTopColor: COLORS.gray1
+    borderTopColor: COLORS.lightgrey
   })
 });
 

@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   },
 
   viewborderbottom: {
-    borderBottomColor: COLORS.holytosca,
+    borderBottomColor: COLORS.anon_primary,
     borderBottomWidth: 2
   }
 });

@@ -211,7 +211,7 @@ const WhotoFollow = () => {
           showMessage({
             message: 'Welcome to Better Social',
             type: 'success',
-            backgroundColor: COLORS.holytosca
+            backgroundColor: COLORS.anon_primary
           });
           setTimeout(() => {
             create();
@@ -223,7 +223,7 @@ const WhotoFollow = () => {
           showMessage({
             message: 'Cannot connect to server, please try again later',
             type: 'danger',
-            backgroundColor: COLORS.red
+            backgroundColor: COLORS.redalert
           });
         }
       })
@@ -233,7 +233,7 @@ const WhotoFollow = () => {
         showMessage({
           message: 'Cannot connect to server, please try again later',
           type: 'danger',
-          backgroundColor: COLORS.red
+          backgroundColor: COLORS.redalert
         });
       });
   };
@@ -337,7 +337,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(24),
-    color: COLORS.gray,
+    color: COLORS.blackgrey,
     opacity: 0.84,
     marginTop: dimen.normalizeDimen(8),
     marginBottom: dimen.normalizeDimen(24),

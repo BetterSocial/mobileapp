@@ -194,7 +194,7 @@ const S = StyleSheet.create({
     fontSize: 12,
     width: 250,
     textAlign: 'center',
-    color: colors.gray,
+    color: COLORS.blackgrey,
     marginTop: 16
   },
   humanID: {

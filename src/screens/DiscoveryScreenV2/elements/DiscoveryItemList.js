@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    backgroundColor: COLORS.anon_primary
+    backgroundColor: COLORS.signed_primary
   },
   container: {
     height: 64,
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: COLORS.anon_primary
+    color: COLORS.signed_primary
   },
   textButtonFollow: {
     fontFamily: fonts.inter[600],
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
   profilepicture: {
     width: 48,
     height: 48,
-    // backgroundColor: COLORS.anon_primary,
+    // backgroundColor: COLORS.signed_primary,
     borderRadius: 24,
     resizeMode: 'cover',
     borderColor: COLORS.lightgrey,
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
   textProfileFullName: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.gray,
+    color: COLORS.blackgrey,
     flexWrap: 'wrap',
     lineHeight: 18,
     // backgroundColor: 'green',
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
   domainDescription: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.gray,
+    color: COLORS.blackgrey,
     flexWrap: 'wrap',
     lineHeight: 18,
     // backgroundColor: 'green',
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: COLORS.anon_primary,
+    borderColor: COLORS.signed_primary,
     borderRadius: 8
   },
   card: {
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    borderColor: COLORS.anon_primary,
+    borderColor: COLORS.signed_primary,
     borderWidth: 1
   },
   textButtonBlock: {
@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: COLORS.anon_primary
+    color: COLORS.signed_primary
   },
   buttonBlock: {
     width: 88,
@@ -269,9 +269,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: COLORS.blockColor,
+    borderColor: COLORS.redalert,
     borderRadius: 8,
-    backgroundColor: COLORS.blockColor
+    backgroundColor: COLORS.redalert
   }
 });
 

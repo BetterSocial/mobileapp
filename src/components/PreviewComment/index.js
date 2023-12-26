@@ -110,13 +110,13 @@ export const styles = StyleSheet.create({
   lineBeforeProfile: {
     height: 9,
     borderLeftWidth: 1,
-    borderLeftColor: COLORS.gray1,
+    borderLeftColor: COLORS.balance_gray,
     marginLeft: 8
   },
   container: (totalComment) => ({
     borderLeftWidth: 1,
     marginHorizontal: SIZES.base,
-    borderLeftColor: totalComment >= 1 ? COLORS.gray1 : COLORS.white
+    borderLeftColor: totalComment >= 1 ? COLORS.balance_gray : COLORS.white
   }),
   username: {
     fontFamily: fonts.inter[700],

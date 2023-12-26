@@ -373,7 +373,7 @@ const styles = StyleSheet.create({
     width: 2,
     height: 2,
     borderRadius: 4,
-    backgroundColor: COLORS.gray,
+    backgroundColor: COLORS.blackgrey,
     marginLeft: 8,
     marginRight: 8,
     alignSelf: 'center',
@@ -393,7 +393,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 12,
     lineHeight: 18,
-    color: COLORS.gray
+    color: COLORS.blackgrey
   },
   usernameComment: {
     fontFamily: fonts.inter[500],
@@ -406,7 +406,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[500],
     fontSize: 12,
     lineHeight: 24,
-    color: COLORS.gray
+    color: COLORS.blackgrey
   },
   item: {
     width: screenWidth - 20,

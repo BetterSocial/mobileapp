@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   tabItemText: {
-    color: COLORS.alto,
+    color: COLORS.blackgrey,
     fontWeight: '500',
     fontSize: normalizeFontSize(12.5),
     paddingVertical: 10,
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10
   },
   underlineFocus: {
-    borderBottomColor: COLORS.anon_primary,
+    borderBottomColor: COLORS.signed_primary,
     borderBottomWidth: 2
   }
 });

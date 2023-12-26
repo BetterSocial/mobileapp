@@ -153,7 +153,7 @@ const ChooseUsername = () => {
         return showMessage({
           message: StringConstant.onboardingChooseUsernameErrorCannotBeEmpty,
           type: 'danger',
-          backgroundColor: COLORS.red
+          backgroundColor: COLORS.redalert
         });
       }
 
@@ -161,7 +161,7 @@ const ChooseUsername = () => {
         return showMessage({
           message: StringConstant.onboardingChooseUsernameLabelMinimumChar,
           type: 'danger',
-          backgroundColor: COLORS.red
+          backgroundColor: COLORS.redalert
         });
       }
 
@@ -169,7 +169,7 @@ const ChooseUsername = () => {
         return showMessage({
           message: StringConstant.onboardingChooseUsernameLabelMaximumChar,
           type: 'danger',
-          backgroundColor: COLORS.red
+          backgroundColor: COLORS.redalert
         });
       }
 
@@ -177,7 +177,7 @@ const ChooseUsername = () => {
         return showMessage({
           message: StringConstant.onboardingChooseUsernameLabelUserTaken(username),
           type: 'danger',
-          backgroundColor: COLORS.red
+          backgroundColor: COLORS.redalert
         });
       }
 
@@ -185,7 +185,7 @@ const ChooseUsername = () => {
         return showMessage({
           message: StringConstant.onboardingChooseUsernameLabelJustANumber,
           type: 'danger',
-          backgroundColor: COLORS.red
+          backgroundColor: COLORS.redalert
         });
       }
     }
@@ -211,25 +211,25 @@ const ChooseUsername = () => {
         );
       case 'notavailable':
         return (
-          <Text style={styles.textMessage(COLORS.red)}>
+          <Text style={styles.textMessage(COLORS.redalert)}>
             {` ${StringConstant.onboardingChooseUsernameLabelUserTaken(user)}`}
           </Text>
         );
       case 'typing':
         return (
-          <Text style={styles.textMessage(COLORS.red)}>
+          <Text style={styles.textMessage(COLORS.redalert)}>
             {` ${StringConstant.onboardingChooseUsernameLabelMinimumChar}`}
           </Text>
         );
       case 'max':
         return (
-          <Text style={styles.textMessage(COLORS.red)}>
+          <Text style={styles.textMessage(COLORS.redalert)}>
             {` ${StringConstant.onboardingChooseUsernameLabelMaximumChar}`}
           </Text>
         );
       case 'nan':
         return (
-          <Text style={styles.textMessage(COLORS.red)}>
+          <Text style={styles.textMessage(COLORS.redalert)}>
             {` ${StringConstant.onboardingChooseUsernameLabelJustANumber}`}
           </Text>
         );
@@ -387,7 +387,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(24),
-    color: COLORS.gray,
+    color: COLORS.blackgrey,
     opacity: 0.84,
     marginTop: dimen.normalizeDimen(8),
     marginBottom: dimen.normalizeDimen(12)

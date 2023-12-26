@@ -3,7 +3,7 @@ import Svg, {Path, Rect} from 'react-native-svg';
 import {COLORS} from '../../utils/theme';
 
 function SendComment(props) {
-  const {fillBackground = COLORS.gray1, fillIcon = COLORS.alto} = props;
+  const {fillBackground = COLORS.lightgrey, fillIcon = COLORS.lightgrey} = props;
   return (
     <Svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" {...props}>
       <Rect width={32} height={32} rx={16} fill={fillBackground} />
