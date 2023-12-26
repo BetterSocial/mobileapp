@@ -31,13 +31,13 @@ export const colors = {
   blueSea10: '#55C2FF',
   greenDark: '#004346',
   babyBlue: '#7B9DCD',
-
   signed_primary: '#4782D7',
   signed_secondary: '#6295DD',
   anon_primary: '#003848',
   anon_secondary: '#154B5B',
   radical_red: '#FF3466',
-  light_silver: '#D2D4DB'
+  light_silver: '#D2D4DB',
+  lightgrey60: 'rgba(245, 245, 245, 0.6)'
 };
 
 export const hexToRgb = (hex, opacity = 1) => {

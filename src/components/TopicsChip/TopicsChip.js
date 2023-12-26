@@ -53,11 +53,12 @@ const styles = StyleSheet.create({
     marginLeft: 12
   },
   topicItemContainer: {
-    backgroundColor: colors.lightgrey,
+    backgroundColor: colors.lightgrey60,
     borderRadius: 14,
     overflow: 'hidden',
     marginEnd: 11,
-    marginBottom: 4
+    marginBottom: 4,
+    opacity: 0.6
   },
   topicText: {
     fontFamily: fonts.inter[500],
