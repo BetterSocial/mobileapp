@@ -90,7 +90,7 @@ const TextAreaChat = ({
           S.textArea,
           {color: disabledInput ? COLORS.lightgrey : COLORS.black, minHeight, maxHeight}
         ]}
-        placeholderTextColor={COLORS.lightgrey}
+        placeholderTextColor={COLORS.blackgrey}
         value={message}
         editable={!disabledInput}
       />
@@ -99,7 +99,7 @@ const TextAreaChat = ({
         disabled={!message || disabledButton}
         style={[S.sendIconContainer]}>
         <MemoSendComment
-          fillBackground={isButtonActive ? iconSendBackgroundColor : COLORS.lightgrey}
+          fillBackground={isButtonActive ? iconSendBackgroundColor : COLORS.blackgrey}
           fillIcon={COLORS.white}
         />
       </TouchableOpacity>
