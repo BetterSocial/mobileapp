@@ -264,6 +264,7 @@ const InputMessageV2 = ({
           }
         }
 
+        refAttachment.current.close();
         handleUploadMedia(newMedias);
       });
     } else {
@@ -287,6 +288,7 @@ const InputMessageV2 = ({
           cropperChooseText: 'Next',
           freeStyleCropEnabled: true
         });
+        refAttachment.current.close();
         handleUploadCamera(imageCropped.path);
       });
     } else {
@@ -302,6 +304,7 @@ const InputMessageV2 = ({
       DocumentPicker.pickSingle({
         presentationStyle: 'fullScreen'
       }).then((pickerResult) => {
+        refAttachment.current.close();
         handleFile(pickerResult);
       });
     } else {
