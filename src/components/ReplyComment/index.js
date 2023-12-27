@@ -222,7 +222,7 @@ export const styles = StyleSheet.create({
     borderLeftColor: isLast ? 'transparent' : COLORS.balance_gray
   }),
   seeRepliesText: {
-    color: COLORS.blue
+    color: COLORS.signed_primary
   },
   btn: {
     paddingVertical: 8,

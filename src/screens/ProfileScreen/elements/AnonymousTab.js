@@ -37,7 +37,7 @@ const AnonymousTab = ({isActive = false}) => {
   return (
     <View style={styles.anonymousContainer}>
       <AnonymousIcon
-        fill={isActive ? COLORS.bondi_blue : COLORS.blackgrey}
+        fill={isActive ? COLORS.signed_primary : COLORS.blackgrey}
         width={17}
         height={17}
       />

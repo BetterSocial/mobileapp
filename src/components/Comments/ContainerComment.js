@@ -205,7 +205,7 @@ export const styles = StyleSheet.create({
     borderLeftWidth: 1
   }),
   seeRepliesText: {
-    color: COLORS.blue
+    color: COLORS.signed_primary
   },
   connector: {
     width: 10,
