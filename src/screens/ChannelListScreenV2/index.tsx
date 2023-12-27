@@ -127,7 +127,11 @@ when friends send you messages.`,
         ListHeaderComponent={
           <>
             <View style={{height: 52}}>
-              <Search animatedValue={0} onPress={navigateToContactScreen} />
+              <Search
+                animatedValue={0}
+                onPress={navigateToContactScreen}
+                selectedTab={selectedTab}
+              />
             </View>
 
             <HorizontalTab

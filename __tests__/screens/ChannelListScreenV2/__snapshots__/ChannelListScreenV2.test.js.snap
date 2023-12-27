@@ -15,6 +15,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
         <Search
           animatedValue={0}
           onPress={[Function]}
+          selectedTab={0}
         />
       </View>
       <HorizontalTab

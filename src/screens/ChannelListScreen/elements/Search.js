@@ -10,7 +10,7 @@ import StringConstant from '../../../utils/string/StringConstant';
 import {COLORS, SIZES} from '../../../utils/theme';
 import {DISCOVERY_TAB_USERS} from '../../../utils/constants';
 
-const Search = ({onPress, animatedValue}) => {
+const Search = ({onPress, animatedValue, selectedTab}) => {
   const navigation = useNavigation();
 
   const __handleOnSearchClicked = () => {
@@ -34,12 +34,14 @@ const Search = ({onPress, animatedValue}) => {
           </Text>
         </View>
       </Pressable>
-      <TouchableOpacity style={styles.wrapperButton} onPress={onPress}>
-        <Text style={styles.newPostText}>{StringConstant.chatTabHeaderCreateChatButtonText}</Text>
-        <View>
-          <MemoIcNewChat height={17} width={15} style={styles.newChatIcon} />
-        </View>
-      </TouchableOpacity>
+      {selectedTab === 0 && (
+        <TouchableOpacity style={styles.wrapperButton} onPress={onPress}>
+          <Text style={styles.newPostText}>{StringConstant.chatTabHeaderCreateChatButtonText}</Text>
+          <View>
+            <MemoIcNewChat height={17} width={15} style={styles.newChatIcon} />
+          </View>
+        </TouchableOpacity>
+      )}
     </Animated.View>
   );
 };
