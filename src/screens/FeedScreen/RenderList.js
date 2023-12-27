@@ -8,6 +8,8 @@ import useWriteComment from '../../components/Comments/hooks/useWriteComment';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import {Context} from '../../context';
 import {setFeedByIndex} from '../../context/actions/feeds';
+import usePostHook from '../../hooks/core/post/usePostHook';
+import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {followUserAnon, setFollow, setUnFollow, unfollowUserAnon} from '../../service/profile';
 import {showScoreAlertDialog} from '../../utils/Utils';
 import {
@@ -70,6 +72,14 @@ const RenderListFeed = (props) => {
     getTotalReaction,
     showScoreButton
   } = useFeed();
+
+  const [feedsContext, feedsContextDispatch] = React.useContext(Context).feeds;
+  const [followContext, followingDispatch] = React.useContext(Context).following;
+  const [profileContext] = React.useContext(Context).profile;
+  const {myProfile} = profileContext;
+  const {anonProfileId, signedProfileId} = useProfileHook();
+  const {isFollowingUser} = useFollowUser();
+
   const {handleUserName} = useWriteComment();
 
   const postApiUpvote = async (status) => {
@@ -89,9 +99,7 @@ const RenderListFeed = (props) => {
     });
   };
 
-  const [feedsContext, feedsContextDispatch] = React.useContext(Context).feeds;
-  const [profileContext] = React.useContext(Context).profile;
-  const {myProfile} = profileContext;
+  const {followUnfollow} = usePostHook();
 
   const onPressDownVoteHandle = async () => {
     onPressDownVoteHook();
@@ -231,7 +239,7 @@ const RenderListFeed = (props) => {
           isShowDelete={isShowDelete}
           isSelf={isSelf}
           isFollow={item?.is_following_target}
-          onPressFollUnFoll={handleFollowUnfollow}
+          onPressFollUnFoll={() => followUnfollow(item)}
         />
         {item.post_type === POST_TYPE_LINK && (
           <ContentLink

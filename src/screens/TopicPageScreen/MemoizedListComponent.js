@@ -1,15 +1,15 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
 import SimpleToast from 'react-native-simple-toast';
 import {Dimensions, StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
 
-import Content from '../FeedScreen/Content';
-import ContentLink from '../FeedScreen/ContentLink';
-import Header from '../FeedScreen/Header';
-import ShareUtils from '../../utils/share';
-import StringConstant from '../../utils/string/StringConstant';
-import dimen from '../../utils/dimen';
-import useFeed from '../FeedScreen/hooks/useFeed';
+import {useRoute} from '@react-navigation/core';
+import {Footer, PreviewComment} from '../../components';
+import useWriteComment from '../../components/Comments/hooks/useWriteComment';
+import TopicsChip from '../../components/TopicsChip/TopicsChip';
+import usePostHook from '../../hooks/core/post/usePostHook';
+import {showScoreAlertDialog} from '../../utils/Utils';
 import {
   ANALYTICS_SHARE_POST_TOPIC_ID,
   ANALYTICS_SHARE_POST_TOPIC_SCREEN,
@@ -17,17 +17,22 @@ import {
   POST_TYPE_POLL,
   POST_TYPE_STANDARD
 } from '../../utils/constants';
-import {Footer, PreviewComment} from '../../components';
-import {getCommentLength, getCountCommentWithChild} from '../../utils/getstream';
-import {showScoreAlertDialog} from '../../utils/Utils';
+import dimen from '../../utils/dimen';
 import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
+import {getCommentLength, getCountCommentWithChild} from '../../utils/getstream';
+import ShareUtils from '../../utils/share';
+import StringConstant from '../../utils/string/StringConstant';
 import {COLORS} from '../../utils/theme';
 import WriteComment from '../../components/Comments/WriteComment';
 import useWriteComment from '../../components/Comments/hooks/useWriteComment';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
-import useCalculationContent from '../FeedScreen/hooks/useCalculationContent';
-import BlurredLayer from '../FeedScreen/elements/BlurredLayer';
+import Content from '../FeedScreen/Content';
+import ContentLink from '../FeedScreen/ContentLink';
+import Header from '../FeedScreen/Header';
 import AddCommentPreview from '../FeedScreen/elements/AddCommentPreview';
+import BlurredLayer from '../FeedScreen/elements/BlurredLayer';
+import useCalculationContent from '../FeedScreen/hooks/useCalculationContent';
+import useFeed from '../FeedScreen/hooks/useFeed';
 
 const FULL_WIDTH = Dimensions.get('screen').width;
 const tabBarHeight = StatusBar.currentHeight;
@@ -44,7 +49,8 @@ const RenderListFeed = (props) => {
     userId,
     onPressDownVote,
     selfUserId,
-    onPressUpvote
+    onPressUpvote,
+    offset
   } = props;
 
   const [loadingVote, setLoadingVote] = React.useState(false);
@@ -66,6 +72,8 @@ const RenderListFeed = (props) => {
     showScoreButton
   } = useFeed();
   const {handleUserName} = useWriteComment();
+  const {followUnfollowTopic} = usePostHook();
+  const route = useRoute();
 
   const onPressDownVoteHandle = async () => {
     onPressDownVoteHook();
@@ -154,6 +162,9 @@ const RenderListFeed = (props) => {
           hideThreeDot={true}
           props={item}
           height={getHeightHeader()}
+          isSelf={item?.is_self}
+          isFollow={item?.is_following_target}
+          onPressFollUnFoll={() => followUnfollowTopic(item, route?.params?.id, offset)}
         />
         {item.post_type === POST_TYPE_LINK && (
           <ContentLink
