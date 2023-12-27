@@ -22,14 +22,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 6,
     borderWidth: 1,
-    borderColor: COLORS.anon_primary,
+    borderColor: COLORS.signed_primary,
     borderRadius: 8
   },
   textButtonFollowing: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: normalizeFontSize(12),
-    color: COLORS.anon_primary
+    color: COLORS.signed_primary
   }
 });
 

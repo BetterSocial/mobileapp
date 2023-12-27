@@ -723,7 +723,7 @@ const CreatePost = () => {
       animatedReminder.setValue(0);
     }
   }, [typeUser]);
-
+  console.log({typeUser}, 'heja');
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -830,7 +830,7 @@ const CreatePost = () => {
             </>
           )}
           <Gap style={styles.height(25)} />
-          <Button disabled={isButtonDisabled()} onPress={postV2}>
+          <Button style={styles.btnPost(typeUser)} disabled={isButtonDisabled()} onPress={postV2}>
             Post
           </Button>
           <Gap style={styles.height(18)} />
@@ -936,7 +936,7 @@ const styles = StyleSheet.create({
     height
   }),
   reminderContainer: {
-    backgroundColor: COLORS.blue,
+    backgroundColor: COLORS.anon_primary,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 7,
@@ -947,5 +947,8 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontSize: normalizeFontSize(10),
     textAlign: 'center'
-  }
+  },
+  btnPost: (isAnonym) => ({
+    backgroundColor: isAnonym ? COLORS.anon_primary : COLORS.signed_primary
+  })
 });
