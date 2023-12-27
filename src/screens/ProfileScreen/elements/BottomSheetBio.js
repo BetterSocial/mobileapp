@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 33,
-    backgroundColor: COLORS.bondi_blue
+    backgroundColor: COLORS.signed_primary
   },
   textStyling: {
     fontFamily: fonts.inter[600],
