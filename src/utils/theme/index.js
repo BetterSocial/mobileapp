@@ -27,8 +27,8 @@ export const COLORS = {
   white: '#FFFFFF',
   whiteSmoke: '#F4F4F4',
 
-  //new color
-  signed_primary: 'pink',
+  // new color
+  signed_primary: '#4782D7',
   signed_secondary: '#6295DD',
   anon_primary: '#107793',
   anon_secondary: '#3A9BB6',
@@ -41,7 +41,8 @@ export const COLORS = {
   blackgrey: '#828282',
   greySubtile1: '#9B9FA9',
   elm: '#22878B',
-  halfBaked: '#88CDD0'
+  halfBaked: '#88CDD0',
+  greenDark: '#004346'
 };
 export const SIZES = {
   // global sizes

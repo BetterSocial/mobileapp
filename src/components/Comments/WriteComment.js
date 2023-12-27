@@ -136,9 +136,7 @@ const WriteComment = ({
           style={styles.btn(!isCommentEnabled || loadingUser || loadingPost)}
           disabled={!isCommentEnabled || loadingUser || loadingPost}>
           <MemoSendComment
-            fillBackground={
-              !isCommentEnabled || loadingUser ? COLORS.balance_gray : COLORS.bondi_blue
-            }
+            fillBackground={!isCommentEnabled || loadingUser ? COLORS.gray : COLORS.signed_primary}
           />
         </TouchableOpacity>
       </View>
