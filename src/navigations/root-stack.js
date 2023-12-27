@@ -39,7 +39,6 @@ import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import TopicMemberScreen from '../screens/TopicMemberScreen';
 import TopicPageScreen from '../screens/TopicPageScreen';
 import Topics from '../screens/Topics';
-import WebsocketResearchScreen from '../screens/WebsocketResearchScreen';
 import WhotoFollow from '../screens/WhotoFollow';
 import api from '../service/config';
 import {
@@ -336,11 +335,6 @@ const AuthenticatedNavigator = () => {
         <AuthenticatedStack.Screen
           name="ChannelScreen"
           component={withKeyboardWrapper(ChannelScreen)}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="WebsocketResearchScreen"
-          component={withKeyboardWrapper(WebsocketResearchScreen)}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
