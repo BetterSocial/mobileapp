@@ -82,6 +82,10 @@ const NavHeader = (props) => {
     navigation.goBack();
   };
 
+  const renderBlur = !(coverPath?.length > 0)
+    ? false
+    : !hasSearch || (hasSearch && coverPath?.length > 0);
+
   const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 
   return (
@@ -113,16 +117,18 @@ const NavHeader = (props) => {
                     height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
                   }}
                 />
-                <AnimatedBlurView
-                  style={[
-                    StyleSheet.absoluteFillObject,
-                    {
-                      opacity: opacityImage
-                    }
-                  ]}
-                  blurAmount={1}
-                  blurType="dark"
-                />
+                {renderBlur && (
+                  <AnimatedBlurView
+                    style={[
+                      StyleSheet.absoluteFillObject,
+                      {
+                        opacity: opacityImage
+                      }
+                    ]}
+                    blurAmount={1}
+                    blurType="dark"
+                  />
+                )}
               </View>
             </>
           )}
@@ -149,7 +155,6 @@ const NavHeader = (props) => {
             style={
               (styles.containerAction,
               {
-                alignItems: 'flex-start',
                 paddingTop: insets.top,
                 paddingRight: dimen.normalizeDimen(20),
                 zIndex: 2,
@@ -181,7 +186,13 @@ const NavHeader = (props) => {
                   style={styles.image}
                 />
               </Animated.View>
-              <View style={styles.containerAction}>
+              <View
+                style={[
+                  styles.containerAction,
+                  {
+                    alignSelf: 'center'
+                  }
+                ]}>
                 <Animated.View style={{opacity: opacityHeaderAnimation}}>
                   {isFollow === undefined && isLoading ? (
                     <Shimmer width={normalize(100)} height={normalize(36)} />
@@ -196,7 +207,7 @@ const NavHeader = (props) => {
             <Animated.View
               style={[
                 styles.domain(isHeaderHide),
-                {bottom: normalize(20), opacity: opacityHeaderAnimation}
+                {bottom: normalize(isFollow ? 13 : 24), opacity: opacityHeaderAnimation}
               ]}>
               <TopicDomainHeader {...props} />
             </Animated.View>
@@ -205,7 +216,10 @@ const NavHeader = (props) => {
       </View>
 
       {hasSearch && (
-        <View style={{}}>
+        <View
+          style={{
+            width: '100%'
+          }}>
           <Search
             searchText={searchText}
             setSearchText={setSearchText}
