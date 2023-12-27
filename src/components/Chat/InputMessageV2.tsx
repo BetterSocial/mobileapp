@@ -372,7 +372,7 @@ const InputMessageV2 = ({
 
   const plusButtonStyle = React.useCallback(() => {
     if (type === SIGNED) return COLORS.signed_primary;
-    return COLORS.signed_primary;
+    return COLORS.anon_secondary;
   }, []);
 
   return (
