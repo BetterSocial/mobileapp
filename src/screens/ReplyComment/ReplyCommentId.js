@@ -337,7 +337,7 @@ const styles = StyleSheet.create({
     borderLeftColor: isLast ? 'transparent' : COLORS.lightgrey
   }),
   seeRepliesText: {
-    color: COLORS.blue
+    color: COLORS.signed_primary
   },
   btn: {
     paddingVertical: 8,

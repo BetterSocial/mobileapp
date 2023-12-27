@@ -5,6 +5,7 @@ import {Dimensions, StyleSheet, Text, View} from 'react-native';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
+import AnonymousIcon from '../../assets/icon/AnonymousIcon';
 
 export interface ChannelListTabItemProps {
   picture: string | null;
@@ -63,7 +64,10 @@ const ChannelListTabItem = (props: ChannelListTabItemProps) => {
       {typeof picture === 'string' ? (
         <FastImage source={{uri: picture}} style={styles.picture} />
       ) : (
-        <FastImage source={picture} style={styles.picture} />
+        <View style={styles.picture}>
+          <AnonymousIcon size={20} fill={COLORS.anon_primary} />
+        </View>
+        // <FastImage source={picture} style={styles.picture} />
       )}
       <Text numberOfLines={1} ellipsizeMode="tail" style={styles.name}>
         as {name}

@@ -91,7 +91,7 @@ const PreviewComment = ({comment, time, image, totalComment, onPress, user, item
         <TouchableOpacity style={styles.btnMore} onPress={onPress}>
           <Text
             style={{
-              color: COLORS.blue,
+              color: COLORS.signed_primary,
               ...FONTS.body4
             }}>{`${totalComment} more ${totalComment > 1 ? 'replies' : 'reply'}`}</Text>
         </TouchableOpacity>
