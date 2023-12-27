@@ -825,7 +825,7 @@ const CreatePost = () => {
             </>
           )}
           <Gap style={styles.height(25)} />
-          <Button style={styles.btnPost(typeUser)} disabled={isButtonDisabled()} onPress={postV2}>
+          <Button styles={styles.btnPost(typeUser)} disabled={isButtonDisabled()} onPress={postV2}>
             Post
           </Button>
           <Gap style={styles.height(18)} />

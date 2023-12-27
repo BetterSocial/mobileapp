@@ -79,7 +79,7 @@ const BioAndDMSetting = ({
   const isBioEmpty = bio === null || bio === undefined;
 
   return (
-    <View style={styles.container(useDynamicColors(isAnonymity).primary)}>
+    <View style={styles.container}>
       <Pressable onPress={() => changeBio()} style={{paddingVertical: 12}}>
         {isBioEmpty ? (
           <Text style={styles.editPromptLabel}>Edit Prompt</Text>
@@ -133,12 +133,12 @@ const BioAndDMSetting = ({
 };
 
 const styles = StyleSheet.create({
-  container: (bgColor) => ({
-    backgroundColor: bgColor || COLORS.signed_primary,
+  container: {
+    backgroundColor: COLORS.signed_primary,
     borderRadius: 15,
     paddingHorizontal: 12,
     marginTop: 20
-  }),
+  },
   editPromptLabel: {color: COLORS.blueSea, textDecorationLine: 'underline'},
   bioText: {
     color: COLORS.lightgrey,
