@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     marginTop: 7
   },
   button: {
-    backgroundColor: COLORS.bondi_blue,
+    backgroundColor: COLORS.signed_primary,
     marginTop: dimen.normalizeDimen(7)
   },
   textStyling: {
