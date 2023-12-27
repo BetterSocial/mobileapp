@@ -86,6 +86,7 @@ export const requestExternalStoragePermission = async () => {
     if (
       requestResult['android.permission.READ_EXTERNAL_STORAGE'] === 'granted' ||
       requestResult['ios.permission.PHOTO_LIBRARY'] === 'granted' ||
+      requestResult['ios.permission.PHOTO_LIBRARY'] === 'limited' ||
       requestResult['android.permission.READ_MEDIA_IMAGES'] === 'granted'
     ) {
       return {

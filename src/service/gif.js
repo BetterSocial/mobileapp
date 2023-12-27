@@ -1,9 +1,9 @@
 import api from './config';
 
-export const getGifFeatured = async () =>
+export const getGifFeatured = async (search) =>
   new Promise((resolve, reject) => {
     api
-      .get('/chat/gif/featured')
+      .get(search?.trim() !== '' ? `/chat/gif/search?q=${search.trim()}` : '/chat/gif/featured')
       .then((res) => {
         resolve(res.data);
       })
