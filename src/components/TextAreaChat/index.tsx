@@ -99,7 +99,7 @@ const TextAreaChat = ({
         disabled={!message || disabledButton}
         style={[S.sendIconContainer]}>
         <MemoSendComment
-          fillBackground={isButtonActive ? iconSendBackgroundColor : COLORS.blackgrey}
+          fillBackground={isButtonActive ? iconSendBackgroundColor : COLORS.gray}
           fillIcon={COLORS.white}
         />
       </TouchableOpacity>

@@ -24,7 +24,6 @@ import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BlockIcon from '../../assets/icons/images/block-blue.svg';
 import BlockProfile from '../../components/Blocking/BlockProfile';
 import BottomSheetBio from '../ProfileScreen/elements/BottomSheetBio';
-import EnveloveBlueIcon from '../../assets/icons/images/envelove-blue.svg';
 import GlobalButton from '../../components/Button/GlobalButton';
 import ProfileHeader from '../ProfileScreen/elements/ProfileHeader';
 import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
@@ -61,6 +60,7 @@ import useCreateChat from '../../hooks/screen/useCreateChat';
 import {ANON_PM, SIGNED} from '../../hooks/core/constant';
 import {ToggleSwitchAnon, useDynamicColors} from '../../hooks/useToggleColors';
 import {COLORS} from '../../utils/theme';
+import EnvelopeIcon from '../../assets/icon/EnvelopeIcon';
 
 const {width, height} = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -92,8 +92,7 @@ const BioAndChat = (props) => {
         ) : (
           <Pressable onPress={openBio}>
             <Text linkStyle={styles.seeMore} style={styles.bioText(dynamicColors)}>
-              {trimString(bio, 121)}{' '}
-              {bio.length > 121 ? <Text style={{color: COLORS.blue}}>see more</Text> : null}
+              {bio}
             </Text>
           </Pressable>
         )}
@@ -453,8 +452,8 @@ const OtherProfile = () => {
         );
 
       return (
-        <View style={{...styles.btnMsg, borderColor: COLORS.lightgrey}}>
-          <BlockIcon width={20} height={20} style={{color: COLORS.lightgrey}} />
+        <View style={{...styles.btnMsg, borderColor: COLORS.signed_primary}}>
+          <BlockIcon width={20} height={20} style={{color: COLORS.signed_primary}} />
         </View>
       );
     };
@@ -532,7 +531,7 @@ const OtherProfile = () => {
           {__renderFollowingButton()}
           <GlobalButton onPress={onCreateChat}>
             <View style={styles.btnMsg}>
-              <EnveloveBlueIcon width={20} height={20} fill={COLORS.bondi_blue} />
+              <EnvelopeIcon />
             </View>
           </GlobalButton>
         </React.Fragment>
@@ -913,7 +912,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[800],
     fontWeight: 'bold',
     fontSize: 14,
-    color: COLORS.bondi_blue,
+    color: COLORS.signed_primary,
     paddingRight: 4
   },
   textFollow: {
@@ -944,7 +943,7 @@ const styles = StyleSheet.create({
     color: COLORS.black,
     paddingBottom: 12,
     borderBottomWidth: 2,
-    borderBottomColor: COLORS.bondi_blue
+    borderBottomColor: COLORS.signed_primary
   },
   wrapNameAndbackButton: {
     flexDirection: 'row',
@@ -969,7 +968,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: COLORS.bondi_blue,
+    borderColor: COLORS.signed_primary,
     borderRadius: 8
   },
   buttonFollow: {
@@ -979,14 +978,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    backgroundColor: COLORS.bondi_blue,
+    backgroundColor: COLORS.signed_primary,
     color: COLORS.white
   },
   textButtonFollowing: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: COLORS.bondi_blue
+    color: COLORS.signed_primary
   },
   textButtonFollow: {
     fontFamily: fonts.inter[600],
@@ -1027,7 +1026,7 @@ const styles = StyleSheet.create({
     height: 36,
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: COLORS.bondi_blue,
+    borderColor: COLORS.signed_primary,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'
