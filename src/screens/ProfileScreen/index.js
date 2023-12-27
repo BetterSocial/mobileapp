@@ -29,8 +29,8 @@ import BottomSheetImage from './elements/BottomSheetImage';
 import BottomSheetRealname from './elements/BottomSheetRealname';
 import CustomPressable from '../../components/CustomPressable';
 import FollowInfoRow from './elements/FollowInfoRow';
+import ImageCompressionUtils from '../../utils/image/compress';
 import LinkAndSocialMedia from './elements/LinkAndSocialMedia';
-import PostOptionModal from '../../components/Modal/PostOptionModal';
 import ProfileHeader from './elements/ProfileHeader';
 import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
@@ -53,6 +53,7 @@ import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {ButtonNewPost} from '../../components/Button';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH, SOURCE_MY_PROFILE} from '../../utils/constants';
+import {KarmaScore} from './elements/KarmaScore';
 import {
   changeRealName,
   getMyProfile,
@@ -98,12 +99,20 @@ const Header = (props) => {
         headerHeightRef.current = headerHeightLayout;
       }}>
       <View style={styles.content}>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row', alignContent: 'center', alignItems: 'center'}}>
           <ProfilePicture
             onImageContainerClick={changeImage}
             profilePicPath={dataMain.profile_pic_path}
+            karmaScore={dataMain.karma_score}
           />
-          <View style={{marginLeft: 20}}>
+          <View
+            style={{
+              flexDirection: 'column',
+              paddingHorizontal: 14,
+              paddingVertical: 5,
+              justifyContent: 'center'
+            }}>
+            <KarmaScore score={Math.floor(dataMain.karma_score)} />
             <FollowInfoRow
               follower={dataMain.follower_symbol}
               following={dataMain.following_symbol}
@@ -169,12 +178,11 @@ const ProfileScreen = ({route}) => {
   const [opacity, setOpacity] = React.useState(0);
   const [tempBio, setTempBio] = React.useState('');
   const [tempFullName, setTempFullName] = React.useState('');
-  const [isLoadingUpdateImageGalery, setIsLoadingUpdateImageGalery] = React.useState(false);
+  const [isLoadingUpdateImageGallery, setIsLoadingUpdateImageGallery] = React.useState(false);
   const [isLoadingUpdateImageCamera, setIsLoadingUpdateImageCamera] = React.useState(false);
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
-  const [isPostOptionModalOpen, setIsOptionModalOpen] = React.useState(false);
   const [selectedPostForOption, setSelectedPostForOption] = React.useState(null);
   const [isFetchingList, setIsFetchingList] = React.useState(false);
   const {interactionsComplete} = useAfterInteractions();
@@ -185,6 +193,7 @@ const ProfileScreen = ({route}) => {
   const {refreshCount} = useResetContext();
   const {mappingColorFeed} = useCoreFeed();
   const LIMIT_PROFILE_FEED = 10;
+  const TYPE_GALLERY = 'gallery';
 
   const {feeds} = myProfileFeed;
   const {
@@ -270,10 +279,9 @@ const ProfileScreen = ({route}) => {
     try {
       setIsFetchingList(true);
       setIsHitApiFirstTime(true);
-      const cacheFeed = StorageUtils.myFeeds.get();
       const result = await getSelfFeedsInProfile(offset, limit);
       const {data: dataMyFeed} = result;
-      const {mapNewData} = mappingColorFeed({dataFeed: dataMyFeed, dataCache: cacheFeed});
+      const mapNewData = mappingColorFeed(dataMyFeed);
       if (offset === 0) {
         StorageUtils.myFeeds.set(JSON.stringify(mapNewData));
         setMyProfileFeed(mapNewData, myProfileDispatch);
@@ -375,7 +383,7 @@ const ProfileScreen = ({route}) => {
         mediaType: 'photo',
         includeBase64: true
       }).then((imageRes) => {
-        handleUpdateImage(`data:image/jpeg;base64,${imageRes.data}`, 'gallery');
+        handleUpdateImage(`data:image/jpeg;base64,${imageRes.data}`, TYPE_GALLERY);
       });
     } else {
       openAlertPermission(
@@ -418,37 +426,50 @@ const ProfileScreen = ({route}) => {
     });
   };
 
-  const handleUpdateImage = (value, type) => {
-    if (type === 'gallery') {
-      setIsLoadingUpdateImageGalery(true);
-    } else {
-      setIsLoadingUpdateImageCamera(true);
-    }
-    const data = {
-      profile_pic_path: value
-    };
+  const handleUpdateImage = async (imgBase64, type) => {
+    try {
+      if (type === TYPE_GALLERY) {
+        setIsLoadingUpdateImageGallery(true);
+      } else {
+        setIsLoadingUpdateImageCamera(true);
+      }
+      const compressionResult = await ImageCompressionUtils.compress(imgBase64, 'base64');
+      const data = {
+        profile_pic_path: compressionResult
+      };
 
-    updateImageProfile(data)
-      .then(async (res) => {
-        if (type === 'gallery') {
-          setIsLoadingUpdateImageGalery(false);
-        } else {
-          setIsLoadingUpdateImageCamera(false);
-        }
-        if (res.code === 200) {
-          closeImageBs();
-          getMyFeeds();
-          const profilePicture = await fetchMyProfile(true);
-          updateUserClient(profilePicture);
-        }
-      })
-      .catch(() => {
-        if (type === 'gallery') {
-          setIsLoadingUpdateImageGalery(false);
-        } else {
-          setIsLoadingUpdateImageCamera(false);
-        }
+      updateImageProfile(data)
+        .then(async (res) => {
+          if (type === TYPE_GALLERY) {
+            setIsLoadingUpdateImageGallery(false);
+          } else {
+            setIsLoadingUpdateImageCamera(false);
+          }
+          if (res.code === 200) {
+            closeImageBs();
+            getMyFeeds();
+            const profilePicture = await fetchMyProfile(true);
+            updateUserClient(profilePicture);
+          }
+        })
+        .catch(() => {
+          if (type === TYPE_GALLERY) {
+            setIsLoadingUpdateImageGallery(false);
+          } else {
+            setIsLoadingUpdateImageCamera(false);
+          }
+        });
+    } catch (error) {
+      showMessage({
+        message: 'Failed to update profile',
+        type: 'danger'
       });
+      if (type === TYPE_GALLERY) {
+        setIsLoadingUpdateImageGallery(false);
+      } else {
+        setIsLoadingUpdateImageCamera(false);
+      }
+    }
   };
 
   const handleRemoveImageProfile = async () => {
@@ -479,6 +500,7 @@ const ProfileScreen = ({route}) => {
   };
 
   const debounceModalOpen = debounce(() => {
+    setTempBio(profile?.myProfile?.bio);
     bottomSheetBioRef.current.open();
   }, 350);
 
@@ -564,16 +586,6 @@ const ProfileScreen = ({route}) => {
     fetchMyProfile(true);
   }
 
-  const onHeaderOptionClosed = () => {
-    setSelectedPostForOption(null);
-    setIsOptionModalOpen(false);
-  };
-
-  const onHeaderOptionClicked = (post) => {
-    setSelectedPostForOption(post);
-    setIsOptionModalOpen(true);
-  };
-
   const removePostByIdFromContext = () => {
     const deletedIndex = feeds?.findIndex((find) => selectedPostForOption?.id === find?.id);
     const newData = [...feeds];
@@ -582,7 +594,6 @@ const ProfileScreen = ({route}) => {
   };
 
   const onDeletePost = async () => {
-    setIsOptionModalOpen(false);
     removePostByIdFromContext();
 
     let response;
@@ -595,9 +606,8 @@ const ProfileScreen = ({route}) => {
     if (isProfileTabSigned) return getMyFeeds();
     return reloadFetchAnonymousPost();
   };
-
   return (
-    <SafeAreaProvider style={styles.container} forceInset={{top: 'always'}}>
+    <View style={styles.container} forceInset={{top: 'always'}}>
       <StatusBar translucent={false} />
       <ProfileHeader
         showArrow={isNotFromHomeTab}
@@ -651,7 +661,9 @@ const ProfileScreen = ({route}) => {
               source={SOURCE_MY_PROFILE}
               hideThreeDot={false}
               showAnonymousOption={true}
-              onHeaderOptionClicked={() => onHeaderOptionClicked(item)}
+              onDeletePost={() => onDeletePost()}
+              isSelf={item.is_self}
+              isShowDelete={true}
             />
           );
         }}
@@ -679,7 +691,7 @@ const ProfileScreen = ({route}) => {
         onOpenImageGalery={() => onOpenImageGalery()}
         onOpenCamera={() => onOpenCamera()}
         handleRemoveImageProfile={() => handleRemoveImageProfile()}
-        isLoadingUpdateImageGalery={isLoadingUpdateImageGalery}
+        isLoadingUpdateImageGallery={isLoadingUpdateImageGallery}
         isLoadingUpdateImageCamera={isLoadingUpdateImageCamera}
         isLoadingRemoveImage={isLoadingRemoveImage}
       />
@@ -696,12 +708,7 @@ const ProfileScreen = ({route}) => {
       ) : null}
 
       <BlockComponent ref={refBlockComponent} refresh={getMyFeeds} screen="my_profile" />
-      <PostOptionModal
-        isOpen={isPostOptionModalOpen}
-        onClose={onHeaderOptionClosed}
-        onDeleteClicked={onDeletePost}
-      />
-    </SafeAreaProvider>
+    </View>
   );
 };
 
@@ -714,7 +721,8 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: 'column',
     paddingHorizontal: 20,
-    backgroundColor: colors.white
+    backgroundColor: colors.white,
+    marginTop: 14
   },
   dummyItem: (heightItem) => ({
     height: heightItem,

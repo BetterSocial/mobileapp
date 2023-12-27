@@ -1,26 +1,25 @@
-import * as React from 'react';
-import {Animated, InteractionManager, StatusBar, StyleSheet} from 'react-native';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
+import * as React from 'react';
+import {Animated, InteractionManager, StatusBar, StyleSheet, View} from 'react-native';
 
 import BlockComponent from '../../components/BlockComponent';
-import RenderListFeed from './RenderList';
-import Search from './elements/Search';
+import {ButtonNewPost} from '../../components/Button';
 import TiktokScroll from '../../components/TiktokScroll';
-import dimen from '../../utils/dimen';
-import useCoreFeed from './hooks/useCoreFeed';
-import useViewPostTimeHook from './hooks/useViewPostTimeHook';
+import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import {Context} from '../../context';
+import {setFeedByIndex} from '../../context/actions/feeds';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
 } from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
-import {ButtonNewPost} from '../../components/Button';
-import {Context} from '../../context';
-import {DISCOVERY_TAB_TOPICS} from '../../utils/constants';
-import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
-import {normalizeFontSizeByWidth} from '../../utils/fonts';
-import {setFeedByIndex} from '../../context/actions/feeds';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
-import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import {DISCOVERY_TAB_TOPICS} from '../../utils/constants';
+import dimen from '../../utils/dimen';
+import {normalizeFontSizeByWidth} from '../../utils/fonts';
+import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import RenderListFeed from './RenderList';
+import Search from './elements/Search';
+import useCoreFeed from './hooks/useCoreFeed';
+import useViewPostTimeHook from './hooks/useViewPostTimeHook';
 
 let lastDragY = 0;
 
@@ -220,6 +219,8 @@ const FeedScreen = (props) => {
       searchHeight={searchHeight}
       bottomArea={bottom}
       isScroll={isScroll}
+      hideThreeDot={false}
+      isSelf={item.is_self}
     />
   );
 
@@ -230,7 +231,7 @@ const FeedScreen = (props) => {
   };
 
   return (
-    <SafeAreaProvider style={styles.container} forceInset={{top: 'always'}}>
+    <View>
       <StatusBar translucent={false} />
       <Search
         getSearchLayout={saveSearchHeightHandle}
@@ -261,7 +262,7 @@ const FeedScreen = (props) => {
         refreshAnonymous={onDeleteBlockedPostCompletedHandle}
         screen="screen_feed"
       />
-    </SafeAreaProvider>
+    </View>
   );
 };
 

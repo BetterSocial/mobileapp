@@ -161,11 +161,109 @@ const getOrCreateAnonymousChannel = async (userId) => {
   }
 };
 
+const moveChatToSigned = async ({oldChannelId, targetUserId, source}) => {
+  try {
+    const response = await api.post('/chat/move-to-sign', {oldChannelId, targetUserId, source});
+    if (response.status === 200) {
+      return Promise.resolve(response.data);
+    }
+    return Promise.reject(response.data);
+  } catch (e) {
+    if (e?.response?.data?.message) return Promise.reject(e?.response?.data?.message);
+    return Promise.reject(e);
+  }
+};
+
+const moveChatToAnon = async ({
+  anon_user_info_color_code,
+  anon_user_info_color_name,
+  anon_user_info_emoji_code,
+  anon_user_info_emoji_name,
+  oldChannelId,
+  targetUserId,
+  source
+}) => {
+  try {
+    const response = await anonymousApi.post('/chat/move-to-anon', {
+      anon_user_info_color_code,
+      anon_user_info_color_name,
+      anon_user_info_emoji_code,
+      anon_user_info_emoji_name,
+      oldChannelId,
+      targetUserId,
+      source
+    });
+    if (response.status === 200) {
+      return Promise.resolve(response.data);
+    }
+    return Promise.reject(response.data);
+  } catch (e) {
+    if (e?.response?.data?.message) return Promise.reject(e?.response?.data?.message);
+    return Promise.reject(e);
+  }
+};
+
+const initChatFromPost = async ({source, id}) => {
+  let payload = {source};
+  switch (source) {
+    case 'post':
+      payload = {...payload, postId: id};
+      break;
+    case 'comment':
+      payload = {...payload, commentId: id};
+      break;
+    default:
+      break;
+  }
+
+  try {
+    const response = await api.post('/chat/init-chat-from-post', payload);
+    if (response?.status === 200) {
+      return Promise.resolve(response.data);
+    }
+
+    return Promise.reject(response.data);
+  } catch (e) {
+    if (e?.response?.data?.message) return Promise.reject(e?.response?.data?.message);
+    return Promise.reject(e);
+  }
+};
+
+const initChatFromPostAnon = async ({source, id}) => {
+  let payload = {source};
+  switch (source) {
+    case 'post':
+      payload = {...payload, postId: id};
+      break;
+    case 'comment':
+      payload = {...payload, commentId: id};
+      break;
+    default:
+      break;
+  }
+
+  try {
+    const response = await anonymousApi.post('/chat/init-chat-from-post', payload);
+    if (response?.status === 200) {
+      return Promise.resolve(response.data);
+    }
+
+    return Promise.reject(response.data);
+  } catch (e) {
+    if (e?.response?.data?.message) return Promise.reject(e?.response?.data?.message);
+    return Promise.reject(e);
+  }
+};
+
 export {
   createChannel,
   sendSystemMessage,
   sendAnonymousDMOtherProfile,
   sendSignedDMOtherProfile,
   getOrCreateAnonymousChannel,
-  followClient
+  followClient,
+  moveChatToSigned,
+  moveChatToAnon,
+  initChatFromPost,
+  initChatFromPostAnon
 };

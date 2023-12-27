@@ -50,7 +50,7 @@ const ChannelListScreenV2 = ({route}) => {
   };
 
   return (
-    <>
+    <View>
       <StatusBar translucent={false} />
       <View style={{height: 52}}>
         <Search route={route} onPress={goToContactScreen} isShowNewChat={false} />
@@ -69,7 +69,7 @@ const ChannelListScreenV2 = ({route}) => {
         }
         renderItem={renderChannelItem}
       />
-    </>
+    </View>
   );
 };
 

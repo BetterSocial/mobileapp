@@ -16,7 +16,7 @@ const SheetCloseBtn = ({backRef, goBack, continueToEdit}) => {
       closeOnPressMask={true}
       customStyles={{
         container: styles.containerSheet,
-        draggableIcon: styles.draggableIcon,
+        draggableIcon: styles.draggableIcon
       }}>
       <View style={styles.container}>
         <Text style={styles.header}>Are you sure?</Text>
@@ -27,7 +27,7 @@ const SheetCloseBtn = ({backRef, goBack, continueToEdit}) => {
         <Gap style={styles.gap(10)} />
         <Button
           onPress={goBack}
-          style={{backgroundColor: colors.porcelain}}
+          styles={{backgroundColor: colors.porcelain}}
           textStyling={{color: colors.black}}>
           <Text>Discard post</Text>
         </Button>
@@ -42,24 +42,24 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 20,
     paddingBottom: 38,
-    paddingHorizontal: 20,
+    paddingHorizontal: 20
   },
   header: {
     color: colors.black,
     fontFamily: fonts.inter[600],
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   containerBtn: {flexDirection: 'row'},
   containerSheet: {
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
-    height: 240,
+    height: 240
   },
   draggableIcon: {
-    backgroundColor: colors.alto,
+    backgroundColor: colors.alto
   },
   gap: (height) => ({
-    height,
-  }),
+    height
+  })
 });

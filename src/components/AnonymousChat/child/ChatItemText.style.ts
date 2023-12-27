@@ -45,11 +45,12 @@ export const styles = StyleSheet.create({
   },
   chatTitleContainer: {
     display: 'flex',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    marginBottom: dimen.normalizeDimen(4)
   },
   textContainer: {
     flex: 1,
-    paddingHorizontal: dimen.normalizeDimen(6),
+    paddingHorizontal: dimen.normalizeDimen(4),
     paddingVertical: dimen.normalizeDimen(4),
     backgroundColor: colors.lightgrey,
     borderRadius: 8
@@ -66,19 +67,16 @@ export const styles = StyleSheet.create({
   textContainerTargetText: {
     borderTopStartRadius: 0
   },
-  textContainerNewLine: {
-    paddingBottom: 14
-  },
   userText: {
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(12),
     lineHeight: 19.36
   },
   text: {
+    flex: 1,
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(16),
-    lineHeight: 19.36,
-    marginBottom: 4
+    lineHeight: 19.36
   },
   deletedMyText: {
     color: colors.light_silver,
@@ -116,10 +114,7 @@ export const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   icon: {
-    alignSelf: 'flex-end',
-    position: 'absolute',
-    bottom: 6,
-    right: 8
+    alignSelf: 'flex-end'
   },
   iconNewLine: {
     alignSelf: 'flex-end',
@@ -147,6 +142,60 @@ export const styles = StyleSheet.create({
   },
   radius8: {
     borderRadius: 8
+  },
+  attachmentContainer: {
+    width: '100%',
+    height: 268,
+    borderRadius: 8,
+    overflow: 'hidden',
+    flexDirection: 'row',
+    flexWrap: 'wrap'
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover'
+  },
+  moreOverlay: {
+    position: 'absolute',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  moreText: {
+    fontSize: dimen.normalizeDimen(16),
+    fontFamily: fonts.inter[400],
+    color: colors.white
+  },
+  attachmentFileContainer: {
+    backgroundColor: colors.alto,
+    justifyContent: 'center',
+    minHeight: dimen.normalizeDimen(64),
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  attachmentFileContent: {
+    flex: 1,
+    padding: dimen.normalizeDimen(6)
+  },
+  attachmentFileName: {
+    fontSize: dimen.normalizeDimen(14),
+    fontFamily: fonts.inter[600],
+    color: colors.black
+  },
+  attachmentFileInfo: {
+    fontSize: dimen.normalizeDimen(12),
+    fontFamily: fonts.inter[400],
+    color: colors.gray
+  },
+  attachmentFileIcon: {
+    backgroundColor: colors.light_silver,
+    width: dimen.normalizeDimen(64),
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
 
@@ -157,16 +206,11 @@ export const containerStyle = (isMyText: boolean, isReplyPrompt: boolean) => [
   isReplyPrompt && !isMyText && styles.chatContainerPromptTargetText
 ];
 
-export const textContainerStyle = (
-  isMyText: boolean,
-  type?: 'ANONYMOUS' | 'SIGNED',
-  isNewLine?: boolean
-) => [
+export const textContainerStyle = (isMyText: boolean, type?: 'ANONYMOUS' | 'SIGNED') => [
   styles.textContainer,
   type === SIGNED && styles.textContainerSigned,
   type === ANONYMOUS && styles.textContainerAnon,
-  isMyText ? styles.textContainerMyText : styles.textContainerTargetText,
-  isNewLine && styles.textContainerNewLine
+  isMyText ? styles.textContainerMyText : styles.textContainerTargetText
 ];
 
 export const dotStyle = (isMyText: boolean) => [

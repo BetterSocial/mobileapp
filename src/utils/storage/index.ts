@@ -17,15 +17,19 @@ enum StorageKeysEnum {
   ProfileData = 'profiledata',
   OtherProfileData = 'otherprofiledata',
   LastPromptNotification = 'lastPromptNotification',
-  LastSelectedMenu = 'lastSelectedMenu'
+  LastSelectedMenu = 'lastSelectedMenu',
+  chatInfo = 'chatInfo',
+  BlockedStatus = 'blockedStatus',
+  BlockingStatus = 'blockingStatus',
+  Feed = 'feed'
 }
 
 interface IStorage {
-  get: () => string;
+  get: () => string | undefined;
   set: (value: string) => void;
   clear: () => void;
   setForKey: (key: string, value: string) => void;
-  getForKey: (key: string) => string;
+  getForKey: (key: string) => string | undefined;
   clearForKey: (key: string) => void;
 }
 /**
@@ -83,13 +87,17 @@ const StorageUtils = {
   otherProfileData: storageBuilder(StorageKeysEnum.OtherProfileData),
   lastPromptNotification: storageBuilder(StorageKeysEnum.LastPromptNotification),
   lastSelectedMenu: storageBuilder(StorageKeysEnum.LastSelectedMenu),
+  chatInfo: storageBuilder(StorageKeysEnum.chatInfo),
+  blockingStatus: storageBuilder(StorageKeysEnum.BlockingStatus),
+  blockedStatus: storageBuilder(StorageKeysEnum.BlockedStatus),
+  feed: storageBuilder(StorageKeysEnum.Feed),
   clearAll: () => MMKVStorage.clearAll()
 };
 
 const clearAll = () => {
   const onboardingPassword = StorageUtils.onboardingPassword.get();
   MMKVStorage.clearAll();
-  StorageUtils.onboardingPassword.set(onboardingPassword);
+  StorageUtils.onboardingPassword.set(onboardingPassword || '');
 };
 
 StorageUtils.clearAll = clearAll;
@@ -101,6 +109,7 @@ export interface IStorageUtils {
   jwtToken: Storage;
   anonymousToken: Storage;
   lastPromptNotification: Storage;
+  chatInfo: Storage;
   clearAll: () => void;
 }
 export default StorageUtils;

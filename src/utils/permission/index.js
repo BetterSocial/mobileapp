@@ -1,4 +1,4 @@
-import {PERMISSIONS, RESULTS, check, request} from 'react-native-permissions';
+import {PERMISSIONS, RESULTS, check, request, requestMultiple} from 'react-native-permissions';
 import {Platform} from 'react-native';
 
 import StringConstant from '../string/StringConstant';
@@ -71,60 +71,44 @@ export const requestCameraPermission = async () => {
   }
 };
 
+const androidPermission = () => {
+  if (Platform.Version < 33) {
+    return [PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE, PERMISSIONS.ANDROID.CAMERA];
+  }
+  return [PERMISSIONS.ANDROID.READ_MEDIA_IMAGES];
+};
+
 export const requestExternalStoragePermission = async () => {
   try {
-    const result = await check(
-      Platform.OS === 'android'
-        ? PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE
-        : PERMISSIONS.IOS.PHOTO_LIBRARY
+    const requestResult = await requestMultiple(
+      Platform.OS === 'android' ? androidPermission() : [PERMISSIONS.IOS.PHOTO_LIBRARY]
     );
-    let message = '';
-    let success = false;
-    switch (result) {
-      case RESULTS.UNAVAILABLE:
-        message = StringConstant.cameraPermissionUnavailable;
-        success = false;
-        break;
-
-      case RESULTS.BLOCKED:
-      case RESULTS.DENIED:
-        message = StringConstant.cameraPermissionDenied;
-        success = false;
-        break;
-
-      case RESULTS.GRANTED:
-        message = StringConstant.cameraPermissionGranted;
-        success = true;
-        break;
-
-      default:
-        break;
-    }
-
-    if (result !== RESULTS.DENIED) {
-      return {
-        message,
-        success
-      };
-    }
-
-    const requestResult = await request(
-      Platform.OS === 'android'
-        ? PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE
-        : PERMISSIONS.IOS.PHOTO_LIBRARY
-    );
-    if (requestResult === RESULTS.GRANTED) {
+    if (
+      requestResult['android.permission.READ_EXTERNAL_STORAGE'] === 'granted' ||
+      requestResult['ios.permission.PHOTO_LIBRARY'] === 'granted' ||
+      requestResult['ios.permission.PHOTO_LIBRARY'] === 'limited' ||
+      requestResult['android.permission.READ_MEDIA_IMAGES'] === 'granted'
+    ) {
       return {
         message: StringConstant.cameraPermissionGranted,
         success: true
       };
     }
+    if (
+      requestResult['android.permission.READ_EXTERNAL_STORAGE'] === 'unavailable' ||
+      requestResult['ios.permission.PHOTO_LIBRARY'] === 'unavailable' ||
+      requestResult['android.permission.READ_MEDIA_IMAGES'] === 'unavailable'
+    ) {
+      return {
+        message: StringConstant.externalStoragePermissionUnavailable,
+        success: false
+      };
+    }
     return {
-      message: StringConstant.cameraPermissionDenied,
+      message: StringConstant.externalStoragePermissionDenied,
       success: false
     };
   } catch (err) {
-    console.warn(err);
     return {
       success: false,
       message: err

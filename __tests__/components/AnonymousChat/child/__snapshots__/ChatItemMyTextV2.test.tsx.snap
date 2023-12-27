@@ -65,6 +65,7 @@ exports[`TESTING ChatItemMyTextV2 should match snapshot 1`] = `
             },
           ]
         }
+        disabled={false}
         onPress={[Function]}
         previewBackgroundColor="transparent"
         style={
@@ -84,10 +85,10 @@ exports[`TESTING ChatItemMyTextV2 should match snapshot 1`] = `
             style={
               Array [
                 Object {
-                  "backgroundColor": "#F5F5F5",
+                  "backgroundColor": "#F5F6F7",
                   "borderRadius": 8,
                   "flex": 1,
-                  "paddingHorizontal": 4.800000000000001,
+                  "paddingHorizontal": 3.2,
                   "paddingVertical": 3.2,
                 },
                 Object {
@@ -97,9 +98,6 @@ exports[`TESTING ChatItemMyTextV2 should match snapshot 1`] = `
                 Object {
                   "borderTopEndRadius": 0,
                 },
-                Object {
-                  "paddingBottom": 14,
-                },
               ]
             }
           >
@@ -108,6 +106,7 @@ exports[`TESTING ChatItemMyTextV2 should match snapshot 1`] = `
                 Object {
                   "display": "flex",
                   "flexDirection": "row",
+                  "marginBottom": 3.2,
                 }
               }
             >
@@ -166,37 +165,44 @@ exports[`TESTING ChatItemMyTextV2 should match snapshot 1`] = `
                 1m ago
               </Text>
             </View>
-            <Text
-              onTextLayout={[Function]}
-              style={
-                Array [
-                  Object {
-                    "fontFamily": "Inter-Regular",
-                    "fontSize": 14.4,
-                    "lineHeight": 19.36,
-                    "marginBottom": 4,
-                  },
-                  Object {
-                    "color": "#ffffff",
-                  },
-                  false,
-                  false,
-                ]
-              }
-            >
-              message
-            </Text>
             <View
               style={
                 Object {
-                  "alignSelf": "flex-end",
-                  "bottom": 6,
-                  "position": "absolute",
-                  "right": 8,
+                  "flexDirection": "row",
                 }
               }
             >
-              <View />
+              <Text
+                style={
+                  Array [
+                    Object {
+                      "flex": 1,
+                      "fontFamily": "Inter-Regular",
+                      "fontSize": 14.4,
+                      "lineHeight": 19.36,
+                    },
+                    Object {
+                      "color": "#ffffff",
+                    },
+                    false,
+                    false,
+                  ]
+                }
+              >
+                message
+              </Text>
+              <View
+                style={
+                  Object {
+                    "alignSelf": "flex-end",
+                    "bottom": 6,
+                    "position": "absolute",
+                    "right": 8,
+                  }
+                }
+              >
+                <View />
+              </View>
             </View>
           </View>
         </View>

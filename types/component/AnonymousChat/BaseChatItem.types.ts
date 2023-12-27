@@ -17,6 +17,7 @@ export interface BaseChatItemProps {
   time: string;
   isContinuous: boolean;
   message: string;
+  attachments?: any;
   type?: BaseChatItemTypeProps;
 }
 
@@ -32,7 +33,9 @@ export interface ChatItemTargetText extends BaseChatItemProps {
 }
 
 export interface BaseChatItemComponentProps {
-  item: ChatSchema;
-  index: number;
+  item?: ChatSchema;
+  index?: number;
   type?: 'ANONYMOUS' | 'SIGNED';
+  messageSingle?: string;
+  componentType?: 'SINGLE' | 'GROUP';
 }

@@ -3,6 +3,7 @@ import api from '../config';
 import {ChannelData} from '../../../types/repo/ChannelData';
 import {
   ChannelTypeEnum,
+  EditChannelPostTyoe,
   SignedPostNotification
 } from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 
@@ -11,6 +12,7 @@ type SendPayloadType = {
   message: string;
   channelType: number;
   messageType?: string;
+  attachments?: any;
   replyMessageId?: string;
 };
 
@@ -22,6 +24,7 @@ const baseUrl = {
   getSingleSignedPostNotifications: (activityId: string) => `/feeds/feed-chat/${activityId}`,
   setChannelAsRead: '/chat/channels/read',
   createSignedChat: '/chat/channels-signed',
+  editChannel: '/chat/channel-detail',
   deleteMessage: (messageId: string) => `/chat/message/${messageId}`
 };
 
@@ -31,6 +34,7 @@ interface SignedMessageRepoTypes {
     channelId: string,
     message: string,
     channelType: number,
+    attachments: any,
     replyMessageId?: string
   ) => Promise<any>;
   getAllSignedChannels: () => Promise<ChannelData[]>;
@@ -38,6 +42,7 @@ interface SignedMessageRepoTypes {
   getSingleSignedPostNotifications: (activityId: string) => Promise<SignedPostNotification>;
   setChannelAsRead: (channelId: string, channelType: ChannelTypeEnum) => Promise<boolean>;
   createSignedChat: (body: string[]) => Promise<any>;
+  editChannel: (body: EditChannelPostTyoe) => Promise<any>;
   deleteMessage: (messageId: string) => Promise<any>;
 }
 
@@ -63,9 +68,10 @@ async function sendSignedMessage(
   channelId: string,
   message: string,
   channelType: number,
+  attachments: any,
   replyMessageId?: string
 ) {
-  let payload: SendPayloadType = {channelId, message, channelType};
+  let payload: SendPayloadType = {channelId, message, channelType, attachments};
   if (replyMessageId) {
     payload = {...payload, messageType: 'reply', replyMessageId};
   }
@@ -79,7 +85,7 @@ async function sendSignedMessage(
 
     return Promise.reject(response.data?.data);
   } catch (e) {
-    console.log(e);
+    console.log(e?.response);
     return Promise.reject(e);
   }
 }
@@ -161,6 +167,20 @@ async function createSignedChat(members: string[]) {
   }
 }
 
+async function editChannel(body: EditChannelPostTyoe) {
+  try {
+    const response = await api.post(baseUrl.editChannel, body);
+    if (response.status === 200) {
+      return Promise.resolve(response.data);
+    }
+
+    return Promise.reject(response.status);
+  } catch (e) {
+    console.log(e);
+    return Promise.reject(e);
+  }
+}
+
 async function deleteMessage(messageId: string) {
   try {
     const response = await api.delete(baseUrl.deleteMessage(messageId));
@@ -183,6 +203,7 @@ const SignedMessageRepo: SignedMessageRepoTypes = {
   getSingleSignedPostNotifications,
   setChannelAsRead,
   createSignedChat,
+  editChannel,
   deleteMessage
 };
 

@@ -17,12 +17,13 @@ import {
 } from 'react-native-safe-area-context';
 import {appUpgradeVersionCheck} from 'app-upgrade-react-native-sdk';
 
+import NetworkDebuggerModal from './src/components/NetworkDebuggerModal';
 import Store from './src/context/Store';
+import useFirebaseRemoteConfig from './src/libraries/Configs/RemoteConfig';
 import getFeatureLoggerInstance, {EFeatureLogFlag} from './src/utils/log/FeatureLog';
 import {APP_UPGRADE_API_KEY, ENV, ONE_SIGNAL_APP_ID} from './src/libraries/Configs/ENVConfig';
 import {Analytics} from './src/libraries/analytics/firebaseAnalytics';
 import {RootNavigator} from './src/navigations/root-stack';
-import {fetchRemoteConfig} from './src/utils/FirebaseUtil';
 import {linking} from './src/navigations/linking';
 import {reactotronInstance} from './src/libraries/reactotron/reactotronInstance';
 import {toastConfig} from './src/configs/ToastConfig';
@@ -32,6 +33,7 @@ const {featLog} = getFeatureLoggerInstance(EFeatureLogFlag.navigation);
 const App = () => {
   const {top, bottom} = useSafeAreaInsets();
   const {height} = useSafeAreaFrame();
+  const {initializeFirebaseRemoteConfig} = useFirebaseRemoteConfig();
   const streami18n = new Streami18n({
     language: 'en'
   });
@@ -40,17 +42,13 @@ const App = () => {
   const [currentScreen, setCurrentScreen] = React.useState('InitialScreenName');
 
   React.useEffect(() => {
-    const init = async () => {
-      try {
-        fetchRemoteConfig();
-      } catch (error) {
-        if (__DEV__) {
-          console.log('app ', error);
-        }
+    try {
+      initializeFirebaseRemoteConfig();
+    } catch (error) {
+      if (__DEV__) {
+        console.log('app init: ', error);
       }
-    };
-
-    init();
+    }
     // return unsubscribe;
   }, []);
 
@@ -149,6 +147,7 @@ const App = () => {
             </NavigationContainer>
           </GestureHandlerRootView>
         </Store>
+        <NetworkDebuggerModal />
       </RecoilRoot>
       {/* </RealmProvider> */}
       <Toast config={toastConfig} />

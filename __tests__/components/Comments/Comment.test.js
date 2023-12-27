@@ -4,6 +4,7 @@ import {fireEvent, render} from '@testing-library/react-native';
 import * as UserUtil from '../../../src/utils/users';
 import * as serviceVote from '../../../src/service/vote';
 import Comment, {isEqual} from '../../../src/components/Comments/Comment';
+import Store from '../../../src/context/Store';
 
 jest.mock('react-native/Libraries/Pressability/usePressability');
 jest.mock('react-native/Libraries/Components/Pressable/Pressable');
@@ -81,6 +82,27 @@ describe('Comment test should run correctly', () => {
     useRef.mockReturnValueOnce({current: openBlockComponent});
   });
 
+  it('open profile should run correctly', () => {
+    const onPress = jest.fn();
+    const findComment = jest.fn();
+    const updateVote = jest.fn();
+    const time = '2023-01-09T14:13:31.890300Z';
+    const {getByTestId} = render(
+      <Comment
+        user={user}
+        comment={comment}
+        photo={photo}
+        level={level}
+        onPress={onPress}
+        findCommentAndUpdate={findComment}
+        updateVote={updateVote}
+        time={time}
+      />
+    );
+    fireEvent.press(getByTestId('openProfile'));
+    // expect()
+  })
+
   it('Should match snapshot', () => {
     const onPress = jest.fn();
     const findComment = jest.fn();
@@ -96,7 +118,8 @@ describe('Comment test should run correctly', () => {
         findCommentAndUpdate={findComment}
         updateVote={updateVote}
         time={time}
-      />
+      />,
+      {wrapper: Store}
     );
     expect(toJSON).toMatchSnapshot();
   });
@@ -116,7 +139,8 @@ describe('Comment test should run correctly', () => {
         findCommentAndUpdate={findComment}
         updateVote={updateVote}
         time={time}
-      />
+      />,
+      {wrapper: Store}
     );
     fireEvent.press(getByTestId('textPress'));
     expect(onPress).toHaveBeenCalled();
@@ -130,7 +154,8 @@ describe('Comment test should run correctly', () => {
         findCommentAndUpdate={findComment}
         updateVote={updateVote}
         time={time}
-      />
+      />,
+      {wrapper: Store}
     );
     fireEvent.press(getByTestIdLevel2('textPress'));
     expect(onPress).toHaveBeenCalled();
@@ -152,7 +177,8 @@ describe('Comment test should run correctly', () => {
         findCommentAndUpdate={findComment}
         updateVote={updateVote}
         time={time}
-      />
+      />,
+      {wrapper: Store}
     );
     fireEvent.press(getByTestId('openProfile'));
     expect(spyGeUserId).toHaveBeenCalled();
@@ -173,7 +199,8 @@ describe('Comment test should run correctly', () => {
         findCommentAndUpdate={findComment}
         updateVote={updateVote}
         time={time}
-      />
+      />,
+      {wrapper: Store}
     );
     fireEvent.press(getByTestId('textPress'));
     expect(onPress).toHaveBeenCalled();
@@ -187,7 +214,8 @@ describe('Comment test should run correctly', () => {
         findCommentAndUpdate={findComment}
         updateVote={updateVote}
         time={time}
-      />
+      />,
+      {wrapper: Store}
     );
     fireEvent.press(getByTestIdLevel2('textPress'));
     expect(onPress).toHaveBeenCalled();
@@ -211,7 +239,8 @@ describe('Comment test should run correctly', () => {
         findCommentAndUpdate={findComment}
         updateVote={updateVote}
         time={time}
-      />
+      />,
+      {wrapper: Store}
     );
     fireEvent.press(getByTestId('upvoteBtn'));
     expect(setState).toHaveBeenCalled();

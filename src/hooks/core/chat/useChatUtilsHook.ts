@@ -9,22 +9,28 @@ import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
 import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
 import UseChatUtilsHook from '../../../../types/hooks/screens/useChatUtilsHook.types';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
-import {ANON_PM, GROUP_INFO} from '../constant';
+import {ANON_PM, CHAT_ATOM, GROUP_INFO} from '../constant';
 import {ChannelList} from '../../../../types/database/schema/ChannelList.types';
 import {ChannelTypeEnum} from '../../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 import {Context} from '../../../context';
 import {PostNotificationChannelList} from '../../../../types/database/schema/PostNotificationChannelList.types';
 import {convertTopicNameToTopicPageScreenParam} from '../../../utils/string/StringUtils';
 
-const chatAtom = atom({
-  key: 'chatAtom',
+export const chatAtom = atom({
+  key: CHAT_ATOM,
   default: {
     selectedChannel: null
   }
 });
 
+const selectedChannelKeyTab = atom({
+  key: 'selectedChannelKeyTab',
+  default: 0
+});
+
 function useChatUtilsHook(): UseChatUtilsHook {
   const [chat, setChat] = useRecoilState(chatAtom);
+  const [selectedChannelKey, setSelectedChannelKey] = useRecoilState(selectedChannelKeyTab);
   const {localDb, refresh} = useLocalDatabaseHook();
   const navigation = useNavigation();
   const {selectedChannel} = chat;
@@ -80,10 +86,13 @@ function useChatUtilsHook(): UseChatUtilsHook {
 
   const goToCommunityScreen = (channel: ChannelList) => {
     setChannelAsRead(channel);
-
     const topicName = channel?.name?.replace(/^#/, '');
     const navigationParam = {
-      id: convertTopicNameToTopicPageScreenParam(topicName)
+      id: convertTopicNameToTopicPageScreenParam(topicName),
+      channelPicture: channel.channelPicture,
+      coverImage: channel.rawJson.cover_image,
+      isFollowing: channel.rawJson.is_following,
+      memberCount: channel.rawJson.topic_follower_count
     };
 
     navigation.navigate('TopicPageScreen', navigationParam);
@@ -118,7 +127,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
   const goToChatScreen = (channel: ChannelList, from) => {
     setChat({
       ...chat,
-      selectedChannel: channel
+      selectedChannel: channel as unknown as null
     });
     setChannelAsRead(channel);
     if (channel?.channelType === ANON_PM) {
@@ -134,6 +143,20 @@ function useChatUtilsHook(): UseChatUtilsHook {
     }
 
     return null;
+  };
+
+  const goToMoveChat = (channel: ChannelList) => {
+    setChat({
+      ...chat,
+      selectedChannel: channel as unknown as null
+    });
+    setChannelAsRead(channel);
+    if (channel?.channelType === ANON_PM) {
+      setSelectedChannelKey(1);
+      return openChat('SampleChatScreen');
+    }
+    setSelectedChannelKey(0);
+    return openChat('SignedChatScreen');
   };
 
   const goBackFromChatScreen = async () => {
@@ -179,8 +202,10 @@ function useChatUtilsHook(): UseChatUtilsHook {
 
   return {
     selectedChannel,
+    selectedChannelKey,
     goBack,
     goToChatScreen,
+    goToMoveChat,
     goToPostDetailScreen,
     goToCommunityScreen,
     goToContactScreen,

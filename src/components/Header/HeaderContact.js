@@ -6,6 +6,7 @@ import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {COLORS, SIZES} from '../../utils/theme';
 import GlobalButton from '../Button/GlobalButton';
 import dimen from '../../utils/dimen';
+import {colors} from '../../utils/colors';
 
 const HeaderContact = ({
   title,
@@ -54,8 +55,8 @@ const HeaderContact = ({
         <Text
           style={[
             styles.text,
-            {color: disabledNextBtn ? COLORS.gray6 : COLORS.holyTosca},
-            subtitleStyle
+            subtitleStyle,
+            {color: disabledNextBtn ? COLORS.gray6 : colors.darkBlue}
           ]}>
           {subTitle}
         </Text>
@@ -82,7 +83,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: SIZES.base,
     alignItems: 'center'
   },
   content: (marginLeft) => ({

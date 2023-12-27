@@ -1,20 +1,18 @@
+/* eslint-disable no-unexpected-multiline */
 // eslint-disable-next-line no-use-before-define
 import * as React from 'react';
 import Animated, {withDelay, withSequence, withTiming} from 'react-native-reanimated';
 import ContextMenu, {ContextMenuAction} from 'react-native-context-menu-view';
-import {
-  Dimensions,
-  NativeSyntheticEvent,
-  Text,
-  TextLayoutEventData,
-  View,
-  ViewStyle
-} from 'react-native';
 import {Swipeable} from 'react-native-gesture-handler';
+import {Linking, Text, TouchableOpacity, View, ViewStyle} from 'react-native';
+import {useNavigation} from '@react-navigation/core';
+import FastImage from 'react-native-fast-image';
 
 import ChatReplyView from './ChatReplyView';
 import IconChatCheckMark from '../../../assets/icon/IconChatCheckMark';
 import IconChatClockGrey from '../../../assets/icon/IconChatClockGrey';
+import IconVideoPlay from '../../../assets/icon/IconVideoPlay';
+import IconFile from '../../../assets/icon/IconFile';
 import useMessageHook from '../../../hooks/screen/useMessageHook';
 import {
   CONTEXT_MENU_COPY,
@@ -35,20 +33,18 @@ import {
   dotStyle,
   messageStyle,
   styles,
-  targetLastLine,
   textContainerStyle,
   textStyle
 } from './ChatItemText.style';
 import {replyIcon} from './ChatItemTargetText';
-
-const {width} = Dimensions.get('screen');
-const targetLastLineWidth = width - targetLastLine;
+import {formatBytes} from '../../../utils/string/StringUtils';
 
 const ChatItemMyTextV2 = ({
   username = 'Anonymous User',
   time = '4h',
   isContinuous = false,
   message = '',
+  attachments = [],
   status = ChatStatus.PENDING,
   avatar,
   chatType,
@@ -60,12 +56,12 @@ const ChatItemMyTextV2 = ({
     onContextMenuPressed,
     pulseAnimation,
     animatedBubbleStyle,
-    animatedPulseStyle
+    animatedPulseStyle,
+    onOpenMediaPreview
   } = useMessageHook();
+  const navigation = useNavigation();
   const scrollContext = React.useContext(ScrollContext);
-
   const swipeableRef = React.useRef<Swipeable>(null);
-  const [isNewLine, setIsNewLine] = React.useState(true);
 
   React.useEffect(() => {
     if (scrollContext?.selectedMessageId === data?.id) {
@@ -81,25 +77,17 @@ const ChatItemMyTextV2 = ({
   const isReplyPrompt = messageType === MESSAGE_TYPE_REPLY_PROMPT;
   const isShowUserInfo = !isContinuous || isReplyPrompt || isReply;
 
-  const onTextLayout = (event: NativeSyntheticEvent<TextLayoutEventData>) => {
-    const {lines} = event.nativeEvent;
-    const lastLine = lines[lines.length - 1];
-    const lastLineWidth = lastLine?.width;
-    const isCalculatedNewLine = targetLastLineWidth - lastLineWidth < 24;
-    setIsNewLine(isCalculatedNewLine);
-  };
-
   const renderIcon = React.useCallback(() => {
     if (status === ChatStatus.PENDING)
       return (
-        <View style={styles.icon}>
+        <View style={styles.iconNewLine}>
           <IconChatClockGrey color={colors.silver} width={12} height={12} />
         </View>
       );
 
     return (
-      <View style={styles.icon}>
-        <IconChatCheckMark color={colors.silver} />
+      <View style={styles.iconNewLine}>
+        <IconChatCheckMark color={colors.silver} width={12} height={12} />
       </View>
     );
   }, [status]);
@@ -153,9 +141,10 @@ const ChatItemMyTextV2 = ({
             previewBackgroundColor="transparent"
             style={{flex: 1}}
             actions={contextMenuActions}
-            onPress={(e) => onContextMenuPressed(e, data, chatType)}>
+            onPress={(e) => onContextMenuPressed(e, data, chatType)}
+            disabled={attachments.length > 1}>
             <View style={styles.radius8}>
-              <View style={textContainerStyle(true, chatType, isNewLine)}>
+              <View style={textContainerStyle(true, chatType)}>
                 {isShowUserInfo && (
                   <View style={styles.chatTitleContainer}>
                     <Text style={[styles.userText, textStyle(true)]}>{username}</Text>
@@ -165,6 +154,81 @@ const ChatItemMyTextV2 = ({
                     </Text>
                   </View>
                 )}
+                {attachments.length > 0 && messageType !== 'deleted' && (
+                  <View
+                    style={[
+                      styles.attachmentContainer,
+                      attachments?.find((item) => item.type === 'file') ? {height: 'auto'} : {}
+                    ]}>
+                    {attachments
+                      .filter((item, index) => index <= 3)
+                      .map((item, index) =>
+                        item.type === 'file' ? (
+                          <TouchableOpacity
+                            key={item.file_path}
+                            style={{flex: 1}}
+                            activeOpacity={1}
+                            onPress={() => Linking.openURL(item.file_path)}>
+                            <View style={styles.attachmentFileContainer}>
+                              <View style={styles.attachmentFileContent}>
+                                <Text style={styles.attachmentFileName}>{item.file_name}</Text>
+                                <View>
+                                  <Text style={styles.attachmentFileInfo}>
+                                    {formatBytes(item.file_size)} •{' '}
+                                    {item.file_name
+                                      ?.split('.')
+                                      [item.file_name?.split('.')?.length - 1]?.toUpperCase()}
+                                  </Text>
+                                </View>
+                              </View>
+                              <View style={styles.attachmentFileIcon}>
+                                <IconFile />
+                              </View>
+                            </View>
+                          </TouchableOpacity>
+                        ) : (
+                          <TouchableOpacity
+                            key={item.thumb_url}
+                            style={{
+                              width: `${
+                                (attachments.length >= 3 && index > 0) || attachments.length >= 4
+                                  ? 50
+                                  : 100
+                              }%`,
+                              height: `${attachments.length >= 3 ? 50 : 100 / attachments.length}%`,
+                              position: 'relative',
+                              overflow: 'hidden'
+                            }}
+                            activeOpacity={1}
+                            onPress={
+                              attachments.length > 0 && item.type !== 'gif'
+                                ? () => onOpenMediaPreview(attachments, index, navigation)
+                                : null
+                            }>
+                            {item.type !== 'file' && (
+                              <FastImage
+                                style={styles.image}
+                                source={{
+                                  uri: item.thumb_url
+                                }}
+                              />
+                            )}
+                            {attachments.length > 4 && index === 3 && (
+                              <View style={styles.moreOverlay}>
+                                <Text style={styles.moreText}>+{attachments.length - 4}</Text>
+                              </View>
+                            )}
+                            {/* Video Play Icon */}
+                            {item.video_path && (
+                              <View style={styles.moreOverlay}>
+                                <IconVideoPlay />
+                              </View>
+                            )}
+                          </TouchableOpacity>
+                        )
+                      )}
+                  </View>
+                )}
 
                 <ChatReplyView
                   type={chatType}
@@ -172,11 +236,12 @@ const ChatItemMyTextV2 = ({
                   replyData={data?.reply_data}
                 />
 
-                <Text style={messageStyle(true, messageType)} onTextLayout={onTextLayout}>
-                  {`${message}`}
-                </Text>
-
-                {renderIcon()}
+                <View style={{flexDirection: 'row'}}>
+                  {attachments.length <= 0 && (
+                    <Text style={messageStyle(true, messageType)}>{message}</Text>
+                  )}
+                  {renderIcon()}
+                </View>
               </View>
             </View>
           </ContextMenu>
