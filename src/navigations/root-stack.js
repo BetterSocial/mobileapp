@@ -7,6 +7,7 @@ import {createNativeStackNavigator} from 'react-native-screens/native-stack';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
+import AnonymousChatScreen from '../screens/AnonymousChatScreen';
 import Blocked from '../screens/Blocked';
 import ChatInfoScreen from '../screens/ChatInfoScreen/ChatInfoScreen';
 import ChooseUsername from '../screens/InputUsername';
@@ -31,10 +32,9 @@ import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
 import ProfilePostDetail from '../screens/ProfilePostDetail';
 import ProfileReplyComment from '../screens/ProfileReplyComment';
 import ReplyComment from '../screens/ReplyComment';
-import SampleChatScreen from '../screens/WebsocketResearchScreen/SampleChatScreen';
 import Settings from '../screens/Settings';
 import SignIn from '../screens/SignInV2';
-import SignedChatScreen from '../screens/WebsocketResearchScreen/SignedChatScreen';
+import SignedChatScreen from '../screens/SignedChatScreen';
 import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import TopicMemberScreen from '../screens/TopicMemberScreen';
 import TopicPageScreen from '../screens/TopicPageScreen';
@@ -108,7 +108,7 @@ export const RootNavigator = ({currentScreen}) => {
   const getInsetTopColor = () => {
     'worklet';
 
-    return currentScreen === 'SampleChatScreen' ? colors.anon_primary : colors.white;
+    return currentScreen === 'AnonymousChatScreen' ? colors.anon_primary : colors.white;
   };
 
   return (
@@ -338,8 +338,8 @@ const AuthenticatedNavigator = () => {
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
-          name="SampleChatScreen"
-          component={withKeyboardWrapper(SampleChatScreen)}
+          name="AnonymousChatScreen"
+          component={withKeyboardWrapper(AnonymousChatScreen)}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
