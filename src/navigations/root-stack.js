@@ -29,6 +29,7 @@ import DomainScreen from '../screens/DomainScreen';
 import FollowersScreen from '../screens/Followings/FollowersScreen';
 import FollowingScreen from '../screens/Followings/FollowingScreen';
 import ImageViewerScreen from '../screens/ImageViewer';
+import VideoViewerScreen from '../screens/VideoViewer';
 import ChooseUsername from '../screens/InputUsername';
 import LinkContextScreen from '../screens/LinkContextScreen';
 import LocalCommunity from '../screens/LocalCommunity';
@@ -119,16 +120,6 @@ export const RootNavigator = () => {
             <RootStack.Screen name="UnauthenticatedStack" component={UnauthenticatedNavigator} />
           )}
         </RootStack.Navigator>
-        <View
-          style={{
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            bottom: 0,
-            height: insets.bottom,
-            backgroundColor: colors.white
-          }}
-        />
       </View>
     </LoadingStartupContext.Provider>
   );
@@ -141,20 +132,20 @@ RootNavigator.propTypes = {
 // region authenticatedStack
 const AuthenticatedStack = createNativeStackNavigator();
 
+const withSafeAreaView = (Component) => {
+  return (props) => (
+    <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+      <Component {...props} />
+    </SafeAreaView>
+  );
+};
+
 const AuthenticatedNavigator = () => {
   const withKeyboardWrapper = (Component) => {
     return (props) => (
       <KeyboardWrapper>
         <Component {...props} />
       </KeyboardWrapper>
-    );
-  };
-
-  const withSafeAreaView = (Component) => {
-    return (props) => (
-      <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
-        <Component {...props} />
-      </SafeAreaView>
     );
   };
 
@@ -192,6 +183,7 @@ const AuthenticatedNavigator = () => {
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen name="ImageViewer" component={ImageViewerScreen} />
+        <AuthenticatedStack.Screen name="VideoViewer" component={VideoViewerScreen} />
         <AuthenticatedStack.Screen
           name="DomainScreen"
           component={withKeyboardWrapper(DomainScreen)}
@@ -221,7 +213,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="Followers"
-          component={withKeyboardWrapper(FollowersScreen)}
+          component={withSafeAreaView(withKeyboardWrapper(FollowersScreen))}
           options={{
             headerShown: false
           }}
@@ -333,7 +325,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="SampleChatScreen"
-          component={withKeyboardWrapper(SampleChatScreen)}
+          component={withSafeAreaView(withKeyboardWrapper(SampleChatScreen))}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen

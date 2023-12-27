@@ -2,7 +2,15 @@ import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
 import moment from 'moment';
 import * as React from 'react';
-import {Dimensions, Keyboard, ScrollView, StatusBar, StyleSheet, View} from 'react-native';
+import {
+  Dimensions,
+  Keyboard,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  View,
+  useWindowDimensions
+} from 'react-native';
 import Toast from 'react-native-simple-toast';
 
 import {Footer} from '..';
@@ -22,7 +30,7 @@ import {
   ANALYTICS_SHARE_POST_PDP_SCREEN,
   SOURCE_PDP
 } from '../../utils/constants';
-import {fonts} from '../../utils/fonts';
+import {fonts, normalize} from '../../utils/fonts';
 import {getCountCommentWithChildInDetailPage} from '../../utils/getstream';
 import ShareUtils from '../../utils/share';
 import StringConstant from '../../utils/string/StringConstant';
@@ -35,6 +43,7 @@ import {withInteractionsManaged} from '../WithInteractionManaged';
 import Content from './elements/Content';
 import usePostDetail from './hooks/usePostDetail';
 import usePostHook from '../../hooks/core/post/usePostHook';
+import {Shimmer} from '../Shimmer/Shimmer';
 
 const {width, height} = Dimensions.get('window');
 
@@ -69,11 +78,12 @@ const PostPageDetailIdComponent = (props) => {
   const {getTotalReaction, getHeightHeader} = useFeed();
   const [commentContext, dispatchComment] = React.useContext(Context).comments;
   const {comments} = commentContext;
-  const [, setLoadingGetComment] = React.useState(true);
+  const [loadingGetComment, setLoadingGetComment] = React.useState(true);
   const {updateVoteLatestChildrenLevel3, updateVoteChildrenLevel1, calculatePaddingBtm} =
     usePostDetail();
   const {updateFeedContext} = usePostContextHook(contextSource);
   const {updateFeedContext: updateTopicContext} = usePostContextHook(CONTEXT_SOURCE.TOPIC_FEEDS);
+  const {width: displayWidth} = useWindowDimensions();
 
   const {followUnfollow} = usePostHook();
 
@@ -622,28 +632,38 @@ const PostPageDetailIdComponent = (props) => {
                 />
               </View>
             </ScrollView>
-            {comments.length > 0 && (
-              <ContainerComment
-                feedId={feedId}
-                itemParent={item}
-                comments={comments}
-                isLoading={loadingPost}
-                refreshComment={handleRefreshComment}
-                refreshChildComment={handleRefreshChildComment}
-                navigateToReplyView={(data) =>
-                  navigateToReplyView(
-                    data,
-                    updateParentPost,
-                    findCommentAndUpdate,
-                    item,
-                    updateVoteLatestChildren,
-                    getComment
-                  )
-                }
-                findCommentAndUpdate={findCommentAndUpdate}
-                contextSource={contextSource}
-                updateVote={handleUpdateVote}
-              />
+            {loadingGetComment ? (
+              <View>
+                {Array.from(Array(10).keys()).map((_, index) => (
+                  <View key={index} style={{marginVertical: normalize(10)}}>
+                    <Shimmer height={20} width={displayWidth} />
+                  </View>
+                ))}
+              </View>
+            ) : (
+              comments.length > 0 && (
+                <ContainerComment
+                  feedId={feedId}
+                  itemParent={item}
+                  comments={comments}
+                  isLoading={loadingPost}
+                  refreshComment={handleRefreshComment}
+                  refreshChildComment={handleRefreshChildComment}
+                  navigateToReplyView={(data) =>
+                    navigateToReplyView(
+                      data,
+                      updateParentPost,
+                      findCommentAndUpdate,
+                      item,
+                      updateVoteLatestChildren,
+                      getComment
+                    )
+                  }
+                  findCommentAndUpdate={findCommentAndUpdate}
+                  contextSource={contextSource}
+                  updateVote={handleUpdateVote}
+                />
+              )
             )}
           </ScrollView>
 

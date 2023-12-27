@@ -3,6 +3,7 @@ import React from 'react';
 import Animated, {SlideInDown, SlideOutDown} from 'react-native-reanimated';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
+import FastImage from 'react-native-fast-image';
 import IconClear from '../../../assets/icon/IconClear';
 import dimen from '../../../utils/dimen';
 import useMessageHook from '../../../hooks/screen/useMessageHook';
@@ -12,6 +13,7 @@ import {ScrollContext} from '../../../hooks/screen/useChatScreenHook';
 import {calculateTime} from '../../../utils/time';
 import {colors} from '../../../utils/colors';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
+import IconVideoPlay from '../../../assets/icon/IconVideoPlay';
 
 interface ChatReplyPreviewProps {
   type: 'SIGNED' | 'ANONYMOUS';
@@ -82,7 +84,8 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: dimen.normalizeDimen(4),
     paddingHorizontal: dimen.normalizeDimen(8),
-    borderRadius: 8
+    borderRadius: 8,
+    overflow: 'hidden'
   },
   chatTitleContainer: {
     display: 'flex',

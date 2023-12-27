@@ -427,7 +427,9 @@ const TopicPageScreen = (props) => {
 
       <View
         style={{
-          marginTop: isHeaderHide ? -dimen.size.TOPIC_FEED_HEADER_HEIGHT : 0
+          marginTop: isHeaderHide ? -dimen.size.TOPIC_FEED_HEADER_HEIGHT : 0,
+          minHeight: 548,
+          height: 700
         }}>
         <TiktokScroll
           ref={listRef}
@@ -442,34 +444,8 @@ const TopicPageScreen = (props) => {
           showSearchBar={true}
           snap
           contentInsetAdjustmentBehavior={feeds?.length > 1 ? 'automatic' : 'never'}
-          onMomentumScrollEnd={(event) => {
-            onWillSendViewPostTime(event, feeds);
-            fetchNextFeeds(event);
-          }}
+          onMomentumScrollEnd={(event) => onWillSendViewPostTime(event, feeds)}
         />
-
-        <View
-          style={{
-            marginTop: isHeaderHide ? -dimen.size.TOPIC_FEED_HEADER_HEIGHT : 0,
-            minHeight: 548,
-            height: 700
-          }}>
-          <TiktokScroll
-            ref={listRef}
-            contentHeight={dimen.size.TOPIC_CURRENT_ITEM_HEIGHT + normalizeFontSizeByWidth(4)}
-            data={feeds}
-            onEndReach={onEndReach}
-            onRefresh={onRefresh}
-            refreshing={loading}
-            renderItem={renderItem}
-            onScroll={handleScroll}
-            scrollEventThrottle={16}
-            showSearchBar={true}
-            snap
-            contentInsetAdjustmentBehavior={feeds?.length > 1 ? 'automatic' : 'never'}
-            onMomentumScrollEnd={(event) => onWillSendViewPostTime(event, feeds)}
-          />
-        </View>
       </View>
       <ButtonAddPostTopic topicName={topicName} onRefresh={onRefresh} />
       <BlockComponent
