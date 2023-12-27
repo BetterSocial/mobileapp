@@ -35,7 +35,6 @@ import ReplyComment from '../screens/ReplyComment';
 import Settings from '../screens/Settings';
 import SignIn from '../screens/SignInV2';
 import SignedChatScreen from '../screens/SignedChatScreen';
-import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import TopicMemberScreen from '../screens/TopicMemberScreen';
 import TopicPageScreen from '../screens/TopicPageScreen';
 import Topics from '../screens/Topics';
@@ -43,7 +42,6 @@ import WhotoFollow from '../screens/WhotoFollow';
 import api from '../service/config';
 import {
   AddParticipant,
-  ChannelScreen,
   ContactScreen,
   DetailDomainScreen,
   DetailGroupImage,
@@ -174,11 +172,6 @@ const AuthenticatedNavigator = () => {
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
-          name="TermsAndCondition"
-          component={withKeyboardWrapper(TermsAndCondition)}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
           name="PrivacyPolicies"
           component={withKeyboardWrapper(PrivacyPolicies)}
           options={{headerShown: false}}
@@ -267,11 +260,12 @@ const AuthenticatedNavigator = () => {
             headerShown: false
           }}
         />
-        <AuthenticatedStack.Screen
+        {/* TODO: Remove this and the screen after confirmed */}
+        {/* <AuthenticatedStack.Screen
           name="AddParticipant"
           component={withKeyboardWrapper(AddParticipant)}
           options={{headerShown: false}}
-        />
+        /> */}
         <AuthenticatedStack.Screen
           name="DetailGroupImage"
           component={withKeyboardWrapper(DetailGroupImage)}
@@ -306,11 +300,6 @@ const AuthenticatedNavigator = () => {
         <AuthenticatedStack.Screen
           name="OtherProfilePostDetailPage"
           component={withKeyboardWrapper(OtherProfilePostDetail)}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="ChannelScreen"
-          component={withKeyboardWrapper(ChannelScreen)}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
