@@ -7,6 +7,7 @@ import {createNativeStackNavigator} from 'react-native-screens/native-stack';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
+import AnonymousChatScreen from '../screens/AnonymousChatScreen';
 import Blocked from '../screens/Blocked';
 import ChatInfoScreen from '../screens/ChatInfoScreen/ChatInfoScreen';
 import ChooseUsername from '../screens/InputUsername';
@@ -31,10 +32,9 @@ import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
 import ProfilePostDetail from '../screens/ProfilePostDetail';
 import ProfileReplyComment from '../screens/ProfileReplyComment';
 import ReplyComment from '../screens/ReplyComment';
-import SampleChatScreen from '../screens/WebsocketResearchScreen/SampleChatScreen';
 import Settings from '../screens/Settings';
 import SignIn from '../screens/SignInV2';
-import SignedChatScreen from '../screens/WebsocketResearchScreen/SignedChatScreen';
+import SignedChatScreen from '../screens/SignedChatScreen';
 import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import TopicMemberScreen from '../screens/TopicMemberScreen';
 import TopicPageScreen from '../screens/TopicPageScreen';
@@ -56,12 +56,13 @@ import {
 } from '../screens';
 import {InitialStartupAtom, LoadingStartupContext} from '../service/initialStartup';
 import {NavigationConstants} from '../utils/constants';
+import {colors} from '../utils/colors';
 import {followersOrFollowingAtom} from '../screens/ChannelListScreen/model/followersOrFollowingAtom';
 import {useInitialStartup} from '../hooks/useInitialStartup';
 
 const RootStack = createNativeStackNavigator();
 
-export const RootNavigator = () => {
+export const RootNavigator = ({currentScreen}) => {
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const [following, setFollowing] = useRecoilState(followersOrFollowingAtom);
   const loadingStartup = useInitialStartup();
@@ -93,6 +94,23 @@ export const RootNavigator = () => {
       unsubscribe();
     };
   }, []);
+
+  const isUnauthenticated = initialStartup.id === null || initialStartup.id === '';
+
+  const getPaddingTop = (screenName) => {
+    'worklet';
+
+    if (isUnauthenticated || ['TopicPageScreen', 'TopicMemberScreen'].includes(screenName)) {
+      return 0;
+    }
+    return insets.top;
+  };
+
+  const getInsetTopColor = () => {
+    'worklet';
+
+    return currentScreen === 'AnonymousChatScreen' ? colors.anon_primary : colors.white;
+  };
 
   return (
     <LoadingStartupContext.Provider value={loadingStartup.loadingUser}>
@@ -317,8 +335,8 @@ const AuthenticatedNavigator = () => {
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
-          name="SampleChatScreen"
-          component={withSafeAreaView(withKeyboardWrapper(SampleChatScreen))}
+          name="AnonymousChatScreen"
+          component={withKeyboardWrapper(AnonymousChatScreen)}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
