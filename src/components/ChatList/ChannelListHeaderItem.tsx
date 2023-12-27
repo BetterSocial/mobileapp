@@ -33,7 +33,7 @@ const ChannelListHeaderItem = (props: ChannelListTabItemProps) => {
     name: {
       fontFamily: fonts.inter[500],
       fontSize: normalizeFontSize(14),
-      color: type === SIGNED ? COLORS.darkBlue : COLORS.anon_primary
+      color: type === SIGNED ? COLORS.signed_primary : COLORS.anon_primary
     },
     picture: {
       width: dimen.normalizeDimen(20),
