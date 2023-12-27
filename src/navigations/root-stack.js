@@ -45,13 +45,9 @@ import api from '../service/config';
 import {
   AddParticipant,
   ChannelScreen,
-  ChatDetailPage,
   ContactScreen,
   DetailDomainScreen,
   DetailGroupImage,
-  GroupInfo,
-  GroupMedia,
-  GroupSetting,
   ProfileScreen
 } from '../screens';
 import {InitialStartupAtom, LoadingStartupContext} from '../service/initialStartup';
@@ -269,33 +265,13 @@ const AuthenticatedNavigator = () => {
           }}
         />
         <AuthenticatedStack.Screen
-          name="GroupSetting"
-          component={withKeyboardWrapper(GroupSetting)}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
           name="AddParticipant"
           component={withKeyboardWrapper(AddParticipant)}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
-          name="GroupMedia"
-          component={withKeyboardWrapper(GroupMedia)}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="GroupInfo"
-          component={withKeyboardWrapper(GroupInfo)}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
           name="DetailGroupImage"
           component={withKeyboardWrapper(DetailGroupImage)}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="ChatDetailPage"
-          component={withKeyboardWrapper(ChatDetailPage)}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
