@@ -7,6 +7,7 @@ import ToggleSwitch from '../../../components/ToggleSwitch';
 import {profileSettingsDMpermission} from '../../../service/profile';
 import {addDotAndRemoveNewline} from '../../../utils/string/TrimString';
 import {COLORS} from '../../../utils/theme';
+import {useDynamicColors} from '../../../hooks/useToggleColors';
 
 type BioAndDMSettingProps = {
   bio: string;
@@ -78,7 +79,7 @@ const BioAndDMSetting = ({
   const isBioEmpty = bio === null || bio === undefined;
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container(useDynamicColors(isAnonymity).primary)}>
       <Pressable onPress={() => changeBio()} style={{paddingVertical: 12}}>
         {isBioEmpty ? (
           <Text style={styles.editPromptLabel}>Edit Prompt</Text>
@@ -132,12 +133,12 @@ const BioAndDMSetting = ({
 };
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: COLORS.signed_primary,
+  container: (bgColor) => ({
+    backgroundColor: bgColor || COLORS.signed_primary,
     borderRadius: 15,
     paddingHorizontal: 12,
     marginTop: 20
-  },
+  }),
   editPromptLabel: {color: COLORS.blueSea, textDecorationLine: 'underline'},
   bioText: {
     color: COLORS.lightgrey,
