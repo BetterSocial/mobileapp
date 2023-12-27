@@ -1,13 +1,13 @@
+import * as React from 'react';
+import PushNotification from 'react-native-push-notification';
+import mock from 'react-native-permissions/mock';
+import {Alert} from 'react-native';
 /* eslint-disable react/display-name */
 import {render} from '@testing-library/react-native';
-import * as React from 'react';
-import mock from 'react-native-permissions/mock';
-import PushNotification from 'react-native-push-notification';
 
-import {Alert} from 'react-native';
-import Store from '../../../src/context/Store';
-import ChannelListScreenV2 from '../../../src/screens/ChannelListScreenV2';
+import AnonymousChannelListScreen from '../../../src/screens/AnonymousChannelListScreen';
 import StorageUtils from '../../../src/utils/storage';
+import Store from '../../../src/context/Store';
 
 jest.mock('react-native', () => ({
   ...jest.requireActual('react-native'),
@@ -80,7 +80,7 @@ jest.mock('react-native-push-notification', () => ({
   }
 }));
 
-describe('ChannelListScreenV2 requestPermission', () => {
+describe('AnonymousChannelListScreen requestPermission', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -112,14 +112,14 @@ jest.mock('../../../src/hooks/screen/useRootChannelListHook', () => {
   }));
 });
 
-describe('ChannelListScreenV2', () => {
+describe('AnonymousChannelListScreen', () => {
   it('RENDER should match snapshot', () => {
-    const {toJSON} = render(<ChannelListScreenV2 />, {wrapper: Store});
+    const {toJSON} = render(<AnonymousChannelListScreen />, {wrapper: Store});
     expect(toJSON()).toMatchSnapshot();
   });
 
   it('RENDER should have two tabs', () => {
-    const {findByTestId, findByText, queryByTestId} = render(<ChannelListScreenV2 />, {
+    const {findByTestId, findByText, queryByTestId} = render(<AnonymousChannelListScreen />, {
       wrapper: Store
     });
     expect(findByTestId('horizontal-tab-0')).toBeTruthy();
@@ -137,7 +137,7 @@ jest.mock('react-native-push-notification', () => ({
   // Add other methods from PushNotification that you use
 }));
 
-describe('ChannelListScreenV2 useEffect', () => {
+describe('AnonymousChannelListScreen useEffect', () => {
   let alertSpy;
 
   beforeEach(() => {
@@ -159,7 +159,7 @@ describe('ChannelListScreenV2 useEffect', () => {
       })
     }));
 
-    render(<ChannelListScreenV2 />, {wrapper: Store});
+    render(<AnonymousChannelListScreen />, {wrapper: Store});
     jest.advanceTimersByTime(20000); // Advance timers by 20 seconds
     expect(PushNotification.checkPermissions).not.toHaveBeenCalled();
   });
@@ -170,7 +170,7 @@ describe('ChannelListScreenV2 useEffect', () => {
     });
     StorageUtils.lastPromptNotification.get.mockReturnValue(jest.getRealSystemTime);
 
-    render(<ChannelListScreenV2 />, {wrapper: Store});
+    render(<AnonymousChannelListScreen />, {wrapper: Store});
     jest.advanceTimersByTime(20000);
     expect(StorageUtils.lastPromptNotification.set).not.toHaveBeenCalled();
     expect(Alert.alert).not.toBeCalled();
