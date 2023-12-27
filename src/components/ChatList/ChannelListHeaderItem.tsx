@@ -6,6 +6,7 @@ import dimen from '../../utils/dimen';
 import {SIGNED} from '../../hooks/core/constant';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
+import AnonymousIcon from '../../assets/icon/AnonymousIcon';
 
 export interface ChannelListTabItemProps {
   picture: string | null;
@@ -51,7 +52,9 @@ const ChannelListHeaderItem = (props: ChannelListTabItemProps) => {
       {typeof picture === 'string' ? (
         <FastImage source={{uri: picture}} style={styles.picture} />
       ) : (
-        <FastImage source={picture} style={[styles.picture, styles.anonBgColor]} />
+        <View style={styles.picture}>
+          <AnonymousIcon size={20} fill={COLORS.anon_primary} />
+        </View>
       )}
       <Text numberOfLines={1} ellipsizeMode="tail" style={styles.name}>
         as {name}
