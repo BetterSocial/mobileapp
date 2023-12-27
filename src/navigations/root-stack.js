@@ -131,20 +131,20 @@ RootNavigator.propTypes = {
 // region authenticatedStack
 const AuthenticatedStack = createNativeStackNavigator();
 
+const withSafeAreaView = (Component) => {
+  return (props) => (
+    <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+      <Component {...props} />
+    </SafeAreaView>
+  );
+};
+
 const AuthenticatedNavigator = () => {
   const withKeyboardWrapper = (Component) => {
     return (props) => (
       <KeyboardWrapper>
         <Component {...props} />
       </KeyboardWrapper>
-    );
-  };
-
-  const withSafeAreaView = (Component) => {
-    return (props) => (
-      <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
-        <Component {...props} />
-      </SafeAreaView>
     );
   };
 
