@@ -1,6 +1,6 @@
 import AddParticipant from './AddParticipant';
+import AnonymousChannelListScreen from './AnonymousChannelListScreen';
 import ChannelListScreen from './ChannelListScreen';
-import ChannelListScreenV2 from './ChannelListScreenV2';
 import ChannelScreen from './ChannelScreen';
 import ChatDetailPage from './ChatDetailPage';
 import ContactScreen from './ContactScreen';
@@ -16,7 +16,7 @@ import ProfileScreen from './ProfileScreen';
 export {
   ChannelScreen,
   ChannelListScreen,
-  ChannelListScreenV2,
+  AnonymousChannelListScreen,
   FeedScreen,
   NewsScreen,
   ProfileScreen,

@@ -149,7 +149,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
   };
 
   const goToChatInfoScreen = (params?: object) => {
-    navigation.navigate('SampleChatInfoScreen', params);
+    navigation.navigate('ChatInfoScreen', params);
   };
 
   const goBack = () => {

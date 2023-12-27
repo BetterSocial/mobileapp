@@ -8,6 +8,7 @@ import {useRecoilState, useRecoilValue} from 'recoil';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import Blocked from '../screens/Blocked';
+import ChatInfoScreen from '../screens/ChatInfoScreen/ChatInfoScreen';
 import ChooseUsername from '../screens/InputUsername';
 import CreatePost from '../screens/CreatePost';
 import DiscoveryScreenV2 from '../screens/DiscoveryScreenV2';
@@ -30,7 +31,6 @@ import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
 import ProfilePostDetail from '../screens/ProfilePostDetail';
 import ProfileReplyComment from '../screens/ProfileReplyComment';
 import ReplyComment from '../screens/ReplyComment';
-import SampleChatInfoScreen from '../screens/WebsocketResearchScreen/SampleChatInfoScreen';
 import SampleChatScreen from '../screens/WebsocketResearchScreen/SampleChatScreen';
 import Settings from '../screens/Settings';
 import SignIn from '../screens/SignInV2';
@@ -343,8 +343,8 @@ const AuthenticatedNavigator = () => {
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
-          name="SampleChatInfoScreen"
-          component={withKeyboardWrapper(SampleChatInfoScreen)}
+          name="ChatInfoScreen"
+          component={withKeyboardWrapper(ChatInfoScreen)}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen

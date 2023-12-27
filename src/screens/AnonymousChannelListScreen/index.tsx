@@ -13,7 +13,7 @@ import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import useRootChannelListHook from '../../hooks/screen/useRootChannelListHook';
 import {ANON_PM, ANON_POST_NOTIFICATION} from '../../hooks/core/constant';
 
-const ChannelListScreenV2 = ({route}) => {
+const AnonymousChannelListScreen = ({route}) => {
   const {refresh} = useLocalDatabaseHook();
   const {checkNotificationPermission} = useRootChannelListHook();
   const navigation = useNavigation();
@@ -73,4 +73,4 @@ const ChannelListScreenV2 = ({route}) => {
   );
 };
 
-export default ChannelListScreenV2;
+export default AnonymousChannelListScreen;

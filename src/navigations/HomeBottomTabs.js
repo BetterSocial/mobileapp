@@ -7,9 +7,9 @@ import {Platform, StyleSheet, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useRecoilState, useRecoilValue} from 'recoil';
 
+import AnonymousChannelListScreen from '../screens/AnonymousChannelListScreen';
 import AnonymousChatFill from '../assets/icon/AnonymousChatFill';
 import AnonymousChatOutline from '../assets/icon/AnonymousChatOutline';
-import ChannelListScreenV2 from '../screens/ChannelListScreenV2';
 import FirebaseConfig from '../configs/FirebaseConfig';
 import MemoFeed from '../assets/icon/Feed';
 import MemoNews from '../assets/icon/News';
@@ -297,7 +297,7 @@ function HomeBottomTabs({navigation}) {
         />
         <Tab.Screen
           name="AnonymousChannelList"
-          component={ChannelListScreenV2}
+          component={AnonymousChannelListScreen}
           initialParams={{isBottomTab: true}}
           listeners={({route}) => saveLastMenu(route)}
           options={{
