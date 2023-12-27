@@ -21,12 +21,18 @@ const chatAtom = atom({
   }
 });
 
+const selectedChannelKeyTab = atom({
+  key: 'selectedChannelKeyTab',
+  default: 0
+});
+
 function useChatUtilsHook(): UseChatUtilsHook {
   const [chat, setChat] = useRecoilState(chatAtom);
+  const [selectedChannelKey, setSelectedChannelKey] = useRecoilState(selectedChannelKeyTab);
   const {localDb, refresh} = useLocalDatabaseHook();
   const navigation = useNavigation();
   const {selectedChannel} = chat;
-  const [profile] = React.useContext(Context).profile;
+  const [profile] = (React.useContext(Context) as any).profile;
   const setChannelAsRead = async (channel: ChannelList) => {
     if (!localDb) return;
     channel.setRead(localDb).catch((e) => console.log('setChannelAsRead error', e));
@@ -134,6 +140,20 @@ function useChatUtilsHook(): UseChatUtilsHook {
     return null;
   };
 
+  const goToMoveChat = (channel: ChannelList) => {
+    setChat({
+      ...chat,
+      selectedChannel: channel
+    });
+    setChannelAsRead(channel);
+    if (channel?.channelType === ANON_PM) {
+      setSelectedChannelKey(1);
+      return openChat('SampleChatScreen');
+    }
+    setSelectedChannelKey(0);
+    return openChat('SignedChatScreen');
+  };
+
   const goBackFromChatScreen = async () => {
     navigation.goBack();
     setChat({
@@ -173,8 +193,10 @@ function useChatUtilsHook(): UseChatUtilsHook {
 
   return {
     selectedChannel,
+    selectedChannelKey,
     goBack,
     goToChatScreen,
+    goToMoveChat,
     goToPostDetailScreen,
     goToCommunityScreen,
     goToChatInfoScreen,

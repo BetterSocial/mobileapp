@@ -10,6 +10,7 @@ import FeedIcon from '../../../assets/images/feed-icon.png';
 import dimen from '../../../utils/dimen';
 import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
 import {colors} from '../../../utils/colors';
+import useProfileHook from '../../../hooks/core/profile/useProfileHook';
 
 const ChannelImage = ({
   mainPicture,
@@ -64,10 +65,34 @@ const ChannelImage = ({
   const isAnonymousCommenter = Boolean(anonPostNotificationUserInfo?.anon_user_info_emoji_code);
   const isAnonymousPostMaker = Boolean(postMaker?.anon_user_info_emoji_code);
   const isAnonymousOldPostMaker = Boolean(postMaker?.emoji_code);
+  const {anonProfileId} = useProfileHook();
 
   const renderChatMainImage = () => {
     const isAnonymousChannel = type === BaseChannelItemTypeProps.ANON_PM;
-    if (!isAnonymousChannel && isAnonymousPostMaker)
+    const memberChat = postMaker?.members?.find((item: any) => item.user_id !== anonProfileId);
+    const betterSocialMember = postMaker?.better_channel_member;
+
+    if (
+      isAnonymousChannel &&
+      isAnonymousPostMaker &&
+      betterSocialMember &&
+      betterSocialMember[memberChat?.user_id].anon_user_info_emoji_code &&
+      betterSocialMember[memberChat?.user_id].anon_user_info_color_code
+    ) {
+      return (
+        <ChannelAnonymousImage
+          anonPostNotificationUserInfo={{
+            anon_user_info_emoji_code:
+              betterSocialMember[memberChat?.user_id].anon_user_info_emoji_code,
+            anon_user_info_color_code:
+              betterSocialMember[memberChat?.user_id].anon_user_info_color_code
+          }}
+          imageStyle={styles.image}
+        />
+      );
+    }
+
+    if (!isAnonymousChannel && isAnonymousPostMaker) {
       return (
         <ChannelAnonymousImage
           anonPostNotificationUserInfo={{
@@ -77,7 +102,7 @@ const ChannelImage = ({
           imageStyle={styles.image}
         />
       );
-
+    }
     if (!isAnonymousChannel && isAnonymousOldPostMaker)
       return (
         <ChannelAnonymousImage
