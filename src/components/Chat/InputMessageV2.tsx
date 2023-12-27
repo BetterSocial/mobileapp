@@ -399,7 +399,7 @@ const InputMessageV2 = ({
             labelLeft={!inputFocus ? 'Anonymity' : undefined}
             styleLabelLeft={[
               styles.labelToggle,
-              {color: type === ANONYMOUS ? COLORS.gray : COLORS.blue}
+              {color: type === ANONYMOUS ? COLORS.gray : COLORS.signed_primary}
             ]}
             onValueChange={toggleChange}
             value={type === ANONYMOUS}
