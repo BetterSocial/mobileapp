@@ -41,13 +41,7 @@ import Topics from '../screens/Topics';
 import VideoViewerScreen from '../screens/VideoViewer';
 import WhotoFollow from '../screens/WhotoFollow';
 import api from '../service/config';
-import {
-  AddParticipant,
-  ContactScreen,
-  DetailDomainScreen,
-  DetailGroupImage,
-  ProfileScreen
-} from '../screens';
+import {AddParticipant, ContactScreen, DetailDomainScreen, ProfileScreen} from '../screens';
 import {InitialStartupAtom, LoadingStartupContext} from '../service/initialStartup';
 import {NavigationConstants} from '../utils/constants';
 import {colors} from '../utils/colors';
@@ -263,11 +257,6 @@ const AuthenticatedNavigator = () => {
           component={withKeyboardWrapper(AddParticipant)}
           options={{headerShown: false}}
         /> */}
-        <AuthenticatedStack.Screen
-          name="DetailGroupImage"
-          component={withKeyboardWrapper(DetailGroupImage)}
-          options={{headerShown: false}}
-        />
         <AuthenticatedStack.Screen
           name="ReplyComment"
           component={withKeyboardWrapper(ReplyComment)}
