@@ -53,7 +53,7 @@ const AnonymousChannelListScreen = ({route}) => {
     <>
       <StatusBar translucent={false} />
       <View style={{height: 52}}>
-        <Search route={route} onPress={goToContactScreen} />
+        <Search route={route} onPress={goToContactScreen} isShowNewChat={false} />
       </View>
 
       <FlatList
