@@ -22,22 +22,22 @@ import AnonymousChatInfoHeader from '../../components/Header/AnonymousChatInfoHe
 import AnonymousIcon from '../ChannelListScreen/elements/components/AnonymousIcon';
 import BlockComponent from '../../components/BlockComponent';
 import ChannelImage from '../../components/ChatList/elements/ChannelImage';
+import MemoIc_pencil from '../../assets/icons/Ic_pencil';
 import ModalAction from '../GroupInfo/elements/ModalAction';
 import ModalActionAnonymous from '../GroupInfo/elements/ModalActionAnonymous';
 import dimen from '../../utils/dimen';
 import useChatInfoScreenHook from '../../hooks/screen/useChatInfoHook';
+import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
 import {CHANNEL_GROUP, GROUP_INFO, SIGNED} from '../../hooks/core/constant';
 import {Context} from '../../context';
 import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
+import {channelImageStyles} from '../../components/ChatList/elements/ChannelImage.style';
 import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {getChatName} from '../../utils/string/StringUtils';
 import {isContainUrl} from '../../utils/Utils';
-import MemoIc_pencil from '../../assets/icons/Ic_pencil';
-import {channelImageStyles} from '../../components/ChatList/elements/ChannelImage.style';
-import useProfileHook from '../../hooks/core/profile/useProfileHook';
 
 export const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#fff', paddingBottom: 40},
@@ -201,7 +201,8 @@ const ChatInfoScreen = () => {
     blockModalRef,
     handleShowArrow,
     loadingChannelInfo,
-    goToEditGroup
+    goToEditGroup,
+    isLoadingInitChat
   } = useChatInfoScreenHook();
   const [isLoadingMembers] = React.useState<boolean>(false);
   const {signedProfileId} = useUserAuthHook();
@@ -363,6 +364,7 @@ const ChatInfoScreen = () => {
         isOpen={openModal}
         onPress={handlePressPopup}
         name={selectedUser?.user?.username || selectedUser?.user?.name}
+        isLoadingInitChat={isLoadingInitChat}
       />
       <ModalActionAnonymous
         name={

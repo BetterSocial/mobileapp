@@ -132,7 +132,7 @@ exports[`Testing Feed Screen Content Link Card Matches Snapshot 1`] = `
               numberOfLines={1}
               style={
                 Object {
-                  "color": "#6A6A6A",
+                  "color": "#E8EBED",
                   "fontFamily": "Inter-Regular",
                   "fontSize": 12,
                 }
@@ -416,7 +416,7 @@ exports[`Testing Feed Screen Content Link CardHeader Matches Snapshot 1`] = `
         numberOfLines={1}
         style={
           Object {
-            "color": "#6A6A6A",
+            "color": "#E8EBED",
             "fontFamily": "Inter-Regular",
             "fontSize": 12,
           }
@@ -609,7 +609,7 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
                 numberOfLines={1}
                 style={
                   Object {
-                    "color": "#6A6A6A",
+                    "color": "#E8EBED",
                     "fontFamily": "Inter-Regular",
                     "fontSize": 12,
                   }
