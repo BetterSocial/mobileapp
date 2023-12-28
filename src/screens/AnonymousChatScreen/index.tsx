@@ -3,7 +3,7 @@
 /* eslint-disable import/no-unresolved */
 
 import * as React from 'react';
-import {Dimensions, FlatList, StatusBar, StyleSheet, View} from 'react-native';
+import {Dimensions, FlatList, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
 
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import BaseSystemChat from '../../components/AnonymousChat/BaseChatSystem';
@@ -109,62 +109,64 @@ const SampleChatScreen = () => {
   }, []);
 
   return (
-    <ScrollContext.Provider value={scrollContext}>
-      <StatusBar barStyle="light-content" backgroundColor={COLORS.anon_primary} />
+    <SafeAreaView style={{flex: 1}}>
+      <ScrollContext.Provider value={scrollContext}>
+        <StatusBar barStyle="light-content" backgroundColor={COLORS.anon_primary} />
 
-      <View style={styles.keyboardAvoidingView}>
-        {selectedChannel ? (
-          <ChatDetailHeader
-            onAvatarPress={goToChatInfoScreen}
-            onBackPress={goBackFromChatScreen}
-            onThreeDotPress={goToChatInfoScreen}
-            avatar={selectedChannel?.channelPicture}
-            user={selectedChannel?.name}
-            type={ANONYMOUS}
-            anon_user_info_emoji_code={
-              betterSocialMember &&
-              betterSocialMember[memberChat?.user_id]?.anon_user_info_emoji_code
+        <View style={styles.keyboardAvoidingView}>
+          {selectedChannel ? (
+            <ChatDetailHeader
+              onAvatarPress={goToChatInfoScreen}
+              onBackPress={goBackFromChatScreen}
+              onThreeDotPress={goToChatInfoScreen}
+              avatar={selectedChannel?.channelPicture}
+              user={selectedChannel?.name}
+              type={ANONYMOUS}
+              anon_user_info_emoji_code={
+                betterSocialMember &&
+                betterSocialMember[memberChat?.user_id]?.anon_user_info_emoji_code
+              }
+              anon_user_info_color_code={
+                betterSocialMember &&
+                betterSocialMember[memberChat?.user_id]?.anon_user_info_color_code
+              }
+            />
+          ) : null}
+          <FlatList
+            ref={scrollRef}
+            contentContainerStyle={styles.flatlistContainer}
+            style={styles.chatContainer}
+            data={updatedChats}
+            inverted={true}
+            initialNumToRender={10}
+            alwaysBounceVertical={false}
+            keyExtractor={(item, index) => item?.id || index.toString()}
+            ListFooterComponent={
+              ownerChat ? (
+                <BaseSystemChat
+                  componentType="SINGLE"
+                  messageSingle={`You’re anonymously messaging ${selectedChannel?.name}.\nThey are still able to block you`}
+                />
+              ) : null
             }
-            anon_user_info_color_code={
-              betterSocialMember &&
-              betterSocialMember[memberChat?.user_id]?.anon_user_info_color_code
-            }
+            renderItem={renderChatItem}
           />
-        ) : null}
-        <FlatList
-          ref={scrollRef}
-          contentContainerStyle={styles.flatlistContainer}
-          style={styles.chatContainer}
-          data={updatedChats}
-          inverted={true}
-          initialNumToRender={10}
-          alwaysBounceVertical={false}
-          keyExtractor={(item, index) => item?.id || index.toString()}
-          ListFooterComponent={
-            ownerChat ? (
-              <BaseSystemChat
-                componentType="SINGLE"
-                messageSingle={`You’re anonymously messaging ${selectedChannel?.name}.\nThey are still able to block you`}
-              />
-            ) : null
-          }
-          renderItem={renderChatItem}
-        />
 
-        {replyPreview && <ChatReplyPreview type={ANONYMOUS} />}
-        <View style={styles.inputContainer}>
-          <InputMessageV2
-            onSendButtonClicked={sendChat}
-            type={ANONYMOUS}
-            emojiCode={selectedChannel?.rawJson.channel.anon_user_info_emoji_code}
-            emojiColor={selectedChannel?.rawJson.channel.anon_user_info_color_code}
-            username={selectedChannel?.name}
-            onToggleConfirm={moveChatSigned}
-          />
+          {replyPreview && <ChatReplyPreview type={ANONYMOUS} />}
+          <View style={styles.inputContainer}>
+            <InputMessageV2
+              onSendButtonClicked={sendChat}
+              type={ANONYMOUS}
+              emojiCode={selectedChannel?.rawJson.channel.anon_user_info_emoji_code}
+              emojiColor={selectedChannel?.rawJson.channel.anon_user_info_color_code}
+              username={selectedChannel?.name}
+              onToggleConfirm={moveChatSigned}
+            />
+          </View>
+          <Loading visible={loading} />
         </View>
-        <Loading visible={loading} />
-      </View>
-    </ScrollContext.Provider>
+      </ScrollContext.Provider>
+    </SafeAreaView>
   );
 };
 

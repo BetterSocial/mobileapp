@@ -7,6 +7,7 @@ import {openComposer} from 'react-native-email-link';
 import {useNavigation} from '@react-navigation/core';
 
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
+import ImageUtils from '../../../utils/image';
 import useCreateChat from '../../../hooks/screen/useCreateChat';
 import TokenStorage, {ITokenEnum} from '../../../utils/storage/custom/tokenStorage';
 import {ANONYMOUS_USER} from '../../../hooks/core/constant';
@@ -17,7 +18,6 @@ import {isContainUrl} from '../../../utils/Utils';
 import {requestExternalStoragePermission} from '../../../utils/permission';
 import {setChannel} from '../../../context/actions/setChannel';
 import {setParticipants} from '../../../context/actions/groupChat';
-import ImageUtils from '../../../utils/image';
 
 const useGroupInfo = () => {
   const [groupChatState, groupPatchDispatch] = React.useContext(Context).groupChat;
@@ -30,6 +30,7 @@ const useGroupInfo = () => {
   const [isLoadingMembers, setIsLoadingMembers] = React.useState(false);
   const [uploadedImage, setUploadedImage] = React.useState('');
   const [isUploadingImage, setIsUploadingImage] = React.useState(false);
+  const [isLoadingInitChat, setIsLoadingInitChat] = React.useState(false);
   const [username, setUsername] = React.useState(channelState.channel?.data?.name);
   const createChat = channelState.channel?.data?.created_at;
   const countUser = Object.entries(participants).length;
@@ -89,6 +90,7 @@ const useGroupInfo = () => {
   // eslint-disable-next-line consistent-return
   const checkUserIsBlockHandle = async () => {
     try {
+      setIsLoadingInitChat(true);
       const sendData = {
         user_id: selectedUser.user_id
       };
@@ -101,6 +103,8 @@ const useGroupInfo = () => {
       return handleOpenProfile(selectedUser);
     } catch (e) {
       console.log('error:', e);
+    } finally {
+      setIsLoadingInitChat(false);
     }
   };
 
@@ -327,8 +331,15 @@ const useGroupInfo = () => {
   };
 
   const handleMessageAnonymously = async () => {
-    setOpenModal(false);
-    handleAnonymousMessage(selectedUser);
+    try {
+      setIsLoadingInitChat(true);
+      await handleAnonymousMessage(selectedUser);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsLoadingInitChat(false);
+      setOpenModal(false);
+    }
   };
 
   /**
@@ -431,6 +442,8 @@ const useGroupInfo = () => {
     }, 500);
   };
 
+  console.log(isLoadingInitChat, 'isLoadingInitChat');
+
   return {
     serializeMembersList,
     groupChatState,
@@ -479,7 +492,8 @@ const useGroupInfo = () => {
     setIsAnonymousModalOpen,
     blockModalRef,
     openChatMessage,
-    isFetchingAllowAnonDM
+    isFetchingAllowAnonDM,
+    isLoadingInitChat
   };
 };
 

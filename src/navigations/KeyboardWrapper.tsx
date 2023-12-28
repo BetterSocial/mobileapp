@@ -12,10 +12,7 @@ const KeyboardWrapper = ({children}: Props): JSX.Element => {
   const insets = useSafeAreaInsets();
 
   return (
-    <KeyboardAvoidingView
-      style={{flex: 1}}
-      keyboardVerticalOffset={insets.top}
-      behavior={isIos ? 'padding' : undefined}>
+    <KeyboardAvoidingView style={{flex: 1}} behavior={isIos ? 'padding' : undefined}>
       {children}
     </KeyboardAvoidingView>
   );

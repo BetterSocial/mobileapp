@@ -4,14 +4,14 @@ import {useNavigation, useRoute} from '@react-navigation/core';
 import ChannelList from '../../database/schema/ChannelListSchema';
 import UseAnonymousChatInfoScreenHook from '../../../types/hooks/screens/useAnonymousChatInfoScreenHook.types';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
-import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
-import {ChannelListMemberSchema} from '../../../types/database/schema/ChannelList.types';
-import {getAnonymousUserId, getUserId} from '../../utils/users';
-import {Context} from '../../context';
-import {ANONYMOUS_USER, SIGNED} from '../core/constant';
-import {isContainUrl} from '../../utils/Utils';
 import useGroupInfo from '../../screens/GroupInfo/hooks/useGroupInfo';
+import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
+import {ANONYMOUS_USER, SIGNED} from '../core/constant';
+import {ChannelListMemberSchema} from '../../../types/database/schema/ChannelList.types';
+import {Context} from '../../context';
 import {Member} from '../../../types/database/schema/ChatListDetail.types';
+import {getAnonymousUserId, getUserId} from '../../utils/users';
+import {isContainUrl} from '../../utils/Utils';
 
 function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   const {params}: any = useRoute();
@@ -22,7 +22,8 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
     alertRemoveUser,
     isAnonymousModalOpen,
     selectedUser,
-    blockModalRef
+    blockModalRef,
+    isLoadingInitChat
   } = useGroupInfo();
   const {localDb} = useLocalDatabaseHook();
   const [loadingChannelInfo, setLoadingChannelInfo] = React.useState<boolean>(false);
@@ -106,7 +107,8 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
     blockModalRef,
     handleShowArrow,
     goToEditGroup,
-    loadingChannelInfo
+    loadingChannelInfo,
+    isLoadingInitChat
   };
 }
 

@@ -2,10 +2,19 @@ import Modal from 'react-native-modal';
 import React from 'react';
 import {Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
+import Loading from '../../Loading';
 import {COLORS} from '../../../utils/theme';
 
 const ModalAction = (props) => {
-  const {isOpen, name, onCloseModal, onPress, selectedUser, isGroup = false} = props;
+  const {
+    isOpen,
+    name,
+    onCloseModal,
+    onPress,
+    selectedUser,
+    isGroup = false,
+    isLoadingInitChat = false
+  } = props;
   const isAndroid = Platform.OS === 'android';
 
   return (
@@ -21,7 +30,10 @@ const ModalAction = (props) => {
           testID="pressMessage"
           onPress={() => onPress('message', selectedUser)}
           style={styles.buttonStyle}>
-          <Text style={styles.textButton}>Message {name}</Text>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={styles.textButton}>Message {name}</Text>
+            <Loading visible={isLoadingInitChat} />
+          </View>
         </TouchableOpacity>
         <TouchableOpacity
           testID="pressMessageAnonym"
