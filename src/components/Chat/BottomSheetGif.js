@@ -9,6 +9,7 @@ import {
   FlatList
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import {debounce} from 'lodash';
 
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {colors} from '../../utils/colors';
@@ -27,18 +28,10 @@ const BottomSheetGif = React.forwardRef((props, ref) => {
   const [list, setList] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
 
-  const handleChangeText = (text) => {
-    setSearchText(text);
-  };
-
-  const handleOnClearText = () => {
-    setSearchText('');
-  };
-
-  const onLoad = async () => {
+  const onLoad = async (search) => {
     setIsLoading(true);
     try {
-      const result = await getGifFeatured();
+      const result = await getGifFeatured(search);
       if (result.code === 200) {
         setList(result.data);
       }
@@ -48,15 +41,33 @@ const BottomSheetGif = React.forwardRef((props, ref) => {
     setIsLoading(false);
   };
 
+  const searchGIF = React.useCallback(
+    debounce((search) => {
+      onLoad(search);
+    }, 500),
+    []
+  );
+
+  const handleChangeText = (text) => {
+    setSearchText(text);
+    if (text?.trim()?.length > 2) {
+      searchGIF(text);
+    }
+  };
+
+  const handleOnClearText = () => {
+    setSearchText('');
+  };
+
   React.useEffect(() => {
-    onLoad();
+    onLoad('');
   }, []);
 
   return (
     <BottomSheet
       ref={ref}
       closeOnPressMask={true}
-      height={heightScreen - 50}
+      height={heightScreen - 75}
       viewstyle={styles.container}>
       <View style={styles.searchContainer}>
         <View style={styles.wrapperSearch}>
