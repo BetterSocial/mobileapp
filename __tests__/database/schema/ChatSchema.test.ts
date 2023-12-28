@@ -11,6 +11,7 @@ const chatSchema = new ChatSchema({
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   rawJson: {},
+  attachmentJson: [],
   user: null,
   status: 'status',
   isMe: false,
@@ -26,7 +27,8 @@ const savePrepReplacementExpectation = [
   'status',
   'createdAt',
   'updatedAt',
-  {}
+  {},
+  []
 ];
 
 const fromDatabaseObjectExpectation = {
@@ -38,6 +40,7 @@ const fromDatabaseObjectExpectation = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   rawJson: {},
+  attachmentJson: [],
   status: 'status',
   isMe: false,
   isContinuous: false
@@ -99,6 +102,7 @@ describe('TESTING ChatSchema', () => {
                 created_at: 'createdAt',
                 updated_at: 'updatedAt',
                 raw_json: '{}',
+                attachment_json: '[]',
                 user: null,
                 status: 'status',
                 is_me: false,
@@ -143,7 +147,8 @@ describe('TESTING ChatSchema', () => {
         message: {
           created_at: 'createdAt',
           id: 'messageId',
-          updated_at: 'updatedAt'
+          updated_at: 'updatedAt',
+          attachments: '[]'
         }
       };
 
@@ -158,6 +163,7 @@ describe('TESTING ChatSchema', () => {
         'updatedAt',
         expect.any(String),
         'messageId',
+        expect.any(String),
         'id'
       ]);
     });
@@ -172,7 +178,8 @@ describe('TESTING ChatSchema', () => {
         message: {
           created_at: 'createdAt',
           id: 'messageId',
-          updated_at: 'updatedAt'
+          updated_at: 'updatedAt',
+          attachments: '[]'
         }
       };
 
@@ -187,6 +194,7 @@ describe('TESTING ChatSchema', () => {
         'updatedAt',
         expect.any(String),
         'messageId',
+        expect.any(String),
         'id'
       ]);
 
@@ -239,6 +247,7 @@ describe('TESTING ChatSchema', () => {
                 created_at: 'createdAt',
                 updated_at: 'updatedAt',
                 raw_json: '{}',
+                attachment_json: '[]',
                 user: null,
                 status: 'status',
                 is_me: false,
@@ -271,6 +280,7 @@ describe('TESTING ChatSchema', () => {
         createdAt: 'createdAt',
         updatedAt: 'createdAt',
         rawJson: expect.any(String),
+        attachmentJson: expect.any(String),
         user: null,
         status: 'sent',
         isMe: false,
@@ -292,6 +302,14 @@ describe('TESTING ChatSchema', () => {
           text: 'message',
           type: 'type',
           message: 'message',
+          attachments: [
+            {
+              type: 'image',
+              thumb_url: 'thumb_url',
+              asset_url: 'asset_url',
+              myCustomField: 'image'
+            }
+          ],
           created_at: 'createdAt',
           updated_at: 'updatedAt'
         },
@@ -325,6 +343,7 @@ describe('TESTING ChatSchema', () => {
         createdAt: 'createdAt',
         updatedAt: 'createdAt',
         rawJson: expect.any(String),
+        attachmentJson: expect.any(String),
         user: null,
         status: 'sent',
         isMe: false,
@@ -343,6 +362,14 @@ describe('TESTING ChatSchema', () => {
         text: 'message',
         type: 'type',
         message: 'message',
+        attachments: [
+          {
+            type: 'image',
+            thumb_url: 'thumb_url',
+            asset_url: 'asset_url',
+            myCustomField: 'image'
+          }
+        ],
         created_at: 'createdAt',
         updated_at: 'updatedAt'
       });
@@ -363,6 +390,7 @@ describe('TESTING ChatSchema', () => {
         isMe: true,
         message: 'message',
         rawJson: expect.any(String),
+        attachmentJson: expect.any(String),
         status: 'sent',
         type: 'regular',
         updatedAt: 'updatedAt',
@@ -436,6 +464,7 @@ describe('TESTING ChatSchema', () => {
         isMe: true,
         message: 'message',
         rawJson: null,
+        attachmentJson: '[]',
         status: 'pending',
         type: 'regular',
         updatedAt: expect.any(String),
@@ -449,6 +478,7 @@ describe('TESTING ChatSchema', () => {
         'userId',
         'channelId',
         'message',
+        [],
         mockDb
       );
 
@@ -468,6 +498,7 @@ describe('TESTING ChatSchema', () => {
         isMe: true,
         message: 'message',
         rawJson: null,
+        attachmentJson: '[]',
         status: 'pending',
         type: 'regular',
         updatedAt: expect.any(String),
@@ -481,6 +512,7 @@ describe('TESTING ChatSchema', () => {
         'userId',
         'channelId',
         'message',
+        [],
         mockDb
       );
 
