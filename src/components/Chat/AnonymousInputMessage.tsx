@@ -2,7 +2,6 @@ import * as React from 'react';
 import {StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
 
 import IconSend from '../../assets/icon/IconSendComment';
-import SheetEmoji from './SheetEmoji';
 import {colors} from '../../utils/colors';
 
 const styles = StyleSheet.create({
@@ -71,14 +70,10 @@ export interface AnonymousInputMessageProps {
 }
 
 const AnonymousInputMessage = ({onSendButtonClicked, type}: AnonymousInputMessageProps) => {
-  const refEmoji = React.useRef(null);
   const [text, setText] = React.useState('');
 
   const onChangeInput = (v) => {
     setText(v);
-  };
-  const onSelectEmoji = () => {
-    refEmoji.current.close();
   };
 
   const handleSendMessage = () => {
@@ -98,25 +93,21 @@ const AnonymousInputMessage = ({onSendButtonClicked, type}: AnonymousInputMessag
   }, [isDisableButton()]);
 
   return (
-    <>
-      <View style={styles.container}>
-        <View style={styles.containerInput}>
-          <TextInput multiline style={styles.input} onChangeText={onChangeInput} value={text} />
-          <TouchableOpacity
-            style={styles.btn}
-            disabled={isDisableButton()}
-            onPress={handleSendMessage}>
-            <IconSend
-              style={styles.icSendButton}
-              fillBackground={sendButtonStyle()}
-              fillIcon={colors.white}
-            />
-          </TouchableOpacity>
-        </View>
+    <View style={styles.container}>
+      <View style={styles.containerInput}>
+        <TextInput multiline style={styles.input} onChangeText={onChangeInput} value={text} />
+        <TouchableOpacity
+          style={styles.btn}
+          disabled={isDisableButton()}
+          onPress={handleSendMessage}>
+          <IconSend
+            style={styles.icSendButton}
+            fillBackground={sendButtonStyle()}
+            fillIcon={colors.white}
+          />
+        </TouchableOpacity>
       </View>
-
-      <SheetEmoji ref={refEmoji} selectEmoji={onSelectEmoji} />
-    </>
+    </View>
   );
 };
 

@@ -7,7 +7,9 @@ import {createNativeStackNavigator} from 'react-native-screens/native-stack';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
+import AnonymousChatScreen from '../screens/AnonymousChatScreen';
 import Blocked from '../screens/Blocked';
+import ChatInfoScreen from '../screens/ChatInfoScreen/ChatInfoScreen';
 import ChooseUsername from '../screens/InputUsername';
 import CreatePost from '../screens/CreatePost';
 import DiscoveryScreenV2 from '../screens/DiscoveryScreenV2';
@@ -30,30 +32,15 @@ import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
 import ProfilePostDetail from '../screens/ProfilePostDetail';
 import ProfileReplyComment from '../screens/ProfileReplyComment';
 import ReplyComment from '../screens/ReplyComment';
-import SampleChatInfoScreen from '../screens/WebsocketResearchScreen/SampleChatInfoScreen';
-import SampleChatScreen from '../screens/WebsocketResearchScreen/SampleChatScreen';
 import Settings from '../screens/Settings';
 import SignIn from '../screens/SignInV2';
-import SignedChatScreen from '../screens/WebsocketResearchScreen/SignedChatScreen';
-import TermsAndCondition from '../screens/WebView/TermsAndCondition';
+import SignedChatScreen from '../screens/SignedChatScreen';
 import TopicMemberScreen from '../screens/TopicMemberScreen';
 import TopicPageScreen from '../screens/TopicPageScreen';
 import Topics from '../screens/Topics';
-import WebsocketResearchScreen from '../screens/WebsocketResearchScreen';
 import WhotoFollow from '../screens/WhotoFollow';
 import api from '../service/config';
-import {
-  AddParticipant,
-  ChannelScreen,
-  ChatDetailPage,
-  ContactScreen,
-  DetailDomainScreen,
-  DetailGroupImage,
-  GroupInfo,
-  GroupMedia,
-  GroupSetting,
-  ProfileScreen
-} from '../screens';
+import {AddParticipant, ContactScreen, DetailDomainScreen, ProfileScreen} from '../screens';
 import {InitialStartupAtom, LoadingStartupContext} from '../service/initialStartup';
 import {NavigationConstants} from '../utils/constants';
 import {colors} from '../utils/colors';
@@ -109,7 +96,7 @@ export const RootNavigator = ({currentScreen}) => {
   const getInsetTopColor = () => {
     'worklet';
 
-    return currentScreen === 'SampleChatScreen' ? colors.anon_primary : colors.white;
+    return currentScreen === 'AnonymousChatScreen' ? colors.anon_primary : colors.white;
   };
 
   return (
@@ -176,11 +163,6 @@ const AuthenticatedNavigator = () => {
         <AuthenticatedStack.Screen
           name="HomeTabs"
           component={HomeBottomTabs}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="TermsAndCondition"
-          component={withKeyboardWrapper(TermsAndCondition)}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
@@ -272,36 +254,12 @@ const AuthenticatedNavigator = () => {
             headerShown: false
           }}
         />
-        <AuthenticatedStack.Screen
-          name="GroupSetting"
-          component={withKeyboardWrapper(GroupSetting)}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
+        {/* TODO: Remove this and the screen after confirmed */}
+        {/* <AuthenticatedStack.Screen
           name="AddParticipant"
           component={withKeyboardWrapper(AddParticipant)}
           options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="GroupMedia"
-          component={withKeyboardWrapper(GroupMedia)}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="GroupInfo"
-          component={withKeyboardWrapper(GroupInfo)}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="DetailGroupImage"
-          component={withKeyboardWrapper(DetailGroupImage)}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="ChatDetailPage"
-          component={withKeyboardWrapper(ChatDetailPage)}
-          options={{headerShown: false}}
-        />
+        /> */}
         <AuthenticatedStack.Screen
           name="ReplyComment"
           component={withKeyboardWrapper(ReplyComment)}
@@ -334,23 +292,13 @@ const AuthenticatedNavigator = () => {
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
-          name="ChannelScreen"
-          component={withKeyboardWrapper(ChannelScreen)}
+          name="AnonymousChatScreen"
+          component={withKeyboardWrapper(AnonymousChatScreen)}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
-          name="WebsocketResearchScreen"
-          component={withKeyboardWrapper(WebsocketResearchScreen)}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="SampleChatScreen"
-          component={withKeyboardWrapper(SampleChatScreen)}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="SampleChatInfoScreen"
-          component={withKeyboardWrapper(SampleChatInfoScreen)}
+          name="ChatInfoScreen"
+          component={withKeyboardWrapper(ChatInfoScreen)}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen

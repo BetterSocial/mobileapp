@@ -17,7 +17,7 @@ import {Context} from '../../context';
 import {SIGNED} from '../../hooks/core/constant';
 import {getChatName} from '../../utils/string/StringUtils';
 import {setChannel} from '../../context/actions/setChannel';
-import {styles} from './SampleChatScreen';
+import {styles} from '../AnonymousChatScreen';
 
 const SignedChatScreen = () => {
   const {

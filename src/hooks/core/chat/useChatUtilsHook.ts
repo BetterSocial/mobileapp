@@ -123,9 +123,9 @@ function useChatUtilsHook(): UseChatUtilsHook {
     setChannelAsRead(channel);
     if (channel?.channelType === ANON_PM) {
       if (from === GROUP_INFO) {
-        return openChat('SampleChatScreen', 'AnonymousChannelList');
+        return openChat('AnonymousChatScreen', 'AnonymousChannelList');
       }
-      navigation.navigate('SampleChatScreen');
+      navigation.navigate('AnonymousChatScreen');
     } else {
       if (from === GROUP_INFO) {
         return openChat('SignedChatScreen', 'SignedChannelList');
@@ -149,7 +149,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
   };
 
   const goToChatInfoScreen = (params?: object) => {
-    navigation.navigate('SampleChatInfoScreen', params);
+    navigation.navigate('ChatInfoScreen', params);
   };
 
   const goBack = () => {
