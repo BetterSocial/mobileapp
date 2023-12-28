@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
+exports[`AnonymousChannelListScreen RENDER should match snapshot 1`] = `
 <View>
   <View
     style={

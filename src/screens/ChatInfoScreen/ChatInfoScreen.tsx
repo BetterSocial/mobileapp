@@ -188,7 +188,7 @@ export const styles = StyleSheet.create({
   }
 });
 
-const SampleChatInfoScreen = () => {
+const ChatInfoScreen = () => {
   const {
     channelInfo,
     goBack,
@@ -380,4 +380,4 @@ const SampleChatInfoScreen = () => {
   );
 };
 
-export default SampleChatInfoScreen;
+export default ChatInfoScreen;
