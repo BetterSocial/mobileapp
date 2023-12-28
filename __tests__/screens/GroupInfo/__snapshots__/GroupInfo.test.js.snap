@@ -654,7 +654,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
         >
           <ActivityIndicator
             animating={true}
-            color="#00ADB5"
+            color="#999999"
             hidesWhenStopped={true}
             size="large"
           />
@@ -687,7 +687,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
       >
         <ActivityIndicator
           animating={true}
-          color="#00ADB5"
+          color="#999999"
           hidesWhenStopped={true}
           size="large"
         />
@@ -850,7 +850,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
           <Text
             style={
               Object {
-                "color": "#C4C4C4",
+                "color": undefined,
                 "fontSize": 16,
                 "fontWeight": "bold",
               }
@@ -1081,7 +1081,7 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
       >
         <ActivityIndicator
           animating={true}
-          color="#00ADB5"
+          color="#999999"
           hidesWhenStopped={true}
           size="large"
         />
