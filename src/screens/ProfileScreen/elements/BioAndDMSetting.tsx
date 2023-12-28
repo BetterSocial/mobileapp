@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     marginTop: 20
   },
-  editPromptLabel: {color: COLORS.blueSea, textDecorationLine: 'underline'},
+  editPromptLabel: {color: COLORS.signed_secondary, textDecorationLine: 'underline'},
   bioText: {
     color: COLORS.lightgrey,
     fontFamily: 'Inter',
