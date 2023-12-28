@@ -31,8 +31,6 @@ export const COLORS = {
   holyTosca: '#00ADB5',
   holytosca30percent: '#00ADB54D',
   lightBlue: '#2F80ED',
-  lightgrey: '#F5F5F5',
-  gray: '#6A6A6A',
   gray1: '#C4C4C4',
   gray6: '#F2F2F2',
   gray4: '#4A4A4A',
