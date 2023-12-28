@@ -26,6 +26,18 @@ export const COLORS = {
   white: '#FFFFFF',
   whiteSmoke: '#F4F4F4',
 
+  //need to remove
+  holytosca: '#00ADB5',
+  holyTosca: '#00ADB5',
+  holytosca30percent: '#00ADB54D',
+  lightBlue: '#2F80ED',
+  lightgrey: '#F5F5F5',
+  gray: '#6A6A6A',
+  gray1: '#C4C4C4',
+  gray6: '#F2F2F2',
+  gray4: '#4A4A4A',
+  bondi_blue: '#00ADB5',
+
   // new color
   signed_primary: '#4782D7',
   signed_secondary: '#6295DD',
