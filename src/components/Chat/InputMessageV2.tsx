@@ -144,6 +144,8 @@ const InputMessageV2 = ({
   const [text, setText] = React.useState('');
   const [isLoadingUploadImageMedia, setIsLoadingUploadImageMedia] = React.useState(false);
   const [isLoadingUploadImageCamera, setIsLoadingUploadImageCamera] = React.useState(false);
+  const [isLoadingUploadImageFile, setIsLoadingUploadImageFile] = React.useState(false);
+  const [isLoadingUploadImageGIF, setIsLoadingUploadImageGIF] = React.useState(false);
 
   const handleUploadMedia = async (medias) => {
     setIsLoadingUploadImageMedia(true);
@@ -178,6 +180,7 @@ const InputMessageV2 = ({
   };
 
   const handleSelectGIF = (gifPath, gifPathSmall) => {
+    setIsLoadingUploadImageGIF(true);
     onCloseGIF();
     const resultUrls = [
       {
@@ -189,6 +192,7 @@ const InputMessageV2 = ({
       }
     ];
     onSendButtonClicked('Sent GIF 🎆🌆🌉', resultUrls);
+    setIsLoadingUploadImageGIF(false);
   };
 
   const handleFile = (file) => {
@@ -232,6 +236,7 @@ const InputMessageV2 = ({
   };
 
   const onOpenMedia = async () => {
+    setIsLoadingUploadImageMedia(true);
     const {success} = await requestExternalStoragePermission();
     if (success) {
       ImagePicker.openPicker({
@@ -268,6 +273,7 @@ const InputMessageV2 = ({
         handleUploadMedia(newMedias);
       });
     } else {
+      setIsLoadingUploadImageMedia(false);
       openAlertPermission(
         'We’re not able to access your photos, please adjust your permission settings for BetterSocial.'
       );
@@ -275,6 +281,7 @@ const InputMessageV2 = ({
   };
 
   const onOpenCamera = async () => {
+    setIsLoadingUploadImageCamera(true);
     const {success} = await requestCameraPermission();
     if (success) {
       ImagePicker.openCamera({
@@ -292,6 +299,7 @@ const InputMessageV2 = ({
         handleUploadCamera(imageCropped.path);
       });
     } else {
+      setIsLoadingUploadImageCamera(false);
       openAlertPermission(
         'We’re not able to access your camera, please adjust your permission settings for BetterSocial.'
       );
@@ -299,6 +307,7 @@ const InputMessageV2 = ({
   };
 
   const onOpenFile = async () => {
+    setIsLoadingUploadImageFile(true);
     const {success} = await requestExternalStoragePermission();
     if (success) {
       DocumentPicker.pickSingle({
@@ -308,6 +317,7 @@ const InputMessageV2 = ({
         handleFile(pickerResult);
       });
     } else {
+      setIsLoadingUploadImageFile(false);
       openAlertPermission(
         'We’re not able to access your document library, please adjust your permission settings for BetterSocial.'
       );
@@ -434,9 +444,9 @@ const InputMessageV2 = ({
         onOpenCamera={onOpenCamera}
         onOpenFile={onOpenFile}
         isLoadingUploadMedia={isLoadingUploadImageMedia}
-        isLoadingUploadGIF={false}
+        isLoadingUploadGIF={isLoadingUploadImageGIF}
         isLoadingUploadCamera={isLoadingUploadImageCamera}
-        isLoadingUploadFile={false}
+        isLoadingUploadFile={isLoadingUploadImageFile}
       />
 
       <BottomSheetGif ref={refGif} onCancel={onCloseGIF} onSelect={handleSelectGIF} />
