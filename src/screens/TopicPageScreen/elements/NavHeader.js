@@ -25,6 +25,8 @@ import {COLORS} from '../../../utils/theme';
 import ButtonFollow from './ButtonFollow';
 import ButtonFollowing from './ButtonFollowing';
 import TopicDomainHeader from './TopicDomainHeader';
+import ChannelImage from '../../../components/ChatList/elements/ChannelImage';
+import {CHANNEL_COMMUNITY} from '../../../hooks/core/constant';
 
 const NavHeader = (props) => {
   const {
@@ -174,16 +176,11 @@ const NavHeader = (props) => {
           <>
             <View style={[styles.headerContainer]}>
               <Animated.View style={{opacity: opacityHeaderAnimation}}>
-                <FastImage
-                  source={
-                    initialData?.channelPicutre
-                      ? {uri: initialData?.channelPicutre}
-                      : topicDetail?.icon_path
-                      ? {uri: topicDetail?.icon_path}
-                      : TopicDefaultIcon
-                  }
-                  style={styles.image}
-                />
+                {initialData?.channelPicutre ? (
+                  <FastImage source={{uri: initialData.channelPicutre}} style={styles.image} />
+                ) : (
+                  <ChannelImage.Big type={CHANNEL_COMMUNITY} />
+                )}
               </Animated.View>
               <View
                 style={[
@@ -303,7 +300,7 @@ const styles = StyleSheet.create({
     width: normalize(48),
     height: normalize(48),
     borderRadius: normalize(24),
-    backgroundColor: 'lightgrey',
+    backgroundColor: COLORS.lightgrey,
     marginRight: 8
   },
   backbutton: {

@@ -44,7 +44,7 @@ const Search = ({route, onPress, isShowNewChat = true, isAnon}) => {
           <Text style={[styles.newPostText, {color: themeColor()}]}>
             {StringConstant.chatTabHeaderCreateChatButtonText}
           </Text>
-          <View>
+          <View style={styles.chatIconContainer}>
             <MemoIcNewChat height={18} width={16} color={themeColor()} style={styles.newChatIcon} />
           </View>
         </TouchableOpacity>
@@ -120,6 +120,9 @@ const styles = StyleSheet.create({
     paddingBottom: 7,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.lightgrey
+  },
+  chatIconContainer: {
+    marginLeft: dimen.normalizeDimen(5)
   }
 });
 
