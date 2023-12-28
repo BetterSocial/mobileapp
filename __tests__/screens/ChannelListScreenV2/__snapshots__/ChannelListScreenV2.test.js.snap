@@ -105,7 +105,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
           style={
             Object {
               "backgroundColor": "white",
-              "borderBottomColor": "#C4C4C4",
+              "borderBottomColor": undefined,
               "borderBottomWidth": 1,
               "flexDirection": "row",
               "left": 0,
@@ -159,7 +159,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
                 style={
                   Object {
                     "alignSelf": "center",
-                    "color": "#C4C4C4",
+                    "color": undefined,
                     "flex": 1,
                     "fontFamily": "Inter-Regular",
                     "fontSize": 14,
@@ -201,7 +201,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
             <Text
               style={
                 Object {
-                  "color": "#00ADB5",
+                  "color": undefined,
                   "fontFamily": "Inter-SemiBold",
                   "fontSize": 12,
                   "lineHeight": 14.52,
