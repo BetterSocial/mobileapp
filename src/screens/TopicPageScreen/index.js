@@ -396,6 +396,7 @@ const TopicPageScreen = (props) => {
       onPressDownVote={(post) => setDownVote(post, index)}
       loading={loading}
       selfUserId={userId}
+      offset={offset}
     />
   );
 
