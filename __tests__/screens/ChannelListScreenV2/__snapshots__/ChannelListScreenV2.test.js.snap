@@ -81,50 +81,6 @@ exports[`AnonymousChannelListScreen RENDER should match snapshot 1`] = `
           </Text>
         </View>
       </View>
-      <View
-        accessible={true}
-        focusable={true}
-        onClick={[Function]}
-        onResponderGrant={[Function]}
-        onResponderMove={[Function]}
-        onResponderRelease={[Function]}
-        onResponderTerminate={[Function]}
-        onResponderTerminationRequest={[Function]}
-        onStartShouldSetResponder={[Function]}
-        style={
-          Object {
-            "alignItems": "center",
-            "flexDirection": "row",
-            "justifyContent": "space-around",
-            "marginEnd": 8,
-            "opacity": 1,
-            "paddingBottom": 9,
-            "paddingRight": 12,
-            "paddingTop": 9,
-          }
-        }
-      >
-        <Text
-          style={
-            Array [
-              Object {
-                "fontFamily": "Inter-SemiBold",
-                "fontSize": 12,
-                "lineHeight": 14.52,
-                "marginRight": 4,
-              },
-              Object {
-                "color": "#003848",
-              },
-            ]
-          }
-        >
-          New Chat
-        </Text>
-        <View>
-          <View />
-        </View>
-      </View>
     </View>
   </View>
   <RCTScrollView
