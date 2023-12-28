@@ -13,7 +13,9 @@ import CameraIcon from '../../assets/icons/images/camera.svg';
 const BottomSheetAttachment = React.forwardRef((props, ref) => (
   <BottomSheet ref={ref} closeOnPressMask={true} height={300} viewstyle={styles.container}>
     <View style={styles.containerBottomSheet}>
-      <TouchableNativeFeedback onPress={() => props.onOpenMedia()}>
+      <TouchableNativeFeedback
+        onPress={() => props.onOpenMedia()}
+        disabled={props.isLoadingUploadMedia}>
         <View style={styles.card}>
           <View style={styles.wrapCardImage}>
             <MediasIcon width={20} height={20} fill={colors.black} />
@@ -22,7 +24,9 @@ const BottomSheetAttachment = React.forwardRef((props, ref) => (
           {props.isLoadingUploadMedia ? <ActivityIndicator size="small" color="#0000ff" /> : null}
         </View>
       </TouchableNativeFeedback>
-      <TouchableNativeFeedback onPress={() => props.onOpenGIF()}>
+      <TouchableNativeFeedback
+        onPress={() => props.onOpenGIF()}
+        disabled={props.isLoadingUploadGIF}>
         <View style={styles.card}>
           <View style={styles.wrapCardImage}>
             <GIFIcon width={20} height={20} fill={colors.black} />
@@ -31,7 +35,9 @@ const BottomSheetAttachment = React.forwardRef((props, ref) => (
           {props.isLoadingUploadGIF ? <ActivityIndicator size="small" color="#0000ff" /> : null}
         </View>
       </TouchableNativeFeedback>
-      <TouchableNativeFeedback onPress={() => props.onOpenCamera()}>
+      <TouchableNativeFeedback
+        onPress={() => props.onOpenCamera()}
+        disabled={props.isLoadingUploadCamera}>
         <View style={styles.card}>
           <View style={styles.wrapCardImage}>
             <CameraIcon width={20} height={20} fill={colors.black} />
@@ -41,7 +47,9 @@ const BottomSheetAttachment = React.forwardRef((props, ref) => (
         </View>
       </TouchableNativeFeedback>
 
-      <TouchableNativeFeedback onPress={() => props.onOpenFile()}>
+      <TouchableNativeFeedback
+        onPress={() => props.onOpenFile()}
+        disabled={props.isLoadingUploadFile}>
         <View
           style={[
             styles.card,
