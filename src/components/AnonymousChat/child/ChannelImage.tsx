@@ -8,9 +8,9 @@ import ChannelAnonymousSubImage from './ChannelAnonymousSubImage';
 import ChatIcon from '../../../assets/chat-icon.png';
 import FeedIcon from '../../../assets/images/feed-icon.png';
 import dimen from '../../../utils/dimen';
+import useProfileHook from '../../../hooks/core/profile/useProfileHook';
 import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
 import {colors} from '../../../utils/colors';
-import useProfileHook from '../../../hooks/core/profile/useProfileHook';
 
 const ChannelImage = ({
   mainPicture,
@@ -83,9 +83,9 @@ const ChannelImage = ({
         <ChannelAnonymousImage
           anonPostNotificationUserInfo={{
             anon_user_info_emoji_code:
-              betterSocialMember[memberChat?.user_id].anon_user_info_emoji_code,
+              betterSocialMember?.[memberChat?.user_id]?.anon_user_info_emoji_code,
             anon_user_info_color_code:
-              betterSocialMember[memberChat?.user_id].anon_user_info_color_code
+              betterSocialMember?.[memberChat?.user_id]?.anon_user_info_color_code
           }}
           imageStyle={styles.image}
         />
