@@ -14,7 +14,7 @@ import {useDynamicColors} from '../../../hooks/useToggleColors';
 import {COLORS, SIZES} from '../../../utils/theme';
 import {fonts} from '../../../utils/fonts';
 
-const Search = ({route, onPress, isAnon}) => {
+const Search = ({route, onPress, isShowNewChat = true, isAnon}) => {
   const navigation = useNavigation();
   const dynamicColors = useDynamicColors(isAnon);
 
@@ -39,14 +39,16 @@ const Search = ({route, onPress, isAnon}) => {
           <Text style={styles.input}>{StringConstant.chatTabHeaderPlaceholder}</Text>
         </View>
       </Pressable>
-      <TouchableOpacity style={styles.wrapperButton} onPress={onPress}>
-        <Text style={[styles.newPostText, {color: themeColor()}]}>
-          {StringConstant.chatTabHeaderCreateChatButtonText}
-        </Text>
-        <View>
-          <MemoIcNewChat height={18} width={16} color={themeColor()} style={styles.newChatIcon} />
-        </View>
-      </TouchableOpacity>
+      {isShowNewChat && (
+        <TouchableOpacity style={styles.wrapperButton} onPress={onPress}>
+          <Text style={[styles.newPostText, {color: themeColor()}]}>
+            {StringConstant.chatTabHeaderCreateChatButtonText}
+          </Text>
+          <View>
+            <MemoIcNewChat height={18} width={16} color={themeColor()} style={styles.newChatIcon} />
+          </View>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

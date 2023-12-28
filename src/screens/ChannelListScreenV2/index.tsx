@@ -53,7 +53,7 @@ const ChannelListScreenV2 = ({route}) => {
     <View>
       <StatusBar translucent={false} />
       <View style={{height: 52}}>
-        <Search route={route} onPress={goToContactScreen} />
+        <Search route={route} onPress={goToContactScreen} isShowNewChat={false} />
       </View>
 
       <FlatList
