@@ -115,12 +115,12 @@ function useMessageHook(): UseMessageHook {
 
   const onOpenMediaPreview = (medias, index, navigation) => {
     if (medias.find((media) => media.type === 'video')) {
-      navigation.navigate('VideoViewer', {
+      navigation.push('VideoViewer', {
         title: 'Video',
         url: medias[index].video_path
       });
     } else {
-      navigation.navigate('ImageViewer', {
+      navigation.push('ImageViewer', {
         title: 'Photo',
         index,
         images: medias
