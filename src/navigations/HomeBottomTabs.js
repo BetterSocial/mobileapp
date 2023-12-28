@@ -1,29 +1,29 @@
+import * as React from 'react';
+import PushNotification from 'react-native-push-notification';
 /* eslint-disable no-use-before-define */
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import messaging from '@react-native-firebase/messaging';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import * as React from 'react';
 import {Platform, SafeAreaView, StyleSheet, View} from 'react-native';
-import PushNotification from 'react-native-push-notification';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useRecoilState, useRecoilValue} from 'recoil';
 
+import AnonymousChannelListScreen from '../screens/AnonymousChannelListScreen';
 import AnonymousChatFill from '../assets/icon/AnonymousChatFill';
 import AnonymousChatOutline from '../assets/icon/AnonymousChatOutline';
+import FirebaseConfig from '../configs/FirebaseConfig';
 import MemoFeed from '../assets/icon/Feed';
 import MemoNews from '../assets/icon/News';
 import MemoProfileIcon from '../assets/icon/Profile';
 import SignedChat from '../assets/icon/SignedChat';
+import StorageUtils from '../utils/storage';
 import profileAtom from '../atom/profileAtom';
-import FirebaseConfig from '../configs/FirebaseConfig';
 import useCoreChatSystemHook from '../hooks/core/useCoreChatSystemHook';
 import useRootChannelListHook from '../hooks/screen/useRootChannelListHook';
-import {ChannelListScreen, FeedScreen, NewsScreen, ProfileScreen} from '../screens';
-import ChannelListScreenV2 from '../screens/ChannelListScreenV2';
-import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
 import TokenStorage, {ITokenEnum} from '../utils/storage/custom/tokenStorage';
+import {ChannelListScreen, FeedScreen, NewsScreen, ProfileScreen} from '../screens';
+import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
 import {getAnonymousUserId, getUserId} from '../utils/users';
 import {COLORS} from '../utils/theme';
-import StorageUtils from '../utils/storage';
 
 const Tab = createBottomTabNavigator();
 
@@ -303,7 +303,7 @@ function HomeBottomTabs({navigation}) {
         />
         <Tab.Screen
           name="AnonymousChannelList"
-          component={ChannelListScreenV2}
+          component={AnonymousChannelListScreen}
           initialParams={{isBottomTab: true}}
           listeners={({route}) => saveLastMenu(route)}
           options={{

@@ -4,8 +4,6 @@ import React from 'react';
 import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
 
 import {Footer, Gap, PreviewComment} from '../../components';
-import {Context} from '../../context';
-import {followUserAnon, setFollow, setUnFollow, unfollowUserAnon} from '../../service/profile';
 import {showScoreAlertDialog} from '../../utils/Utils';
 import {
   ANALYTICS_SHARE_POST_FEED_ID,
@@ -25,7 +23,7 @@ import Content from './Content';
 import ContentLink from './ContentLink';
 import Header from './Header';
 import useFeed from './hooks/useFeed';
-import {setFeedByIndex} from '../../context/actions/feeds';
+import usePostHook from '../../hooks/core/post/usePostHook';
 
 const tabBarHeight = StatusBar.currentHeight;
 const FULL_WIDTH = Dimensions.get('screen').width;
@@ -66,9 +64,7 @@ const RenderListFeed = (props) => {
     showScoreButton
   } = useFeed();
 
-  const [feedsContext, feedsContextDispatch] = React.useContext(Context).feeds;
-  const [profileContext] = React.useContext(Context).profile;
-  const {myProfile} = profileContext;
+  const {followUnfollow} = usePostHook();
 
   const onPressDownVoteHandle = async () => {
     onPressDownVoteHook();
@@ -121,77 +117,6 @@ const RenderListFeed = (props) => {
     return dimen.size.FEED_CURRENT_ITEM_HEIGHT - getHeightHeader() - getHeightFooter() - haveLength;
   };
 
-  const handleFollowUnfollow = async () => {
-    const user_id = item?.actor?.id;
-    const username = item?.actor?.data?.username;
-    const data = {
-      user_id_follower: myProfile?.user_id,
-      user_id_followed: user_id,
-      username_follower: myProfile?.username,
-      username_followed: username,
-      follow_source: 'feed'
-    };
-    const dataFollowAnon = {
-      follow_source: 'post',
-      post_id: item?.id
-    };
-    const indexFeed = feedsContext?.feeds?.findIndex((feed) => {
-      return feed?.id === item?.id;
-    });
-    const feedData = feedsContext?.feeds[indexFeed];
-    if (feedData?.is_following_target) {
-      if (!feedData?.anon_user_info_color_name) {
-        feedsContext?.feeds.forEach((feed, index) => {
-          if (feed?.actor?.id === user_id) {
-            setFeedByIndex(
-              {
-                index,
-                singleFeed: {...feedsContext?.feeds[index], is_following_target: false}
-              },
-              feedsContextDispatch
-            );
-          }
-        });
-        await setUnFollow(data);
-      } else {
-        const newFeed = {...feedsContext?.feeds[indexFeed], is_following_target: false};
-        setFeedByIndex(
-          {
-            index: indexFeed,
-            singleFeed: newFeed
-          },
-          feedsContextDispatch
-        );
-        await unfollowUserAnon(dataFollowAnon);
-      }
-    } else {
-      if (!feedData?.anon_user_info_color_name) {
-        feedsContext?.feeds.forEach((feed, index) => {
-          if (feed?.actor?.id === user_id) {
-            setFeedByIndex(
-              {
-                index,
-                singleFeed: {...feedsContext?.feeds[index], is_following_target: true}
-              },
-              feedsContextDispatch
-            );
-          }
-        });
-        await setFollow(data);
-      } else {
-        const newFeed = {...feedsContext?.feeds[indexFeed], is_following_target: true};
-        setFeedByIndex(
-          {
-            index: indexFeed,
-            singleFeed: newFeed
-          },
-          feedsContextDispatch
-        );
-        await followUserAnon(dataFollowAnon);
-      }
-    }
-  };
-
   return (
     <View key={item.id} testID="dataScroll" style={styles.cardContainer}>
       <View style={[styles.cardMain]}>
@@ -206,7 +131,7 @@ const RenderListFeed = (props) => {
           isShowDelete={isShowDelete}
           isSelf={isSelf}
           isFollow={item?.is_following_target}
-          onPressFollUnFoll={handleFollowUnfollow}
+          onPressFollUnFoll={() => followUnfollow(item)}
         />
         {item.post_type === POST_TYPE_LINK && (
           <ContentLink

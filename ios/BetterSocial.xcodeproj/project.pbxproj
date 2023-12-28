@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* BetterSocialTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* BetterSocialTests.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		14115AEA3BBBE196AC80D3AE /* libPods-BetterSocial-BetterSocialDev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7125237D9815EC140E28774A /* libPods-BetterSocial-BetterSocialDev.a */; };
+		15275D552676F11AD7AB5D79 /* libPods-BetterSocial-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B880C1B4F2562553E5710094 /* libPods-BetterSocial-tvOSTests.a */; };
 		23F559981B4BBF0E06478C55 /* libPods-BetterSocial-BetterSocialStaging.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B47556C0AD1CC64479471CC9 /* libPods-BetterSocial-BetterSocialStaging.a */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -17,6 +17,7 @@
 		2DCD954D1E0B4F2C00145EB5 /* BetterSocialTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* BetterSocialTests.m */; };
 		2E7357E3EDC718B14778FD80 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		4072C477AE4EC446CE0FC74E /* libPods-BetterSocial-BetterSocialTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E98032BA201E20EFF47E4C1 /* libPods-BetterSocial-BetterSocialTests.a */; };
+		51C3299674D28DC992323CA6 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F21D279A76EF30062BAF3FA4 /* libPods-OneSignalNotificationServiceExtension.a */; };
 		845147C0275632A000F1BF16 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		845147C1275632B300F1BF16 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		845C6E802758AFC500C9F384 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DD32758A00C00C9F384 /* Inter-Regular.ttf */; };
@@ -135,11 +136,9 @@
 		88BB6015299BC09D003FA042 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 88BB6014299BC09D003FA042 /* GoogleService-Info.plist */; };
 		88BB6018299BC0B3003FA042 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 88BB6016299BC0AF003FA042 /* GoogleService-Info.plist */; };
 		92D8142362E828E0BFD1A9D0 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BB713F145613AF30A53AC77D /* libPods-BetterSocial-BetterSocialTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A00352A589D59C45332961CB /* libPods-BetterSocial-BetterSocialTests.a */; };
-		C36230AE8C5C3DD90FCED3EC /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D1D792BA444DA06DB9C6F91A /* libPods-OneSignalNotificationServiceExtension.a */; };
-		A1887CEB4A482E13213BC7BB /* libPods-BetterSocial-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D86021FB6E968AD4D9B1A405 /* libPods-BetterSocial-tvOS.a */; };
-		D005338321D7859D46B7FB4A /* libPods-BetterSocial-BetterSocialTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EE145185DE64E05AAF5301E /* libPods-BetterSocial-BetterSocialTests.a */; };
-		DF406A10F46754D5F30BA58F /* libPods-BetterSocial-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 236C1C93F53E6B2EA54D4E06 /* libPods-BetterSocial-tvOSTests.a */; };
+		ADF1D0F61710CB35747750C3 /* libPods-BetterSocial-BetterSocialDev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7125237D9815EC140E28774A /* libPods-BetterSocial-BetterSocialDev.a */; };
+		C36230AE8C5C3DD90FCED3EC /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		D003BE73B9156D8E3DB05127 /* libPods-BetterSocial-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A60CCBC9606E354E38EB1DF3 /* libPods-BetterSocial-tvOS.a */; };
 		E97154A42976870A0021A505 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		E97154A52976870B0021A505 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		F23408F1E96AC908FB2D1D88 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1310CCE4FD9F49BADEA89C19 /* libPods-OneSignalNotificationServiceExtension.a */; };
@@ -318,7 +317,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9B05B57677B3A2F73F54DBBD /* libPods-BetterSocial-tvOS.a in Frameworks */,
+				D003BE73B9156D8E3DB05127 /* libPods-BetterSocial-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -327,15 +326,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2E7357E3EDC718B14778FD80 /* BuildFile in Frameworks */,
-				D1374C228B156DC3945BA78C /* libPods-BetterSocial-tvOSTests.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4785D99AAAC235719D68D96C /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B1AB83FF26C2AB5AF7297977 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */,
+				15275D552676F11AD7AB5D79 /* libPods-BetterSocial-tvOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -352,7 +343,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				92D8142362E828E0BFD1A9D0 /* BuildFile in Frameworks */,
-				140B3EFDAF3C6F6A17D21477 /* libPods-BetterSocial-BetterSocialDev.a in Frameworks */,
+				ADF1D0F61710CB35747750C3 /* libPods-BetterSocial-BetterSocialDev.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -360,7 +351,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C36230AE8C5C3DD90FCED3EC /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */,
+				C36230AE8C5C3DD90FCED3EC /* BuildFile in Frameworks */,
+				51C3299674D28DC992323CA6 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

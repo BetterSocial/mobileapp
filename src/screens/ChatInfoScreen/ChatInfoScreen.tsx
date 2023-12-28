@@ -189,7 +189,7 @@ export const styles = StyleSheet.create({
   }
 });
 
-const SampleChatInfoScreen = () => {
+const ChatInfoScreen = () => {
   const {
     channelInfo,
     goBack,
@@ -315,7 +315,7 @@ const SampleChatInfoScreen = () => {
                         <MemoIc_pencil
                           height={dimen.normalizeDimen(20)}
                           width={dimen.normalizeDimen(20)}
-                          color={colors.darkBlue}
+                          color={COLORS.darkBlue}
                         />
                       </TouchableOpacity>
                     ) : null}
@@ -381,4 +381,4 @@ const SampleChatInfoScreen = () => {
   );
 };
 
-export default SampleChatInfoScreen;
+export default ChatInfoScreen;
