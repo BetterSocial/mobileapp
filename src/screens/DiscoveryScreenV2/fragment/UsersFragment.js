@@ -78,40 +78,43 @@ const UsersFragment = ({
     });
   };
 
-  const exhangeFollower = (newUserLists, willFollow, index) => {
-    if (newUserLists[index].user) {
-      newUserLists[index].user.following = !!willFollow;
-      newUserLists[index].user.user_id_follower = myId;
+  const exhangeFollower = (newUserLists, willFollow, userId) => {
+    const indexUser = newUserLists.findIndex((item) =>
+      item.user ? item.user.user_id === userId : item.user_id === userId
+    );
+    if (newUserLists[indexUser].user) {
+      newUserLists[indexUser].user.following = !!willFollow;
+      newUserLists[indexUser].user.user_id_follower = myId;
     } else {
-      newUserLists[index].following = !!willFollow;
-      newUserLists[index].user_id_follower = myId;
+      newUserLists[indexUser].following = !!willFollow;
+      newUserLists[indexUser].user_id_follower = myId;
     }
   };
 
   const handleFollow = async (from, willFollow, item, index) => {
     if (from === FROM_FOLLOWED_USERS_INITIAL || from === FROM_UNFOLLOWED_USERS_INITIAL) {
       const newFollowedUsers = [...users];
-      exhangeFollower(newFollowedUsers, willFollow, index);
+      exhangeFollower(newFollowedUsers, willFollow, item.user ? item.user.user_id : item.user_id);
 
       DiscoveryAction.setDiscoveryInitialUsers(newFollowedUsers, discoveryDispatch);
     }
 
     if (from === FROM_FOLLOWED_USERS) {
       const newFollowedUsers = [...followedUsers];
-      exhangeFollower(newFollowedUsers, willFollow, index);
+      exhangeFollower(newFollowedUsers, willFollow, item.user ? item.user.user_id : item.user_id);
 
       setFollowedUsers(newFollowedUsers);
     }
 
     if (from === FROM_UNFOLLOWED_USERS) {
       const newUnfollowedUsers = [...unfollowedUsers];
-      exhangeFollower(newUnfollowedUsers, willFollow, index);
+      exhangeFollower(newUnfollowedUsers, willFollow, item.user ? item.user.user_id : item.user_id);
       setUnfollowedUsers(newUnfollowedUsers);
     }
 
     if (from === FROM_USERS_INITIAL) {
       const newFollowedUsers = [...initialUsers];
-      exhangeFollower(newFollowedUsers, willFollow, index);
+      exhangeFollower(newFollowedUsers, willFollow, item.user ? item.user.user_id : item.user_id);
 
       setInitialUsers(newFollowedUsers);
     }
@@ -149,7 +152,8 @@ const UsersFragment = ({
             name: item.user ? item.user.username : item.username,
             image: item.user ? item.user.profile_pic_path : item.profile_pic_path,
             isunfollowed: isUnfollowed,
-            description: item.user ? item.user.bio : item.bio
+            description: item.user ? item.user.bio : item.bio,
+            karmaScore: item.user ? item.user.karma_score : item.karma_score
           }}
         />
       );
