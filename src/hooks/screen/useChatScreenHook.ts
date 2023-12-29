@@ -174,8 +174,8 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
         response = await AnonymousMessageRepo.sendAnonymousMessage(
           selectedChannel?.id,
           message,
-          replyData?.id,
-          newAttachments
+          newAttachments,
+          replyData?.id
         );
       } else {
         response = await SignedMessageRepo.sendSignedMessage(

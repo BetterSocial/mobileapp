@@ -16,6 +16,7 @@ const BottomSheet = React.forwardRef((props, ref) => {
       dragFromTopOnly={true}
       closeOnPressMask={props.closeOnPressMask}
       height={props.height ? props.height : 355}
+      keyboardAvoidingViewEnabled={false}
       customStyles={{
         container: styles.containerSheet(pullBottom),
         draggableIcon: styles.draggableIcon
