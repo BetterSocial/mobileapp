@@ -3,6 +3,7 @@ export const COLORS = {
   black: '#1E1F20',
   black000: '#000',
   black30percent: 'rgba(0,0,0,0.3)',
+  black80percent: 'rgba(0,0,0,0.8)',
   black43: '#434343',
   blue: '#2F80ED',
   blueLoyal: '#023B60',
@@ -26,9 +27,8 @@ export const COLORS = {
   white: '#FFFFFF',
   whiteSmoke: '#F4F4F4',
 
-  //need to remove
+  // need to remove
   holytosca: '#00ADB5',
-  holyTosca: '#00ADB5',
   holytosca30percent: '#00ADB54D',
   lightBlue: '#2F80ED',
   gray1: '#C4C4C4',
@@ -37,7 +37,7 @@ export const COLORS = {
   bondi_blue: '#00ADB5',
 
   // new color
-  signed_primary: 'pink',
+  signed_primary: '#4782D7',
   signed_secondary: '#6295DD',
   anon_primary: '#107793',
   anon_secondary: '#3A9BB6',
@@ -47,7 +47,11 @@ export const COLORS = {
   gray: '#E8EBED',
   lightgrey: '#F5F6F7',
   redalert: '#FF2E63',
-  blackgrey: '#828282'
+  blackgrey: '#828282',
+  greySubtile1: '#9B9FA9',
+  elm: '#22878B',
+  halfBaked: '#88CDD0',
+  greenDark: '#004346'
 };
 export const SIZES = {
   // global sizes
