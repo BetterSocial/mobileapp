@@ -390,7 +390,11 @@ class ChannelList implements BaseDbSchema {
     });
   }
 
-  static fromChannelAPI(data: ChannelData, channelType: ChannelType): ChannelList {
+  static fromChannelAPI(
+    data: ChannelData,
+    channelType: ChannelType,
+    members?: ChannelData['members']
+  ): ChannelList {
     const isPM = channelType === 'PM';
     const firstMessage = data?.firstMessage;
     const isSystemMessage = firstMessage?.type === 'system' || firstMessage?.isSystem;
@@ -411,7 +415,7 @@ class ChannelList implements BaseDbSchema {
       createdAt: data?.created_at,
       rawJson: data,
       user: null,
-      members: null
+      members: members || null
     });
   }
 
