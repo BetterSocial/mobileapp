@@ -1,6 +1,8 @@
 import * as React from 'react';
 import ImagePicker from 'react-native-image-crop-picker';
+import PropTypes from 'prop-types';
 import Toast from 'react-native-simple-toast';
+import netInfo from '@react-native-community/netinfo';
 import {
   ActivityIndicator,
   Alert,
@@ -13,12 +15,11 @@ import {
   TouchableNativeFeedback,
   View
 } from 'react-native';
-import PropTypes from 'prop-types';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {debounce} from 'lodash';
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
-import netInfo from '@react-native-community/netinfo';
+
 import AnonymousTab from './elements/AnonymousTab';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BioAndDMSetting from './elements/BioAndDMSetting';
@@ -34,8 +35,12 @@ import ProfileHeader from './elements/ProfileHeader';
 import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
 import RenderItem from '../FeedScreen/RenderList';
+import ShadowFloatingButtons from '../../components/Button/ShadowFloatingButtons';
 import ShareUtils from '../../utils/share';
+import StorageUtils from '../../utils/storage';
 import dimen from '../../utils/dimen';
+import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
+import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
 import useResetContext from '../../hooks/context/useResetContext';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
@@ -67,9 +72,6 @@ import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import ShadowFloatingButtons from '../../components/Button/ShadowFloatingButtons';
-import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
-import StorageUtils from '../../utils/storage';
 import {COLORS} from '../../utils/theme';
 
 const {width} = Dimensions.get('screen');
@@ -171,7 +173,6 @@ const ProfileScreen = ({route}) => {
   const [isLoadingUpdateImageCamera, setIsLoadingUpdateImageCamera] = React.useState(false);
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0);
-  const [isLastPage, setIsLastPage] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [isPostOptionModalOpen, setIsOptionModalOpen] = React.useState(false);
   const [selectedPostForOption, setSelectedPostForOption] = React.useState(null);
@@ -195,6 +196,8 @@ const ProfileScreen = ({route}) => {
     reloadFetchAnonymousPost,
     getProfileCache
   } = useProfileScreenHook();
+
+  const {fetchNextFeeds} = useFeedPreloadHook(mainFeeds?.length, () => getMyFeeds(postOffset));
   // eslint-disable-next-line consistent-return
   React.useEffect(() => {
     if (interactionsComplete) {
@@ -228,7 +231,6 @@ const ProfileScreen = ({route}) => {
     const status = await netInfo.fetch();
     if (status.isConnected) {
       getMyFeeds(0, LIMIT_PROFILE_FEED);
-      console.log('masuka');
     } else {
       setMyProfileFeed(JSON.parse(cacheFeed), myProfileDispatch);
     }
@@ -272,9 +274,6 @@ const ProfileScreen = ({route}) => {
       const result = await getSelfFeedsInProfile(offset, limit);
       const {data: dataMyFeed} = result;
       const {mapNewData} = mappingColorFeed({dataFeed: dataMyFeed, dataCache: cacheFeed});
-      if (Array.isArray(result.data) && result.data.length === 0) {
-        setIsLastPage(true);
-      }
       if (offset === 0) {
         StorageUtils.myFeeds.set(JSON.stringify(mapNewData));
         setMyProfileFeed(mapNewData, myProfileDispatch);
@@ -558,15 +557,8 @@ const ProfileScreen = ({route}) => {
     await downVote(post);
   };
 
-  const handleOnEndReached = () => {
-    if (!isLastPage) {
-      getMyFeeds(postOffset);
-    }
-  };
-
   function handleRefresh() {
     setLoading(true);
-    setIsLastPage(false);
     getMyFeeds(0, LIMIT_PROFILE_FEED);
     reloadFetchAnonymousPost();
     fetchMyProfile(true);
@@ -621,12 +613,12 @@ const ProfileScreen = ({route}) => {
         style={styles.flatlistContainer}
         onScroll={handleScroll}
         ListFooterComponent={isFetchingList ? <ActivityIndicator /> : null}
-        onEndReach={handleOnEndReached}
         initialNumToRender={2}
         maxToRenderPerBatch={2}
         updateCellsBatchingPeriod={10}
         removeClippedSubviews
         windowSize={10}
+        onMomentumScrollEnd={(event) => fetchNextFeeds(event)}
         ListHeaderComponent={
           <Header
             headerHeightRef={headerHeightRef}

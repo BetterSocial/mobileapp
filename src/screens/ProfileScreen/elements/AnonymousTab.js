@@ -23,13 +23,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 17,
     textAlign: 'center',
-    color: isActive ? COLORS.bondi_blue : COLORS.blackgrey
+    color: isActive ? COLORS.signed_primary : COLORS.blackgrey
   }),
   anonymousPostTextSubtitle: (isActive) => ({
     fontFamily: isActive ? fonts.inter[600] : fonts.inter[400],
     fontSize: 10,
     textAlign: 'center',
-    color: isActive ? COLORS.bondi_blue : COLORS.blackgrey
+    color: isActive ? COLORS.signed_primary : COLORS.blackgrey
   })
 });
 

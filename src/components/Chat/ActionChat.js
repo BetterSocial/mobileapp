@@ -6,7 +6,6 @@ import MemoIc_arrow_right from '../../assets/chats/Ic_arrow_right';
 import MemoIc_block from '../../assets/chats/Ic_block';
 import MemoIc_copy from '../../assets/chats/Ic_copy';
 import MemoIC_trash from '../../assets/chats/IC_trash';
-import {colors} from '../../utils/colors';
 import {COLORS} from '../../utils/theme';
 
 const ActionChat = ({children, isMe, active, all}) => {
@@ -41,18 +40,18 @@ export default ActionChat;
 
 const styles = StyleSheet.create({
   container: (active) => ({
-    backgroundColor: active ? 'rgba(0, 173, 181, 0.2)' : COLORS.white,
+    backgroundColor: active ? 'rgba(0, 173, 181, 0.2)' : COLORS.white
   }),
   btn: {
     paddingVertical: 10,
-    paddingHorizontal: 10,
+    paddingHorizontal: 10
   },
   action: {
     position: 'absolute',
     bottom: -20,
     right: 20,
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     flexDirection: 'row',
-    borderRadius: 8,
-  },
+    borderRadius: 8
+  }
 });

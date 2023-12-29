@@ -4,8 +4,6 @@ import {StyleSheet, Text, View, Image} from 'react-native';
 
 import Autolink from 'react-native-autolink';
 
-import MemoIc_read from '../../assets/chats/Ic_read';
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {trimString} from '../../utils/string/TrimString';
 import {calculateTime} from '../../utils/time';
@@ -80,7 +78,7 @@ const styles = StyleSheet.create({
     lineHeight: 18
   }),
   containerPreview: (isMe) => ({
-    backgroundColor: isMe ? colors.tradewind : colors.lightgrey,
+    backgroundColor: isMe ? COLORS.tradewind : COLORS.lightgrey,
     marginHorizontal: -4,
     borderRadius: 4,
     paddingLeft: 6,
@@ -119,7 +117,7 @@ const styles = StyleSheet.create({
     marginVertical: 4
   },
   containerChat: (isMe) => ({
-    backgroundColor: isMe ? colors.halfBaked : colors.lightgrey,
+    backgroundColor: isMe ? COLORS.halfBaked : COLORS.lightgrey,
     paddingVertical: 8,
     paddingLeft: 8,
     paddingRight: 9.35,

@@ -7,8 +7,7 @@ permissions:
 on:
   pull_request:
     branches: 
-      - main
-      - main-chat
+      - staging
 
 concurrency:
   group:

@@ -5,7 +5,6 @@ import crashlytics from '@react-native-firebase/crashlytics';
 import {BackHandler, StatusBar, StyleSheet, View} from 'react-native';
 import {StackActions} from '@react-navigation/native';
 // eslint-disable-next-line import/no-unresolved
-import {colors} from 'react-native-swiper-flatlist/src/themes';
 import {
   logIn,
   onCancel,

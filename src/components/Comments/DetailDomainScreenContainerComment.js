@@ -7,7 +7,6 @@ import Comment from './Comment';
 import ConnectorWrapper from './ConnectorWrapper';
 import DetailDomainScreenCommentItem from './DetailDomainScreenCommentItem';
 import StringConstant from '../../utils/string/StringConstant';
-import {colors} from '../../utils/colors';
 import {downVoteDomain, upVoteDomain} from '../../service/vote';
 import ButtonHightlight from '../ButtonHighlight';
 import {COLORS} from '../../utils/theme';

@@ -2,7 +2,6 @@ import * as React from 'react';
 import FastImage from 'react-native-fast-image';
 import {Dimensions, StyleSheet, Text, View} from 'react-native';
 
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 import AnonymousIcon from '../../assets/icon/AnonymousIcon';
