@@ -308,19 +308,28 @@ const OtherProfile = () => {
       await generateAnonProfile();
     }
   };
+  console.log(isAnonimity, 'nakal');
 
   const __renderListHeader = () => {
     const __renderBlockIcon = () => {
       if (blockStatus.blocker)
         return (
-          <View style={styles.buttonFollowing}>
-            <Text style={styles.textButtonFollowing}>Blocked</Text>
+          <View style={styles.buttonFollowing(isAnonimity)}>
+            <Text style={styles.textButtonFollowing(isAnonimity)}>Blocked</Text>
           </View>
         );
 
       return (
-        <View style={{...styles.btnMsg, borderColor: COLORS.signed_primary}}>
-          <BlockIcon width={20} height={20} style={{color: COLORS.signed_primary}} />
+        <View
+          style={{
+            ...styles.btnMsg(isAnonimity),
+            borderColor: isAnonimity ? COLORS.anon_primary : COLORS.signed_primary
+          }}>
+          <BlockIcon
+            width={20}
+            height={20}
+            style={{color: isAnonimity ? COLORS.anon_primary : COLORS.signed_primary}}
+          />
         </View>
       );
     };
@@ -337,7 +346,7 @@ const OtherProfile = () => {
         <View style={styles.wrapFollower}>
           <TouchableOpacity onPress={handleOpenFollowerUser} style={styles.wrapRow}>
             <React.Fragment>
-              <Text style={styles.textTotal}>{dataMain.follower_symbol}</Text>
+              <Text style={styles.textTotal(isAnonimity)}>{dataMain.follower_symbol}</Text>
               <Text style={styles.textFollow}>
                 {getSingularOrPluralText(dataMain.follower_symbol, 'Follower', 'Followers')}
               </Text>
@@ -363,15 +372,15 @@ const OtherProfile = () => {
       if (dataMain.is_following)
         return (
           <GlobalButton onPress={() => handleSetUnFollow()}>
-            <View style={styles.buttonFollowing}>
-              <Text style={styles.textButtonFollowing}>Following</Text>
+            <View style={styles.buttonFollowing(isAnonimity)}>
+              <Text style={styles.textButtonFollowing(isAnonimity)}>Following</Text>
             </View>
           </GlobalButton>
         );
 
       return (
         <GlobalButton onPress={() => handleSetFollow()}>
-          <View style={styles.buttonFollow}>
+          <View style={styles.buttonFollow(isAnonimity)}>
             <Text style={styles.textButtonFollow}>Follow</Text>
           </View>
         </GlobalButton>
@@ -397,8 +406,8 @@ const OtherProfile = () => {
         <React.Fragment>
           {__renderFollowingButton()}
           <GlobalButton onPress={onCreateChat}>
-            <View style={styles.btnMsg}>
-              <EnvelopeIcon />
+            <View style={styles.btnMsg(isAnonimity)}>
+              <EnvelopeIcon color={isAnonimity ? COLORS.anon_primary : COLORS.signed_primary} />
             </View>
           </GlobalButton>
         </React.Fragment>
@@ -768,13 +777,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
-  textTotal: {
+  textTotal: (isAnon) => ({
     fontFamily: fonts.inter[800],
     fontWeight: 'bold',
     fontSize: 14,
-    color: COLORS.signed_primary,
+    color: isAnon ? COLORS.anon_primary : COLORS.signed_primary,
     paddingRight: 4
-  },
+  }),
   textFollow: {
     fontSize: 14,
     color: COLORS.black,
@@ -813,32 +822,32 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end'
   },
-  buttonFollowing: {
+  buttonFollowing: (isAnon) => ({
     width: 88,
     height: 36,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: COLORS.signed_primary,
+    borderColor: isAnon ? COLORS.anon_primary : COLORS.signed_primary,
     borderRadius: 8
-  },
-  buttonFollow: {
+  }),
+  buttonFollow: (isAnon) => ({
     width: 88,
     height: 36,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    backgroundColor: COLORS.signed_primary,
+    backgroundColor: isAnon ? COLORS.anon_primary : COLORS.signed_primary,
     color: COLORS.white
-  },
-  textButtonFollowing: {
+  }),
+  textButtonFollowing: (isAnon) => ({
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: COLORS.signed_primary
-  },
+    color: isAnon ? COLORS.anon_primary : COLORS.signed_primary
+  }),
   textButtonFollow: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
@@ -873,16 +882,16 @@ const styles = StyleSheet.create({
     // padding: 20,
     flex: 1
   },
-  btnMsg: {
+  btnMsg: (isAnon) => ({
     width: 36,
     height: 36,
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: COLORS.signed_primary,
+    borderColor: isAnon ? COLORS.anon_primary : COLORS.signed_primary,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'
-  },
+  }),
   containerLoading: {
     height: '100%',
     width: '100%',
@@ -904,7 +913,11 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     marginBottom: 20
-  }
+  },
+  blockBtnStyle: (isAnonym) => ({
+    backgroundColor: isAnonym ? COLORS.anon_primary : COLORS.signed_primary,
+    paddingLeft: 0
+  })
 });
 
 export default withInteractionsManaged(OtherProfile);
