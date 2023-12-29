@@ -136,7 +136,7 @@ const BioAndChat = (props) => {
           labelLeft={
             isAnonimityEnabled || !isSignedMessageEnabled ? 'Anonymity' : 'Anonymity disabled'
           }
-          styleLabelLeft={{color: isAnonimityEnabled ? COLORS.white : '#648ABF'}}
+          styleLabelLeft={{color: isAnonimityEnabled ? COLORS.white : COLORS.signed_secondary}}
         />
       </TouchableOpacity>
     </View>
