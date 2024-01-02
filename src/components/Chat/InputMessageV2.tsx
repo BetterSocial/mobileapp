@@ -244,34 +244,39 @@ const InputMessageV2 = ({
         maxFiles: 20,
         sortOrder: 'asc',
         smartAlbums: ['RecentlyAdded', 'UserLibrary']
-      }).then(async (medias) => {
-        const newMedias: any = [];
-        for (const media of medias) {
-          if (media?.mime?.includes('video')) {
-            const thumbnailPath = await getVideoThumbnail(media.path);
-            newMedias.push({
-              type: 'video',
-              path: thumbnailPath,
-              pathVideo: media.path,
-              nameVideo: media.filename,
-              typeVideo: media.mime
-            });
-          } else {
-            const imageCropped = await ImagePicker.openCropper({
-              mediaType: 'photo',
-              path: media.path,
-              width: media.width,
-              height: media.height,
-              cropperChooseText: 'Next',
-              freeStyleCropEnabled: true
-            });
-            newMedias.push({type: 'image', path: imageCropped.path});
+      })
+        .then(async (medias) => {
+          setIsLoadingUploadImageMedia(false);
+          const newMedias: any = [];
+          for (const media of medias) {
+            if (media?.mime?.includes('video')) {
+              const thumbnailPath = await getVideoThumbnail(media.path);
+              newMedias.push({
+                type: 'video',
+                path: thumbnailPath,
+                pathVideo: media.path,
+                nameVideo: media.filename,
+                typeVideo: media.mime
+              });
+            } else {
+              const imageCropped = await ImagePicker.openCropper({
+                mediaType: 'photo',
+                path: media.path,
+                width: media.width,
+                height: media.height,
+                cropperChooseText: 'Next',
+                freeStyleCropEnabled: true
+              });
+              newMedias.push({type: 'image', path: imageCropped.path});
+            }
           }
-        }
 
-        refAttachment.current.close();
-        handleUploadMedia(newMedias);
-      });
+          refAttachment.current.close();
+          handleUploadMedia(newMedias);
+        })
+        .catch(() => {
+          setIsLoadingUploadImageMedia(false);
+        });
     } else {
       setIsLoadingUploadImageMedia(false);
       openAlertPermission(
@@ -286,18 +291,23 @@ const InputMessageV2 = ({
     if (success) {
       ImagePicker.openCamera({
         mediaType: 'photo'
-      }).then(async (imageRes) => {
-        const imageCropped = await ImagePicker.openCropper({
-          mediaType: 'photo',
-          path: imageRes.path,
-          width: imageRes.width,
-          height: imageRes.height,
-          cropperChooseText: 'Next',
-          freeStyleCropEnabled: true
+      })
+        .then(async (imageRes) => {
+          setIsLoadingUploadImageCamera(false);
+          const imageCropped = await ImagePicker.openCropper({
+            mediaType: 'photo',
+            path: imageRes.path,
+            width: imageRes.width,
+            height: imageRes.height,
+            cropperChooseText: 'Next',
+            freeStyleCropEnabled: true
+          });
+          refAttachment.current.close();
+          handleUploadCamera(imageCropped.path);
+        })
+        .catch(() => {
+          setIsLoadingUploadImageCamera(false);
         });
-        refAttachment.current.close();
-        handleUploadCamera(imageCropped.path);
-      });
     } else {
       setIsLoadingUploadImageCamera(false);
       openAlertPermission(
@@ -308,20 +318,17 @@ const InputMessageV2 = ({
 
   const onOpenFile = async () => {
     setIsLoadingUploadImageFile(true);
-    const {success} = await requestExternalStoragePermission();
-    if (success) {
-      DocumentPicker.pickSingle({
-        presentationStyle: 'fullScreen'
-      }).then((pickerResult) => {
+    DocumentPicker.pickSingle({
+      presentationStyle: 'fullScreen'
+    })
+      .then((pickerResult) => {
+        setIsLoadingUploadImageFile(false);
         refAttachment.current.close();
         handleFile(pickerResult);
+      })
+      .catch(() => {
+        setIsLoadingUploadImageFile(false);
       });
-    } else {
-      setIsLoadingUploadImageFile(false);
-      openAlertPermission(
-        'We’re not able to access your document library, please adjust your permission settings for BetterSocial.'
-      );
-    }
   };
 
   const onChangeInput = (v) => {
