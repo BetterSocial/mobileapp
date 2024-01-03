@@ -50,13 +50,14 @@ import {
 } from '../../service/profile';
 import {colors} from '../../utils/colors';
 import {downVote, upVote} from '../../service/vote';
-import {fonts} from '../../utils/fonts';
+import {fonts, normalize} from '../../utils/fonts';
 import {generateAnonProfileOtherProfile} from '../../service/anonymousProfile';
 import {getFeedDetail} from '../../service/post';
 import {getSingularOrPluralText} from '../../utils/string/StringUtils';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherProfileFeed';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import {CircleGradient} from '../../components/Karma/CircleGradient';
 
 const {width} = Dimensions.get('screen');
 
@@ -408,12 +409,19 @@ const OtherProfile = () => {
     return (
       <>
         <View style={styles.headerImageContainer}>
-          <Image
-            style={styles.profileImage}
-            source={{
-              uri: dataMain.profile_pic_path ?? DEFAULT_PROFILE_PIC_PATH
-            }}
-          />
+          <View style={{marginRight: normalize(22)}}>
+            <CircleGradient
+              fill={dataMain.karma_score ?? 0}
+              size={normalize(100)}
+              width={normalize(3)}>
+              <Image
+                style={styles.profileImage}
+                source={{
+                  uri: dataMain.profile_pic_path ?? DEFAULT_PROFILE_PIC_PATH
+                }}
+              />
+            </CircleGradient>
+          </View>
 
           <View>
             <View style={styles.rightHeaderContentContainer}>
@@ -739,10 +747,11 @@ const styles = StyleSheet.create({
     marginLeft: 18
   },
   profileImage: {
-    width: 100,
-    height: 100,
+    width: 95,
+    height: 95,
     borderRadius: 100,
-    marginRight: 22
+    marginLeft: 3.2,
+    marginTop: 3.2
   },
   containerProfile: {
     marginTop: 24
