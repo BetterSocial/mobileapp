@@ -317,7 +317,8 @@ const TopicPageScreen = (props) => {
       isalreadypolling: item.isalreadypolling,
       from: 'topic',
       haveSeeMore,
-      data: item
+      data: item,
+      isKeyboardOpen: true
     });
   };
 
