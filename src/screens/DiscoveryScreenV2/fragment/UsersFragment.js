@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
 import * as React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 import PropTypes from 'prop-types';
@@ -163,101 +163,82 @@ const UsersFragment = ({
     if (searchText.length > 0) fetchData();
   };
 
-  const renderDiscoveryItem = (from, key, item, index) => {
-    const isUnfollowed = item.user ? !item.user.following : !item.following;
-
-    if (
-      (route.name === 'Followings' && item.user_id_follower !== null) ||
-      route.name !== 'Followings'
-    ) {
-      return (
-        <DomainList
-          key={`${key}-${index}`}
-          onPressBody={() => handleOnPress(item.user || item)}
-          handleSetFollow={() => handleFollow(from, true, item.user || item)}
-          handleSetUnFollow={() => handleFollow(from, false, item.user || item)}
-          item={{
-            name: item.user ? item.user.username : item.username,
-            image: item.user ? item.user.profile_pic_path : item.profile_pic_path,
-            isunfollowed: isUnfollowed,
-            description: item.user ? item.user.bio : item.bio,
-            karmaScore: item.user ? item.user.karma_score : item.karma_score
-          }}
-        />
-      );
-    }
-    return null;
-  };
-
   const renderUsersItem = () => {
-    if (isFirstTimeOpen) {
-      if (withoutRecent) {
-        if (initialUsers.length !== 0) {
-          return [
-            initialUsers.map((item, index) =>
-              renderDiscoveryItem(FROM_USERS_INITIAL, 'topicUsers', item, index)
-            )
-          ];
-        }
-        return [
-          users.map((item, index) =>
-            renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, 'followedUsers', item, index)
-          )
-        ];
+    const renderDiscoveryItem = ({from, item, index}) => {
+      if (item.separator) {
+        return <DiscoveryTitleSeparator key="user-title-separator" text="Suggested Users" />;
       }
 
-      const followingUsers = [];
-      const unfollowingUsers = [];
+      const isUnfollowed = item.user ? !item.user.following : !item.following;
 
-      users.forEach((item) => {
-        if (item.user?.user_id_follower || item.user_id_follower) {
-          followingUsers.push(item);
-        } else {
-          unfollowingUsers.push(item);
-        }
-      });
+      if (
+        (route.name === 'Followings' && item.user_id_follower !== null) ||
+        route.name !== 'Followings'
+      ) {
+        return (
+          <DomainList
+            key={index}
+            onPressBody={() => handleOnPress(item.user || item)}
+            handleSetFollow={() => handleFollow(from, true, item.user || item)}
+            handleSetUnFollow={() => handleFollow(from, false, item.user || item)}
+            item={{
+              name: item.user ? item.user.username : item.username,
+              image: item.user ? item.user.profile_pic_path : item.profile_pic_path,
+              isunfollowed: isUnfollowed,
+              description: item.user ? item.user.bio : item.bio,
+              karmaScore: item.user ? item.user.karma_score : item.karma_score
+            }}
+          />
+        );
+      }
+      return null;
+    };
 
-      return [
-        followingUsers.map((item, index) =>
-          renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, 'followedUsers', item, index)
-        )
-      ]
-        .concat([
-          route.name !== 'Followings' && (
-            <DiscoveryTitleSeparator key="user-title-separator" text="Suggested Users" />
-          )
-        ])
-        .concat([
-          unfollowingUsers.map((item, index) =>
-            renderDiscoveryItem(
-              FROM_FOLLOWED_USERS_INITIAL,
-              'followedUsers',
-              item,
-              index + followingUsers.length
-            )
-          )
-        ]);
-    }
+    const initFollowingUsers = [];
+    const initUnfollowingUsers = [];
+
+    users.forEach((item) => {
+      if (item.user?.user_id_follower || item.user_id_follower) {
+        initFollowingUsers.push(item);
+      } else {
+        initUnfollowingUsers.push(item);
+      }
+    });
+
+    const data = isFirstTimeOpen
+      ? withoutRecent
+        ? initialUsers.length !== 0
+          ? initialUsers
+          : users
+        : [...initFollowingUsers, {separator: true}, ...initUnfollowingUsers]
+      : unfollowedUsers.length !== 0
+      ? [...followedUsers, {separator: true}, ...unfollowedUsers]
+      : followedUsers;
 
     return (
-      <>
-        {followedUsers.map((item, index) =>
-          renderDiscoveryItem(FROM_FOLLOWED_USERS, 'followedUsers', item, index)
-        )}
-
-        {route.name !== 'Followings' &&
-          unfollowedUsers.length > 0 &&
-          followedUsers.length > 0 &&
-          !withoutRecent && (
-            <View style={styles.unfollowedHeaderContainer}>
-              <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreUsers}</Text>
-            </View>
-          )}
-        {route.name !== 'Followings' &&
-          unfollowedUsers.map((item, index) =>
-            renderDiscoveryItem(FROM_UNFOLLOWED_USERS, 'unfollowedUsers', item, index)
-          )}
-      </>
+      <FlatList
+        data={data}
+        renderItem={({index, item}) => {
+          return renderDiscoveryItem({
+            from: isFirstTimeOpen
+              ? withoutRecent
+                ? initialUsers.length !== 0
+                  ? FROM_USERS_INITIAL
+                  : FROM_FOLLOWED_USERS_INITIAL
+                : FROM_FOLLOWED_USERS_INITIAL
+              : unfollowedUsers.length !== 0
+              ? index > followedUsers.length
+                ? FROM_UNFOLLOWED_USERS
+                : FROM_FOLLOWED_USERS
+              : index > followedUsers.length
+              ? FROM_UNFOLLOWED_USERS
+              : FROM_FOLLOWED_USERS,
+            item,
+            index
+          });
+        }}
+        keyExtractor={(item, index) => index.toString()}
+      />
     );
   };
 
