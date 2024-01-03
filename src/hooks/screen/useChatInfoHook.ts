@@ -33,7 +33,7 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   const navigation = useNavigation();
   const [showPopupBlock, setShowPopupBlock] = React.useState(false);
   const [channelInfo, setChannelInfo] = React.useState(null);
-  const {signedProfileId, anonProfileId} = useUserAuthHook();
+  const {signedProfileId} = useUserAuthHook();
 
   const initChatInfoData = async () => {
     if (localDb) {

@@ -20,8 +20,7 @@ const ProfileContact = ({
   item,
   ImageComponent = null,
   disabled = false,
-  isYou,
-  from
+  isYou
 }) => {
   const {anonProfileId, signedProfileId} = useProfileHook();
   const handleYouText = () => {
@@ -89,7 +88,8 @@ ProfileContact.propTypes = {
   showArrow: PropTypes.bool,
   userId: PropTypes.string,
   ImageComponent: PropTypes.node,
-  from: PropTypes.string
+  from: PropTypes.string,
+  isYou: PropTypes.bool
 };
 
 export default React.memo(ProfileContact);
