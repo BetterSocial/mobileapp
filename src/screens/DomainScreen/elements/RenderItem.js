@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
   wrapperImage: {
     borderRadius: normalize(45),
     borderWidth: 0.2,
-    borderColor: 'rgba(0,0,0,0.5)',
+    borderColor: COLORS.black50,
     width: normalize(48),
     height: normalize(48),
     justifyContent: 'center',

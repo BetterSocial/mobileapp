@@ -29,7 +29,6 @@ export const COLORS = {
 
   // need to remove
   holytosca: '#00ADB5',
-  holytosca30percent: '#00ADB54D',
   lightBlue: '#2F80ED',
   gray1: '#C4C4C4',
   gray6: '#F2F2F2',
@@ -51,7 +50,10 @@ export const COLORS = {
   greySubtile1: '#9B9FA9',
   elm: '#22878B',
   halfBaked: '#88CDD0',
-  greenDark: '#004346'
+  greenDark: '#004346',
+  holytosca15percent: '#00ADB526',
+  holytosca30percent: '#00ADB54D',
+  black50: 'rgba(0, 0, 0, 0.5)'
 };
 export const SIZES = {
   // global sizes

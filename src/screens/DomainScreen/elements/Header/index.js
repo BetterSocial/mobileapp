@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   boxImage: {
     borderRadius: 45,
     borderWidth: 0.2,
-    borderColor: 'rgba(0,0,0,0.5)',
+    borderColor: COLORS.black50,
     width: 60,
     height: 60,
     justifyContent: 'center',
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
   }),
   wrapperImage: {
     borderRadius: normalize(50),
-    borderColor: 'rgba(0,0,0,0.5)',
+    borderColor: COLORS.black50,
     width: normalize(100),
     height: normalize(100),
     justifyContent: 'center',
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
     width: normalize(100),
     borderRadius: normalize(50),
     borderWidth: 0.2,
-    borderColor: 'rgba(0,0,0,0.5)'
+    borderColor: COLORS.black50
   }
 });
 

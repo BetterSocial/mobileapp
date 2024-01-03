@@ -707,7 +707,7 @@ const styles = StyleSheet.create({
   },
   content: {
     width,
-    shadowColor: 'rgba(0,0,0,0.5)',
+    shadowColor: COLORS.black50,
     shadowOffset: {
       width: 0,
       height: 1
