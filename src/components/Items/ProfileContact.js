@@ -1,13 +1,14 @@
 import * as React from 'react';
 import Mi from 'react-native-vector-icons/MaterialIcons';
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import PropTypes from 'prop-types';
+import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+
 import MemoIc_Checklist from '../../assets/icons/Ic_Checklist';
-import {COLORS} from '../../utils/theme';
-import {normalize, normalizeFontSize} from '../../utils/fonts';
-import {colors} from '../../utils/colors';
 import dimen from '../../utils/dimen';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
+import {COLORS} from '../../utils/theme';
+import {colors} from '../../utils/colors';
+import {normalize, normalizeFontSize} from '../../utils/fonts';
 
 const ProfileContact = ({
   photo,
@@ -19,10 +20,15 @@ const ProfileContact = ({
   item,
   ImageComponent = null,
   disabled = false,
+  isYou,
   from
 }) => {
   const {anonProfileId, signedProfileId} = useProfileHook();
   const handleYouText = () => {
+    if (isYou) {
+      return '(You)';
+    }
+
     if (anonProfileId === item?.user_id || signedProfileId === item?.user_id) {
       return '(You)';
     }

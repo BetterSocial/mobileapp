@@ -61,7 +61,11 @@ class ChannelList implements BaseDbSchema {
     rawJson,
     user,
     expiredAt = null,
-    members = []
+    members = [],
+    anon_user_info_color_code = null,
+    anon_user_info_color_name = null,
+    anon_user_info_emoji_name = null,
+    anon_user_info_emoji_code = null
   }) {
     if (!id) throw new Error('ChannelList must have an id');
 
@@ -78,6 +82,10 @@ class ChannelList implements BaseDbSchema {
     this.user = user;
     this.members = members;
     this.expiredAt = expiredAt;
+    this.anon_user_info_color_code = anon_user_info_color_code;
+    this.anon_user_info_color_name = anon_user_info_color_name;
+    this.anon_user_info_emoji_name = anon_user_info_emoji_name;
+    this.anon_user_info_emoji_code = anon_user_info_emoji_code;
   }
 
   saveIfNotExist(db: SQLiteDatabase): Promise<void> {

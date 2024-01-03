@@ -23,8 +23,8 @@ export interface AnonDMBody {
 }
 
 export interface AnonUserInfo {
-  anon_user_info_emoji_name: string;
-  anon_user_info_emoji_code: string;
-  anon_user_info_color_name: string;
-  anon_user_info_color_code: string;
+  anon_user_info_emoji_name: string | null;
+  anon_user_info_emoji_code: string | null;
+  anon_user_info_color_name: string | null;
+  anon_user_info_color_code: string | null;
 }

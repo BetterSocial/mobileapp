@@ -26,7 +26,6 @@ import ModalAction from '../GroupInfo/elements/ModalAction';
 import ModalActionAnonymous from '../GroupInfo/elements/ModalActionAnonymous';
 import dimen from '../../utils/dimen';
 import useChatInfoScreenHook from '../../hooks/screen/useChatInfoHook';
-import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
 import {CHANNEL_GROUP, GROUP_INFO, SIGNED} from '../../hooks/core/constant';
 import {Context} from '../../context';
@@ -195,13 +194,12 @@ const ChatInfoScreen = () => {
     isLoadingInitChat
   } = useChatInfoScreenHook();
   const [isLoadingMembers] = React.useState<boolean>(false);
-  const {signedProfileId} = useUserAuthHook();
   const [profile] = (React.useContext(Context) as unknown as any).profile;
   const {params}: any = useRoute();
   const ANONYMOUS_USER = 'AnonymousUser';
   const {anon_user_info_color_code, anon_user_info_emoji_code} =
     channelInfo?.rawJson?.channel || {};
-  const {anonProfileId} = useProfileHook();
+  const {anonProfileId, signedProfileId} = useUserAuthHook();
   const memberChat = channelInfo?.rawJson?.channel?.members?.find(
     (item: any) => item.user_id !== anonProfileId
   );
@@ -234,29 +232,20 @@ const ChatInfoScreen = () => {
   };
 
   const renderImageComponent = (item) => {
-    if (!isContainUrl(item?.user?.image) || item?.user?.name === ANONYMOUS_USER) {
+    if (!isContainUrl(item?.user?.image) || item?.user?.anon_user_info_color_code) {
       return (
         <View style={styles.mr7}>
-          {betterSocialMember &&
-          item.user_id === betterSocialMember[memberChat?.user_id]?.user_id ? (
-            <AnonymousIcon
-              color={betterSocialMember[memberChat?.user_id]?.anon_user_info_color_code}
-              emojiCode={betterSocialMember[memberChat?.user_id]?.anon_user_info_emoji_code}
-              size={normalize(48)}
-            />
-          ) : (
-            <AnonymousIcon
-              color={anon_user_info_color_code}
-              emojiCode={anon_user_info_emoji_code}
-              size={normalize(48)}
-            />
-          )}
+          <AnonymousIcon
+            color={item?.user?.anon_user_info_color_code}
+            emojiCode={item?.user?.anon_user_info_emoji_code}
+            size={normalize(48)}
+          />
         </View>
       );
     }
     return (
       <View style={styles.mr7}>
-        <FastImage style={styles.imageUser} source={{uri: item?.user?.image}} />
+        <FastImage style={styles.imageUser} source={{uri: item?.user?.profilePicture}} />
       </View>
     );
   };
@@ -298,7 +287,7 @@ const ChatInfoScreen = () => {
                 <Text style={styles.countUser(params?.from)}>Participants {countParticipat()}</Text>
                 <FlatList
                   testID="participants"
-                  data={channelInfo?.rawJson?.channel?.members}
+                  data={channelInfo?.members}
                   keyExtractor={(item, index) => index?.toString()}
                   renderItem={({item, index}) => (
                     <View style={styles.parentContact}>
@@ -306,11 +295,15 @@ const ChatInfoScreen = () => {
                         key={index}
                         item={item}
                         onPress={() => onContactPressed(item, params.from)}
-                        fullname={item?.user?.name || item?.user?.username}
+                        fullname={item?.user?.username}
                         photo={item?.user?.profilePicture}
                         showArrow={handleShowArrow(item)}
                         userId={signedProfileId}
                         ImageComponent={renderImageComponent(item)}
+                        isYou={
+                          item?.user?.userId === signedProfileId ||
+                          item?.user?.userId === anonProfileId
+                        }
                         from={params?.from}
                       />
                     </View>
