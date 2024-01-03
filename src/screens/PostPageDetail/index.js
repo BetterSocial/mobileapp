@@ -3,11 +3,10 @@ import {StyleSheet, View} from 'react-native';
 
 // import PostPageDetailComponent from '../../components/PostPageDetail'
 import PostPageDetailComponent from '../../components/PostPageDetail';
-import useMainPdp from './hooks/useMainPdp';
-import {CONTEXT_SOURCE} from '../../hooks/usePostContextHooks';
 import {Context} from '../../context';
 import {setFeedByIndex} from '../../context/actions/feeds';
-import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import {CONTEXT_SOURCE} from '../../hooks/usePostContextHooks';
+import useMainPdp from './hooks/useMainPdp';
 
 const FeedsPostDetail = (props) => {
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
@@ -51,4 +50,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default withInteractionsManaged(FeedsPostDetail);
+export default FeedsPostDetail;

@@ -66,9 +66,9 @@ const PostPageDetailIdComponent = (props) => {
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
   const [loadingPost, setLoadingPost] = React.useState(false);
-  const [item, setItem] = React.useState(null);
   const navigation = useNavigation();
   const route = useRoute();
+  const [item, setItem] = React.useState(route?.params?.data);
   const scrollViewRef = React.useRef(null);
   const refBlockComponent = React.useRef();
   const [feedsContext, dispatch] = useFeedDataContext(contextSource);
@@ -106,6 +106,7 @@ const PostPageDetailIdComponent = (props) => {
   React.useEffect(() => {
     getComment();
   }, []);
+
   const handleVote = (data = {}) => {
     const upvote = data.upvotes ? data.upvotes : 0;
     const downvotes = data.downvotes ? data.downvotes : 0;
@@ -585,7 +586,6 @@ const PostPageDetailIdComponent = (props) => {
               setItem({...item, is_following_target: !item?.is_following_target});
             }}
           />
-
           <ScrollView
             ref={scrollViewRef}
             keyboardShouldPersistTaps="handled"
@@ -683,7 +683,7 @@ const PostPageDetailIdComponent = (props) => {
   );
 };
 
-export default withInteractionsManaged(React.memo(PostPageDetailIdComponent));
+export default PostPageDetailIdComponent;
 
 const styles = StyleSheet.create({
   container: {
