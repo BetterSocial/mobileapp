@@ -232,7 +232,7 @@ Array [
             secureTextEntry={true}
             style={
               Object {
-                "backgroundColor": "#F5F5F5",
+                "backgroundColor": "#F5F6F7",
                 "margin": 16,
                 "padding": 16,
               }
@@ -431,7 +431,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#6A6A6A",
+                    "backgroundColor": "#E8EBED",
                     "height": 2,
                     "width": "100%",
                   }
@@ -471,7 +471,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#6A6A6A",
+                    "backgroundColor": "#E8EBED",
                     "height": 2,
                     "width": "100%",
                   }
@@ -511,7 +511,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#6A6A6A",
+                    "backgroundColor": "#E8EBED",
                     "height": 2,
                     "width": "100%",
                   }
@@ -551,7 +551,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#6A6A6A",
+                    "backgroundColor": "#E8EBED",
                     "height": 2,
                     "width": "100%",
                   }
@@ -591,7 +591,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#6A6A6A",
+                    "backgroundColor": "#E8EBED",
                     "height": 2,
                     "width": "100%",
                   }
@@ -631,7 +631,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#6A6A6A",
+                    "backgroundColor": "#E8EBED",
                     "height": 2,
                     "width": "100%",
                   }
@@ -671,7 +671,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#6A6A6A",
+                    "backgroundColor": "#E8EBED",
                     "height": 2,
                     "width": "100%",
                   }
@@ -711,7 +711,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#6A6A6A",
+                    "backgroundColor": "#E8EBED",
                     "height": 2,
                     "width": "100%",
                   }
@@ -751,7 +751,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#6A6A6A",
+                    "backgroundColor": "#E8EBED",
                     "height": 2,
                     "width": "100%",
                   }
@@ -791,7 +791,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#6A6A6A",
+                    "backgroundColor": "#E8EBED",
                     "height": 2,
                     "width": "100%",
                   }
@@ -831,7 +831,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#6A6A6A",
+                    "backgroundColor": "#E8EBED",
                     "height": 2,
                     "width": "100%",
                   }
@@ -871,7 +871,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#6A6A6A",
+                    "backgroundColor": "#E8EBED",
                     "height": 2,
                     "width": "100%",
                   }
@@ -911,7 +911,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#6A6A6A",
+                    "backgroundColor": "#E8EBED",
                     "height": 2,
                     "width": "100%",
                   }
@@ -951,7 +951,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#6A6A6A",
+                    "backgroundColor": "#E8EBED",
                     "height": 2,
                     "width": "100%",
                   }
@@ -991,7 +991,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#6A6A6A",
+                    "backgroundColor": "#E8EBED",
                     "height": 2,
                     "width": "100%",
                   }
@@ -1031,7 +1031,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#6A6A6A",
+                    "backgroundColor": "#E8EBED",
                     "height": 2,
                     "width": "100%",
                   }
@@ -1071,7 +1071,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#6A6A6A",
+                    "backgroundColor": "#E8EBED",
                     "height": 2,
                     "width": "100%",
                   }
@@ -1111,7 +1111,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#6A6A6A",
+                    "backgroundColor": "#E8EBED",
                     "height": 2,
                     "width": "100%",
                   }
@@ -1151,7 +1151,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#6A6A6A",
+                    "backgroundColor": "#E8EBED",
                     "height": 2,
                     "width": "100%",
                   }

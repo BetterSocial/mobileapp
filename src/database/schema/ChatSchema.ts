@@ -94,6 +94,19 @@ class ChatSchema implements BaseDbSchema {
     }
   };
 
+  saveIfNotExist = async (db: SQLiteDatabase) => {
+    try {
+      const existingChat = await ChatSchema.getByid(db, this.id);
+      if (!existingChat) {
+        console.log('save chat schema if not exist');
+        await this.save(db);
+      }
+    } catch (e) {
+      console.log('error saving chat schema if not exist');
+      console.log(e);
+    }
+  };
+
   static async getAll(
     db: SQLiteDatabase,
     channelId: string,

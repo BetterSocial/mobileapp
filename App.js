@@ -54,6 +54,10 @@ const App = () => {
     // return unsubscribe;
   }, []);
 
+  React.useEffect(() => {
+    appUpgradeVersionCheck(appInfo, APP_UPGRADE_API_KEY, alertConfig);
+  }, [currentScreen]);
+
   const preventCloseApp = () => true;
 
   const backFunc = () => {
@@ -119,8 +123,6 @@ const App = () => {
       }
     }
   };
-
-  appUpgradeVersionCheck(appInfo, APP_UPGRADE_API_KEY, alertConfig);
 
   // Remove this method to stop OneSignal Debugging
   OneSignal.Debug.setLogLevel(ENV === 'Prod' ? LogLevel.None : LogLevel.Verbose);

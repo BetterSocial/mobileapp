@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 
 import BaseDbSchema from './BaseDbSchema';
@@ -77,6 +78,10 @@ class ChannelList implements BaseDbSchema {
     this.user = user;
     this.members = members;
     this.expiredAt = expiredAt;
+  }
+
+  saveIfNotExist(db: SQLiteDatabase): Promise<void> {
+    throw new Error('Method not implemented.');
   }
 
   getAll = (db: any): Promise<BaseDbSchema[]> => {
@@ -410,6 +415,7 @@ class ChannelList implements BaseDbSchema {
   static fromChannelAPI(
     data: ChannelData,
     channelType: ChannelType,
+    members?: ChannelData['members'],
     anonUserInfo: AnonUserInfo | null = null
   ): ChannelList {
     const isPM = channelType === 'PM';
@@ -432,11 +438,11 @@ class ChannelList implements BaseDbSchema {
       createdAt: data?.created_at,
       rawJson: data,
       user: null,
-      members: null,
       anon_user_info_color_code: anonUserInfo?.anon_user_info_color_code ?? null,
       anon_user_info_color_name: anonUserInfo?.anon_user_info_color_name ?? null,
       anon_user_info_emoji_name: anonUserInfo?.anon_user_info_emoji_name ?? null,
-      anon_user_info_emoji_code: anonUserInfo?.anon_user_info_emoji_code ?? null
+      anon_user_info_emoji_code: anonUserInfo?.anon_user_info_emoji_code ?? null,
+      members: members || null
     });
   }
 
