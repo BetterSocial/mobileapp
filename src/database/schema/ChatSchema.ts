@@ -131,6 +131,10 @@ class ChatSchema implements BaseDbSchema {
         B.profile_picture, 
         B.bio, 
         B.is_banned,
+        B.anon_user_info_color_name,
+        B.anon_user_info_color_code,
+        B.anon_user_info_emoji_name,
+        B.anon_user_info_emoji_code,
         CASE A.user_id 
           WHEN ? THEN 1 
           WHEN ? THEN 1

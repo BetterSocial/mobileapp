@@ -8,11 +8,14 @@ import {v4 as uuid} from 'uuid';
 
 import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
 import ChatSchema from '../../database/schema/ChatSchema';
+import ImageUtils from '../../utils/image';
 import SignedMessageRepo from '../../service/repo/signedMessageRepo';
 import UseChatScreenHook from '../../../types/hooks/screens/useChatScreenHook.types';
+import UserSchema from '../../database/schema/UserSchema';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import useMessageHook from './useMessageHook';
+import useUserAuthHook from '../core/auth/useUserAuthHook';
 import {ANONYMOUS} from '../core/constant';
 import {
   CHANNEL_TYPE_ANONYMOUS,
@@ -23,7 +26,6 @@ import {
 } from '../../utils/constants';
 import {getAnonymousUserId, getUserId} from '../../utils/users';
 import {randomString} from '../../utils/string/StringUtils';
-import ImageUtils from '../../utils/image';
 
 interface ScrollContextProps {
   selectedMessageId: string | null;
@@ -37,9 +39,12 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const [selectedMessageId, setSelectedMessageId] = React.useState<string | null>(null);
   const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen} = useChatUtilsHook();
   const {replyPreview, clearReplyPreview} = useMessageHook();
+  const {anonProfileId} = useUserAuthHook();
   const flatListRef = React.useRef<FlatList>(null);
   const [loadingChat, setLoadingChat] = React.useState(true);
   const [chats, setChats] = React.useState<ChatSchema[]>([]);
+  const [selfAnonUserInfo, setSelfAnonUserInfo] = React.useState<any>(null);
+
   const {anon_user_info_emoji_name} = selectedChannel?.rawJson?.channel || {};
 
   const initChatData = async () => {
@@ -58,6 +63,16 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       setTimeout(() => {
         setLoadingChat(false);
       }, 350);
+
+      if (type === 'ANONYMOUS') {
+        const userInfo = await UserSchema.getSelfAnonUserInfo(
+          localDb,
+          anonProfileId,
+          selectedChannel?.id
+        );
+
+        setSelfAnonUserInfo(userInfo);
+      }
     } catch (e) {
       setLoadingChat(false);
       console.log(e, 'error get all chat');
@@ -239,6 +254,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     sendChat,
     handleUserName,
     updateChatContinuity,
+    selfAnonUserInfo,
     flatListRef,
     scrollContext: {
       selectedMessageId,

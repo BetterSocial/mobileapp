@@ -10,9 +10,8 @@ import CustomPressable from '../CustomPressable';
 import IcArrowBackWhite from '../../assets/arrow/Ic_arrow_back_white';
 import dimen from '../../utils/dimen';
 import {ANONYMOUS, SIGNED} from '../../hooks/core/constant';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
-import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
+import {fonts} from '../../utils/fonts';
 
 const styles = StyleSheet.create({
   container: {
@@ -87,7 +86,7 @@ const ChatDetailHeader = ({
   };
   const contentColor = () => {
     if (type === SIGNED) return COLORS.black;
-    return COLORS.white;
+    return COLORS.black;
   };
 
   const animatedStyle = useAnimatedStyle(() => {
