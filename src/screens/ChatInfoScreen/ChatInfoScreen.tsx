@@ -213,11 +213,11 @@ const ChatInfoScreen = () => {
         </ChannelImage>
       );
     }
-    if (anon_user_info_color_code) {
+    if (channelInfo?.anon_user_info_emoji_name) {
       return (
         <AnonymousIcon
-          color={anon_user_info_color_code}
-          emojiCode={anon_user_info_emoji_code}
+          color={channelInfo?.anon_user_info_color_code}
+          emojiCode={channelInfo?.anon_user_info_emoji_code}
           size={normalize(100)}
         />
       );
@@ -232,7 +232,7 @@ const ChatInfoScreen = () => {
   };
 
   const renderImageComponent = (item) => {
-    if (!isContainUrl(item?.user?.image) || item?.user?.anon_user_info_color_code) {
+    if (item?.user?.anon_user_info_color_code) {
       return (
         <View style={styles.mr7}>
           <AnonymousIcon
@@ -258,11 +258,7 @@ const ChatInfoScreen = () => {
       <StatusBar barStyle={'dark-content'} translucent={false} />
       {isLoadingMembers || loadingChannelInfo ? null : (
         <>
-          <AnonymousChatInfoHeader
-            isCenter
-            onPress={goBack}
-            title={`${getChatName(channelInfo?.name, profile?.myProfile?.username)}`}
-          />
+          <AnonymousChatInfoHeader isCenter onPress={goBack} title={channelInfo?.name} />
           <View style={styles.lineTop} />
           <ScrollView nestedScrollEnabled={true}>
             <SafeAreaView>
@@ -273,7 +269,7 @@ const ChatInfoScreen = () => {
                 <View style={styles.column}>
                   <View style={styles.containerGroupName}>
                     <Text numberOfLines={1} style={styles.groupName}>
-                      {getChatName(channelInfo?.name, profile?.myProfile?.username)}
+                      {channelInfo?.name}
                     </Text>
                   </View>
                   <Text style={styles.dateCreate}>
