@@ -3,6 +3,7 @@ import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import BaseDbSchema from './BaseDbSchema';
 import ChannelListMemberSchema from './ChannelListMemberSchema';
 import UserSchema from './UserSchema';
+import {AnonUserInfo} from '../../../types/service/AnonProfile.type';
 import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
 import {CHANNEL_GROUP, PM} from '../../hooks/core/constant';
 import {ChannelData} from '../../../types/repo/AnonymousMessageRepo/AnonymousChannelsData';
@@ -30,13 +31,21 @@ class ChannelList implements BaseDbSchema {
 
   createdAt: string;
 
-  expiredAt: string;
+  expiredAt: string | null;
 
   rawJson: any;
 
   user: UserSchema | null;
 
-  members: ChannelListMemberSchema[] | null;
+  members: ChannelListMemberSchema[] | null | undefined;
+
+  anon_user_info_color_code: string | null;
+
+  anon_user_info_color_name: string | null;
+
+  anon_user_info_emoji_name: string | null;
+
+  anon_user_info_emoji_code: string | null;
 
   constructor({
     id,
@@ -121,8 +130,12 @@ class ChannelList implements BaseDbSchema {
           last_updated_by,
           created_at,
           expired_at,
-          raw_json
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          raw_json,
+          anon_user_info_color_code,
+          anon_user_info_color_name,
+          anon_user_info_emoji_name,
+          anon_user_info_emoji_code
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           this.id,
           this.channelPicture,
@@ -134,7 +147,11 @@ class ChannelList implements BaseDbSchema {
           this.lastUpdatedBy,
           this.createdAt,
           this.expiredAt,
-          jsonString
+          jsonString,
+          this.anon_user_info_color_code,
+          this.anon_user_info_color_name,
+          this.anon_user_info_emoji_name,
+          this.anon_user_info_emoji_code
         ]
       );
     } catch (e) {
@@ -390,7 +407,11 @@ class ChannelList implements BaseDbSchema {
     });
   }
 
-  static fromChannelAPI(data: ChannelData, channelType: ChannelType): ChannelList {
+  static fromChannelAPI(
+    data: ChannelData,
+    channelType: ChannelType,
+    anonUserInfo: AnonUserInfo | null = null
+  ): ChannelList {
     const isPM = channelType === 'PM';
     const firstMessage = data?.firstMessage;
     const isSystemMessage = firstMessage?.type === 'system' || firstMessage?.isSystem;
@@ -411,7 +432,11 @@ class ChannelList implements BaseDbSchema {
       createdAt: data?.created_at,
       rawJson: data,
       user: null,
-      members: null
+      members: null,
+      anon_user_info_color_code: anonUserInfo?.anon_user_info_color_code ?? null,
+      anon_user_info_color_name: anonUserInfo?.anon_user_info_color_name ?? null,
+      anon_user_info_emoji_name: anonUserInfo?.anon_user_info_emoji_name ?? null,
+      anon_user_info_emoji_code: anonUserInfo?.anon_user_info_emoji_code ?? null
     });
   }
 

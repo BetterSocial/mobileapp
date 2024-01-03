@@ -15,13 +15,13 @@ import {
   DELETED_MESSAGE_TEXT,
   MESSAGE_TYPE_DELETED
 } from '../../../utils/constants';
-import {getAnonymousChatName, getChatName} from '../../../utils/string/StringUtils';
+import {getChannelListInfo, getChatName} from '../../../utils/string/StringUtils';
 
 type ChannelCategory = 'SIGNED' | 'ANONYMOUS';
 
 const useFetchChannelHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook();
-  const {signedProfileId} = useUserAuthHook();
+  const {signedProfileId, anonProfileId} = useUserAuthHook();
 
   const helperChannelPromiseBuilder = async (channel, channelCategory: ChannelCategory) => {
     if (channel?.members?.length === 0) return Promise.reject(Error('no members'));
@@ -53,14 +53,14 @@ const useFetchChannelHook = () => {
           channel?.members?.find((member) => member?.user_id !== signedProfileId)?.user?.image ??
           DEFAULT_PROFILE_PIC_PATH;
       }
+      channel.targetName = signedChannelName;
+      channel.targetImage = signedChannelImage;
+    } else {
+      const channelListInfo = getChannelListInfo(channel, signedProfileId, anonProfileId);
+      channel.targetName = channelListInfo?.channelName;
+      channel.targetImage = channelListInfo?.channelImage;
     }
 
-    const chatName = isAnonymous
-      ? await getAnonymousChatName(channel?.members)
-      : {name: signedChannelName, image: signedChannelImage};
-
-    channel.targetName = chatName?.name;
-    channel.targetImage = chatName?.image;
     if (isAnonymous) {
       channel.firstMessage = channel?.messages?.[0];
     } else {

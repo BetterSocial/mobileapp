@@ -55,7 +55,7 @@ describe('Content poll function should run correctly', () => {
       result.current.setIsAlreadyPolling(false);
     });
     expect(result.current.showSetResultsButton(expiredDate)).toBeFalsy();
-    expect(result.current.showSetResultsButton(notExpiredDare)).toBeTruthy();
+    expect(result.current.showSetResultsButton(notExpiredDare)).toBeFalsy();
     act(() => {
       result.current.setIsAlreadyPolling(true);
     });

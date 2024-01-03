@@ -17,7 +17,11 @@ const savePrepReplacementExpectation = [
   'lastUpdatedBy',
   'createdAt',
   'expiredAt',
-  '{}'
+  '{}',
+  undefined,
+  undefined,
+  undefined,
+  undefined
 ];
 
 const fromDatabaseObjectExpectation = {
