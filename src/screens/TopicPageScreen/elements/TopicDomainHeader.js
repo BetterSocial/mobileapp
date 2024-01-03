@@ -38,12 +38,10 @@ const TopicDomainHeader = (props) => {
             height: normalize(8)
           }}
         />
-        {props?.initialData?.memberCount === undefined && props.isLoading ? (
+        {memberCount === undefined && props.isLoading ? (
           <Shimmer height={10} width={normalize(25)} />
         ) : (
-          <Text style={styles.domainMember(shouldDisplay)}>
-            {props?.initialData?.memberCount || memberCount}
-          </Text>
+          <Text style={styles.domainMember(shouldDisplay)}>{memberCount}</Text>
         )}
         <Text style={styles.domainMember(shouldDisplay)}> Members</Text>
       </View>
