@@ -3,10 +3,10 @@ import IconFA5 from 'react-native-vector-icons/FontAwesome5';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
-import ItemList from './ItemList';
-import {Button} from '../Button';
-import {colors} from '../../utils/colors';
+import ItemList from '../../components/Blocking/ItemList';
+import {Button} from '../../components/Button';
 import {fonts} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
 
 const ReportUser = React.forwardRef((props, ref) => {
   const {onSelect, onSkip} = props;
@@ -71,7 +71,7 @@ const ReportUser = React.forwardRef((props, ref) => {
       <ScrollView nestedScrollEnabled={true}>
         <TouchableOpacity style={styles.btnSkip} onPress={() => onSkip()}>
           <Text style={styles.btnSkipText}>Skip & just block this account</Text>
-          <IconFA5 name="chevron-right" size={17} color={'#000'} />
+          <IconFA5 name="chevron-right" size={17} color={COLORS.black} />
         </TouchableOpacity>
         <Text style={styles.title}>
           Or select all which apply to specify the issue - provide more info on next screen:
@@ -94,20 +94,18 @@ const ReportUser = React.forwardRef((props, ref) => {
     </RBSheet>
   );
 });
-
 ReportUser.displayName = 'ReportUser';
-
 export default ReportUser;
 
 const styles = StyleSheet.create({
   title: {
     fontFamily: fonts.inter[700],
     fontSize: 16,
-    color: '#000',
+    color: COLORS.black,
     marginLeft: 21
   },
   desc: {
-    color: colors.gray,
+    color: COLORS.blackgrey,
     fontFamily: fonts.inter[400],
     fontSize: 12,
     marginHorizontal: 21,
@@ -121,7 +119,7 @@ const styles = StyleSheet.create({
     marginBottom: 30
   },
   btnSkip: {
-    backgroundColor: '#E0E0E0',
+    backgroundColor: COLORS.lightgrey,
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 17,
@@ -131,7 +129,7 @@ const styles = StyleSheet.create({
   btnSkipText: {
     fontFamily: fonts.inter[700],
     fontSize: 14,
-    color: '#000'
+    color: COLORS.black
   },
   container: {
     height: '80%',
@@ -139,7 +137,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20
   },
   draggableIcon: {
-    backgroundColor: colors.alto,
+    backgroundColor: COLORS.lightgrey,
     width: 60
   }
 });

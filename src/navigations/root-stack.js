@@ -44,9 +44,9 @@ import api from '../service/config';
 import {AddParticipant, ContactScreen, DetailDomainScreen, ProfileScreen} from '../screens';
 import {InitialStartupAtom, LoadingStartupContext} from '../service/initialStartup';
 import {NavigationConstants} from '../utils/constants';
-import {colors} from '../utils/colors';
 import {followersOrFollowingAtom} from '../screens/ChannelListScreen/model/followersOrFollowingAtom';
 import {useInitialStartup} from '../hooks/useInitialStartup';
+import {COLORS} from '../utils/theme';
 
 const RootStack = createNativeStackNavigator();
 
@@ -97,7 +97,7 @@ export const RootNavigator = ({currentScreen}) => {
   const getInsetTopColor = () => {
     'worklet';
 
-    return currentScreen === 'AnonymousChatScreen' ? colors.anon_primary : colors.white;
+    return currentScreen === 'AnonymousChatScreen' ? COLORS.anon_primary : COLORS.white;
   };
 
   return (

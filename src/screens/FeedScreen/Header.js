@@ -35,12 +35,12 @@ import StringConstant from '../../utils/string/StringConstant';
 import useFeedHeader from './hooks/useFeedHeader';
 import {DEFAULT_PROFILE_PIC_PATH, PRIVACY_PUBLIC} from '../../utils/constants';
 import {calculateTime} from '../../utils/time';
-import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import ShareAndroidIcon from '../../assets/icons/images/share-for-android.svg';
 import TrashRed from '../../assets/icons/images/trash-red.svg';
 import BottomSheetMenu from '../../components/BottomSheet/BottomSheetMenu';
 import ShareUtils from '../../utils/share';
+import {COLORS} from '../../utils/theme';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -140,7 +140,7 @@ const _renderAnonimity = ({
         refSheet.current.close();
         onDeletePost();
       },
-      style: {color: colors.red}
+      style: {color: COLORS.red}
     });
   }
 
@@ -187,7 +187,7 @@ const _renderAnonimity = ({
               buttonStyle={{position: 'absolute', right: 0, top: -8}}
               onPress={() => refSheet.current.open()}>
               <View style={{zIndex: 1000}}>
-                <ElipsisIcon width={4} height={14} fill={colors.blackgrey} />
+                <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
               </View>
             </GlobalButton>
             <View style={styles.containerFeedText}>
@@ -252,7 +252,7 @@ const _renderProfileNormal = ({
         refSheet.current.close();
         onDeletePost();
       },
-      style: {color: colors.red}
+      style: {color: COLORS.red}
     });
   }
   const {navigateToProfile, username, profile_pic_url, onBackNormalUser} = useFeedHeader({
@@ -310,7 +310,7 @@ const _renderProfileNormal = ({
                 buttonStyle={{marginLeft: 'auto', paddingBottom: 0, alignSelf: 'center'}}
                 onPress={() => refSheet.current.open()}>
                 <View style={{zIndex: 1000}}>
-                  <ElipsisIcon width={4} height={14} fill={colors.blackgrey} />
+                  <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
                 </View>
               </GlobalButton>
             </View>
@@ -444,7 +444,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
     lineHeight: 16.94,
-    color: colors.black
+    color: COLORS.black
   },
   containerFeedText: {
     flexDirection: 'row',
@@ -456,21 +456,21 @@ const styles = StyleSheet.create({
   feedDate: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.blackgrey,
+    color: COLORS.blackgrey,
     lineHeight: 18
   },
   feedDateLocation: {
     flex: 1,
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.blackgrey,
+    color: COLORS.blackgrey,
     lineHeight: 18
   },
   point: {
     width: 2,
     height: 2,
     borderRadius: 4,
-    backgroundColor: colors.gray,
+    backgroundColor: COLORS.gray,
     marginLeft: 8,
     marginRight: 8,
     alignSelf: 'center',
@@ -484,26 +484,26 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 14,
     lineHeight: 24,
-    color: colors.black
+    color: COLORS.black
   },
   textComment: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
     lineHeight: 18,
-    color: colors.gray
+    color: COLORS.gray
   },
   usernameComment: {
     fontFamily: fonts.inter[500],
     fontWeight: '900',
     fontSize: 12,
     lineHeight: 24,
-    color: colors.black
+    color: COLORS.black
   },
   usernameTextComment: {
     fontFamily: fonts.inter[500],
     fontSize: 12,
     lineHeight: 24,
-    color: colors.gray
+    color: COLORS.gray
   },
   item: {
     width: screenWidth - 20,
@@ -537,13 +537,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   textFollow: {
-    color: colors.bluePrimary,
+    color: COLORS.bluePrimary,
     fontSize: normalizeFontSize(14),
     fontStyle: 'normal',
     fontWeight: '500'
   },
   textFollowing: {
-    color: colors.greySubtile1,
+    color: COLORS.greySubtile1,
     fontSize: normalizeFontSize(14),
     fontStyle: 'normal',
     fontWeight: '500'

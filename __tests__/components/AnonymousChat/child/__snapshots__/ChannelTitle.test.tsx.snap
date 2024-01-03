@@ -43,7 +43,7 @@ exports[`TESTING ChatItemTargetText RENDER ANON_PM should match snapshot 1`] = `
         style={
           Object {
             "alignSelf": "flex-start",
-            "color": "#69707C",
+            "color": "#828282",
             "fontFamily": "Poppins-Regular",
             "fontSize": 12.600000000000001,
             "lineHeight": 22,
@@ -126,7 +126,7 @@ exports[`TESTING ChatItemTargetText RENDER ANON_PM with isMe should match snapsh
         style={
           Object {
             "alignSelf": "flex-start",
-            "color": "#69707C",
+            "color": "#828282",
             "fontFamily": "Poppins-Regular",
             "fontSize": 12.600000000000001,
             "lineHeight": 22,
@@ -209,7 +209,7 @@ exports[`TESTING ChatItemTargetText RENDER ANON_PM with unreadcount should match
         style={
           Object {
             "alignSelf": "flex-start",
-            "color": "#69707C",
+            "color": "#828282",
             "fontFamily": "Poppins-Regular",
             "fontSize": 12.600000000000001,
             "lineHeight": 22,
@@ -248,7 +248,7 @@ exports[`TESTING ChatItemTargetText RENDER ANON_PM with unreadcount should match
         style={
           Object {
             "alignItems": "center",
-            "backgroundColor": "#4782D7",
+            "backgroundColor": undefined,
             "borderRadius": 10,
             "height": 20,
             "justifyContent": "center",
@@ -260,7 +260,7 @@ exports[`TESTING ChatItemTargetText RENDER ANON_PM with unreadcount should match
         <Text
           style={
             Object {
-              "color": "#ffffff",
+              "color": "#FFFFFF",
               "fontFamily": "Inter-Regular",
               "fontSize": 9,
               "lineHeight": 14.52,
@@ -333,7 +333,7 @@ exports[`TESTING ChatItemTargetText RENDER MY_ANON_POST with no messages should 
         style={
           Object {
             "alignSelf": "flex-start",
-            "color": "#69707C",
+            "color": "#828282",
             "fontFamily": "Poppins-Regular",
             "fontSize": 12.600000000000001,
             "lineHeight": 22,
@@ -407,7 +407,7 @@ exports[`TESTING ChatItemTargetText RENDER MY_ANON_POST_NOTIFICATION should matc
         style={
           Object {
             "alignSelf": "flex-start",
-            "color": "#69707C",
+            "color": "#828282",
             "fontFamily": "Poppins-Regular",
             "fontSize": 12.600000000000001,
             "lineHeight": 22,
@@ -481,7 +481,7 @@ exports[`TESTING ChatItemTargetText RENDER MY_ANON_POST_NOTIFICATION_I_COMMENTED
         style={
           Object {
             "alignSelf": "flex-start",
-            "color": "#69707C",
+            "color": "#828282",
             "fontFamily": "Poppins-Regular",
             "fontSize": 12.600000000000001,
             "lineHeight": 22,
@@ -555,7 +555,7 @@ exports[`TESTING ChatItemTargetText RENDER other type post with messages should 
         style={
           Object {
             "alignSelf": "flex-start",
-            "color": "#69707C",
+            "color": "#828282",
             "fontFamily": "Poppins-Regular",
             "fontSize": 12.600000000000001,
             "lineHeight": 22,
@@ -628,7 +628,7 @@ exports[`TESTING ChatItemTargetText RENDER other type post with no messages shou
         style={
           Object {
             "alignSelf": "flex-start",
-            "color": "#69707C",
+            "color": "#828282",
             "fontFamily": "Poppins-Regular",
             "fontSize": 12.600000000000001,
             "lineHeight": 22,
@@ -701,7 +701,7 @@ exports[`TESTING ChatItemTargetText RENDER other type post with unreadcount shou
         style={
           Object {
             "alignSelf": "flex-start",
-            "color": "#69707C",
+            "color": "#828282",
             "fontFamily": "Poppins-Regular",
             "fontSize": 12.600000000000001,
             "lineHeight": 22,
@@ -724,7 +724,7 @@ exports[`TESTING ChatItemTargetText RENDER other type post with unreadcount shou
           style={
             Object {
               "alignItems": "center",
-              "backgroundColor": "#4782D7",
+              "backgroundColor": undefined,
               "borderRadius": 10,
               "height": 20,
               "justifyContent": "center",
@@ -736,7 +736,7 @@ exports[`TESTING ChatItemTargetText RENDER other type post with unreadcount shou
           <Text
             style={
               Object {
-                "color": "#ffffff",
+                "color": "#FFFFFF",
                 "fontFamily": "Inter-Regular",
                 "fontSize": 9,
                 "lineHeight": 14.52,

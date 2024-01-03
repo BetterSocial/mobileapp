@@ -10,6 +10,7 @@ import MemoIc_block_inactive from '../../assets/block/Ic_block_inactive';
 import MemoIc_comment from '../../assets/icons/Ic_comment';
 import MemoIc_share from '../../assets/icons/Ic_share';
 import Memoic_globe from '../../assets/icons/ic_globe';
+import {COLORS, FONTS} from '../../utils/theme';
 import MemoIc_senddm from '../../assets/icons/ic_send_dm';
 import SendDMAnonBlock from '../../assets/icons/images/send-dm-anon-black.svg';
 import SendDMBlack from '../../assets/icons/images/send-dm-black.svg';
@@ -17,11 +18,9 @@ import ShareBlack from '../../assets/icons/images/share-black.svg';
 import {Context} from '../../context';
 import useDMMessage from '../../hooks/core/chat/useDMMessage';
 import useCreateChat from '../../hooks/screen/useCreateChat';
-import {colors} from '../../utils/colors';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import dimen from '../../utils/dimen';
 import {normalizeFontSize} from '../../utils/fonts';
-import {FONTS} from '../../utils/theme';
 import BottomSheetMenu from '../BottomSheet/BottomSheetMenu';
 
 const Footer = ({
@@ -69,12 +68,12 @@ const Footer = ({
 
   const voteStyle = () => {
     if (totalVote > 0) {
-      return '#00ADB5';
+      return COLORS.anon_primary;
     }
     if (totalVote < 0) {
-      return '#FF2E63';
+      return COLORS.redalert;
     }
-    return '#C4C4C4';
+    return COLORS.balance_gray;
   };
 
   const username = item?.anon_user_info_emoji_name
@@ -255,7 +254,7 @@ const styles = StyleSheet.create({
   },
   text: {
     ...FONTS.body3,
-    color: '#C4C4C4'
+    color: COLORS.balance_gray
   },
   vote: (colorBasedCount) => ({
     ...FONTS.body3,
@@ -284,7 +283,7 @@ const styles = StyleSheet.create({
   textDM: {
     fontSize: normalizeFontSize(12),
     fontWeight: '600',
-    color: colors.greySubtile1,
+    color: COLORS.greySubtile1,
     marginLeft: dimen.normalizeDimen(4),
     textAlignVertical: 'center'
   },
@@ -292,7 +291,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.white,
+    backgroundColor: COLORS.white,
     width: dimen.normalizeDimen(50),
     height: dimen.normalizeDimen(26),
     elevation: dimen.normalizeDimen(2),

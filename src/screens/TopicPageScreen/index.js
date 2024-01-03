@@ -16,6 +16,7 @@ import useOnBottomNavigationTabPressHook, {
 import {getFeedDetail} from '../../service/post';
 import {getTopicPages} from '../../service/topicPages';
 import {getTopics, getUserTopic} from '../../service/topics';
+import {COLORS} from '../../utils/theme';
 import {downVote, upVote} from '../../service/vote';
 import dimen from '../../utils/dimen';
 import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   header: {
-    backgroundColor: 'lightblue',
+    backgroundColor: COLORS.signed_primary,
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: dimen.normalizeDimen(40),

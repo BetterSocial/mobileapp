@@ -3,8 +3,8 @@ import {StyleSheet} from 'react-native';
 import dimen from '../../../utils/dimen';
 import {ANONYMOUS, SIGNED} from '../../../hooks/core/constant';
 import {MESSAGE_TYPE_DELETED} from '../../../utils/constants';
-import {colors} from '../../../utils/colors';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
+import {COLORS} from '../../../utils/theme';
 
 const AVATAR_SIZE = 24;
 const CONTAINER_LEFT_PADDING = 60;
@@ -52,14 +52,14 @@ export const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: dimen.normalizeDimen(4),
     paddingVertical: dimen.normalizeDimen(4),
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     borderRadius: 8
   },
   textContainerSigned: {
-    backgroundColor: colors.darkBlue
+    backgroundColor: COLORS.signed_primary
   },
   textContainerAnon: {
-    backgroundColor: colors.anon_primary
+    backgroundColor: COLORS.anon_primary
   },
   textContainerMyText: {
     borderTopEndRadius: 0
@@ -79,12 +79,12 @@ export const styles = StyleSheet.create({
     lineHeight: 19.36
   },
   deletedMyText: {
-    color: colors.light_silver,
+    color: COLORS.light_silver,
     fontSize: normalizeFontSize(15),
     fontStyle: 'italic'
   },
   deletedTargetText: {
-    color: colors.blackgrey,
+    color: COLORS.blackgrey,
     fontSize: normalizeFontSize(15),
     fontStyle: 'italic'
   },
@@ -102,10 +102,10 @@ export const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   dotMyText: {
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   dotTargetText: {
-    backgroundColor: colors.black
+    backgroundColor: COLORS.black
   },
   timeText: {
     fontFamily: fonts.inter[200],
@@ -132,7 +132,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 20,
-    backgroundColor: colors.lightgrey
+    backgroundColor: COLORS.lightgrey
   },
   mlBuble: {
     marginLeft: dimen.normalizeDimen(BUBBLE_LEFT_PADDING)
@@ -167,10 +167,10 @@ export const styles = StyleSheet.create({
   moreText: {
     fontSize: dimen.normalizeDimen(16),
     fontFamily: fonts.inter[400],
-    color: colors.white
+    color: COLORS.white
   },
   attachmentFileContainer: {
-    backgroundColor: colors.alto,
+    backgroundColor: COLORS.gray,
     justifyContent: 'center',
     minHeight: dimen.normalizeDimen(64),
     flexDirection: 'row',
@@ -183,15 +183,15 @@ export const styles = StyleSheet.create({
   attachmentFileName: {
     fontSize: dimen.normalizeDimen(14),
     fontFamily: fonts.inter[600],
-    color: colors.black
+    color: COLORS.black
   },
   attachmentFileInfo: {
     fontSize: dimen.normalizeDimen(12),
     fontFamily: fonts.inter[400],
-    color: colors.gray
+    color: COLORS.gray
   },
   attachmentFileIcon: {
-    backgroundColor: colors.light_silver,
+    backgroundColor: COLORS.light_silver,
     width: dimen.normalizeDimen(64),
     height: '100%',
     alignItems: 'center',
@@ -219,12 +219,12 @@ export const dotStyle = (isMyText: boolean) => [
 ];
 
 export const textStyle = (isMyText: boolean) => [
-  isMyText ? {color: colors.white} : {color: colors.black}
+  isMyText ? {color: COLORS.white} : {color: COLORS.black}
 ];
 
 export const messageStyle = (isMyText: boolean, messageType?: string) => [
   styles.text,
-  isMyText ? {color: colors.white} : {color: colors.black},
+  isMyText ? {color: COLORS.white} : {color: COLORS.black},
   isMyText && messageType === MESSAGE_TYPE_DELETED && styles.deletedMyText,
   !isMyText && messageType === MESSAGE_TYPE_DELETED && styles.deletedTargetText
 ];

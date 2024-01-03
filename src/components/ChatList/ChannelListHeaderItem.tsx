@@ -4,8 +4,9 @@ import {StyleSheet, Text, View} from 'react-native';
 
 import dimen from '../../utils/dimen';
 import {SIGNED} from '../../hooks/core/constant';
-import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
+import AnonymousIcon from '../../assets/icon/AnonymousIcon';
 
 export interface ChannelListTabItemProps {
   picture: string | null;
@@ -26,14 +27,14 @@ const ChannelListHeaderItem = (props: ChannelListTabItemProps) => {
       paddingRight: dimen.normalizeDimen(30),
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: colors.white,
+      backgroundColor: COLORS.white,
       borderBottomWidth: 2,
-      borderBottomColor: type === SIGNED ? colors.darkBlue : colors.anon_primary
+      borderBottomColor: type === SIGNED ? COLORS.signed_primary : COLORS.anon_primary
     },
     name: {
       fontFamily: fonts.inter[500],
       fontSize: normalizeFontSize(14),
-      color: type === SIGNED ? colors.darkBlue : colors.anon_primary
+      color: type === SIGNED ? COLORS.signed_primary : COLORS.anon_primary
     },
     picture: {
       width: dimen.normalizeDimen(20),
@@ -42,7 +43,7 @@ const ChannelListHeaderItem = (props: ChannelListTabItemProps) => {
       borderRadius: dimen.normalizeDimen(10)
     },
     anonBgColor: {
-      backgroundColor: colors.anon_primary
+      backgroundColor: COLORS.anon_primary
     }
   });
 
@@ -51,7 +52,9 @@ const ChannelListHeaderItem = (props: ChannelListTabItemProps) => {
       {typeof picture === 'string' ? (
         <FastImage source={{uri: picture}} style={styles.picture} />
       ) : (
-        <FastImage source={picture} style={[styles.picture, styles.anonBgColor]} />
+        <View style={styles.picture}>
+          <AnonymousIcon size={20} fill={COLORS.anon_primary} />
+        </View>
       )}
       <Text numberOfLines={1} ellipsizeMode="tail" style={styles.name}>
         as {name}

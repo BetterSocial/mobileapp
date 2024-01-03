@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import dimen from '../../utils/dimen';
 import {normalizeFontSize} from '../../utils/fonts';
-import {colors} from '../../utils/colors';
+import {COLORS} from '../../utils/theme';
 
 const styles = StyleSheet.create({
   container: {
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     height: dimen.normalizeDimen(16),
     width: dimen.normalizeDimen(16),
     borderRadius: dimen.normalizeDimen(16 / 2),
-    backgroundColor: colors.blue1,
+    backgroundColor: COLORS.signed_primary,
     position: 'absolute',
     top: dimen.normalizeDimen(2),
     bottom: dimen.normalizeDimen(2),
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     lineHeight: dimen.normalizeDimen(18),
     textAlign: 'center',
     textAlignVertical: 'center',
-    color: '#f4f3f4',
+    color: COLORS.whiteSmoke,
     position: 'absolute',
     top: dimen.normalizeDimen(1),
     left: dimen.normalizeDimen(2),
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     lineHeight: dimen.normalizeDimen(18),
     textAlign: 'center',
     textAlignVertical: 'center',
-    color: '#f4f3f4',
+    color: COLORS.whiteSmoke,
     position: 'absolute',
     top: dimen.normalizeDimen(1),
     right: dimen.normalizeDimen(2),
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   mainStyes: {
     position: 'relative',
     borderRadius: dimen.normalizeDimen(12),
-    backgroundColor: '#F5F5F5',
+    backgroundColor: COLORS.lightgrey,
     height: dimen.normalizeDimen(20),
     width: dimen.normalizeDimen(42),
     ...Platform.select({
@@ -80,13 +80,13 @@ const styles = StyleSheet.create({
   },
   labelLeft: {
     marginRight: dimen.normalizeDimen(5),
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: normalizeFontSize(12),
     fontWeight: '400'
   },
   labelRight: {
     marginLeft: dimen.normalizeDimen(5),
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: normalizeFontSize(12),
     fontWeight: '400'
   }
@@ -115,14 +115,14 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   onValueChange,
   labelLeft,
   labelRight,
-  circleActiveColor = '#00ADB5',
-  circleInActiveColor = colors.blue1,
-  backgroundActive = '#F5F5F5',
-  backgroundInactive = '#F5F5F5',
+  circleActiveColor = COLORS.anon_primary,
+  circleInActiveColor = COLORS.signed_primary,
+  backgroundActive = COLORS.lightgrey,
+  backgroundInactive = COLORS.lightgrey,
   styleLabelLeft,
   styleLabelRight,
-  activeTextColor = '#00ADB5',
-  inactiveTextColor = colors.blue1,
+  activeTextColor = COLORS.anon_primary,
+  inactiveTextColor = COLORS.signed_primary,
   containerStyle,
   labelOff = 'Off',
   labelOn = 'On'

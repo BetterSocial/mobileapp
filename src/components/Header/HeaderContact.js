@@ -3,10 +3,9 @@ import {Platform, StyleSheet, Text, View} from 'react-native';
 import PropTypes from 'prop-types';
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
-import {COLORS, SIZES} from '../../utils/theme';
+import {COLORS} from '../../utils/theme';
 import GlobalButton from '../Button/GlobalButton';
 import dimen from '../../utils/dimen';
-import {colors} from '../../utils/colors';
 
 const HeaderContact = ({
   title,
@@ -55,8 +54,8 @@ const HeaderContact = ({
         <Text
           style={[
             styles.text,
-            subtitleStyle,
-            {color: disabledNextBtn ? COLORS.gray6 : colors.darkBlue}
+            {color: disabledNextBtn ? COLORS.gray6 : COLORS.anon_primary},
+            subtitleStyle
           ]}>
           {subTitle}
         </Text>

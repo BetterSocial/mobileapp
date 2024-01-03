@@ -1,8 +1,8 @@
 import * as React from 'react';
 import {Image, Linking, TouchableOpacity, StyleSheet, Text, View} from 'react-native';
-import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 import {trimString} from '../../../utils/string/TrimString';
+import {COLORS} from '../../../utils/theme';
 
 const ItemLink = ({domain, link, title, image}) => {
   return (
@@ -29,7 +29,7 @@ export default ItemLink;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     borderRadius: 8,
     marginBottom: 8,
     paddingHorizontal: 4,
@@ -40,19 +40,19 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: 14,
     lineHeight: 16.94,
-    color: '#000'
+    color: COLORS.white
   },
   domain: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
     lineHeight: 18,
-    color: colors.gray
+    color: COLORS.blackgrey
   },
   link: {
     fontFamily: fonts.inter[400],
     fontSize: 14,
     lineHeight: 20,
-    color: colors.blue,
+    color: COLORS.blue,
     marginHorizontal: 10,
     marginTop: 5,
     marginBottom: 4
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 4
   },
   detail: {
-    backgroundColor: colors.alto,
+    backgroundColor: COLORS.lightgrey,
     borderRadius: 4,
     flexDirection: 'row',
     justifyContent: 'space-between'

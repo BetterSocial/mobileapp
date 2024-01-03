@@ -4,7 +4,7 @@ exports[`Testing Feed Screen Content Link Card Matches Snapshot 1`] = `
 <View
   style={
     Object {
-      "borderColor": "rgba(0,0,0, 0.5)",
+      "borderColor": "rgba(0, 0, 0, 0.5)",
       "borderRadius": 8,
       "borderWidth": 0.5,
       "height": 225,
@@ -46,7 +46,7 @@ exports[`Testing Feed Screen Content Link Card Matches Snapshot 1`] = `
           style={
             Object {
               "alignItems": "center",
-              "borderColor": "rgba(0,0,0,0.5)",
+              "borderColor": "rgba(0, 0, 0, 0.5)",
               "borderRadius": 45,
               "borderWidth": 0.2,
               "height": 24,
@@ -104,7 +104,7 @@ exports[`Testing Feed Screen Content Link Card Matches Snapshot 1`] = `
               numberOfLines={1}
               style={
                 Object {
-                  "color": "#000000",
+                  "color": "#1E1F20",
                   "flexShrink": 1,
                   "fontFamily": "Inter-SemiBold",
                   "fontSize": 14,
@@ -132,7 +132,7 @@ exports[`Testing Feed Screen Content Link Card Matches Snapshot 1`] = `
               numberOfLines={1}
               style={
                 Object {
-                  "color": "#E8EBED",
+                  "color": "#828282",
                   "fontFamily": "Inter-Regular",
                   "fontSize": 12,
                 }
@@ -330,7 +330,7 @@ exports[`Testing Feed Screen Content Link CardHeader Matches Snapshot 1`] = `
     style={
       Object {
         "alignItems": "center",
-        "borderColor": "rgba(0,0,0,0.5)",
+        "borderColor": "rgba(0, 0, 0, 0.5)",
         "borderRadius": 45,
         "borderWidth": 0.2,
         "height": 24,
@@ -388,7 +388,7 @@ exports[`Testing Feed Screen Content Link CardHeader Matches Snapshot 1`] = `
         numberOfLines={1}
         style={
           Object {
-            "color": "#000000",
+            "color": "#1E1F20",
             "flexShrink": 1,
             "fontFamily": "Inter-SemiBold",
             "fontSize": 14,
@@ -416,7 +416,7 @@ exports[`Testing Feed Screen Content Link CardHeader Matches Snapshot 1`] = `
         numberOfLines={1}
         style={
           Object {
-            "color": "#E8EBED",
+            "color": "#828282",
             "fontFamily": "Inter-Regular",
             "fontSize": 12,
           }
@@ -481,7 +481,7 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
   <View
     style={
       Object {
-        "borderColor": "rgba(0,0,0, 0.5)",
+        "borderColor": "rgba(0, 0, 0, 0.5)",
         "borderRadius": 8,
         "borderWidth": 0.5,
         "height": 225,
@@ -523,7 +523,7 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
             style={
               Object {
                 "alignItems": "center",
-                "borderColor": "rgba(0,0,0,0.5)",
+                "borderColor": "rgba(0, 0, 0, 0.5)",
                 "borderRadius": 45,
                 "borderWidth": 0.2,
                 "height": 24,
@@ -581,7 +581,7 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
                 numberOfLines={1}
                 style={
                   Object {
-                    "color": "#000000",
+                    "color": "#1E1F20",
                     "flexShrink": 1,
                     "fontFamily": "Inter-SemiBold",
                     "fontSize": 14,
@@ -609,7 +609,7 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
                 numberOfLines={1}
                 style={
                   Object {
-                    "color": "#E8EBED",
+                    "color": "#828282",
                     "fontFamily": "Inter-Regular",
                     "fontSize": 12,
                   }

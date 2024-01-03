@@ -27,7 +27,6 @@ import {ChatStatus} from '../../../../types/database/schema/ChannelList.types';
 import {MessageType} from '../../../../types/hooks/screens/useMessageHook.types';
 import {ScrollContext} from '../../../hooks/screen/useChatScreenHook';
 import {calculateTime} from '../../../utils/time';
-import {colors} from '../../../utils/colors';
 import {
   containerStyle,
   dotStyle,
@@ -38,6 +37,7 @@ import {
 } from './ChatItemText.style';
 import {replyIcon} from './ChatItemTargetText';
 import {formatBytes} from '../../../utils/string/StringUtils';
+import {COLORS} from '../../../utils/theme';
 
 const ChatItemMyTextV2 = ({
   username = 'Anonymous User',
@@ -81,13 +81,13 @@ const ChatItemMyTextV2 = ({
     if (status === ChatStatus.PENDING)
       return (
         <View style={styles.iconNewLine}>
-          <IconChatClockGrey color={colors.silver} width={12} height={12} />
+          <IconChatClockGrey color={COLORS.silver} width={12} height={12} />
         </View>
       );
 
     return (
       <View style={styles.iconNewLine}>
-        <IconChatCheckMark color={colors.silver} width={12} height={12} />
+        <IconChatCheckMark color={COLORS.silver} width={12} height={12} />
       </View>
     );
   }, [status]);
@@ -203,7 +203,7 @@ const ChatItemMyTextV2 = ({
                             onPress={
                               attachments.length > 0 && item.type !== 'gif'
                                 ? () => onOpenMediaPreview(attachments, index, navigation)
-                                : null
+                                : () => null
                             }>
                             {item.type !== 'file' && (
                               <FastImage

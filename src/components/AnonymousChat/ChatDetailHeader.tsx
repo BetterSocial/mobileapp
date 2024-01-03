@@ -11,17 +11,24 @@ import IcArrowBackWhite from '../../assets/arrow/Ic_arrow_back_white';
 import dimen from '../../utils/dimen';
 import {ANONYMOUS, SIGNED} from '../../hooks/core/constant';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
 
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
     flexDirection: 'row',
     height: 50,
+    alignItems: 'center'
+  },
+  bgsigned_primary: {
+    backgroundColor: COLORS.signed_primary
+  },
+  bgBondiBlue: {
+    backgroundColor: COLORS.anon_primary,
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: colors.alto
+    borderBottomColor: COLORS.gray
   },
   backButton: {
     paddingLeft: 22,
@@ -44,6 +51,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: fonts.inter[600],
+    color: COLORS.white,
     fontSize: 14,
     lineHeight: 17,
     marginLeft: 10,
@@ -73,14 +81,18 @@ const ChatDetailHeader = ({
   type,
   channel
 }) => {
+  const bgHeaderStyle = () => {
+    if (type === SIGNED) return styles.bgsigned_primary;
+    return styles.bgBondiBlue;
+  };
   const contentColor = () => {
-    if (type === SIGNED) return colors.black;
-    return colors.white;
+    if (type === SIGNED) return COLORS.black;
+    return COLORS.white;
   };
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      backgroundColor: withTiming(type === ANONYMOUS ? colors.anon_primary : colors.white, {
+      backgroundColor: withTiming(type === ANONYMOUS ? COLORS.anon_primary : COLORS.white, {
         duration: 400,
         easing: Easing.inOut(Easing.quad)
       })

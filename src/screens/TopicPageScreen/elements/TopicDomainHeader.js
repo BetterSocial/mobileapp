@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import SimpleToast from 'react-native-simple-toast';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 
+import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
+import {convertString} from '../../../utils/string/StringUtils';
+import {COLORS} from '../../../utils/theme';
 import CommunityIcon from '../../../assets/icon/CommunityIcon';
 import {Shimmer} from '../../../components/Shimmer/Shimmer';
-import {colors} from '../../../utils/colors';
-import {convertString} from '../../../utils/string/StringUtils';
-import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
 
 const TopicDomainHeader = (props) => {
   const {domain, handleOnMemberPress, hideSeeMember, isFollow, memberCount} = props;
@@ -53,10 +53,7 @@ const TopicDomainHeader = (props) => {
         isFollow &&
         !hideSeeMember && (
           <Pressable onPress={handlePress} style={{backgroundColor: 'transparent'}}>
-            <Text
-              style={styles.seeMemberText(props.isHeaderHide)}
-              numberOfLines={1}
-              ellipsizeMode="tail">
+            <Text style={styles.seeMemberText} numberOfLines={1} ellipsizeMode="tail">
               See community members
             </Text>
           </Pressable>
@@ -80,7 +77,7 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(16),
     fontFamily: fonts.inter[600],
     textAlign: 'left',
-    color: isHeaderHide ? colors.white : colors.black,
+    color: isHeaderHide ? COLORS.white : COLORS.black,
     backgroundColor: 'transparent'
   }),
   member: {
@@ -92,15 +89,14 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(12),
     fontFamily: fonts.inter[400],
     textAlign: 'left',
-    color: isHeaderHide ? colors.white : colors.blackgrey
+    color: isHeaderHide ? COLORS.white : COLORS.blackgrey
   }),
-  seeMemberText: () => ({
+  seeMemberText: {
     fontSize: normalizeFontSize(12),
     fontFamily: fonts.inter[500],
     textAlign: 'left',
-    color: colors.signed_primary,
-    marginTop: normalize(1)
-  })
+    color: COLORS.signed_primary
+  }
 });
 
 export default TopicDomainHeader;

@@ -3,8 +3,8 @@ import React from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 
 import dimen from '../../../utils/dimen';
-import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
+import {COLORS} from '../../../utils/theme';
 
 interface Props {
   isFollowing: boolean;
@@ -42,13 +42,13 @@ const styles = StyleSheet.create({
     paddingVertical: dimen.normalizeDimen(9.5),
     paddingHorizontal: dimen.normalizeDimen(14),
     borderRadius: 8,
-    backgroundColor: colors.darkBlue
+    backgroundColor: COLORS.signed_primary
   },
   followingBtn: {
     paddingVertical: dimen.normalizeDimen(9.5),
     paddingHorizontal: dimen.normalizeDimen(4.5),
     borderWidth: 1,
-    borderColor: colors.darkBlue,
+    borderColor: COLORS.signed_primary,
     borderRadius: 8
   },
   textFollowBtn: {
@@ -57,10 +57,10 @@ const styles = StyleSheet.create({
     fontSize: 12
   },
   textFollow: {
-    color: colors.white
+    color: COLORS.white
   },
   textFollowing: {
-    color: colors.darkBlue
+    color: COLORS.signed_primary
   }
 });
 

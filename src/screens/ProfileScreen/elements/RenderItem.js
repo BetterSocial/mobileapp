@@ -21,6 +21,7 @@ import {Footer, PreviewComment} from '../../../components';
 import {getCountCommentWithChild} from '../../../utils/getstream';
 import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
 import {showScoreAlertDialog} from '../../../utils/Utils';
+import {COLORS} from '../../../utils/theme';
 
 const {height} = Dimensions.get('window');
 
@@ -273,19 +274,19 @@ const styles = StyleSheet.create({
     width: '100%',
     height: dimen.size.PROFILE_ITEM_HEIGHT,
     maxHeight: dimen.size.PROFILE_ITEM_HEIGHT,
-    shadowColor: '#c4c4c4',
+    shadowColor: COLORS.lightgrey,
     shadowOffset: {
       width: 1,
       height: 8
     },
     shadowOpacity: 0.5,
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     paddingBottom: 0,
     borderBottomColor: 'transparent'
     // paddingHorizontal: 9
   },
   paddingHorizontal: {paddingHorizontal: 20},
-  lineAffterFooter: {backgroundColor: '#C4C4C4', height: 1},
+  lineAffterFooter: {backgroundColor: COLORS.lightgrey, height: 1},
   footerWrapper: (h) => ({height: h, paddingHorizontal: 0}),
   contentReaction: (heightReaction) => ({
     height: heightReaction

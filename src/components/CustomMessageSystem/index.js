@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, Text } from 'react-native';
 import { fonts } from '../../utils/fonts';
+import { COLORS } from '../../utils/theme';
 
 const index = ({ text }) => (<View style={{
     justifyContent: 'center',
@@ -9,14 +10,14 @@ const index = ({ text }) => (<View style={{
     marginVertical: 20
   }}>
     <View style={{
-      backgroundColor: '#F5F5F5',
+      backgroundColor: COLORS.lightgrey,
       borderRadius: 18,
       padding: 8,
       justifyContent: 'center',
       alignItems: 'center'
     }}>
       <Text style={{
-        color: '#828282',
+        color: COLORS.blackgrey,
         fontFamily: fonts.inter[400],
         fontSize: 14,
         fontWeight: '400',

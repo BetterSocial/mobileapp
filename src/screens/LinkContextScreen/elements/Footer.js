@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
   wrapperFooter: {
     paddingHorizontal: 8,
     height: 52,
-    borderBottomColor: COLORS.gray1,
+    borderBottomColor: COLORS.balance_gray,
     borderBottomWidth: 1
   },
   reactionContainer: {

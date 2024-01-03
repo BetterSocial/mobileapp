@@ -52,7 +52,7 @@ export const HeaderStyles = StyleSheet.create({
   },
   wrapperSearch: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: COLORS.lightgrey,
     marginLeft: 20,
     marginRight: 20,
     borderRadius: 8,
@@ -89,7 +89,7 @@ export const HeaderStyles = StyleSheet.create({
     // height: 36,
     paddingTop: 0,
     paddingBottom: 0,
-    color: COLORS.gray1,
+    color: COLORS.blackgrey,
     alignSelf: 'center'
   },
   wrapperIcon: {
@@ -98,7 +98,7 @@ export const HeaderStyles = StyleSheet.create({
     justifyContent: 'center'
   },
   newPostText: {
-    color: COLORS.holytosca,
+    color: COLORS.anon_primary,
     marginRight: 11,
     ...FONTS.h3
   },
@@ -115,7 +115,7 @@ export const HeaderStyles = StyleSheet.create({
     paddingTop: 7,
     paddingBottom: 7,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.alto
+    borderBottomColor: COLORS.lightgrey
   })
 });
 
