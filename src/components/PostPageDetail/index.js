@@ -54,7 +54,8 @@ const PostPageDetailIdComponent = (props) => {
     navigateToReplyView,
     contextSource = CONTEXT_SOURCE.FEEDS,
     haveSeeMore,
-    parentData
+    parentData,
+    isKeyboardOpen
   } = props;
   const [profile] = React.useContext(Context).profile;
   const [loading, setLoading] = React.useState(true);
@@ -675,6 +676,7 @@ const PostPageDetailIdComponent = (props) => {
             onChangeText={(value) => setTextComment(value)}
             onPress={onComment}
             loadingPost={loadingPost}
+            isKeyboardOpen={isKeyboardOpen}
           />
 
           <BlockComponent ref={refBlockComponent} refresh={updateFeed} screen="post_detail_page" />

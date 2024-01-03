@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import PropTypes from 'prop-types';
 import React from 'react';
-import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
+import {Dimensions, StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
 
 import {Footer, Gap, PreviewComment} from '../../components';
 import {showScoreAlertDialog} from '../../utils/Utils';
@@ -17,13 +17,14 @@ import {getCommentLength} from '../../utils/getstream';
 import {normalizeFontSizeByWidth} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 import dimen from '../../utils/dimen';
-
 import ShareUtils from '../../utils/share';
 import Content from './Content';
 import ContentLink from './ContentLink';
 import Header from './Header';
 import useFeed from './hooks/useFeed';
 import usePostHook from '../../hooks/core/post/usePostHook';
+import WriteComment from '../../components/Comments/WriteComment';
+import useWriteComment from '../../components/Comments/hooks/useWriteComment';
 
 const tabBarHeight = StatusBar.currentHeight;
 const FULL_WIDTH = Dimensions.get('screen').width;
@@ -65,6 +66,7 @@ const RenderListFeed = (props) => {
   } = useFeed();
 
   const {followUnfollow} = usePostHook();
+  const {handleUserName} = useWriteComment();
 
   const onPressDownVoteHandle = async () => {
     onPressDownVoteHook();
@@ -111,9 +113,13 @@ const RenderListFeed = (props) => {
     initialSetup(item);
   }, [item]);
 
+  const isHaveComment = getCommentLength(item.latest_reactions.comment) > 0;
+
   const contentLinkHeight = () => {
     const haveLength =
-      getCommentLength(item.latest_reactions.comment) > 0 ? getHeightReaction() / 2.2 : 0;
+      getCommentLength(item.latest_reactions.comment) > 0
+        ? getHeightReaction() / 2.2
+        : getHeightReaction() / 1.6;
     return dimen.size.FEED_CURRENT_ITEM_HEIGHT - getHeightHeader() - getHeightFooter() - haveLength;
   };
 
@@ -146,6 +152,7 @@ const RenderListFeed = (props) => {
             messageContainerStyle={{paddingHorizontal: 10}}
             topics={item?.topics}
             contentHeight={contentLinkHeight()}
+            isHaveComment={isHaveComment}
           />
         )}
         {(item.post_type === POST_TYPE_STANDARD || item.post_type === POST_TYPE_POLL) && (
@@ -161,6 +168,7 @@ const RenderListFeed = (props) => {
             topics={item?.topics}
             item={item}
             onNewPollFetched={onNewPollFetched}
+            isHaveComment={isHaveComment}
           />
         )}
         <View style={styles.footerWrapper(getHeightFooter())}>
@@ -186,8 +194,8 @@ const RenderListFeed = (props) => {
             isShowDM
           />
         </View>
-        {getCommentLength(item.latest_reactions.comment) > 0 && (
-          <View style={styles.contentReaction(getHeightReaction())}>
+        {isHaveComment ? (
+          <View testID="previewComment" style={styles.contentReaction(getHeightReaction())}>
             <React.Fragment>
               <PreviewComment
                 user={item.latest_reactions.comment[0].user}
@@ -201,6 +209,24 @@ const RenderListFeed = (props) => {
               <Gap height={8} />
             </React.Fragment>
           </View>
+        ) : (
+          <TouchableOpacity
+            testID="writeComment"
+            onPress={() => onPress(isHaveSeeMore)}
+            style={styles.contentReaction(getHeightReaction())}>
+            <React.Fragment>
+              <WriteComment
+                postId={''}
+                username={handleUserName(item)}
+                value={''}
+                onChangeText={() => {}}
+                onPress={() => {}}
+                loadingPost={false}
+                isViewOnly={true}
+                withAnonymityLabel={false}
+              />
+            </React.Fragment>
+          </TouchableOpacity>
         )}
       </View>
     </View>
@@ -219,7 +245,11 @@ const styles = StyleSheet.create({
     borderBottomColor: COLORS.lightgrey,
     backgroundColor: 'white',
     height: dimen.size.FEED_CURRENT_ITEM_HEIGHT,
-    marginBottom: normalizeFontSizeByWidth(4)
+    marginBottom: normalizeFontSizeByWidth(4),
+    shadowColor: COLORS.black000,
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 0.3,
+    shadowRadius: 4
   },
   cardMain: {
     width: '100%',
@@ -244,7 +274,8 @@ RenderListFeed.propTypes = {
   hideThreeDot: PropTypes.bool,
   showAnonymousOption: PropTypes.bool,
   onDeletePost: PropTypes.func,
-  isSelf: PropTypes.bool
+  isSelf: PropTypes.bool,
+  onPreviewCommentPress: PropTypes.func
 };
 
 export default React.memo(

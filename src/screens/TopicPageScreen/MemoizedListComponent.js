@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
-import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
+import {Dimensions, StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
 
 import {useRoute} from '@react-navigation/core';
 import Content from '../FeedScreen/Content';
@@ -24,6 +24,8 @@ import {showScoreAlertDialog} from '../../utils/Utils';
 import {normalizeFontSizeByWidth} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 import usePostHook from '../../hooks/core/post/usePostHook';
+import WriteComment from '../../components/Comments/WriteComment';
+import useWriteComment from '../../components/Comments/hooks/useWriteComment';
 
 const FULL_WIDTH = Dimensions.get('screen').width;
 const tabBarHeight = StatusBar.currentHeight;
@@ -62,6 +64,7 @@ const RenderListFeed = (props) => {
     showScoreButton
   } = useFeed();
   const {followUnfollowTopic} = usePostHook();
+  const {handleUserName} = useWriteComment();
   const route = useRoute();
 
   const onPressDownVoteHandle = async () => {
@@ -177,7 +180,7 @@ const RenderListFeed = (props) => {
             isShowDM
           />
         </View>
-        {getCommentLength(item.latest_reactions.comment) > 0 && (
+        {getCommentLength(item.latest_reactions.comment) > 0 ? (
           <View style={styles.contentReaction(getHeightReaction())}>
             <PreviewComment
               user={item.latest_reactions.comment[0].user}
@@ -190,6 +193,23 @@ const RenderListFeed = (props) => {
             />
             <Gap height={8} />
           </View>
+        ) : (
+          <TouchableOpacity
+            onPress={() => onPress(isHaveSeeMore)}
+            style={styles.contentReaction(getHeightReaction())}>
+            <React.Fragment>
+              <WriteComment
+                postId={''}
+                username={handleUserName(item)}
+                value={''}
+                onChangeText={() => {}}
+                onPress={() => {}}
+                loadingPost={false}
+                isViewOnly={true}
+                withAnonymityLabel={false}
+              />
+            </React.Fragment>
+          </TouchableOpacity>
         )}
       </View>
     </View>

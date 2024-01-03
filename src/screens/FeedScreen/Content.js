@@ -15,6 +15,7 @@ import {fonts, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
 import useCalculationContent from './hooks/useCalculationContent';
 import {getCommentLength} from '../../utils/getstream';
+import dimen from '../../utils/dimen';
 
 const {width: screenWidth} = Dimensions.get('window');
 const Content = ({
@@ -25,7 +26,8 @@ const Content = ({
   topics = [],
   item,
   onNewPollFetched,
-  setHaveSeeMore
+  setHaveSeeMore,
+  isHaveComment
 }) => {
   const navigation = useNavigation();
   const route = useRoute();
@@ -235,7 +237,7 @@ const Content = ({
     <Pressable
       onLayout={hanldeHeightContainer}
       onPress={onPress}
-      style={[styles.contentFeed, style]}>
+      style={[styles.contentFeed(isHaveComment), style]}>
       {message?.length > 0 ? (
         <View>
           <View
@@ -350,12 +352,12 @@ export const styles = StyleSheet.create({
     marginLeft: 8,
     marginRight: 8
   },
-  contentFeed: {
-    flex: 1,
+  contentFeed: (isHaveComment) => ({
+    flex: !isHaveComment ? undefined : 1,
     marginTop: 0,
-    height: '100%',
+    height: !isHaveComment ? dimen.normalizeDimen(355) : '100%',
     width: '100%'
-  },
+  }),
   item: {
     width: screenWidth - 20,
     height: screenWidth - 20,
