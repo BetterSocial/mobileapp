@@ -79,7 +79,7 @@ const WriteComment = ({
     if (isKeyboardOpen) {
       commentInputRef.current.focus();
     }
-  }, [commentInputRef.current]);
+  }, [isKeyboardOpen, commentInputRef.current]);
   const saveToStorage = (valueData) => {
     AsyncStorage.setItem(storageKey, valueData);
   };

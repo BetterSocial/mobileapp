@@ -22,7 +22,7 @@ import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuil
 import {showScoreAlertDialog} from '../../../utils/Utils';
 import WriteComment from '../../../components/Comments/WriteComment';
 import useWriteComment from '../../../components/Comments/hooks/useWriteComment';
-import {normalizeFontSizeByWidth} from '../../../utils/fonts';
+import {normalize, normalizeFontSizeByWidth} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
 
 const {height} = Dimensions.get('window');
@@ -264,18 +264,16 @@ const Item = ({
         <TouchableOpacity
           onPress={onPressComment}
           style={styles.previewComment(getHeightReaction())}>
-          <React.Fragment>
-            <WriteComment
-              postId={''}
-              username={handleUserName(item)}
-              value={''}
-              onChangeText={() => {}}
-              onPress={() => {}}
-              loadingPost={false}
-              isViewOnly={true}
-              withAnonymityLabel={false}
-            />
-          </React.Fragment>
+          <WriteComment
+            postId={''}
+            username={handleUserName(item)}
+            value={''}
+            onChangeText={() => {}}
+            onPress={() => {}}
+            loadingPost={false}
+            isViewOnly={true}
+            withAnonymityLabel={false}
+          />
         </TouchableOpacity>
       )}
     </View>
@@ -312,7 +310,7 @@ const styles = StyleSheet.create({
   }),
   previewComment: (heightReaction) => ({
     maxHeight: heightReaction,
-    marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0
+    marginBottom: heightReaction <= 0 ? tabBarHeight + normalize(10) : 0
   }),
   linearGradient: {
     height: 8

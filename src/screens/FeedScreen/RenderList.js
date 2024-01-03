@@ -14,7 +14,7 @@ import {
   SOURCE_FEED_TAB
 } from '../../utils/constants';
 import {getCommentLength} from '../../utils/getstream';
-import {normalizeFontSizeByWidth} from '../../utils/fonts';
+import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 import dimen from '../../utils/dimen';
 import ShareUtils from '../../utils/share';
@@ -116,10 +116,7 @@ const RenderListFeed = (props) => {
   const isHaveComment = getCommentLength(item.latest_reactions.comment) > 0;
 
   const contentLinkHeight = () => {
-    const haveLength =
-      getCommentLength(item.latest_reactions.comment) > 0
-        ? getHeightReaction() / 2.2
-        : getHeightReaction() / 1.6;
+    const haveLength = isHaveComment ? getHeightReaction() / 2.2 : getHeightReaction() / 1.6;
     return dimen.size.FEED_CURRENT_ITEM_HEIGHT - getHeightHeader() - getHeightFooter() - haveLength;
   };
 
@@ -214,18 +211,16 @@ const RenderListFeed = (props) => {
             testID="writeComment"
             onPress={() => onPress(isHaveSeeMore)}
             style={styles.contentReaction(getHeightReaction())}>
-            <React.Fragment>
-              <WriteComment
-                postId={''}
-                username={handleUserName(item)}
-                value={''}
-                onChangeText={() => {}}
-                onPress={() => {}}
-                loadingPost={false}
-                isViewOnly={true}
-                withAnonymityLabel={false}
-              />
-            </React.Fragment>
+            <WriteComment
+              postId={''}
+              username={handleUserName(item)}
+              value={''}
+              onChangeText={() => {}}
+              onPress={() => {}}
+              loadingPost={false}
+              isViewOnly={true}
+              withAnonymityLabel={false}
+            />
           </TouchableOpacity>
         )}
       </View>
@@ -237,7 +232,7 @@ const styles = StyleSheet.create({
   footerWrapper: (h) => ({height: h, alignItems: 'center', justifyContent: 'center'}),
   contentReaction: (heightReaction) => ({
     maxHeight: heightReaction,
-    marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0
+    marginBottom: heightReaction <= 0 ? tabBarHeight + normalize(10) : 0
   }),
   cardContainer: {
     width: FULL_WIDTH,
