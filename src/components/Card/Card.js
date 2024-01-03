@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   contentHeader: {
     borderRadius: 45,
     borderWidth: 0.2,
-    borderColor: 'rgba(0,0,0,0.5)',
+    borderColor: COLORS.black50,
     width: 36,
     height: 36,
     justifyContent: 'center',

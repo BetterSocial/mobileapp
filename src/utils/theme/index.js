@@ -52,7 +52,8 @@ export const COLORS = {
   halfBaked: '#88CDD0',
   greenDark: '#004346',
   holytosca15percent: '#00ADB526',
-  holytosca30percent: '#00ADB54D'
+  holytosca30percent: '#00ADB54D',
+  black50: 'rgba(0, 0, 0, 0.5)'
 };
 export const SIZES = {
   // global sizes
