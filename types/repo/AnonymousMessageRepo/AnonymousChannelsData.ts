@@ -94,3 +94,18 @@ export interface ChannelData {
   unreadCount?: number;
   firstMessage: Message;
 }
+
+export interface mappingChannelList {
+  id: string;
+  channelPicture: string;
+  name: string;
+  description: string;
+  unreadCount: number;
+  channelType: 'ANON_PM' | 'PM';
+  lastUpdatedAt: string;
+  lastUpdatedBy: string;
+  createdAt: string;
+  rawJson: any;
+  user: null;
+  members: never[];
+}

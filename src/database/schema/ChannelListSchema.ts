@@ -4,7 +4,10 @@ import BaseDbSchema from './BaseDbSchema';
 import ChannelListMemberSchema from './ChannelListMemberSchema';
 import UserSchema from './UserSchema';
 import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
-import {ChannelData} from '../../../types/repo/AnonymousMessageRepo/AnonymousChannelsData';
+import {
+  ChannelData,
+  mappingChannelList
+} from '../../../types/repo/AnonymousMessageRepo/AnonymousChannelsData';
 import {ChannelType} from '../../../types/repo/ChannelData';
 import {MessageAnonymouslyData} from '../../../types/repo/AnonymousMessageRepo/MessageAnonymouslyData';
 import {ModifyAnonymousChatData} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
@@ -387,6 +390,23 @@ class ChannelList implements BaseDbSchema {
       createdAt: object?.time,
       rawJson: json,
       user: null
+    });
+  }
+
+  static mappingChannelList(data: mappingChannelList) {
+    return new ChannelList({
+      id: data?.id,
+      channelPicture: data?.channelPicture,
+      name: data?.name,
+      description: data?.description,
+      unreadCount: data?.unreadCount,
+      channelType: data?.channelType,
+      lastUpdatedAt: data?.lastUpdatedAt,
+      lastUpdatedBy: data?.lastUpdatedBy,
+      createdAt: data?.createdAt,
+      rawJson: data?.rawJson,
+      user: null,
+      members: data?.members || []
     });
   }
 

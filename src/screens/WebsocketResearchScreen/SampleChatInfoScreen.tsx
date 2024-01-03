@@ -233,7 +233,11 @@ const SampleChatInfoScreen = () => {
   };
 
   const renderImageComponent = (item) => {
-    if (!isContainUrl(item?.user?.image) || item?.user?.name === ANONYMOUS_USER) {
+    if (
+      !isContainUrl(item?.user?.image) ||
+      item?.user?.name === ANONYMOUS_USER ||
+      item?.user?.name?.split(' ')[0] === 'Anonymous'
+    ) {
       return (
         <View style={styles.mr7}>
           {betterSocialMember &&

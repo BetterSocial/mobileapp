@@ -19,34 +19,41 @@ const useDMMessage = () => {
   const saveChannelList = async (channel, type: ChannelCategory) => {
     try {
       if (channel?.members?.length === 0) return Promise.reject(Error('no members'));
-      let userTarget = channel?.better_channel_members.find(
-        (data) => data?.user?.id !== signedProfileId
+      const members = channel?.better_channel_members?.find(
+        (member) => member?.user_id !== signedProfileId
       );
+      const membersAnon = channel?.better_channel_members.find(
+        (member) => member?.user_id !== anonProfileId
+      );
+      const channelPicture =
+        type === 'ANONYMOUS'
+          ? membersAnon?.user?.image || DEFAULT_PROFILE_PIC_PATH
+          : members?.user?.image || DEFAULT_PROFILE_PIC_PATH;
+      const name =
+        type === 'ANONYMOUS'
+          ? membersAnon?.user?.name || membersAnon?.user?.username
+          : members?.user?.name || members?.user?.username;
+      const channelList = ChannelList.mappingChannelList({
+        id: channel?.id,
+        channelPicture,
+        channelType: type === 'ANONYMOUS' ? 'ANON_PM' : 'PM',
+        name,
+        description: '',
+        createdAt: channel?.created_at,
+        lastUpdatedAt: channel?.updated_at,
+        lastUpdatedBy: channel?.lastUpdatedBy,
+        unreadCount: 0,
+        members: channel?.better_channel_members,
+        rawJson: {...channel, channel},
+        user: null
+      });
 
-      if (type === 'ANONYMOUS') {
-        userTarget = channel?.better_channel_members.find(
-          (data) => data?.user?.id !== anonProfileId
-        );
-      }
-
-      const chatType = type === 'ANONYMOUS' ? 'ANON_PM' : 'PM';
-      const chatName = {
-        name: userTarget?.user?.name || userTarget?.user?.username,
-        image: userTarget?.user?.image || DEFAULT_PROFILE_PIC_PATH
-      };
-
-      channel.firstMessage = channel?.messages?.[channel?.messages?.length - 1];
-      channel.myUserId = signedProfileId;
-      channel.targetName = chatName?.name;
-      channel.targetImage = chatName?.image;
-
-      channel.channel = {...channel};
-      const channelList = ChannelList.fromChannelAPI(channel, chatType, channel?.members);
       await channelList.saveIfLatest(localDb);
       refresh('channelList', 'chat', 'channelInfo', 'channelMember');
       return goToChatScreen(channelList);
     } catch (error) {
       console.log('sendMessage', error);
+      throw error;
     }
   };
 
@@ -101,6 +108,7 @@ const useDMMessage = () => {
       await saveChannelList(channel, channelCategory);
     } catch (e) {
       console.log('error on saveChannelData', e);
+      throw e;
     }
   };
 
