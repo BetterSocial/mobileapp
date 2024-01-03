@@ -233,8 +233,6 @@ Array [
             style={
               Object {
                 "backgroundColor": "#F5F6F7",
-                "backgroundColor": "#F5F6F7",
-                "backgroundColor": "#F5F6F7",
                 "margin": 16,
                 "padding": 16,
               }

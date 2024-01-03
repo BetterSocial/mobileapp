@@ -116,16 +116,41 @@ exports[`ModalAction element should run correctly should match snapshot 1`] = `
         }
         testID="pressMessage"
       >
-        <Text
+        <View
           style={
             Object {
-              "fontSize": 16,
-              "fontWeight": "bold",
+              "flexDirection": "row",
             }
           }
         >
-          Message 
-        </Text>
+          <Text
+            style={
+              Object {
+                "fontSize": 16,
+                "fontWeight": "bold",
+              }
+            }
+          >
+            Message 
+          </Text>
+          <View
+            style={
+              Object {
+                "flex": 1,
+              }
+            }
+            transition={
+              <Transition.Together>
+                <Transition.Change
+                  interpolation="easeInOut"
+                />
+                <Transition.In
+                  type="fade"
+                />
+              </Transition.Together>
+            }
+          />
+        </View>
       </View>
       <View
         accessible={true}

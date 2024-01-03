@@ -81,45 +81,6 @@ exports[`AnonymousChannelListScreen RENDER should match snapshot 1`] = `
           </Text>
         </View>
       </View>
-      <View
-        accessible={true}
-        focusable={true}
-        onClick={[Function]}
-        onResponderGrant={[Function]}
-        onResponderMove={[Function]}
-        onResponderRelease={[Function]}
-        onResponderTerminate={[Function]}
-        onResponderTerminationRequest={[Function]}
-        onStartShouldSetResponder={[Function]}
-        style={
-          Object {
-            "alignItems": "center",
-            "flexDirection": "row",
-            "justifyContent": "space-around",
-            "marginEnd": 8,
-            "opacity": 1,
-            "paddingBottom": 9,
-            "paddingRight": 12,
-            "paddingTop": 9,
-          }
-        }
-      >
-        <Text
-          style={
-            Array [
-              [Function],
-              Object {
-                "color": "#107793",
-              },
-            ]
-          }
-        >
-          New Chat
-        </Text>
-        <View>
-          <View />
-        </View>
-      </View>
     </View>
   </View>
   <RCTScrollView
@@ -181,33 +142,15 @@ exports[`AnonymousChannelListScreen RENDER should match snapshot 1`] = `
         >
           <View
             style={
-              Array [
-                Object {
-                  "overflow": "hidden",
-                },
-                Array [
-                  Object {
-                    "borderRadius": 8,
-                    "height": 16,
-                    "marginRight": 4.800000000000001,
-                    "width": 16,
-                  },
-                  Object {
-                    "backgroundColor": "#107793",
-                  },
-                ],
-              ]
+              Object {
+                "borderRadius": 8,
+                "height": 16,
+                "marginRight": 4.800000000000001,
+                "width": 16,
+              }
             }
           >
-            <FastImageView
-              defaultSource={null}
-              resizeMode="cover"
-              source={
-                Object {
-                  "testUri": "../../../src/assets/images/AnonymousProfile.png",
-                }
-              }
-            />
+            <View />
           </View>
           <Text
             ellipsizeMode="tail"
