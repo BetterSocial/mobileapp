@@ -63,7 +63,7 @@ const WriteComment = ({
   return (
     <View style={styles.columnContainer}>
       <View style={styles.connectorTop(inReplyCommentView, showProfileConnector)} />
-      <View style={{flexDirection: 'row', paddingRight: 10}}>
+      <View style={styles.containerReply}>
         <Text style={styles.replyToContainer(inReplyCommentView)}>
           <Text style={styles.replyToTitle}>Reply to </Text>
           {username}
@@ -146,15 +146,11 @@ export const styles = StyleSheet.create({
   replyToContainer: (inReplyCommentView) => ({
     marginLeft: inReplyCommentView ? 90 : 60,
     fontFamily: fonts.inter[600],
-    marginBottom: 11,
-    marginTop: 7,
-    lineHeight: 15,
     fontSize: 12,
     color: colors.gray
   }),
   replyToTitle: {
     fontFamily: fonts.inter[600],
-    lineHeight: 15,
     fontSize: 12,
     color: colors.black
   },
@@ -242,5 +238,12 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 12,
     color: colors.gray
+  },
+  containerReply: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingRight: 10,
+    marginBottom: 11,
+    marginTop: 7
   }
 });
