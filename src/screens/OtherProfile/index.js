@@ -308,7 +308,6 @@ const OtherProfile = () => {
       await generateAnonProfile();
     }
   };
-  console.log(isAnonimity, 'nakal');
 
   const __renderListHeader = () => {
     const __renderBlockIcon = () => {
