@@ -75,7 +75,7 @@ const ChatDetailHeader = ({
 }) => {
   const contentColor = () => {
     if (type === SIGNED) return colors.black;
-    return colors.white;
+    return colors.black;
   };
 
   const animatedStyle = useAnimatedStyle(() => {

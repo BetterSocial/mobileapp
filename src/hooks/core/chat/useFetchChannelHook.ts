@@ -9,19 +9,16 @@ import UserSchema from '../../../database/schema/UserSchema';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import useUserAuthHook from '../auth/useUserAuthHook';
 import {ANONYMOUS} from '../constant';
+import {AnonUserInfo} from '../../../../types/service/AnonProfile.type';
 import {ChannelData, ChannelType} from '../../../../types/repo/ChannelData';
-import {
-  DEFAULT_PROFILE_PIC_PATH,
-  DELETED_MESSAGE_TEXT,
-  MESSAGE_TYPE_DELETED
-} from '../../../utils/constants';
-import {getAnonymousChatName, getChatName} from '../../../utils/string/StringUtils';
+import {DELETED_MESSAGE_TEXT, MESSAGE_TYPE_DELETED} from '../../../utils/constants';
+import {getChannelListInfo, getChannelMembers} from '../../../utils/string/StringUtils';
 
 type ChannelCategory = 'SIGNED' | 'ANONYMOUS';
 
 const useFetchChannelHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook();
-  const {signedProfileId} = useUserAuthHook();
+  const {signedProfileId, anonProfileId} = useUserAuthHook();
 
   const helperChannelPromiseBuilder = async (channel, channelCategory: ChannelCategory) => {
     if (channel?.members?.length === 0) return Promise.reject(Error('no members'));
@@ -33,34 +30,17 @@ const useFetchChannelHook = () => {
       topics: 'TOPIC'
     };
 
-    let signedChannelName;
-    let signedChannelImage;
+    const channelListInfo = getChannelListInfo(channel, signedProfileId, anonProfileId);
+    const anonUserInfo: AnonUserInfo | undefined = {
+      anon_user_info_emoji_name: channelListInfo?.anonUserInfoEmojiName,
+      anon_user_info_emoji_code: channelListInfo?.anonUserInfoEmojiCode,
+      anon_user_info_color_name: channelListInfo?.anonUserInfoColorName,
+      anon_user_info_color_code: channelListInfo?.anonUserInfoColorCode
+    };
 
-    if (!isAnonymous) {
-      const myUserData = channel?.members?.find(
-        (member) => member?.user?.id === signedProfileId
-      )?.user;
-      const signedChannelUsername = myUserData?.username ?? myUserData?.name;
-      signedChannelName =
-        channel?.channel_type === 4
-          ? `Anonymous ${channel?.anon_user_info_emoji_name}`
-          : getChatName(channel?.name, signedChannelUsername);
+    channel.targetName = channelListInfo?.channelName;
+    channel.targetImage = channelListInfo?.channelImage;
 
-      if (channel?.type === 'group' || channel?.type === 'topics') {
-        signedChannelImage = channel?.channel_image;
-      } else {
-        signedChannelImage =
-          channel?.members?.find((member) => member?.user_id !== signedProfileId)?.user?.image ??
-          DEFAULT_PROFILE_PIC_PATH;
-      }
-    }
-
-    const chatName = isAnonymous
-      ? await getAnonymousChatName(channel?.members)
-      : {name: signedChannelName, image: signedChannelImage};
-
-    channel.targetName = chatName?.name;
-    channel.targetImage = chatName?.image;
     if (isAnonymous) {
       channel.firstMessage = channel?.messages?.[0];
     } else {
@@ -75,7 +55,13 @@ const useFetchChannelHook = () => {
     const channelType = channel?.type;
 
     try {
-      const channelList = ChannelList.fromChannelAPI(channel, type[channelType]);
+      const channelList = ChannelList.fromChannelAPI(
+        channel,
+        type[channelType],
+        undefined,
+        anonUserInfo
+      );
+
       await channelList.saveIfLatest(localDb);
       refresh('channelList');
     } catch (e) {
@@ -96,8 +82,9 @@ const useFetchChannelHook = () => {
     if (channel?.type === 'topics') return;
 
     try {
+      const members = getChannelMembers(channel);
       await Promise.all(
-        (channel?.members || []).map(async (member) => {
+        (members || []).map(async (member) => {
           const userMember = UserSchema.fromMemberWebsocketObject(member, channel?.id);
           const memberSchema = ChannelListMemberSchema.fromWebsocketObject(
             channel?.id,

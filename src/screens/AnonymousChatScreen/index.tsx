@@ -59,6 +59,7 @@ const AnonymousChatScreen = () => {
     goBackFromChatScreen,
     goToChatInfoScreen,
     sendChat,
+    selfAnonUserInfo,
     updateChatContinuity
   } = useChatScreenHook(ANONYMOUS);
 
@@ -77,8 +78,6 @@ const AnonymousChatScreen = () => {
   const renderChatItem = React.useCallback(({item, index}) => {
     return <BaseChatItem type={ANONYMOUS} item={item} index={index} />;
   }, []);
-
-  const betterSocialMember = selectedChannel?.rawJson?.better_channel_member;
 
   const scrollToEnd = () => {
     flatlistRef.current?.scrollToEnd();
@@ -108,12 +107,8 @@ const AnonymousChatScreen = () => {
           onThreeDotPress={goToChatInfoScreen}
           avatar={selectedChannel?.channelPicture}
           user={selectedChannel?.name}
-          anon_user_info_emoji_code={
-            betterSocialMember && betterSocialMember[memberChat?.user_id]?.anon_user_info_emoji_code
-          }
-          anon_user_info_color_code={
-            betterSocialMember && betterSocialMember[memberChat?.user_id]?.anon_user_info_color_code
-          }
+          anon_user_info_emoji_code={selectedChannel?.anon_user_info_emoji_code}
+          anon_user_info_color_code={selectedChannel?.anon_user_info_color_code}
         />
       ) : null}
       <FlatList
@@ -140,8 +135,8 @@ const AnonymousChatScreen = () => {
         <InputMessageV2
           onSendButtonClicked={sendChat}
           type={ANONYMOUS}
-          emojiCode={selectedChannel?.rawJson.channel.anon_user_info_emoji_code}
-          emojiColor={selectedChannel?.rawJson.channel.anon_user_info_color_code}
+          emojiCode={selfAnonUserInfo?.anon_user_info_emoji_code}
+          emojiColor={selfAnonUserInfo?.anon_user_info_color_code}
           username={selectedChannel?.name}
           onToggleConfirm={moveChatSigned}
         />
