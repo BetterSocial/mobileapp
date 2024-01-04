@@ -26,6 +26,7 @@ import ModalAction from '../GroupInfo/elements/ModalAction';
 import ModalActionAnonymous from '../GroupInfo/elements/ModalActionAnonymous';
 import dimen from '../../utils/dimen';
 import useChatInfoScreenHook from '../../hooks/screen/useChatInfoHook';
+import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
 import {CHANNEL_GROUP, GROUP_INFO, SIGNED} from '../../hooks/core/constant';
 import {Context} from '../../context';
@@ -190,7 +191,8 @@ const ChatInfoScreen = () => {
     isAnonymousModalOpen,
     blockModalRef,
     handleShowArrow,
-    loadingChannelInfo
+    loadingChannelInfo,
+    isLoadingInitChat
   } = useChatInfoScreenHook();
   const [isLoadingMembers] = React.useState<boolean>(false);
   const {signedProfileId} = useUserAuthHook();
@@ -199,6 +201,12 @@ const ChatInfoScreen = () => {
   const ANONYMOUS_USER = 'AnonymousUser';
   const {anon_user_info_color_code, anon_user_info_emoji_code} =
     channelInfo?.rawJson?.channel || {};
+  const {anonProfileId} = useProfileHook();
+  const memberChat = channelInfo?.rawJson?.channel?.members?.find(
+    (item: any) => item.user_id !== anonProfileId
+  );
+  const betterSocialMember = channelInfo?.rawJson?.better_channel_member;
+
   const showImageProfile = (): React.ReactNode => {
     if (channelInfo?.channelType === CHANNEL_GROUP) {
       return (
@@ -229,11 +237,20 @@ const ChatInfoScreen = () => {
     if (!isContainUrl(item?.user?.image) || item?.user?.name === ANONYMOUS_USER) {
       return (
         <View style={styles.mr7}>
-          <AnonymousIcon
-            color={anon_user_info_color_code}
-            emojiCode={anon_user_info_emoji_code}
-            size={normalize(48)}
-          />
+          {betterSocialMember &&
+          item.user_id === betterSocialMember[memberChat?.user_id]?.user_id ? (
+            <AnonymousIcon
+              color={betterSocialMember[memberChat?.user_id]?.anon_user_info_color_code}
+              emojiCode={betterSocialMember[memberChat?.user_id]?.anon_user_info_emoji_code}
+              size={normalize(48)}
+            />
+          ) : (
+            <AnonymousIcon
+              color={anon_user_info_color_code}
+              emojiCode={anon_user_info_emoji_code}
+              size={normalize(48)}
+            />
+          )}
         </View>
       );
     }
@@ -314,6 +331,7 @@ const ChatInfoScreen = () => {
         isOpen={openModal}
         onPress={handlePressPopup}
         name={selectedUser?.user?.username || selectedUser?.user?.name}
+        isLoadingInitChat={isLoadingInitChat}
       />
       <ModalActionAnonymous
         name={

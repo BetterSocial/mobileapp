@@ -18,6 +18,7 @@ interface UseAnonymousChatInfoScreenHook {
   handleShowArrow: (item: Member) => void;
   goToEditGroup: () => void;
   loadingChannelInfo: boolean;
+  isLoadingInitChat: boolean;
 }
 
 export default UseAnonymousChatInfoScreenHook;
