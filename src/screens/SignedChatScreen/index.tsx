@@ -127,7 +127,6 @@ const SignedChatScreen = () => {
         </View>
         <Loading visible={loading} />
       </View>
-      <Loading visible={loading} />
     </ScrollContext.Provider>
   );
 };
