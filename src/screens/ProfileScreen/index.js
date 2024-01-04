@@ -501,6 +501,7 @@ const ProfileScreen = ({route}) => {
   };
 
   const debounceModalOpen = debounce(() => {
+    setTempBio(profile?.myProfile?.bio);
     bottomSheetBioRef.current.open();
   }, 350);
 
@@ -617,7 +618,6 @@ const ProfileScreen = ({route}) => {
     if (isProfileTabSigned) return getMyFeeds();
     return reloadFetchAnonymousPost();
   };
-
   return (
     <View style={styles.container} forceInset={{top: 'always'}}>
       <StatusBar translucent={false} />

@@ -212,38 +212,31 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
             onStartShouldSetResponder={[Function]}
             style={
               Object {
+                "alignItems": "center",
+                "backgroundColor": "#00ADB5",
+                "borderRadius": 6.4,
+                "flexDirection": "row",
+                "height": 40,
+                "justifyContent": "center",
                 "opacity": 1,
+                "paddingHorizontal": 20,
               }
             }
             testID="button-report-test"
           >
-            <View
+            <Text
               style={
                 Object {
-                  "alignItems": "center",
-                  "backgroundColor": "#00ADB5",
-                  "borderRadius": 6.4,
-                  "flexDirection": "row",
-                  "height": 40,
-                  "justifyContent": "center",
-                  "paddingHorizontal": 20,
+                  "color": "#FFFFFF",
+                  "fontFamily": "Inter-SemiBold",
+                  "fontSize": 18,
                 }
               }
             >
-              <Text
-                style={
-                  Object {
-                    "color": "#FFFFFF",
-                    "fontFamily": "Inter-SemiBold",
-                    "fontSize": 18,
-                  }
-                }
-              >
-                <Text>
-                  File Report
-                </Text>
+              <Text>
+                File Report
               </Text>
-            </View>
+            </Text>
           </View>
         </View>
       </View>
