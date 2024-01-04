@@ -88,12 +88,6 @@ const AnonymousChatScreen = () => {
     return <BaseChatItem type={ANONYMOUS} item={item} index={index} />;
   }, []);
 
-  const betterSocialMember = selectedChannel?.rawJson?.better_channel_member;
-
-  const scrollToEnd = () => {
-    flatlistRef.current?.scrollToEnd();
-  };
-
   const moveChatSigned = async () => {
     try {
       setLoading(true);
