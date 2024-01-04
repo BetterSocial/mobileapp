@@ -2,9 +2,10 @@ import * as React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import PostToCommunity from '../../assets/icon/PostToCommunity';
-import dimen from '../../utils/dimen';
 import useBetterNavigationHook from '../../hooks/navigation/useBetterNavigationHook';
 import {colors} from '../../utils/colors';
+import dimen from '../../utils/dimen';
+import {normalize} from '../../utils/fonts';
 import ShadowFloatingButtons from './ShadowFloatingButtons';
 
 const ButtonAddPostTopic = ({topicName, onRefresh}) => {
@@ -35,6 +36,10 @@ export default ButtonAddPostTopic;
 
 const styles = StyleSheet.create({
   container: {
+    position: 'absolute',
+    bottom: normalize(30),
+    right: 0,
+    zIndex: 99,
     backgroundColor: '#0000'
   },
   buttonContainer: {
