@@ -19,6 +19,7 @@ import {FeedScreen, NewsScreen, ProfileScreen} from '../screens';
 import ChannelListScreenV2 from '../screens/ChannelListScreenV2';
 import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
 import {colors} from '../utils/colors';
+import {COLORS} from '../utils/theme';
 import TokenStorage, {ITokenEnum} from '../utils/storage/custom/tokenStorage';
 import {getAnonymousUserId, getUserId} from '../utils/users';
 
@@ -349,7 +350,7 @@ const styles = StyleSheet.create({
   container: {
     height: '100%',
     width: '100%',
-    backgroundColor: 'white'
+    backgroundColor: COLORS.white
   },
   badge: {
     height: 7,

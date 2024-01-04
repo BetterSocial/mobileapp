@@ -31,7 +31,7 @@ const TopicDomainHeader = (props) => {
       </Text>
       <View style={{flexDirection: 'row', alignItems: 'center', marginTop: normalize(1)}}>
         <CommunityIcon
-          color={shouldDisplay ? '#FFFFFF' : undefined}
+          color={shouldDisplay ? COLORS.white : undefined}
           style={{
             marginRight: normalize(5),
             height: normalize(8)
