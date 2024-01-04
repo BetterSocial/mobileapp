@@ -52,10 +52,6 @@ const SignedChatScreen = () => {
     goToChatInfoScreen({from: SIGNED});
   };
 
-  const scrollToEnd = () => {
-    flatlistRef.current?.scrollToEnd();
-  };
-
   const moveChatToAnon = async () => {
     try {
       setLoading(true);
