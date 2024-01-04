@@ -170,13 +170,20 @@ function useChatUtilsHook(): UseChatUtilsHook {
     navigation.goBack();
   };
   const handleTextSystem = (item): string => {
+    let message = item?.description || item?.message;
+    if (message === ' ') {
+      message = 'sent media 🎆🌆🌉';
+    }
     if (
       item?.rawJson?.userIdFollower === profile?.myProfile?.user_id ||
       item?.rawJson?.message?.userIdFollower === profile?.myProfile?.user_id
     ) {
-      return item?.rawJson?.textOwnMessage || item?.rawJson?.message?.textOwnMessage;
+      message = item?.rawJson?.textOwnMessage || item?.rawJson?.message?.textOwnMessage;
+      if (message === ' ') {
+        message = 'sent media 🎆🌆🌉';
+      }
     }
-    return item?.description || item?.message;
+    return message;
   };
 
   const splitSystemMessage = (message: string): string[] => {
