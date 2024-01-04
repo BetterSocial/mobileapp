@@ -7,6 +7,7 @@ import MigrationVersion12 from './migration_version_12_channel_lists_add_anon_us
 import MigrationVersion13 from './migration_version_13_channel_lists_add_anon_user_info_emoji_code';
 import MigrationVersion14 from './migration_version_14_channel_lists_add_anon_user_info_color_name';
 import MigrationVersion15 from './migration_version_15_channel_lists_add_anon_user_info_color_code';
+import MigrationVersion16 from './migration_version_16_chat_add_attachment_json';
 import MigrationVersion2 from './migration_version_2';
 import MigrationVersion3 from './migration_version_3';
 import MigrationVersion4 from './migration_version_4';
@@ -32,7 +33,8 @@ const allMigrations: Migration[] = [
   MigrationVersion12,
   MigrationVersion13,
   MigrationVersion14,
-  MigrationVersion15
+  MigrationVersion15,
+  MigrationVersion16
 ];
 
 export default allMigrations;

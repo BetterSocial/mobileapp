@@ -150,7 +150,15 @@ exports[`AnonymousChannelListScreen RENDER should match snapshot 1`] = `
               }
             }
           >
-            <View />
+            <FastImageView
+              defaultSource={null}
+              resizeMode="cover"
+              source={
+                Object {
+                  "testUri": "../../../src/assets/images/AnonymousProfile.png",
+                }
+              }
+            />
           </View>
           <Text
             ellipsizeMode="tail"

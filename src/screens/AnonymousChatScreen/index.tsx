@@ -67,9 +67,9 @@ const AnonymousChatScreen = () => {
     goToChatInfoScreen,
     sendChat,
     selfAnonUserInfo,
-    updateChatContinuity,
     scrollContext,
-    flatListRef: scrollRef
+    flatListRef: scrollRef,
+    updateChatContinuity
   } = useChatScreenHook(ANONYMOUS);
   const {replyPreview, clearReplyPreview} = useMessageHook();
   const {moveToSignedChannel} = useMoveChatTypeHook();
@@ -87,6 +87,8 @@ const AnonymousChatScreen = () => {
   const renderChatItem = React.useCallback(({item, index}) => {
     return <BaseChatItem type={ANONYMOUS} item={item} index={index} />;
   }, []);
+
+  const betterSocialMember = selectedChannel?.rawJson?.better_channel_member;
 
   const scrollToEnd = () => {
     flatlistRef.current?.scrollToEnd();
@@ -106,6 +108,7 @@ const AnonymousChatScreen = () => {
       setLoading(false);
     }
   };
+
   React.useEffect(() => {
     return () => {
       clearReplyPreview();

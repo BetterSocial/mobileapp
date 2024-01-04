@@ -28,8 +28,8 @@ const SignedChatScreen = () => {
     goToChatInfoScreen,
     sendChat,
     updateChatContinuity,
-    flatListRef: scrollRef,
-    scrollContext
+    scrollContext,
+    flatListRef: scrollRef
   } = useChatScreenHook(SIGNED);
   const {replyPreview, clearReplyPreview} = useMessageHook();
   const {moveToAnonymousChannel} = useMoveChatTypeHook();
@@ -52,6 +52,10 @@ const SignedChatScreen = () => {
     goToChatInfoScreen({from: SIGNED});
   };
 
+  const scrollToEnd = () => {
+    flatlistRef.current?.scrollToEnd();
+  };
+
   const moveChatToAnon = async () => {
     try {
       setLoading(true);
@@ -72,12 +76,6 @@ const SignedChatScreen = () => {
       setChannel(selectedChannel, dispatchChannel);
     }
   }, [selectedChannel]);
-
-  React.useEffect(() => {
-    return () => {
-      clearReplyPreview();
-    };
-  }, []);
 
   return (
     <ScrollContext.Provider value={scrollContext}>
@@ -129,6 +127,7 @@ const SignedChatScreen = () => {
         </View>
         <Loading visible={loading} />
       </View>
+      <Loading visible={loading} />
     </ScrollContext.Provider>
   );
 };
