@@ -6,6 +6,7 @@ import MigrationVersion3 from './migration_version_3';
 import MigrationVersion4 from './migration_version_4';
 import MigrationVersion5 from './migration_version_5';
 import MigrationVersion6 from './migration_version_6';
+import MigrationVersion8 from './migration_version_8';
 
 const allMigrations: Migration[] = [
   MigrationVersion0,
@@ -14,7 +15,8 @@ const allMigrations: Migration[] = [
   MigrationVersion3,
   MigrationVersion4,
   MigrationVersion5,
-  MigrationVersion6
+  MigrationVersion6,
+  MigrationVersion8
 ];
 
 export default allMigrations;

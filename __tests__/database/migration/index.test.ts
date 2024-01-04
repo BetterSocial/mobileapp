@@ -5,7 +5,7 @@ describe('TESTING migration file', () => {
     expect(DROP_ALL_DB).toBeFalsy();
   });
 
-  it('TEST should check TARGET_MIGRATION_VERSION to 5', () => {
-    expect(TARGET_MIGRATION_VERSION).toBe(6);
+  it('TEST should expect TARGET_MIGRATION_VERSION to be 8', () => {
+    expect(TARGET_MIGRATION_VERSION).toBe(8);
   });
 });

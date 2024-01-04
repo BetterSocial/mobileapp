@@ -1,13 +1,15 @@
 import * as React from 'react';
-
+import {ActivityIndicator} from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
 
 const ImageViewerScreen = ({route, navigation}) => {
-  let {images, title, index} = route.params || {};
+  const {images, title, index} = route.params || {};
   navigation.setOptions({
-    headerTitle: title,
+    headerTitle: title
   });
 
-  return <ImageViewer imageUrls={images} index={index} />;
+  return (
+    <ImageViewer imageUrls={images} index={index} loadingRender={() => <ActivityIndicator />} />
+  );
 };
 export default ImageViewerScreen;
