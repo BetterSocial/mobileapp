@@ -113,10 +113,10 @@ const RenderListFeed = (props) => {
     initialSetup(item);
   }, [item]);
 
-  const isHaveComment = getCommentLength(item.latest_reactions.comment) > 0;
+  const hasComment = getCommentLength(item.latest_reactions.comment) > 0;
 
   const contentLinkHeight = () => {
-    const haveLength = isHaveComment ? getHeightReaction() / 2.2 : getHeightReaction() / 1.6;
+    const haveLength = hasComment ? getHeightReaction() / 2.2 : getHeightReaction() / 1.6;
     return dimen.size.FEED_CURRENT_ITEM_HEIGHT - getHeightHeader() - getHeightFooter() - haveLength;
   };
 
@@ -149,7 +149,7 @@ const RenderListFeed = (props) => {
             messageContainerStyle={{paddingHorizontal: 10}}
             topics={item?.topics}
             contentHeight={contentLinkHeight()}
-            isHaveComment={isHaveComment}
+            hasComment={hasComment}
           />
         )}
         {(item.post_type === POST_TYPE_STANDARD || item.post_type === POST_TYPE_POLL) && (
@@ -165,7 +165,7 @@ const RenderListFeed = (props) => {
             topics={item?.topics}
             item={item}
             onNewPollFetched={onNewPollFetched}
-            isHaveComment={isHaveComment}
+            hasComment={hasComment}
           />
         )}
         <View style={styles.footerWrapper(getHeightFooter())}>
@@ -191,7 +191,7 @@ const RenderListFeed = (props) => {
             isShowDM
           />
         </View>
-        {isHaveComment ? (
+        {hasComment ? (
           <View testID="previewComment" style={styles.contentReaction(getHeightReaction())}>
             <React.Fragment>
               <PreviewComment

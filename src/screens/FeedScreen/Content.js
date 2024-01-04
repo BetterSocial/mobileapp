@@ -27,7 +27,7 @@ const Content = ({
   item,
   onNewPollFetched,
   setHaveSeeMore,
-  isHaveComment
+  hasComment
 }) => {
   const navigation = useNavigation();
   const route = useRoute();
@@ -237,7 +237,7 @@ const Content = ({
     <Pressable
       onLayout={hanldeHeightContainer}
       onPress={onPress}
-      style={[styles.contentFeed(isHaveComment), style]}>
+      style={[styles.contentFeed(hasComment), style]}>
       {message?.length > 0 ? (
         <View>
           <View
@@ -352,10 +352,10 @@ export const styles = StyleSheet.create({
     marginLeft: 8,
     marginRight: 8
   },
-  contentFeed: (isHaveComment) => ({
-    flex: !isHaveComment ? undefined : 1,
+  contentFeed: (hasComment) => ({
+    flex: !hasComment ? undefined : 1,
     marginTop: 0,
-    height: !isHaveComment ? dimen.normalizeDimen(355) : '100%',
+    height: !hasComment ? dimen.normalizeDimen(355) : '100%',
     width: '100%'
   }),
   item: {
