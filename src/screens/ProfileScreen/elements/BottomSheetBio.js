@@ -12,14 +12,18 @@ import dimen from '../../../utils/dimen';
 const BottomSheetBio = React.forwardRef((props, ref) => {
   return (
     <View>
-      <BottomSheet ref={ref} closeOnPressMask={true} height={355}>
+      <BottomSheet
+        ref={ref}
+        closeOnPressMask={true}
+        height={355}
+        keyboardAvoidingViewEnabled={true}>
         <View style={styles.containerBottomSheet}>
           <Text style={styles.title}>{props.username} Edit prompt</Text>
           <AutoFocusTextArea
             value={props.value}
             onChangeText={props.onChangeText}
             placeholder="Message prompt"
-            keyboardAppearDelay={500}
+            keyboardAppearDelay={1}
             editable={!props.isOtherProfile}
             maxLength={350}
           />

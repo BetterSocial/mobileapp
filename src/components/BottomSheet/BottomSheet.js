@@ -7,7 +7,7 @@ import {colors} from '../../utils/colors';
 import dimen from '../../utils/dimen';
 
 const BottomSheet = React.forwardRef((props, ref) => {
-  const {pullBottom = false} = props;
+  const {pullBottom = false, keyboardAvoidingViewEnabled = false} = props;
   return (
     <RBSheet
       ref={ref}
@@ -15,6 +15,7 @@ const BottomSheet = React.forwardRef((props, ref) => {
       closeOnDragDown={true}
       closeOnPressMask={props.closeOnPressMask}
       height={props.height ? props.height : 355}
+      keyboardAvoidingViewEnabled={keyboardAvoidingViewEnabled}
       customStyles={{
         container: styles.containerSheet(pullBottom),
         draggableIcon: styles.draggableIcon
