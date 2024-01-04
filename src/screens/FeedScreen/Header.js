@@ -41,6 +41,7 @@ import TrashRed from '../../assets/icons/images/trash-red.svg';
 import BottomSheetMenu from '../../components/BottomSheet/BottomSheetMenu';
 import ShareUtils from '../../utils/share';
 import {COLORS} from '../../utils/theme';
+import BlurredLayer from './elements/BlurredLayer';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -119,7 +120,8 @@ const _renderAnonimity = ({
   onPressFollUnFoll = () => {},
   onDeletePost = () => {},
   isShowDelete = false,
-  isSelf = false
+  isSelf = false,
+  isBlurredPost = false
 }) => {
   const navigation = useNavigation();
   const refSheet = React.useRef();
@@ -206,6 +208,7 @@ const _renderAnonimity = ({
             </View>
           </View>
         </View>
+        {isBlurredPost && <BlurredLayer toastOnly={true} />}
       </View>
       <BottomSheetMenu
         refSheet={refSheet}
@@ -368,7 +371,8 @@ const Header = ({
     anon_user_info_color_name,
     anon_user_info_emoji_code,
     anon_user_info_emoji_name,
-    version = 1
+    version = 1,
+    isBlurredPost
   } = props;
   if (anonimity) {
     return _renderAnonimity({
@@ -393,7 +397,8 @@ const Header = ({
       onPressFollUnFoll,
       onDeletePost,
       isShowDelete,
-      isSelf
+      isSelf,
+      isBlurredPost
     });
   }
   return _renderProfileNormal({

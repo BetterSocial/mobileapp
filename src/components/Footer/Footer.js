@@ -22,6 +22,7 @@ import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import dimen from '../../utils/dimen';
 import {normalizeFontSize} from '../../utils/fonts';
 import BottomSheetMenu from '../BottomSheet/BottomSheetMenu';
+import BlurredLayer from '../../screens/FeedScreen/elements/BlurredLayer';
 
 const Footer = ({
   item,
@@ -232,6 +233,7 @@ const Footer = ({
         </TouchableOpacity>
       </View>
       <BottomSheetMenu refSheet={refSheet} dataSheet={dataSheet} />
+      {item?.isBlurredPost && <BlurredLayer toastOnly={true} />}
     </View>
   );
 };

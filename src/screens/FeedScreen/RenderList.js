@@ -24,6 +24,7 @@ import ContentLink from './ContentLink';
 import Header from './Header';
 import useFeed from './hooks/useFeed';
 import usePostHook from '../../hooks/core/post/usePostHook';
+import BlurredLayer from './elements/BlurredLayer';
 
 const tabBarHeight = StatusBar.currentHeight;
 const FULL_WIDTH = Dimensions.get('screen').width;
@@ -200,6 +201,7 @@ const RenderListFeed = (props) => {
               />
               <Gap height={8} />
             </React.Fragment>
+            {item?.isBlurredPost && <BlurredLayer layerOnly blurType="light" withToast={true} />}
           </View>
         )}
       </View>
