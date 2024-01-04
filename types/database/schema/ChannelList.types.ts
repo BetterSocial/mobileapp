@@ -43,6 +43,10 @@ export interface ChannelList {
   user: UserSchema | null;
   members: ChannelListMemberSchema[] | null;
   setRead: (db: any) => Promise<void>;
+  anon_user_info_emoji_name: string | null;
+  anon_user_info_emoji_code: string | null;
+  anon_user_info_color_code: string | null;
+  anon_user_info_color_name: string | null;
 }
 
 export interface ChatSchema {
