@@ -762,7 +762,7 @@
 					};
 					888DAA1429B48C8900311304 = {
 						DevelopmentTeam = J22M3M9VYU;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					889CAB5E27D46CD6007F5892 = {
 						ProvisioningStyle = Automatic;
