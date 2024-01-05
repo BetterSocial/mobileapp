@@ -358,7 +358,6 @@ const InputMessageV2 = ({
   const isDisableButton = () => {
     return text?.length === 0;
   };
-
   const sendButtonStyle = React.useCallback(() => {
     const isDisabled = isDisableButton();
     if (isDisabled) return COLORS.balance_gray;

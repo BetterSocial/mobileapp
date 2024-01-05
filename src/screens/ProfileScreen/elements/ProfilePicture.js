@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import Image from '../../../components/Image';
 import MemoIcAddCircle from '../../../assets/icons/ic_add_circle';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
-import {normalize, normalizeFontSize} from '../../../utils/fonts';
+import {normalize} from '../../../utils/fonts';
 import {CircleGradient} from '../../../components/Karma/CircleGradient';
 import dimen from '../../../utils/dimen';
 
