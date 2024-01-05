@@ -15,10 +15,10 @@ import ToggleSwitch from '../ToggleSwitch';
 import AnonUserInfoRepo from '../../service/repo/anonUserInfoRepo';
 import StringConstant from '../../utils/string/StringConstant';
 import {Context} from '../../context';
-import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 import SendIcon from '../SendIcon';
 import {CHAT_ANON, CHAT_SIGNED, DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {fonts, normalize} from '../../utils/fonts';
 
 const WriteComment = ({
   value = null,
@@ -28,7 +28,10 @@ const WriteComment = ({
   inReplyCommentView = false,
   showProfileConnector = true,
   loadingPost = false,
-  postId = ''
+  postId = '',
+  isKeyboardOpen = false,
+  isViewOnly = false,
+  withAnonymityLabel = true
 }) => {
   const [profile] = React.useContext(Context).profile;
   const commentInputRef = React.useRef(null);
@@ -72,11 +75,16 @@ const WriteComment = ({
       }
     });
   }, []);
+  React.useEffect(() => {
+    if (isKeyboardOpen) {
+      commentInputRef.current.focus();
+    }
+  }, [isKeyboardOpen, commentInputRef.current]);
   const saveToStorage = (valueData) => {
     AsyncStorage.setItem(storageKey, valueData);
   };
   return (
-    <View style={styles.columnContainer}>
+    <View style={isViewOnly ? styles.isViewOnlyColumnContainer : styles.columnContainer}>
       <View style={styles.connectorTop(inReplyCommentView, showProfileConnector)} />
       <View style={{flexDirection: 'row', paddingRight: 10}}>
         <Text style={styles.replyToContainer(inReplyCommentView)}>
@@ -87,10 +95,11 @@ const WriteComment = ({
           <ToggleSwitch
             value={isAnonimity}
             onValueChange={toggleSwitch}
-            labelLeft="Anonymity"
+            labelLeft={withAnonymityLabel ? 'Anonymity' : null}
             backgroundActive={COLORS.lightgrey}
             backgroundInactive={COLORS.lightgrey}
             styleLabelLeft={styles.switch}
+            isViewOnly={isViewOnly}
           />
         </View>
       </View>
@@ -118,28 +127,37 @@ const WriteComment = ({
             />
           </>
         )}
-
         <TextInput
           testID="changeinput"
           ref={commentInputRef}
           placeholder={StringConstant.commentBoxDefaultPlaceholder}
+          style={[styles.text, styles.content(isViewOnly)]}
           placeholderTextColor={COLORS.blackgrey}
-          style={[styles.text, styles.content]}
           onChangeText={onChangeText}
           value={value}
           multiline
           textAlignVertical="center"
+          pointerEvents={isViewOnly ? 'none' : 'auto'}
         />
-        <TouchableOpacity
-          testID="iscommentenable"
-          onPress={() => onPress(isAnonimity, anonimityData)}
-          style={styles.btn(!isCommentEnabled || loadingUser)}
-          disabled={!isCommentEnabled || loadingUser}>
-          <SendIcon
-            type={!isAnonimity ? CHAT_SIGNED : CHAT_ANON}
-            isDisabled={!isCommentEnabled || loadingUser}
-          />
-        </TouchableOpacity>
+        {!isViewOnly ? (
+          <TouchableOpacity
+            testID="iscommentenable"
+            onPress={() => onPress(isAnonimity, anonimityData)}
+            style={styles.btn(!isCommentEnabled || loadingUser || loadingPost)}
+            disabled={!isCommentEnabled || loadingUser || loadingPost}>
+            <SendIcon
+              type={!isAnonimity ? CHAT_SIGNED : CHAT_ANON}
+              isDisabled={!isCommentEnabled || loadingUser}
+            />
+          </TouchableOpacity>
+        ) : (
+          <View style={styles.isViewOnlyIcon}>
+            <SendIcon
+              type={!isAnonimity ? CHAT_SIGNED : CHAT_ANON}
+              isDisabled={!isCommentEnabled || loadingUser}
+            />
+          </View>
+        )}
       </View>
     </View>
   );
@@ -160,6 +178,14 @@ export const styles = StyleSheet.create({
     borderTopColor: COLORS.balance_gray,
     // zIndex: 1,
     paddingBottom: 14
+  },
+  isViewOnlyColumnContainer: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    borderTopWidth: 1,
+    borderTopColor: COLORS.gray1,
+    position: 'absolute'
   },
   replyToContainer: (inReplyCommentView) => ({
     marginLeft: inReplyCommentView ? 90 : 60,
@@ -185,7 +211,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     zIndex: 100
   }),
-  content: {
+  content: (isViewOnly) => ({
     display: 'flex',
     flexDirection: 'column',
     // alignItems: 'center',
@@ -195,8 +221,9 @@ export const styles = StyleSheet.create({
     paddingLeft: 6,
     paddingRight: 8,
     marginEnd: 8,
-    flex: 1
-  },
+    flex: 1,
+    height: isViewOnly ? 36 : undefined
+  }),
   btn: (isDisableSubmit) => ({
     backgroundColor: !isDisableSubmit ? COLORS.bondi_blue : COLORS.concrete,
     borderRadius: 18,
@@ -260,5 +287,9 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 12,
     color: COLORS.blackgrey
+  },
+  isViewOnlyIcon: {
+    width: normalize(32),
+    height: normalize(32)
   }
 });

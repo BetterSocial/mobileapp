@@ -29,7 +29,8 @@ const ContentLink = ({
   messageContainerStyle = {},
   topics = [],
   isPostDetail,
-  contentHeight
+  contentHeight,
+  hasComment
 }) => {
   const route = useRoute();
   const isTouchableDisabled = route?.name === 'PostDetailPage';
@@ -57,7 +58,7 @@ const ContentLink = ({
   };
 
   return (
-    <View style={styles.contentFeed}>
+    <View style={styles.contentFeed(hasComment)}>
       <TouchableNativeFeedback
         disabled={isTouchableDisabled}
         onPress={onPress}
@@ -98,11 +99,11 @@ const ContentLink = ({
 export default ContentLink;
 
 const styles = StyleSheet.create({
-  contentFeed: {
-    flex: 1,
+  contentFeed: (hasComment) => ({
+    flex: hasComment ? 1 : 'none',
     marginHorizontal: 6,
     backgroundColor: COLORS.white
-  },
+  }),
   messageContainer: {
     paddingHorizontal: 20,
     marginTop: 6,
