@@ -52,6 +52,8 @@ const POST_CHECK_AUTHOR_BLOCKED = 4;
 const PERMISSION_STATUS_ACCEPTED = 1;
 const PERMISSION_STATUS_BLOCKED = 2;
 const PERMISSION_STATUS_PENDING = 3;
+const CHAT_SIGNED = 'SIGNED';
+const CHAT_ANON = 'ANON';
 
 const NavigationConstants = {
   CREATE_POST_SCREEN: 'CreatePost'
@@ -109,5 +111,7 @@ export {
   POST_CHECK_FEED_EXPIRED,
   POST_CHECK_AUTHOR_BLOCKED,
   FEED_CHAT_KEY,
-  NavigationConstants
+  NavigationConstants,
+  CHAT_ANON,
+  CHAT_SIGNED
 };

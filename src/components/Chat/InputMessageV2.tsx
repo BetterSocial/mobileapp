@@ -2,12 +2,12 @@ import * as React from 'react';
 import {Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
 import ToastMessage from 'react-native-toast-message';
-import IconSend from '../../assets/icon/IconSendComment';
 import dimen from '../../utils/dimen';
 import {normalizeFontSize} from '../../utils/fonts';
 import ToggleSwitch from '../ToggleSwitch';
 import SheetEmoji from './SheetEmoji';
 import {COLORS} from '../../utils/theme';
+import SendIcon from '../SendIcon';
 
 const styles = StyleSheet.create({
   main: {
@@ -138,12 +138,11 @@ const InputMessageV2 = ({
   const isDisableButton = () => {
     return text?.length === 0;
   };
-
   const sendButtonStyle = React.useCallback(() => {
     const isDisabled = isDisableButton();
     if (isDisabled) return COLORS.gray1;
-    if (type === 'SIGNED') return COLORS.darkBlue;
-    return COLORS.bondi_blue;
+    if (type === 'SIGNED') return COLORS.signed_primary;
+    return COLORS.anon_primary;
   }, [isDisableButton()]);
 
   const toggleChnage = () => {
@@ -205,11 +204,7 @@ const InputMessageV2 = ({
         style={[styles.btn, isDisableButton() ? styles.disableButton : styles.enableButton]}
         disabled={isDisableButton()}
         onPress={handleSendMessage}>
-        <IconSend
-          style={styles.icSendButton}
-          fillBackground={sendButtonStyle()}
-          fillIcon={COLORS.white}
-        />
+        <SendIcon type={type} isDisabled={isDisableButton()} />
       </TouchableOpacity>
       <SheetEmoji ref={refEmoji} selectEmoji={onSelectEmoji} />
     </View>

@@ -12,11 +12,12 @@ import {
 import ToggleSwitch from '../ToggleSwitch';
 
 import AnonUserInfoRepo from '../../service/repo/anonUserInfoRepo';
-import MemoSendComment from '../../assets/icon/IconSendComment';
 import StringConstant from '../../utils/string/StringConstant';
 import {Context} from '../../context';
 import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
+import SendIcon from '../SendIcon';
+import {CHAT_ANON, CHAT_SIGNED} from '../../utils/constants';
 
 const WriteComment = ({
   value = null,
@@ -118,8 +119,9 @@ const WriteComment = ({
           onPress={() => onPress(isAnonimity, anonimityData)}
           style={styles.btn(isDisableSubmit || loadingUser)}
           disabled={isDisableSubmit || loadingUser}>
-          <MemoSendComment
-            fillBackground={isDisableSubmit || loadingUser ? COLORS.gray : COLORS.bondi_blue}
+          <SendIcon
+            type={!isAnonimity ? CHAT_SIGNED : CHAT_ANON}
+            isDisabled={isDisableSubmit || loadingUser}
           />
         </TouchableOpacity>
       </View>
