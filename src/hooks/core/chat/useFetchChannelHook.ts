@@ -100,6 +100,7 @@ const useFetchChannelHook = () => {
         (channel?.messages || []).map(async (message) => {
           const isDeletedMessage = message?.message_type === MESSAGE_TYPE_DELETED;
           const isDeletedHelper = Boolean(message?.deleted_message_id);
+          if (message?.id === '9e57a95f-6ecc-4ead-861a-199f7b626435') console.log(message);
           if (isDeletedMessage && isDeletedHelper) return;
 
           if (isDeletedMessage) message.text = DELETED_MESSAGE_TEXT;

@@ -31,6 +31,12 @@ class ChatSchema implements BaseDbSchema {
 
   isContinuous: boolean;
 
+  replyChatId: string | null;
+
+  replyChatText: string | null;
+
+  replyChatUsername: string | null;
+
   constructor({
     id,
     channelId,
@@ -43,7 +49,10 @@ class ChatSchema implements BaseDbSchema {
     user,
     status,
     isMe,
-    isContinuous
+    isContinuous,
+    replyChatId = null,
+    replyChatText = null,
+    replyChatUsername = null
   }) {
     if (!id) throw new Error('ChatSchema must have an id');
 
@@ -72,8 +81,11 @@ class ChatSchema implements BaseDbSchema {
         status,
         created_at,
         updated_at,
-        raw_json
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+        raw_json,
+        reply_chat_id,
+        reply_chat_text,
+        reply_chat_username
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
 
       const insertParams = [
         this.id,
@@ -84,7 +96,10 @@ class ChatSchema implements BaseDbSchema {
         this.status,
         this.createdAt,
         this.updatedAt,
-        this.rawJson
+        this.rawJson,
+        this.replyChatId,
+        this.replyChatText,
+        this.replyChatUsername
       ];
 
       await db.executeSql(insertQuery, insertParams);
@@ -198,7 +213,10 @@ class ChatSchema implements BaseDbSchema {
       user,
       status: dbObject.status,
       isMe: dbObject.is_me,
-      isContinuous: dbObject.is_continuous
+      isContinuous: dbObject.is_continuous,
+      replyChatId: dbObject?.reply_chat_id ?? null,
+      replyChatText: dbObject?.reply_chat_text ?? null,
+      replyChatUsername: dbObject?.reply_chat_username
     });
   }
 
@@ -250,7 +268,10 @@ class ChatSchema implements BaseDbSchema {
       user: null,
       status: 'sent',
       isMe: false,
-      isContinuous: false
+      isContinuous: false,
+      replyChatId: json?.reply_data?.id ?? null,
+      replyChatText: json?.reply_data?.text ?? null,
+      replyChatUsername: json?.reply_data?.user?.username ?? null
     });
   }
 
@@ -276,7 +297,10 @@ class ChatSchema implements BaseDbSchema {
       user: null,
       status: 'sent',
       isMe: false,
-      isContinuous: false
+      isContinuous: false,
+      replyChatId: json?.reply_data?.id ?? null,
+      replyChatText: json?.reply_data?.text ?? null,
+      replyChatUsername: json?.reply_data?.user?.username ?? null
     });
   }
 
@@ -288,7 +312,10 @@ class ChatSchema implements BaseDbSchema {
     localDb: SQLiteDatabase,
     type: 'regular' | 'system' | 'reply' = 'regular',
     status: 'pending' | 'sent' = 'pending',
-    json: string | null = null
+    json: string | null = null,
+    replyChatId: string | null = null,
+    replyChatText: string | null = null,
+    replyChatUsername: string | null = null
   ): Promise<ChatSchema> {
     let newRandomId = id;
     let rawJson: string | null = null;
@@ -318,7 +345,10 @@ class ChatSchema implements BaseDbSchema {
       user: null,
       userId,
       isMe: true,
-      isContinuous: true
+      isContinuous: true,
+      replyChatId,
+      replyChatText,
+      replyChatUsername
     });
   }
 

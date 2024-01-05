@@ -201,6 +201,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     updateChatContinuity,
     selfAnonUserInfo,
     flatListRef,
+    replyPreview,
     scrollContext: {
       selectedMessageId,
       setSelectedMessageId,

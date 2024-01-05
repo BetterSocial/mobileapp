@@ -8,6 +8,7 @@ import {Dimensions, FlatList, StyleSheet, View} from 'react-native';
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import BaseSystemChat from '../../components/AnonymousChat/BaseChatSystem';
 import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
+import ChatReplyPreview from '../../components/AnonymousChat/child/ChatReplyPreview';
 import InputMessageV2 from '../../components/Chat/InputMessageV2';
 import Loading from '../Loading';
 import dimen from '../../utils/dimen';
@@ -60,7 +61,8 @@ const AnonymousChatScreen = () => {
     goToChatInfoScreen,
     sendChat,
     selfAnonUserInfo,
-    updateChatContinuity
+    updateChatContinuity,
+    replyPreview
   } = useChatScreenHook(ANONYMOUS);
 
   const {moveToSignedChannel} = useMoveChatTypeHook();
@@ -132,6 +134,7 @@ const AnonymousChatScreen = () => {
         renderItem={renderChatItem}
       />
       <View style={styles.inputContainer}>
+        {replyPreview && <ChatReplyPreview type={ANONYMOUS} />}
         <InputMessageV2
           onSendButtonClicked={sendChat}
           type={ANONYMOUS}
