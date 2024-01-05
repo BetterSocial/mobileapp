@@ -12,11 +12,10 @@ import FastImage from 'react-native-fast-image';
 import {debounce} from 'lodash';
 
 import {fonts, normalizeFontSize} from '../../utils/fonts';
-import {colors} from '../../utils/colors';
 import {BottomSheet} from '../BottomSheet';
 import MemoIcSearch from '../../assets/icons/Ic_search';
 import dimen from '../../utils/dimen';
-import {SIZES} from '../../utils/theme';
+import {COLORS} from '../../utils/theme';
 import IconClear from '../../assets/icon/IconClear';
 import {getGifFeatured} from '../../service/gif';
 
@@ -80,7 +79,7 @@ const BottomSheetGif = React.forwardRef((props, ref) => {
             multiline={false}
             returnKeyType="search"
             placeholder="Search"
-            placeholderTextColor={colors.gray1}
+            placeholderTextColor={COLORS.gray1}
             style={styles.input}
           />
 
@@ -89,12 +88,12 @@ const BottomSheetGif = React.forwardRef((props, ref) => {
             onPress={handleOnClearText}
             style={styles.clearIconContainer}
             android_ripple={{
-              color: colors.gray1,
+              color: COLORS.gray1,
               borderless: true,
               radius: 35
             }}>
             <View style={styles.wrapperDeleteIcon}>
-              <IconClear width={9} height={10} iconColor={colors.black} />
+              <IconClear width={9} height={10} iconColor={COLORS.black} />
             </View>
           </TouchableOpacity>
         </View>
@@ -176,7 +175,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   cancelText: {
-    color: colors.darkBlue,
+    color: COLORS.darkBlue,
     marginLeft: dimen.normalizeDimen(12),
     fontFamily: 'Inter-SemiBold',
     fontSize: 12,

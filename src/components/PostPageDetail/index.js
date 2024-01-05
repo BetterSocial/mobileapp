@@ -40,6 +40,7 @@ import WriteComment from '../Comments/WriteComment';
 import useWriteComment from '../Comments/hooks/useWriteComment';
 import LoadingWithoutModal from '../LoadingWithoutModal';
 import {withInteractionsManaged} from '../WithInteractionManaged';
+import {COLORS} from '../../utils/theme';
 import Content from './elements/Content';
 import usePostDetail from './hooks/usePostDetail';
 import usePostHook from '../../hooks/core/post/usePostHook';
@@ -687,7 +688,7 @@ export default PostPageDetailIdComponent;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.white,
     flex: 1
   },
   containerText: {
@@ -697,23 +698,23 @@ const styles = StyleSheet.create({
   textDesc: {
     fontFamily: fonts.inter[400],
     fontSize: 16,
-    color: '#000'
+    color: COLORS.black
   },
   more: {
-    color: '#0e24b3',
+    color: COLORS.blueZaffre,
     fontFamily: fonts.inter[400],
     fontSize: 14
   },
   content: {
     width,
-    shadowColor: 'rgba(0,0,0,0.5)',
+    shadowColor: COLORS.black50,
     shadowOffset: {
       width: 0,
       height: 1
     },
     shadowOpacity: 0.5,
-    backgroundColor: 'white',
-    borderBottomColor: '#C4C4C4',
+    backgroundColor: COLORS.white,
+    borderBottomColor: COLORS.balance_gray,
     marginBottom: -1
   },
   gap: {height: 16},
@@ -730,7 +731,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     width: '100%',
     borderBottomWidth: 1,
-    borderBottomColor: '#C4C4C4'
+    borderBottomColor: COLORS.balance_gray
   },
   scrollContent: {
     paddingBottom: 0

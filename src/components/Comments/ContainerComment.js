@@ -12,11 +12,11 @@ import StringConstant from '../../utils/string/StringConstant';
 import useContainerComment from './hooks/useContainerComment';
 import useReplyComment from './hooks/useReplyComment';
 import usePostContextHook, {CONTEXT_SOURCE} from '../../hooks/usePostContextHooks';
-import {colors} from '../../utils/colors';
 import {deleteComment} from '../../service/comment';
 import {getUserId} from '../../utils/users';
 import usePostDetail from '../PostPageDetail/hooks/usePostDetail';
 import ListComment from './ListComment';
+import {COLORS} from '../../utils/theme';
 
 const ContainerComment = ({
   feedId,
@@ -182,7 +182,7 @@ export const ReplyComment = ({
   );
 };
 export const ContainerReply = ({children, isGrandchild}) => (
-  <View style={[{borderColor: isGrandchild ? '#fff' : colors.gray1}]}>{children}</View>
+  <View style={[{borderColor: isGrandchild ? COLORS.white : COLORS.balance_gray}]}>{children}</View>
 );
 
 export const isEqual = (prevProps, nextProps) => prevProps.comments === nextProps.comments;
@@ -201,11 +201,11 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     paddingBottom: 14,
-    borderLeftColor: isLast ? 'transparent' : colors.gray1,
+    borderLeftColor: isLast ? 'transparent' : COLORS.balance_gray,
     borderLeftWidth: 1
   }),
   seeRepliesText: {
-    color: colors.blue
+    color: COLORS.signed_primary
   },
   connector: {
     width: 10,
@@ -213,8 +213,8 @@ export const styles = StyleSheet.create({
     borderLeftWidth: 1.5,
     borderBottomWidth: 1.5,
     // borderBottomLeftRadius: 1,
-    borderLeftColor: colors.gray1,
-    borderBottomColor: colors.gray1,
+    borderLeftColor: COLORS.balance_gray,
+    borderBottomColor: COLORS.balance_gray,
     marginRight: 4,
     marginLeft: -1,
     borderBottomLeftRadius: 15 / 2,
@@ -227,7 +227,7 @@ export const styles = StyleSheet.create({
   },
   containerComment: {
     borderLeftWidth: 1,
-    borderLeftColor: '#C4C4C4',
+    borderLeftColor: COLORS.balance_gray,
     marginTop: 0
   }
 });

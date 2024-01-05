@@ -22,8 +22,8 @@ import useRootChannelListHook from '../hooks/screen/useRootChannelListHook';
 import TokenStorage, {ITokenEnum} from '../utils/storage/custom/tokenStorage';
 import {ChannelListScreen, FeedScreen, NewsScreen, ProfileScreen} from '../screens';
 import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
-import {colors} from '../utils/colors';
 import {getAnonymousUserId, getUserId} from '../utils/users';
+import {COLORS} from '../utils/theme';
 
 const Tab = createBottomTabNavigator();
 
@@ -228,7 +228,7 @@ function HomeBottomTabs({navigation}) {
       return (
         <View style={styles.center}>
           {focused ? (
-            <AnonymousChatFill fill={colors.anon_primary} stroke={colors.anon_primary} />
+            <AnonymousChatFill fill={COLORS.anon_primary} stroke={COLORS.anon_primary} />
           ) : (
             <AnonymousChatOutline fill={color} />
           )}
@@ -274,7 +274,7 @@ function HomeBottomTabs({navigation}) {
 
   const menuIndicator = (nav, route) => {
     const isAnonChatMenu = route.name === 'AnonymousChannelList';
-    const activeColor = isAnonChatMenu ? colors.anon_primary : colors.darkBlue;
+    const activeColor = isAnonChatMenu ? COLORS.anon_primary : COLORS.signed_primary;
     const style = {backgroundColor: nav.isFocused() ? activeColor : 'transparent'};
     return <View style={[styles.badge, style]} />;
   };
@@ -284,14 +284,15 @@ function HomeBottomTabs({navigation}) {
       <Tab.Navigator
         initialRouteName={getInitialRouteName()}
         tabBarOptions={{
-          inactiveTintColor: colors.gray1,
-          safeAreaInsets: {top: 0, bottom: 0, left: 0, right: 0}
+          inactiveTintColor: COLORS.blackgrey,
+          safeAreaInsets: {top: 0, bottom: 0, left: 0, right: 0},
+          activeTintColor: COLORS.signed_primary
         }}
         screenOptions={({navigation: nav, route}) => ({
           tabBarLabel: () => menuIndicator(nav, route),
           tabBarIcon: ({focused, color}) => renderTabBarIcon(route, focused, color),
           tabBarActiveTintColor:
-            route.name === 'AnonymousChannelList' ? colors.anon_primary : colors.darkBlue
+            route.name === 'AnonymousChannelList' ? COLORS.anon_primary : COLORS.signed_primary
         })}>
         <Tab.Screen
           name="SignedChannelList"

@@ -1,6 +1,9 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
 import * as React from 'react';
+import DocumentPicker from 'react-native-document-picker';
+import ImagePicker from 'react-native-image-crop-picker';
+import ToastMessage from 'react-native-toast-message';
 import {
   Alert,
   Image,
@@ -11,22 +14,19 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import ImagePicker from 'react-native-image-crop-picker';
-import DocumentPicker from 'react-native-document-picker';
 import {createThumbnail} from 'react-native-create-thumbnail';
-import ToastMessage from 'react-native-toast-message';
 
-import IconSend from '../../assets/icon/IconSendComment';
-import IconPlusAttachment from '../../assets/icon/IconPlusAttachment';
-import {colors} from '../../utils/colors';
-import dimen from '../../utils/dimen';
-import {normalizeFontSize} from '../../utils/fonts';
-import ToggleSwitch from '../ToggleSwitch';
 import BottomSheetAttachment from './BottomSheetAttachment';
 import BottomSheetGif from './BottomSheetGif';
-import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
+import IconPlusAttachment from '../../assets/icon/IconPlusAttachment';
+import IconSend from '../../assets/icon/IconSendComment';
 import ImageUtils from '../../utils/image';
+import ToggleSwitch from '../ToggleSwitch';
+import dimen from '../../utils/dimen';
 import {ANONYMOUS, SIGNED} from '../../hooks/core/constant';
+import {COLORS} from '../../utils/theme';
+import {normalizeFontSize} from '../../utils/fonts';
+import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
 
 const styles = StyleSheet.create({
   main: {
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: colors.white,
+    backgroundColor: COLORS.white,
     paddingHorizontal: dimen.normalizeDimen(6)
   },
   btnEmoji: {
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
   containerInput: {
     flex: 1,
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     flexDirection: 'row',
     alignItems: 'flex-end',
     paddingVertical: dimen.normalizeDimen(6),
@@ -64,8 +64,8 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    backgroundColor: colors.lightgrey,
-    color: colors.black,
+    backgroundColor: COLORS.lightgrey,
+    color: COLORS.black,
     fontFamily: 'Inter',
     fontSize: normalizeFontSize(14),
     fontStyle: 'normal',
@@ -83,10 +83,10 @@ const styles = StyleSheet.create({
     display: 'flex'
   },
   enableButton: {
-    backgroundColor: colors.bondi_blue
+    backgroundColor: COLORS.signed_primary
   },
   disableButton: {
-    backgroundColor: colors.gray1
+    backgroundColor: COLORS.balance_gray
   },
   previewPhotoContainer: {
     marginTop: dimen.normalizeDimen(5),
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     right: 0,
     height: dimen.normalizeDimen(25),
     width: dimen.normalizeDimen(25),
-    backgroundColor: colors.holytosca,
+    backgroundColor: COLORS.anon_primary,
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: dimen.normalizeDimen(100),
@@ -361,9 +361,9 @@ const InputMessageV2 = ({
 
   const sendButtonStyle = React.useCallback(() => {
     const isDisabled = isDisableButton();
-    if (isDisabled) return colors.gray1;
-    if (type === SIGNED) return colors.darkBlue;
-    return colors.bondi_blue;
+    if (isDisabled) return COLORS.balance_gray;
+    if (type === SIGNED) return COLORS.signed_primary;
+    return COLORS.signed_primary;
   }, [isDisableButton()]);
 
   const toggleChange = () => {
@@ -391,8 +391,8 @@ const InputMessageV2 = ({
   };
 
   const plusButtonStyle = React.useCallback(() => {
-    if (type === SIGNED) return colors.darkBlue;
-    return colors.bondi_blue;
+    if (type === SIGNED) return COLORS.signed_primary;
+    return COLORS.anon_secondary;
   }, []);
 
   return (
@@ -419,7 +419,7 @@ const InputMessageV2 = ({
             labelLeft={!inputFocus ? 'Anonymity' : undefined}
             styleLabelLeft={[
               styles.labelToggle,
-              {color: type === ANONYMOUS ? colors.gray : colors.blue}
+              {color: type === ANONYMOUS ? COLORS.gray : COLORS.signed_primary}
             ]}
             onValueChange={toggleChange}
             value={type === ANONYMOUS}
@@ -434,7 +434,7 @@ const InputMessageV2 = ({
           <IconSend
             style={styles.icSendButton}
             fillBackground={sendButtonStyle()}
-            fillIcon={colors.white}
+            fillIcon={COLORS.white}
           />
         </TouchableOpacity>
       )}

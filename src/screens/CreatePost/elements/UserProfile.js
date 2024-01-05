@@ -6,8 +6,8 @@ import AnonymousProfile from '../../../assets/images/AnonymousProfile.png';
 import AnonymousUsername from '../../../components/AnonymousUsername';
 import ToggleSwitch from '../../../components/ToggleSwitch';
 import {POST_VERSION} from '../../../utils/constants';
-import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
+import {COLORS} from '../../../utils/theme';
 
 const styles = StyleSheet.create({
   container: {
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   },
   profile: {flexDirection: 'row', alignItems: 'center'},
   username: {
-    color: colors.black,
+    color: COLORS.black,
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 14
@@ -27,12 +27,12 @@ const styles = StyleSheet.create({
   desc: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.gray
+    color: COLORS.blackgrey
   },
   switch: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.gray
+    color: COLORS.blackgrey
   },
   image: {
     marginRight: 8,
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     borderRadius: 16
   },
   anonImageBg: {
-    backgroundColor: colors.anon_primary
+    backgroundColor: COLORS.anon_primary
   },
   containerMessage: {
     flex: 1,
@@ -114,10 +114,10 @@ const UserProfile = ({
           value={isAnonymous}
           onValueChange={() => setTypeUser(!isAnonymous)}
           labelLeft="Anonymity"
-          backgroundActive={colors.lightgrey}
-          backgroundInactive={colors.lightgrey}
-          circleInActiveColor={colors.blue1}
-          inactiveTextColor={colors.blue1}
+          backgroundActive={COLORS.lightgrey}
+          backgroundInactive={COLORS.lightgrey}
+          circleInActiveColor={COLORS.signed_primary}
+          inactiveTextColor={COLORS.signed_primary}
           styleLabelLeft={styles.switch}
         />
       </View>

@@ -17,7 +17,11 @@ const savePrepReplacementExpectation = [
   'lastUpdatedBy',
   'createdAt',
   'expiredAt',
-  '{}'
+  '{}',
+  null,
+  null,
+  null,
+  null
 ];
 
 const fromDatabaseObjectExpectation = {
@@ -50,7 +54,11 @@ beforeEach(() => {
     unreadCount: 0,
     description: 'description',
     createdAt: 'createdAt',
-    channelType: 'channelType'
+    channelType: 'channelType',
+    anon_user_info_color_code: null,
+    anon_user_info_color_name: null,
+    anon_user_info_emoji_code: null,
+    anon_user_info_emoji_name: null
   });
 });
 

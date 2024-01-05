@@ -5,7 +5,6 @@ import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
 
 import {Footer, Gap, PreviewComment} from '../../components';
 import {showScoreAlertDialog} from '../../utils/Utils';
-import {colors} from '../../utils/colors';
 import {
   ANALYTICS_SHARE_POST_FEED_ID,
   ANALYTICS_SHARE_POST_FEED_SCREEN,
@@ -14,9 +13,11 @@ import {
   POST_TYPE_STANDARD,
   SOURCE_FEED_TAB
 } from '../../utils/constants';
-import dimen from '../../utils/dimen';
-import {normalizeFontSizeByWidth} from '../../utils/fonts';
 import {getCommentLength} from '../../utils/getstream';
+import {normalizeFontSizeByWidth} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
+import dimen from '../../utils/dimen';
+
 import ShareUtils from '../../utils/share';
 import Content from './Content';
 import ContentLink from './ContentLink';
@@ -215,7 +216,7 @@ const styles = StyleSheet.create({
   cardContainer: {
     width: FULL_WIDTH,
     borderBottomWidth: 0,
-    borderBottomColor: colors.lightgrey,
+    borderBottomColor: COLORS.lightgrey,
     backgroundColor: 'white',
     height: dimen.size.FEED_CURRENT_ITEM_HEIGHT,
     marginBottom: normalizeFontSizeByWidth(4)

@@ -1,6 +1,6 @@
 import React from 'react';
-import {View} from 'react-native';
 import {Circle, Defs, LinearGradient, Path, Stop, Svg} from 'react-native-svg';
+import {View} from 'react-native';
 
 export interface GradientCircularProgressProps {
   progress: number;

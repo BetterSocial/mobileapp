@@ -33,7 +33,7 @@ const Search = ({onPress, animatedValue, onChangeText, text, onClearText, isLoad
         <MemoIc_search width={20} height={20} />
       </View>
       <View style={styles.wrapperSecondaryIcon}>
-        {isLoading && <ActivityIndicator style={styles.loader} color={COLORS.gray} />}
+        {isLoading && <ActivityIndicator style={styles.loader} color={COLORS.blackgrey} />}
         {!isLoading && (
           <Pressable onPress={onClearText}>
             <IcClearCircle width={20} height={20} />
@@ -47,11 +47,11 @@ const Search = ({onPress, animatedValue, onChangeText, text, onClearText, isLoad
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: 'white'
+    backgroundColor: COLORS.white
   },
   wrapperSearch: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: COLORS.lightgrey,
     marginLeft: 15,
     marginRight: 15,
     borderRadius: SIZES.radius,
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     paddingRight: 8,
     paddingTop: 9,
     paddingBottom: 9
-    // backgroundColor: 'red',
+    // backgroundColor: COLORS.redalert,
   },
   input: {
     marginLeft: 28,
@@ -84,8 +84,8 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: '500',
     fontSize: 14,
-    color: '#000000'
-    // backgroundColor: 'red'
+    color: COLORS.black
+    // backgroundColor: COLORS.redalert
   },
   wrapperIcon: {
     position: 'absolute',
@@ -102,13 +102,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   newPostText: {
-    color: COLORS.holytosca,
+    color: COLORS.anon_primary,
     marginRight: 11,
     ...FONTS.h4
   },
   animatedViewContainer: (animatedValue) => ({
     flexDirection: 'row',
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     marginTop: animatedValue,
     top: 0,
     left: 0,
@@ -116,9 +116,9 @@ const styles = StyleSheet.create({
     zIndex: 10,
     padding: 7,
     borderBottomWidth: 0.5,
-    borderBottomColor: COLORS.gray1,
+    borderBottomColor: COLORS.lightgrey,
     borderTopWidth: 0.5,
-    borderTopColor: COLORS.gray1
+    borderTopColor: COLORS.lightgrey
   })
 });
 

@@ -1,5 +1,5 @@
 import FeedStorage from '../../../utils/storage/custom/feedStorage';
-import {checkIsHasColor, hexToRgb} from '../../../utils/colors';
+import {checkIsHasColor, hexToRgb} from '../../../utils/theme';
 import {getRandomInt} from '../../../utils/Utils';
 import {listFeedColor} from '../../../configs/FeedColor';
 

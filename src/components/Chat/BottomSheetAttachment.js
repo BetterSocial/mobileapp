@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import {View, Text, StyleSheet, TouchableNativeFeedback, ActivityIndicator} from 'react-native';
 
 import {fonts} from '../../utils/fonts';
-import {colors} from '../../utils/colors';
 import {BottomSheet} from '../BottomSheet';
 import MediasIcon from '../../assets/icons/images/medias.svg';
 import GIFIcon from '../../assets/icons/images/gif.svg';
 import FileIcon from '../../assets/icons/images/file.svg';
 import CameraIcon from '../../assets/icons/images/camera.svg';
+import {COLORS} from '../../utils/theme';
 
 const BottomSheetAttachment = React.forwardRef((props, ref) => (
   <BottomSheet ref={ref} closeOnPressMask={true} height={300} viewstyle={styles.container}>
@@ -18,7 +18,7 @@ const BottomSheetAttachment = React.forwardRef((props, ref) => (
         disabled={props.isLoadingUploadMedia}>
         <View style={styles.card}>
           <View style={styles.wrapCardImage}>
-            <MediasIcon width={20} height={20} fill={colors.black} />
+            <MediasIcon width={20} height={20} fill={COLORS.black} />
             <Text style={styles.textCard}>Send Photos & Videos</Text>
           </View>
           {props.isLoadingUploadMedia ? <ActivityIndicator size="small" color="#0000ff" /> : null}
@@ -29,7 +29,7 @@ const BottomSheetAttachment = React.forwardRef((props, ref) => (
         disabled={props.isLoadingUploadGIF}>
         <View style={styles.card}>
           <View style={styles.wrapCardImage}>
-            <GIFIcon width={20} height={20} fill={colors.black} />
+            <GIFIcon width={20} height={20} fill={COLORS.black} />
             <Text style={styles.textCard}>Send a GIF</Text>
           </View>
           {props.isLoadingUploadGIF ? <ActivityIndicator size="small" color="#0000ff" /> : null}
@@ -40,7 +40,7 @@ const BottomSheetAttachment = React.forwardRef((props, ref) => (
         disabled={props.isLoadingUploadCamera}>
         <View style={styles.card}>
           <View style={styles.wrapCardImage}>
-            <CameraIcon width={20} height={20} fill={colors.black} />
+            <CameraIcon width={20} height={20} fill={COLORS.black} />
             <Text style={styles.textCard}>Take a Picture</Text>
           </View>
           {props.isLoadingUploadCamera ? <ActivityIndicator size="small" color="#0000ff" /> : null}
@@ -55,11 +55,11 @@ const BottomSheetAttachment = React.forwardRef((props, ref) => (
             styles.card,
             {
               borderBottomWidth: 1,
-              borderBottomColor: colors.alto
+              borderBottomColor: COLORS.gray
             }
           ]}>
           <View style={styles.wrapCardImage}>
-            <FileIcon width={20} height={20} fill={colors.black} />
+            <FileIcon width={20} height={20} fill={COLORS.black} />
             <Text style={styles.textCard}>Send a File</Text>
           </View>
           {props.isLoadingUploadFile ? <ActivityIndicator size="small" color="#0000ff" /> : null}
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     borderTopWidth: 1,
-    borderTopColor: colors.alto
+    borderTopColor: COLORS.gray
   },
   wrapCardImage: {
     flexDirection: 'row',
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   textCard: {
     fontFamily: fonts.inter[500],
     fontSize: 14,
-    color: colors.black,
+    color: COLORS.black,
     paddingLeft: 9
   }
 });

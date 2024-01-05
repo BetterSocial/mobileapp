@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     borderRadius: SIZES.radius,
     backgroundColor: COLORS.white,
     elevation: 0.0,
-    borderColor: COLORS.gray,
+    borderColor: COLORS.blackgrey,
     marginHorizontal: SIZES.base
   },
   wrapperFooter: {

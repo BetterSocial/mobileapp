@@ -7,7 +7,7 @@ import IcDownvoteOn from '../../../assets/arrow/Ic_downvote_on';
 import IcUpvoteOn from '../../../assets/arrow/Ic_upvote_on';
 import Imageblock from '../../../assets/images/block.png';
 import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
-import {colors} from '../../../utils/colors';
+import {COLORS} from '../../../utils/theme';
 
 const ChannelPostNotificationStats = ({
   type = BaseChannelItemTypeProps.ANON_PM,
@@ -47,7 +47,7 @@ const ChannelPostNotificationStats = ({
   return (
     <View style={styles.descriptionContainer}>
       <View style={styles.iconContainer}>
-        <IcUpvoteOn color={colors.darkBlue} width={15} height={15} />
+        <IcUpvoteOn color={COLORS.signed_primary} width={15} height={15} />
         <Text style={styles.textVoteMargin}>{upvote}</Text>
       </View>
       <View style={styles.iconContainer}>

@@ -2,7 +2,7 @@
 import LocalDatabase from '..';
 import allMigrationsFile from './file/index';
 
-export const TARGET_MIGRATION_VERSION = 8;
+export const TARGET_MIGRATION_VERSION = 15;
 
 /**
  * PROCEED WITH CAUTION
@@ -97,8 +97,16 @@ const migrateDb = async () => {
   console.log('===== DONE MIGRATING DB =====');
 };
 
+const shouldDbMigrated = async () => {
+  let currentVersion = await getCurrentMigrationVersion();
+  if (currentVersion === -1) currentVersion = 0;
+
+  return currentVersion < TARGET_MIGRATION_VERSION;
+};
+
 const LocalDatabaseMigration = {
-  migrateDb
+  migrateDb,
+  shouldDbMigrated
 };
 
 export default LocalDatabaseMigration;

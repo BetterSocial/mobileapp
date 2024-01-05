@@ -141,6 +141,7 @@
 		D003BE73B9156D8E3DB05127 /* libPods-BetterSocial-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A60CCBC9606E354E38EB1DF3 /* libPods-BetterSocial-tvOS.a */; };
 		E97154A42976870A0021A505 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		E97154A52976870B0021A505 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		F23408F1E96AC908FB2D1D88 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1310CCE4FD9F49BADEA89C19 /* libPods-OneSignalNotificationServiceExtension.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -764,7 +765,7 @@
 					};
 					888DAA1429B48C8900311304 = {
 						DevelopmentTeam = J22M3M9VYU;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 					};
 					889CAB5E27D46CD6007F5892 = {
 						ProvisioningStyle = Automatic;

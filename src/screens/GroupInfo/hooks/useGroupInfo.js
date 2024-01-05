@@ -442,8 +442,6 @@ const useGroupInfo = () => {
     }, 500);
   };
 
-  console.log(isLoadingInitChat, 'isLoadingInitChat');
-
   return {
     serializeMembersList,
     groupChatState,

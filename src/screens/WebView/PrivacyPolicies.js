@@ -3,6 +3,7 @@ import { ActivityIndicator, SafeAreaView, StyleSheet, View } from 'react-native'
 import { WebView } from 'react-native-webview';
 import Header from '../../components/Header';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import { COLORS } from '../../utils/theme';
 
 const PrivacyPolicies = ({navigation}) => (
     <View style={styles.container}>
@@ -29,7 +30,7 @@ export default withInteractionsManaged(React.memo(PrivacyPolicies));
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.white,
   },
   header: { padding: 0, paddingHorizontal: 16, paddingBottom: 8 },
   loading: { flex: 1, position: 'relative' },

@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   disabledTextButton: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: COLORS.gray1
+    color: COLORS.lightgrey
   },
   textButton: {
     fontSize: 16,

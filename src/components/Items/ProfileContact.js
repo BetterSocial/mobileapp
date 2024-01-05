@@ -1,13 +1,13 @@
 import * as React from 'react';
 import Mi from 'react-native-vector-icons/MaterialIcons';
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import PropTypes from 'prop-types';
+import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+
 import MemoIc_Checklist from '../../assets/icons/Ic_Checklist';
-import {COLORS} from '../../utils/theme';
-import {normalize, normalizeFontSize} from '../../utils/fonts';
-import {colors} from '../../utils/colors';
 import dimen from '../../utils/dimen';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
+import {COLORS} from '../../utils/theme';
+import {normalize, normalizeFontSize} from '../../utils/fonts';
 
 const ProfileContact = ({
   photo,
@@ -19,10 +19,14 @@ const ProfileContact = ({
   item,
   ImageComponent = null,
   disabled = false,
-  from
+  isYou
 }) => {
   const {anonProfileId, signedProfileId} = useProfileHook();
   const handleYouText = () => {
+    if (isYou) {
+      return '(You)';
+    }
+
     if (anonProfileId === item?.user_id || signedProfileId === item?.user_id) {
       return '(You)';
     }
@@ -33,7 +37,7 @@ const ProfileContact = ({
     <Pressable
       onPress={onPress}
       android_ripple={{
-        color: COLORS.gray1,
+        color: COLORS.lightgrey,
         borderless: false,
         borderRadius: 10
       }}
@@ -83,7 +87,8 @@ ProfileContact.propTypes = {
   showArrow: PropTypes.bool,
   userId: PropTypes.string,
   ImageComponent: PropTypes.node,
-  from: PropTypes.string
+  from: PropTypes.string,
+  isYou: PropTypes.bool
 };
 
 export default React.memo(ProfileContact);
@@ -110,7 +115,7 @@ const styles = StyleSheet.create({
   fullname: (isMe) => ({
     fontSize: normalizeFontSize(14),
 
-    color: isMe ? colors.darkBlue : 'black',
+    color: isMe ? COLORS.signed_primary : 'black',
     lineHeight: normalizeFontSize(16.94),
     fontWeight: 'bold'
   }),

@@ -4,6 +4,7 @@ import * as paramBuilder from '../../src/utils/navigation/paramBuilder';
 import useFeed from '../../src/screens/FeedScreen/hooks/useFeed';
 import {normalizeFontSizeByWidth} from '../../src/utils/fonts';
 import dimen from '../../src/utils/dimen';
+import {COLORS} from '../../src/utils/theme';
 
 jest.mock('@react-navigation/bottom-tabs', () => ({
   useBottomTabBarHeight: jest.fn()
@@ -182,11 +183,11 @@ describe('Logic feed should run correctly', () => {
   it('initialSetup should run correctly', async () => {
     const {result} = renderHook(useFeed);
     await result.current.setTotalVote(1);
-    expect(result.current.handleTextCountStyle()).toEqual('#00ADB5');
+    expect(result.current.handleTextCountStyle()).toEqual(COLORS.anon_primary);
     await result.current.setTotalVote(-1);
-    expect(result.current.handleTextCountStyle()).toEqual('#FF2E63');
+    expect(result.current.handleTextCountStyle()).toEqual(COLORS.redalert);
     await result.current.setTotalVote(0);
-    expect(result.current.handleTextCountStyle()).toEqual('#C4C4C4');
+    expect(result.current.handleTextCountStyle()).toEqual(COLORS.lightgrey);
   });
 
   it('getTotalReaction should run correctly', async () => {

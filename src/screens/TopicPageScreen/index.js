@@ -16,6 +16,7 @@ import useOnBottomNavigationTabPressHook, {
 import {getFeedDetail} from '../../service/post';
 import {getTopicPages} from '../../service/topicPages';
 import {getTopics, getUserTopic} from '../../service/topics';
+import {COLORS} from '../../utils/theme';
 import {downVote, upVote} from '../../service/vote';
 import dimen from '../../utils/dimen';
 import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   header: {
-    backgroundColor: 'lightblue',
+    backgroundColor: COLORS.signed_primary,
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: dimen.normalizeDimen(40),
@@ -62,7 +63,7 @@ const TopicPageScreen = (props) => {
   const [topicId, setTopicId] = React.useState('');
   const [isFollow, setIsFollow] = React.useState(params.isFollowing);
   const [topicDetail, setTopicDetail] = React.useState({});
-  const [memberCount, setMemberCount] = React.useState(0);
+  const [memberCount, setMemberCount] = React.useState(params.memberCount);
   const [isHeaderHide, setIsHeaderHide] = React.useState(false);
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   const feeds = feedsContext.topicFeeds

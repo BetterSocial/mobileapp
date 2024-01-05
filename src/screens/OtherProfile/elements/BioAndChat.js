@@ -6,10 +6,10 @@ import TextAreaChat from '../../../components/TextAreaChat';
 import ToggleSwitch from '../../../components/ToggleSwitch';
 import useSaveAnonChatHook from '../../../database/hooks/useSaveAnonChatHook';
 import {ANON_PM, SIGNED} from '../../../hooks/core/constant';
-import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 import {sendAnonymousDMOtherProfile, sendSignedDMOtherProfile} from '../../../service/chat';
 import {trimString} from '../../../utils/string/TrimString';
+import {COLORS} from '../../../utils/theme';
 
 const CHANNEL_BLOCKED = 'Channel is blocked';
 
@@ -101,10 +101,10 @@ const BioAndChat = (props) => {
     <View style={styles.bioAndSendChatContainer(isAnonimity)}>
       <View style={styles.containerBio}>
         {bio === null || bio === undefined ? (
-          <Text style={styles.bioText(isAnonimity)}>Send a message</Text>
+          <Text style={styles.bioText}>Send a message</Text>
         ) : (
           <Pressable onPress={openBio}>
-            <Text linkStyle={styles.seeMore} style={styles.bioText(isAnonimity)}>
+            <Text linkStyle={styles.seeMore} style={styles.bioText}>
               {bio}
             </Text>
           </Pressable>
@@ -136,7 +136,7 @@ const BioAndChat = (props) => {
           labelLeft={
             isAnonimityEnabled || !isSignedMessageEnabled ? 'Anonymity' : 'Anonymity disabled'
           }
-          styleLabelLeft={{color: isAnonimityEnabled ? colors.white : '#648ABF'}}
+          styleLabelLeft={{color: isAnonimityEnabled ? COLORS.white : COLORS.signed_secondary}}
         />
       </TouchableOpacity>
     </View>
@@ -145,7 +145,7 @@ const BioAndChat = (props) => {
 
 const styles = StyleSheet.create({
   bioAndSendChatContainer: (isAnonimity) => ({
-    backgroundColor: isAnonimity ? colors.bondi_blue : colors.blue1,
+    backgroundColor: isAnonimity ? COLORS.anon_primary : COLORS.signed_primary,
     borderRadius: 15,
     paddingHorizontal: 10,
     paddingTop: 10
@@ -153,16 +153,16 @@ const styles = StyleSheet.create({
   containerBio: {
     marginBottom: 10
   },
-  bioText: (isAnonimity) => ({
-    color: isAnonimity ? colors.greenDark : colors.white,
+  bioText: {
+    color: COLORS.white,
     fontSize: 14,
     fontWeight: '600',
     lineHeight: 22
-  }),
+  },
   seeMore: {
     fontFamily: fonts.inter[500],
     fontSize: 14,
-    color: colors.black
+    color: COLORS.black
   },
   toggleSwitchContainer: {
     display: 'flex',

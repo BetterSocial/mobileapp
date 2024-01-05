@@ -1,10 +1,10 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {colors} from '../../utils/colors';
 import dimen from '../../utils/dimen';
 import {normalizeFontSize} from '../../utils/fonts';
 import Gap from '../Gap';
+import {COLORS} from '../../utils/theme';
 
 const BottomSheetMenu = ({refSheet, dataSheet = [], height = 234}) => {
   return (
@@ -34,13 +34,13 @@ export default BottomSheetMenu;
 
 const styles = StyleSheet.create({
   rbsheetContainer: (height) => ({
-    backgroundColor: colors.white,
+    backgroundColor: COLORS.white,
     borderTopLeftRadius: dimen.normalizeDimen(12),
     borderTopRightRadius: dimen.normalizeDimen(12),
     height: dimen.normalizeDimen(height)
   }),
   rbsheetDraggableIcon: {
-    backgroundColor: colors.greySubtile1,
+    backgroundColor: COLORS.greySubtile1,
     height: dimen.normalizeDimen(4),
     width: dimen.normalizeDimen(60),
     marginTop: dimen.normalizeDimen(16),
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingVertical: dimen.normalizeDimen(14),
     paddingHorizontal: dimen.normalizeDimen(20),
-    borderColor: colors.greySubtile2
+    borderColor: COLORS.greySubtile2
   },
   rbsheetContent2: {
     flexDirection: 'row',
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingVertical: dimen.normalizeDimen(14),
     paddingHorizontal: dimen.normalizeDimen(20),
-    borderColor: colors.greySubtile2
+    borderColor: COLORS.greySubtile2
   },
   textShare: {
     fontSize: normalizeFontSize(16),

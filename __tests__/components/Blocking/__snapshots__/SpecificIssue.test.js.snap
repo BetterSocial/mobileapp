@@ -104,7 +104,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
                 "width": 35,
               },
               Object {
-                "backgroundColor": "#E8EBED",
+                "backgroundColor": "#F5F6F7",
                 "width": 60,
               },
             ]
@@ -115,7 +115,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
         <Text
           style={
             Object {
-              "color": "#000",
+              "color": "#1E1F20",
               "fontFamily": "Inter-Bold",
               "fontSize": 18,
               "marginLeft": 21,
@@ -136,7 +136,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
             Object {
               "backgroundColor": "#F5F6F7",
               "borderRadius": 8,
-              "color": "#69707C",
+              "color": "#828282",
               "fontFamily": "Inter-Regular",
               "height": 233,
               "marginLeft": 17,
@@ -164,7 +164,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
           onStartShouldSetResponder={[Function]}
           style={
             Object {
-              "backgroundColor": "#E0E0E0",
+              "backgroundColor": "#F5F6F7",
               "flexDirection": "row",
               "justifyContent": "space-between",
               "marginVertical": 22,
@@ -178,7 +178,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
           <Text
             style={
               Object {
-                "color": "#000",
+                "color": "#1E1F20",
                 "fontFamily": "Inter-Bold",
                 "fontSize": 14,
               }
@@ -187,7 +187,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
             Skip & just block this account
           </Text>
           <Icon
-            color="#000"
+            color="#1E1F20"
             name="chevron-right"
             size={17}
           />
@@ -228,7 +228,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
             <Text
               style={
                 Object {
-                  "color": "#ffffff",
+                  "color": "#FFFFFF",
                   "fontFamily": "Inter-SemiBold",
                   "fontSize": 18,
                 }

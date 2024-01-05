@@ -4,8 +4,8 @@ exports[`Tabbar should run correctly tabbar should match with snapshot 1`] = `
 <View
   style={
     Object {
-      "backgroundColor": "#ffffff",
-      "borderBottomColor": "#00000050",
+      "backgroundColor": "#FFFFFF",
+      "borderBottomColor": "rgba(0,0,0,0.3)",
       "borderBottomWidth": 1,
       "flexDirection": "row",
       "paddingHorizontal": 4,
@@ -31,7 +31,6 @@ exports[`Tabbar should run correctly tabbar should match with snapshot 1`] = `
         "paddingLeft": 16,
       }
     }
-    testID="btn0"
   >
     <Text
       style={
@@ -73,7 +72,6 @@ exports[`Tabbar should run correctly tabbar should match with snapshot 1`] = `
         "paddingLeft": 16,
       }
     }
-    testID="btn1"
   >
     <Text
       style={
@@ -91,7 +89,7 @@ exports[`Tabbar should run correctly tabbar should match with snapshot 1`] = `
     <View
       style={
         Object {
-          "borderBottomColor": "#003848",
+          "borderBottomColor": "#107793",
           "borderBottomWidth": 1,
         }
       }

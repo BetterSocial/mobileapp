@@ -11,7 +11,6 @@ import ImageLayouter from './elements/ImageLayouter';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import {COLORS} from '../../utils/theme';
 import {POST_TYPE_LINK, POST_TYPE_POLL, POST_TYPE_STANDARD} from '../../utils/constants';
-import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
 import useCalculationContent from './hooks/useCalculationContent';
@@ -309,7 +308,7 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontWeight: 'normal',
     fontSize: normalizeFontSizeByWidth(28),
-    color: colors.black,
+    color: COLORS.black,
     lineHeight: 24,
     flex: 1
   },
@@ -340,14 +339,14 @@ export const styles = StyleSheet.create({
   feedDate: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.black,
+    color: COLORS.black,
     lineHeight: 18
   },
   point: {
     width: 4,
     height: 4,
     borderRadius: 4,
-    backgroundColor: colors.gray,
+    backgroundColor: COLORS.blackgrey,
     marginLeft: 8,
     marginRight: 8
   },

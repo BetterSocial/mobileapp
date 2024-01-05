@@ -13,7 +13,6 @@ import useCalculationContent from '../../../screens/FeedScreen/hooks/useCalculat
 import useContentFeed from '../../../screens/FeedScreen/hooks/useContentFeed';
 import {COLORS} from '../../../utils/theme';
 import {POST_TYPE_LINK, POST_TYPE_POLL, POST_TYPE_STANDARD} from '../../../utils/constants';
-import {colors} from '../../../utils/colors';
 import {fonts, normalizeFontSize, normalizeFontSizeByWidth} from '../../../utils/fonts';
 import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
 import {sanitizeUrl} from '../../../utils/string/StringUtils';
@@ -258,7 +257,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontWeight: 'normal',
     fontSize: normalizeFontSize(14),
-    color: colors.black,
+    color: COLORS.black,
     flex: 1,
     flexWrap: 'wrap'
   }),

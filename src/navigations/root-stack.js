@@ -46,6 +46,10 @@ import HomeBottomTabs from './HomeBottomTabs';
 import KeyboardWrapper from './KeyboardWrapper';
 import OneSignalNavigator from './OneSignalNavigator';
 
+import {followersOrFollowingAtom} from '../screens/ChannelListScreen/model/followersOrFollowingAtom';
+import {useInitialStartup} from '../hooks/useInitialStartup';
+import {COLORS} from '../utils/theme';
+
 const RootStack = createNativeStackNavigator();
 
 export const RootNavigator = () => {
@@ -79,6 +83,7 @@ export const RootNavigator = () => {
       unsubscribe();
     };
   }, []);
+
 
   return (
     <LoadingStartupContext.Provider value={loadingStartup.loadingUser}>

@@ -83,9 +83,9 @@ const styles = StyleSheet.create({
   headerDomainInfoContainer: {flex: 1, marginRight: 8},
   headerDomainDateContainer: {flexDirection: 'row', alignItems: 'center', flexShrink: 1},
   wrapperText: {
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     borderRadius: 8,
-    borderColor: '#00ADB5',
+    borderColor: COLORS.anon_primary,
     width: 28,
     height: 28,
     justifyContent: 'center',
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   wrapperImage: {
     borderRadius: 45,
     borderWidth: 0.2,
-    borderColor: 'rgba(0,0,0,0.5)',
+    borderColor: COLORS.black50,
     width: 48,
     height: 48,
     justifyContent: 'center',
@@ -104,20 +104,20 @@ const styles = StyleSheet.create({
   headerDomainName: {
     fontSize: 14,
     fontFamily: fonts.inter[600],
-    color: '#000000'
+    color: COLORS.black
   },
   headerDomainDate: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
     lineHeight: 18,
-    color: '#828282',
+    color: COLORS.blackgrey,
     flexShrink: 1
   },
   point: {
     width: 2,
     height: 2,
     borderRadius: 4,
-    backgroundColor: COLORS.gray,
+    backgroundColor: COLORS.blackgrey,
     marginLeft: 5,
     marginRight: 5
   },
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     alignItems: 'center',
     borderBottomWidth: 0.5,
-    borderBottomColor: COLORS.gray1,
+    borderBottomColor: COLORS.balance_gray,
     height: 64
   },
   backNavigationContainer: {
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     paddingRight: 20
   },
   followerNumber: {
-    color: '#828282',
+    color: COLORS.blackgrey,
     fontSize: 12,
     fontFamily: fonts.inter[700]
   }

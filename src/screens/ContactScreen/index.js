@@ -250,7 +250,7 @@ const ContactScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     flex: 1
   },
   recyclerview: {
@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16
   },
   subtitleStyle: (selectedUsers) => ({
-    color: selectedUsers.length > 0 ? COLORS.holytosca : COLORS.gray4,
+    color: selectedUsers.length > 0 ? COLORS.anon_primary : COLORS.gray4,
     marginEnd: 8
   })
 });
