@@ -11,13 +11,13 @@ import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
 import ChatReplyPreview from '../../components/AnonymousChat/child/ChatReplyPreview';
 import InputMessageV2 from '../../components/Chat/InputMessageV2';
 import Loading from '../Loading';
+import dimen from '../../utils/dimen';
 import useMessageHook from '../../hooks/screen/useMessageHook';
 import useMoveChatTypeHook from '../../hooks/core/chat/useMoveChatTypeHook';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import useChatScreenHook, {ScrollContext} from '../../hooks/screen/useChatScreenHook';
 import {ANONYMOUS} from '../../hooks/core/constant';
 import {COLORS} from '../../utils/theme';
-import dimen from '../../utils/dimen';
 
 const {height} = Dimensions.get('window');
 
@@ -58,16 +58,18 @@ export const styles = StyleSheet.create({
   }
 });
 
-const SampleChatScreen = () => {
+const AnonymousChatScreen = () => {
+  const flatlistRef = React.useRef<FlatList>();
   const {
     selectedChannel,
     chats,
     goBackFromChatScreen,
     goToChatInfoScreen,
     sendChat,
+    selfAnonUserInfo,
     updateChatContinuity,
-    flatListRef: scrollRef,
-    scrollContext
+    scrollContext,
+    flatListRef: scrollRef
   } = useChatScreenHook(ANONYMOUS);
   const {replyPreview, clearReplyPreview} = useMessageHook();
   const {moveToSignedChannel} = useMoveChatTypeHook();
@@ -86,7 +88,9 @@ const SampleChatScreen = () => {
     return <BaseChatItem type={ANONYMOUS} item={item} index={index} />;
   }, []);
 
-  const betterSocialMember = selectedChannel?.rawJson?.better_channel_member;
+  const scrollToEnd = () => {
+    flatlistRef.current?.scrollToEnd();
+  };
 
   const moveChatSigned = async () => {
     try {
@@ -122,14 +126,8 @@ const SampleChatScreen = () => {
               avatar={selectedChannel?.channelPicture}
               user={selectedChannel?.name}
               type={ANONYMOUS}
-              anon_user_info_emoji_code={
-                betterSocialMember &&
-                betterSocialMember[memberChat?.user_id]?.anon_user_info_emoji_code
-              }
-              anon_user_info_color_code={
-                betterSocialMember &&
-                betterSocialMember[memberChat?.user_id]?.anon_user_info_color_code
-              }
+              anon_user_info_emoji_code={selectedChannel?.anon_user_info_emoji_code}
+              anon_user_info_color_code={selectedChannel?.anon_user_info_color_code}
             />
           ) : null}
           <FlatList
@@ -157,8 +155,8 @@ const SampleChatScreen = () => {
             <InputMessageV2
               onSendButtonClicked={sendChat}
               type={ANONYMOUS}
-              emojiCode={selectedChannel?.rawJson.channel.anon_user_info_emoji_code}
-              emojiColor={selectedChannel?.rawJson.channel.anon_user_info_color_code}
+              emojiCode={selfAnonUserInfo?.anon_user_info_emoji_code}
+              emojiColor={selfAnonUserInfo?.anon_user_info_color_code}
               username={selectedChannel?.name}
               onToggleConfirm={moveChatSigned}
             />
@@ -170,4 +168,4 @@ const SampleChatScreen = () => {
   );
 };
 
-export default SampleChatScreen;
+export default AnonymousChatScreen;

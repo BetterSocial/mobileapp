@@ -1,8 +1,9 @@
 import React from 'react';
 import {View} from 'react-native';
-import {renderCircleColor} from './utils';
-import {GradientCircularProgress} from './GradientCircularProgress';
+
 import {COLORS} from '../../utils/theme';
+import {GradientCircularProgress} from './GradientCircularProgress';
+import {renderCircleColor} from './utils';
 
 export const CircleGradient = (props: {
   size: number;

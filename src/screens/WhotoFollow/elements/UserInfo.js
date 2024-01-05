@@ -1,8 +1,9 @@
 import * as React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
 import PropTypes from 'prop-types';
+import {Image, StyleSheet, Text, View} from 'react-native';
 import {COLORS} from '../../../utils/theme';
 import {normalize} from '../../../utils/fonts';
+
 import {CircleGradient} from '../../../components/Karma/CircleGradient';
 
 const UserInfo = ({photo, username, bio, karmaScore}) => (

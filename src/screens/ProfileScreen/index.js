@@ -51,6 +51,7 @@ import useProfileScreenHook, {
 } from '../../hooks/screen/useProfileScreenHook';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {ButtonNewPost} from '../../components/Button';
+import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH, SOURCE_MY_PROFILE} from '../../utils/constants';
 import {
@@ -72,7 +73,6 @@ import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {COLORS} from '../../utils/theme';
 import {KarmaScore} from './elements/KarmaScore';
 
 const {width} = Dimensions.get('screen');

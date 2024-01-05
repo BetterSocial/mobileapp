@@ -8,6 +8,11 @@ import localDatabaseAtom from '../atom/localDatabaseAtom';
 import migrationDbStatusAtom from '../atom/migrationDbStatusAtom';
 import {InitialStartupAtom} from '../../service/initialStartup';
 
+const MIGRATION_STATUS = {
+  NOT_MIGRATED: 'NOT_MIGRATED',
+  MIGRATED: 'MIGRATED'
+};
+
 /**
  *
  * @returns {UseLocalDatabaseHook}
@@ -38,9 +43,18 @@ const useLocalDatabaseHook = () => {
     const isEnteringApp = Boolean(initialStartup?.id);
 
     const db = await LocalDatabase.getDBConnection();
-    if (isEnteringApp && migrationStatus === 'NOT_MIGRATED') {
+    const shouldDbMigrated = await LocalDatabaseMigration.shouldDbMigrated();
+    let scopedMigrationStatus = migrationStatus;
+
+    if (isEnteringApp && shouldDbMigrated) {
       await LocalDatabaseMigration.migrateDb();
-      setMigrationStatus('MIGRATED');
+      setMigrationStatus(MIGRATION_STATUS.MIGRATED);
+      scopedMigrationStatus = MIGRATION_STATUS.MIGRATED;
+    }
+
+    if (isEnteringApp && scopedMigrationStatus === MIGRATION_STATUS.NOT_MIGRATED) {
+      await LocalDatabaseMigration.migrateDb();
+      setMigrationStatus(MIGRATION_STATUS.MIGRATED);
     }
 
     setLocalDb(db);

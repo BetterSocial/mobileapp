@@ -3,6 +3,7 @@
 import * as React from 'react';
 import moment from 'moment';
 import reactStringReplace from 'react-string-replace';
+import _, {isArray} from 'lodash';
 import {Linking, StyleSheet, Text} from 'react-native';
 
 import HighlightText from '../../components/HightlightClickText/HighlightText';
@@ -11,9 +12,10 @@ import TextBold from '../../components/Text/TextBold';
 import TopicText from '../../components/TopicText';
 // eslint-disable-next-line import/no-cycle
 import removePrefixTopic from '../topics/removePrefixTopic';
+import {COLORS} from '../theme';
+import {DEFAULT_PROFILE_PIC_PATH, DEFAULT_TOPIC_PIC_PATH} from '../constants';
 import {getAnonymousUserId} from '../users';
 import {getUserId} from '../token';
-import {COLORS} from '../theme';
 
 const NO_POLL_UUID = '00000000-0000-0000-0000-000000000000';
 const urlRegex = /(https?:\/\/\S+)+/g;
@@ -240,6 +242,117 @@ const getAnonymousChatName = async (members) => {
   });
 };
 
+const helperGetMemberName = (member) => {
+  const isAnonymous = Boolean(member?.anon_user_info_emoji_name);
+
+  return isAnonymous
+    ? `Anonymous ${member?.anon_user_info_emoji_name}`
+    : member?.user?.username ?? member?.user?.name;
+};
+
+const helperIsSelf = (userId, selfSignUserId, selfAnonUserId) => {
+  return userId === selfSignUserId || userId === selfAnonUserId;
+};
+
+const helperGetWhichMembers = (channel, selfSignUserId, selfAnonUserId) => {
+  const members = [];
+  if (channel?.better_channel_member) {
+    if (isArray(channel?.better_channel_member)) {
+      _.forEach(channel?.better_channel_member, (member) => {
+        const isNotSelf = !helperIsSelf(member?.user_id, selfSignUserId, selfAnonUserId);
+        if (isNotSelf) {
+          members.push(member);
+        }
+      });
+
+      return members;
+    }
+
+    _.forIn(channel?.better_channel_member, (member, key) => {
+      const isNotSelf = !helperIsSelf(key, selfSignUserId, selfAnonUserId);
+      if (isNotSelf) {
+        members.push(member);
+      }
+    });
+
+    return members;
+  }
+
+  channel?.members?.forEach((item) => {
+    const isNotSelf = !helperIsSelf(item?.user_id, selfSignUserId, selfAnonUserId);
+    if (isNotSelf) {
+      members.push(item);
+    }
+  });
+
+  return members;
+};
+
+const getChannelListInfo = (channel, selfSignUserId, selfAnonUserId) => {
+  let channelName;
+  let channelImage;
+  let anonUserInfoEmojiCode;
+  let anonUserInfoEmojiName;
+  let anonUserInfoColorCode;
+  let anonUserInfoColorName;
+
+  const members = helperGetWhichMembers(channel, selfSignUserId, selfAnonUserId);
+
+  if (members?.length === 1) {
+    const member = members[0];
+    const isAnonymous = Boolean(member?.anon_user_info_emoji_name);
+
+    channelName = helperGetMemberName(member);
+
+    channelImage = isAnonymous ? DEFAULT_PROFILE_PIC_PATH : member?.user?.image;
+    anonUserInfoEmojiCode = member?.anon_user_info_emoji_code;
+    anonUserInfoEmojiName = member?.anon_user_info_emoji_name;
+    anonUserInfoColorCode = member?.anon_user_info_color_code;
+    anonUserInfoColorName = member?.anon_user_info_color_name;
+  } else if (members?.length > 6) {
+    const names = members?.slice(0, 6).map((item) => helperGetMemberName(item));
+    channelName = `${names.join(', ')} & others`;
+    channelImage = DEFAULT_PROFILE_PIC_PATH;
+  } else if (members?.length > 1) {
+    const names = members?.map((item) => helperGetMemberName(item));
+    channelName = names.join(', ');
+    channelImage = DEFAULT_PROFILE_PIC_PATH;
+  }
+
+  if (channel?.type === 'topics') {
+    channelImage = channel?.channel_image ?? DEFAULT_TOPIC_PIC_PATH;
+    channelName = channel?.name;
+  }
+
+  if (channel?.type === 'group') {
+    channelImage = channel?.is_custom_image ? channel?.channel_image : null;
+    if (channel?.is_custom_name) channelName = channel?.name;
+  }
+
+  return {
+    channelName,
+    channelImage,
+    anonUserInfoEmojiCode,
+    anonUserInfoEmojiName,
+    anonUserInfoColorCode,
+    anonUserInfoColorName
+  };
+};
+
+const getChannelMembers = (channel) => {
+  const members = helperGetWhichMembers(channel);
+
+  return members?.map((item) => {
+    const isAnonymous = Boolean(item?.anon_user_info_emoji_name);
+
+    return {
+      ...item,
+      name: helperGetMemberName(item),
+      image: isAnonymous ? DEFAULT_PROFILE_PIC_PATH : item?.user?.image
+    };
+  });
+};
+
 const getGroupMemberCount = (channel) => Object.keys(channel?.state?.members).length;
 
 const styles = StyleSheet.create({
@@ -426,6 +539,8 @@ export {
   getCaptionWithTopicStyle,
   getChatName,
   formatBytes,
+  getChannelListInfo,
+  getChannelMembers,
   getGroupMemberCount,
   getPollTime,
   getSingularOrPluralText,
