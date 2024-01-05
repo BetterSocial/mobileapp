@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {StyleSheet, TextInput} from 'react-native';
 import PropTypes from 'prop-types';
+import {StyleSheet, TextInput} from 'react-native';
 
-import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
+import {fonts} from '../../utils/fonts';
 
 export default class AutoFocusTextArea extends React.Component {
   constructor(props) {

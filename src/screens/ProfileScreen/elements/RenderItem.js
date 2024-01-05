@@ -1,6 +1,5 @@
 import * as React from 'react';
-import LinearGradient from 'react-native-linear-gradient';
-import {Dimensions, StyleSheet, View} from 'react-native';
+import {Dimensions, StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
 import Content from '../../FeedScreen/Content';
@@ -21,9 +20,13 @@ import {Footer, PreviewComment} from '../../../components';
 import {getCountCommentWithChild} from '../../../utils/getstream';
 import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
 import {showScoreAlertDialog} from '../../../utils/Utils';
+import WriteComment from '../../../components/Comments/WriteComment';
+import useWriteComment from '../../../components/Comments/hooks/useWriteComment';
+import {normalize, normalizeFontSizeByWidth} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
 
 const {height} = Dimensions.get('window');
+const tabBarHeight = StatusBar.currentHeight;
 
 const getHeightReaction = () => {
   const h = Math.floor((height * 12) / 100);
@@ -76,6 +79,7 @@ const Item = ({
   const [statusDownvote, setStatusDowvote] = React.useState(false);
   const navigation = useNavigation();
   const [profile] = React.useContext(Context).profile;
+  const {handleUserName} = useWriteComment();
 
   React.useEffect(() => {
     const initial = () => {
@@ -241,7 +245,7 @@ const Item = ({
           statusVote={voteStatus}
         />
       </View>
-      {isReaction && (
+      {isReaction ? (
         <View style={styles.contentReaction(getHeightReaction())}>
           <View style={styles.lineAffterFooter} />
           {previewComment && (
@@ -256,8 +260,22 @@ const Item = ({
             />
           )}
         </View>
+      ) : (
+        <TouchableOpacity
+          onPress={onPressComment}
+          style={styles.previewComment(getHeightReaction())}>
+          <WriteComment
+            postId={''}
+            username={handleUserName(item)}
+            value={''}
+            onChangeText={() => {}}
+            onPress={() => {}}
+            loadingPost={false}
+            isViewOnly={true}
+            withAnonymityLabel={false}
+          />
+        </TouchableOpacity>
       )}
-      <LinearGradient colors={['rgba(0,0,0,0.3)', 'rgba(0,0,0,0)']} style={styles.linearGradient} />
     </View>
   );
 };
@@ -274,15 +292,14 @@ const styles = StyleSheet.create({
     width: '100%',
     height: dimen.size.PROFILE_ITEM_HEIGHT,
     maxHeight: dimen.size.PROFILE_ITEM_HEIGHT,
-    shadowColor: COLORS.lightgrey,
-    shadowOffset: {
-      width: 1,
-      height: 8
-    },
-    shadowOpacity: 0.5,
     backgroundColor: COLORS.white,
     paddingBottom: 0,
-    borderBottomColor: 'transparent'
+    borderBottomColor: 'transparent',
+    marginBottom: normalizeFontSizeByWidth(4),
+    shadowColor: COLORS.black000,
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 0.3,
+    shadowRadius: 4
     // paddingHorizontal: 9
   },
   paddingHorizontal: {paddingHorizontal: 20},
@@ -290,6 +307,10 @@ const styles = StyleSheet.create({
   footerWrapper: (h) => ({height: h, paddingHorizontal: 0}),
   contentReaction: (heightReaction) => ({
     height: heightReaction
+  }),
+  previewComment: (heightReaction) => ({
+    maxHeight: heightReaction,
+    marginBottom: heightReaction <= 0 ? tabBarHeight + normalize(10) : 0
   }),
   linearGradient: {
     height: 8

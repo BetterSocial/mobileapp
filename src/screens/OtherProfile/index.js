@@ -476,7 +476,8 @@ const OtherProfile = () => {
     navigation.navigate('OtherProfilePostDetailPage', {
       index,
       isalreadypolling: item.isalreadypolling,
-      feedId: item.id
+      feedId: item.id,
+      isKeyboardOpen: true
     });
   };
 
