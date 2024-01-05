@@ -23,6 +23,7 @@ import BioAndChat from './elements/BioAndChat';
 import BlockIcon from '../../assets/icons/images/block-blue.svg';
 import BlockProfile from '../../components/Blocking/BlockProfile';
 import BottomSheetBio from '../ProfileScreen/elements/BottomSheetBio';
+import EnvelopeIcon from '../../assets/icon/EnvelopeIcon';
 import GlobalButton from '../../components/Button/GlobalButton';
 import ProfileHeader from '../ProfileScreen/elements/ProfileHeader';
 import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
@@ -35,6 +36,7 @@ import useCreateChat from '../../hooks/screen/useCreateChat';
 import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
 import useOtherProfileScreenHooks from './hooks/useOtherProfileScreenHooks';
 import useViewPostTimeHook from '../FeedScreen/hooks/useViewPostTimeHook';
+import {COLORS} from '../../utils/theme';
 import {CircleGradient} from '../../components/Karma/CircleGradient';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
@@ -48,8 +50,6 @@ import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder
 import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherProfileFeed';
 import {setFollow, setUnFollow} from '../../service/profile';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {COLORS} from '../../utils/theme';
-import EnvelopeIcon from '../../assets/icon/EnvelopeIcon';
 
 const {width} = Dimensions.get('screen');
 

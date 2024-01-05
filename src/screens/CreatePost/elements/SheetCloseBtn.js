@@ -1,12 +1,11 @@
 import * as React from 'react';
+import RBSheet from 'react-native-raw-bottom-sheet';
 import {StyleSheet, Text, View} from 'react-native';
 
-import RBSheet from 'react-native-raw-bottom-sheet';
-
-import {Button} from '../../../components/Button';
 import Gap from '../../../components/Gap';
-import {fonts} from '../../../utils/fonts';
+import {Button} from '../../../components/Button';
 import {COLORS} from '../../../utils/theme';
+import {fonts} from '../../../utils/fonts';
 
 const SheetCloseBtn = ({backRef, goBack, continueToEdit}) => {
   return (
