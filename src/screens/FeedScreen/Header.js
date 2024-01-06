@@ -537,7 +537,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   textFollow: {
-    color: COLORS.bluePrimary,
+    color: COLORS.signed_primary,
     fontSize: normalizeFontSize(14),
     fontStyle: 'normal',
     fontWeight: '500'
@@ -547,7 +547,11 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(14),
     fontStyle: 'normal',
     fontWeight: '500'
-  }
+  },
+  buttonFollow: (isFollow) => ({
+    backgroundColor: COLORS.signed_primary,
+    paddingHorizontal: 10
+  })
 });
 
 Header.propsTypes = {
