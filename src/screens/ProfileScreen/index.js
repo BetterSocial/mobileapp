@@ -54,7 +54,6 @@ import {ButtonNewPost} from '../../components/Button';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH, SOURCE_MY_PROFILE} from '../../utils/constants';
-import {KarmaScore} from './elements/KarmaScore';
 import {
   changeRealName,
   getMyProfile,
@@ -74,6 +73,7 @@ import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import {KarmaScore} from './elements/KarmaScore';
 
 const {width} = Dimensions.get('screen');
 

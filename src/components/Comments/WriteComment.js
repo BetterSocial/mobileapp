@@ -13,12 +13,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ToggleSwitch from '../ToggleSwitch';
 
 import AnonUserInfoRepo from '../../service/repo/anonUserInfoRepo';
-import MemoSendComment from '../../assets/icon/IconSendComment';
 import StringConstant from '../../utils/string/StringConstant';
 import {Context} from '../../context';
 import {COLORS} from '../../utils/theme';
+import SendIcon from '../SendIcon';
+import {CHAT_ANON, CHAT_SIGNED, DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {fonts, normalize} from '../../utils/fonts';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 
 const WriteComment = ({
   value = null,
@@ -145,18 +145,16 @@ const WriteComment = ({
             onPress={() => onPress(isAnonimity, anonimityData)}
             style={styles.btn(!isCommentEnabled || loadingUser || loadingPost)}
             disabled={!isCommentEnabled || loadingUser || loadingPost}>
-            <MemoSendComment
-              fillBackground={
-                !isCommentEnabled || loadingUser ? COLORS.gray : COLORS.signed_primary
-              }
+            <SendIcon
+              type={!isAnonimity ? CHAT_SIGNED : CHAT_ANON}
+              isDisabled={!isCommentEnabled || loadingUser}
             />
           </TouchableOpacity>
         ) : (
           <View style={styles.isViewOnlyIcon}>
-            <MemoSendComment
-              fillBackground={
-                !isCommentEnabled || loadingUser ? COLORS.gray : COLORS.signed_primary
-              }
+            <SendIcon
+              type={!isAnonimity ? CHAT_SIGNED : CHAT_ANON}
+              isDisabled={!isCommentEnabled || loadingUser}
             />
           </View>
         )}
