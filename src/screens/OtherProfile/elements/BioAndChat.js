@@ -101,10 +101,10 @@ const BioAndChat = (props) => {
     <View style={styles.bioAndSendChatContainer(isAnonimity)}>
       <View style={styles.containerBio}>
         {bio === null || bio === undefined ? (
-          <Text style={styles.bioText(isAnonimity)}>Send a message</Text>
+          <Text style={styles.bioText}>Send a message</Text>
         ) : (
           <Pressable onPress={openBio}>
-            <Text linkStyle={styles.seeMore} style={styles.bioText(isAnonimity)}>
+            <Text linkStyle={styles.seeMore} style={styles.bioText}>
               {bio}
             </Text>
           </Pressable>
@@ -153,12 +153,12 @@ const styles = StyleSheet.create({
   containerBio: {
     marginBottom: 10
   },
-  bioText: (isAnonimity) => ({
-    color: isAnonimity ? COLORS.anon_secondary : COLORS.white,
+  bioText: {
+    color: COLORS.white,
     fontSize: 14,
     fontWeight: '600',
     lineHeight: 22
-  }),
+  },
   seeMore: {
     fontFamily: fonts.inter[500],
     fontSize: 14,
