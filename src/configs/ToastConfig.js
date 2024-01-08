@@ -22,9 +22,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 10,
-    borderRadius: 10,
-    borderColor: COLORS.concrete,
-    borderWidth: 1
+    borderRadius: 10
   },
   centerText: {
     textAlign: 'center'
