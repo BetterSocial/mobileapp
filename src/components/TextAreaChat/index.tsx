@@ -5,6 +5,7 @@ import MemoSendComment from '../../assets/icon/IconSendComment';
 import {PhotoProfileProps, TextAreaChatProps} from './typings';
 import {S} from './styles';
 import {COLORS} from '../../utils/theme';
+import SendIcon from '../SendIcon';
 
 const PhotoProfile = ({
   anonUser,
@@ -98,10 +99,7 @@ const TextAreaChat = ({
         onPress={onSend}
         disabled={!message || disabledButton}
         style={[S.sendIconContainer]}>
-        <MemoSendComment
-          fillBackground={isButtonActive ? iconSendBackgroundColor : COLORS.gray}
-          fillIcon={COLORS.white}
-        />
+        <SendIcon type={isAnonimity ? 'ANON' : 'SIGNED'} isDisabled={!isButtonActive} />
       </TouchableOpacity>
     </View>
   );

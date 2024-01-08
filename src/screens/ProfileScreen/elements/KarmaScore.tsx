@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {Text, View} from 'react-native';
-import FastImage from 'react-native-fast-image';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import MemoIcQuestionMark from '../../../assets/icons/Ic_question_mark';

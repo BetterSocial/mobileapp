@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 import {COLORS} from '../../../utils/theme';
 import {CircleGradient} from '../../../components/Karma/CircleGradient';

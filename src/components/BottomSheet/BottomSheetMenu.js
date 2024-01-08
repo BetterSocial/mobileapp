@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingVertical: dimen.normalizeDimen(14),
     paddingHorizontal: dimen.normalizeDimen(20),
-    borderColor: COLORS.greySubtile2
+    borderColor: COLORS.gray5
   },
   rbsheetContent2: {
     flexDirection: 'row',
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingVertical: dimen.normalizeDimen(14),
     paddingHorizontal: dimen.normalizeDimen(20),
-    borderColor: COLORS.greySubtile2
+    borderColor: COLORS.gray5
   },
   textShare: {
     fontSize: normalizeFontSize(16),

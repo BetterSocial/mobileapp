@@ -1,6 +1,9 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
 import * as React from 'react';
+import DocumentPicker from 'react-native-document-picker';
+import ImagePicker from 'react-native-image-crop-picker';
+import ToastMessage from 'react-native-toast-message';
 import {
   Alert,
   Image,
@@ -11,22 +14,19 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import ImagePicker from 'react-native-image-crop-picker';
-import DocumentPicker from 'react-native-document-picker';
 import {createThumbnail} from 'react-native-create-thumbnail';
-import ToastMessage from 'react-native-toast-message';
 
-import IconSend from '../../assets/icon/IconSendComment';
-import IconPlusAttachment from '../../assets/icon/IconPlusAttachment';
-import dimen from '../../utils/dimen';
-import {normalizeFontSize} from '../../utils/fonts';
-import ToggleSwitch from '../ToggleSwitch';
 import BottomSheetAttachment from './BottomSheetAttachment';
 import BottomSheetGif from './BottomSheetGif';
-import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
+import IconPlusAttachment from '../../assets/icon/IconPlusAttachment';
+import IconSend from '../../assets/icon/IconSendComment';
 import ImageUtils from '../../utils/image';
+import ToggleSwitch from '../ToggleSwitch';
+import dimen from '../../utils/dimen';
 import {ANONYMOUS, SIGNED} from '../../hooks/core/constant';
 import {COLORS} from '../../utils/theme';
+import {normalizeFontSize} from '../../utils/fonts';
+import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
 
 const styles = StyleSheet.create({
   main: {
@@ -358,7 +358,6 @@ const InputMessageV2 = ({
   const isDisableButton = () => {
     return text?.length === 0;
   };
-
   const sendButtonStyle = React.useCallback(() => {
     const isDisabled = isDisableButton();
     if (isDisabled) return COLORS.balance_gray;
