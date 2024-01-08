@@ -18,13 +18,11 @@ export const toastConfig = {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.signed_primary,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 10,
-    borderRadius: 10,
-    borderColor: COLORS.concrete,
-    borderWidth: 1
+    borderRadius: 10
   },
   centerText: {
     textAlign: 'center'
@@ -33,7 +31,7 @@ const styles = StyleSheet.create({
 
 const styleAsNative = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.gray5,
+    backgroundColor: COLORS.signed_primary,
     borderRadius: 45,
     paddingHorizontal: 30,
     paddingVertical: 5,
