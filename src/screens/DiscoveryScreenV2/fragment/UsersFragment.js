@@ -38,7 +38,8 @@ const UsersFragment = ({
   withoutRecent = false,
   showRecentSearch = true,
   fetchData = () => {},
-  searchText
+  searchText,
+  isUser
 }) => {
   const [discovery, discoveryDispatch] = React.useContext(Context).discovery;
   const [profile] = React.useContext(Context).profile;
@@ -146,18 +147,14 @@ const UsersFragment = ({
     if (willFollow) {
       try {
         await setFollow(data, client);
-        console.log('BERHASIL DIFOLLOW');
       } catch (error) {
         handleUser(from, !willFollow, item);
-        console.log('HASIL ERROR FOLLOW', error);
       }
     } else {
       try {
         await setUnFollow(data, client);
-        console.log('BERHASIL DIUNFOLLOW');
       } catch (error) {
         handleUser(from, !willFollow, item);
-        console.log('HASIL ERROR UNFOLLOW', error);
       }
     }
     if (searchText.length > 0) fetchData();
@@ -186,7 +183,10 @@ const UsersFragment = ({
               image: item.user ? item.user.profile_pic_path : item.profile_pic_path,
               isunfollowed: isUnfollowed,
               description: item.user ? item.user.bio : item.bio,
-              karmaScore: item.user ? item.user.karma_score : item.karma_score
+              karmaScore: item.user ? item.user.karma_score : item.karma_score,
+              comumnityInfo: item.user ? item.user.community_info || [] : item.community_info || [],
+              routeName: route.name,
+              isUser
             }}
           />
         );

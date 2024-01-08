@@ -198,6 +198,7 @@ const DiscoveryScreenV2 = ({route}) => {
           fetchData={fetchDiscoveryData}
           searchText={searchText}
           withoutRecent={route.name === 'Followings'}
+          isUser={true}
         />
       );
 

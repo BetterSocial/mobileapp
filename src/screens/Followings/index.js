@@ -14,6 +14,7 @@ const Followings = ({dataFollower = [], isLoading, setDataFollower = () => {}}) 
         isLoadingDiscoveryUser={isLoading}
         showRecentSearch={true}
         withoutRecent={true}
+        isUser={true}
       />
     </ScrollView>
   );
