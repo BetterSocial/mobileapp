@@ -92,6 +92,15 @@ const UsersFragment = ({
     return newUserLists[indexUser];
   };
 
+  const mapUser = (newUser) => {
+    return discovery.initialUsers.map((user) => {
+      if (user.user) {
+        if (user.user.user_id === newUser.user.user_id) return newUser;
+      } else if (user.user_id === newUser.user_id) return newUser;
+      return user;
+    });
+  };
+
   const handleUser = async (from, willFollow, item) => {
     if (from === FROM_FOLLOWED_USERS_INITIAL || from === FROM_UNFOLLOWED_USERS_INITIAL) {
       const newFollowedUsers = [...users];
@@ -101,15 +110,7 @@ const UsersFragment = ({
         item.user ? item.user.user_id : item.user_id
       );
 
-      DiscoveryAction.setDiscoveryInitialUsers(
-        discovery.initialUsers.map((user) => {
-          if (user.user) {
-            if (user.user.user_id === newUser.user.user_id) return newUser;
-          } else if (user.user_id === newUser.user_id) return newUser;
-          return user;
-        }),
-        discoveryDispatch
-      );
+      DiscoveryAction.setDiscoveryInitialUsers(mapUser(newUser), discoveryDispatch);
     }
 
     if (from === FROM_FOLLOWED_USERS) {

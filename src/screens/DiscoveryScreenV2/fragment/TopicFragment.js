@@ -85,35 +85,28 @@ const TopicFragment = ({
     return newTopicLists[indexTopic];
   };
 
+  const mapTopic = (newTopic) => {
+    return discovery.initialTopics.map((topic) => {
+      if (topic.topic_id === newTopic.topic_id) {
+        return newTopic;
+      }
+      return topic;
+    });
+  };
+
   const handleTopic = (from, willFollow, item, index) => {
     if (from === FROM_FOLLOWED_TOPIC_INITIAL) {
       const newFollowedTopics = [...topics];
       const newTopic = exhangeFollower(newFollowedTopics, willFollow, item.topic_id);
 
-      DiscoveryAction.setDiscoveryInitialTopics(
-        discovery.initialTopics.map((topic) => {
-          if (topic.topic_id === newTopic.topic_id) {
-            return newTopic;
-          }
-          return topic;
-        }),
-        discoveryDispatch
-      );
+      DiscoveryAction.setDiscoveryInitialTopics(mapTopic(newTopic), discoveryDispatch);
     }
 
     if (from === FROM_UNFOLLOWED_TOPIC_INITIAL) {
       const newFollowedTopics = [...topics];
       const newTopic = exhangeFollower(newFollowedTopics, willFollow, item.topic_id);
 
-      DiscoveryAction.setDiscoveryInitialTopics(
-        discovery.initialTopics.map((topic) => {
-          if (topic.topic_id === newTopic.topic_id) {
-            return newTopic;
-          }
-          return topic;
-        }),
-        discoveryDispatch
-      );
+      DiscoveryAction.setDiscoveryInitialTopics(mapTopic(newTopic), discoveryDispatch);
     }
 
     if (from === FROM_FOLLOWED_TOPIC) {
