@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import {StyleSheet, Text, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
-import {useNetInfo} from '@react-native-community/netinfo';
 import DiscoveryAction from '../../../context/actions/discoveryAction';
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import DomainList from '../elements/DiscoveryItemList';
@@ -44,7 +43,6 @@ const UsersFragment = ({
   const [profile] = React.useContext(Context).profile;
   const navigation = useNavigation();
   const [client] = React.useContext(Context).client;
-  const netInfo = useNetInfo();
 
   const route = useRoute();
 
@@ -91,19 +89,28 @@ const UsersFragment = ({
       newUserLists[indexUser].following = !!willFollow;
       newUserLists[indexUser].user_id_follower = myId;
     }
+    return newUserLists[indexUser];
   };
 
-  const handleFollow = async (from, willFollow, item, index) => {
+  const mapUser = (newUser) => {
+    return discovery.initialUsers.map((user) => {
+      if (user.user) {
+        if (user.user.user_id === newUser.user.user_id) return newUser;
+      } else if (user.user_id === newUser.user_id) return newUser;
+      return user;
+    });
+  };
+
+  const handleUser = async (from, willFollow, item) => {
     if (from === FROM_FOLLOWED_USERS_INITIAL || from === FROM_UNFOLLOWED_USERS_INITIAL) {
       const newFollowedUsers = [...users];
-      exhangeFollower(newFollowedUsers, willFollow, item.user ? item.user.user_id : item.user_id);
+      const newUser = exhangeFollower(
+        newFollowedUsers,
+        willFollow,
+        item.user ? item.user.user_id : item.user_id
+      );
 
-      DiscoveryAction.setDiscoveryInitialUsers(newFollowedUsers, discoveryDispatch);
-      if (!netInfo.isConnected)
-        setTimeout(() => {
-          exhangeFollower(newFollowedUsers, !willFollow, index);
-          DiscoveryAction.setDiscoveryInitialUsers(newFollowedUsers, discoveryDispatch);
-        }, 2000);
+      DiscoveryAction.setDiscoveryInitialUsers(mapUser(newUser), discoveryDispatch);
     }
 
     if (from === FROM_FOLLOWED_USERS) {
@@ -111,22 +118,12 @@ const UsersFragment = ({
       exhangeFollower(newFollowedUsers, willFollow, item.user ? item.user.user_id : item.user_id);
 
       setFollowedUsers(newFollowedUsers);
-      if (!netInfo.isConnected)
-        setTimeout(() => {
-          exhangeFollower(newFollowedUsers, !willFollow, index);
-          setFollowedUsers(newFollowedUsers);
-        }, 2000);
     }
 
     if (from === FROM_UNFOLLOWED_USERS) {
       const newUnfollowedUsers = [...unfollowedUsers];
       exhangeFollower(newUnfollowedUsers, willFollow, item.user ? item.user.user_id : item.user_id);
       setUnfollowedUsers(newUnfollowedUsers);
-      if (!netInfo.isConnected)
-        setTimeout(() => {
-          exhangeFollower(newUnfollowedUsers, !willFollow, index);
-          setUnfollowedUsers(newUnfollowedUsers);
-        }, 2000);
     }
 
     if (from === FROM_USERS_INITIAL) {
@@ -134,29 +131,33 @@ const UsersFragment = ({
       exhangeFollower(newFollowedUsers, willFollow, item.user ? item.user.user_id : item.user_id);
 
       setInitialUsers(newFollowedUsers);
-      if (!netInfo.isConnected)
-        setTimeout(() => {
-          exhangeFollower(newFollowedUsers, !willFollow, index);
-          setInitialUsers(newFollowedUsers);
-        }, 2000);
     }
+  };
 
-    if (netInfo.isConnected) {
-      const data = {
-        user_id_follower: myId,
-        user_id_followed: item.user_id,
-        username_follower: profile.myProfile.username,
-        username_followed: item.username,
-        follow_source: 'discoveryScreen'
-      };
+  const handleFollow = async (from, willFollow, item) => {
+    handleUser(from, willFollow, item);
+    const data = {
+      user_id_follower: myId,
+      user_id_followed: item.user ? item.user.user_id : item.user_id,
+      username_follower: profile.myProfile.username,
+      username_followed: item.username,
+      follow_source: 'discoveryScreen'
+    };
 
-      if (willFollow) {
+    if (willFollow) {
+      try {
         await setFollow(data, client);
-      } else {
-        await setUnFollow(data, client);
+      } catch (error) {
+        handleUser(from, !willFollow, item);
       }
-      if (searchText.length > 0) fetchData();
+    } else {
+      try {
+        await setUnFollow(data, client);
+      } catch (error) {
+        handleUser(from, !willFollow, item);
+      }
     }
+    if (searchText.length > 0) fetchData();
   };
 
   const renderDiscoveryItem = (from, key, item, index) => {
@@ -170,8 +171,8 @@ const UsersFragment = ({
         <DomainList
           key={`${key}-${index}`}
           onPressBody={() => handleOnPress(item.user || item)}
-          handleSetFollow={() => handleFollow(from, true, item.user || item, index)}
-          handleSetUnFollow={() => handleFollow(from, false, item.user || item, index)}
+          handleSetFollow={() => handleFollow(from, true, item.user || item)}
+          handleSetUnFollow={() => handleFollow(from, false, item.user || item)}
           item={{
             name: item.user ? item.user.username : item.username,
             image: item.user ? item.user.profile_pic_path : item.profile_pic_path,
