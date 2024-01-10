@@ -1,16 +1,16 @@
+import PropTypes from 'prop-types';
 import * as React from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import SimpleToast from 'react-native-simple-toast';
-import PropTypes from 'prop-types';
-
-import FastImage from 'react-native-fast-image';
-import TopicMemberIcon from '../../../assets/images/topic-member-picture.png';
+import CommunityIcon from '../../../assets/icon/CommunityIcon';
+import {Shimmer} from '../../../components/Shimmer/Shimmer';
 import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
 import {convertString} from '../../../utils/string/StringUtils';
 import {COLORS} from '../../../utils/theme';
 
 const TopicDomainHeader = (props) => {
   const {domain, handleOnMemberPress, hideSeeMember, isFollow, memberCount} = props;
+
   const handlePress = () => {
     if (isFollow) {
       handleOnMemberPress();
@@ -18,23 +18,44 @@ const TopicDomainHeader = (props) => {
       SimpleToast.show('Only community members can see other members', SimpleToast.SHORT);
     }
   };
+  const shouldDisplay = !(props.topicDetail?.cover_path?.length > 0)
+    ? false
+    : props.hasSearch
+    ? props.topicDetail?.cover_path?.length > 0
+    : props.isHeaderHide;
 
   return (
     <View>
-      <Text style={styles.domainText} numberOfLines={1} ellipsizeMode="tail">
+      <Text style={styles.domainText(shouldDisplay)} numberOfLines={1} ellipsizeMode="tail">
         {`#${convertString(domain, ' ', '')}`}
       </Text>
-      <Pressable onPress={handlePress} style={{backgroundColor: 'transparent'}}>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <FastImage testID="imageTopicMember" source={TopicMemberIcon} style={styles.member} />
-          <Text style={styles.domainMember}>{memberCount} Members</Text>
-        </View>
-        {isFollow && !hideSeeMember && (
-          <Text style={styles.seeMemberText} numberOfLines={1} ellipsizeMode="tail">
-            See community member
-          </Text>
+      <View style={{flexDirection: 'row', alignItems: 'center', marginTop: normalize(1)}}>
+        <CommunityIcon
+          color={shouldDisplay ? COLORS.white : undefined}
+          style={{
+            marginRight: normalize(5),
+            height: normalize(8)
+          }}
+        />
+        {memberCount === undefined && props.isLoading ? (
+          <Shimmer height={10} width={normalize(25)} />
+        ) : (
+          <Text style={styles.domainMember(shouldDisplay)}>{memberCount}</Text>
         )}
-      </Pressable>
+        <Text style={styles.domainMember(shouldDisplay)}> Members</Text>
+      </View>
+      {props?.initialData?.memberCount === undefined && props.isLoading ? (
+        <Shimmer height={10} width={normalize(60)} />
+      ) : (
+        isFollow &&
+        !hideSeeMember && (
+          <Pressable onPress={handlePress} style={{backgroundColor: 'transparent'}}>
+            <Text style={styles.seeMemberText} numberOfLines={1} ellipsizeMode="tail">
+              See community members
+            </Text>
+          </Pressable>
+        )
+      )}
     </View>
   );
 };
@@ -44,33 +65,35 @@ TopicDomainHeader.propTypes = {
   handleOnMemberPress: PropTypes.func,
   hideSeeMember: PropTypes.bool,
   isFollow: PropTypes.bool,
-  memberCount: PropTypes.number
+  memberCount: PropTypes.number,
+  isLoading: PropTypes.bool
 };
 
 const styles = StyleSheet.create({
-  domainText: {
+  domainText: (isHeaderHide) => ({
     fontSize: normalizeFontSize(16),
     fontFamily: fonts.inter[600],
     textAlign: 'left',
-    color: COLORS.black,
+    color: isHeaderHide ? COLORS.white : COLORS.black,
     backgroundColor: 'transparent'
-  },
+  }),
   member: {
     width: normalize(16),
     height: normalize(16),
     marginRight: normalize(5)
   },
-  domainMember: {
+  domainMember: (isHeaderHide) => ({
     fontSize: normalizeFontSize(12),
     fontFamily: fonts.inter[400],
     textAlign: 'left',
-    color: COLORS.blackgrey
-  },
+    color: isHeaderHide ? COLORS.white : COLORS.blackgrey
+  }),
   seeMemberText: {
     fontSize: normalizeFontSize(12),
     fontFamily: fonts.inter[500],
     textAlign: 'left',
-    color: COLORS.signed_primary
+    color: COLORS.blue,
+    marginTop: normalize(1)
   }
 });
 

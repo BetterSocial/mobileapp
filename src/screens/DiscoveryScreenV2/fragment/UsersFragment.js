@@ -163,7 +163,7 @@ const UsersFragment = ({
   const renderUsersItem = () => {
     if (isFirstTimeOpen) {
       if (withoutRecent) {
-        if (initialUsers.length !== 0) {
+        if (initialUsers.length !== 0 || route.name === 'TopicMemberScreen') {
           return [
             initialUsers.map((item, index) =>
               renderDiscoveryItem(FROM_USERS_INITIAL, 'topicUsers', item, index)

@@ -4,7 +4,11 @@ exports[`Testing Button Add Topic Post should match snapshot 1`] = `
 <View
   style={
     Object {
-      "backgroundColor": "#1E1F20",
+      "backgroundColor": "#0000",
+      "bottom": 27,
+      "position": "absolute",
+      "right": 0,
+      "zIndex": 99,
     }
   }
 >

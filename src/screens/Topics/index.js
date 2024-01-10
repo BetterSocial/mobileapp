@@ -173,7 +173,7 @@ const Topics = () => {
             <Button
               onPress={() => next()}
               disabled={!(topicSelected.length >= minTopic)}
-              style={topicSelected.length >= minTopic ? null : styles.button}>
+              styles={topicSelected.length >= minTopic ? null : styles.button}>
               {topicSelected.length >= minTopic
                 ? StringConstant.onboardingTopicsButtonStateNext
                 : StringConstant.onboardingTopicsButtonStateChooseMore(

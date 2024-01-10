@@ -119,7 +119,7 @@ when friends send you messages.`,
   }, [isFocused]);
 
   return (
-    <>
+    <View>
       <StatusBar translucent={false} />
       <FlatList
         data={[]}
@@ -169,7 +169,7 @@ when friends send you messages.`,
           </>
         }
       />
-    </>
+    </View>
   );
 };
 

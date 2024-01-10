@@ -248,8 +248,6 @@ const styles = StyleSheet.create({
   clearIconContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: dimen.normalizeDimen(-20.5),
-    paddingHorizontal: dimen.normalizeDimen(30),
     zIndex: 1000
   },
   searchContainer: {
