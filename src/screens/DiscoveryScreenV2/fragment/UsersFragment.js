@@ -10,7 +10,6 @@ import DomainList from '../elements/DiscoveryItemList';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import RecentSearch from '../elements/RecentSearch';
 import StringConstant from '../../../utils/string/StringConstant';
-import useIsReady from '../../../hooks/useIsReady';
 import {COLORS} from '../../../utils/theme';
 import {Context} from '../../../context/Store';
 import {colors} from '../../../utils/colors';
@@ -48,8 +47,6 @@ const UsersFragment = ({
   const route = useRoute();
 
   const [myId, setMyId] = React.useState('');
-
-  const isReady = useIsReady();
 
   const users = React.useMemo(() => {
     return discovery.initialUsers.map((item) => ({
@@ -232,8 +229,6 @@ const UsersFragment = ({
       </>
     );
   };
-
-  if (!isReady) return <></>;
 
   if (isLoadingDiscoveryUser)
     return (

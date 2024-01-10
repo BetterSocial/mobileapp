@@ -9,7 +9,7 @@ import BlurredLayerToast from './BlurredLayerToast';
 
 const BlurredLayerContent = ({onPressContent}) => {
   return (
-    <TouchableOpacity style={styles.container} activeOpacity={1} onPress={onPressContent}>
+    <TouchableOpacity style={styles.container} onPress={onPressContent}>
       <IconSecurityLock />
       <Text style={styles.infoText}>
         To protect the privacy of your connections, you need to follow at least 7 users to see
@@ -24,7 +24,7 @@ const BlurredLayer = ({layerOnly, blurType = 'dark', toastOnly, withToast, onPre
   return toastOnly ? (
     <BlurredLayerToast />
   ) : (
-    <BlurView style={styles.containerBlur} blurType={blurType}>
+    <BlurView style={styles.containerBlur} blurType={blurType} blurAmount={4}>
       {withToast && <BlurredLayerToast />}
       {!layerOnly && <BlurredLayerContent onPressContent={onPressContent} />}
     </BlurView>

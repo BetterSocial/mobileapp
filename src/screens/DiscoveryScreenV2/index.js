@@ -22,7 +22,6 @@ import {
 } from '../../utils/constants';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import {withInteractionsManagedNoStatusBar} from '../../components/WithInteractionManaged';
 import FollowingAction from '../../context/actions/following';
 import {Header} from '../../components';
 
@@ -335,7 +334,7 @@ DiscoveryScreenV2.propTypes = {
   route: PropTypes.object
 };
 
-export default withInteractionsManagedNoStatusBar(DiscoveryScreenV2);
+export default DiscoveryScreenV2;
 
 const DiscoveryContainer = ({children}) => {
   if (Platform.OS === 'ios') return <>{children}</>;

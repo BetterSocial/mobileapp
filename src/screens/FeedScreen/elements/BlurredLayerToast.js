@@ -5,7 +5,6 @@ import ToastMessage from 'react-native-toast-message';
 const BlurredLayerToast = () => {
   return (
     <TouchableOpacity
-      activeOpacity={1}
       style={styles.container}
       onPress={() =>
         ToastMessage.show({
