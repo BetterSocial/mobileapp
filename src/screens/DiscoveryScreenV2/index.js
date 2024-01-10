@@ -22,7 +22,6 @@ import {
   DISCOVERY_TAB_USERS
 } from '../../utils/constants';
 import {fonts} from '../../utils/fonts';
-import {withInteractionsManagedNoStatusBar} from '../../components/WithInteractionManaged';
 import {Header} from '../../components';
 import {COLORS} from '../../utils/theme';
 
@@ -335,7 +334,7 @@ DiscoveryScreenV2.propTypes = {
   route: PropTypes.object
 };
 
-export default withInteractionsManagedNoStatusBar(DiscoveryScreenV2);
+export default DiscoveryScreenV2;
 
 const DiscoveryContainer = ({children}) => {
   if (Platform.OS === 'ios') return <>{children}</>;

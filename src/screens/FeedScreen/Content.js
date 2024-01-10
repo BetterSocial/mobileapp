@@ -8,9 +8,15 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 
 import ContentPoll from './ContentPoll';
 import ImageLayouter from './elements/ImageLayouter';
+import BlurredLayer from './elements/BlurredLayer';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import {COLORS} from '../../utils/theme';
-import {POST_TYPE_LINK, POST_TYPE_POLL, POST_TYPE_STANDARD} from '../../utils/constants';
+import {
+  DISCOVERY_TAB_USERS,
+  POST_TYPE_LINK,
+  POST_TYPE_POLL,
+  POST_TYPE_STANDARD
+} from '../../utils/constants';
 import {fonts, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
 import useCalculationContent from './hooks/useCalculationContent';
@@ -41,7 +47,8 @@ const Content = ({
     heightTopic,
     amountLineTopic,
     onPollLayout,
-    heightPoll
+    heightPoll,
+    handleMarginVertical
   } = useCalculationContent();
   const [amountCut, setAmountCut] = React.useState(0);
   const [textCut, setTextCut] = React.useState(null);
@@ -233,49 +240,81 @@ const Content = ({
     onLayoutTopicChip(nativeEvent, lineHeight);
   };
 
+  const handleBlurredContent = () => {
+    navigation.navigate('DiscoveryScreen', {
+      tab: DISCOVERY_TAB_USERS
+    });
+  };
+
   return (
     <Pressable
       onLayout={hanldeHeightContainer}
       onPress={onPress}
       style={[styles.contentFeed(hasComment), style]}>
-      {message?.length > 0 ? (
-        <View>
-          <View
-            style={[
-              styles.containerMainText(handleContainerText().isShort),
-              handleContainerText().container
-            ]}>
-            {renderHandleTextContent()}
+      <BlurredLayer
+        withToast={true}
+        onPressContent={handleBlurredContent}
+        isVisible={item?.isBlurredPost}>
+        {message?.length > 0 ? (
+          <View>
+            <View
+              style={[
+                styles.containerMainText(handleContainerText().isShort),
+                {marginVertical: handleMarginVertical(message)}
+              ]}>
+              <ContentPoll
+                message={item.message}
+                images_url={item.images_url}
+                polls={item.pollOptions}
+                item={item}
+                pollexpiredat={item.polls_expired_at}
+                multiplechoice={item.multiplechoice}
+                isAlreadyPolling={item.isalreadypolling}
+                onnewpollfetched={onNewPollFetched}
+                voteCount={item.voteCount}
+                topics={item?.topics}
+                onLayout={onPollLayout}
+              />
+            </View>
           </View>
-        </View>
-      ) : null}
+        ) : null}
+        {images_url.length > 0 && (
+          <View style={[styles.containerImage]}>
+            <ImageLayouter
+              isFeed={true}
+              images={images_url}
+              onimageclick={() => onPress(showSeeMore)}
+            />
+          </View>
+        )}
 
-      {item && item.post_type === POST_TYPE_POLL ? (
-        <View style={styles.containerMainText(handleContainerText().isShort)}>
-          <ContentPoll
-            message={item.message}
-            images_url={item.images_url}
-            polls={item.pollOptions}
-            item={item}
-            pollexpiredat={item.polls_expired_at}
-            multiplechoice={item.multiplechoice}
-            isAlreadyPolling={item.isalreadypolling}
-            onnewpollfetched={onNewPollFetched}
-            voteCount={item.voteCount}
-            topics={item?.topics}
-            onLayout={onPollLayout}
-          />
-        </View>
-      ) : null}
-      {images_url.length > 0 && (
-        <View style={styles.containerImage}>
-          <ImageLayouter
-            isFeed={true}
-            images={images_url}
-            onimageclick={() => onPress(showSeeMore)}
-          />
-        </View>
-      )}
+        {item && item.post_type === POST_TYPE_POLL ? (
+          <View style={styles.containerMainText(handleContainerText().isShort)}>
+            <ContentPoll
+              message={item.message}
+              images_url={item.images_url}
+              polls={item.pollOptions}
+              item={item}
+              pollexpiredat={item.polls_expired_at}
+              multiplechoice={item.multiplechoice}
+              isAlreadyPolling={item.isalreadypolling}
+              onnewpollfetched={onNewPollFetched}
+              voteCount={item.voteCount}
+              topics={item?.topics}
+              onLayout={onPollLayout}
+            />
+          </View>
+        ) : null}
+        {images_url.length > 0 && (
+          <View style={styles.containerImage}>
+            <ImageLayouter
+              isFeed={true}
+              images={images_url}
+              onimageclick={() => onPress(showSeeMore)}
+            />
+          </View>
+        )}
+      </BlurredLayer>
 
       <TopicsChip
         onLayout={calculateLineTopicChip}
