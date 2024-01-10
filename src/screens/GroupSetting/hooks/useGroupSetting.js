@@ -6,7 +6,7 @@ import StringConstant from '../../../utils/string/StringConstant';
 import {Context} from '../../../context';
 import {getChatName} from '../../../utils/string/StringUtils';
 import {requestExternalStoragePermission} from '../../../utils/permission';
-import {uploadFile} from '../../../service/file';
+import ImageUtils from '../../../utils/image';
 
 const useGroupSetting = ({navigation, route}) => {
   const [groupChatState] = React.useContext(Context).groupChat;
@@ -41,7 +41,7 @@ const useGroupSetting = ({navigation, route}) => {
     if (changeImage) {
       if (withLoading) setIsLoading(true);
       try {
-        const res = await uploadFile(`data:image/jpeg;base64,${base64Profile}`);
+        const res = await ImageUtils.uploadImage(urlImage);
         changeImageUrl = res.data.url;
       } catch (e) {
         setIsLoading(false);
@@ -63,7 +63,6 @@ const useGroupSetting = ({navigation, route}) => {
       } else if (channel?.data?.image) {
         dataEdit.image = channel?.data?.image;
       }
-      console.log({dataEdit}, 'nusu');
       updateDataEdit(dataEdit, withNavigation);
     } else if (withNavigation) navigation.goBack();
   };
