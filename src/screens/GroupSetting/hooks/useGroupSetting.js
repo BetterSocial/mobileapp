@@ -6,6 +6,7 @@ import StringConstant from '../../../utils/string/StringConstant';
 import {Context} from '../../../context';
 import {getChatName} from '../../../utils/string/StringUtils';
 import {requestExternalStoragePermission} from '../../../utils/permission';
+import {uploadFile} from '../../../service/file';
 import ImageUtils from '../../../utils/image';
 
 const useGroupSetting = ({navigation, route}) => {
