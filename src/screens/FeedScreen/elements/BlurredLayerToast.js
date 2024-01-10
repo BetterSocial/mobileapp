@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import ToastMessage from 'react-native-toast-message';
 
-const BlurredLayerToast = () => {
+const BlurredLayerToast = ({children}) => {
   return (
     <TouchableOpacity
       style={styles.container}
@@ -12,19 +12,15 @@ const BlurredLayerToast = () => {
           text1: 'Follow more users to enable interactions with anonymous posts',
           position: 'bottom'
         })
-      }
-    />
+      }>
+      {children}
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '200%',
-    zIndex: 11
+    width: '100%'
   }
 });
 export default React.memo(BlurredLayerToast);
