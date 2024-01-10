@@ -26,7 +26,7 @@ export const COLORS = {
   white: '#FFFFFF',
   whiteSmoke: '#F4F4F4',
 
-  //need to remove
+  // need to remove
   holytosca: '#00ADB5',
   holyTosca: '#00ADB5',
   holytosca30percent: '#00ADB54D',

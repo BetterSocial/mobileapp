@@ -121,6 +121,7 @@ const SignedChatScreen = () => {
           }
         />
       </View>
+      <Loading visible={loading} />
     </View>
   );
 };
