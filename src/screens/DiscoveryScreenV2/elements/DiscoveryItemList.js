@@ -12,6 +12,7 @@ import {colors} from '../../../utils/colors';
 import {fonts, normalize} from '../../../utils/fonts';
 import {CircleGradient} from '../../../components/Karma/CircleGradient';
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
+import ProfilePicture from '../../ProfileScreen/elements/ProfilePicture';
 
 const renderDefaultImage = (DefaultImage) => {
   if (DefaultImage) {
@@ -31,7 +32,8 @@ const DomainList = (props) => {
     onPressBody,
     DefaultImage,
     isCommunity,
-    isBlockedSection
+    isBlockedSection,
+    withKarma
   } = props;
 
   const renderButonAction = () => {
@@ -80,34 +82,13 @@ const DomainList = (props) => {
   };
 
   const renderProfilePicture = () => {
-    if (item.karmaScore) {
-      return (
-        <CircleGradient
-          testId="images"
-          fill={item.karmaScore}
-          size={normalize(51)}
-          width={normalize(3)}>
-          <Image
-            testId="images"
-            source={{
-              uri: item.image
-            }}
-            style={styles.profilepicture}
-            width={48}
-            height={48}
-          />
-        </CircleGradient>
-      );
-    }
     return (
-      <Image
-        testId="images"
-        source={{
-          uri: item.image
-        }}
-        style={styles.profilepicture}
-        width={48}
-        height={48}
+      <ProfilePicture
+        profilePicPath={item.image}
+        karmaScore={item.karmaScore}
+        size={51}
+        width={3}
+        withKarma={withKarma}
       />
     );
   };

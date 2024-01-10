@@ -103,6 +103,7 @@ const Header = (props) => {
             onImageContainerClick={changeImage}
             profilePicPath={dataMain.profile_pic_path}
             karmaScore={dataMain.karma_score}
+            withKarma={true}
           />
           <View
             style={{
