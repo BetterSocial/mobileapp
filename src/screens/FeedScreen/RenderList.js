@@ -21,6 +21,7 @@ import {Footer, Gap, PreviewComment} from '../../components';
 import {colors} from '../../utils/colors';
 import {getCommentLength} from '../../utils/getstream';
 import {normalizeFontSizeByWidth} from '../../utils/fonts';
+import BlurredLayer from './elements/BlurredLayer';
 import {showScoreAlertDialog} from '../../utils/Utils';
 
 const tabBarHeight = StatusBar.currentHeight;
@@ -188,6 +189,7 @@ const RenderListFeed = (props) => {
               />
               <Gap height={8} />
             </React.Fragment>
+            {item?.isBlurredPost && <BlurredLayer layerOnly blurType="light" withToast={true} />}
           </View>
         )}
       </View>

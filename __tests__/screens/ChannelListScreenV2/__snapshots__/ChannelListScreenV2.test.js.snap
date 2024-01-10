@@ -20,7 +20,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
         </View>
         <HorizontalTab
           onSelectedTabChange={[Function]}
-          selectedTab={0}
+          selectedTab={Object {}}
           tabs={
             Array [
               <Memo(ChannelListTabItem)
@@ -46,7 +46,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
         <View
           style={
             Object {
-              "display": "flex",
+              "display": "none",
             }
           }
         >
@@ -237,20 +237,15 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
             collapsable={false}
             focusable={true}
             style={
-              Array [
-                Object {
-                  "alignItems": "center",
-                  "borderBottomWidth": 2,
-                  "display": "flex",
-                  "flex": 1,
-                  "height": 48,
-                  "justifyContent": "center",
-                  "opacity": 1,
-                },
-                Object {
-                  "borderBottomColor": "#2C67BC",
-                },
-              ]
+              Object {
+                "alignItems": "center",
+                "borderBottomColor": "#00ADB5",
+                "display": "flex",
+                "flex": 1,
+                "height": 48,
+                "justifyContent": "center",
+                "opacity": 0.1,
+              }
             }
           >
             <View
@@ -422,7 +417,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
         <View
           style={
             Object {
-              "display": "flex",
+              "display": "none",
             }
           }
         />

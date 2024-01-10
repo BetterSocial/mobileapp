@@ -11,8 +11,10 @@ import MemoIc_comment from '../../assets/icons/Ic_comment';
 import MemoIc_share from '../../assets/icons/Ic_share';
 import Memoic_globe from '../../assets/icons/ic_globe';
 import {FONTS} from '../../utils/theme';
+import BlurredLayer from '../../screens/FeedScreen/elements/BlurredLayer';
 
 const Footer = ({
+  item,
   onPressShare,
   onPressComment,
   totalComment,
@@ -133,6 +135,8 @@ const Footer = ({
           </View>
         </TouchableOpacity>
       </View>
+
+      {item?.isBlurredPost && <BlurredLayer toastOnly={true} />}
     </View>
   );
 };
