@@ -22,7 +22,6 @@ import {normalize} from '../../../utils/fonts';
 import useChatClientHook from '../../../utils/getstream/useChatClientHook';
 import Search from '../../DiscoveryScreenV2/elements/Search';
 import {COLORS} from '../../../utils/theme';
-import ChannelImage from '../../../components/ChatList/elements/ChannelImage';
 import ButtonFollow from './ButtonFollow';
 import ButtonFollowing from './ButtonFollowing';
 import TopicDomainHeader from './TopicDomainHeader';
@@ -174,14 +173,7 @@ const NavHeader = (props) => {
         </View>
         {!hasSearch && (
           <>
-            <Animated.View style={{opacity: opacityHeaderAnimation}}>
-              {topicDetail?.icon_path ? (
-                <FastImage source={{uri: topicDetail?.icon_path}} style={styles.image} />
-              ) : (
-                <ChannelImage.Big type={'COMMUNITY'} />
-              )}
-            </Animated.View>
-            <View style={styles.containerAction}>
+            <View style={[styles.headerContainer]}>
               <Animated.View style={{opacity: opacityHeaderAnimation}}>
                 <FastImage
                   source={
