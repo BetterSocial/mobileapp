@@ -75,8 +75,9 @@ import {getSpecificCache} from '../../utils/cache';
 import {getUrl, isContainUrl} from '../../utils/Utils';
 import {getUserId} from '../../utils/users';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
-import {uploadPhoto} from '../../service/file';
 import {COLORS} from '../../utils/theme';
+import ImageUtils from '../../utils/image';
+import ImageCompressionUtils from '../../utils/image/compress';
 
 const IS_GEO_SELECT_ENABLED = false;
 
@@ -309,20 +310,13 @@ const CreatePost = () => {
 
   const uploadPhotoImage = async (pathImg) => {
     try {
-      const compressionResult = await Image.compress(pathImg, {
-        compressionMethod: 'auto'
-      });
-
+      const compressionResult = await ImageCompressionUtils.compress(pathImg);
       const newArr = {
         id: mediaStorage.length,
         data: compressionResult
       };
 
-      const asset = new FormData();
-      asset.append('photo', composeImageMeta(compressionResult));
-
-      const responseUpload = await uploadPhoto(asset);
-
+      const responseUpload = await ImageUtils.uploadImage(pathImg);
       setMediaStorage((val) => [...val, newArr]);
       setDataImage((val) => [...val, responseUpload.data.url]);
       sheetMediaRef.current.close();
