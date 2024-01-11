@@ -5,7 +5,7 @@ import Migration from './migration.types';
 
 const TABLE_NAME = ChatSchema.getTableName();
 
-class MigrationVersion8 implements Migration {
+class MigrationVersion16 implements Migration {
   up = async (db: SQLiteDatabase): Promise<void> => {
     const upQuery = `ALTER TABLE ${TABLE_NAME}
       ADD COLUMN attachment_json TEXT DEFAULT NULL;`;
@@ -23,4 +23,4 @@ class MigrationVersion8 implements Migration {
   };
 }
 
-export default new MigrationVersion8();
+export default new MigrationVersion16();
