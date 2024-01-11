@@ -153,7 +153,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
     setChannelAsRead(channel);
     if (channel?.channelType === ANON_PM) {
       setSelectedChannelKey(1);
-      return openChat('SampleChatScreen');
+      return navigation.push('AnonymousChatScreen');
     }
     setSelectedChannelKey(0);
     return openChat('SignedChatScreen');

@@ -1,21 +1,13 @@
 import React from 'react';
 
-import {KeyboardAvoidingView, Platform} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {KeyboardAvoidingView} from 'react-native';
 
 type Props = {
   children: React.ReactNode;
 };
 
 const KeyboardWrapper = ({children}: Props): JSX.Element => {
-  const isIos = Platform.OS === 'ios';
-  const insets = useSafeAreaInsets();
-
-  return (
-    <KeyboardAvoidingView style={{flex: 1}} behavior={isIos ? 'padding' : undefined}>
-      {children}
-    </KeyboardAvoidingView>
-  );
+  return <KeyboardAvoidingView style={{flex: 1}}>{children}</KeyboardAvoidingView>;
 };
 
 export default KeyboardWrapper;

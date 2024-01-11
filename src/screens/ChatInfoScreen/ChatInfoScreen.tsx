@@ -2,9 +2,9 @@
 /* eslint-disable import/extensions */
 /* eslint-disable import/no-unresolved */
 
-import * as React from 'react';
-import FastImage from 'react-native-fast-image';
+import {useRoute} from '@react-navigation/core';
 import moment from 'moment';
+import * as React from 'react';
 import {
   FlatList,
   Image,
@@ -16,26 +16,25 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import {useRoute} from '@react-navigation/core';
+import FastImage from 'react-native-fast-image';
 
-import AnonymousChatInfoHeader from '../../components/Header/AnonymousChatInfoHeader';
-import AnonymousIcon from '../ChannelListScreen/elements/components/AnonymousIcon';
+import MemoIc_pencil from '../../assets/icons/Ic_pencil';
+import {Loading} from '../../components';
 import BlockComponent from '../../components/BlockComponent';
 import ChannelImage from '../../components/ChatList/elements/ChannelImage';
-import MemoIc_pencil from '../../assets/icons/Ic_pencil';
-import ModalAction from '../GroupInfo/elements/ModalAction';
-import ModalActionAnonymous from '../GroupInfo/elements/ModalActionAnonymous';
-import dimen from '../../utils/dimen';
-import useChatInfoScreenHook from '../../hooks/screen/useChatInfoHook';
+import {channelImageStyles} from '../../components/ChatList/elements/ChannelImage.style';
+import AnonymousChatInfoHeader from '../../components/Header/AnonymousChatInfoHeader';
+import {ProfileContact} from '../../components/Items';
+import {Context} from '../../context';
 import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
 import {CHANNEL_GROUP, GROUP_INFO, SIGNED} from '../../hooks/core/constant';
-import {COLORS} from '../../utils/theme';
-import {Context} from '../../context';
-import {Loading} from '../../components';
-import {ProfileContact} from '../../components/Items';
+import useChatInfoScreenHook from '../../hooks/screen/useChatInfoHook';
+import dimen from '../../utils/dimen';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
-import {getChatName} from '../../utils/string/StringUtils';
-import {isContainUrl} from '../../utils/Utils';
+import {COLORS} from '../../utils/theme';
+import AnonymousIcon from '../ChannelListScreen/elements/components/AnonymousIcon';
+import ModalAction from '../GroupInfo/elements/ModalAction';
+import ModalActionAnonymous from '../GroupInfo/elements/ModalActionAnonymous';
 
 export const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: COLORS.white, paddingBottom: 40},

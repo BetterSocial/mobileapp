@@ -59,8 +59,8 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
     return navigation.push('OtherProfile', {
       data: {
         user_id: myUserId?.myProfile?.user_id,
-        other_id: item?.user_id,
-        username: item?.user?.name
+        other_id: item?.user_id || item?.userId,
+        username: item?.user?.name || item?.user?.username
       }
     });
   };
