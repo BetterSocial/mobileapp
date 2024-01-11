@@ -16,6 +16,8 @@ jest.mock('@react-navigation/core', () => ({
 }));
 
 describe('ButtonNewPost should run correctly', () => {
+  // eslint-disable-next-line no-import-assign
+  React.hasOwnProperty = () => Object.hasOwnProperty;
   const mockContext = jest.spyOn(React, 'useContext');
   const mockTiming = jest.fn();
   beforeEach(() => {

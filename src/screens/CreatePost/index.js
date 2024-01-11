@@ -60,7 +60,6 @@ import {
 } from '../../utils/constants';
 import {PROFILE_CACHE} from '../../utils/cache/constant';
 import {ShowingAudience, createPost} from '../../service/post';
-import {colors} from '../../utils/colors';
 import {composeImageMeta} from '../../utils/string/file';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {
@@ -76,7 +75,7 @@ import {getSpecificCache} from '../../utils/cache';
 import {getUrl, isContainUrl} from '../../utils/Utils';
 import {getUserId} from '../../utils/users';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
-import {uploadPhoto} from '../../service/file';
+import {COLORS} from '../../utils/theme';
 import ImageUtils from '../../utils/image';
 import ImageCompressionUtils from '../../utils/image/compress';
 
@@ -718,7 +717,7 @@ const CreatePost = () => {
       animatedReminder.setValue(0);
     }
   }, [typeUser]);
-
+  console.log({typeUser}, 'heja');
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -825,7 +824,7 @@ const CreatePost = () => {
             </>
           )}
           <Gap style={styles.height(25)} />
-          <Button disabled={isButtonDisabled()} onPress={postV2}>
+          <Button styles={styles.btnPost(typeUser)} disabled={isButtonDisabled()} onPress={postV2}>
             Post
           </Button>
           <Gap style={styles.height(18)} />
@@ -882,11 +881,11 @@ export default CreatePost;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.white,
     position: 'relative'
   },
   input: {
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     paddingVertical: 16,
     paddingHorizontal: 12,
     minHeight: 100,
@@ -894,23 +893,23 @@ const styles = StyleSheet.create({
     overflow: 'scroll'
   },
   hastagText: {
-    color: colors.gray1,
+    color: COLORS.lightgrey,
     fontSize: 14,
     fontFamily: fonts.inter[400]
   },
   listText: {
-    color: colors.black,
+    color: COLORS.black,
     fontSize: 14,
     fontFamily: fonts.inter[400]
   },
   label: {
-    color: colors.black,
+    color: COLORS.black,
     fontFamily: fonts.inter[600],
     fontWeight: 'bold'
   },
   desc: {fontSize: 14, fontFamily: fonts.poppins[400]},
   labelButtonAddMedia: {
-    color: colors.black,
+    color: COLORS.black,
     fontFamily: fonts.inter[600],
     fontSize: 14,
     fontWeight: 'bold'
@@ -923,7 +922,7 @@ const styles = StyleSheet.create({
     paddingBottom: 13
   },
   userTarget: {
-    color: colors.bondi_blue,
+    color: COLORS.bondi_blue,
     fontSize: 14,
     fontFamily: fonts.poppins[400]
   },
@@ -931,7 +930,7 @@ const styles = StyleSheet.create({
     height
   }),
   reminderContainer: {
-    backgroundColor: '#2F80ED',
+    backgroundColor: COLORS.anon_primary,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 7,
@@ -939,8 +938,11 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 10
   },
   whiteText: {
-    color: 'white',
+    color: COLORS.white,
     fontSize: normalizeFontSize(10),
     textAlign: 'center'
-  }
+  },
+  btnPost: (isAnonym) => ({
+    backgroundColor: isAnonym ? COLORS.anon_primary : COLORS.signed_primary
+  })
 });

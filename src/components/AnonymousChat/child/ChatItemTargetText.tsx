@@ -2,8 +2,8 @@ import * as React from 'react';
 import {Dimensions, StyleSheet, Text, View} from 'react-native';
 
 import {ChatItemMyTextProps} from '../../../../types/component/AnonymousChat/BaseChatItem.types';
-import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
+import {COLORS} from '../../../utils/theme';
 
 const {width} = Dimensions.get('screen');
 const styles = StyleSheet.create({
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   textContainer: {
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     paddingLeft: 8,
     paddingRight: 8,
     paddingTop: 4,
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     marginLeft: 5,
     marginRight: 5,
-    backgroundColor: colors.black,
+    backgroundColor: COLORS.black,
     alignSelf: 'center'
   },
   timeText: {

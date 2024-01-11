@@ -1,8 +1,8 @@
 import * as React from 'react';
 import {StyleSheet, TextInput} from 'react-native';
 
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
 
 const TextArea = ({
   textAlignVertical = 'top',
@@ -11,7 +11,7 @@ const TextArea = ({
   onChangeText = () => {},
   value = '',
   style = {},
-  onRef = (ref) => {},
+  onRef = (ref) => {}
 }) => {
   let textRef = React.useRef();
   React.useEffect(() => {
@@ -34,7 +34,7 @@ const TextArea = ({
 
 const styles = StyleSheet.create({
   input: {
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     paddingVertical: 16,
     paddingHorizontal: 12,
     height: 150,
@@ -43,8 +43,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     fontFamily: fonts.inter[500],
     fontSize: 14,
-    color: colors.black,
-    lineHeight: 24,
-  },
+    color: COLORS.black,
+    lineHeight: 24
+  }
 });
 export default TextArea;

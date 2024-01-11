@@ -233,6 +233,7 @@ Array [
             style={
               Object {
                 "backgroundColor": "#F5F6F7",
+                "backgroundColor": "#F5F6F7",
                 "margin": 16,
                 "padding": 16,
               }
@@ -431,7 +432,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#E8EBED",
+                    "backgroundColor": "#828282",
                     "height": 2,
                     "width": "100%",
                   }
@@ -471,7 +472,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#E8EBED",
+                    "backgroundColor": "#828282",
                     "height": 2,
                     "width": "100%",
                   }
@@ -486,6 +487,46 @@ Array [
                 }
               >
                 halofajarism
+              </Text>
+            </View>
+          </View>
+          <View
+            testID="dev-dummy-login-fajarus1"
+          >
+            <View
+              accessible={true}
+              focusable={true}
+              onClick={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                Object {
+                  "opacity": 1,
+                }
+              }
+            >
+              <View
+                style={
+                  Object {
+                    "backgroundColor": "#828282",
+                    "height": 2,
+                    "width": "100%",
+                  }
+                }
+              />
+              <Text
+                style={
+                  Object {
+                    "paddingHorizontal": 16,
+                    "paddingVertical": 8,
+                  }
+                }
+              >
+                fajarus1
               </Text>
             </View>
           </View>
@@ -511,7 +552,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#E8EBED",
+                    "backgroundColor": "#828282",
                     "height": 2,
                     "width": "100%",
                   }
@@ -551,7 +592,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#E8EBED",
+                    "backgroundColor": "#828282",
                     "height": 2,
                     "width": "100%",
                   }
@@ -591,7 +632,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#E8EBED",
+                    "backgroundColor": "#828282",
                     "height": 2,
                     "width": "100%",
                   }
@@ -631,7 +672,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#E8EBED",
+                    "backgroundColor": "#828282",
                     "height": 2,
                     "width": "100%",
                   }
@@ -671,7 +712,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#E8EBED",
+                    "backgroundColor": "#828282",
                     "height": 2,
                     "width": "100%",
                   }
@@ -711,7 +752,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#E8EBED",
+                    "backgroundColor": "#828282",
                     "height": 2,
                     "width": "100%",
                   }
@@ -751,7 +792,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#E8EBED",
+                    "backgroundColor": "#828282",
                     "height": 2,
                     "width": "100%",
                   }
@@ -791,7 +832,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#E8EBED",
+                    "backgroundColor": "#828282",
                     "height": 2,
                     "width": "100%",
                   }
@@ -831,7 +872,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#E8EBED",
+                    "backgroundColor": "#828282",
                     "height": 2,
                     "width": "100%",
                   }
@@ -871,7 +912,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#E8EBED",
+                    "backgroundColor": "#828282",
                     "height": 2,
                     "width": "100%",
                   }
@@ -911,7 +952,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#E8EBED",
+                    "backgroundColor": "#828282",
                     "height": 2,
                     "width": "100%",
                   }
@@ -951,7 +992,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#E8EBED",
+                    "backgroundColor": "#828282",
                     "height": 2,
                     "width": "100%",
                   }
@@ -991,7 +1032,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#E8EBED",
+                    "backgroundColor": "#828282",
                     "height": 2,
                     "width": "100%",
                   }
@@ -1031,7 +1072,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#E8EBED",
+                    "backgroundColor": "#828282",
                     "height": 2,
                     "width": "100%",
                   }
@@ -1071,7 +1112,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#E8EBED",
+                    "backgroundColor": "#828282",
                     "height": 2,
                     "width": "100%",
                   }
@@ -1111,7 +1152,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#E8EBED",
+                    "backgroundColor": "#828282",
                     "height": 2,
                     "width": "100%",
                   }
@@ -1151,7 +1192,7 @@ Array [
               <View
                 style={
                   Object {
-                    "backgroundColor": "#E8EBED",
+                    "backgroundColor": "#828282",
                     "height": 2,
                     "width": "100%",
                   }

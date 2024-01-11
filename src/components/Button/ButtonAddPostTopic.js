@@ -3,10 +3,10 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import PostToCommunity from '../../assets/icon/PostToCommunity';
 import useBetterNavigationHook from '../../hooks/navigation/useBetterNavigationHook';
-import {colors} from '../../utils/colors';
 import dimen from '../../utils/dimen';
 import {normalize} from '../../utils/fonts';
 import ShadowFloatingButtons from './ShadowFloatingButtons';
+import {COLORS} from '../../utils/theme';
 
 const ButtonAddPostTopic = ({topicName, onRefresh}) => {
   const {toCreatePostWithTopic} = useBetterNavigationHook();
@@ -40,10 +40,10 @@ const styles = StyleSheet.create({
     bottom: normalize(30),
     right: 0,
     zIndex: 99,
-    backgroundColor: '#0000'
+    backgroundColor: COLORS.black
   },
   buttonContainer: {
-    backgroundColor: colors.darkBlue,
+    backgroundColor: COLORS.signed_primary,
     // height: dimen.size.TOPIC_FEED_POST_BUTTON_HEIGHT,
     borderRadius: dimen.size.FEED_ACTION_BUTTON_RADIUS,
     justifyContent: 'center'
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     marginTop: dimen.normalizeDimen(8),
     marginBottom: dimen.normalizeDimen(7),
     marginLeft: dimen.normalizeDimen(7),
-    color: colors.white,
+    color: COLORS.white,
     alignSelf: 'center'
   }
 });

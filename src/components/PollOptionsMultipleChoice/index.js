@@ -6,8 +6,8 @@ import {Dimensions, Platform, StyleSheet, Text, TouchableNativeFeedback, View} f
 import IconPollMine from '../../assets/icon/IconPollMine';
 import IconPollWinnerBadge from '../../assets/icon/IconPollWinnerBadge';
 import usePollOptionMultiple from './hooks/usePollOptionMultiple';
-import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
 
 const {height} = Dimensions.get('window');
 const PollOptionsMultipleChoice = ({
@@ -51,7 +51,7 @@ const PollOptionsMultipleChoice = ({
             styles.barStyle,
             {
               width: `${handleStyleBar(optionPercentage)}%`,
-              backgroundColor: isMax ? colors.bondi_blue : colors.gray1
+              backgroundColor: isMax ? COLORS.bondi_blue : COLORS.lightgrey
             }
           ]}
         />
@@ -65,7 +65,7 @@ const PollOptionsMultipleChoice = ({
             styles.barStyle,
             {
               width: `${handleStyleBar(optionPercentage)}%`,
-              backgroundColor: isMyPoll() ? colors.bondi_blue : colors.gray1
+              backgroundColor: isMyPoll() ? COLORS.bondi_blue : COLORS.lightgrey
             }
           ]}
         />
@@ -112,7 +112,7 @@ const PollOptionsMultipleChoice = ({
               testID="checkbox"
               value={selected}
               boxType="square"
-              tintColors={{true: colors.holytosca, false: colors.black}}
+              tintColors={{true: COLORS.anon_primary, false: COLORS.black}}
               style={checkboxStyle}
             />
           )}
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     marginBottom: 8
   },
   pollOptionItemContainer: {
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     marginBottom: 8,
     borderRadius: 8,
     height: (height * 7) / 100,
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   pollOptionItemContainerActive: {
-    backgroundColor: colors.holytosca30percent,
+    backgroundColor: COLORS.holytosca30percent,
     marginBottom: 8,
     borderRadius: 8,
     height: (height * 7) / 100,
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   pollOptionItemText: (isexpired, isMax) => ({
     flex: 1,
     textAlignVertical: 'center',
-    color: colors.black,
+    color: COLORS.black,
     fontFamily: fonts.inter[400],
     marginTop: isMax ? 0 : isexpired ? 6 : 0,
     marginBottom: isMax ? 0 : isexpired ? 6 : 0,
@@ -180,14 +180,14 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(12),
     lineHeight: 16,
-    color: colors.blackgrey
+    color: COLORS.blackgrey
   },
   pollRadioButton: {
     width: 12,
     height: 12,
     alignSelf: 'center',
     borderRadius: 0,
-    borderColor: colors.black,
+    borderColor: COLORS.black,
     borderWidth: 1,
     marginEnd: 12
   },

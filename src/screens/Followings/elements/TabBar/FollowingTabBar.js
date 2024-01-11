@@ -1,9 +1,8 @@
 import * as React from 'react';
 import Animated from 'react-native-reanimated';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-
-import {colors} from '../../../../utils/colors';
 import {fonts} from '../../../../utils/fonts';
+import {COLORS} from '../../../../utils/theme';
 
 const MyTabBar = ({state, descriptors, position, navigation}) => {
   const getLabel = (options, route) => {
@@ -56,8 +55,8 @@ const MyTabBar = ({state, descriptors, position, navigation}) => {
 const S = StyleSheet.create({
   toptabcontainer: {
     flexDirection: 'row',
-    backgroundColor: colors.white,
-    borderBottomColor: '#00000050',
+    backgroundColor: COLORS.white,
+    borderBottomColor: COLORS.black30percent,
     borderBottomWidth: 1,
     paddingHorizontal: 4
   },
@@ -75,7 +74,7 @@ const S = StyleSheet.create({
   },
 
   viewborderbottom: {
-    borderBottomColor: colors.holytosca,
+    borderBottomColor: COLORS.anon_primary,
     borderBottomWidth: 1
   }
 });

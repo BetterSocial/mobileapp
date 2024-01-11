@@ -142,6 +142,7 @@
 		DF406A10F46754D5F30BA58F /* libPods-BetterSocial-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 236C1C93F53E6B2EA54D4E06 /* libPods-BetterSocial-tvOSTests.a */; };
 		E97154A42976870A0021A505 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		E97154A52976870B0021A505 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		F23408F1E96AC908FB2D1D88 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1310CCE4FD9F49BADEA89C19 /* libPods-OneSignalNotificationServiceExtension.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -175,7 +176,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				C4AE09092AC43A4800E13758 /* OneSignalNotificationServiceExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -353,21 +353,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		888DAA1A29B48C8900311304 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E759201CFC6E9949F71D1B5A /* libPods-BetterSocial-BetterSocialStaging.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		889CAB6427D46CD6007F5892 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				92D8142362E828E0BFD1A9D0 /* BuildFile in Frameworks */,
 				93983F146E51F87F73BDAD47 /* libPods-BetterSocial-BetterSocialDev.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C4AE08FF2AC43A4800E13758 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				962349FAE6BEC6C5CCF1D8EB /* BuildFile in Frameworks */,
-				1DBF80C9D3A1696FFC841AE6 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -739,8 +738,8 @@
 			buildPhases = (
 				D4B60652299CD3B75FF49B83 /* [CP] Check Pods Manifest.lock */,
 				C4AE08FE2AC43A4800E13758 /* Sources */,
-				C4AE08FF2AC43A4800E13758 /* Frameworks */,
 				C4AE09002AC43A4800E13758 /* Resources */,
+				6A774A4C9B67562633967EEE /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1737,7 +1736,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C4AE09052AC43A4800E13758 /* NotificationService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

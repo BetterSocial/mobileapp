@@ -3,6 +3,7 @@ import {Animated, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 
 import MemoIc_Checklist from '../../../assets/icons/Ic_Checklist';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
+import {COLORS} from '../../../utils/theme';
 
 const ItemUser = ({photo, username, followed, onPress, userid}) => {
   const [isSelect, setIsSelect] = React.useState(false);
@@ -33,7 +34,7 @@ const ItemUser = ({photo, username, followed, onPress, userid}) => {
         style={[
           styles.containerCard,
           {
-            backgroundColor: isSelect ? '#00ADB526' : 'white'
+            backgroundColor: isSelect ? COLORS.holytosca15percent : COLORS.white
           }
         ]}>
         <View style={styles.cardLeft}>
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: '500',
     fontSize: 14,
-    color: '#000000',
+    color: COLORS.black,
     lineHeight: 17,
     alignSelf: 'flex-start'
   },
