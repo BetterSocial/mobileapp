@@ -189,7 +189,7 @@ describe('ContainerComment should run correctly', () => {
       display: 'flex',
       flexDirection: 'row',
       paddingBottom: 14,
-      borderLeftColor: 'transparent',
+      borderLeftColor: COLORS.transparent,
       borderLeftWidth: 1
     });
     expect(styles.seeRepliesContainer(false)).toEqual({

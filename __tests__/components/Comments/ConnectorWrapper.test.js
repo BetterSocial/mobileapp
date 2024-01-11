@@ -32,8 +32,8 @@ describe('Connector Wrapper should run correctly', () => {
       borderLeftWidth: 1,
       borderBottomWidth: 2,
       borderBottomLeftRadius: 21,
-      borderLeftColor: 'transparent',
-      borderBottomColor: 'transparent'
+      borderLeftColor: COLORS.transparent,
+      borderBottomColor: COLORS.transparent
     });
   });
 });

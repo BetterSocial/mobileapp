@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'transparent'
+    backgroundColor: COLORS.transparent
   },
   buttonUnblock: {
     flex: 1,

@@ -21,7 +21,7 @@ const PhotoProfile = ({
       <View
         style={[
           S.image,
-          {backgroundColor: loadingAnonUser ? 'transparent' : anon_user_info_color_code}
+          {backgroundColor: loadingAnonUser ? COLORS.transparent : anon_user_info_color_code}
         ]}>
         {loadingAnonUser ? (
           <ActivityIndicator size={'small'} color={COLORS.bondi_blue} />

@@ -174,7 +174,7 @@ export const ContainerReply = ({children, isGrandchild = true, key}) => (
     key={key}
     style={[
       styles.containerReply,
-      {borderColor: isGrandchild ? 'transparent' : COLORS.balance_gray}
+      {borderColor: isGrandchild ? COLORS.transparent : COLORS.balance_gray}
     ]}>
     {children}
   </View>
@@ -213,7 +213,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     paddingBottom: 14,
-    borderLeftColor: isLast ? 'transparent' : COLORS.balance_gray
+    borderLeftColor: isLast ? COLORS.transparent : COLORS.balance_gray
   }),
   seeRepliesText: {
     color: COLORS.signed_primary

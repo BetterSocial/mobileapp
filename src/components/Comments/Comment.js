@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
     borderLeftColor: isLast
       ? level === 0
         ? COLORS.balance_gray
-        : 'transparent'
+        : COLORS.transparent
       : COLORS.balance_gray,
     ...style
   }),

@@ -49,7 +49,7 @@ const TopicDomainHeader = (props) => {
       ) : (
         isFollow &&
         !hideSeeMember && (
-          <Pressable onPress={handlePress} style={{backgroundColor: 'transparent'}}>
+          <Pressable onPress={handlePress} style={{backgroundColor: COLORS.transparent}}>
             <Text style={styles.seeMemberText} numberOfLines={1} ellipsizeMode="tail">
               See community members
             </Text>
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     textAlign: 'left',
     color: isHeaderHide ? COLORS.white : COLORS.black,
-    backgroundColor: 'transparent'
+    backgroundColor: COLORS.transparent
   }),
   member: {
     width: normalize(16),

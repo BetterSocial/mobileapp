@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
   }),
   centerVertical: {
     justifyContent: 'center',
-    backgroundColor: 'transparent'
+    backgroundColor: COLORS.transparent
   },
   contensStyle: (paddingBottom) => ({
     paddingBottom

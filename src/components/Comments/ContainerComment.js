@@ -195,7 +195,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     paddingBottom: 14,
-    borderLeftColor: isLast ? 'transparent' : COLORS.balance_gray,
+    borderLeftColor: isLast ? COLORS.transparent : COLORS.balance_gray,
     borderLeftWidth: 1
   }),
   seeRepliesText: {

@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
   container: {
     borderWidth: 0.5,
     borderRadius: 8,
-    borderColor: 'rgba(0,0,0, 0.5)',
+    borderColor: COLORS.black50,
     overflow: 'hidden',
     paddingBottom: 8,
     flex: 1

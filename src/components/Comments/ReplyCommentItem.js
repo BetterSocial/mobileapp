@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
   container: ({isLast, style, showLeftConnector}) => ({
     width: '100%',
     borderLeftWidth: showLeftConnector ? 1 : 0,
-    borderLeftColor: isLast ? 'transparent' : COLORS.balance_gray,
+    borderLeftColor: isLast ? COLORS.transparent : COLORS.balance_gray,
     ...style
   }),
   username: {

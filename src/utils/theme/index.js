@@ -54,7 +54,9 @@ export const COLORS = {
   holytosca15percent: '#00ADB526',
   holytosca30percent: '#00ADB54D',
   black50: 'rgba(0, 0, 0, 0.5)',
-  black75: 'rgba(0, 0, 0, 0.75)'
+  black75: 'rgba(0, 0, 0, 0.75)',
+  transparent: 'transparent',
+  anonSecondary20: 'rgba(0, 173, 181, 0.2)'
 };
 export const SIZES = {
   // global sizes

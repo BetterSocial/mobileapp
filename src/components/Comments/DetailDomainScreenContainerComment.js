@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     paddingBottom: 14,
-    borderLeftColor: isLast ? 'transparent' : COLORS.lightgrey,
+    borderLeftColor: isLast ? COLORS.transparent : COLORS.lightgrey,
     borderLeftWidth: 1
   }),
   seeRepliesText: {

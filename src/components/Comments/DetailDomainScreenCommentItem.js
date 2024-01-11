@@ -147,7 +147,11 @@ const styles = StyleSheet.create({
   container: ({isLast, style, level, isLastInParent}) => ({
     width: '100%',
     borderLeftWidth: isLastInParent ? 0 : 1,
-    borderLeftColor: isLast ? (level === 0 ? COLORS.lightgrey : 'transparent') : COLORS.lightgrey,
+    borderLeftColor: isLast
+      ? level === 0
+        ? COLORS.lightgrey
+        : COLORS.transparent
+      : COLORS.lightgrey,
     ...style
   }),
   username: {

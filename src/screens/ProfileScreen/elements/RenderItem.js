@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     backgroundColor: COLORS.white,
     paddingBottom: 0,
-    borderBottomColor: 'transparent'
+    borderBottomColor: COLORS.transparent
     // paddingHorizontal: 9
   },
   paddingHorizontal: {paddingHorizontal: 20},

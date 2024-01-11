@@ -258,7 +258,7 @@ const DomainScreen = () => {
         })()}
         ListHeaderComponent={
           <View
-            style={{backgroundColor: 'transparent'}}
+            style={{backgroundColor: COLORS.transparent}}
             onLayout={(event) => {
               const headerHeightLayout = event.nativeEvent.layout.height;
               setHeaderHeightRef(headerHeightLayout);

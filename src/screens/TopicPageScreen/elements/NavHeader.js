@@ -321,13 +321,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: normalize(isHeaderHide ? 32 : 48) + normalize(28),
     zIndex: 99,
-    backgroundColor: 'transparent'
+    backgroundColor: COLORS.transparent
   }),
   search: {
     width: '100%',
     position: 'absolute',
     zIndex: 99,
-    backgroundColor: 'transparent',
+    backgroundColor: COLORS.transparent,
     bottom: 0
   },
   containerAction: {

@@ -177,7 +177,7 @@ const Content = ({
         style={[
           styles.containerText,
           {marginBottom: handleMarginTopic()},
-          {backgroundColor: 'transparent'}
+          {backgroundColor: COLORS.transparent}
         ]}>
         {amountCut <= 0 ? (
           <Text

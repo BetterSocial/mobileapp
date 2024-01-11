@@ -40,7 +40,7 @@ export default ActionChat;
 
 const styles = StyleSheet.create({
   container: (active) => ({
-    backgroundColor: active ? 'rgba(0, 173, 181, 0.2)' : COLORS.white
+    backgroundColor: active ? COLORS.anonSecondary20 : COLORS.white
   }),
   btn: {
     paddingVertical: 10,

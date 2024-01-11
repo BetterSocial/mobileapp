@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: COLORS.white,
     paddingHorizontal: 20,
-    borderTopColor: 'transparent',
+    borderTopColor: COLORS.transparent,
     // shadowColor: COLORS.black,
     // shadowOffset: {width: 0, height: 1},
     // shadowOpacity: 0.8,

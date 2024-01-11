@@ -91,7 +91,7 @@ const bottomOverlayStyles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'transparent',
+    backgroundColor: COLORS.transparent,
     zIndex: 1000,
     width: '100%'
     // backgroundColor: 'rgba(255,0,0,0.5)'

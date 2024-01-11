@@ -269,7 +269,7 @@ function HomeBottomTabs({navigation}) {
                 {
                   backgroundColor: screenOptionsNavigation.isFocused()
                     ? COLORS.signed_primary
-                    : 'transparent'
+                    : COLORS.transparent
                 }
               ]}
             />
