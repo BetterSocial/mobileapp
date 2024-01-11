@@ -138,7 +138,7 @@ const LinkAndSocialMedia: React.FC<LinkProps> = ({username, prompt}) => {
         <Text style={styles.shareStepLabel}>Step 2: Share your link</Text>
 
         <View style={{flexDirection: 'row'}}>
-          <Button onPress={shareTwitter} styles={styles.tweetButton}>
+          <Button onPress={shareTwitter} style={styles.tweetButton}>
             <Text style={styles.buttonSocialMediaLabel}>Tweet</Text>
             <TwitterIcon height={16} width={20} />
           </Button>
