@@ -297,7 +297,7 @@ const WhotoFollow = () => {
       )}
       <View style={styles.footer}>
         <View style={styles.textSmallContainer}>
-          <Text style={styles.textSmall}>Others cannot see who you’re following.</Text>
+          <Text styles={styles.textSmall}>Others cannot see who you’re following.</Text>
         </View>
         <Button onPress={() => register()}>FINISH</Button>
       </View>

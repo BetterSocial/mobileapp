@@ -54,7 +54,7 @@ const CopyLink: React.FC<Omit<LinkProps, 'prompt'>> = ({username}) => {
         {`${config.SHARE_URL}/u/${username}`}
       </Text>
 
-      <Button onPress={handleCopyLink} style={styles.copyLinkButton}>
+      <Button onPress={handleCopyLink} styles={styles.copyLinkButton}>
         <Text style={styles.copyLinkButtonLabel}>Copy Link</Text>
       </Button>
     </View>
@@ -138,7 +138,7 @@ const LinkAndSocialMedia: React.FC<LinkProps> = ({username, prompt}) => {
         <Text style={styles.shareStepLabel}>Step 2: Share your link</Text>
 
         <View style={{flexDirection: 'row'}}>
-          <Button onPress={shareTwitter} style={styles.tweetButton}>
+          <Button onPress={shareTwitter} styles={styles.tweetButton}>
             <Text style={styles.buttonSocialMediaLabel}>Tweet</Text>
             <TwitterIcon height={16} width={20} />
           </Button>
