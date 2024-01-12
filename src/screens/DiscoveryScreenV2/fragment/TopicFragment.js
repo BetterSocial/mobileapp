@@ -164,32 +164,53 @@ const TopicFragment = ({
     navigation.push('TopicPageScreen', navigationParam);
   };
 
+  const renderRecentSearch = (index) => {
+    return (
+      index === 0 &&
+      !withoutRecent && (
+        <RecentSearch
+          shown={isFirstTimeOpen}
+          setSearchText={setSearchText}
+          setIsFirstTimeOpen={setIsFirstTimeOpen}
+        />
+      )
+    );
+  };
+
   const __renderTopicItems = () => {
     const renderDiscoveryItem = ({from, item, index}) => {
       if (item.separator && route.name !== 'Followings') {
-        return <DiscoveryTitleSeparator key="topic-title-separator" text="Suggested Communities" />;
+        return (
+          <>
+            {renderRecentSearch(index)}
+            <DiscoveryTitleSeparator key="topic-title-separator" text="Suggested Communities" />
+          </>
+        );
       }
 
       return (
-        <View style={styles.domainContainer}>
-          {(route.name === 'Followings' && item.user_id_follower !== null) ||
-          route.name !== 'Followings' ? (
-            <DomainList
-              handleSetFollow={() => handleFollow(from, true, item, index)}
-              handleSetUnFollow={() => handleFollow(from, false, item, index)}
-              key={`followedTopic-${index}`}
-              isCommunity={true}
-              onPressBody={() => __handleOnTopicPress(item)}
-              item={{
-                name: item.name,
-                image: item.icon_path,
-                isunfollowed: !item.following,
-                description: null
-              }}
-              DefaultImage={TopicsProfilePictureEmptyState}
-            />
-          ) : null}
-        </View>
+        <>
+          {renderRecentSearch(index)}
+          <View style={styles.domainContainer}>
+            {(route.name === 'Followings' && item.user_id_follower !== null) ||
+            route.name !== 'Followings' ? (
+              <DomainList
+                handleSetFollow={() => handleFollow(from, true, item, index)}
+                handleSetUnFollow={() => handleFollow(from, false, item, index)}
+                key={`followedTopic-${index}`}
+                isCommunity={true}
+                onPressBody={() => __handleOnTopicPress(item)}
+                item={{
+                  name: item.name,
+                  image: item.icon_path,
+                  isunfollowed: !item.following,
+                  description: null
+                }}
+                DefaultImage={TopicsProfilePictureEmptyState}
+              />
+            ) : null}
+          </View>
+        </>
       );
     };
 
@@ -210,6 +231,7 @@ const TopicFragment = ({
 
     return (
       <FlatList
+        contentContainerStyle={{paddingBottom: 100}}
         data={data}
         renderItem={({index, item}) =>
           renderDiscoveryItem({
@@ -223,6 +245,8 @@ const TopicFragment = ({
           })
         }
         keyExtractor={(item, index) => index.toString()}
+        onEndReached={() => fetchData()}
+        onEndReachedThreshold={0.3}
       />
     );
   };
@@ -242,18 +266,7 @@ const TopicFragment = ({
       </View>
     );
 
-  return (
-    <View>
-      {!withoutRecent && (
-        <RecentSearch
-          shown={isFirstTimeOpen}
-          setSearchText={setSearchText}
-          setIsFirstTimeOpen={setIsFirstTimeOpen}
-        />
-      )}
-      {__renderTopicItems()}
-    </View>
-  );
+  return <View>{__renderTopicItems()}</View>;
 };
 
 const styles = StyleSheet.create({

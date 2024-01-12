@@ -130,9 +130,9 @@ const fetchDiscoveryDataNews = async (query, axiosOptions = {}) => {
  * @param {Number} page
  * @returns {FetchInitialDiscoveryTopicsResponse}
  */
-const fetchInitialDiscoveryTopics = async (limit = 25, page = 0) => {
+const fetchInitialDiscoveryTopics = async (limit = 50, page = 0) => {
   try {
-    const response = await api.post(`/discovery/init/topic?limit=${limit}`, {
+    const response = await api.post(`/discovery/init/topic?limit=${limit}&page=${page}`, {
       limit,
       page
     });
@@ -180,14 +180,14 @@ const fetchInitialDiscoveryTopics = async (limit = 25, page = 0) => {
  * @param {Number} page
  * @returns {FetchInitialDiscoveryUsersResponse}
  */
-const fetchInitialDiscoveryUsers = async (limit, page = 0) => {
+const fetchInitialDiscoveryUsers = async (limit = 50, page = 0) => {
   const body = {
     page
   };
 
   if (limit) body.limit = limit;
   try {
-    const response = await api.post('discovery/init/user', body);
+    const response = await api.post(`discovery/init/user?limit=${limit}&page=${page}`, body);
 
     if (response.data.success) {
       return response.data;
@@ -226,9 +226,9 @@ const fetchInitialDiscoveryUsers = async (limit, page = 0) => {
  * @param {Number} page
  * @returns {FetchInitialDiscoveryDomainsResponse}
  */
-const fetchInitialDiscoveryDomains = async (limit = 25, page = 0) => {
+const fetchInitialDiscoveryDomains = async (limit = 50, page = 0) => {
   try {
-    const response = await api.post(`discovery/init/domain?limit=${limit}`, {
+    const response = await api.post(`discovery/init/domain?limit=${limit}&page=${page}`, {
       limit,
       page
     });

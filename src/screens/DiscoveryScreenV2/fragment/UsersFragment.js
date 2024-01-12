@@ -160,19 +160,38 @@ const UsersFragment = ({
     if (searchText.length > 0) fetchData();
   };
 
-  const renderUsersItem = () => {
-    const renderDiscoveryItem = ({from, item, index}) => {
-      if (item.separator) {
-        return <DiscoveryTitleSeparator key="user-title-separator" text="Suggested Users" />;
-      }
+  const renderRecentSearch = (index) => {
+    return (
+      index === 0 &&
+      !withoutRecent && (
+        <RecentSearch
+          shown={showRecentSearch || isFirstTimeOpen}
+          setSearchText={setSearchText}
+          setIsFirstTimeOpen={setIsFirstTimeOpen}
+        />
+      )
+    );
+  };
 
-      const isUnfollowed = item.user ? !item.user.following : !item.following;
+  const renderDiscoveryItem = ({from, item, index}) => {
+    if (item.separator) {
+      return (
+        <>
+          {renderRecentSearch(index)}
+          <DiscoveryTitleSeparator key="user-title-separator" text="Suggested Users" />
+        </>
+      );
+    }
 
-      if (
-        (route.name === 'Followings' && item.user_id_follower !== null) ||
-        route.name !== 'Followings'
-      ) {
-        return (
+    const isUnfollowed = item.user ? !item.user.following : !item.following;
+
+    if (
+      (route.name === 'Followings' && item.user_id_follower !== null) ||
+      route.name !== 'Followings'
+    ) {
+      return (
+        <>
+          {renderRecentSearch(index)}
           <DomainList
             key={index}
             onPressBody={() => handleOnPress(item.user || item)}
@@ -189,11 +208,13 @@ const UsersFragment = ({
               isUser
             }}
           />
-        );
-      }
-      return null;
-    };
+        </>
+      );
+    }
+    return null;
+  };
 
+  const renderUsersItem = () => {
     const initFollowingUsers = [];
     const initUnfollowingUsers = [];
 
@@ -217,7 +238,8 @@ const UsersFragment = ({
 
     return (
       <FlatList
-        data={data}
+        contentContainerStyle={{paddingBottom: 100}}
+        data={data || []}
         renderItem={({index, item}) => {
           return renderDiscoveryItem({
             from: isFirstTimeOpen
@@ -238,6 +260,8 @@ const UsersFragment = ({
           });
         }}
         keyExtractor={(item, index) => index.toString()}
+        onEndReached={() => fetchData()}
+        onEndReachedThreshold={0.6}
       />
     );
   };
@@ -257,18 +281,7 @@ const UsersFragment = ({
       </View>
     );
 
-  return (
-    <View>
-      {!withoutRecent && (
-        <RecentSearch
-          shown={showRecentSearch || isFirstTimeOpen}
-          setSearchText={setSearchText}
-          setIsFirstTimeOpen={setIsFirstTimeOpen}
-        />
-      )}
-      {renderUsersItem()}
-    </View>
-  );
+  return <View>{renderUsersItem()}</View>;
 };
 
 const styles = StyleSheet.create({
