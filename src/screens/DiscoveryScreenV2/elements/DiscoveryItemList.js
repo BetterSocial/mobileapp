@@ -31,7 +31,8 @@ const DomainList = (props) => {
     onPressBody,
     DefaultImage,
     isCommunity,
-    isBlockedSection
+    isBlockedSection,
+    isDomain
   } = props;
 
   const renderButonAction = () => {
@@ -135,7 +136,7 @@ const DomainList = (props) => {
               {item.name}
             </Text>
 
-            {!item.isunfollowed && !!item.description && (
+            {((!!item.user_id_follower && !!item.description) || isDomain) && (
               <Text
                 testID="desc"
                 style={item.isDomain ? styles.textProfileFullName : styles.domainDescription}
@@ -144,7 +145,7 @@ const DomainList = (props) => {
                 {item.description ? item.description : ''}
               </Text>
             )}
-            {item.comumnityInfo?.length > 0 && item.isunfollowed && item.isUser && (
+            {item.comumnityInfo?.length > 0 && !item.user_id_follower && item.isUser && (
               <View style={styles.communityTextContainer} testID="communityDesc">
                 <Text style={styles.textProfileFullName} numberOfLines={1} ellipsizeMode="tail">
                   Also in{' '}

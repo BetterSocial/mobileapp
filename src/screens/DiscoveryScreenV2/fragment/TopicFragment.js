@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import * as React from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 import PropTypes from 'prop-types';
@@ -77,11 +77,14 @@ const TopicFragment = ({
     };
     parseToken();
   }, []);
+  const handleScroll = React.useCallback(() => {
+    Keyboard.dismiss();
+  });
 
   const exhangeFollower = (newTopicLists, willFollow, topicId) => {
     const indexTopic = newTopicLists.findIndex((item) => item.topic_id === topicId);
     newTopicLists[indexTopic].following = !!willFollow;
-    newTopicLists[indexTopic].user_id_follower = myId;
+    // newTopicLists[indexTopic].user_id_follower = myId;
     return newTopicLists[indexTopic];
   };
 
@@ -231,6 +234,7 @@ const TopicFragment = ({
 
     return (
       <FlatList
+        onMomentumScrollBegin={handleScroll}
         contentContainerStyle={{paddingBottom: 100}}
         data={data}
         renderItem={({index, item}) =>
@@ -246,7 +250,7 @@ const TopicFragment = ({
         }
         keyExtractor={(item, index) => index.toString()}
         onEndReached={() => fetchData()}
-        onEndReachedThreshold={0.3}
+        onEndReachedThreshold={0.6}
       />
     );
   };

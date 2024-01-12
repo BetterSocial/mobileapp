@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
 import * as React from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 import PropTypes from 'prop-types';
@@ -79,16 +79,20 @@ const UsersFragment = ({
     });
   };
 
+  const handleScroll = React.useCallback(() => {
+    Keyboard.dismiss();
+  });
+
   const exhangeFollower = (newUserLists, willFollow, userId) => {
     const indexUser = newUserLists.findIndex((item) =>
       item.user ? item.user.user_id === userId : item.user_id === userId
     );
     if (newUserLists[indexUser].user) {
       newUserLists[indexUser].user.following = !!willFollow;
-      newUserLists[indexUser].user.user_id_follower = myId;
+      // newUserLists[indexUser].user.user_id_follower = myId;
     } else {
       newUserLists[indexUser].following = !!willFollow;
-      newUserLists[indexUser].user_id_follower = myId;
+      // newUserLists[indexUser].user_id_follower = myId;
     }
     return newUserLists[indexUser];
   };
@@ -200,6 +204,7 @@ const UsersFragment = ({
             item={{
               name: item.user ? item.user.username : item.username,
               image: item.user ? item.user.profile_pic_path : item.profile_pic_path,
+              user_id_follower: item.user ? item.user.user_id_follower : item.user_id_follower,
               isunfollowed: isUnfollowed,
               description: item.user ? item.user.bio : item.bio,
               karmaScore: item.user ? item.user.karma_score : item.karma_score,
@@ -238,6 +243,7 @@ const UsersFragment = ({
 
     return (
       <FlatList
+        onMomentumScrollBegin={handleScroll}
         contentContainerStyle={{paddingBottom: 100}}
         data={data || []}
         renderItem={({index, item}) => {

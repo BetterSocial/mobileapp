@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import * as React from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 import PropTypes from 'prop-types';
@@ -93,6 +93,9 @@ const DomainFragment = ({
 
     navigation.push('DomainScreen', navigationParam);
   };
+  const handleScroll = React.useCallback(() => {
+    Keyboard.dismiss();
+  });
 
   const handleDomain = async (from, willFollow, item, index) => {
     if (from === FROM_FOLLOWED_DOMAIN_INITIAL) {
@@ -101,7 +104,7 @@ const DomainFragment = ({
         (domain) => domain.domain_page_id === item.domain_page_id
       );
       newFollowedDomains[domainIndex].following = !!willFollow;
-      newFollowedDomains[domainIndex].user_id_follower = myId;
+      // newFollowedDomains[domainIndex].user_id_follower = myId;
 
       const newDomain = newFollowedDomains[domainIndex];
       const newDomainList = discovery.initialDomains.map((domain) => {
@@ -119,7 +122,7 @@ const DomainFragment = ({
         (domain) => domain.domain_name === item.domain_name
       );
       newFollowedDomains[domainIndex].following = !!willFollow;
-      newFollowedDomains[domainIndex].user_id_follower = myId;
+      // newFollowedDomains[domainIndex].user_id_follower = myId;
 
       const newDomain = newFollowedDomains[domainIndex];
       setFollowedDomains(
@@ -138,7 +141,7 @@ const DomainFragment = ({
         (domain) => domain.domain_name === item.domain_name
       );
       newUnfollowedDomains[domainIndex].following = !!willFollow;
-      newUnfollowedDomains[domainIndex].user_id_follower = myId;
+      // newUnfollowedDomains[domainIndex].user_id_follower = myId;
 
       const newDomain = newUnfollowedDomains[domainIndex];
 
@@ -249,6 +252,7 @@ const DomainFragment = ({
 
     return (
       <FlatList
+        onMomentumScrollBegin={handleScroll}
         contentContainerStyle={{paddingBottom: 100}}
         data={data}
         keyExtractor={(_, index) => index.toString()}
@@ -264,7 +268,7 @@ const DomainFragment = ({
           })
         }
         onEndReached={() => fetchData()}
-        onEndReachedThreshold={0.3}
+        onEndReachedThreshold={0.6}
       />
     );
   };
