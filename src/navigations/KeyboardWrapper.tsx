@@ -1,13 +1,19 @@
 import React from 'react';
 
-import {KeyboardAvoidingView} from 'react-native';
+import {KeyboardAvoidingView, Platform} from 'react-native';
 
 type Props = {
   children: React.ReactNode;
 };
 
 const KeyboardWrapper = ({children}: Props): JSX.Element => {
-  return <KeyboardAvoidingView style={{flex: 1}}>{children}</KeyboardAvoidingView>;
+  const isIos = Platform.OS === 'ios';
+
+  return (
+    <KeyboardAvoidingView style={{flex: 1}} behavior={isIos ? 'padding' : undefined}>
+      {children}
+    </KeyboardAvoidingView>
+  );
 };
 
 export default KeyboardWrapper;
