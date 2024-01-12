@@ -17,7 +17,7 @@ import {isContainUrl} from '../../../utils/Utils';
 import {requestExternalStoragePermission} from '../../../utils/permission';
 import {setChannel} from '../../../context/actions/setChannel';
 import {setParticipants} from '../../../context/actions/groupChat';
-import {uploadFile} from '../../../service/file';
+import ImageUtils from '../../../utils/image';
 
 const useGroupInfo = () => {
   const [groupChatState, groupPatchDispatch] = React.useContext(Context).groupChat;
@@ -112,10 +112,10 @@ const useGroupInfo = () => {
     launchGallery();
   };
 
-  const uploadImageBase64 = async (res) => {
+  const uploadImage = async (pathImg) => {
     try {
       setIsUploadingImage(true);
-      const result = await uploadFile(`data:image/jpeg;base64,${res.base64}`);
+      const result = await ImageUtils.uploadImage(pathImg);
       setUploadedImage(result.data.url);
       const dataEdit = {
         name: chatName,
@@ -142,7 +142,7 @@ const useGroupInfo = () => {
         },
         (res) => {
           if (!res.didCancel) {
-            uploadImageBase64(res?.assets?.[0]?.base64);
+            uploadImage(res?.assets?.[0]?.uri);
           }
         }
       );
@@ -465,7 +465,7 @@ const useGroupInfo = () => {
     getMembersList,
     handleOnNameChange,
     handleOnImageClicked,
-    uploadImageBase64,
+    uploadImage,
     chatName,
     launchGallery,
     selectedUser,

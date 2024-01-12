@@ -1,8 +1,8 @@
-import * as React from 'react';
-import ImagePicker from 'react-native-image-crop-picker';
-import PropTypes from 'prop-types';
-import Toast from 'react-native-simple-toast';
 import netInfo from '@react-native-community/netinfo';
+import {useNavigation} from '@react-navigation/core';
+import {debounce} from 'lodash';
+import PropTypes from 'prop-types';
+import * as React from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -15,32 +15,21 @@ import {
   TouchableNativeFeedback,
   View
 } from 'react-native';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {debounce} from 'lodash';
 import {showMessage} from 'react-native-flash-message';
-import {useNavigation} from '@react-navigation/core';
+import ImagePicker from 'react-native-image-crop-picker';
+import Toast from 'react-native-simple-toast';
 
-import AnonymousTab from './elements/AnonymousTab';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
-import BioAndDMSetting from './elements/BioAndDMSetting';
 import BlockComponent from '../../components/BlockComponent';
-import BottomSheetBio from './elements/BottomSheetBio';
-import BottomSheetImage from './elements/BottomSheetImage';
-import BottomSheetRealname from './elements/BottomSheetRealname';
-import CustomPressable from '../../components/CustomPressable';
-import FollowInfoRow from './elements/FollowInfoRow';
-import LinkAndSocialMedia from './elements/LinkAndSocialMedia';
-import PostOptionModal from '../../components/Modal/PostOptionModal';
-import ProfileHeader from './elements/ProfileHeader';
-import ProfilePicture from './elements/ProfilePicture';
-import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
-import RenderItem from '../FeedScreen/RenderList';
+import {ButtonNewPost} from '../../components/Button';
 import ShadowFloatingButtons from '../../components/Button/ShadowFloatingButtons';
-import ShareUtils from '../../utils/share';
-import StorageUtils from '../../utils/storage';
-import dimen from '../../utils/dimen';
-import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
-import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
+import CustomPressable from '../../components/CustomPressable';
+import PostOptionModal from '../../components/Modal/PostOptionModal';
+import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import {Context} from '../../context';
+import {setFeedByIndex} from '../../context/actions/feeds';
+import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
+import {setMyProfileAction} from '../../context/actions/setMyProfileAction';
 import useResetContext from '../../hooks/context/useResetContext';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
@@ -49,10 +38,9 @@ import useProfileScreenHook, {
   TAB_INDEX_ANONYMOUS,
   TAB_INDEX_SIGNED
 } from '../../hooks/screen/useProfileScreenHook';
+import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
-import {ButtonNewPost} from '../../components/Button';
-import {Context} from '../../context';
-import {DEFAULT_PROFILE_PIC_PATH, SOURCE_MY_PROFILE} from '../../utils/constants';
+import {deleteAnonymousPost, deletePost} from '../../service/post';
 import {
   changeRealName,
   getMyProfile,
@@ -61,19 +49,31 @@ import {
   updateBioProfile,
   updateImageProfile
 } from '../../service/profile';
-import {colors} from '../../utils/colors';
-import {deleteAnonymousPost, deletePost} from '../../service/post';
 import {downVote, upVote} from '../../service/vote';
+import {colors} from '../../utils/colors';
+import {DEFAULT_PROFILE_PIC_PATH, SOURCE_MY_PROFILE} from '../../utils/constants';
+import dimen from '../../utils/dimen';
 import {fonts} from '../../utils/fonts';
+import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
-import {setFeedByIndex} from '../../context/actions/feeds';
-import {setMyProfileAction} from '../../context/actions/setMyProfileAction';
-import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
-import {useAfterInteractions} from '../../hooks/useAfterInteractions';
-import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
-import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import ShareUtils from '../../utils/share';
+import StorageUtils from '../../utils/storage';
+import RenderItem from '../FeedScreen/RenderList';
+import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
+import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
+import AnonymousTab from './elements/AnonymousTab';
+import BioAndDMSetting from './elements/BioAndDMSetting';
+import BottomSheetBio from './elements/BottomSheetBio';
+import BottomSheetImage from './elements/BottomSheetImage';
+import BottomSheetRealname from './elements/BottomSheetRealname';
+import FollowInfoRow from './elements/FollowInfoRow';
 import {KarmaScore} from './elements/KarmaScore';
+import LinkAndSocialMedia from './elements/LinkAndSocialMedia';
+import ProfileHeader from './elements/ProfileHeader';
+import ProfilePicture from './elements/ProfilePicture';
+import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
+import ImageCompressionUtils from '../../utils/image/compress';
 
 const {width} = Dimensions.get('screen');
 
@@ -178,7 +178,7 @@ const ProfileScreen = ({route}) => {
   const [opacity, setOpacity] = React.useState(0);
   const [tempBio, setTempBio] = React.useState('');
   const [tempFullName, setTempFullName] = React.useState('');
-  const [isLoadingUpdateImageGalery, setIsLoadingUpdateImageGalery] = React.useState(false);
+  const [isLoadingUpdateImageGallery, setIsLoadingUpdateImageGallery] = React.useState(false);
   const [isLoadingUpdateImageCamera, setIsLoadingUpdateImageCamera] = React.useState(false);
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0);
@@ -194,6 +194,7 @@ const ProfileScreen = ({route}) => {
   const {refreshCount} = useResetContext();
   const {mappingColorFeed} = useCoreFeed();
   const LIMIT_PROFILE_FEED = 10;
+  const TYPE_GALLERY = 'gallery';
 
   const {feeds} = myProfileFeed;
   const {
@@ -384,7 +385,7 @@ const ProfileScreen = ({route}) => {
         mediaType: 'photo',
         includeBase64: true
       }).then((imageRes) => {
-        handleUpdateImage(`data:image/jpeg;base64,${imageRes.data}`, 'gallery');
+        handleUpdateImage(`data:image/jpeg;base64,${imageRes.data}`, TYPE_GALLERY);
       });
     } else {
       openAlertPermission(
@@ -427,37 +428,50 @@ const ProfileScreen = ({route}) => {
     });
   };
 
-  const handleUpdateImage = (value, type) => {
-    if (type === 'gallery') {
-      setIsLoadingUpdateImageGalery(true);
-    } else {
-      setIsLoadingUpdateImageCamera(true);
-    }
-    const data = {
-      profile_pic_path: value
-    };
+  const handleUpdateImage = async (imgBase64, type) => {
+    try {
+      if (type === TYPE_GALLERY) {
+        setIsLoadingUpdateImageGallery(true);
+      } else {
+        setIsLoadingUpdateImageCamera(true);
+      }
+      const compressionResult = await ImageCompressionUtils.compress(imgBase64, 'base64');
+      const data = {
+        profile_pic_path: compressionResult
+      };
 
-    updateImageProfile(data)
-      .then(async (res) => {
-        if (type === 'gallery') {
-          setIsLoadingUpdateImageGalery(false);
-        } else {
-          setIsLoadingUpdateImageCamera(false);
-        }
-        if (res.code === 200) {
-          closeImageBs();
-          getMyFeeds();
-          const profilePicture = await fetchMyProfile(true);
-          updateUserClient(profilePicture);
-        }
-      })
-      .catch(() => {
-        if (type === 'gallery') {
-          setIsLoadingUpdateImageGalery(false);
-        } else {
-          setIsLoadingUpdateImageCamera(false);
-        }
+      updateImageProfile(data)
+        .then(async (res) => {
+          if (type === TYPE_GALLERY) {
+            setIsLoadingUpdateImageGallery(false);
+          } else {
+            setIsLoadingUpdateImageCamera(false);
+          }
+          if (res.code === 200) {
+            closeImageBs();
+            getMyFeeds();
+            const profilePicture = await fetchMyProfile(true);
+            updateUserClient(profilePicture);
+          }
+        })
+        .catch(() => {
+          if (type === TYPE_GALLERY) {
+            setIsLoadingUpdateImageGallery(false);
+          } else {
+            setIsLoadingUpdateImageCamera(false);
+          }
+        });
+    } catch (error) {
+      showMessage({
+        message: 'Failed to update profile',
+        type: 'danger'
       });
+      if (type === TYPE_GALLERY) {
+        setIsLoadingUpdateImageGallery(false);
+      } else {
+        setIsLoadingUpdateImageCamera(false);
+      }
+    }
   };
 
   const handleRemoveImageProfile = async () => {
@@ -488,6 +502,7 @@ const ProfileScreen = ({route}) => {
   };
 
   const debounceModalOpen = debounce(() => {
+    setTempBio(profile?.myProfile?.bio);
     bottomSheetBioRef.current.open();
   }, 350);
 
@@ -604,9 +619,8 @@ const ProfileScreen = ({route}) => {
     if (isProfileTabSigned) return getMyFeeds();
     return reloadFetchAnonymousPost();
   };
-
   return (
-    <SafeAreaProvider style={styles.container} forceInset={{top: 'always'}}>
+    <View style={styles.container} forceInset={{top: 'always'}}>
       <StatusBar translucent={false} />
       <ProfileHeader
         showArrow={isNotFromHomeTab}
@@ -688,7 +702,7 @@ const ProfileScreen = ({route}) => {
         onOpenImageGalery={() => onOpenImageGalery()}
         onOpenCamera={() => onOpenCamera()}
         handleRemoveImageProfile={() => handleRemoveImageProfile()}
-        isLoadingUpdateImageGalery={isLoadingUpdateImageGalery}
+        isLoadingUpdateImageGallery={isLoadingUpdateImageGallery}
         isLoadingUpdateImageCamera={isLoadingUpdateImageCamera}
         isLoadingRemoveImage={isLoadingRemoveImage}
       />
@@ -710,7 +724,7 @@ const ProfileScreen = ({route}) => {
         onClose={onHeaderOptionClosed}
         onDeleteClicked={onDeletePost}
       />
-    </SafeAreaProvider>
+    </View>
   );
 };
 
