@@ -1,45 +1,47 @@
 /* eslint-disable react/display-name */
-import * as React from 'react';
 import NetInfo from '@react-native-community/netinfo';
-import {View} from 'react-native';
+import PropTypes from 'prop-types';
+import {SafeAreaView, View} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
 import {useRecoilState, useRecoilValue} from 'recoil';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import PropTypes from 'prop-types';
 
+import * as React from 'react';
+import NetworkStatusIndicator from '../components/NetworkStatusIndicator';
 import Blocked from '../screens/Blocked';
-import ChooseUsername from '../screens/InputUsername';
 import CreatePost from '../screens/CreatePost';
 import DiscoveryScreenV2 from '../screens/DiscoveryScreenV2';
 import DomainScreen from '../screens/DomainScreen';
 import FollowingScreen from '../screens/Followings/FollowingScreen';
-import HelpCenter from '../screens/WebView/HelpCenter';
-import HomeBottomTabs from './HomeBottomTabs';
 import ImageViewerScreen from '../screens/ImageViewer';
+import ChooseUsername from '../screens/InputUsername';
 import LinkContextScreen from '../screens/LinkContextScreen';
 import LocalCommunity from '../screens/LocalCommunity';
-import NetworkStatusIndicator from '../components/NetworkStatusIndicator';
-import OneSignalNavigator from './OneSignalNavigator';
 import OtherProfile from '../screens/OtherProfile';
 import OtherProfilePostDetail from '../screens/OtherProfilePostDetail';
 import OtherProfileReplyComment from '../screens/OtherProfileReplyComment';
 import PostDetailPage from '../screens/PostPageDetail';
-import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
 import ProfilePostDetail from '../screens/ProfilePostDetail';
 import ProfileReplyComment from '../screens/ProfileReplyComment';
 import ReplyComment from '../screens/ReplyComment';
-import SampleChatInfoScreen from '../screens/WebsocketResearchScreen/SampleChatInfoScreen';
-import SampleChatScreen from '../screens/WebsocketResearchScreen/SampleChatScreen';
-import SignedChatScreen from '../screens/WebsocketResearchScreen/SignedChatScreen';
 import Settings from '../screens/Settings';
 import SignIn from '../screens/SignInV2';
-import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import TopicMemberScreen from '../screens/TopicMemberScreen';
 import TopicPageScreen from '../screens/TopicPageScreen';
 import Topics from '../screens/Topics';
+import HelpCenter from '../screens/WebView/HelpCenter';
+import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
+import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import WebsocketResearchScreen from '../screens/WebsocketResearchScreen';
+import SampleChatInfoScreen from '../screens/WebsocketResearchScreen/SampleChatInfoScreen';
+import SampleChatScreen from '../screens/WebsocketResearchScreen/SampleChatScreen';
+import SignedChatScreen from '../screens/WebsocketResearchScreen/SignedChatScreen';
 import WhotoFollow from '../screens/WhotoFollow';
 import api from '../service/config';
+import HomeBottomTabs from './HomeBottomTabs';
+import OneSignalNavigator from './OneSignalNavigator';
+
+import {useInitialStartup} from '../hooks/useInitialStartup';
 import {
   AddParticipant,
   ChannelScreen,
@@ -52,16 +54,15 @@ import {
   GroupSetting,
   ProfileScreen
 } from '../screens';
+import {followersOrFollowingAtom} from '../screens/ChannelListScreen/model/followersOrFollowingAtom';
+import FollowersScreen from '../screens/Followings/FollowersScreen';
 import {InitialStartupAtom, LoadingStartupContext} from '../service/initialStartup';
 import {NavigationConstants} from '../utils/constants';
-import {followersOrFollowingAtom} from '../screens/ChannelListScreen/model/followersOrFollowingAtom';
-import {useInitialStartup} from '../hooks/useInitialStartup';
-import FollowersScreen from '../screens/Followings/FollowersScreen';
 import KeyboardWrapper from './KeyboardWrapper';
 
 const RootStack = createNativeStackNavigator();
 
-export const RootNavigator = ({currentScreen}) => {
+export const RootNavigator = () => {
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const [following, setFollowing] = useRecoilState(followersOrFollowingAtom);
   const loadingStartup = useInitialStartup();
@@ -94,22 +95,11 @@ export const RootNavigator = ({currentScreen}) => {
     };
   }, []);
 
-  const isUnauthenticated = initialStartup.id === null || initialStartup.id === '';
-
-  const getPaddingTop = (screenName) => {
-    if (isUnauthenticated || ['TopicPageScreen', 'TopicMemberScreen'].includes(screenName)) {
-      return 0;
-    }
-    return insets.top;
-  };
-
   return (
     <LoadingStartupContext.Provider value={loadingStartup.loadingUser}>
       <View
         style={{
-          height: '100%',
-          paddingBottom: isUnauthenticated ? 0 : insets.bottom,
-          paddingTop: getPaddingTop(currentScreen)
+          height: '100%'
         }}>
         <NetworkStatusIndicator hide={true} />
 
@@ -140,6 +130,14 @@ RootNavigator.propTypes = {
 
 // region authenticatedStack
 const AuthenticatedStack = createNativeStackNavigator();
+
+const withSafeAreaView = (Component) => {
+  return (props) => (
+    <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+      <Component {...props} />
+    </SafeAreaView>
+  );
+};
 
 const AuthenticatedNavigator = () => {
   const withKeyboardWrapper = (Component) => {
@@ -180,7 +178,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="ProfileScreen"
-          component={withKeyboardWrapper(ProfileScreen)}
+          component={withSafeAreaView(withKeyboardWrapper(ProfileScreen))}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen name="ImageViewer" component={ImageViewerScreen} />
@@ -206,7 +204,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="Followings"
-          component={withKeyboardWrapper(FollowingScreen)}
+          component={withSafeAreaView(withKeyboardWrapper(FollowingScreen))}
           options={{
             headerShown: false
           }}
@@ -240,7 +238,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="DiscoveryScreen"
-          component={withKeyboardWrapper(DiscoveryScreenV2)}
+          component={withSafeAreaView(withKeyboardWrapper(DiscoveryScreenV2))}
           options={{
             headerShown: false
           }}
@@ -290,27 +288,27 @@ const AuthenticatedNavigator = () => {
 
         <AuthenticatedStack.Screen
           name="ProfileReplyComment"
-          component={withKeyboardWrapper(ProfileReplyComment)}
+          component={withSafeAreaView(withKeyboardWrapper(ProfileReplyComment))}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="OtherProfileReplyComment"
-          component={withKeyboardWrapper(OtherProfileReplyComment)}
+          component={withSafeAreaView(withKeyboardWrapper(OtherProfileReplyComment))}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="PostDetailPage"
-          component={withKeyboardWrapper(PostDetailPage)}
+          component={withSafeAreaView(withKeyboardWrapper(PostDetailPage))}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="ProfilePostDetailPage"
-          component={withKeyboardWrapper(ProfilePostDetail)}
+          component={withSafeAreaView(withKeyboardWrapper(ProfilePostDetail))}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
           name="OtherProfilePostDetailPage"
-          component={withKeyboardWrapper(OtherProfilePostDetail)}
+          component={withSafeAreaView(withKeyboardWrapper(OtherProfilePostDetail))}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
@@ -325,7 +323,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="SampleChatScreen"
-          component={withKeyboardWrapper(SampleChatScreen)}
+          component={withSafeAreaView(withKeyboardWrapper(SampleChatScreen))}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
@@ -335,7 +333,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="SignedChatScreen"
-          component={withKeyboardWrapper(SignedChatScreen)}
+          component={withSafeAreaView(withKeyboardWrapper(SignedChatScreen))}
           options={{headerShown: false}}
         />
       </AuthenticatedStack.Navigator>

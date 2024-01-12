@@ -8,10 +8,10 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import {colors} from '../../../utils/colors';
 import {fonts, normalize} from '../../../utils/fonts';
 import {CircleGradient} from '../../../components/Karma/CircleGradient';
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
+import {COLORS} from '../../../utils/theme';
 
 const renderDefaultImage = (DefaultImage) => {
   if (DefaultImage) {
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   communityText: {
-    color: colors.primaryBlue,
+    color: COLORS.blueOnboarding,
     fontFamily: fonts.inter[400],
     fontSize: 12,
     flexWrap: 'wrap',
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    backgroundColor: colors.bondi_blue
+    backgroundColor: COLORS.signed_primary
   },
   container: {
     height: 64,
@@ -198,20 +198,20 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: colors.bondi_blue
+    color: COLORS.signed_primary
   },
   textButtonFollow: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: colors.white
+    color: COLORS.white
   },
   profilepicture: {
     width: 48,
     height: 48,
     borderRadius: 24,
     resizeMode: 'cover',
-    borderColor: colors.lightgrey,
+    borderColor: COLORS.lightgrey,
     borderWidth: 1,
     marginLeft: 2,
     marginTop: 2
@@ -240,13 +240,13 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[500],
     fontWeight: 'bold',
     fontSize: 14,
-    color: colors.black,
+    color: COLORS.black,
     lineHeight: 16.94
   },
   textProfileFullName: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.gray,
+    color: COLORS.blackgrey,
     flexWrap: 'wrap',
     lineHeight: 18,
     marginTop: 4
@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
   domainDescription: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.gray,
+    color: COLORS.blackgrey,
     flexWrap: 'wrap',
     lineHeight: 18,
     marginTop: 4
@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: colors.bondi_blue,
+    borderColor: COLORS.signed_primary,
     borderRadius: 8
   },
   card: {
@@ -290,20 +290,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    borderColor: colors.bondi_blue,
+    borderColor: COLORS.signed_primary,
     borderWidth: 1
   },
   textButtonBlock: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: colors.white
+    color: COLORS.white
   },
   textButtonBlockUser: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: colors.bondi_blue
+    color: COLORS.signed_primary
   },
   buttonBlock: {
     width: 88,
@@ -312,9 +312,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: colors.blockColor,
+    borderColor: COLORS.redalert,
     borderRadius: 8,
-    backgroundColor: colors.blockColor
+    backgroundColor: COLORS.redalert
   }
 });
 

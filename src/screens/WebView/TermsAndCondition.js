@@ -4,6 +4,7 @@ import {ActivityIndicator, StyleSheet, View, SafeAreaView} from 'react-native';
 import {WebView} from 'react-native-webview';
 import Header from '../../components/Header';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import {COLORS} from '../../utils/theme';
 
 const TermsAndCondition = ({navigation}) => (
     <View style={styles.container}>
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.white,
   },
   content: {flex: 1, position: 'relative'},
 });

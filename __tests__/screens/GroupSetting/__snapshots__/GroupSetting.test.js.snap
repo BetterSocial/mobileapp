@@ -5,7 +5,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
   emulateUnlessSupported={true}
   style={
     Object {
-      "backgroundColor": "#fff",
+      "backgroundColor": "#FFFFFF",
       "flex": 1,
     }
   }
@@ -19,7 +19,6 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
               "alignItems": "center",
               "flexDirection": "row",
               "justifyContent": "space-between",
-              "paddingVertical": 8,
             },
             Object {
               "marginLeft": 22,
@@ -155,7 +154,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
             style={
               Object {
                 "alignItems": "center",
-                "backgroundColor": "#E0E0E0",
+                "backgroundColor": "#F5F6F7",
                 "borderRadius": 21.6,
                 "height": 43.2,
                 "justifyContent": "center",

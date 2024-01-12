@@ -18,10 +18,10 @@ import {
   SOURCE_FEED_TAB
 } from '../../utils/constants';
 import {Footer, Gap, PreviewComment} from '../../components';
-import {colors} from '../../utils/colors';
 import {getCommentLength} from '../../utils/getstream';
 import {normalizeFontSizeByWidth} from '../../utils/fonts';
 import {showScoreAlertDialog} from '../../utils/Utils';
+import {COLORS} from '../../utils/theme';
 
 const tabBarHeight = StatusBar.currentHeight;
 const FULL_WIDTH = Dimensions.get('screen').width;
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
   cardContainer: {
     width: FULL_WIDTH,
     borderBottomWidth: 0,
-    borderBottomColor: colors.lightgrey,
+    borderBottomColor: COLORS.lightgrey,
     backgroundColor: 'white',
     height: dimen.size.FEED_CURRENT_ITEM_HEIGHT,
     marginBottom: normalizeFontSizeByWidth(4)

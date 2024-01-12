@@ -17,7 +17,7 @@ import {isContainUrl} from '../../../utils/Utils';
 import {requestExternalStoragePermission} from '../../../utils/permission';
 import {setChannel} from '../../../context/actions/setChannel';
 import {setParticipants} from '../../../context/actions/groupChat';
-import {uploadFile} from '../../../service/file';
+import ImageUtils from '../../../utils/image';
 
 const useGroupInfo = () => {
   const [groupChatState, groupPatchDispatch] = React.useContext(Context).groupChat;
@@ -30,6 +30,7 @@ const useGroupInfo = () => {
   const [isLoadingMembers, setIsLoadingMembers] = React.useState(false);
   const [uploadedImage, setUploadedImage] = React.useState('');
   const [isUploadingImage, setIsUploadingImage] = React.useState(false);
+  const [isLoadingInitChat, setIsLoadingInitChat] = React.useState(false);
   const [username, setUsername] = React.useState(channelState.channel?.data?.name);
   const createChat = channelState.channel?.data?.created_at;
   const countUser = Object.entries(participants).length;
@@ -89,6 +90,7 @@ const useGroupInfo = () => {
   // eslint-disable-next-line consistent-return
   const checkUserIsBlockHandle = async () => {
     try {
+      setIsLoadingInitChat(true);
       const sendData = {
         user_id: selectedUser.user_id
       };
@@ -101,6 +103,8 @@ const useGroupInfo = () => {
       return handleOpenProfile(selectedUser);
     } catch (e) {
       console.log('error:', e);
+    } finally {
+      setIsLoadingInitChat(false);
     }
   };
 
@@ -108,10 +112,10 @@ const useGroupInfo = () => {
     launchGallery();
   };
 
-  const uploadImageBase64 = async (res) => {
+  const uploadImage = async (pathImg) => {
     try {
       setIsUploadingImage(true);
-      const result = await uploadFile(`data:image/jpeg;base64,${res.base64}`);
+      const result = await ImageUtils.uploadImage(pathImg);
       setUploadedImage(result.data.url);
       const dataEdit = {
         name: chatName,
@@ -138,7 +142,7 @@ const useGroupInfo = () => {
         },
         (res) => {
           if (!res.didCancel) {
-            uploadImageBase64(res?.assets?.[0]?.base64);
+            uploadImage(res?.assets?.[0]?.uri);
           }
         }
       );
@@ -327,8 +331,15 @@ const useGroupInfo = () => {
   };
 
   const handleMessageAnonymously = async () => {
-    setOpenModal(false);
-    handleAnonymousMessage(selectedUser);
+    try {
+      setIsLoadingInitChat(true);
+      await handleAnonymousMessage(selectedUser);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsLoadingInitChat(false);
+      setOpenModal(false);
+    }
   };
 
   /**
@@ -430,6 +441,8 @@ const useGroupInfo = () => {
     }, 500);
   };
 
+  console.log(isLoadingInitChat, 'isLoadingInitChat');
+
   return {
     serializeMembersList,
     groupChatState,
@@ -452,7 +465,7 @@ const useGroupInfo = () => {
     getMembersList,
     handleOnNameChange,
     handleOnImageClicked,
-    uploadImageBase64,
+    uploadImage,
     chatName,
     launchGallery,
     selectedUser,
@@ -478,7 +491,8 @@ const useGroupInfo = () => {
     isAnonymousModalOpen,
     setIsAnonymousModalOpen,
     blockModalRef,
-    isFetchingAllowAnonDM
+    isFetchingAllowAnonDM,
+    isLoadingInitChat
   };
 };
 

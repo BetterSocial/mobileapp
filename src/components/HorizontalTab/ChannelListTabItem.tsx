@@ -2,8 +2,9 @@ import * as React from 'react';
 import FastImage from 'react-native-fast-image';
 import {Dimensions, StyleSheet, Text, View} from 'react-native';
 
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
+import AnonymousIcon from '../../assets/icon/AnonymousIcon';
 
 export interface ChannelListTabItemProps {
   picture: string | null;
@@ -28,7 +29,7 @@ const ChannelListTabItem = (props: ChannelListTabItemProps) => {
     name: {
       fontFamily: fonts.inter[500],
       fontSize: 14,
-      color: props.type === 'SIGNED' ? colors.darkBlue : colors.black
+      color: props.type === 'SIGNED' ? COLORS.signed_primary : COLORS.anon_primary
     },
     picture: {
       width: 20,
@@ -43,13 +44,13 @@ const ChannelListTabItem = (props: ChannelListTabItemProps) => {
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: 8,
-      backgroundColor: colors.red,
+      backgroundColor: COLORS.redalert,
       bottom: 4
     },
     unreadCount: {
       fontFamily: fonts.inter[500],
       fontSize: 10,
-      color: colors.white
+      color: COLORS.white
     }
   });
 
@@ -62,7 +63,10 @@ const ChannelListTabItem = (props: ChannelListTabItemProps) => {
       {typeof picture === 'string' ? (
         <FastImage source={{uri: picture}} style={styles.picture} />
       ) : (
-        <FastImage source={picture} style={styles.picture} />
+        <View style={styles.picture}>
+          <AnonymousIcon size={20} fill={COLORS.anon_primary} />
+        </View>
+        // <FastImage source={picture} style={styles.picture} />
       )}
       <Text numberOfLines={1} ellipsizeMode="tail" style={styles.name}>
         as {name}

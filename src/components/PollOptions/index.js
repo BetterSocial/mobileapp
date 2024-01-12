@@ -1,7 +1,5 @@
 import * as React from 'react';
 import {StyleSheet, TouchableNativeFeedback, View, Text, Dimensions, Platform} from 'react-native';
-
-import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 import IconPollWinnerBadge from '../../assets/icon/IconPollWinnerBadge';
@@ -115,7 +113,7 @@ const PollOptions = ({
 const styles = StyleSheet.create({
   pollOptionsItemContainer: {
     flex: 1,
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
@@ -125,7 +123,7 @@ const styles = StyleSheet.create({
   },
   pollOptionsItemActiveContainer: {
     flex: 1,
-    backgroundColor: colors.holytosca30percent,
+    backgroundColor: COLORS.holytosca30percent,
     marginBottom: 8,
     borderRadius: 8,
     justifyContent: 'center',
@@ -146,7 +144,7 @@ const styles = StyleSheet.create({
   pollOptionItemText: {
     flex: 1,
     textAlignVertical: 'center',
-    color: colors.black,
+    color: COLORS.black,
     fontFamily: fonts.inter[400],
     marginBottom: Platform.OS === 'ios' ? 0 : 3,
     fontSize: normalizeFontSize(14)
@@ -163,7 +161,7 @@ const styles = StyleSheet.create({
       top: 0,
       left: 0,
       borderRadius: 6,
-      backgroundColor: isMyPoll ? colors.bondi_blue : colors.gray1
+      backgroundColor: isMyPoll ? COLORS.bondi_blue : COLORS.lightgrey
     };
   },
   expiredPercentageBar: (percent, isMax = false) => {
@@ -174,21 +172,21 @@ const styles = StyleSheet.create({
       top: 0,
       left: 0,
       borderRadius: 6,
-      backgroundColor: isMax ? COLORS.blueSea : colors.gray1
+      backgroundColor: isMax ? COLORS.blueSea : COLORS.lightgrey
     };
   },
   totalpolltext: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(12),
     lineHeight: 16,
-    color: colors.blackgrey
+    color: COLORS.blackgrey
   },
   pollRadioButton: {
     width: 12,
     height: 12,
     alignSelf: 'center',
     borderRadius: 6,
-    borderColor: colors.black,
+    borderColor: COLORS.black,
     borderWidth: 1,
     marginEnd: 8
   },
@@ -198,7 +196,7 @@ const styles = StyleSheet.create({
     height: 12,
     alignSelf: 'center',
     borderRadius: 6,
-    backgroundColor: colors.holytosca,
+    backgroundColor: COLORS.anon_primary,
     marginEnd: 8
   },
   totalVotesContainer: {

@@ -26,18 +26,19 @@ import ModalAction from '../GroupInfo/elements/ModalAction';
 import ModalActionAnonymous from '../GroupInfo/elements/ModalActionAnonymous';
 import dimen from '../../utils/dimen';
 import useChatInfoScreenHook from '../../hooks/screen/useChatInfoHook';
+import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
 import {CHANNEL_GROUP, GROUP_INFO, SIGNED} from '../../hooks/core/constant';
 import {Context} from '../../context';
 import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
-import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {getChatName} from '../../utils/string/StringUtils';
 import {isContainUrl} from '../../utils/Utils';
+import {COLORS} from '../../utils/theme';
 
 export const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#fff', paddingBottom: 40},
+  container: {flex: 1, backgroundColor: COLORS.white, paddingBottom: 40},
   users: {
     paddingTop: 12
   },
@@ -49,11 +50,11 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(20),
-    color: colors.holytosca
+    color: COLORS.anon_primary
   },
   btnAdd: {
     padding: normalize(8),
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     width: 'auto',
     justifyContent: 'center',
     alignItems: 'center',
@@ -65,7 +66,7 @@ export const styles = StyleSheet.create({
   countUser: (from) => ({
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(16.94),
-    color: from === SIGNED ? colors.darkBlue : colors.holytosca,
+    color: from === SIGNED ? COLORS.signed_primary : COLORS.anon_primary,
     marginLeft: dimen.normalizeDimen(20),
     marginBottom: dimen.normalizeDimen(4),
     fontWeight: 'bold'
@@ -74,27 +75,27 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(16.94),
-    color: colors.holytosca
+    color: COLORS.anon_primary
   },
   dateCreate: {
     marginLeft: 20,
     fontSize: normalizeFontSize(14),
     fontFamily: fonts.inter[400],
     lineHeight: normalizeFontSize(16.94),
-    color: '#000',
+    color: COLORS.black,
     marginTop: 4,
     marginBottom: 9
   },
   groupName: {
     fontSize: normalizeFontSize(24),
     lineHeight: normalizeFontSize(29.05),
-    color: '#000',
+    color: COLORS.black,
     width: '100%',
     paddingHorizontal: dimen.normalizeDimen(20),
     fontWeight: 'bold'
   },
   lineTop: {
-    backgroundColor: colors.alto,
+    backgroundColor: COLORS.lightgrey,
     height: 1
   },
   containerGroupName: {
@@ -112,7 +113,7 @@ export const styles = StyleSheet.create({
     width: normalize(100),
     height: normalize(100),
     borderRadius: normalize(50),
-    backgroundColor: colors.alto,
+    backgroundColor: COLORS.lightgrey,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -144,7 +145,7 @@ export const styles = StyleSheet.create({
   },
   gap: {
     height: 1,
-    backgroundColor: '#E0E0E0'
+    backgroundColor: COLORS.lightgrey
   },
   actionGroup: {
     marginTop: 22
@@ -162,7 +163,7 @@ export const styles = StyleSheet.create({
     marginRight: 26
   },
   textAct: {
-    color: '#FF2E63',
+    color: COLORS.redalert,
     fontSize: 14
   },
   mr7: {
@@ -190,7 +191,8 @@ const SampleChatInfoScreen = () => {
     isAnonymousModalOpen,
     blockModalRef,
     handleShowArrow,
-    loadingChannelInfo
+    loadingChannelInfo,
+    isLoadingInitChat
   } = useChatInfoScreenHook();
   const [isLoadingMembers] = React.useState<boolean>(false);
   const {signedProfileId} = useUserAuthHook();
@@ -199,6 +201,12 @@ const SampleChatInfoScreen = () => {
   const ANONYMOUS_USER = 'AnonymousUser';
   const {anon_user_info_color_code, anon_user_info_emoji_code} =
     channelInfo?.rawJson?.channel || {};
+  const {anonProfileId} = useProfileHook();
+  const memberChat = channelInfo?.rawJson?.channel?.members?.find(
+    (item: any) => item.user_id !== anonProfileId
+  );
+  const betterSocialMember = channelInfo?.rawJson?.better_channel_member;
+
   const showImageProfile = (): React.ReactNode => {
     if (channelInfo?.channelType === CHANNEL_GROUP) {
       return (
@@ -229,11 +237,20 @@ const SampleChatInfoScreen = () => {
     if (!isContainUrl(item?.user?.image) || item?.user?.name === ANONYMOUS_USER) {
       return (
         <View style={styles.mr7}>
-          <AnonymousIcon
-            color={anon_user_info_color_code}
-            emojiCode={anon_user_info_emoji_code}
-            size={normalize(48)}
-          />
+          {betterSocialMember &&
+          item.user_id === betterSocialMember[memberChat?.user_id]?.user_id ? (
+            <AnonymousIcon
+              color={betterSocialMember[memberChat?.user_id]?.anon_user_info_color_code}
+              emojiCode={betterSocialMember[memberChat?.user_id]?.anon_user_info_emoji_code}
+              size={normalize(48)}
+            />
+          ) : (
+            <AnonymousIcon
+              color={anon_user_info_color_code}
+              emojiCode={anon_user_info_emoji_code}
+              size={normalize(48)}
+            />
+          )}
         </View>
       );
     }
@@ -314,6 +331,7 @@ const SampleChatInfoScreen = () => {
         isOpen={openModal}
         onPress={handlePressPopup}
         name={selectedUser?.user?.username || selectedUser?.user?.name}
+        isLoadingInitChat={isLoadingInitChat}
       />
       <ModalActionAnonymous
         name={

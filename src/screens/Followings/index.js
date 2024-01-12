@@ -3,7 +3,7 @@ import * as React from 'react';
 import {ScrollView, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
 import UsersFragment from '../DiscoveryScreenV2/fragment/UsersFragment';
-import {colors} from '../../utils/colors';
+import {COLORS} from '../../utils/theme';
 
 const Followings = ({dataFollower = [], isLoading, setDataFollower = () => {}}) => {
   return (
@@ -29,5 +29,5 @@ Followings.propTypes = {
 export default Followings;
 
 const styles = StyleSheet.create({
-  container: {height: '100%', backgroundColor: colors.white}
+  container: {height: '100%', backgroundColor: COLORS.white}
 });

@@ -5,7 +5,7 @@ exports[`Testing Discovery Screen V2 Testing Discovery Search Bar Match Snapshot
   style={
     Object {
       "backgroundColor": "white",
-      "borderBottomColor": "#E0E0E0",
+      "borderBottomColor": "#F5F6F7",
       "borderBottomWidth": 0.8,
       "flexDirection": "row",
       "height": 48,
@@ -56,7 +56,7 @@ exports[`Testing Discovery Screen V2 Testing Discovery Search Bar Match Snapshot
       style={
         Object {
           "alignSelf": "center",
-          "backgroundColor": "#F5F5F5",
+          "backgroundColor": "#F5F6F7",
           "borderRadius": 6.4,
           "flex": 1,
           "flexDirection": "row",

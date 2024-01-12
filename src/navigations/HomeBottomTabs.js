@@ -1,25 +1,26 @@
-import * as React from 'react';
-import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import messaging from '@react-native-firebase/messaging';
-import {Platform, StyleSheet, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import * as React from 'react';
+import {Platform, StyleSheet, View, SafeAreaView} from 'react-native';
+import PushNotification from 'react-native-push-notification';
+/* eslint-disable no-use-before-define */
 import {useRecoilState, useRecoilValue} from 'recoil';
 
-import ChannelListScreenV2 from '../screens/ChannelListScreenV2';
-import FirebaseConfig from '../configs/FirebaseConfig';
 import MemoFeed from '../assets/icon/Feed';
 import MemoHome from '../assets/icon/Home';
 import MemoNews from '../assets/icon/News';
 import MemoProfileIcon from '../assets/icon/Profile';
 import profileAtom from '../atom/profileAtom';
+import FirebaseConfig from '../configs/FirebaseConfig';
 import useCoreChatSystemHook from '../hooks/core/useCoreChatSystemHook';
 import useRootChannelListHook from '../hooks/screen/useRootChannelListHook';
-import TokenStorage, {ITokenEnum} from '../utils/storage/custom/tokenStorage';
 import {FeedScreen, NewsScreen, ProfileScreen} from '../screens';
+import ChannelListScreenV2 from '../screens/ChannelListScreenV2';
 import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
-import {colors} from '../utils/colors';
+import TokenStorage, {ITokenEnum} from '../utils/storage/custom/tokenStorage';
 import {getAnonymousUserId, getUserId} from '../utils/users';
+import {COLORS} from '../utils/theme';
 
 const Tab = createBottomTabNavigator();
 
@@ -242,7 +243,7 @@ function HomeBottomTabs({navigation}) {
   // eslint-disable-next-line react/display-name
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Tab.Navigator
         initialRouteName={
           initialStartup !== null && otherProfileData?.user_id === initialStartup.id
@@ -250,8 +251,8 @@ function HomeBottomTabs({navigation}) {
             : 'Feed'
         }
         tabBarOptions={{
-          activeTintColor: colors.holytosca,
-          inactiveTintColor: colors.gray1,
+          activeTintColor: COLORS.signed_primary,
+          inactiveTintColor: COLORS.blackgrey,
           safeAreaInsets: {
             top: 0,
             bottom: 0,
@@ -260,15 +261,15 @@ function HomeBottomTabs({navigation}) {
           }
         }}
         screenOptions={({navigation: screenOptionsNavigation}) => ({
-          activeTintColor: colors.holytosca,
+          activeTintColor: COLORS.signed_primary,
           tabBarLabel: () => (
             <View
               style={[
                 styles.badge,
                 {
                   backgroundColor: screenOptionsNavigation.isFocused()
-                    ? colors.holytosca
-                    : 'transparent'
+                    ? COLORS.signed_primary
+                    : COLORS.transparent
                 }
               ]}
             />
@@ -279,7 +280,7 @@ function HomeBottomTabs({navigation}) {
           component={FeedScreen}
           initialParams={{isBottomTab: true}}
           options={{
-            activeTintColor: colors.holytosca,
+            activeTintColor: COLORS.signed_primary,
             tabBarIcon: renderTabLabelIcon('Feed')
             // unmountOnBlur: true
           }}
@@ -289,7 +290,7 @@ function HomeBottomTabs({navigation}) {
           component={WebsocketResearchScreen}
           initialParams={{isBottomTab: true}}
           options={{
-            activeTintColor: colors.holytosca,
+            activeTintColor: COLORS.signed_primary,
             tabBarIcon: renderTabLabelIcon('Feed')
             // unmountOnBlur: true
           }}
@@ -299,7 +300,7 @@ function HomeBottomTabs({navigation}) {
           component={ChannelListScreen}
           initialParams={{isBottomTab: true}}
           options={{
-            activeTintColor: colors.holytosca,
+            activeTintColor: COLORS.signed_primary,
             tabBarIcon: renderTabLabelIcon('ChannelList'),
             tabBarBadge:
               unReadMessage.total_unread_count + unReadMessage.unread_post > 0
@@ -312,7 +313,7 @@ function HomeBottomTabs({navigation}) {
           component={ChannelListScreenV2}
           initialParams={{isBottomTab: true}}
           options={{
-            activeTintColor: colors.holytosca,
+            activeTintColor: COLORS.signed_primary,
             tabBarIcon: renderTabLabelIcon('ChannelList'),
             tabBarBadge: totalUnreadCount > 0 ? totalUnreadCount : null
           }}
@@ -322,7 +323,7 @@ function HomeBottomTabs({navigation}) {
           component={NewsScreen}
           initialParams={{isBottomTab: true}}
           options={{
-            activeTintColor: colors.holytosca,
+            activeTintColor: COLORS.signed_primary,
             tabBarIcon: renderTabLabelIcon('News')
             // unmountOnBlur: true
           }}
@@ -332,14 +333,14 @@ function HomeBottomTabs({navigation}) {
           initialParams={{isBottomTab: true}}
           component={ProfileScreen}
           options={{
-            activeTintColor: colors.holytosca,
+            activeTintColor: COLORS.signed_primary,
             tabBarIcon: renderTabLabelIcon('Profile')
             // unmountOnBlur:true
           }}
         />
       </Tab.Navigator>
       <FirebaseConfig navigation={navigation} />
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -347,7 +348,8 @@ export default HomeBottomTabs;
 const styles = StyleSheet.create({
   container: {
     height: '100%',
-    width: '100%'
+    width: '100%',
+    backgroundColor: COLORS.white
   },
   badge: {
     height: 7,

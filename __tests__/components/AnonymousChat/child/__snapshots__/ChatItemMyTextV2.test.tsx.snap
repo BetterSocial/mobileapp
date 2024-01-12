@@ -18,7 +18,7 @@ exports[`TESTING ChatItemTargetText RENDER continuous should match snapshot 1`] 
     style={
       Array [
         Object {
-          "backgroundColor": "#88CDD0",
+          "backgroundColor": "#107793",
         },
         Object {
           "borderRadius": 8,
@@ -35,6 +35,7 @@ exports[`TESTING ChatItemTargetText RENDER continuous should match snapshot 1`] 
     <Text
       style={
         Object {
+          "color": "#FFFFFF",
           "fontFamily": "Inter-Regular",
           "fontSize": 16,
           "lineHeight": 19.36,
@@ -88,7 +89,7 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
     style={
       Array [
         Object {
-          "backgroundColor": "#88CDD0",
+          "backgroundColor": "#107793",
         },
         Object {
           "borderRadius": 8,
@@ -113,6 +114,7 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
       <Text
         style={
           Object {
+            "color": "#FFFFFF",
             "fontFamily": "Inter-SemiBold",
             "fontSize": 12,
             "lineHeight": 19.36,
@@ -125,7 +127,7 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
         style={
           Object {
             "alignSelf": "center",
-            "backgroundColor": "#000000",
+            "backgroundColor": "#FFFFFF",
             "borderRadius": 2,
             "height": 3,
             "marginLeft": 5,
@@ -138,6 +140,7 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
         style={
           Object {
             "alignSelf": "center",
+            "color": "#FFFFFF",
             "fontFamily": "Inter-ExtraLight",
             "fontSize": 10,
             "lineHeight": 12.19,
@@ -150,6 +153,7 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
     <Text
       style={
         Object {
+          "color": "#FFFFFF",
           "fontFamily": "Inter-Regular",
           "fontSize": 16,
           "lineHeight": 19.36,

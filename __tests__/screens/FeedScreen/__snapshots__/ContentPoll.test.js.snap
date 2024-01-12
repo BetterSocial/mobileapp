@@ -52,7 +52,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
         onStartShouldSetResponder={[Function]}
         style={
           Object {
-            "backgroundColor": "#F5F5F5",
+            "backgroundColor": "#F5F6F7",
             "borderRadius": 8,
             "flex": 1,
             "flexDirection": "row",
@@ -73,7 +73,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
                 "top": 0,
               },
               Object {
-                "backgroundColor": "#C4C4C4",
+                "backgroundColor": "#F5F6F7",
                 "width": "0%",
               },
             ]
@@ -101,7 +101,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
           <Text
             style={
               Object {
-                "color": "#000000",
+                "color": "#1E1F20",
                 "flex": 1,
                 "fontFamily": "Inter-Regular",
                 "fontSize": 12.600000000000001,
@@ -139,7 +139,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
         onStartShouldSetResponder={[Function]}
         style={
           Object {
-            "backgroundColor": "#F5F5F5",
+            "backgroundColor": "#F5F6F7",
             "borderRadius": 8,
             "flex": 1,
             "flexDirection": "row",
@@ -160,7 +160,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
                 "top": 0,
               },
               Object {
-                "backgroundColor": "#00ADB5",
+                "backgroundColor": undefined,
                 "width": "50%",
               },
             ]
@@ -190,7 +190,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
           <Text
             style={
               Object {
-                "color": "#000000",
+                "color": "#1E1F20",
                 "flex": 1,
                 "fontFamily": "Inter-Regular",
                 "fontSize": 12.600000000000001,

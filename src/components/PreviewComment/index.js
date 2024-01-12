@@ -44,7 +44,7 @@ const PreviewComment = ({comment, time, image, totalComment, onPress, user, item
           <View style={styles.profile}>
             {item?.data?.anon_user_info_emoji_name || item?.data?.is_anonymous ? (
               <View style={[styles.image, {backgroundColor: item.data.anon_user_info_color_code}]}>
-                <Text style={{color: 'white', fontSize: 14}}>
+                <Text style={{color: COLORS.white, fontSize: 14}}>
                   {item?.data?.anon_user_info_emoji_code}
                 </Text>
               </View>
@@ -60,7 +60,7 @@ const PreviewComment = ({comment, time, image, totalComment, onPress, user, item
                     style={{
                       width: 24,
                       height: 24,
-                      backgroundColor: 'white',
+                      backgroundColor: COLORS.white,
                       borderRadius: 12
                     }}
                   />
@@ -72,7 +72,7 @@ const PreviewComment = ({comment, time, image, totalComment, onPress, user, item
             <View style={styles.containerUsername}>
               <CommentUserName isPreviewComment comment={item} user={user} />
               <Gap width={4} />
-              <Dot size={4} color={'#828282'} />
+              <Dot size={4} color={COLORS.blackgrey} />
               <Gap width={4} />
               <Text style={styles.time}>{calculateTime(time).replace('ago', '')}</Text>
             </View>
@@ -91,7 +91,7 @@ const PreviewComment = ({comment, time, image, totalComment, onPress, user, item
         <TouchableOpacity style={styles.btnMore} onPress={onPress}>
           <Text
             style={{
-              color: COLORS.blue,
+              color: COLORS.signed_primary,
               ...FONTS.body4
             }}>{`${totalComment} more ${totalComment > 1 ? 'replies' : 'reply'}`}</Text>
         </TouchableOpacity>
@@ -110,18 +110,18 @@ export const styles = StyleSheet.create({
   lineBeforeProfile: {
     height: 9,
     borderLeftWidth: 1,
-    borderLeftColor: '#C4C4C4',
+    borderLeftColor: COLORS.balance_gray,
     marginLeft: 8
   },
   container: (totalComment) => ({
     borderLeftWidth: 1,
     marginHorizontal: SIZES.base,
-    borderLeftColor: totalComment >= 1 ? '#C4C4C4' : '#fff'
+    borderLeftColor: totalComment >= 1 ? COLORS.balance_gray : COLORS.white
   }),
   username: {
     fontFamily: fonts.inter[700],
     fontSize: normalizeFontSize(10),
-    color: '#828282',
+    color: COLORS.blackgrey,
     marginLeft: SIZES.base
   },
   profile: {
@@ -131,7 +131,7 @@ export const styles = StyleSheet.create({
   time: {
     fontFamily: fonts.inter[400],
     fontSize: 10,
-    color: '#828282',
+    color: COLORS.blackgrey,
     lineHeight: 12
   },
   containerUsername: {

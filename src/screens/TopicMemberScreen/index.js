@@ -8,11 +8,11 @@ import ShareUtils from '../../utils/share';
 import dimen from '../../utils/dimen';
 import {getAllMemberTopic} from '../../service/topics';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {colors} from '../../utils/colors';
 import StringConstant from '../../utils/string/StringConstant';
 import UsersFragment from '../DiscoveryScreenV2/fragment/UsersFragment';
 import {Context} from '../../context';
 import NavHeader from '../TopicPageScreen/elements/NavHeader';
+import {COLORS} from '../../utils/theme';
 
 const styles = StyleSheet.create({
   parentContainer: {
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   },
   fragmentContainer: {
     height: '100%',
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   fragmentContentContainer: {
     // flexGrow: 1,
@@ -88,7 +88,7 @@ const TopicMemberScreen = () => {
     return () => {
       scrollY.removeListener(listener);
     };
-  }, [scrollY]);
+  }, []);
 
   const handleScroll = Animated.event([{nativeEvent: {contentOffset: {y: scrollY}}}], {
     useNativeDriver: false
@@ -154,7 +154,6 @@ const TopicMemberScreen = () => {
     cancelTokenRef.current = axios.CancelToken.source();
   };
 
-  if (isInitialLoading) return null;
   return (
     <SafeAreaProvider forceInset={{top: 'always'}} style={styles.parentContainer}>
       <NavHeader
@@ -186,7 +185,7 @@ const TopicMemberScreen = () => {
         decelerationRate="fast"
         scrollEventThrottle={1}
         style={styles.fragmentContainer}
-        contentContainerStyle={[styles.fragmentContentContainer, {paddingTop: headerShowHeight}]}
+        contentContainerStyle={[styles.fragmentContentContainer]}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
         removeClippedSubviews={true}
@@ -208,4 +207,4 @@ const TopicMemberScreen = () => {
     </SafeAreaProvider>
   );
 };
-export default withInteractionsManaged(TopicMemberScreen);
+export default TopicMemberScreen;

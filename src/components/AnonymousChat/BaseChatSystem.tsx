@@ -3,10 +3,11 @@ import {View, Text, StyleSheet} from 'react-native';
 import {BaseChatItemComponentProps} from '../../../types/component/AnonymousChat/BaseChatItem.types';
 import dimen from '../../utils/dimen';
 import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
+import {COLORS} from '../../utils/theme';
 
 const styles = StyleSheet.create({
   containerMessage: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: COLORS.lightgrey,
     marginHorizontal: dimen.normalizeDimen(20),
     padding: dimen.normalizeDimen(8),
     borderRadius: dimen.normalizeDimen(8),
@@ -16,22 +17,30 @@ const styles = StyleSheet.create({
   },
   textSystem: {
     fontSize: 14,
-    color: '#828282',
+    color: COLORS.blackgrey,
     textAlign: 'center'
   }
 });
 
-const BaseSystemChat: React.FC<BaseChatItemComponentProps> = ({item, index}) => {
+const BaseSystemChat: React.FC<BaseChatItemComponentProps> = ({
+  item,
+  index,
+  messageSingle,
+  componentType = 'GROUP'
+}) => {
   const {handleTextSystem, splitSystemMessage} = useChatUtilsHook();
 
   const messageText = () => {
-    return splitSystemMessage(handleTextSystem(item))?.map((message, key) => {
-      return (
-        <Text key={key} style={styles.textSystem}>
-          {message}.
-        </Text>
-      );
-    });
+    if (componentType === 'GROUP') {
+      return splitSystemMessage(handleTextSystem(item))?.map((message, key) => {
+        return (
+          <Text key={key} style={styles.textSystem}>
+            {message}.
+          </Text>
+        );
+      });
+    }
+    return <Text style={styles.textSystem}>{messageSingle}.</Text>;
   };
 
   return (

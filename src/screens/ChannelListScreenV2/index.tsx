@@ -11,6 +11,7 @@ import HorizontalTab from '../../components/HorizontalTab';
 import ChannelListTabItem from '../../components/HorizontalTab/ChannelListTabItem';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
+import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
 import useRootChannelListHook from '../../hooks/screen/useRootChannelListHook';
 import {fcmTokenService} from '../../service/users';
 import StorageUtils from '../../utils/storage';
@@ -29,7 +30,9 @@ const ChannelListScreenV2 = () => {
   const {profile} = useUserAuthHook();
   const isFocused = navigation.isFocused();
 
-  const [selectedTab, setSelectedTab] = React.useState(0);
+  const {selectedChannelKey} = useChatUtilsHook();
+
+  const [selectedTab, setSelectedTab] = React.useState(selectedChannelKey || 0);
   const {signedChannelUnreadCount, anonymousChannelUnreadCount} = useRootChannelListHook();
 
   const navigateToContactScreen = () => {
@@ -116,7 +119,7 @@ when friends send you messages.`,
   }, [isFocused]);
 
   return (
-    <>
+    <View>
       <StatusBar translucent={false} />
       <FlatList
         data={[]}
@@ -127,7 +130,11 @@ when friends send you messages.`,
         ListHeaderComponent={
           <>
             <View style={{height: 52}}>
-              <Search animatedValue={0} onPress={navigateToContactScreen} />
+              <Search
+                animatedValue={0}
+                onPress={navigateToContactScreen}
+                isAnon={selectedTab === 1}
+              />
             </View>
 
             <HorizontalTab
@@ -162,7 +169,7 @@ when friends send you messages.`,
           </>
         }
       />
-    </>
+    </View>
   );
 };
 
