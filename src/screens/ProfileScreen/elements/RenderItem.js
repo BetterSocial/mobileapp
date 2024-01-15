@@ -2,6 +2,7 @@ import * as React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import {Dimensions, StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
+import PropTypes from 'prop-types';
 
 import Content from '../../FeedScreen/Content';
 import ContentLink from '../../FeedScreen/ContentLink';
@@ -263,6 +264,21 @@ const Item = ({
     </View>
   );
 };
+
+Item.propTypes = {
+  item: PropTypes.object,
+  onPress: PropTypes.func,
+  onPressBlock: PropTypes.func,
+  onPressUpvote: PropTypes.func,
+  onPressDownVote: PropTypes.func,
+  onPressComment: PropTypes.func,
+  selfUserId: PropTypes.any,
+  onPressDomain: PropTypes.func,
+  onNewPollFetched: PropTypes.func,
+  index: PropTypes.number,
+  onHeaderOptionClicked: PropTypes.func
+};
+
 function compare(prevProps, nextProps) {
   return prevProps.item === nextProps.item;
 }
