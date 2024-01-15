@@ -31,7 +31,6 @@ import RenderItem from '../ProfileScreen/elements/RenderItem';
 import ReportUser from '../../components/Blocking/ReportUser';
 import ShareUtils from '../../utils/share';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
-import TextAreaChat from '../../components/TextAreaChat';
 import StorageUtils from '../../utils/storage';
 import dimen from '../../utils/dimen';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
@@ -56,13 +55,9 @@ import {getSingularOrPluralText} from '../../utils/string/StringUtils';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherProfileFeed';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-<<<<<<< Updated upstream
 import {COLORS} from '../../utils/theme';
 import EnvelopeIcon from '../../assets/icon/EnvelopeIcon';
-import {CircleGradient} from '../../components/Karma/CircleGradient';
-=======
 import ProfilePicture from '../ProfileScreen/elements/ProfilePicture';
->>>>>>> Stashed changes
 
 const {width} = Dimensions.get('screen');
 

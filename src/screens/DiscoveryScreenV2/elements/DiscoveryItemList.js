@@ -1,22 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TouchableNativeFeedback,
-  TouchableOpacity,
-  View
-} from 'react-native';
-import {fonts, normalize} from '../../../utils/fonts';
-import {CircleGradient} from '../../../components/Karma/CircleGradient';
+import {StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View} from 'react-native';
+import {fonts} from '../../../utils/fonts';
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 import {COLORS} from '../../../utils/theme';
-<<<<<<< Updated upstream
-=======
-import {fonts} from '../../../utils/fonts';
 import ProfilePicture from '../../ProfileScreen/elements/ProfilePicture';
->>>>>>> Stashed changes
 
 const renderDefaultImage = (DefaultImage) => {
   if (DefaultImage) {
