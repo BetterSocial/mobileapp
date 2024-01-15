@@ -79,9 +79,8 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
           message,
           attachments,
           localDb,
-          replyData ? MESSAGE_TYPE_REPLY : MESSAGE_TYPE_REGULAR,
-          'pending',
-          json
+          'regular',
+          'pending'
         );
         currentChatSchema.save(localDb);
         refresh('chat');

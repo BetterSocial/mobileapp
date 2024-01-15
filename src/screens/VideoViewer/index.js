@@ -1,6 +1,5 @@
 import * as React from 'react';
-import {Text, View} from 'react-native';
-import Video from 'react-native-video';
+import PropsTypes from 'prop-types';
 import VideoPlayer from 'react-native-video-controls';
 
 const VideoViewerScreen = ({route, navigation}) => {
@@ -20,5 +19,10 @@ const VideoViewerScreen = ({route, navigation}) => {
       disableVolume
     />
   );
+};
+
+VideoViewerScreen.propsTypes = {
+  route: PropsTypes.any,
+  navigation: PropsTypes.any
 };
 export default VideoViewerScreen;

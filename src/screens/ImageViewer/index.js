@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropsTypes from 'prop-types';
 import {ActivityIndicator} from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
 
@@ -7,9 +8,13 @@ const ImageViewerScreen = ({route, navigation}) => {
   navigation.setOptions({
     headerTitle: title
   });
+  const loadingRender = () => <ActivityIndicator />;
 
-  return (
-    <ImageViewer imageUrls={images} index={index} loadingRender={() => <ActivityIndicator />} />
-  );
+  return <ImageViewer imageUrls={images} index={index} loadingRender={loadingRender} />;
+};
+
+ImageViewerScreen.propsTypes = {
+  route: PropsTypes.any,
+  navigation: PropsTypes.any
 };
 export default ImageViewerScreen;

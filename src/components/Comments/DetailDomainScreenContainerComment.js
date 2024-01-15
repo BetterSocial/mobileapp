@@ -87,10 +87,10 @@ const DetailDomainScreenContainerComment = ({comments, indexFeed, updateParent, 
         });
 
         return (
-          <View key={index}>
-            <View key={index}>
+          <View key={`c${index}`}>
+            <View key={`c1${index}`}>
               <DetailDomainScreenCommentItem
-                key={index}
+                key={`d${index}`}
                 comment={item}
                 // username={item.user.data.username}
                 user={item.user}

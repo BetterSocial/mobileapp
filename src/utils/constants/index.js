@@ -61,8 +61,6 @@ const NavigationConstants = {
 
 const POST_VERSION = 2;
 
-const MESSAGE_TYPE_REGULAR = 'regular';
-const MESSAGE_TYPE_REPLY = 'reply';
 const FEEDS_DIFF_TO_FETCH = 5;
 
 export {
@@ -113,8 +111,6 @@ export {
   POST_CHECK_FEED_EXPIRED,
   POST_CHECK_AUTHOR_BLOCKED,
   FEED_CHAT_KEY,
-  MESSAGE_TYPE_REGULAR,
-  MESSAGE_TYPE_REPLY,
   NavigationConstants,
   CHAT_ANON,
   CHAT_SIGNED
