@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropsTypes from 'prop-types';
 import {Image, Pressable, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import NewsEmptyState from '../../../assets/images/news-empty-state.png';
@@ -335,4 +336,19 @@ const styles = StyleSheet.create({
   }
 });
 
+RenderItem.propTypes = {
+  item: PropsTypes.object,
+  image: PropsTypes.any,
+  onPressComment: PropsTypes.func,
+  onPressDownVote: PropsTypes.func,
+  onPressUpvote: PropsTypes.func,
+  onPressShare: PropsTypes.func,
+  selfUserId: PropsTypes.any,
+  onPressBlock: PropsTypes.func,
+  handleFollow: PropsTypes.func,
+  handleUnfollow: PropsTypes.func,
+  follow: PropsTypes.bool,
+  follower: PropsTypes.number,
+  score: PropsTypes.any
+};
 export default RenderItem;
