@@ -21,7 +21,7 @@ const SearchAutoComplete = (props) => {
         <View style={styles.box}>
           {props.options.map((value, index) => {
             return (
-              <TouchableNativeFeedback key={`c${index}`} onPress={() => props.onSelect(value)}>
+              <TouchableNativeFeedback key={value.label} onPress={() => props.onSelect(value)}>
                 <View style={styles.list}>
                   <Text style={styles.label}>{value.label}</Text>
                 </View>

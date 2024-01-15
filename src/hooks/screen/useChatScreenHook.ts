@@ -99,7 +99,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
 
   const sendChat = async (
     message: string = randomString(20),
-    attachments: [],
+    attachments: [] = [],
     iteration = 0,
     sendingChatSchema: ChatSchema | null = null
   ) => {
