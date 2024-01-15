@@ -172,6 +172,7 @@ const UsersFragment = ({
     ) {
       return (
         <DomainList
+          withKarma={true}
           key={`${key}-${index}`}
           onPressBody={() => handleOnPress(item.user || item)}
           handleSetFollow={() => handleFollow(from, true, item.user || item)}
