@@ -21,7 +21,7 @@ const Search = ({animatedValue, onContainerClicked = () => {}, getSearchLayout})
           <View style={styles.wrapperIcon}>
             <MemoIc_search width={16.67} height={16.67} />
           </View>
-          <Text style={styles.inputText}>{StringConstant.newsTabHeaderPlaceholder}</Text>
+          <Text style={styles.inputText}>{StringConstant.discoverySearchBarPlaceholder}</Text>
         </View>
       </Pressable>
     </Animated.View>
