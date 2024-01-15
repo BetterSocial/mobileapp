@@ -56,51 +56,10 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     iteration = 0,
     sendingChatSchema: ChatSchema | null = null
   ) => {
-    if (iteration > 5) {
-      SimpleToast.show("Can't send message, please check your connection");
-      return;
-    }
+    const MAX_ITERATIONS = 5;
 
-    let currentChatSchema = sendingChatSchema;
-    let userId = await getUserId();
-    const myAnonymousId = await getAnonymousUserId();
-
-    if (type === 'ANONYMOUS') {
-      userId = myAnonymousId;
-    }
-    try {
-      const randomId = uuid();
-
-      if (currentChatSchema === null) {
-        currentChatSchema = await ChatSchema.generateSendingChat(
-          randomId,
-          userId,
-          selectedChannel?.id,
-          message,
-          attachments,
-          localDb,
-          'regular',
-          'pending'
-        );
-        currentChatSchema.save(localDb);
-        refresh('chat');
-        refresh('channelList');
-      }
-      let channelType = CHANNEL_TYPE_PERSONAL;
-      if (
-        selectedChannel?.channelType?.toLowerCase() === 'group' ||
-        selectedChannel?.rawJson?.channel?.type === 'group'
-      ) {
-        channelType = CHANNEL_TYPE_GROUP;
-      }
-
-      if (selectedChannel?.rawJson?.channel?.channel_type === 4) {
-        channelType = CHANNEL_TYPE_ANONYMOUS;
-      }
-
-      let response;
-
-      const allAttachmentPromises: Promise<void>[] = attachments.map(async (item: any) => {
+    const processAttachments = async () => {
+      const processAttachment = async (item) => {
         if (item.type === 'image') {
           const uploadedImageUrl = await ImageUtils.uploadImage(item.asset_url);
           return {
@@ -136,12 +95,55 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
             file_path: uploadedUrl.data.url
           };
         }
-
         return item;
-      });
+      };
 
-      const newAttachments = await Promise.all(allAttachmentPromises);
+      const allAttachmentPromises = attachments.map(processAttachment);
+      return Promise.all(allAttachmentPromises);
+    };
 
+    const updateChatStatus = async (currentChatSchema, response) => {
+      await currentChatSchema.updateChatSentStatus(localDb, response);
+      refresh('chat');
+      refresh('channelList');
+    };
+
+    if (iteration > MAX_ITERATIONS) {
+      SimpleToast.show("Can't send message, please check your connection");
+      return;
+    }
+
+    let currentChatSchema = sendingChatSchema;
+    let userId = await getUserId();
+    const myAnonymousId = await getAnonymousUserId();
+
+    if (type === 'ANONYMOUS') {
+      userId = myAnonymousId;
+    }
+
+    try {
+      const randomId = uuid();
+
+      if (currentChatSchema === null) {
+        currentChatSchema = await ChatSchema.generateSendingChat(
+          randomId,
+          userId,
+          selectedChannel?.id,
+          message,
+          attachments,
+          localDb,
+          'regular',
+          'pending'
+        );
+        currentChatSchema.save(localDb);
+        refresh('chat');
+        refresh('channelList');
+      }
+
+      const channelType = CHANNEL_TYPE_PERSONAL;
+      const newAttachments = await processAttachments(attachments);
+
+      let response;
       if (type === 'ANONYMOUS') {
         response = await AnonymousMessageRepo.sendAnonymousMessage(
           selectedChannel?.id,
@@ -158,16 +160,13 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
           null
         );
       }
-      await currentChatSchema.updateChatSentStatus(localDb, response);
-      refresh('chat');
-      refresh('channelList');
+
+      await updateChatStatus(currentChatSchema, localDb, response);
     } catch (e) {
       if (e?.response?.data?.status === 'Channel is blocked') return;
 
-      setTimeout(() => {
-        sendChat(message, attachments, iteration + 1, currentChatSchema).catch((sendChatError) => {
-          console.log(sendChatError);
-        });
+      setTimeout(async () => {
+        await sendChat(message, attachments, iteration + 1, currentChatSchema);
       }, 1000);
     }
   };
