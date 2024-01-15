@@ -105,6 +105,11 @@
     "@typescript-eslint/object-curly-spacing": "warn",
     "@typescript-eslint/no-empty-function": "warn",
     "import/no-cycle": "warn",
+    "consistent-return": "warn",
+    "react/display-name": "warn",
+    "no-unused-expressions": "warn",
+    "prefer-template": "warn",
+    "global-require": "warn",
     "import/extensions": [
       "error",
       "ignorePackages",

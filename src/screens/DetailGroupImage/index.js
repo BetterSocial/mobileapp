@@ -10,15 +10,15 @@ import {
   StatusBar
 } from 'react-native';
 
+import Icon from 'react-native-vector-icons/Octicons';
+import {useNavigation} from '@react-navigation/native';
 import MemoIc_arrow_back_white from '../../assets/arrow/Ic_arrow_back_white';
 import {fonts} from '../../utils/fonts';
-import Icon from 'react-native-vector-icons/Octicons';
 import {calculateTime} from '../../utils/time';
 import ModalImageSingleDetail from '../../components/Chat/ModalImageSingleDetail';
-import {useNavigation} from '@react-navigation/native';
 import {COLORS} from '../../utils/theme';
 
-const width = Dimensions.get('screen').width;
+const {width} = Dimensions.get('screen');
 
 const ShowDetailGroupImage = (props) => {
   const [images] = React.useState(props.route.params.images);
@@ -74,7 +74,7 @@ export default ShowDetailGroupImage;
 
 const styles = StyleSheet.create({
   image: {
-    width: width,
+    width,
     height: 417,
     marginTop: 8,
     justifyContent: 'flex-end',

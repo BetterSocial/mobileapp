@@ -7,7 +7,7 @@ import {
   StyleSheet,
   View,
   Text,
-  TouchableOpacity,
+  TouchableOpacity
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Entypo';
@@ -18,7 +18,7 @@ import {fonts} from '../../utils/fonts';
 import {calculateTime} from '../../utils/time';
 import {COLORS} from '../../utils/theme';
 
-const width = Dimensions.get('screen').width;
+const {width} = Dimensions.get('screen');
 
 const ModalImageSingleDetail = ({onBack, visible, img, name, time}) => {
   React.useEffect(() => {
@@ -49,7 +49,7 @@ const ModalImageSingleDetail = ({onBack, visible, img, name, time}) => {
       <View style={styles.container}>
         <Image
           source={{
-            uri: img,
+            uri: img
           }}
           style={styles.image}
           resizeMode="cover"
@@ -63,18 +63,18 @@ export default ModalImageSingleDetail;
 
 const styles = StyleSheet.create({
   btnShare: {
-    marginRight: 9,
+    marginRight: 9
   },
   headerLeft: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   headerRight: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   container: {flex: 1, backgroundColor: COLORS.black, justifyContent: 'center'},
-  image: {width: width, height: 417},
+  image: {width, height: 417},
   header: {
     backgroundColor: COLORS.black,
     flexDirection: 'row',
@@ -83,21 +83,21 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingTop: 6,
     paddingBottom: 7,
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   user: {
-    marginLeft: 18,
+    marginLeft: 18
   },
   name: {
     fontFamily: fonts.inter[600],
     fontSize: 14,
     color: COLORS.white,
-    lineHeight: 16.94,
+    lineHeight: 16.94
   },
   time: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
     color: COLORS.white,
-    lineHeight: 18,
-  },
+    lineHeight: 18
+  }
 });

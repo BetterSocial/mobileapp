@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import * as React from 'react';
 import {Platform, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 

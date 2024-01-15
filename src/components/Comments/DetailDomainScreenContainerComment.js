@@ -15,15 +15,15 @@ const DetailDomainScreenContainerComment = ({comments, indexFeed, updateParent, 
   const [totalVote, setTotalVote] = React.useState(0);
   const [voteStatus, setVoteStatus] = React.useState('none');
   const navigation = useNavigation();
-  let isLast = (index, item) => {
+  const isLast = (index, item) => {
     return index === comments.length - 1 && (item.children_counts.comment || 0) === 0;
   };
 
-  let isLastInParent = (index, item) => {
+  const isLastInParent = (index, item) => {
     return index === comments.length - 1;
   };
 
-  let hideLeftConnector = (index, item) => {
+  const hideLeftConnector = (index, item) => {
     return index === comments.length - 1;
   };
 
@@ -48,10 +48,10 @@ const DetailDomainScreenContainerComment = ({comments, indexFeed, updateParent, 
     onRefreshNews();
   };
 
-  const onVoteDown = async () => {
+  const onVoteDown = async (item) => {
     await downVoteDomain({
       activity_id: item.id,
-      status: !statusUpvote,
+      // status: !statusUpvote, //TODO: is not defined
       feed_group: 'domain',
       domain: item.domain.name
     });
@@ -81,16 +81,15 @@ const DetailDomainScreenContainerComment = ({comments, indexFeed, updateParent, 
       <View style={styles.lineBeforeProfile} />
       {comments.map((item, index) => {
         (item.latest_children.comment || []).sort((current, next) => {
-          let currentMoment = moment(current.updated_at);
-          let nextMoment = moment(next.updated_at);
+          const currentMoment = moment(current.updated_at);
+          const nextMoment = moment(next.updated_at);
           return currentMoment.diff(nextMoment);
         });
 
         return (
-          <View>
-            <View key={'p' + index}>
+          <View key={item.created_at}>
+            <View>
               <DetailDomainScreenCommentItem
-                key={'p' + index}
                 comment={item}
                 // username={item.user.data.username}
                 user={item.user}
@@ -101,10 +100,10 @@ const DetailDomainScreenContainerComment = ({comments, indexFeed, updateParent, 
                 isLastInParent={isLastInParent(index, item)}
                 onPress={() => {
                   navigation.navigate('ReplyComment', {
-                    item: item,
+                    item,
                     level: 0,
-                    indexFeed: indexFeed,
-                    updateParent: updateParent
+                    indexFeed,
+                    updateParent
                   });
                 }}
                 onVoteDown={() => onVoteDown(item)}
@@ -136,11 +135,11 @@ const ReplyComment = ({
   hideLeftConnector,
   updateParent
 }) => {
-  let isLast = (item, index) => {
+  const isLast = (item, index) => {
     return index === countComment - 1 && (item.children_counts.comment || 0) === 0;
   };
 
-  let isLastInParent = (index) => {
+  const isLastInParent = (index) => {
     return index === countComment - 1;
   };
 
@@ -149,25 +148,24 @@ const ReplyComment = ({
       {data.map((item, index) => {
         const showCommentView = () =>
           navigation.navigate('ReplyComment', {
-            item: item,
+            item,
             level: 1,
-            indexFeed: indexFeed,
-            updateParent: updateParent
+            indexFeed,
+            updateParent
           });
 
         const showChildCommentView = () =>
           navigation.navigate('ReplyComment', {
-            item: item,
+            item,
             level: 2,
-            indexFeed: indexFeed,
-            updateParent: updateParent
+            indexFeed,
+            updateParent
           });
 
         return (
-          <ConnectorWrapper index={index}>
-            <View key={'c' + index} style={styles.levelOneCommentWrapper}>
+          <ConnectorWrapper key={item.created_at} index={index}>
+            <View style={styles.levelOneCommentWrapper}>
               <Comment
-                key={'c' + index}
                 comment={item}
                 // username={item.user.data.username}
                 user={item.user}

@@ -23,7 +23,7 @@ const RenderItem = ({
   const [statusDownvote, setStatusDowvote] = React.useState(false);
   const [totalVote, setTotalVote] = React.useState(0);
 
-  const onPressUpvoteNew = async (item) => {
+  const onPressUpvoteNew = async () => {
     await onPressUpvote({
       activity_id: item.id,
       status: !statusUpvote,

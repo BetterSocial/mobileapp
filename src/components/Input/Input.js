@@ -15,6 +15,6 @@ const styles = StyleSheet.create({
     borderColor: COLORS.silver,
     paddingHorizontal: 23,
     paddingVertical: 13,
-    width: width - 100,
-  },
+    width: width - 100
+  }
 });

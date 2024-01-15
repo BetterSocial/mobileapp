@@ -154,7 +154,7 @@ const Content = ({
   const handleTextLayout = ({nativeEvent}) => {
     let text = '';
     const {newMaxLine, countDeviceLine} = adjustmentCountDeviceLine();
-    for (let i = 0; i < newMaxLine; i++) {
+    for (let i = 0; i < newMaxLine; i += 1) {
       if (nativeEvent.lines[i]) {
         if (i < countDeviceLine) {
           text += nativeEvent.lines[i].text;

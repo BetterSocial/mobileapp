@@ -1,6 +1,5 @@
 import * as React from 'react';
-import {Image, Linking, TouchableOpacity} from 'react-native';
-import {StyleSheet, Text, View} from 'react-native';
+import {Image, Linking, TouchableOpacity, StyleSheet, Text, View} from 'react-native';
 import {fonts} from '../../../utils/fonts';
 import {trimString} from '../../../utils/string/TrimString';
 import {COLORS} from '../../../utils/theme';

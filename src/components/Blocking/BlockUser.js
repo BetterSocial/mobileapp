@@ -3,7 +3,7 @@ import {StyleSheet, Text, View} from 'react-native';
 
 import RBSheet from 'react-native-raw-bottom-sheet';
 
-import ItemListLarge from '../../components/Blocking/ItemListLarge';
+import ItemListLarge from './ItemListLarge';
 import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 

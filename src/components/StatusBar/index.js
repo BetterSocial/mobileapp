@@ -6,17 +6,17 @@ const STATUSBAR_HEIGHT = StatusBar.currentHeight;
 const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 56;
 
 const index = ({backgroundColor, ...props}) => (
-    <View testID='statusbar' style={[styles.statusBar, {backgroundColor}]}>
-      <StatusBar translucent backgroundColor={backgroundColor} {...props} />
-    </View>
-  );
+  <View testID="statusbar" style={[styles.statusBar, {backgroundColor}]}>
+    <StatusBar translucent backgroundColor={backgroundColor} {...props} />
+  </View>
+);
 const styles = StyleSheet.create({
   statusBar: {
-    height: STATUSBAR_HEIGHT,
+    height: STATUSBAR_HEIGHT
   },
   appBar: {
     backgroundColor: COLORS.greenMantis,
-    height: APPBAR_HEIGHT,
-  },
+    height: APPBAR_HEIGHT
+  }
 });
 export default index;

@@ -438,7 +438,7 @@ const styles = StyleSheet.create({
   })
 });
 
-Header.propsTypes = {
+Header.propTypes = {
   props: PropsTypes.object,
   isBackButton: PropsTypes.bool
 };

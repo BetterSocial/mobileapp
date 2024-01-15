@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {StyleSheet, View} from 'react-native';
 import dimen from '../../utils/dimen';
-import { COLORS } from '../../utils/theme';
+import {COLORS} from '../../utils/theme';
 
 const styles = StyleSheet.create({
   container: {

@@ -13,7 +13,7 @@ const TextArea = ({
   style = {},
   onRef = (ref) => {}
 }) => {
-  let textRef = React.useRef();
+  const textRef = React.useRef();
   React.useEffect(() => {
     onRef(textRef);
   }, []);

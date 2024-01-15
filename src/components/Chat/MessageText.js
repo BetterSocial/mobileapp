@@ -1,6 +1,5 @@
 import * as React from 'react';
-import {TouchableWithoutFeedback} from 'react-native';
-import {StyleSheet, Text, View} from 'react-native';
+import {TouchableWithoutFeedback, StyleSheet, Text, View} from 'react-native';
 
 import {fonts} from '../../utils/fonts';
 import {calculateTime} from '../../utils/time';

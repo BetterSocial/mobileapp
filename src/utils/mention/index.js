@@ -8,7 +8,7 @@ import {COLORS} from '../theme';
 const handleMention = (text, setFormattedContent) => {
   const retLines = text.split('\n');
   const arrText = [];
-  for (let i = 0; i < retLines.length; i++) {
+  for (let i = 0; i < retLines.length; i += 1) {
     arrText.push(retLines[i]);
     if (i !== retLines.length - 1) {
       arrText.push('\n');

@@ -13,6 +13,7 @@ const BottomSheet = React.forwardRef((props, ref) => {
       ref={ref}
       onOpen={() => (props.onOpen ? props.onOpen() : {})}
       closeOnDragDown={true}
+      dragFromTopOnly={true}
       closeOnPressMask={props.closeOnPressMask}
       height={props.height ? props.height : 355}
       keyboardAvoidingViewEnabled={keyboardAvoidingViewEnabled}

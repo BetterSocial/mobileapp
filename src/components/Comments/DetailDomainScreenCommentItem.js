@@ -56,11 +56,11 @@ const DetailDomainScreenCommentItem = ({
     });
   };
 
-  const onBlock = (comment) => {
+  const onBlock = (commentLocal) => {
     refBlockComponent.current.openBlockComponent({
       anonimity: false,
-      actor: comment.user,
-      id: comment.id
+      actor: commentLocal.user,
+      id: commentLocal.id
     });
   };
 
