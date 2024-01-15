@@ -105,12 +105,6 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   ) => {
     const MAX_ITERATIONS = 5;
 
-    const updateChatStatus = async (currentChatSchema, response) => {
-      await currentChatSchema.updateChatSentStatus(localDb, response);
-      refresh('chat');
-      refresh('channelList');
-    };
-
     if (iteration > MAX_ITERATIONS) {
       SimpleToast.show("Can't send message, please check your connection");
       return;
@@ -164,7 +158,9 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
         );
       }
 
-      await updateChatStatus(currentChatSchema, localDb, response);
+      await currentChatSchema.updateChatSentStatus(localDb, response);
+      refresh('chat');
+      refresh('channelList');
     } catch (e) {
       if (e?.response?.data?.status === 'Channel is blocked') return;
 
