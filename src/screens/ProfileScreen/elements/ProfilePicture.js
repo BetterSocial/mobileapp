@@ -14,7 +14,10 @@ const ProfilePicture = ({
   onImageContainerClick,
   profilePicPath,
   disabledAddIcon = false,
-  karmaScore = 0
+  karmaScore = 0,
+  size = 100,
+  width = 6,
+  withKarma = false
 }) => {
   const renderAddIcon = () => {
     if (!profilePicPath || !disabledAddIcon) return <></>;
@@ -24,10 +27,29 @@ const ProfilePicture = ({
   return (
     <View style={styles.wrapImageProfile}>
       <TouchableNativeFeedback onPress={onImageContainerClick}>
-        <CircleGradient fill={karmaScore} size={normalize(100)} width={normalize(6)}>
-          <View style={styles.profileImageContainer}>
+        {withKarma ? (
+          <CircleGradient
+            fill={karmaScore}
+            size={normalize(size)}
+            width={normalize(width)}
+            testId="images">
+            <View style={styles.profileImageContainer(size)}>
+              <Image
+                testId="images"
+                style={styles.profileImage(size, width)}
+                source={{
+                  uri: profilePicPath ? `${profilePicPath}` : DEFAULT_PROFILE_PIC_PATH
+                }}
+                resizeMode={FastImage.resizeMode.stretch}
+              />
+              {renderAddIcon()}
+            </View>
+          </CircleGradient>
+        ) : (
+          <View style={styles.profileImageContainer(size)} testId="images">
             <Image
-              style={styles.profileImage}
+              testId="images"
+              style={styles.profileImage(size, width)}
               source={{
                 uri: profilePicPath ? `${profilePicPath}` : DEFAULT_PROFILE_PIC_PATH
               }}
@@ -35,7 +57,7 @@ const ProfilePicture = ({
             />
             {renderAddIcon()}
           </View>
-        </CircleGradient>
+        )}
       </TouchableNativeFeedback>
     </View>
   );
@@ -43,17 +65,17 @@ const ProfilePicture = ({
 
 let styles = StyleSheet.create({
   addCircle: {position: 'absolute', top: 25, left: 25},
-  profileImage: {
-    width: dimen.normalizeDimen(92),
-    height: dimen.normalizeDimen(92),
+  profileImage: (size, width) => ({
+    width: dimen.normalizeDimen(size * 0.91),
+    height: dimen.normalizeDimen(size * 0.91),
     borderRadius: 100,
-    marginLeft: dimen.normalizeDimen(2.5),
-    marginTop: dimen.normalizeDimen(2.75)
-  },
-  profileImageContainer: {
-    width: 100,
+    marginLeft: dimen.normalizeDimen(width / 2),
+    marginTop: dimen.normalizeDimen(width / 2)
+  }),
+  profileImageContainer: (size) => ({
+    width: size,
     borderRadius: 100
-  },
+  }),
   wrapImageProfile: {
     flexDirection: 'column'
   }

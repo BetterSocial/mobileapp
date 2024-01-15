@@ -1,17 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TouchableNativeFeedback,
-  TouchableOpacity,
-  View
-} from 'react-native';
-import {fonts, normalize} from '../../../utils/fonts';
-import {CircleGradient} from '../../../components/Karma/CircleGradient';
+import {StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View} from 'react-native';
+import {fonts} from '../../../utils/fonts';
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 import {COLORS} from '../../../utils/theme';
+import ProfilePicture from '../../ProfileScreen/elements/ProfilePicture';
 
 const renderDefaultImage = (DefaultImage) => {
   if (DefaultImage) {
@@ -32,7 +25,8 @@ const DomainList = (props) => {
     DefaultImage,
     isCommunity,
     isBlockedSection,
-    isDomain
+    isDomain,
+    withKarma
   } = props;
 
   const renderButonAction = () => {
@@ -81,34 +75,13 @@ const DomainList = (props) => {
   };
 
   const renderProfilePicture = () => {
-    if (item.karmaScore) {
-      return (
-        <CircleGradient
-          testId="images"
-          fill={item.karmaScore}
-          size={normalize(51)}
-          width={normalize(3)}>
-          <Image
-            testId="images"
-            source={{
-              uri: item.image
-            }}
-            style={styles.profilepicture}
-            width={48}
-            height={48}
-          />
-        </CircleGradient>
-      );
-    }
     return (
-      <Image
-        testId="images"
-        source={{
-          uri: item.image
-        }}
-        style={styles.profilepicture}
-        width={48}
-        height={48}
+      <ProfilePicture
+        profilePicPath={item.image}
+        karmaScore={item.karmaScore}
+        size={51}
+        width={3}
+        withKarma={withKarma}
       />
     );
   };

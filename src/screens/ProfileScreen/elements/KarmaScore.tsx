@@ -57,7 +57,7 @@ export const KarmaScore = ({score}: KarmaScoreProps) => {
                   lineHeight: normalize(24),
                   marginBottom: normalize(8)
                 }}>
-                Your Karma Score
+                What is my Karma Score?
               </Text>
               <Text
                 style={{
@@ -69,12 +69,13 @@ export const KarmaScore = ({score}: KarmaScoreProps) => {
                 }}>
                 The higher your Karma score, the higher your visibility on the platform. Get
                 rewarded for positive contributions to the community - and avoid being blocked by
-                others!
+                others! Your Karma score will be shown as a circle around your profile picture,
+                including for your anonymous posts.
               </Text>
               <Text
                 style={{
                   fontWeight: '600',
-                  paddingVertical: normalize(8),
+                  paddingTop: normalize(8),
                   fontSize: normalize(14),
                   lineHeight: normalize(20),
                   color: '#4782D7',
