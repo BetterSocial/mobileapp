@@ -201,7 +201,7 @@ const ContainerReply = ({children, isGrandchild, hideLeftConnector}) => {
     <View
       style={[
         styles.containerReply(hideLeftConnector),
-        {borderColor: isGrandchild ? '#fff' : COLORS.gray1}
+        {borderColor: isGrandchild ? COLORS.white : COLORS.lightgrey}
       ]}>
       {children}
     </View>
@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
   lineBeforeProfile: {
     height: 8.5,
     borderLeftWidth: 1,
-    borderLeftColor: '#C4C4C4'
+    borderLeftColor: COLORS.lightgrey
   },
   containerReply: (hideLeftConnector) => ({
     borderLeftWidth: 1
@@ -226,11 +226,11 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     paddingBottom: 14,
-    borderLeftColor: isLast ? 'transparent' : COLORS.gray1,
+    borderLeftColor: isLast ? COLORS.transparent : COLORS.lightgrey,
     borderLeftWidth: 1
   }),
   seeRepliesText: {
-    color: COLORS.blue
+    color: COLORS.signed_primary
   },
   connector: {
     width: 15,

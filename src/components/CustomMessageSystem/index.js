@@ -17,7 +17,9 @@ const index = ({text}) => (
         borderRadius: 18,
         padding: 8,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginHorizontal: 16,
+        marginVertical: 20
       }}>
       <Text
         style={{

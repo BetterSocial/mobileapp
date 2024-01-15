@@ -64,7 +64,7 @@ const S = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 4,
     paddingHorizontal: 8,
-    borderColor: COLORS.holytosca
+    borderColor: COLORS.anon_primary
   },
 
   pollitemtextinput: {

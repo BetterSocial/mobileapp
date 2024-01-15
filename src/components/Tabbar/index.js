@@ -19,7 +19,7 @@ const S = StyleSheet.create({
   toptabcontainer: {
     flexDirection: 'row',
     backgroundColor: COLORS.white,
-    borderBottomColor: '#00000050',
+    borderBottomColor: COLORS.black30percent,
     borderBottomWidth: 1,
     paddingHorizontal: 4
   },
@@ -37,7 +37,7 @@ const S = StyleSheet.create({
   },
 
   viewborderbottom: {
-    borderBottomColor: COLORS.holytosca,
+    borderBottomColor: COLORS.anon_primary,
     borderBottomWidth: 1
   }
 });
