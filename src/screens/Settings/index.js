@@ -79,7 +79,11 @@ const Settings = () => {
             text="Help Center"
             onPress={() => goToPage('HelpCenter')}
           />
-          <ProfileSettingItem testID="delete" onPress={showDeleteAccountAlert} />
+          <ProfileSettingItem
+            testID="delete"
+            text="Delete Account"
+            onPress={showDeleteAccountAlert}
+          />
           <ProfileSettingItem testID="logout" text="Logout" onPress={doLogout} />
         </View>
         <View>
