@@ -21,7 +21,7 @@ const VideoViewerScreen = ({route, navigation}) => {
   );
 };
 
-VideoViewerScreen.propsTypes = {
+VideoViewerScreen.propTypes = {
   route: PropsTypes.any,
   navigation: PropsTypes.any
 };

@@ -13,7 +13,7 @@ const ImageViewerScreen = ({route, navigation}) => {
   return <ImageViewer imageUrls={images} index={index} loadingRender={loadingRender} />;
 };
 
-ImageViewerScreen.propsTypes = {
+ImageViewerScreen.propTypes = {
   route: PropsTypes.any,
   navigation: PropsTypes.any
 };

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropsTypes from 'prop-types';
 import {
   View,
   Text,
@@ -172,4 +173,8 @@ const styles = StyleSheet.create({
   }
 });
 
+BottomSheetGif.propTypes = {
+  onCancel: PropsTypes.func,
+  onSelect: PropsTypes.func
+};
 export default BottomSheetGif;

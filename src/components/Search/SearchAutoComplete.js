@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropsTypes from 'prop-types';
 import {TextInput, View, Text, StyleSheet, TouchableNativeFeedback} from 'react-native';
 
 import SearchIcon from '../../../assets/icons/search.svg';
@@ -83,4 +84,7 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize'
   }
 });
+SearchAutoComplete.propTypes = {
+  onSelect: PropsTypes.func
+};
 export default SearchAutoComplete;
