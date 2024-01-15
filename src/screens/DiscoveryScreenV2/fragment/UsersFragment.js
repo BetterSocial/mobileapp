@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
 import * as React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 import PropTypes from 'prop-types';
@@ -9,7 +9,6 @@ import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import DomainList from '../elements/DiscoveryItemList';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import RecentSearch from '../elements/RecentSearch';
-import StringConstant from '../../../utils/string/StringConstant';
 import useIsReady from '../../../hooks/useIsReady';
 import {COLORS} from '../../../utils/theme';
 import {Context} from '../../../context/Store';
@@ -37,7 +36,8 @@ const UsersFragment = ({
   withoutRecent = false,
   showRecentSearch = true,
   fetchData = () => {},
-  searchText
+  searchText,
+  isUser
 }) => {
   const [discovery, discoveryDispatch] = React.useContext(Context).discovery;
   const [profile] = React.useContext(Context).profile;
@@ -77,16 +77,20 @@ const UsersFragment = ({
     });
   };
 
+  const handleScroll = React.useCallback(() => {
+    Keyboard.dismiss();
+  });
+
   const exhangeFollower = (newUserLists, willFollow, userId) => {
     const indexUser = newUserLists.findIndex((item) =>
       item.user ? item.user.user_id === userId : item.user_id === userId
     );
     if (newUserLists[indexUser].user) {
       newUserLists[indexUser].user.following = !!willFollow;
-      newUserLists[indexUser].user.user_id_follower = myId;
+      // newUserLists[indexUser].user.user_id_follower = myId;
     } else {
       newUserLists[indexUser].following = !!willFollow;
-      newUserLists[indexUser].user_id_follower = myId;
+      // newUserLists[indexUser].user_id_follower = myId;
     }
     return newUserLists[indexUser];
   };
@@ -163,7 +167,29 @@ const UsersFragment = ({
     if (searchText.length > 0) fetchData();
   };
 
-  const renderDiscoveryItem = (from, key, item, index) => {
+  const renderRecentSearch = (index) => {
+    return (
+      index === 0 &&
+      !withoutRecent && (
+        <RecentSearch
+          shown={showRecentSearch || isFirstTimeOpen}
+          setSearchText={setSearchText}
+          setIsFirstTimeOpen={setIsFirstTimeOpen}
+        />
+      )
+    );
+  };
+
+  const renderDiscoveryItem = ({from, item, index}) => {
+    if (item.separator) {
+      return (
+        <>
+          {renderRecentSearch(index)}
+          <DiscoveryTitleSeparator key="user-title-separator" text="Suggested Users" />
+        </>
+      );
+    }
+
     const isUnfollowed = item.user ? !item.user.following : !item.following;
 
     if (
@@ -171,94 +197,95 @@ const UsersFragment = ({
       route.name !== 'Followings'
     ) {
       return (
-        <DomainList
-          withKarma={true}
-          key={`${key}-${index}`}
-          onPressBody={() => handleOnPress(item.user || item)}
-          handleSetFollow={() => handleFollow(from, true, item.user || item)}
-          handleSetUnFollow={() => handleFollow(from, false, item.user || item)}
-          item={{
-            name: item.user ? item.user.username : item.username,
-            image: item.user ? item.user.profile_pic_path : item.profile_pic_path,
-            isunfollowed: isUnfollowed,
-            description: item.user ? item.user.bio : item.bio,
-            karmaScore: item.user ? item.user.karma_score : item.karma_score
-          }}
-        />
+        <>
+          {renderRecentSearch(index)}
+          <DomainList
+            key={index}
+            onPressBody={() => handleOnPress(item.user || item)}
+            handleSetFollow={() => handleFollow(from, true, item.user || item)}
+            handleSetUnFollow={() => handleFollow(from, false, item.user || item)}
+            item={{
+              name: item.user ? item.user.username : item.username,
+              image: item.user ? item.user.profile_pic_path : item.profile_pic_path,
+              user_id_follower: item.user ? item.user.user_id_follower : item.user_id_follower,
+              isunfollowed: isUnfollowed,
+              description: item.user ? item.user.bio : item.bio,
+              karmaScore: item.user ? item.user.karma_score : item.karma_score,
+              comumnityInfo: item.user ? item.user.community_info || [] : item.community_info || [],
+              routeName: route.name,
+              isUser
+            }}
+          />
+        </>
       );
     }
     return null;
   };
 
-  const renderUsersItem = () => {
+  const renderItem = ({index, item}) => {
+    let result;
+
     if (isFirstTimeOpen) {
       if (withoutRecent) {
-        if (initialUsers.length !== 0 || route.name === 'TopicMemberScreen') {
-          return [
-            initialUsers.map((item, index) =>
-              renderDiscoveryItem(FROM_USERS_INITIAL, 'topicUsers', item, index)
-            )
-          ];
-        }
-        return [
-          users.map((item, index) =>
-            renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, 'followedUsers', item, index)
-          )
-        ];
-      }
-
-      const followingUsers = [];
-      const unfollowingUsers = [];
-
-      users.forEach((item) => {
-        if (item.user?.user_id_follower || item.user_id_follower) {
-          followingUsers.push(item);
+        if (initialUsers.length !== 0) {
+          result = FROM_USERS_INITIAL;
         } else {
-          unfollowingUsers.push(item);
+          result = FROM_FOLLOWED_USERS_INITIAL;
         }
-      });
-
-      return [
-        followingUsers.map((item, index) =>
-          renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, 'followedUsers', item, index)
-        )
-      ]
-        .concat([
-          route.name !== 'Followings' && (
-            <DiscoveryTitleSeparator key="user-title-separator" text="Suggested Users" />
-          )
-        ])
-        .concat([
-          unfollowingUsers.map((item, index) =>
-            renderDiscoveryItem(
-              FROM_FOLLOWED_USERS_INITIAL,
-              'followedUsers',
-              item,
-              index + followingUsers.length
-            )
-          )
-        ]);
+      } else {
+        result = FROM_FOLLOWED_USERS_INITIAL;
+      }
+    } else if (unfollowedUsers.length !== 0) {
+      if (index > followedUsers.length) {
+        result = FROM_UNFOLLOWED_USERS;
+      } else {
+        result = FROM_FOLLOWED_USERS;
+      }
+    } else if (index > followedUsers.length) {
+      result = FROM_UNFOLLOWED_USERS;
+    } else {
+      result = FROM_FOLLOWED_USERS;
     }
 
-    return (
-      <>
-        {followedUsers.map((item, index) =>
-          renderDiscoveryItem(FROM_FOLLOWED_USERS, 'followedUsers', item, index)
-        )}
+    return renderDiscoveryItem({
+      from: result,
+      item,
+      index
+    });
+  };
 
-        {route.name !== 'Followings' &&
-          unfollowedUsers.length > 0 &&
-          followedUsers.length > 0 &&
-          !withoutRecent && (
-            <View style={styles.unfollowedHeaderContainer}>
-              <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreUsers}</Text>
-            </View>
-          )}
-        {route.name !== 'Followings' &&
-          unfollowedUsers.map((item, index) =>
-            renderDiscoveryItem(FROM_UNFOLLOWED_USERS, 'unfollowedUsers', item, index)
-          )}
-      </>
+  const renderUsersItem = () => {
+    const initFollowingUsers = [];
+    const initUnfollowingUsers = [];
+
+    users.forEach((item) => {
+      if (item.user?.user_id_follower || item.user_id_follower) {
+        initFollowingUsers.push(item);
+      } else {
+        initUnfollowingUsers.push(item);
+      }
+    });
+
+    const data = isFirstTimeOpen
+      ? withoutRecent
+        ? initialUsers.length !== 0
+          ? initialUsers
+          : users
+        : [...initFollowingUsers, {separator: true}, ...initUnfollowingUsers]
+      : unfollowedUsers.length !== 0
+      ? [...followedUsers, {separator: true}, ...unfollowedUsers]
+      : followedUsers;
+
+    return (
+      <FlatList
+        onMomentumScrollBegin={handleScroll}
+        contentContainerStyle={{paddingBottom: 100}}
+        data={data || []}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => index.toString()}
+        onEndReached={() => fetchData()}
+        onEndReachedThreshold={0.6}
+      />
     );
   };
 
@@ -277,18 +304,7 @@ const UsersFragment = ({
       </View>
     );
 
-  return (
-    <View>
-      {!withoutRecent && (
-        <RecentSearch
-          shown={showRecentSearch || isFirstTimeOpen}
-          setSearchText={setSearchText}
-          setIsFirstTimeOpen={setIsFirstTimeOpen}
-        />
-      )}
-      {renderUsersItem()}
-    </View>
-  );
+  return <View>{renderUsersItem()}</View>;
 };
 
 const styles = StyleSheet.create({
