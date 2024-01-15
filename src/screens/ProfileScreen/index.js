@@ -40,7 +40,6 @@ import useProfileScreenHook, {
 } from '../../hooks/screen/useProfileScreenHook';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
-import {deleteAnonymousPost, deletePost} from '../../service/post';
 import {
   changeRealName,
   getMyProfile,
@@ -49,14 +48,15 @@ import {
   updateBioProfile,
   updateImageProfile
 } from '../../service/profile';
+import {deleteAnonymousPost, deletePost} from '../../service/post';
 import {downVote, upVote} from '../../service/vote';
-import {colors} from '../../utils/colors';
 import {DEFAULT_PROFILE_PIC_PATH, SOURCE_MY_PROFILE} from '../../utils/constants';
 import dimen from '../../utils/dimen';
 import {fonts} from '../../utils/fonts';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
+import {COLORS} from '../../utils/theme';
 import ShareUtils from '../../utils/share';
 import StorageUtils from '../../utils/storage';
 import RenderItem from '../FeedScreen/RenderList';
@@ -712,7 +712,7 @@ const ProfileScreen = ({route}) => {
         <ShadowFloatingButtons>
           <TouchableNativeFeedback onPress={toTop}>
             <View style={{...styles.btnBottom, opacity}}>
-              <ArrowUpWhiteIcon width={12} height={20} fill={colors.white} />
+              <ArrowUpWhiteIcon width={12} height={20} fill={COLORS.white} />
             </View>
           </TouchableNativeFeedback>
         </ShadowFloatingButtons>
@@ -731,24 +731,24 @@ const ProfileScreen = ({route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white,
+    backgroundColor: COLORS.white,
     height: '100%'
   },
   content: {
     flexDirection: 'column',
     paddingHorizontal: 20,
-    backgroundColor: colors.white,
+    backgroundColor: COLORS.white,
     marginTop: 14
   },
   dummyItem: (heightItem) => ({
     height: heightItem,
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   }),
   postText: (isActive) => ({
     fontFamily: isActive ? fonts.inter[600] : fonts.inter[400],
     fontSize: 14,
     lineHeight: 17,
-    color: isActive ? colors.bondi_blue : colors.blackgrey,
+    color: isActive ? COLORS.signed_primary : COLORS.blackgrey,
     paddingHorizontal: 16,
     textAlign: 'center'
   }),
@@ -760,7 +760,7 @@ const styles = StyleSheet.create({
     width: dimen.size.PROFILE_ACTION_BUTTON_RADIUS,
     height: dimen.size.PROFILE_ACTION_BUTTON_RADIUS,
 
-    backgroundColor: colors.darkBlue,
+    backgroundColor: COLORS.signed_primary,
     borderRadius: 30,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -773,28 +773,28 @@ const styles = StyleSheet.create({
   seeMore: {
     fontFamily: fonts.inter[500],
     fontSize: 14,
-    color: colors.black
+    color: COLORS.black
   },
   tabs: {
     width,
-    borderBottomColor: colors.alto,
+    borderBottomColor: COLORS.lightgrey,
     borderBottomWidth: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   tabItem: (isActive) => ({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     height: 48,
-    borderBottomColor: colors.bondi_blue,
+    borderBottomColor: COLORS.signed_primary,
     borderBottomWidth: isActive ? 2 : 0
   }),
   tabsFixed: {
     width,
-    borderBottomColor: colors.alto,
+    borderBottomColor: COLORS.lightgrey,
     borderBottomWidth: 1,
     paddingLeft: 20,
     paddingRight: 20,
@@ -802,7 +802,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 42,
     zIndex: 2000,
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   nameProfile: {
     fontFamily: fonts.inter[800],
@@ -810,7 +810,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 17,
     marginTop: 12,
-    color: colors.black
+    color: COLORS.black
   },
 
   containerLoading: {
@@ -822,14 +822,14 @@ const styles = StyleSheet.create({
     paddingLeft: 0
   },
   tooltipText: {
-    color: '#828282',
+    color: COLORS.blackgrey,
     fontFamily: 'Inter',
     fontSize: 12,
     fontStyle: 'normal',
     fontWeight: '400'
   },
   flatlistContainer: {
-    backgroundColor: 'white'
+    backgroundColor: COLORS.white
   }
 });
 

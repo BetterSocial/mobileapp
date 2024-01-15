@@ -6,11 +6,11 @@ import {ScrollView, StyleSheet, Text, TextInput, TouchableNativeFeedback, View} 
 import Card from './Card';
 import TopicItem from '../../../components/TopicItem';
 import {Button} from '../../../components/Button';
-import {colors} from '../../../utils/colors';
 import {convertString} from '../../../utils/string/StringUtils';
 import {fonts} from '../../../utils/fonts';
 import {getTopics} from '../../../service/topics';
 import {isEmptyOrSpaces} from '../../../utils/Utils';
+import {COLORS} from '../../../utils/theme';
 
 const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics}) => {
   const [dataTopic, setTopic] = React.useState('');
@@ -167,7 +167,7 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics}) => {
                     <View style={{marginBottom: 5}}>
                       <Text
                         style={{
-                          color: '#000000',
+                          color: COLORS.black,
                           fontFamily: fonts.inter[500],
                           fontWeight: '500',
                           fontSize: 12,
@@ -176,7 +176,9 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics}) => {
                         #{convertString(item.name, ' ', '')}
                       </Text>
                       {index !== topicSuggestion.length - 1 && (
-                        <View style={{height: 1, marginTop: 5, backgroundColor: '#C4C4C4'}} />
+                        <View
+                          style={{height: 1, marginTop: 5, backgroundColor: COLORS.lightgrey}}
+                        />
                       )}
                     </View>
                   </TouchableNativeFeedback>
@@ -203,7 +205,7 @@ const styles = StyleSheet.create({
     paddingBottom: 38
   },
   content: {
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     paddingHorizontal: 16,
     paddingTop: 17,
     minHeight: 150,
@@ -212,13 +214,13 @@ const styles = StyleSheet.create({
     paddingBottom: 16
   },
   title: {
-    color: colors.black,
+    color: COLORS.black,
     fontFamily: fonts.inter[600],
     fontSize: 18,
     fontWeight: 'bold'
   },
   containerTag: {
-    backgroundColor: colors.white,
+    backgroundColor: COLORS.white,
     borderRadius: 14,
     paddingHorizontal: 16,
     paddingVertical: 7.33,
@@ -250,7 +252,7 @@ const styles = StyleSheet.create({
   textDesc: {
     fontSize: 10,
     fontFamily: fonts.inter[400],
-    color: colors.gray,
+    color: COLORS.blackgrey,
     marginTop: 5,
     marginBottom: 21
   },
@@ -259,7 +261,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20
   },
   draggableIcon: {
-    backgroundColor: colors.alto
+    backgroundColor: COLORS.lightgrey
   },
   topicItem: {
     marginBottom: 12

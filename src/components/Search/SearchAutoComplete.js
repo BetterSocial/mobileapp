@@ -1,13 +1,8 @@
 import * as React from 'react';
-import {
-  TextInput,
-  View,
-  Text,
-  StyleSheet,
-  TouchableNativeFeedback,
-} from 'react-native';
+import {TextInput, View, Text, StyleSheet, TouchableNativeFeedback} from 'react-native';
 
 import SearchIcon from '../../../assets/icons/search.svg';
+import {COLORS} from '../../utils/theme';
 
 const SearchAutoComplete = (props) => {
   return (
@@ -25,9 +20,7 @@ const SearchAutoComplete = (props) => {
         <View style={styles.box}>
           {props.options.map((value, index) => {
             return (
-              <TouchableNativeFeedback
-                key={index}
-                onPress={() => props.onSelect(value)}>
+              <TouchableNativeFeedback key={index} onPress={() => props.onSelect(value)}>
                 <View style={styles.list}>
                   <Text style={styles.label}>{value.label}</Text>
                 </View>
@@ -41,17 +34,17 @@ const SearchAutoComplete = (props) => {
 };
 const styles = StyleSheet.create({
   container: {
-    position: 'relative',
+    position: 'relative'
   },
   inputContainer: {
     height: 48,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderWidth: 1,
-    borderColor: '#BDBDBD',
+    borderColor: COLORS.silver,
     borderRadius: 8,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: 13,
+    paddingLeft: 13
   },
   searchInput: {
     width: '90%',
@@ -61,14 +54,14 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     fontSize: 13,
     letterSpacing: -0.28,
-    color: '#BDBDBD',
-    marginLeft: 5,
+    color: COLORS.silver,
+    marginLeft: 5
   },
   box: {
     minHeight: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderWidth: 1,
-    borderColor: '#BDBDBD',
+    borderColor: COLORS.silver,
     borderRadius: 8,
     flexDirection: 'column',
     marginBottom: 2,
@@ -76,18 +69,18 @@ const styles = StyleSheet.create({
     width: '100%',
     top: 50,
     zIndex: 2000,
-    elevation: 2000,
+    elevation: 2000
   },
   list: {
     minHeight: 35,
-    backgroundColor: '#e6e6e6',
+    backgroundColor: COLORS.platinum,
     paddingLeft: 13,
     paddingRight: 13,
     paddingTop: 2,
-    paddingBottom: 2,
+    paddingBottom: 2
   },
   label: {
-    textTransform: 'capitalize',
-  },
+    textTransform: 'capitalize'
+  }
 });
 export default SearchAutoComplete;

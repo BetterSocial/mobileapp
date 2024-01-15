@@ -19,6 +19,7 @@ import {getDomainDetailById} from '../../service/domain';
 import {getMyProfile} from '../../service/profile';
 import {getUserId} from '../../utils/users';
 import {updateComment} from '../../context/actions/news';
+import {COLORS} from '../../utils/theme';
 
 const {width} = Dimensions.get('window');
 
@@ -314,7 +315,7 @@ export default DetailDomainScreen;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     flex: 1,
     paddingBottom: 75
     // paddingTop: 8,
@@ -326,23 +327,23 @@ const styles = StyleSheet.create({
   textDesc: {
     fontFamily: fonts.inter[400],
     fontSize: 16,
-    color: '#000'
+    color: COLORS.black
   },
   more: {
-    color: '#0e24b3',
+    color: COLORS.blueZaffre,
     fontFamily: fonts.inter[400],
     fontSize: 14
   },
   content: {
     width,
     borderRadius: 5,
-    shadowColor: 'rgba(0,0,0,0.5)',
+    shadowColor: COLORS.black50,
     shadowOffset: {
       width: 0,
       height: 1
     },
     shadowOpacity: 0.5,
-    backgroundColor: 'white'
+    backgroundColor: COLORS.white
   },
   gap: {height: 16},
   footerWrapper: {

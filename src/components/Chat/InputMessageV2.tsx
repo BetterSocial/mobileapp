@@ -16,9 +16,7 @@ import DocumentPicker from 'react-native-document-picker';
 import {createThumbnail} from 'react-native-create-thumbnail';
 import ToastMessage from 'react-native-toast-message';
 
-import IconSend from '../../assets/icon/IconSendComment';
 import IconPlusAttachment from '../../assets/icon/IconPlusAttachment';
-import {colors} from '../../utils/colors';
 import dimen from '../../utils/dimen';
 import {normalizeFontSize} from '../../utils/fonts';
 import ToggleSwitch from '../ToggleSwitch';
@@ -27,6 +25,8 @@ import BottomSheetGif from './BottomSheetGif';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
 import ImageUtils from '../../utils/image';
 import {ANONYMOUS, SIGNED} from '../../hooks/core/constant';
+import {COLORS} from '../../utils/theme';
+import SendIcon from '../SendIcon';
 
 const styles = StyleSheet.create({
   main: {
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: colors.white,
+    backgroundColor: COLORS.white,
     paddingHorizontal: dimen.normalizeDimen(6)
   },
   btnEmoji: {
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
   containerInput: {
     flex: 1,
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     flexDirection: 'row',
     alignItems: 'flex-end',
     paddingVertical: dimen.normalizeDimen(6),
@@ -64,8 +64,8 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    backgroundColor: colors.lightgrey,
-    color: colors.black,
+    backgroundColor: COLORS.lightgrey,
+    color: COLORS.black,
     fontFamily: 'Inter',
     fontSize: normalizeFontSize(14),
     fontStyle: 'normal',
@@ -83,10 +83,10 @@ const styles = StyleSheet.create({
     display: 'flex'
   },
   enableButton: {
-    backgroundColor: colors.bondi_blue
+    backgroundColor: COLORS.bondi_blue
   },
   disableButton: {
-    backgroundColor: colors.gray1
+    backgroundColor: COLORS.gray1
   },
   previewPhotoContainer: {
     marginTop: dimen.normalizeDimen(5),
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     right: 0,
     height: dimen.normalizeDimen(25),
     width: dimen.normalizeDimen(25),
-    backgroundColor: colors.holytosca,
+    backgroundColor: COLORS.holytosca,
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: dimen.normalizeDimen(100),
@@ -358,12 +358,11 @@ const InputMessageV2 = ({
   const isDisableButton = () => {
     return text?.length === 0;
   };
-
   const sendButtonStyle = React.useCallback(() => {
     const isDisabled = isDisableButton();
-    if (isDisabled) return colors.gray1;
-    if (type === SIGNED) return colors.darkBlue;
-    return colors.bondi_blue;
+    if (isDisabled) return COLORS.gray1;
+    if (type === 'SIGNED') return COLORS.signed_primary;
+    return COLORS.anon_primary;
   }, [isDisableButton()]);
 
   const toggleChange = () => {
@@ -419,7 +418,7 @@ const InputMessageV2 = ({
             labelLeft={!inputFocus ? 'Anonymity' : undefined}
             styleLabelLeft={[
               styles.labelToggle,
-              {color: type === ANONYMOUS ? colors.gray : colors.blue}
+              {color: type === 'ANONYMOUS' ? COLORS.gray : COLORS.blue}
             ]}
             onValueChange={toggleChange}
             value={type === ANONYMOUS}
@@ -431,11 +430,7 @@ const InputMessageV2 = ({
           style={[styles.btn, isDisableButton() ? styles.disableButton : styles.enableButton]}
           disabled={isDisableButton()}
           onPress={handleSendMessage}>
-          <IconSend
-            style={styles.icSendButton}
-            fillBackground={sendButtonStyle()}
-            fillIcon={colors.white}
-          />
+          <SendIcon type={type} isDisabled={isDisableButton()} />
         </TouchableOpacity>
       )}
       {text?.trim() === '' && (

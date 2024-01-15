@@ -52,6 +52,8 @@ const POST_CHECK_AUTHOR_BLOCKED = 4;
 const PERMISSION_STATUS_ACCEPTED = 1;
 const PERMISSION_STATUS_BLOCKED = 2;
 const PERMISSION_STATUS_PENDING = 3;
+const CHAT_SIGNED = 'SIGNED';
+const CHAT_ANON = 'ANON';
 
 const NavigationConstants = {
   CREATE_POST_SCREEN: 'CreatePost'
@@ -59,16 +61,8 @@ const NavigationConstants = {
 
 const POST_VERSION = 2;
 
-const DELETED_MESSAGE_TEXT = 'This message has been deleted';
-const CONTEXT_MENU_REPLY = 'Reply';
-const CONTEXT_MENU_COPY = 'Copy Message';
-const CONTEXT_MENU_DELETE = 'Delete Message';
 const MESSAGE_TYPE_REGULAR = 'regular';
 const MESSAGE_TYPE_REPLY = 'reply';
-const MESSAGE_TYPE_REPLY_PROMPT = 'reply_prompt';
-const MESSAGE_TYPE_DELETED = 'deleted';
-const TUTOR_POST_ANON = 'tutor_post_anon';
-const TUTOR_CREATE_POST_ANON = 'tutor_creat_post_anon';
 const FEEDS_DIFF_TO_FETCH = 5;
 
 export {
@@ -119,15 +113,9 @@ export {
   POST_CHECK_FEED_EXPIRED,
   POST_CHECK_AUTHOR_BLOCKED,
   FEED_CHAT_KEY,
-  DELETED_MESSAGE_TEXT,
-  CONTEXT_MENU_REPLY,
-  CONTEXT_MENU_COPY,
-  CONTEXT_MENU_DELETE,
   MESSAGE_TYPE_REGULAR,
   MESSAGE_TYPE_REPLY,
-  MESSAGE_TYPE_REPLY_PROMPT,
-  MESSAGE_TYPE_DELETED,
-  TUTOR_POST_ANON,
-  TUTOR_CREATE_POST_ANON,
-  NavigationConstants
+  NavigationConstants,
+  CHAT_ANON,
+  CHAT_SIGNED
 };

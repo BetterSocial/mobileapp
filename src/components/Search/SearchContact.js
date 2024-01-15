@@ -27,7 +27,7 @@ const Search = ({animatedValue, text, setText}) => {
 const styles = StyleSheet.create({
   wrapperSearch: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: COLORS.lightgrey,
     marginHorizontal: 12,
     borderRadius: SIZES.radius,
     alignSelf: 'center',
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   newPostText: {
-    color: COLORS.holyTosca,
+    color: COLORS.anon_primary,
     marginRight: 11,
     ...FONTS.h4
   },
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     zIndex: 10,
     padding: 7,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.gray1
+    borderBottomColor: COLORS.lightgrey
   })
 });
 

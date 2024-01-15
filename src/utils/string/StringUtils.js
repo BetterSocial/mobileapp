@@ -13,6 +13,7 @@ import TopicText from '../../components/TopicText';
 import removePrefixTopic from '../topics/removePrefixTopic';
 import {getAnonymousUserId} from '../users';
 import {getUserId} from '../token';
+import {COLORS} from '../theme';
 
 const NO_POLL_UUID = '00000000-0000-0000-0000-000000000000';
 
@@ -249,7 +250,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
     lineHeight: 17,
-    color: '#000000'
+    color: COLORS.black
     // textTransform: 'capitalize',
   }
 });
@@ -279,7 +280,7 @@ const capitalizeFirstText = (str) => {
   // loop through each element of the array and capitalize the first letter.
 
   // eslint-disable-next-line no-plusplus
-  for (let i = 0; i < arr.length; i++) {
+  for (let i = 0; i < arr.length; i += 1) {
     arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
   }
 
@@ -294,7 +295,7 @@ const randomString = (length) => {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   const charactersLength = characters.length;
   // eslint-disable-next-line no-plusplus
-  for (let i = 0; i < length; i++) {
+  for (let i = 0; i < length; i += 1) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
   return result;
