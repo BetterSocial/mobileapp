@@ -50,6 +50,53 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     }
   };
 
+  const processImageAttachment = async (item) => {
+    const uploadedImageUrl = await ImageUtils.uploadImage(item.asset_url);
+    return {...item, asset_url: uploadedImageUrl.data.url, thumb_url: uploadedImageUrl.data.url};
+  };
+
+  const processVideoAttachment = async (item) => {
+    const uploadedImageUrl = await ImageUtils.uploadImage(item.asset_url);
+    const uploadedUrl = await ImageUtils.uploadFile(
+      item.video_path,
+      item.video_name,
+      item.video_type
+    );
+    return {
+      ...item,
+      asset_url: uploadedImageUrl.data.url,
+      thumb_url: uploadedImageUrl.data.url,
+      video_path: uploadedUrl.data.url
+    };
+  };
+
+  const processFileAttachment = async (item) => {
+    const uploadedUrl = await ImageUtils.uploadFile(item.file_path, item.file_name, item.file_type);
+    return {
+      ...item,
+      asset_url: uploadedUrl.data.url,
+      thumb_url: uploadedUrl.data.url,
+      file_path: uploadedUrl.data.url
+    };
+  };
+
+  const processAttachments = async (attachments) => {
+    const attachmentPromises = attachments.map(async (item) => {
+      switch (item.type) {
+        case 'image':
+          return processImageAttachment(item);
+        case 'video':
+          return processVideoAttachment(item);
+        case 'file':
+          return processFileAttachment(item);
+        default:
+          return item;
+      }
+    });
+
+    return Promise.all(attachmentPromises);
+  };
+
   const sendChat = async (
     message: string = randomString(20),
     attachments: [],
@@ -57,50 +104,6 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     sendingChatSchema: ChatSchema | null = null
   ) => {
     const MAX_ITERATIONS = 5;
-
-    const processAttachments = async () => {
-      const processAttachment = async (item) => {
-        if (item.type === 'image') {
-          const uploadedImageUrl = await ImageUtils.uploadImage(item.asset_url);
-          return {
-            ...item,
-            asset_url: uploadedImageUrl.data.url,
-            thumb_url: uploadedImageUrl.data.url
-          };
-        }
-        if (item.type === 'video') {
-          const uploadedImageUrl = await ImageUtils.uploadImage(item.asset_url);
-          const uploadedUrl = await ImageUtils.uploadFile(
-            item.video_path,
-            item.video_name,
-            item.video_type
-          );
-          return {
-            ...item,
-            asset_url: uploadedImageUrl.data.url,
-            thumb_url: uploadedImageUrl.data.url,
-            video_path: uploadedUrl.data.url
-          };
-        }
-        if (item.type === 'file') {
-          const uploadedUrl = await ImageUtils.uploadFile(
-            item.file_path,
-            item.file_name,
-            item.file_type
-          );
-          return {
-            ...item,
-            asset_url: uploadedUrl.data.url,
-            thumb_url: uploadedUrl.data.url,
-            file_path: uploadedUrl.data.url
-          };
-        }
-        return item;
-      };
-
-      const allAttachmentPromises = attachments.map(processAttachment);
-      return Promise.all(allAttachmentPromises);
-    };
 
     const updateChatStatus = async (currentChatSchema, response) => {
       await currentChatSchema.updateChatSentStatus(localDb, response);
