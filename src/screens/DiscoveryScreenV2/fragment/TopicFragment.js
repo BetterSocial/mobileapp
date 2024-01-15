@@ -171,44 +171,54 @@ const TopicFragment = ({
       )
     );
   };
-
-  const __renderTopicItems = () => {
-    const renderDiscoveryItem = ({from, item, index}) => {
-      if (item.separator && route.name !== 'Followings') {
-        return (
-          <>
-            {renderRecentSearch(index)}
-            <DiscoveryTitleSeparator key="topic-title-separator" text="Suggested Communities" />
-          </>
-        );
-      }
-
+  const renderDiscoveryItem = ({from, item, index}) => {
+    if (item.separator && route.name !== 'Followings') {
       return (
         <>
           {renderRecentSearch(index)}
-          <View style={styles.domainContainer}>
-            {(route.name === 'Followings' && item.user_id_follower !== null) ||
-            route.name !== 'Followings' ? (
-              <DomainList
-                handleSetFollow={() => handleFollow(from, true, item, index)}
-                handleSetUnFollow={() => handleFollow(from, false, item, index)}
-                key={`followedTopic-${index}`}
-                isCommunity={true}
-                onPressBody={() => __handleOnTopicPress(item)}
-                item={{
-                  name: item.name,
-                  image: item.icon_path,
-                  isunfollowed: !item.following,
-                  description: null
-                }}
-                DefaultImage={TopicsProfilePictureEmptyState}
-              />
-            ) : null}
-          </View>
+          <DiscoveryTitleSeparator key="topic-title-separator" text="Suggested Communities" />
         </>
       );
-    };
+    }
 
+    return (
+      <>
+        {renderRecentSearch(index)}
+        <View style={styles.domainContainer}>
+          {(route.name === 'Followings' && item.user_id_follower !== null) ||
+          route.name !== 'Followings' ? (
+            <DomainList
+              handleSetFollow={() => handleFollow(from, true, item, index)}
+              handleSetUnFollow={() => handleFollow(from, false, item, index)}
+              key={`followedTopic-${index}`}
+              isCommunity={true}
+              onPressBody={() => __handleOnTopicPress(item)}
+              item={{
+                name: item.name,
+                image: item.icon_path,
+                isunfollowed: !item.following,
+                description: null
+              }}
+              DefaultImage={TopicsProfilePictureEmptyState}
+            />
+          ) : null}
+        </View>
+      </>
+    );
+  };
+
+  const renderItem = ({index, item}) =>
+    renderDiscoveryItem({
+      from: isFirstTimeOpen
+        ? FROM_FOLLOWED_TOPIC_INITIAL
+        : index > newMapFollowedTopics.length
+        ? FROM_UNFOLLOWED_TOPIC
+        : FROM_FOLLOWED_TOPIC,
+      item,
+      index
+    });
+
+  const __renderTopicItems = () => {
     const followingTopics = [];
     const unfollowingTopics = [];
 
@@ -229,17 +239,7 @@ const TopicFragment = ({
         onMomentumScrollBegin={handleScroll}
         contentContainerStyle={{paddingBottom: 100}}
         data={data}
-        renderItem={({index, item}) =>
-          renderDiscoveryItem({
-            from: isFirstTimeOpen
-              ? FROM_FOLLOWED_TOPIC_INITIAL
-              : index > newMapFollowedTopics.length
-              ? FROM_UNFOLLOWED_TOPIC
-              : FROM_FOLLOWED_TOPIC,
-            item,
-            index
-          })
-        }
+        renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
         onEndReached={() => fetchData()}
         onEndReachedThreshold={0.6}

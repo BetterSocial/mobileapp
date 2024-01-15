@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import {FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 import DiscoveryAction from '../../../context/actions/discoveryAction';
@@ -220,6 +220,38 @@ const UsersFragment = ({
     return null;
   };
 
+  const renderItem = ({index, item}) => {
+    let result;
+
+    if (isFirstTimeOpen) {
+      if (withoutRecent) {
+        if (initialUsers.length !== 0) {
+          result = FROM_USERS_INITIAL;
+        } else {
+          result = FROM_FOLLOWED_USERS_INITIAL;
+        }
+      } else {
+        result = FROM_FOLLOWED_USERS_INITIAL;
+      }
+    } else if (unfollowedUsers.length !== 0) {
+      if (index > followedUsers.length) {
+        result = FROM_UNFOLLOWED_USERS;
+      } else {
+        result = FROM_FOLLOWED_USERS;
+      }
+    } else if (index > followedUsers.length) {
+      result = FROM_UNFOLLOWED_USERS;
+    } else {
+      result = FROM_FOLLOWED_USERS;
+    }
+
+    return renderDiscoveryItem({
+      from: result,
+      item,
+      index
+    });
+  };
+
   const renderUsersItem = () => {
     const initFollowingUsers = [];
     const initUnfollowingUsers = [];
@@ -247,25 +279,7 @@ const UsersFragment = ({
         onMomentumScrollBegin={handleScroll}
         contentContainerStyle={{paddingBottom: 100}}
         data={data || []}
-        renderItem={({index, item}) => {
-          return renderDiscoveryItem({
-            from: isFirstTimeOpen
-              ? withoutRecent
-                ? initialUsers.length !== 0
-                  ? FROM_USERS_INITIAL
-                  : FROM_FOLLOWED_USERS_INITIAL
-                : FROM_FOLLOWED_USERS_INITIAL
-              : unfollowedUsers.length !== 0
-              ? index > followedUsers.length
-                ? FROM_UNFOLLOWED_USERS
-                : FROM_FOLLOWED_USERS
-              : index > followedUsers.length
-              ? FROM_UNFOLLOWED_USERS
-              : FROM_FOLLOWED_USERS,
-            item,
-            index
-          });
-        }}
+        renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
         onEndReached={() => fetchData()}
         onEndReachedThreshold={0.6}
