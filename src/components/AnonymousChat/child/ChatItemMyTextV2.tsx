@@ -21,9 +21,9 @@ const {width} = Dimensions.get('screen');
 const AVATAR_SIZE = 24;
 const CONTAINER_LEFT_PADDING = 60;
 const CONTAINER_RIGHT_PADDING = 10;
-const AVATAR_LEFT_MARGIN = 8;
-const BUBBLE_LEFT_PADDING = 8;
-const BUBBLE_RIGHT_PADDING = 8;
+const AVATAR_LEFT_MARGIN = 4;
+const BUBBLE_LEFT_PADDING = 4;
+const BUBBLE_RIGHT_PADDING = 4;
 
 const styles = StyleSheet.create({
   chatContainer: {
@@ -312,9 +312,11 @@ const ChatItemMyTextV2 = ({
               )}
           </View>
         )}
-        <Text ref={messageRef} style={styles.text}>
-          {`${message}`}
-        </Text>
+        {attachments.length <= 0 && (
+          <Text ref={messageRef} style={styles.text}>
+            {`${message}`}
+          </Text>
+        )}
 
         {renderIcon()}
       </View>

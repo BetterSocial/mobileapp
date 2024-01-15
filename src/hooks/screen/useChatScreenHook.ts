@@ -142,12 +142,12 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
 
       const newAttachments = await Promise.all(allAttachmentPromises);
 
-      if (type === ANONYMOUS) {
+      if (type === 'ANONYMOUS') {
         response = await AnonymousMessageRepo.sendAnonymousMessage(
           selectedChannel?.id,
           message,
           newAttachments,
-          replyData?.id
+          null
         );
       } else {
         response = await SignedMessageRepo.sendSignedMessage(
@@ -155,7 +155,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
           message,
           channelType,
           newAttachments,
-          replyData?.id
+          null
         );
       }
       await currentChatSchema.updateChatSentStatus(localDb, response);
