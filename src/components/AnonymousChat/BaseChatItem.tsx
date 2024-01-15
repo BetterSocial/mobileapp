@@ -81,7 +81,7 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
         isContinuous={item?.isContinuous}
         message={item?.message}
         attachments={item?.attachmentJson}
-        time={item?.updatedAt}
+        time={calculateTime(item?.updatedAt, true)}
         username={handleUserName(item)}
         type={BaseChatItemTypeProps.MY_ANON_CHAT}
         status={item?.status as ChatStatus}
