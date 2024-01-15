@@ -163,10 +163,9 @@ const ReplyComment = ({
           });
 
         return (
-          <ConnectorWrapper key={index} index={index}>
-            <View key={index} style={styles.levelOneCommentWrapper}>
+          <ConnectorWrapper key={item.created_at} index={index}>
+            <View style={styles.levelOneCommentWrapper}>
               <Comment
-                key={index}
                 comment={item}
                 // username={item.user.data.username}
                 user={item.user}

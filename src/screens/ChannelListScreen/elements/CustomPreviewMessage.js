@@ -1,4 +1,5 @@
 import React from 'react';
+import PropsTypes from 'prop-types';
 import {ChannelPreviewMessage} from 'stream-chat-react-native';
 import {StyleSheet, Text} from 'react-native';
 import {Context} from '../../../context';
@@ -58,4 +59,7 @@ const PreviewMessage = (props) => {
   return <ChannelPreviewMessage {...props} />;
 };
 
+PreviewMessage.propTypes = {
+  latestMessagePreview: PropsTypes.object
+};
 export default React.memo(PreviewMessage);
