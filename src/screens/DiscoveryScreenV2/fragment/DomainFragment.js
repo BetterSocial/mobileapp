@@ -224,6 +224,23 @@ const DomainFragment = ({
     );
   };
 
+  const renderItemList = ({index, item}) => {
+    let result;
+
+    if (isFirstTimeOpen) {
+      result = FROM_FOLLOWED_DOMAIN_INITIAL;
+    } else if (index > newMapFollowedDomain.length) {
+      result = FROM_UNFOLLOWED_DOMAIN;
+    } else {
+      result = FROM_FOLLOWED_DOMAIN;
+    }
+    return renderItem({
+      from: result,
+      item,
+      index
+    });
+  };
+
   const renderDomainItems = () => {
     const followingDomains = [];
     const unfollowingDomains = [];
@@ -255,17 +272,7 @@ const DomainFragment = ({
         contentContainerStyle={{paddingBottom: 100}}
         data={data}
         keyExtractor={(_, index) => index.toString()}
-        renderItem={({index, item}) =>
-          renderItem({
-            from: isFirstTimeOpen
-              ? FROM_FOLLOWED_DOMAIN_INITIAL
-              : index > newMapFollowedDomain.length
-              ? FROM_UNFOLLOWED_DOMAIN
-              : FROM_FOLLOWED_DOMAIN,
-            item,
-            index
-          })
-        }
+        renderItem={renderItemList}
         onEndReached={() => fetchData()}
         onEndReachedThreshold={0.6}
       />

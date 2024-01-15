@@ -9,7 +9,6 @@ import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import DomainList from '../elements/DiscoveryItemList';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import RecentSearch from '../elements/RecentSearch';
-import StringConstant from '../../../utils/string/StringConstant';
 import useIsReady from '../../../hooks/useIsReady';
 import {COLORS} from '../../../utils/theme';
 import {Context} from '../../../context/Store';
@@ -219,6 +218,38 @@ const UsersFragment = ({
     return null;
   };
 
+  const renderItem = ({index, item}) => {
+    let result;
+
+    if (isFirstTimeOpen) {
+      if (withoutRecent) {
+        if (initialUsers.length !== 0) {
+          result = FROM_USERS_INITIAL;
+        } else {
+          result = FROM_FOLLOWED_USERS_INITIAL;
+        }
+      } else {
+        result = FROM_FOLLOWED_USERS_INITIAL;
+      }
+    } else if (unfollowedUsers.length !== 0) {
+      if (index > followedUsers.length) {
+        result = FROM_UNFOLLOWED_USERS;
+      } else {
+        result = FROM_FOLLOWED_USERS;
+      }
+    } else if (index > followedUsers.length) {
+      result = FROM_UNFOLLOWED_USERS;
+    } else {
+      result = FROM_FOLLOWED_USERS;
+    }
+
+    return renderDiscoveryItem({
+      from: result,
+      item,
+      index
+    });
+  };
+
   const renderUsersItem = () => {
     const initFollowingUsers = [];
     const initUnfollowingUsers = [];
@@ -246,25 +277,7 @@ const UsersFragment = ({
         onMomentumScrollBegin={handleScroll}
         contentContainerStyle={{paddingBottom: 100}}
         data={data || []}
-        renderItem={({index, item}) => {
-          return renderDiscoveryItem({
-            from: isFirstTimeOpen
-              ? withoutRecent
-                ? initialUsers.length !== 0
-                  ? FROM_USERS_INITIAL
-                  : FROM_FOLLOWED_USERS_INITIAL
-                : FROM_FOLLOWED_USERS_INITIAL
-              : unfollowedUsers.length !== 0
-              ? index > followedUsers.length
-                ? FROM_UNFOLLOWED_USERS
-                : FROM_FOLLOWED_USERS
-              : index > followedUsers.length
-              ? FROM_UNFOLLOWED_USERS
-              : FROM_FOLLOWED_USERS,
-            item,
-            index
-          });
-        }}
+        renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
         onEndReached={() => fetchData()}
         onEndReachedThreshold={0.6}
