@@ -211,6 +211,7 @@ const UsersFragment = ({
             routeName: route.name,
             isUser
           }}
+          withKarma
         />
       </>
     );
