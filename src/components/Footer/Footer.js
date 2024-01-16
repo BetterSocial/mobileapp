@@ -224,6 +224,7 @@ const styles = StyleSheet.create({
 });
 
 Footer.propTypes = {
+  item: PropTypes.object,
   onPressShare: PropTypes.func,
   onPressComment: PropTypes.func,
   onPressBlock: PropTypes.func,
@@ -232,7 +233,12 @@ Footer.propTypes = {
   totalVote: PropTypes.number,
   totalComment: PropTypes.number,
   statusVote: PropTypes.oneOf(['none', 'upvote', 'downvote']),
-  isSelf: PropTypes.bool
+  isSelf: PropTypes.bool,
+  disableComment: PropTypes.bool,
+  blockStatus: PropTypes.any,
+  loadingVote: PropTypes.any,
+  showScoreButton: PropTypes.bool,
+  onPressScore: PropTypes.func
 };
 
 export default Footer;
