@@ -208,21 +208,18 @@ const DomainFragment = ({
       <>
         {renderRecentSearch(index)}
         <View style={styles.domainContainer}>
-          {(route.name === 'Followings' && item.user_id_follower !== null) ||
-          route.name !== 'Followings' ? (
-            <DomainList
-              isDomain={true}
-              onPressBody={() => __handleOnPressDomain(item)}
-              handleSetFollow={() => __handleFollow(from, true, item, index)}
-              handleSetUnFollow={() => __handleFollow(from, false, item, index)}
-              item={{
-                name: item.domain_name,
-                image: item.logo,
-                isunfollowed: !item.following,
-                description: item.short_description || null
-              }}
-            />
-          ) : null}
+          <DomainList
+            isDomain={true}
+            onPressBody={() => __handleOnPressDomain(item)}
+            handleSetFollow={() => __handleFollow(from, true, item, index)}
+            handleSetUnFollow={() => __handleFollow(from, false, item, index)}
+            item={{
+              name: item.domain_name,
+              image: item.logo,
+              isunfollowed: !item.following,
+              description: item.short_description || null
+            }}
+          />
         </View>
       </>
     );
