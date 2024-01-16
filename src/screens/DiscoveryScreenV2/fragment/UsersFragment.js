@@ -12,7 +12,6 @@ import RecentSearch from '../elements/RecentSearch';
 import StringConstant from '../../../utils/string/StringConstant';
 import {COLORS} from '../../../utils/theme';
 import {Context} from '../../../context/Store';
-import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 import {getUserId} from '../../../utils/users';
 import {setFollow, setUnFollow} from '../../../service/profile';
@@ -86,14 +85,28 @@ const UsersFragment = ({
       newUserLists[indexUser].following = !!willFollow;
       newUserLists[indexUser].user_id_follower = myId;
     }
+    return newUserLists[indexUser];
   };
 
-  const handleFollow = async (from, willFollow, item, index) => {
+  const mapUser = (newUser) => {
+    return discovery.initialUsers.map((user) => {
+      if (user.user) {
+        if (user.user.user_id === newUser.user.user_id) return newUser;
+      } else if (user.user_id === newUser.user_id) return newUser;
+      return user;
+    });
+  };
+
+  const handleUser = async (from, willFollow, item) => {
     if (from === FROM_FOLLOWED_USERS_INITIAL || from === FROM_UNFOLLOWED_USERS_INITIAL) {
       const newFollowedUsers = [...users];
-      exhangeFollower(newFollowedUsers, willFollow, item.user ? item.user.user_id : item.user_id);
+      const newUser = exhangeFollower(
+        newFollowedUsers,
+        willFollow,
+        item.user ? item.user.user_id : item.user_id
+      );
 
-      DiscoveryAction.setDiscoveryInitialUsers(newFollowedUsers, discoveryDispatch);
+      DiscoveryAction.setDiscoveryInitialUsers(mapUser(newUser), discoveryDispatch);
     }
 
     if (from === FROM_FOLLOWED_USERS) {
@@ -115,19 +128,34 @@ const UsersFragment = ({
 
       setInitialUsers(newFollowedUsers);
     }
+  };
 
+  const handleFollow = async (from, willFollow, item) => {
+    handleUser(from, willFollow, item);
     const data = {
       user_id_follower: myId,
-      user_id_followed: item.user_id,
+      user_id_followed: item.user ? item.user.user_id : item.user_id,
       username_follower: profile.myProfile.username,
       username_followed: item.username,
       follow_source: 'discoveryScreen'
     };
 
     if (willFollow) {
-      await setFollow(data, client);
+      try {
+        await setFollow(data, client);
+        console.log('BERHASIL DIFOLLOW');
+      } catch (error) {
+        handleUser(from, !willFollow, item);
+        console.log('HASIL ERROR FOLLOW', error);
+      }
     } else {
-      await setUnFollow(data, client);
+      try {
+        await setUnFollow(data, client);
+        console.log('BERHASIL DIUNFOLLOW');
+      } catch (error) {
+        handleUser(from, !willFollow, item);
+        console.log('HASIL ERROR UNFOLLOW', error);
+      }
     }
     if (searchText.length > 0) fetchData();
   };
@@ -143,8 +171,8 @@ const UsersFragment = ({
         <DomainList
           key={`${key}-${index}`}
           onPressBody={() => handleOnPress(item.user || item)}
-          handleSetFollow={() => handleFollow(from, true, item.user || item, index)}
-          handleSetUnFollow={() => handleFollow(from, false, item.user || item, index)}
+          handleSetFollow={() => handleFollow(from, true, item.user || item)}
+          handleSetUnFollow={() => handleFollow(from, false, item.user || item)}
           item={{
             name: item.user ? item.user.username : item.username,
             image: item.user ? item.user.profile_pic_path : item.profile_pic_path,
@@ -260,11 +288,11 @@ const UsersFragment = ({
 const styles = StyleSheet.create({
   fragmentContainer: {
     flex: 1,
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   noDataFoundContainer: {
     flex: 1,
-    backgroundColor: colors.white,
+    backgroundColor: COLORS.white,
     justifyContent: 'center'
   },
   noDataFoundText: {

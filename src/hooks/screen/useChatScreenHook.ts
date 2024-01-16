@@ -18,6 +18,14 @@ import {
 } from '../../utils/constants';
 import {getAnonymousUserId, getUserId} from '../../utils/users';
 import {randomString} from '../../utils/string/StringUtils';
+import ImageUtils from '../../utils/image';
+
+interface ScrollContextProps {
+  selectedMessageId: string | null;
+  setSelectedMessageId: (id: string | null) => void;
+  handleScrollTo: (id: string) => void;
+}
+export const ScrollContext = React.createContext<ScrollContextProps | null>(null);
 
 function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const {localDb, chat, refresh} = useLocalDatabaseHook();
@@ -42,12 +50,62 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     }
   };
 
+  const processImageAttachment = async (item) => {
+    const uploadedImageUrl = await ImageUtils.uploadImage(item.asset_url);
+    return {...item, asset_url: uploadedImageUrl.data.url, thumb_url: uploadedImageUrl.data.url};
+  };
+
+  const processVideoAttachment = async (item) => {
+    const uploadedImageUrl = await ImageUtils.uploadImage(item.asset_url);
+    const uploadedUrl = await ImageUtils.uploadFile(
+      item.video_path,
+      item.video_name,
+      item.video_type
+    );
+    return {
+      ...item,
+      asset_url: uploadedImageUrl.data.url,
+      thumb_url: uploadedImageUrl.data.url,
+      video_path: uploadedUrl.data.url
+    };
+  };
+
+  const processFileAttachment = async (item) => {
+    const uploadedUrl = await ImageUtils.uploadFile(item.file_path, item.file_name, item.file_type);
+    return {
+      ...item,
+      asset_url: uploadedUrl.data.url,
+      thumb_url: uploadedUrl.data.url,
+      file_path: uploadedUrl.data.url
+    };
+  };
+
+  const processAttachments = async (attachments) => {
+    const attachmentPromises = attachments.map(async (item) => {
+      switch (item.type) {
+        case 'image':
+          return processImageAttachment(item);
+        case 'video':
+          return processVideoAttachment(item);
+        case 'file':
+          return processFileAttachment(item);
+        default:
+          return item;
+      }
+    });
+
+    return Promise.all(attachmentPromises);
+  };
+
   const sendChat = async (
     message: string = randomString(20),
+    attachments: [] = [],
     iteration = 0,
     sendingChatSchema: ChatSchema | null = null
   ) => {
-    if (iteration > 5) {
+    const MAX_ITERATIONS = 5;
+
+    if (iteration > MAX_ITERATIONS) {
       SimpleToast.show("Can't send message, please check your connection");
       return;
     }
@@ -59,6 +117,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     if (type === 'ANONYMOUS') {
       userId = myAnonymousId;
     }
+
     try {
       const randomId = uuid();
 
@@ -68,44 +127,45 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
           userId,
           selectedChannel?.id,
           message,
-          localDb
+          attachments,
+          localDb,
+          'regular',
+          'pending'
         );
         currentChatSchema.save(localDb);
         refresh('chat');
         refresh('channelList');
       }
-      let channelType = CHANNEL_TYPE_PERSONAL;
-      if (
-        selectedChannel?.channelType?.toLowerCase() === 'group' ||
-        selectedChannel?.rawJson?.channel?.type === 'group'
-      ) {
-        channelType = CHANNEL_TYPE_GROUP;
-      }
 
-      if (selectedChannel?.rawJson?.channel?.channel_type === 4) {
-        channelType = CHANNEL_TYPE_ANONYMOUS;
-      }
+      const channelType = CHANNEL_TYPE_PERSONAL;
+      const newAttachments = await processAttachments(attachments);
 
       let response;
       if (type === 'ANONYMOUS') {
-        response = await AnonymousMessageRepo.sendAnonymousMessage(selectedChannel?.id, message);
+        response = await AnonymousMessageRepo.sendAnonymousMessage(
+          selectedChannel?.id,
+          message,
+          newAttachments,
+          null
+        );
       } else {
         response = await SignedMessageRepo.sendSignedMessage(
           selectedChannel?.id,
           message,
-          channelType
+          channelType,
+          newAttachments,
+          null
         );
       }
+
       await currentChatSchema.updateChatSentStatus(localDb, response);
       refresh('chat');
       refresh('channelList');
     } catch (e) {
       if (e?.response?.data?.status === 'Channel is blocked') return;
 
-      setTimeout(() => {
-        sendChat(message, iteration + 1, currentChatSchema).catch((sendChatError) => {
-          console.log(sendChatError);
-        });
+      setTimeout(async () => {
+        await sendChat(message, attachments, iteration + 1, currentChatSchema);
       }, 1000);
     }
   };

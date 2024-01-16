@@ -1,10 +1,11 @@
 import * as React from 'react';
 import {View, TextInput, ActivityIndicator, Text, TouchableOpacity} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {colors} from '../../utils/colors';
 import MemoSendComment from '../../assets/icon/IconSendComment';
 import {PhotoProfileProps, TextAreaChatProps} from './typings';
 import {S} from './styles';
+import {COLORS} from '../../utils/theme';
+import SendIcon from '../SendIcon';
 
 const PhotoProfile = ({
   anonUser,
@@ -20,10 +21,10 @@ const PhotoProfile = ({
       <View
         style={[
           S.image,
-          {backgroundColor: loadingAnonUser ? 'transparent' : anon_user_info_color_code}
+          {backgroundColor: loadingAnonUser ? COLORS.transparent : anon_user_info_color_code}
         ]}>
         {loadingAnonUser ? (
-          <ActivityIndicator size={'small'} color={colors.bondi_blue} />
+          <ActivityIndicator size={'small'} color={COLORS.bondi_blue} />
         ) : (
           <Text style={S.emojiStyle}>{anon_user_info_emoji_code}</Text>
         )}
@@ -59,7 +60,7 @@ const TextAreaChat = ({
 
   const isButtonActive = message && !disabledButton;
 
-  const iconSendBackgroundColor = isAnonimity ? colors.bondi_blue : colors.blue1;
+  const iconSendBackgroundColor = isAnonimity ? COLORS.bondi_blue : COLORS.blue1;
 
   const onChangeText = (text: string) => {
     setMessage(text);
@@ -88,9 +89,9 @@ const TextAreaChat = ({
         placeholder={placeholder}
         style={[
           S.textArea,
-          {color: disabledInput ? colors.gray1 : colors.black, minHeight, maxHeight}
+          {color: disabledInput ? COLORS.lightgrey : COLORS.black, minHeight, maxHeight}
         ]}
-        placeholderTextColor={'#C4C4C4'}
+        placeholderTextColor={COLORS.blackgrey}
         value={message}
         editable={!disabledInput}
       />
@@ -98,10 +99,7 @@ const TextAreaChat = ({
         onPress={onSend}
         disabled={!message || disabledButton}
         style={[S.sendIconContainer]}>
-        <MemoSendComment
-          fillBackground={isButtonActive ? iconSendBackgroundColor : colors.gray1}
-          fillIcon={colors.white}
-        />
+        <SendIcon type={isAnonimity ? 'ANON' : 'SIGNED'} isDisabled={!isButtonActive} />
       </TouchableOpacity>
     </View>
   );

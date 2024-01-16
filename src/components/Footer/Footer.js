@@ -10,7 +10,7 @@ import MemoIc_block_inactive from '../../assets/block/Ic_block_inactive';
 import MemoIc_comment from '../../assets/icons/Ic_comment';
 import MemoIc_share from '../../assets/icons/Ic_share';
 import Memoic_globe from '../../assets/icons/ic_globe';
-import {FONTS} from '../../utils/theme';
+import {COLORS, FONTS} from '../../utils/theme';
 import BlurredLayer from '../../screens/FeedScreen/elements/BlurredLayer';
 
 const Footer = ({
@@ -52,12 +52,12 @@ const Footer = ({
 
   const voteStyle = () => {
     if (totalVote > 0) {
-      return '#00ADB5';
+      return COLORS.anon_primary;
     }
     if (totalVote < 0) {
-      return '#FF2E63';
+      return COLORS.redalert;
     }
-    return '#C4C4C4';
+    return COLORS.balance_gray;
   };
   return (
     <BlurredLayer toastOnly={true} isVisible={item?.isBlurredPost}>
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   },
   text: {
     ...FONTS.body3,
-    color: '#C4C4C4'
+    color: COLORS.balance_gray
   },
   vote: (colorBasedCount) => ({
     ...FONTS.body3,

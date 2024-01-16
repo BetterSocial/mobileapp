@@ -248,7 +248,7 @@ exports[`TESTING ChatItemTargetText RENDER ANON_PM with unreadcount should match
         style={
           Object {
             "alignItems": "center",
-            "backgroundColor": "#2C67BC",
+            "backgroundColor": undefined,
             "borderRadius": 10,
             "height": 20,
             "justifyContent": "center",
@@ -260,7 +260,7 @@ exports[`TESTING ChatItemTargetText RENDER ANON_PM with unreadcount should match
         <Text
           style={
             Object {
-              "color": "#ffffff",
+              "color": "#FFFFFF",
               "fontFamily": "Inter-Regular",
               "fontSize": 9,
               "lineHeight": 14.52,
@@ -724,7 +724,7 @@ exports[`TESTING ChatItemTargetText RENDER other type post with unreadcount shou
           style={
             Object {
               "alignItems": "center",
-              "backgroundColor": "#2C67BC",
+              "backgroundColor": undefined,
               "borderRadius": 10,
               "height": 20,
               "justifyContent": "center",
@@ -736,7 +736,7 @@ exports[`TESTING ChatItemTargetText RENDER other type post with unreadcount shou
           <Text
             style={
               Object {
-                "color": "#ffffff",
+                "color": "#FFFFFF",
                 "fontFamily": "Inter-Regular",
                 "fontSize": 9,
                 "lineHeight": 14.52,

@@ -1,10 +1,9 @@
 import * as React from 'react';
-import {StyleSheet} from 'react-native';
-import {View, Text} from 'react-native';
+import {StyleSheet, View, Text} from 'react-native';
 
 import EmojiSelector from 'react-native-emoji-selector';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {colors} from '../../utils/colors';
+import {COLORS} from '../../utils/theme';
 
 const SheetEmoji = React.forwardRef(({selectEmoji}, ref) => {
   return (
@@ -14,7 +13,7 @@ const SheetEmoji = React.forwardRef(({selectEmoji}, ref) => {
       closeOnPressMask={true}
       customStyles={{
         container: styles.container,
-        draggableIcon: styles.draggableIcon,
+        draggableIcon: styles.draggableIcon
       }}>
       <View style={styles.containerEmoji}>
         <EmojiSelector
@@ -33,10 +32,10 @@ const styles = StyleSheet.create({
   container: {
     height: '80%',
     borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
+    borderTopLeftRadius: 20
   },
   draggableIcon: {
-    backgroundColor: colors.alto,
-    width: 60,
-  },
+    backgroundColor: COLORS.lightgrey,
+    width: 60
+  }
 });

@@ -14,7 +14,6 @@ import useChatClientHook from '../../../utils/getstream/useChatClientHook';
 import useIsReady from '../../../hooks/useIsReady';
 import {COLORS} from '../../../utils/theme';
 import {Context} from '../../../context/Store';
-import {colors} from '../../../utils/colors';
 import {convertTopicNameToTopicPageScreenParam} from '../../../utils/string/StringUtils';
 import {fonts} from '../../../utils/fonts';
 import {getUserId} from '../../../utils/users';
@@ -55,6 +54,18 @@ const TopicFragment = ({
       following: item.following !== undefined ? item.following : item.user_id_follower !== null
     }));
   }, [discovery.initialTopics]);
+  const newMapFollowedTopics = React.useMemo(() => {
+    return followedTopic.map((item) => ({
+      ...item,
+      following: item.following !== undefined ? item.following : item.user_id_follower !== null
+    }));
+  }, [followedTopic]);
+  const newMapUnfollowedTopics = React.useMemo(() => {
+    return unfollowedTopic.map((item) => ({
+      ...item,
+      following: item.following !== undefined ? item.following : item.user_id_follower !== null
+    }));
+  }, [unfollowedTopic]);
 
   React.useEffect(() => {
     const parseToken = async () => {
@@ -66,39 +77,74 @@ const TopicFragment = ({
     parseToken();
   }, []);
 
-  const handleFollow = async (from, willFollow, item, index) => {
+  const exhangeFollower = (newTopicLists, willFollow, topicId) => {
+    const indexTopic = newTopicLists.findIndex((item) => item.topic_id === topicId);
+    newTopicLists[indexTopic].following = !!willFollow;
+    newTopicLists[indexTopic].user_id_follower = myId;
+    return newTopicLists[indexTopic];
+  };
+
+  const mapTopic = (newTopic) => {
+    return discovery.initialTopics.map((topic) => {
+      if (topic.topic_id === newTopic.topic_id) {
+        return newTopic;
+      }
+      return topic;
+    });
+  };
+
+  const handleTopic = (from, willFollow, item, index) => {
     if (from === FROM_FOLLOWED_TOPIC_INITIAL) {
       const newFollowedTopics = [...topics];
-      newFollowedTopics[index].following = !!willFollow;
-      newFollowedTopics[index].user_id_follower = myId;
-      DiscoveryAction.setDiscoveryInitialTopics(newFollowedTopics, discoveryDispatch);
+      const newTopic = exhangeFollower(newFollowedTopics, willFollow, item.topic_id);
+
+      DiscoveryAction.setDiscoveryInitialTopics(mapTopic(newTopic), discoveryDispatch);
     }
 
     if (from === FROM_UNFOLLOWED_TOPIC_INITIAL) {
       const newFollowedTopics = [...topics];
-      newFollowedTopics[index].following = !!willFollow;
-      newFollowedTopics[index].user_id_follower = myId;
+      const newTopic = exhangeFollower(newFollowedTopics, willFollow, item.topic_id);
 
-      DiscoveryAction.setDiscoveryInitialTopics(newFollowedTopics, discoveryDispatch);
+      DiscoveryAction.setDiscoveryInitialTopics(mapTopic(newTopic), discoveryDispatch);
     }
 
     if (from === FROM_FOLLOWED_TOPIC) {
-      const newFollowedTopics = [...followedTopic];
-      newFollowedTopics[index].following = !!willFollow;
-      newFollowedTopics[index].user_id_follower = myId;
+      const newFollowedTopics = [...newMapFollowedTopics];
+      const newTopic = exhangeFollower(newFollowedTopics, willFollow, item.topic_id);
 
-      setFollowedTopic(newFollowedTopics);
+      setFollowedTopic(
+        followedTopic.map((topic) => {
+          if (topic.topic_id === newTopic.topic_id) {
+            return newTopic;
+          }
+          return topic;
+        })
+      );
     }
 
     if (from === FROM_UNFOLLOWED_TOPIC) {
-      const newUnFollowedTopic = [...unfollowedTopic];
-      newUnFollowedTopic[index].following = !!willFollow;
-      newUnFollowedTopic[index].user_id_follower = myId;
+      const newUnFollowedTopic = [...newMapUnfollowedTopics];
+      const newTopic = exhangeFollower(newUnFollowedTopic, willFollow, item.topic_id);
 
-      setUnfollowedTopic(newUnFollowedTopic);
+      setUnfollowedTopic(
+        unfollowedTopic.map((topic) => {
+          if (topic.topic_id === newTopic.topic_id) {
+            return newTopic;
+          }
+          return topic;
+        })
+      );
     }
+  };
 
-    followTopic(item?.name);
+  const handleFollow = async (from, willFollow, item, index) => {
+    handleTopic(from, willFollow, item, index);
+
+    try {
+      await followTopic(item?.name);
+    } catch (e) {
+      handleTopic(from, !willFollow, item, index);
+    }
     if (searchText.length > 0) fetchData();
   };
 
@@ -185,7 +231,7 @@ const TopicFragment = ({
 
     return (
       <>
-        {followedTopic.map((item, index) =>
+        {newMapFollowedTopics.map((item, index) =>
           __renderDiscoveryItem(FROM_FOLLOWED_TOPIC, 'followedTopicDiscovery', item, index)
         )}
 
@@ -195,7 +241,7 @@ const TopicFragment = ({
           </View>
         )}
         {route.name !== 'Followings' &&
-          unfollowedTopic.map((item, index) =>
+          newMapUnfollowedTopics.map((item, index) =>
             __renderDiscoveryItem(FROM_UNFOLLOWED_TOPIC, 'unfollowedTopicDiscovery', item, index)
           )}
       </>
@@ -234,11 +280,11 @@ const TopicFragment = ({
 const styles = StyleSheet.create({
   fragmentContainer: {
     flex: 1,
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   noDataFoundContainer: {
     flex: 1,
-    backgroundColor: colors.white,
+    backgroundColor: COLORS.white,
     justifyContent: 'center'
   },
   noDataFoundText: {

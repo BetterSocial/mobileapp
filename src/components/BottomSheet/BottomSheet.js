@@ -3,7 +3,7 @@ import {StyleSheet, View} from 'react-native';
 import PropTypes from 'prop-types';
 import RBSheet from 'react-native-raw-bottom-sheet';
 
-import {colors} from '../../utils/colors';
+import {COLORS} from '../../utils/theme';
 import dimen from '../../utils/dimen';
 
 const BottomSheet = React.forwardRef((props, ref) => {
@@ -13,6 +13,7 @@ const BottomSheet = React.forwardRef((props, ref) => {
       ref={ref}
       onOpen={() => (props.onOpen ? props.onOpen() : {})}
       closeOnDragDown={true}
+      dragFromTopOnly={true}
       closeOnPressMask={props.closeOnPressMask}
       height={props.height ? props.height : 355}
       keyboardAvoidingViewEnabled={keyboardAvoidingViewEnabled}
@@ -46,6 +47,6 @@ const styles = StyleSheet.create({
     justifyContent: pullBottom ? 'flex-end' : 'flex-start'
   }),
   draggableIcon: {
-    backgroundColor: colors.alto
+    backgroundColor: COLORS.lightgrey
   }
 });

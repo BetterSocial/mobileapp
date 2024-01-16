@@ -13,16 +13,16 @@ import useMoveChatTypeHook from '../../hooks/core/chat/useMoveChatTypeHook';
 import {ANONYMOUS} from '../../hooks/core/constant';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
-import {colors} from '../../utils/colors';
 import Loading from '../Loading';
 import dimen from '../../utils/dimen';
+import {COLORS} from '../../utils/theme';
 
 const {height} = Dimensions.get('window');
 
 export const styles = StyleSheet.create({
   keyboardAvoidingView: {
     flex: 1,
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   container: {
     display: 'flex',
@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
     height: '100%'
   },
   inputContainer: {
-    backgroundColor: colors.white,
+    backgroundColor: COLORS.white,
     position: 'absolute',
     bottom: 0,
     // height: 50,
@@ -42,12 +42,13 @@ export const styles = StyleSheet.create({
     right: 0,
     zIndex: 100,
     padding: 8,
-    borderTopColor: colors.lightgrey,
+    paddingBottom: 16,
+    borderTopColor: COLORS.lightgrey,
     borderTopWidth: 1
   },
   contentContainerStyle: {
     paddingTop: dimen.normalizeDimen(60),
-    backgroundColor: 'transparent'
+    backgroundColor: COLORS.transparent
   }
 });
 

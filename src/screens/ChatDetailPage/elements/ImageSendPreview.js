@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useMessageInputContext} from 'stream-chat-react-native-core';
+import {COLORS} from '../../../utils/theme';
 
 const ImageSendPreview = () => {
   const {ImageUploadPreview} = useMessageInputContext();
@@ -10,5 +11,5 @@ const ImageSendPreview = () => {
 export default ImageSendPreview;
 
 const styles = StyleSheet.create({
-  container: {backgroundColor: '#FCFCFC'},
+  container: {backgroundColor: COLORS.brilliance}
 });

@@ -15,6 +15,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
         >
           <Search
             animatedValue={0}
+            isAnon={false}
             onPress={[Function]}
           />
         </View>
@@ -105,8 +106,8 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
           <View
             style={
               Object {
-                "backgroundColor": "white",
-                "borderBottomColor": "#C4C4C4",
+                "backgroundColor": "#FFFFFF",
+                "borderBottomColor": "#F5F6F7",
                 "borderBottomWidth": 1,
                 "flexDirection": "row",
                 "left": 0,
@@ -135,7 +136,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
                 style={
                   Object {
                     "alignSelf": "center",
-                    "backgroundColor": "#F5F5F5",
+                    "backgroundColor": "#F5F6F7",
                     "borderRadius": 8,
                     "flex": 1,
                     "flexDirection": "row",
@@ -160,7 +161,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
                   style={
                     Object {
                       "alignSelf": "center",
-                      "color": "#C4C4C4",
+                      "color": "#828282",
                       "flex": 1,
                       "fontFamily": "Inter-Regular",
                       "fontSize": 14,
@@ -202,7 +203,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
               <Text
                 style={
                   Object {
-                    "color": "#00ADB5",
+                    "color": "#4782D7",
                     "fontFamily": "Inter-SemiBold",
                     "fontSize": 12,
                     "lineHeight": 14.52,
@@ -222,8 +223,8 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
           style={
             Object {
               "alignItems": "center",
-              "backgroundColor": "#ffffff",
-              "borderBottomColor": "#E0E0E0",
+              "backgroundColor": "#FFFFFF",
+              "borderBottomColor": "#F5F6F7",
               "borderBottomWidth": 1,
               "display": "flex",
               "flexDirection": "row",
@@ -271,31 +272,22 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
               >
                 <View
                   style={
-                    Array [
-                      Object {
-                        "overflow": "hidden",
-                      },
-                      Object {
-                        "borderRadius": 10,
-                        "height": 20,
-                        "marginEnd": 6,
-                        "width": 20,
-                      },
-                    ]
+                    Object {
+                      "borderRadius": 10,
+                      "height": 20,
+                      "marginEnd": 6,
+                      "width": 20,
+                    }
                   }
                 >
-                  <FastImageView
-                    defaultSource={null}
-                    resizeMode="cover"
-                    source={null}
-                  />
+                  <View />
                 </View>
                 <Text
                   ellipsizeMode="tail"
                   numberOfLines={1}
                   style={
                     Object {
-                      "color": "#2C67BC",
+                      "color": "#4782D7",
                       "fontFamily": "Inter-Medium",
                       "fontSize": 14,
                     }
@@ -346,35 +338,22 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
               >
                 <View
                   style={
-                    Array [
-                      Object {
-                        "overflow": "hidden",
-                      },
-                      Object {
-                        "borderRadius": 10,
-                        "height": 20,
-                        "marginEnd": 6,
-                        "width": 20,
-                      },
-                    ]
+                    Object {
+                      "borderRadius": 10,
+                      "height": 20,
+                      "marginEnd": 6,
+                      "width": 20,
+                    }
                   }
                 >
-                  <FastImageView
-                    defaultSource={null}
-                    resizeMode="cover"
-                    source={
-                      Object {
-                        "testUri": "../../../src/assets/images/AnonymousProfile.png",
-                      }
-                    }
-                  />
+                  <View />
                 </View>
                 <Text
                   ellipsizeMode="tail"
                   numberOfLines={1}
                   style={
                     Object {
-                      "color": "#000000",
+                      "color": "#107793",
                       "fontFamily": "Inter-Medium",
                       "fontSize": 14,
                     }
@@ -401,7 +380,7 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
                   <Text
                     style={
                       Object {
-                        "color": "#ffffff",
+                        "color": "#FFFFFF",
                         "fontFamily": "Inter-Medium",
                         "fontSize": 10,
                       }

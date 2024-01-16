@@ -1,12 +1,6 @@
 import * as React from 'react';
 import FastImage from 'react-native-fast-image';
-import {
-  Linking,
-  Pressable,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+import {Linking, Pressable, StyleSheet, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import Gap from '../../components/Gap';
@@ -21,29 +15,29 @@ const Content = (props) => {
   const {item, title, image, description, url, onContentClicked = undefined} = props;
 
   const onContentPressed = () => {
-    if(onContentClicked) {
-      return onContentClicked()
+    if (onContentClicked) {
+      return onContentClicked();
     }
 
     return navigation.push('LinkContextScreen', {
-      item,
+      item
     });
   };
 
   return (
-    <Pressable testID='press' onPress={onContentPressed}>
-      <View >
+    <Pressable testID="press" onPress={onContentPressed}>
+      <View>
         <View style={styles.base}>
           <Text style={styles.title}>{title}</Text>
         </View>
         <Gap height={SIZES.base} />
-        <View >
+        <View>
           {image ? (
             <Image
               source={{uri: image, priority: imageConst.priority.normal}}
               style={{
                 width: '100%',
-                height: 180,
+                height: 180
               }}
               resizeMode={imageConst.resizeMode.cover}
             />
@@ -52,7 +46,7 @@ const Content = (props) => {
               source={NewsEmptyState}
               style={{
                 width: '100%',
-                height: 180,
+                height: 180
               }}
               resizeMode={imageConst.resizeMode.co}
             />
@@ -62,7 +56,7 @@ const Content = (props) => {
           <Text style={styles.content}>
             {description}{' '}
             <Text
-              testID='textPress'
+              testID="textPress"
               onPress={() => Linking.openURL(sanitizeUrlForLinking(url))}
               style={{
                 color: COLORS.blue,
@@ -70,7 +64,7 @@ const Content = (props) => {
                 marginStart: 8,
                 fontFamily: fonts.inter[600],
                 lineHeight: 18,
-                fontSize: 12,
+                fontSize: 12
               }}>
               Open Link
             </Text>
@@ -92,15 +86,15 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 12,
     lineHeight: 18,
-    color: COLORS.blackgrey,
+    color: COLORS.blackgrey
   },
   title: {
     // marginLeft: 12,
     // marginRight: 12,
     fontFamily: fonts.inter[600],
     fontSize: 14,
-    lineHeight: 17,
-  },
+    lineHeight: 17
+  }
 });
 
 export default Content;

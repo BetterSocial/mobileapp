@@ -2,10 +2,10 @@ import * as React from 'react';
 import {View, Text, StyleSheet, ActivityIndicator} from 'react-native';
 import PropTypes from 'prop-types';
 import {fonts} from '../../../utils/fonts';
-import {colors} from '../../../utils/colors';
 import {Button} from '../../../components/Button';
 import {BottomSheet} from '../../../components/BottomSheet';
 import AutoFocusTextArea from '../../../components/TextArea/AutoFocusTextArea';
+import {COLORS} from '../../../utils/theme';
 import dimen from '../../../utils/dimen';
 
 // eslint-disable-next-line react/display-name
@@ -56,28 +56,29 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontWeight: 'bold',
     fontSize: 24,
-    color: colors.black,
+    color: COLORS.black,
     marginBottom: dimen.normalizeDimen(12)
   },
   description: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.gray,
+    color: COLORS.blackgrey,
     marginTop: 7
   },
   errorText: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.red,
+    color: COLORS.redalert,
     marginTop: dimen.normalizeDimen(7)
   },
   button: {
-    backgroundColor: colors.bondi_blue
+    marginTop: 33,
+    backgroundColor: COLORS.signed_primary
   },
   textStyling: {
     fontFamily: fonts.inter[600],
     fontSize: 18,
-    color: colors.white
+    color: COLORS.white
   }
 });
 export default React.memo(BottomSheetBio);

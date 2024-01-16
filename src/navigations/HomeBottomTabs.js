@@ -18,10 +18,9 @@ import useRootChannelListHook from '../hooks/screen/useRootChannelListHook';
 import {FeedScreen, NewsScreen, ProfileScreen} from '../screens';
 import ChannelListScreenV2 from '../screens/ChannelListScreenV2';
 import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
-import {colors} from '../utils/colors';
-import {COLORS} from '../utils/theme';
 import TokenStorage, {ITokenEnum} from '../utils/storage/custom/tokenStorage';
 import {getAnonymousUserId, getUserId} from '../utils/users';
+import {COLORS} from '../utils/theme';
 
 const Tab = createBottomTabNavigator();
 
@@ -252,8 +251,8 @@ function HomeBottomTabs({navigation}) {
             : 'Feed'
         }
         tabBarOptions={{
-          activeTintColor: colors.holytosca,
-          inactiveTintColor: colors.gray1,
+          activeTintColor: COLORS.signed_primary,
+          inactiveTintColor: COLORS.blackgrey,
           safeAreaInsets: {
             top: 0,
             bottom: 0,
@@ -262,15 +261,15 @@ function HomeBottomTabs({navigation}) {
           }
         }}
         screenOptions={({navigation: screenOptionsNavigation}) => ({
-          activeTintColor: colors.holytosca,
+          activeTintColor: COLORS.signed_primary,
           tabBarLabel: () => (
             <View
               style={[
                 styles.badge,
                 {
                   backgroundColor: screenOptionsNavigation.isFocused()
-                    ? colors.holytosca
-                    : 'transparent'
+                    ? COLORS.signed_primary
+                    : COLORS.transparent
                 }
               ]}
             />
@@ -281,7 +280,7 @@ function HomeBottomTabs({navigation}) {
           component={FeedScreen}
           initialParams={{isBottomTab: true}}
           options={{
-            activeTintColor: colors.holytosca,
+            activeTintColor: COLORS.signed_primary,
             tabBarIcon: renderTabLabelIcon('Feed')
             // unmountOnBlur: true
           }}
@@ -291,7 +290,7 @@ function HomeBottomTabs({navigation}) {
           component={WebsocketResearchScreen}
           initialParams={{isBottomTab: true}}
           options={{
-            activeTintColor: colors.holytosca,
+            activeTintColor: COLORS.signed_primary,
             tabBarIcon: renderTabLabelIcon('Feed')
             // unmountOnBlur: true
           }}
@@ -301,7 +300,7 @@ function HomeBottomTabs({navigation}) {
           component={ChannelListScreen}
           initialParams={{isBottomTab: true}}
           options={{
-            activeTintColor: colors.holytosca,
+            activeTintColor: COLORS.signed_primary,
             tabBarIcon: renderTabLabelIcon('ChannelList'),
             tabBarBadge:
               unReadMessage.total_unread_count + unReadMessage.unread_post > 0
@@ -314,7 +313,7 @@ function HomeBottomTabs({navigation}) {
           component={ChannelListScreenV2}
           initialParams={{isBottomTab: true}}
           options={{
-            activeTintColor: colors.holytosca,
+            activeTintColor: COLORS.signed_primary,
             tabBarIcon: renderTabLabelIcon('ChannelList'),
             tabBarBadge: totalUnreadCount > 0 ? totalUnreadCount : null
           }}
@@ -324,7 +323,7 @@ function HomeBottomTabs({navigation}) {
           component={NewsScreen}
           initialParams={{isBottomTab: true}}
           options={{
-            activeTintColor: colors.holytosca,
+            activeTintColor: COLORS.signed_primary,
             tabBarIcon: renderTabLabelIcon('News')
             // unmountOnBlur: true
           }}
@@ -334,7 +333,7 @@ function HomeBottomTabs({navigation}) {
           initialParams={{isBottomTab: true}}
           component={ProfileScreen}
           options={{
-            activeTintColor: colors.holytosca,
+            activeTintColor: COLORS.signed_primary,
             tabBarIcon: renderTabLabelIcon('Profile')
             // unmountOnBlur:true
           }}

@@ -9,9 +9,11 @@ import {fonts} from '../../../utils/fonts';
 import StringConstant from '../../../utils/string/StringConstant';
 import {COLORS, SIZES} from '../../../utils/theme';
 import {DISCOVERY_TAB_USERS} from '../../../utils/constants';
+import {useDynamicColors} from '../../../hooks/useToggleColors';
 
-const Search = ({onPress, animatedValue}) => {
+const Search = ({onPress, animatedValue, isAnon}) => {
   const navigation = useNavigation();
+  const dynamicColors = useDynamicColors(isAnon);
 
   const __handleOnSearchClicked = () => {
     navigation.push('DiscoveryScreen', {
@@ -28,16 +30,23 @@ const Search = ({onPress, animatedValue}) => {
           </View>
           <Text
             // placeholder={StringConstant.chatTabHeaderPlaceholder}
-            // placeholderTextColor={COLORS.gray1}
+            // placeholderTextColor={COLORS.lightgrey}
             style={styles.input}>
             {StringConstant.chatTabHeaderPlaceholder}
           </Text>
         </View>
       </Pressable>
       <TouchableOpacity style={styles.wrapperButton} onPress={onPress}>
-        <Text style={styles.newPostText}>{StringConstant.chatTabHeaderCreateChatButtonText}</Text>
+        <Text style={styles.newPostText(dynamicColors)}>
+          {StringConstant.chatTabHeaderCreateChatButtonText}
+        </Text>
         <View>
-          <MemoIcNewChat height={17} width={15} style={styles.newChatIcon} />
+          <MemoIcNewChat
+            height={17}
+            width={15}
+            style={styles.newChatIcon}
+            color={dynamicColors.primary}
+          />
         </View>
       </TouchableOpacity>
     </Animated.View>
@@ -47,7 +56,7 @@ const Search = ({onPress, animatedValue}) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     marginBottom: SIZES.base
   },
   searchPressableContainer: {
@@ -56,7 +65,7 @@ const styles = StyleSheet.create({
   wrapperSearch: {
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: '#F5F5F5',
+    backgroundColor: COLORS.lightgrey,
     marginLeft: 20,
     marginRight: 12,
     borderRadius: 8,
@@ -82,26 +91,26 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 14,
     alignSelf: 'center',
-    color: COLORS.gray1
+    color: COLORS.blackgrey
   },
   wrapperIcon: {
     marginLeft: 8,
     alignSelf: 'center',
     justifyContent: 'center'
   },
-  newPostText: {
-    color: COLORS.holyTosca,
+  newPostText: (dynamicColors) => ({
+    color: dynamicColors.primary,
     marginRight: 11,
     fontFamily: 'Inter-SemiBold',
     fontSize: 12,
     lineHeight: 14.52
-  },
+  }),
   newChatIcon: {
     marginTop: 0
   },
   animatedViewContainer: (animatedValue) => ({
     flexDirection: 'row',
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     marginBottom: SIZES.base,
     marginTop: animatedValue,
     position: 'absolute',
@@ -112,7 +121,7 @@ const styles = StyleSheet.create({
     paddingTop: 7,
     paddingBottom: 7,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.gray1
+    borderBottomColor: COLORS.lightgrey
   })
 });
 

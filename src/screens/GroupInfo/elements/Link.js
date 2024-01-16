@@ -1,13 +1,14 @@
+/* eslint-disable consistent-return */
 import * as React from 'react';
-import {FlatList} from 'react-native';
-import {StyleSheet, View} from 'react-native';
+import {FlatList, StyleSheet, View} from 'react-native';
 import {Context} from '../../../context';
 
 import ItemLink from './ItemLink';
+import {COLORS} from '../../../utils/theme';
 
 const Link = () => {
   const [groupChatState] = React.useContext(Context).groupChat;
-  let {asset} = groupChatState;
+  const {asset} = groupChatState;
   return (
     <View style={styles.container}>
       <FlatList
@@ -35,8 +36,8 @@ export default Link;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.white,
     paddingHorizontal: 20,
-    paddingTop: 8,
-  },
+    paddingTop: 8
+  }
 });

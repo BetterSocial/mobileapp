@@ -23,7 +23,6 @@ import dimen from '../../../utils/dimen';
 import {COLORS, FONTS, SIZES} from '../../../utils/theme';
 import {Context} from '../../../context/Store';
 import {RECENT_SEARCH_TERMS} from '../../../utils/cache/constant';
-import {colors} from '../../../utils/colors';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
 
 const DiscoverySearch = ({
@@ -172,7 +171,7 @@ const DiscoverySearch = ({
               <MemoIcArrowBackWhite
                 width={20}
                 height={12}
-                fill={colors.black}
+                fill={COLORS.black}
                 style={{alignSelf: 'center'}}
               />
             </View>
@@ -196,7 +195,7 @@ const DiscoverySearch = ({
             returnKeyType="search"
             onSubmitEditing={handleOnSubmitEditing}
             placeholder={placeholderText}
-            placeholderTextColor={COLORS.gray1}
+            placeholderTextColor={COLORS.lightgrey}
             style={styles.input}
           />
 
@@ -206,12 +205,12 @@ const DiscoverySearch = ({
             onPress={handleOnClearText}
             style={styles.clearIconContainer}
             android_ripple={{
-              color: COLORS.gray1,
+              color: COLORS.lightgrey,
               borderless: true,
               radius: 35
             }}>
             <View style={styles.wrapperDeleteIcon}>
-              <IconClear width={9} height={10} iconColor={colors.black} />
+              <IconClear width={9} height={10} iconColor={COLORS.black} />
             </View>
           </TouchableOpacity>
         </View>
@@ -242,7 +241,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flexDirection: 'row',
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     marginBottom: SIZES.base,
     marginHorizontal: SIZES.base
   },
@@ -257,7 +256,7 @@ const styles = StyleSheet.create({
   },
   wrapperSearch: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: COLORS.lightgrey,
     borderRadius: dimen.normalizeDimen(8),
     alignSelf: 'center',
     flexDirection: 'row',
@@ -294,7 +293,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   newPostText: {
-    color: COLORS.holytosca,
+    color: COLORS.anon_primary,
     marginRight: dimen.normalizeDimen(11),
     ...FONTS.h3
   },
@@ -306,7 +305,7 @@ const styles = StyleSheet.create({
     height: dimen.size.DISCOVERY_HEADER_HEIGHT,
     paddingVertical: dimen.normalizeDimen(7),
     borderBottomWidth: hideBackIcon ? 0 : dimen.normalizeDimen(1),
-    borderBottomColor: COLORS.alto
+    borderBottomColor: COLORS.lightgrey
   })
 });
 

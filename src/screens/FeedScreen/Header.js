@@ -27,8 +27,8 @@ import StringConstant from '../../utils/string/StringConstant';
 import useFeedHeader from './hooks/useFeedHeader';
 import {DEFAULT_PROFILE_PIC_PATH, PRIVACY_PUBLIC} from '../../utils/constants';
 import {calculateTime} from '../../utils/time';
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
 import BlurredLayer from './elements/BlurredLayer';
 
 const {width: screenWidth} = Dimensions.get('window');
@@ -145,7 +145,7 @@ const _renderAnonimity = ({
                   buttonStyle={{position: 'absolute', right: 0, top: -8}}
                   onPress={onHeaderOptionClicked}>
                   <View style={{zIndex: 1000}}>
-                    <ElipsisIcon width={4} height={14} fill={colors.blackgrey} />
+                    <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
                   </View>
                 </GlobalButton>
               )}
@@ -157,11 +157,20 @@ const _renderAnonimity = ({
                 ) : (
                   <MemoPeopleFollow height={16} width={16} />
                 )}
+                <View style={styles.containerFeedText}>
+                  <Text style={styles.feedDate}>{calculateTime(time)}</Text>
+                  <View style={styles.point} />
+                  {privacy.toLowerCase() === PRIVACY_PUBLIC ? (
+                    <Memoic_globe height={16} width={16} />
+                  ) : (
+                    <MemoPeopleFollow height={16} width={16} />
+                  )}
 
-                {duration_feed !== 'never' ? <View style={styles.point} /> : null}
-                {duration_feed !== 'never' ? validationTimer(time, duration_feed) : null}
-                <View style={styles.point} />
-                <Text style={styles.feedDate}>{location}</Text>
+                  {duration_feed !== 'never' ? <View style={styles.point} /> : null}
+                  {duration_feed !== 'never' ? validationTimer(time, duration_feed) : null}
+                  <View style={styles.point} />
+                  <Text style={styles.feedDate}>{location}</Text>
+                </View>
               </View>
             </View>
           </View>
@@ -229,7 +238,7 @@ const _renderProfileNormal = ({
                 onPress={onHeaderOptionClicked}>
                 {hideThreeDot ? null : (
                   <View style={{zIndex: 1000}}>
-                    <ElipsisIcon width={4} height={14} fill={colors.blackgrey} />
+                    <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
                   </View>
                 )}
               </GlobalButton>
@@ -352,7 +361,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
     lineHeight: 16.94,
-    color: colors.black,
+    color: COLORS.black,
     flex: 1
   },
   containerFeedText: {
@@ -365,21 +374,21 @@ const styles = StyleSheet.create({
   feedDate: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.blackgrey,
+    color: COLORS.blackgrey,
     lineHeight: 18
   },
   feedDateLocation: {
     flex: 1,
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.blackgrey,
+    color: COLORS.blackgrey,
     lineHeight: 18
   },
   point: {
     width: 2,
     height: 2,
     borderRadius: 4,
-    backgroundColor: colors.gray,
+    backgroundColor: COLORS.blackgrey,
     marginLeft: 8,
     marginRight: 8,
     alignSelf: 'center',
@@ -393,26 +402,26 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 14,
     lineHeight: 24,
-    color: colors.black
+    color: COLORS.black
   },
   textComment: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
     lineHeight: 18,
-    color: colors.gray
+    color: COLORS.blackgrey
   },
   usernameComment: {
     fontFamily: fonts.inter[500],
     fontWeight: '900',
     fontSize: 12,
     lineHeight: 24,
-    color: colors.black
+    color: COLORS.black
   },
   usernameTextComment: {
     fontFamily: fonts.inter[500],
     fontSize: 12,
     lineHeight: 24,
-    color: colors.gray
+    color: COLORS.blackgrey
   },
   item: {
     width: screenWidth - 20,
@@ -444,7 +453,7 @@ const styles = StyleSheet.create({
   })
 });
 
-Header.propsTypes = {
+Header.propTypes = {
   props: PropsTypes.object,
   isBackButton: PropsTypes.bool
 };
