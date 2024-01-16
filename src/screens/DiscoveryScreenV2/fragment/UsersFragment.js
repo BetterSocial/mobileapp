@@ -48,8 +48,6 @@ const UsersFragment = ({
 
   const [myId, setMyId] = React.useState('');
 
-  const isReady = useIsReady();
-
   const users = React.useMemo(() => {
     return discovery.initialUsers.map((item) => ({
       ...item,
@@ -283,8 +281,6 @@ const UsersFragment = ({
       />
     );
   };
-
-  if (!isReady) return <></>;
 
   if (isLoadingDiscoveryUser)
     return (

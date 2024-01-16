@@ -22,13 +22,14 @@ import MemoSeventyFive_eightySeven from '../../assets/timer/SeventyFive_eightySe
 import MemoSixtyThree_seventyFour from '../../assets/timer/SixtyThree_seventyFour';
 import MemoThirtySeven_fourtyNine from '../../assets/timer/ThirtySeven_fourtyNine';
 import MemoTwentyFive_thirtySix from '../../assets/timer/TwentyFive_thirtySix';
-import Memoic_globe from '../../assets/icons/ic_globe';
+import MemoicGlobe from '../../assets/icons/ic_globe';
 import StringConstant from '../../utils/string/StringConstant';
 import useFeedHeader from './hooks/useFeedHeader';
 import {DEFAULT_PROFILE_PIC_PATH, PRIVACY_PUBLIC} from '../../utils/constants';
 import {calculateTime} from '../../utils/time';
 import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
+import BlurredLayer from './elements/BlurredLayer';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -104,65 +105,77 @@ const _renderAnonimity = ({
   hideThreeDot,
   version = 1,
   anonUserInfo = {},
-  isPostDetail
+  isPostDetail,
+  isBlurredPost = false
 }) => {
   const navigation = useNavigation();
 
   return (
     <SafeAreaView>
-      <View
-        testID="anonymHeader"
-        style={[
-          styles.rowSpaceBeetwen,
-          styles.heightHeader(height),
-          {paddingLeft: isPostDetail ? 10 : 0}
-        ]}>
-        <View style={[styles.rowCenter, headerStyle]}>
-          {isBackButton ? (
-            <View testID="haveBackButton" style={[styles.btn]}>
-              <GlobalButton
-                testID="onBack"
-                onPress={() => {
-                  navigation.goBack();
-                }}>
-                <MemoIc_arrow_back height={20} width={20} />
-              </GlobalButton>
+      <BlurredLayer toastOnly={true} isVisible={isBlurredPost}>
+        <View
+          testID="anonymHeader"
+          style={[
+            styles.rowSpaceBeetwen,
+            styles.heightHeader(height),
+            {paddingLeft: isPostDetail ? 10 : 0}
+          ]}>
+          <View style={[styles.rowCenter, headerStyle]}>
+            {isBackButton ? (
+              <View testID="haveBackButton" style={[styles.btn]}>
+                <GlobalButton
+                  testID="onBack"
+                  onPress={() => {
+                    navigation.goBack();
+                  }}>
+                  <MemoIc_arrow_back height={20} width={20} />
+                </GlobalButton>
+              </View>
+            ) : null}
+            <View style={[styles.imageAnonymContainer]}>
+              <AnonymousAvatar anonUserInfo={anonUserInfo} version={version} />
             </View>
-          ) : null}
-          <View style={[styles.imageAnonymContainer]}>
-            <AnonymousAvatar anonUserInfo={anonUserInfo} version={version} />
-          </View>
 
-          <View style={[styles.containerFeedProfile]}>
-            <View style={[styles.containerFeedName, {alignItems: 'center'}]}>
-              <AnonymousUsername version={version} anonUserInfo={anonUserInfo} />
-            </View>
-            {showAnonymousOption && !hideThreeDot && (
-              <GlobalButton
-                buttonStyle={{position: 'absolute', right: 0, top: -8}}
-                onPress={onHeaderOptionClicked}>
-                <View style={{zIndex: 1000}}>
-                  <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
-                </View>
-              </GlobalButton>
-            )}
-            <View style={styles.containerFeedText}>
-              <Text style={styles.feedDate}>{calculateTime(time)}</Text>
-              <View style={styles.point} />
-              {privacy.toLowerCase() === PRIVACY_PUBLIC ? (
-                <Memoic_globe height={16} width={16} />
-              ) : (
-                <MemoPeopleFollow height={16} width={16} />
+            <View style={[styles.containerFeedProfile]}>
+              <View style={[styles.containerFeedName, {alignItems: 'center'}]}>
+                <AnonymousUsername version={version} anonUserInfo={anonUserInfo} />
+              </View>
+              {showAnonymousOption && !hideThreeDot && (
+                <GlobalButton
+                  buttonStyle={{position: 'absolute', right: 0, top: -8}}
+                  onPress={onHeaderOptionClicked}>
+                  <View style={{zIndex: 1000}}>
+                    <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
+                  </View>
+                </GlobalButton>
               )}
+              <View style={styles.containerFeedText}>
+                <Text style={styles.feedDate}>{calculateTime(time)}</Text>
+                <View style={styles.point} />
+                {privacy.toLowerCase() === PRIVACY_PUBLIC ? (
+                  <MemoicGlobe height={16} width={16} />
+                ) : (
+                  <MemoPeopleFollow height={16} width={16} />
+                )}
+                <View style={styles.containerFeedText}>
+                  <Text style={styles.feedDate}>{calculateTime(time)}</Text>
+                  <View style={styles.point} />
+                  {privacy.toLowerCase() === PRIVACY_PUBLIC ? (
+                    <MemoicGlobe height={16} width={16} />
+                  ) : (
+                    <MemoPeopleFollow height={16} width={16} />
+                  )}
 
-              {duration_feed !== 'never' ? <View style={styles.point} /> : null}
-              {duration_feed !== 'never' ? validationTimer(time, duration_feed) : null}
-              <View style={styles.point} />
-              <Text style={styles.feedDate}>{location}</Text>
+                  {duration_feed !== 'never' ? <View style={styles.point} /> : null}
+                  {duration_feed !== 'never' ? validationTimer(time, duration_feed) : null}
+                  <View style={styles.point} />
+                  <Text style={styles.feedDate}>{location}</Text>
+                </View>
+              </View>
             </View>
           </View>
         </View>
-      </View>
+      </BlurredLayer>
     </SafeAreaView>
   );
 };
@@ -234,7 +247,7 @@ const _renderProfileNormal = ({
               <Text style={styles.feedDate}>{calculateTime(time)}</Text>
               <View style={styles.point} />
               {privacy?.toLowerCase() === PRIVACY_PUBLIC ? (
-                <Memoic_globe height={16} width={16} />
+                <MemoicGlobe height={16} width={16} />
               ) : (
                 <MemoPeopleFollow height={16} width={16} />
               )}
@@ -276,7 +289,8 @@ const Header = ({
     anon_user_info_color_name,
     anon_user_info_emoji_code,
     anon_user_info_emoji_name,
-    version = 1
+    version = 1,
+    isBlurredPost
   } = props;
   if (anonimity) {
     return _renderAnonimity({
@@ -298,7 +312,8 @@ const Header = ({
         emojiCode: anon_user_info_emoji_code,
         emojiName: anon_user_info_emoji_name
       },
-      isPostDetail
+      isPostDetail,
+      isBlurredPost
     });
   }
   return _renderProfileNormal({
