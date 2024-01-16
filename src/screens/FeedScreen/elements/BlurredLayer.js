@@ -1,5 +1,6 @@
 import React from 'react';
 import {Text, StyleSheet, TouchableOpacity, View} from 'react-native';
+import PropTypes from 'prop-types';
 import {BlurView} from '@react-native-community/blur';
 import ToastMessage from 'react-native-toast-message';
 
@@ -20,6 +21,9 @@ const BlurredLayerContent = ({onPressContent}) => {
     </TouchableOpacity>
   );
 };
+BlurredLayerContent.propTypes = {
+  onPressContent: PropTypes.func
+};
 
 const BlurredLayer = ({
   isVisible,
@@ -30,12 +34,12 @@ const BlurredLayer = ({
   onPressContent,
   children
 }) => {
+  const ToastOnlyComponent = () => {
+    return isVisible ? <BlurredLayerToast>{children}</BlurredLayerToast> : <>{children}</>;
+  };
+
   return toastOnly ? (
-    isVisible ? (
-      <BlurredLayerToast>{children}</BlurredLayerToast>
-    ) : (
-      <>{children}</>
-    )
+    ToastOnlyComponent()
   ) : (
     <>
       {withToast && <BlurredLayerToast>{children}</BlurredLayerToast>}
@@ -97,4 +101,13 @@ const styles = StyleSheet.create({
     paddingVertical: 10
   }
 });
+BlurredLayer.propTypes = {
+  isVisible: PropTypes.bool,
+  layerOnly: PropTypes.bool,
+  blurType: PropTypes.string,
+  toastOnly: PropTypes.bool,
+  withToast: PropTypes.bool,
+  onPressContent: PropTypes.func,
+  children: PropTypes.any
+};
 export default React.memo(BlurredLayer);
