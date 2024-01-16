@@ -85,7 +85,7 @@ exports[`Testing Discovery Screen V2 Testing Discovery Search Bar Match Snapshot
         onFocus={[Function]}
         onSubmitEditing={[Function]}
         placeholder="Search BetterSocial"
-        placeholderTextColor="#C4C4C4"
+        placeholderTextColor="#F5F6F7"
         rejectResponderTermination={true}
         returnKeyType="search"
         style={
@@ -119,9 +119,7 @@ exports[`Testing Discovery Screen V2 Testing Discovery Search Bar Match Snapshot
           Object {
             "alignItems": "center",
             "justifyContent": "center",
-            "marginRight": -16.400000000000002,
             "opacity": 1,
-            "paddingHorizontal": 24,
             "zIndex": 1000,
           }
         }

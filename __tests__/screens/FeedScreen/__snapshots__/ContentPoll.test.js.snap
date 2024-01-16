@@ -160,7 +160,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
                 "top": 0,
               },
               Object {
-                "backgroundColor": undefined,
+                "backgroundColor": "#00ADB5",
                 "width": "50%",
               },
             ]

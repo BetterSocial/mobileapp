@@ -559,7 +559,8 @@ const ProfileScreen = ({route}) => {
       feedId: item.id,
       refreshParent: profileTabIndex === 0 ? getMyFeeds : reloadFetchAnonymousPost,
       haveSeeMore,
-      data: item
+      data: item,
+      isKeyboardOpen: true
     });
   };
 

@@ -137,7 +137,8 @@ const FeedScreen = (props) => {
       data: item,
       isCaching: true,
       haveSeeMore,
-      refreshParent: () => refreshMoreText(index, haveSeeMore)
+      refreshParent: () => refreshMoreText(index, haveSeeMore),
+      isKeyboardOpen: true
     });
   };
 
