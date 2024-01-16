@@ -88,7 +88,6 @@ const verifyAccessToken = async () =>
 
 export const refreshToken = async () => {
   const token = StorageUtils.refreshToken.get();
-  console.warn('token', token);
   const options = {
     headers: {
       Authorization: `Bearer ${token}`

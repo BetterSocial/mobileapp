@@ -295,14 +295,14 @@ const Content = ({
             />
           </View>
         )}
-
-        <TopicsChip
-          onLayout={calculateLineTopicChip}
-          topics={topics}
-          fontSize={normalizeFontSizeByWidth(14)}
-          text={message}
-        />
       </BlurredLayer>
+
+      <TopicsChip
+        onLayout={calculateLineTopicChip}
+        topics={topics}
+        fontSize={normalizeFontSizeByWidth(14)}
+        text={message}
+      />
     </Pressable>
   );
 };
