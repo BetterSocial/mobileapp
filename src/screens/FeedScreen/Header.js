@@ -22,7 +22,7 @@ import MemoSeventyFive_eightySeven from '../../assets/timer/SeventyFive_eightySe
 import MemoSixtyThree_seventyFour from '../../assets/timer/SixtyThree_seventyFour';
 import MemoThirtySeven_fourtyNine from '../../assets/timer/ThirtySeven_fourtyNine';
 import MemoTwentyFive_thirtySix from '../../assets/timer/TwentyFive_thirtySix';
-import Memoic_globe from '../../assets/icons/ic_globe';
+import MemoicGlobe from '../../assets/icons/ic_globe';
 import StringConstant from '../../utils/string/StringConstant';
 import useFeedHeader from './hooks/useFeedHeader';
 import {DEFAULT_PROFILE_PIC_PATH, PRIVACY_PUBLIC} from '../../utils/constants';
@@ -153,7 +153,7 @@ const _renderAnonimity = ({
                 <Text style={styles.feedDate}>{calculateTime(time)}</Text>
                 <View style={styles.point} />
                 {privacy.toLowerCase() === PRIVACY_PUBLIC ? (
-                  <Memoic_globe height={16} width={16} />
+                  <MemoicGlobe height={16} width={16} />
                 ) : (
                   <MemoPeopleFollow height={16} width={16} />
                 )}
@@ -161,7 +161,7 @@ const _renderAnonimity = ({
                   <Text style={styles.feedDate}>{calculateTime(time)}</Text>
                   <View style={styles.point} />
                   {privacy.toLowerCase() === PRIVACY_PUBLIC ? (
-                    <Memoic_globe height={16} width={16} />
+                    <MemoicGlobe height={16} width={16} />
                   ) : (
                     <MemoPeopleFollow height={16} width={16} />
                   )}
@@ -247,7 +247,7 @@ const _renderProfileNormal = ({
               <Text style={styles.feedDate}>{calculateTime(time)}</Text>
               <View style={styles.point} />
               {privacy?.toLowerCase() === PRIVACY_PUBLIC ? (
-                <Memoic_globe height={16} width={16} />
+                <MemoicGlobe height={16} width={16} />
               ) : (
                 <MemoPeopleFollow height={16} width={16} />
               )}
