@@ -29,13 +29,13 @@ import useChatInfoScreenHook from '../../hooks/screen/useChatInfoHook';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
 import {CHANNEL_GROUP, GROUP_INFO, SIGNED} from '../../hooks/core/constant';
+import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {getChatName} from '../../utils/string/StringUtils';
 import {isContainUrl} from '../../utils/Utils';
-import {COLORS} from '../../utils/theme';
 
 export const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: COLORS.white, paddingBottom: 40},
@@ -179,7 +179,7 @@ export const styles = StyleSheet.create({
   }
 });
 
-const SampleChatInfoScreen = () => {
+const ChatInfoScreen = () => {
   const {
     channelInfo,
     goBack,
@@ -349,4 +349,4 @@ const SampleChatInfoScreen = () => {
   );
 };
 
-export default SampleChatInfoScreen;
+export default ChatInfoScreen;
