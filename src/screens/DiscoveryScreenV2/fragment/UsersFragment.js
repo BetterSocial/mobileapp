@@ -1,9 +1,9 @@
 /* eslint-disable no-use-before-define */
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import {FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
-import PropTypes from 'prop-types';
 import DiscoveryAction from '../../../context/actions/discoveryAction';
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import DomainList from '../elements/DiscoveryItemList';
@@ -47,8 +47,6 @@ const UsersFragment = ({
   const route = useRoute();
 
   const [myId, setMyId] = React.useState('');
-
-  const isReady = useIsReady();
 
   const users = React.useMemo(() => {
     return discovery.initialUsers.map((item) => ({
@@ -207,6 +205,7 @@ const UsersFragment = ({
             routeName: route.name,
             isUser
           }}
+          withKarma
         />
       </>
     );
@@ -278,8 +277,6 @@ const UsersFragment = ({
       />
     );
   };
-
-  if (!isReady) return <></>;
 
   if (isLoadingDiscoveryUser)
     return (
