@@ -21,6 +21,7 @@ import {removeWhiteSpace} from '../../utils/Utils';
 import BlockComponent from '../BlockComponent';
 import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
 import CommentUserName from '../CommentUsername/CommentUsername';
+import ProfilePicture from '../../screens/ProfileScreen/elements/ProfilePicture';
 
 const Comment = ({
   user,
@@ -109,6 +110,7 @@ const Comment = ({
     }
     return COLORS.balance_gray;
   };
+  console.log(comment.karmaScores);
   return (
     <View
       style={styles.container({
@@ -130,13 +132,16 @@ const Comment = ({
                 <Text>{comment.data?.anon_user_info_emoji_code}</Text>
               </View>
             ) : (
-              <Image
-                source={
+              <ProfilePicture
+                karmaScore={comment.karmaScores}
+                profilePicPath={
                   photo
-                    ? {uri: removeWhiteSpace(photo)}
+                    ? removeWhiteSpace(photo)
                     : require('../../assets/images/ProfileDefault.png')
                 }
-                style={styles.image}
+                size={25}
+                width={3}
+                withKarma
               />
             )}
 
