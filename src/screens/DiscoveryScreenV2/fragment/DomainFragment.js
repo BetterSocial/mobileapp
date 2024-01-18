@@ -164,18 +164,14 @@ const DomainFragment = ({
     if (willFollow) {
       try {
         await followDomain(data);
-        console.log('FOLLOWED');
       } catch (e) {
         handleDomain(from, !willFollow, item, index);
-        console.log('ERROR FOLLOW', e);
       }
     } else {
       try {
         await unfollowDomain(data);
-        console.log('UNFOLLOWED');
       } catch (e) {
         handleDomain(from, !willFollow, item, index);
-        console.log('ERROR UNFOLLOW', e);
       }
     }
     if (searchText.length > 0) fetchData();

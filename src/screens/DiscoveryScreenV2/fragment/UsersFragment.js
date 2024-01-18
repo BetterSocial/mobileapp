@@ -1,9 +1,9 @@
 /* eslint-disable no-use-before-define */
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import {FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
-import PropTypes from 'prop-types';
 import DiscoveryAction from '../../../context/actions/discoveryAction';
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import DomainList from '../elements/DiscoveryItemList';
@@ -148,18 +148,14 @@ const UsersFragment = ({
     if (willFollow) {
       try {
         await setFollow(data, client);
-        console.log('BERHASIL DIFOLLOW');
       } catch (error) {
         handleUser(from, !willFollow, item);
-        console.log('HASIL ERROR FOLLOW', error);
       }
     } else {
       try {
         await setUnFollow(data, client);
-        console.log('BERHASIL DIUNFOLLOW');
       } catch (error) {
         handleUser(from, !willFollow, item);
-        console.log('HASIL ERROR UNFOLLOW', error);
       }
     }
     if (searchText.length > 0) fetchData();
