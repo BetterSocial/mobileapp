@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 6,
     borderRadius: 8,
-    backgroundColor: COLORS.anon_primary
+    backgroundColor: COLORS.signed_primary
   },
   textButtonFollow: {
     fontFamily: fonts.inter[500],
