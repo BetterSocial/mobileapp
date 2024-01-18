@@ -408,6 +408,100 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
           }
         >
           <View
+            style={
+              Object {
+                "height": 52,
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "backgroundColor": "#FFFFFF",
+                  "borderBottomColor": "#F5F6F7",
+                  "borderBottomWidth": 1,
+                  "flexDirection": "row",
+                  "left": 0,
+                  "marginBottom": 8,
+                  "marginTop": undefined,
+                  "paddingBottom": 7,
+                  "paddingTop": 7,
+                  "position": "absolute",
+                  "right": 0,
+                  "top": 0,
+                  "zIndex": 10,
+                }
+              }
+            >
+              <View
+                accessible={true}
+                collapsable={false}
+                focusable={true}
+                style={
+                  Object {
+                    "flex": 1,
+                  }
+                }
+              >
+                <View
+                  style={
+                    Object {
+                      "alignSelf": "center",
+                      "backgroundColor": "#F5F6F7",
+                      "borderRadius": 8,
+                      "flex": 1,
+                      "flexDirection": "row",
+                      "height": 36,
+                      "marginLeft": 20,
+                      "marginRight": 12,
+                    }
+                  }
+                >
+                  <View
+                    style={
+                      Object {
+                        "alignSelf": "center",
+                        "justifyContent": "center",
+                        "marginLeft": 8,
+                      }
+                    }
+                  >
+                    <View />
+                  </View>
+                  <Text
+                    style={
+                      Object {
+                        "alignSelf": "center",
+                        "color": "#828282",
+                        "flex": 1,
+                        "fontFamily": "Inter-Regular",
+                        "fontSize": 14,
+                        "lineHeight": 36,
+                        "paddingBottom": 0,
+                        "paddingStart": 10,
+                        "paddingTop": 0,
+                      }
+                    }
+                  >
+                    Search Users
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+          <View
+            ListHeaderComponent={
+              <Memo(ChannelListHeaderItem)
+                name="Anonymous"
+                picture={
+                  Object {
+                    "testUri": "../../../src/assets/images/AnonymousProfile.png",
+                  }
+                }
+                testID="horizontal-tab-1"
+                type="ANONYMOUS"
+              />
+            }
             data={Array []}
             disableVirtualization={false}
             getItem={[Function]}
@@ -425,13 +519,79 @@ exports[`ChannelListScreenV2 RENDER should match snapshot 1`] = `
             onScrollEndDrag={[Function]}
             removeClippedSubviews={false}
             renderItem={[Function]}
-            scrollEnabled={false}
             scrollEventThrottle={50}
             stickyHeaderIndices={Array []}
             updateCellsBatchingPeriod={50}
             viewabilityConfigCallbackPairs={Array []}
             windowSize={21}
-          />
+          >
+            <View
+              onLayout={[Function]}
+            >
+              <View
+                style={
+                  Object {
+                    "alignItems": "center",
+                    "backgroundColor": "#FFFFFF",
+                    "borderBottomColor": "#107793",
+                    "borderBottomWidth": 2,
+                    "flexDirection": "row",
+                    "height": 38.400000000000006,
+                    "justifyContent": "center",
+                    "marginBottom": 1.6,
+                    "paddingLeft": 24,
+                    "paddingRight": 24,
+                  }
+                }
+                testID="horizontal-tab-1"
+              >
+                <View
+                  style={
+                    Array [
+                      Object {
+                        "overflow": "hidden",
+                      },
+                      Array [
+                        Object {
+                          "borderRadius": 8,
+                          "height": 16,
+                          "marginRight": 4.800000000000001,
+                          "width": 16,
+                        },
+                        Object {
+                          "backgroundColor": "#107793",
+                        },
+                      ],
+                    ]
+                  }
+                >
+                  <FastImageView
+                    defaultSource={null}
+                    resizeMode="cover"
+                    source={
+                      Object {
+                        "testUri": "../../../src/assets/images/AnonymousProfile.png",
+                      }
+                    }
+                  />
+                </View>
+                <Text
+                  ellipsizeMode="tail"
+                  numberOfLines={1}
+                  style={
+                    Object {
+                      "color": "#107793",
+                      "fontFamily": "Inter-Medium",
+                      "fontSize": 12.600000000000001,
+                    }
+                  }
+                >
+                  as 
+                  Anonymous
+                </Text>
+              </View>
+            </View>
+          </View>
         </View>
       </View>
     </View>

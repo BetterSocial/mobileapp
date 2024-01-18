@@ -1,5 +1,6 @@
 import React from 'react';
 import {act, fireEvent, render} from '@testing-library/react-native';
+
 import RenderBlockList from '../../../src/screens/Blocked/elements/RenderList';
 
 describe('Render block list should run correctly', () => {
@@ -94,7 +95,7 @@ describe('Render block list should run correctly', () => {
         onPressList={onPressList}
       />
     );
-    expect(hashtagId('name').props.children[0]).toEqual(`#`);
+    expect(hashtagId('name').props.children[0]).toEqual('#');
   });
 
   it('Button Block should correctly', () => {

@@ -9,12 +9,12 @@ import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import BaseSystemChat from '../../components/AnonymousChat/BaseChatSystem';
 import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
 import InputMessageV2 from '../../components/Chat/InputMessageV2';
-import useMoveChatTypeHook from '../../hooks/core/chat/useMoveChatTypeHook';
-import {ANONYMOUS} from '../../hooks/core/constant';
-import useProfileHook from '../../hooks/core/profile/useProfileHook';
-import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
 import Loading from '../Loading';
 import dimen from '../../utils/dimen';
+import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
+import useMoveChatTypeHook from '../../hooks/core/chat/useMoveChatTypeHook';
+import useProfileHook from '../../hooks/core/profile/useProfileHook';
+import {ANONYMOUS} from '../../hooks/core/constant';
 import {COLORS} from '../../utils/theme';
 
 const {height} = Dimensions.get('window');
@@ -52,7 +52,7 @@ export const styles = StyleSheet.create({
   }
 });
 
-const SampleChatScreen = () => {
+const AnonymousChatScreen = () => {
   const flatlistRef = React.useRef<FlatList>();
   const {
     selectedChannel,
@@ -152,4 +152,4 @@ const SampleChatScreen = () => {
   );
 };
 
-export default SampleChatScreen;
+export default AnonymousChatScreen;
