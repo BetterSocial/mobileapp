@@ -27,7 +27,9 @@ const SheetCloseBtn = ({backRef, goBack, continueToEdit}) => {
         <Gap style={styles.gap(10)} />
         <Button
           onPress={goBack}
-          style={{backgroundColor: COLORS.porcelain}}
+          styles={{
+            backgroundColor: COLORS.porcelain
+          }}
           textStyling={{color: COLORS.black}}>
           <Text>Discard post</Text>
         </Button>
