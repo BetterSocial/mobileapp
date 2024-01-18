@@ -139,16 +139,15 @@ const withSafeAreaView = (Component) => {
     </SafeAreaView>
   );
 };
+const withKeyboardWrapper = (Component) => {
+  return (props) => (
+    <KeyboardWrapper>
+      <Component {...props} />
+    </KeyboardWrapper>
+  );
+};
 
 const AuthenticatedNavigator = () => {
-  const withKeyboardWrapper = (Component) => {
-    return (props) => (
-      <KeyboardWrapper>
-        <Component {...props} />
-      </KeyboardWrapper>
-    );
-  };
-
   return (
     <OneSignalNavigator>
       <AuthenticatedStack.Navigator initialRouteName="HomeTabs">
@@ -213,7 +212,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="Followers"
-          component={withKeyboardWrapper(FollowersScreen)}
+          component={withSafeAreaView(withKeyboardWrapper(FollowersScreen))}
           options={{
             headerShown: false
           }}
