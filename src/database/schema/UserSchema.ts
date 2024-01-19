@@ -202,6 +202,18 @@ class UserSchema implements BaseDbSchema {
     db.transaction(resolver);
   };
 
+  static async getSelfAnonUserInfo(
+    db: SQLiteDatabase,
+    selfAnonUserId: string,
+    channelId: string
+  ): Promise<UserSchema> {
+    const [results] = await db.executeSql(
+      `SELECT * FROM ${UserSchema.getTableName()} WHERE channel_id = ? AND user_id = ? LIMIT 1`,
+      [channelId, selfAnonUserId]
+    );
+    return results.rows.raw().map((dbObject) => this.fromDatabaseObject(dbObject))[0];
+  }
+
   static async getAll(db: SQLiteDatabase): Promise<UserSchema[]> {
     const [results] = await db.executeSql(`SELECT * FROM ${UserSchema.getTableName()}`);
     return results.rows.raw().map((dbObject) => this.fromDatabaseObject(dbObject));
