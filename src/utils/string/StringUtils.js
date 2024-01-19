@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-properties */
 /* eslint-disable no-param-reassign,no-useless-escape */
 import * as React from 'react';
 import moment from 'moment';
@@ -192,6 +193,18 @@ const getChatName = (usernames, me) => {
   return 'No name';
 };
 
+const formatBytes = (bytes, decimals = 2) => {
+  if (!+bytes) return '0 Bytes';
+
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+};
+
 const getAnonymousChatName = async (members) => {
   const anonUserId = await getAnonymousUserId();
   const userId = await getUserId();
@@ -267,7 +280,7 @@ const capitalizeFirstText = (str) => {
   // loop through each element of the array and capitalize the first letter.
 
   // eslint-disable-next-line no-plusplus
-  for (let i = 0; i < arr.length; i++) {
+  for (let i = 0; i < arr.length; i += 1) {
     arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
   }
 
@@ -282,7 +295,7 @@ const randomString = (length) => {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   const charactersLength = characters.length;
   // eslint-disable-next-line no-plusplus
-  for (let i = 0; i < length; i++) {
+  for (let i = 0; i < length; i += 1) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
   return result;
@@ -407,6 +420,7 @@ export {
   displayFormattedSearchLocationsV2,
   getCaptionWithTopicStyle,
   getChatName,
+  formatBytes,
   getGroupMemberCount,
   getPollTime,
   getSingularOrPluralText,

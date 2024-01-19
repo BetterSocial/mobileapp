@@ -1,6 +1,5 @@
 import * as React from 'react';
-import {TouchableWithoutFeedback} from 'react-native';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {TouchableWithoutFeedback, Image, StyleSheet, Text, View} from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 

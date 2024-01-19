@@ -20,7 +20,7 @@ const RenderItem = ({item, selectedUsers, onChange, index}) => {
         style={{
           paddingHorizontal: SIZES.base * 2,
           flexDirection: 'row',
-          paddingVertical: SIZES.base,
+          paddingVertical: SIZES.base
           // backgroundColor:
           //   isInArray(item, selectedUsers) > -1
           //     ? 'rgba(0, 173, 181, 0.15)'
@@ -50,14 +50,13 @@ function areEqual(prevProps, nextProps) {
   the same result as passing prevProps to render,
   otherwise return false
   */
-  let prev = JSON.stringify(prevProps);
-  let next = JSON.stringify(nextProps);
+  const prev = JSON.stringify(prevProps);
+  const next = JSON.stringify(nextProps);
 
   if (prev === next) {
     return false;
-  } else {
-    return true;
   }
+  return true;
 }
 
 export default React.memo(RenderItem, areEqual);

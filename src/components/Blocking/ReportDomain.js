@@ -4,8 +4,8 @@ import {TouchableOpacity, ScrollView, StyleSheet, Text, View} from 'react-native
 import RBSheet from 'react-native-raw-bottom-sheet';
 import IconFA5 from 'react-native-vector-icons/FontAwesome5';
 
-import {Button} from '../../components/Button';
-import ItemList from '../../components/Blocking/ItemList';
+import {Button} from '../Button';
+import ItemList from './ItemList';
 import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 
@@ -42,14 +42,14 @@ const ReportDomain = React.forwardRef((props, ref) => {
 
   const onChoice = (id, value, type) => {
     if (type === 'add') {
-      let newArr = [...active, id];
-      let newArrLabel = [...activeLabel, value];
+      const newArr = [...active, id];
+      const newArrLabel = [...activeLabel, value];
       setActiveLabel(newArrLabel);
       setActive(newArr);
     } else {
-      let newArr = active.filter((e) => e !== id);
+      const newArr = active.filter((e) => e !== id);
       setActive(newArr);
-      let newArrLabel = activeLabel.filter((e) => e !== value);
+      const newArrLabel = activeLabel.filter((e) => e !== value);
       setActiveLabel(newArrLabel);
     }
   };

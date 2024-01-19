@@ -1,11 +1,6 @@
 import * as React from 'react';
-import {
-  TextInput,
-  View,
-  Text,
-  StyleSheet,
-  TouchableNativeFeedback,
-} from 'react-native';
+import PropsTypes from 'prop-types';
+import {TextInput, View, Text, StyleSheet, TouchableNativeFeedback} from 'react-native';
 
 import SearchIcon from '../../../assets/icons/search.svg';
 import {COLORS} from '../../utils/theme';
@@ -26,9 +21,7 @@ const SearchAutoComplete = (props) => {
         <View style={styles.box}>
           {props.options.map((value, index) => {
             return (
-              <TouchableNativeFeedback
-                key={index}
-                onPress={() => props.onSelect(value)}>
+              <TouchableNativeFeedback key={value.label} onPress={() => props.onSelect(value)}>
                 <View style={styles.list}>
                   <Text style={styles.label}>{value.label}</Text>
                 </View>
@@ -42,7 +35,7 @@ const SearchAutoComplete = (props) => {
 };
 const styles = StyleSheet.create({
   container: {
-    position: 'relative',
+    position: 'relative'
   },
   inputContainer: {
     height: 48,
@@ -52,7 +45,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: 13,
+    paddingLeft: 13
   },
   searchInput: {
     width: '90%',
@@ -63,7 +56,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     letterSpacing: -0.28,
     color: COLORS.silver,
-    marginLeft: 5,
+    marginLeft: 5
   },
   box: {
     minHeight: 20,
@@ -77,7 +70,7 @@ const styles = StyleSheet.create({
     width: '100%',
     top: 50,
     zIndex: 2000,
-    elevation: 2000,
+    elevation: 2000
   },
   list: {
     minHeight: 35,
@@ -85,10 +78,13 @@ const styles = StyleSheet.create({
     paddingLeft: 13,
     paddingRight: 13,
     paddingTop: 2,
-    paddingBottom: 2,
+    paddingBottom: 2
   },
   label: {
-    textTransform: 'capitalize',
-  },
+    textTransform: 'capitalize'
+  }
 });
+SearchAutoComplete.propTypes = {
+  onSelect: PropsTypes.func
+};
 export default SearchAutoComplete;

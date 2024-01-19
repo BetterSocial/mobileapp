@@ -31,7 +31,6 @@ import RenderItem from '../ProfileScreen/elements/RenderItem';
 import ReportUser from '../../components/Blocking/ReportUser';
 import ShareUtils from '../../utils/share';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
-import TextAreaChat from '../../components/TextAreaChat';
 import StorageUtils from '../../utils/storage';
 import dimen from '../../utils/dimen';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
@@ -58,7 +57,7 @@ import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherPr
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {COLORS} from '../../utils/theme';
 import EnvelopeIcon from '../../assets/icon/EnvelopeIcon';
-import {CircleGradient} from '../../components/Karma/CircleGradient';
+import ProfilePicture from '../ProfileScreen/elements/ProfilePicture';
 
 const {width} = Dimensions.get('screen');
 
@@ -419,17 +418,12 @@ const OtherProfile = () => {
       <>
         <View style={styles.headerImageContainer}>
           <View style={{marginRight: normalize(22)}}>
-            <CircleGradient
-              fill={dataMain.karma_score ?? 0}
-              size={normalize(100)}
-              width={normalize(3)}>
-              <Image
-                style={styles.profileImage}
-                source={{
-                  uri: dataMain.profile_pic_path ?? DEFAULT_PROFILE_PIC_PATH
-                }}
-              />
-            </CircleGradient>
+            <ProfilePicture
+              karmaScore={dataMain.karma_score ?? 0}
+              withKarma={true}
+              profilePicPath={dataMain.profile_pic_path ?? DEFAULT_PROFILE_PIC_PATH}
+              width={6}
+            />
           </View>
 
           <View>

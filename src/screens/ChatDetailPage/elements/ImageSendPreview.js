@@ -11,5 +11,5 @@ const ImageSendPreview = () => {
 export default ImageSendPreview;
 
 const styles = StyleSheet.create({
-  container: {backgroundColor: COLORS.brilliance},
+  container: {backgroundColor: COLORS.brilliance}
 });

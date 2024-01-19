@@ -8,9 +8,15 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 
 import ContentPoll from './ContentPoll';
 import ImageLayouter from './elements/ImageLayouter';
+import BlurredLayer from './elements/BlurredLayer';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import {COLORS} from '../../utils/theme';
-import {POST_TYPE_LINK, POST_TYPE_POLL, POST_TYPE_STANDARD} from '../../utils/constants';
+import {
+  DISCOVERY_TAB_USERS,
+  POST_TYPE_LINK,
+  POST_TYPE_POLL,
+  POST_TYPE_STANDARD
+} from '../../utils/constants';
 import {fonts, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
 import useCalculationContent from './hooks/useCalculationContent';
@@ -156,7 +162,7 @@ const Content = ({
   const handleTextLayout = ({nativeEvent}) => {
     let text = '';
     const {newMaxLine, countDeviceLine} = adjustmentCountDeviceLine();
-    for (let i = 0; i < newMaxLine; i++) {
+    for (let i = 0; i < newMaxLine; i += 1) {
       if (nativeEvent.lines[i]) {
         if (i < countDeviceLine) {
           text += nativeEvent.lines[i].text;
@@ -234,53 +240,64 @@ const Content = ({
     onLayoutTopicChip(nativeEvent, lineHeight);
   };
 
+  const handleBlurredContent = () => {
+    navigation.navigate('DiscoveryScreen', {
+      tab: DISCOVERY_TAB_USERS
+    });
+  };
+
   return (
     <Pressable
       onLayout={hanldeHeightContainer}
       onPress={onPress}
       style={[styles.contentFeed(hasComment), style]}>
-      {message?.length > 0 ? (
-        <View>
+      <BlurredLayer
+        withToast={true}
+        onPressContent={handleBlurredContent}
+        isVisible={item?.isBlurredPost}>
+        {message?.length > 0 ? (
+          <View>
+            <View
+              style={[
+                styles.containerMainText(handleContainerText().isShort),
+                handleContainerText().container
+              ]}>
+              {renderHandleTextContent()}
+            </View>
+          </View>
+        ) : null}
+
+        {item && item.post_type === POST_TYPE_POLL ? (
           <View
             style={[
               styles.containerMainText(handleContainerText().isShort),
-              handleContainerText().container
+              {marginVertical: handleMarginVertical(message)}
             ]}>
-            {renderHandleTextContent()}
+            <ContentPoll
+              message={item.message}
+              images_url={item.images_url}
+              polls={item.pollOptions}
+              item={item}
+              pollexpiredat={item.polls_expired_at}
+              multiplechoice={item.multiplechoice}
+              isAlreadyPolling={item.isalreadypolling}
+              onnewpollfetched={onNewPollFetched}
+              voteCount={item.voteCount}
+              topics={item?.topics}
+              onLayout={onPollLayout}
+            />
           </View>
-        </View>
-      ) : null}
-
-      {item && item.post_type === POST_TYPE_POLL ? (
-        <View
-          style={[
-            styles.containerMainText(handleContainerText().isShort),
-            {marginVertical: handleMarginVertical(message)}
-          ]}>
-          <ContentPoll
-            message={item.message}
-            images_url={item.images_url}
-            polls={item.pollOptions}
-            item={item}
-            pollexpiredat={item.polls_expired_at}
-            multiplechoice={item.multiplechoice}
-            isAlreadyPolling={item.isalreadypolling}
-            onnewpollfetched={onNewPollFetched}
-            voteCount={item.voteCount}
-            topics={item?.topics}
-            onLayout={onPollLayout}
-          />
-        </View>
-      ) : null}
-      {images_url.length > 0 && (
-        <View style={[styles.containerImage]}>
-          <ImageLayouter
-            isFeed={true}
-            images={images_url}
-            onimageclick={() => onPress(showSeeMore)}
-          />
-        </View>
-      )}
+        ) : null}
+        {images_url.length > 0 && (
+          <View style={[styles.containerImage]}>
+            <ImageLayouter
+              isFeed={true}
+              images={images_url}
+              onimageclick={() => onPress(showSeeMore)}
+            />
+          </View>
+        )}
+      </BlurredLayer>
 
       <TopicsChip
         onLayout={calculateLineTopicChip}
@@ -297,7 +314,10 @@ Content.propTypes = {
   images_url: PropTypes.array,
   style: PropTypes.object,
   onPress: PropTypes.func,
-  topics: PropTypes.arrayOf(PropTypes.string)
+  topics: PropTypes.arrayOf(PropTypes.string),
+  item: PropTypes.object,
+  onNewPollFetched: PropTypes.func,
+  setHaveSeeMore: PropTypes.func
 };
 
 export default Content;

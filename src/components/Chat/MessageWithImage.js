@@ -1,6 +1,14 @@
 import * as React from 'react';
-import {TouchableOpacity} from 'react-native';
-import {ImageBackground, FlatList, Image, StyleSheet, Text, View} from 'react-native';
+import {
+  TouchableOpacity,
+  ImageBackground,
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  TouchableWithoutFeedback
+} from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
 
@@ -10,7 +18,6 @@ import Dot from '../Dot';
 import ModalImageSingleDetail from './ModalImageSingleDetail';
 import ProfileMessage from './ProfileMessage';
 import ActionChat from './ActionChat';
-import {TouchableWithoutFeedback} from 'react-native';
 import {COLORS} from '../../utils/theme';
 
 const MessageWithImage = ({image, name, time, message, read, isMe, attachments}) => {
@@ -59,7 +66,7 @@ const ShowImage = React.memo(({images, name, time}) => {
             return (
               <TouchableOpacity onPress={() => openDetail(item.image_url)}>
                 <Image
-                  key={'sg' + index}
+                  key={`sg${index}`}
                   style={styles.singleImage}
                   source={{
                     uri: item.image_url
@@ -100,7 +107,7 @@ const ShowImage = React.memo(({images, name, time}) => {
                 })
               }>
               <Image
-                key={'mn' + index}
+                key={`mn${index}`}
                 style={[styles.manyImage, styles.manyImageItem(index)]}
                 source={{uri: item.asset_url}}
                 resizeMode="cover"
@@ -151,7 +158,7 @@ const RanderImages = React.memo(({item, index, count}) => {
   }
   return (
     <Image
-      key={'mn' + index}
+      key={`mn${index}`}
       style={[styles.manyImage, styles.manyImageItem(index)]}
       source={{uri: item.asset_url}}
       resizeMode="cover"

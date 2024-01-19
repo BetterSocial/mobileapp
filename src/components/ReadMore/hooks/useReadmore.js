@@ -10,7 +10,7 @@ const useReadmore = ({numberLine}) => {
   const handleLayoutText = async ({nativeEvent}) => {
     let text = '';
     // eslint-disable-next-line no-plusplus
-    for (let i = 0; i < numberLine; i++) {
+    for (let i = 0; i < numberLine; i += 1) {
       if (i === numberLine - 1) {
         const availableText = nativeEvent.lines[i]?.text;
         if (!availableText) return;

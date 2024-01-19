@@ -56,7 +56,9 @@ export const COLORS = {
   black50: 'rgba(0, 0, 0, 0.5)',
   black75: 'rgba(0, 0, 0, 0.75)',
   transparent: 'transparent',
-  anonSecondary20: 'rgba(0, 173, 181, 0.2)'
+  anonSecondary20: 'rgba(0, 173, 181, 0.2)',
+  gray400: '#9B9FA9',
+  lightgrey60: 'rgba(245, 246, 247, 0.6)'
 };
 export const SIZES = {
   // global sizes

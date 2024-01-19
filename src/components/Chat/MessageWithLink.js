@@ -1,6 +1,5 @@
 import * as React from 'react';
-import {TouchableWithoutFeedback} from 'react-native';
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {TouchableWithoutFeedback, StyleSheet, Text, View, Image} from 'react-native';
 
 import Autolink from 'react-native-autolink';
 

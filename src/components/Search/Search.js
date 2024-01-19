@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: 13,
+    paddingLeft: 13
   },
   searchInput: {
     width: '90%',
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     letterSpacing: -0.28,
     color: COLORS.silver,
-    marginLeft: 5,
-  },
+    marginLeft: 5
+  }
 });
 export default Search;

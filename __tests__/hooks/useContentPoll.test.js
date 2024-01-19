@@ -50,7 +50,7 @@ describe('Content poll function should run correctly', () => {
   it('showSetResultsButton should run correctly', () => {
     const {result} = renderHook(() => useContentPoll({polls}));
     const expiredDate = '2022-11-25T02:14:14.499Z';
-    const notExpiredDare = '2023-12-29T02:14:14.499Z';
+    const notExpiredDare = '2024-12-29T02:14:14.499Z';
     act(() => {
       result.current.setIsAlreadyPolling(false);
     });

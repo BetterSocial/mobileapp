@@ -1,17 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TouchableNativeFeedback,
-  TouchableOpacity,
-  View
-} from 'react-native';
-import {fonts, normalize} from '../../../utils/fonts';
-import {CircleGradient} from '../../../components/Karma/CircleGradient';
+import {StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View} from 'react-native';
+
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
+import ProfilePicture from '../../ProfileScreen/elements/ProfilePicture';
 import {COLORS} from '../../../utils/theme';
+import {fonts, normalize} from '../../../utils/fonts';
 
 const renderDefaultImage = (DefaultImage) => {
   if (DefaultImage) {
@@ -31,7 +25,9 @@ const DomainList = (props) => {
     onPressBody,
     DefaultImage,
     isCommunity,
-    isBlockedSection
+    isBlockedSection,
+    isDomain,
+    withKarma
   } = props;
 
   const renderButonAction = () => {
@@ -80,34 +76,13 @@ const DomainList = (props) => {
   };
 
   const renderProfilePicture = () => {
-    if (item.karmaScore) {
-      return (
-        <CircleGradient
-          testId="images"
-          fill={item.karmaScore}
-          size={normalize(51)}
-          width={normalize(3)}>
-          <Image
-            testId="images"
-            source={{
-              uri: item.image
-            }}
-            style={styles.profilepicture}
-            width={48}
-            height={48}
-          />
-        </CircleGradient>
-      );
-    }
     return (
-      <Image
-        testId="images"
-        source={{
-          uri: item.image
-        }}
-        style={styles.profilepicture}
-        width={48}
-        height={48}
+      <ProfilePicture
+        profilePicPath={item.image}
+        karmaScore={item.karmaScore}
+        size={51}
+        width={3}
+        withKarma={withKarma}
       />
     );
   };
@@ -135,7 +110,7 @@ const DomainList = (props) => {
               {item.name}
             </Text>
 
-            {item.description !== null && (
+            {((!!item.user_id_follower && !!item.description) || isDomain) && (
               <Text
                 testID="desc"
                 style={item.isDomain ? styles.textProfileFullName : styles.domainDescription}
@@ -143,6 +118,19 @@ const DomainList = (props) => {
                 ellipsizeMode={'tail'}>
                 {item.description ? item.description : ''}
               </Text>
+            )}
+            {item.comumnityInfo?.length > 0 && !item.user_id_follower && item.isUser && (
+              <View style={styles.communityTextContainer} testID="communityDesc">
+                <Text style={styles.textProfileFullName} numberOfLines={1} ellipsizeMode="tail">
+                  Also in{' '}
+                  <Text style={styles.communityText}>
+                    {`${item.comumnityInfo
+                      .slice(0, 3)
+                      .map((community) => `#${community}`)
+                      .join(', ')}`}
+                  </Text>
+                </Text>
+              </View>
             )}
           </View>
         </View>
@@ -154,9 +142,21 @@ const DomainList = (props) => {
 
 // data needed name, description, image
 const styles = StyleSheet.create({
+  communityTextContainer: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  communityText: {
+    color: COLORS.blueOnboarding,
+    fontFamily: fonts.inter[400],
+    fontSize: 12,
+    flexWrap: 'wrap',
+    lineHeight: 18,
+    marginTop: 4
+  },
   buttonFollow: {
-    width: 88,
-    height: 36,
+    width: normalize(65),
+    height: normalize(34),
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -183,7 +183,6 @@ const styles = StyleSheet.create({
   profilepicture: {
     width: 48,
     height: 48,
-    // backgroundColor: COLORS.signed_primary,
     borderRadius: 24,
     resizeMode: 'cover',
     borderColor: COLORS.lightgrey,
@@ -195,8 +194,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
-    flex: 1,
-    marginEnd: 4
+    flex: 1
   },
   imageProfile: {
     width: 48,
@@ -207,12 +205,10 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     flexDirection: 'column',
     flex: 1
-    // justifyContent: 'space-between',
   },
   wrapTextProfileTopic: {
     flexDirection: 'column',
     flex: 1
-    // justifyContent: 'space-between',
   },
   textProfileUsername: {
     fontFamily: fonts.inter[500],
@@ -220,7 +216,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: COLORS.black,
     lineHeight: 16.94
-    // backgroundColor: 'red',
   },
   textProfileFullName: {
     fontFamily: fonts.inter[400],
@@ -228,7 +223,6 @@ const styles = StyleSheet.create({
     color: COLORS.blackgrey,
     flexWrap: 'wrap',
     lineHeight: 18,
-    // backgroundColor: 'green',
     marginTop: 4
   },
   domainDescription: {
@@ -237,12 +231,11 @@ const styles = StyleSheet.create({
     color: COLORS.blackgrey,
     flexWrap: 'wrap',
     lineHeight: 18,
-    // backgroundColor: 'green',
     marginTop: 4
   },
   buttonFollowing: {
-    width: 88,
-    height: 36,
+    width: normalize(65),
+    height: normalize(34),
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -252,21 +245,17 @@ const styles = StyleSheet.create({
   },
   card: {
     height: 64,
-    // height: 150,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     flex: 1,
     paddingLeft: 20
-    // backgroundColor: 'red'
-    // marginVertical: 10,
   },
   followContainer: {
-    paddingRight: 20,
-    paddingLeft: 8,
+    paddingRight: normalize(20),
+    paddingLeft: normalize(8),
     height: '100%',
     justifyContent: 'center'
-    // backgroundColor: 'blue'
   },
   buttonBlockUser: {
     width: 88,
