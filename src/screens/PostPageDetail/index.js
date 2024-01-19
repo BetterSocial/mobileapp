@@ -11,7 +11,7 @@ import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 const FeedsPostDetail = (props) => {
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
-  const {feedId, refreshCache, haveSeeMore, refreshParent, contextSource, data} =
+  const {feedId, refreshCache, haveSeeMore, refreshParent, contextSource, data, isKeyboardOpen} =
     props.route.params;
   const {feeds} = feedsContext;
   const {navigateToReplyView} = useMainPdp(props);
@@ -39,6 +39,7 @@ const FeedsPostDetail = (props) => {
         haveSeeMore={haveSeeMore}
         parentData={data}
         refreshParent={refreshParent}
+        isKeyboardOpen={isKeyboardOpen}
       />
     </View>
   );
