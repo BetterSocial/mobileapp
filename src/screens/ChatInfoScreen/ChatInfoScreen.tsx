@@ -202,10 +202,6 @@ const ChatInfoScreen = () => {
   const {anon_user_info_color_code, anon_user_info_emoji_code} =
     channelInfo?.rawJson?.channel || {};
   const {anonProfileId} = useProfileHook();
-  const memberChat = channelInfo?.rawJson?.channel?.members?.find(
-    (item: any) => item.user_id !== anonProfileId
-  );
-  const betterSocialMember = channelInfo?.rawJson?.better_channel_member;
 
   const showImageProfile = (): React.ReactNode => {
     if (channelInfo?.channelType === CHANNEL_GROUP) {
@@ -234,34 +230,26 @@ const ChatInfoScreen = () => {
   };
 
   const renderImageComponent = (item) => {
-    if (!isContainUrl(item?.user?.image) || item?.user?.name === ANONYMOUS_USER) {
+    if (!isContainUrl(item?.user?.profilePicture) || item?.user?.anon_user_info_color_code) {
       return (
         <View style={styles.mr7}>
-          {betterSocialMember &&
-          item.user_id === betterSocialMember[memberChat?.user_id]?.user_id ? (
-            <AnonymousIcon
-              color={betterSocialMember[memberChat?.user_id]?.anon_user_info_color_code}
-              emojiCode={betterSocialMember[memberChat?.user_id]?.anon_user_info_emoji_code}
-              size={normalize(48)}
-            />
-          ) : (
-            <AnonymousIcon
-              color={anon_user_info_color_code}
-              emojiCode={anon_user_info_emoji_code}
-              size={normalize(48)}
-            />
-          )}
+          <AnonymousIcon
+            color={item?.user?.anon_user_info_color_code}
+            emojiCode={item?.user?.anon_user_info_emoji_code}
+            size={normalize(48)}
+          />
         </View>
       );
     }
+
     return (
       <View style={styles.mr7}>
-        <FastImage style={styles.imageUser} source={{uri: item?.user?.image}} />
+        <FastImage style={styles.imageUser} source={{uri: item?.user?.profilePicture}} />
       </View>
     );
   };
 
-  const countParticipat = () => {
+  const countParticipant = () => {
     return `(${channelInfo?.members?.length})`;
   };
   return (
@@ -295,10 +283,12 @@ const ChatInfoScreen = () => {
               <View style={styles.lineTop} />
               <View style={styles.lineTop} />
               <View style={styles.users}>
-                <Text style={styles.countUser(params?.from)}>Participants {countParticipat()}</Text>
+                <Text style={styles.countUser(params?.from)}>
+                  Participants {countParticipant()}
+                </Text>
                 <FlatList
                   testID="participants"
-                  data={channelInfo?.rawJson?.channel?.members}
+                  data={channelInfo?.members}
                   keyExtractor={(item, index) => index?.toString()}
                   renderItem={({item, index}) => (
                     <View style={styles.parentContact}>
@@ -311,6 +301,10 @@ const ChatInfoScreen = () => {
                         showArrow={handleShowArrow(item)}
                         userId={signedProfileId}
                         ImageComponent={renderImageComponent(item)}
+                        isYou={
+                          item?.user?.userId === signedProfileId ||
+                          item?.user?.userId === anonProfileId
+                        }
                         from={params?.from}
                       />
                     </View>
