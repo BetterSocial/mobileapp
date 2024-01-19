@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import moment from 'moment';
+import {CommonActions, useNavigation} from '@react-navigation/native';
 import {atom, useRecoilState} from 'recoil';
-import {useNavigation, CommonActions} from '@react-navigation/native';
+
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
 import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
 import UseChatUtilsHook from '../../../../types/hooks/screens/useChatUtilsHook.types';
@@ -32,7 +34,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
   const {localDb, refresh} = useLocalDatabaseHook();
   const navigation = useNavigation();
   const {selectedChannel} = chat;
-  const [profile] = (React.useContext(Context) as any).profile;
+  const [profile] = (React.useContext(Context) as unknown as any).profile;
   const setChannelAsRead = async (channel: ChannelList) => {
     if (!localDb) return;
     channel.setRead(localDb).catch((e) => console.log('setChannelAsRead error', e));
@@ -84,19 +86,16 @@ function useChatUtilsHook(): UseChatUtilsHook {
 
   const goToCommunityScreen = (channel: ChannelList) => {
     setChannelAsRead(channel);
+
     const topicName = channel?.name?.replace(/^#/, '');
     const navigationParam = {
-      id: convertTopicNameToTopicPageScreenParam(topicName),
-      channelPicture: channel.channelPicture,
-      coverImage: channel.rawJson.cover_image,
-      isFollowing: channel.rawJson.is_following,
-      memberCount: channel.rawJson.topic_follower_count
+      id: convertTopicNameToTopicPageScreenParam(topicName)
     };
 
     navigation.navigate('TopicPageScreen', navigationParam);
   };
 
-  const openChat = (screen: string) => {
+  const openChat = (screen: string, from?: string) => {
     navigation.dispatch({
       ...CommonActions.reset({
         routes: [
@@ -105,7 +104,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
             params: {
               screen: 'HomeTabs',
               params: {
-                screen: 'ChannelList',
+                screen: from ?? 'ChannelList',
                 isReset: true
               }
             }
@@ -125,17 +124,17 @@ function useChatUtilsHook(): UseChatUtilsHook {
   const goToChatScreen = (channel: ChannelList, from) => {
     setChat({
       ...chat,
-      selectedChannel: channel as unknown as null
+      selectedChannel: channel
     });
     setChannelAsRead(channel);
     if (channel?.channelType === ANON_PM) {
       if (from === GROUP_INFO) {
-        return openChat('SampleChatScreen');
+        return openChat('AnonymousChatScreen', 'AnonymousChannelList');
       }
-      navigation.navigate('SampleChatScreen');
+      navigation.navigate('AnonymousChatScreen');
     } else {
       if (from === GROUP_INFO) {
-        return openChat('SignedChatScreen');
+        return openChat('SignedChatScreen', 'SignedChannelList');
       }
       navigation.navigate('SignedChatScreen');
     }
@@ -151,7 +150,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
     setChannelAsRead(channel);
     if (channel?.channelType === ANON_PM) {
       setSelectedChannelKey(1);
-      return openChat('SampleChatScreen');
+      return openChat('AnonymousChatScreen');
     }
     setSelectedChannelKey(0);
     return openChat('SignedChatScreen');
@@ -165,8 +164,12 @@ function useChatUtilsHook(): UseChatUtilsHook {
     });
   };
 
+  const goToContactScreen = () => {
+    navigation.navigate('ContactScreen');
+  };
+
   const goToChatInfoScreen = (params?: object) => {
-    navigation.navigate('SampleChatInfoScreen', params);
+    navigation.navigate('ChatInfoScreen', params);
   };
 
   const goBack = () => {
@@ -202,6 +205,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
     goToMoveChat,
     goToPostDetailScreen,
     goToCommunityScreen,
+    goToContactScreen,
     goToChatInfoScreen,
     goBackFromChatScreen,
     handleTextSystem,

@@ -1,17 +1,17 @@
 /* eslint-disable no-underscore-dangle */
 import * as React from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, Animated, Pressable} from 'react-native';
+import {Animated, Pressable, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
 import MemoIcNewChat from '../../../assets/icons/ic_new_chat';
 import MemoIc_search from '../../../assets/icons/Ic_search';
-import {fonts} from '../../../utils/fonts';
 import StringConstant from '../../../utils/string/StringConstant';
 import {COLORS, SIZES} from '../../../utils/theme';
 import {DISCOVERY_TAB_USERS} from '../../../utils/constants';
+import {fonts} from '../../../utils/fonts';
 import {useDynamicColors} from '../../../hooks/useToggleColors';
 
-const Search = ({onPress, animatedValue, isAnon}) => {
+const Search = ({onPress, animatedValue, isAnon, isShowNewChat = true}) => {
   const navigation = useNavigation();
   const dynamicColors = useDynamicColors(isAnon);
 
@@ -36,19 +36,21 @@ const Search = ({onPress, animatedValue, isAnon}) => {
           </Text>
         </View>
       </Pressable>
-      <TouchableOpacity style={styles.wrapperButton} onPress={onPress}>
-        <Text style={styles.newPostText(dynamicColors)}>
-          {StringConstant.chatTabHeaderCreateChatButtonText}
-        </Text>
-        <View>
-          <MemoIcNewChat
-            height={17}
-            width={15}
-            style={styles.newChatIcon}
-            color={dynamicColors.primary}
-          />
-        </View>
-      </TouchableOpacity>
+      {isShowNewChat && (
+        <TouchableOpacity style={styles.wrapperButton} onPress={onPress}>
+          <Text style={styles.newPostText(dynamicColors)}>
+            {StringConstant.chatTabHeaderCreateChatButtonText}
+          </Text>
+          <View>
+            <MemoIcNewChat
+              height={17}
+              width={15}
+              style={styles.newChatIcon}
+              color={dynamicColors.primary}
+            />
+          </View>
+        </TouchableOpacity>
+      )}
     </Animated.View>
   );
 };
