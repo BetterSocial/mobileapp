@@ -1,9 +1,9 @@
 /* eslint-disable no-use-before-define */
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import {FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
-import PropTypes from 'prop-types';
 import DiscoveryAction from '../../../context/actions/discoveryAction';
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import DomainList from '../elements/DiscoveryItemList';
@@ -47,8 +47,6 @@ const UsersFragment = ({
   const route = useRoute();
 
   const [myId, setMyId] = React.useState('');
-
-  const isReady = useIsReady();
 
   const users = React.useMemo(() => {
     return discovery.initialUsers.map((item) => ({
@@ -188,34 +186,29 @@ const UsersFragment = ({
 
     const isUnfollowed = item.user ? !item.user.following : !item.following;
 
-    if (
-      (route.name === 'Followings' && item.user_id_follower !== null) ||
-      route.name !== 'Followings'
-    ) {
-      return (
-        <>
-          {renderRecentSearch(index)}
-          <DomainList
-            key={index}
-            onPressBody={() => handleOnPress(item.user || item)}
-            handleSetFollow={() => handleFollow(from, true, item.user || item)}
-            handleSetUnFollow={() => handleFollow(from, false, item.user || item)}
-            item={{
-              name: item.user ? item.user.username : item.username,
-              image: item.user ? item.user.profile_pic_path : item.profile_pic_path,
-              user_id_follower: item.user ? item.user.user_id_follower : item.user_id_follower,
-              isunfollowed: isUnfollowed,
-              description: item.user ? item.user.bio : item.bio,
-              karmaScore: item.user ? item.user.karma_score : item.karma_score,
-              comumnityInfo: item.user ? item.user.community_info || [] : item.community_info || [],
-              routeName: route.name,
-              isUser
-            }}
-          />
-        </>
-      );
-    }
-    return null;
+    return (
+      <>
+        {renderRecentSearch(index)}
+        <DomainList
+          key={index}
+          onPressBody={() => handleOnPress(item.user || item)}
+          handleSetFollow={() => handleFollow(from, true, item.user || item)}
+          handleSetUnFollow={() => handleFollow(from, false, item.user || item)}
+          item={{
+            name: item.user ? item.user.username : item.username,
+            image: item.user ? item.user.profile_pic_path : item.profile_pic_path,
+            user_id_follower: item.user ? item.user.user_id_follower : item.user_id_follower,
+            isunfollowed: isUnfollowed,
+            description: item.user ? item.user.bio : item.bio,
+            karmaScore: item.user ? item.user.karma_score : item.karma_score,
+            comumnityInfo: item.user ? item.user.community_info || [] : item.community_info || [],
+            routeName: route.name,
+            isUser
+          }}
+          withKarma
+        />
+      </>
+    );
   };
 
   const renderItem = ({index, item}) => {
@@ -266,7 +259,7 @@ const UsersFragment = ({
       ? withoutRecent
         ? initialUsers.length !== 0
           ? initialUsers
-          : users
+          : [...initFollowingUsers, {separator: true}, ...initUnfollowingUsers]
         : [...initFollowingUsers, {separator: true}, ...initUnfollowingUsers]
       : unfollowedUsers.length !== 0
       ? [...followedUsers, {separator: true}, ...unfollowedUsers]
@@ -284,8 +277,6 @@ const UsersFragment = ({
       />
     );
   };
-
-  if (!isReady) return <></>;
 
   if (isLoadingDiscoveryUser)
     return (
