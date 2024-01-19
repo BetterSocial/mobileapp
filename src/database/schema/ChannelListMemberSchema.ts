@@ -102,6 +102,10 @@ class ChannelListMemberSchema implements BaseDbSchema {
             B.bio,
             B.is_banned,
             B.last_active_at,
+            B.anon_user_info_color_code,
+            B.anon_user_info_color_name,
+            B.anon_user_info_emoji_code,
+            B.anon_user_info_emoji_name,
             CASE A.user_id 
                 WHEN ? THEN true
                 WHEN ? THEN true
