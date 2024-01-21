@@ -58,17 +58,29 @@ const ProfilePicture = ({
             )}
           </CircleGradient>
         ) : (
-          <View style={styles.profileImageContainer(size)} testId="images">
-            <Image
-              testId="images"
-              style={styles.profileImage(size, width)}
-              source={{
-                uri: profilePicPath ? `${profilePicPath}` : DEFAULT_PROFILE_PIC_PATH
-              }}
-              resizeMode={FastImage.resizeMode.stretch}
-            />
-            {renderAddIcon()}
-          </View>
+          <>
+            {isAnon ? (
+              <>
+                <View style={[styles.anonStyle(size), {backgroundColor: anonBackgroundColor}]}>
+                  <Text style={{fontSize: size / 1.5, textAlign: 'center', alignSelf: 'center'}}>
+                    {anonEmojiCode}
+                  </Text>
+                </View>
+              </>
+            ) : (
+              <View style={styles.profileImageContainer(size)} testId="images">
+                <Image
+                  testId="images"
+                  style={styles.profileImage(size, width)}
+                  source={{
+                    uri: profilePicPath ? `${profilePicPath}` : DEFAULT_PROFILE_PIC_PATH
+                  }}
+                  resizeMode={FastImage.resizeMode.stretch}
+                />
+                {renderAddIcon()}
+              </View>
+            )}
+          </>
         )}
       </TouchableNativeFeedback>
     </View>
@@ -77,22 +89,30 @@ const ProfilePicture = ({
 
 let styles = StyleSheet.create({
   addCircle: {position: 'absolute', top: 25, left: 25},
-  profileImage: (size) => ({
-    width: dimen.normalizeDimen(size * 0.92),
-    height: dimen.normalizeDimen(size * 0.92),
-    borderRadius: 100,
-    marginHorizontal: (dimen.normalizeDimen(size) - dimen.normalizeDimen(size * 0.925)) / 2,
-    marginVertical: (dimen.normalizeDimen(size) - dimen.normalizeDimen(size * 0.925)) / 2
-  }),
-  anonStyle: (size) => ({
-    width: dimen.normalizeDimen(size * 0.92),
-    height: dimen.normalizeDimen(size * 0.92),
-    borderRadius: 100,
-    marginHorizontal: (dimen.normalizeDimen(size) - dimen.normalizeDimen(size * 0.925)) / 2,
-    marginVertical: (dimen.normalizeDimen(size) - dimen.normalizeDimen(size * 0.925)) / 2,
-    justifyContent: 'center',
-    alignItems: 'center'
-  }),
+  profileImage: (size) => {
+    const scale = size <= 25 ? 0.8 : 0.92;
+    const marginScale = size <= 25 ? 0.805 : 0.925;
+    return {
+      width: dimen.normalizeDimen(size * scale),
+      height: dimen.normalizeDimen(size * scale),
+      borderRadius: 100,
+      marginHorizontal: (dimen.normalizeDimen(size) - dimen.normalizeDimen(size * marginScale)) / 2,
+      marginVertical: (dimen.normalizeDimen(size) - dimen.normalizeDimen(size * marginScale)) / 2
+    };
+  },
+  anonStyle: (size) => {
+    const scale = size <= 25 ? 0.8 : 0.92;
+    const marginScale = size <= 25 ? 0.805 : 0.925;
+    return {
+      width: dimen.normalizeDimen(size * scale),
+      height: dimen.normalizeDimen(size * scale),
+      borderRadius: 100,
+      marginHorizontal: (dimen.normalizeDimen(size) - dimen.normalizeDimen(size * marginScale)) / 2,
+      marginVertical: (dimen.normalizeDimen(size) - dimen.normalizeDimen(size * marginScale)) / 2,
+      justifyContent: 'center',
+      alignItems: 'center'
+    };
+  },
   profileImageContainer: (size) => ({
     width: size,
     borderRadius: 100,

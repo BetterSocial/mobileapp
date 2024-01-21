@@ -110,7 +110,9 @@ const Comment = ({
     }
     return COLORS.balance_gray;
   };
-  console.log(comment.karmaScores);
+
+  console.log('KARMA SCORE', comment.data?.anon_user_info_emoji_name, comment.karmaScores);
+
   return (
     <View
       style={styles.container({
@@ -127,14 +129,10 @@ const Comment = ({
           onPress={openProfile}>
           <View style={styles.profile}>
             {comment.data?.anon_user_info_emoji_name || comment.data?.is_anonymous ? (
-              // <View
-              //   style={[styles.image, {backgroundColor: comment.data?.anon_user_info_color_code}]}>
-              //   <Text>{comment.data?.anon_user_info_emoji_code}</Text>
-              // </View>
               <ProfilePicture
                 karmaScore={comment.karmaScores}
                 size={25}
-                width={3}
+                width={6}
                 withKarma
                 isAnon={true}
                 anonBackgroundColor={comment.data?.anon_user_info_color_code}
@@ -149,7 +147,7 @@ const Comment = ({
                     : require('../../assets/images/ProfileDefault.png')
                 }
                 size={25}
-                width={3}
+                width={6}
                 withKarma
               />
             )}
