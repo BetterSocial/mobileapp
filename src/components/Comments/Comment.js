@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
   },
   profile: {
     flexDirection: 'row',
-    marginLeft: -13,
+    marginLeft: -14,
     alignSelf: 'flex-start'
   },
   constainerFooter: {
