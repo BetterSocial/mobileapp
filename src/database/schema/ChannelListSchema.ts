@@ -243,6 +243,7 @@ class ChannelList implements BaseDbSchema {
       LEFT JOIN ${UserSchema.getTableName()} B
       ON A.last_updated_by = B.user_id AND A.id = B.channel_id
       WHERE expired_at IS NULL OR datetime(expired_at) >= datetime('now') AND A.description != ''
+      AND A.channel_type NOT IN ('ANON_PM', 'ANON_POST_NOTIFICATION', 'ANON_GROUP')
       ORDER BY last_updated_at DESC`,
       [myId, myAnonymousId]
     );
@@ -373,7 +374,11 @@ class ChannelList implements BaseDbSchema {
       lastUpdatedBy: json?.message?.user?.id,
       createdAt: json?.channel?.created_at,
       rawJson: json,
-      user: null
+      user: null,
+      anon_user_info_color_code: json?.anon_user_info_color_code,
+      anon_user_info_color_name: json?.anon_user_info_color_name,
+      anon_user_info_emoji_name: json?.anon_user_info_emoji_name,
+      anon_user_info_emoji_code: json?.anon_user_info_emoji_code
     });
   }
 

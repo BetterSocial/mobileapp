@@ -29,7 +29,7 @@ import {GetstreamFeedListenerObject} from '../../../types/hooks/core/getstreamFe
 import {GetstreamMessage, GetstreamWebsocket, MyChannelType} from './websocket/types.d';
 import {InitialStartupAtom} from '../../service/initialStartup';
 import {SignedPostNotification} from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
-import {getAnonymousChatName, getChatName} from '../../utils/string/StringUtils';
+import {getChannelListInfo} from '../../utils/string/StringUtils';
 
 const useCoreChatSystemHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook() as UseLocalDatabaseHook;
@@ -94,31 +94,21 @@ const useCoreChatSystemHook = () => {
     return 1;
   };
 
-  const helperSignedChannelListData = async (websocketData: GetstreamWebsocket) => {
+  const helperGetChannelInfo = (websocketData: GetstreamWebsocket) => {
+    const channelInfo = getChannelListInfo(websocketData?.channel, signedProfileId, anonProfileId);
+    websocketData.targetImage = channelInfo?.channelImage;
+    websocketData.targetName = channelInfo?.channelName;
+    websocketData.anon_user_info_color_code = channelInfo?.anonUserInfoColorCode;
+    websocketData.anon_user_info_color_name = channelInfo?.anonUserInfoColorName;
+    websocketData.anon_user_info_emoji_code = channelInfo?.anonUserInfoEmojiCode;
+    websocketData.anon_user_info_emoji_name = channelInfo?.anonUserInfoEmojiName;
+    websocketData.originalMembers = channelInfo?.originalMembers;
+
+    return websocketData;
+  };
+
+  const helperGetWebsocketMessage = (websocketData: GetstreamWebsocket) => {
     const {type} = websocketData;
-    const websocketMessage = websocketData?.message;
-
-    const chatName = await getChatName(websocketData?.channel?.name, profile?.username);
-    if (websocketData?.channel?.anon_user_info_emoji_name) {
-      websocketData.targetName = `Anonymous ${websocketData?.channel?.anon_user_info_emoji_name}`;
-    } else {
-      websocketData.targetName = chatName;
-    }
-
-    let selectedChannel;
-    try {
-      selectedChannel = (await ChannelList.getById(localDb, websocketData?.channel_id)) as any;
-    } catch (error) {
-      console.log('error on getting selectedChannel');
-    }
-
-    websocketData.targetImage = handleChannelImage(websocketData?.channel?.members);
-    const websocketChannelType = websocketData?.channel_type;
-    if (websocketChannelType === 'topics' || websocketChannelType === 'group') {
-      websocketData.targetImage = websocketData?.channel?.channel_image;
-    } else {
-      websocketData.targetImage = selectedChannel?.channel_picture ?? websocketMessage?.user?.image;
-    }
 
     if (type === 'notification.added_to_channel') {
       websocketData.message.text = 'You have been added to this group';
@@ -127,28 +117,29 @@ const useCoreChatSystemHook = () => {
       websocketData.message.text = 'You have been removed from this group';
     }
 
-    websocketData.unread_count = getUnreadCount(websocketMessage, selectedChannel);
-    websocketData.anon_user_info_color_name = websocketData?.channel?.anon_user_info_color_name;
-    websocketData.anon_user_info_emoji_code = websocketData?.channel?.anon_user_info_emoji_code;
-    websocketData.anon_user_info_color_code = websocketData?.channel?.anon_user_info_color_code;
+    return websocketData;
+  };
+
+  const helperGetWebsocketUnreadCount = async (websocketData: GetstreamWebsocket) => {
+    let selectedChannel;
+    try {
+      selectedChannel = (await ChannelList.getById(localDb, websocketData?.channel_id)) as any;
+    } catch (error) {
+      console.log('error on getting selectedChannel');
+    }
+
+    websocketData.unread_count = getUnreadCount(websocketData?.message, selectedChannel);
 
     return websocketData;
   };
 
-  const saveChannelListData = async (
+  const helperGetSystemMessage = async (
     websocketData: GetstreamWebsocket,
     channelCategory: MyChannelType
   ) => {
-    if (!localDb) return;
-    const websocketMessage = websocketData?.message;
-
-    if (channelCategory === ANONYMOUS) {
-      const chatName = await getAnonymousChatName(websocketData?.channel?.members);
-      websocketData.targetName = chatName?.name;
-      websocketData.targetImage = chatName?.image;
-    } else {
-      websocketData = await helperSignedChannelListData(websocketData);
-    }
+    const isContainFollowingMessage = websocketData?.message?.textOwnMessage
+      ?.toLowerCase()
+      ?.includes('you started following');
 
     const isAnonymous = channelCategory === ANONYMOUS;
     const channelType: {[key: string]: ChannelType} = {
@@ -157,10 +148,8 @@ const useCoreChatSystemHook = () => {
       topics: 'TOPIC'
     };
 
-    const isContainFollowingMessage = websocketData?.message?.textOwnMessage
-      ?.toLowerCase()
-      ?.includes('you started following');
-    const isSystemMessage = websocketMessage?.isSystem || websocketData?.type === 'system';
+    const isSystemMessage = websocketData?.message?.isSystem || websocketData?.type === 'system';
+
     if (isSystemMessage && isContainFollowingMessage) {
       const textOwnUser = 'You started following this user.\n Send them a message now.';
       await ChannelList.updateChannelDescription(
@@ -179,13 +168,25 @@ const useCoreChatSystemHook = () => {
       await channelList.save(localDb);
     }
 
+    return websocketData;
+  };
+
+  const saveChannelListData = async (
+    websocketData: GetstreamWebsocket,
+    channelCategory: MyChannelType
+  ) => {
+    if (!localDb) return;
+    const websocketMessage = websocketData?.message;
+
+    websocketData = helperGetChannelInfo(websocketData);
+    websocketData = helperGetWebsocketMessage(websocketData);
+    websocketData = await helperGetWebsocketUnreadCount(websocketData);
+    websocketData = await helperGetSystemMessage(websocketData, channelCategory);
+
     if (websocketData?.channel_type === 'topics') {
       refresh('channelList');
       return;
     }
-
-    const user = UserSchema.fromWebsocketObject(websocketData);
-    await user.saveOrUpdateIfExists(localDb);
 
     const isMyMessage =
       websocketMessage?.user?.id === signedProfileId ||
@@ -195,8 +196,9 @@ const useCoreChatSystemHook = () => {
       const chat = ChatSchema.fromWebsocketObject(websocketData);
       await chat.save(localDb);
     }
+
     try {
-      websocketData?.channel?.members?.forEach(async (member) => {
+      websocketData?.originalMembers?.forEach(async (member) => {
         const userMember = UserSchema.fromMemberWebsocketObject(member, websocketData?.channel?.id);
         await userMember.saveOrUpdateIfExists(localDb);
 
