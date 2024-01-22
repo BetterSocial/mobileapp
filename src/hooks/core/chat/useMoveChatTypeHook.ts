@@ -1,17 +1,18 @@
 import {v4 as uuid} from 'uuid';
-import {ChannelType} from '../../../../types/repo/ChannelData';
-import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
-import ChannelListMemberSchema from '../../../database/schema/ChannelListMemberSchema';
+
 import ChannelList from '../../../database/schema/ChannelListSchema';
+import ChannelListMemberSchema from '../../../database/schema/ChannelListMemberSchema';
 import ChatSchema from '../../../database/schema/ChatSchema';
 import UserSchema from '../../../database/schema/UserSchema';
-import {moveChatToSigned, moveChatToAnon} from '../../../service/chat';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
-import {getAnonymousChatName, getChatName} from '../../../utils/string/StringUtils';
+import useChatUtilsHook from './useChatUtilsHook';
+import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import useUserAuthHook from '../auth/useUserAuthHook';
 import {ANONYMOUS} from '../constant';
-import useChatUtilsHook from './useChatUtilsHook';
+import {AnonUserInfo} from '../../../../types/service/AnonProfile.type';
+import {ChannelType} from '../../../../types/repo/ChannelData';
 import {generateAnonProfileOtherProfile} from '../../../service/anonymousProfile';
+import {getChannelListInfo} from '../../../utils/string/StringUtils';
+import {moveChatToAnon, moveChatToSigned} from '../../../service/chat';
 
 type ChannelCategory = 'SIGNED' | 'ANONYMOUS';
 interface MoveToChatChannelParams {
@@ -22,7 +23,7 @@ interface MoveToChatChannelParams {
 
 const useMoveChatTypeHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook();
-  const {signedProfileId} = useUserAuthHook();
+  const {signedProfileId, anonProfileId} = useUserAuthHook();
   const {goToMoveChat} = useChatUtilsHook();
 
   const saveChannelList = async (
@@ -38,42 +39,30 @@ const useMoveChatTypeHook = () => {
       topics: 'TOPIC'
     };
 
-    let signedChannelName;
-    let signedChannelImage;
+    const channelListInfo = getChannelListInfo(channel, signedProfileId, anonProfileId);
 
-    if (!isAnonymous) {
-      const myUserData = channel?.members?.find(
-        (member) => member?.user?.id === signedProfileId
-      )?.user;
-      signedChannelName =
-        channel?.channel_type === 4
-          ? `Anonymous ${channel?.anon_user_info_emoji_name}`
-          : getChatName(channel?.name, myUserData?.username ?? myUserData?.name);
+    const anonUserInfo: AnonUserInfo | undefined = {
+      anon_user_info_emoji_name: channelListInfo?.anonUserInfoEmojiName,
+      anon_user_info_emoji_code: channelListInfo?.anonUserInfoEmojiCode,
+      anon_user_info_color_name: channelListInfo?.anonUserInfoColorName,
+      anon_user_info_color_code: channelListInfo?.anonUserInfoColorCode
+    };
 
-      signedChannelImage =
-        channel?.type === 'group' || channel?.type === 'topics'
-          ? channel?.channel_image
-          : channel?.members?.find((member) => member?.user_id !== signedProfileId)?.user?.image ??
-            DEFAULT_PROFILE_PIC_PATH;
+    channel.targetName = channelListInfo?.channelName;
+    channel.targetImage = channelListInfo?.channelImage;
 
-      channel.myUserId = signedProfileId;
-    } else {
-      channel.myUserId = undefined;
-    }
-
-    const chatName = isAnonymous
-      ? await getAnonymousChatName(channel?.members)
-      : {name: signedChannelName, image: signedChannelImage};
-
-    channel.targetName = chatName?.name;
-    channel.targetImage = chatName?.image;
     channel.firstMessage = isAnonymous
       ? channel?.messages?.[0]
       : channel?.messages?.[channel?.messages?.length - 1];
     channel.channel = {...channel};
 
     const channelType = channel?.type;
-    const channelList = ChannelList.fromChannelAPI(channel, type[channelType], channel?.members);
+    const channelList = ChannelList.fromChannelAPI(
+      channel,
+      type[channelType],
+      undefined,
+      anonUserInfo
+    );
 
     await channelList.saveIfLatest(localDb);
     refresh('channelList', 'chat', 'channelInfo', 'channelMember');
@@ -94,8 +83,9 @@ const useMoveChatTypeHook = () => {
     }
 
     try {
+      const members = channel?.better_channel_member || channel?.members || [];
       await Promise.all(
-        (channel?.members || []).map(async (member) => {
+        members?.map(async (member) => {
           const userMember = UserSchema.fromMemberWebsocketObject(member, channel?.id);
           const memberSchema = ChannelListMemberSchema.fromWebsocketObject(
             channel?.id,
@@ -148,6 +138,7 @@ const useMoveChatTypeHook = () => {
       const messages = result?.data?.messageHistories?.map((item: any) => item?.message);
       const channel = {
         ...result?.data?.channel,
+        better_channel_member: result?.data?.better_channel_members,
         members: result?.data?.better_channel_members,
         messages
       };
