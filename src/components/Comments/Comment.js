@@ -111,8 +111,6 @@ const Comment = ({
     return COLORS.balance_gray;
   };
 
-  console.log('KARMA SCORE', comment.data?.anon_user_info_emoji_name, comment.karmaScores);
-
   return (
     <View
       style={styles.container({
