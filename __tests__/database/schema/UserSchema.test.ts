@@ -19,7 +19,11 @@ const userSchema = new UserSchema({
   profilePicture: 'profilePicture',
   bio: 'bio',
   isBanned: false,
-  isMe: false
+  isMe: false,
+  anon_user_info_color_code: null,
+  anon_user_info_color_name: null,
+  anon_user_info_emoji_code: null,
+  anon_user_info_emoji_name: null
 });
 
 const savePrepReplacementExpectation = [
@@ -33,7 +37,11 @@ const savePrepReplacementExpectation = [
   'lastActiveAt',
   'profilePicture',
   'bio',
-  false
+  false,
+  null,
+  null,
+  null,
+  null
 ];
 
 const updatePrepReplacementExpectation = [

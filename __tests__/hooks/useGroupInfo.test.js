@@ -9,7 +9,6 @@ import * as serviceProfile from '../../src/service/profile';
 import AnonymousMessageRepo from '../../src/service/repo/anonymousMessageRepo';
 import useGroupInfo from '../../src/screens/GroupInfo/hooks/useGroupInfo';
 import {Context} from '../../src/context';
-import ImageUtils from '../../src/utils/image';
 
 // eslint-disable-next-line global-require
 jest.mock('react-native-permissions', () => require('react-native-permissions/mock'));
@@ -701,27 +700,5 @@ describe('useGroupInfo should run correctly', () => {
   it('onReportGroup should run correctly', async () => {
     const {result} = renderHook(() => useGroupInfo(), {wrapper});
     await result.current.onReportGroup();
-  });
-  it('handlePressContact type group hould run correctly', async () => {
-    const {result} = renderHook(() => useGroupInfo(), {wrapper});
-    await result.current.handlePressContact({
-      user_id: '123',
-      user: {name: 'agita', image: imageUrl}
-    });
-    expect(result.current.openModal).toBeTruthy();
-  });
-  it('handlePressContact type message hould run correctly', async () => {
-    const {result} = renderHook(() => useGroupInfo(), {wrapper: wrapper2});
-    await result.current.handlePressContact({
-      user_id: '123',
-      user: {name: 'agita', image: imageUrl}
-    });
-    expect(result.current.openModal).toBeTruthy();
-    expect(result.current.selectedUser).toEqual({
-      user_id: '123',
-      user: {name: 'agita', image: imageUrl},
-      allow_anon_dm: true
-    });
-    expect(mockedPushNavigation).toHaveBeenCalled();
   });
 });

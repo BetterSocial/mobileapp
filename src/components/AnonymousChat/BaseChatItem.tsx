@@ -43,6 +43,13 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
     const selectedJson = selectedChannel?.rawJson;
     const itemJson = item?.rawJson;
 
+    if (item?.user?.anon_user_info_color_code) {
+      return renderAnonymousAvatar(
+        item?.user?.anon_user_info_color_code,
+        item?.user?.anon_user_info_emoji_code
+      );
+    }
+
     if (type === ANONYMOUS) {
       if (!item?.isMe && item?.user?.username !== ANONYMOUS_USER) return renderSignedAvatar();
 

@@ -6,10 +6,11 @@ import UseAnonymousChatInfoScreenHook from '../../../types/hooks/screens/useAnon
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import useGroupInfo from '../../screens/GroupInfo/hooks/useGroupInfo';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
-import {ANONYMOUS_USER, SIGNED} from '../core/constant';
+import useUserAuthHook from '../core/auth/useUserAuthHook';
 import {ChannelListMemberSchema} from '../../../types/database/schema/ChannelList.types';
 import {Context} from '../../context';
 import {Member} from '../../../types/database/schema/ChatListDetail.types';
+import {SIGNED} from '../core/constant';
 import {getAnonymousUserId, getUserId} from '../../utils/users';
 import {isContainUrl} from '../../utils/Utils';
 
@@ -32,6 +33,8 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   const navigation = useNavigation();
   const [showPopupBlock, setShowPopupBlock] = React.useState(false);
   const [channelInfo, setChannelInfo] = React.useState(null);
+  const {signedProfileId, anonProfileId} = useUserAuthHook();
+
   const initChatInfoData = async () => {
     if (localDb) {
       setLoadingChannelInfo(true);
@@ -43,6 +46,7 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
         myId,
         myAnonymousId
       );
+
       setChannelInfo(data);
       setLoadingChannelInfo(false);
     }
@@ -52,11 +56,12 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
     if (params.from === SIGNED) {
       return handlePressContact(item);
     }
+
     return navigation.push('OtherProfile', {
       data: {
         user_id: myUserId?.myProfile?.user_id,
-        other_id: item?.user_id,
-        username: item?.user?.name
+        other_id: item?.user_id || item?.userId,
+        username: item?.user?.name || item?.user?.username
       }
     });
   };
@@ -76,11 +81,13 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
 
   const handleShowArrow = (item: Member) => {
     if (params?.from === SIGNED) {
-      return item?.user_id !== myUserId?.myProfile?.user_id;
+      return item?.user?.userId !== signedProfileId;
     }
-    if (!isContainUrl(item?.user?.image) || item?.user?.name === ANONYMOUS_USER) {
+
+    if (!isContainUrl(item?.user?.profilePicture) || item?.user?.anon_user_info_emoji_name) {
       return false;
     }
+
     return item?.user_id !== myUserId?.myProfile?.user_id;
   };
 
