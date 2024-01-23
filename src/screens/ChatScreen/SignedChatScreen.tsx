@@ -18,6 +18,7 @@ import {SIGNED} from '../../hooks/core/constant';
 import {getChatName} from '../../utils/string/StringUtils';
 import {setChannel} from '../../context/actions/setChannel';
 import {styles} from './AnonymousChatScreen';
+import {getOtherProfile} from '../../service/profile';
 
 const SignedChatScreen = () => {
   const {
@@ -31,6 +32,7 @@ const SignedChatScreen = () => {
 
   const flatlistRef = React.useRef<FlatList>();
   const [loading, setLoading] = React.useState(false);
+  const [isAnonimityEnabled, setIsAnonimityEnabled] = React.useState(true);
   const [, dispatchChannel] = (React.useContext(Context) as unknown as any).channel;
   const [profile] = (React.useContext(Context) as unknown as any).profile;
   const updatedChats = updateChatContinuity(chats);
@@ -41,6 +43,7 @@ const SignedChatScreen = () => {
   const memberChat = selectedChannel?.rawJson?.channel?.members?.find(
     (item: any) => item.user_id !== signedProfileId
   );
+  console.log('memberChat', JSON.stringify(memberChat));
 
   const renderChatItem = React.useCallback(({item, index}) => {
     return <BaseChatItem type={SIGNED} item={item} index={index} />;
@@ -69,9 +72,21 @@ const SignedChatScreen = () => {
     }
   };
 
+  const fetchOtherProfile = async () => {
+    try {
+      const result = await getOtherProfile(memberChat?.user?.username);
+      if (result.code === 200) {
+        setIsAnonimityEnabled(result.data.isAnonMessageEnabled);
+      }
+    } catch (e) {
+      // nothing
+    }
+  };
+
   React.useEffect(() => {
     if (selectedChannel) {
       setChannel(selectedChannel, dispatchChannel);
+      fetchOtherProfile();
     }
   }, [selectedChannel]);
 
@@ -119,6 +134,7 @@ const SignedChatScreen = () => {
               ? 'Coming soon: Anonymous messages are not enabled yet within group chats'
               : null
           }
+          isAnonimityEnabled={isAnonimityEnabled}
         />
       </View>
       <Loading visible={loading} />

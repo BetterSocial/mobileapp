@@ -125,6 +125,7 @@ export interface InputMessageV2Props {
   onToggleConfirm?: () => void;
   isShowToggle?: boolean;
   messageDisable?: string | null;
+  isAnonimityEnabled?: boolean;
 }
 
 const InputMessageV2 = ({
@@ -136,7 +137,8 @@ const InputMessageV2 = ({
   onToggleConfirm,
   type,
   isShowToggle = true,
-  messageDisable
+  messageDisable,
+  isAnonimityEnabled = true
 }: InputMessageV2Props) => {
   const refAttachment = React.useRef(null);
   const refGif = React.useRef(null);
@@ -375,18 +377,26 @@ const InputMessageV2 = ({
       return;
     }
 
-    Alert.alert(
-      '',
-      type === ANONYMOUS
-        ? `Switch back to regular chat?\nMessage ${username} using your username.`
-        : 'Switch to anonymous chat?\nMessage this user anonymously instead.',
-      [
-        {
-          text: 'Cancel'
-        },
-        {text: 'Yes, move to other chat', onPress: onToggleConfirm}
-      ]
-    );
+    if (!isAnonimityEnabled) {
+      ToastMessage.show({
+        type: 'asNative',
+        text1: 'This user does not want to receive anonymous messages',
+        position: 'bottom'
+      });
+    } else {
+      Alert.alert(
+        '',
+        type === ANONYMOUS
+          ? `Switch back to regular chat?\nMessage ${username} using your username.`
+          : 'Switch to anonymous chat?\nMessage this user anonymously instead.',
+        [
+          {
+            text: 'Cancel'
+          },
+          {text: 'Yes, move to other chat', onPress: onToggleConfirm}
+        ]
+      );
+    }
   };
 
   const plusButtonStyle = React.useCallback(() => {
@@ -415,7 +425,9 @@ const InputMessageV2 = ({
         />
         {isShowToggle && (
           <ToggleSwitch
-            labelLeft={!inputFocus ? 'Anonymity' : undefined}
+            labelLeft={
+              !inputFocus ? (isAnonimityEnabled ? 'Anonymity' : 'Anonymity disabled') : undefined
+            }
             styleLabelLeft={[
               styles.labelToggle,
               {color: type === 'ANONYMOUS' ? COLORS.gray : COLORS.blue}
