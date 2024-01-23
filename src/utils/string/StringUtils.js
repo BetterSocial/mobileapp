@@ -219,7 +219,7 @@ const getAnonymousChatName = async (members) => {
       targetUserId !== userId &&
       targetUserId !== anonUserId
     ) {
-      acc.push(currentItem?.user);
+      acc.push(currentItem);
     }
     return acc;
   }, []);
@@ -233,7 +233,7 @@ const getAnonymousChatName = async (members) => {
   if (userArraysWithoutMe.length === 1) {
     return Promise.resolve({
       name: userArraysWithoutMe[0]?.username?.trim() || userArraysWithoutMe[0]?.name?.trim(),
-      image: userArraysWithoutMe[0]?.image
+      image: userArraysWithoutMe[0]?.image || userArraysWithoutMe[0]?.profile_pic_path
     });
   }
 

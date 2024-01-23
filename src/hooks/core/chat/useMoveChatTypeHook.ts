@@ -121,7 +121,6 @@ const useMoveChatTypeHook = () => {
     channelCategory: ChannelCategory
   ): Promise<void> => {
     if (!localDb) return;
-
     try {
       const result = await (channelCategory === 'SIGNED'
         ? moveChatToSigned({targetUserId, oldChannelId, source})
@@ -134,7 +133,6 @@ const useMoveChatTypeHook = () => {
             anon_user_info_emoji_name: anonProfileResult?.anon_user_info_emoji_name,
             source
           }));
-
       const messages = result?.data?.messageHistories?.map((item: any) => item?.message);
       const channel = {
         ...result?.data?.channel,
