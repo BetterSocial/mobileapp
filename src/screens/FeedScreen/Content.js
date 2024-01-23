@@ -230,8 +230,8 @@ const Content = ({
       isShort: false
     };
   };
-  const hanldeHeightContainer = ({nativeEvent}) => {
-    setLayoutHeight(nativeEvent.layout.height);
+  const handleHeightContainer = ({nativeEvent}) => {
+    setLayoutHeight(nativeEvent.layout.height + 50);
   };
 
   const calculateLineTopicChip = (nativeEvent) => {
@@ -246,8 +246,8 @@ const Content = ({
 
   return (
     <Pressable
-      onLayout={hanldeHeightContainer}
-      onPress={onPress}
+      onLayout={handleHeightContainer}
+      onPress={item?.isBlurredPost ? null : () => onPress()}
       style={[styles.contentFeed, style]}>
       <BlurredLayer
         withToast={true}
