@@ -135,7 +135,11 @@ const _renderAnonimity = ({
               </View>
             ) : null}
             <View style={[styles.imageAnonymContainer]}>
-              <AnonymousAvatar anonUserInfo={anonUserInfo} version={version} />
+              <AnonymousAvatar
+                karmaScore={karmaScore}
+                anonUserInfo={anonUserInfo}
+                version={version}
+              />
             </View>
 
             <View style={[styles.containerFeedProfile]}>
