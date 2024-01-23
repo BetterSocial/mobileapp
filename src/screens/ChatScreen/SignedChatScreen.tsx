@@ -43,7 +43,6 @@ const SignedChatScreen = () => {
   const memberChat = selectedChannel?.rawJson?.channel?.members?.find(
     (item: any) => item.user_id !== signedProfileId
   );
-  console.log('memberChat', JSON.stringify(memberChat));
 
   const renderChatItem = React.useCallback(({item, index}) => {
     return <BaseChatItem type={SIGNED} item={item} index={index} />;
