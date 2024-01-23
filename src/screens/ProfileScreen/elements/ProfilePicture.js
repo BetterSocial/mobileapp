@@ -8,6 +8,7 @@ import MemoIcAddCircle from '../../../assets/icons/ic_add_circle';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
 import {CircleGradient} from '../../../components/Karma/CircleGradient';
 import dimen from '../../../utils/dimen';
+import {COLORS} from '../../../utils/theme';
 
 const ProfilePicture = ({
   onImageContainerClick,
@@ -49,9 +50,20 @@ const ProfilePicture = ({
                   testId="images"
                   style={styles.profileImage(size, width)}
                   source={{
-                    uri: profilePicPath ? `${profilePicPath}` : DEFAULT_PROFILE_PIC_PATH
+                    uri: profilePicPath ? `${profilePicPath}` : DEFAULT_PROFILE_PIC_PATH,
+                    cache: 'cacheOnly'
                   }}
                   resizeMode={FastImage.resizeMode.stretch}
+                  loadingIndicatorSource={
+                    <Image
+                      style={{
+                        width: 24,
+                        height: 24,
+                        backgroundColor: COLORS.white,
+                        borderRadius: 12
+                      }}
+                    />
+                  }
                 />
                 {renderAddIcon()}
               </View>
