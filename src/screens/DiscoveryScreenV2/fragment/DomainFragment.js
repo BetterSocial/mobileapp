@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import * as React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 import PropTypes from 'prop-types';
@@ -92,14 +92,20 @@ const DomainFragment = ({
 
     navigation.push('DomainScreen', navigationParam);
   };
+  const handleScroll = React.useCallback(() => {
+    Keyboard.dismiss();
+  });
 
   const handleDomain = async (from, willFollow, item, index) => {
     if (from === FROM_FOLLOWED_DOMAIN_INITIAL) {
       const newFollowedDomains = [...domains];
-      newFollowedDomains[index].following = !!willFollow;
-      newFollowedDomains[index].user_id_follower = myId;
+      const domainIndex = newFollowedDomains.findIndex(
+        (domain) => domain.domain_page_id === item.domain_page_id
+      );
+      newFollowedDomains[domainIndex].following = !!willFollow;
+      // newFollowedDomains[domainIndex].user_id_follower = myId;
 
-      const newDomain = newFollowedDomains[index];
+      const newDomain = newFollowedDomains[domainIndex];
       const newDomainList = discovery.initialDomains.map((domain) => {
         if (domain.domain_page_id === newDomain.domain_page_id) {
           return newDomain;
@@ -111,10 +117,13 @@ const DomainFragment = ({
     }
     if (from === FROM_FOLLOWED_DOMAIN) {
       const newFollowedDomains = [...newMapFollowedDomain];
-      newFollowedDomains[index].following = !!willFollow;
-      newFollowedDomains[index].user_id_follower = myId;
+      const domainIndex = newFollowedDomains.findIndex(
+        (domain) => domain.domain_name === item.domain_name
+      );
+      newFollowedDomains[domainIndex].following = !!willFollow;
+      // newFollowedDomains[domainIndex].user_id_follower = myId;
 
-      const newDomain = newFollowedDomains[index];
+      const newDomain = newFollowedDomains[domainIndex];
       setFollowedDomains(
         followedDomains.map((domain) => {
           if (domain.domain_name === newDomain.domain_name) {
@@ -127,10 +136,13 @@ const DomainFragment = ({
 
     if (from === FROM_UNFOLLOWED_DOMAIN) {
       const newUnfollowedDomains = [...newMapUnfollowedDomain];
-      newUnfollowedDomains[index].following = !!willFollow;
-      newUnfollowedDomains[index].user_id_follower = myId;
+      const domainIndex = newUnfollowedDomains.findIndex(
+        (domain) => domain.domain_name === item.domain_name
+      );
+      newUnfollowedDomains[domainIndex].following = !!willFollow;
+      // newUnfollowedDomains[domainIndex].user_id_follower = myId;
 
-      const newDomain = newUnfollowedDomains[index];
+      const newDomain = newUnfollowedDomains[domainIndex];
 
       setUnfollowedDomains(
         unfollowedDomains.map((domain) => {
@@ -152,59 +164,81 @@ const DomainFragment = ({
     if (willFollow) {
       try {
         await followDomain(data);
-        console.log('FOLLOWED');
       } catch (e) {
         handleDomain(from, !willFollow, item, index);
-        console.log('ERROR FOLLOW', e);
       }
     } else {
       try {
         await unfollowDomain(data);
-        console.log('UNFOLLOWED');
       } catch (e) {
         handleDomain(from, !willFollow, item, index);
-        console.log('ERROR UNFOLLOW', e);
       }
     }
     if (searchText.length > 0) fetchData();
   };
 
-  const __renderDiscoveryItem = (from, key, item, index) => {
+  const renderRecentSearch = (index) => {
     return (
-      <View key={`${key}-${index}`} style={styles.domainContainer}>
-        {route.name === 'Followings' && item.user_id_follower !== null && (
-          <DomainList
-            isDomain={true}
-            onPressBody={() => __handleOnPressDomain(item)}
-            handleSetFollow={() => __handleFollow(from, true, item, index)}
-            handleSetUnFollow={() => __handleFollow(from, false, item, index)}
-            item={{
-              name: item.domain_name,
-              image: item.logo,
-              isunfollowed: !item.following,
-              description: item.short_description || null
-            }}
-          />
-        )}
-        {route.name !== 'Followings' && (
-          <DomainList
-            isDomain={true}
-            onPressBody={() => __handleOnPressDomain(item)}
-            handleSetFollow={() => __handleFollow(from, true, item, index)}
-            handleSetUnFollow={() => __handleFollow(from, false, item, index)}
-            item={{
-              name: item.domain_name,
-              image: item.logo,
-              isunfollowed: !item.following,
-              description: item.short_description || null
-            }}
-          />
-        )}
-      </View>
+      index === 0 &&
+      !withoutRecent && (
+        <RecentSearch
+          shown={isFirstTimeOpen}
+          setSearchText={setSearchText}
+          setIsFirstTimeOpen={setIsFirstTimeOpen}
+        />
+      )
     );
   };
 
-  const __renderDomainItems = () => {
+  const renderItem = ({from, item, index}) => {
+    if (item.separator) {
+      return (
+        <>
+          {renderRecentSearch(index)}
+          <DiscoveryTitleSeparator text="Suggested Domains" key="domain-title-separator" />
+        </>
+      );
+    }
+
+    return (
+      <>
+        {renderRecentSearch(index)}
+        <View style={styles.domainContainer}>
+          <DomainList
+            isDomain={true}
+            onPressBody={() => __handleOnPressDomain(item)}
+            handleSetFollow={() => __handleFollow(from, true, item, index)}
+            handleSetUnFollow={() => __handleFollow(from, false, item, index)}
+            item={{
+              name: item.domain_name,
+              image: item.logo,
+              isunfollowed: !item.following,
+              description: item.short_description || null
+            }}
+          />
+        </View>
+      </>
+    );
+  };
+
+  const renderItemList = ({index, item}) => {
+    let result;
+
+    if (isFirstTimeOpen) {
+      result = FROM_FOLLOWED_DOMAIN_INITIAL;
+    } else if (index > newMapFollowedDomain.length) {
+      result = FROM_UNFOLLOWED_DOMAIN;
+    } else {
+      result = FROM_FOLLOWED_DOMAIN;
+    }
+    return renderItem({
+      from: result,
+      item,
+      index
+    });
+  };
+
+  const renderDomainItems = () => {
     const followingDomains = [];
     const unfollowingDomains = [];
 
@@ -215,51 +249,30 @@ const DomainFragment = ({
         unfollowingDomains.push(item);
       }
     });
-    if (isFirstTimeOpen)
-      return [
-        followingDomains.map((item, index) =>
-          __renderDiscoveryItem(
-            FROM_FOLLOWED_DOMAIN_INITIAL,
-            'followedDomainDiscovery',
-            {...item, user_id_follower: item.user_id_follower},
-            index
-          )
-        )
-      ]
-        .concat([
-          route.name !== 'Followings' && (
-            <DiscoveryTitleSeparator text="Suggested Domains" key="domain-title-separator" />
-          )
-        ])
-        .concat(
-          unfollowingDomains.map((item, index) =>
-            __renderDiscoveryItem(
-              FROM_FOLLOWED_DOMAIN_INITIAL,
-              'followedDomainDiscovery',
-              {...item, user_id_follower: item.user_id_follower},
-              index + followingDomains.length
-            )
-          )
-        );
+    const data = isFirstTimeOpen
+      ? [
+          ...followingDomains.map((item, index) => ({
+            ...item,
+            user_id_follower: item.user_id_follower
+          })),
+          {separator: true},
+          ...unfollowingDomains.map((item, index) => ({
+            ...item,
+            user_id_follower: item.user_id_follower
+          }))
+        ]
+      : [...newMapFollowedDomain, {separator: true}, ...newMapUnfollowedDomain];
 
     return (
-      <>
-        {newMapFollowedDomain.map((item, index) =>
-          __renderDiscoveryItem(FROM_FOLLOWED_DOMAIN, 'followedDomainDiscovery', item, index)
-        )}
-
-        {route.name !== 'Followings' &&
-          unfollowedDomains.length > 0 &&
-          followedDomains.length > 0 && (
-            <View style={styles.unfollowedHeaderContainer}>
-              <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreDomains}</Text>
-            </View>
-          )}
-        {route.name !== 'Followings' &&
-          newMapUnfollowedDomain.map((item, index) =>
-            __renderDiscoveryItem(FROM_UNFOLLOWED_DOMAIN, 'unfollowedDomainDiscovery', item, index)
-          )}
-      </>
+      <FlatList
+        onMomentumScrollBegin={handleScroll}
+        contentContainerStyle={{paddingBottom: 100}}
+        data={data}
+        keyExtractor={(_, index) => index.toString()}
+        renderItem={renderItemList}
+        onEndReached={() => fetchData()}
+        onEndReachedThreshold={0.6}
+      />
     );
   };
 
@@ -278,18 +291,7 @@ const DomainFragment = ({
       </View>
     );
 
-  return (
-    <View>
-      {!withoutRecent && (
-        <RecentSearch
-          shown={isFirstTimeOpen}
-          setSearchText={setSearchText}
-          setIsFirstTimeOpen={setIsFirstTimeOpen}
-        />
-      )}
-      {__renderDomainItems()}
-    </View>
-  );
+  return <View>{renderDomainItems()}</View>;
 };
 
 const styles = StyleSheet.create({
