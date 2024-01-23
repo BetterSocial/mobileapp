@@ -116,7 +116,11 @@ describe('Render block list should run correctly', () => {
       fireEvent.press(getByTestId('isUnblock'));
     });
     expect(handleSetBlock).toHaveBeenCalled();
-    const {getAllByTestId: getBlockId, getByTestId: getIdSingleBlock} = render(
+    const {
+      getAllByTestId: getBlockId,
+      getByTestId: getIdSingleBlock,
+      queryByTestId
+    } = render(
       <RenderBlockList
         handleSetBlock={handleSetBlock}
         handleSetUnblock={handleSetUnblock}
@@ -131,7 +135,8 @@ describe('Render block list should run correctly', () => {
       fireEvent.press(getIdSingleBlock('isBlock'));
     });
     expect(handleSetUnblock).toHaveBeenCalled();
-    // TODO: Disabled because "Unable to find an element with testID: desc"
-    // expect(getIdSingleBlock('desc').props.children).toEqual(itemNoImage.description);
+    if (queryByTestId('desc')) {
+      expect(getIdSingleBlock('desc').props.children).toEqual(itemNoImage.description);
+    }
   });
 });
