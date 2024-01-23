@@ -172,7 +172,7 @@ const TopicFragment = ({
     );
   };
   const renderDiscoveryItem = ({from, item, index}) => {
-    if (item.separator && route.name !== 'Followings') {
+    if (item.separator) {
       return (
         <>
           {renderRecentSearch(index)}
@@ -185,23 +185,20 @@ const TopicFragment = ({
       <>
         {renderRecentSearch(index)}
         <View style={styles.domainContainer}>
-          {(route.name === 'Followings' && item.user_id_follower !== null) ||
-          route.name !== 'Followings' ? (
-            <DomainList
-              handleSetFollow={() => handleFollow(from, true, item, index)}
-              handleSetUnFollow={() => handleFollow(from, false, item, index)}
-              key={`followedTopic-${index}`}
-              isCommunity={true}
-              onPressBody={() => __handleOnTopicPress(item)}
-              item={{
-                name: item.name,
-                image: item.icon_path,
-                isunfollowed: !item.following,
-                description: null
-              }}
-              DefaultImage={TopicsProfilePictureEmptyState}
-            />
-          ) : null}
+          <DomainList
+            handleSetFollow={() => handleFollow(from, true, item, index)}
+            handleSetUnFollow={() => handleFollow(from, false, item, index)}
+            key={`followedTopic-${index}`}
+            isCommunity={true}
+            onPressBody={() => __handleOnTopicPress(item)}
+            item={{
+              name: item.name,
+              image: item.icon_path,
+              isunfollowed: !item.following,
+              description: null
+            }}
+            DefaultImage={TopicsProfilePictureEmptyState}
+          />
         </View>
       </>
     );
@@ -243,6 +240,7 @@ const TopicFragment = ({
         keyExtractor={(item, index) => index.toString()}
         onEndReached={() => fetchData()}
         onEndReachedThreshold={0.6}
+        keyboardShouldPersistTaps="handled"
       />
     );
   };

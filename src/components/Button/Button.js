@@ -24,7 +24,7 @@ Btn.propTypes = {
   disabled: PropTypes.bool,
   children: PropTypes.node,
   onPress: PropTypes.func,
-  style: PropTypes.object,
+  styles: PropTypes.object,
   textStyling: PropTypes.object
 };
 

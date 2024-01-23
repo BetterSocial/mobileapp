@@ -30,6 +30,7 @@ import {calculateTime} from '../../utils/time';
 import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 import BlurredLayer from './elements/BlurredLayer';
+import ProfilePicture from '../ProfileScreen/elements/ProfilePicture';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -106,7 +107,8 @@ const _renderAnonimity = ({
   version = 1,
   anonUserInfo = {},
   isPostDetail,
-  isBlurredPost = false
+  isBlurredPost = false,
+  karmaScore = 0
 }) => {
   const navigation = useNavigation();
 
@@ -192,7 +194,8 @@ const _renderProfileNormal = ({
   headerStyle,
   onHeaderOptionClicked = () => {},
   hideThreeDot,
-  isPostDetail
+  isPostDetail,
+  karmaScore = 0
 }) => {
   const {navigateToProfile, username, profile_pic_url, onBackNormalUser} = useFeedHeader({
     actor,
@@ -216,14 +219,13 @@ const _renderProfileNormal = ({
             </View>
           ) : null}
           <GlobalButton onPress={navigateToProfile}>
-            <View style={{}}>
-              <Image
-                source={{
-                  uri: profile_pic_url ?? DEFAULT_PROFILE_PIC_PATH
-                }}
-                style={styles.avatarImage}
-              />
-            </View>
+            <ProfilePicture
+              karmaScore={karmaScore}
+              profilePicPath={profile_pic_url ?? DEFAULT_PROFILE_PIC_PATH}
+              size={50}
+              width={3}
+              withKarma
+            />
           </GlobalButton>
           <GlobalButton
             onPress={navigateToProfile}
@@ -313,7 +315,8 @@ const Header = ({
         emojiName: anon_user_info_emoji_name
       },
       isPostDetail,
-      isBlurredPost
+      isBlurredPost,
+      karmaScore: props?.karma_score
     });
   }
   return _renderProfileNormal({
@@ -329,7 +332,8 @@ const Header = ({
     headerStyle,
     onHeaderOptionClicked: () => onHeaderOptionClicked(props),
     hideThreeDot,
-    isPostDetail
+    isPostDetail,
+    karmaScore: props?.karma_score
   });
 };
 

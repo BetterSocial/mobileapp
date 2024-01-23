@@ -3,21 +3,21 @@
 /* eslint-disable import/no-unresolved */
 
 import * as React from 'react';
+import ToastMessage from 'react-native-toast-message';
 import {FlatList, View} from 'react-native';
 
-import ToastMessage from 'react-native-toast-message';
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
 import InputMessageV2 from '../../components/Chat/InputMessageV2';
-import {Context} from '../../context';
-import {setChannel} from '../../context/actions/setChannel';
-import useMoveChatTypeHook from '../../hooks/core/chat/useMoveChatTypeHook';
-import {SIGNED} from '../../hooks/core/constant';
-import useProfileHook from '../../hooks/core/profile/useProfileHook';
-import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
-import {getChatName} from '../../utils/string/StringUtils';
 import Loading from '../Loading';
-import {styles} from './SampleChatScreen';
+import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
+import useMoveChatTypeHook from '../../hooks/core/chat/useMoveChatTypeHook';
+import useProfileHook from '../../hooks/core/profile/useProfileHook';
+import {Context} from '../../context';
+import {SIGNED} from '../../hooks/core/constant';
+import {getChatName} from '../../utils/string/StringUtils';
+import {setChannel} from '../../context/actions/setChannel';
+import {styles} from './AnonymousChatScreen';
 
 const SignedChatScreen = () => {
   const {

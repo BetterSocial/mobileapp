@@ -17,10 +17,10 @@ import Header from '../../components/Header';
 import Loading from '../Loading';
 import ProfileSettingItem from './element/ProfileSettingItem';
 import useSettings from './hooks/useSettings';
+import {COLORS} from '../../utils/theme';
 import {debugAtom} from '../../service/debug';
 import {fonts} from '../../utils/fonts';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {COLORS} from '../../utils/theme';
 
 const {width} = Dimensions.get('screen');
 
@@ -79,10 +79,6 @@ const Settings = () => {
             text="Help Center"
             onPress={() => goToPage('HelpCenter')}
           />
-          {/* <ProfileSettingItem
-            text="Websocket Research"
-            onPress={() => navigation.navigate('WebsocketResearchScreen')}
-          /> */}
           <ProfileSettingItem text="Delete Account" onPress={showDeleteAccountAlert} />
           <ProfileSettingItem text="Logout" onPress={doLogout} />
         </View>
