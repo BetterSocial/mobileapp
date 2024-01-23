@@ -20,27 +20,69 @@ exports[`AnonymousAvatar test Should match version 1 snapshot 1`] = `
 `;
 
 exports[`AnonymousAvatar test Should match version 2 snapshot 1`] = `
-<View
-  style={
-    Object {
-      "backgroundColor": "#000000",
-      "borderRadius": 7.5,
-      "height": 15,
-      "justifyContent": "center",
-      "width": 15,
-    }
-  }
->
-  <Text
+<View>
+  <View
     style={
       Object {
-        "alignSelf": "center",
-        "fontSize": 10,
-        "textAlign": "center",
+        "alignItems": "baseline",
+        "borderRadius": 9999,
+        "height": 40,
+        "justifyContent": "center",
+        "position": "relative",
+        "width": 40,
       }
     }
+    testID="images"
   >
-    😀
-  </Text>
+    <View
+      style={
+        Object {
+          "height": 40,
+          "position": "relative",
+          "width": 40,
+        }
+      }
+    >
+      <View />
+      <View
+        style={
+          Object {
+            "position": "absolute",
+          }
+        }
+      >
+        <View
+          style={
+            Array [
+              Object {
+                "alignItems": "center",
+                "borderRadius": 100,
+                "height": 36.800000000000004,
+                "justifyContent": "center",
+                "marginHorizontal": 1.5,
+                "marginVertical": 1.5,
+                "width": 36.800000000000004,
+              },
+              Object {
+                "backgroundColor": "#000000",
+              },
+            ]
+          }
+        >
+          <Text
+            style={
+              Object {
+                "alignSelf": "center",
+                "fontSize": 33.333333333333336,
+                "textAlign": "center",
+              }
+            }
+          >
+            😀
+          </Text>
+        </View>
+      </View>
+    </View>
+  </View>
 </View>
 `;

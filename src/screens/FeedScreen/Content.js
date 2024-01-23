@@ -23,6 +23,7 @@ import useCalculationContent from './hooks/useCalculationContent';
 import {getCommentLength} from '../../utils/getstream';
 
 const {width: screenWidth} = Dimensions.get('window');
+const BUFFER_CONTENT_TEXT_HEIGHT = 50;
 const Content = ({
   message,
   images_url = [],
@@ -230,8 +231,8 @@ const Content = ({
       isShort: false
     };
   };
-  const hanldeHeightContainer = ({nativeEvent}) => {
-    setLayoutHeight(nativeEvent.layout.height);
+  const handleHeightContainer = ({nativeEvent}) => {
+    setLayoutHeight(nativeEvent.layout.height + BUFFER_CONTENT_TEXT_HEIGHT);
   };
 
   const calculateLineTopicChip = (nativeEvent) => {
@@ -246,8 +247,8 @@ const Content = ({
 
   return (
     <Pressable
-      onLayout={hanldeHeightContainer}
-      onPress={onPress}
+      onLayout={handleHeightContainer}
+      onPress={item?.isBlurredPost ? null : () => onPress()}
       style={[styles.contentFeed, style]}>
       <BlurredLayer
         withToast={true}

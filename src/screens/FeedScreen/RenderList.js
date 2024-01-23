@@ -206,7 +206,9 @@ const styles = StyleSheet.create({
   footerWrapper: (h) => ({height: h, alignItems: 'center', justifyContent: 'center'}),
   contentReaction: (heightReaction) => ({
     maxHeight: heightReaction,
-    marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0
+    marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0,
+    borderTopWidth: 1,
+    borderTopColor: COLORS.light_silver
   }),
   cardContainer: {
     width: FULL_WIDTH,
