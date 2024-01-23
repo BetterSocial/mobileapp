@@ -42,8 +42,8 @@ const useCreateChat = () => {
       channel_type: 'messaging',
       channel: channelWithMember,
       created_at: response?.channel,
-      targetName: selectedUser?.user?.username || selectedUser?.user?.username,
-      targetImage: selectedUser?.user?.profilePicture || selectedUser?.user?.profilePicture
+      targetName: selectedUser?.user?.username || selectedUser?.user?.name,
+      targetImage: selectedUser?.user?.profilePicture || selectedUser?.user?.image
     };
     const chatData = {
       channel: response?.channel,
@@ -51,8 +51,8 @@ const useCreateChat = () => {
       appAdditionalData: {
         rawJson: targetRawJson,
         message: '',
-        targetName: selectedUser?.user?.username || selectedUser?.user?.username,
-        targetImage: selectedUser?.user?.profilePicture || selectedUser?.user?.profilePicture
+        targetName: selectedUser?.user?.username || selectedUser?.user?.name,
+        targetImage: selectedUser?.user?.profilePicture || selectedUser?.user?.image
       }
     };
     return chatData;
