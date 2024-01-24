@@ -258,7 +258,10 @@ const helperIsSelf = (userId, selfSignUserId, selfAnonUserId) => {
 const helperGetEmptyUsername = (member, channelMembers) => {
   if (!member?.user) {
     const findMember = channelMembers.find((item) => item?.user_id === member?.user_id);
-    member.user.username = findMember?.user?.username;
+    member.user = {
+      username: findMember?.username || findMember?.user?.username,
+      image: findMember?.image || findMember?.user?.image
+    };
   }
 
   return member;

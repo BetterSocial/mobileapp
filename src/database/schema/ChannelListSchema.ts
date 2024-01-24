@@ -105,6 +105,12 @@ class ChannelList implements BaseDbSchema {
     return results.rows.raw()[0];
   };
 
+  static getSchemaById = async (db: any, id: string): Promise<ChannelList | null> => {
+    const channelListDb = await ChannelList.getById(db, id);
+    if (!channelListDb) return null;
+    return this.fromDatabaseObject(channelListDb);
+  };
+
   static getChannelInfo = async (
     db: SQLiteDatabase,
     channelId: string,

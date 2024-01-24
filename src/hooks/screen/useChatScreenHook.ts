@@ -6,6 +6,7 @@ import SimpleToast from 'react-native-simple-toast';
 import {v4 as uuid} from 'uuid';
 
 import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
+import ChannelList from '../../database/schema/ChannelListSchema';
 import ChatSchema from '../../database/schema/ChatSchema';
 import ImageUtils from '../../utils/image';
 import SignedMessageRepo from '../../service/repo/signedMessageRepo';
@@ -143,6 +144,19 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
           'pending'
         );
         currentChatSchema.save(localDb);
+        if (selectedChannel) {
+          const channelList: ChannelList | null = await ChannelList.getSchemaById(
+            localDb,
+            selectedChannel?.id
+          );
+          if (channelList) {
+            channelList.description = message;
+            channelList.lastUpdatedBy = userId;
+            channelList.lastUpdatedAt = new Date().toISOString();
+            channelList.save(localDb);
+          }
+        }
+
         refresh('chat');
         refresh('channelList');
       }
