@@ -219,7 +219,7 @@ const getAnonymousChatName = async (members) => {
       targetUserId !== userId &&
       targetUserId !== anonUserId
     ) {
-      acc.push(currentItem?.user);
+      acc.push(currentItem);
     }
     return acc;
   }, []);
@@ -233,7 +233,7 @@ const getAnonymousChatName = async (members) => {
   if (userArraysWithoutMe.length === 1) {
     return Promise.resolve({
       name: userArraysWithoutMe[0]?.username?.trim() || userArraysWithoutMe[0]?.name?.trim(),
-      image: userArraysWithoutMe[0]?.image
+      image: userArraysWithoutMe[0]?.image || userArraysWithoutMe[0]?.profile_pic_path
     });
   }
 
@@ -255,38 +255,59 @@ const helperIsSelf = (userId, selfSignUserId, selfAnonUserId) => {
   return userId === selfSignUserId || userId === selfAnonUserId;
 };
 
+const helperGetEmptyUsername = (member, channelMembers) => {
+  if (!member?.user) {
+    const findMember = channelMembers.find((item) => item?.user_id === member?.user_id);
+    member.user = {
+      username: findMember?.username || findMember?.user?.username,
+      image: findMember?.image || findMember?.user?.image
+    };
+  }
+
+  return member;
+};
+
 const helperGetWhichMembers = (channel, selfSignUserId, selfAnonUserId) => {
   const members = [];
+  const originalMembers = [];
   if (channel?.better_channel_member) {
     if (isArray(channel?.better_channel_member)) {
       _.forEach(channel?.better_channel_member, (member) => {
         const isNotSelf = !helperIsSelf(member?.user_id, selfSignUserId, selfAnonUserId);
+        originalMembers.push(member);
         if (isNotSelf) {
+          member = helperGetEmptyUsername(member, channel?.members);
           members.push(member);
         }
       });
 
-      return members;
+      return {members, originalMembers};
     }
 
     _.forIn(channel?.better_channel_member, (member, key) => {
       const isNotSelf = !helperIsSelf(key, selfSignUserId, selfAnonUserId);
+      originalMembers.push(member);
       if (isNotSelf) {
+        member = helperGetEmptyUsername(member, channel?.members);
         members.push(member);
       }
     });
 
-    return members;
+    return {members, originalMembers};
   }
 
   channel?.members?.forEach((item) => {
     const isNotSelf = !helperIsSelf(item?.user_id, selfSignUserId, selfAnonUserId);
+    originalMembers.push(item);
     if (isNotSelf) {
       members.push(item);
     }
   });
 
-  return members;
+  return {
+    members,
+    originalMembers
+  };
 };
 
 const getChannelListInfo = (channel, selfSignUserId, selfAnonUserId) => {
@@ -297,7 +318,7 @@ const getChannelListInfo = (channel, selfSignUserId, selfAnonUserId) => {
   let anonUserInfoColorCode;
   let anonUserInfoColorName;
 
-  const members = helperGetWhichMembers(channel, selfSignUserId, selfAnonUserId);
+  const {members, originalMembers} = helperGetWhichMembers(channel, selfSignUserId, selfAnonUserId);
 
   if (members?.length === 1) {
     const member = members[0];
@@ -336,12 +357,13 @@ const getChannelListInfo = (channel, selfSignUserId, selfAnonUserId) => {
     anonUserInfoEmojiCode,
     anonUserInfoEmojiName,
     anonUserInfoColorCode,
-    anonUserInfoColorName
+    anonUserInfoColorName,
+    originalMembers
   };
 };
 
 const getChannelMembers = (channel) => {
-  const members = helperGetWhichMembers(channel);
+  const {members} = helperGetWhichMembers(channel);
 
   return members?.map((item) => {
     const isAnonymous = Boolean(item?.anon_user_info_emoji_name);

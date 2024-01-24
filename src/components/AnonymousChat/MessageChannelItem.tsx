@@ -43,6 +43,15 @@ const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement
   const type = determineChatType(item);
   const isMe = checkIsMe(item, type);
 
+  const dbAnonUserInfo = item?.anon_user_info_color_code
+    ? {
+        anon_user_info_color_code: item?.anon_user_info_color_code,
+        anon_user_info_emoji_code: item?.anon_user_info_emoji_code,
+        anno_user_info_color_name: item?.anon_user_info_color_name,
+        anon_user_info_emoji_name: item?.anon_user_info_emoji_name
+      }
+    : null;
+
   return (
     <BaseChannelItem
       type={type}
@@ -57,6 +66,7 @@ const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement
       hasFollowButton={hasFollowButton}
       handleFollow={handleFollow}
       channelType={item?.channelType}
+      dbAnonUserInfo={dbAnonUserInfo}
     />
   );
 };

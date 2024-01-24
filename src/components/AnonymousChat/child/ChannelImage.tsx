@@ -9,8 +9,20 @@ import ChatIcon from '../../../assets/chat-icon.png';
 import FeedIcon from '../../../assets/images/feed-icon.png';
 import dimen from '../../../utils/dimen';
 import useProfileHook from '../../../hooks/core/profile/useProfileHook';
+import {AnonUserInfo} from '../../../../types/service/AnonProfile.type';
 import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
 import {COLORS} from '../../../utils/theme';
+
+export type ChannelImageProps = {
+  mainPicture?: string;
+  postNotificationPicture?: string;
+  anonPostNotificationUserInfo?: any;
+  postMaker?: any;
+  isCommentExists?: boolean;
+  type?: BaseChannelItemTypeProps;
+  isAnonymousTab?: boolean;
+  dbAnonUserInfo?: AnonUserInfo | null;
+};
 
 const ChannelImage = ({
   mainPicture,
@@ -19,8 +31,9 @@ const ChannelImage = ({
   postMaker = null,
   isCommentExists = false,
   type = BaseChannelItemTypeProps.ANON_PM,
-  isAnonymousTab = false
-}) => {
+  isAnonymousTab = false,
+  dbAnonUserInfo = null
+}: ChannelImageProps) => {
   const styles = StyleSheet.create({
     image: {
       position: 'relative',
@@ -71,6 +84,18 @@ const ChannelImage = ({
     const isAnonymousChannel = type === BaseChannelItemTypeProps.ANON_PM;
     const memberChat = postMaker?.members?.find((item: any) => item.user_id !== anonProfileId);
     const betterSocialMember = postMaker?.better_channel_member;
+
+    if (dbAnonUserInfo) {
+      return (
+        <ChannelAnonymousImage
+          anonPostNotificationUserInfo={{
+            anon_user_info_emoji_code: dbAnonUserInfo?.anon_user_info_emoji_code,
+            anon_user_info_color_code: dbAnonUserInfo?.anon_user_info_color_code
+          }}
+          imageStyle={styles.image}
+        />
+      );
+    }
 
     if (
       isAnonymousChannel &&

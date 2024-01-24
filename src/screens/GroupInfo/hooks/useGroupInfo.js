@@ -170,7 +170,7 @@ const useGroupInfo = () => {
     } catch (e) {
       console.log(e);
     } finally {
-      await setSelectedUser(defaultUserData);
+      setSelectedUser(defaultUserData);
       setOpenModal(true);
       setIsFetchingAllowAnonDM(false);
     }
@@ -336,7 +336,6 @@ const useGroupInfo = () => {
       setIsLoadingInitChat(true);
       await handleAnonymousMessage(selectedUser);
     } catch (e) {
-      console.log(e);
     } finally {
       setIsLoadingInitChat(false);
       setOpenModal(false);
@@ -373,7 +372,7 @@ const useGroupInfo = () => {
     }
 
     if (status === 'message-anonymously') {
-      handleMessageAnonymously();
+      await handleMessageAnonymously();
     }
   };
   const onLeaveGroup = () => {
@@ -430,7 +429,7 @@ const useGroupInfo = () => {
   };
 
   const handleOpenProfile = async (item) => {
-    await setOpenModal(false);
+    setOpenModal(false);
     setTimeout(() => {
       if (profile?.myProfile?.user_id === item?.user_id) {
         return null;

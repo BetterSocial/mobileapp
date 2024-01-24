@@ -398,7 +398,6 @@ class ChatSchema implements BaseDbSchema {
         JSON.stringify(response?.message?.attachments),
         this.id
       ];
-      console.warn('updateReplacement', JSON.stringify(updateReplacement));
 
       await db.executeSql(updateQuery, updateReplacement);
     } catch (e) {
