@@ -4,6 +4,7 @@ import {Image, StyleSheet, Text, View} from 'react-native';
 import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
 import dimen from '../../utils/dimen';
 import {POST_VERSION} from '../../utils/constants';
+import ProfilePicture from '../../screens/ProfileScreen/elements/ProfilePicture';
 
 const styles = StyleSheet.create({
   imageAnonimity: {
@@ -44,15 +45,21 @@ const AnonymousAvatar = (props) => {
     anonUserInfo,
     containerStyle = {},
     radius = dimen.size.FEED_HEADER_IMAGE_RADIUS,
-    emojiRadius = dimen.size.FEED_HEADER_ANONYMOUS_IMAGE_RADIUS
+    emojiRadius = dimen.size.FEED_HEADER_ANONYMOUS_IMAGE_RADIUS,
+    karmaScore
   } = props;
 
   if (version >= POST_VERSION) {
     return (
-      <View
-        style={{...styles.avatarV2Background(anonUserInfo.colorCode, radius), ...containerStyle}}>
-        <Text style={styles.avatarV2Emoji(emojiRadius)}>{anonUserInfo.emojiCode}</Text>
-      </View>
+      <ProfilePicture
+        isAnon={true}
+        anonBackgroundColor={anonUserInfo.colorCode}
+        anonEmojiCode={anonUserInfo.emojiCode}
+        karmaScore={karmaScore}
+        size={50}
+        width={3}
+        withKarma
+      />
     );
   }
 

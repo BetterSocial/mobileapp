@@ -240,6 +240,7 @@ const TopicFragment = ({
         keyExtractor={(item, index) => index.toString()}
         onEndReached={() => fetchData()}
         onEndReachedThreshold={0.6}
+        keyboardShouldPersistTaps="handled"
       />
     );
   };

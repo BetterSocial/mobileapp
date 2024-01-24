@@ -1,26 +1,29 @@
+/* eslint-disable no-use-before-define */
+import * as React from 'react';
+import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import messaging from '@react-native-firebase/messaging';
+import {Platform, SafeAreaView, StyleSheet, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import * as React from 'react';
-import {Platform, StyleSheet, View, SafeAreaView} from 'react-native';
-import PushNotification from 'react-native-push-notification';
-/* eslint-disable no-use-before-define */
 import {useRecoilState, useRecoilValue} from 'recoil';
 
+import AnonymousChannelListScreen from '../screens/ChannelListScreenV2/AnonymousChannelListScreen';
+import AnonymousChatFill from '../assets/icon/AnonymousChatFill';
+import AnonymousChatOutline from '../assets/icon/AnonymousChatOutline';
+import FirebaseConfig from '../configs/FirebaseConfig';
 import MemoFeed from '../assets/icon/Feed';
-import MemoHome from '../assets/icon/Home';
 import MemoNews from '../assets/icon/News';
 import MemoProfileIcon from '../assets/icon/Profile';
+import SignedChat from '../assets/icon/SignedChat';
+import StorageUtils from '../utils/storage';
 import profileAtom from '../atom/profileAtom';
-import FirebaseConfig from '../configs/FirebaseConfig';
 import useCoreChatSystemHook from '../hooks/core/useCoreChatSystemHook';
 import useRootChannelListHook from '../hooks/screen/useRootChannelListHook';
-import {FeedScreen, NewsScreen, ProfileScreen} from '../screens';
-import ChannelListScreenV2 from '../screens/ChannelListScreenV2';
-import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
 import TokenStorage, {ITokenEnum} from '../utils/storage/custom/tokenStorage';
-import {getAnonymousUserId, getUserId} from '../utils/users';
 import {COLORS} from '../utils/theme';
+import {ChannelListScreen, FeedScreen, NewsScreen, ProfileScreen} from '../screens';
+import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
+import {getAnonymousUserId, getUserId} from '../utils/users';
 
 const Tab = createBottomTabNavigator();
 
@@ -30,7 +33,7 @@ function HomeBottomTabs({navigation}) {
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const otherProfileData = useRecoilValue(otherProfileAtom);
   const [, setProfileAtom] = useRecoilState(profileAtom);
-  const {totalUnreadCount} = useRootChannelListHook();
+  const {signedChannelUnreadCount, anonymousChannelUnreadCount} = useRootChannelListHook();
 
   let isOpenNotification = false;
 
@@ -208,135 +211,116 @@ function HomeBottomTabs({navigation}) {
     }
   }, [initialStartup, otherProfileData]);
 
-  const renderTabLabelIcon =
-    (componentType) =>
-    // eslint-disable-next-line react/display-name
-    ({color}) => {
-      if (componentType === 'Feed') {
-        return (
-          <View style={styles.center}>
-            <MemoFeed fill={color} />
-          </View>
-        );
-      }
-      if (componentType === 'ChannelList') {
-        return (
-          <View style={styles.center}>
-            <MemoHome fill={color} />
-          </View>
-        );
-      }
-      if (componentType === 'News') {
-        return (
-          <View>
-            <MemoNews fill={color} />
-          </View>
-        );
-      }
-
+  const renderTabBarIcon = (route, focused, color) => {
+    if (route.name === 'SignedChannelList') {
       return (
         <View style={styles.center}>
-          <MemoProfileIcon />
+          <SignedChat fill={color} stroke={color} />
         </View>
       );
-    };
-  // eslint-disable-next-line react/display-name
+    }
+    if (route.name === 'AnonymousChannelList') {
+      return (
+        <View style={styles.center}>
+          {focused ? (
+            <AnonymousChatFill fill={COLORS.anon_primary} stroke={COLORS.anon_primary} />
+          ) : (
+            <AnonymousChatOutline fill={color} />
+          )}
+        </View>
+      );
+    }
+    if (route.name === 'Feed') {
+      return (
+        <View style={styles.center}>
+          <MemoFeed fill={color} />
+        </View>
+      );
+    }
+    if (route.name === 'News') {
+      return (
+        <View>
+          <MemoNews fill={color} />
+        </View>
+      );
+    }
+
+    return (
+      <View style={styles.center}>
+        <MemoProfileIcon />
+      </View>
+    );
+  };
+
+  const lastMenu = StorageUtils.lastSelectedMenu.get();
+  const getInitialRouteName = React.useCallback(() => {
+    if (initialStartup !== null && otherProfileData?.user_id === initialStartup.id) {
+      return 'Profile';
+    }
+
+    return lastMenu ?? 'Feed';
+  }, [lastMenu]);
+
+  const saveLastMenu = (route) => ({
+    tabPress: () => {
+      StorageUtils.lastSelectedMenu.set(route?.name);
+    }
+  });
+
+  const menuIndicator = (nav, route) => {
+    const isAnonChatMenu = route.name === 'AnonymousChannelList';
+    const activeColor = isAnonChatMenu ? COLORS.anon_primary : COLORS.blueOnboarding;
+    const style = {backgroundColor: nav.isFocused() ? activeColor : 'transparent'};
+    return <View style={[styles.badge, style]} />;
+  };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={{flex: 1}}>
       <Tab.Navigator
-        initialRouteName={
-          initialStartup !== null && otherProfileData?.user_id === initialStartup.id
-            ? 'Profile'
-            : 'Feed'
-        }
+        initialRouteName={getInitialRouteName()}
         tabBarOptions={{
-          activeTintColor: COLORS.signed_primary,
           inactiveTintColor: COLORS.blackgrey,
-          safeAreaInsets: {
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0
-          }
+          safeAreaInsets: {top: 0, bottom: 0, left: 0, right: 0}
         }}
-        screenOptions={({navigation: screenOptionsNavigation}) => ({
-          activeTintColor: COLORS.signed_primary,
-          tabBarLabel: () => (
-            <View
-              style={[
-                styles.badge,
-                {
-                  backgroundColor: screenOptionsNavigation.isFocused()
-                    ? COLORS.signed_primary
-                    : COLORS.transparent
-                }
-              ]}
-            />
-          )
+        screenOptions={({navigation: nav, route}) => ({
+          tabBarLabel: () => menuIndicator(nav, route),
+          tabBarIcon: ({focused, color}) => renderTabBarIcon(route, focused, color),
+          tabBarActiveTintColor:
+            route.name === 'AnonymousChannelList' ? COLORS.anon_primary : COLORS.blueOnboarding
         })}>
+        <Tab.Screen
+          name="SignedChannelList"
+          component={ChannelListScreen}
+          initialParams={{isBottomTab: true}}
+          listeners={({route}) => saveLastMenu(route)}
+          options={{tabBarBadge: signedChannelUnreadCount > 0 ? signedChannelUnreadCount : null}}
+        />
+        <Tab.Screen
+          name="AnonymousChannelList"
+          component={AnonymousChannelListScreen}
+          initialParams={{isBottomTab: true}}
+          listeners={({route}) => saveLastMenu(route)}
+          options={{
+            tabBarBadge: anonymousChannelUnreadCount > 0 ? anonymousChannelUnreadCount : null
+          }}
+        />
         <Tab.Screen
           name="Feed"
           component={FeedScreen}
           initialParams={{isBottomTab: true}}
-          options={{
-            activeTintColor: COLORS.signed_primary,
-            tabBarIcon: renderTabLabelIcon('Feed')
-            // unmountOnBlur: true
-          }}
-        />
-        {/* <Tab.Screen
-          name="Feed"
-          component={WebsocketResearchScreen}
-          initialParams={{isBottomTab: true}}
-          options={{
-            activeTintColor: COLORS.signed_primary,
-            tabBarIcon: renderTabLabelIcon('Feed')
-            // unmountOnBlur: true
-          }}
-        /> */}
-        {/* <Tab.Screen
-          name="ChannelList"
-          component={ChannelListScreen}
-          initialParams={{isBottomTab: true}}
-          options={{
-            activeTintColor: COLORS.signed_primary,
-            tabBarIcon: renderTabLabelIcon('ChannelList'),
-            tabBarBadge:
-              unReadMessage.total_unread_count + unReadMessage.unread_post > 0
-                ? unReadMessage.total_unread_count + unReadMessage.unread_post
-                : null
-          }}
-        /> */}
-        <Tab.Screen
-          name="ChannelList"
-          component={ChannelListScreenV2}
-          initialParams={{isBottomTab: true}}
-          options={{
-            activeTintColor: COLORS.signed_primary,
-            tabBarIcon: renderTabLabelIcon('ChannelList'),
-            tabBarBadge: totalUnreadCount > 0 ? totalUnreadCount : null
-          }}
+          listeners={({route}) => saveLastMenu(route)}
         />
         <Tab.Screen
           name="News"
           component={NewsScreen}
           initialParams={{isBottomTab: true}}
-          options={{
-            activeTintColor: COLORS.signed_primary,
-            tabBarIcon: renderTabLabelIcon('News')
-            // unmountOnBlur: true
-          }}
+          listeners={({route}) => saveLastMenu(route)}
         />
         <Tab.Screen
           name="Profile"
-          initialParams={{isBottomTab: true}}
           component={ProfileScreen}
-          options={{
-            activeTintColor: COLORS.signed_primary,
-            tabBarIcon: renderTabLabelIcon('Profile')
-            // unmountOnBlur:true
-          }}
+          initialParams={{isBottomTab: true}}
+          listeners={({route}) => saveLastMenu(route)}
         />
       </Tab.Navigator>
       <FirebaseConfig navigation={navigation} />
@@ -348,8 +332,7 @@ export default HomeBottomTabs;
 const styles = StyleSheet.create({
   container: {
     height: '100%',
-    width: '100%',
-    backgroundColor: COLORS.white
+    width: '100%'
   },
   badge: {
     height: 7,
@@ -361,5 +344,9 @@ const styles = StyleSheet.create({
   center: {
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  icon: {
+    width: 21,
+    height: 20
   }
 });
