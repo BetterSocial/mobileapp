@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
     height: heightReaction
   }),
   previewComment: (heightReaction) => ({
-    maxHeight: heightReaction,
+    height: heightReaction,
     marginBottom: heightReaction <= 0 ? tabBarHeight + normalize(10) : 0
   }),
   linearGradient: {
