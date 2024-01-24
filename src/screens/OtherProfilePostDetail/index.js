@@ -9,7 +9,7 @@ import {setFeedByIndex} from '../../context/actions/otherProfileFeed';
 
 const OtherProfilePostDetail = (props) => {
   const [feeds, dispatch] = React.useContext(Context).otherProfileFeed;
-  const {index, feedId, refreshParent} = props.route.params;
+  const {index, feedId, isKeyboardOpen} = props.route.params;
   const navigation = useNavigation();
 
   const navigateToReplyView = (data) => {
@@ -26,6 +26,7 @@ const OtherProfilePostDetail = (props) => {
         setFeedByIndexProps={setFeedByIndex}
         navigateToReplyView={navigateToReplyView}
         contextSource={CONTEXT_SOURCE.OTHER_PROFILE_FEEDS}
+        isKeyboardOpen={isKeyboardOpen}
       />
     </View>
   );

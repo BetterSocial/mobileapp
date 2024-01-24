@@ -108,6 +108,7 @@ interface ToggleSwitchProps {
   labelOff?: string;
   labelOn?: string;
   onValueChange?: (value: boolean) => void;
+  isViewOnly?: boolean;
 }
 
 const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
@@ -125,7 +126,8 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   inactiveTextColor = COLORS.signed_primary,
   containerStyle,
   labelOff = 'Off',
-  labelOn = 'On'
+  labelOn = 'On',
+  isViewOnly = false
 }) => {
   const positionButton = React.useMemo(() => new Animated.Value(0), []);
 
@@ -178,7 +180,8 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
     <TouchableOpacity
       style={[styles.container, containerStyle]}
       activeOpacity={0.9}
-      onPress={onPress}>
+      onPress={onPress}
+      disabled={isViewOnly}>
       {labelLeft && <Text style={[styles.labelLeft, styleLabelLeft]}>{labelLeft}</Text>}
       <Animated.View
         style={[
