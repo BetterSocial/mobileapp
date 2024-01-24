@@ -163,20 +163,11 @@ const _renderAnonimity = ({
                 ) : (
                   <MemoPeopleFollow height={16} width={16} />
                 )}
-                <View style={styles.containerFeedText}>
-                  <Text style={styles.feedDate}>{calculateTime(time)}</Text>
-                  <View style={styles.point} />
-                  {privacy.toLowerCase() === PRIVACY_PUBLIC ? (
-                    <MemoicGlobe height={16} width={16} />
-                  ) : (
-                    <MemoPeopleFollow height={16} width={16} />
-                  )}
 
-                  {duration_feed !== 'never' ? <View style={styles.point} /> : null}
-                  {duration_feed !== 'never' ? validationTimer(time, duration_feed) : null}
-                  <View style={styles.point} />
-                  <Text style={styles.feedDate}>{location}</Text>
-                </View>
+                {duration_feed !== 'never' ? <View style={styles.point} /> : null}
+                {duration_feed !== 'never' ? validationTimer(time, duration_feed) : null}
+                <View style={styles.point} />
+                <Text style={styles.feedDate}>{location}</Text>
               </View>
             </View>
           </View>
