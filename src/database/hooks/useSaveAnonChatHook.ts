@@ -37,8 +37,8 @@ const useSaveAnonChatHook = () => {
     type: string
   ) => {
     if (!localDb) return;
-
     const chatName = await getAnonymousChatName(object?.members);
+
     const initAnonymousChat: ModifyAnonymousChatData = {
       ...object,
       targetName: chatName?.name,
@@ -62,14 +62,12 @@ const useSaveAnonChatHook = () => {
           } catch (e) {
             console.log('error saveChatFromOtherProfile userMember', e);
           }
-
           try {
             const memberSchema = ChannelListMemberSchema.fromInitAnonymousChatAPI(
               initAnonymousChat?.message?.cid,
               uuid(),
               member
             );
-
             memberSchema.saveIfNotExist(localDb);
           } catch (e) {
             console.log('error saveChatFromOtherProfile memberSchema', e);
