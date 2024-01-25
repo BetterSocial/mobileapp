@@ -6,16 +6,18 @@ import ChatSchema from '../schema/ChatSchema';
 import UserSchema from '../schema/UserSchema';
 import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
 import useLocalDatabaseHook from './useLocalDatabaseHook';
+import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
+import {GROUP_INFO} from '../../hooks/core/constant';
 import {
   InitAnonymousChatData,
   ModifyAnonymousChatData
 } from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
-import {getAnonymousChatName} from '../../utils/string/StringUtils';
-import {GROUP_INFO} from '../../hooks/core/constant';
+import {getChannelListInfo} from '../../utils/string/StringUtils';
 
 const useSaveAnonChatHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook();
   const {goToChatScreen} = useChatUtilsHook();
+  const {signedProfileId, anonProfileId} = useUserAuthHook();
 
   const helperFindChatById = async (object: InitAnonymousChatData): Promise<ChannelListSchema> => {
     const channelId = object?.message?.cid?.replace('messaging:', '');
@@ -37,12 +39,16 @@ const useSaveAnonChatHook = () => {
     type: string
   ) => {
     if (!localDb) return;
-    const chatName = await getAnonymousChatName(object?.members);
+    const {channelName, channelImage, originalMembers} = await getChannelListInfo(
+      object,
+      signedProfileId,
+      anonProfileId
+    );
 
     const initAnonymousChat: ModifyAnonymousChatData = {
       ...object,
-      targetName: chatName?.name,
-      targetImage: chatName?.image
+      targetName: channelName,
+      targetImage: channelImage
     };
 
     initAnonymousChat.message.cid = initAnonymousChat.message.cid.replace('messaging:', '');
@@ -51,13 +57,15 @@ const useSaveAnonChatHook = () => {
     await chat.save(localDb);
 
     try {
-      object?.members?.forEach((member) => {
+      const members = originalMembers || object?.members;
+      members?.forEach((member) => {
         const saveUserAndChannelListMember = async () => {
           try {
             const userMember = UserSchema.fromInitAnonymousChatAPI(
               member,
               initAnonymousChat?.message?.cid
             );
+
             await userMember.saveOrUpdateIfExists(localDb);
           } catch (e) {
             console.log('error saveChatFromOtherProfile userMember', e);

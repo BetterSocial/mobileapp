@@ -55,6 +55,10 @@ const updatePrepReplacementExpectation = [
   'profilePicture',
   'bio',
   false,
+  null,
+  null,
+  null,
+  null,
   'channelId',
   'userId'
 ];

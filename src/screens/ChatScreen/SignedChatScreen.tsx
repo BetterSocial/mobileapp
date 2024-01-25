@@ -3,7 +3,6 @@
 /* eslint-disable import/no-unresolved */
 
 import * as React from 'react';
-import ToastMessage from 'react-native-toast-message';
 import {FlatList, View} from 'react-native';
 
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
@@ -15,10 +14,9 @@ import useMoveChatTypeHook from '../../hooks/core/chat/useMoveChatTypeHook';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {Context} from '../../context';
 import {SIGNED} from '../../hooks/core/constant';
-import {getChatName} from '../../utils/string/StringUtils';
+import {getOtherProfile} from '../../service/profile';
 import {setChannel} from '../../context/actions/setChannel';
 import {styles} from './AnonymousChatScreen';
-import {getOtherProfile} from '../../service/profile';
 
 const SignedChatScreen = () => {
   const {
@@ -99,13 +97,9 @@ const SignedChatScreen = () => {
           onThreeDotPress={goToChatInfoPage}
           avatar={selectedChannel?.channelPicture}
           type={SIGNED}
-          user={
-            selectedChannel?.rawJson?.channel?.anon_user_info_emoji_code
-              ? `Anonymous ${selectedChannel?.rawJson?.channel?.anon_user_info_emoji_name} `
-              : getChatName(selectedChannel?.name, profile?.myProfile?.username)
-          }
-          anon_user_info_emoji_code={selectedChannel?.rawJson?.channel?.anon_user_info_emoji_code}
-          anon_user_info_color_code={selectedChannel?.rawJson?.channel?.anon_user_info_color_code}
+          user={selectedChannel?.name}
+          anon_user_info_emoji_code={selectedChannel?.anon_user_info_emoji_code}
+          anon_user_info_color_code={selectedChannel?.anon_user_info_color_code}
         />
       ) : null}
 
