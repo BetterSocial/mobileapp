@@ -54,7 +54,7 @@ const HeaderContact = ({
         <Text
           style={[
             styles.text,
-            {color: disabledNextBtn ? COLORS.gray6 : COLORS.holyTosca},
+            {color: disabledNextBtn ? COLORS.gray6 : COLORS.anon_primary},
             subtitleStyle
           ]}>
           {subTitle}

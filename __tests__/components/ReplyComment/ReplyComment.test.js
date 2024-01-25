@@ -6,6 +6,7 @@ import ReplyComment, {styles, ContainerReply} from '../../../src/components/Repl
 import Store from '../../../src/context/Store';
 import useReplyComment from '../../../src/components/ReplyComment/hooks/useReplyComment';
 import * as replyFunc from '../../../src/components/ReplyComment/hooks/useReplyComment';
+import {COLORS} from '../../../src/utils/theme';
 
 jest.mock('react-native/Libraries/Pressability/usePressability');
 jest.mock('react-native/Libraries/Components/Pressable/Pressable');
@@ -102,7 +103,7 @@ describe('Reply comment should run correctly', () => {
       display: 'flex',
       flexDirection: 'row',
       paddingBottom: 14,
-      borderLeftColor: 'transparent'
+      borderLeftColor: COLORS.transparent
     });
   });
 

@@ -24,7 +24,6 @@ import BioAndChat from './elements/BioAndChat';
 import BlockIcon from '../../assets/icons/images/block-blue.svg';
 import BlockProfile from '../../components/Blocking/BlockProfile';
 import BottomSheetBio from '../ProfileScreen/elements/BottomSheetBio';
-import EnveloveBlueIcon from '../../assets/icons/images/envelove-blue.svg';
 import GlobalButton from '../../components/Button/GlobalButton';
 import ProfileHeader from '../ProfileScreen/elements/ProfileHeader';
 import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
@@ -32,6 +31,7 @@ import RenderItem from '../ProfileScreen/elements/RenderItem';
 import ReportUser from '../../components/Blocking/ReportUser';
 import ShareUtils from '../../utils/share';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
+import TextAreaChat from '../../components/TextAreaChat';
 import StorageUtils from '../../utils/storage';
 import dimen from '../../utils/dimen';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
@@ -48,7 +48,6 @@ import {
   setFollow,
   setUnFollow
 } from '../../service/profile';
-import {colors} from '../../utils/colors';
 import {downVote, upVote} from '../../service/vote';
 import {fonts, normalize} from '../../utils/fonts';
 import {generateAnonProfileOtherProfile} from '../../service/anonymousProfile';
@@ -58,6 +57,8 @@ import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder
 import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherProfileFeed';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import ProfilePicture from '../ProfileScreen/elements/ProfilePicture';
+import {COLORS} from '../../utils/theme';
+import EnvelopeIcon from '../../assets/icon/EnvelopeIcon';
 
 const {width} = Dimensions.get('screen');
 
@@ -313,14 +314,22 @@ const OtherProfile = () => {
     const __renderBlockIcon = () => {
       if (blockStatus.blocker)
         return (
-          <View style={styles.buttonFollowing}>
-            <Text style={styles.textButtonFollowing}>Blocked</Text>
+          <View style={styles.buttonFollowing(isAnonimity)}>
+            <Text style={styles.textButtonFollowing(isAnonimity)}>Blocked</Text>
           </View>
         );
 
       return (
-        <View style={{...styles.btnMsg, borderColor: colors.gray1}}>
-          <BlockIcon width={20} height={20} style={{color: colors.gray1}} />
+        <View
+          style={{
+            ...styles.btnMsg(isAnonimity),
+            borderColor: isAnonimity ? COLORS.anon_primary : COLORS.signed_primary
+          }}>
+          <BlockIcon
+            width={20}
+            height={20}
+            style={{color: isAnonimity ? COLORS.anon_primary : COLORS.signed_primary}}
+          />
         </View>
       );
     };
@@ -337,7 +346,7 @@ const OtherProfile = () => {
         <View style={styles.wrapFollower}>
           <TouchableOpacity onPress={handleOpenFollowerUser} style={styles.wrapRow}>
             <React.Fragment>
-              <Text style={styles.textTotal}>{dataMain.follower_symbol}</Text>
+              <Text style={styles.textTotal(isAnonimity)}>{dataMain.follower_symbol}</Text>
               <Text style={styles.textFollow}>
                 {getSingularOrPluralText(dataMain.follower_symbol, 'Follower', 'Followers')}
               </Text>
@@ -363,15 +372,15 @@ const OtherProfile = () => {
       if (dataMain.is_following)
         return (
           <GlobalButton onPress={() => handleSetUnFollow()}>
-            <View style={styles.buttonFollowing}>
-              <Text style={styles.textButtonFollowing}>Following</Text>
+            <View style={styles.buttonFollowing(isAnonimity)}>
+              <Text style={styles.textButtonFollowing(isAnonimity)}>Following</Text>
             </View>
           </GlobalButton>
         );
 
       return (
         <GlobalButton onPress={() => handleSetFollow()}>
-          <View style={styles.buttonFollow}>
+          <View style={styles.buttonFollow(isAnonimity)}>
             <Text style={styles.textButtonFollow}>Follow</Text>
           </View>
         </GlobalButton>
@@ -397,8 +406,8 @@ const OtherProfile = () => {
         <React.Fragment>
           {__renderFollowingButton()}
           <GlobalButton onPress={onCreateChat}>
-            <View style={styles.btnMsg}>
-              <EnveloveBlueIcon width={20} height={20} fill={colors.bondi_blue} />
+            <View style={styles.btnMsg(isAnonimity)}>
+              <EnvelopeIcon color={isAnonimity ? COLORS.anon_primary : COLORS.signed_primary} />
             </View>
           </GlobalButton>
         </React.Fragment>
@@ -704,7 +713,7 @@ const OtherProfile = () => {
         {isShowButton ? (
           <TouchableNativeFeedback onPress={toTop}>
             <View style={{...styles.btnBottom, opacity}}>
-              <ArrowUpWhiteIcon width={12} height={20} fill={colors.white} />
+              <ArrowUpWhiteIcon width={12} height={20} fill={COLORS.white} />
             </View>
           </TouchableNativeFeedback>
         ) : null}
@@ -716,13 +725,13 @@ const OtherProfile = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   content: {
     flexDirection: 'column',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0'
+    borderBottomColor: COLORS.lightgrey
   },
   dummyItem: (heightItem) => ({
     height: heightItem
@@ -738,7 +747,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
     lineHeight: 22,
-    color: colors.black,
+    color: COLORS.black,
     marginLeft: 18
   },
   profileImage: {
@@ -754,14 +763,14 @@ const styles = StyleSheet.create({
   wrapImageProfile: {
     marginTop: 24,
     flexDirection: 'column',
-    backgroundColor: 'red'
+    backgroundColor: COLORS.redalert
   },
   nameProfile: {
     fontFamily: fonts.inter[800],
     fontWeight: 'bold',
     fontSize: 14,
     lineHeight: 17,
-    color: colors.black
+    color: COLORS.black
   },
   wrapFollower: {
     flexDirection: 'row',
@@ -771,21 +780,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
-  textTotal: {
+  textTotal: (isAnon) => ({
     fontFamily: fonts.inter[800],
     fontWeight: 'bold',
     fontSize: 14,
-    color: colors.bondi_blue,
+    color: isAnon ? COLORS.anon_primary : COLORS.signed_primary,
     paddingRight: 4
-  },
+  }),
   textFollow: {
     fontSize: 14,
-    color: colors.black,
+    color: COLORS.black,
     paddingRight: 4
   },
   tabs: {
     width,
-    borderBottomColor: colors.alto,
+    borderBottomColor: COLORS.lightgrey,
     borderBottomWidth: 1,
     paddingLeft: 20,
     paddingRight: 20,
@@ -795,10 +804,10 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[800],
     fontWeight: 'bold',
     fontSize: 14,
-    color: colors.black,
+    color: COLORS.black,
     paddingBottom: 12,
     borderBottomWidth: 2,
-    borderBottomColor: colors.bondi_blue
+    borderBottomColor: COLORS.signed_primary
   },
   wrapNameAndbackButton: {
     flexDirection: 'row',
@@ -808,7 +817,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: 'white'
+    backgroundColor: COLORS.white
   },
   wrapButton: {
     flex: 1,
@@ -816,37 +825,37 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end'
   },
-  buttonFollowing: {
+  buttonFollowing: (isAnon) => ({
     width: 88,
     height: 36,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: colors.bondi_blue,
+    borderColor: isAnon ? COLORS.anon_primary : COLORS.signed_primary,
     borderRadius: 8
-  },
-  buttonFollow: {
+  }),
+  buttonFollow: (isAnon) => ({
     width: 88,
     height: 36,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    backgroundColor: colors.bondi_blue,
-    color: colors.white
-  },
-  textButtonFollowing: {
+    backgroundColor: isAnon ? COLORS.anon_primary : COLORS.signed_primary,
+    color: COLORS.white
+  }),
+  textButtonFollowing: (isAnon) => ({
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: colors.bondi_blue
-  },
+    color: isAnon ? COLORS.anon_primary : COLORS.signed_primary
+  }),
   textButtonFollow: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: colors.white
+    color: COLORS.white
   },
   btnBottom: {
     position: 'absolute',
@@ -854,7 +863,7 @@ const styles = StyleSheet.create({
     height: dimen.size.PROFILE_ACTION_BUTTON_RADIUS,
     right: 20,
     bottom: dimen.size.FEED_ACTION_BUTTON_HEIGHT_FROM_BOTTOM,
-    backgroundColor: colors.darkBlue,
+    backgroundColor: COLORS.signed_primary,
     borderRadius: 30,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -862,7 +871,7 @@ const styles = StyleSheet.create({
   },
   tabsFixed: {
     width,
-    borderBottomColor: colors.alto,
+    borderBottomColor: COLORS.lightgrey,
     borderBottomWidth: 1,
     paddingLeft: 20,
     paddingRight: 20,
@@ -870,22 +879,22 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     zIndex: 2000,
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   containerFlatFeed: {
     // padding: 20,
     flex: 1
   },
-  btnMsg: {
+  btnMsg: (isAnon) => ({
     width: 36,
     height: 36,
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: colors.bondi_blue,
+    borderColor: isAnon ? COLORS.anon_primary : COLORS.signed_primary,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'
-  },
+  }),
   containerLoading: {
     height: '100%',
     width: '100%',
@@ -907,7 +916,11 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     marginBottom: 20
-  }
+  },
+  blockBtnStyle: (isAnonym) => ({
+    backgroundColor: isAnonym ? COLORS.anon_primary : COLORS.signed_primary,
+    paddingLeft: 0
+  })
 });
 
 export default withInteractionsManaged(OtherProfile);

@@ -6,11 +6,7 @@ import Gap from '../../../components/Gap';
 import Header from '../../NewsScreen/Header';
 import {COLORS, SIZES} from '../../../utils/theme';
 import {Footer} from '../../../components';
-import {
-  getCountComment,
-  getCountCommentWithChild,
-  getCountVote,
-} from '../../../utils/getstream';
+import {getCountComment, getCountCommentWithChild, getCountVote} from '../../../utils/getstream';
 
 const RenderItem = ({
   item,
@@ -20,54 +16,54 @@ const RenderItem = ({
   onPressDownVote = () => {},
   onPressUpvote = () => {},
   onPressContent = undefined,
-  selfUserId,
+  selfUserId
 }) => {
   const [voteStatus, setVoteStatus] = React.useState('none');
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
   const [totalVote, setTotalVote] = React.useState(0);
 
-  const onPressUpvoteNew = async (item) => {
+  const onPressUpvoteNew = async () => {
     await onPressUpvote({
       activity_id: item.id,
       status: !statusUpvote,
       feed_group: 'domain',
-      domain: item.domain.name,
+      domain: item.domain.name
     });
     if (voteStatus === 'none') {
       setVoteStatus('upvote');
-      setTotalVote((vote) => vote + 1)
-    } 
-    if(voteStatus === 'upvote') {
-      setVoteStatus('none')
-      setTotalVote((vote) => vote - 1)
+      setTotalVote((vote) => vote + 1);
     }
-    if(voteStatus === 'downvote') {
-      setVoteStatus('upvote')
-      setTotalVote((vote) => vote + 2)
+    if (voteStatus === 'upvote') {
+      setVoteStatus('none');
+      setTotalVote((vote) => vote - 1);
     }
-  }
+    if (voteStatus === 'downvote') {
+      setVoteStatus('upvote');
+      setTotalVote((vote) => vote + 2);
+    }
+  };
 
   const onPressDownVoteHandle = async () => {
     await onPressDownVote({
       activity_id: item.id,
       status: !statusUpvote,
       feed_group: 'domain',
-      domain: item.domain.name,
+      domain: item.domain.name
     });
     if (voteStatus === 'none') {
       setVoteStatus('downvote');
-      setTotalVote((vote) => vote - 1)
-    } 
-    if(voteStatus === 'downvote') {
-      setVoteStatus('none')
-      setTotalVote((vote) => vote + 1)
+      setTotalVote((vote) => vote - 1);
     }
-    if(voteStatus === 'upvote') {
-      setVoteStatus('downvote')
-      setTotalVote((vote) => vote - 2)
+    if (voteStatus === 'downvote') {
+      setVoteStatus('none');
+      setTotalVote((vote) => vote + 1);
     }
-  }
+    if (voteStatus === 'upvote') {
+      setVoteStatus('downvote');
+      setTotalVote((vote) => vote - 2);
+    }
+  };
 
   // React.useEffect(() => {
   //   const initialVote = () => {
@@ -77,25 +73,22 @@ const RenderItem = ({
   //   initialVote();
   // }, [item]);
 
-
   const validationStatusVote = () => {
-      if (item.latest_reactions.upvotes !== undefined) {
-        const upvote = item.latest_reactions.upvotes.filter(
-          (vote) => vote.user_id === selfUserId,
-        );
-        if (upvote !== undefined) {
-          setVoteStatus('upvote');
-        }
-      } else if (item.latest_reactions.downvotes !== undefined) {
-        const downvotes = item.latest_reactions.downvotes.filter(
-          (vote) => vote.user_id === selfUserId,
-        );
-        if (downvotes !== undefined) {
-          setVoteStatus('downvote');
-        }
-      } else {
-        setVoteStatus('none')
-      }    
+    if (item.latest_reactions.upvotes !== undefined) {
+      const upvote = item.latest_reactions.upvotes.filter((vote) => vote.user_id === selfUserId);
+      if (upvote !== undefined) {
+        setVoteStatus('upvote');
+      }
+    } else if (item.latest_reactions.downvotes !== undefined) {
+      const downvotes = item.latest_reactions.downvotes.filter(
+        (vote) => vote.user_id === selfUserId
+      );
+      if (downvotes !== undefined) {
+        setVoteStatus('downvote');
+      }
+    } else {
+      setVoteStatus('none');
+    }
   };
 
   // React.useEffect(() => {
@@ -141,14 +134,14 @@ const styles = StyleSheet.create({
     borderRadius: SIZES.radius,
     backgroundColor: COLORS.white,
     elevation: 0.0,
-    borderColor: COLORS.gray,
+    borderColor: COLORS.blackgrey,
     paddingBottom: 16,
-    marginHorizontal: 16,
+    marginHorizontal: 16
   },
   wrapperFooter: {
     // marginHorizontal: SIZES.base,
-    height: 52,
-  },
+    height: 52
+  }
 });
 
 export default RenderItem;

@@ -2,11 +2,11 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import * as React from 'react';
 import {SafeAreaView, StatusBar, StyleSheet, View, TouchableOpacity} from 'react-native';
 import Animated from 'react-native-reanimated';
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import Header from './elements/Header';
 import Link from './elements/Link';
 import Media from './elements/Media';
+import {COLORS} from '../../utils/theme';
 
 const GroupMedia = () => {
   const Tab = createMaterialTopTabNavigator();
@@ -79,12 +79,12 @@ const GroupMedia = () => {
 export default GroupMedia;
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#fff'},
+  container: {flex: 1, backgroundColor: COLORS.white},
 
   toptabcontainer: {
     flexDirection: 'row',
-    backgroundColor: colors.white,
-    borderBottomColor: '#00000050',
+    backgroundColor: COLORS.white,
+    borderBottomColor: COLORS.black30percent,
     borderBottomWidth: 1,
     paddingHorizontal: 4
   },
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   },
 
   viewborderbottom: {
-    borderBottomColor: colors.holytosca,
+    borderBottomColor: COLORS.anon_primary,
     borderBottomWidth: 2
   }
 });

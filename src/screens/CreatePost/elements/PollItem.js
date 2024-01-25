@@ -1,16 +1,10 @@
+/* eslint-disable consistent-return */
 import * as React from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Platform, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
 import MemoIcClearCircle from '../../../assets/icons/ic_clear_circle';
 import {MAX_POLLING_CHARACTER_ALLOWED} from '../../../utils/constants';
-import {colors} from '../../../utils/colors';
+import {COLORS} from '../../../utils/theme';
 
 export default function PollItem({
   index = 0,
@@ -18,15 +12,14 @@ export default function PollItem({
   onremovepoll = () => {},
   onpollchanged = () => {},
   showdeleteicon,
-  showcharactercount = false,
+  showcharactercount = false
 }) {
   const [isTextInputFocus, setIsTextInputFocus] = React.useState(false);
 
   return (
-    <View
-      style={isTextInputFocus ? S.focuspollitemcontainer : S.pollitemcontainer}>
+    <View style={isTextInputFocus ? S.focuspollitemcontainer : S.pollitemcontainer}>
       <TextInput
-        placeholderTextColor={'#828282'}
+        placeholderTextColor={COLORS.blackgrey}
         placeholder={`Choice ${index + 1}`}
         style={S.pollitemtextinput}
         onFocus={() => setIsTextInputFocus(true)}
@@ -45,9 +38,7 @@ export default function PollItem({
           }>{`${poll.text.length}/${MAX_POLLING_CHARACTER_ALLOWED}`}</Text>
       )}
       {showdeleteicon && (
-        <TouchableOpacity
-          style={S.removepollcontainer}
-          onPress={() => onremovepoll(index)}>
+        <TouchableOpacity style={S.removepollcontainer} onPress={() => onremovepoll(index)}>
           <MemoIcClearCircle width={20} height={20} style={S.removepollicon} />
         </TouchableOpacity>
       )}
@@ -60,10 +51,10 @@ const S = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     borderWidth: 1,
-    borderColor: colors.gray1,
+    borderColor: COLORS.balance_gray,
     borderRadius: 10,
     marginVertical: 4,
-    paddingHorizontal: 8,
+    paddingHorizontal: 8
   },
 
   focuspollitemcontainer: {
@@ -73,7 +64,7 @@ const S = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 4,
     paddingHorizontal: 8,
-    borderColor: colors.holytosca,
+    borderColor: COLORS.anon_primary
   },
 
   pollitemtextinput: {
@@ -83,19 +74,19 @@ const S = StyleSheet.create({
 
   removepollcontainer: {
     justifyContent: 'center',
-    paddingHorizontal: 8,
+    paddingHorizontal: 8
   },
 
   removepollicon: {
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
 
   pollitemtextcount: {
     fontSize: 12,
     alignSelf: 'center',
-    color: colors.gray1,
+    color: COLORS.balance_gray,
     marginEnd: 8,
-    marginStart: 8,
-  },
+    marginStart: 8
+  }
 });

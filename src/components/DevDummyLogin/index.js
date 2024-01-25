@@ -49,7 +49,7 @@ const S = StyleSheet.create({
   },
   divider: {
     width: '100%',
-    backgroundColor: COLORS.gray,
+    backgroundColor: COLORS.blackgrey,
     height: 2
   },
   passwordTextInput: {
@@ -219,7 +219,7 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
             onPress={() => setIsPasswordShown((prev) => !prev)}
           />
           {isLoadingCheckPassword ? (
-            <ActivityIndicator size={'small'} color={COLORS.red} />
+            <ActivityIndicator size={'small'} color={COLORS.redalert} />
           ) : (
             <Button title={'Login'} onPress={checkPassword} />
           )}

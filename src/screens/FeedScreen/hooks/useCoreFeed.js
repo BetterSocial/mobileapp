@@ -8,7 +8,7 @@ import useFeedPreloadHook from './useFeedPreloadHook';
 import useViewPostTimeHook from './useViewPostTimeHook';
 import {Context} from '../../../context';
 import {FEEDS_CACHE} from '../../../utils/cache/constant';
-import {checkIsHasColor, hexToRgb} from '../../../utils/colors';
+import {checkIsHasColor, hexToRgb} from '../../../utils/theme';
 import {downVote, upVote} from '../../../service/vote';
 import {getFeedDetail, getMainFeedV2WithTargetFeed} from '../../../service/post';
 import {listFeedColor} from '../../../configs/FeedColor';

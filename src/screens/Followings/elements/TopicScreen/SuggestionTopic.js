@@ -1,21 +1,21 @@
 import React, {memo} from 'react';
 import {FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
-import {colors} from '../../../../utils/colors';
 import {fonts} from '../../../../utils/fonts';
+import {COLORS} from '../../../../utils/theme';
 
 const styles = StyleSheet.create({
   titleText: {
     fontFamily: fonts.inter[500],
     fontWeight: 'bold',
     fontSize: 16,
-    color: colors.black
+    color: COLORS.black
   },
   suggestionContainer: {
     paddingHorizontal: 20
   },
   capsulContainer: {
-    backgroundColor: colors.alto,
+    backgroundColor: COLORS.lightgrey,
     paddingHorizontal: 10,
     paddingVertical: 5,
     marginRight: 10,
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   },
   moreText: {
     fontSize: 14,
-    color: colors.bondi_blue
+    color: COLORS.bondi_blue
   }
 });
 

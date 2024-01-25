@@ -19,6 +19,7 @@ import {getTopics, getUserTopic} from '../../service/topics';
 import {downVote, upVote} from '../../service/vote';
 import dimen from '../../utils/dimen';
 import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import ShareUtils from '../../utils/share';
 import TopicPageStorage from '../../utils/storage/custom/topicPageStorage';
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   header: {
-    backgroundColor: 'lightblue',
+    backgroundColor: COLORS.signed_primary,
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 40,

@@ -1,7 +1,7 @@
 import React from 'react';
 import {render} from '@testing-library/react-native';
 import PreviewComment, {styles} from '../../../src/components/PreviewComment';
-import {SIZES} from '../../../src/utils/theme';
+import {COLORS, SIZES} from '../../../src/utils/theme';
 
 describe('Preview comment should run correctly', () => {
   const mockItem = {
@@ -60,7 +60,7 @@ describe('Preview comment should run correctly', () => {
     expect(styles.container(10)).toEqual({
       borderLeftWidth: 1,
       marginHorizontal: SIZES.base,
-      borderLeftColor: '#C4C4C4'
+      borderLeftColor: COLORS.balance_gray
     });
   });
 });

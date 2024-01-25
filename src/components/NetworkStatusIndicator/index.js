@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     width: '100%',
     zIndex: 100,
     padding: 4,
-    backgroundColor: COLORS.red,
+    backgroundColor: COLORS.redalert,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center'

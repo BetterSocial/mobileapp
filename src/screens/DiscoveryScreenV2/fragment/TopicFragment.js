@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import * as React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 import PropTypes from 'prop-types';
@@ -14,7 +14,6 @@ import useChatClientHook from '../../../utils/getstream/useChatClientHook';
 import useIsReady from '../../../hooks/useIsReady';
 import {COLORS} from '../../../utils/theme';
 import {Context} from '../../../context/Store';
-import {colors} from '../../../utils/colors';
 import {convertTopicNameToTopicPageScreenParam} from '../../../utils/string/StringUtils';
 import {fonts} from '../../../utils/fonts';
 import {getUserId} from '../../../utils/users';
@@ -55,6 +54,18 @@ const TopicFragment = ({
       following: item.following !== undefined ? item.following : item.user_id_follower !== null
     }));
   }, [discovery.initialTopics]);
+  const newMapFollowedTopics = React.useMemo(() => {
+    return followedTopic.map((item) => ({
+      ...item,
+      following: item.following !== undefined ? item.following : item.user_id_follower !== null
+    }));
+  }, [followedTopic]);
+  const newMapUnfollowedTopics = React.useMemo(() => {
+    return unfollowedTopic.map((item) => ({
+      ...item,
+      following: item.following !== undefined ? item.following : item.user_id_follower !== null
+    }));
+  }, [unfollowedTopic]);
 
   React.useEffect(() => {
     const parseToken = async () => {
@@ -65,40 +76,78 @@ const TopicFragment = ({
     };
     parseToken();
   }, []);
+  const handleScroll = React.useCallback(() => {
+    Keyboard.dismiss();
+  });
 
-  const handleFollow = async (from, willFollow, item, index) => {
+  const exhangeFollower = (newTopicLists, willFollow, topicId) => {
+    const indexTopic = newTopicLists.findIndex((item) => item.topic_id === topicId);
+    newTopicLists[indexTopic].following = !!willFollow;
+    // newTopicLists[indexTopic].user_id_follower = myId;
+    return newTopicLists[indexTopic];
+  };
+
+  const mapTopic = (newTopic) => {
+    return discovery.initialTopics.map((topic) => {
+      if (topic.topic_id === newTopic.topic_id) {
+        return newTopic;
+      }
+      return topic;
+    });
+  };
+
+  const handleTopic = (from, willFollow, item, index) => {
     if (from === FROM_FOLLOWED_TOPIC_INITIAL) {
       const newFollowedTopics = [...topics];
-      newFollowedTopics[index].following = !!willFollow;
-      newFollowedTopics[index].user_id_follower = myId;
-      DiscoveryAction.setDiscoveryInitialTopics(newFollowedTopics, discoveryDispatch);
+      const newTopic = exhangeFollower(newFollowedTopics, willFollow, item.topic_id);
+
+      DiscoveryAction.setDiscoveryInitialTopics(mapTopic(newTopic), discoveryDispatch);
     }
 
     if (from === FROM_UNFOLLOWED_TOPIC_INITIAL) {
       const newFollowedTopics = [...topics];
-      newFollowedTopics[index].following = !!willFollow;
-      newFollowedTopics[index].user_id_follower = myId;
+      const newTopic = exhangeFollower(newFollowedTopics, willFollow, item.topic_id);
 
-      DiscoveryAction.setDiscoveryInitialTopics(newFollowedTopics, discoveryDispatch);
+      DiscoveryAction.setDiscoveryInitialTopics(mapTopic(newTopic), discoveryDispatch);
     }
 
     if (from === FROM_FOLLOWED_TOPIC) {
-      const newFollowedTopics = [...followedTopic];
-      newFollowedTopics[index].following = !!willFollow;
-      newFollowedTopics[index].user_id_follower = myId;
+      const newFollowedTopics = [...newMapFollowedTopics];
+      const newTopic = exhangeFollower(newFollowedTopics, willFollow, item.topic_id);
 
-      setFollowedTopic(newFollowedTopics);
+      setFollowedTopic(
+        followedTopic.map((topic) => {
+          if (topic.topic_id === newTopic.topic_id) {
+            return newTopic;
+          }
+          return topic;
+        })
+      );
     }
 
     if (from === FROM_UNFOLLOWED_TOPIC) {
-      const newUnFollowedTopic = [...unfollowedTopic];
-      newUnFollowedTopic[index].following = !!willFollow;
-      newUnFollowedTopic[index].user_id_follower = myId;
+      const newUnFollowedTopic = [...newMapUnfollowedTopics];
+      const newTopic = exhangeFollower(newUnFollowedTopic, willFollow, item.topic_id);
 
-      setUnfollowedTopic(newUnFollowedTopic);
+      setUnfollowedTopic(
+        unfollowedTopic.map((topic) => {
+          if (topic.topic_id === newTopic.topic_id) {
+            return newTopic;
+          }
+          return topic;
+        })
+      );
     }
+  };
 
-    followTopic(item?.name);
+  const handleFollow = async (from, willFollow, item, index) => {
+    handleTopic(from, willFollow, item, index);
+
+    try {
+      await followTopic(item?.name);
+    } catch (e) {
+      handleTopic(from, !willFollow, item, index);
+    }
     if (searchText.length > 0) fetchData();
   };
 
@@ -110,44 +159,61 @@ const TopicFragment = ({
     navigation.push('TopicPageScreen', navigationParam);
   };
 
-  const __renderDiscoveryItem = (from, key, item, index) => {
+  const renderRecentSearch = (index) => {
     return (
-      <View key={`${key}-${index}`} style={styles.domainContainer}>
-        {route.name === 'Followings' && item.user_id_follower !== null && (
-          <DomainList
-            handleSetFollow={() => handleFollow(from, true, item, index)}
-            handleSetUnFollow={() => handleFollow(from, false, item, index)}
-            key={`followedTopic-${index}`}
-            isCommunity={true}
-            onPressBody={() => __handleOnTopicPress(item)}
-            item={{
-              name: item.name,
-              image: item.icon_path,
-              isunfollowed: !item.following,
-              description: null
-            }}
-            DefaultImage={TopicsProfilePictureEmptyState}
-          />
-        )}
-        {route.name !== 'Followings' && (
-          <DomainList
-            handleSetFollow={() => handleFollow(from, true, item, index)}
-            handleSetUnFollow={() => handleFollow(from, false, item, index)}
-            key={`followedTopic-${index}`}
-            isCommunity={true}
-            onPressBody={() => __handleOnTopicPress(item)}
-            item={{
-              name: item.name,
-              image: item.icon_path,
-              isunfollowed: !item.following,
-              description: null
-            }}
-            DefaultImage={TopicsProfilePictureEmptyState}
-          />
-        )}
-      </View>
+      index === 0 &&
+      !withoutRecent && (
+        <RecentSearch
+          shown={isFirstTimeOpen}
+          setSearchText={setSearchText}
+          setIsFirstTimeOpen={setIsFirstTimeOpen}
+        />
+      )
     );
   };
+  const renderDiscoveryItem = ({from, item, index}) => {
+    if (item.separator) {
+      return (
+        <>
+          {renderRecentSearch(index)}
+          <DiscoveryTitleSeparator key="topic-title-separator" text="Suggested Communities" />
+        </>
+      );
+    }
+
+    return (
+      <>
+        {renderRecentSearch(index)}
+        <View style={styles.domainContainer}>
+          <DomainList
+            handleSetFollow={() => handleFollow(from, true, item, index)}
+            handleSetUnFollow={() => handleFollow(from, false, item, index)}
+            key={`followedTopic-${index}`}
+            isCommunity={true}
+            onPressBody={() => __handleOnTopicPress(item)}
+            item={{
+              name: item.name,
+              image: item.icon_path,
+              isunfollowed: !item.following,
+              description: null
+            }}
+            DefaultImage={TopicsProfilePictureEmptyState}
+          />
+        </View>
+      </>
+    );
+  };
+
+  const renderItem = ({index, item}) =>
+    renderDiscoveryItem({
+      from: isFirstTimeOpen
+        ? FROM_FOLLOWED_TOPIC_INITIAL
+        : index > newMapFollowedTopics.length
+        ? FROM_UNFOLLOWED_TOPIC
+        : FROM_FOLLOWED_TOPIC,
+      item,
+      index
+    });
 
   const __renderTopicItems = () => {
     const followingTopics = [];
@@ -160,45 +226,21 @@ const TopicFragment = ({
         unfollowingTopics.push(item);
       }
     });
-    if (isFirstTimeOpen) {
-      return [
-        followingTopics.map((item, index) =>
-          __renderDiscoveryItem(FROM_FOLLOWED_TOPIC_INITIAL, 'followedTopicDiscovery', item, index)
-        )
-      ]
-        .concat([
-          route.name !== 'Followings' && (
-            <DiscoveryTitleSeparator key="topic-title-separator" text="Suggested Communities" />
-          )
-        ])
-        .concat(
-          unfollowingTopics.map((item, index) =>
-            __renderDiscoveryItem(
-              FROM_FOLLOWED_TOPIC_INITIAL,
-              'followedTopicDiscovery',
-              item,
-              index + followingTopics.length
-            )
-          )
-        );
-    }
+
+    const data = isFirstTimeOpen
+      ? [...followingTopics, {separator: true}, ...unfollowingTopics]
+      : [...newMapFollowedTopics, {separator: true}, ...newMapUnfollowedTopics];
 
     return (
-      <>
-        {followedTopic.map((item, index) =>
-          __renderDiscoveryItem(FROM_FOLLOWED_TOPIC, 'followedTopicDiscovery', item, index)
-        )}
-
-        {route.name !== 'Followings' && unfollowedTopic.length > 0 && followedTopic.length > 0 && (
-          <View style={styles.unfollowedHeaderContainer}>
-            <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreTopics}</Text>
-          </View>
-        )}
-        {route.name !== 'Followings' &&
-          unfollowedTopic.map((item, index) =>
-            __renderDiscoveryItem(FROM_UNFOLLOWED_TOPIC, 'unfollowedTopicDiscovery', item, index)
-          )}
-      </>
+      <FlatList
+        onMomentumScrollBegin={handleScroll}
+        contentContainerStyle={{paddingBottom: 100}}
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => index.toString()}
+        onEndReached={() => fetchData()}
+        onEndReachedThreshold={0.6}
+      />
     );
   };
 
@@ -217,28 +259,17 @@ const TopicFragment = ({
       </View>
     );
 
-  return (
-    <View>
-      {!withoutRecent && (
-        <RecentSearch
-          shown={isFirstTimeOpen}
-          setSearchText={setSearchText}
-          setIsFirstTimeOpen={setIsFirstTimeOpen}
-        />
-      )}
-      {__renderTopicItems()}
-    </View>
-  );
+  return <View>{__renderTopicItems()}</View>;
 };
 
 const styles = StyleSheet.create({
   fragmentContainer: {
     flex: 1,
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   noDataFoundContainer: {
     flex: 1,
-    backgroundColor: colors.white,
+    backgroundColor: COLORS.white,
     justifyContent: 'center'
   },
   noDataFoundText: {

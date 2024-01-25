@@ -8,11 +8,11 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import {colors} from '../../../utils/colors';
 import {fonts, normalize} from '../../../utils/fonts';
 import {CircleGradient} from '../../../components/Karma/CircleGradient';
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 import ProfilePicture from '../../ProfileScreen/elements/ProfilePicture';
+import {COLORS} from '../../../utils/theme';
 
 const renderDefaultImage = (DefaultImage) => {
   if (DefaultImage) {
@@ -33,7 +33,8 @@ const DomainList = (props) => {
     DefaultImage,
     isCommunity,
     isBlockedSection,
-    withKarma
+    withKarma,
+    isDomain
   } = props;
 
   const renderButonAction = () => {
@@ -116,7 +117,7 @@ const DomainList = (props) => {
               {item.name}
             </Text>
 
-            {item.description !== null && (
+            {((!!item.user_id_follower && !!item.description) || isDomain) && (
               <Text
                 testID="desc"
                 style={item.isDomain ? styles.textProfileFullName : styles.domainDescription}
@@ -124,6 +125,19 @@ const DomainList = (props) => {
                 ellipsizeMode={'tail'}>
                 {item.description ? item.description : ''}
               </Text>
+            )}
+            {item.comumnityInfo?.length > 0 && !item.user_id_follower && item.isUser && (
+              <View style={styles.communityTextContainer} testID="communityDesc">
+                <Text style={styles.textProfileFullName} numberOfLines={1} ellipsizeMode="tail">
+                  Also in{' '}
+                  <Text style={styles.communityText}>
+                    {`${item.comumnityInfo
+                      .slice(0, 3)
+                      .map((community) => `#${community}`)
+                      .join(', ')}`}
+                  </Text>
+                </Text>
+              </View>
             )}
           </View>
         </View>
@@ -135,14 +149,26 @@ const DomainList = (props) => {
 
 // data needed name, description, image
 const styles = StyleSheet.create({
+  communityTextContainer: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  communityText: {
+    color: COLORS.blueOnboarding,
+    fontFamily: fonts.inter[400],
+    fontSize: 12,
+    flexWrap: 'wrap',
+    lineHeight: 18,
+    marginTop: 4
+  },
   buttonFollow: {
-    width: 88,
-    height: 36,
+    width: normalize(65),
+    height: normalize(34),
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    backgroundColor: colors.bondi_blue
+    backgroundColor: COLORS.signed_primary
   },
   container: {
     height: 64,
@@ -153,21 +179,20 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: colors.bondi_blue
+    color: COLORS.signed_primary
   },
   textButtonFollow: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: colors.white
+    color: COLORS.white
   },
   profilepicture: {
     width: 48,
     height: 48,
-    // backgroundColor: colors.bondi_blue,
     borderRadius: 24,
     resizeMode: 'cover',
-    borderColor: colors.lightgrey,
+    borderColor: COLORS.lightgrey,
     borderWidth: 1,
     marginLeft: 2,
     marginTop: 2
@@ -176,8 +201,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
-    flex: 1,
-    marginEnd: 4
+    flex: 1
   },
   imageProfile: {
     width: 48,
@@ -188,66 +212,57 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     flexDirection: 'column',
     flex: 1
-    // justifyContent: 'space-between',
   },
   wrapTextProfileTopic: {
     flexDirection: 'column',
     flex: 1
-    // justifyContent: 'space-between',
   },
   textProfileUsername: {
     fontFamily: fonts.inter[500],
     fontWeight: 'bold',
     fontSize: 14,
-    color: colors.black,
+    color: COLORS.black,
     lineHeight: 16.94
-    // backgroundColor: 'red',
   },
   textProfileFullName: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.gray,
+    color: COLORS.blackgrey,
     flexWrap: 'wrap',
     lineHeight: 18,
-    // backgroundColor: 'green',
     marginTop: 4
   },
   domainDescription: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.gray,
+    color: COLORS.blackgrey,
     flexWrap: 'wrap',
     lineHeight: 18,
-    // backgroundColor: 'green',
     marginTop: 4
   },
   buttonFollowing: {
-    width: 88,
-    height: 36,
+    width: normalize(65),
+    height: normalize(34),
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: colors.bondi_blue,
+    borderColor: COLORS.signed_primary,
     borderRadius: 8
   },
   card: {
     height: 64,
-    // height: 150,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     flex: 1,
     paddingLeft: 20
-    // backgroundColor: 'red'
-    // marginVertical: 10,
   },
   followContainer: {
-    paddingRight: 20,
-    paddingLeft: 8,
+    paddingRight: normalize(20),
+    paddingLeft: normalize(8),
     height: '100%',
     justifyContent: 'center'
-    // backgroundColor: 'blue'
   },
   buttonBlockUser: {
     width: 88,
@@ -256,20 +271,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    borderColor: colors.bondi_blue,
+    borderColor: COLORS.signed_primary,
     borderWidth: 1
   },
   textButtonBlock: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: colors.white
+    color: COLORS.white
   },
   textButtonBlockUser: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: colors.bondi_blue
+    color: COLORS.signed_primary
   },
   buttonBlock: {
     width: 88,
@@ -278,9 +293,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: colors.blockColor,
+    borderColor: COLORS.redalert,
     borderRadius: 8,
-    backgroundColor: colors.blockColor
+    backgroundColor: COLORS.redalert
   }
 });
 

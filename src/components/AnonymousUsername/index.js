@@ -2,8 +2,8 @@ import * as React from 'react';
 import {StyleSheet, Text} from 'react-native';
 
 import {POST_VERSION} from '../../utils/constants';
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
 
 const styles = StyleSheet.create({
   feedUsername: {
@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
     lineHeight: 16.94,
-    color: colors.black,
+    color: COLORS.black,
     flex: 1
   }
 });

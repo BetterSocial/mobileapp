@@ -20,11 +20,11 @@ import {
   DISCOVERY_TAB_TOPICS,
   DISCOVERY_TAB_USERS
 } from '../../utils/constants';
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {withInteractionsManagedNoStatusBar} from '../../components/WithInteractionManaged';
 import FollowingAction from '../../context/actions/following';
 import {Header} from '../../components';
+import {COLORS} from '../../utils/theme';
 
 const DiscoveryScreenV2 = ({route}) => {
   const {tab} = route.params;
@@ -51,6 +51,18 @@ const DiscoveryScreenV2 = ({route}) => {
   const [profileState] = React.useContext(Context).profile;
   const cancelTokenRef = React.useRef(axios.CancelToken.source());
   const [, followingDispatch] = React.useContext(Context).following;
+  const [userPage, setUserPage] = React.useState({
+    currentPage: 1,
+    limitPage: 1
+  });
+  const [topicPage, setTopicPage] = React.useState({
+    currentPage: 1,
+    limitPage: 1
+  });
+  const [domainPage, setDomainPage] = React.useState({
+    currentPage: 1,
+    limitPage: 1
+  });
 
   const navigation = useNavigation();
 
@@ -69,8 +81,19 @@ const DiscoveryScreenV2 = ({route}) => {
 
   const fetchDiscoveryData = async (text) => {
     const fetchDiscoveryInitialUsers = async () => {
-      const initialData = await DiscoveryRepo.fetchInitialDiscoveryUsers();
-      DiscoveryAction.setDiscoveryInitialUsers(initialData.suggestedUsers, discoveryDispatch);
+      console.log('masuk sini dong');
+      const initialData = await DiscoveryRepo.fetchInitialDiscoveryUsers(
+        50,
+        parseInt(userPage.currentPage, 10)
+      );
+      setUserPage({
+        currentPage: initialData.page,
+        totalPage: initialData.total_page
+      });
+      DiscoveryAction.setDiscoveryInitialUsers(
+        [...discoveryData.initialUsers, ...initialData.suggestedUsers],
+        discoveryDispatch
+      );
     };
 
     const fetchDiscoveryDataUser = async () => {
@@ -97,9 +120,22 @@ const DiscoveryScreenV2 = ({route}) => {
     };
 
     const fetchDiscoveryInitialDomains = async () => {
-      const initialData = await DiscoveryRepo.fetchInitialDiscoveryDomains();
-      FollowingAction.setFollowingDomain(initialData.suggestedDomains, followingDispatch);
-      DiscoveryAction.setDiscoveryInitialDomains(initialData.suggestedDomains, discoveryDispatch);
+      const initialData = await DiscoveryRepo.fetchInitialDiscoveryDomains(
+        50,
+        parseInt(domainPage.currentPage, 10)
+      );
+      setDomainPage({
+        currentPage: initialData.page,
+        totalPage: initialData.total_page
+      });
+      FollowingAction.setFollowingDomain(
+        [...discoveryData.initialDomains, ...initialData.suggestedDomains],
+        followingDispatch
+      );
+      DiscoveryAction.setDiscoveryInitialDomains(
+        [...discoveryData.initialDomains, ...initialData.suggestedDomains],
+        discoveryDispatch
+      );
     };
 
     const fetchDiscoveryDataDomain = async () => {
@@ -116,8 +152,18 @@ const DiscoveryScreenV2 = ({route}) => {
     };
 
     const fetchDiscoveryInitialTopics = async () => {
-      const initialData = await DiscoveryRepo.fetchInitialDiscoveryTopics();
-      DiscoveryAction.setDiscoveryInitialTopics(initialData.suggestedTopics, discoveryDispatch);
+      const initialData = await DiscoveryRepo.fetchInitialDiscoveryTopics(
+        50,
+        parseInt(topicPage.currentPage, 10)
+      );
+      setTopicPage({
+        currentPage: initialData.page,
+        totalPage: initialData.total_page
+      });
+      DiscoveryAction.setDiscoveryInitialTopics(
+        [...discoveryData.initialTopics, ...initialData.suggestedTopics],
+        discoveryDispatch
+      );
     };
 
     const fetchDiscoveryDataTopic = async () => {
@@ -198,6 +244,7 @@ const DiscoveryScreenV2 = ({route}) => {
           fetchData={fetchDiscoveryData}
           searchText={searchText}
           withoutRecent={route.name === 'Followings'}
+          isUser={true}
         />
       );
 
@@ -298,26 +345,20 @@ const DiscoveryScreenV2 = ({route}) => {
           hideBackIcon
         />
       )}
-      <ScrollView
-        style={styles.fragmentContainer}
-        contentContainerStyle={styles.fragmentContentContainer}
-        keyboardShouldPersistTaps="handled"
-        onMomentumScrollBegin={handleScroll}>
-        {renderFragment()}
-      </ScrollView>
+      {renderFragment()}
     </DiscoveryContainer>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.white,
     flex: 1,
     paddingTop: 60
   },
   fragmentContainer: {
     height: '100%',
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   fragmentContentContainer: {
     // height: '100%'

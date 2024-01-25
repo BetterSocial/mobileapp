@@ -16,6 +16,7 @@ export interface Message {
   text: string;
   html: string;
   type: string;
+  message_type: string;
   user: User;
   attachments: any[];
   latest_reactions: any[];
