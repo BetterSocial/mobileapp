@@ -387,6 +387,10 @@ const TopicPageScreen = (props) => {
     navigation.push('TopicMemberScreen', navigationParam);
   };
 
+  React.useEffect(() => {
+    onRefresh();
+  }, [topicId]);
+
   const renderItem = ({item, index}) => (
     <MemoizedListComponent
       item={item}
