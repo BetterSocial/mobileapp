@@ -40,6 +40,8 @@ class ChannelList implements BaseDbSchema {
 
   members: ChannelListMemberSchema[] | null | undefined;
 
+  memberUsers: UserSchema[] | null | undefined;
+
   anon_user_info_color_code: string | null;
 
   anon_user_info_color_name: string | null;
@@ -62,6 +64,7 @@ class ChannelList implements BaseDbSchema {
     user,
     expiredAt = null,
     members = [],
+    memberUsers = [],
     anon_user_info_color_code = null,
     anon_user_info_color_name = null,
     anon_user_info_emoji_name = null,
@@ -86,6 +89,7 @@ class ChannelList implements BaseDbSchema {
     this.anon_user_info_color_name = anon_user_info_color_name;
     this.anon_user_info_emoji_name = anon_user_info_emoji_name;
     this.anon_user_info_emoji_code = anon_user_info_emoji_code;
+    this.memberUsers = memberUsers;
   }
 
   saveIfNotExist(db: SQLiteDatabase): Promise<void> {
@@ -118,8 +122,8 @@ class ChannelList implements BaseDbSchema {
     myAnonymousId: string
   ): Promise<ChannelList> => {
     const channel = await this.getById(db, channelId);
-    const members = await ChannelListMemberSchema.getAll(db, channelId, myId, myAnonymousId);
-    channel.members = members;
+    const memberUsers = await UserSchema.getAllByChannelId(db, channelId, myId, myAnonymousId);
+    channel.memberUsers = memberUsers;
 
     return ChannelList.fromDatabaseObject(channel);
   };
@@ -410,6 +414,7 @@ class ChannelList implements BaseDbSchema {
       createdAt: json.created_at,
       rawJson: jsonParsed,
       members: json.members,
+      memberUsers: json.memberUsers,
       expiredAt: json.expired_at,
       user,
       anon_user_info_color_code: json?.anon_user_info_color_code,

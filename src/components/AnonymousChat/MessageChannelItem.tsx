@@ -7,10 +7,8 @@ import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {BaseChannelItemTypeProps} from '../../../types/component/AnonymousChat/BaseChannelItem.types';
 import {ChannelList} from '../../../types/database/schema/ChannelList.types';
-import {Context} from '../../context';
 import {MessageChannelItemProps} from '../../../types/component/AnonymousChat/MessageChannelItem.types';
 import {calculateTime} from '../../utils/time';
-import {getChatName} from '../../utils/string/StringUtils';
 
 const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement = ({
   item,
@@ -39,7 +37,6 @@ const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement
   };
 
   const {handleTextSystem} = useChatUtilsHook();
-  const [profile] = (React.useContext(Context) as unknown as any).profile;
   const type = determineChatType(item);
   const isMe = checkIsMe(item, type);
 
@@ -56,7 +53,7 @@ const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement
     <BaseChannelItem
       type={type}
       message={handleTextSystem(item)}
-      name={getChatName(item?.name, profile?.myProfile?.username)}
+      name={item?.name}
       picture={item?.channelPicture}
       postMaker={item?.rawJson}
       time={calculateTime(item?.lastUpdatedAt, true)}

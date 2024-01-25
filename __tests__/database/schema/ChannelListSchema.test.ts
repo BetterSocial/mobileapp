@@ -226,8 +226,8 @@ describe('TESTING ChannelListSchema', () => {
         channel_type: 'channelType'
       });
 
-      ChannelListMemberSchema.getAll = jest.fn().mockResolvedValueOnce([]);
       UserSchema.fromDatabaseObject = jest.fn().mockResolvedValueOnce(null);
+      UserSchema.getAllByChannelId = jest.fn().mockResolvedValueOnce([]);
 
       // Execution
       const result = await ChannelList.getChannelInfo(mockDb, 'channelId', 'myId', 'myAnonymousId');
@@ -235,13 +235,7 @@ describe('TESTING ChannelListSchema', () => {
       // Assertion
       expect(ChannelList.getById).toHaveBeenCalledTimes(1);
       expect(ChannelList.getById).toHaveBeenCalledWith(mockDb, 'channelId');
-      expect(ChannelListMemberSchema.getAll).toHaveBeenCalledTimes(1);
-      expect(ChannelListMemberSchema.getAll).toHaveBeenCalledWith(
-        mockDb,
-        'channelId',
-        'myId',
-        'myAnonymousId'
-      );
+      expect(UserSchema.getAllByChannelId).toHaveBeenCalledTimes(1);
       expect(result).toEqual(expect.objectContaining(fromDatabaseObjectExpectation));
     });
   });
