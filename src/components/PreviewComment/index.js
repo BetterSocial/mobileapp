@@ -44,7 +44,7 @@ const PreviewComment = ({comment, time, image, totalComment, onPress, user, item
           <View style={styles.profile}>
             {item?.data?.anon_user_info_emoji_name || item?.data?.is_anonymous ? (
               <ProfilePicture
-                karmaScore={item.data.karmaScores}
+                karmaScore={item.karma_score}
                 size={25}
                 width={6}
                 withKarma
@@ -54,7 +54,7 @@ const PreviewComment = ({comment, time, image, totalComment, onPress, user, item
               />
             ) : (
               <ProfilePicture
-                karmaScore={item.karmaScores}
+                karmaScore={item.karma_score}
                 profilePicPath={image || require('../../assets/images/ProfileDefault.png')}
                 size={25}
                 width={6}
