@@ -138,11 +138,7 @@ const WriteComment = ({
           </TouchableOpacity>
         ) : (
           <View style={styles.isViewOnlyIcon}>
-            <SendIcon
-              fillBackground={
-                !isCommentEnabled || loadingUser ? COLORS.gray : COLORS.signed_primary
-              }
-            />
+            <SendIcon type={CHAT_SIGNED} />
           </View>
         )}
       </View>

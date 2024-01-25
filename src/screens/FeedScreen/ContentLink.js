@@ -100,9 +100,10 @@ export default ContentLink;
 
 const styles = StyleSheet.create({
   contentFeed: (hasComment) => ({
-    flex: hasComment ? 1 : 'none',
+    flex: hasComment ? 1 : 0,
     marginHorizontal: 6,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.white,
+    marginBottom: hasComment ? 0 : normalizeFontSizeByWidth(16)
   }),
   messageContainer: {
     paddingHorizontal: 20,
