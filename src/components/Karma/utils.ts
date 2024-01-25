@@ -1,6 +1,6 @@
 export const renderCircleColor = (karma: number) => {
   if (karma > 87.5) {
-    return ['#50BA57', '#C7EECA', '#50BA57'];
+    return ['#50B104', '#96EE85', '#50B104'];
   }
   if (karma > 75) {
     return ['#70BF21', '#B3E57F', '#70BF21'];
