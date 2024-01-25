@@ -272,6 +272,7 @@ const DomainFragment = ({
         renderItem={renderItemList}
         onEndReached={() => fetchData()}
         onEndReachedThreshold={0.6}
+        keyboardShouldPersistTaps="handled"
       />
     );
   };

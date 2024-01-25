@@ -72,7 +72,6 @@ const styles = StyleSheet.create({
     marginTop: dimen.normalizeDimen(7)
   },
   button: {
-    marginTop: 33,
     backgroundColor: COLORS.signed_primary
   },
   textStyling: {
