@@ -267,7 +267,7 @@ const useGroupInfo = () => {
       id: profile?.myProfile?.user_id
     };
     const token = TokenStorage.get(ITokenEnum.token);
-    await setOpenModal(false);
+    setOpenModal(false);
     try {
       await client.client.connectUser(user, token);
       const filterMessage = await client.client.queryChannels(filter, sort, {
@@ -336,6 +336,7 @@ const useGroupInfo = () => {
       setIsLoadingInitChat(true);
       await handleAnonymousMessage(selectedUser);
     } catch (e) {
+      console.info('error anon', e);
     } finally {
       setIsLoadingInitChat(false);
       setOpenModal(false);
@@ -355,9 +356,9 @@ const useGroupInfo = () => {
       Alert.alert(
         null,
         `Are you sure you want to remove ${
-          selectedUser.user.name || selectedUser?.user?.username
+          selectedUser.user.name || selectedUser?.user?.username || selectedUser.username
         } from this group? We will let the group know that you removed ${
-          selectedUser.user.name || selectedUser?.user?.username
+          selectedUser.user.name || selectedUser?.user?.username || selectedUser.username
         }.`,
         [{text: 'Yes - remove', onPress: () => onRemoveUser()}, {text: 'Cancel'}]
       );
@@ -439,7 +440,7 @@ const useGroupInfo = () => {
         data: {
           user_id: profile.myProfile.user_id,
           other_id: item?.user_id || item?.userId,
-          username: item?.user?.name || item?.user?.username
+          username: item?.user?.name || item?.user?.username || item.username
         }
       });
     }, 500);
