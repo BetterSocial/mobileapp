@@ -54,7 +54,8 @@ const ChannelImage = ({
       borderColor: COLORS.white,
       display: 'flex',
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
+      backgroundColor: COLORS.anon_primary
     },
     myPostNotificationImageContainer: {
       backgroundColor: isAnonymousTab ? COLORS.anon_primary : COLORS.signed_primary
