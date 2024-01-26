@@ -46,28 +46,25 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.anon_primary
   },
   textContainer: {
-    paddingLeft: BUBBLE_LEFT_PADDING,
+    paddingLeft: BUBBLE_LEFT_PADDING + BUBBLE_LEFT_PADDING,
     paddingRight: BUBBLE_RIGHT_PADDING,
     paddingTop: 4,
     paddingBottom: 4,
-    borderRadius: 8,
+    borderRadius: 12,
     borderTopEndRadius: 0,
     flex: 1
   },
-  textContainerNewLine: {
-    paddingBottom: 14
-  },
+  textContainerNewLine: {},
   userText: {
     fontFamily: fonts.inter[600],
     fontSize: 12,
-    lineHeight: 19.36,
+    lineHeight: 18,
     color: COLORS.white
   },
   text: {
     fontFamily: fonts.inter[400],
     fontSize: 16,
-    lineHeight: 19.36,
-    marginBottom: 4,
+    lineHeight: 24,
     color: COLORS.white
   },
   avatar: {
@@ -201,7 +198,7 @@ const ChatItemMyTextV2 = ({
   }, []);
 
   const renderAvatar = React.useCallback(() => {
-    if (isContinuous) return <View style={styles.avatar} />;
+    if (isContinuous) return <View style={[styles.avatar, styles.ml8]} />;
     return <View style={styles.ml8}>{avatar}</View>;
   }, []);
 
