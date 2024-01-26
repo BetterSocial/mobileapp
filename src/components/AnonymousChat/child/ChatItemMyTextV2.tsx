@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
     paddingTop: 4,
     paddingBottom: 4,
     borderRadius: 12,
+    borderTopEndRadius: 0,
     flex: 1
   },
   textContainerNewLine: {},
@@ -209,25 +210,9 @@ const ChatItemMyTextV2 = ({
 
   const handleTextContainerStyle = () => {
     if (chatType === SIGNED) {
-      return [
-        styles.containerSigned,
-        styles.textContainer,
-        isContinuous
-          ? {}
-          : {
-              borderTopEndRadius: 0
-            }
-      ];
+      return [styles.containerSigned, styles.textContainer];
     }
-    return [
-      styles.containerAnon,
-      styles.textContainer,
-      isContinuous
-        ? {}
-        : {
-            borderTopEndRadius: 0
-          }
-    ];
+    return [styles.containerAnon, styles.textContainer];
   };
 
   const onOpenMediaPreview = (medias, index, navigationLocal) => {
