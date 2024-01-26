@@ -101,7 +101,13 @@ const styles = StyleSheet.create({
     right: 8
   },
   ml8: {
+    marginLeft: 8
+  },
+  marginNonContinuous: {
     marginLeft: 4
+  },
+  marginContinuous: {
+    marginLeft: 5
   },
   attachmentContainer: {
     width: '100%',
@@ -197,8 +203,8 @@ const ChatItemMyTextV2 = ({
   }, []);
 
   const renderAvatar = React.useCallback(() => {
-    if (isContinuous) return <View style={[styles.avatar, styles.ml8]} />;
-    return <View style={styles.ml8}>{avatar}</View>;
+    if (isContinuous) return <View style={[styles.avatar, styles.marginContinuous]} />;
+    return <View style={styles.marginNonContinuous}>{avatar}</View>;
   }, []);
 
   const handleTextContainerStyle = () => {
