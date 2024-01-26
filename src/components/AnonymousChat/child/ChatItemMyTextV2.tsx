@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     right: 8
   },
   ml8: {
-    marginLeft: 8
+    marginLeft: 4
   },
   attachmentContainer: {
     width: '100%',

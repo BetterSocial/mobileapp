@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   mr8: {
-    marginRight: 8
+    marginRight: 4
   }
 });
 
