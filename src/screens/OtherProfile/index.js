@@ -322,12 +322,12 @@ const OtherProfile = () => {
         <View
           style={{
             ...styles.btnMsg(isAnonimity),
-            borderColor: isAnonimity ? COLORS.anon_primary : COLORS.signed_primary
+            borderColor: isAnonimity ? COLORS.anon_primary : COLORS.gray400
           }}>
           <BlockIcon
             width={20}
             height={20}
-            style={{color: isAnonimity ? COLORS.anon_primary : COLORS.signed_primary}}
+            style={{color: isAnonimity ? COLORS.anon_primary : COLORS.gray400}}
           />
         </View>
       );
@@ -370,7 +370,7 @@ const OtherProfile = () => {
       if (user_id === dataMain.user_id) return <></>;
       if (dataMain.is_following)
         return (
-          <GlobalButton onPress={() => handleSetUnFollow()}>
+          <GlobalButton buttonStyle={{paddingLeft: 0}} onPress={() => handleSetUnFollow()}>
             <View style={styles.buttonFollowing(isAnonimity)}>
               <Text style={styles.textButtonFollowing(isAnonimity)}>Following</Text>
             </View>
@@ -378,7 +378,7 @@ const OtherProfile = () => {
         );
 
       return (
-        <GlobalButton onPress={() => handleSetFollow()}>
+        <GlobalButton buttonStyle={{paddingLeft: 0}} onPress={() => handleSetFollow()}>
           <View style={styles.buttonFollow(isAnonimity)}>
             <Text style={styles.textButtonFollow}>Follow</Text>
           </View>
@@ -386,31 +386,9 @@ const OtherProfile = () => {
       );
     };
 
-    const onCreateChat = () => {
-      const channelName = [username, profile?.myProfile?.username].join(',');
-
-      const selectedUser = {
-        user: {
-          name: channelName,
-          image: dataMain.profile_pic_path ?? DEFAULT_PROFILE_PIC_PATH
-        }
-      };
-      const members = [other_id, profile.myProfile.user_id];
-      createSignChat(members, selectedUser);
-    };
-
     const __renderMessageAndFollowButtonGroup = () => {
       if (blockStatus.blocker) return <></>;
-      return (
-        <React.Fragment>
-          {__renderFollowingButton()}
-          <GlobalButton onPress={onCreateChat}>
-            <View style={styles.btnMsg(isAnonimity)}>
-              <EnvelopeIcon color={isAnonimity ? COLORS.anon_primary : COLORS.signed_primary} />
-            </View>
-          </GlobalButton>
-        </React.Fragment>
-      );
+      return <React.Fragment>{__renderFollowingButton()}</React.Fragment>;
     };
 
     if (blockStatus.blocked) return <></>;
@@ -428,10 +406,10 @@ const OtherProfile = () => {
 
           <View>
             <View style={styles.rightHeaderContentContainer}>
+              {__renderMessageAndFollowButtonGroup()}
               <GlobalButton buttonStyle={{paddingLeft: 0}} onPress={onBlockReaction}>
                 {__renderBlockIcon()}
               </GlobalButton>
-              {__renderMessageAndFollowButtonGroup()}
             </View>
             {__renderFollowerDetail()}
           </View>
@@ -784,7 +762,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[800],
     fontWeight: 'bold',
     fontSize: 14,
-    color: isAnon ? COLORS.anon_primary : COLORS.signed_primary,
+    color: COLORS.black,
     paddingRight: 4
   }),
   textFollow: {
