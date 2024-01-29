@@ -27,7 +27,7 @@ import CustomPressable from '../../components/CustomPressable';
 import PostOptionModal from '../../components/Modal/PostOptionModal';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {Context} from '../../context';
-import {setFeedByIndex} from '../../context/actions/feeds';
+import {setFeedByIndex, setTimer} from '../../context/actions/feeds';
 import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
 import {setMyProfileAction} from '../../context/actions/setMyProfileAction';
 import useResetContext from '../../hooks/context/useResetContext';
@@ -48,9 +48,14 @@ import {
   updateBioProfile,
   updateImageProfile
 } from '../../service/profile';
-import {deleteAnonymousPost, deletePost} from '../../service/post';
+import {deleteAnonymousPost, deletePost, viewTimePost} from '../../service/post';
 import {downVote, upVote} from '../../service/vote';
-import {DEFAULT_PROFILE_PIC_PATH, SOURCE_MY_PROFILE} from '../../utils/constants';
+import {
+  DEFAULT_PROFILE_PIC_PATH,
+  NavigationConstants,
+  SOURCE_FEED_TAB,
+  SOURCE_MY_PROFILE
+} from '../../utils/constants';
 import dimen from '../../utils/dimen';
 import {fonts} from '../../utils/fonts';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
@@ -74,6 +79,7 @@ import ProfileHeader from './elements/ProfileHeader';
 import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
 import ImageCompressionUtils from '../../utils/image/compress';
+import {KarmaLock} from './elements/KarmaLock';
 
 const {width} = Dimensions.get('screen');
 
@@ -91,7 +97,18 @@ const Header = (props) => {
     setTabIndexToSigned,
     setTabIndexToAnonymous
   } = props;
+  const navigator = useNavigation();
+  const [feedsContext, dispatch] = React.useContext(Context).feeds;
 
+  const {feeds, timer, viewPostTimeIndex} = feedsContext;
+  // eslint-disable-next-line no-underscore-dangle
+  const handleOnAddPostButtonClicked = () => {
+    const currentTime = new Date().getTime();
+    const id = feeds && feeds[viewPostTimeIndex]?.id;
+    if (id) viewTimePost(id, currentTime - timer.getTime(), SOURCE_FEED_TAB);
+    navigator.navigate(NavigationConstants.CREATE_POST_SCREEN);
+    setTimer(new Date(), dispatch);
+  };
   return (
     <View
       onLayout={(event) => {
@@ -99,21 +116,26 @@ const Header = (props) => {
         headerHeightRef.current = headerHeightLayout;
       }}>
       <View style={styles.content}>
-        <View style={{flexDirection: 'row', alignContent: 'center', alignItems: 'center'}}>
+        <View style={{flexDirection: 'row'}}>
           <ProfilePicture
             onImageContainerClick={changeImage}
             profilePicPath={dataMain.profile_pic_path}
             karmaScore={dataMain.karma_score}
             withKarma={true}
+            size={!dataMain.is_karma_unlocked ? 48 : undefined}
+            width={!dataMain.is_karma_unlocked ? 4 : undefined}
           />
           <View
             style={{
               flexDirection: 'column',
               paddingHorizontal: 14,
-              paddingVertical: 5,
               justifyContent: 'center'
             }}>
-            <KarmaScore score={Math.floor(dataMain.karma_score)} />
+            {dataMain.is_karma_unlocked ? (
+              <KarmaScore score={Math.floor(dataMain.karma_score)} />
+            ) : (
+              <KarmaLock onPressCreatePost={handleOnAddPostButtonClicked} />
+            )}
             <FollowInfoRow
               follower={dataMain.follower_symbol}
               following={dataMain.following_symbol}
@@ -739,7 +761,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     paddingHorizontal: 20,
     backgroundColor: COLORS.white,
-    marginTop: 14
+    paddingVertical: 11
   },
   dummyItem: (heightItem) => ({
     height: heightItem,

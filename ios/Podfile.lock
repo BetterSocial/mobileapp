@@ -568,7 +568,7 @@ PODS:
     - React-perflogger (= 0.64.4)
   - RNCAsyncStorage (1.18.1):
     - React-Core
-  - RNCCheckbox (0.5.15):
+  - RNCCheckbox (0.5.17):
     - BEMCheckBox (~> 1.4)
     - React-Core
   - RNCClipboard (1.11.2):
@@ -997,7 +997,7 @@ SPEC CHECKSUMS:
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: fa8275d5086566e22a26ddc385ab5772e7f9b1bd
-  FBReactNativeSpec: aa44d92c34f72aaacf136ad2a6f9a380db103bb8
+  FBReactNativeSpec: 67b2d6bbfc2d9d96dbbf28ccd1a4a2a97c04a29f
   Firebase: fffddd0bab8677d07376538365faa93ff3889b39
   FirebaseABTesting: e66f1f80747792630d9b292966de206d5df9853b
   FirebaseAnalytics: 4641d7ae4220174f6ca5626163ffc5de2e90391e
@@ -1081,7 +1081,7 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 5b441857030bb6c3abaa7517f333cb01875ae499
   ReactCommon: b4a65d2d6e9eeffd4b32dde1245962b3f43907d0
   RNCAsyncStorage: b90b71f45b8b97be43bc4284e71a6af48ac9f547
-  RNCCheckbox: 43bcc6493611468af0e19f19f029dab3da8561c4
+  RNCCheckbox: a3ca9978cb0846b981d28da4e9914bd437403d77
   RNCClipboard: 3f0451a8100393908bea5c5c5b16f96d45f30bfc
   RNCPicker: 0bc2f0a29abcca7b7ed44a2d036aac9ab6d25700
   RNCPushNotificationIOS: 64218f3c776c03d7408284a819b2abfda1834bc8
