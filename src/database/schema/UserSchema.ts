@@ -199,7 +199,6 @@ class UserSchema implements BaseDbSchema {
       const query = `SELECT * FROM ${UserSchema.getTableName()} WHERE user_id = ? AND channel_id = ? LIMIT 1`;
       tx.executeSql(query, [this.userId, this.channelId], (isExistsTx, results) => {
         const isExists = results?.rows?.length > 0;
-        console.log('isExists', this.userId, isExists);
         if (isExists) {
           this.update(db, isExistsTx);
         } else {
