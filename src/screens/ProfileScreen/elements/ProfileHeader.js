@@ -78,9 +78,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 12,
-    paddingLeft: 20,
-    paddingRight: 20
+    paddingVertical: 10,
+    paddingHorizontal: 20
   },
   textUsername: {
     fontFamily: fonts.inter[800],
