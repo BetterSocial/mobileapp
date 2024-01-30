@@ -2,13 +2,12 @@
 import * as React from 'react';
 import {Text, View, StyleSheet, TouchableOpacity, Pressable, Platform} from 'react-native';
 import ToastMessage from 'react-native-toast-message';
-import CheckBox, {CheckBoxBase} from '@react-native-community/checkbox';
-import TextAreaChat from '../../../components/TextAreaChat';
-import ToggleSwitch from '../../../components/ToggleSwitch';
+import CheckBox from '@react-native-community/checkbox';
 import {profileSettingsDMpermission} from '../../../service/profile';
 import {addDotAndRemoveNewline} from '../../../utils/string/TrimString';
 import {COLORS} from '../../../utils/theme';
 import {PencilIcon} from '../../../assets';
+import {Divider} from '../../../components/Divider';
 
 type BioAndDMSettingProps = {
   bio: string;
@@ -135,7 +134,11 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
             </View>
           </Pressable>
         </View>
-        <View style={[styles.horizontalLine, {marginVertical: 12}]} />
+        <Divider
+          style={{
+            marginVertical: 12
+          }}
+        />
         <Text style={styles.bioText}>{addDotAndRemoveNewline(bio)}</Text>
       </View>
       <View
@@ -171,12 +174,7 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
 
         {isAnonymity && (
           <>
-            <View
-              style={[
-                styles.horizontalLine,
-                {marginTop: 6, marginBottom: 6, backgroundColor: COLORS.gray}
-              ]}
-            />
+            <Divider style={{marginVertical: 12, backgroundColor: COLORS.gray}} />
             <TouchableOpacity onPress={toggleSwitchAnonAllowFollowing}>
               <CheckBoxCustom
                 value={isAllowFollowingSendDM}
@@ -219,11 +217,6 @@ const styles = StyleSheet.create({
     fontWeight: Platform.OS === 'android' ? '700' : '600',
     lineHeight: 22,
     marginBottom: 12
-  },
-  horizontalLine: {
-    width: '100%',
-    height: 0.5,
-    backgroundColor: COLORS.white
   }
 });
 
