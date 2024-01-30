@@ -51,7 +51,7 @@ const ProfilePicture = ({
                   style={styles.profileImage(size, width)}
                   source={{
                     uri: profilePicPath ? `${profilePicPath}` : DEFAULT_PROFILE_PIC_PATH,
-                    cache: 'cacheOnly'
+                    cache: 'web'
                   }}
                   resizeMode={FastImage.resizeMode.stretch}
                   loadingIndicatorSource={
@@ -85,7 +85,8 @@ const ProfilePicture = ({
                   testId="images"
                   style={styles.profileImage(size, width)}
                   source={{
-                    uri: profilePicPath ? `${profilePicPath}` : DEFAULT_PROFILE_PIC_PATH
+                    uri: profilePicPath ? `${profilePicPath}` : DEFAULT_PROFILE_PIC_PATH,
+                    cache: 'web'
                   }}
                   resizeMode={FastImage.resizeMode.stretch}
                 />
