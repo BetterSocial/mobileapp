@@ -1,17 +1,17 @@
 import * as React from 'react';
-import FastImage from 'react-native-fast-image';
 import {StyleSheet, View} from 'react-native';
+import FastImage from 'react-native-fast-image';
 
+import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
+import {AnonUserInfo} from '../../../../types/service/AnonProfile.type';
+import ChatIcon from '../../../assets/chat-icon.png';
 import AnonymousProfile from '../../../assets/images/AnonymousProfile.png';
+import FeedIcon from '../../../assets/images/feed-icon.png';
+import useProfileHook from '../../../hooks/core/profile/useProfileHook';
+import dimen from '../../../utils/dimen';
+import {COLORS} from '../../../utils/theme';
 import ChannelAnonymousImage from './ChannelAnonymousImage';
 import ChannelAnonymousSubImage from './ChannelAnonymousSubImage';
-import ChatIcon from '../../../assets/chat-icon.png';
-import FeedIcon from '../../../assets/images/feed-icon.png';
-import dimen from '../../../utils/dimen';
-import useProfileHook from '../../../hooks/core/profile/useProfileHook';
-import {AnonUserInfo} from '../../../../types/service/AnonProfile.type';
-import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
-import {COLORS} from '../../../utils/theme';
 
 export type ChannelImageProps = {
   mainPicture?: string;
@@ -212,7 +212,7 @@ const ChannelImage = ({
   if (type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_COMMENTED_ANONYMOUSLY) {
     return (
       <View>
-        <FastImage source={AnonymousProfile} style={styles.image} />
+        {renderMainImage()}
         <ChannelAnonymousSubImage
           anonPostNotificationUserInfo={{
             anon_user_info_emoji_code: anonPostNotificationUserInfo?.anon_user_info_emoji_code,
@@ -238,7 +238,7 @@ const ChannelImage = ({
   if (type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION) {
     return (
       <View>
-        <FastImage source={AnonymousProfile} style={styles.image} />
+        {renderMainImage()}
         <View style={[styles.postNotificationImage, styles.myPostNotificationImageContainer]}>
           <FastImage source={FeedIcon} style={styles.postNotificationIcon} />
         </View>
