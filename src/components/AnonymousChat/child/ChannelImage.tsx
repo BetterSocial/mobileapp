@@ -1,6 +1,6 @@
 import * as React from 'react';
 import FastImage from 'react-native-fast-image';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 
 import AnonymousProfile from '../../../assets/images/AnonymousProfile.png';
 import ChannelAnonymousImage from './ChannelAnonymousImage';
@@ -212,7 +212,7 @@ const ChannelImage = ({
   if (type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_COMMENTED_ANONYMOUSLY) {
     return (
       <View>
-        <FastImage source={AnonymousProfile} style={styles.image} />
+        {renderMainImage()}
         <ChannelAnonymousSubImage
           anonPostNotificationUserInfo={{
             anon_user_info_emoji_code: anonPostNotificationUserInfo?.anon_user_info_emoji_code,
