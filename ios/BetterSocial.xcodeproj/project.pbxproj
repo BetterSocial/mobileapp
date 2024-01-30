@@ -17,6 +17,7 @@
 		2DCD954D1E0B4F2C00145EB5 /* BetterSocialTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* BetterSocialTests.m */; };
 		2E7357E3EDC718B14778FD80 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		4072C477AE4EC446CE0FC74E /* libPods-BetterSocial-BetterSocialTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E98032BA201E20EFF47E4C1 /* libPods-BetterSocial-BetterSocialTests.a */; };
+		7EAF2EB0E5E7C358CDFD8010 /* libPods-BetterSocial-BetterSocialDev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CF9A78C5188BE5F9C88048B0 /* libPods-BetterSocial-BetterSocialDev.a */; };
 		845147C0275632A000F1BF16 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		845147C1275632B300F1BF16 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		845C6E802758AFC500C9F384 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DD32758A00C00C9F384 /* Inter-Regular.ttf */; };
@@ -135,11 +136,10 @@
 		88BB6015299BC09D003FA042 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 88BB6014299BC09D003FA042 /* GoogleService-Info.plist */; };
 		88BB6018299BC0B3003FA042 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 88BB6016299BC0AF003FA042 /* GoogleService-Info.plist */; };
 		8DF077F7A73624EEB4761544 /* libPods-BetterSocial-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B880C1B4F2562553E5710094 /* libPods-BetterSocial-tvOSTests.a */; };
-		92D8142362E828E0BFD1A9D0 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		A9ADC797285210C022CAFDB1 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F21D279A76EF30062BAF3FA4 /* libPods-OneSignalNotificationServiceExtension.a */; };
 		E97154A42976870A0021A505 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		E97154A52976870B0021A505 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		FD367AE1785F0F10ECF31D7B /* libPods-BetterSocial-BetterSocialDev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7125237D9815EC140E28774A /* libPods-BetterSocial-BetterSocialDev.a */; };
+		FD367AE1785F0F10ECF31D7B /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -269,6 +269,7 @@
 		C4AE09062AC43A4800E13758 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C6006FE7A8A24EA9B9162F27 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		CD39DC6CD0BE404FAF9761AD /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
+		CF9A78C5188BE5F9C88048B0 /* libPods-BetterSocial-BetterSocialDev.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BetterSocial-BetterSocialDev.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1F34D050FFD4FA4B200601C /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		D6FBEFF7985977EAA274C44D /* Pods-BetterSocial-BetterSocialStaging.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BetterSocial-BetterSocialStaging.release.xcconfig"; path = "Target Support Files/Pods-BetterSocial-BetterSocialStaging/Pods-BetterSocial-BetterSocialStaging.release.xcconfig"; sourceTree = "<group>"; };
 		DA317CDC643EBF5701E6A7B8 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
@@ -331,7 +332,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FD367AE1785F0F10ECF31D7B /* libPods-BetterSocial-BetterSocialDev.a in Frameworks */,
+				FD367AE1785F0F10ECF31D7B /* BuildFile in Frameworks */,
+				7EAF2EB0E5E7C358CDFD8010 /* libPods-BetterSocial-BetterSocialDev.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -399,6 +401,7 @@
 				A60CCBC9606E354E38EB1DF3 /* libPods-BetterSocial-tvOS.a */,
 				B880C1B4F2562553E5710094 /* libPods-BetterSocial-tvOSTests.a */,
 				F21D279A76EF30062BAF3FA4 /* libPods-OneSignalNotificationServiceExtension.a */,
+				CF9A78C5188BE5F9C88048B0 /* libPods-BetterSocial-BetterSocialDev.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
