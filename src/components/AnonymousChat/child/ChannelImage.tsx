@@ -238,7 +238,7 @@ const ChannelImage = ({
   if (type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION) {
     return (
       <View>
-        <FastImage source={AnonymousProfile} style={styles.image} />
+        {renderMainImage()}
         <View style={[styles.postNotificationImage, styles.myPostNotificationImageContainer]}>
           <FastImage source={FeedIcon} style={styles.postNotificationIcon} />
         </View>
