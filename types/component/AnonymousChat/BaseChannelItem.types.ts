@@ -1,3 +1,5 @@
+import {AnonUserInfo} from '../../service/AnonProfile.type';
+
 /* eslint-disable no-shadow */
 export enum BaseChannelItemTypeProps {
   SIGNED_PM = 'SIGNED_PM',
@@ -26,6 +28,7 @@ export enum BaseChannelItemTypeProps {
 
 export interface BaseChannelItemProps {
   anonPostNotificationUserInfo?: any;
+  dbAnonUserInfo: AnonUserInfo;
   block?: number;
   comments?: number;
   downvote?: number;

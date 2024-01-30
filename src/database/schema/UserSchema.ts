@@ -25,9 +25,17 @@ class UserSchema implements BaseDbSchema {
 
   bio: string;
 
-  isBanned: boolean;
+  isBanned: boolean | null;
 
   isMe: boolean;
+
+  anon_user_info_emoji_name: string | null;
+
+  anon_user_info_emoji_code: string | null;
+
+  anon_user_info_color_name: string | null;
+
+  anon_user_info_color_code: string | null;
 
   constructor({
     id,
@@ -41,7 +49,11 @@ class UserSchema implements BaseDbSchema {
     profilePicture,
     bio,
     isBanned,
-    isMe = false
+    isMe = false,
+    anon_user_info_emoji_name = null,
+    anon_user_info_emoji_code = null,
+    anon_user_info_color_name = null,
+    anon_user_info_color_code = null
   }) {
     this.userId = userId;
     this.username = username;
@@ -55,6 +67,10 @@ class UserSchema implements BaseDbSchema {
     this.isMe = isMe;
     this.id = id;
     this.channelId = channelId;
+    this.anon_user_info_emoji_name = anon_user_info_emoji_name;
+    this.anon_user_info_emoji_code = anon_user_info_emoji_code;
+    this.anon_user_info_color_name = anon_user_info_color_name;
+    this.anon_user_info_color_code = anon_user_info_color_code;
   }
 
   save = async (db: SQLiteDatabase, transaction?: Transaction): Promise<void> => {
@@ -71,8 +87,12 @@ class UserSchema implements BaseDbSchema {
         last_active_at,
         profile_picture,
         bio,
-        is_banned
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+        is_banned,
+        anon_user_info_emoji_name,
+        anon_user_info_emoji_code,
+        anon_user_info_color_name,
+        anon_user_info_color_code
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
 
       const prepReplacement = [
         this.id,
@@ -85,7 +105,11 @@ class UserSchema implements BaseDbSchema {
         this.lastActiveAt,
         this.profilePicture,
         this.bio,
-        this.isBanned
+        this.isBanned,
+        this.anon_user_info_emoji_name,
+        this.anon_user_info_emoji_code,
+        this.anon_user_info_color_name,
+        this.anon_user_info_color_code
       ];
 
       if (transaction) {
@@ -111,7 +135,11 @@ class UserSchema implements BaseDbSchema {
         last_active_at = ?,
         profile_picture = ?,
         bio = ?,
-        is_banned = ?
+        is_banned = ?,
+        anon_user_info_emoji_name = ?,
+        anon_user_info_emoji_code = ?,
+        anon_user_info_color_name = ?,
+        anon_user_info_color_code = ?
       WHERE
         channel_id = ? AND user_id = ?`;
 
@@ -126,6 +154,10 @@ class UserSchema implements BaseDbSchema {
         this.profilePicture,
         this.bio,
         this.isBanned,
+        this.anon_user_info_emoji_name,
+        this.anon_user_info_emoji_code,
+        this.anon_user_info_color_name,
+        this.anon_user_info_color_code,
         this.channelId,
         this.userId
       ];
@@ -175,12 +207,54 @@ class UserSchema implements BaseDbSchema {
       });
     };
 
-    db.transaction(resolver);
+    try {
+      db.transaction(resolver);
+    } catch (e) {
+      console.log('error resolver', e);
+    }
   };
+
+  static async getSelfAnonUserInfo(
+    db: SQLiteDatabase,
+    selfAnonUserId: string,
+    channelId: string
+  ): Promise<UserSchema> {
+    const [results] = await db.executeSql(
+      `SELECT * FROM ${UserSchema.getTableName()} WHERE channel_id = ? AND user_id = ? LIMIT 1`,
+      [channelId, selfAnonUserId]
+    );
+    return results.rows.raw().map((dbObject) => this.fromDatabaseObject(dbObject))[0];
+  }
 
   static async getAll(db: SQLiteDatabase): Promise<UserSchema[]> {
     const [results] = await db.executeSql(`SELECT * FROM ${UserSchema.getTableName()}`);
     return results.rows.raw().map((dbObject) => this.fromDatabaseObject(dbObject));
+  }
+
+  static async getAllByChannelId(
+    db: SQLiteDatabase,
+    channelId: string,
+    selfSignedUserId: string,
+    selfAnonUserId: string
+  ): Promise<UserSchema[]> {
+    const query = `
+    SELECT
+      B.*,
+      CASE B.user_id 
+          WHEN ? THEN true
+          WHEN ? THEN true
+          ELSE FALSE END AS is_me
+    FROM users B
+    WHERE B.channel_id = ?`;
+
+    const selectParams = [selfSignedUserId, selfAnonUserId, channelId];
+
+    try {
+      const [results] = await db.executeSql(query, selectParams);
+      return Promise.resolve(results.rows.raw().map(this.fromDatabaseObject));
+    } catch (e) {
+      return Promise.reject(e);
+    }
   }
 
   static getTableName(): string {
@@ -200,7 +274,11 @@ class UserSchema implements BaseDbSchema {
       profilePicture: dbObject.profile_picture,
       bio: dbObject.bio,
       isBanned: dbObject.is_banned,
-      isMe: dbObject.is_me
+      isMe: dbObject.is_me,
+      anon_user_info_color_code: dbObject.anon_user_info_color_code,
+      anon_user_info_color_name: dbObject.anon_user_info_color_name,
+      anon_user_info_emoji_code: dbObject.anon_user_info_emoji_code,
+      anon_user_info_emoji_name: dbObject.anon_user_info_emoji_name
     });
   }
 
@@ -221,19 +299,44 @@ class UserSchema implements BaseDbSchema {
   }
 
   static fromMemberWebsocketObject(json: any, channelId: string): UserSchema {
-    return new UserSchema({
-      id: uuidv4(),
-      channelId,
-      userId: json?.user?.id,
-      username: json?.user?.name,
-      countryCode: '',
-      createdAt: json?.user?.created_at,
-      updatedAt: json?.updated_at,
-      lastActiveAt: json?.user?.last_active,
-      profilePicture: json?.user?.image,
-      bio: '',
-      isBanned: json?.banned
-    });
+    try {
+      return new UserSchema({
+        id: uuidv4(),
+        channelId,
+        userId: json?.user?.id,
+        username: json?.user?.name,
+        countryCode: '',
+        createdAt: json?.user?.created_at,
+        updatedAt: json?.updated_at,
+        lastActiveAt: json?.user?.last_active,
+        profilePicture: json?.user?.image,
+        bio: '',
+        isBanned: json?.banned,
+        anon_user_info_color_code: json?.anon_user_info_color_code,
+        anon_user_info_color_name: json?.anon_user_info_color_name,
+        anon_user_info_emoji_code: json?.anon_user_info_emoji_code,
+        anon_user_info_emoji_name: json?.anon_user_info_emoji_name
+      });
+    } catch (e) {
+      console.log('error on fromMemberWebsocketObject', e);
+      return new UserSchema({
+        id: uuidv4(),
+        channelId,
+        userId: null,
+        username: null,
+        countryCode: null,
+        createdAt: null,
+        updatedAt: null,
+        lastActiveAt: null,
+        profilePicture: null,
+        bio: null,
+        isBanned: null,
+        anon_user_info_color_code: null,
+        anon_user_info_color_name: null,
+        anon_user_info_emoji_code: null,
+        anon_user_info_emoji_name: null
+      });
+    }
   }
 
   static fromInitAnonymousChatAPI(
@@ -251,7 +354,11 @@ class UserSchema implements BaseDbSchema {
       profilePicture: object?.profile_pic_path,
       updatedAt: object?.updated_at,
       username: object?.username,
-      isBanned: object?.is_banned
+      isBanned: object?.is_banned,
+      anon_user_info_color_code: object?.anon_user_info_color_code,
+      anon_user_info_color_name: object?.anon_user_info_color_name,
+      anon_user_info_emoji_code: object?.anon_user_info_emoji_code,
+      anon_user_info_emoji_name: object?.anon_user_info_emoji_name
     });
   }
 

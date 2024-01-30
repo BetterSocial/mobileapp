@@ -1,48 +1,46 @@
+import * as React from 'react';
 /* eslint-disable react/display-name */
 import NetInfo from '@react-native-community/netinfo';
 import PropTypes from 'prop-types';
 import {SafeAreaView, View} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
 import {useRecoilState, useRecoilValue} from 'recoil';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
-import * as React from 'react';
-import NetworkStatusIndicator from '../components/NetworkStatusIndicator';
+import AnonymousChatScreen from '../screens/ChatScreen/AnonymousChatScreen';
 import Blocked from '../screens/Blocked';
+import ChatInfoScreen from '../screens/ChatInfoScreen/ChatInfoScreen';
+import ChooseUsername from '../screens/InputUsername';
 import CreatePost from '../screens/CreatePost';
 import DiscoveryScreenV2 from '../screens/DiscoveryScreenV2';
 import DomainScreen from '../screens/DomainScreen';
+import FollowersScreen from '../screens/Followings/FollowersScreen';
 import FollowingScreen from '../screens/Followings/FollowingScreen';
+import HelpCenter from '../screens/WebView/HelpCenter';
+import HomeBottomTabs from './HomeBottomTabs';
 import ImageViewerScreen from '../screens/ImageViewer';
-import VideoViewerScreen from '../screens/VideoViewer';
-import ChooseUsername from '../screens/InputUsername';
+import KeyboardWrapper from './KeyboardWrapper';
 import LinkContextScreen from '../screens/LinkContextScreen';
 import LocalCommunity from '../screens/LocalCommunity';
+import NetworkStatusIndicator from '../components/NetworkStatusIndicator';
+import OneSignalNavigator from './OneSignalNavigator';
 import OtherProfile from '../screens/OtherProfile';
 import OtherProfilePostDetail from '../screens/OtherProfilePostDetail';
 import OtherProfileReplyComment from '../screens/OtherProfileReplyComment';
 import PostDetailPage from '../screens/PostPageDetail';
+import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
 import ProfilePostDetail from '../screens/ProfilePostDetail';
 import ProfileReplyComment from '../screens/ProfileReplyComment';
 import ReplyComment from '../screens/ReplyComment';
 import Settings from '../screens/Settings';
 import SignIn from '../screens/SignInV2';
+import SignedChatScreen from '../screens/ChatScreen/SignedChatScreen';
 import TopicMemberScreen from '../screens/TopicMemberScreen';
 import TopicPageScreen from '../screens/TopicPageScreen';
 import Topics from '../screens/Topics';
-import HelpCenter from '../screens/WebView/HelpCenter';
-import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
-import TermsAndCondition from '../screens/WebView/TermsAndCondition';
-import WebsocketResearchScreen from '../screens/WebsocketResearchScreen';
-import SampleChatInfoScreen from '../screens/WebsocketResearchScreen/SampleChatInfoScreen';
-import SampleChatScreen from '../screens/WebsocketResearchScreen/SampleChatScreen';
-import SignedChatScreen from '../screens/WebsocketResearchScreen/SignedChatScreen';
+import VideoViewerScreen from '../screens/VideoViewer';
 import WhotoFollow from '../screens/WhotoFollow';
 import api from '../service/config';
-import HomeBottomTabs from './HomeBottomTabs';
-import OneSignalNavigator from './OneSignalNavigator';
-
-import {useInitialStartup} from '../hooks/useInitialStartup';
 import {
   AddParticipant,
   ChannelScreen,
@@ -55,11 +53,10 @@ import {
   GroupSetting,
   ProfileScreen
 } from '../screens';
-import {followersOrFollowingAtom} from '../screens/ChannelListScreen/model/followersOrFollowingAtom';
-import FollowersScreen from '../screens/Followings/FollowersScreen';
 import {InitialStartupAtom, LoadingStartupContext} from '../service/initialStartup';
 import {NavigationConstants} from '../utils/constants';
-import KeyboardWrapper from './KeyboardWrapper';
+import {followersOrFollowingAtom} from '../screens/ChannelListScreen/model/followersOrFollowingAtom';
+import {useInitialStartup} from '../hooks/useInitialStartup';
 
 const RootStack = createNativeStackNavigator();
 
@@ -154,11 +151,6 @@ const AuthenticatedNavigator = () => {
         <AuthenticatedStack.Screen
           name="HomeTabs"
           component={HomeBottomTabs}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="TermsAndCondition"
-          component={withKeyboardWrapper(TermsAndCondition)}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
@@ -318,18 +310,13 @@ const AuthenticatedNavigator = () => {
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
-          name="WebsocketResearchScreen"
-          component={withKeyboardWrapper(WebsocketResearchScreen)}
+          name="AnonymousChatScreen"
+          component={withSafeAreaView(withKeyboardWrapper(AnonymousChatScreen))}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
-          name="SampleChatScreen"
-          component={withSafeAreaView(withKeyboardWrapper(SampleChatScreen))}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="SampleChatInfoScreen"
-          component={withKeyboardWrapper(SampleChatInfoScreen)}
+          name="ChatInfoScreen"
+          component={withKeyboardWrapper(ChatInfoScreen)}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen

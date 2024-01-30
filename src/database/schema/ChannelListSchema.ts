@@ -1,15 +1,17 @@
+/* eslint-disable class-methods-use-this */
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 
 import BaseDbSchema from './BaseDbSchema';
 import ChannelListMemberSchema from './ChannelListMemberSchema';
 import UserSchema from './UserSchema';
+import {AnonUserInfo} from '../../../types/service/AnonProfile.type';
 import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
+import {CHANNEL_GROUP, PM} from '../../hooks/core/constant';
 import {ChannelData} from '../../../types/repo/AnonymousMessageRepo/AnonymousChannelsData';
 import {ChannelType} from '../../../types/repo/ChannelData';
 import {MessageAnonymouslyData} from '../../../types/repo/AnonymousMessageRepo/MessageAnonymouslyData';
 import {ModifyAnonymousChatData} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 import {SignedPostNotification} from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
-import {CHANNEL_GROUP, PM} from '../../hooks/core/constant';
 
 class ChannelList implements BaseDbSchema {
   id: string;
@@ -30,13 +32,23 @@ class ChannelList implements BaseDbSchema {
 
   createdAt: string;
 
-  expiredAt: string;
+  expiredAt: string | null;
 
   rawJson: any;
 
   user: UserSchema | null;
 
-  members: ChannelListMemberSchema[] | null;
+  members: ChannelListMemberSchema[] | null | undefined;
+
+  memberUsers: UserSchema[] | null | undefined;
+
+  anon_user_info_color_code: string | null;
+
+  anon_user_info_color_name: string | null;
+
+  anon_user_info_emoji_name: string | null;
+
+  anon_user_info_emoji_code: string | null;
 
   constructor({
     id,
@@ -51,7 +63,12 @@ class ChannelList implements BaseDbSchema {
     rawJson,
     user,
     expiredAt = null,
-    members = []
+    members = [],
+    memberUsers = [],
+    anon_user_info_color_code = null,
+    anon_user_info_color_name = null,
+    anon_user_info_emoji_name = null,
+    anon_user_info_emoji_code = null
   }) {
     if (!id) throw new Error('ChannelList must have an id');
 
@@ -68,6 +85,15 @@ class ChannelList implements BaseDbSchema {
     this.user = user;
     this.members = members;
     this.expiredAt = expiredAt;
+    this.anon_user_info_color_code = anon_user_info_color_code;
+    this.anon_user_info_color_name = anon_user_info_color_name;
+    this.anon_user_info_emoji_name = anon_user_info_emoji_name;
+    this.anon_user_info_emoji_code = anon_user_info_emoji_code;
+    this.memberUsers = memberUsers;
+  }
+
+  saveIfNotExist(db: SQLiteDatabase): Promise<void> {
+    throw new Error('Method not implemented.');
   }
 
   getAll = (db: any): Promise<BaseDbSchema[]> => {
@@ -83,6 +109,12 @@ class ChannelList implements BaseDbSchema {
     return results.rows.raw()[0];
   };
 
+  static getSchemaById = async (db: any, id: string): Promise<ChannelList | null> => {
+    const channelListDb = await ChannelList.getById(db, id);
+    if (!channelListDb) return null;
+    return this.fromDatabaseObject(channelListDb);
+  };
+
   static getChannelInfo = async (
     db: SQLiteDatabase,
     channelId: string,
@@ -90,8 +122,8 @@ class ChannelList implements BaseDbSchema {
     myAnonymousId: string
   ): Promise<ChannelList> => {
     const channel = await this.getById(db, channelId);
-    const members = await ChannelListMemberSchema.getAll(db, channelId, myId, myAnonymousId);
-    channel.members = members;
+    const memberUsers = await UserSchema.getAllByChannelId(db, channelId, myId, myAnonymousId);
+    channel.memberUsers = memberUsers;
 
     return ChannelList.fromDatabaseObject(channel);
   };
@@ -121,8 +153,12 @@ class ChannelList implements BaseDbSchema {
           last_updated_by,
           created_at,
           expired_at,
-          raw_json
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          raw_json,
+          anon_user_info_color_code,
+          anon_user_info_color_name,
+          anon_user_info_emoji_name,
+          anon_user_info_emoji_code
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           this.id,
           this.channelPicture,
@@ -134,7 +170,11 @@ class ChannelList implements BaseDbSchema {
           this.lastUpdatedBy,
           this.createdAt,
           this.expiredAt,
-          jsonString
+          jsonString,
+          this.anon_user_info_color_code,
+          this.anon_user_info_color_name,
+          this.anon_user_info_emoji_name,
+          this.anon_user_info_emoji_code
         ]
       );
     } catch (e) {
@@ -213,6 +253,7 @@ class ChannelList implements BaseDbSchema {
       LEFT JOIN ${UserSchema.getTableName()} B
       ON A.last_updated_by = B.user_id AND A.id = B.channel_id
       WHERE expired_at IS NULL OR datetime(expired_at) >= datetime('now') AND A.description != ''
+      AND A.channel_type NOT IN ('ANON_PM', 'ANON_POST_NOTIFICATION', 'ANON_GROUP')
       ORDER BY last_updated_at DESC`,
       [myId, myAnonymousId]
     );
@@ -241,7 +282,11 @@ class ChannelList implements BaseDbSchema {
         B.last_active_at,
         B.profile_picture,
         B.bio,
-        B.is_banned
+        B.is_banned,
+        A.anon_user_info_color_code,
+        A.anon_user_info_color_name,
+        A.anon_user_info_emoji_name,
+        A.anon_user_info_emoji_code
       FROM ${ChannelList.getTableName()} A
       LEFT JOIN ${UserSchema.getTableName()} B
       ON A.last_updated_by = B.user_id AND A.id = B.channel_id
@@ -339,7 +384,11 @@ class ChannelList implements BaseDbSchema {
       lastUpdatedBy: json?.message?.user?.id,
       createdAt: json?.channel?.created_at,
       rawJson: json,
-      user: null
+      user: null,
+      anon_user_info_color_code: json?.anon_user_info_color_code,
+      anon_user_info_color_name: json?.anon_user_info_color_name,
+      anon_user_info_emoji_name: json?.anon_user_info_emoji_name,
+      anon_user_info_emoji_code: json?.anon_user_info_emoji_code
     });
   }
 
@@ -365,8 +414,13 @@ class ChannelList implements BaseDbSchema {
       createdAt: json.created_at,
       rawJson: jsonParsed,
       members: json.members,
+      memberUsers: json.memberUsers,
       expiredAt: json.expired_at,
-      user
+      user,
+      anon_user_info_color_code: json?.anon_user_info_color_code,
+      anon_user_info_color_name: json?.anon_user_info_color_name,
+      anon_user_info_emoji_name: json?.anon_user_info_emoji_name,
+      anon_user_info_emoji_code: json?.anon_user_info_emoji_code
     });
   }
 
@@ -393,7 +447,8 @@ class ChannelList implements BaseDbSchema {
   static fromChannelAPI(
     data: ChannelData,
     channelType: ChannelType,
-    members?: ChannelData['members']
+    members?: ChannelData['members'],
+    anonUserInfo: AnonUserInfo | null = null
   ): ChannelList {
     const isPM = channelType === 'PM';
     const firstMessage = data?.firstMessage;
@@ -415,7 +470,11 @@ class ChannelList implements BaseDbSchema {
       createdAt: data?.created_at,
       rawJson: data,
       user: null,
-      members: members || null
+      members: members || null,
+      anon_user_info_color_code: anonUserInfo?.anon_user_info_color_code ?? null,
+      anon_user_info_color_name: anonUserInfo?.anon_user_info_color_name ?? null,
+      anon_user_info_emoji_name: anonUserInfo?.anon_user_info_emoji_name ?? null,
+      anon_user_info_emoji_code: anonUserInfo?.anon_user_info_emoji_code ?? null
     });
   }
 
