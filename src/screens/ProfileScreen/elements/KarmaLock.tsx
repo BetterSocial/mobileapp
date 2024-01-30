@@ -38,7 +38,7 @@ export const KarmaLock = (props: {onPressCreatePost: () => void}) => {
           allowChildInteraction={true}
           isVisible={isTooltipShown}
           placement={'bottom'}
-          backgroundColor={'rgba(0,0,0,0)'}
+          backgroundColor={COLORS.black}
           closeOnContentInteraction={false}
           onClose={() => setIsTooltipShown(false)}
           closeOnBackgroundInteraction={true}

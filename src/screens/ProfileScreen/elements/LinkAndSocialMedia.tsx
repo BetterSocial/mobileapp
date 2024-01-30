@@ -124,9 +124,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     width: '67%'
   },
-  copyLinkUrl: {padding: 10, flex: 1, fontWeight: '600', color: COLORS.balance_gray, fontSize: 12},
-  elseWhereButton: {width: '30%', backgroundColor: COLORS.signed_primary},
-  elseWhereLabel: {color: COLORS.white, fontWeight: '600', textAlign: 'center', fontSize: 12}
+  copyLinkUrl: {padding: 10, flex: 1, fontWeight: '600', color: COLORS.balance_gray, fontSize: 12}
 });
 
 export default LinkAndSocialMedia;
