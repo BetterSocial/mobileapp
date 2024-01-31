@@ -23,6 +23,7 @@ import useCalculationContent from './hooks/useCalculationContent';
 import {getCommentLength} from '../../utils/getstream';
 
 const {width: screenWidth} = Dimensions.get('window');
+const BUFFER_CONTENT_TEXT_HEIGHT = 50;
 const Content = ({
   message,
   images_url = [],
@@ -231,7 +232,7 @@ const Content = ({
     };
   };
   const handleHeightContainer = ({nativeEvent}) => {
-    setLayoutHeight(nativeEvent.layout.height + 50);
+    setLayoutHeight(nativeEvent.layout.height + BUFFER_CONTENT_TEXT_HEIGHT);
   };
 
   const calculateLineTopicChip = (nativeEvent) => {
