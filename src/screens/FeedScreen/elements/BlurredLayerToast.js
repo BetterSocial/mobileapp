@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
+import PropTypes from 'prop-types';
 import ToastMessage from 'react-native-toast-message';
 
 const BlurredLayerToast = ({children}) => {
@@ -23,4 +24,7 @@ const styles = StyleSheet.create({
     width: '100%'
   }
 });
+BlurredLayerToast.propTypes = {
+  children: PropTypes.any
+};
 export default React.memo(BlurredLayerToast);
