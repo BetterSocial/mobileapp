@@ -51,10 +51,6 @@ const AnonymousAvatar = (props) => {
 
   if (version >= POST_VERSION) {
     return (
-      // <View
-      //   style={{...styles.avatarV2Background(anonUserInfo.colorCode, radius), ...containerStyle}}>
-      //   <Text style={styles.avatarV2Emoji(emojiRadius)}>{anonUserInfo.emojiCode}</Text>
-      // </View>
       <ProfilePicture
         isAnon={true}
         anonBackgroundColor={anonUserInfo.colorCode}
