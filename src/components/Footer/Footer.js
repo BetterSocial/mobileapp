@@ -44,7 +44,11 @@ const Footer = ({
         style={styles.btn}
         onPress={onPressBlock}>
         <View style={styles.btnBlock}>
-          <MemoIc_block_inactive height={22} width={22} />
+          <MemoIc_block_inactive
+            color={item?.isBlurredPost ? COLORS.gray : undefined}
+            height={22}
+            width={22}
+          />
         </View>
       </TouchableOpacity>
     );
@@ -61,7 +65,7 @@ const Footer = ({
   };
   return (
     <BlurredLayer toastOnly={true} isVisible={item?.isBlurredPost}>
-      <View style={[styles.rowSpaceBeetwen, styles.container]}>
+      <View style={[styles.rowSpaceBetween, styles.container]}>
         <View style={styles.leftGroupContainer}>
           <TouchableOpacity
             testID="shareBtn"
@@ -69,13 +73,21 @@ const Footer = ({
             style={styles.btn}
             onPress={onPressShare}>
             <View style={styles.btnShare}>
-              <MemoIc_share height={20} width={21} />
+              <MemoIc_share
+                color={item?.isBlurredPost ? COLORS.gray : undefined}
+                height={20}
+                width={21}
+              />
             </View>
           </TouchableOpacity>
           {disableComment ? (
             <View testID="disableComment" style={styles.btn}>
               <View style={styles.btnComment}>
-                <MemoIc_comment height={24} width={25} />
+                <MemoIc_comment
+                  color={item?.isBlurredPost ? COLORS.gray : undefined}
+                  height={24}
+                  width={25}
+                />
               </View>
             </View>
           ) : (
@@ -85,7 +97,11 @@ const Footer = ({
               style={styles.btn}
               onPress={onPressComment}>
               <View style={styles.btnComment}>
-                <MemoIc_comment height={24} width={25} />
+                <MemoIc_comment
+                  color={item?.isBlurredPost ? COLORS.gray : undefined}
+                  height={24}
+                  width={25}
+                />
               </View>
             </TouchableOpacity>
           )}
@@ -107,7 +123,11 @@ const Footer = ({
         <View style={styles.rightGroupContainer}>
           {showScoreButton ? (
             <TouchableOpacity disabled={item?.isBlurredPost} onPress={onPressScore}>
-              <Memoic_globe height={20} width={20} />
+              <Memoic_globe
+                color={item?.isBlurredPost ? COLORS.gray : undefined}
+                height={20}
+                width={20}
+              />
             </TouchableOpacity>
           ) : (
             <></>
@@ -121,11 +141,19 @@ const Footer = ({
             <View style={styles.btnDownvote}>
               {statusVote === 'downvote' ? (
                 <View testID="downvoteOn">
-                  <MemoIc_arrow_down_vote_on width={20} height={18} />
+                  <MemoIc_arrow_down_vote_on
+                    color={item?.isBlurredPost ? COLORS.gray : undefined}
+                    width={20}
+                    height={18}
+                  />
                 </View>
               ) : (
                 <View testID="downvoteOff">
-                  <MemoIc_arrow_down_vote_off width={20} height={18} />
+                  <MemoIc_arrow_down_vote_off
+                    color={item?.isBlurredPost ? COLORS.gray : undefined}
+                    width={20}
+                    height={18}
+                  />
                 </View>
               )}
             </View>
@@ -141,11 +169,19 @@ const Footer = ({
             <View style={styles.btnUpvote}>
               {statusVote === 'upvote' ? (
                 <View testID="votingUpOn">
-                  <MemoIc_arrow_upvote_on width={20} height={18} />
+                  <MemoIc_arrow_upvote_on
+                    color={item?.isBlurredPost ? COLORS.gray : undefined}
+                    width={20}
+                    height={18}
+                  />
                 </View>
               ) : (
                 <View testID="votingUpOff">
-                  <MemoIc_arrow_upvote_off width={20} height={18} />
+                  <MemoIc_arrow_upvote_off
+                    color={item?.isBlurredPost ? COLORS.gray : undefined}
+                    width={20}
+                    height={18}
+                  />
                 </View>
               )}
             </View>
@@ -158,7 +194,9 @@ const Footer = ({
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center'
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.gray
   },
   leftGroupContainer: {
     flexDirection: 'row',
@@ -168,7 +206,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
-  rowSpaceBeetwen: {
+  rowSpaceBetween: {
     flexDirection: 'row',
     alignItems: 'center'
   },
