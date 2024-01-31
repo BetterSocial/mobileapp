@@ -1,6 +1,7 @@
 import React from 'react';
-import {Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {Text, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {BlurView} from '@react-native-community/blur';
+import ToastMessage from 'react-native-toast-message';
 
 import {fonts, normalizeFontSizeByWidth} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
@@ -20,14 +21,41 @@ const BlurredLayerContent = ({onPressContent}) => {
   );
 };
 
-const BlurredLayer = ({layerOnly, blurType = 'dark', toastOnly, withToast, onPressContent}) => {
+const BlurredLayer = ({
+  isVisible,
+  layerOnly,
+  blurType = 'dark',
+  toastOnly,
+  withToast,
+  onPressContent,
+  children
+}) => {
   return toastOnly ? (
-    <BlurredLayerToast />
+    isVisible ? (
+      <BlurredLayerToast>{children}</BlurredLayerToast>
+    ) : (
+      <>{children}</>
+    )
   ) : (
-    <BlurView style={styles.containerBlur} blurType={blurType} blurAmount={4}>
-      {withToast && <BlurredLayerToast />}
-      {!layerOnly && <BlurredLayerContent onPressContent={onPressContent} />}
-    </BlurView>
+    <>
+      {withToast && <BlurredLayerToast>{children}</BlurredLayerToast>}
+      {isVisible && (
+        <TouchableOpacity
+          style={styles.containerBlur}
+          activeOpacity={1}
+          onPress={() =>
+            ToastMessage.show({
+              type: 'asNative',
+              text1: 'Follow more users to enable interactions with anonymous posts',
+              position: 'bottom'
+            })
+          }>
+          <BlurView style={styles.containerBlur} blurType={blurType} blurAmount={4}>
+            {!layerOnly && <BlurredLayerContent onPressContent={onPressContent} />}
+          </BlurView>
+        </TouchableOpacity>
+      )}
+    </>
   );
 };
 

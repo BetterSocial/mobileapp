@@ -112,28 +112,29 @@ const _renderAnonimity = ({
 
   return (
     <SafeAreaView>
-      <View
-        testID="anonymHeader"
-        style={[
-          styles.rowSpaceBeetwen,
-          styles.heightHeader(height),
-          {paddingLeft: isPostDetail ? 10 : 0}
-        ]}>
-        <View style={[styles.rowCenter, headerStyle]}>
-          {isBackButton ? (
-            <View testID="haveBackButton" style={[styles.btn]}>
-              <GlobalButton
-                testID="onBack"
-                onPress={() => {
-                  navigation.goBack();
-                }}>
-                <MemoIc_arrow_back height={20} width={20} />
-              </GlobalButton>
+      <BlurredLayer toastOnly={true} isVisible={isBlurredPost}>
+        <View
+          testID="anonymHeader"
+          style={[
+            styles.rowSpaceBeetwen,
+            styles.heightHeader(height),
+            {paddingLeft: isPostDetail ? 10 : 0}
+          ]}>
+          <View style={[styles.rowCenter, headerStyle]}>
+            {isBackButton ? (
+              <View testID="haveBackButton" style={[styles.btn]}>
+                <GlobalButton
+                  testID="onBack"
+                  onPress={() => {
+                    navigation.goBack();
+                  }}>
+                  <MemoIc_arrow_back height={20} width={20} />
+                </GlobalButton>
+              </View>
+            ) : null}
+            <View style={[styles.imageAnonymContainer]}>
+              <AnonymousAvatar anonUserInfo={anonUserInfo} version={version} />
             </View>
-          ) : null}
-          <View style={[styles.imageAnonymContainer]}>
-            <AnonymousAvatar anonUserInfo={anonUserInfo} version={version} />
-          </View>
 
           <View style={[styles.containerFeedProfile]}>
             <View style={[styles.containerFeedName, {alignItems: 'center'}]}>
@@ -156,16 +157,24 @@ const _renderAnonimity = ({
               ) : (
                 <MemoPeopleFollow height={16} width={16} />
               )}
+              <View style={styles.containerFeedText}>
+                <Text style={styles.feedDate}>{calculateTime(time)}</Text>
+                <View style={styles.point} />
+                {privacy.toLowerCase() === PRIVACY_PUBLIC ? (
+                  <Memoic_globe height={16} width={16} />
+                ) : (
+                  <MemoPeopleFollow height={16} width={16} />
+                )}
 
-              {duration_feed !== 'never' ? <View style={styles.point} /> : null}
-              {duration_feed !== 'never' ? validationTimer(time, duration_feed) : null}
-              <View style={styles.point} />
-              <Text style={styles.feedDate}>{location}</Text>
+                {duration_feed !== 'never' ? <View style={styles.point} /> : null}
+                {duration_feed !== 'never' ? validationTimer(time, duration_feed) : null}
+                <View style={styles.point} />
+                <Text style={styles.feedDate}>{location}</Text>
+              </View>
             </View>
           </View>
         </View>
-        {isBlurredPost && <BlurredLayer toastOnly={true} />}
-      </View>
+      </BlurredLayer>
     </SafeAreaView>
   );
 };
