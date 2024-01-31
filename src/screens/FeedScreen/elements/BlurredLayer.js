@@ -25,6 +25,14 @@ BlurredLayerContent.propTypes = {
   onPressContent: PropTypes.func
 };
 
+const ToastOnlyComponent = ({isVisible, children}) => {
+  return isVisible ? <BlurredLayerToast>{children}</BlurredLayerToast> : <>{children}</>;
+};
+ToastOnlyComponent.propTypes = {
+  isVisible: PropTypes.bool,
+  children: PropTypes.any
+};
+
 const BlurredLayer = ({
   isVisible,
   layerOnly,
@@ -34,15 +42,11 @@ const BlurredLayer = ({
   onPressContent,
   children
 }) => {
-  const ToastOnlyComponent = () => {
-    return isVisible ? <BlurredLayerToast>{children}</BlurredLayerToast> : <>{children}</>;
-  };
-
   return toastOnly ? (
-    ToastOnlyComponent()
+    <ToastOnlyComponent isVisible={isVisible}>{children}</ToastOnlyComponent>
   ) : (
-    <>
-      {withToast && <BlurredLayerToast>{children}</BlurredLayerToast>}
+    <View style={styles.relative}>
+      {withToast && <ToastOnlyComponent isVisible={isVisible}>{children}</ToastOnlyComponent>}
       {isVisible && (
         <TouchableOpacity
           style={styles.containerBlur}
@@ -59,11 +63,15 @@ const BlurredLayer = ({
           </BlurView>
         </TouchableOpacity>
       )}
-    </>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  relative: {
+    position: 'relative',
+    flex: 1
+  },
   containerBlur: {
     position: 'absolute',
     width: '100%',
