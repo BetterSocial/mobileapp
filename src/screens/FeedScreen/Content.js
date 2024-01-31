@@ -312,7 +312,10 @@ Content.propTypes = {
   images_url: PropTypes.array,
   style: PropTypes.object,
   onPress: PropTypes.func,
-  topics: PropTypes.arrayOf(PropTypes.string)
+  topics: PropTypes.arrayOf(PropTypes.string),
+  item: PropTypes.object,
+  onNewPollFetched: PropTypes.func,
+  setHaveSeeMore: PropTypes.func
 };
 
 export default Content;
