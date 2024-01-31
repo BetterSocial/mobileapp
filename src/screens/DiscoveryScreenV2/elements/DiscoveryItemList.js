@@ -1,15 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TouchableNativeFeedback,
-  TouchableOpacity,
-  View
-} from 'react-native';
+import {StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View} from 'react-native';
 import {fonts, normalize} from '../../../utils/fonts';
-import {CircleGradient} from '../../../components/Karma/CircleGradient';
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 import ProfilePicture from '../../ProfileScreen/elements/ProfilePicture';
 import {COLORS} from '../../../utils/theme';
@@ -33,8 +25,8 @@ const DomainList = (props) => {
     DefaultImage,
     isCommunity,
     isBlockedSection,
-    withKarma,
-    isDomain
+    isDomain,
+    withKarma
   } = props;
 
   const renderButonAction = () => {

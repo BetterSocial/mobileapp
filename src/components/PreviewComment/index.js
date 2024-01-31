@@ -11,6 +11,7 @@ import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
 import CommentUserName from '../CommentUsername/CommentUsername';
 import ReadMore from '../ReadMore';
+import ProfilePicture from '../../screens/ProfileScreen/elements/ProfilePicture';
 
 const PreviewComment = ({comment, time, image, totalComment, onPress, user, item}) => {
   const navigation = useNavigation();
@@ -34,7 +35,6 @@ const PreviewComment = ({comment, time, image, totalComment, onPress, user, item
     });
   };
   if (!user) return <></>;
-
   return (
     <View testID="userDefined" style={styles.containerPreview}>
       <View style={styles.lineBeforeProfile} />
@@ -43,29 +43,22 @@ const PreviewComment = ({comment, time, image, totalComment, onPress, user, item
           <View style={{left: -16}} />
           <View style={styles.profile}>
             {item?.data?.anon_user_info_emoji_name || item?.data?.is_anonymous ? (
-              <View style={[styles.image, {backgroundColor: item.data.anon_user_info_color_code}]}>
-                <Text style={{color: COLORS.white, fontSize: 14}}>
-                  {item?.data?.anon_user_info_emoji_code}
-                </Text>
-              </View>
+              <ProfilePicture
+                karmaScore={item.karma_score}
+                size={25}
+                width={6}
+                withKarma
+                isAnon={true}
+                anonBackgroundColor={item.data.anon_user_info_color_code}
+                anonEmojiCode={item?.data?.anon_user_info_emoji_code}
+              />
             ) : (
-              <Image
-                source={
-                  image
-                    ? {uri: image, cache: 'reload'}
-                    : require('../../assets/images/ProfileDefault.png')
-                }
-                loadingIndicatorSource={
-                  <Image
-                    style={{
-                      width: 24,
-                      height: 24,
-                      backgroundColor: COLORS.white,
-                      borderRadius: 12
-                    }}
-                  />
-                }
-                style={styles.image}
+              <ProfilePicture
+                karmaScore={item.karma_score}
+                profilePicPath={image || require('../../assets/images/ProfileDefault.png')}
+                size={25}
+                width={6}
+                withKarma
               />
             )}
 
