@@ -1,22 +1,23 @@
 /* eslint-disable no-underscore-dangle */
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import {FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
-import PropTypes from 'prop-types';
+import DiscoveryAction from '../../../context/actions/discoveryAction';
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import DomainList from '../elements/DiscoveryItemList';
 import FollowingAction from '../../../context/actions/following';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
+import MemoDomainProfilePictureEmptyState from '../../../assets/icon/DomainProfilePictureEmptyState';
 import RecentSearch from '../elements/RecentSearch';
-import StringConstant from '../../../utils/string/StringConstant';
+import dimen from '../../../utils/dimen';
 import useIsReady from '../../../hooks/useIsReady';
 import {COLORS} from '../../../utils/theme';
 import {Context} from '../../../context/Store';
 import {followDomain, unfollowDomain} from '../../../service/domain';
 import {fonts} from '../../../utils/fonts';
 import {getUserId} from '../../../utils/users';
-import DiscoveryAction from '../../../context/actions/discoveryAction';
 
 const FROM_FOLLOWED_DOMAIN = 'fromfolloweddomains';
 const FROM_FOLLOWED_DOMAIN_INITIAL = 'fromfolloweddomainsinitial';
@@ -190,6 +191,15 @@ const DomainFragment = ({
     );
   };
 
+  const renderDefaultImage = () => {
+    return (
+      <MemoDomainProfilePictureEmptyState
+        width={dimen.normalizeDimen(48)}
+        height={dimen.normalizeDimen(48)}
+      />
+    );
+  };
+
   const renderItem = ({from, item, index}) => {
     if (item.separator) {
       return (
@@ -209,6 +219,7 @@ const DomainFragment = ({
             onPressBody={() => __handleOnPressDomain(item)}
             handleSetFollow={() => __handleFollow(from, true, item, index)}
             handleSetUnFollow={() => __handleFollow(from, false, item, index)}
+            DefaultImage={renderDefaultImage}
             item={{
               name: item.domain_name,
               image: item.logo,

@@ -1,17 +1,30 @@
+import FastImage from 'react-native-fast-image';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View} from 'react-native';
 
-import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 import ProfilePicture from '../../ProfileScreen/elements/ProfilePicture';
+import dimen from '../../../utils/dimen';
 import {COLORS} from '../../../utils/theme';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
 import {fonts, normalize} from '../../../utils/fonts';
 
 const renderDefaultImage = (DefaultImage) => {
   if (DefaultImage) {
     return <DefaultImage />;
   }
-  return <MemoDomainProfilePicture width={48} height={48} />;
+  return (
+    <FastImage
+      source={{uri: DEFAULT_PROFILE_PIC_PATH}}
+      width={dimen.normalizeDimen(48)}
+      height={dimen.normalizeDimen(48)}
+      style={{
+        height: dimen.normalizeDimen(48),
+        width: dimen.normalizeDimen(48),
+        borderRadius: dimen.normalizeDimen(24)
+      }}
+    />
+  );
 };
 
 const DomainList = (props) => {
