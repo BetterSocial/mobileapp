@@ -8,9 +8,15 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 
 import ContentPoll from './ContentPoll';
 import ImageLayouter from './elements/ImageLayouter';
+import BlurredLayer from './elements/BlurredLayer';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import {COLORS} from '../../utils/theme';
-import {POST_TYPE_LINK, POST_TYPE_POLL, POST_TYPE_STANDARD} from '../../utils/constants';
+import {
+  DISCOVERY_TAB_USERS,
+  POST_TYPE_LINK,
+  POST_TYPE_POLL,
+  POST_TYPE_STANDARD
+} from '../../utils/constants';
 import {fonts, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
 import useCalculationContent from './hooks/useCalculationContent';
@@ -232,6 +238,12 @@ const Content = ({
     onLayoutTopicChip(nativeEvent, lineHeight);
   };
 
+  const handleBlurredContent = () => {
+    navigation.navigate('DiscoveryScreen', {
+      tab: DISCOVERY_TAB_USERS
+    });
+  };
+
   return (
     <Pressable
       onLayout={hanldeHeightContainer}
@@ -278,6 +290,10 @@ const Content = ({
             onimageclick={() => onPress(showSeeMore)}
           />
         </View>
+      )}
+
+      {item?.isBlurredPost && (
+        <BlurredLayer withToast={true} onPressContent={handleBlurredContent} />
       )}
 
       <TopicsChip

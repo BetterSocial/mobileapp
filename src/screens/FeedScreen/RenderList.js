@@ -20,6 +20,7 @@ import {
 import {Footer, Gap, PreviewComment} from '../../components';
 import {getCommentLength} from '../../utils/getstream';
 import {normalizeFontSizeByWidth} from '../../utils/fonts';
+import BlurredLayer from './elements/BlurredLayer';
 import {showScoreAlertDialog} from '../../utils/Utils';
 import {COLORS} from '../../utils/theme';
 
@@ -188,6 +189,7 @@ const RenderListFeed = (props) => {
               />
               <Gap height={8} />
             </React.Fragment>
+            {item?.isBlurredPost && <BlurredLayer layerOnly blurType="light" withToast={true} />}
           </View>
         )}
       </View>
