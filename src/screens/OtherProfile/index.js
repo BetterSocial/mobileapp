@@ -26,6 +26,7 @@ import BlockProfile from '../../components/Blocking/BlockProfile';
 import BottomSheetBio from '../ProfileScreen/elements/BottomSheetBio';
 import GlobalButton from '../../components/Button/GlobalButton';
 import ProfileHeader from '../ProfileScreen/elements/ProfileHeader';
+import ProfilePicture from '../ProfileScreen/elements/ProfilePicture';
 import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
 import RenderItem from '../ProfileScreen/elements/RenderItem';
 import ReportUser from '../../components/Blocking/ReportUser';
@@ -37,6 +38,7 @@ import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
 import useCreateChat from '../../hooks/screen/useCreateChat';
 import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
 import useViewPostTimeHook from '../FeedScreen/hooks/useViewPostTimeHook';
+import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {blockUser, unblockUserApi} from '../../service/blocking';
@@ -55,9 +57,6 @@ import {getSingularOrPluralText} from '../../utils/string/StringUtils';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherProfileFeed';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {COLORS} from '../../utils/theme';
-import EnvelopeIcon from '../../assets/icon/EnvelopeIcon';
-import ProfilePicture from '../ProfileScreen/elements/ProfilePicture';
 
 const {width} = Dimensions.get('screen');
 

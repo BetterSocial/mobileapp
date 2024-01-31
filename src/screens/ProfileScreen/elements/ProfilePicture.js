@@ -1,14 +1,14 @@
 import * as React from 'react';
-import {StyleSheet, Text, TouchableNativeFeedback, View} from 'react-native';
-
 import FastImage from 'react-native-fast-image';
 import PropTypes from 'prop-types';
+import {StyleSheet, Text, TouchableNativeFeedback, View} from 'react-native';
+
 import Image from '../../../components/Image';
 import MemoIcAddCircle from '../../../assets/icons/ic_add_circle';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
-import {CircleGradient} from '../../../components/Karma/CircleGradient';
 import dimen from '../../../utils/dimen';
 import {COLORS} from '../../../utils/theme';
+import {CircleGradient} from '../../../components/Karma/CircleGradient';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
 
 const ProfilePicture = ({
   onImageContainerClick,

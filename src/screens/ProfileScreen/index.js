@@ -1,8 +1,8 @@
-import netInfo from '@react-native-community/netinfo';
-import {useNavigation} from '@react-navigation/core';
-import {debounce} from 'lodash';
-import PropTypes from 'prop-types';
 import * as React from 'react';
+import ImagePicker from 'react-native-image-crop-picker';
+import PropTypes from 'prop-types';
+import Toast from 'react-native-simple-toast';
+import netInfo from '@react-native-community/netinfo';
 import {
   ActivityIndicator,
   Alert,
@@ -15,21 +15,32 @@ import {
   TouchableNativeFeedback,
   View
 } from 'react-native';
+import {debounce} from 'lodash';
 import {showMessage} from 'react-native-flash-message';
-import ImagePicker from 'react-native-image-crop-picker';
-import Toast from 'react-native-simple-toast';
+import {useNavigation} from '@react-navigation/core';
 
+import AnonymousTab from './elements/AnonymousTab';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
+import BioAndDMSetting from './elements/BioAndDMSetting';
 import BlockComponent from '../../components/BlockComponent';
-import {ButtonNewPost} from '../../components/Button';
-import ShadowFloatingButtons from '../../components/Button/ShadowFloatingButtons';
+import BottomSheetBio from './elements/BottomSheetBio';
+import BottomSheetImage from './elements/BottomSheetImage';
+import BottomSheetRealname from './elements/BottomSheetRealname';
 import CustomPressable from '../../components/CustomPressable';
+import FollowInfoRow from './elements/FollowInfoRow';
+import ImageCompressionUtils from '../../utils/image/compress';
+import LinkAndSocialMedia from './elements/LinkAndSocialMedia';
 import PostOptionModal from '../../components/Modal/PostOptionModal';
-import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {Context} from '../../context';
-import {setFeedByIndex, setTimer} from '../../context/actions/feeds';
-import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
-import {setMyProfileAction} from '../../context/actions/setMyProfileAction';
+import ProfileHeader from './elements/ProfileHeader';
+import ProfilePicture from './elements/ProfilePicture';
+import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
+import RenderItem from '../FeedScreen/RenderList';
+import ShadowFloatingButtons from '../../components/Button/ShadowFloatingButtons';
+import ShareUtils from '../../utils/share';
+import StorageUtils from '../../utils/storage';
+import dimen from '../../utils/dimen';
+import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
+import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
 import useResetContext from '../../hooks/context/useResetContext';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
@@ -38,8 +49,18 @@ import useProfileScreenHook, {
   TAB_INDEX_ANONYMOUS,
   TAB_INDEX_SIGNED
 } from '../../hooks/screen/useProfileScreenHook';
-import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
+import {ButtonNewPost} from '../../components/Button';
+import {COLORS} from '../../utils/theme';
+import {Context} from '../../context';
+import {
+  DEFAULT_PROFILE_PIC_PATH,
+  NavigationConstants,
+  SOURCE_FEED_TAB,
+  SOURCE_MY_PROFILE
+} from '../../utils/constants';
+import {KarmaLock} from './elements/KarmaLock';
+import {KarmaScore} from './elements/KarmaScore';
 import {
   changeRealName,
   getMyProfile,
@@ -50,36 +71,15 @@ import {
 } from '../../service/profile';
 import {deleteAnonymousPost, deletePost, viewTimePost} from '../../service/post';
 import {downVote, upVote} from '../../service/vote';
-import {
-  DEFAULT_PROFILE_PIC_PATH,
-  NavigationConstants,
-  SOURCE_FEED_TAB,
-  SOURCE_MY_PROFILE
-} from '../../utils/constants';
-import dimen from '../../utils/dimen';
 import {fonts} from '../../utils/fonts';
-import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
-import {COLORS} from '../../utils/theme';
-import ShareUtils from '../../utils/share';
-import StorageUtils from '../../utils/storage';
-import RenderItem from '../FeedScreen/RenderList';
-import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
-import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
-import AnonymousTab from './elements/AnonymousTab';
-import BioAndDMSetting from './elements/BioAndDMSetting';
-import BottomSheetBio from './elements/BottomSheetBio';
-import BottomSheetImage from './elements/BottomSheetImage';
-import BottomSheetRealname from './elements/BottomSheetRealname';
-import FollowInfoRow from './elements/FollowInfoRow';
-import {KarmaScore} from './elements/KarmaScore';
-import LinkAndSocialMedia from './elements/LinkAndSocialMedia';
-import ProfileHeader from './elements/ProfileHeader';
-import ProfilePicture from './elements/ProfilePicture';
-import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
-import ImageCompressionUtils from '../../utils/image/compress';
-import {KarmaLock} from './elements/KarmaLock';
+import {setFeedByIndex, setTimer} from '../../context/actions/feeds';
+import {setMyProfileAction} from '../../context/actions/setMyProfileAction';
+import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
+import {useAfterInteractions} from '../../hooks/useAfterInteractions';
+import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
+import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 const {width} = Dimensions.get('screen');
 

@@ -261,7 +261,12 @@ const Content = ({
             <View
               style={[
                 styles.containerMainText(handleContainerText().isShort),
-                handleContainerText().container
+                handleContainerText().container,
+                item?.isBlurredPost
+                  ? {
+                      minHeight: 442
+                    }
+                  : {}
               ]}>
               {renderHandleTextContent()}
             </View>
