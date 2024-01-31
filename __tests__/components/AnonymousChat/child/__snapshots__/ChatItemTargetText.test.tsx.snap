@@ -19,7 +19,7 @@ exports[`TESTING ChatItemTargetText RENDER continuous should match snapshot 1`] 
       Object {
         "borderRadius": 12,
         "height": 24,
-        "marginRight": 8,
+        "marginRight": 4,
         "width": 24,
       }
     }
@@ -71,7 +71,7 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
   <View
     style={
       Object {
-        "marginRight": 8,
+        "marginRight": 4,
       }
     }
   >

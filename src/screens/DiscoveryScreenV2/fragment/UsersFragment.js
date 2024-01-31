@@ -9,7 +9,6 @@ import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import DomainList from '../elements/DiscoveryItemList';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import RecentSearch from '../elements/RecentSearch';
-import StringConstant from '../../../utils/string/StringConstant';
 import {COLORS} from '../../../utils/theme';
 import {Context} from '../../../context/Store';
 import {fonts} from '../../../utils/fonts';
@@ -274,6 +273,7 @@ const UsersFragment = ({
         keyExtractor={(item, index) => index.toString()}
         onEndReached={() => fetchData()}
         onEndReachedThreshold={0.6}
+        keyboardShouldPersistTaps="handled"
       />
     );
   };

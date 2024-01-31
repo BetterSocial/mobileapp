@@ -38,7 +38,8 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
   channelType,
   onPress = () => {
     console.log('onPress');
-  }
+  },
+  dbAnonUserInfo = null
 }) => {
   const [profileContext] = (React.useContext(Context) as unknown as any).profile;
   const [followContext] = (React.useContext(Context) as unknown as any).following;
@@ -68,6 +69,7 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
           isCommentExists={isCommentExists}
           postMaker={postMaker}
           isAnonymousTab={isAnonymousTab}
+          dbAnonUserInfo={dbAnonUserInfo}
         />
 
         <View style={styles.chatContentContainer}>

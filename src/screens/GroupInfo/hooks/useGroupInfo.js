@@ -7,17 +7,15 @@ import {openComposer} from 'react-native-email-link';
 import {useNavigation} from '@react-navigation/core';
 
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
+import ImageUtils from '../../../utils/image';
 import useCreateChat from '../../../hooks/screen/useCreateChat';
 import TokenStorage, {ITokenEnum} from '../../../utils/storage/custom/tokenStorage';
-import {ANONYMOUS_USER} from '../../../hooks/core/constant';
 import {Context} from '../../../context';
 import {checkUserBlock} from '../../../service/profile';
 import {getChatName} from '../../../utils/string/StringUtils';
-import {isContainUrl} from '../../../utils/Utils';
 import {requestExternalStoragePermission} from '../../../utils/permission';
 import {setChannel} from '../../../context/actions/setChannel';
 import {setParticipants} from '../../../context/actions/groupChat';
-import ImageUtils from '../../../utils/image';
 
 const useGroupInfo = () => {
   const [groupChatState, groupPatchDispatch] = React.useContext(Context).groupChat;
@@ -92,10 +90,10 @@ const useGroupInfo = () => {
     try {
       setIsLoadingInitChat(true);
       const sendData = {
-        user_id: selectedUser.user_id
+        user_id: selectedUser.user_id || selectedUser?.userId
       };
       const members = [];
-      members.push(profile?.myProfile?.user_id, selectedUser?.user_id);
+      members.push(profile?.myProfile?.user_id, selectedUser?.user_id || selectedUser?.userId);
       const processGetBlock = await checkUserBlock(sendData);
       if (!processGetBlock.data.data.blocked && !processGetBlock.data.data.blocker) {
         return createSignChat(members, selectedUser);
@@ -161,17 +159,18 @@ const useGroupInfo = () => {
   };
 
   const handleSelectUser = async (user) => {
-    if (user.user_id === profile.myProfile.user_id) return;
+    const userId = user.user_id || user.userId;
+    if (userId === profile.myProfile.user_id) return;
     const defaultUserData = {...user};
     defaultUserData.allow_anon_dm = false;
     try {
       setIsFetchingAllowAnonDM(true);
-      await AnonymousMessageRepo.checkIsTargetAllowingAnonDM(user.user_id);
+      await AnonymousMessageRepo.checkIsTargetAllowingAnonDM(userId);
       defaultUserData.allow_anon_dm = true;
     } catch (e) {
       console.log(e);
     } finally {
-      await setSelectedUser(defaultUserData);
+      setSelectedUser(defaultUserData);
       setOpenModal(true);
       setIsFetchingAllowAnonDM(false);
     }
@@ -224,15 +223,17 @@ const useGroupInfo = () => {
   const onRemoveUser = async () => {
     setOpenModal(false);
     try {
-      const result = await channel.removeMembers([selectedUser.user_id]);
+      const result = await channel.removeMembers([selectedUser.user_id || selectedUser.userId]);
       const updateParticipant = newParticipant.filter(
-        (participant) => participant.user_id !== selectedUser.user_id
+        (participant) => participant.user_id !== (selectedUser.user_id || selectedUser.userId)
       );
       setNewParticipant(updateParticipant);
       updateMemberName(result.members);
       await channel.sendMessage(
         {
-          text: `${profile.myProfile.username} removed ${selectedUser.user.name} from this group`,
+          text: `${profile.myProfile.username} removed ${
+            selectedUser.user.name || selectedUser?.user?.username
+          } from this group`,
           isRemoveMember: true,
           user_id: profile.myProfile.user_id,
           silent: true
@@ -241,7 +242,7 @@ const useGroupInfo = () => {
       );
       await generateSystemChat(
         `${profile.myProfile.username} removed you from this group`,
-        selectedUser.user_id
+        selectedUser.user_id || selectedUser.userId
       );
       setNewParticipant(result.members);
       setParticipants(result.members, groupPatchDispatch);
@@ -266,7 +267,7 @@ const useGroupInfo = () => {
       id: profile?.myProfile?.user_id
     };
     const token = TokenStorage.get(ITokenEnum.token);
-    await setOpenModal(false);
+    setOpenModal(false);
     try {
       await client.client.connectUser(user, token);
       const filterMessage = await client.client.queryChannels(filter, sort, {
@@ -298,7 +299,7 @@ const useGroupInfo = () => {
         setChannel(filterMessage[0], dispatchChannel);
       } else {
         const channelChat = await client.client.channel('messaging', generatedChannelId, {
-          name: selectedUser.user.name,
+          name: selectedUser?.user?.name || selectedUser?.user?.username,
           type_channel: 1
         });
         await channelChat.create();
@@ -317,9 +318,9 @@ const useGroupInfo = () => {
         postId: null,
         isAnonymousUserFromGroupInfo: true,
         actor: {
-          id: selectedUser?.user?.id,
+          id: selectedUser?.user?.id || selectedUser?.userId,
           data: {
-            username: selectedUser?.user?.anonymousUsername
+            username: selectedUser?.user?.anonymousUsername || selectedUser?.user?.username
           }
         }
       };
@@ -335,7 +336,6 @@ const useGroupInfo = () => {
       setIsLoadingInitChat(true);
       await handleAnonymousMessage(selectedUser);
     } catch (e) {
-      console.log(e);
     } finally {
       setIsLoadingInitChat(false);
       setOpenModal(false);
@@ -354,7 +354,11 @@ const useGroupInfo = () => {
     if (status === 'remove') {
       Alert.alert(
         null,
-        `Are you sure you want to remove ${selectedUser.user.name} from this group? We will let the group know that you removed ${selectedUser.user.name}.`,
+        `Are you sure you want to remove ${
+          selectedUser.user.name || selectedUser?.user?.username || selectedUser.username
+        } from this group? We will let the group know that you removed ${
+          selectedUser.user.name || selectedUser?.user?.username || selectedUser.username
+        }.`,
         [{text: 'Yes - remove', onPress: () => onRemoveUser()}, {text: 'Cancel'}]
       );
     }
@@ -368,7 +372,7 @@ const useGroupInfo = () => {
     }
 
     if (status === 'message-anonymously') {
-      handleMessageAnonymously();
+      await handleMessageAnonymously();
     }
   };
   const onLeaveGroup = () => {
@@ -410,12 +414,12 @@ const useGroupInfo = () => {
     });
   };
   const handlePressContact = async (item) => {
-    const isAnonymousUser = !isContainUrl(item?.user?.image) || item?.user?.name === ANONYMOUS_USER;
+    const isAnonymousUser = Boolean(item?.user?.anon_user_info_emoji_name);
     if (item?.user_id === profile?.myProfile?.user_id) return;
 
-    if (anonUserEmojiName || isAnonymousUser) {
+    if (isAnonymousUser) {
       const modifiedUser = {...item};
-      modifiedUser.user.anonymousUsername = `Anonymous ${anonUserEmojiName}`;
+      modifiedUser.user.anonymousUsername = `Anonymous ${item?.user?.anon_user_info_emoji_name}`;
       setSelectedUser(modifiedUser);
       setIsAnonymousModalOpen(true);
       return;
@@ -425,7 +429,7 @@ const useGroupInfo = () => {
   };
 
   const handleOpenProfile = async (item) => {
-    await setOpenModal(false);
+    setOpenModal(false);
     setTimeout(() => {
       if (profile?.myProfile?.user_id === item?.user_id) {
         return null;
@@ -434,14 +438,12 @@ const useGroupInfo = () => {
       return navigation.push('OtherProfile', {
         data: {
           user_id: profile.myProfile.user_id,
-          other_id: item?.user_id,
-          username: item?.user?.name
+          other_id: item?.user_id || item?.userId,
+          username: item?.user?.name || item?.user?.username || item.username
         }
       });
     }, 500);
   };
-
-  console.log(isLoadingInitChat, 'isLoadingInitChat');
 
   return {
     serializeMembersList,
