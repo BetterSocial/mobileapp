@@ -313,7 +313,7 @@ const ChatInfoScreen = () => {
         selectedUser={selectedUser}
         isOpen={openModal}
         onPress={handlePressPopup}
-        name={selectedUser?.user?.username || selectedUser?.user?.name}
+        name={selectedUser?.user?.username || selectedUser?.user?.name || selectedUser?.username}
         isLoadingInitChat={isLoadingInitChat}
       />
       <ModalActionAnonymous
