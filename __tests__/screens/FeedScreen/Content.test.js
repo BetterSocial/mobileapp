@@ -1,8 +1,8 @@
 import React from 'react';
 import {render, cleanup} from '@testing-library/react-native';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 import Content from '../../../src/screens/FeedScreen/Content';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
@@ -16,6 +16,7 @@ jest.mock('@react-navigation/native', () => ({
 jest.mock('react-native/Libraries/Pressability/usePressability');
 
 jest.mock('react-native');
+jest.mock('@react-native-community/blur');
 jest.mock('react', () => {
   const originReact = jest.requireActual('react');
   const mUseRef = jest.fn();
@@ -86,14 +87,57 @@ describe('Content component should run correctly', () => {
     post_performance_comments_score: 1,
     privacy: 'Public'
   };
+  const onPress = jest.fn();
+  const onNewPollFetched = jest.fn();
+  const onPressDomain = jest.fn();
+  const images_url = ['https://detik.jpg'];
 
   afterEach(cleanup);
+  it('renders BlurredLayer with isVisible true when isBlurredPost is true', () => {
+    const mockItem = {
+      ...item,
+      isBlurredPost: true // Set isBlurredPost to true for testing
+    };
+
+    const {getByTestId} = render(
+      <Content
+        message={'halo test'}
+        item={mockItem}
+        images_url={images_url}
+        onNewPollFetched={onNewPollFetched}
+        onPressDomain={onPressDomain}
+        onPress={onPress}
+        topics={item.topics}
+      />
+    );
+
+    const blurredLayer = getByTestId('blurredLayer');
+    expect(blurredLayer.props.isVisible).toBe(true);
+  });
+
+  it('renders BlurredLayer with isVisible false when isBlurredPost is false', () => {
+    const mockItem = {
+      ...item,
+      isBlurredPost: false // Set isBlurredPost to true for testing
+    };
+
+    const {getByTestId} = render(
+      <Content
+        message={'halo test'}
+        item={mockItem}
+        images_url={images_url}
+        onNewPollFetched={onNewPollFetched}
+        onPressDomain={onPressDomain}
+        onPress={onPress}
+        topics={item.topics}
+      />
+    );
+
+    const blurredLayer = getByTestId('blurredLayer');
+    expect(blurredLayer.props.isVisible).toBe(false);
+  });
 
   it('Content should not change', () => {
-    const onPress = jest.fn();
-    const onNewPollFetched = jest.fn();
-    const onPressDomain = jest.fn();
-    const images_url = ['https://detik.jpg'];
     const {toJSON} = render(
       <SafeAreaProvider>
         <Content

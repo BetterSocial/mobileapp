@@ -42,26 +42,30 @@ const BlurredLayer = ({
   onPressContent,
   children
 }) => {
-  return toastOnly ? (
-    <ToastOnlyComponent isVisible={isVisible}>{children}</ToastOnlyComponent>
-  ) : (
-    <View style={styles.relative}>
-      {withToast && <ToastOnlyComponent isVisible={isVisible}>{children}</ToastOnlyComponent>}
-      {isVisible && (
-        <TouchableOpacity
-          style={styles.containerBlur}
-          activeOpacity={1}
-          onPress={() =>
-            ToastMessage.show({
-              type: 'asNative',
-              text1: 'Follow more users to enable interactions with anonymous posts',
-              position: 'bottom'
-            })
-          }>
-          <BlurView style={styles.containerBlur} blurType={blurType} blurAmount={4}>
-            {!layerOnly && <BlurredLayerContent onPressContent={onPressContent} />}
-          </BlurView>
-        </TouchableOpacity>
+  return (
+    <View style={styles.relative} testID="blurredLayer" isVisible={isVisible}>
+      {toastOnly ? (
+        <ToastOnlyComponent isVisible={isVisible}>{children}</ToastOnlyComponent>
+      ) : (
+        <>
+          {withToast && <ToastOnlyComponent isVisible={isVisible}>{children}</ToastOnlyComponent>}
+          {isVisible && (
+            <TouchableOpacity
+              style={styles.containerBlur}
+              activeOpacity={1}
+              onPress={() =>
+                ToastMessage.show({
+                  type: 'asNative',
+                  text1: 'Follow more users to enable interactions with anonymous posts',
+                  position: 'bottom'
+                })
+              }>
+              <BlurView style={styles.containerBlur} blurType={blurType} blurAmount={4}>
+                {!layerOnly && <BlurredLayerContent onPressContent={onPressContent} />}
+              </BlurView>
+            </TouchableOpacity>
+          )}
+        </>
       )}
     </View>
   );
