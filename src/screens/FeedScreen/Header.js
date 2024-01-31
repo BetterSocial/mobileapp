@@ -136,26 +136,18 @@ const _renderAnonimity = ({
               <AnonymousAvatar anonUserInfo={anonUserInfo} version={version} />
             </View>
 
-          <View style={[styles.containerFeedProfile]}>
-            <View style={[styles.containerFeedName, {alignItems: 'center'}]}>
-              <AnonymousUsername version={version} anonUserInfo={anonUserInfo} />
-            </View>
-            {showAnonymousOption && !hideThreeDot && (
-              <GlobalButton
-                buttonStyle={{position: 'absolute', right: 0, top: -8}}
-                onPress={onHeaderOptionClicked}>
-                <View style={{zIndex: 1000}}>
-                  <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
-                </View>
-              </GlobalButton>
-            )}
-            <View style={styles.containerFeedText}>
-              <Text style={styles.feedDate}>{calculateTime(time)}</Text>
-              <View style={styles.point} />
-              {privacy.toLowerCase() === PRIVACY_PUBLIC ? (
-                <Memoic_globe height={16} width={16} />
-              ) : (
-                <MemoPeopleFollow height={16} width={16} />
+            <View style={[styles.containerFeedProfile]}>
+              <View style={[styles.containerFeedName, {alignItems: 'center'}]}>
+                <AnonymousUsername version={version} anonUserInfo={anonUserInfo} />
+              </View>
+              {showAnonymousOption && !hideThreeDot && (
+                <GlobalButton
+                  buttonStyle={{position: 'absolute', right: 0, top: -8}}
+                  onPress={onHeaderOptionClicked}>
+                  <View style={{zIndex: 1000}}>
+                    <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
+                  </View>
+                </GlobalButton>
               )}
               <View style={styles.containerFeedText}>
                 <Text style={styles.feedDate}>{calculateTime(time)}</Text>
