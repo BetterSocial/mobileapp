@@ -204,29 +204,26 @@ exports[`Testing Feed Screen Content Link Card Matches Snapshot 1`] = `
       style={
         Object {
           "flex": 1,
-          "justifyContent": "space-between",
         }
       }
       testID="contentLinkContentPress"
     >
-      <View>
-        <Text
-          style={
-            Object {
-              "color": "#1E1F20",
-              "fontFamily": "Inter-SemiBold",
-              "fontSize": 14,
-              "fontWeight": "600",
-              "lineHeight": 17,
-              "marginBottom": 8,
-              "paddingLeft": 20,
-              "paddingRight": 20,
-            }
+      <Text
+        style={
+          Object {
+            "color": "#1E1F20",
+            "fontFamily": "Inter-SemiBold",
+            "fontSize": 12.600000000000001,
+            "fontWeight": "600",
+            "lineHeight": 13.600000000000001,
+            "marginBottom": 3.2,
+            "paddingLeft": 16,
+            "paddingRight": 16,
           }
-        >
-          humanID: One-click, Anonymous Login
-        </Text>
-      </View>
+        }
+      >
+        humanID: One-click, Anonymous Login
+      </Text>
       <View
         style={
           Object {
@@ -241,8 +238,7 @@ exports[`Testing Feed Screen Content Link Card Matches Snapshot 1`] = `
                 "overflow": "hidden",
               },
               Object {
-                "height": "100%",
-                "width": "100%",
+                "flex": 1,
               },
             ]
           }
@@ -259,58 +255,58 @@ exports[`Testing Feed Screen Content Link Card Matches Snapshot 1`] = `
           />
         </View>
       </View>
-    </View>
-    <Text
-      accessible={true}
-      focusable={true}
-      onClick={[Function]}
-      onResponderGrant={[Function]}
-      onResponderMove={[Function]}
-      onResponderRelease={[Function]}
-      onResponderTerminate={[Function]}
-      onResponderTerminationRequest={[Function]}
-      onStartShouldSetResponder={[Function]}
-      style={
-        Object {
-          "color": "#828282",
-          "fontFamily": "Inter-Regular",
-          "fontSize": 12,
-          "lineHeight": 18,
-          "marginTop": 5,
-          "paddingLeft": 20,
-          "paddingRight": 20,
-        }
-      }
-    >
-      Seamlessly integrate with our anonymous, bot-resistant, one-click login to create a safer community for your users.
-      <View
-        style={
-          Array [
-            Object {
-              "height": undefined,
-              "width": undefined,
-            },
-            Object {
-              "width": 2,
-            },
-          ]
-        }
-        testID="gap"
-      />
       <Text
+        accessible={true}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
         style={
           Object {
-            "color": "#2F80ED",
-            "fontSize": 12,
-            "marginStart": 8,
-            "textDecorationLine": "underline",
+            "color": "#828282",
+            "fontFamily": "Inter-Regular",
+            "fontSize": 10.8,
+            "lineHeight": 14.4,
+            "marginTop": 3.2,
+            "paddingLeft": 16,
+            "paddingRight": 16,
           }
         }
-        testID="contentLinkOpenLinkPress"
       >
-        Open Link
+        Seamlessly integrate with our anonymous, bot-resistant, one-click login to create a safer community for your users.
+        <View
+          style={
+            Array [
+              Object {
+                "height": undefined,
+                "width": undefined,
+              },
+              Object {
+                "width": 2,
+              },
+            ]
+          }
+          testID="gap"
+        />
+        <Text
+          style={
+            Object {
+              "color": "#2F80ED",
+              "fontSize": 12,
+              "marginStart": 8,
+              "textDecorationLine": "underline",
+            }
+          }
+          testID="contentLinkOpenLinkPress"
+        >
+          Open Link
+        </Text>
       </Text>
-    </Text>
+    </View>
   </View>
 </View>
 `;
@@ -681,29 +677,26 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
         style={
           Object {
             "flex": 1,
-            "justifyContent": "space-between",
           }
         }
         testID="contentLinkContentPress"
       >
-        <View>
-          <Text
-            style={
-              Object {
-                "color": "#1E1F20",
-                "fontFamily": "Inter-SemiBold",
-                "fontSize": 14,
-                "fontWeight": "600",
-                "lineHeight": 17,
-                "marginBottom": 8,
-                "paddingLeft": 20,
-                "paddingRight": 20,
-              }
+        <Text
+          style={
+            Object {
+              "color": "#1E1F20",
+              "fontFamily": "Inter-SemiBold",
+              "fontSize": 12.600000000000001,
+              "fontWeight": "600",
+              "lineHeight": 13.600000000000001,
+              "marginBottom": 3.2,
+              "paddingLeft": 16,
+              "paddingRight": 16,
             }
-          >
-            humanID: One-click, Anonymous Login
-          </Text>
-        </View>
+          }
+        >
+          humanID: One-click, Anonymous Login
+        </Text>
         <View
           style={
             Object {
@@ -718,8 +711,7 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
                   "overflow": "hidden",
                 },
                 Object {
-                  "height": "100%",
-                  "width": "100%",
+                  "flex": 1,
                 },
               ]
             }
@@ -736,58 +728,58 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
             />
           </View>
         </View>
-      </View>
-      <Text
-        accessible={true}
-        focusable={true}
-        onClick={[Function]}
-        onResponderGrant={[Function]}
-        onResponderMove={[Function]}
-        onResponderRelease={[Function]}
-        onResponderTerminate={[Function]}
-        onResponderTerminationRequest={[Function]}
-        onStartShouldSetResponder={[Function]}
-        style={
-          Object {
-            "color": "#828282",
-            "fontFamily": "Inter-Regular",
-            "fontSize": 12,
-            "lineHeight": 18,
-            "marginTop": 5,
-            "paddingLeft": 20,
-            "paddingRight": 20,
-          }
-        }
-      >
-        Seamlessly integrate with our anonymous, bot-resistant, one-click login to create a safer community for your users.
-        <View
-          style={
-            Array [
-              Object {
-                "height": undefined,
-                "width": undefined,
-              },
-              Object {
-                "width": 2,
-              },
-            ]
-          }
-          testID="gap"
-        />
         <Text
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
           style={
             Object {
-              "color": "#2F80ED",
-              "fontSize": 12,
-              "marginStart": 8,
-              "textDecorationLine": "underline",
+              "color": "#828282",
+              "fontFamily": "Inter-Regular",
+              "fontSize": 10.8,
+              "lineHeight": 14.4,
+              "marginTop": 3.2,
+              "paddingLeft": 16,
+              "paddingRight": 16,
             }
           }
-          testID="contentLinkOpenLinkPress"
         >
-          Open Link
+          Seamlessly integrate with our anonymous, bot-resistant, one-click login to create a safer community for your users.
+          <View
+            style={
+              Array [
+                Object {
+                  "height": undefined,
+                  "width": undefined,
+                },
+                Object {
+                  "width": 2,
+                },
+              ]
+            }
+            testID="gap"
+          />
+          <Text
+            style={
+              Object {
+                "color": "#2F80ED",
+                "fontSize": 12,
+                "marginStart": 8,
+                "textDecorationLine": "underline",
+              }
+            }
+            testID="contentLinkOpenLinkPress"
+          >
+            Open Link
+          </Text>
         </Text>
-      </Text>
+      </View>
     </View>
   </View>
 </View>
