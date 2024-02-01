@@ -61,12 +61,9 @@ const UserProfile = ({
     if (isAnonymous && anonUserInfo) {
       return (
         <View style={styles.profile}>
-          <View
-            style={{
-              marginRight: 8
-            }}>
+          <View style={styles.anonymousAvatarContainerStyle}>
             <AnonymousAvatar
-              radius={32}
+              radius={31}
               emojiRadius={16}
               version={POST_VERSION}
               anonUserInfo={anonUserInfo}
