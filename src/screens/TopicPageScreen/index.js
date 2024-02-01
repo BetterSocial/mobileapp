@@ -197,8 +197,6 @@ const TopicPageScreen = (props) => {
     }
   };
 
-  console.log(user.username);
-
   const initData = async () => {
     try {
       setIsInitialLoading(true);
