@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
-import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
+import {Dimensions, StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
 
 import Content from '../FeedScreen/Content';
 import ContentLink from '../FeedScreen/ContentLink';
@@ -22,6 +22,8 @@ import {getCommentLength, getCountCommentWithChild} from '../../utils/getstream'
 import {showScoreAlertDialog} from '../../utils/Utils';
 import {normalizeFontSizeByWidth} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
+import WriteComment from '../../components/Comments/WriteComment';
+import useWriteComment from '../../components/Comments/hooks/useWriteComment';
 
 const FULL_WIDTH = Dimensions.get('screen').width;
 const tabBarHeight = StatusBar.currentHeight;
@@ -58,6 +60,7 @@ const RenderListFeed = (props) => {
     statusUpvote,
     showScoreButton
   } = useFeed();
+  const {handleUserName} = useWriteComment();
 
   const onPressDownVoteHandle = async () => {
     onPressDownVoteHook();
@@ -168,7 +171,7 @@ const RenderListFeed = (props) => {
             showScoreButton={showScoreButton}
           />
         </View>
-        {getCommentLength(item.latest_reactions.comment) > 0 && (
+        {getCommentLength(item.latest_reactions.comment) > 0 ? (
           <View style={styles.contentReaction(getHeightReaction())}>
             <PreviewComment
               user={item.latest_reactions.comment[0].user}
@@ -181,6 +184,21 @@ const RenderListFeed = (props) => {
             />
             <Gap height={8} />
           </View>
+        ) : (
+          <TouchableOpacity
+            onPress={() => onPress(isHaveSeeMore)}
+            style={styles.contentReaction(getHeightReaction())}>
+            <WriteComment
+              postId={''}
+              username={handleUserName(item)}
+              value={''}
+              onChangeText={() => {}}
+              onPress={() => {}}
+              loadingPost={false}
+              isViewOnly={true}
+              withAnonymityLabel={false}
+            />
+          </TouchableOpacity>
         )}
       </View>
     </View>
