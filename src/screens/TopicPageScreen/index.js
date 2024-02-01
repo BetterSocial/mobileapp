@@ -30,7 +30,6 @@ import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
 import useViewPostTimeHook from '../FeedScreen/hooks/useViewPostTimeHook';
 import MemoizedListComponent from './MemoizedListComponent';
 import NavHeader from './elements/NavHeader';
-import BottomSheetFollow, {Follow} from './elements/BottomSheetFollow';
 
 const styles = StyleSheet.create({
   parentContainer: {
@@ -63,7 +62,6 @@ const TopicPageScreen = (props) => {
   const [userId, setUserId] = React.useState('');
   const [topicId, setTopicId] = React.useState('');
   const [isFollow, setIsFollow] = React.useState(params.isFollowing);
-  const [followType, setFollowType] = React.useState('');
   const [topicDetail, setTopicDetail] = React.useState({});
   const [memberCount, setMemberCount] = React.useState(params.memberCount);
   const [isHeaderHide, setIsHeaderHide] = React.useState(false);
@@ -76,9 +74,7 @@ const TopicPageScreen = (props) => {
 
   const [offset, setOffset] = React.useState(0);
   const [client] = React.useContext(Context).client;
-  const [user] = React.useContext(Context).profile;
   const refBlockComponent = React.useRef();
-  const bottomSheetFollowRef = React.useRef();
   const scrollY = React.useRef(new Animated.Value(0)).current;
   const {mappingColorFeed} = useCoreFeed();
 
@@ -441,10 +437,11 @@ const TopicPageScreen = (props) => {
         opacityHeaderAnimation={opacityHeader}
         handleOnMemberPress={handleOnMemberPress}
         topicDetail={topicDetail}
+        memberCount={memberCount}
+        setMemberCount={setMemberCount}
+        setIsFollow={setIsFollow}
         isFollow={isFollow}
-        onFollowButtonPress={() => bottomSheetFollowRef.current.open()}
-        followType={followType}
-        setFollowType={setFollowType}
+        getTopicDetail={getTopicDetail}
       />
       <View
         style={{
@@ -467,26 +464,12 @@ const TopicPageScreen = (props) => {
           contentInsetAdjustmentBehavior={feeds?.length > 1 ? 'automatic' : 'never'}
         />
       </View>
-      <ButtonAddPostTopic topicName={topicName} onRefresh={onRefresh} followType={followType} />
+      <ButtonAddPostTopic topicName={topicName} onRefresh={onRefresh} />
       <BlockComponent
         ref={refBlockComponent}
         refresh={onBlockCompleted}
         refreshAnonymous={onDeleteBlockedPostCompleted}
         screen="topic_screen"
-      />
-      <BottomSheetFollow
-        ref={bottomSheetFollowRef}
-        onClose={() => bottomSheetFollowRef.current.close()}
-        topicName={topicDetail.name}
-        memberCount={memberCount}
-        setMemberCount={setMemberCount}
-        isFollow={isFollow}
-        setIsFollow={setIsFollow}
-        followType={followType}
-        setFollowType={setFollowType}
-        getTopicDetail={getTopicDetail}
-        username={user?.myProfile.username}
-        profilePicture={user?.myProfile.profile_pic_path}
       />
     </>
   );
