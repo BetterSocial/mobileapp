@@ -325,6 +325,16 @@ const TopicPageScreen = (props) => {
       isalreadypolling: item.isalreadypolling,
       from: 'topic',
       haveSeeMore,
+      data: item
+    });
+  };
+
+  const onPressComment = (item, haveSeeMore) => {
+    props.navigation.navigate('PostDetailPage', {
+      feedId: item.id,
+      isalreadypolling: item.isalreadypolling,
+      from: 'topic',
+      haveSeeMore,
       data: item,
       isKeyboardOpen: true
     });
@@ -403,7 +413,7 @@ const TopicPageScreen = (props) => {
       index={index}
       onPressDomain={onPressDomain}
       onPress={(haveSeeMore) => onPress(item, haveSeeMore)}
-      onPressComment={() => onPress(item)}
+      onPressComment={() => onPressComment(item)}
       onPressBlock={() => onPressBlock(item)}
       onPressUpvote={(post) => setUpVote(post, index)}
       userId={userId}

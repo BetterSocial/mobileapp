@@ -39,6 +39,7 @@ const RenderListFeed = (props) => {
     onPressDomain,
     onPressBlock,
     onPressUpvote,
+    onPressComment,
     selfUserId,
     onPressDownVote,
     source = SOURCE_FEED_TAB,
@@ -171,7 +172,7 @@ const RenderListFeed = (props) => {
                 ANALYTICS_SHARE_POST_FEED_ID
               )
             }
-            onPressComment={() => onPress(isHaveSeeMore)}
+            onPressComment={() => onPressComment(isHaveSeeMore)}
             onPressBlock={() => onPressBlock(item)}
             onPressDownVote={onPressDownVoteHandle}
             onPressUpvote={onPressUpvoteHandle}
@@ -205,7 +206,7 @@ const RenderListFeed = (props) => {
         ) : (
           <TouchableOpacity
             testID="writeComment"
-            onPress={() => onPress(isHaveSeeMore)}
+            onPress={() => onPressComment(isHaveSeeMore)}
             style={styles.contentReaction(getHeightReaction())}>
             <WriteComment
               postId={''}
