@@ -125,7 +125,6 @@ const Content = ({
   };
 
   if (!cekImage) return null;
-  console.log({message: sanitizeUrl(message)}, 'laka');
   return (
     <>
       <ScrollView
