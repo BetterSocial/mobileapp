@@ -139,7 +139,7 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
             marginVertical: 12
           }}
         />
-        <Text style={styles.bioText}>{addDotAndRemoveNewline(bio)}</Text>
+        <Text style={styles.bioText}>{addDotAndRemoveNewline(bio || '')}</Text>
       </View>
       <View
         style={{
