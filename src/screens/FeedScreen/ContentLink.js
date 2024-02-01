@@ -102,8 +102,7 @@ const styles = StyleSheet.create({
   contentFeed: (hasComment) => ({
     flex: hasComment ? 1 : 0,
     marginHorizontal: 6,
-    backgroundColor: COLORS.white,
-    marginBottom: hasComment ? 0 : normalizeFontSizeByWidth(16)
+    backgroundColor: COLORS.white
   }),
   messageContainer: {
     paddingHorizontal: 20,

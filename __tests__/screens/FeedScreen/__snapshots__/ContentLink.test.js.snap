@@ -474,7 +474,6 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
     Object {
       "backgroundColor": "#FFFFFF",
       "flex": 0,
-      "marginBottom": 14.4,
       "marginHorizontal": 6,
     }
   }
