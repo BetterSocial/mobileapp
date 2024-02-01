@@ -163,17 +163,6 @@ const useCoreFeed = () => {
     getDataFeeds();
   };
 
-  const updateFeed = async (post, index) => {
-    try {
-      const data = await getFeedDetail(post.activity_id);
-      handleUpdateFeed(data, index);
-    } catch (e) {
-      if (axios.isAxiosError(e)) {
-        throw e.response.data;
-      }
-    }
-  };
-
   const handleUpdateFeed = (data, index) => {
     if (data) {
       setFeedByIndex(
@@ -185,16 +174,28 @@ const useCoreFeed = () => {
       );
     }
   };
+
+  const updateFeed = async (post, index) => {
+    try {
+      const data = await getFeedDetail(post.activity_id);
+      handleUpdateFeed(data, index);
+    } catch (e) {
+      if (axios.isAxiosError(e)) {
+        throw e.response.data;
+      }
+    }
+  };
+
   const setUpVote = async (post, index) => {
     await upVote(post);
     // updateVoteData(index, 'upvote', post, myUpvote)
-    updateFeed(post, index);
+    await updateFeed(post, index);
   };
 
   const setDownVote = async (post, index) => {
     await downVote(post);
     // updateVoteData(index, 'downvote', post, myDownVote)
-    updateFeed(post, index);
+    await updateFeed(post, index);
   };
 
   const saveSearchHeight = (height) => {
