@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import PropTypes from 'prop-types';
 import React from 'react';
-import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
+import {Dimensions, StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
 
 import Content from './Content';
 import ContentLink from './ContentLink';
@@ -19,10 +19,12 @@ import {
 } from '../../utils/constants';
 import {Footer, Gap, PreviewComment} from '../../components';
 import {getCommentLength} from '../../utils/getstream';
-import {normalizeFontSizeByWidth} from '../../utils/fonts';
+import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
 import BlurredLayer from './elements/BlurredLayer';
 import {showScoreAlertDialog} from '../../utils/Utils';
 import {COLORS} from '../../utils/theme';
+import WriteComment from '../../components/Comments/WriteComment';
+import useWriteComment from '../../components/Comments/hooks/useWriteComment';
 
 const tabBarHeight = StatusBar.currentHeight;
 const FULL_WIDTH = Dimensions.get('screen').width;
@@ -60,6 +62,7 @@ const RenderListFeed = (props) => {
     getTotalReaction,
     showScoreButton
   } = useFeed();
+  const {handleUserName} = useWriteComment();
 
   const onPressDownVoteHandle = async () => {
     onPressDownVoteHook();
@@ -106,9 +109,10 @@ const RenderListFeed = (props) => {
     initialSetup(item);
   }, [item]);
 
+  const hasComment = getCommentLength(item.latest_reactions.comment) > 0;
+
   const contentLinkHeight = () => {
-    const haveLength =
-      getCommentLength(item.latest_reactions.comment) > 0 ? getHeightReaction() / 2.2 : 0;
+    const haveLength = hasComment ? getHeightReaction() / 2.2 : getHeightReaction() / 1.6;
     return dimen.size.FEED_CURRENT_ITEM_HEIGHT - getHeightHeader() - getHeightFooter() - haveLength;
   };
   return (
@@ -136,6 +140,7 @@ const RenderListFeed = (props) => {
             messageContainerStyle={{paddingHorizontal: 10}}
             topics={item?.topics}
             contentHeight={contentLinkHeight()}
+            hasComment={hasComment}
           />
         )}
         {(item.post_type === POST_TYPE_STANDARD || item.post_type === POST_TYPE_POLL) && (
@@ -151,6 +156,7 @@ const RenderListFeed = (props) => {
             topics={item?.topics}
             item={item}
             onNewPollFetched={onNewPollFetched}
+            hasComment={hasComment}
           />
         )}
         <View style={styles.footerWrapper(getHeightFooter())}>
@@ -175,8 +181,8 @@ const RenderListFeed = (props) => {
             isSelf={item.anonimity ? false : selfUserId === item.actor.id}
           />
         </View>
-        {getCommentLength(item.latest_reactions.comment) > 0 && (
-          <View style={styles.contentReaction(getHeightReaction())}>
+        {hasComment ? (
+          <View testID="previewComment" style={styles.contentReaction(getHeightReaction())}>
             <BlurredLayer
               layerOnly
               blurType="light"
@@ -196,6 +202,22 @@ const RenderListFeed = (props) => {
               </React.Fragment>
             </BlurredLayer>
           </View>
+        ) : (
+          <TouchableOpacity
+            testID="writeComment"
+            onPress={() => onPress(isHaveSeeMore)}
+            style={styles.contentReaction(getHeightReaction())}>
+            <WriteComment
+              postId={''}
+              username={handleUserName(item)}
+              value={''}
+              onChangeText={() => {}}
+              onPress={() => {}}
+              loadingPost={false}
+              isViewOnly={true}
+              withAnonymityLabel={false}
+            />
+          </TouchableOpacity>
         )}
       </View>
     </View>
@@ -206,7 +228,7 @@ const styles = StyleSheet.create({
   footerWrapper: (h) => ({height: h, alignItems: 'center', justifyContent: 'center'}),
   contentReaction: (heightReaction) => ({
     maxHeight: heightReaction,
-    marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0,
+    marginBottom: heightReaction <= 0 ? tabBarHeight + normalize(10) : 0,
     borderTopWidth: 1,
     borderTopColor: COLORS.light_silver
   }),
@@ -216,7 +238,11 @@ const styles = StyleSheet.create({
     borderBottomColor: COLORS.lightgrey,
     backgroundColor: 'white',
     height: dimen.size.FEED_CURRENT_ITEM_HEIGHT,
-    marginBottom: normalizeFontSizeByWidth(4)
+    marginBottom: normalizeFontSizeByWidth(4),
+    shadowColor: COLORS.black000,
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 0.3,
+    shadowRadius: 4
   },
   cardMain: {
     width: '100%',
@@ -240,7 +266,8 @@ RenderListFeed.propTypes = {
   source: PropTypes.string,
   hideThreeDot: PropTypes.bool,
   showAnonymousOption: PropTypes.bool,
-  onHeaderOptionClicked: PropTypes.func
+  onHeaderOptionClicked: PropTypes.func,
+  onPreviewCommentPress: PropTypes.func
 };
 
 export default React.memo(
