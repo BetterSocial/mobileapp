@@ -61,13 +61,18 @@ const UserProfile = ({
     if (isAnonymous && anonUserInfo) {
       return (
         <View style={styles.profile}>
-          <AnonymousAvatar
-            radius={32}
-            emojiRadius={16}
-            version={POST_VERSION}
-            anonUserInfo={anonUserInfo}
-            containerStyle={styles.anonymousAvatarContainerStyle}
-          />
+          <View
+            style={{
+              marginRight: 8
+            }}>
+            <AnonymousAvatar
+              radius={32}
+              emojiRadius={16}
+              version={POST_VERSION}
+              anonUserInfo={anonUserInfo}
+              containerStyle={styles.anonymousAvatarContainerStyle}
+            />
+          </View>
           <View>
             <AnonymousUsername anonUserInfo={anonUserInfo} version={POST_VERSION} />
             <Text style={styles.desc}>Your alias for this post</Text>

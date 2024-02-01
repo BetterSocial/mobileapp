@@ -11,19 +11,7 @@ const styles = StyleSheet.create({
     marginRight: 0,
     width: dimen.size.FEED_HEADER_IMAGE_RADIUS,
     height: dimen.size.FEED_HEADER_IMAGE_RADIUS
-  },
-  avatarV2Background: (backgroundColor, radius) => ({
-    width: radius,
-    height: radius,
-    borderRadius: radius / 2,
-    backgroundColor,
-    justifyContent: 'center'
-  }),
-  avatarV2Emoji: (emojiRadius) => ({
-    fontSize: emojiRadius,
-    textAlign: 'center',
-    alignSelf: 'center'
-  })
+  }
 });
 
 /**
@@ -46,7 +34,8 @@ const AnonymousAvatar = (props) => {
     containerStyle = {},
     radius = dimen.size.FEED_HEADER_IMAGE_RADIUS,
     emojiRadius = dimen.size.FEED_HEADER_ANONYMOUS_IMAGE_RADIUS,
-    karmaScore
+    karmaScore,
+    withKarma = false
   } = props;
 
   if (version >= POST_VERSION) {
@@ -56,9 +45,9 @@ const AnonymousAvatar = (props) => {
         anonBackgroundColor={anonUserInfo.colorCode}
         anonEmojiCode={anonUserInfo.emojiCode}
         karmaScore={karmaScore}
-        size={50}
+        size={radius}
         width={3}
-        withKarma
+        withKarma={withKarma}
       />
     );
   }
