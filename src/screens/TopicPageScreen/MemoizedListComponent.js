@@ -160,7 +160,7 @@ const RenderListFeed = (props) => {
                 ANALYTICS_SHARE_POST_TOPIC_ID
               )
             }
-            onPressComment={() => onPress(isHaveSeeMore)}
+            onPressComment={() => onPressComment(isHaveSeeMore)}
             onPressBlock={() => onPressBlock(item)}
             onPressDownVote={onPressDownVoteHandle}
             onPressUpvote={onPressUpvoteHandle}
@@ -186,7 +186,7 @@ const RenderListFeed = (props) => {
           </View>
         ) : (
           <TouchableOpacity
-            onPress={() => onPress(isHaveSeeMore)}
+            onPress={() => onPressComment(isHaveSeeMore)}
             style={styles.contentReaction(getHeightReaction())}>
             <WriteComment
               postId={''}
