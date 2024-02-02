@@ -39,7 +39,7 @@ const ProfilePicture = ({
             {isAnon ? (
               <>
                 <View style={[styles.anonStyle(size), {backgroundColor: anonBackgroundColor}]}>
-                  <Text style={{fontSize: size / 1.5, textAlign: 'center', alignSelf: 'center'}}>
+                  <Text style={{fontSize: size / 2, textAlign: 'center', alignSelf: 'center'}}>
                     {anonEmojiCode}
                   </Text>
                 </View>
@@ -51,7 +51,7 @@ const ProfilePicture = ({
                   style={styles.profileImage(size, width)}
                   source={{
                     uri: profilePicPath ? `${profilePicPath}` : DEFAULT_PROFILE_PIC_PATH,
-                    cache: 'cacheOnly'
+                    cache: 'web'
                   }}
                   resizeMode={FastImage.resizeMode.stretch}
                   loadingIndicatorSource={
@@ -74,7 +74,7 @@ const ProfilePicture = ({
             {isAnon ? (
               <>
                 <View style={[styles.anonStyle(size), {backgroundColor: anonBackgroundColor}]}>
-                  <Text style={{fontSize: size / 1.5, textAlign: 'center', alignSelf: 'center'}}>
+                  <Text style={{fontSize: size / 2, textAlign: 'center', alignSelf: 'center'}}>
                     {anonEmojiCode}
                   </Text>
                 </View>
@@ -85,7 +85,8 @@ const ProfilePicture = ({
                   testId="images"
                   style={styles.profileImage(size, width)}
                   source={{
-                    uri: profilePicPath ? `${profilePicPath}` : DEFAULT_PROFILE_PIC_PATH
+                    uri: profilePicPath ? `${profilePicPath}` : DEFAULT_PROFILE_PIC_PATH,
+                    cache: 'web'
                   }}
                   resizeMode={FastImage.resizeMode.stretch}
                 />

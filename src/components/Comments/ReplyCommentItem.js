@@ -20,6 +20,7 @@ import {iVoteComment, voteCommentV2} from '../../service/vote';
 import {removeWhiteSpace} from '../../utils/Utils';
 import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
 import CommentUserName from '../CommentUsername/CommentUsername';
+import ProfilePicture from '../../screens/ProfileScreen/elements/ProfilePicture';
 
 const ReplyCommentItem = ({
   user,
@@ -155,18 +156,26 @@ const ReplyCommentItem = ({
         <ButtonHightlight onLongPress={handleLongPress} onPress={openProfile}>
           <View style={styles.profile}>
             {comment.data.anon_user_info_emoji_name || comment.data.is_anonymous ? (
-              <View
-                style={[styles.image, {backgroundColor: comment.data.anon_user_info_color_code}]}>
-                <Text>{comment.data.anon_user_info_emoji_code}</Text>
-              </View>
+              <ProfilePicture
+                karmaScore={comment.karmaScores}
+                size={25}
+                width={6}
+                withKarma
+                isAnon={true}
+                anonBackgroundColor={comment.data?.anon_user_info_color_code}
+                anonEmojiCode={comment.data?.anon_user_info_emoji_code}
+              />
             ) : (
-              <Image
-                source={
+              <ProfilePicture
+                karmaScore={comment.karmaScores}
+                profilePicPath={
                   photo
-                    ? {uri: removeWhiteSpace(photo)}
+                    ? removeWhiteSpace(photo)
                     : require('../../assets/images/ProfileDefault.png')
                 }
-                style={styles.image}
+                size={25}
+                width={6}
+                withKarma
               />
             )}
 
