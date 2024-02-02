@@ -446,7 +446,7 @@ const CreatePost = () => {
   const checkTaggingUser = () => {
     const mapTagUser = taggingUsers.map((data) => {
       const findData = allTaggingUser.find((dataUser) => dataUser.username === data);
-      return findData.user_id;
+      return findData?.user_id;
     });
     return mapTagUser;
   };
