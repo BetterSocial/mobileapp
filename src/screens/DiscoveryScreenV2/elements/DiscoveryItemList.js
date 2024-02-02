@@ -247,6 +247,7 @@ const styles = StyleSheet.create({
   },
   buttonFollowing: {
     width: normalize(65),
+    paddingLeft: 1,
     height: normalize(34),
     flexDirection: 'row',
     justifyContent: 'center',
