@@ -564,6 +564,17 @@ const ProfileScreen = ({route}) => {
     });
   };
 
+  const onPressComment = (item, haveSeeMore) => {
+    navigation.navigate('PostDetailPage', {
+      isalreadypolling: item.isalreadypolling,
+      feedId: item.id,
+      refreshParent: profileTabIndex === 0 ? getMyFeeds : reloadFetchAnonymousPost,
+      haveSeeMore,
+      data: item,
+      isKeyboardOpen: true
+    });
+  };
+
   const onNewPollFetched = (newPolls, index) => {
     setFeedByIndex(
       {
@@ -667,7 +678,7 @@ const ProfileScreen = ({route}) => {
               index={index}
               onPressDomain={onPressDomain}
               onPress={(haveSeeMore) => onPress(item, haveSeeMore)}
-              onPressComment={(haveSeeMore) => onPress(item, haveSeeMore)}
+              onPressComment={(haveSeeMore) => onPressComment(item, haveSeeMore)}
               onPressUpvote={(post) => setUpVote(post)}
               selfUserId={profile.myProfile.user_id}
               onPressDownVote={(post) => setDownVote(post)}
