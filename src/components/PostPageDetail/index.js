@@ -52,7 +52,8 @@ const PostPageDetailIdComponent = (props) => {
     navigateToReplyView,
     contextSource = CONTEXT_SOURCE.FEEDS,
     haveSeeMore,
-    parentData
+    parentData,
+    isKeyboardOpen
   } = props;
   const [profile] = React.useContext(Context).profile;
   const [loading, setLoading] = React.useState(true);
@@ -109,7 +110,7 @@ const PostPageDetailIdComponent = (props) => {
     const downvotes = data.downvotes ? data.downvotes : 0;
     setTotalVote(upvote - downvotes);
   };
-  const initial = async () => {
+  const initial = () => {
     const reactionCount = item?.reaction_counts;
     if (JSON.stringify(reactionCount) !== '{}') {
       let count = 0;
@@ -666,6 +667,7 @@ const PostPageDetailIdComponent = (props) => {
             onChangeText={(value) => setTextComment(value)}
             onPress={onComment}
             loadingPost={loadingPost}
+            isKeyboardOpen={isKeyboardOpen}
           />
 
           <BlockComponent ref={refBlockComponent} refresh={updateFeed} screen="post_detail_page" />
