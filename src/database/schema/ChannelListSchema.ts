@@ -515,14 +515,17 @@ class ChannelList implements BaseDbSchema {
     });
   }
 
-  static fromInitAnonymousChatAPI(data: ModifyAnonymousChatData): ChannelList {
+  static fromInitAnonymousChatAPI(
+    data: ModifyAnonymousChatData,
+    type: 'ANON_PM' | 'PM'
+  ): ChannelList {
     return new ChannelList({
       id: data?.message?.cid,
-      channelPicture: '',
+      channelPicture: data.targetImage,
       name: data?.targetName,
       description: data?.message?.message,
       unreadCount: 0,
-      channelType: 'ANON_PM',
+      channelType: type,
       lastUpdatedAt: data?.message?.created_at,
       lastUpdatedBy: data?.message?.user?.id,
       createdAt: data?.message?.created_at,

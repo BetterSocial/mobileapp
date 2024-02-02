@@ -1,18 +1,18 @@
 import {v4 as uuid} from 'uuid';
 
-import ChannelListMemberSchema from '../schema/ChannelListMemberSchema';
-import ChannelListSchema from '../schema/ChannelListSchema';
-import ChatSchema from '../schema/ChatSchema';
-import UserSchema from '../schema/UserSchema';
-import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
-import useLocalDatabaseHook from './useLocalDatabaseHook';
-import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
-import {GROUP_INFO} from '../../hooks/core/constant';
 import {
   InitAnonymousChatData,
   ModifyAnonymousChatData
 } from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
+import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
+import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
+import {GROUP_INFO, SIGNED} from '../../hooks/core/constant';
 import {getChannelListInfo} from '../../utils/string/StringUtils';
+import ChannelListMemberSchema from '../schema/ChannelListMemberSchema';
+import ChannelListSchema from '../schema/ChannelListSchema';
+import ChatSchema from '../schema/ChatSchema';
+import UserSchema from '../schema/UserSchema';
+import useLocalDatabaseHook from './useLocalDatabaseHook';
 
 const useSaveAnonChatHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook();
@@ -28,8 +28,12 @@ const useSaveAnonChatHook = () => {
   };
 
   const helperGoToAnonymousChat = async (object: InitAnonymousChatData, from: string) => {
-    const channelListSchema = await helperFindChatById(object);
-    goToChatScreen(channelListSchema, from);
+    try {
+      const channelListSchema = await helperFindChatById(object);
+      goToChatScreen(channelListSchema, from);
+    } catch (e) {
+      console.log('error helperGoToAnonymousChat', e);
+    }
   };
 
   const saveChatFromOtherProfile = async (
@@ -39,7 +43,7 @@ const useSaveAnonChatHook = () => {
     type: string
   ) => {
     if (!localDb) return;
-    const {channelName, channelImage, originalMembers} = await getChannelListInfo(
+    const {channelName, channelImage, originalMembers} = getChannelListInfo(
       object,
       signedProfileId,
       anonProfileId
@@ -53,10 +57,9 @@ const useSaveAnonChatHook = () => {
 
     initAnonymousChat.message.cid = initAnonymousChat.message.cid.replace('messaging:', '');
 
-    const chat = ChatSchema.fromInitAnonymousChatAPI(initAnonymousChat, status);
-    await chat.save(localDb);
-
     try {
+      const chat = ChatSchema.fromInitAnonymousChatAPI(initAnonymousChat, status);
+      await chat.save(localDb);
       const members = originalMembers || object?.members;
       members?.forEach((member) => {
         const saveUserAndChannelListMember = async () => {
@@ -65,10 +68,9 @@ const useSaveAnonChatHook = () => {
               member,
               initAnonymousChat?.message?.cid
             );
-
             await userMember.saveOrUpdateIfExists(localDb);
           } catch (e) {
-            console.log('error saveChatFromOtherProfile userMember', e);
+            console.log(e);
           }
           try {
             const memberSchema = ChannelListMemberSchema.fromInitAnonymousChatAPI(
@@ -76,23 +78,34 @@ const useSaveAnonChatHook = () => {
               uuid(),
               member
             );
-            memberSchema.saveIfNotExist(localDb);
+            await memberSchema.saveIfNotExist(localDb);
           } catch (e) {
-            console.log('error saveChatFromOtherProfile memberSchema', e);
+            console.log(e);
           }
         };
 
         Promise.all([saveUserAndChannelListMember()]);
       });
     } catch (e) {
-      console.log('error saveChatFromOtherProfile');
       console.log(e);
     }
-
-    refresh('channelList');
-    refresh('chat');
-
-    if (withNavigate) helperGoToAnonymousChat(object, GROUP_INFO);
+    try {
+      const channelListData = ChannelListSchema.fromInitAnonymousChatAPI(
+        {
+          ...initAnonymousChat
+        },
+        type === SIGNED ? 'PM' : 'ANON_PM'
+      );
+      await channelListData.saveIfLatest(localDb);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      refresh('channelList');
+      refresh('chat');
+      if (withNavigate) {
+        helperGoToAnonymousChat(object, GROUP_INFO);
+      }
+    }
   };
 
   const helperUpdateChannelListDescription = async (object: InitAnonymousChatData) => {

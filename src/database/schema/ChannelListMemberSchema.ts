@@ -68,10 +68,15 @@ class ChannelListMemberSchema implements BaseDbSchema {
   };
 
   saveIfNotExist = async (db: SQLiteDatabase): Promise<void> => {
-    const ifExists = await this.checkIfExist(db);
-    if (ifExists) return;
+    try {
+      const ifExists = await this.checkIfExist(db);
+      if (ifExists) return;
 
-    this.save(db);
+      this.save(db);
+    } catch (e) {
+      console.log('saveIfNotExist error', e);
+      throw e;
+    }
   };
 
   checkIfExist = async (db: SQLiteDatabase): Promise<boolean> => {
