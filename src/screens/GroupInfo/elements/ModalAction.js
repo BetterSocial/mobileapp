@@ -16,7 +16,7 @@ const ModalAction = (props) => {
     isLoadingInitChat = false
   } = props;
   const isAndroid = Platform.OS === 'android';
-
+  const isAnon = selectedUser?.anon_user_info_color_code && selectedUser?.anon_user_info_emoji_code;
   return (
     <Modal
       animationInTiming={200}
@@ -26,24 +26,29 @@ const ModalAction = (props) => {
       onBackdropPress={onCloseModal}
       {...props}>
       <View style={styles.modalContainer}>
-        <TouchableOpacity
-          onPress={() => onPress('message', selectedUser)}
-          style={styles.buttonStyle}>
-          <View style={{flexDirection: 'row'}}>
-            <Text style={styles.textButton}>Message {name}</Text>
-            <Loading visible={isLoadingInitChat} />
-          </View>
-        </TouchableOpacity>
+        {!isAnon && (
+          <TouchableOpacity
+            onPress={() => onPress('message', selectedUser)}
+            style={styles.buttonStyle}>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={styles.textButton}>Message {name}</Text>
+              <Loading visible={isLoadingInitChat} />
+            </View>
+          </TouchableOpacity>
+        )}
         <TouchableOpacity
           onPress={() => onPress('message-anonymously', selectedUser)}
           style={styles.buttonStyle}>
           <Text style={selectedUser?.allow_anon_dm ? styles.textButton : styles.disabledTextButton}>
-            Message Anonymously
+            Message Incognito
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => onPress('view')} style={styles.buttonStyle}>
-          <Text style={styles.textButton}>View {name}&apos;s Profile </Text>
-        </TouchableOpacity>
+        {!isAnon && (
+          <TouchableOpacity onPress={() => onPress('view')} style={styles.buttonStyle}>
+            <Text style={styles.textButton}>View {name}&apos;s Profile </Text>
+          </TouchableOpacity>
+        )}
+
         {isGroup && (
           <TouchableOpacity onPress={() => onPress('remove')} style={styles.buttonStyle}>
             <Text style={styles.textButton}>Remove {name} </Text>
