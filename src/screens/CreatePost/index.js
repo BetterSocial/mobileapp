@@ -18,7 +18,6 @@ import {
   Text,
   View
 } from 'react-native';
-import {Image} from 'react-native-compressor';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {openSettings} from 'react-native-permissions';
 import {showMessage} from 'react-native-flash-message';
@@ -29,6 +28,8 @@ import CreatePollContainer from './elements/CreatePollContainer';
 import CreatePostInput from '../../components/CreatePostInput';
 import Gap from '../../components/Gap';
 import Header from '../../components/Header';
+import ImageCompressionUtils from '../../utils/image/compress';
+import ImageUtils from '../../utils/image';
 import ListItem from '../../components/MenuPostItem';
 import Loading from '../Loading';
 import Location from '../../assets/icons/Ic_location';
@@ -52,6 +53,7 @@ import useCreatePostHook from '../../hooks/screen/useCreatePostHook';
 import useHastagMention from './elements/useHastagMention';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button, ButtonAddMedia} from '../../components/Button';
+import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {
   DEFAULT_TOPIC_PIC_PATH,
@@ -60,7 +62,6 @@ import {
 } from '../../utils/constants';
 import {PROFILE_CACHE} from '../../utils/cache/constant';
 import {ShowingAudience, createPost} from '../../service/post';
-import {composeImageMeta} from '../../utils/string/file';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {
   getDurationId,
@@ -75,9 +76,6 @@ import {getSpecificCache} from '../../utils/cache';
 import {getUrl, isContainUrl} from '../../utils/Utils';
 import {getUserId} from '../../utils/users';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
-import {COLORS} from '../../utils/theme';
-import ImageUtils from '../../utils/image';
-import ImageCompressionUtils from '../../utils/image/compress';
 
 const IS_GEO_SELECT_ENABLED = false;
 
@@ -717,7 +715,7 @@ const CreatePost = () => {
       animatedReminder.setValue(0);
     }
   }, [typeUser]);
-  console.log({typeUser}, 'heja');
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
