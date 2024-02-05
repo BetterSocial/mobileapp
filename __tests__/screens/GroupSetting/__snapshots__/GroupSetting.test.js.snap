@@ -69,9 +69,13 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
                 "color": "#1E1F20",
                 "fontFamily": "Inter-SemiBold",
                 "fontSize": 12.600000000000001,
-                "fontWeight": "bold",
                 "padding": 10,
                 "textAlign": "center",
+              },
+              Object {
+                "position": "absolute",
+                "width": "100%",
+                "zIndex": -1,
               },
               Object {},
             ]
@@ -104,7 +108,6 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
                   "color": "#1E1F20",
                   "fontFamily": "Inter-SemiBold",
                   "fontSize": 12.600000000000001,
-                  "fontWeight": "bold",
                   "padding": 10,
                   "textAlign": "center",
                 },

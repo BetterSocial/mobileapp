@@ -10,6 +10,7 @@ import UserSchema from '../../database/schema/UserSchema';
 import ChannelListMemberSchema from '../../database/schema/ChannelListMemberSchema';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import {GROUP_INFO} from '../core/constant';
+import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
 
 const useCreateChat = () => {
   const [loadingCreateChat, setLoadingCreateChat] = React.useState(false);
@@ -71,11 +72,27 @@ const useCreateChat = () => {
       const initChannel = await SignedMessageRepo.createSignedChat(members);
       const chatData = createChannelJson(initChannel, selectedUser);
 
+      console.log('initChannel', JSON.stringify(initChannel));
       const channelList = ChannelList.fromMessageSignedAPI(chatData);
       channelList.saveIfLatest(localDb);
       handleMemberSchema(initChannel);
       setLoadingCreateChat(false);
       goToChatScreen(channelList, from);
+    } catch (e) {
+      setLoadingCreateChat(false);
+      console.log({e}, 'error create chat');
+    }
+  };
+
+  const createAnonymousChat = async (selectedUser) => {
+    try {
+      setLoadingCreateChat(true);
+      const response = await getOrCreateAnonymousChannel(selectedUser?.user?.userId);
+      const chatData = createChannelJson(response, selectedUser);
+      const channelList = ChannelList.fromMessageAnonymouslyAPI(chatData);
+      await channelList.saveIfLatest(localDb);
+      handleMemberSchema(response);
+      goToChatScreen(channelList, GROUP_INFO);
     } catch (e) {
       setLoadingCreateChat(false);
       console.log({e}, 'error create chat');
@@ -104,6 +121,7 @@ const useCreateChat = () => {
 
   return {
     createSignChat,
+    createAnonymousChat,
     handleAnonymousMessage,
     loadingCreateChat
   };
