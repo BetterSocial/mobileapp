@@ -340,6 +340,47 @@ class UserSchema implements BaseDbSchema {
     }
   }
 
+  static fromMessageAnonymouslyAPI(json: any, channelId: string): UserSchema {
+    try {
+      return new UserSchema({
+        id: uuidv4(),
+        channelId,
+        userId: json?.user?.id,
+        username: json?.user?.username,
+        countryCode: '',
+        createdAt: json?.user?.created_at,
+        updatedAt: json?.user?.updated_at,
+        lastActiveAt: new Date(),
+        profilePicture: json?.user?.image,
+        bio: '',
+        isBanned: json?.banned,
+        anon_user_info_color_code: json?.anon_user_info_color_code,
+        anon_user_info_color_name: json?.anon_user_info_color_name,
+        anon_user_info_emoji_code: json?.anon_user_info_emoji_code,
+        anon_user_info_emoji_name: json?.anon_user_info_emoji_name
+      });
+    } catch (e) {
+      console.log('error on fromMemberWebsocketObject', e);
+      return new UserSchema({
+        id: uuidv4(),
+        channelId,
+        userId: null,
+        username: null,
+        countryCode: null,
+        createdAt: null,
+        updatedAt: null,
+        lastActiveAt: null,
+        profilePicture: null,
+        bio: null,
+        isBanned: null,
+        anon_user_info_color_code: null,
+        anon_user_info_color_name: null,
+        anon_user_info_emoji_code: null,
+        anon_user_info_emoji_name: null
+      });
+    }
+  }
+
   static fromInitAnonymousChatAPI(
     object: InitAnonymousChatDataMember,
     channelId: string

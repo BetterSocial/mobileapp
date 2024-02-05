@@ -1,9 +1,7 @@
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
-import {v4 as uuid} from 'uuid';
 
 import ChannelList from '../../database/schema/ChannelListSchema';
-import ChannelListMemberSchema from '../../database/schema/ChannelListMemberSchema';
 import SignedMessageRepo from '../../service/repo/signedMessageRepo';
 import UserSchema from '../../database/schema/UserSchema';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
@@ -36,13 +34,6 @@ const useCreateChat = () => {
       members?.forEach(async (member) => {
         const userMember = UserSchema.fromMemberWebsocketObject(member, response?.channel?.id);
         await userMember.saveOrUpdateIfExists(localDb);
-
-        const memberSchema = ChannelListMemberSchema.fromWebsocketObject(
-          response?.channel?.id,
-          uuid(),
-          member
-        );
-        await memberSchema.save(localDb);
       });
     } catch (e) {
       console.log(e, 'error on memberSchema');
