@@ -325,6 +325,17 @@ const TopicPageScreen = (props) => {
     });
   };
 
+  const onPressComment = (item, haveSeeMore) => {
+    props.navigation.navigate('PostDetailPage', {
+      feedId: item.id,
+      isalreadypolling: item.isalreadypolling,
+      from: 'topic',
+      haveSeeMore,
+      data: item,
+      isKeyboardOpen: true
+    });
+  };
+
   const onPressBlock = (value) => {
     refBlockComponent.current.openBlockComponent(value);
   };
@@ -387,6 +398,10 @@ const TopicPageScreen = (props) => {
     navigation.push('TopicMemberScreen', navigationParam);
   };
 
+  React.useEffect(() => {
+    onRefresh();
+  }, [topicId]);
+
   const renderItem = ({item, index}) => (
     <MemoizedListComponent
       item={item}
@@ -394,7 +409,7 @@ const TopicPageScreen = (props) => {
       index={index}
       onPressDomain={onPressDomain}
       onPress={(haveSeeMore) => onPress(item, haveSeeMore)}
-      onPressComment={() => onPress(item)}
+      onPressComment={() => onPressComment(item)}
       onPressBlock={() => onPressBlock(item)}
       onPressUpvote={(post) => setUpVote(post, index)}
       userId={userId}

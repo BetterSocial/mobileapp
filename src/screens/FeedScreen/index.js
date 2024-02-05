@@ -141,6 +141,18 @@ const FeedScreen = (props) => {
     });
   };
 
+  const onPressComment = (item, haveSeeMore, index) => {
+    props.navigation.navigate('PostDetailPage', {
+      isalreadypolling: item.isalreadypolling,
+      feedId: item.id,
+      data: item,
+      isCaching: true,
+      haveSeeMore,
+      refreshParent: () => refreshMoreText(index, haveSeeMore),
+      isKeyboardOpen: true
+    });
+  };
+
   const onPressBlock = (value) => {
     refBlockComponent.current.openBlockComponent(value);
   };
@@ -209,7 +221,7 @@ const FeedScreen = (props) => {
       onPress={(haveSeeMore) => {
         onPress(item, haveSeeMore, index);
       }}
-      onPressComment={(haveSeeMore) => onPress(item, haveSeeMore, index)}
+      onPressComment={(haveSeeMore) => onPressComment(item, haveSeeMore, index)}
       onPressBlock={() => onPressBlock(item)}
       onPressUpvote={(post) => setUpVoteHandle(post, index)}
       selfUserId={myProfile.user_id}
