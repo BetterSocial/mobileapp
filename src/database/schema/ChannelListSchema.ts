@@ -9,6 +9,7 @@ import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRep
 import {CHANNEL_GROUP, PM} from '../../hooks/core/constant';
 import {ChannelData} from '../../../types/repo/AnonymousMessageRepo/AnonymousChannelsData';
 import {ChannelType} from '../../../types/repo/ChannelData';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {MessageAnonymouslyData} from '../../../types/repo/AnonymousMessageRepo/MessageAnonymouslyData';
 import {ModifyAnonymousChatData} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 import {SignedPostNotification} from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
@@ -520,7 +521,7 @@ class ChannelList implements BaseDbSchema {
   ): ChannelList {
     return new ChannelList({
       id: data?.message?.cid,
-      channelPicture: data.targetImage,
+      channelPicture: data?.targetImage || DEFAULT_PROFILE_PIC_PATH,
       name: data?.targetName,
       description: data?.message?.message,
       unreadCount: 0,

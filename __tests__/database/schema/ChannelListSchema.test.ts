@@ -553,7 +553,8 @@ describe('TESTING ChannelListSchema', () => {
         rawJson: expect.any(Object),
         user: null,
         members: null,
-        channelPicture: '',
+        channelPicture:
+          'https://res.cloudinary.com/hpjivutj2/image/upload/v1680929851/default-profile-picture_vrmmdn.png',
         expiredAt: null
       };
 

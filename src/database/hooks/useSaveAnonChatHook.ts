@@ -1,18 +1,17 @@
 import {v4 as uuid} from 'uuid';
 
+import ChannelListSchema from '../schema/ChannelListSchema';
+import ChatSchema from '../schema/ChatSchema';
+import UserSchema from '../schema/UserSchema';
+import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
+import useLocalDatabaseHook from './useLocalDatabaseHook';
+import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
+import {GROUP_INFO, SIGNED} from '../../hooks/core/constant';
 import {
   InitAnonymousChatData,
   ModifyAnonymousChatData
 } from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
-import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
-import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
-import {GROUP_INFO, SIGNED} from '../../hooks/core/constant';
 import {getChannelListInfo} from '../../utils/string/StringUtils';
-import ChannelListMemberSchema from '../schema/ChannelListMemberSchema';
-import ChannelListSchema from '../schema/ChannelListSchema';
-import ChatSchema from '../schema/ChatSchema';
-import UserSchema from '../schema/UserSchema';
-import useLocalDatabaseHook from './useLocalDatabaseHook';
 
 const useSaveAnonChatHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook();
@@ -25,6 +24,15 @@ const useSaveAnonChatHook = () => {
 
     const channelListSchema = ChannelListSchema.fromDatabaseObject(channelList);
     return channelListSchema;
+  };
+
+  const saveUserAndChannelListMember = async (channelId, member) => {
+    try {
+      const userMember = UserSchema.fromInitAnonymousChatAPI(member, channelId);
+      await userMember.saveOrUpdateIfExists(localDb);
+    } catch (e) {
+      console.log('error saveUserAndChannelListMember', e);
+    }
   };
 
   const helperGoToAnonymousChat = async (object: InitAnonymousChatData, from: string) => {
@@ -61,31 +69,11 @@ const useSaveAnonChatHook = () => {
       const chat = ChatSchema.fromInitAnonymousChatAPI(initAnonymousChat, status);
       await chat.save(localDb);
       const members = originalMembers || object?.members;
-      members?.forEach((member) => {
-        const saveUserAndChannelListMember = async () => {
-          try {
-            const userMember = UserSchema.fromInitAnonymousChatAPI(
-              member,
-              initAnonymousChat?.message?.cid
-            );
-            await userMember.saveOrUpdateIfExists(localDb);
-          } catch (e) {
-            console.log(e);
-          }
-          try {
-            const memberSchema = ChannelListMemberSchema.fromInitAnonymousChatAPI(
-              initAnonymousChat?.message?.cid,
-              uuid(),
-              member
-            );
-            await memberSchema.saveIfNotExist(localDb);
-          } catch (e) {
-            console.log(e);
-          }
-        };
-
-        Promise.all([saveUserAndChannelListMember()]);
+      const promises: Promise<void>[] = members?.map((member) => {
+        return saveUserAndChannelListMember(initAnonymousChat.message.cid, member);
       });
+
+      await Promise.all(promises);
     } catch (e) {
       console.log(e);
     }
