@@ -28,8 +28,8 @@ const ProfilePicture = ({
     return <MemoIcAddCircle width={48} height={48} style={styles.addCircle} />;
   };
   return (
-    <View>
-      <TouchableNativeFeedback onPress={onImageContainerClick}>
+    <TouchableNativeFeedback onPress={onImageContainerClick}>
+      <View>
         {withKarma ? (
           <CircleGradient
             fill={karmaScore}
@@ -94,8 +94,8 @@ const ProfilePicture = ({
             )}
           </>
         )}
-      </TouchableNativeFeedback>
-    </View>
+      </View>
+    </TouchableNativeFeedback>
   );
 };
 
