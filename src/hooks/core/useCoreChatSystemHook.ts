@@ -5,7 +5,6 @@ import {useRoute} from '@react-navigation/native';
 
 import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../database/schema/ChannelListSchema';
-import ChannelListMemberSchema from '../../database/schema/ChannelListMemberSchema';
 import ChatSchema from '../../database/schema/ChatSchema';
 import SignedMessageRepo from '../../service/repo/signedMessageRepo';
 import UseLocalDatabaseHook from '../../../types/database/localDatabase.types';
@@ -33,7 +32,7 @@ import {getChannelListInfo} from '../../utils/string/StringUtils';
 
 const useCoreChatSystemHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook() as UseLocalDatabaseHook;
-  const {anonProfileId, signedProfileId, profile} = useProfileHook();
+  const {anonProfileId, signedProfileId} = useProfileHook();
   const {getAllSignedChannels, getAllAnonymousChannels} = useFetchChannelHook();
   const {getAllSignedPostNotifications, getAllAnonymousPostNotifications} =
     useFetchPostNotificationHook();
@@ -201,13 +200,6 @@ const useCoreChatSystemHook = () => {
       websocketData?.originalMembers?.forEach(async (member) => {
         const userMember = UserSchema.fromMemberWebsocketObject(member, websocketData?.channel?.id);
         await userMember.saveOrUpdateIfExists(localDb);
-
-        const memberSchema = ChannelListMemberSchema.fromWebsocketObject(
-          websocketData?.channel?.id,
-          websocketData?.message?.id,
-          member
-        );
-        await memberSchema.save(localDb);
       });
     } catch (e) {
       console.log('error on memberSchema');

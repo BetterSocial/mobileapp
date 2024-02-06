@@ -539,7 +539,8 @@ describe('TESTING ChannelListSchema', () => {
             id: 'lastUpdatedBy'
           }
         },
-        targetName: 'name'
+        targetName: 'name',
+        targetImage: ''
       };
 
       const initAnonymousChatAPIObjectExpectation = {
@@ -552,12 +553,13 @@ describe('TESTING ChannelListSchema', () => {
         rawJson: expect.any(Object),
         user: null,
         members: null,
-        channelPicture: '',
+        channelPicture:
+          'https://res.cloudinary.com/hpjivutj2/image/upload/v1680929851/default-profile-picture_vrmmdn.png',
         expiredAt: null
       };
 
       // Execution
-      const result = ChannelList.fromInitAnonymousChatAPI(initAnonymousChatAPIObject);
+      const result = ChannelList.fromInitAnonymousChatAPI(initAnonymousChatAPIObject, 'ANON_PM');
 
       // Assertion
       expect(result).toEqual(expect.objectContaining(initAnonymousChatAPIObjectExpectation));

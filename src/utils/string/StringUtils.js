@@ -326,7 +326,9 @@ const getChannelListInfo = (channel, selfSignUserId, selfAnonUserId) => {
 
     channelName = helperGetMemberName(member);
 
-    channelImage = isAnonymous ? DEFAULT_PROFILE_PIC_PATH : member?.user?.image;
+    channelImage = isAnonymous
+      ? DEFAULT_PROFILE_PIC_PATH
+      : member?.user?.image || DEFAULT_PROFILE_PIC_PATH;
     anonUserInfoEmojiCode = member?.anon_user_info_emoji_code;
     anonUserInfoEmojiName = member?.anon_user_info_emoji_name;
     anonUserInfoColorCode = member?.anon_user_info_color_code;
