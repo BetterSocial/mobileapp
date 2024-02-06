@@ -25,12 +25,15 @@ export const COLORS = {
   silver: '#BDBDBD',
   waterspout: '#9DEDF1',
   white: '#FFFFFF',
+  white20percent: 'rgba(255,255,255,0.2)',
   whiteSmoke: '#F4F4F4',
 
   // need to remove
   holytosca: '#00ADB5',
   lightBlue: '#2F80ED',
   gray1: '#C4C4C4',
+  gray100: '#F5F6F7',
+  gray500: '#69707C',
   gray6: '#F2F2F2',
   gray4: '#4A4A4A',
   bondi_blue: '#00ADB5',
@@ -38,6 +41,7 @@ export const COLORS = {
   // new color
   signed_primary: '#4782D7',
   signed_secondary: '#6295DD',
+  default_signed_secondary: '#69A2F2',
   anon_primary: '#107793',
   anon_secondary: '#3A9BB6',
   radical_red: '#FF3466',

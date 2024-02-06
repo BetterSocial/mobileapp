@@ -44,8 +44,17 @@ const FollowInfoRow = ({
           </Text>
         </View>
       </GlobalButton>
+      <View
+        style={{
+          height: 2,
+          width: 2,
+          backgroundColor: COLORS.black,
+          borderRadius: 999,
+          marginHorizontal: 8
+        }}
+      />
       <GlobalButton buttonStyle={{paddingHorizontal: 0}} onPress={onFollowingContainerClicked}>
-        <View style={styles.following}>
+        <View>
           <View style={styles.wrapRow}>
             <Text style={styles.textTotal}>{following}</Text>
             <Text style={styles.textFollow}>Following</Text>
@@ -57,10 +66,10 @@ const FollowInfoRow = ({
 };
 
 let styles = StyleSheet.create({
-  following: {marginLeft: 18},
   textTotal: {
     fontSize: 14,
-    color: COLORS.signed_primary,
+    fontWeight: '600',
+    color: COLORS.black000,
     paddingRight: 4
   },
   textFollow: {
