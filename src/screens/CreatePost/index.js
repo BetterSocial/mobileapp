@@ -62,7 +62,6 @@ import {
 } from '../../utils/constants';
 import {PROFILE_CACHE} from '../../utils/cache/constant';
 import {ShowingAudience, createPost} from '../../service/post';
-import {composeImageMeta} from '../../utils/string/file';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {
   getDurationId,
