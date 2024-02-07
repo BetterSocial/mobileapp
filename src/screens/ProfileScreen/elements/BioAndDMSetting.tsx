@@ -221,7 +221,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: Platform.OS === 'android' ? '700' : '600',
-    // lineHeight: 22,
     marginBottom: 12
   },
   bioTextNull: {
