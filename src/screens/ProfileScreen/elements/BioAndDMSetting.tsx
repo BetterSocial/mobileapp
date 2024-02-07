@@ -175,16 +175,16 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
           Other users will be able to reply to your prompt and direct message you.
         </Text>
         <TouchableOpacity onPress={toggleSwitchAnon}>
-          <CheckBoxCustom value={isAnonymity} label="Allow anonymous messages?" />
+          <CheckBoxCustom value={isAnonymity} label="Allow messages from incognito users?" />
         </TouchableOpacity>
 
         {isAnonymity && (
           <>
-            <Divider style={{marginVertical: 4, backgroundColor: COLORS.gray}} />
+            <Divider style={{marginVertical: 6, backgroundColor: COLORS.gray}} />
             <TouchableOpacity onPress={toggleSwitchAnonAllowFollowing}>
               <CheckBoxCustom
                 value={isAllowFollowingSendDM}
-                label="Only allow anon DMs from users you follow?"
+                label="Allow incognito only from users you follow?"
               />
             </TouchableOpacity>
           </>
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: Platform.OS === 'android' ? '700' : '600',
-    lineHeight: 22,
+    // lineHeight: 22,
     marginBottom: 12
   },
   bioTextNull: {
