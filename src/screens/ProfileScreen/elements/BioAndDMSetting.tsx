@@ -139,7 +139,13 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
             marginVertical: 12
           }}
         />
-        <Text style={styles.bioText}>{addDotAndRemoveNewline(bio || '')}</Text>
+        {!bio ? (
+          <Text style={styles.bioTextNull}>
+            What should others message you about? Add your bio and conversation starters here.
+          </Text>
+        ) : (
+          <Text style={styles.bioText}>{addDotAndRemoveNewline(bio || '')}</Text>
+        )}
       </View>
       <View
         style={{
@@ -174,7 +180,7 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
 
         {isAnonymity && (
           <>
-            <Divider style={{marginVertical: 12, backgroundColor: COLORS.gray}} />
+            <Divider style={{marginVertical: 4, backgroundColor: COLORS.gray}} />
             <TouchableOpacity onPress={toggleSwitchAnonAllowFollowing}>
               <CheckBoxCustom
                 value={isAllowFollowingSendDM}
@@ -202,7 +208,7 @@ const styles = StyleSheet.create({
   },
   container: {
     backgroundColor: COLORS.default_signed_secondary,
-    borderRadius: 15,
+    borderRadius: 16,
     paddingHorizontal: 12,
     paddingVertical: 12,
     marginTop: 10,
@@ -216,6 +222,15 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: Platform.OS === 'android' ? '700' : '600',
     lineHeight: 22,
+    marginBottom: 12
+  },
+  bioTextNull: {
+    color: COLORS.lightgrey,
+    fontFamily: 'Inter',
+    fontSize: 14,
+    fontStyle: 'italic',
+    fontWeight: '400',
+    lineHeight: 20,
     marginBottom: 12
   }
 });
