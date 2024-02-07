@@ -120,10 +120,10 @@ const Header = (props) => {
           <ProfilePicture
             onImageContainerClick={changeImage}
             profilePicPath={dataMain.profile_pic_path}
-            karmaScore={dataMain.karma_score}
+            karmaScore={!dataMain.is_karma_unlocked ? dataMain.karma_score : 0}
             withKarma={true}
-            size={!dataMain.is_karma_unlocked ? 48 : undefined}
-            width={!dataMain.is_karma_unlocked ? 4 : undefined}
+            size={dataMain.is_karma_unlocked ? 48 : undefined}
+            width={dataMain.is_karma_unlocked ? 4 : undefined}
           />
           <View
             style={{
@@ -131,7 +131,7 @@ const Header = (props) => {
               paddingHorizontal: 14,
               justifyContent: 'center'
             }}>
-            {dataMain.is_karma_unlocked ? (
+            {!dataMain.is_karma_unlocked ? (
               <KarmaScore score={Math.floor(dataMain.karma_score)} />
             ) : (
               <KarmaLock onPressCreatePost={handleOnAddPostButtonClicked} />
@@ -149,7 +149,7 @@ const Header = (props) => {
 
         <BioAndDMSetting
           avatarUrl={DEFAULT_PROFILE_PIC_PATH}
-          bio={dataMainBio}
+          bio={''}
           changeBio={changeBio}
           allowAnonDm={dataMain.allow_anon_dm}
           onlyReceivedDmFromUserFollowing={dataMain.only_received_dm_from_user_following}
