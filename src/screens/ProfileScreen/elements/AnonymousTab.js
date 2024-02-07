@@ -42,7 +42,7 @@ const AnonymousTab = ({isActive = false}) => {
         height={17}
       />
       <View style={styles.anonymousTextContainer}>
-        <Text style={styles.anonymousPostTextTitle(isActive)}>Anonymous Posts</Text>
+        <Text style={styles.anonymousPostTextTitle(isActive)}>Incognito Posts</Text>
         <Text style={styles.anonymousPostTextSubtitle(isActive)}>Only visible to you</Text>
       </View>
     </View>
