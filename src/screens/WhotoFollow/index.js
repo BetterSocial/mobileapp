@@ -13,30 +13,30 @@ import {
 import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useSetRecoilState} from 'recoil';
 
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import ImageUtils from '../../utils/image';
 import ItemUser from './elements/ItemUser';
 import Label from './elements/Label';
 import Loading from '../Loading';
 import TokenStorage from '../../utils/storage/custom/tokenStorage';
+import dimen from '../../utils/dimen';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
+import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {Header} from '../../components';
 import {InitialStartupAtom} from '../../service/initialStartup';
 import {ProgressBar} from '../../components/ProgressBar';
 import {get} from '../../api/server';
+import {normalizeFontSize} from '../../utils/fonts';
 import {registerUser} from '../../service/users';
 import {setImage} from '../../context/actions/users';
 import {setToken} from '../../utils/token';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
-import dimen from '../../utils/dimen';
-import {normalizeFontSize} from '../../utils/fonts';
-import {COLORS} from '../../utils/theme';
 
 const {width} = Dimensions.get('screen');
 
@@ -297,7 +297,7 @@ const WhotoFollow = () => {
       )}
       <View style={styles.footer}>
         <View style={styles.textSmallContainer}>
-          <Text styles={styles.textSmall}>Others cannot see who you’re following.</Text>
+          <Text style={styles.textSmall}>Others cannot see who you’re following.</Text>
         </View>
         <Button onPress={() => register()}>FINISH</Button>
       </View>

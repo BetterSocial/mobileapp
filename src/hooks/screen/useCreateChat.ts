@@ -4,8 +4,8 @@ import SimpleToast from 'react-native-simple-toast';
 import ChannelList from '../../database/schema/ChannelListSchema';
 import SignedMessageRepo from '../../service/repo/signedMessageRepo';
 import UserSchema from '../../database/schema/UserSchema';
-import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
+import useChatUtilsHook, {AllowedGoToChatScreen} from '../core/chat/useChatUtilsHook';
 import {GROUP_INFO} from '../core/constant';
 import {getOrCreateAnonymousChannel} from '../../service/chat';
 
@@ -57,7 +57,7 @@ const useCreateChat = () => {
     return chatData;
   };
 
-  const createSignChat = async (members: string[], selectedUser, from) => {
+  const createSignChat = async (members: string[], selectedUser, from: AllowedGoToChatScreen) => {
     try {
       setLoadingCreateChat(true);
       const initChannel = await SignedMessageRepo.createSignedChat(members);

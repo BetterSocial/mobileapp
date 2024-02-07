@@ -15,7 +15,7 @@ import UserSchema from '../../database/schema/UserSchema';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import useUserAuthHook from '../core/auth/useUserAuthHook';
-import {CHANNEL_TYPE_PERSONAL} from '../../utils/constants';
+import {CHANNEL_TYPE_GROUP, CHANNEL_TYPE_PERSONAL} from '../../utils/constants';
 import {getAnonymousUserId, getUserId} from '../../utils/users';
 import {randomString} from '../../utils/string/StringUtils';
 
@@ -153,7 +153,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
             channelList.description = message;
             channelList.lastUpdatedBy = userId;
             channelList.lastUpdatedAt = new Date().toISOString();
-            channelList.save(localDb);
+            await channelList.save(localDb);
           }
         }
 
@@ -161,7 +161,9 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
         refresh('channelList');
       }
 
-      const channelType = CHANNEL_TYPE_PERSONAL;
+      const channelType =
+        selectedChannel?.channelType === 'GROUP' ? CHANNEL_TYPE_GROUP : CHANNEL_TYPE_PERSONAL;
+
       const newAttachments = await processAttachments(attachments);
 
       let response;
