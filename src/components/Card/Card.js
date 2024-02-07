@@ -12,9 +12,10 @@ import {
 
 import Gap from '../Gap';
 import Header from './CardHeader';
+import Image from '../Image';
 import NewsEmptyState from '../../assets/images/news-empty-state.png';
 import TestIdConstant from '../../utils/testId';
-import Image from '../Image';
+import dimen from '../../utils/dimen';
 import {COLORS} from '../../utils/theme';
 import {fonts, normalizeFontSizeByWidth} from '../../utils/fonts';
 
@@ -38,7 +39,14 @@ const Card = (props) => {
   // const styles = buildStylesheet('card', props.styles);
   const renderImageComponent = () => {
     if (image)
-      return <Image testID="contentLinkImageUrlImage" style={styles.image} source={{uri: image}} />;
+      return (
+        <Image
+          testID="contentLinkImageUrlImage"
+          style={styles.image}
+          source={{uri: image}}
+          resizeMode="cover"
+        />
+      );
 
     return (
       <Image
@@ -77,22 +85,18 @@ const Card = (props) => {
           style={{flex: 1}}
           testID={TestIdConstant.contentLinkContentPress}>
           <View style={styles.content}>
-            <View>
-              <Text style={styles.title}>
-                {_.truncate(`${title}`, {length: 80, separator: ''})}
-              </Text>
-            </View>
+            <Text style={styles.title}>{_.truncate(`${title}`, {length: 80, separator: ''})}</Text>
             <View style={{flex: 1}}>{renderImageComponent()}</View>
+            <TouchableNativeFeedback onPress={onPressUrl}>
+              <Text style={styles.description}>
+                {_.truncate(`${description}`, {length: 120})}
+                <Gap style={styles.width(2)} />
+                <Text testID={TestIdConstant.contentLinkOpenLinkPress} style={styles.link}>
+                  Open Link
+                </Text>
+              </Text>
+            </TouchableNativeFeedback>
           </View>
-        </TouchableNativeFeedback>
-        <TouchableNativeFeedback onPress={onPressUrl}>
-          <Text style={styles.description}>
-            {_.truncate(`${description}`, {length: 120})}
-            <Gap style={styles.width(2)} />
-            <Text testID={TestIdConstant.contentLinkOpenLinkPress} style={styles.link}>
-              Open Link
-            </Text>
-          </Text>
         </TouchableNativeFeedback>
       </View>
     </View>
@@ -132,19 +136,6 @@ const styles = StyleSheet.create({
     width
   }),
   imageHeader: {height: '100%', width: '100%', borderRadius: 45},
-  constainerHeader: {
-    flexDirection: 'row',
-    padding: 8
-  },
-  contentHeader: {
-    borderRadius: 45,
-    borderWidth: 0.2,
-    borderColor: COLORS.black50,
-    width: 36,
-    height: 36,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
   container: (height) => ({
     borderWidth: 0.5,
     borderRadius: 8,
@@ -156,31 +147,29 @@ const styles = StyleSheet.create({
     height
   }),
   image: {
-    width: '100%',
-    height: '100%'
+    flex: 1
   },
   content: {
-    justifyContent: 'space-between',
     flex: 1
   },
   title: {
     color: COLORS.black,
     fontWeight: '600',
-    fontSize: 14,
-    lineHeight: 17,
-    marginBottom: 8,
+    fontSize: normalizeFontSizeByWidth(14),
+    lineHeight: dimen.normalizeDimen(17),
+    marginBottom: dimen.normalizeDimen(4),
     fontFamily: fonts.inter[600],
-    paddingRight: 20,
-    paddingLeft: 20
+    paddingRight: dimen.normalizeDimen(20),
+    paddingLeft: dimen.normalizeDimen(20)
   },
   description: {
     color: COLORS.blackgrey,
-    fontSize: 12,
+    fontSize: normalizeFontSizeByWidth(12),
     fontFamily: fonts.inter[400],
-    paddingRight: 20,
-    paddingLeft: 20,
-    marginTop: 5,
-    lineHeight: 18
+    paddingRight: dimen.normalizeDimen(20),
+    paddingLeft: dimen.normalizeDimen(20),
+    marginTop: dimen.normalizeDimen(4),
+    lineHeight: dimen.normalizeDimen(18)
   },
   openLinkText: {
     color: COLORS.blue,

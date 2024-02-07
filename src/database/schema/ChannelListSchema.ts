@@ -9,6 +9,7 @@ import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRep
 import {CHANNEL_GROUP, PM} from '../../hooks/core/constant';
 import {ChannelData} from '../../../types/repo/AnonymousMessageRepo/AnonymousChannelsData';
 import {ChannelType} from '../../../types/repo/ChannelData';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {MessageAnonymouslyData} from '../../../types/repo/AnonymousMessageRepo/MessageAnonymouslyData';
 import {ModifyAnonymousChatData} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 import {SignedPostNotification} from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
@@ -514,14 +515,17 @@ class ChannelList implements BaseDbSchema {
     });
   }
 
-  static fromInitAnonymousChatAPI(data: ModifyAnonymousChatData): ChannelList {
+  static fromInitAnonymousChatAPI(
+    data: ModifyAnonymousChatData,
+    type: 'ANON_PM' | 'PM'
+  ): ChannelList {
     return new ChannelList({
       id: data?.message?.cid,
-      channelPicture: '',
+      channelPicture: data?.targetImage || DEFAULT_PROFILE_PIC_PATH,
       name: data?.targetName,
       description: data?.message?.message,
       unreadCount: 0,
-      channelType: 'ANON_PM',
+      channelType: type,
       lastUpdatedAt: data?.message?.created_at,
       lastUpdatedBy: data?.message?.user?.id,
       createdAt: data?.message?.created_at,

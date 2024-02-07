@@ -470,7 +470,8 @@ describe('TESTING UserSchema', () => {
             name: 'username',
             last_active: 'lastActiveAt',
             created_at: 'createdAt',
-            image: 'profilePicture'
+            image: 'profilePicture',
+            username: 'username'
           },
           created_at: 'createdAt',
           updated_at: 'updatedAt',
@@ -495,7 +496,8 @@ describe('TESTING UserSchema', () => {
         countryCode: 'countryCode',
         createdAt: 'createdAt',
         lastActiveAt: 'lastActiveAt',
-        profilePicture: 'profilePicture',
+        profilePicture:
+          'https://res.cloudinary.com/hpjivutj2/image/upload/v1680929851/default-profile-picture_vrmmdn.png',
         updatedAt: 'updatedAt',
         username: 'username',
         isBanned: false
@@ -512,7 +514,19 @@ describe('TESTING UserSchema', () => {
           profile_pic_path: 'profilePicture',
           updated_at: 'updatedAt',
           username: 'username',
-          is_banned: false
+          is_banned: false,
+          last_active_at: 'lastActiveAt',
+          user: {
+            banned: false,
+            id: 'userId',
+            name: 'username',
+            username: 'username',
+            last_active_at: 'lastActiveAt',
+            image: 'profilePicture',
+            image:
+              'https://res.cloudinary.com/hpjivutj2/image/upload/v1680929851/default-profile-picture_vrmmdn.png',
+            created_at: 'createdAt'
+          }
         },
         'channelId'
       );

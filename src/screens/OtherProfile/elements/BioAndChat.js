@@ -1,14 +1,13 @@
-import * as React from 'react';
 import PropTypes from 'prop-types';
+import * as React from 'react';
 import {Pressable, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import TextAreaChat from '../../../components/TextAreaChat';
 import ToggleSwitch from '../../../components/ToggleSwitch';
 import useSaveAnonChatHook from '../../../database/hooks/useSaveAnonChatHook';
 import {ANON_PM, SIGNED} from '../../../hooks/core/constant';
-import {fonts} from '../../../utils/fonts';
 import {sendAnonymousDMOtherProfile, sendSignedDMOtherProfile} from '../../../service/chat';
-import {trimString} from '../../../utils/string/TrimString';
+import {fonts} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
 
 const CHANNEL_BLOCKED = 'Channel is blocked';

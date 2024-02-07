@@ -80,7 +80,6 @@ const DiscoveryScreenV2 = ({route}) => {
 
   const fetchDiscoveryData = async (text) => {
     const fetchDiscoveryInitialUsers = async () => {
-      console.log('masuk sini dong');
       const initialData = await DiscoveryRepo.fetchInitialDiscoveryUsers(
         50,
         parseInt(userPage.currentPage, 10)

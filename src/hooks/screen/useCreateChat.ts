@@ -1,16 +1,13 @@
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
-import {v4 as uuid} from 'uuid';
 
-import {getOrCreateAnonymousChannel} from '../../service/chat';
-import SignedMessageRepo from '../../service/repo/signedMessageRepo';
 import ChannelList from '../../database/schema/ChannelListSchema';
-import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
+import SignedMessageRepo from '../../service/repo/signedMessageRepo';
 import UserSchema from '../../database/schema/UserSchema';
-import ChannelListMemberSchema from '../../database/schema/ChannelListMemberSchema';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
+import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import {GROUP_INFO} from '../core/constant';
-import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
+import {getOrCreateAnonymousChannel} from '../../service/chat';
 
 const useCreateChat = () => {
   const [loadingCreateChat, setLoadingCreateChat] = React.useState(false);
@@ -19,16 +16,10 @@ const useCreateChat = () => {
 
   const handleMemberSchema = (response) => {
     try {
-      response?.members?.forEach(async (member) => {
-        const userMember = UserSchema.fromMemberWebsocketObject(member, response?.channel?.id);
+      const members = response?.better_channel_member || response?.members;
+      members.forEach(async (member) => {
+        const userMember = UserSchema.fromMessageAnonymouslyAPI(member, response?.channel?.id);
         await userMember.saveOrUpdateIfExists(localDb);
-
-        const memberSchema = ChannelListMemberSchema.fromWebsocketObject(
-          response?.channel?.id,
-          uuid(),
-          member
-        );
-        await memberSchema.save(localDb);
       });
     } catch (e) {
       console.log(e, 'error on memberSchema');
