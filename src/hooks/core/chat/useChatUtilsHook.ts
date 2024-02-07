@@ -7,7 +7,9 @@ import {atom, useRecoilState} from 'recoil';
 
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
 import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
-import UseChatUtilsHook from '../../../../types/hooks/screens/useChatUtilsHook.types';
+import UseChatUtilsHook, {
+  ContactScreenPayload
+} from '../../../../types/hooks/screens/useChatUtilsHook.types';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import {ANON_PM, GROUP_INFO} from '../constant';
 import {ChannelList} from '../../../../types/database/schema/ChannelList.types';
@@ -171,8 +173,8 @@ function useChatUtilsHook(): UseChatUtilsHook {
     });
   };
 
-  const goToContactScreen = () => {
-    navigation.navigate('ContactScreen');
+  const goToContactScreen = ({from}: ContactScreenPayload) => {
+    navigation.navigate('ContactScreen', {from});
   };
 
   const goToChatInfoScreen = (params?: object) => {
