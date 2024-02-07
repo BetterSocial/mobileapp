@@ -28,13 +28,22 @@ export interface ChannelListMemberSchema {
   joinedAt: string;
   user: UserSchema | null;
 }
+
+export type BetterSocialChannelType =
+  | 'PM'
+  | 'GROUP'
+  | 'ANON_PM'
+  | 'POST_NOTIFICATION'
+  | 'ANON_POST_NOTIFICATION'
+  | 'TOPIC';
+
 export interface ChannelList {
   id: string;
   channelPicture: string;
   name: string;
   description: string;
   unreadCount: number;
-  channelType: string;
+  channelType: BetterSocialChannelType;
   lastUpdatedAt: string;
   lastUpdatedBy: string;
   createdAt: string;

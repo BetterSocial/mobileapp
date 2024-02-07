@@ -6,6 +6,7 @@ import ChannelListMemberSchema from './ChannelListMemberSchema';
 import UserSchema from './UserSchema';
 import {AnonUserInfo} from '../../../types/service/AnonProfile.type';
 import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
+import {BetterSocialChannelType} from '../../../types/database/schema/ChannelList.types';
 import {CHANNEL_GROUP, PM} from '../../hooks/core/constant';
 import {ChannelData} from '../../../types/repo/AnonymousMessageRepo/AnonymousChannelsData';
 import {ChannelType} from '../../../types/repo/ChannelData';
@@ -25,7 +26,7 @@ class ChannelList implements BaseDbSchema {
 
   unreadCount: number;
 
-  channelType: string;
+  channelType: BetterSocialChannelType;
 
   lastUpdatedAt: string;
 
@@ -563,7 +564,7 @@ class ChannelList implements BaseDbSchema {
       description: data?.appAdditionalData?.message,
       unreadCount: 0,
       channelType: isGroup ? CHANNEL_GROUP : PM,
-      lastUpdatedAt: data?.channel?.last_message_at,
+      lastUpdatedAt: data?.channel?.last_message_at || data?.channel?.updated_at,
       lastUpdatedBy: '',
       createdAt: data?.channel?.created_at,
       rawJson: data?.appAdditionalData?.rawJson,
