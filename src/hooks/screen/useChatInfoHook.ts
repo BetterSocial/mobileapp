@@ -11,7 +11,6 @@ import {ChannelListMemberSchema} from '../../../types/database/schema/ChannelLis
 import {Context} from '../../context';
 import {Member} from '../../../types/database/schema/ChatListDetail.types';
 import {SIGNED} from '../core/constant';
-import {getAnonymousUserId, getUserId} from '../../utils/users';
 import {isContainUrl} from '../../utils/Utils';
 
 function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
@@ -28,7 +27,7 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   } = useGroupInfo();
   const {localDb} = useLocalDatabaseHook();
   const [loadingChannelInfo, setLoadingChannelInfo] = React.useState<boolean>(false);
-  const {selectedChannel, goBack} = useChatUtilsHook();
+  const {isLoadingFetchingChannelDetail, selectedChannel, goBack} = useChatUtilsHook();
   const [myUserId] = React.useContext(Context).profile;
   const navigation = useNavigation();
   const [showPopupBlock, setShowPopupBlock] = React.useState(false);
@@ -36,20 +35,24 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   const {signedProfileId, anonProfileId} = useUserAuthHook();
 
   const initChatInfoData = async () => {
+    const startDate = new Date().valueOf();
+    console.log('startDate', startDate);
     if (localDb) {
       setLoadingChannelInfo(true);
-      const myId = await getUserId();
-      const myAnonymousId = await getAnonymousUserId();
+
       const data = await ChannelList.getChannelInfo(
         localDb,
         selectedChannel?.id,
-        myId,
-        myAnonymousId
+        signedProfileId,
+        anonProfileId
       );
 
       setChannelInfo(data);
       setLoadingChannelInfo(false);
     }
+
+    const endDate = new Date().valueOf();
+    console.log('endDate', endDate, 'diff', endDate - startDate);
   };
 
   const onContactPressed = (item: ChannelListMemberSchema) => {
@@ -100,6 +103,7 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   }, []);
 
   return {
+    isLoadingFetchingChannelDetail,
     channelInfo,
     goBack,
     onContactPressed,

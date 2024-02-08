@@ -45,7 +45,7 @@ const useSimpleWebsocket = (url, protocol = undefined) => {
 
     socket.onclose = (event: CloseEvent) => {
       featLog('onclose', event);
-      const {readyState} = websocketRef.current;
+      const readyState = websocketRef?.current?.readyState;
       websocketRef.current = null;
       if (
         isInternetConnectedRef?.current &&
