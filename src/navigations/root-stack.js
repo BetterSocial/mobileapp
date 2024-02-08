@@ -231,7 +231,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="DiscoveryScreen"
-          component={withSafeAreaView(withKeyboardWrapper(DiscoveryScreenV2))}
+          component={DiscoveryScreenV2}
           options={{
             headerShown: false
           }}
