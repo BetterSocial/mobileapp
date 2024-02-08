@@ -28,8 +28,8 @@ const ProfilePicture = ({
     return <MemoIcAddCircle width={48} height={48} style={styles.addCircle} />;
   };
   return (
-    <View>
-      <TouchableNativeFeedback onPress={onImageContainerClick}>
+    <TouchableNativeFeedback onPress={onImageContainerClick}>
+      <View>
         {withKarma ? (
           <CircleGradient
             fill={karmaScore}
@@ -51,7 +51,7 @@ const ProfilePicture = ({
                   style={styles.profileImage(size, width)}
                   source={{
                     uri: profilePicPath ? `${profilePicPath}` : DEFAULT_PROFILE_PIC_PATH,
-                    cache: 'web'
+                    cache: 'cacheOnly'
                   }}
                   resizeMode={FastImage.resizeMode.stretch}
                   loadingIndicatorSource={
@@ -86,7 +86,7 @@ const ProfilePicture = ({
                   style={styles.profileImage(size, width)}
                   source={{
                     uri: profilePicPath ? `${profilePicPath}` : DEFAULT_PROFILE_PIC_PATH,
-                    cache: 'web'
+                    cache: 'cacheOnly'
                   }}
                   resizeMode={FastImage.resizeMode.stretch}
                 />
@@ -95,8 +95,8 @@ const ProfilePicture = ({
             )}
           </>
         )}
-      </TouchableNativeFeedback>
-    </View>
+      </View>
+    </TouchableNativeFeedback>
   );
 };
 

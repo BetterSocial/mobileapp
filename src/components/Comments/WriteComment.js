@@ -9,15 +9,15 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import ToggleSwitch from '../ToggleSwitch';
 
 import AnonUserInfoRepo from '../../service/repo/anonUserInfoRepo';
+import SendIcon from '../SendIcon';
 import StringConstant from '../../utils/string/StringConstant';
+import ToggleSwitch from '../ToggleSwitch';
+import {CHAT_ANON, CHAT_SIGNED} from '../../utils/constants';
+import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {fonts, normalize} from '../../utils/fonts';
-import {COLORS} from '../../utils/theme';
-import SendIcon from '../SendIcon';
-import {CHAT_ANON, CHAT_SIGNED} from '../../utils/constants';
 
 const WriteComment = ({
   value = null,
@@ -68,7 +68,7 @@ const WriteComment = ({
     if (isKeyboardOpen) {
       commentInputRef.current.focus();
     }
-  }, [isKeyboardOpen, commentInputRef.current]);
+  }, [isKeyboardOpen, commentInputRef?.current]);
 
   return (
     <View style={isViewOnly ? styles.isViewOnlyColumnContainer : styles.columnContainer}>
