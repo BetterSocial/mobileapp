@@ -121,12 +121,19 @@ function useChatUtilsHook(): UseChatUtilsHook {
     });
   };
 
-  const goToChatScreen = (channel: ChannelList, from) => {
+  const goToChatScreen = (channel: ChannelList, from: AllowedGoToChatScreen) => {
     setChat({
       ...chat,
       selectedChannel: channel
     });
     setChannelAsRead(channel);
+    if (from === 'CONTACT_SCREEN') {
+      return openChat(
+        'SignedChatScreen',
+        channel?.channelType === ANON_PM ? 'AnonymousChannelList' : 'ChannelList'
+      );
+    }
+
     if (channel?.channelType === ANON_PM) {
       if (from === GROUP_INFO) {
         return openChat('AnonymousChatScreen', 'AnonymousChannelList');
@@ -214,3 +221,9 @@ function useChatUtilsHook(): UseChatUtilsHook {
 }
 
 export default useChatUtilsHook;
+
+export type AllowedGoToChatScreen =
+  | 'CONTACT_SCREEN'
+  | 'PROFILE_SCREEN'
+  | 'CHAT_DETAIL_SCREEN'
+  | 'GROUP_INFO';
