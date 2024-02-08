@@ -35,8 +35,6 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   const {signedProfileId, anonProfileId} = useUserAuthHook();
 
   const initChatInfoData = async () => {
-    const startDate = new Date().valueOf();
-    console.log('startDate', startDate);
     if (localDb) {
       setLoadingChannelInfo(true);
 
@@ -50,9 +48,6 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
       setChannelInfo(data);
       setLoadingChannelInfo(false);
     }
-
-    const endDate = new Date().valueOf();
-    console.log('endDate', endDate, 'diff', endDate - startDate);
   };
 
   const onContactPressed = (item: ChannelListMemberSchema) => {
