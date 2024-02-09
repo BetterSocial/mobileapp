@@ -139,6 +139,7 @@ const _renderAnonimity = ({
                 karmaScore={karmaScore}
                 anonUserInfo={anonUserInfo}
                 version={version}
+                withKarma
               />
             </View>
 
