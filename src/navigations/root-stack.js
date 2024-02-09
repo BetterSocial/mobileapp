@@ -197,7 +197,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="Followings"
-          component={withSafeAreaView(withKeyboardWrapper(FollowingScreen))}
+          component={FollowingScreen}
           options={{
             headerShown: false
           }}
