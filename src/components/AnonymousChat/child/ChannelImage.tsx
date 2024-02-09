@@ -12,6 +12,7 @@ import useProfileHook from '../../../hooks/core/profile/useProfileHook';
 import {AnonUserInfo} from '../../../../types/service/AnonProfile.type';
 import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
 import {COLORS} from '../../../utils/theme';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
 
 export type ChannelImageProps = {
   mainPicture?: string;
@@ -140,7 +141,9 @@ const ChannelImage = ({
         />
       );
 
-    return <FastImage source={{uri: mainPicture}} style={styles.image} />;
+    return (
+      <FastImage source={{uri: mainPicture || DEFAULT_PROFILE_PIC_PATH}} style={styles.image} />
+    );
   };
 
   const renderMainImage = () => {

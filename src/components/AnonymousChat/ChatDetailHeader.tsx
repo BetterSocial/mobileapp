@@ -8,10 +8,10 @@ import ChannelImage from '../ChatList/elements/ChannelImage';
 import CustomPressable from '../CustomPressable';
 import IcArrowBackWhite from '../../assets/arrow/Ic_arrow_back_white';
 import dimen from '../../utils/dimen';
+import {COLORS} from '../../utils/theme';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {SIGNED} from '../../hooks/core/constant';
 import {fonts} from '../../utils/fonts';
-import {COLORS} from '../../utils/theme';
 
 const styles = StyleSheet.create({
   container: {
@@ -95,7 +95,11 @@ const ChatDetailHeader = ({
 
     return (
       <ChannelImage>
-        <ChannelImage.Big style={styles.avatarImage} type={channel?.channelType} image={avatar} />
+        <ChannelImage.Big
+          style={styles.avatarImage}
+          type={channel?.channelType}
+          image={avatar || DEFAULT_PROFILE_PIC_PATH}
+        />
       </ChannelImage>
     );
   };
