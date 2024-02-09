@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600]
   },
   disabledbutton: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray300,
     borderRadius: dimen.normalizeDimen(8)
   }
 });
