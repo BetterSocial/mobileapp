@@ -2,10 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" 
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/helio_primary">
     <ImageView 
-        android:layout_width="match_parent" 
-        android:layout_height="match_parent" 
-        android:src="@drawable/splash_screen" 
-        android:scaleType="centerCrop" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="56dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/splash_screen"/>
 </RelativeLayout>
