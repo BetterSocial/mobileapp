@@ -4,7 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 
-const TopicsChip = ({topics = [], fontSize = 24, onLayout, topicContainer}) => {
+const TopicsChip = ({topics = [], fontSize = 24, onLayout, topicContainer, topicItemStyle}) => {
   const navigation = useNavigation();
 
   const onTopicPress = (topic) => {
@@ -27,7 +27,7 @@ const TopicsChip = ({topics = [], fontSize = 24, onLayout, topicContainer}) => {
       contentContainerStyle={styles.contentStyle}
       style={[styles.topicContainer, topicContainer]}>
       {topics.map((item) => (
-        <View key={`topicContainer-${item}`} style={styles.topicItemContainer}>
+        <View key={`topicContainer-${item}`} style={[styles.topicItemContainer, topicItemStyle]}>
           <TouchableOpacity
             testID="topic-chip"
             activeOpacity={1}
@@ -56,12 +56,12 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     overflow: 'hidden',
     marginEnd: 11,
-    marginBottom: 4
+    marginBottom: 4,
+    paddingHorizontal: 13,
+    paddingVertical: 4.5
   },
   topicText: {
     fontFamily: fonts.inter[500],
-    paddingHorizontal: 13,
-    paddingVertical: 4.5,
     borderRadius: 14,
     color: COLORS.signed_primary
   },
