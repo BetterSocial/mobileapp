@@ -10,7 +10,6 @@ import {
   FlatList,
   Image,
   SafeAreaView,
-  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
@@ -32,7 +31,6 @@ import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
 import {CHANNEL_GROUP, GROUP_INFO, SIGNED} from '../../hooks/core/constant';
 import {COLORS} from '../../utils/theme';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
-import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 
@@ -283,38 +281,34 @@ const ChatInfoScreen = () => {
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
       {loadingChannelInfo ? null : (
-        <>
-          <FlatList
-            testID="participants"
-            data={channelInfo?.memberUsers}
-            keyExtractor={(_, index) => index?.toString()}
-            ListHeaderComponent={getHeaderComponent}
-            ListFooterComponent={
-              <>
-                {isLoadingFetchingChannelDetail ? (
-                  <ActivityIndicator style={styles.loading} />
-                ) : null}
-                <View style={styles.gap} />
-              </>
-            }
-            renderItem={({item, index}) => (
-              <View style={styles.parentContact}>
-                <ProfileContact
-                  key={index}
-                  item={item}
-                  onPress={() => onContactPressed(item, params.from)}
-                  fullname={item?.name || item?.username}
-                  photo={item?.profilePicture}
-                  showArrow={handleShowArrow(item)}
-                  userId={signedProfileId}
-                  ImageComponent={renderImageComponent(item)}
-                  isYou={item?.userId === signedProfileId || item?.userId === anonProfileId}
-                  from={params?.from}
-                />
-              </View>
-            )}
-          />
-        </>
+        <FlatList
+          testID="participants"
+          data={channelInfo?.memberUsers}
+          keyExtractor={(_, index) => index?.toString()}
+          ListHeaderComponent={getHeaderComponent}
+          ListFooterComponent={
+            <>
+              {isLoadingFetchingChannelDetail ? <ActivityIndicator style={styles.loading} /> : null}
+              <View style={styles.gap} />
+            </>
+          }
+          renderItem={({item, index}) => (
+            <View style={styles.parentContact}>
+              <ProfileContact
+                key={index}
+                item={item}
+                onPress={() => onContactPressed(item, params.from)}
+                fullname={item?.name || item?.username}
+                photo={item?.profilePicture}
+                showArrow={handleShowArrow(item)}
+                userId={signedProfileId}
+                ImageComponent={renderImageComponent(item)}
+                isYou={item?.userId === signedProfileId || item?.userId === anonProfileId}
+                from={params?.from}
+              />
+            </View>
+          )}
+        />
       )}
       <ModalAction
         onCloseModal={handleCloseSelectUser}
