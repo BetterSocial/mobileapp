@@ -6,10 +6,10 @@ import * as React from 'react';
 import FastImage from 'react-native-fast-image';
 import moment from 'moment';
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   SafeAreaView,
-  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
@@ -30,7 +30,7 @@ import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
 import {CHANNEL_GROUP, GROUP_INFO, SIGNED} from '../../hooks/core/constant';
 import {COLORS} from '../../utils/theme';
-import {Loading} from '../../components';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {ProfileContact} from '../../components/Items';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 
@@ -66,7 +66,8 @@ export const styles = StyleSheet.create({
     color: from === SIGNED ? COLORS.signed_primary : COLORS.anon_primary,
     marginLeft: dimen.normalizeDimen(20),
     marginBottom: dimen.normalizeDimen(4),
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    paddingTop: dimen.normalizeDimen(12)
   }),
   btnToMediaGroup: {
     fontFamily: fonts.inter[600],
@@ -120,9 +121,10 @@ export const styles = StyleSheet.create({
     borderRadius: normalize(50),
     paddingLeft: 8
   },
-  containerLoading: {
+  loading: {
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom: normalize(20)
   },
   row: {
     display: 'flex',
@@ -178,6 +180,7 @@ export const styles = StyleSheet.create({
 
 const ChatInfoScreen = () => {
   const {
+    isLoadingFetchingChannelDetail,
     channelInfo,
     goBack,
     onContactPressed,
@@ -191,7 +194,6 @@ const ChatInfoScreen = () => {
     loadingChannelInfo,
     isLoadingInitChat
   } = useChatInfoScreenHook();
-  const [isLoadingMembers] = React.useState<boolean>(false);
   const {signedProfileId} = useUserAuthHook();
   const {params}: any = useRoute();
   const ANONYMOUS_USER = 'AnonymousUser';
@@ -220,7 +222,7 @@ const ChatInfoScreen = () => {
       <Image
         testID="image1"
         style={styles.btnUpdatePhoto}
-        source={{uri: channelInfo?.channelPicture}}
+        source={{uri: channelInfo?.channelPicture || DEFAULT_PROFILE_PIC_PATH}}
       />
     );
   };
@@ -248,65 +250,65 @@ const ChatInfoScreen = () => {
   const countParticipant = () => {
     return `(${channelInfo?.memberUsers?.length})`;
   };
+
+  const getHeaderComponent = React.useMemo(() => {
+    return (
+      <>
+        <AnonymousChatInfoHeader isCenter onPress={goBack} title={channelInfo?.name} />
+        <View style={styles.lineTop} />
+        <TouchableOpacity testID="imageClick">
+          <View style={styles.containerPhoto}>{showImageProfile()}</View>
+        </TouchableOpacity>
+        <View style={styles.row}>
+          <View style={styles.column}>
+            <View style={styles.containerGroupName}>
+              <Text numberOfLines={1} style={styles.groupName}>
+                {channelInfo?.name}
+              </Text>
+            </View>
+            <Text style={styles.dateCreate}>
+              Created {moment(channelInfo?.createdAt).format('MM/DD/YYYY')}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.lineTop} />
+        <Text style={styles.countUser(params?.from)}>Participants {countParticipant()}</Text>
+      </>
+    );
+  }, [channelInfo]);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
-      {isLoadingMembers || loadingChannelInfo ? null : (
-        <>
-          <AnonymousChatInfoHeader isCenter onPress={goBack} title={channelInfo?.name} />
-          <View style={styles.lineTop} />
-          <ScrollView nestedScrollEnabled={true}>
-            <SafeAreaView>
-              <TouchableOpacity testID="imageClick">
-                <View style={styles.containerPhoto}>{showImageProfile()}</View>
-              </TouchableOpacity>
-              <View style={styles.row}>
-                <View style={styles.column}>
-                  <View style={styles.containerGroupName}>
-                    <Text numberOfLines={1} style={styles.groupName}>
-                      {channelInfo?.name}
-                    </Text>
-                  </View>
-                  <Text style={styles.dateCreate}>
-                    Created {moment(channelInfo?.createdAt).format('MM/DD/YYYY')}
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.lineTop} />
-              <View style={styles.lineTop} />
-              <View style={styles.users}>
-                <Text style={styles.countUser(params?.from)}>
-                  Participants {countParticipant()}
-                </Text>
-                <FlatList
-                  testID="participants"
-                  data={channelInfo?.memberUsers}
-                  keyExtractor={(item, index) => index?.toString()}
-                  renderItem={({item, index}) => (
-                    <View style={styles.parentContact}>
-                      <ProfileContact
-                        key={index}
-                        item={item}
-                        onPress={() => onContactPressed(item, params.from)}
-                        fullname={item?.name || item?.username}
-                        photo={item?.profilePicture}
-                        showArrow={handleShowArrow(item)}
-                        userId={signedProfileId}
-                        ImageComponent={renderImageComponent(item)}
-                        isYou={item?.userId === signedProfileId || item?.userId === anonProfileId}
-                        from={params?.from}
-                      />
-                    </View>
-                  )}
-                />
-              </View>
+      {loadingChannelInfo ? null : (
+        <FlatList
+          testID="participants"
+          data={channelInfo?.memberUsers}
+          keyExtractor={(_, index) => index?.toString()}
+          ListHeaderComponent={getHeaderComponent}
+          ListFooterComponent={
+            <>
+              {isLoadingFetchingChannelDetail ? <ActivityIndicator style={styles.loading} /> : null}
               <View style={styles.gap} />
-            </SafeAreaView>
-          </ScrollView>
-          <View style={styles.containerLoading}>
-            <Loading visible={isLoadingMembers} />
-          </View>
-        </>
+            </>
+          }
+          renderItem={({item, index}) => (
+            <View style={styles.parentContact}>
+              <ProfileContact
+                key={index}
+                item={item}
+                onPress={() => onContactPressed(item, params.from)}
+                fullname={item?.name || item?.username}
+                photo={item?.profilePicture}
+                showArrow={handleShowArrow(item)}
+                userId={signedProfileId}
+                ImageComponent={renderImageComponent(item)}
+                isYou={item?.userId === signedProfileId || item?.userId === anonProfileId}
+                from={params?.from}
+              />
+            </View>
+          )}
+        />
       )}
       <ModalAction
         onCloseModal={handleCloseSelectUser}
