@@ -34,14 +34,13 @@ import {fonts, normalize} from '../../utils/fonts';
 import {getCountCommentWithChildInDetailPage} from '../../utils/getstream';
 import ShareUtils from '../../utils/share';
 import StringConstant from '../../utils/string/StringConstant';
+import {COLORS} from '../../utils/theme';
 import BlockComponent from '../BlockComponent';
 import ContainerComment from '../Comments/ContainerComment';
 import WriteComment from '../Comments/WriteComment';
 import useWriteComment from '../Comments/hooks/useWriteComment';
 import LoadingWithoutModal from '../LoadingWithoutModal';
 import {Shimmer} from '../Shimmer/Shimmer';
-import {withInteractionsManaged} from '../WithInteractionManaged';
-import {COLORS} from '../../utils/theme';
 import Content from './elements/Content';
 import usePostDetail from './hooks/usePostDetail';
 
@@ -67,9 +66,9 @@ const PostPageDetailIdComponent = (props) => {
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
   const [loadingPost, setLoadingPost] = React.useState(false);
-  const [item, setItem] = React.useState(null);
   const navigation = useNavigation();
   const route = useRoute();
+  const [item, setItem] = React.useState(route?.params?.data);
   const scrollViewRef = React.useRef(null);
   const refBlockComponent = React.useRef();
   const [feedsContext, dispatch] = useFeedDataContext(contextSource);
@@ -105,12 +104,13 @@ const PostPageDetailIdComponent = (props) => {
   React.useEffect(() => {
     getComment();
   }, []);
+
   const handleVote = (data = {}) => {
     const upvote = data.upvotes ? data.upvotes : 0;
     const downvotes = data.downvotes ? data.downvotes : 0;
     setTotalVote(upvote - downvotes);
   };
-  const initial = async () => {
+  const initial = () => {
     const reactionCount = item?.reaction_counts;
     if (JSON.stringify(reactionCount) !== '{}') {
       let count = 0;
@@ -579,7 +579,6 @@ const PostPageDetailIdComponent = (props) => {
             source={SOURCE_PDP}
             height={getHeightHeader()}
           />
-
           <ScrollView
             ref={scrollViewRef}
             keyboardShouldPersistTaps="handled"
@@ -678,7 +677,7 @@ const PostPageDetailIdComponent = (props) => {
   );
 };
 
-export default withInteractionsManaged(React.memo(PostPageDetailIdComponent));
+export default PostPageDetailIdComponent;
 
 const styles = StyleSheet.create({
   container: {
