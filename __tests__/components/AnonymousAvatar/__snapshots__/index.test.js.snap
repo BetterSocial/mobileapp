@@ -20,7 +20,17 @@ exports[`AnonymousAvatar test Should match version 1 snapshot 1`] = `
 `;
 
 exports[`AnonymousAvatar test Should match version 2 snapshot 1`] = `
-<View>
+<View
+  accessible={true}
+  focusable={false}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+>
   <View
     style={
       Array [
