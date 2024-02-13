@@ -112,12 +112,11 @@ const PostPageDetailIdComponent = (props) => {
   };
   const initial = () => {
     const reactionCount = item?.reaction_counts;
-    if (JSON.stringify(reactionCount) !== '{}') {
+    if (JSON.stringify(reactionCount) !== '{}' && reactionCount) {
       let count = 0;
-      const {comment} = reactionCount;
       handleVote(reactionCount);
-      if (comment !== undefined) {
-        if (comment > 0) {
+      if (reactionCount?.comment !== undefined) {
+        if (reactionCount?.comment > 0) {
           setReaction(true);
           setTotalComment(getCountCommentWithChildInDetailPage(item.latest_reactions));
         }
