@@ -14,7 +14,7 @@ export const KarmaLock = (props: {onPressCreatePost: () => void}) => {
       style={{
         backgroundColor: COLORS.gray100,
         borderRadius: 12,
-        paddingVertical: 8,
+        paddingVertical: 6,
         paddingHorizontal: 4
       }}>
       <View
@@ -30,7 +30,8 @@ export const KarmaLock = (props: {onPressCreatePost: () => void}) => {
             fontSize: 12,
             color: COLORS.signed_primary,
             fontWeight: '500',
-            paddingHorizontal: 8
+            paddingHorizontal: 8,
+            lineHeight: 22
           }}>
           Create a post to unlock your Karma score
         </Text>
@@ -38,7 +39,6 @@ export const KarmaLock = (props: {onPressCreatePost: () => void}) => {
           allowChildInteraction={true}
           isVisible={isTooltipShown}
           placement={'bottom'}
-          backgroundColor={COLORS.black}
           closeOnContentInteraction={false}
           onClose={() => setIsTooltipShown(false)}
           closeOnBackgroundInteraction={true}
@@ -88,7 +88,7 @@ export const KarmaLock = (props: {onPressCreatePost: () => void}) => {
           }>
           <TouchableOpacity onPress={() => setIsTooltipShown(true)}>
             <View>
-              <MemoIcQuestionMark width={normalize(13)} height={normalize(13)} />
+              <MemoIcQuestionMark width={normalize(16)} height={normalize(16)} />
             </View>
           </TouchableOpacity>
         </Tooltip>
@@ -97,9 +97,10 @@ export const KarmaLock = (props: {onPressCreatePost: () => void}) => {
         onPress={props.onPressCreatePost}
         style={{
           backgroundColor: COLORS.signed_primary,
-          height: 34,
+          height: 36,
           marginTop: 8,
-          borderRadius: 8
+          borderRadius: 8,
+          marginHorizontal: 2
         }}>
         <View
           style={{
@@ -107,13 +108,13 @@ export const KarmaLock = (props: {onPressCreatePost: () => void}) => {
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
-            marginVertical: 8,
+            marginVertical: 9,
             marginHorizontal: 10
           }}>
           <PencilIcon />
           <Text
             style={{
-              fontSize: 12,
+              fontSize: 14,
               color: COLORS.white,
               marginLeft: 8
             }}>

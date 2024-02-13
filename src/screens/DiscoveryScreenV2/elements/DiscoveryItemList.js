@@ -2,7 +2,6 @@ import FastImage from 'react-native-fast-image';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View} from 'react-native';
-
 import ProfilePicture from '../../ProfileScreen/elements/ProfilePicture';
 import dimen from '../../../utils/dimen';
 import {COLORS} from '../../../utils/theme';
@@ -39,8 +38,8 @@ const DomainList = (props) => {
     DefaultImage,
     isCommunity,
     isBlockedSection,
-    withKarma,
-    isDomain
+    isDomain,
+    withKarma
   } = props;
 
   const renderButonAction = () => {

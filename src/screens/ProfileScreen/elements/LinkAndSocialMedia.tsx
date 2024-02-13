@@ -47,7 +47,7 @@ const LinkAndSocialMedia: React.FC<LinkProps> = ({username}) => {
         marginTop: 19,
         padding: 12
       }}>
-      <Text style={styles.linkAndSocialMediaTitle}>Receive anonymous messages anywhere!</Text>
+      <Text style={styles.linkAndSocialMediaTitle}>Receive incognito messages anywhere!</Text>
       <Text
         style={{
           color: COLORS.gray500,

@@ -120,7 +120,7 @@ const Header = (props) => {
           <ProfilePicture
             onImageContainerClick={changeImage}
             profilePicPath={dataMain.profile_pic_path}
-            karmaScore={dataMain.karma_score}
+            karmaScore={dataMain.is_karma_unlocked ? dataMain.karma_score : 0}
             withKarma={true}
             size={!dataMain.is_karma_unlocked ? 48 : undefined}
             width={!dataMain.is_karma_unlocked ? 4 : undefined}
