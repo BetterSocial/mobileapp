@@ -7,7 +7,6 @@ import useMainPdp from './hooks/useMainPdp';
 import {CONTEXT_SOURCE} from '../../hooks/usePostContextHooks';
 import {Context} from '../../context';
 import {setFeedByIndex} from '../../context/actions/feeds';
-import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 const FeedsPostDetail = (props) => {
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
@@ -52,4 +51,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default withInteractionsManaged(FeedsPostDetail);
+export default FeedsPostDetail;
