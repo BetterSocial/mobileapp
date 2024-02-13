@@ -7,18 +7,33 @@ import ChannelListMemberSchema from '../../database/schema/ChannelListMemberSche
 import SignedMessageRepo from '../../service/repo/signedMessageRepo';
 import UserSchema from '../../database/schema/UserSchema';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
+import useUserAuthHook from '../core/auth/useUserAuthHook';
 import useChatUtilsHook, {AllowedGoToChatScreen} from '../core/chat/useChatUtilsHook';
 import {GROUP_INFO} from '../core/constant';
+import {getChannelListInfo} from '../../utils/string/StringUtils';
 import {getOrCreateAnonymousChannel} from '../../service/chat';
 
 const useCreateChat = () => {
   const [loadingCreateChat, setLoadingCreateChat] = React.useState(false);
   const {localDb} = useLocalDatabaseHook();
   const {goToChatScreen} = useChatUtilsHook();
+  const {signedProfileId, anonProfileId} = useUserAuthHook();
 
   const handleMemberSchema = (response) => {
     try {
-      response?.members?.forEach(async (member) => {
+      const builtChannelData = {
+        better_channel_member: response?.better_channel_member,
+        members: response?.members
+      };
+
+      const {originalMembers} = getChannelListInfo(
+        builtChannelData,
+        signedProfileId,
+        anonProfileId
+      );
+      const members = originalMembers || response?.members;
+
+      members?.forEach(async (member) => {
         const userMember = UserSchema.fromMemberWebsocketObject(member, response?.channel?.id);
         await userMember.saveOrUpdateIfExists(localDb);
 
