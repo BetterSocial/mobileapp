@@ -28,8 +28,8 @@ const ProfilePicture = ({
     return <MemoIcAddCircle width={48} height={48} style={styles.addCircle} />;
   };
   return (
-    <View>
-      <TouchableNativeFeedback onPress={onImageContainerClick}>
+    <TouchableNativeFeedback onPress={onImageContainerClick}>
+      <View>
         {withKarma ? (
           <CircleGradient
             fill={karmaScore}
@@ -39,7 +39,7 @@ const ProfilePicture = ({
             {isAnon ? (
               <>
                 <View style={[styles.anonStyle(size), {backgroundColor: anonBackgroundColor}]}>
-                  <Text style={{fontSize: size / 1.5, textAlign: 'center', alignSelf: 'center'}}>
+                  <Text style={{fontSize: size / 2, textAlign: 'center', alignSelf: 'center'}}>
                     {anonEmojiCode}
                   </Text>
                 </View>
@@ -74,7 +74,7 @@ const ProfilePicture = ({
             {isAnon ? (
               <>
                 <View style={[styles.anonStyle(size), {backgroundColor: anonBackgroundColor}]}>
-                  <Text style={{fontSize: size / 1.5, textAlign: 'center', alignSelf: 'center'}}>
+                  <Text style={{fontSize: size / 2, textAlign: 'center', alignSelf: 'center'}}>
                     {anonEmojiCode}
                   </Text>
                 </View>
@@ -85,7 +85,8 @@ const ProfilePicture = ({
                   testId="images"
                   style={styles.profileImage(size, width)}
                   source={{
-                    uri: profilePicPath ? `${profilePicPath}` : DEFAULT_PROFILE_PIC_PATH
+                    uri: profilePicPath ? `${profilePicPath}` : DEFAULT_PROFILE_PIC_PATH,
+                    cache: 'cacheOnly'
                   }}
                   resizeMode={FastImage.resizeMode.stretch}
                 />
@@ -94,8 +95,8 @@ const ProfilePicture = ({
             )}
           </>
         )}
-      </TouchableNativeFeedback>
-    </View>
+      </View>
+    </TouchableNativeFeedback>
   );
 };
 

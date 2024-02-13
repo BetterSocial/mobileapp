@@ -1,6 +1,7 @@
 import {ChannelList} from '../../database/schema/ChannelList.types';
 
 interface UseChatUtilsHook {
+  isLoadingFetchingChannelDetail: boolean;
   selectedChannel: ChannelList | null;
   selectedChannelKey: number;
   goBack: () => void;

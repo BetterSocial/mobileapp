@@ -1,17 +1,18 @@
 import * as React from 'react';
-import {StyleSheet, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
+import {StyleSheet, View} from 'react-native';
 
-import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
-import {AnonUserInfo} from '../../../../types/service/AnonProfile.type';
-import ChatIcon from '../../../assets/chat-icon.png';
 import AnonymousProfile from '../../../assets/images/AnonymousProfile.png';
-import FeedIcon from '../../../assets/images/feed-icon.png';
-import useProfileHook from '../../../hooks/core/profile/useProfileHook';
-import dimen from '../../../utils/dimen';
-import {COLORS} from '../../../utils/theme';
 import ChannelAnonymousImage from './ChannelAnonymousImage';
 import ChannelAnonymousSubImage from './ChannelAnonymousSubImage';
+import ChatIcon from '../../../assets/chat-icon.png';
+import FeedIcon from '../../../assets/images/feed-icon.png';
+import dimen from '../../../utils/dimen';
+import useProfileHook from '../../../hooks/core/profile/useProfileHook';
+import {AnonUserInfo} from '../../../../types/service/AnonProfile.type';
+import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
+import {COLORS} from '../../../utils/theme';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
 
 export type ChannelImageProps = {
   mainPicture?: string;
@@ -58,7 +59,7 @@ const ChannelImage = ({
       backgroundColor: COLORS.anon_primary
     },
     myPostNotificationImageContainer: {
-      backgroundColor: isAnonymousTab ? COLORS.anon_primary : COLORS.signed_primary
+      backgroundColor: isAnonymousTab ? COLORS.anon_primary : COLORS.signed_secondary
     },
     anonPmNotificationImageContainer: {
       backgroundColor: COLORS.anon_primary
@@ -71,8 +72,8 @@ const ChannelImage = ({
       width: dimen.normalizeDimen(12),
       height: dimen.normalizeDimen(12)
     },
-    backgroundsigned_primary: {
-      backgroundColor: COLORS.signed_primary
+    backgroundsigned_secondary: {
+      backgroundColor: COLORS.signed_secondary
     }
   });
 
@@ -140,7 +141,9 @@ const ChannelImage = ({
         />
       );
 
-    return <FastImage source={{uri: mainPicture}} style={styles.image} />;
+    return (
+      <FastImage source={{uri: mainPicture || DEFAULT_PROFILE_PIC_PATH}} style={styles.image} />
+    );
   };
 
   const renderMainImage = () => {
@@ -191,7 +194,7 @@ const ChannelImage = ({
             styles.postNotificationImage,
             isAnonymousTab
               ? styles.anonPmNotificationImageContainer
-              : styles.backgroundsigned_primary
+              : styles.backgroundsigned_secondary
           ]}>
           <FastImage source={ChatIcon} style={styles.chatIcon} />
         </View>

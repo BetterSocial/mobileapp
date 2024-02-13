@@ -8,18 +8,26 @@ import {atom, useRecoilState} from 'recoil';
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
 import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
 import UseChatUtilsHook from '../../../../types/hooks/screens/useChatUtilsHook.types';
+import UserSchema from '../../../database/schema/UserSchema';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import {ANON_PM, GROUP_INFO} from '../constant';
-import {ChannelList} from '../../../../types/database/schema/ChannelList.types';
+import {
+  BetterSocialChannelType,
+  ChannelList
+} from '../../../../types/database/schema/ChannelList.types';
 import {ChannelTypeEnum} from '../../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 import {Context} from '../../../context';
 import {PostNotificationChannelList} from '../../../../types/database/schema/PostNotificationChannelList.types';
-import {convertTopicNameToTopicPageScreenParam} from '../../../utils/string/StringUtils';
+import {
+  convertTopicNameToTopicPageScreenParam,
+  getChannelListInfo
+} from '../../../utils/string/StringUtils';
 
 const chatAtom = atom({
   key: 'chatAtom',
   default: {
-    selectedChannel: null
+    selectedChannel: null,
+    isLoadingFetchingChannelDetail: false
   }
 });
 
@@ -33,7 +41,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
   const [selectedChannelKey, setSelectedChannelKey] = useRecoilState(selectedChannelKeyTab);
   const {localDb, refresh} = useLocalDatabaseHook();
   const navigation = useNavigation();
-  const {selectedChannel} = chat;
+  const {selectedChannel, isLoadingFetchingChannelDetail} = chat;
   const [profile] = (React.useContext(Context) as unknown as any).profile;
   const setChannelAsRead = async (channel: ChannelList) => {
     if (!localDb) return;
@@ -62,7 +70,9 @@ function useChatUtilsHook(): UseChatUtilsHook {
       }
     }
 
-    refresh('channelList');
+    refresh('channelInfo');
+    refresh('chat');
+    refresh('user');
   };
 
   const goToPostDetailScreen = (channel: ChannelList) => {
@@ -121,12 +131,70 @@ function useChatUtilsHook(): UseChatUtilsHook {
     });
   };
 
-  const goToChatScreen = (channel: ChannelList, from) => {
+  const helperSaveChannelDetail = async (channel: ChannelList, response: any) => {
+    if (!localDb) return;
+    const {originalMembers} = getChannelListInfo(response?.channel);
+
+    const promise = originalMembers?.map((member) => {
+      return new Promise((resolve, reject) => {
+        const user = UserSchema.fromMemberWebsocketObject(member, channel?.id);
+        try {
+          user.saveOrUpdateIfExists(localDb).then(() => resolve(null));
+        } catch (e) {
+          reject(e);
+        }
+      });
+    });
+
+    await Promise.all(promise).catch((e) => console.log('saveChannelDetail error', e));
+  };
+
+  const helperGetChannelDetail = async (channel: ChannelList) => {
+    if (!localDb) return;
+
+    console.log('should fetch channel detail');
+    try {
+      let response;
+      if (channel?.channelType === 'ANON_PM') {
+        response = await AnonymousMessageRepo.getAnonymousChannelDetail('messaging', channel?.id);
+      } else {
+        const channelType = channel?.channelType === 'GROUP' ? 'group' : 'messaging';
+        response = await SignedMessageRepo.getSignedChannelDetail(channelType, channel?.id);
+      }
+      await helperSaveChannelDetail(channel, response);
+    } catch (e) {
+      console.log('getChannelDetail error', e);
+    } finally {
+      setChat((prevChat) => ({
+        ...prevChat,
+        isLoadingFetchingChannelDetail: false
+      }));
+      refresh('channelInfo');
+    }
+  };
+
+  const goToChatScreen = (channel: ChannelList, from: AllowedGoToChatScreen) => {
+    setChannelAsRead(channel);
+
+    const isChannelTypeChat: (BetterSocialChannelType | undefined)[] = ['ANON_PM', 'GROUP', 'PM'];
+    const isChat = isChannelTypeChat.includes(channel?.channelType);
+
+    if (isChat) {
+      helperGetChannelDetail(channel);
+    }
+
     setChat({
-      ...chat,
+      isLoadingFetchingChannelDetail: isChat,
       selectedChannel: channel
     });
-    setChannelAsRead(channel);
+
+    if (from === 'CONTACT_SCREEN') {
+      return openChat(
+        'SignedChatScreen',
+        channel?.channelType === ANON_PM ? 'AnonymousChannelList' : 'ChannelList'
+      );
+    }
+
     if (channel?.channelType === ANON_PM) {
       if (from === GROUP_INFO) {
         return openChat('AnonymousChatScreen', 'AnonymousChannelList');
@@ -143,10 +211,10 @@ function useChatUtilsHook(): UseChatUtilsHook {
   };
 
   const goToMoveChat = (channel: ChannelList) => {
-    setChat({
-      ...chat,
+    setChat((prevChat) => ({
+      ...prevChat,
       selectedChannel: channel
-    });
+    }));
     setChannelAsRead(channel);
     if (channel?.channelType === ANON_PM) {
       setSelectedChannelKey(1);
@@ -158,10 +226,10 @@ function useChatUtilsHook(): UseChatUtilsHook {
 
   const goBackFromChatScreen = async () => {
     navigation.goBack();
-    setChat({
-      ...chat,
+    setChat((prevChat) => ({
+      ...prevChat,
       selectedChannel: null
-    });
+    }));
   };
 
   const goToContactScreen = () => {
@@ -198,6 +266,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
   };
 
   return {
+    isLoadingFetchingChannelDetail,
     selectedChannel,
     selectedChannelKey,
     goBack,
@@ -214,3 +283,9 @@ function useChatUtilsHook(): UseChatUtilsHook {
 }
 
 export default useChatUtilsHook;
+
+export type AllowedGoToChatScreen =
+  | 'CONTACT_SCREEN'
+  | 'PROFILE_SCREEN'
+  | 'CHAT_DETAIL_SCREEN'
+  | 'GROUP_INFO';

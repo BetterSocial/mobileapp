@@ -5,6 +5,7 @@ import {
   ChannelTypeEnum,
   SignedPostNotification
 } from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
+import {GetstreamChannelType} from './types.d';
 
 type SendPayloadType = {
   channelId: string;
@@ -22,7 +23,9 @@ const baseUrl = {
   getAllSignedPostNotifications: '/feeds/feed-chat',
   getSingleSignedPostNotifications: (activityId: string) => `/feeds/feed-chat/${activityId}`,
   setChannelAsRead: '/chat/channels/read',
-  createSignedChat: '/chat/channels-signed'
+  createSignedChat: '/chat/channels-signed',
+  getSignedChannelDetail: (channelType: GetstreamChannelType, channelId: string) =>
+    `/chat/channel-detail?channel_type=${channelType}&channel_id=${channelId}`
 };
 
 interface SignedMessageRepoTypes {
@@ -39,6 +42,7 @@ interface SignedMessageRepoTypes {
   getSingleSignedPostNotifications: (activityId: string) => Promise<SignedPostNotification>;
   setChannelAsRead: (channelId: string, channelType: ChannelTypeEnum) => Promise<boolean>;
   createSignedChat: (body: string[]) => Promise<any>;
+  getSignedChannelDetail: (channelType: GetstreamChannelType, channelId: string) => Promise<any>;
 }
 
 async function checkIsTargetAllowingAnonDM(targetUserId: string) {
@@ -162,6 +166,20 @@ async function createSignedChat(members: string[]) {
   }
 }
 
+async function getSignedChannelDetail(channelType: GetstreamChannelType, channelId: string) {
+  try {
+    const response = await api.get(baseUrl.getSignedChannelDetail(channelType, channelId));
+    if (response.status === 200) {
+      return Promise.resolve(response.data?.data);
+    }
+
+    return Promise.reject(response.data?.status);
+  } catch (e) {
+    console.log(e);
+    return Promise.reject(e);
+  }
+}
+
 const SignedMessageRepo: SignedMessageRepoTypes = {
   checkIsTargetAllowingAnonDM,
   sendSignedMessage,
@@ -169,7 +187,8 @@ const SignedMessageRepo: SignedMessageRepoTypes = {
   getAllSignedPostNotifications,
   getSingleSignedPostNotifications,
   setChannelAsRead,
-  createSignedChat
+  createSignedChat,
+  getSignedChannelDetail
 };
 
 export default SignedMessageRepo;

@@ -139,7 +139,13 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
             marginVertical: 12
           }}
         />
-        <Text style={styles.bioText}>{addDotAndRemoveNewline(bio || '')}</Text>
+        {!bio ? (
+          <Text style={styles.bioTextNull}>
+            What should others message you about? Add your bio and conversation starters here.
+          </Text>
+        ) : (
+          <Text style={styles.bioText}>{addDotAndRemoveNewline(bio || '')}</Text>
+        )}
       </View>
       <View
         style={{
@@ -169,16 +175,16 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
           Other users will be able to reply to your prompt and direct message you.
         </Text>
         <TouchableOpacity onPress={toggleSwitchAnon}>
-          <CheckBoxCustom value={isAnonymity} label="Allow anonymous messages?" />
+          <CheckBoxCustom value={isAnonymity} label="Allow messages from incognito users?" />
         </TouchableOpacity>
 
         {isAnonymity && (
           <>
-            <Divider style={{marginVertical: 12, backgroundColor: COLORS.gray}} />
+            <Divider style={{marginVertical: 6, backgroundColor: COLORS.gray}} />
             <TouchableOpacity onPress={toggleSwitchAnonAllowFollowing}>
               <CheckBoxCustom
                 value={isAllowFollowingSendDM}
-                label="Only allow anon DMs from users you follow?"
+                label="Allow incognito only from users you follow?"
               />
             </TouchableOpacity>
           </>
@@ -202,7 +208,7 @@ const styles = StyleSheet.create({
   },
   container: {
     backgroundColor: COLORS.default_signed_secondary,
-    borderRadius: 15,
+    borderRadius: 16,
     paddingHorizontal: 12,
     paddingVertical: 12,
     marginTop: 10,
@@ -215,7 +221,15 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: Platform.OS === 'android' ? '700' : '600',
-    lineHeight: 22,
+    marginBottom: 12
+  },
+  bioTextNull: {
+    color: COLORS.lightgrey,
+    fontFamily: 'Inter',
+    fontSize: 14,
+    fontStyle: 'italic',
+    fontWeight: '400',
+    lineHeight: 20,
     marginBottom: 12
   }
 });
