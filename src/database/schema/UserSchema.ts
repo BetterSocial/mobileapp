@@ -2,6 +2,7 @@ import {ResultSet, SQLiteDatabase, Transaction} from 'react-native-sqlite-storag
 import {v4 as uuidv4} from 'uuid';
 
 import BaseDbSchema from './BaseDbSchema';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {InitAnonymousChatDataMember} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 
 class UserSchema implements BaseDbSchema {
@@ -271,7 +272,7 @@ class UserSchema implements BaseDbSchema {
       createdAt: dbObject.created_at,
       updatedAt: dbObject.updated_at,
       lastActiveAt: dbObject.last_active_at,
-      profilePicture: dbObject.profile_picture,
+      profilePicture: dbObject.profile_picture || DEFAULT_PROFILE_PIC_PATH,
       bio: dbObject.bio,
       isBanned: dbObject.is_banned,
       isMe: dbObject.is_me,

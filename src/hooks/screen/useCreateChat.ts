@@ -2,14 +2,14 @@ import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import {v4 as uuid} from 'uuid';
 
-import {getOrCreateAnonymousChannel} from '../../service/chat';
-import SignedMessageRepo from '../../service/repo/signedMessageRepo';
 import ChannelList from '../../database/schema/ChannelListSchema';
-import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
-import UserSchema from '../../database/schema/UserSchema';
 import ChannelListMemberSchema from '../../database/schema/ChannelListMemberSchema';
-import useChatUtilsHook from '../core/chat/useChatUtilsHook';
+import SignedMessageRepo from '../../service/repo/signedMessageRepo';
+import UserSchema from '../../database/schema/UserSchema';
+import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
+import useChatUtilsHook, {AllowedGoToChatScreen} from '../core/chat/useChatUtilsHook';
 import {GROUP_INFO} from '../core/constant';
+import {getOrCreateAnonymousChannel} from '../../service/chat';
 
 const useCreateChat = () => {
   const [loadingCreateChat, setLoadingCreateChat] = React.useState(false);
@@ -65,7 +65,7 @@ const useCreateChat = () => {
     return chatData;
   };
 
-  const createSignChat = async (members: string[], selectedUser, from) => {
+  const createSignChat = async (members: string[], selectedUser, from: AllowedGoToChatScreen) => {
     try {
       setLoadingCreateChat(true);
       const initChannel = await SignedMessageRepo.createSignedChat(members);

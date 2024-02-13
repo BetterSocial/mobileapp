@@ -73,7 +73,7 @@ const WriteComment = ({
   return (
     <View style={isViewOnly ? styles.isViewOnlyColumnContainer : styles.columnContainer}>
       <View style={styles.connectorTop(inReplyCommentView, showProfileConnector)} />
-      <View style={{flexDirection: 'row', paddingRight: 10}}>
+      <View style={{flexDirection: 'row', paddingRight: 20, paddingLeft: 7}}>
         <Text style={styles.replyToContainer(inReplyCommentView)}>
           <Text style={styles.replyToTitle}>Reply to </Text>
           {username}
@@ -82,7 +82,7 @@ const WriteComment = ({
           <ToggleSwitch
             value={isAnonimity}
             onValueChange={toggleSwitch}
-            labelLeft={withAnonymityLabel ? 'Anonymity' : null}
+            labelLeft={withAnonymityLabel ? 'Incognito' : null}
             backgroundActive={COLORS.lightgrey}
             backgroundInactive={COLORS.lightgrey}
             styleLabelLeft={styles.switch}
@@ -189,7 +189,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.white,
     width: '100%',
-    paddingRight: 10,
+    paddingRight: 20,
     paddingLeft: inReplyCommentView ? 50 : 20,
     flexDirection: 'row',
     zIndex: 100
@@ -197,7 +197,6 @@ export const styles = StyleSheet.create({
   content: (isViewOnly) => ({
     display: 'flex',
     flexDirection: 'column',
-    // alignItems: 'center',
     backgroundColor: COLORS.lightgrey,
     marginLeft: 8,
     borderRadius: 8,
@@ -221,7 +220,6 @@ export const styles = StyleSheet.create({
   image: {
     width: 36,
     height: 36,
-    marginLeft: -7,
     zIndex: -10,
     borderRadius: 18,
     alignItems: 'center',
@@ -245,7 +243,7 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.balance_gray,
     position: 'absolute',
     top: 0,
-    left: inReplyCommentView ? 60 : 30,
+    left: inReplyCommentView ? 60 : 37,
     zIndex: -100
   }),
   connectorBottom: (inReplyCommentView, showProfileConnector) => ({
@@ -254,7 +252,7 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.balance_gray,
     position: 'absolute',
     top: 0,
-    left: inReplyCommentView ? 60 : 30,
+    left: inReplyCommentView ? 60 : 37,
     zIndex: -100
   }),
   anonimityContainer: {
