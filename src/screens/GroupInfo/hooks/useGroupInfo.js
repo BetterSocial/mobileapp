@@ -17,30 +17,34 @@ import {requestExternalStoragePermission} from '../../../utils/permission';
 import {setChannel} from '../../../context/actions/setChannel';
 import {setParticipants} from '../../../context/actions/groupChat';
 
-const useGroupInfo = () => {
-  const [groupChatState, groupPatchDispatch] = React.useContext(Context).groupChat;
+const useGroupInfo = (channelId = null) => {
   const navigation = useNavigation();
-  const {participants, asset} = groupChatState;
+
+  const [groupChatState, groupPatchDispatch] = React.useContext(Context).groupChat;
+  const [, dispatchChannel] = React.useContext(Context).channel;
   const [client] = React.useContext(Context).client;
   const [channelState] = React.useContext(Context).channel;
   const [profile] = React.useContext(Context).profile;
-  const {channel, profileChannel} = channelState;
+
+  const blockModalRef = React.useRef(null);
+
   const [isLoadingMembers, setIsLoadingMembers] = React.useState(false);
   const [uploadedImage, setUploadedImage] = React.useState('');
   const [isUploadingImage, setIsUploadingImage] = React.useState(false);
   const [isLoadingInitChat, setIsLoadingInitChat] = React.useState(false);
   const [username, setUsername] = React.useState(channelState.channel?.data?.name);
-  const createChat = channelState.channel?.data?.created_at;
-  const countUser = Object.entries(participants).length;
   const [selectedUser, setSelectedUser] = React.useState(null);
   const [newParticipant, setNewParticipant] = React.useState([]);
   const [openModal, setOpenModal] = React.useState(false);
   const [isAnonymousModalOpen, setIsAnonymousModalOpen] = React.useState(false);
   const [isFetchingAllowAnonDM, setIsFetchingAllowAnonDM] = React.useState(false);
-  const [, dispatchChannel] = React.useContext(Context).channel;
-  const {createSignChat, handleAnonymousMessage} = useCreateChat();
-  const blockModalRef = React.useRef(null);
 
+  const {createSignChat, handleAnonymousMessage} = useCreateChat();
+
+  const {participants, asset} = groupChatState;
+  const countUser = Object.entries(participants).length;
+  const {channel, profileChannel} = channelState;
+  const createChat = channelState.channel?.data?.created_at;
   const anonUserEmojiName = channelState?.channel?.data?.anon_user_info_emoji_name;
 
   const serializeMembersList = (result = []) => {
@@ -334,8 +338,9 @@ const useGroupInfo = () => {
   const handleMessageAnonymously = async () => {
     try {
       setIsLoadingInitChat(true);
-      await handleAnonymousMessage(selectedUser);
+      await handleAnonymousMessage(selectedUser, channelId, 'chat');
     } catch (e) {
+      console.log(e);
     } finally {
       setIsLoadingInitChat(false);
       setOpenModal(false);

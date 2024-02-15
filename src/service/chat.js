@@ -143,9 +143,11 @@ const sendSignedDMOtherProfile = async ({user_id, message}) => {
   return Promise.reject(response.data?.data);
 };
 
-const getOrCreateAnonymousChannel = async (userId) => {
+const getOrCreateAnonymousChannel = async (userId, oldChannelId = null, context = null) => {
   const payload = {
-    members: [userId]
+    members: [userId],
+    oldChannelId,
+    context
   };
 
   try {

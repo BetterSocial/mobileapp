@@ -6,15 +6,14 @@ import {CommonActions, useNavigation} from '@react-navigation/native';
 import {atom, useRecoilState} from 'recoil';
 
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
+import ChannelList from '../../../database/schema/ChannelListSchema';
 import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
 import UseChatUtilsHook from '../../../../types/hooks/screens/useChatUtilsHook.types';
 import UserSchema from '../../../database/schema/UserSchema';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
+import useUserAuthHook from '../auth/useUserAuthHook';
 import {ANON_PM, GROUP_INFO} from '../constant';
-import {
-  BetterSocialChannelType,
-  ChannelList
-} from '../../../../types/database/schema/ChannelList.types';
+import {BetterSocialChannelType} from '../../../../types/database/schema/ChannelList.types';
 import {ChannelTypeEnum} from '../../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 import {Context} from '../../../context';
 import {PostNotificationChannelList} from '../../../../types/database/schema/PostNotificationChannelList.types';
@@ -38,11 +37,14 @@ const selectedChannelKeyTab = atom({
 
 function useChatUtilsHook(): UseChatUtilsHook {
   const [chat, setChat] = useRecoilState(chatAtom);
+  const {selectedChannel, isLoadingFetchingChannelDetail} = chat;
+
   const [selectedChannelKey, setSelectedChannelKey] = useRecoilState(selectedChannelKeyTab);
+
   const {localDb, refresh} = useLocalDatabaseHook();
   const navigation = useNavigation();
-  const {selectedChannel, isLoadingFetchingChannelDetail} = chat;
   const [profile] = (React.useContext(Context) as unknown as any).profile;
+  const {anonProfileId, signedProfileId} = useUserAuthHook();
   const setChannelAsRead = async (channel: ChannelList) => {
     if (!localDb) return;
     channel.setRead(localDb).catch((e) => console.log('setChannelAsRead error', e));
@@ -133,7 +135,32 @@ function useChatUtilsHook(): UseChatUtilsHook {
 
   const helperSaveChannelDetail = async (channel: ChannelList, response: any) => {
     if (!localDb) return;
-    const {originalMembers} = getChannelListInfo(response?.channel);
+    const builtChannelData = {
+      better_channel_member: response?.better_channel_members,
+      members: response?.members
+    };
+    const {
+      originalMembers,
+      anonUserInfoColorCode,
+      anonUserInfoColorName,
+      anonUserInfoEmojiCode,
+      anonUserInfoEmojiName,
+      channelImage,
+      channelName
+    } = getChannelListInfo(builtChannelData, signedProfileId, anonProfileId);
+
+    const channelData = await ChannelList.getSchemaById(localDb, channel?.id);
+
+    if (channelData !== null) {
+      channelData.anon_user_info_color_code = anonUserInfoColorCode;
+      channelData.anon_user_info_color_name = anonUserInfoColorName;
+      channelData.anon_user_info_emoji_code = anonUserInfoEmojiCode;
+      channelData.anon_user_info_emoji_name = anonUserInfoEmojiName;
+      channelData.channelPicture = channelImage;
+      channelData.name = channelName;
+
+      await channelData.save(localDb);
+    }
 
     const promise = originalMembers?.map((member) => {
       return new Promise((resolve, reject) => {
@@ -170,6 +197,8 @@ function useChatUtilsHook(): UseChatUtilsHook {
         isLoadingFetchingChannelDetail: false
       }));
       refresh('channelInfo');
+      refresh('channelList');
+      refresh('chats');
     }
   };
 
