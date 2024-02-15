@@ -53,8 +53,8 @@ describe('WriteComment should run correctly', () => {
       flex: 1,
       backgroundColor: COLORS.white,
       width: '100%',
-      paddingRight: 10,
-      paddingLeft: 50,
+      paddingRight: 20,
+      paddingLeft: 43,
       flexDirection: 'row',
       zIndex: 100
     });
@@ -62,7 +62,7 @@ describe('WriteComment should run correctly', () => {
       flex: 1,
       backgroundColor: COLORS.white,
       width: '100%',
-      paddingRight: 10,
+      paddingRight: 20,
       paddingLeft: 20,
       flexDirection: 'row',
       zIndex: 100
@@ -104,7 +104,7 @@ describe('WriteComment should run correctly', () => {
       backgroundColor: COLORS.balance_gray,
       position: 'absolute',
       top: 0,
-      left: 30,
+      left: 37,
       zIndex: -100
     });
 
@@ -124,7 +124,7 @@ describe('WriteComment should run correctly', () => {
       backgroundColor: COLORS.balance_gray,
       position: 'absolute',
       top: 0,
-      left: 30,
+      left: 37,
       zIndex: -100
     });
   });

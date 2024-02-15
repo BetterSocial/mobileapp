@@ -33,7 +33,8 @@ const Card = (props) => {
     url,
     heightTopic = 0,
     textHeight = 0,
-    contentHeight
+    contentHeight,
+    containerStyle
   } = props;
   // const styles = buildStylesheet('card', props.styles);
   const renderImageComponent = () => {
@@ -63,7 +64,7 @@ const Card = (props) => {
   };
 
   return (
-    <View style={styles.container(calculateHeight())}>
+    <View style={[styles.container(calculateHeight()), containerStyle]}>
       <View>
         <TouchableOpacity
           onPress={() => onHeaderPress(item)}
@@ -151,7 +152,6 @@ const styles = StyleSheet.create({
     borderColor: COLORS.black50,
     overflow: 'hidden',
     paddingBottom: 8,
-
     marginBottom: 5,
     height
   }),

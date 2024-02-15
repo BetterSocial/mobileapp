@@ -3,15 +3,18 @@
 exports[`Testing Feed Screen Content Link Card Matches Snapshot 1`] = `
 <View
   style={
-    Object {
-      "borderColor": "rgba(0, 0, 0, 0.5)",
-      "borderRadius": 8,
-      "borderWidth": 0.5,
-      "height": 225,
-      "marginBottom": 5,
-      "overflow": "hidden",
-      "paddingBottom": 8,
-    }
+    Array [
+      Object {
+        "borderColor": "rgba(0, 0, 0, 0.5)",
+        "borderRadius": 8,
+        "borderWidth": 0.5,
+        "height": 225,
+        "marginBottom": 5,
+        "overflow": "hidden",
+        "paddingBottom": 8,
+      },
+      undefined,
+    ]
   }
 >
   <View>
@@ -471,79 +474,314 @@ exports[`Testing Feed Screen Content Link CardHeader Matches Snapshot 1`] = `
 exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
 <View
   style={
-    Object {
-      "backgroundColor": "#FFFFFF",
-      "flex": 0,
-      "marginHorizontal": 6,
-    }
+    Array [
+      Object {
+        "position": "relative",
+        "width": "100%",
+      },
+      Object {
+        "flex": 1,
+      },
+    ]
   }
+  testID="blurredLayer"
 >
   <View
     style={
       Object {
-        "borderColor": "rgba(0, 0, 0, 0.5)",
-        "borderRadius": 8,
-        "borderWidth": 0.5,
-        "height": 225,
-        "marginBottom": 5,
-        "overflow": "hidden",
-        "paddingBottom": 8,
+        "backgroundColor": "#FFFFFF",
+        "flex": 1,
+        "marginHorizontal": 6,
       }
     }
   >
-    <View>
-      <View
-        accessible={true}
-        focusable={true}
-        onClick={[Function]}
-        onResponderGrant={[Function]}
-        onResponderMove={[Function]}
-        onResponderRelease={[Function]}
-        onResponderTerminate={[Function]}
-        onResponderTerminationRequest={[Function]}
-        onStartShouldSetResponder={[Function]}
-        style={
+    <View
+      style={
+        Array [
           Object {
-            "opacity": 1,
-          }
-        }
-        testID="contentLinkHeaderPress"
-      >
+            "borderColor": "rgba(0, 0, 0, 0.5)",
+            "borderRadius": 8,
+            "borderWidth": 0.5,
+            "height": 225,
+            "marginBottom": 5,
+            "overflow": "hidden",
+            "paddingBottom": 8,
+          },
+          Object {
+            "flex": 1,
+          },
+        ]
+      }
+    >
+      <View>
         <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
           style={
             Object {
-              "flexDirection": "row",
-              "paddingLeft": 20,
-              "paddingRight": 20,
-              "paddingVertical": 8.5,
+              "opacity": 1,
             }
           }
+          testID="contentLinkHeaderPress"
         >
           <View
             style={
               Object {
-                "alignItems": "center",
-                "borderColor": "rgba(0, 0, 0, 0.5)",
-                "borderRadius": 45,
-                "borderWidth": 0.2,
-                "height": 24,
-                "justifyContent": "center",
-                "width": 24,
+                "flexDirection": "row",
+                "paddingLeft": 20,
+                "paddingRight": 20,
+                "paddingVertical": 8.5,
               }
             }
           >
             <View
               style={
                 Object {
+                  "alignItems": "center",
+                  "borderColor": "rgba(0, 0, 0, 0.5)",
+                  "borderRadius": 45,
+                  "borderWidth": 0.2,
                   "height": 24,
+                  "justifyContent": "center",
                   "width": 24,
                 }
               }
-              testID="iconDomainProfilePictureEmptyState"
             >
-              <View />
+              <View
+                style={
+                  Object {
+                    "height": 24,
+                    "width": 24,
+                  }
+                }
+                testID="iconDomainProfilePictureEmptyState"
+              >
+                <View />
+              </View>
+            </View>
+            <View
+              style={
+                Array [
+                  Object {
+                    "height": undefined,
+                    "width": undefined,
+                  },
+                  Object {
+                    "width": 0,
+                  },
+                ]
+              }
+              testID="gap"
+            />
+            <View
+              style={
+                Object {
+                  "alignSelf": "center",
+                  "flex": 1,
+                  "justifyContent": "space-around",
+                  "marginLeft": 8,
+                }
+              }
+            >
+              <View
+                style={
+                  Object {
+                    "alignItems": "center",
+                    "flexDirection": "row",
+                    "marginRight": 8,
+                  }
+                }
+              >
+                <Text
+                  numberOfLines={1}
+                  style={
+                    Object {
+                      "color": "#1E1F20",
+                      "flexShrink": 1,
+                      "fontFamily": "Inter-SemiBold",
+                      "fontSize": 14,
+                      "fontWeight": "bold",
+                      "lineHeight": 16,
+                    }
+                  }
+                >
+                  human-id.org
+                </Text>
+                <View
+                  style={
+                    Object {
+                      "backgroundColor": "#9B9FA9",
+                      "borderRadius": 4,
+                      "height": 3,
+                      "marginLeft": 6,
+                      "marginRight": 6,
+                      "marginTop": 1,
+                      "width": 3,
+                    }
+                  }
+                />
+                <Text
+                  numberOfLines={1}
+                  style={
+                    Object {
+                      "color": "#828282",
+                      "fontFamily": "Inter-Regular",
+                      "fontSize": 12,
+                    }
+                  }
+                >
+                  Jan 6, 0001
+                </Text>
+                <View
+                  style={
+                    Object {
+                      "backgroundColor": "#9B9FA9",
+                      "borderRadius": 4,
+                      "height": 3,
+                      "marginLeft": 6,
+                      "marginRight": 6,
+                      "marginTop": 1,
+                      "width": 3,
+                    }
+                  }
+                />
+                <View
+                  style={
+                    Object {
+                      "alignSelf": "center",
+                      "borderRadius": 8,
+                      "flexDirection": "row",
+                      "height": 16,
+                    }
+                  }
+                >
+                  <View />
+                  <Text
+                    style={
+                      Object {
+                        "alignSelf": "center",
+                        "color": "#828282",
+                        "fontFamily": "Inter-Regular",
+                        "fontSize": 12,
+                        "lineHeight": 14.52,
+                        "marginLeft": 4,
+                      }
+                    }
+                  >
+                    n/a
+                  </Text>
+                </View>
+              </View>
             </View>
           </View>
+        </View>
+      </View>
+      <View
+        style={
+          Object {
+            "flex": 1,
+          }
+        }
+      >
+        <View
+          accessible={true}
+          focusable={false}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "flex": 1,
+              "justifyContent": "space-between",
+            }
+          }
+          testID="contentLinkContentPress"
+        >
+          <View>
+            <Text
+              style={
+                Object {
+                  "color": "#1E1F20",
+                  "fontFamily": "Inter-SemiBold",
+                  "fontSize": 14,
+                  "fontWeight": "600",
+                  "lineHeight": 17,
+                  "marginBottom": 8,
+                  "paddingLeft": 20,
+                  "paddingRight": 20,
+                }
+              }
+            >
+              humanID: One-click, Anonymous Login
+            </Text>
+          </View>
+          <View
+            style={
+              Object {
+                "flex": 1,
+              }
+            }
+          >
+            <View
+              style={
+                Array [
+                  Object {
+                    "overflow": "hidden",
+                  },
+                  Object {
+                    "height": "100%",
+                    "width": "100%",
+                  },
+                ]
+              }
+            >
+              <FastImageView
+                defaultSource={null}
+                resizeMode="contain"
+                source={
+                  Object {
+                    "testUri": "../../../src/assets/images/news-empty-state.png",
+                  }
+                }
+                testID="contentLinkImageEmptyStateImage"
+              />
+            </View>
+          </View>
+        </View>
+        <Text
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "color": "#828282",
+              "fontFamily": "Inter-Regular",
+              "fontSize": 12,
+              "lineHeight": 18,
+              "marginTop": 5,
+              "paddingLeft": 20,
+              "paddingRight": 20,
+            }
+          }
+        >
+          Seamlessly integrate with our anonymous, bot-resistant, one-click login to create a safer community for your users.
           <View
             style={
               Array [
@@ -552,242 +790,27 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
                   "width": undefined,
                 },
                 Object {
-                  "width": 0,
+                  "width": 2,
                 },
               ]
             }
             testID="gap"
           />
-          <View
-            style={
-              Object {
-                "alignSelf": "center",
-                "flex": 1,
-                "justifyContent": "space-around",
-                "marginLeft": 8,
-              }
-            }
-          >
-            <View
-              style={
-                Object {
-                  "alignItems": "center",
-                  "flexDirection": "row",
-                  "marginRight": 8,
-                }
-              }
-            >
-              <Text
-                numberOfLines={1}
-                style={
-                  Object {
-                    "color": "#1E1F20",
-                    "flexShrink": 1,
-                    "fontFamily": "Inter-SemiBold",
-                    "fontSize": 14,
-                    "fontWeight": "bold",
-                    "lineHeight": 16,
-                  }
-                }
-              >
-                human-id.org
-              </Text>
-              <View
-                style={
-                  Object {
-                    "backgroundColor": "#9B9FA9",
-                    "borderRadius": 4,
-                    "height": 3,
-                    "marginLeft": 6,
-                    "marginRight": 6,
-                    "marginTop": 1,
-                    "width": 3,
-                  }
-                }
-              />
-              <Text
-                numberOfLines={1}
-                style={
-                  Object {
-                    "color": "#828282",
-                    "fontFamily": "Inter-Regular",
-                    "fontSize": 12,
-                  }
-                }
-              >
-                Jan 6, 0001
-              </Text>
-              <View
-                style={
-                  Object {
-                    "backgroundColor": "#9B9FA9",
-                    "borderRadius": 4,
-                    "height": 3,
-                    "marginLeft": 6,
-                    "marginRight": 6,
-                    "marginTop": 1,
-                    "width": 3,
-                  }
-                }
-              />
-              <View
-                style={
-                  Object {
-                    "alignSelf": "center",
-                    "borderRadius": 8,
-                    "flexDirection": "row",
-                    "height": 16,
-                  }
-                }
-              >
-                <View />
-                <Text
-                  style={
-                    Object {
-                      "alignSelf": "center",
-                      "color": "#828282",
-                      "fontFamily": "Inter-Regular",
-                      "fontSize": 12,
-                      "lineHeight": 14.52,
-                      "marginLeft": 4,
-                    }
-                  }
-                >
-                  n/a
-                </Text>
-              </View>
-            </View>
-          </View>
-        </View>
-      </View>
-    </View>
-    <View
-      style={
-        Object {
-          "flex": 1,
-        }
-      }
-    >
-      <View
-        accessible={true}
-        focusable={false}
-        onClick={[Function]}
-        onResponderGrant={[Function]}
-        onResponderMove={[Function]}
-        onResponderRelease={[Function]}
-        onResponderTerminate={[Function]}
-        onResponderTerminationRequest={[Function]}
-        onStartShouldSetResponder={[Function]}
-        style={
-          Object {
-            "flex": 1,
-            "justifyContent": "space-between",
-          }
-        }
-        testID="contentLinkContentPress"
-      >
-        <View>
           <Text
             style={
               Object {
-                "color": "#1E1F20",
-                "fontFamily": "Inter-SemiBold",
-                "fontSize": 14,
-                "fontWeight": "600",
-                "lineHeight": 17,
-                "marginBottom": 8,
-                "paddingLeft": 20,
-                "paddingRight": 20,
+                "color": "#2F80ED",
+                "fontSize": 12,
+                "marginStart": 8,
+                "textDecorationLine": "underline",
               }
             }
+            testID="contentLinkOpenLinkPress"
           >
-            humanID: One-click, Anonymous Login
+            Open Link
           </Text>
-        </View>
-        <View
-          style={
-            Object {
-              "flex": 1,
-            }
-          }
-        >
-          <View
-            style={
-              Array [
-                Object {
-                  "overflow": "hidden",
-                },
-                Object {
-                  "height": "100%",
-                  "width": "100%",
-                },
-              ]
-            }
-          >
-            <FastImageView
-              defaultSource={null}
-              resizeMode="contain"
-              source={
-                Object {
-                  "testUri": "../../../src/assets/images/news-empty-state.png",
-                }
-              }
-              testID="contentLinkImageEmptyStateImage"
-            />
-          </View>
-        </View>
-      </View>
-      <Text
-        accessible={true}
-        focusable={true}
-        onClick={[Function]}
-        onResponderGrant={[Function]}
-        onResponderMove={[Function]}
-        onResponderRelease={[Function]}
-        onResponderTerminate={[Function]}
-        onResponderTerminationRequest={[Function]}
-        onStartShouldSetResponder={[Function]}
-        style={
-          Object {
-            "color": "#828282",
-            "fontFamily": "Inter-Regular",
-            "fontSize": 12,
-            "lineHeight": 18,
-            "marginTop": 5,
-            "paddingLeft": 20,
-            "paddingRight": 20,
-          }
-        }
-      >
-        Seamlessly integrate with our anonymous, bot-resistant, one-click login to create a safer community for your users.
-        <View
-          style={
-            Array [
-              Object {
-                "height": undefined,
-                "width": undefined,
-              },
-              Object {
-                "width": 2,
-              },
-            ]
-          }
-          testID="gap"
-        />
-        <Text
-          style={
-            Object {
-              "color": "#2F80ED",
-              "fontSize": 12,
-              "marginStart": 8,
-              "textDecorationLine": "underline",
-            }
-          }
-          testID="contentLinkOpenLinkPress"
-        >
-          Open Link
         </Text>
-      </Text>
+      </View>
     </View>
   </View>
 </View>
