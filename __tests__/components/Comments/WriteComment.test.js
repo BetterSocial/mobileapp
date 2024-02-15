@@ -1,9 +1,10 @@
 import * as React from 'react';
-import {render, cleanup, fireEvent} from '@testing-library/react-native';
-import WriteComment, {styles} from '../../../src/components/Comments/WriteComment';
+import {cleanup, fireEvent, render} from '@testing-library/react-native';
+
 import Store from '../../../src/context/Store';
-import {fonts} from '../../../src/utils/fonts';
+import WriteComment, {styles} from '../../../src/components/Comments/WriteComment';
 import {COLORS} from '../../../src/utils/theme';
+import {fonts} from '../../../src/utils/fonts';
 
 describe('WriteComment should run correctly', () => {
   afterEach(cleanup);
@@ -54,7 +55,7 @@ describe('WriteComment should run correctly', () => {
       backgroundColor: COLORS.white,
       width: '100%',
       paddingRight: 20,
-      paddingLeft: 50,
+      paddingLeft: 43,
       flexDirection: 'row',
       zIndex: 100
     });

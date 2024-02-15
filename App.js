@@ -142,9 +142,7 @@ const App = () => {
             ref={navigationRef}
             linking={linking}>
             <View>
-              <OverlayProvider topInset={top} bottomInset={bottom} i18nInstance={streami18n}>
-                <RootNavigator areaHeight={height} currentScreen={currentScreen} />
-              </OverlayProvider>
+              <RootNavigator areaHeight={height} currentScreen={currentScreen} />
             </View>
           </NavigationContainer>
         </Store>
