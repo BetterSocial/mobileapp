@@ -5,6 +5,7 @@ import BaseDbSchema from './BaseDbSchema';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {InitAnonymousChatDataMember} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 
+export type SQLiteBoolean = 0 | 1;
 class UserSchema implements BaseDbSchema {
   id: string;
 
@@ -38,6 +39,8 @@ class UserSchema implements BaseDbSchema {
 
   anon_user_info_color_code: string | null;
 
+  isAnonymous: SQLiteBoolean | null;
+
   constructor({
     id,
     channelId,
@@ -54,7 +57,8 @@ class UserSchema implements BaseDbSchema {
     anon_user_info_emoji_name = null,
     anon_user_info_emoji_code = null,
     anon_user_info_color_name = null,
-    anon_user_info_color_code = null
+    anon_user_info_color_code = null,
+    isAnonymous = null
   }) {
     this.userId = userId;
     this.username = username;
@@ -72,6 +76,7 @@ class UserSchema implements BaseDbSchema {
     this.anon_user_info_emoji_code = anon_user_info_emoji_code;
     this.anon_user_info_color_name = anon_user_info_color_name;
     this.anon_user_info_color_code = anon_user_info_color_code;
+    this.isAnonymous = isAnonymous;
   }
 
   save = async (db: SQLiteDatabase, transaction?: Transaction): Promise<void> => {
@@ -92,8 +97,9 @@ class UserSchema implements BaseDbSchema {
         anon_user_info_emoji_name,
         anon_user_info_emoji_code,
         anon_user_info_color_name,
-        anon_user_info_color_code
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+        anon_user_info_color_code,
+        is_anonymous
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
 
       const prepReplacement = [
         this.id,
@@ -110,7 +116,8 @@ class UserSchema implements BaseDbSchema {
         this.anon_user_info_emoji_name,
         this.anon_user_info_emoji_code,
         this.anon_user_info_color_name,
-        this.anon_user_info_color_code
+        this.anon_user_info_color_code,
+        this.isAnonymous
       ];
 
       if (transaction) {
@@ -140,7 +147,8 @@ class UserSchema implements BaseDbSchema {
         anon_user_info_emoji_name = ?,
         anon_user_info_emoji_code = ?,
         anon_user_info_color_name = ?,
-        anon_user_info_color_code = ?
+        anon_user_info_color_code = ?,
+        is_anonymous = ?
       WHERE
         channel_id = ? AND user_id = ?`;
 
@@ -159,6 +167,7 @@ class UserSchema implements BaseDbSchema {
         this.anon_user_info_emoji_code,
         this.anon_user_info_color_name,
         this.anon_user_info_color_code,
+        this.isAnonymous,
         this.channelId,
         this.userId
       ];
@@ -317,6 +326,7 @@ class UserSchema implements BaseDbSchema {
         anon_user_info_color_name: json?.anon_user_info_color_name,
         anon_user_info_emoji_code: json?.anon_user_info_emoji_code,
         anon_user_info_emoji_name: json?.anon_user_info_emoji_name
+        // TODO: add is_anonymous
       });
     } catch (e) {
       console.log('error on fromMemberWebsocketObject', e);
@@ -336,6 +346,7 @@ class UserSchema implements BaseDbSchema {
         anon_user_info_color_name: null,
         anon_user_info_emoji_code: null,
         anon_user_info_emoji_name: null
+        // TODO: add is_anonymous
       });
     }
   }
@@ -360,6 +371,7 @@ class UserSchema implements BaseDbSchema {
       anon_user_info_color_name: object?.anon_user_info_color_name,
       anon_user_info_emoji_code: object?.anon_user_info_emoji_code,
       anon_user_info_emoji_name: object?.anon_user_info_emoji_name
+      // TODO: add is_anonymous
     });
   }
 
