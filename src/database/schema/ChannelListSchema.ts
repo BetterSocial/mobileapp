@@ -547,7 +547,11 @@ class ChannelList implements BaseDbSchema {
       rawJson: data?.appAdditionalData?.rawJson,
       user: null,
       expiredAt: null,
-      members: null
+      members: null,
+      anon_user_info_color_code: data?.anon_user_info_color_code,
+      anon_user_info_color_name: data?.anon_user_info_color_name,
+      anon_user_info_emoji_name: data?.anon_user_info_emoji_name,
+      anon_user_info_emoji_code: data?.anon_user_info_emoji_code
     });
   }
 
@@ -566,7 +570,11 @@ class ChannelList implements BaseDbSchema {
       rawJson: data?.appAdditionalData?.rawJson,
       user: null,
       expiredAt: null,
-      members: null
+      members: null,
+      anon_user_info_color_code: data?.anon_user_info_color_code,
+      anon_user_info_color_name: data?.anon_user_info_color_name,
+      anon_user_info_emoji_name: data?.anon_user_info_emoji_name,
+      anon_user_info_emoji_code: data?.anon_user_info_emoji_code
     });
   }
 }

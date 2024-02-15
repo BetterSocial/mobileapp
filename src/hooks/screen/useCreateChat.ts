@@ -9,7 +9,9 @@ import UserSchema from '../../database/schema/UserSchema';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import useUserAuthHook from '../core/auth/useUserAuthHook';
 import useChatUtilsHook, {AllowedGoToChatScreen} from '../core/chat/useChatUtilsHook';
+import {AnonUserInfoTs} from '../../../types/core/AnonUserInfoTs.types';
 import {GROUP_INFO} from '../core/constant';
+import {MessageAnonymouslyData} from '../../../types/repo/AnonymousMessageRepo/MessageAnonymouslyData';
 import {getChannelListInfo} from '../../utils/string/StringUtils';
 import {getOrCreateAnonymousChannel} from '../../service/chat';
 
@@ -48,8 +50,15 @@ const useCreateChat = () => {
       console.log(e, 'error on memberSchema');
     }
   };
-  const createChannelJson = (response, selectedUser) => {
+  const createChannelJson = (response, selectedUser, isAnonymous = false) => {
     const channelWithMember = {...response.channel, members: response.members};
+    let targetName =
+      selectedUser?.user?.username || selectedUser?.user?.name || selectedUser.username;
+    let targetImage =
+      selectedUser?.user?.profilePicture ||
+      selectedUser?.user?.image ||
+      selectedUser.profilePicture;
+
     const targetRawJson = {
       type: 'notification.message_new',
       cid: response?.channel?.id,
@@ -57,24 +66,46 @@ const useCreateChat = () => {
       channel_type: 'messaging',
       channel: channelWithMember,
       created_at: response?.channel,
-      targetName: selectedUser?.user?.username || selectedUser?.user?.name || selectedUser.username,
-      targetImage:
-        selectedUser?.user?.profilePicture ||
-        selectedUser?.user?.image ||
-        selectedUser.profilePicture
+      targetName,
+      targetImage
     };
-    const chatData = {
+
+    let defaultAnonUserInfo: AnonUserInfoTs = {
+      anon_user_info_color_code: '',
+      anon_user_info_color_name: '',
+      anon_user_info_emoji_code: '',
+      anon_user_info_emoji_name: ''
+    };
+
+    if (isAnonymous) {
+      const {
+        anonUserInfoColorCode,
+        anonUserInfoColorName,
+        anonUserInfoEmojiCode,
+        anonUserInfoEmojiName,
+        channelImage,
+        channelName
+      } = getChannelListInfo(response?.channel, signedProfileId, anonProfileId);
+      defaultAnonUserInfo = {
+        anon_user_info_color_code: anonUserInfoColorCode,
+        anon_user_info_color_name: anonUserInfoColorName,
+        anon_user_info_emoji_code: anonUserInfoEmojiCode,
+        anon_user_info_emoji_name: anonUserInfoEmojiName
+      };
+
+      targetName = channelName;
+      targetImage = channelImage;
+    }
+
+    const chatData: MessageAnonymouslyData = {
       channel: response?.channel,
       members: response?.members,
+      ...defaultAnonUserInfo,
       appAdditionalData: {
         rawJson: targetRawJson,
         message: '',
-        targetName:
-          selectedUser?.user?.username || selectedUser?.user?.name || selectedUser.username,
-        targetImage:
-          selectedUser?.user?.profilePicture ||
-          selectedUser?.user?.image ||
-          selectedUser.profilePicture
+        targetName,
+        targetImage
       }
     };
     return chatData;
@@ -97,7 +128,7 @@ const useCreateChat = () => {
     }
   };
 
-  const handleAnonymousMessage = async (selectedUser) => {
+  const handleAnonymousMessage = async (selectedUser, channelId = null, context = null) => {
     if (!selectedUser?.allow_anon_dm) {
       SimpleToast.show('This user does not allow anonymous messages');
       return;
@@ -105,11 +136,14 @@ const useCreateChat = () => {
 
     try {
       const response = await getOrCreateAnonymousChannel(
-        selectedUser?.user_id || selectedUser.userId
+        selectedUser?.user_id || selectedUser.userId,
+        channelId,
+        context
       );
-      const chatData = createChannelJson(response, selectedUser);
+
+      const chatData = createChannelJson(response, selectedUser, true);
       const channelList = ChannelList.fromMessageAnonymouslyAPI(chatData);
-      await channelList.saveIfLatest(localDb);
+      await channelList.save(localDb);
       handleMemberSchema(response);
       goToChatScreen(channelList, GROUP_INFO);
     } catch (e) {
