@@ -190,7 +190,7 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     width: '100%',
     paddingRight: 20,
-    paddingLeft: inReplyCommentView ? 50 : 20,
+    paddingLeft: inReplyCommentView ? 43 : 20,
     flexDirection: 'row',
     zIndex: 100
   }),

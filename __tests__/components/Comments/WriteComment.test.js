@@ -54,7 +54,7 @@ describe('WriteComment should run correctly', () => {
       backgroundColor: COLORS.white,
       width: '100%',
       paddingRight: 20,
-      paddingLeft: 50,
+      paddingLeft: 43,
       flexDirection: 'row',
       zIndex: 100
     });
