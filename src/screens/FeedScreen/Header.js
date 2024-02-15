@@ -221,6 +221,7 @@ const _renderProfileNormal = ({
               size={50}
               width={3}
               withKarma
+              onImageContainerClick={navigateToProfile}
             />
           </GlobalButton>
           <GlobalButton
