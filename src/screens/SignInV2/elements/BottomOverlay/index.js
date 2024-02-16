@@ -13,7 +13,7 @@ import {imageConst} from '../../../../components/Image';
 
 const HUMAN_ID_URL = 'https://www.human-internet.org';
 
-const BottomOverlay = ({count, handleLogin, index, isLogin, title, onNextSlide, textSvg}) => {
+const BottomOverlay = ({count, handleLogin, index, isLogin, title, onNextSlide, text}) => {
   const goToHumanIdWeb = () => {
     openUrl(HUMAN_ID_URL, true);
   };
@@ -50,7 +50,7 @@ const BottomOverlay = ({count, handleLogin, index, isLogin, title, onNextSlide, 
               <Text style={bottomOverlayStyles.descBold}>{' without storing\n'}</Text>
               {'your data or'}
               <Text style={bottomOverlayStyles.descBold}>{' sharing'}</Text>
-              {' it with BetterSocial'}
+              {' it with Helio'}
             </Text>
           </View>
         </View>
@@ -60,7 +60,7 @@ const BottomOverlay = ({count, handleLogin, index, isLogin, title, onNextSlide, 
   return (
     <View style={bottomOverlayStyles.container}>
       <Text style={bottomOverlayStyles.title}>{title}</Text>
-      <View>{textSvg}</View>
+      <Text style={bottomOverlayStyles.contentText}>{text}</Text>
       <View style={bottomOverlayStyles.bottomBlock}>
         <View style={bottomOverlayStyles.pagination}>
           <BottomOverlayPagination count={count} active={index} />
@@ -175,12 +175,18 @@ const bottomOverlayStyles = StyleSheet.create({
   },
   title: {
     marginTop: normalize(35),
-    marginBottom: normalize(30),
+    marginBottom: normalize(20),
     lineHeight: normalize(28),
     fontSize: normalizeFontSize(22),
     fontFamily: fonts.inter[600],
     color: COLORS.signed_primary,
     alignSelf: 'flex-start'
+  },
+  contentText: {
+    lineHeight: normalize(20),
+    fontSize: normalizeFontSize(14),
+    fontFamily: fonts.inter[400],
+    color: COLORS.gray500
   },
   paddingContainer: {
     paddingTop: dimen.normalizeDimen(27),
