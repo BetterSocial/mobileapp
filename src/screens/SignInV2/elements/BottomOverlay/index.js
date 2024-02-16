@@ -51,7 +51,7 @@ const BottomOverlay = ({count, handleLogin, index, isLogin, title, onNextSlide, 
               <Text style={bottomOverlayStyles.descBold}>{' without storing\n'}</Text>
               {'your data or'}
               <Text style={bottomOverlayStyles.descBold}>{' sharing'}</Text>
-              {' it with Helio'}
+              {' it with BetterSocial'}
             </Text>
           </View>
         </View>
