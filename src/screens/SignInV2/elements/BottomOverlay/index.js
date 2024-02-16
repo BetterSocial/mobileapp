@@ -2,6 +2,7 @@ import * as React from 'react';
 import {Platform, Pressable, StyleSheet, Text, View, Image} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
+import PropTypes from 'prop-types';
 import BottomOverlayPagination from './pagination';
 import MemoizedIcArrowRightTail from '../../../../assets/arrow/ic_arrow_right_tail';
 import StringConstant from '../../../../utils/string/StringConstant';
@@ -50,7 +51,7 @@ const BottomOverlay = ({count, handleLogin, index, isLogin, title, onNextSlide, 
               <Text style={bottomOverlayStyles.descBold}>{' without storing\n'}</Text>
               {'your data or'}
               <Text style={bottomOverlayStyles.descBold}>{' sharing'}</Text>
-              {' it with Helio'}
+              {' it with BetterSocial'}
             </Text>
           </View>
         </View>
@@ -82,6 +83,16 @@ const BottomOverlay = ({count, handleLogin, index, isLogin, title, onNextSlide, 
 };
 
 export default BottomOverlay;
+
+BottomOverlay.propTypes = {
+  count: PropTypes.number,
+  handleLogin: PropTypes.func,
+  index: PropTypes.number,
+  isLogin: PropTypes.bool,
+  title: PropTypes.string,
+  onNextSlide: PropTypes.func,
+  text: PropTypes.string
+};
 
 const bottomOverlayStyles = StyleSheet.create({
   bottomBlock: {
