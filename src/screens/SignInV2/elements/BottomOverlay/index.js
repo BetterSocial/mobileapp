@@ -85,7 +85,6 @@ const BottomOverlay = ({count, handleLogin, index, isLogin, title, onNextSlide, 
 export default BottomOverlay;
 
 BottomOverlay.propTypes = {
-  // count, handleLogin, index, isLogin, title, onNextSlide, text
   count: PropTypes.number,
   handleLogin: PropTypes.func,
   index: PropTypes.number,
@@ -106,7 +105,6 @@ const bottomOverlayStyles = StyleSheet.create({
     backgroundColor: COLORS.transparent,
     zIndex: 1000,
     width: '100%'
-    // backgroundColor: 'rgba(255,0,0,0.5)'
   },
   btnSign: {
     width: '102%',
@@ -175,7 +173,6 @@ const bottomOverlayStyles = StyleSheet.create({
   },
   nextButton: {
     backgroundColor: COLORS.signed_primary,
-    // backgroundColor: 'red',
     width: dimen.size.ONBOARDING_BOTTOM_OVERLAY_NEXT_BUTTON_SIZE,
     height: dimen.size.ONBOARDING_BOTTOM_OVERLAY_NEXT_BUTTON_SIZE,
     borderRadius: dimen.size.ONBOARDING_BOTTOM_OVERLAY_NEXT_BUTTON_SIZE,
