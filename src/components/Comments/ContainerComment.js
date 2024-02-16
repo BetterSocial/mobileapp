@@ -185,7 +185,7 @@ export default React.memo(ContainerComment, isEqual);
 
 export const styles = StyleSheet.create({
   container: {
-    paddingLeft: 30,
+    paddingLeft: 37,
     paddingRight: 8
   },
   lineBeforeProfile: {
