@@ -1700,6 +1700,13 @@
   dependencies:
     regenerator-runtime "^0.13.11"
 
+"@babel/runtime@^7.16.3":
+  version "7.23.9"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.23.9.tgz#47791a15e4603bb5f905bc0753801cf21d6345f7"
+  integrity sha512-0CX6F+BI2s9dkUqr08KFrAIZgNFj75rdBU/DjCyYLIaV/quFjkk6T+EJ2LkZHyZTbEV4L5p97mNkUsHl2wLFAw==
+  dependencies:
+    regenerator-runtime "^0.14.0"
+
 "@babel/template@^7.0.0", "@babel/template@^7.22.15", "@babel/template@^7.22.5":
   version "7.22.15"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.22.15.tgz#09576efc3830f0430f4548ef971dde1350ef2f38"
@@ -3189,6 +3196,13 @@
   dependencies:
     "@types/node" "*"
 
+"@types/jsonwebtoken@~9.0.0":
+  version "9.0.5"
+  resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-9.0.5.tgz#0bd9b841c9e6c5a937c17656e2368f65da025588"
+  integrity sha512-VRLSGzik+Unrup6BsouBeHsf4d1hOEgYWTm/7Nmw1sXoN1+tRly/Gy/po3yeahnP4jfnQWWAhQAqcNfH7ngOkA==
+  dependencies:
+    "@types/node" "*"
+
 "@types/jwt-decode@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@types/jwt-decode/-/jwt-decode-2.2.1.tgz#afdf5c527fcfccbd4009b5fd02d1e18241f2d2f2"
@@ -4083,6 +4097,15 @@ axios@^0.27.2:
   dependencies:
     follow-redirects "^1.14.9"
     form-data "^4.0.0"
+
+axios@^1.6.0:
+  version "1.6.7"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.6.7.tgz#7b48c2e27c96f9c68a2f8f31e2ab19f59b06b0a7"
+  integrity sha512-/hDJGff6/c7u0hDkvkGxR/oy6CbCs8ziCsC7SqmhjfozqiJGc8Z11wrv9z9lYfY4K8l+H9TpjcMDX0xOZmx+RA==
+  dependencies:
+    follow-redirects "^1.15.4"
+    form-data "^4.0.0"
+    proxy-from-env "^1.1.0"
 
 axobject-query@^2.2.0:
   version "2.2.0"
@@ -6783,6 +6806,11 @@ follow-redirects@^1.14.4, follow-redirects@^1.14.9:
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.2.tgz#b460864144ba63f2681096f274c4e57026da2c13"
   integrity sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==
 
+follow-redirects@^1.15.4:
+  version "1.15.5"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.5.tgz#54d4d6d062c0fa7d9d17feb008461550e3ba8020"
+  integrity sha512-vSFWUON1B+yAw1VN4xMfxgn5fTUiaOzAJCKBwIIgT/+7CuGy9+r+5gITvP62j3RmaD5Ph65UaERdOSRGUzZtgw==
+
 for-each@^0.3.3:
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/for-each/-/for-each-0.3.3.tgz#69b447e88a0a5d32c3e7084f3f1710034b21376e"
@@ -8874,6 +8902,22 @@ jsonwebtoken@^8.5.1:
     lodash.once "^4.0.0"
     ms "^2.1.1"
     semver "^5.6.0"
+
+jsonwebtoken@~9.0.0:
+  version "9.0.2"
+  resolved "https://registry.yarnpkg.com/jsonwebtoken/-/jsonwebtoken-9.0.2.tgz#65ff91f4abef1784697d40952bb1998c504caaf3"
+  integrity sha512-PRp66vJ865SSqOlgqS8hujT5U4AOgMfhrwYIuIhfKaoSCZcirrmASQr8CX7cUg+RMih+hgznrjp99o+W4pJLHQ==
+  dependencies:
+    jws "^3.2.2"
+    lodash.includes "^4.3.0"
+    lodash.isboolean "^3.0.3"
+    lodash.isinteger "^4.0.4"
+    lodash.isnumber "^3.0.3"
+    lodash.isplainobject "^4.0.6"
+    lodash.isstring "^4.0.1"
+    lodash.once "^4.0.0"
+    ms "^2.1.1"
+    semver "^7.5.4"
 
 jsprim@^1.2.2:
   version "1.4.2"
@@ -11343,9 +11387,9 @@ react-native-document-picker@^9.0.1:
   dependencies:
     invariant "^2.2.4"
 
-"react-native-email-link@https://github.com/agit26milan/react-native-email-link.git":
+"react-native-email-link@https://github.com/BetterSocial/react-native-email-link.git":
   version "1.14.4"
-  resolved "https://github.com/agit26milan/react-native-email-link.git#b61c7ebb414306c4a899bd738cb54250e3276117"
+  resolved "https://github.com/BetterSocial/react-native-email-link.git#de3d91b41c33662510e78ebe3cbf44f40c735bd0"
 
 react-native-emoji-selector@^0.2.0:
   version "0.2.0"
@@ -12432,6 +12476,13 @@ semver@^6.3.0, semver@^6.3.1:
   resolved "https://registry.yarnpkg.com/semver/-/semver-6.3.1.tgz#556d2ef8689146e46dcea4bfdd095f3434dffcb4"
   integrity sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==
 
+semver@^7.5.4:
+  version "7.6.0"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.6.0.tgz#1a46a4db4bffcccd97b743b5005c8325f23d4e2d"
+  integrity sha512-EnwXhrlwXMk9gKu5/flx5sv/an57AkRplG3hTK68W7FRDN+k+OWBj65M7719OkA82XLBxrcX0KSHj+X5COhOVg==
+  dependencies:
+    lru-cache "^6.0.0"
+
 send@0.18.0:
   version "0.18.0"
   resolved "https://registry.yarnpkg.com/send/-/send-0.18.0.tgz#670167cc654b05f5aa4a767f9113bb371bc706be"
@@ -12921,7 +12972,6 @@ stream-buffers@2.2.x:
 
 "stream-chat-react-native-core@github:agit26milan/stream-chat-react-native", "stream-chat-react-native-core@github:agit26milan/stream-chat-react-native-core":
   version "3.10.2"
-  uid "2f005ea1bb04319b42d096eb26b12593441ca99a"
   resolved "https://codeload.github.com/agit26milan/stream-chat-react-native-core/tar.gz/2f005ea1bb04319b42d096eb26b12593441ca99a"
   dependencies:
     "@babel/runtime" "7.13.10"
@@ -12938,12 +12988,44 @@ stream-buffers@2.2.x:
     react-native-markdown-package "1.8.1"
     stream-chat "~3.13.1"
 
-"stream-chat-react-native@github:agit26milan/stream-chat-react-native":
+"stream-chat-react-native-core@https://github.com/BetterSocial/stream-chat-react-native-core":
   version "3.10.2"
-  resolved "https://codeload.github.com/agit26milan/stream-chat-react-native/tar.gz/19ebf58b2a69363c9ad062b8886e16274eba5b43"
+  resolved "https://github.com/BetterSocial/stream-chat-react-native-core#c2ed507286f7dbdf32cbdfb2952483caae1500aa"
+  dependencies:
+    "@babel/runtime" "7.13.10"
+    "@gorhom/bottom-sheet" "3.6.4"
+    "@react-native-async-storage/async-storage" "1.15.2"
+    anchorme "^1.1.2"
+    dayjs "1.10.5"
+    file-loader "6.2.0"
+    i18next "20.2.4"
+    lodash-es "4.17.21"
+    metro-react-native-babel-preset "0.66.0"
+    path "0.12.7"
+    react-art "^17.0.2"
+    react-native-markdown-package "1.8.1"
+    stream-chat "~3.13.1"
+
+"stream-chat-react-native@https://github.com/BetterSocial/stream-chat-react-native":
+  version "3.10.2"
+  resolved "https://github.com/BetterSocial/stream-chat-react-native#19ebf58b2a69363c9ad062b8886e16274eba5b43"
   dependencies:
     es6-symbol "^3.1.3"
     stream-chat-react-native-core "github:agit26milan/stream-chat-react-native"
+
+"stream-chat@github:BetterSocial/stream-chat-js":
+  version "8.14.0"
+  resolved "https://codeload.github.com/BetterSocial/stream-chat-js/tar.gz/20048be07dab81d72aa6aabcc67f562edc632fe2"
+  dependencies:
+    "@babel/runtime" "^7.16.3"
+    "@types/jsonwebtoken" "~9.0.0"
+    "@types/ws" "^7.4.0"
+    axios "^1.6.0"
+    base64-js "^1.5.1"
+    form-data "^4.0.0"
+    isomorphic-ws "^4.0.1"
+    jsonwebtoken "~9.0.0"
+    ws "^7.4.4"
 
 "stream-chat@github:kevinnath1007/stream-chat-js", stream-chat@~3.13.1:
   version "4.2.0"
