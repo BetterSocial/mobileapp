@@ -24,7 +24,6 @@ import BioAndChat from './elements/BioAndChat';
 import BlockIcon from '../../assets/icons/images/block-blue.svg';
 import BlockProfile from '../../components/Blocking/BlockProfile';
 import BottomSheetBio from '../ProfileScreen/elements/BottomSheetBio';
-import EnveloveBlueIcon from '../../assets/icons/images/envelove-blue.svg';
 import GlobalButton from '../../components/Button/GlobalButton';
 import ProfileHeader from '../ProfileScreen/elements/ProfileHeader';
 import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
@@ -36,6 +35,8 @@ import StorageUtils from '../../utils/storage';
 import dimen from '../../utils/dimen';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
 import useCreateChat from '../../hooks/screen/useCreateChat';
+import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
+import useViewPostTimeHook from '../FeedScreen/hooks/useViewPostTimeHook';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {blockUser, unblockUserApi} from '../../service/blocking';
@@ -46,15 +47,17 @@ import {
   setFollow,
   setUnFollow
 } from '../../service/profile';
-import {colors} from '../../utils/colors';
 import {downVote, upVote} from '../../service/vote';
-import {fonts} from '../../utils/fonts';
+import {fonts, normalize} from '../../utils/fonts';
 import {generateAnonProfileOtherProfile} from '../../service/anonymousProfile';
 import {getFeedDetail} from '../../service/post';
 import {getSingularOrPluralText} from '../../utils/string/StringUtils';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherProfileFeed';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import ProfilePicture from '../ProfileScreen/elements/ProfilePicture';
+import {COLORS} from '../../utils/theme';
+import EnvelopeIcon from '../../assets/icon/EnvelopeIcon';
 
 const {width} = Dimensions.get('screen');
 
@@ -87,19 +90,22 @@ const OtherProfile = () => {
   const interactionManagerRef = React.useRef(null);
   const [otherProfileFeeds, dispatchOtherProfile] = React.useContext(Context).otherProfileFeed;
   const [profile] = React.useContext(Context).profile;
-  const [, dispatch] = React.useContext(Context).feeds;
-  const [isLastPage, setIsLastPage] = React.useState(false);
+  const [mainFeeds, dispatch] = React.useContext(Context).feeds;
   const [loading, setLoading] = React.useState(false);
   const [initLoading, setInitLoading] = React.useState(true);
   const [isAnonimity, setIsAnonimity] = React.useState(false);
   const {params} = route;
   const {feeds} = otherProfileFeeds;
+  const {timer, viewPostTimeIndex} = mainFeeds;
   const [loadingGenerateAnon, setLoadingGenerateAnon] = React.useState(false);
   const [anonProfile, setAnonProfile] = React.useState();
   const {mappingColorFeed} = useCoreFeed();
   const isSignedMessageEnabled = dataMain.isSignedMessageEnabled ?? true;
   const isAnonimityEnabled = dataMain.isAnonMessageEnabled && isSignedMessageEnabled;
   const {createSignChat} = useCreateChat();
+
+  const {onWillSendViewPostTime} = useViewPostTimeHook(dispatch, timer, viewPostTimeIndex);
+  const {fetchNextFeeds} = useFeedPreloadHook(feeds?.length, () => getOtherFeeds(postOffset));
 
   const generateAnonProfile = async () => {
     setLoadingGenerateAnon(true);
@@ -135,9 +141,6 @@ const OtherProfile = () => {
         dataFeed: feedOtherProfile,
         dataCache: cacheFeed
       });
-      if (Array.isArray(result.data) && result.data.length === 0) {
-        setIsLastPage(true);
-      }
       if (offset === 0) {
         setOtherProfileFeed(mapNewData, dispatchOtherProfile);
         StorageUtils.otherProfileFeed.setForKey(otherId, JSON.stringify(mapNewData));
@@ -310,14 +313,22 @@ const OtherProfile = () => {
     const __renderBlockIcon = () => {
       if (blockStatus.blocker)
         return (
-          <View style={styles.buttonFollowing}>
-            <Text style={styles.textButtonFollowing}>Blocked</Text>
+          <View style={styles.buttonFollowing(isAnonimity)}>
+            <Text style={styles.textButtonFollowing(isAnonimity)}>Blocked</Text>
           </View>
         );
 
       return (
-        <View style={{...styles.btnMsg, borderColor: colors.gray1}}>
-          <BlockIcon width={20} height={20} style={{color: colors.gray1}} />
+        <View
+          style={{
+            ...styles.btnMsg(isAnonimity),
+            borderColor: isAnonimity ? COLORS.anon_primary : COLORS.gray400
+          }}>
+          <BlockIcon
+            width={20}
+            height={20}
+            style={{color: isAnonimity ? COLORS.anon_primary : COLORS.gray400}}
+          />
         </View>
       );
     };
@@ -334,7 +345,7 @@ const OtherProfile = () => {
         <View style={styles.wrapFollower}>
           <TouchableOpacity onPress={handleOpenFollowerUser} style={styles.wrapRow}>
             <React.Fragment>
-              <Text style={styles.textTotal}>{dataMain.follower_symbol}</Text>
+              <Text style={styles.textTotal(isAnonimity)}>{dataMain.follower_symbol}</Text>
               <Text style={styles.textFollow}>
                 {getSingularOrPluralText(dataMain.follower_symbol, 'Follower', 'Followers')}
               </Text>
@@ -359,66 +370,46 @@ const OtherProfile = () => {
       if (user_id === dataMain.user_id) return <></>;
       if (dataMain.is_following)
         return (
-          <GlobalButton onPress={() => handleSetUnFollow()}>
-            <View style={styles.buttonFollowing}>
-              <Text style={styles.textButtonFollowing}>Following</Text>
+          <GlobalButton buttonStyle={{paddingLeft: 0}} onPress={() => handleSetUnFollow()}>
+            <View style={styles.buttonFollowing(isAnonimity)}>
+              <Text style={styles.textButtonFollowing(isAnonimity)}>Following</Text>
             </View>
           </GlobalButton>
         );
 
       return (
-        <GlobalButton onPress={() => handleSetFollow()}>
-          <View style={styles.buttonFollow}>
+        <GlobalButton buttonStyle={{paddingLeft: 0}} onPress={() => handleSetFollow()}>
+          <View style={styles.buttonFollow(isAnonimity)}>
             <Text style={styles.textButtonFollow}>Follow</Text>
           </View>
         </GlobalButton>
       );
     };
 
-    const onCreateChat = () => {
-      const channelName = [username, profile?.myProfile?.username].join(',');
-
-      const selectedUser = {
-        user: {
-          name: channelName,
-          image: dataMain.profile_pic_path ?? DEFAULT_PROFILE_PIC_PATH
-        }
-      };
-      const members = [other_id, profile.myProfile.user_id];
-      createSignChat(members, selectedUser);
-    };
-
     const __renderMessageAndFollowButtonGroup = () => {
       if (blockStatus.blocker) return <></>;
-      return (
-        <React.Fragment>
-          {__renderFollowingButton()}
-          <GlobalButton onPress={onCreateChat}>
-            <View style={styles.btnMsg}>
-              <EnveloveBlueIcon width={20} height={20} fill={colors.bondi_blue} />
-            </View>
-          </GlobalButton>
-        </React.Fragment>
-      );
+      return <React.Fragment>{__renderFollowingButton()}</React.Fragment>;
     };
 
     if (blockStatus.blocked) return <></>;
     return (
       <>
         <View style={styles.headerImageContainer}>
-          <Image
-            style={styles.profileImage}
-            source={{
-              uri: dataMain.profile_pic_path ?? DEFAULT_PROFILE_PIC_PATH
-            }}
-          />
+          <View style={{marginRight: normalize(22)}}>
+            <ProfilePicture
+              karmaScore={dataMain.karma_score ?? 0}
+              withKarma={true}
+              profilePicPath={dataMain.profile_pic_path ?? DEFAULT_PROFILE_PIC_PATH}
+              width={6}
+            />
+          </View>
 
           <View>
             <View style={styles.rightHeaderContentContainer}>
+              {__renderMessageAndFollowButtonGroup()}
               <GlobalButton buttonStyle={{paddingLeft: 0}} onPress={onBlockReaction}>
                 {__renderBlockIcon()}
               </GlobalButton>
-              {__renderMessageAndFollowButtonGroup()}
             </View>
             {__renderFollowerDetail()}
           </View>
@@ -566,7 +557,8 @@ const OtherProfile = () => {
     navigation.navigate('OtherProfilePostDetailPage', {
       index,
       isalreadypolling: item.isalreadypolling,
-      feedId: item.id
+      feedId: item.id,
+      isKeyboardOpen: true
     });
   };
 
@@ -606,14 +598,7 @@ const OtherProfile = () => {
     });
   };
 
-  const __handleOnEndReached = () => {
-    if (!isLastPage) {
-      getOtherFeeds(postOffset);
-    }
-  };
-
   const handleRefresh = () => {
-    setIsLastPage(false);
     getOtherFeeds(0);
   };
 
@@ -642,9 +627,12 @@ const OtherProfile = () => {
           extraData={[feeds]}
           data={handleDataFeed()}
           onScroll={handleScroll}
-          onEndReach={__handleOnEndReached}
           onRefresh={handleRefresh}
           refreshing={loading}
+          onMomentumScrollEnd={(event) => {
+            onWillSendViewPostTime(event, feeds);
+            fetchNextFeeds(event);
+          }}
           ListHeaderComponent={
             <>
               {!initLoading ? (
@@ -703,7 +691,7 @@ const OtherProfile = () => {
         {isShowButton ? (
           <TouchableNativeFeedback onPress={toTop}>
             <View style={{...styles.btnBottom, opacity}}>
-              <ArrowUpWhiteIcon width={12} height={20} fill={colors.white} />
+              <ArrowUpWhiteIcon width={12} height={20} fill={COLORS.white} />
             </View>
           </TouchableNativeFeedback>
         ) : null}
@@ -715,13 +703,13 @@ const OtherProfile = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   content: {
     flexDirection: 'column',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0'
+    borderBottomColor: COLORS.lightgrey
   },
   dummyItem: (heightItem) => ({
     height: heightItem
@@ -737,14 +725,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
     lineHeight: 22,
-    color: colors.black,
+    color: COLORS.black,
     marginLeft: 18
   },
   profileImage: {
-    width: 100,
-    height: 100,
+    width: 95,
+    height: 95,
     borderRadius: 100,
-    marginRight: 22
+    marginLeft: 3.2,
+    marginTop: 3.2
   },
   containerProfile: {
     marginTop: 24
@@ -752,14 +741,14 @@ const styles = StyleSheet.create({
   wrapImageProfile: {
     marginTop: 24,
     flexDirection: 'column',
-    backgroundColor: 'red'
+    backgroundColor: COLORS.redalert
   },
   nameProfile: {
     fontFamily: fonts.inter[800],
     fontWeight: 'bold',
     fontSize: 14,
     lineHeight: 17,
-    color: colors.black
+    color: COLORS.black
   },
   wrapFollower: {
     flexDirection: 'row',
@@ -769,21 +758,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
-  textTotal: {
+  textTotal: (isAnon) => ({
     fontFamily: fonts.inter[800],
     fontWeight: 'bold',
     fontSize: 14,
-    color: colors.bondi_blue,
+    color: COLORS.black,
     paddingRight: 4
-  },
+  }),
   textFollow: {
     fontSize: 14,
-    color: colors.black,
+    color: COLORS.black,
     paddingRight: 4
   },
   tabs: {
     width,
-    borderBottomColor: colors.alto,
+    borderBottomColor: COLORS.lightgrey,
     borderBottomWidth: 1,
     paddingLeft: 20,
     paddingRight: 20,
@@ -793,10 +782,10 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[800],
     fontWeight: 'bold',
     fontSize: 14,
-    color: colors.black,
+    color: COLORS.black,
     paddingBottom: 12,
     borderBottomWidth: 2,
-    borderBottomColor: colors.bondi_blue
+    borderBottomColor: COLORS.signed_primary
   },
   wrapNameAndbackButton: {
     flexDirection: 'row',
@@ -806,7 +795,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: 'white'
+    backgroundColor: COLORS.white
   },
   wrapButton: {
     flex: 1,
@@ -814,37 +803,37 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end'
   },
-  buttonFollowing: {
+  buttonFollowing: (isAnon) => ({
     width: 88,
     height: 36,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: colors.bondi_blue,
+    borderColor: isAnon ? COLORS.anon_primary : COLORS.signed_primary,
     borderRadius: 8
-  },
-  buttonFollow: {
+  }),
+  buttonFollow: (isAnon) => ({
     width: 88,
     height: 36,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    backgroundColor: colors.bondi_blue,
-    color: colors.white
-  },
-  textButtonFollowing: {
+    backgroundColor: isAnon ? COLORS.anon_primary : COLORS.signed_primary,
+    color: COLORS.white
+  }),
+  textButtonFollowing: (isAnon) => ({
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: colors.bondi_blue
-  },
+    color: isAnon ? COLORS.anon_primary : COLORS.signed_primary
+  }),
   textButtonFollow: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: colors.white
+    color: COLORS.white
   },
   btnBottom: {
     position: 'absolute',
@@ -852,7 +841,7 @@ const styles = StyleSheet.create({
     height: dimen.size.PROFILE_ACTION_BUTTON_RADIUS,
     right: 20,
     bottom: dimen.size.FEED_ACTION_BUTTON_HEIGHT_FROM_BOTTOM,
-    backgroundColor: colors.darkBlue,
+    backgroundColor: COLORS.signed_primary,
     borderRadius: 30,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -860,7 +849,7 @@ const styles = StyleSheet.create({
   },
   tabsFixed: {
     width,
-    borderBottomColor: colors.alto,
+    borderBottomColor: COLORS.lightgrey,
     borderBottomWidth: 1,
     paddingLeft: 20,
     paddingRight: 20,
@@ -868,22 +857,22 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     zIndex: 2000,
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   containerFlatFeed: {
     // padding: 20,
     flex: 1
   },
-  btnMsg: {
+  btnMsg: (isAnon) => ({
     width: 36,
     height: 36,
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: colors.bondi_blue,
+    borderColor: isAnon ? COLORS.anon_primary : COLORS.signed_primary,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'
-  },
+  }),
   containerLoading: {
     height: '100%',
     width: '100%',
@@ -905,7 +894,11 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     marginBottom: 20
-  }
+  },
+  blockBtnStyle: (isAnonym) => ({
+    backgroundColor: isAnonym ? COLORS.anon_primary : COLORS.signed_primary,
+    paddingLeft: 0
+  })
 });
 
 export default withInteractionsManaged(OtherProfile);

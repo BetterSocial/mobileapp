@@ -2,13 +2,22 @@ import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
 import moment from 'moment';
 import * as React from 'react';
-import {Dimensions, Keyboard, ScrollView, StatusBar, StyleSheet, View} from 'react-native';
+import {
+  Dimensions,
+  Keyboard,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  View,
+  useWindowDimensions
+} from 'react-native';
 import Toast from 'react-native-simple-toast';
 
 import {Footer} from '..';
 import {Context} from '../../context';
 import {saveComment} from '../../context/actions/comment';
 import {setFeedByIndex} from '../../context/actions/feeds';
+import usePostHook from '../../hooks/core/post/usePostHook';
 import {useFeedDataContext} from '../../hooks/useFeedDataContext';
 import usePostContextHook, {CONTEXT_SOURCE} from '../../hooks/usePostContextHooks';
 import Header from '../../screens/FeedScreen/Header';
@@ -22,19 +31,19 @@ import {
   ANALYTICS_SHARE_POST_PDP_SCREEN,
   SOURCE_PDP
 } from '../../utils/constants';
-import {fonts} from '../../utils/fonts';
+import {fonts, normalize} from '../../utils/fonts';
 import {getCountCommentWithChildInDetailPage} from '../../utils/getstream';
 import ShareUtils from '../../utils/share';
 import StringConstant from '../../utils/string/StringConstant';
+import {COLORS} from '../../utils/theme';
 import BlockComponent from '../BlockComponent';
 import ContainerComment from '../Comments/ContainerComment';
 import WriteComment from '../Comments/WriteComment';
 import useWriteComment from '../Comments/hooks/useWriteComment';
 import LoadingWithoutModal from '../LoadingWithoutModal';
-import {withInteractionsManaged} from '../WithInteractionManaged';
+import {Shimmer} from '../Shimmer/Shimmer';
 import Content from './elements/Content';
 import usePostDetail from './hooks/usePostDetail';
-import usePostHook from '../../hooks/core/post/usePostHook';
 
 const {width, height} = Dimensions.get('window');
 
@@ -44,7 +53,8 @@ const PostPageDetailIdComponent = (props) => {
     navigateToReplyView,
     contextSource = CONTEXT_SOURCE.FEEDS,
     haveSeeMore,
-    parentData
+    parentData,
+    isKeyboardOpen
   } = props;
   const [profile] = React.useContext(Context).profile;
   const [loading, setLoading] = React.useState(true);
@@ -57,9 +67,9 @@ const PostPageDetailIdComponent = (props) => {
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
   const [loadingPost, setLoadingPost] = React.useState(false);
-  const [item, setItem] = React.useState(null);
   const navigation = useNavigation();
   const route = useRoute();
+  const [item, setItem] = React.useState(route?.params?.data);
   const scrollViewRef = React.useRef(null);
   const refBlockComponent = React.useRef();
   const [feedsContext, dispatch] = useFeedDataContext(contextSource);
@@ -69,11 +79,12 @@ const PostPageDetailIdComponent = (props) => {
   const {getTotalReaction, getHeightHeader} = useFeed();
   const [commentContext, dispatchComment] = React.useContext(Context).comments;
   const {comments} = commentContext;
-  const [, setLoadingGetComment] = React.useState(true);
+  const [loadingGetComment, setLoadingGetComment] = React.useState(true);
   const {updateVoteLatestChildrenLevel3, updateVoteChildrenLevel1, calculatePaddingBtm} =
     usePostDetail();
   const {updateFeedContext} = usePostContextHook(contextSource);
   const {updateFeedContext: updateTopicContext} = usePostContextHook(CONTEXT_SOURCE.TOPIC_FEEDS);
+  const {width: displayWidth} = useWindowDimensions();
 
   const {followUnfollow} = usePostHook();
 
@@ -96,12 +107,13 @@ const PostPageDetailIdComponent = (props) => {
   React.useEffect(() => {
     getComment();
   }, []);
+
   const handleVote = (data = {}) => {
     const upvote = data.upvotes ? data.upvotes : 0;
     const downvotes = data.downvotes ? data.downvotes : 0;
     setTotalVote(upvote - downvotes);
   };
-  const initial = async () => {
+  const initial = () => {
     const reactionCount = item?.reaction_counts;
     if (JSON.stringify(reactionCount) !== '{}') {
       let count = 0;
@@ -575,7 +587,6 @@ const PostPageDetailIdComponent = (props) => {
               setItem({...item, is_following_target: !item?.is_following_target});
             }}
           />
-
           <ScrollView
             ref={scrollViewRef}
             keyboardShouldPersistTaps="handled"
@@ -622,28 +633,38 @@ const PostPageDetailIdComponent = (props) => {
                 />
               </View>
             </ScrollView>
-            {comments.length > 0 && (
-              <ContainerComment
-                feedId={feedId}
-                itemParent={item}
-                comments={comments}
-                isLoading={loadingPost}
-                refreshComment={handleRefreshComment}
-                refreshChildComment={handleRefreshChildComment}
-                navigateToReplyView={(data) =>
-                  navigateToReplyView(
-                    data,
-                    updateParentPost,
-                    findCommentAndUpdate,
-                    item,
-                    updateVoteLatestChildren,
-                    getComment
-                  )
-                }
-                findCommentAndUpdate={findCommentAndUpdate}
-                contextSource={contextSource}
-                updateVote={handleUpdateVote}
-              />
+            {loadingGetComment ? (
+              <View>
+                {Array.from(Array(10).keys()).map((_, index) => (
+                  <View key={index} style={{marginVertical: normalize(10)}}>
+                    <Shimmer height={20} width={displayWidth} />
+                  </View>
+                ))}
+              </View>
+            ) : (
+              comments.length > 0 && (
+                <ContainerComment
+                  feedId={feedId}
+                  itemParent={item}
+                  comments={comments}
+                  isLoading={loadingPost}
+                  refreshComment={handleRefreshComment}
+                  refreshChildComment={handleRefreshChildComment}
+                  navigateToReplyView={(data) =>
+                    navigateToReplyView(
+                      data,
+                      updateParentPost,
+                      findCommentAndUpdate,
+                      item,
+                      updateVoteLatestChildren,
+                      getComment
+                    )
+                  }
+                  findCommentAndUpdate={findCommentAndUpdate}
+                  contextSource={contextSource}
+                  updateVote={handleUpdateVote}
+                />
+              )
             )}
           </ScrollView>
 
@@ -654,6 +675,7 @@ const PostPageDetailIdComponent = (props) => {
             onChangeText={(value) => setTextComment(value)}
             onPress={onComment}
             loadingPost={loadingPost}
+            isKeyboardOpen={isKeyboardOpen}
           />
 
           <BlockComponent ref={refBlockComponent} refresh={updateFeed} screen="post_detail_page" />
@@ -663,11 +685,11 @@ const PostPageDetailIdComponent = (props) => {
   );
 };
 
-export default withInteractionsManaged(React.memo(PostPageDetailIdComponent));
+export default PostPageDetailIdComponent;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.white,
     flex: 1
   },
   containerText: {
@@ -677,23 +699,23 @@ const styles = StyleSheet.create({
   textDesc: {
     fontFamily: fonts.inter[400],
     fontSize: 16,
-    color: '#000'
+    color: COLORS.black
   },
   more: {
-    color: '#0e24b3',
+    color: COLORS.blueZaffre,
     fontFamily: fonts.inter[400],
     fontSize: 14
   },
   content: {
     width,
-    shadowColor: 'rgba(0,0,0,0.5)',
+    shadowColor: COLORS.black50,
     shadowOffset: {
       width: 0,
       height: 1
     },
     shadowOpacity: 0.5,
-    backgroundColor: 'white',
-    borderBottomColor: '#C4C4C4',
+    backgroundColor: COLORS.white,
+    borderBottomColor: COLORS.balance_gray,
     marginBottom: -1
   },
   gap: {height: 16},
@@ -710,7 +732,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     width: '100%',
     borderBottomWidth: 1,
-    borderBottomColor: '#C4C4C4'
+    borderBottomColor: COLORS.balance_gray
   },
   scrollContent: {
     paddingBottom: 0

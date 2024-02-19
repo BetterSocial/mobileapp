@@ -1,13 +1,14 @@
 import * as React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import {COLORS} from '../../../utils/theme';
 
 const Label = ({label}) => (
-    <View style={styles.headerList}>
-      <Text style={styles.titleHeader}>
-        People in <Text style={styles.textBold}>{label}</Text> follow...
-      </Text>
-    </View>
-  );
+  <View style={styles.headerList}>
+    <Text style={styles.titleHeader}>
+      People in <Text style={styles.textBold}>{label}</Text> follow...
+    </Text>
+  </View>
+);
 
 export default Label;
 
@@ -16,9 +17,9 @@ const styles = StyleSheet.create({
     height: 40,
     paddingLeft: 22,
     paddingRight: 22,
-    backgroundColor: '#F2F2F2',
+    backgroundColor: COLORS.concrete,
     flexDirection: 'column',
-    justifyContent: 'center',
+    justifyContent: 'center'
     // marginBottom: 12,
     // marginTop: 12,
   },
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     fontSize: 12,
     lineHeight: 18,
-    color: '#4F4F4F',
+    color: COLORS.emperor
   },
   textBold: {
     fontFamily: 'Poppins',
@@ -36,6 +37,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 12,
     lineHeight: 18,
-    color: '#4F4F4F',
-  },
+    color: COLORS.emperor
+  }
 });

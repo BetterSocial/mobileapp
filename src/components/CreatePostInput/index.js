@@ -7,7 +7,7 @@ import {debounce} from 'lodash';
 import MentionSuggestions from './elements/MentionSuggestions';
 import TopicSuggestions from './elements/TopicSuggestions';
 import useHastagMention from '../../screens/CreatePost/elements/useHastagMention';
-import {colors} from '../../utils/colors';
+import {COLORS} from '../../utils/theme';
 import {getTopics} from '../../service/topics';
 import {getUserForTagging} from '../../service/mention';
 import {isEmptyOrSpaces} from '../../utils/Utils';
@@ -199,6 +199,7 @@ const CreatePostInput = ({
         onChangeText={handlePostTextChanged}
         // value={message}
         multiline={true}
+        numberOfLines={10}
         style={styles.input}
         textAlignVertical="top"
         placeholder={
@@ -242,10 +243,11 @@ const CreatePostInput = ({
 
 const styles = StyleSheet.create({
   input: {
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     paddingVertical: 16,
     paddingHorizontal: 12,
     minHeight: 100,
+    maxHeight: 200,
     justifyContent: 'flex-start',
     overflow: 'scroll'
   }

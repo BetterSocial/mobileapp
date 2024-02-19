@@ -3,8 +3,8 @@ import {StyleSheet, Text, View} from 'react-native';
 import PropTypes from 'prop-types';
 import GlobalButton from '../../../components/Button/GlobalButton';
 
-import {colors} from '../../../utils/colors';
 import {getSingularOrPluralText} from '../../../utils/string/StringUtils';
+import {COLORS} from '../../../utils/theme';
 
 /**
  *
@@ -44,8 +44,17 @@ const FollowInfoRow = ({
           </Text>
         </View>
       </GlobalButton>
+      <View
+        style={{
+          height: 2,
+          width: 2,
+          backgroundColor: COLORS.black,
+          borderRadius: 999,
+          marginHorizontal: 8
+        }}
+      />
       <GlobalButton buttonStyle={{paddingHorizontal: 0}} onPress={onFollowingContainerClicked}>
-        <View style={styles.following}>
+        <View>
           <View style={styles.wrapRow}>
             <Text style={styles.textTotal}>{following}</Text>
             <Text style={styles.textFollow}>Following</Text>
@@ -57,26 +66,24 @@ const FollowInfoRow = ({
 };
 
 let styles = StyleSheet.create({
-  following: {marginLeft: 18},
   textTotal: {
     fontSize: 14,
-    color: colors.bondi_blue,
+    fontWeight: '600',
+    color: COLORS.black000,
     paddingRight: 4
   },
   textFollow: {
     fontSize: 14,
-    color: colors.black,
+    color: COLORS.black,
     paddingRight: 4
   },
   wrapFollower: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 12
+    alignItems: 'center'
   },
   wrapRow: {
     flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 8
+    alignItems: 'center'
   }
 });
 

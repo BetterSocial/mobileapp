@@ -12,8 +12,8 @@ import ContainerComment, {
   styles
 } from '../../../src/components/Comments/ContainerComment';
 import {Context} from '../../../src/context/Store';
-import {colors} from '../../../src/utils/colors';
 import {feedsState} from '../../../src/context/reducers/FeedReducer';
+import {COLORS} from '../../../src/utils/theme';
 
 jest.mock('react-native/Libraries/Pressability/usePressability');
 jest.mock('react-native/Libraries/Components/Pressable/Pressable');
@@ -191,14 +191,14 @@ describe('ContainerComment should run correctly', () => {
       display: 'flex',
       flexDirection: 'row',
       paddingBottom: 14,
-      borderLeftColor: 'transparent',
+      borderLeftColor: COLORS.transparent,
       borderLeftWidth: 1
     });
     expect(styles.seeRepliesContainer(false)).toEqual({
       display: 'flex',
       flexDirection: 'row',
       paddingBottom: 14,
-      borderLeftColor: colors.gray1,
+      borderLeftColor: COLORS.balance_gray,
       borderLeftWidth: 1
     });
   });

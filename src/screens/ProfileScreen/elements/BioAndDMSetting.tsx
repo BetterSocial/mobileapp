@@ -2,11 +2,12 @@
 import * as React from 'react';
 import {Text, View, StyleSheet, TouchableOpacity, Pressable, Platform} from 'react-native';
 import ToastMessage from 'react-native-toast-message';
-import TextAreaChat from '../../../components/TextAreaChat';
-import ToggleSwitch from '../../../components/ToggleSwitch';
-import {colors} from '../../../utils/colors';
+import CheckBox from '@react-native-community/checkbox';
 import {profileSettingsDMpermission} from '../../../service/profile';
 import {addDotAndRemoveNewline} from '../../../utils/string/TrimString';
+import {COLORS} from '../../../utils/theme';
+import {PencilIcon} from '../../../assets';
+import {Divider} from '../../../components/Divider';
 
 type BioAndDMSettingProps = {
   bio: string;
@@ -15,6 +16,46 @@ type BioAndDMSettingProps = {
   following: number;
   allowAnonDm: boolean;
   onlyReceivedDmFromUserFollowing: boolean;
+};
+
+const CheckBoxCustom = (props: {value: boolean; label: string}) => {
+  return (
+    <View
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center'
+      }}>
+      <View
+        style={{
+          width: 16,
+          height: 16,
+          borderRadius: 9999,
+          backgroundColor: COLORS.white,
+          marginRight: 5
+        }}>
+        <CheckBox
+          value={props.value}
+          onCheckColor={COLORS.white}
+          tintColors={{true: COLORS.signed_primary, false: COLORS.white}}
+          tintColor={COLORS.signed_primary}
+          onTintColor={COLORS.signed_primary}
+          onFillColor={COLORS.signed_primary}
+          style={{
+            width: 16,
+            height: 16
+          }}
+        />
+      </View>
+      <Text
+        style={{
+          fontSize: 12,
+          fontWeight: '500'
+        }}>
+        {props.label}
+      </Text>
+    </View>
+  );
 };
 
 const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
@@ -57,14 +98,6 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
     }
   };
 
-  const handleClickTextArea = () => {
-    ToastMessage.show({
-      type: 'asNative',
-      text1: 'You cannot send yourself messages.',
-      position: 'bottom'
-    });
-  };
-
   const ref = React.useRef(true);
 
   React.useEffect(() => {
@@ -75,80 +108,130 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
     }
   }, [isAnonymity, isAllowFollowingSendDM]);
 
-  const isBioEmpty = bio === null || bio === undefined;
-
   return (
-    <View style={styles.container}>
-      <Pressable onPress={() => changeBio()} style={{paddingVertical: 12}}>
-        {isBioEmpty ? (
-          <Text style={styles.editPromptLabel}>Edit Prompt</Text>
-        ) : (
-          <Text style={styles.bioText}>
-            {addDotAndRemoveNewline(bio)} <Text style={styles.editPromptLabel}>Edit Prompt</Text>
-          </Text>
-        )}
-      </Pressable>
-
-      <Pressable onPress={handleClickTextArea}>
-        <View pointerEvents="none">
-          <TextAreaChat
-            isAnonimity={false}
-            avatarUrl={avatarUrl}
-            loadingAnonUser={false}
-            onChangeMessage={() => {}}
-            onSend={() => {}}
-            minHeight={55}
-            disabledInput
-            placeholder="From here, others can message you, for example replying to your prompt above."
-          />
+    <View>
+      <View style={styles.container}>
+        <View style={styles.promptTitleContainer}>
+          <Text style={styles.promptTitle}>My Prompt</Text>
+          <Pressable onPress={() => changeBio()}>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}>
+              <PencilIcon />
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontWeight: '500',
+                  color: COLORS.white,
+                  marginLeft: 4
+                }}>
+                Edit
+              </Text>
+            </View>
+          </Pressable>
         </View>
-      </Pressable>
-
-      <TouchableOpacity onPress={toggleSwitchAnon} style={styles.toggleSwitchAnon}>
-        <ToggleSwitch
-          value={isAnonymity}
-          onValueChange={toggleSwitchAnon}
-          labelLeft="Allow anonymous messages?"
-          circleActiveColor={colors.blue1}
-          activeTextColor={colors.blue1}
+        <Divider
+          style={{
+            marginVertical: 12
+          }}
         />
-      </TouchableOpacity>
-
-      {isAnonymity && (
-        <TouchableOpacity
-          onPress={toggleSwitchAnonAllowFollowing}
-          style={styles.toggleSwitchAnonFollowing}>
-          <ToggleSwitch
-            value={isAllowFollowingSendDM}
-            onValueChange={toggleSwitchAnonAllowFollowing}
-            labelLeft="Only allow anon DMs from users you follow?"
-            circleActiveColor={colors.blue1}
-            activeTextColor={colors.blue1}
-          />
+        {!bio ? (
+          <Text style={styles.bioTextNull}>
+            What should others message you about? Add your bio and conversation starters here.
+          </Text>
+        ) : (
+          <Text style={styles.bioText}>{addDotAndRemoveNewline(bio || '')}</Text>
+        )}
+      </View>
+      <View
+        style={{
+          backgroundColor: COLORS.white,
+          borderRadius: 12,
+          padding: 12,
+          marginHorizontal: 12,
+          shadowColor: 'rgba(0, 0, 0, 0.04)',
+          shadowOffset: {
+            width: 0,
+            height: 1
+          },
+          shadowOpacity: 1,
+          shadowRadius: 2,
+          elevation: 2,
+          marginTop: -50,
+          borderWidth: 1,
+          borderColor: COLORS.gray
+        }}>
+        <Text
+          style={{
+            fontSize: 12,
+            fontWeight: '400',
+            color: COLORS.gray500,
+            marginBottom: 12
+          }}>
+          Other users will be able to reply to your prompt and direct message you.
+        </Text>
+        <TouchableOpacity onPress={toggleSwitchAnon}>
+          <CheckBoxCustom value={isAnonymity} label="Allow messages from incognito users?" />
         </TouchableOpacity>
-      )}
+
+        {isAnonymity && (
+          <>
+            <Divider style={{marginVertical: 6, backgroundColor: COLORS.gray}} />
+            <TouchableOpacity onPress={toggleSwitchAnonAllowFollowing}>
+              <CheckBoxCustom
+                value={isAllowFollowingSendDM}
+                label="Allow incognito only from users you follow?"
+              />
+            </TouchableOpacity>
+          </>
+        )}
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: colors.darkBlue,
-    borderRadius: 15,
-    paddingHorizontal: 12,
-    marginTop: 20
+  promptTitleContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   },
-  editPromptLabel: {color: colors.blueSea10, textDecorationLine: 'underline'},
+  promptTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: COLORS.white
+  },
+  container: {
+    backgroundColor: COLORS.default_signed_secondary,
+    borderRadius: 16,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    marginTop: 10,
+    paddingBottom: 50
+  },
+  editPromptLabel: {color: COLORS.signed_secondary, textDecorationLine: 'underline'},
   bioText: {
-    color: '#F5F5F5',
+    color: COLORS.lightgrey,
     fontFamily: 'Inter',
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: Platform.OS === 'android' ? '700' : '600',
-    lineHeight: 22
+    marginBottom: 12
   },
-  toggleSwitchAnon: {display: 'flex', alignSelf: 'flex-end', paddingVertical: 6},
-  toggleSwitchAnonFollowing: {display: 'flex', alignSelf: 'flex-end', paddingBottom: 6}
+  bioTextNull: {
+    color: COLORS.lightgrey,
+    fontFamily: 'Inter',
+    fontSize: 14,
+    fontStyle: 'italic',
+    fontWeight: '400',
+    lineHeight: 20,
+    marginBottom: 12
+  }
 });
 
 export default BioAndDMSetting;

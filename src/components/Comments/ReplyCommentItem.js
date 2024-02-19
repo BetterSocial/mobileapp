@@ -1,34 +1,34 @@
 /* eslint-disable global-require */
-import * as React from 'react';
-import IconEn from 'react-native-vector-icons/Entypo';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import * as React from 'react';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import IconEn from 'react-native-vector-icons/Entypo';
 
-import BlockComponent from '../BlockComponent';
-import ButtonHightlight from '../ButtonHighlight';
-import MemoCommentReply from '../../assets/icon/CommentReply';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
-import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
 import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
+import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
 import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
-import useUpdateComment from './hooks/useUpdateComment';
-import {FONTS} from '../../utils/theme';
-import {calculateTime} from '../../utils/time';
-import {colors} from '../../utils/colors';
-import {fonts, normalizeFontSize} from '../../utils/fonts';
-import {getUserId} from '../../utils/users';
-import {iVoteComment, voteCommentV2} from '../../service/vote';
-import {removeWhiteSpace} from '../../utils/Utils';
-import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
-import CommentUserName from '../CommentUsername/CommentUsername';
-import SendDMBlack from '../../assets/icons/images/send-dm-black.svg';
-import SendDMAnonBlock from '../../assets/icons/images/send-dm-anon-black.svg';
+import MemoCommentReply from '../../assets/icon/CommentReply';
 import MemoSendDM from '../../assets/icon/SendDM';
-import BottomSheetMenu from '../BottomSheet/BottomSheetMenu';
+import SendDMAnonBlock from '../../assets/icons/images/send-dm-anon-black.svg';
+import SendDMBlack from '../../assets/icons/images/send-dm-black.svg';
+import {Context} from '../../context';
 import useDMMessage from '../../hooks/core/chat/useDMMessage';
 import useCreateChat from '../../hooks/screen/useCreateChat';
+import ProfilePicture from '../../screens/ProfileScreen/elements/ProfilePicture';
+import {iVoteComment, voteCommentV2} from '../../service/vote';
+import {removeWhiteSpace} from '../../utils/Utils';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
-import {Context} from '../../context';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
+import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
+import {COLORS, FONTS} from '../../utils/theme';
+import {calculateTime} from '../../utils/time';
+import {getUserId} from '../../utils/users';
+import BlockComponent from '../BlockComponent';
+import BottomSheetMenu from '../BottomSheet/BottomSheetMenu';
+import ButtonHightlight from '../ButtonHighlight';
+import CommentUserName from '../CommentUsername/CommentUsername';
+import useUpdateComment from './hooks/useUpdateComment';
 
 const ReplyCommentItem = ({
   user,
@@ -145,12 +145,12 @@ const ReplyCommentItem = ({
 
   const voteStyle = () => {
     if (totalVote > 0) {
-      return '#00ADB5';
+      return COLORS.anon_primary;
     }
     if (totalVote < 0) {
-      return '#FF2E63';
+      return COLORS.redalert;
     }
-    return '#C4C4C4';
+    return COLORS.balance_gray;
   };
 
   const handleLongPress = () => {
@@ -229,18 +229,26 @@ const ReplyCommentItem = ({
         <ButtonHightlight onLongPress={handleLongPress} onPress={openProfile}>
           <View style={styles.profile}>
             {comment.data.anon_user_info_emoji_name || comment.data.is_anonymous ? (
-              <View
-                style={[styles.image, {backgroundColor: comment.data.anon_user_info_color_code}]}>
-                <Text>{comment.data.anon_user_info_emoji_code}</Text>
-              </View>
+              <ProfilePicture
+                karmaScore={comment.karmaScores}
+                size={25}
+                width={6}
+                withKarma
+                isAnon={true}
+                anonBackgroundColor={comment.data?.anon_user_info_color_code}
+                anonEmojiCode={comment.data?.anon_user_info_emoji_code}
+              />
             ) : (
-              <Image
-                source={
+              <ProfilePicture
+                karmaScore={comment.karmaScores}
+                profilePicPath={
                   photo
-                    ? {uri: removeWhiteSpace(photo)}
+                    ? removeWhiteSpace(photo)
                     : require('../../assets/images/ProfileDefault.png')
                 }
-                style={styles.image}
+                size={25}
+                width={6}
+                withKarma
               />
             )}
 
@@ -279,7 +287,7 @@ const ReplyCommentItem = ({
             onLongPress={handleLongPress}
             onPress={() => onBlock(comment)}
             style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}>
-            <IconEn name="block" size={15.02} color={colors.gray1} />
+            <IconEn name="block" size={15.02} color={COLORS.balance_gray} />
           </ButtonHightlight>
         </TouchableOpacity>
         <TouchableOpacity
@@ -353,20 +361,20 @@ const styles = StyleSheet.create({
   container: ({isLast, style, showLeftConnector}) => ({
     width: '100%',
     borderLeftWidth: showLeftConnector ? 1 : 0,
-    borderLeftColor: isLast ? 'transparent' : colors.gray1,
+    borderLeftColor: isLast ? COLORS.transparent : COLORS.balance_gray,
     ...style
   }),
   username: {
     fontFamily: fonts.inter[700],
     fontSize: normalizeFontSize(12),
-    color: '#828282',
+    color: COLORS.blackgrey,
     lineHeight: 14,
     marginLeft: 16
   },
   post: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(16),
-    color: '#333333',
+    color: COLORS.mine_shaft,
     marginLeft: 28
   },
   profile: {
@@ -389,7 +397,7 @@ const styles = StyleSheet.create({
   btnReplyText: {
     fontFamily: fonts.inter[400],
     fontSize: 13,
-    color: '#C4C4C4',
+    color: COLORS.balance_gray,
     marginLeft: 8.98,
     marginRight: 14
   },
@@ -407,7 +415,7 @@ const styles = StyleSheet.create({
   time: {
     fontFamily: fonts.inter[400],
     fontSize: 10,
-    color: '#828282',
+    color: COLORS.blackgrey,
     lineHeight: 12
   },
   containerUsername: {

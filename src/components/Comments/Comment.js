@@ -13,9 +13,8 @@ import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
 import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
 import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
 import useComment from './hooks/useComment';
-import {FONTS} from '../../utils/theme';
+import {COLORS, FONTS} from '../../utils/theme';
 import {calculateTime} from '../../utils/time';
-import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
 import {removeWhiteSpace} from '../../utils/Utils';
@@ -30,6 +29,7 @@ import useDMMessage from '../../hooks/core/chat/useDMMessage';
 import useCreateChat from '../../hooks/screen/useCreateChat';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import ProfilePicture from '../../screens/ProfileScreen/elements/ProfilePicture';
 
 const Comment = ({
   user,
@@ -121,12 +121,12 @@ const Comment = ({
 
   const voteStyle = () => {
     if (totalVote > 0) {
-      return '#00ADB5';
+      return COLORS.anon_primary;
     }
     if (totalVote < 0) {
-      return '#FF2E63';
+      return COLORS.redalert;
     }
-    return '#C4C4C4';
+    return COLORS.balance_gray;
   };
 
   const username = comment?.data?.anon_user_info_color_name
@@ -200,18 +200,26 @@ const Comment = ({
           onPress={openProfile}>
           <View style={styles.profile}>
             {comment.data?.anon_user_info_emoji_name || comment.data?.is_anonymous ? (
-              <View
-                style={[styles.image, {backgroundColor: comment.data?.anon_user_info_color_code}]}>
-                <Text>{comment.data?.anon_user_info_emoji_code}</Text>
-              </View>
+              <ProfilePicture
+                karmaScore={comment.karmaScores}
+                size={25}
+                width={6}
+                withKarma
+                isAnon={true}
+                anonBackgroundColor={comment.data?.anon_user_info_color_code}
+                anonEmojiCode={comment.data?.anon_user_info_emoji_code}
+              />
             ) : (
-              <Image
-                source={
+              <ProfilePicture
+                karmaScore={comment.karmaScores}
+                profilePicPath={
                   photo
-                    ? {uri: removeWhiteSpace(photo)}
+                    ? removeWhiteSpace(photo)
                     : require('../../assets/images/ProfileDefault.png')
                 }
-                style={styles.image}
+                size={25}
+                width={6}
+                withKarma
               />
             )}
 
@@ -255,7 +263,7 @@ const Comment = ({
           onLongPress={handleOnLongPress}
           style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}
           onPress={() => onBlockComponent(comment)}>
-          <IconEn name="block" size={15.02} color={colors.gray1} />
+          <IconEn name="block" size={15.02} color={COLORS.balance_gray} />
         </ButtonHightlight>
 
         <TouchableOpacity activeOpacity={1} onPress={onDownVote} testID="btnDownvote">
@@ -271,7 +279,7 @@ const Comment = ({
           </ButtonHightlight>
         </TouchableOpacity>
 
-        {totalVote != 0 && <Text style={styles.vote(voteStyle())}>{totalVote}</Text>}
+        {totalVote !== 0 && <Text style={styles.vote(voteStyle())}>{totalVote}</Text>}
         <TouchableOpacity activeOpacity={1} testID="upvoteBtn">
           <ButtonHightlight
             onLongPress={handleOnLongPress}
@@ -319,7 +327,11 @@ const styles = StyleSheet.create({
   container: ({isLast, style, level, showLeftConnector}) => ({
     width: '100%',
     borderLeftWidth: showLeftConnector ? 1 : 0,
-    borderLeftColor: isLast ? (level === 0 ? colors.gray1 : 'transparent') : colors.gray1,
+    borderLeftColor: isLast
+      ? level === 0
+        ? COLORS.balance_gray
+        : COLORS.transparent
+      : COLORS.balance_gray,
     ...style
   }),
   flexStartContainer: {
@@ -328,19 +340,19 @@ const styles = StyleSheet.create({
   username: {
     fontFamily: fonts.inter[700],
     fontSize: normalizeFontSize(12),
-    color: '#828282',
+    color: COLORS.blackgrey,
     lineHeight: 14,
     marginLeft: 16
   },
   post: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
-    color: '#333333',
+    color: COLORS.mine_shaft,
     marginLeft: 28
   },
   profile: {
     flexDirection: 'row',
-    marginLeft: -13,
+    marginLeft: -14,
     alignSelf: 'flex-start'
   },
   constainerFooter: {
@@ -359,7 +371,7 @@ const styles = StyleSheet.create({
   btnReplyText: {
     fontFamily: fonts.inter[400],
     fontSize: 13,
-    color: '#C4C4C4',
+    color: COLORS.balance_gray,
     marginLeft: 8.98,
     marginRight: 14
   },
@@ -377,7 +389,7 @@ const styles = StyleSheet.create({
   time: {
     fontFamily: fonts.inter[400],
     fontSize: 10,
-    color: '#828282',
+    color: COLORS.blackgrey,
     lineHeight: 12
   },
   containerUsername: {

@@ -6,6 +6,7 @@ import * as React from 'react';
 import FastImage from 'react-native-fast-image';
 import moment from 'moment';
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   SafeAreaView,
@@ -26,19 +27,17 @@ import ModalAction from '../GroupInfo/elements/ModalAction';
 import ModalActionAnonymous from '../GroupInfo/elements/ModalActionAnonymous';
 import dimen from '../../utils/dimen';
 import useChatInfoScreenHook from '../../hooks/screen/useChatInfoHook';
+import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
 import {CHANNEL_GROUP, GROUP_INFO, SIGNED} from '../../hooks/core/constant';
-import {Context} from '../../context';
+import {COLORS} from '../../utils/theme';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
-import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
-import {getChatName} from '../../utils/string/StringUtils';
-import {isContainUrl} from '../../utils/Utils';
-import useProfileHook from '../../hooks/core/profile/useProfileHook';
 
 export const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#fff', paddingBottom: 40},
+  container: {flex: 1, backgroundColor: COLORS.white, paddingBottom: 40},
   users: {
     paddingTop: 12
   },
@@ -50,11 +49,11 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(20),
-    color: colors.holytosca
+    color: COLORS.anon_primary
   },
   btnAdd: {
     padding: normalize(8),
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     width: 'auto',
     justifyContent: 'center',
     alignItems: 'center',
@@ -66,36 +65,37 @@ export const styles = StyleSheet.create({
   countUser: (from) => ({
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(16.94),
-    color: from === SIGNED ? colors.darkBlue : colors.holytosca,
+    color: from === SIGNED ? COLORS.signed_primary : COLORS.anon_primary,
     marginLeft: dimen.normalizeDimen(20),
     marginBottom: dimen.normalizeDimen(4),
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    paddingTop: dimen.normalizeDimen(12)
   }),
   btnToMediaGroup: {
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(16.94),
-    color: colors.holytosca
+    color: COLORS.anon_primary
   },
   dateCreate: {
     marginLeft: 20,
     fontSize: normalizeFontSize(14),
     fontFamily: fonts.inter[400],
     lineHeight: normalizeFontSize(16.94),
-    color: '#000',
+    color: COLORS.black,
     marginTop: 4,
     marginBottom: 9
   },
   groupName: {
     fontSize: normalizeFontSize(24),
     lineHeight: normalizeFontSize(29.05),
-    color: '#000',
+    color: COLORS.black,
     width: '100%',
     paddingHorizontal: dimen.normalizeDimen(20),
     fontWeight: 'bold'
   },
   lineTop: {
-    backgroundColor: colors.alto,
+    backgroundColor: COLORS.lightgrey,
     height: 1
   },
   containerGroupName: {
@@ -113,7 +113,7 @@ export const styles = StyleSheet.create({
     width: normalize(100),
     height: normalize(100),
     borderRadius: normalize(50),
-    backgroundColor: colors.alto,
+    backgroundColor: COLORS.lightgrey,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -123,9 +123,10 @@ export const styles = StyleSheet.create({
     borderRadius: normalize(50),
     paddingLeft: 8
   },
-  containerLoading: {
+  loading: {
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom: normalize(20)
   },
   row: {
     display: 'flex',
@@ -145,7 +146,7 @@ export const styles = StyleSheet.create({
   },
   gap: {
     height: 1,
-    backgroundColor: '#E0E0E0'
+    backgroundColor: COLORS.lightgrey
   },
   actionGroup: {
     marginTop: 22
@@ -163,7 +164,7 @@ export const styles = StyleSheet.create({
     marginRight: 26
   },
   textAct: {
-    color: '#FF2E63',
+    color: COLORS.redalert,
     fontSize: 14
   },
   mr7: {
@@ -179,8 +180,9 @@ export const styles = StyleSheet.create({
   }
 });
 
-const SampleChatInfoScreen = () => {
+const ChatInfoScreen = () => {
   const {
+    isLoadingFetchingChannelDetail,
     channelInfo,
     goBack,
     onContactPressed,
@@ -191,20 +193,13 @@ const SampleChatInfoScreen = () => {
     isAnonymousModalOpen,
     blockModalRef,
     handleShowArrow,
-    loadingChannelInfo
+    loadingChannelInfo,
+    isLoadingInitChat
   } = useChatInfoScreenHook();
-  const [isLoadingMembers] = React.useState<boolean>(false);
   const {signedProfileId} = useUserAuthHook();
-  const [profile] = (React.useContext(Context) as unknown as any).profile;
   const {params}: any = useRoute();
   const ANONYMOUS_USER = 'AnonymousUser';
-  const {anon_user_info_color_code, anon_user_info_emoji_code} =
-    channelInfo?.rawJson?.channel || {};
   const {anonProfileId} = useProfileHook();
-  const memberChat = channelInfo?.rawJson?.channel?.members?.find(
-    (item: any) => item.user_id !== anonProfileId
-  );
-  const betterSocialMember = channelInfo?.rawJson?.better_channel_member;
 
   const showImageProfile = (): React.ReactNode => {
     if (channelInfo?.channelType === CHANNEL_GROUP) {
@@ -214,114 +209,111 @@ const SampleChatInfoScreen = () => {
         </ChannelImage>
       );
     }
-    if (anon_user_info_color_code) {
+
+    if (channelInfo?.anon_user_info_emoji_name) {
       return (
         <AnonymousIcon
-          color={anon_user_info_color_code}
-          emojiCode={anon_user_info_emoji_code}
+          color={channelInfo?.anon_user_info_color_code}
+          emojiCode={channelInfo?.anon_user_info_emoji_code}
           size={normalize(100)}
         />
       );
     }
+
     return (
       <Image
         testID="image1"
         style={styles.btnUpdatePhoto}
-        source={{uri: channelInfo?.channelPicture}}
+        source={{uri: channelInfo?.channelPicture || DEFAULT_PROFILE_PIC_PATH}}
       />
     );
   };
 
   const renderImageComponent = (item) => {
-    if (!isContainUrl(item?.user?.image) || item?.user?.name === ANONYMOUS_USER) {
+    if (item?.anon_user_info_color_code) {
       return (
         <View style={styles.mr7}>
-          {betterSocialMember &&
-          item.user_id === betterSocialMember[memberChat?.user_id]?.user_id ? (
-            <AnonymousIcon
-              color={betterSocialMember[memberChat?.user_id]?.anon_user_info_color_code}
-              emojiCode={betterSocialMember[memberChat?.user_id]?.anon_user_info_emoji_code}
-              size={normalize(48)}
-            />
-          ) : (
-            <AnonymousIcon
-              color={anon_user_info_color_code}
-              emojiCode={anon_user_info_emoji_code}
-              size={normalize(48)}
-            />
-          )}
+          <AnonymousIcon
+            color={item?.anon_user_info_color_code}
+            emojiCode={item?.anon_user_info_emoji_code}
+            size={normalize(48)}
+          />
         </View>
       );
     }
+
     return (
       <View style={styles.mr7}>
-        <FastImage style={styles.imageUser} source={{uri: item?.user?.image}} />
+        <FastImage style={styles.imageUser} source={{uri: item?.profilePicture}} />
       </View>
     );
   };
 
-  const countParticipat = () => {
-    return `(${channelInfo?.members?.length})`;
+  const countParticipant = () => {
+    return `(${channelInfo?.memberUsers?.length})`;
   };
+
+  const getHeaderComponent = React.useMemo(() => {
+    return (
+      <>
+        <AnonymousChatInfoHeader isCenter onPress={goBack} title={channelInfo?.name} />
+        <View style={styles.lineTop} />
+        <TouchableOpacity testID="imageClick">
+          <View style={styles.containerPhoto}>{showImageProfile()}</View>
+        </TouchableOpacity>
+        <View style={styles.row}>
+          <View style={styles.column}>
+            <View style={styles.containerGroupName}>
+              <Text numberOfLines={1} style={styles.groupName}>
+                {channelInfo?.name}
+              </Text>
+            </View>
+            <Text style={styles.dateCreate}>
+              Created {moment(channelInfo?.createdAt).format('MM/DD/YYYY')}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.lineTop} />
+        <Text style={styles.countUser(params?.from)}>Participants {countParticipant()}</Text>
+      </>
+    );
+  }, [channelInfo]);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
-      {isLoadingMembers || loadingChannelInfo ? null : (
+      {loadingChannelInfo ? null : (
         <>
-          <AnonymousChatInfoHeader
-            isCenter
-            onPress={goBack}
-            title={`${getChatName(channelInfo?.name, profile?.myProfile?.username)}`}
-          />
-          <View style={styles.lineTop} />
-          <ScrollView nestedScrollEnabled={true}>
-            <SafeAreaView>
-              <TouchableOpacity testID="imageClick">
-                <View style={styles.containerPhoto}>{showImageProfile()}</View>
-              </TouchableOpacity>
-              <View style={styles.row}>
-                <View style={styles.column}>
-                  <View style={styles.containerGroupName}>
-                    <Text numberOfLines={1} style={styles.groupName}>
-                      {getChatName(channelInfo?.name, profile?.myProfile?.username)}
-                    </Text>
-                  </View>
-                  <Text style={styles.dateCreate}>
-                    Created {moment(channelInfo?.createdAt).format('MM/DD/YYYY')}
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.lineTop} />
-              <View style={styles.lineTop} />
-              <View style={styles.users}>
-                <Text style={styles.countUser(params?.from)}>Participants {countParticipat()}</Text>
-                <FlatList
-                  testID="participants"
-                  data={channelInfo?.rawJson?.channel?.members}
-                  keyExtractor={(item, index) => index?.toString()}
-                  renderItem={({item, index}) => (
-                    <View style={styles.parentContact}>
-                      <ProfileContact
-                        key={index}
-                        item={item}
-                        onPress={() => onContactPressed(item, params.from)}
-                        fullname={item?.user?.name || item?.user?.username}
-                        photo={item?.user?.profilePicture}
-                        showArrow={handleShowArrow(item)}
-                        userId={signedProfileId}
-                        ImageComponent={renderImageComponent(item)}
-                        from={params?.from}
-                      />
-                    </View>
-                  )}
+          <FlatList
+            testID="participants"
+            data={channelInfo?.memberUsers}
+            keyExtractor={(_, index) => index?.toString()}
+            ListHeaderComponent={getHeaderComponent}
+            ListFooterComponent={
+              <>
+                {isLoadingFetchingChannelDetail ? (
+                  <ActivityIndicator style={styles.loading} />
+                ) : null}
+                <View style={styles.gap} />
+              </>
+            }
+            renderItem={({item, index}) => (
+              <View style={styles.parentContact}>
+                <ProfileContact
+                  key={index}
+                  item={item}
+                  onPress={() => onContactPressed(item, params.from)}
+                  fullname={item?.name || item?.username}
+                  photo={item?.profilePicture}
+                  showArrow={handleShowArrow(item)}
+                  userId={signedProfileId}
+                  ImageComponent={renderImageComponent(item)}
+                  isYou={item?.userId === signedProfileId || item?.userId === anonProfileId}
+                  from={params?.from}
                 />
               </View>
-              <View style={styles.gap} />
-            </SafeAreaView>
-          </ScrollView>
-          <View style={styles.containerLoading}>
-            <Loading visible={isLoadingMembers} />
-          </View>
+            )}
+          />
         </>
       )}
       <ModalAction
@@ -329,7 +321,8 @@ const SampleChatInfoScreen = () => {
         selectedUser={selectedUser}
         isOpen={openModal}
         onPress={handlePressPopup}
-        name={selectedUser?.user?.username || selectedUser?.user?.name}
+        name={selectedUser?.user?.username || selectedUser?.user?.name || selectedUser?.username}
+        isLoadingInitChat={isLoadingInitChat}
       />
       <ModalActionAnonymous
         name={
@@ -347,4 +340,4 @@ const SampleChatInfoScreen = () => {
   );
 };
 
-export default SampleChatInfoScreen;
+export default ChatInfoScreen;

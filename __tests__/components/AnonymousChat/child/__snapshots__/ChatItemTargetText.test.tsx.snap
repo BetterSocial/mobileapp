@@ -19,7 +19,7 @@ exports[`TESTING ChatItemTargetText RENDER continuous should match snapshot 1`] 
       Object {
         "borderRadius": 12,
         "height": 24,
-        "marginRight": 8,
+        "marginRight": 4,
         "width": 24,
       }
     }
@@ -27,7 +27,7 @@ exports[`TESTING ChatItemTargetText RENDER continuous should match snapshot 1`] 
   <View
     style={
       Object {
-        "backgroundColor": "#F5F5F5",
+        "backgroundColor": "#F5F6F7",
         "borderRadius": 8,
         "borderTopStartRadius": 0,
         "flex": 1,
@@ -71,7 +71,7 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
   <View
     style={
       Object {
-        "marginRight": 8,
+        "marginRight": 4,
       }
     }
   >
@@ -80,7 +80,7 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
   <View
     style={
       Object {
-        "backgroundColor": "#F5F5F5",
+        "backgroundColor": "#F5F6F7",
         "borderRadius": 8,
         "borderTopStartRadius": 0,
         "flex": 1,
@@ -115,7 +115,7 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
         style={
           Object {
             "alignSelf": "center",
-            "backgroundColor": "#000000",
+            "backgroundColor": "#1E1F20",
             "borderRadius": 2,
             "height": 3,
             "marginLeft": 5,

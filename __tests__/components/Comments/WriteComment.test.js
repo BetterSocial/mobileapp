@@ -3,7 +3,7 @@ import {render, cleanup, fireEvent} from '@testing-library/react-native';
 import WriteComment, {styles} from '../../../src/components/Comments/WriteComment';
 import Store from '../../../src/context/Store';
 import {fonts} from '../../../src/utils/fonts';
-import {colors} from '../../../src/utils/colors';
+import {COLORS} from '../../../src/utils/theme';
 
 describe('WriteComment should run correctly', () => {
   afterEach(cleanup);
@@ -38,7 +38,7 @@ describe('WriteComment should run correctly', () => {
       marginTop: 7,
       lineHeight: 15,
       fontSize: 12,
-      color: colors.gray
+      color: COLORS.blackgrey
     });
     expect(styles.replyToContainer(false)).toEqual({
       marginLeft: 60,
@@ -47,28 +47,28 @@ describe('WriteComment should run correctly', () => {
       marginTop: 7,
       lineHeight: 15,
       fontSize: 12,
-      color: colors.gray
+      color: COLORS.blackgrey
     });
     expect(styles.container(true)).toEqual({
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: COLORS.white,
       width: '100%',
-      paddingRight: 10,
+      paddingRight: 20,
       paddingLeft: 50,
       flexDirection: 'row',
       zIndex: 100
     });
     expect(styles.container(false)).toEqual({
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: COLORS.white,
       width: '100%',
-      paddingRight: 10,
+      paddingRight: 20,
       paddingLeft: 20,
       flexDirection: 'row',
       zIndex: 100
     });
     expect(styles.btn(true)).toEqual({
-      backgroundColor: '#f2f2f2',
+      backgroundColor: COLORS.concrete,
       borderRadius: 18,
       width: 35,
       height: 35,
@@ -78,7 +78,7 @@ describe('WriteComment should run correctly', () => {
       alignSelf: 'flex-end'
     });
     expect(styles.btn(false)).toEqual({
-      backgroundColor: colors.bondi_blue,
+      backgroundColor: COLORS.bondi_blue,
       borderRadius: 18,
       width: 35,
       height: 35,
@@ -91,7 +91,7 @@ describe('WriteComment should run correctly', () => {
     expect(styles.connectorTop(true, true)).toEqual({
       height: 36,
       width: 1,
-      backgroundColor: colors.gray1,
+      backgroundColor: COLORS.balance_gray,
       position: 'absolute',
       top: 0,
       left: 60,
@@ -101,17 +101,17 @@ describe('WriteComment should run correctly', () => {
     expect(styles.connectorTop(false, false)).toEqual({
       height: 0,
       width: 1,
-      backgroundColor: colors.gray1,
+      backgroundColor: COLORS.balance_gray,
       position: 'absolute',
       top: 0,
-      left: 30,
+      left: 37,
       zIndex: -100
     });
 
     expect(styles.connectorBottom(true, true)).toEqual({
       height: 20,
       width: 1,
-      backgroundColor: colors.gray1,
+      backgroundColor: COLORS.balance_gray,
       position: 'absolute',
       top: 0,
       left: 60,
@@ -121,10 +121,10 @@ describe('WriteComment should run correctly', () => {
     expect(styles.connectorBottom(false, false)).toEqual({
       height: 0,
       width: 1,
-      backgroundColor: colors.gray1,
+      backgroundColor: COLORS.balance_gray,
       position: 'absolute',
       top: 0,
-      left: 30,
+      left: 37,
       zIndex: -100
     });
   });

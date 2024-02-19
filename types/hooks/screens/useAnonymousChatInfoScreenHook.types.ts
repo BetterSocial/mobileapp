@@ -2,6 +2,7 @@ import {ChannelList, ChannelListMemberSchema} from '../../database/schema/Channe
 import {Member} from '../../database/schema/ChatListDetail.types';
 
 interface UseAnonymousChatInfoScreenHook {
+  isLoadingFetchingChannelDetail: boolean;
   channelInfo: ChannelList;
   goBack: () => void;
   onContactPressed: (item: ChannelListMemberSchema, from?: string) => void;
@@ -18,6 +19,7 @@ interface UseAnonymousChatInfoScreenHook {
   handleShowArrow: (item: Member) => void;
   goToEditGroup: () => void;
   loadingChannelInfo: boolean;
+  isLoadingInitChat: boolean;
 }
 
 export default UseAnonymousChatInfoScreenHook;

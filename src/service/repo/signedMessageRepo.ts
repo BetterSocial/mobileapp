@@ -5,6 +5,16 @@ import {
   ChannelTypeEnum,
   SignedPostNotification
 } from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
+import {GetstreamChannelType} from './types.d';
+
+type SendPayloadType = {
+  channelId: string;
+  message: string;
+  channelType: number;
+  messageType?: string;
+  attachments?: any;
+  replyMessageId?: string;
+};
 
 const baseUrl = {
   checkIsTargetAllowingAnonDM: 'chat/channels/check-allow-anon-dm-status',
@@ -13,17 +23,26 @@ const baseUrl = {
   getAllSignedPostNotifications: '/feeds/feed-chat',
   getSingleSignedPostNotifications: (activityId: string) => `/feeds/feed-chat/${activityId}`,
   setChannelAsRead: '/chat/channels/read',
-  createSignedChat: '/chat/channels-signed'
+  createSignedChat: '/chat/channels-signed',
+  getSignedChannelDetail: (channelType: GetstreamChannelType, channelId: string) =>
+    `/chat/channel-detail?channel_type=${channelType}&channel_id=${channelId}`
 };
 
 interface SignedMessageRepoTypes {
   checkIsTargetAllowingAnonDM: (targetUserId: string) => Promise<any>;
-  sendSignedMessage: (channelId: string, message: string, channelType: number) => Promise<any>;
+  sendSignedMessage: (
+    channelId: string,
+    message: string,
+    channelType: number,
+    attachments: any,
+    replyMessageId?: string
+  ) => Promise<any>;
   getAllSignedChannels: () => Promise<ChannelData[]>;
   getAllSignedPostNotifications: () => Promise<SignedPostNotification[]>;
   getSingleSignedPostNotifications: (activityId: string) => Promise<SignedPostNotification>;
   setChannelAsRead: (channelId: string, channelType: ChannelTypeEnum) => Promise<boolean>;
   createSignedChat: (body: string[]) => Promise<any>;
+  getSignedChannelDetail: (channelType: GetstreamChannelType, channelId: string) => Promise<any>;
 }
 
 async function checkIsTargetAllowingAnonDM(targetUserId: string) {
@@ -44,8 +63,18 @@ async function checkIsTargetAllowingAnonDM(targetUserId: string) {
   }
 }
 
-async function sendSignedMessage(channelId: string, message: string, channelType: number) {
-  const payload = {channelId, message, channelType};
+async function sendSignedMessage(
+  channelId: string,
+  message: string,
+  channelType: number,
+  attachments: any,
+  replyMessageId?: string
+) {
+  let payload: SendPayloadType = {channelId, message, channelType, attachments};
+  if (replyMessageId) {
+    payload = {...payload, messageType: 'reply', replyMessageId};
+  }
+
   try {
     const response = await api.post(baseUrl.sendSignedMessage, payload);
 
@@ -55,7 +84,7 @@ async function sendSignedMessage(channelId: string, message: string, channelType
 
     return Promise.reject(response.data?.data);
   } catch (e) {
-    console.log(e);
+    console.log(e?.response);
     return Promise.reject(e);
   }
 }
@@ -137,6 +166,20 @@ async function createSignedChat(members: string[]) {
   }
 }
 
+async function getSignedChannelDetail(channelType: GetstreamChannelType, channelId: string) {
+  try {
+    const response = await api.get(baseUrl.getSignedChannelDetail(channelType, channelId));
+    if (response.status === 200) {
+      return Promise.resolve(response.data?.data);
+    }
+
+    return Promise.reject(response.data?.status);
+  } catch (e) {
+    console.log(e);
+    return Promise.reject(e);
+  }
+}
+
 const SignedMessageRepo: SignedMessageRepoTypes = {
   checkIsTargetAllowingAnonDM,
   sendSignedMessage,
@@ -144,7 +187,8 @@ const SignedMessageRepo: SignedMessageRepoTypes = {
   getAllSignedPostNotifications,
   getSingleSignedPostNotifications,
   setChannelAsRead,
-  createSignedChat
+  createSignedChat,
+  getSignedChannelDetail
 };
 
 export default SignedMessageRepo;

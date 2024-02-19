@@ -1,6 +1,15 @@
 import anonymousApi from '../anonymousConfig';
 import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
 import {ChannelData} from '../../../types/repo/ChannelData';
+import {GetstreamChannelType} from './types.d';
+
+type SendPayloadType = {
+  channelId: string;
+  message: string;
+  messageType?: string;
+  replyMessageId?: string;
+  attachments?: any;
+};
 
 const baseUrl = {
   checkIsTargetAllowingAnonDM: 'chat/channels/check-allow-anon-dm-status',
@@ -8,16 +17,24 @@ const baseUrl = {
   getAllAnonymousChannels: '/chat/channels',
   getAllAnonymousPostNotifications: '/feeds/feed-chat/anonymous',
   getSingleAnonymousPostNotifications: (activityId: string) => `/feeds/feed-chat/${activityId}`,
-  setChannelAsRead: (channelId: string) => `/chat/channels/${channelId}/read`
+  setChannelAsRead: (channelId: string) => `/chat/channels/${channelId}/read`,
+  getAnonymousChannelDetail: (channelType: GetstreamChannelType, channelId: string) =>
+    `/chat/channel-detail?channel_type=${channelType}&channel_id=${channelId}`
 };
 
 interface AnonymousMessageRepoTypes {
   checkIsTargetAllowingAnonDM: (targetUserId: string) => Promise<any>;
-  sendAnonymousMessage: (channelId: string, message: string) => Promise<any>;
+  sendAnonymousMessage: (
+    channelId: string,
+    message: string,
+    attachments: any,
+    replyMessageId?: string
+  ) => Promise<any>;
   getAllAnonymousChannels: () => Promise<ChannelData[]>;
   getAllAnonymousPostNotifications: () => Promise<AnonymousPostNotification[]>;
   getSingleAnonymousPostNotifications: (activityId: string) => Promise<AnonymousPostNotification>;
   setChannelAsRead: (channelId: string) => Promise<boolean>;
+  getAnonymousChannelDetail: (channelType: GetstreamChannelType, channelId: string) => Promise<any>;
 }
 
 async function checkIsTargetAllowingAnonDM(targetUserId: string) {
@@ -38,11 +55,17 @@ async function checkIsTargetAllowingAnonDM(targetUserId: string) {
   }
 }
 
-async function sendAnonymousMessage(channelId: string, message: string) {
-  const payload = {
-    channelId,
-    message
-  };
+async function sendAnonymousMessage(
+  channelId: string,
+  message: string,
+  attachments: any,
+  replyMessageId?: string
+) {
+  let payload: SendPayloadType = {channelId, message, attachments};
+  if (replyMessageId) {
+    payload = {...payload, messageType: 'reply', replyMessageId};
+  }
+
   try {
     const response = await anonymousApi.post(baseUrl.sendAnonymousMessage, payload);
     if (response.status === 200) {
@@ -119,13 +142,30 @@ async function setChannelAsRead(channelId: string): Promise<boolean> {
   }
 }
 
+async function getAnonymousChannelDetail(channelType: GetstreamChannelType, channelId: string) {
+  try {
+    const response = await anonymousApi.get(
+      baseUrl.getAnonymousChannelDetail(channelType, channelId)
+    );
+    if (response.status === 200) {
+      return Promise.resolve(response.data?.data);
+    }
+
+    return Promise.reject(response.data?.status);
+  } catch (e) {
+    console.log(e);
+    return Promise.reject(e);
+  }
+}
+
 const AnonymousMessageRepo: AnonymousMessageRepoTypes = {
   checkIsTargetAllowingAnonDM,
   sendAnonymousMessage,
   getAllAnonymousChannels,
   getAllAnonymousPostNotifications,
   getSingleAnonymousPostNotifications,
-  setChannelAsRead
+  setChannelAsRead,
+  getAnonymousChannelDetail
 };
 
 export default AnonymousMessageRepo;

@@ -8,9 +8,22 @@ import ChannelAnonymousSubImage from './ChannelAnonymousSubImage';
 import ChatIcon from '../../../assets/chat-icon.png';
 import FeedIcon from '../../../assets/images/feed-icon.png';
 import dimen from '../../../utils/dimen';
-import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
-import {colors} from '../../../utils/colors';
 import useProfileHook from '../../../hooks/core/profile/useProfileHook';
+import {AnonUserInfo} from '../../../../types/service/AnonProfile.type';
+import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
+import {COLORS} from '../../../utils/theme';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
+
+export type ChannelImageProps = {
+  mainPicture?: string;
+  postNotificationPicture?: string;
+  anonPostNotificationUserInfo?: any;
+  postMaker?: any;
+  isCommentExists?: boolean;
+  type?: BaseChannelItemTypeProps;
+  isAnonymousTab?: boolean;
+  dbAnonUserInfo?: AnonUserInfo | null;
+};
 
 const ChannelImage = ({
   mainPicture,
@@ -19,8 +32,9 @@ const ChannelImage = ({
   postMaker = null,
   isCommentExists = false,
   type = BaseChannelItemTypeProps.ANON_PM,
-  isAnonymousTab = false
-}) => {
+  isAnonymousTab = false,
+  dbAnonUserInfo = null
+}: ChannelImageProps) => {
   const styles = StyleSheet.create({
     image: {
       position: 'relative',
@@ -38,16 +52,17 @@ const ChannelImage = ({
       height: dimen.normalizeDimen(24),
       borderRadius: dimen.normalizeDimen(12),
       borderWidth: 2,
-      borderColor: colors.white,
+      borderColor: COLORS.white,
       display: 'flex',
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
+      backgroundColor: COLORS.anon_primary
     },
     myPostNotificationImageContainer: {
-      backgroundColor: isAnonymousTab ? colors.bondi_blue : colors.darkBlue
+      backgroundColor: isAnonymousTab ? COLORS.anon_primary : COLORS.signed_secondary
     },
     anonPmNotificationImageContainer: {
-      backgroundColor: colors.bondi_blue
+      backgroundColor: COLORS.anon_primary
     },
     postNotificationIcon: {
       width: dimen.normalizeDimen(12.5),
@@ -57,8 +72,8 @@ const ChannelImage = ({
       width: dimen.normalizeDimen(12),
       height: dimen.normalizeDimen(12)
     },
-    backgroundDarkBlue: {
-      backgroundColor: colors.darkBlue
+    backgroundsigned_secondary: {
+      backgroundColor: COLORS.signed_secondary
     }
   });
 
@@ -72,20 +87,32 @@ const ChannelImage = ({
     const memberChat = postMaker?.members?.find((item: any) => item.user_id !== anonProfileId);
     const betterSocialMember = postMaker?.better_channel_member;
 
+    if (dbAnonUserInfo) {
+      return (
+        <ChannelAnonymousImage
+          anonPostNotificationUserInfo={{
+            anon_user_info_emoji_code: dbAnonUserInfo?.anon_user_info_emoji_code,
+            anon_user_info_color_code: dbAnonUserInfo?.anon_user_info_color_code
+          }}
+          imageStyle={styles.image}
+        />
+      );
+    }
+
     if (
       isAnonymousChannel &&
       isAnonymousPostMaker &&
       betterSocialMember &&
-      betterSocialMember[memberChat?.user_id].anon_user_info_emoji_code &&
-      betterSocialMember[memberChat?.user_id].anon_user_info_color_code
+      betterSocialMember?.[memberChat?.user_id]?.anon_user_info_emoji_code &&
+      betterSocialMember?.[memberChat?.user_id]?.anon_user_info_color_code
     ) {
       return (
         <ChannelAnonymousImage
           anonPostNotificationUserInfo={{
             anon_user_info_emoji_code:
-              betterSocialMember[memberChat?.user_id].anon_user_info_emoji_code,
+              betterSocialMember?.[memberChat?.user_id]?.anon_user_info_emoji_code,
             anon_user_info_color_code:
-              betterSocialMember[memberChat?.user_id].anon_user_info_color_code
+              betterSocialMember?.[memberChat?.user_id]?.anon_user_info_color_code
           }}
           imageStyle={styles.image}
         />
@@ -114,7 +141,9 @@ const ChannelImage = ({
         />
       );
 
-    return <FastImage source={{uri: mainPicture}} style={styles.image} />;
+    return (
+      <FastImage source={{uri: mainPicture || DEFAULT_PROFILE_PIC_PATH}} style={styles.image} />
+    );
   };
 
   const renderMainImage = () => {
@@ -163,7 +192,9 @@ const ChannelImage = ({
         <View
           style={[
             styles.postNotificationImage,
-            isAnonymousTab ? styles.anonPmNotificationImageContainer : styles.backgroundDarkBlue
+            isAnonymousTab
+              ? styles.anonPmNotificationImageContainer
+              : styles.backgroundsigned_secondary
           ]}>
           <FastImage source={ChatIcon} style={styles.chatIcon} />
         </View>
@@ -184,7 +215,7 @@ const ChannelImage = ({
   if (type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_COMMENTED_ANONYMOUSLY) {
     return (
       <View>
-        <FastImage source={AnonymousProfile} style={styles.image} />
+        {renderMainImage()}
         <ChannelAnonymousSubImage
           anonPostNotificationUserInfo={{
             anon_user_info_emoji_code: anonPostNotificationUserInfo?.anon_user_info_emoji_code,
@@ -210,7 +241,7 @@ const ChannelImage = ({
   if (type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION) {
     return (
       <View>
-        <FastImage source={AnonymousProfile} style={styles.image} />
+        {renderMainImage()}
         <View style={[styles.postNotificationImage, styles.myPostNotificationImageContainer]}>
           <FastImage source={FeedIcon} style={styles.postNotificationIcon} />
         </View>

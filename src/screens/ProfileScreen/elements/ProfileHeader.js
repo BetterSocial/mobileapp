@@ -6,9 +6,9 @@ import {useNavigation} from '@react-navigation/native';
 import ArrowLeftIcon from '../../../assets/icons/images/arrow-left.svg';
 import SettingIcon from '../../../assets/icons/images/setting.svg';
 import ShareIcon from '../../../assets/icons/Ic_share';
-import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 import GlobalButton from '../../../components/Button/GlobalButton';
+import {COLORS} from '../../../utils/theme';
 
 const ProfileHeader = ({
   onShareClicked = () => {},
@@ -23,7 +23,7 @@ const ProfileHeader = ({
 
     return (
       <TouchableOpacity onPress={onSettingsClicked}>
-        <SettingIcon width={20} height={20} fill={colors.black} />
+        <SettingIcon width={20} height={20} fill={COLORS.black} />
       </TouchableOpacity>
     );
   };
@@ -60,7 +60,7 @@ const ProfileHeader = ({
               color="black"
               width={handleIconSize()}
               height={handleIconSize()}
-              fill={colors.black}
+              fill={COLORS.black}
             />
           </TouchableOpacity>
         </View>
@@ -78,16 +78,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 12,
-    paddingLeft: 20,
-    paddingRight: 20
+    paddingVertical: 10,
+    paddingHorizontal: 20
   },
   textUsername: {
     fontFamily: fonts.inter[800],
     fontWeight: 'bold',
     fontSize: 18,
     lineHeight: 22,
-    color: colors.black,
+    color: COLORS.black,
     flex: 1
   },
   wrapHeaderButton: {

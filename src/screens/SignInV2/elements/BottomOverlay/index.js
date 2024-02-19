@@ -7,7 +7,6 @@ import MemoizedIcArrowRightTail from '../../../../assets/arrow/ic_arrow_right_ta
 import StringConstant from '../../../../utils/string/StringConstant';
 import dimen from '../../../../utils/dimen';
 import {COLORS} from '../../../../utils/theme';
-import {colors} from '../../../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../../../utils/fonts';
 import {openUrl} from '../../../../utils/Utils';
 import {imageConst} from '../../../../components/Image';
@@ -92,7 +91,7 @@ const bottomOverlayStyles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'transparent',
+    backgroundColor: COLORS.transparent,
     zIndex: 1000,
     width: '100%'
     // backgroundColor: 'rgba(255,0,0,0.5)'
@@ -117,7 +116,7 @@ const bottomOverlayStyles = StyleSheet.create({
     backgroundColor: 'white',
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: COLORS.gray1,
+    borderColor: COLORS.lightgrey,
     paddingBottom: 16
   },
   descTitle: {
@@ -143,7 +142,7 @@ const bottomOverlayStyles = StyleSheet.create({
     fontFamily: fonts.inter[700]
   },
   link: {
-    color: colors.blue,
+    color: COLORS.blue,
     textDecorationLine: 'underline'
   },
   loginContainer: {
@@ -163,7 +162,7 @@ const bottomOverlayStyles = StyleSheet.create({
     borderRadius: 16
   },
   nextButton: {
-    backgroundColor: COLORS.blueOnboarding,
+    backgroundColor: COLORS.signed_primary,
     // backgroundColor: 'red',
     width: dimen.size.ONBOARDING_BOTTOM_OVERLAY_NEXT_BUTTON_SIZE,
     height: dimen.size.ONBOARDING_BOTTOM_OVERLAY_NEXT_BUTTON_SIZE,
@@ -180,7 +179,7 @@ const bottomOverlayStyles = StyleSheet.create({
     lineHeight: normalize(28),
     fontSize: normalizeFontSize(22),
     fontFamily: fonts.inter[600],
-    color: COLORS.blueOnboarding,
+    color: COLORS.signed_primary,
     alignSelf: 'flex-start'
   },
   paddingContainer: {

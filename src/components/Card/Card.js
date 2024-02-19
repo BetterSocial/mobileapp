@@ -33,7 +33,8 @@ const Card = (props) => {
     url,
     heightTopic = 0,
     textHeight = 0,
-    contentHeight
+    contentHeight,
+    containerStyle
   } = props;
   // const styles = buildStylesheet('card', props.styles);
   const renderImageComponent = () => {
@@ -63,7 +64,7 @@ const Card = (props) => {
   };
 
   return (
-    <View style={styles.container(calculateHeight())}>
+    <View style={[styles.container(calculateHeight()), containerStyle]}>
       <View>
         <TouchableOpacity
           onPress={() => onHeaderPress(item)}
@@ -113,18 +114,18 @@ Card.propTypes = {
 
 const styles = StyleSheet.create({
   link: {
-    color: '#2f80ed',
+    color: COLORS.blue,
     textDecorationLine: 'underline',
     marginStart: 8,
     fontSize: 12
   },
   contentDomain: {flexDirection: 'row', alignItems: 'center'},
   containerDomain: {justifyContent: 'space-around'},
-  date: {fontSize: 12, color: '#828282'},
+  date: {fontSize: 12, color: COLORS.blackgrey},
   domain: {
     fontSize: 16,
     lineHeight: 16,
-    color: '#000000',
+    color: COLORS.black,
     fontWeight: 'bold',
     fontFamily: fonts.inter[600]
   },
@@ -139,7 +140,7 @@ const styles = StyleSheet.create({
   contentHeader: {
     borderRadius: 45,
     borderWidth: 0.2,
-    borderColor: 'rgba(0,0,0,0.5)',
+    borderColor: COLORS.black50,
     width: 36,
     height: 36,
     justifyContent: 'center',
@@ -148,10 +149,9 @@ const styles = StyleSheet.create({
   container: (height) => ({
     borderWidth: 0.5,
     borderRadius: 8,
-    borderColor: 'rgba(0,0,0, 0.5)',
+    borderColor: COLORS.black50,
     overflow: 'hidden',
     paddingBottom: 8,
-
     marginBottom: 5,
     height
   }),
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   title: {
-    color: '#000000',
+    color: COLORS.black,
     fontWeight: '600',
     fontSize: 14,
     lineHeight: 17,
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     lineHeight: 18
   },
   openLinkText: {
-    color: '#2f80ed',
+    color: COLORS.blue,
     textDecorationLine: 'underline',
     marginStart: 8,
     fontSize: 12

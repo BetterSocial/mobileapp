@@ -7,6 +7,10 @@ import newsUnselected from './icon/NewsUnselected';
 import profileSelected from './icon/ProfileSelected';
 import profileUnselected from './icon/ProfileUnselected';
 import AllowLeft from './arrow-left.png';
+import BetterSocialLogoGram from './BetterSocialLogoGram';
+import PencilIcon from './PencilIcon';
+import ShareIcon from './ShareIcon';
+import LockIcon from './LockIcon';
 
 const homeTabs = {
   homeSelected,
@@ -20,4 +24,4 @@ const homeTabs = {
   AllowLeft
 };
 
-export {homeTabs};
+export {homeTabs, BetterSocialLogoGram, PencilIcon, ShareIcon, LockIcon};

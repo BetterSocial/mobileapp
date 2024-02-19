@@ -119,7 +119,7 @@ when friends send you messages.`,
   }, [isFocused]);
 
   return (
-    <>
+    <View>
       <StatusBar translucent={false} />
       <FlatList
         data={[]}
@@ -130,7 +130,11 @@ when friends send you messages.`,
         ListHeaderComponent={
           <>
             <View style={{height: 52}}>
-              <Search animatedValue={0} onPress={navigateToContactScreen} />
+              <Search
+                animatedValue={0}
+                onPress={navigateToContactScreen}
+                isAnon={selectedTab === 1}
+              />
             </View>
 
             <HorizontalTab
@@ -165,7 +169,7 @@ when friends send you messages.`,
           </>
         }
       />
-    </>
+    </View>
   );
 };
 

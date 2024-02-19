@@ -90,6 +90,8 @@ export type GetstreamChannel = {
   last_message_at: string;
   member_count: number;
   members: any[];
+  better_channel_members: any[];
+  better_channel_member: any[];
   name: string;
   type: string;
   updated_at: string;
@@ -110,13 +112,15 @@ export type GetstreamWebsocket = {
   type: string;
   unread_channels: number;
   unread_count: number;
-  targetName: string;
-  targetImage?: string;
   isAnonymous?: boolean;
   anon_user_info_emoji_name?: string;
   anon_user_info_color_name?: string;
   anon_user_info_emoji_code?: string;
   anon_user_info_color_code?: string;
+  // Custom Param
+  targetName: string;
+  targetImage?: string;
+  originalMembers?: any[];
 };
 
 export type MyChannelType = 'SIGNED' | 'ANONYMOUS';

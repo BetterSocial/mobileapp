@@ -1,15 +1,13 @@
 import * as React from 'react';
-import {Image} from 'react-native';
-import {FlatList} from 'react-native';
-import {StyleSheet, View} from 'react-native';
+import {Image, FlatList, StyleSheet, View} from 'react-native';
 import {Context} from '../../../context';
 import useMedia from './useMedia';
+import {COLORS} from '../../../utils/theme';
 
 const Media = () => {
   const [groupChatState] = React.useContext(Context).groupChat;
-  let {asset} = groupChatState;
-  const {getSpace} = useMedia()
-
+  const {asset} = groupChatState;
+  const {getSpace} = useMedia();
 
   return (
     <View style={styles.container}>
@@ -21,7 +19,7 @@ const Media = () => {
         renderItem={({item, index}) => (
           <Image
             source={{
-              uri: item.message.attachments[0].image_url,
+              uri: item.message.attachments[0].image_url
             }}
             width={80}
             height={80}
@@ -38,15 +36,15 @@ export default Media;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.white,
     alignItems: 'center',
     flexWrap: 'nowrap',
-    paddingTop: 8,
+    paddingTop: 8
   },
   image: (isFirst) => ({
     width: 80,
     height: 80,
     marginLeft: isFirst ? 0 : 5,
-    marginBottom: 5,
-  }),
+    marginBottom: 5
+  })
 });

@@ -8,16 +8,23 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 
 import ContentPoll from './ContentPoll';
 import ImageLayouter from './elements/ImageLayouter';
+import BlurredLayer from './elements/BlurredLayer';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import {COLORS} from '../../utils/theme';
-import {POST_TYPE_LINK, POST_TYPE_POLL, POST_TYPE_STANDARD} from '../../utils/constants';
-import {colors} from '../../utils/colors';
+import {
+  DISCOVERY_TAB_USERS,
+  POST_TYPE_LINK,
+  POST_TYPE_POLL,
+  POST_TYPE_STANDARD
+} from '../../utils/constants';
 import {fonts, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
 import useCalculationContent from './hooks/useCalculationContent';
 import {getCommentLength} from '../../utils/getstream';
+import dimen from '../../utils/dimen';
 
 const {width: screenWidth} = Dimensions.get('window');
+const BUFFER_CONTENT_TEXT_HEIGHT = 50;
 const Content = ({
   message,
   images_url = [],
@@ -26,7 +33,8 @@ const Content = ({
   topics = [],
   item,
   onNewPollFetched,
-  setHaveSeeMore
+  setHaveSeeMore,
+  hasComment
 }) => {
   const navigation = useNavigation();
   const route = useRoute();
@@ -40,7 +48,6 @@ const Content = ({
     heightTopic,
     amountLineTopic,
     heightPoll,
-    handleMarginVertical,
     onPollLayout
   } = useCalculationContent();
   const [amountCut, setAmountCut] = React.useState(0);
@@ -63,14 +70,23 @@ const Content = ({
     item.images_url,
     message
   );
+
+  const isBlurredPost = item?.isBlurredPost;
+
   const calculateMaxLine = () => {
+    if (isBlurredPost && images_url.length > 0) {
+      return 1;
+    }
     if (item.post_type === POST_TYPE_LINK || images_url.length > 0) {
       return 5;
     }
     if (item.post_type === POST_TYPE_POLL) {
       const result = Math.round((layoutHeight - heightPoll - heightTopic) / lineHeight);
-
-      return result >= 0 ? result : 0;
+      const isHaveTopic = topics.length > 0 ? 3 : 2;
+      if (item.pollOptions.length < 4) {
+        return result >= 0 ? result - 1 : 0;
+      }
+      return isHaveTopic;
     }
     if (getCommentLength(item.latest_reactions.comment) > 0) {
       return Math.floor(layoutHeight / lineHeight);
@@ -155,7 +171,7 @@ const Content = ({
   const handleTextLayout = ({nativeEvent}) => {
     let text = '';
     const {newMaxLine, countDeviceLine} = adjustmentCountDeviceLine();
-    for (let i = 0; i < newMaxLine; i++) {
+    for (let i = 0; i < newMaxLine; i += 1) {
       if (nativeEvent.lines[i]) {
         if (i < countDeviceLine) {
           text += nativeEvent.lines[i].text;
@@ -178,7 +194,7 @@ const Content = ({
         style={[
           styles.containerText,
           {marginBottom: handleMarginTopic()},
-          {backgroundColor: 'transparent'}
+          {backgroundColor: COLORS.transparent}
         ]}>
         {amountCut <= 0 ? (
           <Text
@@ -225,7 +241,7 @@ const Content = ({
       isShort: false
     };
   };
-  const hanldeHeightContainer = ({nativeEvent}) => {
+  const handleHeightContainer = ({nativeEvent}) => {
     setLayoutHeight(nativeEvent.layout.height);
   };
 
@@ -233,60 +249,81 @@ const Content = ({
     onLayoutTopicChip(nativeEvent, lineHeight);
   };
 
+  const handleBlurredContent = () => {
+    navigation.navigate('DiscoveryScreen', {
+      tab: DISCOVERY_TAB_USERS
+    });
+  };
+
   return (
     <Pressable
-      onLayout={hanldeHeightContainer}
-      onPress={onPress}
+      onLayout={handleHeightContainer}
+      onPress={isBlurredPost ? null : () => onPress()}
       style={[styles.contentFeed, style]}>
-      {message?.length > 0 ? (
-        <View>
+      <BlurredLayer
+        withToast={true}
+        onPressContent={handleBlurredContent}
+        isVisible={isBlurredPost}
+        containerStyle={{
+          flex: 1
+        }}>
+        {message?.length > 0 ? (
+          <View>
+            <View style={[styles.containerMainText, handleContainerText().container]}>
+              {renderHandleTextContent()}
+            </View>
+          </View>
+        ) : null}
+
+        {item && item.post_type === POST_TYPE_POLL ? (
+          <View style={[styles.containerMainText]}>
+            <ContentPoll
+              message={item.message}
+              images_url={item.images_url}
+              polls={item.pollOptions}
+              item={item}
+              pollexpiredat={item.polls_expired_at}
+              multiplechoice={item.multiplechoice}
+              isAlreadyPolling={item.isalreadypolling}
+              onnewpollfetched={onNewPollFetched}
+              voteCount={item.voteCount}
+              topics={item?.topics}
+              onLayout={onPollLayout}
+            />
+          </View>
+        ) : null}
+        {isBlurredPost && images_url.length > 0 && (
           <View
             style={[
-              styles.containerMainText(handleContainerText().isShort),
-              handleContainerText().container
-            ]}>
-            {renderHandleTextContent()}
+              {
+                height: hasComment ? dimen.normalizeDimen(315) : dimen.normalizeDimen(388)
+              }
+            ]}
+          />
+        )}
+        {!isBlurredPost && images_url.length > 0 && (
+          <View style={[styles.containerImage(isBlurredPost)]}>
+            <ImageLayouter
+              isFeed={true}
+              images={images_url}
+              onimageclick={() => onPress(showSeeMore)}
+            />
           </View>
-        </View>
-      ) : null}
+        )}
 
-      {item && item.post_type === POST_TYPE_POLL ? (
-        <View
-          style={[
-            styles.containerMainText(handleContainerText().isShort),
-            {marginVertical: handleMarginVertical(message)}
-          ]}>
-          <ContentPoll
-            message={item.message}
-            images_url={item.images_url}
-            polls={item.pollOptions}
-            item={item}
-            pollexpiredat={item.polls_expired_at}
-            multiplechoice={item.multiplechoice}
-            isAlreadyPolling={item.isalreadypolling}
-            onnewpollfetched={onNewPollFetched}
-            voteCount={item.voteCount}
-            topics={item?.topics}
-            onLayout={onPollLayout}
+        {!isBlurredPost && (
+          <TopicsChip
+            onLayout={calculateLineTopicChip}
+            topics={topics}
+            fontSize={normalizeFontSizeByWidth(14)}
+            text={message}
+            topicContainer={{
+              position: item.post_type === POST_TYPE_STANDARD ? 'absolute' : 'relative',
+              bottom: 0
+            }}
           />
-        </View>
-      ) : null}
-      {images_url.length > 0 && (
-        <View style={[styles.containerImage]}>
-          <ImageLayouter
-            isFeed={true}
-            images={images_url}
-            onimageclick={() => onPress(showSeeMore)}
-          />
-        </View>
-      )}
-
-      <TopicsChip
-        onLayout={calculateLineTopicChip}
-        topics={topics}
-        fontSize={normalizeFontSizeByWidth(14)}
-        text={message}
-      />
+        )}
+      </BlurredLayer>
     </Pressable>
   );
 };
@@ -296,15 +333,19 @@ Content.propTypes = {
   images_url: PropTypes.array,
   style: PropTypes.object,
   onPress: PropTypes.func,
-  topics: PropTypes.arrayOf(PropTypes.string)
+  topics: PropTypes.arrayOf(PropTypes.string),
+  item: PropTypes.object,
+  onNewPollFetched: PropTypes.func,
+  setHaveSeeMore: PropTypes.func
 };
 
 export default Content;
 
 export const styles = StyleSheet.create({
-  containerImage: {
-    flex: 1
-  },
+  containerImage: (isBlurred) => ({
+    flex: 1,
+    height: isBlurred ? dimen.normalizeDimen(422) : 100
+  }),
   imageList: {
     flex: 1,
     width: screenWidth - 32,
@@ -314,7 +355,7 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontWeight: 'normal',
     fontSize: normalizeFontSizeByWidth(28),
-    color: colors.black,
+    color: COLORS.black,
     lineHeight: 24,
     flex: 1
   },
@@ -339,21 +380,20 @@ export const styles = StyleSheet.create({
   feedDate: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.black,
+    color: COLORS.black,
     lineHeight: 18
   },
   point: {
     width: 4,
     height: 4,
     borderRadius: 4,
-    backgroundColor: colors.gray,
+    backgroundColor: COLORS.blackgrey,
     marginLeft: 8,
     marginRight: 8
   },
   contentFeed: {
     flex: 1,
     marginTop: 0,
-    height: '100%',
     width: '100%'
   },
   item: {
@@ -379,10 +419,9 @@ export const styles = StyleSheet.create({
     height: 32
   },
   textContainer: {},
-  containerMainText: (isShort) => ({
+  containerMainText: {
     paddingHorizontal: 16
-    // paddingVertical: isShort ? 0 : 10
-  }),
+  },
   containerText: {
     flexDirection: 'row'
   },

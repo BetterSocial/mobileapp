@@ -4,14 +4,14 @@ import {useNavigation, useRoute} from '@react-navigation/core';
 import ChannelList from '../../database/schema/ChannelListSchema';
 import UseAnonymousChatInfoScreenHook from '../../../types/hooks/screens/useAnonymousChatInfoScreenHook.types';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
-import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
-import {ChannelListMemberSchema} from '../../../types/database/schema/ChannelList.types';
-import {getAnonymousUserId, getUserId} from '../../utils/users';
-import {Context} from '../../context';
-import {ANONYMOUS_USER, SIGNED} from '../core/constant';
-import {isContainUrl} from '../../utils/Utils';
 import useGroupInfo from '../../screens/GroupInfo/hooks/useGroupInfo';
+import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
+import useUserAuthHook from '../core/auth/useUserAuthHook';
+import {ChannelListMemberSchema} from '../../../types/database/schema/ChannelList.types';
+import {Context} from '../../context';
 import {Member} from '../../../types/database/schema/ChatListDetail.types';
+import {SIGNED} from '../core/constant';
+import {isContainUrl} from '../../utils/Utils';
 
 function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   const {params}: any = useRoute();
@@ -22,26 +22,29 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
     alertRemoveUser,
     isAnonymousModalOpen,
     selectedUser,
-    blockModalRef
+    blockModalRef,
+    isLoadingInitChat
   } = useGroupInfo();
   const {localDb} = useLocalDatabaseHook();
   const [loadingChannelInfo, setLoadingChannelInfo] = React.useState<boolean>(false);
-  const {selectedChannel, goBack} = useChatUtilsHook();
+  const {isLoadingFetchingChannelDetail, selectedChannel, goBack} = useChatUtilsHook();
   const [myUserId] = React.useContext(Context).profile;
   const navigation = useNavigation();
   const [showPopupBlock, setShowPopupBlock] = React.useState(false);
   const [channelInfo, setChannelInfo] = React.useState(null);
+  const {signedProfileId, anonProfileId} = useUserAuthHook();
+
   const initChatInfoData = async () => {
     if (localDb) {
       setLoadingChannelInfo(true);
-      const myId = await getUserId();
-      const myAnonymousId = await getAnonymousUserId();
+
       const data = await ChannelList.getChannelInfo(
         localDb,
         selectedChannel?.id,
-        myId,
-        myAnonymousId
+        signedProfileId,
+        anonProfileId
       );
+
       setChannelInfo(data);
       setLoadingChannelInfo(false);
     }
@@ -51,11 +54,12 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
     if (params.from === SIGNED) {
       return handlePressContact(item);
     }
+
     return navigation.push('OtherProfile', {
       data: {
         user_id: myUserId?.myProfile?.user_id,
-        other_id: item?.user_id,
-        username: item?.user?.name
+        other_id: item?.user_id || item?.userId,
+        username: item?.user?.name || item?.user?.username
       }
     });
   };
@@ -75,11 +79,13 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
 
   const handleShowArrow = (item: Member) => {
     if (params?.from === SIGNED) {
-      return item?.user_id !== myUserId?.myProfile?.user_id;
+      return item?.user?.userId !== signedProfileId;
     }
-    if (!isContainUrl(item?.user?.image) || item?.user?.name === ANONYMOUS_USER) {
+
+    if (!isContainUrl(item?.user?.profilePicture) || item?.user?.anon_user_info_emoji_name) {
       return false;
     }
+
     return item?.user_id !== myUserId?.myProfile?.user_id;
   };
 
@@ -92,6 +98,7 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   }, []);
 
   return {
+    isLoadingFetchingChannelDetail,
     channelInfo,
     goBack,
     onContactPressed,
@@ -106,7 +113,8 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
     blockModalRef,
     handleShowArrow,
     goToEditGroup,
-    loadingChannelInfo
+    loadingChannelInfo,
+    isLoadingInitChat
   };
 }
 

@@ -18,7 +18,6 @@ import {
   Text,
   View
 } from 'react-native';
-import {Image} from 'react-native-compressor';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {openSettings} from 'react-native-permissions';
 import {showMessage} from 'react-native-flash-message';
@@ -29,6 +28,8 @@ import CreatePollContainer from './elements/CreatePollContainer';
 import CreatePostInput from '../../components/CreatePostInput';
 import Gap from '../../components/Gap';
 import Header from '../../components/Header';
+import ImageCompressionUtils from '../../utils/image/compress';
+import ImageUtils from '../../utils/image';
 import ListItem from '../../components/MenuPostItem';
 import Loading from '../Loading';
 import Location from '../../assets/icons/Ic_location';
@@ -52,6 +53,7 @@ import useCreatePostHook from '../../hooks/screen/useCreatePostHook';
 import useHastagMention from './elements/useHastagMention';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button, ButtonAddMedia} from '../../components/Button';
+import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {
   DEFAULT_TOPIC_PIC_PATH,
@@ -60,8 +62,6 @@ import {
 } from '../../utils/constants';
 import {PROFILE_CACHE} from '../../utils/cache/constant';
 import {ShowingAudience, createPost} from '../../service/post';
-import {colors} from '../../utils/colors';
-import {composeImageMeta} from '../../utils/string/file';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {
   getDurationId,
@@ -76,7 +76,6 @@ import {getSpecificCache} from '../../utils/cache';
 import {getUrl, isContainUrl} from '../../utils/Utils';
 import {getUserId} from '../../utils/users';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
-import {uploadPhoto} from '../../service/file';
 
 const IS_GEO_SELECT_ENABLED = false;
 
@@ -309,20 +308,13 @@ const CreatePost = () => {
 
   const uploadPhotoImage = async (pathImg) => {
     try {
-      const compressionResult = await Image.compress(pathImg, {
-        compressionMethod: 'auto'
-      });
-
+      const compressionResult = await ImageCompressionUtils.compress(pathImg);
       const newArr = {
         id: mediaStorage.length,
         data: compressionResult
       };
 
-      const asset = new FormData();
-      asset.append('photo', composeImageMeta(compressionResult));
-
-      const responseUpload = await uploadPhoto(asset);
-
+      const responseUpload = await ImageUtils.uploadImage(pathImg);
       setMediaStorage((val) => [...val, newArr]);
       setDataImage((val) => [...val, responseUpload.data.url]);
       sheetMediaRef.current.close();
@@ -454,7 +446,7 @@ const CreatePost = () => {
   const checkTaggingUser = () => {
     const mapTagUser = taggingUsers.map((data) => {
       const findData = allTaggingUser.find((dataUser) => dataUser.username === data);
-      return findData.user_id;
+      return findData?.user_id;
     });
     return mapTagUser;
   };
@@ -830,7 +822,7 @@ const CreatePost = () => {
             </>
           )}
           <Gap style={styles.height(25)} />
-          <Button disabled={isButtonDisabled()} onPress={postV2}>
+          <Button styles={styles.btnPost(typeUser)} disabled={isButtonDisabled()} onPress={postV2}>
             Post
           </Button>
           <Gap style={styles.height(18)} />
@@ -887,11 +879,11 @@ export default CreatePost;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.white,
     position: 'relative'
   },
   input: {
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey,
     paddingVertical: 16,
     paddingHorizontal: 12,
     minHeight: 100,
@@ -899,23 +891,23 @@ const styles = StyleSheet.create({
     overflow: 'scroll'
   },
   hastagText: {
-    color: colors.gray1,
+    color: COLORS.lightgrey,
     fontSize: 14,
     fontFamily: fonts.inter[400]
   },
   listText: {
-    color: colors.black,
+    color: COLORS.black,
     fontSize: 14,
     fontFamily: fonts.inter[400]
   },
   label: {
-    color: colors.black,
+    color: COLORS.black,
     fontFamily: fonts.inter[600],
     fontWeight: 'bold'
   },
   desc: {fontSize: 14, fontFamily: fonts.poppins[400]},
   labelButtonAddMedia: {
-    color: colors.black,
+    color: COLORS.black,
     fontFamily: fonts.inter[600],
     fontSize: 14,
     fontWeight: 'bold'
@@ -928,7 +920,7 @@ const styles = StyleSheet.create({
     paddingBottom: 13
   },
   userTarget: {
-    color: colors.bondi_blue,
+    color: COLORS.bondi_blue,
     fontSize: 14,
     fontFamily: fonts.poppins[400]
   },
@@ -936,7 +928,7 @@ const styles = StyleSheet.create({
     height
   }),
   reminderContainer: {
-    backgroundColor: '#2F80ED',
+    backgroundColor: COLORS.anon_primary,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 7,
@@ -944,8 +936,11 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 10
   },
   whiteText: {
-    color: 'white',
+    color: COLORS.white,
     fontSize: normalizeFontSize(10),
     textAlign: 'center'
-  }
+  },
+  btnPost: (isAnonym) => ({
+    backgroundColor: isAnonym ? COLORS.anon_primary : COLORS.signed_primary
+  })
 });

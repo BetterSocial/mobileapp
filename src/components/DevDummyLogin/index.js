@@ -49,7 +49,7 @@ const S = StyleSheet.create({
   },
   divider: {
     width: '100%',
-    backgroundColor: COLORS.gray,
+    backgroundColor: COLORS.blackgrey,
     height: 2
   },
   passwordTextInput: {
@@ -66,20 +66,19 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
   const [dummyUsers] = React.useState([
     {name: 'fajarismv2', humanId: 'fajarismv2'},
     {name: 'halofajarism', humanId: 'halofajarism'},
-    {name: 'fajarus1', humanId: 'tYy3OFurquv0lkYF'},
     {name: 'agita', humanId: 'agita'},
     {name: 'usup', humanId: 'P19FGPQGMSZ5VSHA0YSQ'},
     {name: 'bastian', humanId: 'bastian'},
-    {name: 'agita2', humanId: 'I4K3M10FGR78EWQQDNQ2'},
-    {name: 'agita3', humanId: 'dlNWskypPXEPyNPM'},
     {name: 'BetterSocial_Team', humanId: 'KVL1JKD8VG6KMHUZ0RY5'},
-    {name: 'JSmithWrites', humanId: 'AXZ61CSQ5CGC1WD94QSE'},
-    {name: 'SophiaZ', humanId: 'ZZ750A44B7RWBNOP40U2'},
-    {name: 'LuckyNumber8', humanId: '2QT5N04V8TU03IWFX61W'},
+    {name: 'smith.confessions', humanId: 'AXZ61CSQ5CGC1WD94QSE'},
+    {name: 'swat_confessions', humanId: 'ZZ750A44B7RWBNOP40U2'},
+    {name: 'Carl_confessions', humanId: 'FIE72UIZAMQ1CQX1G9LO'},
+    {name: 'Mac_confessions', humanId: 'P94ZX8ICBDSWUDX1L7DE'},
+    {name: 'fandm_confessions', humanId: '2QT5N04V8TU03IWFX61W'},
     {name: 'BornIn1999', humanId: 'G7WWEXKD5N264GLU3FZB'},
     {name: 'CollegeConfessions', humanId: '12ULE1ZRJSMOU24YREHU'},
     {name: 'Harvard_gossip', humanId: 'RRSJWZJCU9DC3Y01XRIC'},
-    {name: 'GraceFul', humanId: 'L0ASAI3OQYDD36M49NIY'},
+    {name: 'trinity_confessions', humanId: 'L0ASAI3OQYDD36M49NIY'},
     {name: 'CatLadyForever', humanId: 'YZ55TDV3W49CCFW722CX'},
     {name: 'Liz2', humanId: 'HXDX51MNA1DFV09608SX'},
     {name: 'Simplythebest2', humanId: 'WUCHMWWT9ZNHYFCMPMXZ'},
@@ -220,7 +219,7 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
             onPress={() => setIsPasswordShown((prev) => !prev)}
           />
           {isLoadingCheckPassword ? (
-            <ActivityIndicator size={'small'} color={COLORS.red} />
+            <ActivityIndicator size={'small'} color={COLORS.redalert} />
           ) : (
             <Button title={'Login'} onPress={checkPassword} />
           )}

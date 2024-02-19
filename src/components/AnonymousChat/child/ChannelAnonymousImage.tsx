@@ -1,7 +1,20 @@
 import * as React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-const ChannelAnonymousImage = ({anonPostNotificationUserInfo = null, imageStyle = {}}) => {
+export type AnonPostNotificationUserInfo = {
+  anon_user_info_color_code: string;
+  anon_user_info_emoji_code: string;
+};
+
+export type ChannelAnonymousImageProps = {
+  anonPostNotificationUserInfo?: any;
+  imageStyle?: any;
+};
+
+const ChannelAnonymousImage = ({
+  anonPostNotificationUserInfo = null,
+  imageStyle = {}
+}: ChannelAnonymousImageProps) => {
   const styles = StyleSheet.create({
     postNotificationImage: {
       display: 'flex',

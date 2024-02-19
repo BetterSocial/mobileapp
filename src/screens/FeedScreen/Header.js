@@ -2,10 +2,10 @@
 /* eslint-disable no-underscore-dangle */
 // eslint-disable-next-line import/no-extraneous-dependencies
 
-import * as React from 'react';
-import Image from 'react-native-fast-image';
-import PropsTypes from 'prop-types';
+import {useNavigation} from '@react-navigation/native';
 import moment from 'moment';
+import PropsTypes from 'prop-types';
+import * as React from 'react';
 import {
   Dimensions,
   Platform,
@@ -15,32 +15,33 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 
-import AnonymousAvatar from '../../components/AnonymousAvatar';
-import AnonymousUsername from '../../components/AnonymousUsername';
+import MemoIc_arrow_back from '../../assets/arrow/Ic_arrow_back';
 import ElipsisIcon from '../../assets/icon/ElipsisIcon';
-import GlobalButton from '../../components/Button/GlobalButton';
+import MemoPeopleFollow from '../../assets/icons/Ic_people_follow';
+import MemoicGlobe from '../../assets/icons/ic_globe';
+import ShareAndroidIcon from '../../assets/icons/images/share-for-android.svg';
+import TrashRed from '../../assets/icons/images/trash-red.svg';
 import MemoEightyEight_hundred from '../../assets/timer/EightyEight_hundred';
 import MemoFivety_sixtyTwo from '../../assets/timer/Fivety_sixtyTwo';
-import MemoIc_arrow_back from '../../assets/arrow/Ic_arrow_back';
 import MemoOne from '../../assets/timer/One';
-import MemoPeopleFollow from '../../assets/icons/Ic_people_follow';
 import MemoSeventyFive_eightySeven from '../../assets/timer/SeventyFive_eightySeven';
 import MemoSixtyThree_seventyFour from '../../assets/timer/SixtyThree_seventyFour';
 import MemoThirtySeven_fourtyNine from '../../assets/timer/ThirtySeven_fourtyNine';
 import MemoTwentyFive_thirtySix from '../../assets/timer/TwentyFive_thirtySix';
-import Memoic_globe from '../../assets/icons/ic_globe';
-import StringConstant from '../../utils/string/StringConstant';
-import useFeedHeader from './hooks/useFeedHeader';
-import {DEFAULT_PROFILE_PIC_PATH, PRIVACY_PUBLIC} from '../../utils/constants';
-import {calculateTime} from '../../utils/time';
-import {colors} from '../../utils/colors';
-import {fonts, normalizeFontSize} from '../../utils/fonts';
-import ShareAndroidIcon from '../../assets/icons/images/share-for-android.svg';
-import TrashRed from '../../assets/icons/images/trash-red.svg';
+import AnonymousAvatar from '../../components/AnonymousAvatar';
+import AnonymousUsername from '../../components/AnonymousUsername';
 import BottomSheetMenu from '../../components/BottomSheet/BottomSheetMenu';
+import GlobalButton from '../../components/Button/GlobalButton';
+import {DEFAULT_PROFILE_PIC_PATH, PRIVACY_PUBLIC} from '../../utils/constants';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
 import ShareUtils from '../../utils/share';
+import StringConstant from '../../utils/string/StringConstant';
+import {COLORS} from '../../utils/theme';
+import {calculateTime} from '../../utils/time';
+import ProfilePicture from '../ProfileScreen/elements/ProfilePicture';
+import BlurredLayer from './elements/BlurredLayer';
+import useFeedHeader from './hooks/useFeedHeader';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -119,7 +120,11 @@ const _renderAnonimity = ({
   onPressFollUnFoll = () => {},
   onDeletePost = () => {},
   isShowDelete = false,
-  isSelf = false
+  isSelf = false,
+  karmaScore = 0,
+  isBlurredPost = false,
+  hideThreeDot,
+  onHeaderOptionClicked = () => {}
 }) => {
   const navigation = useNavigation();
   const refSheet = React.useRef();
@@ -140,73 +145,82 @@ const _renderAnonimity = ({
         refSheet.current.close();
         onDeletePost();
       },
-      style: {color: colors.red}
+      style: {color: COLORS.red}
     });
   }
 
   return (
     <SafeAreaView>
-      <View
-        testID="anonymHeader"
-        style={[
-          styles.rowSpaceBeetwen,
-          styles.heightHeader(height),
-          {paddingLeft: isPostDetail ? 10 : 0}
-        ]}>
-        <View style={[styles.rowCenter, headerStyle]}>
-          {isBackButton ? (
-            <View testID="haveBackButton" style={[styles.btn]}>
-              <GlobalButton
-                testID="onBack"
-                onPress={() => {
-                  navigation.goBack();
-                }}>
-                <MemoIc_arrow_back height={20} width={20} />
-              </GlobalButton>
-            </View>
-          ) : null}
-          <View style={[styles.imageAnonymContainer]}>
-            <AnonymousAvatar anonUserInfo={anonUserInfo} version={version} />
-          </View>
-
-          <View style={[styles.containerFeedProfile]}>
-            <View style={[styles.containerFeedName, {alignItems: 'center'}]}>
-              <AnonymousUsername version={version} anonUserInfo={anonUserInfo} style={{flex: 0}} />
-              {!isSelf && (
-                <React.Fragment>
-                  <View style={styles.point} />
-                  <TouchableOpacity onPress={() => onPressFollUnFoll(isFollow)}>
-                    <Text style={isFollow ? styles.textFollowing : styles.textFollow}>
-                      {isFollow ? 'Following' : 'Follow'}
-                    </Text>
-                  </TouchableOpacity>
-                </React.Fragment>
-              )}
-            </View>
-            <GlobalButton
-              buttonStyle={{position: 'absolute', right: 0, top: -8}}
-              onPress={() => refSheet.current.open()}>
-              <View style={{zIndex: 1000}}>
-                <ElipsisIcon width={4} height={14} fill={colors.blackgrey} />
+      <BlurredLayer toastOnly={true} isVisible={isBlurredPost}>
+        <View
+          testID="anonymHeader"
+          style={[
+            styles.rowSpaceBeetwen,
+            styles.heightHeader(height),
+            {paddingLeft: isPostDetail ? 10 : 0}
+          ]}>
+          <View style={[styles.rowCenter, headerStyle]}>
+            {isBackButton ? (
+              <View testID="haveBackButton" style={[styles.btn]}>
+                <GlobalButton
+                  testID="onBack"
+                  onPress={() => {
+                    navigation.goBack();
+                  }}>
+                  <MemoIc_arrow_back height={20} width={20} />
+                </GlobalButton>
               </View>
-            </GlobalButton>
-            <View style={styles.containerFeedText}>
-              <Text style={styles.feedDate}>{calculateTime(time)}</Text>
-              <View style={styles.point} />
-              {privacy.toLowerCase() === PRIVACY_PUBLIC ? (
-                <Memoic_globe height={16} width={16} />
-              ) : (
-                <MemoPeopleFollow height={16} width={16} />
-              )}
+            ) : null}
+            <View style={[styles.imageAnonymContainer]}>
+              <AnonymousAvatar
+                karmaScore={karmaScore}
+                anonUserInfo={anonUserInfo}
+                version={version}
+                withKarma
+              />
+            </View>
 
-              {duration_feed !== 'never' ? <View style={styles.point} /> : null}
-              {duration_feed !== 'never' ? validationTimer(time, duration_feed) : null}
-              <View style={styles.point} />
-              <Text style={styles.feedDate}>{location}</Text>
+            <View style={[styles.containerFeedProfile]}>
+              <View style={[styles.containerFeedName, {alignItems: 'center'}]}>
+                <AnonymousUsername version={version} anonUserInfo={anonUserInfo} />
+                {!isSelf && (
+                  <React.Fragment>
+                    <View style={styles.point} />
+                    <TouchableOpacity onPress={() => onPressFollUnFoll(isFollow)}>
+                      <Text style={isFollow ? styles.textFollowing : styles.textFollow}>
+                        {isFollow ? 'Following' : 'Follow'}
+                      </Text>
+                    </TouchableOpacity>
+                  </React.Fragment>
+                )}
+              </View>
+              {showAnonymousOption && !hideThreeDot && (
+                <GlobalButton
+                  buttonStyle={{position: 'absolute', right: 0, top: -8}}
+                  onPress={onHeaderOptionClicked}>
+                  <View style={{zIndex: 1000}}>
+                    <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
+                  </View>
+                </GlobalButton>
+              )}
+              <View style={styles.containerFeedText}>
+                <Text style={styles.feedDate}>{calculateTime(time)}</Text>
+                <View style={styles.point} />
+                {privacy.toLowerCase() === PRIVACY_PUBLIC ? (
+                  <MemoicGlobe height={16} width={16} />
+                ) : (
+                  <MemoPeopleFollow height={16} width={16} />
+                )}
+
+                {duration_feed !== 'never' ? <View style={styles.point} /> : null}
+                {duration_feed !== 'never' ? validationTimer(time, duration_feed) : null}
+                <View style={styles.point} />
+                <Text style={styles.feedDate}>{location}</Text>
+              </View>
             </View>
           </View>
         </View>
-      </View>
+      </BlurredLayer>
       <BottomSheetMenu
         refSheet={refSheet}
         dataSheet={dataSheet}
@@ -231,7 +245,10 @@ const _renderProfileNormal = ({
   onPressFollUnFoll = () => {},
   onDeletePost = () => {},
   isShowDelete = false,
-  isSelf = false
+  isSelf = false,
+  onHeaderOptionClicked = () => {},
+  hideThreeDot,
+  karmaScore = 0
 }) => {
   const refSheet = React.useRef();
   const dataSheet = [
@@ -252,7 +269,7 @@ const _renderProfileNormal = ({
         refSheet.current.close();
         onDeletePost();
       },
-      style: {color: colors.red}
+      style: {color: COLORS.red}
     });
   }
   const {navigateToProfile, username, profile_pic_url, onBackNormalUser} = useFeedHeader({
@@ -277,14 +294,13 @@ const _renderProfileNormal = ({
             </View>
           ) : null}
           <GlobalButton onPress={navigateToProfile}>
-            <View style={{}}>
-              <Image
-                source={{
-                  uri: profile_pic_url ?? DEFAULT_PROFILE_PIC_PATH
-                }}
-                style={styles.avatarImage}
-              />
-            </View>
+            <ProfilePicture
+              karmaScore={karmaScore}
+              profilePicPath={profile_pic_url ?? DEFAULT_PROFILE_PIC_PATH}
+              size={50}
+              width={3}
+              withKarma
+            />
           </GlobalButton>
           <GlobalButton
             onPress={navigateToProfile}
@@ -308,17 +324,19 @@ const _renderProfileNormal = ({
 
               <GlobalButton
                 buttonStyle={{marginLeft: 'auto', paddingBottom: 0, alignSelf: 'center'}}
-                onPress={() => refSheet.current.open()}>
-                <View style={{zIndex: 1000}}>
-                  <ElipsisIcon width={4} height={14} fill={colors.blackgrey} />
-                </View>
+                onPress={onHeaderOptionClicked}>
+                {hideThreeDot ? null : (
+                  <View style={{zIndex: 1000}}>
+                    <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
+                  </View>
+                )}
               </GlobalButton>
             </View>
             <View style={[styles.containerFeedText, {paddingBottom: 0}]}>
               <Text style={styles.feedDate}>{calculateTime(time)}</Text>
               <View style={styles.point} />
               {privacy?.toLowerCase() === PRIVACY_PUBLIC ? (
-                <Memoic_globe height={16} width={16} />
+                <MemoicGlobe height={16} width={16} />
               ) : (
                 <MemoPeopleFollow height={16} width={16} />
               )}
@@ -354,7 +372,9 @@ const Header = ({
   onPressFollUnFoll = () => {},
   onDeletePost = () => {},
   isShowDelete = false,
-  isSelf = false
+  isSelf = false,
+  onHeaderOptionClicked = () => {},
+  hideThreeDot
 }) => {
   const {
     anonimity,
@@ -368,7 +388,8 @@ const Header = ({
     anon_user_info_color_name,
     anon_user_info_emoji_code,
     anon_user_info_emoji_name,
-    version = 1
+    version = 1,
+    isBlurredPost
   } = props;
   if (anonimity) {
     return _renderAnonimity({
@@ -393,7 +414,9 @@ const Header = ({
       onPressFollUnFoll,
       onDeletePost,
       isShowDelete,
-      isSelf
+      isSelf,
+      karmaScore: props?.karma_score,
+      isBlurredPost
     });
   }
   return _renderProfileNormal({
@@ -412,7 +435,10 @@ const Header = ({
     onPressFollUnFoll,
     onDeletePost,
     isShowDelete,
-    isSelf
+    isSelf,
+    onHeaderOptionClicked: () => onHeaderOptionClicked(props),
+    hideThreeDot,
+    karmaScore: props?.karma_score
   });
 };
 
@@ -444,7 +470,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
     lineHeight: 16.94,
-    color: colors.black
+    color: COLORS.black,
+    flex: 1
   },
   containerFeedText: {
     flexDirection: 'row',
@@ -456,21 +483,21 @@ const styles = StyleSheet.create({
   feedDate: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.blackgrey,
+    color: COLORS.blackgrey,
     lineHeight: 18
   },
   feedDateLocation: {
     flex: 1,
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.blackgrey,
+    color: COLORS.blackgrey,
     lineHeight: 18
   },
   point: {
     width: 2,
     height: 2,
     borderRadius: 4,
-    backgroundColor: colors.gray,
+    backgroundColor: COLORS.blackgrey,
     marginLeft: 8,
     marginRight: 8,
     alignSelf: 'center',
@@ -484,26 +511,26 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 14,
     lineHeight: 24,
-    color: colors.black
+    color: COLORS.black
   },
   textComment: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
     lineHeight: 18,
-    color: colors.gray
+    color: COLORS.blackgrey
   },
   usernameComment: {
     fontFamily: fonts.inter[500],
     fontWeight: '900',
     fontSize: 12,
     lineHeight: 24,
-    color: colors.black
+    color: COLORS.black
   },
   usernameTextComment: {
     fontFamily: fonts.inter[500],
     fontSize: 12,
     lineHeight: 24,
-    color: colors.gray
+    color: COLORS.blackgrey
   },
   item: {
     width: screenWidth - 20,
@@ -537,20 +564,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   textFollow: {
-    color: colors.bluePrimary,
+    color: COLORS.bluePrimary,
     fontSize: normalizeFontSize(14),
     fontStyle: 'normal',
     fontWeight: '500'
   },
   textFollowing: {
-    color: colors.greySubtile1,
+    color: COLORS.greySubtile1,
     fontSize: normalizeFontSize(14),
     fontStyle: 'normal',
     fontWeight: '500'
   }
 });
 
-Header.propsTypes = {
+Header.propTypes = {
   props: PropsTypes.object,
   isBackButton: PropsTypes.bool
 };

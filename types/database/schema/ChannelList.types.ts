@@ -28,13 +28,22 @@ export interface ChannelListMemberSchema {
   joinedAt: string;
   user: UserSchema | null;
 }
+
+export type BetterSocialChannelType =
+  | 'PM'
+  | 'GROUP'
+  | 'ANON_PM'
+  | 'POST_NOTIFICATION'
+  | 'ANON_POST_NOTIFICATION'
+  | 'TOPIC';
+
 export interface ChannelList {
   id: string;
   channelPicture: string;
   name: string;
   description: string;
   unreadCount: number;
-  channelType: string;
+  channelType: BetterSocialChannelType;
   lastUpdatedAt: string;
   lastUpdatedBy: string;
   createdAt: string;
@@ -42,7 +51,12 @@ export interface ChannelList {
   rawJson: any;
   user: UserSchema | null;
   members: ChannelListMemberSchema[] | null;
+  memberUsers: UserSchema[] | null;
   setRead: (db: any) => Promise<void>;
+  anon_user_info_emoji_name: string | null;
+  anon_user_info_emoji_code: string | null;
+  anon_user_info_color_code: string | null;
+  anon_user_info_color_name: string | null;
 }
 
 export interface ChatSchema {

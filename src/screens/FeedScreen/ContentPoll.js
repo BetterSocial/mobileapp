@@ -7,7 +7,6 @@ import PollOptions from '../../components/PollOptions';
 import PollOptionsMultipleChoice from '../../components/PollOptionsMultipleChoice';
 import useContentPoll from './hooks/useContentPoll';
 import {COLORS} from '../../utils/theme';
-import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {getPollTime, isPollExpired} from '../../utils/string/StringUtils';
 
@@ -25,7 +24,8 @@ const ContentPoll = ({
   voteCount = 0,
   onLayout = () => {},
   currentMoment = moment(),
-  isPostDetail = false
+  isPostDetail = false,
+  containerStyle
 }) => {
   const {
     renderSeeResultButton,
@@ -56,7 +56,7 @@ const ContentPoll = ({
     renderSeeResultButton(multiplechoice, multipleChoiceSelected);
 
   return (
-    <View onLayout={onLayout} style={[styles.containerShowMessage]}>
+    <View onLayout={onLayout} style={[styles.containerShowMessage, containerStyle]}>
       <View style={styles.pollOptionsContainer}>
         <Text style={styles.voteFont}>All votes are anonymous - even to the poll’s author!</Text>
         <View style={isPostDetail ? styles.pollContainer : styles.pollListContainer}>
@@ -102,7 +102,7 @@ const ContentPoll = ({
             height: 4,
             borderRadius: 4,
             alignSelf: 'center',
-            backgroundColor: colors.blackgrey
+            backgroundColor: COLORS.blackgrey
           }}
         />
         <Text style={styles.polltime}>{` ${getPollTime(pollexpiredat, currentMoment)}`}</Text>
@@ -132,7 +132,7 @@ const stylesComponent = (pollLength) =>
       height: 4,
       borderRadius: 4,
       alignSelf: 'center',
-      backgroundColor: colors.blackgrey
+      backgroundColor: COLORS.blackgrey
     },
     fletlist: {
       flex: 1
@@ -161,7 +161,7 @@ const stylesComponent = (pollLength) =>
       fontFamily: fonts.inter[600],
       fontWeight: 'bold',
       fontSize: normalizeFontSize(14),
-      color: colors.black
+      color: COLORS.black
     },
     containerFeedText: {
       flexDirection: 'row',
@@ -171,14 +171,14 @@ const stylesComponent = (pollLength) =>
     feedDate: {
       fontFamily: fonts.inter[400],
       fontSize: normalizeFontSize(12),
-      color: colors.black,
+      color: COLORS.black,
       lineHeight: 18
     },
     point: {
       width: 4,
       height: 4,
       borderRadius: 4,
-      backgroundColor: colors.gray,
+      backgroundColor: COLORS.blackgrey,
       marginLeft: 8,
       marginRight: 8
     },
@@ -193,26 +193,26 @@ const stylesComponent = (pollLength) =>
       fontFamily: fonts.inter[400],
       fontSize: normalizeFontSize(24),
       lineHeight: 24,
-      color: colors.black
+      color: COLORS.black
     },
     textComment: {
       fontFamily: fonts.inter[400],
       fontSize: normalizeFontSize(12),
       lineHeight: 18,
-      color: colors.gray
+      color: COLORS.blackgrey
     },
     usernameComment: {
       fontFamily: fonts.inter[500],
       fontWeight: '900',
       fontSize: normalizeFontSize(12),
       lineHeight: 24,
-      color: colors.black
+      color: COLORS.black
     },
     usernameTextComment: {
       fontFamily: fonts.inter[500],
       fontSize: normalizeFontSize(12),
       lineHeight: 24,
-      color: colors.gray
+      color: COLORS.blackgrey
     },
     item: {
       width: screenWidth - 20,
@@ -244,14 +244,14 @@ const stylesComponent = (pollLength) =>
       marginBottom: 0
     },
     pollOptionItemContainer: {
-      backgroundColor: colors.lightgrey,
+      backgroundColor: COLORS.lightgrey,
       marginBottom: 8,
       borderRadius: 8,
       display: 'flex',
       flexDirection: 'row'
     },
     pollOptionItemContainerActive: {
-      backgroundColor: colors.holytosca30percent,
+      backgroundColor: COLORS.holytosca30percent,
       marginBottom: 8,
       borderRadius: 8,
       display: 'flex',
@@ -266,20 +266,20 @@ const stylesComponent = (pollLength) =>
     },
     pollOptionItemText: {
       flex: 1,
-      color: colors.black,
+      color: COLORS.black,
       fontFamily: fonts.inter[400]
     },
     totalpolltext: {
       fontFamily: fonts.inter[400],
       fontSize: normalizeFontSize(12),
       lineHeight: 16,
-      color: colors.blackgrey
+      color: COLORS.blackgrey
     },
     polltime: {
       fontFamily: fonts.inter[400],
       fontSize: normalizeFontSize(12),
       lineHeight: 16,
-      color: colors.blackgrey,
+      color: COLORS.blackgrey,
       alignSelf: 'center',
       flex: 1
     },
@@ -288,7 +288,7 @@ const stylesComponent = (pollLength) =>
       height: 12,
       alignSelf: 'center',
       borderRadius: 6,
-      borderColor: colors.black,
+      borderColor: COLORS.black,
       borderWidth: 1,
       marginEnd: 12
     },
@@ -298,7 +298,7 @@ const stylesComponent = (pollLength) =>
       height: 12,
       alignSelf: 'center',
       borderRadius: 6,
-      backgroundColor: colors.holytosca,
+      backgroundColor: COLORS.anon_primary,
       marginEnd: 12
     },
     totalVotesContainer: {
@@ -310,7 +310,7 @@ const stylesComponent = (pollLength) =>
       alignSelf: 'center'
     },
     seeresultstext: {
-      color: colors.holytosca,
+      color: COLORS.anon_primary,
       fontFamily: fonts.inter[500],
       fontSize: normalizeFontSize(14)
     },
@@ -318,7 +318,7 @@ const stylesComponent = (pollLength) =>
       fontFamily: fonts.inter[400],
       fontWeight: 'normal',
       fontSize: normalizeFontSize(FONT_SIZE_MEDIA),
-      color: colors.black,
+      color: COLORS.black,
       lineHeight: 24
     },
 
@@ -334,7 +334,7 @@ const stylesComponent = (pollLength) =>
     },
     voteFont: {
       fontSize: normalizeFontSize(12),
-      color: '#828282',
+      color: COLORS.blackgrey,
       marginLeft: 2
     }
   });

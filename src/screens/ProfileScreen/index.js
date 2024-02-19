@@ -1,6 +1,8 @@
+import netInfo from '@react-native-community/netinfo';
+import {useNavigation} from '@react-navigation/core';
+import {debounce} from 'lodash';
+import PropTypes from 'prop-types';
 import * as React from 'react';
-import ImagePicker from 'react-native-image-crop-picker';
-import Toast from 'react-native-simple-toast';
 import {
   ActivityIndicator,
   Alert,
@@ -13,28 +15,21 @@ import {
   TouchableNativeFeedback,
   View
 } from 'react-native';
-import PropTypes from 'prop-types';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {debounce} from 'lodash';
 import {showMessage} from 'react-native-flash-message';
-import {useNavigation} from '@react-navigation/core';
-import netInfo from '@react-native-community/netinfo';
-import AnonymousTab from './elements/AnonymousTab';
+import ImagePicker from 'react-native-image-crop-picker';
+import Toast from 'react-native-simple-toast';
+
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
-import BioAndDMSetting from './elements/BioAndDMSetting';
 import BlockComponent from '../../components/BlockComponent';
-import BottomSheetBio from './elements/BottomSheetBio';
-import BottomSheetImage from './elements/BottomSheetImage';
-import BottomSheetRealname from './elements/BottomSheetRealname';
+import {ButtonNewPost} from '../../components/Button';
+import ShadowFloatingButtons from '../../components/Button/ShadowFloatingButtons';
 import CustomPressable from '../../components/CustomPressable';
-import FollowInfoRow from './elements/FollowInfoRow';
-import LinkAndSocialMedia from './elements/LinkAndSocialMedia';
-import ProfileHeader from './elements/ProfileHeader';
-import ProfilePicture from './elements/ProfilePicture';
-import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
-import RenderItem from '../FeedScreen/RenderList';
-import ShareUtils from '../../utils/share';
-import dimen from '../../utils/dimen';
+import PostOptionModal from '../../components/Modal/PostOptionModal';
+import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import {Context} from '../../context';
+import {setFeedByIndex, setTimer} from '../../context/actions/feeds';
+import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
+import {setMyProfileAction} from '../../context/actions/setMyProfileAction';
 import useResetContext from '../../hooks/context/useResetContext';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
@@ -43,10 +38,9 @@ import useProfileScreenHook, {
   TAB_INDEX_ANONYMOUS,
   TAB_INDEX_SIGNED
 } from '../../hooks/screen/useProfileScreenHook';
+import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
-import {ButtonNewPost} from '../../components/Button';
-import {Context} from '../../context';
-import {DEFAULT_PROFILE_PIC_PATH, SOURCE_MY_PROFILE} from '../../utils/constants';
+import {deleteAnonymousPost, deletePost, viewTimePost} from '../../service/post';
 import {
   changeRealName,
   getMyProfile,
@@ -55,21 +49,37 @@ import {
   updateBioProfile,
   updateImageProfile
 } from '../../service/profile';
-import {colors} from '../../utils/colors';
-import {deleteAnonymousPost, deletePost} from '../../service/post';
 import {downVote, upVote} from '../../service/vote';
+import {
+  DEFAULT_PROFILE_PIC_PATH,
+  NavigationConstants,
+  SOURCE_FEED_TAB,
+  SOURCE_MY_PROFILE
+} from '../../utils/constants';
+import dimen from '../../utils/dimen';
 import {fonts} from '../../utils/fonts';
+import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
+import ImageCompressionUtils from '../../utils/image/compress';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
-import {setFeedByIndex} from '../../context/actions/feeds';
-import {setMyProfileAction} from '../../context/actions/setMyProfileAction';
-import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
-import {useAfterInteractions} from '../../hooks/useAfterInteractions';
-import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
-import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import ShadowFloatingButtons from '../../components/Button/ShadowFloatingButtons';
-import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
+import ShareUtils from '../../utils/share';
 import StorageUtils from '../../utils/storage';
+import {COLORS} from '../../utils/theme';
+import RenderItem from '../FeedScreen/RenderList';
+import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
+import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
+import AnonymousTab from './elements/AnonymousTab';
+import BioAndDMSetting from './elements/BioAndDMSetting';
+import BottomSheetBio from './elements/BottomSheetBio';
+import BottomSheetImage from './elements/BottomSheetImage';
+import BottomSheetRealname from './elements/BottomSheetRealname';
+import FollowInfoRow from './elements/FollowInfoRow';
+import {KarmaLock} from './elements/KarmaLock';
+import {KarmaScore} from './elements/KarmaScore';
+import LinkAndSocialMedia from './elements/LinkAndSocialMedia';
+import ProfileHeader from './elements/ProfileHeader';
+import ProfilePicture from './elements/ProfilePicture';
+import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
 
 const {width} = Dimensions.get('screen');
 
@@ -87,7 +97,18 @@ const Header = (props) => {
     setTabIndexToSigned,
     setTabIndexToAnonymous
   } = props;
+  const navigator = useNavigation();
+  const [feedsContext, dispatch] = React.useContext(Context).feeds;
 
+  const {feeds, timer, viewPostTimeIndex} = feedsContext;
+  // eslint-disable-next-line no-underscore-dangle
+  const handleOnAddPostButtonClicked = () => {
+    const currentTime = new Date().getTime();
+    const id = feeds && feeds[viewPostTimeIndex]?.id;
+    if (id) viewTimePost(id, currentTime - timer.getTime(), SOURCE_FEED_TAB);
+    navigator.navigate(NavigationConstants.CREATE_POST_SCREEN);
+    setTimer(new Date(), dispatch);
+  };
   return (
     <View
       onLayout={(event) => {
@@ -99,8 +120,22 @@ const Header = (props) => {
           <ProfilePicture
             onImageContainerClick={changeImage}
             profilePicPath={dataMain.profile_pic_path}
+            karmaScore={dataMain.is_karma_unlocked ? dataMain.karma_score : 0}
+            withKarma={true}
+            size={!dataMain.is_karma_unlocked ? 48 : undefined}
+            width={!dataMain.is_karma_unlocked ? 4 : undefined}
           />
-          <View style={{marginLeft: 20}}>
+          <View
+            style={{
+              flexDirection: 'column',
+              paddingHorizontal: 14,
+              justifyContent: 'center'
+            }}>
+            {dataMain.is_karma_unlocked ? (
+              <KarmaScore score={Math.floor(dataMain.karma_score)} />
+            ) : (
+              <KarmaLock onPressCreatePost={handleOnAddPostButtonClicked} />
+            )}
             <FollowInfoRow
               follower={dataMain.follower_symbol}
               following={dataMain.following_symbol}
@@ -166,11 +201,10 @@ const ProfileScreen = ({route}) => {
   const [opacity, setOpacity] = React.useState(0);
   const [tempBio, setTempBio] = React.useState('');
   const [tempFullName, setTempFullName] = React.useState('');
-  const [isLoadingUpdateImageGalery, setIsLoadingUpdateImageGalery] = React.useState(false);
+  const [isLoadingUpdateImageGallery, setIsLoadingUpdateImageGallery] = React.useState(false);
   const [isLoadingUpdateImageCamera, setIsLoadingUpdateImageCamera] = React.useState(false);
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0);
-  const [isLastPage, setIsLastPage] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [selectedPostForOption, setSelectedPostForOption] = React.useState(null);
   const [isFetchingList, setIsFetchingList] = React.useState(false);
@@ -182,6 +216,7 @@ const ProfileScreen = ({route}) => {
   const {refreshCount} = useResetContext();
   const {mappingColorFeed} = useCoreFeed();
   const LIMIT_PROFILE_FEED = 10;
+  const TYPE_GALLERY = 'gallery';
 
   const {feeds} = myProfileFeed;
   const {
@@ -193,6 +228,8 @@ const ProfileScreen = ({route}) => {
     reloadFetchAnonymousPost,
     getProfileCache
   } = useProfileScreenHook();
+
+  const {fetchNextFeeds} = useFeedPreloadHook(mainFeeds?.length, () => getMyFeeds(postOffset));
   // eslint-disable-next-line consistent-return
   React.useEffect(() => {
     if (interactionsComplete) {
@@ -226,7 +263,6 @@ const ProfileScreen = ({route}) => {
     const status = await netInfo.fetch();
     if (status.isConnected) {
       getMyFeeds(0, LIMIT_PROFILE_FEED);
-      console.log('masuka');
     } else {
       setMyProfileFeed(JSON.parse(cacheFeed), myProfileDispatch);
     }
@@ -270,9 +306,6 @@ const ProfileScreen = ({route}) => {
       const result = await getSelfFeedsInProfile(offset, limit);
       const {data: dataMyFeed} = result;
       const {mapNewData} = mappingColorFeed({dataFeed: dataMyFeed, dataCache: cacheFeed});
-      if (Array.isArray(result.data) && result.data.length === 0) {
-        setIsLastPage(true);
-      }
       if (offset === 0) {
         StorageUtils.myFeeds.set(JSON.stringify(mapNewData));
         setMyProfileFeed(mapNewData, myProfileDispatch);
@@ -374,7 +407,7 @@ const ProfileScreen = ({route}) => {
         mediaType: 'photo',
         includeBase64: true
       }).then((imageRes) => {
-        handleUpdateImage(`data:image/jpeg;base64,${imageRes.data}`, 'gallery');
+        handleUpdateImage(`data:image/jpeg;base64,${imageRes.data}`, TYPE_GALLERY);
       });
     } else {
       openAlertPermission(
@@ -417,37 +450,50 @@ const ProfileScreen = ({route}) => {
     });
   };
 
-  const handleUpdateImage = (value, type) => {
-    if (type === 'gallery') {
-      setIsLoadingUpdateImageGalery(true);
-    } else {
-      setIsLoadingUpdateImageCamera(true);
-    }
-    const data = {
-      profile_pic_path: value
-    };
+  const handleUpdateImage = async (imgBase64, type) => {
+    try {
+      if (type === TYPE_GALLERY) {
+        setIsLoadingUpdateImageGallery(true);
+      } else {
+        setIsLoadingUpdateImageCamera(true);
+      }
+      const compressionResult = await ImageCompressionUtils.compress(imgBase64, 'base64');
+      const data = {
+        profile_pic_path: compressionResult
+      };
 
-    updateImageProfile(data)
-      .then(async (res) => {
-        if (type === 'gallery') {
-          setIsLoadingUpdateImageGalery(false);
-        } else {
-          setIsLoadingUpdateImageCamera(false);
-        }
-        if (res.code === 200) {
-          closeImageBs();
-          getMyFeeds();
-          const profilePicture = await fetchMyProfile(true);
-          updateUserClient(profilePicture);
-        }
-      })
-      .catch(() => {
-        if (type === 'gallery') {
-          setIsLoadingUpdateImageGalery(false);
-        } else {
-          setIsLoadingUpdateImageCamera(false);
-        }
+      updateImageProfile(data)
+        .then(async (res) => {
+          if (type === TYPE_GALLERY) {
+            setIsLoadingUpdateImageGallery(false);
+          } else {
+            setIsLoadingUpdateImageCamera(false);
+          }
+          if (res.code === 200) {
+            closeImageBs();
+            getMyFeeds();
+            const profilePicture = await fetchMyProfile(true);
+            updateUserClient(profilePicture);
+          }
+        })
+        .catch(() => {
+          if (type === TYPE_GALLERY) {
+            setIsLoadingUpdateImageGallery(false);
+          } else {
+            setIsLoadingUpdateImageCamera(false);
+          }
+        });
+    } catch (error) {
+      showMessage({
+        message: 'Failed to update profile',
+        type: 'danger'
       });
+      if (type === TYPE_GALLERY) {
+        setIsLoadingUpdateImageGallery(false);
+      } else {
+        setIsLoadingUpdateImageCamera(false);
+      }
+    }
   };
 
   const handleRemoveImageProfile = async () => {
@@ -478,6 +524,7 @@ const ProfileScreen = ({route}) => {
   };
 
   const debounceModalOpen = debounce(() => {
+    setTempBio(profile?.myProfile?.bio);
     bottomSheetBioRef.current.open();
   }, 350);
 
@@ -538,6 +585,17 @@ const ProfileScreen = ({route}) => {
     });
   };
 
+  const onPressComment = (item, haveSeeMore) => {
+    navigation.navigate('PostDetailPage', {
+      isalreadypolling: item.isalreadypolling,
+      feedId: item.id,
+      refreshParent: profileTabIndex === 0 ? getMyFeeds : reloadFetchAnonymousPost,
+      haveSeeMore,
+      data: item,
+      isKeyboardOpen: true
+    });
+  };
+
   const onNewPollFetched = (newPolls, index) => {
     setFeedByIndex(
       {
@@ -556,15 +614,8 @@ const ProfileScreen = ({route}) => {
     await downVote(post);
   };
 
-  const handleOnEndReached = () => {
-    if (!isLastPage) {
-      getMyFeeds(postOffset);
-    }
-  };
-
   function handleRefresh() {
     setLoading(true);
-    setIsLastPage(false);
     getMyFeeds(0, LIMIT_PROFILE_FEED);
     reloadFetchAnonymousPost();
     fetchMyProfile(true);
@@ -590,9 +641,8 @@ const ProfileScreen = ({route}) => {
     if (isProfileTabSigned) return getMyFeeds();
     return reloadFetchAnonymousPost();
   };
-
   return (
-    <SafeAreaProvider style={styles.container} forceInset={{top: 'always'}}>
+    <View style={styles.container} forceInset={{top: 'always'}}>
       <StatusBar translucent={false} />
       <ProfileHeader
         showArrow={isNotFromHomeTab}
@@ -608,12 +658,12 @@ const ProfileScreen = ({route}) => {
         style={styles.flatlistContainer}
         onScroll={handleScroll}
         ListFooterComponent={isFetchingList ? <ActivityIndicator /> : null}
-        onEndReach={handleOnEndReached}
         initialNumToRender={2}
         maxToRenderPerBatch={2}
         updateCellsBatchingPeriod={10}
         removeClippedSubviews
         windowSize={10}
+        onMomentumScrollEnd={(event) => fetchNextFeeds(event)}
         ListHeaderComponent={
           <Header
             headerHeightRef={headerHeightRef}
@@ -638,7 +688,7 @@ const ProfileScreen = ({route}) => {
               index={index}
               onPressDomain={onPressDomain}
               onPress={(haveSeeMore) => onPress(item, haveSeeMore)}
-              onPressComment={(haveSeeMore) => onPress(item, haveSeeMore)}
+              onPressComment={(haveSeeMore) => onPressComment(item, haveSeeMore)}
               onPressUpvote={(post) => setUpVote(post)}
               selfUserId={profile.myProfile.user_id}
               onPressDownVote={(post) => setDownVote(post)}
@@ -676,7 +726,7 @@ const ProfileScreen = ({route}) => {
         onOpenImageGalery={() => onOpenImageGalery()}
         onOpenCamera={() => onOpenCamera()}
         handleRemoveImageProfile={() => handleRemoveImageProfile()}
-        isLoadingUpdateImageGalery={isLoadingUpdateImageGalery}
+        isLoadingUpdateImageGallery={isLoadingUpdateImageGallery}
         isLoadingUpdateImageCamera={isLoadingUpdateImageCamera}
         isLoadingRemoveImage={isLoadingRemoveImage}
       />
@@ -686,37 +736,43 @@ const ProfileScreen = ({route}) => {
         <ShadowFloatingButtons>
           <TouchableNativeFeedback onPress={toTop}>
             <View style={{...styles.btnBottom, opacity}}>
-              <ArrowUpWhiteIcon width={12} height={20} fill={colors.white} />
+              <ArrowUpWhiteIcon width={12} height={20} fill={COLORS.white} />
             </View>
           </TouchableNativeFeedback>
         </ShadowFloatingButtons>
       ) : null}
 
       <BlockComponent ref={refBlockComponent} refresh={getMyFeeds} screen="my_profile" />
-    </SafeAreaProvider>
+      <PostOptionModal
+        isOpen={isPostOptionModalOpen}
+        onClose={onHeaderOptionClosed}
+        onDeleteClicked={onDeletePost}
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white,
+    backgroundColor: COLORS.white,
     height: '100%'
   },
   content: {
     flexDirection: 'column',
     paddingHorizontal: 20,
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white,
+    paddingVertical: 11
   },
   dummyItem: (heightItem) => ({
     height: heightItem,
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   }),
   postText: (isActive) => ({
     fontFamily: isActive ? fonts.inter[600] : fonts.inter[400],
     fontSize: 14,
     lineHeight: 17,
-    color: isActive ? colors.bondi_blue : colors.blackgrey,
+    color: isActive ? COLORS.signed_primary : COLORS.blackgrey,
     paddingHorizontal: 16,
     textAlign: 'center'
   }),
@@ -728,7 +784,7 @@ const styles = StyleSheet.create({
     width: dimen.size.PROFILE_ACTION_BUTTON_RADIUS,
     height: dimen.size.PROFILE_ACTION_BUTTON_RADIUS,
 
-    backgroundColor: colors.darkBlue,
+    backgroundColor: COLORS.signed_primary,
     borderRadius: 30,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -741,28 +797,28 @@ const styles = StyleSheet.create({
   seeMore: {
     fontFamily: fonts.inter[500],
     fontSize: 14,
-    color: colors.black
+    color: COLORS.black
   },
   tabs: {
     width,
-    borderBottomColor: colors.alto,
+    borderBottomColor: COLORS.lightgrey,
     borderBottomWidth: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   tabItem: (isActive) => ({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     height: 48,
-    borderBottomColor: colors.bondi_blue,
+    borderBottomColor: COLORS.signed_primary,
     borderBottomWidth: isActive ? 2 : 0
   }),
   tabsFixed: {
     width,
-    borderBottomColor: colors.alto,
+    borderBottomColor: COLORS.lightgrey,
     borderBottomWidth: 1,
     paddingLeft: 20,
     paddingRight: 20,
@@ -770,7 +826,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 42,
     zIndex: 2000,
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   },
   nameProfile: {
     fontFamily: fonts.inter[800],
@@ -778,7 +834,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 17,
     marginTop: 12,
-    color: colors.black
+    color: COLORS.black
   },
 
   containerLoading: {
@@ -790,14 +846,14 @@ const styles = StyleSheet.create({
     paddingLeft: 0
   },
   tooltipText: {
-    color: '#828282',
+    color: COLORS.blackgrey,
     fontFamily: 'Inter',
     fontSize: 12,
     fontStyle: 'normal',
     fontWeight: '400'
   },
   flatlistContainer: {
-    backgroundColor: 'white'
+    backgroundColor: COLORS.white
   }
 });
 

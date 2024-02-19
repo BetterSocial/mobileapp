@@ -43,6 +43,13 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
     const selectedJson = selectedChannel?.rawJson;
     const itemJson = item?.rawJson;
 
+    if (item?.user?.anon_user_info_color_code) {
+      return renderAnonymousAvatar(
+        item?.user?.anon_user_info_color_code,
+        item?.user?.anon_user_info_emoji_code
+      );
+    }
+
     if (type === ANONYMOUS) {
       if (!item?.isMe && item?.user?.username !== ANONYMOUS_USER) return renderSignedAvatar();
 
@@ -73,13 +80,14 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
     return <BaseSystemChat item={item} index={index} />;
   }
 
-  if (item?.isMe)
+  if (item?.isMe) {
     return (
       <ChatItemMyTextV2
         key={index}
         avatar={handleAvatar()}
         isContinuous={item?.isContinuous}
         message={item?.message}
+        attachments={item?.attachmentJson}
         time={calculateTime(item?.updatedAt, true)}
         username={handleUserName(item)}
         type={BaseChatItemTypeProps.MY_ANON_CHAT}
@@ -87,6 +95,7 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
         chatType={type}
       />
     );
+  }
 
   return (
     <ChatItemTargetText

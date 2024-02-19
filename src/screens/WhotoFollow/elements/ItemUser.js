@@ -1,12 +1,14 @@
 import * as React from 'react';
 import {Animated, Pressable, StyleSheet, View} from 'react-native';
 
+import PropTypes from 'prop-types';
 import IconAdd from '../../../assets/icon/IconAdd';
 import IconCheck from '../../../assets/icon/IconCheck';
 import UserInfo from './UserInfo';
 import dimen from '../../../utils/dimen';
+import {COLORS} from '../../../utils/theme';
 
-const ItemUser = ({photo, username, bio, followed, onPress, userid}) => {
+const ItemUser = ({photo, username, bio, followed, onPress, userid, karmaScore}) => {
   const followIconFadeAnimation = React.useRef(new Animated.Value(0)).current;
 
   React.useEffect(() => {
@@ -25,7 +27,7 @@ const ItemUser = ({photo, username, bio, followed, onPress, userid}) => {
 
   return (
     <View style={styles.containerCard}>
-      <UserInfo photo={photo} bio={bio} username={username} />
+      <UserInfo photo={photo} bio={bio} username={username} karmaScore={karmaScore} />
       <View style={styles.containerButton}>
         <Pressable onPress={onPress} style={styles.followAction(32, 32)}>
           <Animated.View style={{position: 'absolute', opacity: 1}}>
@@ -39,7 +41,7 @@ const ItemUser = ({photo, username, bio, followed, onPress, userid}) => {
             <IconCheck
               width={dimen.normalizeDimen(32)}
               height={dimen.normalizeDimen(32)}
-              fill="#23C5B6"
+              fill={COLORS.signed_primary}
             />
           </Animated.View>
         </Pressable>
@@ -49,6 +51,15 @@ const ItemUser = ({photo, username, bio, followed, onPress, userid}) => {
 };
 
 // const MemoItemUser = React.memo(ItemUser, isPropsEqual);
+ItemUser.propTypes = {
+  photo: PropTypes.string,
+  username: PropTypes.string,
+  bio: PropTypes.string,
+  followed: PropTypes.array,
+  onPress: PropTypes.func,
+  userid: PropTypes.string,
+  karmaScore: PropTypes.number
+};
 export default ItemUser;
 const styles = StyleSheet.create({
   containerCard: {

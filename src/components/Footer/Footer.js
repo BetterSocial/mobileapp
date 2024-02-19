@@ -17,11 +17,11 @@ import ShareBlack from '../../assets/icons/images/share-black.svg';
 import {Context} from '../../context';
 import useDMMessage from '../../hooks/core/chat/useDMMessage';
 import useCreateChat from '../../hooks/screen/useCreateChat';
-import {colors} from '../../utils/colors';
+import BlurredLayer from '../../screens/FeedScreen/elements/BlurredLayer';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import dimen from '../../utils/dimen';
 import {normalizeFontSize} from '../../utils/fonts';
-import {FONTS} from '../../utils/theme';
+import {COLORS, FONTS} from '../../utils/theme';
 import BottomSheetMenu from '../BottomSheet/BottomSheetMenu';
 
 const Footer = ({
@@ -59,9 +59,17 @@ const Footer = ({
       return <View testID="blocker" />;
     }
     return (
-      <TouchableOpacity testID="onPressBlock" style={styles.btn} onPress={onPressBlock}>
+      <TouchableOpacity
+        testID="onPressBlock"
+        disabled={item?.isBlurredPost}
+        style={styles.btn}
+        onPress={onPressBlock}>
         <View style={styles.btnBlock}>
-          <MemoIc_block_inactive height={22} width={22} />
+          <MemoIc_block_inactive
+            color={item?.isBlurredPost ? COLORS.gray : undefined}
+            height={22}
+            width={22}
+          />
         </View>
       </TouchableOpacity>
     );
@@ -69,12 +77,12 @@ const Footer = ({
 
   const voteStyle = () => {
     if (totalVote > 0) {
-      return '#00ADB5';
+      return COLORS.anon_primary;
     }
     if (totalVote < 0) {
-      return '#FF2E63';
+      return COLORS.redalert;
     }
-    return '#C4C4C4';
+    return COLORS.balance_gray;
   };
 
   const username = item?.anon_user_info_emoji_name
@@ -139,107 +147,146 @@ const Footer = ({
   ];
 
   return (
-    <View style={[styles.rowSpaceBeetwen, styles.container]}>
-      <View style={styles.leftGroupContainer}>
-        {isShowDM && !isSelf ? (
-          <TouchableOpacity
-            testID="sendDM"
-            style={styles.btn}
-            onPress={() => refSheet.current.open()}>
-            <View style={styles.btnDM}>
-              <View style={styles.card}>
-                <MemoIc_senddm height={20} width={21} />
-                <Text style={styles.textDM}>DM</Text>
+    <BlurredLayer toastOnly={true} isVisible={item?.isBlurredPost}>
+      <View style={[styles.rowSpaceBetween, styles.container]}>
+        <View style={styles.leftGroupContainer}>
+          {isShowDM && !isSelf ? (
+            <TouchableOpacity
+              testID="sendDM"
+              style={styles.btn}
+              onPress={() => refSheet.current.open()}>
+              <View style={styles.btnDM}>
+                <View style={styles.card}>
+                  <MemoIc_senddm height={20} width={21} />
+                  <Text style={styles.textDM}>DM</Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity testID="shareBtn" style={styles.btn} onPress={onPressShare}>
+              <View style={styles.btnShare}>
+                <MemoIc_share height={20} width={21} />
+              </View>
+            </TouchableOpacity>
+          )}
+          {disableComment ? (
+            <View testID="disableComment" style={styles.btn}>
+              <View style={styles.btnComment}>
+                <MemoIc_comment
+                  color={item?.isBlurredPost ? COLORS.gray : undefined}
+                  height={24}
+                  width={25}
+                />
               </View>
             </View>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity testID="shareBtn" style={styles.btn} onPress={onPressShare}>
-            <View style={styles.btnShare}>
-              <MemoIc_share height={20} width={21} />
-            </View>
-          </TouchableOpacity>
-        )}
-        {disableComment ? (
-          <View testID="disableComment" style={styles.btn}>
-            <View style={styles.btnComment(isShowDM, isSelf)}>
-              <MemoIc_comment height={24} width={25} />
-            </View>
-          </View>
-        ) : (
-          <TouchableOpacity testID="availableComment" style={styles.btn} onPress={onPressComment}>
-            <View style={styles.btnComment(isShowDM, isSelf)}>
-              <MemoIc_comment height={24} width={25} />
-            </View>
-          </TouchableOpacity>
-        )}
-      </View>
-      {disableComment ? (
-        <View style={styles.totalCommentContainer}>
-          <Text style={styles.text}>{totalComment}</Text>
+          ) : (
+            <TouchableOpacity
+              testID="availableComment"
+              disabled={item?.isBlurredPost}
+              style={styles.btn}
+              onPress={onPressComment}>
+              <View style={styles.btnComment}>
+                <MemoIc_comment
+                  color={item?.isBlurredPost ? COLORS.gray : undefined}
+                  height={24}
+                  width={25}
+                />
+              </View>
+            </TouchableOpacity>
+          )}
         </View>
-      ) : (
-        <TouchableOpacity style={{flex: 1}} onPress={onPressComment}>
+        {disableComment ? (
           <View style={styles.totalCommentContainer}>
             <Text style={styles.text}>{totalComment}</Text>
           </View>
-        </TouchableOpacity>
-      )}
-      <View style={styles.rightGroupContainer}>
-        {showScoreButton ? (
-          <TouchableOpacity onPress={onPressScore}>
-            <Memoic_globe height={20} width={20} />
-          </TouchableOpacity>
         ) : (
-          <></>
+          <TouchableOpacity
+            disabled={item?.isBlurredPost}
+            style={{flex: 1}}
+            onPress={onPressComment}>
+            <View style={styles.totalCommentContainer}>
+              <Text style={styles.text}>{totalComment}</Text>
+            </View>
+          </TouchableOpacity>
         )}
-        {handleBlockUi()}
-        <TouchableOpacity
-          testID="downVoteBtn"
-          disabled={loadingVote}
-          style={styles.btn}
-          onPress={onPressDownVote}>
-          <View style={styles.btnDownvote}>
-            {statusVote === 'downvote' ? (
-              <View testID="downvoteOn">
-                <MemoIc_arrow_down_vote_on width={20} height={18} />
-              </View>
-            ) : (
-              <View testID="downvoteOff">
-                <MemoIc_arrow_down_vote_off width={20} height={18} />
-              </View>
-            )}
-          </View>
-        </TouchableOpacity>
+        <View style={styles.rightGroupContainer}>
+          {showScoreButton ? (
+            <TouchableOpacity disabled={item?.isBlurredPost} onPress={onPressScore}>
+              <Memoic_globe
+                color={item?.isBlurredPost ? COLORS.gray : undefined}
+                height={20}
+                width={20}
+              />
+            </TouchableOpacity>
+          ) : (
+            <></>
+          )}
+          {handleBlockUi()}
+          <TouchableOpacity
+            testID="downVoteBtn"
+            disabled={loadingVote || item?.isBlurredPost}
+            style={styles.btn}
+            onPress={onPressDownVote}>
+            <View style={styles.btnDownvote}>
+              {statusVote === 'downvote' ? (
+                <View testID="downvoteOn">
+                  <MemoIc_arrow_down_vote_on
+                    color={item?.isBlurredPost ? COLORS.gray : undefined}
+                    width={20}
+                    height={18}
+                  />
+                </View>
+              ) : (
+                <View testID="downvoteOff">
+                  <MemoIc_arrow_down_vote_off
+                    color={item?.isBlurredPost ? COLORS.gray : undefined}
+                    width={20}
+                    height={18}
+                  />
+                </View>
+              )}
+            </View>
+          </TouchableOpacity>
 
-        <Text style={styles.vote(voteStyle())}>{totalVote}</Text>
+          <Text style={styles.vote(voteStyle())}>{totalVote}</Text>
 
-        <TouchableOpacity
-          testID="pressUpvote"
-          disabled={loadingVote}
-          style={styles.btn}
-          onPress={onPressUpvote}>
-          <View style={styles.btnUpvote}>
-            {statusVote === 'upvote' ? (
-              <View testID="votingUpOn">
-                <MemoIc_arrow_upvote_on width={20} height={18} />
-              </View>
-            ) : (
-              <View testID="votingUpOff">
-                <MemoIc_arrow_upvote_off width={20} height={18} />
-              </View>
-            )}
-          </View>
-        </TouchableOpacity>
+          <TouchableOpacity
+            testID="pressUpvote"
+            disabled={loadingVote || item?.isBlurredPost}
+            style={styles.btn}
+            onPress={onPressUpvote}>
+            <View style={styles.btnUpvote}>
+              {statusVote === 'upvote' ? (
+                <View testID="votingUpOn">
+                  <MemoIc_arrow_upvote_on
+                    color={item?.isBlurredPost ? COLORS.gray : undefined}
+                    width={20}
+                    height={18}
+                  />
+                </View>
+              ) : (
+                <View testID="votingUpOff">
+                  <MemoIc_arrow_upvote_off
+                    color={item?.isBlurredPost ? COLORS.gray : undefined}
+                    width={20}
+                    height={18}
+                  />
+                </View>
+              )}
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
       <BottomSheetMenu refSheet={refSheet} dataSheet={dataSheet} />
-    </View>
+    </BlurredLayer>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center'
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.gray
   },
   leftGroupContainer: {
     flexDirection: 'row',
@@ -249,13 +296,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
-  rowSpaceBeetwen: {
+  rowSpaceBetween: {
     flexDirection: 'row',
     alignItems: 'center'
   },
   text: {
     ...FONTS.body3,
-    color: '#C4C4C4'
+    color: COLORS.balance_gray
   },
   vote: (colorBasedCount) => ({
     ...FONTS.body3,
@@ -284,7 +331,7 @@ const styles = StyleSheet.create({
   textDM: {
     fontSize: normalizeFontSize(12),
     fontWeight: '600',
-    color: colors.greySubtile1,
+    color: COLORS.greySubtile1,
     marginLeft: dimen.normalizeDimen(4),
     textAlignVertical: 'center'
   },
@@ -292,7 +339,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.white,
+    backgroundColor: COLORS.white,
     width: dimen.normalizeDimen(50),
     height: dimen.normalizeDimen(26),
     elevation: dimen.normalizeDimen(2),
@@ -333,6 +380,7 @@ const styles = StyleSheet.create({
 });
 
 Footer.propTypes = {
+  item: PropTypes.object,
   onPressShare: PropTypes.func,
   onPressComment: PropTypes.func,
   onPressBlock: PropTypes.func,
@@ -341,7 +389,12 @@ Footer.propTypes = {
   totalVote: PropTypes.number,
   totalComment: PropTypes.number,
   statusVote: PropTypes.oneOf(['none', 'upvote', 'downvote']),
-  isSelf: PropTypes.bool
+  isSelf: PropTypes.bool,
+  disableComment: PropTypes.bool,
+  blockStatus: PropTypes.any,
+  loadingVote: PropTypes.any,
+  showScoreButton: PropTypes.bool,
+  onPressScore: PropTypes.func
 };
 
 export default Footer;

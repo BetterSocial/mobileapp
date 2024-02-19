@@ -54,7 +54,7 @@ const HeaderContact = ({
         <Text
           style={[
             styles.text,
-            {color: disabledNextBtn ? COLORS.gray6 : COLORS.holyTosca},
+            {color: disabledNextBtn ? COLORS.gray6 : COLORS.anon_primary},
             subtitleStyle
           ]}>
           {subTitle}
@@ -82,7 +82,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: SIZES.base,
     alignItems: 'center'
   },
   content: (marginLeft) => ({

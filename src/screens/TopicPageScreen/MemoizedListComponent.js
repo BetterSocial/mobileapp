@@ -1,16 +1,14 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import {Dimensions, StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
 import SimpleToast from 'react-native-simple-toast';
-import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
 
 import {useRoute} from '@react-navigation/core';
-import Content from '../FeedScreen/Content';
-import ContentLink from '../FeedScreen/ContentLink';
-import Header from '../FeedScreen/Header';
-import ShareUtils from '../../utils/share';
-import StringConstant from '../../utils/string/StringConstant';
-import dimen from '../../utils/dimen';
-import useFeed from '../FeedScreen/hooks/useFeed';
+import {Footer, Gap, PreviewComment} from '../../components';
+import WriteComment from '../../components/Comments/WriteComment';
+import useWriteComment from '../../components/Comments/hooks/useWriteComment';
+import usePostHook from '../../hooks/core/post/usePostHook';
+import {showScoreAlertDialog} from '../../utils/Utils';
 import {
   ANALYTICS_SHARE_POST_TOPIC_ID,
   ANALYTICS_SHARE_POST_TOPIC_SCREEN,
@@ -18,12 +16,16 @@ import {
   POST_TYPE_POLL,
   POST_TYPE_STANDARD
 } from '../../utils/constants';
-import {Footer, Gap, PreviewComment} from '../../components';
-import {colors} from '../../utils/colors';
-import {getCommentLength, getCountCommentWithChild} from '../../utils/getstream';
-import {showScoreAlertDialog} from '../../utils/Utils';
+import dimen from '../../utils/dimen';
 import {normalizeFontSizeByWidth} from '../../utils/fonts';
-import usePostHook from '../../hooks/core/post/usePostHook';
+import {getCommentLength, getCountCommentWithChild} from '../../utils/getstream';
+import ShareUtils from '../../utils/share';
+import StringConstant from '../../utils/string/StringConstant';
+import {COLORS} from '../../utils/theme';
+import Content from '../FeedScreen/Content';
+import ContentLink from '../FeedScreen/ContentLink';
+import Header from '../FeedScreen/Header';
+import useFeed from '../FeedScreen/hooks/useFeed';
 
 const FULL_WIDTH = Dimensions.get('screen').width;
 const tabBarHeight = StatusBar.currentHeight;
@@ -63,6 +65,7 @@ const RenderListFeed = (props) => {
   } = useFeed();
   const {followUnfollowTopic} = usePostHook();
   const route = useRoute();
+  const {handleUserName} = useWriteComment();
 
   const onPressDownVoteHandle = async () => {
     onPressDownVoteHook();
@@ -165,7 +168,7 @@ const RenderListFeed = (props) => {
                 ANALYTICS_SHARE_POST_TOPIC_ID
               )
             }
-            onPressComment={() => onPress(isHaveSeeMore)}
+            onPressComment={() => onPressComment(isHaveSeeMore)}
             onPressBlock={() => onPressBlock(item)}
             onPressDownVote={onPressDownVoteHandle}
             onPressUpvote={onPressUpvoteHandle}
@@ -177,7 +180,7 @@ const RenderListFeed = (props) => {
             isShowDM
           />
         </View>
-        {getCommentLength(item.latest_reactions.comment) > 0 && (
+        {getCommentLength(item.latest_reactions.comment) > 0 ? (
           <View style={styles.contentReaction(getHeightReaction())}>
             <PreviewComment
               user={item.latest_reactions.comment[0].user}
@@ -190,6 +193,21 @@ const RenderListFeed = (props) => {
             />
             <Gap height={8} />
           </View>
+        ) : (
+          <TouchableOpacity
+            onPress={() => onPressComment(isHaveSeeMore)}
+            style={styles.contentReaction(getHeightReaction())}>
+            <WriteComment
+              postId={''}
+              username={handleUserName(item)}
+              value={''}
+              onChangeText={() => {}}
+              onPress={() => {}}
+              loadingPost={false}
+              isViewOnly={true}
+              withAnonymityLabel={false}
+            />
+          </TouchableOpacity>
         )}
       </View>
     </View>
@@ -201,7 +219,7 @@ const styles = StyleSheet.create({
     height: dimen.size.TOPIC_CURRENT_ITEM_HEIGHT,
     width: FULL_WIDTH,
     marginBottom: normalizeFontSizeByWidth(4),
-    backgroundColor: colors.white
+    backgroundColor: COLORS.white
   }),
   cardMain: {
     height: '100%',

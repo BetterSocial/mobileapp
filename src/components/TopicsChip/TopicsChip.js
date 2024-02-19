@@ -1,11 +1,10 @@
 import * as React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, ScrollView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
 
-const TopicsChip = ({topics = [], fontSize = 24, onLayout, topicContainer}) => {
+const TopicsChip = ({topics = [], fontSize = 24, onLayout, topicContainer, topicItemStyle}) => {
   const navigation = useNavigation();
 
   const onTopicPress = (topic) => {
@@ -28,7 +27,7 @@ const TopicsChip = ({topics = [], fontSize = 24, onLayout, topicContainer}) => {
       contentContainerStyle={styles.contentStyle}
       style={[styles.topicContainer, topicContainer]}>
       {topics.map((item) => (
-        <View key={`topicContainer-${item}`} style={styles.topicItemContainer}>
+        <View key={`topicContainer-${item}`} style={[styles.topicItemContainer, topicItemStyle]}>
           <TouchableOpacity
             testID="topic-chip"
             activeOpacity={1}
@@ -53,18 +52,18 @@ const styles = StyleSheet.create({
     marginLeft: 12
   },
   topicItemContainer: {
-    backgroundColor: colors.lightgrey,
+    backgroundColor: COLORS.lightgrey60,
     borderRadius: 14,
     overflow: 'hidden',
     marginEnd: 11,
-    marginBottom: 4
+    marginBottom: 4,
+    paddingHorizontal: 13,
+    paddingVertical: 4.5
   },
   topicText: {
     fontFamily: fonts.inter[500],
-    paddingHorizontal: 13,
-    paddingVertical: 4.5,
     borderRadius: 14,
-    color: colors.blue
+    color: COLORS.signed_primary
   },
   contentStyle: {
     paddingRight: 12

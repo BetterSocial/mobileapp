@@ -1,6 +1,7 @@
 import {ChannelList} from '../../database/schema/ChannelList.types';
 
 interface UseChatUtilsHook {
+  isLoadingFetchingChannelDetail: boolean;
   selectedChannel: ChannelList | null;
   selectedChannelKey: number;
   goBack: () => void;
@@ -8,6 +9,7 @@ interface UseChatUtilsHook {
   goToMoveChat: (channel: ChannelList) => void;
   goToPostDetailScreen: (channel: ChannelList) => void;
   goToCommunityScreen: (channel: ChannelList) => void;
+  goToContactScreen: () => void;
   goToChatInfoScreen: () => void;
   goBackFromChatScreen: () => void;
   handleTextSystem: (item: any) => string;

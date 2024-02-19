@@ -4,21 +4,16 @@ import axios from 'axios';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import StorageUtils from '../../../utils/storage';
-import dimen from '../../../utils/dimen';
+import useFeedPreloadHook from './useFeedPreloadHook';
+import useViewPostTimeHook from './useViewPostTimeHook';
 import {Context} from '../../../context';
 import {FEEDS_CACHE} from '../../../utils/cache/constant';
-import {SOURCE_FEED_TAB} from '../../../utils/constants';
-import {checkIsHasColor, hexToRgb} from '../../../utils/colors';
+import {checkIsHasColor, hexToRgb} from '../../../utils/theme';
 import {downVote, upVote} from '../../../service/vote';
-import {getFeedDetail, getMainFeedV2WithTargetFeed, viewTimePost} from '../../../service/post';
+import {getFeedDetail, getMainFeedV2WithTargetFeed} from '../../../service/post';
 import {listFeedColor} from '../../../configs/FeedColor';
 import {saveToCache} from '../../../utils/cache';
-import {
-  setFeedByIndex,
-  setMainFeeds,
-  setTimer,
-  setViewPostTimeIndex
-} from '../../../context/actions/feeds';
+import {setFeedByIndex, setMainFeeds, setTimer} from '../../../context/actions/feeds';
 
 const useCoreFeed = () => {
   const [loading, setLoading] = React.useState(false);
@@ -34,6 +29,16 @@ const useCoreFeed = () => {
   const {feeds, timer, viewPostTimeIndex} = feedsContext;
   const {myProfile} = profileContext;
   const {bottom} = useSafeAreaInsets();
+
+  const {sendViewPostTimeWithFeeds, updateViewPostTime, isSamePostViewed} = useViewPostTimeHook(
+    dispatch,
+    timer,
+    viewPostTimeIndex
+  );
+
+  const {fetchNextFeeds} = useFeedPreloadHook(feeds.length, () => {
+    getDataFeeds(postOffset, false, nextTargetFeed);
+  });
 
   const getDataFeeds = async (offsetFeed = 0, useLoading = false, targetFeed = null) => {
     setCountStack(null);
@@ -158,17 +163,6 @@ const useCoreFeed = () => {
     getDataFeeds();
   };
 
-  const updateFeed = async (post, index) => {
-    try {
-      const data = await getFeedDetail(post.activity_id);
-      handleUpdateFeed(data, index);
-    } catch (e) {
-      if (axios.isAxiosError(e)) {
-        throw e.response.data;
-      }
-    }
-  };
-
   const handleUpdateFeed = (data, index) => {
     if (data) {
       setFeedByIndex(
@@ -180,6 +174,18 @@ const useCoreFeed = () => {
       );
     }
   };
+
+  const updateFeed = async (post, index) => {
+    try {
+      const data = await getFeedDetail(post.activity_id);
+      handleUpdateFeed(data, index);
+    } catch (e) {
+      if (axios.isAxiosError(e)) {
+        throw e.response.data;
+      }
+    }
+  };
+
   const setUpVote = async (post, index) => {
     await upVote(post);
     // updateVoteData(index, 'upvote', post, myUpvote)
@@ -222,28 +228,7 @@ const useCoreFeed = () => {
   };
 
   const sendViewPostTime = async (withResetTime = false) => {
-    const currentTime = new Date();
-    const diffTime = currentTime.getTime() - timer.getTime();
-    const id = feeds?.[viewPostTimeIndex]?.id;
-    if (!id) return;
-
-    viewTimePost(id, diffTime, SOURCE_FEED_TAB);
-    if (withResetTime) setTimer(new Date(), dispatch);
-  };
-
-  const getCurrentPostViewed = (momentumEvent) => {
-    const {y} = momentumEvent.nativeEvent.contentOffset;
-    const shownIndex = Math.ceil(y / dimen.size.FEED_CURRENT_ITEM_HEIGHT);
-    return shownIndex;
-  };
-
-  const updateViewPostTime = (momentumEvent) => {
-    setViewPostTimeIndex(getCurrentPostViewed(momentumEvent), dispatch);
-    setTimer(new Date(), dispatch);
-  };
-
-  const isSamePostViewed = (momentumEvent) => {
-    return getCurrentPostViewed(momentumEvent) === viewPostTimeIndex;
+    sendViewPostTimeWithFeeds(feeds, withResetTime);
   };
 
   return {
@@ -262,6 +247,7 @@ const useCoreFeed = () => {
     viewPostTimeIndex,
 
     checkCacheFeed,
+    fetchNextFeeds,
     getDataFeeds,
     handleDataFeeds,
     handleScroll,
@@ -272,6 +258,7 @@ const useCoreFeed = () => {
     onDeleteBlockedPostCompleted,
     saveSearchHeight,
     sendViewPostTime,
+    sendViewPostTimeWithFeeds,
     setDownVote,
     setIsLastPage,
     setMainFeeds,

@@ -5,19 +5,18 @@
 import * as React from 'react';
 import {FlatList, View} from 'react-native';
 
-import ToastMessage from 'react-native-toast-message';
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
 import InputMessageV2 from '../../components/Chat/InputMessageV2';
-import {Context} from '../../context';
-import {setChannel} from '../../context/actions/setChannel';
-import useMoveChatTypeHook from '../../hooks/core/chat/useMoveChatTypeHook';
-import {SIGNED} from '../../hooks/core/constant';
-import useProfileHook from '../../hooks/core/profile/useProfileHook';
-import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
-import {getChatName} from '../../utils/string/StringUtils';
 import Loading from '../Loading';
-import {styles} from './SampleChatScreen';
+import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
+import useMoveChatTypeHook from '../../hooks/core/chat/useMoveChatTypeHook';
+import useProfileHook from '../../hooks/core/profile/useProfileHook';
+import {Context} from '../../context';
+import {SIGNED} from '../../hooks/core/constant';
+import {getOtherProfile} from '../../service/profile';
+import {setChannel} from '../../context/actions/setChannel';
+import {styles} from './AnonymousChatScreen';
 
 const SignedChatScreen = () => {
   const {
@@ -31,6 +30,7 @@ const SignedChatScreen = () => {
 
   const flatlistRef = React.useRef<FlatList>();
   const [loading, setLoading] = React.useState(false);
+  const [isAnonimityEnabled, setIsAnonimityEnabled] = React.useState(true);
   const [, dispatchChannel] = (React.useContext(Context) as unknown as any).channel;
   const [profile] = (React.useContext(Context) as unknown as any).profile;
   const updatedChats = updateChatContinuity(chats);
@@ -69,9 +69,21 @@ const SignedChatScreen = () => {
     }
   };
 
+  const fetchOtherProfile = async () => {
+    try {
+      const result = await getOtherProfile(memberChat?.user?.username);
+      if (result.code === 200) {
+        setIsAnonimityEnabled(result.data.isAnonMessageEnabled);
+      }
+    } catch (e) {
+      // nothing
+    }
+  };
+
   React.useEffect(() => {
     if (selectedChannel) {
       setChannel(selectedChannel, dispatchChannel);
+      fetchOtherProfile();
     }
   }, [selectedChannel]);
 
@@ -85,13 +97,9 @@ const SignedChatScreen = () => {
           onThreeDotPress={goToChatInfoPage}
           avatar={selectedChannel?.channelPicture}
           type={SIGNED}
-          user={
-            selectedChannel?.rawJson?.channel?.anon_user_info_emoji_code
-              ? `Anonymous ${selectedChannel?.rawJson?.channel?.anon_user_info_emoji_name} `
-              : getChatName(selectedChannel?.name, profile?.myProfile?.username)
-          }
-          anon_user_info_emoji_code={selectedChannel?.rawJson?.channel?.anon_user_info_emoji_code}
-          anon_user_info_color_code={selectedChannel?.rawJson?.channel?.anon_user_info_color_code}
+          user={selectedChannel?.name}
+          anon_user_info_emoji_code={selectedChannel?.anon_user_info_emoji_code}
+          anon_user_info_color_code={selectedChannel?.anon_user_info_color_code}
         />
       ) : null}
 
@@ -119,6 +127,7 @@ const SignedChatScreen = () => {
               ? 'Coming soon: Anonymous messages are not enabled yet within group chats'
               : null
           }
+          isAnonimityEnabled={isAnonimityEnabled}
         />
       </View>
       <Loading visible={loading} />

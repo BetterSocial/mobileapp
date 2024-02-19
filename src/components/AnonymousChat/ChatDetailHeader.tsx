@@ -8,9 +8,9 @@ import ChannelImage from '../ChatList/elements/ChannelImage';
 import CustomPressable from '../CustomPressable';
 import IcArrowBackWhite from '../../assets/arrow/Ic_arrow_back_white';
 import dimen from '../../utils/dimen';
+import {COLORS} from '../../utils/theme';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {SIGNED} from '../../hooks/core/constant';
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
 const styles = StyleSheet.create({
@@ -20,11 +20,11 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center'
   },
-  bgDarkBlue: {
-    backgroundColor: colors.darkBlue
+  bgsigned_primary: {
+    backgroundColor: COLORS.signed_primary
   },
   bgBondiBlue: {
-    backgroundColor: colors.bondi_blue
+    backgroundColor: COLORS.anon_primary
   },
   backButton: {
     paddingLeft: 22,
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: fonts.inter[600],
-    color: colors.white,
+    color: COLORS.white,
     fontSize: 14,
     lineHeight: 17,
     marginLeft: 10,
@@ -78,7 +78,7 @@ const ChatDetailHeader = ({
   channel
 }) => {
   const bgHeaderStyle = () => {
-    if (type === SIGNED) return styles.bgDarkBlue;
+    if (type === SIGNED) return styles.bgsigned_primary;
     return styles.bgBondiBlue;
   };
 
@@ -95,7 +95,11 @@ const ChatDetailHeader = ({
 
     return (
       <ChannelImage>
-        <ChannelImage.Big style={styles.avatarImage} type={channel?.channelType} image={avatar} />
+        <ChannelImage.Big
+          style={styles.avatarImage}
+          type={channel?.channelType}
+          image={avatar || DEFAULT_PROFILE_PIC_PATH}
+        />
       </ChannelImage>
     );
   };
@@ -112,7 +116,7 @@ const ChatDetailHeader = ({
         </Text>
       </CustomPressable>
       <CustomPressable style={styles.threeDot} onPress={onThreeDotPress}>
-        <IconEP name="dots-three-vertical" size={20} color={colors.white} />
+        <IconEP name="dots-three-vertical" size={20} color={COLORS.white} />
       </CustomPressable>
       <FastImage />
     </View>
