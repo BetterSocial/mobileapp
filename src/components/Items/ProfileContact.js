@@ -41,7 +41,7 @@ const ProfileContact = ({
         borderless: false,
         borderRadius: 10
       }}
-      disabled={!showArrow || disabled}
+      disabled={disabled}
       style={styles.pressable}>
       <View style={styles.container}>
         <View style={styles.profile}>
@@ -56,15 +56,16 @@ const ProfileContact = ({
             {fullname} {handleYouText()}
           </Text>
         </View>
-        {showArrow && (
-          <>
-            {userId !== item.user_id && (
-              <View>
-                <Mi name="arrow-forward-ios" size={18} />
-              </View>
-            )}
-          </>
-        )}
+        {showArrow &&
+          !(isYou || anonProfileId === item?.user_id || signedProfileId === item?.user_id) && (
+            <>
+              {userId !== item.user_id && (
+                <View>
+                  <Mi name="arrow-forward-ios" size={18} />
+                </View>
+              )}
+            </>
+          )}
         {select && (
           <View testID="selected">
             <MemoIc_Checklist />

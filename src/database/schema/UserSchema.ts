@@ -1,9 +1,9 @@
 import {ResultSet, SQLiteDatabase, Transaction} from 'react-native-sqlite-storage';
 import {v4 as uuidv4} from 'uuid';
 
-import BaseDbSchema from './BaseDbSchema';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {InitAnonymousChatDataMember} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
+import {DEFAULT_PROFILE_PIC_PATH, IS_ANONYMOUS, IS_NOT_ANONYMOUS} from '../../utils/constants';
+import BaseDbSchema from './BaseDbSchema';
 
 export type SQLiteBoolean = 0 | 1;
 class UserSchema implements BaseDbSchema {
@@ -304,7 +304,8 @@ class UserSchema implements BaseDbSchema {
       lastActiveAt: json?.message?.user?.last_active_at,
       profilePicture: json?.message?.user?.image,
       bio: '',
-      isBanned: json.is_banned
+      isBanned: json.is_banned,
+      isAnonymous: json?.is_anonymous ? IS_ANONYMOUS : IS_NOT_ANONYMOUS
     });
   }
 
@@ -325,7 +326,8 @@ class UserSchema implements BaseDbSchema {
         anon_user_info_color_code: json?.anon_user_info_color_code,
         anon_user_info_color_name: json?.anon_user_info_color_name,
         anon_user_info_emoji_code: json?.anon_user_info_emoji_code,
-        anon_user_info_emoji_name: json?.anon_user_info_emoji_name
+        anon_user_info_emoji_name: json?.anon_user_info_emoji_name,
+        isAnonymous: json?.is_anonymous ? IS_ANONYMOUS : IS_NOT_ANONYMOUS
         // TODO: add is_anonymous
       });
     } catch (e) {
@@ -345,7 +347,9 @@ class UserSchema implements BaseDbSchema {
         anon_user_info_color_code: null,
         anon_user_info_color_name: null,
         anon_user_info_emoji_code: null,
-        anon_user_info_emoji_name: null
+        anon_user_info_emoji_name: null,
+        isAnonymous: IS_NOT_ANONYMOUS
+
         // TODO: add is_anonymous
       });
     }
@@ -370,7 +374,8 @@ class UserSchema implements BaseDbSchema {
       anon_user_info_color_code: object?.anon_user_info_color_code,
       anon_user_info_color_name: object?.anon_user_info_color_name,
       anon_user_info_emoji_code: object?.anon_user_info_emoji_code,
-      anon_user_info_emoji_name: object?.anon_user_info_emoji_name
+      anon_user_info_emoji_name: object?.anon_user_info_emoji_name,
+      isAnonymous: object?.is_anonymous ? IS_ANONYMOUS : IS_NOT_ANONYMOUS
       // TODO: add is_anonymous
     });
   }
