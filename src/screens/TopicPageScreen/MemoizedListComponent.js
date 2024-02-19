@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
-import {Dimensions, StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
 
 import Content from '../FeedScreen/Content';
 import ContentLink from '../FeedScreen/ContentLink';
@@ -22,11 +22,11 @@ import {getCommentLength, getCountCommentWithChild} from '../../utils/getstream'
 import {showScoreAlertDialog} from '../../utils/Utils';
 import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
-import WriteComment from '../../components/Comments/WriteComment';
 import useWriteComment from '../../components/Comments/hooks/useWriteComment';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import useCalculationContent from '../FeedScreen/hooks/useCalculationContent';
 import BlurredLayer from '../FeedScreen/elements/BlurredLayer';
+import AddCommentPreview from '../FeedScreen/elements/AddCommentPreview';
 
 const FULL_WIDTH = Dimensions.get('screen').width;
 const tabBarHeight = StatusBar.currentHeight;
@@ -124,28 +124,6 @@ const RenderListFeed = (props) => {
   const hasComment = getCommentLength(item.latest_reactions.comment) > 0;
 
   const isBlurred = item?.isBlurredPost && item?.anonimity;
-
-  const renderWriteComment = () => {
-    return (
-      !isBlurred && (
-        <TouchableOpacity
-          testID="writeComment"
-          onPress={() => onPressComment(isHaveSeeMore)}
-          style={styles.contentReaction(getHeightReaction())}>
-          <WriteComment
-            postId={''}
-            username={handleUserName(item)}
-            value={''}
-            onChangeText={() => {}}
-            onPress={() => {}}
-            loadingPost={false}
-            isViewOnly={true}
-            withAnonymityLabel={false}
-          />
-        </TouchableOpacity>
-      )
-    );
-  };
 
   const commentHeight = () => {
     if (isBlurred && !hasComment) {
@@ -261,7 +239,12 @@ const RenderListFeed = (props) => {
               />
             </View>
           ) : (
-            renderWriteComment()
+            <AddCommentPreview
+              username={handleUserName(item)}
+              isBlurred={isBlurred}
+              heightReaction={getHeightReaction()}
+              onPressComment={() => onPressComment(isHaveSeeMore)}
+            />
           )}
         </BlurredLayer>
       </View>
