@@ -32,6 +32,7 @@ import AddCommentPreview from './elements/AddCommentPreview';
 import BlurredLayer from './elements/BlurredLayer';
 import useCalculationContent from './hooks/useCalculationContent';
 import useFeed from './hooks/useFeed';
+import useFollowUser from '../ChannelListScreen/hooks/useFollowUser';
 
 const tabBarHeight = StatusBar.currentHeight;
 const FULL_WIDTH = Dimensions.get('screen').width;
@@ -72,13 +73,6 @@ const RenderListFeed = (props) => {
     getTotalReaction,
     showScoreButton
   } = useFeed();
-
-  const [feedsContext, feedsContextDispatch] = React.useContext(Context).feeds;
-  const [followContext, followingDispatch] = React.useContext(Context).following;
-  const [profileContext] = React.useContext(Context).profile;
-  const {myProfile} = profileContext;
-  const {anonProfileId, signedProfileId} = useProfileHook();
-  const {isFollowingUser} = useFollowUser();
 
   const {handleUserName} = useWriteComment();
 
@@ -151,78 +145,6 @@ const RenderListFeed = (props) => {
       return getHeightReaction() + normalize(4);
     }
     return getHeightFooter();
-  };
-
-  const handleFollowUnfollow = async () => {
-    const user_id = item?.actor?.id;
-    const username = item?.actor?.data?.username;
-    const data = {
-      user_id_follower: myProfile?.user_id,
-      user_id_followed: user_id,
-      username_follower: myProfile?.username,
-      username_followed: username,
-      follow_source: 'feed'
-    };
-    const dataFollowAnon = {
-      follow_source: 'post',
-      post_id: item?.id
-    };
-    const indexFeed = feedsContext?.feeds?.findIndex((feed) => {
-      return feed?.id === item?.id;
-    });
-    const feedData = feedsContext?.feeds[indexFeed];
-    if (feedData?.is_following_target) {
-      if (!feedData?.anon_user_info_color_name) {
-        feedsContext?.feeds.forEach((feed, index) => {
-          if (feed?.actor?.id === user_id) {
-            setFeedByIndex(
-              {
-                index,
-                singleFeed: {...feedsContext?.feeds[index], is_following_target: false}
-              },
-              feedsContextDispatch
-            );
-          }
-        });
-        await setUnFollow(data);
-      } else {
-        const newFeed = {...feedsContext?.feeds[indexFeed], is_following_target: false};
-        setFeedByIndex(
-          {
-            index: indexFeed,
-            singleFeed: newFeed
-          },
-          feedsContextDispatch
-        );
-        await unfollowUserAnon(dataFollowAnon);
-      }
-    } else {
-      // eslint-disable-next-line no-lonely-if
-      if (!feedData?.anon_user_info_color_name) {
-        feedsContext?.feeds.forEach((feed, index) => {
-          if (feed?.actor?.id === user_id) {
-            setFeedByIndex(
-              {
-                index,
-                singleFeed: {...feedsContext?.feeds[index], is_following_target: true}
-              },
-              feedsContextDispatch
-            );
-          }
-        });
-        await setFollow(data);
-      } else {
-        const newFeed = {...feedsContext?.feeds[indexFeed], is_following_target: true};
-        setFeedByIndex(
-          {
-            index: indexFeed,
-            singleFeed: newFeed
-          },
-          feedsContextDispatch
-        );
-        await followUserAnon(dataFollowAnon);
-      }
-    }
   };
 
   return (
