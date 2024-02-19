@@ -89,6 +89,8 @@ const DiscoverySearch = ({
   };
 
   const handleOnClearText = () => {
+    handleFocus(true);
+    discoverySearchBarRef?.current?.focus();
     setSearchText('');
     setLastSearch('');
   };

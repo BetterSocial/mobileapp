@@ -291,7 +291,15 @@ const DiscoveryScreenV2 = ({route}) => {
           news={discoveryDataNews}
         />
       );
-  }, [selectedScreen]);
+    return null;
+  }, [
+    selectedScreen,
+    searchText,
+    isLoadingDiscovery.topic,
+    isLoadingDiscovery.domain,
+    isLoadingDiscovery.news,
+    isLoadingDiscovery.user
+  ]);
 
   return (
     <DiscoveryContainer>
