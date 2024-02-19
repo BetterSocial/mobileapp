@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
-import {Dimensions, StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
 
 import Content from '../FeedScreen/Content';
 import ContentLink from '../FeedScreen/ContentLink';
@@ -17,13 +17,16 @@ import {
   POST_TYPE_POLL,
   POST_TYPE_STANDARD
 } from '../../utils/constants';
-import {Footer, Gap, PreviewComment} from '../../components';
+import {Footer, PreviewComment} from '../../components';
 import {getCommentLength, getCountCommentWithChild} from '../../utils/getstream';
 import {showScoreAlertDialog} from '../../utils/Utils';
-import {normalizeFontSizeByWidth} from '../../utils/fonts';
+import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
-import WriteComment from '../../components/Comments/WriteComment';
 import useWriteComment from '../../components/Comments/hooks/useWriteComment';
+import TopicsChip from '../../components/TopicsChip/TopicsChip';
+import useCalculationContent from '../FeedScreen/hooks/useCalculationContent';
+import BlurredLayer from '../FeedScreen/elements/BlurredLayer';
+import AddCommentPreview from '../FeedScreen/elements/AddCommentPreview';
 
 const FULL_WIDTH = Dimensions.get('screen').width;
 const tabBarHeight = StatusBar.currentHeight;
@@ -51,6 +54,7 @@ const RenderListFeed = (props) => {
     navigateToLinkContextPage,
     getHeightFooter,
     getHeightHeader,
+    getTotalReaction,
     statusDownvote,
     voteStatus,
     checkVotes,
@@ -116,6 +120,35 @@ const RenderListFeed = (props) => {
     initialSetup(item);
     checkVotesHandle();
   }, [item]);
+
+  const hasComment = getCommentLength(item.latest_reactions.comment) > 0;
+
+  const isBlurred = item?.isBlurredPost && item?.anonimity;
+
+  const commentHeight = () => {
+    if (isBlurred && !hasComment) {
+      return 0;
+    }
+    const isSingleComment = getTotalReaction(item) === 1;
+    const commentSectionHeight = getHeightReaction() - getHeightFooter();
+    return isSingleComment ? commentSectionHeight - 20 : commentSectionHeight;
+  };
+
+  const {onLayoutTopicChip} = useCalculationContent();
+  const calculateLineTopicChip = (nativeEvent) => {
+    onLayoutTopicChip(nativeEvent, 1);
+  };
+
+  const topicBottomPosition = () => {
+    if (hasComment) {
+      if (getTotalReaction(item) === 1) {
+        return getHeightReaction() - 20;
+      }
+      return getHeightReaction();
+    }
+    return getHeightFooter();
+  };
+
   return (
     <View style={[styles.cardContainer()]}>
       <View style={styles.cardMain}>
@@ -134,6 +167,9 @@ const RenderListFeed = (props) => {
             onCardContentPress={() => navigateToLinkContextPage(item)}
             message={item.message}
             topics={item?.topics}
+            contentHeight={
+              dimen.size.FEED_CURRENT_ITEM_HEIGHT - getHeightHeader() - getHeightReaction()
+            }
           />
         )}
         {(item.post_type === POST_TYPE_STANDARD || item.post_type === POST_TYPE_POLL) && (
@@ -146,6 +182,17 @@ const RenderListFeed = (props) => {
             onNewPollFetched={onNewPollFetched}
             topics={item?.topics}
             setHaveSeeMore={(haveSeeMore) => setIsHaveSeeMore(haveSeeMore)}
+          />
+        )}
+        {isBlurred && (
+          <TopicsChip
+            onLayout={calculateLineTopicChip}
+            topics={item?.topics}
+            fontSize={normalizeFontSizeByWidth(14)}
+            text={item.message}
+            topicContainer={{
+              bottom: topicBottomPosition()
+            }}
           />
         )}
         <View style={styles.footerWrapper(getHeightFooter())}>
@@ -171,35 +218,35 @@ const RenderListFeed = (props) => {
             showScoreButton={showScoreButton}
           />
         </View>
-        {getCommentLength(item.latest_reactions.comment) > 0 ? (
-          <View style={styles.contentReaction(getHeightReaction())}>
-            <PreviewComment
-              user={item.latest_reactions.comment[0].user}
-              comment={item?.latest_reactions?.comment[0]?.data?.text || ''}
-              image={item?.latest_reactions?.comment[0]?.user?.data?.profile_pic_url || ''}
-              time={item.latest_reactions.comment[0].created_at}
-              totalComment={getCommentLength(item.latest_reactions.comment) - 1}
-              onPress={onPressComment}
-              item={item.latest_reactions.comment[0]}
-            />
-            <Gap height={8} />
-          </View>
-        ) : (
-          <TouchableOpacity
-            onPress={() => onPressComment(isHaveSeeMore)}
-            style={styles.contentReaction(getHeightReaction())}>
-            <WriteComment
-              postId={''}
+        <BlurredLayer
+          layerOnly
+          blurType="light"
+          withToast={true}
+          isVisible={isBlurred}
+          containerStyle={{
+            height: commentHeight()
+          }}>
+          {hasComment ? (
+            <View style={styles.contentReaction(getHeightReaction())}>
+              <PreviewComment
+                user={item.latest_reactions.comment[0].user}
+                comment={item?.latest_reactions?.comment[0]?.data?.text || ''}
+                image={item?.latest_reactions?.comment[0]?.user?.data?.profile_pic_url || ''}
+                time={item.latest_reactions.comment[0].created_at}
+                totalComment={getTotalReaction(item) - 1}
+                item={item.latest_reactions.comment[0]}
+                onPress={onPressComment}
+              />
+            </View>
+          ) : (
+            <AddCommentPreview
               username={handleUserName(item)}
-              value={''}
-              onChangeText={() => {}}
-              onPress={() => {}}
-              loadingPost={false}
-              isViewOnly={true}
-              withAnonymityLabel={false}
+              isBlurred={isBlurred}
+              heightReaction={getHeightReaction()}
+              onPressComment={() => onPressComment(isHaveSeeMore)}
             />
-          </TouchableOpacity>
-        )}
+          )}
+        </BlurredLayer>
       </View>
     </View>
   );
@@ -210,7 +257,11 @@ const styles = StyleSheet.create({
     height: dimen.size.TOPIC_CURRENT_ITEM_HEIGHT,
     width: FULL_WIDTH,
     marginBottom: normalizeFontSizeByWidth(4),
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.white,
+    shadowColor: COLORS.black000,
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 0.3,
+    shadowRadius: 4
   }),
   cardMain: {
     height: '100%',
@@ -219,7 +270,7 @@ const styles = StyleSheet.create({
   footerWrapper: (h) => ({height: h}),
   contentReaction: (heightReaction) => ({
     maxHeight: heightReaction,
-    marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0
+    marginBottom: heightReaction <= 0 ? tabBarHeight + normalize(10) : 0
   }),
   ml3: {
     marginLeft: 3
