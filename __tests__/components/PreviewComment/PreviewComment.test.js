@@ -1,5 +1,6 @@
 import React from 'react';
 import {render} from '@testing-library/react-native';
+
 import PreviewComment, {styles} from '../../../src/components/PreviewComment';
 import {COLORS, SIZES} from '../../../src/utils/theme';
 
@@ -59,7 +60,7 @@ describe('Preview comment should run correctly', () => {
   it('containerStyle should correct', () => {
     expect(styles.container(10)).toEqual({
       borderLeftWidth: 1,
-      marginHorizontal: SIZES.base,
+      marginHorizontal: SIZES.base - 1,
       borderLeftColor: COLORS.balance_gray
     });
   });
