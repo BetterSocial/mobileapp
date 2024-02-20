@@ -27,6 +27,7 @@ import WriteComment from '../../components/Comments/WriteComment';
 import useWriteComment from '../../components/Comments/hooks/useWriteComment';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import useCalculationContent from './hooks/useCalculationContent';
+import AddCommentPreview from './elements/AddCommentPreview';
 
 const tabBarHeight = StatusBar.currentHeight;
 const FULL_WIDTH = Dimensions.get('screen').width;
@@ -115,28 +116,6 @@ const RenderListFeed = (props) => {
   const hasComment = getCommentLength(item.latest_reactions.comment) > 0;
 
   const isBlurred = item?.isBlurredPost && item?.anonimity;
-
-  const renderWriteComment = () => {
-    return (
-      !isBlurred && (
-        <TouchableOpacity
-          testID="writeComment"
-          onPress={() => onPressComment(isHaveSeeMore)}
-          style={styles.contentReaction(getHeightReaction())}>
-          <WriteComment
-            postId={''}
-            username={handleUserName(item)}
-            value={''}
-            onChangeText={() => {}}
-            onPress={() => {}}
-            loadingPost={false}
-            isViewOnly={true}
-            withAnonymityLabel={false}
-          />
-        </TouchableOpacity>
-      )
-    );
-  };
 
   const commentHeight = () => {
     if (isBlurred && !hasComment) {
@@ -265,7 +244,12 @@ const RenderListFeed = (props) => {
               />
             </View>
           ) : (
-            renderWriteComment()
+            <AddCommentPreview
+              username={handleUserName(item)}
+              isBlurred={isBlurred}
+              heightReaction={getHeightReaction()}
+              onPressComment={() => onPressComment(isHaveSeeMore)}
+            />
           )}
         </BlurredLayer>
       </View>
