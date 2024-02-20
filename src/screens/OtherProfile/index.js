@@ -312,6 +312,8 @@ const OtherProfile = () => {
       return <React.Fragment>{__renderFollowingButton()}</React.Fragment>;
     };
 
+    console.log('isBlocked', isBlocked, 'isBlocking', isBlocking);
+
     if (isBlocked) return <></>;
     return (
       <>
@@ -335,20 +337,22 @@ const OtherProfile = () => {
             {__renderFollowerDetail()}
           </View>
         </View>
-        <BioAndChat
-          isAnonimity={isAnonimity}
-          bio={dataMain.bio}
-          openBio={openBio}
-          dataMain={dataMain}
-          isSignedMessageEnabled={isSignedMessageEnabled}
-          showSignedMessageDisableToast={showSignedMessageDisableToast}
-          loadingGenerateAnon={loadingGenerateAnon}
-          avatarUrl={profile.myProfile.profile_pic_path}
-          anonProfile={anonProfile}
-          username={dataMain.username}
-          toggleSwitch={toggleSwitch}
-          isAnonimityEnabled={isAnonimityEnabled}
-        />
+        {!isBlocked && !isBlocking && (
+          <BioAndChat
+            isAnonimity={isAnonimity}
+            bio={dataMain.bio}
+            openBio={openBio}
+            dataMain={dataMain}
+            isSignedMessageEnabled={isSignedMessageEnabled}
+            showSignedMessageDisableToast={showSignedMessageDisableToast}
+            loadingGenerateAnon={loadingGenerateAnon}
+            avatarUrl={profile.myProfile.profile_pic_path}
+            anonProfile={anonProfile}
+            username={dataMain.username}
+            toggleSwitch={toggleSwitch}
+            isAnonimityEnabled={isAnonimityEnabled}
+          />
+        )}
       </>
     );
   };
