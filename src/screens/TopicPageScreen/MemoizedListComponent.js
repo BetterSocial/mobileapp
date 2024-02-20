@@ -125,13 +125,12 @@ const RenderListFeed = (props) => {
 
   const isBlurred = item?.isBlurredPost && item?.anonimity;
 
-  const commentHeight = () => {
+  const addCommentPreviewHeight = () => {
+    const commentSectionHeight = getHeightReaction() - getHeightFooter();
     if (isBlurred && !hasComment) {
       return 0;
     }
-    const isSingleComment = getTotalReaction(item) === 1;
-    const commentSectionHeight = getHeightReaction() - getHeightFooter();
-    return isSingleComment ? commentSectionHeight - 20 : commentSectionHeight;
+    return commentSectionHeight;
   };
 
   const {onLayoutTopicChip} = useCalculationContent();
@@ -142,7 +141,7 @@ const RenderListFeed = (props) => {
   const topicBottomPosition = () => {
     if (hasComment) {
       if (getTotalReaction(item) === 1) {
-        return getHeightReaction() - 20;
+        return isBlurred && getHeightReaction() + normalize(4);
       }
       return getHeightReaction();
     }
@@ -224,7 +223,8 @@ const RenderListFeed = (props) => {
           withToast={true}
           isVisible={isBlurred}
           containerStyle={{
-            height: commentHeight()
+            height: isBlurred || !hasComment ? addCommentPreviewHeight() : undefined,
+            marginBottom: hasComment ? normalize(4) : 0
           }}>
           {hasComment ? (
             <View style={styles.contentReaction(getHeightReaction())}>
