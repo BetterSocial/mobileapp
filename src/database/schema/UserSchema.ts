@@ -267,19 +267,19 @@ class UserSchema implements BaseDbSchema {
       id: dbObject?.id,
       channelId: dbObject?.channel_id,
       userId: dbObject?.user_id,
-      username: dbObject.username,
-      countryCode: dbObject.country_code,
-      createdAt: dbObject.created_at,
-      updatedAt: dbObject.updated_at,
-      lastActiveAt: dbObject.last_active_at,
-      profilePicture: dbObject.profile_picture || DEFAULT_PROFILE_PIC_PATH,
-      bio: dbObject.bio,
-      isBanned: dbObject.is_banned,
-      isMe: dbObject.is_me,
-      anon_user_info_color_code: dbObject.anon_user_info_color_code,
-      anon_user_info_color_name: dbObject.anon_user_info_color_name,
-      anon_user_info_emoji_code: dbObject.anon_user_info_emoji_code,
-      anon_user_info_emoji_name: dbObject.anon_user_info_emoji_name
+      username: dbObject?.username,
+      countryCode: dbObject?.country_code,
+      createdAt: dbObject?.created_at,
+      updatedAt: dbObject?.updated_at,
+      lastActiveAt: dbObject?.last_active_at,
+      profilePicture: dbObject?.profile_picture || DEFAULT_PROFILE_PIC_PATH,
+      bio: dbObject?.bio,
+      isBanned: dbObject?.is_banned,
+      isMe: dbObject?.is_me,
+      anon_user_info_color_code: dbObject?.anon_user_info_color_code,
+      anon_user_info_color_name: dbObject?.anon_user_info_color_name,
+      anon_user_info_emoji_code: dbObject?.anon_user_info_emoji_code,
+      anon_user_info_emoji_name: dbObject?.anon_user_info_emoji_name
     });
   }
 

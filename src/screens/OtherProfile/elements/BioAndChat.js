@@ -1,12 +1,14 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import {Pressable, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {useNavigation} from '@react-navigation/core';
 
 import TextAreaChat from '../../../components/TextAreaChat';
 import ToggleSwitch from '../../../components/ToggleSwitch';
 import useSaveAnonChatHook from '../../../database/hooks/useSaveAnonChatHook';
 import {ANON_PM, SIGNED} from '../../../hooks/core/constant';
 import {COLORS} from '../../../utils/theme';
+import {Loading} from '../../../components';
 import {fonts} from '../../../utils/fonts';
 import {sendAnonymousDMOtherProfile, sendSignedDMOtherProfile} from '../../../service/chat';
 
@@ -27,6 +29,7 @@ const BioAndChat = (props) => {
     toggleSwitch,
     isAnonimityEnabled
   } = props;
+  const navigation = useNavigation();
   const {saveChatFromOtherProfile, savePendingChatFromOtherProfile} = useSaveAnonChatHook();
   const [dmChat, setDmChat] = React.useState('');
   const [loadingSendDM, setLoadingSendDM] = React.useState(false);
@@ -34,6 +37,19 @@ const BioAndChat = (props) => {
   React.useEffect(() => {
     setDmChat('');
   }, [isSignedMessageEnabled]);
+
+  React.useEffect(() => {
+    navigation.addListener('blur', () => {
+      setTimeout(() => {
+        setDmChat('');
+        setLoadingSendDM(false);
+      }, 500);
+    });
+
+    return () => {
+      navigation.removeListener('blur');
+    };
+  }, []);
 
   const sendSignedDM = async () => {
     try {
@@ -45,13 +61,11 @@ const BioAndChat = (props) => {
       const response = await sendSignedDMOtherProfile(signedMParams);
       const newResponse = {...response, members: response?.message?.members};
       await saveChatFromOtherProfile(newResponse, 'sent', true, SIGNED);
-      setDmChat('');
     } catch (error) {
+      setLoadingSendDM(false);
       if (__DEV__) {
         console.log(error, 'error');
       }
-    } finally {
-      setLoadingSendDM(false);
     }
   };
 
@@ -75,15 +89,13 @@ const BioAndChat = (props) => {
       };
       const response = await sendAnonymousDMOtherProfile(anonDMParams);
       await saveChatFromOtherProfile(response, 'sent', true, ANON_PM);
-      setDmChat('');
     } catch (e) {
       if (e?.response?.data?.status === CHANNEL_BLOCKED) {
         const response = e?.response?.data?.data;
-        await savePendingChatFromOtherProfile(response, true, ANON_PM);
-        setDmChat('');
+        await savePendingChatFromOtherProfile(response, 'pending', true, ANON_PM);
         return;
       }
-    } finally {
+
       setLoadingSendDM(false);
     }
   };
@@ -98,6 +110,7 @@ const BioAndChat = (props) => {
 
   return (
     <View style={styles.bioAndSendChatContainer(isAnonimity)}>
+      <Loading visible={loadingSendDM} />
       <View style={styles.containerBio}>
         {bio === null || bio === undefined ? (
           <Text style={styles.bioText}>Send a message</Text>
