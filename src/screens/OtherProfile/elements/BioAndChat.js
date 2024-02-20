@@ -39,7 +39,7 @@ const BioAndChat = (props) => {
   }, [isSignedMessageEnabled]);
 
   React.useEffect(() => {
-    navigation.addListener('blur', () => {
+    const unsubscribe = navigation.addListener('blur', () => {
       setTimeout(() => {
         setDmChat('');
         setLoadingSendDM(false);
@@ -47,7 +47,7 @@ const BioAndChat = (props) => {
     });
 
     return () => {
-      navigation.removeListener('blur');
+      unsubscribe();
     };
   }, []);
 
