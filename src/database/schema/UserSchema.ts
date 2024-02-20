@@ -267,19 +267,19 @@ class UserSchema implements BaseDbSchema {
       id: dbObject?.id,
       channelId: dbObject?.channel_id,
       userId: dbObject?.user_id,
-      username: dbObject.username,
-      countryCode: dbObject.country_code,
-      createdAt: dbObject.created_at,
-      updatedAt: dbObject.updated_at,
-      lastActiveAt: dbObject.last_active_at,
-      profilePicture: dbObject.profile_picture || DEFAULT_PROFILE_PIC_PATH,
-      bio: dbObject.bio,
-      isBanned: dbObject.is_banned,
-      isMe: dbObject.is_me,
-      anon_user_info_color_code: dbObject.anon_user_info_color_code,
-      anon_user_info_color_name: dbObject.anon_user_info_color_name,
-      anon_user_info_emoji_code: dbObject.anon_user_info_emoji_code,
-      anon_user_info_emoji_name: dbObject.anon_user_info_emoji_name
+      username: dbObject?.username,
+      countryCode: dbObject?.country_code,
+      createdAt: dbObject?.created_at,
+      updatedAt: dbObject?.updated_at,
+      lastActiveAt: dbObject?.last_active_at,
+      profilePicture: dbObject?.profile_picture || DEFAULT_PROFILE_PIC_PATH,
+      bio: dbObject?.bio,
+      isBanned: dbObject?.is_banned,
+      isMe: dbObject?.is_me,
+      anon_user_info_color_code: dbObject?.anon_user_info_color_code,
+      anon_user_info_color_name: dbObject?.anon_user_info_color_name,
+      anon_user_info_emoji_code: dbObject?.anon_user_info_emoji_code,
+      anon_user_info_emoji_name: dbObject?.anon_user_info_emoji_name
     });
   }
 
@@ -305,11 +305,52 @@ class UserSchema implements BaseDbSchema {
         id: uuidv4(),
         channelId,
         userId: json?.user?.id,
-        username: json?.user?.name,
+        username: json?.user?.username,
         countryCode: '',
         createdAt: json?.user?.created_at,
         updatedAt: json?.updated_at,
         lastActiveAt: json?.user?.last_active,
+        profilePicture: json?.user?.image || DEFAULT_PROFILE_PIC_PATH,
+        bio: '',
+        isBanned: json?.banned,
+        anon_user_info_color_code: json?.anon_user_info_color_code,
+        anon_user_info_color_name: json?.anon_user_info_color_name,
+        anon_user_info_emoji_code: json?.anon_user_info_emoji_code,
+        anon_user_info_emoji_name: json?.anon_user_info_emoji_name
+      });
+    } catch (e) {
+      console.log('error on fromMemberWebsocketObject', e);
+      return new UserSchema({
+        id: uuidv4(),
+        channelId,
+        userId: null,
+        username: null,
+        countryCode: null,
+        createdAt: null,
+        updatedAt: null,
+        lastActiveAt: null,
+        profilePicture: null,
+        bio: null,
+        isBanned: null,
+        anon_user_info_color_code: null,
+        anon_user_info_color_name: null,
+        anon_user_info_emoji_code: null,
+        anon_user_info_emoji_name: null
+      });
+    }
+  }
+
+  static fromMessageAnonymouslyAPI(json: any, channelId: string): UserSchema {
+    try {
+      return new UserSchema({
+        id: uuidv4(),
+        channelId,
+        userId: json?.user?.id,
+        username: json?.user?.username,
+        countryCode: '',
+        createdAt: json?.user?.created_at,
+        updatedAt: json?.user?.updated_at,
+        lastActiveAt: new Date(),
         profilePicture: json?.user?.image,
         bio: '',
         isBanned: json?.banned,
@@ -347,15 +388,15 @@ class UserSchema implements BaseDbSchema {
     return new UserSchema({
       id: uuidv4(),
       channelId,
-      userId: object?.user_id,
+      userId: object?.user?.id || object?.user_id,
       bio: object?.bio,
       countryCode: object?.country_code,
-      createdAt: object?.created_at,
-      lastActiveAt: object?.last_active_at,
-      profilePicture: object?.profile_pic_path,
+      createdAt: object?.user?.created_at,
+      lastActiveAt: object?.last_active_at || new Date().toISOString(),
+      profilePicture: object?.user?.image || DEFAULT_PROFILE_PIC_PATH,
       updatedAt: object?.updated_at,
-      username: object?.username,
-      isBanned: object?.is_banned,
+      username: object?.user?.username,
+      isBanned: object?.user?.banned,
       anon_user_info_color_code: object?.anon_user_info_color_code,
       anon_user_info_color_name: object?.anon_user_info_color_name,
       anon_user_info_emoji_code: object?.anon_user_info_emoji_code,
