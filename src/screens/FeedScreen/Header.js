@@ -139,6 +139,7 @@ const _renderAnonimity = ({
                 karmaScore={karmaScore}
                 anonUserInfo={anonUserInfo}
                 version={version}
+                withKarma
               />
             </View>
 
@@ -220,6 +221,7 @@ const _renderProfileNormal = ({
               size={50}
               width={3}
               withKarma
+              onImageContainerClick={navigateToProfile}
             />
           </GlobalButton>
           <GlobalButton
