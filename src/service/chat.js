@@ -193,7 +193,8 @@ const moveChatToAnon = async ({
       anon_user_info_emoji_name,
       oldChannelId,
       targetUserId,
-      source
+      source,
+      context: 'chat'
     });
     if (response.status === 200) {
       return Promise.resolve(response.data);
