@@ -1,13 +1,13 @@
 import {v4 as uuid} from 'uuid';
 
-import ChannelListMemberSchema from '../schema/ChannelListMemberSchema';
 import ChannelListSchema from '../schema/ChannelListSchema';
 import ChatSchema from '../schema/ChatSchema';
 import UserSchema from '../schema/UserSchema';
 import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
 import useLocalDatabaseHook from './useLocalDatabaseHook';
 import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
-import {GROUP_INFO} from '../../hooks/core/constant';
+import {ChannelList} from '../../../types/database/schema/ChannelList.types';
+import {GROUP_INFO, SIGNED} from '../../hooks/core/constant';
 import {
   InitAnonymousChatData,
   ModifyAnonymousChatData
@@ -19,7 +19,9 @@ const useSaveAnonChatHook = () => {
   const {goToChatScreen} = useChatUtilsHook();
   const {signedProfileId, anonProfileId} = useUserAuthHook();
 
-  const helperFindChatById = async (object: InitAnonymousChatData): Promise<ChannelListSchema> => {
+  const helperFindChatById = async (
+    object: InitAnonymousChatData
+  ): Promise<ChannelListSchema | null> => {
     const channelId = object?.message?.cid?.replace('messaging:', '');
     const channelList = await ChannelListSchema.getById(localDb, channelId);
 
@@ -27,9 +29,39 @@ const useSaveAnonChatHook = () => {
     return channelListSchema;
   };
 
+  const saveUserAndChannelListMember = async (channelId, member) => {
+    try {
+      const userMember = UserSchema.fromInitAnonymousChatAPI(member, channelId);
+      await userMember.saveOrUpdateIfExists(localDb);
+    } catch (e) {
+      console.log('error saveUserAndChannelListMember', e);
+    }
+  };
+
   const helperGoToAnonymousChat = async (object: InitAnonymousChatData, from: string) => {
-    const channelListSchema = await helperFindChatById(object);
-    goToChatScreen(channelListSchema, from);
+    try {
+      const channelListSchema = await helperFindChatById(object);
+      goToChatScreen(channelListSchema as ChannelList, from);
+    } catch (e) {
+      console.log('error helperGoToAnonymousChat', e);
+    }
+  };
+
+  const helperSaveChannel = async (object: ModifyAnonymousChatData, type: string) => {
+    const channelId = object?.message?.cid?.replace('messaging:', '');
+    let channelList = await ChannelListSchema.getById(localDb, channelId);
+
+    if (!channelList) {
+      channelList = ChannelListSchema.fromInitAnonymousChatAPI(
+        object,
+        type === SIGNED ? 'PM' : 'ANON_PM'
+      );
+    }
+
+    channelList.description = object?.message?.text;
+    channelList.lastUpdatedAt = new Date().toISOString();
+    channelList.lastUpdatedBy = object?.message?.user?.id;
+    await channelList.saveIfLatest(localDb);
   };
 
   const saveChatFromOtherProfile = async (
@@ -39,7 +71,7 @@ const useSaveAnonChatHook = () => {
     type: string
   ) => {
     if (!localDb) return;
-    const {channelName, channelImage, originalMembers} = await getChannelListInfo(
+    const {channelName, channelImage, originalMembers} = getChannelListInfo(
       object,
       signedProfileId,
       anonProfileId
@@ -53,65 +85,38 @@ const useSaveAnonChatHook = () => {
 
     initAnonymousChat.message.cid = initAnonymousChat.message.cid.replace('messaging:', '');
 
-    const chat = ChatSchema.fromInitAnonymousChatAPI(initAnonymousChat, status);
-    await chat.save(localDb);
-
     try {
-      const members = originalMembers || object?.members;
-      members?.forEach((member) => {
-        const saveUserAndChannelListMember = async () => {
-          try {
-            const userMember = UserSchema.fromInitAnonymousChatAPI(
-              member,
-              initAnonymousChat?.message?.cid
-            );
-
-            await userMember.saveOrUpdateIfExists(localDb);
-          } catch (e) {
-            console.log('error saveChatFromOtherProfile userMember', e);
-          }
-          try {
-            const memberSchema = ChannelListMemberSchema.fromInitAnonymousChatAPI(
-              initAnonymousChat?.message?.cid,
-              uuid(),
-              member
-            );
-            memberSchema.saveIfNotExist(localDb);
-          } catch (e) {
-            console.log('error saveChatFromOtherProfile memberSchema', e);
-          }
-        };
-
-        Promise.all([saveUserAndChannelListMember()]);
-      });
+      await helperSaveChannel(initAnonymousChat, type);
     } catch (e) {
-      console.log('error saveChatFromOtherProfile');
       console.log(e);
     }
 
-    refresh('channelList');
-    refresh('chat');
+    try {
+      const chat = ChatSchema.fromInitAnonymousChatAPI(initAnonymousChat, status);
+      await chat.save(localDb);
+      const members = originalMembers || object?.members;
+      const promises: Promise<void>[] = members?.map((member) => {
+        return saveUserAndChannelListMember(initAnonymousChat.message.cid, member);
+      });
 
-    if (withNavigate) helperGoToAnonymousChat(object, GROUP_INFO);
-  };
-
-  const helperUpdateChannelListDescription = async (object: InitAnonymousChatData) => {
-    const channelListSchema = await helperFindChatById(object);
-
-    channelListSchema.description = object?.message?.text;
-    channelListSchema.lastUpdatedAt = new Date().toISOString();
-    channelListSchema.lastUpdatedBy = object?.message?.user?.id;
-    channelListSchema.save(localDb);
+      await Promise.all(promises);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      refresh('channelList');
+      refresh('chat');
+      if (withNavigate) {
+        helperGoToAnonymousChat(object, GROUP_INFO);
+      }
+    }
   };
 
   const savePendingChatFromOtherProfile = async (
     object: InitAnonymousChatData,
-    withNavigate = false
+    withNavigate = false,
+    type: string
   ) => {
-    helperUpdateChannelListDescription(object).catch((e) =>
-      console.log('error savePendingChatFromOtherProfile helperUpdateChannelListDescription', e)
-    );
-    saveChatFromOtherProfile(object, 'pending', withNavigate).catch((e) =>
+    saveChatFromOtherProfile(object, 'pending', withNavigate, type).catch((e) =>
       console.log('error savePendingChatFromOtherProfile saveChatFromOtherProfile', e)
     );
   };

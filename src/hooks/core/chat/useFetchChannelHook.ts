@@ -1,8 +1,5 @@
-import {v4 as uuid} from 'uuid';
-
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../../database/schema/ChannelListSchema';
-import ChannelListMemberSchema from '../../../database/schema/ChannelListMemberSchema';
 import ChatSchema from '../../../database/schema/ChatSchema';
 import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
 import UserSchema from '../../../database/schema/UserSchema';
@@ -86,13 +83,7 @@ const useFetchChannelHook = () => {
       await Promise.all(
         (members || []).map(async (member) => {
           const userMember = UserSchema.fromMemberWebsocketObject(member, channel?.id);
-          const memberSchema = ChannelListMemberSchema.fromWebsocketObject(
-            channel?.id,
-            uuid(),
-            member
-          );
           await userMember.saveOrUpdateIfExists(localDb);
-          await memberSchema.save(localDb);
         })
       );
 
