@@ -2,6 +2,7 @@ import * as React from 'react';
 import {Platform, Pressable, StyleSheet, Text, View, Image} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
+import PropTypes from 'prop-types';
 import BottomOverlayPagination from './pagination';
 import MemoizedIcArrowRightTail from '../../../../assets/arrow/ic_arrow_right_tail';
 import StringConstant from '../../../../utils/string/StringConstant';
@@ -13,7 +14,7 @@ import {imageConst} from '../../../../components/Image';
 
 const HUMAN_ID_URL = 'https://www.human-internet.org';
 
-const BottomOverlay = ({count, handleLogin, index, isLogin, title, onNextSlide, textSvg}) => {
+const BottomOverlay = ({count, handleLogin, index, isLogin, title, onNextSlide, text}) => {
   const goToHumanIdWeb = () => {
     openUrl(HUMAN_ID_URL, true);
   };
@@ -60,7 +61,7 @@ const BottomOverlay = ({count, handleLogin, index, isLogin, title, onNextSlide, 
   return (
     <View style={bottomOverlayStyles.container}>
       <Text style={bottomOverlayStyles.title}>{title}</Text>
-      <View>{textSvg}</View>
+      <Text style={bottomOverlayStyles.contentText}>{text}</Text>
       <View style={bottomOverlayStyles.bottomBlock}>
         <View style={bottomOverlayStyles.pagination}>
           <BottomOverlayPagination count={count} active={index} />
@@ -83,6 +84,16 @@ const BottomOverlay = ({count, handleLogin, index, isLogin, title, onNextSlide, 
 
 export default BottomOverlay;
 
+BottomOverlay.propTypes = {
+  count: PropTypes.number,
+  handleLogin: PropTypes.func,
+  index: PropTypes.number,
+  isLogin: PropTypes.bool,
+  title: PropTypes.string,
+  onNextSlide: PropTypes.func,
+  text: PropTypes.string
+};
+
 const bottomOverlayStyles = StyleSheet.create({
   bottomBlock: {
     position: 'absolute',
@@ -94,7 +105,6 @@ const bottomOverlayStyles = StyleSheet.create({
     backgroundColor: COLORS.transparent,
     zIndex: 1000,
     width: '100%'
-    // backgroundColor: 'rgba(255,0,0,0.5)'
   },
   btnSign: {
     width: '102%',
@@ -163,7 +173,6 @@ const bottomOverlayStyles = StyleSheet.create({
   },
   nextButton: {
     backgroundColor: COLORS.signed_primary,
-    // backgroundColor: 'red',
     width: dimen.size.ONBOARDING_BOTTOM_OVERLAY_NEXT_BUTTON_SIZE,
     height: dimen.size.ONBOARDING_BOTTOM_OVERLAY_NEXT_BUTTON_SIZE,
     borderRadius: dimen.size.ONBOARDING_BOTTOM_OVERLAY_NEXT_BUTTON_SIZE,
@@ -175,12 +184,18 @@ const bottomOverlayStyles = StyleSheet.create({
   },
   title: {
     marginTop: normalize(35),
-    marginBottom: normalize(30),
+    marginBottom: normalize(20),
     lineHeight: normalize(28),
     fontSize: normalizeFontSize(22),
     fontFamily: fonts.inter[600],
     color: COLORS.signed_primary,
     alignSelf: 'flex-start'
+  },
+  contentText: {
+    lineHeight: normalize(20),
+    fontSize: normalizeFontSize(14),
+    fontFamily: fonts.inter[400],
+    color: COLORS.gray500
   },
   paddingContainer: {
     paddingTop: dimen.normalizeDimen(27),
