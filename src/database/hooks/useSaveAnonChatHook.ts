@@ -6,6 +6,7 @@ import UserSchema from '../schema/UserSchema';
 import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
 import useLocalDatabaseHook from './useLocalDatabaseHook';
 import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
+import {ChannelList} from '../../../types/database/schema/ChannelList.types';
 import {GROUP_INFO, SIGNED} from '../../hooks/core/constant';
 import {
   InitAnonymousChatData,
@@ -18,7 +19,9 @@ const useSaveAnonChatHook = () => {
   const {goToChatScreen} = useChatUtilsHook();
   const {signedProfileId, anonProfileId} = useUserAuthHook();
 
-  const helperFindChatById = async (object: InitAnonymousChatData): Promise<ChannelListSchema> => {
+  const helperFindChatById = async (
+    object: InitAnonymousChatData
+  ): Promise<ChannelListSchema | null> => {
     const channelId = object?.message?.cid?.replace('messaging:', '');
     const channelList = await ChannelListSchema.getById(localDb, channelId);
 
@@ -38,10 +41,27 @@ const useSaveAnonChatHook = () => {
   const helperGoToAnonymousChat = async (object: InitAnonymousChatData, from: string) => {
     try {
       const channelListSchema = await helperFindChatById(object);
-      goToChatScreen(channelListSchema, from);
+      goToChatScreen(channelListSchema as ChannelList, from);
     } catch (e) {
       console.log('error helperGoToAnonymousChat', e);
     }
+  };
+
+  const helperSaveChannel = async (object: ModifyAnonymousChatData, type: string) => {
+    const channelId = object?.message?.cid?.replace('messaging:', '');
+    let channelList = await ChannelListSchema.getById(localDb, channelId);
+
+    if (!channelList) {
+      channelList = ChannelListSchema.fromInitAnonymousChatAPI(
+        object,
+        type === SIGNED ? 'PM' : 'ANON_PM'
+      );
+    }
+
+    channelList.description = object?.message?.text;
+    channelList.lastUpdatedAt = new Date().toISOString();
+    channelList.lastUpdatedBy = object?.message?.user?.id;
+    await channelList.saveIfLatest(localDb);
   };
 
   const saveChatFromOtherProfile = async (
@@ -66,6 +86,12 @@ const useSaveAnonChatHook = () => {
     initAnonymousChat.message.cid = initAnonymousChat.message.cid.replace('messaging:', '');
 
     try {
+      await helperSaveChannel(initAnonymousChat, type);
+    } catch (e) {
+      console.log(e);
+    }
+
+    try {
       const chat = ChatSchema.fromInitAnonymousChatAPI(initAnonymousChat, status);
       await chat.save(localDb);
       const members = originalMembers || object?.members;
@@ -74,17 +100,6 @@ const useSaveAnonChatHook = () => {
       });
 
       await Promise.all(promises);
-    } catch (e) {
-      console.log(e);
-    }
-    try {
-      const channelListData = ChannelListSchema.fromInitAnonymousChatAPI(
-        {
-          ...initAnonymousChat
-        },
-        type === SIGNED ? 'PM' : 'ANON_PM'
-      );
-      await channelListData.saveIfLatest(localDb);
     } catch (e) {
       console.log(e);
     } finally {
@@ -96,23 +111,12 @@ const useSaveAnonChatHook = () => {
     }
   };
 
-  const helperUpdateChannelListDescription = async (object: InitAnonymousChatData) => {
-    const channelListSchema = await helperFindChatById(object);
-
-    channelListSchema.description = object?.message?.text;
-    channelListSchema.lastUpdatedAt = new Date().toISOString();
-    channelListSchema.lastUpdatedBy = object?.message?.user?.id;
-    channelListSchema.save(localDb);
-  };
-
   const savePendingChatFromOtherProfile = async (
     object: InitAnonymousChatData,
-    withNavigate = false
+    withNavigate = false,
+    type: string
   ) => {
-    helperUpdateChannelListDescription(object).catch((e) =>
-      console.log('error savePendingChatFromOtherProfile helperUpdateChannelListDescription', e)
-    );
-    saveChatFromOtherProfile(object, 'pending', withNavigate).catch((e) =>
+    saveChatFromOtherProfile(object, 'pending', withNavigate, type).catch((e) =>
       console.log('error savePendingChatFromOtherProfile saveChatFromOtherProfile', e)
     );
   };

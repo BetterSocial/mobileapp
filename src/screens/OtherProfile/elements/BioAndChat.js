@@ -1,14 +1,14 @@
-import PropTypes from 'prop-types';
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import {Pressable, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import TextAreaChat from '../../../components/TextAreaChat';
 import ToggleSwitch from '../../../components/ToggleSwitch';
 import useSaveAnonChatHook from '../../../database/hooks/useSaveAnonChatHook';
 import {ANON_PM, SIGNED} from '../../../hooks/core/constant';
-import {sendAnonymousDMOtherProfile, sendSignedDMOtherProfile} from '../../../service/chat';
-import {fonts} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
+import {fonts} from '../../../utils/fonts';
+import {sendAnonymousDMOtherProfile, sendSignedDMOtherProfile} from '../../../service/chat';
 
 const CHANNEL_BLOCKED = 'Channel is blocked';
 
@@ -79,7 +79,7 @@ const BioAndChat = (props) => {
     } catch (e) {
       if (e?.response?.data?.status === CHANNEL_BLOCKED) {
         const response = e?.response?.data?.data;
-        await savePendingChatFromOtherProfile(response, true);
+        await savePendingChatFromOtherProfile(response, true, ANON_PM);
         setDmChat('');
         return;
       }
