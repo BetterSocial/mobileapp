@@ -58,7 +58,7 @@ target 'BetterSocial' do
   # Note that if you have use_frameworks! enabled, Flipper will not work and
   # you should disable these next few lines.
   # use_flipper!
-  use_flipper!({ 'Flipper-Folly' => '2.6.7', 'Flipper-RSocket' => '1.4.3' , 'Flipper' => '0.88.0' })
+  # use_flipper!({ 'Flipper-Folly' => '2.6.7', 'Flipper-RSocket' => '1.4.3' , 'Flipper' => '0.88.0' })
   # use_flipper!({ "Flipper-DoubleConversion" => "1.1.7" })
   post_install do |installer|
     flipper_post_install(installer)
