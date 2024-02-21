@@ -149,7 +149,10 @@ const Footer = ({
 
   return (
     <BlurredLayer toastOnly={true} isVisible={item?.isBlurredPost}>
-      <View style={[styles.rowSpaceBeetwen, styles.container]}>
+      <View
+        style={{
+          flexDirection: 'row'
+        }}>
         <View style={styles.leftGroupContainer}>
           {isShowDM && !isSelf ? (
             <TouchableOpacity
@@ -170,19 +173,7 @@ const Footer = ({
               </View>
             </TouchableOpacity>
           )}
-          {disableComment ? (
-            <View testID="disableComment" style={styles.btn}>
-              <View style={styles.btnComment(isShowDM, isSelf)}>
-                <MemoIc_comment height={24} width={25} />
-              </View>
-            </View>
-          ) : (
-            <TouchableOpacity testID="availableComment" style={styles.btn} onPress={onPressComment}>
-              <View style={styles.btnComment(isShowDM, isSelf)}>
-                <MemoIc_comment height={24} width={25} />
-              </View>
-            </TouchableOpacity>
-          )}
+
           {disableComment ? (
             <View testID="disableComment" style={styles.btn}>
               <View style={styles.btnComment}>
@@ -290,9 +281,8 @@ const Footer = ({
             </View>
           </TouchableOpacity>
         </View>
-
-        <BottomSheetMenu refSheet={refSheet} dataSheet={dataSheet} />
       </View>
+      <BottomSheetMenu refSheet={refSheet} dataSheet={dataSheet} />
     </BlurredLayer>
   );
 };
