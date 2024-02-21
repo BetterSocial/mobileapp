@@ -60,7 +60,7 @@ describe('Preview comment should run correctly', () => {
   it('containerStyle should correct', () => {
     expect(styles.container(10)).toEqual({
       borderLeftWidth: 1,
-      marginHorizontal: SIZES.base - 1,
+      marginHorizontal: SIZES.base - 2,
       borderLeftColor: COLORS.balance_gray
     });
   });
