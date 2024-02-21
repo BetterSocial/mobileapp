@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, StyleSheet, BackHandler, Platform} from 'react-native';
+import {View, StyleSheet, BackHandler, Platform, SafeAreaView} from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Tabbar from '../../components/Tabbar';
 import BlockedUserList from './elements/UserScreen';
@@ -8,6 +8,7 @@ import {showHeaderProfile} from '../../context/actions/setMyProfileAction';
 import {Context} from '../../context';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import Header from '../../components/Header';
+import {COLORS} from '../../utils/theme';
 
 const styles = StyleSheet.create({
   containerTab: {
@@ -69,32 +70,34 @@ const Blocked = ({navigation}) => {
   }, []);
 
   return (
-    <View style={styles.containerTab}>
-      {headerBlocked()}
-      <Tabs.Navigator initialRouteName={TAB_BLOCKED_USER} tabBar={myTabbar}>
-        <Tabs.Screen
-          name={TAB_BLOCKED_USER}
-          component={BlockedUserList}
-          options={{
-            title: 'User'
-          }}
-        />
-        <Tabs.Screen
-          name={TAB_BLOCKED_DOMAIN}
-          component={BlockedDomainList}
-          options={{
-            title: 'Domain'
-          }}
-        />
-        {/* <Tabs.Screen
+    <SafeAreaView style={{flex: 1, backgroundColor: COLORS.white}}>
+      <View style={styles.containerTab}>
+        {headerBlocked()}
+        <Tabs.Navigator initialRouteName={TAB_BLOCKED_USER} tabBar={myTabbar}>
+          <Tabs.Screen
+            name={TAB_BLOCKED_USER}
+            component={BlockedUserList}
+            options={{
+              title: 'User'
+            }}
+          />
+          <Tabs.Screen
+            name={TAB_BLOCKED_DOMAIN}
+            component={BlockedDomainList}
+            options={{
+              title: 'Domain'
+            }}
+          />
+          {/* <Tabs.Screen
             name={TAB_BLOCKED_TOPIC}
             component={BlockedTopicList}
             options={{
                 title: 'Topic',
               }}
             /> */}
-      </Tabs.Navigator>
-    </View>
+        </Tabs.Navigator>
+      </View>
+    </SafeAreaView>
   );
 };
 

@@ -40,10 +40,11 @@ const BlurredLayer = ({
   toastOnly,
   withToast,
   onPressContent,
-  children
+  children,
+  containerStyle
 }) => {
   return (
-    <View style={styles.relative} testID="blurredLayer" isVisible={isVisible}>
+    <View style={[styles.relative, containerStyle]} testID="blurredLayer" isVisible={isVisible}>
       {toastOnly ? (
         <ToastOnlyComponent isVisible={isVisible}>{children}</ToastOnlyComponent>
       ) : (

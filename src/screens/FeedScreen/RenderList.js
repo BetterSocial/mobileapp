@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import PropTypes from 'prop-types';
 import React from 'react';
-import {Dimensions, StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
 
 import Content from './Content';
 import ContentLink from './ContentLink';
@@ -17,14 +17,16 @@ import {
   POST_TYPE_STANDARD,
   SOURCE_FEED_TAB
 } from '../../utils/constants';
-import {Footer, Gap, PreviewComment} from '../../components';
+import {Footer, PreviewComment} from '../../components';
 import {getCommentLength} from '../../utils/getstream';
 import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
 import BlurredLayer from './elements/BlurredLayer';
 import {showScoreAlertDialog} from '../../utils/Utils';
 import {COLORS} from '../../utils/theme';
-import WriteComment from '../../components/Comments/WriteComment';
 import useWriteComment from '../../components/Comments/hooks/useWriteComment';
+import TopicsChip from '../../components/TopicsChip/TopicsChip';
+import useCalculationContent from './hooks/useCalculationContent';
+import AddCommentPreview from './elements/AddCommentPreview';
 
 const tabBarHeight = StatusBar.currentHeight;
 const FULL_WIDTH = Dimensions.get('screen').width;
@@ -65,6 +67,23 @@ const RenderListFeed = (props) => {
   } = useFeed();
   const {handleUserName} = useWriteComment();
 
+  const postApiUpvote = async (status) => {
+    await onPressUpvote({
+      activity_id: item.id,
+      status,
+      feed_group: 'main_feed',
+      voteStatus
+    });
+  };
+  const postApiDownvote = async (status) => {
+    await onPressDownVote({
+      activity_id: item.id,
+      status,
+      feed_group: 'main_feed',
+      voteStatus
+    });
+  };
+
   const onPressDownVoteHandle = async () => {
     onPressDownVoteHook();
     let newStatus = !statusDownvote;
@@ -84,23 +103,6 @@ const RenderListFeed = (props) => {
     await postApiUpvote(newStatus);
   };
 
-  const postApiUpvote = async (status) => {
-    await onPressUpvote({
-      activity_id: item.id,
-      status,
-      feed_group: 'main_feed',
-      voteStatus
-    });
-  };
-  const postApiDownvote = async (status) => {
-    await onPressDownVote({
-      activity_id: item.id,
-      status,
-      feed_group: 'main_feed',
-      voteStatus
-    });
-  };
-
   const checkVotesHandle = () => {
     checkVotes(item, selfUserId);
   };
@@ -112,10 +114,31 @@ const RenderListFeed = (props) => {
 
   const hasComment = getCommentLength(item.latest_reactions.comment) > 0;
 
-  const contentLinkHeight = () => {
-    const haveLength = hasComment ? getHeightReaction() / 2.2 : getHeightReaction() / 1.6;
-    return dimen.size.FEED_CURRENT_ITEM_HEIGHT - getHeightHeader() - getHeightFooter() - haveLength;
+  const isBlurred = item?.isBlurredPost && item?.anonimity;
+
+  const addCommentPreviewHeight = () => {
+    const commentSectionHeight = getHeightReaction() - getHeightFooter();
+    if (isBlurred && !hasComment) {
+      return 0;
+    }
+    return commentSectionHeight;
   };
+
+  const {onLayoutTopicChip} = useCalculationContent();
+  const calculateLineTopicChip = (nativeEvent) => {
+    onLayoutTopicChip(nativeEvent, 1);
+  };
+
+  const topicBottomPosition = () => {
+    if (hasComment) {
+      if (getTotalReaction(item) === 1) {
+        return isBlurred && getHeightReaction() + normalize(4);
+      }
+      return getHeightReaction();
+    }
+    return getHeightFooter();
+  };
+
   return (
     <View key={item.id} testID="dataScroll" style={styles.cardContainer}>
       <View style={[styles.cardMain]}>
@@ -140,8 +163,11 @@ const RenderListFeed = (props) => {
             message={item?.message}
             messageContainerStyle={{paddingHorizontal: 10}}
             topics={item?.topics}
-            contentHeight={contentLinkHeight()}
             hasComment={hasComment}
+            item={item}
+            contentHeight={
+              dimen.size.FEED_CURRENT_ITEM_HEIGHT - getHeightHeader() - getHeightReaction()
+            }
           />
         )}
         {(item.post_type === POST_TYPE_STANDARD || item.post_type === POST_TYPE_POLL) && (
@@ -158,6 +184,17 @@ const RenderListFeed = (props) => {
             item={item}
             onNewPollFetched={onNewPollFetched}
             hasComment={hasComment}
+          />
+        )}
+        {isBlurred && (
+          <TopicsChip
+            onLayout={calculateLineTopicChip}
+            topics={item?.topics}
+            fontSize={normalizeFontSizeByWidth(14)}
+            text={item.message}
+            topicContainer={{
+              bottom: topicBottomPosition()
+            }}
           />
         )}
         <View style={styles.footerWrapper(getHeightFooter())}>
@@ -182,44 +219,38 @@ const RenderListFeed = (props) => {
             isSelf={item.anonimity ? false : selfUserId === item.actor.id}
           />
         </View>
-        {hasComment ? (
-          <View testID="previewComment" style={styles.contentReaction(getHeightReaction())}>
-            <BlurredLayer
-              layerOnly
-              blurType="light"
-              withToast={true}
-              isVisible={item?.isBlurredPost && item?.anonimity}>
-              <React.Fragment>
-                <PreviewComment
-                  user={item.latest_reactions.comment[0].user}
-                  comment={item?.latest_reactions?.comment[0]?.data?.text || ''}
-                  image={item?.latest_reactions?.comment[0]?.user?.data?.profile_pic_url || ''}
-                  time={item.latest_reactions.comment[0].created_at}
-                  totalComment={getTotalReaction(item) - 1}
-                  item={item.latest_reactions.comment[0]}
-                  onPress={onPress}
-                />
-                <Gap height={8} />
-              </React.Fragment>
-            </BlurredLayer>
-          </View>
-        ) : (
-          <TouchableOpacity
-            testID="writeComment"
-            onPress={() => onPressComment(isHaveSeeMore)}
-            style={styles.contentReaction(getHeightReaction())}>
-            <WriteComment
-              postId={''}
+        <BlurredLayer
+          layerOnly
+          blurType="light"
+          withToast={true}
+          isVisible={isBlurred}
+          containerStyle={{
+            height: isBlurred || !hasComment ? addCommentPreviewHeight() : undefined,
+            marginBottom: hasComment ? normalize(4) : 0
+          }}>
+          {hasComment ? (
+            <View
+              testID="previewComment"
+              style={styles.contentReaction(getHeightReaction(), isBlurred)}>
+              <PreviewComment
+                user={item.latest_reactions.comment[0].user}
+                comment={item?.latest_reactions?.comment[0]?.data?.text || ''}
+                image={item?.latest_reactions?.comment[0]?.user?.data?.profile_pic_url || ''}
+                time={item.latest_reactions.comment[0].created_at}
+                totalComment={getTotalReaction(item) - 1}
+                item={item.latest_reactions.comment[0]}
+                onPress={onPress}
+              />
+            </View>
+          ) : (
+            <AddCommentPreview
               username={handleUserName(item)}
-              value={''}
-              onChangeText={() => {}}
-              onPress={() => {}}
-              loadingPost={false}
-              isViewOnly={true}
-              withAnonymityLabel={false}
+              isBlurred={isBlurred}
+              heightReaction={getHeightReaction()}
+              onPressComment={() => onPressComment(isHaveSeeMore)}
             />
-          </TouchableOpacity>
-        )}
+          )}
+        </BlurredLayer>
       </View>
     </View>
   );
@@ -227,10 +258,10 @@ const RenderListFeed = (props) => {
 
 const styles = StyleSheet.create({
   footerWrapper: (h) => ({height: h, alignItems: 'center', justifyContent: 'center'}),
-  contentReaction: (heightReaction) => ({
+  contentReaction: (heightReaction, withBorder) => ({
     maxHeight: heightReaction,
     marginBottom: heightReaction <= 0 ? tabBarHeight + normalize(10) : 0,
-    borderTopWidth: 1,
+    borderTopWidth: withBorder ? 1 : 0,
     borderTopColor: COLORS.light_silver
   }),
   cardContainer: {
