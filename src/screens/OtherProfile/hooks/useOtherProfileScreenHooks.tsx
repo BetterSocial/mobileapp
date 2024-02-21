@@ -41,7 +41,7 @@ const useOtherProfileScreenHooks = (targetUserProfileId: string, username: strin
     }
 
     try {
-      const feedsCache = StorageUtils.otherProfileFeed.getForKey(targetUserProfileId) || '{}';
+      const feedsCache = StorageUtils.otherProfileFeed.getForKey(targetUserProfileId) || '[]';
 
       setOtherProfileFeed(JSON.parse(feedsCache), dispatchOtherProfile);
     } catch (e) {
