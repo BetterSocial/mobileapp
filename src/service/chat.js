@@ -143,9 +143,11 @@ const sendSignedDMOtherProfile = async ({user_id, message}) => {
   return Promise.reject(response.data?.data);
 };
 
-const getOrCreateAnonymousChannel = async (userId) => {
+const getOrCreateAnonymousChannel = async (userId, oldChannelId = null, context = null) => {
   const payload = {
-    members: [userId]
+    members: [userId],
+    oldChannelId,
+    context
   };
 
   try {
@@ -191,7 +193,8 @@ const moveChatToAnon = async ({
       anon_user_info_emoji_name,
       oldChannelId,
       targetUserId,
-      source
+      source,
+      context: 'chat'
     });
     if (response.status === 200) {
       return Promise.resolve(response.data);
