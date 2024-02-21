@@ -163,17 +163,6 @@ const useCoreFeed = () => {
     getDataFeeds();
   };
 
-  const updateFeed = async (post, index) => {
-    try {
-      const data = await getFeedDetail(post.activity_id);
-      handleUpdateFeed(data, index);
-    } catch (e) {
-      if (axios.isAxiosError(e)) {
-        throw e.response.data;
-      }
-    }
-  };
-
   const handleUpdateFeed = (data, index) => {
     if (data) {
       setFeedByIndex(
@@ -185,6 +174,18 @@ const useCoreFeed = () => {
       );
     }
   };
+
+  const updateFeed = async (post, index) => {
+    try {
+      const data = await getFeedDetail(post.activity_id);
+      handleUpdateFeed(data, index);
+    } catch (e) {
+      if (axios.isAxiosError(e)) {
+        throw e.response.data;
+      }
+    }
+  };
+
   const setUpVote = async (post, index) => {
     await upVote(post);
     // updateVoteData(index, 'upvote', post, myUpvote)
