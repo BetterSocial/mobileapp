@@ -52,14 +52,6 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
 
   const onContactPressed = (item: ChannelListMemberSchema) => {
     return handlePressContact(item);
-
-    // return navigation.push('OtherProfile', {
-    //   data: {
-    //     user_id: myUserId?.myProfile?.user_id,
-    //     other_id: item?.user_id || item?.userId,
-    //     username: item?.user?.name || item?.user?.username
-    //   }
-    // });
   };
 
   const handleClosePopup = () => setShowPopupBlock(false);

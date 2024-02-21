@@ -29,21 +29,26 @@ const ModalAction = (props) => {
               onPress={() => onPress('message', selectedUser)}
               style={styles.buttonStyle}>
               <View style={{flexDirection: 'row'}}>
-                <Text style={styles.textButton}>Leave incognito</Text>
+                <Text style={styles.textButton}>Leave Incognito Mode</Text>
                 <Loading visible={isLoadingInitChat} />
               </View>
             </TouchableOpacity>
           );
         }
         return (
-          <TouchableOpacity
-            onPress={() => onPress('message-anonymously', selectedUser)}
-            style={styles.buttonStyle}>
-            <Text
-              style={selectedUser?.allow_anon_dm ? styles.textButton : styles.disabledTextButton}>
-              Message Incognito
-            </Text>
-          </TouchableOpacity>
+          <>
+            <TouchableOpacity
+              onPress={() => onPress('message-anonymously', selectedUser)}
+              style={styles.buttonStyle}>
+              <Text
+                style={selectedUser?.allow_anon_dm ? styles.textButton : styles.disabledTextButton}>
+                Message Incognito
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => onPress('view')} style={styles.buttonStyle}>
+              <Text style={styles.textButton}>View {name}&apos;s Profile </Text>
+            </TouchableOpacity>
+          </>
         );
       case SIGNED:
         if (isAnon) {
@@ -61,6 +66,16 @@ const ModalAction = (props) => {
         }
         return (
           <>
+            {isGroup && (
+              <TouchableOpacity
+                onPress={() => onPress('message', selectedUser)}
+                style={styles.buttonStyle}>
+                <View style={{flexDirection: 'row'}}>
+                  <Text style={styles.textButton}>Message {name}</Text>
+                  <Loading visible={isLoadingInitChat} />
+                </View>
+              </TouchableOpacity>
+            )}
             <TouchableOpacity
               onPress={() => onPress('message-anonymously', selectedUser)}
               style={styles.buttonStyle}>
@@ -91,11 +106,11 @@ const ModalAction = (props) => {
       {...props}>
       <View style={styles.modalContainer}>
         <RenderButton />
-        {isGroup && (
+        {/* {isGroup && (
           <TouchableOpacity onPress={() => onPress('remove')} style={styles.buttonStyle}>
             <Text style={styles.textButton}>Remove {name} </Text>
           </TouchableOpacity>
-        )}
+        )} */}
       </View>
     </Modal>
   );
@@ -113,7 +128,7 @@ const styles = StyleSheet.create({
   disabledTextButton: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: COLORS.lightgrey
+    color: COLORS.gray300
   },
   textButton: {
     fontSize: 16,

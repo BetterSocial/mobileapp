@@ -293,13 +293,6 @@ const ChatInfoScreen = () => {
             </>
           }
           renderItem={({item, index}) => {
-            console.log(
-              'item',
-              item?.name || item?.username,
-              item?.userId,
-              signedProfileId,
-              anonProfileId
-            );
             return (
               <View style={styles.parentContact}>
                 <ProfileContact
