@@ -8,16 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* BetterSocialTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* BetterSocialTests.m */; };
-		09208917BD139B3A9EA17C64 /* libPods-BetterSocial-BetterSocialStaging.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B47556C0AD1CC64479471CC9 /* libPods-BetterSocial-BetterSocialStaging.a */; };
-		10F6FA33B07C4E08764270C0 /* libPods-BetterSocial-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A60CCBC9606E354E38EB1DF3 /* libPods-BetterSocial-tvOS.a */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		13F5BF0BF9D746ABD5226553 /* libPods-BetterSocial-BetterSocialDev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 448DF1F5F4E05F94D2BA0AD0 /* libPods-BetterSocial-BetterSocialDev.a */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* BetterSocialTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* BetterSocialTests.m */; };
-		2E7357E3EDC718B14778FD80 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		4072C477AE4EC446CE0FC74E /* libPods-BetterSocial-BetterSocialTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E98032BA201E20EFF47E4C1 /* libPods-BetterSocial-BetterSocialTests.a */; };
+		2E7357E3EDC718B14778FD80 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		39C2A6238A9EF85712FF3325 /* libPods-Helio-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 45A8C31C60BBA99F65167D1B /* libPods-Helio-tvOS.a */; };
+		5E482257835E17B8D4099638 /* libPods-Helio-HelioTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E025EF105DFCE3C13C6D3CE2 /* libPods-Helio-HelioTests.a */; };
 		845147C0275632A000F1BF16 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		845147C1275632B300F1BF16 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		845C6E802758AFC500C9F384 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DD32758A00C00C9F384 /* Inter-Regular.ttf */; };
@@ -49,7 +47,6 @@
 		845C6E9A2758B16500C9F384 /* Poppins-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DCE2758A00C00C9F384 /* Poppins-Thin.ttf */; };
 		845C6E9B2758B16800C9F384 /* Poppins-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DBF2758A00B00C9F384 /* Poppins-ThinItalic.ttf */; };
 		845C6E9C2758B16B00C9F384 /* Poppins.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DD52758A00C00C9F384 /* Poppins.ttf */; };
-		84D979F3233D9A9336607C9B /* libPods-BetterSocial.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F428A10767872783DCEF530 /* libPods-BetterSocial.a */; };
 		888DAA1829B48C8900311304 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		888DAA1929B48C8900311304 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		888DAA1D29B48C8900311304 /* FontsFree-Net-SFProText-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88954CF82832852B00A4B355 /* FontsFree-Net-SFProText-Regular.ttf */; };
@@ -135,11 +132,14 @@
 		88BB34952829E9FB0057417B /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88BB34922829E9DC0057417B /* Montserrat-Bold.ttf */; };
 		88BB6015299BC09D003FA042 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 88BB6014299BC09D003FA042 /* GoogleService-Info.plist */; };
 		88BB6018299BC0B3003FA042 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 88BB6016299BC0AF003FA042 /* GoogleService-Info.plist */; };
-		8DF077F7A73624EEB4761544 /* libPods-BetterSocial-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B880C1B4F2562553E5710094 /* libPods-BetterSocial-tvOSTests.a */; };
 		93C88B16B66646004C8065F1 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BFF0B6565B1866252D7A81F7 /* libPods-OneSignalNotificationServiceExtension.a */; };
+		C36829349B058F4724332805 /* libPods-Helio-HelioDev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D793740D13B5851280AE22A /* libPods-Helio-HelioDev.a */; };
+		CEB4A9AFC1C8EC4495C35A75 /* libPods-Helio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D3C2B9C5859E07404EC20481 /* libPods-Helio.a */; };
+		DE10BE8187E0741A2B59349E /* libPods-Helio-HelioStaging.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AA5F02D50ECF85EDB43A2DBE /* libPods-Helio-HelioStaging.a */; };
 		E97154A42976870A0021A505 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		E97154A52976870B0021A505 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		FD367AE1785F0F10ECF31D7B /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		FD367AE1785F0F10ECF31D7B /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		FDC358A01B89C324E9F57C41 /* libPods-Helio-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 422C06FB4C3BA6EDC12E6514 /* libPods-Helio-tvOSTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -185,6 +185,8 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* BetterSocialTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BetterSocialTests.m; sourceTree = "<group>"; };
 		02691D6E861343A9C3937700 /* Pods-BetterSocial-BetterSocialTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BetterSocial-BetterSocialTests.release.xcconfig"; path = "Target Support Files/Pods-BetterSocial-BetterSocialTests/Pods-BetterSocial-BetterSocialTests.release.xcconfig"; sourceTree = "<group>"; };
+		02966434F373EF1C14422FA8 /* Pods-Helio-HelioDev.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Helio-HelioDev.release.xcconfig"; path = "Target Support Files/Pods-Helio-HelioDev/Pods-Helio-HelioDev.release.xcconfig"; sourceTree = "<group>"; };
+		079544A865AD4CBAEC0CAF88 /* Pods-Helio-HelioStaging.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Helio-HelioStaging.release.xcconfig"; path = "Target Support Files/Pods-Helio-HelioStaging/Pods-Helio-HelioStaging.release.xcconfig"; sourceTree = "<group>"; };
 		0893606660594C6581C180EF /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Helio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Helio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = BetterSocial/AppDelegate.h; sourceTree = "<group>"; };
@@ -193,19 +195,24 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = BetterSocial/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = BetterSocial/main.m; sourceTree = "<group>"; };
 		1AC891F9490348DCA26D996F /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
+		20B51E58CFD2189CB89B866F /* Pods-Helio-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Helio-tvOS.release.xcconfig"; path = "Target Support Files/Pods-Helio-tvOS/Pods-Helio-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		23E2E799B981C57BB2DFCBD5 /* Pods-BetterSocial.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BetterSocial.release.xcconfig"; path = "Target Support Files/Pods-BetterSocial/Pods-BetterSocial.release.xcconfig"; sourceTree = "<group>"; };
 		24B0371C81240F616FD92509 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
 		24D259700A804021837D0178 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		2BAB2ECDE2FB4F9CBC368E44 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* Helio-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Helio-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* Helio-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Helio-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2F428A10767872783DCEF530 /* libPods-BetterSocial.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BetterSocial.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		31B376BF28E745F3BF9C69FF /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		3320609F673DC405F9F6419C /* Pods-BetterSocial-BetterSocialStaging.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BetterSocial-BetterSocialStaging.debug.xcconfig"; path = "Target Support Files/Pods-BetterSocial-BetterSocialStaging/Pods-BetterSocial-BetterSocialStaging.debug.xcconfig"; sourceTree = "<group>"; };
 		343B86486DB9FA227AA6F4EB /* Pods-BetterSocial-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BetterSocial-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-BetterSocial-tvOSTests/Pods-BetterSocial-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
-		448DF1F5F4E05F94D2BA0AD0 /* libPods-BetterSocial-BetterSocialDev.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BetterSocial-BetterSocialDev.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		422C06FB4C3BA6EDC12E6514 /* libPods-Helio-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Helio-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		45A8C31C60BBA99F65167D1B /* libPods-Helio-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Helio-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4925B8316B3331F1A2B57CD8 /* Pods-Helio-HelioDev.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Helio-HelioDev.debug.xcconfig"; path = "Target Support Files/Pods-Helio-HelioDev/Pods-Helio-HelioDev.debug.xcconfig"; sourceTree = "<group>"; };
+		4B445FB0CC821441B508C02F /* Pods-Helio-HelioTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Helio-HelioTests.debug.xcconfig"; path = "Target Support Files/Pods-Helio-HelioTests/Pods-Helio-HelioTests.debug.xcconfig"; sourceTree = "<group>"; };
+		4D793740D13B5851280AE22A /* libPods-Helio-HelioDev.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Helio-HelioDev.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		57C38488C4F539382CB67967 /* Pods-BetterSocial-BetterSocialDev.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BetterSocial-BetterSocialDev.debug.xcconfig"; path = "Target Support Files/Pods-BetterSocial-BetterSocialDev/Pods-BetterSocial-BetterSocialDev.debug.xcconfig"; sourceTree = "<group>"; };
-		7E98032BA201E20EFF47E4C1 /* libPods-BetterSocial-BetterSocialTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BetterSocial-BetterSocialTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B41E112633AA17EBEEA3E5E /* Pods-Helio-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Helio-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-Helio-tvOSTests/Pods-Helio-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		7E423B70444920A66E85125A /* Pods-Helio.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Helio.debug.xcconfig"; path = "Target Support Files/Pods-Helio/Pods-Helio.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = BetterSocial/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		83C90F8EE35E4BC885132002 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		845C6DBC2758A00B00C9F384 /* Inter-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-Bold.ttf"; path = "../assets/fonts/Inter-Bold.ttf"; sourceTree = "<group>"; };
@@ -256,23 +263,28 @@
 		91C8F6CE1BE5AB19D09ABAF8 /* Pods-BetterSocial-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BetterSocial-tvOS.release.xcconfig"; path = "Target Support Files/Pods-BetterSocial-tvOS/Pods-BetterSocial-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		93B8EB55146E63DEC275660B /* Pods-BetterSocial-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BetterSocial-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-BetterSocial-tvOSTests/Pods-BetterSocial-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		A10C675B47ED4AB0B191600C /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
-		A60CCBC9606E354E38EB1DF3 /* libPods-BetterSocial-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BetterSocial-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8C74E6D4D4A50F4F1AC2900 /* Pods-BetterSocial-BetterSocialDev.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BetterSocial-BetterSocialDev.release.xcconfig"; path = "Target Support Files/Pods-BetterSocial-BetterSocialDev/Pods-BetterSocial-BetterSocialDev.release.xcconfig"; sourceTree = "<group>"; };
+		AA5F02D50ECF85EDB43A2DBE /* libPods-Helio-HelioStaging.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Helio-HelioStaging.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFC5D615232FBCDBB3ACE2DC /* Pods-BetterSocial-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BetterSocial-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-BetterSocial-tvOS/Pods-BetterSocial-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		B137FAF8E6AFB0C6B8293FE5 /* Pods-BetterSocial-BetterSocialTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BetterSocial-BetterSocialTests.debug.xcconfig"; path = "Target Support Files/Pods-BetterSocial-BetterSocialTests/Pods-BetterSocial-BetterSocialTests.debug.xcconfig"; sourceTree = "<group>"; };
-		B47556C0AD1CC64479471CC9 /* libPods-BetterSocial-BetterSocialStaging.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BetterSocial-BetterSocialStaging.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5BAA4CB6361443A8DC5D9D0 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		B819D7A6527BBB5DEE2F9DF7 /* Pods-BetterSocial.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BetterSocial.debug.xcconfig"; path = "Target Support Files/Pods-BetterSocial/Pods-BetterSocial.debug.xcconfig"; sourceTree = "<group>"; };
-		B880C1B4F2562553E5710094 /* libPods-BetterSocial-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BetterSocial-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA74824031AE4396AE9CA127 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
+		BFD9060ED16CE2F4736C87A7 /* Pods-Helio-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Helio-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-Helio-tvOSTests/Pods-Helio-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		BFF0B6565B1866252D7A81F7 /* libPods-OneSignalNotificationServiceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OneSignalNotificationServiceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C0D44F6D4EC0449EF8F6E590 /* Pods-Helio-HelioStaging.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Helio-HelioStaging.debug.xcconfig"; path = "Target Support Files/Pods-Helio-HelioStaging/Pods-Helio-HelioStaging.debug.xcconfig"; sourceTree = "<group>"; };
 		C4AE09022AC43A4800E13758 /* OneSignalNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneSignalNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4AE09042AC43A4800E13758 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		C4AE09062AC43A4800E13758 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C6006FE7A8A24EA9B9162F27 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
+		C6591CC5F502F46F62B598FB /* Pods-Helio-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Helio-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-Helio-tvOS/Pods-Helio-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		C7A5416BEE8304199975986F /* Pods-Helio-HelioTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Helio-HelioTests.release.xcconfig"; path = "Target Support Files/Pods-Helio-HelioTests/Pods-Helio-HelioTests.release.xcconfig"; sourceTree = "<group>"; };
 		CD39DC6CD0BE404FAF9761AD /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		D1F34D050FFD4FA4B200601C /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
+		D3C2B9C5859E07404EC20481 /* libPods-Helio.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Helio.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6FBEFF7985977EAA274C44D /* Pods-BetterSocial-BetterSocialStaging.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BetterSocial-BetterSocialStaging.release.xcconfig"; path = "Target Support Files/Pods-BetterSocial-BetterSocialStaging/Pods-BetterSocial-BetterSocialStaging.release.xcconfig"; sourceTree = "<group>"; };
+		DBC2A60929D5EC13BE64F4A6 /* Pods-Helio.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Helio.release.xcconfig"; path = "Target Support Files/Pods-Helio/Pods-Helio.release.xcconfig"; sourceTree = "<group>"; };
+		E025EF105DFCE3C13C6D3CE2 /* libPods-Helio-HelioTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Helio-HelioTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1DE8642037C401E91B99F83 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		E595B01C9D390230E566295D /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		E8A1A88B295646DCA23AABFD /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
@@ -299,7 +311,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4072C477AE4EC446CE0FC74E /* libPods-BetterSocial-BetterSocialTests.a in Frameworks */,
+				5E482257835E17B8D4099638 /* libPods-Helio-HelioTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -307,7 +319,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				84D979F3233D9A9336607C9B /* libPods-BetterSocial.a in Frameworks */,
+				CEB4A9AFC1C8EC4495C35A75 /* libPods-Helio.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,7 +327,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				10F6FA33B07C4E08764270C0 /* libPods-BetterSocial-tvOS.a in Frameworks */,
+				39C2A6238A9EF85712FF3325 /* libPods-Helio-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -323,8 +335,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2E7357E3EDC718B14778FD80 /* (null) in Frameworks */,
-				8DF077F7A73624EEB4761544 /* libPods-BetterSocial-tvOSTests.a in Frameworks */,
+				FDC358A01B89C324E9F57C41 /* libPods-Helio-tvOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -332,8 +343,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FD367AE1785F0F10ECF31D7B /* (null) in Frameworks */,
-				13F5BF0BF9D746ABD5226553 /* libPods-BetterSocial-BetterSocialDev.a in Frameworks */,
+				C36829349B058F4724332805 /* libPods-Helio-HelioDev.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -349,7 +359,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				09208917BD139B3A9EA17C64 /* libPods-BetterSocial-BetterSocialStaging.a in Frameworks */,
+				DE10BE8187E0741A2B59349E /* libPods-Helio-HelioStaging.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -395,13 +405,13 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				2F428A10767872783DCEF530 /* libPods-BetterSocial.a */,
-				B47556C0AD1CC64479471CC9 /* libPods-BetterSocial-BetterSocialStaging.a */,
-				7E98032BA201E20EFF47E4C1 /* libPods-BetterSocial-BetterSocialTests.a */,
-				A60CCBC9606E354E38EB1DF3 /* libPods-BetterSocial-tvOS.a */,
-				B880C1B4F2562553E5710094 /* libPods-BetterSocial-tvOSTests.a */,
-				448DF1F5F4E05F94D2BA0AD0 /* libPods-BetterSocial-BetterSocialDev.a */,
 				BFF0B6565B1866252D7A81F7 /* libPods-OneSignalNotificationServiceExtension.a */,
+				D3C2B9C5859E07404EC20481 /* libPods-Helio.a */,
+				4D793740D13B5851280AE22A /* libPods-Helio-HelioDev.a */,
+				AA5F02D50ECF85EDB43A2DBE /* libPods-Helio-HelioStaging.a */,
+				E025EF105DFCE3C13C6D3CE2 /* libPods-Helio-HelioTests.a */,
+				45A8C31C60BBA99F65167D1B /* libPods-Helio-tvOS.a */,
+				422C06FB4C3BA6EDC12E6514 /* libPods-Helio-tvOSTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -569,6 +579,18 @@
 				93B8EB55146E63DEC275660B /* Pods-BetterSocial-tvOSTests.release.xcconfig */,
 				E595B01C9D390230E566295D /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */,
 				24B0371C81240F616FD92509 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */,
+				7E423B70444920A66E85125A /* Pods-Helio.debug.xcconfig */,
+				DBC2A60929D5EC13BE64F4A6 /* Pods-Helio.release.xcconfig */,
+				4925B8316B3331F1A2B57CD8 /* Pods-Helio-HelioDev.debug.xcconfig */,
+				02966434F373EF1C14422FA8 /* Pods-Helio-HelioDev.release.xcconfig */,
+				C0D44F6D4EC0449EF8F6E590 /* Pods-Helio-HelioStaging.debug.xcconfig */,
+				079544A865AD4CBAEC0CAF88 /* Pods-Helio-HelioStaging.release.xcconfig */,
+				4B445FB0CC821441B508C02F /* Pods-Helio-HelioTests.debug.xcconfig */,
+				C7A5416BEE8304199975986F /* Pods-Helio-HelioTests.release.xcconfig */,
+				C6591CC5F502F46F62B598FB /* Pods-Helio-tvOS.debug.xcconfig */,
+				20B51E58CFD2189CB89B866F /* Pods-Helio-tvOS.release.xcconfig */,
+				BFD9060ED16CE2F4736C87A7 /* Pods-Helio-tvOSTests.debug.xcconfig */,
+				7B41E112633AA17EBEEA3E5E /* Pods-Helio-tvOSTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -762,7 +784,7 @@
 					};
 					888DAA1429B48C8900311304 = {
 						DevelopmentTeam = J22M3M9VYU;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 					};
 					889CAB5E27D46CD6007F5892 = {
 						DevelopmentTeam = J22M3M9VYU;
@@ -1022,8 +1044,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BetterSocial-BetterSocialTests/Pods-BetterSocial-BetterSocialTests-resources.sh",
-				"${PODS_CONFIGURATION_BUILD_DIR}/Protobuf/Protobuf_Privacy.bundle",
+				"${PODS_ROOT}/Target Support Files/Pods-Helio-HelioTests/Pods-Helio-HelioTests-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/RNImageCropPicker/QBImagePicker.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
@@ -1046,7 +1067,6 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Protobuf_Privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/QBImagePicker.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
@@ -1069,7 +1089,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BetterSocial-BetterSocialTests/Pods-BetterSocial-BetterSocialTests-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Helio-HelioTests/Pods-Helio-HelioTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		38D1DD3BE4546ACBC10271B8 /* [CP] Check Pods Manifest.lock */ = {
@@ -1087,7 +1107,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-BetterSocial-tvOS-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Helio-tvOS-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1100,8 +1120,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BetterSocial-BetterSocialDev/Pods-BetterSocial-BetterSocialDev-resources.sh",
-				"${PODS_CONFIGURATION_BUILD_DIR}/Protobuf/Protobuf_Privacy.bundle",
+				"${PODS_ROOT}/Target Support Files/Pods-Helio-HelioDev/Pods-Helio-HelioDev-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/RNImageCropPicker/QBImagePicker.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
@@ -1124,7 +1143,6 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Protobuf_Privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/QBImagePicker.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
@@ -1147,7 +1165,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BetterSocial-BetterSocialDev/Pods-BetterSocial-BetterSocialDev-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Helio-HelioDev/Pods-Helio-HelioDev-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		789613580D92E1255EA48A02 /* [CP] Copy Pods Resources */ = {
@@ -1156,8 +1174,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BetterSocial/Pods-BetterSocial-resources.sh",
-				"${PODS_CONFIGURATION_BUILD_DIR}/Protobuf/Protobuf_Privacy.bundle",
+				"${PODS_ROOT}/Target Support Files/Pods-Helio/Pods-Helio-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/RNImageCropPicker/QBImagePicker.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
@@ -1180,7 +1197,6 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Protobuf_Privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/QBImagePicker.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
@@ -1203,7 +1219,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BetterSocial/Pods-BetterSocial-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Helio/Pods-Helio-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		888DAA1629B48C8900311304 /* Start Packager */ = {
@@ -1237,7 +1253,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
+			shellScript = "export NODE_BINARY=/Users/agitafirstawan/.nvm/versions/node/v16.14.2/bin/node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
 		889CAB6027D46CD6007F5892 /* Start Packager */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1287,7 +1303,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-BetterSocial-BetterSocialTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Helio-HelioTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1323,7 +1339,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-BetterSocial-BetterSocialStaging-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Helio-HelioStaging-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1349,7 +1365,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BetterSocial-BetterSocialDev/Pods-BetterSocial-BetterSocialDev-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Helio-HelioDev/Pods-Helio-HelioDev-frameworks.sh",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OneSignalXCFramework/OneSignal/OneSignalFramework.framework/OneSignalFramework",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OneSignalXCFramework/OneSignalCore/OneSignalCore.framework/OneSignalCore",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OneSignalXCFramework/OneSignalExtension/OneSignalExtension.framework/OneSignalExtension",
@@ -1374,7 +1390,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BetterSocial-BetterSocialDev/Pods-BetterSocial-BetterSocialDev-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Helio-HelioDev/Pods-Helio-HelioDev-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		EA81D98B1BA479AC8E1D9030 /* [CP] Check Pods Manifest.lock */ = {
@@ -1392,7 +1408,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-BetterSocial-tvOSTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Helio-tvOSTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1405,7 +1421,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BetterSocial/Pods-BetterSocial-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Helio/Pods-Helio-frameworks.sh",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OneSignalXCFramework/OneSignal/OneSignalFramework.framework/OneSignalFramework",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OneSignalXCFramework/OneSignalCore/OneSignalCore.framework/OneSignalCore",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OneSignalXCFramework/OneSignalExtension/OneSignalExtension.framework/OneSignalExtension",
@@ -1430,7 +1446,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BetterSocial/Pods-BetterSocial-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Helio/Pods-Helio-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F33E26003CE3FAFD8BF67500 /* [CP] Embed Pods Frameworks */ = {
@@ -1439,7 +1455,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BetterSocial-BetterSocialTests/Pods-BetterSocial-BetterSocialTests-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Helio-HelioTests/Pods-Helio-HelioTests-frameworks.sh",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OneSignalXCFramework/OneSignal/OneSignalFramework.framework/OneSignalFramework",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OneSignalXCFramework/OneSignalCore/OneSignalCore.framework/OneSignalCore",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OneSignalXCFramework/OneSignalExtension/OneSignalExtension.framework/OneSignalExtension",
@@ -1464,7 +1480,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BetterSocial-BetterSocialTests/Pods-BetterSocial-BetterSocialTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Helio-HelioTests/Pods-Helio-HelioTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F349537A619A4A886542A0DD /* [CP] Check Pods Manifest.lock */ = {
@@ -1482,7 +1498,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-BetterSocial-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Helio-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1495,8 +1511,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BetterSocial-BetterSocialStaging/Pods-BetterSocial-BetterSocialStaging-resources.sh",
-				"${PODS_CONFIGURATION_BUILD_DIR}/Protobuf/Protobuf_Privacy.bundle",
+				"${PODS_ROOT}/Target Support Files/Pods-Helio-HelioStaging/Pods-Helio-HelioStaging-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/RNImageCropPicker/QBImagePicker.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
@@ -1519,7 +1534,6 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Protobuf_Privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/QBImagePicker.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
@@ -1542,7 +1556,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BetterSocial-BetterSocialStaging/Pods-BetterSocial-BetterSocialStaging-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Helio-HelioStaging/Pods-Helio-HelioStaging-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F6B2DCD196874C41337BC98E /* [CP] Check Pods Manifest.lock */ = {
@@ -1560,7 +1574,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-BetterSocial-BetterSocialDev-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Helio-HelioDev-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1573,7 +1587,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BetterSocial-BetterSocialStaging/Pods-BetterSocial-BetterSocialStaging-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Helio-HelioStaging/Pods-Helio-HelioStaging-frameworks.sh",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OneSignalXCFramework/OneSignal/OneSignalFramework.framework/OneSignalFramework",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OneSignalXCFramework/OneSignalCore/OneSignalCore.framework/OneSignalCore",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OneSignalXCFramework/OneSignalExtension/OneSignalExtension.framework/OneSignalExtension",
@@ -1598,7 +1612,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BetterSocial-BetterSocialStaging/Pods-BetterSocial-BetterSocialStaging-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Helio-HelioStaging/Pods-Helio-HelioStaging-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -1724,7 +1738,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B137FAF8E6AFB0C6B8293FE5 /* Pods-BetterSocial-BetterSocialTests.debug.xcconfig */;
+			baseConfigurationReference = 4B445FB0CC821441B508C02F /* Pods-Helio-HelioTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -1747,7 +1761,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 02691D6E861343A9C3937700 /* Pods-BetterSocial-BetterSocialTests.release.xcconfig */;
+			baseConfigurationReference = C7A5416BEE8304199975986F /* Pods-Helio-HelioTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -1767,7 +1781,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B819D7A6527BBB5DEE2F9DF7 /* Pods-BetterSocial.debug.xcconfig */;
+			baseConfigurationReference = 7E423B70444920A66E85125A /* Pods-Helio.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -1800,7 +1814,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 23E2E799B981C57BB2DFCBD5 /* Pods-BetterSocial.release.xcconfig */;
+			baseConfigurationReference = DBC2A60929D5EC13BE64F4A6 /* Pods-Helio.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -1832,7 +1846,7 @@
 		};
 		2D02E4971E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AFC5D615232FBCDBB3ACE2DC /* Pods-BetterSocial-tvOS.debug.xcconfig */;
+			baseConfigurationReference = C6591CC5F502F46F62B598FB /* Pods-Helio-tvOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -1860,7 +1874,7 @@
 		};
 		2D02E4981E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 91C8F6CE1BE5AB19D09ABAF8 /* Pods-BetterSocial-tvOS.release.xcconfig */;
+			baseConfigurationReference = 20B51E58CFD2189CB89B866F /* Pods-Helio-tvOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -1888,7 +1902,7 @@
 		};
 		2D02E4991E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 343B86486DB9FA227AA6F4EB /* Pods-BetterSocial-tvOSTests.debug.xcconfig */;
+			baseConfigurationReference = BFD9060ED16CE2F4736C87A7 /* Pods-Helio-tvOSTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -1915,7 +1929,7 @@
 		};
 		2D02E49A1E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 93B8EB55146E63DEC275660B /* Pods-BetterSocial-tvOSTests.release.xcconfig */;
+			baseConfigurationReference = 7B41E112633AA17EBEEA3E5E /* Pods-Helio-tvOSTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -2059,23 +2073,21 @@
 		};
 		888DAA4729B48C8900311304 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3320609F673DC405F9F6419C /* Pods-BetterSocial-BetterSocialStaging.debug.xcconfig */;
+			baseConfigurationReference = C0D44F6D4EC0449EF8F6E590 /* Pods-Helio-HelioStaging.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BetterSocial/BetterSocial.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 301;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2.8.0.115;
 				DEVELOPMENT_TEAM = J22M3M9VYU;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = J22M3M9VYU;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = "$(SRCROOT)/BetterSocialStaging/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.0.0;
+				MARKETING_VERSION = 2.8.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2083,8 +2095,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.BetterSocial;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "match AdHoc org.reactjs.native.example.BetterSocial";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AdHoc org.reactjs.native.example.BetterSocial";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -2093,23 +2104,21 @@
 		};
 		888DAA4829B48C8900311304 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D6FBEFF7985977EAA274C44D /* Pods-BetterSocial-BetterSocialStaging.release.xcconfig */;
+			baseConfigurationReference = 079544A865AD4CBAEC0CAF88 /* Pods-Helio-HelioStaging.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BetterSocialStaging/BetterSocialStagingRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 301;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2.8.0.115;
 				DEVELOPMENT_TEAM = J22M3M9VYU;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = J22M3M9VYU;
 				EXCLUDED_ARCHS = "";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				INFOPLIST_FILE = "$(SRCROOT)/BetterSocialStaging/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.0.0;
+				MARKETING_VERSION = 2.8.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2117,8 +2126,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.BetterSocial;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "match AdHoc org.reactjs.native.example.BetterSocial";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AdHoc org.reactjs.native.example.BetterSocial";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -2126,7 +2134,7 @@
 		};
 		889CAB8C27D46CD6007F5892 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 57C38488C4F539382CB67967 /* Pods-BetterSocial-BetterSocialDev.debug.xcconfig */;
+			baseConfigurationReference = 4925B8316B3331F1A2B57CD8 /* Pods-Helio-HelioDev.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -2157,7 +2165,7 @@
 		};
 		889CAB8D27D46CD6007F5892 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A8C74E6D4D4A50F4F1AC2900 /* Pods-BetterSocial-BetterSocialDev.release.xcconfig */;
+			baseConfigurationReference = 02966434F373EF1C14422FA8 /* Pods-Helio-HelioDev.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;

@@ -194,7 +194,7 @@ PODS:
   - Permission-PhotoLibrary (3.8.0):
     - RNPermissions
   - PromisesObjC (1.2.12)
-  - Protobuf (3.25.3)
+  - Protobuf (3.25.2)
   - RCT-Folly (2020.01.13.00):
     - boost-for-react-native
     - DoubleConversion
@@ -403,7 +403,7 @@ PODS:
     - React
   - react-native-create-thumbnail (1.6.4):
     - React-Core
-  - react-native-document-picker (8.2.2):
+  - react-native-document-picker (9.1.0):
     - React-Core
   - react-native-get-random-values (1.9.0):
     - React-Core
@@ -899,7 +899,7 @@ SPEC CHECKSUMS:
   BVLinearGradient: 34a999fda29036898a09c6a6b728b0b4189e1a44
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: fa8275d5086566e22a26ddc385ab5772e7f9b1bd
-  FBReactNativeSpec: 35c98e8661ee0c117e11e7cfe02938caad0fa85b
+  FBReactNativeSpec: f38ae6764193c85f9d17374eca096882a0abe955
   Firebase: fffddd0bab8677d07376538365faa93ff3889b39
   FirebaseABTesting: e66f1f80747792630d9b292966de206d5df9853b
   FirebaseAnalytics: 4641d7ae4220174f6ca5626163ffc5de2e90391e
@@ -926,7 +926,7 @@ SPEC CHECKSUMS:
   Permission-Camera: e6d142d7d8b714afe0a83e5e6ae17eb949f1e3e9
   Permission-PhotoLibrary: 31787bbe77d0d3ae6a5267b8435e4a2e9ef78f1d
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
-  Protobuf: 8e9074797a13c484a79959fdb819ef4ae6da7dbe
+  Protobuf: 34db13339da0d02d64fa8a2ac6a124cfcc603703
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
   RCTRequired: f85fa00af016059cf88b90b8f8ff9a6af9e4b6c3
   RCTTypeSafety: 5279aaf0fb1ad715cbbbbee32d5c98c72598bc9c
@@ -944,7 +944,7 @@ SPEC CHECKSUMS:
   react-native-config: 86038147314e2e6d10ea9972022aa171e6b1d4d8
   react-native-context-menu-view: ea9e2d0f86859a143f1fd73a96a062ced5159567
   react-native-create-thumbnail: e022bcdcba8a0b4529a50d3fa1a832ec921be39d
-  react-native-document-picker: cd4d6b36a5207ad7a9e599ebb9eb0c2e84fa0b87
+  react-native-document-picker: b4f4a23b73f864ce17965b284c0757648993805b
   react-native-get-random-values: dee677497c6a740b71e5612e8dbd83e7539ed5bb
   react-native-image-picker: a82b781c14f1f5c16953290bee2039db43822517
   react-native-image-resizer: d9fb629a867335bdc13230ac2a58702bb8c8828f
@@ -1004,6 +1004,6 @@ SPEC CHECKSUMS:
   TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
   Yoga: d1fc3575b8b68891ff5ef3c276daa855e841eb32
 
-PODFILE CHECKSUM: 9fa1dfa21c9cb9cda5582923cc388bd4d5a7c9de
+PODFILE CHECKSUM: d41a8fcbbb793af1070a54359a6aae407fe378d1
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.14.3
