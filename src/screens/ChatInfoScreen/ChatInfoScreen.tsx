@@ -292,22 +292,29 @@ const ChatInfoScreen = () => {
               <View style={styles.gap} />
             </>
           }
-          renderItem={({item, index}) => (
-            <View style={styles.parentContact}>
-              <ProfileContact
-                key={index}
-                item={item}
-                onPress={() => onContactPressed(item, params.from)}
-                fullname={item?.name || item?.username}
-                photo={item?.profilePicture}
-                showArrow={handleShowArrow(item)}
-                userId={signedProfileId}
-                ImageComponent={renderImageComponent(item)}
-                isYou={item?.userId === signedProfileId || item?.userId === anonProfileId}
-                from={params?.from}
-              />
-            </View>
-          )}
+          renderItem={({item, index}) => {
+            return (
+              <View style={styles.parentContact}>
+                <ProfileContact
+                  key={index}
+                  item={item}
+                  onPress={() => onContactPressed(item, params.from)}
+                  fullname={item?.name || item?.username}
+                  photo={item?.profilePicture}
+                  showArrow={handleShowArrow(item)}
+                  userId={signedProfileId}
+                  ImageComponent={renderImageComponent(item)}
+                  isYou={
+                    item?.userId === signedProfileId ||
+                    item?.userId === anonProfileId ||
+                    item?.id === signedProfileId ||
+                    item?.id === anonProfileId
+                  }
+                  from={params?.from}
+                />
+              </View>
+            );
+          }}
         />
       )}
       <ModalAction
@@ -317,6 +324,8 @@ const ChatInfoScreen = () => {
         onPress={handlePressPopup}
         name={selectedUser?.user?.username || selectedUser?.user?.name || selectedUser?.username}
         isLoadingInitChat={isLoadingInitChat}
+        from={params?.from}
+        isGroup={channelInfo?.channelType === CHANNEL_GROUP}
       />
       <ModalActionAnonymous
         name={
