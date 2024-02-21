@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import PropTypes from 'prop-types';
 import React from 'react';
-import {Dimensions, StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
 
 import Content from './Content';
 import ContentLink from './ContentLink';
@@ -23,7 +23,6 @@ import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
 import BlurredLayer from './elements/BlurredLayer';
 import {showScoreAlertDialog} from '../../utils/Utils';
 import {COLORS} from '../../utils/theme';
-import WriteComment from '../../components/Comments/WriteComment';
 import useWriteComment from '../../components/Comments/hooks/useWriteComment';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import useCalculationContent from './hooks/useCalculationContent';
@@ -117,13 +116,12 @@ const RenderListFeed = (props) => {
 
   const isBlurred = item?.isBlurredPost && item?.anonimity;
 
-  const commentHeight = () => {
+  const addCommentPreviewHeight = () => {
+    const commentSectionHeight = getHeightReaction() - getHeightFooter();
     if (isBlurred && !hasComment) {
       return 0;
     }
-    const isSingleComment = getTotalReaction(item) === 1;
-    const commentSectionHeight = getHeightReaction() - getHeightFooter();
-    return isSingleComment ? commentSectionHeight - 20 : commentSectionHeight;
+    return commentSectionHeight;
   };
 
   const {onLayoutTopicChip} = useCalculationContent();
@@ -134,7 +132,7 @@ const RenderListFeed = (props) => {
   const topicBottomPosition = () => {
     if (hasComment) {
       if (getTotalReaction(item) === 1) {
-        return getHeightReaction() - 20;
+        return isBlurred && getHeightReaction() + normalize(4);
       }
       return getHeightReaction();
     }
@@ -227,7 +225,8 @@ const RenderListFeed = (props) => {
           withToast={true}
           isVisible={isBlurred}
           containerStyle={{
-            height: commentHeight()
+            height: isBlurred || !hasComment ? addCommentPreviewHeight() : undefined,
+            marginBottom: hasComment ? normalize(4) : 0
           }}>
           {hasComment ? (
             <View
