@@ -4,6 +4,7 @@ import {FlatList} from 'react-native';
 
 import BlockedList from '../RenderList';
 import useBlockedUser from './hooks/useBlockedUser';
+import {COLORS} from '../../../../utils/theme';
 
 const BlockedUserList = (props) => {
   const {navigation} = props;
@@ -48,6 +49,7 @@ const BlockedUserList = (props) => {
       keyExtractor={(item, index) => index.toString()}
       refreshing={isLoading}
       onRefresh={handleFetchData}
+      style={{backgroundColor: COLORS.white}}
     />
   );
 };
