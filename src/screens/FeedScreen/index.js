@@ -219,7 +219,7 @@ const FeedScreen = (props) => {
       index={index}
       onPressDomain={onPressDomain}
       onPress={(haveSeeMore) => {
-        onPress(item, haveSeeMore, index);
+        onPress(feeds[index], haveSeeMore, index);
       }}
       onPressComment={(haveSeeMore) => onPressComment(item, haveSeeMore, index)}
       onPressBlock={() => onPressBlock(item)}
@@ -276,22 +276,4 @@ const FeedScreen = (props) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {flex: 1},
-  content: {
-    flex: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: -1
-  },
-  containerLoading: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  flatlistContainer: {
-    paddingBottom: 0
-  }
-});
-
-export default React.memo(withInteractionsManaged(FeedScreen));
+export default FeedScreen;
