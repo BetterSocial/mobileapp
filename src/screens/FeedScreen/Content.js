@@ -255,12 +255,9 @@ const Content = ({
     });
   };
 
-  function topicsChipPosition() {
-    if (item.post_type === POST_TYPE_POLL) {
-      if (item.pollOptions.length > 3) {
-        return 'relative';
-      }
-      return 'absolute';
+  function getTopicsPositionBasedOnPostType() {
+    if (item.post_type === POST_TYPE_POLL && item.pollOptions.length > 3) {
+      return 'relative';
     }
     return 'absolute';
   }
@@ -328,7 +325,7 @@ const Content = ({
             fontSize={normalizeFontSizeByWidth(14)}
             text={message}
             topicContainer={{
-              position: topicsChipPosition(),
+              position: getTopicsPositionBasedOnPostType(),
               bottom: 0
             }}
           />
