@@ -255,6 +255,16 @@ const Content = ({
     });
   };
 
+  function topicsChipPosition() {
+    if (item.post_type === POST_TYPE_POLL) {
+      if (item.pollOptions.length > 3) {
+        return 'relative';
+      }
+      return 'absolute';
+    }
+    return 'absolute';
+  }
+
   return (
     <Pressable
       onLayout={handleHeightContainer}
@@ -318,12 +328,7 @@ const Content = ({
             fontSize={normalizeFontSizeByWidth(14)}
             text={message}
             topicContainer={{
-              position:
-                item.post_type === POST_TYPE_POLL
-                  ? item.pollOptions.length > 3
-                    ? 'relative'
-                    : 'absolute'
-                  : 'absolute',
+              position: topicsChipPosition(),
               bottom: 0
             }}
           />
