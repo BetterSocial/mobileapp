@@ -1,13 +1,11 @@
 import * as React from 'react';
-import {Dimensions, Image, StyleSheet, Text, TouchableWithoutFeedback, View} from 'react-native';
+import {Dimensions, Image, StyleSheet, TouchableWithoutFeedback, View} from 'react-native';
 
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import BgOnboardingTop from '../../../assets/background/bg_onboarding_top.png';
 import BottomOverlay from './BottomOverlay';
-import IconBetterOnboarding from '../../../assets/icon/IconBetterOnboarding';
 import dimen from '../../../utils/dimen';
-import {COLORS} from '../../../utils/theme';
-import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
+import {fonts, normalize} from '../../../utils/fonts';
 
 const {height, width} = Dimensions.get('screen');
 
@@ -54,21 +52,6 @@ export const SlideShowItem = ({
       <TouchableWithoutFeedback onPress={onPressContainer}>
         <View style={styles.onboardingBackgroundTopContainer}>
           <Image source={BgOnboardingTop} style={styles.onboardingBackgroundTop} />
-          <View style={styles.brandLoginContainer}>
-            <IconBetterOnboarding
-              width={dimen.size.ONBOARDING_BETTER_LOGO_WIDTH}
-              height={dimen.size.ONBOARDING_BETTER_LOGO_HEIGHT}
-              style={styles.brandLoginImage}
-            />
-            {/* <IconBetterOnboarding width={156} height={213.94} style={styles.brandLoginImage} /> */}
-            <Text style={styles.brandLoginTopText}>
-              {'Better Social is a Public Benefits Corporation\n'}
-              {'started to fix what Big Tech has broken.\n'}
-              {'\n'}
-              {'We focus on preserving your privacy, well being,\n'}
-              {'and ability to speak your mind.'}
-            </Text>
-          </View>
         </View>
       </TouchableWithoutFeedback>
     );
@@ -100,21 +83,6 @@ export const SlideShowItem = ({
 };
 
 const styles = StyleSheet.create({
-  brandLoginContainer: {alignSelf: 'center'},
-  brandLoginTopText: {
-    alignSelf: 'center',
-    textAlign: 'center',
-    fontFamily: fonts.inter[500],
-    fontSize: normalizeFontSize(14.12),
-    lineHeight: normalizeFontSize(21.18),
-    marginBottom: normalize(55),
-    color: COLORS.white
-  },
-  brandLoginImage: {
-    alignSelf: 'center',
-    marginBottom: dimen.normalizeDimen(height > 640 ? 32.62 : 8)
-    // backgroundColor: 'red'
-  },
   container: {
     height: '100%',
     width
