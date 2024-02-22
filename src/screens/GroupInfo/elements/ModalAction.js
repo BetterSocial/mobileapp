@@ -38,12 +38,12 @@ const ModalAction = (props) => {
         return (
           <>
             <TouchableOpacity
-              onPress={() => onPress('message-anonymously', selectedUser)}
+              onPress={() => onPress('message', selectedUser)}
               style={styles.buttonStyle}>
-              <Text
-                style={selectedUser?.allow_anon_dm ? styles.textButton : styles.disabledTextButton}>
-                Message Incognito
-              </Text>
+              <View style={{flexDirection: 'row'}}>
+                <Text style={styles.textButton}>Leave Incognito Mode</Text>
+                <Loading visible={isLoadingInitChat} />
+              </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => onPress('view')} style={styles.buttonStyle}>
               <Text style={styles.textButton}>View {name}&apos;s Profile </Text>
