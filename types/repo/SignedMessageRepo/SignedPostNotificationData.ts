@@ -91,6 +91,10 @@ export interface PostMaker {
 export interface PostMakerData {
   profile_pic_url?: string;
   username: string;
+  emoji_name: string | null;
+  emoji_code: string | null;
+  color_name: string | null;
+  color_code: string | null;
 }
 
 // eslint-disable-next-line no-shadow

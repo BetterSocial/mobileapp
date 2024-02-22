@@ -101,6 +101,12 @@ const PostNotificationChannelItem: (props: MessageChannelItemProps) => React.Rea
       unreadCount={postNotifItem?.unreadCount}
       upvote={item?.rawJson?.upvote}
       channelType={item?.channelType}
+      dbAnonUserInfo={{
+        anon_user_info_color_code: item?.anon_user_info_color_code,
+        anon_user_info_color_name: item?.anon_user_info_color_name,
+        anon_user_info_emoji_code: item?.anon_user_info_emoji_code,
+        anon_user_info_emoji_name: item?.anon_user_info_emoji_name
+      }}
     />
   );
 };
