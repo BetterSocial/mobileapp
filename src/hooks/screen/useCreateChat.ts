@@ -1,14 +1,13 @@
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
-import {v4 as uuid} from 'uuid';
 
 import ChannelList from '../../database/schema/ChannelListSchema';
-import ChannelListMemberSchema from '../../database/schema/ChannelListMemberSchema';
 import SignedMessageRepo from '../../service/repo/signedMessageRepo';
 import UserSchema from '../../database/schema/UserSchema';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import useUserAuthHook from '../core/auth/useUserAuthHook';
 import useChatUtilsHook, {AllowedGoToChatScreen} from '../core/chat/useChatUtilsHook';
+import {ChannelList as ChannelListObject} from '../../../types/database/schema/ChannelList.types';
 import {GROUP_INFO} from '../core/constant';
 import {getChannelListInfo} from '../../utils/string/StringUtils';
 import {getOrCreateAnonymousChannel} from '../../service/chat';
@@ -19,7 +18,7 @@ const useCreateChat = () => {
   const {goToChatScreen} = useChatUtilsHook();
   const {signedProfileId, anonProfileId} = useUserAuthHook();
 
-  const handleMemberSchema = (response) => {
+  const handleMemberSchema = async (response) => {
     try {
       const builtChannelData = {
         better_channel_member: response?.better_channel_member,
@@ -33,17 +32,14 @@ const useCreateChat = () => {
       );
       const members = originalMembers || response?.members;
 
+      const promises: Promise<any>[] = [];
+
       members?.forEach(async (member) => {
         const userMember = UserSchema.fromMemberWebsocketObject(member, response?.channel?.id);
         await userMember.saveOrUpdateIfExists(localDb);
-
-        const memberSchema = ChannelListMemberSchema.fromWebsocketObject(
-          response?.channel?.id,
-          uuid(),
-          member
-        );
-        await memberSchema.save(localDb);
       });
+
+      await Promise.all(promises);
     } catch (e) {
       console.log(e, 'error on memberSchema');
     }
@@ -87,10 +83,10 @@ const useCreateChat = () => {
       const chatData = createChannelJson(initChannel, selectedUser);
 
       const channelList = ChannelList.fromMessageSignedAPI(chatData);
-      channelList.saveIfLatest(localDb);
-      handleMemberSchema(initChannel);
+
+      await Promise.all([channelList.saveIfLatest(localDb), handleMemberSchema(initChannel)]);
       setLoadingCreateChat(false);
-      goToChatScreen(channelList, from);
+      goToChatScreen(channelList as ChannelListObject, from);
     } catch (e) {
       setLoadingCreateChat(false);
       console.log({e}, 'error create chat');
@@ -109,9 +105,10 @@ const useCreateChat = () => {
       );
       const chatData = createChannelJson(response, selectedUser);
       const channelList = ChannelList.fromMessageAnonymouslyAPI(chatData);
-      await channelList.saveIfLatest(localDb);
-      handleMemberSchema(response);
-      goToChatScreen(channelList, GROUP_INFO);
+
+      await Promise.all([channelList.save(localDb), handleMemberSchema(response)]);
+
+      goToChatScreen(channelList as ChannelListObject, GROUP_INFO);
     } catch (e) {
       SimpleToast.show(e || 'Failed to message this user anonymously');
     }
