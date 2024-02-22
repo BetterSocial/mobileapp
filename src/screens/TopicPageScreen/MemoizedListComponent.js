@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
 import SimpleToast from 'react-native-simple-toast';
-import {Dimensions, StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
 
 import {useRoute} from '@react-navigation/core';
 import {Footer, PreviewComment} from '../../components';
@@ -23,9 +22,6 @@ import {getCommentLength, getCountCommentWithChild} from '../../utils/getstream'
 import ShareUtils from '../../utils/share';
 import StringConstant from '../../utils/string/StringConstant';
 import {COLORS} from '../../utils/theme';
-import WriteComment from '../../components/Comments/WriteComment';
-import useWriteComment from '../../components/Comments/hooks/useWriteComment';
-import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import Content from '../FeedScreen/Content';
 import ContentLink from '../FeedScreen/ContentLink';
 import Header from '../FeedScreen/Header';
