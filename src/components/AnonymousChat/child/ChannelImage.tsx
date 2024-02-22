@@ -57,13 +57,13 @@ const ChannelImage = ({
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: COLORS.anon_primary
+      backgroundColor: COLORS.anon_secondary
     },
     myPostNotificationImageContainer: {
-      backgroundColor: isAnonymousTab ? COLORS.anon_primary : COLORS.signed_secondary
+      backgroundColor: isAnonymousTab ? COLORS.anon_secondary : COLORS.signed_secondary
     },
     anonPmNotificationImageContainer: {
-      backgroundColor: COLORS.anon_primary
+      backgroundColor: COLORS.anon_secondary
     },
     postNotificationIcon: {
       width: dimen.normalizeDimen(12.5),
