@@ -194,7 +194,7 @@ PODS:
   - Permission-PhotoLibrary (3.8.0):
     - RNPermissions
   - PromisesObjC (1.2.12)
-  - Protobuf (3.25.2)
+  - Protobuf (3.25.3)
   - RCT-Folly (2020.01.13.00):
     - boost-for-react-native
     - DoubleConversion
@@ -926,7 +926,7 @@ SPEC CHECKSUMS:
   Permission-Camera: e6d142d7d8b714afe0a83e5e6ae17eb949f1e3e9
   Permission-PhotoLibrary: 31787bbe77d0d3ae6a5267b8435e4a2e9ef78f1d
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
-  Protobuf: 34db13339da0d02d64fa8a2ac6a124cfcc603703
+  Protobuf: 8e9074797a13c484a79959fdb819ef4ae6da7dbe
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
   RCTRequired: f85fa00af016059cf88b90b8f8ff9a6af9e4b6c3
   RCTTypeSafety: 5279aaf0fb1ad715cbbbbee32d5c98c72598bc9c
