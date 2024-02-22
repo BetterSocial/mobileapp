@@ -255,13 +255,6 @@ const Content = ({
     });
   };
 
-  function getTopicsPositionBasedOnPostType() {
-    if (item.post_type === POST_TYPE_POLL && item.pollOptions.length > 3) {
-      return 'relative';
-    }
-    return 'absolute';
-  }
-
   return (
     <Pressable
       onLayout={handleHeightContainer}
@@ -325,7 +318,7 @@ const Content = ({
             fontSize={normalizeFontSizeByWidth(14)}
             text={message}
             topicContainer={{
-              position: getTopicsPositionBasedOnPostType(),
+              position: 'absolute',
               bottom: 0
             }}
           />
