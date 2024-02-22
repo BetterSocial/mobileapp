@@ -247,7 +247,7 @@ const helperGetMemberName = (member) => {
   const isAnonymous = Boolean(member?.anon_user_info_emoji_name);
 
   return isAnonymous
-    ? `Anonymous ${member?.anon_user_info_emoji_name}`
+    ? `${member?.anon_user_info_color_name} ${member?.anon_user_info_emoji_name}`
     : member?.user?.username ?? member?.user?.name;
 };
 
@@ -549,6 +549,22 @@ const onOpenLink = (url) => {
   });
 };
 
+/**
+ * @typedef {Object} AnonUserInfo
+ * @property {String} anon_user_info_color_code
+ * @property {String} anon_user_info_color_name
+ * @property {String} anon_user_info_emoji_code
+ * @property {String} anon_user_info_emoji_name
+ */
+
+/**
+ * @param {AnonUserInfo} anonUserInfo
+ */
+const getOfficialAnonUsername = (anonUserInfo) => {
+  return `${anonUserInfo?.anon_user_info_color_name} ${anonUserInfo?.anon_user_info_emoji_name}`;
+  // return `Anonymous ${anonUserInfo?.anon_user_info_emoji_name}`;
+};
+
 export {
   capitalizeFirstText,
   convertString,
@@ -572,5 +588,6 @@ export {
   isLocationMatch,
   styles,
   getCaptionWithLinkStyle,
-  getAnonymousChatName
+  getAnonymousChatName,
+  getOfficialAnonUsername
 };
