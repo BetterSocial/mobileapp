@@ -186,7 +186,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="OtherProfile"
-          component={withKeyboardWrapper(OtherProfile)}
+          component={withSafeAreaView(withKeyboardWrapper(OtherProfile))}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen

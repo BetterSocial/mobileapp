@@ -108,7 +108,7 @@ export const styles = StyleSheet.create({
   },
   container: (totalComment) => ({
     borderLeftWidth: 1,
-    marginHorizontal: SIZES.base - 1,
+    marginHorizontal: SIZES.base - 2,
     borderLeftColor: totalComment >= 1 ? COLORS.balance_gray : COLORS.white
   }),
   username: {
