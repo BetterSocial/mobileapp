@@ -209,9 +209,9 @@ const WhotoFollow = () => {
             crashlytics().recordError(new Error(e));
           }
           showMessage({
-            message: 'Welcome to Better Social',
+            message: ' Welcome to Helio',
             type: 'success',
-            backgroundColor: COLORS.anon_primary
+            backgroundColor: COLORS.signed_primary
           });
           setTimeout(() => {
             create();
