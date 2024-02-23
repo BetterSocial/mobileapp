@@ -12,7 +12,7 @@ const PrivacyPolicies = ({navigation}) => (
     </SafeAreaView>
     <WebView
       androidHardwareAccelerationDisabled={false}
-      source={{uri: 'https://bettersocial.org/privacy'}}
+      source={{uri: 'https://home.helio.social/privacy'}}
       showsVerticalScrollIndicator={false}
       startInLoadingState={true}
       style={styles.webview}
