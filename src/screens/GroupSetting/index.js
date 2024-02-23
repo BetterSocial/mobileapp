@@ -37,7 +37,7 @@ const GroupSetting = ({navigation, route}) => {
   const isFocusChatName = route?.params?.focusChatName;
   const [channelState] = React.useContext(Context).channel;
 
-  const anonymousName = `Anonymous ${channelState?.data?.anon_user_info_emoji_name}`;
+  const anonymousName = `${channelState?.data?.anon_user_color_name} ${channelState?.data?.anon_user_info_emoji_name}`;
   const getProfileName = (name) => {
     console.log('name', name);
     return name === 'AnonymousUser' ? anonymousName : name;
