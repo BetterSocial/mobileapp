@@ -209,7 +209,7 @@ const WhotoFollow = () => {
             crashlytics().recordError(new Error(e));
           }
           showMessage({
-            message: ' Welcome to Helio',
+            message: 'Welcome to Helio',
             type: 'success',
             backgroundColor: COLORS.signed_primary
           });
