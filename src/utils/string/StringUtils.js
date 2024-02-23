@@ -555,13 +555,20 @@ const onOpenLink = (url) => {
  * @property {String} anon_user_info_color_name
  * @property {String} anon_user_info_emoji_code
  * @property {String} anon_user_info_emoji_name
+ * @property {String} color_code
+ * @property {String} color_name
+ * @property {String} emoji_code
+ * @property {String} emoji_name
  */
 
 /**
  * @param {AnonUserInfo} anonUserInfo
  */
 const getOfficialAnonUsername = (anonUserInfo) => {
-  return `${anonUserInfo?.anon_user_info_color_name} ${anonUserInfo?.anon_user_info_emoji_name}`;
+  const colorName = anonUserInfo?.color_name || anonUserInfo?.anon_user_info_color_name;
+  const emojiName = anonUserInfo?.emoji_name || anonUserInfo?.anon_user_info_emoji_name;
+
+  return `${colorName} ${emojiName}`;
 };
 
 export {
