@@ -135,7 +135,7 @@ const WhotoFollow = () => {
           showMessage({
             message: 'Welcome to Helio',
             type: 'success',
-            backgroundColor: COLORS.anon_primary
+            backgroundColor: COLORS.signed_primary
           });
           setTimeout(() => {
             navigation.dispatch(StackActions.replace('HomeTabs'));
