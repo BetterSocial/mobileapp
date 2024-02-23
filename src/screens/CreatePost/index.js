@@ -345,17 +345,13 @@ const CreatePost = () => {
         }
       });
     } else {
-      Alert.alert(
-        'Permission denied',
-        'Allow Better Social to access photos and media on your device ?',
-        [
-          {
-            text: 'Open Settings',
-            onPress: () => openSettings().then(() => sheetMediaRef.current.close())
-          },
-          {text: 'Close'}
-        ]
-      );
+      Alert.alert('Permission denied', 'Allow Helio to access photos and media on your device ?', [
+        {
+          text: 'Open Settings',
+          onPress: () => openSettings().then(() => sheetMediaRef.current.close())
+        },
+        {text: 'Close'}
+      ]);
     }
   };
 

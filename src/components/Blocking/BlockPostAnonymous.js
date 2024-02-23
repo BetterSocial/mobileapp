@@ -12,7 +12,7 @@ const BlockPostAnonymous = ({refBlockPostAnonymous, onSelect}) => {
       id: 1,
       icon: 'block',
       label: "Block user's anonymous post indefinitely",
-      desc: 'You won’t see any anonymous posts from this user and the user’s reach will be reduced across BetterSocial, in particular for this post. This action cannot be reversed!',
+      desc: 'You won’t see any anonymous posts from this user and the user’s reach will be reduced across Helio, in particular for this post. This action cannot be reversed!',
       iconReght: false
     },
     {

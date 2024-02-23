@@ -62,7 +62,7 @@ export const SlideShowItem = ({
             />
             {/* <IconBetterOnboarding width={156} height={213.94} style={styles.brandLoginImage} /> */}
             <Text style={styles.brandLoginTopText}>
-              {'Better Social is a Public Benefits Corporation\n'}
+              {'Helio is a Public Benefits Corporation\n'}
               {'started to fix what Big Tech has broken.\n'}
               {'\n'}
               {'We focus on preserving your privacy, well being,\n'}

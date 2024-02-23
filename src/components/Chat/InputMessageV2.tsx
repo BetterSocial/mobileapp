@@ -282,7 +282,7 @@ const InputMessageV2 = ({
     } else {
       setIsLoadingUploadImageMedia(false);
       openAlertPermission(
-        'We’re not able to access your photos, please adjust your permission settings for BetterSocial.'
+        'We’re not able to access your photos, please adjust your permission settings for Helio.'
       );
     }
   };
@@ -313,7 +313,7 @@ const InputMessageV2 = ({
     } else {
       setIsLoadingUploadImageCamera(false);
       openAlertPermission(
-        'We’re not able to access your camera, please adjust your permission settings for BetterSocial.'
+        'We’re not able to access your camera, please adjust your permission settings for Helio.'
       );
     }
   };
