@@ -254,7 +254,7 @@ const ChatInfoScreen = () => {
       return getOfficialAnonUsername(item);
     }
 
-    return item?.username || item?.name;
+    return item?.user?.username || item?.username || item?.name;
   };
 
   const countParticipant = () => {
@@ -325,7 +325,7 @@ const ChatInfoScreen = () => {
         selectedUser={selectedUser}
         isOpen={openModal}
         onPress={handlePressPopup}
-        name={selectedUser?.user?.username || selectedUser?.user?.name || selectedUser?.username}
+        name={getUsername(selectedUser)}
         isLoadingInitChat={isLoadingInitChat}
       />
       <ModalActionAnonymous

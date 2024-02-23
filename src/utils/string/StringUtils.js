@@ -562,7 +562,6 @@ const onOpenLink = (url) => {
  */
 const getOfficialAnonUsername = (anonUserInfo) => {
   return `${anonUserInfo?.anon_user_info_color_name} ${anonUserInfo?.anon_user_info_emoji_name}`;
-  // return `Anonymous ${anonUserInfo?.anon_user_info_emoji_name}`;
 };
 
 export {

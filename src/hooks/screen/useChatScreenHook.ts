@@ -198,12 +198,13 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
 
   const handleUserName = (item): string => {
     if (item?.user?.anon_user_info_emoji_code) {
-      return getOfficialAnonUsername(selectedChannel);
+      return getOfficialAnonUsername(item?.user);
     }
 
     if (item?.user?.username !== 'AnonymousUser') {
       return item?.user?.username;
     }
+
     return getOfficialAnonUsername(selectedChannel);
   };
 

@@ -26,10 +26,10 @@ import ModalAction from './elements/ModalAction';
 import ModalActionAnonymous from './elements/ModalActionAnonymous';
 import ReportGroup from '../../assets/images/report.png';
 import useGroupInfo from './hooks/useGroupInfo';
+import {COLORS} from '../../utils/theme';
 import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
-import {COLORS} from '../../utils/theme';
 
 const GroupInfo = () => {
   const navigation = useNavigation();
@@ -148,7 +148,7 @@ const GroupInfo = () => {
   };
 
   const getProfileName = (name) => {
-    const anonymousName = `Anonymous ${channel?.data?.anon_user_info_emoji_name}`;
+    const anonymousName = `${channel?.data?.anon_user_info_emoji_name} ${channel?.data?.anon_user_info_emoji_name}`;
     return name === 'AnonymousUser' ? anonymousName : name;
   };
 
