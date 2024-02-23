@@ -4,7 +4,7 @@
 const signInScreenHumanIdFoundation = 'Foundation for a Human Internet';
 const signInScreenHumanIdBrand = 'humanID';
 const signInScreenHumanIdDetail =
-  'is an independent nonprofit guaranteeing\n your privacy. Better Social will receive no personal\ninformation.';
+  'is an independent nonprofit guaranteeing\n your privacy. Helio will receive no personal\ninformation.';
 const signInTermsAndPrivacyDetail = 'By continuing, you agree to our';
 const signInTermsLink = 'Terms';
 const signInPrivacy = 'Privacy Policy';
@@ -107,7 +107,7 @@ const discoveryMoreUsers = 'More Users';
 const discoveryMoreTopics = 'More Communities';
 const discoveryMoreDomains = 'More Domains';
 const discoveryMoreNews = 'More News';
-const discoverySearchBarPlaceholder = 'Search BetterSocial';
+const discoverySearchBarPlaceholder = 'Search Helio';
 
 // Profile Screeen
 const profileDeleteAccountAlertMessage =

@@ -12,7 +12,7 @@ const BlockDomain = ({refBlockDomain, onSelect, domain}) => {
       id: 1,
       icon: 'block',
       label: `Block ${domain} indefinitely`,
-      desc: `You will not be able to see ${domain}’s posts. The domain’s reach will be reduced across BetterSocial, in particular for this link.`,
+      desc: `You will not be able to see ${domain}’s posts. The domain’s reach will be reduced across Helio, in particular for this link.`,
       iconReght: false
     },
     {

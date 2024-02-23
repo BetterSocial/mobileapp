@@ -1,5 +1,5 @@
 # mobileapp
-Better Social Mobile App
+Helio Mobile App
 
 # Checkout the source
 
