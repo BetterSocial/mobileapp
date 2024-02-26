@@ -30,9 +30,6 @@ const PostNotificationChannelItem: (props: MessageChannelItemProps) => React.Rea
 
   const helperDetermineCommenterName = () => {
     const anonymousCommenterName = firstComment?.reaction?.data?.anon_user_info_emoji_name;
-    const firstCommenterId = firstComment?.reaction?.user_id;
-    const isFirstCommenterMe =
-      firstCommenterId === signedProfileId || firstCommenterId === anonProfileId;
 
     if (firstComment?.reaction?.isOwningReaction) {
       commenterName = 'You';
@@ -43,8 +40,6 @@ const PostNotificationChannelItem: (props: MessageChannelItemProps) => React.Rea
       commenterName = firstComment?.reaction?.user?.data?.username;
       postNotificationPicture = firstComment?.reaction?.user?.data?.profile_pic_url;
     }
-
-    if (isFirstCommenterMe) commenterName = 'You';
 
     return commenterName;
   };
@@ -73,11 +68,18 @@ const PostNotificationChannelItem: (props: MessageChannelItemProps) => React.Rea
   }
 
   const postMaker = postNotifItem?.rawJson?.postMaker;
-  const isOwnPost = postNotifItem?.rawJson?.isOwnPost;
   const isOwnSignedPost = item?.rawJson?.isOwnSignedPost;
 
   const {determinePostType} = useChannelHook();
   const type = determinePostType(postNotifItem);
+
+  const getIsMe = () => {
+    if (item?.channelType === 'ANON_POST_NOTIFICATION')
+      return postNotifItem?.rawJson?.isOwnAnonymousPost;
+    if (item?.channelType === 'POST_NOTIFICATION') return postNotifItem?.rawJson?.isOwnSignedPost;
+
+    return false;
+  };
 
   return (
     <BaseChannelItem
@@ -87,7 +89,7 @@ const PostNotificationChannelItem: (props: MessageChannelItemProps) => React.Rea
       comments={item?.rawJson?.comments?.length}
       downvote={item?.rawJson?.downvote}
       isCommentExists={Boolean(firstComment)}
-      isMe={item?.user?.isMe || isOwnSignedPost || isOwnPost}
+      isMe={getIsMe()}
       isOwnSignedPost={isOwnSignedPost}
       message={item?.description}
       name={postMaker?.data?.username}

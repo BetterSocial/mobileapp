@@ -3,7 +3,10 @@ import {PostNotificationChannelList} from '../../../types/database/schema/PostNo
 
 function useChannelHook() {
   const determinePostType = (data: PostNotificationChannelList): BaseChannelItemTypeProps => {
-    const isOwningPost = data?.rawJson?.isOwnPost;
+    const isOwnSignedPost =
+      data?.rawJson?.isOwnSignedPost && data?.channelType === 'POST_NOTIFICATION';
+    const isOwnAnonymousPost =
+      data?.rawJson?.isOwnAnonymousPost && data?.channelType === 'ANON_POST_NOTIFICATION';
     const isAnonymousPost = data?.rawJson?.isAnonym;
 
     const firstComment = data?.rawJson?.comments[0];
@@ -11,33 +14,34 @@ function useChannelHook() {
     const isOwningComment = firstComment?.reaction?.isOwningReaction;
     const isAnonymousComment = firstComment?.reaction?.data?.is_anonymous;
 
-    if (isOwningPost && isAnonymousPost && isOwningComment && isAnonymousComment)
+    if (isOwnAnonymousPost && isAnonymousPost && isOwningComment && isAnonymousComment)
       return BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_I_COMMENTED_ANONYMOUSLY;
 
-    if (isOwningPost && isAnonymousPost && isOwningComment)
+    if (isOwnAnonymousPost && isAnonymousPost && isOwningComment)
       return BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_I_COMMENTED;
 
-    if (isOwningPost && isAnonymousPost && isAnonymousComment)
+    if (isOwnAnonymousPost && isAnonymousPost && isAnonymousComment)
       return BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_COMMENTED_ANONYMOUSLY;
 
-    if (isOwningPost && isAnonymousPost && hasComment)
+    if (isOwnAnonymousPost && isAnonymousPost && hasComment)
       return BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_COMMENTED;
 
-    if (isOwningPost && isAnonymousPost) return BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION;
+    if (isOwnAnonymousPost && isAnonymousPost)
+      return BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION;
 
-    if (isOwningPost && isOwningComment && isAnonymousComment)
+    if (isOwnSignedPost && isOwningComment && isAnonymousComment)
       return BaseChannelItemTypeProps.MY_SIGNED_POST_NOTIFICATION_I_COMMENTED_ANONYMOUSLY;
 
-    if (isOwningPost && isOwningComment)
+    if (isOwnSignedPost && isOwningComment)
       return BaseChannelItemTypeProps.MY_SIGNED_POST_NOTIFICATION_COMMENTED;
 
-    if (isOwningPost && isAnonymousComment)
+    if (isOwnSignedPost && isAnonymousComment)
       return BaseChannelItemTypeProps.MY_SIGNED_POST_NOTIFICATION_COMMENTED_ANONYMOUSLY;
 
-    if (isOwningPost && hasComment)
+    if (isOwnSignedPost && hasComment)
       return BaseChannelItemTypeProps.MY_SIGNED_POST_NOTIFICATION_COMMENTED;
 
-    if (isOwningPost) return BaseChannelItemTypeProps.MY_SIGNED_POST_NOTIFICATION;
+    if (isOwnSignedPost) return BaseChannelItemTypeProps.MY_SIGNED_POST_NOTIFICATION;
 
     if (isAnonymousPost && isOwningComment && isAnonymousComment)
       return BaseChannelItemTypeProps.ANON_POST_NOTIFICATION_I_COMMENTED_ANONYMOUSLY;
