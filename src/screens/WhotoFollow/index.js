@@ -64,7 +64,7 @@ const WhotoFollow = () => {
   const create = useClientGetstream();
 
   const navigation = useNavigation();
-  const {bottom} = useSafeAreaInsets();
+  const {bottom, top} = useSafeAreaInsets();
 
   React.useEffect(() => {
     setIsLoading(true);
@@ -209,9 +209,10 @@ const WhotoFollow = () => {
             crashlytics().recordError(new Error(e));
           }
           showMessage({
-            message: 'Welcome to Better Social',
+            message: 'Welcome to Helio',
             type: 'success',
-            backgroundColor: COLORS.anon_primary
+            backgroundColor: COLORS.signed_primary,
+            style: top > 55 ? {paddingTop: 50} : undefined
           });
           setTimeout(() => {
             create();
