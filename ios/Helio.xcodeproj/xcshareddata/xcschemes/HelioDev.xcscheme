@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1420"
+   LastUpgradeVersion = "1520"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,10 +14,10 @@
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"
-                     BlueprintIdentifier = "888DAA1429B48C8900311304"
-                     BuildableName = "BetterSocialStaging.app"
-                     BlueprintName = "BetterSocialStaging"
-                     ReferencedContainer = "container:BetterSocial.xcodeproj">
+                     BlueprintIdentifier = "889CAB5E27D46CD6007F5892"
+                     BuildableName = "HelioDev.app"
+                     BlueprintName = "HelioDev"
+                     ReferencedContainer = "container:Helio.xcodeproj">
                   </BuildableReference>
                </EnvironmentBuildable>
             </ActionContent>
@@ -30,10 +30,10 @@
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"
-                     BlueprintIdentifier = "888DAA1429B48C8900311304"
-                     BuildableName = "BetterSocialStaging.app"
-                     BlueprintName = "BetterSocialStaging"
-                     ReferencedContainer = "container:BetterSocial.xcodeproj">
+                     BlueprintIdentifier = "889CAB5E27D46CD6007F5892"
+                     BuildableName = "HelioDev.app"
+                     BlueprintName = "HelioDev"
+                     ReferencedContainer = "container:Helio.xcodeproj">
                   </BuildableReference>
                </EnvironmentBuildable>
             </ActionContent>
@@ -48,10 +48,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "888DAA1429B48C8900311304"
-               BuildableName = "BetterSocialStaging.app"
-               BlueprintName = "BetterSocialStaging"
-               ReferencedContainer = "container:BetterSocial.xcodeproj">
+               BlueprintIdentifier = "889CAB5E27D46CD6007F5892"
+               BuildableName = "HelioDev.app"
+               BlueprintName = "HelioDev"
+               ReferencedContainer = "container:Helio.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -60,9 +60,8 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
-      <Testables>
-      </Testables>
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      shouldAutocreateTestPlan = "YES">
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -79,14 +78,14 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "echo &quot;.env.development&quot; &gt; /tmp/envfile&#10;">
+               scriptText = "# Type a script or drag a script file from your workspace to insert its path.&#10;# Type a script or drag a script file from your workspace to insert its path.&#10;echo &quot;.env.development&quot; &gt; /tmp/envfile&#10;">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"
-                     BlueprintIdentifier = "888DAA1429B48C8900311304"
-                     BuildableName = "BetterSocialStaging.app"
-                     BlueprintName = "BetterSocialStaging"
-                     ReferencedContainer = "container:BetterSocial.xcodeproj">
+                     BlueprintIdentifier = "889CAB5E27D46CD6007F5892"
+                     BuildableName = "HelioDev.app"
+                     BlueprintName = "HelioDev"
+                     ReferencedContainer = "container:Helio.xcodeproj">
                   </BuildableReference>
                </EnvironmentBuildable>
             </ActionContent>
@@ -95,14 +94,14 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "# Type a script or drag a script file from your workspace to insert its path.&#10;&quot;${SRCROOT}/../node_modules/react-native-config/ios/ReactNativeConfig/BuildXCConfig.rb&quot; &quot;${SRCROOT}/..&quot; &quot;${SRCROOT}/tmp.xcconfig&quot;&#10;">
+               scriptText = "# Type a script or drag a script file from your workspace to insert its path.&#10;# Type a script or drag a script file from your workspace to insert its path.&#10;&quot;${SRCROOT}/../node_modules/react-native-config/ios/ReactNativeConfig/BuildXCConfig.rb&quot; &quot;${SRCROOT}/..&quot; &quot;${SRCROOT}/tmp.xcconfig&quot;&#10;">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"
-                     BlueprintIdentifier = "888DAA1429B48C8900311304"
-                     BuildableName = "BetterSocialStaging.app"
-                     BlueprintName = "BetterSocialStaging"
-                     ReferencedContainer = "container:BetterSocial.xcodeproj">
+                     BlueprintIdentifier = "889CAB5E27D46CD6007F5892"
+                     BuildableName = "HelioDev.app"
+                     BlueprintName = "HelioDev"
+                     ReferencedContainer = "container:Helio.xcodeproj">
                   </BuildableReference>
                </EnvironmentBuildable>
             </ActionContent>
@@ -112,10 +111,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "888DAA1429B48C8900311304"
-            BuildableName = "BetterSocialStaging.app"
-            BlueprintName = "BetterSocialStaging"
-            ReferencedContainer = "container:BetterSocial.xcodeproj">
+            BlueprintIdentifier = "889CAB5E27D46CD6007F5892"
+            BuildableName = "HelioDev.app"
+            BlueprintName = "HelioDev"
+            ReferencedContainer = "container:Helio.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -129,10 +128,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "888DAA1429B48C8900311304"
-            BuildableName = "BetterSocialStaging.app"
-            BlueprintName = "BetterSocialStaging"
-            ReferencedContainer = "container:BetterSocial.xcodeproj">
+            BlueprintIdentifier = "889CAB5E27D46CD6007F5892"
+            BuildableName = "HelioDev.app"
+            BlueprintName = "HelioDev"
+            ReferencedContainer = "container:Helio.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
