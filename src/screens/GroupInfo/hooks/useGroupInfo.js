@@ -12,7 +12,7 @@ import useCreateChat from '../../../hooks/screen/useCreateChat';
 import TokenStorage, {ITokenEnum} from '../../../utils/storage/custom/tokenStorage';
 import {Context} from '../../../context';
 import {checkUserBlock} from '../../../service/profile';
-import {getChatName} from '../../../utils/string/StringUtils';
+import {getChatName, getOfficialAnonUsername} from '../../../utils/string/StringUtils';
 import {requestExternalStoragePermission} from '../../../utils/permission';
 import {setChannel} from '../../../context/actions/setChannel';
 import {setParticipants} from '../../../context/actions/groupChat';
@@ -46,6 +46,7 @@ const useGroupInfo = (channelId = null) => {
   const {channel, profileChannel} = channelState;
   const createChat = channelState.channel?.data?.created_at;
   const anonUserEmojiName = channelState?.channel?.data?.anon_user_info_emoji_name;
+  const anonUserColorName = channelState?.channel?.data?.anon_user_info_color_name;
 
   const serializeMembersList = (result = []) => {
     if (!result) {
@@ -78,7 +79,7 @@ const useGroupInfo = (channelId = null) => {
     }
   };
   const memberName = () => {
-    if (anonUserEmojiName) return `Anonymous ${anonUserEmojiName}`;
+    if (anonUserEmojiName) return `${anonUserColorName} ${anonUserEmojiName}`;
     return getChatName(username, profile.myProfile.username);
   };
   const chatName = getChatName(username, profile.myProfile.username);
@@ -317,6 +318,10 @@ const useGroupInfo = (channelId = null) => {
 
   const blockAnonUser = async () => {
     try {
+      const blockedUsername = selectedUser?.user?.anon_user_info_color_name
+        ? getOfficialAnonUsername(selectedUser?.user)
+        : selectedUser?.user?.anonymousUsername || selectedUser?.user?.username;
+
       setIsAnonymousModalOpen(false);
       const blockComponentValue = {
         postId: null,
@@ -324,7 +329,7 @@ const useGroupInfo = (channelId = null) => {
         actor: {
           id: selectedUser?.user?.id || selectedUser?.userId,
           data: {
-            username: selectedUser?.user?.anonymousUsername || selectedUser?.user?.username
+            username: blockedUsername
           }
         }
       };
@@ -340,7 +345,7 @@ const useGroupInfo = (channelId = null) => {
       setIsLoadingInitChat(true);
       await handleAnonymousMessage(selectedUser, channelId, 'chat');
     } catch (e) {
-      console.log(e);
+      console.error(e);
     } finally {
       setIsLoadingInitChat(false);
       setOpenModal(false);
@@ -441,7 +446,7 @@ const useGroupInfo = (channelId = null) => {
 
     if (isAnonymousUser) {
       const modifiedUser = {...item};
-      modifiedUser.user.anonymousUsername = `Anonymous ${item?.user?.anon_user_info_emoji_name}`;
+      modifiedUser.user.anonymousUsername = `${item?.user?.anon_user_info_color_name} ${item?.user?.anon_user_info_emoji_name}`;
       setSelectedUser(modifiedUser);
       setIsAnonymousModalOpen(true);
       return;
