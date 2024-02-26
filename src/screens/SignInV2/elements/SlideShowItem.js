@@ -19,7 +19,6 @@ export const SlideShowItem = ({
   isLogin,
   title,
   text,
-  textSvg,
   onNextSlide = () => {},
   onPressContainer = () => {}
 }) => {
@@ -90,7 +89,6 @@ export const SlideShowItem = ({
         handleLogin={handleLogin}
         isLogin={isLogin}
         text={text}
-        textSvg={textSvg}
         title={title}
         index={index}
         onNextSlide={__onNextSlide}

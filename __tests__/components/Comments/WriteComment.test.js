@@ -31,16 +31,7 @@ describe('WriteComment should run correctly', () => {
   });
 
   it('styles should run correctly', () => {
-    expect(styles.replyToContainer(true)).toEqual({
-      marginLeft: 90,
-      fontFamily: fonts.inter[600],
-      marginBottom: 11,
-      marginTop: 7,
-      lineHeight: 15,
-      fontSize: 12,
-      color: COLORS.blackgrey
-    });
-    expect(styles.replyToContainer(false)).toEqual({
+    expect(styles.replyToContainer).toEqual({
       marginLeft: 60,
       fontFamily: fonts.inter[600],
       marginBottom: 11,
@@ -49,16 +40,7 @@ describe('WriteComment should run correctly', () => {
       fontSize: 12,
       color: COLORS.blackgrey
     });
-    expect(styles.container(true)).toEqual({
-      flex: 1,
-      backgroundColor: COLORS.white,
-      width: '100%',
-      paddingRight: 20,
-      paddingLeft: 43,
-      flexDirection: 'row',
-      zIndex: 100
-    });
-    expect(styles.container(false)).toEqual({
+    expect(styles.container).toEqual({
       flex: 1,
       backgroundColor: COLORS.white,
       width: '100%',

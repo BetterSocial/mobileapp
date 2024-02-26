@@ -136,7 +136,7 @@ const NavHeader = (props) => {
             style={{
               flexDirection: 'row',
               alignItems: 'flex-start',
-              paddingTop: insets.top,
+              paddingTop: hasSearch ? insets.top : insets.top - dimen.normalizeDimen(8),
               zIndex: 2,
               position: 'absolute'
             }}>

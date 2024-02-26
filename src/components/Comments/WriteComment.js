@@ -74,7 +74,7 @@ const WriteComment = ({
     <View style={isViewOnly ? styles.isViewOnlyColumnContainer : styles.columnContainer}>
       <View style={styles.connectorTop(inReplyCommentView, showProfileConnector)} />
       <View style={{flexDirection: 'row', paddingRight: 20, paddingLeft: 7}}>
-        <Text style={styles.replyToContainer(inReplyCommentView)}>
+        <Text style={styles.replyToContainer}>
           <Text style={styles.replyToTitle}>Reply to </Text>
           {username}
         </Text>
@@ -90,7 +90,7 @@ const WriteComment = ({
           />
         </View>
       </View>
-      <View style={styles.container(inReplyCommentView)}>
+      <View style={styles.container}>
         <View style={styles.connectorBottom(inReplyCommentView, showProfileConnector)} />
         {isAnonimity ? (
           <>
@@ -170,30 +170,30 @@ export const styles = StyleSheet.create({
     borderTopColor: COLORS.gray1,
     position: 'absolute'
   },
-  replyToContainer: (inReplyCommentView) => ({
-    marginLeft: inReplyCommentView ? 90 : 60,
+  replyToContainer: {
+    marginLeft: 60,
     fontFamily: fonts.inter[600],
     marginBottom: 11,
     marginTop: 7,
     lineHeight: 15,
     fontSize: 12,
     color: COLORS.blackgrey
-  }),
+  },
   replyToTitle: {
     fontFamily: fonts.inter[600],
     lineHeight: 15,
     fontSize: 12,
     color: COLORS.black
   },
-  container: (inReplyCommentView) => ({
+  container: {
     flex: 1,
     backgroundColor: COLORS.white,
     width: '100%',
     paddingRight: 20,
-    paddingLeft: inReplyCommentView ? 43 : 20,
+    paddingLeft: 20,
     flexDirection: 'row',
     zIndex: 100
-  }),
+  },
   content: (isViewOnly) => ({
     display: 'flex',
     flexDirection: 'column',
