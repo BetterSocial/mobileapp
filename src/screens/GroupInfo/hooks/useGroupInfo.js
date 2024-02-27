@@ -352,6 +352,23 @@ const useGroupInfo = (channelId = null) => {
     }
   };
 
+  const handleOpenProfile = async (item) => {
+    setOpenModal(false);
+    setTimeout(() => {
+      if (profile?.myProfile?.user_id === item?.user_id) {
+        return null;
+      }
+
+      return navigation.push('OtherProfile', {
+        data: {
+          user_id: profile.myProfile.user_id,
+          other_id: item?.user_id || item?.userId,
+          username: item?.user?.name || item?.user?.username || item.username
+        }
+      });
+    }, 100);
+  };
+
   /**
    *
    * @param {('view' | 'remove' | 'message' | 'block' | 'message-anonymously')} status
@@ -436,23 +453,6 @@ const useGroupInfo = (channelId = null) => {
     }
 
     await handleSelectUser(item);
-  };
-
-  const handleOpenProfile = async (item) => {
-    setOpenModal(false);
-    setTimeout(() => {
-      if (profile?.myProfile?.user_id === item?.user_id) {
-        return null;
-      }
-
-      return navigation.push('OtherProfile', {
-        data: {
-          user_id: profile.myProfile.user_id,
-          other_id: item?.user_id || item?.userId,
-          username: item?.user?.name || item?.user?.username || item.username
-        }
-      });
-    }, 500);
   };
 
   return {
