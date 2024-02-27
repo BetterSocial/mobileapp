@@ -113,7 +113,6 @@ const useCreateChat = () => {
       const initChannel = await SignedMessageRepo.createSignedChat(members);
       const chatData = createChannelJson(initChannel, selectedUser);
 
-      console.log('initChannel', JSON.stringify(initChannel));
       const channelList = ChannelList.fromMessageSignedAPI(chatData);
 
       await Promise.all([channelList.saveIfLatest(localDb), handleMemberSchema(initChannel)]);
@@ -135,8 +134,9 @@ const useCreateChat = () => {
       handleMemberSchema(response);
       goToChatScreen(channelList, GROUP_INFO);
     } catch (e) {
-      setLoadingCreateChat(false);
       console.log({e}, 'error create chat');
+    } finally {
+      setLoadingCreateChat(false);
     }
   };
 
