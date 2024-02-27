@@ -6,11 +6,7 @@ import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
 import {Footer, PreviewComment} from '../../components';
 import useWriteComment from '../../components/Comments/hooks/useWriteComment';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
-import {Context} from '../../context';
-import {setFeedByIndex} from '../../context/actions/feeds';
 import usePostHook from '../../hooks/core/post/usePostHook';
-import useProfileHook from '../../hooks/core/profile/useProfileHook';
-import {followUserAnon, setFollow, setUnFollow, unfollowUserAnon} from '../../service/profile';
 import {showScoreAlertDialog} from '../../utils/Utils';
 import {
   ANALYTICS_SHARE_POST_FEED_ID,
@@ -32,7 +28,6 @@ import AddCommentPreview from './elements/AddCommentPreview';
 import BlurredLayer from './elements/BlurredLayer';
 import useCalculationContent from './hooks/useCalculationContent';
 import useFeed from './hooks/useFeed';
-import useFollowUser from '../ChannelListScreen/hooks/useFollowUser';
 
 const tabBarHeight = StatusBar.currentHeight;
 const FULL_WIDTH = Dimensions.get('screen').width;
@@ -55,7 +50,8 @@ const RenderListFeed = (props) => {
     showAnonymousOption = false,
     onDeletePost,
     isShowDelete,
-    isSelf
+    isSelf,
+    onHeaderOptionClicked = () => {}
   } = props;
   const {
     totalVote,
@@ -162,6 +158,7 @@ const RenderListFeed = (props) => {
           isSelf={isSelf}
           isFollow={item?.is_following_target}
           onPressFollUnFoll={() => followUnfollow(item)}
+          onHeaderOptionClicked={onHeaderOptionClicked}
         />
         {item.post_type === POST_TYPE_LINK && (
           <ContentLink
