@@ -140,7 +140,7 @@ const ContactScreen = ({navigation}) => {
       followed={extendedState.followed}
       userid={item.user_id}
       isAnon={sourceScreen === ANONYMOUS}
-      onPress={() => handleSelected(item, sourceScreen)}
+      onPress={() => handleSelected(item)}
     />
   );
   // }
@@ -231,10 +231,7 @@ const ContactScreen = ({navigation}) => {
       {sourceScreen !== ANONYMOUS && (
         <View>
           {selectedUsers && (
-            <ContactPreview
-              users={selectedUsers}
-              onPress={(user) => handleSelected(user, sourceScreen)}
-            />
+            <ContactPreview users={selectedUsers} onPress={(user) => handleSelected(user)} />
           )}
         </View>
       )}
@@ -261,7 +258,7 @@ const ContactScreen = ({navigation}) => {
           selectedUsers={selectedUsers}
           usernames={usernames}
           setLoading={setIsLoadingSearchResult}
-          onHandleSelected={(value) => handleSelected(value, sourceScreen)}
+          onHandleSelected={(value) => handleSelected(value)}
         />
       )}
       <Loading visible={loading || loadingCreateChat} />
