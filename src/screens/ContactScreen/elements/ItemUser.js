@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import {Animated, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 
 import MemoIc_Checklist from '../../../assets/icons/Ic_Checklist';
@@ -65,6 +66,14 @@ const ItemUser = ({photo, username, followed, onPress, userid, isAnon}) => {
   );
 };
 
+ItemUser.propTypes = {
+  photo: PropTypes.string,
+  username: PropTypes.string,
+  followed: PropTypes.any,
+  onPress: PropTypes.func,
+  userid: PropTypes.string,
+  isAnon: PropTypes.string
+};
 export default ItemUser;
 const styles = StyleSheet.create({
   containerCard: {
