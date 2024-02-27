@@ -4,7 +4,7 @@ import {StyleSheet, Text, View} from 'react-native';
 
 import dimen from '../../utils/dimen';
 import {COLORS} from '../../utils/theme';
-import {SIGNED} from '../../hooks/core/constant';
+import {ANONYMOUS, SIGNED} from '../../hooks/core/constant';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 
 export interface ChannelListTabItemProps {
@@ -54,7 +54,7 @@ const ChannelListHeaderItem = (props: ChannelListTabItemProps) => {
         <FastImage source={picture} style={[styles.picture, styles.anonBgColor]} />
       )}
       <Text numberOfLines={1} ellipsizeMode="tail" style={styles.name}>
-        as {name}
+        {type === ANONYMOUS ? name : `as ${name}`}
       </Text>
     </View>
   );

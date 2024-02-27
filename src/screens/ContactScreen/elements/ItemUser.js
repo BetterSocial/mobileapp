@@ -5,9 +5,10 @@ import MemoIc_Checklist from '../../../assets/icons/Ic_Checklist';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
 import {COLORS} from '../../../utils/theme';
 
-const ItemUser = ({photo, username, followed, onPress, userid}) => {
+const ItemUser = ({photo, username, followed, onPress, userid, isAnon}) => {
   const [isSelect, setIsSelect] = React.useState(false);
   const followIconFadeAnimation = React.useRef(new Animated.Value(0)).current;
+  const backgroundOpacity15PercentHexCode = '26';
 
   React.useEffect(() => {
     if (followed.includes(userid)) {
@@ -34,7 +35,11 @@ const ItemUser = ({photo, username, followed, onPress, userid}) => {
         style={[
           styles.containerCard,
           {
-            backgroundColor: isSelect ? COLORS.holytosca15percent : COLORS.white
+            backgroundColor: isSelect
+              ? isAnon
+                ? COLORS.anon_primary + backgroundOpacity15PercentHexCode
+                : COLORS.signed_primary + backgroundOpacity15PercentHexCode
+              : COLORS.white
           }
         ]}>
         <View style={styles.cardLeft}>
@@ -50,8 +55,8 @@ const ItemUser = ({photo, username, followed, onPress, userid}) => {
         </View>
         <View style={styles.containerButton}>
           <Pressable style={styles.followAction(32, 32)}>
-            <Animated.View style={{position: 'absolute', opacity: followIconFadeAnimation}}>
-              <MemoIc_Checklist width={32} height={32} />
+            <Animated.View style={{position: 'absolute', top: 4, opacity: followIconFadeAnimation}}>
+              <MemoIc_Checklist width={32} height={32} color={isAnon ? '#107793' : '#4782D7'} />
             </Animated.View>
           </Pressable>
         </View>
