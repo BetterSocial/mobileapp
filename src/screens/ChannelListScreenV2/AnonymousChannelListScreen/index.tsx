@@ -11,7 +11,7 @@ import Search from '../../ChannelListScreen/elements/Search';
 import useAnonymousChannelListScreenHook from '../../../hooks/screen/useAnonymousChannelListHook';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import useRootChannelListHook from '../../../hooks/screen/useRootChannelListHook';
-import {ANON_PM, ANON_POST_NOTIFICATION} from '../../../hooks/core/constant';
+import {ANONYMOUS, ANON_PM, ANON_POST_NOTIFICATION} from '../../../hooks/core/constant';
 
 const AnonymousChannelListScreen = ({route}) => {
   const {refresh} = useLocalDatabaseHook();
@@ -53,7 +53,7 @@ const AnonymousChannelListScreen = ({route}) => {
     <>
       <StatusBar translucent={false} />
       <View style={{height: 52}}>
-        <Search route={route} onPress={goToContactScreen} isShowNewChat={false} />
+        <Search route={route} isAnon={true} onPress={() => goToContactScreen({from: ANONYMOUS})} />
       </View>
 
       <FlatList
@@ -61,7 +61,7 @@ const AnonymousChannelListScreen = ({route}) => {
         keyExtractor={(item) => item.id}
         ListHeaderComponent={
           <ChannelListHeaderItem
-            name="Anonymous"
+            name="Incognito"
             picture={AnonymousProfile}
             type="ANONYMOUS"
             testID="horizontal-tab-1"
