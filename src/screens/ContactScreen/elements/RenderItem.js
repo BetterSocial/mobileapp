@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {View, Text, TouchableNativeFeedback} from 'react-native';
-import MemoIc_Checklist from '../../../assets/icons/Ic_Checklist';
+import IconChecklist from '../../../assets/icons/Ic_Checklist';
 
 import {Avatar, Gap} from '../../../components';
 import {COLORS, SIZES} from '../../../utils/theme';
@@ -37,7 +37,7 @@ const RenderItem = ({item, selectedUsers, onChange, index}) => {
             alignItems: 'flex-end',
             flex: 1,
           }}>
-          {isInArray(item, selectedUsers) > -1 ? <MemoIc_Checklist /> : null}
+          {isInArray(item, selectedUsers) > -1 ? <IconChecklist /> : null}
         </View> */}
       </View>
     </TouchableNativeFeedback>

@@ -4,7 +4,7 @@ import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
 import {Dimensions, RefreshControl, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
 /* eslint-disable no-param-reassign */
 import {debounce} from 'lodash';
-
+import {useRoute} from '@react-navigation/core';
 import ContactPreview from './elements/ContactPreview';
 import Header from '../../components/Header/HeaderContact';
 import ItemUser from './elements/ItemUser';
@@ -18,6 +18,7 @@ import {Loading} from '../../components';
 import {Search} from './elements';
 import {userPopulate} from '../../service/users';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import {ANONYMOUS} from '../../hooks/core/constant';
 
 const {width} = Dimensions.get('screen');
 
@@ -37,7 +38,9 @@ const ContactScreen = ({navigation}) => {
   const [selectedUsers, setSelectedUsers] = React.useState([]);
   const [isSearchMode, setIsSearchMode] = React.useState(false);
   const [isLoadingSearchResult, setIsLoadingSearchResult] = React.useState(false);
-  const {createSignChat, loadingCreateChat} = useCreateChat();
+  const {createSignChat, createAnonymousChat, loadingCreateChat} = useCreateChat();
+  const route = useRoute();
+  const {from: sourceScreen} = route.params;
   const debounced = React.useCallback(
     debounce((changedText) => {
       // handleSearch(changedText)
@@ -106,6 +109,7 @@ const ContactScreen = ({navigation}) => {
   const handleCreateChannel = async () => {
     try {
       const mappingUserName = selectedUsers?.map((user) => user?.username).join(',');
+      const mappingUserId = selectedUsers?.map((user) => user?.user_id).join(',');
       let image = DEFAULT_PROFILE_PIC_PATH;
       if (selectedUsers.length === 1) {
         image = selectedUsers[0]?.profile_pic_path;
@@ -113,10 +117,16 @@ const ContactScreen = ({navigation}) => {
       const dataSelected = {
         user: {
           name: mappingUserName,
-          image
+          image,
+          userId: mappingUserId
         }
       };
-      createSignChat(followed, dataSelected, 'CONTACT_SCREEN');
+
+      if (sourceScreen === ANONYMOUS) {
+        createAnonymousChat(dataSelected);
+      } else {
+        createSignChat(followed, dataSelected, 'CONTACT_SCREEN');
+      }
     } catch (e) {
       console.log(e, 'error signed chat');
     }
@@ -129,14 +139,15 @@ const ContactScreen = ({navigation}) => {
       username={item.username}
       followed={extendedState.followed}
       userid={item.user_id}
+      isAnon={sourceScreen === ANONYMOUS}
       onPress={() => handleSelected(item)}
     />
   );
   // }
   const handleSelected = (value) => {
-    const copyFollowed = [...followed];
-    const copyUsername = [...usernames];
-    const copyUsers = [...selectedUsers];
+    const copyFollowed = sourceScreen === ANONYMOUS ? [] : [...followed];
+    const copyUsername = sourceScreen === ANONYMOUS ? [] : [...usernames];
+    const copyUsers = sourceScreen === ANONYMOUS ? [] : [...selectedUsers];
     const index = copyFollowed.indexOf(value.user_id);
     if (index > -1) {
       copyFollowed.splice(index, 1);
@@ -195,9 +206,14 @@ const ContactScreen = ({navigation}) => {
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
       <Header
-        title={StringConstant.chatTabHeaderCreateChatButtonText}
+        title={
+          sourceScreen === ANONYMOUS
+            ? StringConstant.chatTabHeaderCreateAnonChatButtonText
+            : StringConstant.chatTabHeaderCreateChatButtonText
+        }
         containerStyle={styles.containerStyle}
         subTitle={'Next'}
+        subtitleStyle={selectedUsers.length > 0 && styles.subtitleStyle(sourceScreen)}
         onPressSub={() => handleCreateChannel()}
         onPress={() => navigation.goBack()}
         disabledNextBtn={selectedUsers.length <= 0}
@@ -212,11 +228,13 @@ const ContactScreen = ({navigation}) => {
         // onPress={handleSearch}
       />
 
-      <View>
-        {selectedUsers && (
-          <ContactPreview users={selectedUsers} onPress={(user) => handleSelected(user)} />
-        )}
-      </View>
+      {sourceScreen !== ANONYMOUS && (
+        <View>
+          {selectedUsers && (
+            <ContactPreview users={selectedUsers} onPress={(user) => handleSelected(user)} />
+          )}
+        </View>
+      )}
 
       {isRecyclerViewShown && !isSearchMode && (
         <RecyclerListView
@@ -262,9 +280,8 @@ const styles = StyleSheet.create({
   containerStyle: {
     marginHorizontal: 16
   },
-  subtitleStyle: (selectedUsers) => ({
-    color: selectedUsers.length > 0 ? COLORS.anon_primary : COLORS.gray4,
-    marginEnd: 8
+  subtitleStyle: (sourceScreen) => ({
+    color: sourceScreen === ANONYMOUS ? COLORS.anon_primary : COLORS.signed_primary
   })
 });
 
