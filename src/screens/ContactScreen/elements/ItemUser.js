@@ -9,10 +9,7 @@ import {COLORS} from '../../../utils/theme';
 const ItemUser = ({photo, username, followed, onPress, userid, isAnon}) => {
   const [isSelect, setIsSelect] = React.useState(false);
   const followIconFadeAnimation = React.useRef(new Animated.Value(0)).current;
-  const backgroundOpacity15PercentHexCode = '26';
-  const anonColorCondition = isAnon
-    ? COLORS.anon_primary + backgroundOpacity15PercentHexCode
-    : COLORS.signed_primary + backgroundOpacity15PercentHexCode;
+  const anonColorCondition = isAnon ? COLORS.anon_primary_15 : COLORS.signed_primary_15;
 
   React.useEffect(() => {
     if (followed.includes(userid)) {
@@ -56,7 +53,11 @@ const ItemUser = ({photo, username, followed, onPress, userid, isAnon}) => {
         <View style={styles.containerButton}>
           <Pressable style={styles.followAction(32, 32)}>
             <Animated.View style={{position: 'absolute', top: 4, opacity: followIconFadeAnimation}}>
-              <IconChecklist width={32} height={32} color={isAnon ? '#107793' : '#4782D7'} />
+              <IconChecklist
+                width={32}
+                height={32}
+                color={isAnon ? COLORS.anon_primary : COLORS.signed_primary}
+              />
             </Animated.View>
           </Pressable>
         </View>
