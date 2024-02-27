@@ -318,7 +318,7 @@ const Content = ({
             fontSize={normalizeFontSizeByWidth(14)}
             text={message}
             topicContainer={{
-              position: item.post_type === POST_TYPE_STANDARD ? 'absolute' : 'relative',
+              position: 'absolute',
               bottom: 0
             }}
           />

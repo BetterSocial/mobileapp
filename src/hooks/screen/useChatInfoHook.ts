@@ -15,6 +15,15 @@ import {isContainUrl} from '../../utils/Utils';
 
 function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   const {params}: any = useRoute();
+  const navigation = useNavigation();
+
+  const [myUserId] = React.useContext(Context).profile;
+
+  const [showPopupBlock, setShowPopupBlock] = React.useState(false);
+  const [channelInfo, setChannelInfo] = React.useState(null);
+  const [loadingChannelInfo, setLoadingChannelInfo] = React.useState<boolean>(false);
+
+  const {isLoadingFetchingChannelDetail, selectedChannel, goBack} = useChatUtilsHook();
   const {
     handlePressContact,
     openModal,
@@ -24,15 +33,10 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
     selectedUser,
     blockModalRef,
     isLoadingInitChat
-  } = useGroupInfo();
-  const {localDb} = useLocalDatabaseHook();
-  const [loadingChannelInfo, setLoadingChannelInfo] = React.useState<boolean>(false);
-  const {isLoadingFetchingChannelDetail, selectedChannel, goBack} = useChatUtilsHook();
-  const [myUserId] = React.useContext(Context).profile;
-  const navigation = useNavigation();
-  const [showPopupBlock, setShowPopupBlock] = React.useState(false);
-  const [channelInfo, setChannelInfo] = React.useState(null);
+  } = useGroupInfo(selectedChannel?.id);
+
   const {signedProfileId, anonProfileId} = useUserAuthHook();
+  const {localDb} = useLocalDatabaseHook();
 
   const initChatInfoData = async () => {
     if (localDb) {

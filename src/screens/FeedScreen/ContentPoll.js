@@ -7,7 +7,7 @@ import PollOptions from '../../components/PollOptions';
 import PollOptionsMultipleChoice from '../../components/PollOptionsMultipleChoice';
 import useContentPoll from './hooks/useContentPoll';
 import {COLORS} from '../../utils/theme';
-import {fonts, normalizeFontSize, normalizeFontSizeByWidth} from '../../utils/fonts';
+import {fonts, normalize, normalizeFontSize, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {getPollTime, isPollExpired} from '../../utils/string/StringUtils';
 
 const {width: screenWidth} = Dimensions.get('window');
@@ -25,7 +25,8 @@ const ContentPoll = ({
   onLayout = () => {},
   currentMoment = moment(),
   isPostDetail = false,
-  containerStyle
+  containerStyle,
+  topics = []
 }) => {
   const {
     renderSeeResultButton,
@@ -55,11 +56,19 @@ const ContentPoll = ({
   const renderSeeResultButtonHandle = () =>
     renderSeeResultButton(multiplechoice, multipleChoiceSelected);
 
+  const hasTopics = topics.length > 0;
+  const isMoreThanThreePolls = polls.length > 3;
+
   return (
     <View onLayout={onLayout} style={[styles.containerShowMessage, containerStyle]}>
       <View style={styles.pollOptionsContainer}>
         <Text style={styles.voteFont}>All votes are anonymous - even to the poll’s author!</Text>
-        <View style={isPostDetail ? styles.pollContainer : styles.pollListContainer}>
+        <View
+          style={
+            isPostDetail
+              ? styles.pollContainer
+              : styles.pollListContainer(hasTopics, isMoreThanThreePolls)
+          }>
           {polls.map((pollItem, indexPoll) =>
             multiplechoice ? (
               <PollOptionsMultipleChoice
@@ -328,10 +337,12 @@ const stylesComponent = (pollLength) =>
     pollContainer: {
       paddingTop: 10
     },
-    pollListContainer: {
+    pollListContainer: (hasTopics, isMoreThanThreePolls) => ({
       paddingTop: 10,
-      height: (pollLength / 4) * normalizeFontSizeByWidth(250)
-    },
+      height:
+        (pollLength / 4) * normalizeFontSizeByWidth(250) -
+        (hasTopics && isMoreThanThreePolls ? normalize(30) : 0)
+    }),
     voteFont: {
       fontSize: normalizeFontSize(12),
       color: COLORS.blackgrey,
