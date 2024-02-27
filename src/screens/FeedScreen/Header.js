@@ -124,8 +124,7 @@ const _renderAnonimity = ({
   onDeletePost = () => {},
   isShowDelete = false,
   isSelf = false,
-  hideThreeDot,
-  onHeaderOptionClicked = () => {}
+  hideThreeDot
 }) => {
   const navigation = useNavigation();
   const refSheet = React.useRef();
@@ -202,7 +201,7 @@ const _renderAnonimity = ({
               {showAnonymousOption && !hideThreeDot && (
                 <GlobalButton
                   buttonStyle={{position: 'absolute', right: 0, top: -8}}
-                  onPress={onHeaderOptionClicked}>
+                  onPress={() => {}}>
                   <View style={{zIndex: 1000}}>
                     <ElipsisIcon width={4} height={14} fill={colors.blackgrey} />
                   </View>
@@ -320,32 +319,47 @@ const _renderProfileNormal = ({
           <GlobalButton
             onPress={navigateToProfile}
             style={[styles.containerFeedProfile, {paddingBottom: 5}]}>
-            <View style={[styles.containerFeedName, {alignItems: 'flex-end'}]}>
-              <View style={styles.contentFeedName}>
-                <Text style={styles.feedUsername}>
-                  {username || StringConstant.feedDeletedUserName}
-                </Text>
-                {!isSelf && (
-                  <React.Fragment>
-                    <View style={styles.point} />
-                    <TouchableOpacity onPress={() => onPressFollUnFoll(isFollow)}>
-                      <Text style={isFollow ? styles.textFollowing : styles.textFollow}>
-                        {isFollow ? 'Following' : 'Follow'}
-                      </Text>
-                    </TouchableOpacity>
-                  </React.Fragment>
-                )}
-              </View>
+            <View>
+              <View
+                style={[
+                  {
+                    flexDirection: 'row',
+                    alignItems: 'center'
+                  }
+                ]}>
+                <View
+                  style={{
+                    flexDirection: 'row'
+                  }}>
+                  <Text>{username || StringConstant.feedDeletedUserName}</Text>
+                  {!isSelf && (
+                    <React.Fragment>
+                      <View style={styles.point} />
+                      <TouchableOpacity onPress={() => onPressFollUnFoll(isFollow)}>
+                        <Text style={isFollow ? styles.textFollowing : styles.textFollow}>
+                          {isFollow ? 'Following' : 'Follow'}
+                        </Text>
+                      </TouchableOpacity>
+                    </React.Fragment>
+                  )}
+                </View>
 
-              <GlobalButton
-                buttonStyle={{marginLeft: 'auto', paddingBottom: 0, alignSelf: 'center'}}
-                onPress={onHeaderOptionClicked}>
-                {hideThreeDot ? null : (
-                  <View style={{zIndex: 1000}}>
-                    <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
-                  </View>
-                )}
-              </GlobalButton>
+                <GlobalButton
+                  buttonStyle={{
+                    marginLeft: 'auto',
+                    paddingBottom: 0,
+                    alignSelf: 'center'
+                  }}
+                  onPress={() => {
+                    refSheet.current.open();
+                  }}>
+                  {hideThreeDot ? null : (
+                    <View style={{zIndex: 1000}}>
+                      <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
+                    </View>
+                  )}
+                </GlobalButton>
+              </View>
             </View>
             <View style={[styles.containerFeedText, {paddingBottom: 0}]}>
               <Text style={styles.feedDate}>{calculateTime(time)}</Text>

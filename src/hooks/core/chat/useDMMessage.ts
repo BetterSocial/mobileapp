@@ -36,9 +36,9 @@ const useDMMessage = () => {
       };
 
       channel.firstMessage = channel?.messages?.[channel?.messages?.length - 1];
-      channel.myUserId = signedProfileId;
-      channel.targetName = chatName?.name;
-      channel.targetImage = chatName?.image;
+      channel.myUserId = signedProfileId; // change to use getChannelListInfo
+      channel.targetName = chatName?.name; // change to use getChannelListInfo
+      channel.targetImage = chatName?.image; // change to use getChannelListInfo
 
       channel.channel = {...channel};
       const channelList = ChannelList.fromChannelAPI(channel, chatType, channel?.members);
@@ -83,7 +83,7 @@ const useDMMessage = () => {
           const memberSchema = ChannelListMemberSchema.fromWebsocketObject(
             channel?.id,
             uuid(),
-            member
+            member // change to use getChannelListInfo
           );
           await userMember.saveOrUpdateIfExists(localDb);
           await memberSchema.save(localDb);
