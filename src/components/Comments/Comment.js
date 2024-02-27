@@ -252,12 +252,12 @@ const Comment = ({
             </ButtonHightlight>
           </TouchableOpacity>
         )}
-        <ButtonHightlight
+        {/* <ButtonHightlight
           onLongPress={handleOnLongPress}
           style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}
           onPress={() => refSheet.current.open()}>
           <MemoSendDM width={20} height={18} />
-        </ButtonHightlight>
+        </ButtonHightlight> */}
 
         <ButtonHightlight
           onLongPress={handleOnLongPress}
