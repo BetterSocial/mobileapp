@@ -14,10 +14,10 @@ import MemoIc_arrow_down_vote_on from '../../../../assets/arrow/Ic_downvote_on';
 import MemoIc_arrow_upvote_on from '../../../../assets/arrow/Ic_upvote_on';
 import MemoIc_block_inactive from '../../../../assets/block/Ic_block_inactive';
 import MemoIc_comment from '../../../../assets/icons/Ic_comment';
+import {COLORS} from '../../../../utils/theme';
 import {Context} from '../../../../context';
 import {calculateTime} from '../../../../utils/time';
 import {normalizeFontSize} from '../../../../utils/fonts';
-import {COLORS} from '../../../../utils/theme';
 
 const styles = StyleSheet.create({
   containerCard: {
@@ -170,7 +170,7 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
         return `You: ${findComment.reaction.data.text}`;
       }
       if (findComment.reaction.data.anon_user_info_color_name) {
-        return `Anonymous ${findComment.reaction.data.anon_user_info_emoji_name}: ${findComment.reaction.data.text}`;
+        return `${findComment.reaction.data.anon_user_info_color_name} ${findComment.reaction.data.anon_user_info_emoji_name}: ${findComment.reaction.data.text}`;
       }
       return `${findComment.reaction?.user?.data?.username}: ${findComment.reaction.data.text} `;
     }

@@ -33,6 +33,15 @@ const heightBs = Dimensions.get('window').height * 0.85;
 const heightBsPassword = Dimensions.get('window').height * 0.65;
 
 const S = StyleSheet.create({
+  dummyInput: {
+    borderColor: 'black',
+    borderWidth: 1,
+    marginHorizontal: 16,
+    marginTop: 8,
+    padding: 8,
+    borderRadius: 8,
+    textTransform: 'lowercase'
+  },
   devTrialView: (top) => ({
     position: 'absolute',
     top: 0,
@@ -62,12 +71,16 @@ const S = StyleSheet.create({
 const DevDummyLogin = ({resetClickTime = () => {}}) => {
   const {ENABLE_DEV_ONLY_FEATURE} = configEnv;
   const {setAuth} = useUserAuthHook();
+  const [dummyInput, setDummyInput] = React.useState('');
 
   const [dummyUsers] = React.useState([
     {name: 'fajarismv2', humanId: 'fajarismv2'},
     {name: 'halofajarism', humanId: 'halofajarism'},
     {name: 'agita', humanId: 'agita'},
     {name: 'usup', humanId: 'P19FGPQGMSZ5VSHA0YSQ'},
+    {name: 'new_test_account1', humanId: 'newtestaccount1'},
+    {name: 'new_test_account2', humanId: 'newtestaccount2'},
+    {name: 'new_test_account3', humanId: 'newtestaccount3'},
     {name: 'bastian', humanId: 'bastian'},
     {name: 'BetterSocial_Team', humanId: 'KVL1JKD8VG6KMHUZ0RY5'},
     {name: 'smith.confessions', humanId: 'AXZ61CSQ5CGC1WD94QSE'},
@@ -140,6 +153,8 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
   };
 
   const dummyLogin = (appUserId) => {
+    if (!appUserId) return;
+
     if (ENABLE_DEV_ONLY_FEATURE === 'true') {
       dummyLoginRbSheetRef.current.close();
     }
@@ -192,6 +207,8 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
     if (savedPasswordText) setPasswordText(savedPasswordText);
   }, []);
 
+  console.log(dummyInput);
+
   if (ENABLE_DEV_ONLY_FEATURE === 'true')
     return (
       <View style={S.devTrialView(top)}>
@@ -226,6 +243,13 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
         </RBSheet>
         <RBSheet height={heightBs} ref={dummyLoginRbSheetRef}>
           <Text>Choose an account you wish to login</Text>
+          <TextInput
+            placeholder="Custom ID"
+            value={dummyInput}
+            onChangeText={(value) => setDummyInput(value)}
+            style={S.dummyInput}
+          />
+          <Button title={'Login with custom id'} onPress={() => dummyLogin(dummyInput)} />
           {dummyUsers.map((item) => (
             <View testID={`dev-dummy-login-${item.name}`} key={`dummyusers-${item.name}`}>
               <TouchableOpacity onPress={() => dummyLogin(item.humanId)}>

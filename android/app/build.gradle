@@ -208,14 +208,14 @@ android {
         dev {
             minSdkVersion rootProject.ext.minSdkVersion
             targetSdkVersion rootProject.ext.targetSdkVersion
-            resValue "string", "app_name", "BetterSocial Dev"
+            resValue "string", "app_name", "HelioDev"
             applicationIdSuffix ".dev"
             resValue "string", "build_config_package", "org.bettersocial"
         }
         prod {
             minSdkVersion rootProject.ext.minSdkVersion
             targetSdkVersion rootProject.ext.targetSdkVersion
-            resValue "string", "app_name", "BetterSocial"
+            resValue "string", "app_name", "Helio"
             resValue "string", "build_config_package", "org.bettersocial"
         }
     }

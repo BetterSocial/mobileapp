@@ -409,6 +409,66 @@ Array [
           <Text>
             Choose an account you wish to login
           </Text>
+          <TextInput
+            allowFontScaling={true}
+            onChangeText={[Function]}
+            placeholder="Custom ID"
+            rejectResponderTermination={true}
+            style={
+              Object {
+                "borderColor": "black",
+                "borderRadius": 8,
+                "borderWidth": 1,
+                "marginHorizontal": 16,
+                "marginTop": 8,
+                "padding": 8,
+                "textTransform": "lowercase",
+              }
+            }
+            underlineColorAndroid="transparent"
+            value=""
+          />
+          <View
+            accessibilityRole="button"
+            accessibilityState={Object {}}
+            accessible={true}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "opacity": 1,
+              }
+            }
+          >
+            <View
+              style={
+                Array [
+                  Object {},
+                ]
+              }
+            >
+              <Text
+                style={
+                  Array [
+                    Object {
+                      "color": "#007AFF",
+                      "fontSize": 18,
+                      "margin": 8,
+                      "textAlign": "center",
+                    },
+                  ]
+                }
+              >
+                Login with custom id
+              </Text>
+            </View>
+          </View>
           <View
             testID="dev-dummy-login-fajarismv2"
           >
@@ -566,6 +626,126 @@ Array [
                 }
               >
                 usup
+              </Text>
+            </View>
+          </View>
+          <View
+            testID="dev-dummy-login-new_test_account1"
+          >
+            <View
+              accessible={true}
+              focusable={true}
+              onClick={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                Object {
+                  "opacity": 1,
+                }
+              }
+            >
+              <View
+                style={
+                  Object {
+                    "backgroundColor": "#828282",
+                    "height": 2,
+                    "width": "100%",
+                  }
+                }
+              />
+              <Text
+                style={
+                  Object {
+                    "paddingHorizontal": 16,
+                    "paddingVertical": 8,
+                  }
+                }
+              >
+                new_test_account1
+              </Text>
+            </View>
+          </View>
+          <View
+            testID="dev-dummy-login-new_test_account2"
+          >
+            <View
+              accessible={true}
+              focusable={true}
+              onClick={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                Object {
+                  "opacity": 1,
+                }
+              }
+            >
+              <View
+                style={
+                  Object {
+                    "backgroundColor": "#828282",
+                    "height": 2,
+                    "width": "100%",
+                  }
+                }
+              />
+              <Text
+                style={
+                  Object {
+                    "paddingHorizontal": 16,
+                    "paddingVertical": 8,
+                  }
+                }
+              >
+                new_test_account2
+              </Text>
+            </View>
+          </View>
+          <View
+            testID="dev-dummy-login-new_test_account3"
+          >
+            <View
+              accessible={true}
+              focusable={true}
+              onClick={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                Object {
+                  "opacity": 1,
+                }
+              }
+            >
+              <View
+                style={
+                  Object {
+                    "backgroundColor": "#828282",
+                    "height": 2,
+                    "width": "100%",
+                  }
+                }
+              />
+              <Text
+                style={
+                  Object {
+                    "paddingHorizontal": 16,
+                    "paddingVertical": 8,
+                  }
+                }
+              >
+                new_test_account3
               </Text>
             </View>
           </View>

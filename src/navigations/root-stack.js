@@ -3,44 +3,12 @@ import * as React from 'react';
 import NetInfo from '@react-native-community/netinfo';
 import PropTypes from 'prop-types';
 import {SafeAreaView, View} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
 import {useRecoilState, useRecoilValue} from 'recoil';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
-import AnonymousChatScreen from '../screens/ChatScreen/AnonymousChatScreen';
-import Blocked from '../screens/Blocked';
-import ChatInfoScreen from '../screens/ChatInfoScreen/ChatInfoScreen';
-import ChooseUsername from '../screens/InputUsername';
-import CreatePost from '../screens/CreatePost';
-import DiscoveryScreenV2 from '../screens/DiscoveryScreenV2';
-import DomainScreen from '../screens/DomainScreen';
-import FollowersScreen from '../screens/Followings/FollowersScreen';
-import FollowingScreen from '../screens/Followings/FollowingScreen';
-import HelpCenter from '../screens/WebView/HelpCenter';
-import HomeBottomTabs from './HomeBottomTabs';
-import ImageViewerScreen from '../screens/ImageViewer';
-import KeyboardWrapper from './KeyboardWrapper';
-import LinkContextScreen from '../screens/LinkContextScreen';
-import LocalCommunity from '../screens/LocalCommunity';
 import NetworkStatusIndicator from '../components/NetworkStatusIndicator';
-import OneSignalNavigator from './OneSignalNavigator';
-import OtherProfile from '../screens/OtherProfile';
-import OtherProfilePostDetail from '../screens/OtherProfilePostDetail';
-import OtherProfileReplyComment from '../screens/OtherProfileReplyComment';
-import PostDetailPage from '../screens/PostPageDetail';
-import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
-import ProfilePostDetail from '../screens/ProfilePostDetail';
-import ProfileReplyComment from '../screens/ProfileReplyComment';
-import ReplyComment from '../screens/ReplyComment';
-import Settings from '../screens/Settings';
-import SignIn from '../screens/SignInV2';
-import SignedChatScreen from '../screens/ChatScreen/SignedChatScreen';
-import TopicMemberScreen from '../screens/TopicMemberScreen';
-import TopicPageScreen from '../screens/TopicPageScreen';
-import Topics from '../screens/Topics';
-import VideoViewerScreen from '../screens/VideoViewer';
-import WhotoFollow from '../screens/WhotoFollow';
-import api from '../service/config';
+import {useInitialStartup} from '../hooks/useInitialStartup';
 import {
   AddParticipant,
   ChannelScreen,
@@ -53,10 +21,42 @@ import {
   GroupSetting,
   ProfileScreen
 } from '../screens';
+import Blocked from '../screens/Blocked';
+import {followersOrFollowingAtom} from '../screens/ChannelListScreen/model/followersOrFollowingAtom';
+import ChatInfoScreen from '../screens/ChatInfoScreen/ChatInfoScreen';
+import AnonymousChatScreen from '../screens/ChatScreen/AnonymousChatScreen';
+import SignedChatScreen from '../screens/ChatScreen/SignedChatScreen';
+import CreatePost from '../screens/CreatePost';
+import DiscoveryScreenV2 from '../screens/DiscoveryScreenV2';
+import DomainScreen from '../screens/DomainScreen';
+import FollowersScreen from '../screens/Followings/FollowersScreen';
+import FollowingScreen from '../screens/Followings/FollowingScreen';
+import ImageViewerScreen from '../screens/ImageViewer';
+import ChooseUsername from '../screens/InputUsername';
+import LinkContextScreen from '../screens/LinkContextScreen';
+import LocalCommunity from '../screens/LocalCommunity';
+import OtherProfile from '../screens/OtherProfile';
+import OtherProfilePostDetail from '../screens/OtherProfilePostDetail';
+import OtherProfileReplyComment from '../screens/OtherProfileReplyComment';
+import PostDetailPage from '../screens/PostPageDetail';
+import ProfilePostDetail from '../screens/ProfilePostDetail';
+import ProfileReplyComment from '../screens/ProfileReplyComment';
+import ReplyComment from '../screens/ReplyComment';
+import Settings from '../screens/Settings';
+import SignIn from '../screens/SignInV2';
+import TopicMemberScreen from '../screens/TopicMemberScreen';
+import TopicPageScreen from '../screens/TopicPageScreen';
+import Topics from '../screens/Topics';
+import VideoViewerScreen from '../screens/VideoViewer';
+import HelpCenter from '../screens/WebView/HelpCenter';
+import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
+import WhotoFollow from '../screens/WhotoFollow';
+import api from '../service/config';
 import {InitialStartupAtom, LoadingStartupContext} from '../service/initialStartup';
 import {NavigationConstants} from '../utils/constants';
-import {followersOrFollowingAtom} from '../screens/ChannelListScreen/model/followersOrFollowingAtom';
-import {useInitialStartup} from '../hooks/useInitialStartup';
+import HomeBottomTabs from './HomeBottomTabs';
+import KeyboardWrapper from './KeyboardWrapper';
+import OneSignalNavigator from './OneSignalNavigator';
 
 const RootStack = createNativeStackNavigator();
 
@@ -64,7 +64,6 @@ export const RootNavigator = () => {
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const [following, setFollowing] = useRecoilState(followersOrFollowingAtom);
   const loadingStartup = useInitialStartup();
-  const insets = useSafeAreaInsets();
 
   React.useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
@@ -187,7 +186,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="OtherProfile"
-          component={withKeyboardWrapper(OtherProfile)}
+          component={withSafeAreaView(withKeyboardWrapper(OtherProfile))}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
@@ -197,7 +196,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="Followings"
-          component={withSafeAreaView(withKeyboardWrapper(FollowingScreen))}
+          component={FollowingScreen}
           options={{
             headerShown: false
           }}
@@ -231,7 +230,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="DiscoveryScreen"
-          component={withSafeAreaView(withKeyboardWrapper(DiscoveryScreenV2))}
+          component={DiscoveryScreenV2}
           options={{
             headerShown: false
           }}

@@ -247,7 +247,7 @@ const helperGetMemberName = (member) => {
   const isAnonymous = Boolean(member?.anon_user_info_emoji_name);
 
   return isAnonymous
-    ? `Anonymous ${member?.anon_user_info_emoji_name}`
+    ? `${member?.anon_user_info_color_name} ${member?.anon_user_info_emoji_name}`
     : member?.user?.username ?? member?.user?.name;
 };
 
@@ -326,7 +326,9 @@ const getChannelListInfo = (channel, selfSignUserId, selfAnonUserId) => {
 
     channelName = helperGetMemberName(member);
 
-    channelImage = isAnonymous ? DEFAULT_PROFILE_PIC_PATH : member?.user?.image;
+    channelImage = isAnonymous
+      ? DEFAULT_PROFILE_PIC_PATH
+      : member?.user?.image || DEFAULT_PROFILE_PIC_PATH;
     anonUserInfoEmojiCode = member?.anon_user_info_emoji_code;
     anonUserInfoEmojiName = member?.anon_user_info_emoji_name;
     anonUserInfoColorCode = member?.anon_user_info_color_code;
@@ -547,6 +549,28 @@ const onOpenLink = (url) => {
   });
 };
 
+/**
+ * @typedef {Object} AnonUserInfo
+ * @property {String} anon_user_info_color_code
+ * @property {String} anon_user_info_color_name
+ * @property {String} anon_user_info_emoji_code
+ * @property {String} anon_user_info_emoji_name
+ * @property {String} color_code
+ * @property {String} color_name
+ * @property {String} emoji_code
+ * @property {String} emoji_name
+ */
+
+/**
+ * @param {AnonUserInfo} anonUserInfo
+ */
+const getOfficialAnonUsername = (anonUserInfo) => {
+  const colorName = anonUserInfo?.color_name || anonUserInfo?.anon_user_info_color_name;
+  const emojiName = anonUserInfo?.emoji_name || anonUserInfo?.anon_user_info_emoji_name;
+
+  return `${colorName} ${emojiName}`;
+};
+
 export {
   capitalizeFirstText,
   convertString,
@@ -570,5 +594,6 @@ export {
   isLocationMatch,
   styles,
   getCaptionWithLinkStyle,
-  getAnonymousChatName
+  getAnonymousChatName,
+  getOfficialAnonUsername
 };

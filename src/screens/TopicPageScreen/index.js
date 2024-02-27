@@ -1,56 +1,35 @@
-import {useNavigation, useRoute} from '@react-navigation/native';
-import _ from 'lodash';
 import * as React from 'react';
-import {Animated, Platform, StyleSheet, View} from 'react-native';
+import _ from 'lodash';
 import SimpleToast from 'react-native-simple-toast';
-
+import {Animated, Platform, StyleSheet, View} from 'react-native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+
 import BlockComponent from '../../components/BlockComponent';
 import ButtonAddPostTopic from '../../components/Button/ButtonAddPostTopic';
-import TiktokScroll from '../../components/TiktokScroll';
-import {Context} from '../../context';
-import {setFeedByIndex, setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
-import useOnBottomNavigationTabPressHook, {
-  LIST_VIEW_TYPE
-} from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
-import {getFeedDetail} from '../../service/post';
-import {getTopicPages} from '../../service/topicPages';
-import {getTopics, getUserTopic} from '../../service/topics';
-import {downVote, upVote} from '../../service/vote';
-import dimen from '../../utils/dimen';
-import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
-import {COLORS} from '../../utils/theme';
-import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import MemoizedListComponent from './MemoizedListComponent';
+import NavHeader from './elements/NavHeader';
 import ShareUtils from '../../utils/share';
+import TiktokScroll from '../../components/TiktokScroll';
 import TopicPageStorage from '../../utils/storage/custom/topicPageStorage';
+import dimen from '../../utils/dimen';
 import removePrefixTopic from '../../utils/topics/removePrefixTopic';
-import {getUserId} from '../../utils/users';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
 import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
 import useViewPostTimeHook from '../FeedScreen/hooks/useViewPostTimeHook';
-import MemoizedListComponent from './MemoizedListComponent';
-import NavHeader from './elements/NavHeader';
-
-const styles = StyleSheet.create({
-  parentContainer: {
-    flex: 1
-  },
-  header: {
-    backgroundColor: COLORS.signed_primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: 40,
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    zIndex: 2
-  },
-  headerText: {
-    fontSize: 20,
-    fontWeight: 'bold'
-  }
-});
+import useOnBottomNavigationTabPressHook, {
+  LIST_VIEW_TYPE
+} from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
+import {COLORS} from '../../utils/theme';
+import {Context} from '../../context';
+import {downVote, upVote} from '../../service/vote';
+import {getFeedDetail} from '../../service/post';
+import {getTopicPages} from '../../service/topicPages';
+import {getTopics, getUserTopic} from '../../service/topics';
+import {getUserId} from '../../utils/users';
+import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
+import {setFeedByIndex, setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
 
 const TopicPageScreen = (props) => {
   const route = useRoute();
@@ -460,6 +439,10 @@ const TopicPageScreen = (props) => {
           onScroll={handleScroll}
           scrollEventThrottle={16}
           showSearchBar={true}
+          onMomentumScrollEnd={(event) => {
+            onWillSendViewPostTime(event, feeds);
+            fetchNextFeeds(event);
+          }}
           snap
           contentInsetAdjustmentBehavior={feeds?.length > 1 ? 'automatic' : 'never'}
         />

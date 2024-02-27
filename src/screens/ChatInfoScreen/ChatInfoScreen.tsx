@@ -24,6 +24,7 @@ import BlockComponent from '../../components/BlockComponent';
 import ChannelImage from '../../components/ChatList/elements/ChannelImage';
 import ModalAction from '../GroupInfo/elements/ModalAction';
 import ModalActionAnonymous from '../GroupInfo/elements/ModalActionAnonymous';
+import UserSchema from '../../database/schema/UserSchema';
 import dimen from '../../utils/dimen';
 import useChatInfoScreenHook from '../../hooks/screen/useChatInfoHook';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
@@ -33,6 +34,7 @@ import {COLORS} from '../../utils/theme';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {ProfileContact} from '../../components/Items';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
+import {getOfficialAnonUsername} from '../../utils/string/StringUtils';
 
 export const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: COLORS.white, paddingBottom: 40},
@@ -247,6 +249,14 @@ const ChatInfoScreen = () => {
     );
   };
 
+  const getUsername = (item: UserSchema) => {
+    if (item?.anon_user_info_color_code) {
+      return getOfficialAnonUsername(item);
+    }
+
+    return item?.user?.username || item?.username || item?.name;
+  };
+
   const countParticipant = () => {
     return `(${channelInfo?.memberUsers?.length})`;
   };
@@ -299,7 +309,7 @@ const ChatInfoScreen = () => {
                   key={index}
                   item={item}
                   onPress={() => onContactPressed(item, params.from)}
-                  fullname={item?.name || item?.username}
+                  fullname={getUsername(item)}
                   photo={item?.profilePicture}
                   showArrow={handleShowArrow(item)}
                   userId={signedProfileId}
@@ -315,6 +325,7 @@ const ChatInfoScreen = () => {
               </View>
             );
           }}
+
         />
       )}
       <ModalAction
@@ -322,7 +333,7 @@ const ChatInfoScreen = () => {
         selectedUser={selectedUser}
         isOpen={openModal}
         onPress={handlePressPopup}
-        name={selectedUser?.user?.username || selectedUser?.user?.name || selectedUser?.username}
+        name={getUsername(selectedUser)}
         isLoadingInitChat={isLoadingInitChat}
         from={params?.from}
         isGroup={channelInfo?.channelType === CHANNEL_GROUP}

@@ -24,6 +24,7 @@ import {fonts} from '../../utils/fonts';
 import FollowingAction from '../../context/actions/following';
 import {Header} from '../../components';
 import {COLORS} from '../../utils/theme';
+import KeyboardWrapper from '../../navigations/KeyboardWrapper';
 
 const DiscoveryScreenV2 = ({route}) => {
   const {tab} = route.params;
@@ -65,10 +66,6 @@ const DiscoveryScreenV2 = ({route}) => {
 
   const navigation = useNavigation();
 
-  const handleScroll = React.useCallback(() => {
-    Keyboard.dismiss();
-  });
-
   React.useEffect(() => {
     const unsubscribe = () => {
       DiscoveryAction.setDiscoveryFirstTimeOpen(true, discoveryDispatch);
@@ -80,7 +77,6 @@ const DiscoveryScreenV2 = ({route}) => {
 
   const fetchDiscoveryData = async (text) => {
     const fetchDiscoveryInitialUsers = async () => {
-      console.log('masuk sini dong');
       const initialData = await DiscoveryRepo.fetchInitialDiscoveryUsers(
         50,
         parseInt(userPage.currentPage, 10)
@@ -227,7 +223,7 @@ const DiscoveryScreenV2 = ({route}) => {
     cancelTokenRef.current = axios.CancelToken.source();
   };
 
-  const renderFragment = () => {
+  const RenderFragment = React.useMemo(() => {
     if (selectedScreen === DISCOVERY_TAB_USERS)
       return (
         <UsersFragment
@@ -294,9 +290,16 @@ const DiscoveryScreenV2 = ({route}) => {
           news={discoveryDataNews}
         />
       );
+    return null;
+  }, [
+    selectedScreen,
+    searchText,
+    isLoadingDiscovery.topic,
+    isLoadingDiscovery.domain,
+    isLoadingDiscovery.news,
+    isLoadingDiscovery.user
+  ]);
 
-    return <></>;
-  };
   return (
     <DiscoveryContainer>
       <StatusBar translucent={false} />
@@ -344,7 +347,7 @@ const DiscoveryScreenV2 = ({route}) => {
           hideBackIcon
         />
       )}
-      {renderFragment()}
+      {RenderFragment}
     </DiscoveryContainer>
   );
 };
@@ -378,7 +381,9 @@ DiscoveryScreenV2.propTypes = {
 export default DiscoveryScreenV2;
 
 const DiscoveryContainer = ({children}) => {
-  if (Platform.OS === 'ios') return <>{children}</>;
-
-  return <SafeAreaView style={{flex: 1}}>{children}</SafeAreaView>;
+  return (
+    <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+      <KeyboardWrapper>{children}</KeyboardWrapper>
+    </SafeAreaView>
+  );
 };

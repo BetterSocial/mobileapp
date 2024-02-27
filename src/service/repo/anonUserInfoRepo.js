@@ -1,4 +1,4 @@
-import api from '../config';
+import anonymousApi from '../anonymousConfig';
 
 const baseUrl = {
   getPostAnonUserInfo: '/feeds/generate-anonymous-username'
@@ -6,7 +6,7 @@ const baseUrl = {
 
 const baseGetAnonUserInfo = async (contentType, postId = '') => {
   try {
-    const response = await api.post(baseUrl.getPostAnonUserInfo, {
+    const response = await anonymousApi.post(baseUrl.getPostAnonUserInfo, {
       contentType,
       postId
     });
