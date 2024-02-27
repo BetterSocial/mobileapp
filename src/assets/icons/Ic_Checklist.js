@@ -22,5 +22,5 @@ function Ic_Checklist(props) {
 Ic_Checklist.propTypes = {
   color: PropTypes.string
 };
-const MemoIc_Checklist = React.memo(Ic_Checklist);
-export default MemoIc_Checklist;
+const IconChecklist = React.memo(Ic_Checklist);
+export default IconChecklist;
