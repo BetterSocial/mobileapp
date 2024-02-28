@@ -1,17 +1,17 @@
 {
   "images": [
     {
-      "filename": "helio (1).png",
+      "filename": "helio_1x.png",
       "idiom": "universal",
       "scale": "1x"
     },
     {
-      "filename": "helio (2).png",
+      "filename": "helio_2x.png",
       "idiom": "universal",
       "scale": "2x"
     },
     {
-      "filename": "helio (3).png",
+      "filename": "helio_3x.png",
       "idiom": "universal",
       "scale": "3x"
     }
