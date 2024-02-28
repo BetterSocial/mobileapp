@@ -13,7 +13,7 @@ import TopicText from '../../components/TopicText';
 // eslint-disable-next-line import/no-cycle
 import removePrefixTopic from '../topics/removePrefixTopic';
 import {COLORS} from '../theme';
-import {DEFAULT_PROFILE_PIC_PATH, DEFAULT_TOPIC_PIC_PATH} from '../constants';
+import {DEFAULT_PROFILE_PIC_PATH} from '../constants';
 import {getAnonymousUserId} from '../users';
 import {getUserId} from '../token';
 
