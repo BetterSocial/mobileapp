@@ -22,8 +22,10 @@ const AVATAR_SIZE = 24;
 const CONTAINER_LEFT_PADDING = 60;
 const CONTAINER_RIGHT_PADDING = 10;
 const AVATAR_LEFT_MARGIN = 4;
-const BUBBLE_LEFT_PADDING = 4;
-const BUBBLE_RIGHT_PADDING = 4;
+const BUBBLE_LEFT_PADDING = 8;
+const BUBBLE_RIGHT_PADDING = 8;
+const BUBBLE_LEFT_PADDING_ATTACHMENT = 4;
+const BUBBLE_RIGHT_PADDING_ATTACHMENT = 4;
 
 const styles = StyleSheet.create({
   chatContainer: {
@@ -46,8 +48,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.anon_primary
   },
   textContainer: {
-    paddingLeft: BUBBLE_LEFT_PADDING + BUBBLE_LEFT_PADDING,
-    paddingRight: BUBBLE_RIGHT_PADDING,
     paddingTop: 4,
     paddingBottom: 4,
     borderRadius: 12,
@@ -209,10 +209,15 @@ const ChatItemMyTextV2 = ({
   }, []);
 
   const handleTextContainerStyle = () => {
+    const isAttachment = attachments.length > 0;
+    const paddingStyle = {
+      paddingLeft: isAttachment ? BUBBLE_LEFT_PADDING_ATTACHMENT : BUBBLE_LEFT_PADDING,
+      paddingRight: isAttachment ? BUBBLE_RIGHT_PADDING_ATTACHMENT : BUBBLE_RIGHT_PADDING
+    };
     if (chatType === SIGNED) {
-      return [styles.containerSigned, styles.textContainer];
+      return [styles.containerSigned, styles.textContainer, paddingStyle];
     }
-    return [styles.containerAnon, styles.textContainer];
+    return [styles.containerAnon, styles.textContainer, paddingStyle];
   };
 
   const onOpenMediaPreview = (medias, index, navigationLocal) => {
@@ -236,7 +241,8 @@ const ChatItemMyTextV2 = ({
     <View style={styles.chatContainer}>
       <View style={handleTextContainerStyle()}>
         {!isContinuous && (
-          <View style={styles.chatTitleContainer}>
+          <View
+            style={[styles.chatTitleContainer, attachments.length > 0 ? {marginBottom: 4} : {}]}>
             <Text style={styles.userText}>{username}</Text>
             <View style={styles.dot} />
             <Text style={styles.timeText}>{time}</Text>
