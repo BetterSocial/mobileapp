@@ -141,10 +141,7 @@ const RenderListFeed = (props) => {
 
   const topicBottomPosition = () => {
     if (hasComment) {
-      if (getTotalReaction(item) === 1) {
-        return isBlurred && getHeightReaction() + normalize(4);
-      }
-      return getHeightReaction();
+      return getHeightReaction() + normalize(4);
     }
     return getHeightFooter();
   };

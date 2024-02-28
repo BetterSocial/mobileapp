@@ -2,6 +2,7 @@ import * as React from 'react';
 import {Platform, Pressable, StyleSheet, Text, View, Image} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
+import PropTypes from 'prop-types';
 import BottomOverlayPagination from './pagination';
 import MemoizedIcArrowRightTail from '../../../../assets/arrow/ic_arrow_right_tail';
 import StringConstant from '../../../../utils/string/StringConstant';
@@ -13,7 +14,7 @@ import {imageConst} from '../../../../components/Image';
 
 const HUMAN_ID_URL = 'https://www.human-internet.org';
 
-const BottomOverlay = ({count, handleLogin, index, isLogin, title, onNextSlide, textSvg}) => {
+const BottomOverlay = ({count, handleLogin, index, isLogin, title, onNextSlide, text}) => {
   const goToHumanIdWeb = () => {
     openUrl(HUMAN_ID_URL, true);
   };
@@ -47,9 +48,9 @@ const BottomOverlay = ({count, handleLogin, index, isLogin, title, onNextSlide, 
               </Text>
               {',\n'}
               {'humanID verifies your humanity'}
-              <Text style={bottomOverlayStyles.descBold}>{' without storing\n'}</Text>
+              <Text>{' without storing\n'}</Text>
               {'your data or'}
-              <Text style={bottomOverlayStyles.descBold}>{' sharing'}</Text>
+              <Text>{' sharing'}</Text>
               {' it with Helio'}
             </Text>
           </View>
@@ -60,7 +61,7 @@ const BottomOverlay = ({count, handleLogin, index, isLogin, title, onNextSlide, 
   return (
     <View style={bottomOverlayStyles.container}>
       <Text style={bottomOverlayStyles.title}>{title}</Text>
-      <View>{textSvg}</View>
+      <Text style={bottomOverlayStyles.contentText}>{text}</Text>
       <View style={bottomOverlayStyles.bottomBlock}>
         <View style={bottomOverlayStyles.pagination}>
           <BottomOverlayPagination count={count} active={index} />
@@ -83,6 +84,16 @@ const BottomOverlay = ({count, handleLogin, index, isLogin, title, onNextSlide, 
 
 export default BottomOverlay;
 
+BottomOverlay.propTypes = {
+  count: PropTypes.number,
+  handleLogin: PropTypes.func,
+  index: PropTypes.number,
+  isLogin: PropTypes.bool,
+  title: PropTypes.string,
+  onNextSlide: PropTypes.func,
+  text: PropTypes.string
+};
+
 const bottomOverlayStyles = StyleSheet.create({
   bottomBlock: {
     position: 'absolute',
@@ -104,7 +115,7 @@ const bottomOverlayStyles = StyleSheet.create({
     zIndex: 99
   },
   container: {
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     height: dimen.size.ONBOARDING_BOTTOM_OVERLAY_CONTAINER,
     paddingStart: 32,
     paddingEnd: 32,
@@ -113,10 +124,10 @@ const bottomOverlayStyles = StyleSheet.create({
     zIndex: 10
   },
   containerBtnLogin: {
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: COLORS.lightgrey,
+    borderColor: COLORS.gray300,
     paddingBottom: 16
   },
   descTitle: {
@@ -134,30 +145,26 @@ const bottomOverlayStyles = StyleSheet.create({
     lineHeight: Platform.OS === 'ios' ? 20 : 22,
     fontSize: 14,
     textAlign: 'center',
-    color: COLORS.blackgrey,
+    color: COLORS.gray500,
     alignSelf: 'center'
-  },
-  descBold: {
-    fontWeight: '700',
-    fontFamily: fonts.inter[700]
   },
   link: {
     color: COLORS.blue,
     textDecorationLine: 'underline'
   },
   loginContainer: {
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.gray100
   },
   loginBox: {
     width: '100%',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.gray100,
     height: dimen.size.ONBOARDING_BOTTOM_OVERLAY_CONTAINER,
     display: 'flex',
     flexDirection: 'column',
     alignContent: 'center',
     zIndex: 10,
     padding: 16,
-    paddingTop: 27,
+    paddingTop: 30,
     alignSelf: 'center',
     borderRadius: 16
   },
@@ -175,12 +182,18 @@ const bottomOverlayStyles = StyleSheet.create({
   },
   title: {
     marginTop: normalize(35),
-    marginBottom: normalize(30),
+    marginBottom: normalize(20),
     lineHeight: normalize(28),
     fontSize: normalizeFontSize(22),
     fontFamily: fonts.inter[600],
     color: COLORS.signed_primary,
     alignSelf: 'flex-start'
+  },
+  contentText: {
+    lineHeight: normalize(20),
+    fontSize: normalizeFontSize(14),
+    fontFamily: fonts.inter[400],
+    color: COLORS.gray500
   },
   paddingContainer: {
     paddingTop: dimen.normalizeDimen(27),

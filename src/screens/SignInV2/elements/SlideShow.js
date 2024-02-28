@@ -8,10 +8,6 @@ import FgOnboarding1 from '../../../assets/background/fg_onboarding_full_1.png';
 import FgOnboarding2 from '../../../assets/background/fg_onboarding_full_2.png';
 import FgOnboarding3 from '../../../assets/background/fg_onboarding_full_3.png';
 import FgOnboarding4 from '../../../assets/background/fg_onboarding_full_4.png';
-import OnboardingText1 from '../../../assets/onboarding/OnboardingText1';
-import OnboardingText2 from '../../../assets/onboarding/OnboardingText2';
-import OnboardingText3 from '../../../assets/onboarding/OnboardingText3';
-import OnboardingText4 from '../../../assets/onboarding/OnboardingText4';
 import {COLORS} from '../../../utils/theme';
 import {SlideShowItem} from './SlideShowItem';
 import {fonts} from '../../../utils/fonts';
@@ -25,43 +21,30 @@ const SlideShow = ({handleLogin, onContainerPress = () => {}}) => {
     {
       illustrations: FgOnboarding1,
       title: 'Go Incognito with a Tap',
-      // textSvg: <OnboardingText1 preserveAspectRatio="xMinYMin meet" width={292 - 32}/>,
-      textSvg: <OnboardingText1 preserveAspectRatio="xMinYMin meet" width={'100%'} />,
       text: (
-        <Text style={slideShowStyles.textFontNormal}>
-          <Text style={slideShowStyles.textFontBold}>{'Post, comment and chat anonymously. '}</Text>
-          {'We’ll'}
+        <Text>
+          {'Post, comment and chat with or without'}
           {'\n'}
 
-          {'never reveal your username, and you’ll be'}
+          {'revealing your username - it’s up to you!'}
           {'\n'}
 
-          {'assigned a different random emoji for every'}
-          {'\n'}
-
-          {'post, comment or message.'}
-          {'\n'}
-
-          {'So go ahead and '}
-          <Text style={slideShowStyles.textFontBold}>{'say what you really thisnk!'}</Text>
+          {'So go ahead and say what you really think!'}
         </Text>
       )
     },
     {
       illustrations: FgOnboarding2,
-      title: 'Get Anonymous Messages',
-      // textSvg: <OnboardingText2 preserveAspectRatio="xMinYMin meet" width={297 - 32}/>,
-      textSvg: <OnboardingText2 preserveAspectRatio="xMinYMin meet" width={'100%'} />,
+      title: 'Receive Incognito Messages',
       text: (
-        <Text style={slideShowStyles.textFontNormal}>
+        <Text>
           {'Share your link on other platforms to receive'}
           {'\n'}
 
-          {'anonymous messages from your friends. '}
-          <Text style={slideShowStyles.textFontBold}>{'Ask'}</Text>
+          {'messages from your friends. Ask for advice,'}
           {'\n'}
 
-          <Text style={slideShowStyles.textFontBold}>{'for advice, feedback, and more!'}</Text>
+          {'feedback, and more!'}
           {'\n'}
 
           {'As always, abuse can be blocked in two clicks.'}
@@ -70,51 +53,37 @@ const SlideShow = ({handleLogin, onContainerPress = () => {}}) => {
     },
     {
       illustrations: FgOnboarding3,
-      title: 'Find Your Community',
-      // textSvg: <OnboardingText3 preserveAspectRatio="xMinYMin meet" width={303 - 32}/>,
-      textSvg: <OnboardingText3 preserveAspectRatio="xMinYMin meet" width={'100%'} />,
+      title: 'Find Your #community',
       text: (
-        <Text style={slideShowStyles.textFontNormal}>
+        <Text>
           {'Posting into a community is as easy as using a'}
           {'\n'}
 
-          <Text style={slideShowStyles.textFontBold}>{'#hashtag. '}</Text>
-          {'Add '}
-          <Text style={slideShowStyles.textFontBold}>{'#communities '}</Text>
-          {'to your posts to'}
+          {'#hashtag. Add #communities to your posts to'}
           {'\n'}
 
-          {'reach more people.'}
+          {'reach more people, and join communities of'}
           {'\n'}
 
-          {'Follow friends and communities to start and'}
-          {'\n'}
-
-          {'join conversations.'}
+          {'like-minded people.'}
         </Text>
       )
     },
     {
       illustrations: FgOnboarding4,
       title: 'Don’t Miss Anything',
-      // textSvg: <OnboardingText4 preserveAspectRatio="xMinYMin meet" width={306 - 32}/>,
-      textSvg: <OnboardingText4 preserveAspectRatio="xMinYMin meet" width={'100%'} />,
       text: (
-        <Text style={slideShowStyles.textFontNormal}>
+        <Text>
           {'Chats, posts, comments, and communities:'}
           {'\n'}
 
-          {'Find all your conversations separated between'}
+          {'Find all your conversations separated'}
           {'\n'}
 
-          {'your anonymous and your public activity.'}
+          {'between your incognito and your public'}
           {'\n'}
 
-          <Text style={slideShowStyles.textFontBold}>{'Avoid notification spam '}</Text>
-          {'and check what’s'}
-          {'\n'}
-
-          {'new, all in one place.'}
+          {'activity.'}
         </Text>
       )
     },
@@ -153,7 +122,6 @@ const SlideShow = ({handleLogin, onContainerPress = () => {}}) => {
           onNextSlide={onHandleNextSlide}
           text={item.text}
           title={item.title}
-          textSvg={item.textSvg}
         />
       )}
       onChangeIndex={handleChangeIndex}

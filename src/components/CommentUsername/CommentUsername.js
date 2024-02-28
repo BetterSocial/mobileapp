@@ -1,7 +1,9 @@
 import React from 'react';
-import {Text, StyleSheet} from 'react-native';
-import {fonts, normalizeFontSize} from '../../utils/fonts';
+import {StyleSheet, Text} from 'react-native';
+
 import {COLORS, SIZES} from '../../utils/theme';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
+import {getOfficialAnonUsername} from '../../utils/string/StringUtils';
 
 const styles = StyleSheet.create({
   username: {
@@ -33,7 +35,7 @@ const CommentUsername = ({comment, user, isPreviewComment}) => {
     return (
       <Text style={[styles.username, styles.previewContainer]}>
         {comment.data?.anon_user_info_color_name
-          ? `Anonymous ${comment.data?.anon_user_info_emoji_name}`
+          ? getOfficialAnonUsername(comment?.data)
           : user?.data?.username}{' '}
       </Text>
     );
@@ -41,7 +43,7 @@ const CommentUsername = ({comment, user, isPreviewComment}) => {
   return (
     <Text style={styles.username}>
       {comment.data?.anon_user_info_color_name
-        ? `Anonymous ${comment.data?.anon_user_info_emoji_name}`
+        ? getOfficialAnonUsername(comment?.data)
         : user?.data?.username}{' '}
       {comment.is_you ? '(You)' : ''} {comment.is_author ? '(Post Author)' : ''} •
     </Text>

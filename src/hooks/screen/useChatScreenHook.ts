@@ -17,7 +17,7 @@ import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import useUserAuthHook from '../core/auth/useUserAuthHook';
 import {CHANNEL_TYPE_GROUP, CHANNEL_TYPE_PERSONAL} from '../../utils/constants';
 import {getAnonymousUserId, getUserId} from '../../utils/users';
-import {randomString} from '../../utils/string/StringUtils';
+import {getOfficialAnonUsername, randomString} from '../../utils/string/StringUtils';
 
 interface ScrollContextProps {
   selectedMessageId: string | null;
@@ -197,10 +197,15 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   };
 
   const handleUserName = (item): string => {
+    if (item?.user?.anon_user_info_emoji_code) {
+      return getOfficialAnonUsername(item?.user);
+    }
+
     if (item?.user?.username !== 'AnonymousUser') {
       return item?.user?.username;
     }
-    return `Anonymous ${anon_user_info_emoji_name}`;
+
+    return getOfficialAnonUsername(selectedChannel);
   };
 
   const updateChatContinuity = (chatsData: ChatSchema[]) => {

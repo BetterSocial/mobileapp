@@ -103,9 +103,9 @@ const AnonymousChatScreen = () => {
     <View style={styles.keyboardAvoidingView}>
       {selectedChannel ? (
         <ChatDetailHeader
-          onAvatarPress={goToChatInfoScreen}
+          onAvatarPress={() => goToChatInfoScreen({from: ANONYMOUS})}
           onBackPress={goBackFromChatScreen}
-          onThreeDotPress={goToChatInfoScreen}
+          onThreeDotPress={() => goToChatInfoScreen({from: ANONYMOUS})}
           avatar={selectedChannel?.channelPicture}
           user={selectedChannel?.name}
           anon_user_info_emoji_code={selectedChannel?.anon_user_info_emoji_code}

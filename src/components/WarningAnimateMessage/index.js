@@ -86,7 +86,7 @@ const WarningAnimatedMessage = ({isSHow, top = 100, left = 110}) => {
             {top, left}
           ]}>
           <Text>
-            Even when posts are anonymous, you can be 🚫blocked, which will affect your visibility
+            Even when posts are incognito, you can be 🚫blocked, which will affect your visibility
             in the future. Respectful & balanced posts do best on Better.
           </Text>
         </Animated.View>

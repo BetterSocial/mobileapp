@@ -2,6 +2,7 @@
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 
 import {ChatListDetail} from './ChatListDetail.types';
+import {SQLiteBoolean} from '../../../src/database/schema/UserSchema';
 
 export interface UserSchema {
   userId?: string;
@@ -16,6 +17,11 @@ export interface UserSchema {
   isBanned: boolean;
   isMe: boolean;
   image?: string;
+  anon_user_info_emoji_name: string | null;
+  anon_user_info_emoji_code: string | null;
+  anon_user_info_color_name: string | null;
+  anon_user_info_color_code: string | null;
+  isAnonymous: SQLiteBoolean | null;
 }
 
 export interface ChannelListMemberSchema {

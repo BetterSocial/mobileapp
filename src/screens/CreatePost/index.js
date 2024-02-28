@@ -748,7 +748,7 @@ const CreatePost = () => {
           {typeUser && (
             <Animated.View style={[{opacity: animatedReminder}, styles.reminderContainer]}>
               <Text style={styles.whiteText}>
-                Even when anonymous, you can be blocked by others.
+                Even when incognito, you can be blocked by others.
               </Text>
             </Animated.View>
           )}

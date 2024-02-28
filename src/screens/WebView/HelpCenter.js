@@ -13,7 +13,7 @@ const HelpCenter = ({navigation}) => (
     </SafeAreaView>
     <WebView
       androidHardwareAccelerationDisabled={false}
-      source={{uri: 'https://bettersocial.org/help'}}
+      source={{uri: 'https://home.helio.social/faq'}}
       showsVerticalScrollIndicator={false}
       startInLoadingState={true}
       style={styles.webview}

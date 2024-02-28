@@ -23,7 +23,8 @@ const userSchema = new UserSchema({
   anon_user_info_color_code: null,
   anon_user_info_color_name: null,
   anon_user_info_emoji_code: null,
-  anon_user_info_emoji_name: null
+  anon_user_info_emoji_name: null,
+  isAnonymous: null
 });
 
 const savePrepReplacementExpectation = [
@@ -41,6 +42,7 @@ const savePrepReplacementExpectation = [
   null,
   null,
   null,
+  null,
   null
 ];
 
@@ -55,6 +57,7 @@ const updatePrepReplacementExpectation = [
   'profilePicture',
   'bio',
   false,
+  null,
   null,
   null,
   null,
