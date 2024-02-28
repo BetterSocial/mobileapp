@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import BaseChannelItem from './BaseChannelItem';
 import useChannelHook from '../../hooks/screen/useChannelHook';
-import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
 import {
   Comment,
   PostNotificationChannelList,
@@ -10,14 +9,12 @@ import {
 } from '../../../types/database/schema/PostNotificationChannelList.types';
 import {MessageChannelItemProps} from '../../../types/component/AnonymousChat/MessageChannelItem.types';
 import {calculateTime} from '../../utils/time';
-import {capitalizeFirstText, getOfficialAnonUsername} from '../../utils/string/StringUtils';
+import {getOfficialAnonUsername} from '../../utils/string/StringUtils';
 
 const PostNotificationChannelItem: (props: MessageChannelItemProps) => React.ReactElement = ({
   item,
   onChannelPressed
 }) => {
-  const {anonProfileId, signedProfileId} = useUserAuthHook();
-
   const postNotifItem = item as PostNotificationChannelList;
   let commenterName = '';
   let postNotificationMessageText = '';
