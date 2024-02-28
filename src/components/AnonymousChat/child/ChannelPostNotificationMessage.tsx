@@ -2,8 +2,8 @@ import * as React from 'react';
 import {StyleSheet, Text} from 'react-native';
 
 import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
-import {fonts, normalize} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
+import {fonts, normalize} from '../../../utils/fonts';
 
 const ChannelPostNotificationMessage = ({
   type = BaseChannelItemTypeProps.ANON_PM,

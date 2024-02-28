@@ -61,6 +61,8 @@ export interface PostNotificationChannelListData {
   isSeen: boolean;
   totalComment: number;
   isOwnPost: boolean;
+  isOwnAnonymousPost: boolean;
+  isOwnSignedPost: boolean;
   totalCommentBadge: number;
   isRead: boolean;
   type: string;

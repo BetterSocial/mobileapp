@@ -325,7 +325,6 @@ const ChatInfoScreen = () => {
               </View>
             );
           }}
-
         />
       )}
       <ModalAction

@@ -105,7 +105,7 @@ describe('useChannelHook should run correctly', () => {
     const {determinePostType} = result.current;
     const postType = determinePostType(mockPostNotification1);
 
-    expect(postType).toBe(BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_COMMENTED);
+    expect(postType).toBe(BaseChannelItemTypeProps.ANON_POST_NOTIFICATION);
   });
 
   it('should return the correct post notification type', () => {

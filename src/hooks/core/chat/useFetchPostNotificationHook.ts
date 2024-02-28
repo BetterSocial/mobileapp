@@ -11,7 +11,7 @@ const useFetchPostNotificationHook = () => {
     if (!localDb) return;
     const allPromises: Promise<void>[] = notifications.map((notification) => {
       const channelList = fromNotificationAPI(notification);
-      return channelList.saveIfLatest(localDb);
+      return channelList.save(localDb);
     });
 
     try {

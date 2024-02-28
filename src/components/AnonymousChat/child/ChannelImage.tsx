@@ -42,7 +42,8 @@ const ChannelImage = ({
       height: dimen.normalizeDimen(48),
       marginTop: dimen.normalizeDimen(12),
       marginBottom: dimen.normalizeDimen(12),
-      borderRadius: dimen.normalizeDimen(24)
+      borderRadius: dimen.normalizeDimen(24),
+      backgroundColor: COLORS.anon_primary
     },
     postNotificationImage: {
       position: 'absolute',
@@ -56,13 +57,13 @@ const ChannelImage = ({
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: COLORS.anon_primary
+      backgroundColor: COLORS.anon_secondary
     },
     myPostNotificationImageContainer: {
-      backgroundColor: isAnonymousTab ? COLORS.anon_primary : COLORS.signed_secondary
+      backgroundColor: isAnonymousTab ? COLORS.anon_secondary : COLORS.signed_secondary
     },
     anonPmNotificationImageContainer: {
-      backgroundColor: COLORS.anon_primary
+      backgroundColor: COLORS.anon_secondary
     },
     postNotificationIcon: {
       width: dimen.normalizeDimen(12.5),
@@ -130,7 +131,7 @@ const ChannelImage = ({
         />
       );
     }
-    if (!isAnonymousChannel && isAnonymousOldPostMaker)
+    if (!isAnonymousChannel && isAnonymousOldPostMaker) {
       return (
         <ChannelAnonymousImage
           anonPostNotificationUserInfo={{
@@ -140,6 +141,7 @@ const ChannelImage = ({
           imageStyle={styles.image}
         />
       );
+    }
 
     return (
       <FastImage source={{uri: mainPicture || DEFAULT_PROFILE_PIC_PATH}} style={styles.image} />
@@ -183,6 +185,10 @@ const ChannelImage = ({
       <FastImage source={{uri: postNotificationPicture}} style={styles.postNotificationImage} />
     );
   };
+
+  /**
+   * START OF RENDER
+   */
 
   // SIGNED OR ANON PM CHANNEL IMAGE
   if (type?.includes('PM')) {
