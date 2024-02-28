@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   attachmentFileContainer: {
     backgroundColor: COLORS.gray,
     justifyContent: 'center',
-    minHeight: dimen.normalizeDimen(64),
+    height: dimen.normalizeDimen(64),
     flexDirection: 'row',
     alignItems: 'center'
   },
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
   attachmentFileInfo: {
     fontSize: dimen.normalizeDimen(12),
     fontFamily: fonts.inter[400],
-    color: COLORS.gray
+    color: COLORS.gray500
   },
   attachmentFileIcon: {
     backgroundColor: COLORS.light_silver,
@@ -265,7 +265,9 @@ const ChatItemMyTextV2 = ({
                     onPress={() => Linking.openURL(item.file_path)}>
                     <View style={styles.attachmentFileContainer}>
                       <View style={styles.attachmentFileContent}>
-                        <Text style={styles.attachmentFileName}>{item.file_name}</Text>
+                        <Text style={styles.attachmentFileName} numberOfLines={1}>
+                          {item.file_name}
+                        </Text>
                         <View>
                           <Text style={styles.attachmentFileInfo}>
                             {formatBytes(item.file_size)} •{' '}
