@@ -388,7 +388,7 @@ const InputMessageV2 = ({
         '',
         type === ANONYMOUS
           ? `Switch back to regular chat?\nMessage ${username} using your username.`
-          : 'Switch to anonymous chat?\nMessage this user anonymously instead.',
+          : 'Switch to anonymous chat?\nMessage this user in Incognito Mode instead.',
         [
           {
             text: 'Cancel'

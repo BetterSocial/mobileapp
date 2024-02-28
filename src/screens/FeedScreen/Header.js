@@ -181,21 +181,36 @@ const _renderAnonimity = ({
             </View>
 
             <View style={[styles.containerFeedProfile]}>
-              <View style={[styles.containerFeedName, {alignItems: 'center'}]}>
-                <AnonymousUsername
-                  version={version}
-                  anonUserInfo={anonUserInfo}
-                  style={{flex: 0}}
-                />
-                {!isSelf && (
-                  <React.Fragment>
-                    <View style={styles.point} />
-                    <TouchableOpacity onPress={() => onPressFollUnFoll(isFollow)}>
-                      <Text style={isFollow ? styles.textFollowing : styles.textFollow}>
-                        {isFollow ? 'Following' : 'Follow'}
-                      </Text>
-                    </TouchableOpacity>
-                  </React.Fragment>
+              <View
+                style={[
+                  {
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    paddingRight: 16
+                  }
+                ]}>
+                <View
+                  style={{
+                    flexDirection: 'row'
+                  }}>
+                  <AnonymousUsername version={version} anonUserInfo={anonUserInfo} isFeed={true} />
+
+                  {!isSelf && (
+                    <React.Fragment>
+                      <View style={styles.point} />
+                      <TouchableOpacity onPress={() => onPressFollUnFoll(isFollow)}>
+                        <Text style={isFollow ? styles.textFollowing : styles.textFollow}>
+                          {isFollow ? 'Following' : 'Follow'}
+                        </Text>
+                      </TouchableOpacity>
+                    </React.Fragment>
+                  )}
+                </View>
+                {hideThreeDot ? null : (
+                  <View style={{zIndex: 1000}}>
+                    <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
+                  </View>
                 )}
               </View>
               {showAnonymousOption && !hideThreeDot && (
@@ -215,20 +230,11 @@ const _renderAnonimity = ({
                 ) : (
                   <MemoPeopleFollow height={16} width={16} />
                 )}
-                <View style={styles.containerFeedText}>
-                  <Text style={styles.feedDate}>{calculateTime(time)}</Text>
-                  <View style={styles.point} />
-                  {privacy.toLowerCase() === PRIVACY_PUBLIC ? (
-                    <MemoicGlobe height={16} width={16} />
-                  ) : (
-                    <MemoPeopleFollow height={16} width={16} />
-                  )}
 
-                  {duration_feed !== 'never' ? <View style={styles.point} /> : null}
-                  {duration_feed !== 'never' ? validationTimer(time, duration_feed) : null}
-                  <View style={styles.point} />
-                  <Text style={styles.feedDate}>{location}</Text>
-                </View>
+                {duration_feed !== 'never' ? <View style={styles.point} /> : null}
+                {duration_feed !== 'never' ? validationTimer(time, duration_feed) : null}
+                <View style={styles.point} />
+                <Text style={styles.feedDate}>{location}</Text>
               </View>
             </View>
           </View>
