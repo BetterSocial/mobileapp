@@ -1,17 +1,17 @@
-import * as React from 'react';
 import {useNavigation, useRoute} from '@react-navigation/core';
+import * as React from 'react';
 
-import ChannelList from '../../database/schema/ChannelListSchema';
-import UseAnonymousChatInfoScreenHook from '../../../types/hooks/screens/useAnonymousChatInfoScreenHook.types';
-import useChatUtilsHook from '../core/chat/useChatUtilsHook';
-import useGroupInfo from '../../screens/GroupInfo/hooks/useGroupInfo';
-import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
-import useUserAuthHook from '../core/auth/useUserAuthHook';
 import {ChannelListMemberSchema} from '../../../types/database/schema/ChannelList.types';
-import {Context} from '../../context';
 import {Member} from '../../../types/database/schema/ChatListDetail.types';
-import {SIGNED} from '../core/constant';
+import UseAnonymousChatInfoScreenHook from '../../../types/hooks/screens/useAnonymousChatInfoScreenHook.types';
+import {Context} from '../../context';
+import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
+import ChannelList from '../../database/schema/ChannelListSchema';
+import useGroupInfo from '../../screens/GroupInfo/hooks/useGroupInfo';
 import {isContainUrl} from '../../utils/Utils';
+import useUserAuthHook from '../core/auth/useUserAuthHook';
+import useChatUtilsHook from '../core/chat/useChatUtilsHook';
+import {ANONYMOUS, SIGNED} from '../core/constant';
 
 function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   const {params}: any = useRoute();
@@ -55,17 +55,7 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   };
 
   const onContactPressed = (item: ChannelListMemberSchema) => {
-    if (params.from === SIGNED) {
-      return handlePressContact(item);
-    }
-
-    return navigation.push('OtherProfile', {
-      data: {
-        user_id: myUserId?.myProfile?.user_id,
-        other_id: item?.user_id || item?.userId,
-        username: item?.user?.name || item?.user?.username
-      }
-    });
+    return handlePressContact(item);
   };
 
   const handleClosePopup = () => setShowPopupBlock(false);
@@ -82,7 +72,7 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   };
 
   const handleShowArrow = (item: Member) => {
-    if (params?.from === SIGNED) {
+    if (params?.from === SIGNED || params?.from === ANONYMOUS) {
       return item?.user?.userId !== signedProfileId;
     }
 

@@ -3,7 +3,7 @@ import Toast from 'react-native-simple-toast';
 import {blockAnonymous, blockDomain, blockUser, blockUserFromAnonChat} from '../blocking';
 
 const handleMessage = (reason = [], message = '', type = 'user') => {
-  let successMessage = `The ${type} was blocked successfully. \nThanks for making BetterSocial better!`;
+  let successMessage = `The ${type} was blocked successfully. \nThanks for making Helio better!`;
   if (reason.length > 0 || message.length > 0) {
     successMessage = 'Your report was filed & will be investigated';
   }

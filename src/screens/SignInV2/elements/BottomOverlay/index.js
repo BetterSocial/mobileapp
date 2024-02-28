@@ -48,10 +48,10 @@ const BottomOverlay = ({count, handleLogin, index, isLogin, title, onNextSlide, 
               </Text>
               {',\n'}
               {'humanID verifies your humanity'}
-              <Text style={bottomOverlayStyles.descBold}>{' without storing\n'}</Text>
+              <Text>{' without storing\n'}</Text>
               {'your data or'}
-              <Text style={bottomOverlayStyles.descBold}>{' sharing'}</Text>
-              {' it with BetterSocial'}
+              <Text>{' sharing'}</Text>
+              {' it with Helio'}
             </Text>
           </View>
         </View>
@@ -115,7 +115,7 @@ const bottomOverlayStyles = StyleSheet.create({
     zIndex: 99
   },
   container: {
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     height: dimen.size.ONBOARDING_BOTTOM_OVERLAY_CONTAINER,
     paddingStart: 32,
     paddingEnd: 32,
@@ -124,10 +124,10 @@ const bottomOverlayStyles = StyleSheet.create({
     zIndex: 10
   },
   containerBtnLogin: {
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: COLORS.lightgrey,
+    borderColor: COLORS.gray300,
     paddingBottom: 16
   },
   descTitle: {
@@ -145,30 +145,26 @@ const bottomOverlayStyles = StyleSheet.create({
     lineHeight: Platform.OS === 'ios' ? 20 : 22,
     fontSize: 14,
     textAlign: 'center',
-    color: COLORS.blackgrey,
+    color: COLORS.gray500,
     alignSelf: 'center'
-  },
-  descBold: {
-    fontWeight: '700',
-    fontFamily: fonts.inter[700]
   },
   link: {
     color: COLORS.blue,
     textDecorationLine: 'underline'
   },
   loginContainer: {
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.gray100
   },
   loginBox: {
     width: '100%',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.gray100,
     height: dimen.size.ONBOARDING_BOTTOM_OVERLAY_CONTAINER,
     display: 'flex',
     flexDirection: 'column',
     alignContent: 'center',
     zIndex: 10,
     padding: 16,
-    paddingTop: 27,
+    paddingTop: 30,
     alignSelf: 'center',
     borderRadius: 16
   },

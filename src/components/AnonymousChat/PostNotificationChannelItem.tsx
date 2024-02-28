@@ -10,7 +10,7 @@ import {
 } from '../../../types/database/schema/PostNotificationChannelList.types';
 import {MessageChannelItemProps} from '../../../types/component/AnonymousChat/MessageChannelItem.types';
 import {calculateTime} from '../../utils/time';
-import {capitalizeFirstText} from '../../utils/string/StringUtils';
+import {capitalizeFirstText, getOfficialAnonUsername} from '../../utils/string/StringUtils';
 
 const PostNotificationChannelItem: (props: MessageChannelItemProps) => React.ReactElement = ({
   item,
@@ -35,7 +35,7 @@ const PostNotificationChannelItem: (props: MessageChannelItemProps) => React.Rea
       commenterName = 'You';
       postNotificationPicture = firstComment?.reaction?.user?.data?.profile_pic_url;
     } else if (anonymousCommenterName) {
-      commenterName = `Anonymous ${capitalizeFirstText(anonymousCommenterName)}`;
+      commenterName = getOfficialAnonUsername(firstComment?.reaction?.data);
     } else {
       commenterName = firstComment?.reaction?.user?.data?.username;
       postNotificationPicture = firstComment?.reaction?.user?.data?.profile_pic_url;
@@ -81,6 +81,17 @@ const PostNotificationChannelItem: (props: MessageChannelItemProps) => React.Rea
     return false;
   };
 
+  const postMakerAnonUserInfo = {
+    anon_user_info_emoji_name: postMaker?.data?.emoji_name,
+    anon_user_info_color_name: postMaker?.data?.color_name,
+    anon_user_info_emoji_code: postMaker?.data?.emoji_code,
+    anon_user_info_color_code: postMaker?.data?.color_code
+  };
+
+  const anonUsername = postMaker?.data?.emoji_name
+    ? getOfficialAnonUsername(postMakerAnonUserInfo)
+    : postMaker?.data?.username;
+
   return (
     <BaseChannelItem
       type={type}
@@ -92,7 +103,7 @@ const PostNotificationChannelItem: (props: MessageChannelItemProps) => React.Rea
       isMe={getIsMe()}
       isOwnSignedPost={isOwnSignedPost}
       message={item?.description}
-      name={postMaker?.data?.username}
+      name={anonUsername}
       onPress={onChannelPressed}
       picture={postMaker?.data?.profile_pic_url}
       postMaker={postMaker?.data}
