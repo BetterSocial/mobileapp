@@ -412,7 +412,7 @@ const ProfileScreen = ({route}) => {
       });
     } else {
       openAlertPermission(
-        'We’re not able to access your photos, please adjust your permission settings for BetterSocial.'
+        'We’re not able to access your photos, please adjust your permission settings for Helio.'
       );
     }
   };
@@ -431,7 +431,7 @@ const ProfileScreen = ({route}) => {
       });
     } else {
       openAlertPermission(
-        'We’re not able to access your camera, please adjust your permission settings for BetterSocial.'
+        'We’re not able to access your camera, please adjust your permission settings for Helio.'
       );
     }
   };

@@ -13,7 +13,7 @@ const BlockUser = ({refBlockUser, onSelect, username}) => {
       id: 1,
       icon: 'block',
       label: `Block ${username} indefinitely`,
-      desc: 'You will not be able to see each other’s posts, or message each other. The user’s reach will be reduced across BetterSocial, in particular for this post.',
+      desc: 'You will not be able to see each other’s posts, or message each other. The user’s reach will be reduced across Helio, in particular for this post.',
       iconReght: false
     },
     {
