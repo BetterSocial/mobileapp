@@ -252,7 +252,8 @@ NavHeader.propTypes = {
   setIsFirstTimeOpen: PropTypes.func,
   getSearchLayout: PropTypes.func,
   hasSearch: PropTypes.bool,
-  onFollowButtonPress: PropTypes.func
+  onFollowButtonPress: PropTypes.func,
+  followType: PropTypes.string
 };
 
 const styles = StyleSheet.create({

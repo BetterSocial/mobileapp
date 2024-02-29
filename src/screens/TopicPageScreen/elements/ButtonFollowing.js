@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {View, TouchableNativeFeedback, Text, StyleSheet} from 'react-native';
 import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
@@ -11,6 +12,11 @@ const ButtonFollowing = ({handleSetUnFollow, followType = 'signed'}) => {
       </View>
     </TouchableNativeFeedback>
   );
+};
+
+ButtonFollowing.propTypes = {
+  handleSetUnFollow: PropTypes.func,
+  followType: PropTypes.string
 };
 
 const styles = StyleSheet.create({

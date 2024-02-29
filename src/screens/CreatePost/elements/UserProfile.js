@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import PropTypes from 'prop-types';
 import ToggleSwitch from '../../../components/ToggleSwitch';
 import AnonymousAvatar from '../../../components/AnonymousAvatar';
 import AnonymousProfile from '../../../assets/images/AnonymousProfile.png';
@@ -119,6 +120,16 @@ const UserProfile = ({
       </View>
     </>
   );
+};
+
+UserProfile.propTypes = {
+  setTypeUser: PropTypes.func,
+  username: PropTypes.string,
+  photo: PropTypes.string,
+  onPress: PropTypes.func,
+  isAnonymous: PropTypes.bool,
+  anonUserInfo: PropTypes.object,
+  isToggleDisabled: PropTypes.bool
 };
 
 export default UserProfile;

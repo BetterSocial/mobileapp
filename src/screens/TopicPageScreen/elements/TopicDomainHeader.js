@@ -67,7 +67,8 @@ TopicDomainHeader.propTypes = {
   hideSeeMember: PropTypes.bool,
   isFollow: PropTypes.bool,
   memberCount: PropTypes.number,
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
+  followType: PropTypes.string
 };
 
 const styles = StyleSheet.create({
