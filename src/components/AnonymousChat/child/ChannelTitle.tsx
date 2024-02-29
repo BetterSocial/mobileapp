@@ -5,8 +5,8 @@ import {StyleSheet, Text, View} from 'react-native';
 import ChannelFollowButton from './ChannelFollowButton';
 import baseStyles from '../BaseChannelItemStyles';
 import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
-import {fonts, normalize} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
+import {fonts, normalize} from '../../../utils/fonts';
 
 const ChannelTitle = ({
   type,
@@ -112,9 +112,7 @@ const ChannelTitle = ({
   }
 
   const getTitle = () => {
-    const isMyPost = type?.includes('MY_SIGNED_POST') || type?.includes('MY_ANON_POST');
-
-    if (isMyPost) {
+    if (isMe) {
       if (message?.length === 0) return 'Your media post 📸 🖼';
       return 'Your post: ';
     }
