@@ -426,7 +426,7 @@ const InputMessageV2 = ({
         {isShowToggle && (
           <ToggleSwitch
             labelLeft={
-              !inputFocus ? (isAnonimityEnabled ? 'Anonymity' : 'Anonymity disabled') : undefined
+              !inputFocus ? (isAnonimityEnabled ? 'Incognito' : 'Incognito disabled') : undefined
             }
             styleLabelLeft={[
               styles.labelToggle,
