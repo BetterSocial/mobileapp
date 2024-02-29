@@ -3,18 +3,18 @@ import {View, TouchableNativeFeedback, Text, StyleSheet} from 'react-native';
 import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
 
-const ButtonFollowing = ({handleSetUnFollow}) => {
+const ButtonFollowing = ({handleSetUnFollow, followType = 'signed'}) => {
   return (
     <TouchableNativeFeedback onPress={handleSetUnFollow}>
-      <View style={styles.buttonFollowing}>
-        <Text style={styles.textButtonFollowing}>Joined</Text>
+      <View style={styles.buttonFollowing(followType)}>
+        <Text style={styles.textButtonFollowing(followType)}>Joined</Text>
       </View>
     </TouchableNativeFeedback>
   );
 };
 
 const styles = StyleSheet.create({
-  buttonFollowing: {
+  buttonFollowing: (followType) => ({
     width: normalize(88),
     height: normalize(36),
     flexDirection: 'row',
@@ -22,15 +22,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 6,
     borderWidth: 1,
-    borderColor: COLORS.signed_primary,
+    borderColor: followType === 'incognito' ? COLORS.anon_secondary : COLORS.signed_primary,
     borderRadius: 8
-  },
-  textButtonFollowing: {
+  }),
+  textButtonFollowing: (followType) => ({
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: normalizeFontSize(12),
-    color: COLORS.signed_primary
-  }
+    color: followType === 'incognito' ? COLORS.anon_secondary : COLORS.signed_primary
+  })
 });
 
 export default ButtonFollowing;

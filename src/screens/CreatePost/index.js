@@ -704,6 +704,15 @@ const CreatePost = () => {
     }
   }, [typeUser]);
 
+  React.useEffect(() => {
+    const followType = params?.followType;
+    if (followType === 'incognito' || followType === undefined) {
+      setTypeUser(true);
+    } else {
+      setTypeUser(false);
+    }
+  }, [params.followType]);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -724,6 +733,7 @@ const CreatePost = () => {
                 isNotFromHomeTab: true
               });
             }}
+            isToggleDisabled={params.followType === 'incognito'}
           />
           <Gap style={styles.height(8)} />
           <CreatePostInput
