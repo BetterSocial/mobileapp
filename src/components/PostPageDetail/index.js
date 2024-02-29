@@ -43,6 +43,7 @@ import LoadingWithoutModal from '../LoadingWithoutModal';
 import {Shimmer} from '../Shimmer/Shimmer';
 import Content from './elements/Content';
 import usePostDetail from './hooks/usePostDetail';
+import usePostHook from '../../hooks/core/post/usePostHook';
 
 const {width, height} = Dimensions.get('window');
 
@@ -569,6 +570,8 @@ const PostPageDetailIdComponent = (props) => {
     getComment();
   };
 
+  const {followUnfollow} = usePostHook();
+
   return (
     <View style={styles.container}>
       {loading && !route.params.isCaching ? <LoadingWithoutModal /> : null}
@@ -582,6 +585,11 @@ const PostPageDetailIdComponent = (props) => {
             isBackButton={true}
             source={SOURCE_PDP}
             height={getHeightHeader()}
+            isFollow={item?.is_following_target || parentData?.is_following_target}
+            onPressFollUnFoll={() => {
+              followUnfollow(item);
+              setItem({...item, is_following_target: !item?.is_following_target});
+            }}
           />
 
           <ScrollView
