@@ -107,7 +107,7 @@ const UserProfile = ({
         <ToggleSwitch
           value={isAnonymous}
           onValueChange={() => setTypeUser(!isAnonymous)}
-          labelLeft="Anonymity"
+          labelLeft="Incognito"
           backgroundActive={COLORS.lightgrey}
           backgroundInactive={COLORS.lightgrey}
           circleInActiveColor={COLORS.signed_primary}

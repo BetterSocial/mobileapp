@@ -33,7 +33,7 @@ export const ToggleSwitchAnon = ({value, onValueChange, labelLeft}) => {
       <ToggleSwitch
         value={value}
         onValueChange={onValueChange}
-        labelLeft={labelLeft || 'Anonimity'}
+        labelLeft={labelLeft || 'Incognito'}
         circleActiveColor={dynamicColors.primary}
         activeTextColor={dynamicColors.primary}
         styleLabelLeft={{color: dynamicColors.text}}
