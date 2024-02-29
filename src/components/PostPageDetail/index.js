@@ -14,6 +14,7 @@ import {
 import Toast from 'react-native-simple-toast';
 
 import {Footer} from '..';
+
 import {Context} from '../../context';
 import {saveComment} from '../../context/actions/comment';
 import {setFeedByIndex} from '../../context/actions/feeds';
@@ -43,6 +44,7 @@ import LoadingWithoutModal from '../LoadingWithoutModal';
 import {Shimmer} from '../Shimmer/Shimmer';
 import Content from './elements/Content';
 import usePostDetail from './hooks/usePostDetail';
+import usePostHook from '../../hooks/core/post/usePostHook';
 
 const {width, height} = Dimensions.get('window');
 
@@ -84,6 +86,8 @@ const PostPageDetailIdComponent = (props) => {
   const {updateFeedContext} = usePostContextHook(contextSource);
   const {updateFeedContext: updateTopicContext} = usePostContextHook(CONTEXT_SOURCE.TOPIC_FEEDS);
   const {width: displayWidth} = useWindowDimensions();
+
+  const {followUnfollow} = usePostHook();
 
   const {handleUserName} = useWriteComment();
   const getComment = async (scrollToBottom, noNeedLoading) => {
@@ -582,6 +586,11 @@ const PostPageDetailIdComponent = (props) => {
             isBackButton={true}
             source={SOURCE_PDP}
             height={getHeightHeader()}
+            isFollow={item?.is_following_target || parentData?.is_following_target}
+            onPressFollUnFoll={() => {
+              followUnfollow(item);
+              setItem({...item, is_following_target: !item?.is_following_target});
+            }}
           />
 
           <ScrollView
