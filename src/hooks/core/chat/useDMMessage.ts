@@ -8,6 +8,7 @@ import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
 import useUserAuthHook from '../auth/useUserAuthHook';
 import useChatUtilsHook from './useChatUtilsHook';
 import {initChatFromPost, initChatFromPostAnon} from '../../../service/chat';
+import {getChannelListInfo} from '../../../utils/string/StringUtils';
 
 type ChannelCategory = 'SIGNED' | 'ANONYMOUS';
 
@@ -16,7 +17,14 @@ const useDMMessage = () => {
   const {signedProfileId, anonProfileId} = useUserAuthHook();
   const {goToChatScreen} = useChatUtilsHook();
 
-  const saveChannelList = async (channel, type: ChannelCategory) => {
+  const saveChannelList = async (
+    channel,
+    type: ChannelCategory,
+    builtChannelData: {
+      better_channel_member: any;
+      members: any;
+    }
+  ) => {
     try {
       if (channel?.members?.length === 0) return Promise.reject(Error('no members'));
       let userTarget = channel?.better_channel_members.find(
@@ -29,10 +37,19 @@ const useDMMessage = () => {
         );
       }
 
+      const {
+        anonUserInfoEmojiName,
+        anonUserInfoColorCode,
+        anonUserInfoColorName,
+        anonUserInfoEmojiCode,
+        channelName,
+        channelImage
+      } = getChannelListInfo(builtChannelData, signedProfileId, anonProfileId);
+
       const chatType = type === 'ANONYMOUS' ? 'ANON_PM' : 'PM';
       const chatName = {
-        name: userTarget?.user?.name || userTarget?.user?.username,
-        image: userTarget?.user?.image || DEFAULT_PROFILE_PIC_PATH
+        name: channelName,
+        image: channelImage
       };
 
       channel.firstMessage = channel?.messages?.[channel?.messages?.length - 1];
@@ -41,7 +58,18 @@ const useDMMessage = () => {
       channel.targetImage = chatName?.image; // change to use getChannelListInfo
 
       channel.channel = {...channel};
-      const channelList = ChannelList.fromChannelAPI(channel, chatType, channel?.members);
+      console.log('data', {
+        anon_user_info_color_name: anonUserInfoColorName,
+        anon_user_info_color_code: anonUserInfoColorCode,
+        anon_user_info_emoji_code: anonUserInfoEmojiCode,
+        anon_user_info_emoji_name: anonUserInfoEmojiName
+      });
+      const channelList = ChannelList.fromChannelAPI(channel, chatType, channel?.members, {
+        anon_user_info_color_name: anonUserInfoColorName,
+        anon_user_info_color_code: anonUserInfoColorCode,
+        anon_user_info_emoji_code: anonUserInfoEmojiCode,
+        anon_user_info_emoji_name: anonUserInfoEmojiName
+      });
       await channelList.saveIfLatest(localDb);
       refresh('channelList', 'chat', 'channelInfo', 'channelMember');
       return goToChatScreen(channelList);
@@ -59,6 +87,11 @@ const useDMMessage = () => {
       channelCategory === 'ANONYMOUS'
         ? await initChatFromPostAnon({source, id})
         : await initChatFromPost({source, id});
+
+    const builtChannelData = {
+      better_channel_member: initChat.data.better_channel_members,
+      members: initChat?.data.members
+    };
 
     const channel = {
       ...initChat?.data?.channel,
@@ -98,7 +131,7 @@ const useDMMessage = () => {
         })
       );
 
-      await saveChannelList(channel, channelCategory);
+      await saveChannelList(channel, channelCategory, builtChannelData);
     } catch (e) {
       console.log('error on saveChannelData', e);
     }
