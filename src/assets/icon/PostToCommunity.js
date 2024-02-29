@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Svg, {Path, Rect} from 'react-native-svg';
+import PropTypes from 'prop-types';
 import {COLORS} from '../../utils/theme';
 
 const PostToCommunity = (props) => (
@@ -36,5 +37,9 @@ const PostToCommunity = (props) => (
     />
   </Svg>
 );
+
+PostToCommunity.propTypes = {
+  color: PropTypes.string
+};
 
 export default PostToCommunity;
