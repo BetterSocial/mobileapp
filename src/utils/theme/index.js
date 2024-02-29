@@ -27,6 +27,7 @@ export const COLORS = {
   white: '#FFFFFF',
   white20percent: 'rgba(255,255,255,0.2)',
   whiteSmoke: '#F4F4F4',
+  bluePrimary: '#4782D7',
 
   // need to remove
   holytosca: '#00ADB5',
