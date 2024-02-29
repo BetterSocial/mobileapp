@@ -1,7 +1,7 @@
 import * as React from 'react';
 import _ from 'lodash';
 import SimpleToast from 'react-native-simple-toast';
-import {Animated, Platform, StyleSheet, View} from 'react-native';
+import {Animated, Platform, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -20,7 +20,6 @@ import useViewPostTimeHook from '../FeedScreen/hooks/useViewPostTimeHook';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
 } from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
-import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {downVote, upVote} from '../../service/vote';
 import {getFeedDetail} from '../../service/post';
@@ -30,6 +29,7 @@ import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {setFeedByIndex, setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
+import BottomSheetFollow from './elements/BottomSheetFollow';
 
 const TopicPageScreen = (props) => {
   const route = useRoute();
@@ -41,6 +41,7 @@ const TopicPageScreen = (props) => {
   const [userId, setUserId] = React.useState('');
   const [topicId, setTopicId] = React.useState('');
   const [isFollow, setIsFollow] = React.useState(params.isFollowing);
+  const [followType, setFollowType] = React.useState('');
   const [topicDetail, setTopicDetail] = React.useState({});
   const [memberCount, setMemberCount] = React.useState(params.memberCount);
   const [isHeaderHide, setIsHeaderHide] = React.useState(false);
@@ -53,7 +54,9 @@ const TopicPageScreen = (props) => {
 
   const [offset, setOffset] = React.useState(0);
   const [client] = React.useContext(Context).client;
+  const [user] = React.useContext(Context).profile;
   const refBlockComponent = React.useRef();
+  const bottomSheetFollowRef = React.useRef();
   const scrollY = React.useRef(new Animated.Value(0)).current;
   const {mappingColorFeed} = useCoreFeed();
 
@@ -142,21 +145,27 @@ const TopicPageScreen = (props) => {
     }
   };
 
+  const handleFollowData = (type) => {
+    if (type === 'sign') {
+      setFollowType('signed');
+      setIsFollow(true);
+    } else if (type === 'anon') {
+      setFollowType('incognito');
+      setIsFollow(true);
+    } else {
+      setFollowType('');
+      setIsFollow(false);
+    }
+  };
+
   const getTopicDetail = async (domain) => {
     try {
-      const query = `?name=${domain}`;
-      const resultGetUserTopic = await getUserTopic(query);
-
-      if (resultGetUserTopic.data) {
-        setIsFollow(true);
-      } else {
-        setIsFollow(false);
-      }
       const resultTopicDetail = await getTopics(domain);
       if (resultTopicDetail.data) {
         const detail = resultTopicDetail.data.find((item) => item.name === domain);
         setTopicDetail(detail);
-        setMemberCount(Number(detail?.followersCount));
+        handleFollowData(detail.is_followed_by);
+        setMemberCount(Number(detail.followersCount));
         setIsInitialLoading(false);
       }
     } catch (error) {
@@ -421,6 +430,9 @@ const TopicPageScreen = (props) => {
         setIsFollow={setIsFollow}
         isFollow={isFollow}
         getTopicDetail={getTopicDetail}
+        onFollowButtonPress={() => bottomSheetFollowRef?.current?.open()}
+        followType={followType}
+        setFollowType={setFollowType}
       />
       <View
         style={{
@@ -447,12 +459,26 @@ const TopicPageScreen = (props) => {
           contentInsetAdjustmentBehavior={feeds?.length > 1 ? 'automatic' : 'never'}
         />
       </View>
-      <ButtonAddPostTopic topicName={topicName} onRefresh={onRefresh} />
+      <ButtonAddPostTopic topicName={topicName} onRefresh={onRefresh} followType={followType} />
       <BlockComponent
         ref={refBlockComponent}
         refresh={onBlockCompleted}
         refreshAnonymous={onDeleteBlockedPostCompleted}
         screen="topic_screen"
+      />
+      <BottomSheetFollow
+        ref={bottomSheetFollowRef}
+        onClose={() => bottomSheetFollowRef.current.close()}
+        topicName={topicDetail.name}
+        memberCount={memberCount}
+        setMemberCount={setMemberCount}
+        isFollow={isFollow}
+        setIsFollow={setIsFollow}
+        followType={followType}
+        setFollowType={setFollowType}
+        getTopicDetail={getTopicDetail}
+        username={user?.myProfile.username}
+        profilePicture={user?.myProfile.profile_pic_path}
       />
     </>
   );

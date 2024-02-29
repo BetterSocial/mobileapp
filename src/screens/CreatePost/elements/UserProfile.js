@@ -55,7 +55,8 @@ const UserProfile = ({
   photo,
   onPress,
   isAnonymous = true,
-  anonUserInfo = null
+  anonUserInfo = null,
+  isToggleDisabled = false
 }) => {
   const userProfile = () => {
     if (isAnonymous && anonUserInfo) {
@@ -113,6 +114,7 @@ const UserProfile = ({
           circleInActiveColor={COLORS.signed_primary}
           inactiveTextColor={COLORS.signed_primary}
           styleLabelLeft={styles.switch}
+          isDisabled={isToggleDisabled}
         />
       </View>
     </>

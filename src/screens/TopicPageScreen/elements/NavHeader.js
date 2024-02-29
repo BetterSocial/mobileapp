@@ -15,11 +15,11 @@ import FastImage from 'react-native-fast-image';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import MemoIcArrowBackCircle from '../../../assets/arrow/Ic_arrow_back_circle';
 import ShareIconCircle from '../../../assets/icons/Ic_share_circle';
-import TopicDefaultIcon from '../../../assets/topic.png';
+import TopicSignedDefaultIcon from '../../../assets/dp-topics-signed.png';
+import TopicAnonDefaultIcon from '../../../assets/dp-topics-anon.png';
 import {Shimmer} from '../../../components/Shimmer/Shimmer';
 import dimen from '../../../utils/dimen';
 import {normalize} from '../../../utils/fonts';
-import useChatClientHook from '../../../utils/getstream/useChatClientHook';
 import Search from '../../DiscoveryScreenV2/elements/Search';
 import {COLORS} from '../../../utils/theme';
 import ButtonFollow from './ButtonFollow';
@@ -32,12 +32,8 @@ const NavHeader = (props) => {
     initialData,
     opacityHeaderAnimation,
     onShareCommunity,
-    getTopicDetail,
-    setMemberCount,
-    memberCount,
     isHeaderHide,
     topicDetail,
-    setIsFollow,
     isFollow,
     hasSearch,
     searchText,
@@ -49,34 +45,14 @@ const NavHeader = (props) => {
     onCancelToken,
     placeholderText,
     setIsFirstTimeOpen,
-    getSearchLayout,
-    opacityImage
+    opacityImage,
+    onFollowButtonPress,
+    followType
   } = props;
   const navigation = useNavigation();
   const coverPath = topicDetail?.cover_path || null;
   const insets = useSafeAreaInsets();
   const {width: displayWidth} = useWindowDimensions();
-
-  const {followTopic} = useChatClientHook();
-
-  const handleFollowTopic = async () => {
-    setIsFollow(!isFollow);
-    if (isFollow) {
-      setMemberCount(memberCount - 1);
-    } else {
-      setMemberCount(memberCount + 1);
-    }
-    try {
-      const followed = await followTopic(topicDetail?.name);
-
-      setIsFollow(followed);
-      getTopicDetail(topicDetail?.name);
-    } catch (error) {
-      if (__DEV__) {
-        console.log(error);
-      }
-    }
-  };
 
   const backScreen = () => {
     navigation.goBack();
@@ -87,6 +63,9 @@ const NavHeader = (props) => {
     : !hasSearch || (hasSearch && coverPath?.length > 0);
 
   const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
+
+  const TopicDefaultIcon =
+    followType === 'incognito' ? TopicAnonDefaultIcon : TopicSignedDefaultIcon;
 
   return (
     <View>
@@ -163,7 +142,7 @@ const NavHeader = (props) => {
               })
             }>
             {!isFollow && isHeaderHide ? (
-              <ButtonFollow handleSetFollow={handleFollowTopic} />
+              <ButtonFollow handleSetFollow={onFollowButtonPress} />
             ) : (
               <TouchableOpacity onPress={onShareCommunity} style={styles.shareIconStyle}>
                 <ShareIconCircle color="black" width={32} height={32} />
@@ -183,7 +162,7 @@ const NavHeader = (props) => {
                       ? {uri: topicDetail?.icon_path}
                       : TopicDefaultIcon
                   }
-                  style={styles.image}
+                  style={styles.image(followType)}
                 />
               </Animated.View>
               <View
@@ -197,9 +176,12 @@ const NavHeader = (props) => {
                   {isFollow === undefined && isLoading ? (
                     <Shimmer width={normalize(100)} height={normalize(36)} />
                   ) : isFollow ? (
-                    <ButtonFollowing handleSetUnFollow={handleFollowTopic} />
+                    <ButtonFollowing
+                      handleSetUnFollow={onFollowButtonPress}
+                      followType={followType}
+                    />
                   ) : (
-                    <ButtonFollow handleSetFollow={handleFollowTopic} />
+                    <ButtonFollow handleSetFollow={onFollowButtonPress} />
                   )}
                 </Animated.View>
               </View>
@@ -207,7 +189,10 @@ const NavHeader = (props) => {
             <Animated.View
               style={[
                 styles.domain(isHeaderHide),
-                {bottom: normalize(isFollow ? 13 : 24), opacity: opacityHeaderAnimation}
+                {
+                  bottom: normalize(isFollow && followType === 'signed' ? 13 : 24),
+                  opacity: opacityHeaderAnimation
+                }
               ]}>
               <TopicDomainHeader {...props} />
             </Animated.View>
@@ -218,7 +203,9 @@ const NavHeader = (props) => {
       {hasSearch && (
         <View
           style={{
-            width: '100%'
+            width: '100%',
+            borderBottomWidth: 1,
+            borderBottomColor: COLORS.gray
           }}>
           <Search
             searchText={searchText}
@@ -264,7 +251,8 @@ NavHeader.propTypes = {
   placeholderText: PropTypes.string,
   setIsFirstTimeOpen: PropTypes.func,
   getSearchLayout: PropTypes.func,
-  hasSearch: PropTypes.bool
+  hasSearch: PropTypes.bool,
+  onFollowButtonPress: PropTypes.func
 };
 
 const styles = StyleSheet.create({
@@ -300,13 +288,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     opacity: opacityHeaderAnimation
   }),
-  image: {
+  image: (followType) => ({
     width: normalize(48),
     height: normalize(48),
     borderRadius: normalize(24),
-    backgroundColor: 'lightgrey',
+    backgroundColor: followType === 'signed' ? 'lightgrey' : COLORS.anon_secondary,
     marginRight: 8
-  },
+  }),
   backbutton: {
     paddingRight: 16,
     justifyContent: 'center',
