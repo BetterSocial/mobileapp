@@ -146,7 +146,7 @@ const BioAndChat = (props) => {
           value={isAnonimity}
           onValueChange={toggleSwitch}
           labelLeft={
-            isAnonimityEnabled || !isSignedMessageEnabled ? 'Anonymity' : 'Anonymity disabled'
+            isAnonimityEnabled || !isSignedMessageEnabled ? 'Incognito' : 'Incognito disabled'
           }
           styleLabelLeft={{color: COLORS.white}}
         />
