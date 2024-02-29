@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
+import PropTypes from 'prop-types';
 import PostToCommunity from '../../assets/icon/PostToCommunity';
 import useBetterNavigationHook from '../../hooks/navigation/useBetterNavigationHook';
 import dimen from '../../utils/dimen';
@@ -32,6 +33,12 @@ const ButtonAddPostTopic = ({topicName, onRefresh, followType}) => {
       </ShadowFloatingButtons>
     </View>
   );
+};
+
+ButtonAddPostTopic.propTypes = {
+  topicName: PropTypes.string,
+  onRefresh: PropTypes.func,
+  followType: PropTypes.string
 };
 
 export default ButtonAddPostTopic;
