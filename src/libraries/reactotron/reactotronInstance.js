@@ -9,7 +9,7 @@ import {reactotronRecoilPlugin} from 'reactotron-recoil-plugin';
 export const reactotronInstance = reactotron
   .setAsyncStorageHandler(AsyncStorage) // AsyncStorage would either come from `react-native` or `@react-native-community/async-storage` depending on where you get it from
   .configure({
-    name: 'BetterSocialDev'
+    name: 'HelioDev'
   }) // controls connection & communication settings
   .useReactNative() // add all built-in react native plugins
   .use(openInEditor())

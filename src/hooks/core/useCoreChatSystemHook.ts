@@ -144,7 +144,7 @@ const useCoreChatSystemHook = () => {
     const channelType: {[key: string]: ChannelType} = {
       messaging: isAnonymous ? 'ANON_PM' : 'PM',
       group: 'GROUP',
-      topics: 'TOPIC'
+      topics: isAnonymous ? 'ANON_TOPIC' : 'TOPIC'
     };
 
     const isSystemMessage = websocketData?.message?.isSystem || websocketData?.type === 'system';

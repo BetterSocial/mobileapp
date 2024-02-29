@@ -13,6 +13,8 @@ const CHANNEL_TYPE_ANONYMOUS = 4;
 const DEFAULT_PROFILE_PIC_PATH =
   'https://res.cloudinary.com/hpjivutj2/image/upload/v1680929851/default-profile-picture_vrmmdn.png';
 const DEFAULT_TOPIC_PIC_PATH =
+  'https://res.cloudinary.com/hpjivutj2/image/upload/v1707840597/qlundmevnhtlwx6vlglo.png';
+const DEFAULT_TOPIC_PIC_PATH_ANON =
   'https://res.cloudinary.com/hpjivutj2/image/upload/v1636632905/vdg8solozeepgvzxyfbv.png';
 const KEY_ACCESS_TOKEN = 'access_token';
 const KEY_ANONYMOUS_TOKEN = 'anonymous_token';
@@ -93,6 +95,7 @@ export {
   CONTEXT_MENU_REPLY,
   DEFAULT_PROFILE_PIC_PATH,
   DEFAULT_TOPIC_PIC_PATH,
+  DEFAULT_TOPIC_PIC_PATH_ANON,
   DELETED_MESSAGE_TEXT,
   DISCOVERY_TAB_DOMAINS,
   DISCOVERY_TAB_NEWS,

@@ -55,11 +55,7 @@ import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button, ButtonAddMedia} from '../../components/Button';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
-import {
-  DEFAULT_TOPIC_PIC_PATH,
-  MAX_POLLING_ALLOWED,
-  MIN_POLLING_ALLOWED
-} from '../../utils/constants';
+import {MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED} from '../../utils/constants';
 import {PROFILE_CACHE} from '../../utils/cache/constant';
 import {ShowingAudience, createPost} from '../../service/post';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
@@ -573,17 +569,13 @@ const CreatePost = () => {
   };
 
   const handleTopicChat = async () => {
-    const defaultImage = DEFAULT_TOPIC_PIC_PATH;
     const allTopics = listTopic;
 
     allTopics.forEach(async (topic) => {
       const channel = await client.client.channel('topics', `topic_${topic}`, {
         name: `#${topic}`,
         members: [user.myProfile.user_id],
-        channel_type: 3,
-        channel_image: defaultImage,
-        channelImage: defaultImage,
-        image: defaultImage
+        channel_type: 3
       });
       await channel.create();
       await channel.addMembers([user.myProfile.user_id]);

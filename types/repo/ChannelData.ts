@@ -68,4 +68,4 @@ export interface Command {
   set: string;
 }
 
-export type ChannelType = 'PM' | 'ANON_PM' | 'GROUP' | 'TOPIC';
+export type ChannelType = 'PM' | 'ANON_PM' | 'GROUP' | 'TOPIC' | 'ANON_TOPIC';
