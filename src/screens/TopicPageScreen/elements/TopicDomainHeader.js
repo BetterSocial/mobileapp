@@ -9,7 +9,7 @@ import {convertString} from '../../../utils/string/StringUtils';
 import {COLORS} from '../../../utils/theme';
 
 const TopicDomainHeader = (props) => {
-  const {domain, handleOnMemberPress, hideSeeMember, isFollow, memberCount} = props;
+  const {domain, handleOnMemberPress, hideSeeMember, isFollow, memberCount, followType} = props;
 
   const handlePress = () => {
     if (isFollow) {
@@ -48,9 +48,10 @@ const TopicDomainHeader = (props) => {
         <Shimmer height={10} width={normalize(60)} />
       ) : (
         isFollow &&
+        followType === 'signed' &&
         !hideSeeMember && (
           <Pressable onPress={handlePress} style={{backgroundColor: COLORS.transparent}}>
-            <Text style={styles.seeMemberText} numberOfLines={1} ellipsizeMode="tail">
+            <Text style={styles.seeMemberText(followType)} numberOfLines={1} ellipsizeMode="tail">
               See community members
             </Text>
           </Pressable>
@@ -66,7 +67,8 @@ TopicDomainHeader.propTypes = {
   hideSeeMember: PropTypes.bool,
   isFollow: PropTypes.bool,
   memberCount: PropTypes.number,
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
+  followType: PropTypes.string
 };
 
 const styles = StyleSheet.create({
@@ -88,13 +90,13 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     color: isHeaderHide ? COLORS.white : COLORS.blackgrey
   }),
-  seeMemberText: {
+  seeMemberText: (followType) => ({
     fontSize: normalizeFontSize(12),
     fontFamily: fonts.inter[500],
     textAlign: 'left',
-    color: COLORS.blue,
+    color: followType === 'incognito' ? COLORS.anon_secondary : COLORS.blue,
     marginTop: normalize(1)
-  }
+  })
 });
 
 export default TopicDomainHeader;
