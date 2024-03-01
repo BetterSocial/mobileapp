@@ -124,6 +124,22 @@ const useCreateChat = () => {
     }
   };
 
+  const createAnonymousChat = async (selectedUser) => {
+    try {
+      setLoadingCreateChat(true);
+      const response = await getOrCreateAnonymousChannel(selectedUser?.user?.userId);
+      const chatData = createChannelJson(response, selectedUser);
+      const channelList = ChannelList.fromMessageAnonymouslyAPI(chatData);
+      await channelList.saveIfLatest(localDb);
+      handleMemberSchema(response);
+      goToChatScreen(channelList, GROUP_INFO);
+    } catch (e) {
+      console.log({e}, 'error create chat');
+    } finally {
+      setLoadingCreateChat(false);
+    }
+  };
+
   const handleAnonymousMessage = async (selectedUser, channelId = null, context = null) => {
     if (!selectedUser?.allow_anon_dm) {
       SimpleToast.show('This user does not allow anonymous messages');
@@ -144,12 +160,13 @@ const useCreateChat = () => {
 
       goToChatScreen(channelList as ChannelListObject, GROUP_INFO);
     } catch (e) {
-      SimpleToast.show(e || 'Failed to message this user anonymously');
+      SimpleToast.show(e || 'Failed to message this user in Incognito Mode');
     }
   };
 
   return {
     createSignChat,
+    createAnonymousChat,
     handleAnonymousMessage,
     loadingCreateChat
   };
