@@ -190,7 +190,7 @@ const NavHeader = (props) => {
               style={[
                 styles.domain(isHeaderHide),
                 {
-                  bottom: normalize(isFollow && followType === 'signed' ? 13 : 24),
+                  bottom: normalize(isFollow ? 13 : 24),
                   opacity: opacityHeaderAnimation
                 }
               ]}>
