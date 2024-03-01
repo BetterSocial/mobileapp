@@ -162,10 +162,10 @@ const TopicPageScreen = (props) => {
     try {
       const resultTopicDetail = await getTopics(domain);
       if (resultTopicDetail.data) {
-        const detail = resultTopicDetail.data[0];
+        const detail = resultTopicDetail.data.find((item) => item.name === domain);
         setTopicDetail(detail);
-        handleFollowData(detail.is_followed_by);
-        setMemberCount(Number(detail.followersCount));
+        handleFollowData(detail?.is_followed_by);
+        setMemberCount(Number(detail?.followersCount));
         setIsInitialLoading(false);
       }
     } catch (error) {
@@ -469,7 +469,7 @@ const TopicPageScreen = (props) => {
       <BottomSheetFollow
         ref={bottomSheetFollowRef}
         onClose={() => bottomSheetFollowRef.current.close()}
-        topicName={topicDetail.name}
+        topicName={topicDetail?.name}
         memberCount={memberCount}
         setMemberCount={setMemberCount}
         isFollow={isFollow}
