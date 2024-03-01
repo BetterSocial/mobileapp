@@ -48,7 +48,6 @@ const TopicDomainHeader = (props) => {
         <Shimmer height={10} width={normalize(60)} />
       ) : (
         isFollow &&
-        followType === 'signed' &&
         !hideSeeMember && (
           <Pressable onPress={handlePress} style={{backgroundColor: COLORS.transparent}}>
             <Text style={styles.seeMemberText(followType)} numberOfLines={1} ellipsizeMode="tail">
