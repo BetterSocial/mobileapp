@@ -1,5 +1,5 @@
-import * as React from 'react';
 import PropTypes from 'prop-types';
+import * as React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
@@ -10,8 +10,16 @@ import MemoIc_block_inactive from '../../assets/block/Ic_block_inactive';
 import MemoIc_comment from '../../assets/icons/Ic_comment';
 import MemoIc_share from '../../assets/icons/Ic_share';
 import Memoic_globe from '../../assets/icons/ic_globe';
-import {COLORS, FONTS} from '../../utils/theme';
+import MemoIc_senddm from '../../assets/icons/ic_send_dm';
+import SendDMAnonBlock from '../../assets/icons/images/send-dm-anon-black.svg';
+import SendDMBlack from '../../assets/icons/images/send-dm-black.svg';
+import {Context} from '../../context';
+import useDMMessage from '../../hooks/core/chat/useDMMessage';
+import useCreateChat from '../../hooks/screen/useCreateChat';
 import BlurredLayer from '../../screens/FeedScreen/elements/BlurredLayer';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {COLORS, FONTS} from '../../utils/theme';
+import BottomSheetMenu from '../BottomSheet/BottomSheetMenu';
 
 const Footer = ({
   item,
@@ -28,8 +36,19 @@ const Footer = ({
   blockStatus,
   loadingVote,
   showScoreButton = false,
-  onPressScore
+  onPressScore,
+  isShowDM = false
 }) => {
+  const {sendMessageDM} = useDMMessage();
+  const [profile] = React.useContext(Context).profile;
+
+  const [loading, setLoading] = React.useState({
+    loadingDm: false,
+    loadingDmAnon: false
+  });
+  const refSheet = React.useRef();
+  const {createSignChat} = useCreateChat();
+
   const handleBlockUi = () => {
     if (isSelf) {
       return <View testID="isself" />;
@@ -63,23 +82,98 @@ const Footer = ({
     }
     return COLORS.balance_gray;
   };
+  const username = item?.anon_user_info_emoji_name
+    ? `${item.anon_user_info_color_name} ${item?.anon_user_info_emoji_name}`
+    : item?.actor?.data?.username;
+
+  const onPressDM = async () => {
+    try {
+      setLoading({...loading, loadingDm: true});
+      if (!item?.anon_user_info_emoji_name) {
+        const channelName = username;
+        const selectedUser = {
+          user: {
+            name: channelName,
+            image: item?.actor?.data?.profile_pic_url || DEFAULT_PROFILE_PIC_PATH
+          }
+        };
+        const members = [item?.actor?.id, profile.myProfile.user_id];
+        await createSignChat(members, selectedUser);
+      } else {
+        await sendMessageDM(item.id, 'post', 'SIGNED');
+      }
+    } catch (e) {
+      console.warn(e);
+    } finally {
+      refSheet.current.close();
+      setLoading({...loading, loadingDm: false});
+    }
+  };
+
+  const onPressDMAnon = async () => {
+    try {
+      setLoading({...loading, loadingDmAnon: true});
+      await sendMessageDM(item.id, 'post', 'ANONYMOUS');
+    } catch (e) {
+      console.warn(e);
+    } finally {
+      refSheet.current.close();
+      setLoading({...loading, loadingDmAnon: false});
+    }
+  };
+
+  const dataSheet = [
+    {
+      id: 1,
+      name: loading.loadingDm ? 'Loading...' : `Message ${username}`,
+      icon: <SendDMBlack />,
+      onPress: onPressDM
+    },
+    {
+      id: 2,
+      name: loading.loadingDmAnon ? 'Loading...' : 'Message using Incognito Mode',
+      icon: <SendDMAnonBlock />,
+      onPress: onPressDMAnon
+    }
+  ];
+
   return (
     <BlurredLayer toastOnly={true} isVisible={item?.isBlurredPost}>
       <View style={[styles.rowSpaceBetween, styles.container]}>
         <View style={styles.leftGroupContainer}>
-          <TouchableOpacity
-            testID="shareBtn"
-            disabled={item?.isBlurredPost}
-            style={styles.btn}
-            onPress={onPressShare}>
-            <View style={styles.btnShare}>
-              <MemoIc_share
-                color={item?.isBlurredPost ? COLORS.gray : undefined}
-                height={20}
-                width={21}
-              />
-            </View>
-          </TouchableOpacity>
+          {isShowDM && !isSelf ? (
+            <TouchableOpacity
+              testID="sendDM"
+              style={styles.btn}
+              onPress={() => refSheet.current.open()}>
+              <View
+                style={[
+                  styles.btnShare,
+                  {
+                    flexDirection: 'row',
+                    alignItems: 'center'
+                  }
+                ]}>
+                <MemoIc_senddm height={20} width={21} />
+                <Text
+                  style={[
+                    styles.text,
+                    {
+                      marginLeft: 4,
+                      fontWeight: '500'
+                    }
+                  ]}>
+                  DM
+                </Text>
+              </View>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity testID="shareBtn" style={styles.btn} onPress={onPressShare}>
+              <View style={styles.btnShare}>
+                <MemoIc_share height={20} width={21} />
+              </View>
+            </TouchableOpacity>
+          )}
           {disableComment ? (
             <View testID="disableComment" style={styles.btn}>
               <View style={styles.btnComment}>
@@ -188,6 +282,7 @@ const Footer = ({
           </TouchableOpacity>
         </View>
       </View>
+      <BottomSheetMenu height={186} refSheet={refSheet} dataSheet={dataSheet} />
     </BlurredLayer>
   );
 };
