@@ -50,7 +50,7 @@ const TextAreaChat = ({
   placeholder,
   onSend,
   onChangeMessage,
-  defaultValue,
+  defaultValue = '',
   disabledButton = false,
   disabledInput = false,
   minHeight = 88,
@@ -60,15 +60,10 @@ const TextAreaChat = ({
 
   const isButtonActive = message && !disabledButton;
 
-  const iconSendBackgroundColor = isAnonimity ? COLORS.bondi_blue : COLORS.blue1;
-
   const onChangeText = (text: string) => {
     setMessage(text);
+    onChangeMessage(text);
   };
-
-  React.useEffect(() => {
-    onChangeMessage(message);
-  }, [message]);
 
   React.useEffect(() => {
     setMessage(defaultValue);
