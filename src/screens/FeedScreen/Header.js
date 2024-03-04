@@ -336,7 +336,16 @@ const _renderProfileNormal = ({
                   style={{
                     flexDirection: 'row'
                   }}>
-                  <Text>{username || StringConstant.feedDeletedUserName}</Text>
+                  <Text
+                    style={{
+                      fontFamily: fonts.inter[600],
+                      fontWeight: 'bold',
+                      fontSize: 14,
+                      lineHeight: 16.94,
+                      color: COLORS.black
+                    }}>
+                    {username || StringConstant.feedDeletedUserName}
+                  </Text>
                   {!isSelf && (
                     <React.Fragment>
                       <View style={styles.point} />
