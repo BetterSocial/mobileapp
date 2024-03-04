@@ -154,9 +154,9 @@ const TopicPageScreen = (props) => {
       }
       const resultTopicDetail = await getTopics(domain);
       if (resultTopicDetail.data) {
-        const detail = resultTopicDetail.data[0];
+        const detail = resultTopicDetail.data.find((item) => item.name === domain);
         setTopicDetail(detail);
-        setMemberCount(Number(detail.followersCount));
+        setMemberCount(Number(detail?.followersCount));
         setIsInitialLoading(false);
       }
     } catch (error) {
