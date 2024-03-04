@@ -1,14 +1,15 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import {Animated, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 
-import MemoIc_Checklist from '../../../assets/icons/Ic_Checklist';
+import IconChecklist from '../../../assets/icons/Ic_Checklist';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
 import {COLORS} from '../../../utils/theme';
 
 const ItemUser = ({photo, username, followed, onPress, userid, isAnon}) => {
   const [isSelect, setIsSelect] = React.useState(false);
   const followIconFadeAnimation = React.useRef(new Animated.Value(0)).current;
-  const backgroundOpacity15PercentHexCode = '26';
+  const anonColorCondition = isAnon ? COLORS.anon_primary_15 : COLORS.signed_primary_15;
 
   React.useEffect(() => {
     if (followed.includes(userid)) {
@@ -35,11 +36,7 @@ const ItemUser = ({photo, username, followed, onPress, userid, isAnon}) => {
         style={[
           styles.containerCard,
           {
-            backgroundColor: isSelect
-              ? isAnon
-                ? COLORS.anon_primary + backgroundOpacity15PercentHexCode
-                : COLORS.signed_primary + backgroundOpacity15PercentHexCode
-              : COLORS.white
+            backgroundColor: isSelect ? anonColorCondition : COLORS.white
           }
         ]}>
         <View style={styles.cardLeft}>
@@ -56,7 +53,11 @@ const ItemUser = ({photo, username, followed, onPress, userid, isAnon}) => {
         <View style={styles.containerButton}>
           <Pressable style={styles.followAction(32, 32)}>
             <Animated.View style={{position: 'absolute', top: 4, opacity: followIconFadeAnimation}}>
-              <MemoIc_Checklist width={32} height={32} color={isAnon ? '#107793' : '#4782D7'} />
+              <IconChecklist
+                width={32}
+                height={32}
+                color={isAnon ? COLORS.anon_primary : COLORS.signed_primary}
+              />
             </Animated.View>
           </Pressable>
         </View>
@@ -65,6 +66,14 @@ const ItemUser = ({photo, username, followed, onPress, userid, isAnon}) => {
   );
 };
 
+ItemUser.propTypes = {
+  photo: PropTypes.string,
+  username: PropTypes.string,
+  followed: PropTypes.any,
+  onPress: PropTypes.func,
+  userid: PropTypes.string,
+  isAnon: PropTypes.string
+};
 export default ItemUser;
 const styles = StyleSheet.create({
   containerCard: {

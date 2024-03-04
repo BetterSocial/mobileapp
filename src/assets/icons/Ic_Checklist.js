@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import Svg, {Path} from 'react-native-svg';
 
 function Ic_Checklist(props) {
@@ -18,5 +19,8 @@ function Ic_Checklist(props) {
   );
 }
 
-const MemoIc_Checklist = React.memo(Ic_Checklist);
-export default MemoIc_Checklist;
+Ic_Checklist.propTypes = {
+  color: PropTypes.string
+};
+const IconChecklist = React.memo(Ic_Checklist);
+export default IconChecklist;
