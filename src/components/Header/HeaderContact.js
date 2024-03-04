@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   }),
   text: {
     color: COLORS.black,
-    fontFamily: fonts.inter[600],
+    fontFamily: fonts.inter[500],
     fontSize: normalizeFontSize(14),
     padding: 10,
     textAlign: 'center'
