@@ -1,4 +1,9 @@
+import {ANONYMOUS, SIGNED} from '../../../src/hooks/core/constant';
 import {ChannelList} from '../../database/schema/ChannelList.types';
+
+export interface ContactScreenPayload {
+  from: typeof ANONYMOUS | typeof SIGNED;
+}
 
 interface UseChatUtilsHook {
   isLoadingFetchingChannelDetail: boolean;
@@ -9,7 +14,7 @@ interface UseChatUtilsHook {
   goToMoveChat: (channel: ChannelList) => void;
   goToPostDetailScreen: (channel: ChannelList) => void;
   goToCommunityScreen: (channel: ChannelList) => void;
-  goToContactScreen: () => void;
+  goToContactScreen: ({from}: ContactScreenPayload) => void;
   goToChatInfoScreen: () => void;
   goBackFromChatScreen: () => void;
   handleTextSystem: (item: any) => string;

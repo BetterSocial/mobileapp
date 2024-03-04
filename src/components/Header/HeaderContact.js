@@ -33,7 +33,7 @@ const HeaderContact = ({
     }
     return (
       <GlobalButton testID="onPressIos" buttonStyle={styles.noPaddingLeft} onPress={onPress}>
-        <View testID="ios" style={styles.content(-8)}>
+        <View testID="ios" style={styles.content(-6)}>
           <ArrowLeftIcon
             width={dimen.normalizeDimen(20)}
             height={dimen.normalizeDimen(20)}
@@ -46,7 +46,7 @@ const HeaderContact = ({
   return (
     <View style={[styles.container, containerStyle]}>
       {renderHeader()}
-      <Text style={[styles.text, titleStyle]}>{title}</Text>
+      <Text style={[styles.text, styles.titleText, titleStyle]}>{title}</Text>
       <GlobalButton
         disabled={disabledNextBtn}
         buttonStyle={styles.noPaddingRight}
@@ -92,9 +92,13 @@ const styles = StyleSheet.create({
     color: COLORS.black,
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(14),
-    fontWeight: 'bold',
     padding: 10,
     textAlign: 'center'
+  },
+  titleText: {
+    position: 'absolute',
+    width: '100%',
+    zIndex: -1
   },
   noPaddingLeft: {
     paddingLeft: 0
