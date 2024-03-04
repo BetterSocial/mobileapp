@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {View, Text, TouchableNativeFeedback} from 'react-native';
-import IconChecklist from '../../../assets/icons/Ic_Checklist';
+// import IconChecklist from '../../../assets/icons/Ic_Checklist';
 
 import {Avatar, Gap} from '../../../components';
 import {COLORS, SIZES} from '../../../utils/theme';
