@@ -104,7 +104,6 @@ const PostPageDetailIdComponent = (props) => {
   React.useEffect(() => {
     getComment();
   }, []);
-
   const handleVote = (data = {}) => {
     const upvote = data.upvotes ? data.upvotes : 0;
     const downvotes = data.downvotes ? data.downvotes : 0;
@@ -114,6 +113,7 @@ const PostPageDetailIdComponent = (props) => {
     const reactionCount = item?.reaction_counts;
     if (JSON.stringify(reactionCount) !== '{}' && reactionCount) {
       let count = 0;
+      const {comment} = reactionCount;
       handleVote(reactionCount);
       if (reactionCount?.comment !== undefined) {
         if (reactionCount?.comment > 0) {
@@ -583,6 +583,7 @@ const PostPageDetailIdComponent = (props) => {
             source={SOURCE_PDP}
             height={getHeightHeader()}
           />
+
           <ScrollView
             ref={scrollViewRef}
             keyboardShouldPersistTaps="handled"
