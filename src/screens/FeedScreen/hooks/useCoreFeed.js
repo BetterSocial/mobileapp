@@ -189,13 +189,13 @@ const useCoreFeed = () => {
   const setUpVote = async (post, index) => {
     await upVote(post);
     // updateVoteData(index, 'upvote', post, myUpvote)
-    updateFeed(post, index);
+    await updateFeed(post, index);
   };
 
   const setDownVote = async (post, index) => {
     await downVote(post);
     // updateVoteData(index, 'downvote', post, myDownVote)
-    updateFeed(post, index);
+    await updateFeed(post, index);
   };
 
   const saveSearchHeight = (height) => {

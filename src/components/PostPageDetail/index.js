@@ -52,8 +52,7 @@ const PostPageDetailIdComponent = (props) => {
     navigateToReplyView,
     contextSource = CONTEXT_SOURCE.FEEDS,
     haveSeeMore,
-    parentData,
-    isKeyboardOpen
+    parentData
   } = props;
   const [profile] = React.useContext(Context).profile;
   const [loading, setLoading] = React.useState(true);
@@ -104,6 +103,7 @@ const PostPageDetailIdComponent = (props) => {
   React.useEffect(() => {
     getComment();
   }, []);
+
   const handleVote = (data = {}) => {
     const upvote = data.upvotes ? data.upvotes : 0;
     const downvotes = data.downvotes ? data.downvotes : 0;
@@ -583,7 +583,6 @@ const PostPageDetailIdComponent = (props) => {
             source={SOURCE_PDP}
             height={getHeightHeader()}
           />
-
           <ScrollView
             ref={scrollViewRef}
             keyboardShouldPersistTaps="handled"
@@ -672,7 +671,6 @@ const PostPageDetailIdComponent = (props) => {
             onChangeText={(value) => setTextComment(value)}
             onPress={onComment}
             loadingPost={loadingPost}
-            isKeyboardOpen={isKeyboardOpen}
           />
 
           <BlockComponent ref={refBlockComponent} refresh={updateFeed} screen="post_detail_page" />
