@@ -590,7 +590,7 @@ Array [
             </View>
           </View>
           <View
-            testID="dev-dummy-login-usup"
+            testID="dev-dummy-login-bastian"
           >
             <View
               accessible={true}
@@ -625,7 +625,7 @@ Array [
                   }
                 }
               >
-                usup
+                bastian
               </Text>
             </View>
           </View>
