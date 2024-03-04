@@ -4,6 +4,7 @@ import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
 import {Dimensions, RefreshControl, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
 /* eslint-disable no-param-reassign */
 import {debounce} from 'lodash';
+import {useRoute} from '@react-navigation/core';
 import ContactPreview from './elements/ContactPreview';
 import Header from '../../components/Header/HeaderContact';
 import ItemUser from './elements/ItemUser';
@@ -18,7 +19,6 @@ import {Search} from './elements';
 import {userPopulate} from '../../service/users';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {ANONYMOUS} from '../../hooks/core/constant';
-import dimen from '../../utils/dimen';
 
 const {width} = Dimensions.get('screen');
 
@@ -121,7 +121,6 @@ const ContactScreen = ({navigation}) => {
           userId: mappingUserId
         }
       };
-
       if (sourceScreen === ANONYMOUS) {
         createAnonymousChat(dataSelected);
       } else {
