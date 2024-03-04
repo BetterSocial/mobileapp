@@ -284,8 +284,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16
   },
   subtitleStyle: (sourceScreen) => ({
-    color: sourceScreen === ANONYMOUS ? COLORS.anon_primary : COLORS.signed_primary,
-    marginEnd: dimen.normalizeDimen(8)
+    color: sourceScreen === ANONYMOUS ? COLORS.anon_primary : COLORS.signed_primary
   })
 });
 
