@@ -114,7 +114,6 @@ const PostPageDetailIdComponent = (props) => {
     const reactionCount = item?.reaction_counts;
     if (JSON.stringify(reactionCount) !== '{}' && reactionCount) {
       let count = 0;
-      const {comment} = reactionCount;
       handleVote(reactionCount);
       if (reactionCount?.comment !== undefined) {
         if (reactionCount?.comment > 0) {
