@@ -22,6 +22,8 @@ const useViewPostTimeHook = (dispatch, timer, viewPostTimeIndex) => {
 
   const onWillSendViewPostTime = (event, feedParams) => {
     if (isSamePostViewed(event, viewPostTimeIndex)) return;
+    if (viewPostTimeIndex < 0) return;
+    if (viewPostTimeIndex > feedParams?.length) return;
     sendViewPostTimeWithFeeds(feedParams);
     updateViewPostTime(event);
   };
