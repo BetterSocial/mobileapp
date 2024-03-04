@@ -126,7 +126,7 @@ const useCreateChat = () => {
 
   const handleAnonymousMessage = async (selectedUser, channelId = null, context = null) => {
     if (!selectedUser?.allow_anon_dm) {
-      SimpleToast.show('This user does not allow anonymous messages');
+      SimpleToast.show('This user does not allow messages in Incognito Mode.');
       return;
     }
 
