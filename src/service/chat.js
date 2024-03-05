@@ -232,6 +232,19 @@ const initChatFromPost = async ({source, id}) => {
   }
 };
 
+const getAllowAnonDmStatus = async (postId) => {
+  try {
+    const response = await api.get(`/users/check-allow-dm/?source=post&post_id=${postId}`);
+    if (response?.status === 200) {
+      return Promise.resolve(response.data);
+    }
+    return Promise.reject(response.data);
+  } catch (e) {
+    if (e?.response?.data?.message) return Promise.reject(e?.response?.data?.message);
+    return Promise.reject(e);
+  }
+};
+
 const initChatFromPostAnon = async ({source, id}) => {
   let payload = {source};
   switch (source) {
@@ -268,5 +281,6 @@ export {
   moveChatToSigned,
   moveChatToAnon,
   initChatFromPost,
-  initChatFromPostAnon
+  initChatFromPostAnon,
+  getAllowAnonDmStatus
 };

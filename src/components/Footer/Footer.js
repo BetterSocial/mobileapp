@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import * as React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
+import Toast from 'react-native-simple-toast';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
 import MemoIc_arrow_down_vote_on from '../../assets/arrow/Ic_downvote_on';
 import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
@@ -17,9 +18,11 @@ import {Context} from '../../context';
 import useDMMessage from '../../hooks/core/chat/useDMMessage';
 import useCreateChat from '../../hooks/screen/useCreateChat';
 import BlurredLayer from '../../screens/FeedScreen/elements/BlurredLayer';
+import {getAllowAnonDmStatus} from '../../service/chat';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {COLORS, FONTS} from '../../utils/theme';
 import BottomSheetMenu from '../BottomSheet/BottomSheetMenu';
+import {IcDmAnon} from '../../assets/icons/ic_dm_anon';
 
 const Footer = ({
   item,
@@ -41,10 +44,12 @@ const Footer = ({
 }) => {
   const {sendMessageDM} = useDMMessage();
   const [profile] = React.useContext(Context).profile;
+  const [userAllowDm, setUserAllowDm] = React.useState(false);
 
   const [loading, setLoading] = React.useState({
     loadingDm: false,
-    loadingDmAnon: false
+    loadingDmAnon: false,
+    loadingGetAllowAnonDmStatus: false
   });
   const refSheet = React.useRef();
   const {createSignChat} = useCreateChat();
@@ -131,9 +136,27 @@ const Footer = ({
     },
     {
       id: 2,
-      name: loading.loadingDmAnon ? 'Loading...' : 'Message using Incognito Mode',
-      icon: <SendDMAnonBlock />,
-      onPress: onPressDMAnon
+      name:
+        loading.loadingGetAllowAnonDmStatus || loading.loadingDmAnon
+          ? 'Loading...'
+          : 'Message using Incognito Mode',
+      icon: (
+        <IcDmAnon
+          color={
+            !userAllowDm || loading.loadingGetAllowAnonDmStatus || loading.loadingDmAnon
+              ? COLORS.gray
+              : 'black'
+          }
+        />
+      ),
+      onPress: userAllowDm
+        ? onPressDMAnon
+        : () => {
+            Toast.show('User not allow to DM from Incognito Mode', Toast.SHORT);
+          },
+      style: (!userAllowDm || loading.loadingGetAllowAnonDmStatus || loading.loadingDmAnon) && {
+        color: COLORS.gray300
+      }
     }
   ];
 
@@ -144,14 +167,31 @@ const Footer = ({
           {isShowDM && !isSelf ? (
             <TouchableOpacity
               testID="sendDM"
-              style={styles.btn}
-              onPress={() => refSheet.current.open()}>
+              style={[
+                {
+                  width: 100
+                }
+              ]}
+              onPress={async () => {
+                try {
+                  refSheet.current.open();
+                  setLoading({...loading, loadingGetAllowAnonDmStatus: true});
+                  const data = await getAllowAnonDmStatus(item.id);
+                  setUserAllowDm(data?.user.allow_anon_dm);
+                } catch (e) {
+                  console.log(e);
+                } finally {
+                  setLoading({...loading, loadingGetAllowAnonDmStatus: false});
+                }
+              }}>
               <View
                 style={[
                   styles.btnShare,
                   {
                     flexDirection: 'row',
-                    alignItems: 'center'
+                    alignItems: 'center',
+                    paddingLeft: 0,
+                    paddingRight: 0
                   }
                 ]}>
                 <MemoIc_senddm height={20} width={21} />
@@ -163,7 +203,7 @@ const Footer = ({
                       fontWeight: '500'
                     }
                   ]}>
-                  DM
+                  {loading.loadingGetAllowAnonDmStatus ? 'Loading...' : 'DM'}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -190,7 +230,7 @@ const Footer = ({
               disabled={item?.isBlurredPost}
               style={styles.btn}
               onPress={onPressComment}>
-              <View style={styles.btnComment}>
+              <View style={styles.btnComment(totalComment || 0)}>
                 <MemoIc_comment
                   color={item?.isBlurredPost ? COLORS.gray : undefined}
                   height={24}
@@ -295,7 +335,7 @@ const styles = StyleSheet.create({
   },
   leftGroupContainer: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'flex-start'
   },
   rightGroupContainer: {
     flexDirection: 'row',
@@ -327,12 +367,12 @@ const styles = StyleSheet.create({
     paddingRight: 13.5,
     paddingLeft: 18
   },
-  btnComment: {
+  btnComment: (commentValue) => ({
     height: '100%',
     justifyContent: 'center',
-    paddingLeft: 13.5,
-    paddingRight: 10
-  },
+    marginLeft: 0,
+    paddingRight: commentValue > 9 ? 10 : 4
+  }),
   btnBlock: {
     height: '100%',
     justifyContent: 'center',
