@@ -5,11 +5,13 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import messaging from '@react-native-firebase/messaging';
 import {Platform, SafeAreaView, StyleSheet, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {useNavigation} from '@react-navigation/core';
 import {useRecoilState, useRecoilValue} from 'recoil';
 
 import AnonymousChannelListScreen from '../screens/ChannelListScreenV2/AnonymousChannelListScreen';
 import AnonymousChatFill from '../assets/icon/AnonymousChatFill';
 import AnonymousChatOutline from '../assets/icon/AnonymousChatOutline';
+import ChannelList from '../database/schema/ChannelListSchema';
 import FirebaseConfig from '../configs/FirebaseConfig';
 import MemoFeed from '../assets/icon/Feed';
 import MemoNews from '../assets/icon/News';
@@ -17,8 +19,11 @@ import MemoProfileIcon from '../assets/icon/Profile';
 import SignedChat from '../assets/icon/SignedChat';
 import StorageUtils from '../utils/storage';
 import profileAtom from '../atom/profileAtom';
+import useChatUtilsHook from '../hooks/core/chat/useChatUtilsHook';
 import useCoreChatSystemHook from '../hooks/core/useCoreChatSystemHook';
+import useLocalDatabaseHook from '../database/hooks/useLocalDatabaseHook';
 import useRootChannelListHook from '../hooks/screen/useRootChannelListHook';
+import useUserAuthHook from '../hooks/core/auth/useUserAuthHook';
 import TokenStorage, {ITokenEnum} from '../utils/storage/custom/tokenStorage';
 import {COLORS} from '../utils/theme';
 import {ChannelListScreen, FeedScreen, NewsScreen, ProfileScreen} from '../screens';
@@ -27,13 +32,17 @@ import {getAnonymousUserId, getUserId} from '../utils/users';
 
 const Tab = createBottomTabNavigator();
 
-function HomeBottomTabs({navigation}) {
+function HomeBottomTabs() {
   useCoreChatSystemHook();
   const isIos = Platform.OS === 'ios';
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const otherProfileData = useRecoilValue(otherProfileAtom);
   const [, setProfileAtom] = useRecoilState(profileAtom);
+  const {signedProfileId} = useUserAuthHook();
   const {signedChannelUnreadCount, anonymousChannelUnreadCount} = useRootChannelListHook();
+  const navigation = useNavigation();
+  const {localDb} = useLocalDatabaseHook();
+  const {fetchChannelDetail, setSelectedChannel} = useChatUtilsHook();
 
   let isOpenNotification = false;
 
@@ -41,22 +50,30 @@ function HomeBottomTabs({navigation}) {
     setTimeout(() => {
       if (!isOpenNotification) {
         isOpenNotification = true;
-        navigation.reset({
-          index: 1,
-          routes: [
-            {
-              name: 'AuthenticatedStack',
+        const routes = [
+          {
+            name: 'AuthenticatedStack',
+            params: {
+              screen: 'HomeTabs',
               params: {
-                screen: 'HomeTabs',
-                params: {
-                  screen: 'ChannelList'
-                }
+                screen: 'SignedChannelList'
               }
-            },
-            {
+            }
+          }
+        ];
+
+        if (screenData)
+          routes.push({
+            name: 'AuthenticatedStack',
+            params: {
               ...screenData
             }
-          ]
+          });
+
+        console.log('routes', routes);
+        navigation.reset({
+          index: screenData ? 2 : 1,
+          routes
         });
       }
     }, 500);
@@ -79,43 +96,32 @@ function HomeBottomTabs({navigation}) {
       });
     }
     if (notification.data.type === 'message.new') {
-      helperNavigationResetWithData({
-        name: 'AuthenticatedStack',
-        params: {
-          screen: 'ChatDetailPage',
-          params: {
-            data: notification.data
-          }
-        }
-      });
+      console.log('notification.data', notification?.data);
+
+      if (notification?.data?.receiver_id === signedProfileId) {
+        console.log('same user id');
+        const channel = new ChannelList({
+          id: notification?.data?.channel_id,
+          channelType: 'PM'
+        });
+        const response = await fetchChannelDetail(channel);
+        console.log('response', response);
+        const selectedChannel = await ChannelList.getSchemaById(
+          localDb,
+          notification?.data?.channel_id
+        );
+        console.log('selectedChannel', selectedChannel);
+        setSelectedChannel(selectedChannel);
+        helperNavigationResetWithData({
+          screen: 'SignedChatScreen'
+        });
+      }
     }
   };
 
-  PushNotification.configure({
-    // (required) Called when a remote is received or opened, or local notification is opened
-    onNotification(notification) {
-      handleNotification(notification);
-      notification.finish(PushNotificationIOS.FetchResult.NoData);
-    },
-    // (optional) Called when the user fails to register for remote notifications.
-    // Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
-    onRegistrationError(err) {
-      console.error(err.message, err);
-    },
-    // IOS ONLY (optional): default: all - Permissions to register.
-    permissions: {
-      alert: true,
-      badge: true,
-      sound: true
-    },
-    // Should the initial notification be popped automatically
-    // default: true
-    popInitialNotification: true,
-    requestPermissions: false
-  });
-
   const pushNotifIos = (message) => {
     if (__DEV__) {
+      console.log('message', message);
       console.log(message.messageId, 'message');
     }
     const {title, body} = message.notification;
@@ -198,6 +204,35 @@ function HomeBottomTabs({navigation}) {
       unsubscribe();
     };
   }, []);
+
+  React.useEffect(() => {
+    PushNotification.configure({
+      // (required) Called when a remote is received or opened, or local notification is opened
+      onNotification(notification) {
+        handleNotification(notification);
+        notification.finish(PushNotificationIOS.FetchResult.NoData);
+      },
+      // (optional) Called when the user fails to register for remote notifications.
+      // Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
+      onRegistrationError(err) {
+        console.error(err.message, err);
+      },
+      // IOS ONLY (optional): default: all - Permissions to register.
+      permissions: {
+        alert: true,
+        badge: true,
+        sound: true
+      },
+      // Should the initial notification be popped automatically
+      // default: true
+      popInitialNotification: true,
+      requestPermissions: false
+    });
+
+    return () => {
+      PushNotification.unregister();
+    };
+  }, [navigation, signedProfileId, localDb]);
 
   React.useEffect(() => {
     if (otherProfileData !== null && initialStartup.id !== null) {
