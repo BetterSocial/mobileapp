@@ -141,7 +141,7 @@ exports[`Testing Feed Screen Content Link Card Matches Snapshot 1`] = `
                 }
               }
             >
-              NaNw ago
+              NaNw
             </Text>
             <View
               style={
@@ -421,7 +421,7 @@ exports[`Testing Feed Screen Content Link CardHeader Matches Snapshot 1`] = `
           }
         }
       >
-        NaNw ago
+        NaNw
       </Text>
       <View
         style={
