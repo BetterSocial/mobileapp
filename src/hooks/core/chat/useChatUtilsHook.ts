@@ -296,10 +296,19 @@ function useChatUtilsHook(): UseChatUtilsHook {
     return pushMessage;
   };
 
+  const setSelectedChannel = (channel: ChannelList) => {
+    setChat((prevChat) => ({
+      ...prevChat,
+      selectedChannel: channel,
+      isLoadingFetchingChannelDetail: false
+    }));
+  };
+
   return {
     isLoadingFetchingChannelDetail,
     selectedChannel,
     selectedChannelKey,
+    fetchChannelDetail: helperGetChannelDetail,
     goBack,
     goToChatScreen,
     goToMoveChat,
@@ -309,6 +318,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
     goToChatInfoScreen,
     goBackFromChatScreen,
     handleTextSystem,
+    setSelectedChannel,
     splitSystemMessage
   };
 }
