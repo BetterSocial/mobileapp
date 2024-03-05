@@ -7,12 +7,12 @@ import {SafeAreaProvider, useSafeAreaInsets} from 'react-native-safe-area-contex
 import ShareUtils from '../../utils/share';
 import dimen from '../../utils/dimen';
 import {getAllMemberTopic} from '../../service/topics';
-import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import StringConstant from '../../utils/string/StringConstant';
 import UsersFragment from '../DiscoveryScreenV2/fragment/UsersFragment';
 import {Context} from '../../context';
 import NavHeader from '../TopicPageScreen/elements/NavHeader';
 import {COLORS} from '../../utils/theme';
+import TopicMemberHeadline from './elements/TopicMemberHeadlineList';
 
 const styles = StyleSheet.create({
   parentContainer: {
@@ -181,6 +181,7 @@ const TopicMemberScreen = () => {
         setIsFirstTimeOpen={setIsFirstTimeOpen}
         getSearchLayout={setSearchHeight}
       />
+      <TopicMemberHeadline text="Visible members of this community" />
       <ScrollView
         decelerationRate="fast"
         scrollEventThrottle={1}
