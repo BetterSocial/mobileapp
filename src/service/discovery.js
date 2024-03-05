@@ -21,9 +21,12 @@ import api from './config';
  * @param {import('axios').AxiosRequestConfig} axiosOptions
  * @return {FetchDiscoveryDataResponse}
  */
-const fetchDiscoveryDataUser = async (query, axiosOptions = {}) => {
+const fetchDiscoveryDataUser = async (query, isAnon, axiosOptions = {}) => {
   try {
-    const response = await api.get(`/discovery/user/?q=${encodeURIComponent(query)}`, axiosOptions);
+    const response = await api.get(
+      `/discovery/user/${isAnon ? 'allow_anon_dm=true' : ''}`,
+      axiosOptions
+    );
     if (response?.data?.success) {
       return response?.data;
     }
@@ -180,14 +183,17 @@ const fetchInitialDiscoveryTopics = async (limit = 50, page = 0) => {
  * @param {Number} page
  * @returns {FetchInitialDiscoveryUsersResponse}
  */
-const fetchInitialDiscoveryUsers = async (limit = 50, page = 0) => {
+const fetchInitialDiscoveryUsers = async (limit = 50, page = 0, isAnon = false) => {
   const body = {
     page
   };
 
   if (limit) body.limit = limit;
   try {
-    const response = await api.post(`discovery/init/user?limit=${limit}&page=${page}`, body);
+    const response = await api.post(
+      `discovery/init/user?limit=${limit}&page=${page}${isAnon ? '&allow_anon_dm=true' : ''}`,
+      body
+    );
 
     if (response.data.success) {
       return response.data;
