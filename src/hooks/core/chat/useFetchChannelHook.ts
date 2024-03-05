@@ -24,7 +24,7 @@ const useFetchChannelHook = () => {
     const type: {[key: string]: ChannelType} = {
       messaging: isAnonymous ? 'ANON_PM' : 'PM',
       group: 'GROUP',
-      topics: 'TOPIC'
+      topics: isAnonymous ? 'ANON_TOPIC' : 'TOPIC'
     };
 
     const channelListInfo = getChannelListInfo(channel, signedProfileId, anonProfileId);
