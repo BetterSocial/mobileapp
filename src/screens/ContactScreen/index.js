@@ -4,6 +4,7 @@ import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
 import {Dimensions, RefreshControl, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
 /* eslint-disable no-param-reassign */
 import {debounce} from 'lodash';
+import axios from 'axios';
 import {useRoute} from '@react-navigation/core';
 import ContactPreview from './elements/ContactPreview';
 import Header from '../../components/Header/HeaderContact';
@@ -16,9 +17,10 @@ import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {Loading} from '../../components';
 import {Search} from './elements';
-import {userPopulate} from '../../service/users';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {ANONYMOUS} from '../../hooks/core/constant';
+import DiscoveryRepo from '../../service/discovery';
+import DiscoveryAction from '../../context/actions/discoveryAction';
 
 const {width} = Dimensions.get('screen');
 
@@ -30,41 +32,93 @@ const ContactScreen = ({navigation}) => {
   const [layoutProvider, setLayoutProvider] = React.useState(() => {});
   const [refreshing, setRefreshing] = React.useState(false);
   const [dataProvider, setDataProvider] = React.useState(null);
-  const [cacheUsers, setCacheUser] = React.useState([]);
-  const [text, setText] = React.useState(null);
+  const [text, setText] = React.useState('');
   const [debouncedText, setDebouncedText] = React.useState('');
   const [followed, setFollowed] = React.useState([profile.myProfile.user_id]);
   const [usernames, setUsernames] = React.useState([profile.myProfile.username]);
   const [selectedUsers, setSelectedUsers] = React.useState([]);
   const [isSearchMode, setIsSearchMode] = React.useState(false);
+  const [userPage, setUserPage] = React.useState({
+    currentPage: 1,
+    limitPage: 1
+  });
   const [isLoadingSearchResult, setIsLoadingSearchResult] = React.useState(false);
   const {createSignChat, createAnonymousChat, loadingCreateChat} = useCreateChat();
+  const [discoveryData, discoveryDispatch] = React.useContext(Context).discovery;
+  const cancelTokenRef = React.useRef(axios.CancelToken.source());
   const route = useRoute();
   const {from: sourceScreen} = route.params;
+  const isAnon = sourceScreen === ANONYMOUS;
+
+  const VIEW_TYPE_LABEL = 1;
+  const VIEW_TYPE_DATA = 2;
+
+  const getDiscoveryUser = async () => {
+    const initialData = await DiscoveryRepo.fetchInitialDiscoveryUsers(
+      50,
+      parseInt(userPage.currentPage, 10),
+      isAnon
+    );
+    setUserPage({
+      currentPage: initialData.page,
+      totalPage: initialData.total_page
+    });
+    DiscoveryAction.setDiscoveryInitialUsers(
+      [...discoveryData.initialUsers, ...initialData.suggestedUsers],
+      discoveryDispatch
+    );
+    const userData = discoveryData.initialUsers.map((item) => ({
+      ...item,
+      following: item.following !== undefined ? item.following : item.user_id_follower !== null
+    }));
+
+    setUsers(userData);
+  };
+
+  const handleSearch = async () => {
+    try {
+      setLoading(true);
+
+      const cancelToken = cancelTokenRef?.current?.token;
+      const data = await DiscoveryRepo.fetchDiscoveryDataUser(text, isAnon, {cancelToken});
+      console.warn('data', JSON.stringify(data));
+      if (data.success) {
+        const followedUsers =
+          data?.followedUsers?.map((item) => ({
+            ...item,
+            following: item.user_id_follower !== null
+          })) || [];
+        const unfollowedUsers =
+          data?.unfollowedUsers?.map((item) => ({
+            ...item,
+            following: item.user_id_follower !== null
+          })) || [];
+
+        const dataUser = [...followedUsers, ...unfollowedUsers];
+        setUsers(dataUser);
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
+  };
+
   const debounced = React.useCallback(
     debounce((changedText) => {
-      // handleSearch(changedText)
+      handleSearch();
       setDebouncedText(changedText);
     }, 1000),
     []
   );
 
-  const VIEW_TYPE_LABEL = 1;
-  const VIEW_TYPE_DATA = 2;
-
   React.useEffect(() => {
-    const getUserPopulate = async () => {
-      try {
-        setLoading(true);
-        const res = await userPopulate();
-        setUsers(res);
-        setCacheUser(res);
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-      }
-    };
-    getUserPopulate();
+    try {
+      setLoading(true);
+      getDiscoveryUser();
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
   }, []);
 
   React.useEffect(() => {
@@ -121,8 +175,7 @@ const ContactScreen = ({navigation}) => {
           userId: mappingUserId
         }
       };
-
-      if (sourceScreen === ANONYMOUS) {
+      if (isAnon) {
         createAnonymousChat(dataSelected);
       } else {
         createSignChat(followed, dataSelected, 'CONTACT_SCREEN');
@@ -139,15 +192,15 @@ const ContactScreen = ({navigation}) => {
       username={item.username}
       followed={extendedState.followed}
       userid={item.user_id}
-      isAnon={sourceScreen === ANONYMOUS}
+      isAnon={isAnon}
       onPress={() => handleSelected(item)}
     />
   );
   // }
   const handleSelected = (value) => {
-    const copyFollowed = sourceScreen === ANONYMOUS ? [] : [...followed];
-    const copyUsername = sourceScreen === ANONYMOUS ? [] : [...usernames];
-    const copyUsers = sourceScreen === ANONYMOUS ? [] : [...selectedUsers];
+    const copyFollowed = isAnon ? [] : [...followed];
+    const copyUsername = isAnon ? [] : [...usernames];
+    const copyUsers = isAnon ? [] : [...selectedUsers];
     const index = copyFollowed.indexOf(value.user_id);
     if (index > -1) {
       copyFollowed.splice(index, 1);
@@ -177,18 +230,12 @@ const ContactScreen = ({navigation}) => {
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
     try {
-      const res = await userPopulate();
-      setUsers(res);
-      setCacheUser(res);
+      getDiscoveryUser();
       setRefreshing(false);
     } catch (error) {
       setRefreshing(false);
     }
   }, []);
-
-  const setDefaultPopulateUsers = () => {
-    setUsers(cacheUsers);
-  };
 
   const onSearchTextChange = (changedText) => {
     setText(changedText);
@@ -196,7 +243,6 @@ const ContactScreen = ({navigation}) => {
       debounced(changedText);
     } else {
       debounced.cancel();
-      setDefaultPopulateUsers();
     }
 
     setIsSearchMode(changedText.length > 0);
@@ -207,13 +253,13 @@ const ContactScreen = ({navigation}) => {
       <StatusBar translucent={false} />
       <Header
         title={
-          sourceScreen === ANONYMOUS
+          isAnon
             ? StringConstant.chatTabHeaderCreateAnonChatButtonText
             : StringConstant.chatTabHeaderCreateChatButtonText
         }
         containerStyle={styles.containerStyle}
         subTitle={'Next'}
-        subtitleStyle={selectedUsers.length > 0 && styles.subtitleStyle(sourceScreen)}
+        subtitleStyle={selectedUsers.length > 0 && styles.subtitleStyle(isAnon)}
         onPressSub={() => handleCreateChannel()}
         onPress={() => navigation.goBack()}
         disabledNextBtn={selectedUsers.length <= 0}
@@ -228,7 +274,7 @@ const ContactScreen = ({navigation}) => {
         // onPress={handleSearch}
       />
 
-      {sourceScreen !== ANONYMOUS && (
+      {!isAnon && (
         <View>
           {selectedUsers && (
             <ContactPreview users={selectedUsers} onPress={(user) => handleSelected(user)} />
@@ -280,8 +326,8 @@ const styles = StyleSheet.create({
   containerStyle: {
     marginHorizontal: 16
   },
-  subtitleStyle: (sourceScreen) => ({
-    color: sourceScreen === ANONYMOUS ? COLORS.anon_primary : COLORS.signed_primary
+  subtitleStyle: (isAnon) => ({
+    color: isAnon ? COLORS.anon_primary : COLORS.signed_primary
   })
 });
 
