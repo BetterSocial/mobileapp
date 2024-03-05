@@ -71,16 +71,7 @@ const ContactScreen = ({navigation}) => {
       ...item,
       following: item.following !== undefined ? item.following : item.user_id_follower !== null
     }));
-    const initFollowingUsers = [];
-    const initUnfollowingUsers = [];
 
-    userData.forEach((item) => {
-      if (item.user?.user_id_follower || item.user_id_follower) {
-        initFollowingUsers.push(item);
-      } else {
-        initUnfollowingUsers.push(item);
-      }
-    });
     setUsers(userData);
   };
 
