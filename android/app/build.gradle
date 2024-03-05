@@ -153,8 +153,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         compileSdkVersion rootProject.ext.compileSdkVersion
 
-        versionCode 420
-        versionName "2.7.0"
+        versionCode 601
+        versionName "2.10.1"
     }
     splits {
         abi {

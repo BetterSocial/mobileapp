@@ -71,7 +71,7 @@ const MESSAGE_TYPE_REGULAR = 'regular';
 const MESSAGE_TYPE_REPLY = 'reply';
 const MESSAGE_TYPE_REPLY_PROMPT = 'reply_prompt';
 const MESSAGE_TYPE_DELETED = 'deleted';
-const FEEDS_DIFF_TO_FETCH = 5;
+const FEEDS_DIFF_TO_FETCH = 8;
 const IS_ANONYMOUS = 1;
 const IS_NOT_ANONYMOUS = 0;
 

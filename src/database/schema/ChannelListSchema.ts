@@ -293,7 +293,7 @@ class ChannelList implements BaseDbSchema {
       LEFT JOIN ${UserSchema.getTableName()} B
       ON A.last_updated_by = B.user_id AND A.id = B.channel_id
       WHERE (expired_at IS NULL OR datetime(expired_at) >= datetime('now')) AND A.description != ''
-      AND A.channel_type IN ('ANON_PM', 'ANON_POST_NOTIFICATION', 'ANON_GROUP')
+      AND A.channel_type IN ('ANON_PM', 'ANON_POST_NOTIFICATION', 'ANON_GROUP', 'ANON_TOPIC')
       ORDER BY last_updated_at DESC`,
       [myId, myAnonymousId]
     );

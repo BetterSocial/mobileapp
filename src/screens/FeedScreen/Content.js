@@ -6,10 +6,12 @@ import {Dimensions, Platform, Pressable, StyleSheet, Text, View} from 'react-nat
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {useNavigation, useRoute} from '@react-navigation/native';
 
+import BlurredLayer from './elements/BlurredLayer';
 import ContentPoll from './ContentPoll';
 import ImageLayouter from './elements/ImageLayouter';
-import BlurredLayer from './elements/BlurredLayer';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
+import dimen from '../../utils/dimen';
+import useCalculationContent from './hooks/useCalculationContent';
 import {COLORS} from '../../utils/theme';
 import {
   DISCOVERY_TAB_USERS,
@@ -19,9 +21,7 @@ import {
 } from '../../utils/constants';
 import {fonts, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
-import useCalculationContent from './hooks/useCalculationContent';
 import {getCommentLength} from '../../utils/getstream';
-import dimen from '../../utils/dimen';
 
 const {width: screenWidth} = Dimensions.get('window');
 const BUFFER_CONTENT_TEXT_HEIGHT = 50;
@@ -84,14 +84,18 @@ const Content = ({
       const result = Math.round((layoutHeight - heightPoll - heightTopic) / lineHeight);
       const isHaveTopic = topics.length > 0 ? 3 : 2;
       if (item.pollOptions.length < 4) {
-        return result >= 0 ? result - 1 : 0;
+        return result > 0 ? result - 1 : 0;
       }
       return isHaveTopic;
     }
+
     if (getCommentLength(item.latest_reactions.comment) > 0) {
-      return Math.floor(layoutHeight / lineHeight);
+      const value = Math.floor(layoutHeight / lineHeight);
+      return value >= 0 ? value : 0;
     }
-    return Math.round(layoutHeight / lineHeight);
+
+    const value = Math.round(layoutHeight / lineHeight);
+    return value >= 0 ? value : 0;
   };
 
   const handleStyleFont = () => {
