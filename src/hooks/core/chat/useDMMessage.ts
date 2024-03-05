@@ -4,11 +4,10 @@ import ChannelListMemberSchema from '../../../database/schema/ChannelListMemberS
 import ChannelList from '../../../database/schema/ChannelListSchema';
 import ChatSchema from '../../../database/schema/ChatSchema';
 import UserSchema from '../../../database/schema/UserSchema';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
-import useUserAuthHook from '../auth/useUserAuthHook';
-import useChatUtilsHook from './useChatUtilsHook';
 import {initChatFromPost, initChatFromPostAnon} from '../../../service/chat';
 import {getChannelListInfo} from '../../../utils/string/StringUtils';
+import useUserAuthHook from '../auth/useUserAuthHook';
+import useChatUtilsHook from './useChatUtilsHook';
 
 type ChannelCategory = 'SIGNED' | 'ANONYMOUS';
 
