@@ -32,8 +32,6 @@ const ContactScreen = ({navigation}) => {
   const [layoutProvider, setLayoutProvider] = React.useState(() => {});
   const [refreshing, setRefreshing] = React.useState(false);
   const [dataProvider, setDataProvider] = React.useState(null);
-  const [discoveryDataFollowedUsers, setDiscoveryDataFollowedUsers] = React.useState([]);
-  const [discoveryDataUnfollowedUsers, setDiscoveryDataUnfollowedUsers] = React.useState([]);
   const [text, setText] = React.useState('');
   const [debouncedText, setDebouncedText] = React.useState('');
   const [followed, setFollowed] = React.useState([profile.myProfile.user_id]);
@@ -83,8 +81,6 @@ const ContactScreen = ({navigation}) => {
         initUnfollowingUsers.push(item);
       }
     });
-    setDiscoveryDataFollowedUsers(initFollowingUsers);
-    setDiscoveryDataUnfollowedUsers(initUnfollowingUsers);
     setUsers(userData);
   };
 
@@ -106,9 +102,6 @@ const ContactScreen = ({navigation}) => {
             ...item,
             following: item.user_id_follower !== null
           })) || [];
-
-        setDiscoveryDataFollowedUsers(followedUsers);
-        setDiscoveryDataUnfollowedUsers(unfollowedUsers);
 
         const dataUser = [...followedUsers, ...unfollowedUsers];
         setUsers(dataUser);
