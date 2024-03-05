@@ -160,6 +160,19 @@ const Footer = ({
     }
   ];
 
+  const onPressDm = async () => {
+    try {
+      refSheet.current.open();
+      setLoading({...loading, loadingGetAllowAnonDmStatus: true});
+      const data = await getAllowAnonDmStatus(item.id);
+      setUserAllowDm(data?.user.allow_anon_dm);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading({...loading, loadingGetAllowAnonDmStatus: false});
+    }
+  };
+
   return (
     <BlurredLayer toastOnly={true} isVisible={item?.isBlurredPost}>
       <View style={[styles.rowSpaceBetween, styles.container]}>
@@ -172,39 +185,10 @@ const Footer = ({
                   width: 100
                 }
               ]}
-              onPress={async () => {
-                try {
-                  refSheet.current.open();
-                  setLoading({...loading, loadingGetAllowAnonDmStatus: true});
-                  const data = await getAllowAnonDmStatus(item.id);
-                  setUserAllowDm(data?.user.allow_anon_dm);
-                } catch (e) {
-                  console.log(e);
-                } finally {
-                  setLoading({...loading, loadingGetAllowAnonDmStatus: false});
-                }
-              }}>
-              <View
-                style={[
-                  styles.btnShare,
-                  {
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    paddingLeft: 0,
-                    paddingRight: 0
-                  }
-                ]}>
+              onPress={onPressDm}>
+              <View style={[styles.btnShare, styles.buttonShareContainer]}>
                 <MemoIc_senddm height={20} width={21} />
-                <Text
-                  style={[
-                    styles.text,
-                    {
-                      marginLeft: 4,
-                      fontWeight: '500'
-                    }
-                  ]}>
-                  {loading.loadingGetAllowAnonDmStatus ? 'Loading...' : 'DM'}
-                </Text>
+                <Text style={[styles.text, styles.textDM]}>DM</Text>
               </View>
             </TouchableOpacity>
           ) : (
@@ -332,6 +316,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: COLORS.gray
+  },
+  buttonShareContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 0,
+    paddingRight: 0
+  },
+  textDM: {
+    marginLeft: 4,
+    fontWeight: '500'
   },
   leftGroupContainer: {
     flexDirection: 'row',
