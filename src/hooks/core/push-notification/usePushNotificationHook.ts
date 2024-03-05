@@ -18,7 +18,7 @@ const usePushNotificationHook = () => {
   const isIos = Platform.OS === 'ios';
 
   const navigation = useNavigation();
-  const {signedProfileId, anonProfileId} = useUserAuthHook();
+  const {signedProfileId} = useUserAuthHook();
   const {localDb} = useLocalDatabaseHook();
   const {fetchChannelDetail, setSelectedChannel} = useChatUtilsHook();
   const [, setProfileAtom] = useRecoilState(profileAtom);
