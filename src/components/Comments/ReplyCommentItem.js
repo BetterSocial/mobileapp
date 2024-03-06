@@ -2,20 +2,21 @@
 import {useNavigation} from '@react-navigation/native';
 import * as React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import Toast from 'react-native-simple-toast';
 import IconEn from 'react-native-vector-icons/Entypo';
-
+import {IcDmAnon} from '../../assets/icons/ic_dm_anon';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
 import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
 import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
 import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
 import MemoCommentReply from '../../assets/icon/CommentReply';
 import MemoSendDM from '../../assets/icon/SendDM';
-import SendDMAnonBlock from '../../assets/icons/images/send-dm-anon-black.svg';
 import SendDMBlack from '../../assets/icons/images/send-dm-black.svg';
 import {Context} from '../../context';
 import useDMMessage from '../../hooks/core/chat/useDMMessage';
 import useCreateChat from '../../hooks/screen/useCreateChat';
 import ProfilePicture from '../../screens/ProfileScreen/elements/ProfilePicture';
+import {getAllowAnonDmStatus} from '../../service/chat';
 import {iVoteComment, voteCommentV2} from '../../service/vote';
 import {removeWhiteSpace} from '../../utils/Utils';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
@@ -59,6 +60,7 @@ const ReplyCommentItem = ({
     loadingDm: false,
     loadingDmAnon: false
   });
+  const [userAllowDm, setUserAllowDm] = React.useState(false);
 
   const [profile] = React.useContext(Context).profile;
   const {createSignChat} = useCreateChat();
@@ -158,16 +160,28 @@ const ReplyCommentItem = ({
       onLongPress();
     }
   };
-
   const username = comment?.data?.anon_user_info_color_name
-    ? `Anonymous ${comment.data?.anon_user_info_emoji_name}`
+    ? `${comment.data.anon_user_info_color_name} ${comment.data?.anon_user_info_emoji_name}`
     : user?.data?.username;
+
+  const onPressDm = async () => {
+    try {
+      refSheet.current.open();
+      setLoading({...loading, loadingGetAllowAnonDmStatus: true});
+      const data = await getAllowAnonDmStatus('comment', comment?.id);
+      setUserAllowDm(data?.user.allow_anon_dm);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading({...loading, loadingGetAllowAnonDmStatus: false});
+    }
+  };
 
   const onPressDM = async () => {
     try {
       setLoading({...loading, loadingDm: true});
       if (!comment?.data?.anon_user_info_color_name) {
-        const channelName = [username, profile?.myProfile?.username].join(',');
+        const channelName = username;
         const selectedUser = {
           user: {
             name: channelName,
@@ -208,9 +222,27 @@ const ReplyCommentItem = ({
     },
     {
       id: 2,
-      name: loading.loadingDmAnon ? 'Loading...' : `Message ${username} anonymously`,
-      icon: <SendDMAnonBlock />,
-      onPress: onPressDMAnon
+      name:
+        loading.loadingGetAllowAnonDmStatus || loading.loadingDmAnon
+          ? 'Loading...'
+          : 'Message using Incognito Mode',
+      icon: (
+        <IcDmAnon
+          color={
+            !userAllowDm || loading.loadingGetAllowAnonDmStatus || loading.loadingDmAnon
+              ? COLORS.gray
+              : 'black'
+          }
+        />
+      ),
+      onPress: userAllowDm
+        ? onPressDMAnon
+        : () => {
+            Toast.show('This user does not allow messages in Incognito Mode.', Toast.SHORT);
+          },
+      style: (!userAllowDm || loading.loadingGetAllowAnonDmStatus || loading.loadingDmAnon) && {
+        color: COLORS.gray300
+      }
     }
   ];
 
@@ -275,10 +307,15 @@ const ReplyCommentItem = ({
           <TouchableOpacity testID="replyBtn" activeOpacity={1} onPress={onPress}>
             <ButtonHightlight
               onLongPress={handleLongPress}
-              style={styles.btnReply}
+              style={[
+                styles.btnReply,
+                {
+                  marginRight: 0,
+                  paddingRight: 0
+                }
+              ]}
               onPress={onPress}>
               <MemoCommentReply />
-              <Text style={styles.btnReplyText}>Reply</Text>
             </ButtonHightlight>
           </TouchableOpacity>
         )}
@@ -286,26 +323,48 @@ const ReplyCommentItem = ({
           <ButtonHightlight
             onLongPress={handleLongPress}
             onPress={() => onBlock(comment)}
-            style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}>
+            style={[
+              styles.btnBlock(comment.user.id === yourselfId),
+              styles.btn,
+              {
+                marginRight: comment.is_you ? 16 : 0,
+                paddingRight: 0
+              }
+            ]}>
             <IconEn name="block" size={15.02} color={COLORS.balance_gray} />
           </ButtonHightlight>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => refSheet.current.open()}
-          testID="sendDMbtn"
-          activeOpacity={1}>
-          <ButtonHightlight
-            onLongPress={handleLongPress}
-            onPress={() => refSheet.current.open()}
-            style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}>
-            <MemoSendDM />
-          </ButtonHightlight>
-        </TouchableOpacity>
+        {!comment.is_you && (
+          <TouchableOpacity onPress={onPressDm} testID="sendDMbtn" activeOpacity={1}>
+            <ButtonHightlight
+              onLongPress={handleLongPress}
+              onPress={onPressDm}
+              style={[
+                styles.btnBlock(comment.user.id === yourselfId),
+                styles.btn,
+                {
+                  marginRight: 0,
+                  paddingRight: 16
+                }
+              ]}>
+              <MemoSendDM />
+            </ButtonHightlight>
+          </TouchableOpacity>
+        )}
 
         <TouchableOpacity onPress={onDownVote} testID="downvoteBtn">
           <ButtonHightlight
             onLongPress={handleLongPress}
-            style={[styles.arrowup, styles.btn]}
+            style={[
+              styles.arrowup,
+              styles.btn,
+              {
+                paddingLeft: 0,
+                marginLeft: 0,
+                marginRight: 8,
+                paddingRight: 0
+              }
+            ]}
             onPress={onDownVote}>
             {statusVote === 'downvote' ? (
               <MemoIc_downvote_on width={20} height={18} />
@@ -314,11 +373,18 @@ const ReplyCommentItem = ({
             )}
           </ButtonHightlight>
         </TouchableOpacity>
-        {totalVote !== 0 && <Text style={styles.vote(voteStyle())}>{totalVote}</Text>}
+        {<Text style={styles.vote(voteStyle())}>{totalVote}</Text>}
         <TouchableOpacity onPress={onUpVote} testID="upvotebtn" activeOpacity={1}>
           <ButtonHightlight
             onLongPress={handleLongPress}
-            style={[styles.arrowdown, styles.btn]}
+            style={[
+              styles.arrowdown,
+              styles.btn,
+              {
+                paddingLeft: 0,
+                marginLeft: 8
+              }
+            ]}
             onPress={onUpVote}>
             {statusVote === 'upvote' ? (
               <MemoIc_upvote_on width={20} height={18} />

@@ -57,12 +57,6 @@ const useDMMessage = () => {
       channel.targetImage = chatName?.image; // change to use getChannelListInfo
 
       channel.channel = {...channel};
-      console.log('data', {
-        anon_user_info_color_name: anonUserInfoColorName,
-        anon_user_info_color_code: anonUserInfoColorCode,
-        anon_user_info_emoji_code: anonUserInfoEmojiCode,
-        anon_user_info_emoji_name: anonUserInfoEmojiName
-      });
       const channelList = ChannelList.fromChannelAPI(channel, chatType, channel?.members, {
         anon_user_info_color_name: anonUserInfoColorName,
         anon_user_info_color_code: anonUserInfoColorCode,
