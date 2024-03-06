@@ -144,7 +144,7 @@ const useCreateChat = () => {
 
       goToChatScreen(channelList as ChannelListObject, GROUP_INFO);
     } catch (e) {
-      SimpleToast.show(e || 'Failed to message this user anonymously');
+      SimpleToast.show(e || 'Failed to message this user in Incognito Mode');
     }
   };
 
