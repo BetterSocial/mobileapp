@@ -152,7 +152,7 @@ const Footer = ({
       onPress: userAllowDm
         ? onPressDMAnon
         : () => {
-            Toast.show('User not allow to DM from Incognito Mode', Toast.SHORT);
+            Toast.show('This user does not allow messages in Incognito Mode.', Toast.SHORT);
           },
       style: (!userAllowDm || loading.loadingGetAllowAnonDmStatus || loading.loadingDmAnon) && {
         color: COLORS.gray300
