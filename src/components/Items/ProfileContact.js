@@ -3,7 +3,7 @@ import Mi from 'react-native-vector-icons/MaterialIcons';
 import PropTypes from 'prop-types';
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 
-import MemoIc_Checklist from '../../assets/icons/Ic_Checklist';
+import IconChecklist from '../../assets/icons/Ic_Checklist';
 import dimen from '../../utils/dimen';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {COLORS} from '../../utils/theme';
@@ -68,7 +68,7 @@ const ProfileContact = ({
           )}
         {select && (
           <View testID="selected">
-            <MemoIc_Checklist />
+            <IconChecklist />
           </View>
         )}
       </View>
