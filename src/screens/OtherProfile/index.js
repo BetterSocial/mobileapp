@@ -221,7 +221,7 @@ const OtherProfile = () => {
     } else if (!isAnonimityEnabled) {
       ToastMessage.show({
         type: 'asNative',
-        text1: 'This user does not want to receive anonymous messages',
+        text1: 'This user does not allow messages in Incognito Mode.',
         position: 'bottom'
       });
     } else {
