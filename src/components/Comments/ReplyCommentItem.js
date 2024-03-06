@@ -5,6 +5,7 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Toast from 'react-native-simple-toast';
 import IconEn from 'react-native-vector-icons/Entypo';
 import {IcDmAnon} from '../../assets/icons/ic_dm_anon';
+
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
 import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
 import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
