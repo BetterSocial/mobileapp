@@ -47,20 +47,19 @@ export const styles = StyleSheet.create({
   },
   btnAddText: {
     fontFamily: fonts.inter[600],
-    fontSize: normalizeFontSize(14),
+    fontSize: normalizeFontSize(12),
     lineHeight: normalizeFontSize(20),
-    color: COLORS.anon_primary
+    color: COLORS.signed_primary
   },
   btnAdd: {
-    padding: normalize(8),
+    padding: dimen.normalizeDimen(8),
     backgroundColor: COLORS.lightgrey,
     width: 'auto',
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'absolute',
     borderRadius: 8,
     alignSelf: 'center',
-    bottom: 5
+    marginVertical: dimen.normalizeDimen(20)
   },
   countUser: (from) => ({
     fontSize: normalizeFontSize(14),
@@ -300,6 +299,22 @@ const ChatInfoScreen = () => {
             <>
               {isLoadingFetchingChannelDetail ? <ActivityIndicator style={styles.loading} /> : null}
               <View style={styles.gap} />
+
+              {channelInfo?.channelType === CHANNEL_GROUP && (
+                <View style={styles.btnAdd}>
+                  <TouchableOpacity
+                    testID="addParticipant"
+                    // onPress={() =>
+                    //   navigation.push('ContactScreen', {
+                    //     isAddParticipant: true,
+                    //     channelId: channelState?.channel?.id
+                    //   })
+                    // }
+                  >
+                    <Text style={styles.btnAddText}>+ Add Participants</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
             </>
           }
           renderItem={({item, index}) => {
