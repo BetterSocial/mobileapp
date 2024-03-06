@@ -213,7 +213,8 @@ const initChatFromPost = async ({source, id, postId}) => {
       payload = {...payload, postId: id};
       break;
     case 'comment':
-      payload = {...payload, commentId: id};
+      payload = {...payload, commentId: id, postId};
+      console.log('payload', payload);
       break;
     default:
       break;
@@ -254,14 +255,14 @@ const getAllowAnonDmStatus = async (type, id) => {
   }
 };
 
-const initChatFromPostAnon = async ({source, id}) => {
+const initChatFromPostAnon = async ({source, id, feedId}) => {
   let payload = {source};
   switch (source) {
     case 'post':
       payload = {...payload, postId: id};
       break;
     case 'comment':
-      payload = {...payload, commentId: id};
+      payload = {...payload, commentId: id, postId: feedId};
       break;
     default:
       break;

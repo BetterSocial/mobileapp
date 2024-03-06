@@ -46,7 +46,8 @@ const ReplyCommentItem = ({
   disableOnTextPress = false,
   refreshComment,
   updateVoteParent,
-  onLongPress
+  onLongPress,
+  feedId
 }) => {
   const refSheet = React.useRef();
   const navigation = useNavigation();
@@ -192,7 +193,7 @@ const ReplyCommentItem = ({
         const members = [comment?.user?.id, profile.myProfile.user_id];
         await createSignChat(members, selectedUser);
       } else {
-        await sendMessageDM(comment?.id, 'comment', 'SIGNED');
+        await sendMessageDM(comment?.id, 'comment', 'SIGNED', feedId);
       }
     } catch (e) {
       console.warn(e);
@@ -205,7 +206,7 @@ const ReplyCommentItem = ({
   const onPressDMAnon = async () => {
     try {
       setLoading({...loading, loadingDmAnon: true});
-      await sendMessageDM(comment?.id, 'comment', 'ANONYMOUS');
+      await sendMessageDM(comment?.id, 'comment', 'ANONYMOUS', feedId);
     } catch (e) {
       console.warn(e);
     } finally {
@@ -305,20 +306,39 @@ const ReplyCommentItem = ({
         {isLast && level >= 2 ? (
           <View style={styles.gap} />
         ) : (
-          <TouchableOpacity testID="replyBtn" activeOpacity={1} onPress={onPress}>
-            <ButtonHightlight
-              onLongPress={handleLongPress}
-              style={[
-                styles.btnReply,
-                {
-                  marginRight: 0,
-                  paddingRight: 0
-                }
-              ]}
-              onPress={onPress}>
-              <MemoCommentReply />
-            </ButtonHightlight>
-          </TouchableOpacity>
+          <>
+            <TouchableOpacity testID="replyBtn" activeOpacity={1} onPress={onPress}>
+              <ButtonHightlight
+                onLongPress={handleLongPress}
+                style={[
+                  styles.btnReply,
+                  {
+                    marginRight: 0,
+                    paddingRight: 0
+                  }
+                ]}
+                onPress={onPress}>
+                <MemoCommentReply />
+              </ButtonHightlight>
+            </TouchableOpacity>
+            {!comment.is_you && (
+              <TouchableOpacity onPress={onPressDm} testID="sendDMbtn" activeOpacity={1}>
+                <ButtonHightlight
+                  onLongPress={handleLongPress}
+                  onPress={onPressDm}
+                  style={[
+                    styles.btnBlock(comment.user.id === yourselfId),
+                    styles.btn,
+                    {
+                      marginRight: 0,
+                      paddingRight: 0
+                    }
+                  ]}>
+                  <MemoSendDM />
+                </ButtonHightlight>
+              </TouchableOpacity>
+            )}
+          </>
         )}
         <TouchableOpacity onPress={() => onBlock(comment)} testID="btnBlock" activeOpacity={1}>
           <ButtonHightlight
@@ -328,30 +348,13 @@ const ReplyCommentItem = ({
               styles.btnBlock(comment.user.id === yourselfId),
               styles.btn,
               {
-                marginRight: comment.is_you ? 16 : 0,
+                marginRight: 16,
                 paddingRight: 0
               }
             ]}>
             <IconEn name="block" size={15.02} color={COLORS.balance_gray} />
           </ButtonHightlight>
         </TouchableOpacity>
-        {!comment.is_you && (
-          <TouchableOpacity onPress={onPressDm} testID="sendDMbtn" activeOpacity={1}>
-            <ButtonHightlight
-              onLongPress={handleLongPress}
-              onPress={onPressDm}
-              style={[
-                styles.btnBlock(comment.user.id === yourselfId),
-                styles.btn,
-                {
-                  marginRight: 0,
-                  paddingRight: 16
-                }
-              ]}>
-              <MemoSendDM />
-            </ButtonHightlight>
-          </TouchableOpacity>
-        )}
 
         <TouchableOpacity onPress={onDownVote} testID="downvoteBtn">
           <ButtonHightlight

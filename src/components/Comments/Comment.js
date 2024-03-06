@@ -45,6 +45,7 @@ const Comment = ({
   showLeftConnector = true,
   disableOnTextPress = false,
   onLongPress,
+  feedId,
   updateVote
 }) => {
   const refSheet = React.useRef();
@@ -149,7 +150,8 @@ const Comment = ({
         const members = [comment?.user?.id, profile.myProfile.user_id];
         await createSignChat(members, selectedUser);
       } else {
-        await sendMessageDM(comment?.id, 'comment', 'SIGNED');
+        console.log('feedId', feedId);
+        await sendMessageDM(comment?.id, 'comment', 'SIGNED', feedId);
       }
     } catch (e) {
       console.warn(e);
@@ -162,7 +164,7 @@ const Comment = ({
   const onPressDMAnon = async () => {
     try {
       setLoading({...loading, loadingDmAnon: true});
-      await sendMessageDM(comment?.id, 'comment', 'ANONYMOUS');
+      await sendMessageDM(comment?.id, 'comment', 'ANONYMOUS', feedId);
     } catch (e) {
       console.warn(e);
     } finally {
