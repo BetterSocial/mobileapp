@@ -585,7 +585,7 @@ const PostPageDetailIdComponent = (props) => {
             isBackButton={true}
             source={SOURCE_PDP}
             height={getHeightHeader()}
-            isFollow={item?.is_following_target || parentData?.is_following_target}
+            isFollow={item?.is_following_target}
             onPressFollUnFoll={() => {
               followUnfollow(item);
               setItem({...item, is_following_target: !item?.is_following_target});
