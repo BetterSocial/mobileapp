@@ -1,6 +1,7 @@
 import React from 'react';
 import {Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Modal from 'react-native-modal';
+import SimpleToast from 'react-native-simple-toast';
 
 import {ANONYMOUS, SIGNED} from '../../../hooks/core/constant';
 import {COLORS} from '../../../utils/theme';
@@ -54,7 +55,12 @@ const ModalAction = (props) => {
         if (isAnon) {
           return (
             <TouchableOpacity
-              onPress={() => onPress('message-anonymously', selectedUser)}
+              onPress={() => {
+                if (!selectedUser?.allow_anon_dm) {
+                  return SimpleToast.show('This user does not allow messages in Incognito Mode.');
+                }
+                onPress('message-anonymously', selectedUser);
+              }}
               style={styles.buttonStyle}>
               <Text
                 numberOfLines={1}
@@ -68,7 +74,12 @@ const ModalAction = (props) => {
           <>
             {isGroup && (
               <TouchableOpacity
-                onPress={() => onPress('message', selectedUser)}
+                onPress={() => {
+                  if (!selectedUser?.allow_anon_dm) {
+                    return SimpleToast.show('This user does not allow messages in Incognito Mode.');
+                  }
+                  onPress('message-anonymously', selectedUser);
+                }}
                 style={styles.buttonStyle}>
                 <View style={{flexDirection: 'row'}}>
                   <Text style={styles.textButton}>Message {name}</Text>
@@ -77,7 +88,12 @@ const ModalAction = (props) => {
               </TouchableOpacity>
             )}
             <TouchableOpacity
-              onPress={() => onPress('message-anonymously', selectedUser)}
+              onPress={() => {
+                if (!selectedUser?.allow_anon_dm) {
+                  return SimpleToast.show('This user does not allow messages in Incognito Mode.');
+                }
+                onPress('message-anonymously', selectedUser);
+              }}
               style={styles.buttonStyle}>
               <Text
                 numberOfLines={1}
