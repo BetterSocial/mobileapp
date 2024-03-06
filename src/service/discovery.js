@@ -24,7 +24,7 @@ import api from './config';
 const fetchDiscoveryDataUser = async (query, isAnon, axiosOptions = {}) => {
   try {
     const response = await api.get(
-      `/discovery/user/${isAnon ? 'allow_anon_dm=true' : ''}`,
+      `/discovery/user/?q=${query}${isAnon ? '&allow_anon_dm=true' : ''}`,
       axiosOptions
     );
     if (response?.data?.success) {
