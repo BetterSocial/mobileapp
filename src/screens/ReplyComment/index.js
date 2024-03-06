@@ -28,6 +28,7 @@ const ReplyComment = (props) => {
     }
     return 0;
   };
+  console.log('feeds', dataFeed.id);
   return (
     <View style={styles.container}>
       <ReplyCommentComponent

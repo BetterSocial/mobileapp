@@ -74,12 +74,13 @@ const useDMMessage = () => {
   const sendMessageDM = async (
     id,
     source: 'post' | 'comment',
-    channelCategory: ChannelCategory
+    channelCategory: ChannelCategory,
+    feedId: string
   ) => {
     const initChat =
       channelCategory === 'ANONYMOUS'
-        ? await initChatFromPostAnon({source, id})
-        : await initChatFromPost({source, id});
+        ? await initChatFromPostAnon({source, id, feedId})
+        : await initChatFromPost({source, id, postId: feedId});
 
     const builtChannelData = {
       better_channel_member: initChat.data.better_channel_members,
