@@ -33,7 +33,12 @@ import AnonymousAvatar from '../../components/AnonymousAvatar';
 import AnonymousUsername from '../../components/AnonymousUsername';
 import BottomSheetMenu from '../../components/BottomSheet/BottomSheetMenu';
 import GlobalButton from '../../components/Button/GlobalButton';
-import {DEFAULT_PROFILE_PIC_PATH, PRIVACY_PUBLIC} from '../../utils/constants';
+import {
+  ANALYTICS_SHARE_POST_FEED_ID,
+  ANALYTICS_SHARE_POST_FEED_SCREEN,
+  DEFAULT_PROFILE_PIC_PATH,
+  PRIVACY_PUBLIC
+} from '../../utils/constants';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import ShareUtils from '../../utils/share';
 import StringConstant from '../../utils/string/StringConstant';
@@ -123,15 +128,24 @@ const _renderAnonimity = ({
   onDeletePost = () => {},
   isShowDelete = false,
   isSelf = false,
-  hideThreeDot
+  hideThreeDot,
+  actor,
+  source,
+  item
 }) => {
   const navigation = useNavigation();
   const refSheet = React.useRef();
+  const {username} = useFeedHeader({
+    actor,
+    source
+  });
   const dataSheet = [
     {
       id: 1,
       name: 'Share link',
-      icon: <ShareAndroidIcon />
+      icon: <ShareAndroidIcon />,
+      onPress: () =>
+        ShareUtils.shareFeeds(item, ANALYTICS_SHARE_POST_FEED_SCREEN, ANALYTICS_SHARE_POST_FEED_ID)
     }
   ];
 
@@ -207,15 +221,20 @@ const _renderAnonimity = ({
                   )}
                 </View>
                 {hideThreeDot ? null : (
-                  <View style={{zIndex: 1000}}>
-                    <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
-                  </View>
+                  <GlobalButton
+                    onPress={() => {
+                      refSheet.current.open();
+                    }}>
+                    <View style={{zIndex: 1000}}>
+                      <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
+                    </View>
+                  </GlobalButton>
                 )}
               </View>
               {showAnonymousOption && !hideThreeDot && (
                 <GlobalButton
                   buttonStyle={{position: 'absolute', right: 0, top: -8}}
-                  onPress={() => {}}>
+                  onPress={() => refSheet.current.open()}>
                   <View style={{zIndex: 1000}}>
                     <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
                   </View>
@@ -266,7 +285,8 @@ const _renderProfileNormal = ({
   onPressFollUnFoll = () => {},
   onDeletePost = () => {},
   isShowDelete = false,
-  isSelf = false
+  isSelf = false,
+  item
 }) => {
   const refSheet = React.useRef();
   const dataSheet = [
@@ -274,7 +294,8 @@ const _renderProfileNormal = ({
       id: 1,
       name: 'Share link',
       icon: <ShareAndroidIcon />,
-      onPress: () => ShareUtils.shareUserLink(username)
+      onPress: () =>
+        ShareUtils.shareFeeds(item, ANALYTICS_SHARE_POST_FEED_SCREEN, ANALYTICS_SHARE_POST_FEED_ID)
     }
   ];
 
@@ -416,6 +437,7 @@ const Header = ({
   onDeletePost = () => {},
   isShowDelete = false,
   isSelf = false,
+  item,
   onHeaderOptionClicked,
   hideThreeDot
 }) => {
@@ -436,6 +458,7 @@ const Header = ({
   } = props;
   if (anonimity) {
     return _renderAnonimity({
+      item,
       time,
       privacy,
       duration_feed,
@@ -459,10 +482,14 @@ const Header = ({
       onPressFollUnFoll,
       onDeletePost,
       isShowDelete,
-      isSelf
+      isSelf,
+      onHeaderOptionClicked,
+      actor,
+      source
     });
   }
   return _renderProfileNormal({
+    item,
     actor,
     time,
     privacy,

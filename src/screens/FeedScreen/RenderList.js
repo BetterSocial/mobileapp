@@ -147,6 +147,7 @@ const RenderListFeed = (props) => {
     <View key={item.id} testID="dataScroll" style={styles.cardContainer}>
       <View style={[styles.cardMain]}>
         <Header
+          item={item}
           hideThreeDot={hideThreeDot}
           props={item}
           height={getHeightHeader()}
