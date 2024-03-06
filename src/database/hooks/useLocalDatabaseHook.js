@@ -10,14 +10,15 @@ import {InitialStartupAtom} from '../../service/initialStartup';
 
 const MIGRATION_STATUS = {
   NOT_MIGRATED: 'NOT_MIGRATED',
-  MIGRATED: 'MIGRATED'
+  MIGRATED: 'MIGRATED',
+  MIGRATING: 'MIGRATING'
 };
 
 /**
  *
  * @returns {UseLocalDatabaseHook}
  */
-const useLocalDatabaseHook = () => {
+const useLocalDatabaseHook = (withMigration = false) => {
   /**
    * @type {[import('react-native-sqlite-storage').SQLiteDatabase | null, (value: import('react-native-sqlite-storage').SQLiteDatabase | null) => void]}
    */
@@ -46,8 +47,13 @@ const useLocalDatabaseHook = () => {
     const shouldDbMigrated = await LocalDatabaseMigration.shouldDbMigrated();
     let scopedMigrationStatus = migrationStatus;
 
+    if (scopedMigrationStatus === MIGRATION_STATUS.MIGRATING) {
+      return null;
+    }
+
     if (isEnteringApp && shouldDbMigrated) {
-      await LocalDatabaseMigration.migrateDb();
+      setMigrationStatus(MIGRATION_STATUS.MIGRATING);
+      if (withMigration) await LocalDatabaseMigration.migrateDb();
       setMigrationStatus(MIGRATION_STATUS.MIGRATED);
       scopedMigrationStatus = MIGRATION_STATUS.MIGRATED;
     }
