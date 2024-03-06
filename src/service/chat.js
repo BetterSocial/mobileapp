@@ -206,6 +206,71 @@ const moveChatToAnon = async ({
   }
 };
 
+const initChatFromPost = async ({source, id}) => {
+  let payload = {source};
+  switch (source) {
+    case 'post':
+      payload = {...payload, postId: id};
+      break;
+    case 'comment':
+      payload = {...payload, commentId: id};
+      break;
+    default:
+      break;
+  }
+
+  try {
+    const response = await api.post('/chat/init-chat-from-post', payload);
+    if (response?.status === 200) {
+      return Promise.resolve(response.data);
+    }
+
+    return Promise.reject(response.data);
+  } catch (e) {
+    if (e?.response?.data?.message) return Promise.reject(e?.response?.data?.message);
+    return Promise.reject(e);
+  }
+};
+
+const getAllowAnonDmStatus = async (postId) => {
+  try {
+    const response = await api.get(`/users/check-allow-dm/?source=post&post_id=${postId}`);
+    if (response?.status === 200) {
+      return Promise.resolve(response.data);
+    }
+    return Promise.reject(response.data);
+  } catch (e) {
+    if (e?.response?.data?.message) return Promise.reject(e?.response?.data?.message);
+    return Promise.reject(e);
+  }
+};
+
+const initChatFromPostAnon = async ({source, id}) => {
+  let payload = {source};
+  switch (source) {
+    case 'post':
+      payload = {...payload, postId: id};
+      break;
+    case 'comment':
+      payload = {...payload, commentId: id};
+      break;
+    default:
+      break;
+  }
+
+  try {
+    const response = await anonymousApi.post('/chat/init-chat-from-post', payload);
+    if (response?.status === 200) {
+      return Promise.resolve(response.data);
+    }
+
+    return Promise.reject(response.data);
+  } catch (e) {
+    if (e?.response?.data?.message) return Promise.reject(e?.response?.data?.message);
+    return Promise.reject(e);
+  }
+};
+
 export {
   createChannel,
   sendSystemMessage,
@@ -214,5 +279,8 @@ export {
   getOrCreateAnonymousChannel,
   followClient,
   moveChatToSigned,
-  moveChatToAnon
+  moveChatToAnon,
+  initChatFromPost,
+  initChatFromPostAnon,
+  getAllowAnonDmStatus
 };
