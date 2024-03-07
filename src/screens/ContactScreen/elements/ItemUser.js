@@ -72,7 +72,7 @@ ItemUser.propTypes = {
   followed: PropTypes.any,
   onPress: PropTypes.func,
   userid: PropTypes.string,
-  isAnon: PropTypes.string
+  isAnon: PropTypes.bool
 };
 export default ItemUser;
 const styles = StyleSheet.create({
