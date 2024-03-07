@@ -193,14 +193,19 @@ const _renderAnonimity = ({
               />
             </View>
 
-            <View style={[styles.containerFeedProfile]}>
+            <View
+              style={[
+                styles.containerFeedProfile,
+                {
+                  marginTop: -10
+                }
+              ]}>
               <View
                 style={[
                   {
                     alignItems: 'center',
                     flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    paddingRight: 16
+                    justifyContent: 'space-between'
                   }
                 ]}>
                 <View
@@ -240,7 +245,13 @@ const _renderAnonimity = ({
                   </View>
                 </GlobalButton>
               )}
-              <View style={styles.containerFeedText}>
+              <View
+                style={[
+                  styles.containerFeedText,
+                  {
+                    marginTop: -2
+                  }
+                ]}>
                 <Text style={styles.feedDate}>{calculateTime(time)}</Text>
                 <View style={styles.point} />
                 {privacy.toLowerCase() === PRIVACY_PUBLIC ? (
@@ -624,7 +635,7 @@ const styles = StyleSheet.create({
     paddingLeft: 0
   },
   imageAnonymContainer: {
-    padding: 10
+    paddingHorizontal: 10
   },
   avatarImage: {height: 48, width: 48, borderRadius: 24},
   postDetail: (isPostDetail) => ({
