@@ -164,7 +164,7 @@ const Footer = ({
     try {
       refSheet.current.open();
       setLoading({...loading, loadingGetAllowAnonDmStatus: true});
-      const data = await getAllowAnonDmStatus(item.id);
+      const data = await getAllowAnonDmStatus('post', item.id);
       setUserAllowDm(data?.user.allow_anon_dm);
     } catch (e) {
       console.log(e);

@@ -313,7 +313,7 @@ const ReplyCommentItem = ({
                 style={[
                   styles.btnReply,
                   {
-                    marginRight: 0,
+                    marginRight: 8,
                     paddingRight: 0
                   }
                 ]}
@@ -330,7 +330,7 @@ const ReplyCommentItem = ({
                     styles.btnBlock(comment.user.id === yourselfId),
                     styles.btn,
                     {
-                      marginRight: 0,
+                      marginRight: 8,
                       paddingRight: 0
                     }
                   ]}>
@@ -348,7 +348,7 @@ const ReplyCommentItem = ({
               styles.btnBlock(comment.user.id === yourselfId),
               styles.btn,
               {
-                marginRight: 16,
+                marginRight: 24,
                 paddingRight: 0
               }
             ]}>

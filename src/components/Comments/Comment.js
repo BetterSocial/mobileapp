@@ -284,7 +284,7 @@ const Comment = ({
                 style={[
                   styles.btnReply,
                   {
-                    marginRight: 0,
+                    marginRight: 8,
                     paddingRight: 0
                   }
                 ]}
@@ -300,7 +300,7 @@ const Comment = ({
                     styles.btnBlock(comment.user.id === yourselfId),
                     styles.btn,
                     {
-                      marginRight: 0,
+                      marginRight: 8,
                       paddingRight: 0
                     }
                   ]}>
@@ -317,7 +317,7 @@ const Comment = ({
             styles.btnBlock(comment.user.id === yourselfId),
             styles.btn,
             {
-              marginRight: 0,
+              marginRight: 8,
               paddingRight: 0
             }
           ]}
