@@ -16,7 +16,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import {useRoute} from '@react-navigation/core';
+import {useNavigation, useRoute} from '@react-navigation/core';
 
 import AnonymousChatInfoHeader from '../../components/Header/AnonymousChatInfoHeader';
 import AnonymousIcon from '../ChannelListScreen/elements/components/AnonymousIcon';
@@ -195,6 +195,7 @@ const ChatInfoScreen = () => {
     loadingChannelInfo,
     isLoadingInitChat
   } = useChatInfoScreenHook();
+  const navigation = useNavigation();
   const {signedProfileId} = useUserAuthHook();
   const {params}: any = useRoute();
   const ANONYMOUS_USER = 'AnonymousUser';
@@ -304,13 +305,7 @@ const ChatInfoScreen = () => {
                 <View style={styles.btnAdd}>
                   <TouchableOpacity
                     testID="addParticipant"
-                    // onPress={() =>
-                    //   navigation.push('ContactScreen', {
-                    //     isAddParticipant: true,
-                    //     channelId: channelState?.channel?.id
-                    //   })
-                    // }
-                  >
+                    onPress={() => navigation.push('ContactScreen', {from: SIGNED})}>
                     <Text style={styles.btnAddText}>+ Add Participants</Text>
                   </TouchableOpacity>
                 </View>
