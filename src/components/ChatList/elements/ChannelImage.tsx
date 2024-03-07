@@ -1,14 +1,14 @@
 /* eslint-disable no-use-before-define */
-import FastImage from 'react-native-fast-image';
 import React from 'react';
 import {View} from 'react-native';
+import FastImage from 'react-native-fast-image';
 
-import CommunityIcon from '../../../assets/hashtag.png';
-import GroupIcon from '../../../assets/group-icon.png';
 import {
   ChannelImageBadgeProps,
   ChannelImageMainProps
 } from '../../../../types/component/ChatList/ChannelImage.types';
+import GroupIcon from '../../../assets/group-icon.png';
+import CommunityIcon from '../../../assets/hashtag.png';
 import {GROUP_INFO} from '../../../hooks/core/constant';
 import {channelImageStyles as styles} from './ChannelImage.style';
 
@@ -24,6 +24,19 @@ const Big: React.FC<ChannelImageMainProps> = ({type, image, style}) => {
         resizeMode={FastImage.resizeMode.cover}
         style={style ?? styles.containerImage}
       />
+    );
+  }
+
+  if (type === 'ANON_TOPIC') {
+    return (
+      <View
+        style={[styles.containerImage, styles.containerDefaultImage, styles.containeranon_primary]}>
+        <FastImage
+          source={CommunityIcon}
+          resizeMode={FastImage.resizeMode.contain}
+          style={styles.imageDefaultCommunity}
+        />
+      </View>
     );
   }
 
@@ -82,6 +95,18 @@ const Big: React.FC<ChannelImageMainProps> = ({type, image, style}) => {
 };
 
 const Small: React.FC<ChannelImageBadgeProps> = ({type}) => {
+  if (type === 'ANON_TOPIC') {
+    return (
+      <View style={[styles.badgeContainer, styles.containeranon_secondary]}>
+        <FastImage
+          source={CommunityIcon}
+          resizeMode={FastImage.resizeMode.contain}
+          style={[styles.badgeIcon, {top: -0.1, left: -0.06}]}
+        />
+      </View>
+    );
+  }
+
   if (type === 'COMMUNITY') {
     return (
       <View style={[styles.badgeContainer, styles.containersigned_secondary]}>

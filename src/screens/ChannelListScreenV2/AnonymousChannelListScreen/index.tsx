@@ -12,6 +12,7 @@ import useAnonymousChannelListScreenHook from '../../../hooks/screen/useAnonymou
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import useRootChannelListHook from '../../../hooks/screen/useRootChannelListHook';
 import {ANONYMOUS, ANON_PM, ANON_POST_NOTIFICATION} from '../../../hooks/core/constant';
+import CommunityChannelItem from '../../../components/ChatList/CommunityChannelItem';
 
 const AnonymousChannelListScreen = ({route}) => {
   const {refresh} = useLocalDatabaseHook();
@@ -22,7 +23,8 @@ const AnonymousChannelListScreen = ({route}) => {
     channels: anonChannels,
     goToChatScreen,
     goToPostDetailScreen,
-    goToContactScreen
+    goToContactScreen,
+    goToCommunityScreen
   } = useAnonymousChannelListScreenHook();
 
   React.useEffect(() => {
@@ -47,9 +49,9 @@ const AnonymousChannelListScreen = ({route}) => {
     }
 
     if (item?.channelType === 'ANON_TOPIC') {
-      // TODO: ADD the correct ANON_TOPIC Channel Item Component here;
-
-      return <MessageChannelItem item={item} onChannelPressed={() => goToChatScreen(item)} />;
+      return (
+        <CommunityChannelItem channel={item} onChannelPressed={() => goToCommunityScreen(item)} />
+      );
     }
 
     return null;
