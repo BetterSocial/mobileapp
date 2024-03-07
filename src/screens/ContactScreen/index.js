@@ -139,7 +139,7 @@ const ContactScreen = ({navigation}) => {
             switch (type) {
               case VIEW_TYPE_DATA:
                 dim.width = width;
-                dim.height = 72;
+                dim.height = 64;
                 break;
 
               case VIEW_TYPE_LABEL:

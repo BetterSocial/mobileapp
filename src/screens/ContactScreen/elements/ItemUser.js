@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
-    height: 72
+    height: 64
   },
   cardLeft: {
     flexDirection: 'row',
