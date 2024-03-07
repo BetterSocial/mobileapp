@@ -72,7 +72,7 @@ ItemUser.propTypes = {
   followed: PropTypes.any,
   onPress: PropTypes.func,
   userid: PropTypes.string,
-  isAnon: PropTypes.string
+  isAnon: PropTypes.bool
 };
 export default ItemUser;
 const styles = StyleSheet.create({
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
-    height: 72
+    height: 64
   },
   cardLeft: {
     flexDirection: 'row',

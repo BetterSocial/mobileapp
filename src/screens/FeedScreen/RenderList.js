@@ -3,12 +3,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
 
-import Content from './Content';
-import ContentLink from './ContentLink';
-import Header from './Header';
-import ShareUtils from '../../utils/share';
-import dimen from '../../utils/dimen';
-import useFeed from './hooks/useFeed';
+import {Footer, PreviewComment} from '../../components';
+import useWriteComment from '../../components/Comments/hooks/useWriteComment';
+import TopicsChip from '../../components/TopicsChip/TopicsChip';
+import usePostHook from '../../hooks/core/post/usePostHook';
+import {showScoreAlertDialog} from '../../utils/Utils';
 import {
   ANALYTICS_SHARE_POST_FEED_ID,
   ANALYTICS_SHARE_POST_FEED_SCREEN,
@@ -17,16 +16,18 @@ import {
   POST_TYPE_STANDARD,
   SOURCE_FEED_TAB
 } from '../../utils/constants';
-import {Footer, PreviewComment} from '../../components';
-import {getCommentLength} from '../../utils/getstream';
+import dimen from '../../utils/dimen';
 import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
-import BlurredLayer from './elements/BlurredLayer';
-import {showScoreAlertDialog} from '../../utils/Utils';
+import {getCommentLength} from '../../utils/getstream';
+import ShareUtils from '../../utils/share';
 import {COLORS} from '../../utils/theme';
-import useWriteComment from '../../components/Comments/hooks/useWriteComment';
-import TopicsChip from '../../components/TopicsChip/TopicsChip';
-import useCalculationContent from './hooks/useCalculationContent';
+import Content from './Content';
+import ContentLink from './ContentLink';
+import Header from './Header';
 import AddCommentPreview from './elements/AddCommentPreview';
+import BlurredLayer from './elements/BlurredLayer';
+import useCalculationContent from './hooks/useCalculationContent';
+import useFeed from './hooks/useFeed';
 
 const tabBarHeight = StatusBar.currentHeight;
 const FULL_WIDTH = Dimensions.get('screen').width;
@@ -47,6 +48,9 @@ const RenderListFeed = (props) => {
     source = SOURCE_FEED_TAB,
     hideThreeDot = true,
     showAnonymousOption = false,
+    onDeletePost,
+    isShowDelete,
+    isSelf,
     onHeaderOptionClicked = () => {}
   } = props;
   const {
@@ -65,6 +69,7 @@ const RenderListFeed = (props) => {
     getTotalReaction,
     showScoreButton
   } = useFeed();
+
   const {handleUserName} = useWriteComment();
 
   const postApiUpvote = async (status) => {
@@ -83,6 +88,8 @@ const RenderListFeed = (props) => {
       voteStatus
     });
   };
+
+  const {followUnfollow} = usePostHook();
 
   const onPressDownVoteHandle = async () => {
     onPressDownVoteHook();
@@ -140,12 +147,18 @@ const RenderListFeed = (props) => {
     <View key={item.id} testID="dataScroll" style={styles.cardContainer}>
       <View style={[styles.cardMain]}>
         <Header
+          item={item}
           hideThreeDot={hideThreeDot}
           props={item}
           height={getHeightHeader()}
           source={source}
           headerStyle={styles.mh9}
           showAnonymousOption={showAnonymousOption}
+          onDeletePost={onDeletePost}
+          isShowDelete={isShowDelete}
+          isSelf={isSelf}
+          isFollow={item?.is_following_target}
+          onPressFollUnFoll={() => followUnfollow(item)}
           onHeaderOptionClicked={onHeaderOptionClicked}
         />
         {item.post_type === POST_TYPE_LINK && (
@@ -213,7 +226,8 @@ const RenderListFeed = (props) => {
             statusVote={voteStatus}
             showScoreButton={showScoreButton}
             onPressScore={() => showScoreAlertDialog(item)}
-            isSelf={item.anonimity ? false : selfUserId === item.actor.id}
+            isSelf={isSelf}
+            isShowDM
           />
         </View>
         <BlurredLayer
@@ -296,7 +310,9 @@ RenderListFeed.propTypes = {
   hideThreeDot: PropTypes.bool,
   showAnonymousOption: PropTypes.bool,
   onHeaderOptionClicked: PropTypes.func,
-  onPreviewCommentPress: PropTypes.func
+  onPreviewCommentPress: PropTypes.func,
+  onDeletePost: PropTypes.func,
+  isSelf: PropTypes.bool
 };
 
 export default React.memo(
