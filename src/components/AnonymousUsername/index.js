@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StyleSheet, Text} from 'react-native';
+import {StyleSheet, Text, TextStyle} from 'react-native';
 
 import {COLORS} from '../../utils/theme';
 import {POST_VERSION} from '../../utils/constants';
@@ -7,20 +7,21 @@ import {fonts} from '../../utils/fonts';
 import {getOfficialAnonUsername} from '../../utils/string/StringUtils';
 
 const styles = StyleSheet.create({
-  feedUsername: {
+  feedUsername: (isFeeds) => ({
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 14,
     lineHeight: 16.94,
     color: COLORS.black,
-    flex: 1
-  }
+    flex: isFeeds ? 0 : 1
+  })
 });
 
 /**
  * @typedef {Object} AnonymousUsernameComponentProps
  * @property {string} version
  * @property {AnonUserInfoTypes} anonUserInfo
+ * @property {TextStyle} style
  */
 
 /**
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
  * @param {AnonymousUsernameComponentProps} props
  */
 const AnonymousUsername = (props) => {
-  const {version, anonUserInfo} = props;
+  const {version, anonUserInfo, isFeed} = props;
 
   if (version >= POST_VERSION) {
     const mappedAnonUserInfo = {
@@ -38,13 +39,13 @@ const AnonymousUsername = (props) => {
       anon_user_info_emoji_code: anonUserInfo.emojiCode
     };
     return (
-      <Text testID="newVersion" style={styles.feedUsername}>
+      <Text testID="newVersion" style={styles.feedUsername(isFeed)}>
         {getOfficialAnonUsername(mappedAnonUserInfo)}
       </Text>
     );
   }
 
-  return <Text style={styles.feedUsername}>Anonymous</Text>;
+  return <Text style={[styles.feedUsername, props.style]}>Anonymous</Text>;
 };
 
 export default AnonymousUsername;

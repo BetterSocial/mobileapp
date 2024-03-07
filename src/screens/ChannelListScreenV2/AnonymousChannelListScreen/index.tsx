@@ -46,6 +46,12 @@ const AnonymousChannelListScreen = ({route}) => {
       );
     }
 
+    if (item?.channelType === 'ANON_TOPIC') {
+      // TODO: ADD the correct ANON_TOPIC Channel Item Component here;
+
+      return <MessageChannelItem item={item} onChannelPressed={() => goToChatScreen(item)} />;
+    }
+
     return null;
   };
 

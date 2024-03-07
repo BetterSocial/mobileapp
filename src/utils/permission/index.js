@@ -93,6 +93,7 @@ export const requestExternalStoragePermission = async () => {
         break;
 
       case RESULTS.GRANTED:
+      case RESULTS.LIMITED:
         message = StringConstant.cameraPermissionGranted;
         success = true;
         break;
@@ -113,7 +114,7 @@ export const requestExternalStoragePermission = async () => {
         ? PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE
         : PERMISSIONS.IOS.PHOTO_LIBRARY
     );
-    if (requestResult === RESULTS.GRANTED) {
+    if (requestResult === RESULTS.GRANTED || requestResult === RESULTS.LIMITED) {
       return {
         message: StringConstant.cameraPermissionGranted,
         success: true
