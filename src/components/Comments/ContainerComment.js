@@ -95,6 +95,7 @@ const ContainerComment = ({
             {item.user ? (
               <ListComment
                 key={`p${index}`}
+                feedId={feedId}
                 indexFeed={indexFeed}
                 index={index}
                 onCommentLongPressed={onCommentLongPressed}
@@ -126,7 +127,8 @@ export const ReplyComment = ({
   navigateToReplyView,
   findCommentAndUpdate,
   onCommentLongPressed = () => {},
-  updateVote
+  updateVote,
+  feedId
 }) => {
   const {isLast, isLastInParent} = useReplyComment();
   return (
@@ -138,6 +140,7 @@ export const ReplyComment = ({
               <TouchableWithoutFeedback onLongPress={() => onCommentLongPressed(item, 1)}>
                 <View key={`c${index}`} style={styles.levelOneCommentWrapper}>
                   <Comment
+                    feedId={feedId}
                     indexFeed={indexFeed}
                     key={`c${index}`}
                     comment={item}

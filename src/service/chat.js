@@ -206,19 +206,19 @@ const moveChatToAnon = async ({
   }
 };
 
-const initChatFromPost = async ({source, id}) => {
+const initChatFromPost = async ({source, id, postId}) => {
   let payload = {source};
   switch (source) {
     case 'post':
       payload = {...payload, postId: id};
       break;
     case 'comment':
-      payload = {...payload, commentId: id};
+      payload = {...payload, commentId: id, postId};
+      console.log('payload', payload);
       break;
     default:
       break;
   }
-
   try {
     const response = await api.post('/chat/init-chat-from-post', payload);
     if (response?.status === 200) {
@@ -232,9 +232,19 @@ const initChatFromPost = async ({source, id}) => {
   }
 };
 
-const getAllowAnonDmStatus = async (postId) => {
+const getAllowAnonDmStatus = async (type, id) => {
+  const generateUrl = () => {
+    switch (type) {
+      case 'post':
+        return `/users/check-allow-dm/?source=post&post_id=${id}`;
+      case 'comment':
+        return `/users/check-allow-dm/?source=comment&comment_id=${id}`;
+      default:
+        return '';
+    }
+  };
   try {
-    const response = await api.get(`/users/check-allow-dm/?source=post&post_id=${postId}`);
+    const response = await api.get(generateUrl());
     if (response?.status === 200) {
       return Promise.resolve(response.data);
     }
@@ -245,19 +255,18 @@ const getAllowAnonDmStatus = async (postId) => {
   }
 };
 
-const initChatFromPostAnon = async ({source, id}) => {
+const initChatFromPostAnon = async ({source, id, feedId}) => {
   let payload = {source};
   switch (source) {
     case 'post':
       payload = {...payload, postId: id};
       break;
     case 'comment':
-      payload = {...payload, commentId: id};
+      payload = {...payload, commentId: id, postId: feedId};
       break;
     default:
       break;
   }
-
   try {
     const response = await anonymousApi.post('/chat/init-chat-from-post', payload);
     if (response?.status === 200) {
