@@ -17,6 +17,19 @@ const useFetchChannelHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook();
   const {signedProfileId, anonProfileId} = useUserAuthHook();
 
+  const helperFollowingSystemMessage = (message) => {
+    if (message?.system_user === signedProfileId) {
+      message.text = message?.own_text;
+    } else {
+      message.text = message?.other_text;
+    }
+    /**
+     * TODO: Handle follow anonymous user system message later, if any
+     * */
+
+    return message;
+  };
+
   const helperChannelPromiseBuilder = async (channel, channelCategory: ChannelCategory) => {
     if (channel?.members?.length === 0) return Promise.reject(Error('no members'));
 
@@ -43,6 +56,9 @@ const useFetchChannelHook = () => {
     } else {
       channel.firstMessage = channel?.messages?.[channel?.messages?.length - 1];
       channel.myUserId = signedProfileId;
+      if (channel.firstMessage?.type === 'system') {
+        channel.firstMessage = helperFollowingSystemMessage(channel.firstMessage);
+      }
     }
 
     const isDeletedMessage = channel.firstMessage?.message_type === MESSAGE_TYPE_DELETED;
@@ -90,6 +106,9 @@ const useFetchChannelHook = () => {
       await Promise.all(
         (channel?.messages || []).map(async (message) => {
           if (message?.type === 'deleted') return;
+          if (message?.type === 'system') {
+            message = helperFollowingSystemMessage(message);
+          }
           const chat = ChatSchema.fromGetAllChannelAPI(channel?.id, message);
           await chat.save(localDb);
         })
