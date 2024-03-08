@@ -3,6 +3,7 @@ import crashlytics from '@react-native-firebase/crashlytics';
 import OneSignalUtil from './onesignal';
 import api from './config';
 import {Monitoring} from '../libraries/monitoring/sentry';
+import anonymousApi from './anonymousConfig';
 
 const getUserTopic = async (query) => {
   try {
@@ -14,9 +15,14 @@ const getUserTopic = async (query) => {
   }
 };
 
-const putUserTopic = async (data) => {
+const putUserTopic = async (data, isIncognito) => {
+  let res;
   try {
-    const res = await api.put('/topics/follow-v2', data);
+    if (isIncognito) {
+      res = await anonymousApi.put('/topics/follow-v2', data);
+    } else {
+      res = await api.put('/topics/follow-v2', data);
+    }
     OneSignalUtil.rebuildAndSubscribeTags();
     return res.data;
   } catch (error) {
