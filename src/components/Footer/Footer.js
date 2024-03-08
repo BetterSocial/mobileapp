@@ -12,7 +12,6 @@ import MemoIc_comment from '../../assets/icons/Ic_comment';
 import MemoIc_share from '../../assets/icons/Ic_share';
 import Memoic_globe from '../../assets/icons/ic_globe';
 import MemoIc_senddm from '../../assets/icons/ic_send_dm';
-import SendDMAnonBlock from '../../assets/icons/images/send-dm-anon-black.svg';
 import SendDMBlack from '../../assets/icons/images/send-dm-black.svg';
 import {Context} from '../../context';
 import useDMMessage from '../../hooks/core/chat/useDMMessage';

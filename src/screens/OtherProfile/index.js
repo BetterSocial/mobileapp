@@ -312,8 +312,6 @@ const OtherProfile = () => {
       return <React.Fragment>{__renderFollowingButton()}</React.Fragment>;
     };
 
-    console.log('isBlocked', isBlocked, 'isBlocking', isBlocking);
-
     if (isBlocked) return <></>;
     return (
       <>
