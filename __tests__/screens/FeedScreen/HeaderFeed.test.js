@@ -18,10 +18,6 @@ jest.mock('@react-navigation/native', () => ({
   })
 }));
 
-jest.mock('@react-native-clipboard/clipboard', () => ({
-  setString: jest.fn()
-}));
-
 describe('Header feed should run correctly', () => {
   afterEach(cleanup);
 
