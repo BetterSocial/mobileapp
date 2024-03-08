@@ -11,9 +11,9 @@ import ContainerComment, {
   isEqual,
   styles
 } from '../../../src/components/Comments/ContainerComment';
+import {COLORS} from '../../../src/utils/theme';
 import {Context} from '../../../src/context/Store';
 import {feedsState} from '../../../src/context/reducers/FeedReducer';
-import {COLORS} from '../../../src/utils/theme';
 
 jest.mock('react-native/Libraries/Pressability/usePressability');
 jest.mock('react-native/Libraries/Components/Pressable/Pressable');
@@ -138,7 +138,8 @@ describe('ContainerComment should run correctly', () => {
     const findCommentAndUpdate = jest.fn();
 
     const contextValue = {
-      feeds: [feedsState, () => jest.fn()]
+      feeds: [feedsState, () => jest.fn()],
+      profile: [{}, jest.fn()]
     };
 
     const {toJSON} = render(
@@ -164,7 +165,8 @@ describe('ContainerComment should run correctly', () => {
     const findCommentAndUpdate = jest.fn();
 
     const contextValue = {
-      feeds: [feedsState, () => jest.fn()]
+      feeds: [feedsState, () => jest.fn()],
+      profile: [{}, jest.fn()]
     };
 
     const {getByTestId} = render(
@@ -218,7 +220,8 @@ describe('ContainerComment should run correctly', () => {
     const findCommentAndUpdate = jest.fn();
 
     const contextValue = {
-      feeds: [feedsState, () => jest.fn()]
+      feeds: [feedsState, () => jest.fn()],
+      profile: [{}, jest.fn()]
     };
 
     const {getAllByTestId} = render(
@@ -245,14 +248,22 @@ describe('ContainerComment should run correctly', () => {
     const navigateToReplyView = jest.fn();
     const indexFeed = 0;
     const findCommentAndUpdate = jest.fn();
+
+    const contextValue = {
+      feeds: [feedsState, () => jest.fn()],
+      profile: [{}, jest.fn()]
+    };
+
     const {toJSON} = render(
-      <ReplyComment
-        countComment={comments2[0].children_counts.comment}
-        indexFeed={indexFeed}
-        findCommentAndUpdate={findCommentAndUpdate}
-        navigateToReplyView={navigateToReplyView}
-        data={comments2[0].latest_children.comment}
-      />
+      <Context.Provider value={contextValue}>
+        <ReplyComment
+          countComment={comments2[0].children_counts.comment}
+          indexFeed={indexFeed}
+          findCommentAndUpdate={findCommentAndUpdate}
+          navigateToReplyView={navigateToReplyView}
+          data={comments2[0].latest_children.comment}
+        />
+      </Context.Provider>
     );
     expect(toJSON).toMatchSnapshot();
   });
@@ -261,14 +272,22 @@ describe('ContainerComment should run correctly', () => {
     const navigateToReplyView = jest.fn();
     const indexFeed = 0;
     const findCommentAndUpdate = jest.fn();
+
+    const contextValue = {
+      feeds: [feedsState, () => jest.fn()],
+      profile: [{}, jest.fn()]
+    };
+
     const {getByTestId} = render(
-      <ReplyComment
-        countComment={comments2[0].children_counts.comment}
-        indexFeed={indexFeed}
-        findCommentAndUpdate={findCommentAndUpdate}
-        navigateToReplyView={navigateToReplyView}
-        data={comments2[0].latest_children.comment}
-      />
+      <Context.Provider value={contextValue}>
+        <ReplyComment
+          countComment={comments2[0].children_counts.comment}
+          indexFeed={indexFeed}
+          findCommentAndUpdate={findCommentAndUpdate}
+          navigateToReplyView={navigateToReplyView}
+          data={comments2[0].latest_children.comment}
+        />
+      </Context.Provider>
     );
     fireEvent.press(getByTestId('memoComment'));
     expect(navigateToReplyView).toHaveBeenCalled();
