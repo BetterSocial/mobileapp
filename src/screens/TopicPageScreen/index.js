@@ -299,6 +299,7 @@ const TopicPageScreen = (props) => {
       feedId: item.id,
       isalreadypolling: item.isalreadypolling,
       from: 'topic',
+      isCaching: true,
       haveSeeMore,
       data: item
     });
@@ -311,6 +312,7 @@ const TopicPageScreen = (props) => {
       from: 'topic',
       haveSeeMore,
       data: item,
+      isCaching: true,
       isKeyboardOpen: true
     });
   };
@@ -395,6 +397,7 @@ const TopicPageScreen = (props) => {
       onPressDownVote={(post) => setDownVote(post, index)}
       loading={loading}
       selfUserId={userId}
+      offset={offset}
     />
   );
 
