@@ -346,6 +346,9 @@ const getChannelListInfo = (channel, selfSignUserId, selfAnonUserId) => {
   if (channel?.type === 'topics') {
     channelImage = channel?.channel_image;
     channelName = channel?.name;
+    if (!channelName || channelName === '') {
+      channelName = removePrefixTopic(channel?.id);
+    }
   }
 
   if (channel?.type === 'group') {
