@@ -4,6 +4,7 @@ import {fireEvent, render} from '@testing-library/react-native';
 import * as UserUtil from '../../../src/utils/users';
 import * as serviceVote from '../../../src/service/vote';
 import Comment, {isEqual} from '../../../src/components/Comments/Comment';
+import {Context} from '../../../src/context';
 
 jest.mock('react-native/Libraries/Pressability/usePressability');
 jest.mock('react-native/Libraries/Components/Pressable/Pressable');
@@ -86,17 +87,24 @@ describe('Comment test should run correctly', () => {
     const findComment = jest.fn();
     const updateVote = jest.fn();
     const time = '2023-01-09T14:13:31.890300Z';
+
+    const contextValue = {
+      profile: [{}, jest.fn()]
+    };
+
     const {toJSON} = render(
-      <Comment
-        user={user}
-        comment={comment}
-        photo={photo}
-        level={level}
-        onPress={onPress}
-        findCommentAndUpdate={findComment}
-        updateVote={updateVote}
-        time={time}
-      />
+      <Context.Provider value={contextValue}>
+        <Comment
+          user={user}
+          comment={comment}
+          photo={photo}
+          level={level}
+          onPress={onPress}
+          findCommentAndUpdate={findComment}
+          updateVote={updateVote}
+          time={time}
+        />
+      </Context.Provider>
     );
     expect(toJSON).toMatchSnapshot();
   });
@@ -106,31 +114,39 @@ describe('Comment test should run correctly', () => {
     const findComment = jest.fn();
     const updateVote = jest.fn();
     const time = '2023-01-09T14:13:31.890300Z';
+
+    const contextValue = {
+      profile: [{}, jest.fn()]
+    };
     const {getByTestId} = render(
-      <Comment
-        user={user}
-        comment={comment}
-        photo={photo}
-        level={level}
-        onPress={onPress}
-        findCommentAndUpdate={findComment}
-        updateVote={updateVote}
-        time={time}
-      />
+      <Context.Provider value={contextValue}>
+        <Comment
+          user={user}
+          comment={comment}
+          photo={photo}
+          level={level}
+          onPress={onPress}
+          findCommentAndUpdate={findComment}
+          updateVote={updateVote}
+          time={time}
+        />
+      </Context.Provider>
     );
     fireEvent.press(getByTestId('textPress'));
     expect(onPress).toHaveBeenCalled();
     const {getByTestId: getByTestIdLevel2} = render(
-      <Comment
-        user={user}
-        comment={comment}
-        photo={photo}
-        level={2}
-        onPress={onPress}
-        findCommentAndUpdate={findComment}
-        updateVote={updateVote}
-        time={time}
-      />
+      <Context.Provider value={contextValue}>
+        <Comment
+          user={user}
+          comment={comment}
+          photo={photo}
+          level={2}
+          onPress={onPress}
+          findCommentAndUpdate={findComment}
+          updateVote={updateVote}
+          time={time}
+        />
+      </Context.Provider>
     );
     fireEvent.press(getByTestIdLevel2('textPress'));
     expect(onPress).toHaveBeenCalled();
@@ -142,17 +158,23 @@ describe('Comment test should run correctly', () => {
     const updateVote = jest.fn();
     const time = '2023-01-09T14:13:31.890300Z';
     const spyGeUserId = jest.spyOn(UserUtil, 'getUserId');
+
+    const contextValue = {
+      profile: [{}, jest.fn()]
+    };
     const {getByTestId} = render(
-      <Comment
-        user={user}
-        comment={comment}
-        photo={photo}
-        level={level}
-        onPress={onPress}
-        findCommentAndUpdate={findComment}
-        updateVote={updateVote}
-        time={time}
-      />
+      <Context.Provider value={contextValue}>
+        <Comment
+          user={user}
+          comment={comment}
+          photo={photo}
+          level={level}
+          onPress={onPress}
+          findCommentAndUpdate={findComment}
+          updateVote={updateVote}
+          time={time}
+        />
+      </Context.Provider>
     );
     fireEvent.press(getByTestId('openProfile'));
     expect(spyGeUserId).toHaveBeenCalled();
@@ -163,31 +185,39 @@ describe('Comment test should run correctly', () => {
     const findComment = jest.fn();
     const updateVote = jest.fn();
     const time = '2023-01-09T14:13:31.890300Z';
+
+    const contextValue = {
+      profile: [{}, jest.fn()]
+    };
     const {getByTestId} = render(
-      <Comment
-        user={user}
-        comment={comment}
-        photo={photo}
-        level={level}
-        onPress={onPress}
-        findCommentAndUpdate={findComment}
-        updateVote={updateVote}
-        time={time}
-      />
+      <Context.Provider value={contextValue}>
+        <Comment
+          user={user}
+          comment={comment}
+          photo={photo}
+          level={level}
+          onPress={onPress}
+          findCommentAndUpdate={findComment}
+          updateVote={updateVote}
+          time={time}
+        />
+      </Context.Provider>
     );
     fireEvent.press(getByTestId('textPress'));
     expect(onPress).toHaveBeenCalled();
     const {getByTestId: getByTestIdLevel2} = render(
-      <Comment
-        user={user}
-        comment={comment}
-        photo={photo}
-        level={2}
-        onPress={onPress}
-        findCommentAndUpdate={findComment}
-        updateVote={updateVote}
-        time={time}
-      />
+      <Context.Provider value={contextValue}>
+        <Comment
+          user={user}
+          comment={comment}
+          photo={photo}
+          level={2}
+          onPress={onPress}
+          findCommentAndUpdate={findComment}
+          updateVote={updateVote}
+          time={time}
+        />
+      </Context.Provider>
     );
     fireEvent.press(getByTestIdLevel2('textPress'));
     expect(onPress).toHaveBeenCalled();
@@ -201,17 +231,23 @@ describe('Comment test should run correctly', () => {
     const updateVote = jest.fn();
     const time = '2023-01-09T14:13:31.890300Z';
     const serviceIvoteMock = jest.spyOn(serviceVote, 'iVoteComment');
+
+    const contextValue = {
+      profile: [{}, jest.fn()]
+    };
     const {getByTestId} = render(
-      <Comment
-        user={user}
-        comment={comment}
-        photo={photo}
-        level={level}
-        onPress={onPress}
-        findCommentAndUpdate={findComment}
-        updateVote={updateVote}
-        time={time}
-      />
+      <Context.Provider value={contextValue}>
+        <Comment
+          user={user}
+          comment={comment}
+          photo={photo}
+          level={level}
+          onPress={onPress}
+          findCommentAndUpdate={findComment}
+          updateVote={updateVote}
+          time={time}
+        />
+      </Context.Provider>
     );
     fireEvent.press(getByTestId('upvoteBtn'));
     expect(setState).toHaveBeenCalled();
