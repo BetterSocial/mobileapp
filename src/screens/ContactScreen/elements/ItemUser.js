@@ -1,13 +1,15 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import {Animated, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 
-import MemoIc_Checklist from '../../../assets/icons/Ic_Checklist';
+import IconChecklist from '../../../assets/icons/Ic_Checklist';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
 import {COLORS} from '../../../utils/theme';
 
-const ItemUser = ({photo, username, followed, onPress, userid}) => {
+const ItemUser = ({photo, username, followed, onPress, userid, isAnon}) => {
   const [isSelect, setIsSelect] = React.useState(false);
   const followIconFadeAnimation = React.useRef(new Animated.Value(0)).current;
+  const anonColorCondition = isAnon ? COLORS.anon_primary_15 : COLORS.signed_primary_15;
 
   React.useEffect(() => {
     if (followed.includes(userid)) {
@@ -34,7 +36,7 @@ const ItemUser = ({photo, username, followed, onPress, userid}) => {
         style={[
           styles.containerCard,
           {
-            backgroundColor: isSelect ? COLORS.holytosca15percent : COLORS.white
+            backgroundColor: isSelect ? anonColorCondition : COLORS.white
           }
         ]}>
         <View style={styles.cardLeft}>
@@ -50,8 +52,12 @@ const ItemUser = ({photo, username, followed, onPress, userid}) => {
         </View>
         <View style={styles.containerButton}>
           <Pressable style={styles.followAction(32, 32)}>
-            <Animated.View style={{position: 'absolute', opacity: followIconFadeAnimation}}>
-              <MemoIc_Checklist width={32} height={32} />
+            <Animated.View style={{position: 'absolute', top: 4, opacity: followIconFadeAnimation}}>
+              <IconChecklist
+                width={32}
+                height={32}
+                color={isAnon ? COLORS.anon_primary : COLORS.signed_primary}
+              />
             </Animated.View>
           </Pressable>
         </View>
@@ -60,6 +66,14 @@ const ItemUser = ({photo, username, followed, onPress, userid}) => {
   );
 };
 
+ItemUser.propTypes = {
+  photo: PropTypes.string,
+  username: PropTypes.string,
+  followed: PropTypes.any,
+  onPress: PropTypes.func,
+  userid: PropTypes.string,
+  isAnon: PropTypes.bool
+};
 export default ItemUser;
 const styles = StyleSheet.create({
   containerCard: {
@@ -67,7 +81,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
-    height: 72
+    height: 64
   },
   cardLeft: {
     flexDirection: 'row',

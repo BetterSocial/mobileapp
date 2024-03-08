@@ -116,9 +116,9 @@ export const verifyTokenGetstream = async () => {
   return status.data;
 };
 
-export const userPopulate = async () => {
+export const userPopulate = async (isAnon) => {
   try {
-    const resApi = await api.get('/users/populate');
+    const resApi = await api.get(`/users/populate${isAnon ? '?allow_anon_dm=true' : ''}`);
     return resApi.data.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
