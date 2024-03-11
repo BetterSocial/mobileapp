@@ -10,9 +10,9 @@ import MemoIc_arrow_upvote_on from '../../assets/arrow/Ic_upvote_on';
 import MemoIc_block_inactive from '../../assets/block/Ic_block_inactive';
 import MemoIc_comment from '../../assets/icons/Ic_comment';
 import MemoIc_share from '../../assets/icons/Ic_share';
+import {IcDmAnon} from '../../assets/icons/ic_dm_anon';
 import Memoic_globe from '../../assets/icons/ic_globe';
 import MemoIc_senddm from '../../assets/icons/ic_send_dm';
-import SendDMAnonBlock from '../../assets/icons/images/send-dm-anon-black.svg';
 import SendDMBlack from '../../assets/icons/images/send-dm-black.svg';
 import {Context} from '../../context';
 import useDMMessage from '../../hooks/core/chat/useDMMessage';
@@ -22,7 +22,6 @@ import {getAllowAnonDmStatus} from '../../service/chat';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {COLORS, FONTS} from '../../utils/theme';
 import BottomSheetMenu from '../BottomSheet/BottomSheetMenu';
-import {IcDmAnon} from '../../assets/icons/ic_dm_anon';
 
 const Footer = ({
   item,
