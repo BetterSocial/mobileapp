@@ -467,7 +467,7 @@ class ChannelList implements BaseDbSchema {
       description: descriptionSystemMessage || firstMessage?.text || firstMessage?.message || '',
       unreadCount: data?.unreadCount ?? 0,
       channelType,
-      lastUpdatedAt: data?.last_message_at,
+      lastUpdatedAt: data?.last_message_at ?? data?.updated_at,
       lastUpdatedBy: firstMessage?.user?.id,
       createdAt: data?.created_at,
       rawJson: data,

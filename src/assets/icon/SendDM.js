@@ -1,5 +1,6 @@
 import * as React from 'react';
-import Svg, {Path, Defs, ClipPath, Rect} from 'react-native-svg';
+import Svg, {ClipPath, Defs, Path, Rect} from 'react-native-svg';
+
 import {COLORS} from '../../utils/theme';
 
 function SendDM(props) {

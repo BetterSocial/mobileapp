@@ -1,27 +1,27 @@
-import PropTypes from 'prop-types';
 import * as React from 'react';
+import PropTypes from 'prop-types';
+import Toast from 'react-native-simple-toast';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
-import Toast from 'react-native-simple-toast';
+import BlurredLayer from '../../screens/FeedScreen/elements/BlurredLayer';
+import BottomSheetMenu from '../BottomSheet/BottomSheetMenu';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
 import MemoIc_arrow_down_vote_on from '../../assets/arrow/Ic_downvote_on';
 import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
 import MemoIc_arrow_upvote_on from '../../assets/arrow/Ic_upvote_on';
 import MemoIc_block_inactive from '../../assets/block/Ic_block_inactive';
 import MemoIc_comment from '../../assets/icons/Ic_comment';
-import MemoIc_share from '../../assets/icons/Ic_share';
-import {IcDmAnon} from '../../assets/icons/ic_dm_anon';
-import Memoic_globe from '../../assets/icons/ic_globe';
 import MemoIc_senddm from '../../assets/icons/ic_send_dm';
+import MemoIc_share from '../../assets/icons/Ic_share';
+import Memoic_globe from '../../assets/icons/ic_globe';
 import SendDMBlack from '../../assets/icons/images/send-dm-black.svg';
-import {Context} from '../../context';
-import useDMMessage from '../../hooks/core/chat/useDMMessage';
 import useCreateChat from '../../hooks/screen/useCreateChat';
-import BlurredLayer from '../../screens/FeedScreen/elements/BlurredLayer';
-import {getAllowAnonDmStatus} from '../../service/chat';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import useDMMessage from '../../hooks/core/chat/useDMMessage';
 import {COLORS, FONTS} from '../../utils/theme';
-import BottomSheetMenu from '../BottomSheet/BottomSheetMenu';
+import {Context} from '../../context';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {IcDmAnon} from '../../assets/icons/ic_dm_anon';
+import {getAllowAnonDmStatus} from '../../service/chat';
 
 const Footer = ({
   item,

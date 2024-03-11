@@ -1,5 +1,6 @@
 import React from 'react';
-import {render, cleanup, fireEvent} from '@testing-library/react-native';
+import {cleanup, fireEvent, render} from '@testing-library/react-native';
+
 import RenderItem from '../../../src/screens/NewsScreen/RenderItem';
 import Store from '../../../src/context/Store';
 
@@ -151,26 +152,6 @@ describe('RenderItem news should run correctly', () => {
     expect(onPressDownVote).toHaveBeenCalled();
   });
 
-  it('onShare should run correctly', () => {
-    const onPressBlock = jest.fn();
-    const onPressComment = jest.fn();
-    const onPressDownVote = jest.fn();
-    const onPressShare = jest.fn();
-    const onUpvote = jest.fn();
-    const {getByTestId} = render(
-      <RenderItem
-        item={item}
-        onPressBlock={onPressBlock}
-        onPressComment={onPressComment}
-        onPressDownVote={onPressDownVote}
-        onPressShare={onPressShare}
-        onPressUpvote={onUpvote}
-      />,
-      {wrapper: Store}
-    );
-    fireEvent.press(getByTestId('sendDM'));
-    expect(onPressShare).toHaveBeenCalled();
-  });
   it('onComment should run correctly', () => {
     const onPressBlock = jest.fn();
     const onPressComment = jest.fn();

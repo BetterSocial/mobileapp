@@ -1,36 +1,36 @@
+import * as React from 'react';
+import IconEn from 'react-native-vector-icons/Entypo';
+import Toast from 'react-native-simple-toast';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 /* eslint-disable global-require */
 import {useNavigation} from '@react-navigation/native';
-import * as React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import Toast from 'react-native-simple-toast';
-import IconEn from 'react-native-vector-icons/Entypo';
-import {IcDmAnon} from '../../assets/icons/ic_dm_anon';
 
-import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
-import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
-import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
-import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
-import MemoCommentReply from '../../assets/icon/CommentReply';
-import MemoSendDM from '../../assets/icon/SendDM';
-import SendDMBlack from '../../assets/icons/images/send-dm-black.svg';
-import {Context} from '../../context';
-import useDMMessage from '../../hooks/core/chat/useDMMessage';
-import useCreateChat from '../../hooks/screen/useCreateChat';
-import ProfilePicture from '../../screens/ProfileScreen/elements/ProfilePicture';
-import {getAllowAnonDmStatus} from '../../service/chat';
-import {iVoteComment, voteCommentV2} from '../../service/vote';
-import {removeWhiteSpace} from '../../utils/Utils';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
-import {fonts, normalizeFontSize} from '../../utils/fonts';
-import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
-import {COLORS, FONTS} from '../../utils/theme';
-import {calculateTime} from '../../utils/time';
-import {getUserId} from '../../utils/users';
 import BlockComponent from '../BlockComponent';
 import BottomSheetMenu from '../BottomSheet/BottomSheetMenu';
 import ButtonHightlight from '../ButtonHighlight';
 import CommentUserName from '../CommentUsername/CommentUsername';
+import MemoCommentReply from '../../assets/icon/CommentReply';
+import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
+import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
+import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
+import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
+import MemoSendDM from '../../assets/icon/SendDM';
+import ProfilePicture from '../../screens/ProfileScreen/elements/ProfilePicture';
+import SendDMBlack from '../../assets/icons/images/send-dm-black.svg';
+import useCreateChat from '../../hooks/screen/useCreateChat';
+import useDMMessage from '../../hooks/core/chat/useDMMessage';
 import useUpdateComment from './hooks/useUpdateComment';
+import {COLORS, FONTS} from '../../utils/theme';
+import {Context} from '../../context';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {IcDmAnon} from '../../assets/icons/ic_dm_anon';
+import {calculateTime} from '../../utils/time';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
+import {getAllowAnonDmStatus} from '../../service/chat';
+import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
+import {getUserId} from '../../utils/users';
+import {iVoteComment, voteCommentV2} from '../../service/vote';
+import {removeWhiteSpace} from '../../utils/Utils';
 
 const ReplyCommentItem = ({
   user,
@@ -179,42 +179,6 @@ const ReplyCommentItem = ({
     }
   };
 
-  const onPressDM = async () => {
-    try {
-      setLoading({...loading, loadingDm: true});
-      if (!comment?.data?.anon_user_info_color_name) {
-        const channelName = username;
-        const selectedUser = {
-          user: {
-            name: channelName,
-            image: comment?.user?.data?.profile_pic_url || DEFAULT_PROFILE_PIC_PATH
-          }
-        };
-        const members = [comment?.user?.id, profile.myProfile.user_id];
-        await createSignChat(members, selectedUser);
-      } else {
-        await sendMessageDM(comment?.id, 'comment', 'SIGNED', feedId);
-      }
-    } catch (e) {
-      console.warn(e);
-    } finally {
-      refSheet.current.close();
-      setLoading({...loading, loadingDm: false});
-    }
-  };
-
-  const onPressDMAnon = async () => {
-    try {
-      setLoading({...loading, loadingDmAnon: true});
-      await sendMessageDM(comment?.id, 'comment', 'ANONYMOUS', feedId);
-    } catch (e) {
-      console.warn(e);
-    } finally {
-      refSheet.current.close();
-      setLoading({...loading, loadingDmAnon: false});
-    }
-  };
-
   const dataSheet = [
     {
       id: 1,
@@ -247,6 +211,42 @@ const ReplyCommentItem = ({
       }
     }
   ];
+
+  const onPressDM = async () => {
+    try {
+      setLoading({...loading, loadingDm: true});
+      if (!comment?.data?.anon_user_info_color_name) {
+        const channelName = [username, profile?.myProfile?.username].join(',');
+        const selectedUser = {
+          user: {
+            name: channelName,
+            image: comment?.user?.data?.profile_pic_url || DEFAULT_PROFILE_PIC_PATH
+          }
+        };
+        const members = [comment?.user?.id, profile.myProfile.user_id];
+        await createSignChat(members, selectedUser);
+      } else {
+        await sendMessageDM(comment?.id, 'comment', 'SIGNED');
+      }
+    } catch (e) {
+      console.warn(e);
+    } finally {
+      refSheet.current.close();
+      setLoading({...loading, loadingDm: false});
+    }
+  };
+
+  const onPressDMAnon = async () => {
+    try {
+      setLoading({...loading, loadingDmAnon: true});
+      await sendMessageDM(comment?.id, 'comment', 'ANONYMOUS');
+    } catch (e) {
+      console.warn(e);
+    } finally {
+      refSheet.current.close();
+      setLoading({...loading, loadingDmAnon: false});
+    }
+  };
 
   return (
     <TouchableOpacity
@@ -353,6 +353,17 @@ const ReplyCommentItem = ({
               }
             ]}>
             <IconEn name="block" size={15.02} color={COLORS.balance_gray} />
+          </ButtonHightlight>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => refSheet.current.open()}
+          testID="sendDMbtn"
+          activeOpacity={1}>
+          <ButtonHightlight
+            onLongPress={handleLongPress}
+            onPress={() => refSheet.current.open()}
+            style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}>
+            <MemoSendDM />
           </ButtonHightlight>
         </TouchableOpacity>
 

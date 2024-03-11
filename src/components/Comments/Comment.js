@@ -1,36 +1,36 @@
+import * as React from 'react';
+import IconEn from 'react-native-vector-icons/Entypo';
+import Toast from 'react-native-simple-toast';
+import moment from 'moment';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 /* eslint-disable global-require */
 import {useNavigation} from '@react-navigation/native';
-import * as React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import Toast from 'react-native-simple-toast';
-import IconEn from 'react-native-vector-icons/Entypo';
 
-import moment from 'moment';
-import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
-import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
-import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
-import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
-import MemoCommentReply from '../../assets/icon/CommentReply';
-import MemoSendDM from '../../assets/icon/SendDM';
-import {IcDmAnon} from '../../assets/icons/ic_dm_anon';
-import SendDMBlack from '../../assets/icons/images/send-dm-black.svg';
-import {Context} from '../../context';
-import useDMMessage from '../../hooks/core/chat/useDMMessage';
-import useCreateChat from '../../hooks/screen/useCreateChat';
-import ProfilePicture from '../../screens/ProfileScreen/elements/ProfilePicture';
-import {getAllowAnonDmStatus} from '../../service/chat';
-import {removeWhiteSpace} from '../../utils/Utils';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
-import {fonts, normalizeFontSize} from '../../utils/fonts';
-import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
-import {COLORS, FONTS} from '../../utils/theme';
-import {calculateTime} from '../../utils/time';
-import {getUserId} from '../../utils/users';
 import BlockComponent from '../BlockComponent';
 import BottomSheetMenu from '../BottomSheet/BottomSheetMenu';
 import ButtonHightlight from '../ButtonHighlight';
 import CommentUserName from '../CommentUsername/CommentUsername';
+import MemoCommentReply from '../../assets/icon/CommentReply';
+import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
+import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
+import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
+import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
+import MemoSendDM from '../../assets/icon/SendDM';
+import ProfilePicture from '../../screens/ProfileScreen/elements/ProfilePicture';
+import SendDMBlack from '../../assets/icons/images/send-dm-black.svg';
 import useComment from './hooks/useComment';
+import useCreateChat from '../../hooks/screen/useCreateChat';
+import useDMMessage from '../../hooks/core/chat/useDMMessage';
+import {COLORS, FONTS} from '../../utils/theme';
+import {Context} from '../../context';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {IcDmAnon} from '../../assets/icons/ic_dm_anon';
+import {calculateTime} from '../../utils/time';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
+import {getAllowAnonDmStatus} from '../../service/chat';
+import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
+import {getUserId} from '../../utils/users';
+import {removeWhiteSpace} from '../../utils/Utils';
 
 const Comment = ({
   user,
@@ -338,7 +338,7 @@ const Comment = ({
           </ButtonHightlight>
         </TouchableOpacity>
 
-        <Text style={styles.vote(voteStyle())}>{totalVote}</Text>
+        {totalVote !== 0 && <Text style={styles.vote(voteStyle())}>{totalVote}</Text>}
         <TouchableOpacity activeOpacity={1} testID="upvoteBtn">
           <ButtonHightlight
             onLongPress={handleOnLongPress}
