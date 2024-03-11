@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {atom, useRecoilValue, useSetRecoilState} from 'recoil';
+import {atom, useRecoilState} from 'recoil';
 
 import ChannelList from '../../database/schema/ChannelListSchema';
 import ChannelListMemberSchema from '../../database/schema/ChannelListMemberSchema';
@@ -25,8 +25,7 @@ const useResetContext = () => {
   const [, profileDispatch] = React.useContext(Context).profile;
   const {localDb} = useLocalDatabaseHook();
 
-  const setRefreshCount = useSetRecoilState(resetAtom);
-  const refreshCount = useRecoilValue(resetAtom);
+  const [refreshCount, setRefreshCount] = useRecoilState(resetAtom);
 
   const {resetAuth} = useUserAuthHook();
 
