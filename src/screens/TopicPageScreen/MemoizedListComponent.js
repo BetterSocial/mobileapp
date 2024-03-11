@@ -302,5 +302,4 @@ function compare(prevProps, nextProps) {
   return JSON.stringify(prevProps) === JSON.stringify(nextProps);
 }
 
-const MemoizedListComponent = React.memo(RenderListFeed, compare);
-export default MemoizedListComponent;
+export default RenderListFeed;

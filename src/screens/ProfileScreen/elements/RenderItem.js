@@ -26,6 +26,7 @@ import {normalize, normalizeFontSizeByWidth} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
 import WriteComment from '../../../components/Comments/WriteComment';
 import useWriteComment from '../../../components/Comments/hooks/useWriteComment';
+import usePostHook from '../../../hooks/core/post/usePostHook';
 
 const {height} = Dimensions.get('window');
 const tabBarHeight = StatusBar.currentHeight;
@@ -83,6 +84,7 @@ const Item = ({
   const navigation = useNavigation();
   const [profile] = React.useContext(Context).profile;
   const {handleUserName} = useWriteComment();
+  const {followUnfollow} = usePostHook();
 
   React.useEffect(() => {
     const initial = () => {
@@ -153,6 +155,9 @@ const Item = ({
         height={getHeightHeader()}
         showAnonymousOption={true}
         source={SOURCE_MY_PROFILE}
+        isFollow={item?.is_following_target}
+        onPressFollUnFoll={() => followUnfollow(item)}
+        disabledFollow={true}
       />
 
       {item.post_type === POST_TYPE_LINK && (
@@ -186,7 +191,7 @@ const Item = ({
           item={item}
           totalComment={getCountCommentWithChild(item)}
           totalVote={totalVote}
-          isSelf={true}
+          isSelf={false}
           onPressShare={() =>
             ShareUtils.sharePostInProfile(
               item,
@@ -247,6 +252,7 @@ const Item = ({
             });
           }}
           statusVote={voteStatus}
+          isShowDM
         />
       </View>
       {isReaction ? (
@@ -298,12 +304,7 @@ Item.propTypes = {
   onHeaderOptionClicked: PropTypes.func
 };
 
-function compare(prevProps, nextProps) {
-  return prevProps.item === nextProps.item;
-}
-
-const RenderItem = React.memo(Item, compare);
-export default RenderItem;
+export default Item;
 // export default Item
 
 const styles = StyleSheet.create({
