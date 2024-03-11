@@ -1,11 +1,11 @@
 import React from 'react';
-import {render, cleanup, fireEvent} from '@testing-library/react-native';
 import {View} from 'react-native';
+import {cleanup, fireEvent, render} from '@testing-library/react-native';
 
-import ReplyComment, {styles, ContainerReply} from '../../../src/components/ReplyComment';
+import * as replyFunc from '../../../src/components/ReplyComment/hooks/useReplyComment';
 import Store from '../../../src/context/Store';
 import useReplyComment from '../../../src/components/ReplyComment/hooks/useReplyComment';
-import * as replyFunc from '../../../src/components/ReplyComment/hooks/useReplyComment';
+import ReplyComment, {ContainerReply, styles} from '../../../src/components/ReplyComment';
 import {COLORS} from '../../../src/utils/theme';
 
 jest.mock('react-native/Libraries/Pressability/usePressability');
@@ -72,6 +72,7 @@ describe('Reply comment should run correctly', () => {
   it('should match snapshot', () => {
     const {toJSON} = render(
       <ReplyComment
+        dataFeed={itemProp}
         itemProp={itemProp}
         itemParent={itemParent}
         page={page}
@@ -86,6 +87,7 @@ describe('Reply comment should run correctly', () => {
   it('Back Button should run correctly', async () => {
     const {getByTestId} = render(
       <ReplyComment
+        dataFeed={itemProp}
         itemProp={itemProp}
         itemParent={itemParent}
         page={page}
@@ -119,6 +121,7 @@ describe('Reply comment should run correctly', () => {
   it('createChildComment should be called', () => {
     const {getByTestId} = render(
       <ReplyComment
+        dataFeed={itemProp}
         itemProp={itemProp}
         itemParent={itemParent}
         page={page}
@@ -140,6 +143,7 @@ describe('Reply comment should run correctly', () => {
     }));
     render(
       <ReplyComment
+        dataFeed={itemProp}
         itemProp={itemProp}
         itemParent={itemParent}
         page={page}

@@ -1,13 +1,14 @@
 import {v4 as uuid} from 'uuid';
-import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
-import ChannelListMemberSchema from '../../../database/schema/ChannelListMemberSchema';
+
 import ChannelList from '../../../database/schema/ChannelListSchema';
+import ChannelListMemberSchema from '../../../database/schema/ChannelListMemberSchema';
 import ChatSchema from '../../../database/schema/ChatSchema';
 import UserSchema from '../../../database/schema/UserSchema';
-import {initChatFromPost, initChatFromPostAnon} from '../../../service/chat';
-import {getChannelListInfo} from '../../../utils/string/StringUtils';
-import useUserAuthHook from '../auth/useUserAuthHook';
 import useChatUtilsHook from './useChatUtilsHook';
+import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
+import useUserAuthHook from '../auth/useUserAuthHook';
+import {getChannelListInfo} from '../../../utils/string/StringUtils';
+import {initChatFromPost, initChatFromPostAnon} from '../../../service/chat';
 
 type ChannelCategory = 'SIGNED' | 'ANONYMOUS';
 
