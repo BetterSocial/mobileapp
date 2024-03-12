@@ -706,7 +706,7 @@ const CreatePost = () => {
 
   React.useEffect(() => {
     const followType = params?.followType;
-    if (followType === 'incognito' || followType === undefined) {
+    if (followType === 'incognito') {
       setTypeUser(true);
     } else {
       setTypeUser(false);
