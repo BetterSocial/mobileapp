@@ -25,10 +25,16 @@ const useProfileHook = () => {
     });
   };
 
+  const isMe = (profileId: string | undefined): boolean => {
+    if (!profileId) return false;
+    return profileId === signedProfileId || profileId === anonProfileId;
+  };
+
   return {
     profile: profileContext ? profileContext.myProfile : null,
     signedProfileId,
     anonProfileId,
+    isMe,
     setProfileId,
     reset
   };

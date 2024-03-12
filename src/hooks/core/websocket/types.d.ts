@@ -14,7 +14,10 @@ export type GetstreamMessage = {
   id: string;
   latest_reactions: any[];
   mentioned_users: any[];
+  only_show_to_system_user?: boolean;
+  other_text?: string;
   own_reactions: any[];
+  own_text?: string;
   pin_expires: any;
   pinned: boolean;
   pinned_at: any;
@@ -24,6 +27,7 @@ export type GetstreamMessage = {
   reply_count: number;
   shadowed: boolean;
   silent: boolean;
+  system_user?: string;
   text: string;
   isSystem?: boolean;
   textOwnMessage?: string;

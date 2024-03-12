@@ -32,7 +32,7 @@ import {getChannelListInfo} from '../../utils/string/StringUtils';
 
 const useCoreChatSystemHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook() as UseLocalDatabaseHook;
-  const {anonProfileId, signedProfileId} = useProfileHook();
+  const {anonProfileId, signedProfileId, isMe} = useProfileHook();
   const {getAllSignedChannels, getAllAnonymousChannels} = useFetchChannelHook();
   const {getAllSignedPostNotifications, getAllAnonymousPostNotifications} =
     useFetchPostNotificationHook();
@@ -136,6 +136,12 @@ const useCoreChatSystemHook = () => {
     websocketData: GetstreamWebsocket,
     channelCategory: MyChannelType
   ) => {
+    console.log('websocketData', websocketData);
+    const message = websocketData?.message;
+
+    /**
+     * TODO: LEGACY FOLLOW SYSTEM USER, CHANGE TO NEW SYSTEM
+     */
     const isContainFollowingMessage = websocketData?.message?.textOwnMessage
       ?.toLowerCase()
       ?.includes('you started following');
@@ -159,13 +165,53 @@ const useCoreChatSystemHook = () => {
       );
       const chat = ChatSchema.fromWebsocketObject(websocketData);
       await chat.save(localDb);
-    } else {
+
+      return websocketData;
+    }
+
+    /**
+     * TODO END
+     */
+
+    if (message?.text?.toLowerCase()?.includes('this topic has new')) {
+      return websocketData;
+    }
+
+    const isOnlyShowSystemMessageToSystemUser = message?.only_show_to_system_user;
+    if (isSystemMessage && isOnlyShowSystemMessageToSystemUser && !isMe(message?.system_user)) {
+      return websocketData;
+    }
+
+    const newWebsocketData = {...websocketData};
+
+    if (isSystemMessage && isOnlyShowSystemMessageToSystemUser && isMe(message?.system_user)) {
+      newWebsocketData.message.text = message?.own_text || '';
       const channelList = ChannelList.fromWebsocketObject(
-        websocketData,
+        newWebsocketData,
         channelType[websocketData?.channel_type]
       );
       await channelList.save(localDb);
+      return websocketData;
     }
+
+    if (isSystemMessage) {
+      newWebsocketData.message.text = isMe(message?.system_user)
+        ? message?.own_text || ''
+        : message?.other_text || '';
+
+      const channelList = ChannelList.fromWebsocketObject(
+        newWebsocketData,
+        channelType[websocketData?.channel_type]
+      );
+      await channelList.save(localDb);
+      return websocketData;
+    }
+
+    const channelList = ChannelList.fromWebsocketObject(
+      newWebsocketData,
+      channelType[websocketData?.channel_type]
+    );
+    await channelList.save(localDb);
 
     return websocketData;
   };
