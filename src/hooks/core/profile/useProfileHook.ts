@@ -5,6 +5,10 @@ import profileAtom from '../../../atom/profileAtom';
 import {Context} from '../../../context';
 import {ProfileContext} from '../../../../types/context/profilecontext.types';
 
+/**
+ *
+ * @deprecated Please use useUserAuthHook instead
+ */
 const useProfileHook = () => {
   // TODO: Merge this with useUserAuthHook and delete this hook
   const contextValue = React.useContext(Context);
@@ -25,16 +29,10 @@ const useProfileHook = () => {
     });
   };
 
-  const isMe = (profileId: string | undefined): boolean => {
-    if (!profileId) return false;
-    return profileId === signedProfileId || profileId === anonProfileId;
-  };
-
   return {
     profile: profileContext ? profileContext.myProfile : null,
     signedProfileId,
     anonProfileId,
-    isMe,
     setProfileId,
     reset
   };

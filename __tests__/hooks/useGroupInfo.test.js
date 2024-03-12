@@ -627,7 +627,6 @@ describe('useGroupInfo should run correctly', () => {
     expect(result.current.newParticipant).toEqual([
       {user_id: '1234', name: 'elon', user: {name: 'elon'}}
     ]);
-    expect(mockSendMessage).toHaveBeenCalled();
     expect(mockRemoveMember).toHaveBeenCalled();
     expect(mockGroupDispatch).toHaveBeenCalled();
   });

@@ -15,7 +15,8 @@ import useFetchChannelHook from './chat/useFetchChannelHook';
 import useFetchPostNotificationHook from './chat/useFetchPostNotificationHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import usePostNotificationListenerHook from './getstream/usePostNotificationListenerHook';
-import useProfileHook from './profile/useProfileHook';
+import useSystemMessage from './chat/useSystemMessage';
+import useUserAuthHook from './auth/useUserAuthHook';
 import {ANONYMOUS, SIGNED} from './constant';
 import {
   AnonymousPostNotification,
@@ -32,13 +33,15 @@ import {getChannelListInfo} from '../../utils/string/StringUtils';
 
 const useCoreChatSystemHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook() as UseLocalDatabaseHook;
-  const {anonProfileId, signedProfileId, isMe} = useProfileHook();
+  const {anonProfileId, signedProfileId} = useUserAuthHook();
   const {getAllSignedChannels, getAllAnonymousChannels} = useFetchChannelHook();
   const {getAllSignedPostNotifications, getAllAnonymousPostNotifications} =
     useFetchPostNotificationHook();
   const [migrationStatus] = useRecoilState(migrationDbStatusAtom);
   const initialStartup: any = useRecoilValue(InitialStartupAtom);
   const {params} = useRoute();
+
+  const {saveSystemMessageFromWebsocket} = useSystemMessage();
 
   const isEnteringApp =
     initialStartup?.id !== null && initialStartup?.id !== undefined && initialStartup?.id !== '';
@@ -136,9 +139,6 @@ const useCoreChatSystemHook = () => {
     websocketData: GetstreamWebsocket,
     channelCategory: MyChannelType
   ) => {
-    console.log('websocketData', websocketData);
-    const message = websocketData?.message;
-
     /**
      * TODO: LEGACY FOLLOW SYSTEM USER, CHANGE TO NEW SYSTEM
      */
@@ -168,50 +168,30 @@ const useCoreChatSystemHook = () => {
 
       return websocketData;
     }
-
     /**
      * TODO END
      */
 
-    if (message?.text?.toLowerCase()?.includes('this topic has new')) {
-      return websocketData;
-    }
-
-    const isOnlyShowSystemMessageToSystemUser = message?.only_show_to_system_user;
-    if (isSystemMessage && isOnlyShowSystemMessageToSystemUser && !isMe(message?.system_user)) {
-      return websocketData;
-    }
-
+    /**
+     * Process System Message Websocket
+     */
     const newWebsocketData = {...websocketData};
-
-    if (isSystemMessage && isOnlyShowSystemMessageToSystemUser && isMe(message?.system_user)) {
-      newWebsocketData.message.text = message?.own_text || '';
-      const channelList = ChannelList.fromWebsocketObject(
-        newWebsocketData,
-        channelType[websocketData?.channel_type]
-      );
-      await channelList.save(localDb);
-      return websocketData;
-    }
-
-    if (isSystemMessage) {
-      newWebsocketData.message.text = isMe(message?.system_user)
-        ? message?.own_text || ''
-        : message?.other_text || '';
-
-      const channelList = ChannelList.fromWebsocketObject(
-        newWebsocketData,
-        channelType[websocketData?.channel_type]
-      );
-      await channelList.save(localDb);
-      return websocketData;
-    }
-
-    const channelList = ChannelList.fromWebsocketObject(
-      newWebsocketData,
-      channelType[websocketData?.channel_type]
+    const isSuccess = await saveSystemMessageFromWebsocket(
+      newWebsocketData?.message,
+      async (newMessage) => {
+        newWebsocketData.message = newMessage;
+        const channelList = ChannelList.fromWebsocketObject(
+          newWebsocketData,
+          channelType[websocketData?.channel_type]
+        );
+        await channelList.save(localDb);
+      }
     );
-    await channelList.save(localDb);
+
+    if (isSuccess) return websocketData;
+    /**
+     * Process System Message Websocket (END)
+     */
 
     return websocketData;
   };
