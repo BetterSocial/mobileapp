@@ -9,7 +9,6 @@ import {
 } from '../../../../types/component/ChatList/ChannelImage.types';
 import GroupIcon from '../../../assets/group-icon.png';
 import CommunityIcon from '../../../assets/hashtag.png';
-import {GROUP_INFO} from '../../../hooks/core/constant';
 import {channelImageStyles as styles} from './ChannelImage.style';
 
 const ChannelImage = ({children}) => {
@@ -40,7 +39,7 @@ const Big: React.FC<ChannelImageMainProps> = ({type, image, style}) => {
     );
   }
 
-  if (type === 'COMMUNITY') {
+  if (type === 'TOPIC') {
     return (
       <View
         style={[
@@ -74,7 +73,7 @@ const Big: React.FC<ChannelImageMainProps> = ({type, image, style}) => {
     );
   }
 
-  if (type === GROUP_INFO) {
+  if (type === 'GROUP_INFO') {
     return (
       <View
         style={[
@@ -91,7 +90,16 @@ const Big: React.FC<ChannelImageMainProps> = ({type, image, style}) => {
     );
   }
 
-  return null;
+  return (
+    <View
+      style={[styles.containerImage, styles.containerDefaultImage, styles.containersigned_primary]}>
+      <FastImage
+        source={CommunityIcon}
+        resizeMode={FastImage.resizeMode.contain}
+        style={styles.imageDefaultCommunity}
+      />
+    </View>
+  );
 };
 
 const Small: React.FC<ChannelImageBadgeProps> = ({type}) => {
