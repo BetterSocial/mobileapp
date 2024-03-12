@@ -1,28 +1,28 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import {CommonActions, useNavigation} from '@react-navigation/native';
+import moment from 'moment';
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
-import moment from 'moment';
-import {CommonActions, useNavigation} from '@react-navigation/native';
 import {atom, useRecoilState} from 'recoil';
 
-import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
-import ChannelList from '../../../database/schema/ChannelListSchema';
-import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
+import {BetterSocialChannelType} from '../../../../types/database/schema/ChannelList.types';
+import {PostNotificationChannelList} from '../../../../types/database/schema/PostNotificationChannelList.types';
 import UseChatUtilsHook, {
   ContactScreenPayload
 } from '../../../../types/hooks/screens/useChatUtilsHook.types';
-import UserSchema from '../../../database/schema/UserSchema';
-import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
-import useUserAuthHook from '../auth/useUserAuthHook';
-import {ANON_PM, GROUP_INFO} from '../constant';
-import {BetterSocialChannelType} from '../../../../types/database/schema/ChannelList.types';
 import {ChannelTypeEnum} from '../../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 import {Context} from '../../../context';
-import {PostNotificationChannelList} from '../../../../types/database/schema/PostNotificationChannelList.types';
+import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
+import ChannelList from '../../../database/schema/ChannelListSchema';
+import UserSchema from '../../../database/schema/UserSchema';
+import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
+import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
 import {
   convertTopicNameToTopicPageScreenParam,
   getChannelListInfo
 } from '../../../utils/string/StringUtils';
+import useUserAuthHook from '../auth/useUserAuthHook';
+import {ANON_PM, GROUP_INFO} from '../constant';
 
 const chatAtom = atom({
   key: 'chatAtom',
@@ -37,7 +37,7 @@ const selectedChannelKeyTab = atom({
   default: 0
 });
 
-function useChatUtilsHook(): UseChatUtilsHook {
+function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
   const [chat, setChat] = useRecoilState(chatAtom);
   const {selectedChannel, isLoadingFetchingChannelDetail} = chat;
 
@@ -181,7 +181,6 @@ function useChatUtilsHook(): UseChatUtilsHook {
   const helperGetChannelDetail = async (channel: ChannelList) => {
     if (!localDb) return;
 
-    console.log('should fetch channel detail');
     try {
       let response;
       if (channel?.channelType === 'ANON_PM') {
@@ -256,11 +255,19 @@ function useChatUtilsHook(): UseChatUtilsHook {
   };
 
   const goBackFromChatScreen = async () => {
-    navigation.goBack();
-    setChat((prevChat) => ({
-      ...prevChat,
-      selectedChannel: null
-    }));
+    if (type === 'ANONYMOUS') {
+      navigation.navigate('AnonymousChannelList');
+    }
+    if (type === 'SIGNED') {
+      navigation.navigate('SignedChannelList');
+    }
+    // navigation.goBack();
+    setChat((prevChat) => {
+      return {
+        ...prevChat,
+        selectedChannel: null
+      };
+    });
   };
 
   const goToContactScreen = ({from}: ContactScreenPayload) => {
