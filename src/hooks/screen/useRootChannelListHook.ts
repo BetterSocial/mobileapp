@@ -10,6 +10,7 @@ import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import {
   PERMISSION_STATUS_ACCEPTED,
   PERMISSION_STATUS_BLOCKED,
+  PERMISSION_STATUS_NOT_DEFINED,
   PERMISSION_STATUS_PENDING
 } from '../../utils/constants';
 import {fcmTokenService} from '../../service/users';
@@ -100,6 +101,7 @@ when friends send you messages.`,
             }
             break;
           case PERMISSION_STATUS_PENDING:
+          case PERMISSION_STATUS_NOT_DEFINED:
             StorageUtils.lastPromptNotification.set(currentTime.toString());
             showAlert(() => requestPermission());
             break;

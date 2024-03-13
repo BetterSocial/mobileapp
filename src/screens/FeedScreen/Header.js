@@ -129,16 +129,12 @@ const _renderAnonimity = ({
   isShowDelete = false,
   isSelf = false,
   hideThreeDot,
-  actor,
-  source,
-  item
+  item,
+  disabledFollow
 }) => {
   const navigation = useNavigation();
   const refSheet = React.useRef();
-  const {username} = useFeedHeader({
-    actor,
-    source
-  });
+
   const dataSheet = [
     {
       id: 1,
@@ -193,14 +189,19 @@ const _renderAnonimity = ({
               />
             </View>
 
-            <View style={[styles.containerFeedProfile]}>
+            <View
+              style={[
+                styles.containerFeedProfile,
+                {
+                  marginTop: -10
+                }
+              ]}>
               <View
                 style={[
                   {
                     alignItems: 'center',
                     flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    paddingRight: 16
+                    justifyContent: 'space-between'
                   }
                 ]}>
                 <View
@@ -209,16 +210,18 @@ const _renderAnonimity = ({
                   }}>
                   <AnonymousUsername version={version} anonUserInfo={anonUserInfo} isFeed={true} />
 
-                  {!isSelf && (
-                    <React.Fragment>
-                      <View style={styles.point} />
-                      <TouchableOpacity onPress={() => onPressFollUnFoll(isFollow)}>
-                        <Text style={isFollow ? styles.textFollowing : styles.textFollow}>
-                          {isFollow ? 'Following' : 'Follow'}
-                        </Text>
-                      </TouchableOpacity>
-                    </React.Fragment>
-                  )}
+                  {disabledFollow
+                    ? null
+                    : !isSelf && (
+                        <React.Fragment>
+                          <View style={styles.point} />
+                          <TouchableOpacity onPress={() => onPressFollUnFoll(isFollow)}>
+                            <Text style={isFollow ? styles.textFollowing : styles.textFollow}>
+                              {isFollow ? 'Following' : 'Follow'}
+                            </Text>
+                          </TouchableOpacity>
+                        </React.Fragment>
+                      )}
                 </View>
                 {hideThreeDot ? null : (
                   <GlobalButton
@@ -240,7 +243,13 @@ const _renderAnonimity = ({
                   </View>
                 </GlobalButton>
               )}
-              <View style={styles.containerFeedText}>
+              <View
+                style={[
+                  styles.containerFeedText,
+                  {
+                    marginTop: -2
+                  }
+                ]}>
                 <Text style={styles.feedDate}>{calculateTime(time)}</Text>
                 <View style={styles.point} />
                 {privacy.toLowerCase() === PRIVACY_PUBLIC ? (
@@ -286,7 +295,8 @@ const _renderProfileNormal = ({
   onDeletePost = () => {},
   isShowDelete = false,
   isSelf = false,
-  item
+  item,
+  disabledFollow
 }) => {
   const refSheet = React.useRef();
   const dataSheet = [
@@ -367,16 +377,18 @@ const _renderProfileNormal = ({
                     }}>
                     {username || StringConstant.feedDeletedUserName}
                   </Text>
-                  {!isSelf && (
-                    <React.Fragment>
-                      <View style={styles.point} />
-                      <TouchableOpacity onPress={() => onPressFollUnFoll(isFollow)}>
-                        <Text style={isFollow ? styles.textFollowing : styles.textFollow}>
-                          {isFollow ? 'Following' : 'Follow'}
-                        </Text>
-                      </TouchableOpacity>
-                    </React.Fragment>
-                  )}
+                  {disabledFollow
+                    ? null
+                    : !isSelf && (
+                        <React.Fragment>
+                          <View style={styles.point} />
+                          <TouchableOpacity onPress={() => onPressFollUnFoll(isFollow)}>
+                            <Text style={isFollow ? styles.textFollowing : styles.textFollow}>
+                              {isFollow ? 'Following' : 'Follow'}
+                            </Text>
+                          </TouchableOpacity>
+                        </React.Fragment>
+                      )}
                 </View>
 
                 <GlobalButton
@@ -439,7 +451,8 @@ const Header = ({
   isSelf = false,
   item,
   onHeaderOptionClicked,
-  hideThreeDot
+  hideThreeDot,
+  disabledFollow
 }) => {
   const {
     anonimity,
@@ -485,7 +498,8 @@ const Header = ({
       isSelf,
       onHeaderOptionClicked,
       actor,
-      source
+      source,
+      disabledFollow
     });
   }
   return _renderProfileNormal({
@@ -508,7 +522,8 @@ const Header = ({
     onPressFollUnFoll,
     onDeletePost,
     isShowDelete,
-    isSelf
+    isSelf,
+    disabledFollow
   });
 };
 
@@ -624,7 +639,7 @@ const styles = StyleSheet.create({
     paddingLeft: 0
   },
   imageAnonymContainer: {
-    padding: 10
+    paddingHorizontal: 10
   },
   avatarImage: {height: 48, width: 48, borderRadius: 24},
   postDetail: (isPostDetail) => ({

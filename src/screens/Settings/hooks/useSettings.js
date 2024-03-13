@@ -46,7 +46,7 @@ const useSettings = () => {
       setFeedChatData([]);
       client?.disconnectUser();
     } catch (e) {
-      console.log('error', e);
+      console.log('error clearing data', e);
     }
   };
 
