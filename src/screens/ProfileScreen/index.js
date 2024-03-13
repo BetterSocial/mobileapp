@@ -116,7 +116,7 @@ const Header = (props) => {
         headerHeightRef.current = headerHeightLayout;
       }}>
       <View style={styles.content}>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row', marginBottom: 10}}>
           <ProfilePicture
             onImageContainerClick={changeImage}
             profilePicPath={dataMain.profile_pic_path}
