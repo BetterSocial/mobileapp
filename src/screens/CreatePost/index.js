@@ -733,7 +733,6 @@ const CreatePost = () => {
                 isNotFromHomeTab: true
               });
             }}
-            isToggleDisabled={params.followType === 'incognito'}
           />
           <Gap style={styles.height(8)} />
           <CreatePostInput
