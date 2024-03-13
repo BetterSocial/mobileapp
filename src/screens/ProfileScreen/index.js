@@ -447,8 +447,8 @@ const ProfileScreen = ({route}) => {
   const onViewProfilePicture = () => {
     closeImageBs();
     navigation.push('ImageViewer', {
-      title: dataMain.username,
-      images: [{url: dataMain.profile_pic_path}]
+      title: profile?.myProfile?.username,
+      images: [{url: profile?.myProfile?.profile_pic_path}]
     });
   };
 
