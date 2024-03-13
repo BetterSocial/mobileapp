@@ -305,7 +305,14 @@ const ChatInfoScreen = () => {
                 <View style={styles.btnAdd}>
                   <TouchableOpacity
                     testID="addParticipant"
-                    onPress={() => navigation.push('ContactScreen', {from: SIGNED})}>
+                    onPress={() =>
+                      navigation.push('ContactScreen', {
+                        from: SIGNED,
+                        isAddParticipant: true,
+                        channelId: channelInfo?.id,
+                        existParticipants: channelInfo?.memberUsers?.map((item) => item?.username)
+                      })
+                    }>
                     <Text style={styles.btnAddText}>+ Add Participants</Text>
                   </TouchableOpacity>
                 </View>
