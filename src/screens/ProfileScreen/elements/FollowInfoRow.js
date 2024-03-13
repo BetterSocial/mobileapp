@@ -50,7 +50,8 @@ const FollowInfoRow = ({
           width: 2,
           backgroundColor: COLORS.black,
           borderRadius: 999,
-          marginHorizontal: 8
+          marginHorizontal: 8,
+          marginTop: 1.9
         }}
       />
       <GlobalButton buttonStyle={{paddingHorizontal: 0}} onPress={onFollowingContainerClicked}>
