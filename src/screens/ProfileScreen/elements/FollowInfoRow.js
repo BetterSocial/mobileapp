@@ -50,7 +50,8 @@ const FollowInfoRow = ({
           width: 2,
           backgroundColor: COLORS.black,
           borderRadius: 999,
-          marginHorizontal: 8
+          marginHorizontal: 8,
+          marginTop: 1.9
         }}
       />
       <GlobalButton buttonStyle={{paddingHorizontal: 0}} onPress={onFollowingContainerClicked}>
@@ -74,8 +75,7 @@ let styles = StyleSheet.create({
   },
   textFollow: {
     fontSize: 14,
-    color: COLORS.black,
-    paddingRight: 4
+    color: COLORS.black
   },
   wrapFollower: {
     flexDirection: 'row',
