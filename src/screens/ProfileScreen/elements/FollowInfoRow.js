@@ -75,8 +75,7 @@ let styles = StyleSheet.create({
   },
   textFollow: {
     fontSize: 14,
-    color: COLORS.black,
-    paddingRight: 4
+    color: COLORS.black
   },
   wrapFollower: {
     flexDirection: 'row',
