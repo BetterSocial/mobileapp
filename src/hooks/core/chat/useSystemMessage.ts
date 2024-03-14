@@ -120,7 +120,12 @@ const useSystemMessage = () => {
         continue;
       }
 
-      if (checkFirstMessage?.text?.toLocaleLowerCase()?.includes('you joinedt this community')) {
+      if (checkFirstMessage?.text?.toLocaleLowerCase()?.includes('you joined this community')) {
+        if (isMe(checkFirstMessage?.system_user)) {
+          firstMessage = checkFirstMessage;
+          break;
+        }
+
         sortedMessages?.shift();
         continue;
       }
@@ -130,6 +135,19 @@ const useSystemMessage = () => {
         __isMySystemMessage(sortedMessages[0])
       ) {
         firstMessage = checkSystemMessageOnlyForSystemUser(sortedMessages[0]);
+        break;
+      }
+
+      if (
+        __isMessageOnlyForSystemUser(sortedMessages[0]) &&
+        !__isMySystemMessage(sortedMessages[0])
+      ) {
+        sortedMessages.shift();
+        continue;
+      }
+
+      if (__isMessageForOtherUser(sortedMessages[0])) {
+        firstMessage = checkSystemMessageOnlyForOtherSystemUser(sortedMessages[0]);
         break;
       }
 
