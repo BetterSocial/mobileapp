@@ -80,7 +80,7 @@ const PostPageDetailIdComponent = (props) => {
   const {getTotalReaction, getHeightHeader} = useFeed();
   const [commentContext, dispatchComment] = React.useContext(Context).comments;
   const {comments} = commentContext;
-  const [loadingGetComment, setLoadingGetComment] = React.useState(true);
+  const [loadingGetComment, setLoadingGetComment] = React.useState(false);
   const {updateVoteLatestChildrenLevel3, updateVoteChildrenLevel1, calculatePaddingBtm} =
     usePostDetail();
   const {updateFeedContext} = usePostContextHook(contextSource);
@@ -106,6 +106,7 @@ const PostPageDetailIdComponent = (props) => {
   React.useEffect(() => {
     getComment();
   }, []);
+
   const handleVote = (data = {}) => {
     const upvote = data.upvotes ? data.upvotes : 0;
     const downvotes = data.downvotes ? data.downvotes : 0;
@@ -568,7 +569,7 @@ const PostPageDetailIdComponent = (props) => {
   };
 
   const handleUpdateVote = () => {
-    getComment();
+    getComment(false, true);
   };
 
   const {followUnfollow} = usePostHook();
