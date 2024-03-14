@@ -104,7 +104,10 @@ export const setUnFollow = async (data) =>
 export const followUser = async (data) =>
   new Promise((resolve, reject) => {
     api
-      .post('/profiles/follow-user-v3', data)
+      .post('/profiles/follow-user-v3', {
+        ...data,
+        with_system_message: true
+      })
       .then((res) => {
         resolve(res.data);
       })
@@ -140,7 +143,10 @@ export const unfollowUserAnon = async (data) =>
 export const setFollow = async (data) => {
   return new Promise((resolve, reject) => {
     api
-      .post('/profiles/follow-user-v3', data)
+      .post('/profiles/follow-user-v3', {
+        ...data,
+        with_system_message: true
+      })
       .then((res) => {
         resolve(res.data);
       })
