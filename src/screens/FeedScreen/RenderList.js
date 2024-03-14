@@ -250,7 +250,7 @@ const RenderListFeed = (props) => {
                 time={item.latest_reactions.comment[0].created_at}
                 totalComment={getTotalReaction(item) - 1}
                 item={item.latest_reactions.comment[0]}
-                onPress={onPress}
+                onPress={() => onPressComment(isHaveSeeMore)}
               />
             </View>
           ) : (
