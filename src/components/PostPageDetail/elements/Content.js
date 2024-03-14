@@ -10,13 +10,14 @@ import ImageLayouter from '../../../screens/FeedScreen/elements/ImageLayouter';
 import TopicsChip from '../../TopicsChip/TopicsChip';
 import dimen from '../../../utils/dimen';
 import useContentFeed from '../../../screens/FeedScreen/hooks/useContentFeed';
-import {COLORS} from '../../../utils/theme';
+import {COLORS, hexToRgb} from '../../../utils/theme';
 import {POST_TYPE_LINK, POST_TYPE_POLL, POST_TYPE_STANDARD} from '../../../utils/constants';
 import {fonts, normalizeFontSize, normalizeFontSizeByWidth} from '../../../utils/fonts';
 import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
 import {sanitizeUrl} from '../../../utils/string/StringUtils';
 import {smartRender} from '../../../utils/Utils';
 import useCalculationContent from '../../../screens/FeedScreen/hooks/useCalculationContent';
+import {listFeedColor} from '../../../configs/FeedColor';
 
 const Content = ({
   message,
@@ -84,12 +85,26 @@ const Content = ({
     }
   }, [containerHeight, textHeight]);
 
+  const randomIndex = React.useMemo(() => {
+    return Math.floor(Math.random() * listFeedColor.length);
+  }, []);
+
   const isShortText = () => {
     return images_url.length <= 0 && item.post_type === POST_TYPE_STANDARD && !haveSeeMore;
   };
   const handleContainerPdp = () => {
     if (isShortText()) {
-      return styles.shortText(parentData?.bg);
+      const backgroundData = (() => {
+        if (parentData?.bg) {
+          return parentData.bg;
+        }
+        if (item.anon_user_info_color_code) {
+          return hexToRgb(item.anon_user_info_color_code, 0.25);
+        }
+        const newColor = listFeedColor[randomIndex];
+        return hexToRgb(newColor.bg, 0.25);
+      })();
+      return styles.shortText(backgroundData);
     }
     return {};
   };
