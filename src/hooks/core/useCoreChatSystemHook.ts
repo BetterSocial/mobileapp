@@ -184,7 +184,8 @@ const useCoreChatSystemHook = () => {
           newWebsocketData,
           channelType[websocketData?.channel_type]
         );
-        await channelList.save(localDb);
+        const chat = ChatSchema.fromWebsocketObject(newWebsocketData);
+        await Promise.all([chat.save(localDb), channelList.save(localDb)]);
       }
     );
 

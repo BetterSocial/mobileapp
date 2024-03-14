@@ -15,6 +15,10 @@ const useSystemMessage = () => {
     return message?.only_show_to_system_user === true;
   }
 
+  function __isMessageForOtherUser(message: GetstreamMessage): boolean {
+    return message?.other_system_user === 'true' && isMe(message?.other_system_user);
+  }
+
   function __isMySystemMessage(message: GetstreamMessage): boolean {
     return isMe(message?.system_user);
   }
@@ -27,15 +31,24 @@ const useSystemMessage = () => {
     return message;
   }
 
+  function checkSystemMessageOnlyForOtherSystemUser(message: GetstreamMessage): GetstreamMessage {
+    if (__isSystemMessage(message) && __isMessageForOtherUser(message)) {
+      message.text = message?.other_text || '';
+    }
+
+    return message;
+  }
+
   function checkSystemMessage(message: GetstreamMessage): GetstreamMessage {
     if (__isSystemMessage(message)) {
       if (isMe(message?.system_user)) {
         message.text = message?.own_text || '';
       } else {
-        message.text = message?.other_text || '';
+        message.text = message?.text || '';
       }
     }
 
+    console.log('message', message);
     return message;
   }
 
@@ -44,14 +57,14 @@ const useSystemMessage = () => {
     saveSystemMessageCallback: SaveSystemMessageCallback
   ): Promise<boolean> {
     // If the callback is not provided, do nothing
+    console.log('checkpoint1');
     if (!saveSystemMessageCallback) return false;
 
+    console.log('checkpoint2');
     // If the message is a follow topic message, do nothing
     if (message?.text?.toLocaleLowerCase()?.includes('this topic has new')) return false;
 
-    // If the message is only for system user and I am not the system user, do nothing
-    if (__isMessageOnlyForSystemUser(message) && !__isMySystemMessage(message)) return false;
-
+    console.log('checkpoint3');
     // If the message is a system message, save the message
     if (__isMessageOnlyForSystemUser(message) && __isMySystemMessage(message)) {
       const newMessage = checkSystemMessageOnlyForSystemUser(message);
@@ -59,6 +72,17 @@ const useSystemMessage = () => {
       return true;
     }
 
+    console.log('checkpoint 3.5');
+    if (__isMessageOnlyForSystemUser(message) && !__isMySystemMessage(message)) return false;
+
+    console.log('checkpoint4');
+    if (__isMessageForOtherUser(message)) {
+      const newMessage = checkSystemMessageOnlyForOtherSystemUser(message);
+      saveSystemMessageCallback?.(newMessage);
+      return true;
+    }
+
+    console.log('checkpoint5');
     // If the message is a system message, save the message
     if (__isSystemMessage(message)) {
       const newMessage = checkSystemMessage(message);
@@ -66,6 +90,13 @@ const useSystemMessage = () => {
       return true;
     }
 
+    console.log('checkpoint6');
+    if (message?.better_type) {
+      saveSystemMessageCallback?.(message);
+      return true;
+    }
+
+    console.log('checkpoint7');
     return false;
   }
 
