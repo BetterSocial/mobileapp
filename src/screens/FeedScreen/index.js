@@ -1,11 +1,10 @@
 import {useNavigation} from '@react-navigation/native';
 import * as React from 'react';
-import {Animated, InteractionManager, StatusBar, StyleSheet, View} from 'react-native';
+import {Animated, InteractionManager, StatusBar, View} from 'react-native';
 
 import BlockComponent from '../../components/BlockComponent';
 import {ButtonNewPost} from '../../components/Button';
 import TiktokScroll from '../../components/TiktokScroll';
-import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {Context} from '../../context';
 import {setFeedByIndex} from '../../context/actions/feeds';
 import useOnBottomNavigationTabPressHook, {
