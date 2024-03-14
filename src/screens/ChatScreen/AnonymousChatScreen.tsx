@@ -126,7 +126,7 @@ const AnonymousChatScreen = () => {
           ownerChat ? (
             <BaseSystemChat
               componentType="SINGLE"
-              messageSingle={`You’re anonymously messaging ${selectedChannel?.name}.\nThey are still able to block you`}
+              messageSingle={`You’re messaging ${selectedChannel?.name} in Incognito Mode. They can still block you`}
             />
           ) : null
         }
