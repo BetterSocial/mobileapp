@@ -53,7 +53,7 @@ const ProfilePicture = ({
                     uri: profilePicPath ? `${profilePicPath}` : DEFAULT_PROFILE_PIC_PATH,
                     cache: 'web'
                   }}
-                  resizeMode={FastImage.resizeMode.stretch}
+                  resizeMode={FastImage.resizeMode.cover}
                   loadingIndicatorSource={
                     <Image
                       style={{
