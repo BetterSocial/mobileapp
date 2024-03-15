@@ -2066,6 +2066,15 @@
   dependencies:
     "@hapi/hoek" "^9.0.0"
 
+"@human-id/react-native-humanid@^2.3.5":
+  version "2.3.5"
+  resolved "https://registry.yarnpkg.com/@human-id/react-native-humanid/-/react-native-humanid-2.3.5.tgz#23e5b7b5c733cb832c52f18d290cf4de7cb83205"
+  integrity sha512-UI7jJFIEWocnFpyMbukuDzdzf20v3Q5ey7a6PVJ6TbqqQCDkGCYNEw8MSyH8V1oeU1QObphcOx2EgOTFkrJ7gQ==
+  dependencies:
+    google-libphonenumber "3.2.15"
+    react-native-iphone-x-helper "^1.3.1"
+    react-native-modal "11.6.1"
+
 "@human-internet/react-native-humanid@^2.4.10":
   version "2.4.10"
   resolved "https://registry.yarnpkg.com/@human-internet/react-native-humanid/-/react-native-humanid-2.4.10.tgz#d1485c951d6bcf9b224e49060818471ef8f30a63"
@@ -11520,6 +11529,14 @@ react-native-mmkv@2.5.1:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/react-native-mmkv/-/react-native-mmkv-2.5.1.tgz#29fc462077fab16a5e1b79570fbf8acaac9d87b4"
   integrity sha512-5eQu25z3H6zf6w0NkJoTuFEFrbOu6luZxZ6+rK1W+XwY/rjPSFZFQPVtMaz3im90RbILFXXM/KrFGZrpaJJRoQ==
+
+react-native-modal@11.6.1:
+  version "11.6.1"
+  resolved "https://registry.yarnpkg.com/react-native-modal/-/react-native-modal-11.6.1.tgz#6162a39731860fb3b6e8304059f72dc0a961f9fd"
+  integrity sha512-Xsd79nuBvbLOYwpRuur4btwJFQ3WkV9zp5LbAREidUtjl/Ajlp4QbNBx888FOPjo+EpOO3+U0riCRqs1dkdIzQ==
+  dependencies:
+    prop-types "^15.6.2"
+    react-native-animatable "1.3.3"
 
 react-native-modal@^13.0.1:
   version "13.0.1"

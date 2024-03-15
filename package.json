@@ -35,6 +35,7 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
+    "@human-id/react-native-humanid": "^2.3.5",
     "@human-internet/react-native-humanid": "^2.4.10",
     "@react-native-async-storage/async-storage": "^1.15.2",
     "@react-native-clipboard/clipboard": "^1.11.2",
@@ -79,7 +80,7 @@
     "react-native-context-menu-view": "^1.11.0",
     "react-native-create-thumbnail": "^1.6.4",
     "react-native-device-info": "10.6.0",
-    "react-native-document-picker": "^9.0.1",
+    "react-native-document-picker": "8.2.2",
     "react-native-email-link": "https://github.com/BetterSocial/react-native-email-link.git",
     "react-native-emoji-selector": "^0.2.0",
     "react-native-fast-image": "^8.5.11",

@@ -3,10 +3,9 @@ import DeviceInfo from 'react-native-device-info';
 import FlashMessage from 'react-native-flash-message';
 import Toast from 'react-native-toast-message';
 import {BackHandler, Platform, View} from 'react-native';
-import {HumanIDProvider} from '@human-internet/react-native-humanid';
+import {HumanIDProvider} from '@human-id/react-native-humanid';
 import {LogLevel, OneSignal} from 'react-native-onesignal';
 import {NavigationContainer} from '@react-navigation/native';
-import {OverlayProvider, Streami18n} from 'stream-chat-react-native';
 import {RecoilDebugObserver} from 'reactotron-recoil-plugin';
 import {RecoilRoot} from 'recoil';
 import {
@@ -14,6 +13,7 @@ import {
   useSafeAreaFrame,
   useSafeAreaInsets
 } from 'react-native-safe-area-context';
+import {Streami18n} from 'stream-chat-react-native';
 import {appUpgradeVersionCheck} from 'app-upgrade-react-native-sdk';
 
 import Store from './src/context/Store';

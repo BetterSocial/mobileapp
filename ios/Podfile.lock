@@ -125,7 +125,7 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (7.12.0):
     - GoogleUtilities/Logger
-  - human-id-react-native-humanid (2.4.10):
+  - human-id-react-native-humanid (2.3.5):
     - React-Core
   - libwebp (1.3.2):
     - libwebp/demux (= 1.3.2)
@@ -403,7 +403,7 @@ PODS:
     - React
   - react-native-create-thumbnail (1.6.4):
     - React-Core
-  - react-native-document-picker (8.2.2):
+  - react-native-document-picker (9.1.0):
     - React-Core
   - react-native-get-random-values (1.9.0):
     - React-Core
@@ -624,7 +624,7 @@ DEPENDENCIES:
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - "human-id-react-native-humanid (from `../node_modules/@human-internet/react-native-humanid`)"
+  - "human-id-react-native-humanid (from `../node_modules/@human-id/react-native-humanid`)"
   - OneSignalXCFramework (< 6.0, >= 5.0.0)
   - Permission-Camera (from `../node_modules/react-native-permissions/ios/Camera`)
   - Permission-PhotoLibrary (from `../node_modules/react-native-permissions/ios/PhotoLibrary`)
@@ -747,7 +747,7 @@ EXTERNAL SOURCES:
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   human-id-react-native-humanid:
-    :path: "../node_modules/@human-internet/react-native-humanid"
+    :path: "../node_modules/@human-id/react-native-humanid"
   Permission-Camera:
     :path: "../node_modules/react-native-permissions/ios/Camera"
   Permission-PhotoLibrary:
@@ -916,7 +916,7 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: 1c863b1161fc3c8cf614a7460d1be6a7c262aab3
   GoogleDataTransport: cd9db2180fcecd8da1b561aea31e3e56cf834aa7
   GoogleUtilities: 0759d1a57ebb953965c2dfe0ba4c82e95ccc2e34
-  human-id-react-native-humanid: a29c347c1d168a5cc14e7cc100b34634e019806d
+  human-id-react-native-humanid: 1ac0c9ca78838e5a6cd748f5a5c7c290f0076cc0
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
   MMKV: f902fb6719da13c2ab0965233d8963a59416f911
   MMKVCore: d26e4d3edd5cb8588c2569222cbd8be4231374e9
@@ -944,7 +944,7 @@ SPEC CHECKSUMS:
   react-native-config: 86038147314e2e6d10ea9972022aa171e6b1d4d8
   react-native-context-menu-view: ea9e2d0f86859a143f1fd73a96a062ced5159567
   react-native-create-thumbnail: e022bcdcba8a0b4529a50d3fa1a832ec921be39d
-  react-native-document-picker: cd4d6b36a5207ad7a9e599ebb9eb0c2e84fa0b87
+  react-native-document-picker: b4f4a23b73f864ce17965b284c0757648993805b
   react-native-get-random-values: dee677497c6a740b71e5612e8dbd83e7539ed5bb
   react-native-image-picker: a82b781c14f1f5c16953290bee2039db43822517
   react-native-image-resizer: d9fb629a867335bdc13230ac2a58702bb8c8828f
