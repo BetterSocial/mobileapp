@@ -1,11 +1,21 @@
+/* eslint-disable no-unexpected-multiline */
 import * as React from 'react';
 import {Dimensions, StyleSheet, Text, View} from 'react-native';
 
 import {ChatItemMyTextProps} from '../../../../types/component/AnonymousChat/BaseChatItem.types';
 import {fonts} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
+import {
+  AVATAR_MARGIN,
+  BUBBLE_LEFT_PADDING,
+  BUBBLE_RIGHT_PADDING,
+  BUBBLE_LEFT_PADDING_ATTACHMENT,
+  BUBBLE_RIGHT_PADDING_ATTACHMENT
+} from './ChatItemAttachmentStyles';
+import ChatItemAttachment from './ChatItemAttachment';
 
 const {width} = Dimensions.get('screen');
+
 const styles = StyleSheet.create({
   chatContainer: {
     display: 'flex',
@@ -22,11 +32,9 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     backgroundColor: COLORS.lightgrey,
-    paddingLeft: 8,
-    paddingRight: 8,
     paddingTop: 4,
-    paddingBottom: 8,
-    borderRadius: 8,
+    paddingBottom: 4,
+    borderRadius: 12,
     borderTopStartRadius: 0,
     flex: 1
   },
@@ -44,7 +52,7 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    marginRight: 4
+    marginRight: AVATAR_MARGIN
   },
   dot: {
     width: 3,
@@ -71,6 +79,7 @@ const ChatItemTargetText = ({
   time = '4h',
   isContinuous = false,
   message = '',
+  attachments = [],
   avatar
 }: ChatItemMyTextProps) => {
   const renderAvatar = React.useCallback(() => {
@@ -78,20 +87,34 @@ const ChatItemTargetText = ({
     return <View style={styles.mr8}>{avatar}</View>;
   }, []);
 
+  const handleTextContainerStyle = () => {
+    const isAttachment = attachments.length > 0;
+    const paddingStyle = {
+      paddingLeft: isAttachment ? BUBBLE_LEFT_PADDING_ATTACHMENT : BUBBLE_LEFT_PADDING,
+      paddingRight: isAttachment ? BUBBLE_RIGHT_PADDING_ATTACHMENT : BUBBLE_RIGHT_PADDING
+    };
+    return [styles.textContainer, paddingStyle];
+  };
+
   return (
     <View style={styles.chatContainer}>
       {renderAvatar()}
-      <View style={styles.textContainer}>
+      <View style={handleTextContainerStyle()}>
         {!isContinuous && (
-          <View testID="chat-item-user-info" style={styles.chatTitleContainer}>
+          <View
+            testID="chat-item-user-info"
+            style={[styles.chatTitleContainer, attachments.length > 0 ? {marginBottom: 4} : {}]}>
             <Text style={styles.userText}>{username}</Text>
             <View style={styles.dot} />
             <Text style={styles.timeText}>{time}</Text>
           </View>
         )}
-        <Text testID="chat-item-message" style={styles.text}>
-          {message}
-        </Text>
+        {attachments.length > 0 && <ChatItemAttachment attachments={attachments} />}
+        {attachments.length <= 0 && (
+          <Text testID="chat-item-message" style={styles.text}>
+            {message}
+          </Text>
+        )}
       </View>
     </View>
   );
