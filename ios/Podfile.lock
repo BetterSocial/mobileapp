@@ -403,7 +403,7 @@ PODS:
     - React
   - react-native-create-thumbnail (1.6.4):
     - React-Core
-  - react-native-document-picker (9.1.0):
+  - react-native-document-picker (8.2.2):
     - React-Core
   - react-native-get-random-values (1.9.0):
     - React-Core
@@ -944,7 +944,7 @@ SPEC CHECKSUMS:
   react-native-config: 86038147314e2e6d10ea9972022aa171e6b1d4d8
   react-native-context-menu-view: ea9e2d0f86859a143f1fd73a96a062ced5159567
   react-native-create-thumbnail: e022bcdcba8a0b4529a50d3fa1a832ec921be39d
-  react-native-document-picker: b4f4a23b73f864ce17965b284c0757648993805b
+  react-native-document-picker: cd4d6b36a5207ad7a9e599ebb9eb0c2e84fa0b87
   react-native-get-random-values: dee677497c6a740b71e5612e8dbd83e7539ed5bb
   react-native-image-picker: a82b781c14f1f5c16953290bee2039db43822517
   react-native-image-resizer: d9fb629a867335bdc13230ac2a58702bb8c8828f
