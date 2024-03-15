@@ -85,11 +85,14 @@ const styles = StyleSheet.create({
     top: 0,
     zIndex: 10,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    overflow: 'hidden'
   },
   container: {
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    width: '100%',
+    height: '100%'
   },
   infoText: {
     fontFamily: fonts.inter[400],
