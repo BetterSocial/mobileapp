@@ -670,8 +670,34 @@ index 3d3b44a..0000000
 -
 -@end
 -
+diff --git a/node_modules/@human-id/react-native-humanid/lib/typescript/core/core.interface.d.ts b/node_modules/@human-id/react-native-humanid/lib/typescript/core/core.interface.d.ts
+index 44961ba..0d5aeb8 100644
+--- a/node_modules/@human-id/react-native-humanid/lib/typescript/core/core.interface.d.ts
++++ b/node_modules/@human-id/react-native-humanid/lib/typescript/core/core.interface.d.ts
+@@ -41,4 +41,5 @@ export declare type ILogIn = () => void;
+ export declare type IOnCancel = (callback: onCancelCallback) => void;
+ export declare type IOnError = (callback: onErrorCallback) => void;
+ export declare type IOnSuccess = (callback: onSuccessCallback) => void;
++export declare type IUnsubscribeAllEventListeners = () => void;
+ export {};
+diff --git a/node_modules/@human-id/react-native-humanid/lib/typescript/index.d.ts b/node_modules/@human-id/react-native-humanid/lib/typescript/index.d.ts
+index d178760..3560ebb 100644
+--- a/node_modules/@human-id/react-native-humanid/lib/typescript/index.d.ts
++++ b/node_modules/@human-id/react-native-humanid/lib/typescript/index.d.ts
+@@ -1,8 +1,9 @@
+-import { IConfigureHumanID, ILogIn, IOnCancel, IOnError, IOnSuccess } from './core/core.interface';
++import { IConfigureHumanID, ILogIn, IOnCancel, IOnError, IOnSuccess, IUnsubscribeAllEventListeners } from './core/core.interface';
+ import HumanIDProvider from './core/Provider';
+ declare const configureHumanID: IConfigureHumanID;
+ declare const logIn: ILogIn;
+ declare const onCancel: IOnCancel;
+ declare const onSuccess: IOnSuccess;
+ declare const onError: IOnError;
+-export { configureHumanID, logIn, onError, onSuccess, onCancel, HumanIDProvider };
++declare const unsubscribeAllEventListeners: IUnsubscribeAllEventListeners;
++export { configureHumanID, logIn, onError, onSuccess, onCancel, unsubscribeAllEventListeners, HumanIDProvider };
 diff --git a/node_modules/@human-id/react-native-humanid/src/core/core.interface.ts b/node_modules/@human-id/react-native-humanid/src/core/core.interface.ts
-index d590303..3db9387 100644
+index d590303..44be55d 100644
 --- a/node_modules/@human-id/react-native-humanid/src/core/core.interface.ts
 +++ b/node_modules/@human-id/react-native-humanid/src/core/core.interface.ts
 @@ -1,3 +1,5 @@
@@ -693,10 +719,10 @@ index d590303..3db9387 100644
  
  export type IOnSuccess = (callback: onSuccessCallback) => void;
 +
-+export type IUnsubscribeAllEventListener = () => void;
++export type IUnsubscribeAllEventListeners = () => void;
 \ No newline at end of file
 diff --git a/node_modules/@human-id/react-native-humanid/src/index.ts b/node_modules/@human-id/react-native-humanid/src/index.ts
-index 22c8654..018d9a0 100644
+index 22c8654..90d60b3 100644
 --- a/node_modules/@human-id/react-native-humanid/src/index.ts
 +++ b/node_modules/@human-id/react-native-humanid/src/index.ts
 @@ -1,14 +1,15 @@
@@ -711,7 +737,7 @@ index 22c8654..018d9a0 100644
    IOnError,
 -  IOnSuccess
 +  IOnSuccess,
-+  IUnsubscribeAllEventListener
++  IUnsubscribeAllEventListeners
  } from './core/core.interface';
 -import {EventRegister, ON_CANCEL, ON_ERROR, ON_SUCCESS} from './core/eventManager';
 -import options from './core/options';
@@ -724,7 +750,7 @@ index 22c8654..018d9a0 100644
    });
  };
  
-+const unsubscribeAllEventListener: IUnsubscribeAllEventListener = () => {
++const unsubscribeAllEventListeners: IUnsubscribeAllEventListeners = () => {
 +  EventRegister.removeAllListeners();
 +}
 +
@@ -734,6 +760,160 @@ index 22c8654..018d9a0 100644
    onError,
    onSuccess,
    onCancel,
-+  unsubscribeAllEventListener,
++  unsubscribeAllEventListeners,
    HumanIDProvider
  };
+diff --git a/node_modules/@human-id/react-native-humanid/src/modules/Login/CountryPicker/index.tsx b/node_modules/@human-id/react-native-humanid/src/modules/Login/CountryPicker/index.tsx
+index 7db44d8..5231f3b 100644
+--- a/node_modules/@human-id/react-native-humanid/src/modules/Login/CountryPicker/index.tsx
++++ b/node_modules/@human-id/react-native-humanid/src/modules/Login/CountryPicker/index.tsx
+@@ -1,18 +1,20 @@
+-import React, {useContext} from 'react';
+-import {View, Text, Image, TouchableOpacity, FlatList} from 'react-native';
+ import Modal from 'react-native-modal';
+-import {flags, images} from '../../../themes';
+-import SearchCountryInput from './SearchCountryInput';
+-import FlatListSeparator from './FlatListSeparator';
++import React, {useContext} from 'react';
++import {FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
++import { SafeAreaView } from 'react-native-safe-area-context';
++
+ import CountryPickerEmpty from './CountryPickerEmpty';
++import FlatListSeparator from './FlatListSeparator';
++import SearchCountryInput from './SearchCountryInput';
++import styles from '../styles';
++import {Context} from '../../../core/Context';
+ import {
+   Countries,
+   Country,
+   CountryPickerProps,
+   FlagType
+ } from '../Login.interface';
+-import styles from '../styles';
+-import {Context} from '../../../core/Context';
++import {flags, images} from '../../../themes';
+ import {getDialCode} from '../../../helpers';
+ 
+ const countries: Countries = require('../../../../assets/json/countries.json');
+@@ -101,23 +103,25 @@ function Index(props: CountryPickerProps) {
+         onModalShow={onCountryPickerShow}
+         onBackButtonPress={toggleModal}
+       >
+-        <View>
+-          <SearchCountryInput
+-            onChangeText={handleOnCountryChange}
+-            onCancel={toggleModal}
+-          />
+-            <FlatList
+-              keyExtractor={keyExtractor}
+-              data={countries}
+-              renderItem={renderItem}
+-              scrollEnabled={true}
+-              showsVerticalScrollIndicator={false}
+-              maxToRenderPerBatch={15}
+-              ItemSeparatorComponent={FlatListSeparator}
+-              ListEmptyComponent={CountryPickerEmpty}
+-              keyboardShouldPersistTaps="handled"
++        <SafeAreaView>
++          <View>
++            <SearchCountryInput
++              onChangeText={handleOnCountryChange}
++              onCancel={toggleModal}
+             />
+-        </View>
++              <FlatList
++                keyExtractor={keyExtractor}
++                data={countries}
++                renderItem={renderItem}
++                scrollEnabled={true}
++                showsVerticalScrollIndicator={false}
++                maxToRenderPerBatch={15}
++                ItemSeparatorComponent={FlatListSeparator}
++                ListEmptyComponent={CountryPickerEmpty}
++                keyboardShouldPersistTaps="handled"
++              />
++          </View>
++        </SafeAreaView>
+       </Modal>
+     </>
+   );
+diff --git a/node_modules/@human-id/react-native-humanid/src/modules/Login/Form.tsx b/node_modules/@human-id/react-native-humanid/src/modules/Login/Form.tsx
+index 4d9b318..29e1d50 100644
+--- a/node_modules/@human-id/react-native-humanid/src/modules/Login/Form.tsx
++++ b/node_modules/@human-id/react-native-humanid/src/modules/Login/Form.tsx
+@@ -1,11 +1,12 @@
+ import React, {RefObject, useContext, useEffect, useRef} from 'react';
+-import {Keyboard, TextInput, View, InteractionManager} from 'react-native';
+-import CountryPicker from './CountryPicker';
++import {InteractionManager, Keyboard, TextInput, View} from 'react-native';
++
+ import Button from './Button';
++import CountryPicker from './CountryPicker';
+ import styles from './styles';
+-import {colors} from '../../themes';
+ import {Context} from '../../core/Context';
+ import {Country} from './Login.interface';
++import {colors} from '../../themes';
+ import {getCountry, getDialCode} from '../../helpers';
+ 
+ function Form() {
+diff --git a/node_modules/@human-id/react-native-humanid/src/modules/Login/index.tsx b/node_modules/@human-id/react-native-humanid/src/modules/Login/index.tsx
+index dfabc3e..30503f3 100644
+--- a/node_modules/@human-id/react-native-humanid/src/modules/Login/index.tsx
++++ b/node_modules/@human-id/react-native-humanid/src/modules/Login/index.tsx
+@@ -1,16 +1,17 @@
+-import React, {useContext} from 'react';
+-import {View, ScrollView, Platform, StatusBar} from 'react-native';
+ import Modal from 'react-native-modal';
+-import OTP from '../OTP';
++import React, {useContext} from 'react';
++import {Platform, SafeAreaView, ScrollView, StatusBar, View} from 'react-native';
++
++import Description from './Description';
++import Form from './Form';
+ import Header from '../Header';
+ import Logo from './Logo';
+-import Description from './Description';
++import OTP from '../OTP';
+ import TermsDescription from './TermsDescription';
+ import styles from './styles';
+-import {colors} from '../../themes';
+-import Form from './Form';
+ import {Context} from '../../core/Context';
+ import {EventRegister, ON_CANCEL} from '../../core/eventManager';
++import {colors} from '../../themes';
+ 
+ function Login(): JSX.Element {
+   const {
+@@ -42,18 +43,20 @@ function Login(): JSX.Element {
+         backdropColor={colors.white}
+         style={styles.modal}
+         coverScreen={true}>
+-        <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+-          <StatusBar barStyle="dark-content" />
+-          <Header />
+-          <View style={styles.container}>
+-            <Logo />
+-            <View style={styles.content}>
+-              <Description />
+-              <Form />
+-              <TermsDescription />
++        <SafeAreaView>
++          <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
++            <StatusBar barStyle="dark-content" />
++            <Header />
++            <View style={styles.container}>
++              <Logo />
++              <View style={styles.content}>
++                <Description />
++                <Form />
++                <TermsDescription />
++              </View>
+             </View>
+-          </View>
+-        </ScrollView>
++          </ScrollView>
++        </SafeAreaView>
+         <OTP />
+       </Modal>
+     </>

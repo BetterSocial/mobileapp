@@ -10,7 +10,7 @@ import {
   onCancel,
   onError,
   onSuccess,
-  unsubscribeAllEventListener
+  unsubscribeAllEventListeners
 } from '@human-id/react-native-humanid';
 import {useNavigation} from '@react-navigation/core';
 import {useSetRecoilState} from 'recoil';
@@ -105,7 +105,7 @@ const SignIn = () => {
     });
 
     const cleanup = () => {
-      if (unsubscribeAllEventListener) unsubscribeAllEventListener();
+      if (unsubscribeAllEventListeners) unsubscribeAllEventListeners();
     };
 
     return cleanup;
