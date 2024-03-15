@@ -4,7 +4,6 @@ import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
 import {Dimensions, RefreshControl, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
 /* eslint-disable no-param-reassign */
 import {debounce} from 'lodash';
-import {v4 as uuidv4} from 'uuid';
 import axios from 'axios';
 import {useRoute} from '@react-navigation/core';
 import ContactPreview from './elements/ContactPreview';
@@ -25,7 +24,6 @@ import DiscoveryAction from '../../context/actions/discoveryAction';
 import {addMemberGroup} from '../../service/chat';
 import UserSchema from '../../database/schema/UserSchema';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
-import ChatSchema from '../../database/schema/ChatSchema';
 
 const {width} = Dimensions.get('screen');
 
@@ -78,7 +76,9 @@ const ContactScreen = ({navigation}) => {
     }));
 
     setUsers(
-      userData?.filter((item) => isAddParticipant && !existParticipants.includes(item.username))
+      userData?.filter((item) =>
+        isAddParticipant ? !existParticipants.includes(item.username) : item
+      )
     );
   };
 
@@ -103,7 +103,9 @@ const ContactScreen = ({navigation}) => {
 
         const dataUser = [...followedUsers, ...unfollowedUsers];
         setUsers(
-          dataUser?.filter((item) => isAddParticipant && !existParticipants.includes(item.username))
+          dataUser?.filter((item) =>
+            isAddParticipant ? !existParticipants.includes(item.username) : item
+          )
         );
       }
       setLoading(false);
@@ -214,18 +216,6 @@ const ContactScreen = ({navigation}) => {
           channelId
         );
         await userMember.saveOrUpdateIfExists(localDb);
-
-        const currentChatSchema = await ChatSchema.generateSendingChat(
-          uuidv4(),
-          member?.user_id,
-          channelId,
-          `You added ${member?.username} to this group`,
-          [],
-          localDb,
-          'system',
-          'sent'
-        );
-        currentChatSchema.save(localDb);
       });
     } catch (e) {
       console.log('error on memberSchema');

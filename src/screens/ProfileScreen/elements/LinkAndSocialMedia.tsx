@@ -82,7 +82,7 @@ const LinkAndSocialMedia: React.FC<LinkProps> = ({username}) => {
               flexDirection: 'row',
               justifyContent: 'center',
               alignItems: 'center',
-              marginVertical: 8,
+              marginVertical: 9.5,
               marginHorizontal: 10
             }}>
             <ShareIcon />

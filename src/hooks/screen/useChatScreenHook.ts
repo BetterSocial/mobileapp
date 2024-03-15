@@ -5,19 +5,19 @@ import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import {v4 as uuid} from 'uuid';
 
-import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
+import UseChatScreenHook from '../../../types/hooks/screens/useChatScreenHook.types';
+import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import ChannelList from '../../database/schema/ChannelListSchema';
 import ChatSchema from '../../database/schema/ChatSchema';
-import ImageUtils from '../../utils/image';
-import SignedMessageRepo from '../../service/repo/signedMessageRepo';
-import UseChatScreenHook from '../../../types/hooks/screens/useChatScreenHook.types';
 import UserSchema from '../../database/schema/UserSchema';
-import useChatUtilsHook from '../core/chat/useChatUtilsHook';
-import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
-import useUserAuthHook from '../core/auth/useUserAuthHook';
+import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
+import SignedMessageRepo from '../../service/repo/signedMessageRepo';
 import {CHANNEL_TYPE_GROUP, CHANNEL_TYPE_PERSONAL} from '../../utils/constants';
-import {getAnonymousUserId, getUserId} from '../../utils/users';
+import ImageUtils from '../../utils/image';
 import {getOfficialAnonUsername, randomString} from '../../utils/string/StringUtils';
+import {getAnonymousUserId, getUserId} from '../../utils/users';
+import useUserAuthHook from '../core/auth/useUserAuthHook';
+import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 
 interface ScrollContextProps {
   selectedMessageId: string | null;
@@ -28,12 +28,11 @@ export const ScrollContext = React.createContext<ScrollContextProps | null>(null
 
 function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const {localDb, chat, refresh} = useLocalDatabaseHook();
-  const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen} = useChatUtilsHook();
+  const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen} = useChatUtilsHook(type);
   const {anonProfileId} = useUserAuthHook();
 
   const [selfAnonUserInfo, setSelfAnonUserInfo] = React.useState<any>(null);
   const [chats, setChats] = React.useState<ChatSchema[]>([]);
-  const {anon_user_info_emoji_name} = selectedChannel?.rawJson?.channel || {};
   const initChatData = async () => {
     if (!localDb || !selectedChannel) return;
     try {

@@ -116,7 +116,7 @@ const Header = (props) => {
         headerHeightRef.current = headerHeightLayout;
       }}>
       <View style={styles.content}>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row', marginBottom: 10}}>
           <ProfilePicture
             onImageContainerClick={changeImage}
             profilePicPath={dataMain.profile_pic_path}
@@ -447,8 +447,8 @@ const ProfileScreen = ({route}) => {
   const onViewProfilePicture = () => {
     closeImageBs();
     navigation.push('ImageViewer', {
-      title: dataMain.username,
-      images: [{url: dataMain.profile_pic_path}]
+      title: profile?.myProfile?.username,
+      images: [{url: profile?.myProfile?.profile_pic_path}]
     });
   };
 
