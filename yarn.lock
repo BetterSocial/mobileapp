@@ -2450,12 +2450,10 @@
   resolved "https://registry.yarnpkg.com/@react-native-clipboard/clipboard/-/clipboard-1.11.2.tgz#e826d0336b34e67294aaffa6878308900bc7d197"
   integrity sha512-bHyZVW62TuleiZsXNHS1Pv16fWc0fh8O9WvBzl4h2fykqZRW9a+Pv/RGTH56E3X2PqzHP38K5go8zmCZUoIsoQ==
 
-"@react-native-community/blur@^3.6.0":
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/@react-native-community/blur/-/blur-3.6.0.tgz#31c9e0f2770519c9b5c4f99418f192246f0d4db8"
-  integrity sha512-GtDBhpX2pQcjl4VopOC8FktrVufrEfYRwVeMQ2WWckqKIv2BdwvlvWvj88L1WmEdBr9UNcm3rtgz+d+YXkmirA==
-  dependencies:
-    prop-types "^15.5.10"
+"@react-native-community/blur@^4.4.0":
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/@react-native-community/blur/-/blur-4.4.0.tgz#b2440dab17d94e480fbc4470e03155573b5b7375"
+  integrity sha512-P+xdT2LIq1ewOsF3zx7C0nu4dj7nxl2NVTsMXEzRDjM3bWMdrrEbTRA7uwPV5ngn7/BXIommBPlT/JW4SAedrw==
 
 "@react-native-community/cameraroll@^4.1.2":
   version "4.1.2"
@@ -11380,10 +11378,10 @@ react-native-device-info@10.6.0:
   resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-10.6.0.tgz#51f1b2ec98abc32747149b0a5b7fb662b44d50e4"
   integrity sha512-/MmINdojWdw2/9rwYpH/dX+1gFP0o78p8yYPjwxiPhoySSL2rZaNi+Mq9VwC+zFi/yQmJUvHntkKSw2KUc7rFw==
 
-react-native-document-picker@^9.0.1:
-  version "9.1.0"
-  resolved "https://registry.yarnpkg.com/react-native-document-picker/-/react-native-document-picker-9.1.0.tgz#d9d6ff271c01f5b850e482210dd809c3d55b23a7"
-  integrity sha512-SRKPIAzUtcPDUstLRhQeebVVM+x+1I24iSvoy5mFp1KAD+6+UyDEle0SoD96k7MxVH5o46wPifWCYOA3FuQOyw==
+react-native-document-picker@8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-document-picker/-/react-native-document-picker-8.0.0.tgz#f760f89049cda668be8b1cfb31a484af19716f35"
+  integrity sha512-4O1FNOJHzfZ7BBFOJhNoeCKHSjthFtZyMEWJsAxX1ORdShGSa6miLvTHtQjpCDMNWSoPU1C7fXLNNPrv8GAarQ==
   dependencies:
     invariant "^2.2.4"
 
