@@ -186,7 +186,6 @@ const ChatItemMyTextV2 = ({
   chatType
 }: ChatItemMyTextProps) => {
   const navigation = useNavigation();
-  const messageRef = React.useRef<Text>(null);
 
   const renderIcon = React.useCallback(() => {
     if (status === ChatStatus.PENDING)
@@ -323,11 +322,7 @@ const ChatItemMyTextV2 = ({
               )}
           </View>
         )}
-        {attachments.length <= 0 && (
-          <Text ref={messageRef} style={styles.text}>
-            {`${message}`}
-          </Text>
-        )}
+        {attachments.length <= 0 && <Text style={styles.text}>{message}</Text>}
 
         {renderIcon()}
       </View>
