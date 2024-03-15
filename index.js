@@ -9,7 +9,7 @@ import * as Sentry from '@sentry/react-native';
 import config from 'react-native-config';
 import DeviceInfo, {getReadableVersion} from 'react-native-device-info';
 import {AppRegistry} from 'react-native';
-import {configureHumanID} from '@human-internet/react-native-humanid';
+import {configureHumanID} from '@human-id/react-native-humanid';
 import {enableScreens} from 'react-native-screens';
 
 import App from './App';
@@ -44,7 +44,7 @@ const clientSecret = HUMAN_ID_CLIENT_SECRET;
 const clientId = HUMAN_ID_CLIENT_ID;
 
 configureHumanID({
-  appName: 'Better Social',
+  appName: 'Helio',
   clientSecret,
   clientId,
   Icon: AppIcon

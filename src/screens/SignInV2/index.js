@@ -11,7 +11,7 @@ import {
   onError,
   onSuccess,
   unsubscribeAllEventListener
-} from '@human-internet/react-native-humanid';
+} from '@human-id/react-native-humanid';
 import {useNavigation} from '@react-navigation/core';
 import {useSetRecoilState} from 'recoil';
 
