@@ -16,7 +16,7 @@ const useSystemMessage = () => {
   }
 
   function __isMessageForOtherUser(message: GetstreamMessage): boolean {
-    return message?.other_system_user === 'true' && isMe(message?.other_system_user);
+    return isMe(message?.other_system_user);
   }
 
   function __isMySystemMessage(message: GetstreamMessage): boolean {
@@ -48,7 +48,7 @@ const useSystemMessage = () => {
       }
     }
 
-    console.log('message', message);
+    // console.log('message', message);
     return message;
   }
 
