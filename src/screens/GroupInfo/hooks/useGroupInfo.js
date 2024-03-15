@@ -373,7 +373,7 @@ const useGroupInfo = (channelId = null) => {
    *
    * @param {('view' | 'remove' | 'message' | 'block' | 'message-anonymously')} status
    */
-  const alertRemoveUser = async (status) => {
+  const handleOpenPopup = async (status) => {
     if (status === 'view') {
       setOpenModal(false);
       handleOpenProfile(selectedUser).catch((e) => console.log(e));
@@ -488,7 +488,7 @@ const useGroupInfo = (channelId = null) => {
     onRemoveUser,
     openModal,
     leaveGroup,
-    alertRemoveUser,
+    handleOpenPopup,
     memberName,
     onLeaveGroup,
     checkUserIsBlockHandle,
