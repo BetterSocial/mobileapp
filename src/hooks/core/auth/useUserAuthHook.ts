@@ -21,6 +21,11 @@ const useUserAuthHook = () => {
       anonymousToken: null
     });
 
+  const isMe = (profileId: string | undefined): boolean => {
+    if (!profileId) return false;
+    return profileId === signedProfileId || profileId === anonProfileId;
+  };
+
   return {
     profile: profileContext.myProfile,
     signedProfileId,
@@ -28,6 +33,7 @@ const useUserAuthHook = () => {
     token,
     anonymousToken,
 
+    isMe,
     resetAuth,
     setAuth
   };
