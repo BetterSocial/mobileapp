@@ -146,7 +146,6 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
           </Text>
         ) : (
           <TextWithEmoji text={addDotAndRemoveNewline(bio || '')} />
-          // <Text style={styles.bioText}>{addDotAndRemoveNewline(bio || '')}</Text>
         )}
       </View>
       <View
@@ -217,15 +216,6 @@ const styles = StyleSheet.create({
     paddingBottom: 50
   },
   editPromptLabel: {color: COLORS.signed_secondary, textDecorationLine: 'underline'},
-  bioText: {
-    color: COLORS.lightgrey,
-    // fontFamily: 'Inter',
-    fontSize: 14,
-    fontStyle: 'normal',
-    fontWeight: '400',
-    marginBottom: 12,
-    lineHeight: 20
-  },
   bioTextNull: {
     color: COLORS.lightgrey,
     fontFamily: 'Inter',
