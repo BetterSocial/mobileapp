@@ -38,9 +38,7 @@ const SignedChatScreen = () => {
 
   const {moveToAnonymousChannel} = useMoveChatTypeHook();
 
-  const memberChat = selectedChannel?.rawJson?.channel?.members?.find(
-    (item: any) => item.user_id !== signedProfileId
-  );
+  const memberChat = selectedChannel?.members?.find((item: any) => item.userId !== signedProfileId);
 
   const renderChatItem = React.useCallback(({item, index}) => {
     return <BaseChatItem type={SIGNED} item={item} index={index} />;
