@@ -103,7 +103,7 @@ const ProfilePicture = ({
 let styles = StyleSheet.create({
   addCircle: {position: 'absolute', top: 25, left: 25},
   profileImage: (size) => {
-    const scale = size <= 25 ? 0.8 : 0.92;
+    const scale = size <= 25 ? 0.8 : 0.922;
     const marginScale = size <= 25 ? 0.805 : 0.925;
     return {
       width: dimen.normalizeDimen(size * scale),
