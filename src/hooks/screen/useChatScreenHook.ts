@@ -16,6 +16,7 @@ import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import useUserAuthHook from '../core/auth/useUserAuthHook';
 import {CHANNEL_TYPE_GROUP, CHANNEL_TYPE_PERSONAL} from '../../utils/constants';
+import {ENV} from '../../libraries/Configs/ENVConfig';
 import {getAnonymousUserId, getUserId} from '../../utils/users';
 import {getOfficialAnonUsername, randomString} from '../../utils/string/StringUtils';
 
@@ -38,13 +39,21 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     try {
       const myUserId = await getUserId();
       const myAnonymousId = await getAnonymousUserId();
-      console.log('checkpoint chat screen 1', new Date().getTime());
+      const time = new Date().getTime();
+      if (ENV === 'Dev') {
+        SimpleToast.show('checkpoint getting all chat data');
+      }
       const data = (await ChatSchema.getAll(
         localDb,
         selectedChannel?.id,
         myUserId,
         myAnonymousId
       )) as ChatSchema[];
+      if (ENV === 'Dev') {
+        SimpleToast.show(
+          `checkpoint finish getting all chat data: ${(new Date().getTime() - time) / 1000}s`
+        );
+      }
       console.log('checkpoint chat screen 2', new Date().getTime());
       setChats(data);
 
