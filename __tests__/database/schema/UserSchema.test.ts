@@ -305,7 +305,7 @@ describe('TESTING UserSchema', () => {
       mockDbExecuteSql.mockImplementationOnce(() => [{rows: []}, {}]);
 
       // Execution
-      const isUserExists = await userSchema.isUserExists(mockDb, 'userId', 'channelId');
+      const isUserExists = await UserSchema.isUserExists(mockDb, 'userId', 'channelId');
 
       // Assertion
       expect(mockDb.executeSql).toHaveBeenCalledTimes(1);
@@ -324,7 +324,7 @@ describe('TESTING UserSchema', () => {
       ]);
 
       // Execution
-      const isUserExists = await userSchema.isUserExists(mockDb, 'userId', 'channelId');
+      const isUserExists = await UserSchema.isUserExists(mockDb, 'userId', 'channelId');
 
       // Assertion
       expect(mockDb.executeSql).toHaveBeenCalledTimes(1);
@@ -340,7 +340,7 @@ describe('TESTING UserSchema', () => {
       mockTransactionExecuteSql.mockImplementationOnce(() => [{}, {rows: []}]);
 
       // Execution
-      const isUserExists = await userSchema.isUserExists(
+      const isUserExists = await UserSchema.isUserExists(
         mockDb,
         'userId',
         'channelId',
@@ -364,7 +364,7 @@ describe('TESTING UserSchema', () => {
       ]);
 
       // Execution
-      await userSchema.isUserExists(mockDb, 'userId', 'channelId', mockTransaction);
+      await UserSchema.isUserExists(mockDb, 'userId', 'channelId', mockTransaction);
 
       // Assertion
       expect(mockTransaction.executeSql).toHaveBeenCalledTimes(1);
@@ -381,7 +381,7 @@ describe('TESTING UserSchema', () => {
       });
 
       // Execution
-      const isUserExists = await userSchema.isUserExists(mockDb, 'userId', 'channelId');
+      const isUserExists = await UserSchema.isUserExists(mockDb, 'userId', 'channelId');
 
       // Assertion
       expect(consoleSpy).toBeCalled();

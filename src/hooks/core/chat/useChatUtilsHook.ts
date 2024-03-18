@@ -1,28 +1,28 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import {CommonActions, useNavigation} from '@react-navigation/native';
-import moment from 'moment';
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
+import moment from 'moment';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {CommonActions, useNavigation} from '@react-navigation/native';
 import {atom, useRecoilState} from 'recoil';
 
-import {BetterSocialChannelType} from '../../../../types/database/schema/ChannelList.types';
-import {PostNotificationChannelList} from '../../../../types/database/schema/PostNotificationChannelList.types';
+import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
+import ChannelList from '../../../database/schema/ChannelListSchema';
+import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
+import UserSchema from '../../../database/schema/UserSchema';
+import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
+import useUserAuthHook from '../auth/useUserAuthHook';
 import UseChatUtilsHook, {
   ContactScreenPayload
 } from '../../../../types/hooks/screens/useChatUtilsHook.types';
+import {ANON_PM, GROUP_INFO} from '../constant';
+import {BetterSocialChannelType} from '../../../../types/database/schema/ChannelList.types';
 import {ChannelTypeEnum} from '../../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 import {Context} from '../../../context';
-import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
-import ChannelList from '../../../database/schema/ChannelListSchema';
-import UserSchema from '../../../database/schema/UserSchema';
-import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
-import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
+import {PostNotificationChannelList} from '../../../../types/database/schema/PostNotificationChannelList.types';
 import {
   convertTopicNameToTopicPageScreenParam,
   getChannelListInfo
 } from '../../../utils/string/StringUtils';
-import useUserAuthHook from '../auth/useUserAuthHook';
-import {ANON_PM, GROUP_INFO} from '../constant';
 
 const chatAtom = atom({
   key: 'chatAtom',
@@ -53,7 +53,7 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
 
     if (channel?.channelType?.includes('ANON')) {
       try {
-        await AnonymousMessageRepo.setChannelAsRead(channel?.id?.replace('_anon', ''));
+        AnonymousMessageRepo.setChannelAsRead(channel?.id?.replace('_anon', ''));
       } catch (error) {
         console.log('setAnonChannelAsRead error api', error);
       }
@@ -65,7 +65,7 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
       };
 
       try {
-        await SignedMessageRepo.setChannelAsRead(
+        SignedMessageRepo.setChannelAsRead(
           channel?.id,
           channelType[channel?.rawJson?.channel?.type]
         );
@@ -176,7 +176,7 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
       });
     });
 
-    await Promise.all(promise).catch((e) => console.log('saveChannelDetail error', e));
+    await Promise.all(promise);
   };
 
   const helperGetChannelDetail = async (channel: ChannelList) => {
@@ -190,7 +190,7 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
         const channelType = channel?.channelType === 'GROUP' ? 'group' : 'messaging';
         response = await SignedMessageRepo.getSignedChannelDetail(channelType, channel?.id);
       }
-      await helperSaveChannelDetail(channel, response);
+      helperSaveChannelDetail(channel, response);
     } catch (e) {
       console.log('getChannelDetail error', e);
     } finally {
@@ -205,14 +205,18 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
   };
 
   const goToChatScreen = (channel: ChannelList, from: AllowedGoToChatScreen) => {
+    console.log('checkpoint 1');
     setChannelAsRead(channel);
 
     const isChannelTypeChat: (BetterSocialChannelType | undefined)[] = ['ANON_PM', 'GROUP', 'PM'];
     const isChat = isChannelTypeChat.includes(channel?.channelType);
 
+    console.log('checkpoint 2');
     if (isChat) {
       helperGetChannelDetail(channel);
     }
+
+    console.log('checkpoint 3');
 
     setChat({
       isLoadingFetchingChannelDetail: isChat,
@@ -220,6 +224,7 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
     });
 
     if (from === 'CONTACT_SCREEN') {
+      console.log('checkpoint 4');
       return openChat(
         'SignedChatScreen',
         channel?.channelType === ANON_PM ? 'AnonymousChannelList' : 'ChannelList'
@@ -227,17 +232,20 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
     }
 
     if (channel?.channelType === ANON_PM) {
+      console.log('checkpoint 5');
       if (from === GROUP_INFO) {
         return openChat('AnonymousChatScreen', 'AnonymousChannelList');
       }
       navigation.navigate('AnonymousChatScreen');
     } else {
+      console.log('checkpoint 6');
       if (from === GROUP_INFO) {
         return openChat('SignedChatScreen', 'SignedChannelList');
       }
       navigation.navigate('SignedChatScreen');
     }
 
+    console.log('checkpoint 7');
     return null;
   };
 
