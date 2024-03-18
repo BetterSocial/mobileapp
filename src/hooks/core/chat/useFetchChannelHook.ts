@@ -96,23 +96,42 @@ const useFetchChannelHook = () => {
 
     try {
       const members = getChannelMembers(channel);
-      await Promise.all(
-        (members || []).map(async (member) => {
-          const userMember = UserSchema.fromMemberWebsocketObject(member, channel?.id);
-          await userMember.saveOrUpdateIfExists(localDb);
-        })
-      );
 
-      await Promise.all(
-        (channel?.messages || []).map(async (message) => {
-          if (message?.type === 'deleted') return;
+      const memberPromise = (members || []).map((member) => {
+        const userMember = UserSchema.fromMemberWebsocketObject(member, channel?.id);
+        return new Promise((resolve) => {
+          UserSchema.isUserExists(localDb, member?.user?.id, channel?.id).then((isUserExists) => {
+            if (!member?.user?.username) return resolve(true);
+            if (!isUserExists) {
+              userMember.save(localDb).then(() => {
+                return resolve(true);
+              });
+            } else {
+              return resolve(true);
+            }
+          });
+        });
+      });
+
+      const messagePromise = (channel?.messages || []).map((message) => {
+        return new Promise((resolve) => {
+          if (message?.type === 'deleted') {
+            resolve(true);
+            return;
+          }
           if (message?.type === 'system') {
             message = helperFollowingSystemMessage(message);
           }
           const chat = ChatSchema.fromGetAllChannelAPI(channel?.id, message);
-          await chat.save(localDb);
-        })
-      );
+          chat.saveIfNotExist(localDb).then(() => {
+            resolve(true);
+            refresh('chats');
+          });
+        });
+      });
+
+      const allPromises = [...memberPromise, ...messagePromise];
+      await Promise.all(allPromises);
     } catch (e) {
       console.log('error on saveChannelData:', e);
     }
@@ -140,9 +159,11 @@ const useFetchChannelHook = () => {
   const saveAllChannelData = async (channels, channelCategory: ChannelCategory) => {
     const filteredChannels = filterChannels(channels);
 
-    filteredChannels?.forEach(async (channel) => {
-      await saveChannelData(channel, channelCategory);
+    const channelPromises = filteredChannels?.map((channel) => {
+      return Promise.resolve(saveChannelData(channel, channelCategory));
     });
+
+    await Promise.all(channelPromises);
   };
 
   const getAllSignedChannels = async () => {

@@ -5,19 +5,19 @@ import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import {v4 as uuid} from 'uuid';
 
-import UseChatScreenHook from '../../../types/hooks/screens/useChatScreenHook.types';
-import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
+import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../database/schema/ChannelListSchema';
 import ChatSchema from '../../database/schema/ChatSchema';
-import UserSchema from '../../database/schema/UserSchema';
-import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
-import SignedMessageRepo from '../../service/repo/signedMessageRepo';
-import {CHANNEL_TYPE_GROUP, CHANNEL_TYPE_PERSONAL} from '../../utils/constants';
 import ImageUtils from '../../utils/image';
-import {getOfficialAnonUsername, randomString} from '../../utils/string/StringUtils';
-import {getAnonymousUserId, getUserId} from '../../utils/users';
-import useUserAuthHook from '../core/auth/useUserAuthHook';
+import SignedMessageRepo from '../../service/repo/signedMessageRepo';
+import UseChatScreenHook from '../../../types/hooks/screens/useChatScreenHook.types';
+import UserSchema from '../../database/schema/UserSchema';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
+import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
+import useUserAuthHook from '../core/auth/useUserAuthHook';
+import {CHANNEL_TYPE_GROUP, CHANNEL_TYPE_PERSONAL} from '../../utils/constants';
+import {getAnonymousUserId, getUserId} from '../../utils/users';
+import {getOfficialAnonUsername, randomString} from '../../utils/string/StringUtils';
 
 interface ScrollContextProps {
   selectedMessageId: string | null;
@@ -38,15 +38,18 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     try {
       const myUserId = await getUserId();
       const myAnonymousId = await getAnonymousUserId();
+      console.log('checkpoint chat screen 1', new Date().getTime());
       const data = (await ChatSchema.getAll(
         localDb,
         selectedChannel?.id,
         myUserId,
         myAnonymousId
       )) as ChatSchema[];
+      console.log('checkpoint chat screen 2', new Date().getTime());
       setChats(data);
 
       if (type === 'ANONYMOUS') {
+        console.log('checkpoint chat screen 3');
         const userInfo = await UserSchema.getSelfAnonUserInfo(
           localDb,
           anonProfileId,
@@ -55,6 +58,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
 
         setSelfAnonUserInfo(userInfo);
       }
+      console.log('checkpoint chat screen 4');
     } catch (e) {
       console.log(e, 'error get all chat');
     }
