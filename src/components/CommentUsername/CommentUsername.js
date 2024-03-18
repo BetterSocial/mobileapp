@@ -1,9 +1,10 @@
 import React from 'react';
 import {StyleSheet, Text} from 'react-native';
 
-import {COLORS, SIZES} from '../../utils/theme';
+import dimen from '../../utils/dimen';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getOfficialAnonUsername} from '../../utils/string/StringUtils';
+import {COLORS, SIZES} from '../../utils/theme';
 
 const styles = StyleSheet.create({
   username: {
@@ -11,10 +12,20 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(12),
     color: COLORS.blackgrey,
     lineHeight: 14,
-    marginLeft: 16
+    marginLeft: 16,
+    maxWidth: dimen.normalizeDimen(170)
   },
   previewContainer: {
     marginLeft: SIZES.base
+  },
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  dot: {
+    fontFamily: fonts.inter[700],
+    fontSize: normalizeFontSize(12),
+    color: '#828282'
   }
 });
 
@@ -33,7 +44,7 @@ const styles = StyleSheet.create({
 const CommentUsername = ({comment, user, isPreviewComment}) => {
   if (isPreviewComment) {
     return (
-      <Text style={[styles.username, styles.previewContainer]}>
+      <Text style={[styles.username, styles.previewContainer]} numberOfLines={1}>
         {comment.data?.anon_user_info_color_name
           ? getOfficialAnonUsername(comment?.data)
           : user?.data?.username}{' '}

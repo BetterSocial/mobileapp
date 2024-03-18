@@ -26,7 +26,6 @@ const Search = ({onPress, animatedValue, onChangeText, text, onClearText, isLoad
         returnKeyType="search"
         onSubmitEditing={onPress}
         textAlignVertical="center"
-        clearButtonMode="while-editing"
         blurOnSubmit={true}
       />
       <View style={styles.wrapperIcon}>

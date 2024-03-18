@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Animated, ScrollView, StyleSheet, Platform} from 'react-native';
+import {Animated, StyleSheet, Platform} from 'react-native';
 import {useRoute} from '@react-navigation/native';
 import axios from 'axios';
 
@@ -11,20 +11,11 @@ import StringConstant from '../../utils/string/StringConstant';
 import UsersFragment from '../DiscoveryScreenV2/fragment/UsersFragment';
 import {Context} from '../../context';
 import NavHeader from '../TopicPageScreen/elements/NavHeader';
-import {COLORS} from '../../utils/theme';
 import TopicMemberHeadline from './elements/TopicMemberHeadlineList';
 
 const styles = StyleSheet.create({
   parentContainer: {
     flex: 1
-  },
-  fragmentContainer: {
-    height: '100%',
-    backgroundColor: COLORS.white
-  },
-  fragmentContentContainer: {
-    // flexGrow: 1,
-    backgroundColor: 'white'
   }
 });
 
@@ -36,9 +27,7 @@ const TopicMemberScreen = () => {
   const getTopicDetail = route?.params?.getTopicDetail;
   const [isFollow, setIsFollow] = React.useState(route?.params?.isFollow);
   const [memberCount, setMemberCount] = React.useState(route?.params?.memberCount);
-
   const [profile] = React.useContext(Context).profile;
-  const [isInitialLoading, setIsInitialLoading] = React.useState(true);
   const [headerHide, setHeaderHide] = React.useState(false);
   const [searchHeight, setSearchHeight] = React.useState(0);
   const [searchText, setSearchText] = React.useState('');
@@ -90,10 +79,6 @@ const TopicMemberScreen = () => {
     };
   }, []);
 
-  const handleScroll = Animated.event([{nativeEvent: {contentOffset: {y: scrollY}}}], {
-    useNativeDriver: false
-  });
-
   const fetchMember = async (text = '') => {
     setIsLoadingDiscovery({user: true});
     let query = `?name=${topicName}`;
@@ -127,12 +112,10 @@ const TopicMemberScreen = () => {
       }
       setIsLoadingDiscovery({user: false});
     }
-    setIsInitialLoading(false);
   };
 
   const initialData = async () => {
     try {
-      setIsInitialLoading(true);
       fetchMember();
     } catch (error) {
       if (__DEV__) {
@@ -182,29 +165,19 @@ const TopicMemberScreen = () => {
         getSearchLayout={setSearchHeight}
       />
       <TopicMemberHeadline text="Visible members of this community" />
-      <ScrollView
-        decelerationRate="fast"
-        scrollEventThrottle={1}
-        style={styles.fragmentContainer}
-        contentContainerStyle={[styles.fragmentContentContainer]}
-        keyboardShouldPersistTaps="handled"
-        keyboardDismissMode="on-drag"
-        removeClippedSubviews={true}
-        onScroll={handleScroll}>
-        <UsersFragment
-          isLoadingDiscoveryUser={isLoadingDiscovery.user}
-          isFirstTimeOpen={isFirstTimeOpen}
-          initialUsers={initalMember}
-          setInitialUsers={setInitialMember}
-          followedUsers={topicDataFollowedUsers}
-          unfollowedUsers={topicDataUnfollowedUsers}
-          setFollowedUsers={setTopicDataFollowedUsers}
-          setUnfollowedUsers={setTopicDataUnfollowedUsers}
-          setIsFirstTimeOpen={setIsFirstTimeOpen}
-          setSearchText={setSearchText}
-          withoutRecent={true}
-        />
-      </ScrollView>
+      <UsersFragment
+        isLoadingDiscoveryUser={isLoadingDiscovery.user}
+        isFirstTimeOpen={isFirstTimeOpen}
+        initialUsers={initalMember}
+        setInitialUsers={setInitialMember}
+        followedUsers={topicDataFollowedUsers}
+        unfollowedUsers={topicDataUnfollowedUsers}
+        setFollowedUsers={setTopicDataFollowedUsers}
+        setUnfollowedUsers={setTopicDataUnfollowedUsers}
+        setIsFirstTimeOpen={setIsFirstTimeOpen}
+        setSearchText={setSearchText}
+        withoutRecent={true}
+      />
     </SafeAreaProvider>
   );
 };

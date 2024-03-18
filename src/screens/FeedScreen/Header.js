@@ -2,35 +2,51 @@
 /* eslint-disable no-underscore-dangle */
 // eslint-disable-next-line import/no-extraneous-dependencies
 
-import * as React from 'react';
-import Image from 'react-native-fast-image';
-import PropsTypes from 'prop-types';
-import moment from 'moment';
-import {Dimensions, Platform, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import moment from 'moment';
+import PropsTypes from 'prop-types';
+import * as React from 'react';
+import {
+  Dimensions,
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
 
-import AnonymousAvatar from '../../components/AnonymousAvatar';
-import AnonymousUsername from '../../components/AnonymousUsername';
+import MemoIc_arrow_back from '../../assets/arrow/Ic_arrow_back';
 import ElipsisIcon from '../../assets/icon/ElipsisIcon';
-import GlobalButton from '../../components/Button/GlobalButton';
+import MemoPeopleFollow from '../../assets/icons/Ic_people_follow';
+import MemoicGlobe from '../../assets/icons/ic_globe';
+import ShareAndroidIcon from '../../assets/icons/images/share-for-android.svg';
+import TrashRed from '../../assets/icons/images/trash-red.svg';
 import MemoEightyEight_hundred from '../../assets/timer/EightyEight_hundred';
 import MemoFivety_sixtyTwo from '../../assets/timer/Fivety_sixtyTwo';
-import MemoIc_arrow_back from '../../assets/arrow/Ic_arrow_back';
 import MemoOne from '../../assets/timer/One';
-import MemoPeopleFollow from '../../assets/icons/Ic_people_follow';
 import MemoSeventyFive_eightySeven from '../../assets/timer/SeventyFive_eightySeven';
 import MemoSixtyThree_seventyFour from '../../assets/timer/SixtyThree_seventyFour';
 import MemoThirtySeven_fourtyNine from '../../assets/timer/ThirtySeven_fourtyNine';
 import MemoTwentyFive_thirtySix from '../../assets/timer/TwentyFive_thirtySix';
-import MemoicGlobe from '../../assets/icons/ic_globe';
+import AnonymousAvatar from '../../components/AnonymousAvatar';
+import AnonymousUsername from '../../components/AnonymousUsername';
+import BottomSheetMenu from '../../components/BottomSheet/BottomSheetMenu';
+import GlobalButton from '../../components/Button/GlobalButton';
+import {
+  ANALYTICS_SHARE_POST_FEED_ID,
+  ANALYTICS_SHARE_POST_FEED_SCREEN,
+  DEFAULT_PROFILE_PIC_PATH,
+  PRIVACY_PUBLIC
+} from '../../utils/constants';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
+import ShareUtils from '../../utils/share';
 import StringConstant from '../../utils/string/StringConstant';
-import useFeedHeader from './hooks/useFeedHeader';
-import {DEFAULT_PROFILE_PIC_PATH, PRIVACY_PUBLIC} from '../../utils/constants';
-import {calculateTime} from '../../utils/time';
-import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
+import {calculateTime} from '../../utils/time';
 import ProfilePicture from '../ProfileScreen/elements/ProfilePicture';
 import BlurredLayer from './elements/BlurredLayer';
+import useFeedHeader from './hooks/useFeedHeader';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -102,15 +118,45 @@ const _renderAnonimity = ({
   height,
   headerStyle,
   showAnonymousOption = false,
-  onHeaderOptionClicked = () => {},
-  hideThreeDot,
   version = 1,
   anonUserInfo = {},
   isPostDetail,
   karmaScore = 0,
-  isBlurredPost = false
+  isBlurredPost = false,
+  isFollow = false,
+  onPressFollUnFoll = () => {},
+  onDeletePost = () => {},
+  isShowDelete = false,
+  isSelf = false,
+  hideThreeDot,
+  item,
+  disabledFollow
 }) => {
   const navigation = useNavigation();
+  const refSheet = React.useRef();
+
+  const dataSheet = [
+    {
+      id: 1,
+      name: 'Share link',
+      icon: <ShareAndroidIcon />,
+      onPress: () =>
+        ShareUtils.shareFeeds(item, ANALYTICS_SHARE_POST_FEED_SCREEN, ANALYTICS_SHARE_POST_FEED_ID)
+    }
+  ];
+
+  if (isShowDelete) {
+    dataSheet.push({
+      id: 2,
+      name: 'Delete post',
+      icon: <TrashRed />,
+      onPress: () => {
+        refSheet.current.close();
+        onDeletePost();
+      },
+      style: {color: COLORS.red}
+    });
+  }
 
   return (
     <SafeAreaView>
@@ -143,20 +189,67 @@ const _renderAnonimity = ({
               />
             </View>
 
-            <View style={[styles.containerFeedProfile]}>
-              <View style={[styles.containerFeedName, {alignItems: 'center'}]}>
-                <AnonymousUsername version={version} anonUserInfo={anonUserInfo} />
+            <View
+              style={[
+                styles.containerFeedProfile,
+                {
+                  marginTop: -10
+                }
+              ]}>
+              <View
+                style={[
+                  {
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between'
+                  }
+                ]}>
+                <View
+                  style={{
+                    flexDirection: 'row'
+                  }}>
+                  <AnonymousUsername version={version} anonUserInfo={anonUserInfo} isFeed={true} />
+
+                  {disabledFollow
+                    ? null
+                    : !isSelf && (
+                        <React.Fragment>
+                          <View style={styles.point} />
+                          <TouchableOpacity onPress={() => onPressFollUnFoll(isFollow)}>
+                            <Text style={isFollow ? styles.textFollowing : styles.textFollow}>
+                              {isFollow ? 'Following' : 'Follow'}
+                            </Text>
+                          </TouchableOpacity>
+                        </React.Fragment>
+                      )}
+                </View>
+                {hideThreeDot ? null : (
+                  <GlobalButton
+                    onPress={() => {
+                      refSheet.current.open();
+                    }}>
+                    <View style={{zIndex: 1000}}>
+                      <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
+                    </View>
+                  </GlobalButton>
+                )}
               </View>
               {showAnonymousOption && !hideThreeDot && (
                 <GlobalButton
                   buttonStyle={{position: 'absolute', right: 0, top: -8}}
-                  onPress={onHeaderOptionClicked}>
+                  onPress={() => refSheet.current.open()}>
                   <View style={{zIndex: 1000}}>
                     <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
                   </View>
                 </GlobalButton>
               )}
-              <View style={styles.containerFeedText}>
+              <View
+                style={[
+                  styles.containerFeedText,
+                  {
+                    marginTop: -2
+                  }
+                ]}>
                 <Text style={styles.feedDate}>{calculateTime(time)}</Text>
                 <View style={styles.point} />
                 {privacy.toLowerCase() === PRIVACY_PUBLIC ? (
@@ -173,6 +266,11 @@ const _renderAnonimity = ({
             </View>
           </View>
         </View>
+        <BottomSheetMenu
+          refSheet={refSheet}
+          dataSheet={dataSheet}
+          height={isShowDelete ? 182 : 130}
+        />
       </BlurredLayer>
     </SafeAreaView>
   );
@@ -191,8 +289,38 @@ const _renderProfileNormal = ({
   onHeaderOptionClicked = () => {},
   hideThreeDot,
   isPostDetail,
-  karmaScore = 0
+  karmaScore = 0,
+  isFollow = false,
+  onPressFollUnFoll = () => {},
+  onDeletePost = () => {},
+  isShowDelete = false,
+  isSelf = false,
+  item,
+  disabledFollow
 }) => {
+  const refSheet = React.useRef();
+  const dataSheet = [
+    {
+      id: 1,
+      name: 'Share link',
+      icon: <ShareAndroidIcon />,
+      onPress: () =>
+        ShareUtils.shareFeeds(item, ANALYTICS_SHARE_POST_FEED_SCREEN, ANALYTICS_SHARE_POST_FEED_ID)
+    }
+  ];
+
+  if (isShowDelete) {
+    dataSheet.push({
+      id: 2,
+      name: 'Delete post',
+      icon: <TrashRed />,
+      onPress: () => {
+        refSheet.current.close();
+        onDeletePost();
+      },
+      style: {color: COLORS.red}
+    });
+  }
   const {navigateToProfile, username, profile_pic_url, onBackNormalUser} = useFeedHeader({
     actor,
     source
@@ -227,20 +355,58 @@ const _renderProfileNormal = ({
           <GlobalButton
             onPress={navigateToProfile}
             style={[styles.containerFeedProfile, {paddingBottom: 5}]}>
-            <View style={[styles.containerFeedName, {alignItems: 'flex-end'}]}>
-              <Text style={styles.feedUsername}>
-                {username || StringConstant.feedDeletedUserName}
-              </Text>
+            <View>
+              <View
+                style={[
+                  {
+                    flexDirection: 'row',
+                    alignItems: 'center'
+                  }
+                ]}>
+                <View
+                  style={{
+                    flexDirection: 'row'
+                  }}>
+                  <Text
+                    style={{
+                      fontFamily: fonts.inter[600],
+                      fontWeight: 'bold',
+                      fontSize: 14,
+                      lineHeight: 16.94,
+                      color: COLORS.black
+                    }}>
+                    {username || StringConstant.feedDeletedUserName}
+                  </Text>
+                  {disabledFollow
+                    ? null
+                    : !isSelf && (
+                        <React.Fragment>
+                          <View style={styles.point} />
+                          <TouchableOpacity onPress={() => onPressFollUnFoll(isFollow)}>
+                            <Text style={isFollow ? styles.textFollowing : styles.textFollow}>
+                              {isFollow ? 'Following' : 'Follow'}
+                            </Text>
+                          </TouchableOpacity>
+                        </React.Fragment>
+                      )}
+                </View>
 
-              <GlobalButton
-                buttonStyle={{marginLeft: 'auto', paddingBottom: 0, alignSelf: 'center'}}
-                onPress={onHeaderOptionClicked}>
-                {hideThreeDot ? null : (
-                  <View style={{zIndex: 1000}}>
-                    <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
-                  </View>
-                )}
-              </GlobalButton>
+                <GlobalButton
+                  buttonStyle={{
+                    marginLeft: 'auto',
+                    paddingBottom: 0,
+                    alignSelf: 'center'
+                  }}
+                  onPress={() => {
+                    refSheet.current.open();
+                  }}>
+                  {hideThreeDot ? null : (
+                    <View style={{zIndex: 1000}}>
+                      <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
+                    </View>
+                  )}
+                </GlobalButton>
+              </View>
             </View>
             <View style={[styles.containerFeedText, {paddingBottom: 0}]}>
               <Text style={styles.feedDate}>{calculateTime(time)}</Text>
@@ -261,6 +427,11 @@ const _renderProfileNormal = ({
           </GlobalButton>
         </View>
       </View>
+      <BottomSheetMenu
+        refSheet={refSheet}
+        dataSheet={dataSheet}
+        height={isShowDelete ? 182 : 130}
+      />
     </SafeAreaView>
   );
 };
@@ -271,10 +442,17 @@ const Header = ({
   height,
   source = null,
   headerStyle,
-  onHeaderOptionClicked = () => {},
   showAnonymousOption = false,
+  isPostDetail,
+  isFollow = false,
+  onPressFollUnFoll = () => {},
+  onDeletePost = () => {},
+  isShowDelete = false,
+  isSelf = false,
+  item,
+  onHeaderOptionClicked,
   hideThreeDot,
-  isPostDetail
+  disabledFollow
 }) => {
   const {
     anonimity,
@@ -293,6 +471,7 @@ const Header = ({
   } = props;
   if (anonimity) {
     return _renderAnonimity({
+      item,
       time,
       privacy,
       duration_feed,
@@ -302,8 +481,6 @@ const Header = ({
       height,
       headerStyle,
       showAnonymousOption,
-      onHeaderOptionClicked: () => onHeaderOptionClicked(props),
-      hideThreeDot,
       version,
       anonUserInfo: {
         colorCode: anon_user_info_color_code,
@@ -313,10 +490,20 @@ const Header = ({
       },
       isPostDetail,
       karmaScore: props?.karma_score,
-      isBlurredPost
+      isBlurredPost,
+      isFollow,
+      onPressFollUnFoll,
+      onDeletePost,
+      isShowDelete,
+      isSelf,
+      onHeaderOptionClicked,
+      actor,
+      source,
+      disabledFollow
     });
   }
   return _renderProfileNormal({
+    item,
     actor,
     time,
     privacy,
@@ -330,7 +517,13 @@ const Header = ({
     onHeaderOptionClicked: () => onHeaderOptionClicked(props),
     hideThreeDot,
     isPostDetail,
-    karmaScore: props?.karma_score
+    karmaScore: props?.karma_score,
+    isFollow,
+    onPressFollUnFoll,
+    onDeletePost,
+    isShowDelete,
+    isSelf,
+    disabledFollow
   });
 };
 
@@ -446,12 +639,27 @@ const styles = StyleSheet.create({
     paddingLeft: 0
   },
   imageAnonymContainer: {
-    padding: 10
+    paddingHorizontal: 10
   },
   avatarImage: {height: 48, width: 48, borderRadius: 24},
   postDetail: (isPostDetail) => ({
     paddingLeft: isPostDetail ? 10 : 0
-  })
+  }),
+  contentFeedName: {
+    flexDirection: 'row'
+  },
+  textFollow: {
+    color: COLORS.bluePrimary,
+    fontSize: normalizeFontSize(14),
+    fontStyle: 'normal',
+    fontWeight: '500'
+  },
+  textFollowing: {
+    color: COLORS.greySubtile1,
+    fontSize: normalizeFontSize(14),
+    fontStyle: 'normal',
+    fontWeight: '500'
+  }
 });
 
 Header.propTypes = {

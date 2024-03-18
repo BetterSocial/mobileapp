@@ -40,6 +40,7 @@ import useProfileScreenHook, {
 } from '../../hooks/screen/useProfileScreenHook';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
+import {deleteAnonymousPost, deletePost, viewTimePost} from '../../service/post';
 import {
   changeRealName,
   getMyProfile,
@@ -48,7 +49,6 @@ import {
   updateBioProfile,
   updateImageProfile
 } from '../../service/profile';
-import {deleteAnonymousPost, deletePost, viewTimePost} from '../../service/post';
 import {downVote, upVote} from '../../service/vote';
 import {
   DEFAULT_PROFILE_PIC_PATH,
@@ -59,11 +59,12 @@ import {
 import dimen from '../../utils/dimen';
 import {fonts} from '../../utils/fonts';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
+import ImageCompressionUtils from '../../utils/image/compress';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
-import {COLORS} from '../../utils/theme';
 import ShareUtils from '../../utils/share';
 import StorageUtils from '../../utils/storage';
+import {COLORS} from '../../utils/theme';
 import RenderItem from '../FeedScreen/RenderList';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
 import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
@@ -73,13 +74,12 @@ import BottomSheetBio from './elements/BottomSheetBio';
 import BottomSheetImage from './elements/BottomSheetImage';
 import BottomSheetRealname from './elements/BottomSheetRealname';
 import FollowInfoRow from './elements/FollowInfoRow';
+import {KarmaLock} from './elements/KarmaLock';
 import {KarmaScore} from './elements/KarmaScore';
 import LinkAndSocialMedia from './elements/LinkAndSocialMedia';
 import ProfileHeader from './elements/ProfileHeader';
 import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
-import ImageCompressionUtils from '../../utils/image/compress';
-import {KarmaLock} from './elements/KarmaLock';
 
 const {width} = Dimensions.get('screen');
 
@@ -116,7 +116,7 @@ const Header = (props) => {
         headerHeightRef.current = headerHeightLayout;
       }}>
       <View style={styles.content}>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row', marginBottom: 10}}>
           <ProfilePicture
             onImageContainerClick={changeImage}
             profilePicPath={dataMain.profile_pic_path}
@@ -218,6 +218,7 @@ const ProfileScreen = ({route}) => {
   const {mappingColorFeed} = useCoreFeed();
   const LIMIT_PROFILE_FEED = 10;
   const TYPE_GALLERY = 'gallery';
+  const refBottomSheet = React.useRef();
 
   const {feeds} = myProfileFeed;
   const {
@@ -446,8 +447,8 @@ const ProfileScreen = ({route}) => {
   const onViewProfilePicture = () => {
     closeImageBs();
     navigation.push('ImageViewer', {
-      title: dataMain.username,
-      images: [{url: dataMain.profile_pic_path}]
+      title: profile?.myProfile?.username,
+      images: [{url: profile?.myProfile?.profile_pic_path}]
     });
   };
 
@@ -640,7 +641,6 @@ const ProfileScreen = ({route}) => {
   };
 
   const onDeletePost = async () => {
-    setIsOptionModalOpen(false);
     removePostByIdFromContext();
 
     let response;
@@ -708,6 +708,9 @@ const ProfileScreen = ({route}) => {
               source={SOURCE_MY_PROFILE}
               hideThreeDot={false}
               showAnonymousOption={true}
+              onDeletePost={() => onDeletePost()}
+              isSelf={item.is_self}
+              isShowDelete={true}
               onHeaderOptionClicked={() => onHeaderOptionClicked(item)}
             />
           );

@@ -93,7 +93,7 @@ const DiscoveryScreenV2 = ({route}) => {
 
     const fetchDiscoveryDataUser = async () => {
       const cancelToken = cancelTokenRef?.current?.token;
-      const data = await DiscoveryRepo.fetchDiscoveryDataUser(text, {cancelToken});
+      const data = await DiscoveryRepo.fetchDiscoveryDataUser(text, false, {cancelToken});
       if (data.success) {
         setDiscoveryDataFollowedUsers(
           data?.followedUsers?.map((item) => ({
