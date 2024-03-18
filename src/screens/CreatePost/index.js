@@ -510,7 +510,6 @@ const CreatePost = () => {
       if (params.onRefresh && typeof params.onRefresh === 'function') {
         params.onRefresh();
       }
-      handleTopicChat();
       showMessage({
         message: StringConstant.createPostDone,
         type: 'success'
@@ -561,27 +560,6 @@ const CreatePost = () => {
     );
   };
 
-  const handleTextMessage = () => {
-    if (!typeUser) {
-      return `There are new posts from ${user.myProfile.username} & others`;
-    }
-    return 'There are new posts from Anonymous & others';
-  };
-
-  const handleTopicChat = async () => {
-    const allTopics = listTopic;
-
-    allTopics.forEach(async (topic) => {
-      const channel = await client.client.channel('topics', `topic_${topic}`, {
-        name: `#${topic}`,
-        members: [user.myProfile.user_id],
-        channel_type: 3
-      });
-      await channel.create();
-      await channel.addMembers([user.myProfile.user_id]);
-      await channel.sendMessage({text: handleTextMessage()}, {skip_push: true});
-    });
-  };
   const createPoll = () => {
     setIsPollShown(true);
     sheetMediaRef.current.close();

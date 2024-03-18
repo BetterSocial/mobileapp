@@ -19,9 +19,15 @@ const putUserTopic = async (data, isIncognito) => {
   let res;
   try {
     if (isIncognito) {
-      res = await anonymousApi.put('/topics/follow-v2', data);
+      res = await anonymousApi.put('/topics/follow-v2', {
+        ...data,
+        with_system_message: true
+      });
     } else {
-      res = await api.put('/topics/follow-v2', data);
+      res = await api.put('/topics/follow-v2', {
+        ...data,
+        with_system_message: true
+      });
     }
     OneSignalUtil.rebuildAndSubscribeTags();
     return res.data;
