@@ -28,7 +28,7 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
     handlePressContact,
     openModal,
     handleCloseSelectUser,
-    alertRemoveUser,
+    handleOpenPopup,
     isAnonymousModalOpen,
     selectedUser,
     blockModalRef,
@@ -68,7 +68,7 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   };
 
   const handlePressPopup = (status) => {
-    alertRemoveUser(status);
+    handleOpenPopup(status);
   };
 
   const handleShowArrow = (item: Member) => {

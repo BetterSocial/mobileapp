@@ -288,6 +288,23 @@ const addMemberGroup = async ({channelId, memberIds}) => {
   }
 };
 
+const removeMemberGroup = async ({channelId, targetUserId}) => {
+  try {
+    const response = await api.post('/chat/group/remove-member', {
+      channelId,
+      targetUserId
+    });
+    console.warn('response', JSON.stringify(response));
+    if (response.status === 200) {
+      return Promise.resolve(response.data);
+    }
+    return Promise.reject(response.data);
+  } catch (e) {
+    if (e?.response?.data?.message) return Promise.reject(e?.response?.data?.message);
+    return Promise.reject(e);
+  }
+};
+
 export {
   createChannel,
   sendSystemMessage,
@@ -300,5 +317,6 @@ export {
   initChatFromPost,
   initChatFromPostAnon,
   getAllowAnonDmStatus,
-  addMemberGroup
+  addMemberGroup,
+  removeMemberGroup
 };

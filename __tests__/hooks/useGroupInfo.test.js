@@ -656,7 +656,7 @@ describe('useGroupInfo should run correctly', () => {
     await result.current.setSelectedUser({user_id: '123', user: {name: 'agita'}});
 
     act(() => {
-      result.current.alertRemoveUser('view');
+      result.current.handleOpenPopup('view');
     });
     expect(result.current.openModal).toBeFalsy();
   });
@@ -664,7 +664,7 @@ describe('useGroupInfo should run correctly', () => {
     const spyAlert = jest.spyOn(Alert, 'alert');
     const {result} = renderHook(() => useGroupInfo(), {wrapper});
     await result.current.setSelectedUser({user_id: '123', user: {name: 'agita'}});
-    await result.current.alertRemoveUser('remove');
+    await result.current.handleOpenPopup('remove');
 
     expect(spyAlert).toHaveBeenCalled();
     expect(result.current.openModal).toBeFalsy();
@@ -673,7 +673,7 @@ describe('useGroupInfo should run correctly', () => {
   it('alert remove user status remove should run correctly', async () => {
     const {result} = renderHook(() => useGroupInfo(), {wrapper});
     await result.current.setSelectedUser({user_id: '123', user: {name: 'agita'}});
-    await result.current.alertRemoveUser('message');
+    await result.current.handleOpenPopup('message');
 
     expect(result.current.openModal).toBeFalsy();
   });
