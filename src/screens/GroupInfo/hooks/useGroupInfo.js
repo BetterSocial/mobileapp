@@ -20,7 +20,7 @@ import {
 import {requestExternalStoragePermission} from '../../../utils/permission';
 import {setChannel} from '../../../context/actions/setChannel';
 import {setParticipants} from '../../../context/actions/groupChat';
-import {addMemberGroup, removeMemberGroup} from '../../../service/chat';
+import {addMemberGroup, removeMemberGroup, leaveGroup} from '../../../service/chat';
 import UserSchema from '../../../database/schema/UserSchema';
 import ChannelListSchema from '../../../database/schema/ChannelListSchema';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
@@ -51,7 +51,7 @@ const useGroupInfo = (channelId = null) => {
   const [isFetchingAllowAnonDM, setIsFetchingAllowAnonDM] = React.useState(false);
 
   const {createSignChat, handleAnonymousMessage} = useCreateChat();
-  const {setSelectedChannel} = useChatUtilsHook();
+  const {selectedChannel, setSelectedChannel} = useChatUtilsHook();
   const {anonProfileId, signedProfileId} = useUserAuthHook();
 
   const {participants, asset} = groupChatState;
@@ -464,32 +464,47 @@ const useGroupInfo = (channelId = null) => {
       await handleMessageAnonymously();
     }
   };
-  const onLeaveGroup = () => {
-    Alert.alert('', 'Exit this group?', [{text: 'Cancel'}, {text: 'Exit', onPress: leaveGroup}]);
+
+  const actionLeaveGroup = async () => {
+    setOpenModal(false);
+    const responseChannelData = await leaveGroup({channelId});
+    console.warn('responseChannelData', responseChannelData);
+    try {
+      const {channelName} = getChannelListInfo(
+        responseChannelData.data,
+        signedProfileId,
+        anonProfileId
+      );
+      const channelList = await ChannelListSchema.getSchemaById(localDb, channelId);
+      channelList.name = channelName;
+      await channelList.save(localDb);
+
+      setSelectedChannel(channelList);
+
+      await UserSchema.deleteByUserId(localDb, signedProfileId, channelId);
+    } catch (e) {
+      if (__DEV__) {
+        console.log(e, 'error');
+      }
+      console.log('error on memberSchema');
+      console.log(JSON.stringify(e));
+      console.log(e);
+    }
+
+    refresh('channelList');
+    refresh('chat');
+    refresh('channelInfo');
+
+    setTimeout(() => {
+      navigation.navigate('SignedChatScreen');
+    }, 500);
   };
 
-  const leaveGroup = async () => {
-    try {
-      const response = await channel.removeMembers([profile.myProfile.user_id]);
-      SimpleToast.show('You left this chat');
-      navigation.reset({
-        index: 1,
-        routes: [
-          {
-            name: 'AuthenticatedStack',
-            params: {
-              screen: 'HomeTabs',
-              params: {
-                screen: 'ChannelList'
-              }
-            }
-          }
-        ]
-      });
-      setNewParticipant(response.members);
-    } catch (e) {
-      console.log(e, 'sayu');
-    }
+  const onLeaveGroup = () => {
+    Alert.alert('', 'Leave this group?', [
+      {text: 'Cancel'},
+      {text: 'Exit', onPress: actionLeaveGroup}
+    ]);
   };
 
   const onReportGroup = () => {
@@ -497,7 +512,7 @@ const useGroupInfo = (channelId = null) => {
       to: 'contact@bettersocial.org',
       subject: 'Reporting a group',
       body: `Reporting group ${
-        channelState.channel?.data?.name || ''
+        selectedChannel?.name || ''
       }. Please type reason for reporting this group below. Thank you!`
     });
   };
