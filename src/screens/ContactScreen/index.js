@@ -21,9 +21,7 @@ import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {ANONYMOUS} from '../../hooks/core/constant';
 import DiscoveryRepo from '../../service/discovery';
 import DiscoveryAction from '../../context/actions/discoveryAction';
-import {addMemberGroup} from '../../service/chat';
-import UserSchema from '../../database/schema/UserSchema';
-import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
+import useGroupInfo from '../GroupInfo/hooks/useGroupInfo';
 
 const {width} = Dimensions.get('screen');
 
@@ -49,12 +47,13 @@ const ContactScreen = ({navigation}) => {
   const {createSignChat, createAnonymousChat, loadingCreateChat} = useCreateChat();
   const [discoveryData, discoveryDispatch] = React.useContext(Context).discovery;
   const cancelTokenRef = React.useRef(axios.CancelToken.source());
-  const {localDb, refresh} = useLocalDatabaseHook();
   const route = useRoute();
   const {from: sourceScreen, isAddParticipant, channelId, existParticipants} = route?.params || {};
   const isAnon = sourceScreen === ANONYMOUS;
   const VIEW_TYPE_LABEL = 1;
   const VIEW_TYPE_DATA = 2;
+
+  const {onAddMember} = useGroupInfo(channelId);
 
   const getDiscoveryUser = async () => {
     const initialData = await DiscoveryRepo.fetchInitialDiscoveryUsers(
@@ -197,39 +196,7 @@ const ContactScreen = ({navigation}) => {
   };
 
   const handleAddParticipant = () => {
-    addMemberGroup({channelId, memberIds: selectedUsers.map((user) => user.user_id)});
-
-    try {
-      selectedUsers?.forEach(async (member) => {
-        const userMember = UserSchema.fromMemberWebsocketObject(
-          {
-            user: {
-              id: member?.user_id,
-              username: member?.username,
-              image: member?.profile_pic_path,
-              last_active: member?.last_active_at,
-              created_at: member?.created_at,
-              updated_at: member?.updated_at
-            },
-            banner: member?.is_banner
-          },
-          channelId
-        );
-        await userMember.saveOrUpdateIfExists(localDb);
-      });
-    } catch (e) {
-      console.log('error on memberSchema');
-      console.log(e);
-    }
-
-    refresh('channelList');
-    refresh('chat');
-    refresh('channelInfo');
-    refresh('channelMember');
-
-    setTimeout(() => {
-      navigation.navigate('SignedChatScreen');
-    }, 500);
+    onAddMember(selectedUsers);
   };
 
   const rowRenderer = (type, item, index, extendedState) => (
@@ -300,7 +267,9 @@ const ContactScreen = ({navigation}) => {
       <StatusBar translucent={false} />
       <Header
         title={
-          isAnon
+          isAddParticipant
+            ? 'Add Participants'
+            : isAnon
             ? StringConstant.chatTabHeaderCreateAnonChatButtonText
             : StringConstant.chatTabHeaderCreateChatButtonText
         }
