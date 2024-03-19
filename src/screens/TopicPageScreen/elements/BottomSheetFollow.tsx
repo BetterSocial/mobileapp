@@ -9,6 +9,9 @@ import {COLORS} from '../../../utils/theme';
 import {Button} from '../../../components/Button';
 import useChatClientHook from '../../../utils/getstream/useChatClientHook';
 import UserItem from './UserItem';
+import DiscoveryRepo from '../../../service/discovery';
+import DiscoveryAction from '../../../context/actions/discoveryAction';
+import {Context} from '../../../context';
 
 export type Follow = 'signed' | 'incognito' | '';
 
@@ -38,6 +41,7 @@ const BottomSheetFollow = forwardRef((props: BottomSheetFollowProps, ref: Ref<RB
     getTopicDetail,
     onClose
   } = props;
+  const [, discoveryDispatch] = (React.useContext(Context) as any)?.discovery;
   const {followTopic} = useChatClientHook();
 
   const handleFollowTopic = async ({type: followTypeParam}: {type: Follow}) => {
@@ -51,6 +55,11 @@ const BottomSheetFollow = forwardRef((props: BottomSheetFollowProps, ref: Ref<RB
       try {
         await followTopic(topicName, isIncognito);
         getTopicDetail(topicName);
+        const discoveryInitialTopicResponse = await DiscoveryRepo.fetchInitialDiscoveryTopics();
+        DiscoveryAction.setDiscoveryInitialTopics(
+          discoveryInitialTopicResponse.suggestedTopics as any,
+          discoveryDispatch
+        );
       } catch (error) {
         if (__DEV__) {
           console.log(error);
