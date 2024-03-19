@@ -174,7 +174,12 @@ const _renderAnonimity = ({
                 <GlobalButton
                   testID="onBack"
                   onPress={() => {
-                    navigation.goBack();
+                    navigation.navigate('HomeTabs', {
+                      screen: 'Feed',
+                      params: {
+                        isGoBack: true
+                      }
+                    });
                   }}>
                   <MemoIc_arrow_back height={20} width={20} />
                 </GlobalButton>
