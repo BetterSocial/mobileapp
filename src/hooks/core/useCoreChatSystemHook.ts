@@ -15,7 +15,8 @@ import useFetchChannelHook from './chat/useFetchChannelHook';
 import useFetchPostNotificationHook from './chat/useFetchPostNotificationHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import usePostNotificationListenerHook from './getstream/usePostNotificationListenerHook';
-import useProfileHook from './profile/useProfileHook';
+import useSystemMessage from './chat/useSystemMessage';
+import useUserAuthHook from './auth/useUserAuthHook';
 import {ANONYMOUS, SIGNED} from './constant';
 import {
   AnonymousPostNotification,
@@ -32,13 +33,15 @@ import {getChannelListInfo} from '../../utils/string/StringUtils';
 
 const useCoreChatSystemHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook() as UseLocalDatabaseHook;
-  const {anonProfileId, signedProfileId} = useProfileHook();
+  const {anonProfileId, signedProfileId} = useUserAuthHook();
   const {getAllSignedChannels, getAllAnonymousChannels} = useFetchChannelHook();
   const {getAllSignedPostNotifications, getAllAnonymousPostNotifications} =
     useFetchPostNotificationHook();
   const [migrationStatus] = useRecoilState(migrationDbStatusAtom);
   const initialStartup: any = useRecoilValue(InitialStartupAtom);
   const {params} = useRoute();
+
+  const {saveSystemMessageFromWebsocket} = useSystemMessage();
 
   const isEnteringApp =
     initialStartup?.id !== null && initialStartup?.id !== undefined && initialStartup?.id !== '';
@@ -136,6 +139,9 @@ const useCoreChatSystemHook = () => {
     websocketData: GetstreamWebsocket,
     channelCategory: MyChannelType
   ) => {
+    /**
+     * TODO: LEGACY FOLLOW SYSTEM USER, CHANGE TO NEW SYSTEM
+     */
     const isContainFollowingMessage = websocketData?.message?.textOwnMessage
       ?.toLowerCase()
       ?.includes('you started following');
@@ -159,13 +165,34 @@ const useCoreChatSystemHook = () => {
       );
       const chat = ChatSchema.fromWebsocketObject(websocketData);
       await chat.save(localDb);
-    } else {
-      const channelList = ChannelList.fromWebsocketObject(
-        websocketData,
-        channelType[websocketData?.channel_type]
-      );
-      await channelList.save(localDb);
+
+      return websocketData;
     }
+    /**
+     * TODO END
+     */
+
+    /**
+     * Process System Message Websocket
+     */
+    const newWebsocketData = {...websocketData};
+    const isSuccess = await saveSystemMessageFromWebsocket(
+      newWebsocketData?.message,
+      async (newMessage) => {
+        newWebsocketData.message = newMessage;
+        const channelList = ChannelList.fromWebsocketObject(
+          newWebsocketData,
+          channelType[websocketData?.channel_type]
+        );
+        const chat = ChatSchema.fromWebsocketObject(newWebsocketData);
+        await Promise.all([chat.save(localDb), channelList.save(localDb)]);
+      }
+    );
+
+    if (isSuccess) return websocketData;
+    /**
+     * Process System Message Websocket (END)
+     */
 
     return websocketData;
   };
