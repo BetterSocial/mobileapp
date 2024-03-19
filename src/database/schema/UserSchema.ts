@@ -224,6 +224,23 @@ class UserSchema implements BaseDbSchema {
     }
   };
 
+  static deleteByUserId = async (
+    db: SQLiteDatabase,
+    userId: string,
+    channelId: string
+  ): Promise<void> => {
+    const resolver = (tx: Transaction) => {
+      const query = `DELETE FROM ${UserSchema.getTableName()} WHERE user_id = ? AND channel_id = ? LIMIT 1`;
+      tx.executeSql(query, [userId, channelId]);
+    };
+
+    try {
+      db.transaction(resolver);
+    } catch (e) {
+      console.log('error resolver', e);
+    }
+  };
+
   static async getSelfAnonUserInfo(
     db: SQLiteDatabase,
     selfAnonUserId: string,

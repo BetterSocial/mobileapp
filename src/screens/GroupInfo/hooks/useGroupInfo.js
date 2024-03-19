@@ -12,13 +12,24 @@ import useCreateChat from '../../../hooks/screen/useCreateChat';
 import TokenStorage, {ITokenEnum} from '../../../utils/storage/custom/tokenStorage';
 import {Context} from '../../../context';
 import {checkUserBlock} from '../../../service/profile';
-import {getChatName, getOfficialAnonUsername} from '../../../utils/string/StringUtils';
+import {
+  getChannelListInfo,
+  getChatName,
+  getOfficialAnonUsername
+} from '../../../utils/string/StringUtils';
 import {requestExternalStoragePermission} from '../../../utils/permission';
 import {setChannel} from '../../../context/actions/setChannel';
 import {setParticipants} from '../../../context/actions/groupChat';
+import {removeMemberGroup} from '../../../service/chat';
+import UserSchema from '../../../database/schema/UserSchema';
+import ChannelListSchema from '../../../database/schema/ChannelListSchema';
+import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
+import useUserAuthHook from '../../../hooks/core/auth/useUserAuthHook';
+import useChatUtilsHook from '../../../hooks/core/chat/useChatUtilsHook';
 
 const useGroupInfo = (channelId = null) => {
   const navigation = useNavigation();
+  const {localDb, refresh} = useLocalDatabaseHook();
 
   const [groupChatState, groupPatchDispatch] = React.useContext(Context).groupChat;
   const [, dispatchChannel] = React.useContext(Context).channel;
@@ -40,6 +51,8 @@ const useGroupInfo = (channelId = null) => {
   const [isFetchingAllowAnonDM, setIsFetchingAllowAnonDM] = React.useState(false);
 
   const {createSignChat, handleAnonymousMessage} = useCreateChat();
+  const {setSelectedChannel} = useChatUtilsHook();
+  const {anonProfileId, signedProfileId} = useUserAuthHook();
 
   const {participants, asset} = groupChatState;
   const countUser = Object.entries(participants).length;
@@ -227,20 +240,37 @@ const useGroupInfo = (channelId = null) => {
 
   const onRemoveUser = async () => {
     setOpenModal(false);
+    const responseChannelData = await removeMemberGroup({
+      channelId,
+      targetUserId: selectedUser?.userId
+    });
+
     try {
-      const result = await channel.removeMembers([selectedUser.user_id || selectedUser.userId]);
-      const updateParticipant = newParticipant.filter(
-        (participant) => participant.user_id !== (selectedUser.user_id || selectedUser.userId)
+      const {channelName} = getChannelListInfo(
+        responseChannelData.data,
+        signedProfileId,
+        anonProfileId
       );
-      setNewParticipant(updateParticipant);
-      updateMemberName(result.members);
-      setNewParticipant(result.members);
-      setParticipants(result.members, groupPatchDispatch);
+      const channelList = await ChannelListSchema.getSchemaById(localDb, channelId);
+      channelList.name = channelName;
+      await channelList.save(localDb);
+
+      setSelectedChannel(channelList);
+
+      await UserSchema.deleteByUserId(localDb, selectedUser?.userId, channelId);
     } catch (e) {
-      if (__DEV__) {
-        console.log(e, 'error');
-      }
+      console.log('error on memberSchema');
+      console.log(JSON.stringify(e));
+      console.log(e);
     }
+
+    refresh('channelList');
+    refresh('chat');
+    refresh('channelInfo');
+
+    setTimeout(() => {
+      navigation.navigate('SignedChatScreen');
+    }, 500);
   };
 
   const openChatMessage = async () => {
@@ -359,6 +389,7 @@ const useGroupInfo = (channelId = null) => {
    * @param {('view' | 'remove' | 'message' | 'block' | 'message-anonymously')} status
    */
   const handleOpenPopup = async (status) => {
+    console.warn('selectedUser', JSON.stringify(selectedUser));
     if (status === 'view') {
       setOpenModal(false);
       handleOpenProfile(selectedUser).catch((e) => console.log(e));
@@ -366,11 +397,7 @@ const useGroupInfo = (channelId = null) => {
     if (status === 'remove') {
       Alert.alert(
         null,
-        `Are you sure you want to remove ${
-          selectedUser.user.name || selectedUser?.user?.username || selectedUser.username
-        } from this group? We will let the group know that you removed ${
-          selectedUser.user.name || selectedUser?.user?.username || selectedUser.username
-        }.`,
+        `Are you sure you want to remove ${selectedUser?.username} from this group? We will let the group know that you removed ${selectedUser?.username}.`,
         [{text: 'Yes - remove', onPress: () => onRemoveUser()}, {text: 'Cancel'}]
       );
     }
