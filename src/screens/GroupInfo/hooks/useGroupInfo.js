@@ -234,21 +234,6 @@ const useGroupInfo = (channelId = null) => {
       );
       setNewParticipant(updateParticipant);
       updateMemberName(result.members);
-      await channel.sendMessage(
-        {
-          text: `${profile.myProfile.username} removed ${
-            selectedUser.user.name || selectedUser?.user?.username
-          } from this group`,
-          isRemoveMember: true,
-          user_id: profile.myProfile.user_id,
-          silent: true
-        },
-        {skip_push: true}
-      );
-      await generateSystemChat(
-        `${profile.myProfile.username} removed you from this group`,
-        selectedUser.user_id || selectedUser.userId
-      );
       setNewParticipant(result.members);
       setParticipants(result.members, groupPatchDispatch);
     } catch (e) {
@@ -409,7 +394,6 @@ const useGroupInfo = (channelId = null) => {
   const leaveGroup = async () => {
     try {
       const response = await channel.removeMembers([profile.myProfile.user_id]);
-      await generateSystemChat('You left this group', profile.myProfile.user_id);
       SimpleToast.show('You left this chat');
       navigation.reset({
         index: 1,

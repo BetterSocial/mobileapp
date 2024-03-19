@@ -16,7 +16,10 @@ const getUserTopic = async (query) => {
 
 const putUserTopic = async (data) => {
   try {
-    const res = await api.put('/topics/follow-v2', data);
+    const res = await api.put('/topics/follow-v2', {
+      ...data,
+      with_system_message: true
+    });
     OneSignalUtil.rebuildAndSubscribeTags();
     return res.data;
   } catch (error) {
