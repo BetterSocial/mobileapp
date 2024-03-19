@@ -22,8 +22,8 @@ const GroupChatChannelItem = (props: ChannelItemProps) => {
 
   const description = groupChat?.rawJson?.firstMessage ?? groupChat?.rawJson?.message;
   const isSystemDescription =
-    description?.isSystem ??
-    description?.type === 'system' ??
+    description?.isSystem ||
+    description?.type === 'system' ||
     description?.message?.type === 'system';
   const isDeletedMessage = description?.type === 'deleted';
   const sender = description?.user?.username ?? description?.user?.name;

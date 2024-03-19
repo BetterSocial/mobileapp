@@ -52,6 +52,9 @@ const ContactScreen = ({navigation}) => {
   const isAnon = sourceScreen === ANONYMOUS;
   const VIEW_TYPE_LABEL = 1;
   const VIEW_TYPE_DATA = 2;
+  const newChatTitleScreen = isAnon
+    ? StringConstant.chatTabHeaderCreateAnonChatButtonText
+    : StringConstant.chatTabHeaderCreateChatButtonText;
 
   const {onAddMember} = useGroupInfo(channelId);
 
@@ -268,13 +271,7 @@ const ContactScreen = ({navigation}) => {
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
       <Header
-        title={
-          isAddParticipant
-            ? 'Add Participants'
-            : isAnon
-            ? StringConstant.chatTabHeaderCreateAnonChatButtonText
-            : StringConstant.chatTabHeaderCreateChatButtonText
-        }
+        title={isAddParticipant ? 'Add Participants' : newChatTitleScreen}
         containerStyle={styles.containerStyle}
         subTitle={'Next'}
         subtitleStyle={selectedUsers.length > 0 && styles.subtitleStyle(isAnon)}
