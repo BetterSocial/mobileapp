@@ -12,13 +12,24 @@ import useCreateChat from '../../../hooks/screen/useCreateChat';
 import TokenStorage, {ITokenEnum} from '../../../utils/storage/custom/tokenStorage';
 import {Context} from '../../../context';
 import {checkUserBlock} from '../../../service/profile';
-import {getChatName, getOfficialAnonUsername} from '../../../utils/string/StringUtils';
+import {
+  getChannelListInfo,
+  getChatName,
+  getOfficialAnonUsername
+} from '../../../utils/string/StringUtils';
 import {requestExternalStoragePermission} from '../../../utils/permission';
 import {setChannel} from '../../../context/actions/setChannel';
 import {setParticipants} from '../../../context/actions/groupChat';
+import {leaveGroup} from '../../../service/chat';
+import UserSchema from '../../../database/schema/UserSchema';
+import ChannelListSchema from '../../../database/schema/ChannelListSchema';
+import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
+import useUserAuthHook from '../../../hooks/core/auth/useUserAuthHook';
+import useChatUtilsHook from '../../../hooks/core/chat/useChatUtilsHook';
 
 const useGroupInfo = (channelId = null) => {
   const navigation = useNavigation();
+  const {localDb, refresh} = useLocalDatabaseHook();
 
   const [groupChatState, groupPatchDispatch] = React.useContext(Context).groupChat;
   const [, dispatchChannel] = React.useContext(Context).channel;
@@ -40,6 +51,8 @@ const useGroupInfo = (channelId = null) => {
   const [isFetchingAllowAnonDM, setIsFetchingAllowAnonDM] = React.useState(false);
 
   const {createSignChat, handleAnonymousMessage} = useCreateChat();
+  const {selectedChannel, setSelectedChannel} = useChatUtilsHook();
+  const {anonProfileId, signedProfileId} = useUserAuthHook();
 
   const {participants, asset} = groupChatState;
   const countUser = Object.entries(participants).length;
@@ -387,32 +400,47 @@ const useGroupInfo = (channelId = null) => {
       await handleMessageAnonymously();
     }
   };
-  const onLeaveGroup = () => {
-    Alert.alert('', 'Exit this group?', [{text: 'Cancel'}, {text: 'Exit', onPress: leaveGroup}]);
+
+  const actionLeaveGroup = async () => {
+    setOpenModal(false);
+    const responseChannelData = await leaveGroup({channelId});
+    console.warn('responseChannelData', responseChannelData);
+    try {
+      const {channelName} = getChannelListInfo(
+        responseChannelData.data,
+        signedProfileId,
+        anonProfileId
+      );
+      const channelList = await ChannelListSchema.getSchemaById(localDb, channelId);
+      channelList.name = channelName;
+      await channelList.save(localDb);
+
+      setSelectedChannel(channelList);
+
+      await UserSchema.deleteByUserId(localDb, signedProfileId, channelId);
+    } catch (e) {
+      if (__DEV__) {
+        console.log(e, 'error');
+      }
+      console.log('error on memberSchema');
+      console.log(JSON.stringify(e));
+      console.log(e);
+    }
+
+    refresh('channelList');
+    refresh('chat');
+    refresh('channelInfo');
+
+    setTimeout(() => {
+      navigation.navigate('SignedChatScreen');
+    }, 500);
   };
 
-  const leaveGroup = async () => {
-    try {
-      const response = await channel.removeMembers([profile.myProfile.user_id]);
-      SimpleToast.show('You left this chat');
-      navigation.reset({
-        index: 1,
-        routes: [
-          {
-            name: 'AuthenticatedStack',
-            params: {
-              screen: 'HomeTabs',
-              params: {
-                screen: 'ChannelList'
-              }
-            }
-          }
-        ]
-      });
-      setNewParticipant(response.members);
-    } catch (e) {
-      console.log(e, 'sayu');
-    }
+  const onLeaveGroup = () => {
+    Alert.alert('', 'Leave this group?', [
+      {text: 'Cancel'},
+      {text: 'Exit', onPress: actionLeaveGroup}
+    ]);
   };
 
   const onReportGroup = () => {
@@ -420,7 +448,7 @@ const useGroupInfo = (channelId = null) => {
       to: 'contact@bettersocial.org',
       subject: 'Reporting a group',
       body: `Reporting group ${
-        channelState.channel?.data?.name || ''
+        selectedChannel?.name || ''
       }. Please type reason for reporting this group below. Thank you!`
     });
   };
