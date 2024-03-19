@@ -26,16 +26,20 @@ exports[`TESTING ChatItemTargetText RENDER continuous should match snapshot 1`] 
   />
   <View
     style={
-      Object {
-        "backgroundColor": "#F5F6F7",
-        "borderRadius": 8,
-        "borderTopStartRadius": 0,
-        "flex": 1,
-        "paddingBottom": 8,
-        "paddingLeft": 8,
-        "paddingRight": 8,
-        "paddingTop": 4,
-      }
+      Array [
+        Object {
+          "backgroundColor": "#F5F6F7",
+          "borderRadius": 12,
+          "borderTopStartRadius": 0,
+          "flex": 1,
+          "paddingBottom": 4,
+          "paddingTop": 4,
+        },
+        Object {
+          "paddingLeft": 8,
+          "paddingRight": 8,
+        },
+      ]
     }
   >
     <Text
@@ -79,24 +83,31 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
   </View>
   <View
     style={
-      Object {
-        "backgroundColor": "#F5F6F7",
-        "borderRadius": 8,
-        "borderTopStartRadius": 0,
-        "flex": 1,
-        "paddingBottom": 8,
-        "paddingLeft": 8,
-        "paddingRight": 8,
-        "paddingTop": 4,
-      }
+      Array [
+        Object {
+          "backgroundColor": "#F5F6F7",
+          "borderRadius": 12,
+          "borderTopStartRadius": 0,
+          "flex": 1,
+          "paddingBottom": 4,
+          "paddingTop": 4,
+        },
+        Object {
+          "paddingLeft": 8,
+          "paddingRight": 8,
+        },
+      ]
     }
   >
     <View
       style={
-        Object {
-          "display": "flex",
-          "flexDirection": "row",
-        }
+        Array [
+          Object {
+            "display": "flex",
+            "flexDirection": "row",
+          },
+          Object {},
+        ]
       }
       testID="chat-item-user-info"
     >
