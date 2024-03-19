@@ -45,7 +45,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: COLORS.white
-    // padding: 10
   },
   content: {
     height: 48,
@@ -65,7 +64,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.poppins[600],
     fontSize: 16,
     fontWeight: '600',
-    marginRight: 15
+    marginRight: 50
   },
   gap: {width: 20, height: 12},
   buttonBackContainer: {
