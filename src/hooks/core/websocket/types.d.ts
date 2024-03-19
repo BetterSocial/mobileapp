@@ -24,10 +24,6 @@ export type GetstreamMessage = {
   reply_count: number;
   shadowed: boolean;
   silent: boolean;
-  text: string;
-  isSystem?: boolean;
-  textOwnMessage?: string;
-  type: string;
   updated_at: string;
   user: {
     banned: boolean;
@@ -41,6 +37,31 @@ export type GetstreamMessage = {
     updated_at: string;
     username: string;
   };
+  /**
+   * SYSTEM MESSAGE CUSTOM PARAM
+   */
+  system_user?: string;
+  other_system_user?: string;
+  isSystem?: boolean;
+  ignore_update_timestamp?: boolean;
+  ignore_unread_count?: boolean;
+  textOwnMessage?: string;
+  type: string;
+  better_type?:
+    | 'follow_user'
+    | 'follow_topic'
+    | 'new_topic_post'
+    | 'add_member_to_group'
+    | 'remove_member_from_group'
+    | 'change_channel_detail'
+    | 'leave_group';
+  only_show_to_system_user?: boolean;
+  text: string;
+  other_text?: string;
+  own_text?: string;
+  /**
+   * SYSTEM MESSAGE END
+   */
 };
 
 export type GetstreamChannel = {

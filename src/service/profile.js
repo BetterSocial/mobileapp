@@ -104,7 +104,10 @@ export const setUnFollow = async (data) =>
 export const followUser = async (data) =>
   new Promise((resolve, reject) => {
     api
-      .post('/profiles/follow-user-v3', data)
+      .post('/profiles/follow-user-v3', {
+        ...data,
+        with_system_message: true
+      })
       .then((res) => {
         resolve(res.data);
       })
@@ -138,13 +141,12 @@ export const unfollowUserAnon = async (data) =>
   });
 
 export const setFollow = async (data) => {
-  const textTargetUser = `${data.username_follower} started following you.\nSend them a message now`;
-  const textOwnUser = `You started following ${data.username_followed}.\nSend them a message now.`;
-  const members = [data.user_id_follower, data.user_id_followed];
-  followClient(members, data, textTargetUser, textOwnUser);
   return new Promise((resolve, reject) => {
     api
-      .post('/profiles/follow-user-v3', data)
+      .post('/profiles/follow-user-v3', {
+        ...data,
+        with_system_message: true
+      })
       .then((res) => {
         resolve(res.data);
       })

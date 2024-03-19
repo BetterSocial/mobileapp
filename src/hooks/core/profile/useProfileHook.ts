@@ -5,6 +5,10 @@ import profileAtom from '../../../atom/profileAtom';
 import {Context} from '../../../context';
 import {ProfileContext} from '../../../../types/context/profilecontext.types';
 
+/**
+ *
+ * @deprecated Please use useUserAuthHook instead
+ */
 const useProfileHook = () => {
   // TODO: Merge this with useUserAuthHook and delete this hook
   const contextValue = React.useContext(Context);
