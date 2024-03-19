@@ -11,7 +11,7 @@ import {channelItemStyles as styles} from './ChannelItem.style';
 
 const CommunityChannelItem = (props: ChannelItemProps) => {
   const {channel: community, onChannelPressed} = props;
-  const channelType = 'COMMUNITY';
+  const channelType = community.channelType || 'COMMUNITY';
   const channelPicture = community?.channelPicture;
   const unreadCount = community?.unreadCount;
   const hasBadge = unreadCount > 0;

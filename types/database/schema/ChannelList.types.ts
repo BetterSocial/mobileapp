@@ -41,7 +41,9 @@ export type BetterSocialChannelType =
   | 'ANON_PM'
   | 'POST_NOTIFICATION'
   | 'ANON_POST_NOTIFICATION'
-  | 'TOPIC';
+  | 'TOPIC'
+  | 'ANON_TOPIC'
+  | 'GROUP_INFO';
 
 export interface ChannelList {
   id: string;

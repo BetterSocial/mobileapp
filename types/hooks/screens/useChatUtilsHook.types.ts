@@ -17,7 +17,7 @@ interface UseChatUtilsHook {
   goToCommunityScreen: (channel: ChannelList) => void;
   goToContactScreen: ({from}: ContactScreenPayload) => void;
   goToChatInfoScreen: () => void;
-  goBackFromChatScreen: () => void;
+  goBackFromChatScreen: (type: string) => void;
   handleTextSystem: (item: any) => string;
   setSelectedChannel: (channel: ChannelList) => void;
   splitSystemMessage: (message: string) => string[];

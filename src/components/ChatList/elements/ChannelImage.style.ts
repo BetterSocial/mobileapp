@@ -47,6 +47,12 @@ export const channelImageStyles = StyleSheet.create({
   containersigned_secondary: {
     backgroundColor: COLORS.signed_secondary
   },
+  containeranon_primary: {
+    backgroundColor: COLORS.anon_primary
+  },
+  containeranon_secondary: {
+    backgroundColor: COLORS.anon_secondary
+  },
   badgeContainer: {
     position: 'absolute',
     display: 'flex',
