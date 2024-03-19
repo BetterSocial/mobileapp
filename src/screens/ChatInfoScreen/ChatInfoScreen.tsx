@@ -202,7 +202,7 @@ const ChatInfoScreen = () => {
     isLoadingInitChat
   } = useChatInfoScreenHook();
 
-  const {onLeaveGroup, onReportGroup} = useGroupInfo();
+  const {onLeaveGroup, onReportGroup} = useGroupInfo(channelInfo?.id);
   const {signedProfileId} = useUserAuthHook();
   const {params}: any = useRoute();
   const ANONYMOUS_USER = 'AnonymousUser';
