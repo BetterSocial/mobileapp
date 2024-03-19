@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
 import * as React from 'react';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useNavigation} from '@react-navigation/core';
 import {useRecoilValue} from 'recoil';
@@ -14,6 +14,7 @@ import MemoNews from '../assets/icon/News';
 import MemoProfileIcon from '../assets/icon/Profile';
 import SignedChat from '../assets/icon/SignedChat';
 import StorageUtils from '../utils/storage';
+import dimen from '../utils/dimen';
 import useCoreChatSystemHook from '../hooks/core/useCoreChatSystemHook';
 import usePushNotificationHook from '../hooks/core/push-notification/usePushNotificationHook';
 import useRootChannelListHook from '../hooks/screen/useRootChannelListHook';
@@ -21,6 +22,7 @@ import {COLORS} from '../utils/theme';
 import {ChannelListScreen, FeedScreen, NewsScreen, ProfileScreen} from '../screens';
 import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
 import {Loading} from '../components';
+import {fonts, normalizeFontSize} from '../utils/fonts';
 
 const Tab = createBottomTabNavigator();
 
@@ -47,14 +49,14 @@ function HomeBottomTabs() {
   const renderTabBarIcon = (route, focused, color) => {
     if (route.name === 'SignedChannelList') {
       return (
-        <View style={styles.center}>
+        <View style={styles.iconContainer}>
           <SignedChat fill={color} stroke={color} />
         </View>
       );
     }
     if (route.name === 'AnonymousChannelList') {
       return (
-        <View style={styles.center}>
+        <View style={styles.iconContainer}>
           {focused ? (
             <AnonymousChatFill fill={COLORS.anon_primary} stroke={COLORS.anon_primary} />
           ) : (
@@ -65,21 +67,21 @@ function HomeBottomTabs() {
     }
     if (route.name === 'Feed') {
       return (
-        <View style={styles.center}>
+        <View style={styles.iconContainer}>
           <MemoFeed fill={color} />
         </View>
       );
     }
     if (route.name === 'News') {
       return (
-        <View>
+        <View style={styles.iconContainer}>
           <MemoNews fill={color} />
         </View>
       );
     }
 
     return (
-      <View style={styles.center}>
+      <View style={styles.iconContainer}>
         <MemoProfileIcon />
       </View>
     );
@@ -103,8 +105,17 @@ function HomeBottomTabs() {
   const menuIndicator = (nav, route) => {
     const isAnonChatMenu = route.name === 'AnonymousChannelList';
     const activeColor = isAnonChatMenu ? COLORS.anon_primary : COLORS.blueOnboarding;
-    const style = {backgroundColor: nav.isFocused() ? activeColor : 'transparent'};
-    return <View style={[styles.badge, style]} />;
+    let label = '';
+    if (route.name === 'SignedChannelList') label = 'Convos';
+    else if (route.name === 'AnonymousChannelList') label = 'Incognito';
+    else if (route.name === 'Feed') label = 'Main';
+    else if (route.name === 'News') label = 'News';
+    if (route.name === 'Profile') label = 'Profile';
+
+    const bottomBarExtendedStyle = {
+      color: nav?.isFocused() ? activeColor : COLORS.blackgrey
+    };
+    return <Text style={[styles.bottomBarLabel, bottomBarExtendedStyle]}>{label}</Text>;
   };
 
   return (
@@ -127,7 +138,10 @@ function HomeBottomTabs() {
           component={ChannelListScreen}
           initialParams={{isBottomTab: true}}
           listeners={({route}) => saveLastMenu(route)}
-          options={{tabBarBadge: signedChannelUnreadCount > 0 ? signedChannelUnreadCount : null}}
+          options={{
+            tabBarBadge: signedChannelUnreadCount > 0 ? signedChannelUnreadCount : null,
+            tabBarBadgeStyle: styles.bottomBarBadge
+          }}
         />
         <Tab.Screen
           name="AnonymousChannelList"
@@ -135,7 +149,8 @@ function HomeBottomTabs() {
           initialParams={{isBottomTab: true}}
           listeners={({route}) => saveLastMenu(route)}
           options={{
-            tabBarBadge: anonymousChannelUnreadCount > 0 ? anonymousChannelUnreadCount : null
+            tabBarBadge: anonymousChannelUnreadCount > 0 ? anonymousChannelUnreadCount : 10,
+            tabBarBadgeStyle: styles.bottomBarBadge
           }}
         />
         <Tab.Screen
@@ -165,23 +180,17 @@ function HomeBottomTabs() {
 export default HomeBottomTabs;
 
 const styles = StyleSheet.create({
-  container: {
-    height: '100%',
-    width: '100%'
-  },
-  badge: {
-    height: 7,
-    width: 7,
-    position: 'absolute',
-    bottom: 3,
-    borderRadius: 3.5
-  },
-  center: {
+  iconContainer: {
+    top: dimen.normalizeDimen(5),
     alignItems: 'center',
     justifyContent: 'center'
   },
-  icon: {
-    width: 21,
-    height: 20
+  bottomBarBadge: {
+    fontFamily: fonts.inter[700],
+    fontSize: normalizeFontSize(10)
+  },
+  bottomBarLabel: {
+    fontFamily: fonts.inter[500],
+    fontSize: normalizeFontSize(10)
   }
 });
