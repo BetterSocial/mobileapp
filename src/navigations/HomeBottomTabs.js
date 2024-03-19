@@ -149,7 +149,7 @@ function HomeBottomTabs() {
           initialParams={{isBottomTab: true}}
           listeners={({route}) => saveLastMenu(route)}
           options={{
-            tabBarBadge: anonymousChannelUnreadCount > 0 ? anonymousChannelUnreadCount : 10,
+            tabBarBadge: anonymousChannelUnreadCount > 0 ? anonymousChannelUnreadCount : null,
             tabBarBadgeStyle: styles.bottomBarBadge
           }}
         />
