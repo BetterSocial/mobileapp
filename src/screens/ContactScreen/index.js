@@ -196,7 +196,9 @@ const ContactScreen = ({navigation}) => {
   };
 
   const handleAddParticipant = () => {
-    onAddMember(selectedUsers);
+    const newSelectedUsers = selectedUsers;
+    setSelectedUsers([]);
+    onAddMember(newSelectedUsers);
   };
 
   const rowRenderer = (type, item, index, extendedState) => (
