@@ -8,6 +8,7 @@ import {addDotAndRemoveNewline} from '../../../utils/string/TrimString';
 import {COLORS} from '../../../utils/theme';
 import {PencilIcon} from '../../../assets';
 import {Divider} from '../../../components/Divider';
+import {TextWithEmoji} from './TextWithEmoji';
 
 type BioAndDMSettingProps = {
   bio: string;
@@ -144,7 +145,7 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
             What should others message you about? Add your bio and conversation starters here.
           </Text>
         ) : (
-          <Text style={styles.bioText}>{addDotAndRemoveNewline(bio || '')}</Text>
+          <TextWithEmoji text={addDotAndRemoveNewline(bio || '')} />
         )}
       </View>
       <View
@@ -215,14 +216,6 @@ const styles = StyleSheet.create({
     paddingBottom: 50
   },
   editPromptLabel: {color: COLORS.signed_secondary, textDecorationLine: 'underline'},
-  bioText: {
-    color: COLORS.lightgrey,
-    fontFamily: 'Inter',
-    fontSize: 14,
-    fontStyle: 'normal',
-    fontWeight: Platform.OS === 'android' ? '700' : '600',
-    marginBottom: 12
-  },
   bioTextNull: {
     color: COLORS.lightgrey,
     fontFamily: 'Inter',

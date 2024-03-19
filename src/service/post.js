@@ -4,7 +4,10 @@ import api from './config';
 
 export const createPost = async (data) => {
   try {
-    const resApi = await api.post('/activity/post-v3', data);
+    const resApi = await api.post('/activity/post-v3', {
+      ...data,
+      with_system_message: true
+    });
     return resApi.data;
   } catch (error) {
     if (__DEV__) {
