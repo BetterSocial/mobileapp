@@ -234,15 +234,7 @@ const _renderAnonimity = ({
                   </GlobalButton>
                 )}
               </View>
-              {showAnonymousOption && !hideThreeDot && (
-                <GlobalButton
-                  buttonStyle={{position: 'absolute', right: 0, top: -8}}
-                  onPress={() => refSheet.current.open()}>
-                  <View style={{zIndex: 1000}}>
-                    <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
-                  </View>
-                </GlobalButton>
-              )}
+
               <View
                 style={[
                   styles.containerFeedText,
