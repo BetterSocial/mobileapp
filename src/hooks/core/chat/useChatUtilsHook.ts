@@ -37,7 +37,7 @@ const selectedChannelKeyTab = atom({
   default: 0
 });
 
-function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
+function useChatUtilsHook(): UseChatUtilsHook {
   const [chat, setChat] = useRecoilState(chatAtom);
   const {selectedChannel, isLoadingFetchingChannelDetail} = chat;
 
@@ -254,7 +254,7 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
     return openChat('SignedChatScreen');
   };
 
-  const goBackFromChatScreen = async () => {
+  const goBackFromChatScreen = async (type: 'SIGNED' | 'ANONYMOUS') => {
     if (type === 'ANONYMOUS') {
       navigation.navigate('AnonymousChannelList');
     }

@@ -28,7 +28,7 @@ export const ScrollContext = React.createContext<ScrollContextProps | null>(null
 
 function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const {localDb, chat, refresh} = useLocalDatabaseHook();
-  const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen} = useChatUtilsHook(type);
+  const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen} = useChatUtilsHook();
   const {anonProfileId} = useUserAuthHook();
 
   const [selfAnonUserInfo, setSelfAnonUserInfo] = React.useState<any>(null);
