@@ -20,7 +20,7 @@ import {
 import {requestExternalStoragePermission} from '../../../utils/permission';
 import {setChannel} from '../../../context/actions/setChannel';
 import {setParticipants} from '../../../context/actions/groupChat';
-import {addMemberGroup} from '../../../service/chat';
+import {addMemberGroup, removeMemberGroup} from '../../../service/chat';
 import UserSchema from '../../../database/schema/UserSchema';
 import ChannelListSchema from '../../../database/schema/ChannelListSchema';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
@@ -240,20 +240,37 @@ const useGroupInfo = (channelId = null) => {
 
   const onRemoveUser = async () => {
     setOpenModal(false);
+    const responseChannelData = await removeMemberGroup({
+      channelId,
+      targetUserId: selectedUser?.userId
+    });
+
     try {
-      const result = await channel.removeMembers([selectedUser.user_id || selectedUser.userId]);
-      const updateParticipant = newParticipant.filter(
-        (participant) => participant.user_id !== (selectedUser.user_id || selectedUser.userId)
+      const {channelName} = getChannelListInfo(
+        responseChannelData.data,
+        signedProfileId,
+        anonProfileId
       );
-      setNewParticipant(updateParticipant);
-      updateMemberName(result.members);
-      setNewParticipant(result.members);
-      setParticipants(result.members, groupPatchDispatch);
+      const channelList = await ChannelListSchema.getSchemaById(localDb, channelId);
+      channelList.name = channelName;
+      await channelList.save(localDb);
+
+      setSelectedChannel(channelList);
+
+      await UserSchema.deleteByUserId(localDb, selectedUser?.userId, channelId);
     } catch (e) {
-      if (__DEV__) {
-        console.log(e, 'error');
-      }
+      console.log('error on memberSchema');
+      console.log(JSON.stringify(e));
+      console.log(e);
     }
+
+    refresh('channelList');
+    refresh('chat');
+    refresh('channelInfo');
+
+    setTimeout(() => {
+      navigation.navigate('SignedChatScreen');
+    }, 500);
   };
 
   const onAddMember = async (selectedUsers) => {
@@ -422,6 +439,7 @@ const useGroupInfo = (channelId = null) => {
    * @param {('view' | 'remove' | 'message' | 'block' | 'message-anonymously')} status
    */
   const handleOpenPopup = async (status) => {
+    console.warn('selectedUser', JSON.stringify(selectedUser));
     if (status === 'view') {
       setOpenModal(false);
       handleOpenProfile(selectedUser).catch((e) => console.log(e));
@@ -429,11 +447,7 @@ const useGroupInfo = (channelId = null) => {
     if (status === 'remove') {
       Alert.alert(
         null,
-        `Are you sure you want to remove ${
-          selectedUser.user.name || selectedUser?.user?.username || selectedUser.username
-        } from this group? We will let the group know that you removed ${
-          selectedUser.user.name || selectedUser?.user?.username || selectedUser.username
-        }.`,
+        `Are you sure you want to remove ${selectedUser?.username} from this group? We will let the group know that you removed ${selectedUser?.username}.`,
         [{text: 'Yes - remove', onPress: () => onRemoveUser()}, {text: 'Cancel'}]
       );
     }
