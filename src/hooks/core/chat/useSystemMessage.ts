@@ -57,14 +57,14 @@ const useSystemMessage = () => {
     saveSystemMessageCallback: SaveSystemMessageCallback
   ): Promise<boolean> {
     // If the callback is not provided, do nothing
-    console.log('checkpoint1');
+    // console.log('checkpoint1');
     if (!saveSystemMessageCallback) return false;
 
-    console.log('checkpoint2');
+    // console.log('checkpoint2');
     // If the message is a follow topic message, do nothing
     if (message?.text?.toLocaleLowerCase()?.includes('this topic has new')) return false;
 
-    console.log('checkpoint3');
+    // console.log('checkpoint3');
     // If the message is a system message, save the message
     if (__isMessageOnlyForSystemUser(message) && __isMySystemMessage(message)) {
       const newMessage = checkSystemMessageOnlyForSystemUser(message);
@@ -72,17 +72,17 @@ const useSystemMessage = () => {
       return true;
     }
 
-    console.log('checkpoint 3.5');
+    // console.log('checkpoint 3.5');
     if (__isMessageOnlyForSystemUser(message) && !__isMySystemMessage(message)) return false;
 
-    console.log('checkpoint4');
+    // console.log('checkpoint4');
     if (__isMessageForOtherUser(message)) {
       const newMessage = checkSystemMessageOnlyForOtherSystemUser(message);
       saveSystemMessageCallback?.(newMessage);
       return true;
     }
 
-    console.log('checkpoint5');
+    // console.log('checkpoint5');
     // If the message is a system message, save the message
     if (__isSystemMessage(message)) {
       const newMessage = checkSystemMessage(message);
@@ -90,13 +90,13 @@ const useSystemMessage = () => {
       return true;
     }
 
-    console.log('checkpoint6');
+    // console.log('checkpoint6');
     if (message?.better_type) {
       saveSystemMessageCallback?.(message);
       return true;
     }
 
-    console.log('checkpoint7');
+    // console.log('checkpoint7');
     return false;
   }
 
