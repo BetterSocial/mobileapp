@@ -21,18 +21,22 @@ const GroupChatChannelItem = (props: ChannelItemProps) => {
   const hasBadge = unreadCount > 0;
 
   const description = groupChat?.rawJson?.firstMessage ?? groupChat?.rawJson?.message;
-  const isSystemDescription = description?.isSystem ?? description?.type === 'system';
+  const isSystemDescription =
+    description?.isSystem ??
+    description?.type === 'system' ??
+    description?.message?.type === 'system';
   const isDeletedMessage = description?.type === 'deleted';
   const sender = description?.user?.username ?? description?.user?.name;
-  const isMeAsSender = description?.user?.id === signedProfileId;
+  const isMeAsSender =
+    description?.user?.id === signedProfileId || description?.user?.isMe || !description;
 
   let channelDescription = groupChat?.description;
-  if (!isSystemDescription) {
+  if (!isSystemDescription && description !== channelDescription) {
     channelDescription = isMeAsSender
       ? `You: ${channelDescription}`
       : `${sender}: ${channelDescription}`;
   }
-  if (!sender || isDeletedMessage) channelDescription = '';
+  if (isDeletedMessage) channelDescription = '';
 
   return (
     <CustomPressable onPress={onChannelPressed}>
