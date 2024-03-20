@@ -277,7 +277,6 @@ const addMemberGroup = async ({channelId, memberIds}) => {
       channel_id: channelId,
       members: memberIds
     });
-    console.warn('response', JSON.stringify(response));
     if (response.status === 200) {
       return Promise.resolve(response.data);
     }
@@ -294,7 +293,6 @@ const removeMemberGroup = async ({channelId, targetUserId}) => {
       channelId,
       targetUserId
     });
-    console.warn('response', JSON.stringify(response));
     if (response.status === 200) {
       return Promise.resolve(response.data);
     }
