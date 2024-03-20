@@ -308,7 +308,7 @@ const removeMemberGroup = async ({channelId, targetUserId}) => {
 const leaveGroup = async ({channelId}) => {
   try {
     const response = await api.post('/chat/group/leave', {
-      channel_id: channelId
+      channelId
     });
     if (response.status === 200) {
       return Promise.resolve(response.data);
