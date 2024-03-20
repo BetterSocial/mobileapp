@@ -4,6 +4,7 @@ enum EFeatureLogFlag {
   // Hooks
   useSimpleWebsocketHook = 'useSimpleWebsocketHook',
   useOneSignalSubscribeToCommunityHooks = 'useOneSignalSubscribeToCommunityHooks',
+  useSystemMessage = 'useSystemMessage',
 
   // Utils
   oneSignalUtils = 'oneSignalUtils',
@@ -24,7 +25,8 @@ const FeatureLogFlag: TFeatureLogFlag = {
   useOneSignalSubscribeToCommunityHooks: false,
   oneSignalUtils: false,
   navigation: false,
-  firebaseUtils: false
+  firebaseUtils: false,
+  useSystemMessage: false
 };
 
 const getFeatureLoggerInstance = (flag: EFeatureLogFlag) => {
