@@ -62,7 +62,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 8,
     alignSelf: 'center',
-    marginVertical: dimen.normalizeDimen(20)
+    marginBottom: dimen.normalizeDimen(20)
   },
   countUser: (from) => ({
     fontSize: normalizeFontSize(14),
@@ -150,7 +150,9 @@ export const styles = StyleSheet.create({
     height: 2,
     backgroundColor: COLORS.gray200
   },
-  actionGroup: {},
+  actionGroup: {
+    marginTop: dimen.normalizeDimen(6)
+  },
   buttonGroup: {
     flexDirection: 'row',
     paddingHorizontal: dimen.normalizeDimen(20),
@@ -304,8 +306,6 @@ const ChatInfoScreen = () => {
           ListFooterComponent={
             <>
               {isLoadingFetchingChannelDetail ? <ActivityIndicator style={styles.loading} /> : null}
-              <View style={styles.gap} />
-
               {channelInfo?.channelType === CHANNEL_GROUP && (
                 <View style={styles.btnAdd}>
                   <TouchableOpacity
@@ -322,6 +322,7 @@ const ChatInfoScreen = () => {
                   </TouchableOpacity>
                 </View>
               )}
+              <View style={styles.gap} />
               {channelInfo?.channelType === CHANNEL_GROUP && (
                 <View style={styles.actionGroup}>
                   <TouchableOpacity onPress={onLeaveGroup} style={styles.buttonGroup}>
