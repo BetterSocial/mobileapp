@@ -27,7 +27,7 @@ const GroupChatChannelItem = (props: ChannelItemProps) => {
   const isMeAsSender = description?.user?.id === signedProfileId || true;
 
   let channelDescription = groupChat?.description;
-  if (!isSystemDescription) {
+  if (!isSystemDescription || description !== channelDescription) {
     channelDescription = isMeAsSender
       ? `You: ${channelDescription}`
       : `${sender}: ${channelDescription}`;
