@@ -12,13 +12,25 @@ import useCreateChat from '../../../hooks/screen/useCreateChat';
 import TokenStorage, {ITokenEnum} from '../../../utils/storage/custom/tokenStorage';
 import {Context} from '../../../context';
 import {checkUserBlock} from '../../../service/profile';
-import {getChatName, getOfficialAnonUsername} from '../../../utils/string/StringUtils';
+import {
+  getChannelListInfo,
+  getChatName,
+  getOfficialAnonUsername
+} from '../../../utils/string/StringUtils';
 import {requestExternalStoragePermission} from '../../../utils/permission';
 import {setChannel} from '../../../context/actions/setChannel';
 import {setParticipants} from '../../../context/actions/groupChat';
+import {addMemberGroup} from '../../../service/chat';
+import UserSchema from '../../../database/schema/UserSchema';
+import ChannelListSchema from '../../../database/schema/ChannelListSchema';
+import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
+import {SIGNED} from '../../../hooks/core/constant';
+import useUserAuthHook from '../../../hooks/core/auth/useUserAuthHook';
+import useChatUtilsHook from '../../../hooks/core/chat/useChatUtilsHook';
 
 const useGroupInfo = (channelId = null) => {
   const navigation = useNavigation();
+  const {localDb, refresh} = useLocalDatabaseHook();
 
   const [groupChatState, groupPatchDispatch] = React.useContext(Context).groupChat;
   const [, dispatchChannel] = React.useContext(Context).channel;
@@ -40,6 +52,8 @@ const useGroupInfo = (channelId = null) => {
   const [isFetchingAllowAnonDM, setIsFetchingAllowAnonDM] = React.useState(false);
 
   const {createSignChat, handleAnonymousMessage} = useCreateChat();
+  const {setSelectedChannel} = useChatUtilsHook();
+  const {anonProfileId, signedProfileId} = useUserAuthHook();
 
   const {participants, asset} = groupChatState;
   const countUser = Object.entries(participants).length;
@@ -241,6 +255,56 @@ const useGroupInfo = (channelId = null) => {
         console.log(e, 'error');
       }
     }
+  };
+
+  const onAddMember = async (selectedUsers) => {
+    const responseChannelData = await addMemberGroup({
+      channelId,
+      memberIds: selectedUsers.map((user) => user.user_id)
+    });
+
+    try {
+      const {channelName} = getChannelListInfo(
+        responseChannelData.data,
+        signedProfileId,
+        anonProfileId
+      );
+      const channelList = await ChannelListSchema.getSchemaById(localDb, channelId);
+      channelList.name = channelName;
+      await channelList.save(localDb);
+
+      setSelectedChannel(channelList);
+
+      selectedUsers?.forEach(async (member) => {
+        const userMember = UserSchema.fromMemberWebsocketObject(
+          {
+            user: {
+              id: member?.user_id,
+              username: member?.username,
+              image: member?.profile_pic_path,
+              last_active: member?.last_active_at,
+              created_at: member?.created_at,
+              updated_at: member?.updated_at
+            },
+            banner: member?.is_banner
+          },
+          channelId
+        );
+        await userMember.saveOrUpdateIfExists(localDb);
+      });
+    } catch (e) {
+      console.log('error on memberSchema');
+      console.log(JSON.stringify(e));
+      console.log(e);
+    }
+
+    refresh('channelList');
+    refresh('chat');
+    refresh('channelInfo');
+
+    setTimeout(() => {
+      navigation.navigate('SignedChatScreen');
+    }, 500);
   };
 
   const openChatMessage = async () => {
@@ -470,6 +534,7 @@ const useGroupInfo = (channelId = null) => {
     newParticipant,
     handleCloseSelectUser,
     onRemoveUser,
+    onAddMember,
     openModal,
     leaveGroup,
     handleOpenPopup,
