@@ -194,13 +194,7 @@ const _renderAnonimity = ({
               />
             </View>
 
-            <View
-              style={[
-                styles.containerFeedProfile,
-                {
-                  marginTop: -10
-                }
-              ]}>
+            <View style={[styles.containerFeedProfile]}>
               <View
                 style={[
                   {
@@ -211,6 +205,7 @@ const _renderAnonimity = ({
                 ]}>
                 <View
                   style={{
+                    marginTop: -6,
                     flexDirection: 'row'
                   }}>
                   <AnonymousUsername version={version} anonUserInfo={anonUserInfo} isFeed={true} />
@@ -244,7 +239,8 @@ const _renderAnonimity = ({
                 style={[
                   styles.containerFeedText,
                   {
-                    marginTop: -2
+                    marginTop: -6,
+                    paddingBottom: 4
                   }
                 ]}>
                 <Text style={styles.feedDate}>{calculateTime(time)}</Text>
