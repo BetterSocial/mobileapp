@@ -38,6 +38,10 @@ const SignedChatScreen = () => {
 
   const {moveToAnonymousChannel} = useMoveChatTypeHook();
 
+  const exitedGroup =
+    selectedChannel?.rawJson?.channel?.better_channel_member?.findIndex(
+      (item: any) => item.user_id === signedProfileId
+    ) < 0;
   const memberChat = selectedChannel?.rawJson?.channel?.members?.find(
     (item: any) => item.user_id !== signedProfileId
   );
@@ -92,9 +96,9 @@ const SignedChatScreen = () => {
       {selectedChannel ? (
         <ChatDetailHeader
           channel={selectedChannel}
-          onAvatarPress={goToChatInfoPage}
-          onBackPress={() => goBackFromChatScreen('SIGNED')}
-          onThreeDotPress={goToChatInfoPage}
+          onAvatarPress={exitedGroup ? null : () => goToChatInfoPage()}
+          onBackPress={goBackFromChatScreen}
+          onThreeDotPress={exitedGroup ? null : () => goToChatInfoPage()}
           avatar={selectedChannel?.channelPicture}
           type={SIGNED}
           user={selectedChannel?.name}
@@ -115,21 +119,23 @@ const SignedChatScreen = () => {
         keyExtractor={(item, index) => item?.id || index.toString()}
         renderItem={renderChatItem}
       />
-      <View style={styles.inputContainer}>
-        <InputMessageV2
-          onSendButtonClicked={sendChat}
-          type={SIGNED}
-          username={selectedChannel?.name}
-          profileImage={profile?.myProfile?.profile_pic_path}
-          onToggleConfirm={moveChatToAnon}
-          messageDisable={
-            selectedChannel?.channelType === 'GROUP'
-              ? 'Coming soon: Anonymous messages are not enabled yet within group chats'
-              : null
-          }
-          isAnonimityEnabled={isAnonimityEnabled}
-        />
-      </View>
+      {!exitedGroup && (
+        <View style={styles.inputContainer}>
+          <InputMessageV2
+            onSendButtonClicked={sendChat}
+            type={SIGNED}
+            username={selectedChannel?.name}
+            profileImage={profile?.myProfile?.profile_pic_path}
+            onToggleConfirm={moveChatToAnon}
+            messageDisable={
+              selectedChannel?.channelType === 'GROUP'
+                ? 'Coming soon: Anonymous messages are not enabled yet within group chats'
+                : null
+            }
+            isAnonimityEnabled={isAnonimityEnabled}
+          />
+        </View>
+      )}
       <Loading visible={loading} />
     </View>
   );

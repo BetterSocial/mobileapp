@@ -21,6 +21,7 @@ import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {ANONYMOUS} from '../../hooks/core/constant';
 import DiscoveryRepo from '../../service/discovery';
 import DiscoveryAction from '../../context/actions/discoveryAction';
+import useGroupInfo from '../GroupInfo/hooks/useGroupInfo';
 
 const {width} = Dimensions.get('screen');
 
@@ -47,11 +48,15 @@ const ContactScreen = ({navigation}) => {
   const [discoveryData, discoveryDispatch] = React.useContext(Context).discovery;
   const cancelTokenRef = React.useRef(axios.CancelToken.source());
   const route = useRoute();
-  const {from: sourceScreen} = route.params;
+  const {from: sourceScreen, isAddParticipant, channelId, existParticipants} = route?.params || {};
   const isAnon = sourceScreen === ANONYMOUS;
-
   const VIEW_TYPE_LABEL = 1;
   const VIEW_TYPE_DATA = 2;
+  const newChatTitleScreen = isAnon
+    ? StringConstant.chatTabHeaderCreateAnonChatButtonText
+    : StringConstant.chatTabHeaderCreateChatButtonText;
+
+  const {onAddMember} = useGroupInfo(channelId);
 
   const getDiscoveryUser = async () => {
     const initialData = await DiscoveryRepo.fetchInitialDiscoveryUsers(
@@ -72,7 +77,11 @@ const ContactScreen = ({navigation}) => {
       following: item.following !== undefined ? item.following : item.user_id_follower !== null
     }));
 
-    setUsers(userData);
+    setUsers(
+      userData?.filter((item) =>
+        isAddParticipant ? !existParticipants.includes(item.username) : item
+      )
+    );
   };
 
   const handleSearch = async () => {
@@ -95,7 +104,11 @@ const ContactScreen = ({navigation}) => {
           })) || [];
 
         const dataUser = [...followedUsers, ...unfollowedUsers];
-        setUsers(dataUser);
+        setUsers(
+          dataUser?.filter((item) =>
+            isAddParticipant ? !existParticipants.includes(item.username) : item
+          )
+        );
       }
       setLoading(false);
     } catch (error) {
@@ -185,6 +198,12 @@ const ContactScreen = ({navigation}) => {
     }
   };
 
+  const handleAddParticipant = () => {
+    const newSelectedUsers = selectedUsers;
+    setSelectedUsers([]);
+    onAddMember(newSelectedUsers);
+  };
+
   const rowRenderer = (type, item, index, extendedState) => (
     <ItemUser
       photo={item.profile_pic_path}
@@ -252,15 +271,11 @@ const ContactScreen = ({navigation}) => {
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
       <Header
-        title={
-          isAnon
-            ? StringConstant.chatTabHeaderCreateAnonChatButtonText
-            : StringConstant.chatTabHeaderCreateChatButtonText
-        }
+        title={isAddParticipant ? 'Add Participants' : newChatTitleScreen}
         containerStyle={styles.containerStyle}
         subTitle={'Next'}
         subtitleStyle={selectedUsers.length > 0 && styles.subtitleStyle(isAnon)}
-        onPressSub={() => handleCreateChannel()}
+        onPressSub={() => (isAddParticipant ? handleAddParticipant() : handleCreateChannel())}
         onPress={() => navigation.goBack()}
         disabledNextBtn={selectedUsers.length <= 0}
       />

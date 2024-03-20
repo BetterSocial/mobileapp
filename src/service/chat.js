@@ -271,6 +271,53 @@ const initChatFromPostAnon = async ({source, id}) => {
   }
 };
 
+const addMemberGroup = async ({channelId, memberIds}) => {
+  try {
+    const response = await api.post('/chat/group/add-members', {
+      channel_id: channelId,
+      members: memberIds
+    });
+    if (response.status === 200) {
+      return Promise.resolve(response.data);
+    }
+    return Promise.reject(response.data);
+  } catch (e) {
+    if (e?.response?.data?.message) return Promise.reject(e?.response?.data?.message);
+    return Promise.reject(e);
+  }
+};
+
+const removeMemberGroup = async ({channelId, targetUserId}) => {
+  try {
+    const response = await api.post('/chat/group/remove-member', {
+      channelId,
+      targetUserId
+    });
+    if (response.status === 200) {
+      return Promise.resolve(response.data);
+    }
+    return Promise.reject(response.data);
+  } catch (e) {
+    if (e?.response?.data?.message) return Promise.reject(e?.response?.data?.message);
+    return Promise.reject(e);
+  }
+};
+
+const leaveGroup = async ({channelId}) => {
+  try {
+    const response = await api.post('/chat/group/leave', {
+      channelId
+    });
+    if (response.status === 200) {
+      return Promise.resolve(response.data);
+    }
+    return Promise.reject(response.data);
+  } catch (e) {
+    if (e?.response?.data?.message) return Promise.reject(e?.response?.data?.message);
+    return Promise.reject(e);
+  }
+};
+
 export {
   createChannel,
   sendSystemMessage,
@@ -282,5 +329,8 @@ export {
   moveChatToAnon,
   initChatFromPost,
   initChatFromPostAnon,
-  getAllowAnonDmStatus
+  getAllowAnonDmStatus,
+  addMemberGroup,
+  removeMemberGroup,
+  leaveGroup
 };

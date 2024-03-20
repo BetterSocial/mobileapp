@@ -16,8 +16,10 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import {useRoute} from '@react-navigation/core';
+import {useNavigation, useRoute} from '@react-navigation/core';
 
+import ExitGroup from '../../assets/images/exit-group.png';
+import ReportGroup from '../../assets/images/report.png';
 import AnonymousChatInfoHeader from '../../components/Header/AnonymousChatInfoHeader';
 import AnonymousIcon from '../ChannelListScreen/elements/components/AnonymousIcon';
 import BlockComponent from '../../components/BlockComponent';
@@ -33,34 +35,34 @@ import {CHANNEL_GROUP, GROUP_INFO, SIGNED} from '../../hooks/core/constant';
 import {COLORS} from '../../utils/theme';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {ProfileContact} from '../../components/Items';
-import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getOfficialAnonUsername} from '../../utils/string/StringUtils';
+import useGroupInfo from '../GroupInfo/hooks/useGroupInfo';
 
 export const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: COLORS.white, paddingBottom: 40},
+  container: {flex: 1, backgroundColor: COLORS.white, paddingBottom: dimen.normalizeDimen(40)},
   users: {
-    paddingTop: 12
+    paddingTop: dimen.normalizeDimen(12)
   },
   photoProfile: {
-    height: normalize(50),
-    width: normalize(50)
+    height: dimen.normalizeDimen(50),
+    width: dimen.normalizeDimen(50)
   },
   btnAddText: {
     fontFamily: fonts.inter[600],
-    fontSize: normalizeFontSize(14),
+    fontSize: normalizeFontSize(12),
     lineHeight: normalizeFontSize(20),
-    color: COLORS.anon_primary
+    color: COLORS.signed_primary
   },
   btnAdd: {
-    padding: normalize(8),
+    padding: dimen.normalizeDimen(8),
     backgroundColor: COLORS.lightgrey,
     width: 'auto',
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'absolute',
     borderRadius: 8,
     alignSelf: 'center',
-    bottom: 5
+    marginBottom: dimen.normalizeDimen(20)
   },
   countUser: (from) => ({
     fontSize: normalizeFontSize(14),
@@ -78,13 +80,13 @@ export const styles = StyleSheet.create({
     color: COLORS.anon_primary
   },
   dateCreate: {
-    marginLeft: 20,
+    marginLeft: dimen.normalizeDimen(20),
     fontSize: normalizeFontSize(14),
     fontFamily: fonts.inter[400],
     lineHeight: normalizeFontSize(16.94),
     color: COLORS.black,
-    marginTop: 4,
-    marginBottom: 9
+    marginTop: dimen.normalizeDimen(4),
+    marginBottom: dimen.normalizeDimen(9)
   },
   groupName: {
     fontSize: normalizeFontSize(24),
@@ -106,27 +108,27 @@ export const styles = StyleSheet.create({
   containerPhoto: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 8,
-    paddingBottom: 13
+    paddingTop: dimen.normalizeDimen(8),
+    paddingBottom: dimen.normalizeDimen(13)
   },
   btnUpdatePhoto: {
-    width: normalize(100),
-    height: normalize(100),
-    borderRadius: normalize(50),
+    width: dimen.normalizeDimen(100),
+    height: dimen.normalizeDimen(100),
+    borderRadius: dimen.normalizeDimen(50),
     backgroundColor: COLORS.lightgrey,
     justifyContent: 'center',
     alignItems: 'center'
   },
   groupProfilePicture: {
-    width: normalize(100),
-    height: normalize(100),
-    borderRadius: normalize(50),
-    paddingLeft: 8
+    width: dimen.normalizeDimen(100),
+    height: dimen.normalizeDimen(100),
+    borderRadius: dimen.normalizeDimen(50),
+    paddingLeft: dimen.normalizeDimen(8)
   },
   loading: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: normalize(20)
+    marginBottom: dimen.normalizeDimen(20)
   },
   row: {
     display: 'flex',
@@ -138,45 +140,47 @@ export const styles = StyleSheet.create({
     flex: 1
   },
   pencilIconTouchable: {
-    padding: 4,
-    marginRight: 28,
+    padding: dimen.normalizeDimen(4),
+    marginRight: dimen.normalizeDimen(28),
     alignContent: 'center',
     alignItems: 'center',
-    height: 28
+    height: dimen.normalizeDimen(28)
   },
   gap: {
-    height: 1,
-    backgroundColor: COLORS.lightgrey
+    height: 2,
+    backgroundColor: COLORS.gray200
   },
   actionGroup: {
-    marginTop: 22
+    marginTop: dimen.normalizeDimen(6)
   },
   buttonGroup: {
     flexDirection: 'row',
-    paddingHorizontal: 20,
-    paddingVertical: 13
+    paddingHorizontal: dimen.normalizeDimen(20),
+    paddingVertical: dimen.normalizeDimen(13)
   },
   imageAction: {
-    height: 20,
-    width: 20
+    height: dimen.normalizeDimen(20),
+    width: dimen.normalizeDimen(20)
   },
   imageActContainer: {
-    marginRight: 26
+    marginRight: dimen.normalizeDimen(26)
   },
   textAct: {
     color: COLORS.redalert,
-    fontSize: 14
+    fontSize: normalizeFontSize(14),
+    lineHeight: normalizeFontSize(20),
+    fontFamily: fonts.inter[500]
   },
   mr7: {
     marginRight: dimen.normalizeDimen(12)
   },
   imageUser: {
-    height: normalize(48),
-    width: normalize(48),
-    borderRadius: normalize(24)
+    height: dimen.normalizeDimen(48),
+    width: dimen.normalizeDimen(48),
+    borderRadius: dimen.normalizeDimen(24)
   },
   parentContact: {
-    height: normalize(72)
+    height: dimen.normalizeDimen(72)
   }
 });
 
@@ -196,6 +200,9 @@ const ChatInfoScreen = () => {
     loadingChannelInfo,
     isLoadingInitChat
   } = useChatInfoScreenHook();
+  const navigation = useNavigation();
+
+  const {onLeaveGroup, onReportGroup} = useGroupInfo(channelInfo?.id);
   const {signedProfileId} = useUserAuthHook();
   const {params}: any = useRoute();
   const ANONYMOUS_USER = 'AnonymousUser';
@@ -215,7 +222,7 @@ const ChatInfoScreen = () => {
         <AnonymousIcon
           color={channelInfo?.anon_user_info_color_code}
           emojiCode={channelInfo?.anon_user_info_emoji_code}
-          size={normalize(100)}
+          size={dimen.normalizeDimen(100)}
         />
       );
     }
@@ -236,7 +243,7 @@ const ChatInfoScreen = () => {
           <AnonymousIcon
             color={item?.anon_user_info_color_code}
             emojiCode={item?.anon_user_info_emoji_code}
-            size={normalize(48)}
+            size={dimen.normalizeDimen(48)}
           />
         </View>
       );
@@ -299,7 +306,43 @@ const ChatInfoScreen = () => {
           ListFooterComponent={
             <>
               {isLoadingFetchingChannelDetail ? <ActivityIndicator style={styles.loading} /> : null}
+              {channelInfo?.channelType === CHANNEL_GROUP && (
+                <View style={styles.btnAdd}>
+                  <TouchableOpacity
+                    testID="addParticipant"
+                    onPress={() =>
+                      navigation.push('ContactScreen', {
+                        from: SIGNED,
+                        isAddParticipant: true,
+                        channelId: channelInfo?.id,
+                        existParticipants: channelInfo?.memberUsers?.map((item) => item?.username)
+                      })
+                    }>
+                    <Text style={styles.btnAddText}>+ Add Participants</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
               <View style={styles.gap} />
+              {channelInfo?.channelType === CHANNEL_GROUP && (
+                <View style={styles.actionGroup}>
+                  <TouchableOpacity onPress={onLeaveGroup} style={styles.buttonGroup}>
+                    <View style={styles.imageActContainer}>
+                      <FastImage style={styles.imageAction} source={ExitGroup} />
+                    </View>
+                    <View>
+                      <Text style={styles.textAct}>Exit Group</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={onReportGroup} style={styles.buttonGroup}>
+                    <View style={styles.imageActContainer}>
+                      <FastImage style={styles.imageAction} source={ReportGroup} />
+                    </View>
+                    <View>
+                      <Text style={styles.textAct}>Report Group</Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              )}
             </>
           }
           renderItem={({item, index}) => {
