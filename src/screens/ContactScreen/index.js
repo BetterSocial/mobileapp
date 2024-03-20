@@ -4,6 +4,7 @@ import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
 import {Dimensions, RefreshControl, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
 /* eslint-disable no-param-reassign */
 import {debounce} from 'lodash';
+import {v4 as uuidv4} from 'uuid';
 import axios from 'axios';
 import {useRoute} from '@react-navigation/core';
 import ContactPreview from './elements/ContactPreview';
@@ -21,6 +22,10 @@ import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {ANONYMOUS} from '../../hooks/core/constant';
 import DiscoveryRepo from '../../service/discovery';
 import DiscoveryAction from '../../context/actions/discoveryAction';
+import {addMemberGroup} from '../../service/chat';
+import UserSchema from '../../database/schema/UserSchema';
+import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
+import ChatSchema from '../../database/schema/ChatSchema';
 
 const {width} = Dimensions.get('screen');
 
@@ -46,10 +51,10 @@ const ContactScreen = ({navigation}) => {
   const {createSignChat, createAnonymousChat, loadingCreateChat} = useCreateChat();
   const [discoveryData, discoveryDispatch] = React.useContext(Context).discovery;
   const cancelTokenRef = React.useRef(axios.CancelToken.source());
+  const {localDb, refresh} = useLocalDatabaseHook();
   const route = useRoute();
-  const {from: sourceScreen} = route.params;
+  const {from: sourceScreen, isAddParticipant, channelId, existParticipants} = route?.params || {};
   const isAnon = sourceScreen === ANONYMOUS;
-
   const VIEW_TYPE_LABEL = 1;
   const VIEW_TYPE_DATA = 2;
 
@@ -72,7 +77,9 @@ const ContactScreen = ({navigation}) => {
       following: item.following !== undefined ? item.following : item.user_id_follower !== null
     }));
 
-    setUsers(userData);
+    setUsers(
+      userData?.filter((item) => isAddParticipant && !existParticipants.includes(item.username))
+    );
   };
 
   const handleSearch = async () => {
@@ -95,7 +102,9 @@ const ContactScreen = ({navigation}) => {
           })) || [];
 
         const dataUser = [...followedUsers, ...unfollowedUsers];
-        setUsers(dataUser);
+        setUsers(
+          dataUser?.filter((item) => isAddParticipant && !existParticipants.includes(item.username))
+        );
       }
       setLoading(false);
     } catch (error) {
@@ -185,6 +194,54 @@ const ContactScreen = ({navigation}) => {
     }
   };
 
+  const handleAddParticipant = () => {
+    addMemberGroup({channelId, memberIds: selectedUsers.map((user) => user.user_id)});
+
+    try {
+      selectedUsers?.forEach(async (member) => {
+        const userMember = UserSchema.fromMemberWebsocketObject(
+          {
+            user: {
+              id: member?.user_id,
+              username: member?.username,
+              image: member?.profile_pic_path,
+              last_active: member?.last_active_at,
+              created_at: member?.created_at,
+              updated_at: member?.updated_at
+            },
+            banner: member?.is_banner
+          },
+          channelId
+        );
+        await userMember.saveOrUpdateIfExists(localDb);
+
+        const currentChatSchema = await ChatSchema.generateSendingChat(
+          uuidv4(),
+          member?.user_id,
+          channelId,
+          `You added ${member?.username} to this group`,
+          [],
+          localDb,
+          'system',
+          'sent'
+        );
+        currentChatSchema.save(localDb);
+      });
+    } catch (e) {
+      console.log('error on memberSchema');
+      console.log(e);
+    }
+
+    refresh('channelList');
+    refresh('chat');
+    refresh('channelInfo');
+    refresh('channelMember');
+
+    setTimeout(() => {
+      navigation.navigate('SignedChatScreen');
+    }, 500);
+  };
+
   const rowRenderer = (type, item, index, extendedState) => (
     <ItemUser
       photo={item.profile_pic_path}
@@ -260,7 +317,7 @@ const ContactScreen = ({navigation}) => {
         containerStyle={styles.containerStyle}
         subTitle={'Next'}
         subtitleStyle={selectedUsers.length > 0 && styles.subtitleStyle(isAnon)}
-        onPressSub={() => handleCreateChannel()}
+        onPressSub={() => (isAddParticipant ? handleAddParticipant() : handleCreateChannel())}
         onPress={() => navigation.goBack()}
         disabledNextBtn={selectedUsers.length <= 0}
       />
