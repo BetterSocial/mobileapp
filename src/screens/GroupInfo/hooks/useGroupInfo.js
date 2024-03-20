@@ -24,7 +24,6 @@ import {addMemberGroup} from '../../../service/chat';
 import UserSchema from '../../../database/schema/UserSchema';
 import ChannelListSchema from '../../../database/schema/ChannelListSchema';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
-import {SIGNED} from '../../../hooks/core/constant';
 import useUserAuthHook from '../../../hooks/core/auth/useUserAuthHook';
 import useChatUtilsHook from '../../../hooks/core/chat/useChatUtilsHook';
 
