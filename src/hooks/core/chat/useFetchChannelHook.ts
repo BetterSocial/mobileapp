@@ -4,6 +4,7 @@ import ChatSchema from '../../../database/schema/ChatSchema';
 import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
 import UserSchema from '../../../database/schema/UserSchema';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
+import useSystemMessage from './useSystemMessage';
 import useUserAuthHook from '../auth/useUserAuthHook';
 import {ANONYMOUS} from '../constant';
 import {AnonUserInfo} from '../../../../types/service/AnonProfile.type';
@@ -16,19 +17,7 @@ type ChannelCategory = 'SIGNED' | 'ANONYMOUS';
 const useFetchChannelHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook();
   const {signedProfileId, anonProfileId} = useUserAuthHook();
-
-  const helperFollowingSystemMessage = (message) => {
-    if (message?.system_user === signedProfileId) {
-      message.text = message?.own_text;
-    } else {
-      message.text = message?.other_text;
-    }
-    /**
-     * TODO: Handle follow anonymous user system message later, if any
-     * */
-
-    return message;
-  };
+  const {getFirstMessage} = useSystemMessage();
 
   const helperChannelPromiseBuilder = async (channel, channelCategory: ChannelCategory) => {
     if (channel?.members?.length === 0) return Promise.reject(Error('no members'));
@@ -51,15 +40,7 @@ const useFetchChannelHook = () => {
     channel.targetName = channelListInfo?.channelName;
     channel.targetImage = channelListInfo?.channelImage;
 
-    if (isAnonymous) {
-      channel.firstMessage = channel?.messages?.[0];
-    } else {
-      channel.firstMessage = channel?.messages?.[channel?.messages?.length - 1];
-      channel.myUserId = signedProfileId;
-      if (channel.firstMessage?.type === 'system') {
-        channel.firstMessage = helperFollowingSystemMessage(channel.firstMessage);
-      }
-    }
+    channel.firstMessage = getFirstMessage(channel?.messages);
 
     const isDeletedMessage = channel.firstMessage?.message_type === MESSAGE_TYPE_DELETED;
     if (isDeletedMessage) channel.firstMessage.text = DELETED_MESSAGE_TEXT;
@@ -107,7 +88,7 @@ const useFetchChannelHook = () => {
         (channel?.messages || []).map(async (message) => {
           if (message?.type === 'deleted') return;
           if (message?.type === 'system') {
-            message = helperFollowingSystemMessage(message);
+            message = getFirstMessage([message]);
           }
           const chat = ChatSchema.fromGetAllChannelAPI(channel?.id, message);
           await chat.save(localDb);

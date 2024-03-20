@@ -1,35 +1,33 @@
 /* eslint-disable global-require */
 import * as React from 'react';
 import IconEn from 'react-native-vector-icons/Entypo';
+import moment from 'moment';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-import moment from 'moment';
+import BlockComponent from '../BlockComponent';
+import BottomSheetMenu from '../BottomSheet/BottomSheetMenu';
 import ButtonHightlight from '../ButtonHighlight';
-import Image from '../Image';
+import CommentUserName from '../CommentUsername/CommentUsername';
 import MemoCommentReply from '../../assets/icon/CommentReply';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
 import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
 import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
 import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
-import useComment from './hooks/useComment';
-import {COLORS, FONTS} from '../../utils/theme';
-import {calculateTime} from '../../utils/time';
-import {fonts, normalizeFontSize} from '../../utils/fonts';
-import {getUserId} from '../../utils/users';
-import {removeWhiteSpace} from '../../utils/Utils';
-import BlockComponent from '../BlockComponent';
-import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
-import CommentUserName from '../CommentUsername/CommentUsername';
 import ProfilePicture from '../../screens/ProfileScreen/elements/ProfilePicture';
-import SendDMBlack from '../../assets/icons/images/send-dm-black.svg';
 import SendDMAnonBlock from '../../assets/icons/images/send-dm-anon-black.svg';
-import MemoSendDM from '../../assets/icon/SendDM';
-import BottomSheetMenu from '../BottomSheet/BottomSheetMenu';
-import useDMMessage from '../../hooks/core/chat/useDMMessage';
+import SendDMBlack from '../../assets/icons/images/send-dm-black.svg';
+import useComment from './hooks/useComment';
 import useCreateChat from '../../hooks/screen/useCreateChat';
+import useDMMessage from '../../hooks/core/chat/useDMMessage';
+import {COLORS, FONTS} from '../../utils/theme';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {calculateTime} from '../../utils/time';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
+import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
+import {getUserId} from '../../utils/users';
+import {removeWhiteSpace} from '../../utils/Utils';
 
 const Comment = ({
   user,
@@ -253,12 +251,14 @@ const Comment = ({
           </TouchableOpacity>
         )}
 
-        <ButtonHightlight
-          onLongPress={handleOnLongPress}
-          style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}
-          onPress={() => onBlockComponent(comment)}>
-          <IconEn name="block" size={15.02} color={COLORS.balance_gray} />
-        </ButtonHightlight>
+        {!comment?.is_you && (
+          <ButtonHightlight
+            onLongPress={handleOnLongPress}
+            style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}
+            onPress={() => onBlockComponent(comment)}>
+            <IconEn name="block" size={15.02} color={COLORS.balance_gray} />
+          </ButtonHightlight>
+        )}
 
         <TouchableOpacity activeOpacity={1} onPress={onDownVote} testID="btnDownvote">
           <ButtonHightlight
@@ -273,7 +273,7 @@ const Comment = ({
           </ButtonHightlight>
         </TouchableOpacity>
 
-        {totalVote != 0 && <Text style={styles.vote(voteStyle())}>{totalVote}</Text>}
+        {totalVote !== 0 && <Text style={styles.vote(voteStyle())}>{totalVote}</Text>}
         <TouchableOpacity activeOpacity={1} testID="upvoteBtn">
           <ButtonHightlight
             onLongPress={handleOnLongPress}
