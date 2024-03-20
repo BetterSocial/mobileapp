@@ -226,18 +226,6 @@ const useGroupInfo = (channelId = null) => {
     }
   };
 
-  const updateMemberName = (members = []) => {
-    if (!channel.data.isEditName && members.length > 0) {
-      members = members.map((member) => member.user.name).join(',');
-      setUsername(members);
-      if (members.length > 1) {
-        channel?.update({
-          name: members
-        });
-      }
-    }
-  };
-
   const onRemoveUser = async () => {
     setOpenModal(false);
     const responseChannelData = await removeMemberGroup({

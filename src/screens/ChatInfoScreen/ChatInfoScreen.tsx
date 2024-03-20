@@ -35,7 +35,7 @@ import {CHANNEL_GROUP, GROUP_INFO, SIGNED} from '../../hooks/core/constant';
 import {COLORS} from '../../utils/theme';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {ProfileContact} from '../../components/Items';
-import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getOfficialAnonUsername} from '../../utils/string/StringUtils';
 import useGroupInfo from '../GroupInfo/hooks/useGroupInfo';
 
