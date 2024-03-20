@@ -166,7 +166,7 @@ const Header = (props) => {
             <Text style={styles.postText(profileTabIndex === TAB_INDEX_SIGNED)}>Signed Posts</Text>
           </CustomPressable>
           <CustomPressable
-            style={styles.tabItem(profileTabIndex === TAB_INDEX_ANONYMOUS)}
+            style={styles.tabItem(profileTabIndex === TAB_INDEX_ANONYMOUS, true)}
             onPress={setTabIndexToAnonymous}>
             <AnonymousTab isActive={profileTabIndex === TAB_INDEX_ANONYMOUS} />
           </CustomPressable>
@@ -821,12 +821,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: COLORS.white
   },
-  tabItem: (isActive) => ({
+  tabItem: (isActive, isAnonymous = false) => ({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     height: 48,
-    borderBottomColor: COLORS.signed_primary,
+    borderBottomColor: isAnonymous ? COLORS.anon_primary : COLORS.signed_primary,
     borderBottomWidth: isActive ? 2 : 0
   }),
   tabsFixed: {
