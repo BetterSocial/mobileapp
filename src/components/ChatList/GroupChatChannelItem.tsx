@@ -24,7 +24,7 @@ const GroupChatChannelItem = (props: ChannelItemProps) => {
   const isSystemDescription = description?.isSystem ?? description?.type === 'system';
   const isDeletedMessage = description?.type === 'deleted';
   const sender = description?.user?.username ?? description?.user?.name;
-  const isMeAsSender = description?.user?.id === signedProfileId;
+  const isMeAsSender = description?.user?.id === signedProfileId || true;
 
   let channelDescription = groupChat?.description;
   if (!isSystemDescription) {
@@ -32,7 +32,7 @@ const GroupChatChannelItem = (props: ChannelItemProps) => {
       ? `You: ${channelDescription}`
       : `${sender}: ${channelDescription}`;
   }
-  if (!sender || isDeletedMessage) channelDescription = '';
+  if (isDeletedMessage) channelDescription = '';
 
   return (
     <CustomPressable onPress={onChannelPressed}>
