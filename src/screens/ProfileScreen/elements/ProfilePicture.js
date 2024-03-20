@@ -36,38 +36,38 @@ const ProfilePicture = ({
             size={dimen.normalizeDimen(size)}
             width={dimen.normalizeDimen(width)}
             testId="images">
-            {isAnon ? (
-              <>
+            <View style={styles.profileImageContainer(dimen.normalizeDimen(size))}>
+              {isAnon ? (
                 <View style={[styles.anonStyle(size), {backgroundColor: anonBackgroundColor}]}>
                   <Text style={{fontSize: size / 2, textAlign: 'center', alignSelf: 'center'}}>
                     {anonEmojiCode}
                   </Text>
                 </View>
-              </>
-            ) : (
-              <View style={styles.profileImageContainer(size)}>
-                <Image
-                  testId="images"
-                  style={styles.profileImage(size, width)}
-                  source={{
-                    uri: profilePicPath ? `${profilePicPath}` : DEFAULT_PROFILE_PIC_PATH,
-                    cache: 'web'
-                  }}
-                  resizeMode={FastImage.resizeMode.cover}
-                  loadingIndicatorSource={
-                    <Image
-                      style={{
-                        width: 24,
-                        height: 24,
-                        backgroundColor: COLORS.white,
-                        borderRadius: 12
-                      }}
-                    />
-                  }
-                />
-                {renderAddIcon()}
-              </View>
-            )}
+              ) : (
+                <>
+                  <Image
+                    testId="images"
+                    style={styles.profileImage(size, width)}
+                    source={{
+                      uri: profilePicPath ? `${profilePicPath}` : DEFAULT_PROFILE_PIC_PATH,
+                      cache: 'web'
+                    }}
+                    resizeMode={FastImage.resizeMode.cover}
+                    loadingIndicatorSource={
+                      <Image
+                        style={{
+                          width: 24,
+                          height: 24,
+                          backgroundColor: COLORS.white,
+                          borderRadius: 12
+                        }}
+                      />
+                    }
+                  />
+                  {renderAddIcon()}
+                </>
+              )}
+            </View>
           </CircleGradient>
         ) : (
           <>
@@ -103,7 +103,7 @@ const ProfilePicture = ({
 let styles = StyleSheet.create({
   addCircle: {position: 'absolute', top: 25, left: 25},
   profileImage: (size) => {
-    const scale = size <= 25 ? 0.8 : 0.922;
+    const scale = size <= 25 ? 0.8 : 0.91;
     const marginScale = size <= 25 ? 0.805 : 0.925;
     return {
       width: dimen.normalizeDimen(size * scale),
@@ -129,7 +129,9 @@ let styles = StyleSheet.create({
   profileImageContainer: (size) => ({
     width: size,
     borderRadius: 100,
-    height: size
+    height: size,
+    alignItems: 'center',
+    justifyContent: 'center'
   })
 });
 
