@@ -214,7 +214,9 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       if (previousChat) {
         if (
           currentChat?.userId === previousChat?.userId &&
-          (previousChat?.rawJson?.isSystem || previousChat?.rawJson?.type === 'system')
+          (previousChat?.rawJson?.isSystem ||
+            previousChat?.rawJson?.type === 'system' ||
+            previousChat?.rawJson?.message?.type === 'system')
         ) {
           currentChat.isContinuous = false;
         }
