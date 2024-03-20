@@ -87,6 +87,16 @@ const ModalAction = (props) => {
                 </View>
               </TouchableOpacity>
             )}
+            {isGroup && (
+              <TouchableOpacity
+                onPress={() => onPress('remove', selectedUser)}
+                style={styles.buttonStyle}>
+                <View style={{flexDirection: 'row'}}>
+                  <Text style={styles.textButton}>Remove {name}</Text>
+                  <Loading visible={isLoadingInitChat} />
+                </View>
+              </TouchableOpacity>
+            )}
             <TouchableOpacity
               onPress={() => {
                 if (!selectedUser?.allow_anon_dm) {
