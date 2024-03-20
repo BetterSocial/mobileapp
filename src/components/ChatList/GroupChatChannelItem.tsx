@@ -24,7 +24,8 @@ const GroupChatChannelItem = (props: ChannelItemProps) => {
   const isSystemDescription = description?.isSystem ?? description?.type === 'system';
   const isDeletedMessage = description?.type === 'deleted';
   const sender = description?.user?.username ?? description?.user?.name;
-  const isMeAsSender = description?.user?.id === signedProfileId || !description;
+  const isMeAsSender =
+    description?.user?.id === signedProfileId || description?.user?.isMe || !description;
 
   let channelDescription = groupChat?.description;
   if (!isSystemDescription || description !== channelDescription) {
