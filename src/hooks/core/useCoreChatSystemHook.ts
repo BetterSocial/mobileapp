@@ -90,7 +90,7 @@ const useCoreChatSystemHook = () => {
     const isMyMessage =
       message?.user?.id === signedProfileId || message?.user?.id === anonProfileId;
 
-    const hasUnreadMessage = selectedChannel?.unread_count <= 0;
+    const hasUnreadMessage = selectedChannel?.unread_count >= 0;
     if (isMyMessage) return 0;
     if (hasUnreadMessage) return selectedChannel?.unread_count + 1;
     return 1;
