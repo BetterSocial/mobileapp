@@ -19,7 +19,8 @@ enum StorageKeysEnum {
   LastPromptNotification = 'lastPromptNotification',
   LastSelectedMenu = 'lastSelectedMenu',
   BlockedStatus = 'blockedStatus',
-  BlockingStatus = 'blockingStatus'
+  BlockingStatus = 'blockingStatus',
+  FetchInitialData = 'fetchInitialData'
 }
 
 interface IStorage {
@@ -87,6 +88,7 @@ const StorageUtils = {
   lastSelectedMenu: storageBuilder(StorageKeysEnum.LastSelectedMenu),
   blockingStatus: storageBuilder(StorageKeysEnum.BlockingStatus),
   blockedStatus: storageBuilder(StorageKeysEnum.BlockedStatus),
+  fetchInitialData: storageBuilder(StorageKeysEnum.FetchInitialData),
   clearAll: () => MMKVStorage.clearAll()
 };
 
@@ -106,6 +108,7 @@ export interface IStorageUtils {
   anonymousToken: Storage;
   lastPromptNotification: Storage;
   lastSelectedMenu: Storage;
+  fetchInitialData: Storage;
   clearAll: () => void;
 }
 export default StorageUtils;

@@ -103,7 +103,6 @@ class ChatSchema implements BaseDbSchema {
     try {
       const existingChat = await ChatSchema.isExists(db, this.id);
       if (!existingChat) {
-        console.log('save chat schema if not exist', this.id);
         await this.save(db);
       }
     } catch (e) {
@@ -147,7 +146,7 @@ class ChatSchema implements BaseDbSchema {
           ELSE 0 END AS is_continuous
       FROM 
       ${ChatSchema.getTableName()} A 
-      INNER JOIN ${UserSchema.getTableName()} B 
+      LEFT JOIN ${UserSchema.getTableName()} B 
       ON A.user_id = user_schema_user_id AND A.channel_id = user_channel_id
       WHERE A.channel_id = ? ORDER BY created_at DESC;`;
 

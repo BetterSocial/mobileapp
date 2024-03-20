@@ -7,8 +7,10 @@ import {atom, useRecoilState} from 'recoil';
 
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../../database/schema/ChannelListSchema';
+import ChatSchema from '../../../database/schema/ChatSchema';
 import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
 import UserSchema from '../../../database/schema/UserSchema';
+import useDatabaseQueueHook from '../queue/useDatabaseQueueHook';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import useUserAuthHook from '../auth/useUserAuthHook';
 import UseChatUtilsHook, {
@@ -18,6 +20,7 @@ import {ANON_PM, GROUP_INFO} from '../constant';
 import {BetterSocialChannelType} from '../../../../types/database/schema/ChannelList.types';
 import {ChannelTypeEnum} from '../../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 import {Context} from '../../../context';
+import {JobPriority} from '../../../core/queue/BaseQueue';
 import {PostNotificationChannelList} from '../../../../types/database/schema/PostNotificationChannelList.types';
 import {
   convertTopicNameToTopicPageScreenParam,
@@ -43,10 +46,12 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
 
   const [selectedChannelKey, setSelectedChannelKey] = useRecoilState(selectedChannelKeyTab);
 
-  const {localDb, refresh} = useLocalDatabaseHook();
+  const {localDb, refresh, refreshWithId} = useLocalDatabaseHook();
   const navigation = useNavigation();
   const [profile] = (React.useContext(Context) as unknown as any).profile;
   const {anonProfileId, signedProfileId} = useUserAuthHook();
+  const {queue} = useDatabaseQueueHook();
+
   const setChannelAsRead = async (channel: ChannelList) => {
     if (!localDb) return;
     channel.setRead(localDb).catch((e) => console.log('setChannelAsRead error', e));
@@ -76,8 +81,9 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
 
     refresh('channelList');
     refresh('channelInfo');
-    refresh('chat');
     refresh('user');
+    refreshWithId('chat', channel?.id);
+    // refresh('chat');
   };
 
   const goToPostDetailScreen = (channel: ChannelList) => {
@@ -138,6 +144,19 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
 
   const helperSaveChannelDetail = async (channel: ChannelList, response: any) => {
     if (!localDb) return;
+    response?.messages?.map((message) => {
+      const chatMessage = ChatSchema.fromGetAllChannelAPI(channel?.id, message);
+      return queue.addHighPriorityJob({
+        label: `saveChatMessage-${message?.id}`,
+        priority: JobPriority.HIGH,
+        task: async () => {
+          await chatMessage.save(localDb);
+          refreshWithId('chat', channel?.id);
+          // refresh('chat');
+        }
+      });
+    });
+
     const builtChannelData = {
       better_channel_member: response?.better_channel_members,
       members: response?.members
@@ -162,21 +181,32 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
       channelData.channelPicture = channelImage;
       channelData.name = channelName;
 
-      await channelData.save(localDb);
-    }
-
-    const promise = originalMembers?.map((member) => {
-      return new Promise((resolve, reject) => {
-        const user = UserSchema.fromMemberWebsocketObject(member, channel?.id);
-        try {
-          user.saveOrUpdateIfExists(localDb).then(() => resolve(null));
-        } catch (e) {
-          reject(e);
+      queue.addHighPriorityJob({
+        label: `saveChannelData-${channel?.id}`,
+        priority: JobPriority.HIGH,
+        task: async () => {
+          channelData.saveIfLatest(localDb);
         }
       });
-    });
+    }
 
-    await Promise.all(promise);
+    originalMembers?.map((member) => {
+      const user = UserSchema.fromMemberWebsocketObject(member, channel?.id);
+      try {
+        queue.addHighPriorityJob({
+          label: `save user from channel detail fetch${channel?.name}`,
+          priority: JobPriority.HIGH,
+          task: async () => {
+            console.log('saving user', user);
+            user.saveOrUpdateIfExists(localDb);
+          }
+        });
+      } catch (e) {
+        console.log('error on save user from channel detail fetch', e);
+      }
+
+      return null;
+    });
   };
 
   const helperGetChannelDetail = async (channel: ChannelList) => {
@@ -200,23 +230,20 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
       }));
       refresh('channelInfo');
       refresh('channelList');
-      refresh('chats');
+      refreshWithId('chat', channel?.id);
+      // refresh('chat');
     }
   };
 
   const goToChatScreen = (channel: ChannelList, from: AllowedGoToChatScreen) => {
-    console.log('checkpoint 1');
     setChannelAsRead(channel);
 
     const isChannelTypeChat: (BetterSocialChannelType | undefined)[] = ['ANON_PM', 'GROUP', 'PM'];
     const isChat = isChannelTypeChat.includes(channel?.channelType);
 
-    console.log('checkpoint 2');
     if (isChat) {
       helperGetChannelDetail(channel);
     }
-
-    console.log('checkpoint 3');
 
     setChat({
       isLoadingFetchingChannelDetail: isChat,
@@ -224,7 +251,6 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
     });
 
     if (from === 'CONTACT_SCREEN') {
-      console.log('checkpoint 4');
       return openChat(
         'SignedChatScreen',
         channel?.channelType === ANON_PM ? 'AnonymousChannelList' : 'ChannelList'
@@ -232,13 +258,11 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
     }
 
     if (channel?.channelType === ANON_PM) {
-      console.log('checkpoint 5');
       if (from === GROUP_INFO) {
         return openChat('AnonymousChatScreen', 'AnonymousChannelList');
       }
       navigation.navigate('AnonymousChatScreen');
     } else {
-      console.log('checkpoint 6');
       if (from === GROUP_INFO) {
         return openChat('SignedChatScreen', 'SignedChannelList');
       }
