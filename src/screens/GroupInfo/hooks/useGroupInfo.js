@@ -477,6 +477,7 @@ const useGroupInfo = (channelId = null) => {
       );
       const channelList = await ChannelListSchema.getSchemaById(localDb, channelId);
       channelList.name = channelName;
+      channelList.rawJson = responseChannelData.data;
       await channelList.save(localDb);
 
       setSelectedChannel(channelList);
@@ -496,7 +497,7 @@ const useGroupInfo = (channelId = null) => {
     refresh('channelInfo');
 
     setTimeout(() => {
-      navigation.navigate('SignedChatScreen');
+      navigation.navigate('HomeTabs');
     }, 500);
   };
 
