@@ -71,7 +71,12 @@ const useFeedHeader = ({actor, source}) => {
     if (source && id) sendViewTimePost(id);
 
     resetTimer();
-    navigation.goBack();
+    navigation.navigate('HomeTabs', {
+      screen: 'Feed',
+      params: {
+        isGoBack: true
+      }
+    });
   };
 
   return {
