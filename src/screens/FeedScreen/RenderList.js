@@ -51,7 +51,8 @@ const RenderListFeed = (props) => {
     onDeletePost,
     isShowDelete,
     isSelf,
-    onHeaderOptionClicked = () => {}
+    onHeaderOptionClicked = () => {},
+    isFromFeeds = false
   } = props;
   const {
     totalVote,

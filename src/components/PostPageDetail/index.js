@@ -55,7 +55,8 @@ const PostPageDetailIdComponent = (props) => {
     contextSource = CONTEXT_SOURCE.FEEDS,
     haveSeeMore,
     parentData,
-    isKeyboardOpen
+    isKeyboardOpen,
+    fromFeeds
   } = props;
   const [profile] = React.useContext(Context).profile;
   const [loading, setLoading] = React.useState(true);
@@ -592,6 +593,7 @@ const PostPageDetailIdComponent = (props) => {
               followUnfollow(item);
               setItem({...item, is_following_target: !item?.is_following_target});
             }}
+            isFromFeeds={fromFeeds}
           />
 
           <ScrollView

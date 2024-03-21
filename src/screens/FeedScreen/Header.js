@@ -130,7 +130,8 @@ const _renderAnonimity = ({
   isSelf = false,
   hideThreeDot,
   item,
-  disabledFollow
+  disabledFollow,
+  isFromFeeds
 }) => {
   const navigation = useNavigation();
   const refSheet = React.useRef();
@@ -174,12 +175,15 @@ const _renderAnonimity = ({
                 <GlobalButton
                   testID="onBack"
                   onPress={() => {
-                    navigation.navigate('HomeTabs', {
-                      screen: 'Feed',
-                      params: {
-                        isGoBack: true
-                      }
-                    });
+                    if (isFromFeeds) {
+                      return navigation.navigate('HomeTabs', {
+                        screen: 'Feed',
+                        params: {
+                          isGoBack: true
+                        }
+                      });
+                    }
+                    return navigation.goBack();
                   }}>
                   <MemoIc_arrow_back height={20} width={20} />
                 </GlobalButton>
@@ -289,7 +293,8 @@ const _renderProfileNormal = ({
   isShowDelete = false,
   isSelf = false,
   item,
-  disabledFollow
+  disabledFollow,
+  isFromFeeds
 }) => {
   const refSheet = React.useRef();
   const dataSheet = [
@@ -330,7 +335,7 @@ const _renderProfileNormal = ({
         <View style={[styles.rowCenter, headerStyle]}>
           {isBackButton ? (
             <View testID="haveBackButton" style={styles.btn}>
-              <GlobalButton testID="onBack" onPress={onBackNormalUser}>
+              <GlobalButton testID="onBack" onPress={() => onBackNormalUser(isFromFeeds)}>
                 <MemoIc_arrow_back height={20} width={20} />
               </GlobalButton>
             </View>
@@ -445,7 +450,8 @@ const Header = ({
   item,
   onHeaderOptionClicked,
   hideThreeDot,
-  disabledFollow
+  disabledFollow,
+  isFromFeeds
 }) => {
   const {
     anonimity,
@@ -492,7 +498,8 @@ const Header = ({
       onHeaderOptionClicked,
       actor,
       source,
-      disabledFollow
+      disabledFollow,
+      isFromFeeds
     });
   }
   return _renderProfileNormal({
@@ -516,7 +523,8 @@ const Header = ({
     onDeletePost,
     isShowDelete,
     isSelf,
-    disabledFollow
+    disabledFollow,
+    isFromFeeds
   });
 };
 
