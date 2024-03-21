@@ -45,7 +45,7 @@ const ChannelTitle = ({
       marginRight: 4
     },
     chatContentUnreadCountContainer: {
-      backgroundColor: isAnonymousTab ? COLORS.anon_primary : COLORS.darkBlue,
+      backgroundColor: isAnonymousTab ? COLORS.anon_primary : COLORS.signed_primary,
       width: 20,
       height: 20,
       borderRadius: 10,

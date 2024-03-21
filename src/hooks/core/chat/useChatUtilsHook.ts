@@ -74,6 +74,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
       }
     }
 
+    refresh('channelList');
     refresh('channelInfo');
     refresh('chat');
     refresh('user');

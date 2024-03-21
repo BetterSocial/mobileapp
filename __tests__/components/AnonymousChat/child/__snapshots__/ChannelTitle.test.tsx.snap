@@ -248,7 +248,7 @@ exports[`TESTING ChatItemTargetText RENDER ANON_PM with unreadcount should match
         style={
           Object {
             "alignItems": "center",
-            "backgroundColor": undefined,
+            "backgroundColor": "#4782D7",
             "borderRadius": 10,
             "height": 20,
             "justifyContent": "center",
@@ -724,7 +724,7 @@ exports[`TESTING ChatItemTargetText RENDER other type post with unreadcount shou
           style={
             Object {
               "alignItems": "center",
-              "backgroundColor": undefined,
+              "backgroundColor": "#4782D7",
               "borderRadius": 10,
               "height": 20,
               "justifyContent": "center",
