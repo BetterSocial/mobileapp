@@ -569,7 +569,7 @@ const PostPageDetailIdComponent = (props) => {
   };
 
   const handleUpdateVote = () => {
-    getComment(false, false);
+    getComment(false, true);
   };
 
   const {followUnfollow} = usePostHook();
