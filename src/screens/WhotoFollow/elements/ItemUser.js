@@ -29,18 +29,18 @@ const ItemUser = ({photo, username, bio, followed, onPress, userid, karmaScore})
     <View style={styles.containerCard}>
       <UserInfo photo={photo} bio={bio} username={username} karmaScore={karmaScore} />
       <View style={styles.containerButton}>
-        <Pressable onPress={onPress} style={styles.followAction(32, 32)}>
+        <Pressable onPress={onPress} style={styles.followAction(24, 24)}>
           <Animated.View style={{position: 'absolute', opacity: 1}}>
             <IconAdd
-              width={dimen.normalizeDimen(20)}
-              height={dimen.normalizeDimen(20)}
+              width={dimen.normalizeDimen(24)}
+              height={dimen.normalizeDimen(24)}
               fill="#000000"
             />
           </Animated.View>
           <Animated.View style={{position: 'absolute', opacity: followIconFadeAnimation}}>
             <IconCheck
-              width={dimen.normalizeDimen(32)}
-              height={dimen.normalizeDimen(32)}
+              width={dimen.normalizeDimen(24)}
+              height={dimen.normalizeDimen(24)}
               fill={COLORS.signed_primary}
             />
           </Animated.View>
