@@ -40,7 +40,6 @@ import Topics from '../screens/Topics';
 import VideoViewerScreen from '../screens/VideoViewer';
 import WhotoFollow from '../screens/WhotoFollow';
 import api from '../service/config';
-import useDatabaseQueueHook from '../hooks/core/queue/useDatabaseQueueHook';
 import useLocalDatabaseHook from '../database/hooks/useLocalDatabaseHook';
 import {
   AddParticipant,
@@ -66,7 +65,6 @@ export const RootNavigator = () => {
   const [following, setFollowing] = useRecoilState(followersOrFollowingAtom);
   const loadingStartup = useInitialStartup();
   useLocalDatabaseHook(true);
-  useDatabaseQueueHook();
 
   React.useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {

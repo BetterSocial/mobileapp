@@ -1,8 +1,8 @@
 /* eslint-disable no-shadow */
-export enum JobPriority {
-  HIGH = 0,
-  MEDIUM = 1,
-  LOW = 2
+export enum QueueJobPriority {
+  HIGH = 1,
+  MEDIUM = 2,
+  LOW = 3
 }
 
 export type IQueueJob = {
@@ -11,13 +11,14 @@ export type IQueueJob = {
   callback?: (data) => void;
 };
 
-export type IHighPriorityQueueJobs = IQueueJob & {
-  priority: JobPriority.HIGH | JobPriority.MEDIUM | JobPriority.LOW;
+export type IPriorityQueueJob = IQueueJob & {
+  priority: QueueJobPriority.HIGH | QueueJobPriority.MEDIUM | QueueJobPriority.LOW;
+  createdAt?: number;
 };
 
 export type IQueue = {
   addJob: (job: IQueueJob) => void;
-  addHighPriorityJob: (job: IHighPriorityQueueJobs) => void;
+  addPriorityJob: (job: IPriorityQueueJob) => void;
   processJobs: () => Promise<void>;
   getRemainingJobsCount: () => number;
 };
@@ -27,7 +28,7 @@ class BaseQueue {
 
   jobs: IQueueJob[] = [];
 
-  highPriorityJobs: IHighPriorityQueueJobs[] = [];
+  highPriorityJobs: IPriorityQueueJob[] = [];
 
   isExecutingJob = false;
 
@@ -51,8 +52,12 @@ class BaseQueue {
     }
   }
 
-  addHighPriorityJob(job: IHighPriorityQueueJobs) {
-    this.highPriorityJobs.push(job);
+  addPriorityJob(job: IPriorityQueueJob) {
+    if (!job) throw new Error('Job is required');
+    if (!job?.task) throw new Error('Task is required');
+    if (!job?.priority) throw new Error('Priority is required');
+
+    this.highPriorityJobs.push({...job, createdAt: Date.now().valueOf()});
     this.processJobs();
   }
 
@@ -68,7 +73,9 @@ class BaseQueue {
     this.isExecutingJob = true;
     if (this.highPriorityJobs.length > 0) {
       //   const job = this.highPriorityJobs.shift();
-      this.highPriorityJobs.sort((a, b) => a.priority - b.priority);
+      this.highPriorityJobs.sort(
+        (a, b) => a.priority - b.priority || (a?.createdAt || 0) - (b?.createdAt || 0)
+      );
       const job = this.highPriorityJobs.at(0);
       if (job) {
         console.log('Processing High Priority Job:', job.label, 'Priority:', job.priority);
