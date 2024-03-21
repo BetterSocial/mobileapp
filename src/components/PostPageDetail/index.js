@@ -55,7 +55,8 @@ const PostPageDetailIdComponent = (props) => {
     contextSource = CONTEXT_SOURCE.FEEDS,
     haveSeeMore,
     parentData,
-    isKeyboardOpen
+    isKeyboardOpen,
+    fromFeeds
   } = props;
   const [profile] = React.useContext(Context).profile;
   const [loading, setLoading] = React.useState(true);
@@ -106,6 +107,7 @@ const PostPageDetailIdComponent = (props) => {
   React.useEffect(() => {
     getComment();
   }, []);
+
   const handleVote = (data = {}) => {
     const upvote = data.upvotes ? data.upvotes : 0;
     const downvotes = data.downvotes ? data.downvotes : 0;
@@ -591,6 +593,7 @@ const PostPageDetailIdComponent = (props) => {
               followUnfollow(item);
               setItem({...item, is_following_target: !item?.is_following_target});
             }}
+            isFromFeeds={fromFeeds}
           />
 
           <ScrollView

@@ -130,7 +130,8 @@ const _renderAnonimity = ({
   isSelf = false,
   hideThreeDot,
   item,
-  disabledFollow
+  disabledFollow,
+  isFromFeeds
 }) => {
   const navigation = useNavigation();
   const refSheet = React.useRef();
@@ -174,12 +175,15 @@ const _renderAnonimity = ({
                 <GlobalButton
                   testID="onBack"
                   onPress={() => {
-                    navigation.navigate('HomeTabs', {
-                      screen: 'Feed',
-                      params: {
-                        isGoBack: true
-                      }
-                    });
+                    if (isFromFeeds) {
+                      return navigation.navigate('HomeTabs', {
+                        screen: 'Feed',
+                        params: {
+                          isGoBack: true
+                        }
+                      });
+                    }
+                    return navigation.goBack();
                   }}>
                   <MemoIc_arrow_back height={20} width={20} />
                 </GlobalButton>
@@ -194,13 +198,7 @@ const _renderAnonimity = ({
               />
             </View>
 
-            <View
-              style={[
-                styles.containerFeedProfile,
-                {
-                  marginTop: -10
-                }
-              ]}>
+            <View style={[styles.containerFeedProfile]}>
               <View
                 style={[
                   {
@@ -211,6 +209,7 @@ const _renderAnonimity = ({
                 ]}>
                 <View
                   style={{
+                    marginTop: -6,
                     flexDirection: 'row'
                   }}>
                   <AnonymousUsername version={version} anonUserInfo={anonUserInfo} isFeed={true} />
@@ -239,20 +238,13 @@ const _renderAnonimity = ({
                   </GlobalButton>
                 )}
               </View>
-              {showAnonymousOption && !hideThreeDot && (
-                <GlobalButton
-                  buttonStyle={{position: 'absolute', right: 0, top: -8}}
-                  onPress={() => refSheet.current.open()}>
-                  <View style={{zIndex: 1000}}>
-                    <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
-                  </View>
-                </GlobalButton>
-              )}
+
               <View
                 style={[
                   styles.containerFeedText,
                   {
-                    marginTop: -2
+                    marginTop: -6,
+                    paddingBottom: 4
                   }
                 ]}>
                 <Text style={styles.feedDate}>{calculateTime(time)}</Text>
@@ -301,7 +293,8 @@ const _renderProfileNormal = ({
   isShowDelete = false,
   isSelf = false,
   item,
-  disabledFollow
+  disabledFollow,
+  isFromFeeds
 }) => {
   const refSheet = React.useRef();
   const dataSheet = [
@@ -342,7 +335,7 @@ const _renderProfileNormal = ({
         <View style={[styles.rowCenter, headerStyle]}>
           {isBackButton ? (
             <View testID="haveBackButton" style={styles.btn}>
-              <GlobalButton testID="onBack" onPress={onBackNormalUser}>
+              <GlobalButton testID="onBack" onPress={() => onBackNormalUser(isFromFeeds)}>
                 <MemoIc_arrow_back height={20} width={20} />
               </GlobalButton>
             </View>
@@ -457,7 +450,8 @@ const Header = ({
   item,
   onHeaderOptionClicked,
   hideThreeDot,
-  disabledFollow
+  disabledFollow,
+  isFromFeeds
 }) => {
   const {
     anonimity,
@@ -504,7 +498,8 @@ const Header = ({
       onHeaderOptionClicked,
       actor,
       source,
-      disabledFollow
+      disabledFollow,
+      isFromFeeds
     });
   }
   return _renderProfileNormal({
@@ -528,7 +523,8 @@ const Header = ({
     onDeletePost,
     isShowDelete,
     isSelf,
-    disabledFollow
+    disabledFollow,
+    isFromFeeds
   });
 };
 

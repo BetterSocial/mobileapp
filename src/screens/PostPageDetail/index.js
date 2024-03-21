@@ -10,8 +10,16 @@ import {setFeedByIndex} from '../../context/actions/feeds';
 
 const FeedsPostDetail = (props) => {
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
-  const {feedId, refreshCache, haveSeeMore, refreshParent, contextSource, data, isKeyboardOpen} =
-    props.route.params;
+  const {
+    feedId,
+    refreshCache,
+    haveSeeMore,
+    refreshParent,
+    contextSource,
+    data,
+    isKeyboardOpen,
+    fromFeeds
+  } = props.route.params;
   const {feeds} = feedsContext;
   const {navigateToReplyView} = useMainPdp(props);
   React.useEffect(() => {
@@ -28,6 +36,7 @@ const FeedsPostDetail = (props) => {
   return (
     <View style={styles.container}>
       <PostPageDetailComponent
+        fromFeeds={fromFeeds}
         feeds={feeds}
         feedId={feedId}
         dispatch={dispatch}
