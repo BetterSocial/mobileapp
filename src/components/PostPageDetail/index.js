@@ -1,7 +1,6 @@
-import {useNavigation} from '@react-navigation/core';
-import {useRoute} from '@react-navigation/native';
-import moment from 'moment';
 import * as React from 'react';
+import Toast from 'react-native-simple-toast';
+import moment from 'moment';
 import {
   Dimensions,
   Keyboard,
@@ -11,40 +10,40 @@ import {
   View,
   useWindowDimensions
 } from 'react-native';
-import Toast from 'react-native-simple-toast';
+import {useNavigation} from '@react-navigation/core';
+import {useRoute} from '@react-navigation/native';
 
-import {Footer} from '..';
-
-import {Context} from '../../context';
-import {saveComment} from '../../context/actions/comment';
-import {setFeedByIndex} from '../../context/actions/feeds';
-import {useFeedDataContext} from '../../hooks/useFeedDataContext';
-import usePostContextHook, {CONTEXT_SOURCE} from '../../hooks/usePostContextHooks';
+import BlockComponent from '../BlockComponent';
+import ContainerComment from '../Comments/ContainerComment';
+import Content from './elements/Content';
 import Header from '../../screens/FeedScreen/Header';
+import LoadingWithoutModal from '../LoadingWithoutModal';
+import ShareUtils from '../../utils/share';
+import StringConstant from '../../utils/string/StringConstant';
+import WriteComment from '../Comments/WriteComment';
 import useFeed from '../../screens/FeedScreen/hooks/useFeed';
-import {createCommentParentV3, getCommentList} from '../../service/comment';
-import {getFeedDetail} from '../../service/post';
-import {downVote, upVote} from '../../service/vote';
-import {showScoreAlertDialog} from '../../utils/Utils';
+import usePostDetail from './hooks/usePostDetail';
+import usePostHook from '../../hooks/core/post/usePostHook';
+import useWriteComment from '../Comments/hooks/useWriteComment';
+import usePostContextHook, {CONTEXT_SOURCE} from '../../hooks/usePostContextHooks';
 import {
   ANALYTICS_SHARE_POST_FEED_ID,
   ANALYTICS_SHARE_POST_PDP_SCREEN,
   SOURCE_PDP
 } from '../../utils/constants';
+import {COLORS} from '../../utils/theme';
+import {Context} from '../../context';
+import {Footer} from '..';
+import {Shimmer} from '../Shimmer/Shimmer';
+import {createCommentParentV3, getCommentList} from '../../service/comment';
+import {downVote, upVote} from '../../service/vote';
 import {fonts, normalize} from '../../utils/fonts';
 import {getCountCommentWithChildInDetailPage} from '../../utils/getstream';
-import ShareUtils from '../../utils/share';
-import StringConstant from '../../utils/string/StringConstant';
-import {COLORS} from '../../utils/theme';
-import BlockComponent from '../BlockComponent';
-import ContainerComment from '../Comments/ContainerComment';
-import WriteComment from '../Comments/WriteComment';
-import useWriteComment from '../Comments/hooks/useWriteComment';
-import LoadingWithoutModal from '../LoadingWithoutModal';
-import {Shimmer} from '../Shimmer/Shimmer';
-import Content from './elements/Content';
-import usePostDetail from './hooks/usePostDetail';
-import usePostHook from '../../hooks/core/post/usePostHook';
+import {getFeedDetail} from '../../service/post';
+import {saveComment} from '../../context/actions/comment';
+import {setFeedByIndex} from '../../context/actions/feeds';
+import {showScoreAlertDialog} from '../../utils/Utils';
+import {useFeedDataContext} from '../../hooks/useFeedDataContext';
 
 const {width, height} = Dimensions.get('window');
 
