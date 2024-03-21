@@ -1,34 +1,34 @@
+import * as React from 'react';
+import IconEn from 'react-native-vector-icons/Entypo';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 /* eslint-disable global-require */
 import {useNavigation} from '@react-navigation/native';
-import * as React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import IconEn from 'react-native-vector-icons/Entypo';
 
-import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
-import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
-import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
-import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
-import MemoCommentReply from '../../assets/icon/CommentReply';
-import MemoSendDM from '../../assets/icon/SendDM';
-import SendDMAnonBlock from '../../assets/icons/images/send-dm-anon-black.svg';
-import SendDMBlack from '../../assets/icons/images/send-dm-black.svg';
-import {Context} from '../../context';
-import useDMMessage from '../../hooks/core/chat/useDMMessage';
-import useCreateChat from '../../hooks/screen/useCreateChat';
-import ProfilePicture from '../../screens/ProfileScreen/elements/ProfilePicture';
-import {iVoteComment, voteCommentV2} from '../../service/vote';
-import {removeWhiteSpace} from '../../utils/Utils';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
-import {fonts, normalizeFontSize} from '../../utils/fonts';
-import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
-import {COLORS, FONTS} from '../../utils/theme';
-import {calculateTime} from '../../utils/time';
-import {getUserId} from '../../utils/users';
 import BlockComponent from '../BlockComponent';
 import BottomSheetMenu from '../BottomSheet/BottomSheetMenu';
 import ButtonHightlight from '../ButtonHighlight';
 import CommentUserName from '../CommentUsername/CommentUsername';
+import MemoCommentReply from '../../assets/icon/CommentReply';
+import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
+import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
+import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
+import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
+import MemoSendDM from '../../assets/icon/SendDM';
+import ProfilePicture from '../../screens/ProfileScreen/elements/ProfilePicture';
+import SendDMAnonBlock from '../../assets/icons/images/send-dm-anon-black.svg';
+import SendDMBlack from '../../assets/icons/images/send-dm-black.svg';
+import useCreateChat from '../../hooks/screen/useCreateChat';
+import useDMMessage from '../../hooks/core/chat/useDMMessage';
 import useUpdateComment from './hooks/useUpdateComment';
+import {COLORS, FONTS} from '../../utils/theme';
+import {Context} from '../../context';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {calculateTime} from '../../utils/time';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
+import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
+import {getUserId} from '../../utils/users';
+import {iVoteComment, voteCommentV2} from '../../service/vote';
+import {removeWhiteSpace} from '../../utils/Utils';
 
 const ReplyCommentItem = ({
   user,
@@ -282,14 +282,16 @@ const ReplyCommentItem = ({
             </ButtonHightlight>
           </TouchableOpacity>
         )}
-        <TouchableOpacity onPress={() => onBlock(comment)} testID="btnBlock" activeOpacity={1}>
-          <ButtonHightlight
-            onLongPress={handleLongPress}
-            onPress={() => onBlock(comment)}
-            style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}>
-            <IconEn name="block" size={15.02} color={COLORS.balance_gray} />
-          </ButtonHightlight>
-        </TouchableOpacity>
+        {!comment?.is_you && (
+          <TouchableOpacity onPress={() => onBlock(comment)} testID="btnBlock" activeOpacity={1}>
+            <ButtonHightlight
+              onLongPress={handleLongPress}
+              onPress={() => onBlock(comment)}
+              style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}>
+              <IconEn name="block" size={15.02} color={COLORS.balance_gray} />
+            </ButtonHightlight>
+          </TouchableOpacity>
+        )}
         <TouchableOpacity
           onPress={() => refSheet.current.open()}
           testID="sendDMbtn"

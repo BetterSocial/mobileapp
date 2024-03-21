@@ -388,8 +388,8 @@ PODS:
     - React-jsi (= 0.64.4)
     - React-perflogger (= 0.64.4)
   - React-jsinspector (0.64.4)
-  - react-native-blur (0.8.0):
-    - React
+  - react-native-blur (4.4.0):
+    - React-Core
   - react-native-cameraroll (4.1.2):
     - React-Core
   - react-native-compressor (1.6.1):
@@ -899,7 +899,7 @@ SPEC CHECKSUMS:
   BVLinearGradient: 34a999fda29036898a09c6a6b728b0b4189e1a44
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: fa8275d5086566e22a26ddc385ab5772e7f9b1bd
-  FBReactNativeSpec: 35c98e8661ee0c117e11e7cfe02938caad0fa85b
+  FBReactNativeSpec: aa44d92c34f72aaacf136ad2a6f9a380db103bb8
   Firebase: fffddd0bab8677d07376538365faa93ff3889b39
   FirebaseABTesting: e66f1f80747792630d9b292966de206d5df9853b
   FirebaseAnalytics: 4641d7ae4220174f6ca5626163ffc5de2e90391e
@@ -938,7 +938,7 @@ SPEC CHECKSUMS:
   React-jsi: 64f80675a66899bf0f4a58b8e3908966fa516234
   React-jsiexecutor: 8c077bef1c64430b6034f27df1000d194551e2eb
   React-jsinspector: d4f6973dd474357dbaaf6f52f31ffc713bf3e766
-  react-native-blur: cad4d93b364f91e7b7931b3fa935455487e5c33c
+  react-native-blur: 172abeaa2de2d3ba4dc586fa23488d01c533818f
   react-native-cameraroll: 2957f2bce63ae896a848fbe0d5352c1bd4d20866
   react-native-compressor: ebcf8bc36f8e44581a8f831583caee8a27e55a01
   react-native-config: 86038147314e2e6d10ea9972022aa171e6b1d4d8

@@ -9,12 +9,14 @@ jest.mock('react-native-activity-feed/node_modules/react-native-image-crop-picke
   openPicker: () => jest.fn()
 }));
 const mockedGoBack = jest.fn();
+const mockedNavigate = jest.fn();
 
 jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
   useRoute: () => jest.fn(),
   useNavigation: () => ({
-    goBack: mockedGoBack
+    goBack: mockedGoBack,
+    navigate: mockedNavigate
   })
 }));
 
@@ -63,6 +65,6 @@ describe('Header feed should run correctly', () => {
     expect(getAllByTestId('haveBackButton')).toHaveLength(1);
     expect(allIdAnonym('haveBackButton')).toHaveLength(1);
     fireEvent.press(idAnonym('onBack'));
-    expect(mockedGoBack).toHaveBeenCalledTimes(1);
+    expect(mockedNavigate).toHaveBeenCalledTimes(1);
   });
 });
