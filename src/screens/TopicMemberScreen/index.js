@@ -11,6 +11,7 @@ import StringConstant from '../../utils/string/StringConstant';
 import UsersFragment from '../DiscoveryScreenV2/fragment/UsersFragment';
 import {Context} from '../../context';
 import NavHeader from '../TopicPageScreen/elements/NavHeader';
+import TopicMemberHeadline from './elements/TopicMemberHeadlineList';
 
 const styles = StyleSheet.create({
   parentContainer: {
@@ -163,6 +164,7 @@ const TopicMemberScreen = () => {
         setIsFirstTimeOpen={setIsFirstTimeOpen}
         getSearchLayout={setSearchHeight}
       />
+      <TopicMemberHeadline text="Visible members of this community" />
       <UsersFragment
         isLoadingDiscoveryUser={isLoadingDiscovery.user}
         isFirstTimeOpen={isFirstTimeOpen}

@@ -682,6 +682,15 @@ const CreatePost = () => {
     }
   }, [typeUser]);
 
+  React.useEffect(() => {
+    const followType = params?.followType;
+    if (followType === 'incognito') {
+      setTypeUser(true);
+    } else {
+      setTypeUser(false);
+    }
+  }, [params.followType]);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
