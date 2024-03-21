@@ -92,7 +92,7 @@ const FeedScreen = (props) => {
 
       unsubscribe();
     };
-  }, [navigation]);
+  }, [navigation, route.params.isGoBack]);
 
   const setUpVoteHandle = async (post, index) => {
     setUpVote(post, index);
@@ -140,7 +140,8 @@ const FeedScreen = (props) => {
       data: item,
       isCaching: true,
       haveSeeMore,
-      refreshParent: () => refreshMoreText(index, haveSeeMore)
+      refreshParent: () => refreshMoreText(index, haveSeeMore),
+      fromFeeds: true
     });
   };
 
