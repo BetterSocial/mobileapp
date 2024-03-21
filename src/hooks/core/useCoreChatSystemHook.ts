@@ -7,6 +7,7 @@ import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../database/schema/ChannelListSchema';
 import ChatSchema from '../../database/schema/ChatSchema';
 import SignedMessageRepo from '../../service/repo/signedMessageRepo';
+import StorageUtils from '../../utils/storage';
 import UseLocalDatabaseHook from '../../../types/database/localDatabase.types';
 import UserSchema from '../../database/schema/UserSchema';
 import migrationDbStatusAtom from '../../database/atom/migrationDbStatusAtom';
@@ -32,7 +33,7 @@ import {SignedPostNotification} from '../../../types/repo/SignedMessageRepo/Sign
 import {getChannelListInfo} from '../../utils/string/StringUtils';
 
 const useCoreChatSystemHook = () => {
-  const {localDb, refresh} = useLocalDatabaseHook() as UseLocalDatabaseHook;
+  const {localDb, refresh, refreshWithId} = useLocalDatabaseHook() as UseLocalDatabaseHook;
   const {anonProfileId, signedProfileId} = useUserAuthHook();
   const {getAllSignedChannels, getAllAnonymousChannels} = useFetchChannelHook();
   const {getAllSignedPostNotifications, getAllAnonymousPostNotifications} =
@@ -234,7 +235,8 @@ const useCoreChatSystemHook = () => {
     }
 
     refresh('channelList');
-    refresh('chat');
+    refreshWithId('chat', websocketData?.channel?.id);
+    // refresh('chat');
     refresh('channelInfo');
     refresh('channelMember');
   };

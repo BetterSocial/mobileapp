@@ -2,24 +2,34 @@
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../../database/schema/ChannelListSchema';
 import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
+import useDatabaseQueueHook from '../queue/useDatabaseQueueHook';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 
 const useFetchPostNotificationHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook();
+  const {queue} = useDatabaseQueueHook();
 
   const saveNotifications = async (notifications: any[], fromNotificationAPI: any) => {
     if (!localDb) return;
-    const allPromises: Promise<void>[] = notifications.map((notification) => {
-      const channelList = fromNotificationAPI(notification);
-      return channelList.save(localDb);
+
+    notifications.map((notification) => {
+      queue.addJob({
+        label: 'save post notifications',
+        task: async () => {
+          const channelList = fromNotificationAPI(notification);
+          await channelList.save(localDb);
+        }
+      });
+
+      return null;
     });
 
-    try {
-      await Promise.all(allPromises);
-      refresh('channelList');
-    } catch (e) {
-      console.log('error on saving notifications:', e);
-    }
+    queue.addJob({
+      label: 'refresh channelList',
+      task: async () => {
+        refresh('channelList');
+      }
+    });
   };
 
   const getAllSignedPostNotifications = async () => {

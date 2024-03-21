@@ -1,4 +1,5 @@
 import * as React from 'react';
+import _ from 'lodash';
 import {useRecoilState} from 'recoil';
 
 import LocalDatabase from '..';
@@ -15,7 +16,7 @@ const MIGRATION_STATUS = {
 
 /**
  *
- * @returns {UseLocalDatabaseHook}
+ * @returns {import('../../../types/database/localDatabase.types').UseLocalDatabaseHook}
  */
 const useLocalDatabaseHook = (withMigration = false) => {
   /**
@@ -36,7 +37,17 @@ const useLocalDatabaseHook = (withMigration = false) => {
     }));
   };
 
-  const {channelInfo, channelList, channelMember, chat, user} = databaseListener;
+  const debouncedRefresh = React.useCallback(
+    _.debounce((key) => refresh(key)),
+    50
+  );
+
+  const refreshWithId = (key, id) => {
+    const keyWithId = `${key}_${id}`;
+    debouncedRefresh(keyWithId);
+  };
+
+  const {channelInfo, channelList, channelMember, chat, user, ...otherListener} = databaseListener;
 
   const initDb = async () => {
     const db = await LocalDatabase.getDBConnection();
@@ -74,7 +85,9 @@ const useLocalDatabaseHook = (withMigration = false) => {
     channelMember,
     chat,
     user,
-    refresh
+    otherListener,
+    refresh,
+    refreshWithId
   };
 };
 

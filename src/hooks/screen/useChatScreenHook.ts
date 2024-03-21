@@ -2,22 +2,25 @@
 import 'react-native-get-random-values';
 
 import * as React from 'react';
+import _ from 'lodash';
 import SimpleToast from 'react-native-simple-toast';
 import {v4 as uuid} from 'uuid';
 
-import UseChatScreenHook from '../../../types/hooks/screens/useChatScreenHook.types';
-import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
+import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../database/schema/ChannelListSchema';
 import ChatSchema from '../../database/schema/ChatSchema';
-import UserSchema from '../../database/schema/UserSchema';
-import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
-import SignedMessageRepo from '../../service/repo/signedMessageRepo';
-import {CHANNEL_TYPE_GROUP, CHANNEL_TYPE_PERSONAL} from '../../utils/constants';
 import ImageUtils from '../../utils/image';
-import {getOfficialAnonUsername, randomString} from '../../utils/string/StringUtils';
-import {getAnonymousUserId, getUserId} from '../../utils/users';
-import useUserAuthHook from '../core/auth/useUserAuthHook';
+import SignedMessageRepo from '../../service/repo/signedMessageRepo';
+import UseChatScreenHook from '../../../types/hooks/screens/useChatScreenHook.types';
+import UserSchema from '../../database/schema/UserSchema';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
+import useDatabaseQueueHook from '../core/queue/useDatabaseQueueHook';
+import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
+import useUserAuthHook from '../core/auth/useUserAuthHook';
+import {CHANNEL_TYPE_GROUP, CHANNEL_TYPE_PERSONAL} from '../../utils/constants';
+import {QueueJobPriority} from '../../core/queue/BaseQueue';
+import {getAnonymousUserId, getUserId} from '../../utils/users';
+import {getOfficialAnonUsername, randomString} from '../../utils/string/StringUtils';
 
 interface ScrollContextProps {
   selectedMessageId: string | null;
@@ -27,35 +30,60 @@ interface ScrollContextProps {
 export const ScrollContext = React.createContext<ScrollContextProps | null>(null);
 
 function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
-  const {localDb, chat, refresh} = useLocalDatabaseHook();
+  const {localDb, refresh, otherListener, refreshWithId, chat} = useLocalDatabaseHook();
   const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen} = useChatUtilsHook();
   const {anonProfileId} = useUserAuthHook();
+  const {queue} = useDatabaseQueueHook();
+
+  const isInitiatingChatRef = React.useRef(false);
 
   const [selfAnonUserInfo, setSelfAnonUserInfo] = React.useState<any>(null);
   const [chats, setChats] = React.useState<ChatSchema[]>([]);
+
   const initChatData = async () => {
     if (!localDb || !selectedChannel) return;
+    const chatListener = otherListener[`chat_${selectedChannel?.id}`];
+    if (!chatListener) return;
+    // console.log('checkpoint chat screen 1');
+
     try {
+      isInitiatingChatRef.current = true;
       const myUserId = await getUserId();
       const myAnonymousId = await getAnonymousUserId();
-      const data = (await ChatSchema.getAll(
-        localDb,
-        selectedChannel?.id,
-        myUserId,
-        myAnonymousId
-      )) as ChatSchema[];
-      setChats(data);
+
+      queue.addPriorityJob({
+        priority: QueueJobPriority.HIGH,
+        label: `get-all-chat-${selectedChannel?.name}`,
+        task: async () => {
+          const data = (await ChatSchema.getAll(
+            localDb,
+            selectedChannel?.id,
+            myUserId,
+            myAnonymousId
+          )) as ChatSchema[];
+          setChats(data);
+          isInitiatingChatRef.current = false;
+
+          return data;
+        }
+      });
 
       if (type === 'ANONYMOUS') {
-        const userInfo = await UserSchema.getSelfAnonUserInfo(
-          localDb,
-          anonProfileId,
-          selectedChannel?.id
-        );
-
-        setSelfAnonUserInfo(userInfo);
+        queue.addPriorityJob({
+          priority: QueueJobPriority.MEDIUM,
+          label: `get-anon-user-info-${selectedChannel?.name}`,
+          task: async () => {
+            const userInfo = await UserSchema.getSelfAnonUserInfo(
+              localDb,
+              anonProfileId,
+              selectedChannel?.id
+            );
+            setSelfAnonUserInfo(userInfo);
+          }
+        });
       }
     } catch (e) {
+      isInitiatingChatRef.current = false;
       console.log(e, 'error get all chat');
     }
   };
@@ -156,7 +184,8 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
           }
         }
 
-        refresh('chat');
+        refreshWithId('chat', selectedChannel?.id);
+        // refresh('chat');
         refresh('channelList');
       }
 
@@ -184,7 +213,8 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       }
 
       await currentChatSchema.updateChatSentStatus(localDb, response);
-      refresh('chat');
+      refreshWithId('chat', selectedChannel?.id);
+      // refresh('chat');
       refresh('channelList');
     } catch (e) {
       if (e?.response?.data?.status === 'Channel is blocked') return;
@@ -229,7 +259,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
 
   React.useEffect(() => {
     initChatData();
-  }, [localDb, chat, selectedChannel]);
+  }, [localDb, chat, otherListener[`chat_${selectedChannel?.id}`], selectedChannel]);
 
   return {
     chats,

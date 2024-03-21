@@ -9,12 +9,14 @@ jest.mock('react-native-activity-feed/node_modules/react-native-image-crop-picke
   openPicker: () => jest.fn()
 }));
 const mockedGoBack = jest.fn();
+const mockedNavigate = jest.fn();
 
 jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
   useRoute: () => jest.fn(),
   useNavigation: () => ({
-    goBack: mockedGoBack
+    goBack: mockedGoBack,
+    navigate: mockedNavigate
   })
 }));
 
@@ -51,7 +53,7 @@ describe('Header feed should run correctly', () => {
     expect(getAllByTestId('full')).toHaveLength(1);
   });
 
-  it('props isBackButton should have back button', () => {
+  it('props isBackButton not from feeds should have back button', () => {
     const {getAllByTestId} = render(
       <Header props={{anonimity: false, source: 'public'}} isBackButton={true} />,
       {wrapper: Store}
@@ -64,5 +66,28 @@ describe('Header feed should run correctly', () => {
     expect(allIdAnonym('haveBackButton')).toHaveLength(1);
     fireEvent.press(idAnonym('onBack'));
     expect(mockedGoBack).toHaveBeenCalledTimes(1);
+  });
+
+  it('props isBackButton from feeds should have back button', () => {
+    const {getAllByTestId} = render(
+      <Header
+        props={{anonimity: false, source: 'public'}}
+        isBackButton={true}
+        isFromFeeds={true}
+      />,
+      {wrapper: Store}
+    );
+    const {getAllByTestId: allIdAnonym, getByTestId: idAnonym} = render(
+      <Header
+        props={{anonimity: true, privacy: 'public'}}
+        isBackButton={true}
+        isFromFeeds={true}
+      />,
+      {wrapper: Store}
+    );
+    expect(getAllByTestId('haveBackButton')).toHaveLength(1);
+    expect(allIdAnonym('haveBackButton')).toHaveLength(1);
+    fireEvent.press(idAnonym('onBack'));
+    expect(mockedNavigate).toHaveBeenCalledTimes(1);
   });
 });
