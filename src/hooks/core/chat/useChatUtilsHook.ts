@@ -20,8 +20,8 @@ import {ANON_PM, GROUP_INFO} from '../constant';
 import {BetterSocialChannelType} from '../../../../types/database/schema/ChannelList.types';
 import {ChannelTypeEnum} from '../../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 import {Context} from '../../../context';
-import {JobPriority} from '../../../core/queue/BaseQueue';
 import {PostNotificationChannelList} from '../../../../types/database/schema/PostNotificationChannelList.types';
+import {QueueJobPriority} from '../../../core/queue/BaseQueue';
 import {
   convertTopicNameToTopicPageScreenParam,
   getChannelListInfo
@@ -146,15 +146,21 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
     if (!localDb) return;
     response?.messages?.map((message) => {
       const chatMessage = ChatSchema.fromGetAllChannelAPI(channel?.id, message);
-      return queue.addHighPriorityJob({
+      return queue.addPriorityJob({
         label: `saveChatMessage-${message?.id}`,
-        priority: JobPriority.HIGH,
+        priority: QueueJobPriority.MEDIUM,
         task: async () => {
           await chatMessage.save(localDb);
-          refreshWithId('chat', channel?.id);
-          // refresh('chat');
         }
       });
+    });
+
+    queue.addPriorityJob({
+      label: 'refresh channel list',
+      priority: QueueJobPriority.MEDIUM,
+      task: async () => {
+        refresh('channelList');
+      }
     });
 
     const builtChannelData = {
@@ -181,9 +187,9 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
       channelData.channelPicture = channelImage;
       channelData.name = channelName;
 
-      queue.addHighPriorityJob({
+      queue.addPriorityJob({
         label: `saveChannelData-${channel?.id}`,
-        priority: JobPriority.HIGH,
+        priority: QueueJobPriority.MEDIUM,
         task: async () => {
           channelData.saveIfLatest(localDb);
         }
@@ -193,11 +199,10 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
     originalMembers?.map((member) => {
       const user = UserSchema.fromMemberWebsocketObject(member, channel?.id);
       try {
-        queue.addHighPriorityJob({
+        queue.addPriorityJob({
           label: `save user from channel detail fetch${channel?.name}`,
-          priority: JobPriority.HIGH,
+          priority: QueueJobPriority.MEDIUM,
           task: async () => {
-            console.log('saving user', user);
             user.saveOrUpdateIfExists(localDb);
           }
         });

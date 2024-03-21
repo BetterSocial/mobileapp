@@ -2,6 +2,7 @@
 import 'react-native-get-random-values';
 
 import * as React from 'react';
+import _ from 'lodash';
 import SimpleToast from 'react-native-simple-toast';
 import {v4 as uuid} from 'uuid';
 
@@ -17,8 +18,7 @@ import useDatabaseQueueHook from '../core/queue/useDatabaseQueueHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import useUserAuthHook from '../core/auth/useUserAuthHook';
 import {CHANNEL_TYPE_GROUP, CHANNEL_TYPE_PERSONAL} from '../../utils/constants';
-import {ENV} from '../../libraries/Configs/ENVConfig';
-import {JobPriority} from '../../core/queue/BaseQueue';
+import {QueueJobPriority} from '../../core/queue/BaseQueue';
 import {getAnonymousUserId, getUserId} from '../../utils/users';
 import {getOfficialAnonUsername, randomString} from '../../utils/string/StringUtils';
 
@@ -34,12 +34,12 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen} = useChatUtilsHook(type);
   const {anonProfileId} = useUserAuthHook();
   const {queue} = useDatabaseQueueHook();
-  // const queue = DatabaseQueue.getInstance();
 
   const isInitiatingChatRef = React.useRef(false);
 
   const [selfAnonUserInfo, setSelfAnonUserInfo] = React.useState<any>(null);
   const [chats, setChats] = React.useState<ChatSchema[]>([]);
+
   const initChatData = async () => {
     if (!localDb || !selectedChannel) return;
     const chatListener = otherListener[`chat_${selectedChannel?.id}`];
@@ -50,10 +50,9 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       isInitiatingChatRef.current = true;
       const myUserId = await getUserId();
       const myAnonymousId = await getAnonymousUserId();
-      const time = new Date().getTime();
 
-      queue.addHighPriorityJob({
-        priority: JobPriority.HIGH,
+      queue.addPriorityJob({
+        priority: QueueJobPriority.HIGH,
         label: `get-all-chat-${selectedChannel?.name}`,
         task: async () => {
           const data = (await ChatSchema.getAll(
@@ -62,11 +61,6 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
             myUserId,
             myAnonymousId
           )) as ChatSchema[];
-          if (ENV === 'Dev') {
-            SimpleToast.show(
-              `checkpoint finish getting all chat data: ${(new Date().getTime() - time) / 1000}s`
-            );
-          }
           setChats(data);
           isInitiatingChatRef.current = false;
 
@@ -75,8 +69,8 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       });
 
       if (type === 'ANONYMOUS') {
-        queue.addHighPriorityJob({
-          priority: JobPriority.MEDIUM,
+        queue.addPriorityJob({
+          priority: QueueJobPriority.MEDIUM,
           label: `get-anon-user-info-${selectedChannel?.name}`,
           task: async () => {
             const userInfo = await UserSchema.getSelfAnonUserInfo(
@@ -84,7 +78,6 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
               anonProfileId,
               selectedChannel?.id
             );
-
             setSelfAnonUserInfo(userInfo);
           }
         });
