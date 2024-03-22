@@ -350,7 +350,7 @@ const useCoreChatSystemHook = () => {
     if (type === 'notification.message_new') {
       saveChannelListData(lastAnonymousMessage, ANONYMOUS).catch((e) => console.log(e));
     }
-  }, [JSON.stringify(lastAnonymousMessage), localDb]);
+  }, [lastAnonymousMessage, localDb]);
 
   React.useEffect(() => {
     if (!lastSignedMessage || !localDb) return;
@@ -359,7 +359,7 @@ const useCoreChatSystemHook = () => {
     if (type === 'notification.message_new' || type === 'notification.added_to_channel') {
       saveChannelListData(lastSignedMessage, SIGNED).catch((e) => console.log(e));
     }
-  }, [JSON.stringify(lastSignedMessage), localDb]);
+  }, [lastSignedMessage, localDb]);
 
   React.useEffect(() => {
     const isResetNav = params?.isReset;
