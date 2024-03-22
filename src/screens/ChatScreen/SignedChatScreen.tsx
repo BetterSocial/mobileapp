@@ -97,7 +97,7 @@ const SignedChatScreen = () => {
         <ChatDetailHeader
           channel={selectedChannel}
           onAvatarPress={exitedGroup ? null : () => goToChatInfoPage()}
-          onBackPress={goBackFromChatScreen}
+          onBackPress={() => goBackFromChatScreen(SIGNED)}
           onThreeDotPress={exitedGroup ? null : () => goToChatInfoPage()}
           avatar={selectedChannel?.channelPicture}
           type={SIGNED}
