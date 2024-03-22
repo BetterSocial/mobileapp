@@ -235,7 +235,7 @@ const useGroupInfo = (channelId = null) => {
 
     try {
       const {channelName} = getChannelListInfo(
-        responseChannelData.data,
+        responseChannelData.data?.channel,
         signedProfileId,
         anonProfileId
       );
@@ -269,7 +269,7 @@ const useGroupInfo = (channelId = null) => {
 
     try {
       const {channelName} = getChannelListInfo(
-        responseChannelData.data,
+        responseChannelData.data?.channel,
         signedProfileId,
         anonProfileId
       );
@@ -459,7 +459,7 @@ const useGroupInfo = (channelId = null) => {
     console.warn('responseChannelData', responseChannelData);
     try {
       const {channelName} = getChannelListInfo(
-        responseChannelData.data,
+        responseChannelData.data?.channel,
         signedProfileId,
         anonProfileId
       );
