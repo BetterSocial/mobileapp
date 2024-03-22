@@ -1,11 +1,10 @@
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import * as React from 'react';
-import {Animated, InteractionManager, StatusBar, StyleSheet, View} from 'react-native';
+import {Animated, InteractionManager, StatusBar, View, useWindowDimensions} from 'react-native';
 
 import BlockComponent from '../../components/BlockComponent';
 import {ButtonNewPost} from '../../components/Button';
 import TiktokScroll from '../../components/TiktokScroll';
-import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {Context} from '../../context';
 import {setFeedByIndex} from '../../context/actions/feeds';
 import useOnBottomNavigationTabPressHook, {
@@ -20,6 +19,7 @@ import RenderListFeed from './RenderList';
 import Search from './elements/Search';
 import useCoreFeed from './hooks/useCoreFeed';
 import useViewPostTimeHook from './hooks/useViewPostTimeHook';
+import {Shimmer} from '../../components/Shimmer/Shimmer';
 
 let lastDragY = 0;
 
@@ -27,6 +27,7 @@ const FeedScreen = (props) => {
   const navigation = useNavigation();
   const offset = React.useRef(new Animated.Value(0)).current;
   const {listRef} = useOnBottomNavigationTabPressHook(LIST_VIEW_TYPE.TIKTOK_SCROLL, onRefresh);
+  const route = useRoute();
 
   const refBlockComponent = React.useRef();
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
@@ -80,7 +81,9 @@ const FeedScreen = (props) => {
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      showSearchBarAnimation();
+      if (!route.params.isGoBack) {
+        showSearchBarAnimation();
+      }
     });
 
     return () => {
@@ -89,7 +92,7 @@ const FeedScreen = (props) => {
 
       unsubscribe();
     };
-  }, [navigation]);
+  }, [navigation, route.params.isGoBack]);
 
   const setUpVoteHandle = async (post, index) => {
     setUpVote(post, index);
@@ -137,7 +140,8 @@ const FeedScreen = (props) => {
       data: item,
       isCaching: true,
       haveSeeMore,
-      refreshParent: () => refreshMoreText(index, haveSeeMore)
+      refreshParent: () => refreshMoreText(index, haveSeeMore),
+      fromFeeds: true
     });
   };
 
@@ -198,6 +202,18 @@ const FeedScreen = (props) => {
     },
     [offset]
   );
+  React.useEffect(() => {
+    if (route.params?.isGoBack) {
+      interactionManagerAnimatedRef.current = InteractionManager.runAfterInteractions(() => {
+        Animated.timing(offset, {
+          toValue: -50,
+          duration: 100,
+          useNativeDriver: false
+        }).start();
+      });
+      setShowNavbar(false);
+    }
+  }, [route.params]);
 
   const handleSearchBarClicked = () => {
     sendViewPostTime(true);
@@ -235,6 +251,7 @@ const FeedScreen = (props) => {
       isSelf={item.is_self}
     />
   );
+  const {width: displayWidth} = useWindowDimensions();
 
   const renderItem = ({item, index}) => {
     if (item.dummy) return <React.Fragment key={index} />;
@@ -250,6 +267,20 @@ const FeedScreen = (props) => {
         animatedValue={offset}
         onContainerClicked={handleSearchBarClicked}
       />
+      {Array.isArray(feeds) && feeds.length <= 0 && (
+        <View
+          style={{
+            width: displayWidth,
+            marginTop: 20
+          }}>
+          <View style={{marginVertical: 24}}>
+            <Shimmer height={400} width={displayWidth} />
+          </View>
+          <View style={{marginVertical: 24}}>
+            <Shimmer height={400} width={displayWidth} />
+          </View>
+        </View>
+      )}
       <TiktokScroll
         ref={listRef}
         contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT + normalizeFontSizeByWidth(4)}

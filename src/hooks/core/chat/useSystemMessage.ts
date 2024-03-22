@@ -2,7 +2,10 @@
 import moment from 'moment';
 
 import useUserAuthHook from '../auth/useUserAuthHook';
+import getFeatureLoggerInstance, {EFeatureLogFlag} from '../../../utils/log/FeatureLog';
 import {GetstreamMessage} from '../websocket/types.d';
+
+const {featLog} = getFeatureLoggerInstance(EFeatureLogFlag.useSystemMessage);
 
 const useSystemMessage = () => {
   const {isMe} = useUserAuthHook();
@@ -57,11 +60,14 @@ const useSystemMessage = () => {
     saveSystemMessageCallback: SaveSystemMessageCallback
   ): Promise<boolean> {
     // If the callback is not provided, do nothing
+    featLog('checkpoint1');
     if (!saveSystemMessageCallback) return false;
 
+    featLog('checkpoint2');
     // If the message is a follow topic message, do nothing
     if (message?.text?.toLocaleLowerCase()?.includes('this topic has new')) return false;
 
+    featLog('checkpoint3');
     // If the message is a system message, save the message
     if (__isMessageOnlyForSystemUser(message) && __isMySystemMessage(message)) {
       const newMessage = checkSystemMessageOnlyForSystemUser(message);
@@ -69,14 +75,17 @@ const useSystemMessage = () => {
       return true;
     }
 
+    featLog('checkpoint 3.5');
     if (__isMessageOnlyForSystemUser(message) && !__isMySystemMessage(message)) return false;
 
+    featLog('checkpoint4');
     if (__isMessageForOtherUser(message)) {
       const newMessage = checkSystemMessageOnlyForOtherSystemUser(message);
       saveSystemMessageCallback?.(newMessage);
       return true;
     }
 
+    featLog('checkpoint5');
     // If the message is a system message, save the message
     if (__isSystemMessage(message)) {
       const newMessage = checkSystemMessage(message);
@@ -84,11 +93,19 @@ const useSystemMessage = () => {
       return true;
     }
 
+    featLog('checkpoint6');
     if (message?.better_type) {
       saveSystemMessageCallback?.(message);
       return true;
     }
 
+    featLog('checkpoint7');
+    if (message?.type === 'regular') {
+      saveSystemMessageCallback?.(message);
+      return true;
+    }
+
+    featLog('checkpoint8');
     return false;
   }
 
