@@ -1,10 +1,10 @@
+import SimpleToast from 'react-native-simple-toast';
 import {act, renderHook} from '@testing-library/react-hooks';
 
 import * as actionFeed from '../../src/context/actions/feeds';
+import * as servicePost from '../../src/service/post';
 import Store from '../../src/context/Store';
 import useFeedHeader from '../../src/screens/FeedScreen/hooks/useFeedHeader';
-import * as servicePost from '../../src/service/post';
-import SimpleToast from 'react-native-simple-toast';
 
 const mockedGoBack = jest.fn();
 const mockedNavigate = jest.fn();
@@ -49,12 +49,20 @@ describe('Feed Header should run correctly', () => {
     });
     expect(spyActionFeed).toHaveBeenCalled();
   });
-  it('onBackNormal should run correctly', () => {
+  it('onBackNormal not from feeds should run correctly', () => {
     const {result} = renderHook(() => useFeedHeader({actor, source: 'public'}), {wrapper: Store});
     act(() => {
       result.current.onBackNormalUser();
     });
-    expect(mockedGoBack).toHaveBeenCalled();
+    expect(mockedNavigate).toHaveBeenCalled();
+  });
+
+  it('onBackNormal from feeds should run correctly', () => {
+    const {result} = renderHook(() => useFeedHeader({actor, source: 'public'}), {wrapper: Store});
+    act(() => {
+      result.current.onBackNormalUser(true);
+    });
+    expect(mockedNavigate).toHaveBeenCalled();
   });
 
   it('handleNavigate should run correctly', () => {
