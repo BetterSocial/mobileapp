@@ -273,11 +273,12 @@ const helperGetWhichMembers = (channel, selfSignUserId, selfAnonUserId) => {
   if (channel?.better_channel_member) {
     if (isArray(channel?.better_channel_member)) {
       _.forEach(channel?.better_channel_member, (member) => {
+        let newMember = {...member};
         const isNotSelf = !helperIsSelf(member?.user_id, selfSignUserId, selfAnonUserId);
         originalMembers.push(member);
         if (isNotSelf) {
-          member = helperGetEmptyUsername(member, channel?.members);
-          members.push(member);
+          newMember = helperGetEmptyUsername(newMember, channel?.members);
+          members.push(newMember);
         }
       });
 
@@ -285,11 +286,12 @@ const helperGetWhichMembers = (channel, selfSignUserId, selfAnonUserId) => {
     }
 
     _.forIn(channel?.better_channel_member, (member, key) => {
+      let newMember = {...member};
       const isNotSelf = !helperIsSelf(key, selfSignUserId, selfAnonUserId);
       originalMembers.push(member);
       if (isNotSelf) {
-        member = helperGetEmptyUsername(member, channel?.members);
-        members.push(member);
+        newMember = helperGetEmptyUsername(newMember, channel?.members);
+        members.push(newMember);
       }
     });
 
