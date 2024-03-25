@@ -4,6 +4,7 @@ import ChannelList from '../../../database/schema/ChannelListSchema';
 import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
 import useDatabaseQueueHook from '../queue/useDatabaseQueueHook';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
+import StorageUtils from '../../../utils/storage';
 
 const useFetchPostNotificationHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook();
@@ -46,6 +47,9 @@ const useFetchPostNotificationHook = () => {
       const anonymousPostNotifications =
         await AnonymousMessageRepo.getAllAnonymousPostNotifications();
       saveNotifications(anonymousPostNotifications, ChannelList.fromAnonymousPostNotificationAPI);
+      // update timestamp
+      const timestamp = new Date().toISOString().split('T')[0];
+      StorageUtils.anonymousNotificationTimeStamp.set(timestamp);
     } catch (e) {
       console.log('error on getting anonymousPostNotifications', e);
     }

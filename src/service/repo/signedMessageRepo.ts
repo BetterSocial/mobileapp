@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import api from '../config';
 import {ChannelData} from '../../../types/repo/ChannelData';
 import {
   ChannelTypeEnum,
   SignedPostNotification
 } from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
+import StorageUtils from '../../utils/storage';
+import api from '../config';
 import {GetstreamChannelType} from './types.d';
 
 type SendPayloadType = {
@@ -90,29 +91,40 @@ async function sendSignedMessage(
 }
 
 async function getAllSignedChannels() {
+  const timeStamp = StorageUtils.channelSignedTimeStamps.get();
+  const url = timeStamp
+    ? `${baseUrl.getAllSignedChannels}?last_fetch_date=${timeStamp}`
+    : baseUrl.getAllSignedChannels;
   try {
-    const response = await api.get(baseUrl.getAllSignedChannels);
-
+    const response = await api.get(url);
     if (response.status === 200) {
+      console.log('SUCCESS URL', url);
       return Promise.resolve(response.data?.data);
     }
 
     return Promise.reject(response.data?.status);
   } catch (e) {
+    console.log('FAILED URL', url);
     console.log(e);
     return Promise.reject(e);
   }
 }
 
 async function getAllSignedPostNotifications() {
+  const timeStamp = StorageUtils.channelAnonTimeStamps.get();
+  const url = timeStamp
+    ? `${baseUrl.getAllSignedPostNotifications}?last_fetch_date=${timeStamp}`
+    : baseUrl.getAllSignedPostNotifications;
   try {
-    const response = await api.get(baseUrl.getAllSignedPostNotifications);
+    const response = await api.get(url);
     if (response.status === 200) {
+      console.log('SUCCESS URL', url);
       return Promise.resolve(response.data?.data);
     }
 
     return Promise.reject(response.data?.status);
   } catch (e) {
+    console.log('FAILED URL', url);
     console.log(e);
     return Promise.reject(e);
   }
