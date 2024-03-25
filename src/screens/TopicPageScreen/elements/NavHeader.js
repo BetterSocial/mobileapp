@@ -5,6 +5,7 @@ import {
   Animated,
   StatusBar,
   StyleSheet,
+  Text,
   TouchableOpacity,
   View,
   useWindowDimensions
@@ -15,11 +16,9 @@ import FastImage from 'react-native-fast-image';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import MemoIcArrowBackCircle from '../../../assets/arrow/Ic_arrow_back_circle';
 import ShareIconCircle from '../../../assets/icons/Ic_share_circle';
-import TopicSignedDefaultIcon from '../../../assets/dp-topics-signed.png';
-import TopicAnonDefaultIcon from '../../../assets/dp-topics-anon.png';
 import {Shimmer} from '../../../components/Shimmer/Shimmer';
 import dimen from '../../../utils/dimen';
-import {normalize} from '../../../utils/fonts';
+import {normalize, normalizeFontSize} from '../../../utils/fonts';
 import Search from '../../DiscoveryScreenV2/elements/Search';
 import {COLORS} from '../../../utils/theme';
 import ButtonFollow from './ButtonFollow';
@@ -63,9 +62,6 @@ const NavHeader = (props) => {
     : !hasSearch || (hasSearch && coverPath?.length > 0);
 
   const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
-
-  const TopicDefaultIcon =
-    followType === 'incognito' ? TopicAnonDefaultIcon : TopicSignedDefaultIcon;
 
   return (
     <View>
@@ -154,16 +150,22 @@ const NavHeader = (props) => {
           <>
             <View style={[styles.headerContainer]}>
               <Animated.View style={{opacity: opacityHeaderAnimation}}>
-                <FastImage
-                  source={
-                    initialData?.channelPicutre
-                      ? {uri: initialData?.channelPicutre}
-                      : topicDetail?.icon_path
-                      ? {uri: topicDetail?.icon_path}
-                      : TopicDefaultIcon
-                  }
-                  style={styles.image(followType)}
-                />
+                {initialData?.channelPicutre || topicDetail?.icon_path ? (
+                  <FastImage
+                    source={
+                      initialData?.channelPicutre
+                        ? {uri: initialData?.channelPicutre}
+                        : topicDetail?.icon_path
+                        ? {uri: topicDetail?.icon_path}
+                        : null
+                    }
+                    style={styles.image(followType)}
+                  />
+                ) : (
+                  <View style={styles.image(followType)}>
+                    <Text style={styles.profileHashtag}>#</Text>
+                  </View>
+                )}
               </Animated.View>
               <View
                 style={[
@@ -293,9 +295,16 @@ const styles = StyleSheet.create({
     width: normalize(48),
     height: normalize(48),
     borderRadius: normalize(24),
-    backgroundColor: followType === 'signed' ? 'lightgrey' : COLORS.anon_secondary,
-    marginRight: 8
+    backgroundColor: followType === 'incognito' ? COLORS.anon_secondary : COLORS.signed_primary,
+    marginRight: 8,
+    alignContent: 'center',
+    justifyContent: 'center'
   }),
+  profileHashtag: {
+    color: COLORS.white,
+    textAlign: 'center',
+    fontSize: normalizeFontSize(24)
+  },
   backbutton: {
     paddingRight: 16,
     justifyContent: 'center',
