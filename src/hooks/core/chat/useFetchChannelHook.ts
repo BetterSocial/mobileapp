@@ -1,18 +1,18 @@
-import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
+import {ChannelData, ChannelType} from '../../../../types/repo/ChannelData';
+import {AnonUserInfo} from '../../../../types/service/AnonProfile.type';
+import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import ChannelList from '../../../database/schema/ChannelListSchema';
 import ChatSchema from '../../../database/schema/ChatSchema';
-import DatabaseQueue from '../../../core/queue/DatabaseQueue';
-import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
 import UserSchema from '../../../database/schema/UserSchema';
-import useDatabaseQueueHook from '../queue/useDatabaseQueueHook';
-import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
-import useSystemMessage from './useSystemMessage';
+import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
+import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
+import {DELETED_MESSAGE_TEXT, MESSAGE_TYPE_DELETED} from '../../../utils/constants';
+import StorageUtils from '../../../utils/storage';
+import {getChannelListInfo, getChannelMembers} from '../../../utils/string/StringUtils';
 import useUserAuthHook from '../auth/useUserAuthHook';
 import {ANONYMOUS} from '../constant';
-import {AnonUserInfo} from '../../../../types/service/AnonProfile.type';
-import {ChannelData, ChannelType} from '../../../../types/repo/ChannelData';
-import {DELETED_MESSAGE_TEXT, MESSAGE_TYPE_DELETED} from '../../../utils/constants';
-import {getChannelListInfo, getChannelMembers} from '../../../utils/string/StringUtils';
+import useDatabaseQueueHook from '../queue/useDatabaseQueueHook';
+import useSystemMessage from './useSystemMessage';
 
 type ChannelCategory = 'SIGNED' | 'ANONYMOUS';
 
@@ -189,6 +189,8 @@ const useFetchChannelHook = () => {
     try {
       await saveAllChannelData(signedChannel ?? [], 'SIGNED');
       refresh('channelList');
+      const timestamp = new Date().toISOString().split('T')[0];
+      StorageUtils.channelSignedTimeStamps.set(timestamp);
     } catch (e) {
       console.log('error on saving signedChannel:', e);
     }
@@ -206,6 +208,8 @@ const useFetchChannelHook = () => {
     try {
       await saveAllChannelData(anonymousChannel, 'ANONYMOUS');
       refresh('channelList');
+      const timestamp = new Date().toISOString().split('T')[0];
+      StorageUtils.channelAnonTimeStamps.set(timestamp);
     } catch (e) {
       console.log('error on saving anonymousChannel:', e);
     }

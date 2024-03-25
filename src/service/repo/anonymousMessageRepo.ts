@@ -2,6 +2,7 @@ import anonymousApi from '../anonymousConfig';
 import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
 import {ChannelData} from '../../../types/repo/ChannelData';
 import {GetstreamChannelType} from './types.d';
+import StorageUtils from '../../utils/storage';
 
 type SendPayloadType = {
   channelId: string;
@@ -80,28 +81,44 @@ async function sendAnonymousMessage(
 }
 
 async function getAllAnonymousChannels() {
+  // get time stamp
+  const timeStamp = StorageUtils.channelAnonTimeStamps.get();
+  const url = timeStamp
+    ? `${baseUrl.getAllAnonymousChannels}?last_fetch_date=${timeStamp}`
+    : baseUrl.getAllAnonymousChannels;
   try {
-    const response = await anonymousApi.get(baseUrl.getAllAnonymousChannels);
+    const response = await anonymousApi.get(url);
     if (response.status === 200) {
+      console.log('SUCCESS URL', url);
       return Promise.resolve(response.data?.data);
     }
 
     return Promise.reject(response.data?.status);
   } catch (e) {
+    console.log('FAILED URL', url);
+
     console.log(e);
     return Promise.reject(e);
   }
 }
 
 async function getAllAnonymousPostNotifications() {
+  const timeStamp = StorageUtils.anonymousNotificationTimeStamp.get();
+  const url = timeStamp
+    ? `${baseUrl.getAllAnonymousPostNotifications}?last_fetch_date=${timeStamp}`
+    : baseUrl.getAllAnonymousPostNotifications;
+
   try {
-    const response = await anonymousApi.get(baseUrl.getAllAnonymousPostNotifications);
+    const response = await anonymousApi.get(url);
     if (response.status === 200) {
+      console.log('SUCCESS URL', url);
       return Promise.resolve(response.data?.data);
     }
 
     return Promise.reject(response.data?.status);
   } catch (e) {
+    console.log('FAILED URL', url);
+
     console.log(e);
     return Promise.reject(e);
   }
