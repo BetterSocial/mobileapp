@@ -53,7 +53,7 @@ describe('Header feed should run correctly', () => {
     expect(getAllByTestId('full')).toHaveLength(1);
   });
 
-  it('props isBackButton should have back button', () => {
+  it('props isBackButton not from feeds should have back button', () => {
     const {getAllByTestId} = render(
       <Header props={{anonimity: false, source: 'public'}} isBackButton={true} />,
       {wrapper: Store}
@@ -65,6 +65,29 @@ describe('Header feed should run correctly', () => {
     expect(getAllByTestId('haveBackButton')).toHaveLength(1);
     expect(allIdAnonym('haveBackButton')).toHaveLength(1);
     fireEvent.press(idAnonym('onBack'));
-    expect(mockedNavigate).toHaveBeenCalledTimes(1);
+    expect(mockedGoBack).toHaveBeenCalledTimes(1);
+  });
+
+  it('props isBackButton from feeds should have back button', () => {
+    const {getAllByTestId} = render(
+      <Header
+        props={{anonimity: false, source: 'public'}}
+        isBackButton={true}
+        isFromFeeds={true}
+      />,
+      {wrapper: Store}
+    );
+    const {getAllByTestId: allIdAnonym, getByTestId: idAnonym} = render(
+      <Header
+        props={{anonimity: true, privacy: 'public'}}
+        isBackButton={true}
+        isFromFeeds={true}
+      />,
+      {wrapper: Store}
+    );
+    expect(getAllByTestId('haveBackButton')).toHaveLength(1);
+    expect(allIdAnonym('haveBackButton')).toHaveLength(1);
+    fireEvent.press(idAnonym('onBack'));
+    expect(mockedNavigate).toBeCalled();
   });
 });

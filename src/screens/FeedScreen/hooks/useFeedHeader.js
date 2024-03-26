@@ -66,17 +66,20 @@ const useFeedHeader = ({actor, source}) => {
     handleNavigate(selfUserId);
   };
 
-  const onBackNormalUser = () => {
+  const onBackNormalUser = (isFromFeeds) => {
     if (viewPostTimeIndex >= 0) id = feeds[viewPostTimeIndex]?.id;
     if (source && id) sendViewTimePost(id);
 
     resetTimer();
-    navigation.navigate('HomeTabs', {
-      screen: 'Feed',
-      params: {
-        isGoBack: true
-      }
-    });
+    if (isFromFeeds) {
+      return navigation.navigate('HomeTabs', {
+        screen: 'Feed',
+        params: {
+          isGoBack: true
+        }
+      });
+    }
+    return navigation.goBack();
   };
 
   return {

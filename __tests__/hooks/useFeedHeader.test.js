@@ -49,10 +49,18 @@ describe('Feed Header should run correctly', () => {
     });
     expect(spyActionFeed).toHaveBeenCalled();
   });
-  it('onBackNormal should run correctly', () => {
+  it('onBackNormal not from feeds should run correctly', () => {
     const {result} = renderHook(() => useFeedHeader({actor, source: 'public'}), {wrapper: Store});
     act(() => {
       result.current.onBackNormalUser();
+    });
+    expect(mockedGoBack).toHaveBeenCalled();
+  });
+
+  it('onBackNormal from feeds should run correctly', () => {
+    const {result} = renderHook(() => useFeedHeader({actor, source: 'public'}), {wrapper: Store});
+    act(() => {
+      result.current.onBackNormalUser(true);
     });
     expect(mockedNavigate).toHaveBeenCalled();
   });

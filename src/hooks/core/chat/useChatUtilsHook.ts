@@ -79,6 +79,7 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
       }
     }
 
+    refresh('channelList');
     refresh('channelInfo');
     refresh('user');
     refreshWithId('chat', channel?.id);

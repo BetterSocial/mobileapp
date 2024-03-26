@@ -91,7 +91,7 @@ const useCoreChatSystemHook = () => {
     const isMyMessage =
       message?.user?.id === signedProfileId || message?.user?.id === anonProfileId;
 
-    const hasUnreadMessage = selectedChannel?.unread_count <= 0;
+    const hasUnreadMessage = selectedChannel?.unread_count >= 0;
     if (isMyMessage) return 0;
     if (hasUnreadMessage) return selectedChannel?.unread_count + 1;
     return 1;
@@ -352,7 +352,7 @@ const useCoreChatSystemHook = () => {
     if (type === 'notification.message_new') {
       saveChannelListData(lastAnonymousMessage, ANONYMOUS).catch((e) => console.log(e));
     }
-  }, [JSON.stringify(lastAnonymousMessage), localDb]);
+  }, [lastAnonymousMessage, localDb]);
 
   React.useEffect(() => {
     if (!lastSignedMessage || !localDb) return;
@@ -361,7 +361,7 @@ const useCoreChatSystemHook = () => {
     if (type === 'notification.message_new' || type === 'notification.added_to_channel') {
       saveChannelListData(lastSignedMessage, SIGNED).catch((e) => console.log(e));
     }
-  }, [JSON.stringify(lastSignedMessage), localDb]);
+  }, [lastSignedMessage, localDb]);
 
   React.useEffect(() => {
     const isResetNav = params?.isReset;
