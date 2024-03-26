@@ -65,7 +65,7 @@ describe('Header feed should run correctly', () => {
     expect(getAllByTestId('haveBackButton')).toHaveLength(1);
     expect(allIdAnonym('haveBackButton')).toHaveLength(1);
     fireEvent.press(idAnonym('onBack'));
-    expect(mockedNavigate).toHaveBeenCalledTimes(1);
+    expect(mockedGoBack).toHaveBeenCalledTimes(1);
   });
 
   it('props isBackButton from feeds should have back button', () => {
