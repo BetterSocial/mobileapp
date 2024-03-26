@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View
 } from 'react-native';
 import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
@@ -103,7 +104,7 @@ const WhotoFollow = () => {
             }
             return VIEW_TYPE_DATA;
           },
-          (type, dim) => {
+          (type, dim, index) => {
             switch (type) {
               case VIEW_TYPE_DATA:
                 dim.width = width;
@@ -114,7 +115,7 @@ const WhotoFollow = () => {
               case VIEW_TYPE_LABEL_LOCATION:
               default:
                 dim.width = width;
-                dim.height = dimen.normalizeDimen(40);
+                dim.height = dimen.normalizeDimen(index > 0 ? 85 : 40);
                 break;
             }
           }
@@ -243,7 +244,18 @@ const WhotoFollow = () => {
     const labelTopicName = item.neighborhood ? item.neighborhood : item.name || '';
     switch (type) {
       case VIEW_TYPE_LABEL_TOPIC:
-        return <Label label={`#${labelTopicName}`} />;
+        return (
+          <>
+            {index > 0 && (
+              <TouchableOpacity>
+                <Text style={styles.textShowMore}>
+                  Show more in <Text style={styles.textShowMoreBold}>#{labelTopicName}</Text>
+                </Text>
+              </TouchableOpacity>
+            )}
+            <Label label={`#${labelTopicName}`} />
+          </>
+        );
       case VIEW_TYPE_LABEL_LOCATION:
         return <Label label={`${item?.city || ''}`} />;
       case VIEW_TYPE_DATA:
@@ -300,7 +312,9 @@ const WhotoFollow = () => {
         <View style={styles.textSmallContainer}>
           <Text style={styles.textSmall}>Others cannot see who you’re following.</Text>
         </View>
-        <Button onPress={() => register()}>FINISH</Button>
+        <Button onPress={() => register()} disabled={followed.length < 3}>
+          {followed.length < 3 ? `Choose ${3 - followed.length} more` : 'FINISH'}
+        </Button>
       </View>
       <Loading visible={fetchRegister} />
     </SafeAreaView>
@@ -344,6 +358,20 @@ const styles = StyleSheet.create({
     marginTop: dimen.normalizeDimen(8),
     marginBottom: dimen.normalizeDimen(24),
     paddingHorizontal: dimen.normalizeDimen(20)
+  },
+  textShowMore: {
+    fontFamily: 'Inter-Medium',
+    fontWeight: '500',
+    fontSize: normalizeFontSize(14),
+    lineHeight: normalizeFontSize(20),
+    color: COLORS.signed_primary,
+    marginLeft: dimen.normalizeDimen(16),
+    marginBottom: dimen.normalizeDimen(16),
+    marginTop: dimen.normalizeDimen(8)
+  },
+  textShowMoreBold: {
+    fontFamily: 'Inter-Bold',
+    fontWeight: '700'
   },
   footer: {
     position: 'absolute',
