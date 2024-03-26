@@ -4,24 +4,24 @@ exports[`Label render correctly Match snapshot 1`] = `
 <View
   style={
     Object {
-      "backgroundColor": "#F2F2F2",
+      "backgroundColor": "#F5F6F7",
       "flexDirection": "column",
-      "height": 40,
+      "height": 32,
       "justifyContent": "center",
-      "paddingLeft": 22,
-      "paddingRight": 22,
+      "paddingLeft": 17.6,
+      "paddingRight": 17.6,
     }
   }
 >
   <Text
     style={
       Object {
-        "color": "#4F4F4F",
+        "color": "#69707C",
         "fontFamily": "Poppins",
-        "fontSize": 12,
+        "fontSize": 10.8,
         "fontStyle": "normal",
         "fontWeight": "normal",
-        "lineHeight": 18,
+        "lineHeight": 16.2,
       }
     }
   >
@@ -29,12 +29,12 @@ exports[`Label render correctly Match snapshot 1`] = `
     <Text
       style={
         Object {
-          "color": "#4F4F4F",
+          "color": "#000",
           "fontFamily": "Poppins",
-          "fontSize": 12,
+          "fontSize": 10.8,
           "fontStyle": "normal",
           "fontWeight": "bold",
-          "lineHeight": 18,
+          "lineHeight": 16.2,
         }
       }
     >

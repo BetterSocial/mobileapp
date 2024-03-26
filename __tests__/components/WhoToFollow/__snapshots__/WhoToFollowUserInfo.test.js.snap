@@ -49,11 +49,11 @@ exports[`Testing Who To Follow Item User Match Snapshot 1`] = `
           }
           style={
             Object {
-              "borderRadius": 48,
-              "height": 45,
-              "marginLeft": 3,
-              "marginTop": 3,
-              "width": 45,
+              "borderRadius": 38.400000000000006,
+              "height": 36,
+              "marginLeft": 2.4000000000000004,
+              "marginTop": 2.4000000000000004,
+              "width": 36,
             }
           }
           width={45}
@@ -67,7 +67,7 @@ exports[`Testing Who To Follow Item User Match Snapshot 1`] = `
         "alignItems": "center",
         "flex": 1,
         "flexDirection": "column",
-        "marginLeft": 8,
+        "marginLeft": 6.4,
       }
     }
   >
@@ -75,12 +75,12 @@ exports[`Testing Who To Follow Item User Match Snapshot 1`] = `
       style={
         Object {
           "alignSelf": "flex-start",
-          "color": "#000000",
+          "color": "#000",
           "fontFamily": "Poppins",
-          "fontSize": 14,
+          "fontSize": 12.600000000000001,
           "fontStyle": "normal",
           "fontWeight": "bold",
-          "lineHeight": 21,
+          "lineHeight": 18.9,
         }
       }
     >
@@ -91,10 +91,10 @@ exports[`Testing Who To Follow Item User Match Snapshot 1`] = `
       style={
         Object {
           "alignSelf": "flex-start",
-          "color": "#000000",
-          "fontSize": 14,
-          "lineHeight": 21,
-          "marginRight": 16,
+          "color": "#69707C",
+          "fontSize": 12.600000000000001,
+          "lineHeight": 18.9,
+          "marginRight": 12.8,
           "width": "100%",
         }
       }

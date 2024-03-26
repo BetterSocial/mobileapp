@@ -1,15 +1,36 @@
 import * as React from 'react';
-import Svg, {Path} from 'react-native-svg';
+import PropTypes from 'prop-types';
+import Svg, {G, Path, Defs, ClipPath} from 'react-native-svg';
 
-const IconAdd = (props) => (
-  <Svg width={20} height={20} fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-    <Path
-      fillRule="evenodd"
-      clipRule="evenodd"
-      d="M10 20C4.477 20 0 15.523 0 10S4.477 0 10 0s10 4.477 10 10-4.477 10-10 10Zm0-18a8 8 0 1 0 0 16 8 8 0 0 0 0-16Zm0 2.757a1 1 0 0 1 1 1V9h3.243a1 1 0 1 1 0 2H11v3.243a1 1 0 0 1-2 0V11H5.756a1 1 0 1 1 0-2H9V5.757a1 1 0 0 1 1-1Z"
-      fill="#000"
-    />
-  </Svg>
-);
+function IconAdd(props) {
+  return (
+    <Svg
+      viewBox="0 0 24 24"
+      width={props?.width ?? 20}
+      height={props?.height ?? 20}
+      fill={props?.fill}
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}>
+      <G clipPath="url(#clip0_19924_1680)">
+        <Path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M12 24C5.373 24 0 18.627 0 12S5.373 0 12 0s12 5.373 12 12-5.373 12-12 12zm0-21.6a9.6 9.6 0 100 19.2 9.6 9.6 0 000-19.2zm0 3.309a1.2 1.2 0 011.2 1.2V10.8h3.891a1.2 1.2 0 010 2.4h-3.89v3.891a1.2 1.2 0 11-2.4 0V13.2H6.909a1.2 1.2 0 010-2.4H10.8V6.909a1.2 1.2 0 011.2-1.2z"
+          fill="#69707C"
+        />
+      </G>
+      <Defs>
+        <ClipPath id="clip0_19924_1680">
+          <Path fill="#fff" d="M0 0H24V24H0z" />
+        </ClipPath>
+      </Defs>
+    </Svg>
+  );
+}
 
+IconAdd.propTypes = {
+  width: PropTypes.number,
+  height: PropTypes.number,
+  fill: PropTypes.string
+};
 export default IconAdd;
