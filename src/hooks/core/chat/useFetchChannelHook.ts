@@ -1,18 +1,18 @@
-import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
+import {ChannelData, ChannelType} from '../../../../types/repo/ChannelData';
+import {AnonUserInfo} from '../../../../types/service/AnonProfile.type';
+import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import ChannelList from '../../../database/schema/ChannelListSchema';
 import ChatSchema from '../../../database/schema/ChatSchema';
-import DatabaseQueue from '../../../core/queue/DatabaseQueue';
-import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
 import UserSchema from '../../../database/schema/UserSchema';
-import useDatabaseQueueHook from '../queue/useDatabaseQueueHook';
-import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
-import useSystemMessage from './useSystemMessage';
+import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
+import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
+import {DELETED_MESSAGE_TEXT, MESSAGE_TYPE_DELETED} from '../../../utils/constants';
+import StorageUtils from '../../../utils/storage';
+import {getChannelListInfo, getChannelMembers} from '../../../utils/string/StringUtils';
 import useUserAuthHook from '../auth/useUserAuthHook';
 import {ANONYMOUS} from '../constant';
-import {AnonUserInfo} from '../../../../types/service/AnonProfile.type';
-import {ChannelData, ChannelType} from '../../../../types/repo/ChannelData';
-import {DELETED_MESSAGE_TEXT, MESSAGE_TYPE_DELETED} from '../../../utils/constants';
-import {getChannelListInfo, getChannelMembers} from '../../../utils/string/StringUtils';
+import useDatabaseQueueHook from '../queue/useDatabaseQueueHook';
+import useSystemMessage from './useSystemMessage';
 
 type ChannelCategory = 'SIGNED' | 'ANONYMOUS';
 
@@ -170,7 +170,13 @@ const useFetchChannelHook = () => {
     const filteredChannels = filterChannels(channels);
 
     const channelPromises = filteredChannels?.map((channel) => {
-      return Promise.resolve(saveChannelData(channel, channelCategory));
+      return new Promise((resolve, reject) => {
+        try {
+          resolve(saveChannelData(channel, channelCategory));
+        } catch (error) {
+          reject(error);
+        }
+      });
     });
 
     await Promise.all(channelPromises);
@@ -181,14 +187,18 @@ const useFetchChannelHook = () => {
     let signedChannel;
 
     try {
-      signedChannel = await SignedMessageRepo.getAllSignedChannels();
+      const timeStamp = StorageUtils.channelSignedTimeStamps.get();
+      signedChannel = await SignedMessageRepo.getAllSignedChannels(timeStamp as string);
     } catch (e) {
       console.log('error on getting signedChannel:', e);
     }
 
     try {
-      await saveAllChannelData(signedChannel ?? [], 'SIGNED');
+      if (Array.isArray(signedChannel) && signedChannel.length === 0) return;
+      await saveAllChannelData(signedChannel, 'SIGNED');
       refresh('channelList');
+      const timestamp = new Date().toISOString();
+      StorageUtils.channelSignedTimeStamps.set(timestamp);
     } catch (e) {
       console.log('error on saving signedChannel:', e);
     }
@@ -198,7 +208,9 @@ const useFetchChannelHook = () => {
     if (!localDb) return;
     let anonymousChannel: ChannelData[] = [];
     try {
-      anonymousChannel = await AnonymousMessageRepo.getAllAnonymousChannels();
+      const timeStamp = StorageUtils.channelAnonTimeStamps.get();
+
+      anonymousChannel = await AnonymousMessageRepo.getAllAnonymousChannels(timeStamp as string);
     } catch (e) {
       console.log('error on getting anonymousChannel:', e);
     }
@@ -206,6 +218,8 @@ const useFetchChannelHook = () => {
     try {
       await saveAllChannelData(anonymousChannel, 'ANONYMOUS');
       refresh('channelList');
+      const timestamp = new Date().toISOString();
+      StorageUtils.channelAnonTimeStamps.set(timestamp);
     } catch (e) {
       console.log('error on saving anonymousChannel:', e);
     }
