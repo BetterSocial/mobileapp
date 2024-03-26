@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import {StyleSheet, Text, View} from 'react-native';
 import {COLORS} from '../../../utils/theme';
 import dimen from '../../../utils/dimen';
@@ -16,6 +17,10 @@ const Label = ({label, isOriginalText}) => (
   </View>
 );
 
+Label.propTypes = {
+  label: PropTypes.string,
+  isOriginalText: PropTypes.bool
+};
 export default Label;
 
 const styles = StyleSheet.create({

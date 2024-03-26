@@ -220,6 +220,58 @@ const WhotoFollow = () => {
     navigation.goBack();
   };
 
+  const renderSectionFooter = (section) => {
+    return section.isLoadingMore ? (
+      <View style={{marginBottom: dimen.normalizeDimen(20)}}>
+        <ActivityIndicator color={COLORS.signed_primary} />
+      </View>
+    ) : (
+      <>
+        {section.isLastPage ? null : (
+          <TouchableOpacity
+            onPress={() => onNextPage(section.id || section.location_id || 'other')}>
+            {section.viewtype !== 'labelothers' ? (
+              <Text style={styles.textShowMore}>
+                Show more in{' '}
+                <Text style={styles.textShowMoreBold}>
+                  {section.city || section.state || section.country || `#${section.name}`}
+                </Text>
+              </Text>
+            ) : (
+              <Text style={styles.textShowMore}>Show more</Text>
+            )}
+          </TouchableOpacity>
+        )}
+      </>
+    );
+  };
+
+  const renderItem = (item) => {
+    return (
+      <ItemUser
+        photo={item.profile_pic_path}
+        bio={item.bio}
+        username={item.username}
+        followed={followed}
+        userid={item.user_id}
+        onPress={() => handleSelected(item.user_id)}
+        karmaScore={item.karma_score}
+      />
+    );
+  };
+
+  const renderSectionHeader = (section) => {
+    switch (section.viewtype) {
+      case 'labeltopic':
+        return <Label label={`#${section.name}`} />;
+      case 'labellocation':
+        return <Label label={`${section.city || section.state || section.country || ''}`} />;
+      case 'labelothers':
+      default:
+        return <Label label={section.name} isOriginalText />;
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Header onPress={onBack} />
@@ -239,54 +291,10 @@ const WhotoFollow = () => {
           data: i.users
         }))}
         keyExtractor={(item, index) => item + index}
-        ListFooterComponent={() => <View style={{height: dimen.normalizeDimen(90)}} />}
-        renderSectionFooter={({section}) =>
-          section.isLoadingMore ? (
-            <View style={{marginBottom: dimen.normalizeDimen(20)}}>
-              <ActivityIndicator color={COLORS.signed_primary} />
-            </View>
-          ) : (
-            <>
-              {section.isLastPage ? null : (
-                <TouchableOpacity
-                  onPress={() => onNextPage(section.id || section.location_id || 'other')}>
-                  {section.viewtype !== 'labelothers' ? (
-                    <Text style={styles.textShowMore}>
-                      Show more in{' '}
-                      <Text style={styles.textShowMoreBold}>
-                        {section.city || section.state || section.country || `#${section.name}`}
-                      </Text>
-                    </Text>
-                  ) : (
-                    <Text style={styles.textShowMore}>Show more</Text>
-                  )}
-                </TouchableOpacity>
-              )}
-            </>
-          )
-        }
-        renderItem={({item}) => (
-          <ItemUser
-            photo={item.profile_pic_path}
-            bio={item.bio}
-            username={item.username}
-            followed={followed}
-            userid={item.user_id}
-            onPress={() => handleSelected(item.user_id)}
-            karmaScore={item.karma_score}
-          />
-        )}
-        renderSectionHeader={({section: {viewtype, name, city, state, country}}) => {
-          switch (viewtype) {
-            case 'labeltopic':
-              return <Label label={`#${name}`} />;
-            case 'labellocation':
-              return <Label label={`${city || state || country || ''}`} />;
-            case 'labelothers':
-            default:
-              return <Label label={name} isOriginalText />;
-          }
-        }}
+        ListFooterComponent={<View style={{height: dimen.normalizeDimen(90)}} />}
+        renderSectionFooter={({section}) => renderSectionFooter(section)}
+        renderItem={({item}) => renderItem(item)}
+        renderSectionHeader={({section}) => renderSectionHeader(section)}
       />
       <View style={styles.footer}>
         <View style={styles.textSmallContainer}>
