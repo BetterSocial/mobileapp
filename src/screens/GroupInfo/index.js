@@ -50,7 +50,7 @@ const GroupInfo = () => {
     selectedUser,
     handleCloseSelectUser,
     openModal,
-    alertRemoveUser,
+    handleOpenPopup,
     memberName,
     onLeaveGroup,
     profile,
@@ -281,7 +281,7 @@ const GroupInfo = () => {
             isOpen={openModal}
             onCloseModal={handleCloseSelectUser}
             selectedUser={selectedUser}
-            onPress={alertRemoveUser}
+            onPress={handleOpenPopup}
             isGroup={channelState?.channel?.data?.type === 'group'}
           />
           <ModalActionAnonymous
@@ -289,7 +289,7 @@ const GroupInfo = () => {
             isOpen={isAnonymousModalOpen}
             onCloseModal={handleCloseSelectUser}
             selectedUser={selectedUser}
-            onPress={alertRemoveUser}
+            onPress={handleOpenPopup}
           />
 
           <Loading visible={isFetchingAllowAnonDM} />

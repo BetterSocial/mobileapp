@@ -1,17 +1,18 @@
 // eslint-disable-next-line no-use-before-define
+import {useNavigation} from '@react-navigation/core';
 import * as React from 'react';
 import {FlatList, StatusBar, View} from 'react-native';
-import {useNavigation} from '@react-navigation/core';
 
+import {useScrollToTop} from '@react-navigation/native';
 import AnonymousProfile from '../../../assets/images/AnonymousProfile.png';
-import ChannelListHeaderItem from '../../../components/ChatList/ChannelListHeaderItem';
 import MessageChannelItem from '../../../components/AnonymousChat/MessageChannelItem';
 import PostNotificationChannelItem from '../../../components/AnonymousChat/PostNotificationChannelItem';
-import Search from '../../ChannelListScreen/elements/Search';
-import useAnonymousChannelListScreenHook from '../../../hooks/screen/useAnonymousChannelListHook';
+import ChannelListHeaderItem from '../../../components/ChatList/ChannelListHeaderItem';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
-import useRootChannelListHook from '../../../hooks/screen/useRootChannelListHook';
 import {ANONYMOUS, ANON_PM, ANON_POST_NOTIFICATION} from '../../../hooks/core/constant';
+import useAnonymousChannelListScreenHook from '../../../hooks/screen/useAnonymousChannelListHook';
+import useRootChannelListHook from '../../../hooks/screen/useRootChannelListHook';
+import Search from '../../ChannelListScreen/elements/Search';
 
 const AnonymousChannelListScreen = ({route}) => {
   const {refresh} = useLocalDatabaseHook();
@@ -24,6 +25,9 @@ const AnonymousChannelListScreen = ({route}) => {
     goToPostDetailScreen,
     goToContactScreen
   } = useAnonymousChannelListScreenHook();
+  const ref = React.useRef(null);
+
+  useScrollToTop(ref);
 
   React.useEffect(() => {
     if (isFocused) {
@@ -63,6 +67,7 @@ const AnonymousChannelListScreen = ({route}) => {
       </View>
 
       <FlatList
+        ref={ref}
         data={anonChannels}
         keyExtractor={(item) => item.id}
         ListHeaderComponent={

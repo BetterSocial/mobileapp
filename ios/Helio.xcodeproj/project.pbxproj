@@ -46,6 +46,10 @@
 		845C6E9A2758B16500C9F384 /* Poppins-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DCE2758A00C00C9F384 /* Poppins-Thin.ttf */; };
 		845C6E9B2758B16800C9F384 /* Poppins-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DBF2758A00B00C9F384 /* Poppins-ThinItalic.ttf */; };
 		845C6E9C2758B16B00C9F384 /* Poppins.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DD52758A00C00C9F384 /* Poppins.ttf */; };
+		885931912BA4F89A00170A1C /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 885931902BA4F89A00170A1C /* PrivacyInfo.xcprivacy */; };
+		885931922BA4F89A00170A1C /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 885931902BA4F89A00170A1C /* PrivacyInfo.xcprivacy */; };
+		885931932BA4F89A00170A1C /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 885931902BA4F89A00170A1C /* PrivacyInfo.xcprivacy */; };
+		885931942BA4F89A00170A1C /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 885931902BA4F89A00170A1C /* PrivacyInfo.xcprivacy */; };
 		888DAA1829B48C8900311304 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		888DAA1929B48C8900311304 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		888DAA1D29B48C8900311304 /* FontsFree-Net-SFProText-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88954CF82832852B00A4B355 /* FontsFree-Net-SFProText-Regular.ttf */; };
@@ -242,6 +246,7 @@
 		845C6DD72758A00C00C9F384 /* Inter-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-Black.ttf"; path = "../assets/fonts/Inter-Black.ttf"; sourceTree = "<group>"; };
 		845C6DD82758A00C00C9F384 /* Inter-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-ExtraBold.ttf"; path = "../assets/fonts/Inter-ExtraBold.ttf"; sourceTree = "<group>"; };
 		845C6DD92758A00C00C9F384 /* Inter-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-Medium.ttf"; path = "../assets/fonts/Inter-Medium.ttf"; sourceTree = "<group>"; };
+		885931902BA4F89A00170A1C /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		8889442129B5599100B238C8 /* BetterSocialRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = BetterSocialRelease.entitlements; path = BetterSocial/BetterSocialRelease.entitlements; sourceTree = "<group>"; };
 		8889442229B559F900B238C8 /* BetterSocialDevRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BetterSocialDevRelease.entitlements; sourceTree = "<group>"; };
 		8889442329B55A0B00B238C8 /* BetterSocialStagingRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BetterSocialStagingRelease.entitlements; sourceTree = "<group>"; };
@@ -394,6 +399,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				885931902BA4F89A00170A1C /* PrivacyInfo.xcprivacy */,
 			);
 			name = BetterSocial;
 			sourceTree = "<group>";
@@ -849,6 +855,7 @@
 				845C6E882758B11900C9F384 /* Inter-Thin.ttf in Resources */,
 				845C6E962758B15900C9F384 /* Poppins-MediumItalic.ttf in Resources */,
 				845C6E942758B15200C9F384 /* Poppins-LightItalic.ttf in Resources */,
+				885931912BA4F89A00170A1C /* PrivacyInfo.xcprivacy in Resources */,
 				845C6E932758B14F00C9F384 /* Poppins-Light.ttf in Resources */,
 				845C6E922758B14A00C9F384 /* Poppins-Italic.ttf in Resources */,
 				845C6E8B2758B13400C9F384 /* Poppins-BlackItalic.ttf in Resources */,
@@ -893,6 +900,7 @@
 				888DAA1D29B48C8900311304 /* FontsFree-Net-SFProText-Regular.ttf in Resources */,
 				888DAA1E29B48C8900311304 /* Roboto-Bold.ttf in Resources */,
 				888DAA1F29B48C8900311304 /* Montserrat-Bold.ttf in Resources */,
+				885931932BA4F89A00170A1C /* PrivacyInfo.xcprivacy in Resources */,
 				888DAA2029B48C8900311304 /* Montserrat-Regular.ttf in Resources */,
 				888DAA2129B48C8900311304 /* Lato-Regular.ttf in Resources */,
 				888DAA2229B48C8900311304 /* Lato-Bold.ttf in Resources */,
@@ -938,6 +946,7 @@
 				88954CF92832853500A4B355 /* FontsFree-Net-SFProText-Regular.ttf in Resources */,
 				88A969592829ED8600A87C3C /* Roboto-Bold.ttf in Resources */,
 				88BB34952829E9FB0057417B /* Montserrat-Bold.ttf in Resources */,
+				885931922BA4F89A00170A1C /* PrivacyInfo.xcprivacy in Resources */,
 				88BB34942829E9F40057417B /* Montserrat-Regular.ttf in Resources */,
 				88BB34912829E8CF0057417B /* Lato-Regular.ttf in Resources */,
 				88BB348F2829E8B20057417B /* Lato-Bold.ttf in Resources */,
@@ -980,6 +989,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				885931942BA4F89A00170A1C /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1795,14 +1805,14 @@
 				CODE_SIGN_ENTITLEMENTS = BetterSocial/BetterSocial.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.10.104.11;
+				CURRENT_PROJECT_VERSION = 2.10.105.12;
 				DEVELOPMENT_TEAM = J22M3M9VYU;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = BetterSocial/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.10.104;
+				MARKETING_VERSION = 2.10.105;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1828,14 +1838,14 @@
 				CODE_SIGN_ENTITLEMENTS = BetterSocial/BetterSocialRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.10.104.11;
+				CURRENT_PROJECT_VERSION = 2.10.105.12;
 				DEVELOPMENT_TEAM = J22M3M9VYU;
 				EXCLUDED_ARCHS = "";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				INFOPLIST_FILE = BetterSocial/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.10.104;
+				MARKETING_VERSION = 2.10.105;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -2086,14 +2096,14 @@
 				CODE_SIGN_ENTITLEMENTS = BetterSocial/BetterSocial.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.8.0.115;
+				CURRENT_PROJECT_VERSION = 2.10.105.1001;
 				DEVELOPMENT_TEAM = J22M3M9VYU;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = "$(SRCROOT)/BetterSocialStaging/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.8.0;
+				MARKETING_VERSION = 2.10.105;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2117,14 +2127,14 @@
 				CODE_SIGN_ENTITLEMENTS = BetterSocialStaging/BetterSocialStagingRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.8.0.115;
+				CURRENT_PROJECT_VERSION = 2.10.105.1001;
 				DEVELOPMENT_TEAM = J22M3M9VYU;
 				EXCLUDED_ARCHS = "";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				INFOPLIST_FILE = "$(SRCROOT)/BetterSocialStaging/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.8.0;
+				MARKETING_VERSION = 2.10.105;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
