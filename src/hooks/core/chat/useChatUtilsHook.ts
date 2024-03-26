@@ -83,7 +83,6 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
     refresh('channelInfo');
     refresh('user');
     refreshWithId('chat', channel?.id);
-    // refresh('chat');
   };
 
   const goToPostDetailScreen = (channel: ChannelList) => {
@@ -144,15 +143,21 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
 
   const helperSaveChannelDetail = async (channel: ChannelList, response: any) => {
     if (!localDb) return;
-    response?.messages?.map((message) => {
-      const chatMessage = ChatSchema.fromGetAllChannelAPI(channel?.id, message);
-      return queue.addPriorityJob({
-        label: `saveChatMessage-${message?.id}`,
-        priority: QueueJobPriority.MEDIUM,
-        task: async () => {
-          await chatMessage.save(localDb);
-        }
-      });
+
+    queue.addPriorityJob({
+      label: `saveChatMessage-${channel?.id}`,
+      priority: QueueJobPriority.HIGH,
+      task: async () => {
+        const saveChatPromises = response?.messages?.map((message) => {
+          return new Promise((resolve) => {
+            const chatMessage = ChatSchema.fromGetAllChannelAPI(channel?.id, message);
+            chatMessage.save(localDb);
+            resolve(true);
+          });
+        });
+
+        await Promise.all(saveChatPromises);
+      }
     });
 
     queue.addPriorityJob({
@@ -160,7 +165,8 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
       priority: QueueJobPriority.MEDIUM,
       task: async () => {
         refresh('channelList');
-      }
+      },
+      forceAddToQueue: true
     });
 
     const builtChannelData = {
@@ -200,7 +206,7 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
       const user = UserSchema.fromMemberWebsocketObject(member, channel?.id);
       try {
         queue.addPriorityJob({
-          label: `save user from channel detail fetch${channel?.name}`,
+          label: `save user from channel detail fetch-${channel?.name}-${member?.user?.username}`,
           priority: QueueJobPriority.MEDIUM,
           task: async () => {
             user.saveOrUpdateIfExists(localDb);
@@ -236,7 +242,6 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
       refresh('channelInfo');
       refresh('channelList');
       refreshWithId('chat', channel?.id);
-      // refresh('chat');
     }
   };
 

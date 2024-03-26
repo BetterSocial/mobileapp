@@ -14,6 +14,7 @@ export type IQueueJob = {
 export type IPriorityQueueJob = IQueueJob & {
   priority: QueueJobPriority.HIGH | QueueJobPriority.MEDIUM | QueueJobPriority.LOW;
   createdAt?: number;
+  forceAddToQueue?: boolean;
 };
 
 export type IQueue = {
@@ -57,7 +58,14 @@ class BaseQueue {
     if (!job?.task) throw new Error('Task is required');
     if (!job?.priority) throw new Error('Priority is required');
 
-    this.highPriorityJobs.push({...job, createdAt: Date.now().valueOf()});
+    const sameQueueIndex = this.highPriorityJobs.findIndex((current) => {
+      return current?.label === job.label;
+    });
+
+    if (sameQueueIndex === -1 || job?.forceAddToQueue) {
+      this.highPriorityJobs.push({...job, createdAt: Date.now().valueOf()});
+    }
+
     this.processJobs();
   }
 
@@ -72,7 +80,6 @@ class BaseQueue {
     );
     this.isExecutingJob = true;
     if (this.highPriorityJobs.length > 0) {
-      //   const job = this.highPriorityJobs.shift();
       this.highPriorityJobs.sort(
         (a, b) => a.priority - b.priority || (a?.createdAt || 0) - (b?.createdAt || 0)
       );
@@ -86,7 +93,6 @@ class BaseQueue {
     } else if (this.jobs.length > 0) {
       const job = this.jobs.at(0);
       if (job) {
-        // console.log('Processing Job:', job.label);
         const response = await job.task();
         this.jobs.shift();
         if (job?.callback) job.callback(response);

@@ -185,7 +185,6 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
         }
 
         refreshWithId('chat', selectedChannel?.id);
-        // refresh('chat');
         refresh('channelList');
       }
 
@@ -214,7 +213,6 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
 
       await currentChatSchema.updateChatSentStatus(localDb, response);
       refreshWithId('chat', selectedChannel?.id);
-      // refresh('chat');
       refresh('channelList');
     } catch (e) {
       if (e?.response?.data?.status === 'Channel is blocked') return;
@@ -259,7 +257,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
 
   React.useEffect(() => {
     initChatData();
-  }, [localDb, chat, otherListener[`chat_${selectedChannel?.id}`], selectedChannel]);
+  }, [localDb, otherListener[`chat_${selectedChannel?.id}`], selectedChannel]);
 
   return {
     chats,
