@@ -1,8 +1,8 @@
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../../database/schema/ChannelListSchema';
 import ChatSchema from '../../../database/schema/ChatSchema';
-import DatabaseQueue from '../../../core/queue/DatabaseQueue';
 import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
+import StorageUtils from '../../../utils/storage';
 import UserSchema from '../../../database/schema/UserSchema';
 import useDatabaseQueueHook from '../queue/useDatabaseQueueHook';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
@@ -20,7 +20,6 @@ const useFetchChannelHook = () => {
   const {localDb, refresh, refreshWithId} = useLocalDatabaseHook();
   const {signedProfileId, anonProfileId} = useUserAuthHook();
   const {getFirstMessage} = useSystemMessage();
-  // const queue = DatabaseQueue.getInstance();
   const {queue} = useDatabaseQueueHook();
 
   const helperChannelPromiseBuilder = async (channel, channelCategory: ChannelCategory) => {
@@ -170,7 +169,21 @@ const useFetchChannelHook = () => {
     const filteredChannels = filterChannels(channels);
 
     const channelPromises = filteredChannels?.map((channel) => {
-      return Promise.resolve(saveChannelData(channel, channelCategory));
+      return new Promise((resolve, reject) => {
+        try {
+          saveChannelData(channel, channelCategory).then(() => resolve(true));
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
+
+    queue.addJob({
+      label: 'timestamp update',
+      task: async () => {
+        const timestamp = new Date().toISOString();
+        StorageUtils.channelSignedTimeStamps.set(timestamp);
+      }
     });
 
     await Promise.all(channelPromises);
@@ -181,13 +194,15 @@ const useFetchChannelHook = () => {
     let signedChannel;
 
     try {
-      signedChannel = await SignedMessageRepo.getAllSignedChannels();
+      const timeStamp = StorageUtils.channelSignedTimeStamps.get();
+      signedChannel = await SignedMessageRepo.getAllSignedChannels(timeStamp as string);
     } catch (e) {
       console.log('error on getting signedChannel:', e);
     }
 
     try {
-      await saveAllChannelData(signedChannel ?? [], 'SIGNED');
+      if (Array.isArray(signedChannel) && signedChannel.length === 0) return;
+      await saveAllChannelData(signedChannel, 'SIGNED');
       refresh('channelList');
     } catch (e) {
       console.log('error on saving signedChannel:', e);
@@ -198,7 +213,8 @@ const useFetchChannelHook = () => {
     if (!localDb) return;
     let anonymousChannel: ChannelData[] = [];
     try {
-      anonymousChannel = await AnonymousMessageRepo.getAllAnonymousChannels();
+      const timeStamp = StorageUtils.channelAnonTimeStamps.get();
+      anonymousChannel = await AnonymousMessageRepo.getAllAnonymousChannels(timeStamp as string);
     } catch (e) {
       console.log('error on getting anonymousChannel:', e);
     }
@@ -206,6 +222,8 @@ const useFetchChannelHook = () => {
     try {
       await saveAllChannelData(anonymousChannel, 'ANONYMOUS');
       refresh('channelList');
+      const timestamp = new Date().toISOString();
+      StorageUtils.channelAnonTimeStamps.set(timestamp);
     } catch (e) {
       console.log('error on saving anonymousChannel:', e);
     }

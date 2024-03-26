@@ -322,12 +322,15 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
     navigation.goBack();
   };
   const handleTextSystem = (item): string => {
-    if (
-      item?.rawJson?.userIdFollower === profile?.myProfile?.user_id ||
-      item?.rawJson?.message?.userIdFollower === profile?.myProfile?.user_id
-    ) {
-      return item?.rawJson?.textOwnMessage || item?.rawJson?.message?.textOwnMessage;
+    if (profile?.myProfile?.user_id && item.rawJson) {
+      if (
+        item?.rawJson?.userIdFollower === profile?.myProfile?.user_id ||
+        item?.rawJson?.message?.userIdFollower === profile?.myProfile?.user_id
+      ) {
+        return item?.rawJson?.textOwnMessage || item?.rawJson?.message?.textOwnMessage;
+      }
     }
+
     return item?.description || item?.message;
   };
 

@@ -40,9 +40,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
 
   const initChatData = async () => {
     if (!localDb || !selectedChannel) return;
-    const chatListener = otherListener[`chat_${selectedChannel?.id}`];
-    if (!chatListener) return;
-    // console.log('checkpoint chat screen 1');
+    if (!otherListener[`chat_${selectedChannel?.id}`]) return;
 
     try {
       queue.addPriorityJob({

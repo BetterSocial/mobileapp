@@ -1,3 +1,5 @@
+import getFeatureLoggerInstance, {EFeatureLogFlag} from '../../utils/log/FeatureLog';
+
 /* eslint-disable no-shadow */
 export enum QueueJobPriority {
   HIGH = 1,
@@ -23,6 +25,8 @@ export type IQueue = {
   processJobs: () => Promise<void>;
   getRemainingJobsCount: () => number;
 };
+
+const {featLog} = getFeatureLoggerInstance(EFeatureLogFlag.DBQueue);
 
 class BaseQueue {
   static instance: BaseQueue;
@@ -72,12 +76,13 @@ class BaseQueue {
   async processJobs() {
     if (this.isExecutingJob) return;
 
-    console.log(
+    featLog(
       'Remaining High Jobs:',
       this.highPriorityJobs.length,
       'Regular jobs:',
       this.jobs.length
     );
+
     this.isExecutingJob = true;
     if (this.highPriorityJobs.length > 0) {
       this.highPriorityJobs.sort(
@@ -85,7 +90,7 @@ class BaseQueue {
       );
       const job = this.highPriorityJobs.at(0);
       if (job) {
-        console.log('Processing High Priority Job:', job.label, 'Priority:', job.priority);
+        featLog('Processing High Priority Job:', job.label, 'Priority:', job.priority);
         const response = await job.task();
         this.highPriorityJobs.shift();
         if (job?.callback) job.callback(response);
@@ -93,6 +98,7 @@ class BaseQueue {
     } else if (this.jobs.length > 0) {
       const job = this.jobs.at(0);
       if (job) {
+        featLog('Regular jobs:', job.label);
         const response = await job.task();
         this.jobs.shift();
         if (job?.callback) job.callback(response);
