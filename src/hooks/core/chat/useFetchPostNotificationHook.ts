@@ -36,6 +36,7 @@ const useFetchPostNotificationHook = () => {
   const getAllSignedPostNotifications = async () => {
     try {
       const signedPostNotifications = await SignedMessageRepo.getAllSignedPostNotifications();
+      //TODO: update timestamp here
       saveNotifications(signedPostNotifications, ChannelList.fromSignedPostNotificationAPI);
     } catch (e) {
       console.log('error on getting signedPostNotifications:', e);
