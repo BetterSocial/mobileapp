@@ -365,10 +365,10 @@ const useCoreChatSystemHook = () => {
   React.useEffect(() => {
     const isResetNav = params?.isReset;
     if (isEnteringApp && migrationStatus === 'MIGRATED' && !isResetNav) {
-      // getAllSignedChannels().catch((e) => console.log(e));
-      // getAllSignedPostNotifications().catch((e) => console.log(e));
-      // getAllAnonymousChannels().catch((e) => console.log(e));
-      // getAllAnonymousPostNotifications().catch((e) => console.log(e));
+      getAllSignedChannels().catch((e) => console.log(e));
+      getAllSignedPostNotifications().catch((e) => console.log(e));
+      getAllAnonymousChannels().catch((e) => console.log(e));
+      getAllAnonymousPostNotifications().catch((e) => console.log(e));
     }
   }, [isEnteringApp, migrationStatus]);
 };
