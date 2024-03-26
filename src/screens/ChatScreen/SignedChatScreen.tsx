@@ -106,6 +106,8 @@ const SignedChatScreen = () => {
         style={styles.chatContainer}
         data={updatedChats}
         inverted={true}
+        windowSize={10}
+        maxToRenderPerBatch={5}
         initialNumToRender={20}
         alwaysBounceVertical={false}
         bounces={false}

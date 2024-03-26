@@ -324,6 +324,7 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
         return item?.rawJson?.textOwnMessage || item?.rawJson?.message?.textOwnMessage;
       }
     }
+
     return item?.description || item?.message;
   };
 

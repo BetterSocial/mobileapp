@@ -187,7 +187,8 @@ const useFetchChannelHook = () => {
     }
 
     try {
-      await saveAllChannelData(signedChannel ?? [], 'SIGNED');
+      if (Array.isArray(signedChannel) && signedChannel.length === 0) return;
+      await saveAllChannelData(signedChannel, 'SIGNED');
       refresh('channelList');
       const timestamp = new Date().toISOString().split('T')[0];
       StorageUtils.channelSignedTimeStamps.set(timestamp);
