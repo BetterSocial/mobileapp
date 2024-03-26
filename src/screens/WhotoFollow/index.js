@@ -222,7 +222,7 @@ const WhotoFollow = () => {
 
   const renderSectionFooter = (section) => {
     return section.isLoadingMore ? (
-      <View style={{marginBottom: dimen.normalizeDimen(20)}}>
+      <View style={{marginBottom: dimen.normalizeDimen(24.5)}}>
         <ActivityIndicator color={COLORS.signed_primary} />
       </View>
     ) : (
