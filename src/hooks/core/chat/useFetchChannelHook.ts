@@ -170,7 +170,13 @@ const useFetchChannelHook = () => {
     const filteredChannels = filterChannels(channels);
 
     const channelPromises = filteredChannels?.map((channel) => {
-      return Promise.resolve(saveChannelData(channel, channelCategory));
+      return new Promise((resolve, reject) => {
+        try {
+          resolve(saveChannelData(channel, channelCategory));
+        } catch (error) {
+          reject(error);
+        }
+      });
     });
 
     await Promise.all(channelPromises);
@@ -181,7 +187,8 @@ const useFetchChannelHook = () => {
     let signedChannel;
 
     try {
-      signedChannel = await SignedMessageRepo.getAllSignedChannels();
+      const timeStamp = StorageUtils.channelSignedTimeStamps.get();
+      signedChannel = await SignedMessageRepo.getAllSignedChannels(timeStamp as string);
     } catch (e) {
       console.log('error on getting signedChannel:', e);
     }
@@ -190,7 +197,7 @@ const useFetchChannelHook = () => {
       if (Array.isArray(signedChannel) && signedChannel.length === 0) return;
       await saveAllChannelData(signedChannel, 'SIGNED');
       refresh('channelList');
-      const timestamp = new Date().toISOString().split('T')[0];
+      const timestamp = new Date().toISOString();
       StorageUtils.channelSignedTimeStamps.set(timestamp);
     } catch (e) {
       console.log('error on saving signedChannel:', e);
@@ -201,7 +208,9 @@ const useFetchChannelHook = () => {
     if (!localDb) return;
     let anonymousChannel: ChannelData[] = [];
     try {
-      anonymousChannel = await AnonymousMessageRepo.getAllAnonymousChannels();
+      const timeStamp = StorageUtils.channelAnonTimeStamps.get();
+
+      anonymousChannel = await AnonymousMessageRepo.getAllAnonymousChannels(timeStamp as string);
     } catch (e) {
       console.log('error on getting anonymousChannel:', e);
     }
@@ -209,7 +218,7 @@ const useFetchChannelHook = () => {
     try {
       await saveAllChannelData(anonymousChannel, 'ANONYMOUS');
       refresh('channelList');
-      const timestamp = new Date().toISOString().split('T')[0];
+      const timestamp = new Date().toISOString();
       StorageUtils.channelAnonTimeStamps.set(timestamp);
     } catch (e) {
       console.log('error on saving anonymousChannel:', e);

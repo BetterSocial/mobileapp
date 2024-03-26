@@ -1,8 +1,7 @@
-import anonymousApi from '../anonymousConfig';
 import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
 import {ChannelData} from '../../../types/repo/ChannelData';
+import anonymousApi from '../anonymousConfig';
 import {GetstreamChannelType} from './types.d';
-import StorageUtils from '../../utils/storage';
 
 type SendPayloadType = {
   channelId: string;
@@ -31,8 +30,8 @@ interface AnonymousMessageRepoTypes {
     attachments: any,
     replyMessageId?: string
   ) => Promise<any>;
-  getAllAnonymousChannels: () => Promise<ChannelData[]>;
-  getAllAnonymousPostNotifications: () => Promise<AnonymousPostNotification[]>;
+  getAllAnonymousChannels: (timeStamp: string) => Promise<ChannelData[]>;
+  getAllAnonymousPostNotifications: (timeStamp: string) => Promise<AnonymousPostNotification[]>;
   getSingleAnonymousPostNotifications: (activityId: string) => Promise<AnonymousPostNotification>;
   setChannelAsRead: (channelId: string) => Promise<boolean>;
   getAnonymousChannelDetail: (channelType: GetstreamChannelType, channelId: string) => Promise<any>;
@@ -80,30 +79,25 @@ async function sendAnonymousMessage(
   }
 }
 
-async function getAllAnonymousChannels() {
+async function getAllAnonymousChannels(timeStamp: string | undefined) {
   // get time stamp
-  const timeStamp = StorageUtils.channelAnonTimeStamps.get();
   const url = timeStamp
     ? `${baseUrl.getAllAnonymousChannels}?last_fetch_date=${timeStamp}`
     : baseUrl.getAllAnonymousChannels;
   try {
     const response = await anonymousApi.get(url);
     if (response.status === 200) {
-      console.log('SUCCESS URL', url);
       return Promise.resolve(response.data?.data);
     }
 
     return Promise.reject(response.data?.status);
   } catch (e) {
-    console.log('FAILED URL', url);
-
     console.log(e);
     return Promise.reject(e);
   }
 }
 
-async function getAllAnonymousPostNotifications() {
-  const timeStamp = StorageUtils.anonymousNotificationTimeStamp.get();
+async function getAllAnonymousPostNotifications(timeStamp: string | undefined) {
   const url = timeStamp
     ? `${baseUrl.getAllAnonymousPostNotifications}?last_fetch_date=${timeStamp}`
     : baseUrl.getAllAnonymousPostNotifications;
@@ -111,14 +105,11 @@ async function getAllAnonymousPostNotifications() {
   try {
     const response = await anonymousApi.get(url);
     if (response.status === 200) {
-      console.log('SUCCESS URL', url);
       return Promise.resolve(response.data?.data);
     }
 
     return Promise.reject(response.data?.status);
   } catch (e) {
-    console.log('FAILED URL', url);
-
     console.log(e);
     return Promise.reject(e);
   }

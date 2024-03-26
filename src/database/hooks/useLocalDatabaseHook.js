@@ -38,8 +38,8 @@ const useLocalDatabaseHook = (withMigration = false) => {
   };
 
   const debouncedRefresh = React.useCallback(
-    _.debounce((key) => refresh(key)),
-    50
+    _.debounce((key) => refresh(key), 50),
+    []
   );
 
   const refreshWithId = (key, id) => {

@@ -4,7 +4,6 @@ import {
   ChannelTypeEnum,
   SignedPostNotification
 } from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
-import StorageUtils from '../../utils/storage';
 import api from '../config';
 import {GetstreamChannelType} from './types.d';
 
@@ -38,8 +37,8 @@ interface SignedMessageRepoTypes {
     attachments: any,
     replyMessageId?: string
   ) => Promise<any>;
-  getAllSignedChannels: () => Promise<ChannelData[]>;
-  getAllSignedPostNotifications: () => Promise<SignedPostNotification[]>;
+  getAllSignedChannels: (timeStamp: string) => Promise<ChannelData[]>;
+  getAllSignedPostNotifications: (timeStamp: string) => Promise<SignedPostNotification[]>;
   getSingleSignedPostNotifications: (activityId: string) => Promise<SignedPostNotification>;
   setChannelAsRead: (channelId: string, channelType: ChannelTypeEnum) => Promise<boolean>;
   createSignedChat: (body: string[]) => Promise<any>;
@@ -90,8 +89,7 @@ async function sendSignedMessage(
   }
 }
 
-async function getAllSignedChannels() {
-  const timeStamp = StorageUtils.channelSignedTimeStamps.get();
+async function getAllSignedChannels(timeStamp: string | undefined) {
   const url = timeStamp
     ? `${baseUrl.getAllSignedChannels}?last_fetch_date=${timeStamp}`
     : baseUrl.getAllSignedChannels;
@@ -110,8 +108,7 @@ async function getAllSignedChannels() {
   }
 }
 
-async function getAllSignedPostNotifications() {
-  const timeStamp = StorageUtils.channelAnonTimeStamps.get();
+async function getAllSignedPostNotifications(timeStamp: string | undefined) {
   const url = timeStamp
     ? `${baseUrl.getAllSignedPostNotifications}?last_fetch_date=${timeStamp}`
     : baseUrl.getAllSignedPostNotifications;
