@@ -54,7 +54,7 @@ describe('Feed Header should run correctly', () => {
     act(() => {
       result.current.onBackNormalUser();
     });
-    expect(mockedNavigate).toHaveBeenCalled();
+    expect(mockedGoBack).toHaveBeenCalled();
   });
 
   it('onBackNormal from feeds should run correctly', () => {
