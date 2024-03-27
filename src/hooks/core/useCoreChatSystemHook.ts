@@ -12,12 +12,14 @@ import UseLocalDatabaseHook from '../../../types/database/localDatabase.types';
 import UserSchema from '../../database/schema/UserSchema';
 import migrationDbStatusAtom from '../../database/atom/migrationDbStatusAtom';
 import useBetterWebsocketHook from './websocket/useBetterWebsocketHook';
+import useDatabaseQueueHook from './queue/useDatabaseQueueHook';
 import useFetchChannelHook from './chat/useFetchChannelHook';
 import useFetchPostNotificationHook from './chat/useFetchPostNotificationHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import usePostNotificationListenerHook from './getstream/usePostNotificationListenerHook';
 import useSystemMessage from './chat/useSystemMessage';
 import useUserAuthHook from './auth/useUserAuthHook';
+import DatabaseQueue, {DatabaseOperationLabel} from '../../core/queue/DatabaseQueue';
 import {ANONYMOUS, SIGNED} from './constant';
 import {
   AnonymousPostNotification,
@@ -29,6 +31,7 @@ import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {GetstreamFeedListenerObject} from '../../../types/hooks/core/getstreamFeedListener/feedListenerObject';
 import {GetstreamMessage, GetstreamWebsocket, MyChannelType} from './websocket/types.d';
 import {InitialStartupAtom} from '../../service/initialStartup';
+import {QueueJobPriority} from '../../core/queue/BaseQueue';
 import {SignedPostNotification} from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 import {getChannelListInfo} from '../../utils/string/StringUtils';
 
@@ -38,6 +41,7 @@ const useCoreChatSystemHook = () => {
   const {getAllSignedChannels, getAllAnonymousChannels} = useFetchChannelHook();
   const {getAllSignedPostNotifications, getAllAnonymousPostNotifications} =
     useFetchPostNotificationHook();
+  const {queue} = useDatabaseQueueHook();
   const [migrationStatus] = useRecoilState(migrationDbStatusAtom);
   const initialStartup: any = useRecoilValue(InitialStartupAtom);
   const {params} = useRoute();
@@ -158,14 +162,21 @@ const useCoreChatSystemHook = () => {
 
     if (isSystemMessage && isContainFollowingMessage) {
       const textOwnUser = 'You started following this user.\n Send them a message now.';
-      await ChannelList.updateChannelDescription(
-        localDb,
-        websocketData?.channel_id,
-        websocketData?.message?.textOwnMessage ?? textOwnUser,
-        websocketData
-      );
-      const chat = ChatSchema.fromWebsocketObject(websocketData);
-      await chat.save(localDb);
+      queue.addPriorityJob({
+        operationLabel: DatabaseOperationLabel.CoreChatSystem_SaveFollowingMessage,
+        id: `${websocketData?.channel?.id}-${websocketData?.message?.id}`,
+        priority: QueueJobPriority.HIGH,
+        task: async () => {
+          await ChannelList.updateChannelDescription(
+            localDb,
+            websocketData?.channel_id,
+            websocketData?.message?.textOwnMessage ?? textOwnUser,
+            websocketData
+          );
+          const chat = ChatSchema.fromWebsocketObject(websocketData);
+          await chat.save(localDb);
+        }
+      });
 
       return websocketData;
     }
@@ -185,8 +196,16 @@ const useCoreChatSystemHook = () => {
           newWebsocketData,
           channelType[websocketData?.channel_type]
         );
-        const chat = ChatSchema.fromWebsocketObject(newWebsocketData);
-        await Promise.all([chat.save(localDb), channelList.save(localDb)]);
+
+        queue.addPriorityJob({
+          operationLabel: DatabaseOperationLabel.CoreChatSystem_GeneralSystemMessage,
+          id: `${websocketData?.channel?.id}-${websocketData?.message?.id}`,
+          priority: QueueJobPriority.HIGH,
+          task: async () => {
+            const chat = ChatSchema.fromWebsocketObject(newWebsocketData);
+            await Promise.all([chat.save(localDb), channelList.save(localDb)]);
+          }
+        });
       }
     );
 
@@ -220,24 +239,41 @@ const useCoreChatSystemHook = () => {
       websocketMessage?.user?.id === anonProfileId;
 
     if (!isMyMessage) {
-      const chat = ChatSchema.fromWebsocketObject(websocketData);
-      await chat.save(localDb);
-    }
-
-    try {
-      websocketData?.originalMembers?.forEach(async (member) => {
-        const userMember = UserSchema.fromMemberWebsocketObject(member, websocketData?.channel?.id);
-        await userMember.saveOrUpdateIfExists(localDb);
+      queue.addPriorityJob({
+        operationLabel: DatabaseOperationLabel.CoreChatSystem_SaveChat,
+        id: `${websocketData?.channel?.id}-${websocketData?.message?.id}`,
+        task: async () => {
+          const chat = ChatSchema.fromWebsocketObject(websocketData);
+          await chat.save(localDb);
+        },
+        priority: QueueJobPriority.HIGH
       });
-    } catch (e) {
-      console.log('error on memberSchema');
-      console.log(e);
     }
 
-    refresh('channelList');
-    refreshWithId('chat', websocketData?.channel?.id);
-    refresh('channelInfo');
-    refresh('channelMember');
+    queue.addPriorityJob({
+      operationLabel: DatabaseOperationLabel.CoreChatSystem_SaveUserMember,
+      id: `${websocketData?.channel?.id}`,
+      priority: QueueJobPriority.HIGH,
+      task: async () => {
+        try {
+          websocketData?.originalMembers?.forEach(async (member) => {
+            const userMember = UserSchema.fromMemberWebsocketObject(
+              member,
+              websocketData?.channel?.id
+            );
+            await userMember.saveOrUpdateIfExists(localDb);
+          });
+        } catch (e) {
+          console.log('error on memberSchema');
+          console.log(e);
+        }
+
+        refresh('channelList');
+        refreshWithId('chat', websocketData?.channel?.id);
+        refresh('channelInfo');
+        refresh('channelMember');
+      }
+    });
   };
 
   const helperDetermineIsMyChildComment = (postNotification: AnonymousPostNotification) => {

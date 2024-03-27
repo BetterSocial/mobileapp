@@ -1,4 +1,5 @@
 import getFeatureLoggerInstance, {EFeatureLogFlag} from '../../utils/log/FeatureLog';
+import {DatabaseOperationLabel} from './DatabaseQueue';
 
 /* eslint-disable no-shadow */
 export enum QueueJobPriority {
@@ -7,9 +8,13 @@ export enum QueueJobPriority {
   LOW = 3
 }
 
+type allEnum = DatabaseOperationLabel;
+
 export type IQueueJob = {
   task: () => Promise<any>;
   label?: string;
+  operationLabel: allEnum;
+  id: string;
   callback?: (data) => void;
 };
 
@@ -37,6 +42,8 @@ class BaseQueue {
 
   isExecutingJob = false;
 
+  timekeeper = {};
+
   static getInstance(): BaseQueue {
     if (!this.instance) {
       return new BaseQueue();
@@ -48,12 +55,17 @@ class BaseQueue {
   addJob(job: IQueueJob) {
     if (!job) throw new Error('Job is required');
     if (!job?.task) throw new Error('Task is required');
+    if (!job?.operationLabel) throw new Error('Database Operation Label is required');
+    if (!job?.id) throw new Error('id is required');
 
     try {
-      this.jobs.push(job);
+      this.jobs.push({
+        ...job,
+        label: `${job.operationLabel}-${job.id}`
+      });
       this.processJobs();
     } catch (e) {
-      console.log('error on addJob', e);
+      featLog('error on addJob', e);
     }
   }
 
@@ -62,13 +74,32 @@ class BaseQueue {
     if (!job?.task) throw new Error('Task is required');
     if (!job?.priority) throw new Error('Priority is required');
 
-    const sameQueueIndex = this.highPriorityJobs.findIndex((current) => {
-      return current?.label === job.label;
-    });
+    job.label = `${job.operationLabel}-${job.id}`;
 
-    if (sameQueueIndex === -1 || job?.forceAddToQueue) {
-      this.highPriorityJobs.push({...job, createdAt: Date.now().valueOf()});
+    /**
+     * Timekeeping block (START)
+     *
+     * This block is to optimize priority job addition to the queue
+     * 1. Find job that has the same label on the timekeeper hash map. If no job with the same label set default lastAddedTime to 0;
+     * 2. If there are jobs with the same label, check its time difference with the timekeeper.
+     * 3. If the difference is more than 50ms, add it to the queue.
+     * 4. forceAddToQueue parameter ignores all above requirement.
+     * 5. Set timekeeper for job with current timestamp.
+     */
+    const currentTime = Date.now().valueOf();
+    const lastAddedTime = this.timekeeper?.[job.label] || 0;
+    const diff = currentTime - lastAddedTime;
+
+    const shouldQueueAdded = lastAddedTime === 0 || diff > 50 || job.forceAddToQueue;
+
+    if (shouldQueueAdded) {
+      this.timekeeper[job.label] = currentTime;
+      this.highPriorityJobs.push({...job, createdAt: currentTime});
     }
+
+    /**
+     * Timekeeping block (END)
+     */
 
     this.processJobs();
   }
@@ -110,7 +141,8 @@ class BaseQueue {
     if (this.highPriorityJobs.length > 0 || this.jobs.length > 0) {
       this.processJobs();
     } else {
-      console.log('No more jobs to process');
+      featLog('No more jobs to process');
+      this.timekeeper = {};
     }
   }
 
