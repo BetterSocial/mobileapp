@@ -13,7 +13,10 @@ enum EFeatureLogFlag {
   navigation = 'navigation',
 
   // External Library
-  firebaseUtils = 'firebaseUtils'
+  firebaseUtils = 'firebaseUtils',
+
+  // Core
+  DBQueue = 'DBQueue'
 }
 
 type TFeatureLogFlag = {
@@ -26,7 +29,8 @@ const FeatureLogFlag: TFeatureLogFlag = {
   oneSignalUtils: false,
   navigation: false,
   firebaseUtils: false,
-  useSystemMessage: false
+  useSystemMessage: false,
+  DBQueue: false
 };
 
 const getFeatureLoggerInstance = (flag: EFeatureLogFlag) => {

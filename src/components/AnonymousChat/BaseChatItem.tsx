@@ -7,7 +7,7 @@ import BaseSystemChat from './BaseChatSystem';
 import ChatItemMyTextV2 from './child/ChatItemMyTextV2';
 import ChatItemTargetText from './child/ChatItemTargetText';
 import dimen from '../../utils/dimen';
-import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
+import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
 import {ANONYMOUS, ANONYMOUS_USER} from '../../hooks/core/constant';
 import {
   BaseChatItemComponentProps,
@@ -16,6 +16,7 @@ import {
 import {ChatStatus} from '../../../types/database/schema/ChannelList.types';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {calculateTime} from '../../utils/time';
+import {handleUserName} from '../../utils/string/StringUtils';
 
 const styles = StyleSheet.create({
   containerPicture: {
@@ -26,7 +27,7 @@ const styles = StyleSheet.create({
 });
 
 const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
-  const {selectedChannel, handleUserName} = useChatScreenHook(type || ANONYMOUS);
+  const {selectedChannel} = useChatUtilsHook(type || ANONYMOUS);
 
   const renderAnonymousAvatar = (anonColor: string, anonEmoji: string) => (
     <AnonymousIcon color={anonColor} emojiCode={anonEmoji} size={dimen.normalizeDimen(24)} />
@@ -89,7 +90,7 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
         message={item?.message}
         attachments={item?.attachmentJson}
         time={calculateTime(item?.updatedAt, true)}
-        username={handleUserName(item)}
+        username={handleUserName(item, selectedChannel)}
         type={BaseChatItemTypeProps.MY_ANON_CHAT}
         status={item?.status as ChatStatus}
         chatType={type}
@@ -105,7 +106,7 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
       message={item?.message}
       attachments={item?.attachmentJson}
       time={calculateTime(item?.updatedAt, true)}
-      username={handleUserName(item)}
+      username={handleUserName(item, selectedChannel)}
       type={BaseChatItemTypeProps.ANON_CHAT}
     />
   );

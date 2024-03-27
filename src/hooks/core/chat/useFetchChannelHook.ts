@@ -2,7 +2,9 @@ import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../../database/schema/ChannelListSchema';
 import ChatSchema from '../../../database/schema/ChatSchema';
 import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
+import StorageUtils from '../../../utils/storage';
 import UserSchema from '../../../database/schema/UserSchema';
+import useDatabaseQueueHook from '../queue/useDatabaseQueueHook';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import useSystemMessage from './useSystemMessage';
 import useUserAuthHook from '../auth/useUserAuthHook';
@@ -15,9 +17,10 @@ import {getChannelListInfo, getChannelMembers} from '../../../utils/string/Strin
 type ChannelCategory = 'SIGNED' | 'ANONYMOUS';
 
 const useFetchChannelHook = () => {
-  const {localDb, refresh} = useLocalDatabaseHook();
+  const {localDb, refresh, refreshWithId} = useLocalDatabaseHook();
   const {signedProfileId, anonProfileId} = useUserAuthHook();
   const {getFirstMessage} = useSystemMessage();
+  const {queue} = useDatabaseQueueHook();
 
   const helperChannelPromiseBuilder = async (channel, channelCategory: ChannelCategory) => {
     if (channel?.members?.length === 0) return Promise.reject(Error('no members'));
@@ -29,6 +32,8 @@ const useFetchChannelHook = () => {
       topics: isAnonymous ? 'ANON_TOPIC' : 'TOPIC'
     };
 
+    const newChannel = {...channel};
+
     const channelListInfo = getChannelListInfo(channel, signedProfileId, anonProfileId);
     const anonUserInfo: AnonUserInfo | undefined = {
       anon_user_info_emoji_name: channelListInfo?.anonUserInfoEmojiName,
@@ -37,29 +42,38 @@ const useFetchChannelHook = () => {
       anon_user_info_color_code: channelListInfo?.anonUserInfoColorCode
     };
 
-    channel.targetName = channelListInfo?.channelName;
-    channel.targetImage = channelListInfo?.channelImage;
+    newChannel.targetName = channelListInfo?.channelName;
+    newChannel.targetImage = channelListInfo?.channelImage;
 
-    channel.firstMessage = getFirstMessage(channel?.messages);
+    newChannel.firstMessage = getFirstMessage(channel?.messages);
 
     const isDeletedMessage = channel.firstMessage?.message_type === MESSAGE_TYPE_DELETED;
     if (isDeletedMessage) channel.firstMessage.text = DELETED_MESSAGE_TEXT;
 
-    channel.channel = {...channel};
+    newChannel.channel = {...channel};
     const channelType = channel?.type;
 
     try {
-      const channelList = ChannelList.fromChannelAPI(
-        channel,
-        type[channelType],
-        undefined,
-        anonUserInfo
-      );
+      queue.addJob({
+        label: `saveChannelData-${channel?.id}`,
+        task: () => {
+          return new Promise((resolve) => {
+            const channelList = ChannelList.fromChannelAPI(
+              newChannel,
+              type[channelType],
+              undefined,
+              anonUserInfo
+            );
 
-      await channelList.saveIfLatest(localDb);
-      refresh('channelList');
+            channelList.saveIfLatest(localDb).then(() => {
+              refresh('channelList');
+              resolve(true);
+            });
+          });
+        }
+      });
     } catch (e) {
-      console.log('error on helperChannelPromiseBuilder');
+      console.log('error on helperChannelPromiseBuilder', e);
     }
     return null;
   };
@@ -77,23 +91,56 @@ const useFetchChannelHook = () => {
 
     try {
       const members = getChannelMembers(channel);
-      await Promise.all(
-        (members || []).map(async (member) => {
-          const userMember = UserSchema.fromMemberWebsocketObject(member, channel?.id);
-          await userMember.saveOrUpdateIfExists(localDb);
-        })
-      );
 
-      await Promise.all(
-        (channel?.messages || []).map(async (message) => {
-          if (message?.type === 'deleted') return;
-          if (message?.type === 'system') {
-            message = getFirstMessage([message]);
+      (members || []).map((member) => {
+        const userMember = UserSchema.fromMemberWebsocketObject(member, channel?.id);
+        queue.addJob({
+          label: `saveUserMember-${member?.user?.id}`,
+          task: () => {
+            return new Promise((resolve) => {
+              UserSchema.isUserExists(localDb, member?.user?.id, channel?.id).then(
+                (isUserExists) => {
+                  if (!member?.user?.username) return resolve(true);
+                  if (!isUserExists) {
+                    userMember.save(localDb).then(() => {
+                      return resolve(true);
+                    });
+                  } else {
+                    return resolve(true);
+                  }
+                }
+              );
+            });
           }
-          const chat = ChatSchema.fromGetAllChannelAPI(channel?.id, message);
-          await chat.save(localDb);
-        })
-      );
+        });
+
+        return null;
+      });
+
+      (channel?.messages || []).map((message) => {
+        queue.addJob({
+          label: `saveChat-${message?.id}`,
+          task: () => {
+            return new Promise((resolve) => {
+              if (message?.type === 'deleted') {
+                resolve(true);
+                return;
+              }
+              if (message?.type === 'system') {
+                message = getFirstMessage([message]);
+              }
+              const chat = ChatSchema.fromGetAllChannelAPI(channel?.id, message);
+              chat.saveIfNotExist(localDb).then(() => {
+                resolve(true);
+
+                refreshWithId('chat', channel?.id);
+              });
+            });
+          }
+        });
+
+        return null;
+      });
     } catch (e) {
       console.log('error on saveChannelData:', e);
     }
@@ -121,9 +168,25 @@ const useFetchChannelHook = () => {
   const saveAllChannelData = async (channels, channelCategory: ChannelCategory) => {
     const filteredChannels = filterChannels(channels);
 
-    filteredChannels?.forEach(async (channel) => {
-      await saveChannelData(channel, channelCategory);
+    const channelPromises = filteredChannels?.map((channel) => {
+      return new Promise((resolve, reject) => {
+        try {
+          saveChannelData(channel, channelCategory).then(() => resolve(true));
+        } catch (error) {
+          reject(error);
+        }
+      });
     });
+
+    queue.addJob({
+      label: 'timestamp update',
+      task: async () => {
+        const timestamp = new Date().toISOString();
+        StorageUtils.channelSignedTimeStamps.set(timestamp);
+      }
+    });
+
+    await Promise.all(channelPromises);
   };
 
   const getAllSignedChannels = async () => {
@@ -131,13 +194,15 @@ const useFetchChannelHook = () => {
     let signedChannel;
 
     try {
-      signedChannel = await SignedMessageRepo.getAllSignedChannels();
+      const timeStamp = StorageUtils.channelSignedTimeStamps.get();
+      signedChannel = await SignedMessageRepo.getAllSignedChannels(timeStamp as string);
     } catch (e) {
       console.log('error on getting signedChannel:', e);
     }
 
     try {
-      await saveAllChannelData(signedChannel ?? [], 'SIGNED');
+      if (Array.isArray(signedChannel) && signedChannel.length === 0) return;
+      await saveAllChannelData(signedChannel, 'SIGNED');
       refresh('channelList');
     } catch (e) {
       console.log('error on saving signedChannel:', e);
@@ -148,7 +213,8 @@ const useFetchChannelHook = () => {
     if (!localDb) return;
     let anonymousChannel: ChannelData[] = [];
     try {
-      anonymousChannel = await AnonymousMessageRepo.getAllAnonymousChannels();
+      const timeStamp = StorageUtils.channelAnonTimeStamps.get();
+      anonymousChannel = await AnonymousMessageRepo.getAllAnonymousChannels(timeStamp as string);
     } catch (e) {
       console.log('error on getting anonymousChannel:', e);
     }
@@ -156,6 +222,8 @@ const useFetchChannelHook = () => {
     try {
       await saveAllChannelData(anonymousChannel, 'ANONYMOUS');
       refresh('channelList');
+      const timestamp = new Date().toISOString();
+      StorageUtils.channelAnonTimeStamps.set(timestamp);
     } catch (e) {
       console.log('error on saving anonymousChannel:', e);
     }

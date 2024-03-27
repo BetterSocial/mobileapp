@@ -78,6 +78,11 @@ export const useInitialStartup = () => {
 
   const getProfile = async () => {
     try {
+      const storageData = StorageUtils.profileData.get();
+      if (storageData) {
+        const profileData = JSON.parse(storageData);
+        setMyProfileAction(profileData, dispatchProfile);
+      }
       const profile = await getMyProfile();
       StorageUtils.profileData.set(JSON.stringify(profile.data));
       setMyProfileAction(profile.data, dispatchProfile);

@@ -101,9 +101,8 @@ class ChatSchema implements BaseDbSchema {
 
   saveIfNotExist = async (db: SQLiteDatabase) => {
     try {
-      const existingChat = await ChatSchema.getByid(db, this.id);
+      const existingChat = await ChatSchema.isExists(db, this.id);
       if (!existingChat) {
-        console.log('save chat schema if not exist');
         await this.save(db);
       }
     } catch (e) {
@@ -147,7 +146,7 @@ class ChatSchema implements BaseDbSchema {
           ELSE 0 END AS is_continuous
       FROM 
       ${ChatSchema.getTableName()} A 
-      INNER JOIN ${UserSchema.getTableName()} B 
+      LEFT JOIN ${UserSchema.getTableName()} B 
       ON A.user_id = user_schema_user_id AND A.channel_id = user_channel_id
       WHERE A.channel_id = ? ORDER BY created_at DESC;`;
 
@@ -168,6 +167,16 @@ class ChatSchema implements BaseDbSchema {
       FROM ${ChatSchema.getTableName()} A
       INNER JOIN ${UserSchema.getTableName()} B
       ON A.user_id = B.user_id
+      WHERE A.id = ?;`;
+
+    const [{rows}] = await db.executeSql(selectQuery, [id]);
+    if (rows.length === 0) return Promise.resolve(null);
+    return Promise.resolve(this.fromDatabaseObject(rows.raw()[0]));
+  }
+
+  static async isExists(db: SQLiteDatabase, id: string): Promise<ChatSchema> {
+    const selectQuery = `SELECT A.id
+      FROM ${ChatSchema.getTableName()} A
       WHERE A.id = ?;`;
 
     const [{rows}] = await db.executeSql(selectQuery, [id]);

@@ -112,10 +112,10 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
                   "textAlign": "center",
                 },
                 Object {
-                  "color": "#107793",
+                  "color": "#00C4C6",
                 },
                 Object {
-                  "color": "#107793",
+                  "color": "#00C4C6",
                 },
               ]
             }
@@ -127,7 +127,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
       <View
         style={
           Object {
-            "backgroundColor": "#107793",
+            "backgroundColor": "#00C4C6",
             "borderTopColor": "#F5F6F7",
             "borderTopWidth": 1,
             "paddingHorizontal": 15,
@@ -270,7 +270,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
             >
               <ActivityIndicator
                 animating={true}
-                color="#107793"
+                color="#00C4C6"
                 hidesWhenStopped={true}
                 size="large"
               />
@@ -289,7 +289,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
         <Text
           style={
             Object {
-              "color": "#107793",
+              "color": "#00C4C6",
               "fontFamily": "Inter-SemiBold",
               "fontSize": 14,
               "lineHeight": 16.94,

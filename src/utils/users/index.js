@@ -2,11 +2,11 @@ import JWTDecode from 'jwt-decode';
 
 import TokenStorage, {ITokenEnum} from '../storage/custom/tokenStorage';
 
-export const getUserId = async () => {
+export const getUserId = () => {
   const token = TokenStorage.get(ITokenEnum.token);
   if (token) {
     try {
-      const id = await JWTDecode(token).user_id;
+      const id = JWTDecode(token).user_id;
       return id;
     } catch (e) {
       console.log('error on get user id', e);
@@ -16,11 +16,11 @@ export const getUserId = async () => {
   return null;
 };
 
-export const getAnonymousUserId = async () => {
+export const getAnonymousUserId = () => {
   try {
     const token = TokenStorage.get(ITokenEnum.anonymousToken);
     if (token) {
-      const id = await JWTDecode(token).user_id;
+      const id = JWTDecode(token).user_id;
       return id;
     }
     return null;

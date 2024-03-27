@@ -42,7 +42,7 @@ exports[`Testing Button Add Topic Post should match snapshot 1`] = `
       onStartShouldSetResponder={[Function]}
       style={
         Object {
-          "backgroundColor": "#4782D7",
+          "backgroundColor": "#0391FB",
           "borderRadius": 40,
           "justifyContent": "center",
           "opacity": 1,

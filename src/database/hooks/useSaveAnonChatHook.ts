@@ -15,7 +15,7 @@ import {
 import {getChannelListInfo} from '../../utils/string/StringUtils';
 
 const useSaveAnonChatHook = () => {
-  const {localDb, refresh} = useLocalDatabaseHook();
+  const {localDb, refresh, refreshWithId} = useLocalDatabaseHook();
   const {goToChatScreen} = useChatUtilsHook();
   const {signedProfileId, anonProfileId} = useUserAuthHook();
 
@@ -104,7 +104,7 @@ const useSaveAnonChatHook = () => {
       console.log(e);
     } finally {
       refresh('channelList');
-      refresh('chat');
+      refreshWithId('chat', initAnonymousChat.message.cid);
       if (withNavigate) {
         helperGoToAnonymousChat(object, GROUP_INFO);
       }

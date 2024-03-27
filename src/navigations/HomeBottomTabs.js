@@ -104,7 +104,7 @@ function HomeBottomTabs() {
 
   const menuIndicator = (nav, route) => {
     const isAnonChatMenu = route.name === 'AnonymousChannelList';
-    const activeColor = isAnonChatMenu ? COLORS.anon_primary : COLORS.blueOnboarding;
+    const activeColor = isAnonChatMenu ? COLORS.anon_primary : COLORS.signed_primary;
     let label = '';
     if (route.name === 'SignedChannelList') label = 'Convos';
     else if (route.name === 'AnonymousChannelList') label = 'Incognito';
@@ -131,7 +131,7 @@ function HomeBottomTabs() {
           tabBarLabel: () => menuIndicator(nav, route),
           tabBarIcon: ({focused, color}) => renderTabBarIcon(route, focused, color),
           tabBarActiveTintColor:
-            route.name === 'AnonymousChannelList' ? COLORS.anon_primary : COLORS.blueOnboarding
+            route.name === 'AnonymousChannelList' ? COLORS.anon_primary : COLORS.signed_primary
         })}>
         <Tab.Screen
           name="SignedChannelList"

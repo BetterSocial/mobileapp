@@ -1,6 +1,6 @@
-import anonymousApi from '../anonymousConfig';
 import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
 import {ChannelData} from '../../../types/repo/ChannelData';
+import anonymousApi from '../anonymousConfig';
 import {GetstreamChannelType} from './types.d';
 
 type SendPayloadType = {
@@ -30,8 +30,8 @@ interface AnonymousMessageRepoTypes {
     attachments: any,
     replyMessageId?: string
   ) => Promise<any>;
-  getAllAnonymousChannels: () => Promise<ChannelData[]>;
-  getAllAnonymousPostNotifications: () => Promise<AnonymousPostNotification[]>;
+  getAllAnonymousChannels: (timeStamp: string) => Promise<ChannelData[]>;
+  getAllAnonymousPostNotifications: (timeStamp: string) => Promise<AnonymousPostNotification[]>;
   getSingleAnonymousPostNotifications: (activityId: string) => Promise<AnonymousPostNotification>;
   setChannelAsRead: (channelId: string) => Promise<boolean>;
   getAnonymousChannelDetail: (channelType: GetstreamChannelType, channelId: string) => Promise<any>;
@@ -79,9 +79,13 @@ async function sendAnonymousMessage(
   }
 }
 
-async function getAllAnonymousChannels() {
+async function getAllAnonymousChannels(timeStamp: string | undefined) {
+  // get time stamp
+  const url = timeStamp
+    ? `${baseUrl.getAllAnonymousChannels}?last_fetch_date=${timeStamp}`
+    : baseUrl.getAllAnonymousChannels;
   try {
-    const response = await anonymousApi.get(baseUrl.getAllAnonymousChannels);
+    const response = await anonymousApi.get(url);
     if (response.status === 200) {
       return Promise.resolve(response.data?.data);
     }
@@ -93,9 +97,13 @@ async function getAllAnonymousChannels() {
   }
 }
 
-async function getAllAnonymousPostNotifications() {
+async function getAllAnonymousPostNotifications(timeStamp: string | undefined) {
+  const url = timeStamp
+    ? `${baseUrl.getAllAnonymousPostNotifications}?last_fetch_date=${timeStamp}`
+    : baseUrl.getAllAnonymousPostNotifications;
+
   try {
-    const response = await anonymousApi.get(baseUrl.getAllAnonymousPostNotifications);
+    const response = await anonymousApi.get(url);
     if (response.status === 200) {
       return Promise.resolve(response.data?.data);
     }

@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import api from '../config';
 import {ChannelData} from '../../../types/repo/ChannelData';
 import {
   ChannelTypeEnum,
   SignedPostNotification
 } from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
+import api from '../config';
 import {GetstreamChannelType} from './types.d';
 
 type SendPayloadType = {
@@ -37,8 +37,8 @@ interface SignedMessageRepoTypes {
     attachments: any,
     replyMessageId?: string
   ) => Promise<any>;
-  getAllSignedChannels: () => Promise<ChannelData[]>;
-  getAllSignedPostNotifications: () => Promise<SignedPostNotification[]>;
+  getAllSignedChannels: (timeStamp: string) => Promise<ChannelData[]>;
+  getAllSignedPostNotifications: (timeStamp: string) => Promise<SignedPostNotification[]>;
   getSingleSignedPostNotifications: (activityId: string) => Promise<SignedPostNotification>;
   setChannelAsRead: (channelId: string, channelType: ChannelTypeEnum) => Promise<boolean>;
   createSignedChat: (body: string[]) => Promise<any>;
@@ -89,30 +89,39 @@ async function sendSignedMessage(
   }
 }
 
-async function getAllSignedChannels() {
+async function getAllSignedChannels(timeStamp: string | undefined) {
+  const url = timeStamp
+    ? `${baseUrl.getAllSignedChannels}?last_fetch_date=${timeStamp}`
+    : baseUrl.getAllSignedChannels;
   try {
-    const response = await api.get(baseUrl.getAllSignedChannels);
-
+    const response = await api.get(url);
     if (response.status === 200) {
+      console.log('SUCCESS URL', url);
       return Promise.resolve(response.data?.data);
     }
 
     return Promise.reject(response.data?.status);
   } catch (e) {
+    console.log('FAILED URL', url);
     console.log(e);
     return Promise.reject(e);
   }
 }
 
-async function getAllSignedPostNotifications() {
+async function getAllSignedPostNotifications(timeStamp: string | undefined) {
+  const url = timeStamp
+    ? `${baseUrl.getAllSignedPostNotifications}?last_fetch_date=${timeStamp}`
+    : baseUrl.getAllSignedPostNotifications;
   try {
-    const response = await api.get(baseUrl.getAllSignedPostNotifications);
+    const response = await api.get(url);
     if (response.status === 200) {
+      console.log('SUCCESS URL', url);
       return Promise.resolve(response.data?.data);
     }
 
     return Promise.reject(response.data?.status);
   } catch (e) {
+    console.log('FAILED URL', url);
     console.log(e);
     return Promise.reject(e);
   }

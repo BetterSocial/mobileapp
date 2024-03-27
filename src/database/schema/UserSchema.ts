@@ -1,9 +1,9 @@
 import {ResultSet, SQLiteDatabase, Transaction} from 'react-native-sqlite-storage';
 import {v4 as uuidv4} from 'uuid';
 
-import {InitAnonymousChatDataMember} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
-import {DEFAULT_PROFILE_PIC_PATH, IS_ANONYMOUS, IS_NOT_ANONYMOUS} from '../../utils/constants';
 import BaseDbSchema from './BaseDbSchema';
+import {DEFAULT_PROFILE_PIC_PATH, IS_ANONYMOUS, IS_NOT_ANONYMOUS} from '../../utils/constants';
+import {InitAnonymousChatDataMember} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 
 export type SQLiteBoolean = 0 | 1;
 class UserSchema implements BaseDbSchema {
@@ -182,14 +182,14 @@ class UserSchema implements BaseDbSchema {
     }
   };
 
-  isUserExists = async (
+  static isUserExists = async (
     db: SQLiteDatabase,
     userId: string,
     channelId: string,
     transaction?: Transaction
   ): Promise<boolean> => {
     try {
-      const query = `SELECT * FROM ${UserSchema.getTableName()} WHERE user_id = ? AND channel_id = ? LIMIT 1`;
+      const query = `SELECT user_id FROM ${UserSchema.getTableName()} WHERE user_id = ? AND channel_id = ? LIMIT 1`;
       let results: ResultSet;
       if (transaction) {
         [, results] = await transaction.executeSql(query, [userId, channelId]);
