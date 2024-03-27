@@ -104,7 +104,6 @@ const useSaveAnonChatHook = () => {
       console.log(e);
     } finally {
       refresh('channelList');
-      // refresh('chat');
       refreshWithId('chat', initAnonymousChat.message.cid);
       if (withNavigate) {
         helperGoToAnonymousChat(object, GROUP_INFO);

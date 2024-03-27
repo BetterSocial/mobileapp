@@ -1,3 +1,5 @@
+import getFeatureLoggerInstance, {EFeatureLogFlag} from '../../utils/log/FeatureLog';
+
 /* eslint-disable no-shadow */
 export enum QueueJobPriority {
   HIGH = 1,
@@ -14,6 +16,7 @@ export type IQueueJob = {
 export type IPriorityQueueJob = IQueueJob & {
   priority: QueueJobPriority.HIGH | QueueJobPriority.MEDIUM | QueueJobPriority.LOW;
   createdAt?: number;
+  forceAddToQueue?: boolean;
 };
 
 export type IQueue = {
@@ -22,6 +25,8 @@ export type IQueue = {
   processJobs: () => Promise<void>;
   getRemainingJobsCount: () => number;
 };
+
+const {featLog} = getFeatureLoggerInstance(EFeatureLogFlag.DBQueue);
 
 class BaseQueue {
   static instance: BaseQueue;
@@ -57,28 +62,35 @@ class BaseQueue {
     if (!job?.task) throw new Error('Task is required');
     if (!job?.priority) throw new Error('Priority is required');
 
-    this.highPriorityJobs.push({...job, createdAt: Date.now().valueOf()});
+    const sameQueueIndex = this.highPriorityJobs.findIndex((current) => {
+      return current?.label === job.label;
+    });
+
+    if (sameQueueIndex === -1 || job?.forceAddToQueue) {
+      this.highPriorityJobs.push({...job, createdAt: Date.now().valueOf()});
+    }
+
     this.processJobs();
   }
 
   async processJobs() {
     if (this.isExecutingJob) return;
 
-    console.log(
+    featLog(
       'Remaining High Jobs:',
       this.highPriorityJobs.length,
       'Regular jobs:',
       this.jobs.length
     );
+
     this.isExecutingJob = true;
     if (this.highPriorityJobs.length > 0) {
-      //   const job = this.highPriorityJobs.shift();
       this.highPriorityJobs.sort(
         (a, b) => a.priority - b.priority || (a?.createdAt || 0) - (b?.createdAt || 0)
       );
       const job = this.highPriorityJobs.at(0);
       if (job) {
-        console.log('Processing High Priority Job:', job.label, 'Priority:', job.priority);
+        featLog('Processing High Priority Job:', job.label, 'Priority:', job.priority);
         const response = await job.task();
         this.highPriorityJobs.shift();
         if (job?.callback) job.callback(response);
@@ -86,7 +98,7 @@ class BaseQueue {
     } else if (this.jobs.length > 0) {
       const job = this.jobs.at(0);
       if (job) {
-        // console.log('Processing Job:', job.label);
+        featLog('Regular jobs:', job.label);
         const response = await job.task();
         this.jobs.shift();
         if (job?.callback) job.callback(response);

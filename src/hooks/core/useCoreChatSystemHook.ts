@@ -236,7 +236,6 @@ const useCoreChatSystemHook = () => {
 
     refresh('channelList');
     refreshWithId('chat', websocketData?.channel?.id);
-    // refresh('chat');
     refresh('channelInfo');
     refresh('channelMember');
   };
