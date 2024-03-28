@@ -20,6 +20,7 @@ import {ANON_PM, GROUP_INFO} from '../constant';
 import {BetterSocialChannelType} from '../../../../types/database/schema/ChannelList.types';
 import {ChannelTypeEnum} from '../../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 import {Context} from '../../../context';
+import {DatabaseOperationLabel} from '../../../core/queue/DatabaseQueue';
 import {PostNotificationChannelList} from '../../../../types/database/schema/PostNotificationChannelList.types';
 import {QueueJobPriority} from '../../../core/queue/BaseQueue';
 import {
@@ -52,7 +53,10 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
   const {anonProfileId, signedProfileId} = useUserAuthHook();
   const {queue} = useDatabaseQueueHook();
 
-  const setChannelAsRead = async (channel: ChannelList) => {
+  const setChannelAsRead = async (
+    channel: ChannelList,
+    ignoreRefresh: boolean | undefined = false
+  ) => {
     if (!localDb) return;
     channel.setRead(localDb).catch((e) => console.log('setChannelAsRead error', e));
 
@@ -80,6 +84,9 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
     }
 
     refresh('channelList');
+
+    if (ignoreRefresh) return;
+
     refresh('channelInfo');
     refresh('user');
     refreshWithId('chat', channel?.id);
@@ -145,7 +152,8 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
     if (!localDb) return;
 
     queue.addPriorityJob({
-      label: `saveChatMessage-${channel?.id}`,
+      operationLabel: DatabaseOperationLabel.FetchChannelDetail_SaveAllChat,
+      id: channel?.id,
       priority: QueueJobPriority.HIGH,
       task: async () => {
         const saveChatPromises = response?.messages?.map((message) => {
@@ -161,7 +169,8 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
     });
 
     queue.addPriorityJob({
-      label: 'refresh channel list',
+      operationLabel: DatabaseOperationLabel.FetchChannelDetail_RefreshChannelList,
+      id: channel?.id,
       priority: QueueJobPriority.MEDIUM,
       task: async () => {
         refresh('channelList');
@@ -194,7 +203,8 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
       channelData.name = channelName;
 
       queue.addPriorityJob({
-        label: `saveChannelData-${channel?.id}`,
+        operationLabel: DatabaseOperationLabel.FetchChannelDetail_SaveChannelList,
+        id: channel?.id,
         priority: QueueJobPriority.MEDIUM,
         task: async () => {
           channelData.saveIfLatest(localDb);
@@ -206,7 +216,8 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
       const user = UserSchema.fromMemberWebsocketObject(member, channel?.id);
       try {
         queue.addPriorityJob({
-          label: `save user from channel detail fetch-${channel?.name}-${member?.user?.username}`,
+          operationLabel: DatabaseOperationLabel.FetchChannelDetail_SaveUserMember,
+          id: `${channel?.name}-${member?.user?.username}`,
           priority: QueueJobPriority.MEDIUM,
           task: async () => {
             user.saveOrUpdateIfExists(localDb);
@@ -369,6 +380,7 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
     goBackFromChatScreen,
     handleTextSystem,
     setSelectedChannel,
+    setChannelAsRead,
     splitSystemMessage
   };
 }

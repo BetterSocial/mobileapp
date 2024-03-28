@@ -18,9 +18,10 @@ import useDatabaseQueueHook from '../core/queue/useDatabaseQueueHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import useUserAuthHook from '../core/auth/useUserAuthHook';
 import {CHANNEL_TYPE_GROUP, CHANNEL_TYPE_PERSONAL} from '../../utils/constants';
+import {DatabaseOperationLabel} from '../../core/queue/DatabaseQueue';
 import {QueueJobPriority} from '../../core/queue/BaseQueue';
 import {getAnonymousUserId, getUserId} from '../../utils/users';
-import {getOfficialAnonUsername, randomString} from '../../utils/string/StringUtils';
+import {randomString} from '../../utils/string/StringUtils';
 
 interface ScrollContextProps {
   selectedMessageId: string | null;
@@ -31,7 +32,8 @@ export const ScrollContext = React.createContext<ScrollContextProps | null>(null
 
 function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const {localDb, refresh, otherListener} = useLocalDatabaseHook();
-  const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen} = useChatUtilsHook(type);
+  const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen, setChannelAsRead} =
+    useChatUtilsHook(type);
   const {anonProfileId, signedProfileId} = useUserAuthHook();
   const {queue} = useDatabaseQueueHook();
 
@@ -45,8 +47,10 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     try {
       queue.addPriorityJob({
         priority: QueueJobPriority.HIGH,
-        label: `get-all-chat-${selectedChannel?.name}`,
+        operationLabel: DatabaseOperationLabel.ChatScreen_GetChat,
+        id: selectedChannel?.name,
         task: async () => {
+          setChannelAsRead(selectedChannel, true);
           const data = (await ChatSchema.getAll(
             localDb,
             selectedChannel?.id,
@@ -62,7 +66,8 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       if (type === 'ANONYMOUS') {
         queue.addPriorityJob({
           priority: QueueJobPriority.MEDIUM,
-          label: `get-anon-user-info-${selectedChannel?.name}`,
+          operationLabel: DatabaseOperationLabel.ChatScreen_GetSelfAnonUserInfo,
+          id: selectedChannel?.name,
           task: async () => {
             const userInfo = await UserSchema.getSelfAnonUserInfo(
               localDb,
@@ -151,7 +156,8 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
 
       if (currentChatSchema === null) {
         queue.addPriorityJob({
-          label: `sending-chat-${selectedChannel?.id}-${new Date().valueOf()}`,
+          operationLabel: DatabaseOperationLabel.ChatScreen_SendChat,
+          id: `${selectedChannel?.id}-${new Date().valueOf()}`,
           priority: QueueJobPriority.HIGH,
           forceAddToQueue: true,
           task: async () => {
@@ -173,7 +179,8 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
 
         if (selectedChannel) {
           queue.addPriorityJob({
-            label: `updating-channel-description-${selectedChannel?.id}-${randomId}`,
+            operationLabel: DatabaseOperationLabel.ChatScreen_UpdateChannelDescription,
+            id: `${selectedChannel?.id}-${randomId}`,
             priority: QueueJobPriority.HIGH,
             task: async () => {
               const channelList: ChannelList | null = await ChannelList.getSchemaById(
@@ -215,7 +222,8 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
         );
       }
       queue.addPriorityJob({
-        label: `update-chat-sent-status-${selectedChannel?.id}-${randomId}`,
+        operationLabel: DatabaseOperationLabel.ChatScreen_UpdateChatSentStatus,
+        id: `${selectedChannel?.id}-${randomId}`,
         priority: QueueJobPriority.HIGH,
         forceAddToQueue: true,
         task: async () => {
@@ -231,18 +239,6 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
         await sendChat(message, attachments, iteration + 1, currentChatSchema);
       }, 1000);
     }
-  };
-
-  const handleUserName = (item): string => {
-    if (item?.user?.anon_user_info_emoji_code) {
-      return getOfficialAnonUsername(item?.user);
-    }
-
-    if (item?.user?.username !== 'AnonymousUser') {
-      return item?.user?.username;
-    }
-
-    return getOfficialAnonUsername(selectedChannel);
   };
 
   const updateChatContinuity = (chatsData: ChatSchema[]) => {
@@ -277,7 +273,6 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     goBackFromChatScreen,
     goToChatInfoScreen,
     sendChat,
-    handleUserName,
     updateChatContinuity
   };
 }

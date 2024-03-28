@@ -576,6 +576,18 @@ const getOfficialAnonUsername = (anonUserInfo) => {
   return `${colorName} ${emojiName}`;
 };
 
+const handleUserName = (item, selectedChannel) => {
+  if (item?.user?.anon_user_info_emoji_code) {
+    return getOfficialAnonUsername(item?.user);
+  }
+
+  if (item?.user?.username !== 'AnonymousUser') {
+    return item?.user?.username;
+  }
+
+  return getOfficialAnonUsername(selectedChannel);
+};
+
 export {
   capitalizeFirstText,
   convertString,
@@ -589,6 +601,7 @@ export {
   getGroupMemberCount,
   getPollTime,
   getSingularOrPluralText,
+  handleUserName,
   isPollExpired,
   NO_POLL_UUID,
   randomString,
