@@ -1,11 +1,13 @@
 import * as React from 'react';
-import {Image, Text, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {Image, Text, View, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
 
 import EmptyIncognito from '../../../assets/images/empty_incognito.png';
 import MemoIc_arrow_right from '../../../assets/icons/Ic_arrow_right';
 import dimen from '../../../utils/dimen';
 import {COLORS} from '../../../utils/theme';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
+
+const {width: widthScreen} = Dimensions.get('window');
 
 const IncognitoEmptyChat = ({totalChannel}) => {
   return totalChannel >= 3 ? null : (
@@ -57,14 +59,14 @@ const styles = StyleSheet.create({
     width: '100%',
     bottom: 0,
     paddingTop: dimen.normalizeDimen(140),
-    paddingBottom: dimen.normalizeDimen(42),
+    paddingBottom: dimen.normalizeDimen(40),
     justifyContent: 'flex-end',
     alignItems: 'center',
     zIndex: 10
   },
   image: {
-    width: 250,
-    height: 141,
+    width: widthScreen - 90,
+    height: 160,
     resizeMode: 'contain'
   },
   titleText: {
@@ -89,7 +91,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: COLORS.white,
-    padding: dimen.normalizeDimen(16),
+    paddingHorizontal: dimen.normalizeDimen(16),
+    paddingVertical: dimen.normalizeDimen(15),
     borderRadius: 8,
     borderColor: COLORS.gray200,
     borderWidth: 1,
