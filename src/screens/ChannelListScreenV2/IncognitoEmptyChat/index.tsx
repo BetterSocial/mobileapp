@@ -3,7 +3,7 @@ import {Image, Text, View, StyleSheet, TouchableOpacity, Dimensions} from 'react
 import {useNavigation} from '@react-navigation/core';
 
 import EmptyIncognito from '../../../assets/images/empty_incognito.png';
-import MemoIc_arrow_right from '../../../assets/icons/Ic_arrow_right';
+import IconArrowRight from '../../../assets/icons/Ic_arrow_right';
 import dimen from '../../../utils/dimen';
 import {COLORS} from '../../../utils/theme';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
@@ -34,7 +34,7 @@ const IncognitoEmptyChat = ({totalChannel}) => {
             <Text style={styles.itemSubtitle}>Send an incognito message to friends.</Text>
           </View>
           <View>
-            <MemoIc_arrow_right width={8} height={12} fill={COLORS.gray400} />
+            <IconArrowRight width={8} height={12} fill={COLORS.gray400} />
           </View>
         </TouchableOpacity>
         <TouchableOpacity
@@ -47,7 +47,7 @@ const IncognitoEmptyChat = ({totalChannel}) => {
             <Text style={styles.itemSubtitle}>Post and comment using an alias.</Text>
           </View>
           <View>
-            <MemoIc_arrow_right width={8} height={12} fill={COLORS.gray400} />
+            <IconArrowRight width={8} height={12} fill={COLORS.gray400} />
           </View>
         </TouchableOpacity>
         <TouchableOpacity
@@ -58,7 +58,7 @@ const IncognitoEmptyChat = ({totalChannel}) => {
             <Text style={styles.itemSubtitle}>Safely join without anyone knowing.</Text>
           </View>
           <View>
-            <MemoIc_arrow_right width={8} height={12} fill={COLORS.gray400} />
+            <IconArrowRight width={8} height={12} fill={COLORS.gray400} />
           </View>
         </TouchableOpacity>
       </View>
