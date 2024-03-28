@@ -1,8 +1,10 @@
 import * as React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import PropTypes from 'prop-types';
-import {normalize} from '../../../utils/fonts';
+import {normalize, normalizeFontSize} from '../../../utils/fonts';
 import {CircleGradient} from '../../../components/Karma/CircleGradient';
+import {COLORS} from '../../../utils/theme';
+import dimen from '../../../utils/dimen';
 
 const UserInfo = ({photo, username, bio, karmaScore}) => (
   <View style={styles.cardLeft}>
@@ -39,34 +41,34 @@ const styles = StyleSheet.create({
     flex: 1
   },
   tinyLogo: {
-    width: 45,
-    height: 45,
-    borderRadius: 48,
-    marginLeft: 3,
-    marginTop: 3
+    width: dimen.normalizeDimen(45),
+    height: dimen.normalizeDimen(45),
+    borderRadius: dimen.normalizeDimen(48),
+    marginLeft: dimen.normalizeDimen(3),
+    marginTop: dimen.normalizeDimen(3)
   },
   containerTextCard: {
     flexDirection: 'column',
     alignItems: 'center',
-    marginLeft: 8,
+    marginLeft: dimen.normalizeDimen(8),
     flex: 1
   },
   textFullName: {
     fontFamily: 'Poppins',
     fontStyle: 'normal',
     fontWeight: 'bold',
-    fontSize: 14,
-    color: '#000000',
-    lineHeight: 21,
+    fontSize: normalizeFontSize(14),
+    color: COLORS.black000,
+    lineHeight: normalizeFontSize(21),
     alignSelf: 'flex-start'
   },
   textUsername: {
-    fontSize: 14,
-    color: '#000000',
-    lineHeight: 21,
+    fontSize: normalizeFontSize(14),
+    color: COLORS.gray500,
+    lineHeight: normalizeFontSize(21),
     alignSelf: 'flex-start',
     width: '100%',
-    marginRight: 16
+    marginRight: dimen.normalizeDimen(16)
   }
 });
 
