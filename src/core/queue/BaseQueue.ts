@@ -13,8 +13,8 @@ type allEnum = DatabaseOperationLabel;
 export type IQueueJob = {
   task: () => Promise<any>;
   label?: string;
-  operationLabel: allEnum;
-  id: string;
+  operationLabel?: allEnum;
+  id?: string;
   callback?: (data) => void;
 };
 
@@ -22,6 +22,8 @@ export type IPriorityQueueJob = IQueueJob & {
   priority: QueueJobPriority.HIGH | QueueJobPriority.MEDIUM | QueueJobPriority.LOW;
   createdAt?: number;
   forceAddToQueue?: boolean;
+  operationLabel: allEnum;
+  id: string;
 };
 
 export type IQueue = {
@@ -55,14 +57,9 @@ class BaseQueue {
   addJob(job: IQueueJob) {
     if (!job) throw new Error('Job is required');
     if (!job?.task) throw new Error('Task is required');
-    if (!job?.operationLabel) throw new Error('Database Operation Label is required');
-    if (!job?.id) throw new Error('id is required');
 
     try {
-      this.jobs.push({
-        ...job,
-        label: `${job.operationLabel}-${job.id}`
-      });
+      this.jobs.push(job);
       this.processJobs();
     } catch (e) {
       featLog('error on addJob', e);
@@ -73,6 +70,8 @@ class BaseQueue {
     if (!job) throw new Error('Job is required');
     if (!job?.task) throw new Error('Task is required');
     if (!job?.priority) throw new Error('Priority is required');
+    if (!job?.operationLabel) throw new Error('Database Operation Label is required');
+    if (!job?.id) throw new Error('id is required');
 
     job.label = `${job.operationLabel}-${job.id}`;
 
@@ -94,7 +93,11 @@ class BaseQueue {
 
     if (shouldQueueAdded) {
       this.timekeeper[job.label] = currentTime;
-      this.highPriorityJobs.push({...job, createdAt: currentTime});
+      this.highPriorityJobs.push({
+        ...job,
+        createdAt: currentTime,
+        label: `${job.operationLabel}-${job.id}`
+      });
     }
 
     /**
