@@ -56,7 +56,7 @@ const WarningAnimatedMessage = ({isSHow, top = 100, left = 110}) => {
 
   React.useEffect(() => {
     getSpecificCache(OPEN_FIRST_TIME, (cache) => {
-      if (!cache) setIsRunAnimated(isSHow);
+      if (!cache?.isOpen) setIsRunAnimated(isSHow);
     });
   }, [isSHow]);
 

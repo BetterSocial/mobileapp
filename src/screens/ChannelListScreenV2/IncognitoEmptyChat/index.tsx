@@ -1,15 +1,22 @@
 import * as React from 'react';
 import {Image, Text, View, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
+import {useNavigation} from '@react-navigation/core';
 
 import EmptyIncognito from '../../../assets/images/empty_incognito.png';
 import MemoIc_arrow_right from '../../../assets/icons/Ic_arrow_right';
 import dimen from '../../../utils/dimen';
 import {COLORS} from '../../../utils/theme';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
+import {ANONYMOUS} from '../../../hooks/core/constant';
+import useAnonymousChannelListScreenHook from '../../../hooks/screen/useAnonymousChannelListHook';
+import {DISCOVERY_TAB_TOPICS, NavigationConstants} from '../../../utils/constants';
 
 const {width: widthScreen} = Dimensions.get('window');
 
 const IncognitoEmptyChat = ({totalChannel}) => {
+  const {goToContactScreen} = useAnonymousChannelListScreenHook();
+  const navigation = useNavigation();
+
   return totalChannel >= 3 ? null : (
     <View style={styles.container}>
       {totalChannel === 0 && <Image source={EmptyIncognito} style={styles.image} />}
@@ -21,7 +28,7 @@ const IncognitoEmptyChat = ({totalChannel}) => {
       )}
       <View style={styles.wrapper}>
         {totalChannel === 0 && <View style={styles.line} />}
-        <TouchableOpacity style={styles.item}>
+        <TouchableOpacity style={styles.item} onPress={() => goToContactScreen({from: ANONYMOUS})}>
           <View style={styles.itemContent}>
             <Text style={styles.itemTitle}>Start an Incognito Chat</Text>
             <Text style={styles.itemSubtitle}>Send an incognito message to friends.</Text>
@@ -30,7 +37,11 @@ const IncognitoEmptyChat = ({totalChannel}) => {
             <MemoIc_arrow_right width={8} height={12} fill={COLORS.gray400} />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.item}>
+        <TouchableOpacity
+          style={styles.item}
+          onPress={() =>
+            navigation.navigate(NavigationConstants.CREATE_POST_SCREEN, {followType: 'incognito'})
+          }>
           <View style={styles.itemContent}>
             <Text style={styles.itemTitle}>Create an Incognito Post</Text>
             <Text style={styles.itemSubtitle}>Post and comment using an alias.</Text>
@@ -39,7 +50,9 @@ const IncognitoEmptyChat = ({totalChannel}) => {
             <MemoIc_arrow_right width={8} height={12} fill={COLORS.gray400} />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.item}>
+        <TouchableOpacity
+          style={styles.item}
+          onPress={() => navigation.navigate('DiscoveryScreen', {tab: DISCOVERY_TAB_TOPICS})}>
           <View style={styles.itemContent}>
             <Text style={styles.itemTitle}>Join Communities in Incognito Mode</Text>
             <Text style={styles.itemSubtitle}>Safely join without anyone knowing.</Text>
