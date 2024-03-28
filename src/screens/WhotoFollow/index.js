@@ -4,14 +4,13 @@ import crashlytics from '@react-native-firebase/crashlytics';
 import {
   ActivityIndicator,
   Dimensions,
-  RefreshControl,
   SafeAreaView,
+  SectionList,
   StyleSheet,
   Text,
   TouchableOpacity,
   View
 } from 'react-native';
-import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -23,7 +22,6 @@ import Label from './elements/Label';
 import Loading from '../Loading';
 import TokenStorage from '../../utils/storage/custom/tokenStorage';
 import dimen from '../../utils/dimen';
-import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
 import {COLORS} from '../../utils/theme';
@@ -32,104 +30,97 @@ import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {Header} from '../../components';
 import {InitialStartupAtom} from '../../service/initialStartup';
 import {ProgressBar} from '../../components/ProgressBar';
-import {get} from '../../api/server';
 import {normalizeFontSize} from '../../utils/fonts';
 import {registerUser} from '../../service/users';
 import {setImage} from '../../context/actions/users';
 import {setToken} from '../../utils/token';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
+import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
+import {getWhoToFollowList} from '../../service/topics';
 
 const {width} = Dimensions.get('screen');
 
-const VIEW_TYPE_LABEL_TOPIC = 1;
-const VIEW_TYPE_LABEL_LOCATION = 2;
-const VIEW_TYPE_DATA = 3;
-
 const WhotoFollow = () => {
-  // TODO: Change this into useUserAuthHook
-  const {setProfileId} = useProfileHook();
+  const {setAuth} = useUserAuthHook();
 
   const [users, setUsers] = React.useState([]);
   const [followed, setFollowed] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [refreshing, setRefreshing] = React.useState(false);
   const [fetchRegister, setFetchRegister] = React.useState(false);
   const [topics] = React.useContext(Context).topics;
   const [localCommunity] = React.useContext(Context).localCommunity;
   const [usersState, usersDispatch] = React.useContext(Context).users;
-  const [dataProvider, setDataProvider] = React.useState(null);
-  const [isRecyclerViewShown, setIsRecyclerViewShown] = React.useState(false);
-  const [layoutProvider, setLayoutProvider] = React.useState(() => {});
 
   const setInitialValue = useSetRecoilState(InitialStartupAtom);
   const create = useClientGetstream();
 
   const navigation = useNavigation();
-  const {bottom, top} = useSafeAreaInsets();
+  const {top} = useSafeAreaInsets();
 
-  React.useEffect(() => {
-    setIsLoading(true);
+  const onLoad = async () => {
+    try {
+      setIsLoading(true);
 
-    const getWhoToFollowListUrl = `/who-to-follow/list?topics=${encodeURI(
-      JSON.stringify(topics.topics)
-    )}&locations=${encodeURI(JSON.stringify(localCommunity.local_community))}`;
+      const resultList = await getWhoToFollowList(topics.topics, localCommunity.local_community);
+      if (resultList.length > 0) {
+        setUsers(
+          resultList.map((i) => ({
+            ...i,
+            page: 1,
+            isLoadingMore: false,
+            isLastPage: i.users.length < 7
+          }))
+        );
+      }
+      setIsLoading(false);
+    } catch (err) {
+      crashlytics().recordError(new Error(err));
+      setIsLoading(false);
+    }
+  };
 
-    get({url: getWhoToFollowListUrl})
-      .then((res) => {
-        setIsLoading(false);
-        if (res.status === 200) {
-          setUsers(res.data.body);
-        }
-      })
-      .catch((err) => {
-        crashlytics().recordError(new Error(err));
-        setIsLoading(false);
-      });
-  }, []);
+  const onNextPage = async (sectionId) => {
+    const checkSectionId = (item) => {
+      return sectionId === 'other'
+        ? item.viewtype === 'labelothers'
+        : item.id === sectionId || item.location_id === sectionId;
+    };
+    const indexSectionId = users.findIndex((i) => checkSectionId(i));
 
-  React.useEffect(() => {
-    if (users.length > 0) {
-      const dProvider = new DataProvider((row1, row2) => row1 !== row2);
-      setLayoutProvider(
-        new LayoutProvider(
-          (index) => {
-            if (users.length < 1) {
-              return 0;
-            }
-            if (users[index].viewtype === 'labeltopic') {
-              return VIEW_TYPE_LABEL_TOPIC;
-            }
-            if (users[index].viewtype === 'labellocation') {
-              return VIEW_TYPE_LABEL_LOCATION;
-            }
-            return VIEW_TYPE_DATA;
-          },
-          (type, dim, index) => {
-            switch (type) {
-              case VIEW_TYPE_DATA:
-                dim.width = width;
-                dim.height = dimen.normalizeDimen(64);
-                break;
+    try {
+      const copyUsers = [...users];
+      if (copyUsers[indexSectionId]) {
+        copyUsers[indexSectionId].isLoadingMore = true;
+        setUsers(copyUsers);
+      }
 
-              case VIEW_TYPE_LABEL_TOPIC:
-              case VIEW_TYPE_LABEL_LOCATION:
-              default:
-                dim.width = width;
-                dim.height = dimen.normalizeDimen(index > 0 ? 85 : 40);
-                break;
-            }
-          }
-        )
+      const resultList = await getWhoToFollowList(
+        topics.topics,
+        localCommunity.local_community,
+        users[indexSectionId].page + 1
       );
-      setDataProvider(dProvider.cloneWithRows(users));
+      const copyUsers2 = [...users];
+      if (copyUsers2[indexSectionId]) {
+        const newUsers = resultList.find((i) => checkSectionId(i))?.users || [];
+        copyUsers2[indexSectionId].users = [...copyUsers2[indexSectionId].users, ...newUsers];
+        copyUsers2[indexSectionId].page += 1;
+        copyUsers2[indexSectionId].isLoadingMore = false;
+        copyUsers2[indexSectionId].isLastPage = newUsers.length <= 0;
+        setUsers(copyUsers2);
+      }
+    } catch (err) {
+      crashlytics().recordError(new Error(err));
+      const copyUsers = [...users];
+      if (copyUsers[indexSectionId]) {
+        copyUsers[indexSectionId].isLoadingMore = false;
+        setUsers(copyUsers);
+      }
     }
-  }, [users]);
+  };
 
   React.useEffect(() => {
-    if (dataProvider) {
-      setIsRecyclerViewShown(true);
-    }
-  }, [dataProvider]);
+    onLoad();
+  }, []);
 
   const handleSelected = (value) => {
     const copyFollowed = [...followed];
@@ -141,21 +132,6 @@ const WhotoFollow = () => {
     }
     setFollowed(copyFollowed);
   };
-
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    get({url: '/who-to-follow/list'})
-      .then((res) => {
-        setRefreshing(false);
-        if (res.status === 200) {
-          setUsers(res.data.body);
-        }
-      })
-      .catch((err) => {
-        crashlytics().recordError(new Error(err));
-        setRefreshing(false);
-      });
-  }, []);
 
   const register = async () => {
     setFetchRegister(true);
@@ -200,7 +176,7 @@ const WhotoFollow = () => {
           try {
             const userId = await JwtDecode(res.token).user_id;
             const anonymousUserId = await JwtDecode(res.anonymousToken).user_id;
-            setProfileId({
+            setAuth({
               anonProfileId: anonymousUserId,
               signedProfileId: userId,
               token: res.token,
@@ -240,40 +216,6 @@ const WhotoFollow = () => {
       });
   };
 
-  const rowRenderer = (type, item, index, extendedState) => {
-    const labelTopicName = item.neighborhood ? item.neighborhood : item.name || '';
-    switch (type) {
-      case VIEW_TYPE_LABEL_TOPIC:
-        return (
-          <>
-            {index > 0 && (
-              <TouchableOpacity>
-                <Text style={styles.textShowMore}>
-                  Show more in <Text style={styles.textShowMoreBold}>#{labelTopicName}</Text>
-                </Text>
-              </TouchableOpacity>
-            )}
-            <Label label={`#${labelTopicName}`} />
-          </>
-        );
-      case VIEW_TYPE_LABEL_LOCATION:
-        return <Label label={`${item?.city || ''}`} />;
-      case VIEW_TYPE_DATA:
-      default:
-        return (
-          <ItemUser
-            photo={item.profile_pic_path}
-            bio={item.bio}
-            username={item.username}
-            followed={extendedState.followed}
-            userid={item.user_id}
-            onPress={() => handleSelected(item.user_id)}
-            karmaScore={item.karma_score}
-          />
-        );
-    }
-  };
-
   const onBack = () => {
     navigation.goBack();
   };
@@ -281,7 +223,6 @@ const WhotoFollow = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Header onPress={onBack} />
-      {/* <View style={styles.wrapperHeader}>{renderHeader()}</View> */}
       <View style={styles.containerProgress}>
         <ProgressBar isStatic={true} value={100} />
       </View>
@@ -292,28 +233,67 @@ const WhotoFollow = () => {
         </Text>
       </View>
       {isLoading ? <ActivityIndicator size="small" color={COLORS.signed_primary} /> : null}
-      {isRecyclerViewShown ? (
-        <RecyclerListView
-          style={styles.recyclerview(bottom)}
-          layoutProvider={layoutProvider}
-          dataProvider={dataProvider}
-          extendedState={{
-            followed
-          }}
-          rowRenderer={rowRenderer}
-          scrollViewProps={{
-            refreshControl: <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }}
-        />
-      ) : (
-        <></>
-      )}
+      <SectionList
+        sections={users.map((i) => ({
+          ...i,
+          data: i.users
+        }))}
+        keyExtractor={(item, index) => item + index}
+        ListFooterComponent={() => <View style={{height: dimen.normalizeDimen(90)}} />}
+        renderSectionFooter={({section}) =>
+          section.isLoadingMore ? (
+            <View style={{marginBottom: dimen.normalizeDimen(20)}}>
+              <ActivityIndicator color={COLORS.signed_primary} />
+            </View>
+          ) : (
+            <>
+              {section.isLastPage ? null : (
+                <TouchableOpacity
+                  onPress={() => onNextPage(section.id || section.location_id || 'other')}>
+                  {section.viewtype !== 'labelothers' ? (
+                    <Text style={styles.textShowMore}>
+                      Show more in{' '}
+                      <Text style={styles.textShowMoreBold}>
+                        {section.city || section.state || section.country || `#${section.name}`}
+                      </Text>
+                    </Text>
+                  ) : (
+                    <Text style={styles.textShowMore}>Show more</Text>
+                  )}
+                </TouchableOpacity>
+              )}
+            </>
+          )
+        }
+        renderItem={({item}) => (
+          <ItemUser
+            photo={item.profile_pic_path}
+            bio={item.bio}
+            username={item.username}
+            followed={followed}
+            userid={item.user_id}
+            onPress={() => handleSelected(item.user_id)}
+            karmaScore={item.karma_score}
+          />
+        )}
+        renderSectionHeader={({section: {viewtype, name, city, state, country}}) => {
+          switch (viewtype) {
+            case 'labeltopic':
+              return <Label label={`#${name}`} />;
+            case 'labellocation':
+              return <Label label={`${city || state || country || ''}`} />;
+            case 'labelothers':
+            default:
+              return <Label label={name} isOriginalText />;
+          }
+        }}
+      />
       <View style={styles.footer}>
         <View style={styles.textSmallContainer}>
           <Text style={styles.textSmall}>Others cannot see who you’re following.</Text>
         </View>
         <Button onPress={() => register()} disabled={followed.length < 3}>
-          {followed.length < 3 ? `Choose ${3 - followed.length} more` : 'FINISH'}
+          {followed.length < 3 ? `CHOOSE ${3 - followed.length} MORE` : 'FINISH'}
         </Button>
       </View>
       <Loading visible={fetchRegister} />
