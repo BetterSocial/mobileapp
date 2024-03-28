@@ -106,6 +106,7 @@ const CreatePost = () => {
   const [privacySelect, setPrivacySelect] = React.useState(0);
   const [dataImage, setDataImage] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
+  const [loadingPost, setLoadingPost] = React.useState(false);
   const [dataProfile, setDataProfile] = React.useState({});
   const [geoList, setGeoList] = React.useState([]);
   const [geoSelect, setGeoSelect] = React.useState(0);
@@ -449,11 +450,13 @@ const CreatePost = () => {
   };
 
   const postV2 = async () => {
+    setLoadingPost(true);
     if (!isEmptyMessageAllowed()) {
       showMessage({
         message: StringConstant.createPostFailedNoMessage,
         type: 'danger'
       });
+      setLoadingPost(false);
       return true;
     }
 
@@ -506,14 +509,23 @@ const CreatePost = () => {
         });
       }
 
-      await createPost(data);
+      const post = await createPost(data);
       if (params.onRefresh && typeof params.onRefresh === 'function') {
         params.onRefresh();
       }
-      showMessage({
-        message: StringConstant.createPostDone,
-        type: 'success'
-      });
+      if (post.code === 200) {
+        showMessage({
+          message: StringConstant.createPostDone,
+          type: 'success'
+        });
+        setLoadingPost(false);
+      } else {
+        showMessage({
+          message: StringConstant.createPostFailedGeneralError,
+          type: 'danger'
+        });
+        setLoadingPost(false);
+      }
     } catch (e) {
       if (__DEV__) {
         console.log('CreatePost : ', e);
@@ -610,6 +622,7 @@ const CreatePost = () => {
 
   const isPollButtonDisabled = () => getReducedPoll().length < 2;
   const isButtonDisabled = () => {
+    if (loadingPost) return true;
     if (isPollShown) return isPollButtonDisabled();
     return false;
   };
