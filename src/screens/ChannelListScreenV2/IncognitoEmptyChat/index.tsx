@@ -29,7 +29,7 @@ const IncognitoEmptyChat = ({totalChannel}) => {
     if (totalChannel >= 3) {
       result = MODE_HIDE;
     }
-    if ((totalChannel > 0 && totalChannel < 3) || widthScreen < 800) {
+    if ((totalChannel > 0 && totalChannel < 3) || widthScreen < 380) {
       result = MODE_BUTTON;
     }
 
