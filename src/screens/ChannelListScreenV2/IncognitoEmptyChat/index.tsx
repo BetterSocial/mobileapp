@@ -13,21 +13,42 @@ import {DISCOVERY_TAB_TOPICS, NavigationConstants} from '../../../utils/constant
 
 const {width: widthScreen} = Dimensions.get('window');
 
+const MODE_FULL = 1;
+const MODE_BUTTON = 2;
+const MODE_HIDE = 3;
+
 const IncognitoEmptyChat = ({totalChannel}) => {
   const {goToContactScreen} = useAnonymousChannelListScreenHook();
   const navigation = useNavigation();
 
-  return totalChannel >= 3 ? null : (
-    <View style={styles.container}>
-      {totalChannel === 0 && <Image source={EmptyIncognito} style={styles.image} />}
-      {totalChannel === 0 && (
-        <Text style={styles.titleText}>
+  const getMode = () => {
+    let result = MODE_FULL;
+    if (totalChannel === 0) {
+      result = MODE_FULL;
+    }
+    if (totalChannel >= 3) {
+      result = MODE_HIDE;
+    }
+    if ((totalChannel > 0 && totalChannel < 3) || widthScreen < 800) {
+      result = MODE_BUTTON;
+    }
+
+    return result;
+  };
+
+  return getMode() === MODE_HIDE ? null : (
+    <View style={styles.container} testID="IncognitoEmptyChatContainer">
+      {getMode() === MODE_FULL && (
+        <Image testID="IncognitoEmptyChatImage" source={EmptyIncognito} style={styles.image} />
+      )}
+      {getMode() === MODE_FULL && (
+        <Text testID="IncognitoEmptyChatText" style={styles.titleText}>
           All your incognito activity, including chats, posts, comments and communities will appear
           here.
         </Text>
       )}
       <View style={styles.wrapper}>
-        {totalChannel === 0 && <View style={styles.line} />}
+        {getMode() === MODE_FULL && <View testID="IncognitoEmptyChatLine" style={styles.line} />}
         <TouchableOpacity style={styles.item} onPress={() => goToContactScreen({from: ANONYMOUS})}>
           <View style={styles.itemContent}>
             <Text style={styles.itemTitle}>Start an Incognito Chat</Text>
