@@ -36,6 +36,18 @@ const IncognitoEmptyChat = ({totalChannel}) => {
     return result;
   };
 
+  const IncognitoButton = ({title, subtitle, onPress}) => (
+    <TouchableOpacity style={styles.item} onPress={onPress}>
+      <View style={styles.itemContent}>
+        <Text style={styles.itemTitle}>{title}</Text>
+        <Text style={styles.itemSubtitle}>{subtitle}</Text>
+      </View>
+      <View>
+        <IconArrowRight width={8} height={12} fill={COLORS.gray400} />
+      </View>
+    </TouchableOpacity>
+  );
+
   if (getMode() === MODE_HIDE) return null;
 
   return (
@@ -51,39 +63,23 @@ const IncognitoEmptyChat = ({totalChannel}) => {
       )}
       <View style={styles.wrapper}>
         {getMode() === MODE_FULL && <View testID="IncognitoEmptyChatLine" style={styles.line} />}
-        <TouchableOpacity style={styles.item} onPress={() => goToContactScreen({from: ANONYMOUS})}>
-          <View style={styles.itemContent}>
-            <Text style={styles.itemTitle}>Start an Incognito Chat</Text>
-            <Text style={styles.itemSubtitle}>Send an incognito message to friends.</Text>
-          </View>
-          <View>
-            <IconArrowRight width={8} height={12} fill={COLORS.gray400} />
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.item}
+        <IncognitoButton
+          title="Start an Incognito Chat"
+          subtitle="Send an incognito message to friends."
+          onPress={() => goToContactScreen({from: ANONYMOUS})}
+        />
+        <IncognitoButton
+          title="Create an Incognito Post"
+          subtitle="Send an incognito message to friends."
           onPress={() =>
             navigation.navigate(NavigationConstants.CREATE_POST_SCREEN, {followType: 'incognito'})
-          }>
-          <View style={styles.itemContent}>
-            <Text style={styles.itemTitle}>Create an Incognito Post</Text>
-            <Text style={styles.itemSubtitle}>Post and comment using an alias.</Text>
-          </View>
-          <View>
-            <IconArrowRight width={8} height={12} fill={COLORS.gray400} />
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.item}
-          onPress={() => navigation.navigate('DiscoveryScreen', {tab: DISCOVERY_TAB_TOPICS})}>
-          <View style={styles.itemContent}>
-            <Text style={styles.itemTitle}>Join Communities in Incognito Mode</Text>
-            <Text style={styles.itemSubtitle}>Safely join without anyone knowing.</Text>
-          </View>
-          <View>
-            <IconArrowRight width={8} height={12} fill={COLORS.gray400} />
-          </View>
-        </TouchableOpacity>
+          }
+        />
+        <IncognitoButton
+          title="Join Communities in Incognito Mode"
+          subtitle="Safely join without anyone knowing."
+          onPress={() => navigation.navigate('DiscoveryScreen', {tab: DISCOVERY_TAB_TOPICS})}
+        />
       </View>
     </View>
   );
