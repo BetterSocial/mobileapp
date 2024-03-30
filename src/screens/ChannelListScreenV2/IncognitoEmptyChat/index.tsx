@@ -17,6 +17,20 @@ const MODE_FULL = 1;
 const MODE_BUTTON = 2;
 const MODE_HIDE = 3;
 
+const IncognitoButton = ({title, subtitle, onPress}) => {
+  return (
+    <TouchableOpacity style={styles.item} onPress={onPress}>
+      <View style={styles.itemContent}>
+        <Text style={styles.itemTitle}>{title}</Text>
+        <Text style={styles.itemSubtitle}>{subtitle}</Text>
+      </View>
+      <View>
+        <IconArrowRight width={8} height={12} fill={COLORS.gray400} />
+      </View>
+    </TouchableOpacity>
+  );
+};
+
 const IncognitoEmptyChat = ({totalChannel}) => {
   const {goToContactScreen} = useAnonymousChannelListScreenHook();
   const navigation = useNavigation();
@@ -35,18 +49,6 @@ const IncognitoEmptyChat = ({totalChannel}) => {
 
     return result;
   };
-
-  const IncognitoButton = ({title, subtitle, onPress}) => (
-    <TouchableOpacity style={styles.item} onPress={onPress}>
-      <View style={styles.itemContent}>
-        <Text style={styles.itemTitle}>{title}</Text>
-        <Text style={styles.itemSubtitle}>{subtitle}</Text>
-      </View>
-      <View>
-        <IconArrowRight width={8} height={12} fill={COLORS.gray400} />
-      </View>
-    </TouchableOpacity>
-  );
 
   if (getMode() === MODE_HIDE) return null;
 
