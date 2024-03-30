@@ -7,10 +7,16 @@ import {openComposer} from 'react-native-email-link';
 import {useNavigation} from '@react-navigation/core';
 
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
+import ChannelListSchema from '../../../database/schema/ChannelListSchema';
 import ImageUtils from '../../../utils/image';
+import UserSchema from '../../../database/schema/UserSchema';
+import useChatUtilsHook from '../../../hooks/core/chat/useChatUtilsHook';
 import useCreateChat from '../../../hooks/screen/useCreateChat';
+import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
+import useUserAuthHook from '../../../hooks/core/auth/useUserAuthHook';
 import TokenStorage, {ITokenEnum} from '../../../utils/storage/custom/tokenStorage';
 import {Context} from '../../../context';
+import {addMemberGroup, leaveGroup, removeMemberGroup} from '../../../service/chat';
 import {checkUserBlock} from '../../../service/profile';
 import {
   getChannelListInfo,
@@ -20,16 +26,10 @@ import {
 import {requestExternalStoragePermission} from '../../../utils/permission';
 import {setChannel} from '../../../context/actions/setChannel';
 import {setParticipants} from '../../../context/actions/groupChat';
-import {addMemberGroup, removeMemberGroup, leaveGroup} from '../../../service/chat';
-import UserSchema from '../../../database/schema/UserSchema';
-import ChannelListSchema from '../../../database/schema/ChannelListSchema';
-import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
-import useUserAuthHook from '../../../hooks/core/auth/useUserAuthHook';
-import useChatUtilsHook from '../../../hooks/core/chat/useChatUtilsHook';
 
 const useGroupInfo = (channelId = null) => {
   const navigation = useNavigation();
-  const {localDb, refresh} = useLocalDatabaseHook();
+  const {localDb, refresh, refreshWithId} = useLocalDatabaseHook();
 
   const [groupChatState, groupPatchDispatch] = React.useContext(Context).groupChat;
   const [, dispatchChannel] = React.useContext(Context).channel;
@@ -253,7 +253,7 @@ const useGroupInfo = (channelId = null) => {
     }
 
     refresh('channelList');
-    refresh('chat');
+    refreshWithId('chat', channelId);
     refresh('channelInfo');
 
     setTimeout(() => {
@@ -303,7 +303,7 @@ const useGroupInfo = (channelId = null) => {
     }
 
     refresh('channelList');
-    refresh('chat');
+    refreshWithId('chat', channelId);
     refresh('channelInfo');
 
     setTimeout(() => {
@@ -481,7 +481,7 @@ const useGroupInfo = (channelId = null) => {
     }
 
     refresh('channelList');
-    refresh('chat');
+    refreshWithId('chat', channelId);
     refresh('channelInfo');
 
     setTimeout(() => {
