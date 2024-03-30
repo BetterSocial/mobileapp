@@ -3,8 +3,8 @@ import FastImage from 'react-native-fast-image';
 import {StyleSheet, Text, View} from 'react-native';
 
 import dimen from '../../utils/dimen';
-import {COLORS} from '../../utils/theme';
 import {ANONYMOUS, SIGNED} from '../../hooks/core/constant';
+import {COLORS} from '../../utils/theme';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 
 export interface ChannelListTabItemProps {
@@ -28,12 +28,12 @@ const ChannelListHeaderItem = (props: ChannelListTabItemProps) => {
       alignItems: 'center',
       backgroundColor: COLORS.white,
       borderBottomWidth: 2,
-      borderBottomColor: type === SIGNED ? COLORS.blueOnboarding : COLORS.anon_primary
+      borderBottomColor: type === SIGNED ? COLORS.signed_primary : COLORS.anon_primary
     },
     name: {
       fontFamily: fonts.inter[500],
       fontSize: normalizeFontSize(14),
-      color: type === SIGNED ? COLORS.blueOnboarding : COLORS.anon_primary
+      color: type === SIGNED ? COLORS.signed_primary : COLORS.anon_primary
     },
     picture: {
       width: dimen.normalizeDimen(20),
