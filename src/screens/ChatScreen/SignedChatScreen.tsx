@@ -19,21 +19,14 @@ import {setChannel} from '../../context/actions/setChannel';
 import {styles} from './AnonymousChatScreen';
 
 const SignedChatScreen = () => {
-  const {
-    selectedChannel,
-    chats,
-    goBackFromChatScreen,
-    goToChatInfoScreen,
-    sendChat,
-    updateChatContinuity
-  } = useChatScreenHook(SIGNED);
+  const {selectedChannel, chats, goBackFromChatScreen, goToChatInfoScreen, sendChat} =
+    useChatScreenHook(SIGNED);
 
   const flatlistRef = React.useRef<FlatList>();
   const [loading, setLoading] = React.useState(false);
   const [isAnonimityEnabled, setIsAnonimityEnabled] = React.useState(true);
   const [, dispatchChannel] = (React.useContext(Context) as unknown as any).channel;
   const [profile] = (React.useContext(Context) as unknown as any).profile;
-  const updatedChats = updateChatContinuity(chats);
   const {signedProfileId} = useProfileHook();
 
   const {moveToAnonymousChannel} = useMoveChatTypeHook();
@@ -46,9 +39,12 @@ const SignedChatScreen = () => {
     (item: any) => item.user_id !== signedProfileId
   );
 
-  const renderChatItem = React.useCallback(({item, index}) => {
-    return <BaseChatItem type={SIGNED} item={item} index={index} />;
-  }, []);
+  const renderChatItem = React.useCallback(
+    ({item, index}) => {
+      return <BaseChatItem type={SIGNED} item={item} index={index} />;
+    },
+    [chats]
+  );
 
   const goToChatInfoPage = () => {
     goToChatInfoScreen({from: SIGNED});
@@ -110,8 +106,10 @@ const SignedChatScreen = () => {
       <FlatList
         contentContainerStyle={styles.contentContainerStyle}
         style={styles.chatContainer}
-        data={updatedChats}
+        data={chats}
         inverted={true}
+        windowSize={10}
+        maxToRenderPerBatch={5}
         initialNumToRender={20}
         alwaysBounceVertical={false}
         bounces={false}
