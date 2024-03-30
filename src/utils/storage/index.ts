@@ -19,7 +19,8 @@ enum StorageKeysEnum {
   LastPromptNotification = 'lastPromptNotification',
   LastSelectedMenu = 'lastSelectedMenu',
   BlockedStatus = 'blockedStatus',
-  BlockingStatus = 'blockingStatus'
+  BlockingStatus = 'blockingStatus',
+  IncognitoCreatePostFirstTime = 'incognitoCreatePostFirstTime'
 }
 
 interface IStorage {
@@ -87,6 +88,7 @@ const StorageUtils = {
   lastSelectedMenu: storageBuilder(StorageKeysEnum.LastSelectedMenu),
   blockingStatus: storageBuilder(StorageKeysEnum.BlockingStatus),
   blockedStatus: storageBuilder(StorageKeysEnum.BlockedStatus),
+  incognitoCreatePostFirstTime: storageBuilder(StorageKeysEnum.IncognitoCreatePostFirstTime),
   clearAll: () => MMKVStorage.clearAll()
 };
 
@@ -106,6 +108,9 @@ export interface IStorageUtils {
   anonymousToken: Storage;
   lastPromptNotification: Storage;
   lastSelectedMenu: Storage;
+  blockingStatus: Storage;
+  blockedStatus: Storage;
+  incognitoCreatePostFirstTime: Storage;
   clearAll: () => void;
 }
 export default StorageUtils;

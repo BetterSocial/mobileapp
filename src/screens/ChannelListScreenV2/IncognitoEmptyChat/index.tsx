@@ -36,7 +36,9 @@ const IncognitoEmptyChat = ({totalChannel}) => {
     return result;
   };
 
-  return getMode() === MODE_HIDE ? null : (
+  if (getMode() === MODE_HIDE) return null;
+
+  return (
     <View style={styles.container} testID="IncognitoEmptyChatContainer">
       {getMode() === MODE_FULL && (
         <Image testID="IncognitoEmptyChatImage" source={EmptyIncognito} style={styles.image} />
