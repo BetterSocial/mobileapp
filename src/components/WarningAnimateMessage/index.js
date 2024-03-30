@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {Animated, StyleSheet, Text, Easing, Dimensions, TouchableOpacity} from 'react-native';
 import {COLORS} from '../../utils/theme';
 import StorageUtils from '../../utils/storage';
@@ -126,4 +127,9 @@ const styles = StyleSheet.create({
   }
 });
 
+WarningAnimatedMessage.propTypes = {
+  isShow: PropTypes.bool,
+  top: PropTypes.number,
+  left: PropTypes.number
+};
 export default WarningAnimatedMessage;
