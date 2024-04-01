@@ -1,10 +1,10 @@
 import React from 'react';
-import {Animated, StyleSheet, Text, Easing, Dimensions, View, TouchableOpacity} from 'react-native';
-import {getSpecificCache, saveToCache} from '../../utils/cache';
-import {OPEN_FIRST_TIME} from '../../utils/cache/constant';
+import PropTypes from 'prop-types';
+import {Animated, StyleSheet, Text, Easing, Dimensions, TouchableOpacity} from 'react-native';
 import {COLORS} from '../../utils/theme';
+import StorageUtils from '../../utils/storage';
 
-const WarningAnimatedMessage = ({isSHow, top = 100, left = 110}) => {
+const WarningAnimatedMessage = ({isShow, top = 100, left = 110}) => {
   const [isRunAnimate, setIsRunAnimated] = React.useState(false);
   const opacity = React.useRef(new Animated.Value(0)).current;
   const {width} = Dimensions.get('window');
@@ -28,7 +28,7 @@ const WarningAnimatedMessage = ({isSHow, top = 100, left = 110}) => {
         })
       ]).start(() => {
         setIsRunAnimated(false);
-        saveToCache(OPEN_FIRST_TIME, {isOpen: true});
+        StorageUtils.incognitoCreatePostFirstTime.set('true');
       });
     }
   };
@@ -41,7 +41,7 @@ const WarningAnimatedMessage = ({isSHow, top = 100, left = 110}) => {
       useNativeDriver: true
     }).start(() => {
       setIsRunAnimated(false);
-      saveToCache(OPEN_FIRST_TIME, {isOpen: true});
+      StorageUtils.incognitoCreatePostFirstTime.set('true');
     });
   };
 
@@ -55,43 +55,41 @@ const WarningAnimatedMessage = ({isSHow, top = 100, left = 110}) => {
   }, [isRunAnimate]);
 
   React.useEffect(() => {
-    getSpecificCache(OPEN_FIRST_TIME, (cache) => {
-      if (!cache) setIsRunAnimated(isSHow);
-    });
-  }, [isSHow]);
+    if (StorageUtils.incognitoCreatePostFirstTime.get() !== 'true') {
+      setIsRunAnimated(isShow);
+    }
+  }, [isShow]);
 
   return (
-    <>
-      <AnimatedTouchable
-        onPress={onAnimatedClose}
-        activeOpacity={1}
+    <AnimatedTouchable
+      onPress={onAnimatedClose}
+      activeOpacity={1}
+      style={[
+        styles.parentContainer,
+        {
+          opacity,
+          display: isRunAnimate ? 'flex' : 'none',
+          position: isRunAnimate ? 'absolute' : 'relative'
+        }
+      ]}>
+      <Animated.View
         style={[
-          styles.parentContainer,
-          {
-            opacity,
-            display: isRunAnimate ? 'flex' : 'none',
-            position: isRunAnimate ? 'absolute' : 'relative'
-          }
+          styles.triangle,
+          {top: top - 10, right: left - 80, opacity, transform: [{translateX}]}
+        ]}
+      />
+      <Animated.View
+        style={[
+          {opacity, display: isRunAnimate ? 'flex' : 'none', transform: [{translateX}]},
+          styles.container,
+          {top, left}
         ]}>
-        <Animated.View
-          style={[
-            styles.triangle,
-            {top: top - 10, right: left - 80, opacity, transform: [{translateX}]}
-          ]}
-        />
-        <Animated.View
-          style={[
-            {opacity, display: isRunAnimate ? 'flex' : 'none', transform: [{translateX}]},
-            styles.container,
-            {top, left}
-          ]}>
-          <Text>
-            Even when posts are incognito, you can be 🚫blocked, which will affect your visibility
-            in the future. Respectful & balanced posts do best on Better.
-          </Text>
-        </Animated.View>
-      </AnimatedTouchable>
-    </>
+        <Text>
+          Even when posts are incognito, you can be 🚫blocked, which will affect your visibility in
+          the future. Respectful & balanced posts do best on Better.
+        </Text>
+      </Animated.View>
+    </AnimatedTouchable>
   );
 };
 
@@ -129,4 +127,9 @@ const styles = StyleSheet.create({
   }
 });
 
+WarningAnimatedMessage.propTypes = {
+  isShow: PropTypes.bool,
+  top: PropTypes.number,
+  left: PropTypes.number
+};
 export default WarningAnimatedMessage;
