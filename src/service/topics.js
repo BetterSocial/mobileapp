@@ -80,11 +80,33 @@ const getSubscribeableTopic = async () => {
   }
 };
 
+const getWhoToFollowList = async (topics, locations, page = 1, axiosOptions = {}) => {
+  try {
+    const topicsQueryString = topics
+      .map((topic) => `topics[]=${encodeURIComponent(topic)}`)
+      .join('&');
+    const locationsQueryString = locations
+      .map((topic) => `locations[]=${encodeURIComponent(topic)}`)
+      .join('&');
+    console.warn(
+      `/who-to-follow/list_v2?${locationsQueryString}&${topicsQueryString}&page=${page}`
+    );
+    const result = await api.get(
+      `/who-to-follow/list_v2?${locationsQueryString}&${topicsQueryString}&page=${page}`,
+      axiosOptions
+    );
+    return result.data.body;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
 export {
   getUserTopic,
   putUserTopic,
   getFollowingTopic,
   getAllMemberTopic,
   getTopics,
-  getSubscribeableTopic
+  getSubscribeableTopic,
+  getWhoToFollowList
 };
