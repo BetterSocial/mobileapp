@@ -213,7 +213,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
             style={
               Object {
                 "alignItems": "center",
-                "backgroundColor": "#4782D7",
+                "backgroundColor": "#0391FB",
                 "borderRadius": 6.4,
                 "flexDirection": "row",
                 "height": 40,
