@@ -702,7 +702,7 @@ const CreatePost = () => {
     } else {
       setTypeUser(false);
     }
-  }, [params.followType]);
+  }, [params?.followType]);
 
   return (
     <SafeAreaView style={styles.container}>
