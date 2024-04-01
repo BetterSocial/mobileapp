@@ -20,7 +20,14 @@ enum StorageKeysEnum {
   LastSelectedMenu = 'lastSelectedMenu',
   BlockedStatus = 'blockedStatus',
   BlockingStatus = 'blockingStatus',
-  IncognitoCreatePostFirstTime = 'incognitoCreatePostFirstTime'
+  IncognitoCreatePostFirstTime = 'incognitoCreatePostFirstTime',
+  FetchInitialData = 'fetchInitialData',
+  ChannelSignedTimeStamps = 'channelSignedTimeStamps',
+  ChannelAnonTimeStamps = 'channelAnonTimeStamps',
+  ChannelDetailTimeStamps = 'channelDetailTimeStamps',
+  FeedChatTimeStamps = 'feedChatTimeStamps',
+  AnonymousNotificationTimeStamps = 'anynoymousNotificationTimeStamp',
+  SignedNotificationTimeStamp = 'signedNotificationTimeStamp'
 }
 
 interface IStorage {
@@ -89,6 +96,13 @@ const StorageUtils = {
   blockingStatus: storageBuilder(StorageKeysEnum.BlockingStatus),
   blockedStatus: storageBuilder(StorageKeysEnum.BlockedStatus),
   incognitoCreatePostFirstTime: storageBuilder(StorageKeysEnum.IncognitoCreatePostFirstTime),
+  fetchInitialData: storageBuilder(StorageKeysEnum.FetchInitialData),
+  channelSignedTimeStamps: storageBuilder(StorageKeysEnum.ChannelSignedTimeStamps),
+  channelAnonTimeStamps: storageBuilder(StorageKeysEnum.ChannelAnonTimeStamps),
+  channelDetailTimeStamps: storageBuilder(StorageKeysEnum.ChannelDetailTimeStamps),
+  feedChatTimeStamps: storageBuilder(StorageKeysEnum.FeedChatTimeStamps),
+  anonymousNotificationTimeStamp: storageBuilder(StorageKeysEnum.AnonymousNotificationTimeStamps),
+  signedNotificationTimeStamp: storageBuilder(StorageKeysEnum.SignedNotificationTimeStamp),
   clearAll: () => MMKVStorage.clearAll()
 };
 
@@ -111,6 +125,13 @@ export interface IStorageUtils {
   blockingStatus: Storage;
   blockedStatus: Storage;
   incognitoCreatePostFirstTime: Storage;
+  fetchInitialData: Storage;
+  channelSignedTimeStamps: Storage;
+  channelAnonTimeStamps: Storage;
+  channelDetailTimeStamps: Storage;
+  feedChatTimeStamps: Storage;
+  anonymousNotificationTimeStamps: Storage;
+  signedNotificationTimeStamp: Storage;
   clearAll: () => void;
 }
 export default StorageUtils;

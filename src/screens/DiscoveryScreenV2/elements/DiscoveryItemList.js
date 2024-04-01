@@ -2,6 +2,7 @@ import FastImage from 'react-native-fast-image';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View} from 'react-native';
+
 import ProfilePicture from '../../ProfileScreen/elements/ProfilePicture';
 import dimen from '../../../utils/dimen';
 import {COLORS} from '../../../utils/theme';
@@ -159,7 +160,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   communityText: {
-    color: COLORS.blueOnboarding,
+    color: COLORS.signed_primary,
     fontFamily: fonts.inter[400],
     fontSize: 12,
     flexWrap: 'wrap',
