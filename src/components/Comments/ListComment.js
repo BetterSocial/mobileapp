@@ -15,7 +15,8 @@ const ListComment = ({
   findCommentAndUpdate,
   hideLeftConnector,
   navigation,
-  updateVote
+  updateVote,
+  feedId
 }) => {
   return (
     <TouchableWithoutFeedback key={index} onLongPress={() => onCommentLongPressed(item, 0)}>
@@ -23,6 +24,7 @@ const ListComment = ({
         <View key={`p${index}`}>
           {item.user ? (
             <Comment
+              feedId={feedId}
               indexFeed={indexFeed}
               key={`p${index}`}
               comment={item}
@@ -49,6 +51,7 @@ const ListComment = ({
         </View>
         {item?.children_counts?.comment > 0 && (
           <ReplyComment
+            feedId={feedId}
             hideLeftConnector={hideLeftConnector(index, item, comments)}
             data={item.latest_children.comment}
             countComment={item.children_counts.comment}
