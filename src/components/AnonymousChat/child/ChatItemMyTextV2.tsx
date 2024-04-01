@@ -39,10 +39,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   containerSigned: {
-    backgroundColor: COLORS.signed_primary
+    backgroundColor: COLORS.signed_secondary
   },
   containerAnon: {
-    backgroundColor: COLORS.anon_primary
+    backgroundColor: COLORS.anon_secondary
   },
   textContainer: {
     paddingTop: 4,
@@ -56,13 +56,13 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: 12,
     lineHeight: 18,
-    color: COLORS.white
+    color: COLORS.white2
   },
   text: {
     fontFamily: fonts.inter[400],
     fontSize: 16,
     lineHeight: 24,
-    color: COLORS.white
+    color: COLORS.white2
   },
   avatar: {
     width: AVATAR_SIZE,
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     marginLeft: 5,
     marginRight: 5,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.gray500,
     alignSelf: 'center'
   },
   timeText: {
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     lineHeight: 12.19,
     alignSelf: 'center',
-    color: COLORS.white
+    color: COLORS.gray500
   },
   icon: {
     alignSelf: 'flex-end',

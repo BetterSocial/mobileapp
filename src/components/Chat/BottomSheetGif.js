@@ -7,7 +7,8 @@ import {
   Dimensions,
   TouchableOpacity,
   TextInput,
-  FlatList
+  FlatList,
+  RefreshControl
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {debounce} from 'lodash';
@@ -73,7 +74,7 @@ const BottomSheetGif = React.forwardRef((props, ref) => {
       <View style={styles.searchContainer}>
         <View style={styles.wrapperSearch}>
           <View style={styles.wrapperIcon}>
-            <MemoIcSearch width={16.67} height={16.67} />
+            <MemoIcSearch width={16.67} height={16.67} fill={COLORS.white2} />
           </View>
           <TextInput
             value={searchText}
@@ -81,8 +82,9 @@ const BottomSheetGif = React.forwardRef((props, ref) => {
             multiline={false}
             returnKeyType="search"
             placeholder="Search"
-            placeholderTextColor={COLORS.gray1}
+            placeholderTextColor={COLORS.gray300}
             style={styles.input}
+            keyboardAppearance="dark"
           />
 
           <TouchableOpacity
@@ -95,7 +97,7 @@ const BottomSheetGif = React.forwardRef((props, ref) => {
               radius: 35
             }}>
             <View style={styles.wrapperDeleteIcon}>
-              <IconClear width={9} height={10} iconColor={COLORS.black} />
+              <IconClear width={9} height={10} fill={COLORS.gray400} />
             </View>
           </TouchableOpacity>
         </View>
@@ -118,8 +120,9 @@ const BottomSheetGif = React.forwardRef((props, ref) => {
           </TouchableOpacity>
         )}
         keyExtractor={(item, index) => index.toString()}
-        refreshing={isLoading}
-        onRefresh={onLoad}
+        refreshControl={
+          <RefreshControl tintColor={COLORS.white2} refreshing={isLoading} onRefresh={onLoad} />
+        }
         numColumns={2}
         ListFooterComponent={<View style={{height: 100}} />}
       />
@@ -141,8 +144,8 @@ const styles = StyleSheet.create({
   },
   wrapperSearch: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
-    borderRadius: dimen.normalizeDimen(8),
+    backgroundColor: COLORS.gray100,
+    borderRadius: dimen.normalizeDimen(12),
     alignSelf: 'center',
     flexDirection: 'row',
     height: dimen.normalizeDimen(36),
@@ -158,7 +161,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     height: dimen.normalizeDimen(33),
     paddingTop: 0,
-    paddingBottom: 0
+    paddingBottom: 0,
+    color: COLORS.white2
   },
   clearIconContainer: {
     justifyContent: 'center',
@@ -178,7 +182,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   cancelText: {
-    color: COLORS.darkBlue,
+    color: COLORS.signed_primary,
     marginLeft: dimen.normalizeDimen(12),
     fontFamily: 'Inter-SemiBold',
     fontSize: 12,

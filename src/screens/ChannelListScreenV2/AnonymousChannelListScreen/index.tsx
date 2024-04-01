@@ -13,6 +13,7 @@ import {ANONYMOUS, ANON_PM, ANON_POST_NOTIFICATION} from '../../../hooks/core/co
 import useAnonymousChannelListScreenHook from '../../../hooks/screen/useAnonymousChannelListHook';
 import useRootChannelListHook from '../../../hooks/screen/useRootChannelListHook';
 import Search from '../../ChannelListScreen/elements/Search';
+import {COLORS} from '../../../utils/theme';
 
 const AnonymousChannelListScreen = ({route}) => {
   const {refresh} = useLocalDatabaseHook();
@@ -79,6 +80,7 @@ const AnonymousChannelListScreen = ({route}) => {
           />
         }
         renderItem={renderChannelItem}
+        style={{backgroundColor: COLORS.almostBlack}}
       />
     </>
   );

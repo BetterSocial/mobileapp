@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
   containerInput: {
     flex: 1,
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray100,
     flexDirection: 'row',
     alignItems: 'flex-end',
     paddingVertical: dimen.normalizeDimen(6),
@@ -64,8 +64,8 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    backgroundColor: COLORS.lightgrey,
-    color: COLORS.black,
+    backgroundColor: COLORS.gray100,
+    color: COLORS.white2,
     fontFamily: 'Inter',
     fontSize: normalizeFontSize(14),
     fontStyle: 'normal',
@@ -369,6 +369,7 @@ const InputMessageV2 = ({
 
   const toggleChange = () => {
     if (messageDisable) {
+      // TODO: Garry, need to change this color
       ToastMessage.show({
         type: 'asNative',
         text1: messageDisable,
@@ -422,6 +423,7 @@ const InputMessageV2 = ({
           onFocus={() => setInputFocus(true)}
           onBlur={() => setInputFocus(false)}
           numberOfLines={4}
+          keyboardAppearance="dark"
         />
         {isShowToggle && (
           <ToggleSwitch

@@ -47,7 +47,7 @@ const ChannelTitle = ({
       color: COLORS.gray500
     },
     chatContentUnreadCountContainer: {
-      backgroundColor: isAnonymousTab ? COLORS.anon_primary : COLORS.signed_primary,
+      backgroundColor: isAnonymousTab ? COLORS.anon_secondary : COLORS.signed_secondary,
       width: 20,
       height: 20,
       borderRadius: 10,
@@ -59,7 +59,7 @@ const ChannelTitle = ({
       fontFamily: fonts.inter[400],
       fontSize: normalize(10),
       lineHeight: 14.52,
-      color: COLORS.white
+      color: COLORS.white2
     },
     chatContentUnreadCountPostNotificationContainer: {
       position: 'absolute',

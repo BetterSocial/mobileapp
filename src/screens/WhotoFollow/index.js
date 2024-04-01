@@ -290,7 +290,13 @@ const WhotoFollow = () => {
           }}
           rowRenderer={rowRenderer}
           scrollViewProps={{
-            refreshControl: <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            refreshControl: (
+              <RefreshControl
+                tintColor={COLORS.white2}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+            )
           }}
         />
       ) : (

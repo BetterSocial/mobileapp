@@ -56,7 +56,7 @@ export const styles = StyleSheet.create({
   },
   btnAdd: {
     padding: dimen.normalizeDimen(8),
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray100,
     width: 'auto',
     justifyContent: 'center',
     alignItems: 'center',
@@ -84,7 +84,7 @@ export const styles = StyleSheet.create({
     fontSize: normalizeFontSize(14),
     fontFamily: fonts.inter[400],
     lineHeight: normalizeFontSize(16.94),
-    color: COLORS.black,
+    color: COLORS.gray500,
     marginTop: dimen.normalizeDimen(4),
     marginBottom: dimen.normalizeDimen(9)
   },
@@ -322,7 +322,7 @@ const ChatInfoScreen = () => {
                   </TouchableOpacity>
                 </View>
               )}
-              <View style={styles.gap} />
+              {channelInfo?.channelType === CHANNEL_GROUP && <View style={styles.gap} />}
               {channelInfo?.channelType === CHANNEL_GROUP && (
                 <View style={styles.actionGroup}>
                   <TouchableOpacity onPress={onLeaveGroup} style={styles.buttonGroup}>
