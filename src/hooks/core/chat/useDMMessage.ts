@@ -14,7 +14,7 @@ type ChannelCategory = 'SIGNED' | 'ANONYMOUS';
 const useDMMessage = () => {
   const {localDb, refresh} = useLocalDatabaseHook();
   const {signedProfileId, anonProfileId} = useUserAuthHook();
-  const {goToChatScreen} = useChatUtilsHook();
+  const {goToChatScreen} = useChatUtilsHook('SIGNED');
 
   const saveChannelList = async (
     channel,
@@ -57,12 +57,6 @@ const useDMMessage = () => {
       channel.targetImage = chatName?.image; // change to use getChannelListInfo
 
       channel.channel = {...channel};
-      console.log('data', {
-        anon_user_info_color_name: anonUserInfoColorName,
-        anon_user_info_color_code: anonUserInfoColorCode,
-        anon_user_info_emoji_code: anonUserInfoEmojiCode,
-        anon_user_info_emoji_name: anonUserInfoEmojiName
-      });
       const channelList = ChannelList.fromChannelAPI(channel, chatType, channel?.members, {
         anon_user_info_color_name: anonUserInfoColorName,
         anon_user_info_color_code: anonUserInfoColorCode,
@@ -80,12 +74,13 @@ const useDMMessage = () => {
   const sendMessageDM = async (
     id,
     source: 'post' | 'comment',
-    channelCategory: ChannelCategory
+    channelCategory: ChannelCategory,
+    feedId: string
   ) => {
     const initChat =
       channelCategory === 'ANONYMOUS'
-        ? await initChatFromPostAnon({source, id})
-        : await initChatFromPost({source, id});
+        ? await initChatFromPostAnon({source, id, feedId})
+        : await initChatFromPost({source, id, postId: feedId});
 
     const builtChannelData = {
       better_channel_member: initChat.data.better_channel_members,
