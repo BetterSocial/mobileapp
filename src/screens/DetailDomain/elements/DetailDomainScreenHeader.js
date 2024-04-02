@@ -53,7 +53,6 @@ const DetailDomainScreenHeader = ({
           {/* <View style={styles.point} /> */}
           {/* <Memoic_globe height={13} width={13} /> */}
           <View style={styles.point} />
-          {/* TODO: Garry, gray berapa? */}
           <MemoPeopleFollow height={13} width={12} fill={COLORS.gray400} />
           <Gap style={{width: 4}} />
           <Text style={styles.followerNumber}>{follower}</Text>

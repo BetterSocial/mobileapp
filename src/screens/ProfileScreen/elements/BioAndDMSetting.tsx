@@ -168,7 +168,6 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
           elevation: 2,
           marginTop: -50,
           borderWidth: 1,
-          // TODO: Garry, gray berapa?
           borderColor: COLORS.gray200
         }}>
         <Text

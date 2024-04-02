@@ -4,10 +4,11 @@ import {View, Text, StyleSheet, TouchableNativeFeedback, ActivityIndicator} from
 
 import {fonts} from '../../utils/fonts';
 import {BottomSheet} from '../BottomSheet';
-import MediasIcon from '../../assets/icons/images/medias.svg'; // TODO: Garry,  need to pass props color
-import GIFIcon from '../../assets/icons/images/gif.svg'; // TODO: Garry,  need to pass props color
-import FileIcon from '../../assets/icons/images/file.svg'; // TODO: Garry,  need to pass props color
-import CameraIcon from '../../assets/icons/images/camera.svg'; // TODO: Garry,  need to pass props color
+// TODO: Garry,  need to pass props color
+import MediasIcon from '../../assets/icons/images/medias.svg';
+import GIFIcon from '../../assets/icons/images/gif.svg';
+import FileIcon from '../../assets/icons/images/file.svg';
+import CameraIcon from '../../assets/icons/images/camera.svg';
 import {COLORS} from '../../utils/theme';
 
 const BottomSheetAttachment = React.forwardRef((props, ref) => (

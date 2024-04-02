@@ -116,7 +116,6 @@ const Header = ({item, image, name, time, showBackButton, follow, setFollow}) =>
                 {calculateTime(time)}
               </Text>
               <View style={styles.point} />
-              {/* TODO: Garry, gray berapa? */}
               <MemoPeopleFollow height={13} width={12} fill={COLORS.gray400} />
               <Gap style={{width: 3.33}} />
               <Text style={styles.headerFollowerText}>12k</Text>
