@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import * as React from 'react';
-import {Text, View, StyleSheet, TouchableOpacity, Pressable, Platform} from 'react-native';
-import ToastMessage from 'react-native-toast-message';
 import CheckBox from '@react-native-community/checkbox';
-import {profileSettingsDMpermission} from '../../../service/profile';
-import {addDotAndRemoveNewline} from '../../../utils/string/TrimString';
+import ToastMessage from 'react-native-toast-message';
+import {Pressable, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+
 import {COLORS} from '../../../utils/theme';
-import {PencilIcon} from '../../../assets';
 import {Divider} from '../../../components/Divider';
+import {PencilIcon} from '../../../assets';
 import {TextWithEmoji} from './TextWithEmoji';
 import {fonts} from '../../../utils/fonts';
+import {addDotAndRemoveNewline} from '../../../utils/string/TrimString';
+import {profileSettingsDMpermission} from '../../../service/profile';
 
 type BioAndDMSettingProps = {
   bio: string;
@@ -20,7 +21,7 @@ type BioAndDMSettingProps = {
   onlyReceivedDmFromUserFollowing: boolean;
 };
 
-const CheckBoxCustom = (props: {value: boolean; label: string}) => {
+const CheckBoxCustom = (props: {value: boolean; label: string; disabled?: boolean}) => {
   return (
     <View
       style={{
@@ -37,6 +38,7 @@ const CheckBoxCustom = (props: {value: boolean; label: string}) => {
           marginRight: 5
         }}>
         <CheckBox
+          disabled={props.disabled || false}
           value={props.value}
           onCheckColor={COLORS.white}
           tintColors={{true: COLORS.signed_primary, false: COLORS.white}}
@@ -47,6 +49,8 @@ const CheckBoxCustom = (props: {value: boolean; label: string}) => {
             width: 16,
             height: 16
           }}
+          aria-checked={props.value}
+          onValueChange={() => {}}
         />
       </View>
       <Text
@@ -89,6 +93,11 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
   };
 
   const toggleSwitchAnonAllowFollowing = () => {
+    if (isAllowFollowingSendDM) {
+      setIsAllowFollowingSendDM(() => false);
+      return;
+    }
+
     if (following >= 20) {
       setIsAllowFollowingSendDM((current) => !current);
     } else {
@@ -181,6 +190,7 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
               <CheckBoxCustom
                 value={isAllowFollowingSendDM}
                 label="Allow incognito only from users you follow?"
+                disabled={!isAllowFollowingSendDM && following < 20}
               />
             </TouchableOpacity>
           </>
