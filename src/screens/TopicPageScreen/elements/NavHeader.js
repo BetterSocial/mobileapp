@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
     paddingLeft: normalize(20),
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: 'white'
+    backgroundColor: COLORS.almostBlack
   },
   headerImage: (opacityHeaderAnimation) => ({
     width: '100%',
