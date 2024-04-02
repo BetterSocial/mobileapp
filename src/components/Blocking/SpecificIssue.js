@@ -27,7 +27,7 @@ const SpecificIssue = ({refSpecificIssue, onPress, onSkip, loading}) => {
           textAlignVertical="top"
           multiline
           placeholder={'Please provide more details to inform our\n team (min. 50 characters)'}
-          placeholderTextColor={COLORS.blackgrey}
+          placeholderTextColor={COLORS.gray400}
         />
         <TouchableOpacity testID="button-skip-test" style={styles.btnSkip} onPress={() => onSkip()}>
           <Text style={styles.btnSkipText}>Skip & just block this account</Text>

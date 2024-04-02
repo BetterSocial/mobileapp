@@ -71,7 +71,8 @@ const NavHeader = (props) => {
           style={[
             styles.navContainer(isHeaderHide),
             {
-              height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
+              height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER,
+              backgroundColor: COLORS.almostBlack
             }
           ]}
           imageStyle={{opacity: isHeaderHide ? 0 : 1}}>
@@ -127,16 +128,16 @@ const NavHeader = (props) => {
             </Animated.View>
           </View>
           <View
-            style={
-              (styles.containerAction,
+            style={[
+              styles.containerAction,
               {
                 paddingTop: insets.top,
                 paddingRight: dimen.normalizeDimen(20),
                 zIndex: 2,
                 position: 'absolute',
                 right: 0
-              })
-            }>
+              }
+            ]}>
             {!isFollow && isHeaderHide ? (
               <ButtonFollow handleSetFollow={onFollowButtonPress} />
             ) : (
@@ -301,7 +302,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   }),
   profileHashtag: {
-    color: COLORS.white,
+    color: COLORS.white2,
     textAlign: 'center',
     fontSize: normalizeFontSize(24)
   },

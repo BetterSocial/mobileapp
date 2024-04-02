@@ -134,7 +134,8 @@ const styles = StyleSheet.create({
   container: {
     height: '80%',
     borderTopRightRadius: 20,
-    borderTopLeftRadius: 20
+    borderTopLeftRadius: 20,
+    backgroundColor: COLORS.almostBlack
   },
   draggableIcon: {
     backgroundColor: COLORS.lightgrey,

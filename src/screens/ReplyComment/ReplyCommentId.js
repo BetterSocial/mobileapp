@@ -186,7 +186,7 @@ const ReplyCommentId = ({itemProp, indexFeed, level, updateParent}) => {
   }, []);
   return (
     <View style={styles.container}>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       {/* Header */}
       <SafeAreaView>
         <View style={styles.header}>

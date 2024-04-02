@@ -196,7 +196,7 @@ const AddParticipant = ({navigation, route}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       <View style={styles.container}>
         <HeaderContact
           title={'Add new participant'}

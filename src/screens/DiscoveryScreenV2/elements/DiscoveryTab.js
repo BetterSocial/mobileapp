@@ -32,7 +32,7 @@ const DiscoveryTab = ({onChangeScreen, selectedScreen = 0, tabs}) => {
     <View style={styles.tabContainer}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        howsHorizontalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
         horizontal={true}>
         {Object.keys(tabs).map((item, index) => {

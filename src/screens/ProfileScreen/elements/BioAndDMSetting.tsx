@@ -37,11 +37,12 @@ const CheckBoxCustom = (props: {value: boolean; label: string; disabled?: boolea
           backgroundColor: COLORS.white,
           marginRight: 5
         }}>
+        {/* TODO: Garry, masih ada warna hitam kalau disabled */}
         <CheckBox
           disabled={props.disabled || false}
           value={props.value}
-          onCheckColor={COLORS.white}
-          tintColors={{true: COLORS.signed_primary, false: COLORS.white}}
+          onCheckColor={COLORS.gray100}
+          tintColors={{true: COLORS.signed_primary, false: COLORS.gray100}}
           tintColor={COLORS.signed_primary}
           onTintColor={COLORS.signed_primary}
           onFillColor={COLORS.signed_primary}
@@ -153,7 +154,7 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
       </View>
       <View
         style={{
-          backgroundColor: COLORS.almostBlack,
+          backgroundColor: COLORS.gray100,
           borderRadius: 12,
           padding: 12,
           marginHorizontal: 12,
@@ -168,7 +169,7 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
           marginTop: -50,
           borderWidth: 1,
           // TODO: Garry, gray berapa?
-          borderColor: COLORS.gray400
+          borderColor: COLORS.gray200
         }}>
         <Text
           style={{
@@ -185,7 +186,7 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
 
         {isAnonymity && (
           <>
-            <Divider style={{marginVertical: 6, backgroundColor: COLORS.gray}} />
+            <Divider style={{marginVertical: 6, backgroundColor: COLORS.gray200}} />
             <TouchableOpacity onPress={toggleSwitchAnonAllowFollowing}>
               <CheckBoxCustom
                 value={isAllowFollowingSendDM}
@@ -213,7 +214,7 @@ const styles = StyleSheet.create({
     color: COLORS.white2
   },
   container: {
-    backgroundColor: COLORS.default_signed_secondary,
+    backgroundColor: COLORS.signed_secondary,
     borderRadius: 16,
     paddingHorizontal: 12,
     paddingVertical: 12,
@@ -227,8 +228,7 @@ const styles = StyleSheet.create({
     marginLeft: 4
   },
   bioTextNull: {
-    // TODO: Garry, gray berapa?
-    color: COLORS.gray200,
+    color: COLORS.white2,
     fontFamily: 'Inter',
     fontSize: 14,
     fontStyle: 'italic',
