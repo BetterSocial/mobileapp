@@ -20,6 +20,7 @@ enum StorageKeysEnum {
   LastSelectedMenu = 'lastSelectedMenu',
   BlockedStatus = 'blockedStatus',
   BlockingStatus = 'blockingStatus',
+  IncognitoCreatePostFirstTime = 'incognitoCreatePostFirstTime',
   FetchInitialData = 'fetchInitialData',
   ChannelSignedTimeStamps = 'channelSignedTimeStamps',
   ChannelAnonTimeStamps = 'channelAnonTimeStamps',
@@ -94,6 +95,7 @@ const StorageUtils = {
   lastSelectedMenu: storageBuilder(StorageKeysEnum.LastSelectedMenu),
   blockingStatus: storageBuilder(StorageKeysEnum.BlockingStatus),
   blockedStatus: storageBuilder(StorageKeysEnum.BlockedStatus),
+  incognitoCreatePostFirstTime: storageBuilder(StorageKeysEnum.IncognitoCreatePostFirstTime),
   fetchInitialData: storageBuilder(StorageKeysEnum.FetchInitialData),
   channelSignedTimeStamps: storageBuilder(StorageKeysEnum.ChannelSignedTimeStamps),
   channelAnonTimeStamps: storageBuilder(StorageKeysEnum.ChannelAnonTimeStamps),
@@ -120,6 +122,9 @@ export interface IStorageUtils {
   anonymousToken: Storage;
   lastPromptNotification: Storage;
   lastSelectedMenu: Storage;
+  blockingStatus: Storage;
+  blockedStatus: Storage;
+  incognitoCreatePostFirstTime: Storage;
   fetchInitialData: Storage;
   channelSignedTimeStamps: Storage;
   channelAnonTimeStamps: Storage;

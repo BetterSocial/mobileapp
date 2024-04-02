@@ -13,6 +13,7 @@ import {ANONYMOUS, ANON_PM, ANON_POST_NOTIFICATION} from '../../../hooks/core/co
 import useAnonymousChannelListScreenHook from '../../../hooks/screen/useAnonymousChannelListHook';
 import useRootChannelListHook from '../../../hooks/screen/useRootChannelListHook';
 import Search from '../../ChannelListScreen/elements/Search';
+import IncognitoEmptyChat from '../IncognitoEmptyChat';
 
 const AnonymousChannelListScreen = ({route}) => {
   const {refresh} = useLocalDatabaseHook();
@@ -65,6 +66,8 @@ const AnonymousChannelListScreen = ({route}) => {
       <View style={{height: 52}}>
         <Search route={route} isAnon={true} onPress={() => goToContactScreen({from: ANONYMOUS})} />
       </View>
+
+      <IncognitoEmptyChat totalChannel={anonChannels.length} />
 
       <FlatList
         ref={ref}

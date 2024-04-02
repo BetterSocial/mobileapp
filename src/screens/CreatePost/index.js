@@ -857,7 +857,7 @@ const CreatePost = () => {
         </View>
       </ScrollView>
       <Loading visible={loading} />
-      <WarningAnimatedMessage isSHow={typeUser} />
+      <WarningAnimatedMessage isShow={typeUser} />
     </SafeAreaView>
   );
 };
