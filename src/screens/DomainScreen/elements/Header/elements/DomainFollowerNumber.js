@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     marginTop: 6
   },
   followersNumber: {
-    color: COLORS.anon_primary,
+    color: COLORS.signed_primary,
     fontFamily: fonts.inter[700],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(17)

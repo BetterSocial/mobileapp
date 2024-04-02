@@ -237,9 +237,9 @@ const styles = StyleSheet.create({
     borderWidth: 0.5
   },
   wrapperTextUnFollow: {
-    backgroundColor: COLORS.anon_primary,
+    backgroundColor: COLORS.signed_primary,
     borderRadius: 8,
-    borderColor: COLORS.anon_primary,
+    borderColor: COLORS.signed_primary,
     width: 28,
     height: 28,
     justifyContent: 'center',

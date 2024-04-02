@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
   username: {
     fontFamily: fonts.inter[700],
     fontSize: normalizeFontSize(12),
-    color: COLORS.blackgrey,
+    color: COLORS.white2,
     lineHeight: 14,
     marginLeft: 16,
     maxWidth: dimen.normalizeDimen(170)
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
   dot: {
     fontFamily: fonts.inter[700],
     fontSize: normalizeFontSize(12),
-    color: '#828282'
+    color: COLORS.gray400
   }
 });
 
@@ -56,7 +56,8 @@ const CommentUsername = ({comment, user, isPreviewComment}) => {
       {comment.data?.anon_user_info_color_name
         ? getOfficialAnonUsername(comment?.data)
         : user?.data?.username}{' '}
-      {comment.is_you ? '(You)' : ''} {comment.is_author ? '(Post Author)' : ''} •
+      {comment.is_you ? '(You)' : ''} {comment.is_author ? '(Post Author)' : ''}{' '}
+      <Text style={styles.dot}>•</Text>
     </Text>
   );
 };

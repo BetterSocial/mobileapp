@@ -109,8 +109,7 @@ const LinkContextItem = ({
         style={{
           height: 6,
           width: '100%',
-          // TODO: Garry, gray berapa?
-          backgroundColor: COLORS.gray400
+          backgroundColor: COLORS.gray100
         }}
       />
 
