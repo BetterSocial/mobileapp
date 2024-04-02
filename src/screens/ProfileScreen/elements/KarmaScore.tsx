@@ -3,9 +3,10 @@ import {Text, View} from 'react-native';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import MemoIcQuestionMark from '../../../assets/icons/Ic_question_mark';
-import {normalize} from '../../../utils/fonts';
+import {fonts, normalize} from '../../../utils/fonts';
 import {CircleGradient} from '../../../components/Karma/CircleGradient';
 import {BetterSocialLogoGram} from '../../../assets';
+import { COLORS } from '../../../utils/theme';
 
 type KarmaScoreProps = {
   score: number;
@@ -30,10 +31,11 @@ export const KarmaScore = ({score}: KarmaScoreProps) => {
         </View>
         <Text
           style={{
-            fontWeight: '500',
+            fontFamily: fonts.inter[500],
             fontSize: 24,
             lineHeight: 36,
-            marginRight: 8
+            marginRight: 8,
+            color: COLORS.white2
           }}>{`${score} Karma`}</Text>
         <Tooltip
           allowChildInteraction={true}
@@ -46,26 +48,29 @@ export const KarmaScore = ({score}: KarmaScoreProps) => {
           contentStyle={{
             borderRadius: 10,
             padding: 16,
-            height: 'auto'
+            height: 'auto',
+            backgroundColor: COLORS.almostBlack
           }}
           content={
             <View>
               <Text
                 style={{
-                  fontWeight: '600',
+                  fontFamily: fonts.inter[600],
                   fontSize: normalize(16),
                   lineHeight: normalize(24),
-                  marginBottom: normalize(8)
+                  marginBottom: normalize(8),
+                  color: COLORS.white2
                 }}>
                 What is my Karma Score?
               </Text>
               <Text
                 style={{
-                  fontWeight: '400',
+                  fontFamily: fonts.inter[400],
                   fontSize: normalize(12),
                   lineHeight: normalize(18),
                   marginBottom: normalize(8),
-                  color: '#69707C'
+                  // TODO: Garry, gray berapa?
+                  color: COLORS.gray300
                 }}>
                 The higher your Karma score, the higher your visibility on the platform. Get
                 rewarded for positive contributions to the community - and avoid being blocked by

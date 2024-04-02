@@ -10,6 +10,7 @@ import {PencilIcon} from '../../../assets';
 import {TextWithEmoji} from './TextWithEmoji';
 import {addDotAndRemoveNewline} from '../../../utils/string/TrimString';
 import {profileSettingsDMpermission} from '../../../service/profile';
+import {fonts} from '../../../utils/fonts';
 
 type BioAndDMSettingProps = {
   bio: string;
@@ -55,7 +56,8 @@ const CheckBoxCustom = (props: {value: boolean; label: string; disabled?: boolea
       <Text
         style={{
           fontSize: 12,
-          fontWeight: '500'
+          fontFamily: fonts.inter[500],
+          color: COLORS.white2
         }}>
         {props.label}
       </Text>
@@ -132,15 +134,7 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
                 alignItems: 'center'
               }}>
               <PencilIcon />
-              <Text
-                style={{
-                  fontSize: 14,
-                  fontWeight: '500',
-                  color: COLORS.white,
-                  marginLeft: 4
-                }}>
-                Edit
-              </Text>
+              <Text style={styles.editPromptLabel}>Edit</Text>
             </View>
           </Pressable>
         </View>
@@ -159,7 +153,7 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
       </View>
       <View
         style={{
-          backgroundColor: COLORS.white,
+          backgroundColor: COLORS.almostBlack,
           borderRadius: 12,
           padding: 12,
           marginHorizontal: 12,
@@ -173,7 +167,8 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
           elevation: 2,
           marginTop: -50,
           borderWidth: 1,
-          borderColor: COLORS.gray
+          // TODO: Garry, gray berapa?
+          borderColor: COLORS.gray400
         }}>
         <Text
           style={{
@@ -215,7 +210,7 @@ const styles = StyleSheet.create({
   promptTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: COLORS.white
+    color: COLORS.white2
   },
   container: {
     backgroundColor: COLORS.default_signed_secondary,
@@ -225,9 +220,15 @@ const styles = StyleSheet.create({
     marginTop: 10,
     paddingBottom: 50
   },
-  editPromptLabel: {color: COLORS.signed_secondary, textDecorationLine: 'underline'},
+  editPromptLabel: {
+    fontSize: 14,
+    fontFamily: fonts.inter[500],
+    color: COLORS.white2,
+    marginLeft: 4
+  },
   bioTextNull: {
-    color: COLORS.lightgrey,
+    // TODO: Garry, gray berapa?
+    color: COLORS.gray200,
     fontFamily: 'Inter',
     fontSize: 14,
     fontStyle: 'italic',

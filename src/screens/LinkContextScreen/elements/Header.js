@@ -172,8 +172,7 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     alignItems: 'center',
     borderBottomWidth: 0.5,
-    // TODO: Garry, gray berapa?
-    borderBottomColor: COLORS.gray400,
+    borderBottomColor: COLORS.gray200,
     paddingBottom: 8,
     paddingTop: 8,
     backgroundColor: COLORS.white
@@ -203,11 +202,11 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(12),
     lineHeight: normalizeFontSize(18),
-    color: COLORS.blackgrey,
+    color: COLORS.gray400,
     flexShrink: 1
   },
   headerFollowerText: {
-    color: COLORS.blackgrey,
+    color: COLORS.gray400,
     fontSize: 12,
     fontFamily: fonts.inter[700]
   },
@@ -220,7 +219,7 @@ const styles = StyleSheet.create({
     width: 3,
     height: 3,
     borderRadius: 4,
-    backgroundColor: COLORS.blackgrey,
+    backgroundColor: COLORS.gray400,
     marginLeft: 8,
     marginRight: 8
   },
@@ -230,7 +229,7 @@ const styles = StyleSheet.create({
   wrapperText: {
     backgroundColor: COLORS.white,
     borderRadius: 8,
-    borderColor: COLORS.anon_primary,
+    borderColor: COLORS.signed_primary,
     width: 28,
     height: 28,
     justifyContent: 'center',
