@@ -8,6 +8,7 @@ import {COLORS} from '../../../utils/theme';
 import {Divider} from '../../../components/Divider';
 import {PencilIcon} from '../../../assets';
 import {TextWithEmoji} from './TextWithEmoji';
+import {fonts} from '../../../utils/fonts';
 import {addDotAndRemoveNewline} from '../../../utils/string/TrimString';
 import {profileSettingsDMpermission} from '../../../service/profile';
 import {fonts} from '../../../utils/fonts';
