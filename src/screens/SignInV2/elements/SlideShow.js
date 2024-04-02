@@ -35,19 +35,19 @@ const SlideShow = ({handleLogin, onContainerPress = () => {}}) => {
     },
     {
       illustrations: FgOnboarding2,
-      title: 'Receive Incognito Messages',
+      title: 'Better Karma, Higher Visibility',
       text: (
         <Text>
-          {'Share your link on other platforms to receive'}
+          {'Karma scores help the community stay'}
           {'\n'}
 
-          {'messages from your friends. Ask for advice,'}
+          {'accountable even when in Incognito Mode.'}
           {'\n'}
 
-          {'feedback, and more!'}
+          {'To increase your score, just invite followers,'}
           {'\n'}
 
-          {'As always, abuse can be blocked in two clicks.'}
+          {'create posts and avoid being blocked!'}
         </Text>
       )
     },
@@ -56,16 +56,13 @@ const SlideShow = ({handleLogin, onContainerPress = () => {}}) => {
       title: 'Find Your #community',
       text: (
         <Text>
-          {'Posting into a community is as easy as using a'}
+          {'Create or post in communities just by using a'}
           {'\n'}
 
-          {'#hashtag. Add #communities to your posts to'}
+          {'hashtags. To protect your privacy, '}
           {'\n'}
 
-          {'reach more people, and join communities of'}
-          {'\n'}
-
-          {'like-minded people.'}
+          {'communities can be joined incognito as well!.'}
         </Text>
       )
     },
@@ -77,7 +74,7 @@ const SlideShow = ({handleLogin, onContainerPress = () => {}}) => {
           {'Chats, posts, comments, and communities:'}
           {'\n'}
 
-          {'Find all your conversations separated'}
+          {'Find all your conversations, separated'}
           {'\n'}
 
           {'between your incognito and your public'}
