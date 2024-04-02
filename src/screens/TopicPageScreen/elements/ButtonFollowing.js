@@ -28,14 +28,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 6,
     borderWidth: 1,
-    borderColor: followType === 'incognito' ? COLORS.anon_secondary : COLORS.signed_primary,
+    borderColor: followType === 'incognito' ? COLORS.anon_primary : COLORS.signed_primary,
     borderRadius: 8
   }),
   textButtonFollowing: (followType) => ({
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: normalizeFontSize(12),
-    color: followType === 'incognito' ? COLORS.anon_secondary : COLORS.signed_primary
+    color: followType === 'incognito' ? COLORS.anon_primary : COLORS.signed_primary
   })
 });
 

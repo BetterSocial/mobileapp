@@ -706,7 +706,7 @@ const CreatePost = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={positionKeyboard}>
         <Header title={headerTitle} onPress={() => onBack()} />
         <View style={{paddingHorizontal: 15}}>

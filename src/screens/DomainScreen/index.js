@@ -244,7 +244,7 @@ const DomainScreen = () => {
   }
   return (
     <View style={styles.container}>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       <Navigation domain={dataDomain.og.domain} />
       <ProfileTiktokScroll
         ref={tiktokScrollRef}

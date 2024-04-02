@@ -43,8 +43,8 @@ const LinkAndSocialMedia: React.FC<LinkProps> = ({username}) => {
     <View
       style={{
         borderWidth: 1,
-        // TODO: Garry, gray berapa?
         borderColor: COLORS.gray200,
+        backgroundColor: COLORS.gray100,
         borderRadius: 10,
         marginTop: 19,
         padding: 12
@@ -53,7 +53,7 @@ const LinkAndSocialMedia: React.FC<LinkProps> = ({username}) => {
       <Text
         style={{
           color: COLORS.gray500,
-          fontWeight: '400',
+          fontFamily: fonts.inter[400],
           fontSize: 12,
           paddingVertical: 8,
           lineHeight: 18
@@ -120,7 +120,6 @@ const styles = StyleSheet.create({
   },
   copyLinkContainer: {
     borderWidth: 1,
-    // TODO: Garry, gray berapa?
     borderColor: COLORS.gray200,
     borderRadius: 8,
     justifyContent: 'center',
@@ -133,8 +132,7 @@ const styles = StyleSheet.create({
     padding: 10,
     flex: 1,
     fontFamily: fonts.inter[600],
-    // TODO: Garry, gray berapa?
-    color: COLORS.gray400,
+    color: COLORS.gray500,
     fontSize: 12
   }
 });

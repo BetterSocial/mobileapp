@@ -243,7 +243,7 @@ const DetailDomainScreen = (props) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       <SafeAreaView>
         <DetailDomainScreenHeader
           domain={item.domain.name}

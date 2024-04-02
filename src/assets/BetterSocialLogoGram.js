@@ -1,10 +1,17 @@
 import * as React from 'react';
 import Svg, {Circle, ClipPath, Defs, G, LinearGradient, Path, Rect, Stop} from 'react-native-svg';
+import {COLORS} from '../utils/theme';
 
 function BetterSocialLogoGram() {
   return (
     <Svg width="28" height="29" viewBox="0 0 28 29" fill="none">
-      <Circle cx="14" cy="14.5" r="11.2" transform="rotate(-90 14 14.5)" fill="white" />
+      <Circle
+        cx="14"
+        cy="14.5"
+        r="11.2"
+        transform="rotate(-90 14 14.5)"
+        fill={COLORS.almostBlack}
+      />
       <G clipPath="url(#clip0_25_79)">
         <Path
           fillRule="evenodd"
