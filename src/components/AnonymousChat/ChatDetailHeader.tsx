@@ -21,10 +21,10 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   bgsigned_primary: {
-    backgroundColor: COLORS.signed_primary
+    backgroundColor: COLORS.signed_secondary
   },
   bgBondiBlue: {
-    backgroundColor: COLORS.anon_primary
+    backgroundColor: COLORS.anon_secondary
   },
   backButton: {
     paddingLeft: 22,
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: fonts.inter[600],
-    color: COLORS.white,
+    color: COLORS.white2,
     fontSize: 14,
     lineHeight: 17,
     marginLeft: 10,
@@ -116,7 +116,7 @@ const ChatDetailHeader = ({
         </Text>
       </CustomPressable>
       <CustomPressable style={styles.threeDot} onPress={onThreeDotPress}>
-        <IconEP name="dots-three-vertical" size={20} color={COLORS.white} />
+        <IconEP name="dots-three-vertical" size={20} color={COLORS.white2} />
       </CustomPressable>
       <FastImage />
     </View>

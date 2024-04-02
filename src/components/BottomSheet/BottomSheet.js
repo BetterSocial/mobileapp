@@ -39,14 +39,16 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: dimen.normalizeDimen(10),
     paddingHorizontal: dimen.normalizeDimen(20),
-    paddingBottom: dimen.normalizeDimen(20)
+    paddingBottom: dimen.normalizeDimen(20),
+    backgroundColor: COLORS.almostBlack
   },
   containerSheet: (pullBottom) => ({
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
-    justifyContent: pullBottom ? 'flex-end' : 'flex-start'
+    justifyContent: pullBottom ? 'flex-end' : 'flex-start',
+    backgroundColor: COLORS.almostBlack
   }),
   draggableIcon: {
-    backgroundColor: COLORS.lightgrey
+    backgroundColor: COLORS.gray100
   }
 });

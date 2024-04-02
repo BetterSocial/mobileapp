@@ -183,7 +183,7 @@ const DiscoverySearch = ({
       <View style={styles.searchContainer}>
         <View style={styles.wrapperSearch}>
           <View style={styles.wrapperIcon}>
-            <MemoIcSearch width={16.67} height={16.67} />
+            <MemoIcSearch width={16.67} height={16.67} fill={COLORS.white2} />
           </View>
           <TextInput
             ref={discoverySearchBarRef}
@@ -197,8 +197,9 @@ const DiscoverySearch = ({
             returnKeyType="search"
             onSubmitEditing={handleOnSubmitEditing}
             placeholder={placeholderText}
-            placeholderTextColor={COLORS.lightgrey}
+            placeholderTextColor={COLORS.gray300}
             style={styles.input}
+            keyboardAppearance="dark"
           />
 
           <TouchableOpacity
@@ -212,7 +213,7 @@ const DiscoverySearch = ({
               radius: 35
             }}>
             <View style={styles.wrapperDeleteIcon}>
-              <IconClear width={9} height={10} iconColor={COLORS.black} />
+              <IconClear width={9} height={10} fill={COLORS.gray400} />
             </View>
           </TouchableOpacity>
         </View>
@@ -259,11 +260,11 @@ const styles = StyleSheet.create({
   wrapperSearch: {
     flex: 1,
     backgroundColor: COLORS.lightgrey,
-    borderRadius: dimen.normalizeDimen(8),
+    borderRadius: dimen.normalizeDimen(12),
     alignSelf: 'center',
     flexDirection: 'row',
     height: dimen.normalizeDimen(36),
-    paddingRight: dimen.normalizeDimen(8)
+    paddingRight: dimen.normalizeDimen(12)
   },
   wrapperButton: {
     flexDirection: 'row',
@@ -282,7 +283,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     height: dimen.normalizeDimen(33),
     paddingTop: 0,
-    paddingBottom: 0
+    paddingBottom: 0,
+    color: COLORS.white2
   },
   wrapperIcon: {
     marginLeft: dimen.normalizeDimen(9.67),
@@ -301,7 +303,7 @@ const styles = StyleSheet.create({
   },
   animatedViewContainer: (hideBackIcon) => ({
     flexDirection: 'row',
-    backgroundColor: 'white',
+    backgroundColor: COLORS.almostBlack,
     marginTop: 0,
     zIndex: 10,
     height: dimen.size.DISCOVERY_HEADER_HEIGHT,

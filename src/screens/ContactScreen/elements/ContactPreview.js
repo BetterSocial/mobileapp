@@ -2,18 +2,16 @@ import React from 'react';
 import {Image, Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
 
 import MemoIconClose from './IconClose';
+import {fonts} from '../../../utils/fonts';
+import {COLORS} from '../../../utils/theme';
+import dimen from '../../../utils/dimen';
 
 const ContactPreview = ({users = [], onPress}) => {
   if (users.length < 1) {
     return null;
   }
   return (
-    <ScrollView
-      horizontal={true}
-      style={{
-        paddingHorizontal: 4,
-        paddingVertical: 20
-      }}>
+    <ScrollView horizontal={true} style={styles.container}>
       {users.map((item) => {
         if (item) {
           return (
@@ -37,18 +35,11 @@ const ContactPreview = ({users = [], onPress}) => {
                     right: -5
                   }}>
                   <Pressable onPress={() => onPress(item)}>
-                    <MemoIconClose width={24} height={24} />
+                    <MemoIconClose width={24} height={24} fill={COLORS.signed_primary} />
                   </Pressable>
                 </View>
               </View>
-              <Text
-                numberOfLines={1}
-                style={{
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  alignSelf: 'center',
-                  marginTop: 6
-                }}>
+              <Text numberOfLines={1} style={styles.username}>
                 {item.username.length < 8
                   ? `${item.username}`
                   : `${item.username.substring(0, 8)}...`}
@@ -64,10 +55,26 @@ const ContactPreview = ({users = [], onPress}) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: dimen.normalizeDimen(4),
+    paddingTop: dimen.normalizeDimen(16),
+    paddingBottom: dimen.normalizeDimen(8),
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.gray200
+  },
   tinyLogo: {
     width: 54,
     height: 54,
     borderRadius: 54
+  },
+  username: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    marginTop: 6,
+    fontFamily: fonts.inter[400],
+    fontSize: 12,
+    color: COLORS.white2
   }
 });
 
