@@ -35,7 +35,6 @@ const styles = StyleSheet.create({
   divider: {
     height: 1,
     width: '100%',
-    // TODO: Garry, gray berapa?
     backgroundColor: COLORS.gray400
   }
 });
