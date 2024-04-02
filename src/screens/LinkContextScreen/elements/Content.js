@@ -36,12 +36,14 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     paddingHorizontal: 20,
     marginTop: 12,
-    marginBottom: 12
+    marginBottom: 12,
+    color: COLORS.white2
   },
   domainItemDescription: {
     fontFamily: fonts.inter[400],
     fontSize: 16,
-    lineHeight: 24
+    lineHeight: 24,
+    color: COLORS.white2
   },
   domainIndicatorContainer: {
     marginLeft: -4
