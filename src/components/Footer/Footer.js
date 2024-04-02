@@ -315,8 +315,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     borderBottomWidth: 1,
-    // TODO: Garry, gray berapa?
-    borderBottomColor: COLORS.gray400
+    borderBottomColor: COLORS.gray200
   },
   buttonShareContainer: {
     flexDirection: 'row',

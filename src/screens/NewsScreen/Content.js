@@ -59,7 +59,7 @@ const Content = (props) => {
               testID="textPress"
               onPress={() => Linking.openURL(sanitizeUrlForLinking(url))}
               style={{
-                color: COLORS.blue,
+                color: COLORS.signed_primary,
                 textDecorationLine: 'underline',
                 marginStart: 8,
                 fontFamily: fonts.inter[600],
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 12,
     lineHeight: 18,
-    color: COLORS.blackgrey
+    color: COLORS.gray500
   },
   title: {
     // marginLeft: 12,
