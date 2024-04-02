@@ -353,7 +353,7 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(20),
     color: COLORS.signed_primary,
-    marginLeft: dimen.normalizeDimen(16),
+    marginLeft: dimen.normalizeDimen(20),
     marginBottom: dimen.normalizeDimen(16),
     marginTop: dimen.normalizeDimen(8)
   },
