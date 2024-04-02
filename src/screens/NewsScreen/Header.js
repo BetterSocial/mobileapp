@@ -79,7 +79,8 @@ const styles = StyleSheet.create({
     lineHeight: 14.52,
     fontSize: 12,
     fontFamily: fonts.inter[600],
-    flexShrink: 1
+    flexShrink: 1,
+    color: COLORS.white2
   },
   domainNameContainer: {
     flexDirection: 'row',
