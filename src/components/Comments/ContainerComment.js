@@ -224,7 +224,7 @@ export const styles = StyleSheet.create({
   },
   containerComment: {
     borderLeftWidth: 1,
-    borderLeftColor: COLORS.balance_gray,
+    borderLeftColor: COLORS.gray200,
     marginTop: 0
   }
 });

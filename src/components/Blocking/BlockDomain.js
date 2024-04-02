@@ -60,11 +60,11 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: fonts.inter[600],
     fontSize: 18,
-    color: COLORS.black,
+    color: COLORS.white2,
     marginLeft: 21
   },
   desc: {
-    color: COLORS.blackgrey,
+    color: COLORS.gray500,
     fontFamily: fonts.inter[400],
     fontSize: 12,
     marginHorizontal: 21,
@@ -75,7 +75,8 @@ const styles = StyleSheet.create({
   container: {
     height: 'auto',
     borderTopRightRadius: 20,
-    borderTopLeftRadius: 20
+    borderTopLeftRadius: 20,
+    backgroundColor: COLORS.almostBlack
   },
   draggableIcon: {
     backgroundColor: COLORS.lightgrey,

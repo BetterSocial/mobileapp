@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
   wrapperText: {
     backgroundColor: COLORS.white,
     borderRadius: 8,
-    borderColor: COLORS.anon_primary,
+    borderColor: COLORS.signed_primary,
     width: 28,
     height: 28,
     justifyContent: 'center',
@@ -112,14 +112,14 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 12,
     lineHeight: 18,
-    color: COLORS.blackgrey,
+    color: COLORS.gray400,
     flexShrink: 1
   },
   point: {
     width: 2,
     height: 2,
     borderRadius: 4,
-    backgroundColor: COLORS.blackgrey,
+    backgroundColor: COLORS.gray400,
     marginLeft: 5,
     marginRight: 5
   },
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     alignItems: 'center',
     borderBottomWidth: 0.5,
-    borderBottomColor: COLORS.balance_gray,
+    borderBottomColor: COLORS.gray200,
     height: 64
   },
   backNavigationContainer: {
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     paddingRight: 20
   },
   followerNumber: {
-    color: COLORS.blackgrey,
+    color: COLORS.gray400,
     fontSize: 12,
     fontFamily: fonts.inter[700]
   }

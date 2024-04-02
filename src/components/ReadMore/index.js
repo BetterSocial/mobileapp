@@ -44,7 +44,7 @@ const ReadMore = (props) => {
     <View onLayout={handleLayoutWidth} style={props.containerStyle}>
       {isFinishSetLayout ? (
         <TouchableOpacity testID="finishLayout" onPress={props.onPress}>
-          <Text style={props.textStyle}>
+          <Text style={[{color: COLORS.gray400}, props.textStyle]}>
             {textShown}
             {''}
             {limitNumberLine < realNumberLine ? (
@@ -57,7 +57,10 @@ const ReadMore = (props) => {
       ) : null}
       {!isFinishSetLayout ? (
         <TouchableOpacity testID="finishLayout" onPress={props.onPress}>
-          <Text style={props.textStyle} testID="notFinishLayout" onTextLayout={handleLayoutText}>
+          <Text
+            style={[{color: COLORS.gray400}, props.textStyle]}
+            testID="notFinishLayout"
+            onTextLayout={handleLayoutText}>
             {props.text}{' '}
           </Text>
         </TouchableOpacity>

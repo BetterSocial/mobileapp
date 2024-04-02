@@ -61,7 +61,7 @@ const ReportDomain = React.forwardRef((props, ref) => {
     <View>
       <RBSheet
         ref={ref}
-        closeOnDragDown={false}
+        closeOnDragDown={true}
         closeOnPressMask={true}
         customStyles={{
           container: styles.container,
@@ -87,7 +87,7 @@ const ReportDomain = React.forwardRef((props, ref) => {
             ))}
             <View style={styles.btn}>
               <Button onPress={onNext}>
-                <Text>Provide info on next screen</Text>
+                <Text style={styles.btnText}>Provide info on next screen</Text>
               </Button>
             </View>
           </ScrollView>
@@ -123,13 +123,18 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     marginBottom: 30
   },
+  btnText: {
+    fontFamily: fonts.inter[500],
+    fontSize: 16,
+    color: COLORS.white2
+  },
   btnSkip: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray100,
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 17,
     paddingVertical: 18,
-    marginVertical: 22
+    marginBottom: 22
   },
   btnSkipText: {
     fontFamily: fonts.inter[700],
@@ -139,7 +144,8 @@ const styles = StyleSheet.create({
   container: {
     height: '80%',
     borderTopRightRadius: 20,
-    borderTopLeftRadius: 20
+    borderTopLeftRadius: 20,
+    backgroundColor: COLORS.almostBlack
   },
   draggableIcon: {
     backgroundColor: COLORS.lightgrey,
