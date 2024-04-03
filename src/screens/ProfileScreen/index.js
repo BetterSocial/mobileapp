@@ -655,7 +655,7 @@ const ProfileScreen = ({route}) => {
   };
   return (
     <View style={styles.container} forceInset={{top: 'always'}}>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       <ProfileHeader
         showArrow={isNotFromHomeTab}
         onShareClicked={onShare}
@@ -785,7 +785,7 @@ const styles = StyleSheet.create({
     fontFamily: isActive ? fonts.inter[600] : fonts.inter[400],
     fontSize: 14,
     lineHeight: 17,
-    color: isActive ? COLORS.signed_primary : COLORS.blackgrey,
+    color: isActive ? COLORS.signed_primary : COLORS.gray400,
     paddingHorizontal: 16,
     textAlign: 'center'
   }),
@@ -814,7 +814,7 @@ const styles = StyleSheet.create({
   },
   tabs: {
     width,
-    borderBottomColor: COLORS.lightgrey,
+    borderBottomColor: COLORS.gray200,
     borderBottomWidth: 1,
     flexDirection: 'row',
     alignItems: 'center',

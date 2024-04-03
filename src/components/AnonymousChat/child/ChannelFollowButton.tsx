@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     fontSize: 12
   },
   textFollow: {
-    color: COLORS.white
+    color: COLORS.white2
   },
   textFollowing: {
     color: COLORS.signed_primary

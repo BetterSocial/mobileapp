@@ -8,8 +8,10 @@ import {COLORS} from '../../../utils/theme';
 import {Divider} from '../../../components/Divider';
 import {PencilIcon} from '../../../assets';
 import {TextWithEmoji} from './TextWithEmoji';
+import {fonts} from '../../../utils/fonts';
 import {addDotAndRemoveNewline} from '../../../utils/string/TrimString';
 import {profileSettingsDMpermission} from '../../../service/profile';
+import {fonts} from '../../../utils/fonts';
 
 type BioAndDMSettingProps = {
   bio: string;
@@ -36,11 +38,12 @@ const CheckBoxCustom = (props: {value: boolean; label: string; disabled?: boolea
           backgroundColor: COLORS.white,
           marginRight: 5
         }}>
+        {/* TODO: Garry, masih ada warna hitam kalau disabled */}
         <CheckBox
           disabled={props.disabled || false}
           value={props.value}
-          onCheckColor={COLORS.white}
-          tintColors={{true: COLORS.signed_primary, false: COLORS.white}}
+          onCheckColor={COLORS.gray100}
+          tintColors={{true: COLORS.signed_primary, false: COLORS.gray100}}
           tintColor={COLORS.signed_primary}
           onTintColor={COLORS.signed_primary}
           onFillColor={COLORS.signed_primary}
@@ -55,7 +58,8 @@ const CheckBoxCustom = (props: {value: boolean; label: string; disabled?: boolea
       <Text
         style={{
           fontSize: 12,
-          fontWeight: '500'
+          fontFamily: fonts.inter[500],
+          color: COLORS.white2
         }}>
         {props.label}
       </Text>
@@ -132,15 +136,7 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
                 alignItems: 'center'
               }}>
               <PencilIcon />
-              <Text
-                style={{
-                  fontSize: 14,
-                  fontWeight: '500',
-                  color: COLORS.white,
-                  marginLeft: 4
-                }}>
-                Edit
-              </Text>
+              <Text style={styles.editPromptLabel}>Edit</Text>
             </View>
           </Pressable>
         </View>
@@ -159,7 +155,7 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
       </View>
       <View
         style={{
-          backgroundColor: COLORS.white,
+          backgroundColor: COLORS.gray100,
           borderRadius: 12,
           padding: 12,
           marginHorizontal: 12,
@@ -173,7 +169,7 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
           elevation: 2,
           marginTop: -50,
           borderWidth: 1,
-          borderColor: COLORS.gray
+          borderColor: COLORS.gray200
         }}>
         <Text
           style={{
@@ -190,7 +186,7 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
 
         {isAnonymity && (
           <>
-            <Divider style={{marginVertical: 6, backgroundColor: COLORS.gray}} />
+            <Divider style={{marginVertical: 6, backgroundColor: COLORS.gray200}} />
             <TouchableOpacity onPress={toggleSwitchAnonAllowFollowing}>
               <CheckBoxCustom
                 value={isAllowFollowingSendDM}
@@ -215,19 +211,24 @@ const styles = StyleSheet.create({
   promptTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: COLORS.white
+    color: COLORS.white2
   },
   container: {
-    backgroundColor: COLORS.default_signed_secondary,
+    backgroundColor: COLORS.signed_secondary,
     borderRadius: 16,
     paddingHorizontal: 12,
     paddingVertical: 12,
     marginTop: 10,
     paddingBottom: 50
   },
-  editPromptLabel: {color: COLORS.signed_secondary, textDecorationLine: 'underline'},
+  editPromptLabel: {
+    fontSize: 14,
+    fontFamily: fonts.inter[500],
+    color: COLORS.white2,
+    marginLeft: 4
+  },
   bioTextNull: {
-    color: COLORS.lightgrey,
+    color: COLORS.white2,
     fontFamily: 'Inter',
     fontSize: 14,
     fontStyle: 'italic',

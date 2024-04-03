@@ -79,7 +79,8 @@ const styles = StyleSheet.create({
     lineHeight: 14.52,
     fontSize: 12,
     fontFamily: fonts.inter[600],
-    flexShrink: 1
+    flexShrink: 1,
+    color: COLORS.white2
   },
   domainNameContainer: {
     flexDirection: 'row',
@@ -89,7 +90,7 @@ const styles = StyleSheet.create({
     lineHeight: 14.52,
     fontSize: 12,
     fontFamily: fonts.inter[400],
-    color: COLORS.blackgrey
+    color: COLORS.gray400
   },
   wrapperItem: {backgroundColor: 'white', marginBottom: 16},
   wrapperImage: {
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
     width: 3,
     height: 3,
     borderRadius: 4,
-    backgroundColor: COLORS.blackgrey,
+    backgroundColor: COLORS.gray400,
     marginLeft: 6,
     marginRight: 6,
     marginTop: 1

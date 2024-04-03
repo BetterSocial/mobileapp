@@ -9,7 +9,7 @@ import {
   View
 } from 'react-native';
 
-import IcClearCircle from '../../../assets/icons/ic_clear_circle';
+import IconClose from '../../../assets/icon/IconClose';
 import MemoIc_search from '../../../assets/icons/Ic_search';
 import {COLORS, FONTS, SIZES} from '../../../utils/theme';
 
@@ -19,6 +19,7 @@ const Search = ({onPress, animatedValue, onChangeText, text, onClearText, isLoad
       <TextInput
         value={text}
         placeholder={'Search Users'}
+        placeholderTextColor={COLORS.gray400}
         style={styles.input}
         onChangeText={(t) => {
           onChangeText(t);
@@ -27,15 +28,16 @@ const Search = ({onPress, animatedValue, onChangeText, text, onClearText, isLoad
         onSubmitEditing={onPress}
         textAlignVertical="center"
         blurOnSubmit={true}
+        keyboardAppearance="dark"
       />
       <View style={styles.wrapperIcon}>
-        <MemoIc_search width={20} height={20} />
+        <MemoIc_search width={20} height={20} fill={COLORS.gray300} />
       </View>
       <View style={styles.wrapperSecondaryIcon}>
         {isLoading && <ActivityIndicator style={styles.loader} color={COLORS.blackgrey} />}
         {!isLoading && (
           <Pressable onPress={onClearText}>
-            <IcClearCircle width={20} height={20} />
+            <IconClose width={8} height={8} color={COLORS.gray400} />
           </Pressable>
         )}
       </View>
@@ -95,7 +97,7 @@ const styles = StyleSheet.create({
   },
   wrapperSecondaryIcon: {
     position: 'absolute',
-    right: 8,
+    right: 12,
     top: 0,
     bottom: 0,
     justifyContent: 'center'

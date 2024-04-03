@@ -31,7 +31,7 @@ const TopicDomainHeader = (props) => {
       </Text>
       <View style={{flexDirection: 'row', alignItems: 'center', marginTop: normalize(1)}}>
         <CommunityIcon
-          color={shouldDisplay ? COLORS.white : undefined}
+          color={shouldDisplay ? COLORS.white2 : undefined}
           style={{
             marginRight: normalize(5),
             height: normalize(8)
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(16),
     fontFamily: fonts.inter[600],
     textAlign: 'left',
-    color: isHeaderHide ? COLORS.white : COLORS.black,
+    color: isHeaderHide ? COLORS.white2 : COLORS.black,
     backgroundColor: COLORS.transparent
   }),
   member: {
@@ -87,13 +87,13 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(12),
     fontFamily: fonts.inter[400],
     textAlign: 'left',
-    color: isHeaderHide ? COLORS.white : COLORS.blackgrey
+    color: isHeaderHide ? COLORS.white2 : COLORS.blackgrey
   }),
   seeMemberText: (followType) => ({
     fontSize: normalizeFontSize(12),
     fontFamily: fonts.inter[500],
     textAlign: 'left',
-    color: followType === 'incognito' ? COLORS.anon_secondary : COLORS.blue,
+    color: followType === 'incognito' ? COLORS.anon_primary : COLORS.blue,
     marginTop: normalize(1)
   })
 });

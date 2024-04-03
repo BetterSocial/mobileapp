@@ -269,7 +269,7 @@ const ContactScreen = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       <Header
         title={isAddParticipant ? 'Add Participants' : newChatTitleScreen}
         containerStyle={styles.containerStyle}
@@ -307,7 +307,13 @@ const ContactScreen = ({navigation}) => {
           }}
           rowRenderer={rowRenderer}
           scrollViewProps={{
-            refreshControl: <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            refreshControl: (
+              <RefreshControl
+                tintColor={COLORS.white2}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+            )
           }}
         />
       )}

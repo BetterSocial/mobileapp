@@ -148,7 +148,7 @@ const BioAndChat = (props) => {
           labelLeft={
             isAnonimityEnabled || !isSignedMessageEnabled ? 'Incognito' : 'Incognito disabled'
           }
-          styleLabelLeft={{color: COLORS.white}}
+          styleLabelLeft={{color: COLORS.gray500}}
         />
       </TouchableOpacity>
     </View>
@@ -157,7 +157,7 @@ const BioAndChat = (props) => {
 
 const styles = StyleSheet.create({
   bioAndSendChatContainer: (isAnonimity) => ({
-    backgroundColor: isAnonimity ? COLORS.anon_primary : COLORS.signed_primary,
+    backgroundColor: isAnonimity ? COLORS.anon_secondary : COLORS.signed_secondary,
     borderRadius: 15,
     paddingHorizontal: 10,
     paddingTop: 10
@@ -166,15 +166,15 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   bioText: {
-    color: COLORS.white,
+    color: COLORS.white2,
     fontSize: 14,
-    fontWeight: '600',
+    fontFamily: fonts.inter[600],
     lineHeight: 22
   },
   seeMore: {
     fontFamily: fonts.inter[500],
     fontSize: 14,
-    color: COLORS.black
+    color: COLORS.white2
   },
   toggleSwitchContainer: {
     display: 'flex',

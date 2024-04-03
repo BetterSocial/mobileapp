@@ -16,6 +16,7 @@ import useRootChannelListHook from '../../hooks/screen/useRootChannelListHook';
 import useSignedChannelListScreenHook from '../../hooks/screen/useSignedChannelListHook';
 import Search from './elements/Search';
 import useFollowUser from './hooks/useFollowUser';
+import {COLORS} from '../../utils/theme';
 
 const ChannelListScreen = ({route}) => {
   const {refresh} = useLocalDatabaseHook();
@@ -76,7 +77,7 @@ const ChannelListScreen = ({route}) => {
 
   return (
     <>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       <View style={{height: 52}}>
         <Search route={route} onPress={goToContactScreen} />
       </View>
@@ -94,6 +95,7 @@ const ChannelListScreen = ({route}) => {
           />
         }
         renderItem={renderChannelItem}
+        style={{backgroundColor: COLORS.almostBlack}}
       />
     </>
   );

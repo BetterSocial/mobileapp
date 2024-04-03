@@ -1,26 +1,11 @@
 import * as React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  Linking,
-} from 'react-native';
+import {StyleSheet, Text, View, Image, TouchableOpacity, Linking} from 'react-native';
 import {NewsEmptyState} from '../../../assets/images';
 import {fonts} from '../../../utils/fonts';
 import StringConstant from '../../../utils/string/StringConstant';
 import {COLORS} from '../../../utils/theme';
 
-const DetailDomainScreenContent = ({
-  date,
-  description,
-  domain,
-  domainImage,
-  image,
-  title,
-  url,
-}) => {
+const DetailDomainScreenContent = ({date, description, domain, domainImage, image, title, url}) => {
   const onReadFullActiclePressed = () => {
     if (Linking.canOpenURL(url)) {
       Linking.openURL(url);
@@ -33,7 +18,7 @@ const DetailDomainScreenContent = ({
       {image ? (
         <Image
           source={{
-            uri: image,
+            uri: image
           }}
           style={styles.contentImage}
         />
@@ -52,7 +37,7 @@ const DetailDomainScreenContent = ({
 
 let styles = StyleSheet.create({
   contentContainer: {
-    backgroundColor: 'red',
+    backgroundColor: 'red'
   },
   title: {
     fontFamily: fonts.inter[500],
@@ -60,12 +45,12 @@ let styles = StyleSheet.create({
     lineHeight: 29.05,
     color: COLORS.black,
     marginHorizontal: 20,
-    marginVertical: 12,
+    marginVertical: 12
   },
   contentImage: {
     height: 210,
     width: '100%',
-    resizeMode: 'contain',
+    resizeMode: 'contain'
   },
   description: {
     marginTop: 8,
@@ -73,7 +58,7 @@ let styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 16,
     lineHeight: 24,
-    color: COLORS.black000,
+    color: COLORS.white2
   },
   readFullText: {
     marginTop: 8,
@@ -81,8 +66,8 @@ let styles = StyleSheet.create({
     fontFamily: fonts.inter[500],
     fontSize: 16,
     lineHeight: 24,
-    color: COLORS.blue,
-  },
+    color: COLORS.signed_primary
+  }
 });
 
 export default DetailDomainScreenContent;

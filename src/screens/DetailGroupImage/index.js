@@ -35,7 +35,7 @@ const ShowDetailGroupImage = (props) => {
   };
   return (
     <View style={styles.container}>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <MemoIc_arrow_back_white width={20} height={12} />

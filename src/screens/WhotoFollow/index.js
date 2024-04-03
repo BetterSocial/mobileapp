@@ -30,7 +30,7 @@ import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {Header} from '../../components';
 import {InitialStartupAtom} from '../../service/initialStartup';
 import {ProgressBar} from '../../components/ProgressBar';
-import {normalizeFontSize} from '../../utils/fonts';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {registerUser} from '../../service/users';
 import {setImage} from '../../context/actions/users';
 import {setToken} from '../../utils/token';
@@ -223,7 +223,7 @@ const WhotoFollow = () => {
   const renderSectionFooter = (section) => {
     return section.isLoadingMore ? (
       <View style={{marginBottom: dimen.normalizeDimen(24.5)}}>
-        <ActivityIndicator color={COLORS.signed_primary} />
+        <ActivityIndicator color={COLORS.white2} />
       </View>
     ) : (
       <>
@@ -284,7 +284,7 @@ const WhotoFollow = () => {
           {'Find interesting people to follow.\nYou can edit this anytime.'}
         </Text>
       </View>
-      {isLoading ? <ActivityIndicator size="small" color={COLORS.signed_primary} /> : null}
+      {isLoading ? <ActivityIndicator size="small" color={COLORS.white2} /> : null}
       <SectionList
         sections={users.map((i) => ({
           ...i,
@@ -327,22 +327,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: dimen.normalizeDimen(20)
   },
   textWhoToFollow: {
-    fontFamily: 'Inter-Bold',
-    fontStyle: 'normal',
-    fontWeight: '600',
+    fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(36),
     lineHeight: normalizeFontSize(43.57),
-    color: COLORS.bunting,
+    color: COLORS.white2,
     marginHorizontal: dimen.normalizeDimen(20)
   },
   textDescription: {
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: '400',
+    fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(24),
-    color: COLORS.blackgrey,
-    opacity: 0.84,
+    color: COLORS.gray500,
     marginTop: dimen.normalizeDimen(8),
     marginBottom: dimen.normalizeDimen(24),
     paddingHorizontal: dimen.normalizeDimen(20)
@@ -353,7 +348,7 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(20),
     color: COLORS.signed_primary,
-    marginLeft: dimen.normalizeDimen(16),
+    marginLeft: dimen.normalizeDimen(20),
     marginBottom: dimen.normalizeDimen(16),
     marginTop: dimen.normalizeDimen(8)
   },
@@ -369,15 +364,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: dimen.normalizeDimen(20),
     paddingBottom: dimen.normalizeDimen(20),
     backgroundColor: COLORS.white,
-    shadowColor: COLORS.black,
-    shadowOffset: {
-      width: 0,
-      height: 5
-    },
-    shadowOpacity: 0.36,
-    shadowRadius: 6.68,
-
-    elevation: 11,
     flexDirection: 'column',
     justifyContent: 'space-between',
     zIndex: 1000
@@ -387,12 +373,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   textSmall: {
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: '400',
     fontSize: normalizeFontSize(10),
+    fontFamily: fonts.inter[400],
     textAlign: 'center',
-    color: COLORS.blackgrey
+    color: COLORS.gray500
   }
 });
 export default WhotoFollow;

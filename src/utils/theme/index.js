@@ -1,6 +1,7 @@
 export const COLORS = {
+  almostBlack: '#16202A',
   alto: '#E0E0E0',
-  black: '#1E1F20',
+  black: '#FFFFFF', // changed to white, before is #1E1F20
   black000: '#000',
   black30percent: 'rgba(0,0,0,0.3)',
   black80percent: 'rgba(0,0,0,0.8)',
@@ -13,8 +14,8 @@ export const COLORS = {
   blueZaffre: '#0E24B3',
   brilliance: '#FCFCFC',
   bunting: '#11243D',
-  concrete: '#F2F2F2',
-  emperor: '#4F4F4F',
+  concrete: '#233343', // changed to gray 100, before is #F2F2F2
+  emperor: '#4F4F4F', // not used again
   french_pass: '#b6e4fd',
   greenMantis: '#79B45D',
   greyseries: '#333333',
@@ -24,7 +25,9 @@ export const COLORS = {
   porcelain: '#ecf0f1',
   silver: '#BDBDBD',
   waterspout: '#9DEDF1',
-  white: '#FFFFFF',
+  white: '#16202A', // almost black
+  white2: '#FFFFFF',
+  white10percent: 'rgba(255,255,255,0.1)',
   white20percent: 'rgba(255,255,255,0.2)',
   whiteSmoke: '#F4F4F4',
   bluePrimary: '#4782D7',
@@ -33,8 +36,16 @@ export const COLORS = {
   holytosca: '#00ADB5',
   lightBlue: '#2F80ED',
   gray1: '#C4C4C4',
-  gray100: '#F5F6F7',
-  gray500: '#69707C',
+  gray100: '#233343',
+  gray200: '#3A4F64',
+  gray300: '#52667A',
+  gray400: '#8C939F',
+  gray500: '#A5ACB8',
+  // gray100: '#FF00FF',
+  // gray200: '#FF00FF',
+  // gray300: '#FF00FF',
+  // gray400: '#FF00FF',
+  // gray500: '#FF00FF',
   gray6: '#F2F2F2',
   gray4: '#4A4A4A',
   bondi_blue: '#00ADB5',
@@ -46,21 +57,21 @@ export const COLORS = {
   signed_primary: '#0391FB',
   signed_primary_15: '#0391FB26',
   signed_secondary: '#275D8A',
-  default_signed_secondary: '#69A2F2',
+  default_signed_secondary: '#0391FB',
   // anon_primary: '#107793',
   // anon_primary_15: '#10779326',
   // anon_secondary: '#3A9BB6',
-  anon_primary: '#00C4C6',
-  anon_primary_15: '#00C4C626',
+  anon_primary: '#00ABB2',
+  anon_primary_15: '#00ABB226',
   anon_secondary: '#184A57',
   radical_red: '#FF3466',
   light_silver: '#D2D4DB',
   balance_gray: '#9B9FA9',
   gray: '#E8EBED',
-  lightgrey: '#F5F6F7',
+  lightgrey: '#233343', // changed to gray 100 #F5F6F7
   redalert: '#FF2E63',
-  blackgrey: '#828282',
-  greySubtile1: '#9B9FA9',
+  blackgrey: '#8C939F', // changed to gray 400
+  greySubtile1: '#8C939F', // changed to gray 400
   elm: '#22878B',
   halfBaked: '#88CDD0',
   greenDark: '#004346',
@@ -69,10 +80,9 @@ export const COLORS = {
   black75: 'rgba(0, 0, 0, 0.75)',
   transparent: 'transparent',
   anonSecondary20: 'rgba(0, 173, 181, 0.2)',
-  gray400: '#9B9FA9',
   lightgrey60: 'rgba(245, 246, 247, 0.6)',
-  gray300: '#D2D4DB',
-  gray200: '#E8EBED'
+  downvote: '#E2887E',
+  upvote: '#69DD10'
 };
 export const SIZES = {
   // global sizes

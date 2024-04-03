@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
   containerInput: {
     flex: 1,
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray100,
     flexDirection: 'row',
     alignItems: 'flex-end',
     paddingVertical: dimen.normalizeDimen(6),
@@ -64,8 +64,8 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    backgroundColor: COLORS.lightgrey,
-    color: COLORS.black,
+    backgroundColor: COLORS.gray100,
+    color: COLORS.white2,
     fontFamily: 'Inter',
     fontSize: normalizeFontSize(14),
     fontStyle: 'normal',
@@ -108,10 +108,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     zIndex: dimen.normalizeDimen(100),
     borderRadius: dimen.normalizeDimen(13)
-  },
-  labelToggle: {
-    fontSize: dimen.normalizeDimen(8),
-    fontWeight: '400'
   }
 });
 
@@ -369,6 +365,7 @@ const InputMessageV2 = ({
 
   const toggleChange = () => {
     if (messageDisable) {
+      // TODO: Garry, need to change this color
       ToastMessage.show({
         type: 'asNative',
         text1: messageDisable,
@@ -422,6 +419,7 @@ const InputMessageV2 = ({
           onFocus={() => setInputFocus(true)}
           onBlur={() => setInputFocus(false)}
           numberOfLines={4}
+          keyboardAppearance="dark"
         />
         {isShowToggle && (
           <ToggleSwitch
@@ -429,8 +427,7 @@ const InputMessageV2 = ({
               !inputFocus ? (isAnonimityEnabled ? 'Incognito' : 'Incognito disabled') : undefined
             }
             styleLabelLeft={[
-              styles.labelToggle,
-              {color: type === 'ANONYMOUS' ? COLORS.gray : COLORS.blue}
+              {color: type === 'ANONYMOUS' ? COLORS.anon_primary : COLORS.signed_primary}
             ]}
             onValueChange={toggleChange}
             value={type === ANONYMOUS}

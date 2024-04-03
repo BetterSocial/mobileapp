@@ -26,14 +26,15 @@ const ChannelTitle = ({
       fontSize: normalize(14),
       lineHeight: 22,
       flex: 1,
-      paddingBottom: 2
+      paddingBottom: 2,
+      color: COLORS.white2
     },
     chatContentTime: {
       fontFamily: fonts.poppins[400],
       fontSize: normalize(14),
       lineHeight: 22,
       marginLeft: 20,
-      color: COLORS.blackgrey,
+      color: COLORS.gray500,
       alignSelf: 'flex-start'
     },
     chatContentMessage: {
@@ -42,10 +43,11 @@ const ChannelTitle = ({
       lineHeight: 22,
       alignSelf: 'center',
       flex: 1,
-      marginRight: 4
+      marginRight: 4,
+      color: COLORS.gray500
     },
     chatContentUnreadCountContainer: {
-      backgroundColor: isAnonymousTab ? COLORS.anon_primary : COLORS.signed_primary,
+      backgroundColor: isAnonymousTab ? COLORS.anon_secondary : COLORS.signed_secondary,
       width: 20,
       height: 20,
       borderRadius: 10,
@@ -57,7 +59,7 @@ const ChannelTitle = ({
       fontFamily: fonts.inter[400],
       fontSize: normalize(10),
       lineHeight: 14.52,
-      color: COLORS.white
+      color: COLORS.white2
     },
     chatContentUnreadCountPostNotificationContainer: {
       position: 'absolute',

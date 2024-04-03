@@ -29,7 +29,7 @@ const Search = ({animatedValue}) => {
         onPress={handleOnContainerPress}>
         <View style={styles.wrapperSearch}>
           <View style={styles.wrapperIcon}>
-            <MemoIc_search width={16.67} height={16.67} />
+            <MemoIc_search width={16.67} height={16.67} fill={COLORS.gray300} />
           </View>
           <Text style={styles.input}>{StringConstant.newsTabHeaderPlaceholder}</Text>
         </View>
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     paddingBottom: 0,
     alignSelf: 'center',
-    color: COLORS.blackgrey
+    color: COLORS.gray400
   },
   wrapperIcon: {
     marginLeft: 8,

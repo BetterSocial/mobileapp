@@ -61,7 +61,7 @@ const GroupMedia = () => {
   };
   return (
     <SafeAreaView style={{flex: 1}}>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       <View style={styles.container}>
         <Header title="Group Media" />
         <Tab.Navigator
