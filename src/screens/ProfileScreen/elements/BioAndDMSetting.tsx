@@ -11,7 +11,6 @@ import {TextWithEmoji} from './TextWithEmoji';
 import {fonts} from '../../../utils/fonts';
 import {addDotAndRemoveNewline} from '../../../utils/string/TrimString';
 import {profileSettingsDMpermission} from '../../../service/profile';
-import {fonts} from '../../../utils/fonts';
 
 type BioAndDMSettingProps = {
   bio: string;
