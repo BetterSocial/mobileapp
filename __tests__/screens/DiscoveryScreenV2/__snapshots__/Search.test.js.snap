@@ -4,8 +4,8 @@ exports[`Testing Discovery Screen V2 Testing Discovery Search Bar Match Snapshot
 <View
   style={
     Object {
-      "backgroundColor": "white",
-      "borderBottomColor": "#F5F6F7",
+      "backgroundColor": "#16202A",
+      "borderBottomColor": "#233343",
       "borderBottomWidth": 0.8,
       "flexDirection": "row",
       "height": 48,
@@ -56,12 +56,12 @@ exports[`Testing Discovery Screen V2 Testing Discovery Search Bar Match Snapshot
       style={
         Object {
           "alignSelf": "center",
-          "backgroundColor": "#F5F6F7",
-          "borderRadius": 6.4,
+          "backgroundColor": "#233343",
+          "borderRadius": 9.600000000000001,
           "flex": 1,
           "flexDirection": "row",
           "height": 28.8,
-          "paddingRight": 6.4,
+          "paddingRight": 9.600000000000001,
         }
       }
     >
@@ -79,18 +79,20 @@ exports[`Testing Discovery Screen V2 Testing Discovery Search Bar Match Snapshot
       </View>
       <TextInput
         allowFontScaling={true}
+        keyboardAppearance="dark"
         multiline={false}
         onBlur={[Function]}
         onChangeText={[Function]}
         onFocus={[Function]}
         onSubmitEditing={[Function]}
         placeholder="Search Helio"
-        placeholderTextColor="#F5F6F7"
+        placeholderTextColor="#8C939F"
         rejectResponderTermination={true}
         returnKeyType="search"
         style={
           Object {
             "alignSelf": "center",
+            "color": "#FFFFFF",
             "flex": 1,
             "fontFamily": "Inter-Regular",
             "fontSize": 12.600000000000001,
