@@ -95,7 +95,7 @@ const ReplyCommentId = ({
       <ScrollView ref={scrollViewRef} contentContainerStyle={styles.commentScrollView}>
         <View style={styles.containerComment}>
           <ReplyCommentItem
-            feedId={dataFeed.id}
+            feedId={dataFeed?.id}
             indexFeed={indexFeed}
             user={item.user}
             comment={item}
