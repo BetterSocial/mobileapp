@@ -29,7 +29,8 @@ const DetailDomainScreenHeader = ({
         onPress={() => {
           navigation.goBack();
         }}>
-        <ArrowLeftIcon width={20} height={12} fill="#000" />
+        {/* TODO: Garry, perlu pakai props */}
+        <ArrowLeftIcon width={20} height={12} />
       </TouchableOpacity>
       <View style={styles.wrapperImage}>
         <Image
@@ -52,7 +53,8 @@ const DetailDomainScreenHeader = ({
           {/* <View style={styles.point} /> */}
           {/* <Memoic_globe height={13} width={13} /> */}
           <View style={styles.point} />
-          <MemoPeopleFollow height={13} width={12} />
+          {/* TODO: Garry, gray berapa? */}
+          <MemoPeopleFollow height={13} width={12} fill={COLORS.gray400} />
           <Gap style={{width: 4}} />
           <Text style={styles.followerNumber}>{follower}</Text>
           <View style={styles.point} />

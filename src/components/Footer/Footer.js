@@ -84,7 +84,8 @@ const Footer = ({
     if (totalVote < 0) {
       return COLORS.redalert;
     }
-    return COLORS.balance_gray;
+    // TODO: Garry, gray berapa?
+    return COLORS.gray400;
   };
   const username = item?.anon_user_info_emoji_name
     ? `${item.anon_user_info_color_name} ${item?.anon_user_info_emoji_name}`
@@ -199,7 +200,7 @@ const Footer = ({
           )}
           {disableComment ? (
             <View testID="disableComment" style={styles.btn}>
-              <View style={styles.btnComment}>
+              <View style={styles.btnComment(0)}>
                 <MemoIc_comment
                   color={item?.isBlurredPost ? COLORS.gray : undefined}
                   height={24}
@@ -314,7 +315,8 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.gray
+    // TODO: Garry, gray berapa?
+    borderBottomColor: COLORS.gray400
   },
   buttonShareContainer: {
     flexDirection: 'row',
@@ -340,7 +342,8 @@ const styles = StyleSheet.create({
   },
   text: {
     ...FONTS.body3,
-    color: COLORS.balance_gray
+    // TODO: Garry, gray berapa?
+    color: COLORS.gray400
   },
   vote: (colorBasedCount) => ({
     ...FONTS.body3,
