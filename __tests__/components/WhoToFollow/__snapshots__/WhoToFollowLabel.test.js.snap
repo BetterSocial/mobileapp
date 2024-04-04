@@ -4,7 +4,7 @@ exports[`Label render correctly Match snapshot 1`] = `
 <View
   style={
     Object {
-      "backgroundColor": "#233343",
+      "backgroundColor": "#1E3343",
       "flexDirection": "column",
       "height": 32,
       "justifyContent": "center",

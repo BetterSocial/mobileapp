@@ -36,7 +36,7 @@ export const COLORS = {
   holytosca: '#00ADB5',
   lightBlue: '#2F80ED',
   gray1: '#C4C4C4',
-  gray100: '#233343',
+  gray100: '#1E3343',
   gray200: '#3A4F64',
   gray300: '#52667A',
   gray400: '#8C939F',

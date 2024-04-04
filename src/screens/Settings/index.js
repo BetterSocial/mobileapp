@@ -60,7 +60,7 @@ const Settings = () => {
 
   return (
     <>
-      <StatusBar barStyle="dark-content" translucent={false} />
+      <StatusBar barStyle="light-content" translucent={false} />
       <SafeAreaView style={styles.container}>
         <Header title="Settings" isCenter onPress={() => navigation.goBack()} />
         <View style={styles.content}>
