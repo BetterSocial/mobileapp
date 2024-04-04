@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     fontFamily: fonts.inter[500],
     fontSize: 14,
-    color: COLORS.white2,
+    color: COLORS.white,
     lineHeight: 24
   }
 });

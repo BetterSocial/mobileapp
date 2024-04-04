@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: 14,
     lineHeight: 17,
-    color: COLORS.white2
+    color: COLORS.white
   }
 });
 

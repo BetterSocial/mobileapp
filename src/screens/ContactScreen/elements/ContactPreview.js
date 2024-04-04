@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     marginTop: 6,
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.white2
+    color: COLORS.white
   }
 });
 

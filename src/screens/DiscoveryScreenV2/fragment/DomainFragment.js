@@ -312,11 +312,11 @@ const styles = StyleSheet.create({
   },
   fragmentContainer: {
     flex: 1,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   noDataFoundContainer: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     justifyContent: 'center'
   },
   noDataFoundText: {
@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600]
   },
   unfollowedHeaderContainer: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray100,
     height: 40,
     display: 'flex',
     flexDirection: 'column',

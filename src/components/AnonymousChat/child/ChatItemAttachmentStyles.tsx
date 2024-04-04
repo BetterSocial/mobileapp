@@ -34,10 +34,10 @@ const ChatItemAttachmentStyles = StyleSheet.create({
   moreText: {
     fontSize: dimen.normalizeDimen(16),
     fontFamily: fonts.inter[400],
-    color: COLORS.white2
+    color: COLORS.white
   },
   attachmentFileContainer: {
-    backgroundColor: COLORS.white10percent,
+    backgroundColor: COLORS.almostBlack10percent,
     justifyContent: 'center',
     height: dimen.normalizeDimen(64),
     flexDirection: 'row',
@@ -50,7 +50,7 @@ const ChatItemAttachmentStyles = StyleSheet.create({
   attachmentFileName: {
     fontSize: dimen.normalizeDimen(14),
     fontFamily: fonts.inter[600],
-    color: COLORS.white2
+    color: COLORS.white
   },
   attachmentFileInfo: {
     fontSize: dimen.normalizeDimen(12),
@@ -58,7 +58,7 @@ const ChatItemAttachmentStyles = StyleSheet.create({
     color: COLORS.gray500
   },
   attachmentFileIcon: {
-    backgroundColor: COLORS.white10percent,
+    backgroundColor: COLORS.almostBlack10percent,
     width: dimen.normalizeDimen(64),
     height: '100%',
     alignItems: 'center',

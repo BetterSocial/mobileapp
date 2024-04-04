@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
     height: dimen.size.TOPIC_CURRENT_ITEM_HEIGHT,
     width: FULL_WIDTH,
     marginBottom: normalizeFontSizeByWidth(4),
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     shadowColor: COLORS.black000,
     shadowOffset: {width: 0, height: 4},
     shadowOpacity: 0.3,

@@ -96,7 +96,7 @@ const Header = ({item, image, name, time, showBackButton, follow, setFollow}) =>
         <Pressable onPress={onHeaderClicked} style={styles.leftRowContainer}>
           {showBackButton && (
             <TouchableOpacity onPress={onNavigationBack} style={styles.backbutton}>
-              <MemoIc_arrow_back width={18} height={18} fill={COLORS.white2} />
+              <MemoIc_arrow_back width={18} height={18} fill={COLORS.white} />
             </TouchableOpacity>
           )}
           <View style={styles.wrapperImage(showBackButton)}>
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     borderBottomColor: COLORS.gray200,
     paddingBottom: 8,
     paddingTop: 8,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   wrapperImage: (showBackButton = true) => ({
     borderRadius: 45,
@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
     marginLeft: -4
   },
   wrapperText: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     borderRadius: 8,
     borderColor: COLORS.signed_primary,
     width: 28,

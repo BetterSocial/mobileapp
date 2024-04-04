@@ -113,18 +113,18 @@ function HomeBottomTabs() {
     if (route.name === 'Profile') label = 'Profile';
 
     const bottomBarExtendedStyle = {
-      color: nav?.isFocused() ? activeColor : COLORS.blackgrey
+      color: nav?.isFocused() ? activeColor : COLORS.gray400
     };
     return <Text style={[styles.bottomBarLabel, bottomBarExtendedStyle]}>{label}</Text>;
   };
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: COLORS.white}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: COLORS.almostBlack}}>
       <Loading visible={isLoadingFetchingChannelDetail} />
       <Tab.Navigator
         initialRouteName={getInitialRouteName()}
         tabBarOptions={{
-          inactiveTintColor: COLORS.blackgrey,
+          inactiveTintColor: COLORS.gray400,
           safeAreaInsets: {top: 0, bottom: 0, left: 0, right: 0}
         }}
         screenOptions={({navigation: nav, route}) => ({

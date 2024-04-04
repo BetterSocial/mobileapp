@@ -315,7 +315,7 @@ export default DetailDomainScreen;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     flex: 1
   },
   containerText: {
@@ -341,7 +341,7 @@ const styles = StyleSheet.create({
       height: 1
     },
     shadowOpacity: 0.5,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   gap: {height: 16},
   footerWrapper: {

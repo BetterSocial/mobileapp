@@ -45,7 +45,7 @@ Search.propTypes = {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     marginBottom: SIZES.base,
     marginHorizontal: SIZES.base
   },
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   },
   wrapperSearch: {
     flex: 1,
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray100,
     marginLeft: 20,
     marginRight: 20,
     borderRadius: 8,
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   },
   animatedViewContainer: (animatedValue) => ({
     flexDirection: 'row',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     // marginBottom: SIZES.base,
     marginTop: Platform.OS === 'android' ? 0 : animatedValue,
     top: Platform.OS === 'android' ? animatedValue : 0,
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     paddingTop: 7,
     paddingBottom: 7,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.lightgrey,
+    borderBottomColor: COLORS.gray100,
     height: 50
   })
 });

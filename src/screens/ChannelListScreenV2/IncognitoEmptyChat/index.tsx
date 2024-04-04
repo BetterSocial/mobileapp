@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(16),
     lineHeight: normalizeFontSize(24),
-    color: COLORS.white2,
+    color: COLORS.white,
     paddingHorizontal: dimen.normalizeDimen(40),
     textAlign: 'center',
     marginTop: dimen.normalizeDimen(8)
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(18),
-    color: COLORS.white2,
+    color: COLORS.white,
     marginBottom: dimen.normalizeDimen(4)
   },
   itemSubtitle: {

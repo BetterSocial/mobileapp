@@ -54,7 +54,7 @@ const BlockedDomainList = (props) => {
       keyExtractor={(item, index) => index.toString()}
       refreshing={isLoading}
       onRefresh={handleFetchData}
-      style={{backgroundColor: COLORS.white}}
+      style={{backgroundColor: COLORS.almostBlack}}
     />
   );
 };

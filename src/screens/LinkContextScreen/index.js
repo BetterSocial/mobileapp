@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
   },
   bottomAnchorSwipeText: {
     fontFamily: fonts.inter[500],
-    color: COLORS.white2,
+    color: COLORS.white,
     fontSize: 14
   }
 });

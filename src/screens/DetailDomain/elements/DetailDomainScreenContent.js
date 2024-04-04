@@ -58,7 +58,7 @@ let styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 16,
     lineHeight: 24,
-    color: COLORS.white2
+    color: COLORS.white
   },
   readFullText: {
     marginTop: 8,

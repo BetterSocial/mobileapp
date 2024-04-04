@@ -18,7 +18,11 @@ const AnonymousIcon = (props) => (
     </G>
     <Defs>
       <ClipPath id="a">
-        <Path fill={COLORS.white} transform="translate(7.333 7.333)" d="M0 0h17.333v17.333H0z" />
+        <Path
+          fill={COLORS.almostBlack}
+          transform="translate(7.333 7.333)"
+          d="M0 0h17.333v17.333H0z"
+        />
       </ClipPath>
     </Defs>
   </Svg>

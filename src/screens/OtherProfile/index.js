@@ -611,7 +611,7 @@ const OtherProfile = () => {
         {isShowButton ? (
           <TouchableNativeFeedback onPress={toTop}>
             <View style={{...styles.btnBottom, opacity}}>
-              <ArrowUpWhiteIcon width={12} height={20} fill={COLORS.white} />
+              <ArrowUpWhiteIcon width={12} height={20} fill={COLORS.almostBlack} />
             </View>
           </TouchableNativeFeedback>
         ) : null}
@@ -623,13 +623,13 @@ const OtherProfile = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   content: {
     flexDirection: 'column',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.lightgrey
+    borderBottomColor: COLORS.gray100
   },
   dummyItem: (heightItem) => ({
     height: heightItem
@@ -692,7 +692,7 @@ const styles = StyleSheet.create({
   },
   tabs: {
     width,
-    borderBottomColor: COLORS.lightgrey,
+    borderBottomColor: COLORS.gray100,
     borderBottomWidth: 1,
     paddingLeft: 20,
     paddingRight: 20,
@@ -715,7 +715,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   wrapButton: {
     flex: 1,
@@ -741,7 +741,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 8,
     backgroundColor: isAnon ? COLORS.anon_primary : COLORS.signed_primary,
-    color: COLORS.white
+    color: COLORS.almostBlack
   }),
   textButtonFollowing: (isAnon) => ({
     fontFamily: fonts.inter[600],
@@ -753,7 +753,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: COLORS.white2
+    color: COLORS.white
   },
   btnBottom: {
     position: 'absolute',
@@ -769,7 +769,7 @@ const styles = StyleSheet.create({
   },
   tabsFixed: {
     width,
-    borderBottomColor: COLORS.lightgrey,
+    borderBottomColor: COLORS.gray100,
     borderBottomWidth: 1,
     paddingLeft: 20,
     paddingRight: 20,
@@ -777,7 +777,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     zIndex: 2000,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   containerFlatFeed: {
     // padding: 20,

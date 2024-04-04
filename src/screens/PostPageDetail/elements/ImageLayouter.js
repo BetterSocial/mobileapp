@@ -7,15 +7,11 @@ const ImageLayouter = ({images = [], onimageclick}) => {
   if (images.length === 1) {
     return (
       <Pressable onPress={() => onimageclick(0)}>
-        <Image
-          source={{uri: images[0]}}
-          style={styles.imagelayout1}
-          width={'100%'}
-          height={305}
-        />
+        <Image source={{uri: images[0]}} style={styles.imagelayout1} width={'100%'} height={305} />
       </Pressable>
     );
-  } else if (images.length === 2) {
+  }
+  if (images.length === 2) {
     return (
       <View style={styles.twoPhotoLayout}>
         {images.map((item, index) => {
@@ -34,13 +30,12 @@ const ImageLayouter = ({images = [], onimageclick}) => {
         })}
       </View>
     );
-  } else if (images.length === 3) {
+  }
+  if (images.length === 3) {
     return (
       <View style={styles.threePhotoLayout}>
         <View style={styles.threePhotoTopLayout}>
-          <Pressable
-            onPress={() => onimageclick(0)}
-            style={styles.threePhotoTopFirstLayout}>
+          <Pressable onPress={() => onimageclick(0)} style={styles.threePhotoTopFirstLayout}>
             <Image
               style={styles.imagelayout3}
               source={{uri: images[0]}}
@@ -48,9 +43,7 @@ const ImageLayouter = ({images = [], onimageclick}) => {
               height={'100%'}
             />
           </Pressable>
-          <Pressable
-            onPress={() => onimageclick(1)}
-            style={styles.threePhotoTopSecondLayout}>
+          <Pressable onPress={() => onimageclick(1)} style={styles.threePhotoTopSecondLayout}>
             <Image
               style={styles.imagelayout3}
               source={{uri: images[1]}}
@@ -71,13 +64,12 @@ const ImageLayouter = ({images = [], onimageclick}) => {
         </View>
       </View>
     );
-  } else if (images.length === 4) {
+  }
+  if (images.length === 4) {
     return (
       <View style={styles.threePhotoLayout}>
         <View style={styles.threePhotoTopLayout}>
-          <Pressable
-            onPress={() => onimageclick(0)}
-            style={styles.threePhotoTopFirstLayout}>
+          <Pressable onPress={() => onimageclick(0)} style={styles.threePhotoTopFirstLayout}>
             <Image
               style={styles.imagelayout3}
               source={{uri: images[0]}}
@@ -85,9 +77,7 @@ const ImageLayouter = ({images = [], onimageclick}) => {
               height={'100%'}
             />
           </Pressable>
-          <Pressable
-            onPress={() => onimageclick(1)}
-            style={styles.threePhotoTopSecondLayout}>
+          <Pressable onPress={() => onimageclick(1)} style={styles.threePhotoTopSecondLayout}>
             <Image
               style={styles.imagelayout3}
               source={{uri: images[1]}}
@@ -97,9 +87,7 @@ const ImageLayouter = ({images = [], onimageclick}) => {
           </Pressable>
         </View>
         <View style={styles.threePhotoTopLayout}>
-          <Pressable
-            onPress={() => onimageclick(2)}
-            style={styles.threePhotoTopFirstLayout}>
+          <Pressable onPress={() => onimageclick(2)} style={styles.threePhotoTopFirstLayout}>
             <Image
               style={styles.imagelayout3}
               source={{uri: images[2]}}
@@ -107,9 +95,7 @@ const ImageLayouter = ({images = [], onimageclick}) => {
               height={'100%'}
             />
           </Pressable>
-          <Pressable
-            onPress={() => onimageclick(3)}
-            style={styles.threePhotoTopSecondLayout}>
+          <Pressable onPress={() => onimageclick(3)} style={styles.threePhotoTopSecondLayout}>
             <Image
               style={styles.imagelayout3}
               source={{uri: images[3]}}
@@ -120,13 +106,12 @@ const ImageLayouter = ({images = [], onimageclick}) => {
         </View>
       </View>
     );
-  } else if (images.length > 4) {
+  }
+  if (images.length > 4) {
     return (
       <View style={styles.threePhotoLayout}>
         <View style={styles.threePhotoTopLayout}>
-          <Pressable
-            onPress={() => onimageclick(0)}
-            style={styles.threePhotoTopFirstLayout}>
+          <Pressable onPress={() => onimageclick(0)} style={styles.threePhotoTopFirstLayout}>
             <Image
               style={styles.imagelayout3}
               source={{uri: images[0]}}
@@ -134,9 +119,7 @@ const ImageLayouter = ({images = [], onimageclick}) => {
               height={'100%'}
             />
           </Pressable>
-          <Pressable
-            onPress={() => onimageclick(1)}
-            style={styles.threePhotoTopSecondLayout}>
+          <Pressable onPress={() => onimageclick(1)} style={styles.threePhotoTopSecondLayout}>
             <Image
               style={styles.imagelayout3}
               source={{uri: images[1]}}
@@ -146,9 +129,7 @@ const ImageLayouter = ({images = [], onimageclick}) => {
           </Pressable>
         </View>
         <View style={styles.threePhotoTopLayout}>
-          <Pressable
-            onPress={() => onimageclick(2)}
-            style={styles.threePhotoTopFirstLayout}>
+          <Pressable onPress={() => onimageclick(2)} style={styles.threePhotoTopFirstLayout}>
             <Image
               style={styles.imagelayout3}
               source={{uri: images[2]}}
@@ -156,9 +137,7 @@ const ImageLayouter = ({images = [], onimageclick}) => {
               height={'100%'}
             />
           </Pressable>
-          <Pressable
-            onPress={() => onimageclick(3)}
-            style={styles.threePhotoTopSecondLayout}>
+          <Pressable onPress={() => onimageclick(3)} style={styles.threePhotoTopSecondLayout}>
             <View
               style={{
                 backgroundColor: COLORS.blue,
@@ -166,7 +145,7 @@ const ImageLayouter = ({images = [], onimageclick}) => {
                 width: '100%',
                 height: '100%',
                 opacity: 0.5,
-                zIndex: 1000,
+                zIndex: 1000
               }}
             />
             <Text
@@ -179,7 +158,7 @@ const ImageLayouter = ({images = [], onimageclick}) => {
                 fontSize: 36,
                 fontFamily: fonts.inter[700],
                 zIndex: 1000,
-                color: COLORS.white,
+                color: COLORS.almostBlack
               }}>{`${images.length - 3}+`}</Text>
             <Image
               style={styles.imagelayout3}
@@ -200,38 +179,38 @@ const styles = StyleSheet.create({
   imagelayout1: {
     maxHeight: 305,
     width: '100%',
-    resizeMode: 'cover',
+    resizeMode: 'cover'
   },
 
   imagelayout2: {
     maxHeight: 305,
     width: '100%',
-    resizeMode: 'cover',
+    resizeMode: 'cover'
   },
 
   imagelayout3: {
-    resizeMode: 'cover',
+    resizeMode: 'cover'
   },
 
   twoPhotoLayout: {
     width: '100%',
     height: 305,
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
 
   threePhotoLayout: {
     width: '100%',
     height: 305,
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'column'
   },
 
   threePhotoTopLayout: {
     flex: 1,
     marginBottom: 2,
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
 
   threePhotoTopFirstLayout: {flex: 1, marginRight: 2},
@@ -239,14 +218,14 @@ const styles = StyleSheet.create({
   threePhotoTopSecondBlurLayout: {flex: 1, backgroundColor: COLORS.blue},
 
   threePhotoBottomLayout: {
-    flex: 1,
+    flex: 1
   },
 
   twoPhotoItemLayout: {
     flex: 1,
     height: 305,
-    marginHorizontal: 1,
-  },
+    marginHorizontal: 1
+  }
 });
 
 export default ImageLayouter;

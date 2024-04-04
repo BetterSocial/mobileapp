@@ -8,7 +8,7 @@ export const channelItemStyles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     paddingLeft: dimen.normalizeDimen(20),
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   contentContainer: {
     flex: 1,

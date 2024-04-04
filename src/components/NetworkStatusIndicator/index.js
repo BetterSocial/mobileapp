@@ -38,7 +38,7 @@ const NetworkStatusIndicator = ({hide = false}) => {
     return (
       <View testID="internet-not-available" style={styles.container}>
         <View style={styles.bottomContainer}>
-          <ActivityIndicator color={COLORS.white} size={14} />
+          <ActivityIndicator color={COLORS.almostBlack} size={14} />
           <Text style={styles.text}>No Internet Connection</Text>
         </View>
       </View>
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    color: COLORS.white,
+    color: COLORS.almostBlack,
     alignSelf: 'center',
     marginEnd: 8,
     marginStart: 8

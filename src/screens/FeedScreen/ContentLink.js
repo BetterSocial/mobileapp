@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   contentFeed: {
     flex: 1,
     marginHorizontal: 6,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   messageContainer: {
     paddingHorizontal: 20,

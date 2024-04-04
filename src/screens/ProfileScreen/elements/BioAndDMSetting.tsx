@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   promptTitle: {
     fontSize: normalizeFontSize(14),
     fontFamily: fonts.inter[600],
-    color: COLORS.white2
+    color: COLORS.white
   },
   container: {
     backgroundColor: COLORS.signed_secondary,
@@ -178,11 +178,11 @@ const styles = StyleSheet.create({
   editPromptLabel: {
     fontSize: normalizeFontSize(14),
     fontFamily: fonts.inter[500],
-    color: COLORS.white2,
+    color: COLORS.white,
     marginLeft: dimen.normalizeDimen(4)
   },
   bioTextNull: {
-    color: COLORS.white2,
+    color: COLORS.white,
     fontFamily: fonts.inter[400],
     fontStyle: 'italic',
     lineHeight: normalizeFontSize(20),
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     width: dimen.normalizeDimen(16),
     height: dimen.normalizeDimen(16),
     borderRadius: 9999,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     marginRight: dimen.normalizeDimen(5)
   },
   checkbox: {
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
   checkboxLabel: {
     fontSize: normalizeFontSize(12),
     fontFamily: fonts.inter[500],
-    color: COLORS.white2
+    color: COLORS.white
   }
 });
 

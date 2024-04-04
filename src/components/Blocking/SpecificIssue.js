@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     marginBottom: 19,
     fontFamily: fonts.inter[500],
     fontSize: 16,
-    color: COLORS.white2
+    color: COLORS.white
   },
   btn: {
     paddingLeft: 18,
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     color: COLORS.black
   },
   input: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray100,
     marginLeft: 17,
     marginRight: 23,
     borderRadius: 8,
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     paddingRight: 13,
     paddingLeft: 19,
     fontFamily: fonts.inter[400],
-    color: COLORS.white2,
+    color: COLORS.white,
     borderWidth: 1,
     borderColor: COLORS.gray200
   },
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.almostBlack
   },
   draggableIcon: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray100,
     width: 60
   }
 });

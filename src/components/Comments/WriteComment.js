@@ -90,8 +90,8 @@ const WriteComment = ({
             value={isAnonimity}
             onValueChange={toggleSwitch}
             labelLeft={withAnonymityLabel ? 'Incognito' : null}
-            backgroundActive={COLORS.lightgrey}
-            backgroundInactive={COLORS.lightgrey}
+            backgroundActive={COLORS.gray100}
+            backgroundInactive={COLORS.gray100}
             isDisabled={isViewOnly}
           />
         </View>
@@ -160,7 +160,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     flex: 1,
     width: '100%',
     position: 'absolute',
@@ -200,12 +200,12 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     lineHeight: 12,
     fontSize: 12,
-    color: COLORS.white2,
+    color: COLORS.white,
     marginRight: dimen.normalizeDimen(6)
   },
   container: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     width: '100%',
     paddingRight: dimen.normalizeDimen(16),
     paddingLeft: dimen.normalizeDimen(16),
@@ -215,7 +215,7 @@ export const styles = StyleSheet.create({
   content: (isViewOnly) => ({
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray100,
     marginLeft: 8,
     borderRadius: 8,
     paddingLeft: 6,
@@ -225,7 +225,7 @@ export const styles = StyleSheet.create({
     height: isViewOnly ? 36 : undefined
   }),
   btn: (isDisableSubmit) => ({
-    backgroundColor: !isDisableSubmit ? COLORS.bondi_blue : COLORS.concrete,
+    backgroundColor: !isDisableSubmit ? COLORS.bondi_blue : COLORS.gray100,
     borderRadius: 18,
     width: 35,
     height: 35,
@@ -248,7 +248,7 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: fonts.inter[400],
     color: COLORS.black,
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray100,
     maxHeight: 100,
     paddingTop: Platform.OS === 'ios' ? 10 : 5,
     paddingBottom: Platform.OS === 'ios' ? 10 : 5
