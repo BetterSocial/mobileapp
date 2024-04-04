@@ -208,7 +208,7 @@ const NavHeader = (props) => {
           style={{
             width: '100%',
             borderBottomWidth: 1,
-            borderBottomColor: COLORS.gray
+            borderBottomColor: COLORS.gray200
           }}>
           <Search
             searchText={searchText}
