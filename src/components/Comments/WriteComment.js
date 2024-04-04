@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 
 import AnonUserInfoRepo from '../../service/repo/anonUserInfoRepo';
+import IconCloseBold from '../../assets/icon/IconCloseBold';
 import SendIcon from '../SendIcon';
 import StringConstant from '../../utils/string/StringConstant';
 import ToggleSwitch from '../ToggleSwitch';
@@ -18,6 +19,7 @@ import {CHAT_ANON, CHAT_SIGNED} from '../../utils/constants';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {fonts, normalize} from '../../utils/fonts';
+import dimen from '../../utils/dimen';
 
 const WriteComment = ({
   value = null,
@@ -72,12 +74,17 @@ const WriteComment = ({
 
   return (
     <View style={isViewOnly ? styles.isViewOnlyColumnContainer : styles.columnContainer}>
-      <View style={styles.connectorTop(inReplyCommentView, showProfileConnector)} />
-      <View style={{flexDirection: 'row', paddingRight: 20, paddingLeft: 7}}>
-        <Text style={styles.replyToContainer}>
+      {/* <View style={styles.connectorTop(inReplyCommentView, showProfileConnector)} /> */}
+      <View style={styles.rowTop}>
+        <View style={styles.replyToContainer}>
           <Text style={styles.replyToTitle}>Reply to </Text>
-          {username}
-        </Text>
+          <Text style={styles.replyToUsername}>{username}</Text>
+          {value?.trim() !== '' && (
+            <TouchableOpacity onPress={() => onChangeText('')}>
+              <IconCloseBold />
+            </TouchableOpacity>
+          )}
+        </View>
         <View style={styles.anonimityContainer}>
           <ToggleSwitch
             value={isAnonimity}
@@ -85,13 +92,12 @@ const WriteComment = ({
             labelLeft={withAnonymityLabel ? 'Incognito' : null}
             backgroundActive={COLORS.lightgrey}
             backgroundInactive={COLORS.lightgrey}
-            styleLabelLeft={styles.switch}
             isDisabled={isViewOnly}
           />
         </View>
       </View>
       <View style={styles.container}>
-        <View style={styles.connectorBottom(inReplyCommentView, showProfileConnector)} />
+        {/* <View style={styles.connectorBottom(inReplyCommentView, showProfileConnector)} /> */}
         {isAnonimity ? (
           <>
             {loadingUser ? (
@@ -117,13 +123,14 @@ const WriteComment = ({
           testID="changeinput"
           ref={commentInputRef}
           placeholder={StringConstant.commentBoxDefaultPlaceholder}
-          placeholderTextColor={COLORS.blackgrey}
+          placeholderTextColor={COLORS.gray300}
           style={[styles.text, styles.content(isViewOnly)]}
           onChangeText={onChangeText}
           value={value}
           multiline
           textAlignVertical="center"
           pointerEvents={isViewOnly ? 'none' : 'auto'}
+          keyboardAppearance="dark"
         />
         {!isViewOnly ? (
           <TouchableOpacity
@@ -152,15 +159,17 @@ export const styles = StyleSheet.create({
   columnContainer: {
     display: 'flex',
     flexDirection: 'column',
+    justifyContent: 'center',
     backgroundColor: COLORS.white,
     flex: 1,
     width: '100%',
     position: 'absolute',
     bottom: 0,
     borderTopWidth: 1,
-    borderTopColor: COLORS.balance_gray,
+    borderTopColor: COLORS.gray200,
     // zIndex: 1,
-    paddingBottom: 14
+    paddingTop: dimen.normalizeDimen(5),
+    paddingBottom: dimen.normalizeDimen(10)
   },
   isViewOnlyColumnContainer: {
     width: '100%',
@@ -170,27 +179,36 @@ export const styles = StyleSheet.create({
     borderTopColor: COLORS.gray1,
     position: 'absolute'
   },
+  rowTop: {
+    flexDirection: 'row',
+    paddingRight: dimen.normalizeDimen(16),
+    paddingLeft: dimen.normalizeDimen(7),
+    paddingBottom: dimen.normalizeDimen(8)
+  },
   replyToContainer: {
     marginLeft: 60,
-    fontFamily: fonts.inter[600],
-    marginBottom: 11,
-    marginTop: 7,
-    lineHeight: 15,
-    fontSize: 12,
-    color: COLORS.blackgrey
+    alignItems: 'center',
+    flexDirection: 'row'
   },
   replyToTitle: {
     fontFamily: fonts.inter[600],
-    lineHeight: 15,
+    lineHeight: 12,
     fontSize: 12,
-    color: COLORS.black
+    color: COLORS.gray400
+  },
+  replyToUsername: {
+    fontFamily: fonts.inter[600],
+    lineHeight: 12,
+    fontSize: 12,
+    color: COLORS.white2,
+    marginRight: dimen.normalizeDimen(6)
   },
   container: {
     flex: 1,
     backgroundColor: COLORS.white,
     width: '100%',
-    paddingRight: 20,
-    paddingLeft: 20,
+    paddingRight: dimen.normalizeDimen(16),
+    paddingLeft: dimen.normalizeDimen(16),
     flexDirection: 'row',
     zIndex: 100
   },
@@ -230,6 +248,7 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: fonts.inter[400],
     color: COLORS.black,
+    backgroundColor: COLORS.lightgrey,
     maxHeight: 100,
     paddingTop: Platform.OS === 'ios' ? 10 : 5,
     paddingBottom: Platform.OS === 'ios' ? 10 : 5
@@ -263,11 +282,6 @@ export const styles = StyleSheet.create({
   },
   emojyStyle: {
     fontSize: 18
-  },
-  switch: {
-    fontFamily: fonts.inter[400],
-    fontSize: 12,
-    color: COLORS.blackgrey
   },
   isViewOnlyIcon: {
     width: normalize(32),

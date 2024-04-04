@@ -66,7 +66,7 @@ let styles = StyleSheet.create({
     fontFamily: fonts.inter[500],
     fontSize: 16,
     lineHeight: 24,
-    color: COLORS.blue
+    color: COLORS.signed_primary
   }
 });
 

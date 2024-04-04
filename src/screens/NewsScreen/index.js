@@ -5,6 +5,7 @@ import {
   FlatList,
   InteractionManager,
   Platform,
+  RefreshControl,
   StatusBar,
   StyleSheet,
   View
@@ -238,10 +239,16 @@ const NewsScreen = () => {
           onScroll={handleScrollEvent}
           scrollEventThrottle={16}
           data={news}
-          refreshing={refreshing}
-          onRefresh={onRefresh}
+          refreshControl={
+            <RefreshControl
+              tintColor={COLORS.white2}
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }
           onEndReached={loadMoreData}
           contentContainerStyle={styles.flatlistContainer}
+          style={{backgroundColor: COLORS.almostBlack}}
           initialNumToRender={2}
           maxToRenderPerBatch={2}
           updateCellsBatchingPeriod={10}

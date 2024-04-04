@@ -5,7 +5,7 @@ import {useRoute} from '@react-navigation/native';
 
 import LinkContextItem from './elements/Item';
 import Loading from '../Loading';
-import PostArrowUp from '../../assets/images/post-arrow-up.png';
+import PostArrowUp from '../../assets/icon/IconPostArrowUp';
 import TopicPageLabel from '../../components/Label/TopicPageLabel';
 import TokenStorage, {ITokenEnum} from '../../utils/storage/custom/tokenStorage';
 import {COLORS} from '../../utils/theme';
@@ -140,7 +140,7 @@ const LinkContextScreen = () => {
       />
       {data.length > 1 && (
         <Animated.View style={styles.bottomAnchorContainer(animatedBottomAnchorContainerValue)}>
-          <Image source={PostArrowUp} style={styles.postArrowUpImage} />
+          <PostArrowUp fill={COLORS.signed_secondary} style={styles.postArrowUpImage} />
           <View style={styles.bottomAnchorTextContainer}>
             <Text style={styles.bottomAnchorSwipeText}>Swipe for related articles</Text>
           </View>
@@ -175,14 +175,14 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   bottomAnchorTextContainer: {
-    backgroundColor: COLORS.anon_primary,
+    backgroundColor: COLORS.signed_secondary,
     padding: 11,
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8
   },
   bottomAnchorSwipeText: {
     fontFamily: fonts.inter[500],
-    color: COLORS.white,
+    color: COLORS.white2,
     fontSize: 14
   }
 });

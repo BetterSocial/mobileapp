@@ -79,14 +79,14 @@ const Footer = ({
 
   const voteStyle = () => {
     if (totalVote > 0) {
-      return COLORS.anon_primary;
+      return COLORS.upvote;
     }
     if (totalVote < 0) {
-      return COLORS.redalert;
+      return COLORS.downvote;
     }
-    // TODO: Garry, gray berapa?
     return COLORS.gray400;
   };
+
   const username = item?.anon_user_info_emoji_name
     ? `${item.anon_user_info_color_name} ${item?.anon_user_info_emoji_name}`
     : item?.actor?.data?.username;
@@ -341,7 +341,6 @@ const styles = StyleSheet.create({
   },
   text: {
     ...FONTS.body3,
-    // TODO: Garry, gray berapa?
     color: COLORS.gray400
   },
   vote: (colorBasedCount) => ({

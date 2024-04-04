@@ -108,10 +108,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     zIndex: dimen.normalizeDimen(100),
     borderRadius: dimen.normalizeDimen(13)
-  },
-  labelToggle: {
-    fontSize: dimen.normalizeDimen(8),
-    fontWeight: '400'
   }
 });
 
@@ -431,8 +427,7 @@ const InputMessageV2 = ({
               !inputFocus ? (isAnonimityEnabled ? 'Incognito' : 'Incognito disabled') : undefined
             }
             styleLabelLeft={[
-              styles.labelToggle,
-              {color: type === 'ANONYMOUS' ? COLORS.gray : COLORS.blue}
+              {color: type === 'ANONYMOUS' ? COLORS.anon_primary : COLORS.signed_primary}
             ]}
             onValueChange={toggleChange}
             value={type === ANONYMOUS}
