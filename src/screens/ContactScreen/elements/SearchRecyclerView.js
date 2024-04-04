@@ -150,7 +150,13 @@ const SearchRecyclerView = ({text, onHandleSelected, followed, setLoading}) => {
         }}
         rowRenderer={rowRenderer}
         scrollViewProps={{
-          refreshControl: <RefreshControl refreshing={refreshing} onRefresh={() => {}} />
+          refreshControl: (
+            <RefreshControl
+              tintColor={COLORS.white2}
+              refreshing={refreshing}
+              onRefresh={() => {}}
+            />
+          )
         }}
       />
     );

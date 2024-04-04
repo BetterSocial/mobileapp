@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   credderRating: {
     fontSize: 16,
     fontFamily: fonts.inter[600],
-    color: COLORS.white,
+    color: COLORS.white2,
     alignSelf: 'center',
     textAlign: 'center',
     flex: 1

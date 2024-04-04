@@ -60,13 +60,13 @@ const styles = StyleSheet.create({
     fontSize: RFValue(10),
     lineHeight: RFValue(12),
     fontFamily: fonts.inter[400],
-    color: COLORS.blackgrey
+    color: COLORS.gray500
   },
   tooltipContent: {
     fontFamily: fonts.inter[400],
     fontSize: RFValue(14),
     lineHeight: RFValue(17),
-    color: COLORS.blackgrey
+    color: COLORS.white2
   },
   tooltipShadowContainer: {
     paddingHorizontal: 10,
@@ -81,7 +81,8 @@ const styles = StyleSheet.create({
     // shadowRadius: 10,
     elevation: 16,
     borderWidth: 1,
-    borderColor: 'rgba(0,0,0,0.1)'
+    borderColor: COLORS.gray200,
+    backgroundColor: COLORS.gray100
   }
 });
 

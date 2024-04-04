@@ -107,7 +107,7 @@ exports[`Testing Feed Screen Content Link Card Matches Snapshot 1`] = `
               numberOfLines={1}
               style={
                 Object {
-                  "color": "#1E1F20",
+                  "color": "#FFFFFF",
                   "flexShrink": 1,
                   "fontFamily": "Inter-SemiBold",
                   "fontSize": 14,
@@ -135,7 +135,7 @@ exports[`Testing Feed Screen Content Link Card Matches Snapshot 1`] = `
               numberOfLines={1}
               style={
                 Object {
-                  "color": "#828282",
+                  "color": "#8C939F",
                   "fontFamily": "Inter-Regular",
                   "fontSize": 12,
                 }
@@ -171,7 +171,7 @@ exports[`Testing Feed Screen Content Link Card Matches Snapshot 1`] = `
                 style={
                   Object {
                     "alignSelf": "center",
-                    "color": "#828282",
+                    "color": "#8C939F",
                     "fontFamily": "Inter-Regular",
                     "fontSize": 12,
                     "lineHeight": 14.52,
@@ -214,7 +214,7 @@ exports[`Testing Feed Screen Content Link Card Matches Snapshot 1`] = `
       <Text
         style={
           Object {
-            "color": "#1E1F20",
+            "color": "#FFFFFF",
             "fontFamily": "Inter-SemiBold",
             "fontSize": 12.600000000000001,
             "fontWeight": "600",
@@ -270,7 +270,7 @@ exports[`Testing Feed Screen Content Link Card Matches Snapshot 1`] = `
         onStartShouldSetResponder={[Function]}
         style={
           Object {
-            "color": "#828282",
+            "color": "#8C939F",
             "fontFamily": "Inter-Regular",
             "fontSize": 10.8,
             "lineHeight": 14.4,
@@ -387,7 +387,7 @@ exports[`Testing Feed Screen Content Link CardHeader Matches Snapshot 1`] = `
         numberOfLines={1}
         style={
           Object {
-            "color": "#1E1F20",
+            "color": "#FFFFFF",
             "flexShrink": 1,
             "fontFamily": "Inter-SemiBold",
             "fontSize": 14,
@@ -415,7 +415,7 @@ exports[`Testing Feed Screen Content Link CardHeader Matches Snapshot 1`] = `
         numberOfLines={1}
         style={
           Object {
-            "color": "#828282",
+            "color": "#8C939F",
             "fontFamily": "Inter-Regular",
             "fontSize": 12,
           }
@@ -451,7 +451,7 @@ exports[`Testing Feed Screen Content Link CardHeader Matches Snapshot 1`] = `
           style={
             Object {
               "alignSelf": "center",
-              "color": "#828282",
+              "color": "#8C939F",
               "fontFamily": "Inter-Regular",
               "fontSize": 12,
               "lineHeight": 14.52,
@@ -485,7 +485,7 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
   <View
     style={
       Object {
-        "backgroundColor": "#FFFFFF",
+        "backgroundColor": "#16202A",
         "flex": 1,
         "marginHorizontal": 6,
       }
@@ -599,7 +599,7 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
                   numberOfLines={1}
                   style={
                     Object {
-                      "color": "#1E1F20",
+                      "color": "#FFFFFF",
                       "flexShrink": 1,
                       "fontFamily": "Inter-SemiBold",
                       "fontSize": 14,
@@ -627,7 +627,7 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
                   numberOfLines={1}
                   style={
                     Object {
-                      "color": "#828282",
+                      "color": "#8C939F",
                       "fontFamily": "Inter-Regular",
                       "fontSize": 12,
                     }
@@ -663,7 +663,7 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
                     style={
                       Object {
                         "alignSelf": "center",
-                        "color": "#828282",
+                        "color": "#8C939F",
                         "fontFamily": "Inter-Regular",
                         "fontSize": 12,
                         "lineHeight": 14.52,
@@ -706,7 +706,7 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
           <Text
             style={
               Object {
-                "color": "#1E1F20",
+                "color": "#FFFFFF",
                 "fontFamily": "Inter-SemiBold",
                 "fontSize": 12.600000000000001,
                 "fontWeight": "600",
@@ -762,7 +762,7 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
             onStartShouldSetResponder={[Function]}
             style={
               Object {
-                "color": "#828282",
+                "color": "#8C939F",
                 "fontFamily": "Inter-Regular",
                 "fontSize": 10.8,
                 "lineHeight": 14.4,

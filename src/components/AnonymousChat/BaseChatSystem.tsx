@@ -7,7 +7,7 @@ import {COLORS} from '../../utils/theme';
 
 const styles = StyleSheet.create({
   containerMessage: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.lightgrey, // TODO: Garry, belum dikerjain
     marginHorizontal: dimen.normalizeDimen(20),
     padding: dimen.normalizeDimen(8),
     borderRadius: dimen.normalizeDimen(8),

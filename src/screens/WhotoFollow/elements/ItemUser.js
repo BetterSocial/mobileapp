@@ -31,11 +31,7 @@ const ItemUser = ({photo, username, bio, followed, onPress, userid, karmaScore})
       <View style={styles.containerButton}>
         <Pressable onPress={onPress} style={styles.followAction(24, 24)}>
           <Animated.View style={{position: 'absolute', opacity: 1}}>
-            <IconAdd
-              width={dimen.normalizeDimen(24)}
-              height={dimen.normalizeDimen(24)}
-              fill="#000000"
-            />
+            <IconAdd width={dimen.normalizeDimen(24)} height={dimen.normalizeDimen(24)} />
           </Animated.View>
           <Animated.View style={{position: 'absolute', opacity: followIconFadeAnimation}}>
             <IconCheck

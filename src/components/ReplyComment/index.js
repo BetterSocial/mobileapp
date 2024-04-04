@@ -82,7 +82,7 @@ const ReplyCommentId = ({
   if (!item) return null;
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       <View style={styles.header}>
         <TouchableOpacity testID="backButton" onPress={navigationGoBack} style={styles.backArrow}>
           <ArrowLeftIcon width={20} height={20} fill="#000" />
@@ -95,7 +95,7 @@ const ReplyCommentId = ({
       <ScrollView ref={scrollViewRef} contentContainerStyle={styles.commentScrollView}>
         <View style={styles.containerComment}>
           <ReplyCommentItem
-            feedId={dataFeed.id}
+            feedId={dataFeed?.id}
             indexFeed={indexFeed}
             user={item.user}
             comment={item}

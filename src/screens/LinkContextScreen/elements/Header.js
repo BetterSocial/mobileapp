@@ -96,7 +96,7 @@ const Header = ({item, image, name, time, showBackButton, follow, setFollow}) =>
         <Pressable onPress={onHeaderClicked} style={styles.leftRowContainer}>
           {showBackButton && (
             <TouchableOpacity onPress={onNavigationBack} style={styles.backbutton}>
-              <MemoIc_arrow_back width={18} height={18} />
+              <MemoIc_arrow_back width={18} height={18} fill={COLORS.white2} />
             </TouchableOpacity>
           )}
           <View style={styles.wrapperImage(showBackButton)}>
@@ -116,7 +116,7 @@ const Header = ({item, image, name, time, showBackButton, follow, setFollow}) =>
                 {calculateTime(time)}
               </Text>
               <View style={styles.point} />
-              <MemoPeopleFollow height={13} width={12} />
+              <MemoPeopleFollow height={13} width={12} fill={COLORS.gray400} />
               <Gap style={{width: 3.33}} />
               <Text style={styles.headerFollowerText}>12k</Text>
               <View style={styles.point} />
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     alignItems: 'center',
     borderBottomWidth: 0.5,
-    borderBottomColor: COLORS.balance_gray,
+    borderBottomColor: COLORS.gray200,
     paddingBottom: 8,
     paddingTop: 8,
     backgroundColor: COLORS.white
@@ -201,11 +201,11 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(12),
     lineHeight: normalizeFontSize(18),
-    color: COLORS.blackgrey,
+    color: COLORS.gray400,
     flexShrink: 1
   },
   headerFollowerText: {
-    color: COLORS.blackgrey,
+    color: COLORS.gray400,
     fontSize: 12,
     fontFamily: fonts.inter[700]
   },
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
     width: 3,
     height: 3,
     borderRadius: 4,
-    backgroundColor: COLORS.blackgrey,
+    backgroundColor: COLORS.gray400,
     marginLeft: 8,
     marginRight: 8
   },
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
   wrapperText: {
     backgroundColor: COLORS.white,
     borderRadius: 8,
-    borderColor: COLORS.anon_primary,
+    borderColor: COLORS.signed_primary,
     width: 28,
     height: 28,
     justifyContent: 'center',
@@ -236,9 +236,9 @@ const styles = StyleSheet.create({
     borderWidth: 0.5
   },
   wrapperTextUnFollow: {
-    backgroundColor: COLORS.anon_primary,
+    backgroundColor: COLORS.signed_primary,
     borderRadius: 8,
-    borderColor: COLORS.anon_primary,
+    borderColor: COLORS.signed_primary,
     width: 28,
     height: 28,
     justifyContent: 'center',

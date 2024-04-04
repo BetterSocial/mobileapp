@@ -3,25 +3,28 @@
 /* eslint-disable import/no-unresolved */
 
 import * as React from 'react';
-import {FlatList, View} from 'react-native';
+import {AppState, FlatList, View} from 'react-native';
 
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
 import InputMessageV2 from '../../components/Chat/InputMessageV2';
-import Loading from '../Loading';
-import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
-import useMoveChatTypeHook from '../../hooks/core/chat/useMoveChatTypeHook';
-import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {Context} from '../../context';
-import {SIGNED} from '../../hooks/core/constant';
-import {getOtherProfile} from '../../service/profile';
 import {setChannel} from '../../context/actions/setChannel';
+import ChannelList from '../../database/schema/ChannelListSchema';
+import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
+import useMoveChatTypeHook from '../../hooks/core/chat/useMoveChatTypeHook';
+import {SIGNED} from '../../hooks/core/constant';
+import useProfileHook from '../../hooks/core/profile/useProfileHook';
+import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
+import {getOtherProfile} from '../../service/profile';
+import Loading from '../Loading';
 import {styles} from './AnonymousChatScreen';
+import StorageUtils from '../../utils/storage';
 
 const SignedChatScreen = () => {
   const {selectedChannel, chats, goBackFromChatScreen, goToChatInfoScreen, sendChat} =
     useChatScreenHook(SIGNED);
-
+  const {fetchChannelDetail} = useChatUtilsHook('SIGNED');
   const flatlistRef = React.useRef<FlatList>();
   const [loading, setLoading] = React.useState(false);
   const [isAnonimityEnabled, setIsAnonimityEnabled] = React.useState(true);
@@ -84,8 +87,31 @@ const SignedChatScreen = () => {
     if (selectedChannel) {
       setChannel(selectedChannel, dispatchChannel);
       fetchOtherProfile();
+      fetchChannelDetail(selectedChannel as ChannelList);
+      const serializeData = JSON.stringify({
+        id: selectedChannel.id,
+        channelType: selectedChannel.channelType,
+        name: selectedChannel.name
+      });
+      StorageUtils.openedChannel.set(serializeData);
     }
   }, [selectedChannel]);
+
+  const appState = React.useRef(AppState.currentState);
+  React.useEffect(() => {
+    const subscription = AppState.addEventListener('change', (nextAppState) => {
+      if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+        const channelData = StorageUtils.openedChannel.get();
+        const parsedData = JSON.parse(channelData || '');
+        fetchChannelDetail(parsedData as ChannelList);
+      }
+      appState.current = nextAppState;
+    });
+
+    return () => {
+      subscription?.remove();
+    };
+  }, []);
 
   return (
     <View style={styles.keyboardAvoidingView}>

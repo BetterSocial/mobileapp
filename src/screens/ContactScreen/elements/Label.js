@@ -6,7 +6,7 @@ const Label = ({
   label,
   containerBgColor = COLORS.concrete,
   titleHeaderColor = COLORS.whiteSmoke,
-  textColor = COLORS.emperor
+  textColor = COLORS.white2
 }) => (
   <View style={styles.headerList(containerBgColor)}>
     <Text style={styles.titleHeader(titleHeaderColor)}>

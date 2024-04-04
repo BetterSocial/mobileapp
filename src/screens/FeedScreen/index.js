@@ -271,7 +271,7 @@ const FeedScreen = (props) => {
 
   return (
     <View>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       <Search
         getSearchLayout={saveSearchHeightHandle}
         animatedValue={offset}

@@ -40,6 +40,7 @@ const useGroupInfo = (channelId = null) => {
   const blockModalRef = React.useRef(null);
 
   const [isLoadingMembers, setIsLoadingMembers] = React.useState(false);
+  const [isLoadingAddMember, setIsLoadingAddMember] = React.useState(false);
   const [uploadedImage, setUploadedImage] = React.useState('');
   const [isUploadingImage, setIsUploadingImage] = React.useState(false);
   const [isLoadingInitChat, setIsLoadingInitChat] = React.useState(false);
@@ -262,12 +263,12 @@ const useGroupInfo = (channelId = null) => {
   };
 
   const onAddMember = async (selectedUsers) => {
-    const responseChannelData = await addMemberGroup({
-      channelId,
-      memberIds: selectedUsers.map((user) => user.user_id)
-    });
-
     try {
+      setIsLoadingAddMember(true);
+      const responseChannelData = await addMemberGroup({
+        channelId,
+        memberIds: selectedUsers.map((user) => user.user_id)
+      });
       const {channelName} = getChannelListInfo(
         responseChannelData.data,
         signedProfileId,
@@ -296,19 +297,21 @@ const useGroupInfo = (channelId = null) => {
         );
         await userMember.saveOrUpdateIfExists(localDb);
       });
+
+      refresh('channelList');
+      refreshWithId('chat', channelId);
+      refresh('channelInfo');
+
+      setTimeout(() => {
+        setIsLoadingAddMember(false);
+        navigation.navigate('SignedChatScreen');
+      }, 500);
     } catch (e) {
+      setIsLoadingAddMember(false);
       console.log('error on memberSchema');
       console.log(JSON.stringify(e));
       console.log(e);
     }
-
-    refresh('channelList');
-    refreshWithId('chat', channelId);
-    refresh('channelInfo');
-
-    setTimeout(() => {
-      navigation.navigate('SignedChatScreen');
-    }, 500);
   };
 
   const openChatMessage = async () => {
@@ -570,7 +573,8 @@ const useGroupInfo = (channelId = null) => {
     setIsAnonymousModalOpen,
     blockModalRef,
     isFetchingAllowAnonDM,
-    isLoadingInitChat
+    isLoadingInitChat,
+    isLoadingAddMember
   };
 };
 

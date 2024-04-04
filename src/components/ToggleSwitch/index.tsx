@@ -11,7 +11,7 @@ import {
   TouchableOpacityProps
 } from 'react-native';
 import dimen from '../../utils/dimen';
-import {normalizeFontSize} from '../../utils/fonts';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 
 const styles = StyleSheet.create({
@@ -63,12 +63,12 @@ const styles = StyleSheet.create({
   mainStyes: {
     position: 'relative',
     borderRadius: dimen.normalizeDimen(12),
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.almostBlack,
     height: dimen.normalizeDimen(20),
     width: dimen.normalizeDimen(42),
     ...Platform.select({
       ios: {
-        shadowColor: 'rgba(0,0,0,0.25)',
+        shadowColor: COLORS.gray200,
         shadowOffset: {width: 0, height: 0},
         shadowOpacity: dimen.normalizeDimen(1),
         shadowRadius: dimen.normalizeDimen(1)
@@ -80,15 +80,15 @@ const styles = StyleSheet.create({
   },
   labelLeft: {
     marginRight: dimen.normalizeDimen(5),
-    color: COLORS.white,
-    fontSize: normalizeFontSize(12),
-    fontWeight: '400'
+    color: COLORS.gray400,
+    fontSize: normalizeFontSize(8),
+    fontFamily: fonts.inter[400]
   },
   labelRight: {
     marginLeft: dimen.normalizeDimen(5),
-    color: COLORS.white,
-    fontSize: normalizeFontSize(12),
-    fontWeight: '400'
+    color: COLORS.gray400,
+    fontSize: normalizeFontSize(8),
+    fontFamily: fonts.inter[400]
   }
 });
 
@@ -118,8 +118,8 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   labelRight,
   circleActiveColor = COLORS.anon_primary,
   circleInActiveColor = COLORS.signed_primary,
-  backgroundActive = COLORS.lightgrey,
-  backgroundInactive = COLORS.lightgrey,
+  backgroundActive = COLORS.almostBlack,
+  backgroundInactive = COLORS.almostBlack,
   styleLabelLeft,
   styleLabelRight,
   activeTextColor = COLORS.anon_primary,

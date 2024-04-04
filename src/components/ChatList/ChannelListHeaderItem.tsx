@@ -21,7 +21,6 @@ const ChannelListHeaderItem = (props: ChannelListTabItemProps) => {
     container: {
       flexDirection: 'row',
       height: dimen.normalizeDimen(48),
-      marginBottom: dimen.normalizeDimen(2),
       paddingLeft: dimen.normalizeDimen(30),
       paddingRight: dimen.normalizeDimen(30),
       justifyContent: 'center',

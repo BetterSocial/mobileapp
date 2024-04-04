@@ -231,16 +231,24 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
     });
   };
 
-  const helperGetChannelDetail = async (channel: ChannelList) => {
+  const helperGetChannelDetail = async (channel: ChannelList, lastChatDate?: string) => {
     if (!localDb) return;
 
     try {
       let response;
       if (channel?.channelType === 'ANON_PM') {
-        response = await AnonymousMessageRepo.getAnonymousChannelDetail('messaging', channel?.id);
+        response = await AnonymousMessageRepo.getAnonymousChannelDetail(
+          'messaging',
+          channel?.id,
+          lastChatDate
+        );
       } else {
         const channelType = channel?.channelType === 'GROUP' ? 'group' : 'messaging';
-        response = await SignedMessageRepo.getSignedChannelDetail(channelType, channel?.id);
+        response = await SignedMessageRepo.getSignedChannelDetail(
+          channelType,
+          channel?.id,
+          lastChatDate
+        );
       }
       helperSaveChannelDetail(channel, response);
     } catch (e) {

@@ -4,6 +4,7 @@ import config from 'react-native-config';
 import ShareUtils from '../../../utils/share/index';
 import {COLORS} from '../../../utils/theme';
 import {ShareIcon} from '../../../assets';
+import {fonts} from '../../../utils/fonts';
 
 interface LinkProps {
   username: string;
@@ -42,7 +43,8 @@ const LinkAndSocialMedia: React.FC<LinkProps> = ({username}) => {
     <View
       style={{
         borderWidth: 1,
-        borderColor: COLORS.gray,
+        borderColor: COLORS.gray200,
+        backgroundColor: COLORS.gray100,
         borderRadius: 10,
         marginTop: 19,
         padding: 12
@@ -51,7 +53,7 @@ const LinkAndSocialMedia: React.FC<LinkProps> = ({username}) => {
       <Text
         style={{
           color: COLORS.gray500,
-          fontWeight: '400',
+          fontFamily: fonts.inter[400],
           fontSize: 12,
           paddingVertical: 8,
           lineHeight: 18
@@ -89,7 +91,8 @@ const LinkAndSocialMedia: React.FC<LinkProps> = ({username}) => {
             <Text
               style={{
                 fontSize: 12,
-                color: COLORS.white,
+                fontFamily: fonts.inter[400],
+                color: COLORS.white2,
                 marginLeft: 8
               }}>
               Share
@@ -103,8 +106,9 @@ const LinkAndSocialMedia: React.FC<LinkProps> = ({username}) => {
 
 const styles = StyleSheet.create({
   linkAndSocialMediaTitle: {
-    fontWeight: '500',
-    fontSize: 14
+    fontFamily: fonts.inter[500],
+    fontSize: 14,
+    color: COLORS.white2
   },
   buttonContainer: {
     paddingVertical: 9,
@@ -116,7 +120,7 @@ const styles = StyleSheet.create({
   },
   copyLinkContainer: {
     borderWidth: 1,
-    borderColor: COLORS.gray,
+    borderColor: COLORS.gray200,
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
@@ -124,7 +128,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     width: '67%'
   },
-  copyLinkUrl: {padding: 10, flex: 1, fontWeight: '600', color: COLORS.balance_gray, fontSize: 12}
+  copyLinkUrl: {
+    padding: 10,
+    flex: 1,
+    fontFamily: fonts.inter[600],
+    color: COLORS.gray500,
+    fontSize: 12
+  }
 });
 
 export default LinkAndSocialMedia;

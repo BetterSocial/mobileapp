@@ -26,7 +26,7 @@ import {locationValidation} from '../../utils/Utils';
 import {post} from '../../api/server';
 import {setLocalCommunity} from '../../context/actions/localCommunity';
 import dimen from '../../utils/dimen';
-import {normalizeFontSize} from '../../utils/fonts';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 
 const {width} = Dimensions.get('screen');
@@ -114,13 +114,13 @@ const LocalCommunity = () => {
       <TouchableNativeFeedback onPress={onPressTouchable}>
         <View style={styles.containerLocation}>
           <View style={styles.containerRow}>
-            <PinIcon width={14} height={20} fill="#000000" />
+            <PinIcon width={14} height={20} fill={COLORS.white2} />
             <Text style={styles.textLocation}>{locationValidation(item)}</Text>
           </View>
           <TouchableNativeFeedback
             onPress={() => handleDelete(item.location_id)}
             background={TouchableNativeFeedback.Ripple(COLORS.lightgrey, true, 20)}>
-            <TrashIcon width={18} height={20} fill="#000000" />
+            <TrashIcon width={18} height={20} fill={COLORS.white2} />
           </TouchableNativeFeedback>
         </View>
       </TouchableNativeFeedback>
@@ -199,7 +199,7 @@ const LocalCommunity = () => {
               <PlusIcon
                 width={dimen.normalizeDimen(18)}
                 height={dimen.normalizeDimen(18)}
-                fill="#000000"
+                fill={COLORS.white2}
               />
               <View style={styles.columnButton}>
                 <Text style={styles.textAddLocation}>
@@ -272,10 +272,7 @@ const LocalCommunity = () => {
             We value privacy and do not ask for location tracking access
           </Text>
         </View>
-        <Button
-          disabled={location.length < 1}
-          styles={location.length >= 1 ? null : styles.button}
-          onPress={() => next()}>
+        <Button disabled={location.length < 1} onPress={() => next()}>
           NEXT
         </Button>
       </View>
@@ -293,12 +290,10 @@ const styles = StyleSheet.create({
     paddingBottom: dimen.normalizeDimen(5)
   },
   textFindYourLocalCommunity: {
-    fontFamily: 'Inter-Bold',
-    fontStyle: 'normal',
-    fontWeight: '600',
+    fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(36),
     lineHeight: normalizeFontSize(43.57),
-    color: COLORS.bunting,
+    color: COLORS.white2,
     marginHorizontal: dimen.normalizeDimen(20)
   },
   footer: {
@@ -309,15 +304,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingBottom: dimen.normalizeDimen(20),
     paddingHorizontal: dimen.normalizeDimen(20),
-    shadowColor: COLORS.black,
-    shadowOffset: {
-      width: 0,
-      height: 5
-    },
-    shadowOpacity: 0.36,
-    shadowRadius: 6.68,
-
-    elevation: 11,
     position: 'absolute',
     bottom: 0
   },
@@ -327,13 +313,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: dimen.normalizeDimen(20)
   },
   textDesc: {
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: '400',
+    fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(24),
-    color: COLORS.blackgrey,
-    opacity: 0.84,
+    color: COLORS.gray500,
     marginTop: dimen.normalizeDimen(8),
     marginBottom: dimen.normalizeDimen(24),
     paddingHorizontal: dimen.normalizeDimen(20)
@@ -349,9 +332,7 @@ const styles = StyleSheet.create({
     marginLeft: dimen.normalizeDimen(14)
   },
   textAddLocation: {
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: 'bold',
+    fontFamily: fonts.inter[700],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(24),
     letterSpacing: normalizeFontSize(-0.28),
@@ -359,14 +340,12 @@ const styles = StyleSheet.create({
     color: COLORS.black
   },
   textSearchYourFavorite: {
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: 'normal',
+    fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(12),
     lineHeight: normalizeFontSize(24),
     letterSpacing: normalizeFontSize(-0.28),
     marginBottom: dimen.normalizeDimen(10),
-    color: COLORS.silver
+    color: COLORS.gray500
   },
   containerLocation: {
     flexDirection: 'row',
@@ -379,9 +358,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   textLocation: {
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: 'bold',
+    fontFamily: fonts.inter[700],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(24),
     letterSpacing: normalizeFontSize(-0.28),
@@ -396,15 +373,9 @@ const styles = StyleSheet.create({
   },
   textSmall: {
     fontSize: normalizeFontSize(10),
-    fontWeight: '400',
-    fontStyle: 'normal',
-    fontFamily: 'Inter',
+    fontFamily: fonts.inter[400],
     textAlign: 'center',
-    color: COLORS.blackgrey
-  },
-  button: {
-    backgroundColor: COLORS.blackgrey,
-    borderRadius: dimen.normalizeDimen(8)
+    color: COLORS.gray500
   }
 });
 export default LocalCommunity;

@@ -79,13 +79,14 @@ const Footer = ({
 
   const voteStyle = () => {
     if (totalVote > 0) {
-      return COLORS.anon_primary;
+      return COLORS.upvote;
     }
     if (totalVote < 0) {
-      return COLORS.redalert;
+      return COLORS.downvote;
     }
-    return COLORS.balance_gray;
+    return COLORS.gray400;
   };
+
   const username = item?.anon_user_info_emoji_name
     ? `${item.anon_user_info_color_name} ${item?.anon_user_info_emoji_name}`
     : item?.actor?.data?.username;
@@ -199,7 +200,7 @@ const Footer = ({
           )}
           {disableComment ? (
             <View testID="disableComment" style={styles.btn}>
-              <View style={styles.btnComment}>
+              <View style={styles.btnComment(0)}>
                 <MemoIc_comment
                   color={item?.isBlurredPost ? COLORS.gray : undefined}
                   height={24}
@@ -314,7 +315,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.gray
+    borderBottomColor: COLORS.gray200
   },
   buttonShareContainer: {
     flexDirection: 'row',
@@ -340,7 +341,7 @@ const styles = StyleSheet.create({
   },
   text: {
     ...FONTS.body3,
-    color: COLORS.balance_gray
+    color: COLORS.gray400
   },
   vote: (colorBasedCount) => ({
     ...FONTS.body3,

@@ -112,7 +112,7 @@ describe('Share utils test should pass', () => {
   it('should call share community', async () => {
     ShareUtils.shareCommunity('topicname');
     expect(mockedShare).toHaveBeenCalledWith({
-      message: 'https://www.google.com/community/topicname'
+      message: 'https://www.google.com/c/topicname'
     });
   });
 

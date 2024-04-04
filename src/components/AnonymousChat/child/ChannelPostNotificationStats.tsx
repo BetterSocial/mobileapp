@@ -1,12 +1,14 @@
 import * as React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 
-import Imageblock from '../../../assets/images/block.png';
 import MemoIc_arrow_down_vote_on from '../../../assets/arrow/Ic_downvote_on';
 import MemoIc_arrow_upvote_on from '../../../assets/arrow/Ic_upvote_on';
+import MemoIc_block_active from '../../../assets/block/Ic_block_active';
 import MemoIc_block_inactive from '../../../assets/block/Ic_block_inactive';
 import MemoIc_comment from '../../../assets/icons/Ic_comment';
 import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
+import {fonts, normalizeFontSize} from '../../../utils/fonts';
+import {COLORS} from '../../../utils/theme';
 
 const ChannelPostNotificationStats = ({
   type = BaseChannelItemTypeProps.ANON_PM,
@@ -35,7 +37,10 @@ const ChannelPostNotificationStats = ({
     },
     iconMargin: {},
     textVoteMargin: {
-      marginStart: 5
+      marginStart: 5,
+      fontFamily: fonts.inter[400],
+      fontSize: normalizeFontSize(14),
+      color: COLORS.gray500
     }
   });
 
@@ -46,22 +51,22 @@ const ChannelPostNotificationStats = ({
   return (
     <View style={styles.descriptionContainer}>
       <View style={styles.iconContainer}>
-        <MemoIc_arrow_upvote_on style={styles.iconMargin} width={15} height={15} />
+        <MemoIc_arrow_upvote_on style={styles.iconMargin} width={16} height={16} />
         <Text style={styles.textVoteMargin}>{upvote}</Text>
       </View>
       <View style={styles.iconContainer}>
-        <MemoIc_arrow_down_vote_on style={styles.iconMargin} width={15} height={15} />
+        <MemoIc_arrow_down_vote_on style={styles.iconMargin} width={16} height={16} />
         <Text style={styles.textVoteMargin}>{downvote}</Text>
       </View>
       <View style={styles.iconContainer}>
-        <MemoIc_comment style={styles.iconMargin} width={15} height={15} />
+        <MemoIc_comment style={styles.iconMargin} width={16} height={16} />
         <Text style={styles.textVoteMargin}>{comments}</Text>
       </View>
       <View style={styles.iconContainer}>
         {Number(block) > 0 ? (
-          <Image source={Imageblock} style={styles.iconMargin} width={15} height={15} />
+          <MemoIc_block_active style={styles.iconMargin} width={16} height={16} />
         ) : (
-          <MemoIc_block_inactive style={styles.iconMargin} width={15} height={15} />
+          <MemoIc_block_inactive style={styles.iconMargin} width={16} height={16} />
         )}
         <Text style={styles.textVoteMargin}>{String(block)}</Text>
       </View>

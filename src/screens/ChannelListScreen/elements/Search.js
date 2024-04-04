@@ -8,8 +8,9 @@ import MemoIc_search from '../../../assets/icons/Ic_search';
 import StringConstant from '../../../utils/string/StringConstant';
 import {COLORS, SIZES} from '../../../utils/theme';
 import {DISCOVERY_TAB_USERS} from '../../../utils/constants';
-import {fonts} from '../../../utils/fonts';
+import {fonts, normalizeFontSize} from '../../../utils/fonts';
 import {useDynamicColors} from '../../../hooks/useToggleColors';
+import dimen from '../../../utils/dimen';
 
 const Search = ({onPress, animatedValue, isAnon, isShowNewChat = true}) => {
   const navigation = useNavigation();
@@ -26,14 +27,9 @@ const Search = ({onPress, animatedValue, isAnon, isShowNewChat = true}) => {
       <Pressable onPress={__handleOnSearchClicked} style={styles.searchPressableContainer}>
         <View style={styles.wrapperSearch}>
           <View style={styles.wrapperIcon}>
-            <MemoIc_search width={16.67} height={16.67} />
+            <MemoIc_search width={17} height={17} fill={COLORS.gray300} />
           </View>
-          <Text
-            // placeholder={StringConstant.chatTabHeaderPlaceholder}
-            // placeholderTextColor={COLORS.lightgrey}
-            style={styles.input}>
-            {StringConstant.chatTabHeaderPlaceholder}
-          </Text>
+          <Text style={styles.input}>{StringConstant.chatTabHeaderPlaceholder}</Text>
         </View>
       </Pressable>
       {isShowNewChat && (
@@ -43,8 +39,8 @@ const Search = ({onPress, animatedValue, isAnon, isShowNewChat = true}) => {
           </Text>
           <View>
             <MemoIcNewChat
-              height={17}
-              width={15}
+              height={18}
+              width={16}
               style={styles.newChatIcon}
               color={dynamicColors.primary}
             />
@@ -62,17 +58,17 @@ const styles = StyleSheet.create({
     marginBottom: SIZES.base
   },
   searchPressableContainer: {
-    flex: 1
+    flex: 1,
+    justifyContent: 'center'
   },
   wrapperSearch: {
-    flex: 1,
     flexDirection: 'row',
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray100,
     marginLeft: 20,
     marginRight: 12,
-    borderRadius: 8,
+    borderRadius: 12,
     alignSelf: 'center',
-    height: 36
+    height: 28
   },
   wrapperButton: {
     flexDirection: 'row',
@@ -86,14 +82,14 @@ const styles = StyleSheet.create({
   },
   input: {
     paddingStart: 10,
-    lineHeight: 36,
+    lineHeight: 28,
     flex: 1,
     paddingBottom: 0,
     paddingTop: 0,
     fontFamily: fonts.inter[400],
     fontSize: 14,
     alignSelf: 'center',
-    color: COLORS.blackgrey
+    color: COLORS.gray400
   },
   wrapperIcon: {
     marginLeft: 8,
@@ -102,10 +98,9 @@ const styles = StyleSheet.create({
   },
   newPostText: (dynamicColors) => ({
     color: dynamicColors.primary,
-    marginRight: 11,
-    fontFamily: 'Inter-SemiBold',
-    fontSize: 12,
-    lineHeight: 14.52
+    marginRight: dimen.normalizeDimen(4),
+    fontFamily: fonts.inter[600],
+    fontSize: normalizeFontSize(14)
   }),
   newChatIcon: {
     marginTop: 0
@@ -120,10 +115,9 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     zIndex: 10,
+    height: '100%',
     paddingTop: 7,
-    paddingBottom: 7,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.lightgrey
+    paddingBottom: 7
   })
 });
 

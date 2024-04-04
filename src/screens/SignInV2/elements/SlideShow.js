@@ -62,7 +62,7 @@ const SlideShow = ({handleLogin, onContainerPress = () => {}}) => {
           {'hashtags. To protect your privacy, '}
           {'\n'}
 
-          {'communities can be joined incognito as well!.'}
+          {'communities can be joined incognito as well!'}
         </Text>
       )
     },
