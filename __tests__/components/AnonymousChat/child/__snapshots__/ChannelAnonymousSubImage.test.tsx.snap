@@ -6,7 +6,7 @@ exports[`TESTING ChannelAnonymousImage RENDER should match snapshot 1`] = `
     Object {
       "alignItems": "center",
       "backgroundColor": "#FF0000",
-      "borderColor": "#FFFFFF",
+      "borderColor": "#16202A",
       "borderRadius": 9.600000000000001,
       "borderWidth": 2,
       "display": "flex",
