@@ -245,7 +245,7 @@ const RenderListFeed = (props) => {
 const styles = StyleSheet.create({
   cardContainer: {
     width: FULL_WIDTH,
-    backgroundColor: COLORS.grey110,
+    backgroundColor: COLORS.gray110,
     height: dimen.size.FEED_CURRENT_ITEM_HEIGHT,
     paddingTop: normalize(4)
   },

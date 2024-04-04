@@ -19,7 +19,7 @@ const Search = ({animatedValue, onContainerClicked = () => {}, getSearchLayout})
       <Pressable onPress={onContainerClicked} style={styles.searchContainer}>
         <View style={styles.wrapperSearch}>
           <View style={styles.wrapperIcon}>
-            <MemoIc_search width={16.67} height={16.67} fill={COLORS.grey410} />
+            <MemoIc_search width={16.67} height={16.67} fill={COLORS.gray410} />
           </View>
           <Text style={styles.inputText}>{StringConstant.discoverySearchBarPlaceholder}</Text>
         </View>
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   },
   wrapperSearch: {
     flex: 1,
-    backgroundColor: COLORS.grey110,
+    backgroundColor: COLORS.gray110,
     marginLeft: 20,
     marginRight: 20,
     borderRadius: 8,

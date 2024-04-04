@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
-    color: COLORS.grey410
+    color: COLORS.gray410
   },
   moreText: {
     color: COLORS.bondi_blue

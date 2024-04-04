@@ -239,7 +239,7 @@ const _renderAnonimity = ({
                   refSheet.current.open();
                 }}>
                 <View style={{zIndex: 1000}}>
-                  <ElipsisIcon width={16} height={16} color={COLORS.grey410} />
+                  <ElipsisIcon width={16} height={16} color={COLORS.gray410} />
                 </View>
               </GlobalButton>
             )}
@@ -382,7 +382,7 @@ const _renderProfileNormal = ({
               }}>
               {hideThreeDot ? null : (
                 <View style={{zIndex: 1000}}>
-                  <ElipsisIcon width={16} height={16} color={COLORS.grey410} />
+                  <ElipsisIcon width={16} height={16} color={COLORS.gray410} />
                 </View>
               )}
             </GlobalButton>
@@ -527,7 +527,7 @@ const styles = StyleSheet.create({
   feedDate: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.grey410,
+    color: COLORS.gray410,
     lineHeight: 18
   },
   feedDateLocation: {
@@ -541,7 +541,7 @@ const styles = StyleSheet.create({
     width: 2,
     height: 2,
     borderRadius: 4,
-    backgroundColor: COLORS.grey410,
+    backgroundColor: COLORS.gray410,
     marginLeft: 8,
     marginRight: 8,
     alignSelf: 'center',

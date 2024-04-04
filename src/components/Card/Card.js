@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
   container: (height) => ({
     borderWidth: 1,
     borderRadius: 9,
-    borderColor: COLORS.grey210,
+    borderColor: COLORS.gray210,
     overflow: 'hidden',
     paddingBottom: 8,
     marginBottom: 5,

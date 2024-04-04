@@ -130,7 +130,7 @@ export const styles = StyleSheet.create({
   time: {
     fontFamily: fonts.inter[400],
     fontSize: 10,
-    color: COLORS.grey410,
+    color: COLORS.gray410,
     lineHeight: 12
   },
   containerUsername: {
@@ -158,7 +158,7 @@ export const styles = StyleSheet.create({
     width: 2,
     height: 2,
     borderRadius: 4,
-    backgroundColor: COLORS.grey410,
+    backgroundColor: COLORS.gray410,
     marginHorizontal: 6,
     alignSelf: 'center',
     marginTop: 0

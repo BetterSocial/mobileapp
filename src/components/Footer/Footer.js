@@ -150,7 +150,7 @@ const Footer = ({
             Toast.show('This user does not allow messages in Incognito Mode.', Toast.SHORT);
           },
       style: (!userAllowDm || loading.loadingGetAllowAnonDmStatus || loading.loadingDmAnon) && {
-        color: COLORS.gray300
+        color: COLORS.gray310
       }
     }
   ];
@@ -181,7 +181,7 @@ const Footer = ({
           }}>
           <View
             style={{
-              borderTopColor: COLORS.grey300,
+              borderTopColor: COLORS.gray300,
               borderTopWidth: 1,
               opacity: 0.3
             }}
@@ -202,7 +202,7 @@ const Footer = ({
             }}>
             <View
               style={{
-                borderTopColor: COLORS.grey300,
+                borderTopColor: COLORS.gray300,
                 borderTopWidth: 1,
                 opacity: 0.3
               }}
@@ -226,7 +226,7 @@ const Footer = ({
         {disableComment ? (
           <View testID="disableComment">
             <View style={styles.btnComment(totalComment || 0)}>
-              <IconCommentArrow color={COLORS.grey410} />
+              <IconCommentArrow color={COLORS.gray410} />
             </View>
             <Text style={styles.text}>{totalComment}</Text>
           </View>
@@ -237,7 +237,7 @@ const Footer = ({
             onPress={onPressComment}
             style={{flexDirection: 'row', alignItems: 'center'}}>
             <View style={styles.btnComment(totalComment || 0)}>
-              <IconCommentArrow color={COLORS.grey410} />
+              <IconCommentArrow color={COLORS.gray410} />
             </View>
             <Text style={styles.text}>{totalComment}</Text>
           </TouchableOpacity>
@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
   },
   text: {
     ...FONTS.body3,
-    color: COLORS.grey410
+    color: COLORS.gray410
   },
   vote: (colorBasedCount) => ({
     ...FONTS.body3,

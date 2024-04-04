@@ -71,7 +71,7 @@ function AddCommentPreview({
                 flex: 1,
                 display: 'flex',
                 flexDirection: 'column',
-                backgroundColor: COLORS.grey110,
+                backgroundColor: COLORS.gray110,
                 borderRadius: 8,
                 marginHorizontal: 8,
                 paddingHorizontal: 8,
@@ -79,7 +79,7 @@ function AddCommentPreview({
                 fontSize: dimen.normalizeDimen(14),
                 fontFamily: fonts.inter[400],
                 lineHeight: 20,
-                color: COLORS.grey410
+                color: COLORS.gray410
               }}
             />
             <View style={{width: normalize(32), height: normalize(32)}}>

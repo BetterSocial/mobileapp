@@ -124,7 +124,7 @@ function HomeBottomTabs() {
       <Tab.Navigator
         initialRouteName={getInitialRouteName()}
         tabBarOptions={{
-          inactiveTintColor: COLORS.grey410,
+          inactiveTintColor: COLORS.gray410,
           safeAreaInsets: {top: 0, bottom: 0, left: 0, right: 0},
           activeBackgroundColor: COLORS.almostBlack,
           inactiveBackgroundColor: COLORS.almostBlack

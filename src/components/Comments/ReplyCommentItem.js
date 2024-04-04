@@ -243,7 +243,7 @@ const ReplyCommentItem = ({
             Toast.show('This user does not allow messages in Incognito Mode.', Toast.SHORT);
           },
       style: (!userAllowDm || loading.loadingGetAllowAnonDmStatus || loading.loadingDmAnon) && {
-        color: COLORS.gray300
+        color: COLORS.gray310
       }
     }
   ];
