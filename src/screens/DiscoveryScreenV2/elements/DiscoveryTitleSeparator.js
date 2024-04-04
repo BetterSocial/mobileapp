@@ -20,12 +20,12 @@ const DiscoveryTitleSeparator = (prop) => {
         fontSize: 12,
         lineHeight: 18,
         fontFamily: fonts.poppins[600],
-        color: COLORS.black,
+        color: COLORS.white2,
         paddingLeft: 20,
         paddingRight: 20,
         paddingTop: 11,
         paddingBottom: 11,
-        backgroundColor: COLORS.lightgrey
+        backgroundColor: COLORS.gray100
         // marginTop: 15,
       }}>
       {text}
