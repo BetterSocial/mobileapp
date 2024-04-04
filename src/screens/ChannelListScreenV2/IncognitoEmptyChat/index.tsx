@@ -35,7 +35,9 @@ const IncognitoButton = ({title, subtitle, onPress}) => {
 const IncognitoEmptyChat = () => {
   const {channels: anonChannels, goToContactScreen} = useAnonymousChannelListScreenHook();
   const navigation = useNavigation();
-  const [totalChannel, setTotalChannel] = React.useState(anonChannels.length);
+  const totalChannel = StorageUtils.totalAnonChannels.get()
+    ? parseInt(StorageUtils.totalAnonChannels.get() || '0', 10)
+    : anonChannels.length;
 
   const getMode = () => {
     let result = MODE_FULL;
@@ -51,13 +53,6 @@ const IncognitoEmptyChat = () => {
 
     return result;
   };
-
-  React.useEffect(() => {
-    const storedTotalChannel = StorageUtils.totalAnonChannels.get();
-    if (storedTotalChannel !== null && storedTotalChannel !== undefined) {
-      setTotalChannel(parseInt(storedTotalChannel, 10));
-    }
-  }, []);
 
   if (getMode() === MODE_HIDE) return null;
 
