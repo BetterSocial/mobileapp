@@ -11,8 +11,8 @@
 		<string>applinks:linkdev.bettersocial.org/posts</string>
 		<string>applinks:linkdev.bettersocial.org/postprivate</string>
 		<string>applinks:linkdev.bettersocial.org/postexpired</string>
-		<string>applinks:helio.social</string>
-		<string>applinks:app.bettersocial.org</string>
+		<string>applinks:dev.helio.social</string>
+		<string>applinks:devapp.bettersocial.org</string>
 	</array>
 </dict>
 </plist>

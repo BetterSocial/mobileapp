@@ -3,23 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>999239767957-vic8cg1t945sojqk9ql7vdpinaljcm63.apps.googleusercontent.com</string>
+	<string>70467963537-3ksj3ll9t9l5tunrh6anbblbakk1ivkq.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.999239767957-vic8cg1t945sojqk9ql7vdpinaljcm63</string>
+	<string>com.googleusercontent.apps.70467963537-3ksj3ll9t9l5tunrh6anbblbakk1ivkq</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>999239767957-4eui8rh65kplabh6u37n72mprlidevem.apps.googleusercontent.com</string>
+	<string>70467963537-1bb38obin95nebi295pvivg3afu3gi25.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAiPNgmrrM11JD67mxiiZYYe3-07Si-nkA</string>
+	<string>AIzaSyCw6H5Tyud_IgN5XMwaKMDF6mT2T-sy6zU</string>
 	<key>GCM_SENDER_ID</key>
-	<string>999239767957</string>
+	<string>70467963537</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>org.reactjs.native.example.BetterSocial</string>
 	<key>PROJECT_ID</key>
-	<string>bettersocial-2b386</string>
+	<string>bettersocial-dev</string>
 	<key>STORAGE_BUCKET</key>
-	<string>bettersocial-2b386.appspot.com</string>
+	<string>bettersocial-dev.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:999239767957:ios:9762afe3630fc7d0c4489c</string>
+	<string>1:70467963537:ios:75b199d2e21a1e84c64d30</string>
 </dict>
 </plist>

@@ -35,6 +35,7 @@ const FirebaseConfig = (props) => {
     if (dynamicLink?.url?.includes('postPrivateId=')) return handlePrivatePost(dynamicLink);
     if (dynamicLink?.url?.includes('communityName')) return handleCommunityPage(dynamicLink);
     if (dynamicLink?.url?.includes('users?username=')) return getUserProfile(dynamicLink?.url);
+    if (dynamicLink?.url?.includes('?username=')) return getUserProfileV3(dynamicLink?.url);
     if (dynamicLink?.url?.includes('profile/')) return getUserProfileV2(dynamicLink?.url);
     return handlePost(dynamicLink);
   };
@@ -74,6 +75,25 @@ const FirebaseConfig = (props) => {
         user_id: userId
       };
       handleMovePage(USER, data);
+    }
+  };
+
+  const getUserProfileV3 = async (url) => {
+    if (url && typeof url === 'string') {
+      const userId = await getUserId();
+      const parts = url.split('?username=');
+      const username = parts?.[1];
+
+      try {
+        const replacedUsername = username?.replace('+', '');
+        const data = {
+          username: replacedUsername,
+          user_id: userId
+        };
+        handleMovePage(USER, data);
+      } catch (e) {
+        console.error(e);
+      }
     }
   };
 
