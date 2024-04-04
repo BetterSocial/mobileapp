@@ -90,7 +90,6 @@ const ContactScreen = ({navigation}) => {
 
       const cancelToken = cancelTokenRef?.current?.token;
       const data = await DiscoveryRepo.fetchDiscoveryDataUser(text, isAnon, {cancelToken});
-      console.warn('data', JSON.stringify(data));
       if (data.success) {
         const followedUsers =
           data?.followedUsers?.map((item) => ({

@@ -26,6 +26,7 @@ import AnonymousIcon from '../ChannelListScreen/elements/components/AnonymousIco
 import BlockComponent from '../../components/BlockComponent';
 import ChannelImage from '../../components/ChatList/elements/ChannelImage';
 import ModalAction from '../GroupInfo/elements/ModalAction';
+import ModalChangeName from '../GroupInfo/elements/ModalChangeName';
 import ModalActionAnonymous from '../GroupInfo/elements/ModalActionAnonymous';
 import UserSchema from '../../database/schema/UserSchema';
 import dimen from '../../utils/dimen';
@@ -216,10 +217,14 @@ const ChatInfoScreen = () => {
   const {
     onLeaveGroup,
     onReportGroup,
-    handleOnNameChange,
+    handleOpenNameChange,
+    handleSaveNameChange,
     handleOnImageClicked,
     isUploadingImage,
-    uploadedImage
+    uploadedImage,
+    closeOnNameChange,
+    isOpenModalChangeName,
+    isUpdatingName
   } = useGroupInfo(channelInfo?.id);
   const {signedProfileId} = useUserAuthHook();
   const {params}: any = useRoute();
@@ -295,14 +300,15 @@ const ChatInfoScreen = () => {
       <>
         <AnonymousChatInfoHeader isCenter onPress={goBack} title={channelInfo?.name} />
         <View style={styles.lineTop} />
-        <TouchableOpacity testID="imageClick" onPress={handleOnImageClicked}>
-          <View style={styles.containerPhoto}>
-            {isUploadingImage ? (
-              <ActivityIndicator color={COLORS.white} />
-            ) : (
-              showImageProfile(uploadedImage)
-            )}
-          </View>
+        <TouchableOpacity
+          testID="imageClick"
+          onPress={handleOnImageClicked}
+          style={styles.containerPhoto}>
+          {isUploadingImage ? (
+            <ActivityIndicator color={COLORS.white} />
+          ) : (
+            showImageProfile(uploadedImage)
+          )}
         </TouchableOpacity>
         <View style={styles.row}>
           <View style={styles.column}>
@@ -315,8 +321,12 @@ const ChatInfoScreen = () => {
               Created {moment(channelInfo?.createdAt).format('MM/DD/YYYY')}
             </Text>
           </View>
-          <TouchableOpacity onPress={handleOnNameChange} style={styles.pencilIconTouchable}>
-            <IconPencil width={20} height={20} color={COLORS.gray400} />
+          <TouchableOpacity onPress={handleOpenNameChange} style={styles.pencilIconTouchable}>
+            {isUpdatingName ? (
+              <ActivityIndicator />
+            ) : (
+              <IconPencil width={20} height={20} color={COLORS.gray400} />
+            )}
           </TouchableOpacity>
         </View>
         <View style={styles.lineTop} />
@@ -401,6 +411,12 @@ const ChatInfoScreen = () => {
           }}
         />
       )}
+      <ModalChangeName
+        onCloseModal={closeOnNameChange}
+        isOpen={isOpenModalChangeName}
+        name={channelInfo?.rawJson?.channel?.is_name_custom ? channelInfo?.name : ''}
+        onSave={handleSaveNameChange}
+      />
       <ModalAction
         onCloseModal={handleCloseSelectUser}
         selectedUser={selectedUser}

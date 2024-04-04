@@ -43,6 +43,7 @@ const useGroupInfo = (channelId = null) => {
   const [isLoadingMembers, setIsLoadingMembers] = React.useState(false);
   const [uploadedImage, setUploadedImage] = React.useState('');
   const [isUploadingImage, setIsUploadingImage] = React.useState(false);
+  const [isUpdatingName, setIsUpdatingName] = React.useState(false);
   const [isLoadingInitChat, setIsLoadingInitChat] = React.useState(false);
   const [username, setUsername] = React.useState(channelState.channel?.data?.name);
   const [selectedUser, setSelectedUser] = React.useState(null);
@@ -50,6 +51,7 @@ const useGroupInfo = (channelId = null) => {
   const [openModal, setOpenModal] = React.useState(false);
   const [isAnonymousModalOpen, setIsAnonymousModalOpen] = React.useState(false);
   const [isFetchingAllowAnonDM, setIsFetchingAllowAnonDM] = React.useState(false);
+  const [isOpenModalChangeName, setIsOpenModalChangeName] = React.useState(false);
 
   const {createSignChat, handleAnonymousMessage} = useCreateChat();
   const {selectedChannel, setSelectedChannel} = useChatUtilsHook();
@@ -97,12 +99,49 @@ const useGroupInfo = (channelId = null) => {
     return getChatName(username, profile.myProfile.username);
   };
   const chatName = getChatName(username, profile.myProfile.username);
-  const handleOnNameChange = () => {
-    navigation.push('GroupSetting', {
-      username: chatName,
-      focusChatName: true,
-      refresh: getMembersList
-    });
+  const handleOpenNameChange = () => {
+    setIsOpenModalChangeName(true);
+  };
+  const handleSaveNameChange = async (name) => {
+    setIsOpenModalChangeName(false);
+
+    try {
+      setIsUpdatingName(true);
+      const responseChannelData = await SignedMessageRepo.changeSignedChannelDetail(
+        channelId,
+        name,
+        null
+      );
+
+      const {channelName} = getChannelListInfo(
+        responseChannelData?.channel,
+        signedProfileId,
+        anonProfileId
+      );
+      const channelList = await ChannelListSchema.getSchemaById(localDb, channelId);
+      channelList.name = channelName;
+      channelList.rawJson = responseChannelData;
+      await channelList.save(localDb);
+
+      setSelectedChannel(channelList);
+      setIsUpdatingName(false);
+
+      refresh('channelList');
+      refreshWithId('chat', channelId);
+      refresh('channelInfo');
+
+      setTimeout(() => {
+        navigation.navigate('SignedChatScreen');
+      }, 500);
+    } catch (e) {
+      setIsUpdatingName(false);
+      if (__DEV__) {
+        console.log(e);
+      }
+    }
+  };
+  const closeOnNameChange = () => {
+    setIsOpenModalChangeName(false);
   };
   // eslint-disable-next-line consistent-return
   const checkUserIsBlockHandle = async () => {
@@ -141,20 +180,18 @@ const useGroupInfo = (channelId = null) => {
 
       const result = await ImageUtils.uploadImage(pathImg);
       setUploadedImage(result.data.url);
-      console.warn('result.data.url', result.data.url);
 
       setIsUploadingImage(false);
 
       const responseChannelData = await SignedMessageRepo.changeSignedChannelDetail(
         channelId,
-        username,
+        null,
         result.data.url
       );
       const channelList = await ChannelListSchema.getSchemaById(localDb, channelId);
       channelList.channelPicture = result.data.url;
       channelList.rawJson = responseChannelData;
       await channelList.save(localDb);
-      console.warn('channelList', JSON.stringify(channelList));
       setSelectedChannel(channelList);
 
       refresh('channelList');
@@ -453,7 +490,6 @@ const useGroupInfo = (channelId = null) => {
    * @param {('view' | 'remove' | 'message' | 'block' | 'message-anonymously')} status
    */
   const handleOpenPopup = async (status) => {
-    console.warn('selectedUser', JSON.stringify(selectedUser));
     if (status === 'view') {
       setOpenModal(false);
       handleOpenProfile(selectedUser).catch((e) => console.log(e));
@@ -482,7 +518,6 @@ const useGroupInfo = (channelId = null) => {
   const actionLeaveGroup = async () => {
     setOpenModal(false);
     const responseChannelData = await leaveGroup({channelId});
-    console.warn('responseChannelData', responseChannelData);
     try {
       const {channelName} = getChannelListInfo(
         responseChannelData.data,
@@ -562,11 +597,14 @@ const useGroupInfo = (channelId = null) => {
     setUploadedImage,
     isUploadingImage,
     setIsUploadingImage,
+    isUpdatingName,
     username,
     createChat,
     countUser,
     getMembersList,
-    handleOnNameChange,
+    handleOpenNameChange,
+    handleSaveNameChange,
+    closeOnNameChange,
     handleOnImageClicked,
     uploadImage,
     chatName,
@@ -596,7 +634,8 @@ const useGroupInfo = (channelId = null) => {
     setIsAnonymousModalOpen,
     blockModalRef,
     isFetchingAllowAnonDM,
-    isLoadingInitChat
+    isLoadingInitChat,
+    isOpenModalChangeName
   };
 };
 
