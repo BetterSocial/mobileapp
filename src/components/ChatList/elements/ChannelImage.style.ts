@@ -36,7 +36,7 @@ export const channelImageStyles = StyleSheet.create({
     height: dimen.normalizeDimen(50)
   },
   containerGrey: {
-    backgroundColor: COLORS.lightgrey
+    backgroundColor: COLORS.gray100
   },
   containerGreen: {
     backgroundColor: COLORS.bondi_blue
@@ -56,7 +56,7 @@ export const channelImageStyles = StyleSheet.create({
     height: dimen.normalizeDimen(24),
     borderRadius: dimen.normalizeDimen(12),
     borderWidth: 2,
-    borderColor: COLORS.white,
+    borderColor: COLORS.almostBlack,
     justifyContent: 'center',
     alignItems: 'center'
   },

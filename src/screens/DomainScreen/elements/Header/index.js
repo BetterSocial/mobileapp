@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   }),
   headerDomain: {
     flexDirection: 'column',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     paddingHorizontal: 20,
     borderTopColor: COLORS.transparent,
     // shadowColor: COLORS.black,
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
   },
   followButtonText: {
     fontSize: normalizeFontSize(14),
-    color: COLORS.white,
+    color: COLORS.almostBlack,
     paddingHorizontal: 25
   },
   domainName: {
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     lineHeight: normalizeFontSize(17),
     fontSize: normalizeFontSize(14),
-    color: COLORS.white2
+    color: COLORS.white
   },
   shadowBox: {
     paddingBottom: 8
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 10,
     height: 10,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     top: 23,
     zIndex: 10000000,
     left: 10,

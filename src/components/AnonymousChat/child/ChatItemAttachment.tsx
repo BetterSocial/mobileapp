@@ -60,7 +60,7 @@ const ChatItemAttachment = ({attachments = []}: any) => {
                   </View>
                 </View>
                 <View style={ChatItemAttachmentStyles.attachmentFileIcon}>
-                  <IconFile fill={COLORS.white2} />
+                  <IconFile fill={COLORS.white} />
                 </View>
               </View>
             </TouchableOpacity>

@@ -37,7 +37,7 @@ const BottomSheetBio = React.forwardRef((props, ref) => {
             textStyling={styles.textStyling}
             onPress={props.handleSave}>
             {props.isLoadingUpdateBio ? (
-              <ActivityIndicator size="small" color={COLORS.white2} />
+              <ActivityIndicator size="small" color={COLORS.white} />
             ) : (
               'Save'
             )}
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   textStyling: {
     fontFamily: fonts.inter[600],
     fontSize: 18,
-    color: COLORS.white2
+    color: COLORS.white
   }
 });
 export default React.memo(BottomSheetBio);

@@ -25,7 +25,7 @@ const ChannelListHeaderItem = (props: ChannelListTabItemProps) => {
       paddingRight: dimen.normalizeDimen(30),
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: COLORS.white,
+      backgroundColor: COLORS.almostBlack,
       borderBottomWidth: 2,
       borderBottomColor: type === SIGNED ? COLORS.signed_primary : COLORS.anon_primary
     },

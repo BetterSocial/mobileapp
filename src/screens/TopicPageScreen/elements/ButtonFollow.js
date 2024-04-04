@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[500],
     fontWeight: 'bold',
     fontSize: normalizeFontSize(12),
-    color: COLORS.white2,
+    color: COLORS.white,
     lineHeight: 24
   }
 });

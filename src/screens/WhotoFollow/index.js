@@ -223,7 +223,7 @@ const WhotoFollow = () => {
   const renderSectionFooter = (section) => {
     return section.isLoadingMore ? (
       <View style={{marginBottom: dimen.normalizeDimen(24.5)}}>
-        <ActivityIndicator color={COLORS.white2} />
+        <ActivityIndicator color={COLORS.white} />
       </View>
     ) : (
       <>
@@ -284,7 +284,7 @@ const WhotoFollow = () => {
           {'Find interesting people to follow.\nYou can edit this anytime.'}
         </Text>
       </View>
-      {isLoading ? <ActivityIndicator size="small" color={COLORS.white2} /> : null}
+      {isLoading ? <ActivityIndicator size="small" color={COLORS.white} /> : null}
       <SectionList
         sections={users.map((i) => ({
           ...i,
@@ -312,7 +312,7 @@ const WhotoFollow = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   recyclerview: (bottom) => ({
     marginBottom: dimen.normalizeDimen(112) - bottom
@@ -330,7 +330,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(36),
     lineHeight: normalizeFontSize(43.57),
-    color: COLORS.white2,
+    color: COLORS.white,
     marginHorizontal: dimen.normalizeDimen(20)
   },
   textDescription: {
@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
     width,
     paddingHorizontal: dimen.normalizeDimen(20),
     paddingBottom: dimen.normalizeDimen(20),
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     flexDirection: 'column',
     justifyContent: 'space-between',
     zIndex: 1000

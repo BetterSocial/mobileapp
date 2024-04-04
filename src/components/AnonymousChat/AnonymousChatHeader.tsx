@@ -43,7 +43,7 @@ const AnonymousChatHeader = ({
     },
     text: {
       fontFamily: fonts.inter[600],
-      color: COLORS.white,
+      color: COLORS.almostBlack,
       fontSize: 14,
       lineHeight: 17,
       marginLeft: 10,
@@ -78,7 +78,7 @@ const AnonymousChatHeader = ({
         </Text>
       </CustomPressable>
       <CustomPressable testID="pressable-option" style={styles.threeDot} onPress={onThreeDotPress}>
-        <IconEP name="dots-three-vertical" size={20} color={COLORS.white} />
+        <IconEP name="dots-three-vertical" size={20} color={COLORS.almostBlack} />
       </CustomPressable>
       <FastImage />
     </View>

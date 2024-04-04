@@ -142,13 +142,13 @@ const slideShowStyles = StyleSheet.create({
     fontFamily: fonts.inter[700],
     fontSize: fontScale < 1 ? RFValue(16, 812) : RFValue(14, 812),
     lineHeight: fontScale < 1 ? RFValue(22) : RFValue(20),
-    color: COLORS.blackgrey
+    color: COLORS.gray400
   },
   textFontNormal: {
     fontFamily: fonts.inter[400],
     fontSize: fontScale < 1 ? RFValue(16, 812) : RFValue(14, 812),
     lineHeight: fontScale < 1 ? RFValue(22) : RFValue(20),
-    color: COLORS.blackgrey,
+    color: COLORS.gray400,
     flex: 1,
     alignSelf: 'flex-start',
     marginRight: 32,

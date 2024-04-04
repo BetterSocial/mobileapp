@@ -71,13 +71,13 @@ let styles = StyleSheet.create({
   textTotal: {
     fontSize: 14,
     fontFamily: fonts.inter[600],
-    color: COLORS.white2,
+    color: COLORS.white,
     paddingRight: 4
   },
   textFollow: {
     fontSize: 14,
     fontFamily: fonts.inter[400],
-    color: COLORS.white2
+    color: COLORS.white
   },
   wrapFollower: {
     flexDirection: 'row',

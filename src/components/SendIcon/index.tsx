@@ -23,7 +23,7 @@ const SendIcon: React.FC<SendIconProps> = ({type, isDisabled}) => {
 
   const iconColorStyle = React.useCallback(() => {
     if (isDisabled) return COLORS.gray300;
-    return COLORS.white2;
+    return COLORS.white;
   }, [isDisabled]);
 
   return (

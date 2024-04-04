@@ -57,7 +57,7 @@ const ProfileHeader = ({
       <View style={styles.wrapHeaderButton}>
         <View style={hideSetting ? styles.btnShareWithoutSetting : styles.btnShare}>
           <TouchableOpacity onPress={onShareClicked}>
-            <ShareIcon width={handleIconSize()} height={handleIconSize()} color={COLORS.white2} />
+            <ShareIcon width={handleIconSize()} height={handleIconSize()} color={COLORS.white} />
           </TouchableOpacity>
         </View>
 

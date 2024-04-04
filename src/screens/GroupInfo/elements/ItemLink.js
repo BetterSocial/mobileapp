@@ -29,7 +29,7 @@ export default ItemLink;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray100,
     borderRadius: 8,
     marginBottom: 8,
     paddingHorizontal: 4,
@@ -40,13 +40,13 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: 14,
     lineHeight: 16.94,
-    color: COLORS.white
+    color: COLORS.almostBlack
   },
   domain: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
     lineHeight: 18,
-    color: COLORS.blackgrey
+    color: COLORS.gray400
   },
   link: {
     fontFamily: fonts.inter[400],
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 4
   },
   detail: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray100,
     borderRadius: 4,
     flexDirection: 'row',
     justifyContent: 'space-between'

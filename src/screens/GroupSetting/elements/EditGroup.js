@@ -48,7 +48,7 @@ const EditGroup = ({
     }
     return (
       <View testID="imagePencil">
-        <MemoIc_pencil width={25} height={25} color={COLORS.lightgrey} />
+        <MemoIc_pencil width={25} height={25} color={COLORS.gray100} />
       </View>
     );
   };
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     borderRadius: normalize(48 / 2)
   },
   editName: {
-    color: COLORS.white,
+    color: COLORS.almostBlack,
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(24),
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     marginBottom: 5
   },
   textDesc: {
-    color: COLORS.white,
+    color: COLORS.almostBlack,
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(12),
     lineHeight: normalizeFontSize(18)
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.anon_primary,
     borderTopWidth: 1,
-    borderTopColor: COLORS.lightgrey,
+    borderTopColor: COLORS.gray100,
     paddingVertical: 10,
     paddingHorizontal: 15
   },
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     width: normalize(48),
     height: normalize(48),
     borderRadius: normalize(24),
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray100,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 17

@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
   textMore: {
     fontSize: 24,
     fontFamily: fonts.inter[400],
-    color: COLORS.white
+    color: COLORS.almostBlack
   },
   singleImage: {
     flex: 1,
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     marginVertical: 4,
     borderRadius: 8
   },
-  flexlist: {backgroundColor: COLORS.white, borderRadius: 8},
+  flexlist: {backgroundColor: COLORS.almostBlack, borderRadius: 8},
   containerManyEmage: {
     flexDirection: 'row',
     flexWrap: 'wrap'
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20
   },
   containerChat: (isMe) => ({
-    backgroundColor: isMe ? COLORS.halfBaked : COLORS.lightgrey,
+    backgroundColor: isMe ? COLORS.halfBaked : COLORS.gray100,
     paddingVertical: 8,
     paddingHorizontal: 4,
     flex: 1,

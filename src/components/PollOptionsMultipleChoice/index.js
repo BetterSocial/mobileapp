@@ -51,7 +51,7 @@ const PollOptionsMultipleChoice = ({
             styles.barStyle,
             {
               width: `${handleStyleBar(optionPercentage)}%`,
-              backgroundColor: isMax ? COLORS.bondi_blue : COLORS.lightgrey
+              backgroundColor: isMax ? COLORS.bondi_blue : COLORS.gray100
             }
           ]}
         />
@@ -65,7 +65,7 @@ const PollOptionsMultipleChoice = ({
             styles.barStyle,
             {
               width: `${handleStyleBar(optionPercentage)}%`,
-              backgroundColor: isMyPoll() ? COLORS.bondi_blue : COLORS.lightgrey
+              backgroundColor: isMyPoll() ? COLORS.bondi_blue : COLORS.gray100
             }
           ]}
         />
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     marginBottom: 8
   },
   pollOptionItemContainer: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray100,
     marginBottom: 8,
     borderRadius: 8,
     height: (height * 7) / 100,
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(12),
     lineHeight: 16,
-    color: COLORS.blackgrey
+    color: COLORS.gray400
   },
   pollRadioButton: {
     width: 12,

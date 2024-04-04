@@ -46,7 +46,7 @@ const UserItem = ({type, username, profilePicture, isFollowing, onPress}: UserIt
                 anonEmojiCode=""
               />
             ) : (
-              <IconIncognito color={COLORS.white} />
+              <IconIncognito color={COLORS.almostBlack} />
             )}
           </View>
           <Text
@@ -62,7 +62,7 @@ const UserItem = ({type, username, profilePicture, isFollowing, onPress}: UserIt
           style={{
             fontFamily: fonts.inter[400],
             fontSize: 12,
-            color: COLORS.blackgrey,
+            color: COLORS.gray400,
             marginTop: 4,
             lineHeight: 18
           }}>

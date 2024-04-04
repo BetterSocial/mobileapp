@@ -439,7 +439,7 @@ const styles = StyleSheet.create({
   username: {
     fontFamily: fonts.inter[700],
     fontSize: normalizeFontSize(12),
-    color: COLORS.blackgrey,
+    color: COLORS.gray400,
     lineHeight: 14,
     marginLeft: 16
   },
@@ -487,7 +487,7 @@ const styles = StyleSheet.create({
   time: {
     fontFamily: fonts.inter[400],
     fontSize: 10,
-    color: COLORS.blackgrey,
+    color: COLORS.gray400,
     lineHeight: 12
   },
   containerUsername: {

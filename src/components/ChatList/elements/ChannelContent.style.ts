@@ -10,7 +10,7 @@ export const channelContentStyles = StyleSheet.create({
     lineHeight: 22,
     flex: 1,
     paddingBottom: 2,
-    color: COLORS.white2
+    color: COLORS.white
   },
   description: {
     fontFamily: fonts.inter[400],
@@ -41,6 +41,6 @@ export const channelContentStyles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: normalize(10),
     lineHeight: 14.52,
-    color: COLORS.white
+    color: COLORS.almostBlack
   }
 });

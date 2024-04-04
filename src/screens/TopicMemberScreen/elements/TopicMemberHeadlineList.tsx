@@ -18,7 +18,7 @@ const TopicMemberHeadline = ({text}: Props) => {
         color: COLORS.black,
         paddingVertical: normalize(8),
         paddingHorizontal: normalize(22),
-        backgroundColor: COLORS.white
+        backgroundColor: COLORS.almostBlack
       }}>
       {text}
     </Text>

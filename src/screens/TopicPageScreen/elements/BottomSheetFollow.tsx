@@ -165,7 +165,7 @@ const BottomSheetFollow = forwardRef((props: BottomSheetFollowProps, ref: Ref<RB
               }}
               disabled={followType === ''}
               styles={{
-                backgroundColor: COLORS.white,
+                backgroundColor: COLORS.almostBlack,
                 paddingVertical: dimen.normalizeDimen(11),
                 paddingHorizontal: dimen.normalizeDimen(20),
                 borderRadius: dimen.normalizeDimen(8),
@@ -180,7 +180,7 @@ const BottomSheetFollow = forwardRef((props: BottomSheetFollowProps, ref: Ref<RB
                 fontFamily: fonts.inter[500],
                 fontWeight: 'normal',
                 fontSize: 12,
-                color: isFollow ? COLORS.redalert : COLORS.white
+                color: isFollow ? COLORS.redalert : COLORS.almostBlack
               }}>
               Leave Community
             </Button>
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
   description: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.blackgrey,
+    color: COLORS.gray400,
     marginTop: 7
   },
   errorText: {
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
   textStyling: {
     fontFamily: fonts.inter[600],
     fontSize: 18,
-    color: COLORS.white
+    color: COLORS.almostBlack
   }
 });
 

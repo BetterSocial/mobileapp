@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     paddingHorizontal: dimen.normalizeDimen(6)
   },
   btnEmoji: {
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     backgroundColor: COLORS.gray100,
-    color: COLORS.white2,
+    color: COLORS.white,
     fontFamily: 'Inter',
     fontSize: normalizeFontSize(14),
     fontStyle: 'normal',

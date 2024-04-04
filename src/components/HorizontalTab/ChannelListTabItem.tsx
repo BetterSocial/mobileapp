@@ -50,7 +50,7 @@ const ChannelListTabItem = (props: ChannelListTabItemProps) => {
     unreadCount: {
       fontFamily: fonts.inter[500],
       fontSize: 10,
-      color: COLORS.white
+      color: COLORS.almostBlack
     }
   });
 
