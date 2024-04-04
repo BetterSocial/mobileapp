@@ -19,7 +19,7 @@ const Search = ({onPress, animatedValue, onChangeText, text, onClearText, isLoad
       <TextInput
         value={text}
         placeholder={'Search Users'}
-        placeholderTextColor={COLORS.gray300}
+        placeholderTextColor={COLORS.gray400}
         style={styles.input}
         onChangeText={(t) => {
           onChangeText(t);
@@ -31,7 +31,7 @@ const Search = ({onPress, animatedValue, onChangeText, text, onClearText, isLoad
         keyboardAppearance="dark"
       />
       <View style={styles.wrapperIcon}>
-        <MemoIc_search width={20} height={20} fill={COLORS.white2} />
+        <MemoIc_search width={20} height={20} fill={COLORS.gray300} />
       </View>
       <View style={styles.wrapperSecondaryIcon}>
         {isLoading && <ActivityIndicator style={styles.loader} color={COLORS.blackgrey} />}

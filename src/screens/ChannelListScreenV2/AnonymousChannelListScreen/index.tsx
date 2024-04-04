@@ -63,7 +63,7 @@ const AnonymousChannelListScreen = ({route}) => {
 
   return (
     <>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       <View style={{height: 52}}>
         <Search route={route} isAnon={true} onPress={() => goToContactScreen({from: ANONYMOUS})} />
       </View>

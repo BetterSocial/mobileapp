@@ -173,7 +173,7 @@ const DiscoverySearch = ({
               <MemoIcArrowBackWhite
                 width={20}
                 height={12}
-                fill={COLORS.black}
+                fill={COLORS.white2}
                 style={{alignSelf: 'center'}}
               />
             </View>
@@ -183,7 +183,7 @@ const DiscoverySearch = ({
       <View style={styles.searchContainer}>
         <View style={styles.wrapperSearch}>
           <View style={styles.wrapperIcon}>
-            <MemoIcSearch width={16.67} height={16.67} fill={COLORS.white2} />
+            <MemoIcSearch width={16.67} height={16.67} fill={COLORS.gray300} />
           </View>
           <TextInput
             ref={discoverySearchBarRef}
@@ -197,7 +197,7 @@ const DiscoverySearch = ({
             returnKeyType="search"
             onSubmitEditing={handleOnSubmitEditing}
             placeholder={placeholderText}
-            placeholderTextColor={COLORS.gray300}
+            placeholderTextColor={COLORS.gray400}
             style={styles.input}
             keyboardAppearance="dark"
           />

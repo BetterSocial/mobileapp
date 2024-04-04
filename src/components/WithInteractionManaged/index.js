@@ -37,7 +37,7 @@ export function withInteractionsManagedNoStatusBar(Component, Placeholder) {
         }
         style={{flex: 1}}
         ref={transitionRef}>
-        <StatusBar translucent={false} />
+        <StatusBar translucent={false} barStyle={'light-content'} />
         {interactionsComplete ? <Component {...props} /> : Placeholder && <Placeholder />}
       </Transitioning.View>
     );

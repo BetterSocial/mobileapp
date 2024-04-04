@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(12),
     fontFamily: fonts.inter[500],
     textAlign: 'left',
-    color: followType === 'incognito' ? COLORS.anon_secondary : COLORS.blue,
+    color: followType === 'incognito' ? COLORS.anon_primary : COLORS.blue,
     marginTop: normalize(1)
   })
 });

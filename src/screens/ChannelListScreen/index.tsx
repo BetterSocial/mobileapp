@@ -77,7 +77,7 @@ const ChannelListScreen = ({route}) => {
 
   return (
     <>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       <View style={{height: 52}}>
         <Search route={route} onPress={goToContactScreen} />
       </View>
