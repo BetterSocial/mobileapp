@@ -8,9 +8,9 @@ import {COLORS} from '../../../utils/theme';
 import {Divider} from '../../../components/Divider';
 import {PencilIcon} from '../../../assets';
 import {TextWithEmoji} from './TextWithEmoji';
+import {fonts, normalizeFontSize} from '../../../utils/fonts';
 import {addDotAndRemoveNewline} from '../../../utils/string/TrimString';
 import {profileSettingsDMpermission} from '../../../service/profile';
-import {fonts, normalizeFontSize} from '../../../utils/fonts';
 import dimen from '../../../utils/dimen';
 
 type BioAndDMSettingProps = {

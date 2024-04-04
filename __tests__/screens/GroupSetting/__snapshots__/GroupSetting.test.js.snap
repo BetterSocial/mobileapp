@@ -263,14 +263,14 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
               style={
                 Object {
                   "backgroundColor": "rgba(0, 0, 0, 0.22)",
-                  "borderRadius": 10,
-                  "padding": 50,
+                  "borderRadius": 8,
+                  "padding": 40,
                 }
               }
             >
               <ActivityIndicator
                 animating={true}
-                color="#00ABB2"
+                color="#0391FB"
                 hidesWhenStopped={true}
                 size="large"
               />
