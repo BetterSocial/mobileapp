@@ -44,7 +44,7 @@ const DiscoveryTab = ({onChangeScreen, selectedScreen = 0, tabs}) => {
               android_ripple={{color: COLORS.balance_gray}}
               style={[
                 styles.tabItem(route.name === 'Followings' ? 3 : 4),
-                index === selectedScreen ? styles.underlineFocus : {}
+                index === selectedScreen ? styles.underlineActive : styles.underlineInactive
               ]}
               onPress={() => {
                 handleTabOnClicked(index);
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   tabItemText: {
-    color: COLORS.blackgrey,
+    color: COLORS.gray400,
     fontWeight: '500',
     fontSize: normalizeFontSize(12.5),
     paddingVertical: 10,
@@ -94,7 +94,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingVertical: 10
   },
-  underlineFocus: {
+  underlineInactive: {
+    borderBottomColor: COLORS.gray200,
+    borderBottomWidth: 2
+  },
+  underlineActive: {
     borderBottomColor: COLORS.signed_primary,
     borderBottomWidth: 2
   }

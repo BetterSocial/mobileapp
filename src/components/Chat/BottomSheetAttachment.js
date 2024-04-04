@@ -4,10 +4,10 @@ import {View, Text, StyleSheet, TouchableNativeFeedback, ActivityIndicator} from
 
 import {fonts} from '../../utils/fonts';
 import {BottomSheet} from '../BottomSheet';
-import MediasIcon from '../../assets/icons/images/medias.svg';
-import GIFIcon from '../../assets/icons/images/gif.svg';
-import FileIcon from '../../assets/icons/images/file.svg';
-import CameraIcon from '../../assets/icons/images/camera.svg';
+import MediasIcon from '../../assets/icons/images/medias.svg'; // TODO: Garry,  need to pass props color
+import GIFIcon from '../../assets/icons/images/gif.svg'; // TODO: Garry,  need to pass props color
+import FileIcon from '../../assets/icons/images/file.svg'; // TODO: Garry,  need to pass props color
+import CameraIcon from '../../assets/icons/images/camera.svg'; // TODO: Garry,  need to pass props color
 import {COLORS} from '../../utils/theme';
 
 const BottomSheetAttachment = React.forwardRef((props, ref) => (
@@ -18,10 +18,12 @@ const BottomSheetAttachment = React.forwardRef((props, ref) => (
         disabled={props.isLoadingUploadMedia}>
         <View style={styles.card}>
           <View style={styles.wrapCardImage}>
-            <MediasIcon width={20} height={20} fill={COLORS.black} />
+            <MediasIcon width={20} height={20} />
             <Text style={styles.textCard}>Send Photos & Videos</Text>
           </View>
-          {props.isLoadingUploadMedia ? <ActivityIndicator size="small" color="#0000ff" /> : null}
+          {props.isLoadingUploadMedia ? (
+            <ActivityIndicator size="small" color={COLORS.white2} />
+          ) : null}
         </View>
       </TouchableNativeFeedback>
       <TouchableNativeFeedback
@@ -29,10 +31,12 @@ const BottomSheetAttachment = React.forwardRef((props, ref) => (
         disabled={props.isLoadingUploadGIF}>
         <View style={styles.card}>
           <View style={styles.wrapCardImage}>
-            <GIFIcon width={20} height={20} fill={COLORS.black} />
+            <GIFIcon width={20} height={20} />
             <Text style={styles.textCard}>Send a GIF</Text>
           </View>
-          {props.isLoadingUploadGIF ? <ActivityIndicator size="small" color="#0000ff" /> : null}
+          {props.isLoadingUploadGIF ? (
+            <ActivityIndicator size="small" color={COLORS.white2} />
+          ) : null}
         </View>
       </TouchableNativeFeedback>
       <TouchableNativeFeedback
@@ -40,10 +44,12 @@ const BottomSheetAttachment = React.forwardRef((props, ref) => (
         disabled={props.isLoadingUploadCamera}>
         <View style={styles.card}>
           <View style={styles.wrapCardImage}>
-            <CameraIcon width={20} height={20} fill={COLORS.black} />
+            <CameraIcon width={20} height={20} />
             <Text style={styles.textCard}>Take a Picture</Text>
           </View>
-          {props.isLoadingUploadCamera ? <ActivityIndicator size="small" color="#0000ff" /> : null}
+          {props.isLoadingUploadCamera ? (
+            <ActivityIndicator size="small" color={COLORS.white2} />
+          ) : null}
         </View>
       </TouchableNativeFeedback>
 
@@ -55,14 +61,16 @@ const BottomSheetAttachment = React.forwardRef((props, ref) => (
             styles.card,
             {
               borderBottomWidth: 1,
-              borderBottomColor: COLORS.alto
+              borderBottomColor: COLORS.gray200
             }
           ]}>
           <View style={styles.wrapCardImage}>
-            <FileIcon width={20} height={20} fill={COLORS.black} />
+            <FileIcon width={20} height={20} />
             <Text style={styles.textCard}>Send a File</Text>
           </View>
-          {props.isLoadingUploadFile ? <ActivityIndicator size="small" color="#0000ff" /> : null}
+          {props.isLoadingUploadFile ? (
+            <ActivityIndicator size="small" color={COLORS.white2} />
+          ) : null}
         </View>
       </TouchableNativeFeedback>
     </View>
@@ -73,10 +81,12 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 0,
     paddingTop: 0,
-    paddingBottom: 0
+    paddingBottom: 0,
+    backgroundColor: COLORS.almostBlack
   },
   containerBottomSheet: {
-    marginTop: 20
+    marginTop: 20,
+    backgroundColor: COLORS.almostBlack
   },
   card: {
     height: 52,
@@ -85,7 +95,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     borderTopWidth: 1,
-    borderTopColor: COLORS.alto
+    borderTopColor: COLORS.gray200
   },
   wrapCardImage: {
     flexDirection: 'row',

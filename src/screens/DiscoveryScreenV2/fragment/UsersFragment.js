@@ -274,6 +274,7 @@ const UsersFragment = ({
         onEndReached={() => fetchData()}
         onEndReachedThreshold={0.6}
         keyboardShouldPersistTaps="handled"
+        style={{backgroundColor: COLORS.almostBlack}}
       />
     );
   };
@@ -307,7 +308,8 @@ const styles = StyleSheet.create({
   noDataFoundText: {
     alignSelf: 'center',
     justifyContent: 'center',
-    fontFamily: fonts.inter[600]
+    fontFamily: fonts.inter[600],
+    color: COLORS.white2
   },
   unfollowedHeaderContainer: {
     backgroundColor: COLORS.lightgrey,

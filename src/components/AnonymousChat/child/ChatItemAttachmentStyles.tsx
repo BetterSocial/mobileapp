@@ -25,7 +25,7 @@ const ChatItemAttachmentStyles = StyleSheet.create({
   },
   moreOverlay: {
     position: 'absolute',
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(0,0,0,0.75)',
     width: '100%',
     height: '100%',
     justifyContent: 'center',
@@ -34,10 +34,10 @@ const ChatItemAttachmentStyles = StyleSheet.create({
   moreText: {
     fontSize: dimen.normalizeDimen(16),
     fontFamily: fonts.inter[400],
-    color: COLORS.white
+    color: COLORS.white2
   },
   attachmentFileContainer: {
-    backgroundColor: COLORS.gray,
+    backgroundColor: COLORS.white10percent,
     justifyContent: 'center',
     height: dimen.normalizeDimen(64),
     flexDirection: 'row',
@@ -50,7 +50,7 @@ const ChatItemAttachmentStyles = StyleSheet.create({
   attachmentFileName: {
     fontSize: dimen.normalizeDimen(14),
     fontFamily: fonts.inter[600],
-    color: COLORS.black
+    color: COLORS.white2
   },
   attachmentFileInfo: {
     fontSize: dimen.normalizeDimen(12),
@@ -58,7 +58,7 @@ const ChatItemAttachmentStyles = StyleSheet.create({
     color: COLORS.gray500
   },
   attachmentFileIcon: {
-    backgroundColor: COLORS.light_silver,
+    backgroundColor: COLORS.white10percent,
     width: dimen.normalizeDimen(64),
     height: '100%',
     alignItems: 'center',
