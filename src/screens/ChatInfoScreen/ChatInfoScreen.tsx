@@ -40,7 +40,11 @@ import {getOfficialAnonUsername} from '../../utils/string/StringUtils';
 import useGroupInfo from '../GroupInfo/hooks/useGroupInfo';
 
 export const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: COLORS.white, paddingBottom: dimen.normalizeDimen(40)},
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.almostBlack,
+    paddingBottom: dimen.normalizeDimen(40)
+  },
   users: {
     paddingTop: dimen.normalizeDimen(12)
   },
@@ -97,7 +101,7 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   lineTop: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray100,
     height: 1
   },
   containerGroupName: {
@@ -115,7 +119,7 @@ export const styles = StyleSheet.create({
     width: dimen.normalizeDimen(100),
     height: dimen.normalizeDimen(100),
     borderRadius: dimen.normalizeDimen(50),
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray100,
     justifyContent: 'center',
     alignItems: 'center'
   },

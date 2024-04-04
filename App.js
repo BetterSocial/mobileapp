@@ -5,7 +5,7 @@ import Toast from 'react-native-toast-message';
 import {BackHandler, Platform, View} from 'react-native';
 import {HumanIDProvider} from '@human-internet/react-native-humanid';
 import {LogLevel, OneSignal} from 'react-native-onesignal';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
 import {OverlayProvider, Streami18n} from 'stream-chat-react-native';
 import {RecoilDebugObserver} from 'reactotron-recoil-plugin';
 import {RecoilRoot} from 'recoil';
@@ -25,6 +25,7 @@ import {fetchRemoteConfig} from './src/utils/FirebaseUtil';
 import {linking} from './src/navigations/linking';
 import {reactotronInstance} from './src/libraries/reactotron/reactotronInstance';
 import {toastConfig} from './src/configs/ToastConfig';
+import {COLORS} from './src/utils/theme';
 
 const {featLog} = getFeatureLoggerInstance(EFeatureLogFlag.navigation);
 
@@ -37,6 +38,13 @@ const App = () => {
   const navigationRef = React.useRef();
   const routeNameRef = React.useRef();
   const [currentScreen, setCurrentScreen] = React.useState('InitialScreenName');
+  const navTheme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      background: COLORS.almostBlack
+    }
+  };
 
   React.useEffect(() => {
     const init = async () => {
@@ -137,6 +145,7 @@ const App = () => {
         {__DEV__ ? <RecoilDebugObserver instance={reactotronInstance} /> : null}
         <Store>
           <NavigationContainer
+            theme={navTheme}
             onReady={onReadyState}
             onStateChange={handleStateChange}
             ref={navigationRef}

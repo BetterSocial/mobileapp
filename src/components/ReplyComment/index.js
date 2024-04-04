@@ -187,7 +187,7 @@ export const styles = StyleSheet.create({
   container: {
     height: 'auto',
     flex: 1,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
     // backgroundColor: 'blue',
   },
   containerComment: {
@@ -225,7 +225,7 @@ export const styles = StyleSheet.create({
     borderRadius: 20
   },
   btnText: {
-    color: COLORS.white
+    color: COLORS.almostBlack
   },
   headerText: {
     fontFamily: fonts.inter[600],
@@ -239,7 +239,7 @@ export const styles = StyleSheet.create({
     height: 48
   },
   input: {
-    backgroundColor: COLORS.concrete,
+    backgroundColor: COLORS.gray100,
     flex: 1,
     color: COLORS.b,
     padding: 10,

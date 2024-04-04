@@ -23,7 +23,7 @@ const BottomSheetAttachment = React.forwardRef((props, ref) => (
             <Text style={styles.textCard}>Send Photos & Videos</Text>
           </View>
           {props.isLoadingUploadMedia ? (
-            <ActivityIndicator size="small" color={COLORS.white2} />
+            <ActivityIndicator size="small" color={COLORS.white} />
           ) : null}
         </View>
       </TouchableNativeFeedback>
@@ -36,7 +36,7 @@ const BottomSheetAttachment = React.forwardRef((props, ref) => (
             <Text style={styles.textCard}>Send a GIF</Text>
           </View>
           {props.isLoadingUploadGIF ? (
-            <ActivityIndicator size="small" color={COLORS.white2} />
+            <ActivityIndicator size="small" color={COLORS.white} />
           ) : null}
         </View>
       </TouchableNativeFeedback>
@@ -49,7 +49,7 @@ const BottomSheetAttachment = React.forwardRef((props, ref) => (
             <Text style={styles.textCard}>Take a Picture</Text>
           </View>
           {props.isLoadingUploadCamera ? (
-            <ActivityIndicator size="small" color={COLORS.white2} />
+            <ActivityIndicator size="small" color={COLORS.white} />
           ) : null}
         </View>
       </TouchableNativeFeedback>
@@ -70,7 +70,7 @@ const BottomSheetAttachment = React.forwardRef((props, ref) => (
             <Text style={styles.textCard}>Send a File</Text>
           </View>
           {props.isLoadingUploadFile ? (
-            <ActivityIndicator size="small" color={COLORS.white2} />
+            <ActivityIndicator size="small" color={COLORS.white} />
           ) : null}
         </View>
       </TouchableNativeFeedback>

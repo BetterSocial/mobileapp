@@ -31,7 +31,7 @@ const Search = ({animatedValue, onContainerClicked = () => {}, getSearchLayout})
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     marginBottom: SIZES.base,
     marginHorizontal: SIZES.base
   },
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   },
   wrapperSearch: {
     flex: 1,
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray100,
     marginLeft: 20,
     marginRight: 20,
     borderRadius: 8,
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     // height: 36,
     paddingTop: 0,
     paddingBottom: 0,
-    color: COLORS.blackgrey,
+    color: COLORS.gray400,
     alignSelf: 'center'
   },
   wrapperIcon: {
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     paddingTop: 7,
     paddingBottom: 7,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.lightgrey
+    borderBottomColor: COLORS.gray100
   })
 });
 

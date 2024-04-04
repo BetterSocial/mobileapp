@@ -28,7 +28,7 @@ export const KarmaLock = (props: {onPressCreatePost: () => void}) => {
         <Text
           style={{
             fontSize: 12,
-            color: COLORS.white2,
+            color: COLORS.white,
             fontWeight: '500',
             paddingHorizontal: 8,
             lineHeight: 22
@@ -56,7 +56,7 @@ export const KarmaLock = (props: {onPressCreatePost: () => void}) => {
                   fontSize: normalize(16),
                   lineHeight: normalize(24),
                   marginBottom: normalize(8),
-                  color: COLORS.white2
+                  color: COLORS.white
                 }}>
                 What is my Karma Score?
               </Text>
@@ -118,7 +118,7 @@ export const KarmaLock = (props: {onPressCreatePost: () => void}) => {
             style={{
               fontSize: 14,
               fontFamily: fonts.inter[400],
-              color: COLORS.white2,
+              color: COLORS.white,
               marginLeft: 8
             }}>
             Start Posting

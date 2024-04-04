@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     borderWidth: 2
   },
   wrapperText: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     borderRadius: 8,
     borderColor: COLORS.signed_primary,
     width: 28,

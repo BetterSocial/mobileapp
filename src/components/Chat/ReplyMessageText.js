@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 8
   },
   containerQuoted: (isMe) => ({
-    backgroundColor: isMe ? COLORS.tradewind : COLORS.lightgrey,
+    backgroundColor: isMe ? COLORS.tradewind : COLORS.gray100,
     flexDirection: 'row',
     flex: 1,
     borderRadius: 8
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   },
   quotedMessage: {
     borderLeftWidth: 1,
-    borderLeftColor: COLORS.blackgrey,
+    borderLeftColor: COLORS.gray400,
     marginLeft: 12,
     paddingLeft: 28,
     paddingBottom: 6,
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
     marginRight: 20
   },
   containerChat: (isMe) => ({
-    backgroundColor: isMe ? COLORS.halfBaked : COLORS.lightgrey,
+    backgroundColor: isMe ? COLORS.halfBaked : COLORS.gray100,
     paddingTop: 4,
     paddingBottom: 8,
     paddingLeft: 4,
@@ -204,8 +204,8 @@ const styles = StyleSheet.create({
   },
   lineLeft: {
     borderLeftWidth: 1,
-    borderLeftColor: COLORS.blackgrey,
-    borderBottomColor: COLORS.blackgrey,
+    borderLeftColor: COLORS.gray400,
+    borderBottomColor: COLORS.gray400,
     borderBottomWidth: 1,
     borderBottomLeftRadius: 8,
     width: 10,

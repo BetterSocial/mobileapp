@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: RFValue(14),
     lineHeight: RFValue(17),
-    color: COLORS.white2
+    color: COLORS.white
   },
   tooltipShadowContainer: {
     paddingHorizontal: 10,

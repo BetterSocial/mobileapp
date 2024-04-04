@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
   cardContainer: {
     width: FULL_WIDTH,
     borderBottomWidth: 0,
-    borderBottomColor: COLORS.lightgrey,
+    borderBottomColor: COLORS.gray100,
     backgroundColor: 'white',
     height: dimen.size.FEED_CURRENT_ITEM_HEIGHT,
     marginBottom: normalizeFontSizeByWidth(4),

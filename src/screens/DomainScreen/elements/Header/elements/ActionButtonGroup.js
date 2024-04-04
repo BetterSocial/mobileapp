@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 8,
     backgroundColor: COLORS.signed_primary,
-    color: COLORS.white
+    color: COLORS.almostBlack
   },
   buttonFollowing: {
     flex: 1,
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: normalizeFontSize(12),
     lineHeight: normalizeFontSize(24),
-    color: COLORS.white2
+    color: COLORS.white
   },
   textButtonFollowing: {
     fontFamily: fonts.inter[600],
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
   },
   unblockButtonText: {
     fontSize: normalizeFontSize(12),
-    color: COLORS.white,
+    color: COLORS.almostBlack,
     paddingHorizontal: 0
   }
 });

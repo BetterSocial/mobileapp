@@ -233,7 +233,7 @@ const _renderAnonimity = ({
                       refSheet.current.open();
                     }}>
                     <View style={{zIndex: 1000}}>
-                      <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
+                      <ElipsisIcon width={4} height={14} fill={COLORS.gray400} />
                     </View>
                   </GlobalButton>
                 )}
@@ -400,7 +400,7 @@ const _renderProfileNormal = ({
                   }}>
                   {hideThreeDot ? null : (
                     <View style={{zIndex: 1000}}>
-                      <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
+                      <ElipsisIcon width={4} height={14} fill={COLORS.gray400} />
                     </View>
                   )}
                 </GlobalButton>
@@ -569,21 +569,21 @@ const styles = StyleSheet.create({
   feedDate: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.blackgrey,
+    color: COLORS.gray400,
     lineHeight: 18
   },
   feedDateLocation: {
     flex: 1,
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.blackgrey,
+    color: COLORS.gray400,
     lineHeight: 18
   },
   point: {
     width: 2,
     height: 2,
     borderRadius: 4,
-    backgroundColor: COLORS.blackgrey,
+    backgroundColor: COLORS.gray400,
     marginLeft: 8,
     marginRight: 8,
     alignSelf: 'center',
@@ -603,7 +603,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 12,
     lineHeight: 18,
-    color: COLORS.blackgrey
+    color: COLORS.gray400
   },
   usernameComment: {
     fontFamily: fonts.inter[500],
@@ -616,7 +616,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[500],
     fontSize: 12,
     lineHeight: 24,
-    color: COLORS.blackgrey
+    color: COLORS.gray400
   },
   item: {
     width: screenWidth - 20,
@@ -656,7 +656,7 @@ const styles = StyleSheet.create({
     fontWeight: '500'
   },
   textFollowing: {
-    color: COLORS.greySubtile1,
+    color: COLORS.gray400,
     fontSize: normalizeFontSize(14),
     fontStyle: 'normal',
     fontWeight: '500'

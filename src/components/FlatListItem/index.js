@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.lightgrey,
+    borderBottomColor: COLORS.gray100,
     paddingHorizontal: 20,
     alignItems: 'center'
   },
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 12,
     fontWeight: '400',
-    color: COLORS.blackgrey,
+    color: COLORS.gray400,
     flexWrap: 'wrap'
   },
   labelIcon: {

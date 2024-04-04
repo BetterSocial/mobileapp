@@ -8,7 +8,7 @@ const BaseChatItemStyles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     paddingLeft: dimen.normalizeDimen(20),
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   chatContentContainer: {
     flex: 1,

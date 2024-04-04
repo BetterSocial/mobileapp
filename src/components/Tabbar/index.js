@@ -1,44 +1,45 @@
 import React from 'react';
-import {View, TouchableOpacity, StyleSheet} from 'react-native';
-import Animated from 'react-native-reanimated';
-import {fonts} from '../../utils/fonts';
+import {View, TouchableOpacity, StyleSheet, Text} from 'react-native';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
+import dimen from '../../utils/dimen';
 
 const S = StyleSheet.create({
   container: {
-    paddingHorizontal: 22,
-    paddingVertical: 20,
+    paddingHorizontal: dimen.normalizeDimen(22),
+    paddingVertical: dimen.normalizeDimen(20),
     display: 'flex',
     flexDirection: 'column'
   },
 
   containertitle: {
-    fontSize: 16
+    fontSize: normalizeFontSize(16)
   },
 
   toptabcontainer: {
     flexDirection: 'row',
-    backgroundColor: COLORS.white,
-    borderBottomColor: COLORS.black30percent,
+    backgroundColor: COLORS.almostBlack,
+    borderBottomColor: COLORS.gray200,
     borderBottomWidth: 1,
-    paddingHorizontal: 4
+    paddingHorizontal: dimen.normalizeDimen(4)
   },
 
   singletab: {
     flex: 1,
-    paddingLeft: 16
+    paddingLeft: dimen.normalizeDimen(16)
   },
 
   singletabtext: {
     fontFamily: fonts.inter[500],
-    textAlign: 'left',
-    fontSize: 14,
-    paddingVertical: 10
+    textAlign: 'center',
+    fontSize: normalizeFontSize(14),
+    paddingVertical: dimen.normalizeDimen(10),
+    color: COLORS.gray400
   },
 
   viewborderbottom: {
-    borderBottomColor: COLORS.anon_primary,
-    borderBottomWidth: 1
+    borderBottomColor: COLORS.signed_primary,
+    borderBottomWidth: 2
   }
 });
 
@@ -68,12 +69,6 @@ const Tabbar = ({state, descriptors, navigation, position}) => {
           }
         };
 
-        const inputRange = state.routes.map((_, i) => i);
-        const opacity = Animated.interpolateNode(position, {
-          inputRange,
-          outputRange: inputRange.map((i) => (i === index ? 1 : 0.3))
-        });
-
         return (
           <TouchableOpacity
             key={index}
@@ -83,7 +78,7 @@ const Tabbar = ({state, descriptors, navigation, position}) => {
             testID={options.tabBarTestID}
             onPress={onPress}
             style={S.singletab}>
-            <Animated.Text style={{opacity, ...S.singletabtext}}>{label}</Animated.Text>
+            <Text style={[S.singletabtext, isFocused ? {color: COLORS.white} : {}]}>{label}</Text>
             <View style={isFocused ? S.viewborderbottom : {}} />
           </TouchableOpacity>
         );

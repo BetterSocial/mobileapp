@@ -12,7 +12,7 @@ const ItemListLarge = ({label, desc, iconReght, icon, onPress}) => {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.header}>
-        {icon === 'block' && <IconEn name="block" size={17} color={COLORS.white2} />}
+        {icon === 'block' && <IconEn name="block" size={17} color={COLORS.white} />}
         {icon === 'handcuffs' && <Handcuffs />}
         <Text style={styles.label}>{label}</Text>
       </View>
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   label: {
     marginLeft: 15,
     fontFamily: fonts.inter[500],
-    color: COLORS.white2,
+    color: COLORS.white,
     fontSize: 14
   },
   desc: {

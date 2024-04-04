@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
   username: {
     fontFamily: fonts.inter[700],
     fontSize: normalizeFontSize(12),
-    color: COLORS.white2,
+    color: COLORS.white,
     lineHeight: 14,
     marginLeft: 16,
     maxWidth: dimen.normalizeDimen(170)

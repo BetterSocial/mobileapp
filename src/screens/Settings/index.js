@@ -60,7 +60,7 @@ const Settings = () => {
 
   return (
     <>
-      <StatusBar barStyle="dark-content" translucent={false} />
+      <StatusBar barStyle="light-content" translucent={false} />
       <SafeAreaView style={styles.container}>
         <Header title="Settings" isCenter onPress={() => navigation.goBack()} />
         <View style={styles.content}>
@@ -98,7 +98,7 @@ const Settings = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   containerHeader: {padding: 16},
   header: {
