@@ -5,7 +5,7 @@ import {useNavigation} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import {COLORS, SIZES} from '../../utils/theme';
 import {calculateTime} from '../../utils/time';
-import {fonts, normalizeFontSize} from '../../utils/fonts';
+import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
 import CommentUserName from '../CommentUsername/CommentUsername';
 import ReadMore from '../ReadMore';
@@ -37,14 +37,15 @@ const PreviewComment = ({comment, time, image, totalComment, onPress, user, item
     <View>
       <View
         style={{
-          height: 28,
+          height: normalize(28),
           backgroundColor: COLORS.almostBlack,
           borderBottomLeftRadius: 12,
           borderBottomRightRadius: 12,
           borderLeftWidth: 1,
           borderRightWidth: 1,
           borderBottomWidth: 1,
-          borderColor: COLORS.darkGray
+          borderColor: COLORS.darkGray,
+          marginTop: -1
         }}>
         {isShortText && (
           <LinearGradient
@@ -64,7 +65,7 @@ const PreviewComment = ({comment, time, image, totalComment, onPress, user, item
       <TouchableOpacity
         style={{
           paddingHorizontal: 12,
-          height: 56,
+          height: normalize(56),
           position: 'absolute',
           width: '100%'
         }}

@@ -162,9 +162,7 @@ const RenderListFeed = (props) => {
             message={item?.message}
             messageContainerStyle={{paddingHorizontal: 10}}
             topics={item?.topics}
-            hasComment={hasComment}
             item={item}
-            contentHeight={normalize(399)}
           />
         )}
         {(item.post_type === POST_TYPE_STANDARD || item.post_type === POST_TYPE_POLL) && (
@@ -251,9 +249,9 @@ const styles = StyleSheet.create({
   },
   cardMain: {
     width: '100%',
-    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT - 56,
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
+    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT - normalize(56),
+    borderTopLeftRadius: normalize(16),
+    borderTopRightRadius: normalize(16),
     backgroundColor: COLORS.almostBlack
   }
 });

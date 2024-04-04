@@ -475,9 +475,7 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
         "position": "relative",
         "width": "100%",
       },
-      Object {
-        "height": undefined,
-      },
+      undefined,
     ]
   }
   testID="blurredLayer"
@@ -489,7 +487,7 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
         "borderColor": "#394756",
         "borderLeftWidth": 1,
         "borderRightWidth": 1,
-        "flex": 1,
+        "height": 316.8,
         "paddingHorizontal": 6,
       }
     }

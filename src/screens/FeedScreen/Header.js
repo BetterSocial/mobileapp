@@ -170,8 +170,8 @@ const _renderAnonimity = ({
                 left: 0,
                 right: 0,
                 bottom: 0,
-                borderTopLeftRadius: 16,
-                borderTopRightRadius: 16
+                borderTopLeftRadius: normalize(15),
+                borderTopRightRadius: normalize(15)
               }}
             />
           )}
@@ -314,8 +314,8 @@ const _renderProfileNormal = ({
               left: 0,
               right: 0,
               bottom: 0,
-              borderTopLeftRadius: 16,
-              borderTopRightRadius: 16
+              borderTopLeftRadius: normalize(15),
+              borderTopRightRadius: normalize(15)
             }}
           />
         )}
@@ -489,8 +489,8 @@ const styles = StyleSheet.create({
     paddingRight: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
+    borderTopLeftRadius: normalize(16),
+    borderTopRightRadius: normalize(16),
     borderTopWidth: 1,
     borderLeftWidth: 1,
     borderRightWidth: 1,

@@ -166,7 +166,6 @@ const RenderListFeed = (props) => {
             onCardContentPress={() => navigateToLinkContextPage(item)}
             message={item.message}
             topics={item?.topics}
-            contentHeight={normalize(399)}
           />
         )}
         {(item.post_type === POST_TYPE_STANDARD || item.post_type === POST_TYPE_POLL) && (
@@ -249,8 +248,7 @@ const styles = StyleSheet.create({
   cardContainer: {
     width: FULL_WIDTH,
     height: dimen.size.TOPIC_CURRENT_ITEM_HEIGHT,
-    backgroundColor: COLORS.almostBlack,
-    paddingTop: normalize(4)
+    backgroundColor: COLORS.almostBlack
   },
   cardMain: {
     height: '100%',

@@ -35,8 +35,8 @@ function AddCommentPreview({
                 left: 0,
                 right: 0,
                 bottom: 0,
-                borderBottomLeftRadius: 12,
-                borderBottomRightRadius: 12
+                borderBottomLeftRadius: normalize(13),
+                borderBottomRightRadius: normalize(13)
               }}
             />
           )}
@@ -44,8 +44,8 @@ function AddCommentPreview({
         <TouchableOpacity
           onPress={onPressComment}
           style={{
-            paddingHorizontal: 12,
-            height: 56,
+            paddingHorizontal: normalize(12),
+            height: normalize(56),
             position: 'absolute',
             width: '100%'
           }}>
@@ -109,13 +109,14 @@ export const styles = StyleSheet.create({
     shadowRadius: 3
   },
   floatBackground: {
-    height: 28,
+    height: normalize(28),
     backgroundColor: COLORS.almostBlack,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
+    borderBottomLeftRadius: normalize(16),
+    borderBottomRightRadius: normalize(16),
     borderLeftWidth: 1,
     borderRightWidth: 1,
     borderBottomWidth: 1,
-    borderColor: COLORS.darkGray
+    borderColor: COLORS.darkGray,
+    marginTop: -1
   }
 });

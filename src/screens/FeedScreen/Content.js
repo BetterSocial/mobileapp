@@ -41,7 +41,7 @@ const Content = ({
   const route = useRoute();
   const [textHeight, setTextHeight] = React.useState(null);
   const maxFontSize = normalizeFontSizeByWidth(28);
-  const minFontSize = normalizeFontSizeByWidth(16);
+  const minFontSize = normalizeFontSizeByWidth(22);
   const {
     handleCalculation,
     onLayoutTopicChip,
@@ -409,7 +409,7 @@ export const styles = StyleSheet.create({
     marginRight: 8
   },
   contentFeed: {
-    height: normalize(399),
+    height: dimen.size.FEED_CONTENT_HEIGHT,
     marginTop: 0,
     width: '100%',
     borderLeftWidth: 1,

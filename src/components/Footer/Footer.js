@@ -22,6 +22,7 @@ import {COLORS, FONTS} from '../../utils/theme';
 import BottomSheetMenu from '../BottomSheet/BottomSheetMenu';
 import {IcDmAnon} from '../../assets/icons/ic_dm_anon';
 import IconCommentArrow from '../../assets/icon/IconCommentArrow';
+import {normalize} from '../../utils/fonts';
 
 const Footer = ({
   item,
@@ -291,7 +292,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: 48,
+    height: normalize(48),
     paddingHorizontal: 16,
     paddingVertical: 10,
     backgroundColor: COLORS.almostBlack,
