@@ -10,6 +10,7 @@ import {fonts, normalizeFontSize} from '../../../utils/fonts';
 import {ANONYMOUS} from '../../../hooks/core/constant';
 import useAnonymousChannelListScreenHook from '../../../hooks/screen/useAnonymousChannelListHook';
 import {DISCOVERY_TAB_TOPICS, NavigationConstants} from '../../../utils/constants';
+import StorageUtils from '../../../utils/storage';
 
 const {width: widthScreen} = Dimensions.get('window');
 
@@ -31,9 +32,10 @@ const IncognitoButton = ({title, subtitle, onPress}) => {
   );
 };
 
-const IncognitoEmptyChat = ({totalChannel}) => {
+const IncognitoEmptyChat = () => {
   const {goToContactScreen} = useAnonymousChannelListScreenHook();
   const navigation = useNavigation();
+  const totalChannel = parseInt(StorageUtils.totalAnonChannels.get() || '0', 10);
 
   const getMode = () => {
     let result = MODE_FULL;

@@ -20,6 +20,8 @@ import Search from './elements/Search';
 import useCoreFeed from './hooks/useCoreFeed';
 import useViewPostTimeHook from './hooks/useViewPostTimeHook';
 import {Shimmer} from '../../components/Shimmer/Shimmer';
+import useAnonymousChannelListScreenHook from '../../hooks/screen/useAnonymousChannelListHook';
+import StorageUtils from '../../utils/storage';
 
 let lastDragY = 0;
 
@@ -59,6 +61,8 @@ const FeedScreen = (props) => {
     setUpVote
   } = useCoreFeed();
 
+  const {channels: anonChannels} = useAnonymousChannelListScreenHook();
+
   const {onWillSendViewPostTime} = useViewPostTimeHook(dispatch, timer, viewPostTimeIndex);
 
   const interactionManagerRef = React.useRef(null);
@@ -78,6 +82,12 @@ const FeedScreen = (props) => {
       checkCacheFeed();
     }
   }, [interactionsComplete]);
+
+  React.useEffect(() => {
+    if (anonChannels.length > 0) {
+      StorageUtils.totalAnonChannels.set(anonChannels.length?.toString() || '0');
+    }
+  }, [anonChannels.length]);
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
