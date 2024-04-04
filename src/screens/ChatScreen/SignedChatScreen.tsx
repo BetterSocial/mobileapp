@@ -90,7 +90,8 @@ const SignedChatScreen = () => {
       fetchChannelDetail(selectedChannel as ChannelList);
       const serializeData = JSON.stringify({
         id: selectedChannel.id,
-        channelType: selectedChannel.channelType
+        channelType: selectedChannel.channelType,
+        name: selectedChannel.name
       });
       StorageUtils.openedChannel.set(serializeData);
     }
@@ -102,7 +103,7 @@ const SignedChatScreen = () => {
       if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
         const channelData = StorageUtils.openedChannel.get();
         const parsedData = JSON.parse(channelData || '');
-        fetchChannelDetail({id: parsedData.id, channelType: parsedData.channelType} as ChannelList);
+        fetchChannelDetail(parsedData as ChannelList);
       }
       appState.current = nextAppState;
     });
