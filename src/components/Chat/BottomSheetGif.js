@@ -74,7 +74,7 @@ const BottomSheetGif = React.forwardRef((props, ref) => {
       <View style={styles.searchContainer}>
         <View style={styles.wrapperSearch}>
           <View style={styles.wrapperIcon}>
-            <MemoIcSearch width={16.67} height={16.67} fill={COLORS.gray300} />
+            <MemoIcSearch width={16.67} height={16.67} fill={COLORS.gray310} />
           </View>
           <TextInput
             value={searchText}

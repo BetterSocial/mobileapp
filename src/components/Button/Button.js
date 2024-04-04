@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600]
   },
   buttonTextDisabled: {
-    color: COLORS.gray300
+    color: COLORS.gray310
   },
   disabledbutton: {
     backgroundColor: COLORS.gray200,

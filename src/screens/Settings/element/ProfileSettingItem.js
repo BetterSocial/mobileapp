@@ -19,7 +19,7 @@ const ProfileSettingItem = ({text, onPress, ...props}) => (
   <TouchableOpacity onPress={onPress} {...props}>
     <View style={styles.card}>
       <Text style={styles.textCard}>{text}</Text>
-      <IconChevronRight width={6.67} height={11.67} fill={COLORS.gray300} />
+      <IconChevronRight width={6.67} height={11.67} fill={COLORS.gray310} />
     </View>
   </TouchableOpacity>
 );

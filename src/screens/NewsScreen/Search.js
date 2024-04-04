@@ -29,7 +29,7 @@ const Search = ({animatedValue}) => {
         onPress={handleOnContainerPress}>
         <View style={styles.wrapperSearch}>
           <View style={styles.wrapperIcon}>
-            <MemoIc_search width={16.67} height={16.67} fill={COLORS.gray300} />
+            <MemoIc_search width={16.67} height={16.67} fill={COLORS.gray310} />
           </View>
           <Text style={styles.input}>{StringConstant.newsTabHeaderPlaceholder}</Text>
         </View>

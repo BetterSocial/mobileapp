@@ -293,7 +293,7 @@ const FeedScreen = (props) => {
       )}
       <TiktokScroll
         ref={listRef}
-        contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT + normalizeFontSizeByWidth(4)}
+        contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT}
         data={feeds}
         onRefresh={onRefresh}
         onScroll={handleScrollEvent}

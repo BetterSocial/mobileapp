@@ -4,7 +4,14 @@ import {useNavigation} from '@react-navigation/native';
 import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 
-const TopicsChip = ({topics = [], fontSize = 24, onLayout, topicContainer, topicItemStyle}) => {
+const TopicsChip = ({
+  topics = [],
+  fontSize = 24,
+  onLayout,
+  topicContainer,
+  topicItemStyle,
+  textStyle
+}) => {
   const navigation = useNavigation();
 
   const onTopicPress = (topic) => {
@@ -32,7 +39,9 @@ const TopicsChip = ({topics = [], fontSize = 24, onLayout, topicContainer, topic
             testID="topic-chip"
             activeOpacity={1}
             onPress={() => onTopicPress(item)}>
-            <Text style={{...styles.topicText, fontSize}}>#{item && item.toLowerCase()}</Text>
+            <Text style={{...styles.topicText, fontSize, textStyle}}>
+              #{item && item.toLowerCase()}
+            </Text>
           </TouchableOpacity>
         </View>
       ))}
@@ -52,18 +61,20 @@ const styles = StyleSheet.create({
     marginLeft: 12
   },
   topicItemContainer: {
-    backgroundColor: COLORS.lightgrey60,
+    backgroundColor: COLORS.transparent,
     borderRadius: 14,
     overflow: 'hidden',
     marginEnd: 11,
     marginBottom: 4,
     paddingHorizontal: 13,
-    paddingVertical: 4.5
+    paddingVertical: 4.5,
+    borderWidth: 1,
+    borderColor: COLORS.white30percent
   },
   topicText: {
     fontFamily: fonts.inter[500],
     borderRadius: 14,
-    color: COLORS.signed_primary
+    color: COLORS.white2
   },
   contentStyle: {
     paddingRight: 12

@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     fontFamily: isActive ? fonts.inter[600] : fonts.inter[400],
     fontSize: 10,
     textAlign: 'center',
-    color: isActive ? COLORS.gray300 : COLORS.gray300
+    color: isActive ? COLORS.gray310 : COLORS.gray310
   })
 });
 

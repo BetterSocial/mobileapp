@@ -33,7 +33,7 @@ const useFeed = () => {
   };
 
   const getHeightFooter = () => {
-    const h = normalizeFontSizeByWidth(52);
+    const h = normalizeFontSizeByWidth(49);
     return h;
   };
 
