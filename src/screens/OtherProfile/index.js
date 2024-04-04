@@ -175,7 +175,8 @@ const OtherProfile = () => {
   const handleSetUnFollow = async () => {
     setDataMain((prevState) => ({
       ...prevState,
-      is_following: false
+      is_following: false,
+      is_me_following_target: false
     }));
 
     const data = {
@@ -192,7 +193,8 @@ const OtherProfile = () => {
   const handleSetFollow = async () => {
     setDataMain((prevState) => ({
       ...prevState,
-      is_following: true
+      is_following: true,
+      is_me_following_target: true
     }));
 
     const data = {
@@ -289,7 +291,7 @@ const OtherProfile = () => {
 
     const __renderFollowingButton = () => {
       if (user_id === dataMain.user_id) return <></>;
-      if (dataMain.is_following)
+      if (dataMain.is_me_following_target)
         return (
           <GlobalButton buttonStyle={{paddingLeft: 0}} onPress={() => handleSetUnFollow()}>
             <View style={styles.buttonFollowing(isAnonimity)}>
