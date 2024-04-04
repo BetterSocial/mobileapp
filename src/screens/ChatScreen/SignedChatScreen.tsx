@@ -19,6 +19,7 @@ import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
 import {getOtherProfile} from '../../service/profile';
 import Loading from '../Loading';
 import {styles} from './AnonymousChatScreen';
+import StorageUtils from '../../utils/storage';
 
 const SignedChatScreen = () => {
   const {selectedChannel, chats, goBackFromChatScreen, goToChatInfoScreen, sendChat} =
@@ -87,27 +88,29 @@ const SignedChatScreen = () => {
       setChannel(selectedChannel, dispatchChannel);
       fetchOtherProfile();
       fetchChannelDetail(selectedChannel as ChannelList);
+      const serializeData = JSON.stringify({
+        id: selectedChannel.id,
+        channelType: selectedChannel.channelType
+      });
+      StorageUtils.openedChannel.set(serializeData);
     }
   }, [selectedChannel]);
 
   const appState = React.useRef(AppState.currentState);
-
   React.useEffect(() => {
     const subscription = AppState.addEventListener('change', (nextAppState) => {
       if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
-        fetchChannelDetail(selectedChannel as ChannelList);
-        if (selectedChannel) {
-          fetchChannelDetail(selectedChannel as ChannelList);
-        }
+        const channelData = StorageUtils.openedChannel.get();
+        const parsedData = JSON.parse(channelData || '');
+        fetchChannelDetail({id: parsedData.id, channelType: parsedData.channelType} as ChannelList);
       }
-
       appState.current = nextAppState;
     });
 
     return () => {
       subscription?.remove();
     };
-  }, [selectedChannel]);
+  }, []);
 
   return (
     <View style={styles.keyboardAvoidingView}>

@@ -27,7 +27,8 @@ enum StorageKeysEnum {
   ChannelDetailTimeStamps = 'channelDetailTimeStamps',
   FeedChatTimeStamps = 'feedChatTimeStamps',
   AnonymousNotificationTimeStamps = 'anynoymousNotificationTimeStamp',
-  SignedNotificationTimeStamp = 'signedNotificationTimeStamp'
+  SignedNotificationTimeStamp = 'signedNotificationTimeStamp',
+  OpenedChannel = 'openedChannel'
 }
 
 interface IStorage {
@@ -103,7 +104,8 @@ const StorageUtils = {
   feedChatTimeStamps: storageBuilder(StorageKeysEnum.FeedChatTimeStamps),
   anonymousNotificationTimeStamp: storageBuilder(StorageKeysEnum.AnonymousNotificationTimeStamps),
   signedNotificationTimeStamp: storageBuilder(StorageKeysEnum.SignedNotificationTimeStamp),
-  clearAll: () => MMKVStorage.clearAll()
+  clearAll: () => MMKVStorage.clearAll(),
+  openedChannel: storageBuilder(StorageKeysEnum.OpenedChannel)
 };
 
 const clearAll = () => {
@@ -132,6 +134,7 @@ export interface IStorageUtils {
   feedChatTimeStamps: Storage;
   anonymousNotificationTimeStamps: Storage;
   signedNotificationTimeStamp: Storage;
+  openedChannel: Storage;
   clearAll: () => void;
 }
 export default StorageUtils;
