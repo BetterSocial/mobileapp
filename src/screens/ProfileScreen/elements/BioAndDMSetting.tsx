@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import * as React from 'react';
 import CheckBox from '@react-native-community/checkbox';
-import ToastMessage from 'react-native-toast-message';
+import * as React from 'react';
 import {Pressable, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import ToastMessage from 'react-native-toast-message';
 
-import {COLORS} from '../../../utils/theme';
-import {Divider} from '../../../components/Divider';
 import {PencilIcon} from '../../../assets';
-import {TextWithEmoji} from './TextWithEmoji';
+import {Divider} from '../../../components/Divider';
+import {profileSettingsDMpermission} from '../../../service/profile';
 import {fonts} from '../../../utils/fonts';
 import {addDotAndRemoveNewline} from '../../../utils/string/TrimString';
-import {profileSettingsDMpermission} from '../../../service/profile';
+import {COLORS} from '../../../utils/theme';
+import {TextWithEmoji} from './TextWithEmoji';
 
 type BioAndDMSettingProps = {
   bio: string;
