@@ -1,20 +1,28 @@
 import * as React from 'react';
-import Svg, {Path} from 'react-native-svg';
+import Svg, {Path, G, Defs, ClipPath} from 'react-native-svg';
 
 function Ic_search(props) {
   return (
     <Svg
-      width="1em"
-      height="1em"
-      viewBox="0 0 16.67 16.67"
+      width={17}
+      height={17}
+      viewBox="0 0 17 17"
       fill="none"
+      xmlns="http://www.w3.org/2000/svg"
       {...props}>
-      <Path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M1.667 7.917a6.25 6.25 0 0010.08 4.94.83.83 0 00.164.232l5 5a.834.834 0 001.178-1.178l-5-5a.833.833 0 00-.233-.165 6.25 6.25 0 10-11.19-3.83zm1.666 0a4.583 4.583 0 119.167 0 4.583 4.583 0 01-9.167 0z"
-        fill="#000"
-      />
+      <G clipPath="url(#clip0_20145_82994)">
+        <Path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M0 6.375a6.375 6.375 0 0010.281 5.038c.041.086.097.167.168.238l5.1 5.1a.85.85 0 101.202-1.202l-5.1-5.1a.849.849 0 00-.238-.168A6.375 6.375 0 100 6.375zm1.7 0a4.675 4.675 0 119.35 0 4.675 4.675 0 01-9.35 0z"
+          fill={props?.fill || '#000'}
+        />
+      </G>
+      <Defs>
+        <ClipPath id="clip0_20145_82994">
+          <Path fill={props?.fill || '#000'} d="M0 0H17V17H0z" />
+        </ClipPath>
+      </Defs>
     </Svg>
   );
 }
