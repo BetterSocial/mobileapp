@@ -3,11 +3,7 @@
 /* eslint-disable import/no-unresolved */
 
 import * as React from 'react';
-<<<<<<< Updated upstream
-import {FlatList, StatusBar, View} from 'react-native';
-=======
 import {AppState, FlatList, View} from 'react-native';
->>>>>>> Stashed changes
 
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
@@ -90,6 +86,7 @@ const SignedChatScreen = () => {
     if (selectedChannel) {
       setChannel(selectedChannel, dispatchChannel);
       fetchOtherProfile();
+      fetchChannelDetail(selectedChannel as ChannelList);
     }
   }, [selectedChannel]);
 
@@ -98,6 +95,7 @@ const SignedChatScreen = () => {
   React.useEffect(() => {
     const subscription = AppState.addEventListener('change', (nextAppState) => {
       if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+        fetchChannelDetail(selectedChannel as ChannelList);
         if (selectedChannel) {
           fetchChannelDetail(selectedChannel as ChannelList);
         }
