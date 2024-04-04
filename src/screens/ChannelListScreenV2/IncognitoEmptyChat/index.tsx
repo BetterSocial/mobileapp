@@ -35,9 +35,11 @@ const IncognitoButton = ({title, subtitle, onPress}) => {
 const IncognitoEmptyChat = () => {
   const {channels: anonChannels, goToContactScreen} = useAnonymousChannelListScreenHook();
   const navigation = useNavigation();
-  const totalChannel = StorageUtils.totalAnonChannels.get()
-    ? parseInt(StorageUtils.totalAnonChannels.get() || '0', 10)
-    : anonChannels.length;
+  let totalChannel = anonChannels.length;
+  const storedTotalChannel = StorageUtils.totalAnonChannels.get();
+  if (storedTotalChannel !== null && storedTotalChannel !== undefined) {
+    totalChannel = parseInt(storedTotalChannel, 10);
+  }
 
   const getMode = () => {
     let result = MODE_FULL;
