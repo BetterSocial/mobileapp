@@ -1,11 +1,9 @@
-/* eslint-disable import/no-cycle */
-/* eslint-disable global-require */
 import * as React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-import {COLORS, FONTS, SIZES} from '../../utils/theme';
-import {Dot, Gap} from '../index';
+import LinearGradient from 'react-native-linear-gradient';
+import {COLORS, SIZES} from '../../utils/theme';
 import {calculateTime} from '../../utils/time';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
@@ -13,7 +11,7 @@ import CommentUserName from '../CommentUsername/CommentUsername';
 import ReadMore from '../ReadMore';
 import ProfilePicture from '../../screens/ProfileScreen/elements/ProfilePicture';
 
-const PreviewComment = ({comment, time, image, totalComment, onPress, user, item}) => {
+const PreviewComment = ({comment, time, image, totalComment, onPress, user, item, isShortText}) => {
   const navigation = useNavigation();
 
   const openProfile = async () => {
@@ -36,17 +34,48 @@ const PreviewComment = ({comment, time, image, totalComment, onPress, user, item
   };
   if (!user) return <></>;
   return (
-    <View testID="userDefined" style={styles.containerPreview}>
-      <View style={styles.lineBeforeProfile} />
-      <View style={styles.container(totalComment)}>
-        <TouchableOpacity style={styles.profileTouchable} onPress={openProfile}>
-          <View style={{left: -16}} />
-          <View style={styles.profile}>
+    <View>
+      <View
+        style={{
+          height: 28,
+          backgroundColor: COLORS.almostBlack,
+          borderBottomLeftRadius: 12,
+          borderBottomRightRadius: 12,
+          borderLeftWidth: 1,
+          borderRightWidth: 1,
+          borderBottomWidth: 1,
+          borderColor: COLORS.darkGray
+        }}>
+        {isShortText && (
+          <LinearGradient
+            colors={['#275D8A', '#275D8A']}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              borderBottomLeftRadius: 12,
+              borderBottomRightRadius: 12
+            }}
+          />
+        )}
+      </View>
+      <TouchableOpacity
+        style={{
+          paddingHorizontal: 12,
+          height: 56,
+          position: 'absolute',
+          width: '100%'
+        }}
+        onPress={onPress}>
+        <View testID="userDefined" style={styles.profile}>
+          <TouchableOpacity onPress={openProfile}>
             {item?.data?.anon_user_info_emoji_name || item?.data?.is_anonymous ? (
               <ProfilePicture
                 karmaScore={item.karma_score}
-                size={25}
-                width={6}
+                size={20}
+                width={4}
                 withKarma
                 isAnon={true}
                 anonBackgroundColor={item.data.anon_user_info_color_code}
@@ -55,40 +84,23 @@ const PreviewComment = ({comment, time, image, totalComment, onPress, user, item
             ) : (
               <ProfilePicture
                 karmaScore={item.karma_score}
-                profilePicPath={image || require('../../assets/images/ProfileDefault.png')}
+                profilePicPath={image}
                 size={25}
-                width={6}
+                width={4}
                 withKarma
               />
             )}
-
-            <View style={styles.containerUsername}>
+          </TouchableOpacity>
+          <View style={{flexDirection: 'column'}}>
+            <TouchableOpacity onPress={openProfile} style={styles.containerUsername}>
               <CommentUserName isPreviewComment comment={item} user={user} />
-              <Gap width={4} />
-              <Dot size={4} color={COLORS.gray400} />
-              <Gap width={4} />
+              <View style={styles.point} />
               <Text style={styles.time}>{calculateTime(time).replace('ago', '')}</Text>
-            </View>
+            </TouchableOpacity>
+            <ReadMore onPress={onPress} text={comment} />
           </View>
-        </TouchableOpacity>
-        <ReadMore
-          onPress={onPress}
-          containerStyle={styles.text}
-          numberLine={2}
-          style={styles.text}
-          text={comment}
-        />
-        <Gap height={4} />
-      </View>
-      {totalComment >= 1 && (
-        <TouchableOpacity style={styles.btnMore} onPress={onPress}>
-          <Text
-            style={{
-              color: COLORS.signed_primary,
-              ...FONTS.body4
-            }}>{`${totalComment} more ${totalComment > 1 ? 'replies' : 'reply'}`}</Text>
-        </TouchableOpacity>
-      )}
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -96,21 +108,6 @@ const PreviewComment = ({comment, time, image, totalComment, onPress, user, item
 export default React.memo(PreviewComment);
 
 export const styles = StyleSheet.create({
-  containerPreview: {paddingHorizontal: 20},
-  text: {
-    marginStart: 20
-  },
-  lineBeforeProfile: {
-    height: 9,
-    borderLeftWidth: 1,
-    borderLeftColor: COLORS.gray200,
-    marginLeft: 8
-  },
-  container: (totalComment) => ({
-    borderLeftWidth: 1,
-    marginHorizontal: SIZES.base - 2,
-    borderLeftColor: totalComment >= 1 ? COLORS.balance_gray : COLORS.white
-  }),
   username: {
     fontFamily: fonts.inter[700],
     fontSize: normalizeFontSize(10),
@@ -118,20 +115,27 @@ export const styles = StyleSheet.create({
     marginLeft: SIZES.base
   },
   profile: {
-    flexDirection: 'row'
-    // marginLeft: -12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.almostBlack,
+    padding: 12,
+    borderRadius: 12,
+    borderColor: COLORS.darkGray2,
+    borderWidth: 1,
+    shadowColor: COLORS.black000,
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.5,
+    shadowRadius: 3
   },
   time: {
     fontFamily: fonts.inter[400],
     fontSize: 10,
-    color: COLORS.gray400,
+    color: COLORS.grey410,
     lineHeight: 12
   },
   containerUsername: {
     alignItems: 'center',
-    flexDirection: 'row',
-    flex: 1
-    // marginTop: -8.5,
+    flexDirection: 'row'
   },
   btnMore: {marginStart: 8},
   commenttext: {
@@ -143,12 +147,20 @@ export const styles = StyleSheet.create({
   seemore: {
     color: COLORS.blue
   },
-  profileTouchable: {marginLeft: -12},
   image: {
     width: 24,
     height: 24,
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  point: {
+    width: 2,
+    height: 2,
+    borderRadius: 4,
+    backgroundColor: COLORS.grey410,
+    marginHorizontal: 6,
+    alignSelf: 'center',
+    marginTop: 0
   }
 });

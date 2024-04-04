@@ -72,7 +72,7 @@ const ContentLink = ({
       onPressContent={handleBlurredContent}
       isVisible={isBlurredPost}
       containerStyle={{
-        flex: 1
+        height: contentHeight
       }}>
       <View style={styles.contentFeed}>
         <TouchableNativeFeedback
@@ -123,8 +123,11 @@ export default ContentLink;
 const styles = StyleSheet.create({
   contentFeed: {
     flex: 1,
-    marginHorizontal: 6,
-    backgroundColor: COLORS.white
+    paddingHorizontal: 6,
+    backgroundColor: COLORS.white,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderColor: COLORS.darkGray
   },
   messageContainer: {
     paddingHorizontal: 20,
@@ -135,7 +138,8 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     lineHeight: 24,
     fontSize: normalizeFontSizeByWidth(16),
-    letterSpacing: 0.1
+    letterSpacing: 0.1,
+    color: COLORS.white2
   },
   topicStyle: {
     position: 'relative',

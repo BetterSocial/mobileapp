@@ -16,6 +16,7 @@ import {
   View
 } from 'react-native';
 
+import LinearGradient from 'react-native-linear-gradient';
 import MemoIc_arrow_back from '../../assets/arrow/Ic_arrow_back';
 import ElipsisIcon from '../../assets/icon/ElipsisIcon';
 import MemoPeopleFollow from '../../assets/icons/Ic_people_follow';
@@ -39,7 +40,7 @@ import {
   DEFAULT_PROFILE_PIC_PATH,
   PRIVACY_PUBLIC
 } from '../../utils/constants';
-import {fonts, normalizeFontSize} from '../../utils/fonts';
+import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import ShareUtils from '../../utils/share';
 import StringConstant from '../../utils/string/StringConstant';
 import {COLORS} from '../../utils/theme';
@@ -111,13 +112,9 @@ export const validationTimer = (createdAt, duration_feed) => {
 
 const _renderAnonimity = ({
   time,
-  privacy,
   duration_feed,
-  location,
   isBackButton,
   height,
-  headerStyle,
-  showAnonymousOption = false,
   version = 1,
   anonUserInfo = {},
   isPostDetail,
@@ -131,7 +128,8 @@ const _renderAnonimity = ({
   hideThreeDot,
   item,
   disabledFollow,
-  isFromFeeds
+  isFromFeeds,
+  isShortText = false
 }) => {
   const navigation = useNavigation();
   const refSheet = React.useRef();
@@ -162,105 +160,89 @@ const _renderAnonimity = ({
   return (
     <SafeAreaView>
       <BlurredLayer toastOnly={true} isVisible={isBlurredPost}>
-        <View
-          testID="anonymHeader"
-          style={[
-            styles.rowSpaceBeetwen,
-            styles.heightHeader(height),
-            {paddingLeft: isPostDetail ? 10 : 0}
-          ]}>
-          <View style={[styles.rowCenter, headerStyle]}>
-            {isBackButton ? (
-              <View testID="haveBackButton" style={[styles.btn]}>
-                <GlobalButton
-                  testID="onBack"
-                  onPress={() => {
-                    if (isFromFeeds) {
-                      return navigation.navigate('HomeTabs', {
-                        screen: 'Feed',
-                        params: {
-                          isGoBack: true
-                        }
-                      });
-                    }
-                    return navigation.goBack();
-                  }}>
-                  <MemoIc_arrow_back height={20} width={20} />
-                </GlobalButton>
-              </View>
-            ) : null}
-            <View style={[styles.imageAnonymContainer]}>
+        <View testID="anonymHeader" style={[styles.rowCenter, styles.header(height, isPostDetail)]}>
+          {isShortText && (
+            <LinearGradient
+              colors={['#184A57', '#184A57']}
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                borderTopLeftRadius: 16,
+                borderTopRightRadius: 16
+              }}
+            />
+          )}
+          {isBackButton ? (
+            <View testID="haveBackButton" style={[styles.btn]}>
+              <GlobalButton
+                testID="onBack"
+                onPress={() => {
+                  if (isFromFeeds) {
+                    return navigation.navigate('HomeTabs', {
+                      screen: 'Feed',
+                      params: {
+                        isGoBack: true
+                      }
+                    });
+                  }
+                  return navigation.goBack();
+                }}>
+                <MemoIc_arrow_back height={20} width={20} fill={COLORS.white} />
+              </GlobalButton>
+            </View>
+          ) : null}
+          <View
+            style={{
+              alignItems: 'center',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              flex: 1
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center'
+              }}>
               <AnonymousAvatar
                 karmaScore={karmaScore}
                 anonUserInfo={anonUserInfo}
                 version={version}
                 withKarma
+                radius={25}
               />
+              <View style={{width: 6}} />
+              <AnonymousUsername version={version} anonUserInfo={anonUserInfo} isFeed={true} />
+              <View style={styles.point} />
+              <Text style={styles.feedDate}>{calculateTime(time).replace(' ago', '')}</Text>
+              {duration_feed !== 'never' ? <View style={styles.point} /> : null}
+              {duration_feed !== 'never' ? validationTimer(time, duration_feed) : null}
+              {disabledFollow
+                ? null
+                : !isSelf && (
+                    <React.Fragment>
+                      <View style={styles.point} />
+                      <TouchableOpacity onPress={() => onPressFollUnFoll(isFollow)}>
+                        <Text
+                          style={isFollow ? styles.textFollowing : styles.textFollow(isShortText)}>
+                          {isFollow ? 'Following' : 'Follow'}
+                        </Text>
+                      </TouchableOpacity>
+                    </React.Fragment>
+                  )}
             </View>
-
-            <View style={[styles.containerFeedProfile]}>
-              <View
-                style={[
-                  {
-                    alignItems: 'center',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between'
-                  }
-                ]}>
-                <View
-                  style={{
-                    marginTop: -6,
-                    flexDirection: 'row'
-                  }}>
-                  <AnonymousUsername version={version} anonUserInfo={anonUserInfo} isFeed={true} />
-
-                  {disabledFollow
-                    ? null
-                    : !isSelf && (
-                        <React.Fragment>
-                          <View style={styles.point} />
-                          <TouchableOpacity onPress={() => onPressFollUnFoll(isFollow)}>
-                            <Text style={isFollow ? styles.textFollowing : styles.textFollow}>
-                              {isFollow ? 'Following' : 'Follow'}
-                            </Text>
-                          </TouchableOpacity>
-                        </React.Fragment>
-                      )}
+            {hideThreeDot ? null : (
+              <GlobalButton
+                onPress={() => {
+                  refSheet.current.open();
+                }}>
+                <View style={{zIndex: 1000}}>
+                  <ElipsisIcon width={16} height={16} color={COLORS.grey410} />
                 </View>
-                {hideThreeDot ? null : (
-                  <GlobalButton
-                    onPress={() => {
-                      refSheet.current.open();
-                    }}>
-                    <View style={{zIndex: 1000}}>
-                      <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
-                    </View>
-                  </GlobalButton>
-                )}
-              </View>
-
-              <View
-                style={[
-                  styles.containerFeedText,
-                  {
-                    marginTop: -6,
-                    paddingBottom: 4
-                  }
-                ]}>
-                <Text style={styles.feedDate}>{calculateTime(time)}</Text>
-                <View style={styles.point} />
-                {privacy.toLowerCase() === PRIVACY_PUBLIC ? (
-                  <MemoicGlobe height={16} width={16} />
-                ) : (
-                  <MemoPeopleFollow height={16} width={16} />
-                )}
-
-                {duration_feed !== 'never' ? <View style={styles.point} /> : null}
-                {duration_feed !== 'never' ? validationTimer(time, duration_feed) : null}
-                <View style={styles.point} />
-                <Text style={styles.feedDate}>{location}</Text>
-              </View>
-            </View>
+              </GlobalButton>
+            )}
           </View>
         </View>
         <BottomSheetMenu
@@ -276,14 +258,10 @@ const _renderAnonimity = ({
 const _renderProfileNormal = ({
   actor,
   time,
-  privacy,
   duration_feed,
-  location,
   isBackButton,
   height,
   source,
-  headerStyle,
-  onHeaderOptionClicked = () => {},
   hideThreeDot,
   isPostDetail,
   karmaScore = 0,
@@ -294,7 +272,8 @@ const _renderProfileNormal = ({
   isSelf = false,
   item,
   disabledFollow,
-  isFromFeeds
+  isFromFeeds,
+  isShortText
 }) => {
   const refSheet = React.useRef();
   const dataSheet = [
@@ -325,105 +304,90 @@ const _renderProfileNormal = ({
   });
   return (
     <SafeAreaView>
-      <View
-        testID="defaultHeader"
-        style={[
-          styles.rowSpaceBeetwen,
-          styles.heightHeader(height),
-          styles.postDetail(isPostDetail)
-        ]}>
-        <View style={[styles.rowCenter, headerStyle]}>
-          {isBackButton ? (
-            <View testID="haveBackButton" style={styles.btn}>
-              <GlobalButton testID="onBack" onPress={() => onBackNormalUser(isFromFeeds)}>
-                <MemoIc_arrow_back height={20} width={20} />
-              </GlobalButton>
-            </View>
-          ) : null}
-          <GlobalButton onPress={navigateToProfile}>
-            <ProfilePicture
-              karmaScore={karmaScore}
-              profilePicPath={profile_pic_url ?? DEFAULT_PROFILE_PIC_PATH}
-              size={50}
-              width={3}
-              withKarma
-              onImageContainerClick={navigateToProfile}
-            />
-          </GlobalButton>
-          <GlobalButton
-            onPress={navigateToProfile}
-            style={[styles.containerFeedProfile, {paddingBottom: 5}]}>
-            <View>
-              <View
-                style={[
-                  {
-                    flexDirection: 'row',
-                    alignItems: 'center'
-                  }
-                ]}>
-                <View
-                  style={{
-                    flexDirection: 'row'
-                  }}>
-                  <Text
-                    style={{
-                      fontFamily: fonts.inter[600],
-                      fontWeight: 'bold',
-                      fontSize: 14,
-                      lineHeight: 16.94,
-                      color: COLORS.black
-                    }}>
-                    {username || StringConstant.feedDeletedUserName}
-                  </Text>
-                  {disabledFollow
-                    ? null
-                    : !isSelf && (
-                        <React.Fragment>
-                          <View style={styles.point} />
-                          <TouchableOpacity onPress={() => onPressFollUnFoll(isFollow)}>
-                            <Text style={isFollow ? styles.textFollowing : styles.textFollow}>
-                              {isFollow ? 'Following' : 'Follow'}
-                            </Text>
-                          </TouchableOpacity>
-                        </React.Fragment>
-                      )}
-                </View>
-
-                <GlobalButton
-                  buttonStyle={{
-                    marginLeft: 'auto',
-                    paddingBottom: 0,
-                    alignSelf: 'center'
-                  }}
-                  onPress={() => {
-                    refSheet.current.open();
-                  }}>
-                  {hideThreeDot ? null : (
-                    <View style={{zIndex: 1000}}>
-                      <ElipsisIcon width={4} height={14} fill={COLORS.blackgrey} />
-                    </View>
-                  )}
-                </GlobalButton>
-              </View>
-            </View>
-            <View style={[styles.containerFeedText, {paddingBottom: 0}]}>
-              <Text style={styles.feedDate}>{calculateTime(time)}</Text>
+      <View testID="defaultHeader" style={[styles.rowCenter, styles.header(height, isPostDetail)]}>
+        {isShortText && (
+          <LinearGradient
+            colors={['#184A57', '#184A57']}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              borderTopLeftRadius: 16,
+              borderTopRightRadius: 16
+            }}
+          />
+        )}
+        {isBackButton ? (
+          <View testID="haveBackButton" style={styles.btn}>
+            <GlobalButton testID="onBack" onPress={() => onBackNormalUser(isFromFeeds)}>
+              <MemoIc_arrow_back height={20} width={20} fill={COLORS.white} />
+            </GlobalButton>
+          </View>
+        ) : null}
+        <GlobalButton onPress={navigateToProfile} style={[styles.containerFeedProfile]}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between'
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center'
+              }}>
+              <ProfilePicture
+                karmaScore={karmaScore}
+                profilePicPath={profile_pic_url ?? DEFAULT_PROFILE_PIC_PATH}
+                size={25}
+                width={4}
+                withKarma
+                onImageContainerClick={navigateToProfile}
+              />
+              <View style={{width: 6}} />
+              <Text
+                style={{
+                  fontFamily: fonts.inter[600],
+                  fontWeight: 'bold',
+                  fontSize: 14,
+                  lineHeight: 16.94,
+                  color: COLORS.white2
+                }}>
+                {username || StringConstant.feedDeletedUserName}
+              </Text>
               <View style={styles.point} />
-              {privacy?.toLowerCase() === PRIVACY_PUBLIC ? (
-                <MemoicGlobe height={16} width={16} />
-              ) : (
-                <MemoPeopleFollow height={16} width={16} />
-              )}
-
+              <Text style={styles.feedDate}>{calculateTime(time).replace(' ago', '')}</Text>
               {duration_feed !== 'never' ? <View style={styles.point} /> : null}
               {duration_feed !== 'never' ? validationTimer(time, duration_feed) : null}
-              <View style={styles.point} />
-              <Text style={styles.feedDateLocation} numberOfLines={1}>
-                {location}
-              </Text>
+              {disabledFollow
+                ? null
+                : !isSelf && (
+                    <React.Fragment>
+                      <View style={styles.point} />
+                      <TouchableOpacity onPress={() => onPressFollUnFoll(isFollow)}>
+                        <Text
+                          style={isFollow ? styles.textFollowing : styles.textFollow(isShortText)}>
+                          {isFollow ? 'Following' : 'Follow'}
+                        </Text>
+                      </TouchableOpacity>
+                    </React.Fragment>
+                  )}
             </View>
-          </GlobalButton>
-        </View>
+
+            <GlobalButton
+              onPress={() => {
+                refSheet.current.open();
+              }}>
+              {hideThreeDot ? null : (
+                <View style={{zIndex: 1000}}>
+                  <ElipsisIcon width={16} height={16} color={COLORS.grey410} />
+                </View>
+              )}
+            </GlobalButton>
+          </View>
+        </GlobalButton>
       </View>
       <BottomSheetMenu
         refSheet={refSheet}
@@ -439,8 +403,6 @@ const Header = ({
   isBackButton = false,
   height,
   source = null,
-  headerStyle,
-  showAnonymousOption = false,
   isPostDetail,
   isFollow = false,
   onPressFollUnFoll = () => {},
@@ -448,18 +410,16 @@ const Header = ({
   isShowDelete = false,
   isSelf = false,
   item,
-  onHeaderOptionClicked,
   hideThreeDot,
   disabledFollow,
-  isFromFeeds
+  isFromFeeds,
+  isShortText
 }) => {
   const {
     anonimity,
     time,
-    privacy,
     duration_feed,
     expired_at,
-    location,
     actor,
     anon_user_info_color_code,
     anon_user_info_color_name,
@@ -472,14 +432,10 @@ const Header = ({
     return _renderAnonimity({
       item,
       time,
-      privacy,
       duration_feed,
       expired_at,
-      location,
       isBackButton,
       height,
-      headerStyle,
-      showAnonymousOption,
       version,
       anonUserInfo: {
         colorCode: anon_user_info_color_code,
@@ -495,26 +451,22 @@ const Header = ({
       onDeletePost,
       isShowDelete,
       isSelf,
-      onHeaderOptionClicked,
       actor,
       source,
       disabledFollow,
-      isFromFeeds
+      isFromFeeds,
+      isShortText
     });
   }
   return _renderProfileNormal({
     item,
     actor,
     time,
-    privacy,
     duration_feed,
     expired_at,
-    location,
     isBackButton,
     height,
     source,
-    headerStyle,
-    onHeaderOptionClicked: () => onHeaderOptionClicked(props),
     hideThreeDot,
     isPostDetail,
     karmaScore: props?.karma_score,
@@ -524,20 +476,26 @@ const Header = ({
     isShowDelete,
     isSelf,
     disabledFollow,
-    isFromFeeds
+    isFromFeeds,
+    isShortText
   });
 };
 
 const styles = StyleSheet.create({
-  heightHeader: (height) => ({
-    height
-  }),
-  rowSpaceBeetwen: {
+  header: (height, isPostDetail) => ({
+    backgroundColor: COLORS.almostBlack,
+    height,
+    paddingLeft: isPostDetail ? 10 : 20,
+    paddingRight: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 8
-  },
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    borderTopWidth: 1,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderColor: COLORS.darkGray
+  }),
   rowCenter: {
     flexDirection: 'row',
     alignItems: 'center'
@@ -569,7 +527,7 @@ const styles = StyleSheet.create({
   feedDate: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.blackgrey,
+    color: COLORS.grey410,
     lineHeight: 18
   },
   feedDateLocation: {
@@ -583,7 +541,7 @@ const styles = StyleSheet.create({
     width: 2,
     height: 2,
     borderRadius: 4,
-    backgroundColor: COLORS.blackgrey,
+    backgroundColor: COLORS.grey410,
     marginLeft: 8,
     marginRight: 8,
     alignSelf: 'center',
@@ -639,22 +597,16 @@ const styles = StyleSheet.create({
   noPaddingLeft: {
     paddingLeft: 0
   },
-  imageAnonymContainer: {
-    paddingHorizontal: 10
-  },
   avatarImage: {height: 48, width: 48, borderRadius: 24},
-  postDetail: (isPostDetail) => ({
-    paddingLeft: isPostDetail ? 10 : 0
-  }),
   contentFeedName: {
     flexDirection: 'row'
   },
-  textFollow: {
-    color: COLORS.bluePrimary,
+  textFollow: (isShortText) => ({
+    color: isShortText ? COLORS.white2 : COLORS.bluePrimary,
     fontSize: normalizeFontSize(14),
     fontStyle: 'normal',
     fontWeight: '500'
-  },
+  }),
   textFollowing: {
     color: COLORS.greySubtile1,
     fontSize: normalizeFontSize(14),
@@ -665,7 +617,8 @@ const styles = StyleSheet.create({
 
 Header.propTypes = {
   props: PropsTypes.object,
-  isBackButton: PropsTypes.bool
+  isBackButton: PropsTypes.bool,
+  isShortText: PropsTypes.bool
 };
 
 export default React.memo(Header);

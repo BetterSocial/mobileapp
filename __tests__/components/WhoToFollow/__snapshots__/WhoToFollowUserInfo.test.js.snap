@@ -89,7 +89,7 @@ exports[`Testing Who To Follow Item User Match Snapshot 1`] = `
       style={
         Object {
           "alignSelf": "flex-start",
-          "color": "#A5ACB8",
+          "color": "#69707C",
           "fontSize": 12.600000000000001,
           "lineHeight": 18.9,
           "marginRight": 12.8,

@@ -5,9 +5,9 @@ exports[`Testing Feed Screen Content Link Card Matches Snapshot 1`] = `
   style={
     Array [
       Object {
-        "borderColor": "rgba(0, 0, 0, 0.5)",
-        "borderRadius": 8,
-        "borderWidth": 0.5,
+        "borderColor": "#2A3D50",
+        "borderRadius": 9,
+        "borderWidth": 1,
         "height": 225,
         "marginBottom": 5,
         "overflow": "hidden",
@@ -476,7 +476,7 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
         "width": "100%",
       },
       Object {
-        "flex": 1,
+        "height": undefined,
       },
     ]
   }
@@ -486,8 +486,11 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
     style={
       Object {
         "backgroundColor": "#16202A",
+        "borderColor": "#394756",
+        "borderLeftWidth": 1,
+        "borderRightWidth": 1,
         "flex": 1,
-        "marginHorizontal": 6,
+        "paddingHorizontal": 6,
       }
     }
   >
@@ -495,9 +498,9 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
       style={
         Array [
           Object {
-            "borderColor": "rgba(0, 0, 0, 0.5)",
-            "borderRadius": 8,
-            "borderWidth": 0.5,
+            "borderColor": "#2A3D50",
+            "borderRadius": 9,
+            "borderWidth": 1,
             "height": 225,
             "marginBottom": 5,
             "overflow": "hidden",

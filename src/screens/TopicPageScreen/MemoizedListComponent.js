@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
+import {Dimensions, StyleSheet, View} from 'react-native';
 import SimpleToast from 'react-native-simple-toast';
 
 import {useRoute} from '@react-navigation/core';
@@ -31,7 +31,6 @@ import useCalculationContent from '../FeedScreen/hooks/useCalculationContent';
 import useFeed from '../FeedScreen/hooks/useFeed';
 
 const FULL_WIDTH = Dimensions.get('screen').width;
-const tabBarHeight = StatusBar.currentHeight;
 
 const RenderListFeed = (props) => {
   const {
@@ -51,6 +50,7 @@ const RenderListFeed = (props) => {
 
   const [loadingVote, setLoadingVote] = React.useState(false);
   const [isHaveSeeMore, setIsHaveSeeMore] = React.useState(false);
+  const [isShortText, setIsShortText] = React.useState(true);
   const {
     totalVote,
     getHeightReaction,
@@ -130,14 +130,6 @@ const RenderListFeed = (props) => {
 
   const isBlurred = item?.isBlurredPost && item?.anonimity;
 
-  const addCommentPreviewHeight = () => {
-    const commentSectionHeight = getHeightReaction() - getHeightFooter();
-    if (isBlurred && !hasComment) {
-      return 0;
-    }
-    return commentSectionHeight;
-  };
-
   const {onLayoutTopicChip} = useCalculationContent();
   const calculateLineTopicChip = (nativeEvent) => {
     onLayoutTopicChip(nativeEvent, 1);
@@ -150,17 +142,20 @@ const RenderListFeed = (props) => {
     return getHeightFooter();
   };
 
+  const isShortTextPost =
+    item.post_type === POST_TYPE_STANDARD && item.images_url.length <= 0 && isShortText === true;
+
   return (
-    <View style={[styles.cardContainer()]}>
+    <View style={styles.cardContainer}>
       <View style={styles.cardMain}>
         <Header
-          headerStyle={styles.ml3}
           hideThreeDot={true}
           props={item}
           height={getHeightHeader()}
           isSelf={item?.is_self}
           isFollow={item?.is_following_target}
           onPressFollUnFoll={() => followUnfollowTopic(item, route?.params?.id, offset)}
+          isShortText={isShortTextPost}
         />
         {item.post_type === POST_TYPE_LINK && (
           <ContentLink
@@ -171,9 +166,7 @@ const RenderListFeed = (props) => {
             onCardContentPress={() => navigateToLinkContextPage(item)}
             message={item.message}
             topics={item?.topics}
-            contentHeight={
-              dimen.size.FEED_CURRENT_ITEM_HEIGHT - getHeightHeader() - getHeightReaction()
-            }
+            contentHeight={normalize(399)}
           />
         )}
         {(item.post_type === POST_TYPE_STANDARD || item.post_type === POST_TYPE_POLL) && (
@@ -186,6 +179,7 @@ const RenderListFeed = (props) => {
             onNewPollFetched={onNewPollFetched}
             topics={item?.topics}
             setHaveSeeMore={(haveSeeMore) => setIsHaveSeeMore(haveSeeMore)}
+            setIsShortText={(shortText) => setIsShortText(shortText)}
           />
         )}
         {isBlurred && (
@@ -199,41 +193,32 @@ const RenderListFeed = (props) => {
             }}
           />
         )}
-        <View style={styles.footerWrapper(getHeightFooter())}>
-          <Footer
-            item={item}
-            totalComment={getCountCommentWithChild(item)}
-            totalVote={totalVote}
-            onPressShare={() =>
-              ShareUtils.sharePostInTopic(
-                item,
-                ANALYTICS_SHARE_POST_TOPIC_SCREEN,
-                ANALYTICS_SHARE_POST_TOPIC_ID
-              )
-            }
-            onPressComment={() => onPressComment(isHaveSeeMore)}
-            onPressBlock={() => onPressBlock(item)}
-            onPressDownVote={onPressDownVoteHandle}
-            onPressUpvote={onPressUpvoteHandle}
-            statusVote={voteStatus}
-            loadingVote={loadingVote}
-            isSelf={item.anonimity ? false : userId === item?.actor?.id}
-            onPressScore={showScoreAlertDialog}
-            showScoreButton={showScoreButton}
-            isShowDM
-          />
-        </View>
-        <BlurredLayer
-          layerOnly
-          blurType="light"
-          withToast={true}
-          isVisible={isBlurred}
-          containerStyle={{
-            height: isBlurred || !hasComment ? addCommentPreviewHeight() : undefined,
-            marginBottom: hasComment ? normalize(4) : 0
-          }}>
+        <Footer
+          item={item}
+          totalComment={getCountCommentWithChild(item)}
+          totalVote={totalVote}
+          onPressShare={() =>
+            ShareUtils.sharePostInTopic(
+              item,
+              ANALYTICS_SHARE_POST_TOPIC_SCREEN,
+              ANALYTICS_SHARE_POST_TOPIC_ID
+            )
+          }
+          onPressComment={() => onPressComment(isHaveSeeMore)}
+          onPressBlock={() => onPressBlock(item)}
+          onPressDownVote={onPressDownVoteHandle}
+          onPressUpvote={onPressUpvoteHandle}
+          statusVote={voteStatus}
+          loadingVote={loadingVote}
+          isSelf={item.anonimity ? false : userId === item?.actor?.id}
+          onPressScore={showScoreAlertDialog}
+          showScoreButton={showScoreButton}
+          isShowDM
+          isShortText={isShortTextPost}
+        />
+        <BlurredLayer layerOnly blurType="light" withToast={true} isVisible={isBlurred}>
           {hasComment ? (
-            <View style={styles.contentReaction(getHeightReaction())}>
+            <View>
               <PreviewComment
                 user={item.latest_reactions.comment[0].user}
                 comment={item?.latest_reactions?.comment[0]?.data?.text || ''}
@@ -242,6 +227,7 @@ const RenderListFeed = (props) => {
                 totalComment={getTotalReaction(item) - 1}
                 item={item.latest_reactions.comment[0]}
                 onPress={onPressComment}
+                isShortText={isShortTextPost}
               />
             </View>
           ) : (
@@ -250,6 +236,7 @@ const RenderListFeed = (props) => {
               isBlurred={isBlurred}
               heightReaction={getHeightReaction()}
               onPressComment={() => onPressComment(isHaveSeeMore)}
+              isShortText={isShortTextPost}
             />
           )}
         </BlurredLayer>
@@ -259,27 +246,15 @@ const RenderListFeed = (props) => {
 };
 
 const styles = StyleSheet.create({
-  cardContainer: () => ({
-    height: dimen.size.TOPIC_CURRENT_ITEM_HEIGHT,
+  cardContainer: {
     width: FULL_WIDTH,
-    marginBottom: normalizeFontSizeByWidth(4),
-    backgroundColor: COLORS.white,
-    shadowColor: COLORS.black000,
-    shadowOffset: {width: 0, height: 4},
-    shadowOpacity: 0.3,
-    shadowRadius: 4
-  }),
+    height: dimen.size.TOPIC_CURRENT_ITEM_HEIGHT,
+    backgroundColor: COLORS.almostBlack,
+    paddingTop: normalize(4)
+  },
   cardMain: {
     height: '100%',
     width: '100%'
-  },
-  footerWrapper: (h) => ({height: h}),
-  contentReaction: (heightReaction) => ({
-    maxHeight: heightReaction,
-    marginBottom: heightReaction <= 0 ? tabBarHeight + normalize(10) : 0
-  }),
-  ml3: {
-    marginLeft: 3
   }
 });
 
@@ -297,9 +272,5 @@ RenderListFeed.propTypes = {
   onPressDownVote: PropTypes.func,
   loading: PropTypes.bool
 };
-
-function compare(prevProps, nextProps) {
-  return JSON.stringify(prevProps) === JSON.stringify(nextProps);
-}
 
 export default RenderListFeed;
