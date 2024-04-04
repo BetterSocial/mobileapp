@@ -28,6 +28,7 @@ enum StorageKeysEnum {
   FeedChatTimeStamps = 'feedChatTimeStamps',
   AnonymousNotificationTimeStamps = 'anynoymousNotificationTimeStamp',
   SignedNotificationTimeStamp = 'signedNotificationTimeStamp',
+  TotalAnonChannels = 'totalAnonChannels',
   OpenedChannel = 'openedChannel'
 }
 
@@ -104,6 +105,7 @@ const StorageUtils = {
   feedChatTimeStamps: storageBuilder(StorageKeysEnum.FeedChatTimeStamps),
   anonymousNotificationTimeStamp: storageBuilder(StorageKeysEnum.AnonymousNotificationTimeStamps),
   signedNotificationTimeStamp: storageBuilder(StorageKeysEnum.SignedNotificationTimeStamp),
+  totalAnonChannels: storageBuilder(StorageKeysEnum.TotalAnonChannels),
   clearAll: () => MMKVStorage.clearAll(),
   openedChannel: storageBuilder(StorageKeysEnum.OpenedChannel)
 };
