@@ -100,6 +100,7 @@ const SignedChatScreen = () => {
           user={selectedChannel?.name}
           anon_user_info_emoji_code={selectedChannel?.anon_user_info_emoji_code}
           anon_user_info_color_code={selectedChannel?.anon_user_info_color_code}
+          isGroup={selectedChannel?.channelType === 'GROUP'}
         />
       ) : null}
 
