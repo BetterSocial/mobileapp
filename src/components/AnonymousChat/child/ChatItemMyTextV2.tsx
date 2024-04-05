@@ -56,13 +56,13 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: 12,
     lineHeight: 18,
-    color: COLORS.white
+    color: COLORS.white2
   },
   text: {
     fontFamily: fonts.inter[400],
     fontSize: 16,
     lineHeight: 24,
-    color: COLORS.white
+    color: COLORS.white2
   },
   avatar: {
     width: AVATAR_SIZE,

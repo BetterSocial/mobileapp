@@ -34,7 +34,7 @@ const ChatItemAttachmentStyles = StyleSheet.create({
   moreText: {
     fontSize: dimen.normalizeDimen(16),
     fontFamily: fonts.inter[400],
-    color: COLORS.white
+    color: COLORS.white2
   },
   attachmentFileContainer: {
     backgroundColor: COLORS.almostBlack10percent,

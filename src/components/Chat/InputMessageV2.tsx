@@ -365,6 +365,7 @@ const InputMessageV2 = ({
 
   const toggleChange = () => {
     if (messageDisable) {
+      // TODO: Garry, need to change this color
       ToastMessage.show({
         type: 'asNative',
         text1: messageDisable,
