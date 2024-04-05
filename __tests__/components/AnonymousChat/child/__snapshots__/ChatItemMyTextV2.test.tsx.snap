@@ -138,7 +138,7 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
         style={
           Object {
             "alignSelf": "center",
-            "backgroundColor": "#A5ACB8",
+            "backgroundColor": "#69707C",
             "borderRadius": 2,
             "height": 3,
             "marginLeft": 5,
@@ -151,7 +151,7 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
         style={
           Object {
             "alignSelf": "center",
-            "color": "#A5ACB8",
+            "color": "#69707C",
             "fontFamily": "Inter-ExtraLight",
             "fontSize": 10,
             "lineHeight": 12.19,

@@ -13,8 +13,8 @@ import {ANONYMOUS, ANON_PM, ANON_POST_NOTIFICATION} from '../../../hooks/core/co
 import useAnonymousChannelListScreenHook from '../../../hooks/screen/useAnonymousChannelListHook';
 import useRootChannelListHook from '../../../hooks/screen/useRootChannelListHook';
 import Search from '../../ChannelListScreen/elements/Search';
+import {COLORS, COLORS, COLORS} from '../../../utils/theme';
 import IncognitoEmptyChat from '../IncognitoEmptyChat';
-import {COLORS} from '../../../utils/theme';
 
 const AnonymousChannelListScreen = ({route}) => {
   const {refresh} = useLocalDatabaseHook();
