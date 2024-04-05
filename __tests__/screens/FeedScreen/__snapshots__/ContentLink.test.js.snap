@@ -472,6 +472,7 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
   style={
     Array [
       Object {
+        "overflow": "hidden",
         "position": "relative",
         "width": "100%",
       },

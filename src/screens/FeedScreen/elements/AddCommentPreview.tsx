@@ -9,6 +9,7 @@ import {CHAT_SIGNED} from '../../../utils/constants';
 import StringConstant from '../../../utils/string/StringConstant';
 import {fonts, normalize} from '../../../utils/fonts';
 import dimen from '../../../utils/dimen';
+import BlurredLayer from './BlurredLayer';
 
 type AddCommentPreviewProps = {
   isBlurred: boolean;
@@ -23,32 +24,36 @@ function AddCommentPreview({
 }: AddCommentPreviewProps) {
   const [profile] = (useContext(Context) as unknown as any).profile;
   return (
-    !isBlurred && (
-      <TouchableOpacity testID="writeComment" onPress={onPressComment}>
-        <View style={styles.floatBackground}>
-          {isShortText && (
-            <LinearGradient
-              colors={['#275D8A', '#275D8A']}
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                borderBottomLeftRadius: normalize(13),
-                borderBottomRightRadius: normalize(13)
-              }}
-            />
-          )}
-        </View>
-        <TouchableOpacity
-          onPress={onPressComment}
-          style={{
-            paddingHorizontal: normalize(12),
-            height: normalize(56),
-            position: 'absolute',
-            width: '100%'
-          }}>
+    <TouchableOpacity testID="writeComment" onPress={onPressComment}>
+      <View style={styles.floatBackground}>
+        {isShortText && (
+          <LinearGradient
+            colors={['#275D8A', '#275D8A']}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              borderBottomLeftRadius: normalize(13),
+              borderBottomRightRadius: normalize(13)
+            }}
+          />
+        )}
+      </View>
+      <TouchableOpacity
+        onPress={onPressComment}
+        style={{
+          paddingHorizontal: normalize(12),
+          height: normalize(56),
+          position: 'absolute',
+          width: '100%'
+        }}>
+        <BlurredLayer
+          layerOnly
+          withToast={true}
+          isVisible={isBlurred}
+          containerStyle={{borderRadius: 12}}>
           <View style={styles.profile}>
             <View testID="userDefined">
               <ProfilePicture
@@ -86,9 +91,9 @@ function AddCommentPreview({
               <SendIcon type={CHAT_SIGNED} />
             </View>
           </View>
-        </TouchableOpacity>
+        </BlurredLayer>
       </TouchableOpacity>
-    )
+    </TouchableOpacity>
   );
 }
 
