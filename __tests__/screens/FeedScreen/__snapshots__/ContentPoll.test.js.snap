@@ -25,7 +25,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
     <Text
       style={
         Object {
-          "color": "#828282",
+          "color": "#8C939F",
           "fontSize": 10.8,
           "marginLeft": 2,
         }
@@ -53,7 +53,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
         onStartShouldSetResponder={[Function]}
         style={
           Object {
-            "backgroundColor": "#F5F6F7",
+            "backgroundColor": "#233343",
             "borderRadius": 8,
             "flex": 1,
             "flexDirection": "row",
@@ -74,7 +74,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
                 "top": 0,
               },
               Object {
-                "backgroundColor": "#F5F6F7",
+                "backgroundColor": "#233343",
                 "width": "0%",
               },
             ]
@@ -102,7 +102,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
           <Text
             style={
               Object {
-                "color": "#1E1F20",
+                "color": "#FFFFFF",
                 "flex": 1,
                 "fontFamily": "Inter-Regular",
                 "fontSize": 12.600000000000001,
@@ -140,7 +140,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
         onStartShouldSetResponder={[Function]}
         style={
           Object {
-            "backgroundColor": "#F5F6F7",
+            "backgroundColor": "#233343",
             "borderRadius": 8,
             "flex": 1,
             "flexDirection": "row",
@@ -191,7 +191,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
           <Text
             style={
               Object {
-                "color": "#1E1F20",
+                "color": "#FFFFFF",
                 "flex": 1,
                 "fontFamily": "Inter-Regular",
                 "fontSize": 12.600000000000001,
@@ -231,7 +231,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
     <Text
       style={
         Object {
-          "color": "#828282",
+          "color": "#8C939F",
           "fontFamily": "Inter-Regular",
           "fontSize": 10.8,
           "lineHeight": 16,
@@ -244,7 +244,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
       style={
         Object {
           "alignSelf": "center",
-          "backgroundColor": "#828282",
+          "backgroundColor": "#8C939F",
           "borderRadius": 4,
           "height": 4,
           "width": 4,
@@ -255,7 +255,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
       style={
         Object {
           "alignSelf": "center",
-          "color": "#828282",
+          "color": "#8C939F",
           "flex": 1,
           "fontFamily": "Inter-Regular",
           "fontSize": 10.8,
