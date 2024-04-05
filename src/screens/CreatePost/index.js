@@ -329,18 +329,21 @@ const CreatePost = () => {
   const uploadMediaFromLibrary = async () => {
     const {success} = await requestExternalStoragePermission();
     if (success) {
-      launchImageLibrary({mediaType: 'photo', includeBase64: true}, async (res) => {
-        const uri = res?.assets?.[0]?.uri;
-        if (res.didCancel && __DEV__) {
-          console.log('User cancelled image picker');
-        } else if (uri) {
-          setIsUploadingPhotoMedia(true);
-          await uploadPhotoImage(uri);
-          setIsUploadingPhotoMedia(false);
-        } else if (__DEV__) {
-          console.log('CreatePost (launchImageLibrary): ', res);
+      launchImageLibrary(
+        {mediaType: 'photo', includeBase64: true, tintColor: 'red'},
+        async (res) => {
+          const uri = res?.assets?.[0]?.uri;
+          if (res.didCancel && __DEV__) {
+            console.log('User cancelled image picker');
+          } else if (uri) {
+            setIsUploadingPhotoMedia(true);
+            await uploadPhotoImage(uri);
+            setIsUploadingPhotoMedia(false);
+          } else if (__DEV__) {
+            console.log('CreatePost (launchImageLibrary): ', res);
+          }
         }
-      });
+      );
     } else {
       Alert.alert('Permission denied', 'Allow Helio to access photos and media on your device ?', [
         {
