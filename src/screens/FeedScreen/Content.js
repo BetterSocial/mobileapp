@@ -410,7 +410,6 @@ export const styles = StyleSheet.create({
   },
   contentFeed: {
     height: dimen.size.FEED_CONTENT_HEIGHT,
-    marginTop: 0,
     width: '100%',
     borderLeftWidth: 1,
     borderRightWidth: 1,

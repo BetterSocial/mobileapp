@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
   },
   cardMain: {
     width: '100%',
-    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT - normalize(56),
+    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT,
     borderTopLeftRadius: normalize(16),
     borderTopRightRadius: normalize(16),
     backgroundColor: COLORS.almostBlack
