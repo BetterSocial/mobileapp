@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
   container: {
     height: 64,
     flexDirection: 'row',
-    backgroundColor: 'white'
+    backgroundColor: COLORS.almostBlack
   },
   textButtonFollowing: {
     fontFamily: fonts.inter[600],
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: COLORS.white
+    color: COLORS.white2
   },
   profilepicture: {
     width: 48,
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
   textProfileFullName: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.blackgrey,
+    color: COLORS.gray500,
     flexWrap: 'wrap',
     lineHeight: 18,
     marginTop: 4
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
   domainDescription: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.blackgrey,
+    color: COLORS.gray500,
     flexWrap: 'wrap',
     lineHeight: 18,
     marginTop: 4
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: COLORS.white
+    color: COLORS.white2
   },
   textButtonBlockUser: {
     fontFamily: fonts.inter[600],

@@ -30,7 +30,7 @@ const SendIcon: React.FC<SendIconProps> = ({type, isDisabled}) => {
     <MemoSendComment
       style={styles.icSendButton}
       fillBackground={sendButtonStyle()}
-      fillIcon={COLORS.white}
+      fillIcon={COLORS.white2}
     />
   );
 };

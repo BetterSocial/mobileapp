@@ -1,6 +1,6 @@
 export const COLORS = {
   alto: '#E0E0E0',
-  black: '#1E1F20',
+  black: '#FFFFFF', // changed to white, before is #1E1F20
   black000: '#000',
   black30percent: 'rgba(0,0,0,0.3)',
   black80percent: 'rgba(0,0,0,0.8)',
@@ -13,8 +13,8 @@ export const COLORS = {
   blueZaffre: '#0E24B3',
   brilliance: '#FCFCFC',
   bunting: '#11243D',
-  concrete: '#F2F2F2',
-  emperor: '#4F4F4F',
+  concrete: '#FF00FF', // changed to gray 100, before is #F2F2F2
+  emperor: '#4F4F4F', // not used again
   french_pass: '#b6e4fd',
   greenMantis: '#79B45D',
   greyseries: '#333333',
@@ -26,6 +26,7 @@ export const COLORS = {
   waterspout: '#9DEDF1',
   white: '#16202A', // almost black
   white2: '#FFFFFF',
+  white10percent: 'rgba(255,255,255,0.1)',
   white20percent: 'rgba(255,255,255,0.2)',
   white30percent: 'rgba(255,255,255,0.3)',
   whiteSmoke: '#F4F4F4',
@@ -69,7 +70,7 @@ export const COLORS = {
   light_silver: '#D2D4DB',
   balance_gray: '#9B9FA9',
   gray: '#E8EBED',
-  lightgrey: '#F5F6F7',
+  lightgrey: '#FF00FF', // changed to gray 200 #F5F6F7
   redalert: '#FF2E63',
   blackgrey: '#FF00FF', // changed to gray 400
   greySubtile1: '#9B9FA9', // changed to gray 400

@@ -14,6 +14,7 @@ import useAnonymousChannelListScreenHook from '../../../hooks/screen/useAnonymou
 import useRootChannelListHook from '../../../hooks/screen/useRootChannelListHook';
 import Search from '../../ChannelListScreen/elements/Search';
 import IncognitoEmptyChat from '../IncognitoEmptyChat';
+import {COLORS} from '../../../utils/theme';
 
 const AnonymousChannelListScreen = ({route}) => {
   const {refresh} = useLocalDatabaseHook();
@@ -82,6 +83,7 @@ const AnonymousChannelListScreen = ({route}) => {
           />
         }
         renderItem={renderChannelItem}
+        style={{backgroundColor: COLORS.almostBlack}}
       />
     </>
   );

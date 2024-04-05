@@ -63,12 +63,12 @@ const styles = StyleSheet.create({
   mainStyes: {
     position: 'relative',
     borderRadius: dimen.normalizeDimen(12),
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.almostBlack,
     height: dimen.normalizeDimen(20),
     width: dimen.normalizeDimen(42),
     ...Platform.select({
       ios: {
-        shadowColor: 'rgba(0,0,0,0.25)',
+        shadowColor: COLORS.gray200,
         shadowOffset: {width: 0, height: 0},
         shadowOpacity: dimen.normalizeDimen(1),
         shadowRadius: dimen.normalizeDimen(1)
@@ -118,8 +118,8 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   labelRight,
   circleActiveColor = COLORS.anon_primary,
   circleInActiveColor = COLORS.signed_primary,
-  backgroundActive = COLORS.lightgrey,
-  backgroundInactive = COLORS.lightgrey,
+  backgroundActive = COLORS.almostBlack,
+  backgroundInactive = COLORS.almostBlack,
   styleLabelLeft,
   styleLabelRight,
   activeTextColor = COLORS.anon_primary,
