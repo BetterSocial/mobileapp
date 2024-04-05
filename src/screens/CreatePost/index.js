@@ -739,6 +739,7 @@ const CreatePost = () => {
             topicChats={listTopicChat}
             allTaggedUser={allTaggingUser}
             setAllTaggedUser={setAllTaggingUser}
+            typeUser={typeUser}
           />
           {typeUser && (
             <Animated.View style={[{opacity: animatedReminder}, styles.reminderContainer]}>
