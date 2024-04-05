@@ -58,13 +58,13 @@ const S = StyleSheet.create({
   },
   divider: {
     width: '100%',
-    backgroundColor: COLORS.blackgrey,
+    backgroundColor: COLORS.gray400,
     height: 2
   },
   passwordTextInput: {
     margin: 16,
     padding: 16,
-    backgroundColor: COLORS.lightgrey
+    backgroundColor: COLORS.gray100
   }
 });
 

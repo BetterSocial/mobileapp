@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     borderRadius: 10
   }),
   text: {
-    color: COLORS.white,
+    color: COLORS.almostBlack,
     fontSize: 16,
     marginTop: 10
   }

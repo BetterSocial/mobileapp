@@ -58,7 +58,7 @@ const ProfilePicture = ({
                         style={{
                           width: 24,
                           height: 24,
-                          backgroundColor: COLORS.white,
+                          backgroundColor: COLORS.almostBlack,
                           borderRadius: 12
                         }}
                       />

@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     marginLeft: 'auto'
   },
   unreadText: {
-    color: COLORS.white,
+    color: COLORS.almostBlack,
     textAlign: 'center',
     fontSize: 10,
     fontFamily: 'Inter'

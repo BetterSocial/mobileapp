@@ -241,7 +241,7 @@ const NewsScreen = () => {
           data={news}
           refreshControl={
             <RefreshControl
-              tintColor={COLORS.white2}
+              tintColor={COLORS.white}
               refreshing={refreshing}
               onRefresh={onRefresh}
             />

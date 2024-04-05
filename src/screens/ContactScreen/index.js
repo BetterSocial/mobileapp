@@ -309,7 +309,7 @@ const ContactScreen = ({navigation}) => {
           scrollViewProps={{
             refreshControl: (
               <RefreshControl
-                tintColor={COLORS.white2}
+                tintColor={COLORS.white}
                 refreshing={refreshing}
                 onRefresh={onRefresh}
               />
@@ -336,7 +336,7 @@ const ContactScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     flex: 1
   },
   recyclerview: {

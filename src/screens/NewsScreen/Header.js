@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: fonts.inter[600],
     flexShrink: 1,
-    color: COLORS.white2
+    color: COLORS.white
   },
   domainNameContainer: {
     flexDirection: 'row',
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     borderRadius: 45
   },
   wrapperText: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     borderRadius: 8,
     borderColor: COLORS.anon_primary,
     width: 32,

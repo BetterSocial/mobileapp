@@ -13,8 +13,6 @@ export const COLORS = {
   blueZaffre: '#0E24B3',
   brilliance: '#FCFCFC',
   bunting: '#11243D',
-  concrete: '#233343', // changed to gray 100, before is #F2F2F2
-  emperor: '#4F4F4F', // not used again
   french_pass: '#b6e4fd',
   greenMantis: '#79B45D',
   greyseries: '#333333',
@@ -24,8 +22,7 @@ export const COLORS = {
   porcelain: '#ecf0f1',
   silver: '#BDBDBD',
   waterspout: '#9DEDF1',
-  white: '#16202A', // almost black
-  white2: '#FFFFFF',
+  white: '#FFFFFF',
   white10percent: 'rgba(255,255,255,0.1)',
   white20percent: 'rgba(255,255,255,0.2)',
   white30percent: 'rgba(255,255,255,0.3)',
@@ -53,16 +50,10 @@ export const COLORS = {
   bondi_blue: '#00ADB5',
 
   // new color
-  // signed_primary: '#4782D7',
-  // signed_primary_15: '#4782D726',
-  // signed_secondary: '#6295DD',
   signed_primary: '#0391FB',
   signed_primary_15: '#0391FB26',
   signed_secondary: '#275D8A',
   default_signed_secondary: '#0391FB',
-  // anon_primary: '#107793',
-  // anon_primary_15: '#10779326',
-  // anon_secondary: '#3A9BB6',
   anon_primary: '#00ABB2',
   anon_primary_15: '#00ABB226',
   anon_secondary: '#184A57',
@@ -70,10 +61,7 @@ export const COLORS = {
   light_silver: '#D2D4DB',
   balance_gray: '#9B9FA9',
   gray: '#E8EBED',
-  lightgrey: '#233343', // changed to gray 100 #F5F6F7
   redalert: '#FF2E63',
-  blackgrey: '#8C939F', // changed to gray 400
-  greySubtile1: '#8C939F', // changed to gray 400
   elm: '#22878B',
   halfBaked: '#88CDD0',
   greenDark: '#004346',

@@ -99,13 +99,13 @@ const styles = StyleSheet.create({
   name: {
     fontFamily: fonts.inter[600],
     fontSize: 14,
-    color: COLORS.white,
+    color: COLORS.almostBlack,
     lineHeight: 16.94
   },
   time: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.white,
+    color: COLORS.almostBlack,
     lineHeight: 18
   }
 });

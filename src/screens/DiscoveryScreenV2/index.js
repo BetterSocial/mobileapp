@@ -354,13 +354,13 @@ const DiscoveryScreenV2 = ({route}) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     flex: 1,
     paddingTop: 60
   },
   fragmentContainer: {
     height: '100%',
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   fragmentContentContainer: {
     // height: '100%'

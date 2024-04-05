@@ -179,7 +179,9 @@ export const ReplyComment = ({
   );
 };
 export const ContainerReply = ({children, isGrandchild}) => (
-  <View style={[{borderColor: isGrandchild ? COLORS.white : COLORS.balance_gray}]}>{children}</View>
+  <View style={[{borderColor: isGrandchild ? COLORS.almostBlack : COLORS.balance_gray}]}>
+    {children}
+  </View>
 );
 
 export const isEqual = (prevProps, nextProps) => prevProps.comments === nextProps.comments;

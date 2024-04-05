@@ -30,7 +30,7 @@ const SearchModal = (props) => {
         <View style={styles.content}>
           <View style={styles.header}>
             <Pressable onPress={props.onClose} style={styles.closeButton}>
-              <CrossIcon width={18} height={18} fill={COLORS.white2} />
+              <CrossIcon width={18} height={18} fill={COLORS.white} />
             </Pressable>
             <Text style={styles.textSearch}>{StringConstant.searchModalTitle}</Text>
           </View>
@@ -137,12 +137,12 @@ const styles = StyleSheet.create({
     letterSpacing: -0.28,
     borderColor: COLORS.gray200,
     backgroundColor: COLORS.gray100,
-    color: COLORS.white2,
+    color: COLORS.white,
     marginLeft: 5
   },
   box: {
     minHeight: 20,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     borderRadius: 8,
     flexDirection: 'column',
     marginBottom: 2,

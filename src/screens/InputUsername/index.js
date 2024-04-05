@@ -312,7 +312,7 @@ const ChooseUsername = () => {
             </View>
             <View style={styles.containerInfo}>
               <View style={styles.parentIcon}>
-                <IconWarningCircleBlue fill={COLORS.white2} fillIcon={COLORS.signed_primary} />
+                <IconWarningCircleBlue fill={COLORS.white} fillIcon={COLORS.signed_primary} />
               </View>
               <View style={styles.parentInfo}>
                 <Text style={styles.infoText}>
@@ -352,14 +352,14 @@ const styles = StyleSheet.create({
     borderRadius: dimen.normalizeDimen(8),
     borderColor: COLORS.gray200,
     backgroundColor: COLORS.gray100,
-    color: COLORS.white2,
+    color: COLORS.white,
     paddingHorizontal: dimen.normalizeDimen(23),
     paddingVertical: dimen.normalizeDimen(13),
     width: '100%'
   },
   container: {
     flex: 1,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   btnNext: {marginTop: dimen.normalizeDimen(16)},
   gap: {flex: 1},
@@ -379,7 +379,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(36),
     lineHeight: normalizeFontSize(43.57),
-    color: COLORS.white2,
+    color: COLORS.white,
     marginTop: dimen.normalizeDimen(24)
   },
   desc: {
@@ -401,7 +401,7 @@ const styles = StyleSheet.create({
   infoText: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
-    color: COLORS.white2,
+    color: COLORS.white,
     lineHeight: normalizeFontSize(24),
     paddingHorizontal: dimen.normalizeDimen(4)
   },
@@ -437,7 +437,7 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: dimen.normalizeDimen(20),
     paddingBottom: dimen.normalizeDimen(20),
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     flexDirection: 'column',
     justifyContent: 'space-between'
   },

@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
     flex: 1,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   content: {flex: 1, position: 'relative'}
 });

@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   bioText: {
-    color: COLORS.white2,
+    color: COLORS.white,
     fontSize: 14,
     fontFamily: fonts.inter[600],
     lineHeight: 22
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
   seeMore: {
     fontFamily: fonts.inter[500],
     fontSize: 14,
-    color: COLORS.white2
+    color: COLORS.white
   },
   toggleSwitchContainer: {
     display: 'flex',

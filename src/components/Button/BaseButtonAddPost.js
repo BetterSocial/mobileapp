@@ -62,7 +62,7 @@ const BaseButtonAddPost = ({
     <MemoIc_pencil
       width={dimen.normalizeDimen(21)}
       height={dimen.normalizeDimen(21)}
-      color={COLORS.white2}
+      color={COLORS.white}
       style={{
         alignSelf: 'center'
       }}
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: fonts.inter[500],
-    color: COLORS.white,
+    color: COLORS.almostBlack,
     fontSize: 12,
     marginLeft: 9.67
   }

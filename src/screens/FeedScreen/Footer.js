@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     paddingBottom: 16.12,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.lightgrey
+    borderBottomColor: COLORS.gray100
   },
   rowSpaceBeetwen: {
     flexDirection: 'row',
@@ -108,7 +108,7 @@ const handleTextCountColor = (totalVote) => {
   if (totalVote < 0) {
     return COLORS.redalert;
   }
-  return COLORS.lightgrey;
+  return COLORS.gray100;
 };
 
 Footer.propTypes = {

@@ -34,7 +34,7 @@ export default BottomSheetMenu;
 
 const styles = StyleSheet.create({
   rbsheetContainer: (height) => ({
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     borderTopLeftRadius: dimen.normalizeDimen(12),
     borderTopRightRadius: dimen.normalizeDimen(12),
     height: dimen.normalizeDimen(height)

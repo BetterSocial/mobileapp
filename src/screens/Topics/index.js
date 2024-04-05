@@ -184,7 +184,7 @@ const Topics = () => {
         </React.Fragment>
       )}
 
-      {isFetchingTopic && <ActivityIndicator size={'large'} color={COLORS.blackgrey} />}
+      {isFetchingTopic && <ActivityIndicator size={'large'} color={COLORS.gray400} />}
     </SafeAreaView>
   );
 };
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: Platform.OS === 'ios' ? dimen.normalizeDimen(22) : 0,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   containerProgress: {
     marginTop: dimen.normalizeDimen(20),
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(36),
     lineHeight: normalizeFontSize(43.57),
-    color: COLORS.white2,
+    color: COLORS.white,
     marginHorizontal: dimen.normalizeDimen(20)
   },
   footer: {
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
     width,
     paddingHorizontal: dimen.normalizeDimen(20),
     paddingBottom: dimen.normalizeDimen(20),
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     flexDirection: 'column',
     justifyContent: 'space-between'
   },
@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
     color: COLORS.gray500
   },
   button: {
-    backgroundColor: COLORS.blackgrey,
+    backgroundColor: COLORS.gray400,
     borderRadius: dimen.normalizeDimen(8)
   },
   scrollButtonParent: {

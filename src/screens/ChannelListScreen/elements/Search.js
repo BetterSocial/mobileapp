@@ -54,7 +54,7 @@ const Search = ({onPress, animatedValue, isAnon, isShowNewChat = true}) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     marginBottom: SIZES.base
   },
   searchPressableContainer: {
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
   },
   animatedViewContainer: (animatedValue) => ({
     flexDirection: 'row',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     marginBottom: SIZES.base,
     marginTop: animatedValue,
     position: 'absolute',

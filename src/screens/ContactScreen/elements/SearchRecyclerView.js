@@ -151,11 +151,7 @@ const SearchRecyclerView = ({text, onHandleSelected, followed, setLoading}) => {
         rowRenderer={rowRenderer}
         scrollViewProps={{
           refreshControl: (
-            <RefreshControl
-              tintColor={COLORS.white2}
-              refreshing={refreshing}
-              onRefresh={() => {}}
-            />
+            <RefreshControl tintColor={COLORS.white} refreshing={refreshing} onRefresh={() => {}} />
           )
         }}
       />
@@ -168,7 +164,7 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   recyclerview: {
     // height: height - 180,

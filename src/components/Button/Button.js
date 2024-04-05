@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   buttonText: {
-    color: COLORS.white2,
+    color: COLORS.white,
     fontSize: 18,
     fontFamily: fonts.inter[600]
   },

@@ -132,9 +132,9 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 8,
     borderRadius: SIZES.radius,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     elevation: 0.0,
-    borderColor: COLORS.blackgrey,
+    borderColor: COLORS.gray400,
     paddingBottom: 16,
     marginHorizontal: 16
   },

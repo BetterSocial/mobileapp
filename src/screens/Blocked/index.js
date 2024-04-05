@@ -70,7 +70,7 @@ const Blocked = ({navigation}) => {
   }, []);
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: COLORS.white}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: COLORS.almostBlack}}>
       <View style={styles.containerTab}>
         {headerBlocked()}
         {/*

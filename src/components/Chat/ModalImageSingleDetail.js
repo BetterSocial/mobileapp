@@ -42,7 +42,7 @@ const ModalImageSingleDetail = ({onBack, visible, img, name, time}) => {
             <MemoIc_arrow_turn_right width={20} height={20} />
           </TouchableOpacity>
           <TouchableOpacity>
-            <Icon name="dots-three-vertical" color={COLORS.white} size={17} />
+            <Icon name="dots-three-vertical" color={COLORS.almostBlack} size={17} />
           </TouchableOpacity>
         </View>
       </View>
@@ -91,13 +91,13 @@ const styles = StyleSheet.create({
   name: {
     fontFamily: fonts.inter[600],
     fontSize: 14,
-    color: COLORS.white,
+    color: COLORS.almostBlack,
     lineHeight: 16.94
   },
   time: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.white,
+    color: COLORS.almostBlack,
     lineHeight: 18
   }
 });

@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   headerDomainInfoContainer: {flex: 1, marginRight: 8},
   headerDomainDateContainer: {flexDirection: 'row', alignItems: 'center', flexShrink: 1},
   wrapperText: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     borderRadius: 8,
     borderColor: COLORS.signed_primary,
     width: 28,

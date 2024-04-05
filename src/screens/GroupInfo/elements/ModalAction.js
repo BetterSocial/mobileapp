@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
   textButton: {
     fontSize: 16,
     fontFamily: fonts.inter[600],
-    color: COLORS.white2
+    color: COLORS.white
   }
 });
 

@@ -53,7 +53,7 @@ const ChannelImage = ({
       height: dimen.normalizeDimen(24),
       borderRadius: dimen.normalizeDimen(12),
       borderWidth: 2,
-      borderColor: COLORS.white,
+      borderColor: COLORS.almostBlack,
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',

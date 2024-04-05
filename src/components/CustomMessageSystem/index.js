@@ -13,7 +13,7 @@ const index = ({text}) => (
     }}>
     <View
       style={{
-        backgroundColor: COLORS.lightgrey,
+        backgroundColor: COLORS.gray100,
         borderRadius: 18,
         padding: 8,
         justifyContent: 'center',
@@ -23,7 +23,7 @@ const index = ({text}) => (
       }}>
       <Text
         style={{
-          color: COLORS.blackgrey,
+          color: COLORS.gray400,
           fontFamily: fonts.inter[400],
           fontSize: 14,
           fontWeight: '400',

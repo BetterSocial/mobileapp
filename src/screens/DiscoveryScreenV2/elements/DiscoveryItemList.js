@@ -191,14 +191,14 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: COLORS.white2
+    color: COLORS.white
   },
   profilepicture: {
     width: 48,
     height: 48,
     borderRadius: 24,
     resizeMode: 'cover',
-    borderColor: COLORS.lightgrey,
+    borderColor: COLORS.gray100,
     borderWidth: 1,
     marginLeft: 2,
     marginTop: 2
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: COLORS.white2
+    color: COLORS.white
   },
   textButtonBlockUser: {
     fontFamily: fonts.inter[600],

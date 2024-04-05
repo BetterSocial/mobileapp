@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   textCard: {
     fontFamily: fonts.inter[800],
     fontSize: 14,
-    color: COLORS.white2,
+    color: COLORS.white,
     lineHeight: 16
   }
 });

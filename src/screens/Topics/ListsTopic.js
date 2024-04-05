@@ -4,7 +4,7 @@ import {COLORS} from '../../utils/theme';
 
 const styles = StyleSheet.create({
   bgTopicSelectNotActive: (isActive) => ({
-    backgroundColor: isActive ? COLORS.bondi_blue : COLORS.concrete,
+    backgroundColor: isActive ? COLORS.bondi_blue : COLORS.gray100,
     // minWidth: 100,
     paddingHorizontal: 15,
     paddingVertical: 7,
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: '500',
     fontSize: 12,
-    color: isActive ? COLORS.white : COLORS.mine_shaft
+    color: isActive ? COLORS.almostBlack : COLORS.mine_shaft
     // paddingLeft: 5,
   })
 });

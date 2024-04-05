@@ -115,7 +115,7 @@ const Header = ({onBack}) => {
               focusChatName: true
             })
           }>
-          <IconEP name="dots-three-vertical" size={12.87} color={COLORS.white} />
+          <IconEP name="dots-three-vertical" size={12.87} color={COLORS.almostBlack} />
         </GlobalButton>
       </View>
     </View>
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
   name: {
     marginLeft: 11,
     fontFamily: fonts.inter[600],
-    color: COLORS.white,
+    color: COLORS.almostBlack,
     fontSize: 14,
     width: '70%'
   },

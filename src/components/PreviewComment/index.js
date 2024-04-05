@@ -112,7 +112,7 @@ export const styles = StyleSheet.create({
   username: {
     fontFamily: fonts.inter[700],
     fontSize: normalizeFontSize(10),
-    color: COLORS.blackgrey,
+    color: COLORS.gray400,
     marginLeft: SIZES.base
   },
   profile: {

@@ -293,13 +293,13 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(16),
     fontFamily: fonts.inter[700],
     lineHeight: normalizeFontSize(24),
-    color: COLORS.white2
+    color: COLORS.white
   },
   domainItemDescription: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(16),
     lineHeight: normalizeFontSize(24),
-    color: COLORS.white2,
+    color: COLORS.white,
     flex: 1
   },
   previewCommentContainer: {zIndex: 1000},
