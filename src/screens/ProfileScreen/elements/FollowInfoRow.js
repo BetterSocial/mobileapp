@@ -5,6 +5,7 @@ import GlobalButton from '../../../components/Button/GlobalButton';
 
 import {getSingularOrPluralText} from '../../../utils/string/StringUtils';
 import {COLORS} from '../../../utils/theme';
+import {fonts} from '../../../utils/fonts';
 
 /**
  *
@@ -69,13 +70,14 @@ const FollowInfoRow = ({
 let styles = StyleSheet.create({
   textTotal: {
     fontSize: 14,
-    fontWeight: '600',
-    color: COLORS.black000,
+    fontFamily: fonts.inter[600],
+    color: COLORS.white2,
     paddingRight: 4
   },
   textFollow: {
     fontSize: 14,
-    color: COLORS.black
+    fontFamily: fonts.inter[400],
+    color: COLORS.white2
   },
   wrapFollower: {
     flexDirection: 'row',
