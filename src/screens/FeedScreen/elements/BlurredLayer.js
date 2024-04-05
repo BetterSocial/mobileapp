@@ -75,7 +75,8 @@ const BlurredLayer = ({
 const styles = StyleSheet.create({
   relative: {
     position: 'relative',
-    width: '100%'
+    width: '100%',
+    overflow: 'hidden'
   },
   containerBlur: {
     position: 'absolute',

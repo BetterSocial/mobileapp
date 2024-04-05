@@ -23,7 +23,6 @@ import Content from './Content';
 import ContentLink from './ContentLink';
 import Header from './Header';
 import AddCommentPreview from './elements/AddCommentPreview';
-import BlurredLayer from './elements/BlurredLayer';
 import useCalculationContent from './hooks/useCalculationContent';
 import useFeed from './hooks/useFeed';
 
@@ -127,7 +126,7 @@ const RenderListFeed = (props) => {
     if (hasComment) {
       return getHeightReaction() + normalize(4);
     }
-    return getHeightFooter();
+    return getHeightFooter() + normalize(4);
   };
 
   const isShortTextPost =
@@ -213,28 +212,27 @@ const RenderListFeed = (props) => {
           isShowDM
           isShortText={isShortTextPost}
         />
-        <BlurredLayer layerOnly blurType="light" withToast={true} isVisible={isBlurred}>
-          {hasComment ? (
-            <View testID="previewComment">
-              <PreviewComment
-                user={item.latest_reactions.comment[0].user}
-                comment={item?.latest_reactions?.comment[0]?.data?.text || ''}
-                image={item?.latest_reactions?.comment[0]?.user?.data?.profile_pic_url || ''}
-                time={item.latest_reactions.comment[0].created_at}
-                totalComment={getTotalReaction(item) - 1}
-                item={item.latest_reactions.comment[0]}
-                onPress={() => onPressComment(isHaveSeeMore)}
-                isShortText={isShortTextPost}
-              />
-            </View>
-          ) : (
-            <AddCommentPreview
-              isBlurred={isBlurred}
-              onPressComment={() => onPressComment(isHaveSeeMore)}
+        {hasComment ? (
+          <View testID="previewComment">
+            <PreviewComment
+              user={item.latest_reactions.comment[0].user}
+              comment={item?.latest_reactions?.comment[0]?.data?.text || ''}
+              image={item?.latest_reactions?.comment[0]?.user?.data?.profile_pic_url || ''}
+              time={item.latest_reactions.comment[0].created_at}
+              totalComment={getTotalReaction(item) - 1}
+              item={item.latest_reactions.comment[0]}
+              onPress={() => onPressComment(isHaveSeeMore)}
               isShortText={isShortTextPost}
+              isBlurred={isBlurred}
             />
-          )}
-        </BlurredLayer>
+          </View>
+        ) : (
+          <AddCommentPreview
+            isBlurred={isBlurred}
+            onPressComment={() => onPressComment(isHaveSeeMore)}
+            isShortText={isShortTextPost}
+          />
+        )}
       </View>
     </View>
   );

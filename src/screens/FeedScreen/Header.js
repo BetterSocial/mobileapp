@@ -64,48 +64,48 @@ export const validationTimer = (createdAt, duration_feed) => {
   if (timePercentage < 25)
     return (
       <View testID="25">
-        <MemoEightyEight_hundred height={17} width={17} />
+        <MemoEightyEight_hundred height={17} width={17} fill={COLORS.gray410} />
       </View>
     );
 
   if (timePercentage < 38)
     return (
       <View testID="36">
-        <MemoSeventyFive_eightySeven height={17} width={17} />
+        <MemoSeventyFive_eightySeven height={17} width={17} fill={COLORS.gray410} />
       </View>
     );
 
   if (timePercentage < 50)
     return (
       <View testID="50">
-        <MemoSixtyThree_seventyFour height={17} width={17} />
+        <MemoSixtyThree_seventyFour height={17} width={17} fill={COLORS.gray410} />
       </View>
     );
 
   if (timePercentage < 63)
     return (
       <View testID="63">
-        <MemoFivety_sixtyTwo height={17} width={17} />
+        <MemoFivety_sixtyTwo height={17} width={17} fill={COLORS.gray410} />
       </View>
     );
 
   if (timePercentage < 75)
     return (
       <View testID="75">
-        <MemoThirtySeven_fourtyNine height={17} width={17} />
+        <MemoThirtySeven_fourtyNine height={17} width={17} fill={COLORS.gray410} />
       </View>
     );
 
   if (timePercentage < 88)
     return (
       <View testID="80">
-        <MemoTwentyFive_thirtySix height={17} width={17} />
+        <MemoTwentyFive_thirtySix height={17} width={17} fill={COLORS.gray410} />
       </View>
     );
 
   return (
     <View testID="full">
-      <MemoOne height={17} width={17} />
+      <MemoOne height={17} width={17} fill={COLORS.gray410} />
     </View>
   );
 };

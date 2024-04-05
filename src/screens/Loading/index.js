@@ -9,7 +9,7 @@ const Loading = ({visible}) => {
     <Modal transparent visible={visible}>
       <View style={styles.container}>
         <View style={styles.content}>
-          <ActivityIndicator size="large" color={COLORS.signed_primary} />
+          <ActivityIndicator size="large" color={COLORS.gray510} />
         </View>
       </View>
     </Modal>
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   content: {
-    backgroundColor: 'rgba(0, 0, 0, 0.22)',
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
     padding: dimen.normalizeDimen(50),
     borderRadius: dimen.normalizeDimen(10)
   }
