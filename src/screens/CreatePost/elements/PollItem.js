@@ -19,7 +19,7 @@ export default function PollItem({
   return (
     <View style={isTextInputFocus ? S.focuspollitemcontainer : S.pollitemcontainer}>
       <TextInput
-        placeholderTextColor={COLORS.gray400}
+        placeholderTextColor={COLORS.gray410}
         placeholder={`Choice ${index + 1}`}
         style={S.pollitemtextinput}
         onFocus={() => setIsTextInputFocus(true)}

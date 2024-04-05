@@ -124,10 +124,10 @@ const bottomOverlayStyles = StyleSheet.create({
     zIndex: 10
   },
   containerBtnLogin: {
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: COLORS.gray200,
+    borderColor: COLORS.gray210,
     paddingBottom: 16
   },
   descTitle: {
@@ -145,7 +145,7 @@ const bottomOverlayStyles = StyleSheet.create({
     lineHeight: Platform.OS === 'ios' ? 20 : 22,
     fontSize: 14,
     textAlign: 'center',
-    color: COLORS.gray500,
+    color: COLORS.gray510,
     alignSelf: 'center'
   },
   link: {
@@ -192,7 +192,7 @@ const bottomOverlayStyles = StyleSheet.create({
     lineHeight: normalize(20),
     fontSize: normalizeFontSize(14),
     fontFamily: fonts.inter[400],
-    color: COLORS.gray500
+    color: COLORS.gray510
   },
   paddingContainer: {
     paddingTop: dimen.normalizeDimen(27),

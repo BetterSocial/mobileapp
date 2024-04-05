@@ -9,7 +9,7 @@ describe('Dot should run correctly', () => {
     const {toJSON, getByTestId} = render(<Dot size={5} color="blue" />);
     expect(toJSON).toMatchSnapshot();
     expect(getByTestId('dot').props.style).toEqual([
-      {borderRadius: 4, backgroundColor: COLORS.gray400},
+      {borderRadius: 4, backgroundColor: COLORS.gray410},
       {width: 5, height: 5, backgroundColor: 'blue'}
     ]);
   });

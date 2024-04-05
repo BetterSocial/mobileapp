@@ -82,7 +82,7 @@ const BottomSheetGif = React.forwardRef((props, ref) => {
             multiline={false}
             returnKeyType="search"
             placeholder="Search"
-            placeholderTextColor={COLORS.gray400}
+            placeholderTextColor={COLORS.gray410}
             style={styles.input}
             keyboardAppearance="dark"
           />
@@ -97,7 +97,7 @@ const BottomSheetGif = React.forwardRef((props, ref) => {
               radius: 35
             }}>
             <View style={styles.wrapperDeleteIcon}>
-              <IconClear width={9} height={10} fill={COLORS.gray400} />
+              <IconClear width={9} height={10} fill={COLORS.gray410} />
             </View>
           </TouchableOpacity>
         </View>
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   },
   wrapperSearch: {
     flex: 1,
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     borderRadius: dimen.normalizeDimen(12),
     alignSelf: 'center',
     flexDirection: 'row',

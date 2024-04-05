@@ -4,7 +4,7 @@ import {COLORS} from '../../utils/theme';
 
 const styles = StyleSheet.create({
   bgTopicSelectNotActive: (isActive) => ({
-    backgroundColor: isActive ? COLORS.bondi_blue : COLORS.gray100,
+    backgroundColor: isActive ? COLORS.bondi_blue : COLORS.gray110,
     // minWidth: 100,
     paddingHorizontal: 15,
     paddingVertical: 7,

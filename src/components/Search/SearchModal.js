@@ -45,7 +45,7 @@ const SearchModal = (props) => {
                 onChangeText={props.onChangeText}
                 value={props.value}
                 placeholder={props.placeholder ? props.placeholder : ''}
-                placeholderTextColor={COLORS.gray400}
+                placeholderTextColor={COLORS.gray410}
                 multiline={false}
                 returnKeyType="search"
               />
@@ -118,8 +118,8 @@ const styles = StyleSheet.create({
     height: 48,
     width: width - 44,
     borderWidth: 1,
-    borderColor: COLORS.gray200,
-    backgroundColor: COLORS.gray100,
+    borderColor: COLORS.gray210,
+    backgroundColor: COLORS.gray110,
     borderRadius: 8,
     flexDirection: 'row',
     alignItems: 'center',
@@ -135,8 +135,8 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 14,
     letterSpacing: -0.28,
-    borderColor: COLORS.gray200,
-    backgroundColor: COLORS.gray100,
+    borderColor: COLORS.gray210,
+    backgroundColor: COLORS.gray110,
     color: COLORS.white,
     marginLeft: 5
   },
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize'
   },
   loadingText: {
-    color: COLORS.gray400,
+    color: COLORS.gray410,
     fontSize: normalizeFontSize(14),
     fontFamily: fonts.inter[400],
     marginTop: dimen.normalizeDimen(10)

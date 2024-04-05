@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     maxWidth: '70%'
   },
   subtitleStyle: {
-    // color: COLORS.gray400,
+    // color: COLORS.gray410,
     flex: 1,
     // marginTop:3,
     fontSize: 12

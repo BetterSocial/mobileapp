@@ -43,7 +43,7 @@ export const styles = StyleSheet.create({
     zIndex: 100,
     padding: 8,
     paddingBottom: 16,
-    borderTopColor: COLORS.gray100,
+    borderTopColor: COLORS.gray110,
     borderTopWidth: 1
   },
   contentContainerStyle: {

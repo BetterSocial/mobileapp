@@ -25,7 +25,7 @@ const DiscoveryTitleSeparator = (prop) => {
         paddingRight: 20,
         paddingTop: 11,
         paddingBottom: 11,
-        backgroundColor: COLORS.gray100
+        backgroundColor: COLORS.gray110
         // marginTop: 15,
       }}>
       {text}

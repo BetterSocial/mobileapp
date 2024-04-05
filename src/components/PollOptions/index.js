@@ -113,7 +113,7 @@ const PollOptions = ({
 const styles = StyleSheet.create({
   pollOptionsItemContainer: {
     flex: 1,
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
       top: 0,
       left: 0,
       borderRadius: 6,
-      backgroundColor: isMyPoll ? COLORS.bondi_blue : COLORS.gray100
+      backgroundColor: isMyPoll ? COLORS.bondi_blue : COLORS.gray110
     };
   },
   expiredPercentageBar: (percent, isMax = false) => {
@@ -172,14 +172,14 @@ const styles = StyleSheet.create({
       top: 0,
       left: 0,
       borderRadius: 6,
-      backgroundColor: isMax ? COLORS.blueSea : COLORS.gray100
+      backgroundColor: isMax ? COLORS.blueSea : COLORS.gray110
     };
   },
   totalpolltext: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(12),
     lineHeight: 16,
-    color: COLORS.gray400
+    color: COLORS.gray410
   },
   pollRadioButton: {
     width: 12,

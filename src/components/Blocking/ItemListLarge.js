@@ -20,7 +20,7 @@ const ItemListLarge = ({label, desc, iconReght, icon, onPress}) => {
         <Text style={styles.desc}>{desc}</Text>
         {iconReght && (
           <TouchableOpacity style={styles.btn}>
-            <IconFA5 name="chevron-right" size={17} color={COLORS.gray500} />
+            <IconFA5 name="chevron-right" size={17} color={COLORS.gray510} />
           </TouchableOpacity>
         )}
       </View>
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: 15,
     paddingHorizontal: 22,
-    borderTopColor: COLORS.gray200,
+    borderTopColor: COLORS.gray210,
     borderTopWidth: 1
   },
   content: {
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   desc: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.gray500,
+    color: COLORS.gray510,
     marginTop: 5,
     flex: 1
   }

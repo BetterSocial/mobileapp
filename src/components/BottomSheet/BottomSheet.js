@@ -49,6 +49,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.almostBlack
   }),
   draggableIcon: {
-    backgroundColor: COLORS.gray100
+    backgroundColor: COLORS.gray110
   }
 });

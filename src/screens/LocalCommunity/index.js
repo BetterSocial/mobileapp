@@ -119,7 +119,7 @@ const LocalCommunity = () => {
           </View>
           <TouchableNativeFeedback
             onPress={() => handleDelete(item.location_id)}
-            background={TouchableNativeFeedback.Ripple(COLORS.gray100, true, 20)}>
+            background={TouchableNativeFeedback.Ripple(COLORS.gray110, true, 20)}>
             <TrashIcon width={18} height={20} fill={COLORS.white} />
           </TouchableNativeFeedback>
         </View>
@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(24),
-    color: COLORS.gray500,
+    color: COLORS.gray510,
     marginTop: dimen.normalizeDimen(8),
     marginBottom: dimen.normalizeDimen(24),
     paddingHorizontal: dimen.normalizeDimen(20)
@@ -345,7 +345,7 @@ const styles = StyleSheet.create({
     lineHeight: normalizeFontSize(24),
     letterSpacing: normalizeFontSize(-0.28),
     marginBottom: dimen.normalizeDimen(10),
-    color: COLORS.gray500
+    color: COLORS.gray510
   },
   containerLocation: {
     flexDirection: 'row',
@@ -375,7 +375,7 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(10),
     fontFamily: fonts.inter[400],
     textAlign: 'center',
-    color: COLORS.gray500
+    color: COLORS.gray510
   }
 });
 export default LocalCommunity;

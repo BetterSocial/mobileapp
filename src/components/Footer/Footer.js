@@ -80,7 +80,7 @@ const Footer = ({
     if (totalVote < 0) {
       return COLORS.downvote;
     }
-    return COLORS.gray400;
+    return COLORS.gray410;
   };
 
   const username = item?.anon_user_info_emoji_name
@@ -182,7 +182,7 @@ const Footer = ({
           }}>
           <View
             style={{
-              borderTopColor: COLORS.gray300,
+              borderTopColor: COLORS.gray310,
               borderTopWidth: 1,
               opacity: 0.3
             }}
@@ -203,7 +203,7 @@ const Footer = ({
             }}>
             <View
               style={{
-                borderTopColor: COLORS.gray300,
+                borderTopColor: COLORS.gray310,
                 borderTopWidth: 1,
                 opacity: 0.3
               }}

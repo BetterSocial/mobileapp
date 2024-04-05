@@ -785,7 +785,7 @@ const styles = StyleSheet.create({
     fontFamily: isActive ? fonts.inter[600] : fonts.inter[400],
     fontSize: 14,
     lineHeight: 17,
-    color: isActive ? COLORS.signed_primary : COLORS.gray400,
+    color: isActive ? COLORS.signed_primary : COLORS.gray410,
     paddingHorizontal: 16,
     textAlign: 'center'
   }),
@@ -814,7 +814,7 @@ const styles = StyleSheet.create({
   },
   tabs: {
     width,
-    borderBottomColor: COLORS.gray200,
+    borderBottomColor: COLORS.gray210,
     borderBottomWidth: 1,
     flexDirection: 'row',
     alignItems: 'center',
@@ -831,7 +831,7 @@ const styles = StyleSheet.create({
   }),
   tabsFixed: {
     width,
-    borderBottomColor: COLORS.gray100,
+    borderBottomColor: COLORS.gray110,
     borderBottomWidth: 1,
     paddingLeft: 20,
     paddingRight: 20,
@@ -859,7 +859,7 @@ const styles = StyleSheet.create({
     paddingLeft: 0
   },
   tooltipText: {
-    color: COLORS.gray400,
+    color: COLORS.gray410,
     fontFamily: 'Inter',
     fontSize: 12,
     fontStyle: 'normal',

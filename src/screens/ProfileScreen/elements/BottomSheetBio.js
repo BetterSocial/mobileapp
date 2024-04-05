@@ -26,7 +26,7 @@ const BottomSheetBio = React.forwardRef((props, ref) => {
             keyboardAppearDelay={1}
             editable={!props.isOtherProfile}
             maxLength={350}
-            placeholderTextColor={COLORS.gray400}
+            placeholderTextColor={COLORS.gray410}
           />
           <Text style={styles.description}>{props.value ? props.value.length : 0}/350</Text>
           {props.error ? <Text style={styles.errorText}>{props.error}</Text> : null}
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   description: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.gray400,
+    color: COLORS.gray410,
     marginTop: 7
   },
   errorText: {

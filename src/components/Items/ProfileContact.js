@@ -37,7 +37,7 @@ const ProfileContact = ({
     <Pressable
       onPress={onPress}
       android_ripple={{
-        color: COLORS.gray100,
+        color: COLORS.gray110,
         borderless: false,
         borderRadius: 10
       }}

@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   textContainer: {
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     paddingTop: 4,
     paddingBottom: 4,
     borderRadius: 12,
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     marginLeft: 5,
     marginRight: 5,
-    backgroundColor: COLORS.gray500,
+    backgroundColor: COLORS.gray510,
     alignSelf: 'center'
   },
   timeText: {
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     lineHeight: 12.19,
     alignSelf: 'center',
-    color: COLORS.gray500
+    color: COLORS.gray510
   },
   mr8: {
     marginRight: 4

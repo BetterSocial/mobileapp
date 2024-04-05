@@ -104,7 +104,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
                 "width": 35,
               },
               Object {
-                "backgroundColor": "#F5F6F7",
+                "backgroundColor": "#1E3343",
                 "width": 60,
               },
             ]
@@ -131,12 +131,12 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
           onChangeText={[Function]}
           placeholder="Please provide more details to inform our
  team (min. 50 characters)"
-          placeholderTextColor="#8C939F"
+          placeholderTextColor="#7E8FA0"
           rejectResponderTermination={true}
           style={
             Object {
-              "backgroundColor": "#F5F6F7",
-              "borderColor": "#3A4F64",
+              "backgroundColor": "#1E3343",
+              "borderColor": "#2A3D50",
               "borderRadius": 8,
               "borderWidth": 1,
               "color": "#FFFFFF",
@@ -166,7 +166,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
           onStartShouldSetResponder={[Function]}
           style={
             Object {
-              "backgroundColor": "#F5F6F7",
+              "backgroundColor": "#1E3343",
               "flexDirection": "row",
               "justifyContent": "space-between",
               "marginVertical": 22,

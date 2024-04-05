@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingVertical: 17.67,
     paddingLeft: 21.67,
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     borderRadius: 8,
     marginBottom: 12,
     alignItems: 'center'
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20
   },
   draggableIcon: {
-    backgroundColor: COLORS.gray100
+    backgroundColor: COLORS.gray110
   },
   loader: {
     marginRight: 10

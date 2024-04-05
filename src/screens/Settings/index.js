@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
   textVersion: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.gray400
+    color: COLORS.gray410
   }
 });
 export default withInteractionsManaged(React.memo(Settings));

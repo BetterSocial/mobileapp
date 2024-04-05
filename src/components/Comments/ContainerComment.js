@@ -226,7 +226,7 @@ export const styles = StyleSheet.create({
   },
   containerComment: {
     borderLeftWidth: 1,
-    borderLeftColor: COLORS.gray200,
+    borderLeftColor: COLORS.gray210,
     marginTop: 0
   }
 });

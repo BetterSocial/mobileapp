@@ -871,7 +871,7 @@ const styles = StyleSheet.create({
     position: 'relative'
   },
   input: {
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     paddingVertical: 16,
     paddingHorizontal: 12,
     minHeight: 100,
@@ -879,7 +879,7 @@ const styles = StyleSheet.create({
     overflow: 'scroll'
   },
   hastagText: {
-    color: COLORS.gray100,
+    color: COLORS.gray110,
     fontSize: 14,
     fontFamily: fonts.inter[400]
   },

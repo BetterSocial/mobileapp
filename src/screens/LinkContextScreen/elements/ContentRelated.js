@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   domainImageEmptyState: {
     height: 135,
     marginBottom: 14,
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     resizeMode: 'center',
     width: '100%'
   }

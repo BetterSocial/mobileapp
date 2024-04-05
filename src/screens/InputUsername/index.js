@@ -199,7 +199,7 @@ const ChooseUsername = () => {
     switch (type) {
       case 'fetch':
         return (
-          <Text style={styles.textMessage(COLORS.gray400)}>
+          <Text style={styles.textMessage(COLORS.gray410)}>
             {` ${StringConstant.onboardingChooseUsernameLabelCheckingAvailability}`}
           </Text>
         );
@@ -296,7 +296,7 @@ const ChooseUsername = () => {
               <View style={{flex: 1}}>
                 <Input
                   placeholder="Username"
-                  placeholderTextColor={COLORS.gray400}
+                  placeholderTextColor={COLORS.gray410}
                   onChangeText={checkUsername}
                   onBlur={onTextBlur}
                   value={username}
@@ -350,8 +350,8 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: dimen.normalizeDimen(1),
     borderRadius: dimen.normalizeDimen(8),
-    borderColor: COLORS.gray200,
-    backgroundColor: COLORS.gray100,
+    borderColor: COLORS.gray210,
+    backgroundColor: COLORS.gray110,
     color: COLORS.white,
     paddingHorizontal: dimen.normalizeDimen(23),
     paddingVertical: dimen.normalizeDimen(13),
@@ -386,7 +386,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(24),
-    color: COLORS.gray500,
+    color: COLORS.gray510,
     marginTop: dimen.normalizeDimen(8),
     marginBottom: dimen.normalizeDimen(12)
   },

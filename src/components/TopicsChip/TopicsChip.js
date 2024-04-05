@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   topicText: {
     fontFamily: fonts.inter[500],
     borderRadius: 14,
-    color: COLORS.white2
+    color: COLORS.white
   },
   contentStyle: {
     paddingRight: 12

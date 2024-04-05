@@ -184,7 +184,7 @@ const Topics = () => {
         </React.Fragment>
       )}
 
-      {isFetchingTopic && <ActivityIndicator size={'large'} color={COLORS.gray400} />}
+      {isFetchingTopic && <ActivityIndicator size={'large'} color={COLORS.gray410} />}
     </SafeAreaView>
   );
 };
@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(24),
-    color: COLORS.gray500,
+    color: COLORS.gray510,
     marginTop: dimen.normalizeDimen(8),
     marginBottom: dimen.normalizeDimen(24),
     paddingHorizontal: dimen.normalizeDimen(20)
@@ -263,10 +263,10 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(10),
     textAlign: 'center',
-    color: COLORS.gray500
+    color: COLORS.gray510
   },
   button: {
-    backgroundColor: COLORS.gray400,
+    backgroundColor: COLORS.gray410,
     borderRadius: dimen.normalizeDimen(8)
   },
   scrollButtonParent: {

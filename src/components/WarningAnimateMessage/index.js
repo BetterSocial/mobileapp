@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     width: 259,
     backgroundColor: COLORS.almostBlack,
-    borderColor: COLORS.gray100,
+    borderColor: COLORS.gray110,
     borderWidth: 1
   },
   parentContainer: {
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     borderLeftWidth: 10,
     borderTopColor: COLORS.transparent,
     borderRightColor: COLORS.transparent,
-    borderBottomColor: COLORS.gray100,
+    borderBottomColor: COLORS.gray110,
     borderLeftColor: COLORS.transparent,
     position: 'absolute'
   }

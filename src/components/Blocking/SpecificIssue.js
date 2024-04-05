@@ -27,7 +27,7 @@ const SpecificIssue = ({refSpecificIssue, onPress, onSkip, loading}) => {
           textAlignVertical="top"
           multiline
           placeholder={'Please provide more details to inform our\n team (min. 50 characters)'}
-          placeholderTextColor={COLORS.gray400}
+          placeholderTextColor={COLORS.gray410}
         />
         <TouchableOpacity testID="button-skip-test" style={styles.btnSkip} onPress={() => onSkip()}>
           <Text style={styles.btnSkipText}>Skip & just block this account</Text>
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     paddingTop: 8
   },
   btnSkip: {
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 17,
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     color: COLORS.black
   },
   input: {
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     marginLeft: 17,
     marginRight: 23,
     borderRadius: 8,
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     color: COLORS.white,
     borderWidth: 1,
-    borderColor: COLORS.gray200
+    borderColor: COLORS.gray210
   },
   container: {
     height: 'auto',
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.almostBlack
   },
   draggableIcon: {
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     width: 60
   }
 });

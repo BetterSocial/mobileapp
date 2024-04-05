@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4
   },
   paddingHorizontal: {paddingHorizontal: 20},
-  lineAffterFooter: {backgroundColor: COLORS.gray100, height: 1},
+  lineAffterFooter: {backgroundColor: COLORS.gray110, height: 1},
   footerWrapper: (h) => ({height: h, paddingHorizontal: 0}),
   contentReaction: (heightReaction) => ({
     height: heightReaction

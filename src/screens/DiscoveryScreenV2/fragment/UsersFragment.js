@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
     color: COLORS.white
   },
   unfollowedHeaderContainer: {
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     height: 40,
     display: 'flex',
     flexDirection: 'column',

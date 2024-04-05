@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
   description: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.gray400,
+    color: COLORS.gray410,
     marginTop: 7
   },
   errorText: {

@@ -239,7 +239,7 @@ export const styles = StyleSheet.create({
     height: 48
   },
   input: {
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     flex: 1,
     color: COLORS.b,
     padding: 10,

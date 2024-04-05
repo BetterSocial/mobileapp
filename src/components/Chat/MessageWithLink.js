@@ -70,14 +70,14 @@ const styles = StyleSheet.create({
     marginTop: 5
   },
   authorName: (isMe) => ({
-    color: isMe ? COLORS.almostBlack : COLORS.gray400,
+    color: isMe ? COLORS.almostBlack : COLORS.gray410,
     fontFamily: fonts.inter[400],
     fontSize: 12,
     marginBottom: 5,
     lineHeight: 18
   }),
   containerPreview: (isMe) => ({
-    backgroundColor: isMe ? COLORS.tradewind : COLORS.gray100,
+    backgroundColor: isMe ? COLORS.tradewind : COLORS.gray110,
     marginHorizontal: -4,
     borderRadius: 4,
     paddingLeft: 6,
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     marginVertical: 4
   },
   containerChat: (isMe) => ({
-    backgroundColor: isMe ? COLORS.halfBaked : COLORS.gray100,
+    backgroundColor: isMe ? COLORS.halfBaked : COLORS.gray110,
     paddingVertical: 8,
     paddingLeft: 8,
     paddingRight: 9.35,

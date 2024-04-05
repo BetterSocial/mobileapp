@@ -25,7 +25,7 @@ const Card = (props) => {
           borderColor: COLORS.silver,
           borderWidth: 0.5,
           // https://github.com/facebook/react-native/issues/10049#issuecomment-366426897
-          backgroundColor: COLORS.gray100,
+          backgroundColor: COLORS.gray110,
           // Android shadow
           elevation: 4,
           paddingHorizontal: 15,

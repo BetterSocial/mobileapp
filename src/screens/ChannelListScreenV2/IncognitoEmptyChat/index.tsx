@@ -25,7 +25,7 @@ const IncognitoButton = ({title, subtitle, onPress}) => {
         <Text style={styles.itemSubtitle}>{subtitle}</Text>
       </View>
       <View>
-        <IconArrowRight width={8} height={12} fill={COLORS.gray400} />
+        <IconArrowRight width={8} height={12} fill={COLORS.gray410} />
       </View>
     </TouchableOpacity>
   );
@@ -119,11 +119,11 @@ const styles = StyleSheet.create({
   item: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     paddingHorizontal: dimen.normalizeDimen(16),
     paddingVertical: dimen.normalizeDimen(15),
     borderRadius: 8,
-    borderColor: COLORS.gray200,
+    borderColor: COLORS.gray210,
     borderWidth: 1,
     marginBottom: dimen.normalizeDimen(8)
   },
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(18),
-    color: COLORS.gray500
+    color: COLORS.gray510
   }
 });
 

@@ -262,6 +262,6 @@ const styles = StyleSheet.create({
     marginTop: 16
   },
   subtitleStyle: (isIsset) => ({
-    color: isIsset ? COLORS.anon_primary : COLORS.gray100
+    color: isIsset ? COLORS.anon_primary : COLORS.gray110
   })
 });

@@ -29,8 +29,8 @@ const CheckBoxCustom = (props: {value: boolean; label: string; disabled?: boolea
         <CheckBox
           disabled={props.disabled || false}
           value={props.value}
-          onCheckColor={COLORS.gray100}
-          tintColors={{true: COLORS.signed_primary, false: COLORS.gray100}}
+          onCheckColor={COLORS.gray110}
+          tintColors={{true: COLORS.signed_primary, false: COLORS.gray110}}
           tintColor={COLORS.signed_primary}
           onTintColor={COLORS.signed_primary}
           onFillColor={COLORS.signed_primary}
@@ -140,7 +140,7 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
 
         {isAnonymity && (
           <>
-            <Divider style={{marginVertical: 6, backgroundColor: COLORS.gray200}} />
+            <Divider style={{marginVertical: 6, backgroundColor: COLORS.gray210}} />
             <TouchableOpacity onPress={toggleSwitchAnonAllowFollowing}>
               <CheckBoxCustom
                 value={isAllowFollowingSendDM}
@@ -190,18 +190,18 @@ const styles = StyleSheet.create({
     marginBottom: dimen.normalizeDimen(12)
   },
   allowContainer: {
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     borderRadius: dimen.normalizeDimen(12),
     padding: dimen.normalizeDimen(12),
     marginHorizontal: dimen.normalizeDimen(12),
     marginTop: -50,
     borderWidth: 1,
-    borderColor: COLORS.gray200
+    borderColor: COLORS.gray210
   },
   allowDescText: {
     fontSize: normalizeFontSize(12),
     fontFamily: fonts.inter[400],
-    color: COLORS.gray500,
+    color: COLORS.gray510,
     marginBottom: dimen.normalizeDimen(12)
   },
   checkboxItem: {
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
   checkbox: {
     width: dimen.normalizeDimen(16),
     height: dimen.normalizeDimen(16),
-    backgroundColor: COLORS.gray100
+    backgroundColor: COLORS.gray110
   },
   checkboxLabel: {
     fontSize: normalizeFontSize(12),

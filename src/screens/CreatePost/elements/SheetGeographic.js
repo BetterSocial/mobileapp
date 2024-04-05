@@ -59,6 +59,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20
   },
   draggableIcon: {
-    backgroundColor: COLORS.gray100
+    backgroundColor: COLORS.gray110
   }
 });

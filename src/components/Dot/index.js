@@ -11,6 +11,6 @@ export default Dot;
 const styles = StyleSheet.create({
   point: {
     borderRadius: 4,
-    backgroundColor: COLORS.gray400
+    backgroundColor: COLORS.gray410
   }
 });

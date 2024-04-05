@@ -16,9 +16,9 @@ interface ToggleProps {
 
 const Toggle: React.FC<ToggleProps> = ({
   activeColor = COLORS.waterspout,
-  inactiveColor = COLORS.gray100,
+  inactiveColor = COLORS.gray110,
   activeButtonColor = COLORS.anon_primary,
-  inactiveButtonColor = COLORS.gray100,
+  inactiveButtonColor = COLORS.gray110,
   onPress,
   label,
   labelStyle,
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   },
   offText: {
     marginHorizontal: 3.5,
-    color: COLORS.gray100,
+    color: COLORS.gray110,
     fontSize: 10
   },
   onText: {

@@ -40,7 +40,7 @@ const ChannelPostNotificationStats = ({
       marginStart: 5,
       fontFamily: fonts.inter[400],
       fontSize: normalizeFontSize(14),
-      color: COLORS.gray500
+      color: COLORS.gray510
     }
   });
 

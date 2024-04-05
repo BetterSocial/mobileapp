@@ -60,7 +60,7 @@ export const styles = StyleSheet.create({
   },
   btnAdd: {
     padding: dimen.normalizeDimen(8),
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     width: 'auto',
     justifyContent: 'center',
     alignItems: 'center',
@@ -88,7 +88,7 @@ export const styles = StyleSheet.create({
     fontSize: normalizeFontSize(14),
     fontFamily: fonts.inter[400],
     lineHeight: normalizeFontSize(16.94),
-    color: COLORS.gray500,
+    color: COLORS.gray510,
     marginTop: dimen.normalizeDimen(4),
     marginBottom: dimen.normalizeDimen(9)
   },
@@ -101,7 +101,7 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   lineTop: {
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     height: 1
   },
   containerGroupName: {
@@ -119,7 +119,7 @@ export const styles = StyleSheet.create({
     width: dimen.normalizeDimen(100),
     height: dimen.normalizeDimen(100),
     borderRadius: dimen.normalizeDimen(50),
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -152,7 +152,7 @@ export const styles = StyleSheet.create({
   },
   gap: {
     height: 2,
-    backgroundColor: COLORS.gray200
+    backgroundColor: COLORS.gray210
   },
   actionGroup: {
     marginTop: dimen.normalizeDimen(6)

@@ -47,7 +47,7 @@ describe('WriteComment should run correctly', () => {
       zIndex: 100
     });
     expect(styles.btn(true)).toEqual({
-      backgroundColor: COLORS.gray100,
+      backgroundColor: COLORS.gray110,
       borderRadius: 18,
       width: 35,
       height: 35,
