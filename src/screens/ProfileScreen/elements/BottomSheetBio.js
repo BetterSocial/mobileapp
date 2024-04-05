@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   textStyling: {
     fontFamily: fonts.inter[600],
     fontSize: 18,
-    color: COLORS.white
+    color: COLORS.white2
   }
 });
 export default React.memo(BottomSheetBio);

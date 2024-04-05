@@ -753,7 +753,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: COLORS.white
+    color: COLORS.white2
   },
   btnBottom: {
     position: 'absolute',

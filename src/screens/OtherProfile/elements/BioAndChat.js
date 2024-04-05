@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   bioText: {
-    color: COLORS.white,
+    color: COLORS.white2,
     fontSize: 14,
     fontFamily: fonts.inter[600],
     lineHeight: 22
