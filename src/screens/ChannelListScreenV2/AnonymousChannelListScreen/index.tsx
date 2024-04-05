@@ -15,6 +15,7 @@ import useRootChannelListHook from '../../../hooks/screen/useRootChannelListHook
 import {COLORS} from '../../../utils/theme';
 import Search from '../../ChannelListScreen/elements/Search';
 import IncognitoEmptyChat from '../IncognitoEmptyChat';
+import {COLORS} from '../../../utils/theme';
 
 const AnonymousChannelListScreen = ({route}) => {
   const {refresh} = useLocalDatabaseHook();
