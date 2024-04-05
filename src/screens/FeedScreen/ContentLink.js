@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   contentFeed: {
     height: dimen.size.FEED_CONTENT_HEIGHT,
     paddingHorizontal: 6,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     borderLeftWidth: 1,
     borderRightWidth: 1,
     borderColor: COLORS.darkGray
