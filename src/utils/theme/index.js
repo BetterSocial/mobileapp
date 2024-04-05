@@ -70,7 +70,7 @@ export const COLORS = {
   light_silver: '#D2D4DB',
   balance_gray: '#9B9FA9',
   gray: '#E8EBED',
-  lightgrey: '#FF00FF', // changed to gray 200 #F5F6F7
+  lightgrey: '#FF00FF', // changed to gray 100 #F5F6F7
   redalert: '#FF2E63',
   blackgrey: '#FF00FF', // changed to gray 400
   greySubtile1: '#9B9FA9', // changed to gray 400

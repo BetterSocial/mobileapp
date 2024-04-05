@@ -15,8 +15,7 @@ interface SendIconProps {
 }
 
 const SendIcon: React.FC<SendIconProps> = ({type, isDisabled}) => {
-  const sendButtonStyle = React.useCallback(() => {
-    // TODO: Garry, gray berapa?
+  const iconBackgroundColorStyle = React.useCallback(() => {
     if (isDisabled) return COLORS.gray200;
     if (type === 'SIGNED') return COLORS.signed_primary;
     return COLORS.anon_primary;
@@ -30,8 +29,8 @@ const SendIcon: React.FC<SendIconProps> = ({type, isDisabled}) => {
   return (
     <MemoSendComment
       style={styles.icSendButton}
-      fillBackground={sendButtonStyle()}
-      fillIcon={COLORS.white2}
+      fillBackground={iconBackgroundColorStyle()}
+      fillIcon={iconColorStyle()}
     />
   );
 };

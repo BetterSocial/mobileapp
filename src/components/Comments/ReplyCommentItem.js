@@ -149,12 +149,12 @@ const ReplyCommentItem = ({
 
   const voteStyle = () => {
     if (totalVote > 0) {
-      return COLORS.anon_primary;
+      return COLORS.upvote;
     }
     if (totalVote < 0) {
-      return COLORS.redalert;
+      return COLORS.downvote;
     }
-    return COLORS.balance_gray;
+    return COLORS.gray400;
   };
 
   const handleLongPress = () => {
@@ -353,7 +353,7 @@ const ReplyCommentItem = ({
                   paddingRight: 0
                 }
               ]}>
-              <IconEn name="block" size={15.02} color={COLORS.balance_gray} />
+              <IconEn name="block" size={15.02} color={COLORS.gray400} />
             </ButtonHightlight>
           </TouchableOpacity>
         )}
