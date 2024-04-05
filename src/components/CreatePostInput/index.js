@@ -216,6 +216,7 @@ const CreatePostInput = ({
         keyboardAppearance="dark">
         <Text>{formattedText}</Text>
       </TextInput>
+      {/* TODO: Garry jarak 8px */}
       <TopicSuggestions
         message={message}
         handleStateHashtag={handleStateHashtag}

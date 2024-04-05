@@ -75,10 +75,12 @@ const CreatePollContainerBaseStyle = StyleSheet.create({
 
   polldurationbuttontext: {
     fontFamily: fonts.inter[400],
-    color: COLORS.almostBlack,
-    backgroundColor: COLORS.anon_primary,
+    color: COLORS.white,
+    // TODO: Garry warna sesuai mode
+    backgroundColor: COLORS.signed_secondary,
     paddingHorizontal: dimen.normalizeDimen(22),
     paddingVertical: dimen.normalizeDimen(8),
+    // TODO: Garry border radius tidak terbaca
     borderRadius: 6,
     marginEnd: dimen.normalizeDimen(24)
   },

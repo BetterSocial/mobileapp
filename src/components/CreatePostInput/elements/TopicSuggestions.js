@@ -62,7 +62,9 @@ const TopicSuggestions = ({
 };
 
 const styles = StyleSheet.create({
-  cardContainer: {marginTop: -16},
+  cardContainer: {
+    marginTop: -16
+  },
   suggestions: {
     color: COLORS.black,
     fontFamily: fonts.inter[500],

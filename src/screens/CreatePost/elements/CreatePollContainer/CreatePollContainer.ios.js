@@ -68,6 +68,7 @@ function CreatePollContainer({
 
       {polls.length < MAX_POLLING_ALLOWED && (
         <TouchableOpacity onPress={() => onaddpoll()} style={S.addpollitemcontainer}>
+          {/* TODO: Garry warna sesuai mode */}
           <MemoIcPlus width={16} height={16} style={S.addpollitemplusicon} fill={COLORS.white} />
         </TouchableOpacity>
       )}
@@ -87,6 +88,7 @@ function CreatePollContainer({
       <View style={S.row}>
         <Text style={S.fillparenttext}>Multiple Choice</Text>
         <Text style={S.switchtext}>{ismultiplechoice ? 'On' : 'Off'}</Text>
+        {/* TODO: Garry pakai komponen ToggleSwitch seperti yang lain */}
         <Switch
           value={ismultiplechoice}
           onValueChange={(value) => onmultiplechoicechanged(value)}
