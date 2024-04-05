@@ -17,6 +17,7 @@ import useContentFeed from './hooks/useContentFeed';
 import useCalculationContentLink from './hooks/useCalculatiuonContentLink';
 import BlurredLayer from './elements/BlurredLayer';
 import {DISCOVERY_TAB_USERS} from '../../utils/constants';
+import dimen from '../../utils/dimen';
 
 const ContentLink = ({
   item,
@@ -28,9 +29,7 @@ const ContentLink = ({
   message = '',
   messageContainerStyle = {},
   topics = [],
-  isPostDetail,
-  contentHeight,
-  hasComment
+  isPostDetail
 }) => {
   const route = useRoute();
   const isTouchableDisabled = route?.name === 'PostDetailPage';
@@ -67,19 +66,12 @@ const ContentLink = ({
   };
 
   return (
-    <BlurredLayer
-      withToast={true}
-      onPressContent={handleBlurredContent}
-      isVisible={isBlurredPost}
-      containerStyle={{
-        flex: 1
-      }}>
+    <BlurredLayer withToast={true} onPressContent={handleBlurredContent} isVisible={isBlurredPost}>
       <View style={styles.contentFeed}>
         <TouchableNativeFeedback
           disabled={isTouchableDisabled}
           onPress={onPress}
-          testID="contentLinkContentPressable"
-          style={{flex: 1}}>
+          testID="contentLinkContentPressable">
           <>
             <TouchableWithoutFeedback onPress={onPress}>
               {renderMessageContentLink()}
@@ -98,7 +90,6 @@ const ContentLink = ({
               item,
               heightTopic,
               textHeight,
-              contentHeight,
               containerStyle: {flex: topics.length > 0 ? 0 : 1}
             })}
           </>
@@ -122,9 +113,12 @@ export default ContentLink;
 
 const styles = StyleSheet.create({
   contentFeed: {
-    flex: 1,
-    marginHorizontal: 6,
-    backgroundColor: COLORS.white
+    height: dimen.size.FEED_CONTENT_HEIGHT,
+    paddingHorizontal: 6,
+    backgroundColor: COLORS.white,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderColor: COLORS.darkGray
   },
   messageContainer: {
     paddingHorizontal: 20,
@@ -135,7 +129,8 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     lineHeight: 24,
     fontSize: normalizeFontSizeByWidth(16),
-    letterSpacing: 0.1
+    letterSpacing: 0.1,
+    color: COLORS.white2
   },
   topicStyle: {
     position: 'relative',

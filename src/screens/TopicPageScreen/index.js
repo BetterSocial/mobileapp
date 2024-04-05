@@ -30,6 +30,7 @@ import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder
 import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {setFeedByIndex, setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
 import BottomSheetFollow from './elements/BottomSheetFollow';
+import {COLORS} from '../../utils/theme';
 
 const TopicPageScreen = (props) => {
   const route = useRoute();
@@ -441,11 +442,12 @@ const TopicPageScreen = (props) => {
         style={{
           marginTop: isHeaderHide ? -dimen.size.TOPIC_FEED_HEADER_HEIGHT : 0,
           minHeight: 548,
-          height: 700
+          height: 700,
+          backgroundColor: COLORS.almostBlack
         }}>
         <TiktokScroll
           ref={listRef}
-          contentHeight={dimen.size.TOPIC_CURRENT_ITEM_HEIGHT + normalizeFontSizeByWidth(4)}
+          contentHeight={dimen.size.TOPIC_CURRENT_ITEM_HEIGHT}
           data={feeds}
           onEndReach={onEndReach}
           onRefresh={onRefresh}

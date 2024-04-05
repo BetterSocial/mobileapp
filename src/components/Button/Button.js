@@ -43,6 +43,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: fonts.inter[600]
   },
+  buttonTextDisabled: {
+    color: COLORS.gray310
+  },
   disabledbutton: {
     backgroundColor: COLORS.gray300,
     borderRadius: dimen.normalizeDimen(8)

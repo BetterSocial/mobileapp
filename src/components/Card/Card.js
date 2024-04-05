@@ -138,9 +138,9 @@ const styles = StyleSheet.create({
   }),
   imageHeader: {height: '100%', width: '100%', borderRadius: 45},
   container: (height) => ({
-    borderWidth: 0.5,
-    borderRadius: 8,
-    borderColor: COLORS.black50,
+    borderWidth: 1,
+    borderRadius: 9,
+    borderColor: COLORS.gray210,
     overflow: 'hidden',
     paddingBottom: 8,
     marginBottom: 5,

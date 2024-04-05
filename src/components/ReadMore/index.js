@@ -2,28 +2,20 @@ import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {COLORS} from '../../utils/theme';
 import useReadmore from './hooks/useReadmore';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
 
 const styles = StyleSheet.create({
+  text: {
+    fontFamily: fonts.inter[400],
+    fontSize: normalizeFontSize(14),
+    color: COLORS.gray410
+  },
   moreText: {
     color: COLORS.bondi_blue
   }
 });
 
-/**
- * @typedef {Object} ReadmoreProps
- * @property {any} containerStyle
- * @property {string} text
- * @property {number} numberLine
- * @property {Function} onPress
- * @property {import('react-native').StyleProp} textStyle
- */
-
-/**
- *
- *@param {ReadmoreProps} props
- */
-
-const ReadMore = (props) => {
+const ReadMore = ({text, onPress}) => {
   const {
     isFinishSetLayout,
     realNumberLine,
@@ -34,31 +26,31 @@ const ReadMore = (props) => {
     handleLayoutWidth,
     limitNumberLine
   } = useReadmore({
-    numberLine: props.numberLine
+    numberLine: 1
   });
 
   React.useEffect(() => {
     setIsFinishSetLayout(false);
-  }, [layoutWidth, props.text]);
+  }, [layoutWidth, text]);
+
   return (
-    <View onLayout={handleLayoutWidth} style={props.containerStyle}>
+    <View style={{marginLeft: 8, marginTop: 2}} onLayout={handleLayoutWidth}>
       {isFinishSetLayout ? (
-        <TouchableOpacity testID="finishLayout" onPress={props.onPress}>
-          <Text style={props.textStyle}>
+        <TouchableOpacity testID="finishLayout" onPress={onPress}>
+          <Text style={styles.text}>
             {textShown}
-            {''}
             {limitNumberLine < realNumberLine ? (
               <Text testID="moreText" style={styles.moreText}>
                 More...
               </Text>
-            ) : null}{' '}
+            ) : null}
           </Text>
         </TouchableOpacity>
       ) : null}
       {!isFinishSetLayout ? (
-        <TouchableOpacity testID="finishLayout" onPress={props.onPress}>
-          <Text style={props.textStyle} testID="notFinishLayout" onTextLayout={handleLayoutText}>
-            {props.text}{' '}
+        <TouchableOpacity testID="finishLayout" onPress={onPress}>
+          <Text style={styles.text} testID="notFinishLayout" onTextLayout={handleLayoutText}>
+            {text}{' '}
           </Text>
         </TouchableOpacity>
       ) : null}

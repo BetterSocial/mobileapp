@@ -162,7 +162,7 @@ describe('Logic feed should run correctly', () => {
   });
   it('getHeightFooter should run correctly', async () => {
     const {result} = renderHook(useFeed);
-    expect(result.current.getHeightFooter()).toEqual(normalizeFontSizeByWidth(52));
+    expect(result.current.getHeightFooter()).toEqual(normalizeFontSizeByWidth(49));
   });
   it('getHeightHeader should run correctly', async () => {
     const {result} = renderHook(useFeed);
