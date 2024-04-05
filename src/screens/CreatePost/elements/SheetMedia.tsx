@@ -5,8 +5,9 @@ import {ActivityIndicator, StyleSheet, Text, TouchableOpacity, View} from 'react
 import MemoIcCamera from '../../../assets/icons/Ic_camera';
 import MemoIcCreatePoll from '../../../assets/icons/ic_create_poll';
 import MemoIcMedia from '../../../assets/icons/Ic_media';
-import {fonts} from '../../../utils/fonts';
+import {fonts, normalizeFontSize} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
+import dimen from '../../../utils/dimen';
 
 export type SheetMediaProps = {
   refMedia: React.RefObject<RBSheet>;
@@ -46,19 +47,19 @@ const SheetMedia = ({
       {medias.length === 0 && (
         <List
           label="Add a poll"
-          icon={<MemoIcCreatePoll width={16.67} height={16.67} />}
+          icon={<MemoIcCreatePoll width={16.67} height={16.67} fill={COLORS.white} />}
           onPress={createPoll}
         />
       )}
       <List
         label="Upload media from library"
-        icon={<MemoIcMedia width={16.67} height={16.67} />}
+        icon={<MemoIcMedia width={16.67} height={16.67} fill={COLORS.white} />}
         onPress={uploadFromMedia}
         isLoading={isLoadingUploadingMedia}
       />
       <List
         label="Take a photo"
-        icon={<MemoIcCamera width={16.67} height={16.67} />}
+        icon={<MemoIcCamera width={16.67} height={16.67} fill={COLORS.white} />}
         onPress={takePhoto}
         isLoading={isLoadingUploadingPhoto}
       />
@@ -70,41 +71,46 @@ const List = ({icon, label, onPress, isLoading = false}: ListProps) => (
   <TouchableOpacity style={styles.list} onPress={onPress}>
     {icon}
     <Text style={styles.labelList}>{label}</Text>
-    {isLoading ? <ActivityIndicator size="small" color="#0000ff" style={styles.loader} /> : <></>}
+    {isLoading ? (
+      <ActivityIndicator size="small" color={COLORS.white} style={styles.loader} />
+    ) : (
+      <></>
+    )}
   </TouchableOpacity>
 );
 export default SheetMedia;
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 38
+    paddingHorizontal: dimen.normalizeDimen(20),
+    paddingTop: dimen.normalizeDimen(20),
+    paddingBottom: dimen.normalizeDimen(38)
   },
   list: {
     flexDirection: 'row',
-    paddingVertical: 17.67,
-    paddingLeft: 21.67,
+    paddingVertical: dimen.normalizeDimen(17.67),
+    paddingLeft: dimen.normalizeDimen(21.67),
     backgroundColor: COLORS.gray110,
     borderRadius: 8,
-    marginBottom: 12,
+    marginBottom: dimen.normalizeDimen(12),
     alignItems: 'center'
   },
   labelList: {
     fontFamily: fonts.inter[500],
-    fontSize: 14,
+    fontSize: normalizeFontSize(14),
     color: COLORS.black,
-    paddingLeft: 8,
+    paddingLeft: dimen.normalizeDimen(8),
     flex: 1
   },
   containerSheet: {
     borderTopRightRadius: 20,
-    borderTopLeftRadius: 20
+    borderTopLeftRadius: 20,
+    backgroundColor: COLORS.almostBlack
   },
   draggableIcon: {
     backgroundColor: COLORS.gray110
   },
   loader: {
-    marginRight: 10
+    marginRight: dimen.normalizeDimen(10)
   }
 });

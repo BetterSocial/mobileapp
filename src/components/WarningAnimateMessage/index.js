@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {Animated, StyleSheet, Text, Easing, Dimensions, TouchableOpacity} from 'react-native';
 import {COLORS} from '../../utils/theme';
 import StorageUtils from '../../utils/storage';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
 
 const WarningAnimatedMessage = ({isShow, top = 100, left = 110}) => {
   const [isRunAnimate, setIsRunAnimated] = React.useState(false);
@@ -84,7 +85,7 @@ const WarningAnimatedMessage = ({isShow, top = 100, left = 110}) => {
           styles.container,
           {top, left}
         ]}>
-        <Text>
+        <Text style={styles.text}>
           Even when posts are incognito, you can be 🚫blocked, which will affect your visibility in
           the future. Respectful & balanced posts do best on Better.
         </Text>
@@ -121,9 +122,14 @@ const styles = StyleSheet.create({
     borderLeftWidth: 10,
     borderTopColor: COLORS.transparent,
     borderRightColor: COLORS.transparent,
-    borderBottomColor: COLORS.gray110,
+    borderBottomColor: COLORS.almostBlack,
     borderLeftColor: COLORS.transparent,
     position: 'absolute'
+  },
+  text: {
+    fontFamily: fonts.inter[400],
+    fontSize: normalizeFontSize(12),
+    color: COLORS.white
   }
 });
 

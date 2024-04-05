@@ -21,7 +21,7 @@ const MenuPostItem = ({icon, label, labelStyle, onPress, topic, listTopic}) => {
         {icon}
         <Text style={[styles.text, labelStyle]}>{label}</Text>
       </View>
-      <MemoIc_arrow_right width={8} height={12} />
+      <MemoIc_arrow_right width={8} height={12} fill={COLORS.white} />
     </TouchableOpacity>
   );
 };

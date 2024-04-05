@@ -5,7 +5,7 @@ exports[`Testing Button Add Topic Post should match snapshot 1`] = `
   style={
     Object {
       "backgroundColor": "#FFFFFF",
-      "bottom": 27,
+      "bottom": 24,
       "position": "absolute",
       "right": 0,
       "zIndex": 99,
@@ -66,12 +66,10 @@ exports[`Testing Button Add Topic Post should match snapshot 1`] = `
           style={
             Object {
               "alignSelf": "center",
-              "color": "#16202A",
-              "fontFamily": "Inter",
-              "fontSize": 12,
-              "fontStyle": "normal",
-              "fontWeight": "400",
-              "lineHeight": 14,
+              "color": "#FFFFFF",
+              "fontFamily": "Inter-Regular",
+              "fontSize": 10.8,
+              "lineHeight": 12.600000000000001,
               "marginBottom": 5.6000000000000005,
               "marginLeft": 5.6000000000000005,
               "marginTop": 6.4,
