@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import {SafeAreaView, StatusBar, View} from 'react-native';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
 import {useRecoilState, useRecoilValue} from 'recoil';
-// import {SafeAreaView} from 'react-native-safe-area-context';
 
 import AnonymousChatScreen from '../screens/ChatScreen/AnonymousChatScreen';
 import Blocked from '../screens/Blocked';

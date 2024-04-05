@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import Svg, {Path} from 'react-native-svg';
 
 function Ic_hastag(props) {
@@ -14,5 +15,8 @@ function Ic_hastag(props) {
   );
 }
 
+Ic_hastag.propTypes = {
+  fill: PropTypes.string
+};
 const MemoIc_hastag = React.memo(Ic_hastag);
 export default MemoIc_hastag;
