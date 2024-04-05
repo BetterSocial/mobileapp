@@ -73,6 +73,11 @@ const Blocked = ({navigation}) => {
     <SafeAreaView style={{flex: 1, backgroundColor: COLORS.white}}>
       <View style={styles.containerTab}>
         {headerBlocked()}
+        {/*
+          TODO: Garry ganti seperti ini:
+          indicator active signed primary, inactive gray200
+          text active white, inactive gray400
+        */}
         <Tabs.Navigator initialRouteName={TAB_BLOCKED_USER} tabBar={myTabbar}>
           <Tabs.Screen
             name={TAB_BLOCKED_USER}

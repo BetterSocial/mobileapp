@@ -82,7 +82,7 @@ const BottomSheetGif = React.forwardRef((props, ref) => {
             multiline={false}
             returnKeyType="search"
             placeholder="Search"
-            placeholderTextColor={COLORS.gray300}
+            placeholderTextColor={COLORS.gray400}
             style={styles.input}
             keyboardAppearance="dark"
           />

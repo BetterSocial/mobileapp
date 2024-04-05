@@ -29,12 +29,7 @@ const Search = ({onPress, animatedValue, isAnon, isShowNewChat = true}) => {
           <View style={styles.wrapperIcon}>
             <MemoIc_search width={17} height={17} fill={COLORS.gray310} />
           </View>
-          <Text
-            // placeholder={StringConstant.chatTabHeaderPlaceholder}
-            // placeholderTextColor={COLORS.lightgrey}
-            style={styles.input}>
-            {StringConstant.chatTabHeaderPlaceholder}
-          </Text>
+          <Text style={styles.input}>{StringConstant.chatTabHeaderPlaceholder}</Text>
         </View>
       </Pressable>
       {isShowNewChat && (
@@ -94,7 +89,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 14,
     alignSelf: 'center',
-    color: COLORS.gray300
+    color: COLORS.gray400
   },
   wrapperIcon: {
     marginLeft: 8,

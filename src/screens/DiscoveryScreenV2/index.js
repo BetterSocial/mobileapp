@@ -302,7 +302,7 @@ const DiscoveryScreenV2 = ({route}) => {
 
   return (
     <DiscoveryContainer>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       {route.name === 'Followings' ? (
         <Header
           title={

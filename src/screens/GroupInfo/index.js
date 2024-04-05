@@ -174,7 +174,7 @@ const GroupInfo = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       {/* <Header title={chatName} /> */}
       {isLoadingMembers ? null : (
         <>

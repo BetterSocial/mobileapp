@@ -64,7 +64,6 @@ const IncognitoEmptyChat = ({totalChannel}) => {
         </Text>
       )}
       <View style={styles.wrapper}>
-        {getMode() === MODE_FULL && <View testID="IncognitoEmptyChatLine" style={styles.line} />}
         <IncognitoButton
           title="Start an Incognito Chat"
           subtitle="Send an incognito message to friends."
@@ -107,24 +106,20 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(16),
     lineHeight: normalizeFontSize(24),
-    color: COLORS.anon_primary,
+    color: COLORS.white2,
     paddingHorizontal: dimen.normalizeDimen(40),
     textAlign: 'center',
-    marginTop: dimen.normalizeDimen(16)
+    marginTop: dimen.normalizeDimen(8)
   },
   wrapper: {
+    marginTop: dimen.normalizeDimen(24),
     paddingHorizontal: dimen.normalizeDimen(20),
     width: '100%'
-  },
-  line: {
-    height: 2,
-    backgroundColor: COLORS.gray200,
-    marginBottom: dimen.normalizeDimen(24)
   },
   item: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.gray100,
     paddingHorizontal: dimen.normalizeDimen(16),
     paddingVertical: dimen.normalizeDimen(15),
     borderRadius: 8,
@@ -139,7 +134,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(18),
-    color: COLORS.anon_primary,
+    color: COLORS.white2,
     marginBottom: dimen.normalizeDimen(4)
   },
   itemSubtitle: {

@@ -30,7 +30,7 @@ const BottomOverlay = ({count, handleLogin, index, isLogin, title, onNextSlide, 
           <View style={bottomOverlayStyles.containerBtnLogin}>
             <TouchableOpacity onPress={() => handleLogin()} style={bottomOverlayStyles.btnSign}>
               <Image
-                style={{height: 51, width: '100%'}}
+                style={{height: 48.5, width: '100%'}}
                 imageStyle={{borderRadius: 8}}
                 // eslint-disable-next-line global-require
                 source={require('../../../../assets/images/button-sign.png')}
@@ -108,10 +108,10 @@ const bottomOverlayStyles = StyleSheet.create({
     // backgroundColor: 'rgba(255,0,0,0.5)'
   },
   btnSign: {
-    width: '102%',
+    width: '101%',
     alignSelf: 'center',
     marginBottom: 12,
-    right: 2,
+    marginTop: -1,
     zIndex: 99
   },
   container: {
@@ -124,10 +124,10 @@ const bottomOverlayStyles = StyleSheet.create({
     zIndex: 10
   },
   containerBtnLogin: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.gray100,
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: COLORS.gray300,
+    borderColor: COLORS.gray200,
     paddingBottom: 16
   },
   descTitle: {
@@ -136,7 +136,7 @@ const bottomOverlayStyles = StyleSheet.create({
     lineHeight: 24,
     fontSize: 16,
     textAlign: 'center',
-    color: COLORS.bunting,
+    color: COLORS.white2,
     alignSelf: 'center'
   },
   desc: {
@@ -149,15 +149,15 @@ const bottomOverlayStyles = StyleSheet.create({
     alignSelf: 'center'
   },
   link: {
-    color: COLORS.blue,
+    color: COLORS.signed_primary,
     textDecorationLine: 'underline'
   },
   loginContainer: {
-    backgroundColor: COLORS.gray100
+    backgroundColor: COLORS.almostBlack
   },
   loginBox: {
     width: '100%',
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.almostBlack,
     height: dimen.size.ONBOARDING_BOTTOM_OVERLAY_CONTAINER,
     display: 'flex',
     flexDirection: 'column',
@@ -170,7 +170,6 @@ const bottomOverlayStyles = StyleSheet.create({
   },
   nextButton: {
     backgroundColor: COLORS.signed_primary,
-    // backgroundColor: 'red',
     width: dimen.size.ONBOARDING_BOTTOM_OVERLAY_NEXT_BUTTON_SIZE,
     height: dimen.size.ONBOARDING_BOTTOM_OVERLAY_NEXT_BUTTON_SIZE,
     borderRadius: dimen.size.ONBOARDING_BOTTOM_OVERLAY_NEXT_BUTTON_SIZE,
@@ -186,7 +185,7 @@ const bottomOverlayStyles = StyleSheet.create({
     lineHeight: normalize(28),
     fontSize: normalizeFontSize(22),
     fontFamily: fonts.inter[600],
-    color: COLORS.signed_primary,
+    color: COLORS.white2,
     alignSelf: 'flex-start'
   },
   contentText: {

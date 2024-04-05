@@ -41,7 +41,6 @@ export const KarmaScore = ({score}: KarmaScoreProps) => {
           allowChildInteraction={true}
           isVisible={isTooltipShown}
           placement={'bottom'}
-          backgroundColor={'rgba(0,0,0,0)'}
           closeOnContentInteraction={false}
           onClose={() => setIsTooltipShown(false)}
           closeOnBackgroundInteraction={true}
@@ -69,8 +68,7 @@ export const KarmaScore = ({score}: KarmaScoreProps) => {
                   fontSize: normalize(12),
                   lineHeight: normalize(18),
                   marginBottom: normalize(8),
-                  // TODO: Garry, gray berapa?
-                  color: COLORS.gray300
+                  color: COLORS.gray500
                 }}>
                 The higher your Karma score, the higher your visibility on the platform. Get
                 rewarded for positive contributions to the community - and avoid being blocked by
@@ -83,7 +81,7 @@ export const KarmaScore = ({score}: KarmaScoreProps) => {
                   paddingTop: normalize(8),
                   fontSize: normalize(14),
                   lineHeight: normalize(20),
-                  color: '#4782D7',
+                  color: COLORS.signed_primary,
                   width: '100%',
                   textAlign: 'right'
                 }}

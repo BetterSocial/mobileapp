@@ -48,6 +48,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: normalizeFontSize(12),
     lineHeight: normalizeFontSize(18),
-    color: COLORS.black000
+    color: COLORS.white2
   }
 });

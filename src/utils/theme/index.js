@@ -13,7 +13,7 @@ export const COLORS = {
   blueZaffre: '#0E24B3',
   brilliance: '#FCFCFC',
   bunting: '#11243D',
-  concrete: '#FF00FF', // changed to gray 100, before is #F2F2F2
+  concrete: '#233343', // changed to gray 100, before is #F2F2F2
   emperor: '#4F4F4F', // not used again
   french_pass: '#b6e4fd',
   greenMantis: '#79B45D',
@@ -70,10 +70,10 @@ export const COLORS = {
   light_silver: '#D2D4DB',
   balance_gray: '#9B9FA9',
   gray: '#E8EBED',
-  lightgrey: '#FF00FF', // changed to gray 100 #F5F6F7
+  lightgrey: '#233343', // changed to gray 100 #F5F6F7
   redalert: '#FF2E63',
-  blackgrey: '#FF00FF', // changed to gray 400
-  greySubtile1: '#9B9FA9', // changed to gray 400
+  blackgrey: '#8C939F', // changed to gray 400
+  greySubtile1: '#8C939F', // changed to gray 400
   elm: '#22878B',
   halfBaked: '#88CDD0',
   greenDark: '#004346',

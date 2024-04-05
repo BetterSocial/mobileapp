@@ -578,7 +578,7 @@ const PostPageDetailIdComponent = (props) => {
   return (
     <View style={styles.container}>
       {loading && !route.params.isCaching ? <LoadingWithoutModal /> : null}
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       {item ? (
         <React.Fragment>
           <Header

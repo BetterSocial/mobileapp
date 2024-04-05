@@ -97,7 +97,7 @@ const LinkContextScreen = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       <FlatList
         data={data}
         onScroll={handleOnScroll}

@@ -19,7 +19,7 @@ const Search = ({onPress, animatedValue, onChangeText, text, onClearText, isLoad
       <TextInput
         value={text}
         placeholder={'Search Users'}
-        placeholderTextColor={COLORS.gray300}
+        placeholderTextColor={COLORS.gray400}
         style={styles.input}
         onChangeText={(t) => {
           onChangeText(t);

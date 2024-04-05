@@ -30,6 +30,7 @@ export default class AutoFocusTextArea extends React.Component {
         style={{...styles.input, ...this.props.style}}
         textAlignVertical={'top'}
         placeholder={this.props.placeholder}
+        keyboardAppearance="dark"
         {...this.props}
       />
     );
@@ -46,7 +47,7 @@ AutoFocusTextArea.propTypes = {
 
 const styles = StyleSheet.create({
   input: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray100,
     paddingVertical: 16,
     paddingHorizontal: 12,
     height: 150,
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     fontFamily: fonts.inter[500],
     fontSize: 14,
-    color: COLORS.black,
+    color: COLORS.white2,
     lineHeight: 24
   }
 });

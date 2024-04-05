@@ -20,7 +20,7 @@ import {useNavigation} from '@react-navigation/core';
 import BottomSheetChooseImage from './elements/BottomSheetChooseImage';
 import MemoOnboardingChangeProfilePlusIcon from '../../assets/icon/OnboardingChangeProfilePlusIcon';
 import StringConstant from '../../utils/string/StringConstant';
-import WarningIcon from '../../assets/icon-svg/warning_circle_blue.svg';
+import IconWarningCircleBlue from '../../assets/icon/IconWarningCircleBlue';
 import dimen from '../../utils/dimen';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
@@ -199,7 +199,7 @@ const ChooseUsername = () => {
     switch (type) {
       case 'fetch':
         return (
-          <Text style={styles.textMessage(COLORS.silver)}>
+          <Text style={styles.textMessage(COLORS.gray400)}>
             {` ${StringConstant.onboardingChooseUsernameLabelCheckingAvailability}`}
           </Text>
         );
@@ -266,7 +266,7 @@ const ChooseUsername = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       <Header />
       <View style={styles.keyboardavoidingview}>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -289,13 +289,14 @@ const ChooseUsername = () => {
                     style={styles.image}
                   />
                   <View style={styles.icon}>
-                    <MemoOnboardingChangeProfilePlusIcon />
+                    <MemoOnboardingChangeProfilePlusIcon fill={COLORS.signed_primary} />
                   </View>
                 </View>
               </TouchableOpacity>
               <View style={{flex: 1}}>
                 <Input
                   placeholder="Username"
+                  placeholderTextColor={COLORS.gray400}
                   onChangeText={checkUsername}
                   onBlur={onTextBlur}
                   value={username}
@@ -309,9 +310,9 @@ const ChooseUsername = () => {
                 {messageTypeFetch(typeFetch, formatUsernameString())}
               </View>
             </View>
-            <View style={styles.constainerInfo}>
+            <View style={styles.containerInfo}>
               <View style={styles.parentIcon}>
-                <WarningIcon />
+                <IconWarningCircleBlue fill={COLORS.white2} fillIcon={COLORS.signed_primary} />
               </View>
               <View style={styles.parentInfo}>
                 <Text style={styles.infoText}>
@@ -349,7 +350,9 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: dimen.normalizeDimen(1),
     borderRadius: dimen.normalizeDimen(8),
-    borderColor: COLORS.silver,
+    borderColor: COLORS.gray200,
+    backgroundColor: COLORS.gray100,
+    color: COLORS.white2,
     paddingHorizontal: dimen.normalizeDimen(23),
     paddingVertical: dimen.normalizeDimen(13),
     width: '100%'
@@ -373,33 +376,22 @@ const styles = StyleSheet.create({
     borderRadius: dimen.normalizeDimen(26)
   },
   title: {
-    fontFamily: 'Inter-Bold',
-    fontStyle: 'normal',
-    fontWeight: '600',
+    fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(36),
     lineHeight: normalizeFontSize(43.57),
-    color: COLORS.bunting,
+    color: COLORS.white2,
     marginTop: dimen.normalizeDimen(24)
   },
   desc: {
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: '400',
+    fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(24),
-    color: COLORS.blackgrey,
-    opacity: 0.84,
+    color: COLORS.gray500,
     marginTop: dimen.normalizeDimen(8),
     marginBottom: dimen.normalizeDimen(12)
   },
-  btnImage: {
-    width: dimen.normalizeDimen(23),
-    height: dimen.normalizeDimen(23),
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  constainerInfo: {
-    backgroundColor: 'rgba(47, 128, 237, 0.2)',
+  containerInfo: {
+    backgroundColor: COLORS.signed_secondary,
     flexDirection: 'row',
     borderRadius: dimen.normalizeDimen(8),
     width: '100%',
@@ -407,16 +399,11 @@ const styles = StyleSheet.create({
     paddingVertical: dimen.normalizeDimen(8)
   },
   infoText: {
-    fontFamily: 'Inter-Regular',
-    fontStyle: 'normal',
-    fontWeight: '400',
+    fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
-    color: COLORS.blue,
-    // marginLeft: 12,
+    color: COLORS.white2,
     lineHeight: normalizeFontSize(24),
     paddingHorizontal: dimen.normalizeDimen(4)
-    // width: width - 95,
-    // backgroundColor: 'red'
   },
   containerAddIcon: {
     marginRight: dimen.normalizeDimen(13)

@@ -15,7 +15,13 @@ const Btn = (props) => {
       style={{...styles.button, ...props.styles, ...disabledStyle}}
       onPress={props.onPress}
       {...props}>
-      <Text style={{...styles.buttonText, ...props.textStyling}}>{props.children}</Text>
+      <Text
+        style={[
+          {...styles.buttonText, ...props.textStyling},
+          disable ? styles.buttonTextDisabled : {}
+        ]}>
+        {props.children}
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -39,7 +45,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   buttonText: {
-    color: COLORS.white,
+    color: COLORS.white2,
     fontSize: 18,
     fontFamily: fonts.inter[600]
   },
@@ -47,7 +53,7 @@ const styles = StyleSheet.create({
     color: COLORS.gray310
   },
   disabledbutton: {
-    backgroundColor: COLORS.gray300,
+    backgroundColor: COLORS.gray200,
     borderRadius: dimen.normalizeDimen(8)
   }
 });
