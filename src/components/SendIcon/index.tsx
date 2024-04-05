@@ -16,14 +16,14 @@ interface SendIconProps {
 
 const SendIcon: React.FC<SendIconProps> = ({type, isDisabled}) => {
   const iconBackgroundColorStyle = React.useCallback(() => {
-    if (isDisabled) return COLORS.gray200;
+    if (isDisabled) return COLORS.gray210;
     if (type === 'SIGNED') return COLORS.signed_primary;
     return COLORS.anon_primary;
   }, [isDisabled, type]);
 
   const iconColorStyle = React.useCallback(() => {
     if (isDisabled) return COLORS.gray310;
-    return COLORS.white2;
+    return COLORS.white;
   }, [isDisabled]);
 
   return (

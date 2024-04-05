@@ -75,7 +75,8 @@ const BlurredLayer = ({
 const styles = StyleSheet.create({
   relative: {
     position: 'relative',
-    width: '100%'
+    width: '100%',
+    overflow: 'hidden'
   },
   containerBlur: {
     position: 'absolute',
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     fontSize: normalizeFontSizeByWidth(12),
     lineHeight: 18,
-    color: COLORS.white2,
+    color: COLORS.white,
     textAlign: 'center',
     maxWidth: 242,
     marginVertical: 20
@@ -109,8 +110,8 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     fontSize: normalizeFontSizeByWidth(12),
     lineHeight: 18,
-    color: COLORS.white2,
-    borderColor: COLORS.white2,
+    color: COLORS.white,
+    borderColor: COLORS.white,
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 16,

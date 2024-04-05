@@ -47,7 +47,7 @@ AutoFocusTextArea.propTypes = {
 
 const styles = StyleSheet.create({
   input: {
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     paddingVertical: 16,
     paddingHorizontal: 12,
     height: 150,
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     fontFamily: fonts.inter[500],
     fontSize: 14,
-    color: COLORS.white2,
+    color: COLORS.white,
     lineHeight: 24
   }
 });

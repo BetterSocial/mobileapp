@@ -234,7 +234,7 @@ export default AddParticipant;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   containerHeader: {marginHorizontal: 22},
   newParticipantWarningContainer: {
@@ -262,6 +262,6 @@ const styles = StyleSheet.create({
     marginTop: 16
   },
   subtitleStyle: (isIsset) => ({
-    color: isIsset ? COLORS.anon_primary : COLORS.lightgrey
+    color: isIsset ? COLORS.anon_primary : COLORS.gray110
   })
 });

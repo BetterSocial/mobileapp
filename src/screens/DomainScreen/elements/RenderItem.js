@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
   wrapperItem: {
     backgroundColor: COLORS.almostBlack,
     borderBottomWidth: 4,
-    borderBottomColor: COLORS.gray100,
+    borderBottomColor: COLORS.gray110,
     height: dimen.size.DOMAIN_CURRENT_HEIGHT - 2
   },
   wrapperImage: {
@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
     width: 3,
     height: 3,
     borderRadius: 4,
-    backgroundColor: COLORS.gray400,
+    backgroundColor: COLORS.gray410,
     marginLeft: 8,
     marginRight: 8
   },
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
   wrapperFooter: {
     height: normalize(52),
     // flexBasis: 52,
-    borderBottomColor: COLORS.gray200,
+    borderBottomColor: COLORS.gray210,
     borderBottomWidth: 1
   },
   headerDomainName: {
@@ -287,19 +287,19 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(12),
     lineHeight: normalizeFontSize(18),
-    color: COLORS.gray400
+    color: COLORS.gray410
   },
   domainItemTitle: {
     fontSize: normalizeFontSize(16),
     fontFamily: fonts.inter[700],
     lineHeight: normalizeFontSize(24),
-    color: COLORS.white2
+    color: COLORS.white
   },
   domainItemDescription: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(16),
     lineHeight: normalizeFontSize(24),
-    color: COLORS.white2,
+    color: COLORS.white,
     flex: 1
   },
   previewCommentContainer: {zIndex: 1000},

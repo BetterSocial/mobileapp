@@ -19,7 +19,7 @@ const Search = ({onPress, animatedValue, onChangeText, text, onClearText, isLoad
       <TextInput
         value={text}
         placeholder={'Search Users'}
-        placeholderTextColor={COLORS.gray400}
+        placeholderTextColor={COLORS.gray410}
         style={styles.input}
         onChangeText={(t) => {
           onChangeText(t);
@@ -34,10 +34,10 @@ const Search = ({onPress, animatedValue, onChangeText, text, onClearText, isLoad
         <MemoIc_search width={20} height={20} fill={COLORS.gray310} />
       </View>
       <View style={styles.wrapperSecondaryIcon}>
-        {isLoading && <ActivityIndicator style={styles.loader} color={COLORS.blackgrey} />}
+        {isLoading && <ActivityIndicator style={styles.loader} color={COLORS.gray410} />}
         {!isLoading && (
           <Pressable onPress={onClearText}>
-            <IconClose width={8} height={8} color={COLORS.gray400} />
+            <IconClose width={8} height={8} color={COLORS.gray410} />
           </Pressable>
         )}
       </View>
@@ -48,11 +48,11 @@ const Search = ({onPress, animatedValue, onChangeText, text, onClearText, isLoad
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   wrapperSearch: {
     flex: 1,
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray110,
     marginLeft: 15,
     marginRight: 15,
     borderRadius: SIZES.radius,
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   },
   animatedViewContainer: (animatedValue) => ({
     flexDirection: 'row',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     marginTop: animatedValue,
     top: 0,
     left: 0,
@@ -117,9 +117,9 @@ const styles = StyleSheet.create({
     zIndex: 10,
     padding: 7,
     borderBottomWidth: 0.5,
-    borderBottomColor: COLORS.lightgrey,
+    borderBottomColor: COLORS.gray110,
     borderTopWidth: 0.5,
-    borderTopColor: COLORS.lightgrey
+    borderTopColor: COLORS.gray110
   })
 });
 

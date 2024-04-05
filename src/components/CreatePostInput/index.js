@@ -243,7 +243,7 @@ const CreatePostInput = ({
 
 const styles = StyleSheet.create({
   input: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray110,
     paddingVertical: 16,
     paddingHorizontal: 12,
     minHeight: 100,

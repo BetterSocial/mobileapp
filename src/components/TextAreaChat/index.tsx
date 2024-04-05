@@ -82,10 +82,10 @@ const TextAreaChat = ({
         multiline={true}
         onChangeText={onChangeText}
         placeholder={placeholder}
-        placeholderTextColor={COLORS.gray400}
+        placeholderTextColor={COLORS.gray410}
         style={[
           S.textArea,
-          {color: disabledInput ? COLORS.lightgrey : COLORS.white2, minHeight, maxHeight}
+          {color: disabledInput ? COLORS.gray110 : COLORS.white, minHeight, maxHeight}
         ]}
         value={message}
         editable={!disabledInput}

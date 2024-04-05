@@ -176,9 +176,7 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics}) => {
                         #{convertString(item.name, ' ', '')}
                       </Text>
                       {index !== topicSuggestion.length - 1 && (
-                        <View
-                          style={{height: 1, marginTop: 5, backgroundColor: COLORS.lightgrey}}
-                        />
+                        <View style={{height: 1, marginTop: 5, backgroundColor: COLORS.gray110}} />
                       )}
                     </View>
                   </TouchableNativeFeedback>
@@ -205,7 +203,7 @@ const styles = StyleSheet.create({
     paddingBottom: 38
   },
   content: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray110,
     paddingHorizontal: 16,
     paddingTop: 17,
     minHeight: 150,
@@ -220,7 +218,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   containerTag: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     borderRadius: 14,
     paddingHorizontal: 16,
     paddingVertical: 7.33,
@@ -252,7 +250,7 @@ const styles = StyleSheet.create({
   textDesc: {
     fontSize: 10,
     fontFamily: fonts.inter[400],
-    color: COLORS.blackgrey,
+    color: COLORS.gray410,
     marginTop: 5,
     marginBottom: 21
   },
@@ -261,7 +259,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20
   },
   draggableIcon: {
-    backgroundColor: COLORS.lightgrey
+    backgroundColor: COLORS.gray110
   },
   topicItem: {
     marginBottom: 12

@@ -30,12 +30,12 @@ const styles = StyleSheet.create({
     lineHeight: normalize(29),
     fontWeight: 'bold',
     textAlign: 'left',
-    color: COLORS.white2
+    color: COLORS.white
   },
   divider: {
     height: 1,
     width: '100%',
-    backgroundColor: COLORS.gray400
+    backgroundColor: COLORS.gray410
   }
 });
 

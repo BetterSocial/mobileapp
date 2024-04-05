@@ -56,13 +56,13 @@ const styles = StyleSheet.create({
   textFullName: {
     fontFamily: fonts.inter[700],
     fontSize: normalizeFontSize(14),
-    color: COLORS.white2,
+    color: COLORS.white,
     lineHeight: normalizeFontSize(21),
     alignSelf: 'flex-start'
   },
   textUsername: {
     fontSize: normalizeFontSize(14),
-    color: COLORS.gray500,
+    color: COLORS.gray510,
     lineHeight: normalizeFontSize(21),
     alignSelf: 'flex-start',
     width: '100%',

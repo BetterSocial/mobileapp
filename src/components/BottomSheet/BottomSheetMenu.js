@@ -34,13 +34,13 @@ export default BottomSheetMenu;
 
 const styles = StyleSheet.create({
   rbsheetContainer: (height) => ({
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     borderTopLeftRadius: dimen.normalizeDimen(12),
     borderTopRightRadius: dimen.normalizeDimen(12),
     height: dimen.normalizeDimen(height)
   }),
   rbsheetDraggableIcon: {
-    backgroundColor: COLORS.gray200,
+    backgroundColor: COLORS.gray210,
     height: dimen.normalizeDimen(4),
     width: dimen.normalizeDimen(60),
     marginTop: dimen.normalizeDimen(16),
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingVertical: dimen.normalizeDimen(14),
     paddingHorizontal: dimen.normalizeDimen(20),
-    borderColor: COLORS.gray200
+    borderColor: COLORS.gray210
   },
   rbsheetContent2: {
     flexDirection: 'row',
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingVertical: dimen.normalizeDimen(14),
     paddingHorizontal: dimen.normalizeDimen(20),
-    borderColor: COLORS.gray200
+    borderColor: COLORS.gray210
   },
   textShare: {
     fontSize: normalizeFontSize(16),

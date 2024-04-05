@@ -53,7 +53,7 @@ const DetailDomainScreenHeader = ({
           {/* <View style={styles.point} /> */}
           {/* <Memoic_globe height={13} width={13} /> */}
           <View style={styles.point} />
-          <MemoPeopleFollow height={13} width={12} fill={COLORS.gray400} />
+          <MemoPeopleFollow height={13} width={12} fill={COLORS.gray410} />
           <Gap style={{width: 4}} />
           <Text style={styles.followerNumber}>{follower}</Text>
           <View style={styles.point} />
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   headerDomainInfoContainer: {flex: 1, marginRight: 8},
   headerDomainDateContainer: {flexDirection: 'row', alignItems: 'center', flexShrink: 1},
   wrapperText: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     borderRadius: 8,
     borderColor: COLORS.signed_primary,
     width: 28,
@@ -111,14 +111,14 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 12,
     lineHeight: 18,
-    color: COLORS.gray400,
+    color: COLORS.gray410,
     flexShrink: 1
   },
   point: {
     width: 2,
     height: 2,
     borderRadius: 4,
-    backgroundColor: COLORS.gray400,
+    backgroundColor: COLORS.gray410,
     marginLeft: 5,
     marginRight: 5
   },
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     alignItems: 'center',
     borderBottomWidth: 0.5,
-    borderBottomColor: COLORS.gray200,
+    borderBottomColor: COLORS.gray210,
     height: 64
   },
   backNavigationContainer: {
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     paddingRight: 20
   },
   followerNumber: {
-    color: COLORS.gray400,
+    color: COLORS.gray410,
     fontSize: 12,
     fontFamily: fonts.inter[700]
   }

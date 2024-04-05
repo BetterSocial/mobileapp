@@ -33,13 +33,12 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   textOn: {
-    fontFamily: 'Inter',
-    fontWeight: '400',
+    fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(12),
     lineHeight: dimen.normalizeDimen(18),
     textAlign: 'center',
     textAlignVertical: 'center',
-    color: COLORS.whiteSmoke,
+    color: COLORS.almostBlackSmoke,
     position: 'absolute',
     top: dimen.normalizeDimen(1),
     left: dimen.normalizeDimen(2),
@@ -47,46 +46,36 @@ const styles = StyleSheet.create({
     height: dimen.normalizeDimen(18)
   },
   textOff: {
-    fontFamily: 'Inter',
-    fontWeight: '400',
+    fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(12),
     lineHeight: dimen.normalizeDimen(18),
     textAlign: 'center',
     textAlignVertical: 'center',
-    color: COLORS.whiteSmoke,
+    color: COLORS.almostBlackSmoke,
     position: 'absolute',
     top: dimen.normalizeDimen(1),
-    right: dimen.normalizeDimen(2),
+    right: dimen.normalizeDimen(1),
     width: dimen.normalizeDimen(22),
     height: dimen.normalizeDimen(18)
   },
   mainStyes: {
     position: 'relative',
     borderRadius: dimen.normalizeDimen(12),
+    borderWidth: 1,
+    borderColor: COLORS.gray210,
     backgroundColor: COLORS.almostBlack,
-    height: dimen.normalizeDimen(20),
-    width: dimen.normalizeDimen(42),
-    ...Platform.select({
-      ios: {
-        shadowColor: COLORS.gray200,
-        shadowOffset: {width: 0, height: 0},
-        shadowOpacity: dimen.normalizeDimen(1),
-        shadowRadius: dimen.normalizeDimen(1)
-      },
-      android: {
-        elevation: dimen.normalizeDimen(1)
-      }
-    })
+    height: dimen.normalizeDimen(22),
+    width: dimen.normalizeDimen(42)
   },
   labelLeft: {
     marginRight: dimen.normalizeDimen(5),
-    color: COLORS.gray400,
+    color: COLORS.gray410,
     fontSize: normalizeFontSize(8),
     fontFamily: fonts.inter[400]
   },
   labelRight: {
     marginLeft: dimen.normalizeDimen(5),
-    color: COLORS.gray400,
+    color: COLORS.gray410,
     fontSize: normalizeFontSize(8),
     fontFamily: fonts.inter[400]
   }
@@ -151,7 +140,7 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
 
   const positionInterPol = positionButton.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, dimen.normalizeDimen(22)]
+    outputRange: [0, dimen.normalizeDimen(20)]
   });
   const backgroundColorAnim = positionButton.interpolate({
     inputRange: [0, 1],

@@ -30,7 +30,7 @@ export default MenuPostItem;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray110,
     paddingVertical: 19,
     paddingRight: 24,
     paddingLeft: 19,
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     borderRadius: 8
   },
   containerTopic: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray110,
     paddingRight: 24,
     paddingLeft: 19,
     flexDirection: 'row',

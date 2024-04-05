@@ -168,7 +168,7 @@ export const useInitialStartup = () => {
     LogBox.ignoreAllLogs();
 
     // statusbar
-    if (Platform.OS === 'android') StatusBar.setBackgroundColor(COLORS.white);
+    if (Platform.OS === 'android') StatusBar.setBackgroundColor(COLORS.almostBlack);
     StatusBar.setBarStyle('dark-content', true);
 
     doGetAccessToken();

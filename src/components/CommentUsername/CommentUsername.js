@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
   username: {
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(12),
-    color: COLORS.white2,
+    color: COLORS.white,
     lineHeight: 14,
     marginLeft: 8,
     maxWidth: dimen.normalizeDimen(170)
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
   dot: {
     fontFamily: fonts.inter[700],
     fontSize: normalizeFontSize(12),
-    color: COLORS.gray400
+    color: COLORS.gray410
   }
 });
 

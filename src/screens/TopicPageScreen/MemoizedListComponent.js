@@ -139,7 +139,7 @@ const RenderListFeed = (props) => {
     if (hasComment) {
       return getHeightReaction() + normalize(4);
     }
-    return getHeightFooter();
+    return getHeightFooter() + normalize(4);
   };
 
   const isShortTextPost =
@@ -215,30 +215,29 @@ const RenderListFeed = (props) => {
           isShowDM
           isShortText={isShortTextPost}
         />
-        <BlurredLayer layerOnly blurType="light" withToast={true} isVisible={isBlurred}>
-          {hasComment ? (
-            <View>
-              <PreviewComment
-                user={item.latest_reactions.comment[0].user}
-                comment={item?.latest_reactions?.comment[0]?.data?.text || ''}
-                image={item?.latest_reactions?.comment[0]?.user?.data?.profile_pic_url || ''}
-                time={item.latest_reactions.comment[0].created_at}
-                totalComment={getTotalReaction(item) - 1}
-                item={item.latest_reactions.comment[0]}
-                onPress={onPressComment}
-                isShortText={isShortTextPost}
-              />
-            </View>
-          ) : (
-            <AddCommentPreview
-              username={handleUserName(item)}
-              isBlurred={isBlurred}
-              heightReaction={getHeightReaction()}
-              onPressComment={() => onPressComment(isHaveSeeMore)}
+        {hasComment ? (
+          <View>
+            <PreviewComment
+              user={item.latest_reactions.comment[0].user}
+              comment={item?.latest_reactions?.comment[0]?.data?.text || ''}
+              image={item?.latest_reactions?.comment[0]?.user?.data?.profile_pic_url || ''}
+              time={item.latest_reactions.comment[0].created_at}
+              totalComment={getTotalReaction(item) - 1}
+              item={item.latest_reactions.comment[0]}
+              onPress={onPressComment}
               isShortText={isShortTextPost}
+              isBlurred={isBlurred}
             />
-          )}
-        </BlurredLayer>
+          </View>
+        ) : (
+          <AddCommentPreview
+            username={handleUserName(item)}
+            isBlurred={isBlurred}
+            heightReaction={getHeightReaction()}
+            onPressComment={() => onPressComment(isHaveSeeMore)}
+            isShortText={isShortTextPost}
+          />
+        )}
       </View>
     </View>
   );

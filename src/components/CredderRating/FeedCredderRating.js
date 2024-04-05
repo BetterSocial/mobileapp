@@ -17,7 +17,7 @@ const FeedCredderRating = ({
   viewBox = '0 0 18 18',
   scoreStyle = {}
 }) => {
-  const __renderCredderRatingIcon = () => {
+  const renderCredderRatingIcon = () => {
     if (!score || score < 0)
       return (
         <CredderRatingGray
@@ -56,7 +56,7 @@ const FeedCredderRating = ({
     );
   };
 
-  const __renderCredderRatingScore = () => {
+  const renderCredderRatingScore = () => {
     if (!score || score < 0) return 'n/a';
     // return ${score}${<Text>{`%`}</Text>}
     return (
@@ -69,9 +69,9 @@ const FeedCredderRating = ({
 
   return (
     <View style={{...styles.credderRatingContainer, ...containerStyle}}>
-      {__renderCredderRatingIcon()}
+      {renderCredderRatingIcon()}
       <Text style={{...styles.credderRating(scoreSize, score), ...scoreStyle}}>
-        {__renderCredderRatingScore()}
+        {renderCredderRatingScore()}
       </Text>
     </View>
   );
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     return {
       fontSize,
       fontFamily: fonts.inter[400],
-      color: COLORS.gray400,
+      color: COLORS.gray410,
       alignSelf: 'center',
       marginLeft: 4,
       lineHeight: 14.52

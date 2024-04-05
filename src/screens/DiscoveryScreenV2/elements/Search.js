@@ -173,7 +173,7 @@ const DiscoverySearch = ({
               <MemoIcArrowBackWhite
                 width={20}
                 height={12}
-                fill={COLORS.white2}
+                fill={COLORS.white}
                 style={{alignSelf: 'center'}}
               />
             </View>
@@ -197,7 +197,7 @@ const DiscoverySearch = ({
             returnKeyType="search"
             onSubmitEditing={handleOnSubmitEditing}
             placeholder={placeholderText}
-            placeholderTextColor={COLORS.gray400}
+            placeholderTextColor={COLORS.gray410}
             style={styles.input}
             keyboardAppearance="dark"
           />
@@ -208,12 +208,12 @@ const DiscoverySearch = ({
             onPress={handleOnClearText}
             style={styles.clearIconContainer}
             android_ripple={{
-              color: COLORS.lightgrey,
+              color: COLORS.gray110,
               borderless: true,
               radius: 35
             }}>
             <View style={styles.wrapperDeleteIcon}>
-              <IconClear width={9} height={10} fill={COLORS.gray400} />
+              <IconClear width={9} height={10} fill={COLORS.gray410} />
             </View>
           </TouchableOpacity>
         </View>
@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flexDirection: 'row',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     marginBottom: SIZES.base,
     marginHorizontal: SIZES.base
   },
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
   },
   wrapperSearch: {
     flex: 1,
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray110,
     borderRadius: dimen.normalizeDimen(12),
     alignSelf: 'center',
     flexDirection: 'row',
@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
     height: dimen.normalizeDimen(33),
     paddingTop: 0,
     paddingBottom: 0,
-    color: COLORS.white2
+    color: COLORS.white
   },
   wrapperIcon: {
     marginLeft: dimen.normalizeDimen(9.67),
@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
     height: dimen.size.DISCOVERY_HEADER_HEIGHT,
     paddingVertical: dimen.normalizeDimen(7),
     borderBottomWidth: hideBackIcon ? 0 : dimen.normalizeDimen(1),
-    borderBottomColor: COLORS.lightgrey
+    borderBottomColor: COLORS.gray110
   })
 });
 

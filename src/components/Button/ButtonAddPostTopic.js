@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     marginTop: dimen.normalizeDimen(8),
     marginBottom: dimen.normalizeDimen(7),
     marginLeft: dimen.normalizeDimen(7),
-    color: COLORS.white,
+    color: COLORS.almostBlack,
     alignSelf: 'center'
   }
 });

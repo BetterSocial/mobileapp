@@ -7,7 +7,7 @@ import {COLORS} from '../../utils/theme';
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     padding: 16,
     borderRadius: 8
   },

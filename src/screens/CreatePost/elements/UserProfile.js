@@ -28,12 +28,12 @@ const styles = StyleSheet.create({
   desc: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.blackgrey
+    color: COLORS.gray410
   },
   switch: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.blackgrey
+    color: COLORS.gray410
   },
   image: {
     marginRight: 8,
@@ -110,8 +110,8 @@ const UserProfile = ({
           value={isAnonymous}
           onValueChange={() => setTypeUser(!isAnonymous)}
           labelLeft="Incognito"
-          backgroundActive={COLORS.lightgrey}
-          backgroundInactive={COLORS.lightgrey}
+          backgroundActive={COLORS.gray110}
+          backgroundInactive={COLORS.gray110}
           circleInActiveColor={COLORS.signed_primary}
           inactiveTextColor={COLORS.signed_primary}
           styleLabelLeft={styles.switch}

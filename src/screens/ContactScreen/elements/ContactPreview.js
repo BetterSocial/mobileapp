@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     paddingTop: dimen.normalizeDimen(16),
     paddingBottom: dimen.normalizeDimen(8),
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.gray200
+    borderBottomColor: COLORS.gray210
   },
   tinyLogo: {
     width: 54,
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     marginTop: 6,
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.white2
+    color: COLORS.white
   }
 });
 

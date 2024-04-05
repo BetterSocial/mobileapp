@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     paddingHorizontal: dimen.normalizeDimen(6)
   },
   btnEmoji: {
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
   containerInput: {
     flex: 1,
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     flexDirection: 'row',
     alignItems: 'flex-end',
     paddingVertical: dimen.normalizeDimen(6),
@@ -64,8 +64,8 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    backgroundColor: COLORS.gray100,
-    color: COLORS.white2,
+    backgroundColor: COLORS.gray110,
+    color: COLORS.white,
     fontFamily: 'Inter',
     fontSize: normalizeFontSize(14),
     fontStyle: 'normal',
@@ -365,7 +365,6 @@ const InputMessageV2 = ({
 
   const toggleChange = () => {
     if (messageDisable) {
-      // TODO: Garry, need to change this color
       ToastMessage.show({
         type: 'asNative',
         text1: messageDisable,

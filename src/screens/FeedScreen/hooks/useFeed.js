@@ -103,7 +103,7 @@ const useFeed = () => {
       return COLORS.redalert;
     }
 
-    return COLORS.lightgrey;
+    return COLORS.gray110;
   };
 
   const getTotalReaction = (feedDetail) => {

@@ -111,7 +111,7 @@ const ContentPoll = ({
             height: 4,
             borderRadius: 4,
             alignSelf: 'center',
-            backgroundColor: COLORS.blackgrey
+            backgroundColor: COLORS.gray410
           }}
         />
         <Text style={styles.polltime}>{` ${getPollTime(pollexpiredat, currentMoment)}`}</Text>
@@ -141,7 +141,7 @@ const stylesComponent = (pollLength) =>
       height: 4,
       borderRadius: 4,
       alignSelf: 'center',
-      backgroundColor: COLORS.blackgrey
+      backgroundColor: COLORS.gray410
     },
     fletlist: {
       flex: 1
@@ -187,7 +187,7 @@ const stylesComponent = (pollLength) =>
       width: 4,
       height: 4,
       borderRadius: 4,
-      backgroundColor: COLORS.blackgrey,
+      backgroundColor: COLORS.gray410,
       marginLeft: 8,
       marginRight: 8
     },
@@ -208,7 +208,7 @@ const stylesComponent = (pollLength) =>
       fontFamily: fonts.inter[400],
       fontSize: normalizeFontSize(12),
       lineHeight: 18,
-      color: COLORS.blackgrey
+      color: COLORS.gray410
     },
     usernameComment: {
       fontFamily: fonts.inter[500],
@@ -221,7 +221,7 @@ const stylesComponent = (pollLength) =>
       fontFamily: fonts.inter[500],
       fontSize: normalizeFontSize(12),
       lineHeight: 24,
-      color: COLORS.blackgrey
+      color: COLORS.gray410
     },
     item: {
       width: screenWidth - 20,
@@ -253,7 +253,7 @@ const stylesComponent = (pollLength) =>
       marginBottom: 0
     },
     pollOptionItemContainer: {
-      backgroundColor: COLORS.lightgrey,
+      backgroundColor: COLORS.gray110,
       marginBottom: 8,
       borderRadius: 8,
       display: 'flex',
@@ -282,13 +282,13 @@ const stylesComponent = (pollLength) =>
       fontFamily: fonts.inter[400],
       fontSize: normalizeFontSize(12),
       lineHeight: 16,
-      color: COLORS.blackgrey
+      color: COLORS.gray410
     },
     polltime: {
       fontFamily: fonts.inter[400],
       fontSize: normalizeFontSize(12),
       lineHeight: 16,
-      color: COLORS.blackgrey,
+      color: COLORS.gray410,
       alignSelf: 'center',
       flex: 1
     },
@@ -345,7 +345,7 @@ const stylesComponent = (pollLength) =>
     }),
     voteFont: {
       fontSize: normalizeFontSize(12),
-      color: COLORS.blackgrey,
+      color: COLORS.gray410,
       marginLeft: 2
     }
   });

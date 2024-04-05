@@ -199,7 +199,7 @@ const ChooseUsername = () => {
     switch (type) {
       case 'fetch':
         return (
-          <Text style={styles.textMessage(COLORS.gray400)}>
+          <Text style={styles.textMessage(COLORS.gray410)}>
             {` ${StringConstant.onboardingChooseUsernameLabelCheckingAvailability}`}
           </Text>
         );
@@ -296,7 +296,7 @@ const ChooseUsername = () => {
               <View style={{flex: 1}}>
                 <Input
                   placeholder="Username"
-                  placeholderTextColor={COLORS.gray400}
+                  placeholderTextColor={COLORS.gray410}
                   onChangeText={checkUsername}
                   onBlur={onTextBlur}
                   value={username}
@@ -312,7 +312,7 @@ const ChooseUsername = () => {
             </View>
             <View style={styles.containerInfo}>
               <View style={styles.parentIcon}>
-                <IconWarningCircleBlue fill={COLORS.white2} fillIcon={COLORS.signed_primary} />
+                <IconWarningCircleBlue fill={COLORS.white} fillIcon={COLORS.signed_primary} />
               </View>
               <View style={styles.parentInfo}>
                 <Text style={styles.infoText}>
@@ -350,16 +350,16 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: dimen.normalizeDimen(1),
     borderRadius: dimen.normalizeDimen(8),
-    borderColor: COLORS.gray200,
-    backgroundColor: COLORS.gray100,
-    color: COLORS.white2,
+    borderColor: COLORS.gray210,
+    backgroundColor: COLORS.gray110,
+    color: COLORS.white,
     paddingHorizontal: dimen.normalizeDimen(23),
     paddingVertical: dimen.normalizeDimen(13),
     width: '100%'
   },
   container: {
     flex: 1,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   btnNext: {marginTop: dimen.normalizeDimen(16)},
   gap: {flex: 1},
@@ -379,14 +379,14 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(36),
     lineHeight: normalizeFontSize(43.57),
-    color: COLORS.white2,
+    color: COLORS.white,
     marginTop: dimen.normalizeDimen(24)
   },
   desc: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(24),
-    color: COLORS.gray500,
+    color: COLORS.gray510,
     marginTop: dimen.normalizeDimen(8),
     marginBottom: dimen.normalizeDimen(12)
   },
@@ -401,7 +401,7 @@ const styles = StyleSheet.create({
   infoText: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
-    color: COLORS.white2,
+    color: COLORS.white,
     lineHeight: normalizeFontSize(24),
     paddingHorizontal: dimen.normalizeDimen(4)
   },
@@ -437,7 +437,7 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: dimen.normalizeDimen(20),
     paddingBottom: dimen.normalizeDimen(20),
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     flexDirection: 'column',
     justifyContent: 'space-between'
   },

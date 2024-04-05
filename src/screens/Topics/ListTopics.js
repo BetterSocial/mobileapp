@@ -9,13 +9,13 @@ const ListTopics = ({item, i, myTopic, handleSelectedLanguage}) => (
     key={i}
     style={[
       styles.bgTopicSelectNotActive,
-      {backgroundColor: myTopic[item.topic_id] ? COLORS.signed_primary : COLORS.gray100}
+      {backgroundColor: myTopic[item.topic_id] ? COLORS.signed_primary : COLORS.gray110}
     ]}>
     <Text>{item.icon}</Text>
     <Text
       style={[
         styles.textTopicNotActive,
-        {color: myTopic[item.topic_id] ? COLORS.white2 : COLORS.white2}
+        {color: myTopic[item.topic_id] ? COLORS.white : COLORS.white}
       ]}>
       #{item.name}
     </Text>
@@ -24,7 +24,7 @@ const ListTopics = ({item, i, myTopic, handleSelectedLanguage}) => (
 
 const styles = StyleSheet.create({
   bgTopicSelectNotActive: {
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     paddingHorizontal: 15,
     paddingVertical: 7,
     borderRadius: 14,
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   textTopicNotActive: {
     fontFamily: fonts.inter[500],
     fontSize: 12,
-    color: COLORS.white2
+    color: COLORS.white
   }
 });
 

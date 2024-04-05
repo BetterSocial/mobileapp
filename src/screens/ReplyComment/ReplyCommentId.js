@@ -295,7 +295,7 @@ const ContainerReply = ({children, isGrandchild = true, hideLeftConnector, key})
     key={key}
     style={[
       styles.containerReply(hideLeftConnector),
-      {borderColor: isGrandchild ? COLORS.transparent : COLORS.lightgrey}
+      {borderColor: isGrandchild ? COLORS.transparent : COLORS.gray110}
     ]}>
     {children}
   </View>
@@ -306,7 +306,7 @@ const styles = StyleSheet.create({
   container: {
     height: 'auto',
     flex: 1,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
     // backgroundColor: COLORS.blue,
   },
   containerComment: {
@@ -334,7 +334,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     paddingBottom: 14,
-    borderLeftColor: isLast ? COLORS.transparent : COLORS.lightgrey
+    borderLeftColor: isLast ? COLORS.transparent : COLORS.gray110
   }),
   seeRepliesText: {
     color: COLORS.signed_primary
@@ -345,7 +345,7 @@ const styles = StyleSheet.create({
     borderRadius: 20
   },
   btnText: {
-    color: COLORS.white
+    color: COLORS.almostBlack
   },
   headerText: {
     fontFamily: fonts.inter[600],
@@ -359,7 +359,7 @@ const styles = StyleSheet.create({
     height: 48
   },
   input: {
-    backgroundColor: COLORS.concrete,
+    backgroundColor: COLORS.gray110,
     flex: 1,
     color: COLORS.black,
     padding: 10,
@@ -382,7 +382,7 @@ const styles = StyleSheet.create({
     height: '100%',
     width: 1,
     position: 'absolute',
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray110,
     left: 46,
     zIndex: -100
   },
@@ -392,20 +392,20 @@ const styles = StyleSheet.create({
     borderLeftWidth: 1,
     borderBottomWidth: 1,
     borderBottomLeftRadius: 21,
-    borderLeftColor: COLORS.lightgrey,
-    borderBottomColor: COLORS.lightgrey,
+    borderLeftColor: COLORS.gray110,
+    borderBottomColor: COLORS.gray110,
     marginRight: 4,
     marginLeft: -1
   },
   childCommentWrapper: {
-    borderLeftColor: COLORS.lightgrey,
+    borderLeftColor: COLORS.gray110,
     borderLeftWidth: 1,
     flex: 1
   },
   childLevelMainConnector: {
     flex: 1,
     borderLeftWidth: 1,
-    borderLeftColor: COLORS.lightgrey,
+    borderLeftColor: COLORS.gray110,
     marginLeft: 24
   },
   backArrow: {

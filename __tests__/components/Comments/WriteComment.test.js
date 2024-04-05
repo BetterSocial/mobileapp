@@ -39,7 +39,7 @@ describe('WriteComment should run correctly', () => {
     });
     expect(styles.container).toEqual({
       flex: 1,
-      backgroundColor: COLORS.white,
+      backgroundColor: COLORS.almostBlack,
       width: '100%',
       paddingRight: dimen.normalizeDimen(16),
       paddingLeft: dimen.normalizeDimen(16),
@@ -47,7 +47,7 @@ describe('WriteComment should run correctly', () => {
       zIndex: 100
     });
     expect(styles.btn(true)).toEqual({
-      backgroundColor: COLORS.concrete,
+      backgroundColor: COLORS.gray110,
       borderRadius: 18,
       width: 35,
       height: 35,

@@ -67,7 +67,7 @@ const DiscoveryTab = ({onChangeScreen, selectedScreen = 0, tabs}) => {
 const styles = StyleSheet.create({
   tabContainer: {
     height: dimen.normalizeDimen(38),
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   tabItem: (numTabs) => ({
     width: numTabs === 4 ? undefined : windowWidth / numTabs,
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   tabItemText: {
-    color: COLORS.gray400,
+    color: COLORS.gray410,
     fontWeight: '500',
     fontSize: normalizeFontSize(12.5),
     paddingVertical: 10,
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10
   },
   underlineInactive: {
-    borderBottomColor: COLORS.gray200,
+    borderBottomColor: COLORS.gray210,
     borderBottomWidth: 2
   },
   underlineActive: {

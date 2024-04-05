@@ -154,7 +154,7 @@ const ReplyCommentItem = ({
     if (totalVote < 0) {
       return COLORS.downvote;
     }
-    return COLORS.gray400;
+    return COLORS.gray410;
   };
 
   const handleLongPress = () => {
@@ -353,7 +353,7 @@ const ReplyCommentItem = ({
                   paddingRight: 0
                 }
               ]}>
-              <IconEn name="block" size={15.02} color={COLORS.gray400} />
+              <IconEn name="block" size={15.02} color={COLORS.gray410} />
             </ButtonHightlight>
           </TouchableOpacity>
         )}
@@ -439,7 +439,7 @@ const styles = StyleSheet.create({
   username: {
     fontFamily: fonts.inter[700],
     fontSize: normalizeFontSize(12),
-    color: COLORS.blackgrey,
+    color: COLORS.gray410,
     lineHeight: 14,
     marginLeft: 16
   },
@@ -487,7 +487,7 @@ const styles = StyleSheet.create({
   time: {
     fontFamily: fonts.inter[400],
     fontSize: 10,
-    color: COLORS.blackgrey,
+    color: COLORS.gray410,
     lineHeight: 12
   },
   containerUsername: {

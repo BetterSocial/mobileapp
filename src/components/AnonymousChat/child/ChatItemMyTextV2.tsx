@@ -56,13 +56,13 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: 12,
     lineHeight: 18,
-    color: COLORS.white2
+    color: COLORS.white
   },
   text: {
     fontFamily: fonts.inter[400],
     fontSize: 16,
     lineHeight: 24,
-    color: COLORS.white2
+    color: COLORS.white
   },
   avatar: {
     width: AVATAR_SIZE,
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     marginLeft: 5,
     marginRight: 5,
-    backgroundColor: COLORS.gray500,
+    backgroundColor: COLORS.gray510,
     alignSelf: 'center'
   },
   timeText: {
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     lineHeight: 12.19,
     alignSelf: 'center',
-    color: COLORS.gray500
+    color: COLORS.gray510
   },
   icon: {
     alignSelf: 'flex-end',

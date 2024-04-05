@@ -322,11 +322,11 @@ const styles = StyleSheet.create({
   list: {flex: 1},
   dummyItem: (heightParam) => ({
     height: heightParam,
-    backgroundColor: COLORS.lightgrey
+    backgroundColor: COLORS.gray110
   }),
   container: {
     flex: 1,
-    // backgroundColor: COLORS.lightgrey,
+    // backgroundColor: COLORS.gray110,
     backgroundColor: COLORS.almostBlack
   },
   height: (h) => ({

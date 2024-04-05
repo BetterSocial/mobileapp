@@ -739,7 +739,7 @@ const CreatePost = () => {
           />
           {typeUser && (
             <Animated.View style={[{opacity: animatedReminder}, styles.reminderContainer]}>
-              <Text style={styles.whiteText}>
+              <Text style={styles.almostBlackText}>
                 Even when incognito, you can be blocked by others.
               </Text>
             </Animated.View>
@@ -867,11 +867,11 @@ export default CreatePost;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     position: 'relative'
   },
   input: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray110,
     paddingVertical: 16,
     paddingHorizontal: 12,
     minHeight: 100,
@@ -879,7 +879,7 @@ const styles = StyleSheet.create({
     overflow: 'scroll'
   },
   hastagText: {
-    color: COLORS.lightgrey,
+    color: COLORS.gray110,
     fontSize: 14,
     fontFamily: fonts.inter[400]
   },
@@ -924,7 +924,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 10
   },
   whiteText: {
-    color: COLORS.white,
+    color: COLORS.almostBlack,
     fontSize: normalizeFontSize(10),
     textAlign: 'center'
   },

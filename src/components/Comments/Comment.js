@@ -130,7 +130,7 @@ const Comment = ({
     if (totalVote < 0) {
       return COLORS.downvote;
     }
-    return COLORS.gray400;
+    return COLORS.gray410;
   };
 
   const username = comment?.data?.anon_user_info_color_name
@@ -400,14 +400,14 @@ const styles = StyleSheet.create({
   username: {
     fontFamily: fonts.inter[700],
     fontSize: normalizeFontSize(12),
-    color: COLORS.blackgrey,
+    color: COLORS.gray410,
     lineHeight: 14,
     marginLeft: 16
   },
   post: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
-    color: COLORS.white2,
+    color: COLORS.white,
     marginLeft: 28
   },
   profile: {
@@ -449,7 +449,7 @@ const styles = StyleSheet.create({
   time: {
     fontFamily: fonts.inter[400],
     fontSize: 10,
-    color: COLORS.gray400,
+    color: COLORS.gray410,
     lineHeight: 12
   },
   containerUsername: {

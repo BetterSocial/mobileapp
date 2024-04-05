@@ -54,7 +54,7 @@ const Search = ({onPress, animatedValue, isAnon, isShowNewChat = true}) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     marginBottom: SIZES.base
   },
   searchPressableContainer: {
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   },
   wrapperSearch: {
     flexDirection: 'row',
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     marginLeft: 20,
     marginRight: 12,
     borderRadius: 12,
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 14,
     alignSelf: 'center',
-    color: COLORS.gray400
+    color: COLORS.gray410
   },
   wrapperIcon: {
     marginLeft: 8,
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
   },
   animatedViewContainer: (animatedValue) => ({
     flexDirection: 'row',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     marginBottom: SIZES.base,
     marginTop: animatedValue,
     position: 'absolute',

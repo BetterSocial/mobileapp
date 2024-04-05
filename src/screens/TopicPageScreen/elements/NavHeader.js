@@ -66,7 +66,7 @@ const NavHeader = (props) => {
   return (
     <View>
       <View style={{}}>
-        <StatusBar barStyle="dark-content" />
+        <StatusBar barStyle="light-content" />
         <View
           style={[
             styles.navContainer(isHeaderHide),
@@ -208,7 +208,7 @@ const NavHeader = (props) => {
           style={{
             width: '100%',
             borderBottomWidth: 1,
-            borderBottomColor: COLORS.gray
+            borderBottomColor: COLORS.gray210
           }}>
           <Search
             searchText={searchText}
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
   container: (animatedHeight) => ({
     width: '100%',
     height: animatedHeight,
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray110,
     position: 'absolute',
     zIndex: 80,
     overflow: 'hidden'
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   }),
   profileHashtag: {
-    color: COLORS.white2,
+    color: COLORS.white,
     textAlign: 'center',
     fontSize: normalizeFontSize(24)
   },

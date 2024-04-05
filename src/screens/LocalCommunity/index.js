@@ -114,13 +114,13 @@ const LocalCommunity = () => {
       <TouchableNativeFeedback onPress={onPressTouchable}>
         <View style={styles.containerLocation}>
           <View style={styles.containerRow}>
-            <PinIcon width={14} height={20} fill={COLORS.white2} />
+            <PinIcon width={14} height={20} fill={COLORS.white} />
             <Text style={styles.textLocation}>{locationValidation(item)}</Text>
           </View>
           <TouchableNativeFeedback
             onPress={() => handleDelete(item.location_id)}
-            background={TouchableNativeFeedback.Ripple(COLORS.lightgrey, true, 20)}>
-            <TrashIcon width={18} height={20} fill={COLORS.white2} />
+            background={TouchableNativeFeedback.Ripple(COLORS.gray110, true, 20)}>
+            <TrashIcon width={18} height={20} fill={COLORS.white} />
           </TouchableNativeFeedback>
         </View>
       </TouchableNativeFeedback>
@@ -199,7 +199,7 @@ const LocalCommunity = () => {
               <PlusIcon
                 width={dimen.normalizeDimen(18)}
                 height={dimen.normalizeDimen(18)}
-                fill={COLORS.white2}
+                fill={COLORS.white}
               />
               <View style={styles.columnButton}>
                 <Text style={styles.textAddLocation}>
@@ -282,7 +282,7 @@ const LocalCommunity = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   header: {
     paddingHorizontal: dimen.normalizeDimen(22),
@@ -293,14 +293,14 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(36),
     lineHeight: normalizeFontSize(43.57),
-    color: COLORS.white2,
+    color: COLORS.white,
     marginHorizontal: dimen.normalizeDimen(20)
   },
   footer: {
     width,
     height: dimen.normalizeDimen(112),
     flexDirection: 'column',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     justifyContent: 'space-between',
     paddingBottom: dimen.normalizeDimen(20),
     paddingHorizontal: dimen.normalizeDimen(20),
@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(24),
-    color: COLORS.gray500,
+    color: COLORS.gray510,
     marginTop: dimen.normalizeDimen(8),
     marginBottom: dimen.normalizeDimen(24),
     paddingHorizontal: dimen.normalizeDimen(20)
@@ -345,7 +345,7 @@ const styles = StyleSheet.create({
     lineHeight: normalizeFontSize(24),
     letterSpacing: normalizeFontSize(-0.28),
     marginBottom: dimen.normalizeDimen(10),
-    color: COLORS.gray500
+    color: COLORS.gray510
   },
   containerLocation: {
     flexDirection: 'row',
@@ -375,7 +375,7 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(10),
     fontFamily: fonts.inter[400],
     textAlign: 'center',
-    color: COLORS.gray500
+    color: COLORS.gray510
   }
 });
 export default LocalCommunity;

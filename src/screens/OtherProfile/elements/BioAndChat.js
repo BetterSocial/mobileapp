@@ -9,7 +9,7 @@ import useSaveAnonChatHook from '../../../database/hooks/useSaveAnonChatHook';
 import {ANON_PM, SIGNED} from '../../../hooks/core/constant';
 import {COLORS} from '../../../utils/theme';
 import {Loading} from '../../../components';
-import {fonts} from '../../../utils/fonts';
+import {fonts, normalizeFontSize} from '../../../utils/fonts';
 import {sendAnonymousDMOtherProfile, sendSignedDMOtherProfile} from '../../../service/chat';
 
 const CHANNEL_BLOCKED = 'Channel is blocked';
@@ -109,10 +109,10 @@ const BioAndChat = (props) => {
   };
 
   return (
-    <View style={styles.bioAndSendChatContainer(isAnonimity)}>
+    <View style={styles.bioAndSendChatContainer}>
       <Loading visible={loadingSendDM} />
       <View style={styles.containerBio}>
-        {bio === null || bio === undefined ? (
+        {bio === null || bio === undefined || bio === '' ? (
           <Text style={styles.bioText}>Send a message</Text>
         ) : (
           <Pressable onPress={openBio}>
@@ -148,7 +148,10 @@ const BioAndChat = (props) => {
           labelLeft={
             isAnonimityEnabled || !isSignedMessageEnabled ? 'Incognito' : 'Incognito disabled'
           }
-          styleLabelLeft={{color: COLORS.gray500}}
+          styleLabelLeft={{
+            color: isAnonimity ? COLORS.anon_primary : COLORS.signed_primary,
+            fontSize: normalizeFontSize(12)
+          }}
         />
       </TouchableOpacity>
     </View>
@@ -156,17 +159,19 @@ const BioAndChat = (props) => {
 };
 
 const styles = StyleSheet.create({
-  bioAndSendChatContainer: (isAnonimity) => ({
-    backgroundColor: isAnonimity ? COLORS.anon_secondary : COLORS.signed_secondary,
+  bioAndSendChatContainer: {
+    backgroundColor: COLORS.gray110,
+    borderWidth: 1,
+    borderColor: COLORS.gray210,
     borderRadius: 15,
     paddingHorizontal: 10,
     paddingTop: 10
-  }),
+  },
   containerBio: {
     marginBottom: 10
   },
   bioText: {
-    color: COLORS.white2,
+    color: COLORS.white,
     fontSize: 14,
     fontFamily: fonts.inter[600],
     lineHeight: 22
@@ -174,7 +179,7 @@ const styles = StyleSheet.create({
   seeMore: {
     fontFamily: fonts.inter[500],
     fontSize: 14,
-    color: COLORS.white2
+    color: COLORS.white
   },
   toggleSwitchContainer: {
     display: 'flex',
