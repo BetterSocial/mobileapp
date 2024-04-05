@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
+import {useNavigation} from '@react-navigation/core';
 
 import StringConstant from '../utils/string/StringConstant';
 import {
@@ -13,16 +14,12 @@ import {
 import {getUserId} from '../utils/users';
 import {isAuthorFollowingMe} from '../service/post';
 
-const FirebaseConfig = (props) => {
-  const {navigation} = props;
+const FirebaseConfig = () => {
+  const navigation = useNavigation();
 
   React.useEffect(() => {
     const unsubscribe = dynamicLinks().onLink(parseDynamicLink);
     return () => unsubscribe();
-  }, []);
-
-  React.useEffect(() => {
-    dynamicLinks().getInitialLink().then(parseDynamicLink);
   }, []);
 
   /**

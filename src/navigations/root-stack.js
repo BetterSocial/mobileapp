@@ -13,6 +13,7 @@ import ChooseUsername from '../screens/InputUsername';
 import CreatePost from '../screens/CreatePost';
 import DiscoveryScreenV2 from '../screens/DiscoveryScreenV2';
 import DomainScreen from '../screens/DomainScreen';
+import FirebaseConfig from '../configs/FirebaseConfig';
 import FollowersScreen from '../screens/Followings/FollowersScreen';
 import FollowingScreen from '../screens/Followings/FollowingScreen';
 import HelpCenter from '../screens/WebView/HelpCenter';
@@ -147,6 +148,7 @@ const withKeyboardWrapper = (Component) => {
 const AuthenticatedNavigator = () => {
   return (
     <OneSignalNavigator>
+      <FirebaseConfig />
       <AuthenticatedStack.Navigator initialRouteName="HomeTabs">
         <AuthenticatedStack.Screen
           name="HomeTabs"
