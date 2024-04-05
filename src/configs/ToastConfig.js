@@ -43,7 +43,7 @@ const styleAsNative = StyleSheet.create({
     alignItems: 'center'
   },
   text: {
-    color: COLORS.white,
+    color: COLORS.white2,
     textAlign: 'center',
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(12),

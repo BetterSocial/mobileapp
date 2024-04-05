@@ -34,7 +34,7 @@ export const COLORS = {
   lightBlue: '#2F80ED',
   gray1: '#C4C4C4',
   gray100: '#F5F6F7',
-  gray110: '#233343',
+  gray110: '#1E3343',
   gray200: '#3A4F64',
   gray210: '#2A3D50',
   gray300: '#D2D4DB',
@@ -50,7 +50,6 @@ export const COLORS = {
   bondi_blue: '#00ADB5',
 
   // new color
-  almostBlack: '#16202A',
   signed_primary: '#0391FB',
   signed_primary_15: '#0391FB26',
   signed_secondary: '#275D8A',
@@ -73,12 +72,7 @@ export const COLORS = {
   anonSecondary20: 'rgba(0, 173, 181, 0.2)',
   lightgrey60: 'rgba(245, 246, 247, 0.6)',
   downvote: '#E2887E',
-  upvote: '#69DD10',
-  gray100: '#1E3343',
-  gray200: '#3A4F64',
-  gray300: '#52667A',
-  gray400: '#8C939F',
-  gray500: '#A5ACB8'
+  upvote: '#69DD10'
 };
 export const SIZES = {
   // global sizes
