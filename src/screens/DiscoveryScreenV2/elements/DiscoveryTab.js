@@ -67,7 +67,7 @@ const DiscoveryTab = ({onChangeScreen, selectedScreen = 0, tabs}) => {
 const styles = StyleSheet.create({
   tabContainer: {
     height: dimen.normalizeDimen(38),
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   tabItem: (numTabs) => ({
     width: numTabs === 4 ? undefined : windowWidth / numTabs,

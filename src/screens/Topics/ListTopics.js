@@ -15,7 +15,7 @@ const ListTopics = ({item, i, myTopic, handleSelectedLanguage}) => (
     <Text
       style={[
         styles.textTopicNotActive,
-        {color: myTopic[item.topic_id] ? COLORS.white2 : COLORS.white2}
+        {color: myTopic[item.topic_id] ? COLORS.white : COLORS.white}
       ]}>
       #{item.name}
     </Text>
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   textTopicNotActive: {
     fontFamily: fonts.inter[500],
     fontSize: 12,
-    color: COLORS.white2
+    color: COLORS.white
   }
 });
 

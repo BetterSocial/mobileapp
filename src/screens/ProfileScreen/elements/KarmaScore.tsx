@@ -6,7 +6,7 @@ import MemoIcQuestionMark from '../../../assets/icons/Ic_question_mark';
 import {fonts, normalize} from '../../../utils/fonts';
 import {CircleGradient} from '../../../components/Karma/CircleGradient';
 import {BetterSocialLogoGram} from '../../../assets';
-import { COLORS } from '../../../utils/theme';
+import {COLORS} from '../../../utils/theme';
 
 type KarmaScoreProps = {
   score: number;
@@ -35,7 +35,7 @@ export const KarmaScore = ({score}: KarmaScoreProps) => {
             fontSize: 24,
             lineHeight: 36,
             marginRight: 8,
-            color: COLORS.white2
+            color: COLORS.white
           }}>{`${score} Karma`}</Text>
         <Tooltip
           allowChildInteraction={true}
@@ -58,7 +58,7 @@ export const KarmaScore = ({score}: KarmaScoreProps) => {
                   fontSize: normalize(16),
                   lineHeight: normalize(24),
                   marginBottom: normalize(8),
-                  color: COLORS.white2
+                  color: COLORS.white
                 }}>
                 What is my Karma Score?
               </Text>

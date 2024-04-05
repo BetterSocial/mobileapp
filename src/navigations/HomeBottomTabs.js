@@ -113,7 +113,7 @@ function HomeBottomTabs() {
     if (route.name === 'Profile') label = 'Profile';
 
     const bottomBarExtendedStyle = {
-      color: nav?.isFocused() ? activeColor : COLORS.blackgrey
+      color: nav?.isFocused() ? activeColor : COLORS.gray400
     };
     return <Text style={[styles.bottomBarLabel, bottomBarExtendedStyle]}>{label}</Text>;
   };

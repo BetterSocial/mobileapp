@@ -534,7 +534,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.blackgrey,
+    color: COLORS.gray400,
     lineHeight: 18
   },
   point: {
@@ -561,7 +561,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 12,
     lineHeight: 18,
-    color: COLORS.blackgrey
+    color: COLORS.gray400
   },
   usernameComment: {
     fontFamily: fonts.inter[500],
@@ -574,7 +574,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[500],
     fontSize: 12,
     lineHeight: 24,
-    color: COLORS.blackgrey
+    color: COLORS.gray400
   },
   item: {
     width: screenWidth - 20,
@@ -608,7 +608,7 @@ const styles = StyleSheet.create({
     fontWeight: '500'
   }),
   textFollowing: {
-    color: COLORS.greySubtile1,
+    color: COLORS.gray400,
     fontSize: normalizeFontSize(14),
     fontStyle: 'normal',
     fontWeight: '500'

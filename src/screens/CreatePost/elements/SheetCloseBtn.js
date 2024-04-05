@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     height: 240
   },
   draggableIcon: {
-    backgroundColor: COLORS.lightgrey
+    backgroundColor: COLORS.gray100
   },
   gap: (height) => ({
     height

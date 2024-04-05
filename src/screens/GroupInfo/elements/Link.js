@@ -36,7 +36,7 @@ export default Link;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     paddingHorizontal: 20,
     paddingTop: 8
   }

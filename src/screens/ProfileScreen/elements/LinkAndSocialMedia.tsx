@@ -92,7 +92,7 @@ const LinkAndSocialMedia: React.FC<LinkProps> = ({username}) => {
               style={{
                 fontSize: 12,
                 fontFamily: fonts.inter[400],
-                color: COLORS.white2,
+                color: COLORS.white,
                 marginLeft: 8
               }}>
               Share
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   linkAndSocialMediaTitle: {
     fontFamily: fonts.inter[500],
     fontSize: 14,
-    color: COLORS.white2
+    color: COLORS.white
   },
   buttonContainer: {
     paddingVertical: 9,

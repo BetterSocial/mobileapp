@@ -232,7 +232,7 @@ Array [
             secureTextEntry={true}
             style={
               Object {
-                "backgroundColor": "#233343",
+                "backgroundColor": "#1E3343",
                 "margin": 16,
                 "padding": 16,
               }

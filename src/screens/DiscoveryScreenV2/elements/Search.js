@@ -173,7 +173,7 @@ const DiscoverySearch = ({
               <MemoIcArrowBackWhite
                 width={20}
                 height={12}
-                fill={COLORS.white2}
+                fill={COLORS.white}
                 style={{alignSelf: 'center'}}
               />
             </View>
@@ -208,7 +208,7 @@ const DiscoverySearch = ({
             onPress={handleOnClearText}
             style={styles.clearIconContainer}
             android_ripple={{
-              color: COLORS.lightgrey,
+              color: COLORS.gray100,
               borderless: true,
               radius: 35
             }}>
@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flexDirection: 'row',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     marginBottom: SIZES.base,
     marginHorizontal: SIZES.base
   },
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
   },
   wrapperSearch: {
     flex: 1,
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray100,
     borderRadius: dimen.normalizeDimen(12),
     alignSelf: 'center',
     flexDirection: 'row',
@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
     height: dimen.normalizeDimen(33),
     paddingTop: 0,
     paddingBottom: 0,
-    color: COLORS.white2
+    color: COLORS.white
   },
   wrapperIcon: {
     marginLeft: dimen.normalizeDimen(9.67),
@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
     height: dimen.size.DISCOVERY_HEADER_HEIGHT,
     paddingVertical: dimen.normalizeDimen(7),
     borderBottomWidth: hideBackIcon ? 0 : dimen.normalizeDimen(1),
-    borderBottomColor: COLORS.lightgrey
+    borderBottomColor: COLORS.gray100
   })
 });
 

@@ -51,6 +51,6 @@ const styles = StyleSheet.create({
     height: 'auto'
   },
   draggableIcon: {
-    backgroundColor: COLORS.lightgrey
+    backgroundColor: COLORS.gray100
   }
 });

@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
   container: (animatedHeight) => ({
     width: '100%',
     height: animatedHeight,
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray100,
     position: 'absolute',
     zIndex: 80,
     overflow: 'hidden'
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   }),
   profileHashtag: {
-    color: COLORS.white2,
+    color: COLORS.white,
     textAlign: 'center',
     fontSize: normalizeFontSize(24)
   },

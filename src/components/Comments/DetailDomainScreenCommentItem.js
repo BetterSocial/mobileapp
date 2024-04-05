@@ -110,7 +110,7 @@ const DetailDomainScreenCommentItem = ({
         <TouchableOpacity
           style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}
           onPress={() => onBlock(comment)}>
-          <IconEn name="block" size={15.02} color={COLORS.lightgrey} />
+          <IconEn name="block" size={15.02} color={COLORS.gray100} />
         </TouchableOpacity>
 
         <TouchableOpacity onPress={onVoteDown} style={[styles.arrowup, styles.btn]}>
@@ -147,17 +147,13 @@ const styles = StyleSheet.create({
   container: ({isLast, style, level, isLastInParent}) => ({
     width: '100%',
     borderLeftWidth: isLastInParent ? 0 : 1,
-    borderLeftColor: isLast
-      ? level === 0
-        ? COLORS.lightgrey
-        : COLORS.transparent
-      : COLORS.lightgrey,
+    borderLeftColor: isLast ? (level === 0 ? COLORS.gray100 : COLORS.transparent) : COLORS.gray100,
     ...style
   }),
   username: {
     fontFamily: fonts.inter[700],
     fontSize: 12,
-    color: COLORS.blackgrey,
+    color: COLORS.gray400,
     lineHeight: 14,
     marginLeft: 16
   },
@@ -187,7 +183,7 @@ const styles = StyleSheet.create({
   btnReplyText: {
     fontFamily: fonts.inter[400],
     fontSize: 13,
-    color: COLORS.lightgrey,
+    color: COLORS.gray100,
     marginLeft: 8.98,
     marginRight: 14
   },
@@ -205,7 +201,7 @@ const styles = StyleSheet.create({
   time: {
     fontFamily: fonts.inter[400],
     fontSize: 10,
-    color: COLORS.blackgrey,
+    color: COLORS.gray400,
     lineHeight: 12
   },
   containerUsername: {
