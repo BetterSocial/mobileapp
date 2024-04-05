@@ -6,7 +6,7 @@ exports[`Testing Topic Text Match snapshot 1`] = `
   style={
     Array [
       Object {
-        "color": "#FFFFFF",
+        "color": undefined,
         "fontFamily": "Inter-Medium",
       },
       Object {

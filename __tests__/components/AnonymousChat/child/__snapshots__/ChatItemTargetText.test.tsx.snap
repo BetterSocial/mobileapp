@@ -28,7 +28,7 @@ exports[`TESTING ChatItemTargetText RENDER continuous should match snapshot 1`] 
     style={
       Array [
         Object {
-          "backgroundColor": "#1E3343",
+          "backgroundColor": "#F5F6F7",
           "borderRadius": 12,
           "borderTopStartRadius": 0,
           "flex": 1,
@@ -86,7 +86,7 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
     style={
       Array [
         Object {
-          "backgroundColor": "#1E3343",
+          "backgroundColor": "#F5F6F7",
           "borderRadius": 12,
           "borderTopStartRadius": 0,
           "flex": 1,

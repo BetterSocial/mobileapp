@@ -12,7 +12,6 @@ import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import {ANONYMOUS, ANON_PM, ANON_POST_NOTIFICATION} from '../../../hooks/core/constant';
 import useAnonymousChannelListScreenHook from '../../../hooks/screen/useAnonymousChannelListHook';
 import useRootChannelListHook from '../../../hooks/screen/useRootChannelListHook';
-import {COLORS} from '../../../utils/theme';
 import Search from '../../ChannelListScreen/elements/Search';
 import IncognitoEmptyChat from '../IncognitoEmptyChat';
 import {COLORS} from '../../../utils/theme';
