@@ -12,6 +12,8 @@ import {getTopics} from '../../service/topics';
 import {getUserForTagging} from '../../service/mention';
 import {isEmptyOrSpaces} from '../../utils/Utils';
 import {joinTopicIntoTopicList} from '../../utils/array/ChunkArray';
+import {fonts} from '../../utils/fonts';
+import dimen from '../../utils/dimen';
 
 const CreatePostInput = ({
   allTaggedUser = [],
@@ -22,7 +24,8 @@ const CreatePostInput = ({
   setPositionKeyboard,
   setTopics,
   setTopicChats,
-  setMessage
+  setMessage,
+  typeUser
 }) => {
   const [positionEndCursor, setPositionEndCursor] = React.useState(0);
   const [topicSearch, setTopicSearch] = React.useState([]);
@@ -200,12 +203,17 @@ const CreatePostInput = ({
         // value={message}
         multiline={true}
         numberOfLines={10}
-        style={styles.input}
+        style={[
+          styles.input,
+          typeUser ? {borderBottomRightRadius: 0, borderBottomLeftRadius: 0} : {}
+        ]}
         textAlignVertical="top"
         placeholder={
           'What’s on your mind?\nRemember to be respectful.\nDownvotes & Blocks harm all your posts’ visibility.'
         }
-        autoCapitalize={'sentences'}>
+        placeholderTextColor={COLORS.gray410}
+        autoCapitalize={'sentences'}
+        keyboardAppearance="dark">
         <Text>{formattedText}</Text>
       </TextInput>
       <TopicSuggestions
@@ -244,12 +252,15 @@ const CreatePostInput = ({
 const styles = StyleSheet.create({
   input: {
     backgroundColor: COLORS.gray110,
-    paddingVertical: 16,
-    paddingHorizontal: 12,
-    minHeight: 100,
-    maxHeight: 200,
+    paddingVertical: dimen.normalizeDimen(16),
+    paddingHorizontal: dimen.normalizeDimen(12),
+    borderRadius: 8,
+    minHeight: dimen.normalizeDimen(100),
+    maxHeight: dimen.normalizeDimen(200),
     justifyContent: 'flex-start',
-    overflow: 'scroll'
+    overflow: 'scroll',
+    color: COLORS.white,
+    fontFamily: fonts.inter[400]
   }
 });
 
@@ -262,7 +273,8 @@ CreatePostInput.propTypes = {
   setTopics: PropTypes.func,
   setTopicChats: PropTypes.func,
   message: PropTypes.string,
-  setMessage: PropTypes.func
+  setMessage: PropTypes.func,
+  typeUser: PropTypes.string
 };
 
 export default CreatePostInput;

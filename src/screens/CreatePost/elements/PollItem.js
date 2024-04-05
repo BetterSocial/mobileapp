@@ -5,6 +5,8 @@ import {Platform, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'rea
 import MemoIcClearCircle from '../../../assets/icons/ic_clear_circle';
 import {MAX_POLLING_CHARACTER_ALLOWED} from '../../../utils/constants';
 import {COLORS} from '../../../utils/theme';
+import dimen from '../../../utils/dimen';
+import {normalizeFontSize} from '../../../utils/fonts';
 
 export default function PollItem({
   index = 0,
@@ -30,6 +32,7 @@ export default function PollItem({
           }
         }}
         value={poll.text}
+        keyboardAppearance="dark"
       />
       {showcharactercount && (
         <Text
@@ -53,8 +56,8 @@ const S = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.balance_gray,
     borderRadius: 10,
-    marginVertical: 4,
-    paddingHorizontal: 8
+    marginVertical: dimen.normalizeDimen(4),
+    paddingHorizontal: dimen.normalizeDimen(8)
   },
 
   focuspollitemcontainer: {
@@ -62,19 +65,20 @@ const S = StyleSheet.create({
     flexDirection: 'row',
     borderWidth: 1,
     borderRadius: 10,
-    marginVertical: 4,
-    paddingHorizontal: 8,
+    marginVertical: dimen.normalizeDimen(4),
+    paddingHorizontal: dimen.normalizeDimen(8),
     borderColor: COLORS.anon_primary
   },
 
   pollitemtextinput: {
     flex: 1,
-    padding: Platform.OS === 'ios' ? 10 : 0
+    padding: dimen.normalizeDimen(Platform.OS === 'ios' ? 10 : 0),
+    color: COLORS.white
   },
 
   removepollcontainer: {
     justifyContent: 'center',
-    paddingHorizontal: 8
+    paddingHorizontal: dimen.normalizeDimen(8)
   },
 
   removepollicon: {
@@ -83,10 +87,10 @@ const S = StyleSheet.create({
   },
 
   pollitemtextcount: {
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     alignSelf: 'center',
     color: COLORS.balance_gray,
-    marginEnd: 8,
-    marginStart: 8
+    marginEnd: dimen.normalizeDimen(8),
+    marginStart: dimen.normalizeDimen(8)
   }
 });

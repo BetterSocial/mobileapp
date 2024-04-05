@@ -149,6 +149,7 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics}) => {
                   autoCapitalize="none"
                   blurOnSubmit={false}
                   autoFocus
+                  keyboardAppearance="dark"
                 />
               </View>
             )}
@@ -244,7 +245,8 @@ const styles = StyleSheet.create({
   hashtag: {
     fontSize: 14,
     fontWeight: '400',
-    fontFamily: fonts.inter[400]
+    fontFamily: fonts.inter[400],
+    color: COLORS.white
     // marginTop: Platform.OS === 'android' ? -8 : 0,
   },
   textDesc: {
@@ -256,7 +258,8 @@ const styles = StyleSheet.create({
   },
   containerSheet: {
     borderTopRightRadius: 20,
-    borderTopLeftRadius: 20
+    borderTopLeftRadius: 20,
+    backgroundColor: COLORS.almostBlack
   },
   draggableIcon: {
     backgroundColor: COLORS.gray110
@@ -264,5 +267,9 @@ const styles = StyleSheet.create({
   topicItem: {
     marginBottom: 12
   },
-  input: {width: '100%', paddingStart: 0}
+  input: {
+    width: '100%',
+    paddingStart: 0,
+    color: COLORS.white
+  }
 });

@@ -5,10 +5,11 @@ import {Switch, Text, TouchableOpacity, View} from 'react-native';
 
 import CreatePollContainerBaseStyle from './style/CreatePollContainerBaseStyle';
 import MemoIcPlus from '../../../../assets/icons/ic_plus';
-import MemoIc_arrow_right from '../../../../assets/icons/Ic_arrow_right';
+import IconArowRight from '../../../../assets/icons/Ic_arrow_right';
 import PollItem from '../PollItem';
 import {MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED} from '../../../../utils/constants';
 import {getDurationTimeText} from '../../../../utils/string/StringUtils';
+import {COLORS} from '../../../../utils/theme';
 
 function CreatePollContainer({
   onremoveallpoll = () => {},
@@ -67,7 +68,7 @@ function CreatePollContainer({
 
       {polls.length < MAX_POLLING_ALLOWED && (
         <TouchableOpacity onPress={() => onaddpoll()} style={S.addpollitemcontainer}>
-          <MemoIcPlus width={16} height={16} style={S.addpollitemplusicon} />
+          <MemoIcPlus width={16} height={16} style={S.addpollitemplusicon} fill={COLORS.white} />
         </TouchableOpacity>
       )}
 
@@ -77,7 +78,7 @@ function CreatePollContainer({
         <View style={S.row}>
           <Text style={S.fillparenttext}>Duration</Text>
           <Text style={S.polldurationbuttontext}>{getDurationTimeText(selectedtime)}</Text>
-          <MemoIc_arrow_right width={8} height={12} style={S.rightarrow} />
+          <IconArowRight width={8} height={12} style={S.rightarrow} fill={COLORS.white} />
         </View>
       </TouchableOpacity>
 

@@ -1,6 +1,8 @@
 import {StyleSheet} from 'react-native';
 
 import {COLORS} from '../../../../../utils/theme';
+import dimen from '../../../../../utils/dimen';
+import {fonts} from '../../../../../utils/fonts';
 
 const CreatePollContainerBaseStyle = StyleSheet.create({
   createpollcontainer: {
@@ -10,22 +12,22 @@ const CreatePollContainerBaseStyle = StyleSheet.create({
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    marginTop: 16,
-    padding: 16
+    marginTop: dimen.normalizeDimen(16),
+    padding: dimen.normalizeDimen(16)
   },
 
   removepollcontainer: {
     display: 'flex',
     alignItems: 'center',
-    marginTop: 16
+    marginTop: dimen.normalizeDimen(16)
   },
 
   addpollitemcontainer: {
     display: 'flex',
     alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 2,
-    paddingVertical: 12
+    marginTop: dimen.normalizeDimen(10),
+    marginBottom: dimen.normalizeDimen(2),
+    paddingVertical: dimen.normalizeDimen(12)
   },
 
   addpollitemplusicon: {
@@ -43,19 +45,20 @@ const CreatePollContainerBaseStyle = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: 1,
-    marginVertical: 8,
+    marginVertical: dimen.normalizeDimen(8),
     backgroundColor: COLORS.gray110
   },
 
   row: {
     flexDirection: 'row',
     display: 'flex',
-    paddingVertical: 8
+    paddingVertical: dimen.normalizeDimen(8)
   },
 
   fillparenttext: {
     flex: 1,
-    alignSelf: 'center'
+    alignSelf: 'center',
+    color: COLORS.white
   },
 
   rightarrow: {
@@ -63,24 +66,28 @@ const CreatePollContainerBaseStyle = StyleSheet.create({
   },
 
   polldurationbutton: {
+    fontFamily: fonts.inter[400],
     backgroundColor: COLORS.almostBlack,
     color: COLORS.almostBlack,
-    paddingVertical: 4,
-    borderRadius: 4
+    paddingVertical: dimen.normalizeDimen(4),
+    borderRadius: dimen.normalizeDimen(4)
   },
 
   polldurationbuttontext: {
+    fontFamily: fonts.inter[400],
     color: COLORS.almostBlack,
     backgroundColor: COLORS.anon_primary,
-    paddingHorizontal: 22,
-    paddingVertical: 8,
+    paddingHorizontal: dimen.normalizeDimen(22),
+    paddingVertical: dimen.normalizeDimen(8),
     borderRadius: 6,
-    marginEnd: 24
+    marginEnd: dimen.normalizeDimen(24)
   },
 
   switchtext: {
+    fontFamily: fonts.inter[400],
     alignSelf: 'center',
-    marginRight: 16
+    marginRight: dimen.normalizeDimen(16),
+    color: COLORS.white
   },
 
   modalcontainer: {
@@ -93,9 +100,9 @@ const CreatePollContainerBaseStyle = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: 'white',
-    paddingVertical: 24,
+    paddingVertical: dimen.normalizeDimen(24),
     borderRadius: 4,
-    paddingHorizontal: 12
+    paddingHorizontal: dimen.normalizeDimen(12)
   },
 
   modalrowcontainer: {
@@ -113,12 +120,13 @@ const CreatePollContainerBaseStyle = StyleSheet.create({
   },
 
   setdurationtext: {
-    fontFamily: 'Inter-SemiBold',
-    marginBottom: 22
+    fontFamily: fonts.inter[600],
+    marginBottom: dimen.normalizeDimen(22)
   },
 
   pickerlabeltext: {
-    marginBottom: 32
+    fontFamily: fonts.inter[400],
+    marginBottom: dimen.normalizeDimen(32)
   },
 
   bottombuttonrowcontainer: {
@@ -129,12 +137,12 @@ const CreatePollContainerBaseStyle = StyleSheet.create({
   },
 
   buttoncontainer: {
-    paddingHorizontal: 16,
-    paddingVertical: 8
+    paddingHorizontal: dimen.normalizeDimen(16),
+    paddingVertical: dimen.normalizeDimen(8)
   },
 
   bottombuttontext: {
-    fontFamily: 'Inter-SemiBold'
+    fontFamily: fonts.inter[600]
   }
 });
 

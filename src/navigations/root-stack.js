@@ -141,7 +141,7 @@ const withSafeAreaView = (Component) => {
 const withSafeAreaViewTopBottom = (Component, topColor, bottomColor = COLORS.almostBlack) => {
   return (props) => (
     <React.Fragment>
-      <SafeAreaView style={{flex: 0, backgroundColor: topColor}} />
+      <SafeAreaView style={{backgroundColor: topColor}} />
       <SafeAreaView style={{flex: 1, backgroundColor: bottomColor}}>
         <Component {...props} />
       </SafeAreaView>
@@ -323,9 +323,8 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="AnonymousChatScreen"
-          component={withSafeAreaViewTopBottom(
-            withKeyboardWrapper(AnonymousChatScreen),
-            COLORS.anon_secondary
+          component={withKeyboardWrapper(
+            withSafeAreaViewTopBottom(AnonymousChatScreen, COLORS.anon_secondary)
           )}
           options={{headerShown: false}}
         />
@@ -336,9 +335,8 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="SignedChatScreen"
-          component={withSafeAreaViewTopBottom(
-            withKeyboardWrapper(SignedChatScreen),
-            COLORS.signed_secondary
+          component={withKeyboardWrapper(
+            withSafeAreaViewTopBottom(SignedChatScreen, COLORS.signed_secondary)
           )}
           options={{headerShown: false}}
         />

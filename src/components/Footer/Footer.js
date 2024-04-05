@@ -80,7 +80,7 @@ const Footer = ({
     if (totalVote < 0) {
       return COLORS.downvote;
     }
-    return COLORS.gray410;
+    return COLORS.gray400;
   };
 
   const username = item?.anon_user_info_emoji_name
@@ -140,7 +140,7 @@ const Footer = ({
         <IcDmAnon
           color={
             !userAllowDm || loading.loadingGetAllowAnonDmStatus || loading.loadingDmAnon
-              ? COLORS.gray
+              ? COLORS.gray310
               : 'black'
           }
         />
@@ -182,7 +182,7 @@ const Footer = ({
           }}>
           <View
             style={{
-              borderTopColor: COLORS.gray310,
+              borderTopColor: COLORS.gray300,
               borderTopWidth: 1,
               opacity: 0.3
             }}
@@ -203,7 +203,7 @@ const Footer = ({
             }}>
             <View
               style={{
-                borderTopColor: COLORS.gray310,
+                borderTopColor: COLORS.gray300,
                 borderTopWidth: 1,
                 opacity: 0.3
               }}
