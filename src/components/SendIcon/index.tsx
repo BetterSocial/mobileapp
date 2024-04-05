@@ -21,6 +21,11 @@ const SendIcon: React.FC<SendIconProps> = ({type, isDisabled}) => {
     return COLORS.anon_primary;
   }, [isDisabled, type]);
 
+  const iconColorStyle = React.useCallback(() => {
+    if (isDisabled) return COLORS.gray310;
+    return COLORS.white2;
+  }, [isDisabled]);
+
   return (
     <MemoSendComment
       style={styles.icSendButton}

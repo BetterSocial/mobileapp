@@ -29,7 +29,7 @@ const Search = ({onPress, animatedValue, onChangeText, text, onClearText, isLoad
         blurOnSubmit={true}
       />
       <View style={styles.wrapperIcon}>
-        <MemoIc_search width={20} height={20} />
+        <MemoIc_search width={20} height={20} fill={COLORS.gray310} />
       </View>
       <View style={styles.wrapperSecondaryIcon}>
         {isLoading && <ActivityIndicator style={styles.loader} color={COLORS.blackgrey} />}

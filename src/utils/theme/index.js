@@ -26,6 +26,7 @@ export const COLORS = {
   waterspout: '#9DEDF1',
   white: '#FFFFFF',
   white20percent: 'rgba(255,255,255,0.2)',
+  white30percent: 'rgba(255,255,255,0.3)',
   whiteSmoke: '#F4F4F4',
   bluePrimary: '#4782D7',
 
@@ -34,7 +35,17 @@ export const COLORS = {
   lightBlue: '#2F80ED',
   gray1: '#C4C4C4',
   gray100: '#F5F6F7',
+  gray110: '#233343',
+  gray200: '#3A4F64',
+  gray210: '#2A3D50',
+  gray300: '#D2D4DB',
+  gray310: '#52667A',
+  gray400: '#8C939F',
+  gray410: '#7E8FA0',
   gray500: '#69707C',
+  almostBlack: '#16202A',
+  darkGray: '#394756',
+  darkGray2: '#394756',
   gray6: '#F2F2F2',
   gray4: '#4A4A4A',
   bondi_blue: '#00ADB5',
@@ -69,10 +80,7 @@ export const COLORS = {
   black75: 'rgba(0, 0, 0, 0.75)',
   transparent: 'transparent',
   anonSecondary20: 'rgba(0, 173, 181, 0.2)',
-  gray400: '#9B9FA9',
-  lightgrey60: 'rgba(245, 246, 247, 0.6)',
-  gray300: '#D2D4DB',
-  gray200: '#E8EBED'
+  lightgrey60: 'rgba(245, 246, 247, 0.6)'
 };
 export const SIZES = {
   // global sizes

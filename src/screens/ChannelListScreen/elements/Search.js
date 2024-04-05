@@ -26,7 +26,7 @@ const Search = ({onPress, animatedValue, isAnon, isShowNewChat = true}) => {
       <Pressable onPress={__handleOnSearchClicked} style={styles.searchPressableContainer}>
         <View style={styles.wrapperSearch}>
           <View style={styles.wrapperIcon}>
-            <MemoIc_search width={16.67} height={16.67} />
+            <MemoIc_search width={17} height={17} fill={COLORS.gray310} />
           </View>
           <Text
             // placeholder={StringConstant.chatTabHeaderPlaceholder}
