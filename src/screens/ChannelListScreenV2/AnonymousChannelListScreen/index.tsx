@@ -67,7 +67,7 @@ const AnonymousChannelListScreen = ({route}) => {
         <Search route={route} isAnon={true} onPress={() => goToContactScreen({from: ANONYMOUS})} />
       </View>
 
-      <IncognitoEmptyChat totalChannel={anonChannels.length} />
+      <IncognitoEmptyChat />
 
       <FlatList
         ref={ref}
