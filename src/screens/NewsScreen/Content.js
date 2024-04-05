@@ -93,7 +93,8 @@ const styles = StyleSheet.create({
     // marginRight: 12,
     fontFamily: fonts.inter[600],
     fontSize: 14,
-    lineHeight: 17
+    lineHeight: 17,
+    color: COLORS.white2
   }
 });
 

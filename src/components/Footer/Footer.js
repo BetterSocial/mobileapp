@@ -80,7 +80,8 @@ const Footer = ({
     if (totalVote < 0) {
       return COLORS.redalert;
     }
-    return COLORS.balance_gray;
+    // TODO: Garry, gray berapa?
+    return COLORS.gray400;
   };
   const username = item?.anon_user_info_emoji_name
     ? `${item.anon_user_info_color_name} ${item?.anon_user_info_emoji_name}`

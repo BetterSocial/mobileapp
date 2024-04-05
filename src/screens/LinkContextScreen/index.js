@@ -154,11 +154,11 @@ const LinkContextScreen = () => {
 
 const styles = StyleSheet.create({
   list: {
-    // flex: 1,
+    backgroundColor: COLORS.almostBlack
   },
   container: {
     flex: 1,
-    backgroundColor: 'white'
+    backgroundColor: COLORS.almostBlack
   },
   height: (h) => ({
     height: h

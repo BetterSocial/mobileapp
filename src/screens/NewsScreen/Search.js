@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     paddingBottom: 0,
     alignSelf: 'center',
+    // TODO: Garry, gray berapa?
     color: COLORS.blackgrey
   },
   wrapperIcon: {

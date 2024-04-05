@@ -16,7 +16,8 @@ interface SendIconProps {
 
 const SendIcon: React.FC<SendIconProps> = ({type, isDisabled}) => {
   const sendButtonStyle = React.useCallback(() => {
-    if (isDisabled) return COLORS.gray1;
+    // TODO: Garry, gray berapa?
+    if (isDisabled) return COLORS.gray200;
     if (type === 'SIGNED') return COLORS.signed_primary;
     return COLORS.anon_primary;
   }, [isDisabled, type]);
