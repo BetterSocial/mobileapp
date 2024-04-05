@@ -166,7 +166,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
           onStartShouldSetResponder={[Function]}
           style={
             Object {
-              "backgroundColor": "#233343",
+              "backgroundColor": "#1E3343",
               "flexDirection": "row",
               "justifyContent": "space-between",
               "marginVertical": 22,
