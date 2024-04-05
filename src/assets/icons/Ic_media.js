@@ -1,6 +1,6 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import Svg, {Path} from 'react-native-svg';
-import {COLORS} from '../../utils/theme';
 
 function Ic_media(props) {
   return (
@@ -15,5 +15,8 @@ function Ic_media(props) {
   );
 }
 
+Ic_media.propTypes = {
+  fill: PropTypes.string
+};
 const MemoIc_media = React.memo(Ic_media);
 export default MemoIc_media;

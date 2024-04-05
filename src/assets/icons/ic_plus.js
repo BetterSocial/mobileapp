@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import Svg, {Path} from 'react-native-svg';
 
 function IcPlus(props) {
@@ -14,5 +15,8 @@ function IcPlus(props) {
   );
 }
 
+IcPlus.propTypes = {
+  fill: PropTypes.string
+};
 const MemoIcPlus = React.memo(IcPlus);
 export default MemoIcPlus;

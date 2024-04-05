@@ -33,7 +33,7 @@ import ImageUtils from '../../utils/image';
 import ListItem from '../../components/MenuPostItem';
 import Loading from '../Loading';
 import Location from '../../assets/icons/Ic_location';
-import MemoIc_hastag from '../../assets/icons/Ic_hastag';
+import IconHashtag from '../../assets/icons/Ic_hastag';
 import MemoIc_user_group from '../../assets/icons/Ic_user_group';
 import MemoIc_world from '../../assets/icons/Ic_world';
 import ProfileDefault from '../../assets/images/ProfileDefault.png';
@@ -786,7 +786,7 @@ const CreatePost = () => {
           <Text style={styles.label}>Advanced Settings</Text>
           <Gap style={styles.height(12)} />
           <ListItem
-            icon={<MemoIc_hastag width={16.67} height={16.67} fill={COLORS.white} />}
+            icon={<IconHashtag width={16.67} height={16.67} fill={COLORS.white} />}
             topic={listTopic.length > 0}
             listTopic={renderListTopic()}
             label="Add Communities"

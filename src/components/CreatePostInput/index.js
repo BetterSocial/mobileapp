@@ -273,7 +273,8 @@ CreatePostInput.propTypes = {
   setTopics: PropTypes.func,
   setTopicChats: PropTypes.func,
   message: PropTypes.string,
-  setMessage: PropTypes.func
+  setMessage: PropTypes.func,
+  typeUser: PropTypes.string
 };
 
 export default CreatePostInput;

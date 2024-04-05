@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import Svg, {Path} from 'react-native-svg';
 
 function Ic_camera(props) {
@@ -14,5 +15,8 @@ function Ic_camera(props) {
   );
 }
 
+Ic_camera.propTypes = {
+  fill: PropTypes.string
+};
 const MemoIc_camera = React.memo(Ic_camera);
 export default MemoIc_camera;

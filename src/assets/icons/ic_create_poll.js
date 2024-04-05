@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import Svg, {Path} from 'react-native-svg';
 
 function IcCreatePoll(props) {
@@ -14,5 +15,8 @@ function IcCreatePoll(props) {
   );
 }
 
+IcCreatePoll.propTypes = {
+  fill: PropTypes.string
+};
 const MemoIcCreatePoll = React.memo(IcCreatePoll);
 export default MemoIcCreatePoll;

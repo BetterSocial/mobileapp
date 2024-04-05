@@ -1,6 +1,6 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import Svg, {Path} from 'react-native-svg';
-import {COLORS} from '../../utils/theme';
 
 function Ic_timer(props) {
   return (
@@ -15,5 +15,8 @@ function Ic_timer(props) {
   );
 }
 
+Ic_timer.propTypes = {
+  fill: PropTypes.string
+};
 const MemoIc_timer = React.memo(Ic_timer);
 export default MemoIc_timer;
