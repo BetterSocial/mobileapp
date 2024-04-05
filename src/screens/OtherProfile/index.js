@@ -543,6 +543,7 @@ const OtherProfile = () => {
 
         <ProfileTiktokScroll
           keyboardShouldPersistTaps="handled"
+          contentHeight={dimen.size.PROFILE_ITEM_HEIGHT}
           ref={flatListRef}
           extraData={[feeds]}
           data={handleDataFeed()}

@@ -484,7 +484,7 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
   <View
     style={
       Object {
-        "backgroundColor": "#FFFFFF",
+        "backgroundColor": "#16202A",
         "borderColor": "#394756",
         "borderLeftWidth": 1,
         "borderRightWidth": 1,
