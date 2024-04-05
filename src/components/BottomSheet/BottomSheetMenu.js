@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import dimen from '../../utils/dimen';
-import {normalizeFontSize} from '../../utils/fonts';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
 import Gap from '../Gap';
 import {COLORS} from '../../utils/theme';
 
@@ -65,8 +65,9 @@ const styles = StyleSheet.create({
   },
   textShare: {
     fontSize: normalizeFontSize(16),
-    fontWeight: '400',
+    fontFamily: fonts.inter[400],
     lineHeight: dimen.normalizeDimen(24),
-    textAlignVertical: 'center'
+    textAlignVertical: 'center',
+    color: COLORS.white
   }
 });

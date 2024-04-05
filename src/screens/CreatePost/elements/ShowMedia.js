@@ -43,7 +43,7 @@ const ShowImage = ({data, onPress}) => {
       imageStyle={styles.image}
       style={styles.imageContainer}>
       <TouchableOpacity style={styles.icon} onPress={() => onPress(data.id)}>
-        <Icon name="closecircle" size={20} />
+        <Icon name="closecircle" size={20} color={COLORS.white} />
       </TouchableOpacity>
     </ImageBackground>
   );

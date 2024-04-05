@@ -739,7 +739,7 @@ const CreatePost = () => {
           />
           {typeUser && (
             <Animated.View style={[{opacity: animatedReminder}, styles.reminderContainer]}>
-              <Text style={styles.almostBlackText}>
+              <Text style={styles.reminderText}>
                 Even when incognito, you can be blocked by others.
               </Text>
             </Animated.View>
@@ -782,7 +782,7 @@ const CreatePost = () => {
           <Text style={styles.label}>Advanced Settings</Text>
           <Gap style={styles.height(12)} />
           <ListItem
-            icon={<MemoIc_hastag width={16.67} height={16.67} />}
+            icon={<MemoIc_hastag width={16.67} height={16.67} fill={COLORS.white} />}
             topic={listTopic.length > 0}
             listTopic={renderListTopic()}
             label="Add Communities"
@@ -791,7 +791,7 @@ const CreatePost = () => {
           />
           <Gap style={styles.height(16)} />
           <ListItem
-            icon={<Timer width={16.67} height={16.67} />}
+            icon={<Timer width={16.67} height={16.67} fill={COLORS.white} />}
             label={postExpired.length === 0 ? 'Loading...' : postExpired[expiredSelect]?.label}
             labelStyle={styles.listText}
             onPress={() => sheetExpiredRef.current.open()}
@@ -923,8 +923,8 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10
   },
-  whiteText: {
-    color: COLORS.almostBlack,
+  reminderText: {
+    color: COLORS.white,
     fontSize: normalizeFontSize(10),
     textAlign: 'center'
   },
