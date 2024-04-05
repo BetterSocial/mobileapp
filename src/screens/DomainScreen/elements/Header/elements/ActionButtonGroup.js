@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: normalizeFontSize(12),
     lineHeight: normalizeFontSize(24),
-    color: COLORS.white2
+    color: COLORS.white
   },
   textButtonFollowing: {
     fontFamily: fonts.inter[600],

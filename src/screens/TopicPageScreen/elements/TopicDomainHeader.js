@@ -31,7 +31,7 @@ const TopicDomainHeader = (props) => {
       </Text>
       <View style={{flexDirection: 'row', alignItems: 'center', marginTop: normalize(1)}}>
         <CommunityIcon
-          color={shouldDisplay ? COLORS.white2 : undefined}
+          color={shouldDisplay ? COLORS.white : undefined}
           style={{
             marginRight: normalize(5),
             height: normalize(8)
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(16),
     fontFamily: fonts.inter[600],
     textAlign: 'left',
-    color: isHeaderHide ? COLORS.white2 : COLORS.black,
+    color: isHeaderHide ? COLORS.white : COLORS.black,
     backgroundColor: COLORS.transparent
   }),
   member: {

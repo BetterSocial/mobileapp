@@ -59,7 +59,7 @@ const ChannelTitle = ({
       fontFamily: fonts.inter[400],
       fontSize: normalize(10),
       lineHeight: 14.52,
-      color: COLORS.white2
+      color: COLORS.white
     },
     chatContentUnreadCountPostNotificationContainer: {
       position: 'absolute',

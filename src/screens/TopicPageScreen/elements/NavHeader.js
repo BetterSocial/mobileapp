@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   }),
   profileHashtag: {
-    color: COLORS.white2,
+    color: COLORS.white,
     textAlign: 'center',
     fontSize: normalizeFontSize(24)
   },
