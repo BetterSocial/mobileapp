@@ -10,8 +10,19 @@ import {getUserId} from '../../utils/users';
 import CommentUserName from '../CommentUsername/CommentUsername';
 import ReadMore from '../ReadMore';
 import ProfilePicture from '../../screens/ProfileScreen/elements/ProfilePicture';
+import BlurredLayer from '../../screens/FeedScreen/elements/BlurredLayer';
 
-const PreviewComment = ({comment, time, image, totalComment, onPress, user, item, isShortText}) => {
+const PreviewComment = ({
+  comment,
+  time,
+  image,
+  totalComment,
+  onPress,
+  user,
+  item,
+  isShortText,
+  isBlurred
+}) => {
   const navigation = useNavigation();
 
   const openProfile = async () => {
@@ -70,37 +81,43 @@ const PreviewComment = ({comment, time, image, totalComment, onPress, user, item
           width: '100%'
         }}
         onPress={onPress}>
-        <View testID="userDefined" style={styles.profile}>
-          <TouchableOpacity onPress={openProfile}>
-            {item?.data?.anon_user_info_emoji_name || item?.data?.is_anonymous ? (
-              <ProfilePicture
-                karmaScore={item.karma_score}
-                size={20}
-                width={4}
-                withKarma
-                isAnon={true}
-                anonBackgroundColor={item.data.anon_user_info_color_code}
-                anonEmojiCode={item?.data?.anon_user_info_emoji_code}
-              />
-            ) : (
-              <ProfilePicture
-                karmaScore={item.karma_score}
-                profilePicPath={image}
-                size={25}
-                width={4}
-                withKarma
-              />
-            )}
-          </TouchableOpacity>
-          <View style={{flexDirection: 'column'}}>
-            <TouchableOpacity onPress={openProfile} style={styles.containerUsername}>
-              <CommentUserName isPreviewComment comment={item} user={user} />
-              <View style={styles.point} />
-              <Text style={styles.time}>{calculateTime(time).replace('ago', '')}</Text>
+        <BlurredLayer
+          layerOnly
+          withToast={true}
+          isVisible={isBlurred}
+          containerStyle={{borderRadius: 12}}>
+          <View testID="userDefined" style={styles.profile}>
+            <TouchableOpacity onPress={openProfile}>
+              {item?.data?.anon_user_info_emoji_name || item?.data?.is_anonymous ? (
+                <ProfilePicture
+                  karmaScore={item.karma_score}
+                  size={20}
+                  width={4}
+                  withKarma
+                  isAnon={true}
+                  anonBackgroundColor={item.data.anon_user_info_color_code}
+                  anonEmojiCode={item?.data?.anon_user_info_emoji_code}
+                />
+              ) : (
+                <ProfilePicture
+                  karmaScore={item.karma_score}
+                  profilePicPath={image}
+                  size={25}
+                  width={4}
+                  withKarma
+                />
+              )}
             </TouchableOpacity>
-            <ReadMore onPress={onPress} text={comment} />
+            <View style={{flexDirection: 'column'}}>
+              <TouchableOpacity onPress={openProfile} style={styles.containerUsername}>
+                <CommentUserName isPreviewComment comment={item} user={user} />
+                <View style={styles.point} />
+                <Text style={styles.time}>{calculateTime(time).replace('ago', '')}</Text>
+              </TouchableOpacity>
+              <ReadMore onPress={onPress} text={comment} />
+            </View>
           </View>
-        </View>
+        </BlurredLayer>
       </TouchableOpacity>
     </View>
   );
@@ -112,7 +129,7 @@ export const styles = StyleSheet.create({
   username: {
     fontFamily: fonts.inter[700],
     fontSize: normalizeFontSize(10),
-    color: COLORS.blackgrey,
+    color: COLORS.gray410,
     marginLeft: SIZES.base
   },
   profile: {

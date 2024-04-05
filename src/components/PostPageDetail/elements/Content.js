@@ -265,7 +265,7 @@ export default Content;
 const styles = StyleSheet.create({
   contentFeed: {
     flex: 1,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   textContentFeed: () => ({
     fontFamily: fonts.inter[400],
@@ -281,7 +281,7 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
     paddingBottom: 20,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   newsCard: {
     paddingHorizontal: 6

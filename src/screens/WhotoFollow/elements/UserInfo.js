@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import PropTypes from 'prop-types';
-import {normalize, normalizeFontSize} from '../../../utils/fonts';
+import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
 import {CircleGradient} from '../../../components/Karma/CircleGradient';
 import {COLORS} from '../../../utils/theme';
 import dimen from '../../../utils/dimen';
@@ -54,17 +54,15 @@ const styles = StyleSheet.create({
     flex: 1
   },
   textFullName: {
-    fontFamily: 'Poppins',
-    fontStyle: 'normal',
-    fontWeight: 'bold',
+    fontFamily: fonts.inter[700],
     fontSize: normalizeFontSize(14),
-    color: COLORS.black000,
+    color: COLORS.white,
     lineHeight: normalizeFontSize(21),
     alignSelf: 'flex-start'
   },
   textUsername: {
     fontSize: normalizeFontSize(14),
-    color: COLORS.gray500,
+    color: COLORS.gray510,
     lineHeight: normalizeFontSize(21),
     alignSelf: 'flex-start',
     width: '100%',

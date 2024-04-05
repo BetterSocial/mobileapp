@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   recentContainer: {
     paddingTop: 18,
     paddingBottom: 15,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   recentTitle: {
     fontSize: 14,

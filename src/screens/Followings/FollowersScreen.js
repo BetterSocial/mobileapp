@@ -90,7 +90,7 @@ function FollowersScreen() {
   }, []);
   return (
     <View style={{flex: 1}}>
-      {isAndroid ? <StatusBar translucent={false} /> : null}
+      {isAndroid ? <StatusBar translucent={false} barStyle={'light-content'} /> : null}
       {followingHeader()}
 
       <Search

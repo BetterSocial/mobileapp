@@ -77,9 +77,9 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: 10,
     borderRadius: SIZES.radius,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     elevation: 0.0,
-    borderColor: COLORS.blackgrey,
+    borderColor: COLORS.gray410,
     marginHorizontal: SIZES.base
   },
   wrapperFooter: {

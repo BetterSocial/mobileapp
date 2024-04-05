@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 17,
     textAlign: 'center',
-    color: isActive ? COLORS.anon_primary : COLORS.blackgrey
+    color: isActive ? COLORS.anon_primary : COLORS.gray410
   }),
   anonymousPostTextSubtitle: (isActive) => ({
     fontFamily: isActive ? fonts.inter[600] : fonts.inter[400],
@@ -37,7 +37,7 @@ const AnonymousTab = ({isActive = false}) => {
   return (
     <View style={styles.anonymousContainer}>
       <AnonymousIcon
-        fill={isActive ? COLORS.anon_primary : COLORS.blackgrey}
+        fill={isActive ? COLORS.anon_primary : COLORS.gray410}
         width={17}
         height={17}
       />

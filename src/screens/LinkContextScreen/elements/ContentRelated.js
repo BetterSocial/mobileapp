@@ -28,12 +28,14 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     paddingHorizontal: 20,
     marginTop: 12,
-    marginBottom: 12
+    marginBottom: 12,
+    color: COLORS.white
   },
   domainItemDescription: {
     fontFamily: fonts.inter[400],
     fontSize: 16,
-    lineHeight: 24
+    lineHeight: 24,
+    color: COLORS.white
   },
   domainTextContainer: {
     paddingHorizontal: 20
@@ -48,7 +50,7 @@ const styles = StyleSheet.create({
   domainImageEmptyState: {
     height: 135,
     marginBottom: 14,
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray110,
     resizeMode: 'center',
     width: '100%'
   }

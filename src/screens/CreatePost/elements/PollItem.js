@@ -5,6 +5,8 @@ import {Platform, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'rea
 import MemoIcClearCircle from '../../../assets/icons/ic_clear_circle';
 import {MAX_POLLING_CHARACTER_ALLOWED} from '../../../utils/constants';
 import {COLORS} from '../../../utils/theme';
+import dimen from '../../../utils/dimen';
+import {normalizeFontSize} from '../../../utils/fonts';
 
 export default function PollItem({
   index = 0,
@@ -17,9 +19,10 @@ export default function PollItem({
   const [isTextInputFocus, setIsTextInputFocus] = React.useState(false);
 
   return (
+    // TODO: Garry warna focus sesuai mode
     <View style={isTextInputFocus ? S.focuspollitemcontainer : S.pollitemcontainer}>
       <TextInput
-        placeholderTextColor={COLORS.blackgrey}
+        placeholderTextColor={COLORS.gray410}
         placeholder={`Choice ${index + 1}`}
         style={S.pollitemtextinput}
         onFocus={() => setIsTextInputFocus(true)}
@@ -30,6 +33,7 @@ export default function PollItem({
           }
         }}
         value={poll.text}
+        keyboardAppearance="dark"
       />
       {showcharactercount && (
         <Text
@@ -39,7 +43,12 @@ export default function PollItem({
       )}
       {showdeleteicon && (
         <TouchableOpacity style={S.removepollcontainer} onPress={() => onremovepoll(index)}>
-          <MemoIcClearCircle width={20} height={20} style={S.removepollicon} />
+          <MemoIcClearCircle
+            width={20}
+            height={20}
+            style={S.removepollicon}
+            fill={COLORS.gray410}
+          />
         </TouchableOpacity>
       )}
     </View>
@@ -51,10 +60,10 @@ const S = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     borderWidth: 1,
-    borderColor: COLORS.balance_gray,
+    borderColor: COLORS.gray210,
     borderRadius: 10,
-    marginVertical: 4,
-    paddingHorizontal: 8
+    marginVertical: dimen.normalizeDimen(4),
+    paddingHorizontal: dimen.normalizeDimen(8)
   },
 
   focuspollitemcontainer: {
@@ -62,19 +71,20 @@ const S = StyleSheet.create({
     flexDirection: 'row',
     borderWidth: 1,
     borderRadius: 10,
-    marginVertical: 4,
-    paddingHorizontal: 8,
-    borderColor: COLORS.anon_primary
+    marginVertical: dimen.normalizeDimen(4),
+    paddingHorizontal: dimen.normalizeDimen(8),
+    borderColor: COLORS.signed_primary
   },
 
   pollitemtextinput: {
     flex: 1,
-    padding: Platform.OS === 'ios' ? 10 : 0
+    padding: dimen.normalizeDimen(Platform.OS === 'ios' ? 10 : 0),
+    color: COLORS.white
   },
 
   removepollcontainer: {
     justifyContent: 'center',
-    paddingHorizontal: 8
+    paddingHorizontal: dimen.normalizeDimen(8)
   },
 
   removepollicon: {
@@ -83,10 +93,10 @@ const S = StyleSheet.create({
   },
 
   pollitemtextcount: {
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     alignSelf: 'center',
     color: COLORS.balance_gray,
-    marginEnd: 8,
-    marginStart: 8
+    marginEnd: dimen.normalizeDimen(8),
+    marginStart: dimen.normalizeDimen(8)
   }
 });

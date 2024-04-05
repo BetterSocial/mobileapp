@@ -1,6 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import {FlatList, StyleSheet} from 'react-native';
+import {FlatList, RefreshControl, StyleSheet} from 'react-native';
+import {COLORS} from '../../utils/theme';
 
 const styles = StyleSheet.create({
   flatlistContainer: {
@@ -59,7 +60,9 @@ class TiktokScroll extends React.Component {
         disableIntervalMomentum={true}
         keyExtractor={(item) => item.id}
         onEndReached={onEndReach}
-        onRefresh={onRefresh}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={COLORS.white} />
+        }
         onScroll={onScroll}
         onScrollBeginDrag={onScrollBeginDrag}
         getItemLayout={(item, index) => ({
@@ -70,7 +73,6 @@ class TiktokScroll extends React.Component {
         onMomentumScrollEnd={onMomentumScrollEnd}
         initialNumToRender={2}
         ref={this.flatListScrollRef}
-        refreshing={refreshing}
         renderItem={renderItem}
         scrollEventThrottle={1}
         showsVerticalScrollIndicator={false}

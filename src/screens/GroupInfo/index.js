@@ -122,7 +122,7 @@ const GroupInfo = () => {
     }
     return (
       <View testID="image5" style={styles.btnUpdatePhoto}>
-        <MemoIc_pencil width={50} height={50} color={COLORS.lightgrey} />
+        <MemoIc_pencil width={50} height={50} color={COLORS.gray110} />
       </View>
     );
   };
@@ -174,7 +174,7 @@ const GroupInfo = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       {/* <Header title={chatName} /> */}
       {isLoadingMembers ? null : (
         <>
@@ -195,7 +195,7 @@ const GroupInfo = () => {
                   </Text>
                 </View>
                 <TouchableOpacity onPress={handleOnNameChange} style={styles.pencilIconTouchable}>
-                  <MemoIc_pencil width={20} height={20} color={COLORS.lightgrey} />
+                  <MemoIc_pencil width={20} height={20} color={COLORS.gray110} />
                 </TouchableOpacity>
               </View>
               <View style={styles.lineTop} />
@@ -304,7 +304,7 @@ const GroupInfo = () => {
 export default GroupInfo;
 
 export const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: COLORS.white, paddingBottom: 40},
+  container: {flex: 1, backgroundColor: COLORS.almostBlack, paddingBottom: 40},
   users: {
     paddingTop: 12
   },
@@ -323,7 +323,7 @@ export const styles = StyleSheet.create({
   },
   btnAdd: {
     padding: normalize(8),
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray110,
     width: 'auto',
     justifyContent: 'center',
     alignItems: 'center',
@@ -372,7 +372,7 @@ export const styles = StyleSheet.create({
     color: COLORS.black
   },
   lineTop: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray110,
     height: 1
   },
   containerGroupName: {
@@ -391,7 +391,7 @@ export const styles = StyleSheet.create({
     width: normalize(100),
     height: normalize(100),
     borderRadius: normalize(50),
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray110,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -423,7 +423,7 @@ export const styles = StyleSheet.create({
   },
   gap: {
     height: 1,
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray110,
     marginTop: 50
   },
   actionGroup: {

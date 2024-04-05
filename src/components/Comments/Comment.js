@@ -122,14 +122,15 @@ const Comment = ({
     iVote();
   }, [JSON.stringify(comment.data)]);
 
+  // TODO: Garry, bisa di improve jadi 1 style aja
   const voteStyle = () => {
     if (totalVote > 0) {
-      return COLORS.anon_primary;
+      return COLORS.upvote;
     }
     if (totalVote < 0) {
-      return COLORS.redalert;
+      return COLORS.downvote;
     }
-    return COLORS.balance_gray;
+    return COLORS.gray410;
   };
 
   const username = comment?.data?.anon_user_info_color_name
@@ -399,14 +400,14 @@ const styles = StyleSheet.create({
   username: {
     fontFamily: fonts.inter[700],
     fontSize: normalizeFontSize(12),
-    color: COLORS.blackgrey,
+    color: COLORS.gray410,
     lineHeight: 14,
     marginLeft: 16
   },
   post: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
-    color: COLORS.mine_shaft,
+    color: COLORS.white,
     marginLeft: 28
   },
   profile: {
@@ -448,7 +449,7 @@ const styles = StyleSheet.create({
   time: {
     fontFamily: fonts.inter[400],
     fontSize: 10,
-    color: COLORS.blackgrey,
+    color: COLORS.gray410,
     lineHeight: 12
   },
   containerUsername: {

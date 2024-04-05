@@ -404,7 +404,7 @@ export const styles = StyleSheet.create({
     width: 4,
     height: 4,
     borderRadius: 4,
-    backgroundColor: COLORS.blackgrey,
+    backgroundColor: COLORS.gray410,
     marginLeft: 8,
     marginRight: 8
   },
@@ -452,7 +452,7 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.transparent
   }),
   centerVerticalText: () => ({
-    color: COLORS.white2,
+    color: COLORS.white,
     opacity: 1
   }),
   mv5: {

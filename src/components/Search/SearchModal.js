@@ -8,6 +8,8 @@ import CrossIcon from '../../../assets/icons/cross.svg';
 import StringConstant from '../../utils/string/StringConstant';
 import {displayFormattedSearchLocationsV2} from '../../utils/string/StringUtils';
 import {COLORS} from '../../utils/theme';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
+import dimen from '../../utils/dimen';
 
 const {width} = Dimensions.get('screen');
 
@@ -28,7 +30,7 @@ const SearchModal = (props) => {
         <View style={styles.content}>
           <View style={styles.header}>
             <Pressable onPress={props.onClose} style={styles.closeButton}>
-              <CrossIcon width={18} height={18} fill="#000" />
+              <CrossIcon width={18} height={18} fill={COLORS.white} />
             </Pressable>
             <Text style={styles.textSearch}>{StringConstant.searchModalTitle}</Text>
           </View>
@@ -43,12 +45,12 @@ const SearchModal = (props) => {
                 onChangeText={props.onChangeText}
                 value={props.value}
                 placeholder={props.placeholder ? props.placeholder : ''}
-                placeholderTextColor="#BDBDBD"
+                placeholderTextColor={COLORS.gray410}
                 multiline={false}
                 returnKeyType="search"
               />
             </View>
-            {props.isLoading ? <Text>Please wait...</Text> : null}
+            {props.isLoading ? <Text style={styles.loadingText}>Please wait...</Text> : null}
 
             {typeof props.options !== 'undefined' && props.options.length > 0 ? (
               <View style={styles.box}>
@@ -81,7 +83,7 @@ const styles = StyleSheet.create({
   },
   space: {flex: 1},
   content: {
-    backgroundColor: 'white',
+    backgroundColor: COLORS.almostBlack,
     flexDirection: 'column',
     borderColor: 'rgba(0, 0, 0, 0.1)',
     borderTopLeftRadius: 16,
@@ -115,9 +117,9 @@ const styles = StyleSheet.create({
   inputContainer: {
     height: 48,
     width: width - 44,
-    backgroundColor: COLORS.white,
     borderWidth: 1,
-    borderColor: COLORS.silver,
+    borderColor: COLORS.gray210,
+    backgroundColor: COLORS.gray110,
     borderRadius: 8,
     flexDirection: 'row',
     alignItems: 'center',
@@ -130,17 +132,17 @@ const styles = StyleSheet.create({
   searchInput: {
     width: '90%',
     height: 40,
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: 'normal',
+    fontFamily: fonts.inter[400],
     fontSize: 14,
     letterSpacing: -0.28,
-    color: COLORS.black,
+    borderColor: COLORS.gray210,
+    backgroundColor: COLORS.gray110,
+    color: COLORS.white,
     marginLeft: 5
   },
   box: {
     minHeight: 20,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     borderRadius: 8,
     flexDirection: 'column',
     marginBottom: 2,
@@ -174,6 +176,12 @@ const styles = StyleSheet.create({
     lineHeight: 17,
     color: COLORS.black,
     textTransform: 'capitalize'
+  },
+  loadingText: {
+    color: COLORS.gray410,
+    fontSize: normalizeFontSize(14),
+    fontFamily: fonts.inter[400],
+    marginTop: dimen.normalizeDimen(10)
   }
 });
 

@@ -4,9 +4,9 @@ import {COLORS} from '../../../utils/theme';
 
 const Label = ({
   label,
-  containerBgColor = COLORS.concrete,
-  titleHeaderColor = COLORS.whiteSmoke,
-  textColor = COLORS.emperor
+  containerBgColor = COLORS.gray110,
+  titleHeaderColor = COLORS.almostBlackSmoke,
+  textColor = COLORS.white
 }) => (
   <View style={styles.headerList(containerBgColor)}>
     <Text style={styles.titleHeader(titleHeaderColor)}>

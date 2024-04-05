@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   card: {
     height: 52,
     borderRadius: 8,
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray110,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -39,10 +39,9 @@ const styles = StyleSheet.create({
     marginBottom: 12
   },
   textCard: {
-    fontFamily: fonts.inter[700],
-    fontWeight: '800',
+    fontFamily: fonts.inter[800],
     fontSize: 14,
-    color: COLORS.black,
+    color: COLORS.white,
     lineHeight: 16
   }
 });

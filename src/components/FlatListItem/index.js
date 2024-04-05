@@ -17,6 +17,8 @@ const FlatListItem = ({value, index, select, onSelect, icon, desc}) => {
             <Text style={styles.desc}>{desc}</Text>
           </View>
         </View>
+        {/* TODO: Garry use outline icon */}
+        {/* TODO: Garry ganti warna sesuai signed/incognito */}
         {index === select && <Icon name="check-circle" color={COLORS.anon_primary} size={20} />}
       </TouchableOpacity>
     );
@@ -39,7 +41,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.lightgrey,
+    borderBottomColor: COLORS.gray210,
     paddingHorizontal: 20,
     alignItems: 'center'
   },
@@ -53,7 +55,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 12,
     fontWeight: '400',
-    color: COLORS.blackgrey,
+    color: COLORS.gray410,
     flexWrap: 'wrap'
   },
   labelIcon: {

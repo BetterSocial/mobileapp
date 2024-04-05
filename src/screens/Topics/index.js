@@ -184,7 +184,7 @@ const Topics = () => {
         </React.Fragment>
       )}
 
-      {isFetchingTopic && <ActivityIndicator size={'large'} color={COLORS.blackgrey} />}
+      {isFetchingTopic && <ActivityIndicator size={'large'} color={COLORS.gray410} />}
     </SafeAreaView>
   );
 };
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: Platform.OS === 'ios' ? dimen.normalizeDimen(22) : 0,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   containerProgress: {
     marginTop: dimen.normalizeDimen(20),
@@ -208,12 +208,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: dimen.normalizeDimen(20)
   },
   textPickYourTopic: {
-    fontFamily: 'Inter-Bold',
-    fontStyle: 'normal',
-    fontWeight: '600',
+    fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(36),
     lineHeight: normalizeFontSize(43.57),
-    color: COLORS.bunting,
+    color: COLORS.white,
     marginHorizontal: dimen.normalizeDimen(20)
   },
   footer: {
@@ -223,27 +221,15 @@ const styles = StyleSheet.create({
     width,
     paddingHorizontal: dimen.normalizeDimen(20),
     paddingBottom: dimen.normalizeDimen(20),
-    backgroundColor: COLORS.white,
-    shadowColor: COLORS.black,
-    shadowOffset: {
-      width: 0,
-      height: 5
-    },
-    shadowOpacity: 0.36,
-    shadowRadius: 6.68,
-
-    elevation: 11,
+    backgroundColor: COLORS.almostBlack,
     flexDirection: 'column',
     justifyContent: 'space-between'
   },
   textGetPersonalContent: {
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: '400',
+    fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(24),
-    color: COLORS.blackgrey,
-    opacity: 0.84,
+    color: COLORS.gray510,
     marginTop: dimen.normalizeDimen(8),
     marginBottom: dimen.normalizeDimen(24),
     paddingHorizontal: dimen.normalizeDimen(20)
@@ -274,15 +260,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   textSmall: {
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: '400',
+    fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(10),
     textAlign: 'center',
-    color: COLORS.blackgrey
+    color: COLORS.gray510
   },
   button: {
-    backgroundColor: COLORS.blackgrey,
+    backgroundColor: COLORS.gray410,
     borderRadius: dimen.normalizeDimen(8)
   },
   scrollButtonParent: {

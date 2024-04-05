@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20
   },
   capsulContainer: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray110,
     paddingHorizontal: 10,
     paddingVertical: 5,
     marginRight: 10,

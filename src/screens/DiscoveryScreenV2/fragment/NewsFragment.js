@@ -1,7 +1,7 @@
 /* eslint-disable consistent-return */
 /* eslint-disable array-callback-return */
 import * as React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
@@ -124,7 +124,7 @@ const NewsFragment = ({
     );
 
   return (
-    <View>
+    <ScrollView>
       <RecentSearch
         shown={isFirstTimeOpen}
         setSearchText={setSearchText}
@@ -132,18 +132,18 @@ const NewsFragment = ({
       />
       {renderNewsItem()}
       <View style={styles.padding} />
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   fragmentContainer: {
     flex: 1,
-    backgroundColor: COLORS.concrete
+    backgroundColor: COLORS.gray110
   },
   noDataFoundContainer: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     justifyContent: 'center'
   },
   noDataFoundText: {

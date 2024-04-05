@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: fonts.inter[500],
-    color: COLORS.white,
+    color: COLORS.almostBlack,
     fontSize: 12,
     marginLeft: 9.67
   }

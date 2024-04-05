@@ -8,6 +8,7 @@ import IconFile from '../../../assets/icon/IconFile';
 import IconVideoPlay from '../../../assets/icon/IconVideoPlay';
 import {formatBytes} from '../../../utils/string/StringUtils';
 import {ChatItemAttachmentStyles} from './ChatItemAttachmentStyles';
+import {COLORS} from '../../../utils/theme';
 
 const ChatItemAttachment = ({attachments = []}: any) => {
   const navigation = useNavigation();
@@ -59,7 +60,7 @@ const ChatItemAttachment = ({attachments = []}: any) => {
                   </View>
                 </View>
                 <View style={ChatItemAttachmentStyles.attachmentFileIcon}>
-                  <IconFile />
+                  <IconFile fill={COLORS.white} />
                 </View>
               </View>
             </TouchableOpacity>

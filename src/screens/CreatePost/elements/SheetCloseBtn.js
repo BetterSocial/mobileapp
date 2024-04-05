@@ -21,6 +21,7 @@ const SheetCloseBtn = ({backRef, goBack, continueToEdit}) => {
       <View style={styles.container}>
         <Text style={styles.header}>Are you sure?</Text>
         <Gap style={styles.gap(30)} />
+        {/* TODO: Garry warna sesuai mode */}
         <Button onPress={continueToEdit}>
           <Text>Continue editing</Text>
         </Button>
@@ -28,7 +29,7 @@ const SheetCloseBtn = ({backRef, goBack, continueToEdit}) => {
         <Button
           onPress={goBack}
           styles={{
-            backgroundColor: COLORS.porcelain
+            backgroundColor: COLORS.gray110
           }}
           textStyling={{color: COLORS.black}}>
           <Text>Discard post</Text>
@@ -56,10 +57,11 @@ const styles = StyleSheet.create({
   containerSheet: {
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
-    height: 240
+    height: 240,
+    backgroundColor: COLORS.almostBlack
   },
   draggableIcon: {
-    backgroundColor: COLORS.lightgrey
+    backgroundColor: COLORS.gray110
   },
   gap: (height) => ({
     height

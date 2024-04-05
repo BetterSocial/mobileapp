@@ -274,6 +274,7 @@ const UsersFragment = ({
         onEndReached={() => fetchData()}
         onEndReachedThreshold={0.6}
         keyboardShouldPersistTaps="handled"
+        style={{backgroundColor: COLORS.almostBlack}}
       />
     );
   };
@@ -297,20 +298,21 @@ const UsersFragment = ({
 const styles = StyleSheet.create({
   fragmentContainer: {
     flex: 1,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   noDataFoundContainer: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     justifyContent: 'center'
   },
   noDataFoundText: {
     alignSelf: 'center',
     justifyContent: 'center',
-    fontFamily: fonts.inter[600]
+    fontFamily: fonts.inter[600],
+    color: COLORS.white
   },
   unfollowedHeaderContainer: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray110,
     height: 40,
     display: 'flex',
     flexDirection: 'column',

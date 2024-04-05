@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginStart: 20,
     alignSelf: 'flex-start',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     height: normalize(29)
   },
   domainText: {
@@ -29,12 +29,13 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     lineHeight: normalize(29),
     fontWeight: 'bold',
-    textAlign: 'left'
+    textAlign: 'left',
+    color: COLORS.white
   },
   divider: {
     height: 1,
     width: '100%',
-    backgroundColor: COLORS.balance_gray
+    backgroundColor: COLORS.gray410
   }
 });
 

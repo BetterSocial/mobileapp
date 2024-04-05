@@ -27,6 +27,7 @@ const SpecificIssue = ({refSpecificIssue, onPress, onSkip, loading}) => {
           textAlignVertical="top"
           multiline
           placeholder={'Please provide more details to inform our\n team (min. 50 characters)'}
+          placeholderTextColor={COLORS.gray410}
         />
         <TouchableOpacity testID="button-skip-test" style={styles.btnSkip} onPress={() => onSkip()}>
           <Text style={styles.btnSkipText}>Skip & just block this account</Text>
@@ -37,7 +38,7 @@ const SpecificIssue = ({refSpecificIssue, onPress, onSkip, loading}) => {
             {loading ? (
               <ActivityIndicator testID="loading-indicator-test" />
             ) : (
-              <Text>File Report</Text>
+              <Text style={styles.containerBtnText}>File Report</Text>
             )}
           </Button>
         </View>
@@ -61,13 +62,21 @@ const styles = StyleSheet.create({
     marginLeft: 18,
     marginBottom: 19
   },
+  containerBtnText: {
+    marginRight: 22,
+    marginLeft: 18,
+    marginBottom: 19,
+    fontFamily: fonts.inter[500],
+    fontSize: 16,
+    color: COLORS.white
+  },
   btn: {
     paddingLeft: 18,
     paddingRight: 22,
     paddingTop: 8
   },
   btnSkip: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray110,
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 17,
@@ -80,7 +89,7 @@ const styles = StyleSheet.create({
     color: COLORS.black
   },
   input: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray110,
     marginLeft: 17,
     marginRight: 23,
     borderRadius: 8,
@@ -90,15 +99,18 @@ const styles = StyleSheet.create({
     paddingRight: 13,
     paddingLeft: 19,
     fontFamily: fonts.inter[400],
-    color: COLORS.blackgrey
+    color: COLORS.white,
+    borderWidth: 1,
+    borderColor: COLORS.gray210
   },
   container: {
     height: 'auto',
     borderTopRightRadius: 20,
-    borderTopLeftRadius: 20
+    borderTopLeftRadius: 20,
+    backgroundColor: COLORS.almostBlack
   },
   draggableIcon: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray110,
     width: 60
   }
 });

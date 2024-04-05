@@ -243,7 +243,7 @@ const DetailDomainScreen = (props) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       <SafeAreaView>
         <DetailDomainScreenHeader
           domain={item.domain.name}
@@ -315,10 +315,8 @@ export default DetailDomainScreen;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.white,
-    flex: 1,
-    paddingBottom: 75
-    // paddingTop: 8,
+    backgroundColor: COLORS.almostBlack,
+    flex: 1
   },
   containerText: {
     marginTop: 20,
@@ -343,7 +341,7 @@ const styles = StyleSheet.create({
       height: 1
     },
     shadowOpacity: 0.5,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   gap: {height: 16},
   footerWrapper: {

@@ -40,7 +40,7 @@ const TopicText = ({
 
 const styles = StyleSheet.create({
   text: {
-    color: COLORS.white2,
+    color: COLORS.white,
     fontFamily: fonts.inter[500]
   },
   shortText: (isShort) => ({

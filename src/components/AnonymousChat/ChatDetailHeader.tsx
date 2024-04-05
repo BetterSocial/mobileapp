@@ -21,10 +21,10 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   bgsigned_primary: {
-    backgroundColor: COLORS.signed_primary
+    backgroundColor: COLORS.signed_secondary
   },
   bgBondiBlue: {
-    backgroundColor: COLORS.anon_primary
+    backgroundColor: COLORS.anon_secondary
   },
   backButton: {
     paddingLeft: 22,

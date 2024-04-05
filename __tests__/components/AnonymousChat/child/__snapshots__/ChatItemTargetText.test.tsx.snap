@@ -28,7 +28,7 @@ exports[`TESTING ChatItemTargetText RENDER continuous should match snapshot 1`] 
     style={
       Array [
         Object {
-          "backgroundColor": "#F5F6F7",
+          "backgroundColor": "#1E3343",
           "borderRadius": 12,
           "borderTopStartRadius": 0,
           "flex": 1,
@@ -45,6 +45,7 @@ exports[`TESTING ChatItemTargetText RENDER continuous should match snapshot 1`] 
     <Text
       style={
         Object {
+          "color": "#FFFFFF",
           "fontFamily": "Inter-Regular",
           "fontSize": 16,
           "lineHeight": 19.36,
@@ -85,7 +86,7 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
     style={
       Array [
         Object {
-          "backgroundColor": "#F5F6F7",
+          "backgroundColor": "#1E3343",
           "borderRadius": 12,
           "borderTopStartRadius": 0,
           "flex": 1,
@@ -114,6 +115,7 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
       <Text
         style={
           Object {
+            "color": "#FFFFFF",
             "fontFamily": "Inter-SemiBold",
             "fontSize": 12,
             "lineHeight": 19.36,
@@ -126,7 +128,7 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
         style={
           Object {
             "alignSelf": "center",
-            "backgroundColor": "#1E1F20",
+            "backgroundColor": "#A5ACB8",
             "borderRadius": 2,
             "height": 3,
             "marginLeft": 5,
@@ -139,6 +141,7 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
         style={
           Object {
             "alignSelf": "center",
+            "color": "#A5ACB8",
             "fontFamily": "Inter-ExtraLight",
             "fontSize": 10,
             "lineHeight": 12.19,
@@ -151,6 +154,7 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
     <Text
       style={
         Object {
+          "color": "#FFFFFF",
           "fontFamily": "Inter-Regular",
           "fontSize": 16,
           "lineHeight": 19.36,

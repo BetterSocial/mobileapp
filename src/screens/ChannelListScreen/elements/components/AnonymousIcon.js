@@ -12,7 +12,7 @@ const AnonymousIcon = ({color, emojiCode, size, withBorder = false}) => {
       borderRadius: size / 2,
       right: 0,
       borderWidth: withBorder ? 2 : 0,
-      borderColor: COLORS.white,
+      borderColor: COLORS.almostBlack,
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',

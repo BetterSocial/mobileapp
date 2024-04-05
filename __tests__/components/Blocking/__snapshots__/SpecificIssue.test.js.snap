@@ -67,7 +67,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
       onStartShouldSetResponderCapture={[Function]}
       style={
         Object {
-          "backgroundColor": "#fff",
+          "backgroundColor": "#16202A",
           "borderTopLeftRadius": 20,
           "borderTopRightRadius": 20,
           "height": "auto",
@@ -104,7 +104,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
                 "width": 35,
               },
               Object {
-                "backgroundColor": "#F5F6F7",
+                "backgroundColor": "#1E3343",
                 "width": 60,
               },
             ]
@@ -115,7 +115,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
         <Text
           style={
             Object {
-              "color": "#1E1F20",
+              "color": "#FFFFFF",
               "fontFamily": "Inter-Bold",
               "fontSize": 18,
               "marginLeft": 21,
@@ -131,12 +131,15 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
           onChangeText={[Function]}
           placeholder="Please provide more details to inform our
  team (min. 50 characters)"
+          placeholderTextColor="#7E8FA0"
           rejectResponderTermination={true}
           style={
             Object {
-              "backgroundColor": "#F5F6F7",
+              "backgroundColor": "#1E3343",
+              "borderColor": "#2A3D50",
               "borderRadius": 8,
-              "color": "#828282",
+              "borderWidth": 1,
+              "color": "#FFFFFF",
               "fontFamily": "Inter-Regular",
               "height": 233,
               "marginLeft": 17,
@@ -163,7 +166,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
           onStartShouldSetResponder={[Function]}
           style={
             Object {
-              "backgroundColor": "#F5F6F7",
+              "backgroundColor": "#1E3343",
               "flexDirection": "row",
               "justifyContent": "space-between",
               "marginVertical": 22,
@@ -177,7 +180,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
           <Text
             style={
               Object {
-                "color": "#1E1F20",
+                "color": "#FFFFFF",
                 "fontFamily": "Inter-Bold",
                 "fontSize": 14,
               }
@@ -186,7 +189,7 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
             Skip & just block this account
           </Text>
           <Icon
-            color="#1E1F20"
+            color="#FFFFFF"
             name="chevron-right"
             size={17}
           />
@@ -226,14 +229,28 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
           >
             <Text
               style={
-                Object {
-                  "color": "#FFFFFF",
-                  "fontFamily": "Inter-SemiBold",
-                  "fontSize": 18,
-                }
+                Array [
+                  Object {
+                    "color": "#FFFFFF",
+                    "fontFamily": "Inter-SemiBold",
+                    "fontSize": 18,
+                  },
+                  Object {},
+                ]
               }
             >
-              <Text>
+              <Text
+                style={
+                  Object {
+                    "color": "#FFFFFF",
+                    "fontFamily": "Inter-Medium",
+                    "fontSize": 16,
+                    "marginBottom": 19,
+                    "marginLeft": 18,
+                    "marginRight": 22,
+                  }
+                }
+              >
                 File Report
               </Text>
             </Text>
