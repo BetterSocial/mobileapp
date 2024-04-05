@@ -43,8 +43,8 @@ const LinkAndSocialMedia: React.FC<LinkProps> = ({username}) => {
     <View
       style={{
         borderWidth: 1,
-        borderColor: COLORS.gray200,
-        backgroundColor: COLORS.gray100,
+        borderColor: COLORS.gray210,
+        backgroundColor: COLORS.gray110,
         borderRadius: 10,
         marginTop: 19,
         padding: 12
@@ -52,7 +52,7 @@ const LinkAndSocialMedia: React.FC<LinkProps> = ({username}) => {
       <Text style={styles.linkAndSocialMediaTitle}>Receive incognito messages anywhere!</Text>
       <Text
         style={{
-          color: COLORS.gray500,
+          color: COLORS.gray510,
           fontFamily: fonts.inter[400],
           fontSize: 12,
           paddingVertical: 8,
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   },
   copyLinkContainer: {
     borderWidth: 1,
-    borderColor: COLORS.gray200,
+    borderColor: COLORS.gray210,
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     padding: 10,
     flex: 1,
     fontFamily: fonts.inter[600],
-    color: COLORS.gray500,
+    color: COLORS.gray510,
     fontSize: 12
   }
 });

@@ -245,9 +245,9 @@ const OtherProfile = () => {
         <View
           style={{
             ...styles.btnMsg(isAnonimity),
-            borderColor: COLORS.gray400
+            borderColor: COLORS.gray410
           }}>
-          <BlockIcon width={20} height={20} style={{color: COLORS.gray400}} />
+          <BlockIcon width={20} height={20} style={{color: COLORS.gray410}} />
         </View>
       );
     };
@@ -631,7 +631,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.gray100
+    borderBottomColor: COLORS.gray110
   },
   dummyItem: (heightItem) => ({
     height: heightItem
@@ -694,7 +694,7 @@ const styles = StyleSheet.create({
   },
   tabs: {
     width,
-    borderBottomColor: COLORS.gray100,
+    borderBottomColor: COLORS.gray110,
     borderBottomWidth: 1,
     paddingLeft: 20,
     paddingRight: 20,
@@ -771,7 +771,7 @@ const styles = StyleSheet.create({
   },
   tabsFixed: {
     width,
-    borderBottomColor: COLORS.gray100,
+    borderBottomColor: COLORS.gray110,
     borderBottomWidth: 1,
     paddingLeft: 20,
     paddingRight: 20,

@@ -42,6 +42,7 @@ export const COLORS = {
   gray400: '#8C939F',
   gray410: '#7E8FA0',
   gray500: '#69707C',
+  gray510: '#A5ACB8',
   almostBlack: '#16202A',
   darkGray: '#394756',
   darkGray2: '#394756',

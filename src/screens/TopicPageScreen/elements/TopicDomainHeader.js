@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(12),
     fontFamily: fonts.inter[400],
     textAlign: 'left',
-    color: isHeaderHide ? COLORS.white : COLORS.gray400
+    color: isHeaderHide ? COLORS.white : COLORS.gray410
   }),
   seeMemberText: (followType) => ({
     fontSize: normalizeFontSize(12),

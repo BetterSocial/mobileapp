@@ -48,7 +48,7 @@ const EditGroup = ({
     }
     return (
       <View testID="imagePencil">
-        <MemoIc_pencil width={25} height={25} color={COLORS.gray100} />
+        <MemoIc_pencil width={25} height={25} color={COLORS.gray110} />
       </View>
     );
   };
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.anon_primary,
     borderTopWidth: 1,
-    borderTopColor: COLORS.gray100,
+    borderTopColor: COLORS.gray110,
     paddingVertical: 10,
     paddingHorizontal: 15
   },
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     width: normalize(48),
     height: normalize(48),
     borderRadius: normalize(24),
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 17

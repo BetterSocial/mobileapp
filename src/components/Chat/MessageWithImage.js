@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20
   },
   containerChat: (isMe) => ({
-    backgroundColor: isMe ? COLORS.halfBaked : COLORS.gray100,
+    backgroundColor: isMe ? COLORS.halfBaked : COLORS.gray110,
     paddingVertical: 8,
     paddingHorizontal: 4,
     flex: 1,

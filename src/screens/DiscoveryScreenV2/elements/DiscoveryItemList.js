@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     height: 48,
     borderRadius: 24,
     resizeMode: 'cover',
-    borderColor: COLORS.gray100,
+    borderColor: COLORS.gray110,
     borderWidth: 1,
     marginLeft: 2,
     marginTop: 2
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
   textProfileFullName: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.gray500,
+    color: COLORS.gray510,
     flexWrap: 'wrap',
     lineHeight: 18,
     marginTop: 4
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
   domainDescription: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.gray500,
+    color: COLORS.gray510,
     flexWrap: 'wrap',
     lineHeight: 18,
     marginTop: 4

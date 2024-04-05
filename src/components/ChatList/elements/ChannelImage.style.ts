@@ -36,7 +36,7 @@ export const channelImageStyles = StyleSheet.create({
     height: dimen.normalizeDimen(50)
   },
   containerGrey: {
-    backgroundColor: COLORS.gray100
+    backgroundColor: COLORS.gray110
   },
   containerGreen: {
     backgroundColor: COLORS.bondi_blue

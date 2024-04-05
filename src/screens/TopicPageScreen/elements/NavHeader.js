@@ -208,7 +208,7 @@ const NavHeader = (props) => {
           style={{
             width: '100%',
             borderBottomWidth: 1,
-            borderBottomColor: COLORS.gray200
+            borderBottomColor: COLORS.gray210
           }}>
           <Search
             searchText={searchText}
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
   container: (animatedHeight) => ({
     width: '100%',
     height: animatedHeight,
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     position: 'absolute',
     zIndex: 80,
     overflow: 'hidden'

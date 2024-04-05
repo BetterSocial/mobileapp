@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     lineHeight: 18
   },
   topicSuggestionContainer: {marginBottom: 5},
-  view: {height: 1, marginTop: 5, backgroundColor: COLORS.gray100}
+  view: {height: 1, marginTop: 5, backgroundColor: COLORS.gray110}
 });
 
 export default TopicSuggestions;

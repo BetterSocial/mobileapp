@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   },
   wrapperSearch: {
     flex: 1,
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     marginLeft: 20,
     marginRight: 20,
     borderRadius: 8,
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     paddingBottom: 0,
     alignSelf: 'center',
-    color: COLORS.gray400
+    color: COLORS.gray410
   },
   wrapperIcon: {
     marginLeft: 8,
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     paddingTop: 7,
     paddingBottom: 7,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.gray100,
+    borderBottomColor: COLORS.gray110,
     height: 50
   })
 });

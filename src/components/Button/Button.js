@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     color: COLORS.gray310
   },
   disabledbutton: {
-    backgroundColor: COLORS.gray200,
+    backgroundColor: COLORS.gray210,
     borderRadius: dimen.normalizeDimen(8)
   }
 });

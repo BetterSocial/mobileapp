@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     // height: 36,
     paddingTop: 0,
     paddingBottom: 0,
-    color: COLORS.gray400,
+    color: COLORS.gray410,
     alignSelf: 'center'
   },
   wrapperIcon: {

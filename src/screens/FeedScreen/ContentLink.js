@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     fontSize: normalizeFontSizeByWidth(16),
     letterSpacing: 0.1,
-    color: COLORS.white2
+    color: COLORS.white
   },
   topicStyle: {
     position: 'relative',

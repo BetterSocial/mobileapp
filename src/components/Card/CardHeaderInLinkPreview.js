@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
   cardHeaderDate: {
     fontSize: 12,
-    color: COLORS.gray400,
+    color: COLORS.gray410,
     fontFamily: fonts.inter[400]
     // lineHeight: 12.1,
   },

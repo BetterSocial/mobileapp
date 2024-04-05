@@ -19,7 +19,7 @@ const S = StyleSheet.create({
   toptabcontainer: {
     flexDirection: 'row',
     backgroundColor: COLORS.almostBlack,
-    borderBottomColor: COLORS.gray200,
+    borderBottomColor: COLORS.gray210,
     borderBottomWidth: 1,
     paddingHorizontal: dimen.normalizeDimen(4)
   },
@@ -34,7 +34,7 @@ const S = StyleSheet.create({
     textAlign: 'center',
     fontSize: normalizeFontSize(14),
     paddingVertical: dimen.normalizeDimen(10),
-    color: COLORS.gray400
+    color: COLORS.gray410
   },
 
   viewborderbottom: {

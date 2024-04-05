@@ -62,7 +62,7 @@ const UserItem = ({type, username, profilePicture, isFollowing, onPress}: UserIt
           style={{
             fontFamily: fonts.inter[400],
             fontSize: 12,
-            color: COLORS.gray400,
+            color: COLORS.gray410,
             marginTop: 4,
             lineHeight: 18
           }}>

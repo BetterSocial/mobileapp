@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
     marginBottom: 12
   },
   containerDate: {
-    backgroundColor: COLORS.gray400,
+    backgroundColor: COLORS.gray410,
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 19,

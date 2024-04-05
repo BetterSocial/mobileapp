@@ -353,7 +353,7 @@ const _renderProfileNormal = ({
                   fontWeight: 'bold',
                   fontSize: 14,
                   lineHeight: 16.94,
-                  color: COLORS.white2
+                  color: COLORS.white
                 }}>
                 {username || StringConstant.feedDeletedUserName}
               </Text>
@@ -534,7 +534,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.gray400,
+    color: COLORS.gray410,
     lineHeight: 18
   },
   point: {
@@ -561,7 +561,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 12,
     lineHeight: 18,
-    color: COLORS.gray400
+    color: COLORS.gray410
   },
   usernameComment: {
     fontFamily: fonts.inter[500],
@@ -574,7 +574,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[500],
     fontSize: 12,
     lineHeight: 24,
-    color: COLORS.gray400
+    color: COLORS.gray410
   },
   item: {
     width: screenWidth - 20,
@@ -602,13 +602,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   textFollow: (isShortText) => ({
-    color: isShortText ? COLORS.white2 : COLORS.bluePrimary,
+    color: isShortText ? COLORS.white : COLORS.bluePrimary,
     fontSize: normalizeFontSize(14),
     fontStyle: 'normal',
     fontWeight: '500'
   }),
   textFollowing: {
-    color: COLORS.gray400,
+    color: COLORS.gray410,
     fontSize: normalizeFontSize(14),
     fontStyle: 'normal',
     fontWeight: '500'

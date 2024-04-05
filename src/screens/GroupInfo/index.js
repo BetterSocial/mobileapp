@@ -122,7 +122,7 @@ const GroupInfo = () => {
     }
     return (
       <View testID="image5" style={styles.btnUpdatePhoto}>
-        <MemoIc_pencil width={50} height={50} color={COLORS.gray100} />
+        <MemoIc_pencil width={50} height={50} color={COLORS.gray110} />
       </View>
     );
   };
@@ -195,7 +195,7 @@ const GroupInfo = () => {
                   </Text>
                 </View>
                 <TouchableOpacity onPress={handleOnNameChange} style={styles.pencilIconTouchable}>
-                  <MemoIc_pencil width={20} height={20} color={COLORS.gray100} />
+                  <MemoIc_pencil width={20} height={20} color={COLORS.gray110} />
                 </TouchableOpacity>
               </View>
               <View style={styles.lineTop} />
@@ -323,7 +323,7 @@ export const styles = StyleSheet.create({
   },
   btnAdd: {
     padding: normalize(8),
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     width: 'auto',
     justifyContent: 'center',
     alignItems: 'center',
@@ -372,7 +372,7 @@ export const styles = StyleSheet.create({
     color: COLORS.black
   },
   lineTop: {
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     height: 1
   },
   containerGroupName: {
@@ -391,7 +391,7 @@ export const styles = StyleSheet.create({
     width: normalize(100),
     height: normalize(100),
     borderRadius: normalize(50),
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -423,7 +423,7 @@ export const styles = StyleSheet.create({
   },
   gap: {
     height: 1,
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     marginTop: 50
   },
   actionGroup: {

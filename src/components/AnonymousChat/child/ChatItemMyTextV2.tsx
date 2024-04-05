@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     marginLeft: 5,
     marginRight: 5,
-    backgroundColor: COLORS.gray500,
+    backgroundColor: COLORS.gray510,
     alignSelf: 'center'
   },
   timeText: {
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     lineHeight: 12.19,
     alignSelf: 'center',
-    color: COLORS.gray500
+    color: COLORS.gray510
   },
   icon: {
     alignSelf: 'flex-end',

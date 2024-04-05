@@ -197,7 +197,7 @@ const DiscoverySearch = ({
             returnKeyType="search"
             onSubmitEditing={handleOnSubmitEditing}
             placeholder={placeholderText}
-            placeholderTextColor={COLORS.gray400}
+            placeholderTextColor={COLORS.gray410}
             style={styles.input}
             keyboardAppearance="dark"
           />
@@ -208,12 +208,12 @@ const DiscoverySearch = ({
             onPress={handleOnClearText}
             style={styles.clearIconContainer}
             android_ripple={{
-              color: COLORS.gray100,
+              color: COLORS.gray110,
               borderless: true,
               radius: 35
             }}>
             <View style={styles.wrapperDeleteIcon}>
-              <IconClear width={9} height={10} fill={COLORS.gray400} />
+              <IconClear width={9} height={10} fill={COLORS.gray410} />
             </View>
           </TouchableOpacity>
         </View>
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
   },
   wrapperSearch: {
     flex: 1,
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     borderRadius: dimen.normalizeDimen(12),
     alignSelf: 'center',
     flexDirection: 'row',
@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
     height: dimen.size.DISCOVERY_HEADER_HEIGHT,
     paddingVertical: dimen.normalizeDimen(7),
     borderBottomWidth: hideBackIcon ? 0 : dimen.normalizeDimen(1),
-    borderBottomColor: COLORS.gray100
+    borderBottomColor: COLORS.gray110
   })
 });
 

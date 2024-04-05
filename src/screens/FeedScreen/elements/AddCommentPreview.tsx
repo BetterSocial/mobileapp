@@ -64,7 +64,7 @@ function AddCommentPreview({
             </View>
             <TextInput
               placeholder={StringConstant.commentBoxDefaultPlaceholder}
-              placeholderTextColor={COLORS.blackgrey}
+              placeholderTextColor={COLORS.gray410}
               textAlignVertical="center"
               pointerEvents={'none'}
               style={{

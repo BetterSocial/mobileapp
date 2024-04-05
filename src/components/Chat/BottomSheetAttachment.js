@@ -62,7 +62,7 @@ const BottomSheetAttachment = React.forwardRef((props, ref) => (
             styles.card,
             {
               borderBottomWidth: 1,
-              borderBottomColor: COLORS.gray200
+              borderBottomColor: COLORS.gray210
             }
           ]}>
           <View style={styles.wrapCardImage}>
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     borderTopWidth: 1,
-    borderTopColor: COLORS.gray200
+    borderTopColor: COLORS.gray210
   },
   wrapCardImage: {
     flexDirection: 'row',

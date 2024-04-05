@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     lineHeight: 14.52,
     fontSize: 12,
     fontFamily: fonts.inter[400],
-    color: COLORS.gray400
+    color: COLORS.gray410
   },
   wrapperItem: {backgroundColor: 'white', marginBottom: 16},
   wrapperImage: {
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     width: 3,
     height: 3,
     borderRadius: 4,
-    backgroundColor: COLORS.gray400,
+    backgroundColor: COLORS.gray410,
     marginLeft: 6,
     marginRight: 6,
     marginTop: 1

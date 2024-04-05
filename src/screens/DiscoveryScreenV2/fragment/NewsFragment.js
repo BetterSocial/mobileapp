@@ -139,7 +139,7 @@ const NewsFragment = ({
 const styles = StyleSheet.create({
   fragmentContainer: {
     flex: 1,
-    backgroundColor: COLORS.gray100
+    backgroundColor: COLORS.gray110
   },
   noDataFoundContainer: {
     flex: 1,

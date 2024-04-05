@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   },
   wrapperSearch: {
     flexDirection: 'row',
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     marginLeft: 20,
     marginRight: 12,
     borderRadius: 12,
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 14,
     alignSelf: 'center',
-    color: COLORS.gray400
+    color: COLORS.gray410
   },
   wrapperIcon: {
     marginLeft: 8,

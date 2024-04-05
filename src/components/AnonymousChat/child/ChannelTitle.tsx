@@ -34,7 +34,7 @@ const ChannelTitle = ({
       fontSize: normalize(14),
       lineHeight: 22,
       marginLeft: 20,
-      color: COLORS.gray500,
+      color: COLORS.gray510,
       alignSelf: 'flex-start'
     },
     chatContentMessage: {
@@ -44,7 +44,7 @@ const ChannelTitle = ({
       alignSelf: 'center',
       flex: 1,
       marginRight: 4,
-      color: COLORS.gray500
+      color: COLORS.gray510
     },
     chatContentUnreadCountContainer: {
       backgroundColor: isAnonymousTab ? COLORS.anon_secondary : COLORS.signed_secondary,

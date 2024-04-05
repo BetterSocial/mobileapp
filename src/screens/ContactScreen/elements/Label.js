@@ -4,7 +4,7 @@ import {COLORS} from '../../../utils/theme';
 
 const Label = ({
   label,
-  containerBgColor = COLORS.gray100,
+  containerBgColor = COLORS.gray110,
   titleHeaderColor = COLORS.almostBlackSmoke,
   textColor = COLORS.white
 }) => (

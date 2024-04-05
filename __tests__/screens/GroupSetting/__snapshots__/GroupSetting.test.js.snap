@@ -128,7 +128,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
         style={
           Object {
             "backgroundColor": "#00ABB2",
-            "borderTopColor": "#F5F6F7",
+            "borderTopColor": "#1E3343",
             "borderTopWidth": 1,
             "paddingHorizontal": 15,
             "paddingVertical": 10,
@@ -157,7 +157,7 @@ exports[`GroupSetting should be run correctly Should match snapshot 1`] = `
             style={
               Object {
                 "alignItems": "center",
-                "backgroundColor": "#F5F6F7",
+                "backgroundColor": "#1E3343",
                 "borderRadius": 21.6,
                 "height": 43.2,
                 "justifyContent": "center",

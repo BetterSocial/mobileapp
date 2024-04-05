@@ -160,9 +160,9 @@ const BioAndChat = (props) => {
 
 const styles = StyleSheet.create({
   bioAndSendChatContainer: {
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     borderWidth: 1,
-    borderColor: COLORS.gray200,
+    borderColor: COLORS.gray210,
     borderRadius: 15,
     paddingHorizontal: 10,
     paddingTop: 10

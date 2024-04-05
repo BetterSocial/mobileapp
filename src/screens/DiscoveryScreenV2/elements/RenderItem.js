@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     borderRadius: SIZES.radius,
     backgroundColor: COLORS.almostBlack,
     elevation: 0.0,
-    borderColor: COLORS.gray400,
+    borderColor: COLORS.gray410,
     paddingBottom: 16,
     marginHorizontal: 16
   },

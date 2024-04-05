@@ -53,7 +53,7 @@ const RenderItemHeader = ({
             {calculateTime(item?.content?.created_at)}
           </Text>
           <View style={styles.point} />
-          <MemoPeopleFollow height={normalize(13)} width={normalize(12)} fill={COLORS.gray400} />
+          <MemoPeopleFollow height={normalize(13)} width={normalize(12)} fill={COLORS.gray410} />
           <Gap style={{width: 3.33}} />
           <Text style={styles.headerFollowerText}>{follower}</Text>
           <View style={styles.point} />
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     alignItems: 'center',
     borderBottomWidth: 0.5,
-    borderBottomColor: COLORS.gray200,
+    borderBottomColor: COLORS.gray210,
     paddingBottom: 8,
     paddingTop: 8
   },
@@ -124,11 +124,11 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(12),
     lineHeight: normalizeFontSize(18),
-    color: COLORS.gray400,
+    color: COLORS.gray410,
     flexShrink: 1
   },
   headerFollowerText: {
-    color: COLORS.gray400,
+    color: COLORS.gray410,
     fontSize: normalizeFontSize(12),
     fontFamily: fonts.inter[700]
   },
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     width: 2,
     height: 2,
     borderRadius: 4,
-    backgroundColor: COLORS.gray400,
+    backgroundColor: COLORS.gray410,
     marginLeft: 5,
     marginRight: 5
   },

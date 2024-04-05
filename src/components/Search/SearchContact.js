@@ -27,7 +27,7 @@ const Search = ({animatedValue, text, setText}) => {
 const styles = StyleSheet.create({
   wrapperSearch: {
     flex: 1,
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     marginHorizontal: 12,
     borderRadius: SIZES.radius,
     alignSelf: 'center',
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     zIndex: 10,
     padding: 7,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.gray100
+    borderBottomColor: COLORS.gray110
   })
 });
 

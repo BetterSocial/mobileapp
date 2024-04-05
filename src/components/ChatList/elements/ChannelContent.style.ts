@@ -19,14 +19,14 @@ export const channelContentStyles = StyleSheet.create({
     alignSelf: 'center',
     flex: 1,
     marginRight: 4,
-    color: COLORS.gray500
+    color: COLORS.gray510
   },
   time: {
     fontFamily: fonts.poppins[400],
     fontSize: normalize(14),
     lineHeight: 22,
     marginLeft: 20,
-    color: COLORS.gray500,
+    color: COLORS.gray510,
     alignSelf: 'flex-start'
   },
   containerBadge: {

@@ -44,7 +44,7 @@ exports[`TESTING ChatItemTargetText RENDER ANON_PM should match snapshot 1`] = `
         style={
           Object {
             "alignSelf": "flex-start",
-            "color": "#69707C",
+            "color": "#A5ACB8",
             "fontFamily": "Poppins-Regular",
             "fontSize": 12.600000000000001,
             "lineHeight": 22,
@@ -69,7 +69,7 @@ exports[`TESTING ChatItemTargetText RENDER ANON_PM should match snapshot 1`] = `
         style={
           Object {
             "alignSelf": "center",
-            "color": "#69707C",
+            "color": "#A5ACB8",
             "flex": 1,
             "fontFamily": "Inter-Regular",
             "fontSize": 12.600000000000001,
@@ -129,7 +129,7 @@ exports[`TESTING ChatItemTargetText RENDER ANON_PM with isMe should match snapsh
         style={
           Object {
             "alignSelf": "flex-start",
-            "color": "#69707C",
+            "color": "#A5ACB8",
             "fontFamily": "Poppins-Regular",
             "fontSize": 12.600000000000001,
             "lineHeight": 22,
@@ -154,7 +154,7 @@ exports[`TESTING ChatItemTargetText RENDER ANON_PM with isMe should match snapsh
         style={
           Object {
             "alignSelf": "center",
-            "color": "#69707C",
+            "color": "#A5ACB8",
             "flex": 1,
             "fontFamily": "Inter-Regular",
             "fontSize": 12.600000000000001,
@@ -214,7 +214,7 @@ exports[`TESTING ChatItemTargetText RENDER ANON_PM with unreadcount should match
         style={
           Object {
             "alignSelf": "flex-start",
-            "color": "#69707C",
+            "color": "#A5ACB8",
             "fontFamily": "Poppins-Regular",
             "fontSize": 12.600000000000001,
             "lineHeight": 22,
@@ -239,7 +239,7 @@ exports[`TESTING ChatItemTargetText RENDER ANON_PM with unreadcount should match
         style={
           Object {
             "alignSelf": "center",
-            "color": "#69707C",
+            "color": "#A5ACB8",
             "flex": 1,
             "fontFamily": "Inter-Regular",
             "fontSize": 12.600000000000001,
@@ -340,7 +340,7 @@ exports[`TESTING ChatItemTargetText RENDER MY_ANON_POST with no messages should 
         style={
           Object {
             "alignSelf": "flex-start",
-            "color": "#69707C",
+            "color": "#A5ACB8",
             "fontFamily": "Poppins-Regular",
             "fontSize": 12.600000000000001,
             "lineHeight": 22,
@@ -415,7 +415,7 @@ exports[`TESTING ChatItemTargetText RENDER MY_ANON_POST_NOTIFICATION should matc
         style={
           Object {
             "alignSelf": "flex-start",
-            "color": "#69707C",
+            "color": "#A5ACB8",
             "fontFamily": "Poppins-Regular",
             "fontSize": 12.600000000000001,
             "lineHeight": 22,
@@ -490,7 +490,7 @@ exports[`TESTING ChatItemTargetText RENDER MY_ANON_POST_NOTIFICATION_I_COMMENTED
         style={
           Object {
             "alignSelf": "flex-start",
-            "color": "#69707C",
+            "color": "#A5ACB8",
             "fontFamily": "Poppins-Regular",
             "fontSize": 12.600000000000001,
             "lineHeight": 22,
@@ -565,7 +565,7 @@ exports[`TESTING ChatItemTargetText RENDER other type post with messages should 
         style={
           Object {
             "alignSelf": "flex-start",
-            "color": "#69707C",
+            "color": "#A5ACB8",
             "fontFamily": "Poppins-Regular",
             "fontSize": 12.600000000000001,
             "lineHeight": 22,
@@ -639,7 +639,7 @@ exports[`TESTING ChatItemTargetText RENDER other type post with no messages shou
         style={
           Object {
             "alignSelf": "flex-start",
-            "color": "#69707C",
+            "color": "#A5ACB8",
             "fontFamily": "Poppins-Regular",
             "fontSize": 12.600000000000001,
             "lineHeight": 22,
@@ -713,7 +713,7 @@ exports[`TESTING ChatItemTargetText RENDER other type post with unreadcount shou
         style={
           Object {
             "alignSelf": "flex-start",
-            "color": "#69707C",
+            "color": "#A5ACB8",
             "fontFamily": "Poppins-Regular",
             "fontSize": 12.600000000000001,
             "lineHeight": 22,

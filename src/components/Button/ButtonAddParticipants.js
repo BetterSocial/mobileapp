@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   btnAdd: {
     paddingHorizontal: 8,
     paddingVertical: 8,
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     width: 'auto',
     justifyContent: 'center',
     alignItems: 'center',

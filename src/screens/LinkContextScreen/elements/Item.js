@@ -109,7 +109,7 @@ const LinkContextItem = ({
         style={{
           height: 6,
           width: '100%',
-          backgroundColor: COLORS.gray100
+          backgroundColor: COLORS.gray110
         }}
       />
 

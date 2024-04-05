@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
   dot: {
     fontFamily: fonts.inter[700],
     fontSize: normalizeFontSize(12),
-    color: COLORS.gray400
+    color: COLORS.gray410
   }
 });
 

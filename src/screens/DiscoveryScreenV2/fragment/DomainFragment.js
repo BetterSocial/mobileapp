@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600]
   },
   unfollowedHeaderContainer: {
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     height: 40,
     display: 'flex',
     flexDirection: 'column',

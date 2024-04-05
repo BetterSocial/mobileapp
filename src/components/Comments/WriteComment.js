@@ -90,8 +90,8 @@ const WriteComment = ({
             value={isAnonimity}
             onValueChange={toggleSwitch}
             labelLeft={withAnonymityLabel ? 'Incognito' : null}
-            backgroundActive={COLORS.gray100}
-            backgroundInactive={COLORS.gray100}
+            backgroundActive={COLORS.gray110}
+            backgroundInactive={COLORS.gray110}
             isDisabled={isViewOnly}
           />
         </View>
@@ -123,7 +123,7 @@ const WriteComment = ({
           testID="changeinput"
           ref={commentInputRef}
           placeholder={StringConstant.commentBoxDefaultPlaceholder}
-          placeholderTextColor={COLORS.gray400}
+          placeholderTextColor={COLORS.gray410}
           style={[styles.text, styles.content(isViewOnly)]}
           onChangeText={onChangeText}
           value={value}
@@ -166,7 +166,7 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     borderTopWidth: 1,
-    borderTopColor: COLORS.gray200,
+    borderTopColor: COLORS.gray210,
     // zIndex: 1,
     paddingTop: dimen.normalizeDimen(5),
     paddingBottom: dimen.normalizeDimen(10)
@@ -194,7 +194,7 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     lineHeight: 12,
     fontSize: 12,
-    color: COLORS.gray400
+    color: COLORS.gray410
   },
   replyToUsername: {
     fontFamily: fonts.inter[600],
@@ -215,7 +215,7 @@ export const styles = StyleSheet.create({
   content: (isViewOnly) => ({
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     marginLeft: 8,
     borderRadius: 8,
     paddingLeft: 6,
@@ -225,7 +225,7 @@ export const styles = StyleSheet.create({
     height: isViewOnly ? 36 : undefined
   }),
   btn: (isDisableSubmit) => ({
-    backgroundColor: !isDisableSubmit ? COLORS.bondi_blue : COLORS.gray100,
+    backgroundColor: !isDisableSubmit ? COLORS.bondi_blue : COLORS.gray110,
     borderRadius: 18,
     width: 35,
     height: 35,
@@ -248,7 +248,7 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: fonts.inter[400],
     color: COLORS.black,
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     maxHeight: 100,
     paddingTop: Platform.OS === 'ios' ? 10 : 5,
     paddingBottom: Platform.OS === 'ios' ? 10 : 5

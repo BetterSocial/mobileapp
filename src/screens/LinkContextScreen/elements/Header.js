@@ -116,7 +116,7 @@ const Header = ({item, image, name, time, showBackButton, follow, setFollow}) =>
                 {calculateTime(time)}
               </Text>
               <View style={styles.point} />
-              <MemoPeopleFollow height={13} width={12} fill={COLORS.gray400} />
+              <MemoPeopleFollow height={13} width={12} fill={COLORS.gray410} />
               <Gap style={{width: 3.33}} />
               <Text style={styles.headerFollowerText}>12k</Text>
               <View style={styles.point} />
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     alignItems: 'center',
     borderBottomWidth: 0.5,
-    borderBottomColor: COLORS.gray200,
+    borderBottomColor: COLORS.gray210,
     paddingBottom: 8,
     paddingTop: 8,
     backgroundColor: COLORS.almostBlack
@@ -201,11 +201,11 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(12),
     lineHeight: normalizeFontSize(18),
-    color: COLORS.gray400,
+    color: COLORS.gray410,
     flexShrink: 1
   },
   headerFollowerText: {
-    color: COLORS.gray400,
+    color: COLORS.gray410,
     fontSize: 12,
     fontFamily: fonts.inter[700]
   },
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
     width: 3,
     height: 3,
     borderRadius: 4,
-    backgroundColor: COLORS.gray400,
+    backgroundColor: COLORS.gray410,
     marginLeft: 8,
     marginRight: 8
   },

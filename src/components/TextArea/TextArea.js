@@ -34,7 +34,7 @@ const TextArea = ({
 
 const styles = StyleSheet.create({
   input: {
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     paddingVertical: 16,
     paddingHorizontal: 12,
     height: 150,

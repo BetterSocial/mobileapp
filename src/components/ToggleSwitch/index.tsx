@@ -62,20 +62,20 @@ const styles = StyleSheet.create({
     position: 'relative',
     borderRadius: dimen.normalizeDimen(12),
     borderWidth: 1,
-    borderColor: COLORS.gray200,
+    borderColor: COLORS.gray210,
     backgroundColor: COLORS.almostBlack,
     height: dimen.normalizeDimen(22),
     width: dimen.normalizeDimen(42)
   },
   labelLeft: {
     marginRight: dimen.normalizeDimen(5),
-    color: COLORS.gray400,
+    color: COLORS.gray410,
     fontSize: normalizeFontSize(8),
     fontFamily: fonts.inter[400]
   },
   labelRight: {
     marginLeft: dimen.normalizeDimen(5),
-    color: COLORS.gray400,
+    color: COLORS.gray410,
     fontSize: normalizeFontSize(8),
     fontFamily: fonts.inter[400]
   }

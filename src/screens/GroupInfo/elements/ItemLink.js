@@ -29,7 +29,7 @@ export default ItemLink;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     borderRadius: 8,
     marginBottom: 8,
     paddingHorizontal: 4,
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 12,
     lineHeight: 18,
-    color: COLORS.gray400
+    color: COLORS.gray410
   },
   link: {
     fontFamily: fonts.inter[400],
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 4
   },
   detail: {
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     borderRadius: 4,
     flexDirection: 'row',
     justifyContent: 'space-between'

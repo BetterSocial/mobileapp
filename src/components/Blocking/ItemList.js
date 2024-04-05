@@ -30,7 +30,7 @@ export default ItemList;
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 18,
-    borderBottomColor: COLORS.gray200,
+    borderBottomColor: COLORS.gray210,
     borderBottomWidth: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',

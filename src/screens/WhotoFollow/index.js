@@ -337,7 +337,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(24),
-    color: COLORS.gray500,
+    color: COLORS.gray510,
     marginTop: dimen.normalizeDimen(8),
     marginBottom: dimen.normalizeDimen(24),
     paddingHorizontal: dimen.normalizeDimen(20)
@@ -376,7 +376,7 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(10),
     fontFamily: fonts.inter[400],
     textAlign: 'center',
-    color: COLORS.gray500
+    color: COLORS.gray510
   }
 });
 export default WhotoFollow;
