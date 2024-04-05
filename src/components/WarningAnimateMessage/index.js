@@ -101,9 +101,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     width: 259,
     backgroundColor: COLORS.almostBlack,
-    borderColor: COLORS.gray110,
+    borderColor: COLORS.gray210,
     borderWidth: 1
   },
+  // TODO: Garry overlay tidak sampai bawah
   parentContainer: {
     position: 'absolute',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',

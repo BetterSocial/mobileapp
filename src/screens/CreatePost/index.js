@@ -749,6 +749,10 @@ const CreatePost = () => {
             </Animated.View>
           )}
 
+          {/* TODO: Garry
+          Outline 210
+          text 510
+          link signed_primary ikutin mode */}
           {isLinkPreviewShown && (
             <ContentLink
               og={
@@ -920,7 +924,7 @@ const styles = StyleSheet.create({
     height
   }),
   reminderContainer: {
-    backgroundColor: COLORS.anon_primary,
+    backgroundColor: COLORS.anon_secondary,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 7,

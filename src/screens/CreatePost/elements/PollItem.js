@@ -19,6 +19,7 @@ export default function PollItem({
   const [isTextInputFocus, setIsTextInputFocus] = React.useState(false);
 
   return (
+    // TODO: Garry warna focus sesuai mode
     <View style={isTextInputFocus ? S.focuspollitemcontainer : S.pollitemcontainer}>
       <TextInput
         placeholderTextColor={COLORS.gray410}
@@ -42,7 +43,12 @@ export default function PollItem({
       )}
       {showdeleteicon && (
         <TouchableOpacity style={S.removepollcontainer} onPress={() => onremovepoll(index)}>
-          <MemoIcClearCircle width={20} height={20} style={S.removepollicon} />
+          <MemoIcClearCircle
+            width={20}
+            height={20}
+            style={S.removepollicon}
+            fill={COLORS.gray410}
+          />
         </TouchableOpacity>
       )}
     </View>
@@ -54,7 +60,7 @@ const S = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     borderWidth: 1,
-    borderColor: COLORS.balance_gray,
+    borderColor: COLORS.gray210,
     borderRadius: 10,
     marginVertical: dimen.normalizeDimen(4),
     paddingHorizontal: dimen.normalizeDimen(8)
@@ -67,7 +73,7 @@ const S = StyleSheet.create({
     borderRadius: 10,
     marginVertical: dimen.normalizeDimen(4),
     paddingHorizontal: dimen.normalizeDimen(8),
-    borderColor: COLORS.anon_primary
+    borderColor: COLORS.signed_primary
   },
 
   pollitemtextinput: {

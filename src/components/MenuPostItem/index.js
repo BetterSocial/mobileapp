@@ -10,6 +10,8 @@ const MenuPostItem = ({icon, label, labelStyle, onPress, topic, listTopic}) => {
       <Pressable style={styles.containerTopic} onPress={onPress} hitSlop={{bottom: 0, top: 0}}>
         <View style={styles.content}>
           <TouchableOpacity onPress={onPress}>{icon}</TouchableOpacity>
+          {/* TODO: Garry gray410 */}
+          {/* <Text style={[styles.text, labelStyle]}>Select Communities</Text> */}
           {listTopic}
         </View>
       </Pressable>
@@ -49,5 +51,7 @@ const styles = StyleSheet.create({
     borderRadius: 8
   },
   content: {flexDirection: 'row', alignItems: 'center', flex: 1},
-  text: {marginLeft: 12}
+  text: {
+    marginLeft: 12
+  }
 });

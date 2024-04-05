@@ -11,6 +11,7 @@ import {fonts} from '../../../utils/fonts';
 import {getTopics} from '../../../service/topics';
 import {isEmptyOrSpaces} from '../../../utils/Utils';
 import {COLORS} from '../../../utils/theme';
+import dimen from '../../../utils/dimen';
 
 const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics}) => {
   const [dataTopic, setTopic] = React.useState('');
@@ -154,7 +155,7 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics}) => {
               </View>
             )}
             {topicSuggestion.length > 0 && (
-              <Card>
+              <Card style={{marginTop: dimen.normalizeDimen(8)}}>
                 {topicSuggestion.map((item, index) => (
                   <TouchableNativeFeedback
                     key={`topicSuggestions-${index}`}
@@ -189,6 +190,7 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics}) => {
           <Text style={styles.textDesc}>
             Hit space to finish adding a community. Add up to 5 communities.
           </Text>
+          {/* TODO: Garry ganti warna sesuai signed/incognito */}
           <Button onPress={() => save()}>Save</Button>
         </ScrollView>
       </View>

@@ -21,6 +21,7 @@ const SheetCloseBtn = ({backRef, goBack, continueToEdit}) => {
       <View style={styles.container}>
         <Text style={styles.header}>Are you sure?</Text>
         <Gap style={styles.gap(30)} />
+        {/* TODO: Garry warna sesuai mode */}
         <Button onPress={continueToEdit}>
           <Text>Continue editing</Text>
         </Button>

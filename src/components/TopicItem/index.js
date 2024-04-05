@@ -28,7 +28,7 @@ export default TopicItem;
 const styles = StyleSheet.create({
   containerTag: {
     backgroundColor: COLORS.almostBlack,
-    borderRadius: 14,
+    borderRadius: 28,
     paddingLeft: dimen.normalizeDimen(16),
     flexDirection: 'row',
     justifyContent: 'space-between',
