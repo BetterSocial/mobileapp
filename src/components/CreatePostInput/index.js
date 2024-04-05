@@ -24,7 +24,8 @@ const CreatePostInput = ({
   setPositionKeyboard,
   setTopics,
   setTopicChats,
-  setMessage
+  setMessage,
+  typeUser
 }) => {
   const [positionEndCursor, setPositionEndCursor] = React.useState(0);
   const [topicSearch, setTopicSearch] = React.useState([]);
@@ -202,7 +203,10 @@ const CreatePostInput = ({
         // value={message}
         multiline={true}
         numberOfLines={10}
-        style={styles.input}
+        style={[
+          styles.input,
+          typeUser ? {borderBottomRightRadius: 0, borderBottomLeftRadius: 0} : {}
+        ]}
         textAlignVertical="top"
         placeholder={
           'What’s on your mind?\nRemember to be respectful.\nDownvotes & Blocks harm all your posts’ visibility.'
