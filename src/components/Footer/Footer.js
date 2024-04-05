@@ -64,7 +64,7 @@ const Footer = ({
       <TouchableOpacity testID="onPressBlock" disabled={item?.isBlurredPost} onPress={onPressBlock}>
         <View style={styles.btnBlock}>
           <MemoIc_block_inactive
-            color={item?.isBlurredPost ? COLORS.gray : undefined}
+            color={item?.isBlurredPost ? COLORS.gray : isShortText ? COLORS.white : COLORS.gray410}
             height={22}
             width={22}
           />
@@ -80,7 +80,7 @@ const Footer = ({
     if (totalVote < 0) {
       return COLORS.downvote;
     }
-    return COLORS.gray400;
+    return isShortText ? COLORS.white : COLORS.gray410;
   };
 
   const username = item?.anon_user_info_emoji_name
@@ -195,7 +195,7 @@ const Footer = ({
             colors={['#275D8A', '#275D8A']}
             style={{
               position: 'absolute',
-              top: 0,
+              top: 1,
               left: 0,
               right: 0,
               bottom: 0,
@@ -213,23 +213,31 @@ const Footer = ({
         {isShowDM && !isSelf ? (
           <TouchableOpacity testID="sendDM" onPress={onPressDm}>
             <View style={[styles.btnShare, styles.buttonShareContainer]}>
-              <MemoIc_senddm height={18} width={18} />
-              <Text style={[styles.text, styles.textDM]}>DM</Text>
+              <MemoIc_senddm
+                height={18}
+                width={18}
+                color={isShortText ? COLORS.white : COLORS.gray410}
+              />
+              <Text style={[styles.text(isShortText), styles.textDM]}>DM</Text>
             </View>
           </TouchableOpacity>
         ) : (
           <TouchableOpacity testID="shareBtn" onPress={onPressShare}>
             <View style={styles.btnShare}>
-              <MemoIc_share height={20} width={21} />
+              <MemoIc_share
+                height={20}
+                width={21}
+                color={isShortText ? COLORS.white : COLORS.gray410}
+              />
             </View>
           </TouchableOpacity>
         )}
         {disableComment ? (
           <View testID="disableComment">
             <View style={styles.btnComment(totalComment || 0)}>
-              <IconCommentArrow color={COLORS.gray410} />
+              <IconCommentArrow color={isShortText ? COLORS.white : COLORS.gray410} />
             </View>
-            <Text style={styles.text}>{totalComment}</Text>
+            <Text style={styles.text(isShortText)}>{totalComment}</Text>
           </View>
         ) : (
           <TouchableOpacity
@@ -238,9 +246,9 @@ const Footer = ({
             onPress={onPressComment}
             style={{flexDirection: 'row', alignItems: 'center'}}>
             <View style={styles.btnComment(totalComment || 0)}>
-              <IconCommentArrow color={COLORS.gray410} />
+              <IconCommentArrow color={isShortText ? COLORS.white : COLORS.gray410} />
             </View>
-            <Text style={styles.text}>{totalComment}</Text>
+            <Text style={styles.text(isShortText)}>{totalComment}</Text>
           </TouchableOpacity>
         )}
         {handleBlockUi()}
@@ -252,11 +260,27 @@ const Footer = ({
             <View>
               {statusVote === 'downvote' ? (
                 <View testID="downvoteOn">
-                  <ArrowDownvoteOn color={item?.isBlurredPost ? COLORS.gray : undefined} />
+                  <ArrowDownvoteOn
+                    color={
+                      item?.isBlurredPost
+                        ? COLORS.gray
+                        : isShortText
+                        ? COLORS.white
+                        : COLORS.gray410
+                    }
+                  />
                 </View>
               ) : (
                 <View testID="downvoteOff">
-                  <ArrowDownvoteOff color={item?.isBlurredPost ? COLORS.gray : undefined} />
+                  <ArrowDownvoteOff
+                    color={
+                      item?.isBlurredPost
+                        ? COLORS.gray
+                        : isShortText
+                        ? COLORS.white
+                        : COLORS.gray410
+                    }
+                  />
                 </View>
               )}
             </View>
@@ -271,11 +295,27 @@ const Footer = ({
             <View>
               {statusVote === 'upvote' ? (
                 <View testID="votingUpOn">
-                  <ArrowUpvoteOn color={item?.isBlurredPost ? COLORS.gray : undefined} />
+                  <ArrowUpvoteOn
+                    color={
+                      item?.isBlurredPost
+                        ? COLORS.gray
+                        : isShortText
+                        ? COLORS.white
+                        : COLORS.gray410
+                    }
+                  />
                 </View>
               ) : (
                 <View testID="votingUpOff">
-                  <ArrowUpvoteOff color={item?.isBlurredPost ? COLORS.gray : undefined} />
+                  <ArrowUpvoteOff
+                    color={
+                      item?.isBlurredPost
+                        ? COLORS.gray
+                        : isShortText
+                        ? COLORS.white
+                        : COLORS.gray410
+                    }
+                  />
                 </View>
               )}
             </View>
@@ -311,10 +351,10 @@ const styles = StyleSheet.create({
     marginLeft: 4,
     fontWeight: '500'
   },
-  text: {
+  text: (isShortText) => ({
     ...FONTS.body3,
-    color: COLORS.gray410
-  },
+    color: isShortText ? COLORS.white : COLORS.gray410
+  }),
   vote: (colorBasedCount) => ({
     ...FONTS.body3,
     textAlign: 'center',

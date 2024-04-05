@@ -19,8 +19,6 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import MemoIc_arrow_back from '../../assets/arrow/Ic_arrow_back';
 import ElipsisIcon from '../../assets/icon/ElipsisIcon';
-import MemoPeopleFollow from '../../assets/icons/Ic_people_follow';
-import MemoicGlobe from '../../assets/icons/ic_globe';
 import ShareAndroidIcon from '../../assets/icons/images/share-for-android.svg';
 import TrashRed from '../../assets/icons/images/trash-red.svg';
 import MemoEightyEight_hundred from '../../assets/timer/EightyEight_hundred';
@@ -37,8 +35,7 @@ import GlobalButton from '../../components/Button/GlobalButton';
 import {
   ANALYTICS_SHARE_POST_FEED_ID,
   ANALYTICS_SHARE_POST_FEED_SCREEN,
-  DEFAULT_PROFILE_PIC_PATH,
-  PRIVACY_PUBLIC
+  DEFAULT_PROFILE_PIC_PATH
 } from '../../utils/constants';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import ShareUtils from '../../utils/share';
@@ -51,7 +48,7 @@ import useFeedHeader from './hooks/useFeedHeader';
 
 const {width: screenWidth} = Dimensions.get('window');
 
-export const validationTimer = (createdAt, duration_feed) => {
+export const validationTimer = (createdAt, duration_feed, color = COLORS.gray410) => {
   const postCreatedAt = moment(`${createdAt}Z`);
   const postExpiredAt = moment(`${createdAt}Z`).add(duration_feed, 'days');
   const now = moment();
@@ -64,48 +61,48 @@ export const validationTimer = (createdAt, duration_feed) => {
   if (timePercentage < 25)
     return (
       <View testID="25">
-        <MemoEightyEight_hundred height={17} width={17} fill={COLORS.gray410} />
+        <MemoEightyEight_hundred height={17} width={17} fill={color} />
       </View>
     );
 
   if (timePercentage < 38)
     return (
       <View testID="36">
-        <MemoSeventyFive_eightySeven height={17} width={17} fill={COLORS.gray410} />
+        <MemoSeventyFive_eightySeven height={17} width={17} fill={color} />
       </View>
     );
 
   if (timePercentage < 50)
     return (
       <View testID="50">
-        <MemoSixtyThree_seventyFour height={17} width={17} fill={COLORS.gray410} />
+        <MemoSixtyThree_seventyFour height={17} width={17} fill={color} />
       </View>
     );
 
   if (timePercentage < 63)
     return (
       <View testID="63">
-        <MemoFivety_sixtyTwo height={17} width={17} fill={COLORS.gray410} />
+        <MemoFivety_sixtyTwo height={17} width={17} fill={color} />
       </View>
     );
 
   if (timePercentage < 75)
     return (
       <View testID="75">
-        <MemoThirtySeven_fourtyNine height={17} width={17} fill={COLORS.gray410} />
+        <MemoThirtySeven_fourtyNine height={17} width={17} fill={color} />
       </View>
     );
 
   if (timePercentage < 88)
     return (
       <View testID="80">
-        <MemoTwentyFive_thirtySix height={17} width={17} fill={COLORS.gray410} />
+        <MemoTwentyFive_thirtySix height={17} width={17} fill={color} />
       </View>
     );
 
   return (
     <View testID="full">
-      <MemoOne height={17} width={17} fill={COLORS.gray410} />
+      <MemoOne height={17} width={17} fill={color} />
     </View>
   );
 };
@@ -215,15 +212,33 @@ const _renderAnonimity = ({
               />
               <View style={{width: 6}} />
               <AnonymousUsername version={version} anonUserInfo={anonUserInfo} isFeed={true} />
-              <View style={styles.point} />
-              <Text style={styles.feedDate}>{calculateTime(time).replace(' ago', '')}</Text>
-              {duration_feed !== 'never' ? <View style={styles.point} /> : null}
-              {duration_feed !== 'never' ? validationTimer(time, duration_feed) : null}
+              <View
+                style={[
+                  styles.point(isShortText),
+                  {backgroundColor: isShortText ? COLORS.gray310 : COLORS.gray410}
+                ]}
+              />
+              <Text style={styles.feedDate(isShortText)}>
+                {calculateTime(time).replace(' ago', '')}
+              </Text>
+              {duration_feed !== 'never' ? <View style={styles.point(isShortText)} /> : null}
+              {duration_feed !== 'never'
+                ? validationTimer(
+                    time,
+                    duration_feed,
+                    isShortText ? COLORS.gray510 : COLORS.gray410
+                  )
+                : null}
               {disabledFollow
                 ? null
                 : !isSelf && (
                     <React.Fragment>
-                      <View style={styles.point} />
+                      <View
+                        style={[
+                          styles.point(isShortText),
+                          {backgroundColor: isShortText ? COLORS.gray310 : COLORS.gray410}
+                        ]}
+                      />
                       <TouchableOpacity onPress={() => onPressFollUnFoll(isFollow)}>
                         <Text
                           style={isFollow ? styles.textFollowing : styles.textFollow(isShortText)}>
@@ -357,15 +372,33 @@ const _renderProfileNormal = ({
                 }}>
                 {username || StringConstant.feedDeletedUserName}
               </Text>
-              <View style={styles.point} />
-              <Text style={styles.feedDate}>{calculateTime(time).replace(' ago', '')}</Text>
-              {duration_feed !== 'never' ? <View style={styles.point} /> : null}
-              {duration_feed !== 'never' ? validationTimer(time, duration_feed) : null}
+              <View
+                style={[
+                  styles.point(isShortText),
+                  {backgroundColor: isShortText ? COLORS.gray310 : COLORS.gray410}
+                ]}
+              />
+              <Text style={styles.feedDate(isShortText)}>
+                {calculateTime(time).replace(' ago', '')}
+              </Text>
+              {duration_feed !== 'never' ? <View style={styles.point(isShortText)} /> : null}
+              {duration_feed !== 'never'
+                ? validationTimer(
+                    time,
+                    duration_feed,
+                    isShortText ? COLORS.gray510 : COLORS.gray410
+                  )
+                : null}
               {disabledFollow
                 ? null
                 : !isSelf && (
                     <React.Fragment>
-                      <View style={styles.point} />
+                      <View
+                        style={[
+                          styles.point(isShortText),
+                          {backgroundColor: isShortText ? COLORS.gray310 : COLORS.gray410}
+                        ]}
+                      />
                       <TouchableOpacity onPress={() => onPressFollUnFoll(isFollow)}>
                         <Text
                           style={isFollow ? styles.textFollowing : styles.textFollow(isShortText)}>
@@ -524,12 +557,12 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 3
   },
-  feedDate: {
+  feedDate: (isShortText) => ({
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.gray410,
+    color: isShortText ? COLORS.gray510 : COLORS.gray410,
     lineHeight: 18
-  },
+  }),
   feedDateLocation: {
     flex: 1,
     fontFamily: fonts.inter[400],
@@ -537,16 +570,16 @@ const styles = StyleSheet.create({
     color: COLORS.gray410,
     lineHeight: 18
   },
-  point: {
+  point: (isShortText) => ({
     width: 2,
     height: 2,
     borderRadius: 4,
-    backgroundColor: COLORS.gray410,
+    backgroundColor: isShortText ? COLORS.gray510 : COLORS.gray410,
     marginLeft: 8,
     marginRight: 8,
     alignSelf: 'center',
     marginTop: 0
-  },
+  }),
   contentFeed: {
     marginTop: 12,
     flexDirection: 'column'
