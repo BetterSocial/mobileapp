@@ -2,7 +2,7 @@ import * as React from 'react';
 /* eslint-disable react/display-name */
 import NetInfo from '@react-native-community/netinfo';
 import PropTypes from 'prop-types';
-import {SafeAreaView, View} from 'react-native';
+import {SafeAreaView, StatusBar, View} from 'react-native';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
 import {useRecoilState, useRecoilValue} from 'recoil';
 
@@ -57,6 +57,7 @@ import {InitialStartupAtom, LoadingStartupContext} from '../service/initialStart
 import {NavigationConstants} from '../utils/constants';
 import {followersOrFollowingAtom} from '../screens/ChannelListScreen/model/followersOrFollowingAtom';
 import {useInitialStartup} from '../hooks/useInitialStartup';
+import {COLORS} from '../utils/theme';
 
 const RootStack = createNativeStackNavigator();
 
@@ -67,6 +68,7 @@ export const RootNavigator = () => {
   useLocalDatabaseHook(true);
 
   React.useEffect(() => {
+    StatusBar.setBarStyle('light-content', true);
     const unsubscribe = NetInfo.addEventListener((state) => {
       if (state.isConnected && following?.length !== 0) {
         const successValue = [];
@@ -131,7 +133,7 @@ const AuthenticatedStack = createNativeStackNavigator();
 
 const withSafeAreaView = (Component) => {
   return (props) => (
-    <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: COLORS.almostBlack}}>
       <Component {...props} />
     </SafeAreaView>
   );

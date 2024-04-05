@@ -37,7 +37,7 @@ export const COLORS = {
   lightBlue: '#2F80ED',
   gray1: '#C4C4C4',
   gray100: '#F5F6F7',
-  gray110: '#233343',
+  gray110: '#1E3343',
   gray200: '#3A4F64',
   gray210: '#2A3D50',
   gray300: '#D2D4DB',

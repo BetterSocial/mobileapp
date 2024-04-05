@@ -243,13 +243,9 @@ const OtherProfile = () => {
         <View
           style={{
             ...styles.btnMsg(isAnonimity),
-            borderColor: isAnonimity ? COLORS.anon_primary : COLORS.gray400
+            borderColor: COLORS.gray400
           }}>
-          <BlockIcon
-            width={20}
-            height={20}
-            style={{color: isAnonimity ? COLORS.anon_primary : COLORS.gray400}}
-          />
+          <BlockIcon width={20} height={20} style={{color: COLORS.gray400}} />
         </View>
       );
     };
@@ -536,7 +532,7 @@ const OtherProfile = () => {
 
   return (
     <>
-      <StatusBar barStyle="dark-content" translucent={false} />
+      <StatusBar barStyle="light-content" translucent={false} />
       <SafeAreaView style={styles.container}>
         <ProfileHeader
           hideSetting
