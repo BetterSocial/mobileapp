@@ -72,7 +72,12 @@ export const COLORS = {
   anonSecondary20: 'rgba(0, 173, 181, 0.2)',
   lightgrey60: 'rgba(245, 246, 247, 0.6)',
   downvote: '#E2887E',
-  upvote: '#69DD10'
+  upvote: '#69DD10',
+  gray100: '#1E3343',
+  gray200: '#3A4F64',
+  gray300: '#52667A',
+  gray400: '#8C939F',
+  gray500: '#A5ACB8'
 };
 export const SIZES = {
   // global sizes
