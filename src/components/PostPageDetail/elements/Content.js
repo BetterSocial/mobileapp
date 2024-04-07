@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {StyleSheet, Text, View, ScrollView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
+import LinearGradient from 'react-native-linear-gradient';
 import Card from '../../Card/Card';
 import ContentPoll from '../../../screens/FeedScreen/ContentPoll';
 import ImageLayouter from '../../../screens/FeedScreen/elements/ImageLayouter';
@@ -147,6 +148,18 @@ const Content = ({
         contentContainerStyle={styles.contensStyle(handlePaddingBottom())}
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}>
+        {isShortText() && (
+          <LinearGradient
+            colors={['#184A57', '#275D8A']}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0
+            }}
+          />
+        )}
         {sanitizeUrl(message)?.length > 0 ? (
           <View
             onLayout={handleContainerHeight}
