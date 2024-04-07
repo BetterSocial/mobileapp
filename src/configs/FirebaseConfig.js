@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
+import {useNavigation} from '@react-navigation/core';
 
 import StringConstant from '../utils/string/StringConstant';
 import {
@@ -13,16 +14,12 @@ import {
 import {getUserId} from '../utils/users';
 import {isAuthorFollowingMe} from '../service/post';
 
-const FirebaseConfig = (props) => {
-  const {navigation} = props;
+const FirebaseConfig = () => {
+  const navigation = useNavigation();
 
   React.useEffect(() => {
     const unsubscribe = dynamicLinks().onLink(parseDynamicLink);
     return () => unsubscribe();
-  }, []);
-
-  React.useEffect(() => {
-    dynamicLinks().getInitialLink().then(parseDynamicLink);
   }, []);
 
   /**
@@ -35,6 +32,7 @@ const FirebaseConfig = (props) => {
     if (dynamicLink?.url?.includes('postPrivateId=')) return handlePrivatePost(dynamicLink);
     if (dynamicLink?.url?.includes('communityName')) return handleCommunityPage(dynamicLink);
     if (dynamicLink?.url?.includes('users?username=')) return getUserProfile(dynamicLink?.url);
+    if (dynamicLink?.url?.includes('?username=')) return getUserProfileV3(dynamicLink?.url);
     if (dynamicLink?.url?.includes('profile/')) return getUserProfileV2(dynamicLink?.url);
     return handlePost(dynamicLink);
   };
@@ -74,6 +72,25 @@ const FirebaseConfig = (props) => {
         user_id: userId
       };
       handleMovePage(USER, data);
+    }
+  };
+
+  const getUserProfileV3 = async (url) => {
+    if (url && typeof url === 'string') {
+      const userId = await getUserId();
+      const parts = url.split('?username=');
+      const username = parts?.[1];
+
+      try {
+        const replacedUsername = username?.replace('+', '');
+        const data = {
+          username: replacedUsername,
+          user_id: userId
+        };
+        handleMovePage(USER, data);
+      } catch (e) {
+        console.error(e);
+      }
     }
   };
 

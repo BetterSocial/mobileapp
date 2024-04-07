@@ -1,6 +1,7 @@
 import * as React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View, ViewStyle} from 'react-native';
 import config from 'react-native-config';
+import {StyleSheet, Text, TouchableOpacity, View, ViewStyle} from 'react-native';
+
 import ShareUtils from '../../../utils/share/index';
 import {COLORS} from '../../../utils/theme';
 import {ShareIcon} from '../../../assets';
@@ -31,7 +32,7 @@ const CopyLink: React.FC<Omit<LinkProps, 'prompt'>> = ({username}) => {
   return (
     <View style={styles.copyLinkContainer}>
       <Text numberOfLines={1} ellipsizeMode="tail" style={styles.copyLinkUrl}>
-        {`${config.SHARE_URL}/u/${username}`}
+        {`${config.SHARE_URL}/${username}`}
       </Text>
     </View>
   );

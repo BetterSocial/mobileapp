@@ -1,8 +1,8 @@
+import Clipboard from '@react-native-clipboard/clipboard';
 // import dynamicLinks from '@react-native-firebase/dynamic-links';
 import config from 'react-native-config';
 import {Alert, Share} from 'react-native';
 
-import Clipboard from '@react-native-clipboard/clipboard';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 
 const buildShare = async (message) => {
@@ -42,7 +42,7 @@ const sharePostInTopic = async (item, analyticsLogEvent, analyticsId) => {
 };
 
 const shareCommunity = (topicname) => {
-  buildShare(`${config.POST_SHARE_URL}/community/${topicname}`);
+  buildShare(`${config.POST_SHARE_URL}/c/${topicname}`);
 };
 
 const sharePostInProfile = async (item, analyticsLogEvent, analyticsId) => {
@@ -59,10 +59,10 @@ const shareFeeds = async (item, analyticsLogEvent, analyticsId) => {
   await buildShare(`${config.POST_SHARE_URL}/post/${item?.id}`);
 };
 
-const shareUserLink = (username) => buildShare(`${config.SHARE_URL}/u/${username}`);
+const shareUserLink = (username) => buildShare(`${config.SHARE_URL}/${username}`);
 
 const copyToClipboard = (username) => {
-  Clipboard.setString(`${config.SHARE_URL}/u/${username}`);
+  Clipboard.setString(`${config.SHARE_URL}/${username}`);
 };
 
 const ShareUtils = {

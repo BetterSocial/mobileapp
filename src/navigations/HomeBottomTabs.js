@@ -172,7 +172,6 @@ function HomeBottomTabs() {
           listeners={({route}) => saveLastMenu(route)}
         />
       </Tab.Navigator>
-      <FirebaseConfig navigation={navigation} />
     </SafeAreaView>
   );
 }
