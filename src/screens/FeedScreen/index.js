@@ -13,7 +13,6 @@ import useOnBottomNavigationTabPressHook, {
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {DISCOVERY_TAB_TOPICS} from '../../utils/constants';
 import dimen from '../../utils/dimen';
-import {normalizeFontSizeByWidth} from '../../utils/fonts';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import RenderListFeed from './RenderList';
 import Search from './elements/Search';

@@ -29,6 +29,7 @@ import {showScoreAlertDialog} from '../../utils/Utils';
 import {
   ANALYTICS_SHARE_POST_FEED_ID,
   ANALYTICS_SHARE_POST_PDP_SCREEN,
+  POST_TYPE_STANDARD,
   SOURCE_PDP
 } from '../../utils/constants';
 import {fonts, normalize} from '../../utils/fonts';
@@ -47,6 +48,7 @@ import usePostDetail from './hooks/usePostDetail';
 import usePostHook from '../../hooks/core/post/usePostHook';
 
 const {width, height} = Dimensions.get('window');
+const FULL_WIDTH = Dimensions.get('screen').width;
 
 const PostPageDetailIdComponent = (props) => {
   const {
@@ -575,6 +577,9 @@ const PostPageDetailIdComponent = (props) => {
 
   const {followUnfollow} = usePostHook();
 
+  const isShortText =
+    item && item.images_url.length <= 0 && item.post_type === POST_TYPE_STANDARD && !haveSeeMore;
+
   return (
     <View style={styles.container}>
       {loading && !route.params.isCaching ? <LoadingWithoutModal /> : null}
@@ -594,6 +599,7 @@ const PostPageDetailIdComponent = (props) => {
               setItem({...item, is_following_target: !item?.is_following_target});
             }}
             isFromFeeds={fromFeeds}
+            isShortText={isShortText}
           />
 
           <ScrollView
@@ -601,11 +607,7 @@ const PostPageDetailIdComponent = (props) => {
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
             nestedScrollEnabled={true}>
-            <ScrollView
-              nestedScrollEnabled
-              contentContainerStyle={{
-                paddingBottom: handlePaddingBottom()
-              }}>
+            <ScrollView nestedScrollEnabled>
               <Content
                 message={item.message}
                 images_url={item.images_url}
@@ -617,30 +619,29 @@ const PostPageDetailIdComponent = (props) => {
                 haveSeeMore={haveSeeMore}
                 parentData={parentData || item}
               />
-              <View style={styles.footerContainer}>
-                <Footer
-                  item={item}
-                  disableComment={false}
-                  totalComment={getTotalReaction(item)}
-                  totalVote={totalVote}
-                  onPressDownVote={onPressDownVoteHandle}
-                  onPressUpvote={onPressUpvoteHandle}
-                  statusVote={voteStatus}
-                  onPressShare={() =>
-                    ShareUtils.shareFeeds(
-                      item,
-                      ANALYTICS_SHARE_POST_PDP_SCREEN,
-                      ANALYTICS_SHARE_POST_FEED_ID
-                    )
-                  }
-                  onPressComment={onCommentButtonClicked}
-                  showScoreButton={profile?.myProfile?.is_backdoor_user}
-                  onPressScore={handleOnPressScore}
-                  onPressBlock={() => refBlockComponent.current.openBlockComponent(item)}
-                  isSelf={profile.myProfile.user_id === item.actor?.id}
-                  isShowDM
-                />
-              </View>
+              <Footer
+                item={item}
+                disableComment={false}
+                totalComment={getTotalReaction(item)}
+                totalVote={totalVote}
+                onPressDownVote={onPressDownVoteHandle}
+                onPressUpvote={onPressUpvoteHandle}
+                statusVote={voteStatus}
+                onPressShare={() =>
+                  ShareUtils.shareFeeds(
+                    item,
+                    ANALYTICS_SHARE_POST_PDP_SCREEN,
+                    ANALYTICS_SHARE_POST_FEED_ID
+                  )
+                }
+                onPressComment={onCommentButtonClicked}
+                showScoreButton={profile?.myProfile?.is_backdoor_user}
+                onPressScore={handleOnPressScore}
+                onPressBlock={() => refBlockComponent.current.openBlockComponent(item)}
+                isSelf={profile.myProfile.user_id === item.actor?.id}
+                isShowDM
+                isShortText={isShortText}
+              />
             </ScrollView>
             {loadingGetComment ? (
               <View>
@@ -672,6 +673,7 @@ const PostPageDetailIdComponent = (props) => {
                   findCommentAndUpdate={findCommentAndUpdate}
                   contextSource={contextSource}
                   updateVote={handleUpdateVote}
+                  isShortText={isShortText}
                 />
               )
             )}
@@ -698,36 +700,10 @@ export default PostPageDetailIdComponent;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.almostBlack,
+    width: FULL_WIDTH,
+    backgroundColor: COLORS.gray110,
     flex: 1
   },
-  containerText: {
-    marginTop: 20,
-    marginHorizontal: 22
-  },
-  textDesc: {
-    fontFamily: fonts.inter[400],
-    fontSize: 16,
-    color: COLORS.black
-  },
-  more: {
-    color: COLORS.blueZaffre,
-    fontFamily: fonts.inter[400],
-    fontSize: 14
-  },
-  content: {
-    width,
-    shadowColor: COLORS.black50,
-    shadowOffset: {
-      width: 0,
-      height: 1
-    },
-    shadowOpacity: 0.5,
-    backgroundColor: COLORS.almostBlack,
-    borderBottomColor: COLORS.balance_gray,
-    marginBottom: -1
-  },
-  gap: {height: 16},
   additionalContentStyle: (imageLength, h) => {
     if (imageLength > 0) {
       return {
@@ -735,15 +711,5 @@ const styles = StyleSheet.create({
       };
     }
     return {};
-  },
-  footerContainer: {
-    height: 52,
-    paddingHorizontal: 0,
-    width: '100%',
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.balance_gray
-  },
-  scrollContent: {
-    paddingBottom: 0
   }
 });
