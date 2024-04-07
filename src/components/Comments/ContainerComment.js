@@ -4,6 +4,7 @@ import {Alert, Dimensions, StyleSheet, Text, TouchableWithoutFeedback, View} fro
 import {useNavigation} from '@react-navigation/native';
 
 import moment from 'moment';
+import LinearGradient from 'react-native-linear-gradient';
 import ButtonHightlight from '../ButtonHighlight';
 import Comment from './Comment';
 import ConnectorWrapper from './ConnectorWrapper';
@@ -17,6 +18,7 @@ import {getUserId} from '../../utils/users';
 import usePostDetail from '../PostPageDetail/hooks/usePostDetail';
 import ListComment from './ListComment';
 import {COLORS} from '../../utils/theme';
+import {fonts, normalize} from '../../utils/fonts';
 
 const ContainerComment = ({
   feedId,
@@ -28,7 +30,8 @@ const ContainerComment = ({
   findCommentAndUpdate,
   contextSource = CONTEXT_SOURCE.FEEDS,
   itemParent,
-  updateVote
+  updateVote,
+  isShortText
 }) => {
   const navigation = useNavigation();
   const [, setSelectedCommentForDelete] = React.useState(null);
@@ -80,44 +83,86 @@ const ContainerComment = ({
   };
 
   return (
-    <View style={[styles.container]}>
-      <View
-        style={[
-          styles.containerComment,
-          {
-            minHeight: calculateMinHeight() + calculatePaddingBtm(),
-            paddingBottom: calculatePaddingBtm()
-          }
-        ]}>
-        <View style={styles.lineBeforeProfile} />
-        {comments.map((item, index) => (
-          <>
-            {item.user ? (
-              <ListComment
-                key={`p${index}`}
-                indexFeed={indexFeed}
-                index={index}
-                onCommentLongPressed={onCommentLongPressed}
-                item={item}
-                isLast={isLast}
-                isLastInParent={isLastInParent}
-                comments={comments}
-                navigateToReplyView={navigateToReplyView}
-                findCommentAndUpdate={findCommentAndUpdate}
-                hideLeftConnector={hideLeftConnector}
-                navigation={navigation}
-                updateVote={handleUpdateVote}
-                feedId={feedId}
-              />
-            ) : null}
-          </>
-        ))}
+    <View>
+      <View style={styles.floatingBackground}>
+        {isShortText && (
+          <LinearGradient
+            colors={['#275D8A', '#275D8A']}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              borderBottomLeftRadius: 12,
+              borderBottomRightRadius: 12
+            }}
+          />
+        )}
       </View>
+      <View
+        style={{
+          paddingHorizontal: 12,
+          minHeight: calculateMinHeight() + calculatePaddingBtm(),
+          paddingBottom: calculatePaddingBtm() - normalize(16)
+        }}>
+        <View style={[styles.container]}>
+          <View
+            style={{
+              paddingVertical: normalize(8),
+              paddingLeft: normalize(12),
+              borderBottomWidth: 1,
+              borderBottomColor: COLORS.gray410
+            }}>
+            <Text
+              style={{
+                fontFamily: fonts.inter[600],
+                fontSize: 16,
+                color: COLORS.gray410,
+                lineHeight: 24
+              }}>
+              Comments
+            </Text>
+          </View>
+          <View style={{paddingLeft: 22}}>
+            <View style={[styles.containerComment]}>
+              <View style={styles.lineBeforeProfile} />
+              {comments.map((item, index) => (
+                <View key={`p${index}`}>
+                  {item.user ? (
+                    <ListComment
+                      indexFeed={indexFeed}
+                      index={index}
+                      onCommentLongPressed={onCommentLongPressed}
+                      item={item}
+                      isLast={isLast}
+                      isLastInParent={isLastInParent}
+                      comments={comments}
+                      navigateToReplyView={navigateToReplyView}
+                      findCommentAndUpdate={findCommentAndUpdate}
+                      hideLeftConnector={hideLeftConnector}
+                      navigation={navigation}
+                      updateVote={handleUpdateVote}
+                      feedId={feedId}
+                    />
+                  ) : null}
+                </View>
+              ))}
+            </View>
+          </View>
 
-      {isLoading ? <LoadingComment /> : null}
+          {isLoading ? <LoadingComment /> : null}
+        </View>
+      </View>
     </View>
   );
 };
+
+export const ContainerReply = ({children, isGrandchild}) => (
+  <View style={[{borderColor: isGrandchild ? COLORS.almostBlack : COLORS.balance_gray}]}>
+    {children}
+  </View>
+);
 
 export const ReplyComment = ({
   indexFeed,
@@ -178,11 +223,6 @@ export const ReplyComment = ({
     </ContainerReply>
   );
 };
-export const ContainerReply = ({children, isGrandchild}) => (
-  <View style={[{borderColor: isGrandchild ? COLORS.almostBlack : COLORS.balance_gray}]}>
-    {children}
-  </View>
-);
 
 export const isEqual = (prevProps, nextProps) => prevProps.comments === nextProps.comments;
 
@@ -190,8 +230,10 @@ export default React.memo(ContainerComment, isEqual);
 
 export const styles = StyleSheet.create({
   container: {
-    paddingLeft: 37,
-    paddingRight: 8
+    backgroundColor: COLORS.almostBlack,
+    borderRadius: normalize(12),
+    borderWidth: 1,
+    borderColor: COLORS.gray410
   },
   lineBeforeProfile: {
     height: 8.5
@@ -228,5 +270,17 @@ export const styles = StyleSheet.create({
     borderLeftWidth: 1,
     borderLeftColor: COLORS.gray210,
     marginTop: 0
+  },
+  floatingBackground: {
+    height: normalize(28),
+    backgroundColor: COLORS.almostBlack,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: COLORS.darkGray,
+    position: 'absolute',
+    width: '100%'
   }
 });

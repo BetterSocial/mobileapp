@@ -45,6 +45,7 @@ import {calculateTime} from '../../utils/time';
 import ProfilePicture from '../ProfileScreen/elements/ProfilePicture';
 import BlurredLayer from './elements/BlurredLayer';
 import useFeedHeader from './hooks/useFeedHeader';
+import IconChevronLeft from '../../assets/icon/IconChevronLeft';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -187,7 +188,7 @@ const _renderAnonimity = ({
                   }
                   return navigation.goBack();
                 }}>
-                <MemoIc_arrow_back height={20} width={20} fill={COLORS.white} />
+                <IconChevronLeft fill={COLORS.white} />
               </GlobalButton>
             </View>
           ) : null}
@@ -223,11 +224,7 @@ const _renderAnonimity = ({
               </Text>
               {duration_feed !== 'never' ? <View style={styles.point(isShortText)} /> : null}
               {duration_feed !== 'never'
-                ? validationTimer(
-                    time,
-                    duration_feed,
-                    isShortText ? COLORS.gray510 : COLORS.gray410
-                  )
+                ? validationTimer(time, duration_feed, COLORS.gray410)
                 : null}
               {disabledFollow
                 ? null
@@ -337,7 +334,7 @@ const _renderProfileNormal = ({
         {isBackButton ? (
           <View testID="haveBackButton" style={styles.btn}>
             <GlobalButton testID="onBack" onPress={() => onBackNormalUser(isFromFeeds)}>
-              <MemoIc_arrow_back height={20} width={20} fill={COLORS.white} />
+              <IconChevronLeft fill={COLORS.white} />
             </GlobalButton>
           </View>
         ) : null}
@@ -383,11 +380,7 @@ const _renderProfileNormal = ({
               </Text>
               {duration_feed !== 'never' ? <View style={styles.point(isShortText)} /> : null}
               {duration_feed !== 'never'
-                ? validationTimer(
-                    time,
-                    duration_feed,
-                    isShortText ? COLORS.gray510 : COLORS.gray410
-                  )
+                ? validationTimer(time, duration_feed, COLORS.gray410)
                 : null}
               {disabledFollow
                 ? null

@@ -6,10 +6,10 @@ import Toast from 'react-native-simple-toast';
 import IconEn from 'react-native-vector-icons/Entypo';
 
 import moment from 'moment';
-import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
-import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
-import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
-import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
+import ArrowDownvoteOff from '../../assets/arrow/Ic_downvote_off';
+import ArrowDownvoteOn from '../../assets/arrow/Ic_downvote_on';
+import ArrowUpvoteOff from '../../assets/arrow/Ic_upvote_off';
+import ArrowUpvoteOn from '../../assets/arrow/Ic_upvote_on';
 import MemoCommentReply from '../../assets/icon/CommentReply';
 import MemoSendDM from '../../assets/icon/SendDM';
 import {IcDmAnon} from '../../assets/icons/ic_dm_anon';
@@ -21,7 +21,7 @@ import ProfilePicture from '../../screens/ProfileScreen/elements/ProfilePicture'
 import {getAllowAnonDmStatus} from '../../service/chat';
 import {removeWhiteSpace} from '../../utils/Utils';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
-import {fonts, normalizeFontSize} from '../../utils/fonts';
+import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
 import {COLORS, FONTS} from '../../utils/theme';
 import {calculateTime} from '../../utils/time';
@@ -278,20 +278,6 @@ const Comment = ({
           <View testID="level2" style={styles.gap} />
         ) : (
           <>
-            <TouchableOpacity activeOpacity={1} onPress={onPress} testID="memoComment">
-              <ButtonHightlight
-                onLongPress={handleOnLongPress}
-                style={[
-                  styles.btnReply,
-                  {
-                    marginRight: 0,
-                    paddingRight: 0
-                  }
-                ]}
-                onPress={onPress}>
-                <MemoCommentReply />
-              </ButtonHightlight>
-            </TouchableOpacity>
             {!comment.is_you && (
               <TouchableOpacity onPress={onPressDm} testID="sendDMbtn" activeOpacity={1}>
                 <ButtonHightlight
@@ -299,60 +285,63 @@ const Comment = ({
                   style={[
                     styles.btnBlock(comment.user.id === yourselfId),
                     styles.btn,
-                    {
-                      marginRight: 0,
-                      paddingRight: 0
-                    }
+                    styles.iconContainer
                   ]}>
-                  <MemoSendDM />
+                  <MemoSendDM height={normalize(14)} />
                 </ButtonHightlight>
               </TouchableOpacity>
             )}
+            <TouchableOpacity activeOpacity={1} onPress={onPress} testID="memoComment">
+              <ButtonHightlight
+                onLongPress={handleOnLongPress}
+                style={[styles.btnReply, styles.iconContainer]}
+                onPress={onPress}>
+                <MemoCommentReply height={normalize(14)} />
+              </ButtonHightlight>
+            </TouchableOpacity>
           </>
         )}
 
         {!comment?.is_you && (
           <ButtonHightlight
             onLongPress={handleOnLongPress}
-            style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}
+            style={[
+              styles.btnBlock(comment.user.id === yourselfId),
+              styles.btn,
+              styles.iconContainer
+            ]}
             onPress={() => onBlockComponent(comment)}>
-            <IconEn name="block" size={15.02} color={COLORS.balance_gray} />
+            <IconEn name="block" size={normalize(14)} color={COLORS.gray410} />
           </ButtonHightlight>
         )}
 
-        <TouchableOpacity activeOpacity={1} onPress={onDownVote} testID="btnDownvote">
-          <ButtonHightlight
-            onLongPress={handleOnLongPress}
-            style={[styles.arrowup, styles.btn, {marginRight: 8, paddingRight: 0}]}
-            onPress={onDownVote}>
-            {statusVote === 'downvote' ? (
-              <MemoIc_downvote_on width={20} height={18} />
-            ) : (
-              <MemoIc_arrow_down_vote_off width={20} height={18} />
-            )}
-          </ButtonHightlight>
-        </TouchableOpacity>
-
-        <Text style={styles.vote(voteStyle())}>{totalVote}</Text>
-        <TouchableOpacity activeOpacity={1} testID="upvoteBtn">
-          <ButtonHightlight
-            onLongPress={handleOnLongPress}
-            style={[
-              styles.arrowdown,
-              styles.btn,
-              {
-                paddingLeft: 0,
-                marginLeft: 8
-              }
-            ]}
-            onPress={onUpVote}>
-            {statusVote === 'upvote' ? (
-              <MemoIc_upvote_on width={20} height={18} />
-            ) : (
-              <MemoIc_arrow_upvote_off width={20} height={18} />
-            )}
-          </ButtonHightlight>
-        </TouchableOpacity>
+        <View style={{flexDirection: 'row', paddingLeft: 10, paddingRight: 12}}>
+          <TouchableOpacity activeOpacity={1} onPress={onDownVote} testID="btnDownvote">
+            <ButtonHightlight
+              onLongPress={handleOnLongPress}
+              style={[styles.btn]}
+              onPress={onDownVote}>
+              {statusVote === 'downvote' ? (
+                <ArrowDownvoteOn height={normalize(14)} />
+              ) : (
+                <ArrowDownvoteOff height={normalize(14)} />
+              )}
+            </ButtonHightlight>
+          </TouchableOpacity>
+          <Text style={styles.vote(voteStyle())}>{totalVote}</Text>
+          <TouchableOpacity activeOpacity={1} testID="upvoteBtn">
+            <ButtonHightlight
+              onLongPress={handleOnLongPress}
+              style={[styles.btn]}
+              onPress={onUpVote}>
+              {statusVote === 'upvote' ? (
+                <ArrowUpvoteOn height={normalize(14)} />
+              ) : (
+                <ArrowUpvoteOff height={normalize(14)} />
+              )}
+            </ButtonHightlight>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <BlockComponent ref={refBlockComponent} screen={'feed_comment_item'} />
@@ -391,7 +380,7 @@ const styles = StyleSheet.create({
       ? level === 0
         ? COLORS.balance_gray
         : COLORS.transparent
-      : COLORS.balance_gray,
+      : COLORS.gray210,
     ...style
   }),
   flexStartContainer: {
@@ -436,15 +425,8 @@ const styles = StyleSheet.create({
     marginRight: 14
   },
   btnBlock: (isMySelf) => ({
-    paddingHorizontal: 14,
     display: isMySelf ? 'none' : 'flex'
   }),
-  arrowup: {
-    paddingHorizontal: 14
-  },
-  arrowdown: {
-    paddingHorizontal: 14
-  },
   gap: {marginBottom: 8},
   time: {
     fontFamily: fonts.inter[400],
@@ -455,5 +437,8 @@ const styles = StyleSheet.create({
   containerUsername: {
     flexDirection: 'row',
     alignItems: 'center'
+  },
+  iconContainer: {
+    paddingHorizontal: 10
   }
 });

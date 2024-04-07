@@ -21,8 +21,8 @@ describe('Connector Wrapper should run correctly', () => {
       borderLeftWidth: 1,
       borderBottomWidth: 2,
       borderBottomLeftRadius: 21,
-      borderLeftColor: COLORS.balance_gray,
-      borderBottomColor: COLORS.balance_gray
+      borderLeftColor: COLORS.gray210,
+      borderBottomColor: COLORS.gray210
     });
 
     expect(styles.connector(1)).toEqual({
