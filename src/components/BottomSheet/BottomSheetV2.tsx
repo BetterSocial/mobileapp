@@ -51,6 +51,6 @@ const styles = StyleSheet.create({
     paddingBottom: dimen.normalizeDimen(20)
   },
   draggableIcon: {
-    backgroundColor: COLORS.lightgrey
+    backgroundColor: COLORS.gray110
   }
 });

@@ -232,9 +232,9 @@ const styles = StyleSheet.create({
   domainImage: {height: normalize(200), marginBottom: 14},
   domainImageEmptyState: {height: normalize(135), marginBottom: 14},
   wrapperItem: {
-    backgroundColor: 'white',
+    backgroundColor: COLORS.almostBlack,
     borderBottomWidth: 4,
-    borderBottomColor: COLORS.balance_gray,
+    borderBottomColor: COLORS.gray110,
     height: dimen.size.DOMAIN_CURRENT_HEIGHT - 2
   },
   wrapperImage: {
@@ -265,17 +265,16 @@ const styles = StyleSheet.create({
     width: 3,
     height: 3,
     borderRadius: 4,
-    backgroundColor: COLORS.blackgrey,
+    backgroundColor: COLORS.gray410,
     marginLeft: 8,
     marginRight: 8
   },
   height: (height) => ({height}),
   width: (width) => ({width}),
   wrapperFooter: {
-    paddingHorizontal: 8,
     height: normalize(52),
     // flexBasis: 52,
-    borderBottomColor: COLORS.balance_gray,
+    borderBottomColor: COLORS.gray210,
     borderBottomWidth: 1
   },
   headerDomainName: {
@@ -288,45 +287,20 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(12),
     lineHeight: normalizeFontSize(18),
-    color: COLORS.blackgrey
+    color: COLORS.gray410
   },
   domainItemTitle: {
     fontSize: normalizeFontSize(16),
     fontFamily: fonts.inter[700],
-    lineHeight: normalizeFontSize(24)
+    lineHeight: normalizeFontSize(24),
+    color: COLORS.white
   },
   domainItemDescription: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(16),
     lineHeight: normalizeFontSize(24),
-    // fontSize: 16,
-    // lineHeight: 23,
-    // backgroundColor: 'red',
+    color: COLORS.white,
     flex: 1
-    // height: 50,
-  },
-  domainIndicatorContainer: {
-    marginLeft: -4,
-    justifyContent: 'flex-start'
-  },
-  container: {
-    flexDirection: 'row',
-    paddingHorizontal: 20,
-    alignItems: 'center',
-    borderBottomWidth: 0.5,
-    borderBottomColor: COLORS.balance_gray,
-    paddingBottom: 8,
-    paddingTop: 8
-  },
-  wrapperTextUnFollow: {
-    backgroundColor: COLORS.anon_primary,
-    borderRadius: 8,
-    borderColor: COLORS.anon_primary,
-    width: 36,
-    height: 36,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 0.5
   },
   previewCommentContainer: {zIndex: 1000},
   titleContainer: {

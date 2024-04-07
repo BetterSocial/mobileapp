@@ -8,8 +8,10 @@ import {COLORS} from '../../../utils/theme';
 import {Divider} from '../../../components/Divider';
 import {PencilIcon} from '../../../assets';
 import {TextWithEmoji} from './TextWithEmoji';
+import {fonts, normalizeFontSize} from '../../../utils/fonts';
 import {addDotAndRemoveNewline} from '../../../utils/string/TrimString';
 import {profileSettingsDMpermission} from '../../../service/profile';
+import dimen from '../../../utils/dimen';
 
 type BioAndDMSettingProps = {
   bio: string;
@@ -22,43 +24,22 @@ type BioAndDMSettingProps = {
 
 const CheckBoxCustom = (props: {value: boolean; label: string; disabled?: boolean}) => {
   return (
-    <View
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center'
-      }}>
-      <View
-        style={{
-          width: 16,
-          height: 16,
-          borderRadius: 9999,
-          backgroundColor: COLORS.white,
-          marginRight: 5
-        }}>
+    <View style={styles.checkboxItem}>
+      <View style={styles.checkboxItemContent}>
         <CheckBox
           disabled={props.disabled || false}
           value={props.value}
-          onCheckColor={COLORS.white}
-          tintColors={{true: COLORS.signed_primary, false: COLORS.white}}
+          onCheckColor={COLORS.gray110}
+          tintColors={{true: COLORS.signed_primary, false: COLORS.gray110}}
           tintColor={COLORS.signed_primary}
           onTintColor={COLORS.signed_primary}
           onFillColor={COLORS.signed_primary}
-          style={{
-            width: 16,
-            height: 16
-          }}
+          style={styles.checkbox}
           aria-checked={props.value}
           onValueChange={() => {}}
         />
       </View>
-      <Text
-        style={{
-          fontSize: 12,
-          fontWeight: '500'
-        }}>
-        {props.label}
-      </Text>
+      <Text style={styles.checkboxLabel}>{props.label}</Text>
     </View>
   );
 };
@@ -132,15 +113,7 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
                 alignItems: 'center'
               }}>
               <PencilIcon />
-              <Text
-                style={{
-                  fontSize: 14,
-                  fontWeight: '500',
-                  color: COLORS.white,
-                  marginLeft: 4
-                }}>
-                Edit
-              </Text>
+              <Text style={styles.editPromptLabel}>Edit</Text>
             </View>
           </Pressable>
         </View>
@@ -157,31 +130,8 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
           <TextWithEmoji text={addDotAndRemoveNewline(bio || '')} />
         )}
       </View>
-      <View
-        style={{
-          backgroundColor: COLORS.white,
-          borderRadius: 12,
-          padding: 12,
-          marginHorizontal: 12,
-          shadowColor: 'rgba(0, 0, 0, 0.04)',
-          shadowOffset: {
-            width: 0,
-            height: 1
-          },
-          shadowOpacity: 1,
-          shadowRadius: 2,
-          elevation: 2,
-          marginTop: -50,
-          borderWidth: 1,
-          borderColor: COLORS.gray
-        }}>
-        <Text
-          style={{
-            fontSize: 12,
-            fontWeight: '400',
-            color: COLORS.gray500,
-            marginBottom: 12
-          }}>
+      <View style={styles.allowContainer}>
+        <Text style={styles.allowDescText}>
           Other users will be able to reply to your prompt and direct message you.
         </Text>
         <TouchableOpacity onPress={toggleSwitchAnon}>
@@ -190,7 +140,7 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
 
         {isAnonymity && (
           <>
-            <Divider style={{marginVertical: 6, backgroundColor: COLORS.gray}} />
+            <Divider style={{marginVertical: 6, backgroundColor: COLORS.gray210}} />
             <TouchableOpacity onPress={toggleSwitchAnonAllowFollowing}>
               <CheckBoxCustom
                 value={isAllowFollowingSendDM}
@@ -213,27 +163,68 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   promptTitle: {
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: normalizeFontSize(14),
+    fontFamily: fonts.inter[600],
     color: COLORS.white
   },
   container: {
-    backgroundColor: COLORS.default_signed_secondary,
-    borderRadius: 16,
-    paddingHorizontal: 12,
-    paddingVertical: 12,
-    marginTop: 10,
-    paddingBottom: 50
+    backgroundColor: COLORS.signed_secondary,
+    borderRadius: dimen.normalizeDimen(16),
+    paddingHorizontal: dimen.normalizeDimen(12),
+    paddingVertical: dimen.normalizeDimen(12),
+    marginTop: dimen.normalizeDimen(10),
+    paddingBottom: dimen.normalizeDimen(50)
   },
-  editPromptLabel: {color: COLORS.signed_secondary, textDecorationLine: 'underline'},
+  editPromptLabel: {
+    fontSize: normalizeFontSize(14),
+    fontFamily: fonts.inter[500],
+    color: COLORS.white,
+    marginLeft: dimen.normalizeDimen(4)
+  },
   bioTextNull: {
-    color: COLORS.lightgrey,
-    fontFamily: 'Inter',
-    fontSize: 14,
+    color: COLORS.white,
+    fontFamily: fonts.inter[400],
     fontStyle: 'italic',
-    fontWeight: '400',
-    lineHeight: 20,
-    marginBottom: 12
+    lineHeight: normalizeFontSize(20),
+    fontSize: normalizeFontSize(16),
+    marginBottom: dimen.normalizeDimen(12)
+  },
+  allowContainer: {
+    backgroundColor: COLORS.gray110,
+    borderRadius: dimen.normalizeDimen(12),
+    padding: dimen.normalizeDimen(12),
+    marginHorizontal: dimen.normalizeDimen(12),
+    marginTop: -50,
+    borderWidth: 1,
+    borderColor: COLORS.gray210
+  },
+  allowDescText: {
+    fontSize: normalizeFontSize(12),
+    fontFamily: fonts.inter[400],
+    color: COLORS.gray510,
+    marginBottom: dimen.normalizeDimen(12)
+  },
+  checkboxItem: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  checkboxItemContent: {
+    width: dimen.normalizeDimen(16),
+    height: dimen.normalizeDimen(16),
+    borderRadius: 9999,
+    backgroundColor: COLORS.almostBlack,
+    marginRight: dimen.normalizeDimen(5)
+  },
+  checkbox: {
+    width: dimen.normalizeDimen(16),
+    height: dimen.normalizeDimen(16),
+    backgroundColor: COLORS.gray110
+  },
+  checkboxLabel: {
+    fontSize: normalizeFontSize(12),
+    fontFamily: fonts.inter[500],
+    color: COLORS.white
   }
 });
 

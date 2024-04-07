@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
-import ChevronRightIcon from '../../../assets/icons/images/chevron-right.svg';
+import IconChevronRight from '../../../assets/icons/images/chevron-right.svg';
 import {fonts} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
 
@@ -19,7 +19,7 @@ const ProfileSettingItem = ({text, onPress, ...props}) => (
   <TouchableOpacity onPress={onPress} {...props}>
     <View style={styles.card}>
       <Text style={styles.textCard}>{text}</Text>
-      <ChevronRightIcon width={6.67} height={11.67} fill="#000" />
+      <IconChevronRight width={6.67} height={11.67} fill={COLORS.gray310} />
     </View>
   </TouchableOpacity>
 );
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   card: {
     height: 52,
     borderRadius: 8,
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray110,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -39,10 +39,9 @@ const styles = StyleSheet.create({
     marginBottom: 12
   },
   textCard: {
-    fontFamily: fonts.inter[700],
-    fontWeight: '800',
+    fontFamily: fonts.inter[800],
     fontSize: 14,
-    color: COLORS.black,
+    color: COLORS.white,
     lineHeight: 16
   }
 });

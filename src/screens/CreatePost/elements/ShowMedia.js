@@ -43,7 +43,8 @@ const ShowImage = ({data, onPress}) => {
       imageStyle={styles.image}
       style={styles.imageContainer}>
       <TouchableOpacity style={styles.icon} onPress={() => onPress(data.id)}>
-        <Icon name="closecircle" size={20} />
+        {/* TODO: Garry x nggak bolong, harusnya almostBlack */}
+        <Icon name="closecircle" size={20} color={COLORS.white} />
       </TouchableOpacity>
     </ImageBackground>
   );

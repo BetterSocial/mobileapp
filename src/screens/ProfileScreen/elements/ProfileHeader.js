@@ -3,6 +3,7 @@ import * as React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Platform} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
+// TODO: Garry, need icon props fill color
 import ArrowLeftIcon from '../../../assets/icons/images/arrow-left.svg';
 import SettingIcon from '../../../assets/icons/images/setting.svg';
 import ShareIcon from '../../../assets/icons/Ic_share';
@@ -56,12 +57,7 @@ const ProfileHeader = ({
       <View style={styles.wrapHeaderButton}>
         <View style={hideSetting ? styles.btnShareWithoutSetting : styles.btnShare}>
           <TouchableOpacity onPress={onShareClicked}>
-            <ShareIcon
-              color="black"
-              width={handleIconSize()}
-              height={handleIconSize()}
-              fill={COLORS.black}
-            />
+            <ShareIcon width={handleIconSize()} height={handleIconSize()} color={COLORS.white} />
           </TouchableOpacity>
         </View>
 

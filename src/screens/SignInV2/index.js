@@ -193,7 +193,7 @@ const S = StyleSheet.create({
     fontSize: 12,
     width: 250,
     textAlign: 'center',
-    color: COLORS.blackgrey,
+    color: COLORS.gray410,
     marginTop: 16
   },
   humanID: {
@@ -201,8 +201,8 @@ const S = StyleSheet.create({
     // fontWeight: 'bold',
     textDecorationLine: 'underline'
   },
-  btnText: {fontSize: 17, color: COLORS.white, fontWeight: 'bold'},
-  humen: {fontSize: 17, color: COLORS.white, fontWeight: '100'},
+  btnText: {fontSize: 17, color: COLORS.almostBlack, fontWeight: 'bold'},
+  humen: {fontSize: 17, color: COLORS.almostBlack, fontWeight: '100'},
   btnSign: {
     borderRadius: 10
   }

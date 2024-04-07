@@ -11,6 +11,6 @@ const styles = StyleSheet.create({
   horizontalLine: {
     width: '100%',
     height: 0.5,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.gray510
   }
 });

@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   photoContainer: {
     width: 24,
     height: 24,
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray110,
     borderRadius: 12
   },
   containerUsername: {
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   username: {
     fontFamily: fonts.inter[700],
     fontSize: 12,
-    color: COLORS.blackgrey,
+    color: COLORS.gray410,
     lineHeight: 14,
     marginLeft: 16
   },
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   time: {
     fontFamily: fonts.inter[400],
     fontSize: 10,
-    color: COLORS.blackgrey,
+    color: COLORS.gray410,
     lineHeight: 12
   },
   post: {

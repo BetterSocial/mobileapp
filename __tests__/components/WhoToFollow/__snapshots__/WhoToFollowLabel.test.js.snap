@@ -4,7 +4,7 @@ exports[`Label render correctly Match snapshot 1`] = `
 <View
   style={
     Object {
-      "backgroundColor": "#F5F6F7",
+      "backgroundColor": "#1E3343",
       "flexDirection": "column",
       "height": 32,
       "justifyContent": "center",
@@ -16,7 +16,7 @@ exports[`Label render correctly Match snapshot 1`] = `
   <Text
     style={
       Object {
-        "color": "#69707C",
+        "color": "#A5ACB8",
         "fontFamily": "Poppins",
         "fontSize": 10.8,
         "fontStyle": "normal",
@@ -29,7 +29,7 @@ exports[`Label render correctly Match snapshot 1`] = `
     <Text
       style={
         Object {
-          "color": "#000",
+          "color": "#FFFFFF",
           "fontFamily": "Poppins",
           "fontSize": 10.8,
           "fontStyle": "normal",

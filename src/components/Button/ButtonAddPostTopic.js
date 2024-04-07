@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import PostToCommunity from '../../assets/icon/PostToCommunity';
 import useBetterNavigationHook from '../../hooks/navigation/useBetterNavigationHook';
 import dimen from '../../utils/dimen';
-import {normalize} from '../../utils/fonts';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
 import ShadowFloatingButtons from './ShadowFloatingButtons';
 import {COLORS} from '../../utils/theme';
 
@@ -46,14 +46,13 @@ export default ButtonAddPostTopic;
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    bottom: normalize(30),
+    bottom: dimen.normalizeDimen(30),
     right: 0,
     zIndex: 99,
     backgroundColor: COLORS.black
   },
   buttonContainer: (followType) => ({
     backgroundColor: followType === 'incognito' ? COLORS.anon_secondary : COLORS.signed_primary,
-    // height: dimen.size.TOPIC_FEED_POST_BUTTON_HEIGHT,
     borderRadius: dimen.size.FEED_ACTION_BUTTON_RADIUS,
     justifyContent: 'center'
   }),
@@ -65,11 +64,9 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   text: {
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: '400',
-    fontSize: 12,
-    lineHeight: 14,
+    fontFamily: fonts.inter[400],
+    fontSize: normalizeFontSize(12),
+    lineHeight: normalizeFontSize(14),
     marginTop: dimen.normalizeDimen(8),
     marginBottom: dimen.normalizeDimen(7),
     marginLeft: dimen.normalizeDimen(7),

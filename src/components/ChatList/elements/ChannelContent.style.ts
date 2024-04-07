@@ -9,7 +9,8 @@ export const channelContentStyles = StyleSheet.create({
     fontSize: normalize(14),
     lineHeight: 22,
     flex: 1,
-    paddingBottom: 2
+    paddingBottom: 2,
+    color: COLORS.white
   },
   description: {
     fontFamily: fonts.inter[400],
@@ -17,14 +18,15 @@ export const channelContentStyles = StyleSheet.create({
     lineHeight: 22,
     alignSelf: 'center',
     flex: 1,
-    marginRight: 4
+    marginRight: 4,
+    color: COLORS.gray510
   },
   time: {
     fontFamily: fonts.poppins[400],
     fontSize: normalize(14),
     lineHeight: 22,
     marginLeft: 20,
-    color: COLORS.blackgrey,
+    color: COLORS.gray510,
     alignSelf: 'flex-start'
   },
   containerBadge: {
@@ -39,6 +41,6 @@ export const channelContentStyles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: normalize(10),
     lineHeight: 14.52,
-    color: COLORS.white
+    color: COLORS.almostBlack
   }
 });

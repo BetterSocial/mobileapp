@@ -87,13 +87,13 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(12),
     fontFamily: fonts.inter[400],
     textAlign: 'left',
-    color: isHeaderHide ? COLORS.white : COLORS.blackgrey
+    color: isHeaderHide ? COLORS.white : COLORS.gray410
   }),
   seeMemberText: (followType) => ({
     fontSize: normalizeFontSize(12),
     fontFamily: fonts.inter[500],
     textAlign: 'left',
-    color: followType === 'incognito' ? COLORS.anon_secondary : COLORS.blue,
+    color: followType === 'incognito' ? COLORS.anon_primary : COLORS.blue,
     marginTop: normalize(1)
   })
 });

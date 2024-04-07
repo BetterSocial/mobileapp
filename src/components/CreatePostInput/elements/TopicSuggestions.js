@@ -62,7 +62,9 @@ const TopicSuggestions = ({
 };
 
 const styles = StyleSheet.create({
-  cardContainer: {marginTop: -16},
+  cardContainer: {
+    marginTop: -16
+  },
   suggestions: {
     color: COLORS.black,
     fontFamily: fonts.inter[500],
@@ -71,7 +73,7 @@ const styles = StyleSheet.create({
     lineHeight: 18
   },
   topicSuggestionContainer: {marginBottom: 5},
-  view: {height: 1, marginTop: 5, backgroundColor: COLORS.lightgrey}
+  view: {height: 1, marginTop: 5, backgroundColor: COLORS.gray110}
 });
 
 export default TopicSuggestions;

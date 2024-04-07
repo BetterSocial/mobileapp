@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   textContainer: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray110,
     paddingTop: 4,
     paddingBottom: 4,
     borderRadius: 12,
@@ -41,12 +41,14 @@ const styles = StyleSheet.create({
   userText: {
     fontFamily: fonts.inter[600],
     fontSize: 12,
-    lineHeight: 19.36
+    lineHeight: 19.36,
+    color: COLORS.white
   },
   text: {
     fontFamily: fonts.inter[400],
     fontSize: 16,
-    lineHeight: 19.36
+    lineHeight: 19.36,
+    color: COLORS.white
   },
   avatar: {
     width: 24,
@@ -60,14 +62,15 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     marginLeft: 5,
     marginRight: 5,
-    backgroundColor: COLORS.black,
+    backgroundColor: COLORS.gray510,
     alignSelf: 'center'
   },
   timeText: {
     fontFamily: fonts.inter[200],
     fontSize: 10,
     lineHeight: 12.19,
-    alignSelf: 'center'
+    alignSelf: 'center',
+    color: COLORS.gray510
   },
   mr8: {
     marginRight: 4

@@ -302,7 +302,7 @@ const DiscoveryScreenV2 = ({route}) => {
 
   return (
     <DiscoveryContainer>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       {route.name === 'Followings' ? (
         <Header
           title={
@@ -354,13 +354,13 @@ const DiscoveryScreenV2 = ({route}) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     flex: 1,
     paddingTop: 60
   },
   fragmentContainer: {
     height: '100%',
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   fragmentContentContainer: {
     // height: '100%'
@@ -382,7 +382,7 @@ export default DiscoveryScreenV2;
 
 const DiscoveryContainer = ({children}) => {
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: COLORS.almostBlack}}>
       <KeyboardWrapper>{children}</KeyboardWrapper>
     </SafeAreaView>
   );

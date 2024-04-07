@@ -4,8 +4,9 @@ import {StyleSheet, Text, View} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 
 import FlatListItem from '../../../components/FlatListItem';
-import {fonts} from '../../../utils/fonts';
+import {fonts, normalizeFontSize} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
+import dimen from '../../../utils/dimen';
 
 const SheetExpiredPost = ({refExpired, data, select, onSelect}) => (
   <RBSheet
@@ -35,22 +36,23 @@ export default SheetExpiredPost;
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 20,
-    paddingBottom: 38
+    paddingTop: dimen.normalizeDimen(20),
+    paddingBottom: dimen.normalizeDimen(38)
   },
   header: {
     color: COLORS.black,
     fontFamily: fonts.inter[600],
-    fontSize: 18,
+    fontSize: normalizeFontSize(18),
     fontWeight: 'bold',
-    paddingHorizontal: 20
+    paddingHorizontal: dimen.normalizeDimen(20)
   },
   containerSheet: {
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
-    height: 'auto'
+    height: 'auto',
+    backgroundColor: COLORS.almostBlack
   },
   draggableIcon: {
-    backgroundColor: COLORS.lightgrey
+    backgroundColor: COLORS.gray110
   }
 });

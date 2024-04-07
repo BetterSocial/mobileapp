@@ -8,11 +8,11 @@ import {COLORS, SIZES} from '../../utils/theme';
 
 const styles = StyleSheet.create({
   username: {
-    fontFamily: fonts.inter[700],
+    fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(12),
-    color: COLORS.blackgrey,
+    color: COLORS.white,
     lineHeight: 14,
-    marginLeft: 16,
+    marginLeft: 8,
     maxWidth: dimen.normalizeDimen(170)
   },
   previewContainer: {
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
   dot: {
     fontFamily: fonts.inter[700],
     fontSize: normalizeFontSize(12),
-    color: '#828282'
+    color: COLORS.gray410
   }
 });
 
@@ -47,7 +47,7 @@ const CommentUsername = ({comment, user, isPreviewComment}) => {
       <Text style={[styles.username, styles.previewContainer]} numberOfLines={1}>
         {comment.data?.anon_user_info_color_name
           ? getOfficialAnonUsername(comment?.data)
-          : user?.data?.username}{' '}
+          : user?.data?.username}
       </Text>
     );
   }
@@ -56,7 +56,8 @@ const CommentUsername = ({comment, user, isPreviewComment}) => {
       {comment.data?.anon_user_info_color_name
         ? getOfficialAnonUsername(comment?.data)
         : user?.data?.username}{' '}
-      {comment.is_you ? '(You)' : ''} {comment.is_author ? '(Post Author)' : ''} •
+      {comment.is_you ? '(You)' : ''} {comment.is_author ? '(Post Author)' : ''}{' '}
+      <Text style={styles.dot}>•</Text>
     </Text>
   );
 };

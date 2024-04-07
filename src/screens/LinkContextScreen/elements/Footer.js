@@ -155,9 +155,8 @@ const LinkContextScreenFooter = ({
 
 const styles = StyleSheet.create({
   wrapperFooter: {
-    paddingHorizontal: 8,
     height: 52,
-    borderBottomColor: COLORS.balance_gray,
+    borderBottomColor: COLORS.gray210,
     borderBottomWidth: 1
   },
   reactionContainer: {

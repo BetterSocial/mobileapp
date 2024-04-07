@@ -66,12 +66,13 @@ const NavHeader = (props) => {
   return (
     <View>
       <View style={{}}>
-        <StatusBar barStyle="dark-content" />
+        <StatusBar barStyle="light-content" />
         <View
           style={[
             styles.navContainer(isHeaderHide),
             {
-              height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
+              height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER,
+              backgroundColor: COLORS.almostBlack
             }
           ]}
           imageStyle={{opacity: isHeaderHide ? 0 : 1}}>
@@ -127,16 +128,16 @@ const NavHeader = (props) => {
             </Animated.View>
           </View>
           <View
-            style={
-              (styles.containerAction,
+            style={[
+              styles.containerAction,
               {
                 paddingTop: insets.top,
                 paddingRight: dimen.normalizeDimen(20),
                 zIndex: 2,
                 position: 'absolute',
                 right: 0
-              })
-            }>
+              }
+            ]}>
             {!isFollow && isHeaderHide ? (
               <ButtonFollow handleSetFollow={onFollowButtonPress} />
             ) : (
@@ -207,7 +208,7 @@ const NavHeader = (props) => {
           style={{
             width: '100%',
             borderBottomWidth: 1,
-            borderBottomColor: COLORS.gray
+            borderBottomColor: COLORS.gray210
           }}>
           <Search
             searchText={searchText}
@@ -262,7 +263,7 @@ const styles = StyleSheet.create({
   container: (animatedHeight) => ({
     width: '100%',
     height: animatedHeight,
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray110,
     position: 'absolute',
     zIndex: 80,
     overflow: 'hidden'
@@ -284,7 +285,7 @@ const styles = StyleSheet.create({
     paddingLeft: normalize(20),
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: 'white'
+    backgroundColor: COLORS.almostBlack
   },
   headerImage: (opacityHeaderAnimation) => ({
     width: '100%',

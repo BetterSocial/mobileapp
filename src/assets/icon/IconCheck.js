@@ -8,11 +8,10 @@ function IconCheck(props) {
       viewBox="0 0 24 24"
       width={props?.width ?? 20}
       height={props?.height ?? 20}
-      fill={props?.fill}
       xmlns="http://www.w3.org/2000/svg"
       {...props}>
       <G clipPath="url(#clip0_19924_30913)">
-        <Path fill="#4782D7" d="M-4.5 -5.25H28.5V28.5H-4.5z" />
+        <Path fill={props?.fill || '#4782D7'} d="M-4.5 -5.25H28.5V28.5H-4.5z" />
         <Path
           fillRule="evenodd"
           clipRule="evenodd"

@@ -13,7 +13,6 @@ import useOnBottomNavigationTabPressHook, {
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {DISCOVERY_TAB_TOPICS} from '../../utils/constants';
 import dimen from '../../utils/dimen';
-import {normalizeFontSizeByWidth} from '../../utils/fonts';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import RenderListFeed from './RenderList';
 import Search from './elements/Search';
@@ -271,7 +270,7 @@ const FeedScreen = (props) => {
 
   return (
     <View>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       <Search
         getSearchLayout={saveSearchHeightHandle}
         animatedValue={offset}
@@ -293,7 +292,7 @@ const FeedScreen = (props) => {
       )}
       <TiktokScroll
         ref={listRef}
-        contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT + normalizeFontSizeByWidth(4)}
+        contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT}
         data={feeds}
         onRefresh={onRefresh}
         onScroll={handleScrollEvent}

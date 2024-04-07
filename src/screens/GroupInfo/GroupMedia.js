@@ -61,7 +61,7 @@ const GroupMedia = () => {
   };
   return (
     <SafeAreaView style={{flex: 1}}>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       <View style={styles.container}>
         <Header title="Group Media" />
         <Tab.Navigator
@@ -79,11 +79,11 @@ const GroupMedia = () => {
 export default GroupMedia;
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: COLORS.white},
+  container: {flex: 1, backgroundColor: COLORS.almostBlack},
 
   toptabcontainer: {
     flexDirection: 'row',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     borderBottomColor: COLORS.black30percent,
     borderBottomWidth: 1,
     paddingHorizontal: 4

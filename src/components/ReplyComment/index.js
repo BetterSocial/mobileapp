@@ -82,7 +82,7 @@ const ReplyCommentId = ({
   if (!item) return null;
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       <View style={styles.header}>
         <TouchableOpacity testID="backButton" onPress={navigationGoBack} style={styles.backArrow}>
           <ArrowLeftIcon width={20} height={20} fill="#000" />
@@ -95,7 +95,7 @@ const ReplyCommentId = ({
       <ScrollView ref={scrollViewRef} contentContainerStyle={styles.commentScrollView}>
         <View style={styles.containerComment}>
           <ReplyCommentItem
-            feedId={dataFeed.id}
+            feedId={dataFeed?.id}
             indexFeed={indexFeed}
             user={item.user}
             comment={item}
@@ -187,7 +187,7 @@ export const styles = StyleSheet.create({
   container: {
     height: 'auto',
     flex: 1,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
     // backgroundColor: 'blue',
   },
   containerComment: {
@@ -225,7 +225,7 @@ export const styles = StyleSheet.create({
     borderRadius: 20
   },
   btnText: {
-    color: COLORS.white
+    color: COLORS.almostBlack
   },
   headerText: {
     fontFamily: fonts.inter[600],
@@ -239,7 +239,7 @@ export const styles = StyleSheet.create({
     height: 48
   },
   input: {
-    backgroundColor: COLORS.concrete,
+    backgroundColor: COLORS.gray110,
     flex: 1,
     color: COLORS.b,
     padding: 10,

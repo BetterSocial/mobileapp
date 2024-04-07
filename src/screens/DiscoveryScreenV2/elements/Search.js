@@ -173,7 +173,7 @@ const DiscoverySearch = ({
               <MemoIcArrowBackWhite
                 width={20}
                 height={12}
-                fill={COLORS.black}
+                fill={COLORS.white}
                 style={{alignSelf: 'center'}}
               />
             </View>
@@ -183,7 +183,7 @@ const DiscoverySearch = ({
       <View style={styles.searchContainer}>
         <View style={styles.wrapperSearch}>
           <View style={styles.wrapperIcon}>
-            <MemoIcSearch width={16.67} height={16.67} />
+            <MemoIcSearch width={16.67} height={16.67} fill={COLORS.gray310} />
           </View>
           <TextInput
             ref={discoverySearchBarRef}
@@ -197,8 +197,9 @@ const DiscoverySearch = ({
             returnKeyType="search"
             onSubmitEditing={handleOnSubmitEditing}
             placeholder={placeholderText}
-            placeholderTextColor={COLORS.lightgrey}
+            placeholderTextColor={COLORS.gray410}
             style={styles.input}
+            keyboardAppearance="dark"
           />
 
           <TouchableOpacity
@@ -207,12 +208,12 @@ const DiscoverySearch = ({
             onPress={handleOnClearText}
             style={styles.clearIconContainer}
             android_ripple={{
-              color: COLORS.lightgrey,
+              color: COLORS.gray110,
               borderless: true,
               radius: 35
             }}>
             <View style={styles.wrapperDeleteIcon}>
-              <IconClear width={9} height={10} iconColor={COLORS.black} />
+              <IconClear width={9} height={10} fill={COLORS.gray410} />
             </View>
           </TouchableOpacity>
         </View>
@@ -243,7 +244,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flexDirection: 'row',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     marginBottom: SIZES.base,
     marginHorizontal: SIZES.base
   },
@@ -258,12 +259,12 @@ const styles = StyleSheet.create({
   },
   wrapperSearch: {
     flex: 1,
-    backgroundColor: COLORS.lightgrey,
-    borderRadius: dimen.normalizeDimen(8),
+    backgroundColor: COLORS.gray110,
+    borderRadius: dimen.normalizeDimen(12),
     alignSelf: 'center',
     flexDirection: 'row',
     height: dimen.normalizeDimen(36),
-    paddingRight: dimen.normalizeDimen(8)
+    paddingRight: dimen.normalizeDimen(12)
   },
   wrapperButton: {
     flexDirection: 'row',
@@ -282,7 +283,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     height: dimen.normalizeDimen(33),
     paddingTop: 0,
-    paddingBottom: 0
+    paddingBottom: 0,
+    color: COLORS.white
   },
   wrapperIcon: {
     marginLeft: dimen.normalizeDimen(9.67),
@@ -301,13 +303,13 @@ const styles = StyleSheet.create({
   },
   animatedViewContainer: (hideBackIcon) => ({
     flexDirection: 'row',
-    backgroundColor: 'white',
+    backgroundColor: COLORS.almostBlack,
     marginTop: 0,
     zIndex: 10,
     height: dimen.size.DISCOVERY_HEADER_HEIGHT,
     paddingVertical: dimen.normalizeDimen(7),
     borderBottomWidth: hideBackIcon ? 0 : dimen.normalizeDimen(1),
-    borderBottomColor: COLORS.lightgrey
+    borderBottomColor: COLORS.gray110
   })
 });
 

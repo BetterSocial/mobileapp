@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   descriptionYourname: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.blackgrey,
+    color: COLORS.gray410,
     lineHeight: 24
   },
   errorText: {
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   textStyling: {
     fontFamily: fonts.inter[600],
     fontSize: 18,
-    color: COLORS.white
+    color: COLORS.almostBlack
   }
 });
 export default BottomSheetRealname;

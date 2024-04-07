@@ -36,7 +36,7 @@ const ItemUser = ({photo, username, followed, onPress, userid, isAnon}) => {
         style={[
           styles.containerCard,
           {
-            backgroundColor: isSelect ? anonColorCondition : COLORS.white
+            backgroundColor: isSelect ? anonColorCondition : COLORS.almostBlack
           }
         ]}>
         <View style={styles.cardLeft}>

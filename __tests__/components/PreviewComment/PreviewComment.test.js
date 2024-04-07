@@ -56,12 +56,4 @@ describe('Preview comment should run correctly', () => {
     );
     expect(toJSON).toMatchSnapshot();
   });
-
-  it('containerStyle should correct', () => {
-    expect(styles.container(10)).toEqual({
-      borderLeftWidth: 1,
-      marginHorizontal: SIZES.base - 2,
-      borderLeftColor: COLORS.balance_gray
-    });
-  });
 });

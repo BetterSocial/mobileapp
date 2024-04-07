@@ -1,13 +1,11 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import PropTypes from 'prop-types';
 import React from 'react';
-import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
+import {Dimensions, StyleSheet, View} from 'react-native';
 
 import {Footer, PreviewComment} from '../../components';
-import useWriteComment from '../../components/Comments/hooks/useWriteComment';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import usePostHook from '../../hooks/core/post/usePostHook';
-import {showScoreAlertDialog} from '../../utils/Utils';
 import {
   ANALYTICS_SHARE_POST_FEED_ID,
   ANALYTICS_SHARE_POST_FEED_SCREEN,
@@ -25,15 +23,14 @@ import Content from './Content';
 import ContentLink from './ContentLink';
 import Header from './Header';
 import AddCommentPreview from './elements/AddCommentPreview';
-import BlurredLayer from './elements/BlurredLayer';
 import useCalculationContent from './hooks/useCalculationContent';
 import useFeed from './hooks/useFeed';
 
-const tabBarHeight = StatusBar.currentHeight;
 const FULL_WIDTH = Dimensions.get('screen').width;
 
 const RenderListFeed = (props) => {
   const [isHaveSeeMore, setIsHaveSeeMore] = React.useState(false);
+  const [isShortText, setIsShortText] = React.useState(true);
   const {
     item,
     index,
@@ -47,7 +44,6 @@ const RenderListFeed = (props) => {
     onPressDownVote,
     source = SOURCE_FEED_TAB,
     hideThreeDot = true,
-    showAnonymousOption = false,
     onDeletePost,
     isShowDelete,
     isSelf,
@@ -66,11 +62,8 @@ const RenderListFeed = (props) => {
     initialSetup,
     onPressUpvoteHook,
     onPressDownVoteHook,
-    getTotalReaction,
-    showScoreButton
+    getTotalReaction
   } = useFeed();
-
-  const {handleUserName} = useWriteComment();
 
   const postApiUpvote = async (status) => {
     await onPressUpvote({
@@ -119,17 +112,10 @@ const RenderListFeed = (props) => {
     initialSetup(item);
   }, [item]);
 
-  const hasComment = getCommentLength(item.latest_reactions.comment) > 0;
+  const hasComment =
+    getCommentLength(item.latest_reactions.comment) > 0 && item.latest_reactions.comment[0].user;
 
   const isBlurred = item?.isBlurredPost && item?.anonimity;
-
-  const addCommentPreviewHeight = () => {
-    const commentSectionHeight = getHeightReaction() - getHeightFooter();
-    if (isBlurred && !hasComment) {
-      return 0;
-    }
-    return commentSectionHeight;
-  };
 
   const {onLayoutTopicChip} = useCalculationContent();
   const calculateLineTopicChip = (nativeEvent) => {
@@ -140,8 +126,11 @@ const RenderListFeed = (props) => {
     if (hasComment) {
       return getHeightReaction() + normalize(4);
     }
-    return getHeightFooter();
+    return getHeightFooter() + normalize(4);
   };
+
+  const isShortTextPost =
+    item.post_type === POST_TYPE_STANDARD && item.images_url.length <= 0 && isShortText === true;
 
   return (
     <View key={item.id} testID="dataScroll" style={styles.cardContainer}>
@@ -152,14 +141,13 @@ const RenderListFeed = (props) => {
           props={item}
           height={getHeightHeader()}
           source={source}
-          headerStyle={styles.mh9}
-          showAnonymousOption={showAnonymousOption}
           onDeletePost={onDeletePost}
           isShowDelete={isShowDelete}
           isSelf={isSelf}
           isFollow={item?.is_following_target}
           onPressFollUnFoll={() => followUnfollow(item)}
           onHeaderOptionClicked={onHeaderOptionClicked}
+          isShortText={isShortTextPost}
         />
         {item.post_type === POST_TYPE_LINK && (
           <ContentLink
@@ -173,11 +161,7 @@ const RenderListFeed = (props) => {
             message={item?.message}
             messageContainerStyle={{paddingHorizontal: 10}}
             topics={item?.topics}
-            hasComment={hasComment}
             item={item}
-            contentHeight={
-              dimen.size.FEED_CURRENT_ITEM_HEIGHT - getHeightHeader() - getHeightReaction()
-            }
           />
         )}
         {(item.post_type === POST_TYPE_STANDARD || item.post_type === POST_TYPE_POLL) && (
@@ -190,6 +174,7 @@ const RenderListFeed = (props) => {
               onPress(isHaveSeeMore);
             }}
             setHaveSeeMore={(haveSeeMore) => setIsHaveSeeMore(haveSeeMore)}
+            setIsShortText={(shortText) => setIsShortText(shortText)}
             topics={item?.topics}
             item={item}
             onNewPollFetched={onNewPollFetched}
@@ -207,92 +192,65 @@ const RenderListFeed = (props) => {
             }}
           />
         )}
-        <View style={styles.footerWrapper(getHeightFooter())}>
-          <Footer
-            item={item}
-            totalComment={getTotalReaction(item)}
-            totalVote={totalVote}
-            onPressShare={() =>
-              ShareUtils.shareFeeds(
-                item,
-                ANALYTICS_SHARE_POST_FEED_SCREEN,
-                ANALYTICS_SHARE_POST_FEED_ID
-              )
-            }
-            onPressComment={() => onPressComment(isHaveSeeMore)}
-            onPressBlock={() => onPressBlock(item)}
-            onPressDownVote={onPressDownVoteHandle}
-            onPressUpvote={onPressUpvoteHandle}
-            statusVote={voteStatus}
-            showScoreButton={showScoreButton}
-            onPressScore={() => showScoreAlertDialog(item)}
-            isSelf={isSelf}
-            isShowDM
-          />
-        </View>
-        <BlurredLayer
-          layerOnly
-          blurType="light"
-          withToast={true}
-          isVisible={isBlurred}
-          containerStyle={{
-            height: isBlurred || !hasComment ? addCommentPreviewHeight() : undefined,
-            marginBottom: hasComment ? normalize(4) : 0
-          }}>
-          {hasComment ? (
-            <View
-              testID="previewComment"
-              style={styles.contentReaction(getHeightReaction(), isBlurred)}>
-              <PreviewComment
-                user={item.latest_reactions.comment[0].user}
-                comment={item?.latest_reactions?.comment[0]?.data?.text || ''}
-                image={item?.latest_reactions?.comment[0]?.user?.data?.profile_pic_url || ''}
-                time={item.latest_reactions.comment[0].created_at}
-                totalComment={getTotalReaction(item) - 1}
-                item={item.latest_reactions.comment[0]}
-                onPress={() => onPressComment(isHaveSeeMore)}
-              />
-            </View>
-          ) : (
-            <AddCommentPreview
-              username={handleUserName(item)}
+        <Footer
+          item={item}
+          totalComment={getTotalReaction(item)}
+          totalVote={totalVote}
+          onPressShare={() =>
+            ShareUtils.shareFeeds(
+              item,
+              ANALYTICS_SHARE_POST_FEED_SCREEN,
+              ANALYTICS_SHARE_POST_FEED_ID
+            )
+          }
+          onPressComment={() => onPressComment(isHaveSeeMore)}
+          onPressBlock={() => onPressBlock(item)}
+          onPressDownVote={onPressDownVoteHandle}
+          onPressUpvote={onPressUpvoteHandle}
+          statusVote={voteStatus}
+          isSelf={isSelf}
+          isShowDM
+          isShortText={isShortTextPost}
+        />
+        {hasComment ? (
+          <View testID="previewComment">
+            <PreviewComment
+              user={item.latest_reactions.comment[0].user}
+              comment={item?.latest_reactions?.comment[0]?.data?.text || ''}
+              image={item?.latest_reactions?.comment[0]?.user?.data?.profile_pic_url || ''}
+              time={item.latest_reactions.comment[0].created_at}
+              totalComment={getTotalReaction(item) - 1}
+              item={item.latest_reactions.comment[0]}
+              onPress={() => onPressComment(isHaveSeeMore)}
+              isShortText={isShortTextPost}
               isBlurred={isBlurred}
-              heightReaction={getHeightReaction()}
-              onPressComment={() => onPressComment(isHaveSeeMore)}
             />
-          )}
-        </BlurredLayer>
+          </View>
+        ) : (
+          <AddCommentPreview
+            isBlurred={isBlurred}
+            onPressComment={() => onPressComment(isHaveSeeMore)}
+            isShortText={isShortTextPost}
+          />
+        )}
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  footerWrapper: (h) => ({height: h, alignItems: 'center', justifyContent: 'center'}),
-  contentReaction: (heightReaction, withBorder) => ({
-    maxHeight: heightReaction,
-    marginBottom: heightReaction <= 0 ? tabBarHeight + normalize(10) : 0,
-    borderTopWidth: withBorder ? 1 : 0,
-    borderTopColor: COLORS.light_silver
-  }),
   cardContainer: {
     width: FULL_WIDTH,
-    borderBottomWidth: 0,
-    borderBottomColor: COLORS.lightgrey,
-    backgroundColor: 'white',
+    backgroundColor: COLORS.gray110,
     height: dimen.size.FEED_CURRENT_ITEM_HEIGHT,
-    marginBottom: normalizeFontSizeByWidth(4),
-    shadowColor: COLORS.black000,
-    shadowOffset: {width: 0, height: 4},
-    shadowOpacity: 0.3,
-    shadowRadius: 4
+    paddingTop: normalize(4)
   },
   cardMain: {
     width: '100%',
-    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT
-  },
-  mh9: {
-    marginHorizontal: 9
+    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT - normalize(56),
+    borderTopLeftRadius: normalize(16),
+    borderTopRightRadius: normalize(16),
+    backgroundColor: COLORS.almostBlack
   }
 });
 
@@ -308,7 +266,6 @@ RenderListFeed.propTypes = {
   onPressDownVote: PropTypes.func,
   source: PropTypes.string,
   hideThreeDot: PropTypes.bool,
-  showAnonymousOption: PropTypes.bool,
   onHeaderOptionClicked: PropTypes.func,
   onPreviewCommentPress: PropTypes.func,
   onDeletePost: PropTypes.func,

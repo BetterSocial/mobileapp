@@ -36,7 +36,7 @@ export default Media;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     alignItems: 'center',
     flexWrap: 'nowrap',
     paddingTop: 8

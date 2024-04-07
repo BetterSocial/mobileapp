@@ -120,7 +120,7 @@ when friends send you messages.`,
 
   return (
     <View>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       <FlatList
         data={[]}
         keyExtractor={(_e, i) => `dom${i.toString()}`}

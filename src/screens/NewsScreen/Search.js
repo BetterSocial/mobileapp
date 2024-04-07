@@ -29,7 +29,7 @@ const Search = ({animatedValue}) => {
         onPress={handleOnContainerPress}>
         <View style={styles.wrapperSearch}>
           <View style={styles.wrapperIcon}>
-            <MemoIc_search width={16.67} height={16.67} />
+            <MemoIc_search width={16.67} height={16.67} fill={COLORS.gray310} />
           </View>
           <Text style={styles.input}>{StringConstant.newsTabHeaderPlaceholder}</Text>
         </View>
@@ -45,7 +45,7 @@ Search.propTypes = {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     marginBottom: SIZES.base,
     marginHorizontal: SIZES.base
   },
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   },
   wrapperSearch: {
     flex: 1,
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray110,
     marginLeft: 20,
     marginRight: 20,
     borderRadius: 8,
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     paddingBottom: 0,
     alignSelf: 'center',
-    color: COLORS.blackgrey
+    color: COLORS.gray410
   },
   wrapperIcon: {
     marginLeft: 8,
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   },
   animatedViewContainer: (animatedValue) => ({
     flexDirection: 'row',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     // marginBottom: SIZES.base,
     marginTop: Platform.OS === 'android' ? 0 : animatedValue,
     top: Platform.OS === 'android' ? animatedValue : 0,
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     paddingTop: 7,
     paddingBottom: 7,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.lightgrey,
+    borderBottomColor: COLORS.gray110,
     height: 50
   })
 });

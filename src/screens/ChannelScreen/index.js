@@ -50,7 +50,7 @@ const ChannelScreen = () => {
 
   return (
     <SafeAreaView>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       {client.client && channel.channel && (
         <Chat client={client.client} i18nInstance={streami18n}>
           <Channel

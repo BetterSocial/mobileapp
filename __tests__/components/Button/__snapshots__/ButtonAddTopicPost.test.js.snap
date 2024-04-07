@@ -4,8 +4,8 @@ exports[`Testing Button Add Topic Post should match snapshot 1`] = `
 <View
   style={
     Object {
-      "backgroundColor": "#1E1F20",
-      "bottom": 27,
+      "backgroundColor": "#FFFFFF",
+      "bottom": 24,
       "position": "absolute",
       "right": 0,
       "zIndex": 99,
@@ -19,7 +19,7 @@ exports[`Testing Button Add Topic Post should match snapshot 1`] = `
         "elevation": 3,
         "position": "absolute",
         "right": 12.8,
-        "shadowColor": "#1E1F20",
+        "shadowColor": "#FFFFFF",
         "shadowOffset": Object {
           "height": 1,
           "width": 0,
@@ -67,11 +67,9 @@ exports[`Testing Button Add Topic Post should match snapshot 1`] = `
             Object {
               "alignSelf": "center",
               "color": "#FFFFFF",
-              "fontFamily": "Inter",
-              "fontSize": 12,
-              "fontStyle": "normal",
-              "fontWeight": "400",
-              "lineHeight": 14,
+              "fontFamily": "Inter-Regular",
+              "fontSize": 10.8,
+              "lineHeight": 12.600000000000001,
               "marginBottom": 5.6000000000000005,
               "marginLeft": 5.6000000000000005,
               "marginTop": 6.4,

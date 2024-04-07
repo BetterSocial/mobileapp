@@ -6,6 +6,7 @@ import {Dimensions, Platform, Pressable, StyleSheet, Text, View} from 'react-nat
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {useNavigation, useRoute} from '@react-navigation/native';
 
+import LinearGradient from 'react-native-linear-gradient';
 import BlurredLayer from './elements/BlurredLayer';
 import ContentPoll from './ContentPoll';
 import ImageLayouter from './elements/ImageLayouter';
@@ -19,12 +20,11 @@ import {
   POST_TYPE_POLL,
   POST_TYPE_STANDARD
 } from '../../utils/constants';
-import {fonts, normalizeFontSizeByWidth} from '../../utils/fonts';
+import {fonts, normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
 import {getCommentLength} from '../../utils/getstream';
 
 const {width: screenWidth} = Dimensions.get('window');
-const BUFFER_CONTENT_TEXT_HEIGHT = 50;
 const Content = ({
   message,
   images_url = [],
@@ -34,14 +34,14 @@ const Content = ({
   item,
   onNewPollFetched,
   setHaveSeeMore,
-  hasComment
+  hasComment,
+  setIsShortText
 }) => {
   const navigation = useNavigation();
   const route = useRoute();
-  const [layoutHeight, setLayoutHeight] = React.useState(null);
   const [textHeight, setTextHeight] = React.useState(null);
   const maxFontSize = normalizeFontSizeByWidth(28);
-  const minFontSize = normalizeFontSizeByWidth(16);
+  const minFontSize = normalizeFontSizeByWidth(22);
   const {
     handleCalculation,
     onLayoutTopicChip,
@@ -53,6 +53,7 @@ const Content = ({
   const [amountCut, setAmountCut] = React.useState(0);
   const [textCut, setTextCut] = React.useState(null);
   const [arrText] = React.useState([]);
+  const layoutHeight = dimen.size.FEED_CONTENT_HEIGHT;
   const isIos = Platform.OS === 'ios';
 
   React.useEffect(() => {
@@ -233,20 +234,23 @@ const Content = ({
 
   const handleContainerText = () => {
     if (!showSeeMore && item.post_type === POST_TYPE_STANDARD && images_url.length <= 0) {
+      if (setIsShortText && typeof setIsShortText === 'function') {
+        setIsShortText(true);
+      }
       return {
         container: styles.centerVertical(item?.bg),
         text: styles.centerVerticalText(item?.color),
         isShort: true
       };
     }
+    if (setIsShortText && typeof setIsShortText === 'function') {
+      setIsShortText(false);
+    }
     return {
       container: styles.mv5,
       text: {},
       isShort: false
     };
-  };
-  const handleHeightContainer = ({nativeEvent}) => {
-    setLayoutHeight(nativeEvent.layout.height);
   };
 
   const calculateLineTopicChip = (nativeEvent) => {
@@ -260,10 +264,7 @@ const Content = ({
   };
 
   return (
-    <Pressable
-      onLayout={handleHeightContainer}
-      onPress={isBlurredPost ? null : () => onPress()}
-      style={[styles.contentFeed, style]}>
+    <Pressable onPress={isBlurredPost ? null : () => onPress()} style={[styles.contentFeed, style]}>
       <BlurredLayer
         withToast={true}
         onPressContent={handleBlurredContent}
@@ -271,6 +272,18 @@ const Content = ({
         containerStyle={{
           flex: 1
         }}>
+        {handleContainerText().isShort && (
+          <LinearGradient
+            colors={['#184A57', '#275D8A']}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0
+            }}
+          />
+        )}
         {message?.length > 0 ? (
           <View>
             <View style={[styles.containerMainText, handleContainerText().container]}>
@@ -340,7 +353,8 @@ Content.propTypes = {
   topics: PropTypes.arrayOf(PropTypes.string),
   item: PropTypes.object,
   onNewPollFetched: PropTypes.func,
-  setHaveSeeMore: PropTypes.func
+  setHaveSeeMore: PropTypes.func,
+  setIsShortText: PropTypes.func
 };
 
 export default Content;
@@ -363,7 +377,6 @@ export const styles = StyleSheet.create({
     lineHeight: 24,
     flex: 1
   },
-
   seemore: {
     color: COLORS.blue
   },
@@ -391,14 +404,16 @@ export const styles = StyleSheet.create({
     width: 4,
     height: 4,
     borderRadius: 4,
-    backgroundColor: COLORS.blackgrey,
+    backgroundColor: COLORS.gray410,
     marginLeft: 8,
     marginRight: 8
   },
   contentFeed: {
-    flex: 1,
-    marginTop: 0,
-    width: '100%'
+    height: dimen.size.FEED_CONTENT_HEIGHT,
+    width: '100%',
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderColor: COLORS.darkGray
   },
   item: {
     width: screenWidth - 20,
@@ -433,10 +448,10 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: '100%',
-    backgroundColor: `${bg}`
+    backgroundColor: COLORS.transparent
   }),
   centerVerticalText: () => ({
-    color: 'black',
+    color: COLORS.white,
     opacity: 1
   }),
   mv5: {

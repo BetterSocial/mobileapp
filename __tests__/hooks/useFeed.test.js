@@ -162,7 +162,7 @@ describe('Logic feed should run correctly', () => {
   });
   it('getHeightFooter should run correctly', async () => {
     const {result} = renderHook(useFeed);
-    expect(result.current.getHeightFooter()).toEqual(normalizeFontSizeByWidth(52));
+    expect(result.current.getHeightFooter()).toEqual(normalizeFontSizeByWidth(49));
   });
   it('getHeightHeader should run correctly', async () => {
     const {result} = renderHook(useFeed);
@@ -187,7 +187,7 @@ describe('Logic feed should run correctly', () => {
     await result.current.setTotalVote(-1);
     expect(result.current.handleTextCountStyle()).toEqual(COLORS.redalert);
     await result.current.setTotalVote(0);
-    expect(result.current.handleTextCountStyle()).toEqual(COLORS.lightgrey);
+    expect(result.current.handleTextCountStyle()).toEqual(COLORS.gray110);
   });
 
   it('getTotalReaction should run correctly', async () => {

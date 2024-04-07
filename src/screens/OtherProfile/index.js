@@ -245,13 +245,9 @@ const OtherProfile = () => {
         <View
           style={{
             ...styles.btnMsg(isAnonimity),
-            borderColor: isAnonimity ? COLORS.anon_primary : COLORS.gray400
+            borderColor: COLORS.gray410
           }}>
-          <BlockIcon
-            width={20}
-            height={20}
-            style={{color: isAnonimity ? COLORS.anon_primary : COLORS.gray400}}
-          />
+          <BlockIcon width={20} height={20} style={{color: COLORS.gray410}} />
         </View>
       );
     };
@@ -538,7 +534,7 @@ const OtherProfile = () => {
 
   return (
     <>
-      <StatusBar barStyle="dark-content" translucent={false} />
+      <StatusBar barStyle="light-content" translucent={false} />
       <SafeAreaView style={styles.container}>
         <ProfileHeader
           hideSetting
@@ -549,6 +545,7 @@ const OtherProfile = () => {
 
         <ProfileTiktokScroll
           keyboardShouldPersistTaps="handled"
+          contentHeight={dimen.size.PROFILE_ITEM_HEIGHT}
           ref={flatListRef}
           extraData={[feeds]}
           data={handleDataFeed()}
@@ -617,7 +614,7 @@ const OtherProfile = () => {
         {isShowButton ? (
           <TouchableNativeFeedback onPress={toTop}>
             <View style={{...styles.btnBottom, opacity}}>
-              <ArrowUpWhiteIcon width={12} height={20} fill={COLORS.white} />
+              <ArrowUpWhiteIcon width={12} height={20} fill={COLORS.almostBlack} />
             </View>
           </TouchableNativeFeedback>
         ) : null}
@@ -629,13 +626,13 @@ const OtherProfile = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   content: {
     flexDirection: 'column',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.lightgrey
+    borderBottomColor: COLORS.gray110
   },
   dummyItem: (heightItem) => ({
     height: heightItem
@@ -698,7 +695,7 @@ const styles = StyleSheet.create({
   },
   tabs: {
     width,
-    borderBottomColor: COLORS.lightgrey,
+    borderBottomColor: COLORS.gray110,
     borderBottomWidth: 1,
     paddingLeft: 20,
     paddingRight: 20,
@@ -721,7 +718,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   wrapButton: {
     flex: 1,
@@ -747,7 +744,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 8,
     backgroundColor: isAnon ? COLORS.anon_primary : COLORS.signed_primary,
-    color: COLORS.white
+    color: COLORS.almostBlack
   }),
   textButtonFollowing: (isAnon) => ({
     fontFamily: fonts.inter[600],
@@ -775,7 +772,7 @@ const styles = StyleSheet.create({
   },
   tabsFixed: {
     width,
-    borderBottomColor: COLORS.lightgrey,
+    borderBottomColor: COLORS.gray110,
     borderBottomWidth: 1,
     paddingLeft: 20,
     paddingRight: 20,
@@ -783,7 +780,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     zIndex: 2000,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   containerFlatFeed: {
     // padding: 20,
