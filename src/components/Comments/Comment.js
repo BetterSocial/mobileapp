@@ -203,7 +203,7 @@ const Comment = ({
         <IcDmAnon
           color={
             !userAllowDm || loading.loadingGetAllowAnonDmStatus || loading.loadingDmAnon
-              ? COLORS.gray
+              ? COLORS.gray310
               : COLORS.white
           }
         />

@@ -255,7 +255,7 @@ export const styles = StyleSheet.create({
   post: {
     fontFamily: fonts.inter[400],
     fontSize: 16,
-    color: COLORS.mine_shaft,
+    color: COLORS.white,
     marginLeft: 28
   },
   mainLeftConnector: {

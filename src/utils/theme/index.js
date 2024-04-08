@@ -15,8 +15,6 @@ export const COLORS = {
   bunting: '#11243D',
   french_pass: '#b6e4fd',
   greenMantis: '#79B45D',
-  greyseries: '#333333',
-  mine_shaft: '#333333',
   pattens_blue: '#ddf2fe',
   platinum: '#E6E6E6',
   porcelain: '#ecf0f1',
