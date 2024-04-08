@@ -413,6 +413,13 @@ class ChatSchema implements BaseDbSchema {
       console.log('error updatedRandomId', this.id, response?.message?.id);
       console.log('error updating chat status');
       console.log(e);
+      try {
+        const deleteQuery = `DELETE FROM ${ChatSchema.getTableName()} WHERE id = ?;`;
+        await db.executeSql(deleteQuery, [this.id]);
+      } catch (err) {
+        console.log('error delete old chat');
+        console.log(err);
+      }
     }
   };
 
