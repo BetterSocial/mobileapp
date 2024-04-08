@@ -187,7 +187,7 @@ describe('TESTING ChatSchema', () => {
       await chatSchema.updateChatSentStatus(mockDb, response);
 
       // Assertion
-      expect(mockDb.executeSql).toHaveBeenCalledTimes(1);
+      expect(mockDb.executeSql).toHaveBeenCalledTimes(2);
       expect(mockDb.executeSql).toHaveBeenCalledWith(expect.any(String), [
         'sent',
         'createdAt',
