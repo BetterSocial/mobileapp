@@ -204,7 +204,7 @@ const Comment = ({
           color={
             !userAllowDm || loading.loadingGetAllowAnonDmStatus || loading.loadingDmAnon
               ? COLORS.gray
-              : 'black'
+              : COLORS.white
           }
         />
       ),
