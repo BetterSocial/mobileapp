@@ -56,7 +56,7 @@ const ContactScreen = ({navigation}) => {
     ? StringConstant.chatTabHeaderCreateAnonChatButtonText
     : StringConstant.chatTabHeaderCreateChatButtonText;
 
-  const {onAddMember} = useGroupInfo(channelId);
+  const {onAddMember, isLoadingAddMember} = useGroupInfo(channelId);
 
   const getDiscoveryUser = async () => {
     const initialData = await DiscoveryRepo.fetchInitialDiscoveryUsers(
@@ -199,9 +199,9 @@ const ContactScreen = ({navigation}) => {
   };
 
   const handleAddParticipant = () => {
-    const newSelectedUsers = selectedUsers;
-    setSelectedUsers([]);
-    onAddMember(newSelectedUsers);
+    if (!isLoadingAddMember) {
+      onAddMember(selectedUsers);
+    }
   };
 
   const rowRenderer = (type, item, index, extendedState) => (
@@ -328,7 +328,7 @@ const ContactScreen = ({navigation}) => {
           onHandleSelected={(value) => handleSelected(value)}
         />
       )}
-      <Loading visible={loading || loadingCreateChat} />
+      <Loading visible={loading || loadingCreateChat || isLoadingAddMember} />
     </SafeAreaView>
   );
 };
