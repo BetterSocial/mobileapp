@@ -22,7 +22,7 @@ export const channelContentStyles = StyleSheet.create({
     color: COLORS.gray510
   },
   time: {
-    fontFamily: fonts.poppins[400],
+    fontFamily: fonts.inter[400],
     fontSize: normalize(14),
     lineHeight: 22,
     marginLeft: 20,
@@ -41,6 +41,6 @@ export const channelContentStyles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: normalize(10),
     lineHeight: 14.52,
-    color: COLORS.almostBlack
+    color: COLORS.white
   }
 });

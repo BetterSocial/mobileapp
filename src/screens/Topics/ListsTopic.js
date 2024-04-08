@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: '500',
     fontSize: 12,
-    color: isActive ? COLORS.almostBlack : COLORS.mine_shaft
+    color: isActive ? COLORS.almostBlack : COLORS.white
     // paddingLeft: 5,
   })
 });
