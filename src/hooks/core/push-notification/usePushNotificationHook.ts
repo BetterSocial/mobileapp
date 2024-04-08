@@ -45,37 +45,37 @@ const usePushNotificationHook = () => {
     );
   };
 
-  // const __pushNotifIos = (message) => {
-  //   const {title, body} = message.notification;
-  //   PushNotificationIOS.addNotificationRequest({
-  //     title,
-  //     body,
-  //     id: message.messageId,
-  //     userInfo: message.data
-  //   });
-  // };
+  const __pushNotifIos = (message) => {
+    const {title, body} = message.notification;
+    PushNotificationIOS.addNotificationRequest({
+      title,
+      body,
+      id: message.messageId,
+      userInfo: message.data
+    });
+  };
 
-  // const __pushNotifAndroid = (remoteMessage) => {
-  //   const {title, body} = remoteMessage.notification;
-  //   PushNotification.localNotification({
-  //     id: '123',
-  //     title,
-  //     channelId: 'bettersosialid',
-  //     message: body,
-  //     data: remoteMessage.data
-  //   });
-  // };
+  const __pushNotifAndroid = (remoteMessage) => {
+    const {title, body} = remoteMessage.notification;
+    PushNotification.localNotification({
+      id: '123',
+      title,
+      channelId: 'bettersosialid',
+      message: body,
+      data: remoteMessage.data
+    });
+  };
 
-  // const __handlePushNotif = (remoteMessage) => {
-  //   const {data} = remoteMessage;
-  //   if (data.channel_type !== 3) {
-  //     if (isIos) {
-  //       __pushNotifIos(remoteMessage);
-  //     } else {
-  //       __pushNotifAndroid(remoteMessage);
-  //     }
-  //   }
-  // };
+  const __handlePushNotif = (remoteMessage) => {
+    const {data} = remoteMessage;
+    if (data.channel_type !== 3) {
+      if (isIos) {
+        __pushNotifIos(remoteMessage);
+      } else {
+        __pushNotifAndroid(remoteMessage);
+      }
+    }
+  };
 
   const __updateProfileAtomId = async () => {
     const signedUserId = await getUserId();
@@ -142,7 +142,7 @@ const usePushNotificationHook = () => {
       });
     }
     if (notification.data.type === 'message.new') {
-      if (notification?.data?.is_annoymous === 'false' && notification.userInteraction) {
+      if (notification.userInteraction) {
         // change receiver_id to userId to decide which anon or signed
         const channel = new ChannelList({
           id: notification?.data?.channel_id,
@@ -156,9 +156,15 @@ const usePushNotificationHook = () => {
             notification?.data?.channel_id
           );
           setSelectedChannel(selectedChannel);
-          helperNavigationResetWithData({
-            screen: 'SignedChatScreen'
-          });
+          if (notification?.data?.is_annoymous === 'false') {
+            helperNavigationResetWithData({
+              screen: 'SignedChatScreen'
+            });
+          } else {
+            helperNavigationResetWithData({
+              screen: 'AnonymousChatScreen'
+            });
+          }
         } catch (e) {
           console.log('error', e);
         } finally {
@@ -173,7 +179,6 @@ const usePushNotificationHook = () => {
     __updateProfileAtomId();
     if (localDb) {
       messaging().setBackgroundMessageHandler(async (remoteMessage) => {
-        // __handlePushNotif(remoteMessage);
         const response = await ChannelList.getById(
           localDb,
           remoteMessage.data?.channel_id as string
@@ -229,12 +234,17 @@ const usePushNotificationHook = () => {
         }
       });
 
+      const unsubscribes = messaging().onMessage(async (remoteMessage) => {
+        __handlePushNotif(remoteMessage);
+      });
+
       const unsubscribe = messaging().onMessage(async (remoteMessage) => {
         console.log(remoteMessage.data);
         // __handlePushNotif(remoteMessage);
       });
       return () => {
         unsubscribe();
+        unsubscribes();
       };
     }
   }, [localDb]);
