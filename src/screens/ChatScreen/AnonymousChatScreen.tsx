@@ -3,19 +3,22 @@
 /* eslint-disable import/no-unresolved */
 
 import * as React from 'react';
-import {Dimensions, FlatList, StyleSheet, View} from 'react-native';
+import {AppState, Dimensions, FlatList, StyleSheet, View} from 'react-native';
 
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import BaseSystemChat from '../../components/AnonymousChat/BaseChatSystem';
 import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
 import InputMessageV2 from '../../components/Chat/InputMessageV2';
-import Loading from '../Loading';
-import dimen from '../../utils/dimen';
-import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
+import ChannelList from '../../database/schema/ChannelListSchema';
+import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
 import useMoveChatTypeHook from '../../hooks/core/chat/useMoveChatTypeHook';
-import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {ANONYMOUS} from '../../hooks/core/constant';
+import useProfileHook from '../../hooks/core/profile/useProfileHook';
+import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
+import dimen from '../../utils/dimen';
+import StorageUtils from '../../utils/storage';
 import {COLORS} from '../../utils/theme';
+import Loading from '../Loading';
 
 const {height} = Dimensions.get('window');
 
@@ -65,6 +68,7 @@ const AnonymousChatScreen = () => {
   } = useChatScreenHook(ANONYMOUS);
 
   const {moveToSignedChannel} = useMoveChatTypeHook();
+  const {fetchChannelDetail} = useChatUtilsHook('ANONYMOUS');
 
   const updatedChats = updateChatContinuity(chats);
   const [loading, setLoading] = React.useState(false);
@@ -98,6 +102,34 @@ const AnonymousChatScreen = () => {
       setLoading(false);
     }
   };
+
+  React.useEffect(() => {
+    if (selectedChannel) {
+      fetchChannelDetail(selectedChannel as ChannelList);
+      const serializeData = JSON.stringify({
+        id: selectedChannel.id,
+        channelType: selectedChannel.channelType,
+        name: selectedChannel.name
+      });
+      StorageUtils.openedChannel.set(serializeData);
+    }
+  }, [selectedChannel]);
+
+  const appState = React.useRef(AppState.currentState);
+  React.useEffect(() => {
+    const subscription = AppState.addEventListener('change', (nextAppState) => {
+      if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+        const channelData = StorageUtils.openedChannel.get();
+        const parsedData = JSON.parse(channelData || '');
+        fetchChannelDetail(parsedData as ChannelList);
+      }
+      appState.current = nextAppState;
+    });
+
+    return () => {
+      subscription?.remove();
+    };
+  }, []);
 
   return (
     <View style={styles.keyboardAvoidingView}>

@@ -3,11 +3,7 @@
 /* eslint-disable import/no-unresolved */
 
 import * as React from 'react';
-<<<<<<< Updated upstream
-import {FlatList, StatusBar, View} from 'react-native';
-=======
 import {AppState, FlatList, View} from 'react-native';
->>>>>>> Stashed changes
 
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
@@ -23,6 +19,7 @@ import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
 import {getOtherProfile} from '../../service/profile';
 import Loading from '../Loading';
 import {styles} from './AnonymousChatScreen';
+import StorageUtils from '../../utils/storage';
 
 const SignedChatScreen = () => {
   const {selectedChannel, chats, goBackFromChatScreen, goToChatInfoScreen, sendChat} =
@@ -90,26 +87,31 @@ const SignedChatScreen = () => {
     if (selectedChannel) {
       setChannel(selectedChannel, dispatchChannel);
       fetchOtherProfile();
+      fetchChannelDetail(selectedChannel as ChannelList);
+      const serializeData = JSON.stringify({
+        id: selectedChannel.id,
+        channelType: selectedChannel.channelType,
+        name: selectedChannel.name
+      });
+      StorageUtils.openedChannel.set(serializeData);
     }
   }, [selectedChannel]);
 
   const appState = React.useRef(AppState.currentState);
-
   React.useEffect(() => {
     const subscription = AppState.addEventListener('change', (nextAppState) => {
       if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
-        if (selectedChannel) {
-          fetchChannelDetail(selectedChannel as ChannelList);
-        }
+        const channelData = StorageUtils.openedChannel.get();
+        const parsedData = JSON.parse(channelData || '');
+        fetchChannelDetail(parsedData as ChannelList);
       }
-
       appState.current = nextAppState;
     });
 
     return () => {
       subscription?.remove();
     };
-  }, [selectedChannel]);
+  }, []);
 
   return (
     <View style={styles.keyboardAvoidingView}>
