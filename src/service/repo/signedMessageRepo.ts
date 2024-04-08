@@ -42,7 +42,11 @@ interface SignedMessageRepoTypes {
   getSingleSignedPostNotifications: (activityId: string) => Promise<SignedPostNotification>;
   setChannelAsRead: (channelId: string, channelType: ChannelTypeEnum) => Promise<boolean>;
   createSignedChat: (body: string[]) => Promise<any>;
-  getSignedChannelDetail: (channelType: GetstreamChannelType, channelId: string) => Promise<any>;
+  getSignedChannelDetail: (
+    channelType: GetstreamChannelType,
+    channelId: string,
+    timeStamp?: string
+  ) => Promise<any>;
 }
 
 async function checkIsTargetAllowingAnonDM(targetUserId: string) {
@@ -175,9 +179,16 @@ async function createSignedChat(members: string[]) {
   }
 }
 
-async function getSignedChannelDetail(channelType: GetstreamChannelType, channelId: string) {
+async function getSignedChannelDetail(
+  channelType: GetstreamChannelType,
+  channelId: string,
+  timeStamp?: string
+) {
+  const url = timeStamp
+    ? `${baseUrl.getSignedChannelDetail(channelType, channelId)}?last_fetch_date=${timeStamp}`
+    : baseUrl.getSignedChannelDetail(channelType, channelId);
   try {
-    const response = await api.get(baseUrl.getSignedChannelDetail(channelType, channelId));
+    const response = await api.get(url);
     if (response.status === 200) {
       return Promise.resolve(response.data?.data);
     }

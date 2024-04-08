@@ -34,7 +34,11 @@ interface AnonymousMessageRepoTypes {
   getAllAnonymousPostNotifications: (timeStamp: string) => Promise<AnonymousPostNotification[]>;
   getSingleAnonymousPostNotifications: (activityId: string) => Promise<AnonymousPostNotification>;
   setChannelAsRead: (channelId: string) => Promise<boolean>;
-  getAnonymousChannelDetail: (channelType: GetstreamChannelType, channelId: string) => Promise<any>;
+  getAnonymousChannelDetail: (
+    channelType: GetstreamChannelType,
+    channelId: string,
+    timeStamp?: string
+  ) => Promise<any>;
 }
 
 async function checkIsTargetAllowingAnonDM(targetUserId: string) {
@@ -150,11 +154,16 @@ async function setChannelAsRead(channelId: string): Promise<boolean> {
   }
 }
 
-async function getAnonymousChannelDetail(channelType: GetstreamChannelType, channelId: string) {
+async function getAnonymousChannelDetail(
+  channelType: GetstreamChannelType,
+  channelId: string,
+  timeStamp?: string
+) {
+  const url = timeStamp
+    ? `${baseUrl.getAnonymousChannelDetail(channelType, channelId)}?last_fetch_date=${timeStamp}`
+    : baseUrl.getAnonymousChannelDetail(channelType, channelId);
   try {
-    const response = await anonymousApi.get(
-      baseUrl.getAnonymousChannelDetail(channelType, channelId)
-    );
+    const response = await anonymousApi.get(url);
     if (response.status === 200) {
       return Promise.resolve(response.data?.data);
     }
