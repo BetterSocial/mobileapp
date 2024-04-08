@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
-import IconChevronRight from '../../../assets/icons/images/chevron-right.svg';
+import IconChevronRight from '../../../assets/icon/IconChevronRight';
 import {fonts} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
 
