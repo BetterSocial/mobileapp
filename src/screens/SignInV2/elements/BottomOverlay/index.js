@@ -30,11 +30,11 @@ const BottomOverlay = ({count, handleLogin, index, isLogin, title, onNextSlide, 
           <View style={bottomOverlayStyles.containerBtnLogin}>
             <TouchableOpacity onPress={() => handleLogin()} style={bottomOverlayStyles.btnSign}>
               <Image
-                style={{height: 48.5, width: '100%'}}
+                style={{height: dimen.normalizeDimen(48.5), width: '100%'}}
                 imageStyle={{borderRadius: 8}}
                 // eslint-disable-next-line global-require
                 source={require('../../../../assets/images/button-sign.png')}
-                resizeMode={imageConst.resizeMode.cover}
+                resizeMode={imageConst.resizeMode.contain}
               />
             </TouchableOpacity>
             <Text
