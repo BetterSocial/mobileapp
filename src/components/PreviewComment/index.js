@@ -160,7 +160,7 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(12),
     lineHeight: 19.36,
-    color: COLORS.greyseries
+    color: COLORS.white
   },
   seemore: {
     color: COLORS.blue

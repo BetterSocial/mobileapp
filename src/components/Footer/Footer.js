@@ -141,7 +141,7 @@ const Footer = ({
           color={
             !userAllowDm || loading.loadingGetAllowAnonDmStatus || loading.loadingDmAnon
               ? COLORS.gray310
-              : 'black'
+              : COLORS.white
           }
         />
       ),

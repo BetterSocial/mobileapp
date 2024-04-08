@@ -175,7 +175,7 @@ const ContactScreen = ({navigation}) => {
   }, [dataProvider]);
   const handleCreateChannel = async () => {
     try {
-      const mappingUserName = selectedUsers?.map((user) => user?.username).join(',');
+      const mappingUserName = selectedUsers?.map((user) => user?.username).join(', ');
       const mappingUserId = selectedUsers?.map((user) => user?.user_id).join(',');
       let image = DEFAULT_PROFILE_PIC_PATH;
       if (selectedUsers.length === 1) {

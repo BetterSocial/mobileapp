@@ -232,8 +232,8 @@ const ReplyCommentItem = ({
         <IcDmAnon
           color={
             !userAllowDm || loading.loadingGetAllowAnonDmStatus || loading.loadingDmAnon
-              ? COLORS.gray
-              : 'black'
+              ? COLORS.gray310
+              : COLORS.white
           }
         />
       ),
@@ -446,7 +446,7 @@ const styles = StyleSheet.create({
   post: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(16),
-    color: COLORS.mine_shaft,
+    color: COLORS.white,
     marginLeft: 28
   },
   profile: {

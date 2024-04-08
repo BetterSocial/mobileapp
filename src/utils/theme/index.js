@@ -15,8 +15,6 @@ export const COLORS = {
   bunting: '#11243D',
   french_pass: '#b6e4fd',
   greenMantis: '#79B45D',
-  greyseries: '#333333',
-  mine_shaft: '#333333',
   pattens_blue: '#ddf2fe',
   platinum: '#E6E6E6',
   porcelain: '#ecf0f1',
@@ -71,7 +69,9 @@ export const COLORS = {
   black75: 'rgba(0, 0, 0, 0.75)',
   transparent: 'transparent',
   anonSecondary20: 'rgba(0, 173, 181, 0.2)',
-  lightgrey60: 'rgba(245, 246, 247, 0.6)'
+  lightgrey60: 'rgba(245, 246, 247, 0.6)',
+  upvote: '#69DD10',
+  downvote: '#E2887E'
 };
 export const SIZES = {
   // global sizes
