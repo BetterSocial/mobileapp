@@ -217,14 +217,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: isFollow ? COLORS.redalert : COLORS.light_silver,
+    borderColor: isFollow ? COLORS.redalert : COLORS.gray110,
     borderWidth: 1
   }),
   button: (isFollow: boolean) => ({
     fontFamily: fonts.inter[500],
-    fontWeight: 'normal',
     fontSize: normalizeFontSize(12),
-    color: isFollow ? COLORS.redalert : COLORS.almostBlack
+    color: isFollow ? COLORS.redalert : COLORS.gray310
   }),
   textStyling: {
     fontFamily: fonts.inter[600],
