@@ -38,6 +38,8 @@ class ChannelList implements BaseDbSchema {
 
   rawJson: any;
 
+  topic_post_expired_at: string | null;
+
   user: UserSchema | null;
 
   members: ChannelListMemberSchema[] | null | undefined;
@@ -63,6 +65,7 @@ class ChannelList implements BaseDbSchema {
     lastUpdatedBy,
     createdAt,
     rawJson,
+    topicPostExpiredAt,
     user,
     expiredAt = null,
     members = [],
@@ -84,6 +87,7 @@ class ChannelList implements BaseDbSchema {
     this.lastUpdatedBy = lastUpdatedBy;
     this.createdAt = createdAt;
     this.rawJson = rawJson;
+    this.topic_post_expired_at = topicPostExpiredAt;
     this.user = user;
     this.members = members;
     this.expiredAt = expiredAt;
@@ -390,7 +394,8 @@ class ChannelList implements BaseDbSchema {
       anon_user_info_color_code: json?.anon_user_info_color_code,
       anon_user_info_color_name: json?.anon_user_info_color_name,
       anon_user_info_emoji_name: json?.anon_user_info_emoji_name,
-      anon_user_info_emoji_code: json?.anon_user_info_emoji_code
+      anon_user_info_emoji_code: json?.anon_user_info_emoji_code,
+      topicPostExpiredAt: json?.post_expired_at
     });
   }
 
@@ -418,6 +423,7 @@ class ChannelList implements BaseDbSchema {
       members: json.members,
       memberUsers: json.memberUsers,
       expiredAt: json.expired_at,
+      topicPostExpiredAt: json.topic_post_expired_at,
       user,
       anon_user_info_color_code: json?.anon_user_info_color_code,
       anon_user_info_color_name: json?.anon_user_info_color_name,
@@ -442,7 +448,8 @@ class ChannelList implements BaseDbSchema {
       lastUpdatedBy: object?.actor?.id,
       createdAt: object?.time,
       rawJson: json,
-      user: null
+      user: null,
+      topicPostExpiredAt: null
     });
   }
 
