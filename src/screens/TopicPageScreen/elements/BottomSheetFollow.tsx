@@ -4,7 +4,7 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import IconClose from '../../../assets/icon/IconClose';
 import {BottomSheetV2} from '../../../components/BottomSheet';
 import dimen from '../../../utils/dimen';
-import {fonts} from '../../../utils/fonts';
+import {fonts, normalizeFontSize} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
 import {Button} from '../../../components/Button';
 import useChatClientHook from '../../../utils/getstream/useChatClientHook';
@@ -126,7 +126,7 @@ const BottomSheetFollow = forwardRef((props: BottomSheetFollowProps, ref: Ref<RB
           </View>
           <View
             style={{
-              borderTopColor: COLORS.gray,
+              borderTopColor: COLORS.gray210,
               borderTopWidth: 1
             }}
           />
@@ -164,24 +164,8 @@ const BottomSheetFollow = forwardRef((props: BottomSheetFollowProps, ref: Ref<RB
                 });
               }}
               disabled={followType === ''}
-              styles={{
-                backgroundColor: COLORS.almostBlack,
-                paddingVertical: dimen.normalizeDimen(11),
-                paddingHorizontal: dimen.normalizeDimen(20),
-                borderRadius: dimen.normalizeDimen(8),
-                height: dimen.normalizeDimen(40),
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                borderColor: isFollow ? COLORS.redalert : COLORS.light_silver,
-                borderWidth: 1
-              }}
-              textStyling={{
-                fontFamily: fonts.inter[500],
-                fontWeight: 'normal',
-                fontSize: 12,
-                color: isFollow ? COLORS.redalert : COLORS.almostBlack
-              }}>
+              styles={styles.buttonContainer(isFollow)}
+              textStyling={styles.button(isFollow)}>
               Leave Community
             </Button>
           </View>
@@ -209,28 +193,42 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: normalizeFontSize(16),
     color: COLORS.black
   },
   description: {
     fontFamily: fonts.inter[400],
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     color: COLORS.gray410,
-    marginTop: 7
+    marginTop: dimen.normalizeDimen(7)
   },
   errorText: {
     fontFamily: fonts.inter[400],
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     color: COLORS.redalert,
     marginTop: dimen.normalizeDimen(7)
   },
-  button: {
-    marginTop: 33,
-    backgroundColor: COLORS.signed_primary
-  },
+  buttonContainer: (isFollow: boolean) => ({
+    backgroundColor: COLORS.almostBlack,
+    paddingVertical: dimen.normalizeDimen(11),
+    paddingHorizontal: dimen.normalizeDimen(20),
+    borderRadius: dimen.normalizeDimen(8),
+    height: dimen.normalizeDimen(40),
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: isFollow ? COLORS.redalert : COLORS.light_silver,
+    borderWidth: 1
+  }),
+  button: (isFollow: boolean) => ({
+    fontFamily: fonts.inter[500],
+    fontWeight: 'normal',
+    fontSize: normalizeFontSize(12),
+    color: isFollow ? COLORS.redalert : COLORS.almostBlack
+  }),
   textStyling: {
     fontFamily: fonts.inter[600],
-    fontSize: 18,
+    fontSize: normalizeFontSize(18),
     color: COLORS.almostBlack
   }
 });

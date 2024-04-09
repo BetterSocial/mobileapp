@@ -24,7 +24,7 @@ const UserItem = ({type, username, profilePicture, isFollowing, onPress}: UserIt
         alignItems: 'center',
         paddingVertical: dimen.normalizeDimen(14),
         paddingHorizontal: dimen.normalizeDimen(20),
-        borderBottomColor: COLORS.gray,
+        borderBottomColor: COLORS.gray210,
         borderBottomWidth: 1
       }}>
       <View style={{flex: 1, flexDirection: 'column'}}>
@@ -53,7 +53,7 @@ const UserItem = ({type, username, profilePicture, isFollowing, onPress}: UserIt
             style={{
               fontFamily: fonts.inter[400],
               fontSize: 14,
-              color: COLORS.black
+              color: COLORS.white
             }}>
             {type === 'signed' ? `as @${username}` : 'Incognito'}
           </Text>
@@ -62,7 +62,7 @@ const UserItem = ({type, username, profilePicture, isFollowing, onPress}: UserIt
           style={{
             fontFamily: fonts.inter[400],
             fontSize: 12,
-            color: COLORS.gray410,
+            color: COLORS.gray510,
             marginTop: 4,
             lineHeight: 18
           }}>
