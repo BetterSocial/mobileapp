@@ -64,17 +64,15 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    backgroundColor: 'red',
+    backgroundColor: COLORS.gray110,
     color: COLORS.white,
     fontFamily: 'Inter',
     fontSize: normalizeFontSize(14),
     fontStyle: 'normal',
     fontWeight: '400',
-    lineHeight: normalizeFontSize(14),
     marginRight: dimen.normalizeDimen(12),
     minHeight: dimen.normalizeDimen(20),
     maxHeight: dimen.normalizeDimen(80),
-    height: dimen.normalizeDimen(20),
     textAlignVertical: 'center',
     paddingTop: dimen.normalizeDimen(2)
   },
