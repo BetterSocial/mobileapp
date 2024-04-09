@@ -64,6 +64,9 @@ const ReportDomain = React.forwardRef((props, ref) => {
         closeOnDragDown={true}
         closeOnPressMask={true}
         customStyles={{
+          wrapper: {
+            backgroundColor: COLORS.black80
+          },
           container: styles.container,
           draggableIcon: styles.draggableIcon
         }}>

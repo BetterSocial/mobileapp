@@ -67,6 +67,7 @@ export const COLORS = {
   holytosca30percent: '#00ADB54D',
   black50: 'rgba(0, 0, 0, 0.5)',
   black75: 'rgba(0, 0, 0, 0.75)',
+  black80: 'rgba(0, 0, 0, 0.8)',
   transparent: 'transparent',
   anonSecondary20: 'rgba(0, 173, 181, 0.2)',
   lightgrey60: 'rgba(245, 246, 247, 0.6)',
