@@ -5,11 +5,13 @@ import {View} from 'react-native';
 import ChannelContent from './elements/ChannelContent';
 import ChannelImage from './elements/ChannelImage';
 import CustomPressable from '../CustomPressable';
-import {ChannelItemProps} from '../../../types/component/ChatList/ChannelItem.types';
+import useTopicChannelItemHook from './hook/useTopicChannelItemHook';
+import {TopicChannelItemProps} from '../../../types/component/ChatList/ChannelItem.types';
 import {calculateTime} from '../../utils/time';
 import {channelItemStyles as styles} from './ChannelItem.style';
 
-const CommunityChannelItem = (props: ChannelItemProps) => {
+const CommunityChannelItem = (props: TopicChannelItemProps) => {
+  useTopicChannelItemHook(props);
   const {channel: community, onChannelPressed} = props;
   const channelType = 'COMMUNITY';
   const channelPicture = community?.channelPicture;
