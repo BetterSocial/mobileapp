@@ -27,6 +27,7 @@ import ShareUtils from '../../utils/share';
 import {COLORS} from '../../utils/theme';
 import RenderItem from './RenderItem';
 import Search from './Search';
+import dimen from '../../utils/dimen';
 
 const NewsScreen = () => {
   const navigation = useNavigation();
@@ -248,7 +249,7 @@ const NewsScreen = () => {
           }
           onEndReached={loadMoreData}
           contentContainerStyle={styles.flatlistContainer}
-          style={{backgroundColor: COLORS.almostBlack}}
+          style={{backgroundColor: COLORS.gray110}}
           initialNumToRender={2}
           maxToRenderPerBatch={2}
           updateCellsBatchingPeriod={10}
@@ -286,10 +287,14 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.gray6
   },
-  containerLoading: {flex: 1, justifyContent: 'center', alignItems: 'center'},
+  containerLoading: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   flatlistContainer: {
-    paddingTop: 10,
-    backgroundColor: COLORS.almostBlack
+    paddingTop: dimen.normalizeDimen(4),
+    backgroundColor: COLORS.gray110
   }
 });
 

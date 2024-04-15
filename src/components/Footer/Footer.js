@@ -39,7 +39,8 @@ const Footer = ({
   blockStatus,
   loadingVote,
   isShowDM = false,
-  isShortText = false
+  isShortText = false,
+  isNews = false
 }) => {
   const {sendMessageDM} = useDMMessage();
   const [profile] = React.useContext(Context).profile;
@@ -176,20 +177,20 @@ const Footer = ({
           style={{
             paddingHorizontal: 16,
             backgroundColor: COLORS.almostBlack,
-            borderRightWidth: 1,
-            borderLeftWidth: 1,
+            borderRightWidth: isNews ? 0 : 1,
+            borderLeftWidth: isNews ? 0 : 1,
             borderColor: COLORS.darkGray
           }}>
           <View
             style={{
               borderTopColor: COLORS.gray300,
-              borderTopWidth: 1,
+              borderTopWidth: isNews ? 0 : 1,
               opacity: 0.3
             }}
           />
         </View>
       )}
-      <View style={styles.container(isShortText)}>
+      <View style={styles.container(isShortText, isNews)}>
         {isShortText && (
           <LinearGradient
             colors={['#275D8A', '#275D8A']}
@@ -204,7 +205,7 @@ const Footer = ({
             <View
               style={{
                 borderTopColor: COLORS.gray300,
-                borderTopWidth: 1,
+                borderTopWidth: isNews ? 0 : 1,
                 opacity: 0.3
               }}
             />
@@ -328,7 +329,7 @@ const Footer = ({
 };
 
 const styles = StyleSheet.create({
-  container: (isShortText) => ({
+  container: (isShortText, isNews) => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -336,8 +337,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     backgroundColor: COLORS.almostBlack,
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
+    borderLeftWidth: isNews ? 0 : 1,
+    borderRightWidth: isNews ? 0 : 1,
     borderColor: COLORS.darkGray,
     marginTop: isShortText ? -1 : 0
   }),

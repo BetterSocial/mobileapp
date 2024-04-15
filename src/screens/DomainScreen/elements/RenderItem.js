@@ -195,6 +195,7 @@ const RenderItem = ({
             onPressComment={() => onPressComment(item)}
             onPressDownVote={onDownvoteClick}
             onPressUpvote={onUpvoteClick}
+            isNews
           />
         </View>
         {isReaction && (

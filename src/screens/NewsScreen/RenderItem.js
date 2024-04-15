@@ -8,6 +8,7 @@ import {COLORS, SIZES} from '../../utils/theme';
 import {Footer} from '../../components';
 import {getCountCommentWithChild, getCountVote} from '../../utils/getstream';
 import useItemNews from './hooks/useItemNews';
+import dimen from '../../utils/dimen';
 
 const RenderItem = ({
   item,
@@ -41,7 +42,7 @@ const RenderItem = ({
 
   return (
     <View style={styles.container}>
-      <View style={{paddingHorizontal: 18}}>
+      <View style={{paddingHorizontal: dimen.normalizeDimen(16)}}>
         <Header
           image={item.domain.image}
           domain={item.domain.name}
@@ -67,6 +68,7 @@ const RenderItem = ({
           onPressDownVote={() => onPressDownVoteHandle(item, onPressDownVote)}
           onPressUpvote={() => onPressUpvoteNew(item, onPressUpvote)}
           statusVote={voteStatus}
+          isNews
         />
       </View>
     </View>
@@ -75,16 +77,24 @@ const RenderItem = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 10,
+    marginBottom: dimen.normalizeDimen(SIZES.base),
     borderRadius: SIZES.radius,
     backgroundColor: COLORS.almostBlack,
-    elevation: 0.0,
     borderColor: COLORS.gray410,
-    marginHorizontal: SIZES.base
+    marginHorizontal: SIZES.base,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+    elevation: 6
   },
   wrapperFooter: {
-    // marginHorizontal: SIZES.base,
-    height: 52
+    borderRadius: SIZES.radius,
+    height: dimen.normalizeDimen(52),
+    overflow: 'hidden'
   }
 });
 
