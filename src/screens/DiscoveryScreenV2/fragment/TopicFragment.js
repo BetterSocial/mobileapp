@@ -276,7 +276,8 @@ const styles = StyleSheet.create({
   noDataFoundText: {
     alignSelf: 'center',
     justifyContent: 'center',
-    fontFamily: fonts.inter[600]
+    fontFamily: fonts.inter[600],
+    color: COLORS.white
   },
   unfollowedHeaderContainer: {
     backgroundColor: COLORS.gray110,
