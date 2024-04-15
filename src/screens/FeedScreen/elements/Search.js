@@ -3,8 +3,9 @@ import {View, Text, StyleSheet, Animated, Pressable} from 'react-native';
 
 import MemoIc_search from '../../../assets/icons/Ic_search';
 import StringConstant from '../../../utils/string/StringConstant';
-import {fonts} from '../../../utils/fonts';
+import {fonts, normalizeFontSize} from '../../../utils/fonts';
 import {COLORS, FONTS, SIZES} from '../../../utils/theme';
+import dimen from '../../../utils/dimen';
 
 const Search = ({animatedValue, onContainerClicked = () => {}, getSearchLayout}) => {
   const onSearchLayout = (event) => {
@@ -16,10 +17,10 @@ const Search = ({animatedValue, onContainerClicked = () => {}, getSearchLayout})
 
   return (
     <Animated.View onLayout={onSearchLayout} style={styles.animatedViewContainer(animatedValue)}>
-      <Pressable onPress={onContainerClicked} style={styles.searchContainer}>
+      <Pressable onPress={onContainerClicked} style={styles.searchPressableContainer}>
         <View style={styles.wrapperSearch}>
           <View style={styles.wrapperIcon}>
-            <MemoIc_search width={16.67} height={16.67} fill={COLORS.gray410} />
+            <MemoIc_search width={16.67} height={16.67} fill={COLORS.gray310} />
           </View>
           <Text style={styles.inputText}>{StringConstant.discoverySearchBarPlaceholder}</Text>
         </View>
@@ -32,63 +33,52 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     backgroundColor: COLORS.almostBlack,
-    marginBottom: SIZES.base,
-    marginHorizontal: SIZES.base
+    marginBottom: SIZES.base
   },
-  searchContainer: {
-    flex: 1
+  searchPressableContainer: {
+    flex: 1,
+    justifyContent: 'center'
   },
   wrapperSearch: {
-    flex: 1,
-    backgroundColor: COLORS.gray110,
-    marginLeft: 20,
-    marginRight: 20,
-    borderRadius: 8,
-    alignSelf: 'center',
     flexDirection: 'row',
-    height: 36
+    backgroundColor: COLORS.gray110,
+    marginLeft: dimen.normalizeDimen(20),
+    marginRight: dimen.normalizeDimen(12),
+    borderRadius: SIZES.base,
+    alignSelf: 'center',
+    height: 34
   },
   wrapperButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
     marginEnd: SIZES.base,
-    paddingLeft: 8,
-    paddingRight: 8,
-    paddingTop: 9,
-    paddingBottom: 9
-  },
-  input: {
-    marginRight: 16,
-    paddingStart: 10,
-    flex: 1,
-    fontSize: 14,
-    fontFamily: fonts.inter[400],
-    height: 36,
-    paddingTop: 0,
-    paddingBottom: 0
+    paddingLeft: dimen.normalizeDimen(8),
+    paddingRight: dimen.normalizeDimen(12),
+    paddingTop: dimen.normalizeDimen(9),
+    paddingBottom: dimen.normalizeDimen(9)
   },
   inputText: {
-    marginRight: 16,
-    paddingStart: 10,
+    marginRight: dimen.normalizeDimen(16),
+    paddingStart: dimen.normalizeDimen(10),
     flex: 1,
-    fontSize: 14,
+    fontSize: normalizeFontSize(14),
     fontFamily: fonts.inter[400],
-    // height: 36,
     paddingTop: 0,
     paddingBottom: 0,
     color: COLORS.gray410,
     alignSelf: 'center'
   },
   wrapperIcon: {
-    marginLeft: 8,
+    marginLeft: dimen.normalizeDimen(8),
     alignSelf: 'center',
     justifyContent: 'center'
   },
   newPostText: {
     color: COLORS.anon_primary,
-    marginRight: 11,
-    ...FONTS.h3
+    marginRight: dimen.normalizeDimen(4),
+    fontFamily: fonts.inter[600],
+    fontSize: normalizeFontSize(14)
   },
   animatedViewContainer: (animatedValue) => ({
     flexDirection: 'row',
@@ -100,8 +90,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     zIndex: 10,
-    paddingTop: 7,
-    paddingBottom: 7
+    paddingTop: dimen.normalizeDimen(7),
+    paddingBottom: dimen.normalizeDimen(7)
   })
 });
 

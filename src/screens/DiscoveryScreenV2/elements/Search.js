@@ -245,8 +245,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     backgroundColor: COLORS.almostBlack,
-    marginBottom: SIZES.base,
-    marginHorizontal: SIZES.base
+    marginBottom: SIZES.base
   },
   clearIconContainer: {
     justifyContent: 'center',
@@ -255,15 +254,16 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     flex: 1,
+    justifyContent: 'center',
     marginRight: dimen.normalizeDimen(20)
   },
   wrapperSearch: {
     flex: 1,
     backgroundColor: COLORS.gray110,
-    borderRadius: dimen.normalizeDimen(12),
+    borderRadius: dimen.normalizeDimen(SIZES.base),
     alignSelf: 'center',
     flexDirection: 'row',
-    height: dimen.normalizeDimen(36),
+    height: dimen.normalizeDimen(34),
     paddingRight: dimen.normalizeDimen(12)
   },
   wrapperButton: {

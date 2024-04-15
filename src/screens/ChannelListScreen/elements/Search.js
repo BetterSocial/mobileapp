@@ -64,35 +64,35 @@ const styles = StyleSheet.create({
   wrapperSearch: {
     flexDirection: 'row',
     backgroundColor: COLORS.gray110,
-    marginLeft: 20,
-    marginRight: 12,
-    borderRadius: 12,
+    marginLeft: dimen.normalizeDimen(20),
+    marginRight: dimen.normalizeDimen(12),
+    borderRadius: SIZES.base,
     alignSelf: 'center',
-    height: 28
+    height: 34
   },
   wrapperButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
     marginEnd: SIZES.base,
-    paddingLeft: 8,
-    paddingRight: 12,
-    paddingTop: 9,
-    paddingBottom: 9
+    paddingLeft: dimen.normalizeDimen(8),
+    paddingRight: dimen.normalizeDimen(12),
+    paddingTop: dimen.normalizeDimen(9),
+    paddingBottom: dimen.normalizeDimen(9)
   },
   input: {
-    paddingStart: 10,
-    lineHeight: 28,
+    paddingStart: dimen.normalizeDimen(10),
+    lineHeight: normalizeFontSize(28),
     flex: 1,
     paddingBottom: 0,
     paddingTop: 0,
     fontFamily: fonts.inter[400],
-    fontSize: 14,
+    fontSize: normalizeFontSize(14),
     alignSelf: 'center',
     color: COLORS.gray410
   },
   wrapperIcon: {
-    marginLeft: 8,
+    marginLeft: dimen.normalizeDimen(8),
     alignSelf: 'center',
     justifyContent: 'center'
   },
@@ -116,8 +116,8 @@ const styles = StyleSheet.create({
     right: 0,
     zIndex: 10,
     height: '100%',
-    paddingTop: 7,
-    paddingBottom: 7
+    paddingTop: dimen.normalizeDimen(7),
+    paddingBottom: dimen.normalizeDimen(7)
   })
 });
 
