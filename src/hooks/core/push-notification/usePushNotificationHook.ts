@@ -143,32 +143,25 @@ const usePushNotificationHook = () => {
     }
     if (notification.data.type === 'message.new') {
       if (notification.userInteraction) {
+        if (Platform.OS === 'ios') {
+          PushNotificationIOS.removeAllDeliveredNotifications();
+        } else {
+          PushNotification.removeAllDeliveredNotifications();
+        }
         // change receiver_id to userId to decide which anon or signed
-        const channel = new ChannelList({
-          id: notification?.data?.channel_id,
-          channelType: 'PM'
-        });
-        setIsLoadingFetchingChannelDetail(true);
-        try {
-          await fetchChannelDetail(channel);
-          const selectedChannel = await ChannelList.getSchemaById(
-            localDb,
-            notification?.data?.channel_id
-          );
-          setSelectedChannel(selectedChannel);
-          if (notification?.data?.is_annoymous === 'false') {
-            helperNavigationResetWithData({
-              screen: 'SignedChatScreen'
-            });
-          } else {
-            helperNavigationResetWithData({
-              screen: 'AnonymousChatScreen'
-            });
-          }
-        } catch (e) {
-          console.log('error', e);
-        } finally {
-          setIsLoadingFetchingChannelDetail(false);
+        const selectedChannel = await ChannelList.getSchemaById(
+          localDb,
+          notification?.data?.channel_id
+        );
+        setSelectedChannel(selectedChannel);
+        if (notification?.data?.is_annoymous === 'false') {
+          helperNavigationResetWithData({
+            screen: 'SignedChatScreen'
+          });
+        } else {
+          helperNavigationResetWithData({
+            screen: 'AnonymousChatScreen'
+          });
         }
       }
     }
