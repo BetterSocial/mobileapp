@@ -8,10 +8,8 @@ import useReplyComment from '../../../src/components/Comments/hooks/useReplyComm
 import ContainerComment, {
   ContainerReply,
   ReplyComment,
-  isEqual,
-  styles
+  isEqual
 } from '../../../src/components/Comments/ContainerComment';
-import {COLORS} from '../../../src/utils/theme';
 import {Context} from '../../../src/context/Store';
 import {feedsState} from '../../../src/context/reducers/FeedReducer';
 
@@ -158,51 +156,6 @@ describe('ContainerComment should run correctly', () => {
     expect(toJSON).toMatchSnapshot();
   });
 
-  it('Press comment should navigate', () => {
-    const refreshComment = jest.fn();
-    const refreshChildComment = jest.fn();
-    const navigateToReplyView = jest.fn();
-    const findCommentAndUpdate = jest.fn();
-
-    const contextValue = {
-      feeds: [feedsState, () => jest.fn()],
-      profile: [{}, jest.fn()]
-    };
-
-    const {getByTestId} = render(
-      <Context.Provider value={contextValue}>
-        <ContainerComment
-          refreshChildComment={refreshChildComment}
-          navigateToReplyView={navigateToReplyView}
-          findCommentAndUpdate={findCommentAndUpdate}
-          refreshComment={refreshComment}
-          comments={comments}
-          indexFeed={undefined}
-          isLoading={false}
-        />
-      </Context.Provider>
-    );
-    fireEvent.press(getByTestId('memoComment'));
-    expect(navigateToReplyView).toHaveBeenCalled();
-  });
-
-  it('Styles should correct', () => {
-    expect(styles.seeRepliesContainer(true)).toEqual({
-      display: 'flex',
-      flexDirection: 'row',
-      paddingBottom: 14,
-      borderLeftColor: COLORS.transparent,
-      borderLeftWidth: 1
-    });
-    expect(styles.seeRepliesContainer(false)).toEqual({
-      display: 'flex',
-      flexDirection: 'row',
-      paddingBottom: 14,
-      borderLeftColor: COLORS.balance_gray,
-      borderLeftWidth: 1
-    });
-  });
-
   it('ContainerReply should match snapshot', () => {
     const {toJSON, getAllByTestId} = render(
       <ContainerReply>
@@ -266,31 +219,6 @@ describe('ContainerComment should run correctly', () => {
       </Context.Provider>
     );
     expect(toJSON).toMatchSnapshot();
-  });
-
-  it('onpress comment should run correctly', () => {
-    const navigateToReplyView = jest.fn();
-    const indexFeed = 0;
-    const findCommentAndUpdate = jest.fn();
-
-    const contextValue = {
-      feeds: [feedsState, () => jest.fn()],
-      profile: [{}, jest.fn()]
-    };
-
-    const {getByTestId} = render(
-      <Context.Provider value={contextValue}>
-        <ReplyComment
-          countComment={comments2[0].children_counts.comment}
-          indexFeed={indexFeed}
-          findCommentAndUpdate={findCommentAndUpdate}
-          navigateToReplyView={navigateToReplyView}
-          data={comments2[0].latest_children.comment}
-        />
-      </Context.Provider>
-    );
-    fireEvent.press(getByTestId('memoComment'));
-    expect(navigateToReplyView).toHaveBeenCalled();
   });
 });
 

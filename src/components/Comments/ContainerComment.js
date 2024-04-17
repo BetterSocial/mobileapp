@@ -1,11 +1,9 @@
 import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import {Alert, Dimensions, StyleSheet, Text, TouchableWithoutFeedback, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 
 import moment from 'moment';
 import LinearGradient from 'react-native-linear-gradient';
-import ButtonHightlight from '../ButtonHighlight';
 import Comment from './Comment';
 import ConnectorWrapper from './ConnectorWrapper';
 import LoadingComment from '../LoadingComment';
@@ -16,9 +14,134 @@ import usePostContextHook, {CONTEXT_SOURCE} from '../../hooks/usePostContextHook
 import {deleteComment} from '../../service/comment';
 import {getUserId} from '../../utils/users';
 import usePostDetail from '../PostPageDetail/hooks/usePostDetail';
-import ListComment from './ListComment';
 import {COLORS} from '../../utils/theme';
 import {fonts, normalize} from '../../utils/fonts';
+
+export const ContainerReply = ({children, isGrandchild}) => (
+  <View style={[{borderColor: isGrandchild ? COLORS.almostBlack : COLORS.balance_gray}]}>
+    {children}
+  </View>
+);
+
+export const ReplyComment = ({
+  indexFeed,
+  data,
+  countComment,
+  hideLeftConnector,
+  findCommentAndUpdate,
+  onCommentLongPressed = () => {},
+  updateVote,
+  feedId,
+  level = 1,
+  onReplyButtonClick
+}) => {
+  const {isLast} = useReplyComment();
+  return (
+    <ContainerReply hideLeftConnector={hideLeftConnector}>
+      {data.map((item, index) => (
+        <React.Fragment key={`c-${index}`}>
+          {item.user ? (
+            <ConnectorWrapper index={index} level={level}>
+              <TouchableWithoutFeedback onLongPress={() => onCommentLongPressed(item, 1)}>
+                <View key={`c${index}`} style={styles.levelOneCommentWrapper}>
+                  <Comment
+                    feedId={feedId}
+                    indexFeed={indexFeed}
+                    key={`c${index}`}
+                    comment={item}
+                    onLongPress={() => onCommentLongPressed(item, 1)}
+                    user={item.user}
+                    level={level}
+                    photo={item.user?.data?.profile_pic_url}
+                    time={item.created_at || moment().format()}
+                    isLast={isLast(item, index, countComment)}
+                    findCommentAndUpdate={findCommentAndUpdate}
+                    updateVote={updateVote}
+                    onPress={(reactionId, replyUsername) =>
+                      onReplyButtonClick(reactionId, replyUsername, level)
+                    }
+                  />
+                  {item.children_counts.comment > 0 && (
+                    <ReplyComment
+                      feedId={feedId}
+                      hideLeftConnector={true}
+                      data={item.latest_children.comment}
+                      countComment={item.children_counts.comment}
+                      indexFeed={indexFeed}
+                      findCommentAndUpdate={findCommentAndUpdate}
+                      onCommentLongPressed={onCommentLongPressed}
+                      updateVote={updateVote}
+                      level={2}
+                      onReplyButtonClick={onReplyButtonClick}
+                    />
+                  )}
+                </View>
+              </TouchableWithoutFeedback>
+            </ConnectorWrapper>
+          ) : null}
+        </React.Fragment>
+      ))}
+    </ContainerReply>
+  );
+};
+
+const ListComment = ({
+  indexFeed,
+  index,
+  onCommentLongPressed,
+  item,
+  isLast,
+  isLastInParent,
+  comments,
+  findCommentAndUpdate,
+  hideLeftConnector,
+  updateVote,
+  feedId,
+  onReplyButtonClick
+}) => {
+  return (
+    <TouchableWithoutFeedback key={index} onLongPress={() => onCommentLongPressed(item, 0)}>
+      <View>
+        <View key={`p${index}`}>
+          {item.user ? (
+            <Comment
+              feedId={feedId}
+              indexFeed={indexFeed}
+              key={`p${index}`}
+              comment={item}
+              user={item.user}
+              level={0}
+              time={item.created_at}
+              photo={item.user.data?.profile_pic_url}
+              isLast={isLast(index, item, comments)}
+              isLastInParent={isLastInParent(index, comments)}
+              showLeftConnector={false}
+              findCommentAndUpdate={findCommentAndUpdate}
+              onLongPress={onCommentLongPressed}
+              updateVote={updateVote}
+              onPress={(reactionId, replyUsername) =>
+                onReplyButtonClick(reactionId, replyUsername, 0)
+              }
+            />
+          ) : null}
+        </View>
+        {item?.children_counts?.comment > 0 && (
+          <ReplyComment
+            feedId={feedId}
+            hideLeftConnector={hideLeftConnector(index, item, comments)}
+            data={item.latest_children.comment}
+            countComment={item.children_counts.comment}
+            indexFeed={indexFeed}
+            findCommentAndUpdate={findCommentAndUpdate}
+            onCommentLongPressed={onCommentLongPressed}
+            updateVote={updateVote}
+            onReplyButtonClick={onReplyButtonClick}
+          />
+        )}
+      </View>
+    </TouchableWithoutFeedback>
+  );
+};
 
 const ContainerComment = ({
   feedId,
@@ -26,19 +149,26 @@ const ContainerComment = ({
   indexFeed,
   isLoading,
   refreshComment,
-  navigateToReplyView,
   findCommentAndUpdate,
   contextSource = CONTEXT_SOURCE.FEEDS,
   itemParent,
   updateVote,
-  isShortText
+  isShortText,
+  onReplyButtonClick
 }) => {
-  const navigation = useNavigation();
   const [, setSelectedCommentForDelete] = React.useState(null);
   const [selectedCommentLevelForDelete, setSelectedCommentLevelForDelete] = React.useState(0);
   const {isLast, isLastInParent, hideLeftConnector} = useContainerComment();
   const {calculationText, calculatedSizeScreen, calculatePaddingBtm} = usePostDetail();
   const {deleteCommentFromContext} = usePostContextHook(contextSource);
+  const onDeleteCommentClicked = async (item) => {
+    const response = await deleteComment(item?.id);
+    if (response?.success) {
+      deleteCommentFromContext(feedId, item?.id, selectedCommentLevelForDelete);
+      refreshComment();
+      SimpleToast.show('Comment has been deleted successfully');
+    }
+  };
   const onCommentLongPressed = async (item, level = 0) => {
     const selfId = await getUserId();
     if (selfId === item?.user_id || item?.is_you) {
@@ -55,15 +185,6 @@ const ContainerComment = ({
           onPress: () => onDeleteCommentClicked(item)
         }
       ]);
-    }
-  };
-
-  const onDeleteCommentClicked = async (item) => {
-    const response = await deleteComment(item?.id);
-    if (response?.success) {
-      deleteCommentFromContext(feedId, item?.id, selectedCommentLevelForDelete);
-      refreshComment();
-      SimpleToast.show('Comment has been deleted successfully');
     }
   };
 
@@ -138,12 +259,11 @@ const ContainerComment = ({
                       isLast={isLast}
                       isLastInParent={isLastInParent}
                       comments={comments}
-                      navigateToReplyView={navigateToReplyView}
                       findCommentAndUpdate={findCommentAndUpdate}
                       hideLeftConnector={hideLeftConnector}
-                      navigation={navigation}
                       updateVote={handleUpdateVote}
                       feedId={feedId}
+                      onReplyButtonClick={onReplyButtonClick}
                     />
                   ) : null}
                 </View>
@@ -155,72 +275,6 @@ const ContainerComment = ({
         </View>
       </View>
     </View>
-  );
-};
-
-export const ContainerReply = ({children, isGrandchild}) => (
-  <View style={[{borderColor: isGrandchild ? COLORS.almostBlack : COLORS.balance_gray}]}>
-    {children}
-  </View>
-);
-
-export const ReplyComment = ({
-  indexFeed,
-  data,
-  countComment,
-  hideLeftConnector,
-  navigateToReplyView,
-  findCommentAndUpdate,
-  onCommentLongPressed = () => {},
-  updateVote,
-  feedId
-}) => {
-  const {isLast, isLastInParent} = useReplyComment();
-  return (
-    <ContainerReply hideLeftConnector={hideLeftConnector}>
-      {data.map((item, index) => (
-        <React.Fragment key={`c-${index}`}>
-          {item.user ? (
-            <ConnectorWrapper index={index}>
-              <TouchableWithoutFeedback onLongPress={() => onCommentLongPressed(item, 1)}>
-                <View key={`c${index}`} style={styles.levelOneCommentWrapper}>
-                  <Comment
-                    feedId={feedId}
-                    indexFeed={indexFeed}
-                    key={`c${index}`}
-                    comment={item}
-                    onLongPress={() => onCommentLongPressed(item, 1)}
-                    user={item.user}
-                    level={1}
-                    photo={item.user?.data?.profile_pic_url}
-                    time={item.created_at || moment().format()}
-                    onPress={() => navigateToReplyView({item, level: 2, indexFeed})}
-                    isLast={isLast(item, index, countComment)}
-                    findCommentAndUpdate={findCommentAndUpdate}
-                    updateVote={updateVote}
-                  />
-                  {item.children_counts.comment > 0 && (
-                    <>
-                      <View style={styles.seeRepliesContainer(isLastInParent(index, countComment))}>
-                        <View style={styles.connector} />
-                        <ButtonHightlight
-                          onPress={() => navigateToReplyView({item, level: 2, indexFeed})}>
-                          <Text style={styles.seeRepliesText}>
-                            {StringConstant.postDetailPageSeeReplies(
-                              item.children_counts.comment || 0
-                            )}
-                          </Text>
-                        </ButtonHightlight>
-                      </View>
-                    </>
-                  )}
-                </View>
-              </TouchableWithoutFeedback>
-            </ConnectorWrapper>
-          ) : null}
-        </React.Fragment>
-      ))}
-    </ContainerReply>
   );
 };
 
@@ -237,30 +291,6 @@ export const styles = StyleSheet.create({
   },
   lineBeforeProfile: {
     height: 8.5
-  },
-  seeRepliesContainer: (isLast) => ({
-    display: 'flex',
-    flexDirection: 'row',
-    paddingBottom: 14,
-    borderLeftColor: isLast ? COLORS.transparent : COLORS.balance_gray,
-    borderLeftWidth: 1
-  }),
-  seeRepliesText: {
-    color: COLORS.signed_primary
-  },
-  connector: {
-    width: 10,
-    height: 5,
-    borderLeftWidth: 1.5,
-    borderBottomWidth: 1.5,
-    // borderBottomLeftRadius: 1,
-    borderLeftColor: COLORS.balance_gray,
-    borderBottomColor: COLORS.balance_gray,
-    marginRight: 4,
-    marginLeft: -1,
-    borderBottomLeftRadius: 15 / 2,
-    marginTop: 0
-    // marginTop: 1
   },
   levelOneCommentWrapper: {
     flex: 1,
