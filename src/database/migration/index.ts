@@ -2,7 +2,7 @@
 import LocalDatabase from '..';
 import allMigrationsFile from './file/index';
 
-export const TARGET_MIGRATION_VERSION = 21;
+export const TARGET_MIGRATION_VERSION = 22;
 
 /**
  * PROCEED WITH CAUTION
