@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     return {
       width: 12.63,
       height: 4,
-      backgroundColor: isActive ? COLORS.signed_primary : COLORS.black30percent,
+      backgroundColor: isActive ? COLORS.signed_primary : COLORS.gray210,
       marginRight: 3,
       borderRadius: 56
     };

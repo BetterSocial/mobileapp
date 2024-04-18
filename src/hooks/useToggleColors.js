@@ -12,12 +12,12 @@ const Colors = {
   anon: {
     primary: COLORS.anon_primary,
     secondary: COLORS.anon_secondary,
-    text: COLORS.white
+    text: COLORS.almostBlack
   },
   signed: {
     primary: COLORS.signed_primary,
     secondary: COLORS.signed_secondary,
-    text: COLORS.white
+    text: COLORS.almostBlack
   }
 };
 

@@ -2,7 +2,7 @@ import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import MemoIcQuestionMark from '../../../assets/icons/Ic_question_mark';
-import {normalize} from '../../../utils/fonts';
+import {fonts, normalize} from '../../../utils/fonts';
 import {LockIcon, PencilIcon} from '../../../assets';
 import {COLORS} from '../../../utils/theme';
 
@@ -12,7 +12,7 @@ export const KarmaLock = (props: {onPressCreatePost: () => void}) => {
   return (
     <View
       style={{
-        backgroundColor: COLORS.gray100,
+        backgroundColor: COLORS.gray110,
         borderRadius: 12,
         paddingVertical: 6,
         paddingHorizontal: 4
@@ -28,7 +28,7 @@ export const KarmaLock = (props: {onPressCreatePost: () => void}) => {
         <Text
           style={{
             fontSize: 12,
-            color: COLORS.signed_primary,
+            color: COLORS.white,
             fontWeight: '500',
             paddingHorizontal: 8,
             lineHeight: 22
@@ -45,26 +45,28 @@ export const KarmaLock = (props: {onPressCreatePost: () => void}) => {
           contentStyle={{
             borderRadius: 10,
             padding: 16,
-            height: 'auto'
+            height: 'auto',
+            backgroundColor: COLORS.almostBlack
           }}
           content={
             <View>
               <Text
                 style={{
-                  fontWeight: '600',
+                  fontFamily: fonts.inter[600],
                   fontSize: normalize(16),
                   lineHeight: normalize(24),
-                  marginBottom: normalize(8)
+                  marginBottom: normalize(8),
+                  color: COLORS.white
                 }}>
                 What is my Karma Score?
               </Text>
               <Text
                 style={{
-                  fontWeight: '400',
+                  fontFamily: fonts.inter[400],
                   fontSize: normalize(12),
                   lineHeight: normalize(18),
                   marginBottom: normalize(8),
-                  color: '#69707C'
+                  color: COLORS.gray510
                 }}>
                 The higher your Karma score, the higher your visibility on the platform. Get
                 rewarded for positive contributions to the community - and avoid being blocked by
@@ -73,11 +75,11 @@ export const KarmaLock = (props: {onPressCreatePost: () => void}) => {
               </Text>
               <Text
                 style={{
-                  fontWeight: '600',
+                  fontFamily: fonts.inter[600],
                   paddingVertical: normalize(8),
                   fontSize: normalize(14),
                   lineHeight: normalize(20),
-                  color: '#4782D7',
+                  color: COLORS.signed_primary,
                   width: '100%',
                   textAlign: 'right'
                 }}
@@ -115,6 +117,7 @@ export const KarmaLock = (props: {onPressCreatePost: () => void}) => {
           <Text
             style={{
               fontSize: 14,
+              fontFamily: fonts.inter[400],
               color: COLORS.white,
               marginLeft: 8
             }}>

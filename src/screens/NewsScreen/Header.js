@@ -79,7 +79,8 @@ const styles = StyleSheet.create({
     lineHeight: 14.52,
     fontSize: 12,
     fontFamily: fonts.inter[600],
-    flexShrink: 1
+    flexShrink: 1,
+    color: COLORS.white
   },
   domainNameContainer: {
     flexDirection: 'row',
@@ -89,7 +90,7 @@ const styles = StyleSheet.create({
     lineHeight: 14.52,
     fontSize: 12,
     fontFamily: fonts.inter[400],
-    color: COLORS.blackgrey
+    color: COLORS.gray410
   },
   wrapperItem: {backgroundColor: 'white', marginBottom: 16},
   wrapperImage: {
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
     borderRadius: 45
   },
   wrapperText: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     borderRadius: 8,
     borderColor: COLORS.anon_primary,
     width: 32,
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
     width: 3,
     height: 3,
     borderRadius: 4,
-    backgroundColor: COLORS.blackgrey,
+    backgroundColor: COLORS.gray410,
     marginLeft: 6,
     marginRight: 6,
     marginTop: 1

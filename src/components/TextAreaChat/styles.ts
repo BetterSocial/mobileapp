@@ -3,7 +3,7 @@ import {COLORS} from '../../utils/theme';
 
 export const S = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     borderRadius: 8,
     display: 'flex',
     flexDirection: 'row',

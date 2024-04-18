@@ -26,6 +26,7 @@ const BottomSheetBio = React.forwardRef((props, ref) => {
             keyboardAppearDelay={1}
             editable={!props.isOtherProfile}
             maxLength={350}
+            placeholderTextColor={COLORS.gray410}
           />
           <Text style={styles.description}>{props.value ? props.value.length : 0}/350</Text>
           {props.error ? <Text style={styles.errorText}>{props.error}</Text> : null}
@@ -35,7 +36,11 @@ const BottomSheetBio = React.forwardRef((props, ref) => {
             styles={styles.button}
             textStyling={styles.textStyling}
             onPress={props.handleSave}>
-            {props.isLoadingUpdateBio ? <ActivityIndicator size="small" color="#0000ff" /> : 'Save'}
+            {props.isLoadingUpdateBio ? (
+              <ActivityIndicator size="small" color={COLORS.white} />
+            ) : (
+              'Save'
+            )}
           </Button>
         )}
       </BottomSheet>
@@ -62,7 +67,7 @@ const styles = StyleSheet.create({
   description: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.blackgrey,
+    color: COLORS.gray410,
     marginTop: 7
   },
   errorText: {

@@ -4,6 +4,7 @@ import WriteComment, {styles} from '../../../src/components/Comments/WriteCommen
 import Store from '../../../src/context/Store';
 import {fonts} from '../../../src/utils/fonts';
 import {COLORS} from '../../../src/utils/theme';
+import dimen from '../../../src/utils/dimen';
 
 describe('WriteComment should run correctly', () => {
   afterEach(cleanup);
@@ -33,24 +34,20 @@ describe('WriteComment should run correctly', () => {
   it('styles should run correctly', () => {
     expect(styles.replyToContainer).toEqual({
       marginLeft: 60,
-      fontFamily: fonts.inter[600],
-      marginBottom: 11,
-      marginTop: 7,
-      lineHeight: 15,
-      fontSize: 12,
-      color: COLORS.blackgrey
+      alignItems: 'center',
+      flexDirection: 'row'
     });
     expect(styles.container).toEqual({
       flex: 1,
-      backgroundColor: COLORS.white,
+      backgroundColor: COLORS.almostBlack,
       width: '100%',
-      paddingRight: 20,
-      paddingLeft: 20,
+      paddingRight: dimen.normalizeDimen(16),
+      paddingLeft: dimen.normalizeDimen(16),
       flexDirection: 'row',
       zIndex: 100
     });
     expect(styles.btn(true)).toEqual({
-      backgroundColor: COLORS.concrete,
+      backgroundColor: COLORS.gray110,
       borderRadius: 18,
       width: 35,
       height: 35,

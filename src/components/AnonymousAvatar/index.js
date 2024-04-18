@@ -46,7 +46,7 @@ const AnonymousAvatar = (props) => {
         anonEmojiCode={anonUserInfo.emojiCode}
         karmaScore={karmaScore}
         size={radius}
-        width={3}
+        width={4}
         withKarma={withKarma}
       />
     );

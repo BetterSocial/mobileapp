@@ -7,11 +7,6 @@ const Card = (props) => {
     // <View style={{ ...styles.card, ...props.style }}></View>
     <View // Parent
       style={{
-        // No backgroundColor
-        shadowColor: COLORS.black,
-        shadowOffset: {width: 0, height: 1},
-        shadowOpacity: 0.5,
-        // shadowRadius: 10,
         zIndex: 999,
         // width: widthInput,
         ...props.style
@@ -22,10 +17,10 @@ const Card = (props) => {
           borderRadius: 10,
           // To round image corners
           overflow: 'hidden',
-          borderColor: COLORS.silver,
+          borderColor: COLORS.gray310,
           borderWidth: 0.5,
           // https://github.com/facebook/react-native/issues/10049#issuecomment-366426897
-          backgroundColor: COLORS.lightgrey,
+          backgroundColor: COLORS.gray110,
           // Android shadow
           elevation: 4,
           paddingHorizontal: 15,

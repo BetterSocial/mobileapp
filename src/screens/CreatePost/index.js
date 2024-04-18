@@ -33,7 +33,7 @@ import ImageUtils from '../../utils/image';
 import ListItem from '../../components/MenuPostItem';
 import Loading from '../Loading';
 import Location from '../../assets/icons/Ic_location';
-import MemoIc_hastag from '../../assets/icons/Ic_hastag';
+import IconHashtag from '../../assets/icons/Ic_hastag';
 import MemoIc_user_group from '../../assets/icons/Ic_user_group';
 import MemoIc_world from '../../assets/icons/Ic_world';
 import ProfileDefault from '../../assets/images/ProfileDefault.png';
@@ -329,18 +329,21 @@ const CreatePost = () => {
   const uploadMediaFromLibrary = async () => {
     const {success} = await requestExternalStoragePermission();
     if (success) {
-      launchImageLibrary({mediaType: 'photo', includeBase64: true}, async (res) => {
-        const uri = res?.assets?.[0]?.uri;
-        if (res.didCancel && __DEV__) {
-          console.log('User cancelled image picker');
-        } else if (uri) {
-          setIsUploadingPhotoMedia(true);
-          await uploadPhotoImage(uri);
-          setIsUploadingPhotoMedia(false);
-        } else if (__DEV__) {
-          console.log('CreatePost (launchImageLibrary): ', res);
+      launchImageLibrary(
+        {mediaType: 'photo', includeBase64: true, tintColor: 'red'},
+        async (res) => {
+          const uri = res?.assets?.[0]?.uri;
+          if (res.didCancel && __DEV__) {
+            console.log('User cancelled image picker');
+          } else if (uri) {
+            setIsUploadingPhotoMedia(true);
+            await uploadPhotoImage(uri);
+            setIsUploadingPhotoMedia(false);
+          } else if (__DEV__) {
+            console.log('CreatePost (launchImageLibrary): ', res);
+          }
         }
-      });
+      );
     } else {
       Alert.alert('Permission denied', 'Allow Helio to access photos and media on your device ?', [
         {
@@ -706,7 +709,7 @@ const CreatePost = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={positionKeyboard}>
         <Header title={headerTitle} onPress={() => onBack()} />
         <View style={{paddingHorizontal: 15}}>
@@ -736,15 +739,20 @@ const CreatePost = () => {
             topicChats={listTopicChat}
             allTaggedUser={allTaggingUser}
             setAllTaggedUser={setAllTaggingUser}
+            typeUser={typeUser}
           />
           {typeUser && (
             <Animated.View style={[{opacity: animatedReminder}, styles.reminderContainer]}>
-              <Text style={styles.whiteText}>
+              <Text style={styles.reminderText}>
                 Even when incognito, you can be blocked by others.
               </Text>
             </Animated.View>
           )}
 
+          {/* TODO: Garry
+          Outline 210
+          text 510
+          link signed_primary ikutin mode */}
           {isLinkPreviewShown && (
             <ContentLink
               og={
@@ -782,7 +790,7 @@ const CreatePost = () => {
           <Text style={styles.label}>Advanced Settings</Text>
           <Gap style={styles.height(12)} />
           <ListItem
-            icon={<MemoIc_hastag width={16.67} height={16.67} />}
+            icon={<IconHashtag width={16.67} height={16.67} fill={COLORS.white} />}
             topic={listTopic.length > 0}
             listTopic={renderListTopic()}
             label="Add Communities"
@@ -791,7 +799,7 @@ const CreatePost = () => {
           />
           <Gap style={styles.height(16)} />
           <ListItem
-            icon={<Timer width={16.67} height={16.67} />}
+            icon={<Timer width={16.67} height={16.67} fill={COLORS.white} />}
             label={postExpired.length === 0 ? 'Loading...' : postExpired[expiredSelect]?.label}
             labelStyle={styles.listText}
             onPress={() => sheetExpiredRef.current.open()}
@@ -867,11 +875,11 @@ export default CreatePost;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     position: 'relative'
   },
   input: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray110,
     paddingVertical: 16,
     paddingHorizontal: 12,
     minHeight: 100,
@@ -879,7 +887,7 @@ const styles = StyleSheet.create({
     overflow: 'scroll'
   },
   hastagText: {
-    color: COLORS.lightgrey,
+    color: COLORS.gray110,
     fontSize: 14,
     fontFamily: fonts.inter[400]
   },
@@ -916,14 +924,14 @@ const styles = StyleSheet.create({
     height
   }),
   reminderContainer: {
-    backgroundColor: COLORS.anon_primary,
+    backgroundColor: COLORS.anon_secondary,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 7,
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10
   },
-  whiteText: {
+  reminderText: {
     color: COLORS.white,
     fontSize: normalizeFontSize(10),
     textAlign: 'center'

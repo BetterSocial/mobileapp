@@ -5,6 +5,7 @@ import {
   FlatList,
   InteractionManager,
   Platform,
+  RefreshControl,
   StatusBar,
   StyleSheet,
   View
@@ -227,7 +228,7 @@ const NewsScreen = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       <Search animatedValue={offset} />
       <Animated.View style={{paddingTop: Platform.OS === 'android' ? paddingContainer : 0}}>
         <FlatList
@@ -238,10 +239,16 @@ const NewsScreen = () => {
           onScroll={handleScrollEvent}
           scrollEventThrottle={16}
           data={news}
-          refreshing={refreshing}
-          onRefresh={onRefresh}
+          refreshControl={
+            <RefreshControl
+              tintColor={COLORS.white}
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }
           onEndReached={loadMoreData}
           contentContainerStyle={styles.flatlistContainer}
+          style={{backgroundColor: COLORS.almostBlack}}
           initialNumToRender={2}
           maxToRenderPerBatch={2}
           updateCellsBatchingPeriod={10}
@@ -281,7 +288,8 @@ const styles = StyleSheet.create({
   },
   containerLoading: {flex: 1, justifyContent: 'center', alignItems: 'center'},
   flatlistContainer: {
-    paddingTop: 10
+    paddingTop: 10,
+    backgroundColor: COLORS.almostBlack
   }
 });
 

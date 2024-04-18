@@ -14,7 +14,7 @@ const SvgComponent = (props) => (
       fillRule="evenodd"
       clipRule="evenodd"
       d="M14.181.257c.357.349.364.92.015 1.277l-8.821 9.034a.903.903 0 0 1-1.336-.047L.214 6.003a.903.903 0 0 1 1.379-1.168l3.183 3.759L12.904.272A.903.903 0 0 1 14.18.257Z"
-      fill={COLORS.light_silver}
+      fill={COLORS.gray410}
     />
   </Svg>
 );

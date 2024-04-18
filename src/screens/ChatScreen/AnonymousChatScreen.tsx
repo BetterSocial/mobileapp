@@ -22,7 +22,7 @@ const {height} = Dimensions.get('window');
 export const styles = StyleSheet.create({
   keyboardAvoidingView: {
     flex: 1,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   container: {
     display: 'flex',
@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
     height: '100%'
   },
   inputContainer: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     position: 'absolute',
     bottom: 0,
     // height: 50,
@@ -43,7 +43,7 @@ export const styles = StyleSheet.create({
     zIndex: 100,
     padding: 8,
     paddingBottom: 16,
-    borderTopColor: COLORS.lightgrey,
+    borderTopColor: COLORS.gray110,
     borderTopWidth: 1
   },
   contentContainerStyle: {

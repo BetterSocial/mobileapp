@@ -62,7 +62,7 @@ const SlideShow = ({handleLogin, onContainerPress = () => {}}) => {
           {'hashtags. To protect your privacy, '}
           {'\n'}
 
-          {'communities can be joined incognito as well!.'}
+          {'communities can be joined incognito as well!'}
         </Text>
       )
     },
@@ -142,13 +142,13 @@ const slideShowStyles = StyleSheet.create({
     fontFamily: fonts.inter[700],
     fontSize: fontScale < 1 ? RFValue(16, 812) : RFValue(14, 812),
     lineHeight: fontScale < 1 ? RFValue(22) : RFValue(20),
-    color: COLORS.blackgrey
+    color: COLORS.gray410
   },
   textFontNormal: {
     fontFamily: fonts.inter[400],
     fontSize: fontScale < 1 ? RFValue(16, 812) : RFValue(14, 812),
     lineHeight: fontScale < 1 ? RFValue(22) : RFValue(20),
-    color: COLORS.blackgrey,
+    color: COLORS.gray410,
     flex: 1,
     alignSelf: 'flex-start',
     marginRight: 32,

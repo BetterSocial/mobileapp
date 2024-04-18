@@ -2,7 +2,7 @@ import * as React from 'react';
 /* eslint-disable react/display-name */
 import NetInfo from '@react-native-community/netinfo';
 import PropTypes from 'prop-types';
-import {SafeAreaView, View} from 'react-native';
+import {SafeAreaView, StatusBar, View} from 'react-native';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
 import {useRecoilState, useRecoilValue} from 'recoil';
 
@@ -13,6 +13,7 @@ import ChooseUsername from '../screens/InputUsername';
 import CreatePost from '../screens/CreatePost';
 import DiscoveryScreenV2 from '../screens/DiscoveryScreenV2';
 import DomainScreen from '../screens/DomainScreen';
+import FirebaseConfig from '../configs/FirebaseConfig';
 import FollowersScreen from '../screens/Followings/FollowersScreen';
 import FollowingScreen from '../screens/Followings/FollowingScreen';
 import HelpCenter from '../screens/WebView/HelpCenter';
@@ -57,6 +58,7 @@ import {InitialStartupAtom, LoadingStartupContext} from '../service/initialStart
 import {NavigationConstants} from '../utils/constants';
 import {followersOrFollowingAtom} from '../screens/ChannelListScreen/model/followersOrFollowingAtom';
 import {useInitialStartup} from '../hooks/useInitialStartup';
+import {COLORS} from '../utils/theme';
 
 const RootStack = createNativeStackNavigator();
 
@@ -67,6 +69,7 @@ export const RootNavigator = () => {
   useLocalDatabaseHook(true);
 
   React.useEffect(() => {
+    StatusBar.setBarStyle('light-content', true);
     const unsubscribe = NetInfo.addEventListener((state) => {
       if (state.isConnected && following?.length !== 0) {
         const successValue = [];
@@ -131,9 +134,19 @@ const AuthenticatedStack = createNativeStackNavigator();
 
 const withSafeAreaView = (Component) => {
   return (props) => (
-    <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: COLORS.almostBlack}}>
       <Component {...props} />
     </SafeAreaView>
+  );
+};
+const withSafeAreaViewTopBottom = (Component, topColor, bottomColor = COLORS.almostBlack) => {
+  return (props) => (
+    <React.Fragment>
+      <SafeAreaView style={{backgroundColor: topColor}} />
+      <SafeAreaView style={{flex: 1, backgroundColor: bottomColor}}>
+        <Component {...props} />
+      </SafeAreaView>
+    </React.Fragment>
   );
 };
 const withKeyboardWrapper = (Component) => {
@@ -147,6 +160,7 @@ const withKeyboardWrapper = (Component) => {
 const AuthenticatedNavigator = () => {
   return (
     <OneSignalNavigator>
+      <FirebaseConfig />
       <AuthenticatedStack.Navigator initialRouteName="HomeTabs">
         <AuthenticatedStack.Screen
           name="HomeTabs"
@@ -311,7 +325,9 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="AnonymousChatScreen"
-          component={withSafeAreaView(withKeyboardWrapper(AnonymousChatScreen))}
+          component={withKeyboardWrapper(
+            withSafeAreaViewTopBottom(AnonymousChatScreen, COLORS.anon_secondary)
+          )}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
@@ -321,7 +337,9 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name="SignedChatScreen"
-          component={withSafeAreaView(withKeyboardWrapper(SignedChatScreen))}
+          component={withKeyboardWrapper(
+            withSafeAreaViewTopBottom(SignedChatScreen, COLORS.signed_secondary)
+          )}
           options={{headerShown: false}}
         />
       </AuthenticatedStack.Navigator>

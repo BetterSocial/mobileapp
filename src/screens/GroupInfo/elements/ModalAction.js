@@ -6,6 +6,7 @@ import SimpleToast from 'react-native-simple-toast';
 import {ANONYMOUS, SIGNED} from '../../../hooks/core/constant';
 import {COLORS} from '../../../utils/theme';
 import Loading from '../../Loading';
+import {fonts} from '../../../utils/fonts';
 
 const ModalAction = (props) => {
   const {
@@ -144,7 +145,7 @@ const ModalAction = (props) => {
 
 const styles = StyleSheet.create({
   modalContainer: {
-    backgroundColor: 'white',
+    backgroundColor: COLORS.almostBlack,
     padding: 24
   },
   buttonStyle: {
@@ -154,11 +155,12 @@ const styles = StyleSheet.create({
   disabledTextButton: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: COLORS.gray300
+    color: COLORS.gray310
   },
   textButton: {
     fontSize: 16,
-    fontWeight: 'bold'
+    fontFamily: fonts.inter[600],
+    color: COLORS.white
   }
 });
 

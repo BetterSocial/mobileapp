@@ -82,13 +82,14 @@ const TextAreaChat = ({
         multiline={true}
         onChangeText={onChangeText}
         placeholder={placeholder}
+        placeholderTextColor={COLORS.gray410}
         style={[
           S.textArea,
-          {color: disabledInput ? COLORS.lightgrey : COLORS.black, minHeight, maxHeight}
+          {color: disabledInput ? COLORS.gray110 : COLORS.white, minHeight, maxHeight}
         ]}
-        placeholderTextColor={COLORS.blackgrey}
         value={message}
         editable={!disabledInput}
+        keyboardAppearance="dark"
       />
       <TouchableOpacity
         onPress={onSend}

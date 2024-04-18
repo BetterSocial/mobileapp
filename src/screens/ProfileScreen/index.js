@@ -655,7 +655,7 @@ const ProfileScreen = ({route}) => {
   };
   return (
     <View style={styles.container} forceInset={{top: 'always'}}>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       <ProfileHeader
         showArrow={isNotFromHomeTab}
         onShareClicked={onShare}
@@ -749,7 +749,7 @@ const ProfileScreen = ({route}) => {
         <ShadowFloatingButtons>
           <TouchableNativeFeedback onPress={toTop}>
             <View style={{...styles.btnBottom, opacity}}>
-              <ArrowUpWhiteIcon width={12} height={20} fill={COLORS.white} />
+              <ArrowUpWhiteIcon width={12} height={20} fill={COLORS.almostBlack} />
             </View>
           </TouchableNativeFeedback>
         </ShadowFloatingButtons>
@@ -768,24 +768,24 @@ const ProfileScreen = ({route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     height: '100%'
   },
   content: {
     flexDirection: 'column',
     paddingHorizontal: 20,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     paddingVertical: 11
   },
   dummyItem: (heightItem) => ({
     height: heightItem,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   }),
   postText: (isActive) => ({
     fontFamily: isActive ? fonts.inter[600] : fonts.inter[400],
     fontSize: 14,
     lineHeight: 17,
-    color: isActive ? COLORS.signed_primary : COLORS.blackgrey,
+    color: isActive ? COLORS.signed_primary : COLORS.gray410,
     paddingHorizontal: 16,
     textAlign: 'center'
   }),
@@ -814,12 +814,12 @@ const styles = StyleSheet.create({
   },
   tabs: {
     width,
-    borderBottomColor: COLORS.lightgrey,
+    borderBottomColor: COLORS.gray210,
     borderBottomWidth: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   tabItem: (isActive, isAnonymous = false) => ({
     flex: 1,
@@ -831,7 +831,7 @@ const styles = StyleSheet.create({
   }),
   tabsFixed: {
     width,
-    borderBottomColor: COLORS.lightgrey,
+    borderBottomColor: COLORS.gray110,
     borderBottomWidth: 1,
     paddingLeft: 20,
     paddingRight: 20,
@@ -839,7 +839,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 42,
     zIndex: 2000,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   nameProfile: {
     fontFamily: fonts.inter[800],
@@ -859,14 +859,14 @@ const styles = StyleSheet.create({
     paddingLeft: 0
   },
   tooltipText: {
-    color: COLORS.blackgrey,
+    color: COLORS.gray410,
     fontFamily: 'Inter',
     fontSize: 12,
     fontStyle: 'normal',
     fontWeight: '400'
   },
   flatlistContainer: {
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   }
 });
 

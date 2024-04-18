@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     height: 48,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     borderWidth: 1,
     borderColor: COLORS.silver,
     borderRadius: 8,
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   },
   box: {
     minHeight: 20,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     borderWidth: 1,
     borderColor: COLORS.silver,
     borderRadius: 8,

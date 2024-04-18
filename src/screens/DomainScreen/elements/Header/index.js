@@ -58,7 +58,7 @@ const Header = ({
             </Text>
             <View style={{alignSelf: 'center'}}>
               <TouchableOpacity style={styles.openInBrowserIcon} onPress={openDomainLink}>
-                <MemoIc_interface width={17} height={17} />
+                <MemoIc_interface width={17} height={17} fill={COLORS.signed_primary} />
               </TouchableOpacity>
             </View>
           </View>
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   },
   containerFollowers: {flexDirection: 'row'},
   followers: {
-    color: COLORS.anon_primary,
+    color: COLORS.signed_primary,
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(16),
     fontWeight: '700'
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   }),
   headerDomain: {
     flexDirection: 'column',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     paddingHorizontal: 20,
     borderTopColor: COLORS.transparent,
     // shadowColor: COLORS.black,
@@ -126,25 +126,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flexDirection: 'row'
-  },
-  image: {height: '100%', width: '100%', borderRadius: 45},
-  containerImage: {flex: 1.3},
-  boxImage: {
-    borderRadius: 45,
-    borderWidth: 0.2,
-    borderColor: COLORS.black50,
-    width: 60,
-    height: 60,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  buttonPrimary: {
-    height: normalize(36),
-    backgroundColor: COLORS.anon_primary,
-    // flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 8
   },
   wrapperHeader: {
     flex: 1,
@@ -172,7 +153,7 @@ const styles = StyleSheet.create({
   },
   followButtonText: {
     fontSize: normalizeFontSize(14),
-    color: COLORS.white,
+    color: COLORS.almostBlack,
     paddingHorizontal: 25
   },
   domainName: {
@@ -186,8 +167,8 @@ const styles = StyleSheet.create({
   domainDescription: {
     fontFamily: fonts.inter[400],
     lineHeight: normalizeFontSize(17),
-    fontSize: normalizeFontSize(14)
-    // lineHeight: 17,
+    fontSize: normalizeFontSize(14),
+    color: COLORS.white
   },
   shadowBox: {
     paddingBottom: 8
@@ -196,7 +177,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 10,
     height: 10,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     top: 23,
     zIndex: 10000000,
     left: 10,

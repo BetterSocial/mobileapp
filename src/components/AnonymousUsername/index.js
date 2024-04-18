@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
     lineHeight: 16.94,
-    color: COLORS.black,
+    color: COLORS.white,
     flex: isFeeds ? 0 : 1
   })
 });

@@ -1,7 +1,5 @@
 import * as React from 'react';
-import LinearGradient from 'react-native-linear-gradient';
-import {Dimensions, StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {useNavigation} from '@react-navigation/core';
+import {Dimensions, StyleSheet, View} from 'react-native';
 import PropTypes from 'prop-types';
 
 import Content from '../../FeedScreen/Content';
@@ -19,32 +17,15 @@ import {
 } from '../../../utils/constants';
 import {Context} from '../../../context';
 import {Footer, PreviewComment} from '../../../components';
-import {getCountCommentWithChild} from '../../../utils/getstream';
-import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
+import {getCommentLength} from '../../../utils/getstream';
 import {showScoreAlertDialog} from '../../../utils/Utils';
 import {normalize, normalizeFontSizeByWidth} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
-import WriteComment from '../../../components/Comments/WriteComment';
-import useWriteComment from '../../../components/Comments/hooks/useWriteComment';
 import usePostHook from '../../../hooks/core/post/usePostHook';
+import useFeed from '../../FeedScreen/hooks/useFeed';
+import AddCommentPreview from '../../FeedScreen/elements/AddCommentPreview';
 
-const {height} = Dimensions.get('window');
-const tabBarHeight = StatusBar.currentHeight;
-
-const getHeightReaction = () => {
-  const h = Math.floor((height * 12) / 100);
-  return h;
-};
-
-const getHeightHeader = () => {
-  const h = Math.floor((height * 8.3) / 100);
-  return h;
-};
-
-const getHeightFooter = () => {
-  const h = Math.floor((height * 6.8) / 100);
-  return h;
-};
+const FULL_WIDTH = Dimensions.get('screen').width;
 
 const getCountVote = (item) => {
   const reactionCount = item.reaction_counts;
@@ -75,45 +56,15 @@ const Item = ({
   index = -1,
   onHeaderOptionClicked = () => {}
 }) => {
-  const [isReaction, setReaction] = React.useState(false);
-  const [previewComment, setPreviewComment] = React.useState({});
   const [totalVote, setTotalVote] = React.useState(0);
   const [voteStatus, setVoteStatus] = React.useState('none');
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
-  const navigation = useNavigation();
+  const [isHaveSeeMore, setIsHaveSeeMore] = React.useState(false);
+  const [isShortText, setIsShortText] = React.useState(true);
   const [profile] = React.useContext(Context).profile;
-  const {handleUserName} = useWriteComment();
   const {followUnfollow} = usePostHook();
-
-  React.useEffect(() => {
-    const initial = () => {
-      const reactionCount = item.reaction_counts;
-      if (JSON.stringify(reactionCount) !== '{}') {
-        const comment = reactionCount?.comment;
-        if (comment !== undefined) {
-          if (comment > 0) {
-            setReaction(true);
-            setPreviewComment(item.latest_reactions.comment[0]);
-            return;
-          }
-        }
-      }
-
-      setReaction(false);
-    };
-    initial();
-  }, [item]);
-
-  const navigateToLinkContextPage = (itemParam) => {
-    const param = linkContextScreenParamBuilder(
-      itemParam,
-      itemParam.og.domain,
-      itemParam.og.domainImage,
-      itemParam.og.domain_page_id
-    );
-    navigation.push('LinkContextScreen', param);
-  };
+  const {navigateToLinkContextPage, getHeightHeader, getTotalReaction} = useFeed();
 
   React.useEffect(() => {
     const validationStatusVote = () => {
@@ -139,6 +90,7 @@ const Item = ({
     };
     validationStatusVote();
   }, [item, selfUserId]);
+
   React.useEffect(() => {
     const initialVote = () => {
       const c = getCountVote(item);
@@ -146,50 +98,63 @@ const Item = ({
     };
     initialVote();
   }, [item]);
+
+  const hasComment =
+    getCommentLength(item.latest_reactions.comment) > 0 && item.latest_reactions.comment[0].user;
+
+  const isShortTextPost =
+    item.post_type === POST_TYPE_STANDARD && item.images_url.length <= 0 && isShortText === true;
+
   return (
     <View key={item.id} style={styles.cardContainer}>
-      <Header
-        onHeaderOptionClicked={onHeaderOptionClicked}
-        headerStyle={styles.headerContainer}
-        props={item}
-        height={getHeightHeader()}
-        showAnonymousOption={true}
-        source={SOURCE_MY_PROFILE}
-        isFollow={item?.is_following_target}
-        onPressFollUnFoll={() => followUnfollow(item)}
-        disabledFollow={true}
-      />
-
-      {item.post_type === POST_TYPE_LINK && (
-        <View style={{flex: 1}}>
+      <View style={[styles.cardMain]}>
+        <Header
+          item={item}
+          onHeaderOptionClicked={onHeaderOptionClicked}
+          props={item}
+          height={getHeightHeader()}
+          showAnonymousOption={true}
+          source={SOURCE_MY_PROFILE}
+          isFollow={item?.is_following_target}
+          onPressFollUnFoll={() => followUnfollow(item)}
+          disabledFollow={true}
+          isShortText={isShortTextPost}
+        />
+        {item.post_type === POST_TYPE_LINK && (
           <ContentLink
+            key={item.id}
             index={index}
             og={item.og}
-            onPress={onPress}
-            onHeaderPress={onPressDomain}
+            onPress={() => onPress(item)}
+            onHeaderPress={() => onPressDomain(item)}
             onCardContentPress={() => navigateToLinkContextPage(item)}
-            score={item.credderScore}
+            score={item?.credderScore}
             message={item?.message}
+            messageContainerStyle={{paddingHorizontal: 10}}
             topics={item?.topics}
             item={item}
           />
-        </View>
-      )}
-      {(item.post_type === POST_TYPE_STANDARD || item.post_type === POST_TYPE_POLL) && (
-        <Content
-          index={index}
-          message={item.message}
-          images_url={item.images_url}
-          onPress={onPress}
-          topics={item?.topics}
-          item={item}
-          onNewPollFetched={onNewPollFetched}
-        />
-      )}
-      <View style={styles.footerWrapper(getHeightFooter())}>
+        )}
+        {(item.post_type === POST_TYPE_STANDARD || item.post_type === POST_TYPE_POLL) && (
+          <Content
+            key={item.id}
+            index={index}
+            message={item.message}
+            images_url={item.images_url}
+            onPress={() => {
+              onPress(isHaveSeeMore);
+            }}
+            setHaveSeeMore={(haveSeeMore) => setIsHaveSeeMore(haveSeeMore)}
+            setIsShortText={(shortText) => setIsShortText(shortText)}
+            topics={item?.topics}
+            item={item}
+            onNewPollFetched={onNewPollFetched}
+            hasComment={hasComment}
+          />
+        )}
         <Footer
           item={item}
-          totalComment={getCountCommentWithChild(item)}
+          totalComment={getTotalReaction(item)}
           totalVote={totalVote}
           isSelf={false}
           onPressShare={() =>
@@ -253,39 +218,30 @@ const Item = ({
           }}
           statusVote={voteStatus}
           isShowDM
+          isShortText={isShortTextPost}
         />
-      </View>
-      {isReaction ? (
-        <View style={styles.contentReaction(getHeightReaction())}>
-          <View style={styles.lineAffterFooter} />
-          {previewComment && (
+        {hasComment ? (
+          <View testID="previewComment">
             <PreviewComment
-              user={previewComment?.user}
-              comment={previewComment?.data?.text}
-              image={previewComment.user && previewComment?.user.data?.profile_pic_url}
-              time={previewComment?.created_at}
-              totalComment={getCountCommentWithChild(item) - 1}
-              onPress={onPressComment}
-              item={previewComment}
+              user={item.latest_reactions.comment[0].user}
+              comment={item?.latest_reactions?.comment[0]?.data?.text || ''}
+              image={item?.latest_reactions?.comment[0]?.user?.data?.profile_pic_url || ''}
+              time={item.latest_reactions.comment[0].created_at}
+              totalComment={getTotalReaction(item) - 1}
+              item={item.latest_reactions.comment[0]}
+              onPress={() => onPressComment(isHaveSeeMore)}
+              isShortText={isShortTextPost}
+              isBlurred={false}
             />
-          )}
-        </View>
-      ) : (
-        <TouchableOpacity
-          onPress={onPressComment}
-          style={styles.previewComment(getHeightReaction())}>
-          <WriteComment
-            postId={''}
-            username={handleUserName(item)}
-            value={''}
-            onChangeText={() => {}}
-            onPress={() => {}}
-            loadingPost={false}
-            isViewOnly={true}
-            withAnonymityLabel={false}
+          </View>
+        ) : (
+          <AddCommentPreview
+            isBlurred={false}
+            onPressComment={() => onPressComment(isHaveSeeMore)}
+            isShortText={isShortTextPost}
           />
-        </TouchableOpacity>
-      )}
+        )}
+      </View>
     </View>
   );
 };
@@ -309,32 +265,16 @@ export default Item;
 
 const styles = StyleSheet.create({
   cardContainer: {
-    width: '100%',
+    width: FULL_WIDTH,
     height: dimen.size.PROFILE_ITEM_HEIGHT,
-    maxHeight: dimen.size.PROFILE_ITEM_HEIGHT,
-    backgroundColor: COLORS.white,
-    paddingBottom: 0,
-    borderBottomColor: COLORS.transparent,
-    marginBottom: normalizeFontSizeByWidth(4),
-    shadowColor: COLORS.black000,
-    shadowOffset: {width: 0, height: 4},
-    shadowOpacity: 0.3,
-    shadowRadius: 4
+    backgroundColor: COLORS.almostBlack,
+    paddingTop: normalizeFontSizeByWidth(4)
   },
-  paddingHorizontal: {paddingHorizontal: 20},
-  lineAffterFooter: {backgroundColor: COLORS.lightgrey, height: 1},
-  footerWrapper: (h) => ({height: h, paddingHorizontal: 0}),
-  contentReaction: (heightReaction) => ({
-    height: heightReaction
-  }),
-  previewComment: (heightReaction) => ({
-    height: heightReaction,
-    marginBottom: heightReaction <= 0 ? tabBarHeight + normalize(10) : 0
-  }),
-  linearGradient: {
-    height: 8
-  },
-  headerContainer: {
-    marginHorizontal: 9
+  cardMain: {
+    width: '100%',
+    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT - normalize(56),
+    borderTopLeftRadius: normalize(16),
+    borderTopRightRadius: normalize(16),
+    backgroundColor: COLORS.almostBlack
   }
 });

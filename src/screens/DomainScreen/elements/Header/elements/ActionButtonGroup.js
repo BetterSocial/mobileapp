@@ -104,8 +104,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    backgroundColor: COLORS.anon_primary,
-    color: COLORS.white
+    backgroundColor: COLORS.signed_primary,
+    color: COLORS.almostBlack
   },
   buttonFollowing: {
     flex: 1,
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: COLORS.anon_primary,
+    borderColor: COLORS.signed_primary,
     borderRadius: 8
   },
   container: {
@@ -144,11 +144,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: normalizeFontSize(12),
     lineHeight: normalizeFontSize(24),
-    color: COLORS.anon_primary
+    color: COLORS.signed_primary
   },
   unblockButtonText: {
     fontSize: normalizeFontSize(12),
-    color: COLORS.white,
+    color: COLORS.almostBlack,
     paddingHorizontal: 0
   }
 });

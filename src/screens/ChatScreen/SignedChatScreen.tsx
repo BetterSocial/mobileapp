@@ -3,7 +3,7 @@
 /* eslint-disable import/no-unresolved */
 
 import * as React from 'react';
-import {FlatList, View} from 'react-native';
+import {FlatList, StatusBar, View} from 'react-native';
 
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';

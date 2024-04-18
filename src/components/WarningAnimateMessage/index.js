@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {Animated, StyleSheet, Text, Easing, Dimensions, TouchableOpacity} from 'react-native';
 import {COLORS} from '../../utils/theme';
 import StorageUtils from '../../utils/storage';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
 
 const WarningAnimatedMessage = ({isShow, top = 100, left = 110}) => {
   const [isRunAnimate, setIsRunAnimated] = React.useState(false);
@@ -84,7 +85,7 @@ const WarningAnimatedMessage = ({isShow, top = 100, left = 110}) => {
           styles.container,
           {top, left}
         ]}>
-        <Text>
+        <Text style={styles.text}>
           Even when posts are incognito, you can be 🚫blocked, which will affect your visibility in
           the future. Respectful & balanced posts do best on Better.
         </Text>
@@ -99,10 +100,11 @@ const styles = StyleSheet.create({
     elevation: 1,
     borderRadius: 8,
     width: 259,
-    backgroundColor: COLORS.white,
-    borderColor: COLORS.concrete,
+    backgroundColor: COLORS.almostBlack,
+    borderColor: COLORS.gray210,
     borderWidth: 1
   },
+  // TODO: Garry overlay tidak sampai bawah
   parentContainer: {
     position: 'absolute',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -121,9 +123,14 @@ const styles = StyleSheet.create({
     borderLeftWidth: 10,
     borderTopColor: COLORS.transparent,
     borderRightColor: COLORS.transparent,
-    borderBottomColor: COLORS.concrete,
+    borderBottomColor: COLORS.almostBlack,
     borderLeftColor: COLORS.transparent,
     position: 'absolute'
+  },
+  text: {
+    fontFamily: fonts.inter[400],
+    fontSize: normalizeFontSize(12),
+    color: COLORS.white
   }
 });
 

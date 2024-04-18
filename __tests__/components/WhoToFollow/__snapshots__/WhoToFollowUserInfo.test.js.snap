@@ -75,11 +75,9 @@ exports[`Testing Who To Follow Item User Match Snapshot 1`] = `
       style={
         Object {
           "alignSelf": "flex-start",
-          "color": "#000",
-          "fontFamily": "Poppins",
+          "color": "#FFFFFF",
+          "fontFamily": "Inter-Bold",
           "fontSize": 12.600000000000001,
-          "fontStyle": "normal",
-          "fontWeight": "bold",
           "lineHeight": 18.9,
         }
       }
@@ -91,7 +89,7 @@ exports[`Testing Who To Follow Item User Match Snapshot 1`] = `
       style={
         Object {
           "alignSelf": "flex-start",
-          "color": "#69707C",
+          "color": "#A5ACB8",
           "fontSize": 12.600000000000001,
           "lineHeight": 18.9,
           "marginRight": 12.8,

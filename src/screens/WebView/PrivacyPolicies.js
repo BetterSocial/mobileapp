@@ -30,7 +30,7 @@ export default withInteractionsManaged(React.memo(PrivacyPolicies));
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
   },
   header: {padding: 0, paddingHorizontal: 16, paddingBottom: 8},
   loading: {flex: 1, position: 'relative'}

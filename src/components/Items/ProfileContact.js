@@ -37,7 +37,7 @@ const ProfileContact = ({
     <Pressable
       onPress={onPress}
       android_ripple={{
-        color: COLORS.lightgrey,
+        color: COLORS.gray110,
         borderless: false,
         borderRadius: 10
       }}
@@ -61,7 +61,7 @@ const ProfileContact = ({
             <>
               {userId !== item.user_id && (
                 <View>
-                  <Mi name="arrow-forward-ios" size={18} />
+                  <Mi name="arrow-forward-ios" size={18} color={COLORS.white} />
                 </View>
               )}
             </>
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   fullname: (isMe) => ({
     fontSize: normalizeFontSize(14),
 
-    color: isMe ? COLORS.signed_primary : 'black',
+    color: isMe ? COLORS.signed_primary : COLORS.white,
     lineHeight: normalizeFontSize(16.94),
     fontWeight: 'bold'
   }),

@@ -13,6 +13,7 @@ import {ANONYMOUS, ANON_PM, ANON_POST_NOTIFICATION} from '../../../hooks/core/co
 import useAnonymousChannelListScreenHook from '../../../hooks/screen/useAnonymousChannelListHook';
 import useRootChannelListHook from '../../../hooks/screen/useRootChannelListHook';
 import Search from '../../ChannelListScreen/elements/Search';
+import {COLORS} from '../../../utils/theme';
 import IncognitoEmptyChat from '../IncognitoEmptyChat';
 
 const AnonymousChannelListScreen = ({route}) => {
@@ -62,12 +63,12 @@ const AnonymousChannelListScreen = ({route}) => {
 
   return (
     <>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       <View style={{height: 52}}>
         <Search route={route} isAnon={true} onPress={() => goToContactScreen({from: ANONYMOUS})} />
       </View>
 
-      <IncognitoEmptyChat totalChannel={anonChannels.length} />
+      <IncognitoEmptyChat />
 
       <FlatList
         ref={ref}
@@ -82,6 +83,7 @@ const AnonymousChannelListScreen = ({route}) => {
           />
         }
         renderItem={renderChannelItem}
+        style={{backgroundColor: COLORS.almostBlack}}
       />
     </>
   );

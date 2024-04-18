@@ -25,7 +25,7 @@ const RecentSearchItems = (prop) => {
         borderless: false
       }}>
       <Text style={styles.text}>{text}</Text>
-      <IcArrowUpRight style={styles.icon} />
+      <IcArrowUpRight style={styles.icon} fill={COLORS.white} />
     </Pressable>
   );
 };
@@ -48,7 +48,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: 'center',
     paddingTop: 6,
-    paddingBottom: 6
+    paddingBottom: 6,
+    color: COLORS.white
   }
 });
 

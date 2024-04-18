@@ -10,6 +10,8 @@ const MenuPostItem = ({icon, label, labelStyle, onPress, topic, listTopic}) => {
       <Pressable style={styles.containerTopic} onPress={onPress} hitSlop={{bottom: 0, top: 0}}>
         <View style={styles.content}>
           <TouchableOpacity onPress={onPress}>{icon}</TouchableOpacity>
+          {/* TODO: Garry gray410 */}
+          {/* <Text style={[styles.text, labelStyle]}>Select Communities</Text> */}
           {listTopic}
         </View>
       </Pressable>
@@ -21,7 +23,7 @@ const MenuPostItem = ({icon, label, labelStyle, onPress, topic, listTopic}) => {
         {icon}
         <Text style={[styles.text, labelStyle]}>{label}</Text>
       </View>
-      <MemoIc_arrow_right width={8} height={12} />
+      <MemoIc_arrow_right width={8} height={12} fill={COLORS.white} />
     </TouchableOpacity>
   );
 };
@@ -30,7 +32,7 @@ export default MenuPostItem;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray110,
     paddingVertical: 19,
     paddingRight: 24,
     paddingLeft: 19,
@@ -40,7 +42,7 @@ const styles = StyleSheet.create({
     borderRadius: 8
   },
   containerTopic: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray110,
     paddingRight: 24,
     paddingLeft: 19,
     flexDirection: 'row',
@@ -49,5 +51,7 @@ const styles = StyleSheet.create({
     borderRadius: 8
   },
   content: {flexDirection: 'row', alignItems: 'center', flex: 1},
-  text: {marginLeft: 12}
+  text: {
+    marginLeft: 12
+  }
 });

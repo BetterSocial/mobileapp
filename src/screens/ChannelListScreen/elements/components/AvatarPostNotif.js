@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
     borderWidth: 1,
-    borderColor: COLORS.white
+    borderColor: COLORS.almostBlack
   },
   avatarAnonymous: {
     height: 48,

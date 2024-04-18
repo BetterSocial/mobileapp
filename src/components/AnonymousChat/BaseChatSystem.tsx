@@ -4,10 +4,11 @@ import {BaseChatItemComponentProps} from '../../../types/component/AnonymousChat
 import dimen from '../../utils/dimen';
 import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
 import {COLORS} from '../../utils/theme';
+import {normalizeFontSize} from '../../utils/fonts';
 
 const styles = StyleSheet.create({
   containerMessage: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.white10percent,
     marginHorizontal: dimen.normalizeDimen(20),
     padding: dimen.normalizeDimen(8),
     borderRadius: dimen.normalizeDimen(8),
@@ -16,8 +17,8 @@ const styles = StyleSheet.create({
     flex: 1
   },
   textSystem: {
-    fontSize: 14,
-    color: COLORS.blackgrey,
+    fontSize: normalizeFontSize(14),
+    color: COLORS.gray510,
     textAlign: 'center'
   }
 });

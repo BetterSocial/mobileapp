@@ -22,7 +22,7 @@ import {normalizeFontSize} from '../../../../utils/fonts';
 const styles = StyleSheet.create({
   containerCard: {
     paddingHorizontal: 16,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     borderBottomWidth: 1,
     paddingVertical: 12,
     justifyContent: 'center'
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     maxWidth: '70%'
   },
   subtitleStyle: {
-    // color: COLORS.blackgrey,
+    // color: COLORS.gray410,
     flex: 1,
     // marginTop:3,
     fontSize: 12
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
     borderWidth: 1,
-    borderColor: COLORS.white
+    borderColor: COLORS.almostBlack
   },
   blockMention: {
     backgroundColor: COLORS.redalert,
@@ -131,12 +131,12 @@ const styles = StyleSheet.create({
   errorTitleText: {
     fontSize: normalizeFontSize(12),
     fontWeight: 'bold',
-    color: COLORS.white
+    color: COLORS.almostBlack
   },
   errorSubtitleText: {
     fontSize: normalizeFontSize(10),
     fontWeight: '400',
-    color: COLORS.white
+    color: COLORS.almostBlack
   }
 });
 

@@ -82,7 +82,7 @@ const ReplyCommentId = ({
   if (!item) return null;
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       <View style={styles.header}>
         <TouchableOpacity testID="backButton" onPress={navigationGoBack} style={styles.backArrow}>
           <ArrowLeftIcon width={20} height={20} fill="#000" />
@@ -187,7 +187,7 @@ export const styles = StyleSheet.create({
   container: {
     height: 'auto',
     flex: 1,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.almostBlack
     // backgroundColor: 'blue',
   },
   containerComment: {
@@ -225,7 +225,7 @@ export const styles = StyleSheet.create({
     borderRadius: 20
   },
   btnText: {
-    color: COLORS.white
+    color: COLORS.almostBlack
   },
   headerText: {
     fontFamily: fonts.inter[600],
@@ -239,7 +239,7 @@ export const styles = StyleSheet.create({
     height: 48
   },
   input: {
-    backgroundColor: COLORS.concrete,
+    backgroundColor: COLORS.gray110,
     flex: 1,
     color: COLORS.b,
     padding: 10,
@@ -255,7 +255,7 @@ export const styles = StyleSheet.create({
   post: {
     fontFamily: fonts.inter[400],
     fontSize: 16,
-    color: COLORS.mine_shaft,
+    color: COLORS.white,
     marginLeft: 28
   },
   mainLeftConnector: {

@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     height: dimen.normalizeDimen(40),
     paddingLeft: dimen.normalizeDimen(22),
     paddingRight: dimen.normalizeDimen(22),
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.gray110,
     flexDirection: 'column',
     justifyContent: 'center'
     // marginBottom: 12,
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     fontSize: normalizeFontSize(12),
     lineHeight: normalizeFontSize(18),
-    color: COLORS.gray500
+    color: COLORS.gray510
   },
   textBold: {
     fontFamily: 'Poppins',
@@ -48,6 +48,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: normalizeFontSize(12),
     lineHeight: normalizeFontSize(18),
-    color: COLORS.black000
+    color: COLORS.white
   }
 });

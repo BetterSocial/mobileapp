@@ -56,7 +56,7 @@ const ContactScreen = ({navigation}) => {
     ? StringConstant.chatTabHeaderCreateAnonChatButtonText
     : StringConstant.chatTabHeaderCreateChatButtonText;
 
-  const {onAddMember} = useGroupInfo(channelId);
+  const {onAddMember, isLoadingAddMember} = useGroupInfo(channelId);
 
   const getDiscoveryUser = async () => {
     const initialData = await DiscoveryRepo.fetchInitialDiscoveryUsers(
@@ -174,7 +174,7 @@ const ContactScreen = ({navigation}) => {
   }, [dataProvider]);
   const handleCreateChannel = async () => {
     try {
-      const mappingUserName = selectedUsers?.map((user) => user?.username).join(',');
+      const mappingUserName = selectedUsers?.map((user) => user?.username).join(', ');
       const mappingUserId = selectedUsers?.map((user) => user?.user_id).join(',');
       let image = DEFAULT_PROFILE_PIC_PATH;
       if (selectedUsers.length === 1) {
@@ -198,9 +198,9 @@ const ContactScreen = ({navigation}) => {
   };
 
   const handleAddParticipant = () => {
-    const newSelectedUsers = selectedUsers;
-    setSelectedUsers([]);
-    onAddMember(newSelectedUsers);
+    if (!isLoadingAddMember) {
+      onAddMember(selectedUsers);
+    }
   };
 
   const rowRenderer = (type, item, index, extendedState) => (
@@ -268,7 +268,7 @@ const ContactScreen = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       <Header
         title={isAddParticipant ? 'Add Participants' : newChatTitleScreen}
         containerStyle={styles.containerStyle}
@@ -306,7 +306,13 @@ const ContactScreen = ({navigation}) => {
           }}
           rowRenderer={rowRenderer}
           scrollViewProps={{
-            refreshControl: <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            refreshControl: (
+              <RefreshControl
+                tintColor={COLORS.white}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+            )
           }}
         />
       )}
@@ -321,7 +327,7 @@ const ContactScreen = ({navigation}) => {
           onHandleSelected={(value) => handleSelected(value)}
         />
       )}
-      <Loading visible={loading || loadingCreateChat} />
+      <Loading visible={loading || loadingCreateChat || isLoadingAddMember} />
     </SafeAreaView>
   );
 };
@@ -329,7 +335,7 @@ const ContactScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     flex: 1
   },
   recyclerview: {

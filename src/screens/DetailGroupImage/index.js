@@ -35,7 +35,7 @@ const ShowDetailGroupImage = (props) => {
   };
   return (
     <View style={styles.container}>
-      <StatusBar translucent={false} />
+      <StatusBar translucent={false} barStyle={'light-content'} />
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <MemoIc_arrow_back_white width={20} height={12} />
@@ -99,13 +99,13 @@ const styles = StyleSheet.create({
   name: {
     fontFamily: fonts.inter[600],
     fontSize: 14,
-    color: COLORS.white,
+    color: COLORS.almostBlack,
     lineHeight: 16.94
   },
   time: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: COLORS.white,
+    color: COLORS.almostBlack,
     lineHeight: 18
   }
 });

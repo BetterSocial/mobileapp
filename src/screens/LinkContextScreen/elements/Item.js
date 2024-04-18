@@ -109,7 +109,7 @@ const LinkContextItem = ({
         style={{
           height: 6,
           width: '100%',
-          backgroundColor: COLORS.lightgrey
+          backgroundColor: COLORS.gray110
         }}
       />
 
@@ -125,13 +125,13 @@ const LinkContextItem = ({
 
 const styles = StyleSheet.create({
   containerFirstItem: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     // flex: 1,
     display: 'flex',
     height: dimen.size.FEED_CURRENT_ITEM_HEIGHT
   },
   containerRelated: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     flex: 1
   },
   bottomAnchorContainer: {
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
   },
   bottomAnchorSwipeText: {
     fontFamily: fonts.inter[500],
-    color: COLORS.white,
+    color: COLORS.almostBlack,
     fontSize: 14
   }
 });

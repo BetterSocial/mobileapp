@@ -1,9 +1,11 @@
 import * as React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View, ViewStyle} from 'react-native';
 import config from 'react-native-config';
+import {StyleSheet, Text, TouchableOpacity, View, ViewStyle} from 'react-native';
+
 import ShareUtils from '../../../utils/share/index';
 import {COLORS} from '../../../utils/theme';
 import {ShareIcon} from '../../../assets';
+import {fonts} from '../../../utils/fonts';
 
 interface LinkProps {
   username: string;
@@ -31,7 +33,7 @@ const CopyLink: React.FC<Omit<LinkProps, 'prompt'>> = ({username}) => {
   return (
     <View style={styles.copyLinkContainer}>
       <Text numberOfLines={1} ellipsizeMode="tail" style={styles.copyLinkUrl}>
-        {`${config.SHARE_URL}/u/${username}`}
+        {`${config.SHARE_URL}/${username}`}
       </Text>
     </View>
   );
@@ -42,7 +44,8 @@ const LinkAndSocialMedia: React.FC<LinkProps> = ({username}) => {
     <View
       style={{
         borderWidth: 1,
-        borderColor: COLORS.gray,
+        borderColor: COLORS.gray210,
+        backgroundColor: COLORS.gray110,
         borderRadius: 10,
         marginTop: 19,
         padding: 12
@@ -50,8 +53,8 @@ const LinkAndSocialMedia: React.FC<LinkProps> = ({username}) => {
       <Text style={styles.linkAndSocialMediaTitle}>Receive incognito messages anywhere!</Text>
       <Text
         style={{
-          color: COLORS.gray500,
-          fontWeight: '400',
+          color: COLORS.gray510,
+          fontFamily: fonts.inter[400],
           fontSize: 12,
           paddingVertical: 8,
           lineHeight: 18
@@ -89,6 +92,7 @@ const LinkAndSocialMedia: React.FC<LinkProps> = ({username}) => {
             <Text
               style={{
                 fontSize: 12,
+                fontFamily: fonts.inter[400],
                 color: COLORS.white,
                 marginLeft: 8
               }}>
@@ -103,8 +107,9 @@ const LinkAndSocialMedia: React.FC<LinkProps> = ({username}) => {
 
 const styles = StyleSheet.create({
   linkAndSocialMediaTitle: {
-    fontWeight: '500',
-    fontSize: 14
+    fontFamily: fonts.inter[500],
+    fontSize: 14,
+    color: COLORS.white
   },
   buttonContainer: {
     paddingVertical: 9,
@@ -116,7 +121,7 @@ const styles = StyleSheet.create({
   },
   copyLinkContainer: {
     borderWidth: 1,
-    borderColor: COLORS.gray,
+    borderColor: COLORS.gray210,
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
@@ -124,7 +129,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     width: '67%'
   },
-  copyLinkUrl: {padding: 10, flex: 1, fontWeight: '600', color: COLORS.balance_gray, fontSize: 12}
+  copyLinkUrl: {
+    padding: 10,
+    flex: 1,
+    fontFamily: fonts.inter[600],
+    color: COLORS.gray510,
+    fontSize: 12
+  }
 });
 
 export default LinkAndSocialMedia;

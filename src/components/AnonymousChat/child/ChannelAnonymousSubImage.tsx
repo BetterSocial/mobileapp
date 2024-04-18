@@ -14,7 +14,7 @@ const ChannelAnonymousSubImage = ({anonPostNotificationUserInfo = null}) => {
       top: dimen.normalizeDimen(30 + 12),
       right: 0,
       borderWidth: 2,
-      borderColor: COLORS.white,
+      borderColor: COLORS.almostBlack,
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center'

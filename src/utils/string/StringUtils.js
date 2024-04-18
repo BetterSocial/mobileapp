@@ -150,7 +150,7 @@ const displayFormattedSearchLocationsV2 = (searchQuery, locationObject) => {
       return (
         <Text>
           <TextBold text={`${neighborhoodDisplay}`} />
-          {`${cityDisplay}${stateDisplay}`}
+          <Text style={{color: COLORS.gray510}}>{`${cityDisplay}${stateDisplay}`}</Text>
         </Text>
       );
     }

@@ -11,6 +11,7 @@ import {fonts} from '../../../utils/fonts';
 import {getTopics} from '../../../service/topics';
 import {isEmptyOrSpaces} from '../../../utils/Utils';
 import {COLORS} from '../../../utils/theme';
+import dimen from '../../../utils/dimen';
 
 const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics}) => {
   const [dataTopic, setTopic] = React.useState('');
@@ -149,11 +150,12 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics}) => {
                   autoCapitalize="none"
                   blurOnSubmit={false}
                   autoFocus
+                  keyboardAppearance="dark"
                 />
               </View>
             )}
             {topicSuggestion.length > 0 && (
-              <Card>
+              <Card style={{marginTop: dimen.normalizeDimen(8)}}>
                 {topicSuggestion.map((item, index) => (
                   <TouchableNativeFeedback
                     key={`topicSuggestions-${index}`}
@@ -176,9 +178,7 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics}) => {
                         #{convertString(item.name, ' ', '')}
                       </Text>
                       {index !== topicSuggestion.length - 1 && (
-                        <View
-                          style={{height: 1, marginTop: 5, backgroundColor: COLORS.lightgrey}}
-                        />
+                        <View style={{height: 1, marginTop: 5, backgroundColor: COLORS.gray110}} />
                       )}
                     </View>
                   </TouchableNativeFeedback>
@@ -190,6 +190,7 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics}) => {
           <Text style={styles.textDesc}>
             Hit space to finish adding a community. Add up to 5 communities.
           </Text>
+          {/* TODO: Garry ganti warna sesuai signed/incognito */}
           <Button onPress={() => save()}>Save</Button>
         </ScrollView>
       </View>
@@ -205,7 +206,7 @@ const styles = StyleSheet.create({
     paddingBottom: 38
   },
   content: {
-    backgroundColor: COLORS.lightgrey,
+    backgroundColor: COLORS.gray110,
     paddingHorizontal: 16,
     paddingTop: 17,
     minHeight: 150,
@@ -220,7 +221,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   containerTag: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.almostBlack,
     borderRadius: 14,
     paddingHorizontal: 16,
     paddingVertical: 7.33,
@@ -246,25 +247,31 @@ const styles = StyleSheet.create({
   hashtag: {
     fontSize: 14,
     fontWeight: '400',
-    fontFamily: fonts.inter[400]
+    fontFamily: fonts.inter[400],
+    color: COLORS.white
     // marginTop: Platform.OS === 'android' ? -8 : 0,
   },
   textDesc: {
     fontSize: 10,
     fontFamily: fonts.inter[400],
-    color: COLORS.blackgrey,
+    color: COLORS.gray410,
     marginTop: 5,
     marginBottom: 21
   },
   containerSheet: {
     borderTopRightRadius: 20,
-    borderTopLeftRadius: 20
+    borderTopLeftRadius: 20,
+    backgroundColor: COLORS.almostBlack
   },
   draggableIcon: {
-    backgroundColor: COLORS.lightgrey
+    backgroundColor: COLORS.gray110
   },
   topicItem: {
     marginBottom: 12
   },
-  input: {width: '100%', paddingStart: 0}
+  input: {
+    width: '100%',
+    paddingStart: 0,
+    color: COLORS.white
+  }
 });

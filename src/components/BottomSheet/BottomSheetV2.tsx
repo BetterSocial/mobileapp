@@ -31,7 +31,8 @@ const BottomSheetV2 = forwardRef((props: BottomSheetProps, ref: Ref<RBSheet>) =>
         container: {
           borderTopRightRadius: 12,
           borderTopLeftRadius: 12,
-          justifyContent: pullBottom ? 'flex-end' : 'flex-start'
+          justifyContent: pullBottom ? 'flex-end' : 'flex-start',
+          backgroundColor: COLORS.almostBlack
         },
         draggableIcon: styles.draggableIcon
       }}>
@@ -51,6 +52,6 @@ const styles = StyleSheet.create({
     paddingBottom: dimen.normalizeDimen(20)
   },
   draggableIcon: {
-    backgroundColor: COLORS.lightgrey
+    backgroundColor: COLORS.gray110
   }
 });

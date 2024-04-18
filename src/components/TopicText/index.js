@@ -40,11 +40,11 @@ const TopicText = ({
 
 const styles = StyleSheet.create({
   text: {
-    color: COLORS.blue,
+    color: COLORS.white,
     fontFamily: fonts.inter[500]
   },
   shortText: (isShort) => ({
-    color: isShort ? 'rgba(0, 0, 0, 0.5)' : COLORS.blue
+    color: isShort ? COLORS.signed_primary : COLORS.blue
   })
 });
 
