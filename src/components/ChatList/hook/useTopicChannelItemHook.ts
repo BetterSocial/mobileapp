@@ -1,30 +1,33 @@
 import * as React from 'react';
 import moment from 'moment';
 
+import getFeatureLoggerInstance, {EFeatureLogFlag} from '../../../utils/log/FeatureLog';
 import {TopicChannelItemProps} from '../../../../types/component/ChatList/ChannelItem.types';
+
+const {featLog} = getFeatureLoggerInstance(EFeatureLogFlag.useTopicChannelItemHook);
 
 const useTopicChannelItemHook = (props: TopicChannelItemProps) => {
   const {channel, fetchTopicLatestMessage} = props;
 
   function _doFetchTopicLatestMessage() {
-    console.log(channel?.id);
-    console.log('checkpoint 1');
-    if (!channel?.topic_post_expired_at) return;
-    console.log('checkpoint 2');
+    featLog(channel?.id);
+    featLog('checkpoint 1');
+    if (!channel?.topicPostExpiredAt) return;
+    featLog('checkpoint 2');
     if (!channel?.id) return;
-    console.log('checkpoint 3');
+    featLog('checkpoint 3');
     if (!fetchTopicLatestMessage) return;
 
-    console.log('checkpoint 4');
-    if (moment().diff(moment(channel?.topic_post_expired_at), 'millisecond') > 0) {
-      console.log('checkpoint 5');
+    featLog('checkpoint 4');
+    if (moment().diff(moment(channel?.topicPostExpiredAt), 'millisecond') > 0) {
+      featLog('checkpoint 5');
       fetchTopicLatestMessage(channel?.id);
     }
   }
 
   React.useEffect(() => {
     _doFetchTopicLatestMessage();
-  }, [channel?.topic_post_expired_at]);
+  }, [channel?.topicPostExpiredAt]);
 };
 
 export default useTopicChannelItemHook;

@@ -25,8 +25,14 @@ const ChannelListScreen = ({route}) => {
   const {profile} = useUserAuthHook();
   const navigation = useNavigation();
   const isFocused = navigation.isFocused();
-  const {channels, goToChatScreen, goToPostDetailScreen, goToCommunityScreen, goToContactScreen} =
-    useSignedChannelListScreenHook();
+  const {
+    channels,
+    fetchLatestTopicPost,
+    goToChatScreen,
+    goToPostDetailScreen,
+    goToCommunityScreen,
+    goToContactScreen
+  } = useSignedChannelListScreenHook();
   const ref = React.useRef(null);
 
   useScrollToTop(ref);
@@ -71,9 +77,7 @@ const ChannelListScreen = ({route}) => {
         <CommunityChannelItem
           channel={item}
           onChannelPressed={() => goToCommunityScreen(item)}
-          fetchTopicLatestMessage={(topicId) =>
-            console.log(`fetching latest message of ${topicId}`)
-          }
+          fetchTopicLatestMessage={fetchLatestTopicPost}
         />
       );
     }

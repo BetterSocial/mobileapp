@@ -59,6 +59,7 @@ export type GetstreamMessage = {
   text: string;
   other_text?: string;
   own_text?: string;
+  post_expired_at?: string;
   /**
    * SYSTEM MESSAGE END
    */

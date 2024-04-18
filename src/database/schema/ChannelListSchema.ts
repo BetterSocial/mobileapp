@@ -38,7 +38,7 @@ class ChannelList implements BaseDbSchema {
 
   rawJson: any;
 
-  topic_post_expired_at: string | null;
+  topicPostExpiredAt: string | null;
 
   user: UserSchema | null;
 
@@ -87,7 +87,7 @@ class ChannelList implements BaseDbSchema {
     this.lastUpdatedBy = lastUpdatedBy;
     this.createdAt = createdAt;
     this.rawJson = rawJson;
-    this.topic_post_expired_at = topicPostExpiredAt;
+    this.topicPostExpiredAt = topicPostExpiredAt;
     this.user = user;
     this.members = members;
     this.expiredAt = expiredAt;
@@ -159,12 +159,13 @@ class ChannelList implements BaseDbSchema {
           last_updated_by,
           created_at,
           expired_at,
+          topic_post_expired_at,
           raw_json,
           anon_user_info_color_code,
           anon_user_info_color_name,
           anon_user_info_emoji_name,
           anon_user_info_emoji_code
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           this.id,
           this.channelPicture,
@@ -176,6 +177,7 @@ class ChannelList implements BaseDbSchema {
           this.lastUpdatedBy,
           this.createdAt,
           this.expiredAt,
+          this.topicPostExpiredAt,
           jsonString,
           this.anon_user_info_color_code,
           this.anon_user_info_color_name,
@@ -341,7 +343,8 @@ class ChannelList implements BaseDbSchema {
     channelId: string,
     description: string,
     json,
-    isUpdateTimestamp = false
+    isUpdateTimestamp = false,
+    topicPostExpiredAt: string | null = null
   ) => {
     let rawJson: string | null = null;
 
@@ -353,10 +356,10 @@ class ChannelList implements BaseDbSchema {
 
     try {
       const queryTimestamp = `UPDATE ${ChannelList.getTableName()}
-        SET description = ?, created_at = ?, last_updated_at = ?, raw_json = ?
+        SET description = ?, created_at = ?, last_updated_at = ?, raw_json = ?, topic_post_expired_at = ?
         WHERE id = ?;`;
       const queryWithoutTimestamp = `UPDATE ${ChannelList.getTableName()}
-        SET description = ?, raw_json = ?
+        SET description = ?, raw_json = ?, topic_post_expired_at = ?
         WHERE id = ?;`;
 
       const replacementTimestamp = [
@@ -364,9 +367,10 @@ class ChannelList implements BaseDbSchema {
         new Date().toISOString(),
         new Date().toISOString(),
         rawJson,
+        topicPostExpiredAt,
         channelId
       ];
-      const replacementWithoutTimestamp = [description, rawJson, channelId];
+      const replacementWithoutTimestamp = [description, rawJson, topicPostExpiredAt, channelId];
 
       if (isUpdateTimestamp) {
         await db.executeSql(queryTimestamp, replacementTimestamp);
@@ -389,13 +393,13 @@ class ChannelList implements BaseDbSchema {
       lastUpdatedAt: json?.channel?.last_message_at,
       lastUpdatedBy: json?.message?.user?.id,
       createdAt: json?.channel?.created_at,
+      topicPostExpiredAt: json?.message?.post_expired_at,
       rawJson: json,
       user: null,
       anon_user_info_color_code: json?.anon_user_info_color_code,
       anon_user_info_color_name: json?.anon_user_info_color_name,
       anon_user_info_emoji_name: json?.anon_user_info_emoji_name,
-      anon_user_info_emoji_code: json?.anon_user_info_emoji_code,
-      topicPostExpiredAt: json?.post_expired_at
+      anon_user_info_emoji_code: json?.anon_user_info_emoji_code
     });
   }
 
@@ -477,6 +481,7 @@ class ChannelList implements BaseDbSchema {
       lastUpdatedAt: data?.last_message_at ?? data?.updated_at,
       lastUpdatedBy: firstMessage?.user?.id,
       createdAt: data?.created_at,
+      topicPostExpiredAt: data?.topicPostExpiredAt,
       rawJson: data,
       user: null,
       members: members || null,

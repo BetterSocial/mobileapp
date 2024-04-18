@@ -15,8 +15,33 @@ const MIGRATION_STATUS = {
 };
 
 /**
+ * @callback RefreshDBParam
+ * @param {'channelList' | 'channelInfo' | 'chat' | 'user' | 'channelMember'} key
+ * @returns {void}
+ */
+
+/**
+ * @callback RefreshDBWithIdParam
+ * @param {'channelList' | 'channelInfo' | 'chat' | 'user' | 'channelMember'} key
+ * @param {string} id
+ * @returns {void}
+ */
+
+/**
+ * @typedef {Object} useLocalDatabaseHook
+ * @property {import('react-native-sqlite-storage').SQLiteDatabase} localDb
+ * @property {RefreshDBParam} refresh
+ * @property {RefreshDBWithIdParam} refreshWithId
+ * @property {number} channelInfo
+ * @property {number} channelList
+ * @property {number} chat
+ * @property {number} user
+ * @property {number} channelMember
+ */
+
+/**
  *
- * @returns {import('../../../types/database/localDatabase.types').UseLocalDatabaseHook}
+ * @returns {useLocalDatabaseHook}
  */
 const useLocalDatabaseHook = (withMigration = false) => {
   /**
@@ -28,7 +53,7 @@ const useLocalDatabaseHook = (withMigration = false) => {
 
   /**
    *
-   * @param {RefreshAtomParam} key
+   * @param {'channelList' | 'channelInfo' | 'chat' | 'user' | channelMember} key
    */
   const refresh = (key) => {
     setDatabaseListener((prev) => ({

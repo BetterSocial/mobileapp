@@ -63,7 +63,7 @@ export interface ChannelList {
   anon_user_info_emoji_code: string | null;
   anon_user_info_color_code: string | null;
   anon_user_info_color_name: string | null;
-  topic_post_expired_at: string | null;
+  topicPostExpiredAt: string | null;
 }
 
 export interface ChatSchema {
