@@ -27,7 +27,6 @@ const CreatePostInput = ({
   setMessage,
   typeUser
 }) => {
-  const [positionEndCursor, setPositionEndCursor] = React.useState(0);
   const [topicSearch, setTopicSearch] = React.useState([]);
   const [userTaggingSearch, setUserTaggingSearch] = React.useState([]);
   const [hashtagPosition, setHashtagPosition] = React.useState(0);
@@ -38,7 +37,7 @@ const CreatePostInput = ({
     useHastagMention('');
 
   React.useEffect(() => {
-    if (new Date().valueOf() > 0) updateHashtag(message, topics, setTopics, positionEndCursor);
+    if (new Date().valueOf() > 0) updateHashtag(message, topics, setTopics);
   }, [message]);
 
   React.useEffect(() => {
@@ -121,9 +120,9 @@ const CreatePostInput = ({
 
   const handlePostTextChanged = (v) => {
     setMessage(v);
-    // updateHashtag(v, topics, setTopics, positionEndCursor)
-    const positionHashtag = v.lastIndexOf('#', positionEndCursor);
-    const positionMention = v.lastIndexOf('@', positionEndCursor);
+    // updateHashtag(v, topics, setTopics)
+    const positionHashtag = v.lastIndexOf('#');
+    const positionMention = v.lastIndexOf('@');
     if (topics.length >= 5 && !v.includes('@')) {
       return;
     }
@@ -164,12 +163,8 @@ const CreatePostInput = ({
       setPositionKeyboard('never');
       cancelAllRequest();
       const removeCharacterAfterSpace = textSearch.split(' ')[0];
-      const hashtagLastCharIndex = positionHashtag + removeCharacterAfterSpace?.length;
-      if (hashtagLastCharIndex === positionEndCursor - 1) {
-        const newTopics = joinTopicIntoTopicList(removeCharacterAfterSpace, topics);
-        setTopics(newTopics);
-        // setHashtags(newTopics)
-      }
+      const newTopics = joinTopicIntoTopicList(removeCharacterAfterSpace, topics);
+      setTopics(newTopics);
 
       setLastTopicInCursor('');
     }
@@ -194,9 +189,6 @@ const CreatePostInput = ({
   return (
     <>
       <TextInput
-        onSelectionChange={(e) => {
-          setPositionEndCursor(e.nativeEvent.selection.end);
-        }}
         ref={inputRef}
         onKeyPress={isTopicInDeletedText}
         onChangeText={handlePostTextChanged}
