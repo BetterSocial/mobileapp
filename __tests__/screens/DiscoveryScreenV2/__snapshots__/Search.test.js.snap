@@ -87,7 +87,7 @@ exports[`Testing Discovery Screen V2 Testing Discovery Search Bar Match Snapshot
         onFocus={[Function]}
         onSubmitEditing={[Function]}
         placeholder="Search Helio"
-        placeholderTextColor="#7E8FA0"
+        placeholderTextColor="#8C939F"
         rejectResponderTermination={true}
         returnKeyType="search"
         style={

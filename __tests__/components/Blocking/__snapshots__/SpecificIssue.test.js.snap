@@ -133,12 +133,12 @@ exports[`SpecificIssue Block Component test should pass should render 1`] = `
           onChangeText={[Function]}
           placeholder="Please provide more details to inform our
  team (min. 50 characters)"
-          placeholderTextColor="#7E8FA0"
+          placeholderTextColor="#8C939F"
           rejectResponderTermination={true}
           style={
             Object {
               "backgroundColor": "#1E3343",
-              "borderColor": "#2A3D50",
+              "borderColor": "#3A4F64",
               "borderRadius": 8,
               "borderWidth": 1,
               "color": "#FFFFFF",

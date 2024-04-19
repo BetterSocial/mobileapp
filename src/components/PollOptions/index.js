@@ -123,7 +123,9 @@ const styles = StyleSheet.create({
   },
   pollOptionsItemActiveContainer: {
     flex: 1,
-    backgroundColor: COLORS.holytosca30percent,
+    backgroundColor: COLORS.gray110,
+    borderWidth: 1,
+    borderColor: COLORS.signed_primary,
     marginBottom: 8,
     borderRadius: 8,
     justifyContent: 'center',
@@ -151,7 +153,9 @@ const styles = StyleSheet.create({
   },
   pollOptionItemPercentage: {
     textAlignVertical: 'center',
-    fontSize: normalizeFontSize(14)
+    fontSize: normalizeFontSize(14),
+    fontFamily: fonts.inter[400],
+    color: COLORS.white
   },
   percentageBar: (percent, isMyPoll = false) => {
     return {
@@ -160,8 +164,8 @@ const styles = StyleSheet.create({
       position: 'absolute',
       top: 0,
       left: 0,
-      borderRadius: 6,
-      backgroundColor: isMyPoll ? COLORS.bondi_blue : COLORS.gray110
+      borderRadius: 8,
+      backgroundColor: isMyPoll ? COLORS.gray210 : COLORS.gray210
     };
   },
   expiredPercentageBar: (percent, isMax = false) => {
@@ -171,8 +175,8 @@ const styles = StyleSheet.create({
       position: 'absolute',
       top: 0,
       left: 0,
-      borderRadius: 6,
-      backgroundColor: isMax ? COLORS.blueSea : COLORS.gray110
+      borderRadius: 8,
+      backgroundColor: isMax ? COLORS.signed_primary : COLORS.gray210
     };
   },
   totalpolltext: {
