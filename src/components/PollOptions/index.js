@@ -53,12 +53,7 @@ const PollOptions = ({
       );
     }
     if (isalreadypolling) {
-      return (
-        <View
-          testID="isAlreadyPollingOption"
-          style={styles.percentageBar(percentage, isMyPoll())}
-        />
-      );
+      return <View testID="isAlreadyPollingOption" style={styles.percentageBar(percentage)} />;
     }
   };
 
@@ -157,7 +152,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     color: COLORS.white
   },
-  percentageBar: (percent, isMyPoll = false) => {
+  percentageBar: (percent) => {
     return {
       width: percent,
       height: '100%',
@@ -165,7 +160,7 @@ const styles = StyleSheet.create({
       top: 0,
       left: 0,
       borderRadius: 8,
-      backgroundColor: isMyPoll ? COLORS.gray210 : COLORS.gray210
+      backgroundColor: COLORS.gray210
     };
   },
   expiredPercentageBar: (percent, isMax = false) => {

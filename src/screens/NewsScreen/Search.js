@@ -4,7 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 import PropTypes from 'prop-types';
 import MemoIc_search from '../../assets/icons/Ic_search';
 import StringConstant from '../../utils/string/StringConstant';
-import {COLORS, FONTS, SIZES} from '../../utils/theme';
+import {COLORS, SIZES} from '../../utils/theme';
 import {DISCOVERY_TAB_NEWS} from '../../utils/constants';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import dimen from '../../utils/dimen';

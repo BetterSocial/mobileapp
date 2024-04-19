@@ -1,10 +1,10 @@
 import * as React from 'react';
 import {View, Text, StyleSheet, Animated, Pressable} from 'react-native';
 
-import MemoIc_search from '../../../assets/icons/Ic_search';
+import IconSearch from '../../../assets/icons/Ic_search';
 import StringConstant from '../../../utils/string/StringConstant';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
-import {COLORS, FONTS, SIZES} from '../../../utils/theme';
+import {COLORS, SIZES} from '../../../utils/theme';
 import dimen from '../../../utils/dimen';
 
 const Search = ({animatedValue, onContainerClicked = () => {}, getSearchLayout}) => {
@@ -20,7 +20,7 @@ const Search = ({animatedValue, onContainerClicked = () => {}, getSearchLayout})
       <Pressable onPress={onContainerClicked} style={styles.searchPressableContainer}>
         <View style={styles.wrapperSearch}>
           <View style={styles.wrapperIcon}>
-            <MemoIc_search width={16.67} height={16.67} fill={COLORS.gray310} />
+            <IconSearch width={16.67} height={16.67} fill={COLORS.gray310} />
           </View>
           <Text style={styles.inputText}>{StringConstant.discoverySearchBarPlaceholder}</Text>
         </View>

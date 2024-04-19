@@ -390,7 +390,10 @@ Footer.propTypes = {
   isSelf: PropTypes.bool,
   disableComment: PropTypes.bool,
   blockStatus: PropTypes.any,
-  loadingVote: PropTypes.any
+  loadingVote: PropTypes.any,
+  isShowDM: PropTypes.bool,
+  isShortText: PropTypes.bool,
+  isNews: PropTypes.bool
 };
 
 export default Footer;
