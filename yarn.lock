@@ -2066,15 +2066,15 @@
   dependencies:
     "@hapi/hoek" "^9.0.0"
 
-"@human-internet/react-native-humanid@^2.4.10":
-  version "2.4.10"
-  resolved "https://registry.yarnpkg.com/@human-internet/react-native-humanid/-/react-native-humanid-2.4.10.tgz#d1485c951d6bcf9b224e49060818471ef8f30a63"
-  integrity sha512-j+GYNvZVun5uzcAjZlhtZEHy0U58Te3K8B+3bWBlaJ0G0+0Y1M8h9AZsYa3P1WqHCr3IbWdVoHtOABAFCGWuVA==
+"@human-internet/react-native-humanid@^2.4.11":
+  version "2.4.11"
+  resolved "https://registry.yarnpkg.com/@human-internet/react-native-humanid/-/react-native-humanid-2.4.11.tgz#c95fe53044cc2d49673e7761a459248a4a111036"
+  integrity sha512-GUD9ycvC167oSAJOSPEvmmCT8h+D9TmDSHK9EdR7kcvEjGxagTIo7yHbZ+zIS64dfN7Eqwrcbyj5dwY4ZctRjQ==
   dependencies:
     google-libphonenumber "3.2.15"
     react-native-iphone-x-helper "^1.3.1"
     react-native-modal "^13.0.1"
-    react-native-webview "^11.26.0"
+    react-native-webview "11.26.1"
 
 "@humanwhocodes/config-array@^0.5.0":
   version "0.5.0"
@@ -11726,7 +11726,7 @@ react-native-walkthrough-tooltip@^1.2.0:
     prop-types "^15.6.1"
     react-fast-compare "^2.0.4"
 
-react-native-webview@^11.26.0:
+react-native-webview@11.26.1, react-native-webview@^11.26.0:
   version "11.26.1"
   resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-11.26.1.tgz#658c09ed5162dc170b361e48c2dd26c9712879da"
   integrity sha512-hC7BkxOpf+z0UKhxFSFTPAM4shQzYmZHoELa6/8a/MspcjEP7ukYKpuSUTLDywQditT8yI9idfcKvfZDKQExGw==

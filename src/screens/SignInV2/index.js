@@ -4,13 +4,12 @@ import SimpleToast from 'react-native-simple-toast';
 import crashlytics from '@react-native-firebase/crashlytics';
 import {BackHandler, StatusBar, StyleSheet, View} from 'react-native';
 import {StackActions} from '@react-navigation/native';
-// eslint-disable-next-line import/no-unresolved
 import {
   logIn,
   onCancel,
   onError,
   onSuccess,
-  unsubscribeAllEventListener
+  unsubscribeAllEventListeners
 } from '@human-internet/react-native-humanid';
 import {useNavigation} from '@react-navigation/core';
 import {useSetRecoilState} from 'recoil';
@@ -105,7 +104,7 @@ const SignIn = () => {
     });
 
     const cleanup = () => {
-      if (unsubscribeAllEventListener) unsubscribeAllEventListener();
+      if (unsubscribeAllEventListeners) unsubscribeAllEventListeners();
     };
 
     return cleanup;
