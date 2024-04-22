@@ -48,7 +48,7 @@ exports[`TESTING ChatItemTargetText RENDER continuous should match snapshot 1`] 
           "color": "#FFFFFF",
           "fontFamily": "Inter-Regular",
           "fontSize": 16,
-          "lineHeight": 19.36,
+          "lineHeight": 24,
         }
       }
       testID="chat-item-message"
@@ -118,7 +118,7 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
             "color": "#FFFFFF",
             "fontFamily": "Inter-SemiBold",
             "fontSize": 12,
-            "lineHeight": 19.36,
+            "lineHeight": 18,
           }
         }
       >
@@ -157,7 +157,7 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
           "color": "#FFFFFF",
           "fontFamily": "Inter-Regular",
           "fontSize": 16,
-          "lineHeight": 19.36,
+          "lineHeight": 24,
         }
       }
       testID="chat-item-message"
