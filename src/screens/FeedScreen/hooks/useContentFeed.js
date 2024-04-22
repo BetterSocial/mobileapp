@@ -28,10 +28,7 @@ const useContentFeed = ({navigation}) => {
   }, []);
 
   const hanldeShortTextColor = (isShortText) => {
-    if (isShortText) {
-      return 'rgba(0, 0, 0, 0.5)';
-    }
-    return COLORS.blue;
+    return COLORS.signed_primary;
   };
 
   const hashtagAtComponent = (message, substring, isShortText) => {

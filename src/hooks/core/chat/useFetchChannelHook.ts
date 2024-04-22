@@ -45,7 +45,9 @@ const useFetchChannelHook = () => {
     newChannel.targetName = channelListInfo?.channelName;
     newChannel.targetImage = channelListInfo?.channelImage;
 
-    newChannel.firstMessage = getFirstMessage(channel?.messages);
+    const firstMessage = getFirstMessage(channel?.messages);
+    newChannel.firstMessage = firstMessage;
+    newChannel.topicPostExpiredAt = firstMessage?.post_expired_at;
 
     const isDeletedMessage = channel.firstMessage?.message_type === MESSAGE_TYPE_DELETED;
     if (isDeletedMessage) channel.firstMessage.text = DELETED_MESSAGE_TEXT;

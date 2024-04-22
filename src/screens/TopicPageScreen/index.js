@@ -6,6 +6,7 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import BlockComponent from '../../components/BlockComponent';
+import BottomSheetFollow from './elements/BottomSheetFollow';
 import ButtonAddPostTopic from '../../components/Button/ButtonAddPostTopic';
 import MemoizedListComponent from './MemoizedListComponent';
 import NavHeader from './elements/NavHeader';
@@ -20,6 +21,7 @@ import useViewPostTimeHook from '../FeedScreen/hooks/useViewPostTimeHook';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
 } from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
+import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {downVote, upVote} from '../../service/vote';
 import {getFeedDetail} from '../../service/post';
@@ -29,8 +31,6 @@ import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {setFeedByIndex, setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
-import BottomSheetFollow from './elements/BottomSheetFollow';
-import {COLORS} from '../../utils/theme';
 
 const TopicPageScreen = (props) => {
   const route = useRoute();
@@ -221,9 +221,11 @@ const TopicPageScreen = (props) => {
   const markRead = async () => {
     const filter = {type: 'topics', members: {$in: [userId]}, id: route.params.id};
     const sort = [{last_message_at: -1}];
-    const thisChannel = await client.client.queryChannels(filter, sort);
-    const countRead = await thisChannel[0]?.markRead();
-    return countRead;
+    const thisChannel = await client?.client?.queryChannels(filter, sort);
+    if (thisChannel) {
+      const countRead = await thisChannel[0]?.markRead();
+      return countRead;
+    }
   };
 
   React.useEffect(() => {

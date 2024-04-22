@@ -22,7 +22,7 @@ import {getAllowAnonDmStatus} from '../../service/chat';
 import {removeWhiteSpace} from '../../utils/Utils';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
-import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
+import {getCaptionWithLinkStyle, getOfficialAnonUsername} from '../../utils/string/StringUtils';
 import {COLORS, FONTS} from '../../utils/theme';
 import {calculateTime} from '../../utils/time';
 import {getUserId} from '../../utils/users';
@@ -67,12 +67,19 @@ const Comment = ({
   const {createSignChat} = useCreateChat();
   const {sendMessageDM} = useDMMessage();
 
+  const userName =
+    (comment.data?.anon_user_info_color_name
+      ? getOfficialAnonUsername(comment?.data)
+      : user?.data?.username) +
+    (comment.is_you ? ' (You)' : '') +
+    (comment.is_author ? ' (Post Author)' : '');
+
   const onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
       return;
     }
     if (onPress && typeof onPress === 'function') {
-      onPress();
+      onPress(comment.id, userName);
     }
   };
 
@@ -268,8 +275,8 @@ const Comment = ({
       <TouchableOpacity testID="textPress" onPress={onTextPress} style={styles.flexStartContainer}>
         <ButtonHightlight
           onLongPress={handleOnLongPress}
-          style={styles.flexStartContainer}
-          onPress={onTextPress}>
+          onPress={onTextPress}
+          style={styles.flexStartContainer}>
           <Text style={styles.post}>{getCaptionWithLinkStyle(comment.data?.text)}</Text>
         </ButtonHightlight>
       </TouchableOpacity>
@@ -291,14 +298,19 @@ const Comment = ({
                 </ButtonHightlight>
               </TouchableOpacity>
             )}
-            <TouchableOpacity activeOpacity={1} onPress={onPress} testID="memoComment">
-              <ButtonHightlight
-                onLongPress={handleOnLongPress}
-                style={[styles.btnReply, styles.iconContainer]}
-                onPress={onPress}>
-                <MemoCommentReply height={normalize(14)} />
-              </ButtonHightlight>
-            </TouchableOpacity>
+            {level !== 2 && (
+              <TouchableOpacity
+                activeOpacity={1}
+                onPress={() => onPress(comment.id, userName)}
+                testID="memoComment">
+                <ButtonHightlight
+                  onLongPress={handleOnLongPress}
+                  style={[styles.btnReply, styles.iconContainer]}
+                  onPress={() => onPress(comment.id, userName)}>
+                  <MemoCommentReply height={normalize(14)} />
+                </ButtonHightlight>
+              </TouchableOpacity>
+            )}
           </>
         )}
 
@@ -397,7 +409,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
     color: COLORS.white,
-    marginLeft: 28
+    marginLeft: 20
   },
   profile: {
     flexDirection: 'row',

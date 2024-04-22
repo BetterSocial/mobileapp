@@ -28,6 +28,9 @@ const BottomSheetV2 = forwardRef((props: BottomSheetProps, ref: Ref<RBSheet>) =>
       height={props.height ?? 355}
       keyboardAvoidingViewEnabled={keyboardAvoidingViewEnabled}
       customStyles={{
+        wrapper: {
+          backgroundColor: COLORS.black80
+        },
         container: {
           borderTopRightRadius: 12,
           borderTopLeftRadius: 12,

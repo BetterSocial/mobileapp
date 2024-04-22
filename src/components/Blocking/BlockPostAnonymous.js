@@ -30,6 +30,9 @@ const BlockPostAnonymous = ({refBlockPostAnonymous, onSelect}) => {
         closeOnDragDown={true}
         closeOnPressMask={true}
         customStyles={{
+          wrapper: {
+            backgroundColor: COLORS.black80
+          },
           container: styles.container,
           draggableIcon: styles.draggableIcon
         }}>
@@ -75,7 +78,8 @@ const styles = StyleSheet.create({
   container: {
     height: 'auto',
     borderTopRightRadius: 20,
-    borderTopLeftRadius: 20
+    borderTopLeftRadius: 20,
+    backgroundColor: COLORS.almostBlack
   },
   draggableIcon: {
     backgroundColor: COLORS.gray110,

@@ -6,12 +6,7 @@ import {generateRandomId} from 'stream-chat-react-native-core';
 import {fonts} from '../fonts';
 import {COLORS} from '../theme';
 
-const handleHastagMention = (
-  text = '',
-  hashtags = [],
-  setHashtagState = () => {}
-  // cursorPosition = -1
-) => {
+const handleHastagMention = (text = '', hashtags = [], setHashtagState = () => {}) => {
   // eslint-disable-next-line
   const topicRegex = /\B(\#[a-zA-Z0-9_+-]+\b)(?!;)/g;
   // eslint-disable-next-line

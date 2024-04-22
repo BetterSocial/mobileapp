@@ -5,7 +5,7 @@ import MemoIc_arrow_down_vote_on from '../../../assets/arrow/Ic_downvote_on';
 import MemoIc_arrow_upvote_on from '../../../assets/arrow/Ic_upvote_on';
 import MemoIc_block_active from '../../../assets/block/Ic_block_active';
 import MemoIc_block_inactive from '../../../assets/block/Ic_block_inactive';
-import MemoIc_comment from '../../../assets/icons/Ic_comment';
+import IconCommentArrow from '../../../assets/icon/IconCommentArrow';
 import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
@@ -59,7 +59,7 @@ const ChannelPostNotificationStats = ({
         <Text style={styles.textVoteMargin}>{downvote}</Text>
       </View>
       <View style={styles.iconContainer}>
-        <MemoIc_comment style={styles.iconMargin} width={16} height={16} />
+        <IconCommentArrow style={styles.iconMargin} width={16} height={16} color={COLORS.gray410} />
         <Text style={styles.textVoteMargin}>{comments}</Text>
       </View>
       <View style={styles.iconContainer}>

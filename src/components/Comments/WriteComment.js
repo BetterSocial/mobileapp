@@ -26,13 +26,13 @@ const WriteComment = ({
   onPress,
   onChangeText,
   username,
-  inReplyCommentView = false,
-  showProfileConnector = true,
   loadingPost = false,
   postId = '',
   isKeyboardOpen = false,
   isViewOnly = false,
-  withAnonymityLabel = true
+  withAnonymityLabel = true,
+  isReply = false,
+  onClear = () => {}
 }) => {
   const [profile] = React.useContext(Context).profile;
   const commentInputRef = React.useRef(null);
@@ -79,8 +79,12 @@ const WriteComment = ({
         <View style={styles.replyToContainer}>
           <Text style={styles.replyToTitle}>Reply to </Text>
           <Text style={styles.replyToUsername}>{username}</Text>
-          {value?.trim() !== '' && (
-            <TouchableOpacity onPress={() => onChangeText('')}>
+          {(isReply || value?.trim() !== '') && (
+            <TouchableOpacity
+              onPress={() => {
+                onChangeText('');
+                onClear();
+              }}>
               <IconCloseBold />
             </TouchableOpacity>
           )}

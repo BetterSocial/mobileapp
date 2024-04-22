@@ -1,3 +1,100 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`News search should run correctly Should match snapshot 1`] = `[Function]`;
+exports[`News search should run correctly Should match snapshot 1`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "#16202A",
+      "borderBottomColor": "#1E3343",
+      "borderBottomWidth": 1,
+      "flexDirection": "row",
+      "height": 50,
+      "left": 0,
+      "marginTop": 0,
+      "paddingBottom": 5.6000000000000005,
+      "paddingTop": 5.6000000000000005,
+      "position": "absolute",
+      "right": 0,
+      "top": undefined,
+      "zIndex": 10,
+    }
+  }
+>
+  <View
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "alignSelf": "center",
+        "opacity": 1,
+        "paddingLeft": 28,
+      }
+    }
+    testID="news-search-back-button"
+  >
+    <SvgMock />
+  </View>
+  <View
+    accessible={true}
+    collapsable={false}
+    focusable={true}
+    style={
+      Object {
+        "flex": 1,
+        "justifyContent": "center",
+      }
+    }
+    testID="containerPress"
+  >
+    <View
+      style={
+        Object {
+          "alignSelf": "center",
+          "backgroundColor": "#1E3343",
+          "borderRadius": 8,
+          "flexDirection": "row",
+          "height": 34,
+          "marginLeft": 16,
+          "marginRight": 9.600000000000001,
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "alignSelf": "center",
+            "justifyContent": "center",
+            "marginLeft": 6.4,
+          }
+        }
+      >
+        <View />
+      </View>
+      <Text
+        style={
+          Object {
+            "alignSelf": "center",
+            "color": "#8C939F",
+            "flex": 1,
+            "fontFamily": "Inter-Regular",
+            "fontSize": 12.600000000000001,
+            "lineHeight": 25.200000000000003,
+            "paddingBottom": 0,
+            "paddingStart": 8,
+            "paddingTop": 0,
+          }
+        }
+      >
+        Search Recent Articles
+      </Text>
+    </View>
+  </View>
+</View>
+`;

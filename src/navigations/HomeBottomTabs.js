@@ -162,12 +162,6 @@ function HomeBottomTabs() {
           listeners={({route}) => saveLastMenu(route)}
         />
         <Tab.Screen
-          name="News"
-          component={NewsScreen}
-          initialParams={{isBottomTab: true}}
-          listeners={({route}) => saveLastMenu(route)}
-        />
-        <Tab.Screen
           name="Profile"
           component={ProfileScreen}
           initialParams={{isBottomTab: true}}

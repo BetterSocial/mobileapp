@@ -6,14 +6,14 @@ const useHastagMention = (initial = '') => {
   const [formattedText, setFormattedText] = React.useState(initial);
   const [hashtags, setHashtags] = React.useState([]);
 
-  const handleStateHashtag = (text, setHashtagState = null, cursorPosition = -1) => {
-    const hashtagMention = handleHastagMention(text, hashtags, setHashtagState, cursorPosition);
+  const handleStateHashtag = (text, setHashtagState = null) => {
+    const hashtagMention = handleHastagMention(text, hashtags, setHashtagState);
     setFormattedText(hashtagMention);
   };
 
-  const updateHashtag = (text, hashtagsProp, setHashtagState = null, cursorPosition = -1) => {
+  const updateHashtag = (text, hashtagsProp, setHashtagState = null) => {
     setHashtags(hashtagsProp);
-    setFormattedText(handleHastagMention(text, hashtagsProp, setHashtagState, cursorPosition));
+    setFormattedText(handleHastagMention(text, hashtagsProp, setHashtagState));
   };
 
   const handleStateMention = (text) => {
