@@ -191,7 +191,7 @@ const CreatePost = () => {
   React.useEffect(() => {
     init();
     if (isInCreatePostTopicScreen) {
-      setTimeout(() => setMessage((prev) => `${prev}#${listTopic[0]}`), 500);
+      setTimeout(() => onChangeText(`${message}#${listTopic[0]}`), 500);
     }
   }, []);
 
@@ -243,10 +243,6 @@ const CreatePost = () => {
     } else setLinkPreviewMeta(null);
     setIsLinkPreviewShown(response?.success);
   };
-
-  React.useEffect(() => {
-    debounced(message);
-  }, [message]);
 
   const location = [
     {
@@ -659,9 +655,9 @@ const CreatePost = () => {
     sheetTopicRef.current.open();
   };
 
-  const handleTagUser = debounce(() => {
+  const handleTagUser = debounce((text) => {
     const regex = /(^|\W)(@[a-z\d][\w-]*)/gi;
-    const findRegex = message.match(regex);
+    const findRegex = text.match(regex);
     if (findRegex) {
       const newMapRegex = findRegex.map((tagUser) => {
         const newTagUser = tagUser.replace(/\s/g, '').replace('@', '');
@@ -673,6 +669,11 @@ const CreatePost = () => {
     }
   }, 500);
 
+  const onChangeText = (text) => {
+    setMessage(text);
+    handleTagUser(text);
+  };
+
   const renderLocationString = (geoInfo) => {
     if (geoInfo?.location_level?.toLowerCase() === 'neighborhood') return geoInfo?.neighborhood;
     if (geoInfo?.location_level?.toLowerCase() === 'city') return geoInfo?.city.split(',')[0];
@@ -680,10 +681,6 @@ const CreatePost = () => {
     if (geoInfo?.location_level?.toLowerCase() === 'country') return geoInfo?.country;
     return geoInfo?.location_level;
   };
-
-  React.useEffect(() => {
-    handleTagUser();
-  }, [message]);
 
   React.useEffect(() => {
     if (typeUser) {
@@ -722,7 +719,7 @@ const CreatePost = () => {
               dataProfile.profile_pic_path ? {uri: dataProfile.profile_pic_path} : ProfileDefault
             }
             onPress={() => {
-              setMessage('');
+              onChangeText('');
               navigation.navigate('ProfileScreen', {
                 isNotFromHomeTab: true
               });
@@ -730,7 +727,7 @@ const CreatePost = () => {
           />
           <Gap style={styles.height(8)} />
           <CreatePostInput
-            setMessage={setMessage}
+            setMessage={onChangeText}
             setPositionKeyboard={setPositionKeyboard}
             setTopics={setListTopic}
             topics={listTopic}
