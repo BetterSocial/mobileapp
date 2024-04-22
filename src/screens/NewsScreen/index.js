@@ -1,4 +1,3 @@
-import {useNavigation} from '@react-navigation/native';
 import * as React from 'react';
 import {
   Animated,
@@ -6,32 +5,36 @@ import {
   InteractionManager,
   Platform,
   RefreshControl,
+  SafeAreaView,
   StatusBar,
   StyleSheet,
   View
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import BlockDomainComponent from '../../components/BlockDomain';
-import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {Context} from '../../context';
-import {setIFollow, setNews} from '../../context/actions/news';
+import RenderItem from './RenderItem';
+import Search from './Search';
+import ShareUtils from '../../utils/share';
+import dimen from '../../utils/dimen';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
 } from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
-import {useAfterInteractions} from '../../hooks/useAfterInteractions';
-import {getDomainIdIFollow, getDomains} from '../../service/domain';
-import {downVoteDomain, upVoteDomain} from '../../service/vote';
-import {getSpecificCache, saveToCache} from '../../utils/cache';
-import {NEWS_CACHE} from '../../utils/cache/constant';
-import ShareUtils from '../../utils/share';
 import {COLORS} from '../../utils/theme';
-import RenderItem from './RenderItem';
-import Search from './Search';
-import dimen from '../../utils/dimen';
+import {Context} from '../../context';
+import {NEWS_CACHE} from '../../utils/cache/constant';
+import {downVoteDomain, upVoteDomain} from '../../service/vote';
+import {getDomainIdIFollow, getDomains} from '../../service/domain';
+import {getSpecificCache, saveToCache} from '../../utils/cache';
+import {setIFollow, setNews} from '../../context/actions/news';
+import {useAfterInteractions} from '../../hooks/useAfterInteractions';
+import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 const NewsScreen = () => {
   const navigation = useNavigation();
   const {listRef} = useOnBottomNavigationTabPressHook(LIST_VIEW_TYPE.FLAT_LIST);
+  const safeInsets = useSafeAreaInsets();
 
   const refBlockDomainComponent = React.useRef(null);
   const offset = React.useRef(new Animated.Value(0)).current;
@@ -117,33 +120,34 @@ const NewsScreen = () => {
   };
 
   const handleScrollEvent = (event) => {
+    console.log(safeInsets);
     const {y} = event.nativeEvent.contentOffset;
     const dy = y - lastDragY;
-    if (dy + 20 <= 0) {
+    if (dy + 20 <= safeInsets.top) {
       interactionAnimatedRef.current = InteractionManager.runAfterInteractions(() => {
         Animated.timing(offset, {
           toValue: 0,
           duration: 100,
           useNativeDriver: false
         }).start();
-        Animated.timing(paddingContainer, {
-          toValue: 50,
-          duration: 100,
-          useNativeDriver: false
-        }).start();
+        // Animated.timing(paddingContainer, {
+        //   toValue: safeInsets.top,
+        //   duration: 100,
+        //   useNativeDriver: false
+        // }).start();
       });
-    } else if (dy - 20 > 0) {
+    } else if (dy - 20 > safeInsets.top) {
       interactionAnimatedRef.current = InteractionManager.runAfterInteractions(() => {
         Animated.timing(offset, {
-          toValue: -50,
-          duration: 100,
-          useNativeDriver: false
-        }).start();
-        Animated.timing(paddingContainer, {
           toValue: 0,
           duration: 100,
           useNativeDriver: false
         }).start();
+        // Animated.timing(paddingContainer, {
+        //   toValue: 50,
+        //   duration: 100,
+        //   useNativeDriver: false
+        // }).start();
       });
     }
   };
@@ -228,58 +232,62 @@ const NewsScreen = () => {
   const keyExtractor = React.useCallback((item, index) => index.toString(), []);
 
   return (
-    <View style={styles.container}>
-      <StatusBar translucent={false} barStyle={'light-content'} />
-      <Search animatedValue={offset} />
-      <Animated.View style={{paddingTop: Platform.OS === 'android' ? paddingContainer : 0}}>
-        <FlatList
-          ref={listRef}
-          contentInsetAdjustmentBehavior="automatic"
-          keyExtractor={keyExtractor}
-          onScrollBeginDrag={handleOnScrollBeginDrag}
-          onScroll={handleScrollEvent}
-          scrollEventThrottle={16}
-          data={news}
-          refreshControl={
-            <RefreshControl
-              tintColor={COLORS.white}
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-            />
-          }
-          onEndReached={loadMoreData}
-          contentContainerStyle={styles.flatlistContainer}
-          style={{backgroundColor: COLORS.gray110}}
-          initialNumToRender={2}
-          maxToRenderPerBatch={2}
-          updateCellsBatchingPeriod={10}
-          windowSize={10}
-          // onEndReachedThreshold={0.8}
+    <SafeAreaView>
+      <View style={styles.container}>
+        <StatusBar translucent={false} barStyle={'light-content'} />
+        <Search animatedValue={offset} />
+        {/* <Animated.View style={{paddingTop: Platform.OS === 'android' ? paddingContainer : 0}}> */}
+        <View>
+          <FlatList
+            ref={listRef}
+            contentInsetAdjustmentBehavior="automatic"
+            keyExtractor={keyExtractor}
+            onScrollBeginDrag={handleOnScrollBeginDrag}
+            onScroll={handleScrollEvent}
+            scrollEventThrottle={16}
+            data={news}
+            refreshControl={
+              <RefreshControl
+                tintColor={COLORS.white}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+            }
+            onEndReached={loadMoreData}
+            contentContainerStyle={styles.flatlistContainer}
+            style={{backgroundColor: COLORS.almostBlack}}
+            initialNumToRender={2}
+            maxToRenderPerBatch={2}
+            updateCellsBatchingPeriod={10}
+            windowSize={10}
+            // onEndReachedThreshold={0.8}
 
-          // onMomentumScrollEnd={setSelectedIndex}
-          renderItem={({item, index}) => (
-            <RenderItem
-              key={index}
-              item={item}
-              onPressShare={ShareUtils.shareNews}
-              onPressComment={(itemNews) => comment(itemNews)}
-              onPressBlock={(itemNews) => blockNews(itemNews)}
-              onPressUpvote={(itemNews) => upvoteNews(itemNews)}
-              onPressDownVote={(itemNews) => downvoteNews(itemNews)}
-              selfUserId={myProfile.user_id}
-            />
-          )}
+            // onMomentumScrollEnd={setSelectedIndex}
+            renderItem={({item, index}) => (
+              <RenderItem
+                key={index}
+                item={item}
+                onPressShare={ShareUtils.shareNews}
+                onPressComment={(itemNews) => comment(itemNews)}
+                onPressBlock={(itemNews) => blockNews(itemNews)}
+                onPressUpvote={(itemNews) => upvoteNews(itemNews)}
+                onPressDownVote={(itemNews) => downvoteNews(itemNews)}
+                selfUserId={myProfile.user_id}
+              />
+            )}
+          />
+          {/* </Animated.View> */}
+        </View>
+
+        <BlockDomainComponent
+          ref={refBlockDomainComponent}
+          domain={domain}
+          domainId={idBlock}
+          screen="news_screen"
+          getValueBlock={onBlockedDomain}
         />
-      </Animated.View>
-
-      <BlockDomainComponent
-        ref={refBlockDomainComponent}
-        domain={domain}
-        domainId={idBlock}
-        screen="news_screen"
-        getValueBlock={onBlockedDomain}
-      />
-    </View>
+      </View>
+    </SafeAreaView>
   );
 };
 

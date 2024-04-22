@@ -52,13 +52,14 @@ import {
   GroupInfo,
   GroupMedia,
   GroupSetting,
+  NewsScreen,
   ProfileScreen
 } from '../screens';
+import {COLORS} from '../utils/theme';
 import {InitialStartupAtom, LoadingStartupContext} from '../service/initialStartup';
 import {NavigationConstants} from '../utils/constants';
 import {followersOrFollowingAtom} from '../screens/ChannelListScreen/model/followersOrFollowingAtom';
 import {useInitialStartup} from '../hooks/useInitialStartup';
-import {COLORS} from '../utils/theme';
 
 const RootStack = createNativeStackNavigator();
 
@@ -340,6 +341,11 @@ const AuthenticatedNavigator = () => {
           component={withKeyboardWrapper(
             withSafeAreaViewTopBottom(SignedChatScreen, COLORS.signed_secondary)
           )}
+          options={{headerShown: false}}
+        />
+        <AuthenticatedStack.Screen
+          name="News"
+          component={NewsScreen}
           options={{headerShown: false}}
         />
       </AuthenticatedStack.Navigator>
