@@ -4,6 +4,7 @@ import {ChannelList} from '../../database/schema/ChannelList.types';
 
 interface UseChatScreenHook {
   chats: ChatSchema[];
+  isLoadingFetchAllMessage: boolean;
   goBackFromChatScreen: () => void;
   goToChatInfoScreen: (params?: any) => void;
   sendChat: (message: string, attachments: any) => Promise<void>;

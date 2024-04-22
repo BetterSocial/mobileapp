@@ -124,6 +124,7 @@
     "react-native-video-controls": "^2.8.1",
     "react-native-walkthrough-tooltip": "^1.2.0",
     "react-native-webview": "^11.26.0",
+    "react-query": "^3.39.3",
     "react-string-replace": "^1.1.0",
     "recoil": "^0.5.2",
     "recyclerlistview": "^3.0.5",
