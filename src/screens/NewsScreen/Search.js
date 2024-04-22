@@ -4,9 +4,10 @@ import {useNavigation} from '@react-navigation/native';
 import PropTypes from 'prop-types';
 import MemoIc_search from '../../assets/icons/Ic_search';
 import StringConstant from '../../utils/string/StringConstant';
-import {COLORS, FONTS, SIZES} from '../../utils/theme';
+import {COLORS, SIZES} from '../../utils/theme';
 import {DISCOVERY_TAB_NEWS} from '../../utils/constants';
-import {fonts} from '../../utils/fonts';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
+import dimen from '../../utils/dimen';
 
 const Search = ({animatedValue}) => {
   const navigation = useNavigation();
@@ -25,7 +26,7 @@ const Search = ({animatedValue}) => {
       ]}>
       <Pressable
         testID="containerPress"
-        style={styles.pressableContainer}
+        style={styles.searchPressableContainer}
         onPress={handleOnContainerPress}>
         <View style={styles.wrapperSearch}>
           <View style={styles.wrapperIcon}>
@@ -46,65 +47,63 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     backgroundColor: COLORS.almostBlack,
-    marginBottom: SIZES.base,
-    marginHorizontal: SIZES.base
+    marginBottom: SIZES.base
   },
-  pressableContainer: {
-    flex: 1
+  searchPressableContainer: {
+    flex: 1,
+    justifyContent: 'center'
   },
   wrapperSearch: {
-    flex: 1,
-    backgroundColor: COLORS.gray110,
-    marginLeft: 20,
-    marginRight: 20,
-    borderRadius: 8,
-    alignSelf: 'center',
     flexDirection: 'row',
-    height: 36
+    backgroundColor: COLORS.gray110,
+    marginLeft: dimen.normalizeDimen(20),
+    marginRight: dimen.normalizeDimen(12),
+    borderRadius: SIZES.base,
+    alignSelf: 'center',
+    height: 34
   },
   wrapperButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
     marginEnd: SIZES.base,
-    paddingLeft: 8,
-    paddingRight: 8,
-    paddingTop: 9,
-    paddingBottom: 9
+    paddingLeft: dimen.normalizeDimen(8),
+    paddingRight: dimen.normalizeDimen(12),
+    paddingTop: dimen.normalizeDimen(9),
+    paddingBottom: dimen.normalizeDimen(9)
   },
   input: {
-    marginRight: 16,
-    paddingStart: 10,
+    paddingStart: dimen.normalizeDimen(10),
+    lineHeight: normalizeFontSize(28),
     flex: 1,
-    fontSize: 14,
-    fontFamily: fonts.inter[400],
-    // height: 36,
-    paddingTop: 0,
     paddingBottom: 0,
+    paddingTop: 0,
+    fontFamily: fonts.inter[400],
+    fontSize: normalizeFontSize(14),
     alignSelf: 'center',
     color: COLORS.gray410
   },
   wrapperIcon: {
-    marginLeft: 8,
+    marginLeft: dimen.normalizeDimen(8),
     alignSelf: 'center',
     justifyContent: 'center'
   },
   newPostText: {
     color: COLORS.anon_primary,
-    marginRight: 11,
-    ...FONTS.h3
+    marginRight: dimen.normalizeDimen(4),
+    fontFamily: fonts.inter[600],
+    fontSize: normalizeFontSize(14)
   },
   animatedViewContainer: (animatedValue) => ({
     flexDirection: 'row',
     backgroundColor: COLORS.almostBlack,
-    // marginBottom: SIZES.base,
     marginTop: Platform.OS === 'android' ? 0 : animatedValue,
     top: Platform.OS === 'android' ? animatedValue : 0,
     left: 0,
     right: 0,
     zIndex: 10,
-    paddingTop: 7,
-    paddingBottom: 7,
+    paddingTop: dimen.normalizeDimen(7),
+    paddingBottom: dimen.normalizeDimen(7),
     borderBottomWidth: 1,
     borderBottomColor: COLORS.gray110,
     height: 50

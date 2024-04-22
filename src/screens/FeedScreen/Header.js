@@ -151,7 +151,7 @@ const _renderAnonimity = ({
         refSheet.current.close();
         onDeletePost();
       },
-      style: {color: COLORS.red}
+      style: {color: COLORS.redalert}
     });
   }
 
@@ -307,7 +307,7 @@ const _renderProfileNormal = ({
         refSheet.current.close();
         onDeletePost();
       },
-      style: {color: COLORS.red}
+      style: {color: COLORS.redalert}
     });
   }
   const {navigateToProfile, username, profile_pic_url, onBackNormalUser} = useFeedHeader({
