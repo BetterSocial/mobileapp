@@ -272,32 +272,22 @@ const Comment = ({
           </View>
         </ButtonHightlight>
       </View>
-      <TouchableOpacity testID="textPress" onPress={onTextPress} style={styles.flexStartContainer}>
+      <TouchableOpacity
+        testID="textPress"
+        onPress={onTextPress}
+        style={(styles.flexStartContainer, {width: '100%'})}>
         <ButtonHightlight
           onLongPress={handleOnLongPress}
           onPress={onTextPress}
-          style={styles.flexStartContainer}>
+          style={(styles.flexStartContainer, {width: '100%'})}>
           <Text style={styles.post}>{getCaptionWithLinkStyle(comment.data?.text)}</Text>
         </ButtonHightlight>
       </TouchableOpacity>
       <View style={styles.constainerFooter}>
-        {isLast && level >= 2 ? (
+        {isLast && level > 2 ? (
           <View testID="level2" style={styles.gap} />
         ) : (
           <>
-            {!comment.is_you && (
-              <TouchableOpacity onPress={onPressDm} testID="sendDMbtn" activeOpacity={1}>
-                <ButtonHightlight
-                  onPress={onPressDm}
-                  style={[
-                    styles.btnBlock(comment.user.id === yourselfId),
-                    styles.btn,
-                    styles.iconContainer
-                  ]}>
-                  <MemoSendDM height={normalize(14)} />
-                </ButtonHightlight>
-              </TouchableOpacity>
-            )}
             {level !== 2 && (
               <TouchableOpacity
                 activeOpacity={1}
@@ -308,6 +298,20 @@ const Comment = ({
                   style={[styles.btnReply, styles.iconContainer]}
                   onPress={() => onPress(comment.id, userName)}>
                   <MemoCommentReply height={normalize(14)} />
+                  {level === 0 && <Text style={styles.btnReplyText}>Reply</Text>}
+                </ButtonHightlight>
+              </TouchableOpacity>
+            )}
+            {!comment.is_you && (
+              <TouchableOpacity onPress={onPressDm} testID="sendDMbtn" activeOpacity={1}>
+                <ButtonHightlight
+                  onPress={onPressDm}
+                  style={[
+                    styles.btnBlock(comment.user.id === yourselfId),
+                    styles.btn,
+                    styles.iconContainer
+                  ]}>
+                  <MemoSendDM height={normalize(14)} />
                 </ButtonHightlight>
               </TouchableOpacity>
             )}
@@ -409,7 +413,8 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
     color: COLORS.white,
-    marginLeft: 20
+    marginLeft: 20,
+    flex: 1
   },
   profile: {
     flexDirection: 'row',
@@ -430,11 +435,10 @@ const styles = StyleSheet.create({
     flex: 1
   },
   btnReplyText: {
-    fontFamily: fonts.inter[400],
-    fontSize: 13,
-    color: COLORS.balance_gray,
-    marginLeft: 8.98,
-    marginRight: 14
+    fontFamily: fonts.inter[500],
+    fontSize: 12,
+    color: COLORS.gray400,
+    marginLeft: 6
   },
   btnBlock: (isMySelf) => ({
     display: isMySelf ? 'none' : 'flex'
