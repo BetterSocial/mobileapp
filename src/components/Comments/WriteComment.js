@@ -78,7 +78,9 @@ const WriteComment = ({
       <View style={styles.rowTop}>
         <View style={styles.replyToContainer}>
           <Text style={styles.replyToTitle}>Reply to </Text>
-          <Text style={styles.replyToUsername}>{username}</Text>
+          <Text style={styles.replyToUsername} numberOfLines={1} ellipsizeMode="tail">
+            {username}
+          </Text>
           {(isReply || value?.trim() !== '') && (
             <TouchableOpacity
               onPress={() => {
@@ -128,7 +130,7 @@ const WriteComment = ({
           ref={commentInputRef}
           placeholder={StringConstant.commentBoxDefaultPlaceholder}
           placeholderTextColor={COLORS.gray410}
-          style={[styles.text, styles.content(isViewOnly)]}
+          style={[styles.text, styles.content]}
           onChangeText={onChangeText}
           value={value}
           multiline
@@ -190,9 +192,10 @@ export const styles = StyleSheet.create({
     paddingBottom: dimen.normalizeDimen(8)
   },
   replyToContainer: {
-    marginLeft: 60,
+    marginLeft: 53,
     alignItems: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    maxWidth: normalize(150)
   },
   replyToTitle: {
     fontFamily: fonts.inter[600],
@@ -214,20 +217,22 @@ export const styles = StyleSheet.create({
     paddingRight: dimen.normalizeDimen(16),
     paddingLeft: dimen.normalizeDimen(16),
     flexDirection: 'row',
-    zIndex: 100
+    zIndex: 100,
+    alignItems: 'center'
   },
-  content: (isViewOnly) => ({
+  content: {
+    flex: 1,
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: COLORS.gray110,
     marginLeft: 8,
+    marginRight: 8,
     borderRadius: 8,
-    paddingLeft: 6,
-    paddingRight: 8,
-    marginEnd: 8,
-    flex: 1,
-    height: isViewOnly ? 36 : undefined
-  }),
+    paddingTop: 6,
+    paddingHorizontal: 5,
+    paddingBottom: 5,
+    minHeight: normalize(30)
+  },
   btn: (isDisableSubmit) => ({
     backgroundColor: !isDisableSubmit ? COLORS.bondi_blue : COLORS.gray110,
     borderRadius: 18,
@@ -248,14 +253,10 @@ export const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   text: {
-    flex: 1,
-    fontSize: 12,
+    fontSize: 14,
     fontFamily: fonts.inter[400],
     color: COLORS.black,
-    backgroundColor: COLORS.gray110,
-    maxHeight: 100,
-    paddingTop: Platform.OS === 'ios' ? 10 : 5,
-    paddingBottom: Platform.OS === 'ios' ? 10 : 5
+    maxHeight: 100
   },
   icSendButton: {
     alignSelf: 'center'
