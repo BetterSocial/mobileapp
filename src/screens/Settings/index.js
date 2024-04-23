@@ -69,6 +69,7 @@ const Settings = () => {
             text="Blocked List"
             onPress={() => goToPage('BlockScreen')}
           />
+          <ProfileSettingItem testID="news" text="News" onPress={() => goToPage('News')} />
           <ProfileSettingItem
             testID="privacy"
             text="Privacy Policies"

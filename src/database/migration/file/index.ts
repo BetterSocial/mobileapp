@@ -21,6 +21,7 @@ import MigrationVersion18 from './migration_version_18_channel_list_add_column_t
 import MigrationVersion19 from './migration_version_19_channel_list_copy_column_type_to_column_type_new';
 import MigrationVersion20 from './migration_version_20_channel_list_delete_channel_type';
 import MigrationVersion21 from './migration_version_21_channel_list_rename_column_type_new';
+import MigrationVersion22 from './migration_version_22_channel_list_add_topic_post_expired_at';
 
 const allMigrations: Migration[] = [
   MigrationVersion0,
@@ -44,7 +45,8 @@ const allMigrations: Migration[] = [
   MigrationVersion18,
   MigrationVersion19,
   MigrationVersion20,
-  MigrationVersion21
+  MigrationVersion21,
+  MigrationVersion22
 ];
 
 export default allMigrations;

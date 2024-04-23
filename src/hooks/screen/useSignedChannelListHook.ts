@@ -5,10 +5,11 @@ import UseSignedChannelListScreenHook from '../../../types/hooks/screens/useSign
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import {getAnonymousUserId} from '../../utils/users';
+import {getLatestTopicPost} from '../../service/topics';
 import {getUserId} from '../../utils/token';
 
 function useSignedChannelListScreenHook(): UseSignedChannelListScreenHook {
-  const {localDb, channelList} = useLocalDatabaseHook();
+  const {localDb, channelList, refresh} = useLocalDatabaseHook();
   const {goToChatScreen, goToPostDetailScreen, goToCommunityScreen, goToContactScreen} =
     useChatUtilsHook();
 
@@ -23,12 +24,29 @@ function useSignedChannelListScreenHook(): UseSignedChannelListScreenHook {
     setChannels(data);
   };
 
+  const fetchLatestTopicPost = async (topicId: string) => {
+    const cleanTopicName = topicId?.replace('topic_', '');
+    const response = await getLatestTopicPost(cleanTopicName);
+    if (!response || !localDb) return;
+
+    await ChannelList.updateChannelDescription(
+      localDb,
+      topicId,
+      response?.message,
+      null,
+      true,
+      response?.duration
+    );
+    refresh('channelList');
+  };
+
   React.useEffect(() => {
     initializeChannelListData();
   }, [localDb, channelList]);
 
   return {
     channels,
+    fetchLatestTopicPost,
     goToChatScreen,
     goToPostDetailScreen,
     goToCommunityScreen,

@@ -93,4 +93,5 @@ export interface ChannelData {
   myUserId?: string;
   unreadCount?: number;
   firstMessage: Message;
+  topicPostExpiredAt?: string;
 }

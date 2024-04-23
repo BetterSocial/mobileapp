@@ -22,6 +22,7 @@ import {DatabaseOperationLabel} from '../../core/queue/DatabaseQueue';
 import {QueueJobPriority} from '../../core/queue/BaseQueue';
 import {getAnonymousUserId, getUserId} from '../../utils/users';
 import {randomString} from '../../utils/string/StringUtils';
+import {useGetAllMessage} from './services/chatScreenHooks';
 
 interface ScrollContextProps {
   selectedMessageId: string | null;
@@ -39,6 +40,26 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
 
   const [selfAnonUserInfo, setSelfAnonUserInfo] = React.useState<any>(null);
   const [chats, setChats] = React.useState<ChatSchema[]>([]);
+  const [isLoadingFetchAllMessage, setIsLoadingFetchAllMessage] = React.useState(true);
+
+  const getAllMessages = useGetAllMessage(
+    {
+      localDb,
+      selectedChannelId: selectedChannel?.id,
+      signedProfileId,
+      anonProfileId
+    },
+    {
+      enabled: !!localDb && !!selectedChannel && !!otherListener[`chat_${selectedChannel?.id}`]
+    }
+  );
+
+  React.useEffect(() => {
+    if (getAllMessages.data) {
+      setChats(getAllMessages.data);
+      setIsLoadingFetchAllMessage(false);
+    }
+  }, [getAllMessages.data]);
 
   const initChatData = async () => {
     if (!localDb || !selectedChannel) return;
@@ -51,15 +72,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
         id: selectedChannel?.name,
         task: async () => {
           setChannelAsRead(selectedChannel, true);
-          const data = (await ChatSchema.getAll(
-            localDb,
-            selectedChannel?.id,
-            signedProfileId,
-            anonProfileId
-          )) as ChatSchema[];
-          setChats(data);
-
-          return data;
+          getAllMessages.refetch();
         }
       });
 
@@ -262,14 +275,16 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   };
 
   React.useEffect(() => {
-    initChatData();
+    if (localDb && selectedChannel) {
+      initChatData();
+    }
   }, [localDb, otherListener[`chat_${selectedChannel?.id}`], selectedChannel]);
 
   return {
     chats,
     selectedChannel,
     selfAnonUserInfo,
-
+    isLoadingFetchAllMessage,
     goBackFromChatScreen,
     goToChatInfoScreen,
     sendChat,

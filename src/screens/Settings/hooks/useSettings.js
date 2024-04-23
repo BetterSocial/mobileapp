@@ -1,5 +1,6 @@
 import React from 'react';
 import Toast from 'react-native-simple-toast';
+import messaging from '@react-native-firebase/messaging';
 import {Alert} from 'react-native';
 import {useSetRecoilState} from 'recoil';
 
@@ -35,7 +36,10 @@ const useSettings = () => {
       await OneSignalUtil.removeAllSubscribedTags();
       OneSignalUtil.removeExternalId();
       StorageUtils.clearAll();
-      await removeFcmToken();
+
+      const fcmToken = await messaging().getToken();
+      await removeFcmToken(fcmToken);
+
       removeAllCache();
       resetProfileFeed(myProfileDispatch);
       setMainFeeds([], feedDispatch);

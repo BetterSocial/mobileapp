@@ -1,21 +1,21 @@
+import * as React from 'react';
+import {FlatList, StatusBar, View} from 'react-native';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-use-before-define */
 import {useNavigation} from '@react-navigation/core';
-import * as React from 'react';
-import {FlatList, StatusBar, View} from 'react-native';
-
 import {useScrollToTop} from '@react-navigation/native';
-import MessageChannelItem from '../../components/AnonymousChat/MessageChannelItem';
-import PostNotificationChannelItem from '../../components/AnonymousChat/PostNotificationChannelItem';
+
 import ChannelListHeaderItem from '../../components/ChatList/ChannelListHeaderItem';
 import CommunityChannelItem from '../../components/ChatList/CommunityChannelItem';
 import GroupChatChannelItem from '../../components/ChatList/GroupChatChannelItem';
-import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
-import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
-import useRootChannelListHook from '../../hooks/screen/useRootChannelListHook';
-import useSignedChannelListScreenHook from '../../hooks/screen/useSignedChannelListHook';
+import MessageChannelItem from '../../components/AnonymousChat/MessageChannelItem';
+import PostNotificationChannelItem from '../../components/AnonymousChat/PostNotificationChannelItem';
 import Search from './elements/Search';
 import useFollowUser from './hooks/useFollowUser';
+import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
+import useRootChannelListHook from '../../hooks/screen/useRootChannelListHook';
+import useSignedChannelListScreenHook from '../../hooks/screen/useSignedChannelListHook';
+import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
 import {COLORS} from '../../utils/theme';
 
 const ChannelListScreen = ({route}) => {
@@ -25,8 +25,14 @@ const ChannelListScreen = ({route}) => {
   const {profile} = useUserAuthHook();
   const navigation = useNavigation();
   const isFocused = navigation.isFocused();
-  const {channels, goToChatScreen, goToPostDetailScreen, goToCommunityScreen, goToContactScreen} =
-    useSignedChannelListScreenHook();
+  const {
+    channels,
+    fetchLatestTopicPost,
+    goToChatScreen,
+    goToPostDetailScreen,
+    goToCommunityScreen,
+    goToContactScreen
+  } = useSignedChannelListScreenHook();
   const ref = React.useRef(null);
 
   useScrollToTop(ref);
@@ -68,7 +74,11 @@ const ChannelListScreen = ({route}) => {
 
     if (item?.channelType === 'TOPIC') {
       return (
-        <CommunityChannelItem channel={item} onChannelPressed={() => goToCommunityScreen(item)} />
+        <CommunityChannelItem
+          channel={item}
+          onChannelPressed={() => goToCommunityScreen(item)}
+          fetchTopicLatestMessage={fetchLatestTopicPost}
+        />
       );
     }
 

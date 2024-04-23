@@ -143,6 +143,13 @@ const usePushNotificationHook = () => {
     }
     if (notification.data.type === 'message.new') {
       if (notification.userInteraction) {
+
+        if (Platform.OS === 'ios') {
+          PushNotificationIOS.removeAllDeliveredNotifications();
+        } else {
+          PushNotification.removeAllDeliveredNotifications();
+        }
+        // change receiver_id to userId to decide which anon or signed
         const selectedChannel = await ChannelList.getSchemaById(
           localDb,
           notification?.data?.channel_id
