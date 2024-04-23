@@ -120,7 +120,6 @@ const NewsScreen = () => {
   };
 
   const handleScrollEvent = (event) => {
-    console.log(safeInsets);
     const {y} = event.nativeEvent.contentOffset;
     const dy = y - lastDragY;
     if (dy + 20 <= safeInsets.top) {
