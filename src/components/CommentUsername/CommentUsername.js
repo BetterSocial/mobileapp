@@ -12,8 +12,7 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(12),
     color: COLORS.white,
     lineHeight: 14,
-    marginLeft: 8,
-    maxWidth: dimen.normalizeDimen(170)
+    marginLeft: 8
   },
   previewContainer: {
     marginLeft: SIZES.base
