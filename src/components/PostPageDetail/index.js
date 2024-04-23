@@ -253,21 +253,13 @@ const PostPageDetailIdComponent = (props) => {
     setLoadingPost(true);
     try {
       if (textComment.trim() !== '') {
-        const anonUser = {
-          emoji_name: anonimityData.emojiName,
-          color_name: anonimityData.colorName,
-          emoji_code: anonimityData.emojiCode,
-          color_code: anonimityData.colorCode,
-          is_anonymous: isAnonimity,
-          is_you: true
-        };
         const data = await createChildCommentV3(
           textComment,
           reactionId,
           true,
           item.id,
           isAnonimity,
-          anonUser
+          anonimityData
         );
         scrollViewRef.current.scrollToEnd();
         if (data.code === 200) {
