@@ -15,7 +15,7 @@ export const KarmaLock = (props: {onPressCreatePost: () => void}) => {
         backgroundColor: COLORS.gray110,
         borderRadius: 12,
         paddingVertical: 6,
-        paddingHorizontal: 4
+        paddingHorizontal: 2
       }}>
       <View
         style={{
