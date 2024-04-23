@@ -7,10 +7,10 @@ import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../database/schema/ChannelListSchema';
 import ChatSchema from '../../database/schema/ChatSchema';
 import SignedMessageRepo from '../../service/repo/signedMessageRepo';
-import StorageUtils from '../../utils/storage';
 import UseLocalDatabaseHook from '../../../types/database/localDatabase.types';
 import UserSchema from '../../database/schema/UserSchema';
 import migrationDbStatusAtom from '../../database/atom/migrationDbStatusAtom';
+import useAppBadgeHook from '../appBadge/useAppBadgeHook';
 import useBetterWebsocketHook from './websocket/useBetterWebsocketHook';
 import useDatabaseQueueHook from './queue/useDatabaseQueueHook';
 import useFetchChannelHook from './chat/useFetchChannelHook';
@@ -19,7 +19,6 @@ import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import usePostNotificationListenerHook from './getstream/usePostNotificationListenerHook';
 import useSystemMessage from './chat/useSystemMessage';
 import useUserAuthHook from './auth/useUserAuthHook';
-import DatabaseQueue, {DatabaseOperationLabel} from '../../core/queue/DatabaseQueue';
 import {ANONYMOUS, SIGNED} from './constant';
 import {
   AnonymousPostNotification,
@@ -28,6 +27,7 @@ import {
 } from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
 import {ChannelType} from '../../../types/repo/ChannelData';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {DatabaseOperationLabel} from '../../core/queue/DatabaseQueue';
 import {GetstreamFeedListenerObject} from '../../../types/hooks/core/getstreamFeedListener/feedListenerObject';
 import {GetstreamMessage, GetstreamWebsocket, MyChannelType} from './websocket/types.d';
 import {InitialStartupAtom} from '../../service/initialStartup';
@@ -42,6 +42,7 @@ const useCoreChatSystemHook = () => {
   const {getAllSignedPostNotifications, getAllAnonymousPostNotifications} =
     useFetchPostNotificationHook();
   const {queue} = useDatabaseQueueHook();
+  const {updateAppBadgeFromDB} = useAppBadgeHook();
   const [migrationStatus] = useRecoilState(migrationDbStatusAtom);
   const initialStartup: any = useRecoilValue(InitialStartupAtom);
   const {params} = useRoute();
@@ -274,6 +275,8 @@ const useCoreChatSystemHook = () => {
         refresh('channelMember');
       }
     });
+
+    updateAppBadgeFromDB(localDb);
   };
 
   const helperDetermineIsMyChildComment = (postNotification: AnonymousPostNotification) => {

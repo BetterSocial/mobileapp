@@ -16,7 +16,9 @@ export enum DatabaseOperationLabel {
   ChatScreen_GetSelfAnonUserInfo = 'chat_screen_get_self_anon_user_info',
   ChatScreen_SendChat = 'chat_screen_send_chat',
   ChatScreen_UpdateChannelDescription = 'chat_screen_update_channel_description',
-  ChatScreen_UpdateChatSentStatus = 'chat_screen_update_chat_sent_status'
+  ChatScreen_UpdateChatSentStatus = 'chat_screen_update_chat_sent_status',
+
+  AppBadge_UpdateBadgeNumber = 'app_badge_update_badge_number'
 }
 
 class DatabaseQueue extends BaseQueue {
