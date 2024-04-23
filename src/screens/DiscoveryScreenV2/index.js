@@ -1,19 +1,16 @@
-import * as React from 'react';
 import axios from 'axios';
-import {Keyboard, Platform, ScrollView, StatusBar, StyleSheet} from 'react-native';
+import * as React from 'react';
+import {StatusBar, StyleSheet} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 import {useNavigation} from '@react-navigation/core';
 import PropTypes from 'prop-types';
-import DiscoveryAction from '../../context/actions/discoveryAction';
-import DiscoveryRepo from '../../service/discovery';
-import DiscoveryTab from './elements/DiscoveryTab';
-import DomainFragment from './fragment/DomainFragment';
-import NewsFragment from './fragment/NewsFragment';
-import Search from './elements/Search';
-import TopicFragment from './fragment/TopicFragment';
-import UsersFragment from './fragment/UsersFragment';
+import {Header} from '../../components';
 import {Context} from '../../context';
+import DiscoveryAction from '../../context/actions/discoveryAction';
+import FollowingAction from '../../context/actions/following';
+import KeyboardWrapper from '../../navigations/KeyboardWrapper';
+import DiscoveryRepo from '../../service/discovery';
 import {
   DISCOVERY_TAB_DOMAINS,
   DISCOVERY_TAB_NEWS,
@@ -21,10 +18,13 @@ import {
   DISCOVERY_TAB_USERS
 } from '../../utils/constants';
 import {fonts} from '../../utils/fonts';
-import FollowingAction from '../../context/actions/following';
-import {Header} from '../../components';
 import {COLORS} from '../../utils/theme';
-import KeyboardWrapper from '../../navigations/KeyboardWrapper';
+import DiscoveryTab from './elements/DiscoveryTab';
+import Search from './elements/Search';
+import DomainFragment from './fragment/DomainFragment';
+import NewsFragment from './fragment/NewsFragment';
+import TopicFragment from './fragment/TopicFragment';
+import UsersFragment from './fragment/UsersFragment';
 
 const DiscoveryScreenV2 = ({route}) => {
   const {tab} = route.params;
@@ -92,26 +92,31 @@ const DiscoveryScreenV2 = ({route}) => {
     };
 
     const fetchDiscoveryDataUser = async () => {
-      const cancelToken = cancelTokenRef?.current?.token;
-      const data = await DiscoveryRepo.fetchDiscoveryDataUser(text, false, {cancelToken});
-      if (data.success) {
-        setDiscoveryDataFollowedUsers(
-          data?.followedUsers?.map((item) => ({
-            ...item,
-            following: item.user_id_follower !== null
-          })) || []
-        );
-        setDiscoveryDataUnfollowedUsers(
-          data?.unfollowedUsers?.map((item) => ({
-            ...item,
-            following: item.user_id_follower !== null
-          })) || []
-        );
+      try {
+        const cancelToken = cancelTokenRef?.current?.token;
+        const data = await DiscoveryRepo.fetchDiscoveryDataUser(text, false, {cancelToken});
+        if (data.success) {
+          setDiscoveryDataFollowedUsers(
+            data?.followedUsers?.map((item) => ({
+              ...item,
+              following: item.user_id_follower !== null
+            })) || []
+          );
+          setDiscoveryDataUnfollowedUsers(
+            data?.unfollowedUsers?.map((item) => ({
+              ...item,
+              following: item.user_id_follower !== null
+            })) || []
+          );
+        }
+      } catch (e) {
+        console.log('e', e);
+      } finally {
+        setIsLoadingDiscovery((prevState) => ({
+          ...prevState,
+          user: false
+        }));
       }
-      setIsLoadingDiscovery((prevState) => ({
-        ...prevState,
-        user: false
-      }));
     };
 
     const fetchDiscoveryInitialDomains = async () => {
