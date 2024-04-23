@@ -15,14 +15,16 @@ export const KarmaLock = (props: {onPressCreatePost: () => void}) => {
         backgroundColor: COLORS.gray110,
         borderRadius: 12,
         paddingVertical: 6,
-        paddingHorizontal: 2
+        paddingHorizontal: 4,
+        marginLeft: -5,
       }}>
       <View
         style={{
           display: 'flex',
           flexDirection: 'row',
           justifyContent: 'space-between',
-          alignItems: 'center'
+          alignItems: 'center',
+          paddingHorizontal: 1,
         }}>
         <LockIcon />
         <Text
