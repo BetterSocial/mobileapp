@@ -125,7 +125,7 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (7.12.0):
     - GoogleUtilities/Logger
-  - human-id-react-native-humanid (2.4.10):
+  - human-id-react-native-humanid (2.4.11):
     - React-Core
   - libwebp (1.3.2):
     - libwebp/demux (= 1.3.2)
@@ -916,7 +916,7 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: 1c863b1161fc3c8cf614a7460d1be6a7c262aab3
   GoogleDataTransport: cd9db2180fcecd8da1b561aea31e3e56cf834aa7
   GoogleUtilities: 0759d1a57ebb953965c2dfe0ba4c82e95ccc2e34
-  human-id-react-native-humanid: a29c347c1d168a5cc14e7cc100b34634e019806d
+  human-id-react-native-humanid: 52c86933461c9893ae7c26e9effb877430b8dcca
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
   MMKV: f902fb6719da13c2ab0965233d8963a59416f911
   MMKVCore: d26e4d3edd5cb8588c2569222cbd8be4231374e9
