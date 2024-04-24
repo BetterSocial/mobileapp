@@ -63,6 +63,8 @@ const NavHeader = (props) => {
 
   const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 
+  const additionalHeaderHeight = isHeaderHide ? dimen.normalizeDimen(12) : 0;
+
   return (
     <View>
       <View style={{}}>
@@ -71,8 +73,10 @@ const NavHeader = (props) => {
           style={[
             styles.navContainer(isHeaderHide),
             {
-              height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER,
-              backgroundColor: COLORS.almostBlack
+              height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER + additionalHeaderHeight,
+              backgroundColor: COLORS.almostBlack,
+              borderBottomWidth: isHeaderHide ? 1 : 0,
+              borderBottomColor: COLORS.gray310
             }
           ]}
           imageStyle={{opacity: isHeaderHide ? 0 : 1}}>
@@ -111,8 +115,8 @@ const NavHeader = (props) => {
           <View
             style={{
               flexDirection: 'row',
-              alignItems: 'flex-start',
-              paddingTop: hasSearch ? insets.top : insets.top - dimen.normalizeDimen(8),
+              alignItems: 'center',
+              paddingTop: hasSearch ? insets.top : insets.top,
               zIndex: 2,
               position: 'absolute'
             }}>
@@ -131,7 +135,7 @@ const NavHeader = (props) => {
             style={[
               styles.containerAction,
               {
-                paddingTop: insets.top,
+                paddingTop: insets.top + dimen.normalizeDimen(10),
                 paddingRight: dimen.normalizeDimen(20),
                 zIndex: 2,
                 position: 'absolute',
@@ -285,7 +289,9 @@ const styles = StyleSheet.create({
     paddingLeft: normalize(20),
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: COLORS.almostBlack
+    backgroundColor: COLORS.almostBlack,
+    borderBottomColor: COLORS.gray310,
+    borderBottomWidth: 1
   },
   headerImage: (opacityHeaderAnimation) => ({
     width: '100%',
@@ -307,7 +313,7 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(24)
   },
   backbutton: {
-    paddingRight: 16,
+    paddingRight: 20,
     justifyContent: 'center',
     paddingLeft: dimen.normalizeDimen(20)
   },
