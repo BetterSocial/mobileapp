@@ -348,7 +348,7 @@ const InputMessageV2 = ({
   };
 
   const handleSendMessage = () => {
-    onSendButtonClicked(text, []);
+    onSendButtonClicked(text?.trim(), []);
     setText('');
   };
 
