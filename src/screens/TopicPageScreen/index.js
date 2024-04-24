@@ -445,7 +445,8 @@ const TopicPageScreen = (props) => {
           marginTop: isHeaderHide ? -dimen.size.TOPIC_FEED_HEADER_HEIGHT : 0,
           minHeight: 548,
           height: 700,
-          backgroundColor: COLORS.almostBlack
+          backgroundColor: COLORS.gray110,
+          paddingTop: 4
         }}>
         <TiktokScroll
           ref={listRef}

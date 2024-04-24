@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
   cardContainer: {
     width: FULL_WIDTH,
     height: dimen.size.TOPIC_CURRENT_ITEM_HEIGHT,
-    backgroundColor: COLORS.almostBlack
+    backgroundColor: COLORS.gray110
   },
   cardMain: {
     height: '100%',
