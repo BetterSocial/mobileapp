@@ -207,7 +207,7 @@ const AuthenticatedNavigator = () => {
         />
         <AuthenticatedStack.Screen
           name={NavigationConstants.CREATE_POST_SCREEN}
-          component={withKeyboardWrapper(CreatePost)}
+          component={withSafeAreaView(withKeyboardWrapper(CreatePost))}
           options={{headerShown: false}}
         />
         <AuthenticatedStack.Screen
