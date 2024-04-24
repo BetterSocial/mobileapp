@@ -11,6 +11,7 @@ export const COLORS = {
   blueTanzanite: '#11516F',
   blueSea: '#55C2FF',
   blueZaffre: '#0E24B3',
+  blueLink: '#5CB9FF',
   brilliance: '#FCFCFC',
   bunting: '#11243D',
   french_pass: '#b6e4fd',
