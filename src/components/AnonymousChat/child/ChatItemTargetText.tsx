@@ -41,13 +41,13 @@ const styles = StyleSheet.create({
   userText: {
     fontFamily: fonts.inter[600],
     fontSize: 12,
-    lineHeight: 19.36,
+    lineHeight: 18,
     color: COLORS.white
   },
   text: {
     fontFamily: fonts.inter[400],
     fontSize: 16,
-    lineHeight: 19.36,
+    lineHeight: 24,
     color: COLORS.white
   },
   avatar: {
