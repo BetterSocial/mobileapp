@@ -16,6 +16,7 @@ import {
 } from 'react-native-safe-area-context';
 import {appUpgradeVersionCheck} from 'app-upgrade-react-native-sdk';
 
+import {QueryClient, QueryClientProvider} from 'react-query';
 import Store from './src/context/Store';
 import getFeatureLoggerInstance, {EFeatureLogFlag} from './src/utils/log/FeatureLog';
 import {APP_UPGRADE_API_KEY, ENV, ONE_SIGNAL_APP_ID} from './src/libraries/Configs/ENVConfig';
@@ -163,18 +164,24 @@ const App = () => {
   );
 };
 
-const RootApp = () => (
-  <SafeAreaProvider
-    initialMetrics={{
-      insets: {
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0
-      }
-    }}>
-    <App />
-  </SafeAreaProvider>
-);
+const RootApp = () => {
+  const queryClient = new QueryClient();
+
+  return (
+    <SafeAreaProvider
+      initialMetrics={{
+        insets: {
+          top: 0,
+          right: 0,
+          bottom: 0,
+          left: 0
+        }
+      }}>
+      <QueryClientProvider client={queryClient}>
+        <App />
+      </QueryClientProvider>
+    </SafeAreaProvider>
+  );
+};
 
 export default RootApp;

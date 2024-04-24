@@ -1,7 +1,17 @@
 import * as React from 'react';
-import {Animated, Platform, Pressable, StyleSheet, Text, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 import PropTypes from 'prop-types';
+import {
+  Animated,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+
+import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import MemoIc_search from '../../assets/icons/Ic_search';
 import StringConstant from '../../utils/string/StringConstant';
 import {COLORS, SIZES} from '../../utils/theme';
@@ -24,6 +34,12 @@ const Search = ({animatedValue}) => {
         styles.animatedViewContainer(animatedValue),
         {position: Platform.OS === 'android' ? 'absolute' : 'relative'}
       ]}>
+      <TouchableOpacity
+        testID="news-search-back-button"
+        style={styles.backPadding}
+        onPress={() => navigation.goBack()}>
+        <ArrowLeftIcon />
+      </TouchableOpacity>
       <Pressable
         testID="containerPress"
         style={styles.searchPressableContainer}
@@ -53,7 +69,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center'
   },
+  backPadding: {
+    alignSelf: 'center',
+    paddingLeft: 28
+  },
   wrapperSearch: {
+    flex: 1,
     flexDirection: 'row',
     backgroundColor: COLORS.gray110,
     marginLeft: dimen.normalizeDimen(20),

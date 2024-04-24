@@ -18,6 +18,10 @@ jest.mock('recoil', () => ({
   useRecoilState: jest.fn(() => [0, jest.fn()])
 }));
 
+jest.mock('@react-native-firebase/messaging', () => () => ({
+  getToken: jest.fn()
+}));
+
 describe('useSetting should run correctly', () => {
   it('logout should run correctly', async () => {
     const {result} = renderHook(useSettings, {wrapper: Store});

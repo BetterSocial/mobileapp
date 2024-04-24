@@ -5,6 +5,7 @@ import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {Context} from '../../context';
 import {LoadingStartupContext} from '../../service/initialStartup';
 import {COLORS} from '../../utils/theme';
+import dimen from '../../utils/dimen';
 
 const ProfileIcon = () => {
   const [myProfile] = React.useContext(Context).profile;
@@ -16,8 +17,8 @@ const ProfileIcon = () => {
           source={{
             uri: `${myProfile.myProfile.profile_pic_path}`
           }}
-          width={19}
-          height={19}
+          width={dimen.normalizeDimen(20)}
+          height={dimen.normalizeDimen(20)}
           style={styles.borderCircleImage}
         />
       );
@@ -27,8 +28,8 @@ const ProfileIcon = () => {
         source={{
           uri: `${DEFAULT_PROFILE_PIC_PATH}`
         }}
-        width={19}
-        height={19}
+        width={dimen.normalizeDimen(20)}
+        height={dimen.normalizeDimen(20)}
         style={styles.borderCircleImage}
       />
     );
@@ -38,9 +39,9 @@ const ProfileIcon = () => {
 
 const styles = StyleSheet.create({
   borderCircleImage: {
-    borderRadius: 19,
-    width: 19,
-    height: 19,
+    borderRadius: 20,
+    width: dimen.normalizeDimen(20),
+    height: dimen.normalizeDimen(20),
     borderWidth: 0.25,
     borderColor: COLORS.gray110
   }

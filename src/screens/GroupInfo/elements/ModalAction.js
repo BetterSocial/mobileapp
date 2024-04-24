@@ -79,11 +79,11 @@ const ModalAction = (props) => {
                   if (!selectedUser?.allow_anon_dm) {
                     return SimpleToast.show('This user does not allow messages in Incognito Mode.');
                   }
-                  onPress('message-anonymously', selectedUser);
+                  onPress('message', selectedUser);
                 }}
                 style={styles.buttonStyle}>
                 <View style={{flexDirection: 'row'}}>
-                  <Text style={styles.textButton}>Message {name}</Text>
+                  <Text style={styles.textButton}>Message {name} </Text>
                   <Loading visible={isLoadingInitChat} />
                 </View>
               </TouchableOpacity>
