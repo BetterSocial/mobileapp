@@ -346,7 +346,7 @@ const getChannelListInfo = (channel, selfSignUserId, selfAnonUserId) => {
   }
 
   if (channel?.type === 'topics') {
-    channelImage = channel?.channel_image;
+    channelImage = channel?.image || channel?.channel_image;
     channelName = channel?.name;
     if (!channelName || channelName === '') {
       channelName = `#${removePrefixTopic(channel?.id)}`;
@@ -354,8 +354,8 @@ const getChannelListInfo = (channel, selfSignUserId, selfAnonUserId) => {
   }
 
   if (channel?.type === 'group') {
-    channelImage = channel?.is_custom_image ? channel?.channel_image : null;
-    if (channel?.is_custom_name) channelName = channel?.name;
+    channelImage = channel?.is_image_custom ? channel?.image || channel?.channel_image : null;
+    if (channel?.is_name_custom) channelName = channel?.name;
   }
 
   return {
