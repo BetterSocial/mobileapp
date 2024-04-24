@@ -13,6 +13,7 @@ import {
   BUBBLE_RIGHT_PADDING_ATTACHMENT
 } from './ChatItemAttachmentStyles';
 import ChatItemAttachment from './ChatItemAttachment';
+import dimen from '../../../utils/dimen';
 
 const {width} = Dimensions.get('screen');
 
@@ -20,8 +21,7 @@ const styles = StyleSheet.create({
   chatContainer: {
     display: 'flex',
     flexDirection: 'row',
-    marginTop: 4,
-    marginBottom: 4,
+    marginBottom: dimen.normalizeDimen(8),
     maxWidth: width,
     paddingRight: 60,
     paddingLeft: 10
@@ -100,7 +100,7 @@ const ChatItemTargetText = ({
   };
 
   return (
-    <View style={styles.chatContainer}>
+    <View style={[styles.chatContainer, isContinuous ? {marginTop: dimen.normalizeDimen(-4)} : {}]}>
       {renderAvatar()}
       <View style={handleTextContainerStyle()}>
         {!isContinuous && (

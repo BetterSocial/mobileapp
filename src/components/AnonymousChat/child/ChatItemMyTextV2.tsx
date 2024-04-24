@@ -18,6 +18,7 @@ import {
 } from './ChatItemAttachmentStyles';
 import ChatItemAttachment from './ChatItemAttachment';
 import {LinkableText} from '../../LinkableText';
+import dimen from '../../../utils/dimen';
 
 const {width} = Dimensions.get('screen');
 
@@ -29,8 +30,7 @@ const styles = StyleSheet.create({
   chatContainer: {
     display: 'flex',
     flexDirection: 'row',
-    marginTop: 4,
-    marginBottom: 4,
+    marginBottom: dimen.normalizeDimen(8),
     maxWidth: width,
     paddingLeft: CONTAINER_LEFT_PADDING,
     paddingRight: CONTAINER_RIGHT_PADDING
@@ -153,7 +153,7 @@ const ChatItemMyTextV2 = ({
   };
 
   return (
-    <View style={styles.chatContainer}>
+    <View style={[styles.chatContainer, isContinuous ? {marginTop: dimen.normalizeDimen(-4)} : {}]}>
       <View style={handleTextContainerStyle()}>
         {!isContinuous && (
           <View
