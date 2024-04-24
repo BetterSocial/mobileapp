@@ -58,10 +58,10 @@ const FeedCredderRating = ({
 
   const renderCredderRatingScore = () => {
     if (!score || score < 0) return 'n/a';
-    // return ${score}${<Text>{`%`}</Text>}
+    const parsedScore = Math.round(parseInt(score, 10));
     return (
       <Text>
-        {`${score}`}
+        {`${parsedScore}`}
         <Text style={{fontSize: scoreSize - 3}}>%</Text>
       </Text>
     );
