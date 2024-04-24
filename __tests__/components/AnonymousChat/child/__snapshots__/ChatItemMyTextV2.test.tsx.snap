@@ -3,15 +3,19 @@
 exports[`TESTING ChatItemTargetText RENDER continuous should match snapshot 1`] = `
 <View
   style={
-    Object {
-      "display": "flex",
-      "flexDirection": "row",
-      "marginBottom": 4,
-      "marginTop": 4,
-      "maxWidth": 300,
-      "paddingLeft": 60,
-      "paddingRight": 10,
-    }
+    Array [
+      Object {
+        "display": "flex",
+        "flexDirection": "row",
+        "marginBottom": 6.4,
+        "maxWidth": 300,
+        "paddingLeft": 60,
+        "paddingRight": 10,
+      },
+      Object {
+        "marginTop": -3.2,
+      },
+    ]
   }
 >
   <View
@@ -82,15 +86,17 @@ exports[`TESTING ChatItemTargetText RENDER continuous should match snapshot 1`] 
 exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 1`] = `
 <View
   style={
-    Object {
-      "display": "flex",
-      "flexDirection": "row",
-      "marginBottom": 4,
-      "marginTop": 4,
-      "maxWidth": 300,
-      "paddingLeft": 60,
-      "paddingRight": 10,
-    }
+    Array [
+      Object {
+        "display": "flex",
+        "flexDirection": "row",
+        "marginBottom": 6.4,
+        "maxWidth": 300,
+        "paddingLeft": 60,
+        "paddingRight": 10,
+      },
+      Object {},
+    ]
   }
 >
   <View
