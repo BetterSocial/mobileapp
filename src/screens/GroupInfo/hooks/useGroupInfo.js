@@ -642,8 +642,8 @@ const useGroupInfo = (channelId = null) => {
     blockModalRef,
     isFetchingAllowAnonDM,
     isLoadingInitChat,
-    isLoadingAddMember,
-    isOpenModalChangeName
+    isOpenModalChangeName,
+    isLoadingAddMember
   };
 };
 
