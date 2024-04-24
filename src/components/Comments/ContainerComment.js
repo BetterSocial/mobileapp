@@ -247,9 +247,10 @@ const ContainerComment = ({
           </View>
           <View style={{paddingLeft: 22}}>
             <View style={[styles.containerComment]}>
+              <View style={styles.lastConnectorBlocker} />
               <View style={styles.lineBeforeProfile} />
               {comments.map((item, index) => (
-                <View key={`p${index}`}>
+                <View key={`p${index}`} style={{zIndex: 10}}>
                   {item.user ? (
                     <ListComment
                       indexFeed={indexFeed}
@@ -312,5 +313,15 @@ export const styles = StyleSheet.create({
     borderColor: COLORS.darkGray,
     position: 'absolute',
     width: '100%'
+  },
+  lastConnectorBlocker: {
+    position: 'absolute',
+    width: '100%',
+    height: 100,
+    bottom: 0,
+    zIndex: 2,
+    left: -2,
+    borderLeftWidth: 2,
+    borderLeftColor: COLORS.almostBlack
   }
 });
