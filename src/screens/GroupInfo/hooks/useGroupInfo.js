@@ -179,6 +179,10 @@ const useGroupInfo = (channelId = null) => {
       await channelListTemp.save(localDb);
       setSelectedChannel(channelListTemp);
 
+      refresh('channelList');
+      refreshWithId('chat', channelId);
+      refresh('channelInfo');
+
       const result = await ImageUtils.uploadImage(pathImg);
       setUploadedImage(result.data.url);
 
