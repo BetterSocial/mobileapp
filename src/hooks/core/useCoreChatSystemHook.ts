@@ -103,7 +103,14 @@ const useCoreChatSystemHook = () => {
   };
 
   const helperGetChannelInfo = (websocketData: GetstreamWebsocket) => {
-    const channelInfo = getChannelListInfo(websocketData?.channel, signedProfileId, anonProfileId);
+    const channelData = websocketData?.channel;
+    if (websocketData?.message?.channel_name) {
+      channelData.name = websocketData?.message?.channel_name;
+    }
+    if (websocketData?.message?.channel_image) {
+      channelData.image = websocketData?.message?.channel_image;
+    }
+    const channelInfo = getChannelListInfo(channelData, signedProfileId, anonProfileId);
     websocketData.targetImage = channelInfo?.channelImage;
     websocketData.targetName = channelInfo?.channelName;
     websocketData.anon_user_info_color_code = channelInfo?.anonUserInfoColorCode;

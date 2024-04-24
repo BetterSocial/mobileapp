@@ -57,7 +57,7 @@ const ModalChangeName = (props) => {
             <Text
               style={[
                 styles.buttonText,
-                groupName.trim().length <= 0 ? {color: COLORS.gray400} : {}
+                groupName.trim().length <= 0 ? {color: COLORS.gray310} : {}
               ]}>
               Save
             </Text>
@@ -70,27 +70,26 @@ const ModalChangeName = (props) => {
 
 const styles = StyleSheet.create({
   modalContainer: {
-    backgroundColor: 'white',
+    backgroundColor: COLORS.almostBlack,
     padding: dimen.normalizeDimen(16),
     borderRadius: dimen.normalizeDimen(8)
   },
   titleText: {
     fontSize: normalizeFontSize(16),
-    fontFamily: fonts.inter[700]
+    fontFamily: fonts.inter[700],
+    color: COLORS.white
   },
   helperText: {
     fontSize: normalizeFontSize(12),
     fontFamily: fonts.inter[500],
-    color: COLORS.gray400,
+    color: COLORS.gray410,
     marginTop: dimen.normalizeDimen(4)
   },
   inputContainer: {
     paddingTop: dimen.normalizeDimen(10),
     paddingBottom: dimen.normalizeDimen(14),
     paddingHorizontal: dimen.normalizeDimen(16),
-    borderWidth: 1,
-    borderColor: COLORS.signed_secondary,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.gray110,
     borderRadius: dimen.normalizeDimen(8),
     marginTop: dimen.normalizeDimen(12)
   },

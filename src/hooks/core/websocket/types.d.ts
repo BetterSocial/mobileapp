@@ -63,6 +63,9 @@ export type GetstreamMessage = {
   /**
    * SYSTEM MESSAGE END
    */
+  // Used when updating channel image or channel name
+  channel_image?: string;
+  channel_name?: string;
 };
 
 export type GetstreamChannel = {
@@ -115,6 +118,7 @@ export type GetstreamChannel = {
   better_channel_members: any[];
   better_channel_member: any[];
   name: string;
+  image?: string;
   type: string;
   updated_at: string;
   anon_user_info_emoji_name?: string;
