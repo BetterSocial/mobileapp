@@ -231,6 +231,7 @@ const ChatInfoScreen = () => {
   } = useGroupInfo(channelInfo?.id);
   const {signedProfileId, anonProfileId} = useUserAuthHook();
   const {params}: any = useRoute();
+  const [channelName, setChannelName] = React.useState(channelInfo?.name);
   const ANONYMOUS_USER = 'AnonymousUser';
 
   const showImageProfile = (image): React.ReactNode => {
@@ -297,10 +298,15 @@ const ChatInfoScreen = () => {
     return `(${channelInfo?.memberUsers?.length})`;
   };
 
+  const onSaveChangeName = (name) => {
+    setChannelName(name);
+    handleSaveNameChange(name);
+  };
+
   const getHeaderComponent = React.useMemo(() => {
     return (
       <>
-        <AnonymousChatInfoHeader isCenter onPress={goBack} title={channelInfo?.name} />
+        <AnonymousChatInfoHeader isCenter onPress={goBack} title={channelName} />
         <View style={styles.lineTop} />
         <TouchableOpacity
           testID="imageClick"
@@ -316,7 +322,7 @@ const ChatInfoScreen = () => {
           <View style={styles.column}>
             <View style={styles.containerGroupName}>
               <Text numberOfLines={1} style={styles.groupName}>
-                {channelInfo?.name}
+                {channelName}
               </Text>
             </View>
             <Text style={styles.dateCreate}>
@@ -335,7 +341,13 @@ const ChatInfoScreen = () => {
         <Text style={styles.countUser(params?.from)}>Participants {countParticipant()}</Text>
       </>
     );
-  }, [channelInfo, isUploadingImage, isUpdatingName]);
+  }, [channelInfo, isUploadingImage, isUpdatingName, channelName]);
+
+  React.useEffect(() => {
+    if (channelInfo) {
+      setChannelName(channelInfo?.name);
+    }
+  }, [JSON.stringify(channelInfo)]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -416,8 +428,8 @@ const ChatInfoScreen = () => {
       <ModalChangeName
         onCloseModal={closeOnNameChange}
         isOpen={isOpenModalChangeName}
-        name={channelInfo?.rawJson?.channel?.is_name_custom ? channelInfo?.name : ''}
-        onSave={handleSaveNameChange}
+        name={channelInfo?.rawJson?.channel?.is_name_custom ? channelName : ''}
+        onSave={onSaveChangeName}
       />
       <ModalAction
         onCloseModal={handleCloseSelectUser}
