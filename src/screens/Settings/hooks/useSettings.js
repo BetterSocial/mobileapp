@@ -34,11 +34,11 @@ const useSettings = () => {
   const logout = async () => {
     try {
       await OneSignalUtil.removeAllSubscribedTags();
-      OneSignalUtil.removeExternalId();
-      StorageUtils.clearAll();
-
       const fcmToken = await messaging().getToken();
       await removeFcmToken(fcmToken);
+
+      OneSignalUtil.removeExternalId();
+      StorageUtils.clearAll();
 
       removeAllCache();
       resetProfileFeed(myProfileDispatch);
