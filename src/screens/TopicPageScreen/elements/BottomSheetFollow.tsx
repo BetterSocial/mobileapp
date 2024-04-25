@@ -82,7 +82,6 @@ const BottomSheetFollow = forwardRef((props: BottomSheetFollowProps, ref: Ref<RB
     setIsFollow(false);
     setMemberCount(memberCount - 1);
     onClose();
-    console.log('topicName', topicName);
     updateFollowTopicDiscoveryContext(false, {topic_id: topicName}, true);
 
     try {
