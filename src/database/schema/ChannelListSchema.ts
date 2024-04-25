@@ -323,6 +323,22 @@ class ChannelList implements BaseDbSchema {
     }
   }
 
+  static async getAllUnreadCount(db: SQLiteDatabase): Promise<number> {
+    try {
+      const selectQuery = `SELECT SUM(unread_count) as unread_count
+        FROM ${ChannelList.getTableName()}
+        WHERE expired_at IS NULL
+        OR datetime(expired_at) >= datetime('now')`;
+
+      const [results] = await db.executeSql(selectQuery);
+
+      return Promise.resolve(results?.rows?.raw()[0]?.unread_count || 0);
+    } catch (e) {
+      console.log(e);
+      return Promise.resolve(0);
+    }
+  }
+
   static clearAll = async (db: SQLiteDatabase): Promise<void> => {
     const query = `DELETE FROM ${ChannelList.getTableName()}`;
     await db.executeSql(query);

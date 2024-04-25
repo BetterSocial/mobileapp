@@ -7,13 +7,14 @@ import {useNavigation} from '@react-navigation/core';
 import {useRecoilState} from 'recoil';
 
 import ChannelList from '../../../database/schema/ChannelListSchema';
+import ChatSchema from '../../../database/schema/ChatSchema';
 import profileAtom from '../../../atom/profileAtom';
+import useAppBadgeHook from '../../appBadge/useAppBadgeHook';
 import useChatUtilsHook from '../chat/useChatUtilsHook';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import useUserAuthHook from '../auth/useUserAuthHook';
 import TokenStorage, {ITokenEnum} from '../../../utils/storage/custom/tokenStorage';
 import {getAnonymousUserId, getUserId} from '../../../utils/users';
-import ChatSchema from '../../../database/schema/ChatSchema';
 import {getMessageDetail} from '../../../service/repo/messageRepo';
 
 const usePushNotificationHook = () => {
@@ -23,6 +24,8 @@ const usePushNotificationHook = () => {
   const {signedProfileId} = useUserAuthHook();
   const {localDb} = useLocalDatabaseHook();
   const {fetchChannelDetail, setSelectedChannel} = useChatUtilsHook();
+  const {updateAppBadgeFromDB} = useAppBadgeHook();
+
   const [, setProfileAtom] = useRecoilState(profileAtom);
 
   const [isLoadingFetchingChannelDetail, setIsLoadingFetchingChannelDetail] = useState(false);
@@ -219,18 +222,15 @@ const usePushNotificationHook = () => {
           });
           await chatSchema.save(localDb);
         }
+
+        updateAppBadgeFromDB(localDb);
       });
 
       const unsubscribes = messaging().onMessage(async (remoteMessage) => {
         __handlePushNotif(remoteMessage);
       });
 
-      const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-        console.log(remoteMessage.data);
-        // __handlePushNotif(remoteMessage);
-      });
       return () => {
-        unsubscribe();
         unsubscribes();
       };
     }
