@@ -38,7 +38,7 @@ const TopicFragment = ({
   const {
     topics,
     updateFollowTopicDiscoveryContext,
-    topicExchangeFollower: exhangeFollower
+    topicExchangeFollower: exchangeFollower
   } = useDiscovery();
 
   const navigation = useNavigation();
@@ -69,7 +69,7 @@ const TopicFragment = ({
 
     if (from === FROM_FOLLOWED_TOPIC) {
       const newFollowedTopics = [...newMapFollowedTopics];
-      const newTopic = exhangeFollower(newFollowedTopics, willFollow, item.topic_id);
+      const newTopic = exchangeFollower(newFollowedTopics, willFollow, item.topic_id);
 
       setFollowedTopic(
         followedTopic.map((topic) => {
@@ -83,7 +83,7 @@ const TopicFragment = ({
 
     if (from === FROM_UNFOLLOWED_TOPIC) {
       const newUnFollowedTopic = [...newMapUnfollowedTopics];
-      const newTopic = exhangeFollower(newUnFollowedTopic, willFollow, item.topic_id);
+      const newTopic = exchangeFollower(newUnFollowedTopic, willFollow, item.topic_id);
 
       setUnfollowedTopic(
         unfollowedTopic.map((topic) => {

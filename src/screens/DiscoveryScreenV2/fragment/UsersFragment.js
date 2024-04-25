@@ -1,19 +1,18 @@
 /* eslint-disable no-use-before-define */
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import {FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import PropTypes from 'prop-types';
+import * as React from 'react';
+import {FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
 
-import DiscoveryAction from '../../../context/actions/discoveryAction';
-import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
-import DomainList from '../elements/DiscoveryItemList';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
-import RecentSearch from '../elements/RecentSearch';
-import {COLORS} from '../../../utils/theme';
 import {Context} from '../../../context/Store';
-import {fonts} from '../../../utils/fonts';
-import {getUserId} from '../../../utils/users';
 import {setFollow, setUnFollow} from '../../../service/profile';
+import {fonts} from '../../../utils/fonts';
+import {COLORS} from '../../../utils/theme';
+import {getUserId} from '../../../utils/users';
+import DomainList from '../elements/DiscoveryItemList';
+import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
+import RecentSearch from '../elements/RecentSearch';
 import useDiscovery from '../hooks/useDiscovery';
 
 const FROM_FOLLOWED_USERS = 'fromfollowedusers';
@@ -26,7 +25,6 @@ const UsersFragment = ({
   isLoadingDiscoveryUser = false,
   isFirstTimeOpen,
   initialUsers = [],
-  setInitialUsers = () => {},
   followedUsers = [],
   setFollowedUsers = () => {},
   unfollowedUsers = [],
@@ -81,21 +79,12 @@ const UsersFragment = ({
     if (from === FROM_FOLLOWED_USERS) {
       const newFollowedUsers = [...followedUsers];
       exhangeFollower(newFollowedUsers, willFollow, item.user ? item.user.user_id : item.user_id);
-
       setFollowedUsers(newFollowedUsers);
     }
-
     if (from === FROM_UNFOLLOWED_USERS) {
       const newUnfollowedUsers = [...unfollowedUsers];
       exhangeFollower(newUnfollowedUsers, willFollow, item.user ? item.user.user_id : item.user_id);
       setUnfollowedUsers(newUnfollowedUsers);
-    }
-
-    if (from === FROM_USERS_INITIAL) {
-      const newFollowedUsers = [...initialUsers];
-      exhangeFollower(newFollowedUsers, willFollow, item.user ? item.user.user_id : item.user_id);
-
-      setInitialUsers(newFollowedUsers);
     }
   };
 

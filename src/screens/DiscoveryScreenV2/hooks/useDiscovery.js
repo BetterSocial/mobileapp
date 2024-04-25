@@ -24,8 +24,10 @@ const useDiscovery = () => {
     );
     if (newUserLists[indexUser].user) {
       newUserLists[indexUser].user.following = !!willFollow;
+      newUserLists[indexUser].user.is_followed = !!willFollow;
     } else {
       newUserLists[indexUser].following = !!willFollow;
+      newUserLists[indexUser].is_followed = !!willFollow;
     }
     return newUserLists[indexUser];
   };
@@ -50,17 +52,6 @@ const useDiscovery = () => {
     });
   };
 
-  const updateFollowDiscoveryContext = (willFollow, item) => {
-    const newFollowedUsers = [...users];
-    const newUser = exhangeFollower(
-      newFollowedUsers,
-      willFollow,
-      item.user ? item.user.user_id : item.user_id
-    );
-
-    DiscoveryAction.setDiscoveryInitialUsers(mapUser(newUser), discoveryDispatch);
-  };
-
   const topics = React.useMemo(() => {
     return discovery.initialTopics.map((item) => ({
       ...item,
@@ -75,6 +66,17 @@ const useDiscovery = () => {
       }
       return topic;
     });
+  };
+
+  const updateFollowDiscoveryContext = (willFollow, item) => {
+    const newFollowedUsers = [...users];
+    const newUser = exhangeFollower(
+      newFollowedUsers,
+      willFollow,
+      item.user ? item.user.user_id : item.user_id
+    );
+
+    DiscoveryAction.setDiscoveryInitialUsers(mapUser(newUser), discoveryDispatch);
   };
 
   const updateFollowTopicDiscoveryContext = (willFollow, item, fromTopicPage) => {
