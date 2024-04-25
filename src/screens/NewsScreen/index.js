@@ -3,7 +3,6 @@ import {
   Animated,
   FlatList,
   InteractionManager,
-  Platform,
   RefreshControl,
   SafeAreaView,
   StatusBar,
@@ -21,6 +20,7 @@ import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
 } from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
 import {COLORS} from '../../utils/theme';
+import dimen from '../../utils/dimen';
 import {Context} from '../../context';
 import {NEWS_CACHE} from '../../utils/cache/constant';
 import {downVoteDomain, upVoteDomain} from '../../service/vote';
@@ -293,10 +293,14 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.gray6
   },
-  containerLoading: {flex: 1, justifyContent: 'center', alignItems: 'center'},
+  containerLoading: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   flatlistContainer: {
-    paddingTop: 10,
-    backgroundColor: COLORS.almostBlack
+    paddingTop: dimen.normalizeDimen(4),
+    backgroundColor: COLORS.gray110
   }
 });
 

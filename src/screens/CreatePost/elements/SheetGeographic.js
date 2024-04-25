@@ -21,6 +21,9 @@ const SheetGeographic = ({geoRef, data, select, onSelect}) => {
       closeOnDragDown={true}
       closeOnPressMask={true}
       customStyles={{
+        wrapper: {
+          backgroundColor: COLORS.black80
+        },
         container: styles.containerSheet,
         draggableIcon: styles.draggableIcon
       }}>

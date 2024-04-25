@@ -319,7 +319,7 @@ const stylesComponent = (pollLength) =>
       alignSelf: 'center'
     },
     seeresultstext: {
-      color: COLORS.anon_primary,
+      color: COLORS.signed_primary,
       fontFamily: fonts.inter[500],
       fontSize: normalizeFontSize(14)
     },

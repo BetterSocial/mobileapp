@@ -48,6 +48,7 @@ exports[`Testing Discovery Screen V2 Testing Discovery Search Bar Match Snapshot
     style={
       Object {
         "flex": 1,
+        "justifyContent": "center",
         "marginRight": 16,
       }
     }
@@ -57,10 +58,10 @@ exports[`Testing Discovery Screen V2 Testing Discovery Search Bar Match Snapshot
         Object {
           "alignSelf": "center",
           "backgroundColor": "#1E3343",
-          "borderRadius": 9.600000000000001,
+          "borderRadius": 6.4,
           "flex": 1,
           "flexDirection": "row",
-          "height": 28.8,
+          "height": 27.200000000000003,
           "paddingRight": 9.600000000000001,
         }
       }
@@ -86,7 +87,7 @@ exports[`Testing Discovery Screen V2 Testing Discovery Search Bar Match Snapshot
         onFocus={[Function]}
         onSubmitEditing={[Function]}
         placeholder="Search Helio"
-        placeholderTextColor="#7E8FA0"
+        placeholderTextColor="#8C939F"
         rejectResponderTermination={true}
         returnKeyType="search"
         style={

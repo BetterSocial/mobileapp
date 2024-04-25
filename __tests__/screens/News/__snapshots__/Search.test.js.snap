@@ -11,8 +11,8 @@ exports[`News search should run correctly Should match snapshot 1`] = `
       "height": 50,
       "left": 0,
       "marginTop": 0,
-      "paddingBottom": 7,
-      "paddingTop": 7,
+      "paddingBottom": 5.6000000000000005,
+      "paddingTop": 5.6000000000000005,
       "position": "absolute",
       "right": 0,
       "top": undefined,
@@ -48,6 +48,7 @@ exports[`News search should run correctly Should match snapshot 1`] = `
     style={
       Object {
         "flex": 1,
+        "justifyContent": "center",
       }
     }
     testID="containerPress"
@@ -60,9 +61,9 @@ exports[`News search should run correctly Should match snapshot 1`] = `
           "borderRadius": 8,
           "flex": 1,
           "flexDirection": "row",
-          "height": 36,
-          "marginLeft": 10,
-          "marginRight": 20,
+          "height": 34,
+          "marginLeft": 16,
+          "marginRight": 9.600000000000001,
         }
       }
     >
@@ -71,7 +72,7 @@ exports[`News search should run correctly Should match snapshot 1`] = `
           Object {
             "alignSelf": "center",
             "justifyContent": "center",
-            "marginLeft": 8,
+            "marginLeft": 6.4,
           }
         }
       >
@@ -81,13 +82,13 @@ exports[`News search should run correctly Should match snapshot 1`] = `
         style={
           Object {
             "alignSelf": "center",
-            "color": "#7E8FA0",
+            "color": "#8C939F",
             "flex": 1,
             "fontFamily": "Inter-Regular",
-            "fontSize": 14,
-            "marginRight": 16,
+            "fontSize": 12.600000000000001,
+            "lineHeight": 25.200000000000003,
             "paddingBottom": 0,
-            "paddingStart": 10,
+            "paddingStart": 8,
             "paddingTop": 0,
           }
         }

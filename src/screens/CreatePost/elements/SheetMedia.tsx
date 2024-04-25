@@ -40,6 +40,9 @@ const SheetMedia = ({
     closeOnDragDown={true}
     closeOnPressMask={true}
     customStyles={{
+      wrapper: {
+        backgroundColor: COLORS.black80
+      },
       container: styles.containerSheet,
       draggableIcon: styles.draggableIcon
     }}>

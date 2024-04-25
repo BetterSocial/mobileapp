@@ -51,7 +51,7 @@ const PollOptionsMultipleChoice = ({
             styles.barStyle,
             {
               width: `${handleStyleBar(optionPercentage)}%`,
-              backgroundColor: isMax ? COLORS.bondi_blue : COLORS.gray110
+              backgroundColor: isMax ? COLORS.signed_primary : COLORS.gray210
             }
           ]}
         />
@@ -65,7 +65,7 @@ const PollOptionsMultipleChoice = ({
             styles.barStyle,
             {
               width: `${handleStyleBar(optionPercentage)}%`,
-              backgroundColor: isMyPoll() ? COLORS.bondi_blue : COLORS.gray110
+              backgroundColor: isMyPoll() ? COLORS.signed_primary : COLORS.gray210
             }
           ]}
         />
@@ -174,7 +174,9 @@ const styles = StyleSheet.create({
   }),
   pollOptionItemPercentage: {
     textAlignVertical: 'center',
-    fontSize: normalizeFontSize(14)
+    fontSize: normalizeFontSize(14),
+    fontFamily: fonts.inter[400],
+    color: COLORS.white
   },
   totalpolltext: {
     fontFamily: fonts.inter[400],
@@ -196,7 +198,7 @@ const styles = StyleSheet.create({
     width: 12,
     height: 12,
     alignSelf: 'center',
-    borderRadius: 6,
+    borderRadius: 8,
     marginEnd: 12
   },
   totalVotesContainer: {
@@ -208,7 +210,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 0,
-    borderRadius: 6
+    borderRadius: 8
   }
 });
 
