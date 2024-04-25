@@ -48,6 +48,7 @@ export const styles = StyleSheet.create({
   },
   contentContainerStyle: {
     paddingTop: dimen.normalizeDimen(60),
+    paddingBottom: dimen.normalizeDimen(4),
     backgroundColor: COLORS.transparent
   }
 });

@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     marginHorizontal: dimen.normalizeDimen(20),
     padding: dimen.normalizeDimen(8),
     borderRadius: dimen.normalizeDimen(8),
-    marginVertical: dimen.normalizeDimen(5),
+    marginBottom: dimen.normalizeDimen(8),
     maxWidth: dimen.normalizeDimen(335),
     flex: 1
   },
