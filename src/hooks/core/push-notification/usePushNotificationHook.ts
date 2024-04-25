@@ -146,6 +146,7 @@ const usePushNotificationHook = () => {
     }
     if (notification.data.type === 'message.new') {
       if (notification.userInteraction) {
+
         if (Platform.OS === 'ios') {
           PushNotificationIOS.removeAllDeliveredNotifications();
         } else {

@@ -1,6 +1,4 @@
 import * as React from 'react';
-import SimpleToast from 'react-native-simple-toast';
-import ToastMessage from 'react-native-toast-message';
 import {
   Dimensions,
   InteractionManager,
@@ -13,42 +11,45 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+import SimpleToast from 'react-native-simple-toast';
+import ToastMessage from 'react-native-toast-message';
 /* eslint-disable no-underscore-dangle */
 import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
 
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
-import BioAndChat from './elements/BioAndChat';
 import BlockIcon from '../../assets/icons/images/block-blue.svg';
 import BlockProfile from '../../components/Blocking/BlockProfile';
-import BottomSheetBio from '../ProfileScreen/elements/BottomSheetBio';
+import ReportUser from '../../components/Blocking/ReportUser';
+import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import GlobalButton from '../../components/Button/GlobalButton';
+import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import {Context} from '../../context';
+import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherProfileFeed';
+import {generateAnonProfileOtherProfile} from '../../service/anonymousProfile';
+import {blockUser, unblockUserApi} from '../../service/blocking';
+import {getFeedDetail} from '../../service/post';
+import {getOtherFeedsInProfile, setFollow, setUnFollow} from '../../service/profile';
+import {downVote, upVote} from '../../service/vote';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import dimen from '../../utils/dimen';
+import {fonts, normalize} from '../../utils/fonts';
+import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import ShareUtils from '../../utils/share';
+import StorageUtils from '../../utils/storage';
+import {getSingularOrPluralText} from '../../utils/string/StringUtils';
+import {COLORS} from '../../utils/theme';
+import useDiscovery from '../DiscoveryScreenV2/hooks/useDiscovery';
+import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
+import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
+import useViewPostTimeHook from '../FeedScreen/hooks/useViewPostTimeHook';
+import BottomSheetBio from '../ProfileScreen/elements/BottomSheetBio';
 import ProfileHeader from '../ProfileScreen/elements/ProfileHeader';
 import ProfilePicture from '../ProfileScreen/elements/ProfilePicture';
 import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
 import RenderItem from '../ProfileScreen/elements/RenderItem';
-import ReportUser from '../../components/Blocking/ReportUser';
-import ShareUtils from '../../utils/share';
-import SpecificIssue from '../../components/Blocking/SpecificIssue';
-import StorageUtils from '../../utils/storage';
-import dimen from '../../utils/dimen';
-import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
-import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
+import BioAndChat from './elements/BioAndChat';
 import useOtherProfileScreenHooks from './hooks/useOtherProfileScreenHooks';
-import useViewPostTimeHook from '../FeedScreen/hooks/useViewPostTimeHook';
-import {COLORS} from '../../utils/theme';
-import {Context} from '../../context';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
-import {blockUser, unblockUserApi} from '../../service/blocking';
-import {downVote, upVote} from '../../service/vote';
-import {fonts, normalize} from '../../utils/fonts';
-import {generateAnonProfileOtherProfile} from '../../service/anonymousProfile';
-import {getFeedDetail} from '../../service/post';
-import {getOtherFeedsInProfile, setFollow, setUnFollow} from '../../service/profile';
-import {getSingularOrPluralText} from '../../utils/string/StringUtils';
-import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
-import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherProfileFeed';
-import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 const {width} = Dimensions.get('screen');
 
@@ -82,6 +83,8 @@ const OtherProfile = () => {
   const [loadingGenerateAnon, setLoadingGenerateAnon] = React.useState(false);
   const [anonProfile, setAnonProfile] = React.useState();
   const {mappingColorFeed} = useCoreFeed();
+  const {updateFollowDiscoveryContext} = useDiscovery();
+  const [isCurrentFollowed, setIsCurrentFollow] = React.useState(params.data.following);
 
   const {
     feeds,
@@ -95,6 +98,12 @@ const OtherProfile = () => {
     refetchOtherProfile,
     setOtherProfileData: setDataMain
   } = useOtherProfileScreenHooks(params?.data?.other_id, params?.data?.username);
+
+  React.useEffect(() => {
+    if (params.data.following === undefined) {
+      setIsCurrentFollow(dataMain.is_me_following_target);
+    }
+  }, [dataMain.is_me_following_target]);
 
   const isSignedMessageEnabled = dataMain.isSignedMessageEnabled ?? true;
   const isAnonimityEnabled = dataMain.isAnonMessageEnabled && isSignedMessageEnabled;
@@ -287,17 +296,30 @@ const OtherProfile = () => {
 
     const __renderFollowingButton = () => {
       if (user_id === dataMain.user_id) return <></>;
-      if (dataMain.is_me_following_target)
+      if (isCurrentFollowed) {
         return (
-          <GlobalButton buttonStyle={{paddingLeft: 0}} onPress={() => handleSetUnFollow()}>
+          <GlobalButton
+            buttonStyle={{paddingLeft: 0}}
+            onPress={() => {
+              updateFollowDiscoveryContext(false, {user_id: other_id});
+              setIsCurrentFollow((v) => !v);
+              handleSetUnFollow();
+            }}>
             <View style={styles.buttonFollowing(isAnonimity)}>
               <Text style={styles.textButtonFollowing(isAnonimity)}>Following</Text>
             </View>
           </GlobalButton>
         );
+      }
 
       return (
-        <GlobalButton buttonStyle={{paddingLeft: 0}} onPress={() => handleSetFollow()}>
+        <GlobalButton
+          buttonStyle={{paddingLeft: 0}}
+          onPress={() => {
+            updateFollowDiscoveryContext(true, {user_id: other_id});
+            setIsCurrentFollow((v) => !v);
+            handleSetFollow();
+          }}>
           <View style={styles.buttonFollow(isAnonimity)}>
             <Text style={styles.textButtonFollow}>Follow</Text>
           </View>
