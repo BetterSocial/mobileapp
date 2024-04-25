@@ -22,7 +22,7 @@ import {useFeedDataContext} from '../../hooks/useFeedDataContext';
 import usePostContextHook, {CONTEXT_SOURCE} from '../../hooks/usePostContextHooks';
 import Header from '../../screens/FeedScreen/Header';
 import useFeed from '../../screens/FeedScreen/hooks/useFeed';
-import {createCommentParentV3, getCommentList} from '../../service/comment';
+import {createChildCommentV3, createCommentParentV3, getCommentList} from '../../service/comment';
 import {getFeedDetail} from '../../service/post';
 import {downVote, upVote} from '../../service/vote';
 import {showScoreAlertDialog} from '../../utils/Utils';
@@ -44,7 +44,6 @@ import useWriteComment from '../Comments/hooks/useWriteComment';
 import LoadingWithoutModal from '../LoadingWithoutModal';
 import {Shimmer} from '../Shimmer/Shimmer';
 import Content from './elements/Content';
-import usePostDetail from './hooks/usePostDetail';
 import usePostHook from '../../hooks/core/post/usePostHook';
 
 const {width, height} = Dimensions.get('window');
@@ -53,7 +52,6 @@ const FULL_WIDTH = Dimensions.get('screen').width;
 const PostPageDetailIdComponent = (props) => {
   const {
     feedId,
-    navigateToReplyView,
     contextSource = CONTEXT_SOURCE.FEEDS,
     haveSeeMore,
     parentData,
@@ -64,13 +62,15 @@ const PostPageDetailIdComponent = (props) => {
   const [loading, setLoading] = React.useState(true);
   const [, setReaction] = React.useState(false);
   const [textComment, setTextComment] = React.useState('');
-  const [typeComment] = React.useState('parent');
+  const [typeComment, setTypeComment] = React.useState('parent');
   const [, setTotalComment] = React.useState(0);
   const [totalVote, setTotalVote] = React.useState(0);
   const [voteStatus, setVoteStatus] = React.useState('none');
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
   const [loadingPost, setLoadingPost] = React.useState(false);
+  const [reactionId, setReactionId] = React.useState('');
+  const [replyUsername, setReplyUsername] = React.useState('');
   const navigation = useNavigation();
   const route = useRoute();
   const [item, setItem] = React.useState(route?.params?.data);
@@ -84,8 +84,6 @@ const PostPageDetailIdComponent = (props) => {
   const [commentContext, dispatchComment] = React.useContext(Context).comments;
   const {comments} = commentContext;
   const [loadingGetComment, setLoadingGetComment] = React.useState(false);
-  const {updateVoteLatestChildrenLevel3, updateVoteChildrenLevel1, calculatePaddingBtm} =
-    usePostDetail();
   const {updateFeedContext} = usePostContextHook(contextSource);
   const {updateFeedContext: updateTopicContext} = usePostContextHook(CONTEXT_SOURCE.TOPIC_FEEDS);
   const {width: displayWidth} = useWindowDimensions();
@@ -172,10 +170,6 @@ const PostPageDetailIdComponent = (props) => {
       setLoading(false);
     }
   };
-  const updateParentPost = (data) => {
-    setItem(data);
-    updateAllContent(data);
-  };
 
   React.useEffect(() => {
     initial();
@@ -213,14 +207,6 @@ const PostPageDetailIdComponent = (props) => {
     }
   };
 
-  const onComment = (isAnonimity, anonimityData) => {
-    if (typeComment === 'parent') {
-      commentParent(isAnonimity, anonimityData);
-      if (props?.refreshParent) {
-        props.refreshParent();
-      }
-    }
-  };
   const commentParent = async (isAnonimity, anonimityData) => {
     setLoadingPost(true);
     try {
@@ -260,6 +246,46 @@ const PostPageDetailIdComponent = (props) => {
     } catch (e) {
       setLoadingPost(false);
       Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
+    }
+  };
+
+  const commentChildren = async (isAnonimity, anonimityData) => {
+    setLoadingPost(true);
+    try {
+      if (textComment.trim() !== '') {
+        const data = await createChildCommentV3(
+          textComment,
+          reactionId,
+          true,
+          item.id,
+          isAnonimity,
+          anonimityData
+        );
+        scrollViewRef.current.scrollToEnd();
+        if (data.code === 200) {
+          setTextComment('');
+          setReplyUsername('');
+          setTypeComment('parent');
+          updateFeed(true);
+        } else {
+          Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
+          setLoadingPost(false);
+        }
+      }
+    } catch (error) {
+      Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
+      setLoadingPost(false);
+    }
+  };
+
+  const onComment = (isAnonimity, anonimityData) => {
+    if (typeComment === 'parent') {
+      commentParent(isAnonimity, anonimityData);
+      if (props?.refreshParent) {
+        props.refreshParent();
+      }
+    } else {
+      commentChildren(isAnonimity, anonimityData);
     }
   };
 
@@ -556,20 +582,6 @@ const PostPageDetailIdComponent = (props) => {
   const handleOnPressScore = () => {
     showScoreAlertDialog(item);
   };
-  const updateVoteLatestChildren = async (dataUpdated, data, level) => {
-    if (level === 3) {
-      const newComment = await updateVoteLatestChildrenLevel3(comments, dataUpdated);
-      saveComment(newComment, dispatchComment);
-    }
-    if (level === 1) {
-      const newComment = await updateVoteChildrenLevel1(comments, dataUpdated);
-      saveComment(newComment, dispatchComment);
-    }
-  };
-
-  const handlePaddingBottom = () => {
-    return comments.length <= 0 ? calculatePaddingBtm() : 0;
-  };
 
   const handleUpdateVote = () => {
     getComment(false, true);
@@ -660,20 +672,17 @@ const PostPageDetailIdComponent = (props) => {
                   isLoading={loadingPost}
                   refreshComment={handleRefreshComment}
                   refreshChildComment={handleRefreshChildComment}
-                  navigateToReplyView={(data) =>
-                    navigateToReplyView(
-                      data,
-                      updateParentPost,
-                      findCommentAndUpdate,
-                      item,
-                      updateVoteLatestChildren,
-                      getComment
-                    )
-                  }
                   findCommentAndUpdate={findCommentAndUpdate}
                   contextSource={contextSource}
                   updateVote={handleUpdateVote}
                   isShortText={isShortText}
+                  onReplyButtonClick={(reactiondId, username, level) => {
+                    if (level === 0 || level === 1) {
+                      setTypeComment('child');
+                    }
+                    setReactionId(reactiondId);
+                    setReplyUsername(username);
+                  }}
                 />
               )
             )}
@@ -681,12 +690,18 @@ const PostPageDetailIdComponent = (props) => {
 
           <WriteComment
             postId={feedId}
-            username={handleUserName(item)}
+            username={replyUsername || handleUserName(item)}
             value={textComment}
             onChangeText={(value) => setTextComment(value)}
             onPress={onComment}
             loadingPost={loadingPost}
             isKeyboardOpen={isKeyboardOpen}
+            onClear={() => {
+              setTextComment('');
+              setTypeComment('parent');
+              setReplyUsername('');
+            }}
+            isReply={typeComment === 'child' && replyUsername}
           />
 
           <BlockComponent ref={refBlockComponent} refresh={updateFeed} screen="post_detail_page" />
