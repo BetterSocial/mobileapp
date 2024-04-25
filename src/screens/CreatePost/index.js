@@ -54,7 +54,6 @@ import useHastagMention from './elements/useHastagMention';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button, ButtonAddMedia} from '../../components/Button';
 import {COLORS} from '../../utils/theme';
-import {Context} from '../../context';
 import {MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED} from '../../utils/constants';
 import {PROFILE_CACHE} from '../../utils/cache/constant';
 import {ShowingAudience, createPost} from '../../service/post';
@@ -117,8 +116,6 @@ const CreatePost = () => {
   const [isUploadingPhotoCamera, setIsUploadingPhotoCamera] = React.useState(false);
 
   const {setHashtags} = useHastagMention('');
-  const [client] = React.useContext(Context).client;
-  const [user] = React.useContext(Context).profile;
   const [allTaggingUser, setAllTaggingUser] = React.useState([]);
   const animatedReminder = React.useRef(new Animated.Value(0)).current;
   const debounced = React.useCallback(
@@ -670,7 +667,7 @@ const CreatePost = () => {
   }, 500);
 
   const onChangeText = (text) => {
-    setMessage(text);
+    setMessage(debounced(text));
     handleTagUser(text);
   };
 
