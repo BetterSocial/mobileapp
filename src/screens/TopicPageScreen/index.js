@@ -1,7 +1,7 @@
 import * as React from 'react';
 import _ from 'lodash';
 import SimpleToast from 'react-native-simple-toast';
-import {Animated, Platform, View} from 'react-native';
+import {Animated, Platform, SafeAreaView, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -26,10 +26,10 @@ import {Context} from '../../context';
 import {downVote, upVote} from '../../service/vote';
 import {getFeedDetail} from '../../service/post';
 import {getTopicPages} from '../../service/topicPages';
-import {getTopics, getUserTopic} from '../../service/topics';
+import {getTopics} from '../../service/topics';
 import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
-import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
+import {normalize} from '../../utils/fonts';
 import {setFeedByIndex, setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
 
 const TopicPageScreen = (props) => {
@@ -414,7 +414,7 @@ const TopicPageScreen = (props) => {
   );
 
   return (
-    <>
+    <SafeAreaView>
       <NavHeader
         initialData={{
           channelPicutre: params.channelPicture,
@@ -488,7 +488,7 @@ const TopicPageScreen = (props) => {
         username={user?.myProfile.username}
         profilePicture={user?.myProfile.profile_pic_path}
       />
-    </>
+    </SafeAreaView>
   );
 };
 export default TopicPageScreen;
