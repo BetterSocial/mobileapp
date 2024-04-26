@@ -199,6 +199,7 @@ const DiscoveryScreenV2 = ({route}) => {
         fetchDiscoveryDataNews()
       ]);
     } else {
+      setIsFirstTimeOpen(false);
       await Promise.all([
         fetchDiscoveryDataUser(),
         fetchDiscoveryDataDomain(),
@@ -228,7 +229,7 @@ const DiscoveryScreenV2 = ({route}) => {
     cancelTokenRef.current = axios.CancelToken.source();
   };
 
-  const RenderFragment = React.useMemo(() => {
+  const RenderFragment = (() => {
     if (selectedScreen === DISCOVERY_TAB_USERS)
       return (
         <UsersFragment
@@ -296,14 +297,7 @@ const DiscoveryScreenV2 = ({route}) => {
         />
       );
     return null;
-  }, [
-    selectedScreen,
-    searchText,
-    isLoadingDiscovery.topic,
-    isLoadingDiscovery.domain,
-    isLoadingDiscovery.news,
-    isLoadingDiscovery.user
-  ]);
+  })();
 
   return (
     <DiscoveryContainer>

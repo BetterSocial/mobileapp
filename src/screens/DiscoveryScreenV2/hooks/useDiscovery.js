@@ -1,10 +1,10 @@
 import React from 'react';
-import {getFollowing} from '../../../service/profile';
-import {getFollowedDomain} from '../../../service/domain';
-import {getFollowingTopic} from '../../../service/topics';
-import following from '../../../context/actions/following';
 import {Context} from '../../../context';
 import DiscoveryAction from '../../../context/actions/discoveryAction';
+import following from '../../../context/actions/following';
+import {getFollowedDomain} from '../../../service/domain';
+import {getFollowing} from '../../../service/profile';
+import {getFollowingTopic} from '../../../service/topics';
 
 const useDiscovery = () => {
   const [, followingDispatch] = React.useContext(Context).following;
@@ -24,12 +24,23 @@ const useDiscovery = () => {
     );
     if (newUserLists[indexUser].user) {
       newUserLists[indexUser].user.following = !!willFollow;
-      // newUserLists[indexUser].user.user_id_follower = myId;
+      newUserLists[indexUser].user.is_followed = !!willFollow;
     } else {
       newUserLists[indexUser].following = !!willFollow;
-      // newUserLists[indexUser].user_id_follower = myId;
+      newUserLists[indexUser].is_followed = !!willFollow;
     }
     return newUserLists[indexUser];
+  };
+
+  const topicExchangeFollower = (newTopicLists, willFollow, topicId, fromTopicPage) => {
+    let indexTopic;
+    if (fromTopicPage) {
+      indexTopic = newTopicLists.findIndex((item) => item.name === topicId);
+    } else {
+      indexTopic = newTopicLists.findIndex((item) => item.topic_id === topicId);
+    }
+    newTopicLists[indexTopic].following = !!willFollow;
+    return newTopicLists[indexTopic];
   };
 
   const mapUser = (newUser) => {
@@ -38,6 +49,22 @@ const useDiscovery = () => {
         if (user.user.user_id === newUser.user.user_id) return newUser;
       } else if (user.user_id === newUser.user_id) return newUser;
       return user;
+    });
+  };
+
+  const topics = React.useMemo(() => {
+    return discovery.initialTopics.map((item) => ({
+      ...item,
+      following: item.following !== undefined ? item.following : item.user_id_follower !== null
+    }));
+  }, [discovery.initialTopics]);
+
+  const mapTopic = (newTopic) => {
+    return discovery.initialTopics.map((topic) => {
+      if (topic.topic_id === newTopic.topic_id) {
+        return newTopic;
+      }
+      return topic;
     });
   };
 
@@ -50,6 +77,17 @@ const useDiscovery = () => {
     );
 
     DiscoveryAction.setDiscoveryInitialUsers(mapUser(newUser), discoveryDispatch);
+  };
+
+  const updateFollowTopicDiscoveryContext = (willFollow, item, fromTopicPage) => {
+    const newFollowedTopics = [...topics];
+    const newTopic = topicExchangeFollower(
+      newFollowedTopics,
+      willFollow,
+      item.topic_id,
+      fromTopicPage
+    );
+    DiscoveryAction.setDiscoveryInitialTopics(mapTopic(newTopic), discoveryDispatch);
   };
 
   const onRefreshDiscovery = async () => {
@@ -78,7 +116,11 @@ const useDiscovery = () => {
     updateFollowDiscoveryContext,
     mapUser,
     exhangeFollower,
-    users
+    users,
+    updateFollowTopicDiscoveryContext,
+    mapTopic,
+    topics,
+    topicExchangeFollower
   };
 };
 
