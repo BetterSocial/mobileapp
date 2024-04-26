@@ -63,38 +63,32 @@ const NavHeader = (props) => {
 
   const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 
-  const additionalHeaderHeight = isHeaderHide ? dimen.normalizeDimen(12) : 0;
+  const headerHeight = isHeaderHide
+    ? dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2
+    : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT;
 
   return (
     <View>
-      <View style={{}}>
+      <View>
         <StatusBar barStyle="light-content" />
         <View
-          style={[
-            styles.navContainer(isHeaderHide),
-            {
-              height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER + additionalHeaderHeight,
-              backgroundColor: COLORS.almostBlack,
-              borderBottomWidth: isHeaderHide ? 1 : 0,
-              borderBottomColor: COLORS.gray310
-            }
-          ]}
+          style={[styles.navContainer(isHeaderHide, headerHeight)]}
           imageStyle={{opacity: isHeaderHide ? 0 : 1}}>
           {initialData?.coverImage === undefined && isLoading ? (
-            <Shimmer width={displayWidth} height={dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER} />
+            <Shimmer width={displayWidth} height={headerHeight} />
           ) : (
             <>
               <View
                 style={{
                   width: '100%',
-                  height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
+                  height: headerHeight
                 }}>
                 <FastImage
                   source={
                     initialData?.coverImage ? {uri: initialData.coverImage} : {uri: coverPath}
                   }
                   style={{
-                    height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
+                    height: headerHeight
                   }}
                 />
                 {renderBlur && (
@@ -116,7 +110,6 @@ const NavHeader = (props) => {
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-              paddingTop: hasSearch ? insets.top : insets.top,
               zIndex: 2,
               position: 'absolute'
             }}>
@@ -135,7 +128,6 @@ const NavHeader = (props) => {
             style={[
               styles.containerAction,
               {
-                paddingTop: insets.top + dimen.normalizeDimen(10),
                 paddingRight: dimen.normalizeDimen(20),
                 zIndex: 2,
                 position: 'absolute',
@@ -272,15 +264,15 @@ const styles = StyleSheet.create({
     zIndex: 80,
     overflow: 'hidden'
   }),
-  navContainer: (isHeaderHide, top) => ({
+  navContainer: (isHeaderHide, headerHeight) => ({
     flexDirection: 'row',
-    height: isHeaderHide
-      ? dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2
-      : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT,
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    backgroundColor: 'white',
-    zIndex: 10
+    alignItems: 'center',
+    zIndex: 10,
+    height: headerHeight,
+    backgroundColor: COLORS.almostBlack,
+    borderBottomWidth: isHeaderHide ? 1 : 0,
+    borderBottomColor: COLORS.gray310
   }),
   headerContainer: {
     width: '100%',
