@@ -6,6 +6,7 @@ export enum DatabaseOperationLabel {
   CoreChatSystem_GeneralSystemMessage = 'core_chat_system_general_system_message',
   CoreChatSystem_SaveChat = 'core_chat_system_save_chat',
   CoreChatSystem_SaveUserMember = 'core_chat_system_save_user_member',
+  CoreChatSystem_SaveTopicChannel = 'core_chat_system_save_topic_channel',
 
   FetchChannelDetail_SaveAllChat = 'channel_detail_save_all_chat',
   FetchChannelDetail_RefreshChannelList = 'channel_detail_refresh_channel_list',
