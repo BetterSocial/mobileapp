@@ -4,12 +4,22 @@ import emojiRegex from 'emoji-regex';
 import {COLORS} from '../../../utils/theme';
 import {fonts} from '../../../utils/fonts';
 
-export function TextWithEmoji({text}: {text: string}) {
+export function TextWithEmoji({
+  text,
+  textStyle,
+  testId
+}: {
+  text: string;
+  textStyle: object;
+  testId: string;
+}) {
   return (
-    <Text style={styles.text}>
-      {text.split(' ').map((item: string, index: number) => {
+    <Text style={[styles.text, textStyle]} testID={testId}>
+      {text?.split(' ').map((item: string, index: number) => {
         return (
-          <Text key={index} style={item.match(emojiRegex()) ? styles.emoji : styles.text}>
+          <Text
+            key={index}
+            style={[item.match(emojiRegex()) ? styles.emoji : styles.text, textStyle]}>
             {`${item} `}
           </Text>
         );
