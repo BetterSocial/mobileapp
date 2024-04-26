@@ -38,10 +38,12 @@ const useResetContext = () => {
   };
 
   const resetLocalDB = () => {
-    UserSchema.clearAll(localDb);
-    ChatSchema.clearAll(localDb);
-    ChannelListMemberSchema.clearAll(localDb);
-    ChannelList.clearAll(localDb);
+    if (localDb) {
+      UserSchema.clearAll(localDb);
+      ChatSchema.clearAll(localDb);
+      ChannelListMemberSchema.clearAll(localDb);
+      ChannelList.clearAll(localDb);
+    }
 
     TokenStorage.clear();
     TopicPageStorage.clear();

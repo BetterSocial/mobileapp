@@ -1,36 +1,36 @@
-import * as React from 'react';
-import _ from 'lodash';
-import SimpleToast from 'react-native-simple-toast';
-import {Animated, Platform, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import _ from 'lodash';
+import * as React from 'react';
+import {Animated, Platform, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import SimpleToast from 'react-native-simple-toast';
 
 import BlockComponent from '../../components/BlockComponent';
 import ButtonAddPostTopic from '../../components/Button/ButtonAddPostTopic';
-import MemoizedListComponent from './MemoizedListComponent';
-import NavHeader from './elements/NavHeader';
-import ShareUtils from '../../utils/share';
 import TiktokScroll from '../../components/TiktokScroll';
-import TopicPageStorage from '../../utils/storage/custom/topicPageStorage';
-import dimen from '../../utils/dimen';
-import removePrefixTopic from '../../utils/topics/removePrefixTopic';
-import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
-import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
-import useViewPostTimeHook from '../FeedScreen/hooks/useViewPostTimeHook';
+import {Context} from '../../context';
+import {setFeedByIndex, setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
 } from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
-import {Context} from '../../context';
-import {downVote, upVote} from '../../service/vote';
 import {getFeedDetail} from '../../service/post';
 import {getTopicPages} from '../../service/topicPages';
-import {getTopics, getUserTopic} from '../../service/topics';
-import {getUserId} from '../../utils/users';
+import {getTopics} from '../../service/topics';
+import {downVote, upVote} from '../../service/vote';
+import dimen from '../../utils/dimen';
+import {normalize} from '../../utils/fonts';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
-import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
-import {setFeedByIndex, setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
-import BottomSheetFollow from './elements/BottomSheetFollow';
+import ShareUtils from '../../utils/share';
+import TopicPageStorage from '../../utils/storage/custom/topicPageStorage';
 import {COLORS} from '../../utils/theme';
+import removePrefixTopic from '../../utils/topics/removePrefixTopic';
+import {getUserId} from '../../utils/users';
+import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
+import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
+import useViewPostTimeHook from '../FeedScreen/hooks/useViewPostTimeHook';
+import MemoizedListComponent from './MemoizedListComponent';
+import BottomSheetFollow from './elements/BottomSheetFollow';
+import NavHeader from './elements/NavHeader';
 
 const TopicPageScreen = (props) => {
   const route = useRoute();
@@ -221,9 +221,11 @@ const TopicPageScreen = (props) => {
   const markRead = async () => {
     const filter = {type: 'topics', members: {$in: [userId]}, id: route.params.id};
     const sort = [{last_message_at: -1}];
-    const thisChannel = await client.client.queryChannels(filter, sort);
-    const countRead = await thisChannel[0]?.markRead();
-    return countRead;
+    const thisChannel = await client?.client?.queryChannels(filter, sort);
+    if (thisChannel) {
+      const countRead = await thisChannel[0]?.markRead();
+      return countRead;
+    }
   };
 
   React.useEffect(() => {
@@ -472,6 +474,7 @@ const TopicPageScreen = (props) => {
         screen="topic_screen"
       />
       <BottomSheetFollow
+        topicId={topicId}
         ref={bottomSheetFollowRef}
         onClose={() => bottomSheetFollowRef.current.close()}
         topicName={topicDetail.name}

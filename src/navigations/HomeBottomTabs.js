@@ -1,5 +1,6 @@
 /* eslint-disable no-use-before-define */
 import * as React from 'react';
+import PushNotification from 'react-native-push-notification';
 import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useNavigation} from '@react-navigation/core';
@@ -8,13 +9,13 @@ import {useRecoilValue} from 'recoil';
 import AnonymousChannelListScreen from '../screens/ChannelListScreenV2/AnonymousChannelListScreen';
 import AnonymousChatFill from '../assets/icon/AnonymousChatFill';
 import AnonymousChatOutline from '../assets/icon/AnonymousChatOutline';
-import FirebaseConfig from '../configs/FirebaseConfig';
 import MemoFeed from '../assets/icon/Feed';
 import MemoNews from '../assets/icon/News';
 import MemoProfileIcon from '../assets/icon/Profile';
 import SignedChat from '../assets/icon/SignedChat';
 import StorageUtils from '../utils/storage';
 import dimen from '../utils/dimen';
+import useAppBadgeHook from '../hooks/appBadge/useAppBadgeHook';
 import useCoreChatSystemHook from '../hooks/core/useCoreChatSystemHook';
 import usePushNotificationHook from '../hooks/core/push-notification/usePushNotificationHook';
 import useRootChannelListHook from '../hooks/screen/useRootChannelListHook';
@@ -33,6 +34,7 @@ function HomeBottomTabs() {
   const {signedChannelUnreadCount, anonymousChannelUnreadCount} = useRootChannelListHook();
   const navigation = useNavigation();
   const {isLoadingFetchingChannelDetail} = usePushNotificationHook();
+  const {udpateAppBadgeWith} = useAppBadgeHook();
 
   React.useEffect(() => {
     if (otherProfileData !== null && initialStartup.id !== null) {
@@ -45,6 +47,11 @@ function HomeBottomTabs() {
       });
     }
   }, [initialStartup, otherProfileData]);
+
+  React.useEffect(() => {
+    const totalUnreadCount = (signedChannelUnreadCount || 0) + (anonymousChannelUnreadCount || 0);
+    udpateAppBadgeWith(totalUnreadCount);
+  }, [signedChannelUnreadCount, anonymousChannelUnreadCount]);
 
   const renderTabBarIcon = (route, focused, color) => {
     if (route.name === 'SignedChannelList') {
@@ -106,9 +113,9 @@ function HomeBottomTabs() {
     const isAnonChatMenu = route.name === 'AnonymousChannelList';
     const activeColor = isAnonChatMenu ? COLORS.anon_primary : COLORS.signed_primary;
     let label = '';
-    if (route.name === 'SignedChannelList') label = 'Convos';
+    if (route.name === 'SignedChannelList') label = 'Primary';
     else if (route.name === 'AnonymousChannelList') label = 'Incognito';
-    else if (route.name === 'Feed') label = 'Main';
+    else if (route.name === 'Feed') label = 'Feed';
     else if (route.name === 'News') label = 'News';
     if (route.name === 'Profile') label = 'Profile';
 
@@ -158,12 +165,6 @@ function HomeBottomTabs() {
         <Tab.Screen
           name="Feed"
           component={FeedScreen}
-          initialParams={{isBottomTab: true}}
-          listeners={({route}) => saveLastMenu(route)}
-        />
-        <Tab.Screen
-          name="News"
-          component={NewsScreen}
           initialParams={{isBottomTab: true}}
           listeners={({route}) => saveLastMenu(route)}
         />

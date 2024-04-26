@@ -21,7 +21,6 @@ const FeedsPostDetail = (props) => {
     fromFeeds
   } = props.route.params;
   const {feeds} = feedsContext;
-  const {navigateToReplyView} = useMainPdp(props);
   React.useEffect(() => {
     if (refreshCache && typeof refreshCache === 'function') {
       refreshCache();
@@ -41,7 +40,6 @@ const FeedsPostDetail = (props) => {
         feedId={feedId}
         dispatch={dispatch}
         setFeedByIndexProps={setFeedByIndex}
-        navigateToReplyView={navigateToReplyView}
         page={props.route.name}
         contextSource={contextSource || CONTEXT_SOURCE.FEEDS}
         haveSeeMore={haveSeeMore}

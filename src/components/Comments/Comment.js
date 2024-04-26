@@ -22,7 +22,7 @@ import {getAllowAnonDmStatus} from '../../service/chat';
 import {removeWhiteSpace} from '../../utils/Utils';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
-import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
+import {getCaptionWithLinkStyle, getOfficialAnonUsername} from '../../utils/string/StringUtils';
 import {COLORS, FONTS} from '../../utils/theme';
 import {calculateTime} from '../../utils/time';
 import {getUserId} from '../../utils/users';
@@ -67,12 +67,19 @@ const Comment = ({
   const {createSignChat} = useCreateChat();
   const {sendMessageDM} = useDMMessage();
 
+  const userName =
+    (comment.data?.anon_user_info_color_name
+      ? getOfficialAnonUsername(comment?.data)
+      : user?.data?.username) +
+    (comment.is_you ? ' (You)' : '') +
+    (comment.is_author ? ' (Post Author)' : '');
+
   const onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
       return;
     }
     if (onPress && typeof onPress === 'function') {
-      onPress();
+      onPress(comment.id, userName);
     }
   };
 
@@ -265,19 +272,36 @@ const Comment = ({
           </View>
         </ButtonHightlight>
       </View>
-      <TouchableOpacity testID="textPress" onPress={onTextPress} style={styles.flexStartContainer}>
+      <TouchableOpacity
+        testID="textPress"
+        onPress={onTextPress}
+        style={(styles.flexStartContainer, {width: '100%'})}>
         <ButtonHightlight
           onLongPress={handleOnLongPress}
-          style={styles.flexStartContainer}
-          onPress={onTextPress}>
+          onPress={onTextPress}
+          style={(styles.flexStartContainer, {width: '100%'})}>
           <Text style={styles.post}>{getCaptionWithLinkStyle(comment.data?.text)}</Text>
         </ButtonHightlight>
       </TouchableOpacity>
       <View style={styles.constainerFooter}>
-        {isLast && level >= 2 ? (
+        {isLast && level > 2 ? (
           <View testID="level2" style={styles.gap} />
         ) : (
           <>
+            {level !== 2 && (
+              <TouchableOpacity
+                activeOpacity={1}
+                onPress={() => onPress(comment.id, userName)}
+                testID="memoComment">
+                <ButtonHightlight
+                  onLongPress={handleOnLongPress}
+                  style={[styles.btnReply, styles.iconContainer]}
+                  onPress={() => onPress(comment.id, userName)}>
+                  <MemoCommentReply height={normalize(14)} />
+                  {level === 0 && <Text style={styles.btnReplyText}>Reply</Text>}
+                </ButtonHightlight>
+              </TouchableOpacity>
+            )}
             {!comment.is_you && (
               <TouchableOpacity onPress={onPressDm} testID="sendDMbtn" activeOpacity={1}>
                 <ButtonHightlight
@@ -291,14 +315,6 @@ const Comment = ({
                 </ButtonHightlight>
               </TouchableOpacity>
             )}
-            <TouchableOpacity activeOpacity={1} onPress={onPress} testID="memoComment">
-              <ButtonHightlight
-                onLongPress={handleOnLongPress}
-                style={[styles.btnReply, styles.iconContainer]}
-                onPress={onPress}>
-                <MemoCommentReply height={normalize(14)} />
-              </ButtonHightlight>
-            </TouchableOpacity>
           </>
         )}
 
@@ -397,7 +413,8 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
     color: COLORS.white,
-    marginLeft: 28
+    marginLeft: 20,
+    flex: 1
   },
   profile: {
     flexDirection: 'row',
@@ -418,11 +435,10 @@ const styles = StyleSheet.create({
     flex: 1
   },
   btnReplyText: {
-    fontFamily: fonts.inter[400],
-    fontSize: 13,
-    color: COLORS.balance_gray,
-    marginLeft: 8.98,
-    marginRight: 14
+    fontFamily: fonts.inter[500],
+    fontSize: 12,
+    color: COLORS.gray400,
+    marginLeft: 6
   },
   btnBlock: (isMySelf) => ({
     display: isMySelf ? 'none' : 'flex'

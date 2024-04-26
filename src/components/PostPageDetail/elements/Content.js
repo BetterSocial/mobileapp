@@ -240,7 +240,7 @@ const Content = ({
               url: item.og.url,
               onHeaderPress: onPressDomain,
               onCardContentPress: navigateToLinkContextPage,
-              score: item.score,
+              score: item.credderScore,
               item
             })}
           </View>

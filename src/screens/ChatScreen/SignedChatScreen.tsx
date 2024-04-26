@@ -3,7 +3,7 @@
 /* eslint-disable import/no-unresolved */
 
 import * as React from 'react';
-import {FlatList, StatusBar, View} from 'react-native';
+import {ActivityIndicator, FlatList, View} from 'react-native';
 
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import ChatDetailHeader from '../../components/AnonymousChat/ChatDetailHeader';
@@ -19,9 +19,17 @@ import {setChannel} from '../../context/actions/setChannel';
 import {styles} from './AnonymousChatScreen';
 
 const SignedChatScreen = () => {
-  const {selectedChannel, chats, goBackFromChatScreen, goToChatInfoScreen, sendChat} =
-    useChatScreenHook(SIGNED);
+  const {
+    selectedChannel,
+    chats,
+    goBackFromChatScreen,
+    goToChatInfoScreen,
+    sendChat,
+    isLoadingFetchAllMessage,
+    updateChatContinuity
+  } = useChatScreenHook(SIGNED);
 
+  const updatedChats = updateChatContinuity(chats);
   const flatlistRef = React.useRef<FlatList>();
   const [loading, setLoading] = React.useState(false);
   const [isAnonimityEnabled, setIsAnonimityEnabled] = React.useState(true);
@@ -43,7 +51,7 @@ const SignedChatScreen = () => {
     ({item, index}) => {
       return <BaseChatItem type={SIGNED} item={item} index={index} />;
     },
-    [chats]
+    [updatedChats]
   );
 
   const goToChatInfoPage = () => {
@@ -102,21 +110,30 @@ const SignedChatScreen = () => {
           anon_user_info_color_code={selectedChannel?.anon_user_info_color_code}
         />
       ) : null}
+      {!isLoadingFetchAllMessage ? (
+        <FlatList
+          contentContainerStyle={styles.contentContainerStyle}
+          style={styles.chatContainer}
+          data={updatedChats}
+          inverted={true}
+          windowSize={10}
+          maxToRenderPerBatch={5}
+          initialNumToRender={20}
+          alwaysBounceVertical={false}
+          bounces={false}
+          onLayout={scrollToEnd}
+          keyExtractor={(item, index) => item?.id || index.toString()}
+          renderItem={renderChatItem}
+        />
+      ) : (
+        <ActivityIndicator
+          size="large"
+          style={{
+            marginTop: 20
+          }}
+        />
+      )}
 
-      <FlatList
-        contentContainerStyle={styles.contentContainerStyle}
-        style={styles.chatContainer}
-        data={chats}
-        inverted={true}
-        windowSize={10}
-        maxToRenderPerBatch={5}
-        initialNumToRender={20}
-        alwaysBounceVertical={false}
-        bounces={false}
-        onLayout={scrollToEnd}
-        keyExtractor={(item, index) => item?.id || index.toString()}
-        renderItem={renderChatItem}
-      />
       {!exitedGroup && (
         <View style={styles.inputContainer}>
           <InputMessageV2

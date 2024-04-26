@@ -18,6 +18,9 @@ const BottomSheet = React.forwardRef((props, ref) => {
       height={props.height ? props.height : 355}
       keyboardAvoidingViewEnabled={keyboardAvoidingViewEnabled}
       customStyles={{
+        wrapper: {
+          backgroundColor: COLORS.black80
+        },
         container: styles.containerSheet(pullBottom),
         draggableIcon: styles.draggableIcon
       }}>
