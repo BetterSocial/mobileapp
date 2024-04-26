@@ -3,6 +3,7 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {COLORS} from '../../utils/theme';
 import useReadmore from './hooks/useReadmore';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
+import {TextWithEmoji} from '../../screens/ProfileScreen/elements/TextWithEmoji';
 
 const styles = StyleSheet.create({
   text: {
@@ -49,9 +50,18 @@ const ReadMore = ({text, onPress}) => {
       ) : null}
       {!isFinishSetLayout ? (
         <TouchableOpacity testID="finishLayout" onPress={onPress}>
-          <Text style={styles.text} testID="notFinishLayout" onTextLayout={handleLayoutText}>
+          {/* <Text style={styles.text} testID="notFinishLayout" onTextLayout={handleLayoutText}>
             {text}{' '}
-          </Text>
+          </Text> */}
+          <TextWithEmoji
+            testId="notFinishLayout"
+            text={text}
+            textStyle={{
+              marginBottom: 0,
+              fontSize: normalizeFontSize(14),
+              lineHeight: undefined
+            }}
+          />
         </TouchableOpacity>
       ) : null}
     </View>
