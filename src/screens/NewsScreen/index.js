@@ -3,7 +3,6 @@ import {
   Animated,
   FlatList,
   InteractionManager,
-  Platform,
   RefreshControl,
   SafeAreaView,
   StatusBar,
