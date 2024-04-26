@@ -35,7 +35,7 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "@human-internet/react-native-humanid": "^2.4.11",
+    "@human-internet/react-native-humanid": "^2.4.12",
     "@react-native-async-storage/async-storage": "^1.23.1",
     "@react-native-clipboard/clipboard": "^1.11.2",
     "@react-native-community/blur": "^4.4.0",
