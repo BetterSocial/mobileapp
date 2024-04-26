@@ -3,15 +3,13 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import IconClose from '../../../assets/icon/IconClose';
 import {BottomSheetV2} from '../../../components/BottomSheet';
+import {Button} from '../../../components/Button';
 import dimen from '../../../utils/dimen';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
-import {COLORS} from '../../../utils/theme';
-import {Button} from '../../../components/Button';
 import useChatClientHook from '../../../utils/getstream/useChatClientHook';
+import {COLORS} from '../../../utils/theme';
+import useDiscovery from '../../DiscoveryScreenV2/hooks/useDiscovery';
 import UserItem from './UserItem';
-import DiscoveryRepo from '../../../service/discovery';
-import DiscoveryAction from '../../../context/actions/discoveryAction';
-import {Context} from '../../../context';
 
 export type Follow = 'signed' | 'incognito' | '';
 
@@ -24,13 +22,14 @@ interface BottomSheetFollowProps {
   memberCount: number;
   setMemberCount: (memberCount: number) => void;
   onClose: () => void;
-  getTopicDetail: (topicName: string) => void;
   followType: Follow;
   setFollowType: (followType: Follow) => void;
+  topicId: string;
 }
 
 const BottomSheetFollow = forwardRef((props: BottomSheetFollowProps, ref: Ref<RBSheet>) => {
   const {
+    topicId,
     topicName,
     memberCount,
     setMemberCount,
@@ -38,11 +37,10 @@ const BottomSheetFollow = forwardRef((props: BottomSheetFollowProps, ref: Ref<RB
     setIsFollow,
     followType,
     setFollowType,
-    getTopicDetail,
     onClose
   } = props;
-  const [, discoveryDispatch] = (React.useContext(Context) as any)?.discovery;
   const {followTopic} = useChatClientHook();
+  const {updateFollowTopicDiscoveryContext} = useDiscovery();
 
   const handleFollowTopic = async ({type: followTypeParam}: {type: Follow}) => {
     const isIncognito = followTypeParam === 'incognito';
@@ -54,12 +52,7 @@ const BottomSheetFollow = forwardRef((props: BottomSheetFollowProps, ref: Ref<RB
       setIsFollow(true);
       try {
         await followTopic(topicName, isIncognito);
-        getTopicDetail(topicName);
-        const discoveryInitialTopicResponse = await DiscoveryRepo.fetchInitialDiscoveryTopics();
-        DiscoveryAction.setDiscoveryInitialTopics(
-          discoveryInitialTopicResponse.suggestedTopics as any,
-          discoveryDispatch
-        );
+        updateFollowTopicDiscoveryContext(true, {topic_id: topicId}, true);
       } catch (error) {
         if (__DEV__) {
           console.log(error);
@@ -89,6 +82,8 @@ const BottomSheetFollow = forwardRef((props: BottomSheetFollowProps, ref: Ref<RB
     setIsFollow(false);
     setMemberCount(memberCount - 1);
     onClose();
+    updateFollowTopicDiscoveryContext(false, {topic_id: topicName}, true);
+
     try {
       const isIncognito = type === 'incognito';
       await followTopic(topicName, isIncognito);

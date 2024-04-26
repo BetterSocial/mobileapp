@@ -107,14 +107,16 @@ const createChildCommentV3 = async (
       message: text,
       sendPostNotif,
       activityId,
-      anonimity: isAnonymous
+      anonimity: isAnonymous,
+      is_you: true
     };
     const anonimity = {
       emoji_name: anonUser.emojiName,
       color_name: anonUser.colorName,
       emoji_code: anonUser.emojiCode,
       color_code: anonUser.colorCode,
-      is_anonymous: isAnonymous
+      is_anonymous: isAnonymous,
+      is_you: true
     };
     if (isAnonymous) {
       data = {...data, anon_user_info: anonimity};

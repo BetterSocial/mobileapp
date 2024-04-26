@@ -13,6 +13,9 @@ const BottomSheetMenu = ({refSheet, dataSheet = [], height = 234}) => {
       closeOnDragDown={true}
       closeOnPressMask={true}
       customStyles={{
+        wrapper: {
+          backgroundColor: COLORS.black80
+        },
         container: styles.rbsheetContainer(height),
         draggableIcon: styles.rbsheetDraggableIcon
       }}>

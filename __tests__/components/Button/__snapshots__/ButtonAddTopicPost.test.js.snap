@@ -16,16 +16,16 @@ exports[`Testing Button Add Topic Post should match snapshot 1`] = `
     style={
       Object {
         "bottom": 12.8,
-        "elevation": 3,
+        "elevation": 6,
         "position": "absolute",
         "right": 12.8,
-        "shadowColor": "#FFFFFF",
+        "shadowColor": "#000",
         "shadowOffset": Object {
-          "height": 1,
+          "height": 4,
           "width": 0,
         },
-        "shadowOpacity": 0.8,
-        "shadowRadius": 1,
+        "shadowOpacity": 0.3,
+        "shadowRadius": 4,
         "zIndex": 1,
       }
     }

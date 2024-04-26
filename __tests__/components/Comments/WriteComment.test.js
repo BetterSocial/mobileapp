@@ -2,7 +2,7 @@ import * as React from 'react';
 import {render, cleanup, fireEvent} from '@testing-library/react-native';
 import WriteComment, {styles} from '../../../src/components/Comments/WriteComment';
 import Store from '../../../src/context/Store';
-import {fonts} from '../../../src/utils/fonts';
+import {fonts, normalize} from '../../../src/utils/fonts';
 import {COLORS} from '../../../src/utils/theme';
 import dimen from '../../../src/utils/dimen';
 
@@ -33,9 +33,10 @@ describe('WriteComment should run correctly', () => {
 
   it('styles should run correctly', () => {
     expect(styles.replyToContainer).toEqual({
-      marginLeft: 60,
+      marginLeft: 53,
       alignItems: 'center',
-      flexDirection: 'row'
+      flexDirection: 'row',
+      maxWidth: normalize(150)
     });
     expect(styles.container).toEqual({
       flex: 1,
@@ -44,7 +45,8 @@ describe('WriteComment should run correctly', () => {
       paddingRight: dimen.normalizeDimen(16),
       paddingLeft: dimen.normalizeDimen(16),
       flexDirection: 'row',
-      zIndex: 100
+      zIndex: 100,
+      alignItems: 'center'
     });
     expect(styles.btn(true)).toEqual({
       backgroundColor: COLORS.gray110,

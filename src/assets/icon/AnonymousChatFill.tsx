@@ -1,9 +1,15 @@
 import * as React from 'react';
 import Svg, {Path} from 'react-native-svg';
+import dimen from '../../utils/dimen';
 
 function AnonymousChatFill({color, stroke, ...rest}) {
   return (
-    <Svg width="22" height="22" viewBox="0 0 20 20" fill="none" {...rest}>
+    <Svg
+      width={dimen.normalizeDimen(20)}
+      height={dimen.normalizeDimen(20)}
+      viewBox="0 0 20 20"
+      fill="none"
+      {...rest}>
       <Path
         fillRule="evenodd"
         clipRule="evenodd"

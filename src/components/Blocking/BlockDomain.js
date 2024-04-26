@@ -30,6 +30,9 @@ const BlockDomain = ({refBlockDomain, onSelect, domain}) => {
         closeOnDragDown={true}
         closeOnPressMask={true}
         customStyles={{
+          wrapper: {
+            backgroundColor: COLORS.black80
+          },
           container: styles.container,
           draggableIcon: styles.draggableIcon
         }}>

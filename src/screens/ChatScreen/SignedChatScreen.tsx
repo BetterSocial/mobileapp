@@ -25,9 +25,11 @@ const SignedChatScreen = () => {
     goBackFromChatScreen,
     goToChatInfoScreen,
     sendChat,
-    isLoadingFetchAllMessage
+    isLoadingFetchAllMessage,
+    updateChatContinuity
   } = useChatScreenHook(SIGNED);
 
+  const updatedChats = updateChatContinuity(chats);
   const flatlistRef = React.useRef<FlatList>();
   const [loading, setLoading] = React.useState(false);
   const [isAnonimityEnabled, setIsAnonimityEnabled] = React.useState(true);
@@ -49,7 +51,7 @@ const SignedChatScreen = () => {
     ({item, index}) => {
       return <BaseChatItem type={SIGNED} item={item} index={index} />;
     },
-    [chats]
+    [updatedChats]
   );
 
   const goToChatInfoPage = () => {
@@ -112,7 +114,7 @@ const SignedChatScreen = () => {
         <FlatList
           contentContainerStyle={styles.contentContainerStyle}
           style={styles.chatContainer}
-          data={chats}
+          data={updatedChats}
           inverted={true}
           windowSize={10}
           maxToRenderPerBatch={5}
