@@ -15,16 +15,21 @@ export const verifyUser = async (userId) => {
   }
 };
 
-export const demoVerifyUser = async (userId) => {
+export const demoVerifyUser = async (user_id, password) => {
   try {
-    const resApi = await api.post('/users/demo-verify-user', {
-      user_id: userId
+    const resApi = await api.post('/users/demo-verify-user-v2', {
+      user_id,
+      password
     });
 
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
-    return error.response.data;
+    if (error?.response?.data?.status?.toLowerCase() === 'password is invalid') {
+      throw new Error('Password is invalid');
+    }
+
+    return error?.response?.data;
   }
 };
 
