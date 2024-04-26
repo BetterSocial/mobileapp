@@ -113,9 +113,9 @@ function HomeBottomTabs() {
     const isAnonChatMenu = route.name === 'AnonymousChannelList';
     const activeColor = isAnonChatMenu ? COLORS.anon_primary : COLORS.signed_primary;
     let label = '';
-    if (route.name === 'SignedChannelList') label = 'Convos';
+    if (route.name === 'SignedChannelList') label = 'Primary';
     else if (route.name === 'AnonymousChannelList') label = 'Incognito';
-    else if (route.name === 'Feed') label = 'Main';
+    else if (route.name === 'Feed') label = 'Feed';
     else if (route.name === 'News') label = 'News';
     if (route.name === 'Profile') label = 'Profile';
 
