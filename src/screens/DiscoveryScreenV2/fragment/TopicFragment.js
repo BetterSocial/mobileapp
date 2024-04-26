@@ -1,23 +1,20 @@
 /* eslint-disable no-underscore-dangle */
+import {useNavigation} from '@react-navigation/native';
 import * as React from 'react';
 import {FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
-import {useNavigation, useRoute} from '@react-navigation/native';
 
 import PropTypes from 'prop-types';
-import DiscoveryAction from '../../../context/actions/discoveryAction';
-import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
-import DomainList from '../elements/DiscoveryItemList';
-import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
-import RecentSearch from '../elements/RecentSearch';
-import StringConstant from '../../../utils/string/StringConstant';
-import useChatClientHook from '../../../utils/getstream/useChatClientHook';
-import useIsReady from '../../../hooks/useIsReady';
-import {COLORS} from '../../../utils/theme';
-import {Context} from '../../../context/Store';
-import {convertTopicNameToTopicPageScreenParam} from '../../../utils/string/StringUtils';
-import {fonts} from '../../../utils/fonts';
-import {getUserId} from '../../../utils/users';
 import TopicsProfilePictureEmptyState from '../../../assets/icon/TopicsProfilePictureEmptyState';
+import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
+import useIsReady from '../../../hooks/useIsReady';
+import {fonts} from '../../../utils/fonts';
+import useChatClientHook from '../../../utils/getstream/useChatClientHook';
+import {convertTopicNameToTopicPageScreenParam} from '../../../utils/string/StringUtils';
+import {COLORS} from '../../../utils/theme';
+import DomainList from '../elements/DiscoveryItemList';
+import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
+import RecentSearch from '../elements/RecentSearch';
+import useDiscovery from '../hooks/useDiscovery';
 
 const FROM_FOLLOWED_TOPIC = 'fromfollowedtopics';
 const FROM_FOLLOWED_TOPIC_INITIAL = 'fromfollowedtopicsinitial';
@@ -37,23 +34,17 @@ const TopicFragment = ({
   searchText,
   withoutRecent = false
 }) => {
-  const [discovery, discoveryDispatch] = React.useContext(Context).discovery;
   const {followTopic} = useChatClientHook();
+  const {
+    topics,
+    updateFollowTopicDiscoveryContext,
+    topicExchangeFollower: exchangeFollower
+  } = useDiscovery();
 
   const navigation = useNavigation();
 
-  const [myId, setMyId] = React.useState('');
-
   const isReady = useIsReady();
 
-  const route = useRoute();
-
-  const topics = React.useMemo(() => {
-    return discovery.initialTopics.map((item) => ({
-      ...item,
-      following: item.following !== undefined ? item.following : item.user_id_follower !== null
-    }));
-  }, [discovery.initialTopics]);
   const newMapFollowedTopics = React.useMemo(() => {
     return followedTopic.map((item) => ({
       ...item,
@@ -67,53 +58,18 @@ const TopicFragment = ({
     }));
   }, [unfollowedTopic]);
 
-  React.useEffect(() => {
-    const parseToken = async () => {
-      const id = await getUserId();
-      if (id) {
-        setMyId(id);
-      }
-    };
-    parseToken();
-  }, []);
   const handleScroll = React.useCallback(() => {
     Keyboard.dismiss();
   });
 
-  const exhangeFollower = (newTopicLists, willFollow, topicId) => {
-    const indexTopic = newTopicLists.findIndex((item) => item.topic_id === topicId);
-    newTopicLists[indexTopic].following = !!willFollow;
-    // newTopicLists[indexTopic].user_id_follower = myId;
-    return newTopicLists[indexTopic];
-  };
-
-  const mapTopic = (newTopic) => {
-    return discovery.initialTopics.map((topic) => {
-      if (topic.topic_id === newTopic.topic_id) {
-        return newTopic;
-      }
-      return topic;
-    });
-  };
-
-  const handleTopic = (from, willFollow, item, index) => {
-    if (from === FROM_FOLLOWED_TOPIC_INITIAL) {
-      const newFollowedTopics = [...topics];
-      const newTopic = exhangeFollower(newFollowedTopics, willFollow, item.topic_id);
-
-      DiscoveryAction.setDiscoveryInitialTopics(mapTopic(newTopic), discoveryDispatch);
-    }
-
-    if (from === FROM_UNFOLLOWED_TOPIC_INITIAL) {
-      const newFollowedTopics = [...topics];
-      const newTopic = exhangeFollower(newFollowedTopics, willFollow, item.topic_id);
-
-      DiscoveryAction.setDiscoveryInitialTopics(mapTopic(newTopic), discoveryDispatch);
+  const handleTopic = (from, willFollow, item) => {
+    if (from === FROM_FOLLOWED_TOPIC_INITIAL || from === FROM_UNFOLLOWED_TOPIC_INITIAL) {
+      updateFollowTopicDiscoveryContext(willFollow, item);
     }
 
     if (from === FROM_FOLLOWED_TOPIC) {
       const newFollowedTopics = [...newMapFollowedTopics];
-      const newTopic = exhangeFollower(newFollowedTopics, willFollow, item.topic_id);
+      const newTopic = exchangeFollower(newFollowedTopics, willFollow, item.topic_id);
 
       setFollowedTopic(
         followedTopic.map((topic) => {
@@ -127,7 +83,7 @@ const TopicFragment = ({
 
     if (from === FROM_UNFOLLOWED_TOPIC) {
       const newUnFollowedTopic = [...newMapUnfollowedTopics];
-      const newTopic = exhangeFollower(newUnFollowedTopic, willFollow, item.topic_id);
+      const newTopic = exchangeFollower(newUnFollowedTopic, willFollow, item.topic_id);
 
       setUnfollowedTopic(
         unfollowedTopic.map((topic) => {
@@ -140,20 +96,21 @@ const TopicFragment = ({
     }
   };
 
-  const handleFollow = async (from, willFollow, item, index) => {
-    handleTopic(from, willFollow, item, index);
+  const handleFollow = async (from, willFollow, item) => {
+    handleTopic(from, willFollow, item);
 
     try {
       await followTopic(item?.name);
     } catch (e) {
-      handleTopic(from, !willFollow, item, index);
+      handleTopic(from, !willFollow, item);
     }
     if (searchText.length > 0) fetchData();
   };
 
   const __handleOnTopicPress = (item) => {
     const navigationParam = {
-      id: convertTopicNameToTopicPageScreenParam(item.name)
+      id: convertTopicNameToTopicPageScreenParam(item.name),
+      isFollowing: item.following
     };
 
     navigation.push('TopicPageScreen', navigationParam);
@@ -186,8 +143,8 @@ const TopicFragment = ({
         {renderRecentSearch(index)}
         <View style={styles.domainContainer}>
           <DomainList
-            handleSetFollow={() => handleFollow(from, true, item, index)}
-            handleSetUnFollow={() => handleFollow(from, false, item, index)}
+            handleSetFollow={() => handleFollow(from, true, item)}
+            handleSetUnFollow={() => handleFollow(from, false, item)}
             key={`followedTopic-${index}`}
             isCommunity={true}
             onPressBody={() => __handleOnTopicPress(item)}
