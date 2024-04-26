@@ -1,9 +1,9 @@
 import crashlytics from '@react-native-firebase/crashlytics';
 
 import OneSignalUtil from './onesignal';
+import anonymousApi from './anonymousConfig';
 import api from './config';
 import {Monitoring} from '../libraries/monitoring/sentry';
-import anonymousApi from './anonymousConfig';
 
 const getUserTopic = async (query) => {
   try {
@@ -98,12 +98,43 @@ const getWhoToFollowList = async (topics, locations, page = 1, axiosOptions = {}
   }
 };
 
+export type TopicLatestPostData = {
+  success?: boolean;
+  status?: string;
+  message: string;
+  anon_user_info_color_code?: string;
+  anon_user_info_color_name?: string;
+  anon_user_info_emoji_code?: string;
+  anon_user_info_emoji_name?: string;
+  anonimity?: boolean;
+  created_at?: string;
+  duration_feed?: string;
+  expired_at?: string;
+  id?: string;
+  unread_count?: number;
+  time?: string;
+};
+
+const getLatestTopicPost = async (topicName: string): Promise<TopicLatestPostData | undefined> => {
+  try {
+    const res = await api.get(`/topics/latest?name=${topicName}`);
+    return {
+      ...res?.data?.data,
+      status: res?.data?.status,
+      success: res?.data?.success
+    };
+  } catch (e) {
+    console.error(e?.response?.message || `Error on getting latest topic post ${topicName}`);
+  }
+};
+
 export {
-  getUserTopic,
-  putUserTopic,
-  getFollowingTopic,
   getAllMemberTopic,
-  getTopics,
+  getFollowingTopic,
+  getLatestTopicPost,
   getSubscribeableTopic,
-  getWhoToFollowList
+  getTopics,
+  getUserTopic,
+  getWhoToFollowList,
+  putUserTopic
 };

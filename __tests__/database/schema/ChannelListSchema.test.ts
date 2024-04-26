@@ -1,5 +1,4 @@
 import ChannelList from '../../../src/database/schema/ChannelListSchema';
-import ChannelListMemberSchema from '../../../src/database/schema/ChannelListMemberSchema';
 import UserSchema from '../../../src/database/schema/UserSchema';
 import {consoleSpy} from '../../../__utils__/spy';
 import {mockDb, mockDbExecuteSql} from '../../../__utils__/mockedVariable/mockDb';
@@ -17,6 +16,7 @@ const savePrepReplacementExpectation = [
   'lastUpdatedBy',
   'createdAt',
   'expiredAt',
+  null,
   '{}',
   null,
   null,
@@ -50,6 +50,7 @@ beforeEach(() => {
     rawJson: {},
     user: null,
     expiredAt: 'expiredAt',
+    topicPostExpiredAt: null,
     members: [],
     unreadCount: 0,
     description: 'description',
