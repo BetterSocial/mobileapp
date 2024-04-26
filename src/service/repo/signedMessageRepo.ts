@@ -51,8 +51,8 @@ interface SignedMessageRepoTypes {
   getSignedChannelDetail: (channelType: GetstreamChannelType, channelId: string) => Promise<any>;
   changeSignedChannelDetail: (
     channelId: string,
-    channelName: string,
-    channelImage: string
+    channelName?: string,
+    channelImage?: string
   ) => Promise<any>;
 }
 
@@ -202,19 +202,22 @@ async function getSignedChannelDetail(channelType: GetstreamChannelType, channel
 
 async function changeSignedChannelDetail(
   channelId: string,
-  channelName: string,
-  channelImage: string
+  channelName?: string,
+  channelImage?: string
 ) {
   const payload: ChangeGroupInfoPayload = {
-    channel_id: channelId,
-    channel_name: channelName,
-    channel_image: channelImage
+    channel_id: channelId
   };
+  if (channelName) {
+    payload.channel_name = channelName;
+  }
+  if (channelImage) {
+    payload.channel_image = channelImage;
+  }
 
   try {
     const response = await api.post(baseUrl.changeSignedChannelDetail, payload);
     if (response.status === 200) {
-      console.warn('response.data?.data', JSON.stringify(response.data?.data));
       return Promise.resolve(response.data?.data);
     }
 
