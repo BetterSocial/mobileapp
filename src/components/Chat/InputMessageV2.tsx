@@ -205,7 +205,6 @@ const InputMessageV2 = ({
         file_path: file.uri
       }
     ];
-    console.warn('resultUrls', resultUrls);
     onSendButtonClicked('Sent a file 📁', resultUrls);
   };
 
