@@ -20,16 +20,17 @@ import {useNavigation, useRoute} from '@react-navigation/core';
 
 import ExitGroup from '../../assets/images/exit-group.png';
 import ReportGroup from '../../assets/images/report.png';
+import IconPencil from '../../assets/icons/Ic_pencil';
 import AnonymousChatInfoHeader from '../../components/Header/AnonymousChatInfoHeader';
 import AnonymousIcon from '../ChannelListScreen/elements/components/AnonymousIcon';
 import BlockComponent from '../../components/BlockComponent';
 import ChannelImage from '../../components/ChatList/elements/ChannelImage';
 import ModalAction from '../GroupInfo/elements/ModalAction';
+import ModalChangeName from '../GroupInfo/elements/ModalChangeName';
 import ModalActionAnonymous from '../GroupInfo/elements/ModalActionAnonymous';
 import UserSchema from '../../database/schema/UserSchema';
 import dimen from '../../utils/dimen';
 import useChatInfoScreenHook from '../../hooks/screen/useChatInfoHook';
-import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
 import {CHANNEL_GROUP, GROUP_INFO, SIGNED} from '../../hooks/core/constant';
 import {COLORS} from '../../utils/theme';
@@ -112,8 +113,13 @@ export const styles = StyleSheet.create({
   containerPhoto: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: dimen.normalizeDimen(8),
-    paddingBottom: dimen.normalizeDimen(13)
+    alignSelf: 'center',
+    marginTop: dimen.normalizeDimen(8),
+    marginBottom: dimen.normalizeDimen(13),
+    width: dimen.normalizeDimen(100),
+    height: dimen.normalizeDimen(100),
+    borderRadius: dimen.normalizeDimen(100),
+    backgroundColor: COLORS.signed_primary
   },
   btnUpdatePhoto: {
     width: dimen.normalizeDimen(100),
@@ -185,6 +191,11 @@ export const styles = StyleSheet.create({
   },
   parentContact: {
     height: dimen.normalizeDimen(72)
+  },
+  channelImage: {
+    width: dimen.normalizeDimen(100),
+    height: dimen.normalizeDimen(100),
+    borderRadius: dimen.normalizeDimen(100)
   }
 });
 
@@ -206,17 +217,32 @@ const ChatInfoScreen = () => {
   } = useChatInfoScreenHook();
   const navigation = useNavigation();
 
-  const {onLeaveGroup, onReportGroup} = useGroupInfo(channelInfo?.id);
-  const {signedProfileId} = useUserAuthHook();
+  const {
+    onLeaveGroup,
+    onReportGroup,
+    handleOpenNameChange,
+    handleSaveNameChange,
+    handleOnImageClicked,
+    isUploadingImage,
+    uploadedImage,
+    closeOnNameChange,
+    isOpenModalChangeName,
+    isUpdatingName
+  } = useGroupInfo(channelInfo?.id);
+  const {signedProfileId, anonProfileId} = useUserAuthHook();
   const {params}: any = useRoute();
+  const [channelName, setChannelName] = React.useState(channelInfo?.name);
   const ANONYMOUS_USER = 'AnonymousUser';
-  const {anonProfileId} = useProfileHook();
 
-  const showImageProfile = (): React.ReactNode => {
+  const showImageProfile = (image): React.ReactNode => {
     if (channelInfo?.channelType === CHANNEL_GROUP) {
       return (
         <ChannelImage>
-          <ChannelImage.Big type={GROUP_INFO} image={channelInfo?.channelPicture} />
+          <ChannelImage.Big
+            type={GROUP_INFO}
+            image={image || channelInfo?.channelPicture}
+            style={styles.channelImage}
+          />
         </ChannelImage>
       );
     }
@@ -272,31 +298,56 @@ const ChatInfoScreen = () => {
     return `(${channelInfo?.memberUsers?.length})`;
   };
 
+  const onSaveChangeName = (name) => {
+    setChannelName(name);
+    handleSaveNameChange(name);
+  };
+
   const getHeaderComponent = React.useMemo(() => {
     return (
       <>
-        <AnonymousChatInfoHeader isCenter onPress={goBack} title={channelInfo?.name} />
+        <AnonymousChatInfoHeader isCenter onPress={goBack} title={channelName} />
         <View style={styles.lineTop} />
-        <TouchableOpacity testID="imageClick">
-          <View style={styles.containerPhoto}>{showImageProfile()}</View>
+        <TouchableOpacity
+          testID="imageClick"
+          onPress={handleOnImageClicked}
+          style={styles.containerPhoto}>
+          {isUploadingImage ? (
+            <ActivityIndicator color={COLORS.white} />
+          ) : (
+            showImageProfile(uploadedImage)
+          )}
         </TouchableOpacity>
         <View style={styles.row}>
           <View style={styles.column}>
             <View style={styles.containerGroupName}>
               <Text numberOfLines={1} style={styles.groupName}>
-                {channelInfo?.name}
+                {channelName}
               </Text>
             </View>
             <Text style={styles.dateCreate}>
               Created {moment(channelInfo?.createdAt).format('MM/DD/YYYY')}
             </Text>
           </View>
+          <TouchableOpacity onPress={handleOpenNameChange} style={styles.pencilIconTouchable}>
+            {isUpdatingName ? (
+              <ActivityIndicator />
+            ) : (
+              <IconPencil width={20} height={20} color={COLORS.gray400} />
+            )}
+          </TouchableOpacity>
         </View>
         <View style={styles.lineTop} />
         <Text style={styles.countUser(params?.from)}>Participants {countParticipant()}</Text>
       </>
     );
-  }, [channelInfo]);
+  }, [channelInfo, isUploadingImage, isUpdatingName, channelName]);
+
+  React.useEffect(() => {
+    if (channelInfo) {
+      setChannelName(channelInfo?.name);
+    }
+  }, [JSON.stringify(channelInfo)]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -374,6 +425,12 @@ const ChatInfoScreen = () => {
           }}
         />
       )}
+      <ModalChangeName
+        onCloseModal={closeOnNameChange}
+        isOpen={isOpenModalChangeName}
+        name={channelInfo?.rawJson?.channel?.is_name_custom ? channelName : ''}
+        onSave={onSaveChangeName}
+      />
       <ModalAction
         onCloseModal={handleCloseSelectUser}
         selectedUser={selectedUser}

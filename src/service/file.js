@@ -20,7 +20,6 @@ export const uploadPhoto = async (formData) => {
     testing: 'test'
   });
 
-  console.log(result?.data);
   if (result.data) {
     return result.data;
   }
