@@ -12,7 +12,10 @@ import {ANONYMOUS} from '../constant';
 import {AnonUserInfo} from '../../../../types/service/AnonProfile.type';
 import {ChannelData, ChannelType} from '../../../../types/repo/ChannelData';
 import {DELETED_MESSAGE_TEXT, MESSAGE_TYPE_DELETED} from '../../../utils/constants';
+import {DatabaseOperationLabel} from '../../../core/queue/DatabaseQueue';
+import {QueueJobPriority} from '../../../core/queue/BaseQueue';
 import {getChannelListInfo, getChannelMembers} from '../../../utils/string/StringUtils';
+import {getLatestTopicPost} from '../../../service/topics';
 
 type ChannelCategory = 'SIGNED' | 'ANONYMOUS';
 
@@ -55,27 +58,69 @@ const useFetchChannelHook = () => {
     newChannel.channel = {...channel};
     const channelType = channel?.type;
 
-    try {
-      queue.addJob({
-        label: `saveChannelData-${channel?.id}`,
-        task: () => {
-          return new Promise((resolve) => {
-            const channelList = ChannelList.fromChannelAPI(
-              newChannel,
-              type[channelType],
-              undefined,
-              anonUserInfo
-            );
+    if (channelType === 'topics') {
+      try {
+        const cleanTopicName = newChannel?.id?.replace('topic_', '');
+        const response = await getLatestTopicPost(cleanTopicName);
 
-            channelList.saveIfLatest(localDb).then(() => {
-              refresh('channelList');
-              resolve(true);
+        if (!response || response?.status !== 'success') return null;
+
+        newChannel.firstMessage = {
+          text: response?.message,
+          message: response?.message,
+          textOwnMessage: response?.message
+        };
+        newChannel.topicPostExpiredAt = response?.expired_at;
+        newChannel.updated_at = response?.time;
+        newChannel.created_at = response?.time;
+        newChannel.unreadCount = response?.unread_count;
+
+        queue.addPriorityJob({
+          id: `saveChannelData-${channel?.id}`,
+          priority: QueueJobPriority.MEDIUM,
+          operationLabel: DatabaseOperationLabel.CoreChatSystem_SaveTopicChannel,
+          label: `saveChannelData-${channel?.id}`,
+          task: () => {
+            return new Promise((resolve) => {
+              const channelList = ChannelList.fromChannelAPI(
+                newChannel,
+                type[channelType],
+                undefined,
+                anonUserInfo
+              );
+
+              channelList.saveIfLatest(localDb).then(() => {
+                refresh('channelList');
+                resolve(true);
+              });
             });
-          });
-        }
-      });
-    } catch (e) {
-      console.log('error on helperChannelPromiseBuilder', e);
+          }
+        });
+      } catch (e) {
+        console.log('error on helperChannelPromiseBuilder', e);
+      }
+    } else {
+      try {
+        queue.addJob({
+          label: `saveChannelData-${channel?.id}`,
+          task: () => {
+            return new Promise((resolve) => {
+              const channelList = ChannelList.fromChannelAPI(
+                newChannel,
+                type[channelType],
+                undefined,
+                anonUserInfo
+              );
+              channelList.saveIfLatest(localDb).then(() => {
+                refresh('channelList');
+                resolve(true);
+              });
+            });
+          }
+        });
+      } catch (e) {
+        console.log('error on helperChannelPromiseBuilder', e);
+      }
     }
     return null;
   };

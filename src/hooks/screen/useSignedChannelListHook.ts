@@ -35,7 +35,7 @@ function useSignedChannelListScreenHook(): UseSignedChannelListScreenHook {
       response?.message,
       null,
       true,
-      response?.duration
+      response?.expired_at
     );
     refresh('channelList');
   };
