@@ -99,34 +99,32 @@ const getWhoToFollowList = async (topics, locations, page = 1, axiosOptions = {}
 };
 
 export type TopicLatestPostData = {
-  anonymous: boolean;
-  author_user_id: string;
-  created_at: string;
-  getstream_activity_id: string;
-  is_anonymous: boolean;
+  success?: boolean;
+  status?: string;
   message: string;
-  post_content: string;
-  post_id: string;
-  topic_id: string;
-  updated_at: string;
-  username: string;
-  visibility_location_id: string;
   anon_user_info_color_code?: string;
   anon_user_info_color_name?: string;
   anon_user_info_emoji_code?: string;
   anon_user_info_emoji_name?: string;
-  audience_id?: string;
-  duration?: string;
-  parent_post_id?: string;
-  profile_pic_path?: string;
+  anonimity?: boolean;
+  created_at?: string;
+  duration_feed?: string;
+  expired_at?: string;
+  id?: string;
+  unread_count?: number;
+  time?: string;
 };
 
 const getLatestTopicPost = async (topicName: string): Promise<TopicLatestPostData | undefined> => {
   try {
     const res = await api.get(`/topics/latest?name=${topicName}`);
-    return res?.data?.data;
+    return {
+      ...res?.data?.data,
+      status: res?.data?.status,
+      success: res?.data?.success
+    };
   } catch (e) {
-    console.error(e?.response?.message || 'Error on getting latest topic post');
+    console.error(e?.response?.message || `Error on getting latest topic post ${topicName}`);
   }
 };
 
