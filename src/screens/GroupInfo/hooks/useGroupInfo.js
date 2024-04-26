@@ -2,7 +2,7 @@ import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import {Alert} from 'react-native';
 import {generateRandomId} from 'stream-chat-react-native-core';
-import {launchImageLibrary} from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 import {openComposer} from 'react-native-email-link';
 import {useNavigation} from '@react-navigation/core';
 
@@ -26,6 +26,7 @@ import {
 import {requestExternalStoragePermission} from '../../../utils/permission';
 import {setChannel} from '../../../context/actions/setChannel';
 import {setParticipants} from '../../../context/actions/groupChat';
+import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
 
 const useGroupInfo = (channelId = null) => {
   const navigation = useNavigation();
@@ -132,15 +133,38 @@ const useGroupInfo = (channelId = null) => {
   const uploadImage = async (pathImg) => {
     try {
       setIsUploadingImage(true);
+
+      setUploadedImage(pathImg);
+      const channelListTemp = await ChannelListSchema.getSchemaById(localDb, channelId);
+      channelListTemp.channelPicture = pathImg;
+      await channelListTemp.save(localDb);
+      setSelectedChannel(channelListTemp);
+
       const result = await ImageUtils.uploadImage(pathImg);
       setUploadedImage(result.data.url);
-      const dataEdit = {
-        name: chatName,
-        image: result.data.url
-      };
+      console.warn('result.data.url', result.data.url);
 
-      await channel.update(dataEdit);
       setIsUploadingImage(false);
+
+      const responseChannelData = await SignedMessageRepo.changeSignedChannelDetail(
+        channelId,
+        username,
+        result.data.url
+      );
+      const channelList = await ChannelListSchema.getSchemaById(localDb, channelId);
+      channelList.channelPicture = result.data.url;
+      channelList.rawJson = responseChannelData;
+      await channelList.save(localDb);
+      console.warn('channelList', JSON.stringify(channelList));
+      setSelectedChannel(channelList);
+
+      refresh('channelList');
+      refreshWithId('chat', channelId);
+      refresh('channelInfo');
+
+      setTimeout(() => {
+        navigation.navigate('SignedChatScreen');
+      }, 500);
     } catch (e) {
       if (__DEV__) {
         console.log(e);
@@ -150,19 +174,21 @@ const useGroupInfo = (channelId = null) => {
   const launchGallery = async () => {
     const {success} = await requestExternalStoragePermission();
     if (success) {
-      launchImageLibrary(
-        {
+      ImagePicker.openPicker({
+        mediaType: 'photo',
+        sortOrder: 'asc',
+        smartAlbums: ['RecentlyAdded', 'UserLibrary']
+      }).then(async (imageRes) => {
+        const imageCropped = await ImagePicker.openCropper({
           mediaType: 'photo',
-          maxHeight: 500,
-          maxWidth: 500,
-          includeBase64: true
-        },
-        (res) => {
-          if (!res.didCancel) {
-            uploadImage(res?.assets?.[0]?.uri);
-          }
-        }
-      );
+          path: imageRes.path,
+          width: imageRes.width,
+          height: imageRes.height,
+          cropperChooseText: 'Next',
+          freeStyleCropEnabled: true
+        });
+        uploadImage(imageCropped.path);
+      });
     }
   };
 
