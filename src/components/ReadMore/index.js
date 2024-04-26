@@ -23,7 +23,6 @@ const ReadMore = ({text, onPress}) => {
     textShown,
     layoutWidth,
     setIsFinishSetLayout,
-    handleLayoutText,
     handleLayoutWidth,
     limitNumberLine
   } = useReadmore({
@@ -50,9 +49,6 @@ const ReadMore = ({text, onPress}) => {
       ) : null}
       {!isFinishSetLayout ? (
         <TouchableOpacity testID="finishLayout" onPress={onPress}>
-          {/* <Text style={styles.text} testID="notFinishLayout" onTextLayout={handleLayoutText}>
-            {text}{' '}
-          </Text> */}
           <TextWithEmoji
             testId="notFinishLayout"
             text={text}
