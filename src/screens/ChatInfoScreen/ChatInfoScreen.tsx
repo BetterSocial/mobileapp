@@ -31,7 +31,6 @@ import ModalActionAnonymous from '../GroupInfo/elements/ModalActionAnonymous';
 import UserSchema from '../../database/schema/UserSchema';
 import dimen from '../../utils/dimen';
 import useChatInfoScreenHook from '../../hooks/screen/useChatInfoHook';
-import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
 import {CHANNEL_GROUP, GROUP_INFO, SIGNED} from '../../hooks/core/constant';
 import {COLORS} from '../../utils/theme';
@@ -230,10 +229,9 @@ const ChatInfoScreen = () => {
     isOpenModalChangeName,
     isUpdatingName
   } = useGroupInfo(channelInfo?.id);
-  const {signedProfileId} = useUserAuthHook();
+  const {signedProfileId, anonProfileId} = useUserAuthHook();
   const {params}: any = useRoute();
   const ANONYMOUS_USER = 'AnonymousUser';
-  const {anonProfileId} = useProfileHook();
 
   const showImageProfile = (image): React.ReactNode => {
     if (channelInfo?.channelType === CHANNEL_GROUP) {
@@ -337,7 +335,7 @@ const ChatInfoScreen = () => {
         <Text style={styles.countUser(params?.from)}>Participants {countParticipant()}</Text>
       </>
     );
-  }, [channelInfo, isUploadingImage]);
+  }, [channelInfo, isUploadingImage, isUpdatingName]);
 
   return (
     <SafeAreaView style={styles.container}>
