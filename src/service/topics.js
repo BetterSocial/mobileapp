@@ -88,9 +88,6 @@ const getWhoToFollowList = async (topics, locations, page = 1, axiosOptions = {}
     const locationsQueryString = locations
       .map((topic) => `locations[]=${encodeURIComponent(topic)}`)
       .join('&');
-    console.warn(
-      `/who-to-follow/list_v2?${locationsQueryString}&${topicsQueryString}&page=${page}`
-    );
     const result = await api.get(
       `/who-to-follow/list_v2?${locationsQueryString}&${topicsQueryString}&page=${page}`,
       axiosOptions

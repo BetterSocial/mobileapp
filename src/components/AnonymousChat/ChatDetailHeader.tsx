@@ -10,7 +10,7 @@ import IcArrowBackWhite from '../../assets/arrow/Ic_arrow_back_white';
 import dimen from '../../utils/dimen';
 import {COLORS} from '../../utils/theme';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
-import {SIGNED} from '../../hooks/core/constant';
+import {CHANNEL_GROUP, SIGNED} from '../../hooks/core/constant';
 import {fonts} from '../../utils/fonts';
 
 const styles = StyleSheet.create({
@@ -75,7 +75,8 @@ const ChatDetailHeader = ({
   anon_user_info_emoji_code = null,
   anon_user_info_color_code = null,
   type,
-  channel
+  channel,
+  isGroup = false
 }) => {
   const bgHeaderStyle = () => {
     if (type === SIGNED) return styles.bgsigned_primary;
@@ -83,6 +84,14 @@ const ChatDetailHeader = ({
   };
 
   const renderAvatar = () => {
+    if (isGroup) {
+      return (
+        <ChannelImage>
+          <ChannelImage.Big style={styles.avatarImage} type={CHANNEL_GROUP} image={avatar} />
+        </ChannelImage>
+      );
+    }
+
     if (anon_user_info_emoji_code) {
       return (
         <AnonymousIcon
