@@ -20,6 +20,7 @@ import {useNavigation, useRoute} from '@react-navigation/core';
 
 import ExitGroup from '../../assets/images/exit-group.png';
 import ReportGroup from '../../assets/images/report.png';
+import IconPencil from '../../assets/icons/Ic_pencil';
 import AnonymousChatInfoHeader from '../../components/Header/AnonymousChatInfoHeader';
 import AnonymousIcon from '../ChannelListScreen/elements/components/AnonymousIcon';
 import BlockComponent from '../../components/BlockComponent';
@@ -112,8 +113,13 @@ export const styles = StyleSheet.create({
   containerPhoto: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: dimen.normalizeDimen(8),
-    paddingBottom: dimen.normalizeDimen(13)
+    alignSelf: 'center',
+    marginTop: dimen.normalizeDimen(8),
+    marginBottom: dimen.normalizeDimen(13),
+    width: dimen.normalizeDimen(100),
+    height: dimen.normalizeDimen(100),
+    borderRadius: dimen.normalizeDimen(100),
+    backgroundColor: COLORS.signed_primary
   },
   btnUpdatePhoto: {
     width: dimen.normalizeDimen(100),
@@ -185,6 +191,11 @@ export const styles = StyleSheet.create({
   },
   parentContact: {
     height: dimen.normalizeDimen(72)
+  },
+  channelImage: {
+    width: dimen.normalizeDimen(100),
+    height: dimen.normalizeDimen(100),
+    borderRadius: dimen.normalizeDimen(100)
   }
 });
 
@@ -206,17 +217,28 @@ const ChatInfoScreen = () => {
   } = useChatInfoScreenHook();
   const navigation = useNavigation();
 
-  const {onLeaveGroup, onReportGroup} = useGroupInfo(channelInfo?.id);
+  const {
+    onLeaveGroup,
+    onReportGroup,
+    handleOnNameChange,
+    handleOnImageClicked,
+    isUploadingImage,
+    uploadedImage
+  } = useGroupInfo(channelInfo?.id);
   const {signedProfileId} = useUserAuthHook();
   const {params}: any = useRoute();
   const ANONYMOUS_USER = 'AnonymousUser';
   const {anonProfileId} = useProfileHook();
 
-  const showImageProfile = (): React.ReactNode => {
+  const showImageProfile = (image): React.ReactNode => {
     if (channelInfo?.channelType === CHANNEL_GROUP) {
       return (
         <ChannelImage>
-          <ChannelImage.Big type={GROUP_INFO} image={channelInfo?.channelPicture} />
+          <ChannelImage.Big
+            type={GROUP_INFO}
+            image={image || channelInfo?.channelPicture}
+            style={styles.channelImage}
+          />
         </ChannelImage>
       );
     }
@@ -277,8 +299,14 @@ const ChatInfoScreen = () => {
       <>
         <AnonymousChatInfoHeader isCenter onPress={goBack} title={channelInfo?.name} />
         <View style={styles.lineTop} />
-        <TouchableOpacity testID="imageClick">
-          <View style={styles.containerPhoto}>{showImageProfile()}</View>
+        <TouchableOpacity testID="imageClick" onPress={handleOnImageClicked}>
+          <View style={styles.containerPhoto}>
+            {isUploadingImage ? (
+              <ActivityIndicator color={COLORS.white} />
+            ) : (
+              showImageProfile(uploadedImage)
+            )}
+          </View>
         </TouchableOpacity>
         <View style={styles.row}>
           <View style={styles.column}>
@@ -291,12 +319,15 @@ const ChatInfoScreen = () => {
               Created {moment(channelInfo?.createdAt).format('MM/DD/YYYY')}
             </Text>
           </View>
+          <TouchableOpacity onPress={handleOnNameChange} style={styles.pencilIconTouchable}>
+            <IconPencil width={20} height={20} color={COLORS.gray400} />
+          </TouchableOpacity>
         </View>
         <View style={styles.lineTop} />
         <Text style={styles.countUser(params?.from)}>Participants {countParticipant()}</Text>
       </>
     );
-  }, [channelInfo]);
+  }, [channelInfo, isUploadingImage]);
 
   return (
     <SafeAreaView style={styles.container}>
