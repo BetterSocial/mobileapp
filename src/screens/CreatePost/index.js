@@ -28,12 +28,12 @@ import CreatePollContainer from './elements/CreatePollContainer';
 import CreatePostInput from '../../components/CreatePostInput';
 import Gap from '../../components/Gap';
 import Header from '../../components/Header';
+import IconHashtag from '../../assets/icons/Ic_hastag';
 import ImageCompressionUtils from '../../utils/image/compress';
 import ImageUtils from '../../utils/image';
 import ListItem from '../../components/MenuPostItem';
 import Loading from '../Loading';
 import Location from '../../assets/icons/Ic_location';
-import IconHashtag from '../../assets/icons/Ic_hastag';
 import MemoIc_user_group from '../../assets/icons/Ic_user_group';
 import MemoIc_world from '../../assets/icons/Ic_world';
 import ProfileDefault from '../../assets/images/ProfileDefault.png';
@@ -458,6 +458,7 @@ const CreatePost = () => {
 
     try {
       const topicsToPost = _.union(initialTopic, listTopic);
+      console.log('message', message);
       const data = {
         message,
         topics: topicsToPost,
@@ -667,7 +668,8 @@ const CreatePost = () => {
   }, 500);
 
   const onChangeText = (text) => {
-    setMessage(debounced(text));
+    debounced(text);
+    setMessage(text);
     handleTagUser(text);
   };
 
