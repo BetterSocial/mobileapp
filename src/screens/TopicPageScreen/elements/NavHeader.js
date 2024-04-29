@@ -70,7 +70,7 @@ const NavHeader = (props) => {
 
   return (
     <View>
-      <View style={{}}>
+      <View>
         <StatusBar barStyle="light-content" />
         <View
           style={[styles.navContainer(isHeaderHide, additionalHeaderHeight)]}
