@@ -381,8 +381,6 @@ export default DiscoveryScreenV2;
 
 const DiscoveryContainer = ({children}) => {
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: COLORS.almostBlack}}>
-      <KeyboardWrapper>{children}</KeyboardWrapper>
-    </SafeAreaView>
+    <SafeAreaView style={{flex: 1, backgroundColor: COLORS.almostBlack}}>{children}</SafeAreaView>
   );
 };

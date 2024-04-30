@@ -227,6 +227,7 @@ const UsersFragment = ({
         keyExtractor={(item, index) => index.toString()}
         onEndReached={() => fetchData()}
         onEndReachedThreshold={0.6}
+        keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps="handled"
         style={{backgroundColor: COLORS.almostBlack}}
       />
