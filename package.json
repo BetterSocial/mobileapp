@@ -56,6 +56,8 @@
     "@react-navigation/material-top-tabs": "^5.3.15",
     "@react-navigation/native": "^5.9.3",
     "@react-navigation/stack": "^5.14.3",
+    "@segment/analytics-react-native": "^2.19.1",
+    "@segment/sovran-react-native": "^1.1.1",
     "@sentry/react-native": "^5.2.0",
     "@stream-io/flat-list-mvcp": "0.10.1",
     "@types/react-native-sqlite-storage": "^6.0.0",
