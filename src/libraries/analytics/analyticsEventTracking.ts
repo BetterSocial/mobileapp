@@ -2,7 +2,7 @@ import SimpleToast from 'react-native-simple-toast';
 /* eslint-disable no-shadow */
 import {JsonMap, createClient} from '@segment/analytics-react-native';
 
-import {SEGMENT_WRITE_KEY} from '../Configs/ENVConfig';
+import {ENV, SEGMENT_WRITE_KEY} from '../Configs/ENVConfig';
 
 /**
  * Please refer to this for all tracking enums.
@@ -46,9 +46,18 @@ export enum BetterSocialEventTracking {
   ONBOARDING_REGISTRATION_FAILED = 'OB-FollowUsers_API_CreateAccountFail'
 }
 
-const ENABLE_TOAST = true;
+const ENABLE_TOAST = ENV === 'Dev';
 
 const AnalyticsEventTracking = (() => {
+  if (!SEGMENT_WRITE_KEY) {
+    console.error('Segment write key must be provided');
+    return {
+      eventTrack: () => {
+        console.error('Empty track');
+      }
+    };
+  }
+
   const client = createClient({
     writeKey: SEGMENT_WRITE_KEY || '',
     debug: __DEV__,
