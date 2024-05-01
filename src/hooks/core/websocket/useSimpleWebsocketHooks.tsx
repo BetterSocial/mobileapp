@@ -61,7 +61,6 @@ const useSimpleWebsocket = (url, protocol = undefined) => {
     socket.onmessage = (event: MessageEvent) => {
       try {
         const json = JSON.parse(event.data);
-        console.log('onmessage', json.message.message_type);
         if (json.message.message_type === 'text') {
           json.message.attachments = [];
         }
