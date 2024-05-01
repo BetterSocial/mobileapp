@@ -14,14 +14,23 @@ export enum BetterSocialEventTracking {
   HUMAN_ID_SUCCESS_NEW_REGISTRATION = 'OB-Username_na_verified',
   HUMAN_ID_FAILED_VERIFICATION = 'external_API_failed_verification',
 
-  // ONBOARDING REGISTRATION
+  // ONBOARDING INPUT USERNAME SCREEN
   ONBOARDING_USERNAME_PROFILE_PIC_CLICKED = 'OB-Username_ProfilePic_clicked',
   ONBOARDING_USERNAME_PROFILE_PIC_CAMERA_SELECT = 'OB-Username_ProfilePicDrawer_clickCamera',
   ONBOARDING_USERNAME_PROFILE_PIC_LIBRARY_SELECT = 'OB-Username_ProfilePicDrawer_clickLibrary',
   ONBOARDING_USERNAME_PROFILE_PIC_IMAGE_UPLOADED = 'OB-Username_ProfilePic_updated',
   ONBOARDING_USERNAME_PROFILE_PIC_IMAGE_FAIL_UPLOAD = 'OB-Username_ProfilePic_failed',
   ONBOARDING_USERNAME_PROFILE_PIC_ALERT_SKIP = 'OB-Username_PicReminderAlert_skip',
-  ONBOARDING_USERNAME_PROFILE_PIC_ALERT_ADD_PHOTO = 'OB-Username_PicReminderAlert_addProfilePic'
+  ONBOARDING_USERNAME_PROFILE_PIC_ALERT_ADD_PHOTO = 'OB-Username_PicReminderAlert_addProfilePic',
+
+  // ONBOARDING SELECT LOCATION
+  ONBOARDING_LOCATION_FIRST_OPEN_SEARCH = 'OB-Location_Location1_openSearch',
+  ONBOARDING_LOCATION_FIRST_DELETED = 'OB-Location_Location1_deleted',
+  ONBOARDING_LOCATION_SECOND_OPEN_SEARCH = 'OB-Location_Location2_openSearch',
+  ONBOARDING_LOCATION_SECOND_DELETED = 'OB-Location_Location2_deleted',
+  ONBOARDING_LOCATION_FIRST_SELECTED = 'OB-Location_Location1_hasLocationvalue',
+  ONBOARDING_LOCATION_SECOND_SELECTED = 'OB-Location_Location2_hasLocationvalue',
+  ONBOARDING_LOCATION_DRAWER_CLOSED = 'OB-Location_SearchBottomDrawer_closewithoutselection'
 }
 
 const AnalyticsEventTracking = (() => {
