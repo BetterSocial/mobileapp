@@ -141,13 +141,14 @@ const WhotoFollow = () => {
     Analytics.logEvent('onb_select_follows_btn_add', {
       onb_whofollow_users_selected: followed
     });
+    AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.ONBOARDING_TOPICS_TOTAL_FOLLOWING, {
+      total: followed?.length
+    });
     const data = {
       users: {
         username: usersState.username,
         human_id: usersState.userId,
         country_code: usersState.countryCode,
-        // human_id: randomString(16),
-        // country_code: 'US',
         profile_pic_path: usersState.photoUrl,
         status: 'A'
       },
@@ -163,9 +164,15 @@ const WhotoFollow = () => {
         const uploadedImageUrl = await ImageUtils.uploadImageWithoutAuth(
           data?.users?.profile_pic_path
         );
+        AnalyticsEventTracking.eventTrack(
+          BetterSocialEventTracking.ONBOARDING_REGISTRATION_UPLOAD_IMAGE_SUCCESS
+        );
         data.users.profile_pic_path = uploadedImageUrl?.data?.url;
         console.log('uploadedImageUrl', uploadedImageUrl);
       } catch (e) {
+        AnalyticsEventTracking.eventTrack(
+          BetterSocialEventTracking.ONBOARDING_REGISTRATION_UPLOAD_IMAGE_FAIL
+        );
         console.log('error upload', e);
       }
     }

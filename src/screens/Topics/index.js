@@ -11,12 +11,16 @@ import {
   View
 } from 'react-native';
 import {useNavigation} from '@react-navigation/core';
-
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+
 import CustomPressable from '../../components/CustomPressable';
 import ListTopic from './ListTopics';
 import StringConstant from '../../utils/string/StringConstant';
+import dimen from '../../utils/dimen';
 import useSignin from '../SignInV2/hooks/useSignin';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../libraries/analytics/analyticsEventTracking';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
 import {COLORS} from '../../utils/theme';
@@ -27,7 +31,6 @@ import {TOPICS_PICK} from '../../utils/cache/constant';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getSpecificCache} from '../../utils/cache';
 import {setTopics as setTopicsContext} from '../../context/actions/topics';
-import dimen from '../../utils/dimen';
 
 const {width} = Dimensions.get('screen');
 
@@ -87,6 +90,12 @@ const Topics = () => {
       Analytics.logEvent('onb_select_topics_add_btn', {
         onb_topics_selected: topicSelected
       });
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.ONBOARDING_TOPICS_TOTAL_FOLLOWING,
+        {
+          total: topicSelected?.length
+        }
+      );
       setTopicsContext(topicSelected, dispatch);
       navigation.navigate('WhotoFollow');
     }

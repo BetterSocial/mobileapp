@@ -74,10 +74,7 @@ const ChooseUsername = () => {
     const {success, message} = await requestCameraPermission();
     if (success) {
       AnalyticsEventTracking.eventTrack(
-        BetterSocialEventTracking.ONBOARDING_USERNAME_PROFILE_PIC_CAMERA_SELECT,
-        {
-          humanId: users?.userId
-        }
+        BetterSocialEventTracking.ONBOARDING_USERNAME_PROFILE_PIC_CAMERA_SELECT
       );
       launchCamera(
         {
@@ -93,6 +90,9 @@ const ChooseUsername = () => {
             setImage(`${base64}`, dispatch);
             bottomSheetChooseImageRef.current.close();
           }
+          AnalyticsEventTracking.eventTrack(
+            BetterSocialEventTracking.ONBOARDING_USERNAME_PROFILE_PIC_IMAGE_CHANGED
+          );
         }
       );
     } else {
@@ -104,10 +104,7 @@ const ChooseUsername = () => {
     const {success, message} = await requestExternalStoragePermission();
     if (success) {
       AnalyticsEventTracking.eventTrack(
-        BetterSocialEventTracking.ONBOARDING_USERNAME_PROFILE_PIC_LIBRARY_SELECT,
-        {
-          humanId: users?.userId
-        }
+        BetterSocialEventTracking.ONBOARDING_USERNAME_PROFILE_PIC_LIBRARY_SELECT
       );
       launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
         const uri = res?.assets?.[0]?.uri;
@@ -117,6 +114,9 @@ const ChooseUsername = () => {
           setImage(`${base64}`, dispatch);
           bottomSheetChooseImageRef.current.close();
         }
+        AnalyticsEventTracking.eventTrack(
+          BetterSocialEventTracking.ONBOARDING_USERNAME_PROFILE_PIC_IMAGE_CHANGED
+        );
       });
     } else {
       Toast.show(message, Toast.SHORT);
@@ -263,10 +263,7 @@ const ChooseUsername = () => {
           style: 'cancel',
           onPress: () => {
             AnalyticsEventTracking.eventTrack(
-              BetterSocialEventTracking.ONBOARDING_USERNAME_PROFILE_PIC_ALERT_ADD_PHOTO,
-              {
-                humanId: users?.userId
-              }
+              BetterSocialEventTracking.ONBOARDING_USERNAME_PROFILE_PIC_ALERT_ADD_PHOTO
             );
             onPhoto();
           }
@@ -275,10 +272,7 @@ const ChooseUsername = () => {
           text: 'Skip',
           onPress: () => {
             AnalyticsEventTracking.eventTrack(
-              BetterSocialEventTracking.ONBOARDING_USERNAME_PROFILE_PIC_ALERT_SKIP,
-              {
-                humanId: users?.userId
-              }
+              BetterSocialEventTracking.ONBOARDING_USERNAME_PROFILE_PIC_ALERT_SKIP
             );
             next();
           }
@@ -310,10 +304,7 @@ const ChooseUsername = () => {
                 style={styles.containerAddIcon}
                 onPress={() => {
                   AnalyticsEventTracking.eventTrack(
-                    BetterSocialEventTracking.ONBOARDING_USERNAME_PROFILE_PIC_CLICKED,
-                    {
-                      humanId: users?.userId
-                    }
+                    BetterSocialEventTracking.ONBOARDING_USERNAME_PROFILE_PIC_CLICKED
                   );
                   onPhoto();
                 }}>

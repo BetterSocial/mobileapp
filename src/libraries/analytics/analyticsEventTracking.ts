@@ -1,3 +1,4 @@
+import SimpleToast from 'react-native-simple-toast';
 /* eslint-disable no-shadow */
 import {JsonMap, createClient} from '@segment/analytics-react-native';
 
@@ -18,12 +19,12 @@ export enum BetterSocialEventTracking {
   ONBOARDING_USERNAME_PROFILE_PIC_CLICKED = 'OB-Username_ProfilePic_clicked',
   ONBOARDING_USERNAME_PROFILE_PIC_CAMERA_SELECT = 'OB-Username_ProfilePicDrawer_clickCamera',
   ONBOARDING_USERNAME_PROFILE_PIC_LIBRARY_SELECT = 'OB-Username_ProfilePicDrawer_clickLibrary',
-  ONBOARDING_USERNAME_PROFILE_PIC_IMAGE_UPLOADED = 'OB-Username_ProfilePic_updated',
-  ONBOARDING_USERNAME_PROFILE_PIC_IMAGE_FAIL_UPLOAD = 'OB-Username_ProfilePic_failed',
+  ONBOARDING_USERNAME_PROFILE_PIC_IMAGE_CHANGED = 'OB-Username_ProfilePic_updated',
+  ONBOARDING_USERNAME_PROFILE_PIC_IMAGE_FAIL_TO_CHANGE = 'OB-Username_ProfilePic_failed',
   ONBOARDING_USERNAME_PROFILE_PIC_ALERT_SKIP = 'OB-Username_PicReminderAlert_skip',
   ONBOARDING_USERNAME_PROFILE_PIC_ALERT_ADD_PHOTO = 'OB-Username_PicReminderAlert_addProfilePic',
 
-  // ONBOARDING SELECT LOCATION
+  // ONBOARDING SELECT LOCATION SCREEN
   ONBOARDING_LOCATION_FIRST_OPEN_SEARCH = 'OB-Location_Location1_openSearch',
   ONBOARDING_LOCATION_FIRST_DELETED = 'OB-Location_Location1_deleted',
   ONBOARDING_LOCATION_SECOND_OPEN_SEARCH = 'OB-Location_Location2_openSearch',
@@ -32,10 +33,20 @@ export enum BetterSocialEventTracking {
   ONBOARDING_LOCATION_SECOND_SELECTED = 'OB-Location_Location2_hasLocationvalue',
   ONBOARDING_LOCATION_DRAWER_CLOSED = 'OB-Location_SearchBottomDrawer_closewithoutselection',
 
+  // ONBOARDING TOPICS SCREEN
+  ONBOARDING_TOPICS_TOTAL_FOLLOWING = 'OB-Topics_TopicsNextButton_clicked',
+
+  // ONBOARDING WHO TO FOLLOW SCREEN
+  ONBOARDING_WHO_TO_FOLLOW_TOTAL_FOLLOWING = 'OB-FollowUsers_UsersNextButton_clicked',
+
   // ONBOARDING REGISTRATION
+  ONBOARDING_REGISTRATION_UPLOAD_IMAGE_SUCCESS = 'OB-FollowUsers_API_UploadImageSuccess',
+  ONBOARDING_REGISTRATION_UPLOAD_IMAGE_FAIL = 'OB-FollowUsers_API_UploadImageFail',
   ONBOARDING_REGISTRATION_SUCCESS = 'OB-FollowUsers_API_CreateAccountSuccess',
   ONBOARDING_REGISTRATION_FAILED = 'OB-FollowUsers_API_CreateAccountFail'
 }
+
+const ENABLE_TOAST = true;
 
 const AnalyticsEventTracking = (() => {
   const client = createClient({
@@ -51,8 +62,12 @@ const AnalyticsEventTracking = (() => {
       if (additionalData && typeof additionalData !== 'object')
         throw new Error('additionalData must be an object');
 
-      if (!additionalData) return client.track(event);
+      if (!additionalData) {
+        if (ENABLE_TOAST) SimpleToast.show(event);
+        return client.track(event);
+      }
 
+      if (ENABLE_TOAST) SimpleToast.show(`${event} ${JSON.stringify(additionalData || {})}`);
       return client.track(event, (additionalData || {}) as JsonMap);
     }
   };
