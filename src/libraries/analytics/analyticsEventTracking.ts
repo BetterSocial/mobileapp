@@ -63,11 +63,12 @@ const AnalyticsEventTracking = (() => {
         throw new Error('additionalData must be an object');
 
       if (!additionalData) {
-        if (ENABLE_TOAST) SimpleToast.show(event);
+        if (ENABLE_TOAST && !!SEGMENT_WRITE_KEY) SimpleToast.show(event);
         return client.track(event);
       }
 
-      if (ENABLE_TOAST) SimpleToast.show(`${event} ${JSON.stringify(additionalData || {})}`);
+      if (ENABLE_TOAST && !!SEGMENT_WRITE_KEY)
+        SimpleToast.show(`${event} ${JSON.stringify(additionalData || {})}`);
       return client.track(event, (additionalData || {}) as JsonMap);
     }
   };
