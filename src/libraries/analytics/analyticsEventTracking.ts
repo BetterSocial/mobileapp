@@ -30,7 +30,11 @@ export enum BetterSocialEventTracking {
   ONBOARDING_LOCATION_SECOND_DELETED = 'OB-Location_Location2_deleted',
   ONBOARDING_LOCATION_FIRST_SELECTED = 'OB-Location_Location1_hasLocationvalue',
   ONBOARDING_LOCATION_SECOND_SELECTED = 'OB-Location_Location2_hasLocationvalue',
-  ONBOARDING_LOCATION_DRAWER_CLOSED = 'OB-Location_SearchBottomDrawer_closewithoutselection'
+  ONBOARDING_LOCATION_DRAWER_CLOSED = 'OB-Location_SearchBottomDrawer_closewithoutselection',
+
+  // ONBOARDING REGISTRATION
+  ONBOARDING_REGISTRATION_SUCCESS = 'OB-FollowUsers_API_CreateAccountSuccess',
+  ONBOARDING_REGISTRATION_FAILED = 'OB-FollowUsers_API_CreateAccountFail'
 }
 
 const AnalyticsEventTracking = (() => {
