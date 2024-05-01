@@ -13,6 +13,7 @@ import {
   BUBBLE_RIGHT_PADDING_ATTACHMENT
 } from './ChatItemAttachmentStyles';
 import ChatItemAttachment from './ChatItemAttachment';
+import {LinkableText} from '../../LinkableText';
 import dimen from '../../../utils/dimen';
 
 const {width} = Dimensions.get('screen');
@@ -114,9 +115,9 @@ const ChatItemTargetText = ({
         )}
         {attachments.length > 0 && <ChatItemAttachment attachments={attachments} />}
         {attachments.length <= 0 && (
-          <Text testID="chat-item-message" style={styles.text}>
-            {message}
-          </Text>
+          <View testID="chat-item-message">
+            <LinkableText style={styles.text} text={message} />
+          </View>
         )}
       </View>
     </View>
