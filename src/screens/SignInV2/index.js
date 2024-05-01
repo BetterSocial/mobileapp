@@ -97,7 +97,9 @@ const SignIn = () => {
       } catch (e) {
         SimpleToast.show(e?.message, SimpleToast.SHORT);
         crashlytics().recordError(new Error(e?.message));
-        AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.HUMAN_ID_FAILED_VERIFICATION);
+        AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.HUMAN_ID_FAILED_VERIFICATION, {
+          error: e
+        });
         if (__DEV__) {
           console.log('error');
           console.log(e);

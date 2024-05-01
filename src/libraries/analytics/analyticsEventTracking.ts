@@ -3,14 +3,25 @@ import {JsonMap, createClient} from '@segment/analytics-react-native';
 
 import {SEGMENT_WRITE_KEY} from '../Configs/ENVConfig';
 
+/**
+ * Please refer to this for all tracking enums.
+ * https://docs.google.com/spreadsheets/d/1zkQzRPG9nKEXaoHI79nFXgL7WmSgp3qGRPVkHMxBzR0/edit#gid=1943812029
+ */
 export enum BetterSocialEventTracking {
   // ONBOARDING HUMAN ID
   HUMAN_ID_BUTTON_CLICKED = 'PreLogin-Slider5Login_hIDbutton_Clicked',
   HUMAN_ID_SUCCESS_EXISTING_ACCOUNT = 'external_alert_humanID-Relogin',
   HUMAN_ID_SUCCESS_NEW_REGISTRATION = 'OB-Username_na_verified',
-  HUMAN_ID_FAILED_VERIFICATION = 'external_API_failed_verification'
+  HUMAN_ID_FAILED_VERIFICATION = 'external_API_failed_verification',
 
   // ONBOARDING REGISTRATION
+  ONBOARDING_USERNAME_PROFILE_PIC_CLICKED = 'OB-Username_ProfilePic_clicked',
+  ONBOARDING_USERNAME_PROFILE_PIC_CAMERA_SELECT = 'OB-Username_ProfilePicDrawer_clickCamera',
+  ONBOARDING_USERNAME_PROFILE_PIC_LIBRARY_SELECT = 'OB-Username_ProfilePicDrawer_clickLibrary',
+  ONBOARDING_USERNAME_PROFILE_PIC_IMAGE_UPLOADED = 'OB-Username_ProfilePic_updated',
+  ONBOARDING_USERNAME_PROFILE_PIC_IMAGE_FAIL_UPLOAD = 'OB-Username_ProfilePic_failed',
+  ONBOARDING_USERNAME_PROFILE_PIC_ALERT_SKIP = 'OB-Username_PicReminderAlert_skip',
+  ONBOARDING_USERNAME_PROFILE_PIC_ALERT_ADD_PHOTO = 'OB-Username_PicReminderAlert_addProfilePic'
 }
 
 const AnalyticsEventTracking = (() => {

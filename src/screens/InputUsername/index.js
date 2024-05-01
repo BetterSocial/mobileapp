@@ -18,10 +18,13 @@ import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
 
 import BottomSheetChooseImage from './elements/BottomSheetChooseImage';
+import IconWarningCircleBlue from '../../assets/icon/IconWarningCircleBlue';
 import MemoOnboardingChangeProfilePlusIcon from '../../assets/icon/OnboardingChangeProfilePlusIcon';
 import StringConstant from '../../utils/string/StringConstant';
-import IconWarningCircleBlue from '../../assets/icon/IconWarningCircleBlue';
 import dimen from '../../utils/dimen';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../libraries/analytics/analyticsEventTracking';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
 import {COLORS} from '../../utils/theme';
@@ -70,6 +73,12 @@ const ChooseUsername = () => {
   const handleOpenCamera = async () => {
     const {success, message} = await requestCameraPermission();
     if (success) {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.ONBOARDING_USERNAME_PROFILE_PIC_CAMERA_SELECT,
+        {
+          humanId: users?.userId
+        }
+      );
       launchCamera(
         {
           mediaType: 'photo',
@@ -94,6 +103,12 @@ const ChooseUsername = () => {
   const handleOpenGallery = async () => {
     const {success, message} = await requestExternalStoragePermission();
     if (success) {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.ONBOARDING_USERNAME_PROFILE_PIC_LIBRARY_SELECT,
+        {
+          humanId: users?.userId
+        }
+      );
       launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
         const uri = res?.assets?.[0]?.uri;
         const base64 = res?.assets?.[0]?.base64;
@@ -246,11 +261,27 @@ const ChooseUsername = () => {
         {
           text: 'Add profile picture',
           style: 'cancel',
-          onPress: () => onPhoto()
+          onPress: () => {
+            AnalyticsEventTracking.eventTrack(
+              BetterSocialEventTracking.ONBOARDING_USERNAME_PROFILE_PIC_ALERT_ADD_PHOTO,
+              {
+                humanId: users?.userId
+              }
+            );
+            onPhoto();
+          }
         },
         {
           text: 'Skip',
-          onPress: () => next()
+          onPress: () => {
+            AnalyticsEventTracking.eventTrack(
+              BetterSocialEventTracking.ONBOARDING_USERNAME_PROFILE_PIC_ALERT_SKIP,
+              {
+                humanId: users?.userId
+              }
+            );
+            next();
+          }
         }
       ]
     );
@@ -275,7 +306,17 @@ const ChooseUsername = () => {
             <Text style={styles.title}>{StringConstant.onboardingChooseUsernameHeadline}</Text>
             <Text style={styles.desc}>{StringConstant.onboardingChooseUsernameSubHeadline}</Text>
             <View style={styles.containerInput}>
-              <TouchableOpacity style={styles.containerAddIcon} onPress={() => onPhoto()}>
+              <TouchableOpacity
+                style={styles.containerAddIcon}
+                onPress={() => {
+                  AnalyticsEventTracking.eventTrack(
+                    BetterSocialEventTracking.ONBOARDING_USERNAME_PROFILE_PIC_CLICKED,
+                    {
+                      humanId: users?.userId
+                    }
+                  );
+                  onPhoto();
+                }}>
                 <View style={{}}>
                   <Image
                     source={{
