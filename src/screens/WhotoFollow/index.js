@@ -22,6 +22,10 @@ import Label from './elements/Label';
 import Loading from '../Loading';
 import TokenStorage from '../../utils/storage/custom/tokenStorage';
 import dimen from '../../utils/dimen';
+import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../libraries/analytics/analyticsEventTracking';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
 import {COLORS} from '../../utils/theme';
@@ -31,12 +35,11 @@ import {Header} from '../../components';
 import {InitialStartupAtom} from '../../service/initialStartup';
 import {ProgressBar} from '../../components/ProgressBar';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
+import {getWhoToFollowList} from '../../service/topics';
 import {registerUser} from '../../service/users';
 import {setImage} from '../../context/actions/users';
 import {setToken} from '../../utils/token';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
-import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
-import {getWhoToFollowList} from '../../service/topics';
 
 const {width} = Dimensions.get('screen');
 
@@ -138,13 +141,14 @@ const WhotoFollow = () => {
     Analytics.logEvent('onb_select_follows_btn_add', {
       onb_whofollow_users_selected: followed
     });
+    AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.ONBOARDING_TOPICS_TOTAL_FOLLOWING, {
+      total: followed?.length
+    });
     const data = {
       users: {
         username: usersState.username,
         human_id: usersState.userId,
         country_code: usersState.countryCode,
-        // human_id: randomString(16),
-        // country_code: 'US',
         profile_pic_path: usersState.photoUrl,
         status: 'A'
       },
@@ -160,9 +164,15 @@ const WhotoFollow = () => {
         const uploadedImageUrl = await ImageUtils.uploadImageWithoutAuth(
           data?.users?.profile_pic_path
         );
+        AnalyticsEventTracking.eventTrack(
+          BetterSocialEventTracking.ONBOARDING_REGISTRATION_UPLOAD_IMAGE_SUCCESS
+        );
         data.users.profile_pic_path = uploadedImageUrl?.data?.url;
         console.log('uploadedImageUrl', uploadedImageUrl);
       } catch (e) {
+        AnalyticsEventTracking.eventTrack(
+          BetterSocialEventTracking.ONBOARDING_REGISTRATION_UPLOAD_IMAGE_FAIL
+        );
         console.log('error upload', e);
       }
     }
@@ -185,6 +195,9 @@ const WhotoFollow = () => {
           } catch (e) {
             crashlytics().recordError(new Error(e));
           }
+          AnalyticsEventTracking.eventTrack(
+            BetterSocialEventTracking.ONBOARDING_REGISTRATION_SUCCESS
+          );
           showMessage({
             message: 'Welcome to Helio',
             type: 'success',
@@ -198,6 +211,9 @@ const WhotoFollow = () => {
           }, 2000);
         } else {
           crashlytics().recordError(new Error(res));
+          AnalyticsEventTracking.eventTrack(
+            BetterSocialEventTracking.ONBOARDING_REGISTRATION_FAILED
+          );
           showMessage({
             message: 'Cannot connect to server, please try again later',
             type: 'danger',
@@ -208,6 +224,7 @@ const WhotoFollow = () => {
       .catch((error) => {
         crashlytics().recordError(new Error(error.response));
         setFetchRegister(false);
+        AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.ONBOARDING_REGISTRATION_FAILED);
         showMessage({
           message: 'Cannot connect to server, please try again later',
           type: 'danger',
