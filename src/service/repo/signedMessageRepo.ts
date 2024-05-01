@@ -15,6 +15,11 @@ type SendPayloadType = {
   attachments?: any;
   replyMessageId?: string;
 };
+type ChangeGroupInfoPayload = {
+  channel_id: string;
+  channel_name?: string;
+  channel_image?: string;
+};
 
 const baseUrl = {
   checkIsTargetAllowingAnonDM: 'chat/channels/check-allow-anon-dm-status',
@@ -25,7 +30,8 @@ const baseUrl = {
   setChannelAsRead: '/chat/channels/read',
   createSignedChat: '/chat/channels-signed',
   getSignedChannelDetail: (channelType: GetstreamChannelType, channelId: string) =>
-    `/chat/channel-detail?channel_type=${channelType}&channel_id=${channelId}`
+    `/chat/channel-detail?channel_type=${channelType}&channel_id=${channelId}`,
+  changeSignedChannelDetail: '/chat/channel-detail'
 };
 
 interface SignedMessageRepoTypes {
@@ -43,6 +49,11 @@ interface SignedMessageRepoTypes {
   setChannelAsRead: (channelId: string, channelType: ChannelTypeEnum) => Promise<boolean>;
   createSignedChat: (body: string[]) => Promise<any>;
   getSignedChannelDetail: (channelType: GetstreamChannelType, channelId: string) => Promise<any>;
+  changeSignedChannelDetail: (
+    channelId: string,
+    channelName?: string,
+    channelImage?: string
+  ) => Promise<any>;
 }
 
 async function checkIsTargetAllowingAnonDM(targetUserId: string) {
@@ -189,6 +200,34 @@ async function getSignedChannelDetail(channelType: GetstreamChannelType, channel
   }
 }
 
+async function changeSignedChannelDetail(
+  channelId: string,
+  channelName?: string,
+  channelImage?: string
+) {
+  const payload: ChangeGroupInfoPayload = {
+    channel_id: channelId
+  };
+  if (channelName) {
+    payload.channel_name = channelName;
+  }
+  if (channelImage) {
+    payload.channel_image = channelImage;
+  }
+
+  try {
+    const response = await api.post(baseUrl.changeSignedChannelDetail, payload);
+    if (response.status === 200) {
+      return Promise.resolve(response.data?.data);
+    }
+
+    return Promise.reject(response.data?.data);
+  } catch (e) {
+    console.log(e?.response);
+    return Promise.reject(e);
+  }
+}
+
 const SignedMessageRepo: SignedMessageRepoTypes = {
   checkIsTargetAllowingAnonDM,
   sendSignedMessage,
@@ -197,7 +236,8 @@ const SignedMessageRepo: SignedMessageRepoTypes = {
   getSingleSignedPostNotifications,
   setChannelAsRead,
   createSignedChat,
-  getSignedChannelDetail
+  getSignedChannelDetail,
+  changeSignedChannelDetail
 };
 
 export default SignedMessageRepo;

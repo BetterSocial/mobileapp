@@ -162,8 +162,10 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
       dummyLoginRbSheetRef.current.close();
     }
     const data = {appUserId, countryCode: 'ID'};
+    const password = StorageUtils.onboardingPassword.get();
+
     setDataHumenId(data, dispatch);
-    demoVerifyUser(appUserId)
+    demoVerifyUser(appUserId, password)
       .then(async (response) => {
         if (response.is_banned) {
           return;
@@ -197,6 +199,7 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
         if (__DEV__) {
           console.log(e);
         }
+        SimpleToast.show(e?.message);
       });
   };
 

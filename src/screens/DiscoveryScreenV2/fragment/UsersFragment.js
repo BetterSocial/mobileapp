@@ -1,19 +1,19 @@
 /* eslint-disable no-use-before-define */
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import {FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import PropTypes from 'prop-types';
+import * as React from 'react';
+import {FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
 
-import DiscoveryAction from '../../../context/actions/discoveryAction';
-import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
-import DomainList from '../elements/DiscoveryItemList';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
-import RecentSearch from '../elements/RecentSearch';
-import {COLORS} from '../../../utils/theme';
 import {Context} from '../../../context/Store';
-import {fonts} from '../../../utils/fonts';
-import {getUserId} from '../../../utils/users';
 import {setFollow, setUnFollow} from '../../../service/profile';
+import {fonts} from '../../../utils/fonts';
+import {COLORS} from '../../../utils/theme';
+import {getUserId} from '../../../utils/users';
+import DomainList from '../elements/DiscoveryItemList';
+import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
+import RecentSearch from '../elements/RecentSearch';
+import useDiscovery from '../hooks/useDiscovery';
 
 const FROM_FOLLOWED_USERS = 'fromfollowedusers';
 const FROM_FOLLOWED_USERS_INITIAL = 'fromfollowedusersinitial';
@@ -25,7 +25,6 @@ const UsersFragment = ({
   isLoadingDiscoveryUser = false,
   isFirstTimeOpen,
   initialUsers = [],
-  setInitialUsers = () => {},
   followedUsers = [],
   setFollowedUsers = () => {},
   unfollowedUsers = [],
@@ -38,21 +37,14 @@ const UsersFragment = ({
   searchText,
   isUser
 }) => {
-  const [discovery, discoveryDispatch] = React.useContext(Context).discovery;
   const [profile] = React.useContext(Context).profile;
   const navigation = useNavigation();
   const [client] = React.useContext(Context).client;
+  const {exhangeFollower, users, updateFollowDiscoveryContext} = useDiscovery();
 
   const route = useRoute();
 
   const [myId, setMyId] = React.useState('');
-
-  const users = React.useMemo(() => {
-    return discovery.initialUsers.map((item) => ({
-      ...item,
-      following: item.following !== undefined ? item.following : item.user_id_follower !== null
-    }));
-  }, [discovery]);
 
   React.useEffect(() => {
     const parseToken = async () => {
@@ -69,7 +61,8 @@ const UsersFragment = ({
       data: {
         user_id: myId,
         other_id: item.user_id,
-        username: item.username
+        username: item.username,
+        following: item.following
       }
     });
   };
@@ -78,59 +71,20 @@ const UsersFragment = ({
     Keyboard.dismiss();
   });
 
-  const exhangeFollower = (newUserLists, willFollow, userId) => {
-    const indexUser = newUserLists.findIndex((item) =>
-      item.user ? item.user.user_id === userId : item.user_id === userId
-    );
-    if (newUserLists[indexUser].user) {
-      newUserLists[indexUser].user.following = !!willFollow;
-      // newUserLists[indexUser].user.user_id_follower = myId;
-    } else {
-      newUserLists[indexUser].following = !!willFollow;
-      // newUserLists[indexUser].user_id_follower = myId;
-    }
-    return newUserLists[indexUser];
-  };
-
-  const mapUser = (newUser) => {
-    return discovery.initialUsers.map((user) => {
-      if (user.user) {
-        if (user.user.user_id === newUser.user.user_id) return newUser;
-      } else if (user.user_id === newUser.user_id) return newUser;
-      return user;
-    });
-  };
-
   const handleUser = async (from, willFollow, item) => {
     if (from === FROM_FOLLOWED_USERS_INITIAL || from === FROM_UNFOLLOWED_USERS_INITIAL) {
-      const newFollowedUsers = [...users];
-      const newUser = exhangeFollower(
-        newFollowedUsers,
-        willFollow,
-        item.user ? item.user.user_id : item.user_id
-      );
-
-      DiscoveryAction.setDiscoveryInitialUsers(mapUser(newUser), discoveryDispatch);
+      updateFollowDiscoveryContext(willFollow, item);
     }
 
     if (from === FROM_FOLLOWED_USERS) {
       const newFollowedUsers = [...followedUsers];
       exhangeFollower(newFollowedUsers, willFollow, item.user ? item.user.user_id : item.user_id);
-
       setFollowedUsers(newFollowedUsers);
     }
-
     if (from === FROM_UNFOLLOWED_USERS) {
       const newUnfollowedUsers = [...unfollowedUsers];
       exhangeFollower(newUnfollowedUsers, willFollow, item.user ? item.user.user_id : item.user_id);
       setUnfollowedUsers(newUnfollowedUsers);
-    }
-
-    if (from === FROM_USERS_INITIAL) {
-      const newFollowedUsers = [...initialUsers];
-      exhangeFollower(newFollowedUsers, willFollow, item.user ? item.user.user_id : item.user_id);
-
-      setInitialUsers(newFollowedUsers);
     }
   };
 
@@ -273,6 +227,7 @@ const UsersFragment = ({
         keyExtractor={(item, index) => index.toString()}
         onEndReached={() => fetchData()}
         onEndReachedThreshold={0.6}
+        keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps="handled"
         style={{backgroundColor: COLORS.almostBlack}}
       />

@@ -1,21 +1,20 @@
 /* eslint-disable consistent-return */
 /* eslint-disable array-callback-return */
+import {useNavigation} from '@react-navigation/native';
 import * as React from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 
-import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
+import {Context} from '../../../context/Store';
+import useIsReady from '../../../hooks/useIsReady';
+import {fonts} from '../../../utils/fonts';
+import {newsDiscoveryContentParamBuilder} from '../../../utils/navigation/paramBuilder';
+import share from '../../../utils/share';
+import {COLORS} from '../../../utils/theme';
+import {getUserId} from '../../../utils/users';
+import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import RecentSearch from '../elements/RecentSearch';
 import RenderItem from '../elements/RenderItem';
-import share from '../../../utils/share';
-import useIsReady from '../../../hooks/useIsReady';
-import {Context} from '../../../context/Store';
-import {fonts} from '../../../utils/fonts';
-import {getUserId} from '../../../utils/users';
-import {newsDiscoveryContentParamBuilder} from '../../../utils/navigation/paramBuilder';
-import {withInteractionsManaged} from '../../../components/WithInteractionManaged';
-import {COLORS} from '../../../utils/theme';
 
 const NewsFragment = ({
   isLoadingDiscoveryNews = false,
@@ -124,7 +123,7 @@ const NewsFragment = ({
     );
 
   return (
-    <ScrollView>
+    <ScrollView keyboardDismissMode="on-drag" keyboardShouldPersistTaps="handled">
       <RecentSearch
         shown={isFirstTimeOpen}
         setSearchText={setSearchText}
@@ -149,7 +148,8 @@ const styles = StyleSheet.create({
   noDataFoundText: {
     alignSelf: 'center',
     justifyContent: 'center',
-    fontFamily: fonts.inter[600]
+    fontFamily: fonts.inter[600],
+    color: COLORS.white
   },
   padding: {
     height: 16

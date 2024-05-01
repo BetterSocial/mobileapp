@@ -63,34 +63,36 @@ const NavHeader = (props) => {
 
   const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 
+  const additionalHeaderHeight =
+    isHeaderHide || initialData?.coverImage !== undefined || coverPath !== null
+      ? dimen.normalizeDimen(12)
+      : 0;
+
   return (
     <View>
-      <View style={{}}>
+      <View>
         <StatusBar barStyle="light-content" />
         <View
-          style={[
-            styles.navContainer(isHeaderHide),
-            {
-              height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER,
-              backgroundColor: COLORS.almostBlack
-            }
-          ]}
+          style={[styles.navContainer(isHeaderHide, additionalHeaderHeight)]}
           imageStyle={{opacity: isHeaderHide ? 0 : 1}}>
           {initialData?.coverImage === undefined && isLoading ? (
-            <Shimmer width={displayWidth} height={dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER} />
+            <Shimmer
+              width={displayWidth}
+              height={dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER + additionalHeaderHeight}
+            />
           ) : (
             <>
               <View
                 style={{
                   width: '100%',
-                  height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
+                  height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER + additionalHeaderHeight
                 }}>
                 <FastImage
                   source={
                     initialData?.coverImage ? {uri: initialData.coverImage} : {uri: coverPath}
                   }
                   style={{
-                    height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
+                    height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER + additionalHeaderHeight
                   }}
                 />
                 {renderBlur && (
@@ -108,43 +110,31 @@ const NavHeader = (props) => {
               </View>
             </>
           )}
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'flex-start',
-              paddingTop: hasSearch ? insets.top : insets.top - dimen.normalizeDimen(8),
-              zIndex: 2,
-              position: 'absolute'
-            }}>
-            <TouchableOpacity onPress={() => backScreen()} style={styles.backbutton}>
-              <MemoIcArrowBackCircle width={normalize(32)} height={normalize(32)} />
-            </TouchableOpacity>
-
-            <Animated.View
+          <View style={styles.headerBarContainer(insets.top)}>
+            <View
               style={{
-                opacity: opacityImage
+                flexDirection: 'row',
+                alignItems: 'center'
               }}>
-              <TopicDomainHeader {...props} />
-            </Animated.View>
-          </View>
-          <View
-            style={[
-              styles.containerAction,
-              {
-                paddingTop: insets.top,
-                paddingRight: dimen.normalizeDimen(20),
-                zIndex: 2,
-                position: 'absolute',
-                right: 0
-              }
-            ]}>
-            {!isFollow && isHeaderHide ? (
-              <ButtonFollow handleSetFollow={onFollowButtonPress} />
-            ) : (
-              <TouchableOpacity onPress={onShareCommunity} style={styles.shareIconStyle}>
-                <ShareIconCircle color="black" width={32} height={32} />
+              <TouchableOpacity onPress={() => backScreen()} style={styles.backButton}>
+                <MemoIcArrowBackCircle width={normalize(32)} height={normalize(32)} />
               </TouchableOpacity>
-            )}
+              <Animated.View
+                style={{
+                  opacity: opacityImage
+                }}>
+                <TopicDomainHeader {...props} />
+              </Animated.View>
+            </View>
+            <View>
+              {!isFollow && isHeaderHide ? (
+                <ButtonFollow handleSetFollow={onFollowButtonPress} />
+              ) : (
+                <TouchableOpacity onPress={onShareCommunity}>
+                  <ShareIconCircle color="black" width={32} height={32} />
+                </TouchableOpacity>
+              )}
+            </View>
           </View>
         </View>
         {!hasSearch && (
@@ -168,13 +158,7 @@ const NavHeader = (props) => {
                   </View>
                 )}
               </Animated.View>
-              <View
-                style={[
-                  styles.containerAction,
-                  {
-                    alignSelf: 'center'
-                  }
-                ]}>
+              <View style={[styles.containerAction]}>
                 <Animated.View style={{opacity: opacityHeaderAnimation}}>
                   {isFollow === undefined && isLoading ? (
                     <Shimmer width={normalize(100)} height={normalize(36)} />
@@ -204,12 +188,7 @@ const NavHeader = (props) => {
       </View>
 
       {hasSearch && (
-        <View
-          style={{
-            width: '100%',
-            borderBottomWidth: 1,
-            borderBottomColor: COLORS.gray210
-          }}>
+        <View style={styles.searchBar}>
           <Search
             searchText={searchText}
             setSearchText={setSearchText}
@@ -260,23 +239,15 @@ NavHeader.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  container: (animatedHeight) => ({
-    width: '100%',
-    height: animatedHeight,
-    backgroundColor: COLORS.gray110,
-    position: 'absolute',
-    zIndex: 80,
-    overflow: 'hidden'
-  }),
-  navContainer: (isHeaderHide, top) => ({
+  navContainer: (isHeaderHide, additionalHeight) => ({
     flexDirection: 'row',
-    height: isHeaderHide
-      ? dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT2
-      : dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT,
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    backgroundColor: 'white',
-    zIndex: 10
+    zIndex: 10,
+    height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER + additionalHeight,
+    backgroundColor: COLORS.almostBlack,
+    borderBottomWidth: isHeaderHide ? 1 : 0,
+    borderBottomColor: COLORS.gray310
   }),
   headerContainer: {
     width: '100%',
@@ -287,10 +258,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: COLORS.almostBlack
   },
-  headerImage: (opacityHeaderAnimation) => ({
+  headerBarContainer: (top) => ({
     width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: top,
+    zIndex: 2,
     position: 'absolute',
-    opacity: opacityHeaderAnimation
+    paddingHorizontal: dimen.normalizeDimen(20),
+    height: dimen.size.TOPIC_FEED_NAVIGATION_HEIGHT_COVER
   }),
   image: (followType) => ({
     width: normalize(48),
@@ -306,10 +283,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: normalizeFontSize(24)
   },
-  backbutton: {
-    paddingRight: 16,
-    justifyContent: 'center',
-    paddingLeft: dimen.normalizeDimen(20)
+  backButton: {
+    paddingRight: dimen.normalizeDimen(20),
+    justifyContent: 'center'
   },
   domain: (isHeaderHide) => ({
     flex: 1,
@@ -322,23 +298,17 @@ const styles = StyleSheet.create({
     zIndex: 99,
     backgroundColor: COLORS.transparent
   }),
-  search: {
-    width: '100%',
-    position: 'absolute',
-    zIndex: 99,
-    backgroundColor: COLORS.transparent,
-    bottom: 0
-  },
   containerAction: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingRight: dimen.normalizeDimen(20)
+    paddingRight: dimen.normalizeDimen(20),
+    alignSelf: 'center'
   },
-  shareIconStyle: {},
-  searchContainerStyle: {
-    position: 'relative',
-    marginBottom: 0
+  searchBar: {
+    width: '100%',
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.gray210
   }
 });
 

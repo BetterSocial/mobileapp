@@ -6,6 +6,7 @@ export enum DatabaseOperationLabel {
   CoreChatSystem_GeneralSystemMessage = 'core_chat_system_general_system_message',
   CoreChatSystem_SaveChat = 'core_chat_system_save_chat',
   CoreChatSystem_SaveUserMember = 'core_chat_system_save_user_member',
+  CoreChatSystem_SaveTopicChannel = 'core_chat_system_save_topic_channel',
 
   FetchChannelDetail_SaveAllChat = 'channel_detail_save_all_chat',
   FetchChannelDetail_RefreshChannelList = 'channel_detail_refresh_channel_list',
@@ -16,7 +17,9 @@ export enum DatabaseOperationLabel {
   ChatScreen_GetSelfAnonUserInfo = 'chat_screen_get_self_anon_user_info',
   ChatScreen_SendChat = 'chat_screen_send_chat',
   ChatScreen_UpdateChannelDescription = 'chat_screen_update_channel_description',
-  ChatScreen_UpdateChatSentStatus = 'chat_screen_update_chat_sent_status'
+  ChatScreen_UpdateChatSentStatus = 'chat_screen_update_chat_sent_status',
+
+  AppBadge_UpdateBadgeNumber = 'app_badge_update_badge_number'
 }
 
 class DatabaseQueue extends BaseQueue {
