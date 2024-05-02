@@ -57,7 +57,6 @@ const Topics = () => {
     });
   };
   React.useEffect(() => {
-    // console.log(topicCollection, 'lusi')
     if (topicCollection.length > 0) {
       setTopics(topicCollection);
     }
@@ -68,7 +67,6 @@ const Topics = () => {
 
   const handleTopicChange = React.useCallback(
     (val, topic, categoryIndex) => {
-      console.log('val', val, 'categoryIndex', categoryIndex, 'topic', topic);
       if (!myTopic[val]) {
         setMyTopic({...myTopic, [val]: val});
       } else {
