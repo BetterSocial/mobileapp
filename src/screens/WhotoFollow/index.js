@@ -82,13 +82,33 @@ const WhotoFollow = () => {
     }
   };
 
-  const onNextPage = async (sectionId) => {
-    const checkSectionId = (item) => {
-      return sectionId === 'other'
-        ? item.viewtype === 'labelothers'
-        : item.id === sectionId || item.location_id === sectionId;
+  const getSectionIndex = (sectionId) => {
+    return users?.findIndex((user) => checkSectionId(user, sectionId));
+  };
+
+  const checkSectionId = (item, sectionId) => {
+    return sectionId === 'other'
+      ? item.viewtype === 'labelothers'
+      : item.id === sectionId || item.location_id === sectionId;
+  };
+
+  const getSectionData = (sectionId) => {
+    const data = users?.find((user) => checkSectionId(user, sectionId));
+    return {
+      id: data?.id || data?.location_id || 'others',
+      label: data?.viewtype
     };
-    const indexSectionId = users.findIndex((i) => checkSectionId(i));
+  };
+
+  const onNextPage = async (sectionId) => {
+    const indexSectionId = users.findIndex((i) => checkSectionId(i, sectionId));
+
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.ONBOARDING_WHO_TO_FOLLOW_SEE_MORE_CLICKED,
+      {
+        data: getSectionData(sectionId)
+      }
+    );
 
     try {
       const copyUsers = [...users];
@@ -125,13 +145,27 @@ const WhotoFollow = () => {
     onLoad();
   }, []);
 
-  const handleSelected = (value) => {
+  const handleSelected = (value, section) => {
+    const sectionId = section?.id || section?.location_id || 'other';
+    const sectionIndex = getSectionIndex(sectionId);
+    const sectionData = getSectionData(sectionId);
+
     const copyFollowed = [...followed];
     const index = followed.indexOf(value);
     if (index > -1) {
       copyFollowed.splice(index, 1);
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.ONBOARDING_WHO_TO_FOLLOW_USER_UNSELECTED
+      );
     } else {
       copyFollowed.push(value);
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.ONBOARDING_WHO_TO_FOLLOW_USER_SELECTED,
+        {
+          categoryIndex: sectionIndex,
+          ...sectionData
+        }
+      );
     }
     setFollowed(copyFollowed);
   };
@@ -263,7 +297,7 @@ const WhotoFollow = () => {
     );
   };
 
-  const renderItem = (item) => {
+  const renderItem = (item, section) => {
     return (
       <ItemUser
         photo={item.profile_pic_path}
@@ -271,7 +305,7 @@ const WhotoFollow = () => {
         username={item.username}
         followed={followed}
         userid={item.user_id}
-        onPress={() => handleSelected(item.user_id)}
+        onPress={() => handleSelected(item.user_id, section)}
         karmaScore={item.karma_score}
       />
     );
@@ -310,7 +344,7 @@ const WhotoFollow = () => {
         keyExtractor={(item, index) => item + index}
         ListFooterComponent={<View style={{height: dimen.normalizeDimen(90)}} />}
         renderSectionFooter={({section}) => renderSectionFooter(section)}
-        renderItem={({item}) => renderItem(item)}
+        renderItem={({item, section}) => renderItem(item, section)}
         renderSectionHeader={({section}) => renderSectionHeader(section)}
       />
       <View style={styles.footer}>

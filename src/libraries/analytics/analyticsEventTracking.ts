@@ -35,9 +35,14 @@ export enum BetterSocialEventTracking {
 
   // ONBOARDING TOPICS SCREEN
   ONBOARDING_TOPICS_TOTAL_FOLLOWING = 'OB-Topics_TopicsNextButton_clicked',
+  ONBOARDING_TOPICS_SELECTED = 'OB-Topics_CommunitesList_selected',
+  ONBOARDING_TOPICS_UNSELECTED = 'OB-Topics_CommunitiesList_unselected',
 
   // ONBOARDING WHO TO FOLLOW SCREEN
   ONBOARDING_WHO_TO_FOLLOW_TOTAL_FOLLOWING = 'OB-FollowUsers_UsersNextButton_clicked',
+  ONBOARDING_WHO_TO_FOLLOW_SEE_MORE_CLICKED = 'OB-FollowUsers_UserListSeeMore_clicked',
+  ONBOARDING_WHO_TO_FOLLOW_USER_SELECTED = 'OB-FollowUsers_UserList_selected',
+  ONBOARDING_WHO_TO_FOLLOW_USER_UNSELECTED = 'OB-FollowUsers_UserList_unselected',
 
   // ONBOARDING REGISTRATION
   ONBOARDING_REGISTRATION_UPLOAD_IMAGE_SUCCESS = 'OB-FollowUsers_API_UploadImageSuccess',
