@@ -57,7 +57,6 @@ const Topics = () => {
     });
   };
   React.useEffect(() => {
-    // console.log(topicCollection, 'lusi')
     if (topicCollection.length > 0) {
       setTopics(topicCollection);
     }
@@ -66,8 +65,8 @@ const Topics = () => {
     getCacheTopic();
   }, []);
 
-  const handleSelectedLanguage = React.useCallback(
-    (val) => {
+  const handleTopicChange = React.useCallback(
+    (val, topic, categoryIndex) => {
       if (!myTopic[val]) {
         setMyTopic({...myTopic, [val]: val});
       } else {
@@ -77,8 +76,13 @@ const Topics = () => {
       const index = copytopicSelected.findIndex((data) => data === val);
       if (index > -1) {
         copytopicSelected = copytopicSelected.filter((data) => data !== val);
+        AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.ONBOARDING_TOPICS_UNSELECTED);
       } else {
         copytopicSelected.push(val);
+        AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.ONBOARDING_TOPICS_SELECTED, {
+          ...topic,
+          categoryIndex
+        });
       }
       setTopicSelected(copytopicSelected);
     },
@@ -101,12 +105,13 @@ const Topics = () => {
     }
   };
 
-  const renderListTopics = ({item, i}) => (
+  const renderListTopics = ({item, i, categoryIndex}) => (
     <ListTopic
       item={item}
       i={i}
       myTopic={myTopic}
-      handleSelectedLanguage={handleSelectedLanguage}
+      handleTopicChange={handleTopicChange}
+      categoryIndex={categoryIndex}
     />
   );
   const onBack = () => {
@@ -144,7 +149,9 @@ const Topics = () => {
                         nestedScrollEnabled>
                         <FlatList
                           data={topic.data}
-                          renderItem={renderListTopics}
+                          renderItem={({item, topicIndex}) =>
+                            renderListTopics({item, i: topicIndex, categoryIndex: index})
+                          }
                           numColumns={Math.floor(topic.data.length / 3) + 1}
                           nestedScrollEnabled
                           scrollEnabled={false}

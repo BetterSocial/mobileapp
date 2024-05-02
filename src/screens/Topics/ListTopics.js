@@ -1,11 +1,12 @@
 import React from 'react';
 import {Pressable, StyleSheet, Text} from 'react-native';
+
 import {COLORS} from '../../utils/theme';
 import {fonts} from '../../utils/fonts';
 
-const ListTopics = ({item, i, myTopic, handleSelectedLanguage}) => (
+const ListTopics = ({item, i, myTopic, handleTopicChange, categoryIndex}) => (
   <Pressable
-    onPress={() => handleSelectedLanguage(item.topic_id)}
+    onPress={() => handleTopicChange(item.topic_id, item, categoryIndex)}
     key={i}
     style={[
       styles.bgTopicSelectNotActive,
