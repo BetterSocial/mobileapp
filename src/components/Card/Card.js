@@ -66,7 +66,7 @@ const Card = (props) => {
 
   const calculateHeight = () => {
     if (contentHeight && typeof contentHeight === 'number') {
-      return contentHeight - heightTopic - textHeight - 20;
+      return contentHeight - heightTopic - textHeight;
     }
     return normalizeFontSizeByWidth(250);
   };

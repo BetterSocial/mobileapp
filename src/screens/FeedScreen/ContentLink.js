@@ -11,7 +11,7 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import Card from '../../components/Card/Card';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import {COLORS} from '../../utils/theme';
-import {fonts, normalizeFontSize, normalizeFontSizeByWidth} from '../../utils/fonts';
+import {fonts, normalize, normalizeFontSize, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {smartRender} from '../../utils/Utils';
 import useContentFeed from './hooks/useContentFeed';
 import useCalculationContentLink from './hooks/useCalculatiuonContentLink';
@@ -37,8 +37,7 @@ const ContentLink = ({
   const sanitizeUrl = message.replace(/(https?:\/\/)?([^.\s]+)?[^.\s]+\.[^\s]+/gi, '').trim();
   const {hashtagAtComponent} = useContentFeed({navigation});
 
-  const {textHeight, heightTopic, handleTextHeight, handleTopicLayout} =
-    useCalculationContentLink();
+  const {textHeight, handleTextHeight, handleTopicLayout} = useCalculationContentLink();
 
   const renderMessageContentLink = () => {
     if (sanitizeUrl?.length === 0) return <></>;
@@ -88,8 +87,9 @@ const ContentLink = ({
               onCardContentPress,
               score,
               item,
-              heightTopic,
+              heightTopic: normalize(60),
               textHeight,
+              contentHeight: dimen.size.FEED_CONTENT_HEIGHT,
               containerStyle: {flex: topics.length > 0 ? 0 : 1}
             })}
           </>

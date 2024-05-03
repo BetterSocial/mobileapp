@@ -229,7 +229,12 @@ const Content = ({
         ) : null}
         {item && item.post_type === POST_TYPE_LINK && (
           <View
-            style={[styles.newsCard, {marginVertical: handleMarginVertical(sanitizeUrl(message))}]}>
+            style={[
+              styles.newsCard,
+              {
+                marginVertical: handleMarginVertical(sanitizeUrl(message))
+              }
+            ]}>
             {smartRender(Card, {
               domain: item.og.domain,
               date: new Date(item.og.date).toLocaleDateString(),
@@ -318,7 +323,10 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.transparent
   },
   contensStyle: (paddingBottom) => ({
-    paddingBottom
+    paddingBottom,
+    borderRightWidth: 1,
+    borderLeftWidth: 1,
+    borderColor: COLORS.darkGray
   }),
   ph4: {
     paddingHorizontal: 4
