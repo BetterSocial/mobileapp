@@ -500,7 +500,7 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
             "borderColor": "#3A4F64",
             "borderRadius": 9,
             "borderWidth": 1,
-            "height": 225,
+            "height": 262.8,
             "marginBottom": 5,
             "overflow": "hidden",
             "paddingBottom": 8,

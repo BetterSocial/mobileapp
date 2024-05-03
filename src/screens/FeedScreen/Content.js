@@ -20,7 +20,7 @@ import {
   POST_TYPE_POLL,
   POST_TYPE_STANDARD
 } from '../../utils/constants';
-import {fonts, normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
+import {fonts, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
 import {getCommentLength} from '../../utils/getstream';
 
@@ -41,7 +41,8 @@ const Content = ({
   const route = useRoute();
   const [textHeight, setTextHeight] = React.useState(null);
   const maxFontSize = normalizeFontSizeByWidth(28);
-  const minFontSize = normalizeFontSizeByWidth(22);
+  const minFontSize = normalizeFontSizeByWidth(16);
+  const [layoutHeight, setLayoutHeight] = React.useState(null);
   const {
     handleCalculation,
     onLayoutTopicChip,
@@ -53,7 +54,6 @@ const Content = ({
   const [amountCut, setAmountCut] = React.useState(0);
   const [textCut, setTextCut] = React.useState(null);
   const [arrText] = React.useState([]);
-  const layoutHeight = dimen.size.FEED_CONTENT_HEIGHT;
   const isIos = Platform.OS === 'ios';
 
   React.useEffect(() => {
@@ -71,6 +71,10 @@ const Content = ({
     item.images_url,
     message
   );
+
+  const handleHeightContainer = ({nativeEvent}) => {
+    setLayoutHeight(nativeEvent.layout.height);
+  };
 
   const isBlurredPost = item?.isBlurredPost;
 
@@ -264,7 +268,10 @@ const Content = ({
   };
 
   return (
-    <Pressable onPress={isBlurredPost ? null : () => onPress()} style={[styles.contentFeed, style]}>
+    <Pressable
+      onLayout={handleHeightContainer}
+      onPress={isBlurredPost ? null : () => onPress()}
+      style={[styles.contentFeed, style]}>
       <BlurredLayer
         withToast={true}
         onPressContent={handleBlurredContent}
