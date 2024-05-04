@@ -138,7 +138,7 @@ const DiscoverySearch = ({
     if (discoverySearchBarRef?.current) {
       setTimeout(() => {
         discoverySearchBarRef?.current?.focus();
-      }, 500);
+      }, 1000);
     }
   }, []);
 

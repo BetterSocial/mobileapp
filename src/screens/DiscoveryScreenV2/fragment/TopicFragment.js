@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import {useNavigation} from '@react-navigation/native';
 import * as React from 'react';
-import {FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 
 import PropTypes from 'prop-types';
 import TopicsProfilePictureEmptyState from '../../../assets/icon/TopicsProfilePictureEmptyState';
@@ -51,16 +51,13 @@ const TopicFragment = ({
       following: item.following !== undefined ? item.following : item.user_id_follower !== null
     }));
   }, [followedTopic]);
+
   const newMapUnfollowedTopics = React.useMemo(() => {
     return unfollowedTopic.map((item) => ({
       ...item,
       following: item.following !== undefined ? item.following : item.user_id_follower !== null
     }));
   }, [unfollowedTopic]);
-
-  const handleScroll = React.useCallback(() => {
-    Keyboard.dismiss();
-  });
 
   const handleTopic = (from, willFollow, item) => {
     if (from === FROM_FOLLOWED_TOPIC_INITIAL || from === FROM_UNFOLLOWED_TOPIC_INITIAL) {
@@ -190,14 +187,14 @@ const TopicFragment = ({
 
     return (
       <FlatList
-        onMomentumScrollBegin={handleScroll}
+        keyboardDismissMode="on-drag"
+        keyboardShouldPersistTaps="handled"
         contentContainerStyle={{paddingBottom: 100}}
         data={data}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
         onEndReached={() => fetchData()}
         onEndReachedThreshold={0.6}
-        keyboardShouldPersistTaps="handled"
       />
     );
   };
