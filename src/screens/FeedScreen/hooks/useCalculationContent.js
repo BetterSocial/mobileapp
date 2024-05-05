@@ -15,13 +15,7 @@ const useCalculationContent = () => {
   ) => {
     const diff = containerHeight - textHeight - heightTopic - heightPoll;
     const averageDiff = diff / containerHeight;
-    if (
-      containerHeight &&
-      textHeight &&
-      post_type !== POST_TYPE_POLL &&
-      post_type !== POST_TYPE_LINK &&
-      image.length === 0
-    ) {
+    if (containerHeight && textHeight && post_type !== POST_TYPE_POLL && image.length === 0) {
       let font = hugeFont * averageDiff;
       let lineHeight = hugeFont * 1.5 * averageDiff;
       font = Math.ceil(font);
