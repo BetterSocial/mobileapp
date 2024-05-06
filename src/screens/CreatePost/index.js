@@ -187,9 +187,6 @@ const CreatePost = () => {
 
   React.useEffect(() => {
     init();
-    if (isInCreatePostTopicScreen) {
-      setTimeout(() => onChangeText(`${message}#${listTopic[0]}`), 500);
-    }
   }, []);
 
   const init = async () => {
