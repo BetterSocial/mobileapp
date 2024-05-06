@@ -60,7 +60,7 @@ exports[`TESTING ChatItemTargetText RENDER continuous should match snapshot 1`] 
         }
       >
         <Text>
-          message
+          message 
         </Text>
       </Text>
     </View>
@@ -176,7 +176,7 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
         }
       >
         <Text>
-          message
+          message 
         </Text>
       </Text>
     </View>

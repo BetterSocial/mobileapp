@@ -15,6 +15,7 @@ import {
 import ChatItemAttachment from './ChatItemAttachment';
 import {LinkableText} from '../../LinkableText';
 import dimen from '../../../utils/dimen';
+import {LinkableText} from '../../LinkableText';
 
 const {width} = Dimensions.get('screen');
 
