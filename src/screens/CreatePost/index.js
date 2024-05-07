@@ -752,6 +752,8 @@ const CreatePost = () => {
                 setIsPollMultipleChoice(ismultiplechoice)
               }
               expiredobject={postExpired[expiredSelect].expiredobject}
+              isAnonym={typeUser}
+              expiration={postExpired[expiredSelect].label}
             />
           )}
           <Gap style={styles.height(26)} />
