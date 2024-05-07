@@ -1,10 +1,10 @@
+import api from '../config';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {ChannelData} from '../../../types/repo/ChannelData';
 import {
   ChannelTypeEnum,
   SignedPostNotification
 } from '../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
-import api from '../config';
 import {GetstreamChannelType} from './types.d';
 
 type SendPayloadType = {
@@ -107,7 +107,6 @@ async function getAllSignedChannels(timeStamp: string | undefined) {
   try {
     const response = await api.get(url);
     if (response.status === 200) {
-      console.log('SUCCESS URL', url);
       return Promise.resolve(response.data?.data);
     }
 
@@ -126,7 +125,6 @@ async function getAllSignedPostNotifications(timeStamp: string | undefined) {
   try {
     const response = await api.get(url);
     if (response.status === 200) {
-      console.log('SUCCESS URL', url);
       return Promise.resolve(response.data?.data);
     }
 
