@@ -9,6 +9,7 @@ import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import useIsReady from '../../../hooks/useIsReady';
 import {fonts} from '../../../utils/fonts';
 import useChatClientHook from '../../../utils/getstream/useChatClientHook';
+import {convertTopicNameToTopicPageScreenParam} from '../../../utils/string/StringUtils';
 import {COLORS} from '../../../utils/theme';
 import DomainList from '../elements/DiscoveryItemList';
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
