@@ -71,6 +71,7 @@ import {getSpecificCache} from '../../utils/cache';
 import {getUrl, isContainUrl} from '../../utils/Utils';
 import {getUserId} from '../../utils/users';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
+import {Context} from '../../context';
 
 const IS_GEO_SELECT_ENABLED = false;
 
@@ -106,7 +107,7 @@ const CreatePost = () => {
   const [dataImage, setDataImage] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [loadingPost, setLoadingPost] = React.useState(false);
-  const [dataProfile, setDataProfile] = React.useState({});
+  const [profile] = React.useContext(Context).profile;
   const [geoList, setGeoList] = React.useState([]);
   const [geoSelect, setGeoSelect] = React.useState(0);
   const [locationId, setLocationIdState] = React.useState('');
@@ -246,39 +247,13 @@ const CreatePost = () => {
     }
   ];
 
-  const fetchMyProfile = async () => {
-    setLoading(true);
-    const userId = await getUserId();
-    if (userId) {
-      const result = await getMyProfile(userId);
-      if (result.code === 200) {
-        setDataProfile(result.data);
-        setLoading(false);
-        handleLocation(result.data);
-      }
-
-      setLoading(false);
-    }
-  };
-
-  React.useEffect(() => {
-    getSpecificCache(PROFILE_CACHE, async (res) => {
-      if (!res) {
-        fetchMyProfile();
-      } else {
-        setDataProfile(res);
-        handleLocation(res);
-      }
-    });
-  }, []);
-
   const handleLocation = async (res) => {
     setGeoList([...location, ...res?.locations]);
     setLoading(false);
   };
 
   React.useEffect(() => {
-    fetchMyProfile();
+    handleLocation();
   }, []);
 
   React.useEffect(() => {
@@ -710,9 +685,11 @@ const CreatePost = () => {
             setTypeUser={setTypeUser}
             isAnonymous={typeUser}
             anonUserInfo={anonUserInfo}
-            username={dataProfile.username ? dataProfile.username : 'Loading . . .'}
+            username={profile?.myProfile?.username}
             photo={
-              dataProfile.profile_pic_path ? {uri: dataProfile.profile_pic_path} : ProfileDefault
+              profile?.myProfile?.profile_pic_path
+                ? {uri: profile?.myProfile?.profile_pic_path}
+                : ProfileDefault
             }
             onPress={() => {
               onChangeText('');
