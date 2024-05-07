@@ -111,6 +111,7 @@ const useFollowUserV2Hook = (tab: WhichTab = 'signed') => {
       } else {
         await setFollow(data);
       }
+      __helperCallOtherProfileData(item?.id);
     } catch (e) {
       const action = initialFollowStatus?.isFollowing ? 'unfollow' : 'follow';
       SimpleToast.show(`Failed to ${action} user. Please try again later`);
