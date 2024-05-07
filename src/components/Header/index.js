@@ -79,7 +79,8 @@ const styles = StyleSheet.create({
     paddingLeft: 10
   },
   flex: {
-    flex: 1
+    flex: 1,
+    alignItems: 'center'
   },
   nullBackIcon: {
     width: 20,
