@@ -768,7 +768,7 @@ const CreatePost = () => {
             topic={listTopic.length > 0}
             listTopic={renderListTopic()}
             label="Add Communities"
-            labelStyle={styles.hastagText}
+            labelStyle={styles.hashtagText}
             onPress={openTopic}
           />
           <Gap style={styles.height(16)} />
@@ -859,8 +859,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     overflow: 'scroll'
   },
-  hastagText: {
-    color: COLORS.gray110,
+  hashtagText: {
+    color: COLORS.gray410,
     fontSize: 14,
     fontFamily: fonts.inter[400]
   },
