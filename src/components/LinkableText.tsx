@@ -9,16 +9,13 @@ interface Props {
 
 export const LinkableText: React.FC<Props> = ({text, ...props}) => {
   const handlePress = (url: string) => {
-    Linking.canOpenURL(url).then((supported) => {
-      if (supported) {
-        const regex = /(http|https)/;
-        if (!regex.test(url)) {
-          const urls = `http://${url}`;
-          Linking.openURL(urls);
-        }
-        Linking.openURL(url);
-      }
-    });
+    const regex = /(http|https)/;
+    if (!regex.test(url)) {
+      const urls = `http://${url}`;
+      Linking.openURL(urls);
+    } else {
+      Linking.openURL(url);
+    }
   };
 
   // Regular expression to match URLs
