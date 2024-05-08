@@ -21,7 +21,8 @@ function CreatePollContainer({
   selectedtime = {day: 1, hour: 0, minute: 0},
   ontimechanged = () => {},
   polls,
-  expiredobject = {day: 7, hour: 24}
+  expiredobject = {day: 7, hour: 24},
+  isAnonym
 }) {
   const arrayContentToString = (arr) => {
     const newArray = arr.reduce((acc, current) => {
@@ -54,12 +55,18 @@ function CreatePollContainer({
           onpollchanged={(v) => {
             onsinglepollchanged(v, index);
           }}
+          isAnonym={isAnonym}
         />
       ))}
 
       {polls.length < MAX_POLLING_ALLOWED && (
         <TouchableOpacity onPress={() => onaddpoll()} style={S.addpollitemcontainer}>
-          <MemoIcPlus width={16} height={16} style={S.addpollitemplusicon} />
+          <MemoIcPlus
+            width={16}
+            height={16}
+            style={S.addpollitemplusicon}
+            fill={isAnonym ? COLORS.anon_secondary : COLORS.signed_secondary}
+          />
         </TouchableOpacity>
       )}
 
@@ -68,7 +75,9 @@ function CreatePollContainer({
       <TouchableOpacity style={S.polldurationbutton} onPress={() => setIsDurationModalShown(true)}>
         <View style={S.row}>
           <Text style={S.fillparenttext}>Duration</Text>
-          <Text style={S.polldurationbuttontext}>{getDurationTimeText(selectedtime)}</Text>
+          <View style={S.polldurationbuttonview(isAnonym)}>
+            <Text style={S.polldurationbuttontext}>{getDurationTimeText(selectedtime)}</Text>
+          </View>
           <MemoIc_arrow_right width={8} height={12} style={S.rightarrow} />
         </View>
       </TouchableOpacity>

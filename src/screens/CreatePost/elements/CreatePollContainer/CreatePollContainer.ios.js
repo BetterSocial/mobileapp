@@ -21,7 +21,9 @@ function CreatePollContainer({
   selectedtime = {day: 1, hour: 0, minute: 0},
   ontimechanged = () => {},
   polls,
-  expiredobject = {day: 7, hour: 24}
+  expiredobject = {day: 7, hour: 24},
+  isAnonym,
+  expiration
 }) {
   const arrayContentToString = (arr) => {
     const newArray = arr.reduce((acc, current) => {
@@ -63,13 +65,18 @@ function CreatePollContainer({
           onpollchanged={(v) => {
             onsinglepollchanged(v, index);
           }}
+          isAnonym={isAnonym}
         />
       ))}
 
       {polls.length < MAX_POLLING_ALLOWED && (
         <TouchableOpacity onPress={() => onaddpoll()} style={S.addpollitemcontainer}>
-          {/* TODO: Garry warna sesuai mode */}
-          <MemoIcPlus width={16} height={16} style={S.addpollitemplusicon} fill={COLORS.white} />
+          <MemoIcPlus
+            width={20}
+            height={20}
+            style={S.addpollitemplusicon}
+            fill={isAnonym ? COLORS.anon_secondary : COLORS.signed_secondary}
+          />
         </TouchableOpacity>
       )}
 
@@ -78,7 +85,9 @@ function CreatePollContainer({
       <TouchableOpacity style={S.polldurationbutton} onPress={() => setIsDurationModalShown(true)}>
         <View style={S.row}>
           <Text style={S.fillparenttext}>Duration</Text>
-          <Text style={S.polldurationbuttontext}>{getDurationTimeText(selectedtime)}</Text>
+          <View style={S.polldurationbuttonview(isAnonym)}>
+            <Text style={S.polldurationbuttontext}>{getDurationTimeText(selectedtime)}</Text>
+          </View>
           <IconArowRight width={8} height={12} style={S.rightarrow} fill={COLORS.white} />
         </View>
       </TouchableOpacity>
@@ -101,7 +110,15 @@ function CreatePollContainer({
 
       <Modal isVisible={isDurationModalShown}>
         <View style={S.parentcolumncontainer}>
-          <Text style={S.setdurationtext}>Set Duration</Text>
+          <View style={S.setdurationview}>
+            <Text style={S.setdurationtext}>Set Duration</Text>
+            {expiration !== 'Never' && (
+              <Text style={S.setdurationdesc}>
+                The poll duration has to be shorter than the expiration time of your post, currently
+                set to {expiration}.
+              </Text>
+            )}
+          </View>
           <View style={S.modalrowcontainer}>
             <View style={S.pickercontainer}>
               <Text style={S.pickerlabeltext}>Days</Text>
@@ -112,7 +129,7 @@ function CreatePollContainer({
                   }}
                   selectedValue={pickerDay}>
                   {days.map((day, index) => (
-                    <Picker.Item key={index} label={day} value={day} />
+                    <Picker.Item key={index} label={day} value={day} color={COLORS.white} />
                   ))}
                 </Picker>
               </View>
@@ -126,13 +143,13 @@ function CreatePollContainer({
                   }}
                   selectedValue={pickerHour}>
                   {hour.map((h, index) => (
-                    <Picker.Item key={index} label={h} value={h} />
+                    <Picker.Item key={index} label={h} value={h} color={COLORS.white} />
                   ))}
                 </Picker>
               </View>
             </View>
             <View style={S.pickercontainer}>
-              <Text style={S.pickerlabeltext}>Min</Text>
+              <Text style={S.pickerlabeltext}>Minutes</Text>
               <View style={{}}>
                 <Picker
                   onValueChange={(itemValue) => {
@@ -140,7 +157,7 @@ function CreatePollContainer({
                   }}
                   selectedValue={pickerMinute}>
                   {minute.map((m, index) => (
-                    <Picker.Item key={index} label={m} value={m} />
+                    <Picker.Item key={index} label={m} value={m} color={COLORS.white} />
                   ))}
                 </Picker>
               </View>

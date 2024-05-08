@@ -14,13 +14,13 @@ export default function PollItem({
   onremovepoll = () => {},
   onpollchanged = () => {},
   showdeleteicon,
-  showcharactercount = false
+  showcharactercount = false,
+  isAnonym
 }) {
   const [isTextInputFocus, setIsTextInputFocus] = React.useState(false);
 
   return (
-    // TODO: Garry warna focus sesuai mode
-    <View style={isTextInputFocus ? S.focuspollitemcontainer : S.pollitemcontainer}>
+    <View style={isTextInputFocus ? S.focuspollitemcontainer(isAnonym) : S.pollitemcontainer}>
       <TextInput
         placeholderTextColor={COLORS.gray410}
         placeholder={`Choice ${index + 1}`}
@@ -66,15 +66,15 @@ const S = StyleSheet.create({
     paddingHorizontal: dimen.normalizeDimen(8)
   },
 
-  focuspollitemcontainer: {
+  focuspollitemcontainer: (isAnonym) => ({
     display: 'flex',
     flexDirection: 'row',
     borderWidth: 1,
     borderRadius: 10,
     marginVertical: dimen.normalizeDimen(4),
     paddingHorizontal: dimen.normalizeDimen(8),
-    borderColor: COLORS.signed_primary
-  },
+    borderColor: isAnonym ? COLORS.anon_primary : COLORS.signed_primary
+  }),
 
   pollitemtextinput: {
     flex: 1,
