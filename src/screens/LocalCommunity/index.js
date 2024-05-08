@@ -16,18 +16,21 @@ import PinIcon from '../../../assets/icons/pin.svg';
 import PlusIcon from '../../../assets/icons/plus.svg';
 import StringConstant from '../../utils/string/StringConstant';
 import TrashIcon from '../../../assets/icons/trash.svg';
+import dimen from '../../utils/dimen';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../libraries/analytics/analyticsEventTracking';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
+import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {Header} from '../../components';
 import {ProgressBar} from '../../components/ProgressBar';
 import {SearchModal} from '../../components/Search';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {locationValidation} from '../../utils/Utils';
 import {post} from '../../api/server';
 import {setLocalCommunity} from '../../context/actions/localCommunity';
-import dimen from '../../utils/dimen';
-import {fonts, normalizeFontSize} from '../../utils/fonts';
-import {COLORS} from '../../utils/theme';
 
 const {width} = Dimensions.get('screen');
 const LocalCommunity = () => {
@@ -95,6 +98,21 @@ const LocalCommunity = () => {
       });
       return item.location_id;
     });
+
+    if (location?.length === 0) {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.ONBOARDING_LOCATION_FIRST_SELECTED,
+        val
+      );
+    }
+
+    if (location?.length === 1) {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.ONBOARDING_LOCATION_SECOND_SELECTED,
+        val
+      );
+    }
+
     await setLocation(tempLocation);
     await setLocationPost(returnTempLocation);
     await setLocationLog(locLog);
@@ -118,7 +136,7 @@ const LocalCommunity = () => {
             <Text style={styles.textLocation}>{locationValidation(item)}</Text>
           </View>
           <TouchableNativeFeedback
-            onPress={() => handleDelete(item.location_id)}
+            onPress={() => handleDelete(item.location_id, index)}
             background={TouchableNativeFeedback.Ripple(COLORS.gray110, true, 20)}>
             <TrashIcon width={18} height={20} fill={COLORS.white} />
           </TouchableNativeFeedback>
@@ -127,7 +145,7 @@ const LocalCommunity = () => {
     );
   };
 
-  const handleDelete = async (val) => {
+  const handleDelete = async (val, listIndex) => {
     const tempLocation = [...location];
     const index = tempLocation.findIndex((data) => data.location_id === val);
     if (index > -1) {
@@ -144,6 +162,17 @@ const LocalCommunity = () => {
     await setLocation(tempLocation);
     await setLocationPost(returnTempLocation);
     await setLocationLog(locLog);
+
+    if (listIndex === 0)
+      return AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.ONBOARDING_LOCATION_FIRST_DELETED
+      );
+
+    if (listIndex === 1) {
+      return AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.ONBOARDING_LOCATION_SECOND_DELETED
+      );
+    }
   };
   const next = () => {
     if (location.length > 0) {
@@ -163,10 +192,28 @@ const LocalCommunity = () => {
   const onPressFirstLocation = (status) => {
     setIsVisibleFirstLocation(status);
     setSearch('');
+    if (status) {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.ONBOARDING_LOCATION_FIRST_OPEN_SEARCH
+      );
+    } else if (!status && !location?.at(0)) {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.ONBOARDING_LOCATION_DRAWER_CLOSED
+      );
+    }
   };
 
   const onPressSecondLocation = (status) => {
     setIsVisibleSecondLocation(status);
+    if (status) {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.ONBOARDING_LOCATION_FIRST_OPEN_SEARCH
+      );
+    } else if (!status && !location?.at(1)) {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.ONBOARDING_LOCATION_DRAWER_CLOSED
+      );
+    }
     setSearch('');
   };
 
