@@ -797,7 +797,7 @@ const CreatePost = () => {
           )}
           <Gap style={styles.height(25)} />
           <Button styles={styles.btnPost(typeUser)} disabled={isButtonDisabled()} onPress={postV2}>
-            Post
+            {params.isCreateCommunity ? 'Post & Create Community' : 'Post'}
           </Button>
           <Gap style={styles.height(18)} />
           <SheetMedia
