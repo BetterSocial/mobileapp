@@ -21,28 +21,17 @@ const useCreatePostHook = (isAnonymous) => {
   const getAnonUserInfo = React.useCallback(async () => {
     try {
       const response = await AnonUserInfoRepo.getPostAnonUserInfo();
-      if (response.isSuccess) {
-        setAnonUserInfo(response.data);
-      } else {
-        showMessage({
-          message: response.error,
-          type: 'danger'
-        });
-      }
+      setAnonUserInfo(response.data);
     } catch (e) {
       console.log('Error in getAnonUserInfo', e);
       showMessage({
-        message: e,
+        message: JSON.stringify(e),
         type: 'danger'
       });
     }
   }, []);
 
   const refreshAnonUserInfo = React.useCallback(() => {
-    getAnonUserInfo();
-  }, []);
-
-  React.useEffect(() => {
     getAnonUserInfo();
   }, []);
 
