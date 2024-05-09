@@ -20,6 +20,9 @@ import TokenStorage from '../../utils/storage/custom/tokenStorage';
 import getRemoteConfig from '../../service/getRemoteConfig';
 import useSignin from './hooks/useSignin';
 import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../libraries/analytics/analyticsEventTracking';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
@@ -76,6 +79,9 @@ const SignIn = () => {
               token,
               anonymousToken
             });
+            AnalyticsEventTracking.eventTrack(
+              BetterSocialEventTracking.HUMAN_ID_SUCCESS_EXISTING_ACCOUNT
+            );
           } catch (e) {
             crashlytics().recordError(new Error(e));
           }
@@ -84,10 +90,16 @@ const SignIn = () => {
           removeLocalStorege('userId');
           navigation.dispatch(StackActions.replace('ChooseUsername'));
           setUserId(response?.data?.humanIdData?.appUserId);
+          AnalyticsEventTracking.eventTrack(
+            BetterSocialEventTracking.HUMAN_ID_SUCCESS_NEW_REGISTRATION
+          );
         }
       } catch (e) {
         SimpleToast.show(e?.message, SimpleToast.SHORT);
         crashlytics().recordError(new Error(e?.message));
+        AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.HUMAN_ID_FAILED_VERIFICATION, {
+          error: e
+        });
         if (__DEV__) {
           console.log('error');
           console.log(e);
@@ -113,6 +125,7 @@ const SignIn = () => {
   const handleLogin = () => {
     try {
       logIn();
+      AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.HUMAN_ID_BUTTON_CLICKED);
     } catch (e) {
       console.log('test', e);
     }
