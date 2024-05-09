@@ -247,8 +247,8 @@ const CreatePost = () => {
     }
   ];
 
-  const handleLocation = async (res) => {
-    setGeoList([...location, ...res?.locations]);
+  const handleLocation = async () => {
+    setGeoList([...location]);
     setLoading(false);
   };
 
