@@ -247,8 +247,8 @@ const CreatePost = () => {
     }
   ];
 
-  const handleLocation = async (res) => {
-    setGeoList([...location, ...res?.locations]);
+  const handleLocation = async () => {
+    setGeoList([...location]);
     setLoading(false);
   };
 
@@ -357,8 +357,10 @@ const CreatePost = () => {
     setHashtags(newArr);
     setListTopicChat(newChat);
 
-    if (!newArr.map((i) => i.topic).includes(params?.topic)) {
-      setSelectedTopic(null);
+    if (params?.topic) {
+      if (!newArr.map((i) => i.topic).includes(params?.topic)) {
+        setSelectedTopic(null);
+      }
     }
   };
   const onSetExpiredSelect = (v) => {
