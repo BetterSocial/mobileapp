@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {View, Text, StyleSheet, Animated, Pressable} from 'react-native';
+import {useNavigation} from '@react-navigation/core';
 
 import IconSearch from '../../../assets/icons/Ic_search';
 import IconTopic from '../../../assets/icons/ic_topic';
@@ -9,6 +10,8 @@ import {COLORS, SIZES} from '../../../utils/theme';
 import dimen from '../../../utils/dimen';
 
 const Search = ({animatedValue, onContainerClicked = () => {}, getSearchLayout}) => {
+  const navigation = useNavigation();
+
   const onSearchLayout = (event) => {
     const {height} = event.nativeEvent.layout;
     if (getSearchLayout) {
@@ -27,7 +30,7 @@ const Search = ({animatedValue, onContainerClicked = () => {}, getSearchLayout})
             <Text style={styles.inputText}>{StringConstant.discoverySearchBarPlaceholder}</Text>
           </View>
         </Pressable>
-        <Pressable onPress={() => {}} style={styles.btnCreate}>
+        <Pressable onPress={() => navigation.navigate('CreateCommunity')} style={styles.btnCreate}>
           <Text style={styles.btnCreateText}>Create new community</Text>
           <IconTopic fill={COLORS.signed_primary} />
         </Pressable>
