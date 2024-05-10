@@ -1,9 +1,10 @@
 /* eslint-disable no-use-before-define */
 import {useNavigation, useRoute} from '@react-navigation/native';
 import PropTypes from 'prop-types';
-import * as React from 'react';
 import {FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
 
+import React, {useState} from 'react';
+import Accordion from 'react-native-collapsible/Accordion';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import {Context} from '../../../context/Store';
 import {setFollow, setUnFollow} from '../../../service/profile';
@@ -114,16 +115,50 @@ const UsersFragment = ({
     if (searchText.length > 0) fetchData();
   };
 
-  const renderRecentSearch = (index) => {
-    return (
-      index === 0 &&
-      !withoutRecent && (
-        <RecentSearch
-          shown={showRecentSearch || isFirstTimeOpen}
-          setSearchText={setSearchText}
-          setIsFirstTimeOpen={setIsFirstTimeOpen}
+  const SECTIONS = [
+    {
+      title: 'First',
+      content: 'Lorem ipsum...'
+    }
+  ];
+
+  const AccordionView = ({data}) => {
+    const [activeSections, setActiveSections] = useState([]);
+
+    const renderSectionTitle = () => {
+      return <View style={styles.content}></View>;
+    };
+
+    const renderHeader = (data, index) => {
+      return (
+        <DiscoveryTitleSeparator
+          key="user-title-separator"
+          text="People you follow"
+          showArrow
+          rotateArrow={activeSections?.some((actived) => actived === index)}
         />
-      )
+      );
+    };
+
+    const renderContent = () => {
+      return (
+        <View style={styles.content}>{data?.map((item, index) => renderItem({index, item}))}</View>
+      );
+    };
+
+    const updateSections = (activeSectionsParams) => {
+      setActiveSections(activeSectionsParams);
+    };
+
+    return (
+      <Accordion
+        sections={SECTIONS}
+        activeSections={activeSections}
+        renderSectionTitle={renderSectionTitle}
+        renderHeader={renderHeader}
+        renderContent={renderContent}
+        onChange={updateSections}
+      />
     );
   };
 
@@ -131,8 +166,7 @@ const UsersFragment = ({
     if (item.separator) {
       return (
         <>
-          {renderRecentSearch(index)}
-          <DiscoveryTitleSeparator key="user-title-separator" text="Suggested Users" />
+          <DiscoveryTitleSeparator key="user-title-separator" text="People you might know" />
         </>
       );
     }
@@ -141,7 +175,6 @@ const UsersFragment = ({
 
     return (
       <>
-        {renderRecentSearch(index)}
         <DomainList
           key={index}
           onPressBody={() => handleOnPress(item.user || item)}
@@ -212,14 +245,34 @@ const UsersFragment = ({
       ? withoutRecent
         ? initialUsers.length !== 0
           ? initialUsers
-          : [...initFollowingUsers, {separator: true}, ...initUnfollowingUsers]
-        : [...initFollowingUsers, {separator: true}, ...initUnfollowingUsers]
+          : [{separator: true}, ...initUnfollowingUsers]
+        : [{separator: true}, ...initUnfollowingUsers]
       : unfollowedUsers.length !== 0
-      ? [...followedUsers, {separator: true}, ...unfollowedUsers]
+      ? [{separator: true}, ...unfollowedUsers]
+      : [];
+
+    const firstData = isFirstTimeOpen
+      ? withoutRecent
+        ? initialUsers.length !== 0
+          ? initialUsers
+          : [...initFollowingUsers]
+        : [...initFollowingUsers]
+      : unfollowedUsers.length !== 0
+      ? [...followedUsers]
       : followedUsers;
 
     return (
       <FlatList
+        ListHeaderComponent={() => (
+          <>
+            <RecentSearch
+              shown={showRecentSearch || isFirstTimeOpen}
+              setSearchText={setSearchText}
+              setIsFirstTimeOpen={setIsFirstTimeOpen}
+            />
+            <AccordionView data={firstData} />
+          </>
+        )}
         onMomentumScrollBegin={handleScroll}
         contentContainerStyle={{paddingBottom: 100}}
         data={data || []}
