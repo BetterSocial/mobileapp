@@ -193,7 +193,7 @@ class ChatSchema implements BaseDbSchema {
       ON A.channel_id = C.id
       WHERE A.status = 'pending';`;
 
-    const [{rows}] = await db.executeSql(selectQuery, ['pending Messages']);
+    const [{rows}] = await db.executeSql(selectQuery);
     return Promise.resolve(rows.raw().map(this.fromDatabaseObject));
   }
 
