@@ -4,6 +4,7 @@ import {v4 as uuid} from 'uuid';
 import BaseDbSchema from './BaseDbSchema';
 import UserSchema from './UserSchema';
 import {ModifyAnonymousChatData} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
+import ChannelListSchema from './ChannelListSchema';
 
 class ChatSchema implements BaseDbSchema {
   id: string;
@@ -172,6 +173,28 @@ class ChatSchema implements BaseDbSchema {
     const [{rows}] = await db.executeSql(selectQuery, [id]);
     if (rows.length === 0) return Promise.resolve(null);
     return Promise.resolve(this.fromDatabaseObject(rows.raw()[0]));
+  }
+
+  static async getPendingMessages(db: SQLiteDatabase): Promise<ChatSchema[]> {
+    const selectQuery = `SELECT A.*,
+      B.username, 
+      B.country_code, 
+      B.created_at as user_created_at, 
+      B.updated_at as user_updated_at, 
+      B.last_active_at, 
+      B.profile_picture, 
+      B.bio, 
+      B.is_banned,
+      C.channel_type
+      FROM ${ChatSchema.getTableName()} A
+      INNER JOIN ${UserSchema.getTableName()} B
+      ON A.user_id = B.user_id
+      INNER JOIN ${ChannelListSchema.getTableName()} C
+      ON A.channel_id = C.id
+      WHERE A.status = 'pending';`;
+
+    const [{rows}] = await db.executeSql(selectQuery, ['pending Messages']);
+    return Promise.resolve(rows.raw().map(this.fromDatabaseObject));
   }
 
   static async isExists(db: SQLiteDatabase, id: string): Promise<ChatSchema> {

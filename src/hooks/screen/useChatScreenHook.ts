@@ -24,6 +24,7 @@ import {QueueJobPriority} from '../../core/queue/BaseQueue';
 import {getAnonymousUserId, getUserId} from '../../utils/users';
 import {randomString} from '../../utils/string/StringUtils';
 import {useGetAllMessage} from './services/chatScreenHooks';
+import {useSendAnonMessage, useSendSignedMessage} from '../../service/chat';
 
 interface ScrollContextProps {
   selectedMessageId: string | null;
@@ -144,39 +145,16 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     return Promise.all(attachmentPromises);
   };
 
-  const sendChatSignedMutation = useMutation<any, unknown, any, unknown>(
-    (payload) =>
-      SignedMessageRepo.sendSignedMessage(
-        payload.channelId,
-        payload.message,
-        payload.channelType,
-        payload.attachments,
-        payload.replyMessageId
-      ),
-    {
-      retry: true
-    }
-  );
-  const sendChatAnonMutation = useMutation<any, unknown, any, unknown>(
-    (payload) =>
-      AnonymousMessageRepo.sendAnonymousMessage(
-        payload.channelId,
-        payload.message,
-        payload.attachments,
-        payload.replyMessageId
-      ),
-    {
-      retry: true
-    }
-  );
+  const sendChatSignedMutation = useSendSignedMessage();
+  const sendChatAnonMutation = useSendAnonMessage();
 
   const sendChat = async (
     message: string = randomString(20),
     attachments: [] = [],
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     iteration = 0,
     sendingChatSchema: ChatSchema | null = null
   ) => {
-
     let currentChatSchema = sendingChatSchema;
     let userId = await getUserId();
     const myAnonymousId = await getAnonymousUserId();
@@ -198,7 +176,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
             currentChatSchema = await ChatSchema.generateSendingChat(
               randomId,
               userId,
-              selectedChannel?.id,
+              selectedChannel?.id || '',
               message,
               attachments,
               localDb,
@@ -245,7 +223,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
           message,
           attachments: newAttachments,
           replyMessageId: null
-        });
+        } as any);
       } else {
         response = await sendChatSignedMutation.mutateAsync({
           channelId: selectedChannel?.id,
@@ -253,7 +231,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
           channelType,
           attachments: newAttachments,
           replyMessageId: null
-        });
+        } as any);
       }
       queue.addPriorityJob({
         operationLabel: DatabaseOperationLabel.ChatScreen_UpdateChatSentStatus,
@@ -268,7 +246,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       });
     } catch (e) {
       console.log('[ERROR] error sending chat', e);
-      if (e?.response?.data?.status === 'Channel is blocked') return;
+      // if (e?.response?.data?.status === 'Channel is blocked') return;
     }
   };
 
