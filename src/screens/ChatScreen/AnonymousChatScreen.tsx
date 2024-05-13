@@ -61,7 +61,7 @@ const AnonymousChatScreen = () => {
     selfAnonUserInfo,
     goBackFromChatScreen,
     goToChatInfoScreen,
-    sendChat,
+    sendChatMutation,
     updateChatContinuity
   } = useChatScreenHook(ANONYMOUS);
 
@@ -135,7 +135,7 @@ const AnonymousChatScreen = () => {
       />
       <View style={styles.inputContainer}>
         <InputMessageV2
-          onSendButtonClicked={sendChat}
+          onSendButtonClicked={sendChatMutation.mutate}
           type={ANONYMOUS}
           emojiCode={selfAnonUserInfo?.anon_user_info_emoji_code}
           emojiColor={selfAnonUserInfo?.anon_user_info_color_code}

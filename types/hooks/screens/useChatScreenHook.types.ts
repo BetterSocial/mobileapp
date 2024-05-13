@@ -1,3 +1,4 @@
+import {UseMutationResult} from 'react-query';
 import ChatSchema from '../../../src/database/schema/ChatSchema';
 import UserSchema from '../../../src/database/schema/UserSchema';
 import {ChannelList} from '../../database/schema/ChannelList.types';
@@ -12,6 +13,7 @@ interface UseChatScreenHook {
   selfAnonUserInfo: UserSchema | null;
   handleUserName: (item: ChatSchema) => string;
   updateChatContinuity: (chatsData: ChatSchema[]) => ChatSchema[];
+  sendChatMutation: UseMutationResult<void, unknown, string | undefined, unknown>;
 }
 
 export default UseChatScreenHook;
