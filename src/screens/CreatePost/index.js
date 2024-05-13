@@ -90,7 +90,7 @@ const CreatePost = () => {
   const sheetBackRef = React.useRef();
 
   const [typeUser, setTypeUser] = React.useState(false);
-  const {headerTitle, initialTopic, isInCreatePostTopicScreen, anonUserInfo} =
+  const {headerTitle, initialTopic, isInCreatePostTopicScreen, anonUserInfo, setSelectedTopic} =
     useCreatePostHook(typeUser);
   const {params} = useRoute();
   const [message, setMessage] = React.useState('');
@@ -356,6 +356,12 @@ const CreatePost = () => {
     setListTopic(newArr);
     setHashtags(newArr);
     setListTopicChat(newChat);
+
+    if (params?.topic) {
+      if (!newArr.map((i) => i.topic).includes(params?.topic)) {
+        setSelectedTopic(null);
+      }
+    }
   };
   const onSetExpiredSelect = (v) => {
     setExpiredSelect(v);
@@ -809,7 +815,6 @@ const CreatePost = () => {
             topics={listTopic}
             chatTopics={listTopicChat}
             onClose={() => sheetTopicRef.current.close()}
-            // saveOnClose={(v, chatTopic) => onSaveTopic(v, chatTopic)}
           />
           <SheetExpiredPost
             refExpired={sheetExpiredRef}

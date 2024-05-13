@@ -12,11 +12,13 @@ import AnonUserInfoRepo from '../../service/repo/anonUserInfoRepo';
 const useCreatePostHook = (isAnonymous) => {
   const {params = {}} = useRoute();
   const {topic} = params;
+  const [selectedTopic, setSelectedTopic] = React.useState(topic);
   const [anonUserInfo, setAnonUserInfo] = React.useState(null);
+  const [headerTitle, setHeaderTitle] = React.useState(
+    selectedTopic ? `Create Post in #${selectedTopic}` : 'Create Post'
+  );
 
-  const headerTitle = topic ? `Create Post in #${topic}` : 'Create Post';
-
-  const isInCreatePostTopicScreen = !!topic;
+  const isInCreatePostTopicScreen = !!selectedTopic;
 
   const getAnonUserInfo = React.useCallback(async () => {
     try {
@@ -39,12 +41,17 @@ const useCreatePostHook = (isAnonymous) => {
     if (!isAnonymous) getAnonUserInfo();
   }, [isAnonymous]);
 
+  React.useEffect(() => {
+    setHeaderTitle(selectedTopic ? `Create Post in #${selectedTopic}` : 'Create Post');
+  }, [selectedTopic]);
+
   return {
     headerTitle,
-    initialTopic: topic ? [topic] : [],
+    initialTopic: selectedTopic ? [selectedTopic] : [],
     isInCreatePostTopicScreen,
     refreshAnonUserInfo,
-    anonUserInfo
+    anonUserInfo,
+    setSelectedTopic
   };
 };
 
