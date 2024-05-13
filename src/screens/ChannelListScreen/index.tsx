@@ -11,7 +11,6 @@ import GroupChatChannelItem from '../../components/ChatList/GroupChatChannelItem
 import MessageChannelItem from '../../components/AnonymousChat/MessageChannelItem';
 import PostNotificationChannelItem from '../../components/AnonymousChat/PostNotificationChannelItem';
 import Search from './elements/Search';
-import useFollowUser from './hooks/useFollowUser';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import useRootChannelListHook from '../../hooks/screen/useRootChannelListHook';
 import useSignedChannelListScreenHook from '../../hooks/screen/useSignedChannelListHook';
@@ -21,7 +20,6 @@ import {COLORS} from '../../utils/theme';
 const ChannelListScreen = ({route}) => {
   const {refresh} = useLocalDatabaseHook();
   const {checkNotificationPermission} = useRootChannelListHook();
-  const {handleFollow, isInitialFollowing} = useFollowUser();
   const {profile} = useUserAuthHook();
   const navigation = useNavigation();
   const isFocused = navigation.isFocused();
@@ -46,17 +44,7 @@ const ChannelListScreen = ({route}) => {
 
   const renderChannelItem = ({item}) => {
     if (item?.channelType === 'PM') {
-      const isFromAnonymous = item?.rawJson?.channel?.channel_type === 4;
-      const hasFollowButton = !isFromAnonymous && !isInitialFollowing(item);
-
-      return (
-        <MessageChannelItem
-          item={item}
-          onChannelPressed={() => goToChatScreen(item)}
-          hasFollowButton={hasFollowButton}
-          handleFollow={() => handleFollow(item)}
-        />
-      );
+      return <MessageChannelItem item={item} onChannelPressed={() => goToChatScreen(item)} />;
     }
 
     if (item?.channelType === 'POST_NOTIFICATION') {

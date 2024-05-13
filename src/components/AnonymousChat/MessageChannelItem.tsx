@@ -4,7 +4,8 @@ import * as React from 'react';
 
 import BaseChannelItem from './BaseChannelItem';
 import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
-import useProfileHook from '../../hooks/core/profile/useProfileHook';
+import useFollowUserV2Hook from '../../hooks/core/users/useFollowUserV2Hook';
+import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
 import {BaseChannelItemTypeProps} from '../../../types/component/AnonymousChat/BaseChannelItem.types';
 import {ChannelList} from '../../../types/database/schema/ChannelList.types';
 import {MessageChannelItemProps} from '../../../types/component/AnonymousChat/MessageChannelItem.types';
@@ -12,11 +13,12 @@ import {calculateTime} from '../../utils/time';
 
 const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement = ({
   item,
-  onChannelPressed,
-  hasFollowButton = false,
-  handleFollow
+  onChannelPressed
 }) => {
-  const {signedProfileId} = useProfileHook();
+  const {signedProfileId} = useUserAuthHook();
+  const {followStatus, getOtherProfileFollowStatus, followUserAction} =
+    useFollowUserV2Hook('signed');
+  const {handleTextSystem} = useChatUtilsHook('SIGNED');
 
   const determineChatType = (data: ChannelList) => {
     const isAnonymous = Boolean(data?.channelType === 'ANON_PM');
@@ -36,7 +38,6 @@ const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement
     return item?.user?.isMe ?? false;
   };
 
-  const {handleTextSystem} = useChatUtilsHook();
   const type = determineChatType(item);
   const isMe = checkIsMe(item, type);
 
@@ -49,6 +50,16 @@ const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement
       }
     : null;
 
+  const onFollowUser = () => {
+    followUserAction(item);
+  };
+
+  React.useEffect(() => {
+    if (!dbAnonUserInfo && item?.channelType === 'PM') {
+      getOtherProfileFollowStatus(item?.user?.id);
+    }
+  }, []);
+
   return (
     <BaseChannelItem
       type={type}
@@ -60,8 +71,10 @@ const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement
       onPress={onChannelPressed}
       unreadCount={item?.unreadCount}
       isMe={isMe}
-      hasFollowButton={hasFollowButton}
-      handleFollow={handleFollow}
+      hasFollowButton={followStatus?.isFollowing === false || followStatus?.isFollowingFromAction}
+      // hasFollowButton={true}
+      showFollowingButton={followStatus?.isFollowingFromAction}
+      handleFollow={onFollowUser}
       channelType={item?.channelType}
       dbAnonUserInfo={dbAnonUserInfo}
     />

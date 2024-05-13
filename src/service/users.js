@@ -237,3 +237,20 @@ export const checkFollowStatusBatch = async (targetUserIds = [], axiosOptions = 
     );
   }
 };
+
+export const checkFollowStatus = async (channelId) => {
+  if (!channelId) return Promise.reject(new Error('Target User ID is empty'));
+
+  try {
+    const result = await api.get(`/users/check-follow-by-channelId?channelId=${channelId}`);
+    if (result?.status === 200) {
+      return Promise.resolve(result?.data?.data);
+    }
+
+    return Promise.reject(result?.data?.message);
+  } catch (e) {
+    return Promise.reject(
+      e?.response?.data?.message || "Can't check follow status, please try again later"
+    );
+  }
+};
