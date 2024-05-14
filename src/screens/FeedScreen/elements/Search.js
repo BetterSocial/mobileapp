@@ -31,8 +31,8 @@ const Search = ({animatedValue, onContainerClicked = () => {}, getSearchLayout})
           </View>
         </Pressable>
         <Pressable onPress={() => navigation.navigate('CreateCommunity')} style={styles.btnCreate}>
-          <Text style={styles.btnCreateText}>Create new community</Text>
           <IconTopic fill={COLORS.signed_primary} />
+          <Text style={styles.btnCreateText}>Start a new{'\n'}community</Text>
         </Pressable>
       </View>
     </Animated.View>
@@ -92,21 +92,19 @@ const styles = StyleSheet.create({
     paddingBottom: dimen.normalizeDimen(7)
   }),
   btnCreate: {
-    borderWidth: 1,
-    borderColor: COLORS.signed_primary,
+    backgroundColor: COLORS.gray110,
     borderRadius: 8,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: dimen.normalizeDimen(4),
-    paddingHorizontal: dimen.normalizeDimen(8)
+    height: 34,
+    width: 94
   },
   btnCreateText: {
-    fontSize: normalizeFontSize(12),
+    fontSize: normalizeFontSize(10),
     fontFamily: fonts.inter[600],
     color: COLORS.signed_primary,
-    width: 56,
-    marginRight: dimen.normalizeDimen(2)
+    marginLeft: dimen.normalizeDimen(6)
   }
 });
 

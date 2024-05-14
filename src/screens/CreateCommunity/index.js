@@ -322,6 +322,6 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(10),
     fontFamily: fonts.inter[400],
     textAlign: 'center',
-    color: COLORS.gray500
+    color: COLORS.gray510
   }
 });
