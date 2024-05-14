@@ -45,7 +45,7 @@ const AnonymousUsername = (props) => {
     );
   }
 
-  return <Text style={[styles.feedUsername, props.style]}>Anonymous</Text>;
+  return <Text style={[styles.feedUsername(isFeed), props.style]}>Loading...</Text>;
 };
 
 export default AnonymousUsername;

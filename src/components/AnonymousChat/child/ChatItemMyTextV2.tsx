@@ -18,6 +18,7 @@ import {
 } from './ChatItemAttachmentStyles';
 import ChatItemAttachment from './ChatItemAttachment';
 import dimen from '../../../utils/dimen';
+import {LinkableText} from '../../LinkableText';
 
 const {width} = Dimensions.get('screen');
 
@@ -163,7 +164,7 @@ const ChatItemMyTextV2 = ({
           </View>
         )}
         {attachments.length > 0 && <ChatItemAttachment attachments={attachments} />}
-        {attachments.length <= 0 && <Text style={styles.text}>{message}</Text>}
+        {attachments.length <= 0 && <LinkableText style={styles.text} text={message} />}
 
         {renderIcon()}
       </View>

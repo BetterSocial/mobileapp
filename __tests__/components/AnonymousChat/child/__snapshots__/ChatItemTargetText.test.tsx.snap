@@ -46,19 +46,24 @@ exports[`TESTING ChatItemTargetText RENDER continuous should match snapshot 1`] 
       ]
     }
   >
-    <Text
-      style={
-        Object {
-          "color": "#FFFFFF",
-          "fontFamily": "Inter-Regular",
-          "fontSize": 16,
-          "lineHeight": 24,
-        }
-      }
+    <View
       testID="chat-item-message"
     >
-      message
-    </Text>
+      <Text
+        style={
+          Object {
+            "color": "#FFFFFF",
+            "fontFamily": "Inter-Regular",
+            "fontSize": 16,
+            "lineHeight": 24,
+          }
+        }
+      >
+        <Text>
+          message 
+        </Text>
+      </Text>
+    </View>
   </View>
 </View>
 `;
@@ -157,19 +162,24 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
         time
       </Text>
     </View>
-    <Text
-      style={
-        Object {
-          "color": "#FFFFFF",
-          "fontFamily": "Inter-Regular",
-          "fontSize": 16,
-          "lineHeight": 24,
-        }
-      }
+    <View
       testID="chat-item-message"
     >
-      message
-    </Text>
+      <Text
+        style={
+          Object {
+            "color": "#FFFFFF",
+            "fontFamily": "Inter-Regular",
+            "fontSize": 16,
+            "lineHeight": 24,
+          }
+        }
+      >
+        <Text>
+          message 
+        </Text>
+      </Text>
+    </View>
   </View>
 </View>
 `;

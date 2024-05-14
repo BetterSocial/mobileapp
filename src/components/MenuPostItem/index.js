@@ -10,8 +10,6 @@ const MenuPostItem = ({icon, label, labelStyle, onPress, topic, listTopic}) => {
       <Pressable style={styles.containerTopic} onPress={onPress} hitSlop={{bottom: 0, top: 0}}>
         <View style={styles.content}>
           <TouchableOpacity onPress={onPress}>{icon}</TouchableOpacity>
-          {/* TODO: Garry gray410 */}
-          {/* <Text style={[styles.text, labelStyle]}>Select Communities</Text> */}
           {listTopic}
         </View>
       </Pressable>

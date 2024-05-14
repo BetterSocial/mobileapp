@@ -85,7 +85,7 @@ const UserProfile = ({
         <View style={styles.profile}>
           <Image source={AnonymousProfile} width={32} height={32} style={styles.image} />
           <View>
-            <Text style={styles.username}>Anonymous</Text>
+            <Text style={styles.username}>Loading...</Text>
             <Text style={styles.desc}>Username not visible</Text>
           </View>
         </View>

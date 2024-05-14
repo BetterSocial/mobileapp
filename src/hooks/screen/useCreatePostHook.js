@@ -12,31 +12,26 @@ import AnonUserInfoRepo from '../../service/repo/anonUserInfoRepo';
 const useCreatePostHook = (isAnonymous) => {
   const {params = {}} = useRoute();
   const {topic, isCreateCommunity} = params;
+  const [selectedTopic, setSelectedTopic] = React.useState(topic);
   const [anonUserInfo, setAnonUserInfo] = React.useState(null);
+  const [headerTitle, setHeaderTitle] = React.useState(
+    isCreateCommunity
+      ? 'Create first post'
+      : selectedTopic
+      ? `Create Post in #${selectedTopic}`
+      : 'Create Post'
+  );
 
-  const headerTitle = isCreateCommunity
-    ? 'Create first post'
-    : topic
-    ? `Create Post in #${topic}`
-    : 'Create Post';
-
-  const isInCreatePostTopicScreen = !!topic;
+  const isInCreatePostTopicScreen = !!selectedTopic;
 
   const getAnonUserInfo = React.useCallback(async () => {
     try {
       const response = await AnonUserInfoRepo.getPostAnonUserInfo();
-      if (response.isSuccess) {
-        setAnonUserInfo(response.data);
-      } else {
-        showMessage({
-          message: response.error,
-          type: 'danger'
-        });
-      }
+      setAnonUserInfo(response.data);
     } catch (e) {
       console.log('Error in getAnonUserInfo', e);
       showMessage({
-        message: e,
+        message: JSON.stringify(e),
         type: 'danger'
       });
     }
@@ -47,19 +42,20 @@ const useCreatePostHook = (isAnonymous) => {
   }, []);
 
   React.useEffect(() => {
-    getAnonUserInfo();
-  }, []);
-
-  React.useEffect(() => {
     if (!isAnonymous) getAnonUserInfo();
   }, [isAnonymous]);
 
+  React.useEffect(() => {
+    setHeaderTitle(selectedTopic ? `Create Post in #${selectedTopic}` : 'Create Post');
+  }, [selectedTopic]);
+
   return {
     headerTitle,
-    initialTopic: topic ? [topic] : [],
+    initialTopic: selectedTopic ? [selectedTopic] : [],
     isInCreatePostTopicScreen,
     refreshAnonUserInfo,
-    anonUserInfo
+    anonUserInfo,
+    setSelectedTopic
   };
 };
 
