@@ -2,11 +2,12 @@
 import {useNavigation, useRoute} from '@react-navigation/native';
 import PropTypes from 'prop-types';
 import * as React from 'react';
-import {FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
 
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import {Context} from '../../../context/Store';
-import {setFollow, setUnFollow} from '../../../service/profile';
+import useCreateChat from '../../../hooks/screen/useCreateChat';
+import {checkUserBlock, setFollow, setUnFollow} from '../../../service/profile';
 import {fonts} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
 import {getUserId} from '../../../utils/users';
@@ -41,6 +42,8 @@ const UsersFragment = ({
   const navigation = useNavigation();
   const [client] = React.useContext(Context).client;
   const {exhangeFollower, users, updateFollowDiscoveryContext} = useDiscovery();
+  const [loadingDM, setLoadingDM] = React.useState(false);
+  const {createSignChat} = useCreateChat();
 
   const route = useRoute();
 
@@ -139,14 +142,49 @@ const UsersFragment = ({
 
     const isUnfollowed = item.user ? !item.user.following : !item.following;
 
+    const handleOpenProfile = async (item) => {
+      if (profile?.myProfile?.user_id === item?.user_id) {
+        return null;
+      }
+
+      return navigation.push('OtherProfile', {
+        data: {
+          user_id: profile.myProfile.user_id,
+          other_id: item?.user_id || item?.userId,
+          username: item?.user?.name || item?.user?.username || item.username
+        }
+      });
+    };
+
+    const checkUserIsBlockHandle = async () => {
+      try {
+        setLoadingDM(true);
+        const sendData = {
+          user_id: item?.user_id || item?.userId
+        };
+        const members = [];
+        members.push(profile?.myProfile?.user_id, item?.user_id || item?.userId);
+        const processGetBlock = await checkUserBlock(sendData);
+        if (!processGetBlock.data.data.blocked && !processGetBlock.data.data.blocker) {
+          return createSignChat(members, item);
+        }
+        return handleOpenProfile(item);
+      } catch (e) {
+        console.log('error:', e);
+      }
+    };
+
     return (
       <>
         {renderRecentSearch(index)}
         <DomainList
+          isFromUserFragment={true}
           key={index}
           onPressBody={() => handleOnPress(item.user || item)}
           handleSetFollow={() => handleFollow(from, true, item.user || item)}
-          handleSetUnFollow={() => handleFollow(from, false, item.user || item)}
+          handleSetUnFollow={() => {
+            checkUserIsBlockHandle();
+          }}
           item={{
             name: item.user ? item.user.username : item.username,
             image: item.user ? item.user.profile_pic_path : item.profile_pic_path,
@@ -246,8 +284,25 @@ const UsersFragment = ({
         <Text style={styles.noDataFoundText}>No users found</Text>
       </View>
     );
-
-  return <View>{renderUsersItem()}</View>;
+  return (
+    <View>
+      {loadingDM && (
+        <View
+          style={{
+            position: 'absolute',
+            zIndex: 1,
+            width: '100%',
+            height: '100%',
+            justifyContent: 'center',
+            alignContent: 'center',
+            alignSelf: 'center'
+          }}>
+          <ActivityIndicator size="large" />
+        </View>
+      )}
+      {renderUsersItem()}
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
