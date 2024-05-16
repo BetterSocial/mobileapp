@@ -84,7 +84,7 @@ const DomainList = (props) => {
         <View style={styles.followContainer}>
           <View style={styles.buttonFollowing}>
             {isFromUserFragment ? (
-              <MemoIc_senddm height={18} width={18} color={COLORS.gray410} />
+              <MemoIc_senddm height={20} width={20} color={COLORS.signed_primary} />
             ) : (
               <Text style={styles.textButtonFollowing}>{isCommunity ? 'Joined' : 'Following'}</Text>
             )}
