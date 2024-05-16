@@ -122,6 +122,7 @@ const TopicFragment = ({
     const renderHeader = (data, index) => {
       return (
         <DiscoveryTitleSeparator
+          withBorderBottom={true}
           key="user-title-separator"
           text="Your Communities"
           showArrow
