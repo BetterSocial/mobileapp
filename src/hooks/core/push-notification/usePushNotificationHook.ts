@@ -16,6 +16,7 @@ import useUserAuthHook from '../auth/useUserAuthHook';
 import TokenStorage, {ITokenEnum} from '../../../utils/storage/custom/tokenStorage';
 import {getAnonymousUserId, getUserId} from '../../../utils/users';
 import {getMessageDetail} from '../../../service/repo/messageRepo';
+import useChatScreenHook from '../../screen/useChatScreenHook';
 
 const usePushNotificationHook = () => {
   const isIos = Platform.OS === 'ios';
@@ -25,6 +26,7 @@ const usePushNotificationHook = () => {
   const {localDb} = useLocalDatabaseHook();
   const {fetchChannelDetail, setSelectedChannel} = useChatUtilsHook();
   const {updateAppBadgeFromDB} = useAppBadgeHook();
+  const {setIsLoadingFetchAllMessage} = useChatScreenHook();
 
   const [, setProfileAtom] = useRecoilState(profileAtom);
 
@@ -170,6 +172,7 @@ const usePushNotificationHook = () => {
     if (localDb) {
       messaging().setBackgroundMessageHandler(async (remoteMessage) => {
         if (remoteMessage.data?.type === 'message.new') {
+          setIsLoadingFetchAllMessage(true);
           const response = await ChannelList.getById(
             localDb,
             remoteMessage.data?.channel_id as string
@@ -198,7 +201,7 @@ const usePushNotificationHook = () => {
               createdAt: message.created_at,
               updatedAt: message.created_at,
               rawJson: {},
-              attachmentJson: message.attachment,
+              attachmentJson: message.attachments,
               user: message.user,
               status: 'sent',
               isMe: false,
@@ -215,7 +218,7 @@ const usePushNotificationHook = () => {
               createdAt: remoteMessage.data?.created_at,
               updatedAt: remoteMessage.data?.created_at,
               rawJson: {},
-              attachmentJson: remoteMessage.data?.attachment,
+              attachmentJson: remoteMessage.data?.attachments,
               user: null,
               status: remoteMessage.data?.status,
               isMe: false,
@@ -223,6 +226,7 @@ const usePushNotificationHook = () => {
             });
             await chatSchema.save(localDb);
           }
+          setIsLoadingFetchAllMessage(false);
         }
 
         updateAppBadgeFromDB(localDb);
