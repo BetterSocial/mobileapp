@@ -126,9 +126,9 @@ const BioAndChat = (props) => {
                   bioLine += '\n';
                 }
 
-                if (isValidUrl) return <LinkableText text={bioLine} />;
+                if (isValidUrl(bioLine)) return <LinkableText text={bioLine} />;
 
-                return <Text key={bioLine}>{bioLine}</Text>;
+                return <Text key={`${bioLine}-${index}`}>{bioLine}</Text>;
               })}
             </Text>
           </Pressable>

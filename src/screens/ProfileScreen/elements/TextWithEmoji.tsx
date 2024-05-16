@@ -26,7 +26,7 @@ export function TextWithEmoji({
         }
 
         if (isValidUrl(item)) {
-          return <LinkableText text={item} key={item} />;
+          return <LinkableText text={item} key={`${item}-${index}`} />;
         }
 
         return (
