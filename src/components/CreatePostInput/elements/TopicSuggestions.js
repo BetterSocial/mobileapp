@@ -7,13 +7,8 @@ import {fonts} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
 
 const TopicSuggestions = ({
-  topicChats = [],
   message = '',
-  topics = [],
   topicSearch = [],
-  setTopicChats = () => {},
-  setTopics = () => {},
-  setHashtags = () => {},
   setPositionKeyboard = () => {},
   setMessage = () => {},
   setTopicSearch = () => {},
@@ -33,11 +28,8 @@ const TopicSuggestions = ({
   };
 
   const onTopicSuggestionClicked = (item) => {
-    const topicItem = convertString(item.name.toLowerCase(), ' ', '');
     const newMessage = reformatStringByPosition(item.name.toLowerCase(), message);
-    topics.splice(topics.length - 1, 1, topicItem);
     setPositionKeyboard('never');
-    setTopics(topics);
     handleStateHashtag(newMessage);
     setMessage(newMessage);
     setTopicSearch([]);

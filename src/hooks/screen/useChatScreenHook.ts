@@ -6,6 +6,7 @@ import _ from 'lodash';
 import SimpleToast from 'react-native-simple-toast';
 import {v4 as uuid} from 'uuid';
 
+import {useMutation} from 'react-query';
 import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../database/schema/ChannelListSchema';
 import ChatSchema from '../../database/schema/ChatSchema';
@@ -23,6 +24,7 @@ import {QueueJobPriority} from '../../core/queue/BaseQueue';
 import {getAnonymousUserId, getUserId} from '../../utils/users';
 import {randomString} from '../../utils/string/StringUtils';
 import {useGetAllMessage} from './services/chatScreenHooks';
+import {useSendAnonMessage, useSendSignedMessage} from '../../service/chat';
 
 interface ScrollContextProps {
   selectedMessageId: string | null;
@@ -143,19 +145,16 @@ function useChatScreenHook(type?: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     return Promise.all(attachmentPromises);
   };
 
+  const sendChatSignedMutation = useSendSignedMessage();
+  const sendChatAnonMutation = useSendAnonMessage();
+
   const sendChat = async (
     message: string = randomString(20),
     attachments: [] = [],
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     iteration = 0,
     sendingChatSchema: ChatSchema | null = null
   ) => {
-    const MAX_ITERATIONS = 5;
-
-    if (iteration > MAX_ITERATIONS) {
-      SimpleToast.show("Can't send message, please check your connection");
-      return;
-    }
-
     let currentChatSchema = sendingChatSchema;
     let userId = await getUserId();
     const myAnonymousId = await getAnonymousUserId();
@@ -177,7 +176,7 @@ function useChatScreenHook(type?: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
             currentChatSchema = await ChatSchema.generateSendingChat(
               randomId,
               userId,
-              selectedChannel?.id,
+              selectedChannel?.id || '',
               message,
               attachments,
               localDb,
@@ -219,20 +218,20 @@ function useChatScreenHook(type?: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
 
       let response;
       if (type === 'ANONYMOUS') {
-        response = await AnonymousMessageRepo.sendAnonymousMessage(
-          selectedChannel?.id,
+        response = await sendChatAnonMutation.mutateAsync({
+          channelId: selectedChannel?.id,
           message,
-          newAttachments,
-          null
-        );
+          attachments: newAttachments,
+          replyMessageId: null
+        } as any);
       } else {
-        response = await SignedMessageRepo.sendSignedMessage(
-          selectedChannel?.id,
+        response = await sendChatSignedMutation.mutateAsync({
+          channelId: selectedChannel?.id,
           message,
           channelType,
-          newAttachments,
-          null
-        );
+          attachments: newAttachments,
+          replyMessageId: null
+        } as any);
       }
       queue.addPriorityJob({
         operationLabel: DatabaseOperationLabel.ChatScreen_UpdateChatSentStatus,
@@ -246,13 +245,14 @@ function useChatScreenHook(type?: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
         }
       });
     } catch (e) {
-      if (e?.response?.data?.status === 'Channel is blocked') return;
-
-      setTimeout(async () => {
-        await sendChat(message, attachments, iteration + 1, currentChatSchema);
-      }, 1000);
+      console.log('[ERROR] error sending chat', e);
+      // if (e?.response?.data?.status === 'Channel is blocked') return;
     }
   };
+
+  const sendChatMutation = useMutation(sendChat, {
+    retry: true
+  });
 
   const updateChatContinuity = (chatsData: ChatSchema[]) => {
     const updatedChats = chatsData.map((currentChat, currentIndex) => {
@@ -290,6 +290,7 @@ function useChatScreenHook(type?: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     sendChat,
     updateChatContinuity,
     setIsLoadingFetchAllMessage
+    sendChatMutation
   };
 }
 

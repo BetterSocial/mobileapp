@@ -2,10 +2,14 @@ import Config from 'react-native-config';
 /* eslint-disable no-useless-catch */
 import {StreamChat} from 'stream-chat';
 
+import {useMutation} from 'react-query';
 import anonymousApi from './anonymousConfig';
 import api from './config';
 import TokenStorage, {ITokenEnum} from '../utils/storage/custom/tokenStorage';
 import {getUserId} from '../utils/users';
+import ChatSchema from '../database/schema/ChatSchema';
+import SignedMessageRepo from './repo/signedMessageRepo';
+import AnonymousMessageRepo from './repo/anonymousMessageRepo';
 
 const chatClient = new StreamChat(Config.STREAM_API_KEY);
 const createChannel = async (channelType, members, channelName) => {
@@ -326,6 +330,72 @@ const leaveGroup = async ({channelId}) => {
   }
 };
 
+function useSendSignedMessage(options) {
+  return useMutation(
+    (payload) =>
+      SignedMessageRepo.sendSignedMessage(
+        payload.channelId,
+        payload.message,
+        payload.channelType,
+        payload.attachments,
+        payload.replyMessageId
+      ),
+    {
+      retry: true,
+      ...options
+    }
+  );
+}
+function useSendAnonMessage(options) {
+  return useMutation(
+    (payload) =>
+      AnonymousMessageRepo.sendAnonymousMessage(
+        payload.channelId,
+        payload.message,
+        payload.attachments,
+        payload.replyMessageId
+      ),
+    {
+      retry: true,
+      ...options
+    }
+  );
+}
+
+const manualResendPendingMessages = async (localDb, message, anonMutation, signedMutation) => {
+  const currentChat = await ChatSchema.getByid(localDb, message?.id);
+  let response;
+  if (message.channel_type === 'ANON_PM') {
+    response = await anonMutation.mutateAsync({
+      channelId: message?.channelId,
+      message: message?.message,
+      attachments: message.attachmentJson,
+      replyMessageId: null
+    });
+  } else {
+    response = await signedMutation.mutateAsync({
+      channelId: message?.channelId,
+      message: message?.message,
+      channelType: 0,
+      attachments: message.attachmentJson,
+      replyMessageId: null
+    });
+    await currentChat.updateChatSentStatus(localDb, response);
+  }
+};
+
+const resendPendingMessages = async (localDb, anonMutation, signedMutation) => {
+  try {
+    const pendingMessages = await ChatSchema.getPendingMessages(localDb);
+    const promises = pendingMessages?.map((message) => {
+      return manualResendPendingMessages(localDb, message, anonMutation, signedMutation);
+    });
+    await Promise.all(promises);
+  } catch (e) {
+    console.log('[Error] failed get pending chats', e);
+  }
+};
+
 export {
   createChannel,
   sendSystemMessage,
@@ -340,5 +410,8 @@ export {
   getAllowAnonDmStatus,
   addMemberGroup,
   removeMemberGroup,
-  leaveGroup
+  leaveGroup,
+  resendPendingMessages,
+  useSendSignedMessage,
+  useSendAnonMessage
 };
