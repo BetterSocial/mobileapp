@@ -8,8 +8,10 @@ import ToggleSwitch from '../../../components/ToggleSwitch';
 import useSaveAnonChatHook from '../../../database/hooks/useSaveAnonChatHook';
 import {ANON_PM, SIGNED} from '../../../hooks/core/constant';
 import {COLORS} from '../../../utils/theme';
+import {LinkableText} from '../../../components/LinkableText';
 import {Loading} from '../../../components';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
+import {isValidUrl} from '../../../utils/string/StringUtils';
 import {sendAnonymousDMOtherProfile, sendSignedDMOtherProfile} from '../../../service/chat';
 
 const CHANNEL_BLOCKED = 'Channel is blocked';
@@ -108,6 +110,8 @@ const BioAndChat = (props) => {
     }
   };
 
+  const sanitizeNewLineBio = bio?.split('\n');
+
   return (
     <View style={styles.bioAndSendChatContainer}>
       <Loading visible={loadingSendDM} />
@@ -117,7 +121,15 @@ const BioAndChat = (props) => {
         ) : (
           <Pressable onPress={openBio}>
             <Text linkStyle={styles.seeMore} style={styles.bioText}>
-              {bio}
+              {sanitizeNewLineBio?.map((bioLine, index) => {
+                if (index < sanitizeNewLineBio?.length - 1) {
+                  bioLine += '\n';
+                }
+
+                if (isValidUrl) return <LinkableText text={bioLine} />;
+
+                return <Text key={bioLine}>{bioLine}</Text>;
+              })}
             </Text>
           </Pressable>
         )}
