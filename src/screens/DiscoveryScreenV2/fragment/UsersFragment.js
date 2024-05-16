@@ -132,6 +132,7 @@ const UsersFragment = ({
     const renderHeader = (data, index) => {
       return (
         <DiscoveryTitleSeparator
+          withBorderBottom={true}
           key="user-title-separator"
           text="People you follow"
           showArrow
