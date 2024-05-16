@@ -12,6 +12,7 @@ interface UseChatScreenHook {
   selfAnonUserInfo: UserSchema | null;
   handleUserName: (item: ChatSchema) => string;
   updateChatContinuity: (chatsData: ChatSchema[]) => ChatSchema[];
+  setIsLoadingFetchAllMessage: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default UseChatScreenHook;

@@ -31,7 +31,7 @@ interface ScrollContextProps {
 }
 export const ScrollContext = React.createContext<ScrollContextProps | null>(null);
 
-function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
+function useChatScreenHook(type?: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const {localDb, refresh, otherListener} = useLocalDatabaseHook();
   const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen, setChannelAsRead} =
     useChatUtilsHook(type);
@@ -288,7 +288,8 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     goBackFromChatScreen,
     goToChatInfoScreen,
     sendChat,
-    updateChatContinuity
+    updateChatContinuity,
+    setIsLoadingFetchAllMessage
   };
 }
 
