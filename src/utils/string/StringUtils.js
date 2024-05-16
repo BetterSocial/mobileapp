@@ -588,6 +588,17 @@ const handleUserName = (item, selectedChannel) => {
   return getOfficialAnonUsername(selectedChannel);
 };
 
+/**
+ *
+ * @param {string} url
+ * @returns {boolean}
+ */
+const isValidUrl = (url) => {
+  const urlRegex = /^((?:https?:\/\/)?[^./]+(?:\.[^./]+)+(?:\/.*)?)$/;
+
+  return urlRegex.test(url?.toLocaleLowerCase());
+};
+
 export {
   capitalizeFirstText,
   convertString,
@@ -603,6 +614,7 @@ export {
   getSingularOrPluralText,
   handleUserName,
   isPollExpired,
+  isValidUrl,
   NO_POLL_UUID,
   randomString,
   removeStringAfterSpace,
