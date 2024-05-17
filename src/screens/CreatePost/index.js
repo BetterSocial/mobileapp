@@ -135,7 +135,7 @@ const CreatePost = () => {
     hour: 0,
     minute: 0
   });
-  const [expiredSelect, setExpiredSelect] = React.useState(3);
+  const [expiredSelect, setExpiredSelect] = React.useState(params.isCreateCommunity ? 3 : 2);
   const [postExpired] = React.useState([
     {
       label: '24 hours',

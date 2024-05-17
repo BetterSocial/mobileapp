@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   wrapperSearch: {
     flexDirection: 'row',
     backgroundColor: COLORS.gray110,
-    marginRight: dimen.normalizeDimen(12),
+    marginRight: dimen.normalizeDimen(8),
     borderRadius: SIZES.base,
     alignSelf: 'center',
     height: 34
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: 34,
-    width: 94
+    width: 98
   },
   btnCreateText: {
     fontSize: normalizeFontSize(10),
