@@ -24,7 +24,7 @@ const SignedChatScreen = () => {
     chats,
     goBackFromChatScreen,
     goToChatInfoScreen,
-    sendChat,
+    sendChatMutation,
     isLoadingFetchAllMessage,
     updateChatContinuity
   } = useChatScreenHook(SIGNED);
@@ -138,7 +138,7 @@ const SignedChatScreen = () => {
       {!exitedGroup && (
         <View style={styles.inputContainer}>
           <InputMessageV2
-            onSendButtonClicked={sendChat}
+            onSendButtonClicked={sendChatMutation.mutate}
             type={SIGNED}
             username={selectedChannel?.name}
             profileImage={profile?.myProfile?.profile_pic_path}
