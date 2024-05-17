@@ -594,7 +594,7 @@ const handleUserName = (item, selectedChannel) => {
  * @returns {boolean}
  */
 const isValidUrl = (url) => {
-  const urlRegex = /^((?:https?:\/\/)?[^./]+(?:\.[^./]+)+(?:\/.*)?)$/;
+  const urlRegex = /(https?\:\/\/)?([^\.\s]+)?[^\.\s]+\.[^\s]+/gi;
 
   return urlRegex.test(url?.toLocaleLowerCase());
 };
