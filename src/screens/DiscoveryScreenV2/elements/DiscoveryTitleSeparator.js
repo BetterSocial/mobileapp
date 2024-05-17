@@ -9,13 +9,14 @@ import {COLORS} from '../../../utils/theme';
  * @property {String} text
  * @property {Boolean} showArrow
  * @property {Boolean} [rotateArrow]
+ * @property {Boolean} [withBorderBottom]
  */
 /**
  *
  * @param {DiscoveryTitleSeparatorProp} props
  */
 const DiscoveryTitleSeparator = (props) => {
-  const {text, showArrow, rotateArrow = false} = props;
+  const {text, showArrow, rotateArrow = false, withBorderBottom = false} = props;
 
   // Animation value for rotation
   const rotation = React.useRef(new Animated.Value(0)).current;
@@ -47,6 +48,8 @@ const DiscoveryTitleSeparator = (props) => {
   return (
     <View
       style={{
+        borderBottomColor: withBorderBottom && !rotateArrow ? COLORS.gray210 : 'transparent',
+        borderBottomWidth: 1,
         backgroundColor: COLORS.gray110,
         justifyContent: 'space-between',
         alignContent: 'center',

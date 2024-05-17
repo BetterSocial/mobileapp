@@ -196,6 +196,7 @@ const DomainFragment = ({
     const renderHeader = (data, index) => {
       return (
         <DiscoveryTitleSeparator
+          withBorderBottom={true}
           key="user-title-separator"
           text="Domains you follow"
           showArrow
