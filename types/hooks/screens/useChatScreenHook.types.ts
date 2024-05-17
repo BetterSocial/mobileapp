@@ -13,7 +13,8 @@ interface UseChatScreenHook {
   selfAnonUserInfo: UserSchema | null;
   handleUserName: (item: ChatSchema) => string;
   updateChatContinuity: (chatsData: ChatSchema[]) => ChatSchema[];
-  sendChatMutation: UseMutationResult<void, unknown, any | undefined, unknown>;
+  setIsLoadingFetchAllMessage: React.Dispatch<React.SetStateAction<boolean>>;
+  sendChatMutation: UseMutationResult<void, unknown, string | undefined, unknown>;
 }
 
 export default UseChatScreenHook;

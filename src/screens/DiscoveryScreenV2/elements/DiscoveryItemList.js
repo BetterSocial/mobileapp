@@ -1,13 +1,14 @@
-import FastImage from 'react-native-fast-image';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View} from 'react-native';
+import FastImage from 'react-native-fast-image';
 
-import ProfilePicture from '../../ProfileScreen/elements/ProfilePicture';
-import dimen from '../../../utils/dimen';
-import {COLORS} from '../../../utils/theme';
+import MemoIc_senddm from '../../../assets/icons/ic_send_dm';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
+import dimen from '../../../utils/dimen';
 import {fonts, normalize} from '../../../utils/fonts';
+import {COLORS} from '../../../utils/theme';
+import ProfilePicture from '../../ProfileScreen/elements/ProfilePicture';
 
 const renderDefaultImage = (DefaultImage) => {
   if (DefaultImage) {
@@ -40,7 +41,8 @@ const DomainList = (props) => {
     isCommunity,
     isBlockedSection,
     isDomain,
-    withKarma
+    withKarma,
+    isFromUserFragment
   } = props;
 
   const renderButonAction = () => {
@@ -81,7 +83,11 @@ const DomainList = (props) => {
       <TouchableNativeFeedback onPress={handleSetUnFollow}>
         <View style={styles.followContainer}>
           <View style={styles.buttonFollowing}>
-            <Text style={styles.textButtonFollowing}>{isCommunity ? 'Joined' : 'Following'}</Text>
+            {isFromUserFragment ? (
+              <MemoIc_senddm height={18} width={18} color={COLORS.gray410} />
+            ) : (
+              <Text style={styles.textButtonFollowing}>{isCommunity ? 'Joined' : 'Following'}</Text>
+            )}
           </View>
         </View>
       </TouchableNativeFeedback>
@@ -307,6 +313,7 @@ const styles = StyleSheet.create({
 });
 
 DomainList.propTypes = {
+  isFromUserFragment: PropTypes.bool,
   item: PropTypes.object,
   isHashtag: PropTypes.bool,
   isDomain: PropTypes.bool,
