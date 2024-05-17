@@ -4,6 +4,7 @@ import * as React from 'react';
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 
 import PropTypes from 'prop-types';
+import Accordion from 'react-native-collapsible/Accordion';
 import TopicsProfilePictureEmptyState from '../../../assets/icon/TopicsProfilePictureEmptyState';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import useIsReady from '../../../hooks/useIsReady';
@@ -104,6 +105,54 @@ const TopicFragment = ({
     if (searchText.length > 0) fetchData();
   };
 
+  const SECTIONS = [
+    {
+      title: 'First',
+      content: 'Lorem ipsum...'
+    }
+  ];
+
+  const AccordionView = ({data}) => {
+    const [activeSections, setActiveSections] = React.useState([]);
+
+    const renderSectionTitle = () => {
+      return <View style={styles.content}></View>;
+    };
+
+    const renderHeader = (data, index) => {
+      return (
+        <DiscoveryTitleSeparator
+          withBorderBottom={true}
+          key="user-title-separator"
+          text="Your Communities"
+          showArrow
+          rotateArrow={activeSections?.some((actived) => actived === index)}
+        />
+      );
+    };
+
+    const renderContent = () => {
+      return (
+        <View style={styles.content}>{data?.map((item, index) => renderItem({index, item}))}</View>
+      );
+    };
+
+    const updateSections = (activeSectionsParams) => {
+      setActiveSections(activeSectionsParams);
+    };
+
+    return (
+      <Accordion
+        sections={SECTIONS}
+        activeSections={activeSections}
+        renderSectionTitle={renderSectionTitle}
+        renderHeader={renderHeader}
+        renderContent={renderContent}
+        onChange={updateSections}
+      />
+    );
+  };
+
   const __handleOnTopicPress = (item) => {
     const navigationParam = {
       id: convertTopicNameToTopicPageScreenParam(item.name),
@@ -129,8 +178,7 @@ const TopicFragment = ({
     if (item.separator) {
       return (
         <>
-          {renderRecentSearch(index)}
-          <DiscoveryTitleSeparator key="topic-title-separator" text="Suggested Communities" />
+          <DiscoveryTitleSeparator key="topic-title-separator" text="Communities for you!" />
         </>
       );
     }
@@ -180,13 +228,23 @@ const TopicFragment = ({
         unfollowingTopics.push(item);
       }
     });
-
+    const firstData = isFirstTimeOpen ? followingTopics : newMapFollowedTopics;
     const data = isFirstTimeOpen
-      ? [...followingTopics, {separator: true}, ...unfollowingTopics]
-      : [...newMapFollowedTopics, {separator: true}, ...newMapUnfollowedTopics];
+      ? [{separator: true}, ...unfollowingTopics]
+      : [{separator: true}, ...newMapUnfollowedTopics];
 
     return (
       <FlatList
+        ListHeaderComponent={() => (
+          <>
+            <RecentSearch
+              shown={!withoutRecent || isFirstTimeOpen}
+              setSearchText={setSearchText}
+              setIsFirstTimeOpen={setIsFirstTimeOpen}
+            />
+            <AccordionView data={firstData} />
+          </>
+        )}
         keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{paddingBottom: 100}}

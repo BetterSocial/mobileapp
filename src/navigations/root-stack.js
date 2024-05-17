@@ -60,6 +60,7 @@ import {InitialStartupAtom, LoadingStartupContext} from '../service/initialStart
 import {NavigationConstants} from '../utils/constants';
 import {followersOrFollowingAtom} from '../screens/ChannelListScreen/model/followersOrFollowingAtom';
 import {useInitialStartup} from '../hooks/useInitialStartup';
+import {resendPendingMessages, useSendAnonMessage, useSendSignedMessage} from '../service/chat';
 
 const RootStack = createNativeStackNavigator();
 
@@ -67,7 +68,9 @@ export const RootNavigator = () => {
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const [following, setFollowing] = useRecoilState(followersOrFollowingAtom);
   const loadingStartup = useInitialStartup();
-  useLocalDatabaseHook(true);
+  const {localDb} = useLocalDatabaseHook(true);
+  const sendChatSignedMutation = useSendSignedMessage();
+  const sendChatAnonMutation = useSendAnonMessage();
 
   React.useEffect(() => {
     StatusBar.setBarStyle('light-content', true);
@@ -96,6 +99,12 @@ export const RootNavigator = () => {
       unsubscribe();
     };
   }, []);
+
+  React.useEffect(() => {
+    if (localDb) {
+      resendPendingMessages(localDb, sendChatAnonMutation, sendChatSignedMutation);
+    }
+  }, [localDb]);
 
   return (
     <LoadingStartupContext.Provider value={loadingStartup.loadingUser}>
