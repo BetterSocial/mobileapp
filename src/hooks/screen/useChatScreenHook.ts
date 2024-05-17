@@ -148,13 +148,13 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const sendChatSignedMutation = useSendSignedMessage();
   const sendChatAnonMutation = useSendAnonMessage();
 
-  const sendChat = async (
-    message: string = randomString(20),
-    attachments: [] = [],
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    iteration = 0,
-    sendingChatSchema: ChatSchema | null = null
-  ) => {
+  const sendChat = async (props: {
+    message: string;
+    attachments: Array<any>;
+    iteration: number;
+    sendingChatSchema: ChatSchema | null;
+  }) => {
+    const {message = randomString(20), attachments = [], sendingChatSchema = null} = props;
     let currentChatSchema = sendingChatSchema;
     let userId = await getUserId();
     const myAnonymousId = await getAnonymousUserId();

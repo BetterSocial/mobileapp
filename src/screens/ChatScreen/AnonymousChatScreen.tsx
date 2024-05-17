@@ -135,7 +135,12 @@ const AnonymousChatScreen = () => {
       />
       <View style={styles.inputContainer}>
         <InputMessageV2
-          onSendButtonClicked={sendChatMutation.mutate}
+          onSendButtonClicked={(message: string, attachments: any) => {
+            sendChatMutation.mutate({
+              message,
+              attachments
+            } as any);
+          }}
           type={ANONYMOUS}
           emojiCode={selfAnonUserInfo?.anon_user_info_emoji_code}
           emojiColor={selfAnonUserInfo?.anon_user_info_color_code}
