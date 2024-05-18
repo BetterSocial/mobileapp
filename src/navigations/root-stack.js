@@ -53,7 +53,8 @@ import {
   GroupMedia,
   GroupSetting,
   NewsScreen,
-  ProfileScreen
+  ProfileScreen,
+  CreateCommunity
 } from '../screens';
 import {COLORS} from '../utils/theme';
 import {InitialStartupAtom, LoadingStartupContext} from '../service/initialStartup';
@@ -355,6 +356,11 @@ const AuthenticatedNavigator = () => {
         <AuthenticatedStack.Screen
           name="News"
           component={NewsScreen}
+          options={{headerShown: false}}
+        />
+        <AuthenticatedStack.Screen
+          name="CreateCommunity"
+          component={withSafeAreaView(withKeyboardWrapper(CreateCommunity))}
           options={{headerShown: false}}
         />
       </AuthenticatedStack.Navigator>
