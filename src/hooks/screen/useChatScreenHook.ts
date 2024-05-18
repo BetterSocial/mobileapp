@@ -4,9 +4,9 @@ import 'react-native-get-random-values';
 import * as React from 'react';
 import _ from 'lodash';
 import SimpleToast from 'react-native-simple-toast';
+import {useMutation} from 'react-query';
 import {v4 as uuid} from 'uuid';
 
-import {useMutation} from 'react-query';
 import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../database/schema/ChannelListSchema';
 import ChatSchema from '../../database/schema/ChatSchema';
@@ -289,7 +289,7 @@ function useChatScreenHook(type?: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     goToChatInfoScreen,
     sendChat,
     updateChatContinuity,
-    setIsLoadingFetchAllMessage
+    setIsLoadingFetchAllMessage,
     sendChatMutation
   };
 }
