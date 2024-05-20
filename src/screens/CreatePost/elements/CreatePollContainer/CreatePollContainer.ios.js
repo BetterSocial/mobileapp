@@ -95,7 +95,7 @@ function CreatePollContainer({
       <View style={S.divider} />
 
       <View style={S.row}>
-        <Text style={S.fillparenttext}>Multiple Choice</Text>
+        <Text style={S.fillparenttext}>Allow multiple answers</Text>
         <Text style={S.switchtext}>{ismultiplechoice ? 'On' : 'Off'}</Text>
         {/* TODO: Garry pakai komponen ToggleSwitch seperti yang lain */}
         <Switch
