@@ -53,13 +53,15 @@ import {
   GroupMedia,
   GroupSetting,
   NewsScreen,
-  ProfileScreen
+  ProfileScreen,
+  CreateCommunity
 } from '../screens';
 import {COLORS} from '../utils/theme';
 import {InitialStartupAtom, LoadingStartupContext} from '../service/initialStartup';
 import {NavigationConstants} from '../utils/constants';
 import {followersOrFollowingAtom} from '../screens/ChannelListScreen/model/followersOrFollowingAtom';
 import {useInitialStartup} from '../hooks/useInitialStartup';
+import {resendPendingMessages, useSendAnonMessage, useSendSignedMessage} from '../service/chat';
 
 const RootStack = createNativeStackNavigator();
 
@@ -67,7 +69,9 @@ export const RootNavigator = () => {
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const [following, setFollowing] = useRecoilState(followersOrFollowingAtom);
   const loadingStartup = useInitialStartup();
-  useLocalDatabaseHook(true);
+  const {localDb} = useLocalDatabaseHook(true);
+  const sendChatSignedMutation = useSendSignedMessage();
+  const sendChatAnonMutation = useSendAnonMessage();
 
   React.useEffect(() => {
     StatusBar.setBarStyle('light-content', true);
@@ -96,6 +100,12 @@ export const RootNavigator = () => {
       unsubscribe();
     };
   }, []);
+
+  React.useEffect(() => {
+    if (localDb) {
+      resendPendingMessages(localDb, sendChatAnonMutation, sendChatSignedMutation);
+    }
+  }, [localDb]);
 
   return (
     <LoadingStartupContext.Provider value={loadingStartup.loadingUser}>
@@ -346,6 +356,11 @@ const AuthenticatedNavigator = () => {
         <AuthenticatedStack.Screen
           name="News"
           component={NewsScreen}
+          options={{headerShown: false}}
+        />
+        <AuthenticatedStack.Screen
+          name="CreateCommunity"
+          component={withSafeAreaView(withKeyboardWrapper(CreateCommunity))}
           options={{headerShown: false}}
         />
       </AuthenticatedStack.Navigator>

@@ -1,4 +1,9 @@
-import {QueryObserverResult, RefetchOptions, RefetchQueryFilters} from 'react-query';
+import {
+  QueryObserverResult,
+  RefetchOptions,
+  RefetchQueryFilters,
+  UseMutationResult
+} from 'react-query';
 import ChatSchema from '../../../src/database/schema/ChatSchema';
 import UserSchema from '../../../src/database/schema/UserSchema';
 import {ChannelList} from '../../database/schema/ChannelList.types';
@@ -18,6 +23,7 @@ interface UseChatScreenHook {
   refetchMessage: <TPageData>(
     options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
   ) => Promise<QueryObserverResult<BaseDbSchema[], unknown>>;
+  sendChatMutation: UseMutationResult<void, unknown, any | undefined, unknown>;
 }
 
 export default UseChatScreenHook;

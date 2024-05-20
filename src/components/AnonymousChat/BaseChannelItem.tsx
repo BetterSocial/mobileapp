@@ -13,7 +13,6 @@ import {
   BaseChannelItemProps,
   BaseChannelItemTypeProps
 } from '../../../types/component/AnonymousChat/BaseChannelItem.types';
-import {Context} from '../../context';
 
 const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
   anonPostNotificationUserInfo = null,
@@ -39,20 +38,9 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
   onPress = () => {
     console.log('onPress');
   },
+  showFollowingButton = false,
   dbAnonUserInfo = null
 }) => {
-  const [profileContext] = (React.useContext(Context) as unknown as any).profile;
-  const [followContext] = (React.useContext(Context) as unknown as any).following;
-  const {myProfile} = profileContext;
-  let isFollowing = false;
-  if (type === BaseChannelItemTypeProps.SIGNED_PM) {
-    const members = postMaker?.members || postMaker?.channel?.members;
-    const targetUser = members?.find((member) => member?.user_id !== myProfile?.user_id)?.user;
-    isFollowing = Boolean(
-      followContext?.users?.find((user) => user?.user_id_followed === targetUser?.id)
-    );
-  }
-
   const isAnonymousTab: boolean =
     channelType === 'ANON_PM' ||
     channelType === 'ANON_GROUP' ||
@@ -81,7 +69,7 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
             unreadCount={unreadCount}
             isMe={isMe}
             hasFollowButton={hasFollowButton}
-            isFollowing={isFollowing}
+            isFollowing={showFollowingButton}
             handleFollow={handleFollow}
             isAnonymousTab={isAnonymousTab}
           />

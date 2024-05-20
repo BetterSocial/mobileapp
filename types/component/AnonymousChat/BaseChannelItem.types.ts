@@ -48,6 +48,7 @@ export interface BaseChannelItemProps {
   unreadCount?: number;
   upvote?: number;
   hasFollowButton?: boolean;
+  showFollowingButton?: boolean;
   handleFollow?: () => void;
   channelType?: string;
 }

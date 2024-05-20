@@ -31,7 +31,6 @@ const CreatePollContainerBaseStyle = StyleSheet.create({
   },
 
   addpollitemplusicon: {
-    color: COLORS.black,
     alignSelf: 'center'
   },
 
@@ -73,16 +72,16 @@ const CreatePollContainerBaseStyle = StyleSheet.create({
     borderRadius: dimen.normalizeDimen(4)
   },
 
-  polldurationbuttontext: {
-    fontFamily: fonts.inter[400],
-    color: COLORS.white,
-    // TODO: Garry warna sesuai mode
-    backgroundColor: COLORS.signed_secondary,
+  polldurationbuttonview: (isAnonym) => ({
+    backgroundColor: isAnonym ? COLORS.anon_secondary : COLORS.signed_secondary,
     paddingHorizontal: dimen.normalizeDimen(22),
     paddingVertical: dimen.normalizeDimen(8),
-    // TODO: Garry border radius tidak terbaca
     borderRadius: 6,
     marginEnd: dimen.normalizeDimen(24)
+  }),
+  polldurationbuttontext: {
+    fontFamily: fonts.inter[400],
+    color: COLORS.white
   },
 
   switchtext: {
@@ -101,14 +100,13 @@ const CreatePollContainerBaseStyle = StyleSheet.create({
   parentcolumncontainer: {
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: 'white',
-    paddingVertical: dimen.normalizeDimen(24),
-    borderRadius: 4,
-    paddingHorizontal: dimen.normalizeDimen(12)
+    backgroundColor: COLORS.almostBlack,
+    paddingVertical: dimen.normalizeDimen(20),
+    borderRadius: 9,
+    paddingHorizontal: dimen.normalizeDimen(18)
   },
 
   modalrowcontainer: {
-    backgroundColor: 'white',
     flexDirection: 'row',
     display: 'flex',
     width: '100%'
@@ -121,14 +119,28 @@ const CreatePollContainerBaseStyle = StyleSheet.create({
     flex: 1
   },
 
+  setdurationview: {
+    fontFamily: fonts.inter[600],
+    marginBottom: dimen.normalizeDimen(20)
+  },
   setdurationtext: {
     fontFamily: fonts.inter[600],
-    marginBottom: dimen.normalizeDimen(22)
+    fontSize: 18,
+    color: COLORS.white
+  },
+  setdurationdesc: {
+    fontFamily: fonts.inter[400],
+    fontSize: 16,
+    color: COLORS.white,
+    marginTop: dimen.normalizeDimen(16),
+    marginBottom: dimen.normalizeDimen(16),
+    paddingRight: dimen.normalizeDimen(16)
   },
 
   pickerlabeltext: {
-    fontFamily: fonts.inter[400],
-    marginBottom: dimen.normalizeDimen(32)
+    fontFamily: fonts.inter[500],
+    fontSize: 14,
+    color: COLORS.white
   },
 
   bottombuttonrowcontainer: {
@@ -144,7 +156,8 @@ const CreatePollContainerBaseStyle = StyleSheet.create({
   },
 
   bottombuttontext: {
-    fontFamily: fonts.inter[600]
+    fontFamily: fonts.inter[600],
+    color: COLORS.white
   }
 });
 

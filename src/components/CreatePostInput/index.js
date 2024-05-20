@@ -37,7 +37,7 @@ const CreatePostInput = ({
     useHastagMention('');
 
   React.useEffect(() => {
-    if (new Date().valueOf() > 0) updateHashtag(message, topics, setTopics);
+    if (new Date().valueOf() > 0) updateHashtag(message, topics);
   }, [message]);
 
   React.useEffect(() => {
@@ -105,19 +105,6 @@ const CreatePostInput = ({
     cancelTokenRef.current = axios.CancelToken.source();
   };
 
-  const isTopicInDeletedText = (event) => {
-    const {nativeEvent} = event;
-    const isBackspacePressed = nativeEvent?.key === 'Backspace';
-    const deleteHashtagDetected =
-      lastTopicInCursor !== '' && lastTopicInCursor.indexOf(' ') === -1 && isBackspacePressed;
-    if (!deleteHashtagDetected) return;
-
-    const newTopics = [...topics];
-
-    newTopics.splice(newTopics?.lastIndexOf(lastTopicInCursor), 1);
-    setTopics(newTopics);
-  };
-
   const handlePostTextChanged = (v) => {
     setMessage(v);
     // updateHashtag(v, topics, setTopics)
@@ -162,9 +149,9 @@ const CreatePostInput = ({
       resetTopicSearch();
       setPositionKeyboard('never');
       cancelAllRequest();
-      const removeCharacterAfterSpace = textSearch.split(' ')[0];
-      const newTopics = joinTopicIntoTopicList(removeCharacterAfterSpace, topics);
-      setTopics(newTopics);
+      // const removeCharacterAfterSpace = textSearch.split(' ')[0];
+      // const newTopics = joinTopicIntoTopicList(removeCharacterAfterSpace, topics);
+      // setTopics(newTopics);
 
       setLastTopicInCursor('');
     }
@@ -190,9 +177,7 @@ const CreatePostInput = ({
     <>
       <TextInput
         ref={inputRef}
-        onKeyPress={isTopicInDeletedText}
         onChangeText={handlePostTextChanged}
-        // value={message}
         multiline={true}
         numberOfLines={10}
         style={[
@@ -214,14 +199,9 @@ const CreatePostInput = ({
         handleStateHashtag={handleStateHashtag}
         hashtagPosition={hashtagPosition}
         positionTopicSearch={positionTopicSearch}
-        // setHashtags={setHashtags}
         setPositionKeyboard={setPositionKeyboard}
         setMessage={setMessage}
-        setTopicChats={setTopicChats}
         setTopicSearch={setTopicSearch}
-        setTopics={setTopics}
-        topicChats={topicChats}
-        topics={topics}
         topicSearch={topicSearch}
       />
 
