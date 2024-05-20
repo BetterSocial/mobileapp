@@ -1,13 +1,14 @@
 /* eslint-disable no-underscore-dangle */
 import {useNavigation} from '@react-navigation/native';
 import * as React from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 
 import PropTypes from 'prop-types';
 import TopicsProfilePictureEmptyState from '../../../assets/icon/TopicsProfilePictureEmptyState';
+import IconUserGroup from '../../../assets/icons/Ic_user_group';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import useIsReady from '../../../hooks/useIsReady';
-import {fonts} from '../../../utils/fonts';
+import {fonts, normalizeFontSize} from '../../../utils/fonts';
 import useChatClientHook from '../../../utils/getstream/useChatClientHook';
 import {convertTopicNameToTopicPageScreenParam} from '../../../utils/string/StringUtils';
 import {COLORS} from '../../../utils/theme';
@@ -15,6 +16,7 @@ import DomainList from '../elements/DiscoveryItemList';
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import RecentSearch from '../elements/RecentSearch';
 import useDiscovery from '../hooks/useDiscovery';
+import dimen from '../../../utils/dimen';
 
 const FROM_FOLLOWED_TOPIC = 'fromfollowedtopics';
 const FROM_FOLLOWED_TOPIC_INITIAL = 'fromfollowedtopicsinitial';
@@ -186,16 +188,29 @@ const TopicFragment = ({
       : [...newMapFollowedTopics, {separator: true}, ...newMapUnfollowedTopics];
 
     return (
-      <FlatList
-        keyboardDismissMode="on-drag"
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{paddingBottom: 100}}
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
-        onEndReached={() => fetchData()}
-        onEndReachedThreshold={0.6}
-      />
+      <View>
+        <Pressable
+          style={styles.buttonContainer}
+          onPress={() => navigation.push('CreateCommunity')}>
+          <View style={styles.buttonRow}>
+            <IconUserGroup height={20} width={22} fill={COLORS.gray400} />
+            <Text style={styles.buttonText}>Start new community</Text>
+          </View>
+          <View style={styles.buttonGo}>
+            <Text style={styles.buttonGoText}>Go</Text>
+          </View>
+        </Pressable>
+        <FlatList
+          keyboardDismissMode="on-drag"
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{paddingBottom: 100}}
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => index.toString()}
+          onEndReached={() => fetchData()}
+          onEndReachedThreshold={0.6}
+        />
+      </View>
     );
   };
 
@@ -218,6 +233,44 @@ const TopicFragment = ({
 };
 
 const styles = StyleSheet.create({
+  buttonContainer: {
+    borderWidth: 1,
+    borderColor: COLORS.gray310,
+    borderRadius: 10,
+    backgroundColor: COLORS.gray110,
+    marginHorizontal: dimen.normalizeDimen(20),
+    marginVertical: dimen.normalizeDimen(12),
+    paddingHorizontal: dimen.normalizeDimen(16),
+    paddingVertical: dimen.normalizeDimen(8),
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  buttonText: {
+    color: COLORS.white,
+    fontFamily: fonts.inter[500],
+    fontSize: normalizeFontSize(16),
+    lineHeight: normalizeFontSize(24),
+    marginLeft: dimen.normalizeDimen(20)
+  },
+  buttonGo: {
+    width: 41,
+    height: 20,
+    borderRadius: 100,
+    backgroundColor: COLORS.signed_primary,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  buttonGoText: {
+    color: COLORS.white,
+    fontFamily: fonts.inter[500],
+    fontSize: normalizeFontSize(12),
+    lineHeight: normalizeFontSize(18)
+  },
   fragmentContainer: {
     flex: 1,
     backgroundColor: COLORS.almostBlack

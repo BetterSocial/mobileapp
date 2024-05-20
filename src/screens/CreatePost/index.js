@@ -135,7 +135,7 @@ const CreatePost = () => {
     hour: 0,
     minute: 0
   });
-  const [expiredSelect, setExpiredSelect] = React.useState(2);
+  const [expiredSelect, setExpiredSelect] = React.useState(params.isCreateCommunity ? 3 : 2);
   const [postExpired] = React.useState([
     {
       label: '24 hours',
@@ -797,7 +797,7 @@ const CreatePost = () => {
           )}
           <Gap style={styles.height(25)} />
           <Button styles={styles.btnPost(typeUser)} disabled={isButtonDisabled()} onPress={postV2}>
-            Post
+            {params.isCreateCommunity ? 'Post & Create Community' : 'Post'}
           </Button>
           <Gap style={styles.height(18)} />
           <SheetMedia
