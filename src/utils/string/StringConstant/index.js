@@ -108,7 +108,7 @@ const discoveryMoreUsers = 'More Users';
 const discoveryMoreTopics = 'More Communities';
 const discoveryMoreDomains = 'More Domains';
 const discoveryMoreNews = 'More News';
-const discoverySearchBarPlaceholder = 'Search Helio';
+const discoverySearchBarPlaceholder = 'Search Communities';
 
 // Profile Screeen
 const profileDeleteAccountAlertMessage =

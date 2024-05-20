@@ -11,11 +11,15 @@ import AnonUserInfoRepo from '../../service/repo/anonUserInfoRepo';
  */
 const useCreatePostHook = (isAnonymous) => {
   const {params = {}} = useRoute();
-  const {topic} = params;
+  const {topic, isCreateCommunity} = params;
   const [selectedTopic, setSelectedTopic] = React.useState(topic);
   const [anonUserInfo, setAnonUserInfo] = React.useState(null);
   const [headerTitle, setHeaderTitle] = React.useState(
-    selectedTopic ? `Create Post in #${selectedTopic}` : 'Create Post'
+    isCreateCommunity
+      ? 'Create first post'
+      : selectedTopic
+      ? `Create Post in #${selectedTopic}`
+      : 'Create Post'
   );
 
   const isInCreatePostTopicScreen = !!selectedTopic;

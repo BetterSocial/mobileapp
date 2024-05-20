@@ -128,6 +128,17 @@ const getLatestTopicPost = async (topicName: string): Promise<TopicLatestPostDat
   }
 };
 
+const verifyCommunityName = async (name) => {
+  try {
+    const resApi = await api.get(`/topics/is-exist?name=${name}`);
+    console.warn('resApi', JSON.stringify(resApi.data));
+    return resApi.data;
+  } catch (error) {
+    crashlytics().recordError(new Error(error));
+    return error.response.data;
+  }
+};
+
 export {
   getAllMemberTopic,
   getFollowingTopic,
@@ -136,5 +147,6 @@ export {
   getTopics,
   getUserTopic,
   getWhoToFollowList,
-  putUserTopic
+  putUserTopic,
+  verifyCommunityName
 };
