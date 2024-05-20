@@ -289,7 +289,8 @@ function useChatScreenHook(type?: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     goToChatInfoScreen,
     sendChat,
     updateChatContinuity,
-    setIsLoadingFetchAllMessage
+    setIsLoadingFetchAllMessage,
+    refetchMessage: getAllMessages.refetch
   };
 }
 

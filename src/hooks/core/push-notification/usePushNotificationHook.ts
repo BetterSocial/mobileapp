@@ -26,7 +26,7 @@ const usePushNotificationHook = () => {
   const {localDb} = useLocalDatabaseHook();
   const {fetchChannelDetail, setSelectedChannel} = useChatUtilsHook();
   const {updateAppBadgeFromDB} = useAppBadgeHook();
-  const {setIsLoadingFetchAllMessage} = useChatScreenHook();
+  const {setIsLoadingFetchAllMessage, refetchMessage} = useChatScreenHook();
 
   const [, setProfileAtom] = useRecoilState(profileAtom);
 
@@ -148,6 +148,7 @@ const usePushNotificationHook = () => {
     }
     if (notification.data.type === 'message.new') {
       if (notification.userInteraction) {
+        await refetchMessage(); // refetch message
         const selectedChannel = await ChannelList.getSchemaById(
           localDb,
           notification?.data?.channel_id
@@ -186,8 +187,6 @@ const usePushNotificationHook = () => {
             await fetchChannelDetail(channel); // insert channel detail
           }
           if (remoteMessage.data?.is_big_message === 'true') {
-            // todo: fetch message detail by message id
-            // todo: insert message to sqlite
             const {message: messageRes} = await getMessageDetail(
               remoteMessage.data?.messages_id as string
             );
@@ -200,7 +199,7 @@ const usePushNotificationHook = () => {
               type: message.type,
               createdAt: message.created_at,
               updatedAt: message.created_at,
-              rawJson: {},
+              rawJson: '{}',
               attachmentJson: message.attachments,
               user: message.user,
               status: 'sent',
@@ -217,7 +216,7 @@ const usePushNotificationHook = () => {
               type: remoteMessage.data?.type,
               createdAt: remoteMessage.data?.created_at,
               updatedAt: remoteMessage.data?.created_at,
-              rawJson: {},
+              rawJson: '{}',
               attachmentJson: remoteMessage.data?.attachments,
               user: null,
               status: remoteMessage.data?.status,
