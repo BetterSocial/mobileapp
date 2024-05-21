@@ -148,6 +148,10 @@ const DiscoverySearch = ({
   };
 
   React.useEffect(() => {
+    debounceChangeText(searchText);
+  }, [searchText]);
+
+  React.useEffect(() => {
     if (discoverySearchBarRef?.current) {
       setTimeout(() => {
         discoverySearchBarRef?.current?.focus();
