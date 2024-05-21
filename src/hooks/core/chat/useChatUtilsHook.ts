@@ -41,7 +41,7 @@ const selectedChannelKeyTab = atom({
   default: 0
 });
 
-function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
+function useChatUtilsHook(type?: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
   const [chat, setChat] = useRecoilState(chatAtom);
   const {selectedChannel, isLoadingFetchingChannelDetail} = chat;
 
