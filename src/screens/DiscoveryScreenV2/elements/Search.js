@@ -1,6 +1,7 @@
 /* eslint-disable no-use-before-define */
 import * as React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import PropTypes from 'prop-types';
 import {
   Keyboard,
   StyleSheet,
@@ -12,7 +13,6 @@ import {
 import {debounce} from 'lodash';
 import {useNavigation} from '@react-navigation/core';
 
-import PropTypes from 'prop-types';
 import DiscoveryAction from '../../../context/actions/discoveryAction';
 import IconClear from '../../../assets/icon/IconClear';
 import MemoIcArrowBackWhite from '../../../assets/arrow/Ic_arrow_back_white';
@@ -40,6 +40,7 @@ const DiscoverySearch = ({
   const navigation = useNavigation();
   const [, discoveryDispatch] = React.useContext(Context).discovery;
   const discoverySearchBarRef = React.useRef(null);
+  const isForceSearch = React.useRef(false);
 
   const [lastSearch, setLastSearch] = React.useState('');
 
@@ -70,6 +71,17 @@ const DiscoverySearch = ({
   };
 
   const debounceChangeText = (text) => {
+    /**
+     * isForceSearch ref is used to prevent this function to be called twice
+     * when TextInput's onSubmitEditing is called.
+     * Calling this function willChange the isForceSearch ref value back to false after check is true
+     * to re-enable the function.
+     */
+    if (isForceSearch?.current) {
+      isForceSearch.current = false;
+      return;
+    }
+
     onCancelToken();
     if (text.length > 2) {
       setAllLoading(true);
@@ -93,18 +105,23 @@ const DiscoverySearch = ({
     discoverySearchBarRef?.current?.focus();
     setSearchText('');
     setLastSearch('');
+    debounceChangeText('');
   };
 
   const handleOnSubmitEditing = (event) => {
+    isForceSearch.current = true;
+    onCancelToken();
     const {text} = event?.nativeEvent;
     handleSubmitSearchData(text);
   };
 
   const handleSubmitSearchData = async (text) => {
     if (text === lastSearch) return;
+
     setLastSearch(text);
     setAllLoading(true);
     setIsFirstTimeOpen(false);
+
     if (fetchData !== undefined) {
       fetchData(true, text);
     } else {
@@ -129,10 +146,6 @@ const DiscoverySearch = ({
     DiscoveryAction.setDiscoveryRecentSearch(resultArray, discoveryDispatch);
     AsyncStorage.setItem(RECENT_SEARCH_TERMS, JSON.stringify(resultArray));
   };
-
-  React.useEffect(() => {
-    debounceChangeText(searchText);
-  }, [searchText]);
 
   React.useEffect(() => {
     if (discoverySearchBarRef?.current) {
@@ -220,19 +233,6 @@ const DiscoverySearch = ({
       </View>
     </View>
   );
-};
-
-DiscoverySearch.propTypes = {
-  setDiscoveryLoadingData: PropTypes.func,
-  searchText: PropTypes.string,
-  setSearchText: PropTypes.func,
-  placeholderText: PropTypes.string,
-  setIsFocus: PropTypes.func,
-  setIsFirstTimeOpen: PropTypes.func,
-  fetchDiscoveryData: PropTypes.func,
-  fetchData: PropTypes.func,
-  onCancelToken: PropTypes.func,
-  hideBackIcon: PropTypes.bool
 };
 
 const styles = StyleSheet.create({
