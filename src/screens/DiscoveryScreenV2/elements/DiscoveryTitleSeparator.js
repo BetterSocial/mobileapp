@@ -16,10 +16,10 @@ import {COLORS} from '../../../utils/theme';
  * @param {DiscoveryTitleSeparatorProp} props
  */
 const DiscoveryTitleSeparator = (props) => {
-  const {text, showArrow, rotateArrow = false, withBorderBottom = false} = props;
+  const {text, showArrow, rotateArrow, withBorderBottom = false} = props;
 
   // Animation value for rotation
-  const rotation = React.useRef(new Animated.Value(0)).current;
+  const rotation = React.useRef(new Animated.Value(rotateArrow ? 1 : 0)).current;
 
   // Interpolating the animation value to create a rotation style
   const rotate = rotation.interpolate({
@@ -27,29 +27,20 @@ const DiscoveryTitleSeparator = (props) => {
     outputRange: ['0deg', '180deg'] // Rotate 180 degrees
   });
 
-  // Trigger rotation animation if `rotateArrow` is true
+  // Trigger rotation animation if `rotateArrow` changes
   React.useEffect(() => {
-    if (rotateArrow) {
-      Animated.timing(rotation, {
-        toValue: 1,
-        duration: 300, // Adjust as needed
-        useNativeDriver: true
-      }).start();
-    } else {
-      // Reset to default rotation
-      Animated.timing(rotation, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true
-      }).start();
-    }
+    Animated.timing(rotation, {
+      toValue: rotateArrow ? 1 : 0,
+      duration: 300, // Adjust as needed
+      useNativeDriver: true
+    }).start();
   }, [rotateArrow]);
 
   return (
     <View
       style={{
-        borderBottomColor: withBorderBottom && !rotateArrow ? COLORS.gray210 : 'transparent',
-        borderBottomWidth: 1,
+        borderBottomColor: withBorderBottom ? COLORS.gray210 : 'transparent',
+        borderBottomWidth: withBorderBottom ? 1 : 0,
         backgroundColor: COLORS.gray110,
         justifyContent: 'space-between',
         alignContent: 'center',

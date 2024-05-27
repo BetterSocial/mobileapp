@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import PropTypes from 'prop-types';
 import * as React from 'react';
 import {FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
@@ -15,7 +15,6 @@ import {followDomain, unfollowDomain} from '../../../service/domain';
 import dimen from '../../../utils/dimen';
 import {fonts} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
-import {getUserId} from '../../../utils/users';
 import DomainList from '../elements/DiscoveryItemList';
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import RecentSearch from '../elements/RecentSearch';
@@ -23,6 +22,52 @@ import RecentSearch from '../elements/RecentSearch';
 const FROM_FOLLOWED_DOMAIN = 'fromfolloweddomains';
 const FROM_FOLLOWED_DOMAIN_INITIAL = 'fromfolloweddomainsinitial';
 const FROM_UNFOLLOWED_DOMAIN = 'fromunfolloweddomains';
+
+const SECTIONS = [
+  {
+    title: 'First',
+    content: 'Lorem ipsum...'
+  }
+];
+
+const AccordionView = ({data, renderItem, setActiveSections, activeSections}) => {
+  const renderSectionTitle = () => {
+    return <View style={styles.content}></View>;
+  };
+
+  const renderHeader = (data, index) => {
+    return (
+      <DiscoveryTitleSeparator
+        withBorderBottom={true}
+        key="user-title-separator"
+        text="Domains you follow"
+        showArrow
+        rotateArrow={activeSections?.some((actived) => actived === index)}
+      />
+    );
+  };
+
+  const renderContent = () => {
+    return (
+      <View style={styles.content}>{data?.map((item, index) => renderItem({index, item}))}</View>
+    );
+  };
+
+  const updateSections = (activeSectionsParams) => {
+    setActiveSections(activeSectionsParams);
+  };
+
+  return (
+    <Accordion
+      sections={SECTIONS}
+      activeSections={activeSections}
+      renderSectionTitle={renderSectionTitle}
+      renderHeader={renderHeader}
+      renderContent={renderContent}
+      onChange={updateSections}
+    />
+  );
+};
 
 const DomainFragment = ({
   isLoadingDiscoveryDomain,
@@ -38,13 +83,12 @@ const DomainFragment = ({
   withoutRecent = false
 }) => {
   const navigation = useNavigation();
-  const [myId, setMyId] = React.useState('');
   const [discovery, discoveryDispatch] = React.useContext(Context).discovery;
+  const [activeSections, setActiveSections] = React.useState([]);
+
   const [, followingDispatch] = React.useContext(Context).following;
 
   const isReady = useIsReady();
-
-  const route = useRoute();
 
   const domains = React.useMemo(() => {
     return discovery.initialDomains.map((item) => ({
@@ -64,16 +108,6 @@ const DomainFragment = ({
       following: item.following !== undefined ? item.following : item.user_id_follower !== null
     }));
   }, [unfollowedDomains]);
-
-  React.useEffect(() => {
-    const parseToken = async () => {
-      const id = await getUserId();
-      if (id) {
-        setMyId(id);
-      }
-    };
-    parseToken();
-  }, []);
 
   const __handleOnPressDomain = (item) => {
     const navigationParam = {
@@ -179,67 +213,6 @@ const DomainFragment = ({
     if (searchText.length > 0) fetchData();
   };
 
-  const SECTIONS = [
-    {
-      title: 'First',
-      content: 'Lorem ipsum...'
-    }
-  ];
-
-  const AccordionView = ({data}) => {
-    const [activeSections, setActiveSections] = React.useState([]);
-
-    const renderSectionTitle = () => {
-      return <View style={styles.content}></View>;
-    };
-
-    const renderHeader = (data, index) => {
-      return (
-        <DiscoveryTitleSeparator
-          withBorderBottom={true}
-          key="user-title-separator"
-          text="Domains you follow"
-          showArrow
-          rotateArrow={activeSections?.some((actived) => actived === index)}
-        />
-      );
-    };
-
-    const renderContent = () => {
-      return (
-        <View style={styles.content}>{data?.map((item, index) => renderItem({index, item}))}</View>
-      );
-    };
-
-    const updateSections = (activeSectionsParams) => {
-      setActiveSections(activeSectionsParams);
-    };
-
-    return (
-      <Accordion
-        sections={SECTIONS}
-        activeSections={activeSections}
-        renderSectionTitle={renderSectionTitle}
-        renderHeader={renderHeader}
-        renderContent={renderContent}
-        onChange={updateSections}
-      />
-    );
-  };
-
-  const renderRecentSearch = (index) => {
-    return (
-      index === 0 &&
-      !withoutRecent && (
-        <RecentSearch
-          shown={isFirstTimeOpen}
-          setSearchText={setSearchText}
-          setIsFirstTimeOpen={setIsFirstTimeOpen}
-        />
-      )
-    );
-  };
-
   const renderDefaultImage = () => {
     return (
       <MemoDomainProfilePictureEmptyState
@@ -333,7 +306,12 @@ const DomainFragment = ({
               setSearchText={setSearchText}
               setIsFirstTimeOpen={setIsFirstTimeOpen}
             />
-            <AccordionView data={firstData} />
+            <AccordionView
+              data={firstData}
+              renderItem={renderItem}
+              activeSections={activeSections}
+              setActiveSections={setActiveSections}
+            />
           </>
         )}
         onMomentumScrollBegin={handleScroll}

@@ -24,6 +24,51 @@ const FROM_FOLLOWED_TOPIC_INITIAL = 'fromfollowedtopicsinitial';
 const FROM_UNFOLLOWED_TOPIC = 'fromunfollowedtopics';
 const FROM_UNFOLLOWED_TOPIC_INITIAL = 'fromunfollowedtopicsinitial';
 
+const SECTIONS = [
+  {
+    title: 'First',
+    content: 'Lorem ipsum...'
+  }
+];
+
+const AccordionView = ({data, renderItem, setActiveSections, activeSections}) => {
+  const renderSectionTitle = () => {
+    return <View style={styles.content}></View>;
+  };
+
+  const renderHeader = (data, index) => {
+    return (
+      <DiscoveryTitleSeparator
+        key="user-title-separator"
+        text="Your Communities"
+        showArrow
+        rotateArrow={activeSections?.some((actived) => actived === index)}
+      />
+    );
+  };
+
+  const renderContent = () => {
+    return (
+      <View style={styles.content}>{data?.map((item, index) => renderItem({index, item}))}</View>
+    );
+  };
+
+  const updateSections = (activeSectionsParams) => {
+    setActiveSections(activeSectionsParams);
+  };
+
+  return (
+    <Accordion
+      sections={SECTIONS}
+      activeSections={activeSections}
+      renderSectionTitle={renderSectionTitle}
+      renderHeader={renderHeader}
+      renderContent={renderContent}
+      onChange={updateSections}
+    />
+  );
+};
+
 const TopicFragment = ({
   isLoadingDiscoveryTopic = false,
   followedTopic = [],
@@ -37,6 +82,8 @@ const TopicFragment = ({
   searchText,
   withoutRecent = false
 }) => {
+  const [activeSections, setActiveSections] = React.useState([]);
+
   const {followTopic} = useChatClientHook();
   const {
     topics,
@@ -105,54 +152,6 @@ const TopicFragment = ({
       handleTopic(from, !willFollow, item);
     }
     if (searchText.length > 0) fetchData();
-  };
-
-  const SECTIONS = [
-    {
-      title: 'First',
-      content: 'Lorem ipsum...'
-    }
-  ];
-
-  const AccordionView = ({data}) => {
-    const [activeSections, setActiveSections] = React.useState([]);
-
-    const renderSectionTitle = () => {
-      return <View style={styles.content}></View>;
-    };
-
-    const renderHeader = (data, index) => {
-      return (
-        <DiscoveryTitleSeparator
-          withBorderBottom={true}
-          key="user-title-separator"
-          text="Your Communities"
-          showArrow
-          rotateArrow={activeSections?.some((actived) => actived === index)}
-        />
-      );
-    };
-
-    const renderContent = () => {
-      return (
-        <View style={styles.content}>{data?.map((item, index) => renderItem({index, item}))}</View>
-      );
-    };
-
-    const updateSections = (activeSectionsParams) => {
-      setActiveSections(activeSectionsParams);
-    };
-
-    return (
-      <Accordion
-        sections={SECTIONS}
-        activeSections={activeSections}
-        renderSectionTitle={renderSectionTitle}
-        renderHeader={renderHeader}
-        renderContent={renderContent}
-        onChange={updateSections}
-      />
-    );
   };
 
   const __handleOnTopicPress = (item) => {
@@ -249,6 +248,21 @@ const TopicFragment = ({
           </View>
         </Pressable>
         <FlatList
+          ListHeaderComponent={() => (
+            <>
+              <RecentSearch
+                shown={!withoutRecent || isFirstTimeOpen}
+                setSearchText={setSearchText}
+                setIsFirstTimeOpen={setIsFirstTimeOpen}
+              />
+              <AccordionView
+                data={firstData}
+                renderItem={renderItem}
+                activeSections={activeSections}
+                setActiveSections={setActiveSections}
+              />
+            </>
+          )}
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={{paddingBottom: 100}}
