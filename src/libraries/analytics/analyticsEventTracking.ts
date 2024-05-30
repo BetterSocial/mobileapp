@@ -2,7 +2,6 @@ import SimpleToast from 'react-native-simple-toast';
 /* eslint-disable no-shadow */
 import {JsonMap, createClient} from '@segment/analytics-react-native';
 
-import {ANONYMOUS} from '../../hooks/core/constant';
 import {ENV, SEGMENT_WRITE_KEY} from '../Configs/ENVConfig';
 
 /**
@@ -73,7 +72,29 @@ export enum BetterSocialEventTracking {
   ANONYMOUS_CHAT_TAB_MY_POST_NOTIF_OPEN_PDP = 'AnonChat-Chattab_Channel-MyPostNotif_openPDP',
   ANONYMOUS_CHAT_TAB_OTHER_POST_NOTIF_OPEN_PDP = 'AnonChat-Chattab_Channel-OtherPostNotif_openPDP',
   ANONYMOUS_CHAT_TAB_COMMUNITY_PAGE_OPEN_PAGE = 'AnonChat-Chattab_Channel-CommunityPage_openCP',
-  ANONYMOUS_CHAT_TAB = '1'
+
+  // SIGNED CHAT SCREEN
+  SIGNED_CHAT_SCREEN_PLUS_SIGN_CLICKED = 'SignedChat-ChatScreen_plusSign_clicked',
+  SIGNED_CHAT_SCREEN_SEND_BUTTON_CLICKED = 'SignedChat-ChatScreen_sendMessageButton_clicked',
+  SIGNED_CHAT_SCREEN_ATTACHMENT_CLOSE_DRAWER = 'SignedChat-ChatScreen_ChatActions-Drawer_discard',
+  SIGNED_CHAT_SCREEN_ATTACHMENT_CLICK_MEDIA = 'SignedChat-ChatScreen_ChatActions-Drawer_clickMedia',
+  SIGNED_CHAT_SCREEN_ATTACHMENT_CLICK_CAMERA = 'SignedChat-ChatScreen_ChatActions-Drawer_clickCamera',
+  SIGNED_CHAT_SCREEN_ATTACHMENT_CLICK_GIF = 'SignedChat-ChatScreen_ChatActions-Drawer_clickGIF',
+  SIGNED_CHAT_SCREEN_ATTACHMENT_CLICK_FILE = 'SignedChat-ChatScreen_ChatActions-Drawer_clickFile',
+  SIGNED_CHAT_SCREEN_ATTACHMENT_MEDIA_UPLOAD_FILE = 'SignedChat-ChatScreen_ChatActions-Drawer_mediauploadfailed',
+  SIGNED_CHAT_SCREEN_ATTACHMENT = '2',
+  SIGNED_CHAT_SCREEN = '',
+
+  // ANON CHAT SCREEN
+  ANONYMOUS_CHAT_SCREEN_PLUS_SIGN_CLICKED = 'AnonChat-ChatScreen_plusSign_clicked',
+  ANONYMOUS_CHAT_SCREEN_SEND_BUTTON_CLICKED = 'AnonChat-ChatScreen_sendMessageButton_clicked',
+  ANONYMOUS_CHAT_SCREEN_ATTACHMENT_CLOSE_DRAWER = 'AnonChat-ChatScreen_ChatActions-Drawer_discard',
+  ANON_CHAT_SCREEN_ATTACHMENT_CLICK_MEDIA = 'AnonChat-ChatScreen_ChatActions-Drawer_clickMedia',
+  ANON_CHAT_SCREEN_ATTACHMENT_CLICK_CAMERA = 'AnonChat-ChatScreen_ChatActions-Drawer_clickCamera',
+  ANON_CHAT_SCREEN_ATTACHMENT_CLICK_GIF = 'AnonChat-ChatScreen_ChatActions-Drawer_clickGIF',
+  ANON_CHAT_SCREEN_ATTACHMENT_CLICK_FILE = 'AnonChat-ChatScreen_ChatActions-Drawer_clickFile',
+  ANON_CHAT_SCREEN_ATTACHMENT_MEDIA_UPLOAD_FILE = 'AnonChat-ChatScreen_ChatActions-Drawer_mediauploadfailed',
+  ANONYMOUS_CHAT_SCREEN = '1'
 }
 
 const ENABLE_TOAST = ENV === 'Dev';
