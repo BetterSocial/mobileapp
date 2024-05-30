@@ -1,18 +1,27 @@
 /* eslint-disable no-underscore-dangle */
 import * as React from 'react';
-import {Animated, Pressable, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import PropTypes from 'prop-types';
+import {Animated, Pressable, StyleSheet, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
 import MemoIcNewChat from '../../../assets/icons/ic_new_chat';
-import MemoIc_search from '../../../assets/icons/Ic_search';
+import MemoIcSearch from '../../../assets/icons/Ic_search';
+import PressEventTrackingWrapper from '../../../components/Wrapper/PressEventTrackingWrapper';
 import StringConstant from '../../../utils/string/StringConstant';
+import dimen from '../../../utils/dimen';
+import {BetterSocialEventTracking} from '../../../libraries/analytics/analyticsEventTracking';
 import {COLORS, SIZES} from '../../../utils/theme';
 import {DISCOVERY_TAB_USERS} from '../../../utils/constants';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
 import {useDynamicColors} from '../../../hooks/useToggleColors';
-import dimen from '../../../utils/dimen';
 
-const Search = ({onPress, animatedValue, isAnon, isShowNewChat = true}) => {
+const Search = ({
+  onPress,
+  animatedValue,
+  isAnon,
+  eventPressName = BetterSocialEventTracking.UNDEFINED_EVENT,
+  isShowNewChat = true
+}) => {
   const navigation = useNavigation();
   const dynamicColors = useDynamicColors(isAnon);
 
@@ -27,13 +36,16 @@ const Search = ({onPress, animatedValue, isAnon, isShowNewChat = true}) => {
       <Pressable onPress={__handleOnSearchClicked} style={styles.searchPressableContainer}>
         <View style={styles.wrapperSearch}>
           <View style={styles.wrapperIcon}>
-            <MemoIc_search width={17} height={17} fill={COLORS.gray310} />
+            <MemoIcSearch width={17} height={17} fill={COLORS.gray310} />
           </View>
           <Text style={styles.input}>{StringConstant.chatTabHeaderPlaceholder}</Text>
         </View>
       </Pressable>
       {isShowNewChat && (
-        <TouchableOpacity style={styles.wrapperButton} onPress={onPress}>
+        <PressEventTrackingWrapper
+          name={eventPressName}
+          style={styles.wrapperButton}
+          onPress={onPress}>
           <Text style={styles.newPostText(dynamicColors)}>
             {StringConstant.chatTabHeaderCreateChatButtonText}
           </Text>
@@ -45,10 +57,19 @@ const Search = ({onPress, animatedValue, isAnon, isShowNewChat = true}) => {
               color={dynamicColors.primary}
             />
           </View>
-        </TouchableOpacity>
+        </PressEventTrackingWrapper>
       )}
     </Animated.View>
   );
+};
+
+Search.propTypes = {
+  route: PropTypes.string,
+  onPress: PropTypes.func,
+  animatedValue: PropTypes.number,
+  isAnon: PropTypes.bool,
+  eventPressName: PropTypes.string,
+  isShowNewChat: PropTypes.bool
 };
 
 const styles = StyleSheet.create({

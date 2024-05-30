@@ -10,11 +10,13 @@ import CommunityChannelItem from '../../components/ChatList/CommunityChannelItem
 import GroupChatChannelItem from '../../components/ChatList/GroupChatChannelItem';
 import MessageChannelItem from '../../components/AnonymousChat/MessageChannelItem';
 import PostNotificationChannelItem from '../../components/AnonymousChat/PostNotificationChannelItem';
+import PressEventTrackingWrapper from '../../components/Wrapper/PressEventTrackingWrapper';
 import Search from './elements/Search';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import useRootChannelListHook from '../../hooks/screen/useRootChannelListHook';
 import useSignedChannelListScreenHook from '../../hooks/screen/useSignedChannelListHook';
 import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
+import {BetterSocialEventTracking} from '../../libraries/analytics/analyticsEventTracking';
 import {COLORS} from '../../utils/theme';
 
 const ChannelListScreen = ({route}) => {
@@ -77,7 +79,11 @@ const ChannelListScreen = ({route}) => {
     <>
       <StatusBar translucent={false} barStyle={'light-content'} />
       <View style={{height: 52}}>
-        <Search route={route} onPress={goToContactScreen} />
+        <Search
+          route={route}
+          onPress={() => goToContactScreen({from: 'SIGNED'})}
+          eventPressName={BetterSocialEventTracking.SIGNED_CHAT_TAB_OPEN_NEW_CHAT}
+        />
       </View>
 
       <FlatList

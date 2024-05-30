@@ -2,6 +2,7 @@ import SimpleToast from 'react-native-simple-toast';
 /* eslint-disable no-shadow */
 import {JsonMap, createClient} from '@segment/analytics-react-native';
 
+import {ANONYMOUS} from '../../hooks/core/constant';
 import {ENV, SEGMENT_WRITE_KEY} from '../Configs/ENVConfig';
 
 /**
@@ -9,6 +10,9 @@ import {ENV, SEGMENT_WRITE_KEY} from '../Configs/ENVConfig';
  * https://docs.google.com/spreadsheets/d/1zkQzRPG9nKEXaoHI79nFXgL7WmSgp3qGRPVkHMxBzR0/edit#gid=1943812029
  */
 export enum BetterSocialEventTracking {
+  //  DEFAULT EVENT
+  UNDEFINED_EVENT = 'undefined_event',
+
   // ONBOARDING HUMAN ID
   HUMAN_ID_BUTTON_CLICKED = 'PreLogin-Slider5Login_hIDbutton_Clicked',
   HUMAN_ID_SUCCESS_EXISTING_ACCOUNT = 'external_alert_humanID-Relogin',
@@ -48,7 +52,15 @@ export enum BetterSocialEventTracking {
   ONBOARDING_REGISTRATION_UPLOAD_IMAGE_SUCCESS = 'OB-FollowUsers_API_UploadImageSuccess',
   ONBOARDING_REGISTRATION_UPLOAD_IMAGE_FAIL = 'OB-FollowUsers_API_UploadImageFail',
   ONBOARDING_REGISTRATION_SUCCESS = 'OB-FollowUsers_API_CreateAccountSuccess',
-  ONBOARDING_REGISTRATION_FAILED = 'OB-FollowUsers_API_CreateAccountFail'
+  ONBOARDING_REGISTRATION_FAILED = 'OB-FollowUsers_API_CreateAccountFail',
+
+  // SIGNED CHAT TAB
+  SIGNED_CHAT_TAB_OPEN_NEW_CHAT = 'SignedChat-Chattab_newSignedChatButton_openNewSignedChatFlow',
+  SIGNED_CHAT_TAB = '',
+
+  // ANONYMOUS CHAT TAB
+  ANONYMOUS_CHAT_TAB_OPEN_NEW_CHAT = 'AnonChat-Chattab_newAnonChatButton_openNewAnonChatFlow',
+  ANONYMOUS_CHAT_TAB = '1'
 }
 
 const ENABLE_TOAST = ENV === 'Dev';

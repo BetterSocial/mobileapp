@@ -1,20 +1,21 @@
-// eslint-disable-next-line no-use-before-define
-import {useNavigation} from '@react-navigation/core';
 import * as React from 'react';
 import {FlatList, StatusBar, View} from 'react-native';
-
+// eslint-disable-next-line no-use-before-define
+import {useNavigation} from '@react-navigation/core';
 import {useScrollToTop} from '@react-navigation/native';
+
 import AnonymousProfile from '../../../assets/images/AnonymousProfile.png';
+import ChannelListHeaderItem from '../../../components/ChatList/ChannelListHeaderItem';
+import IncognitoEmptyChat from '../IncognitoEmptyChat';
 import MessageChannelItem from '../../../components/AnonymousChat/MessageChannelItem';
 import PostNotificationChannelItem from '../../../components/AnonymousChat/PostNotificationChannelItem';
-import ChannelListHeaderItem from '../../../components/ChatList/ChannelListHeaderItem';
-import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
-import {ANONYMOUS, ANON_PM, ANON_POST_NOTIFICATION} from '../../../hooks/core/constant';
-import useAnonymousChannelListScreenHook from '../../../hooks/screen/useAnonymousChannelListHook';
-import useRootChannelListHook from '../../../hooks/screen/useRootChannelListHook';
 import Search from '../../ChannelListScreen/elements/Search';
+import useAnonymousChannelListScreenHook from '../../../hooks/screen/useAnonymousChannelListHook';
+import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
+import useRootChannelListHook from '../../../hooks/screen/useRootChannelListHook';
+import {ANONYMOUS, ANON_PM, ANON_POST_NOTIFICATION} from '../../../hooks/core/constant';
+import {BetterSocialEventTracking} from '../../../libraries/analytics/analyticsEventTracking';
 import {COLORS} from '../../../utils/theme';
-import IncognitoEmptyChat from '../IncognitoEmptyChat';
 
 const AnonymousChannelListScreen = ({route}) => {
   const {refresh} = useLocalDatabaseHook();
@@ -65,7 +66,12 @@ const AnonymousChannelListScreen = ({route}) => {
     <>
       <StatusBar translucent={false} barStyle={'light-content'} />
       <View style={{height: 52}}>
-        <Search route={route} isAnon={true} onPress={() => goToContactScreen({from: ANONYMOUS})} />
+        <Search
+          route={route}
+          isAnon={true}
+          onPress={() => goToContactScreen({from: ANONYMOUS})}
+          eventPressName={BetterSocialEventTracking.ANONYMOUS_CHAT_TAB_OPEN_NEW_CHAT}
+        />
       </View>
 
       <IncognitoEmptyChat />
