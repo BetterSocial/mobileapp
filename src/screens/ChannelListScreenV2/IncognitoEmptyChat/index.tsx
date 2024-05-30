@@ -1,16 +1,19 @@
 import * as React from 'react';
-import {Image, Text, View, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
+import {Dimensions, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
 import EmptyIncognito from '../../../assets/images/empty_incognito.png';
 import IconArrowRight from '../../../assets/icons/Ic_arrow_right';
-import dimen from '../../../utils/dimen';
-import {COLORS} from '../../../utils/theme';
-import {fonts, normalizeFontSize} from '../../../utils/fonts';
-import {ANONYMOUS} from '../../../hooks/core/constant';
-import useAnonymousChannelListScreenHook from '../../../hooks/screen/useAnonymousChannelListHook';
-import {DISCOVERY_TAB_TOPICS, NavigationConstants} from '../../../utils/constants';
 import StorageUtils from '../../../utils/storage';
+import dimen from '../../../utils/dimen';
+import useAnonymousChannelListScreenHook from '../../../hooks/screen/useAnonymousChannelListHook';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../../libraries/analytics/analyticsEventTracking';
+import {ANONYMOUS} from '../../../hooks/core/constant';
+import {COLORS} from '../../../utils/theme';
+import {DISCOVERY_TAB_TOPICS, NavigationConstants} from '../../../utils/constants';
+import {fonts, normalizeFontSize} from '../../../utils/fonts';
 
 const {width: widthScreen} = Dimensions.get('window');
 
@@ -71,19 +74,32 @@ const IncognitoEmptyChat = () => {
         <IncognitoButton
           title="Start an Incognito Chat"
           subtitle="Send an incognito message to friends."
-          onPress={() => goToContactScreen({from: ANONYMOUS})}
+          onPress={() => {
+            AnalyticsEventTracking.eventTrack(
+              BetterSocialEventTracking.ANONYMOUS_CHAT_TAB_EMPTY_CHAT_OPEN_NEW_CHAT
+            );
+            goToContactScreen({from: ANONYMOUS});
+          }}
         />
         <IncognitoButton
           title="Create an Incognito Post"
           subtitle="Send an incognito message to friends."
-          onPress={() =>
-            navigation.navigate(NavigationConstants.CREATE_POST_SCREEN, {followType: 'incognito'})
-          }
+          onPress={() => {
+            AnalyticsEventTracking.eventTrack(
+              BetterSocialEventTracking.ANONYMOUS_CHAT_TAB_EMPTY_CHAT_OPEN_CREATE_POST
+            );
+            navigation.navigate(NavigationConstants.CREATE_POST_SCREEN, {followType: 'incognito'});
+          }}
         />
         <IncognitoButton
           title="Join Communities in Incognito Mode"
           subtitle="Safely join without anyone knowing."
-          onPress={() => navigation.navigate('DiscoveryScreen', {tab: DISCOVERY_TAB_TOPICS})}
+          onPress={() => {
+            AnalyticsEventTracking.eventTrack(
+              BetterSocialEventTracking.ANONYMOUS_CHAT_TAB_EMPTY_CHAT_OPEN_DISCOVERY
+            );
+            navigation.navigate('DiscoveryScreen', {tab: DISCOVERY_TAB_TOPICS});
+          }}
         />
       </View>
     </View>
