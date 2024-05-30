@@ -56,7 +56,13 @@ export enum BetterSocialEventTracking {
 
   // SIGNED CHAT TAB
   SIGNED_CHAT_TAB_OPEN_NEW_CHAT = 'SignedChat-Chattab_newSignedChatButton_openNewSignedChatFlow',
-  SIGNED_CHAT_TAB = '',
+  SIGNED_CHAT_TAB_OPEN_CHAT_SCREEN = 'SignedChat-Chattab_Channel-DM_openChatScreen',
+  SIGNED_CHAT_TAB_OPEN_GROUP_CHAT_SCREEN = 'SignedChat-Chattab_Channel-Groupchat_openChatScreen',
+  SIGNED_CHAT_TAB_MY_POST_NOTIF_OPEN_PDP = 'SignedChat-Chattab_Channel-MyPostNotif_openPDP',
+  SIGNED_CHAT_TAB_OTHER_POST_NOTIF_OPEN_PDP = 'SignedChat-Chattab_Channel-OtherPostNotif_openPDP',
+  SIGNED_CHAT_TAB_COMMUNITY_PAGE_OPEN_PAGE = 'SignedChat-Chattab_Channel-CommunityPage_openCP',
+  SIGNED_CHAT_TAB_PRESS_FOLLOW_BUTTON = 'SignedChat-Chattab_followButton_Following',
+  SIGNED_CHAT_TAB_PRESS_UNFOLLOW_BUTTON = 'SignedChat-Chattab_followButton_Unfollowing',
 
   // ANONYMOUS CHAT TAB
   ANONYMOUS_CHAT_TAB_OPEN_NEW_CHAT = 'AnonChat-Chattab_newAnonChatButton_openNewAnonChatFlow',
