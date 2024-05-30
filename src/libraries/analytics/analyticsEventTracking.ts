@@ -21,8 +21,10 @@ export enum BetterSocialEventTracking {
   ONBOARDING_USERNAME_PROFILE_PIC_LIBRARY_SELECT = 'OB-Username_ProfilePicDrawer_clickLibrary',
   ONBOARDING_USERNAME_PROFILE_PIC_IMAGE_CHANGED = 'OB-Username_ProfilePic_updated',
   ONBOARDING_USERNAME_PROFILE_PIC_IMAGE_FAIL_TO_CHANGE = 'OB-Username_ProfilePic_failed',
-  ONBOARDING_USERNAME_PROFILE_PIC_ALERT_SKIP = 'OB-Username_PicReminderAlert_skip',
+  ONBOARDING_USERNAME_PROFILE_PIC_ALERT_SKIP = 'OB-Username_PicReminderAlert-skip_OB-LocationOpened',
   ONBOARDING_USERNAME_PROFILE_PIC_ALERT_ADD_PHOTO = 'OB-Username_PicReminderAlert_addProfilePic',
+  ONBOARDING_USERNAME_NEXT_BUTTON_NO_PROFILE_PIC = 'OB-Username_nextButton-noProfilePic_PicReminderAlertOpened',
+  ONBOARDING_USERNAME_NEXT_BUTTON_WITH_PROFILE_PIC = 'OB-Username_nextButton-profilePic_OB-LocationOpened',
 
   // ONBOARDING SELECT LOCATION SCREEN
   ONBOARDING_LOCATION_FIRST_OPEN_SEARCH = 'OB-Location_Location1_openSearch',
@@ -32,11 +34,13 @@ export enum BetterSocialEventTracking {
   ONBOARDING_LOCATION_FIRST_SELECTED = 'OB-Location_Location1_hasLocationvalue',
   ONBOARDING_LOCATION_SECOND_SELECTED = 'OB-Location_Location2_hasLocationvalue',
   ONBOARDING_LOCATION_DRAWER_CLOSED = 'OB-Location_SearchBottomDrawer_closewithoutselection',
+  ONBOARDING_LOCATION_NEXT_BUTTON = 'OB-Location_nextButton_OB-topicsOpened',
 
   // ONBOARDING TOPICS SCREEN
   ONBOARDING_TOPICS_TOTAL_FOLLOWING = 'OB-Topics_TopicsNextButton_clicked',
   ONBOARDING_TOPICS_SELECTED = 'OB-Topics_CommunitesList_selected',
   ONBOARDING_TOPICS_UNSELECTED = 'OB-Topics_CommunitiesList_unselected',
+  ONBOARDING_TOPICS_NEXT_BUTTON = 'OB-Topics_nextButton_OB-FollowUsersOpened',
 
   // ONBOARDING WHO TO FOLLOW SCREEN
   ONBOARDING_WHO_TO_FOLLOW_TOTAL_FOLLOWING = 'OB-FollowUsers_UsersNextButton_clicked',
