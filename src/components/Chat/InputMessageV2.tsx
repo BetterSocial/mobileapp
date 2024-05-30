@@ -235,7 +235,7 @@ const InputMessageV2 = ({
     if (success) {
       eventTrackByUserType(
         BetterSocialEventTracking.SIGNED_CHAT_SCREEN_ATTACHMENT_CLICK_MEDIA,
-        BetterSocialEventTracking.ANON_CHAT_SCREEN_ATTACHMENT_CLICK_MEDIA
+        BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_ATTACHMENT_CLICK_MEDIA
       );
       ImagePicker.openPicker({
         multiple: true,
@@ -289,7 +289,7 @@ const InputMessageV2 = ({
     if (success) {
       eventTrackByUserType(
         BetterSocialEventTracking.SIGNED_CHAT_SCREEN_ATTACHMENT_CLICK_CAMERA,
-        BetterSocialEventTracking.ANON_CHAT_SCREEN_ATTACHMENT_CLICK_CAMERA
+        BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_ATTACHMENT_CLICK_CAMERA
       );
       ImagePicker.openCamera({
         mediaType: 'photo'
@@ -322,7 +322,7 @@ const InputMessageV2 = ({
     setIsLoadingUploadImageFile(true);
     eventTrackByUserType(
       BetterSocialEventTracking.SIGNED_CHAT_SCREEN_ATTACHMENT_CLICK_FILE,
-      BetterSocialEventTracking.ANON_CHAT_SCREEN_ATTACHMENT_CLICK_FILE
+      BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_ATTACHMENT_CLICK_FILE
     );
     DocumentPicker.pickSingle({
       presentationStyle: 'fullScreen'
@@ -347,7 +347,7 @@ const InputMessageV2 = ({
       refGif.current.open();
       eventTrackByUserType(
         BetterSocialEventTracking.SIGNED_CHAT_SCREEN_ATTACHMENT_CLICK_GIF,
-        BetterSocialEventTracking.ANON_CHAT_SCREEN_ATTACHMENT_CLICK_GIF
+        BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_ATTACHMENT_CLICK_GIF
       );
     }, 500);
   };

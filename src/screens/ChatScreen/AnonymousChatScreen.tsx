@@ -59,8 +59,8 @@ const AnonymousChatScreen = () => {
     chats,
     selectedChannel,
     selfAnonUserInfo,
-    goBackFromChatScreen,
-    goToChatInfoScreen,
+    goBackToChatTab,
+    goToChatInfoScreenBy,
     sendChatMutation,
     updateChatContinuity
   } = useChatScreenHook(ANONYMOUS);
@@ -104,9 +104,9 @@ const AnonymousChatScreen = () => {
     <View style={styles.keyboardAvoidingView}>
       {selectedChannel ? (
         <ChatDetailHeader
-          onAvatarPress={() => goToChatInfoScreen({from: ANONYMOUS})}
-          onBackPress={goBackFromChatScreen}
-          onThreeDotPress={() => goToChatInfoScreen({from: ANONYMOUS})}
+          onAvatarPress={() => goToChatInfoScreenBy('ProfilePicture', {from: ANONYMOUS})}
+          onBackPress={goBackToChatTab}
+          onThreeDotPress={() => goToChatInfoScreenBy('OptionsButton', {from: ANONYMOUS})}
           avatar={selectedChannel?.channelPicture}
           user={selectedChannel?.name}
           anon_user_info_emoji_code={selectedChannel?.anon_user_info_emoji_code}

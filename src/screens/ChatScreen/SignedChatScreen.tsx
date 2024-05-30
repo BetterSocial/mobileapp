@@ -13,6 +13,7 @@ import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
 import useMoveChatTypeHook from '../../hooks/core/chat/useMoveChatTypeHook';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {Context} from '../../context';
+import {GoToChatInfoScreenByTrigger} from '../../../types/hooks/screens/useChatScreenHook.types';
 import {SIGNED} from '../../hooks/core/constant';
 import {getOtherProfile} from '../../service/profile';
 import {setChannel} from '../../context/actions/setChannel';
@@ -22,8 +23,8 @@ const SignedChatScreen = () => {
   const {
     selectedChannel,
     chats,
-    goBackFromChatScreen,
-    goToChatInfoScreen,
+    goBackToChatTab,
+    goToChatInfoScreenBy,
     sendChatMutation,
     isLoadingFetchAllMessage,
     updateChatContinuity
@@ -35,8 +36,8 @@ const SignedChatScreen = () => {
   const [isAnonimityEnabled, setIsAnonimityEnabled] = React.useState(true);
   const [, dispatchChannel] = (React.useContext(Context) as unknown as any).channel;
   const [profile] = (React.useContext(Context) as unknown as any).profile;
-  const {signedProfileId} = useProfileHook();
 
+  const {signedProfileId} = useProfileHook();
   const {moveToAnonymousChannel} = useMoveChatTypeHook();
 
   const exitedGroup =
@@ -54,8 +55,8 @@ const SignedChatScreen = () => {
     [updatedChats]
   );
 
-  const goToChatInfoPage = () => {
-    goToChatInfoScreen({from: SIGNED});
+  const goToChatInfoPage = (trigger: GoToChatInfoScreenByTrigger) => {
+    goToChatInfoScreenBy(trigger, {from: SIGNED});
   };
 
   const scrollToEnd = () => {
@@ -100,9 +101,9 @@ const SignedChatScreen = () => {
       {selectedChannel ? (
         <ChatDetailHeader
           channel={selectedChannel}
-          onAvatarPress={exitedGroup ? null : () => goToChatInfoPage()}
-          onBackPress={goBackFromChatScreen}
-          onThreeDotPress={exitedGroup ? null : () => goToChatInfoPage()}
+          onAvatarPress={exitedGroup ? null : () => goToChatInfoPage('ProfilePicture')}
+          onBackPress={goBackToChatTab}
+          onThreeDotPress={exitedGroup ? null : () => goToChatInfoPage('OptionsButton')}
           avatar={selectedChannel?.channelPicture}
           type={SIGNED}
           user={selectedChannel?.name}
