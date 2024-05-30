@@ -63,6 +63,10 @@ export enum BetterSocialEventTracking {
   ANONYMOUS_CHAT_TAB_EMPTY_CHAT_OPEN_NEW_CHAT = 'AnonChat-Chattab_emptyAnonTab-startAnonChatButton_openNewAnonChatFlow',
   ANONYMOUS_CHAT_TAB_EMPTY_CHAT_OPEN_CREATE_POST = 'AnonChat-Chattab_emptyAnonTab-newAnonPostButton_openCreateAnonPost',
   ANONYMOUS_CHAT_TAB_EMPTY_CHAT_OPEN_DISCOVERY = 'AnonChat-Chattab_emptyAnonTab-joinCommButton_openDiscovery-Comm',
+  ANONYMOUS_CHAT_TAB_OPEN_CHAT_SCREEN = 'AnonChat-Chattab_Channel-DM_openChatScreen',
+  ANONYMOUS_CHAT_TAB_MY_POST_NOTIF_OPEN_PDP = 'AnonChat-Chattab_Channel-MyPostNotif_openPDP',
+  ANONYMOUS_CHAT_TAB_OTHER_POST_NOTIF_OPEN_PDP = 'AnonChat-Chattab_Channel-OtherPostNotif_openPDP',
+  ANONYMOUS_CHAT_TAB_COMMUNITY_PAGE_OPEN_PAGE = 'AnonChat-Chattab_Channel-CommunityPage_openCP',
   ANONYMOUS_CHAT_TAB = '1'
 }
 

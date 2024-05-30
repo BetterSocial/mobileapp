@@ -13,8 +13,10 @@ import Search from '../../ChannelListScreen/elements/Search';
 import useAnonymousChannelListScreenHook from '../../../hooks/screen/useAnonymousChannelListHook';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import useRootChannelListHook from '../../../hooks/screen/useRootChannelListHook';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../../libraries/analytics/analyticsEventTracking';
 import {ANONYMOUS, ANON_PM, ANON_POST_NOTIFICATION} from '../../../hooks/core/constant';
-import {BetterSocialEventTracking} from '../../../libraries/analytics/analyticsEventTracking';
 import {COLORS} from '../../../utils/theme';
 
 const AnonymousChannelListScreen = ({route}) => {
@@ -26,6 +28,7 @@ const AnonymousChannelListScreen = ({route}) => {
     channels: anonChannels,
     goToChatScreen,
     goToPostDetailScreen,
+    goToCommunityScreen,
     goToContactScreen
   } = useAnonymousChannelListScreenHook();
   const ref = React.useRef(null);
@@ -41,14 +44,32 @@ const AnonymousChannelListScreen = ({route}) => {
 
   const renderChannelItem = ({item}) => {
     if (item?.channelType === ANON_PM) {
-      return <MessageChannelItem item={item} onChannelPressed={() => goToChatScreen(item)} />;
+      return (
+        <MessageChannelItem
+          item={item}
+          onChannelPressed={() => {
+            AnalyticsEventTracking.eventTrack(
+              BetterSocialEventTracking.ANONYMOUS_CHAT_TAB_OPEN_CHAT_SCREEN
+            );
+            goToChatScreen(item);
+          }}
+        />
+      );
     }
 
     if (item?.channelType === ANON_POST_NOTIFICATION) {
       return (
         <PostNotificationChannelItem
           item={item}
-          onChannelPressed={() => goToPostDetailScreen(item)}
+          onChannelPressed={() => {
+            const isOwnAnonymousPost = item?.rawJson?.isOwnAnonymousPost;
+            AnalyticsEventTracking.eventTrack(
+              isOwnAnonymousPost
+                ? BetterSocialEventTracking.ANONYMOUS_CHAT_TAB_MY_POST_NOTIF_OPEN_PDP
+                : BetterSocialEventTracking.ANONYMOUS_CHAT_TAB_OTHER_POST_NOTIF_OPEN_PDP
+            );
+            goToPostDetailScreen(item);
+          }}
         />
       );
     }
@@ -56,7 +77,17 @@ const AnonymousChannelListScreen = ({route}) => {
     if (item?.channelType === 'ANON_TOPIC') {
       // TODO: ADD the correct ANON_TOPIC Channel Item Component here;
 
-      return <MessageChannelItem item={item} onChannelPressed={() => goToChatScreen(item)} />;
+      return (
+        <MessageChannelItem
+          item={item}
+          onChannelPressed={() => {
+            AnalyticsEventTracking.eventTrack(
+              BetterSocialEventTracking.ANONYMOUS_CHAT_TAB_COMMUNITY_PAGE_OPEN_PAGE
+            );
+            goToCommunityScreen(item);
+          }}
+        />
+      );
     }
 
     return null;
