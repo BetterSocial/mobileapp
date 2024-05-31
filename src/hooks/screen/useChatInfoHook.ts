@@ -2,12 +2,14 @@ import * as React from 'react';
 import {useNavigation, useRoute} from '@react-navigation/core';
 
 import ChannelList from '../../database/schema/ChannelListSchema';
-import UseAnonymousChatInfoScreenHook from '../../../types/hooks/screens/useAnonymousChatInfoScreenHook.types';
 import useAnalyticUtilsHook from '../../libraries/analytics/useAnalyticUtilsHook';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import useGroupInfo from '../../screens/GroupInfo/hooks/useGroupInfo';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import useUserAuthHook from '../core/auth/useUserAuthHook';
+import UseAnonymousChatInfoScreenHook, {
+  ChatInfoModalActions
+} from '../../../types/hooks/screens/useAnonymousChatInfoScreenHook.types';
 import {ANONYMOUS, SIGNED} from '../core/constant';
 import {BetterSocialEventTracking} from '../../libraries/analytics/analyticsEventTracking';
 import {ChannelListMemberSchema} from '../../../types/database/schema/ChannelList.types';
@@ -60,7 +62,11 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   };
 
   const onContactPressed = (item: ChannelListMemberSchema) => {
-    return handlePressContact(item);
+    handlePressContact(item);
+
+    return eventTrackByChannelType({
+      anon: BetterSocialEventTracking.ANONYMOUS_CHAT_DETAIL_OPEN_PARTICIPANT_MENU
+    });
   };
 
   const handleClosePopup = () => setShowPopupBlock(false);
@@ -72,7 +78,27 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
     return false;
   };
 
-  const handlePressPopup = (status) => {
+  const handlePressPopup = (status: ChatInfoModalActions) => {
+    if (status === 'view') {
+      eventTrackByChannelType({
+        signed:
+          BetterSocialEventTracking.SIGNED_CHAT_DETAIL_OPEN_PARTICIPANT_MENU_VIEW_OTHER_PROFILE,
+        anon: BetterSocialEventTracking.ANONYMOUS_CHAT_DETAIL_OPEN_PARTICIPANT_MENU_VIEW_OTHER_PROFILE,
+        group: BetterSocialEventTracking.GROUP_CHAT_DETAIL_OPEN_PARTICIPANT_MENU_VIEW_OTHER_PROFILE
+      });
+    } else if (status === 'message') {
+      eventTrackByChannelType({
+        anon: BetterSocialEventTracking.ANONYMOUS_CHAT_DETAIL_OPEN_PARTICIPANT_MENU_LEAVE_INCOGNITO_MODE,
+        group: BetterSocialEventTracking.GROUP_CHAT_DETAIL_OPEN_PARTICIPANT_MENU_VIEW_MESSAGE
+      });
+    } else if (status === 'message-anonymously') {
+      eventTrackByChannelType({
+        signed: BetterSocialEventTracking.SIGNED_CHAT_DETAIL_OPEN_PARTICIPANT_MENU_GO_INCOGNITO,
+        group:
+          BetterSocialEventTracking.GROUP_CHAT_DETAIL_OPEN_PARTICIPANT_MENU_VIEW_MESSAGE_INCOGNITO
+      });
+    }
+
     handleOpenPopup(status);
   };
 
@@ -109,6 +135,7 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   return {
     isLoadingFetchingChannelDetail,
     channelInfo,
+    eventTrackByChannelType,
     goBack: goBackAndSendAnalytics,
     onContactPressed,
     selectedUser,

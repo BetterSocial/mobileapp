@@ -1,11 +1,14 @@
 import {ChannelList, ChannelListMemberSchema} from '../../database/schema/ChannelList.types';
+import {ChannelTypeEventTracking} from '../../../src/libraries/analytics/useAnalyticUtilsHook';
 import {Member} from '../../database/schema/ChatListDetail.types';
 
+export type ChatInfoModalActions = 'message' | 'view' | 'message-anonymously' | 'remove' | 'block';
 interface UseAnonymousChatInfoScreenHook {
   isLoadingFetchingChannelDetail: boolean;
   channelInfo: ChannelList;
   goBack: () => void;
   onContactPressed: (item: ChannelListMemberSchema, from?: string) => void;
+  eventTrackByChannelType: (options: ChannelTypeEventTracking) => void;
   isAnonymous: boolean;
   selectedUser: ChannelListMemberSchema;
   showPopupBlock: boolean;

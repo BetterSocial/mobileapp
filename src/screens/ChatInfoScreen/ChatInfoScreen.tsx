@@ -33,6 +33,7 @@ import dimen from '../../utils/dimen';
 import useChatInfoScreenHook from '../../hooks/screen/useChatInfoHook';
 import useGroupInfo from '../GroupInfo/hooks/useGroupInfo';
 import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
+import {BetterSocialEventTracking} from '../../libraries/analytics/analyticsEventTracking';
 import {CHANNEL_GROUP, GROUP_INFO, SIGNED} from '../../hooks/core/constant';
 import {COLORS} from '../../utils/theme';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
@@ -205,6 +206,7 @@ const ChatInfoScreen = () => {
     channelInfo,
     goBack,
     onContactPressed,
+    eventTrackByChannelType,
     selectedUser,
     handlePressPopup,
     handleCloseSelectUser,
@@ -365,14 +367,19 @@ const ChatInfoScreen = () => {
                 <View style={styles.btnAdd}>
                   <TouchableOpacity
                     testID="addParticipant"
-                    onPress={() =>
+                    onPress={() => {
+                      eventTrackByChannelType({
+                        group:
+                          BetterSocialEventTracking.GROUP_CHAT_DETAIL_ADD_PARTICIPANT_BUTTON_CLICKED
+                      });
+
                       navigation.push('ContactScreen', {
                         from: SIGNED,
                         isAddParticipant: true,
                         channelId: channelInfo?.id,
                         existParticipants: channelInfo?.memberUsers?.map((item) => item?.username)
-                      })
-                    }>
+                      });
+                    }}>
                     <Text style={styles.btnAddText}>+ Add Participants</Text>
                   </TouchableOpacity>
                 </View>
