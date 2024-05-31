@@ -18,19 +18,20 @@ import {
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/core';
 
-import ExitGroup from '../../assets/images/exit-group.png';
-import ReportGroup from '../../assets/images/report.png';
-import IconPencil from '../../assets/icons/Ic_pencil';
 import AnonymousChatInfoHeader from '../../components/Header/AnonymousChatInfoHeader';
 import AnonymousIcon from '../ChannelListScreen/elements/components/AnonymousIcon';
 import BlockComponent from '../../components/BlockComponent';
 import ChannelImage from '../../components/ChatList/elements/ChannelImage';
+import ExitGroup from '../../assets/images/exit-group.png';
+import IconPencil from '../../assets/icons/Ic_pencil';
 import ModalAction from '../GroupInfo/elements/ModalAction';
-import ModalChangeName from '../GroupInfo/elements/ModalChangeName';
 import ModalActionAnonymous from '../GroupInfo/elements/ModalActionAnonymous';
+import ModalChangeName from '../GroupInfo/elements/ModalChangeName';
+import ReportGroup from '../../assets/images/report.png';
 import UserSchema from '../../database/schema/UserSchema';
 import dimen from '../../utils/dimen';
 import useChatInfoScreenHook from '../../hooks/screen/useChatInfoHook';
+import useGroupInfo from '../GroupInfo/hooks/useGroupInfo';
 import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
 import {CHANNEL_GROUP, GROUP_INFO, SIGNED} from '../../hooks/core/constant';
 import {COLORS} from '../../utils/theme';
@@ -38,7 +39,6 @@ import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {ProfileContact} from '../../components/Items';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getOfficialAnonUsername} from '../../utils/string/StringUtils';
-import useGroupInfo from '../GroupInfo/hooks/useGroupInfo';
 
 export const styles = StyleSheet.create({
   container: {

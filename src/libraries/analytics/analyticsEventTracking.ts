@@ -105,7 +105,19 @@ export enum BetterSocialEventTracking {
   ANONYMOUS_CHAT_SCREEN_TOGGLE_MOVE_CHAT_OPEN_ALERT = 'AnonChat-ChatScreen_Toggle_openMoveChat-Alert',
   ANONYMOUS_CHAT_SCREEN_TOGGLE_MOVE_CHAT_CLOSE_ALERT = 'AnonChat-ChatScreen_MoveChat-Alert_Discard',
   ANONYMOUS_CHAT_SCREEN_TOGGLE_MOVE_CHAT_OPEN_CHAT = 'AnonChat-ChatScreen_MoveChat-Alert_openNewChatScreen',
-  ANONYMOUS_CHAT_SCREEN_ATTACHMENT_UPLOAD_FAILED = 'AnonChat-ChatScreen_ChatActions-Drawer_mediauploadfailed'
+  ANONYMOUS_CHAT_SCREEN_ATTACHMENT_UPLOAD_FAILED = 'AnonChat-ChatScreen_ChatActions-Drawer_mediauploadfailed',
+
+  // SIGNED CHAT DETAIL
+  SIGNED_CHAT_DETAIL_BACK_BUTTON_PRESSED = 'SignedChat-ChatDetail_backButton_openChatScreen',
+  SIGNED_CHAT_DETAIL = '',
+
+  // ANON CHAT DETAIL
+  ANONYMOUS_CHAT_DETAIL_BACK_BUTTON_PRESSED = 'AnonChat-ChatDetail_backButton_openChatScreen',
+  ANONYMOUS_CHAT_DETAIL = '1',
+
+  // GROUP CHAT DETAIL
+  GROUP_CHAT_DETAIL_BACK_BUTTON_PRESSED = 'GroupChat-ChatDetail_backButton_openChatScreen',
+  GROUP_CHAT_DETAIL = '2'
 }
 
 const ENABLE_TOAST = ENV === 'Dev';

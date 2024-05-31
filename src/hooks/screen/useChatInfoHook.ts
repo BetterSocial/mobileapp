@@ -1,17 +1,19 @@
-import {useNavigation, useRoute} from '@react-navigation/core';
 import * as React from 'react';
+import {useNavigation, useRoute} from '@react-navigation/core';
 
-import {ChannelListMemberSchema} from '../../../types/database/schema/ChannelList.types';
-import {Member} from '../../../types/database/schema/ChatListDetail.types';
-import UseAnonymousChatInfoScreenHook from '../../../types/hooks/screens/useAnonymousChatInfoScreenHook.types';
-import {Context} from '../../context';
-import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import ChannelList from '../../database/schema/ChannelListSchema';
-import useGroupInfo from '../../screens/GroupInfo/hooks/useGroupInfo';
-import {isContainUrl} from '../../utils/Utils';
-import useUserAuthHook from '../core/auth/useUserAuthHook';
+import UseAnonymousChatInfoScreenHook from '../../../types/hooks/screens/useAnonymousChatInfoScreenHook.types';
+import useAnalyticUtilsHook from '../../libraries/analytics/useAnalyticUtilsHook';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
+import useGroupInfo from '../../screens/GroupInfo/hooks/useGroupInfo';
+import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
+import useUserAuthHook from '../core/auth/useUserAuthHook';
 import {ANONYMOUS, SIGNED} from '../core/constant';
+import {BetterSocialEventTracking} from '../../libraries/analytics/analyticsEventTracking';
+import {ChannelListMemberSchema} from '../../../types/database/schema/ChannelList.types';
+import {Context} from '../../context';
+import {Member} from '../../../types/database/schema/ChatListDetail.types';
+import {isContainUrl} from '../../utils/Utils';
 
 function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   const {params}: any = useRoute();
@@ -20,8 +22,11 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   const [myUserId] = React.useContext(Context).profile;
 
   const [showPopupBlock, setShowPopupBlock] = React.useState(false);
-  const [channelInfo, setChannelInfo] = React.useState(null);
+  const [channelInfo, setChannelInfo] = React.useState<ChannelList | null>(null);
   const [loadingChannelInfo, setLoadingChannelInfo] = React.useState<boolean>(false);
+
+  const channelType = channelInfo?.channelType;
+  const {eventTrackByChannelType} = useAnalyticUtilsHook('SIGNED', channelType);
 
   const {isLoadingFetchingChannelDetail, selectedChannel, goBack} = useChatUtilsHook();
   const {
@@ -87,6 +92,16 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
     navigation?.navigate('GroupSetting', selectedChannel);
   };
 
+  const goBackAndSendAnalytics = () => {
+    eventTrackByChannelType({
+      signed: BetterSocialEventTracking.SIGNED_CHAT_DETAIL_BACK_BUTTON_PRESSED,
+      anon: BetterSocialEventTracking.ANONYMOUS_CHAT_DETAIL_BACK_BUTTON_PRESSED,
+      group: BetterSocialEventTracking.GROUP_CHAT_DETAIL_BACK_BUTTON_PRESSED
+    });
+
+    goBack();
+  };
+
   React.useEffect(() => {
     initChatInfoData();
   }, []);
@@ -94,7 +109,7 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
   return {
     isLoadingFetchingChannelDetail,
     channelInfo,
-    goBack,
+    goBack: goBackAndSendAnalytics,
     onContactPressed,
     selectedUser,
     showPopupBlock,
