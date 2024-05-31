@@ -85,7 +85,10 @@ export enum BetterSocialEventTracking {
   SIGNED_CHAT_SCREEN_HEADER_BACK_BUTTON_CLICKED = 'SignedChat-ChatScreen_backButton_openSignedChatTab',
   SIGNED_CHAT_SCREEN_HEADER_PROFILE_PICTURE_CLICKED = 'SignedChat-ChatScreen_ChatHeaderDPName_openChatDetailScreen',
   SIGNED_CHAT_SCREEN_HEADER_OPTIONS_BUTTON_CLICKED = 'SignedChat-ChatScreen_3Dots_openChatDetailScreen',
-  SIGNED_CHAT_SCREEN = '',
+  SIGNED_CHAT_SCREEN_TOGGLE_MOVE_CHAT_OPEN_ALERT = 'SignedChat-ChatScreen_Toggle_openMoveChat-Alert',
+  SIGNED_CHAT_SCREEN_TOGGLE_MOVE_CHAT_CLOSE_ALERT = 'SignedChat-ChatScreen_MoveChat-Alert_Discard',
+  SIGNED_CHAT_SCREEN_TOGGLE_MOVE_CHAT_OPEN_CHAT = 'SignedChat-ChatScreen_MoveChat-Alert_openNewChatScreen',
+  SIGNED_CHAT_SCREEN_ATTACHMENT_UPLOAD_FAILED = 'SignedChat-ChatScreen_ChatActions-Drawer_mediauploadfailed',
 
   // ANON CHAT SCREEN
   ANONYMOUS_CHAT_SCREEN_PLUS_SIGN_CLICKED = 'AnonChat-ChatScreen_plusSign_clicked',
@@ -99,7 +102,10 @@ export enum BetterSocialEventTracking {
   ANONYMOUS_CHAT_SCREEN_HEADER_BACK_BUTTON_CLICKED = 'AnonChat-ChatScreen_backButton_openAnonChatTab',
   ANONYMOUS_CHAT_SCREEN_HEADER_PROFILE_PICTURE_CLICKED = 'AnonChat-ChatScreen_ChatHeaderDPName_openChatDetailScreen',
   ANONYMOUS_CHAT_SCREEN_HEADER_OPTIONS_BUTTON_CLICKED = 'AnonChat-ChatScreen_3Dots_openChatDetailScreen',
-  ANONYMOUS_CHAT_SCREEN = '1'
+  ANONYMOUS_CHAT_SCREEN_TOGGLE_MOVE_CHAT_OPEN_ALERT = 'AnonChat-ChatScreen_Toggle_openMoveChat-Alert',
+  ANONYMOUS_CHAT_SCREEN_TOGGLE_MOVE_CHAT_CLOSE_ALERT = 'AnonChat-ChatScreen_MoveChat-Alert_Discard',
+  ANONYMOUS_CHAT_SCREEN_TOGGLE_MOVE_CHAT_OPEN_CHAT = 'AnonChat-ChatScreen_MoveChat-Alert_openNewChatScreen',
+  ANONYMOUS_CHAT_SCREEN_ATTACHMENT_UPLOAD_FAILED = 'AnonChat-ChatScreen_ChatActions-Drawer_mediauploadfailed'
 }
 
 const ENABLE_TOAST = ENV === 'Dev';

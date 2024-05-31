@@ -14,6 +14,9 @@ import dimen from '../../utils/dimen';
 import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
 import useMoveChatTypeHook from '../../hooks/core/chat/useMoveChatTypeHook';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../libraries/analytics/analyticsEventTracking';
 import {ANONYMOUS} from '../../hooks/core/constant';
 import {COLORS} from '../../utils/theme';
 
@@ -93,6 +96,9 @@ const AnonymousChatScreen = () => {
         targetUserId: memberChat.user_id,
         source: 'userId'
       });
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_TOGGLE_MOVE_CHAT_OPEN_CHAT
+      );
     } catch (e) {
       console.log('error moving chat to signed channel', e);
     } finally {

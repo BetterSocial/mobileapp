@@ -12,6 +12,9 @@ import Loading from '../Loading';
 import useChatScreenHook from '../../hooks/screen/useChatScreenHook';
 import useMoveChatTypeHook from '../../hooks/core/chat/useMoveChatTypeHook';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../libraries/analytics/analyticsEventTracking';
 import {Context} from '../../context';
 import {GoToChatInfoScreenByTrigger} from '../../../types/hooks/screens/useChatScreenHook.types';
 import {SIGNED} from '../../hooks/core/constant';
@@ -71,6 +74,9 @@ const SignedChatScreen = () => {
         targetUserId: memberChat.user_id,
         source: 'userId'
       });
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.SIGNED_CHAT_SCREEN_TOGGLE_MOVE_CHAT_OPEN_CHAT
+      );
     } catch (e) {
       console.log('error moving chat to signed channel', e);
     } finally {

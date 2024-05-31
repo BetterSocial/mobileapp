@@ -162,7 +162,12 @@ const InputMessageV2 = ({
     setIsLoadingUploadImageCamera(true);
 
     const resultUrls: any = [];
-    const uploadedImageUrl = await ImageUtils.uploadImageWithoutAuth(path);
+    const uploadedImageUrl = await ImageUtils.uploadImageWithoutAuth(path, {
+      withFailedEventTrack: getEventName(
+        BetterSocialEventTracking.SIGNED_CHAT_SCREEN_ATTACHMENT_MEDIA_UPLOAD_FILE,
+        BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_ATTACHMENT_UPLOAD_FAILED
+      )
+    });
     resultUrls.push({
       type: 'image',
       asset_url: uploadedImageUrl,
@@ -393,10 +398,19 @@ const InputMessageV2 = ({
           : 'Switch to anonymous chat?\nMessage this user in Incognito Mode instead.',
         [
           {
-            text: 'Cancel'
+            text: 'Cancel',
+            onPress: () =>
+              eventTrackByUserType(
+                BetterSocialEventTracking.SIGNED_CHAT_SCREEN_TOGGLE_MOVE_CHAT_CLOSE_ALERT,
+                BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_TOGGLE_MOVE_CHAT_CLOSE_ALERT
+              )
           },
           {text: 'Yes, move to other chat', onPress: onToggleConfirm}
         ]
+      );
+      eventTrackByUserType(
+        BetterSocialEventTracking.SIGNED_CHAT_SCREEN_TOGGLE_MOVE_CHAT_OPEN_ALERT,
+        BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_TOGGLE_MOVE_CHAT_OPEN_ALERT
       );
     }
   };

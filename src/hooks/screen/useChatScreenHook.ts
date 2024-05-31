@@ -7,13 +7,13 @@ import {v4 as uuid} from 'uuid';
 
 import ChannelList from '../../database/schema/ChannelListSchema';
 import ChatSchema from '../../database/schema/ChatSchema';
-import ImageUtils from '../../utils/image';
 import UserSchema from '../../database/schema/UserSchema';
 import useAnalyticUtilsHook from '../../libraries/analytics/useAnalyticUtilsHook';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import useDatabaseQueueHook from '../core/queue/useDatabaseQueueHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import useUserAuthHook from '../core/auth/useUserAuthHook';
+import ImageUtils, {UploadOptions} from '../../utils/image';
 import UseChatScreenHook, {
   GoToChatInfoScreenByTrigger
 } from '../../../types/hooks/screens/useChatScreenHook.types';
@@ -39,11 +39,18 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     useChatUtilsHook(type);
   const {anonProfileId, signedProfileId} = useUserAuthHook();
   const {queue} = useDatabaseQueueHook();
-  const {eventTrackByUserType} = useAnalyticUtilsHook(type);
+  const {eventTrackByUserType, getEventName} = useAnalyticUtilsHook(type);
 
   const [selfAnonUserInfo, setSelfAnonUserInfo] = React.useState<any>(null);
   const [chats, setChats] = React.useState<ChatSchema[]>([]);
   const [isLoadingFetchAllMessage, setIsLoadingFetchAllMessage] = React.useState(true);
+
+  const uploadMediaFailedEvent: UploadOptions = {
+    withFailedEventTrack: getEventName(
+      BetterSocialEventTracking.SIGNED_CHAT_SCREEN_ATTACHMENT_UPLOAD_FAILED,
+      BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_ATTACHMENT_UPLOAD_FAILED
+    )
+  };
 
   const getAllMessages = useGetAllMessage(
     {
@@ -100,16 +107,17 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   };
 
   const processImageAttachment = async (item) => {
-    const uploadedImageUrl = await ImageUtils.uploadImage(item.asset_url);
+    const uploadedImageUrl = await ImageUtils.uploadImage(item.asset_url, uploadMediaFailedEvent);
     return {...item, asset_url: uploadedImageUrl.data.url, thumb_url: uploadedImageUrl.data.url};
   };
 
   const processVideoAttachment = async (item) => {
-    const uploadedImageUrl = await ImageUtils.uploadImage(item.asset_url);
+    const uploadedImageUrl = await ImageUtils.uploadImage(item.asset_url, uploadMediaFailedEvent);
     const uploadedUrl = await ImageUtils.uploadFile(
       item.video_path,
       item.video_name,
-      item.video_type
+      item.video_type,
+      uploadMediaFailedEvent
     );
     return {
       ...item,
@@ -120,7 +128,12 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   };
 
   const processFileAttachment = async (item) => {
-    const uploadedUrl = await ImageUtils.uploadFile(item.file_path, item.file_name, item.file_type);
+    const uploadedUrl = await ImageUtils.uploadFile(
+      item.file_path,
+      item.file_name,
+      item.file_type,
+      uploadMediaFailedEvent
+    );
     return {
       ...item,
       asset_url: uploadedUrl.data.url,
