@@ -25,6 +25,9 @@ export const uploadPhoto = async (formData) => {
       return result.data;
     }
   } catch (e) {
+    if (__DEV__) {
+      console.log('uploadPhoto:', e.response);
+    }
     return null;
   }
 };
