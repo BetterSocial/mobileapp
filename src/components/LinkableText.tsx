@@ -1,5 +1,6 @@
 import React from 'react';
-import {Text, Linking} from 'react-native';
+import {Linking, Text} from 'react-native';
+
 import {COLORS} from '../utils/theme';
 
 interface Props {
@@ -11,7 +12,7 @@ export const LinkableText: React.FC<Props> = ({text, ...props}) => {
   const handlePress = (url: string) => {
     const regex = /(http|https)/;
     if (!regex.test(url)) {
-      const urls = `http://${url}`;
+      const urls = `http://${url?.trim()}`;
       Linking.openURL(urls);
     } else {
       Linking.openURL(url);
@@ -19,7 +20,7 @@ export const LinkableText: React.FC<Props> = ({text, ...props}) => {
   };
 
   // Regular expression to match URLs
-  const urlRegex = /^(?:(?:https?):\/\/)?(?:www\.)?[a-zA-Z0-9-]+(?:\.[a-zA-Z]{2,})+(\.\/*[^\s]*)?$/;
+  const urlRegex = /^((?:https?:\/\/)?[^./]+(?:\.[^./]+)+(?:\/.*)?)$/;
 
   // Split the text by URLs
   const parts = text.split(' ');

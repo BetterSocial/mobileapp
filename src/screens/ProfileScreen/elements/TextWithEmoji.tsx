@@ -1,8 +1,11 @@
 import React from 'react';
-import {Text, StyleSheet} from 'react-native';
 import emojiRegex from 'emoji-regex';
+import {StyleSheet, Text} from 'react-native';
+
 import {COLORS} from '../../../utils/theme';
+import {LinkableText} from '../../../components/LinkableText';
 import {fonts} from '../../../utils/fonts';
+import {isValidUrl} from '../../../utils/string/StringUtils';
 
 export function TextWithEmoji({
   text,
@@ -13,9 +16,19 @@ export function TextWithEmoji({
   textStyle: object;
   testId: string;
 }) {
+  const sanitizeNewLine = text?.split('\n');
+
   return (
     <Text style={[styles.text, textStyle]} testID={testId}>
-      {text?.split(' ').map((item: string, index: number) => {
+      {sanitizeNewLine?.map((item: string, index: number) => {
+        if (index < sanitizeNewLine?.length - 1) {
+          item += '\n';
+        }
+
+        if (isValidUrl(item)) {
+          return <LinkableText text={item} key={`${item}-${index}`} />;
+        }
+
         return (
           <Text
             key={index}
