@@ -22,7 +22,8 @@ import {ProgressBar} from '../../components/ProgressBar';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {setCapitalFirstLetter} from '../../utils/Utils';
 import {NavigationConstants} from '../../utils/constants';
-import {verifyCommunityName} from '../../service/topics';
+import {submitCommunityName, verifyCommunityName} from '../../service/topics';
+import DiscoveryRepo from '../../service/discovery';
 
 const MAXIMUM_NAME_LENGTH = 64;
 const MINIMUM_NAME_LENGTH = 3;
@@ -92,12 +93,25 @@ const CreateCommunity = () => {
   }, []);
 
   // eslint-disable-next-line consistent-return
-  const next = () => {
+  const next = async () => {
     if (name && name.length >= MINIMUM_NAME_LENGTH && typeFetch === 'available') {
-      navigation.replace(NavigationConstants.CREATE_POST_SCREEN, {
-        isCreateCommunity: true,
-        topic: name
-      });
+      const response = await submitCommunityName(name);
+      if (response.success) {
+        const data = await DiscoveryRepo.fetchDiscoveryDataTopic(name);
+        if (data.success) {
+          const topic = (data?.followedTopic)
+            .concat(data?.unfollowedTopic)
+            .find((i) => i.name === name);
+          console.log('topic', JSON.stringify(topic));
+          if (topic) {
+            navigation.replace('ContactScreen', {
+              isCreateCommunity: true,
+              topicCommunityId: topic.topic_id,
+              topicCommunityName: name
+            });
+          }
+        }
+      }
     } else {
       if (!name) {
         return showMessage({
