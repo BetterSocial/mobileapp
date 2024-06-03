@@ -1,19 +1,23 @@
+import ImagePicker from 'react-native-image-crop-picker';
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import {Alert} from 'react-native';
 import {generateRandomId} from 'stream-chat-react-native-core';
-import ImagePicker from 'react-native-image-crop-picker';
 import {openComposer} from 'react-native-email-link';
 import {useNavigation} from '@react-navigation/core';
 
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
 import ChannelListSchema from '../../../database/schema/ChannelListSchema';
 import ImageUtils from '../../../utils/image';
+import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
 import UserSchema from '../../../database/schema/UserSchema';
 import useChatUtilsHook from '../../../hooks/core/chat/useChatUtilsHook';
 import useCreateChat from '../../../hooks/screen/useCreateChat';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import useUserAuthHook from '../../../hooks/core/auth/useUserAuthHook';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../../libraries/analytics/analyticsEventTracking';
 import TokenStorage, {ITokenEnum} from '../../../utils/storage/custom/tokenStorage';
 import {Context} from '../../../context';
 import {addMemberGroup, leaveGroup, removeMemberGroup} from '../../../service/chat';
@@ -26,9 +30,8 @@ import {
 import {requestExternalStoragePermission} from '../../../utils/permission';
 import {setChannel} from '../../../context/actions/setChannel';
 import {setParticipants} from '../../../context/actions/groupChat';
-import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
 
-const useGroupInfo = (channelId = null) => {
+const useGroupInfo = (channelId = null, channelListSchema = null) => {
   const navigation = useNavigation();
   const {localDb, refresh, refreshWithId} = useLocalDatabaseHook();
 
@@ -101,10 +104,20 @@ const useGroupInfo = (channelId = null) => {
   };
   const chatName = getChatName(username, profile.myProfile.username);
   const handleOpenNameChange = () => {
-    setIsOpenModalChangeName(true);
+    if (channelListSchema?.channelType === 'GROUP') {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.GROUP_CHAT_DETAIL_EDIT_NAME_BUTTON_CLICKED
+      );
+      setIsOpenModalChangeName(true);
+    }
   };
   const handleSaveNameChange = async (name) => {
     setIsOpenModalChangeName(false);
+    if (channelListSchema?.channelType === 'GROUP') {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.GROUP_CHAT_DETAIL_EDIT_NAME_MENU_SAVE_BUTTON_CLICKED
+      );
+    }
 
     try {
       setIsUpdatingName(true);
@@ -142,6 +155,11 @@ const useGroupInfo = (channelId = null) => {
     }
   };
   const closeOnNameChange = () => {
+    if (channelListSchema?.channelType === 'GROUP') {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.GROUP_CHAT_DETAIL_EDIT_NAME_MENU_CANCEL_BUTTON_CLICKED
+      );
+    }
     setIsOpenModalChangeName(false);
   };
   // eslint-disable-next-line consistent-return
@@ -166,6 +184,7 @@ const useGroupInfo = (channelId = null) => {
   };
 
   const handleOnImageClicked = () => {
+    AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.GROUP_CHAT_DETAIL_PIC_CLICKED);
     launchGallery();
   };
 
@@ -219,17 +238,25 @@ const useGroupInfo = (channelId = null) => {
         mediaType: 'photo',
         sortOrder: 'asc',
         smartAlbums: ['RecentlyAdded', 'UserLibrary']
-      }).then(async (imageRes) => {
-        const imageCropped = await ImagePicker.openCropper({
-          mediaType: 'photo',
-          path: imageRes.path,
-          width: imageRes.width,
-          height: imageRes.height,
-          cropperChooseText: 'Next',
-          freeStyleCropEnabled: true
+      })
+        .then(async (imageRes) => {
+          const imageCropped = await ImagePicker.openCropper({
+            mediaType: 'photo',
+            path: imageRes.path,
+            width: imageRes.width,
+            height: imageRes.height,
+            cropperChooseText: 'Next',
+            freeStyleCropEnabled: true
+          });
+          uploadImage(imageCropped.path);
+        })
+        .catch((e) => {
+          if (e?.code === 'E_PICKER_CANCELLED') {
+            AnalyticsEventTracking.eventTrack(
+              BetterSocialEventTracking.GROUP_CHAT_DETAIL_EDIT_PICK_CANCELLED
+            );
+          }
         });
-        uploadImage(imageCropped.path);
-      });
     }
   };
 
@@ -296,6 +323,9 @@ const useGroupInfo = (channelId = null) => {
 
   const onRemoveUser = async () => {
     setOpenModal(false);
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.GROUP_CHAT_DETAIL_OPEN_PARTICIPANT_MENU_REMOVE_USER_CONFIRM
+    );
     const responseChannelData = await removeMemberGroup({
       channelId,
       targetUserId: selectedUser?.userId
@@ -332,6 +362,9 @@ const useGroupInfo = (channelId = null) => {
   const onAddMember = async (selectedUsers) => {
     try {
       setIsLoadingAddMember(true);
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.GROUP_CHAT_DETAIL_ADD_PARTICIPANT_CONFIRM
+      );
       const responseChannelData = await addMemberGroup({
         channelId,
         memberIds: selectedUsers.map((user) => user.user_id)
@@ -505,7 +538,17 @@ const useGroupInfo = (channelId = null) => {
       Alert.alert(
         null,
         `Are you sure you want to remove ${selectedUser?.username} from this group? We will let the group know that you removed ${selectedUser?.username}.`,
-        [{text: 'Yes - remove', onPress: () => onRemoveUser()}, {text: 'Cancel'}]
+        [
+          {text: 'Yes - remove', onPress: () => onRemoveUser()},
+          {
+            text: 'Cancel',
+            onPress: () => {
+              AnalyticsEventTracking.eventTrack(
+                BetterSocialEventTracking.GROUP_CHAT_DETAIL_OPEN_PARTICIPANT_MENU_REMOVE_USER_ALERT_CLOSE
+              );
+            }
+          }
+        ]
       );
     }
 
@@ -524,6 +567,9 @@ const useGroupInfo = (channelId = null) => {
 
   const actionLeaveGroup = async () => {
     setOpenModal(false);
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.GROUP_CHAT_DETAIL_OPEN_EXIT_GROUP_MENU_EXIT_GROUP_ALERT_CONFIRM
+    );
     const responseChannelData = await leaveGroup({channelId});
     try {
       const {channelName} = getChannelListInfo(
@@ -558,8 +604,19 @@ const useGroupInfo = (channelId = null) => {
   };
 
   const onLeaveGroup = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.GROUP_CHAT_DETAIL_OPEN_EXIT_GROUP_MENU_EXIT_GROUP_BUTTON_CLICKED
+    );
+
     Alert.alert('', 'Leave this group?', [
-      {text: 'Cancel'},
+      {
+        text: 'Cancel',
+        onPress: () => {
+          AnalyticsEventTracking.eventTrack(
+            BetterSocialEventTracking.GROUP_CHAT_DETAIL_OPEN_EXIT_GROUP_MENU_EXIT_GROUP_ALERT_CLOSE
+          );
+        }
+      },
       {text: 'Exit', onPress: actionLeaveGroup}
     ]);
   };

@@ -1,6 +1,17 @@
 import AnalyticsEventTracking, {BetterSocialEventTracking} from './analyticsEventTracking';
+import {BetterSocialChannelType} from '../../../types/database/schema/ChannelList.types';
 
-const useAnalyticUtilsHook = (type: 'SIGNED' | 'ANONYMOUS') => {
+export type ChannelTypeEventTracking = {
+  signed?: BetterSocialEventTracking | undefined;
+  anon?: BetterSocialEventTracking | undefined;
+  group?: BetterSocialEventTracking | undefined;
+  additionalData?: object;
+};
+
+const useAnalyticUtilsHook = (
+  type: 'SIGNED' | 'ANONYMOUS',
+  channelType: BetterSocialChannelType | undefined
+) => {
   const getEventName = (
     signedEvent: BetterSocialEventTracking,
     anonEvent: BetterSocialEventTracking
@@ -18,8 +29,25 @@ const useAnalyticUtilsHook = (type: 'SIGNED' | 'ANONYMOUS') => {
     return AnalyticsEventTracking.eventTrack(anonEvent, additionalData);
   };
 
+  const eventTrackByChannelType = ({
+    signed,
+    anon,
+    group,
+    additionalData
+  }: ChannelTypeEventTracking) => {
+    if (channelType === 'PM' && signed)
+      return AnalyticsEventTracking.eventTrack(signed, additionalData);
+    if (channelType === 'ANON_PM' && anon)
+      return AnalyticsEventTracking.eventTrack(anon, additionalData);
+    if (channelType === 'GROUP' && group)
+      return AnalyticsEventTracking.eventTrack(group, additionalData);
+
+    return null;
+  };
+
   return {
     eventTrackByUserType,
+    eventTrackByChannelType,
     getEventName
   };
 };
