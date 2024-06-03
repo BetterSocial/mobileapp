@@ -143,12 +143,16 @@ class BlockComponent extends React.Component {
     this.refInteractionManaged.current = InteractionManager.runAfterInteractions(() => {
       this.refSpecificIssue.current.open();
     });
+
+    if (this.props.onReasonsSubmitted) this.props.onReasonsSubmitted(v);
   }
 
   __onSkipOnlyBlock() {
     this.refReportUser.current.close();
     if (this.state.isAnonymousUserFromGroupInfo) return this.__blockAnonymousUserFromGroupInfo();
     if (this.state.isAnonymous) return this.__blockPostAnonymous();
+    if (this.props.onSkipOnlyBlock) this.props.onSkipOnlyBlock();
+
     return this.__blockUser();
   }
 
@@ -165,6 +169,7 @@ class BlockComponent extends React.Component {
 
       if (this.state.isAnonymousUserFromGroupInfo) return this.__blockAnonymousUserFromGroupInfo();
       if (this.state.isAnonymous) return this.__blockPostAnonymous();
+      if (this.props.onReportInfoSubmitted) this.props.onReportInfoSubmitted();
       return this.__blockUser();
     }, 500);
   }
@@ -224,12 +229,17 @@ class BlockComponent extends React.Component {
         <BlockPostAnonymous
           refBlockPostAnonymous={this.refBlockPostAnonymous}
           onSelect={this.__onSelectBlockingPostAnonymous}
+          onBlockAndReportUser={() => this.props?.onBlockAndReportUser?.()}
+          onBlockUserIndefinitely={() => this.props?.onBlockUserIndefinitely?.()}
         />
 
         <BlockUser
           refBlockUser={this.refBlockUser}
           onSelect={this.__onSelectBlocking}
           username={this.state.username}
+          onClose={() => this.props?.onCloseBlockUser?.()}
+          onBlockAndReportUser={() => this.props?.onBlockAndReportUser?.()}
+          onBlockUserIndefinitely={() => this.props?.onBlockUserIndefinitely?.()}
         />
         <ReportUser
           ref={this.refReportUser}
