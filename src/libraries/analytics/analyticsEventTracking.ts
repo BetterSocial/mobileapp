@@ -112,14 +112,12 @@ export enum BetterSocialEventTracking {
   SIGNED_CHAT_DETAIL_OPEN_PARTICIPANT_MENU = 'SignedChat-ChatDetail_ParticipantName_openOtherProfile',
   SIGNED_CHAT_DETAIL_OPEN_PARTICIPANT_MENU_VIEW_OTHER_PROFILE = 'SignedChat-ChatDetail_ParticipantMenu-viewProfile_openOtherProfile',
   SIGNED_CHAT_DETAIL_OPEN_PARTICIPANT_MENU_GO_INCOGNITO = 'SignedChat-ChatDetail_ParticipantMenu-goIncognito_openOtherProfile',
-  SIGNED_CHAT_DETAIL = '',
 
   // ANON CHAT DETAIL
   ANONYMOUS_CHAT_DETAIL_BACK_BUTTON_PRESSED = 'AnonChat-ChatDetail_backButton_openChatScreen',
   ANONYMOUS_CHAT_DETAIL_OPEN_PARTICIPANT_MENU = 'AnonChat-ChatDetail_ParticipantName_openParticipantMenu',
   ANONYMOUS_CHAT_DETAIL_OPEN_PARTICIPANT_MENU_VIEW_OTHER_PROFILE = 'AnonChat-ChatDetail_ParticipantMenu-viewProfile_openOtherProfile',
   ANONYMOUS_CHAT_DETAIL_OPEN_PARTICIPANT_MENU_LEAVE_INCOGNITO_MODE = 'AnonChat-ChatDetail_ParticipantMenu-leaveIncognito_openSignedChatScreen',
-  ANONYMOUS_CHAT_DETAIL = '1',
 
   // GROUP CHAT DETAIL
   GROUP_CHAT_DETAIL_BACK_BUTTON_PRESSED = 'GroupChat-ChatDetail_backButton_openChatScreen',
@@ -140,7 +138,27 @@ export enum BetterSocialEventTracking {
   GROUP_CHAT_DETAIL_EDIT_NAME_MENU_CANCEL_BUTTON_CLICKED = 'GroupChat-ChatDetail_editNameScreen_cancel-openGroupChat-ChatDetail',
   GROUP_CHAT_DETAIL_PIC_CLICKED = 'GroupChat-ChatDetail_editPic_openSignedChatScreen',
   GROUP_CHAT_DETAIL_EDIT_PICK_CANCELLED = 'GroupChat-ChatDetail_editPic_openLeaveGroupScreen',
-  GROUP_CHAT_DETAIL = '2'
+
+  // FEED COMMUNITY SCREEN
+  FEED_COMMUNITY_PAGE_ON_POST_SCROLLED = 'FeedPage-CP_post_scrolled',
+  FEED_COMMUNITY_PAGE_JOIN_BUTTON_CLICKED = 'FeedPage-CP_joinButton_joinBanner',
+  FEED_COMMUNITY_PAGE_JOIN_AS_SIGNED_CLICKED = 'FeedPage-CP_joinBanner-signed_joined',
+  FEED_COMMUNITY_PAGE_JOIN_AS_ANON_CLICKED = 'FeedPage-CP_joinBanner-anon_joined',
+  FEED_COMMUNITY_PAGE_JOIN_LEAVE_COMMUNITY = 'FeedPage-CP_joinBann-leaveComm_clicked',
+  FEED_COMMUNITY_PAGE_BACK_BUTTON_CLICKED = 'FeedPage-CP_backButton_clicked',
+  FEED_COMMUNITY_PAGE_REPLY_POST_BUTTON_CLICKED = 'FeedPage-CP_postInteractions-replyButton_openPDP',
+  FEED_COMMUNITY_PAGE_SHARE_BUTTON_CLICKED = 'FeedPage-CP_postInteractions-share_clicked',
+  FEED_COMMUNITY_PAGE_DM_BUTTON_CLICKED = 'FeedPage-CP_postInteractions-DMbutton_clicked',
+  FEED_COMMUNITY_PAGE_FOLLOW_USER_BUTTON_CLICKED = 'FeedPage-CP_postInteractions-follow_clicked',
+  FEED_COMMUNITY_PAGE_UNFOLLOW_USER_BUTTON_CLICKED = 'FeedPage-CP_postInteractions-follow_unfollow',
+  FEED_COMMUNITY_PAGE_BLOCK_BUTTON_CLICKED = 'FeedPage-CP_postInteractions-blockSymbol_openBlockMenu',
+  FEED_COMMUNITY_PAGE_BLOCK_USER_BOTTOM_SHEET_CLOSED = 'FeedPage-CP_blockdrawer-justblock_closesBlockMenu',
+  FEED_COMMUNITY_PAGE_BLOCK_USER_BLOCK_AND_REPORT_CLICKED = 'FeedPage-CP_blockdrawer-blockAndReport_clicked',
+  FEED_COMMUNITY_PAGE_BLOCK_USER_BLOCK_INDEFINITELY_CLICKED = 'FeedPage-CP_blockdrawer-blockAndReport-reportSkip_clicked',
+  FEED_COMMUNITY_PAGE_BLOCK_USER_BLOCK_AND_REPORT_REASON = 'FeedPage-CP_blockdrawer-blockAndReport-reasons',
+  FEED_COMMUNITY_PAGE_BLOCK_USER_REPORT_INFO_SUBMITTED = 'FeedPage-CP_blockAndReport-reportInfo_submitted',
+  FEED_COMMUNITY_PAGE_BLOCK_USER_REPORT_INFO_SKIPPED = 'FeedPage-CP_blockAndReport-reportInfoSkipped_clicked',
+  FEED_COMMUNITY_PAGE = ''
 }
 
 const ENABLE_TOAST = ENV === 'Dev';
@@ -163,10 +181,15 @@ const AnalyticsEventTracking = (() => {
   });
 
   return {
-    eventTrack: (event: BetterSocialEventTracking, additionalData?: object) => {
-      if (!event) throw new Error('Event must be defined');
-      if (additionalData && typeof additionalData !== 'object')
-        throw new Error('additionalData must be an object');
+    eventTrack: (event: BetterSocialEventTracking, additionalData?: object): Promise<void> => {
+      if (!event) {
+        console.error('Event must be defined');
+        return Promise.resolve();
+      }
+      if (additionalData && typeof additionalData !== 'object') {
+        console.error('Additional data must be an object');
+        return Promise.resolve();
+      }
 
       if (!additionalData) {
         if (ENABLE_TOAST && !!SEGMENT_WRITE_KEY) SimpleToast.show(event);

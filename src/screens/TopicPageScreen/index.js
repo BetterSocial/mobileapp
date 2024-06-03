@@ -1,36 +1,39 @@
-import {useNavigation, useRoute} from '@react-navigation/native';
-import _ from 'lodash';
 import * as React from 'react';
-import {Animated, Platform, View} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import _ from 'lodash';
 import SimpleToast from 'react-native-simple-toast';
+import {Animated, Platform, View} from 'react-native';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import BlockComponent from '../../components/BlockComponent';
+import BottomSheetFollow from './elements/BottomSheetFollow';
 import ButtonAddPostTopic from '../../components/Button/ButtonAddPostTopic';
-import TiktokScroll from '../../components/TiktokScroll';
-import {Context} from '../../context';
-import {setFeedByIndex, setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
-import useOnBottomNavigationTabPressHook, {
-  LIST_VIEW_TYPE
-} from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
-import {getFeedDetail} from '../../service/post';
-import {getTopicPages} from '../../service/topicPages';
-import {getTopics} from '../../service/topics';
-import {downVote, upVote} from '../../service/vote';
-import dimen from '../../utils/dimen';
-import {normalize} from '../../utils/fonts';
-import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import MemoizedListComponent from './MemoizedListComponent';
+import NavHeader from './elements/NavHeader';
 import ShareUtils from '../../utils/share';
+import TiktokScroll from '../../components/TiktokScroll';
 import TopicPageStorage from '../../utils/storage/custom/topicPageStorage';
-import {COLORS} from '../../utils/theme';
+import dimen from '../../utils/dimen';
 import removePrefixTopic from '../../utils/topics/removePrefixTopic';
-import {getUserId} from '../../utils/users';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
 import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
 import useViewPostTimeHook from '../FeedScreen/hooks/useViewPostTimeHook';
-import MemoizedListComponent from './MemoizedListComponent';
-import BottomSheetFollow from './elements/BottomSheetFollow';
-import NavHeader from './elements/NavHeader';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../libraries/analytics/analyticsEventTracking';
+import useOnBottomNavigationTabPressHook, {
+  LIST_VIEW_TYPE
+} from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
+import {COLORS} from '../../utils/theme';
+import {Context} from '../../context';
+import {downVote, upVote} from '../../service/vote';
+import {getFeedDetail} from '../../service/post';
+import {getTopicPages} from '../../service/topicPages';
+import {getTopics} from '../../service/topics';
+import {getUserId} from '../../utils/users';
+import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import {normalize} from '../../utils/fonts';
+import {setFeedByIndex, setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
 
 const TopicPageScreen = (props) => {
   const route = useRoute();
@@ -329,9 +332,16 @@ const TopicPageScreen = (props) => {
       isCaching: true,
       isKeyboardOpen: true
     });
+
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.FEED_COMMUNITY_PAGE_REPLY_POST_BUTTON_CLICKED
+    );
   };
 
   const onPressBlock = (value) => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.FEED_COMMUNITY_PAGE_BLOCK_BUTTON_CLICKED
+    );
     refBlockComponent.current.openBlockComponent(value);
   };
 
@@ -393,6 +403,12 @@ const TopicPageScreen = (props) => {
     navigation.push('TopicMemberScreen', navigationParam);
   };
 
+  const handleAdditionalDmProcess = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.FEED_COMMUNITY_PAGE_DM_BUTTON_CLICKED
+    );
+  };
+
   React.useEffect(() => {
     onRefresh();
   }, [topicId]);
@@ -400,20 +416,65 @@ const TopicPageScreen = (props) => {
   const renderItem = ({item, index}) => (
     <MemoizedListComponent
       item={item}
-      onNewPollFetched={onNewPollFetched}
       index={index}
-      onPressDomain={onPressDomain}
-      onPress={(haveSeeMore) => onPress(item, haveSeeMore)}
-      onPressComment={() => onPressComment(item)}
-      onPressBlock={() => onPressBlock(item)}
-      onPressUpvote={(post) => setUpVote(post, index)}
-      userId={userId}
-      onPressDownVote={(post) => setDownVote(post, index)}
       loading={loading}
-      selfUserId={userId}
       offset={offset}
+      onNewPollFetched={onNewPollFetched}
+      onPress={(haveSeeMore) => onPress(item, haveSeeMore)}
+      onPressBlock={() => onPressBlock(item)}
+      onPressComment={() => onPressComment(item)}
+      onPressDmAdditionalProcess={handleAdditionalDmProcess}
+      onPressDomain={onPressDomain}
+      onPressDownVote={(post) => setDownVote(post, index)}
+      onPressUpvote={(post) => setUpVote(post, index)}
+      selfUserId={userId}
+      userId={userId}
     />
   );
+
+  const openBottomSheetFollow = () => {
+    bottomSheetFollowRef?.current?.open();
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.FEED_COMMUNITY_PAGE_JOIN_BUTTON_CLICKED
+    );
+  };
+
+  const onCloseBlockUser = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.FEED_COMMUNITY_PAGE_BLOCK_USER_BOTTOM_SHEET_CLOSED
+    );
+  };
+
+  const onBlockAndReportUser = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.FEED_COMMUNITY_PAGE_BLOCK_USER_BLOCK_AND_REPORT_CLICKED
+    );
+  };
+
+  const onBlockUserIndefinitely = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.FEED_COMMUNITY_PAGE_BLOCK_USER_BLOCK_INDEFINITELY_CLICKED
+    );
+  };
+
+  const onSkipOnlyBlock = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.FEED_COMMUNITY_PAGE_BLOCK_USER_REPORT_INFO_SKIPPED
+    );
+  };
+
+  const onReportInfoSubmitted = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.FEED_COMMUNITY_PAGE_BLOCK_USER_REPORT_INFO_SUBMITTED
+    );
+  };
+
+  const onReasonsSubmitted = (v) => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.FEED_COMMUNITY_PAGE_BLOCK_USER_BLOCK_AND_REPORT_REASON,
+      v
+    );
+  };
 
   return (
     <>
@@ -424,23 +485,23 @@ const TopicPageScreen = (props) => {
           isFollowing: params.isFollowing,
           memberCount: params.memberCount
         }}
-        isLoading={isInitialLoading}
-        opacityImage={opacityImage}
-        domain={topicName}
         animatedHeight={headerHeight}
-        onShareCommunity={onShareCommunity}
-        isHeaderHide={isHeaderHide}
-        opacityHeaderAnimation={opacityHeader}
-        handleOnMemberPress={handleOnMemberPress}
-        topicDetail={topicDetail}
-        memberCount={memberCount}
-        setMemberCount={setMemberCount}
-        setIsFollow={setIsFollow}
-        isFollow={isFollow}
-        getTopicDetail={getTopicDetail}
-        onFollowButtonPress={() => bottomSheetFollowRef?.current?.open()}
+        domain={topicName}
         followType={followType}
+        getTopicDetail={getTopicDetail}
+        handleOnMemberPress={handleOnMemberPress}
+        isFollow={isFollow}
+        isHeaderHide={isHeaderHide}
+        isLoading={isInitialLoading}
+        memberCount={memberCount}
+        onFollowButtonPress={openBottomSheetFollow}
+        onShareCommunity={onShareCommunity}
+        opacityHeaderAnimation={opacityHeader}
+        opacityImage={opacityImage}
         setFollowType={setFollowType}
+        setIsFollow={setIsFollow}
+        setMemberCount={setMemberCount}
+        topicDetail={topicDetail}
       />
       <View
         style={{
@@ -461,7 +522,9 @@ const TopicPageScreen = (props) => {
           scrollEventThrottle={16}
           showSearchBar={true}
           onMomentumScrollEnd={(event) => {
-            onWillSendViewPostTime(event, feeds);
+            onWillSendViewPostTime(event, feeds, {
+              eventName: BetterSocialEventTracking.FEED_COMMUNITY_PAGE_ON_POST_SCROLLED
+            });
             fetchNextFeeds(event);
           }}
           snap
@@ -474,6 +537,12 @@ const TopicPageScreen = (props) => {
         refresh={onBlockCompleted}
         refreshAnonymous={onDeleteBlockedPostCompleted}
         screen="topic_screen"
+        onCloseBlockUser={onCloseBlockUser}
+        onBlockAndReportUser={onBlockAndReportUser}
+        onBlockUserIndefinitely={onBlockUserIndefinitely}
+        onSkipOnlyBlock={onSkipOnlyBlock}
+        onReportInfoSubmitted={onReportInfoSubmitted}
+        onReasonsSubmitted={onReasonsSubmitted}
       />
       <BottomSheetFollow
         topicId={topicId}
