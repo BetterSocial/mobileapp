@@ -186,7 +186,6 @@ const TopicFragment = ({
 
     return (
       <>
-        {renderRecentSearch(index)}
         <View style={styles.domainContainer}>
           <DomainList
             handleSetFollow={() => handleFollow(from, true, item)}
