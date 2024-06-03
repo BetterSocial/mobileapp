@@ -37,7 +37,6 @@ const Card = (props) => {
     contentHeight,
     containerStyle
   } = props;
-  // const styles = buildStylesheet('card', props.styles);
   const renderImageComponent = () => {
     if (image)
       return (
@@ -110,9 +109,15 @@ Card.propTypes = {
   title: PropTypes.string,
   description: PropTypes.string,
   image: PropTypes.string,
+  item: PropTypes.object,
+  onCardContentPress: PropTypes.func,
+  onHeaderPress: PropTypes.func,
+  score: PropTypes.number,
   url: PropTypes.string,
-  styles: PropTypes.object,
-  pressed: PropTypes.func,
+  heightTopic: PropTypes.number,
+  textHeight: PropTypes.number,
+  contentHeight: PropTypes.number,
+  containerStyle: PropTypes.object,
   date: PropTypes.string
 };
 

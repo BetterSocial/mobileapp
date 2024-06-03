@@ -143,9 +143,9 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics}) => {
                     if (v.match(/\s+$/gm)) {
                       return add();
                     }
-                    setTopic(v);
+                    setTopic(v?.toLowerCase());
                     if (v !== '') {
-                      searchTopic(v);
+                      searchTopic(v?.toLowerCase());
                     }
 
                     return null;

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import {StyleSheet, Text, View} from 'react-native';
 
@@ -11,7 +12,7 @@ import {FeedCredderRating} from '../CredderRating';
 import {calculateTime} from '../../utils/time';
 import {fonts} from '../../utils/fonts';
 
-const Header = ({domain, image = null, date, score}) => {
+const Header = ({domain, date, score, image = null}) => {
   const renderHeaderImage = () => {
     if (image)
       return (
@@ -44,7 +45,7 @@ const Header = ({domain, image = null, date, score}) => {
           <View style={styles.point} />
           {/* <Text style={styles.cardHeaderDate} numberOfLines={1}>{date}</Text> */}
           <Text style={styles.cardHeaderDate} numberOfLines={1}>
-            {calculateTime(moment(date, 'DD MMM YYYY'))}
+            {calculateTime(moment(date))}
           </Text>
           <View style={styles.point} />
           <FeedCredderRating
@@ -59,10 +60,16 @@ const Header = ({domain, image = null, date, score}) => {
   );
 };
 
+Header.propTypes = {
+  domain: PropTypes.string,
+  date: PropTypes.string,
+  score: PropTypes.number,
+  image: PropTypes.string
+};
+
 const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
-    // paddingTop: 12,
     paddingVertical: 8.5,
     paddingLeft: 20,
     paddingRight: 20
@@ -81,7 +88,6 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     flex: 1,
     alignSelf: 'center'
-    // backgroundColor: 'red',
   },
   headerDomainDateRowContainer: {
     flexDirection: 'row',
@@ -110,10 +116,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: COLORS.gray410,
     fontFamily: fonts.inter[400]
-    // lineHeight: 12.1,
   },
   credderRating: {
-    // height: 24,
     height: 16,
     alignSelf: 'center'
   }
