@@ -125,13 +125,19 @@ export enum BetterSocialEventTracking {
   GROUP_CHAT_DETAIL_OPEN_PARTICIPANT_MENU_VIEW_OTHER_PROFILE = 'GroupChat-ChatDetail_ParticipantName_openOtherProfile',
   GROUP_CHAT_DETAIL_OPEN_PARTICIPANT_MENU_VIEW_MESSAGE = 'GroupChat-ChatDetail_ParticipantMenu-message_openOtherProfile',
   GROUP_CHAT_DETAIL_OPEN_PARTICIPANT_MENU_VIEW_MESSAGE_INCOGNITO = 'GroupChat-ChatDetail_ParticipantMenu-anonMessage_openOtherProfile',
-  GROUP_CHAT_DETAIL_ADD_PARTICIPANT_BUTTON_CLICKED = 'GroupChat-ChatDetail_addParticipants_exit-openSignChatTabl',
+  GROUP_CHAT_DETAIL_ADD_PARTICIPANT_BUTTON_CLICKED = 'GroupChat-ChatDetail_editNameScreen_openSignedChatScreen',
+  GROUP_CHAT_DETAIL_ADD_PARTICIPANT_CONFIRM = 'GroupChat-ChatDetail_addParticipants_exit-openSignChatTabl',
   GROUP_CHAT_DETAIL_OPEN_PARTICIPANT_MENU_REMOVE_USER_BUTTON_CLICKED = 'GroupChat-ChatDetail_ParticipantMenu-removeUser_openOtherProfile',
   GROUP_CHAT_DETAIL_OPEN_PARTICIPANT_MENU_REMOVE_USER_ALERT_CLOSE = 'GroupChat-ChatDetail_ParticipantMenu-removeUserNotif_closeAlert',
   GROUP_CHAT_DETAIL_OPEN_PARTICIPANT_MENU_REMOVE_USER_CONFIRM = 'GroupChat-ChatDetail_ParticipantMenu-removeUserNotif_confirmRemoveUser',
   GROUP_CHAT_DETAIL_OPEN_EXIT_GROUP_MENU_EXIT_GROUP_BUTTON_CLICKED = 'GroupChat-ChatDetail_exitGroup_cancel-openGroupChat-ChatDetail',
   GROUP_CHAT_DETAIL_OPEN_EXIT_GROUP_MENU_EXIT_GROUP_ALERT_CLOSE = 'GroupChat-ChatDetail_leaveGroupScreen_cancel-openGroupChat-ChatDetail',
   GROUP_CHAT_DETAIL_OPEN_EXIT_GROUP_MENU_EXIT_GROUP_ALERT_CONFIRM = 'GroupChat-ChatDetail_leaveGroupScreen_redirectToEmail',
+  GROUP_CHAT_DETAIL_EDIT_NAME_BUTTON_CLICKED = 'GroupChat-ChatDetail_editName_openEditNameScreen',
+  GROUP_CHAT_DETAIL_EDIT_NAME_MENU_SAVE_BUTTON_CLICKED = 'GroupChat-ChatDetail_editNameScreen_save-openSignedChatScreen',
+  GROUP_CHAT_DETAIL_EDIT_NAME_MENU_CANCEL_BUTTON_CLICKED = 'GroupChat-ChatDetail_editNameScreen_cancel-openGroupChat-ChatDetail',
+  GROUP_CHAT_DETAIL_PIC_CLICKED = 'GroupChat-ChatDetail_editPic_openSignedChatScreen',
+  GROUP_CHAT_DETAIL_EDIT_PICK_CANCELLED = 'GroupChat-ChatDetail_editPic_openLeaveGroupScreen',
   GROUP_CHAT_DETAIL = '2'
 }
 

@@ -230,7 +230,7 @@ const ChatInfoScreen = () => {
     closeOnNameChange,
     isOpenModalChangeName,
     isUpdatingName
-  } = useGroupInfo(channelInfo?.id);
+  } = useGroupInfo(channelInfo?.id, channelInfo);
   const {signedProfileId, anonProfileId} = useUserAuthHook();
   const {params}: any = useRoute();
   const [channelName, setChannelName] = React.useState(channelInfo?.name);

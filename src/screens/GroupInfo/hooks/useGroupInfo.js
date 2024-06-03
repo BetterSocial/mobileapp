@@ -31,7 +31,7 @@ import {requestExternalStoragePermission} from '../../../utils/permission';
 import {setChannel} from '../../../context/actions/setChannel';
 import {setParticipants} from '../../../context/actions/groupChat';
 
-const useGroupInfo = (channelId = null) => {
+const useGroupInfo = (channelId = null, channelListSchema = null) => {
   const navigation = useNavigation();
   const {localDb, refresh, refreshWithId} = useLocalDatabaseHook();
 
@@ -104,10 +104,20 @@ const useGroupInfo = (channelId = null) => {
   };
   const chatName = getChatName(username, profile.myProfile.username);
   const handleOpenNameChange = () => {
-    setIsOpenModalChangeName(true);
+    if (channelListSchema?.channelType === 'GROUP') {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.GROUP_CHAT_DETAIL_EDIT_NAME_BUTTON_CLICKED
+      );
+      setIsOpenModalChangeName(true);
+    }
   };
   const handleSaveNameChange = async (name) => {
     setIsOpenModalChangeName(false);
+    if (channelListSchema?.channelType === 'GROUP') {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.GROUP_CHAT_DETAIL_EDIT_NAME_MENU_SAVE_BUTTON_CLICKED
+      );
+    }
 
     try {
       setIsUpdatingName(true);
@@ -145,6 +155,11 @@ const useGroupInfo = (channelId = null) => {
     }
   };
   const closeOnNameChange = () => {
+    if (channelListSchema?.channelType === 'GROUP') {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.GROUP_CHAT_DETAIL_EDIT_NAME_MENU_CANCEL_BUTTON_CLICKED
+      );
+    }
     setIsOpenModalChangeName(false);
   };
   // eslint-disable-next-line consistent-return
@@ -169,6 +184,7 @@ const useGroupInfo = (channelId = null) => {
   };
 
   const handleOnImageClicked = () => {
+    AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.GROUP_CHAT_DETAIL_PIC_CLICKED);
     launchGallery();
   };
 
@@ -222,17 +238,25 @@ const useGroupInfo = (channelId = null) => {
         mediaType: 'photo',
         sortOrder: 'asc',
         smartAlbums: ['RecentlyAdded', 'UserLibrary']
-      }).then(async (imageRes) => {
-        const imageCropped = await ImagePicker.openCropper({
-          mediaType: 'photo',
-          path: imageRes.path,
-          width: imageRes.width,
-          height: imageRes.height,
-          cropperChooseText: 'Next',
-          freeStyleCropEnabled: true
+      })
+        .then(async (imageRes) => {
+          const imageCropped = await ImagePicker.openCropper({
+            mediaType: 'photo',
+            path: imageRes.path,
+            width: imageRes.width,
+            height: imageRes.height,
+            cropperChooseText: 'Next',
+            freeStyleCropEnabled: true
+          });
+          uploadImage(imageCropped.path);
+        })
+        .catch((e) => {
+          if (e?.code === 'E_PICKER_CANCELLED') {
+            AnalyticsEventTracking.eventTrack(
+              BetterSocialEventTracking.GROUP_CHAT_DETAIL_EDIT_PICK_CANCELLED
+            );
+          }
         });
-        uploadImage(imageCropped.path);
-      });
     }
   };
 
@@ -338,6 +362,9 @@ const useGroupInfo = (channelId = null) => {
   const onAddMember = async (selectedUsers) => {
     try {
       setIsLoadingAddMember(true);
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.GROUP_CHAT_DETAIL_ADD_PARTICIPANT_CONFIRM
+      );
       const responseChannelData = await addMemberGroup({
         channelId,
         memberIds: selectedUsers.map((user) => user.user_id)
