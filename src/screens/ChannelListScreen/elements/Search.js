@@ -64,7 +64,6 @@ const Search = ({
 };
 
 Search.propTypes = {
-  route: PropTypes.string,
   onPress: PropTypes.func,
   animatedValue: PropTypes.number,
   isAnon: PropTypes.bool,

@@ -97,6 +97,11 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
         group:
           BetterSocialEventTracking.GROUP_CHAT_DETAIL_OPEN_PARTICIPANT_MENU_VIEW_MESSAGE_INCOGNITO
       });
+    } else if (status === 'remove') {
+      eventTrackByChannelType({
+        group:
+          BetterSocialEventTracking.GROUP_CHAT_DETAIL_OPEN_PARTICIPANT_MENU_REMOVE_USER_BUTTON_CLICKED
+      });
     }
 
     handleOpenPopup(status);

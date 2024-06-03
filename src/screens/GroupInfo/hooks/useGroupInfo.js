@@ -1,19 +1,23 @@
+import ImagePicker from 'react-native-image-crop-picker';
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import {Alert} from 'react-native';
 import {generateRandomId} from 'stream-chat-react-native-core';
-import ImagePicker from 'react-native-image-crop-picker';
 import {openComposer} from 'react-native-email-link';
 import {useNavigation} from '@react-navigation/core';
 
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
 import ChannelListSchema from '../../../database/schema/ChannelListSchema';
 import ImageUtils from '../../../utils/image';
+import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
 import UserSchema from '../../../database/schema/UserSchema';
 import useChatUtilsHook from '../../../hooks/core/chat/useChatUtilsHook';
 import useCreateChat from '../../../hooks/screen/useCreateChat';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import useUserAuthHook from '../../../hooks/core/auth/useUserAuthHook';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../../libraries/analytics/analyticsEventTracking';
 import TokenStorage, {ITokenEnum} from '../../../utils/storage/custom/tokenStorage';
 import {Context} from '../../../context';
 import {addMemberGroup, leaveGroup, removeMemberGroup} from '../../../service/chat';
@@ -26,7 +30,6 @@ import {
 import {requestExternalStoragePermission} from '../../../utils/permission';
 import {setChannel} from '../../../context/actions/setChannel';
 import {setParticipants} from '../../../context/actions/groupChat';
-import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
 
 const useGroupInfo = (channelId = null) => {
   const navigation = useNavigation();
@@ -296,6 +299,9 @@ const useGroupInfo = (channelId = null) => {
 
   const onRemoveUser = async () => {
     setOpenModal(false);
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.GROUP_CHAT_DETAIL_OPEN_PARTICIPANT_MENU_REMOVE_USER_CONFIRM
+    );
     const responseChannelData = await removeMemberGroup({
       channelId,
       targetUserId: selectedUser?.userId
@@ -505,7 +511,17 @@ const useGroupInfo = (channelId = null) => {
       Alert.alert(
         null,
         `Are you sure you want to remove ${selectedUser?.username} from this group? We will let the group know that you removed ${selectedUser?.username}.`,
-        [{text: 'Yes - remove', onPress: () => onRemoveUser()}, {text: 'Cancel'}]
+        [
+          {text: 'Yes - remove', onPress: () => onRemoveUser()},
+          {
+            text: 'Cancel',
+            onPress: () => {
+              AnalyticsEventTracking.eventTrack(
+                BetterSocialEventTracking.GROUP_CHAT_DETAIL_OPEN_PARTICIPANT_MENU_REMOVE_USER_ALERT_CLOSE
+              );
+            }
+          }
+        ]
       );
     }
 
@@ -524,6 +540,9 @@ const useGroupInfo = (channelId = null) => {
 
   const actionLeaveGroup = async () => {
     setOpenModal(false);
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.GROUP_CHAT_DETAIL_OPEN_EXIT_GROUP_MENU_EXIT_GROUP_ALERT_CONFIRM
+    );
     const responseChannelData = await leaveGroup({channelId});
     try {
       const {channelName} = getChannelListInfo(
@@ -558,8 +577,19 @@ const useGroupInfo = (channelId = null) => {
   };
 
   const onLeaveGroup = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.GROUP_CHAT_DETAIL_OPEN_EXIT_GROUP_MENU_EXIT_GROUP_BUTTON_CLICKED
+    );
+
     Alert.alert('', 'Leave this group?', [
-      {text: 'Cancel'},
+      {
+        text: 'Cancel',
+        onPress: () => {
+          AnalyticsEventTracking.eventTrack(
+            BetterSocialEventTracking.GROUP_CHAT_DETAIL_OPEN_EXIT_GROUP_MENU_EXIT_GROUP_ALERT_CLOSE
+          );
+        }
+      },
       {text: 'Exit', onPress: actionLeaveGroup}
     ]);
   };
