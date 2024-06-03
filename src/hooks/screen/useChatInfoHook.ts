@@ -65,7 +65,9 @@ function useChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
     handlePressContact(item);
 
     return eventTrackByChannelType({
-      anon: BetterSocialEventTracking.ANONYMOUS_CHAT_DETAIL_OPEN_PARTICIPANT_MENU
+      signed: BetterSocialEventTracking.SIGNED_CHAT_DETAIL_OPEN_PARTICIPANT_MENU,
+      anon: BetterSocialEventTracking.ANONYMOUS_CHAT_DETAIL_OPEN_PARTICIPANT_MENU,
+      group: BetterSocialEventTracking.GROUP_CHAT_DETAIL_OPEN_PARTICIPANT_MENU
     });
   };
 

@@ -109,6 +109,7 @@ export enum BetterSocialEventTracking {
 
   // SIGNED CHAT DETAIL
   SIGNED_CHAT_DETAIL_BACK_BUTTON_PRESSED = 'SignedChat-ChatDetail_backButton_openChatScreen',
+  SIGNED_CHAT_DETAIL_OPEN_PARTICIPANT_MENU = 'SignedChat-ChatDetail_ParticipantName_openOtherProfile',
   SIGNED_CHAT_DETAIL_OPEN_PARTICIPANT_MENU_VIEW_OTHER_PROFILE = 'SignedChat-ChatDetail_ParticipantMenu-viewProfile_openOtherProfile',
   SIGNED_CHAT_DETAIL_OPEN_PARTICIPANT_MENU_GO_INCOGNITO = 'SignedChat-ChatDetail_ParticipantMenu-goIncognito_openOtherProfile',
   SIGNED_CHAT_DETAIL = '',
@@ -122,7 +123,8 @@ export enum BetterSocialEventTracking {
 
   // GROUP CHAT DETAIL
   GROUP_CHAT_DETAIL_BACK_BUTTON_PRESSED = 'GroupChat-ChatDetail_backButton_openChatScreen',
-  GROUP_CHAT_DETAIL_OPEN_PARTICIPANT_MENU_VIEW_OTHER_PROFILE = 'GroupChat-ChatDetail_ParticipantName_openOtherProfile',
+  GROUP_CHAT_DETAIL_OPEN_PARTICIPANT_MENU = 'GroupChat-ChatDetail_ParticipantName_openOtherProfile',
+  GROUP_CHAT_DETAIL_OPEN_PARTICIPANT_MENU_VIEW_OTHER_PROFILE = 'GroupChat-ChatDetail_Participant-viewProfile_openOtherProfile',
   GROUP_CHAT_DETAIL_OPEN_PARTICIPANT_MENU_VIEW_MESSAGE = 'GroupChat-ChatDetail_ParticipantMenu-message_openOtherProfile',
   GROUP_CHAT_DETAIL_OPEN_PARTICIPANT_MENU_VIEW_MESSAGE_INCOGNITO = 'GroupChat-ChatDetail_ParticipantMenu-anonMessage_openOtherProfile',
   GROUP_CHAT_DETAIL_ADD_PARTICIPANT_BUTTON_CLICKED = 'GroupChat-ChatDetail_editNameScreen_openSignedChatScreen',
