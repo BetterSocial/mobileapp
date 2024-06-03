@@ -622,13 +622,21 @@ const useGroupInfo = (channelId = null, channelListSchema = null) => {
   };
 
   const onReportGroup = () => {
-    openComposer({
-      to: 'contact@bettersocial.org',
-      subject: 'Reporting a group',
-      body: `Reporting group ${
-        selectedChannel?.name || ''
-      }. Please type reason for reporting this group below. Thank you!`
-    });
+    try {
+      openComposer({
+        to: 'contact@bettersocial.org',
+        subject: 'Reporting a group',
+        body: `Reporting group ${
+          selectedChannel?.name || ''
+        }. Please type reason for reporting this group below. Thank you!`
+      });
+
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.GROUP_CHAT_DETAIL_REPORT_GROUP_BUTTON_CLICKED
+      );
+    } catch (e) {
+      console.log('error on report group', JSON.stringify(e));
+    }
   };
   const handlePressContact = async (item) => {
     const isAnonymousUser = Boolean(item?.user?.anon_user_info_emoji_name);
