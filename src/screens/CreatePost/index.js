@@ -439,7 +439,6 @@ const CreatePost = () => {
     const attemptPost = async (retryCount) => {
       try {
         const topicsToPost = _.union(initialTopic, listTopic);
-        console.log('message', message);
         const data = {
           message,
           topics: topicsToPost,
