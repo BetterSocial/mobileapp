@@ -163,7 +163,8 @@ const useCoreChatSystemHook = () => {
     const channelType: {[key: string]: ChannelType} = {
       messaging: isAnonymous ? 'ANON_PM' : 'PM',
       group: 'GROUP',
-      topics: isAnonymous ? 'ANON_TOPIC' : 'TOPIC'
+      topics: isAnonymous ? 'ANON_TOPIC' : 'TOPIC',
+      topicinvitation: 'TOPIC'
     };
 
     const isSystemMessage = websocketData?.message?.isSystem || websocketData?.type === 'system';
@@ -237,7 +238,10 @@ const useCoreChatSystemHook = () => {
     websocketData = await helperGetWebsocketUnreadCount(websocketData);
     websocketData = await helperGetSystemMessage(websocketData, channelCategory);
 
-    if (websocketData?.channel_type === 'topics') {
+    if (
+      websocketData?.channel_type === 'topics' ||
+      websocketData?.channel_type === 'topicinvitation'
+    ) {
       refresh('channelList');
       return;
     }

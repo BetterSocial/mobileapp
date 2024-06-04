@@ -345,7 +345,7 @@ const getChannelListInfo = (channel, selfSignUserId, selfAnonUserId) => {
     channelImage = DEFAULT_PROFILE_PIC_PATH;
   }
 
-  if (channel?.type === 'topics') {
+  if (channel?.type === 'topics' || channel?.type === 'topicinvitation') {
     channelImage = channel?.image || channel?.channel_image;
     channelName = channel?.name;
     if (!channelName || channelName === '') {
