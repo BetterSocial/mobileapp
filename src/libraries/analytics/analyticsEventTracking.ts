@@ -160,6 +160,11 @@ export enum BetterSocialEventTracking {
   FEED_COMMUNITY_PAGE_BLOCK_USER_BLOCK_AND_REPORT_REASON = 'FeedPage-CP_blockdrawer-blockAndReport-reasons',
   FEED_COMMUNITY_PAGE_BLOCK_USER_REPORT_INFO_SUBMITTED = 'FeedPage-CP_blockAndReport-reportInfo_submitted',
   FEED_COMMUNITY_PAGE_BLOCK_USER_REPORT_INFO_SKIPPED = 'FeedPage-CP_blockAndReport-reportInfoSkipped_clicked',
+  FEED_COMMUNITY_PAGE_POST_INTERACTION_DOWNVOTE_INSERTED = 'FeedPage-CP_postInteractions-downvote_downvoted',
+  FEED_COMMUNITY_PAGE_POST_INTERACTION_DOWNVOTE_REMOVED = 'FeedPage-CP_postInteractions-downvote-unselected_downvote-removed',
+  FEED_COMMUNITY_PAGE_POST_INTERACTION_UPVOTE_INSERTED = 'FeedPage-CP_postInteractions-upvote_upvoted',
+  FEED_COMMUNITY_PAGE_POST_INTERACTION_UPVOTE_REMOVED = 'FeedPage-CP_postInteractions-upvote-unselected_upvote-removed',
+  FEED_COMMUNITY_PAGE_POST_INTERACTION_OPEN_AUTHOR_PROFILE = 'FeedPage-CP_postInteractions-authorname_openOtherProfile',
   FEED_COMMUNITY_PAGE = ''
 }
 
