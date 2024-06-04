@@ -19,6 +19,7 @@ import ContactPreview from './elements/ContactPreview';
 import Header from '../../components/Header/HeaderContact';
 import ItemUser from './elements/ItemUser';
 import SearchRecyclerView from './elements/SearchRecyclerView';
+import ShareUtils from '../../utils/share';
 import StringConstant from '../../utils/string/StringConstant';
 import useCreateChat from '../../hooks/screen/useCreateChat';
 import {COLORS} from '../../utils/theme';
@@ -229,7 +230,7 @@ const ContactScreen = ({navigation}) => {
   const handleInviteCommunityMember = async () => {
     try {
       const response = await inviteCommunityMember(
-        topicCommunityId,
+        topicCommunityId.toString(),
         selectedUsers?.map((user) => user?.user_id)
       );
       if (response.success) {
@@ -243,6 +244,10 @@ const ContactScreen = ({navigation}) => {
         console.log('error handleInviteCommunityMember: ', e);
       }
     }
+  };
+
+  const onCommunityShare = () => {
+    ShareUtils.shareCommunity(topicCommunityName);
   };
 
   const rowRenderer = (type, item, index, extendedState) => (
@@ -339,7 +344,7 @@ const ContactScreen = ({navigation}) => {
       {isCreateCommunity && (
         <View style={styles.containerHeader}>
           <ProgressBar isStatic={true} value={100} />
-          <TouchableOpacity style={styles.info}>
+          <TouchableOpacity style={styles.info} onPress={onCommunityShare}>
             <View style={styles.iconCircle}>
               <MemoIc_share height={20} width={21} color={COLORS.white} />
             </View>
@@ -400,17 +405,19 @@ const ContactScreen = ({navigation}) => {
         />
       )}
       <Loading visible={loading || loadingCreateChat || isLoadingAddMember} />
-      <View style={styles.footer}>
-        <View style={styles.textSmallContainer}>
-          <Text style={styles.textSmall}>
-            You{"'"}ll appear as the first member of this community. You can switch your membership
-            to incognito at any time from the community page.
-          </Text>
+      {isCreateCommunity && (
+        <View style={styles.footer}>
+          <View style={styles.textSmallContainer}>
+            <Text style={styles.textSmall}>
+              You{"'"}ll appear as the first member of this community. You can switch your
+              membership to incognito at any time from the community page.
+            </Text>
+          </View>
+          <Button disabled={selectedUsers.length <= 0} onPress={handleInviteCommunityMember}>
+            Next
+          </Button>
         </View>
-        <Button disabled={selectedUsers.length <= 0} onPress={handleInviteCommunityMember}>
-          Next
-        </Button>
-      </View>
+      )}
     </SafeAreaView>
   );
 };

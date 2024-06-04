@@ -97,20 +97,11 @@ const CreateCommunity = () => {
     if (name && name.length >= MINIMUM_NAME_LENGTH && typeFetch === 'available') {
       const response = await submitCommunityName(name);
       if (response.success) {
-        const data = await DiscoveryRepo.fetchDiscoveryDataTopic(name);
-        if (data.success) {
-          const topic = (data?.followedTopic)
-            .concat(data?.unfollowedTopic)
-            .find((i) => i.name === name);
-          console.log('topic', JSON.stringify(topic));
-          if (topic) {
-            navigation.replace('ContactScreen', {
-              isCreateCommunity: true,
-              topicCommunityId: topic.topic_id,
-              topicCommunityName: name
-            });
-          }
-        }
+        navigation.replace('ContactScreen', {
+          isCreateCommunity: true,
+          topicCommunityId: response.topic_id,
+          topicCommunityName: name
+        });
       }
     } else {
       if (!name) {
