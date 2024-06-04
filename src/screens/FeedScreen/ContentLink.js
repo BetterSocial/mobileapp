@@ -1,23 +1,25 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
+import moment from 'moment';
 import {
   StyleSheet,
   Text,
   TouchableNativeFeedback,
-  View,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  View
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
+import BlurredLayer from './elements/BlurredLayer';
 import Card from '../../components/Card/Card';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
+import dimen from '../../utils/dimen';
+import useCalculationContentLink from './hooks/useCalculatiuonContentLink';
+import useContentFeed from './hooks/useContentFeed';
 import {COLORS} from '../../utils/theme';
+import {DISCOVERY_TAB_USERS} from '../../utils/constants';
 import {fonts, normalize, normalizeFontSize, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {smartRender} from '../../utils/Utils';
-import useContentFeed from './hooks/useContentFeed';
-import useCalculationContentLink from './hooks/useCalculatiuonContentLink';
-import BlurredLayer from './elements/BlurredLayer';
-import {DISCOVERY_TAB_USERS} from '../../utils/constants';
-import dimen from '../../utils/dimen';
 
 const ContentLink = ({
   item,
@@ -64,6 +66,9 @@ const ContentLink = ({
     });
   };
 
+  const momentDate = moment(og?.content_published_at || og?.date);
+  const date = momentDate.format('MMM DD, YYYY');
+
   return (
     <BlurredLayer withToast={true} onPressContent={handleBlurredContent} isVisible={isBlurredPost}>
       <View style={styles.contentFeed}>
@@ -77,7 +82,7 @@ const ContentLink = ({
             </TouchableWithoutFeedback>
             {smartRender(Card, {
               domain: og.domain,
-              date: new Date(og.date).toLocaleDateString(),
+              date,
               domainImage: og.domainImage,
               title: og.title,
               description: og.description,
@@ -107,6 +112,19 @@ const ContentLink = ({
       </View>
     </BlurredLayer>
   );
+};
+
+ContentLink.propTypes = {
+  item: PropTypes.object,
+  og: PropTypes.object,
+  onPress: PropTypes.func,
+  onHeaderPress: PropTypes.func,
+  onCardContentPress: PropTypes.func,
+  score: PropTypes.number,
+  message: PropTypes.string,
+  messageContainerStyle: PropTypes.object,
+  topics: PropTypes.array,
+  isPostDetail: PropTypes.bool
 };
 
 export default ContentLink;
