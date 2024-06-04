@@ -3,8 +3,15 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {Dimensions, StyleSheet, View} from 'react-native';
 
-import {Footer, PreviewComment} from '../../components';
+import AddCommentPreview from './elements/AddCommentPreview';
+import Content from './Content';
+import ContentLink from './ContentLink';
+import Header from './Header';
+import ShareUtils from '../../utils/share';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
+import dimen from '../../utils/dimen';
+import useCalculationContent from './hooks/useCalculationContent';
+import useFeed from './hooks/useFeed';
 import usePostHook from '../../hooks/core/post/usePostHook';
 import {
   ANALYTICS_SHARE_POST_FEED_ID,
@@ -14,17 +21,11 @@ import {
   POST_TYPE_STANDARD,
   SOURCE_FEED_TAB
 } from '../../utils/constants';
-import dimen from '../../utils/dimen';
-import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
-import {getCommentLength} from '../../utils/getstream';
-import ShareUtils from '../../utils/share';
+import {BetterSocialEventTracking} from '../../libraries/analytics/analyticsEventTracking';
 import {COLORS} from '../../utils/theme';
-import Content from './Content';
-import ContentLink from './ContentLink';
-import Header from './Header';
-import AddCommentPreview from './elements/AddCommentPreview';
-import useCalculationContent from './hooks/useCalculationContent';
-import useFeed from './hooks/useFeed';
+import {Footer, PreviewComment} from '../../components';
+import {getCommentLength} from '../../utils/getstream';
+import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
 
 const FULL_WIDTH = Dimensions.get('screen').width;
 
@@ -148,6 +149,9 @@ const RenderListFeed = (props) => {
           onPressFollUnFoll={() => followUnfollow(item)}
           onHeaderOptionClicked={onHeaderOptionClicked}
           isShortText={isShortTextPost}
+          shareLinkEventName={BetterSocialEventTracking.MAIN_FEED_DRAWER_MENU_SHARE_LINK_CLICKED}
+          threeDotsEventName={BetterSocialEventTracking.MAIN_FEED_POST_THREE_DOTS_CLICKED}
+          navigateToProfileEventName={BetterSocialEventTracking.MAIN_FEED_POST_USERNAME_CLICKED}
         />
         {item.post_type === POST_TYPE_LINK && (
           <ContentLink

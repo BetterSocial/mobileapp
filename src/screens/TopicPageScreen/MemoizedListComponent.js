@@ -82,7 +82,13 @@ const RenderListFeed = (props) => {
       newStatus = true;
     }
 
-    await postApiDownvote(newStatus);
+    postApiDownvote(newStatus);
+
+    AnalyticsEventTracking.eventTrack(
+      newStatus
+        ? BetterSocialEventTracking.FEED_COMMUNITY_PAGE_POST_INTERACTION_DOWNVOTE_INSERTED
+        : BetterSocialEventTracking.FEED_COMMUNITY_PAGE_POST_INTERACTION_DOWNVOTE_REMOVED
+    );
   };
 
   const onPressUpvoteHandle = async () => {
@@ -91,7 +97,14 @@ const RenderListFeed = (props) => {
     if (voteStatus === 'downvote') {
       newStatus = true;
     }
-    await postApiUpvote(newStatus);
+
+    postApiUpvote(newStatus);
+
+    AnalyticsEventTracking.eventTrack(
+      newStatus
+        ? BetterSocialEventTracking.FEED_COMMUNITY_PAGE_POST_INTERACTION_UPVOTE_INSERTED
+        : BetterSocialEventTracking.FEED_COMMUNITY_PAGE_POST_INTERACTION_UPVOTE_REMOVED
+    );
   };
 
   const postApiDownvote = async (status) => {
@@ -173,6 +186,9 @@ const RenderListFeed = (props) => {
           isFollow={item?.is_following_target}
           onPressFollUnFoll={onFollowUnfollowButtonPressed}
           isShortText={isShortTextPost}
+          navigateToProfileEventName={
+            BetterSocialEventTracking.FEED_COMMUNITY_PAGE_POST_INTERACTION_OPEN_AUTHOR_PROFILE
+          }
         />
         {item.post_type === POST_TYPE_LINK && (
           <ContentLink
@@ -196,6 +212,12 @@ const RenderListFeed = (props) => {
             topics={item?.topics}
             setHaveSeeMore={(haveSeeMore) => setIsHaveSeeMore(haveSeeMore)}
             setIsShortText={(shortText) => setIsShortText(shortText)}
+            seeResultsEventName={
+              BetterSocialEventTracking.FEED_COMMUNITY_PAGE_MULTIPLE_POLL_SEE_RESULTS
+            }
+            pollSelectedEventName={
+              BetterSocialEventTracking.FEED_COMMUNITY_PAGE_SINGLE_POLL_CLICKED
+            }
           />
         )}
         {isBlurred && (

@@ -1,14 +1,15 @@
 import * as React from 'react';
 import {useNavigation} from '@react-navigation/core';
 
+import AnalyticsEventTracking from '../../libraries/analytics/analyticsEventTracking';
 import BaseButtonAddPost from './BaseButtonAddPost';
+import ShadowFloatingButtons from './ShadowFloatingButtons';
 import {Context} from '../../context';
 import {NavigationConstants, SOURCE_FEED_TAB} from '../../utils/constants';
 import {setTimer} from '../../context/actions/feeds';
 import {viewTimePost} from '../../service/post';
-import ShadowFloatingButtons from './ShadowFloatingButtons';
 
-const ButtonAddPost = ({onRefresh, isShowArrow}) => {
+const ButtonAddPost = ({onRefresh, isShowArrow, clickEventName}) => {
   const navigator = useNavigation();
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
 
@@ -20,6 +21,8 @@ const ButtonAddPost = ({onRefresh, isShowArrow}) => {
     if (id) viewTimePost(id, currentTime - timer.getTime(), SOURCE_FEED_TAB);
     navigator.navigate(NavigationConstants.CREATE_POST_SCREEN, {onRefresh});
     setTimer(new Date(), dispatch);
+
+    if (clickEventName) AnalyticsEventTracking.eventTrack(clickEventName);
   };
 
   return (
