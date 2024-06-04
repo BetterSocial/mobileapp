@@ -212,6 +212,12 @@ const RenderListFeed = (props) => {
             topics={item?.topics}
             setHaveSeeMore={(haveSeeMore) => setIsHaveSeeMore(haveSeeMore)}
             setIsShortText={(shortText) => setIsShortText(shortText)}
+            seeResultsEventName={
+              BetterSocialEventTracking.FEED_COMMUNITY_PAGE_MULTIPLE_POLL_SEE_RESULTS
+            }
+            pollSelectedEventName={
+              BetterSocialEventTracking.FEED_COMMUNITY_PAGE_SINGLE_POLL_CLICKED
+            }
           />
         )}
         {isBlurred && (

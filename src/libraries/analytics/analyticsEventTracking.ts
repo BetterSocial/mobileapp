@@ -165,6 +165,8 @@ export enum BetterSocialEventTracking {
   FEED_COMMUNITY_PAGE_POST_INTERACTION_UPVOTE_INSERTED = 'FeedPage-CP_postInteractions-upvote_upvoted',
   FEED_COMMUNITY_PAGE_POST_INTERACTION_UPVOTE_REMOVED = 'FeedPage-CP_postInteractions-upvote-unselected_upvote-removed',
   FEED_COMMUNITY_PAGE_POST_INTERACTION_OPEN_AUTHOR_PROFILE = 'FeedPage-CP_postInteractions-authorname_openOtherProfile',
+  FEED_COMMUNITY_PAGE_MULTIPLE_POLL_SEE_RESULTS = 'FeedPage-CP_postInteractions-pollseeresults_clicked',
+  FEED_COMMUNITY_PAGE_SINGLE_POLL_CLICKED = 'FeedPage-CP_postInteractions-pollChoice',
   FEED_COMMUNITY_PAGE = ''
 }
 
