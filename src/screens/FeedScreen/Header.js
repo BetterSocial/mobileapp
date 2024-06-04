@@ -17,6 +17,7 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
+import AnalyticsEventTracking from '../../libraries/analytics/analyticsEventTracking';
 import AnonymousAvatar from '../../components/AnonymousAvatar';
 import AnonymousUsername from '../../components/AnonymousUsername';
 import BlurredLayer from './elements/BlurredLayer';
@@ -127,7 +128,9 @@ const _renderAnonimity = ({
   item,
   disabledFollow,
   isFromFeeds,
-  isShortText = false
+  isShortText = false,
+  threeDotsEventName,
+  shareLinkEventName
 }) => {
   const navigation = useNavigation();
   const refSheet = React.useRef();
@@ -137,8 +140,10 @@ const _renderAnonimity = ({
       id: 1,
       name: 'Share link',
       icon: <ShareAndroidIcon />,
-      onPress: () =>
-        ShareUtils.shareFeeds(item, ANALYTICS_SHARE_POST_FEED_SCREEN, ANALYTICS_SHARE_POST_FEED_ID)
+      onPress: () => {
+        ShareUtils.shareFeeds(item, ANALYTICS_SHARE_POST_FEED_SCREEN, ANALYTICS_SHARE_POST_FEED_ID);
+        if (shareLinkEventName) AnalyticsEventTracking.eventTrack(shareLinkEventName);
+      }
     }
   ];
 
@@ -249,6 +254,7 @@ const _renderAnonimity = ({
               <GlobalButton
                 onPress={() => {
                   refSheet.current.open();
+                  if (threeDotsEventName) AnalyticsEventTracking.eventTrack(threeDotsEventName);
                 }}>
                 <View style={{zIndex: 1000}}>
                   <ElipsisIcon width={16} height={16} color={COLORS.gray410} />
@@ -286,7 +292,9 @@ const _renderProfileNormal = ({
   disabledFollow,
   isFromFeeds,
   isShortText,
-  navigateToProfileEventName
+  navigateToProfileEventName,
+  threeDotsEventName,
+  shareLinkEventName
 }) => {
   const refSheet = React.useRef();
   const dataSheet = [
@@ -294,8 +302,10 @@ const _renderProfileNormal = ({
       id: 1,
       name: 'Share link',
       icon: <ShareAndroidIcon />,
-      onPress: () =>
-        ShareUtils.shareFeeds(item, ANALYTICS_SHARE_POST_FEED_SCREEN, ANALYTICS_SHARE_POST_FEED_ID)
+      onPress: () => {
+        ShareUtils.shareFeeds(item, ANALYTICS_SHARE_POST_FEED_SCREEN, ANALYTICS_SHARE_POST_FEED_ID);
+        if (shareLinkEventName) AnalyticsEventTracking.eventTrack(shareLinkEventName);
+      }
     }
   ];
 
@@ -407,6 +417,7 @@ const _renderProfileNormal = ({
             <GlobalButton
               onPress={() => {
                 refSheet.current.open();
+                if (threeDotsEventName) AnalyticsEventTracking.eventTrack(threeDotsEventName);
               }}>
               {hideThreeDot ? null : (
                 <View style={{zIndex: 1000}}>
@@ -442,7 +453,9 @@ const Header = ({
   disabledFollow,
   isFromFeeds,
   isShortText,
-  navigateToProfileEventName
+  navigateToProfileEventName,
+  threeDotsEventName,
+  shareLinkEventName
 }) => {
   const {
     anonimity,
@@ -484,7 +497,9 @@ const Header = ({
       source,
       disabledFollow,
       isFromFeeds,
-      isShortText
+      isShortText,
+      threeDotsEventName,
+      shareLinkEventName
     });
   }
   return _renderProfileNormal({
@@ -507,7 +522,9 @@ const Header = ({
     disabledFollow,
     isFromFeeds,
     isShortText,
-    navigateToProfileEventName
+    navigateToProfileEventName,
+    threeDotsEventName,
+    shareLinkEventName
   });
 };
 
