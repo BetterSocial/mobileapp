@@ -8,10 +8,10 @@ import ShareUtils from '../../utils/share';
 import dimen from '../../utils/dimen';
 import {getAllMemberTopic} from '../../service/topics';
 import StringConstant from '../../utils/string/StringConstant';
-import UsersFragment from '../DiscoveryScreenV2/fragment/UsersFragment';
 import {Context} from '../../context';
 import NavHeader from '../TopicPageScreen/elements/NavHeader';
 import TopicMemberHeadline from './elements/TopicMemberHeadlineList';
+import UsersFragmentCommunity from '../DiscoveryScreenV2/fragment/UserFragmentCommunity';
 
 const styles = StyleSheet.create({
   parentContainer: {
@@ -165,7 +165,7 @@ const TopicMemberScreen = () => {
         getSearchLayout={setSearchHeight}
       />
       <TopicMemberHeadline text="Visible members of this community" />
-      <UsersFragment
+      <UsersFragmentCommunity
         isLoadingDiscoveryUser={isLoadingDiscovery.user}
         isFirstTimeOpen={isFirstTimeOpen}
         initialUsers={initalMember}
