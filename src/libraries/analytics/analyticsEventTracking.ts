@@ -142,11 +142,24 @@ export enum BetterSocialEventTracking {
   GROUP_CHAT_DETAIL_EDIT_PICK_CANCELLED = 'GroupChat-ChatDetail_editPic_openLeaveGroupScreen',
 
   // MAIN FEED
+  MAIN_FEED_ON_POST_SCROLLED = 'FeedPage-MainFeed_post_scrolled',
+  MAIN_FEED_POST_PROPERTY = 'FeedPage-CP_postProperties_scrolled',
   MAIN_FEED_CREATE_POST_BUTTON_CLICKED = 'FeedPage-MainFeed_createPostButton_openCreatePostFlow',
+  MAIN_FEED_POST_DM_FOOTER_BUTTON_CLICKED = 'FeedPage-MainFeed_postInteractions-DMbutton_openDMmenu',
+  MAIN_FEED_POST_DRAWER_DM_SIGNED_BUTTON_CLICKED = 'FeedPage-MainFeed_DMmenu-MessageUser_openSignedChat',
+  MAIN_FEED_POST_DRAWER_DM_ANON_BUTTON_CLICKED = 'FeedPage-MainFeed_DMmenu-MessageAnon_openAnonChat',
   MAIN_FEED_POST_THREE_DOTS_CLICKED = 'FeedPage-MainFeed_postInteractions-3dots_openPostOptionDrawer',
+  MAIN_FEED_POST_FOOTER_REPLY_BUTTON_CLICKED = 'FeedPage-MainFeed_postInteractions-replyButton_openPDP',
   MAIN_FEED_DRAWER_MENU_SHARE_LINK_CLICKED = 'FeedPage-MainFeed_postInteractions-PostOptionDrawer-shareLink_clicked',
   MAIN_FEED_POST_USERNAME_CLICKED = 'FeedPage-MainFeed_postInteractions-authorname_openOtherProfile',
   MAIN_FEED_SEARCH_BAR_CLICKED = 'FeedPage-MainFeed_searchHelio_discoveryOpened',
+  MAIN_FEED_BLOCK_BUTTON_CLICKED = 'FeedPage-MainFeed_postInteractions-blockSymbol_openBlockMenu',
+  MAIN_FEED_BLOCK_USER_BOTTOM_SHEET_CLOSED = 'FeedPage-MainFeed_blockdrawer-justblock_closesBlockMenu',
+  MAIN_FEED_BLOCK_USER_BLOCK_AND_REPORT_CLICKED = 'FeedPage-MainFeed_blockdrawer-blockAndReport_clicked',
+  MAIN_FEED_BLOCK_USER_BLOCK_INDEFINITELY_CLICKED = 'FeedPage-MainFeed_blockdrawer-blockAndReport-reportSkip_clicked',
+  MAIN_FEED_BLOCK_USER_BLOCK_AND_REPORT_REASON = 'FeedPage-MainFeed_blockdrawer-blockAndReport-reasons',
+  MAIN_FEED_BLOCK_USER_REPORT_INFO_SUBMITTED = 'FeedPage-MainFeed_blockAndReport-reportInfo_submitted',
+  MAIN_FEED_BLOCK_USER_REPORT_INFO_SKIPPED = 'FeedPage-MainFeed_blockAndReport-reportInfoSkipped_clicked',
 
   // FEED COMMUNITY SCREEN
   FEED_COMMUNITY_PAGE_ON_POST_SCROLLED = 'FeedPage-CP_post_scrolled',

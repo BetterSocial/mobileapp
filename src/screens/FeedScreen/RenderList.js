@@ -13,6 +13,9 @@ import dimen from '../../utils/dimen';
 import useCalculationContent from './hooks/useCalculationContent';
 import useFeed from './hooks/useFeed';
 import usePostHook from '../../hooks/core/post/usePostHook';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../libraries/analytics/analyticsEventTracking';
 import {
   ANALYTICS_SHARE_POST_FEED_ID,
   ANALYTICS_SHARE_POST_FEED_SCREEN,
@@ -21,7 +24,6 @@ import {
   POST_TYPE_STANDARD,
   SOURCE_FEED_TAB
 } from '../../utils/constants';
-import {BetterSocialEventTracking} from '../../libraries/analytics/analyticsEventTracking';
 import {COLORS} from '../../utils/theme';
 import {Footer, PreviewComment} from '../../components';
 import {getCommentLength} from '../../utils/getstream';
@@ -133,6 +135,24 @@ const RenderListFeed = (props) => {
   const isShortTextPost =
     item.post_type === POST_TYPE_STANDARD && item.images_url.length <= 0 && isShortText === true;
 
+  const onFooterDMButtonPressed = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.MAIN_FEED_POST_DM_FOOTER_BUTTON_CLICKED
+    );
+  };
+
+  const onAnonDmButtonPressed = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.MAIN_FEED_POST_DRAWER_DM_ANON_BUTTON_CLICKED
+    );
+  };
+
+  const onSignedDmButtonPressed = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.MAIN_FEED_POST_DRAWER_DM_SIGNED_BUTTON_CLICKED
+    );
+  };
+
   return (
     <View key={item.id} testID="dataScroll" style={styles.cardContainer}>
       <View style={[styles.cardMain]}>
@@ -215,6 +235,11 @@ const RenderListFeed = (props) => {
           isSelf={isSelf}
           isShowDM
           isShortText={isShortTextPost}
+          eventTrackCallback={{
+            pressDMFooter: onFooterDMButtonPressed,
+            pressAnonDM: onAnonDmButtonPressed,
+            pressSignedDM: onSignedDmButtonPressed
+          }}
         />
         {hasComment ? (
           <View testID="previewComment">

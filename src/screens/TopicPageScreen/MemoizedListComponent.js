@@ -5,7 +5,6 @@ import {Dimensions, StyleSheet, View} from 'react-native';
 import {useRoute} from '@react-navigation/core';
 
 import AddCommentPreview from '../FeedScreen/elements/AddCommentPreview';
-import BlurredLayer from '../FeedScreen/elements/BlurredLayer';
 import Content from '../FeedScreen/Content';
 import ContentLink from '../FeedScreen/ContentLink';
 import Header from '../FeedScreen/Header';
@@ -20,15 +19,9 @@ import useWriteComment from '../../components/Comments/hooks/useWriteComment';
 import AnalyticsEventTracking, {
   BetterSocialEventTracking
 } from '../../libraries/analytics/analyticsEventTracking';
-import {
-  ANALYTICS_SHARE_POST_TOPIC_ID,
-  ANALYTICS_SHARE_POST_TOPIC_SCREEN,
-  POST_TYPE_LINK,
-  POST_TYPE_POLL,
-  POST_TYPE_STANDARD
-} from '../../utils/constants';
 import {COLORS} from '../../utils/theme';
 import {Footer, PreviewComment} from '../../components';
+import {POST_TYPE_LINK, POST_TYPE_POLL, POST_TYPE_STANDARD} from '../../utils/constants';
 import {getCommentLength, getCountCommentWithChild} from '../../utils/getstream';
 import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {showScoreAlertDialog} from '../../utils/Utils';
@@ -240,7 +233,9 @@ const RenderListFeed = (props) => {
           onPressBlock={() => onPressBlock(item)}
           onPressDownVote={onPressDownVoteHandle}
           onPressUpvote={onPressUpvoteHandle}
-          onPressDmAdditionalProcess={onPressDmAdditionalProcess}
+          eventTrackCallback={{
+            pressDMFooter: onPressDmAdditionalProcess
+          }}
           statusVote={voteStatus}
           loadingVote={loadingVote}
           isSelf={item.anonimity ? false : userId === item?.actor?.id}
