@@ -61,9 +61,12 @@ const getAllMemberTopic = async (query) => {
  * @param {import('axios').AxiosRequestConfig} axiosOptions
  * @returns
  */
-const getTopics = async (name, axiosOptions = {}) => {
+const getTopics = async (name, withMinimumFollower = true, axiosOptions = {}) => {
   try {
-    const result = await api.get(`/topics/?name=${name}`, axiosOptions);
+    const result = await api.get(
+      `/topics/?name=${name}&withMinimumFollower=${withMinimumFollower}`,
+      axiosOptions
+    );
     return result.data;
   } catch (e) {
     throw new Error(e);
