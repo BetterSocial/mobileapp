@@ -4,9 +4,9 @@ import {COLORS} from '../../utils/theme';
 
 const {width} = Dimensions.get('screen');
 
-const Input = ({...props}) => (
-  <TextInput style={styles.input} keyboardAppearance="dark" {...props} />
-);
+const Input = React.forwardRef(({...props}, ref) => {
+  return <TextInput ref={ref} style={styles.input} keyboardAppearance="dark" {...props} />;
+});
 
 export default Input;
 
