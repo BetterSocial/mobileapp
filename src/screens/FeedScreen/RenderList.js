@@ -93,7 +93,12 @@ const RenderListFeed = (props) => {
       newStatus = true;
     }
 
-    await postApiDownvote(newStatus);
+    postApiDownvote(newStatus);
+    AnalyticsEventTracking.eventTrack(
+      newStatus
+        ? BetterSocialEventTracking.MAIN_FEED_POST_FOOTER_DOWNVOTE_INSERTED
+        : BetterSocialEventTracking.MAIN_FEED_POST_FOOTER_DOWNVOTE_REMOVED
+    );
   };
 
   const onPressUpvoteHandle = async () => {
@@ -102,7 +107,13 @@ const RenderListFeed = (props) => {
     if (voteStatus === 'downvote') {
       newStatus = true;
     }
-    await postApiUpvote(newStatus);
+
+    postApiUpvote(newStatus);
+    AnalyticsEventTracking.eventTrack(
+      newStatus
+        ? BetterSocialEventTracking.MAIN_FEED_POST_FOOTER_UPVOTE_INSERTED
+        : BetterSocialEventTracking.MAIN_FEED_POST_FOOTER_UPVOTE_REMOVED
+    );
   };
 
   const checkVotesHandle = () => {
@@ -215,10 +226,11 @@ const RenderListFeed = (props) => {
             item={item}
             onNewPollFetched={onNewPollFetched}
             hasComment={hasComment}
-            seeResultsEventName={
-              BetterSocialEventTracking.MAIN_FEED_POST_MULTIPLE_CHOICE_SEE_RESULTS_CLICKED
-            }
-            pollSelectedEventName={BetterSocialEventTracking.MAIN_FEED_POST_SINGLE_POLL_CLICKED}
+            eventTrackName={{
+              pollSeeResults: BetterSocialEventTracking.MAIN_FEED_POST_SINGLE_POLL_CLICKED,
+              pollSelected: BetterSocialEventTracking.MAIN_FEED_POST_SINGLE_POLL_CLICKED,
+              navigateToTopicPage: BetterSocialEventTracking.MAIN_FEED_POST_TOPIC_CHIP_CLICKED
+            }}
           />
         )}
         {isBlurred && (
