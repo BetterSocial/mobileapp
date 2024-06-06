@@ -172,6 +172,10 @@ export enum BetterSocialEventTracking {
   MAIN_FEED_POST_TOPIC_CHIP_CLICKED = 'FeedPage-MainFeed_postInteractions-hashtag_openCP',
 
   // POST DETAIL PAGE
+  PDP_POST_UPVOTE_INSERTED = 'FeedPage-PDP_postInteractions-upvote_upvoted',
+  PDP_POST_UPVOTE_REMOVED = 'FeedPage-PDP_postInteractions-upvote-unselected_upvote-removed',
+  PDP_POST_DOWNVOTE_INSERTED = 'FeedPage-PDP_postInteractions-downvote_downvoted',
+  PDP_POST_DOWNVOTE_REMOVED = 'FeedPage-PDP_postInteractions-downvote-unselected_downvote-removed',
   PDP_COMMENT_UPVOTE_INSERTED = 'FeedPage-PDP_commentInteractions-upvote_upvoted',
   PDP_COMMENT_UPVOTE_REMOVED = 'FeedPage-PDP_commentInteractions-upvote-unselected_upvote-removed',
   PDP_COMMENT_DOWNVOTE_INSERTED = 'FeedPage-PDP_commentInteractions-downvote_downvoted',

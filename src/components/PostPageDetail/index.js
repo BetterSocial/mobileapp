@@ -514,7 +514,16 @@ const PostPageDetailIdComponent = (props) => {
       setTotalVote((prevState) => prevState - 1);
       setVoteStatus('downvote');
     }
-    await setDownVote(!statusDownvote);
+    setDownVote(!statusDownvote);
+    const isDownvoteInsertedEventTrackEligible = voteStatus === 'upvote' || voteStatus === 'none';
+
+    const isDownvoteRemovedEventTrackEligible = voteStatus === 'downvote';
+
+    if (isDownvoteInsertedEventTrackEligible)
+      AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.PDP_POST_DOWNVOTE_INSERTED);
+
+    if (isDownvoteRemovedEventTrackEligible)
+      AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.PDP_POST_DOWNVOTE_REMOVED);
   };
 
   const onPressUpvoteHandle = async () => {
@@ -531,7 +540,17 @@ const PostPageDetailIdComponent = (props) => {
       setTotalVote((prevState) => prevState + 1);
       setVoteStatus('upvote');
     }
-    await setUpVote(!statusUpvote);
+    setUpVote(!statusUpvote);
+
+    const isUpvoteInsertedEventTrackEligible = voteStatus === 'downvote' || voteStatus === 'none';
+
+    const isUpvoteRemovedEventTrackEligible = voteStatus === 'upvote';
+
+    if (isUpvoteInsertedEventTrackEligible)
+      AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.PDP_POST_UPVOTE_INSERTED);
+
+    if (isUpvoteRemovedEventTrackEligible)
+      AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.PDP_POST_UPVOTE_REMOVED);
   };
 
   const handleRefreshComment = async () => {
