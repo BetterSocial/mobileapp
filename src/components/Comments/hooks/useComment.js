@@ -1,7 +1,18 @@
 import React from 'react';
+
+import AnalyticsEventTracking from '../../../libraries/analytics/analyticsEventTracking';
 import {iVoteComment, voteCommentV2} from '../../../service/vote';
 
-const useComment = ({comment, updateVote}) => {
+const useComment = ({
+  comment,
+  updateVote,
+  eventTrackName = {
+    upvoteInserted: null,
+    upvoteRemoved: null,
+    downvoteInserted: null,
+    downvoteRemoved: null
+  }
+}) => {
   const [totalVote, setTotalVote] = React.useState(
     comment.data?.count_upvote - comment.data?.count_downvote
   );
@@ -19,6 +30,19 @@ const useComment = ({comment, updateVote}) => {
       setTotalVote((prevState) => prevState + 1);
       setStatusVote('upvote');
     }
+
+    const isUpvoteInsertedEventTrackEligible =
+      (statusVote === 'downvote' || statusVote === 'none') && eventTrackName.upvoteInserted;
+
+    const isUpvoteRemovedEventTrackEligible =
+      statusVote === 'upvote' && eventTrackName.upvoteRemoved;
+
+    if (isUpvoteInsertedEventTrackEligible)
+      AnalyticsEventTracking.eventTrack(eventTrackName.upvoteInserted);
+
+    if (isUpvoteRemovedEventTrackEligible)
+      AnalyticsEventTracking.eventTrack(eventTrackName.upvoteRemoved);
+
     const dataVote = {
       reaction_id: comment.id,
       vote: 'upvote'
@@ -38,6 +62,19 @@ const useComment = ({comment, updateVote}) => {
       setTotalVote((prevState) => prevState - 1);
       setStatusVote('downvote');
     }
+
+    const isDownvoteInsertedEventTrackEligible =
+      (statusVote === 'upvote' || statusVote === 'none') && eventTrackName.downvoteInserted;
+
+    const isDownvoteRemovedEventTrackEligible =
+      statusVote === 'downvote' && eventTrackName.downvoteRemoved;
+
+    if (isDownvoteInsertedEventTrackEligible)
+      AnalyticsEventTracking.eventTrack(eventTrackName.downvoteInserted);
+
+    if (isDownvoteRemovedEventTrackEligible)
+      AnalyticsEventTracking.eventTrack(eventTrackName.downvoteRemoved);
+
     const dataVote = {
       reaction_id: comment.id,
       vote: 'downvote'

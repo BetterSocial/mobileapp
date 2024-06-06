@@ -170,6 +170,17 @@ export enum BetterSocialEventTracking {
   MAIN_FEED_POST_FOOTER_UPVOTE_REMOVED = 'FeedPage-MainFeed_postInteractions-upvote-unselected_upvote-removed',
   MAIN_FEED_POST_TOPIC_CHIP_CLICKED = 'FeedPage-MainFeed_postInteractions-hashtag_openCP',
 
+  // POST DETAIL PAGE
+  PDP_COMMENT_UPVOTE_INSERTED = 'FeedPage-PDP_commentInteractions-upvote_upvoted',
+  PDP_COMMENT_UPVOTE_REMOVED = 'FeedPage-PDP_commentInteractions-upvote-unselected_upvote-removed',
+  PDP_COMMENT_DOWNVOTE_INSERTED = 'FeedPage-PDP_commentInteractions-downvote_downvoted',
+  PDP_COMMENT_DOWNVOTE_REMOVED = 'FeedPage-PDP_commentInteractions-downvote-unselected_downvote-removed',
+  PDP_COMMENT_REPLY_BUTTON_CLICKED = 'FeedPage-PDP_commentInteractions-replyButton_clicked',
+  PDP_COMMENT_DELETE_ALERT_CONFIRM = 'FeedPage-PDP_commentInteractions-deleteButton_clicked',
+  PDP_COMMENT_DELETE_ALERT_CANCEL = 'FeedPage-PDP_commentInteractions-cancelDelete_clicked',
+  PDP_COMMENT_INPUT_ANON_ON = 'FeedPage-PDP_commentInteractions-anonOn_clicked',
+  PDP_COMMENT_INPUT_ANON_OFF = 'FeedPage-PDP_commentInteractions-anonOff_clicked',
+
   // FEED COMMUNITY SCREEN
   FEED_COMMUNITY_PAGE_ON_POST_SCROLLED = 'FeedPage-CP_post_scrolled',
   FEED_COMMUNITY_PAGE_JOIN_BUTTON_CLICKED = 'FeedPage-CP_joinButton_joinBanner',
