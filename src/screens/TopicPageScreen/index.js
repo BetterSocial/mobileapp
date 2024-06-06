@@ -523,7 +523,9 @@ const TopicPageScreen = (props) => {
           showSearchBar={true}
           onMomentumScrollEnd={(event) => {
             onWillSendViewPostTime(event, feeds, {
-              eventName: BetterSocialEventTracking.FEED_COMMUNITY_PAGE_ON_POST_SCROLLED
+              scrollEventName: BetterSocialEventTracking.FEED_COMMUNITY_PAGE_ON_POST_SCROLLED,
+              scrollEventItemName:
+                BetterSocialEventTracking.FEED_COMMUNITY_PAGE_ON_POST_SCROLLED_ITEM
             });
             fetchNextFeeds(event);
           }}

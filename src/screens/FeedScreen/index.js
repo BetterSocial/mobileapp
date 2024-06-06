@@ -351,7 +351,8 @@ const FeedScreen = (props) => {
         onEndReachedThreshold={0.9}
         onMomentumScrollEnd={(momentumEvent) => {
           onWillSendViewPostTime(momentumEvent, feeds, {
-            eventName: BetterSocialEventTracking.MAIN_FEED_ON_POST_SCROLLED
+            scrollEventName: BetterSocialEventTracking.MAIN_FEED_ON_POST_SCROLLED,
+            scrollEventItemName: BetterSocialEventTracking.MAIN_FEED_ON_POST_SCROLLED_ITEM
           });
           fetchNextFeeds(momentumEvent);
         }}

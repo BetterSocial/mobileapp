@@ -143,6 +143,7 @@ export enum BetterSocialEventTracking {
 
   // MAIN FEED
   MAIN_FEED_ON_POST_SCROLLED = 'FeedPage-MainFeed_post_scrolled',
+  MAIN_FEED_ON_POST_SCROLLED_ITEM = 'FeedPage-MainFeed_postProperties',
   MAIN_FEED_POST_PROPERTY = 'FeedPage-CP_postProperties_scrolled',
   MAIN_FEED_CREATE_POST_BUTTON_CLICKED = 'FeedPage-MainFeed_createPostButton_openCreatePostFlow',
   MAIN_FEED_POST_HEADER_FOLLOW_BUTTON_CLICKED = 'FeedPage-MainFeed_postInteractions-followPostAuthor_follow',
@@ -183,6 +184,7 @@ export enum BetterSocialEventTracking {
 
   // FEED COMMUNITY SCREEN
   FEED_COMMUNITY_PAGE_ON_POST_SCROLLED = 'FeedPage-CP_post_scrolled',
+  FEED_COMMUNITY_PAGE_ON_POST_SCROLLED_ITEM = 'FeedPage-CP_postProperties',
   FEED_COMMUNITY_PAGE_JOIN_BUTTON_CLICKED = 'FeedPage-CP_joinButton_joinBanner',
   FEED_COMMUNITY_PAGE_JOIN_AS_SIGNED_CLICKED = 'FeedPage-CP_joinBanner-signed_joined',
   FEED_COMMUNITY_PAGE_JOIN_AS_ANON_CLICKED = 'FeedPage-CP_joinBanner-anon_joined',
@@ -206,8 +208,7 @@ export enum BetterSocialEventTracking {
   FEED_COMMUNITY_PAGE_POST_INTERACTION_UPVOTE_REMOVED = 'FeedPage-CP_postInteractions-upvote-unselected_upvote-removed',
   FEED_COMMUNITY_PAGE_POST_INTERACTION_OPEN_AUTHOR_PROFILE = 'FeedPage-CP_postInteractions-authorname_openOtherProfile',
   FEED_COMMUNITY_PAGE_MULTIPLE_POLL_SEE_RESULTS = 'FeedPage-CP_postInteractions-pollseeresults_clicked',
-  FEED_COMMUNITY_PAGE_SINGLE_POLL_CLICKED = 'FeedPage-CP_postInteractions-pollChoice',
-  FEED_COMMUNITY_PAGE = ''
+  FEED_COMMUNITY_PAGE_SINGLE_POLL_CLICKED = 'FeedPage-CP_postInteractions-pollChoice'
 }
 
 const ENABLE_TOAST = ENV === 'Dev';
