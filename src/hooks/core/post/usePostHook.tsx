@@ -13,7 +13,7 @@ const usePostHook = () => {
   const [feedsContext, feedsContextDispatch] = (React.useContext(Context) as any).feeds;
   const {myProfile} = profileContext;
 
-  const followUnfollow = async (item: any) => {
+  const followUnfollow = async (item: any): Promise<FollowAction | null> => {
     const user_id = item?.actor?.id;
     const username = item?.actor?.data?.username;
     const data = {
@@ -27,6 +27,9 @@ const usePostHook = () => {
       follow_source: 'post',
       post_id: item?.id
     };
+
+    let followAction: FollowAction | null = null;
+
     const indexFeed = feedsContext?.feeds?.findIndex((feed) => {
       return feed?.id === item?.id;
     });
@@ -38,11 +41,13 @@ const usePostHook = () => {
             feedsContext.feeds[index] = {...feedsContext?.feeds[index], is_following_target: false};
           }
         });
+        followAction = 'unfollow';
         setUnFollow(data);
       } else {
         const newFeed = {...feedsContext?.feeds[indexFeed], is_following_target: false};
         feedsContext.feeds[indexFeed] = newFeed;
         unfollowUserAnon(dataFollowAnon);
+        followAction = 'unfollow-anonymous';
       }
     } else if (!feedData?.anon_user_info_color_name) {
       feedsContext?.feeds.forEach((feed, index) => {
@@ -51,12 +56,16 @@ const usePostHook = () => {
         }
       });
       setFollow(data);
+      followAction = 'follow';
     } else {
       const newFeed = {...feedsContext?.feeds[indexFeed], is_following_target: true};
       feedsContext.feeds[indexFeed] = newFeed;
       followUserAnon(dataFollowAnon);
+      followAction = 'follow-anonymous';
     }
     setMainFeeds(feedsContext.feeds, feedsContextDispatch);
+
+    return followAction;
   };
 
   const followUnfollowTopic = async (

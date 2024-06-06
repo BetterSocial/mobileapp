@@ -67,6 +67,7 @@ const RenderListFeed = (props) => {
     onPressDownVoteHook,
     getTotalReaction
   } = useFeed();
+  const {followUnfollow} = usePostHook();
 
   const postApiUpvote = async (status) => {
     await onPressUpvote({
@@ -84,8 +85,6 @@ const RenderListFeed = (props) => {
       voteStatus
     });
   };
-
-  const {followUnfollow} = usePostHook();
 
   const onPressDownVoteHandle = async () => {
     onPressDownVoteHook();
@@ -153,6 +152,19 @@ const RenderListFeed = (props) => {
     );
   };
 
+  const onHeaderFolowUnfollowButtonPressed = async () => {
+    const followAction = await followUnfollow(item);
+    if (followAction === 'follow' || followAction === 'follow-anonymous') {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.MAIN_FEED_POST_HEADER_FOLLOW_BUTTON_CLICKED
+      );
+    } else if (followAction === 'unfollow' || followAction === 'unfollow-anonymous') {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.MAIN_FEED_POST_HEADER_UNFOLLOW_BUTTON_CLICKED
+      );
+    }
+  };
+
   return (
     <View key={item.id} testID="dataScroll" style={styles.cardContainer}>
       <View style={[styles.cardMain]}>
@@ -166,7 +178,7 @@ const RenderListFeed = (props) => {
           isShowDelete={isShowDelete}
           isSelf={isSelf}
           isFollow={item?.is_following_target}
-          onPressFollUnFoll={() => followUnfollow(item)}
+          onPressFollUnFoll={() => onHeaderFolowUnfollowButtonPressed(item)}
           onHeaderOptionClicked={onHeaderOptionClicked}
           isShortText={isShortTextPost}
           shareLinkEventName={BetterSocialEventTracking.MAIN_FEED_DRAWER_MENU_SHARE_LINK_CLICKED}
@@ -203,6 +215,10 @@ const RenderListFeed = (props) => {
             item={item}
             onNewPollFetched={onNewPollFetched}
             hasComment={hasComment}
+            seeResultsEventName={
+              BetterSocialEventTracking.MAIN_FEED_POST_MULTIPLE_CHOICE_SEE_RESULTS_CLICKED
+            }
+            pollSelectedEventName={BetterSocialEventTracking.MAIN_FEED_POST_SINGLE_POLL_CLICKED}
           />
         )}
         {isBlurred && (
