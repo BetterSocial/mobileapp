@@ -76,7 +76,21 @@ const FEEDS_DIFF_TO_FETCH = 8;
 const IS_ANONYMOUS = 1;
 const IS_NOT_ANONYMOUS = 0;
 
+const getPostType = (postTypeInNumber) => {
+  switch (postTypeInNumber) {
+    case POST_TYPE_LINK:
+      return 'post_link';
+    case POST_TYPE_POLL:
+      return 'post_poll';
+    case POST_TYPE_STANDARD:
+      return 'post_standard';
+    default:
+      return '';
+  }
+};
+
 export {
+  getPostType,
   ANALYTICS_SHARE_POST_FEED_ID,
   ANALYTICS_SHARE_POST_FEED_SCREEN,
   ANALYTICS_SHARE_POST_PDP_SCREEN,

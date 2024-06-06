@@ -167,10 +167,15 @@ const FeedScreen = (props) => {
       refreshParent: () => refreshMoreText(index, haveSeeMore),
       isKeyboardOpen: true
     });
+
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.MAIN_FEED_POST_FOOTER_REPLY_BUTTON_CLICKED
+    );
   };
 
   const onPressBlock = (value) => {
     refBlockComponent.current.openBlockComponent(value);
+    AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.MAIN_FEED_BLOCK_BUTTON_CLICKED);
   };
 
   function onRefresh() {
@@ -273,6 +278,43 @@ const FeedScreen = (props) => {
     return renderListFeed(item, index);
   };
 
+  const onCloseBlockUser = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.MAIN_FEED_BLOCK_USER_BOTTOM_SHEET_CLOSED
+    );
+  };
+
+  const onBlockAndReportUser = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.MAIN_FEED_BLOCK_USER_BLOCK_AND_REPORT_CLICKED
+    );
+  };
+
+  const onBlockUserIndefinitely = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.MAIN_FEED_BLOCK_USER_BLOCK_INDEFINITELY_CLICKED
+    );
+  };
+
+  const onSkipOnlyBlock = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.MAIN_FEED_BLOCK_USER_REPORT_INFO_SKIPPED
+    );
+  };
+
+  const onReportInfoSubmitted = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.MAIN_FEED_BLOCK_USER_REPORT_INFO_SUBMITTED
+    );
+  };
+
+  const onReasonsSubmitted = (v) => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.MAIN_FEED_BLOCK_USER_BLOCK_AND_REPORT_REASON,
+      v
+    );
+  };
+
   return (
     <View>
       <StatusBar translucent={false} barStyle={'light-content'} />
@@ -308,7 +350,10 @@ const FeedScreen = (props) => {
         renderItem={renderItem}
         onEndReachedThreshold={0.9}
         onMomentumScrollEnd={(momentumEvent) => {
-          onWillSendViewPostTime(momentumEvent, feeds);
+          onWillSendViewPostTime(momentumEvent, feeds, {
+            scrollEventName: BetterSocialEventTracking.MAIN_FEED_ON_POST_SCROLLED,
+            scrollEventItemName: BetterSocialEventTracking.MAIN_FEED_ON_POST_SCROLLED_ITEM
+          });
           fetchNextFeeds(momentumEvent);
         }}
       />
@@ -321,6 +366,12 @@ const FeedScreen = (props) => {
         refresh={onBlockCompletedHandle}
         refreshAnonymous={onDeleteBlockedPostCompletedHandle}
         screen="screen_feed"
+        onCloseBlockUser={onCloseBlockUser}
+        onBlockAndReportUser={onBlockAndReportUser}
+        onBlockUserIndefinitely={onBlockUserIndefinitely}
+        onSkipOnlyBlock={onSkipOnlyBlock}
+        onReportInfoSubmitted={onReportInfoSubmitted}
+        onReasonsSubmitted={onReasonsSubmitted}
       />
     </View>
   );

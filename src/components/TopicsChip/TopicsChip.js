@@ -1,8 +1,10 @@
 import * as React from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, ScrollView} from 'react-native';
+import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {fonts} from '../../utils/fonts';
+
+import AnalyticsEventTracking from '../../libraries/analytics/analyticsEventTracking';
 import {COLORS} from '../../utils/theme';
+import {fonts} from '../../utils/fonts';
 
 const TopicsChip = ({
   topics = [],
@@ -10,12 +12,16 @@ const TopicsChip = ({
   onLayout,
   topicContainer,
   topicItemStyle,
-  textStyle
+  textStyle,
+  navigateToTopicEventName
 }) => {
   const navigation = useNavigation();
 
   const onTopicPress = (topic) => {
     navigation.push('TopicPageScreen', {id: topic.replace('#', '')});
+    if (navigateToTopicEventName) {
+      AnalyticsEventTracking.eventTrack(navigateToTopicEventName);
+    }
   };
 
   const handleLayout = ({nativeEvent}) => {

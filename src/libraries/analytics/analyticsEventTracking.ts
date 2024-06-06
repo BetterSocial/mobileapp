@@ -146,14 +146,53 @@ export enum BetterSocialEventTracking {
   GROUP_CHAT_DETAIL_EDIT_PICK_CANCELLED = 'GroupChat-ChatDetail_editPic_openLeaveGroupScreen',
 
   // MAIN FEED
+  MAIN_FEED_ON_POST_SCROLLED = 'FeedPage-MainFeed_post_scrolled',
+  MAIN_FEED_ON_POST_SCROLLED_ITEM = 'FeedPage-MainFeed_postProperties',
+  MAIN_FEED_POST_PROPERTY = 'FeedPage-CP_postProperties_scrolled',
   MAIN_FEED_CREATE_POST_BUTTON_CLICKED = 'FeedPage-MainFeed_createPostButton_openCreatePostFlow',
+  MAIN_FEED_POST_HEADER_FOLLOW_BUTTON_CLICKED = 'FeedPage-MainFeed_postInteractions-followPostAuthor_follow',
+  MAIN_FEED_POST_HEADER_UNFOLLOW_BUTTON_CLICKED = 'FeedPage-MainFeed_postInteractions-followPostAuthor_unfollow',
+  MAIN_FEED_POST_DM_FOOTER_BUTTON_CLICKED = 'FeedPage-MainFeed_postInteractions-DMbutton_openDMmenu',
+  MAIN_FEED_POST_DRAWER_DM_SIGNED_BUTTON_CLICKED = 'FeedPage-MainFeed_DMmenu-MessageUser_openSignedChat',
+  MAIN_FEED_POST_DRAWER_DM_ANON_BUTTON_CLICKED = 'FeedPage-MainFeed_DMmenu-MessageAnon_openAnonChat',
+  MAIN_FEED_POST_SINGLE_POLL_CLICKED = 'FeedPage-MainFeed_postInteractions-pollChoice',
+  MAIN_FEED_POST_MULTIPLE_CHOICE_SEE_RESULTS_CLICKED = 'FeedPage-MainFeed_postInteractions-pollseeresults_clicked',
   MAIN_FEED_POST_THREE_DOTS_CLICKED = 'FeedPage-MainFeed_postInteractions-3dots_openPostOptionDrawer',
+  MAIN_FEED_POST_FOOTER_REPLY_BUTTON_CLICKED = 'FeedPage-MainFeed_postInteractions-replyButton_openPDP',
   MAIN_FEED_DRAWER_MENU_SHARE_LINK_CLICKED = 'FeedPage-MainFeed_postInteractions-PostOptionDrawer-shareLink_clicked',
   MAIN_FEED_POST_USERNAME_CLICKED = 'FeedPage-MainFeed_postInteractions-authorname_openOtherProfile',
   MAIN_FEED_SEARCH_BAR_CLICKED = 'FeedPage-MainFeed_searchHelio_discoveryOpened',
+  MAIN_FEED_BLOCK_BUTTON_CLICKED = 'FeedPage-MainFeed_postInteractions-blockSymbol_openBlockMenu',
+  MAIN_FEED_BLOCK_USER_BOTTOM_SHEET_CLOSED = 'FeedPage-MainFeed_blockdrawer-justblock_closesBlockMenu',
+  MAIN_FEED_BLOCK_USER_BLOCK_AND_REPORT_CLICKED = 'FeedPage-MainFeed_blockdrawer-blockAndReport_clicked',
+  MAIN_FEED_BLOCK_USER_BLOCK_INDEFINITELY_CLICKED = 'FeedPage-MainFeed_blockdrawer-blockAndReport-reportSkip_clicked',
+  MAIN_FEED_BLOCK_USER_BLOCK_AND_REPORT_REASON = 'FeedPage-MainFeed_blockdrawer-blockAndReport-reasons',
+  MAIN_FEED_BLOCK_USER_REPORT_INFO_SUBMITTED = 'FeedPage-MainFeed_blockAndReport-reportInfo_submitted',
+  MAIN_FEED_BLOCK_USER_REPORT_INFO_SKIPPED = 'FeedPage-MainFeed_blockAndReport-reportInfoSkipped_clicked',
+  MAIN_FEED_POST_FOOTER_UPVOTE_INSERTED = 'FeedPage-MainFeed_postInteractions-upvote_upvoted',
+  MAIN_FEED_POST_FOOTER_DOWNVOTE_INSERTED = 'FeedPage-MainFeed_postInteractions-downvote_downvoted',
+  MAIN_FEED_POST_FOOTER_DOWNVOTE_REMOVED = 'FeedPage-MainFeed_postInteractions-downvote-unselected_downvote-removed',
+  MAIN_FEED_POST_FOOTER_UPVOTE_REMOVED = 'FeedPage-MainFeed_postInteractions-upvote-unselected_upvote-removed',
+  MAIN_FEED_POST_TOPIC_CHIP_CLICKED = 'FeedPage-MainFeed_postInteractions-hashtag_openCP',
+
+  // POST DETAIL PAGE
+  PDP_POST_UPVOTE_INSERTED = 'FeedPage-PDP_postInteractions-upvote_upvoted',
+  PDP_POST_UPVOTE_REMOVED = 'FeedPage-PDP_postInteractions-upvote-unselected_upvote-removed',
+  PDP_POST_DOWNVOTE_INSERTED = 'FeedPage-PDP_postInteractions-downvote_downvoted',
+  PDP_POST_DOWNVOTE_REMOVED = 'FeedPage-PDP_postInteractions-downvote-unselected_downvote-removed',
+  PDP_COMMENT_UPVOTE_INSERTED = 'FeedPage-PDP_commentInteractions-upvote_upvoted',
+  PDP_COMMENT_UPVOTE_REMOVED = 'FeedPage-PDP_commentInteractions-upvote-unselected_upvote-removed',
+  PDP_COMMENT_DOWNVOTE_INSERTED = 'FeedPage-PDP_commentInteractions-downvote_downvoted',
+  PDP_COMMENT_DOWNVOTE_REMOVED = 'FeedPage-PDP_commentInteractions-downvote-unselected_downvote-removed',
+  PDP_COMMENT_REPLY_BUTTON_CLICKED = 'FeedPage-PDP_commentInteractions-replyButton_clicked',
+  PDP_COMMENT_DELETE_ALERT_CONFIRM = 'FeedPage-PDP_commentInteractions-deleteButton_clicked',
+  PDP_COMMENT_DELETE_ALERT_CANCEL = 'FeedPage-PDP_commentInteractions-cancelDelete_clicked',
+  PDP_COMMENT_INPUT_ANON_ON = 'FeedPage-PDP_commentInteractions-anonOn_clicked',
+  PDP_COMMENT_INPUT_ANON_OFF = 'FeedPage-PDP_commentInteractions-anonOff_clicked',
 
   // FEED COMMUNITY SCREEN
   FEED_COMMUNITY_PAGE_ON_POST_SCROLLED = 'FeedPage-CP_post_scrolled',
+  FEED_COMMUNITY_PAGE_ON_POST_SCROLLED_ITEM = 'FeedPage-CP_postProperties',
   FEED_COMMUNITY_PAGE_JOIN_BUTTON_CLICKED = 'FeedPage-CP_joinButton_joinBanner',
   FEED_COMMUNITY_PAGE_JOIN_AS_SIGNED_CLICKED = 'FeedPage-CP_joinBanner-signed_joined',
   FEED_COMMUNITY_PAGE_JOIN_AS_ANON_CLICKED = 'FeedPage-CP_joinBanner-anon_joined',
@@ -177,8 +216,7 @@ export enum BetterSocialEventTracking {
   FEED_COMMUNITY_PAGE_POST_INTERACTION_UPVOTE_REMOVED = 'FeedPage-CP_postInteractions-upvote-unselected_upvote-removed',
   FEED_COMMUNITY_PAGE_POST_INTERACTION_OPEN_AUTHOR_PROFILE = 'FeedPage-CP_postInteractions-authorname_openOtherProfile',
   FEED_COMMUNITY_PAGE_MULTIPLE_POLL_SEE_RESULTS = 'FeedPage-CP_postInteractions-pollseeresults_clicked',
-  FEED_COMMUNITY_PAGE_SINGLE_POLL_CLICKED = 'FeedPage-CP_postInteractions-pollChoice',
-  FEED_COMMUNITY_PAGE = ''
+  FEED_COMMUNITY_PAGE_SINGLE_POLL_CLICKED = 'FeedPage-CP_postInteractions-pollChoice'
 }
 
 const ENABLE_TOAST = ENV === 'Dev';

@@ -1,13 +1,16 @@
+import moment from 'moment';
+
 import useFeedUtilsHook from './useFeedUtilsHook';
 import AnalyticsEventTracking, {
   BetterSocialEventTracking
 } from '../../../libraries/analytics/analyticsEventTracking';
-import {SOURCE_FEED_TAB} from '../../../utils/constants';
+import {SOURCE_FEED_TAB, getPostType} from '../../../utils/constants';
 import {setTimer, setViewPostTimeIndex} from '../../../context/actions/feeds';
 import {viewTimePost} from '../../../service/post';
 
-export type OnVillSendViewPostTimeOptions = {
-  eventName?: BetterSocialEventTracking;
+export type OnWillSendViewPostTimeOptions = {
+  scrollEventName?: BetterSocialEventTracking;
+  scrollEventItemName?: BetterSocialEventTracking;
 };
 
 const useViewPostTimeHook = (dispatch, timer, viewPostTimeIndex) => {
@@ -30,15 +33,31 @@ const useViewPostTimeHook = (dispatch, timer, viewPostTimeIndex) => {
   const onWillSendViewPostTime = (
     event,
     feedParams,
-    options: OnVillSendViewPostTimeOptions = {}
+    options: OnWillSendViewPostTimeOptions = {}
   ) => {
     if (isSamePostViewed(event, viewPostTimeIndex)) return;
     if (viewPostTimeIndex < 0) return;
     if (viewPostTimeIndex > feedParams?.length) return;
     sendViewPostTimeWithFeeds(feedParams);
     updateViewPostTime(event);
-    if (options?.eventName) {
-      AnalyticsEventTracking.eventTrack(options?.eventName);
+    if (options?.scrollEventName) {
+      AnalyticsEventTracking.eventTrack(options?.scrollEventName);
+    }
+
+    const scrolledInIndex = viewPostTimeIndex + 1;
+    if (scrolledInIndex > feedParams?.length) return;
+
+    const scrolledInItem = feedParams?.at(scrolledInIndex);
+    if (options?.scrollEventItemName) {
+      const trackData = {
+        index: scrolledInIndex,
+        anon: scrolledInItem?.anonimity,
+        postType: getPostType(scrolledInItem?.post_type),
+        hasComment: scrolledInItem?.latest_reactions?.comment?.length || 0,
+        postAge: moment(scrolledInItem?.created_at).diff(moment(), 'days')
+      };
+      console.log('scroll', trackData);
+      AnalyticsEventTracking.eventTrack(options?.scrollEventItemName, trackData);
     }
   };
 

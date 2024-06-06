@@ -10,16 +10,17 @@ import {
   View
 } from 'react-native';
 
+import AnalyticsEventTracking from '../../libraries/analytics/analyticsEventTracking';
 import AnonUserInfoRepo from '../../service/repo/anonUserInfoRepo';
 import IconCloseBold from '../../assets/icon/IconCloseBold';
 import SendIcon from '../SendIcon';
 import StringConstant from '../../utils/string/StringConstant';
 import ToggleSwitch from '../ToggleSwitch';
+import dimen from '../../utils/dimen';
 import {CHAT_ANON, CHAT_SIGNED} from '../../utils/constants';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {fonts, normalize} from '../../utils/fonts';
-import dimen from '../../utils/dimen';
 
 const WriteComment = ({
   value = null,
@@ -32,7 +33,11 @@ const WriteComment = ({
   isViewOnly = false,
   withAnonymityLabel = true,
   isReply = false,
-  onClear = () => {}
+  onClear = () => {},
+  eventTrackName = {
+    anonimityChangedToOn: null,
+    anonimityChangedToOff: null
+  }
 }) => {
   const [profile] = React.useContext(Context).profile;
   const commentInputRef = React.useRef(null);
@@ -62,7 +67,14 @@ const WriteComment = ({
   }, [isAnonimity, postId]);
 
   const toggleSwitch = () => {
-    setIsAnonimity((prevState) => !prevState);
+    setIsAnonimity((prevState) => {
+      const isNextStateOn = !prevState;
+      if (isNextStateOn && eventTrackName.anonimityChangedToOn)
+        AnalyticsEventTracking.eventTrack(eventTrackName.anonimityChangedToOn);
+      else if (!isNextStateOn && eventTrackName.anonimityChangedToOff)
+        AnalyticsEventTracking.eventTrack(eventTrackName.anonimityChangedToOff);
+      return isNextStateOn;
+    });
     getAnonUser();
   };
 

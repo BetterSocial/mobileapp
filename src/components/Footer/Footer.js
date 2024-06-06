@@ -3,6 +3,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import PropTypes from 'prop-types';
 import Toast from 'react-native-simple-toast';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {event} from 'react-native-reanimated';
 
 import ArrowDownvoteOff from '../../assets/arrow/Ic_downvote_off';
 import ArrowDownvoteOn from '../../assets/arrow/Ic_downvote_on';
@@ -28,7 +29,6 @@ const Footer = ({
   item,
   onPressShare,
   onPressComment,
-  onPressDmAdditionalProcess,
   totalComment,
   isSelf,
   onPressBlock,
@@ -41,7 +41,12 @@ const Footer = ({
   loadingVote,
   isShowDM = false,
   isShortText = false,
-  isNews = false
+  isNews = false,
+  eventTrackCallback = {
+    pressDMFooter: () => {},
+    pressAnonDM: () => {},
+    pressSignedDM: () => {}
+  }
 }) => {
   const {sendMessageDM} = useDMMessage();
   const [profile] = React.useContext(Context).profile;
@@ -92,6 +97,7 @@ const Footer = ({
   const onPressDM = async () => {
     try {
       setLoading({...loading, loadingDm: true});
+      eventTrackCallback.pressSignedDM();
       if (!item?.anon_user_info_emoji_name) {
         const channelName = username;
         const selectedUser = {
@@ -116,6 +122,7 @@ const Footer = ({
   const onPressDMAnon = async () => {
     try {
       setLoading({...loading, loadingDmAnon: true});
+      eventTrackCallback.pressAnonDM();
       await sendMessageDM(item.id, 'post', 'ANONYMOUS');
     } catch (e) {
       console.warn(e);
@@ -162,8 +169,7 @@ const Footer = ({
     try {
       refSheet.current.open();
       setLoading({...loading, loadingGetAllowAnonDmStatus: true});
-      console.log('onPressDm', onPressDmAdditionalProcess);
-      onPressDmAdditionalProcess?.();
+      eventTrackCallback.pressDMFooter();
       const data = await getAllowAnonDmStatus(item.id);
       setUserAllowDm(data?.user.allow_anon_dm);
     } catch (e) {

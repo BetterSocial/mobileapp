@@ -36,8 +36,11 @@ const Content = ({
   setHaveSeeMore,
   hasComment,
   setIsShortText,
-  seeResultsEventName,
-  pollSelectedEventName
+  eventTrackName = {
+    pollSeeResults: null,
+    pollSelected: null,
+    navigateToTopicPage: null
+  }
 }) => {
   const navigation = useNavigation();
   const route = useRoute();
@@ -315,8 +318,8 @@ const Content = ({
               voteCount={item.voteCount}
               topics={item?.topics}
               onLayout={onPollLayout}
-              seeResultsEventName={seeResultsEventName}
-              pollSelectedEventName={pollSelectedEventName}
+              seeResultsEventName={eventTrackName.pollSeeResults}
+              pollSelectedEventName={eventTrackName.pollSelected}
             />
           </View>
         ) : null}
@@ -349,6 +352,7 @@ const Content = ({
               position: 'absolute',
               bottom: 0
             }}
+            navigateToTopicEventName={eventTrackName.navigateToTopicPage}
           />
         )}
       </BlurredLayer>

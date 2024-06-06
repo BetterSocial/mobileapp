@@ -13,6 +13,9 @@ import dimen from '../../utils/dimen';
 import useCalculationContent from './hooks/useCalculationContent';
 import useFeed from './hooks/useFeed';
 import usePostHook from '../../hooks/core/post/usePostHook';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../libraries/analytics/analyticsEventTracking';
 import {
   ANALYTICS_SHARE_POST_FEED_ID,
   ANALYTICS_SHARE_POST_FEED_SCREEN,
@@ -21,7 +24,6 @@ import {
   POST_TYPE_STANDARD,
   SOURCE_FEED_TAB
 } from '../../utils/constants';
-import {BetterSocialEventTracking} from '../../libraries/analytics/analyticsEventTracking';
 import {COLORS} from '../../utils/theme';
 import {Footer, PreviewComment} from '../../components';
 import {getCommentLength} from '../../utils/getstream';
@@ -65,6 +67,7 @@ const RenderListFeed = (props) => {
     onPressDownVoteHook,
     getTotalReaction
   } = useFeed();
+  const {followUnfollow} = usePostHook();
 
   const postApiUpvote = async (status) => {
     await onPressUpvote({
@@ -83,8 +86,6 @@ const RenderListFeed = (props) => {
     });
   };
 
-  const {followUnfollow} = usePostHook();
-
   const onPressDownVoteHandle = async () => {
     onPressDownVoteHook();
     let newStatus = !statusDownvote;
@@ -92,7 +93,12 @@ const RenderListFeed = (props) => {
       newStatus = true;
     }
 
-    await postApiDownvote(newStatus);
+    postApiDownvote(newStatus);
+    AnalyticsEventTracking.eventTrack(
+      newStatus
+        ? BetterSocialEventTracking.MAIN_FEED_POST_FOOTER_DOWNVOTE_INSERTED
+        : BetterSocialEventTracking.MAIN_FEED_POST_FOOTER_DOWNVOTE_REMOVED
+    );
   };
 
   const onPressUpvoteHandle = async () => {
@@ -101,7 +107,13 @@ const RenderListFeed = (props) => {
     if (voteStatus === 'downvote') {
       newStatus = true;
     }
-    await postApiUpvote(newStatus);
+
+    postApiUpvote(newStatus);
+    AnalyticsEventTracking.eventTrack(
+      newStatus
+        ? BetterSocialEventTracking.MAIN_FEED_POST_FOOTER_UPVOTE_INSERTED
+        : BetterSocialEventTracking.MAIN_FEED_POST_FOOTER_UPVOTE_REMOVED
+    );
   };
 
   const checkVotesHandle = () => {
@@ -133,6 +145,37 @@ const RenderListFeed = (props) => {
   const isShortTextPost =
     item.post_type === POST_TYPE_STANDARD && item.images_url.length <= 0 && isShortText === true;
 
+  const onFooterDMButtonPressed = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.MAIN_FEED_POST_DM_FOOTER_BUTTON_CLICKED
+    );
+  };
+
+  const onAnonDmButtonPressed = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.MAIN_FEED_POST_DRAWER_DM_ANON_BUTTON_CLICKED
+    );
+  };
+
+  const onSignedDmButtonPressed = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.MAIN_FEED_POST_DRAWER_DM_SIGNED_BUTTON_CLICKED
+    );
+  };
+
+  const onHeaderFolowUnfollowButtonPressed = async () => {
+    const followAction = await followUnfollow(item);
+    if (followAction === 'follow' || followAction === 'follow-anonymous') {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.MAIN_FEED_POST_HEADER_FOLLOW_BUTTON_CLICKED
+      );
+    } else if (followAction === 'unfollow' || followAction === 'unfollow-anonymous') {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.MAIN_FEED_POST_HEADER_UNFOLLOW_BUTTON_CLICKED
+      );
+    }
+  };
+
   return (
     <View key={item.id} testID="dataScroll" style={styles.cardContainer}>
       <View style={[styles.cardMain]}>
@@ -146,7 +189,7 @@ const RenderListFeed = (props) => {
           isShowDelete={isShowDelete}
           isSelf={isSelf}
           isFollow={item?.is_following_target}
-          onPressFollUnFoll={() => followUnfollow(item)}
+          onPressFollUnFoll={() => onHeaderFolowUnfollowButtonPressed(item)}
           onHeaderOptionClicked={onHeaderOptionClicked}
           isShortText={isShortTextPost}
           shareLinkEventName={BetterSocialEventTracking.MAIN_FEED_DRAWER_MENU_SHARE_LINK_CLICKED}
@@ -183,6 +226,11 @@ const RenderListFeed = (props) => {
             item={item}
             onNewPollFetched={onNewPollFetched}
             hasComment={hasComment}
+            eventTrackName={{
+              pollSeeResults: BetterSocialEventTracking.MAIN_FEED_POST_SINGLE_POLL_CLICKED,
+              pollSelected: BetterSocialEventTracking.MAIN_FEED_POST_SINGLE_POLL_CLICKED,
+              navigateToTopicPage: BetterSocialEventTracking.MAIN_FEED_POST_TOPIC_CHIP_CLICKED
+            }}
           />
         )}
         {isBlurred && (
@@ -215,6 +263,11 @@ const RenderListFeed = (props) => {
           isSelf={isSelf}
           isShowDM
           isShortText={isShortTextPost}
+          eventTrackCallback={{
+            pressDMFooter: onFooterDMButtonPressed,
+            pressAnonDM: onAnonDmButtonPressed,
+            pressSignedDM: onSignedDmButtonPressed
+          }}
         />
         {hasComment ? (
           <View testID="previewComment">
