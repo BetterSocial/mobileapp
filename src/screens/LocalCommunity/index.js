@@ -180,6 +180,7 @@ const LocalCommunity = () => {
       Analytics.logEvent('onb_select_location', {
         location: locationLog
       });
+      AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.ONBOARDING_LOCATION_NEXT_BUTTON);
       navigation.navigate('Topics');
     } else {
       showMessage({
