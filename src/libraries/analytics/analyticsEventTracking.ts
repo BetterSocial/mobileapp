@@ -88,7 +88,6 @@ export enum BetterSocialEventTracking {
   SIGNED_CHAT_SCREEN_TOGGLE_MOVE_CHAT_OPEN_ALERT = 'SignedChat-ChatScreen_Toggle_openMoveChat-Alert',
   SIGNED_CHAT_SCREEN_TOGGLE_MOVE_CHAT_CLOSE_ALERT = 'SignedChat-ChatScreen_MoveChat-Alert_Discard',
   SIGNED_CHAT_SCREEN_TOGGLE_MOVE_CHAT_OPEN_CHAT = 'SignedChat-ChatScreen_MoveChat-Alert_openNewChatScreen',
-  SIGNED_CHAT_SCREEN_ATTACHMENT_UPLOAD_FAILED = 'SignedChat-ChatScreen_ChatActions-Drawer_mediauploadfailed',
 
   // ANON CHAT SCREEN
   ANONYMOUS_CHAT_SCREEN_PLUS_SIGN_CLICKED = 'AnonChat-ChatScreen_plusSign_clicked',
@@ -105,7 +104,6 @@ export enum BetterSocialEventTracking {
   ANONYMOUS_CHAT_SCREEN_TOGGLE_MOVE_CHAT_OPEN_ALERT = 'AnonChat-ChatScreen_Toggle_openMoveChat-Alert',
   ANONYMOUS_CHAT_SCREEN_TOGGLE_MOVE_CHAT_CLOSE_ALERT = 'AnonChat-ChatScreen_MoveChat-Alert_Discard',
   ANONYMOUS_CHAT_SCREEN_TOGGLE_MOVE_CHAT_OPEN_CHAT = 'AnonChat-ChatScreen_MoveChat-Alert_openNewChatScreen',
-  ANONYMOUS_CHAT_SCREEN_ATTACHMENT_UPLOAD_FAILED = 'AnonChat-ChatScreen_ChatActions-Drawer_mediauploadfailed',
 
   // SIGNED CHAT DETAIL
   SIGNED_CHAT_DETAIL_BACK_BUTTON_PRESSED = 'SignedChat-ChatDetail_backButton_openChatScreen',
