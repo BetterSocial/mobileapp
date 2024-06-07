@@ -14,9 +14,10 @@ import {
   PERMISSION_STATUS_PENDING
 } from '../../utils/constants';
 import {fcmTokenService} from '../../service/users';
+import {BetterSocialChannelType} from '../../../types/database/schema/ChannelList.types';
 
 const useRootChannelListHook = () => {
-  const {localDb, chat, channelList} = useLocalDatabaseHook();
+  const {localDb, chat, channelList, refresh} = useLocalDatabaseHook();
   const [signedChannelUnreadCount, setSignedChannelUnreadCount] = React.useState(0);
   const [anonymousChannelUnreadCount, setAnonymousChannelUnreadCount] = React.useState(0);
   const [totalUnreadCount, setTotalUnreadCount] = React.useState(0);
@@ -36,6 +37,28 @@ const useRootChannelListHook = () => {
     try {
       const unreadCount = await ChannelList.getUnreadCount(localDb, 'ANON');
       setAnonymousChannelUnreadCount(unreadCount);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const updateChannelList = async (channelId: string, channelType: BetterSocialChannelType) => {
+    if (!localDb) return;
+
+    try {
+      await ChannelList.updateChannelList(localDb, channelId, channelType);
+      refresh('channelList');
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const deleteChannelList = async (channelId: string) => {
+    if (!localDb) return;
+
+    try {
+      await ChannelList.deleteChannelList(localDb, channelId);
+      refresh('channelList');
     } catch (e) {
       console.log(e);
     }
@@ -125,7 +148,9 @@ when friends send you messages.`,
     checkNotificationPermission,
     signedChannelUnreadCount,
     anonymousChannelUnreadCount,
-    totalUnreadCount
+    totalUnreadCount,
+    updateChannelList,
+    deleteChannelList
   };
 };
 

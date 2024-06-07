@@ -10,6 +10,7 @@ import useChatClientHook from '../../../utils/getstream/useChatClientHook';
 import {COLORS} from '../../../utils/theme';
 import useDiscovery from '../../DiscoveryScreenV2/hooks/useDiscovery';
 import UserItem from './UserItem';
+import useRootChannelListHook from '../../../hooks/screen/useRootChannelListHook';
 
 export type Follow = 'signed' | 'incognito' | '';
 
@@ -40,6 +41,7 @@ const BottomSheetFollow = forwardRef((props: BottomSheetFollowProps, ref: Ref<RB
     onClose
   } = props;
   const {followTopic} = useChatClientHook();
+  const {updateChannelList, deleteChannelList} = useRootChannelListHook();
   const {updateFollowTopicDiscoveryContext} = useDiscovery();
 
   const handleFollowTopic = async ({type: followTypeParam}: {type: Follow}) => {
@@ -47,11 +49,14 @@ const BottomSheetFollow = forwardRef((props: BottomSheetFollowProps, ref: Ref<RB
 
     const followTypeCheck = (targetType: Follow) => followType === targetType || followType === '';
 
+    const channelType = followTypeParam === 'incognito' ? 'ANON_TOPIC' : 'TOPIC';
+
     const follow = async (type: Follow) => {
       setFollowType(type);
       setIsFollow(true);
       try {
         await followTopic(topicName, isIncognito);
+        updateChannelList(topicId, channelType);
         updateFollowTopicDiscoveryContext(true, {topic_id: topicId}, true);
       } catch (error) {
         if (__DEV__) {
@@ -87,6 +92,7 @@ const BottomSheetFollow = forwardRef((props: BottomSheetFollowProps, ref: Ref<RB
     try {
       const isIncognito = type === 'incognito';
       await followTopic(topicName, isIncognito);
+      deleteChannelList(topicId);
     } catch (error) {
       if (__DEV__) {
         console.log(error);
