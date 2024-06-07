@@ -101,9 +101,7 @@ async function sendSignedMessage(
 }
 
 async function getAllSignedChannels(timeStamp: string | undefined) {
-  const url = timeStamp
-    ? `${baseUrl.getAllSignedChannels}?last_fetch_date=${timeStamp}`
-    : baseUrl.getAllSignedChannels;
+  const url = timeStamp ? `${baseUrl.getAllSignedChannels}` : baseUrl.getAllSignedChannels;
   try {
     const response = await api.get(url);
     if (response.status === 200) {

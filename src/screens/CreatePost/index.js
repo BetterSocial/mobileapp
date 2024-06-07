@@ -407,7 +407,7 @@ const CreatePost = () => {
   };
 
   const navigateToTopicPage = () => {
-    return navigation.navigate('TopicPageScreen', {id: initialTopic[0]});
+    return navigation.replace('TopicPageScreen', {id: initialTopic[0]});
   };
 
   const checkTaggingUser = () => {

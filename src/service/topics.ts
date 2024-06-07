@@ -61,9 +61,12 @@ const getAllMemberTopic = async (query) => {
  * @param {import('axios').AxiosRequestConfig} axiosOptions
  * @returns
  */
-const getTopics = async (name, axiosOptions = {}) => {
+const getTopics = async (name, withMinimumFollower = true, axiosOptions = {}) => {
   try {
-    const result = await api.get(`/topics/?name=${name}`, axiosOptions);
+    const result = await api.get(
+      `/topics/?name=${name}&withMinimumFollower=${withMinimumFollower}`,
+      axiosOptions
+    );
     return result.data;
   } catch (e) {
     throw new Error(e);
@@ -131,7 +134,29 @@ const getLatestTopicPost = async (topicName: string): Promise<TopicLatestPostDat
 const verifyCommunityName = async (name) => {
   try {
     const resApi = await api.get(`/topics/is-exist?name=${name}`);
-    console.warn('resApi', JSON.stringify(resApi.data));
+    return resApi.data;
+  } catch (error) {
+    crashlytics().recordError(new Error(error));
+    return error.response.data;
+  }
+};
+
+const submitCommunityName = async (name) => {
+  try {
+    const resApi = await api.post('/topics/create', {name});
+    return resApi.data;
+  } catch (error) {
+    crashlytics().recordError(new Error(error));
+    return error.response.data;
+  }
+};
+
+const inviteCommunityMember = async (topicId, memberIds) => {
+  try {
+    const resApi = await api.post('/topics/invite-members', {
+      topic_id: topicId,
+      member_ids: memberIds
+    });
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
@@ -148,5 +173,7 @@ export {
   getUserTopic,
   getWhoToFollowList,
   putUserTopic,
-  verifyCommunityName
+  verifyCommunityName,
+  submitCommunityName,
+  inviteCommunityMember
 };
