@@ -13,17 +13,27 @@ import {channelItemStyles as styles} from './ChannelItem.style';
 const CommunityChannelItem = (props: TopicChannelItemProps) => {
   useTopicChannelItemHook(props);
   const {channel: community, onChannelPressed} = props;
-  const channelType = 'COMMUNITY';
   const channelPicture = community?.channelPicture;
   const unreadCount = community?.unreadCount;
   const hasBadge = unreadCount > 0;
+
+  const channelType = () => {
+    switch (community?.channelType) {
+      case 'ANON_TOPIC':
+        return 'ANON_TOPIC';
+      case 'TOPIC':
+        return 'TOPIC';
+      default:
+        return 'TOPIC';
+    }
+  };
 
   return (
     <CustomPressable onPress={onChannelPressed}>
       <View style={styles.channelContainer}>
         <ChannelImage>
-          <ChannelImage.Big type={channelType} image={channelPicture} />
-          <ChannelImage.Small type={channelType} />
+          <ChannelImage.Big type={channelType()} image={channelPicture} />
+          <ChannelImage.Small type={channelType()} />
         </ChannelImage>
 
         <View style={styles.contentContainer}>
