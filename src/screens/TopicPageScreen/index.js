@@ -161,7 +161,7 @@ const TopicPageScreen = (props) => {
 
   const getTopicDetail = async (domain) => {
     try {
-      const resultTopicDetail = await getTopics(domain);
+      const resultTopicDetail = await getTopics(domain, false);
       if (resultTopicDetail.data) {
         const detail = resultTopicDetail.data.find((item) => item.name === domain);
         if (detail) {
@@ -337,6 +337,7 @@ const TopicPageScreen = (props) => {
 
   const onRefresh = () => {
     refreshingData(0);
+    getTopicDetail();
   };
 
   const setUpVote = async (post, index) => {
