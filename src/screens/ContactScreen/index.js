@@ -413,7 +413,7 @@ const ContactScreen = ({navigation}) => {
               membership to incognito at any time from the community page.
             </Text>
           </View>
-          <Button disabled={selectedUsers.length <= 0} onPress={handleInviteCommunityMember}>
+          <Button onPress={handleInviteCommunityMember}>
             Next
           </Button>
         </View>
