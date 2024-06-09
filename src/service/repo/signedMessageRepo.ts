@@ -172,15 +172,12 @@ async function createSignedChat(members: string[]) {
     const body = {
       members
     };
-    console.log('body', body);
     const response = await api.post(baseUrl.createSignedChat, body);
     if (response.status === 200) {
       return Promise.resolve(response.data);
     }
-    console.log('FAILED URL', response);
     return Promise.reject(response.status);
   } catch (e) {
-    console.log('gagal', e);
     return Promise.reject(e);
   }
 }
