@@ -1,15 +1,15 @@
-import * as React from 'react';
-import {Animated, StyleSheet, Platform} from 'react-native';
 import {useRoute} from '@react-navigation/native';
 import axios from 'axios';
+import * as React from 'react';
+import {Animated, Platform, StyleSheet} from 'react-native';
 
 import {SafeAreaProvider, useSafeAreaInsets} from 'react-native-safe-area-context';
-import ShareUtils from '../../utils/share';
-import dimen from '../../utils/dimen';
-import {getAllMemberTopic} from '../../service/topics';
-import StringConstant from '../../utils/string/StringConstant';
-import UsersFragment from '../DiscoveryScreenV2/fragment/UsersFragment';
 import {Context} from '../../context';
+import {getAllMemberTopic} from '../../service/topics';
+import dimen from '../../utils/dimen';
+import ShareUtils from '../../utils/share';
+import StringConstant from '../../utils/string/StringConstant';
+import UsersFragmentCommunity from '../DiscoveryScreenV2/fragment/UserFragmentCommunity';
 import NavHeader from '../TopicPageScreen/elements/NavHeader';
 import TopicMemberHeadline from './elements/TopicMemberHeadlineList';
 
@@ -165,7 +165,7 @@ const TopicMemberScreen = () => {
         getSearchLayout={setSearchHeight}
       />
       <TopicMemberHeadline text="Visible members of this community" />
-      <UsersFragment
+      <UsersFragmentCommunity
         isLoadingDiscoveryUser={isLoadingDiscovery.user}
         isFirstTimeOpen={isFirstTimeOpen}
         initialUsers={initalMember}
