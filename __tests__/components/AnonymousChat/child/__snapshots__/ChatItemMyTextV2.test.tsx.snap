@@ -18,53 +18,71 @@ exports[`TESTING ChatItemTargetText RENDER continuous should match snapshot 1`] 
     ]
   }
 >
-  <View
-    style={
+  <ContextMenu
+    actions={
       Array [
         Object {
-          "backgroundColor": "#184A57",
-        },
-        Object {
-          "borderRadius": 12,
-          "borderTopEndRadius": 0,
-          "flex": 1,
-          "paddingBottom": 4,
-          "paddingTop": 4,
-        },
-        Object {
-          "paddingLeft": 8,
-          "paddingRight": 8,
+          "systemIcon": "square.on.square",
+          "title": "Copy",
         },
       ]
     }
-  >
-    <Text
-      style={
-        Object {
-          "color": "#FFFFFF",
-          "fontFamily": "Inter-Regular",
-          "fontSize": 16,
-          "lineHeight": 24,
-        }
+    onPress={[Function]}
+    previewBackgroundColor="transparent"
+    style={
+      Object {
+        "flex": 1,
       }
-    >
-      <Text>
-        message 
-      </Text>
-    </Text>
+    }
+  >
     <View
       style={
-        Object {
-          "alignSelf": "flex-end",
-          "bottom": 6,
-          "position": "absolute",
-          "right": 8,
-        }
+        Array [
+          Object {
+            "backgroundColor": "#184A57",
+          },
+          Object {
+            "borderRadius": 12,
+            "borderTopEndRadius": 0,
+            "flex": 1,
+            "paddingBottom": 4,
+            "paddingTop": 4,
+          },
+          Object {
+            "paddingLeft": 8,
+            "paddingRight": 8,
+          },
+        ]
       }
     >
-      <View />
+      <Text
+        style={
+          Object {
+            "color": "#FFFFFF",
+            "fontFamily": "Inter-Regular",
+            "fontSize": 16,
+            "lineHeight": 24,
+          }
+        }
+      >
+        <Text>
+          message 
+        </Text>
+      </Text>
+      <View
+        style={
+          Object {
+            "alignSelf": "flex-end",
+            "bottom": 6,
+            "position": "absolute",
+            "right": 8,
+          }
+        }
+      >
+        <View />
+      </View>
     </View>
-  </View>
+  </ContextMenu>
   <View
     style={
       Array [
@@ -99,103 +117,121 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
     ]
   }
 >
-  <View
-    style={
+  <ContextMenu
+    actions={
       Array [
         Object {
-          "backgroundColor": "#184A57",
-        },
-        Object {
-          "borderRadius": 12,
-          "borderTopEndRadius": 0,
-          "flex": 1,
-          "paddingBottom": 4,
-          "paddingTop": 4,
-        },
-        Object {
-          "paddingLeft": 8,
-          "paddingRight": 8,
+          "systemIcon": "square.on.square",
+          "title": "Copy",
         },
       ]
+    }
+    onPress={[Function]}
+    previewBackgroundColor="transparent"
+    style={
+      Object {
+        "flex": 1,
+      }
     }
   >
     <View
       style={
         Array [
           Object {
-            "display": "flex",
-            "flexDirection": "row",
+            "backgroundColor": "#184A57",
           },
-          Object {},
+          Object {
+            "borderRadius": 12,
+            "borderTopEndRadius": 0,
+            "flex": 1,
+            "paddingBottom": 4,
+            "paddingTop": 4,
+          },
+          Object {
+            "paddingLeft": 8,
+            "paddingRight": 8,
+          },
         ]
       }
     >
+      <View
+        style={
+          Array [
+            Object {
+              "display": "flex",
+              "flexDirection": "row",
+            },
+            Object {},
+          ]
+        }
+      >
+        <Text
+          style={
+            Object {
+              "color": "#FFFFFF",
+              "fontFamily": "Inter-SemiBold",
+              "fontSize": 12,
+              "lineHeight": 18,
+            }
+          }
+        >
+          username
+        </Text>
+        <View
+          style={
+            Object {
+              "alignSelf": "center",
+              "backgroundColor": "#A5ACB8",
+              "borderRadius": 2,
+              "height": 3,
+              "marginLeft": 5,
+              "marginRight": 5,
+              "width": 3,
+            }
+          }
+        />
+        <Text
+          style={
+            Object {
+              "alignSelf": "center",
+              "color": "#A5ACB8",
+              "fontFamily": "Inter-ExtraLight",
+              "fontSize": 10,
+              "lineHeight": 12.19,
+            }
+          }
+        >
+          time
+        </Text>
+      </View>
       <Text
         style={
           Object {
             "color": "#FFFFFF",
-            "fontFamily": "Inter-SemiBold",
-            "fontSize": 12,
-            "lineHeight": 18,
+            "fontFamily": "Inter-Regular",
+            "fontSize": 16,
+            "lineHeight": 24,
           }
         }
       >
-        username
+        <Text>
+          message 
+        </Text>
       </Text>
       <View
         style={
           Object {
-            "alignSelf": "center",
-            "backgroundColor": "#A5ACB8",
-            "borderRadius": 2,
-            "height": 3,
-            "marginLeft": 5,
-            "marginRight": 5,
-            "width": 3,
-          }
-        }
-      />
-      <Text
-        style={
-          Object {
-            "alignSelf": "center",
-            "color": "#A5ACB8",
-            "fontFamily": "Inter-ExtraLight",
-            "fontSize": 10,
-            "lineHeight": 12.19,
+            "alignSelf": "flex-end",
+            "bottom": 6,
+            "position": "absolute",
+            "right": 8,
           }
         }
       >
-        time
-      </Text>
+        <View />
+      </View>
     </View>
-    <Text
-      style={
-        Object {
-          "color": "#FFFFFF",
-          "fontFamily": "Inter-Regular",
-          "fontSize": 16,
-          "lineHeight": 24,
-        }
-      }
-    >
-      <Text>
-        message 
-      </Text>
-    </Text>
-    <View
-      style={
-        Object {
-          "alignSelf": "flex-end",
-          "bottom": 6,
-          "position": "absolute",
-          "right": 8,
-        }
-      }
-    >
-      <View />
-    </View>
-  </View>
+  </ContextMenu>
   <View
     style={
       Object {
