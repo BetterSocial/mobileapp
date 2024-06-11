@@ -629,23 +629,25 @@ const ProfileScreen = ({route}) => {
   };
 
   const onHeaderOptionClicked = (post) => {
+    console.log('post', post);
     setSelectedPostForOption(post);
     setIsOptionModalOpen(true);
   };
 
-  const removePostByIdFromContext = () => {
-    const deletedIndex = feeds?.findIndex((find) => selectedPostForOption?.id === find?.id);
+  const removePostByIdFromContext = (post) => {
+    const deletedIndex = feeds?.findIndex((find) => post?.id === find?.id);
     const newData = [...feeds];
     newData?.splice(deletedIndex, 1);
     setMyProfileFeed(newData, myProfileDispatch);
   };
 
-  const onDeletePost = async () => {
-    removePostByIdFromContext();
+  const onDeletePost = async (item) => {
+    removePostByIdFromContext(item);
 
     let response;
-    if (isProfileTabSigned) response = await deletePost(selectedPostForOption?.id);
-    else response = await deleteAnonymousPost(selectedPostForOption?.id);
+    console.log('selected post', item?.id);
+    if (isProfileTabSigned) response = await deletePost(item?.id);
+    else response = await deleteAnonymousPost(item?.id);
     if (response?.success) {
       Toast.show('Post was permanently deleted', Toast.LONG);
     }
@@ -708,7 +710,7 @@ const ProfileScreen = ({route}) => {
               source={SOURCE_MY_PROFILE}
               hideThreeDot={false}
               showAnonymousOption={true}
-              onDeletePost={() => onDeletePost()}
+              onDeletePost={onDeletePost}
               isSelf={item.is_self}
               isShowDelete={true}
               onHeaderOptionClicked={() => onHeaderOptionClicked(item)}
