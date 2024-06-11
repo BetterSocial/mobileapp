@@ -629,7 +629,6 @@ const ProfileScreen = ({route}) => {
   };
 
   const onHeaderOptionClicked = (post) => {
-    console.log('post', post);
     setSelectedPostForOption(post);
     setIsOptionModalOpen(true);
   };
@@ -645,7 +644,6 @@ const ProfileScreen = ({route}) => {
     removePostByIdFromContext(item);
 
     let response;
-    console.log('selected post', item?.id);
     if (isProfileTabSigned) response = await deletePost(item?.id);
     else response = await deleteAnonymousPost(item?.id);
     if (response?.success) {
