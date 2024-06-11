@@ -238,6 +238,15 @@ const useCoreChatSystemHook = () => {
     websocketData = await helperGetWebsocketUnreadCount(websocketData);
     websocketData = await helperGetSystemMessage(websocketData, channelCategory);
 
+    // if (websocketData?.message?.deleted_message_id) {
+    //   console.log('is deleted', websocketData?.message?.deleted_message_id);
+    //   await ChatSchema.updateDeletedChatType(localDb, websocketData?.message?.deleted_message_id, {
+    //     rawJson: websocketData,
+    //     createdAt: websocketData?.message?.deleted_message_created_at || '',
+    //     updatedAt: websocketData?.message?.deleted_message_updated_at || ''
+    //   });
+    // }
+
     if (
       websocketData?.channel_type === 'topics' ||
       websocketData?.channel_type === 'topicinvitation'

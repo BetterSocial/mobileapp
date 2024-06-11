@@ -1,6 +1,6 @@
+import anonymousApi from '../anonymousConfig';
 import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
 import {ChannelData} from '../../../types/repo/ChannelData';
-import anonymousApi from '../anonymousConfig';
 import {GetstreamChannelType} from './types.d';
 
 type SendPayloadType = {
@@ -16,6 +16,7 @@ const baseUrl = {
   sendAnonymousMessage: '/chat/anonymous',
   getAllAnonymousChannels: '/chat/channels',
   getAllAnonymousPostNotifications: '/feeds/feed-chat/anonymous',
+  deleteMessage: (messageId: string) => `/chat/message/${messageId}`,
   getSingleAnonymousPostNotifications: (activityId: string) => `/feeds/feed-chat/${activityId}`,
   setChannelAsRead: (channelId: string) => `/chat/channels/${channelId}/read`,
   getAnonymousChannelDetail: (channelType: GetstreamChannelType, channelId: string) =>
@@ -24,6 +25,7 @@ const baseUrl = {
 
 interface AnonymousMessageRepoTypes {
   checkIsTargetAllowingAnonDM: (targetUserId: string) => Promise<any>;
+  deleteMessage: (messageId: string) => Promise<any>;
   sendAnonymousMessage: (
     channelId: string,
     message: string,
@@ -166,8 +168,23 @@ async function getAnonymousChannelDetail(channelType: GetstreamChannelType, chan
   }
 }
 
+async function deleteMessage(messageId: string) {
+  try {
+    const response = await anonymousApi.delete(baseUrl.deleteMessage(messageId));
+    if (response.status === 200) {
+      return Promise.resolve(response.data);
+    }
+
+    return Promise.reject(response.data?.status);
+  } catch (e) {
+    console.log(e);
+    return Promise.reject(e);
+  }
+}
+
 const AnonymousMessageRepo: AnonymousMessageRepoTypes = {
   checkIsTargetAllowingAnonDM,
+  deleteMessage,
   sendAnonymousMessage,
   getAllAnonymousChannels,
   getAllAnonymousPostNotifications,

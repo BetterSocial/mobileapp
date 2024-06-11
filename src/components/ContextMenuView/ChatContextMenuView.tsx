@@ -3,9 +3,11 @@ import ContextMenu, {
   ContextMenuAction,
   ContextMenuOnPressNativeEvent
 } from 'react-native-context-menu-view';
-import {NativeSyntheticEvent} from 'react-native';
+import {Alert, NativeSyntheticEvent} from 'react-native';
 
+import ChatSchema from '../../database/schema/ChatSchema';
 import ShareUtils from '../../utils/share';
+import useMessageHook from '../../hooks/core/chat/useMessageHook';
 import {COLORS} from '../../utils/theme';
 
 type BetterSocialContextMenuType = 'MyChatContextMenu' | 'TargetChatContextMenu';
@@ -17,31 +19,45 @@ type BetterSocialContextMenuOnPressNativeEvent = ContextMenuOnPressNativeEvent &
 
 type ChatContextMenuViewProps = {
   children: React.ReactNode;
-  message: string;
   contextMenuType: BetterSocialContextMenuType;
+  chat?: ChatSchema;
 };
 
 const MyChatContextMenu: BetterSocialContextMenuAction[] = [
-  {title: 'Copy', systemIcon: 'square.on.square'}
-  //   {title: 'Delete', systemIcon: 'trash', destructive: true}
+  {title: 'Copy', systemIcon: 'square.on.square'},
+  {title: 'Delete', systemIcon: 'trash', destructive: true}
 ];
+
+const DeletedChatContextMenu: BetterSocialContextMenuAction[] = [];
 
 const TargetChatContextMenu: BetterSocialContextMenuAction[] = [
   {title: 'Copy', systemIcon: 'square.on.square'}
 ];
 
-const ChatContextMenuView = ({children, message, contextMenuType}: ChatContextMenuViewProps) => {
+const ChatContextMenuView = ({children, contextMenuType, chat}: ChatContextMenuViewProps) => {
+  const {copyMessage, deleteMessage} = useMessageHook(chat);
+
   let contextMenuActions = MyChatContextMenu;
   if (contextMenuType === 'TargetChatContextMenu') {
     contextMenuActions = TargetChatContextMenu;
   }
 
+  if (chat?.type === 'deleted') {
+    contextMenuActions = DeletedChatContextMenu;
+  }
+
   const onContextMenuPressed = (e: NativeSyntheticEvent<ContextMenuOnPressNativeEvent>) => {
-    console.log('context menu pressed', message);
+    console.log('context menu pressed', chat?.message);
     const event = e?.nativeEvent as BetterSocialContextMenuOnPressNativeEvent;
 
     if (event.name === 'Copy') {
-      ShareUtils.copyMessageWithoutLink(message);
+      copyMessage();
+    } else if (event.name === 'Delete') {
+      console.log('delete chat', chat?.message);
+      Alert.alert('Delete Message?', '', [
+        {text: 'Cancel', style: 'cancel'},
+        {text: 'Delete', style: 'destructive', onPress: () => deleteMessage(0)}
+      ]);
     }
   };
 

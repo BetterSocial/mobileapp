@@ -20,7 +20,7 @@ import {ChatItemMyTextProps} from '../../../../types/component/AnonymousChat/Bas
 import {ChatStatus} from '../../../../types/database/schema/ChannelList.types';
 import {LinkableText} from '../../LinkableText';
 import {SIGNED} from '../../../hooks/core/constant';
-import {fonts} from '../../../utils/fonts';
+import {fonts, normalizeFontSize} from '../../../utils/fonts';
 
 const {width} = Dimensions.get('screen');
 
@@ -66,6 +66,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
     color: COLORS.white
+  },
+  deletedText: {
+    color: COLORS.gray400,
+    fontSize: normalizeFontSize(14),
+    fontStyle: 'italic'
   },
   avatar: {
     width: AVATAR_SIZE,
@@ -120,7 +125,8 @@ const ChatItemMyTextV2 = ({
   attachments = [],
   status = ChatStatus.PENDING,
   avatar,
-  chatType
+  chatType,
+  chatItem
 }: ChatItemMyTextProps) => {
   const renderIcon = React.useCallback(() => {
     if (status === ChatStatus.PENDING)
@@ -154,9 +160,17 @@ const ChatItemMyTextV2 = ({
     return [styles.containerAnon, styles.textContainer, paddingStyle];
   };
 
+  const getStyles = () => {
+    if (chatItem?.type === 'deleted') {
+      return styles.deletedText;
+    }
+
+    return styles.text;
+  };
+
   return (
     <View style={[styles.chatContainer, isContinuous ? {marginTop: dimen.normalizeDimen(-4)} : {}]}>
-      <ChatContextMenuView contextMenuType="MyChatContextMenu" message={message}>
+      <ChatContextMenuView contextMenuType="MyChatContextMenu" chat={chatItem}>
         <View style={handleTextContainerStyle()}>
           {!isContinuous && (
             <View
@@ -167,7 +181,7 @@ const ChatItemMyTextV2 = ({
             </View>
           )}
           {attachments.length > 0 && <ChatItemAttachment attachments={attachments} />}
-          {attachments.length <= 0 && <LinkableText style={styles.text} text={message} />}
+          {attachments.length <= 0 && <LinkableText style={getStyles()} text={message} />}
 
           {renderIcon()}
         </View>

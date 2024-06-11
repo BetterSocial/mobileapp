@@ -25,6 +25,11 @@ exports[`TESTING ChatItemTargetText RENDER continuous should match snapshot 1`] 
           "systemIcon": "square.on.square",
           "title": "Copy",
         },
+        Object {
+          "destructive": true,
+          "systemIcon": "trash",
+          "title": "Delete",
+        },
       ]
     }
     onPress={[Function]}
@@ -123,6 +128,11 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
         Object {
           "systemIcon": "square.on.square",
           "title": "Copy",
+        },
+        Object {
+          "destructive": true,
+          "systemIcon": "trash",
+          "title": "Delete",
         },
       ]
     }
