@@ -251,6 +251,18 @@ class ChatSchema implements BaseDbSchema {
     let rawJson: string | null = null;
     let attachmentJson: string | null = null;
 
+    const isDeleted = ['notification-deleted', 'deleted'].includes(json?.message?.message_type);
+
+    let type = json?.message?.type;
+    if (isDeleted) {
+      type = MESSAGE_TYPE_DELETED;
+    }
+
+    let message = json?.message?.text || json?.message || '';
+    if (isDeleted) {
+      message = DELETED_MESSAGE_TEXT;
+    }
+
     try {
       rawJson = JSON.stringify(json);
     } catch (e) {
@@ -268,8 +280,8 @@ class ChatSchema implements BaseDbSchema {
       id: json?.message?.id,
       channelId: json?.channel_id,
       userId: json?.message?.user?.id,
-      message: json?.message?.text || json?.message?.message,
-      type: json?.message?.type,
+      message,
+      type,
       createdAt: json?.message?.created_at,
       updatedAt: json?.message?.created_at,
       rawJson,
@@ -286,7 +298,10 @@ class ChatSchema implements BaseDbSchema {
     let attachmentJson: string | null = null;
 
     let type = json?.type;
-    if (json?.message_type === MESSAGE_TYPE_DELETED) {
+    if (
+      json?.message_type === MESSAGE_TYPE_DELETED ||
+      json?.message_type === 'notification-deleted'
+    ) {
       type = MESSAGE_TYPE_DELETED;
     }
 
@@ -469,7 +484,7 @@ class ChatSchema implements BaseDbSchema {
       const updatedRawJson = JSON.stringify(rawJson);
 
       const updateQuery = `UPDATE ${ChatSchema.getTableName()}
-        SET type = ?, message = ?, raw_json = ?
+        SET type = ?, message = ?, raw_json = ?, attachment_json = null
         WHERE id = ?;`;
 
       const updateReplacement = ['deleted', DELETED_MESSAGE_TEXT, updatedRawJson, messageId];

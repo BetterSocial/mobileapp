@@ -25,7 +25,7 @@ type TFeatureLogFlag = {
 };
 
 const FeatureLogFlag: TFeatureLogFlag = {
-  useSimpleWebsocketHook: true,
+  useSimpleWebsocketHook: false,
   useOneSignalSubscribeToCommunityHooks: false,
   useSystemMessage: false,
   useTopicChannelItemHook: false,

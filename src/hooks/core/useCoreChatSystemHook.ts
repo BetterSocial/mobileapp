@@ -26,7 +26,7 @@ import {
   LatestChildrenComment
 } from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
 import {ChannelType} from '../../../types/repo/ChannelData';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {DEFAULT_PROFILE_PIC_PATH, DELETED_MESSAGE_TEXT} from '../../utils/constants';
 import {DatabaseOperationLabel} from '../../core/queue/DatabaseQueue';
 import {GetstreamFeedListenerObject} from '../../../types/hooks/core/getstreamFeedListener/feedListenerObject';
 import {GetstreamMessage, GetstreamWebsocket, MyChannelType} from './websocket/types.d';
@@ -211,8 +211,15 @@ const useCoreChatSystemHook = () => {
           id: `${websocketData?.channel?.id}-${websocketData?.message?.id}`,
           priority: QueueJobPriority.HIGH,
           task: async () => {
-            const chat = ChatSchema.fromWebsocketObject(newWebsocketData);
-            await Promise.all([chat.save(localDb), channelList.save(localDb)]);
+            if (
+              websocketData?.message?.message_type === 'notification-deleted' ||
+              websocketData?.message?.message_type === 'deleted'
+            ) {
+              await Promise.all([channelList.save(localDb)]);
+            } else {
+              const chat = ChatSchema.fromWebsocketObject(newWebsocketData);
+              await Promise.all([chat.save(localDb), channelList.save(localDb)]);
+            }
           }
         });
       }
@@ -233,6 +240,7 @@ const useCoreChatSystemHook = () => {
     if (!localDb) return;
     const websocketMessage = websocketData?.message;
 
+    helperWebsocketForDeletedMessage(websocketData);
     websocketData = helperGetChannelInfo(websocketData);
     websocketData = helperGetWebsocketMessage(websocketData);
     websocketData = await helperGetWebsocketUnreadCount(websocketData);
@@ -246,6 +254,12 @@ const useCoreChatSystemHook = () => {
     //     updatedAt: websocketData?.message?.deleted_message_updated_at || ''
     //   });
     // }
+
+    if (websocketData?.message?.message_type === 'notification-deleted') {
+      refresh('channelList');
+      refresh('chat');
+      return;
+    }
 
     if (
       websocketData?.channel_type === 'topics' ||
@@ -322,6 +336,49 @@ const useCoreChatSystemHook = () => {
       isMyComment,
       isMyChildComment
     };
+  };
+
+  const helperWebsocketForDeletedMessage = async (websocketData: GetstreamWebsocket) => {
+    const websocketMessage = websocketData?.message;
+    const isDeletedMessage =
+      websocketMessage?.message_type === 'notification-deleted' ||
+      websocketMessage?.message_type === 'deleted';
+
+    if (isDeletedMessage) {
+      const selectedChat = await ChatSchema.getByid(
+        localDb,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        websocketMessage.deleted_message_id!
+      );
+      const selectedCreatedAt = selectedChat.createdAt;
+      const selectedUpdatedAt = selectedChat.updatedAt;
+
+      websocketMessage.id = websocketMessage.deleted_message_id ?? '';
+      websocketMessage.text = DELETED_MESSAGE_TEXT;
+      websocketMessage.created_at = selectedCreatedAt ?? websocketMessage.created_at;
+      websocketMessage.updated_at = selectedUpdatedAt ?? websocketMessage.updated_at;
+
+      if (websocketMessage?.deleted_message_id) {
+        ChatSchema.updateDeletedChatType(localDb, websocketMessage?.deleted_message_id, {
+          rawJson: websocketMessage
+        });
+      }
+
+      // ChatSchema.updateDeletedRepliedChat(
+      //   localDb,
+      //   websocketData?.channel_id,
+      //   websocketMessage.deleted_message_id ?? '',
+      //   selectedChat.createdAt
+      // );
+
+      // const {replyTarget} = replyPreview;
+      // if (replyTarget && replyTarget?.id === websocketMessage?.deleted_message_id) {
+      //   const newReplyPreview = {...replyTarget};
+      //   newReplyPreview.message = DELETED_MESSAGE_TEXT;
+      //   newReplyPreview.message_type = MESSAGE_TYPE_DELETED;
+      //   setReplyTarget(newReplyPreview, dispatch);
+      // }
+    }
   };
 
   const unreadCountProcessor = (postNotification: AnonymousPostNotification) => {
@@ -415,6 +472,7 @@ const useCoreChatSystemHook = () => {
   React.useEffect(() => {
     if (!lastSignedMessage || !localDb) return;
     const {type} = lastSignedMessage;
+    console.log('type', type);
     if (type === 'health.check') return;
     if (type === 'notification.message_new' || type === 'notification.added_to_channel') {
       saveChannelListData(lastSignedMessage, SIGNED).catch((e) => console.log(e));

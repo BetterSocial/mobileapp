@@ -13,6 +13,13 @@ export type GetstreamMessage = {
   html: string;
   id: string;
   latest_reactions: any[];
+  message_type:
+    | 'regular'
+    | 'system'
+    | 'deleted'
+    | 'reply'
+    | 'reply-prompt'
+    | 'notification-deleted';
   mentioned_users: any[];
   own_reactions: any[];
   pin_expires: any;

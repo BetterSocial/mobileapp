@@ -7,7 +7,7 @@ import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 
 const useMessageHook = (message: ChatSchema | undefined) => {
-  const {localDb, refresh} = useLocalDatabaseHook();
+  const {localDb, refreshWithId} = useLocalDatabaseHook();
 
   const copyMessage = () => {
     if (!message) return;
@@ -24,7 +24,7 @@ const useMessageHook = (message: ChatSchema | undefined) => {
 
     try {
       await ChatSchema.updateDeletedChatType(localDb, message?.id, message);
-      refresh('chat');
+      refreshWithId('chat', message?.channelId);
 
       if (message?.type === 'ANONYMOUS') {
         await AnonymousMessageRepo.deleteMessage(message?.id);
