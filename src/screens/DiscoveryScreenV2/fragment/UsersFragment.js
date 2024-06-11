@@ -91,7 +91,7 @@ const UsersFragment = ({
   const [client] = React.useContext(Context).client;
   const {exhangeFollower, users, updateFollowDiscoveryContext} = useDiscovery();
   const [loadingDM, setLoadingDM] = React.useState(false);
-  const {createSignChat} = useCreateChat();
+  const {createSignChat, loadingCreateChat} = useCreateChat();
   const [activeSections, setActiveSections] = useState([]);
 
   const route = useRoute();
@@ -107,6 +107,16 @@ const UsersFragment = ({
     };
     parseToken();
   }, []);
+
+  React.useEffect(() => {
+    if (searchText.length === 0) {
+      setActiveSections([]);
+    } else if (searchText.length >= 0 && followedUsers.length > 0) {
+      setActiveSections([0]);
+    } else {
+      setActiveSections([]);
+    }
+  }, [searchText, followedUsers]);
 
   const handleOnPress = (item) => {
     navigation.push('OtherProfile', {
@@ -201,8 +211,10 @@ const UsersFragment = ({
         members.push(profile?.myProfile?.user_id, item?.user_id || item?.userId);
         const processGetBlock = await checkUserBlock(sendData);
         if (!processGetBlock.data.data.blocked && !processGetBlock.data.data.blocker) {
+          setLoadingDM(false);
           return createSignChat(members, item);
         }
+        setLoadingDM(false);
         return handleOpenProfile(item);
       } catch (e) {
         console.log('error:', e);
@@ -345,7 +357,7 @@ const UsersFragment = ({
     );
   return (
     <View>
-      {loadingDM && (
+      {(loadingDM || loadingCreateChat) && (
         <View
           style={{
             position: 'absolute',
