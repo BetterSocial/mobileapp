@@ -363,21 +363,6 @@ const useCoreChatSystemHook = () => {
           rawJson: websocketMessage
         });
       }
-
-      // ChatSchema.updateDeletedRepliedChat(
-      //   localDb,
-      //   websocketData?.channel_id,
-      //   websocketMessage.deleted_message_id ?? '',
-      //   selectedChat.createdAt
-      // );
-
-      // const {replyTarget} = replyPreview;
-      // if (replyTarget && replyTarget?.id === websocketMessage?.deleted_message_id) {
-      //   const newReplyPreview = {...replyTarget};
-      //   newReplyPreview.message = DELETED_MESSAGE_TEXT;
-      //   newReplyPreview.message_type = MESSAGE_TYPE_DELETED;
-      //   setReplyTarget(newReplyPreview, dispatch);
-      // }
     }
   };
 
@@ -472,7 +457,6 @@ const useCoreChatSystemHook = () => {
   React.useEffect(() => {
     if (!lastSignedMessage || !localDb) return;
     const {type} = lastSignedMessage;
-    console.log('type', type);
     if (type === 'health.check') return;
     if (type === 'notification.message_new' || type === 'notification.added_to_channel') {
       saveChannelListData(lastSignedMessage, SIGNED).catch((e) => console.log(e));
