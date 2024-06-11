@@ -9,7 +9,6 @@ import {Header} from '../../components';
 import {Context} from '../../context';
 import DiscoveryAction from '../../context/actions/discoveryAction';
 import FollowingAction from '../../context/actions/following';
-import KeyboardWrapper from '../../navigations/KeyboardWrapper';
 import DiscoveryRepo from '../../service/discovery';
 import {
   DISCOVERY_TAB_DOMAINS,
@@ -25,6 +24,12 @@ import DomainFragment from './fragment/DomainFragment';
 import NewsFragment from './fragment/NewsFragment';
 import TopicFragment from './fragment/TopicFragment';
 import UsersFragment from './fragment/UsersFragment';
+
+const DiscoveryContainer = ({children}) => {
+  return (
+    <SafeAreaView style={{flex: 1, backgroundColor: COLORS.almostBlack}}>{children}</SafeAreaView>
+  );
+};
 
 const DiscoveryScreenV2 = ({route}) => {
   const {tab} = route.params;
@@ -378,9 +383,3 @@ DiscoveryScreenV2.propTypes = {
 };
 
 export default DiscoveryScreenV2;
-
-const DiscoveryContainer = ({children}) => {
-  return (
-    <SafeAreaView style={{flex: 1, backgroundColor: COLORS.almostBlack}}>{children}</SafeAreaView>
-  );
-};
