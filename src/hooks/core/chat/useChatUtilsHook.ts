@@ -158,6 +158,9 @@ function useChatUtilsHook(type?: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
       task: async () => {
         const saveChatPromises = response?.messages?.map((message) => {
           return new Promise((resolve) => {
+            // Skip if message_type is notification-deleted
+            if (message?.message_type === 'notification-deleted') return resolve(true);
+
             const chatMessage = ChatSchema.fromGetAllChannelAPI(channel?.id, message);
             chatMessage.save(localDb);
             resolve(true);

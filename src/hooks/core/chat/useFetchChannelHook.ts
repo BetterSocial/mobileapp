@@ -170,7 +170,11 @@ const useFetchChannelHook = () => {
           label: `saveChat-${message?.id}`,
           task: () => {
             return new Promise((resolve) => {
-              if (message?.type === 'deleted') {
+              if (
+                message?.type === 'deleted' ||
+                message?.message_type === 'notification-deleted' ||
+                message?.type === 'notification-deleted'
+              ) {
                 resolve(true);
                 return;
               }
