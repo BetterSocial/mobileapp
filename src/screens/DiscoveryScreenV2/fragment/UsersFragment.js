@@ -108,6 +108,16 @@ const UsersFragment = ({
     parseToken();
   }, []);
 
+  React.useEffect(() => {
+    if (searchText.length === 0) {
+      setActiveSections([]);
+    } else if (searchText.length >= 0 && followedUsers.length > 0) {
+      setActiveSections([0]);
+    } else {
+      setActiveSections([]);
+    }
+  }, [searchText, followedUsers]);
+
   const handleOnPress = (item) => {
     navigation.push('OtherProfile', {
       data: {
