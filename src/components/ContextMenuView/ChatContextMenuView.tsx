@@ -47,13 +47,11 @@ const ChatContextMenuView = ({children, contextMenuType, chat}: ChatContextMenuV
   }
 
   const onContextMenuPressed = (e: NativeSyntheticEvent<ContextMenuOnPressNativeEvent>) => {
-    console.log('context menu pressed', chat?.message);
     const event = e?.nativeEvent as BetterSocialContextMenuOnPressNativeEvent;
 
     if (event.name === 'Copy') {
       copyMessage();
     } else if (event.name === 'Delete') {
-      console.log('delete chat', chat?.message);
       Alert.alert('Delete Message?', '', [
         {text: 'Cancel', style: 'cancel'},
         {text: 'Delete', style: 'destructive', onPress: () => deleteMessage(0)}
