@@ -33,6 +33,7 @@ const CreateCommunity = () => {
   const [users, dispatch] = React.useContext(Context).users;
   const [name, setName] = React.useState('');
   const [typeFetch, setTypeFetch] = React.useState('');
+  const inputRef = React.useRef();
 
   const verifyNameDebounce = React.useCallback(
     _.debounce(async (text) => {
@@ -82,6 +83,14 @@ const CreateCommunity = () => {
     const value = formatNameString();
     setName(value);
   };
+
+  React.useEffect(() => {
+    if (inputRef?.current) {
+      setTimeout(() => {
+        inputRef.current.focus();
+      }, 500);
+    }
+  }, []);
 
   // eslint-disable-next-line consistent-return
   const next = async () => {
@@ -205,6 +214,7 @@ const CreateCommunity = () => {
             <View style={styles.containerInput}>
               <View style={{flex: 1}}>
                 <Input
+                  ref={inputRef}
                   placeholder="Community name"
                   placeholderTextColor={COLORS.gray410}
                   onChangeText={checkName}
@@ -213,7 +223,7 @@ const CreateCommunity = () => {
                   autoCapitalize="none"
                   autoCorrect={false}
                   style={styles.input}
-                  autoFocus={true}
+                  autoFocus={false}
                 />
                 {messageTypeFetch(typeFetch, formatNameString())}
               </View>

@@ -64,6 +64,7 @@ const useSimpleWebsocket = (url, protocol = undefined) => {
         if (json?.message?.message_type === 'text') {
           json.message.attachments = [];
         }
+        featLog('onmessage', json);
         setLastJsonMessage(json);
       } catch (e) {
         console.log('onmessage error', e);

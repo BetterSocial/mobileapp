@@ -254,6 +254,10 @@ const ChooseUsername = () => {
   };
 
   const showAlertProfilePicture = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.ONBOARDING_USERNAME_NEXT_BUTTON_NO_PROFILE_PIC
+    );
+
     Alert.alert(
       StringConstant.onboardingChooseUsernameAlertProfilePictureTitle,
       StringConstant.onboardingChooseUsernameAlertProfilePictureDesc,
@@ -283,6 +287,10 @@ const ChooseUsername = () => {
 
   const checkProfilePicture = () => {
     if (users.photo) {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.ONBOARDING_USERNAME_NEXT_BUTTON_WITH_PROFILE_PIC
+      );
+
       next();
     } else {
       showAlertProfilePicture();

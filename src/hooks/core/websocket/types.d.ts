@@ -13,6 +13,13 @@ export type GetstreamMessage = {
   html: string;
   id: string;
   latest_reactions: any[];
+  message_type:
+    | 'regular'
+    | 'system'
+    | 'deleted'
+    | 'reply'
+    | 'reply-prompt'
+    | 'notification-deleted';
   mentioned_users: any[];
   own_reactions: any[];
   pin_expires: any;
@@ -66,6 +73,9 @@ export type GetstreamMessage = {
   // Used when updating channel image or channel name
   channel_image?: string;
   channel_name?: string;
+  deleted_message_id?: string;
+  deleted_message_created_at?: string;
+  deleted_message_updated_at?: string;
 };
 
 export type GetstreamChannel = {

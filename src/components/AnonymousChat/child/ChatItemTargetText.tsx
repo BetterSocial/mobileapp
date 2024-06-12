@@ -2,19 +2,20 @@
 import * as React from 'react';
 import {Dimensions, StyleSheet, Text, View} from 'react-native';
 
-import {ChatItemMyTextProps} from '../../../../types/component/AnonymousChat/BaseChatItem.types';
-import {fonts} from '../../../utils/fonts';
-import {COLORS} from '../../../utils/theme';
+import ChatContextMenuView from '../../ContextMenuView/ChatContextMenuView';
+import ChatItemAttachment from './ChatItemAttachment';
+import dimen from '../../../utils/dimen';
 import {
   AVATAR_MARGIN,
   BUBBLE_LEFT_PADDING,
-  BUBBLE_RIGHT_PADDING,
   BUBBLE_LEFT_PADDING_ATTACHMENT,
+  BUBBLE_RIGHT_PADDING,
   BUBBLE_RIGHT_PADDING_ATTACHMENT
 } from './ChatItemAttachmentStyles';
-import ChatItemAttachment from './ChatItemAttachment';
-import dimen from '../../../utils/dimen';
+import {COLORS} from '../../../utils/theme';
+import {ChatItemMyTextProps} from '../../../../types/component/AnonymousChat/BaseChatItem.types';
 import {LinkableText} from '../../LinkableText';
+import {fonts, normalizeFontSize} from '../../../utils/fonts';
 
 const {width} = Dimensions.get('screen');
 
@@ -51,6 +52,11 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     color: COLORS.white
   },
+  deletedText: {
+    color: COLORS.gray400,
+    fontSize: normalizeFontSize(14),
+    fontStyle: 'italic'
+  },
   avatar: {
     width: 24,
     height: 24,
@@ -84,7 +90,8 @@ const ChatItemTargetText = ({
   isContinuous = false,
   message = '',
   attachments = [],
-  avatar
+  avatar,
+  chatItem
 }: ChatItemMyTextProps) => {
   const renderAvatar = React.useCallback(() => {
     if (isContinuous) return <View style={styles.avatar} />;
@@ -100,26 +107,36 @@ const ChatItemTargetText = ({
     return [styles.textContainer, paddingStyle];
   };
 
+  const getStyles = () => {
+    if (chatItem?.type === 'deleted') {
+      return styles.deletedText;
+    }
+
+    return styles.text;
+  };
+
   return (
     <View style={[styles.chatContainer, isContinuous ? {marginTop: dimen.normalizeDimen(-4)} : {}]}>
       {renderAvatar()}
-      <View style={handleTextContainerStyle()}>
-        {!isContinuous && (
-          <View
-            testID="chat-item-user-info"
-            style={[styles.chatTitleContainer, attachments.length > 0 ? {marginBottom: 4} : {}]}>
-            <Text style={styles.userText}>{username}</Text>
-            <View style={styles.dot} />
-            <Text style={styles.timeText}>{time}</Text>
-          </View>
-        )}
-        {attachments.length > 0 && <ChatItemAttachment attachments={attachments} />}
-        {attachments.length <= 0 && (
-          <View testID="chat-item-message">
-            <LinkableText style={styles.text} text={message} />
-          </View>
-        )}
-      </View>
+      <ChatContextMenuView contextMenuType="TargetChatContextMenu" chat={chatItem}>
+        <View style={handleTextContainerStyle()}>
+          {!isContinuous && (
+            <View
+              testID="chat-item-user-info"
+              style={[styles.chatTitleContainer, attachments.length > 0 ? {marginBottom: 4} : {}]}>
+              <Text style={styles.userText}>{username}</Text>
+              <View style={styles.dot} />
+              <Text style={styles.timeText}>{time}</Text>
+            </View>
+          )}
+          {attachments.length > 0 && <ChatItemAttachment attachments={attachments} />}
+          {attachments.length <= 0 && (
+            <View testID="chat-item-message">
+              <LinkableText style={getStyles()} text={message} />
+            </View>
+          )}
+        </View>
+      </ChatContextMenuView>
     </View>
   );
 };

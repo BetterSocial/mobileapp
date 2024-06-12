@@ -94,12 +94,9 @@ const Topics = () => {
       Analytics.logEvent('onb_select_topics_add_btn', {
         onb_topics_selected: topicSelected
       });
-      AnalyticsEventTracking.eventTrack(
-        BetterSocialEventTracking.ONBOARDING_TOPICS_TOTAL_FOLLOWING,
-        {
-          total: topicSelected?.length
-        }
-      );
+      AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.ONBOARDING_TOPICS_NEXT_BUTTON, {
+        total: topicSelected?.length
+      });
       setTopicsContext(topicSelected, dispatch);
       navigation.navigate('WhotoFollow');
     }
