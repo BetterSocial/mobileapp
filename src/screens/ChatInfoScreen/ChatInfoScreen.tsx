@@ -310,7 +310,8 @@ const ChatInfoScreen = () => {
         <View style={styles.lineTop} />
         <TouchableOpacity
           testID="imageClick"
-          onPress={handleOnImageClicked}
+          activeOpacity={channelInfo?.channelType === CHANNEL_GROUP ? 0.2 : 1}
+          onPress={channelInfo?.channelType === CHANNEL_GROUP ? () => handleOnImageClicked() : null}
           style={styles.containerPhoto}>
           {isUploadingImage ? (
             <ActivityIndicator color={COLORS.white} />
@@ -329,13 +330,15 @@ const ChatInfoScreen = () => {
               Created {moment(channelInfo?.createdAt).format('MM/DD/YYYY')}
             </Text>
           </View>
-          <TouchableOpacity onPress={handleOpenNameChange} style={styles.pencilIconTouchable}>
-            {isUpdatingName ? (
-              <ActivityIndicator />
-            ) : (
-              <IconPencil width={20} height={20} color={COLORS.gray400} />
-            )}
-          </TouchableOpacity>
+          {channelInfo?.channelType === CHANNEL_GROUP && (
+            <TouchableOpacity onPress={handleOpenNameChange} style={styles.pencilIconTouchable}>
+              {isUpdatingName ? (
+                <ActivityIndicator />
+              ) : (
+                <IconPencil width={20} height={20} color={COLORS.gray400} />
+              )}
+            </TouchableOpacity>
+          )}
         </View>
         <View style={styles.lineTop} />
         <Text style={styles.countUser(params?.from)}>Participants {countParticipant()}</Text>

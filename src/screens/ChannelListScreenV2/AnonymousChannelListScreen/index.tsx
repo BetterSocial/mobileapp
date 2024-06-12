@@ -15,6 +15,8 @@ import useRootChannelListHook from '../../../hooks/screen/useRootChannelListHook
 import Search from '../../ChannelListScreen/elements/Search';
 import {COLORS} from '../../../utils/theme';
 import IncognitoEmptyChat from '../IncognitoEmptyChat';
+import CommunityChannelItem from '../../../components/ChatList/CommunityChannelItem';
+import useSignedChannelListScreenHook from '../../../hooks/screen/useSignedChannelListHook';
 
 const AnonymousChannelListScreen = ({route}) => {
   const {refresh} = useLocalDatabaseHook();
@@ -25,8 +27,10 @@ const AnonymousChannelListScreen = ({route}) => {
     channels: anonChannels,
     goToChatScreen,
     goToPostDetailScreen,
-    goToContactScreen
+    goToContactScreen,
+    goToCommunityScreen
   } = useAnonymousChannelListScreenHook();
+  const {fetchLatestTopicPost} = useSignedChannelListScreenHook();
   const ref = React.useRef(null);
 
   useScrollToTop(ref);
@@ -55,7 +59,14 @@ const AnonymousChannelListScreen = ({route}) => {
     if (item?.channelType === 'ANON_TOPIC') {
       // TODO: ADD the correct ANON_TOPIC Channel Item Component here;
 
-      return <MessageChannelItem item={item} onChannelPressed={() => goToChatScreen(item)} />;
+      // return <MessageChannelItem item={item} onChannelPressed={() => goToChatScreen(item)} />;
+      return (
+        <CommunityChannelItem
+          channel={item}
+          onChannelPressed={() => goToCommunityScreen(item)}
+          fetchTopicLatestMessage={fetchLatestTopicPost}
+        />
+      );
     }
 
     return null;
