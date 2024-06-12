@@ -2,9 +2,10 @@ import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import {v4 as uuid} from 'uuid';
 
 import BaseDbSchema from './BaseDbSchema';
-import UserSchema from './UserSchema';
-import {ModifyAnonymousChatData} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 import ChannelListSchema from './ChannelListSchema';
+import UserSchema from './UserSchema';
+import {DELETED_MESSAGE_TEXT, MESSAGE_TYPE_DELETED} from '../../utils/constants';
+import {ModifyAnonymousChatData} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 
 class ChatSchema implements BaseDbSchema {
   id: string;
@@ -250,6 +251,18 @@ class ChatSchema implements BaseDbSchema {
     let rawJson: string | null = null;
     let attachmentJson: string | null = null;
 
+    const isDeleted = ['notification-deleted', 'deleted'].includes(json?.message?.message_type);
+
+    let type = json?.message?.type;
+    if (isDeleted) {
+      type = MESSAGE_TYPE_DELETED;
+    }
+
+    let message = json?.message?.text || json?.message || '';
+    if (isDeleted) {
+      message = DELETED_MESSAGE_TEXT;
+    }
+
     try {
       rawJson = JSON.stringify(json);
     } catch (e) {
@@ -267,8 +280,8 @@ class ChatSchema implements BaseDbSchema {
       id: json?.message?.id,
       channelId: json?.channel_id,
       userId: json?.message?.user?.id,
-      message: json?.message?.text || json?.message?.message,
-      type: json?.message?.type,
+      message,
+      type,
       createdAt: json?.message?.created_at,
       updatedAt: json?.message?.created_at,
       rawJson,
@@ -283,6 +296,19 @@ class ChatSchema implements BaseDbSchema {
   static fromGetAllChannelAPI(channelId, json): ChatSchema {
     let rawJson: string | null = null;
     let attachmentJson: string | null = null;
+
+    let type = json?.type;
+    if (
+      json?.message_type === MESSAGE_TYPE_DELETED ||
+      json?.message_type === 'notification-deleted'
+    ) {
+      type = MESSAGE_TYPE_DELETED;
+    }
+
+    let message = json?.text || json?.message || '';
+    if (json?.message_type === MESSAGE_TYPE_DELETED) {
+      message = DELETED_MESSAGE_TEXT;
+    }
 
     try {
       rawJson = JSON.stringify(json);
@@ -301,8 +327,8 @@ class ChatSchema implements BaseDbSchema {
       id: json?.id,
       channelId,
       userId: json?.user?.id,
-      message: (json?.text || json?.message) ?? '',
-      type: json?.type,
+      message,
+      type,
       createdAt: json?.created_at,
       updatedAt: json?.created_at,
       rawJson,
@@ -443,6 +469,29 @@ class ChatSchema implements BaseDbSchema {
         console.log('error delete old chat');
         console.log(err);
       }
+    }
+  };
+
+  static updateDeletedChatType = async (
+    db: SQLiteDatabase,
+    messageId: string,
+    oldChat?: ChatSchema
+  ) => {
+    try {
+      const rawJson = oldChat?.rawJson || {};
+      rawJson.message_type = MESSAGE_TYPE_DELETED;
+      rawJson.text = DELETED_MESSAGE_TEXT;
+      const updatedRawJson = JSON.stringify(rawJson);
+
+      const updateQuery = `UPDATE ${ChatSchema.getTableName()}
+        SET type = ?, message = ?, raw_json = ?, attachment_json = null
+        WHERE id = ?;`;
+
+      const updateReplacement = ['deleted', DELETED_MESSAGE_TEXT, updatedRawJson, messageId];
+
+      await db.executeSql(updateQuery, updateReplacement);
+    } catch (e) {
+      console.log('error updating deleted chat:', e);
     }
   };
 

@@ -28,43 +28,61 @@ exports[`TESTING ChatItemTargetText RENDER continuous should match snapshot 1`] 
       }
     }
   />
-  <View
-    style={
+  <ContextMenu
+    actions={
       Array [
         Object {
-          "backgroundColor": "#1E3343",
-          "borderRadius": 12,
-          "borderTopStartRadius": 0,
-          "flex": 1,
-          "paddingBottom": 4,
-          "paddingTop": 4,
-        },
-        Object {
-          "paddingLeft": 8,
-          "paddingRight": 8,
+          "systemIcon": "square.on.square",
+          "title": "Copy",
         },
       ]
     }
+    onPress={[Function]}
+    previewBackgroundColor="transparent"
+    style={
+      Object {
+        "flex": 1,
+      }
+    }
   >
     <View
-      testID="chat-item-message"
-    >
-      <Text
-        style={
+      style={
+        Array [
           Object {
-            "color": "#FFFFFF",
-            "fontFamily": "Inter-Regular",
-            "fontSize": 16,
-            "lineHeight": 24,
-          }
-        }
+            "backgroundColor": "#1E3343",
+            "borderRadius": 12,
+            "borderTopStartRadius": 0,
+            "flex": 1,
+            "paddingBottom": 4,
+            "paddingTop": 4,
+          },
+          Object {
+            "paddingLeft": 8,
+            "paddingRight": 8,
+          },
+        ]
+      }
+    >
+      <View
+        testID="chat-item-message"
       >
-        <Text>
-          message 
+        <Text
+          style={
+            Object {
+              "color": "#FFFFFF",
+              "fontFamily": "Inter-Regular",
+              "fontSize": 16,
+              "lineHeight": 24,
+            }
+          }
+        >
+          <Text>
+            message 
+          </Text>
         </Text>
-      </Text>
+      </View>
     </View>
-  </View>
+  </ContextMenu>
 </View>
 `;
 
@@ -93,93 +111,111 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
   >
     https://www.google.com
   </View>
-  <View
-    style={
+  <ContextMenu
+    actions={
       Array [
         Object {
-          "backgroundColor": "#1E3343",
-          "borderRadius": 12,
-          "borderTopStartRadius": 0,
-          "flex": 1,
-          "paddingBottom": 4,
-          "paddingTop": 4,
-        },
-        Object {
-          "paddingLeft": 8,
-          "paddingRight": 8,
+          "systemIcon": "square.on.square",
+          "title": "Copy",
         },
       ]
+    }
+    onPress={[Function]}
+    previewBackgroundColor="transparent"
+    style={
+      Object {
+        "flex": 1,
+      }
     }
   >
     <View
       style={
         Array [
           Object {
-            "display": "flex",
-            "flexDirection": "row",
+            "backgroundColor": "#1E3343",
+            "borderRadius": 12,
+            "borderTopStartRadius": 0,
+            "flex": 1,
+            "paddingBottom": 4,
+            "paddingTop": 4,
           },
-          Object {},
+          Object {
+            "paddingLeft": 8,
+            "paddingRight": 8,
+          },
         ]
       }
-      testID="chat-item-user-info"
     >
-      <Text
-        style={
-          Object {
-            "color": "#FFFFFF",
-            "fontFamily": "Inter-SemiBold",
-            "fontSize": 12,
-            "lineHeight": 18,
-          }
-        }
-      >
-        username
-      </Text>
       <View
         style={
-          Object {
-            "alignSelf": "center",
-            "backgroundColor": "#A5ACB8",
-            "borderRadius": 2,
-            "height": 3,
-            "marginLeft": 5,
-            "marginRight": 5,
-            "width": 3,
-          }
+          Array [
+            Object {
+              "display": "flex",
+              "flexDirection": "row",
+            },
+            Object {},
+          ]
         }
-      />
-      <Text
-        style={
-          Object {
-            "alignSelf": "center",
-            "color": "#A5ACB8",
-            "fontFamily": "Inter-ExtraLight",
-            "fontSize": 10,
-            "lineHeight": 12.19,
-          }
-        }
+        testID="chat-item-user-info"
       >
-        time
-      </Text>
-    </View>
-    <View
-      testID="chat-item-message"
-    >
-      <Text
-        style={
-          Object {
-            "color": "#FFFFFF",
-            "fontFamily": "Inter-Regular",
-            "fontSize": 16,
-            "lineHeight": 24,
+        <Text
+          style={
+            Object {
+              "color": "#FFFFFF",
+              "fontFamily": "Inter-SemiBold",
+              "fontSize": 12,
+              "lineHeight": 18,
+            }
           }
-        }
-      >
-        <Text>
-          message 
+        >
+          username
         </Text>
-      </Text>
+        <View
+          style={
+            Object {
+              "alignSelf": "center",
+              "backgroundColor": "#A5ACB8",
+              "borderRadius": 2,
+              "height": 3,
+              "marginLeft": 5,
+              "marginRight": 5,
+              "width": 3,
+            }
+          }
+        />
+        <Text
+          style={
+            Object {
+              "alignSelf": "center",
+              "color": "#A5ACB8",
+              "fontFamily": "Inter-ExtraLight",
+              "fontSize": 10,
+              "lineHeight": 12.19,
+            }
+          }
+        >
+          time
+        </Text>
+      </View>
+      <View
+        testID="chat-item-message"
+      >
+        <Text
+          style={
+            Object {
+              "color": "#FFFFFF",
+              "fontFamily": "Inter-Regular",
+              "fontSize": 16,
+              "lineHeight": 24,
+            }
+          }
+        >
+          <Text>
+            message 
+          </Text>
+        </Text>
+      </View>
     </View>
-  </View>
+  </ContextMenu>
 </View>
 `;

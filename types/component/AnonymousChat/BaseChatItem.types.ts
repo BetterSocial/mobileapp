@@ -19,6 +19,7 @@ export interface BaseChatItemProps {
   message: string;
   attachments?: any;
   type?: BaseChatItemTypeProps;
+  chatItem?: ChatSchema;
 }
 
 export interface ChatItemMyTextProps extends BaseChatItemProps {
