@@ -398,6 +398,16 @@ class ChannelList implements BaseDbSchema {
     }
   };
 
+  static async updateChannelList(db: SQLiteDatabase, channelId: string, channelType: string) {
+    const query = 'UPDATE channel_lists SET channel_type=? WHERE id=?';
+    await db.executeSql(query, [channelType, channelId]);
+  }
+
+  static async deleteChannelList(db: SQLiteDatabase, channelId: string) {
+    const query = 'DELETE FROM channel_lists WHERE id=?';
+    await db.executeSql(query, [`topic_${channelId}`]);
+  }
+
   static fromWebsocketObject(json, channelType: ChannelType): ChannelList {
     return new ChannelList({
       id: json?.channel?.id,
