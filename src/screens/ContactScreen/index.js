@@ -228,21 +228,28 @@ const ContactScreen = ({navigation}) => {
   };
 
   const handleInviteCommunityMember = async () => {
-    try {
-      const response = await inviteCommunityMember(
-        topicCommunityId.toString(),
-        selectedUsers?.map((user) => user?.user_id)
-      );
-      if (response.success) {
-        navigation.replace(NavigationConstants.CREATE_POST_SCREEN, {
-          isCreateCommunity: true,
-          topic: topicCommunityName
-        });
+    if (selectedUsers.length > 0) {
+      try {
+        const response = await inviteCommunityMember(
+          topicCommunityId.toString(),
+          selectedUsers?.map((user) => user?.user_id)
+        );
+        if (response.success) {
+          navigation.replace(NavigationConstants.CREATE_POST_SCREEN, {
+            isCreateCommunity: true,
+            topic: topicCommunityName
+          });
+        }
+      } catch (e) {
+        if (__DEV__) {
+          console.log('error handleInviteCommunityMember: ', e);
+        }
       }
-    } catch (e) {
-      if (__DEV__) {
-        console.log('error handleInviteCommunityMember: ', e);
-      }
+    } else {
+      navigation.push(NavigationConstants.CREATE_POST_SCREEN, {
+        isCreateCommunity: true,
+        topic: topicCommunityName
+      });
     }
   };
 
@@ -413,9 +420,7 @@ const ContactScreen = ({navigation}) => {
               membership to incognito at any time from the community page.
             </Text>
           </View>
-          <Button onPress={handleInviteCommunityMember}>
-            Next
-          </Button>
+          <Button onPress={handleInviteCommunityMember}>Next</Button>
         </View>
       )}
     </SafeAreaView>
