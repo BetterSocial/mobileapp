@@ -192,7 +192,7 @@ class ChatSchema implements BaseDbSchema {
       ON A.user_id = B.user_id
       INNER JOIN ${ChannelListSchema.getTableName()} C
       ON A.channel_id = C.id
-      WHERE A.status = 'pending';`;
+      WHERE A.status = 'pending' group by A.id;`;
 
     const [{rows}] = await db.executeSql(selectQuery);
     return Promise.resolve(rows.raw().map(this.fromDatabaseObject));

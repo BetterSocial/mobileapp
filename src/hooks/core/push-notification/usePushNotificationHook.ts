@@ -16,6 +16,7 @@ import useUserAuthHook from '../auth/useUserAuthHook';
 import TokenStorage, {ITokenEnum} from '../../../utils/storage/custom/tokenStorage';
 import {getAnonymousUserId, getUserId} from '../../../utils/users';
 import {getMessageDetail} from '../../../service/repo/messageRepo';
+import useChatScreenHook from '../../screen/useChatScreenHook';
 
 const usePushNotificationHook = () => {
   const isIos = Platform.OS === 'ios';
@@ -25,6 +26,7 @@ const usePushNotificationHook = () => {
   const {localDb} = useLocalDatabaseHook();
   const {fetchChannelDetail, setSelectedChannel} = useChatUtilsHook();
   const {updateAppBadgeFromDB} = useAppBadgeHook();
+  const {setIsLoadingFetchAllMessage, refetchMessage} = useChatScreenHook();
 
   const [, setProfileAtom] = useRecoilState(profileAtom);
 
@@ -146,6 +148,7 @@ const usePushNotificationHook = () => {
     }
     if (notification.data.type === 'message.new') {
       if (notification.userInteraction) {
+        await refetchMessage(); // refetch message
         const selectedChannel = await ChannelList.getSchemaById(
           localDb,
           notification?.data?.channel_id
@@ -169,58 +172,60 @@ const usePushNotificationHook = () => {
     __updateProfileAtomId();
     if (localDb) {
       messaging().setBackgroundMessageHandler(async (remoteMessage) => {
-        const response = await ChannelList.getById(
-          localDb,
-          remoteMessage.data?.channel_id as string
-        );
-        if (!response?.id) {
-          const channel = new ChannelList({
-            // craete channel payload
-            id: remoteMessage.data?.channel_id,
-            channelType: 'PM'
-          });
-          await fetchChannelDetail(channel); // insert channel detail
-        }
-        if (remoteMessage.data?.is_big_message === 'true') {
-          // todo: fetch message detail by message id
-          // todo: insert message to sqlite
-          const {message: messageRes} = await getMessageDetail(
-            remoteMessage.data?.messages_id as string
+        if (remoteMessage.data?.type === 'message.new') {
+          setIsLoadingFetchAllMessage(true);
+          const response = await ChannelList.getById(
+            localDb,
+            remoteMessage.data?.channel_id as string
           );
-          const {message} = messageRes;
-          const chatSchema = new ChatSchema({
-            id: message.id,
-            channelId: message.channel.id,
-            userId: message.user.id,
-            message: message.text,
-            type: message.type,
-            createdAt: message.created_at,
-            updatedAt: message.created_at,
-            rawJson: {},
-            attachmentJson: message.attachment,
-            user: message.user,
-            status: 'sent',
-            isMe: false,
-            isContinuous: false
-          });
-          await chatSchema.save(localDb);
-        } else {
-          const chatSchema = new ChatSchema({
-            id: remoteMessage.data?.messages_id,
-            channelId: remoteMessage.data?.channel_id,
-            userId: remoteMessage.data?.user_id,
-            message: remoteMessage.data?.message,
-            type: remoteMessage.data?.type,
-            createdAt: remoteMessage.data?.created_at,
-            updatedAt: remoteMessage.data?.created_at,
-            rawJson: {},
-            attachmentJson: remoteMessage.data?.attachment,
-            user: null,
-            status: remoteMessage.data?.status,
-            isMe: false,
-            isContinuous: false
-          });
-          await chatSchema.save(localDb);
+          if (!response?.id) {
+            const channel = new ChannelList({
+              // craete channel payload
+              id: remoteMessage.data?.channel_id,
+              channelType: 'PM'
+            });
+            await fetchChannelDetail(channel); // insert channel detail
+          }
+          if (remoteMessage.data?.is_big_message === 'true') {
+            const {message: messageRes} = await getMessageDetail(
+              remoteMessage.data?.messages_id as string
+            );
+            const {message} = messageRes;
+            const chatSchema = new ChatSchema({
+              id: message.id,
+              channelId: message.channel.id,
+              userId: message.user.id,
+              message: message.text,
+              type: message.type,
+              createdAt: message.created_at,
+              updatedAt: message.created_at,
+              rawJson: '{}',
+              attachmentJson: message.attachments,
+              user: message.user,
+              status: 'sent',
+              isMe: false,
+              isContinuous: false
+            });
+            await chatSchema.save(localDb);
+          } else {
+            const chatSchema = new ChatSchema({
+              id: remoteMessage.data?.messages_id,
+              channelId: remoteMessage.data?.channel_id,
+              userId: remoteMessage.data?.user_id,
+              message: remoteMessage.data?.message,
+              type: remoteMessage.data?.type,
+              createdAt: remoteMessage.data?.created_at,
+              updatedAt: remoteMessage.data?.created_at,
+              rawJson: '{}',
+              attachmentJson: remoteMessage.data?.attachments,
+              user: null,
+              status: remoteMessage.data?.status,
+              isMe: false,
+              isContinuous: false
+            });
+            await chatSchema.save(localDb);
+          }
+          setIsLoadingFetchAllMessage(false);
         }
 
         updateAppBadgeFromDB(localDb);
