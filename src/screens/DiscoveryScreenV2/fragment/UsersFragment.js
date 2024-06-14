@@ -1,25 +1,25 @@
+import * as React from 'react';
+import PropTypes from 'prop-types';
+import {FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
 /* eslint-disable no-use-before-define */
 import {useNavigation, useRoute} from '@react-navigation/native';
-import PropTypes from 'prop-types';
-import * as React from 'react';
-import {FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
 
-import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
-import {Context} from '../../../context/Store';
-import {setFollow, setUnFollow} from '../../../service/profile';
-import {fonts} from '../../../utils/fonts';
-import {COLORS} from '../../../utils/theme';
-import {getUserId} from '../../../utils/users';
-import DomainList from '../elements/DiscoveryItemList';
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
+import DomainList from '../elements/DiscoveryItemList';
+import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import RecentSearch from '../elements/RecentSearch';
 import useDiscovery from '../hooks/useDiscovery';
+import {COLORS} from '../../../utils/theme';
+import {Context} from '../../../context/Store';
+import {fonts} from '../../../utils/fonts';
+import {getUserId} from '../../../utils/users';
+import {setFollow, setUnFollow} from '../../../service/profile';
 
-const FROM_FOLLOWED_USERS = 'fromfollowedusers';
-const FROM_FOLLOWED_USERS_INITIAL = 'fromfollowedusersinitial';
-const FROM_UNFOLLOWED_USERS = 'fromunfollowedusers';
-const FROM_UNFOLLOWED_USERS_INITIAL = 'fromunfollowedusersinitial';
-const FROM_USERS_INITIAL = 'fromusersinitial';
+export const FROM_FOLLOWED_USERS = 'fromfollowedusers';
+export const FROM_FOLLOWED_USERS_INITIAL = 'fromfollowedusersinitial';
+export const FROM_UNFOLLOWED_USERS = 'fromunfollowedusers';
+export const FROM_UNFOLLOWED_USERS_INITIAL = 'fromunfollowedusersinitial';
+export const FROM_USERS_INITIAL = 'fromusersinitial';
 
 const UsersFragment = ({
   isLoadingDiscoveryUser = false,
@@ -56,13 +56,14 @@ const UsersFragment = ({
     parseToken();
   }, []);
 
-  const handleOnPress = (item) => {
+  const handleOnPress = (item, from) => {
     navigation.push('OtherProfile', {
       data: {
         user_id: myId,
         other_id: item.user_id,
         username: item.username,
-        following: item.following
+        following: item.following,
+        section: from
       }
     });
   };
@@ -144,7 +145,7 @@ const UsersFragment = ({
         {renderRecentSearch(index)}
         <DomainList
           key={index}
-          onPressBody={() => handleOnPress(item.user || item)}
+          onPressBody={() => handleOnPress(item.user || item, from)}
           handleSetFollow={() => handleFollow(from, true, item.user || item)}
           handleSetUnFollow={() => handleFollow(from, false, item.user || item)}
           item={{
