@@ -90,6 +90,16 @@ const DomainFragment = ({
 
   const isReady = useIsReady();
 
+  React.useEffect(() => {
+    if (searchText.length === 0) {
+      setActiveSections([]);
+    } else if (searchText.length >= 0 && followedDomains.length > 0) {
+      setActiveSections([0]);
+    } else {
+      setActiveSections([]);
+    }
+  }, [searchText, followedDomains]);
+
   const domains = React.useMemo(() => {
     return discovery.initialDomains.map((item) => ({
       ...item,
