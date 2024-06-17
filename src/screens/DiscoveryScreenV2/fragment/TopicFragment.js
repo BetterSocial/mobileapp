@@ -85,6 +85,16 @@ const TopicFragment = ({
 }) => {
   const [activeSections, setActiveSections] = React.useState([]);
 
+  React.useEffect(() => {
+    if (searchText.length === 0) {
+      setActiveSections([]);
+    } else if (searchText.length >= 0 && followedTopic.length > 0) {
+      setActiveSections([0]);
+    } else {
+      setActiveSections([]);
+    }
+  }, [searchText, followedTopic]);
+
   const {followTopic} = useChatClientHook();
   const {
     topics,
