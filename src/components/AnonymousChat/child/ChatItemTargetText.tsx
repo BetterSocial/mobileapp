@@ -4,6 +4,7 @@ import {Dimensions, StyleSheet, Text, View} from 'react-native';
 
 import ChatContextMenuView from '../../ContextMenuView/ChatContextMenuView';
 import ChatItemAttachment from './ChatItemAttachment';
+import MemoLinkDetectionText from '../../Text/LinkDetectionText';
 import dimen from '../../../utils/dimen';
 import {
   AVATAR_MARGIN,
@@ -14,7 +15,6 @@ import {
 } from './ChatItemAttachmentStyles';
 import {COLORS} from '../../../utils/theme';
 import {ChatItemMyTextProps} from '../../../../types/component/AnonymousChat/BaseChatItem.types';
-import {LinkableText} from '../../LinkableText';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
 
 const {width} = Dimensions.get('screen');
@@ -132,7 +132,7 @@ const ChatItemTargetText = ({
           {attachments.length > 0 && <ChatItemAttachment attachments={attachments} />}
           {attachments.length <= 0 && (
             <View testID="chat-item-message">
-              <LinkableText style={getStyles()} text={message} />
+              <MemoLinkDetectionText linkTextStyle={getStyles()} text={message} />
             </View>
           )}
         </View>

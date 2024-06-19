@@ -68,16 +68,24 @@ exports[`TESTING ChatItemTargetText RENDER continuous should match snapshot 1`] 
       >
         <Text
           style={
-            Object {
-              "color": "#FFFFFF",
-              "fontFamily": "Inter-Regular",
-              "fontSize": 16,
-              "lineHeight": 24,
-            }
+            Array [
+              Object {},
+            ]
           }
         >
-          <Text>
-            message 
+          <Text
+            style={
+              Array [
+                Object {
+                  "color": "#FFFFFF",
+                  "fontFamily": "Inter-Regular",
+                  "fontSize": 16,
+                  "lineHeight": 24,
+                },
+              ]
+            }
+          >
+            message
           </Text>
         </Text>
       </View>
@@ -202,16 +210,24 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
       >
         <Text
           style={
-            Object {
-              "color": "#FFFFFF",
-              "fontFamily": "Inter-Regular",
-              "fontSize": 16,
-              "lineHeight": 24,
-            }
+            Array [
+              Object {},
+            ]
           }
         >
-          <Text>
-            message 
+          <Text
+            style={
+              Array [
+                Object {
+                  "color": "#FFFFFF",
+                  "fontFamily": "Inter-Regular",
+                  "fontSize": 16,
+                  "lineHeight": 24,
+                },
+              ]
+            }
+          >
+            message
           </Text>
         </Text>
       </View>
