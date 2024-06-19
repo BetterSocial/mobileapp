@@ -1,27 +1,73 @@
 /* eslint-disable no-underscore-dangle */
-import * as React from 'react';
+import {useNavigation} from '@react-navigation/native';
 import PropTypes from 'prop-types';
+import * as React from 'react';
 import {FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
-import {useNavigation, useRoute} from '@react-navigation/native';
 
-import DiscoveryAction from '../../../context/actions/discoveryAction';
-import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
-import DomainList from '../elements/DiscoveryItemList';
-import FollowingAction from '../../../context/actions/following';
-import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
+import Accordion from 'react-native-collapsible/Accordion';
 import MemoDomainProfilePictureEmptyState from '../../../assets/icon/DomainProfilePictureEmptyState';
-import RecentSearch from '../elements/RecentSearch';
-import dimen from '../../../utils/dimen';
-import useIsReady from '../../../hooks/useIsReady';
-import {COLORS} from '../../../utils/theme';
+import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import {Context} from '../../../context/Store';
+import DiscoveryAction from '../../../context/actions/discoveryAction';
+import FollowingAction from '../../../context/actions/following';
+import useIsReady from '../../../hooks/useIsReady';
 import {followDomain, unfollowDomain} from '../../../service/domain';
+import dimen from '../../../utils/dimen';
 import {fonts} from '../../../utils/fonts';
-import {getUserId} from '../../../utils/users';
+import {COLORS} from '../../../utils/theme';
+import DomainList from '../elements/DiscoveryItemList';
+import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
+import RecentSearch from '../elements/RecentSearch';
 
 const FROM_FOLLOWED_DOMAIN = 'fromfolloweddomains';
 const FROM_FOLLOWED_DOMAIN_INITIAL = 'fromfolloweddomainsinitial';
 const FROM_UNFOLLOWED_DOMAIN = 'fromunfolloweddomains';
+
+const SECTIONS = [
+  {
+    title: 'First',
+    content: 'Lorem ipsum...'
+  }
+];
+
+const AccordionView = ({data, renderItem, setActiveSections, activeSections}) => {
+  const renderSectionTitle = () => {
+    return <View style={styles.content}></View>;
+  };
+
+  const renderHeader = (data, index) => {
+    return (
+      <DiscoveryTitleSeparator
+        withBorderBottom={true}
+        key="user-title-separator"
+        text="Domains you follow"
+        showArrow
+        rotateArrow={activeSections?.some((actived) => actived === index)}
+      />
+    );
+  };
+
+  const renderContent = () => {
+    return (
+      <View style={styles.content}>{data?.map((item, index) => renderItem({index, item}))}</View>
+    );
+  };
+
+  const updateSections = (activeSectionsParams) => {
+    setActiveSections(activeSectionsParams);
+  };
+
+  return (
+    <Accordion
+      sections={SECTIONS}
+      activeSections={activeSections}
+      renderSectionTitle={renderSectionTitle}
+      renderHeader={renderHeader}
+      renderContent={renderContent}
+      onChange={updateSections}
+    />
+  );
+};
 
 const DomainFragment = ({
   isLoadingDiscoveryDomain,
@@ -37,13 +83,22 @@ const DomainFragment = ({
   withoutRecent = false
 }) => {
   const navigation = useNavigation();
-  const [myId, setMyId] = React.useState('');
   const [discovery, discoveryDispatch] = React.useContext(Context).discovery;
+  const [activeSections, setActiveSections] = React.useState([]);
+
   const [, followingDispatch] = React.useContext(Context).following;
 
   const isReady = useIsReady();
 
-  const route = useRoute();
+  React.useEffect(() => {
+    if (searchText.length === 0) {
+      setActiveSections([]);
+    } else if (searchText.length >= 0 && followedDomains.length > 0) {
+      setActiveSections([0]);
+    } else {
+      setActiveSections([]);
+    }
+  }, [searchText, followedDomains]);
 
   const domains = React.useMemo(() => {
     return discovery.initialDomains.map((item) => ({
@@ -63,16 +118,6 @@ const DomainFragment = ({
       following: item.following !== undefined ? item.following : item.user_id_follower !== null
     }));
   }, [unfollowedDomains]);
-
-  React.useEffect(() => {
-    const parseToken = async () => {
-      const id = await getUserId();
-      if (id) {
-        setMyId(id);
-      }
-    };
-    parseToken();
-  }, []);
 
   const __handleOnPressDomain = (item) => {
     const navigationParam = {
@@ -178,19 +223,6 @@ const DomainFragment = ({
     if (searchText.length > 0) fetchData();
   };
 
-  const renderRecentSearch = (index) => {
-    return (
-      index === 0 &&
-      !withoutRecent && (
-        <RecentSearch
-          shown={isFirstTimeOpen}
-          setSearchText={setSearchText}
-          setIsFirstTimeOpen={setIsFirstTimeOpen}
-        />
-      )
-    );
-  };
-
   const renderDefaultImage = () => {
     return (
       <MemoDomainProfilePictureEmptyState
@@ -204,7 +236,6 @@ const DomainFragment = ({
     if (item.separator) {
       return (
         <>
-          {renderRecentSearch(index)}
           <DiscoveryTitleSeparator text="Suggested Domains" key="domain-title-separator" />
         </>
       );
@@ -212,7 +243,6 @@ const DomainFragment = ({
 
     return (
       <>
-        {renderRecentSearch(index)}
         <View style={styles.domainContainer}>
           <DomainList
             isDomain={true}
@@ -262,20 +292,38 @@ const DomainFragment = ({
     });
     const data = isFirstTimeOpen
       ? [
-          ...followingDomains.map((item, index) => ({
-            ...item,
-            user_id_follower: item.user_id_follower
-          })),
           {separator: true},
-          ...unfollowingDomains.map((item, index) => ({
+          ...unfollowingDomains.map((item) => ({
             ...item,
             user_id_follower: item.user_id_follower
           }))
         ]
-      : [...newMapFollowedDomain, {separator: true}, ...newMapUnfollowedDomain];
+      : [{separator: true}, ...newMapUnfollowedDomain];
+
+    const firstData = isFirstTimeOpen
+      ? followingDomains.map((item) => ({
+          ...item,
+          user_id_follower: item.user_id_follower
+        }))
+      : newMapFollowedDomain;
 
     return (
       <FlatList
+        ListHeaderComponent={() => (
+          <>
+            <RecentSearch
+              shown={!withoutRecent || isFirstTimeOpen}
+              setSearchText={setSearchText}
+              setIsFirstTimeOpen={setIsFirstTimeOpen}
+            />
+            <AccordionView
+              data={firstData}
+              renderItem={renderItem}
+              activeSections={activeSections}
+              setActiveSections={setActiveSections}
+            />
+          </>
+        )}
         onMomentumScrollBegin={handleScroll}
         contentContainerStyle={{paddingBottom: 100}}
         data={data}

@@ -4,6 +4,7 @@ import * as React from 'react';
 import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 
 import PropTypes from 'prop-types';
+import Accordion from 'react-native-collapsible/Accordion';
 import TopicsProfilePictureEmptyState from '../../../assets/icon/TopicsProfilePictureEmptyState';
 import IconUserGroup from '../../../assets/icons/Ic_user_group';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
@@ -23,6 +24,52 @@ const FROM_FOLLOWED_TOPIC_INITIAL = 'fromfollowedtopicsinitial';
 const FROM_UNFOLLOWED_TOPIC = 'fromunfollowedtopics';
 const FROM_UNFOLLOWED_TOPIC_INITIAL = 'fromunfollowedtopicsinitial';
 
+const SECTIONS = [
+  {
+    title: 'First',
+    content: 'Lorem ipsum...'
+  }
+];
+
+const AccordionView = ({data, renderItem, setActiveSections, activeSections}) => {
+  const renderSectionTitle = () => {
+    return <View style={styles.content}></View>;
+  };
+
+  const renderHeader = (data, index) => {
+    return (
+      <DiscoveryTitleSeparator
+        withBorderBottom={true}
+        key="user-title-separator"
+        text="Your Communities"
+        showArrow
+        rotateArrow={activeSections?.some((actived) => actived === index)}
+      />
+    );
+  };
+
+  const renderContent = () => {
+    return (
+      <View style={styles.content}>{data?.map((item, index) => renderItem({index, item}))}</View>
+    );
+  };
+
+  const updateSections = (activeSectionsParams) => {
+    setActiveSections(activeSectionsParams);
+  };
+
+  return (
+    <Accordion
+      sections={SECTIONS}
+      activeSections={activeSections}
+      renderSectionTitle={renderSectionTitle}
+      renderHeader={renderHeader}
+      renderContent={renderContent}
+      onChange={updateSections}
+    />
+  );
+};
+
 const TopicFragment = ({
   isLoadingDiscoveryTopic = false,
   followedTopic = [],
@@ -36,6 +83,18 @@ const TopicFragment = ({
   searchText,
   withoutRecent = false
 }) => {
+  const [activeSections, setActiveSections] = React.useState([]);
+
+  React.useEffect(() => {
+    if (searchText.length === 0) {
+      setActiveSections([]);
+    } else if (searchText.length >= 0 && followedTopic.length > 0) {
+      setActiveSections([0]);
+    } else {
+      setActiveSections([]);
+    }
+  }, [searchText, followedTopic]);
+
   const {followTopic} = useChatClientHook();
   const {
     topics,
@@ -131,15 +190,13 @@ const TopicFragment = ({
     if (item.separator) {
       return (
         <>
-          {renderRecentSearch(index)}
-          <DiscoveryTitleSeparator key="topic-title-separator" text="Suggested Communities" />
+          <DiscoveryTitleSeparator key="topic-title-separator" text="Communities for you!" />
         </>
       );
     }
 
     return (
       <>
-        {renderRecentSearch(index)}
         <View style={styles.domainContainer}>
           <DomainList
             handleSetFollow={() => handleFollow(from, true, item)}
@@ -182,10 +239,10 @@ const TopicFragment = ({
         unfollowingTopics.push(item);
       }
     });
-
+    const firstData = isFirstTimeOpen ? followingTopics : newMapFollowedTopics;
     const data = isFirstTimeOpen
-      ? [...followingTopics, {separator: true}, ...unfollowingTopics]
-      : [...newMapFollowedTopics, {separator: true}, ...newMapUnfollowedTopics];
+      ? [{separator: true}, ...unfollowingTopics]
+      : [{separator: true}, ...newMapUnfollowedTopics];
 
     return (
       <View>
@@ -201,6 +258,21 @@ const TopicFragment = ({
           </View>
         </Pressable>
         <FlatList
+          ListHeaderComponent={() => (
+            <>
+              <RecentSearch
+                shown={!withoutRecent || isFirstTimeOpen}
+                setSearchText={setSearchText}
+                setIsFirstTimeOpen={setIsFirstTimeOpen}
+              />
+              <AccordionView
+                data={firstData}
+                renderItem={renderItem}
+                activeSections={activeSections}
+                setActiveSections={setActiveSections}
+              />
+            </>
+          )}
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={{paddingBottom: 100}}

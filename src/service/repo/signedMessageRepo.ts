@@ -176,10 +176,8 @@ async function createSignedChat(members: string[]) {
     if (response.status === 200) {
       return Promise.resolve(response.data);
     }
-
     return Promise.reject(response.status);
   } catch (e) {
-    console.log(e);
     return Promise.reject(e);
   }
 }
