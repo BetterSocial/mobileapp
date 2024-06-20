@@ -3,6 +3,9 @@ import SimpleToast from 'react-native-simple-toast';
 
 import StorageUtils from '../../../utils/storage';
 import useUserAuthHook from '../auth/useUserAuthHook';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../../libraries/analytics/analyticsEventTracking';
 import {ChannelList} from '../../../../types/database/schema/ChannelList.types';
 import {checkFollowStatus} from '../../../service/users';
 import {setFollow, setUnFollow} from '../../../service/profile';
@@ -107,8 +110,14 @@ const useFollowUserV2Hook = (tab: WhichTab = 'signed') => {
       };
 
       if (initialFollowStatus?.isFollowing) {
+        AnalyticsEventTracking.eventTrack(
+          BetterSocialEventTracking.SIGNED_CHAT_TAB_PRESS_UNFOLLOW_BUTTON
+        );
         await setUnFollow(data);
       } else {
+        AnalyticsEventTracking.eventTrack(
+          BetterSocialEventTracking.SIGNED_CHAT_TAB_PRESS_FOLLOW_BUTTON
+        );
         await setFollow(data);
       }
       __helperCallOtherProfileData(item?.id);

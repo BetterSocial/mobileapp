@@ -1,18 +1,23 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import {View, Text, StyleSheet, TouchableNativeFeedback, ActivityIndicator} from 'react-native';
+import {ActivityIndicator, StyleSheet, Text, TouchableNativeFeedback, View} from 'react-native';
 
-import {fonts} from '../../utils/fonts';
-import {BottomSheet} from '../BottomSheet';
+import CameraIcon from '../../assets/icons/images/camera.svg';
+import FileIcon from '../../assets/icons/images/file.svg';
+import GIFIcon from '../../assets/icons/images/gif.svg';
 // TODO: Garry,  need to pass props color
 import MediasIcon from '../../assets/icons/images/medias.svg';
-import GIFIcon from '../../assets/icons/images/gif.svg';
-import FileIcon from '../../assets/icons/images/file.svg';
-import CameraIcon from '../../assets/icons/images/camera.svg';
+import {BottomSheet} from '../BottomSheet';
 import {COLORS} from '../../utils/theme';
+import {fonts} from '../../utils/fonts';
 
 const BottomSheetAttachment = React.forwardRef((props, ref) => (
-  <BottomSheet ref={ref} closeOnPressMask={true} height={300} viewstyle={styles.container}>
+  <BottomSheet
+    ref={ref}
+    closeOnPressMask={true}
+    height={300}
+    viewstyle={styles.container}
+    onClose={() => props?.onClose?.()}>
     <View style={styles.containerBottomSheet}>
       <TouchableNativeFeedback
         onPress={() => props.onOpenMedia()}

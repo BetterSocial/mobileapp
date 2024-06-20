@@ -1,23 +1,23 @@
+import * as React from 'react';
+import Accordion from 'react-native-collapsible/Accordion';
+import PropTypes from 'prop-types';
+import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 /* eslint-disable no-underscore-dangle */
 import {useNavigation} from '@react-navigation/native';
-import * as React from 'react';
-import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 
-import PropTypes from 'prop-types';
-import Accordion from 'react-native-collapsible/Accordion';
-import TopicsProfilePictureEmptyState from '../../../assets/icon/TopicsProfilePictureEmptyState';
+import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
+import DomainList from '../elements/DiscoveryItemList';
 import IconUserGroup from '../../../assets/icons/Ic_user_group';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
-import useIsReady from '../../../hooks/useIsReady';
-import dimen from '../../../utils/dimen';
-import {fonts, normalizeFontSize} from '../../../utils/fonts';
-import useChatClientHook from '../../../utils/getstream/useChatClientHook';
-import {convertTopicNameToTopicPageScreenParam} from '../../../utils/string/StringUtils';
-import {COLORS} from '../../../utils/theme';
-import DomainList from '../elements/DiscoveryItemList';
-import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import RecentSearch from '../elements/RecentSearch';
+import TopicsProfilePictureEmptyState from '../../../assets/icon/TopicsProfilePictureEmptyState';
+import dimen from '../../../utils/dimen';
+import useChatClientHook from '../../../utils/getstream/useChatClientHook';
 import useDiscovery from '../hooks/useDiscovery';
+import useIsReady from '../../../hooks/useIsReady';
+import {COLORS} from '../../../utils/theme';
+import {convertTopicNameToTopicPageScreenParam} from '../../../utils/string/StringUtils';
+import {fonts, normalizeFontSize} from '../../../utils/fonts';
 
 const FROM_FOLLOWED_TOPIC = 'fromfollowedtopics';
 const FROM_FOLLOWED_TOPIC_INITIAL = 'fromfollowedtopicsinitial';
@@ -36,12 +36,12 @@ const AccordionView = ({data, renderItem, setActiveSections, activeSections}) =>
     return <View style={styles.content}></View>;
   };
 
-  const renderHeader = (data, index) => {
+  const renderHeader = (_, index) => {
     return (
       <DiscoveryTitleSeparator
+        withBorderBottom={true}
         key="user-title-separator"
         text="Your Communities"
-        withBorderBottom={true}
         showArrow
         rotateArrow={activeSections?.some((actived) => actived === index)}
       />

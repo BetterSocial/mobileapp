@@ -36,7 +36,7 @@ const AccordionView = ({data, renderItem, setActiveSections, activeSections}) =>
     return <View style={styles.content}></View>;
   };
 
-  const renderHeader = (data, index) => {
+  const renderHeader = (_, index) => {
     return (
       <DiscoveryTitleSeparator
         withBorderBottom={true}
@@ -187,16 +187,16 @@ const UsersFragment = ({
 
     const isUnfollowed = item.user ? !item.user.following : !item.following;
 
-    const handleOpenProfile = async (item) => {
-      if (profile?.myProfile?.user_id === item?.user_id) {
+    const handleOpenProfile = async (profileItem) => {
+      if (profile?.myProfile?.user_id === profileItem?.user_id) {
         return null;
       }
 
       return navigation.push('OtherProfile', {
         data: {
           user_id: profile.myProfile.user_id,
-          other_id: item?.user_id || item?.userId,
-          username: item?.user?.name || item?.user?.username || item.username
+          other_id: profileItem?.user_id || profileItem?.userId,
+          username: profileItem?.user?.name || profileItem?.user?.username || profileItem.username
         }
       });
     };

@@ -18,7 +18,7 @@ interface UseChatUtilsHook {
   goToPostDetailScreen: (channel: ChannelListSchema) => void;
   goToCommunityScreen: (channel: ChannelListSchema) => void;
   goToContactScreen: ({from}: ContactScreenPayload) => void;
-  goToChatInfoScreen: () => void;
+  goToChatInfoScreen: (params?: any) => void;
   goBackFromChatScreen: () => void;
   handleTextSystem: (item: any) => string;
   setChannelAsRead: (
