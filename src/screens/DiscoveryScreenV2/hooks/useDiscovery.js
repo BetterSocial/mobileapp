@@ -1,7 +1,8 @@
 import React from 'react';
-import {Context} from '../../../context';
+
 import DiscoveryAction from '../../../context/actions/discoveryAction';
 import following from '../../../context/actions/following';
+import {Context} from '../../../context';
 import {getFollowedDomain} from '../../../service/domain';
 import {getFollowing} from '../../../service/profile';
 import {getFollowingTopic} from '../../../service/topics';
@@ -18,10 +19,13 @@ const useDiscovery = () => {
     }));
   }, [discovery]);
 
-  const exhangeFollower = (newUserLists, willFollow, userId) => {
+  const exchangeFollower = (newUserLists, willFollow, userId) => {
     const indexUser = newUserLists.findIndex((item) =>
       item.user ? item.user.user_id === userId : item.user_id === userId
     );
+
+    if (indexUser < 0) return null;
+
     if (newUserLists[indexUser].user) {
       newUserLists[indexUser].user.following = !!willFollow;
       newUserLists[indexUser].user.is_followed = !!willFollow;
@@ -43,8 +47,8 @@ const useDiscovery = () => {
     return newTopicLists[indexTopic];
   };
 
-  const mapUser = (newUser) => {
-    return discovery.initialUsers.map((user) => {
+  const mapUserWith = (listReference, newUser) => {
+    return listReference.map((user) => {
       if (user.user) {
         if (user.user.user_id === newUser.user.user_id) return newUser;
       } else if (user.user_id === newUser.user_id) return newUser;
@@ -70,13 +74,37 @@ const useDiscovery = () => {
 
   const updateFollowDiscoveryContext = (willFollow, item) => {
     const newFollowedUsers = [...users];
-    const newUser = exhangeFollower(
-      newFollowedUsers,
-      willFollow,
-      item.user ? item.user.user_id : item.user_id
-    );
+    const userId = item.user ? item.user.user_id : item.user_id;
 
-    DiscoveryAction.setDiscoveryInitialUsers(mapUser(newUser), discoveryDispatch);
+    // Update initial users
+    const newInitialUser = exchangeFollower(newFollowedUsers, willFollow, userId);
+    console.log('newInitialUser', !!newInitialUser);
+    if (newInitialUser !== null)
+      DiscoveryAction.setDiscoveryInitialUsers(
+        mapUserWith([...discovery?.initialUsers], newInitialUser),
+        discoveryDispatch
+      );
+
+    // Update discovery search users followed section
+    const newSearchFollowedUser = exchangeFollower(discovery?.followedUsers, willFollow, userId);
+    if (newSearchFollowedUser !== null)
+      DiscoveryAction.setNewFollowedUsers(
+        mapUserWith([...discovery?.followedUsers], newSearchFollowedUser),
+        discoveryDispatch
+      );
+
+    // Update discovery search users unfollowed section
+    const newSearchUnfollowedUser = exchangeFollower(
+      discovery?.unfollowedUsers,
+      willFollow,
+      userId
+    );
+    console.log('newSearchUnfollowedUser', !!newSearchUnfollowedUser);
+    if (newSearchUnfollowedUser !== null)
+      DiscoveryAction.setNewUnfollowedUsers(
+        mapUserWith([...discovery?.unfollowedUsers], newSearchUnfollowedUser),
+        discoveryDispatch
+      );
   };
 
   const updateFollowTopicDiscoveryContext = (willFollow, item, fromTopicPage) => {
@@ -110,17 +138,39 @@ const useDiscovery = () => {
       setRefreshing(false);
     }
   };
+
+  const getIsMeFollowingTargetStatus = React.useCallback(
+    (userId) => {
+      const targetUser = discovery?.initialUsers?.find((item) => item?.user_id === userId);
+      const targetUserFromFollowed = discovery?.followedUsers?.find(
+        (item) => item?.user_id === userId
+      );
+      const targetUserFromFollowing = discovery?.unfollowedUsers?.find(
+        (item) => item?.user_id === userId
+      );
+
+      return (
+        targetUser?.is_followed ||
+        targetUserFromFollowed?.is_followed ||
+        targetUserFromFollowing?.is_followed ||
+        false
+      );
+    },
+    [discovery]
+  );
+
   return {
-    onRefreshDiscovery,
     refreshing,
-    updateFollowDiscoveryContext,
-    mapUser,
-    exhangeFollower,
-    users,
-    updateFollowTopicDiscoveryContext,
-    mapTopic,
     topics,
-    topicExchangeFollower
+    users,
+
+    exchangeFollower,
+    getIsMeFollowingTargetStatus,
+    mapTopic,
+    onRefreshDiscovery,
+    topicExchangeFollower,
+    updateFollowDiscoveryContext,
+    updateFollowTopicDiscoveryContext
   };
 };
 
