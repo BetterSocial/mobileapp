@@ -156,7 +156,8 @@ const UsersFragmentCommunity = ({
             karmaScore: item.user ? item.user.karma_score : item.karma_score,
             comumnityInfo: item.user ? item.user.community_info || [] : item.community_info || [],
             routeName: route.name,
-            isUser
+            isUser,
+            withFollowButton: profile.myProfile.user_id !== item.user_id
           }}
           withKarma
         />
