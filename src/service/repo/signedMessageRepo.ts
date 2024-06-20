@@ -26,9 +26,10 @@ const baseUrl = {
   sendSignedMessage: '/chat/send-signed-message',
   getAllSignedChannels: '/chat/channels/signed',
   getAllSignedPostNotifications: '/feeds/feed-chat',
-  getSingleSignedPostNotifications: (activityId: string) => `/feeds/feed-chat/${activityId}`,
   setChannelAsRead: '/chat/channels/read',
   createSignedChat: '/chat/channels-signed',
+  deleteMessage: (messageId: string) => `/chat/message/${messageId}`,
+  getSingleSignedPostNotifications: (activityId: string) => `/feeds/feed-chat/${activityId}`,
   getSignedChannelDetail: (channelType: GetstreamChannelType, channelId: string) =>
     `/chat/channel-detail?channel_type=${channelType}&channel_id=${channelId}`,
   changeSignedChannelDetail: '/chat/channel-detail'
@@ -36,6 +37,7 @@ const baseUrl = {
 
 interface SignedMessageRepoTypes {
   checkIsTargetAllowingAnonDM: (targetUserId: string) => Promise<any>;
+  deleteMessage: (messageId: string) => Promise<any>;
   sendSignedMessage: (
     channelId: string,
     message: string,
@@ -101,9 +103,7 @@ async function sendSignedMessage(
 }
 
 async function getAllSignedChannels(timeStamp: string | undefined) {
-  const url = timeStamp
-    ? `${baseUrl.getAllSignedChannels}?last_fetch_date=${timeStamp}`
-    : baseUrl.getAllSignedChannels;
+  const url = timeStamp ? `${baseUrl.getAllSignedChannels}` : baseUrl.getAllSignedChannels;
   try {
     const response = await api.get(url);
     if (response.status === 200) {
@@ -176,10 +176,8 @@ async function createSignedChat(members: string[]) {
     if (response.status === 200) {
       return Promise.resolve(response.data);
     }
-
     return Promise.reject(response.status);
   } catch (e) {
-    console.log(e);
     return Promise.reject(e);
   }
 }
@@ -226,8 +224,23 @@ async function changeSignedChannelDetail(
   }
 }
 
+async function deleteMessage(messageId: string) {
+  try {
+    const response = await api.delete(baseUrl.deleteMessage(messageId));
+    if (response.status === 200) {
+      return Promise.resolve(response.data);
+    }
+
+    return Promise.reject(response.data?.status);
+  } catch (e) {
+    console.log(e);
+    return Promise.reject(e);
+  }
+}
+
 const SignedMessageRepo: SignedMessageRepoTypes = {
   checkIsTargetAllowingAnonDM,
+  deleteMessage,
   sendSignedMessage,
   getAllSignedChannels,
   getAllSignedPostNotifications,

@@ -94,6 +94,7 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
         type={BaseChatItemTypeProps.MY_ANON_CHAT}
         status={item?.status as ChatStatus}
         chatType={type}
+        chatItem={item}
       />
     );
   }
@@ -108,6 +109,7 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
       time={calculateTime(item?.updatedAt, true)}
       username={handleUserName(item, selectedChannel)}
       type={BaseChatItemTypeProps.ANON_CHAT}
+      chatItem={item}
     />
   );
 };

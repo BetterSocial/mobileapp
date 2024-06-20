@@ -407,7 +407,7 @@ const CreatePost = () => {
   };
 
   const navigateToTopicPage = () => {
-    return navigation.navigate('TopicPageScreen', {id: initialTopic[0]});
+    return navigation.replace('TopicPageScreen', {id: initialTopic[0]});
   };
 
   const checkTaggingUser = () => {
@@ -423,8 +423,9 @@ const CreatePost = () => {
     return message !== '';
   };
 
-  const postV2 = async () => {
+  const postV3 = async () => {
     setLoadingPost(true);
+
     if (!isEmptyMessageAllowed()) {
       showMessage({
         message: StringConstant.createPostFailedNoMessage,
@@ -434,92 +435,101 @@ const CreatePost = () => {
       return true;
     }
 
-    try {
-      const topicsToPost = _.union(initialTopic, listTopic);
-      console.log('message', message);
-      const data = {
-        message,
-        topics: topicsToPost,
-        verb: isPollShown ? 'poll' : 'tweet',
-        feedGroup: 'main_feed',
-        privacy: listPrivacy[0].key,
-        anonimity: typeUser,
-        location: renderLocationString(geoList[geoSelect]),
-        location_id: locationId,
-        duration_feed: postExpired[expiredSelect].value,
-        images_url: dataImage,
-        tagUsers: checkTaggingUser(),
-        is_photo_uploaded: true
-      };
-
-      if (isPollShown) {
-        data.polls = getReducedPoll();
-        data.pollsduration = selectedTime;
-        data.multiplechoice = isPollMultipleChoice;
-      }
-
-      if (typeUser) {
-        data.anon_user_info = {
-          color_name: anonUserInfo?.colorName,
-          color_code: anonUserInfo?.colorCode,
-          emoji_name: anonUserInfo?.emojiName,
-          emoji_code: anonUserInfo?.emojiCode
+    const maxRetries = 5;
+    const attemptPost = async (retryCount) => {
+      try {
+        const topicsToPost = _.union(initialTopic, listTopic);
+        console.log('message', message);
+        const data = {
+          message,
+          topics: topicsToPost,
+          verb: isPollShown ? 'poll' : 'tweet',
+          feedGroup: 'main_feed',
+          privacy: listPrivacy[0].key,
+          anonimity: typeUser,
+          location: renderLocationString(geoList[geoSelect]),
+          location_id: locationId,
+          duration_feed: postExpired[expiredSelect].value,
+          images_url: dataImage,
+          tagUsers: checkTaggingUser(),
+          is_photo_uploaded: true
         };
-      }
 
-      setDurationId(JSON.stringify(expiredSelect));
-      if (!isInCreatePostTopicScreen) {
-        setLocationId(JSON.stringify(geoSelect));
-        setPrivacyId(JSON.stringify(0));
-      }
+        if (isPollShown) {
+          data.polls = getReducedPoll();
+          data.pollsduration = selectedTime;
+          data.multiplechoice = isPollMultipleChoice;
+        }
 
-      if (isInCreatePostTopicScreen) {
-        navigateToTopicPage();
-      } else {
-        navigation.navigate('HomeTabs', {
-          screen: 'Feed',
-          params: {
-            refresh: true
+        if (typeUser) {
+          data.anon_user_info = {
+            color_name: anonUserInfo?.colorName,
+            color_code: anonUserInfo?.colorCode,
+            emoji_name: anonUserInfo?.emojiName,
+            emoji_code: anonUserInfo?.emojiCode
+          };
+        }
+
+        setDurationId(JSON.stringify(expiredSelect));
+        if (!isInCreatePostTopicScreen) {
+          setLocationId(JSON.stringify(geoSelect));
+          setPrivacyId(JSON.stringify(0));
+        }
+
+        const post = await createPost(data);
+        if (params.onRefresh && typeof params.onRefresh === 'function') {
+          params.onRefresh();
+        }
+        setLoadingPost(false);
+        if (post.code === 200) {
+          showMessage({
+            message: StringConstant.createPostDone,
+            type: 'success'
+          });
+
+          if (isInCreatePostTopicScreen) {
+            navigateToTopicPage();
+          } else {
+            navigation.navigate('HomeTabs', {
+              screen: 'Feed',
+              params: {refresh: true}
+            });
           }
-        });
-      }
+        } else {
+          showMessage({
+            message: StringConstant.createPostFailedGeneralError,
+            type: 'danger'
+          });
+        }
 
-      const post = await createPost(data);
-      if (params.onRefresh && typeof params.onRefresh === 'function') {
-        params.onRefresh();
-      }
-      if (post.code === 200) {
-        showMessage({
-          message: StringConstant.createPostDone,
-          type: 'success'
+        Analytics.logEvent('create_post', {
+          id: 6,
+          newpost_reach: renderLocationString(geoList[geoSelect]),
+          newpost_privacy: listPrivacy[0].label,
+          num_images: 0,
+          added_poll: isPollShown,
+          topics_added: listTopic,
+          anon: typeUser,
+          predicted_audience: audienceEstimations
         });
-        setLoadingPost(false);
-      } else {
-        showMessage({
-          message: StringConstant.createPostFailedGeneralError,
-          type: 'danger'
-        });
-        setLoadingPost(false);
+      } catch (e) {
+        if (__DEV__) {
+          console.log('CreatePost : ', e);
+          console.warn('retryCount', retryCount);
+        }
+        if (retryCount >= maxRetries) {
+          showMessage({
+            message: 'Failed to post. Please check your internet connection.',
+            type: 'danger'
+          });
+          setLoadingPost(false);
+          return false;
+        }
+        return attemptPost(retryCount + 1);
       }
-    } catch (e) {
-      if (__DEV__) {
-        console.log('CreatePost : ', e);
-      }
-      showMessage({
-        message: StringConstant.createPostFailedGeneralError,
-        type: 'danger'
-      });
-    }
-    Analytics.logEvent('create_post', {
-      id: 6,
-      newpost_reach: renderLocationString(geoList[geoSelect]),
-      newpost_privacy: listPrivacy[0].label,
-      num_images: 0,
-      added_poll: isPollShown,
-      topics_added: listTopic,
-      anon: typeUser,
-      predicted_audience: audienceEstimations
-    });
+    };
+
+    await attemptPost(0);
   };
 
   const randerComponentMedia = () => {
@@ -796,7 +806,7 @@ const CreatePost = () => {
             </>
           )}
           <Gap style={styles.height(25)} />
-          <Button styles={styles.btnPost(typeUser)} disabled={isButtonDisabled()} onPress={postV2}>
+          <Button styles={styles.btnPost(typeUser)} disabled={isButtonDisabled()} onPress={postV3}>
             {params.isCreateCommunity ? 'Post & Create Community' : 'Post'}
           </Button>
           <Gap style={styles.height(18)} />
@@ -841,7 +851,7 @@ const CreatePost = () => {
           />
         </View>
       </ScrollView>
-      <Loading visible={loading} />
+      <Loading visible={loading || loadingPost} />
       <WarningAnimatedMessage isShow={typeUser} />
     </SafeAreaView>
   );

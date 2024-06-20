@@ -44,7 +44,7 @@ const TopicPageScreen = (props) => {
   const [isFollow, setIsFollow] = React.useState(params.isFollowing);
   const [followType, setFollowType] = React.useState('');
   const [topicDetail, setTopicDetail] = React.useState({});
-  const [memberCount, setMemberCount] = React.useState(params.memberCount);
+  const [memberCount, setMemberCount] = React.useState(params.memberCount || 0);
   const [isHeaderHide, setIsHeaderHide] = React.useState(false);
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   const feeds = feedsContext.topicFeeds
@@ -161,13 +161,15 @@ const TopicPageScreen = (props) => {
 
   const getTopicDetail = async (domain) => {
     try {
-      const resultTopicDetail = await getTopics(domain);
+      const resultTopicDetail = await getTopics(domain, false);
       if (resultTopicDetail.data) {
         const detail = resultTopicDetail.data.find((item) => item.name === domain);
-        setTopicDetail(detail);
-        handleFollowData(detail.is_followed_by);
-        setMemberCount(Number(detail?.followersCount));
-        setIsInitialLoading(false);
+        if (detail) {
+          setTopicDetail(detail);
+          handleFollowData(detail.is_followed_by);
+          setMemberCount(Number(detail?.followersCount));
+          setIsInitialLoading(false);
+        }
       }
     } catch (error) {
       SimpleToast.show(
@@ -335,6 +337,7 @@ const TopicPageScreen = (props) => {
 
   const onRefresh = () => {
     refreshingData(0);
+    getTopicDetail();
   };
 
   const setUpVote = async (post, index) => {
@@ -477,7 +480,7 @@ const TopicPageScreen = (props) => {
         topicId={topicId}
         ref={bottomSheetFollowRef}
         onClose={() => bottomSheetFollowRef.current.close()}
-        topicName={topicDetail.name}
+        topicName={topicDetail?.name}
         memberCount={memberCount}
         setMemberCount={setMemberCount}
         isFollow={isFollow}

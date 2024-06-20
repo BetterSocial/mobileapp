@@ -32,7 +32,8 @@ const useFetchChannelHook = () => {
     const type: {[key: string]: ChannelType} = {
       messaging: isAnonymous ? 'ANON_PM' : 'PM',
       group: 'GROUP',
-      topics: isAnonymous ? 'ANON_TOPIC' : 'TOPIC'
+      topics: isAnonymous ? 'ANON_TOPIC' : 'TOPIC',
+      topicinvitation: 'TOPIC'
     };
 
     const newChannel = {...channel};
@@ -58,7 +59,7 @@ const useFetchChannelHook = () => {
     newChannel.channel = {...channel};
     const channelType = channel?.type;
 
-    if (channelType === 'topics') {
+    if (channelType === 'topics' || channelType === 'topicinvitation') {
       try {
         const cleanTopicName = newChannel?.id?.replace('topic_', '');
         const response = await getLatestTopicPost(cleanTopicName);
@@ -134,7 +135,7 @@ const useFetchChannelHook = () => {
       console.log('error on saveChannelData helperChannelPromiseBuilder:', e);
     }
 
-    if (channel?.type === 'topics') return;
+    if (channel?.type === 'topics' || channel?.type === 'topicinvitation') return;
 
     try {
       const members = getChannelMembers(channel);
@@ -169,7 +170,11 @@ const useFetchChannelHook = () => {
           label: `saveChat-${message?.id}`,
           task: () => {
             return new Promise((resolve) => {
-              if (message?.type === 'deleted') {
+              if (
+                message?.type === 'deleted' ||
+                message?.message_type === 'notification-deleted' ||
+                message?.type === 'notification-deleted'
+              ) {
                 resolve(true);
                 return;
               }
@@ -198,6 +203,7 @@ const useFetchChannelHook = () => {
       const isLocationChannel = channel?.channel_type === 2 || channel?.type_channel === 2;
       const isSelfChatChannel = channel?.type === 'messaging' && channel?.members?.length < 2;
       const isCommunityChannel = channel?.type === 'topics';
+      const isCommunityInvitationChannel = channel?.type === 'topicinvitation';
 
       const isDeletedMessage = channel?.firstMessage?.type === 'deleted';
       const hasDeletedMessage = channel?.messages[channel?.messages?.length - 1]?.text
@@ -206,7 +212,8 @@ const useFetchChannelHook = () => {
 
       const isDeletedMessageOrSelfChat = isDeletedMessage || isSelfChatChannel;
       const isDeletedOrHasDeletedMessage = isDeletedMessage || hasDeletedMessage;
-      const isCommunityHasDeletedMessage = isDeletedOrHasDeletedMessage && isCommunityChannel;
+      const isCommunityHasDeletedMessage =
+        isDeletedOrHasDeletedMessage && (isCommunityChannel || isCommunityInvitationChannel);
 
       return !isLocationChannel && !isDeletedMessageOrSelfChat && !isCommunityHasDeletedMessage;
     });
