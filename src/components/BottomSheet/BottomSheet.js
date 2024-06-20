@@ -1,10 +1,10 @@
 import * as React from 'react';
-import {StyleSheet, View} from 'react-native';
 import PropTypes from 'prop-types';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import {StyleSheet, View} from 'react-native';
 
-import {COLORS} from '../../utils/theme';
 import dimen from '../../utils/dimen';
+import {COLORS} from '../../utils/theme';
 
 const BottomSheet = React.forwardRef((props, ref) => {
   const {pullBottom = false, keyboardAvoidingViewEnabled = false} = props;
@@ -17,6 +17,7 @@ const BottomSheet = React.forwardRef((props, ref) => {
       closeOnPressMask={props.closeOnPressMask}
       height={props.height ? props.height : 355}
       keyboardAvoidingViewEnabled={keyboardAvoidingViewEnabled}
+      onClose={() => props?.onClose?.()}
       customStyles={{
         wrapper: {
           backgroundColor: COLORS.black80

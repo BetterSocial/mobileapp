@@ -36,7 +36,7 @@ const AccordionView = ({data, renderItem, setActiveSections, activeSections}) =>
     return <View style={styles.content}></View>;
   };
 
-  const renderHeader = (data, index) => {
+  const renderHeader = (_, index) => {
     return (
       <DiscoveryTitleSeparator
         withBorderBottom={true}

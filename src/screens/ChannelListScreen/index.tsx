@@ -15,6 +15,9 @@ import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import useRootChannelListHook from '../../hooks/screen/useRootChannelListHook';
 import useSignedChannelListScreenHook from '../../hooks/screen/useSignedChannelListHook';
 import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../libraries/analytics/analyticsEventTracking';
 import {COLORS} from '../../utils/theme';
 
 const ChannelListScreen = ({route}) => {
@@ -44,27 +47,60 @@ const ChannelListScreen = ({route}) => {
 
   const renderChannelItem = ({item}) => {
     if (item?.channelType === 'PM') {
-      return <MessageChannelItem item={item} onChannelPressed={() => goToChatScreen(item)} />;
+      return (
+        <MessageChannelItem
+          item={item}
+          onChannelPressed={() => {
+            AnalyticsEventTracking.eventTrack(
+              BetterSocialEventTracking.SIGNED_CHAT_TAB_OPEN_CHAT_SCREEN
+            );
+            goToChatScreen(item);
+          }}
+        />
+      );
     }
 
     if (item?.channelType === 'POST_NOTIFICATION') {
       return (
         <PostNotificationChannelItem
           item={item}
-          onChannelPressed={() => goToPostDetailScreen(item)}
+          onChannelPressed={() => {
+            const isOwnSignedPost = item?.rawJson?.isOwnSignedPost;
+            AnalyticsEventTracking.eventTrack(
+              isOwnSignedPost
+                ? BetterSocialEventTracking.SIGNED_CHAT_TAB_MY_POST_NOTIF_OPEN_PDP
+                : BetterSocialEventTracking.SIGNED_CHAT_TAB_OTHER_POST_NOTIF_OPEN_PDP
+            );
+            goToPostDetailScreen(item);
+          }}
         />
       );
     }
 
     if (item?.channelType === 'GROUP') {
-      return <GroupChatChannelItem channel={item} onChannelPressed={() => goToChatScreen(item)} />;
+      return (
+        <GroupChatChannelItem
+          channel={item}
+          onChannelPressed={() => {
+            AnalyticsEventTracking.eventTrack(
+              BetterSocialEventTracking.SIGNED_CHAT_TAB_OPEN_GROUP_CHAT_SCREEN
+            );
+            goToChatScreen(item);
+          }}
+        />
+      );
     }
 
     if (item?.channelType === 'TOPIC') {
       return (
         <CommunityChannelItem
           channel={item}
-          onChannelPressed={() => goToCommunityScreen(item)}
+          onChannelPressed={() => {
+            AnalyticsEventTracking.eventTrack(
+              BetterSocialEventTracking.SIGNED_CHAT_TAB_COMMUNITY_PAGE_OPEN_PAGE
+            );
+            goToCommunityScreen(item);
+          }}
           fetchTopicLatestMessage={fetchLatestTopicPost}
         />
       );
@@ -77,7 +113,11 @@ const ChannelListScreen = ({route}) => {
     <>
       <StatusBar translucent={false} barStyle={'light-content'} />
       <View style={{height: 52}}>
-        <Search route={route} onPress={goToContactScreen} />
+        <Search
+          route={route}
+          onPress={() => goToContactScreen({from: 'SIGNED'})}
+          eventPressName={BetterSocialEventTracking.SIGNED_CHAT_TAB_OPEN_NEW_CHAT}
+        />
       </View>
 
       <FlatList
