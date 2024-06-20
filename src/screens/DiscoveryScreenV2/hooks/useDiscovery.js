@@ -87,7 +87,6 @@ const useDiscovery = () => {
 
     // Update discovery search users followed section
     const newSearchFollowedUser = exchangeFollower(discovery?.followedUsers, willFollow, userId);
-    console.log('newSearchFollowedUser', !!newSearchFollowedUser);
     if (newSearchFollowedUser !== null)
       DiscoveryAction.setNewFollowedUsers(
         mapUserWith([...discovery?.followedUsers], newSearchFollowedUser),
@@ -143,8 +142,19 @@ const useDiscovery = () => {
   const getIsMeFollowingTargetStatus = React.useCallback(
     (userId) => {
       const targetUser = discovery?.initialUsers?.find((item) => item?.user_id === userId);
+      const targetUserFromFollowed = discovery?.followedUsers?.find(
+        (item) => item?.user_id === userId
+      );
+      const targetUserFromFollowing = discovery?.unfollowedUsers?.find(
+        (item) => item?.user_id === userId
+      );
 
-      return targetUser?.is_followed ?? false;
+      return (
+        targetUser?.is_followed ||
+        targetUserFromFollowed?.is_followed ||
+        targetUserFromFollowing?.is_followed ||
+        false
+      );
     },
     [discovery]
   );

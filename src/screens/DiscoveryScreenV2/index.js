@@ -238,8 +238,6 @@ const DiscoveryScreenV2 = ({route}) => {
           setIsFirstTimeOpen={setIsFirstTimeOpen}
           followedUsers={discoveryData?.followedUsers || []}
           unfollowedUsers={discoveryData?.unfollowedUsers || []}
-          setFollowedUsers={() => {}}
-          setUnfollowedUsers={() => {}}
           setSearchText={setSearchText}
           fetchData={fetchDiscoveryData}
           searchText={searchText}

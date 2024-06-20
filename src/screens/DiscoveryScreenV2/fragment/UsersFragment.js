@@ -75,9 +75,7 @@ const UsersFragment = ({
   isFirstTimeOpen,
   initialUsers = [],
   followedUsers = [],
-  setFollowedUsers = () => {},
   unfollowedUsers = [],
-  setUnfollowedUsers = () => {},
   setSearchText = () => {},
   setIsFirstTimeOpen = () => {},
   withoutRecent = false,
@@ -134,24 +132,7 @@ const UsersFragment = ({
   });
 
   const handleUser = async (from, willFollow, item) => {
-    if (from === FROM_FOLLOWED_USERS_INITIAL || from === FROM_UNFOLLOWED_USERS_INITIAL) {
-      updateFollowDiscoveryContext(willFollow, item);
-    }
-
-    if (from === FROM_FOLLOWED_USERS) {
-      const newFollowedUsers = [...followedUsers];
-      exchangeFollower(newFollowedUsers, willFollow, item.user ? item.user.user_id : item.user_id);
-      setFollowedUsers(newFollowedUsers);
-    }
-    if (from === FROM_UNFOLLOWED_USERS) {
-      const newUnfollowedUsers = [...unfollowedUsers];
-      exchangeFollower(
-        newUnfollowedUsers,
-        willFollow,
-        item.user ? item.user.user_id : item.user_id
-      );
-      setUnfollowedUsers(newUnfollowedUsers);
-    }
+    updateFollowDiscoveryContext(willFollow, item);
   };
 
   const handleFollow = async (from, willFollow, item) => {
@@ -451,9 +432,7 @@ UsersFragment.propTypes = {
   initialUsers: PropTypes.array,
   setInitialUsers: PropTypes.func,
   followedUsers: PropTypes.array,
-  setFollowedUsers: PropTypes.func,
   unfollowedUsers: PropTypes.array,
-  setUnfollowedUsers: PropTypes.func,
   setSearchText: PropTypes.func,
   setIsFirstTimeOpen: PropTypes.func,
   withoutRecent: PropTypes.bool,
