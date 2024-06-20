@@ -68,30 +68,34 @@ const DomainList = (props) => {
         </TouchableNativeFeedback>
       );
     }
-    if (item.isunfollowed) {
+    if (item.withFollowButton) {
+      if (item.isunfollowed) {
+        return (
+          <TouchableNativeFeedback onPress={handleSetFollow}>
+            <View style={styles.followContainer}>
+              <View style={styles.buttonFollow}>
+                <Text style={styles.textButtonFollow}>{isCommunity ? 'Join' : 'Follow'}</Text>
+              </View>
+            </View>
+          </TouchableNativeFeedback>
+        );
+      }
       return (
-        <TouchableNativeFeedback onPress={handleSetFollow}>
+        <TouchableNativeFeedback onPress={handleSetUnFollow}>
           <View style={styles.followContainer}>
-            <View style={styles.buttonFollow}>
-              <Text style={styles.textButtonFollow}>{isCommunity ? 'Join' : 'Follow'}</Text>
+            <View style={styles.buttonFollowing}>
+              {isFromUserFragment ? (
+                <MemoIc_senddm height={20} width={20} color={COLORS.signed_primary} />
+              ) : (
+                <Text style={styles.textButtonFollowing}>
+                  {isCommunity ? 'Joined' : 'Following'}
+                </Text>
+              )}
             </View>
           </View>
         </TouchableNativeFeedback>
       );
     }
-    return (
-      <TouchableNativeFeedback onPress={handleSetUnFollow}>
-        <View style={styles.followContainer}>
-          <View style={styles.buttonFollowing}>
-            {isFromUserFragment ? (
-              <MemoIc_senddm height={20} width={20} color={COLORS.signed_primary} />
-            ) : (
-              <Text style={styles.textButtonFollowing}>{isCommunity ? 'Joined' : 'Following'}</Text>
-            )}
-          </View>
-        </View>
-      </TouchableNativeFeedback>
-    );
   };
 
   const renderProfilePicture = () => {
