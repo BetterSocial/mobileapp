@@ -1,5 +1,6 @@
 import crashlytics from '@react-native-firebase/crashlytics';
 
+import moment from 'moment';
 import OneSignalUtil from './onesignal';
 import anonymousApi from './anonymousConfig';
 import api from './config';
@@ -127,6 +128,13 @@ const getLatestTopicPost = async (topicName: string): Promise<TopicLatestPostDat
       success: res?.data?.success
     };
   } catch (e) {
+    if (e?.response?.message === 'This topic has no active post')
+      return {
+        success: false,
+        message: e?.response?.message,
+        expired_at: moment().add(1, 'h').toISOString()
+      };
+
     console.error(e?.response?.message || `Error on getting latest topic post ${topicName}`);
   }
 };
