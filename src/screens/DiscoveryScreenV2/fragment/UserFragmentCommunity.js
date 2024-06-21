@@ -217,7 +217,7 @@ const UsersFragmentCommunity = ({
       ? withoutRecent
         ? initialUsers.length !== 0
           ? initialUsers
-          : [...initFollowingUsers, {separator: true}, ...initUnfollowingUsers]
+          : []
         : [...initFollowingUsers, {separator: true}, ...initUnfollowingUsers]
       : unfollowedUsers.length !== 0
       ? [...followedUsers, {separator: true}, ...unfollowedUsers]
@@ -249,6 +249,12 @@ const UsersFragmentCommunity = ({
     return (
       <View style={styles.noDataFoundContainer}>
         <Text style={styles.noDataFoundText}>No users found</Text>
+      </View>
+    );
+  if (initialUsers.length === 0)
+    return (
+      <View style={styles.noDataFoundContainer}>
+        <Text style={styles.noDataFoundText}>All members are anonymous</Text>
       </View>
     );
 
