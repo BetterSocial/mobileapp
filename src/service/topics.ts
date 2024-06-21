@@ -1,7 +1,6 @@
 import crashlytics from '@react-native-firebase/crashlytics';
 import moment from 'moment';
 
-import moment from 'moment';
 import OneSignalUtil from './onesignal';
 import anonymousApi from './anonymousConfig';
 import api from './config';
