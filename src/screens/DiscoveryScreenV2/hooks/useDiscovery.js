@@ -78,7 +78,6 @@ const useDiscovery = () => {
 
     // Update initial users
     const newInitialUser = exchangeFollower(newFollowedUsers, willFollow, userId);
-    console.log('newInitialUser', !!newInitialUser);
     if (newInitialUser !== null)
       DiscoveryAction.setDiscoveryInitialUsers(
         mapUserWith([...discovery?.initialUsers], newInitialUser),
@@ -99,7 +98,6 @@ const useDiscovery = () => {
       willFollow,
       userId
     );
-    console.log('newSearchUnfollowedUser', !!newSearchUnfollowedUser);
     if (newSearchUnfollowedUser !== null)
       DiscoveryAction.setNewUnfollowedUsers(
         mapUserWith([...discovery?.unfollowedUsers], newSearchUnfollowedUser),

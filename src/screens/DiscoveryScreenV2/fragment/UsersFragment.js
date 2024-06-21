@@ -258,8 +258,6 @@ const UsersFragment = ({
       result = FROM_FOLLOWED_USERS;
     }
 
-    // console.log('result', item?.username, result);
-
     return renderDiscoveryItem({
       from: result,
       item,
