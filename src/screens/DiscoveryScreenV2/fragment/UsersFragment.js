@@ -1,22 +1,22 @@
+import * as React from 'react';
+import Accordion from 'react-native-collapsible/Accordion';
+import PropTypes from 'prop-types';
+import {ActivityIndicator, FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
 /* eslint-disable no-use-before-define */
 import {useNavigation, useRoute} from '@react-navigation/native';
-import PropTypes from 'prop-types';
-import * as React from 'react';
-import {ActivityIndicator, FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
-
 import {useState} from 'react';
-import Accordion from 'react-native-collapsible/Accordion';
+
+import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
+import DomainList from '../elements/DiscoveryItemList';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
-import {Context} from '../../../context/Store';
+import RecentSearch from '../elements/RecentSearch';
 import useCreateChat from '../../../hooks/screen/useCreateChat';
+import useDiscovery from '../hooks/useDiscovery';
+import {COLORS} from '../../../utils/theme';
+import {Context} from '../../../context/Store';
 import {checkUserBlock, setFollow, setUnFollow} from '../../../service/profile';
 import {fonts} from '../../../utils/fonts';
-import {COLORS} from '../../../utils/theme';
 import {getUserId} from '../../../utils/users';
-import DomainList from '../elements/DiscoveryItemList';
-import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
-import RecentSearch from '../elements/RecentSearch';
-import useDiscovery from '../hooks/useDiscovery';
 
 const FROM_FOLLOWED_USERS = 'fromfollowedusers';
 const FROM_FOLLOWED_USERS_INITIAL = 'fromfollowedusersinitial';
@@ -75,9 +75,7 @@ const UsersFragment = ({
   isFirstTimeOpen,
   initialUsers = [],
   followedUsers = [],
-  setFollowedUsers = () => {},
   unfollowedUsers = [],
-  setUnfollowedUsers = () => {},
   setSearchText = () => {},
   setIsFirstTimeOpen = () => {},
   withoutRecent = false,
@@ -89,7 +87,7 @@ const UsersFragment = ({
   const [profile] = React.useContext(Context).profile;
   const navigation = useNavigation();
   const [client] = React.useContext(Context).client;
-  const {exhangeFollower, users, updateFollowDiscoveryContext} = useDiscovery();
+  const {exchangeFollower, users, updateFollowDiscoveryContext} = useDiscovery();
   const [loadingDM, setLoadingDM] = React.useState(false);
   const {createSignChat, loadingCreateChat} = useCreateChat();
   const [activeSections, setActiveSections] = useState([]);
@@ -134,20 +132,7 @@ const UsersFragment = ({
   });
 
   const handleUser = async (from, willFollow, item) => {
-    if (from === FROM_FOLLOWED_USERS_INITIAL || from === FROM_UNFOLLOWED_USERS_INITIAL) {
-      updateFollowDiscoveryContext(willFollow, item);
-    }
-
-    if (from === FROM_FOLLOWED_USERS) {
-      const newFollowedUsers = [...followedUsers];
-      exhangeFollower(newFollowedUsers, willFollow, item.user ? item.user.user_id : item.user_id);
-      setFollowedUsers(newFollowedUsers);
-    }
-    if (from === FROM_UNFOLLOWED_USERS) {
-      const newUnfollowedUsers = [...unfollowedUsers];
-      exhangeFollower(newUnfollowedUsers, willFollow, item.user ? item.user.user_id : item.user_id);
-      setUnfollowedUsers(newUnfollowedUsers);
-    }
+    updateFollowDiscoveryContext(willFollow, item);
   };
 
   const handleFollow = async (from, willFollow, item) => {
@@ -280,38 +265,69 @@ const UsersFragment = ({
     });
   };
 
-  const renderUsersItem = () => {
-    const initFollowingUsers = [];
-    const initUnfollowingUsers = [];
-
+  const initFollowingUsers = React.useMemo(() => {
+    const initialFollowingUsers = [];
     users.forEach((item) => {
       if (item.user?.user_id_follower || item.user_id_follower) {
-        initFollowingUsers.push(item);
-      } else {
-        initUnfollowingUsers.push(item);
+        initialFollowingUsers.push(item);
       }
     });
 
-    const data = isFirstTimeOpen
-      ? withoutRecent
-        ? initialUsers.length !== 0
-          ? initialUsers
-          : [{separator: true}, ...initUnfollowingUsers]
-        : [{separator: true}, ...initUnfollowingUsers]
-      : unfollowedUsers.length !== 0
-      ? [{separator: true}, ...unfollowedUsers]
-      : [];
+    return initialFollowingUsers;
+  }, [users]);
 
-    const firstData = isFirstTimeOpen
-      ? withoutRecent
-        ? initialUsers.length !== 0
-          ? initialUsers
-          : [...initFollowingUsers]
-        : [...initFollowingUsers]
-      : unfollowedUsers.length !== 0
-      ? [...followedUsers]
-      : followedUsers;
+  const initUnfollowingUsers = React.useMemo(() => {
+    const initialUnfollowingUsers = [];
+    users.forEach((item) => {
+      if (!item.user?.user_id_follower && !item.user_id_follower) {
+        initialUnfollowingUsers.push(item);
+      }
+    });
 
+    return initialUnfollowingUsers;
+  }, [users]);
+
+  const peopleYouMightKnowData = React.useMemo(() => {
+    if (!isFirstTimeOpen && unfollowedUsers.length === 0) {
+      return [];
+    }
+
+    if (!isFirstTimeOpen && unfollowedUsers) {
+      return [{separator: true}, ...unfollowedUsers];
+    }
+
+    if (!withoutRecent) {
+      return [{separator: true}, ...initUnfollowingUsers];
+    }
+
+    if (initialUsers.length === 0) {
+      return [{separator: true}, ...initUnfollowingUsers];
+    }
+
+    return initialUsers;
+  }, [users, unfollowedUsers]);
+
+  const initialAccordionData = React.useMemo(() => {
+    if (!isFirstTimeOpen && unfollowedUsers.length !== 0) {
+      return [...followedUsers];
+    }
+
+    if (!isFirstTimeOpen) {
+      return followedUsers;
+    }
+
+    if (!withoutRecent) {
+      return [...initFollowingUsers];
+    }
+
+    if (initialUsers.length !== 0) {
+      return initialUsers;
+    }
+
+    return [...initFollowingUsers];
+  }, [users, unfollowedUsers, initialUsers]);
+
+  const renderUsersItem = () => {
     return (
       <FlatList
         ListHeaderComponent={() => (
@@ -322,7 +338,7 @@ const UsersFragment = ({
               setIsFirstTimeOpen={setIsFirstTimeOpen}
             />
             <AccordionView
-              data={firstData}
+              data={initialAccordionData}
               renderItem={renderItem}
               activeSections={activeSections}
               setActiveSections={setActiveSections}
@@ -331,7 +347,7 @@ const UsersFragment = ({
         )}
         onMomentumScrollBegin={handleScroll}
         contentContainerStyle={{paddingBottom: 100}}
-        data={data || []}
+        data={peopleYouMightKnowData || []}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
         onEndReached={() => fetchData()}
@@ -414,9 +430,7 @@ UsersFragment.propTypes = {
   initialUsers: PropTypes.array,
   setInitialUsers: PropTypes.func,
   followedUsers: PropTypes.array,
-  setFollowedUsers: PropTypes.func,
   unfollowedUsers: PropTypes.array,
-  setUnfollowedUsers: PropTypes.func,
   setSearchText: PropTypes.func,
   setIsFirstTimeOpen: PropTypes.func,
   withoutRecent: PropTypes.bool,
