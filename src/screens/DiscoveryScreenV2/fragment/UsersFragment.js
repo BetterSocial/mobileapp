@@ -109,9 +109,9 @@ const UsersFragment = ({
   }, []);
 
   React.useEffect(() => {
-    if (searchText.length === 0) {
+    if (searchText?.length === 0) {
       setActiveSections([]);
-    } else if (searchText.length >= 0 && followedUsers.length > 0) {
+    } else if (searchText?.length >= 0 && followedUsers?.length > 0) {
       setActiveSections([0]);
     } else {
       setActiveSections([]);
@@ -316,11 +316,14 @@ const UsersFragment = ({
       <FlatList
         ListHeaderComponent={() => (
           <>
-            <RecentSearch
-              shown={showRecentSearch || isFirstTimeOpen}
-              setSearchText={setSearchText}
-              setIsFirstTimeOpen={setIsFirstTimeOpen}
-            />
+            {!withoutRecent && (
+              <RecentSearch
+                shown={showRecentSearch || isFirstTimeOpen}
+                setSearchText={setSearchText}
+                setIsFirstTimeOpen={setIsFirstTimeOpen}
+              />
+            )}
+
             <AccordionView
               data={firstData}
               renderItem={renderItem}
