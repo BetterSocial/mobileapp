@@ -45,6 +45,9 @@ function useChatScreenHook(type?: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const [chats, setChats] = React.useState<ChatSchema[]>([]);
   const [isLoadingFetchAllMessage, setIsLoadingFetchAllMessage] = React.useState(true);
 
+  const sendChatSignedMutation = useSendSignedMessage();
+  const sendChatAnonMutation = useSendAnonMessage();
+
   const uploadMediaFailedEvent: UploadOptions = {
     withFailedEventTrack: getEventName(
       BetterSocialEventTracking.SIGNED_CHAT_SCREEN_ATTACHMENT_UPLOAD_FAILED,
@@ -63,13 +66,6 @@ function useChatScreenHook(type?: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       enabled: !!localDb && !!selectedChannel && !!otherListener[`chat_${selectedChannel?.id}`]
     }
   );
-
-  React.useEffect(() => {
-    if (getAllMessages.data) {
-      setChats(getAllMessages.data);
-      setIsLoadingFetchAllMessage(false);
-    }
-  }, [getAllMessages.data]);
 
   const initChatData = async () => {
     if (!localDb || !selectedChannel) return;
@@ -158,9 +154,6 @@ function useChatScreenHook(type?: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
 
     return Promise.all(attachmentPromises);
   };
-
-  const sendChatSignedMutation = useSendSignedMessage();
-  const sendChatAnonMutation = useSendAnonMessage();
 
   const sendChat = async (props: {
     message: string;
@@ -316,6 +309,19 @@ function useChatScreenHook(type?: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       initChatData();
     }
   }, [localDb, otherListener[`chat_${selectedChannel?.id}`], selectedChannel]);
+
+  React.useEffect(() => {
+    return () => {
+      setChats([]);
+    };
+  }, []);
+
+  React.useEffect(() => {
+    if (getAllMessages.data) {
+      setChats(getAllMessages.data);
+      setIsLoadingFetchAllMessage(false);
+    }
+  }, [getAllMessages.data]);
 
   return {
     chats,
