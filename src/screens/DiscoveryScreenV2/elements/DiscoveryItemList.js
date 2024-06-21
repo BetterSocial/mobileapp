@@ -45,6 +45,10 @@ const DomainList = (props) => {
     isFromUserFragment
   } = props;
 
+  if (item?.withFollowButton === undefined || item?.withFollowButton === null) {
+    item.withFollowButton = true;
+  }
+
   const renderButonAction = () => {
     if (isBlockedSection) {
       if (item.isUnblocked) {
