@@ -270,7 +270,9 @@ class ChatSchema implements BaseDbSchema {
       console.log(e);
     }
     try {
-      attachmentJson = JSON.stringify(json?.message?.attachments);
+      if (json?.message?.message_type !== 'reply_prompt') {
+        attachmentJson = JSON.stringify(json?.message?.attachments);
+      }
     } catch (e) {
       console.log('error stringify');
       console.log(e);
@@ -317,7 +319,9 @@ class ChatSchema implements BaseDbSchema {
       console.log(e);
     }
     try {
-      attachmentJson = JSON.stringify(json?.attachments);
+      if (json?.message_type !== 'reply_prompt') {
+        attachmentJson = JSON.stringify(json?.attachments);
+      }
     } catch (e) {
       console.log('error stringify');
       console.log(e);
@@ -351,7 +355,9 @@ class ChatSchema implements BaseDbSchema {
       console.log(e);
     }
     try {
-      attachmentJson = JSON.stringify(json?.attachments);
+      if (json?.message_type !== 'reply_prompt') {
+        attachmentJson = JSON.stringify(json?.attachments);
+      }
     } catch (e) {
       console.log('error stringify');
       console.log(e);
