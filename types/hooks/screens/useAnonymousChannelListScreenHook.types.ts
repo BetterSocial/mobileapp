@@ -7,7 +7,6 @@ interface UseAnonymousChannelListScreenHook {
   goToPostDetailScreen: (channel: ChannelList) => void;
   goToCommunityScreen: (channel: ChannelList) => void;
   goToContactScreen: ({from}: ContactScreenPayload) => void;
-  goToCommunityScreen: (channel: ChannelList) => void;
   fetchLatestTopicPost: (topicName: string) => Promise<void>;
 }
 

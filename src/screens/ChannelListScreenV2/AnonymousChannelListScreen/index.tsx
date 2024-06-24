@@ -31,7 +31,8 @@ const AnonymousChannelListScreen = ({route}) => {
     goToChatScreen,
     goToPostDetailScreen,
     goToCommunityScreen,
-    goToContactScreen
+    goToContactScreen,
+    fetchLatestTopicPost
   } = useAnonymousChannelListScreenHook();
   const {fetchLatestTopicPost} = useSignedChannelListScreenHook();
   const ref = React.useRef(null);
