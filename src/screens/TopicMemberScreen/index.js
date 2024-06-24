@@ -4,7 +4,6 @@ import * as React from 'react';
 import {Animated, Platform, StyleSheet} from 'react-native';
 
 import {SafeAreaProvider, useSafeAreaInsets} from 'react-native-safe-area-context';
-import {Context} from '../../context';
 import {getAllMemberTopic} from '../../service/topics';
 import dimen from '../../utils/dimen';
 import ShareUtils from '../../utils/share';
@@ -24,10 +23,8 @@ const TopicMemberScreen = () => {
   const {top} = useSafeAreaInsets();
   const topicName = route?.params?.topicName;
   const topicDetail = route?.params?.topicDetail;
-  const getTopicDetail = route?.params?.getTopicDetail;
   const [isFollow, setIsFollow] = React.useState(route?.params?.isFollow);
   const [memberCount, setMemberCount] = React.useState(route?.params?.memberCount);
-  const [profile] = React.useContext(Context).profile;
   const [headerHide, setHeaderHide] = React.useState(false);
   const [searchHeight, setSearchHeight] = React.useState(0);
   const [searchText, setSearchText] = React.useState('');
@@ -153,7 +150,6 @@ const TopicMemberScreen = () => {
         setMemberCount={setMemberCount}
         setIsFollow={setIsFollow}
         isFollow={isFollow}
-        getTopicDetail={getTopicDetail}
         hasSearch={true}
         searchText={searchText}
         setSearchText={setSearchText}

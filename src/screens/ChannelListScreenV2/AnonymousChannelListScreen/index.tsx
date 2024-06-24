@@ -34,7 +34,6 @@ const AnonymousChannelListScreen = ({route}) => {
     goToContactScreen,
     fetchLatestTopicPost
   } = useAnonymousChannelListScreenHook();
-  const {fetchLatestTopicPost} = useSignedChannelListScreenHook();
   const ref = React.useRef(null);
 
   useScrollToTop(ref);
