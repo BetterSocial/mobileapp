@@ -2,6 +2,7 @@ import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 
 import StorageUtils from '../../../utils/storage';
+import useDiscovery from '../../DiscoveryScreenV2/hooks/useDiscovery';
 import {Context} from '../../../context';
 import {checkUserBlock, getOtherProfile} from '../../../service/profile';
 import {setOtherProfileFeed} from '../../../context/actions/otherProfileFeed';
@@ -16,6 +17,8 @@ const useOtherProfileScreenHooks = (targetUserProfileId: string, username: strin
   const [isBlocking, setIsBlocking] = React.useState<boolean | undefined>(undefined);
   const [otherProfileData, setOtherProfileData] = React.useState<any>({});
   const [, setOtherProfileUserId] = React.useState<string>('');
+
+  const {updateFollowDiscoveryContext} = useDiscovery();
 
   /**
    * Other Profile Context
@@ -64,6 +67,7 @@ const useOtherProfileScreenHooks = (targetUserProfileId: string, username: strin
         const data = result?.data;
         setOtherProfileData(data);
         setOtherProfileUserId(data.user_id);
+        updateFollowDiscoveryContext(data?.is_me_following_target, data);
 
         StorageUtils.otherProfileData.setForKey(targetUserProfileId, JSON.stringify(data));
       }
