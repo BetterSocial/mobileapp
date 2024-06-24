@@ -278,7 +278,7 @@ const CreatePost = () => {
 
       const responseUpload = await ImageUtils.uploadImage(pathImg);
       setMediaStorage((val) => [...val, newArr]);
-      setDataImage((val) => [...val, responseUpload.data.url]);
+      if (responseUpload?.data?.url) setDataImage((val) => [...val, responseUpload.data.url]);
       sheetMediaRef.current.close();
     } catch (e) {
       if (__DEV__) {
@@ -439,7 +439,6 @@ const CreatePost = () => {
     const attemptPost = async (retryCount) => {
       try {
         const topicsToPost = _.union(initialTopic, listTopic);
-        console.log('message', message);
         const data = {
           message,
           topics: topicsToPost,

@@ -33,7 +33,7 @@ interface ScrollContextProps {
 }
 export const ScrollContext = React.createContext<ScrollContextProps | null>(null);
 
-function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
+function useChatScreenHook(type?: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const {localDb, refresh, otherListener} = useLocalDatabaseHook();
   const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen, setChannelAsRead} =
     useChatUtilsHook(type);
@@ -44,6 +44,9 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const [selfAnonUserInfo, setSelfAnonUserInfo] = React.useState<any>(null);
   const [chats, setChats] = React.useState<ChatSchema[]>([]);
   const [isLoadingFetchAllMessage, setIsLoadingFetchAllMessage] = React.useState(true);
+
+  const sendChatSignedMutation = useSendSignedMessage();
+  const sendChatAnonMutation = useSendAnonMessage();
 
   const uploadMediaFailedEvent: UploadOptions = {
     withFailedEventTrack: getEventName(
@@ -63,13 +66,6 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       enabled: !!localDb && !!selectedChannel && !!otherListener[`chat_${selectedChannel?.id}`]
     }
   );
-
-  React.useEffect(() => {
-    if (getAllMessages.data) {
-      setChats(getAllMessages.data);
-      setIsLoadingFetchAllMessage(false);
-    }
-  }, [getAllMessages.data]);
 
   const initChatData = async () => {
     if (!localDb || !selectedChannel) return;
@@ -158,9 +154,6 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
 
     return Promise.all(attachmentPromises);
   };
-
-  const sendChatSignedMutation = useSendSignedMessage();
-  const sendChatAnonMutation = useSendAnonMessage();
 
   const sendChat = async (props: {
     message: string;
@@ -317,6 +310,19 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     }
   }, [localDb, otherListener[`chat_${selectedChannel?.id}`], selectedChannel]);
 
+  React.useEffect(() => {
+    return () => {
+      setChats([]);
+    };
+  }, []);
+
+  React.useEffect(() => {
+    if (getAllMessages.data) {
+      setChats(getAllMessages.data);
+      setIsLoadingFetchAllMessage(false);
+    }
+  }, [getAllMessages.data]);
+
   return {
     chats,
     selectedChannel,
@@ -328,6 +334,8 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     goToChatInfoScreenBy,
     sendChat,
     updateChatContinuity,
+    setIsLoadingFetchAllMessage,
+    refetchMessage: getAllMessages.refetch,
     sendChatMutation
   };
 }

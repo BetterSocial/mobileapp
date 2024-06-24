@@ -6,6 +6,7 @@ import {useScrollToTop} from '@react-navigation/native';
 
 import AnonymousProfile from '../../../assets/images/AnonymousProfile.png';
 import ChannelListHeaderItem from '../../../components/ChatList/ChannelListHeaderItem';
+import CommunityChannelItem from '../../../components/ChatList/CommunityChannelItem';
 import IncognitoEmptyChat from '../IncognitoEmptyChat';
 import MessageChannelItem from '../../../components/AnonymousChat/MessageChannelItem';
 import PostNotificationChannelItem from '../../../components/AnonymousChat/PostNotificationChannelItem';
@@ -13,6 +14,7 @@ import Search from '../../ChannelListScreen/elements/Search';
 import useAnonymousChannelListScreenHook from '../../../hooks/screen/useAnonymousChannelListHook';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import useRootChannelListHook from '../../../hooks/screen/useRootChannelListHook';
+import useSignedChannelListScreenHook from '../../../hooks/screen/useSignedChannelListHook';
 import AnalyticsEventTracking, {
   BetterSocialEventTracking
 } from '../../../libraries/analytics/analyticsEventTracking';
@@ -29,8 +31,10 @@ const AnonymousChannelListScreen = ({route}) => {
     goToChatScreen,
     goToPostDetailScreen,
     goToCommunityScreen,
-    goToContactScreen
+    goToContactScreen,
+    fetchLatestTopicPost
   } = useAnonymousChannelListScreenHook();
+  const {fetchLatestTopicPost} = useSignedChannelListScreenHook();
   const ref = React.useRef(null);
 
   useScrollToTop(ref);
@@ -75,17 +79,16 @@ const AnonymousChannelListScreen = ({route}) => {
     }
 
     if (item?.channelType === 'ANON_TOPIC') {
-      // TODO: ADD the correct ANON_TOPIC Channel Item Component here;
-
       return (
-        <MessageChannelItem
-          item={item}
+        <CommunityChannelItem
+          channel={item}
           onChannelPressed={() => {
             AnalyticsEventTracking.eventTrack(
               BetterSocialEventTracking.ANONYMOUS_CHAT_TAB_COMMUNITY_PAGE_OPEN_PAGE
             );
             goToCommunityScreen(item);
           }}
+          fetchTopicLatestMessage={fetchLatestTopicPost}
         />
       );
     }

@@ -1,30 +1,35 @@
-import axios from 'axios';
 import * as React from 'react';
-import {StatusBar, StyleSheet} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-
-import {useNavigation} from '@react-navigation/core';
 import PropTypes from 'prop-types';
-import {Header} from '../../components';
-import {Context} from '../../context';
+import axios from 'axios';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {StatusBar, StyleSheet} from 'react-native';
+import {useNavigation} from '@react-navigation/core';
+
 import DiscoveryAction from '../../context/actions/discoveryAction';
-import FollowingAction from '../../context/actions/following';
-import KeyboardWrapper from '../../navigations/KeyboardWrapper';
 import DiscoveryRepo from '../../service/discovery';
+import DiscoveryTab from './elements/DiscoveryTab';
+import DomainFragment from './fragment/DomainFragment';
+import FollowingAction from '../../context/actions/following';
+import NewsFragment from './fragment/NewsFragment';
+import Search from './elements/Search';
+import TopicFragment from './fragment/TopicFragment';
+import UsersFragment from './fragment/UsersFragment';
+import {COLORS} from '../../utils/theme';
+import {Context} from '../../context';
 import {
   DISCOVERY_TAB_DOMAINS,
   DISCOVERY_TAB_NEWS,
   DISCOVERY_TAB_TOPICS,
   DISCOVERY_TAB_USERS
 } from '../../utils/constants';
+import {Header} from '../../components';
 import {fonts} from '../../utils/fonts';
-import {COLORS} from '../../utils/theme';
-import DiscoveryTab from './elements/DiscoveryTab';
-import Search from './elements/Search';
-import DomainFragment from './fragment/DomainFragment';
-import NewsFragment from './fragment/NewsFragment';
-import TopicFragment from './fragment/TopicFragment';
-import UsersFragment from './fragment/UsersFragment';
+
+const DiscoveryContainer = ({children}) => {
+  return (
+    <SafeAreaView style={{flex: 1, backgroundColor: COLORS.almostBlack}}>{children}</SafeAreaView>
+  );
+};
 
 const DiscoveryScreenV2 = ({route}) => {
   const {tab} = route.params;
@@ -35,8 +40,6 @@ const DiscoveryScreenV2 = ({route}) => {
     domain: false,
     news: false
   });
-  const [discoveryDataFollowedUsers, setDiscoveryDataFollowedUsers] = React.useState([]);
-  const [discoveryDataUnfollowedUsers, setDiscoveryDataUnfollowedUsers] = React.useState([]);
   const [discoveryDataFollowedTopics, setDiscoveryDataFollowedTopics] = React.useState([]);
   const [discoveryDataUnfollowedTopics, setDiscoveryDataUnfollowedTopics] = React.useState([]);
   const [discoveryDataFollowedDomains, setDiscoveryDataFollowedDomains] = React.useState([]);
@@ -96,18 +99,20 @@ const DiscoveryScreenV2 = ({route}) => {
         const cancelToken = cancelTokenRef?.current?.token;
         const data = await DiscoveryRepo.fetchDiscoveryDataUser(text, false, {cancelToken});
         if (data.success) {
-          setDiscoveryDataFollowedUsers(
+          const followedUsers =
             data?.followedUsers?.map((item) => ({
               ...item,
               following: item.user_id_follower !== null
-            })) || []
-          );
-          setDiscoveryDataUnfollowedUsers(
+            })) || [];
+
+          const unfollowedUsers =
             data?.unfollowedUsers?.map((item) => ({
               ...item,
               following: item.user_id_follower !== null
-            })) || []
-          );
+            })) || [];
+
+          DiscoveryAction.setNewFollowedUsers(followedUsers, discoveryDispatch);
+          DiscoveryAction.setNewUnfollowedUsers(unfollowedUsers, discoveryDispatch);
         }
       } catch (e) {
         console.log('e', e);
@@ -237,10 +242,8 @@ const DiscoveryScreenV2 = ({route}) => {
           hidden={selectedScreen !== DISCOVERY_TAB_USERS}
           isFirstTimeOpen={isFirstTimeOpen}
           setIsFirstTimeOpen={setIsFirstTimeOpen}
-          followedUsers={discoveryDataFollowedUsers}
-          unfollowedUsers={discoveryDataUnfollowedUsers}
-          setFollowedUsers={setDiscoveryDataFollowedUsers}
-          setUnfollowedUsers={setDiscoveryDataUnfollowedUsers}
+          followedUsers={discoveryData?.followedUsers || []}
+          unfollowedUsers={discoveryData?.unfollowedUsers || []}
           setSearchText={setSearchText}
           fetchData={fetchDiscoveryData}
           searchText={searchText}
@@ -378,9 +381,3 @@ DiscoveryScreenV2.propTypes = {
 };
 
 export default DiscoveryScreenV2;
-
-const DiscoveryContainer = ({children}) => {
-  return (
-    <SafeAreaView style={{flex: 1, backgroundColor: COLORS.almostBlack}}>{children}</SafeAreaView>
-  );
-};
