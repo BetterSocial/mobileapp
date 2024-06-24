@@ -24,7 +24,6 @@ const TopicMemberScreen = () => {
   const {top} = useSafeAreaInsets();
   const topicName = route?.params?.topicName;
   const topicDetail = route?.params?.topicDetail;
-  const getTopicDetail = route?.params?.getTopicDetail;
   const [isFollow, setIsFollow] = React.useState(route?.params?.isFollow);
   const [memberCount, setMemberCount] = React.useState(route?.params?.memberCount);
   const [profile] = React.useContext(Context).profile;
@@ -151,7 +150,6 @@ const TopicMemberScreen = () => {
         setMemberCount={setMemberCount}
         setIsFollow={setIsFollow}
         isFollow={isFollow}
-        getTopicDetail={getTopicDetail}
         hasSearch={true}
         searchText={searchText}
         setSearchText={setSearchText}
