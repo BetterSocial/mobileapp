@@ -107,6 +107,12 @@ const UsersFragment = ({
   }, []);
 
   React.useEffect(() => {
+    handleActiveSections();
+  }, [searchText, followedUsers]);
+
+  const handleActiveSections = () => {
+    if (!searchText) return;
+
     if (searchText.length === 0) {
       setActiveSections([]);
     } else if (searchText.length >= 0 && followedUsers.length > 0) {
@@ -114,7 +120,7 @@ const UsersFragment = ({
     } else {
       setActiveSections([]);
     }
-  }, [searchText, followedUsers]);
+  };
 
   const handleOnPress = (item) => {
     navigation.push('OtherProfile', {
