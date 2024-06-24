@@ -35,8 +35,13 @@ export const ScrollContext = React.createContext<ScrollContextProps | null>(null
 
 function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const {localDb, refresh, otherListener} = useLocalDatabaseHook();
-  const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen, setChannelAsRead} =
-    useChatUtilsHook(type);
+  const {
+    selectedChannel,
+    goBackFromChatScreen,
+    goToChatInfoScreen,
+    setChannelAsRead,
+    setSelectedChannel
+  } = useChatUtilsHook(type);
   const {anonProfileId, signedProfileId} = useUserAuthHook();
   const {queue} = useDatabaseQueueHook();
   const {eventTrackByUserType, getEventName} = useAnalyticUtilsHook(type);
@@ -313,6 +318,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   React.useEffect(() => {
     return () => {
       setChats([]);
+      setSelectedChannel(null);
     };
   }, []);
 
