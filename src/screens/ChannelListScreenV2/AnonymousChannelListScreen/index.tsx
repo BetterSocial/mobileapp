@@ -14,7 +14,6 @@ import Search from '../../ChannelListScreen/elements/Search';
 import useAnonymousChannelListScreenHook from '../../../hooks/screen/useAnonymousChannelListHook';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import useRootChannelListHook from '../../../hooks/screen/useRootChannelListHook';
-import useSignedChannelListScreenHook from '../../../hooks/screen/useSignedChannelListHook';
 import AnalyticsEventTracking, {
   BetterSocialEventTracking
 } from '../../../libraries/analytics/analyticsEventTracking';
@@ -34,7 +33,6 @@ const AnonymousChannelListScreen = ({route}) => {
     goToContactScreen,
     fetchLatestTopicPost
   } = useAnonymousChannelListScreenHook();
-  const {fetchLatestTopicPost} = useSignedChannelListScreenHook();
   const ref = React.useRef(null);
 
   useScrollToTop(ref);
