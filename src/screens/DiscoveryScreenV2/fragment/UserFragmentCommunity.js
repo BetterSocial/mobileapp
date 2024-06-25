@@ -1,19 +1,19 @@
+import * as React from 'react';
+import PropTypes from 'prop-types';
+import {FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
 /* eslint-disable no-use-before-define */
 import {useNavigation, useRoute} from '@react-navigation/native';
-import PropTypes from 'prop-types';
-import * as React from 'react';
-import {FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
 
-import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
-import {Context} from '../../../context/Store';
-import {setFollow, setUnFollow} from '../../../service/profile';
-import {fonts} from '../../../utils/fonts';
-import {COLORS} from '../../../utils/theme';
-import {getUserId} from '../../../utils/users';
-import DomainList from '../elements/DiscoveryItemList';
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
+import DomainList from '../elements/DiscoveryItemList';
+import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import RecentSearch from '../elements/RecentSearch';
 import useDiscovery from '../hooks/useDiscovery';
+import {COLORS} from '../../../utils/theme';
+import {Context} from '../../../context/Store';
+import {fonts} from '../../../utils/fonts';
+import {getUserId} from '../../../utils/users';
+import {setFollow, setUnFollow} from '../../../service/profile';
 
 const FROM_FOLLOWED_USERS = 'fromfollowedusers';
 const FROM_FOLLOWED_USERS_INITIAL = 'fromfollowedusersinitial';
@@ -40,7 +40,7 @@ const UsersFragmentCommunity = ({
   const [profile] = React.useContext(Context).profile;
   const navigation = useNavigation();
   const [client] = React.useContext(Context).client;
-  const {exhangeFollower, users, updateFollowDiscoveryContext} = useDiscovery();
+  const {exchangeFollower, users, updateFollowDiscoveryContext} = useDiscovery();
 
   const route = useRoute();
 
@@ -78,12 +78,16 @@ const UsersFragmentCommunity = ({
 
     if (from === FROM_FOLLOWED_USERS) {
       const newFollowedUsers = [...followedUsers];
-      exhangeFollower(newFollowedUsers, willFollow, item.user ? item.user.user_id : item.user_id);
+      exchangeFollower(newFollowedUsers, willFollow, item.user ? item.user.user_id : item.user_id);
       setFollowedUsers(newFollowedUsers);
     }
     if (from === FROM_UNFOLLOWED_USERS) {
       const newUnfollowedUsers = [...unfollowedUsers];
-      exhangeFollower(newUnfollowedUsers, willFollow, item.user ? item.user.user_id : item.user_id);
+      exchangeFollower(
+        newUnfollowedUsers,
+        willFollow,
+        item.user ? item.user.user_id : item.user_id
+      );
       setUnfollowedUsers(newUnfollowedUsers);
     }
   };
@@ -212,7 +216,7 @@ const UsersFragmentCommunity = ({
       ? withoutRecent
         ? initialUsers.length !== 0
           ? initialUsers
-          : [...initFollowingUsers, {separator: true}, ...initUnfollowingUsers]
+          : []
         : [...initFollowingUsers, {separator: true}, ...initUnfollowingUsers]
       : unfollowedUsers.length !== 0
       ? [...followedUsers, {separator: true}, ...unfollowedUsers]
@@ -244,6 +248,12 @@ const UsersFragmentCommunity = ({
     return (
       <View style={styles.noDataFoundContainer}>
         <Text style={styles.noDataFoundText}>No users found</Text>
+      </View>
+    );
+  if (initialUsers.length === 0)
+    return (
+      <View style={styles.noDataFoundContainer}>
+        <Text style={styles.noDataFoundText}>All members are anonymous</Text>
       </View>
     );
 
