@@ -1,14 +1,14 @@
+import FastImage from 'react-native-fast-image';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View} from 'react-native';
-import FastImage from 'react-native-fast-image';
 
 import MemoIc_senddm from '../../../assets/icons/ic_send_dm';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
-import dimen from '../../../utils/dimen';
-import {fonts, normalize} from '../../../utils/fonts';
-import {COLORS} from '../../../utils/theme';
 import ProfilePicture from '../../ProfileScreen/elements/ProfilePicture';
+import dimen from '../../../utils/dimen';
+import {COLORS} from '../../../utils/theme';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
+import {fonts, normalize} from '../../../utils/fonts';
 
 const renderDefaultImage = (DefaultImage) => {
   if (DefaultImage) {
@@ -44,6 +44,10 @@ const DomainList = (props) => {
     withKarma,
     isFromUserFragment
   } = props;
+
+  if (item?.withFollowButton === undefined || item?.withFollowButton === null) {
+    item.withFollowButton = true;
+  }
 
   const renderButonAction = () => {
     if (isBlockedSection) {
