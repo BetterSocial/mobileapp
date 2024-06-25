@@ -107,20 +107,23 @@ const UsersFragment = ({
   }, []);
 
   React.useEffect(() => {
-    handleActiveSections();
+    const handleActiveSections = () => {
+      if (!searchText) return;
+
+      if (searchText.length === 0) {
+        setActiveSections([]);
+      } else if (searchText?.length >= 0 && followedUsers?.length > 0) {
+        setActiveSections([0]);
+      } else {
+        setActiveSections([]);
+      }
+    };
+    if (searchText?.length === 0) {
+      handleActiveSections();
+    }
   }, [searchText, followedUsers]);
 
-  const handleActiveSections = () => {
-    if (!searchText) return;
-
-    if (searchText.length === 0) {
-      setActiveSections([]);
-    } else if (searchText.length >= 0 && followedUsers.length > 0) {
-      setActiveSections([0]);
-    } else {
-      setActiveSections([]);
-    }
-  };
+  
 
   const handleOnPress = (item) => {
     navigation.push('OtherProfile', {
@@ -338,11 +341,14 @@ const UsersFragment = ({
       <FlatList
         ListHeaderComponent={() => (
           <>
-            <RecentSearch
-              shown={showRecentSearch || isFirstTimeOpen}
-              setSearchText={setSearchText}
-              setIsFirstTimeOpen={setIsFirstTimeOpen}
-            />
+            {!withoutRecent && (
+              <RecentSearch
+                shown={showRecentSearch || isFirstTimeOpen}
+                setSearchText={setSearchText}
+                setIsFirstTimeOpen={setIsFirstTimeOpen}
+              />
+            )}
+
             <AccordionView
               data={initialAccordionData}
               renderItem={renderItem}
