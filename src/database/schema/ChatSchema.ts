@@ -4,7 +4,11 @@ import {v4 as uuid} from 'uuid';
 import BaseDbSchema from './BaseDbSchema';
 import ChannelListSchema from './ChannelListSchema';
 import UserSchema from './UserSchema';
-import {DELETED_MESSAGE_TEXT, MESSAGE_TYPE_DELETED} from '../../utils/constants';
+import {
+  DELETED_MESSAGE_TEXT,
+  MESSAGE_TYPE_DELETED,
+  MESSAGE_TYPE_REPLY_PROMPT
+} from '../../utils/constants';
 import {ModifyAnonymousChatData} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 
 class ChatSchema implements BaseDbSchema {
@@ -270,7 +274,7 @@ class ChatSchema implements BaseDbSchema {
       console.log(e);
     }
     try {
-      if (json?.message?.message_type !== 'reply_prompt') {
+      if (isSavingAttachmentAllowed(json?.message?.message_type)) {
         attachmentJson = JSON.stringify(json?.message?.attachments);
       }
     } catch (e) {
@@ -319,7 +323,7 @@ class ChatSchema implements BaseDbSchema {
       console.log(e);
     }
     try {
-      if (json?.message_type !== 'reply_prompt') {
+      if (isSavingAttachmentAllowed(json?.message_type)) {
         attachmentJson = JSON.stringify(json?.attachments);
       }
     } catch (e) {
@@ -355,7 +359,7 @@ class ChatSchema implements BaseDbSchema {
       console.log(e);
     }
     try {
-      if (json?.message_type !== 'reply_prompt') {
+      if (isSavingAttachmentAllowed(json?.message_type)) {
         attachmentJson = JSON.stringify(json?.attachments);
       }
     } catch (e) {
@@ -424,7 +428,9 @@ class ChatSchema implements BaseDbSchema {
       console.log(e);
     }
     try {
-      attachmentJson = JSON.stringify(data?.message?.attachments);
+      if (isSavingAttachmentAllowed(data?.message?.message_type)) {
+        attachmentJson = JSON.stringify(data?.message?.attachments);
+      }
     } catch (e) {
       console.log('error stringify');
       console.log(e);
@@ -517,6 +523,10 @@ class ChatSchema implements BaseDbSchema {
   fromDatabaseObject = (dbObject: any): BaseDbSchema => {
     throw new Error('Method not implemented. 3');
   };
+}
+
+function isSavingAttachmentAllowed(messageType): boolean {
+  return ![MESSAGE_TYPE_REPLY_PROMPT, MESSAGE_TYPE_DELETED].includes(messageType);
 }
 
 export default ChatSchema;
