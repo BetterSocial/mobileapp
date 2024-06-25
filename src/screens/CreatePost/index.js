@@ -54,8 +54,8 @@ import useHastagMention from './elements/useHastagMention';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button, ButtonAddMedia} from '../../components/Button';
 import {COLORS} from '../../utils/theme';
+import {Context} from '../../context';
 import {MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED} from '../../utils/constants';
-import {PROFILE_CACHE} from '../../utils/cache/constant';
 import {ShowingAudience, createPost} from '../../service/post';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {
@@ -66,12 +66,8 @@ import {
   setPrivacyId
 } from '../../utils/setting';
 import {getLinkPreviewInfo} from '../../service/feeds';
-import {getMyProfile} from '../../service/profile';
-import {getSpecificCache} from '../../utils/cache';
 import {getUrl, isContainUrl} from '../../utils/Utils';
-import {getUserId} from '../../utils/users';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
-import {Context} from '../../context';
 
 const IS_GEO_SELECT_ENABLED = false;
 
@@ -135,7 +131,7 @@ const CreatePost = () => {
     hour: 0,
     minute: 0
   });
-  const [expiredSelect, setExpiredSelect] = React.useState(params.isCreateCommunity ? 3 : 2);
+  const [expiredSelect, setExpiredSelect] = React.useState(params?.isCreateCommunity ? 3 : 2);
   const [postExpired] = React.useState([
     {
       label: '24 hours',
@@ -807,7 +803,7 @@ const CreatePost = () => {
           )}
           <Gap style={styles.height(25)} />
           <Button styles={styles.btnPost(typeUser)} disabled={isButtonDisabled()} onPress={postV3}>
-            {params.isCreateCommunity ? 'Post & Create Community' : 'Post'}
+            {params?.isCreateCommunity ? 'Post & Create Community' : 'Post'}
           </Button>
           <Gap style={styles.height(18)} />
           <SheetMedia
