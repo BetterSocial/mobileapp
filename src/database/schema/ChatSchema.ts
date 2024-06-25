@@ -324,7 +324,7 @@ class ChatSchema implements BaseDbSchema {
     }
     try {
       if (isSavingAttachmentAllowed(json?.message_type)) {
-        attachmentJson = JSON.stringify(json?.message?.attachments);
+        attachmentJson = JSON.stringify(json?.attachments);
       }
     } catch (e) {
       console.log('error stringify');
@@ -360,7 +360,7 @@ class ChatSchema implements BaseDbSchema {
     }
     try {
       if (isSavingAttachmentAllowed(json?.message_type)) {
-        attachmentJson = JSON.stringify(json?.message?.attachments);
+        attachmentJson = JSON.stringify(json?.attachments);
       }
     } catch (e) {
       console.log('error stringify');
