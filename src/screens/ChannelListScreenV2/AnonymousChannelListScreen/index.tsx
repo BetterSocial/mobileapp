@@ -12,6 +12,7 @@ import MessageChannelItem from '../../../components/AnonymousChat/MessageChannel
 import PostNotificationChannelItem from '../../../components/AnonymousChat/PostNotificationChannelItem';
 import Search from '../../ChannelListScreen/elements/Search';
 import useAnonymousChannelListScreenHook from '../../../hooks/screen/useAnonymousChannelListHook';
+import useChannelGetInitialMessagesHook from '../../../hooks/core/chat/useChannelGetInitialMessagesHook';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import useRootChannelListHook from '../../../hooks/screen/useRootChannelListHook';
 import AnalyticsEventTracking, {
@@ -33,6 +34,9 @@ const AnonymousChannelListScreen = ({route}) => {
     goToContactScreen,
     fetchLatestTopicPost
   } = useAnonymousChannelListScreenHook();
+  const {getInitialMessagesFromHashMap, viewabilityConfigCallbackPairs} =
+    useChannelGetInitialMessagesHook();
+
   const ref = React.useRef(null);
 
   useScrollToTop(ref);
@@ -53,7 +57,8 @@ const AnonymousChannelListScreen = ({route}) => {
             AnalyticsEventTracking.eventTrack(
               BetterSocialEventTracking.ANONYMOUS_CHAT_TAB_OPEN_CHAT_SCREEN
             );
-            goToChatScreen(item);
+            const initialMessages = getInitialMessagesFromHashMap(item?.id);
+            goToChatScreen(item, undefined, {initialMessages});
           }}
         />
       );
@@ -122,6 +127,7 @@ const AnonymousChannelListScreen = ({route}) => {
         }
         renderItem={renderChannelItem}
         style={{backgroundColor: COLORS.almostBlack}}
+        viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
       />
     </>
   );
