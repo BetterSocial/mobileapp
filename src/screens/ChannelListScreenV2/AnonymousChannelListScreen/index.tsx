@@ -18,6 +18,8 @@ import AnalyticsEventTracking, {
 } from '../../../libraries/analytics/analyticsEventTracking';
 import {ANONYMOUS, ANON_PM, ANON_POST_NOTIFICATION} from '../../../hooks/core/constant';
 import {COLORS} from '../../../utils/theme';
+import CommunityChannelItem from '../../../components/ChatList/CommunityChannelItem';
+import useSignedChannelListScreenHook from '../../../hooks/screen/useSignedChannelListHook';
 
 const AnonymousChannelListScreen = ({route}) => {
   const {refresh} = useLocalDatabaseHook();
@@ -29,7 +31,8 @@ const AnonymousChannelListScreen = ({route}) => {
     goToChatScreen,
     goToPostDetailScreen,
     goToCommunityScreen,
-    goToContactScreen
+    goToContactScreen,
+    fetchLatestTopicPost
   } = useAnonymousChannelListScreenHook();
   const ref = React.useRef(null);
 
@@ -75,17 +78,11 @@ const AnonymousChannelListScreen = ({route}) => {
     }
 
     if (item?.channelType === 'ANON_TOPIC') {
-      // TODO: ADD the correct ANON_TOPIC Channel Item Component here;
-
       return (
-        <MessageChannelItem
-          item={item}
-          onChannelPressed={() => {
-            AnalyticsEventTracking.eventTrack(
-              BetterSocialEventTracking.ANONYMOUS_CHAT_TAB_COMMUNITY_PAGE_OPEN_PAGE
-            );
-            goToCommunityScreen(item);
-          }}
+        <CommunityChannelItem
+          channel={item}
+          onChannelPressed={() => goToCommunityScreen(item)}
+          fetchTopicLatestMessage={fetchLatestTopicPost}
         />
       );
     }

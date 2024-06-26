@@ -9,9 +9,9 @@ import {getAllMemberTopic} from '../../service/topics';
 import dimen from '../../utils/dimen';
 import ShareUtils from '../../utils/share';
 import StringConstant from '../../utils/string/StringConstant';
-import UsersFragmentCommunity from '../DiscoveryScreenV2/fragment/UserFragmentCommunity';
 import NavHeader from '../TopicPageScreen/elements/NavHeader';
 import TopicMemberHeadline from './elements/TopicMemberHeadlineList';
+import UsersFragment from '../DiscoveryScreenV2/fragment/UsersFragment';
 
 const styles = StyleSheet.create({
   parentContainer: {
@@ -35,7 +35,7 @@ const TopicMemberScreen = () => {
   const [topicDataFollowedUsers, setTopicDataFollowedUsers] = React.useState([]);
   const [topicDataUnfollowedUsers, setTopicDataUnfollowedUsers] = React.useState([]);
   const [isFocus, setIsFocus] = React.useState(true);
-  const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true);
+  const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(false);
   const cancelTokenRef = React.useRef(axios.CancelToken.source());
   const scrollY = React.useRef(new Animated.Value(0)).current;
 
@@ -89,7 +89,7 @@ const TopicMemberScreen = () => {
     const result = await getAllMemberTopic(query);
     if (result.code === 200) {
       const newDataFollowed = result.data
-        .filter((item) => item.is_following && profile.myProfile.user_id !== item.user_id)
+        .filter((item) => item.is_following)
         .map((data) => ({
           ...data,
           name: data.username,
@@ -97,7 +97,7 @@ const TopicMemberScreen = () => {
           description: null
         }));
       const newDataUnfollowed = result.data
-        .filter((item) => !item.is_following && profile.myProfile.user_id !== item.user_id)
+        .filter((item) => !item.is_following)
         .map((data) => ({
           ...data,
           name: data.username,
@@ -109,6 +109,8 @@ const TopicMemberScreen = () => {
         setTopicDataUnfollowedUsers(newDataUnfollowed);
       } else {
         setInitialMember([...newDataFollowed, ...newDataUnfollowed]);
+        setTopicDataFollowedUsers(newDataFollowed);
+        setTopicDataUnfollowedUsers(newDataUnfollowed);
       }
       setIsLoadingDiscovery({user: false});
     }
@@ -165,10 +167,9 @@ const TopicMemberScreen = () => {
         getSearchLayout={setSearchHeight}
       />
       <TopicMemberHeadline text="Visible members of this community" />
-      <UsersFragmentCommunity
+      <UsersFragment
         isLoadingDiscoveryUser={isLoadingDiscovery.user}
-        isFirstTimeOpen={isFirstTimeOpen}
-        initialUsers={initalMember}
+        isFirstTimeOpen={false}
         setInitialUsers={setInitialMember}
         followedUsers={topicDataFollowedUsers}
         unfollowedUsers={topicDataUnfollowedUsers}
@@ -177,6 +178,7 @@ const TopicMemberScreen = () => {
         setIsFirstTimeOpen={setIsFirstTimeOpen}
         setSearchText={setSearchText}
         withoutRecent={true}
+        isUser={true}
       />
     </SafeAreaProvider>
   );
