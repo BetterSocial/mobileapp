@@ -118,9 +118,7 @@ const UsersFragment = ({
         setActiveSections([]);
       }
     };
-    if (searchText?.length === 0) {
-      handleActiveSections();
-    }
+    handleActiveSections();
   }, [searchText, followedUsers]);
 
   
