@@ -1,7 +1,7 @@
 import ChannelListSchema from '../../../src/database/schema/ChannelListSchema';
 import {ANONYMOUS, SIGNED} from '../../../src/hooks/core/constant';
 import {AllowedGoToChatScreen} from '../../../src/hooks/core/chat/useChatUtilsHook';
-import {ChannelList} from '../../database/schema/ChannelList.types';
+import {ChannelList, GoToChatScreenOptionalParams} from '../../database/schema/ChannelList.types';
 
 export interface ContactScreenPayload {
   from: typeof ANONYMOUS | typeof SIGNED;
@@ -13,7 +13,11 @@ interface UseChatUtilsHook {
   selectedChannelKey: number;
   fetchChannelDetail: (channel: ChannelListSchema) => void;
   goBack: () => void;
-  goToChatScreen: (channel: ChannelListSchema, from: AllowedGoToChatScreen) => void;
+  goToChatScreen: (
+    channel: ChannelListSchema,
+    from: AllowedGoToChatScreen,
+    optionalParams?: GoToChatScreenOptionalParams
+  ) => void;
   goToMoveChat: (channel: ChannelListSchema, from?: string | undefined) => void;
   goToPostDetailScreen: (channel: ChannelListSchema) => void;
   goToCommunityScreen: (channel: ChannelListSchema) => void;
