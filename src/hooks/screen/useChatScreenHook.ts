@@ -3,6 +3,7 @@ import 'react-native-get-random-values';
 
 import * as React from 'react';
 import {useMutation} from 'react-query';
+import {useRoute} from '@react-navigation/core';
 import {v4 as uuid} from 'uuid';
 
 import ChannelList from '../../database/schema/ChannelListSchema';
@@ -46,9 +47,14 @@ function useChatScreenHook(type?: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const {queue} = useDatabaseQueueHook();
   const {eventTrackByUserType, getEventName} = useAnalyticUtilsHook(type);
 
+  const {params} = useRoute();
+
   const [selfAnonUserInfo, setSelfAnonUserInfo] = React.useState<any>(null);
-  const [chats, setChats] = React.useState<ChatSchema[]>([]);
-  const [isLoadingFetchAllMessage, setIsLoadingFetchAllMessage] = React.useState(true);
+  const [chats, setChats] = React.useState<ChatSchema[]>(params?.initialMessages || []);
+  const [isLoadingFetchAllMessage, setIsLoadingFetchAllMessage] = React.useState(false);
+
+  const sendChatSignedMutation = useSendSignedMessage();
+  const sendChatAnonMutation = useSendAnonMessage();
 
   const sendChatSignedMutation = useSendSignedMessage();
   const sendChatAnonMutation = useSendAnonMessage();
@@ -294,8 +300,11 @@ function useChatScreenHook(type?: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     goBackFromChatScreen();
   };
 
-  const goToChatInfoScreenBy = (trigger: GoToChatInfoScreenByTrigger, params?: any) => {
-    goToChatInfoScreen(params);
+  const goToChatInfoScreenBy = (
+    trigger: GoToChatInfoScreenByTrigger,
+    goToChatInfoScreenParams?: any
+  ) => {
+    goToChatInfoScreen(goToChatInfoScreenParams);
     if (trigger === 'ProfilePicture')
       eventTrackByUserType(
         BetterSocialEventTracking.SIGNED_CHAT_SCREEN_HEADER_PROFILE_PICTURE_CLICKED,
