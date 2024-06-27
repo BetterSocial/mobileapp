@@ -5,6 +5,7 @@ import {Animated, Platform, StyleSheet} from 'react-native';
 
 import {SafeAreaProvider, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {getAllMemberTopic} from '../../service/topics';
+import {Context} from '../../context';
 import dimen from '../../utils/dimen';
 import ShareUtils from '../../utils/share';
 import StringConstant from '../../utils/string/StringConstant';
@@ -25,6 +26,7 @@ const TopicMemberScreen = () => {
   const topicDetail = route?.params?.topicDetail;
   const [isFollow, setIsFollow] = React.useState(route?.params?.isFollow);
   const [memberCount, setMemberCount] = React.useState(route?.params?.memberCount);
+  const [profile] = React.useContext(Context).profile;
   const [headerHide, setHeaderHide] = React.useState(false);
   const [searchHeight, setSearchHeight] = React.useState(0);
   const [searchText, setSearchText] = React.useState('');
@@ -86,7 +88,7 @@ const TopicMemberScreen = () => {
     const result = await getAllMemberTopic(query);
     if (result.code === 200) {
       const newDataFollowed = result.data
-        .filter((item) => item.is_following)
+        .filter((item) => item.is_following && profile.myProfile.user_id !== item.user_id)
         .map((data) => ({
           ...data,
           name: data.username,
@@ -94,7 +96,7 @@ const TopicMemberScreen = () => {
           description: null
         }));
       const newDataUnfollowed = result.data
-        .filter((item) => !item.is_following)
+        .filter((item) => !item.is_following && profile.myProfile.user_id !== item.user_id)
         .map((data) => ({
           ...data,
           name: data.username,
