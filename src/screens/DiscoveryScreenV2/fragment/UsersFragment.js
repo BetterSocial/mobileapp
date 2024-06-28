@@ -121,8 +121,6 @@ const UsersFragment = ({
     handleActiveSections();
   }, [searchText, followedUsers]);
 
-  
-
   const handleOnPress = (item) => {
     navigation.push('OtherProfile', {
       data: {

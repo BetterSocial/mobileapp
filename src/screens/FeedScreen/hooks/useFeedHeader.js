@@ -3,13 +3,14 @@ import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import {useNavigation} from '@react-navigation/core';
 
+import AnalyticsEventTracking from '../../../libraries/analytics/analyticsEventTracking';
 import {Context} from '../../../context';
 import {SOURCE_FEED_TAB, SOURCE_MY_PROFILE, SOURCE_PDP} from '../../../utils/constants';
 import {getUserId} from '../../../utils/users';
 import {setTimer} from '../../../context/actions/feeds';
 import {viewTimePost} from '../../../service/post';
 
-const useFeedHeader = ({actor, source}) => {
+const useFeedHeader = ({actor, source, navigateToProfileEventName}) => {
   const navigation = useNavigation();
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   const {feeds, timer, viewPostTimeIndex} = feedsContext;
@@ -55,6 +56,9 @@ const useFeedHeader = ({actor, source}) => {
         username
       }
     });
+
+    console.log('navigate', navigateToProfileEventName);
+    if (navigateToProfileEventName) AnalyticsEventTracking.eventTrack(navigateToProfileEventName);
   };
 
   const navigateToProfile = async () => {

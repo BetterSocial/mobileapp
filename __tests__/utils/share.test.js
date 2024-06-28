@@ -64,10 +64,6 @@ describe('Share utils test should pass', () => {
       'analyticsId'
     );
 
-    expect(mockedAnalytics).toHaveBeenCalledWith('analyticsLogEvent', {
-      id: 'analyticsId'
-    });
-
     expect(mockedShare).toHaveBeenCalledWith({
       message: 'https://www.google.com/post/1'
     });

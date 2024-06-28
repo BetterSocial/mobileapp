@@ -1,13 +1,19 @@
 import * as React from 'react';
+import RBSheet from 'react-native-raw-bottom-sheet';
 import {StyleSheet, Text, View} from 'react-native';
 
-import RBSheet from 'react-native-raw-bottom-sheet';
-
 import ItemListLarge from './ItemListLarge';
-import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
+import {fonts} from '../../utils/fonts';
 
-const BlockUser = ({refBlockUser, onSelect, username}) => {
+const BlockUser = ({
+  refBlockUser,
+  onSelect,
+  username,
+  onClose = () => {},
+  onBlockUserIndefinitely = () => {},
+  onBlockAndReportUser = () => {}
+}) => {
   const data = [
     {
       id: 1,
@@ -24,12 +30,24 @@ const BlockUser = ({refBlockUser, onSelect, username}) => {
       iconReght: true
     }
   ];
+
+  const onBlockClicked = (item) => {
+    if (item.id === 1) {
+      onBlockUserIndefinitely();
+    } else if (item.id === 2) {
+      onBlockAndReportUser();
+    }
+
+    onSelect(item?.id);
+  };
+
   return (
     <View>
       <RBSheet
         ref={refBlockUser}
         closeOnDragDown={true}
         closeOnPressMask={true}
+        onClose={onClose}
         customStyles={{
           wrapper: {
             backgroundColor: COLORS.black80
@@ -50,7 +68,7 @@ const BlockUser = ({refBlockUser, onSelect, username}) => {
             desc={item.desc}
             iconReght={item.iconReght}
             icon={item.icon}
-            onPress={() => onSelect(item.id)}
+            onPress={() => onBlockClicked(item)}
           />
         ))}
       </RBSheet>

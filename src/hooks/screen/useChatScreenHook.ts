@@ -58,8 +58,8 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
 
   const uploadMediaFailedEvent: UploadOptions = {
     withFailedEventTrack: getEventName(
-      BetterSocialEventTracking.SIGNED_CHAT_SCREEN_ATTACHMENT_UPLOAD_FAILED,
-      BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_ATTACHMENT_UPLOAD_FAILED
+      BetterSocialEventTracking.SIGNED_CHAT_SCREEN_ATTACHMENT_MEDIA_UPLOAD_FILE,
+      BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_ATTACHMENT_MEDIA_UPLOAD_FILE
     )
   };
 

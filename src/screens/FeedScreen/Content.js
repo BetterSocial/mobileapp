@@ -1,12 +1,12 @@
 /* eslint-disable no-plusplus */
 import * as React from 'react';
+import LinearGradient from 'react-native-linear-gradient';
 /* eslint-disable no-nested-ternary */
 import PropTypes from 'prop-types';
 import {Dimensions, Platform, Pressable, StyleSheet, Text, View} from 'react-native';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {useNavigation, useRoute} from '@react-navigation/native';
 
-import LinearGradient from 'react-native-linear-gradient';
 import BlurredLayer from './elements/BlurredLayer';
 import ContentPoll from './ContentPoll';
 import ImageLayouter from './elements/ImageLayouter';
@@ -35,7 +35,12 @@ const Content = ({
   onNewPollFetched,
   setHaveSeeMore,
   hasComment,
-  setIsShortText
+  setIsShortText,
+  eventTrackName = {
+    pollSeeResults: null,
+    pollSelected: null,
+    navigateToTopicPage: null
+  }
 }) => {
   const navigation = useNavigation();
   const route = useRoute();
@@ -313,6 +318,8 @@ const Content = ({
               voteCount={item.voteCount}
               topics={item?.topics}
               onLayout={onPollLayout}
+              seeResultsEventName={eventTrackName.pollSeeResults}
+              pollSelectedEventName={eventTrackName.pollSelected}
             />
           </View>
         ) : null}
@@ -345,6 +352,7 @@ const Content = ({
               position: 'absolute',
               bottom: 0
             }}
+            navigateToTopicEventName={eventTrackName.navigateToTopicPage}
           />
         )}
       </BlurredLayer>
