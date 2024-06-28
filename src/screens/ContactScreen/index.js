@@ -1,6 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
+import SimpleToast from 'react-native-simple-toast';
 import {
   Dimensions,
   RefreshControl,
@@ -239,6 +240,8 @@ const ContactScreen = ({navigation}) => {
             isCreateCommunity: true,
             topic: topicCommunityName
           });
+        } else {
+          SimpleToast.show(response?.message, SimpleToast.SHORT);
         }
       } catch (e) {
         if (__DEV__) {
