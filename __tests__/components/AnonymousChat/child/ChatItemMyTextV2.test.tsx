@@ -3,6 +3,9 @@ import {render} from '@testing-library/react-native';
 
 import ChatItemMyTextV2 from '../../../../src/components/AnonymousChat/child/ChatItemMyTextV2';
 
+jest.mock('@react-native-clipboard/clipboard', () => ({
+  setString: jest.fn()
+}));
 describe('TESTING ChatItemTargetText', () => {
   it('RENDER not continuous should match snapshot', () => {
     const {toJSON} = render(

@@ -3,6 +3,7 @@ import VersionNumber from 'react-native-version-number';
 import analytics from '@react-native-firebase/analytics';
 import {
   Dimensions,
+  Linking,
   SafeAreaView,
   StatusBar,
   StyleSheet,
@@ -18,6 +19,7 @@ import Loading from '../Loading';
 import ProfileSettingItem from './element/ProfileSettingItem';
 import useSettings from './hooks/useSettings';
 import {COLORS} from '../../utils/theme';
+import {SETTINGS_FAQ_URL, SETTINGS_PRIVACY_URL} from '../../utils/constants';
 import {debugAtom} from '../../service/debug';
 import {fonts} from '../../utils/fonts';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
@@ -40,6 +42,11 @@ const Settings = () => {
 
   const goToPage = (pageName) => {
     navigation.navigate(pageName);
+  };
+
+  const goToExternalBrowser = async (url) => {
+    const canOpenUrl = await Linking.canOpenURL(url);
+    if (canOpenUrl) Linking.openURL(url);
   };
 
   const doLogout = () => {
@@ -73,12 +80,12 @@ const Settings = () => {
           <ProfileSettingItem
             testID="privacy"
             text="Privacy Policies"
-            onPress={() => goToPage('PrivacyPolicies')}
+            onPress={() => goToExternalBrowser(SETTINGS_PRIVACY_URL)}
           />
           <ProfileSettingItem
             testID="help"
             text="Help Center"
-            onPress={() => goToPage('HelpCenter')}
+            onPress={() => goToExternalBrowser(SETTINGS_FAQ_URL)}
           />
           <ProfileSettingItem text="Delete Account" onPress={showDeleteAccountAlert} />
           <ProfileSettingItem text="Logout" onPress={doLogout} />

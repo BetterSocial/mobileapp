@@ -13,8 +13,16 @@ import IconClose from '../../../assets/icon/IconClose';
 import MemoIc_search from '../../../assets/icons/Ic_search';
 import {COLORS, FONTS, SIZES} from '../../../utils/theme';
 
-const Search = ({onPress, animatedValue, onChangeText, text, onClearText, isLoading = false}) => (
-  <Animated.View style={styles.animatedViewContainer(animatedValue)}>
+const Search = ({
+  onPress,
+  animatedValue,
+  onChangeText,
+  text,
+  onClearText,
+  isLoading = false,
+  style
+}) => (
+  <Animated.View style={[styles.animatedViewContainer(animatedValue), style]}>
     <View style={styles.wrapperSearch}>
       <TextInput
         value={text}

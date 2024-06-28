@@ -399,7 +399,7 @@ PODS:
     - react-native-config/App (= 1.5.1)
   - react-native-config/App (1.5.1):
     - React-Core
-  - react-native-context-menu-view (1.14.1):
+  - react-native-context-menu-view (1.16.0):
     - React
   - react-native-create-thumbnail (1.6.4):
     - React-Core
@@ -953,7 +953,7 @@ SPEC CHECKSUMS:
   react-native-cameraroll: 2957f2bce63ae896a848fbe0d5352c1bd4d20866
   react-native-compressor: ebcf8bc36f8e44581a8f831583caee8a27e55a01
   react-native-config: 86038147314e2e6d10ea9972022aa171e6b1d4d8
-  react-native-context-menu-view: ea9e2d0f86859a143f1fd73a96a062ced5159567
+  react-native-context-menu-view: 30915369a9b5887904c571b616653acf3f1c8edb
   react-native-create-thumbnail: e022bcdcba8a0b4529a50d3fa1a832ec921be39d
   react-native-document-picker: 429972f7ece4463aa5bcdd789622b3a674a3c5d1
   react-native-get-random-values: dee677497c6a740b71e5612e8dbd83e7539ed5bb

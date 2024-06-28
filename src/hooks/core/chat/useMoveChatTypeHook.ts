@@ -36,7 +36,8 @@ const useMoveChatTypeHook = () => {
     const type: {[key: string]: ChannelType} = {
       messaging: isAnonymous ? 'ANON_PM' : 'PM',
       group: 'GROUP',
-      topics: 'TOPIC'
+      topics: 'TOPIC',
+      topicinvitation: 'TOPIC'
     };
 
     const channelListInfo = getChannelListInfo(channel, signedProfileId, anonProfileId);
@@ -77,7 +78,7 @@ const useMoveChatTypeHook = () => {
       return;
     }
 
-    if (channel?.type === 'topics') {
+    if (channel?.type === 'topics' || channel?.type === 'topicinvitation') {
       console.info('type is topics');
       return;
     }

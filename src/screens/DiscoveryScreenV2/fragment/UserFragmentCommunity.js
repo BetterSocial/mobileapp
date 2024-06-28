@@ -1,22 +1,19 @@
 import * as React from 'react';
-import Accordion from 'react-native-collapsible/Accordion';
 import PropTypes from 'prop-types';
-import {ActivityIndicator, FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
 /* eslint-disable no-use-before-define */
 import {useNavigation, useRoute} from '@react-navigation/native';
-import {useState} from 'react';
 
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import DomainList from '../elements/DiscoveryItemList';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import RecentSearch from '../elements/RecentSearch';
-import useCreateChat from '../../../hooks/screen/useCreateChat';
 import useDiscovery from '../hooks/useDiscovery';
 import {COLORS} from '../../../utils/theme';
 import {Context} from '../../../context/Store';
-import {checkUserBlock, setFollow, setUnFollow} from '../../../service/profile';
 import {fonts} from '../../../utils/fonts';
 import {getUserId} from '../../../utils/users';
+import {setFollow, setUnFollow} from '../../../service/profile';
 
 const FROM_FOLLOWED_USERS = 'fromfollowedusers';
 const FROM_FOLLOWED_USERS_INITIAL = 'fromfollowedusersinitial';
@@ -24,58 +21,14 @@ const FROM_UNFOLLOWED_USERS = 'fromunfollowedusers';
 const FROM_UNFOLLOWED_USERS_INITIAL = 'fromunfollowedusersinitial';
 const FROM_USERS_INITIAL = 'fromusersinitial';
 
-const SECTIONS = [
-  {
-    title: 'First',
-    content: 'Lorem ipsum...'
-  }
-];
-
-const AccordionView = ({data, renderItem, setActiveSections, activeSections}) => {
-  const renderSectionTitle = () => {
-    return <View style={styles.content}></View>;
-  };
-
-  const renderHeader = (_, index) => {
-    return (
-      <DiscoveryTitleSeparator
-        withBorderBottom={true}
-        key="user-title-separator"
-        text="People you follow"
-        showArrow
-        rotateArrow={activeSections?.some((actived) => actived === index)}
-      />
-    );
-  };
-
-  const renderContent = () => {
-    return (
-      <View style={styles.content}>{data?.map((item, index) => renderItem({index, item}))}</View>
-    );
-  };
-
-  const updateSections = (activeSectionsParams) => {
-    setActiveSections(activeSectionsParams);
-  };
-
-  return (
-    <Accordion
-      sections={SECTIONS}
-      activeSections={activeSections}
-      renderSectionTitle={renderSectionTitle}
-      renderHeader={renderHeader}
-      renderContent={renderContent}
-      onChange={updateSections}
-    />
-  );
-};
-
-const UsersFragment = ({
+const UsersFragmentCommunity = ({
   isLoadingDiscoveryUser = false,
   isFirstTimeOpen,
   initialUsers = [],
   followedUsers = [],
+  setFollowedUsers = () => {},
   unfollowedUsers = [],
+  setUnfollowedUsers = () => {},
   setSearchText = () => {},
   setIsFirstTimeOpen = () => {},
   withoutRecent = false,
@@ -88,9 +41,6 @@ const UsersFragment = ({
   const navigation = useNavigation();
   const [client] = React.useContext(Context).client;
   const {exchangeFollower, users, updateFollowDiscoveryContext} = useDiscovery();
-  const [loadingDM, setLoadingDM] = React.useState(false);
-  const {createSignChat, loadingCreateChat} = useCreateChat();
-  const [activeSections, setActiveSections] = useState([]);
 
   const route = useRoute();
 
@@ -105,21 +55,6 @@ const UsersFragment = ({
     };
     parseToken();
   }, []);
-
-  React.useEffect(() => {
-    const handleActiveSections = () => {
-      if (!searchText) return;
-
-      if (searchText.length === 0) {
-        setActiveSections([]);
-      } else if (searchText?.length >= 0 && followedUsers?.length > 0) {
-        setActiveSections([0]);
-      } else {
-        setActiveSections([]);
-      }
-    };
-    handleActiveSections();
-  }, [searchText, followedUsers]);
 
   const handleOnPress = (item) => {
     navigation.push('OtherProfile', {
@@ -137,7 +72,24 @@ const UsersFragment = ({
   });
 
   const handleUser = async (from, willFollow, item) => {
-    updateFollowDiscoveryContext(willFollow, item);
+    if (from === FROM_FOLLOWED_USERS_INITIAL || from === FROM_UNFOLLOWED_USERS_INITIAL) {
+      updateFollowDiscoveryContext(willFollow, item);
+    }
+
+    if (from === FROM_FOLLOWED_USERS) {
+      const newFollowedUsers = [...followedUsers];
+      exchangeFollower(newFollowedUsers, willFollow, item.user ? item.user.user_id : item.user_id);
+      setFollowedUsers(newFollowedUsers);
+    }
+    if (from === FROM_UNFOLLOWED_USERS) {
+      const newUnfollowedUsers = [...unfollowedUsers];
+      exchangeFollower(
+        newUnfollowedUsers,
+        willFollow,
+        item.user ? item.user.user_id : item.user_id
+      );
+      setUnfollowedUsers(newUnfollowedUsers);
+    }
   };
 
   const handleFollow = async (from, willFollow, item) => {
@@ -166,61 +118,39 @@ const UsersFragment = ({
     if (searchText.length > 0) fetchData();
   };
 
+  const renderRecentSearch = (index) => {
+    return (
+      index === 0 &&
+      !withoutRecent && (
+        <RecentSearch
+          shown={showRecentSearch || isFirstTimeOpen}
+          setSearchText={setSearchText}
+          setIsFirstTimeOpen={setIsFirstTimeOpen}
+        />
+      )
+    );
+  };
+
   const renderDiscoveryItem = ({from, item, index}) => {
     if (item.separator) {
       return (
         <>
-          <DiscoveryTitleSeparator key="user-title-separator" text="People you might know" />
+          {renderRecentSearch(index)}
+          <DiscoveryTitleSeparator key="user-title-separator" text="Suggested Users" />
         </>
       );
     }
 
     const isUnfollowed = item.user ? !item.user.following : !item.following;
 
-    const handleOpenProfile = async (profileItem) => {
-      if (profile?.myProfile?.user_id === profileItem?.user_id) {
-        return null;
-      }
-
-      return navigation.push('OtherProfile', {
-        data: {
-          user_id: profile.myProfile.user_id,
-          other_id: profileItem?.user_id || profileItem?.userId,
-          username: profileItem?.user?.name || profileItem?.user?.username || profileItem.username
-        }
-      });
-    };
-
-    const checkUserIsBlockHandle = async () => {
-      try {
-        setLoadingDM(true);
-        const sendData = {
-          user_id: item?.user_id || item?.userId
-        };
-        const members = [];
-        members.push(profile?.myProfile?.user_id, item?.user_id || item?.userId);
-        const processGetBlock = await checkUserBlock(sendData);
-        if (!processGetBlock.data.data.blocked && !processGetBlock.data.data.blocker) {
-          setLoadingDM(false);
-          return createSignChat(members, item);
-        }
-        setLoadingDM(false);
-        return handleOpenProfile(item);
-      } catch (e) {
-        console.log('error:', e);
-      }
-    };
-
     return (
       <>
+        {renderRecentSearch(index)}
         <DomainList
-          isFromUserFragment={true}
           key={index}
           onPressBody={() => handleOnPress(item.user || item)}
           handleSetFollow={() => handleFollow(from, true, item.user || item)}
-          handleSetUnFollow={() => {
-            checkUserIsBlockHandle();
-          }}
+          handleSetUnFollow={() => handleFollow(from, false, item.user || item)}
           item={{
             name: item.user ? item.user.username : item.username,
             image: item.user ? item.user.profile_pic_path : item.profile_pic_path,
@@ -230,7 +160,8 @@ const UsersFragment = ({
             karmaScore: item.user ? item.user.karma_score : item.karma_score,
             comumnityInfo: item.user ? item.user.community_info || [] : item.community_info || [],
             routeName: route.name,
-            isUser
+            isUser,
+            withFollowButton: profile.myProfile.user_id !== item.user_id
           }}
           withKarma
         />
@@ -270,92 +201,33 @@ const UsersFragment = ({
     });
   };
 
-  const initFollowingUsers = React.useMemo(() => {
-    const initialFollowingUsers = [];
+  const renderUsersItem = () => {
+    const initFollowingUsers = [];
+    const initUnfollowingUsers = [];
+
     users.forEach((item) => {
       if (item.user?.user_id_follower || item.user_id_follower) {
-        initialFollowingUsers.push(item);
+        initFollowingUsers.push(item);
+      } else {
+        initUnfollowingUsers.push(item);
       }
     });
 
-    return initialFollowingUsers;
-  }, [users]);
+    const data = isFirstTimeOpen
+      ? withoutRecent
+        ? initialUsers.length !== 0
+          ? initialUsers
+          : []
+        : [...initFollowingUsers, {separator: true}, ...initUnfollowingUsers]
+      : unfollowedUsers.length !== 0
+      ? [...followedUsers, {separator: true}, ...unfollowedUsers]
+      : followedUsers;
 
-  const initUnfollowingUsers = React.useMemo(() => {
-    const initialUnfollowingUsers = [];
-    users.forEach((item) => {
-      if (!item.user?.user_id_follower && !item.user_id_follower) {
-        initialUnfollowingUsers.push(item);
-      }
-    });
-
-    return initialUnfollowingUsers;
-  }, [users]);
-
-  const peopleYouMightKnowData = React.useMemo(() => {
-    if (!isFirstTimeOpen && unfollowedUsers.length === 0) {
-      return [];
-    }
-
-    if (!isFirstTimeOpen && unfollowedUsers) {
-      return [{separator: true}, ...unfollowedUsers];
-    }
-
-    if (!withoutRecent) {
-      return [{separator: true}, ...initUnfollowingUsers];
-    }
-
-    if (initialUsers.length === 0) {
-      return [{separator: true}, ...initUnfollowingUsers];
-    }
-
-    return initialUsers;
-  }, [users, unfollowedUsers]);
-
-  const initialAccordionData = React.useMemo(() => {
-    if (!isFirstTimeOpen && unfollowedUsers.length !== 0) {
-      return [...followedUsers];
-    }
-
-    if (!isFirstTimeOpen) {
-      return followedUsers;
-    }
-
-    if (!withoutRecent) {
-      return [...initFollowingUsers];
-    }
-
-    if (initialUsers.length !== 0) {
-      return initialUsers;
-    }
-
-    return [...initFollowingUsers];
-  }, [users, unfollowedUsers, initialUsers]);
-
-  const renderUsersItem = () => {
     return (
       <FlatList
-        ListHeaderComponent={() => (
-          <>
-            {!withoutRecent && (
-              <RecentSearch
-                shown={showRecentSearch || isFirstTimeOpen}
-                setSearchText={setSearchText}
-                setIsFirstTimeOpen={setIsFirstTimeOpen}
-              />
-            )}
-
-            <AccordionView
-              data={initialAccordionData}
-              renderItem={renderItem}
-              activeSections={activeSections}
-              setActiveSections={setActiveSections}
-            />
-          </>
-        )}
         onMomentumScrollBegin={handleScroll}
         contentContainerStyle={{paddingBottom: 100}}
-        data={peopleYouMightKnowData || []}
+        data={data || []}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
         onEndReached={() => fetchData()}
@@ -379,25 +251,14 @@ const UsersFragment = ({
         <Text style={styles.noDataFoundText}>No users found</Text>
       </View>
     );
-  return (
-    <View>
-      {(loadingDM || loadingCreateChat) && (
-        <View
-          style={{
-            position: 'absolute',
-            zIndex: 1,
-            width: '100%',
-            height: '100%',
-            justifyContent: 'center',
-            alignContent: 'center',
-            alignSelf: 'center'
-          }}>
-          <ActivityIndicator size="large" />
-        </View>
-      )}
-      {renderUsersItem()}
-    </View>
-  );
+  if (initialUsers.length === 0)
+    return (
+      <View style={styles.noDataFoundContainer}>
+        <Text style={styles.noDataFoundText}>All members are anonymous</Text>
+      </View>
+    );
+
+  return <View>{renderUsersItem()}</View>;
 };
 
 const styles = StyleSheet.create({
@@ -432,13 +293,15 @@ const styles = StyleSheet.create({
   }
 });
 
-UsersFragment.propTypes = {
+UsersFragmentCommunity.propTypes = {
   isLoadingDiscoveryUser: PropTypes.bool,
   isFirstTimeOpen: PropTypes.bool,
   initialUsers: PropTypes.array,
   setInitialUsers: PropTypes.func,
   followedUsers: PropTypes.array,
+  setFollowedUsers: PropTypes.func,
   unfollowedUsers: PropTypes.array,
+  setUnfollowedUsers: PropTypes.func,
   setSearchText: PropTypes.func,
   setIsFirstTimeOpen: PropTypes.func,
   withoutRecent: PropTypes.bool,
@@ -447,4 +310,4 @@ UsersFragment.propTypes = {
   searchText: PropTypes.string
 };
 
-export default UsersFragment;
+export default UsersFragmentCommunity;

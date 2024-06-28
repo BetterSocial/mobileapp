@@ -1,9 +1,10 @@
 import {useQuery} from 'react-query';
+
 import ChatSchema from '../../../database/schema/ChatSchema';
 
 export function useGetAllMessage(payload, options) {
   return useQuery(
-    ['getAllMesage', payload],
+    [`getAllMesage-${payload?.selectedChannelId}`, payload],
     () =>
       ChatSchema.getAll(
         payload.localDb,

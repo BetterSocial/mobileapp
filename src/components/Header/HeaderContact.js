@@ -1,11 +1,11 @@
+import PropTypes from 'prop-types';
 import * as React from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
-import PropTypes from 'prop-types';
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
-import {fonts, normalizeFontSize} from '../../utils/fonts';
-import {COLORS, SIZES} from '../../utils/theme';
-import GlobalButton from '../Button/GlobalButton';
 import dimen from '../../utils/dimen';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
+import GlobalButton from '../Button/GlobalButton';
 
 const HeaderContact = ({
   title,

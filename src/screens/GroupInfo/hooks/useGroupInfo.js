@@ -640,7 +640,13 @@ const useGroupInfo = (channelId = null, channelListSchema = null) => {
   };
   const handlePressContact = async (item) => {
     const isAnonymousUser = Boolean(item?.user?.anon_user_info_emoji_name);
-    if (item?.user_id === profile?.myProfile?.user_id) return;
+    if (
+      item?.userId === signedProfileId ||
+      item?.userId === anonProfileId ||
+      item?.id === signedProfileId ||
+      item?.id === anonProfileId
+    )
+      return;
 
     if (isAnonymousUser) {
       const modifiedUser = {...item};

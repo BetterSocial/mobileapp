@@ -68,6 +68,10 @@ const copyToClipboard = (username) => {
   Clipboard.setString(`${config.SHARE_URL}/${username}`);
 };
 
+const copyMessageWithoutLink = (message) => {
+  Clipboard.setString(message);
+};
+
 const ShareUtils = {
   shareDomain,
   shareFeeds,
@@ -76,7 +80,8 @@ const ShareUtils = {
   sharePostInTopic,
   shareUserLink,
   shareCommunity,
-  copyToClipboard
+  copyToClipboard,
+  copyMessageWithoutLink
 };
 
 export default ShareUtils;

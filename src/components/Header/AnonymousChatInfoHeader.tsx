@@ -2,8 +2,8 @@ import * as React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
-import {fonts} from '../../utils/fonts';
 import dimen from '../../utils/dimen';
+import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 
 export interface AnonymousChatInfoHeaderProps {

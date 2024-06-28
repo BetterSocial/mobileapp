@@ -19,6 +19,8 @@ export enum DatabaseOperationLabel {
   ChatScreen_UpdateChannelDescription = 'chat_screen_update_channel_description',
   ChatScreen_UpdateChatSentStatus = 'chat_screen_update_chat_sent_status',
 
+  ChannelList_GetInitialMessages = 'channel_list_get_initial_messages',
+
   AppBadge_UpdateBadgeNumber = 'app_badge_update_badge_number'
 }
 
