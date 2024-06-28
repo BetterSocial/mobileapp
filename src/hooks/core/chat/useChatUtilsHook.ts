@@ -294,16 +294,18 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
       if (from === GROUP_INFO) {
         return openChat('AnonymousChatScreen', 'AnonymousChannelList');
       }
-      navigation.navigate('AnonymousChatScreen', {
-        initialMessages
-      });
+      setTimeout(
+        () =>
+          navigation.navigate('AnonymousChatScreen', {
+            initialMessages
+          }),
+        10
+      );
     } else {
       if (from === GROUP_INFO) {
         return openChat('SignedChatScreen', 'SignedChannelList');
       }
-      navigation.navigate('SignedChatScreen', {
-        initialMessages
-      });
+      setTimeout(() => navigation.navigate('SignedChatScreen', {initialMessages}), 10);
     }
 
     console.log('checkpoint 7');
