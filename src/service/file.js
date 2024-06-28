@@ -13,18 +13,23 @@ export const uploadFile = async (base64String = '') =>
   });
 
 export const uploadPhoto = async (formData) => {
-  const result = await api.post('/upload/photo', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    },
-    testing: 'test'
-  });
+  try {
+    const result = await api.post('/upload/photo', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      },
+      testing: 'test'
+    });
 
-  if (result.data) {
-    return result.data;
+    if (result.data) {
+      return result.data;
+    }
+  } catch (e) {
+    if (__DEV__) {
+      console.log('uploadPhoto:', e.response);
+    }
+    return null;
   }
-
-  return null;
 };
 
 export const uploadPhotoWithoutAuth = async (formData) => {

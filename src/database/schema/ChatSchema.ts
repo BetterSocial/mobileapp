@@ -121,7 +121,8 @@ class ChatSchema implements BaseDbSchema {
     db: SQLiteDatabase,
     channelId: string,
     myId: string,
-    myAnonymousId: string
+    myAnonymousId: string,
+    limit?: number
   ): Promise<BaseDbSchema[]> {
     const selectQuery = `
       SELECT A.*, 
@@ -154,7 +155,7 @@ class ChatSchema implements BaseDbSchema {
       ${ChatSchema.getTableName()} A 
       LEFT JOIN ${UserSchema.getTableName()} B 
       ON A.user_id = user_schema_user_id AND A.channel_id = user_channel_id
-      WHERE A.channel_id = ? ORDER BY created_at DESC;`;
+      WHERE A.channel_id = ? ORDER BY created_at DESC ${limit ? `LIMIT ${limit}` : ''};`;
 
     const [{rows}] = await db.executeSql(selectQuery, [myId, myAnonymousId, channelId]);
     return Promise.resolve(rows.raw().map(this.fromDatabaseObject));

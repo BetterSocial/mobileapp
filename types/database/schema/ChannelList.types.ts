@@ -89,3 +89,7 @@ export enum ChatStatus {
   DELIVERED = 'delivered',
   READ = 'read'
 }
+
+export type GoToChatScreenOptionalParams = {
+  initialMessages?: ChatSchema[];
+};

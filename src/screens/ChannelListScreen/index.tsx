@@ -11,6 +11,7 @@ import GroupChatChannelItem from '../../components/ChatList/GroupChatChannelItem
 import MessageChannelItem from '../../components/AnonymousChat/MessageChannelItem';
 import PostNotificationChannelItem from '../../components/AnonymousChat/PostNotificationChannelItem';
 import Search from './elements/Search';
+import useChannelGetInitialMessagesHook from '../../hooks/core/chat/useChannelGetInitialMessagesHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import useRootChannelListHook from '../../hooks/screen/useRootChannelListHook';
 import useSignedChannelListScreenHook from '../../hooks/screen/useSignedChannelListHook';
@@ -34,6 +35,9 @@ const ChannelListScreen = ({route}) => {
     goToCommunityScreen,
     goToContactScreen
   } = useSignedChannelListScreenHook();
+  const {getInitialMessagesFromHashMap, viewabilityConfigCallbackPairs} =
+    useChannelGetInitialMessagesHook();
+
   const ref = React.useRef(null);
 
   useScrollToTop(ref);
@@ -54,7 +58,8 @@ const ChannelListScreen = ({route}) => {
             AnalyticsEventTracking.eventTrack(
               BetterSocialEventTracking.SIGNED_CHAT_TAB_OPEN_CHAT_SCREEN
             );
-            goToChatScreen(item);
+            const initialMessages = getInitialMessagesFromHashMap(item?.id);
+            goToChatScreen(item, undefined, {initialMessages});
           }}
         />
       );
@@ -85,7 +90,8 @@ const ChannelListScreen = ({route}) => {
             AnalyticsEventTracking.eventTrack(
               BetterSocialEventTracking.SIGNED_CHAT_TAB_OPEN_GROUP_CHAT_SCREEN
             );
-            goToChatScreen(item);
+            const initialMessages = getInitialMessagesFromHashMap(item?.id);
+            goToChatScreen(item, undefined, {initialMessages});
           }}
         />
       );
@@ -134,6 +140,7 @@ const ChannelListScreen = ({route}) => {
         }
         renderItem={renderChannelItem}
         style={{backgroundColor: COLORS.almostBlack}}
+        viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
       />
     </>
   );
