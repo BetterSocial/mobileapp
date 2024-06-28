@@ -308,7 +308,6 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
       setTimeout(() => navigation.navigate('SignedChatScreen', {initialMessages}), 10);
     }
 
-    console.log('checkpoint 7');
     return null;
   };
 
