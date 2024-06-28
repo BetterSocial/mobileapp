@@ -266,7 +266,8 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   };
 
   const sendChatMutation = useMutation(sendChat, {
-    retry: true
+    retry: 10,
+    retryDelay: 1000
   });
 
   const updateChatContinuity = (chatsData: ChatSchema[]) => {
@@ -324,7 +325,6 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   React.useEffect(() => {
     return () => {
       setChats([]);
-      setSelectedChannel(null);
     };
   }, []);
 
