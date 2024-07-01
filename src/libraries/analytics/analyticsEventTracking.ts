@@ -214,7 +214,20 @@ export enum BetterSocialEventTracking {
   FEED_COMMUNITY_PAGE_POST_INTERACTION_UPVOTE_REMOVED = 'FeedPage-CP_postInteractions-upvote-unselected_upvote-removed',
   FEED_COMMUNITY_PAGE_POST_INTERACTION_OPEN_AUTHOR_PROFILE = 'FeedPage-CP_postInteractions-authorname_openOtherProfile',
   FEED_COMMUNITY_PAGE_MULTIPLE_POLL_SEE_RESULTS = 'FeedPage-CP_postInteractions-pollseeresults_clicked',
-  FEED_COMMUNITY_PAGE_SINGLE_POLL_CLICKED = 'FeedPage-CP_postInteractions-pollChoice'
+  FEED_COMMUNITY_PAGE_SINGLE_POLL_CLICKED = 'FeedPage-CP_postInteractions-pollChoice',
+
+  // DOMAIN PAGE
+  DOMAIN_PAGE_BACK_BUTTON_CLICKED = 'FeedPage-DomainPage_backButton_clicked',
+  DOMAIN_PAGE_CREDDER_GROUP_CLICKED = 'FeedPage-DomainPage_credScoreButton_clicked',
+  DOMAIN_PAGE_EXTERNAL_LINK_CLICKED = 'FeedPage-DomainPage_openLink_clicked',
+  DOMAIN_PAGE_FOLLOW_BUTTON_CLICKED = 'FeedPage-DomainPage_follow_follow',
+  DOMAIN_PAGE_POST_DOWNVOTE_INSERTED = 'FeedPage-DomainPage_postInteractions-downvote_downvoted',
+  DOMAIN_PAGE_POST_DOWNVOTE_REMOVED = 'FeedPage-DomainPage_postInteractions-downvote-unselected_downvote-removed',
+  DOMAIN_PAGE_POST_FOLLOW_BUTTON_CLICKED = 'FeedPage-DomainPage_postInteractions-follow_follow',
+  DOMAIN_PAGE_POST_UNFOLLOW_BUTTON_CLICKED = 'FeedPage-DomainPage_postInteractions-follow_unfollow',
+  DOMAIN_PAGE_POST_UPVOTE_INSERTED = 'FeedPage-DomainPage_postInteractions-upvote_upvoted',
+  DOMAIN_PAGE_POST_UPVOTE_REMOVED = 'FeedPage-DomainPage_postInteractions-upvote-unselected_upvote-removed',
+  DOMAIN_PAGE_UNFOLLOW_BUTTON_CLICKED = 'FeedPage-DomainPage_follow_unfollow'
 }
 
 const ENABLE_TOAST = ENV === 'Dev';

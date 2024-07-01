@@ -12,6 +12,9 @@ import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
 import RenderItem from './elements/RenderItem';
 import ShareUtils from '../../utils/share';
 import dimen from '../../utils/dimen';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../libraries/analytics/analyticsEventTracking';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {addIFollowByID, setIFollow} from '../../context/actions/news';
@@ -182,13 +185,14 @@ const DomainScreen = () => {
 
   const domainImage = dataDomain.domain ? dataDomain.domain.image : dataDomain.og.domainImage;
 
-  const handleFollow = async () => {
+  const handleFollow = async (event = AnalyticsEventTracking.UNDEFINED_EVENT) => {
     setFollow(true);
 
     const newDomainFollowers = domainFollowers + 1;
     setDomainFollowers(newDomainFollowers);
     const res = await followDomain(dataFollow);
     if (res.code === 200) {
+      AnalyticsEventTracking.eventTrack(event);
       addIFollowByID(
         {
           domain_id_followed: iddomain
@@ -201,13 +205,14 @@ const DomainScreen = () => {
     }
   };
 
-  const handleUnfollow = async () => {
+  const handleUnfollow = async (event = AnalyticsEventTracking.UNDEFINED_EVENT) => {
     setFollow(false);
 
     const newDomainFollowers = domainFollowers - 1;
     setDomainFollowers(newDomainFollowers);
     const res = await unfollowDomain(dataFollow);
     if (res.code === 200) {
+      AnalyticsEventTracking.eventTrack(event);
       const newListFollow = await ifollow.filter((obj) => obj.domain_id_followed !== iddomain);
 
       setIFollow(newListFollow, dispatch);
@@ -271,8 +276,12 @@ const DomainScreen = () => {
               onPressBlock={onReaction}
               onPressUnblock={onUnblockDomain}
               follow={follow}
-              handleFollow={handleFollow}
-              handleUnfollow={handleUnfollow}
+              handleFollow={() =>
+                handleFollow(BetterSocialEventTracking.DOMAIN_PAGE_FOLLOW_BUTTON_CLICKED)
+              }
+              handleUnfollow={() =>
+                handleUnfollow(BetterSocialEventTracking.DOMAIN_PAGE_UNFOLLOW_BUTTON_CLICKED)
+              }
               isBlocked={isBlocked}
               item={dataDomain}
             />
@@ -299,8 +308,12 @@ const DomainScreen = () => {
               onPressBlock={onReaction}
               follow={follow}
               follower={domainFollowers}
-              handleFollow={handleFollow}
-              handleUnfollow={handleUnfollow}
+              handleFollow={() =>
+                handleFollow(BetterSocialEventTracking.DOMAIN_PAGE_POST_FOLLOW_BUTTON_CLICKED)
+              }
+              handleUnfollow={() =>
+                handleUnfollow(BetterSocialEventTracking.DOMAIN_PAGE_POST_UNFOLLOW_BUTTON_CLICKED)
+              }
               onPressShare={ShareUtils.shareDomain}
             />
           );
