@@ -35,7 +35,10 @@ const DiscoverySearch = ({
   fetchDiscoveryData = () => {},
   fetchData,
   onCancelToken = () => {},
-  hideBackIcon = false
+  hideBackIcon = false,
+  eventTrack = {
+    onFocus: () => {}
+  }
 }) => {
   const navigation = useNavigation();
   const [, discoveryDispatch] = React.useContext(Context).discovery;
@@ -147,6 +150,11 @@ const DiscoverySearch = ({
     AsyncStorage.setItem(RECENT_SEARCH_TERMS, JSON.stringify(resultArray));
   };
 
+  const onFocus = () => {
+    eventTrack.onFocus();
+    handleFocus(true);
+  };
+
   React.useEffect(() => {
     debounceChangeText(searchText);
   }, [searchText]);
@@ -208,7 +216,7 @@ const DiscoverySearch = ({
             // value={discoverySearchBarText}
             value={searchText}
             onChangeText={handleChangeText}
-            onFocus={() => handleFocus(true)}
+            onFocus={onFocus}
             onBlur={() => handleFocus(false)}
             multiline={false}
             returnKeyType="search"

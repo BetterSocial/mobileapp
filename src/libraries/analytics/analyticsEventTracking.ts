@@ -238,7 +238,19 @@ export enum BetterSocialEventTracking {
   DOMAIN_PAGE_BLOCK_DOMAIN_BLOCK_INDEFINITELY_CLICKED = 'FeedPage-DomainPage_blockdrawer-blockAndReport-reportSkip_clicked',
   DOMAIN_PAGE_BLOCK_DOMAIN_BLOCK_AND_REPORT_REASON = 'FeedPage-DomainPage_blockdrawer-blockAndReport-reasons',
   DOMAIN_PAGE_BLOCK_DOMAIN_REPORT_INFO_SUBMITTED = 'FeedPage-DomainPage_blockAndReport-reportInfo_submitted',
-  DOMAIN_PAGE_BLOCK_DOMAIN_REPORT_INFO_SKIPPED = 'FeedPage-DomainPage_blockAndReport-reportInfoSkipped_clicked'
+  DOMAIN_PAGE_BLOCK_DOMAIN_REPORT_INFO_SKIPPED = 'FeedPage-DomainPage_blockAndReport-reportInfoSkipped_clicked',
+
+  // DISCOVERY SCREEN
+  DISCOVERY_SCREEN_SEARCH_COMMUNITY_OPEN_CREATE_COMMUNITY = 'Discovery-SearchComms_startNewCommunity_openCreateCommunityPage',
+  DISCOVERY_SCREEN_SEARCH_COMMUNITY_YOUR_COMMUNITY_JOIN = 'Discovery-SearchComms_joinedComms-joinCommunity_joined',
+  DISCOVERY_SCREEN_SEARCH_COMMUNITY_YOUR_COMMUNITY_LEFT = 'Discovery-SearchComms_joinedComms-joinCommunity_left',
+  DISCOVERY_SCREEN_SEARCH_COMMUNITY_YOUR_COMMUNITY_OPENED = 'Discovery-SearchComms_joinedComms-CP_opened',
+  DISCOVERY_SCREEN_SEARCH_COMMUNITY_SUGGESTED_COMMUNITY_JOIN = 'Discovery-SearchComms_suggestedComms-joinCommunity_clicked',
+  DISCOVERY_SCREEN_SEARCH_COMMUNITY_SUGGESTED_COMMUNITY_LEFT = 'Discovery-SearchComms_suggestedComms-joinCommunity_unclicked',
+  DISCOVERY_SCREEN_SEARCH_COMMUNITY_SUGGESTED_COMMUNITY_OPENED = 'Discovery-SearchComms_suggestedComms-CP_opened',
+  DISCOVERY_SCREEN_SEARCH_COMMUNITY_SEARCHED_COMMUNITY_CLICKED = 'Discovery-SearchComms_searchComms_clicked',
+  DISCOVERY_SCREEN_SEARCH_COMMUNITY_RECENT_SEARCH_CLICKED = 'Discovery-SearchComms_recentSearches_clicked',
+  DISCOVERY_SCREEN_SEARCH_COMMUNITY_CLEAR_RECENT_SEARCH_CLICKED = 'Discovery-SearchComms_clearRecentSearches_clicked'
 }
 
 const ENABLE_TOAST = ENV === 'Dev';

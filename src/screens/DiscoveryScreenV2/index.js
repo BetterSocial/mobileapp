@@ -14,6 +14,9 @@ import NewsFragment from './fragment/NewsFragment';
 import Search from './elements/Search';
 import TopicFragment from './fragment/TopicFragment';
 import UsersFragment from './fragment/UsersFragment';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../libraries/analytics/analyticsEventTracking';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {
@@ -296,6 +299,14 @@ const DiscoveryScreenV2 = ({route}) => {
     return null;
   })();
 
+  const onSearchCommunityPressed = () => {
+    if (selectedScreen === DISCOVERY_TAB_TOPICS) {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_COMMUNITY_SEARCHED_COMMUNITY_CLICKED
+      );
+    }
+  };
+
   return (
     <DiscoveryContainer>
       <StatusBar translucent={false} barStyle={'light-content'} />
@@ -322,6 +333,9 @@ const DiscoveryScreenV2 = ({route}) => {
           fetchDiscoveryData={fetchDiscoveryData}
           onCancelToken={onCancelToken}
           placeholderText={route.name === 'Followings' ? profileState.navbarTitle : undefined}
+          eventTrack={{
+            onFocus: onSearchCommunityPressed
+          }}
         />
       )}
       <DiscoveryTab
