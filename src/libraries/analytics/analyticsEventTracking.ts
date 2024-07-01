@@ -224,10 +224,21 @@ export enum BetterSocialEventTracking {
   DOMAIN_PAGE_POST_DOWNVOTE_INSERTED = 'FeedPage-DomainPage_postInteractions-downvote_downvoted',
   DOMAIN_PAGE_POST_DOWNVOTE_REMOVED = 'FeedPage-DomainPage_postInteractions-downvote-unselected_downvote-removed',
   DOMAIN_PAGE_POST_FOLLOW_BUTTON_CLICKED = 'FeedPage-DomainPage_postInteractions-follow_follow',
+  DOMAIN_PAGE_POST_REPLY_BUTTON_CLICKED = 'FeedPage-DomainPage_postInteractions-replyButton_openPDP',
+  DOMAIN_PAGE_POST_SHARE_BUTTON_CLICKED = 'FeedPage-DomainPage_postInteractions-shareButton_clicked',
+  DOMAIN_PAGE_POST_SCROLLED = 'FeedPage-DomainPage_post_scrolled',
+  DOMAIN_PAGE_POST_PROPERTIES = 'FeedPage-DomainPage_postProperties',
   DOMAIN_PAGE_POST_UNFOLLOW_BUTTON_CLICKED = 'FeedPage-DomainPage_postInteractions-follow_unfollow',
   DOMAIN_PAGE_POST_UPVOTE_INSERTED = 'FeedPage-DomainPage_postInteractions-upvote_upvoted',
   DOMAIN_PAGE_POST_UPVOTE_REMOVED = 'FeedPage-DomainPage_postInteractions-upvote-unselected_upvote-removed',
-  DOMAIN_PAGE_UNFOLLOW_BUTTON_CLICKED = 'FeedPage-DomainPage_follow_unfollow'
+  DOMAIN_PAGE_UNFOLLOW_BUTTON_CLICKED = 'FeedPage-DomainPage_follow_unfollow',
+  DOMAIN_PAGE_BLOCK_BUTTON_CLICKED = 'FeedPage-DomainPage_postInteractions-blockSymbol_openBlockMenu',
+  DOMAIN_PAGE_BLOCK_DOMAIN_BOTTOM_SHEET_CLOSED = 'FeedPage-DomainPage_blockdrawer-justblock_closesBlockMenu',
+  DOMAIN_PAGE_BLOCK_DOMAIN_BLOCK_AND_REPORT_CLICKED = 'FeedPage-DomainPage_blockdrawer-blockAndReport_clicked',
+  DOMAIN_PAGE_BLOCK_DOMAIN_BLOCK_INDEFINITELY_CLICKED = 'FeedPage-DomainPage_blockdrawer-blockAndReport-reportSkip_clicked',
+  DOMAIN_PAGE_BLOCK_DOMAIN_BLOCK_AND_REPORT_REASON = 'FeedPage-DomainPage_blockdrawer-blockAndReport-reasons',
+  DOMAIN_PAGE_BLOCK_DOMAIN_REPORT_INFO_SUBMITTED = 'FeedPage-DomainPage_blockAndReport-reportInfo_submitted',
+  DOMAIN_PAGE_BLOCK_DOMAIN_REPORT_INFO_SKIPPED = 'FeedPage-DomainPage_blockAndReport-reportInfoSkipped_clicked'
 }
 
 const ENABLE_TOAST = ENV === 'Dev';

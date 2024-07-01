@@ -13,9 +13,17 @@ export type OnWillSendViewPostTimeOptions = {
   scrollEventItemName?: BetterSocialEventTracking;
 };
 
-const useViewPostTimeHook = (dispatch, timer, viewPostTimeIndex) => {
+const useViewPostTimeHook = (
+  dispatch,
+  timer,
+  viewPostTimeIndex,
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  manualSetViewPostTimeIndex = null
+) => {
   const {getCurrentPostViewed, isSamePostViewed} = useFeedUtilsHook();
   const sendViewPostTimeWithFeeds = async (feedsParam = [], withResetTime = false) => {
+    if (!dispatch || !timer) return;
+
     const currentTime = new Date();
     const diffTime = currentTime.getTime() - timer.getTime();
     const id = (feedsParam?.[viewPostTimeIndex] as any)?.id;
@@ -26,6 +34,7 @@ const useViewPostTimeHook = (dispatch, timer, viewPostTimeIndex) => {
   };
 
   const updateViewPostTime = (momentumEvent) => {
+    if (!dispatch) return;
     setViewPostTimeIndex(getCurrentPostViewed(momentumEvent), dispatch);
     setTimer(new Date(), dispatch);
   };
@@ -39,7 +48,11 @@ const useViewPostTimeHook = (dispatch, timer, viewPostTimeIndex) => {
     if (viewPostTimeIndex < 0) return;
     if (viewPostTimeIndex > feedParams?.length) return;
     sendViewPostTimeWithFeeds(feedParams);
-    updateViewPostTime(event);
+    if (manualSetViewPostTimeIndex !== null) {
+      const index = getCurrentPostViewed(event);
+      manualSetViewPostTimeIndex?.(index);
+    } else updateViewPostTime(event);
+
     if (options?.scrollEventName) {
       AnalyticsEventTracking.eventTrack(options?.scrollEventName);
     }
