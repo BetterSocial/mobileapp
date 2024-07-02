@@ -14,10 +14,8 @@ import TopicsProfilePictureEmptyState from '../../../assets/icon/TopicsProfilePi
 import dimen from '../../../utils/dimen';
 import useChatClientHook from '../../../utils/getstream/useChatClientHook';
 import useDiscovery from '../hooks/useDiscovery';
+import useDiscoveryScreenAnalyticsHook from '../../../libraries/analytics/useDiscoveryScreenAnalyticsHook';
 import useIsReady from '../../../hooks/useIsReady';
-import AnalyticsEventTracking, {
-  BetterSocialEventTracking
-} from '../../../libraries/analytics/analyticsEventTracking';
 import {COLORS} from '../../../utils/theme';
 import {convertTopicNameToTopicPageScreenParam} from '../../../utils/string/StringUtils';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
@@ -87,6 +85,10 @@ const TopicFragment = ({
   withoutRecent = false
 }) => {
   const [activeSections, setActiveSections] = React.useState([]);
+  const {
+    common: {onCommonClearRecentSearch, onCommonRecentItemClicked},
+    topic: {onFollowUnfollow, onTopicPressed, onStartNewCommunityAnalyticsPressed}
+  } = useDiscoveryScreenAnalyticsHook();
 
   React.useEffect(() => {
     if (searchText.length === 0) {
@@ -123,32 +125,6 @@ const TopicFragment = ({
     }));
   }, [unfollowedTopic]);
 
-  const handleAnalyticsEvent = (willFollow, section) => {
-    if (willFollow && section === 'your-communities') {
-      AnalyticsEventTracking.eventTrack(
-        BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_COMMUNITY_YOUR_COMMUNITY_JOIN
-      );
-    }
-
-    if (!willFollow && section === 'your-communities') {
-      AnalyticsEventTracking.eventTrack(
-        BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_COMMUNITY_YOUR_COMMUNITY_LEFT
-      );
-    }
-
-    if (willFollow && section === 'suggested-communities') {
-      AnalyticsEventTracking.eventTrack(
-        BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_COMMUNITY_SUGGESTED_COMMUNITY_JOIN
-      );
-    }
-
-    if (!willFollow && section === 'suggested-communities') {
-      AnalyticsEventTracking.eventTrack(
-        BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_COMMUNITY_SUGGESTED_COMMUNITY_LEFT
-      );
-    }
-  };
-
   const handleTopic = (from, willFollow, item) => {
     if (from === FROM_FOLLOWED_TOPIC_INITIAL || from === FROM_UNFOLLOWED_TOPIC_INITIAL) {
       updateFollowTopicDiscoveryContext(willFollow, item);
@@ -184,7 +160,7 @@ const TopicFragment = ({
   };
 
   const handleFollow = async (from, willFollow, item, section) => {
-    handleAnalyticsEvent(willFollow, section);
+    onFollowUnfollow(willFollow, section);
     handleTopic(from, willFollow, item);
 
     try {
@@ -201,15 +177,7 @@ const TopicFragment = ({
       isFollowing: item.following
     };
 
-    if (section === 'your-communities') {
-      AnalyticsEventTracking.eventTrack(
-        BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_COMMUNITY_YOUR_COMMUNITY_OPENED
-      );
-    } else if (section === 'suggested-communities') {
-      AnalyticsEventTracking.eventTrack(
-        BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_COMMUNITY_SUGGESTED_COMMUNITY_OPENED
-      );
-    }
+    onTopicPressed(section);
 
     navigation.push('TopicPageScreen', navigationParam);
   };
@@ -258,22 +226,8 @@ const TopicFragment = ({
     });
 
   const onStartNewCommunityPressed = () => {
-    AnalyticsEventTracking.eventTrack(
-      BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_COMMUNITY_OPEN_CREATE_COMMUNITY
-    );
+    onStartNewCommunityAnalyticsPressed();
     navigation.push('CreateCommunity');
-  };
-
-  const onClearRecentSearch = () => {
-    AnalyticsEventTracking.eventTrack(
-      BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_COMMUNITY_CLEAR_RECENT_SEARCH_CLICKED
-    );
-  };
-
-  const onRecentSearchItemClicked = () => {
-    AnalyticsEventTracking.eventTrack(
-      BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_COMMUNITY_RECENT_SEARCH_CLICKED
-    );
   };
 
   const __renderTopicItems = () => {
@@ -311,8 +265,8 @@ const TopicFragment = ({
                 setSearchText={setSearchText}
                 setIsFirstTimeOpen={setIsFirstTimeOpen}
                 eventTrack={{
-                  onClearRecentSearch,
-                  onRecentSearchItemClicked
+                  onClearRecentSearch: () => onCommonClearRecentSearch('topic'),
+                  onRecentSearchItemClicked: () => onCommonRecentItemClicked('topic')
                 }}
               />
               <AccordionView

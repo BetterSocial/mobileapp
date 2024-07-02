@@ -1,23 +1,24 @@
+import * as React from 'react';
+import Accordion from 'react-native-collapsible/Accordion';
+import PropTypes from 'prop-types';
+import {FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
 /* eslint-disable no-underscore-dangle */
 import {useNavigation} from '@react-navigation/native';
-import PropTypes from 'prop-types';
-import * as React from 'react';
-import {FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
 
-import Accordion from 'react-native-collapsible/Accordion';
-import MemoDomainProfilePictureEmptyState from '../../../assets/icon/DomainProfilePictureEmptyState';
-import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
-import {Context} from '../../../context/Store';
 import DiscoveryAction from '../../../context/actions/discoveryAction';
-import FollowingAction from '../../../context/actions/following';
-import useIsReady from '../../../hooks/useIsReady';
-import {followDomain, unfollowDomain} from '../../../service/domain';
-import dimen from '../../../utils/dimen';
-import {fonts} from '../../../utils/fonts';
-import {COLORS} from '../../../utils/theme';
-import DomainList from '../elements/DiscoveryItemList';
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
+import DomainList from '../elements/DiscoveryItemList';
+import FollowingAction from '../../../context/actions/following';
+import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
+import MemoDomainProfilePictureEmptyState from '../../../assets/icon/DomainProfilePictureEmptyState';
 import RecentSearch from '../elements/RecentSearch';
+import dimen from '../../../utils/dimen';
+import useDiscoveryScreenAnalyticsHook from '../../../libraries/analytics/useDiscoveryScreenAnalyticsHook';
+import useIsReady from '../../../hooks/useIsReady';
+import {COLORS} from '../../../utils/theme';
+import {Context} from '../../../context/Store';
+import {followDomain, unfollowDomain} from '../../../service/domain';
+import {fonts} from '../../../utils/fonts';
 
 const FROM_FOLLOWED_DOMAIN = 'fromfolloweddomains';
 const FROM_FOLLOWED_DOMAIN_INITIAL = 'fromfolloweddomainsinitial';
@@ -88,6 +89,11 @@ const DomainFragment = ({
 
   const [, followingDispatch] = React.useContext(Context).following;
 
+  const {
+    common: {onCommonClearRecentSearch, onCommonRecentItemClicked},
+    domain: {onDomainPageOpened, onDomainPageFollowButtonClicked, onDomainPageUnfollowButtonClicked}
+  } = useDiscoveryScreenAnalyticsHook();
+
   const isReady = useIsReady();
 
   React.useEffect(() => {
@@ -119,7 +125,7 @@ const DomainFragment = ({
     }));
   }, [unfollowedDomains]);
 
-  const __handleOnPressDomain = (item) => {
+  const __handleOnPressDomain = (item, section) => {
     const navigationParam = {
       item: {
         content: {
@@ -136,6 +142,7 @@ const DomainFragment = ({
       }
     };
 
+    onDomainPageOpened(section);
     navigation.push('DomainScreen', navigationParam);
   };
   const handleScroll = React.useCallback(() => {
@@ -201,21 +208,24 @@ const DomainFragment = ({
     }
   };
 
-  const __handleFollow = async (from, willFollow, item, index) => {
+  const __handleFollow = async (from, willFollow, item, index, section) => {
     handleDomain(from, willFollow, item, index);
     const data = {
       domainId: item.domain_id_followed,
       source: 'discoveryScreen'
     };
+
     if (willFollow) {
       try {
         await followDomain(data);
+        onDomainPageFollowButtonClicked(section);
       } catch (e) {
         handleDomain(from, !willFollow, item, index);
       }
     } else {
       try {
         await unfollowDomain(data);
+        onDomainPageUnfollowButtonClicked(section);
       } catch (e) {
         handleDomain(from, !willFollow, item, index);
       }
@@ -232,7 +242,7 @@ const DomainFragment = ({
     );
   };
 
-  const renderItem = ({from, item, index}) => {
+  const renderItem = ({from, item, index, section}) => {
     if (item.separator) {
       return (
         <>
@@ -246,9 +256,9 @@ const DomainFragment = ({
         <View style={styles.domainContainer}>
           <DomainList
             isDomain={true}
-            onPressBody={() => __handleOnPressDomain(item)}
-            handleSetFollow={() => __handleFollow(from, true, item, index)}
-            handleSetUnFollow={() => __handleFollow(from, false, item, index)}
+            onPressBody={() => __handleOnPressDomain(item, section)}
+            handleSetFollow={() => __handleFollow(from, true, item, index, section)}
+            handleSetUnFollow={() => __handleFollow(from, false, item, index, section)}
             DefaultImage={renderDefaultImage}
             item={{
               name: item.domain_name,
@@ -275,7 +285,8 @@ const DomainFragment = ({
     return renderItem({
       from: result,
       item,
-      index
+      index,
+      section: 'suggested-domain'
     });
   };
 
@@ -315,10 +326,14 @@ const DomainFragment = ({
               shown={!withoutRecent || isFirstTimeOpen}
               setSearchText={setSearchText}
               setIsFirstTimeOpen={setIsFirstTimeOpen}
+              eventTrack={{
+                onClearRecentSearch: () => onCommonClearRecentSearch('domain'),
+                onRecentSearchItemClicked: () => onCommonRecentItemClicked('domain')
+              }}
             />
             <AccordionView
               data={firstData}
-              renderItem={renderItem}
+              renderItem={(props) => renderItem({...props, section: 'your-domain'})}
               activeSections={activeSections}
               setActiveSections={setActiveSections}
             />
@@ -328,7 +343,7 @@ const DomainFragment = ({
         contentContainerStyle={{paddingBottom: 100}}
         data={data}
         keyExtractor={(_, index) => index.toString()}
-        renderItem={renderItemList}
+        renderItem={(props) => renderItemList({...props, section: 'suggested-domain'})}
         onEndReached={() => fetchData()}
         onEndReachedThreshold={0.6}
         keyboardShouldPersistTaps="handled"

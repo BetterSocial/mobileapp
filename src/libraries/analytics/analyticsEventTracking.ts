@@ -260,7 +260,19 @@ export enum BetterSocialEventTracking {
   DISCOVERY_SCREEN_SEARCH_NEWS_BACK_BUTTON_CLICKED = 'Discovery-SearchNews_backButton_openPrevPage',
   DISCOVERY_SCREEN_SEARCH_NEWS_COMMUNITY_TAB_CLICKED = 'Discovery-SearchNews_searchCommsTab_clicked',
   DISCOVERY_SCREEN_SEARCH_NEWS_USERS_TAB_CLICKED = 'Discovery-SearchNews_searchUsersTab_clicked',
-  DISCOVERY_SCREEN_SEARCH_NEWS_DOMAINS_TAB_CLICKED = 'Discovery-SearchNews_searchDomainsTab_clicked'
+  DISCOVERY_SCREEN_SEARCH_NEWS_DOMAINS_TAB_CLICKED = 'Discovery-SearchNews_searchDomainsTab_clicked',
+
+  DISCOVERY_SCREEN_SEARCH_DOMAIN_SUGGESTED_DOMAIN_JOIN = 'Discovery-SearchDomains_suggestedDomains-followDomain_clicked',
+  DISCOVERY_SCREEN_SEARCH_DOMAIN_SUGGESTED_DOMAIN_LEFT = 'Discovery-SearchDomains_suggestedDomains-followDomain_unclicked',
+  DISCOVERY_SCREEN_SEARCH_DOMAIN_YOUR_DOMAIN_OPENED = 'Discovery-SearchDomains_followedDomains-domainPage_opened',
+  DISCOVERY_SCREEN_SEARCH_DOMAIN_SUGGESTED_DOMAIN_OPENED = 'Discovery-SearchDomains_suggestedDomains-domainPage_opened',
+  DISCOVERY_SCREEN_SEARCH_DOMAIN_SEARCH_DOMAIN_CLICKED = 'Discovery-SearchDomains_searchDomains_clicked',
+  DISCOVERY_SCREEN_SEARCH_DOMAIN_RECENT_SEARCH_CLICKED = 'Discovery-SearchDomains_recentSearches_clicked',
+  DISCOVERY_SCREEN_SEARCH_DOMAIN_CLEAR_RECENT_SEARCH_CLICKED = 'Discovery-SearchDomains_clearRecentSearches_clicked',
+  DISCOVERY_SCREEN_SEARCH_DOMAIN_BACK_BUTTON_CLICKED = 'Discovery-SearchDomains_backButton_openPrevPage',
+  DISCOVERY_SCREEN_SEARCH_DOMAIN_COMMUNITY_TAB_CLICKED = 'Discovery-SearchDomains_searchCommsTab_clicked',
+  DISCOVERY_SCREEN_SEARCH_DOMAIN_USERS_TAB_CLICKED = 'Discovery-SearchDomains_searchUsersTab_clicked',
+  DISCOVERY_SCREEN_SEARCH_DOMAIN_NEWS_TAB_CLICKED = 'Discovery-SearchDomains_searchNewsTab_clicked'
 }
 
 const ENABLE_TOAST = ENV === 'Dev';
