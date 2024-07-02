@@ -97,10 +97,16 @@ const CreateCommunity = () => {
     if (name && name.length >= MINIMUM_NAME_LENGTH && typeFetch === 'available') {
       const response = await submitCommunityName(name);
       if (response.success) {
-        navigation.replace('ContactScreen', {
+        // disabled v3 add members to community
+        // navigation.replace('ContactScreen', {
+        //   isCreateCommunity: true,
+        //   topicCommunityId: response.topic_id,
+        //   topicCommunityName: name
+        // });
+
+        navigation.replace(NavigationConstants.CREATE_POST_SCREEN, {
           isCreateCommunity: true,
-          topicCommunityId: response.topic_id,
-          topicCommunityName: name
+          topic: name
         });
       }
     } else {
