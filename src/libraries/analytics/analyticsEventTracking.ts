@@ -272,7 +272,21 @@ export enum BetterSocialEventTracking {
   DISCOVERY_SCREEN_SEARCH_DOMAIN_BACK_BUTTON_CLICKED = 'Discovery-SearchDomains_backButton_openPrevPage',
   DISCOVERY_SCREEN_SEARCH_DOMAIN_COMMUNITY_TAB_CLICKED = 'Discovery-SearchDomains_searchCommsTab_clicked',
   DISCOVERY_SCREEN_SEARCH_DOMAIN_USERS_TAB_CLICKED = 'Discovery-SearchDomains_searchUsersTab_clicked',
-  DISCOVERY_SCREEN_SEARCH_DOMAIN_NEWS_TAB_CLICKED = 'Discovery-SearchDomains_searchNewsTab_clicked'
+  DISCOVERY_SCREEN_SEARCH_DOMAIN_NEWS_TAB_CLICKED = 'Discovery-SearchDomains_searchNewsTab_clicked',
+
+  DISCOVERY_SCREEN_SEARCH_USERS_YOUR_USER_FOLLOWED = 'Discovery-SearchUsers_suggestedUsers-followUser_followed',
+  DISCOVERY_SCREEN_SEARCH_USERS_YOUR_USER_UNFOLLOWED = 'Discovery-SearchUsers_suggestedUsers-followUser_unfollowed',
+  DISCOVERY_SCREEN_SEARCH_USERS_SUGGESTED_USER_FOLLOWED = 'Discovery-SearchUsers_suggestedUsers-followUser_followed',
+  DISCOVERY_SCREEN_SEARCH_USERS_SUGGESTED_USER_UNFOLLOWED = 'Discovery-SearchUsers_suggestedUsers-followUser_unfollowed',
+  DISCOVERY_SCREEN_SEARCH_USERS_YOUR_USER_OPENED = 'Discovery-SearchUsers_followedUsers-otherProfile_opened',
+  DISCOVERY_SCREEN_SEARCH_USERS_SUGGESTED_USER_OPENED = 'Discovery-SearchUsers_suggestedUsers-otherProfile_opened',
+  DISCOVERY_SCREEN_SEARCH_USERS_SEARCH_USER_CLICKED = 'Discovery-SearchUsers_searchUsers_clicked',
+  DISCOVERY_SCREEN_SEARCH_USERS_RECENT_SEARCH_CLICKED = 'Discovery-SearchUsers_recentSearches_clicked',
+  DISCOVERY_SCREEN_SEARCH_USERS_CLEAR_RECENT_SEARCH_CLICKED = 'Discovery-SearchUsers_clearRecentSearches_clicked',
+  DISCOVERY_SCREEN_SEARCH_USERS_BACK_BUTTON_CLICKED = 'Discovery-SearchUsers_backButton_openPrevPage',
+  DISCOVERY_SCREEN_SEARCH_USERS_COMMUNITY_TAB_CLICKED = 'Discovery-SearchUsers_searchCommsTab_clicked',
+  DISCOVERY_SCREEN_SEARCH_USERS_DOMAINS_TAB_CLICKED = 'Discovery-SearchUsers_searchDomainsTab_clicked',
+  DISCOVERY_SCREEN_SEARCH_USERS_NEWS_TAB_CLICKED = 'Discovery-SearchUsers_searchNewsTab_clicked'
 }
 
 const ENABLE_TOAST = ENV === 'Dev';

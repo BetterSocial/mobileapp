@@ -6,6 +6,8 @@ import {
   DISCOVERY_TAB_USERS
 } from '../../utils/constants';
 
+export type DiscoveryScreenFragments = 'news' | 'domain' | 'topic' | 'user';
+
 const useDiscoveryScreenAnalyticsHook = (
   selectedScreen: number,
   setSelectedScreen: (number) => void
@@ -24,6 +26,10 @@ const useDiscoveryScreenAnalyticsHook = (
       AnalyticsEventTracking.eventTrack(
         BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_DOMAIN_SEARCH_DOMAIN_CLICKED
       );
+    } else if (selectedScreen === DISCOVERY_TAB_USERS) {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_USERS_SEARCH_USER_CLICKED
+      );
     }
   };
 
@@ -35,6 +41,10 @@ const useDiscoveryScreenAnalyticsHook = (
     } else if (selectedScreen === DISCOVERY_TAB_DOMAINS) {
       AnalyticsEventTracking.eventTrack(
         BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_DOMAIN_BACK_BUTTON_CLICKED
+      );
+    } else if (selectedScreen === DISCOVERY_TAB_USERS) {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_USERS_BACK_BUTTON_CLICKED
       );
     }
   };
@@ -55,7 +65,7 @@ const useDiscoveryScreenAnalyticsHook = (
     }
   };
 
-  const __handleSelectedTabClickedFromDomainScreen = (index: number) => {
+  const __handleSelectedTabClickedFromDomainFragment = (index: number) => {
     if (index === DISCOVERY_TAB_USERS) {
       AnalyticsEventTracking.eventTrack(
         BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_DOMAIN_USERS_TAB_CLICKED
@@ -71,16 +81,33 @@ const useDiscoveryScreenAnalyticsHook = (
     }
   };
 
+  const __handleSelectedTabClickedFromUserFragment = (index: number) => {
+    if (index === DISCOVERY_TAB_DOMAINS) {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_USERS_DOMAINS_TAB_CLICKED
+      );
+    } else if (index === DISCOVERY_TAB_TOPICS) {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_USERS_COMMUNITY_TAB_CLICKED
+      );
+    } else if (index === DISCOVERY_TAB_NEWS) {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_USERS_NEWS_TAB_CLICKED
+      );
+    }
+  };
+
   const onTabClicked = (index: number) => {
     setSelectedScreen((prev: number) => {
       if (prev === DISCOVERY_TAB_NEWS) __handleSelectedTabClickedFromNewsFragment(index);
-      else if (prev === DISCOVERY_TAB_DOMAINS) __handleSelectedTabClickedFromDomainScreen(index);
+      else if (prev === DISCOVERY_TAB_DOMAINS) __handleSelectedTabClickedFromDomainFragment(index);
+      else if (prev === DISCOVERY_TAB_USERS) __handleSelectedTabClickedFromUserFragment(index);
 
       return index;
     });
   };
 
-  const onCommonClearRecentSearch = (from: 'news' | 'domain' | 'topic') => {
+  const onCommonClearRecentSearch = (from: DiscoveryScreenFragments) => {
     if (from === 'news') {
       AnalyticsEventTracking.eventTrack(
         BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_NEWS_CLEAR_RECENT_SEARCH_CLICKED
@@ -93,10 +120,14 @@ const useDiscoveryScreenAnalyticsHook = (
       AnalyticsEventTracking.eventTrack(
         BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_COMMUNITY_CLEAR_RECENT_SEARCH_CLICKED
       );
+    } else if (from === 'user') {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_USERS_CLEAR_RECENT_SEARCH_CLICKED
+      );
     }
   };
 
-  const onCommonRecentItemClicked = (from: 'news' | 'domain' | 'topic') => {
+  const onCommonRecentItemClicked = (from: DiscoveryScreenFragments) => {
     if (from === 'news') {
       AnalyticsEventTracking.eventTrack(
         BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_NEWS_RECENT_SEARCH_CLICKED
@@ -108,6 +139,10 @@ const useDiscoveryScreenAnalyticsHook = (
     } else if (from === 'topic') {
       AnalyticsEventTracking.eventTrack(
         BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_COMMUNITY_RECENT_SEARCH_CLICKED
+      );
+    } else if (from === 'user') {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_USERS_RECENT_SEARCH_CLICKED
       );
     }
   };
@@ -211,6 +246,44 @@ const useDiscoveryScreenAnalyticsHook = (
     }
   };
 
+  // Users Discovery Screen
+  const onUserPageOpened = (from: 'your-user' | 'suggested-user') => {
+    console.log('onUserPageOpened', from);
+    if (from === 'your-user') {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_USERS_YOUR_USER_OPENED
+      );
+    } else if (from === 'suggested-user') {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_USERS_SUGGESTED_USER_OPENED
+      );
+    }
+  };
+
+  const onUserPageFollowButtonClicked = (from: 'your-user' | 'suggested-user') => {
+    if (from === 'suggested-user') {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_USERS_SUGGESTED_USER_FOLLOWED
+      );
+    } else if (from === 'your-user') {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_USERS_YOUR_USER_FOLLOWED
+      );
+    }
+  };
+
+  const onUserPageUnfollowButtonClicked = (from: 'your-user' | 'suggested-user') => {
+    if (from === 'suggested-user') {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_USERS_SUGGESTED_USER_UNFOLLOWED
+      );
+    } else if (from === 'your-user') {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_USERS_YOUR_USER_UNFOLLOWED
+      );
+    }
+  };
+
   return {
     common: {
       onSearchCommunityPressed,
@@ -234,6 +307,11 @@ const useDiscoveryScreenAnalyticsHook = (
       onDomainPageOpened,
       onDomainPageFollowButtonClicked,
       onDomainPageUnfollowButtonClicked
+    },
+    user: {
+      onUserPageOpened,
+      onUserPageFollowButtonClicked,
+      onUserPageUnfollowButtonClicked
     }
   };
 };

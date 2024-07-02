@@ -12,6 +12,7 @@ import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import RecentSearch from '../elements/RecentSearch';
 import useCreateChat from '../../../hooks/screen/useCreateChat';
 import useDiscovery from '../hooks/useDiscovery';
+import useDiscoveryScreenAnalyticsHook from '../../../libraries/analytics/useDiscoveryScreenAnalyticsHook';
 import {COLORS} from '../../../utils/theme';
 import {Context} from '../../../context/Store';
 import {checkUserBlock, setFollow, setUnFollow} from '../../../service/profile';
@@ -92,6 +93,11 @@ const UsersFragment = ({
   const {createSignChat, loadingCreateChat} = useCreateChat();
   const [activeSections, setActiveSections] = useState([]);
 
+  const {
+    common: {onCommonClearRecentSearch, onCommonRecentItemClicked},
+    user: {onUserPageOpened, onUserPageFollowButtonClicked, onUserPageUnfollowButtonClicked}
+  } = useDiscoveryScreenAnalyticsHook();
+
   const route = useRoute();
 
   const [myId, setMyId] = React.useState('');
@@ -121,7 +127,8 @@ const UsersFragment = ({
     handleActiveSections();
   }, [searchText, followedUsers]);
 
-  const handleOnPress = (item) => {
+  const handleOnPress = (item, section) => {
+    onUserPageOpened(section);
     navigation.push('OtherProfile', {
       data: {
         user_id: myId,
@@ -140,7 +147,7 @@ const UsersFragment = ({
     updateFollowDiscoveryContext(willFollow, item);
   };
 
-  const handleFollow = async (from, willFollow, item) => {
+  const handleFollow = async (from, willFollow, item, section) => {
     handleUser(from, willFollow, item);
     const data = {
       user_id_follower: myId,
@@ -153,12 +160,14 @@ const UsersFragment = ({
     if (willFollow) {
       try {
         await setFollow(data, client);
+        onUserPageFollowButtonClicked(section);
       } catch (error) {
         handleUser(from, !willFollow, item);
       }
     } else {
       try {
         await setUnFollow(data, client);
+        onUserPageUnfollowButtonClicked(section);
       } catch (error) {
         handleUser(from, !willFollow, item);
       }
@@ -166,7 +175,7 @@ const UsersFragment = ({
     if (searchText.length > 0) fetchData();
   };
 
-  const renderDiscoveryItem = ({from, item, index}) => {
+  const renderDiscoveryItem = ({from, item, index, section}) => {
     if (item.separator) {
       return (
         <>
@@ -216,8 +225,8 @@ const UsersFragment = ({
         <DomainList
           isFromUserFragment={true}
           key={index}
-          onPressBody={() => handleOnPress(item.user || item)}
-          handleSetFollow={() => handleFollow(from, true, item.user || item)}
+          onPressBody={() => handleOnPress(item.user || item, section)}
+          handleSetFollow={() => handleFollow(from, true, item.user || item, section)}
           handleSetUnFollow={() => {
             checkUserIsBlockHandle();
           }}
@@ -238,7 +247,7 @@ const UsersFragment = ({
     );
   };
 
-  const renderItem = ({index, item}) => {
+  const renderItem = ({index, item, section}) => {
     let result;
 
     if (isFirstTimeOpen) {
@@ -266,7 +275,8 @@ const UsersFragment = ({
     return renderDiscoveryItem({
       from: result,
       item,
-      index
+      index,
+      section
     });
   };
 
@@ -342,12 +352,16 @@ const UsersFragment = ({
                 shown={showRecentSearch || isFirstTimeOpen}
                 setSearchText={setSearchText}
                 setIsFirstTimeOpen={setIsFirstTimeOpen}
+                eventTrack={{
+                  onClearRecentSearch: () => onCommonClearRecentSearch('user'),
+                  onRecentItemClicked: () => onCommonRecentItemClicked('user')
+                }}
               />
             )}
 
             <AccordionView
               data={initialAccordionData}
-              renderItem={renderItem}
+              renderItem={(props) => renderItem({...props, section: 'your-user'})}
               activeSections={activeSections}
               setActiveSections={setActiveSections}
             />
@@ -356,7 +370,7 @@ const UsersFragment = ({
         onMomentumScrollBegin={handleScroll}
         contentContainerStyle={{paddingBottom: 100}}
         data={peopleYouMightKnowData || []}
-        renderItem={renderItem}
+        renderItem={(props) => renderItem({...props, section: 'suggested-user'})}
         keyExtractor={(item, index) => index.toString()}
         onEndReached={() => fetchData()}
         onEndReachedThreshold={0.6}
