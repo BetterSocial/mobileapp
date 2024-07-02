@@ -37,7 +37,8 @@ const DiscoverySearch = ({
   onCancelToken = () => {},
   hideBackIcon = false,
   eventTrack = {
-    onFocus: () => {}
+    onSearchBarClicked: () => {},
+    onBackButtonPressed: () => {}
   }
 }) => {
   const navigation = useNavigation();
@@ -57,7 +58,10 @@ const DiscoverySearch = ({
 
   const handleBackPress = () => {
     Keyboard.dismiss();
-    if (navigation.canGoBack()) navigation.goBack();
+    if (navigation.canGoBack()) {
+      eventTrack.onBackButtonPressed();
+      navigation.goBack();
+    }
   };
 
   const handleFocus = (isFocusParam) => {
@@ -150,11 +154,6 @@ const DiscoverySearch = ({
     AsyncStorage.setItem(RECENT_SEARCH_TERMS, JSON.stringify(resultArray));
   };
 
-  const onFocus = () => {
-    eventTrack.onFocus();
-    handleFocus(true);
-  };
-
   React.useEffect(() => {
     debounceChangeText(searchText);
   }, [searchText]);
@@ -216,8 +215,9 @@ const DiscoverySearch = ({
             // value={discoverySearchBarText}
             value={searchText}
             onChangeText={handleChangeText}
-            onFocus={onFocus}
+            onFocus={() => handleFocus(true)}
             onBlur={() => handleFocus(false)}
+            onPressIn={eventTrack.onSearchBarClicked}
             multiline={false}
             returnKeyType="search"
             onSubmitEditing={handleOnSubmitEditing}

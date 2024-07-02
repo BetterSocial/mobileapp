@@ -250,7 +250,17 @@ export enum BetterSocialEventTracking {
   DISCOVERY_SCREEN_SEARCH_COMMUNITY_SUGGESTED_COMMUNITY_OPENED = 'Discovery-SearchComms_suggestedComms-CP_opened',
   DISCOVERY_SCREEN_SEARCH_COMMUNITY_SEARCHED_COMMUNITY_CLICKED = 'Discovery-SearchComms_searchComms_clicked',
   DISCOVERY_SCREEN_SEARCH_COMMUNITY_RECENT_SEARCH_CLICKED = 'Discovery-SearchComms_recentSearches_clicked',
-  DISCOVERY_SCREEN_SEARCH_COMMUNITY_CLEAR_RECENT_SEARCH_CLICKED = 'Discovery-SearchComms_clearRecentSearches_clicked'
+  DISCOVERY_SCREEN_SEARCH_COMMUNITY_CLEAR_RECENT_SEARCH_CLICKED = 'Discovery-SearchComms_clearRecentSearches_clicked',
+
+  DISCOVERY_SCREEN_SEARCH_NEWS_OPEN_LINK_CLICKED = 'Discovery-SearchNews_openLink_clicked',
+  DISCOVERY_SCREEN_SEARCH_NEWS_OPEN_LINK_CONTEXT_SCREEN = 'Discovery-SearchNews_newsPage_opened',
+  DISCOVERY_SCREEN_SEARCH_NEWS_SEARCH_NEWS_CLICKED = 'Discovery-SearchNews_searchNews_clicked',
+  DISCOVERY_SCREEN_SEARCH_NEWS_RECENT_SEARCH_CLICKED = 'Discovery-SearchNews_recentSearches_clicked',
+  DISCOVERY_SCREEN_SEARCH_NEWS_CLEAR_RECENT_SEARCH_CLICKED = 'Discovery-SearchNews_clearRecentSearches_clicked',
+  DISCOVERY_SCREEN_SEARCH_NEWS_BACK_BUTTON_CLICKED = 'Discovery-SearchNews_backButton_openPrevPage',
+  DISCOVERY_SCREEN_SEARCH_NEWS_COMMUNITY_TAB_CLICKED = 'Discovery-SearchNews_searchCommsTab_clicked',
+  DISCOVERY_SCREEN_SEARCH_NEWS_USERS_TAB_CLICKED = 'Discovery-SearchNews_searchUsersTab_clicked',
+  DISCOVERY_SCREEN_SEARCH_NEWS_DOMAINS_TAB_CLICKED = 'Discovery-SearchNews_searchDomainsTab_clicked'
 }
 
 const ENABLE_TOAST = ENV === 'Dev';

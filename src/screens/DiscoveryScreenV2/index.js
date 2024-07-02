@@ -14,9 +14,7 @@ import NewsFragment from './fragment/NewsFragment';
 import Search from './elements/Search';
 import TopicFragment from './fragment/TopicFragment';
 import UsersFragment from './fragment/UsersFragment';
-import AnalyticsEventTracking, {
-  BetterSocialEventTracking
-} from '../../libraries/analytics/analyticsEventTracking';
+import useDiscoveryScreenAnalyticsHook from '../../libraries/analytics/useDiscoveryScreenAnalyticsHook';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {
@@ -65,6 +63,9 @@ const DiscoveryScreenV2 = ({route}) => {
   });
 
   const navigation = useNavigation();
+  const {
+    common: {onSearchCommunityPressed, onBackButtonPressed, onTabClicked}
+  } = useDiscoveryScreenAnalyticsHook(selectedScreen, setSelectedScreen);
 
   React.useEffect(() => {
     const unsubscribe = () => {
@@ -299,14 +300,6 @@ const DiscoveryScreenV2 = ({route}) => {
     return null;
   })();
 
-  const onSearchCommunityPressed = () => {
-    if (selectedScreen === DISCOVERY_TAB_TOPICS) {
-      AnalyticsEventTracking.eventTrack(
-        BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_COMMUNITY_SEARCHED_COMMUNITY_CLICKED
-      );
-    }
-  };
-
   return (
     <DiscoveryContainer>
       <StatusBar translucent={false} barStyle={'light-content'} />
@@ -334,15 +327,12 @@ const DiscoveryScreenV2 = ({route}) => {
           onCancelToken={onCancelToken}
           placeholderText={route.name === 'Followings' ? profileState.navbarTitle : undefined}
           eventTrack={{
-            onFocus: onSearchCommunityPressed
+            onSearchBarClicked: onSearchCommunityPressed,
+            onBackButtonPressed
           }}
         />
       )}
-      <DiscoveryTab
-        selectedScreen={selectedScreen}
-        onChangeScreen={(index) => setSelectedScreen(index)}
-        tabs={tabs}
-      />
+      <DiscoveryTab selectedScreen={selectedScreen} onChangeScreen={onTabClicked} tabs={tabs} />
       {route.name === 'Followings' && (
         <Search
           searchText={searchText}
