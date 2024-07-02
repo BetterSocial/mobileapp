@@ -112,7 +112,8 @@ export enum BetterSocialEventTracking {
   ANONYMOUS_CHAT_SCREEN_ATTACHMENT_UPLOAD_FAILED = 'AnonChat-ChatScreen_ChatActions-Drawer_mediauploadfailed'
 }
 
-const ENABLE_TOAST = ENV === 'Dev';
+// const ENABLE_TOAST = ENV === 'Dev';
+const ENABLE_TOAST = false;
 
 const AnalyticsEventTracking = (() => {
   if (!SEGMENT_WRITE_KEY) {
