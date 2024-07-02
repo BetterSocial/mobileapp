@@ -54,7 +54,8 @@ import {
   GroupSetting,
   NewsScreen,
   ProfileScreen,
-  CreateCommunity
+  CreateCommunity,
+  CreateCommunityCustomize
 } from '../screens';
 import {COLORS} from '../utils/theme';
 import {InitialStartupAtom, LoadingStartupContext} from '../service/initialStartup';
@@ -361,6 +362,11 @@ const AuthenticatedNavigator = () => {
         <AuthenticatedStack.Screen
           name="CreateCommunity"
           component={withSafeAreaView(withKeyboardWrapper(CreateCommunity))}
+          options={{headerShown: false}}
+        />
+        <AuthenticatedStack.Screen
+          name="CreateCommunityCustomize"
+          component={withSafeAreaView(CreateCommunityCustomize)}
           options={{headerShown: false}}
         />
       </AuthenticatedStack.Navigator>

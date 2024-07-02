@@ -9,7 +9,8 @@ import {convertString} from '../../../utils/string/StringUtils';
 import {COLORS} from '../../../utils/theme';
 
 const TopicDomainHeader = (props) => {
-  const {domain, handleOnMemberPress, hideSeeMember, isFollow, memberCount, followType} = props;
+  const {domain, handleOnMemberPress, hideSeeMember, isFollow, memberCount, followType, isPreview} =
+    props;
 
   const handlePress = () => {
     if (isFollow) {
@@ -26,7 +27,13 @@ const TopicDomainHeader = (props) => {
 
   return (
     <View>
-      <Text style={styles.domainText(shouldDisplay)} numberOfLines={1} ellipsizeMode="tail">
+      <Text
+        style={[
+          styles.domainText(shouldDisplay),
+          isPreview ? {fontSize: normalizeFontSize(12)} : {}
+        ]}
+        numberOfLines={1}
+        ellipsizeMode="tail">
         {`#${convertString(domain, ' ', '')}`}
       </Text>
       <View style={{flexDirection: 'row', alignItems: 'center', marginTop: normalize(1)}}>
@@ -36,13 +43,28 @@ const TopicDomainHeader = (props) => {
             marginRight: normalize(5),
             height: normalize(8)
           }}
+          width={isPreview ? 9 : 16}
+          height={isPreview ? 9 : 16}
         />
         {memberCount === undefined && props.isLoading ? (
           <Shimmer height={10} width={normalize(25)} />
         ) : (
-          <Text style={styles.domainMember(shouldDisplay)}>{memberCount}</Text>
+          <Text
+            style={[
+              styles.domainMember(shouldDisplay),
+              isPreview ? {fontSize: normalizeFontSize(9)} : {}
+            ]}>
+            {memberCount}
+          </Text>
         )}
-        <Text style={styles.domainMember(shouldDisplay)}> Members</Text>
+        <Text
+          style={[
+            styles.domainMember(shouldDisplay),
+            isPreview ? {fontSize: normalizeFontSize(9)} : {}
+          ]}>
+          {' '}
+          Members
+        </Text>
       </View>
       {props?.initialData?.memberCount === undefined && props.isLoading ? (
         <Shimmer height={10} width={normalize(60)} />
@@ -50,7 +72,13 @@ const TopicDomainHeader = (props) => {
         isFollow &&
         !hideSeeMember && (
           <Pressable onPress={handlePress} style={{backgroundColor: COLORS.transparent}}>
-            <Text style={styles.seeMemberText(followType)} numberOfLines={1} ellipsizeMode="tail">
+            <Text
+              style={[
+                styles.seeMemberText(followType),
+                isPreview ? {fontSize: normalizeFontSize(9)} : {}
+              ]}
+              numberOfLines={1}
+              ellipsizeMode="tail">
               See community members
             </Text>
           </Pressable>

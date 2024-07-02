@@ -97,7 +97,7 @@ const CreateCommunity = () => {
     if (name && name.length >= MINIMUM_NAME_LENGTH && typeFetch === 'available') {
       const response = await submitCommunityName(name);
       if (response.success) {
-        navigation.replace('ContactScreen', {
+        navigation.replace('CreateCommunityCustomize', {
           isCreateCommunity: true,
           topicCommunityId: response.topic_id,
           topicCommunityName: name
