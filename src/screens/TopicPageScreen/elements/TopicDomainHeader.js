@@ -95,7 +95,8 @@ TopicDomainHeader.propTypes = {
   isFollow: PropTypes.bool,
   memberCount: PropTypes.number,
   isLoading: PropTypes.bool,
-  followType: PropTypes.string
+  followType: PropTypes.string,
+  isPreview: PropTypes.bool
 };
 
 const styles = StyleSheet.create({

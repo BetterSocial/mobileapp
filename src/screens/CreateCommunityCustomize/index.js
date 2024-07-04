@@ -1,5 +1,4 @@
 import * as React from 'react';
-import _ from 'lodash';
 import {
   Keyboard,
   SafeAreaView,
@@ -146,17 +145,15 @@ const CreateCommunityCustomize = () => {
   };
 
   React.useEffect(() => {
-    if (isSubmitNext) {
-      if (iconUrlUploaded !== '' && iconUrlUploaded.includes('https') && coverUrlUploaded === '') {
-        next();
-      } else if (
-        iconUrlUploaded !== '' &&
-        iconUrlUploaded.includes('https') &&
-        coverUrlUploaded !== '' &&
-        coverUrlUploaded.includes('https')
-      ) {
-        next();
-      }
+    if (
+      isSubmitNext &&
+      ((iconUrlUploaded !== '' && iconUrlUploaded.includes('https') && coverUrlUploaded === '') ||
+        (iconUrlUploaded !== '' &&
+          iconUrlUploaded.includes('https') &&
+          coverUrlUploaded !== '' &&
+          coverUrlUploaded.includes('https')))
+    ) {
+      next();
     }
   }, [isSubmitNext, iconUrlUploaded, coverUrlUploaded]);
 
