@@ -286,7 +286,32 @@ export enum BetterSocialEventTracking {
   DISCOVERY_SCREEN_SEARCH_USERS_BACK_BUTTON_CLICKED = 'Discovery-SearchUsers_backButton_openPrevPage',
   DISCOVERY_SCREEN_SEARCH_USERS_COMMUNITY_TAB_CLICKED = 'Discovery-SearchUsers_searchCommsTab_clicked',
   DISCOVERY_SCREEN_SEARCH_USERS_DOMAINS_TAB_CLICKED = 'Discovery-SearchUsers_searchDomainsTab_clicked',
-  DISCOVERY_SCREEN_SEARCH_USERS_NEWS_TAB_CLICKED = 'Discovery-SearchUsers_searchNewsTab_clicked'
+  DISCOVERY_SCREEN_SEARCH_USERS_NEWS_TAB_CLICKED = 'Discovery-SearchUsers_searchNewsTab_clicked',
+
+  // Other Profile Screen
+  OTHER_PROFILE_SCREEN_POST_DOWNVOTE_INSERTED = 'Profile-OtherProfile_postInteractions-downvote_downvoted',
+  OTHER_PROFILE_SCREEN_POST_DOWNVOTE_REMOVED = 'Profile-OtherProfile_postInteractions-downvote-unselected_downvote-removed',
+  OTHER_PROFILE_SCREEN_POST_UPVOTE_INSERTED = 'Profile-OtherProfile_postInteractions-upvote_upvoted',
+  OTHER_PROFILE_SCREEN_POST_UPVOTE_REMOVED = 'Profile-OtherProfile_postInteractions-upvote-unselected_upvote-removed',
+  OTHER_PROFILE_SCREEN_POST_OPTION_CLICKED = 'Profile-OtherProfile_postInteractions-3dots_openPostOptionDrawer',
+  OTHER_PROFILE_SCREEN_POST_OPTION_SHARE_LINK = 'Profile-OtherProfile_postInteractions-PostOptionDrawer-shareLink_clicked',
+  OTHER_PROFILE_SCREEN_POST_DM_BUTTON_CLICKED = 'Profile-OtherProfile_postInteractions-DMbutton_clicked',
+  OTHER_PROFILE_SCREEN_POST_ON_REPLY_BUTTON_CLICKED = 'Profile-OtherProfile_postInteractions-replyButton_openPDP',
+  OTHER_PROFILE_SCREEN_HEADER_USER_FOLLOW = 'Profile-OtherProfile_followUser_followed',
+  OTHER_PROFILE_SCREEN_HEADER_USER_UNFOLLOW = 'Profile-OtherProfile_followUser_unfollowed',
+  OTHER_PROFILE_SCREEN_HEADER_SHARE_USER_CLICKED = 'Profile-OtherProfile_shareUser_clicked',
+  OTHER_PROFILE_SCREEN_BIO_ANON_BUTTON_ON = 'Profile-OtherProfile_anonButton_on',
+  OTHER_PROFILE_SCREEN_BIO_ANON_BUTTON_OFF = 'Profile-OtherProfile_anonButton_off',
+  OTHER_PROFILE_SCREEN_BIO_SEND_DM = 'Profile-OtherProfile_sendDmButton_dmSent',
+  OTHER_PROFILE_SCREEN_POST_POLL_CHOICE_CLICKED = 'Profile-OtherProfile_postInteractions-pollChoice_1,2,3,4',
+  OTHER_PROFILE_SCREEN_POST_POLL_SEE_RESULTS_CLICKED = 'Profile-OtherProfile_postInteractions-pollseeresults_clicked',
+  OTHER_PROFILE_SCREEN_POST_BLOCK_BUTTON_CLICKED = 'Profile-OtherProfile_postInteractions-blockSymbol_openBlockMenu',
+  OTHER_PROFILE_SCREEN_BLOCK_USER_BOTTOM_SHEET_CLOSED = 'Profile-OtherProfile_blockdrawer-justblock_closesBlockMenu',
+  OTHER_PROFILE_SCREEN_BLOCK_USER_BLOCK_AND_REPORT_CLICKED = 'Profile-OtherProfile_blockdrawer-blockAndReport_clicked',
+  OTHER_PROFILE_SCREEN_BLOCK_USER_BLOCK_INDEFINITELY_CLICKED = 'Profile-OtherProfile_blockdrawer-blockAndReport-reportSkip_clicked',
+  OTHER_PROFILE_SCREEN_BLOCK_USER_BLOCK_AND_REPORT_REASON = 'Profile-OtherProfile_blockdrawer-blockAndReport-reasons',
+  OTHER_PROFILE_SCREEN_BLOCK_USER_REPORT_INFO_SUBMITTED = 'Profile-OtherProfile_blockAndReport-reportInfo_submitted',
+  OTHER_PROFILE_SCREEN_BLOCK_USER_REPORT_INFO_SKIPPED = 'Profile-OtherProfile_blockAndReport-reportInfoSkipped_clicked'
 }
 
 const ENABLE_TOAST = ENV === 'Dev';

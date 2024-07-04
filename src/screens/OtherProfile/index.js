@@ -35,6 +35,7 @@ import dimen from '../../utils/dimen';
 import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
 import useDiscovery from '../DiscoveryScreenV2/hooks/useDiscovery';
 import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
+import useOtherProfileScreenAnalyticsHook from '../../libraries/analytics/useOtherProfileScreenAnalyticsHook';
 import useOtherProfileScreenHooks from './hooks/useOtherProfileScreenHooks';
 import useViewPostTimeHook from '../FeedScreen/hooks/useViewPostTimeHook';
 import {COLORS} from '../../utils/theme';
@@ -61,6 +62,7 @@ const OtherProfile = () => {
   const reportUserRef = React.useRef();
   const specificIssueRef = React.useRef();
   const flatListRef = React.useRef();
+  const closeBlockUserBottomSheetRef = React.useRef(false);
 
   const [user_id, setUserId] = React.useState('');
   const [username, setUsername] = React.useState('');
@@ -99,6 +101,22 @@ const OtherProfile = () => {
     refetchOtherProfile,
     setOtherProfileData: setDataMain
   } = useOtherProfileScreenHooks(params?.data?.other_id, params?.data?.username);
+
+  const eventTrack = useOtherProfileScreenAnalyticsHook();
+  const {
+    onBioAnonButtonOff,
+    onBioAnonButtonOn,
+    onShareButtonClicked,
+    onHeaderFollowUser,
+    onHeaderUnfollowUser,
+    onPostBlockButtonClicked,
+    onBlockUserBottomSheetClosed,
+    onBlockUserBlockAndReportClicked,
+    onBlockUserBlockIndefinitelyClicked,
+    onBlockUserBlockAndReportReason,
+    onBlockUserReportInfoSubmitted,
+    onBlockUserReportInfoSkipped
+  } = eventTrack;
 
   const isSignedMessageEnabled = dataMain.isSignedMessageEnabled ?? true;
   const isAnonimityEnabled = dataMain.isAnonMessageEnabled && isSignedMessageEnabled;
@@ -174,7 +192,10 @@ const OtherProfile = () => {
     setUsername(params.data.username);
   };
 
-  const onShare = async () => ShareUtils.shareUserLink(username);
+  const onShare = async () => {
+    onShareButtonClicked();
+    ShareUtils.shareUserLink(username);
+  };
 
   const handleSetUnFollow = async () => {
     setDataMain((prevState) => ({
@@ -191,6 +212,7 @@ const OtherProfile = () => {
     const result = await setUnFollow(data);
     if (result.code === 200) {
       refetchOtherProfile();
+      onHeaderUnfollowUser();
     }
   };
 
@@ -211,6 +233,7 @@ const OtherProfile = () => {
     const result = await setFollow(data);
     if (result.code === 200) {
       refetchOtherProfile();
+      onHeaderFollowUser();
     }
   };
 
@@ -231,7 +254,11 @@ const OtherProfile = () => {
         position: 'bottom'
       });
     } else {
-      setIsAnonimity((prevState) => !prevState);
+      setIsAnonimity((prevState) => {
+        if (prevState) onBioAnonButtonOff();
+        else onBioAnonButtonOn();
+        return !prevState;
+      });
       await generateAnonProfile();
     }
   };
@@ -362,6 +389,7 @@ const OtherProfile = () => {
             username={dataMain.username}
             toggleSwitch={toggleSwitch}
             isAnonimityEnabled={isAnonimityEnabled}
+            eventTrack={eventTrack}
           />
         )}
       </>
@@ -388,6 +416,9 @@ const OtherProfile = () => {
 
   const onBlockReaction = () => {
     blockUserRef.current.open();
+    console.log('onBlockReaction');
+    onPostBlockButtonClicked();
+    closeBlockUserBottomSheetRef.current = true;
   };
   const handleBlocking = async (message) => {
     setLoadingBlocking(true);
@@ -401,6 +432,7 @@ const OtherProfile = () => {
     }
     const blockingUser = await blockUser(data);
     if (blockingUser.code === 200) {
+      closeBlockUserBottomSheetRef.current = false;
       blockUserRef.current.close();
       specificIssueRef.current.close();
       reportUserRef.current.close();
@@ -416,12 +448,14 @@ const OtherProfile = () => {
       const processPostApi = await unblockUserApi({userId: dataMain.user_id});
       if (processPostApi.code === 200) {
         refetchBlockStatus();
+        closeBlockUserBottomSheetRef.current = false;
         blockUserRef.current.close();
         specificIssueRef.current.close();
         reportUserRef.current.close();
       }
     } catch (e) {
       refetchBlockStatus();
+      closeBlockUserBottomSheetRef.current = false;
       blockUserRef.current.close();
       specificIssueRef.current.close();
       reportUserRef.current.close();
@@ -432,7 +466,9 @@ const OtherProfile = () => {
     if (reasonBlock === 1) {
       handleBlocking();
     } else if (reasonBlock === 2) {
+      closeBlockUserBottomSheetRef.current = false;
       blockUserRef.current.close();
+      onBlockUserBlockAndReportClicked();
       interactionManagerRef.current = InteractionManager.runAfterInteractions(() => {
         reportUserRef.current.open();
       });
@@ -449,13 +485,19 @@ const OtherProfile = () => {
     });
   };
 
-  const skipQuestion = () => {
+  const skipQuestion = (source) => {
     reportUserRef.current.close();
+    if (source === 'report-user') {
+      onBlockUserBlockIndefinitelyClicked();
+    } else if (source === 'specific-issue') {
+      onBlockUserReportInfoSkipped();
+    }
     handleBlocking();
   };
 
   const onReportIssue = async (message) => {
     specificIssueRef.current.close();
+    onBlockUserReportInfoSubmitted();
     handleBlocking(message);
   };
 
@@ -547,6 +589,14 @@ const OtherProfile = () => {
     return [];
   };
 
+  const handleOnBlockUserBottomSheetClosed = () => {
+    if (closeBlockUserBottomSheetRef.current) {
+      onBlockUserBottomSheetClosed();
+      closeBlockUserBottomSheetRef.current = false;
+    }
+    console.log('handleOnBlockUserBottomSheetClosed');
+  };
+
   return (
     <>
       <StatusBar barStyle="light-content" translucent={false} />
@@ -601,6 +651,8 @@ const OtherProfile = () => {
                   onPressUpvote={(post) => setUpVote(post, index)}
                   selfUserId={yourselfId}
                   onPressDownVote={(post) => setDownVote(post, index)}
+                  eventTrack={eventTrack}
+                  onPressBlock={onBlockReaction}
                 />
               </View>
             );
@@ -618,11 +670,16 @@ const OtherProfile = () => {
           refBlockUser={blockUserRef}
           username={username}
           isBlocker={isBlocking}
+          onClose={() => handleOnBlockUserBottomSheetClosed()}
         />
-        <ReportUser ref={reportUserRef} onSelect={onNextQuestion} onSkip={skipQuestion} />
+        <ReportUser
+          ref={reportUserRef}
+          onSelect={onNextQuestion}
+          onSkip={() => skipQuestion('report-user')}
+        />
         <SpecificIssue
           refSpecificIssue={specificIssueRef}
-          onSkip={skipQuestion}
+          onSkip={() => skipQuestion('specific-issue')}
           onPress={onReportIssue}
           loading={loadingBlocking}
         />
