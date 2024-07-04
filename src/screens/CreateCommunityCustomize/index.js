@@ -135,7 +135,6 @@ const CreateCommunityCustomize = () => {
 
   const next = async () => {
     const response = await putCommunityImage(topicCommunityName, iconUrlUploaded, coverUrlUploaded);
-    console.warn('response', response);
     if (response.success) {
       navigation.replace('ContactScreen', {
         isCreateCommunity,
@@ -190,25 +189,9 @@ const CreateCommunityCustomize = () => {
               ) : (
                 <View style={[styles.coverPreview, {backgroundColor: COLORS.signed_secondary}]} />
               )}
-              <View
-                style={{
-                  paddingHorizontal: dimen.normalizeDimen(25),
-                  paddingVertical: dimen.normalizeDimen(52)
-                }}>
-                <FastImage
-                  source={PreviewIphone}
-                  style={{
-                    width: dimen.normalizeDimen(300),
-                    height: dimen.normalizeDimen(190),
-                    position: 'absolute'
-                  }}
-                />
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
-                  }}>
+              <View style={styles.previewContentImage}>
+                <FastImage source={PreviewIphone} style={styles.previewContentImageAsset} />
+                <View style={styles.previewContentRow}>
                   <MemoIcArrowBackCircle
                     width={dimen.normalizeDimen(32)}
                     height={dimen.normalizeDimen(32)}
@@ -271,12 +254,7 @@ const CreateCommunityCustomize = () => {
                     <FastImage
                       source={{uri: iconUrl}}
                       resizeMode={FastImage.resizeMode.cover}
-                      style={{
-                        width: dimen.normalizeDimen(60),
-                        height: dimen.normalizeDimen(60),
-                        borderRadius: 100,
-                        marginRight: dimen.normalizeDimen(20)
-                      }}
+                      style={styles.iconCommunity}
                     />
                   ) : (
                     <View style={styles.infoItemIcon}>
@@ -305,12 +283,7 @@ const CreateCommunityCustomize = () => {
                     <FastImage
                       source={{uri: coverUrl}}
                       resizeMode={FastImage.resizeMode.cover}
-                      style={{
-                        width: dimen.normalizeDimen(60),
-                        height: dimen.normalizeDimen(60),
-                        borderRadius: 100,
-                        marginRight: dimen.normalizeDimen(20)
-                      }}
+                      style={styles.iconCommunity}
                     />
                   ) : (
                     <View style={[styles.infoItemIcon, {backgroundColor: COLORS.signed_secondary}]}>
@@ -457,6 +430,26 @@ const styles = StyleSheet.create({
     width: dimen.normalizeDimen(300),
     height: dimen.normalizeDimen(190),
     marginTop: dimen.normalizeDimen(30)
+  },
+  previewContentImage: {
+    paddingHorizontal: dimen.normalizeDimen(25),
+    paddingVertical: dimen.normalizeDimen(52)
+  },
+  previewContentImageAsset: {
+    width: dimen.normalizeDimen(300),
+    height: dimen.normalizeDimen(190),
+    position: 'absolute'
+  },
+  previewContentRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  iconCommunity: {
+    width: dimen.normalizeDimen(60),
+    height: dimen.normalizeDimen(60),
+    borderRadius: 100,
+    marginRight: dimen.normalizeDimen(20)
   },
   infoContainer: {
     paddingTop: dimen.normalizeDimen(20),
