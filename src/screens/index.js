@@ -13,6 +13,7 @@ import GroupSetting from './GroupSetting';
 import NewsScreen from './NewsScreen';
 import ProfileScreen from './ProfileScreen';
 import CreateCommunity from './CreateCommunity';
+import CreateCommunityCustomize from './CreateCommunityCustomize';
 
 export {
   ChannelScreen,
@@ -29,5 +30,6 @@ export {
   GroupMedia,
   AddParticipant,
   GroupSetting,
-  CreateCommunity
+  CreateCommunity,
+  CreateCommunityCustomize
 };

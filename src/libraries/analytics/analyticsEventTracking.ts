@@ -217,7 +217,8 @@ export enum BetterSocialEventTracking {
   FEED_COMMUNITY_PAGE_SINGLE_POLL_CLICKED = 'FeedPage-CP_postInteractions-pollChoice'
 }
 
-const ENABLE_TOAST = ENV === 'Dev';
+// const ENABLE_TOAST = ENV === 'Dev';
+const ENABLE_TOAST = false;
 
 const AnalyticsEventTracking = (() => {
   if (!SEGMENT_WRITE_KEY) {
