@@ -44,7 +44,7 @@ const TopicPageScreen = (props) => {
   const [isFollow, setIsFollow] = React.useState(params.isFollowing);
   const [followType, setFollowType] = React.useState('');
   const [topicDetail, setTopicDetail] = React.useState({});
-  const [memberCount, setMemberCount] = React.useState(params.memberCount || 0);
+  const [memberCount, setMemberCount] = React.useState(params.memberCount || undefined);
   const [isHeaderHide, setIsHeaderHide] = React.useState(false);
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   const feeds = feedsContext.topicFeeds

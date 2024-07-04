@@ -141,7 +141,7 @@ exports[`Testing Feed Screen Content Link Card Matches Snapshot 1`] = `
                 }
               }
             >
-              Jun 1, 2022
+              Jun 2, 2022
             </Text>
             <View
               style={
@@ -421,7 +421,7 @@ exports[`Testing Feed Screen Content Link CardHeader Matches Snapshot 1`] = `
           }
         }
       >
-        Jun 1, 2022
+        Jun 2, 2022
       </Text>
       <View
         style={
@@ -635,7 +635,7 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
                     }
                   }
                 >
-                  Jun 1, 2022
+                  Jun 2, 2022
                 </Text>
                 <View
                   style={

@@ -88,7 +88,7 @@ const TopicMemberScreen = () => {
     const result = await getAllMemberTopic(query);
     if (result.code === 200) {
       const newDataFollowed = result.data
-        .filter((item) => item.is_following)
+        .filter((item) => item.is_following && profile.myProfile.user_id !== item.user_id)
         .map((data) => ({
           ...data,
           name: data.username,
@@ -96,7 +96,7 @@ const TopicMemberScreen = () => {
           description: null
         }));
       const newDataUnfollowed = result.data
-        .filter((item) => !item.is_following)
+        .filter((item) => !item.is_following && profile.myProfile.user_id !== item.user_id)
         .map((data) => ({
           ...data,
           name: data.username,
