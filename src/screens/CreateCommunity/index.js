@@ -99,7 +99,8 @@ const CreateCommunity = () => {
       if (response.success) {
         navigation.replace('CreateCommunityCustomize', {
           isCreateCommunity: true,
-          topic: name
+          topicCommunityId: response.topic_id,
+          topicCommunityName: name
         });
       }
     } else {
