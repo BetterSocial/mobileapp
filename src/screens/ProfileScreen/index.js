@@ -1,8 +1,8 @@
-import netInfo from '@react-native-community/netinfo';
-import {useNavigation} from '@react-navigation/core';
-import {debounce} from 'lodash';
-import PropTypes from 'prop-types';
 import * as React from 'react';
+import ImagePicker from 'react-native-image-crop-picker';
+import PropTypes from 'prop-types';
+import Toast from 'react-native-simple-toast';
+import netInfo from '@react-native-community/netinfo';
 import {
   ActivityIndicator,
   Alert,
@@ -15,21 +15,33 @@ import {
   TouchableNativeFeedback,
   View
 } from 'react-native';
+import {debounce} from 'lodash';
 import {showMessage} from 'react-native-flash-message';
-import ImagePicker from 'react-native-image-crop-picker';
-import Toast from 'react-native-simple-toast';
+import {useNavigation} from '@react-navigation/core';
 
+import AnonymousTab from './elements/AnonymousTab';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
+import BioAndDMSetting from './elements/BioAndDMSetting';
 import BlockComponent from '../../components/BlockComponent';
-import {ButtonNewPost} from '../../components/Button';
-import ShadowFloatingButtons from '../../components/Button/ShadowFloatingButtons';
+import BottomSheetBio from './elements/BottomSheetBio';
+import BottomSheetImage from './elements/BottomSheetImage';
+import BottomSheetRealname from './elements/BottomSheetRealname';
 import CustomPressable from '../../components/CustomPressable';
+import FollowInfoRow from './elements/FollowInfoRow';
+import ImageCompressionUtils from '../../utils/image/compress';
+import LinkAndSocialMedia from './elements/LinkAndSocialMedia';
 import PostOptionModal from '../../components/Modal/PostOptionModal';
-import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {Context} from '../../context';
-import {setFeedByIndex, setTimer} from '../../context/actions/feeds';
-import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
-import {setMyProfileAction} from '../../context/actions/setMyProfileAction';
+import ProfileHeader from './elements/ProfileHeader';
+import ProfilePicture from './elements/ProfilePicture';
+import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
+import RenderItem from '../FeedScreen/RenderList';
+import ShadowFloatingButtons from '../../components/Button/ShadowFloatingButtons';
+import ShareUtils from '../../utils/share';
+import StorageUtils from '../../utils/storage';
+import dimen from '../../utils/dimen';
+import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
+import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
+import useProfileScreenAnalyticsHook from '../../libraries/analytics/useProfileScreenAnalyticsHook';
 import useResetContext from '../../hooks/context/useResetContext';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
@@ -38,9 +50,18 @@ import useProfileScreenHook, {
   TAB_INDEX_ANONYMOUS,
   TAB_INDEX_SIGNED
 } from '../../hooks/screen/useProfileScreenHook';
-import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
-import {deleteAnonymousPost, deletePost, viewTimePost} from '../../service/post';
+import {ButtonNewPost} from '../../components/Button';
+import {COLORS} from '../../utils/theme';
+import {Context} from '../../context';
+import {
+  DEFAULT_PROFILE_PIC_PATH,
+  NavigationConstants,
+  SOURCE_FEED_TAB,
+  SOURCE_MY_PROFILE
+} from '../../utils/constants';
+import {KarmaLock} from './elements/KarmaLock';
+import {KarmaScore} from './elements/KarmaScore';
 import {
   changeRealName,
   getMyProfile,
@@ -49,37 +70,17 @@ import {
   updateBioProfile,
   updateImageProfile
 } from '../../service/profile';
+import {deleteAnonymousPost, deletePost, viewTimePost} from '../../service/post';
 import {downVote, upVote} from '../../service/vote';
-import {
-  DEFAULT_PROFILE_PIC_PATH,
-  NavigationConstants,
-  SOURCE_FEED_TAB,
-  SOURCE_MY_PROFILE
-} from '../../utils/constants';
-import dimen from '../../utils/dimen';
 import {fonts} from '../../utils/fonts';
-import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
-import ImageCompressionUtils from '../../utils/image/compress';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
-import ShareUtils from '../../utils/share';
-import StorageUtils from '../../utils/storage';
-import {COLORS} from '../../utils/theme';
-import RenderItem from '../FeedScreen/RenderList';
-import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
-import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
-import AnonymousTab from './elements/AnonymousTab';
-import BioAndDMSetting from './elements/BioAndDMSetting';
-import BottomSheetBio from './elements/BottomSheetBio';
-import BottomSheetImage from './elements/BottomSheetImage';
-import BottomSheetRealname from './elements/BottomSheetRealname';
-import FollowInfoRow from './elements/FollowInfoRow';
-import {KarmaLock} from './elements/KarmaLock';
-import {KarmaScore} from './elements/KarmaScore';
-import LinkAndSocialMedia from './elements/LinkAndSocialMedia';
-import ProfileHeader from './elements/ProfileHeader';
-import ProfilePicture from './elements/ProfilePicture';
-import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
+import {setFeedByIndex, setTimer} from '../../context/actions/feeds';
+import {setMyProfileAction} from '../../context/actions/setMyProfileAction';
+import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
+import {useAfterInteractions} from '../../hooks/useAfterInteractions';
+import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
+import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 const {width} = Dimensions.get('screen');
 
@@ -99,6 +100,7 @@ const Header = (props) => {
   } = props;
   const navigator = useNavigation();
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
+  const eventTrack = useProfileScreenAnalyticsHook();
 
   const {feeds, timer, viewPostTimeIndex} = feedsContext;
   // eslint-disable-next-line no-underscore-dangle
@@ -154,9 +156,16 @@ const Header = (props) => {
           allowAnonDm={dataMain.allow_anon_dm}
           onlyReceivedDmFromUserFollowing={dataMain.only_received_dm_from_user_following}
           following={dataMain.following}
+          eventTrack={eventTrack}
         />
 
-        <LinkAndSocialMedia username={dataMain.username} prompt={dataMainBio} />
+        <LinkAndSocialMedia
+          username={dataMain.username}
+          prompt={dataMainBio}
+          eventTrack={{
+            onShareLinkClicked: () => eventTrack.onShareLinkClicked()
+          }}
+        />
       </View>
       <View>
         <View style={styles.tabs} ref={postRef}>
@@ -186,6 +195,7 @@ const ProfileScreen = ({route}) => {
   const postRef = React.useRef(null);
   const refBlockComponent = React.useRef();
   const headerHeightRef = React.useRef(0);
+  const closeProfilePicBottomSheetRef = React.useRef(false);
 
   const [profile, dispatchProfile] = React.useContext(Context).profile;
   const [, dispatch] = React.useContext(Context).users;
@@ -219,6 +229,20 @@ const ProfileScreen = ({route}) => {
   const LIMIT_PROFILE_FEED = 10;
   const TYPE_GALLERY = 'gallery';
   const refBottomSheet = React.useRef();
+  const eventTrack = useProfileScreenAnalyticsHook();
+  const {
+    onEditBioClicked,
+    onSaveBioClicked,
+    onShareUserClicked,
+    onSettingsClicked,
+    onProfilePicClicked,
+    onProfileLibraryClicked,
+    onProfilePhotoClicked,
+    onRemoveCurrentProfilePicClicked,
+    onViewProfilePictureClicked,
+    onBannerClosed,
+    onFollowerClicked
+  } = eventTrack;
 
   const {feeds} = myProfileFeed;
   const {
@@ -329,6 +353,7 @@ const ProfileScreen = ({route}) => {
     Analytics.logEvent('profile_screen_btn_share', {
       id: 'btn_share'
     });
+    onShareUserClicked();
     ShareUtils.shareUserLink(profile?.myProfile?.username);
   };
 
@@ -336,6 +361,7 @@ const ProfileScreen = ({route}) => {
     Analytics.logEvent('profile_screen_btn_settings', {
       id: 'btn_settings'
     });
+    onSettingsClicked();
     navigation.navigate('Settings');
   };
 
@@ -346,6 +372,7 @@ const ProfileScreen = ({route}) => {
     });
   };
   const goToFollowers = (userId, username) => {
+    onFollowerClicked();
     navigation.navigate('Followers', {
       screen: 'TabFollowing',
       params: {user_id: userId, username, isFollower: true}
@@ -354,6 +381,8 @@ const ProfileScreen = ({route}) => {
 
   const openImageBs = debounce(() => {
     bottomSheetProfilePictureRef.current.open();
+    closeProfilePicBottomSheetRef.current = true;
+    onProfilePicClicked();
   }, 350);
 
   const closeImageBs = debounce(() => {
@@ -396,12 +425,14 @@ const ProfileScreen = ({route}) => {
 
   const openSettingApp = () => {
     Linking.openSettings();
+    closeProfilePicBottomSheetRef.current = false;
     closeImageBs();
   };
 
   const onOpenImageGalery = async () => {
     const {success} = await requestExternalStoragePermission();
     if (success) {
+      onProfileLibraryClicked();
       ImagePicker.openPicker({
         width: 512,
         height: 512,
@@ -421,6 +452,7 @@ const ProfileScreen = ({route}) => {
   const onOpenCamera = async () => {
     const {success} = await requestCameraPermission();
     if (success) {
+      onProfilePhotoClicked();
       ImagePicker.openCamera({
         width: 512,
         height: 512,
@@ -445,7 +477,9 @@ const ProfileScreen = ({route}) => {
   };
 
   const onViewProfilePicture = () => {
+    closeProfilePicBottomSheetRef.current = false;
     closeImageBs();
+    onViewProfilePictureClicked();
     navigation.push('ImageViewer', {
       title: profile?.myProfile?.username,
       images: [{url: profile?.myProfile?.profile_pic_path}]
@@ -472,6 +506,7 @@ const ProfileScreen = ({route}) => {
             setIsLoadingUpdateImageCamera(false);
           }
           if (res.code === 200) {
+            closeProfilePicBottomSheetRef.current = false;
             closeImageBs();
             getMyFeeds();
             const profilePicture = await fetchMyProfile(true);
@@ -504,6 +539,8 @@ const ProfileScreen = ({route}) => {
       .then((res) => {
         setIsLoadingRemoveImage(false);
         if (res.code === 200) {
+          onRemoveCurrentProfilePicClicked();
+          closeProfilePicBottomSheetRef.current = false;
           closeImageBs();
           fetchMyProfile(true);
           getMyFeeds();
@@ -519,6 +556,7 @@ const ProfileScreen = ({route}) => {
   };
 
   const changeBio = () => {
+    onEditBioClicked();
     if (dataMain.bio !== null || dataMain.bio !== undefined) {
       setTempBio(dataMain.bio);
     }
@@ -544,6 +582,7 @@ const ProfileScreen = ({route}) => {
       .then((res) => {
         setIsLoadingUpdateBio(false);
         if (res.code === 200) {
+          onSaveBioClicked();
           fetchMyProfile(true);
           debounceModalClose();
         }
@@ -653,6 +692,14 @@ const ProfileScreen = ({route}) => {
     if (isProfileTabSigned) return getMyFeeds();
     return reloadFetchAnonymousPost();
   };
+
+  const onProfilePicBottomSheetClosed = () => {
+    if (closeProfilePicBottomSheetRef.current) {
+      closeProfilePicBottomSheetRef.current = false;
+      onBannerClosed();
+    }
+  };
+
   return (
     <View style={styles.container} forceInset={{top: 'always'}}>
       <StatusBar translucent={false} barStyle={'light-content'} />
@@ -742,6 +789,7 @@ const ProfileScreen = ({route}) => {
         isLoadingUpdateImageGallery={isLoadingUpdateImageGallery}
         isLoadingUpdateImageCamera={isLoadingUpdateImageCamera}
         isLoadingRemoveImage={isLoadingRemoveImage}
+        onClose={onProfilePicBottomSheetClosed}
       />
       <ButtonNewPost isShowArrow={isShowButton} />
 

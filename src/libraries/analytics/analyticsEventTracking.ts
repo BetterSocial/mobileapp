@@ -311,7 +311,31 @@ export enum BetterSocialEventTracking {
   OTHER_PROFILE_SCREEN_BLOCK_USER_BLOCK_INDEFINITELY_CLICKED = 'Profile-OtherProfile_blockdrawer-blockAndReport-reportSkip_clicked',
   OTHER_PROFILE_SCREEN_BLOCK_USER_BLOCK_AND_REPORT_REASON = 'Profile-OtherProfile_blockdrawer-blockAndReport-reasons',
   OTHER_PROFILE_SCREEN_BLOCK_USER_REPORT_INFO_SUBMITTED = 'Profile-OtherProfile_blockAndReport-reportInfo_submitted',
-  OTHER_PROFILE_SCREEN_BLOCK_USER_REPORT_INFO_SKIPPED = 'Profile-OtherProfile_blockAndReport-reportInfoSkipped_clicked'
+  OTHER_PROFILE_SCREEN_BLOCK_USER_REPORT_INFO_SKIPPED = 'Profile-OtherProfile_blockAndReport-reportInfoSkipped_clicked',
+
+  // My Profile Screen
+  MY_PROFILE_HEADER_EDIT_BIO_CLICKED = 'Profile-MyProfile_editMyPrompt_openPrompt',
+  MY_PROFILE_HEADER_EDIT_BIO_SAVE_PROMPT_CLICKED = 'Profile-MyProfile_prompt-save_clicked',
+  MY_PROFILE_HEADER_SHARE_USER_CLICKED = 'Profile-MyProfile_share_clicked',
+  MY_PROFILE_HEADER_SETTINGS_CLICKED = 'Profile-MyProfile_settings_openSettingsTab',
+  MY_PROFILE_HEADER_SHARE_LINK_CLICKED = 'Profile-MyProfile_shareLink_clicked',
+  MY_PROFILE_HEADER_ALLOW_ALL_ANON_MESSAGES_CLICKED = 'Profile-MyProfile_allowAllAnonMessages_clicked',
+  MY_PROFILE_HEADER_ALLOW_ANON_MESSAGES_FOLLOWED_CLICKED = 'Profile-MyProfile_allowAnonMessagesFollowed_clicked',
+  MY_PROFILE_HEADER_PROFILE_PIC_OPEN_BANNER = 'Profile-MyProfile_proflilePic_openProfilePicBanner',
+  MY_PROFILE_HEADER_PROFILE_PIC_VIEW_PROFILE_PIC = 'Profile-MyProfile_profilePicBanner-viewProfilePic_clicked',
+  MY_PROFILE_HEADER_PROFILE_LIBRARY_CLICKED = 'Profile-MyProfile_profilePicBanner-library_clicked',
+  MY_PROFILE_HEADER_PROFILE_PHOTO_CLICKED = 'Profile-MyProfile_profilePicBanner-photo_clicked',
+  MY_PROFILE_HEADER_PROFILE_REMOVE_CURRENT_CLICKED = 'Profile-MyProfile_profilePicBanner-removeCurrent_clicked',
+  MY_PROFILE_HEADER_PROFILE_BANNER_CLOSED = 'Profile-MyProfile_profilePicBanner-close_clicked',
+  MY_PROFILE_HEADER_SIGNED_POST_TAB_CLICKED = 'Profile-MyProfile_signedPostsTab_clicked',
+  MY_PROFILE_HEADER_ANON_POST_TAB_CLICKED = 'Profile-MyProfile_AnonPostsTab_clicked',
+  MY_PROFILE_HEADER_FOLLOWER_CLICKED = 'Profile-MyProfile_followers_openFollowerList'
+  // MY_PROFILE_ = '',
+  // MY_PROFILE_ = '',
+  // MY_PROFILE_ = '',
+  // MY_PROFILE_ = '',
+  // MY_PROFILE_ = '',
+  // MY_PROFILE_ = '',
 }
 
 const ENABLE_TOAST = ENV === 'Dev';
