@@ -344,7 +344,25 @@ export enum BetterSocialEventTracking {
   FOLLOWER_SCREEN_USER_ITEM_CLICKED = 'Profile-MyProfile_followerList-profileClicked_openOtherProfile',
   FOLLOWER_SCREEN_BACK_BUTTON_CLICKED = 'Profile-MyProfile_followerList-backButton_clicked',
   FOLLOWER_SCREEN_USER_ITEM_FOLLOW = 'Profile-MyProfile_followerList-followUser_clicked',
-  FOLLOWER_SCREEN_USER_ITEM_UNFOLLOW = 'Profile-MyProfile_followerList-unfollowUser_clicked'
+  FOLLOWER_SCREEN_USER_ITEM_UNFOLLOW = 'Profile-MyProfile_followerList-unfollowUser_clicked',
+
+  // FOLLOWING SCREEN
+  FOLLOWING_SCREEN_SEARCH_BAR_CLICKED = 'Profile-MyProfile_followingListUsers-search_',
+  FOLLOWING_SCREEN_SEARCH_BAR_DELETED = 'Profile-MyProfile_followingListUsers-deleteSearch_',
+  FOLLOWING_SCREEN_BACK_BUTTON_CLICKED = 'Profile-MyProfile_followingListUsers-backButton_clicked',
+  FOLLOWING_SCREEN_USERS_TAB_ITEM_CLICKED = 'Profile-MyProfile_followingListUsers-userClicked_openOtherProfile',
+  FOLLOWING_SCREEN_USERS_TAB_ITEM_FOLLOWED = 'Profile-MyProfile_followingListUsers-follow_clicked',
+  FOLLOWING_SCREEN_USERS_TAB_ITEM_UNFOLLOWED = 'Profile-MyProfile_followingListUsers-unfollow_clicked',
+  FOLLOWING_SCREEN_USERS_TAB_SUGGESTED_ITEM_CLICKED = 'Profile-MyProfile_followingSuggestedUsers-profileClicked_openOtherProfile',
+  FOLLOWING_SCREEN_USERS_TAB_SUGGESTED_ITEM_FOLLOWED = 'Profile-MyProfile_followingListUsers-follow_clicked',
+  FOLLOWING_SCREEN_USERS_TAB_SUGGESTEDITEM_UNFOLLOWED = 'Profile-MyProfile_followingListUsers-unfollow_clicked',
+  FOLLOWING_SCREEN_USERS_TAB_DOMAIN_TAB_CLICKED = 'Profile-MyProfile_followingListUsers-domainsTab_openFollowingDomains',
+  FOLLOWING_SCREEN_USERS_TAB_COMMUNITY_TAB_CLICKED = 'Profile-MyProfile_followingListUsers-communitiesTab_openFollowingComm'
+  // FOLLOWING_SCREEN_ = ''
+  // FOLLOWING_SCREEN_ = ''
+  // FOLLOWING_SCREEN_ = ''
+  // FOLLOWING_SCREEN_ = ''
+  // FOLLOWING_SCREEN_ = ''
 }
 
 const ENABLE_TOAST = ENV === 'Dev';

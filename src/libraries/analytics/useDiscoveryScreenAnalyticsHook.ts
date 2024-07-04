@@ -1,3 +1,6 @@
+import {useRoute} from '@react-navigation/core';
+
+import useFollowingScreenAnalyticsHook from './useFollowingScreenAnalyticsHook';
 import AnalyticsEventTracking, {BetterSocialEventTracking} from './analyticsEventTracking';
 import {
   DISCOVERY_TAB_DOMAINS,
@@ -38,12 +41,31 @@ export type DiscoveryScreenAnalyticsHook = {
   };
 };
 
+const FOLLOWING_SCREEN_ROUTE_NAME = 'Followings';
+
 const useDiscoveryScreenAnalyticsHook = (
   selectedScreen: number,
   setSelectedScreen: (number) => void
 ) => {
+  const route = useRoute();
+
+  // FOLLOWING SCREEN ANALYTICS
+  const {
+    onBackButtonClicked,
+    onDeleteSearchClicked,
+    onUserItemClicked,
+    onUserItemFollow,
+    onUserItemSuggestedFollow,
+    onUserItemSuggestedClicked,
+    onSearchBarClicked
+  } = useFollowingScreenAnalyticsHook();
+
   // Common Discovery Screen
   const onSearchCommunityPressed = () => {
+    if (route.name === FOLLOWING_SCREEN_ROUTE_NAME && selectedScreen === DISCOVERY_TAB_USERS) {
+      return onSearchBarClicked();
+    }
+
     if (selectedScreen === DISCOVERY_TAB_TOPICS) {
       AnalyticsEventTracking.eventTrack(
         BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_COMMUNITY_SEARCHED_COMMUNITY_CLICKED
@@ -64,6 +86,10 @@ const useDiscoveryScreenAnalyticsHook = (
   };
 
   const onBackButtonPressed = () => {
+    if (route.name === FOLLOWING_SCREEN_ROUTE_NAME && selectedScreen === DISCOVERY_TAB_USERS) {
+      return onBackButtonClicked();
+    }
+
     if (selectedScreen === DISCOVERY_TAB_NEWS) {
       AnalyticsEventTracking.eventTrack(
         BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_NEWS_BACK_BUTTON_CLICKED
@@ -127,9 +153,23 @@ const useDiscoveryScreenAnalyticsHook = (
     }
   };
 
+  const __handleSelectedTabClickedFromFollowingUserFragment = (index: number) => {
+    if (index === DISCOVERY_TAB_DOMAINS) {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.FOLLOWING_SCREEN_USERS_TAB_DOMAIN_TAB_CLICKED
+      );
+    } else if (index === DISCOVERY_TAB_TOPICS) {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.FOLLOWING_SCREEN_USERS_TAB_COMMUNITY_TAB_CLICKED
+      );
+    }
+  };
+
   const onTabClicked = (index: number) => {
     setSelectedScreen((prev: number) => {
-      if (prev === DISCOVERY_TAB_NEWS) __handleSelectedTabClickedFromNewsFragment(index);
+      if (route.name === FOLLOWING_SCREEN_ROUTE_NAME && selectedScreen === DISCOVERY_TAB_USERS)
+        __handleSelectedTabClickedFromFollowingUserFragment(index);
+      else if (prev === DISCOVERY_TAB_NEWS) __handleSelectedTabClickedFromNewsFragment(index);
       else if (prev === DISCOVERY_TAB_DOMAINS) __handleSelectedTabClickedFromDomainFragment(index);
       else if (prev === DISCOVERY_TAB_USERS) __handleSelectedTabClickedFromUserFragment(index);
 
@@ -174,6 +214,12 @@ const useDiscoveryScreenAnalyticsHook = (
       AnalyticsEventTracking.eventTrack(
         BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_USERS_RECENT_SEARCH_CLICKED
       );
+    }
+  };
+
+  const onCommonSearchBarDeletedClicked = (from: DiscoveryScreenFragments) => {
+    if (route.name === FOLLOWING_SCREEN_ROUTE_NAME && selectedScreen === DISCOVERY_TAB_USERS) {
+      onDeleteSearchClicked();
     }
   };
 
@@ -278,7 +324,22 @@ const useDiscoveryScreenAnalyticsHook = (
 
   // Users Discovery Screen
   const onUserPageOpened = (from: 'your-user' | 'suggested-user') => {
-    console.log('onUserPageOpened', from);
+    if (
+      route.name === FOLLOWING_SCREEN_ROUTE_NAME &&
+      selectedScreen === DISCOVERY_TAB_USERS &&
+      from === 'your-user'
+    ) {
+      return onUserItemClicked();
+    }
+
+    if (
+      route.name === FOLLOWING_SCREEN_ROUTE_NAME &&
+      selectedScreen === DISCOVERY_TAB_USERS &&
+      from === 'suggested-user'
+    ) {
+      return onUserItemSuggestedClicked();
+    }
+
     if (from === 'your-user') {
       AnalyticsEventTracking.eventTrack(
         BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_USERS_YOUR_USER_OPENED
@@ -291,6 +352,22 @@ const useDiscoveryScreenAnalyticsHook = (
   };
 
   const onUserPageFollowButtonClicked = (from: 'your-user' | 'suggested-user') => {
+    if (
+      route.name === FOLLOWING_SCREEN_ROUTE_NAME &&
+      selectedScreen === DISCOVERY_TAB_USERS &&
+      from === 'your-user'
+    ) {
+      return onUserItemFollow();
+    }
+
+    if (
+      route.name === FOLLOWING_SCREEN_ROUTE_NAME &&
+      selectedScreen === DISCOVERY_TAB_USERS &&
+      from === 'suggested-user'
+    ) {
+      return onUserItemSuggestedFollow();
+    }
+
     if (from === 'suggested-user') {
       AnalyticsEventTracking.eventTrack(
         BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_USERS_SUGGESTED_USER_FOLLOWED
@@ -320,7 +397,8 @@ const useDiscoveryScreenAnalyticsHook = (
       onBackButtonPressed,
       onTabClicked,
       onCommonClearRecentSearch,
-      onCommonRecentItemClicked
+      onCommonRecentItemClicked,
+      onCommonSearchBarDeletedClicked
     },
     topic: {
       onFollowUnfollow,

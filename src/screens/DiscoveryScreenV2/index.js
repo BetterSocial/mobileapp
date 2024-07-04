@@ -65,7 +65,12 @@ const DiscoveryScreenV2 = ({route}) => {
   const navigation = useNavigation();
   const eventTrack = useDiscoveryScreenAnalyticsHook(selectedScreen, setSelectedScreen);
   const {
-    common: {onSearchCommunityPressed, onBackButtonPressed, onTabClicked}
+    common: {
+      onSearchCommunityPressed,
+      onBackButtonPressed,
+      onTabClicked,
+      onCommonSearchBarDeletedClicked
+    }
   } = eventTrack;
 
   React.useEffect(() => {
@@ -324,7 +329,10 @@ const DiscoveryScreenV2 = ({route}) => {
           }
           // containerStyle={styles.header}
           titleStyle={styles.headerTitle}
-          onPress={() => navigation.goBack()}
+          onPress={() => {
+            onBackButtonPressed();
+            navigation.goBack();
+          }}
           isCenter
         />
       ) : (
@@ -358,6 +366,11 @@ const DiscoveryScreenV2 = ({route}) => {
           onCancelToken={onCancelToken}
           placeholderText={route.name === 'Followings' ? profileState.navbarTitle : undefined}
           hideBackIcon
+          eventTrack={{
+            onSearchBarClicked: onSearchCommunityPressed,
+            onBackButtonPressed,
+            onTextCleared: onCommonSearchBarDeletedClicked
+          }}
         />
       )}
       {RenderFragment}

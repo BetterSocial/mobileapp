@@ -15,8 +15,14 @@ import {withInteractionsManagedNoStatusBar} from '../../components/WithInteracti
 function FollowersScreen() {
   const navigation = useNavigation();
   const [profileState, dispatchNavbar] = React.useContext(Context).profile;
-  const {onSearchBarClicked, onBackButtonClicked, onDeleteSearchClicked} =
-    useFollowerScreenAnalyticsHook();
+  const {
+    onSearchBarClicked,
+    onBackButtonClicked,
+    onDeleteSearchClicked,
+    onUserItemClicked,
+    onUserItemFollow,
+    onUserItemUnfollow
+  } = useFollowerScreenAnalyticsHook();
 
   const isAndroid = Platform.OS === 'android';
 
@@ -118,13 +124,13 @@ function FollowersScreen() {
         setDataFollower={setDataFollower}
         eventTrack={{
           common: {
-            onCommonClearRecentSearch: () => console.log('asasddad'),
-            onCommonRecentItemClicked: () => console.log('qweqweqw')
+            onCommonClearRecentSearch: () => {},
+            onCommonRecentItemClicked: () => {}
           },
           user: {
-            onUserPageOpened: () => console.log('xzcxczxc'),
-            onUserPageFollowButtonClicked: () => console.log('123123213'),
-            onUserPageUnfollowButtonClicked: () => console.log('ljkhjk')
+            onUserPageOpened: () => onUserItemClicked(),
+            onUserPageFollowButtonClicked: () => onUserItemFollow(),
+            onUserPageUnfollowButtonClicked: () => onUserItemUnfollow()
           }
         }}
       />
