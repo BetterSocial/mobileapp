@@ -63,9 +63,10 @@ const DiscoveryScreenV2 = ({route}) => {
   });
 
   const navigation = useNavigation();
+  const eventTrack = useDiscoveryScreenAnalyticsHook(selectedScreen, setSelectedScreen);
   const {
     common: {onSearchCommunityPressed, onBackButtonPressed, onTabClicked}
-  } = useDiscoveryScreenAnalyticsHook(selectedScreen, setSelectedScreen);
+  } = eventTrack;
 
   React.useEffect(() => {
     const unsubscribe = () => {
@@ -247,6 +248,17 @@ const DiscoveryScreenV2 = ({route}) => {
           searchText={searchText}
           withoutRecent={route.name === 'Followings'}
           isUser={true}
+          eventTrack={{
+            common: {
+              onCommonClearRecentSearch: eventTrack.common.onCommonClearRecentSearch,
+              onCommonRecentItemClicked: eventTrack.common.onCommonRecentItemClicked
+            },
+            user: {
+              onUserPageOpened: eventTrack.user.onUserPageOpened,
+              onUserPageFollowButtonClicked: eventTrack.user.onUserPageFollowButtonClicked,
+              onUserPageUnfollowButtonClicked: eventTrack.user.onUserPageUnfollowButtonClicked
+            }
+          }}
         />
       );
 
@@ -328,7 +340,8 @@ const DiscoveryScreenV2 = ({route}) => {
           placeholderText={route.name === 'Followings' ? profileState.navbarTitle : undefined}
           eventTrack={{
             onSearchBarClicked: onSearchCommunityPressed,
-            onBackButtonPressed
+            onBackButtonPressed,
+            onTextCleared: () => {}
           }}
         />
       )}

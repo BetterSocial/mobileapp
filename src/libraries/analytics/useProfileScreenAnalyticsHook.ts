@@ -19,6 +19,7 @@ export type ProfileScreenAnalyticsEventTracking = {
   onSignedPostTabClicked: () => void;
   onAnonPostTabClicked: () => void;
   onFollowerClicked: () => void;
+  onFollowingClicked: () => void;
 };
 
 const useProfileScreenAnalyticsHook = (): ProfileScreenAnalyticsEventTracking => {
@@ -71,6 +72,9 @@ const useProfileScreenAnalyticsHook = (): ProfileScreenAnalyticsEventTracking =>
   const onFollowerClicked = () => {
     track(trackEnum.MY_PROFILE_HEADER_FOLLOWER_CLICKED);
   };
+  const onFollowingClicked = () => {
+    track(trackEnum.MY_PROFILE_HEADER_FOLLOWING_CLICKED);
+  };
 
   return {
     onEditBioClicked,
@@ -88,7 +92,8 @@ const useProfileScreenAnalyticsHook = (): ProfileScreenAnalyticsEventTracking =>
     onBannerClosed,
     onSignedPostTabClicked,
     onAnonPostTabClicked,
-    onFollowerClicked
+    onFollowerClicked,
+    onFollowingClicked
   };
 };
 

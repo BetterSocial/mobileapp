@@ -38,7 +38,8 @@ const DiscoverySearch = ({
   hideBackIcon = false,
   eventTrack = {
     onSearchBarClicked: () => {},
-    onBackButtonPressed: () => {}
+    onBackButtonPressed: () => {},
+    onTextCleared: () => {}
   }
 }) => {
   const navigation = useNavigation();
@@ -113,6 +114,7 @@ const DiscoverySearch = ({
     setSearchText('');
     setLastSearch('');
     debounceChangeText('');
+    eventTrack?.onTextCleared();
   };
 
   const handleOnSubmitEditing = (event) => {

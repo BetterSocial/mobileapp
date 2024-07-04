@@ -7,6 +7,36 @@ import {
 } from '../../utils/constants';
 
 export type DiscoveryScreenFragments = 'news' | 'domain' | 'topic' | 'user';
+export type DiscoveryScreenAnalyticsHook = {
+  common: {
+    onSearchCommunityPressed: () => void;
+    onBackButtonPressed: () => void;
+    onTabClicked: (index: number) => void;
+    onCommonClearRecentSearch: (from: DiscoveryScreenFragments) => void;
+    onCommonRecentItemClicked: (from: DiscoveryScreenFragments) => void;
+  };
+  topic: {
+    onFollowUnfollow: (willFollow: boolean, section: string) => void;
+    onTopicPressed: (section: 'your-communities' | 'suggested-communities') => void;
+    onStartNewCommunityAnalyticsPressed: () => void;
+  };
+  news: {
+    onOpenLinkPressed: () => void;
+    onOpenLinkContextScreen: () => void;
+    onClearRecentSearch: () => void;
+    onRecentSearchItemClicked: () => void;
+  };
+  domain: {
+    onDomainPageOpened: (from: 'your-domain' | 'suggested-domain') => void;
+    onDomainPageFollowButtonClicked: (from: 'your-domain' | 'suggested-domain') => void;
+    onDomainPageUnfollowButtonClicked: (from: 'your-domain' | 'suggested-domain') => void;
+  };
+  user: {
+    onUserPageOpened: (from: 'your-user' | 'suggested-user') => void;
+    onUserPageFollowButtonClicked: (from: 'your-user' | 'suggested-user') => void;
+    onUserPageUnfollowButtonClicked: (from: 'your-user' | 'suggested-user') => void;
+  };
+};
 
 const useDiscoveryScreenAnalyticsHook = (
   selectedScreen: number,

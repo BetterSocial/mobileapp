@@ -241,7 +241,8 @@ const ProfileScreen = ({route}) => {
     onRemoveCurrentProfilePicClicked,
     onViewProfilePictureClicked,
     onBannerClosed,
-    onFollowerClicked
+    onFollowerClicked,
+    onFollowingClicked
   } = eventTrack;
 
   const {feeds} = myProfileFeed;
@@ -366,6 +367,7 @@ const ProfileScreen = ({route}) => {
   };
 
   const goToFollowings = (userId, username) => {
+    onFollowingClicked();
     navigation.navigate('Followings', {
       screen: 'TabFollowing',
       params: {user_id: userId, username}

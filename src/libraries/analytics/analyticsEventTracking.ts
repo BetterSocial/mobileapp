@@ -329,13 +329,22 @@ export enum BetterSocialEventTracking {
   MY_PROFILE_HEADER_PROFILE_BANNER_CLOSED = 'Profile-MyProfile_profilePicBanner-close_clicked',
   MY_PROFILE_HEADER_SIGNED_POST_TAB_CLICKED = 'Profile-MyProfile_signedPostsTab_clicked',
   MY_PROFILE_HEADER_ANON_POST_TAB_CLICKED = 'Profile-MyProfile_AnonPostsTab_clicked',
-  MY_PROFILE_HEADER_FOLLOWER_CLICKED = 'Profile-MyProfile_followers_openFollowerList'
+  MY_PROFILE_HEADER_FOLLOWER_CLICKED = 'Profile-MyProfile_followers_openFollowerList',
+  MY_PROFILE_HEADER_FOLLOWING_CLICKED = 'Profile-MyProfile_following_openFollowingListUsers',
   // MY_PROFILE_ = '',
   // MY_PROFILE_ = '',
   // MY_PROFILE_ = '',
   // MY_PROFILE_ = '',
   // MY_PROFILE_ = '',
   // MY_PROFILE_ = '',
+
+  // FOLLOWER SCREEN
+  FOLLOWER_SCREEN_SEARCH_BAR_CLICKED = 'Profile-MyProfile_followerList-search_clicked',
+  FOLLOWER_SCREEN_DELETE_SEARCH_CLICKED = 'Profile-MyProfile_followerList-deleteSearch_clicked',
+  FOLLOWER_SCREEN_USER_ITEM_CLICKED = 'Profile-MyProfile_followerList-profileClicked_openOtherProfile',
+  FOLLOWER_SCREEN_BACK_BUTTON_CLICKED = 'Profile-MyProfile_followerList-backButton_clicked',
+  FOLLOWER_SCREEN_USER_ITEM_FOLLOW = 'Profile-MyProfile_followerList-followUser_clicked',
+  FOLLOWER_SCREEN_USER_ITEM_UNFOLLOW = 'Profile-MyProfile_followerList-unfollowUser_clicked'
 }
 
 const ENABLE_TOAST = ENV === 'Dev';

@@ -3,17 +3,20 @@ import {BackHandler, Platform, StatusBar, StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
 import Followings from '.';
-import {Context} from '../../context';
-import {setNavbarTitle, showHeaderProfile} from '../../context/actions/setMyProfileAction';
-import {withInteractionsManagedNoStatusBar} from '../../components/WithInteractionManaged';
 import Search from '../DiscoveryScreenV2/elements/Search';
-import {getFollower} from '../../service/profile';
+import useFollowerScreenAnalyticsHook from '../../libraries/analytics/useFollowerScreenAnalyticsHook';
+import {Context} from '../../context';
 import {Header} from '../../components';
 import {fonts} from '../../utils/fonts';
+import {getFollower} from '../../service/profile';
+import {setNavbarTitle, showHeaderProfile} from '../../context/actions/setMyProfileAction';
+import {withInteractionsManagedNoStatusBar} from '../../components/WithInteractionManaged';
 
 function FollowersScreen() {
   const navigation = useNavigation();
   const [profileState, dispatchNavbar] = React.useContext(Context).profile;
+  const {onSearchBarClicked, onBackButtonClicked, onDeleteSearchClicked} =
+    useFollowerScreenAnalyticsHook();
 
   const isAndroid = Platform.OS === 'android';
 
@@ -53,7 +56,10 @@ function FollowersScreen() {
           title="Who is following you"
           // containerStyle={styles.header}
           titleStyle={styles.headerTitle}
-          onPress={() => navigation.goBack()}
+          onPress={() => {
+            onBackButtonClicked();
+            navigation.goBack();
+          }}
           isCenter
         />
       );
@@ -99,12 +105,28 @@ function FollowersScreen() {
         fetchData={fetchFollower}
         placeholderText={profileState.navbarTitle}
         hideBackIcon
+        eventTrack={{
+          onSearchBarClicked,
+          onBackButtonPressed: () => {},
+          onTextCleared: onDeleteSearchClicked
+        }}
       />
 
       <Followings
         isLoading={isLoading}
         dataFollower={dataFollower}
         setDataFollower={setDataFollower}
+        eventTrack={{
+          common: {
+            onCommonClearRecentSearch: () => console.log('asasddad'),
+            onCommonRecentItemClicked: () => console.log('qweqweqw')
+          },
+          user: {
+            onUserPageOpened: () => console.log('xzcxczxc'),
+            onUserPageFollowButtonClicked: () => console.log('123123213'),
+            onUserPageUnfollowButtonClicked: () => console.log('ljkhjk')
+          }
+        }}
       />
     </View>
   );

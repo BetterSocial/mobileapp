@@ -12,7 +12,6 @@ import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import RecentSearch from '../elements/RecentSearch';
 import useCreateChat from '../../../hooks/screen/useCreateChat';
 import useDiscovery from '../hooks/useDiscovery';
-import useDiscoveryScreenAnalyticsHook from '../../../libraries/analytics/useDiscoveryScreenAnalyticsHook';
 import {COLORS} from '../../../utils/theme';
 import {Context} from '../../../context/Store';
 import {checkUserBlock, setFollow, setUnFollow} from '../../../service/profile';
@@ -83,7 +82,18 @@ const UsersFragment = ({
   showRecentSearch = true,
   fetchData = () => {},
   searchText,
-  isUser
+  isUser,
+  eventTrack = {
+    common: {
+      onCommonClearRecentSearch: () => {},
+      onCommonRecentItemClicked: () => {}
+    },
+    user: {
+      onUserPageOpened: () => {},
+      onUserPageFollowButtonClicked: () => {},
+      onUserPageUnfollowButtonClicked: () => {}
+    }
+  }
 }) => {
   const [profile] = React.useContext(Context).profile;
   const navigation = useNavigation();
@@ -93,10 +103,9 @@ const UsersFragment = ({
   const {createSignChat, loadingCreateChat} = useCreateChat();
   const [activeSections, setActiveSections] = useState([]);
 
-  const {
-    common: {onCommonClearRecentSearch, onCommonRecentItemClicked},
-    user: {onUserPageOpened, onUserPageFollowButtonClicked, onUserPageUnfollowButtonClicked}
-  } = useDiscoveryScreenAnalyticsHook();
+  const {onCommonClearRecentSearch, onCommonRecentItemClicked} = eventTrack?.common || {};
+  const {onUserPageOpened, onUserPageFollowButtonClicked, onUserPageUnfollowButtonClicked} =
+    eventTrack?.user || {};
 
   const route = useRoute();
 
@@ -354,7 +363,7 @@ const UsersFragment = ({
                 setIsFirstTimeOpen={setIsFirstTimeOpen}
                 eventTrack={{
                   onClearRecentSearch: () => onCommonClearRecentSearch('user'),
-                  onRecentItemClicked: () => onCommonRecentItemClicked('user')
+                  onRecentSearchItemClicked: () => onCommonRecentItemClicked('user')
                 }}
               />
             )}
