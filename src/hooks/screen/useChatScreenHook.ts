@@ -3,6 +3,7 @@ import 'react-native-get-random-values';
 
 import * as React from 'react';
 import {useMutation} from 'react-query';
+import {useRoute} from '@react-navigation/core';
 import {v4 as uuid} from 'uuid';
 
 import ChannelList from '../../database/schema/ChannelListSchema';
@@ -35,20 +36,30 @@ export const ScrollContext = React.createContext<ScrollContextProps | null>(null
 
 function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const {localDb, refresh, otherListener} = useLocalDatabaseHook();
-  const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen, setChannelAsRead} =
-    useChatUtilsHook(type);
+  const {
+    selectedChannel,
+    goBackFromChatScreen,
+    goToChatInfoScreen,
+    setChannelAsRead,
+    setSelectedChannel
+  } = useChatUtilsHook(type);
   const {anonProfileId, signedProfileId} = useUserAuthHook();
   const {queue} = useDatabaseQueueHook();
   const {eventTrackByUserType, getEventName} = useAnalyticUtilsHook(type);
 
+  const {params} = useRoute();
+
   const [selfAnonUserInfo, setSelfAnonUserInfo] = React.useState<any>(null);
-  const [chats, setChats] = React.useState<ChatSchema[]>([]);
-  const [isLoadingFetchAllMessage, setIsLoadingFetchAllMessage] = React.useState(true);
+  const [chats, setChats] = React.useState<ChatSchema[]>(params?.initialMessages || []);
+  const [isLoadingFetchAllMessage, setIsLoadingFetchAllMessage] = React.useState(false);
+
+  const sendChatSignedMutation = useSendSignedMessage();
+  const sendChatAnonMutation = useSendAnonMessage();
 
   const uploadMediaFailedEvent: UploadOptions = {
     withFailedEventTrack: getEventName(
-      BetterSocialEventTracking.SIGNED_CHAT_SCREEN_ATTACHMENT_UPLOAD_FAILED,
-      BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_ATTACHMENT_UPLOAD_FAILED
+      BetterSocialEventTracking.SIGNED_CHAT_SCREEN_ATTACHMENT_MEDIA_UPLOAD_FILE,
+      BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_ATTACHMENT_MEDIA_UPLOAD_FILE
     )
   };
 
@@ -63,13 +74,6 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       enabled: !!localDb && !!selectedChannel && !!otherListener[`chat_${selectedChannel?.id}`]
     }
   );
-
-  React.useEffect(() => {
-    if (getAllMessages.data) {
-      setChats(getAllMessages.data);
-      setIsLoadingFetchAllMessage(false);
-    }
-  }, [getAllMessages.data]);
 
   const initChatData = async () => {
     if (!localDb || !selectedChannel) return;
@@ -158,9 +162,6 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
 
     return Promise.all(attachmentPromises);
   };
-
-  const sendChatSignedMutation = useSendSignedMessage();
-  const sendChatAnonMutation = useSendAnonMessage();
 
   const sendChat = async (props: {
     message: string;
@@ -265,7 +266,8 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   };
 
   const sendChatMutation = useMutation(sendChat, {
-    retry: true
+    retry: 10,
+    retryDelay: 1000
   });
 
   const updateChatContinuity = (chatsData: ChatSchema[]) => {
@@ -296,8 +298,11 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     goBackFromChatScreen();
   };
 
-  const goToChatInfoScreenBy = (trigger: GoToChatInfoScreenByTrigger, params?: any) => {
-    goToChatInfoScreen(params);
+  const goToChatInfoScreenBy = (
+    trigger: GoToChatInfoScreenByTrigger,
+    goToChatInfoScreenParams?: any
+  ) => {
+    goToChatInfoScreen(goToChatInfoScreenParams);
     if (trigger === 'ProfilePicture')
       eventTrackByUserType(
         BetterSocialEventTracking.SIGNED_CHAT_SCREEN_HEADER_PROFILE_PICTURE_CLICKED,
@@ -316,6 +321,19 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       initChatData();
     }
   }, [localDb, otherListener[`chat_${selectedChannel?.id}`], selectedChannel]);
+
+  React.useEffect(() => {
+    return () => {
+      setChats([]);
+    };
+  }, []);
+
+  React.useEffect(() => {
+    if (getAllMessages.data) {
+      setChats(getAllMessages.data);
+      setIsLoadingFetchAllMessage(false);
+    }
+  }, [getAllMessages.data]);
 
   return {
     chats,

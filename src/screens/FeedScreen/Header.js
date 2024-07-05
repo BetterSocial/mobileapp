@@ -316,7 +316,7 @@ const _renderProfileNormal = ({
       icon: <TrashRed />,
       onPress: () => {
         refSheet.current.close();
-        onDeletePost();
+        onDeletePost(item);
       },
       style: {color: COLORS.redalert}
     });

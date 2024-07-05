@@ -1,7 +1,17 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
-import {Dimensions, RefreshControl, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
+import SimpleToast from 'react-native-simple-toast';
+import {
+  Dimensions,
+  RefreshControl,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
 /* eslint-disable no-param-reassign */
 import {debounce} from 'lodash';
 import axios from 'axios';
@@ -10,18 +20,25 @@ import ContactPreview from './elements/ContactPreview';
 import Header from '../../components/Header/HeaderContact';
 import ItemUser from './elements/ItemUser';
 import SearchRecyclerView from './elements/SearchRecyclerView';
+import ShareUtils from '../../utils/share';
 import StringConstant from '../../utils/string/StringConstant';
 import useCreateChat from '../../hooks/screen/useCreateChat';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
-import {Loading} from '../../components';
+import {DEFAULT_PROFILE_PIC_PATH, NavigationConstants} from '../../utils/constants';
+import {Loading, Header as HeaderGeneral} from '../../components';
 import {Search} from './elements';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import {ProgressBar} from '../../components/ProgressBar';
 import {ANONYMOUS} from '../../hooks/core/constant';
 import DiscoveryRepo from '../../service/discovery';
 import DiscoveryAction from '../../context/actions/discoveryAction';
 import useGroupInfo from '../GroupInfo/hooks/useGroupInfo';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
+import MemoIc_share from '../../assets/icons/Ic_share';
+import dimen from '../../utils/dimen';
+import {Button} from '../../components/Button';
+import {inviteCommunityMember} from '../../service/topics';
 
 const {width} = Dimensions.get('screen');
 
@@ -48,7 +65,15 @@ const ContactScreen = ({navigation}) => {
   const [discoveryData, discoveryDispatch] = React.useContext(Context).discovery;
   const cancelTokenRef = React.useRef(axios.CancelToken.source());
   const route = useRoute();
-  const {from: sourceScreen, isAddParticipant, channelId, existParticipants} = route?.params || {};
+  const {
+    from: sourceScreen,
+    isAddParticipant,
+    channelId,
+    existParticipants,
+    isCreateCommunity,
+    topicCommunityId,
+    topicCommunityName
+  } = route?.params || {};
   const isAnon = sourceScreen === ANONYMOUS;
   const VIEW_TYPE_LABEL = 1;
   const VIEW_TYPE_DATA = 2;
@@ -203,6 +228,38 @@ const ContactScreen = ({navigation}) => {
     }
   };
 
+  const handleInviteCommunityMember = async () => {
+    if (selectedUsers.length > 0) {
+      try {
+        const response = await inviteCommunityMember(
+          topicCommunityId.toString(),
+          selectedUsers?.map((user) => user?.user_id)
+        );
+        if (response.success) {
+          navigation.replace(NavigationConstants.CREATE_POST_SCREEN, {
+            isCreateCommunity: true,
+            topic: topicCommunityName
+          });
+        } else {
+          SimpleToast.show(response?.message, SimpleToast.SHORT);
+        }
+      } catch (e) {
+        if (__DEV__) {
+          console.log('error handleInviteCommunityMember: ', e);
+        }
+      }
+    } else {
+      navigation.push(NavigationConstants.CREATE_POST_SCREEN, {
+        isCreateCommunity: true,
+        topic: topicCommunityName
+      });
+    }
+  };
+
+  const onCommunityShare = () => {
+    ShareUtils.shareCommunity(topicCommunityName);
+  };
+
   const rowRenderer = (type, item, index, extendedState) => (
     <ItemUser
       photo={item.profile_pic_path}
@@ -269,19 +326,49 @@ const ContactScreen = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} barStyle={'light-content'} />
-      <Header
-        title={isAddParticipant ? 'Add Participants' : newChatTitleScreen}
-        containerStyle={styles.containerStyle}
-        subTitle={'Next'}
-        subtitleStyle={selectedUsers.length > 0 && styles.subtitleStyle(isAnon)}
-        onPressSub={() => (isAddParticipant ? handleAddParticipant() : handleCreateChannel())}
-        onPress={() => navigation.goBack()}
-        disabledNextBtn={selectedUsers.length <= 0}
-      />
+      {isCreateCommunity ? (
+        <Header
+          title="Create Community"
+          onPress={() => navigation.goBack()}
+          titleStyle={{
+            alignSelf: 'center'
+          }}
+          containerStyle={{
+            borderBottomWidth: 1,
+            borderBottomColor: COLORS.gray210,
+            marginHorizontal: 16
+          }}
+        />
+      ) : (
+        <Header
+          title={isAddParticipant ? 'Add Participants' : newChatTitleScreen}
+          containerStyle={styles.containerStyle}
+          subTitle={'Next'}
+          subtitleStyle={selectedUsers.length > 0 && styles.subtitleStyle(isAnon)}
+          onPressSub={() => (isAddParticipant ? handleAddParticipant() : handleCreateChannel())}
+          onPress={() => navigation.goBack()}
+          disabledNextBtn={selectedUsers.length <= 0}
+        />
+      )}
+
+      {isCreateCommunity && (
+        <View style={styles.containerHeader}>
+          <ProgressBar isStatic={true} value={100} />
+          <TouchableOpacity style={styles.info} onPress={onCommunityShare}>
+            <View style={styles.iconCircle}>
+              <MemoIc_share height={20} width={21} color={COLORS.white} />
+            </View>
+            <View>
+              <Text style={styles.title}>Share invitation link</Text>
+              <Text style={styles.desc}>Who is interested in your community?</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      )}
 
       <Search
         text={text}
-        style={styles.containerStyle}
+        style={[isCreateCommunity ? {borderBottomWidth: 0, borderTopWidth: 0} : {}]}
         onChangeText={onSearchTextChange}
         onClearText={() => onSearchTextChange('')}
         isLoading={isLoadingSearchResult}
@@ -328,6 +415,17 @@ const ContactScreen = ({navigation}) => {
         />
       )}
       <Loading visible={loading || loadingCreateChat || isLoadingAddMember} />
+      {isCreateCommunity && (
+        <View style={styles.footer}>
+          <View style={styles.textSmallContainer}>
+            <Text style={styles.textSmall}>
+              You{"'"}ll appear as the first member of this community. You can switch your
+              membership to incognito at any time from the community page.
+            </Text>
+          </View>
+          <Button onPress={handleInviteCommunityMember}>Next</Button>
+        </View>
+      )}
     </SafeAreaView>
   );
 };
@@ -343,12 +441,63 @@ const styles = StyleSheet.create({
     // height: height - 180,
     flex: 1
   },
+  containerHeader: {
+    paddingHorizontal: 22,
+    paddingTop: 24,
+    paddingBottom: 10
+  },
   containerStyle: {
     marginHorizontal: 16
   },
   subtitleStyle: (isAnon) => ({
     color: isAnon ? COLORS.anon_primary : COLORS.signed_primary
-  })
+  }),
+  info: {
+    flexDirection: 'row',
+    marginTop: dimen.normalizeDimen(16)
+  },
+  iconCircle: {
+    backgroundColor: COLORS.signed_primary,
+    borderRadius: 100,
+    width: 48,
+    height: 48,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: dimen.normalizeDimen(8)
+  },
+  title: {
+    fontFamily: fonts.inter[600],
+    fontSize: normalizeFontSize(16),
+    color: COLORS.signed_primary
+  },
+  desc: {
+    fontFamily: fonts.inter[400],
+    fontSize: normalizeFontSize(14),
+    lineHeight: normalizeFontSize(24),
+    color: COLORS.gray510,
+    marginTop: dimen.normalizeDimen(4)
+  },
+  footer: {
+    position: 'absolute',
+    bottom: 0,
+    height: dimen.normalizeDimen(112),
+    width: '100%',
+    paddingHorizontal: dimen.normalizeDimen(20),
+    paddingBottom: dimen.normalizeDimen(20),
+    backgroundColor: COLORS.almostBlack,
+    flexDirection: 'column',
+    justifyContent: 'space-between'
+  },
+  textSmallContainer: {
+    flex: 1,
+    justifyContent: 'center'
+  },
+  textSmall: {
+    fontSize: normalizeFontSize(10),
+    fontFamily: fonts.inter[400],
+    textAlign: 'center',
+    color: COLORS.gray510
+  }
 });
 
 ContactScreen.propTypes = {

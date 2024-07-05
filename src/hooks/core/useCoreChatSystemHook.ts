@@ -26,7 +26,7 @@ import {
   LatestChildrenComment
 } from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
 import {ChannelType} from '../../../types/repo/ChannelData';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {DEFAULT_PROFILE_PIC_PATH, DELETED_MESSAGE_TEXT} from '../../utils/constants';
 import {DatabaseOperationLabel} from '../../core/queue/DatabaseQueue';
 import {GetstreamFeedListenerObject} from '../../../types/hooks/core/getstreamFeedListener/feedListenerObject';
 import {GetstreamMessage, GetstreamWebsocket, MyChannelType} from './websocket/types.d';
@@ -163,7 +163,8 @@ const useCoreChatSystemHook = () => {
     const channelType: {[key: string]: ChannelType} = {
       messaging: isAnonymous ? 'ANON_PM' : 'PM',
       group: 'GROUP',
-      topics: isAnonymous ? 'ANON_TOPIC' : 'TOPIC'
+      topics: isAnonymous ? 'ANON_TOPIC' : 'TOPIC',
+      topicinvitation: 'TOPIC'
     };
 
     const isSystemMessage = websocketData?.message?.isSystem || websocketData?.type === 'system';
@@ -210,8 +211,15 @@ const useCoreChatSystemHook = () => {
           id: `${websocketData?.channel?.id}-${websocketData?.message?.id}`,
           priority: QueueJobPriority.HIGH,
           task: async () => {
-            const chat = ChatSchema.fromWebsocketObject(newWebsocketData);
-            await Promise.all([chat.save(localDb), channelList.save(localDb)]);
+            if (
+              websocketData?.message?.message_type === 'notification-deleted' ||
+              websocketData?.message?.message_type === 'deleted'
+            ) {
+              await Promise.all([channelList.save(localDb)]);
+            } else {
+              const chat = ChatSchema.fromWebsocketObject(newWebsocketData);
+              await Promise.all([chat.save(localDb), channelList.save(localDb)]);
+            }
           }
         });
       }
@@ -232,12 +240,31 @@ const useCoreChatSystemHook = () => {
     if (!localDb) return;
     const websocketMessage = websocketData?.message;
 
+    helperWebsocketForDeletedMessage(websocketData);
     websocketData = helperGetChannelInfo(websocketData);
     websocketData = helperGetWebsocketMessage(websocketData);
     websocketData = await helperGetWebsocketUnreadCount(websocketData);
     websocketData = await helperGetSystemMessage(websocketData, channelCategory);
 
-    if (websocketData?.channel_type === 'topics') {
+    // if (websocketData?.message?.deleted_message_id) {
+    //   console.log('is deleted', websocketData?.message?.deleted_message_id);
+    //   await ChatSchema.updateDeletedChatType(localDb, websocketData?.message?.deleted_message_id, {
+    //     rawJson: websocketData,
+    //     createdAt: websocketData?.message?.deleted_message_created_at || '',
+    //     updatedAt: websocketData?.message?.deleted_message_updated_at || ''
+    //   });
+    // }
+
+    if (websocketData?.message?.message_type === 'notification-deleted') {
+      refresh('channelList');
+      refresh('chat');
+      return;
+    }
+
+    if (
+      websocketData?.channel_type === 'topics' ||
+      websocketData?.channel_type === 'topicinvitation'
+    ) {
       refresh('channelList');
       return;
     }
@@ -309,6 +336,34 @@ const useCoreChatSystemHook = () => {
       isMyComment,
       isMyChildComment
     };
+  };
+
+  const helperWebsocketForDeletedMessage = async (websocketData: GetstreamWebsocket) => {
+    const websocketMessage = websocketData?.message;
+    const isDeletedMessage =
+      websocketMessage?.message_type === 'notification-deleted' ||
+      websocketMessage?.message_type === 'deleted';
+
+    if (isDeletedMessage) {
+      const selectedChat = await ChatSchema.getByid(
+        localDb,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        websocketMessage.deleted_message_id!
+      );
+      const selectedCreatedAt = selectedChat.createdAt;
+      const selectedUpdatedAt = selectedChat.updatedAt;
+
+      websocketMessage.id = websocketMessage.deleted_message_id ?? '';
+      websocketMessage.text = DELETED_MESSAGE_TEXT;
+      websocketMessage.created_at = selectedCreatedAt ?? websocketMessage.created_at;
+      websocketMessage.updated_at = selectedUpdatedAt ?? websocketMessage.updated_at;
+
+      if (websocketMessage?.deleted_message_id) {
+        ChatSchema.updateDeletedChatType(localDb, websocketMessage?.deleted_message_id, {
+          rawJson: websocketMessage
+        });
+      }
+    }
   };
 
   const unreadCountProcessor = (postNotification: AnonymousPostNotification) => {

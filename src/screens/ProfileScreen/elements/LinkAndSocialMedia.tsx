@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import * as React from 'react';
 import config from 'react-native-config';
 import {StyleSheet, Text, TouchableOpacity, View, ViewStyle} from 'react-native';
@@ -10,6 +11,9 @@ import {fonts} from '../../../utils/fonts';
 interface LinkProps {
   username: string;
   prompt: string;
+  eventTrack?: {
+    onShareLinkClicked: () => void;
+  };
 }
 
 interface ButtonProps {
@@ -39,7 +43,12 @@ const CopyLink: React.FC<Omit<LinkProps, 'prompt'>> = ({username}) => {
   );
 };
 
-const LinkAndSocialMedia: React.FC<LinkProps> = ({username}) => {
+const LinkAndSocialMedia: React.FC<LinkProps> = ({
+  username,
+  eventTrack = {
+    onShareLinkClicked: () => {}
+  }
+}) => {
   return (
     <View
       style={{
@@ -71,6 +80,7 @@ const LinkAndSocialMedia: React.FC<LinkProps> = ({username}) => {
         <CopyLink username={username} />
         <TouchableOpacity
           onPress={() => {
+            eventTrack.onShareLinkClicked();
             ShareUtils.shareUserLink(username);
           }}
           style={{

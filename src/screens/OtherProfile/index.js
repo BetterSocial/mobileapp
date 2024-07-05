@@ -1,4 +1,6 @@
 import * as React from 'react';
+import SimpleToast from 'react-native-simple-toast';
+import ToastMessage from 'react-native-toast-message';
 import {
   Dimensions,
   InteractionManager,
@@ -11,45 +13,44 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import SimpleToast from 'react-native-simple-toast';
-import ToastMessage from 'react-native-toast-message';
 /* eslint-disable no-underscore-dangle */
 import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
 
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
+import BioAndChat from './elements/BioAndChat';
 import BlockIcon from '../../assets/icons/images/block-blue.svg';
 import BlockProfile from '../../components/Blocking/BlockProfile';
-import ReportUser from '../../components/Blocking/ReportUser';
-import SpecificIssue from '../../components/Blocking/SpecificIssue';
-import GlobalButton from '../../components/Button/GlobalButton';
-import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {Context} from '../../context';
-import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherProfileFeed';
-import {generateAnonProfileOtherProfile} from '../../service/anonymousProfile';
-import {blockUser, unblockUserApi} from '../../service/blocking';
-import {getFeedDetail} from '../../service/post';
-import {getOtherFeedsInProfile, setFollow, setUnFollow} from '../../service/profile';
-import {downVote, upVote} from '../../service/vote';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
-import dimen from '../../utils/dimen';
-import {fonts, normalize} from '../../utils/fonts';
-import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
-import ShareUtils from '../../utils/share';
-import StorageUtils from '../../utils/storage';
-import {getSingularOrPluralText} from '../../utils/string/StringUtils';
-import {COLORS} from '../../utils/theme';
-import useDiscovery from '../DiscoveryScreenV2/hooks/useDiscovery';
-import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
-import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
-import useViewPostTimeHook from '../FeedScreen/hooks/useViewPostTimeHook';
 import BottomSheetBio from '../ProfileScreen/elements/BottomSheetBio';
+import GlobalButton from '../../components/Button/GlobalButton';
 import ProfileHeader from '../ProfileScreen/elements/ProfileHeader';
 import ProfilePicture from '../ProfileScreen/elements/ProfilePicture';
 import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
 import RenderItem from '../ProfileScreen/elements/RenderItem';
-import BioAndChat from './elements/BioAndChat';
+import ReportUser from '../../components/Blocking/ReportUser';
+import ShareUtils from '../../utils/share';
+import SpecificIssue from '../../components/Blocking/SpecificIssue';
+import StorageUtils from '../../utils/storage';
+import dimen from '../../utils/dimen';
+import useCoreFeed from '../FeedScreen/hooks/useCoreFeed';
+import useDiscovery from '../DiscoveryScreenV2/hooks/useDiscovery';
+import useFeedPreloadHook from '../FeedScreen/hooks/useFeedPreloadHook';
+import useOtherProfileScreenAnalyticsHook from '../../libraries/analytics/useOtherProfileScreenAnalyticsHook';
 import useOtherProfileScreenHooks from './hooks/useOtherProfileScreenHooks';
+import useViewPostTimeHook from '../FeedScreen/hooks/useViewPostTimeHook';
+import {COLORS} from '../../utils/theme';
+import {Context} from '../../context';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {blockUser, unblockUserApi} from '../../service/blocking';
+import {downVote, upVote} from '../../service/vote';
+import {fonts, normalize} from '../../utils/fonts';
+import {generateAnonProfileOtherProfile} from '../../service/anonymousProfile';
+import {getFeedDetail} from '../../service/post';
+import {getOtherFeedsInProfile, setFollow, setUnFollow} from '../../service/profile';
+import {getSingularOrPluralText} from '../../utils/string/StringUtils';
+import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherProfileFeed';
+import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 const {width} = Dimensions.get('screen');
 
@@ -61,6 +62,7 @@ const OtherProfile = () => {
   const reportUserRef = React.useRef();
   const specificIssueRef = React.useRef();
   const flatListRef = React.useRef();
+  const closeBlockUserBottomSheetRef = React.useRef(false);
 
   const [user_id, setUserId] = React.useState('');
   const [username, setUsername] = React.useState('');
@@ -83,8 +85,9 @@ const OtherProfile = () => {
   const [loadingGenerateAnon, setLoadingGenerateAnon] = React.useState(false);
   const [anonProfile, setAnonProfile] = React.useState();
   const {mappingColorFeed} = useCoreFeed();
-  const {updateFollowDiscoveryContext} = useDiscovery();
-  const [isCurrentFollowed, setIsCurrentFollow] = React.useState(params.data.following);
+  const {updateFollowDiscoveryContext, getIsMeFollowingTargetStatus} = useDiscovery();
+
+  const isCurrentFollowed = getIsMeFollowingTargetStatus(params.data.other_id);
 
   const {
     feeds,
@@ -99,11 +102,21 @@ const OtherProfile = () => {
     setOtherProfileData: setDataMain
   } = useOtherProfileScreenHooks(params?.data?.other_id, params?.data?.username);
 
-  React.useEffect(() => {
-    if (params.data.following === undefined) {
-      setIsCurrentFollow(dataMain.is_me_following_target);
-    }
-  }, [dataMain.is_me_following_target]);
+  const eventTrack = useOtherProfileScreenAnalyticsHook();
+  const {
+    onBioAnonButtonOff,
+    onBioAnonButtonOn,
+    onShareButtonClicked,
+    onHeaderFollowUser,
+    onHeaderUnfollowUser,
+    onPostBlockButtonClicked,
+    onBlockUserBottomSheetClosed,
+    onBlockUserBlockAndReportClicked,
+    onBlockUserBlockIndefinitelyClicked,
+    onBlockUserBlockAndReportReason,
+    onBlockUserReportInfoSubmitted,
+    onBlockUserReportInfoSkipped
+  } = eventTrack;
 
   const isSignedMessageEnabled = dataMain.isSignedMessageEnabled ?? true;
   const isAnonimityEnabled = dataMain.isAnonMessageEnabled && isSignedMessageEnabled;
@@ -179,7 +192,10 @@ const OtherProfile = () => {
     setUsername(params.data.username);
   };
 
-  const onShare = async () => ShareUtils.shareUserLink(username);
+  const onShare = async () => {
+    onShareButtonClicked();
+    ShareUtils.shareUserLink(username);
+  };
 
   const handleSetUnFollow = async () => {
     setDataMain((prevState) => ({
@@ -196,6 +212,7 @@ const OtherProfile = () => {
     const result = await setUnFollow(data);
     if (result.code === 200) {
       refetchOtherProfile();
+      onHeaderUnfollowUser();
     }
   };
 
@@ -216,6 +233,7 @@ const OtherProfile = () => {
     const result = await setFollow(data);
     if (result.code === 200) {
       refetchOtherProfile();
+      onHeaderFollowUser();
     }
   };
 
@@ -236,7 +254,11 @@ const OtherProfile = () => {
         position: 'bottom'
       });
     } else {
-      setIsAnonimity((prevState) => !prevState);
+      setIsAnonimity((prevState) => {
+        if (prevState) onBioAnonButtonOff();
+        else onBioAnonButtonOn();
+        return !prevState;
+      });
       await generateAnonProfile();
     }
   };
@@ -302,7 +324,6 @@ const OtherProfile = () => {
             buttonStyle={{paddingLeft: 0}}
             onPress={() => {
               updateFollowDiscoveryContext(false, {user_id: other_id});
-              setIsCurrentFollow((v) => !v);
               handleSetUnFollow();
             }}>
             <View style={styles.buttonFollowing(isAnonimity)}>
@@ -317,7 +338,6 @@ const OtherProfile = () => {
           buttonStyle={{paddingLeft: 0}}
           onPress={() => {
             updateFollowDiscoveryContext(true, {user_id: other_id});
-            setIsCurrentFollow((v) => !v);
             handleSetFollow();
           }}>
           <View style={styles.buttonFollow(isAnonimity)}>
@@ -369,6 +389,7 @@ const OtherProfile = () => {
             username={dataMain.username}
             toggleSwitch={toggleSwitch}
             isAnonimityEnabled={isAnonimityEnabled}
+            eventTrack={eventTrack}
           />
         )}
       </>
@@ -395,6 +416,9 @@ const OtherProfile = () => {
 
   const onBlockReaction = () => {
     blockUserRef.current.open();
+    console.log('onBlockReaction');
+    onPostBlockButtonClicked();
+    closeBlockUserBottomSheetRef.current = true;
   };
   const handleBlocking = async (message) => {
     setLoadingBlocking(true);
@@ -408,6 +432,7 @@ const OtherProfile = () => {
     }
     const blockingUser = await blockUser(data);
     if (blockingUser.code === 200) {
+      closeBlockUserBottomSheetRef.current = false;
       blockUserRef.current.close();
       specificIssueRef.current.close();
       reportUserRef.current.close();
@@ -423,12 +448,14 @@ const OtherProfile = () => {
       const processPostApi = await unblockUserApi({userId: dataMain.user_id});
       if (processPostApi.code === 200) {
         refetchBlockStatus();
+        closeBlockUserBottomSheetRef.current = false;
         blockUserRef.current.close();
         specificIssueRef.current.close();
         reportUserRef.current.close();
       }
     } catch (e) {
       refetchBlockStatus();
+      closeBlockUserBottomSheetRef.current = false;
       blockUserRef.current.close();
       specificIssueRef.current.close();
       reportUserRef.current.close();
@@ -439,7 +466,9 @@ const OtherProfile = () => {
     if (reasonBlock === 1) {
       handleBlocking();
     } else if (reasonBlock === 2) {
+      closeBlockUserBottomSheetRef.current = false;
       blockUserRef.current.close();
+      onBlockUserBlockAndReportClicked();
       interactionManagerRef.current = InteractionManager.runAfterInteractions(() => {
         reportUserRef.current.open();
       });
@@ -456,13 +485,19 @@ const OtherProfile = () => {
     });
   };
 
-  const skipQuestion = () => {
+  const skipQuestion = (source) => {
     reportUserRef.current.close();
+    if (source === 'report-user') {
+      onBlockUserBlockIndefinitelyClicked();
+    } else if (source === 'specific-issue') {
+      onBlockUserReportInfoSkipped();
+    }
     handleBlocking();
   };
 
   const onReportIssue = async (message) => {
     specificIssueRef.current.close();
+    onBlockUserReportInfoSubmitted();
     handleBlocking(message);
   };
 
@@ -554,6 +589,14 @@ const OtherProfile = () => {
     return [];
   };
 
+  const handleOnBlockUserBottomSheetClosed = () => {
+    if (closeBlockUserBottomSheetRef.current) {
+      onBlockUserBottomSheetClosed();
+      closeBlockUserBottomSheetRef.current = false;
+    }
+    console.log('handleOnBlockUserBottomSheetClosed');
+  };
+
   return (
     <>
       <StatusBar barStyle="light-content" translucent={false} />
@@ -608,6 +651,8 @@ const OtherProfile = () => {
                   onPressUpvote={(post) => setUpVote(post, index)}
                   selfUserId={yourselfId}
                   onPressDownVote={(post) => setDownVote(post, index)}
+                  eventTrack={eventTrack}
+                  onPressBlock={onBlockReaction}
                 />
               </View>
             );
@@ -625,11 +670,16 @@ const OtherProfile = () => {
           refBlockUser={blockUserRef}
           username={username}
           isBlocker={isBlocking}
+          onClose={() => handleOnBlockUserBottomSheetClosed()}
         />
-        <ReportUser ref={reportUserRef} onSelect={onNextQuestion} onSkip={skipQuestion} />
+        <ReportUser
+          ref={reportUserRef}
+          onSelect={onNextQuestion}
+          onSkip={() => skipQuestion('report-user')}
+        />
         <SpecificIssue
           refSpecificIssue={specificIssueRef}
-          onSkip={skipQuestion}
+          onSkip={() => skipQuestion('specific-issue')}
           onPress={onReportIssue}
           loading={loadingBlocking}
         />

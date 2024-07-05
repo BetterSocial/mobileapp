@@ -55,7 +55,6 @@ const TopicPageScreen = (props) => {
     : [];
   const mainFeeds = feedsContext.feeds;
   const {timer, viewPostTimeIndex} = feedsContext;
-
   const [offset, setOffset] = React.useState(0);
   const [client] = React.useContext(Context).client;
   const [user] = React.useContext(Context).profile;
@@ -63,15 +62,11 @@ const TopicPageScreen = (props) => {
   const bottomSheetFollowRef = React.useRef();
   const scrollY = React.useRef(new Animated.Value(0)).current;
   const {mappingColorFeed} = useCoreFeed();
-
   const {onWillSendViewPostTime} = useViewPostTimeHook(dispatch, timer, viewPostTimeIndex);
   const {fetchNextFeeds} = useFeedPreloadHook(feeds?.length, () => refreshingData(offset));
-
   const {listRef} = useOnBottomNavigationTabPressHook(LIST_VIEW_TYPE.TIKTOK_SCROLL, onRefresh);
-
   const topicWithPrefix = route.params.id;
   const id = removePrefixTopic(topicWithPrefix);
-
   const coverPath = topicDetail?.cover_path || null;
   const {top} = useSafeAreaInsets();
   const topPosition = Platform.OS === 'ios' ? top : 0;
@@ -100,20 +95,6 @@ const TopicPageScreen = (props) => {
     outputRange: [0, 1],
     extrapolate: 'clamp'
   });
-
-  React.useEffect(() => {
-    const listener = scrollY.addListener(({value}) => {
-      if (value >= 0 && value <= headerHideHeight) {
-        setIsHeaderHide(false);
-      } else if (value >= headerHideHeight) {
-        setIsHeaderHide(true);
-      }
-    });
-
-    return () => {
-      scrollY.removeListener(listener);
-    };
-  }, [scrollY]);
 
   const handleScroll = Animated.event([{nativeEvent: {contentOffset: {y: scrollY}}}], {
     useNativeDriver: false
@@ -164,7 +145,7 @@ const TopicPageScreen = (props) => {
 
   const getTopicDetail = async (domain) => {
     try {
-      const resultTopicDetail = await getTopics(domain);
+      const resultTopicDetail = await getTopics(domain, false);
       if (resultTopicDetail.data) {
         const detail = resultTopicDetail.data.find((item) => item.name === domain);
         if (detail) {
@@ -210,18 +191,11 @@ const TopicPageScreen = (props) => {
     }
   };
 
-  React.useEffect(() => {
-    const parseToken = async () => {
-      const idUser = await getUserId();
-      if (idUser) {
-        setUserId(idUser);
-      }
-    };
-
-    parseToken();
-    initData();
-    updateCount();
-  }, []);
+  const updateCount = () => {
+    if (params.refreshList && typeof params.refreshList === 'function') {
+      params.refreshList();
+    }
+  };
 
   const markRead = async () => {
     const filter = {type: 'topics', members: {$in: [userId]}, id: route.params.id};
@@ -230,18 +204,6 @@ const TopicPageScreen = (props) => {
     if (thisChannel) {
       const countRead = await thisChannel[0]?.markRead();
       return countRead;
-    }
-  };
-
-  React.useEffect(() => {
-    if (userId !== '') {
-      markRead();
-    }
-  }, [userId]);
-
-  const updateCount = () => {
-    if (params.refreshList && typeof params.refreshList === 'function') {
-      params.refreshList();
     }
   };
 
@@ -274,6 +236,7 @@ const TopicPageScreen = (props) => {
       setLoading(false);
     }
   };
+
   const onDeleteBlockedPostCompleted = async (postId) => {
     const postIndex = feeds.findIndex((item) => item.id === postId);
     const clonedFeeds = [...feeds];
@@ -347,21 +310,7 @@ const TopicPageScreen = (props) => {
 
   const onRefresh = () => {
     refreshingData(0);
-  };
-
-  const setUpVote = async (post, index) => {
-    const processVote = await upVote(post);
-    updateFeed(post, index);
-    return processVote;
-  };
-  const setDownVote = async (post, index) => {
-    const processVote = await downVote(post);
-    updateFeed(post, index);
-    return processVote;
-  };
-
-  const onShareCommunity = () => {
-    ShareUtils.shareCommunity(topicName);
+    getTopicDetail();
   };
 
   const updateFeed = async (post, index) => {
@@ -391,13 +340,27 @@ const TopicPageScreen = (props) => {
     }
   };
 
+  const setUpVote = async (post, index) => {
+    const processVote = await upVote(post);
+    updateFeed(post, index);
+    return processVote;
+  };
+  const setDownVote = async (post, index) => {
+    const processVote = await downVote(post);
+    updateFeed(post, index);
+    return processVote;
+  };
+
+  const onShareCommunity = () => {
+    ShareUtils.shareCommunity(topicName);
+  };
+
   const handleOnMemberPress = () => {
     const navigationParam = {
       topicName,
       isFollow,
       topicDetail,
-      memberCount,
-      getTopicDetail
+      memberCount
     };
 
     navigation.push('TopicMemberScreen', navigationParam);
@@ -410,7 +373,40 @@ const TopicPageScreen = (props) => {
   };
 
   React.useEffect(() => {
-    onRefresh();
+    const listener = scrollY.addListener(({value}) => {
+      if (value >= 0 && value <= headerHideHeight) {
+        setIsHeaderHide(false);
+      } else if (value >= headerHideHeight) {
+        setIsHeaderHide(true);
+      }
+    });
+
+    return () => {
+      scrollY.removeListener(listener);
+    };
+  }, [scrollY]);
+
+  React.useEffect(() => {
+    const parseToken = async () => {
+      const idUser = await getUserId();
+      if (idUser) {
+        setUserId(idUser);
+      }
+    };
+
+    parseToken();
+    initData();
+    updateCount();
+  }, []);
+
+  React.useEffect(() => {
+    if (userId !== '') {
+      markRead();
+    }
+  }, [userId]);
+
+  React.useEffect(() => {
+    refreshingData(0);
   }, [topicId]);
 
   const renderItem = ({item, index}) => (
@@ -480,7 +476,7 @@ const TopicPageScreen = (props) => {
     <>
       <NavHeader
         initialData={{
-          channelPicutre: params.channelPicture,
+          channelPicture: params.channelPicture,
           coverImage: params.coverImage,
           isFollowing: params.isFollowing,
           memberCount: params.memberCount
@@ -557,7 +553,6 @@ const TopicPageScreen = (props) => {
         setIsFollow={setIsFollow}
         followType={followType}
         setFollowType={setFollowType}
-        getTopicDetail={getTopicDetail}
         username={user?.myProfile.username}
         profilePicture={user?.myProfile.profile_pic_path}
       />

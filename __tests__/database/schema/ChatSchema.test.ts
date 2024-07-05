@@ -371,7 +371,8 @@ describe('TESTING ChatSchema', () => {
           }
         ],
         created_at: 'createdAt',
-        updated_at: 'updatedAt'
+        updated_at: 'updatedAt',
+        message_type: 'regular'
       });
 
       // Assertion

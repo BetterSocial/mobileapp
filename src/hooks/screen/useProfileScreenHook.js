@@ -1,9 +1,11 @@
 import * as React from 'react';
 import netInfo from '@react-native-community/netinfo';
+
 import ProfileRepo from '../../service/repo/profileRepo';
-import useMyProfileFeedContextHook from '../context/useMyProfileFeedContext';
 import StorageUtils from '../../utils/storage';
 import useCoreFeed from '../../screens/FeedScreen/hooks/useCoreFeed';
+import useMyProfileFeedContextHook from '../context/useMyProfileFeedContext';
+import useProfileScreenAnalyticsHook from '../../libraries/analytics/useProfileScreenAnalyticsHook';
 import {Context} from '../../context';
 import {setMyProfileAction} from '../../context/actions/setMyProfileAction';
 
@@ -18,12 +20,19 @@ const useProfileScreenHook = () => {
   const {feeds, anonymousFeeds, setMyProfileAnonymousFeed} = useMyProfileFeedContextHook();
   const {mappingColorFeed} = useCoreFeed();
   const [cacheProfile] = React.useState({});
+  const {onSignedPostTabClicked, onAnonPostTabClicked} = useProfileScreenAnalyticsHook();
   const isProfileTabSigned = profileTabIndex === TAB_INDEX_SIGNED;
   const [, dispatchProfile] = React.useContext(Context).profile;
 
-  const setTabIndexToSigned = () => setProfileTabIndex(TAB_INDEX_SIGNED);
+  const setTabIndexToSigned = () => {
+    setProfileTabIndex(TAB_INDEX_SIGNED);
+    onSignedPostTabClicked();
+  };
 
-  const setTabIndexToAnonymous = () => setProfileTabIndex(TAB_INDEX_ANONYMOUS);
+  const setTabIndexToAnonymous = () => {
+    setProfileTabIndex(TAB_INDEX_ANONYMOUS);
+    onAnonPostTabClicked();
+  };
 
   const fetchAnonymousPost = async (offset = 0, limit = 10) => {
     setIsLoadingFetchingAnonymousPosts(true);

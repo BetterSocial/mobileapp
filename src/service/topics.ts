@@ -1,4 +1,5 @@
 import crashlytics from '@react-native-firebase/crashlytics';
+import moment from 'moment';
 
 import OneSignalUtil from './onesignal';
 import anonymousApi from './anonymousConfig';
@@ -61,9 +62,12 @@ const getAllMemberTopic = async (query) => {
  * @param {import('axios').AxiosRequestConfig} axiosOptions
  * @returns
  */
-const getTopics = async (name, axiosOptions = {}) => {
+const getTopics = async (name, withMinimumFollower = true, axiosOptions = {}) => {
   try {
-    const result = await api.get(`/topics/?name=${name}`, axiosOptions);
+    const result = await api.get(
+      `/topics/?name=${name}&withMinimumFollower=${withMinimumFollower}`,
+      axiosOptions
+    );
     return result.data;
   } catch (e) {
     throw new Error(e);
@@ -124,6 +128,13 @@ const getLatestTopicPost = async (topicName: string): Promise<TopicLatestPostDat
       success: res?.data?.success
     };
   } catch (e) {
+    if (e?.response?.message === 'This topic has no active post')
+      return {
+        success: false,
+        message: e?.response?.message,
+        expired_at: moment().add(1, 'h').toISOString()
+      };
+
     console.error(e?.response?.message || `Error on getting latest topic post ${topicName}`);
   }
 };
@@ -131,7 +142,29 @@ const getLatestTopicPost = async (topicName: string): Promise<TopicLatestPostDat
 const verifyCommunityName = async (name) => {
   try {
     const resApi = await api.get(`/topics/is-exist?name=${name}`);
-    console.warn('resApi', JSON.stringify(resApi.data));
+    return resApi.data;
+  } catch (error) {
+    crashlytics().recordError(new Error(error));
+    return error.response.data;
+  }
+};
+
+const submitCommunityName = async (name) => {
+  try {
+    const resApi = await api.post('/topics/create', {name});
+    return resApi.data;
+  } catch (error) {
+    crashlytics().recordError(new Error(error));
+    return error.response.data;
+  }
+};
+
+const inviteCommunityMember = async (topicId, memberIds) => {
+  try {
+    const resApi = await api.post('/topics/invite-members', {
+      topic_id: topicId,
+      member_ids: memberIds
+    });
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
@@ -148,5 +181,7 @@ export {
   getUserTopic,
   getWhoToFollowList,
   putUserTopic,
-  verifyCommunityName
+  verifyCommunityName,
+  submitCommunityName,
+  inviteCommunityMember
 };

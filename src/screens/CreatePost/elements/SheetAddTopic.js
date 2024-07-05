@@ -5,13 +5,13 @@ import {ScrollView, StyleSheet, Text, TextInput, TouchableNativeFeedback, View} 
 
 import Card from './Card';
 import TopicItem from '../../../components/TopicItem';
+import dimen from '../../../utils/dimen';
 import {Button} from '../../../components/Button';
+import {COLORS} from '../../../utils/theme';
 import {convertString} from '../../../utils/string/StringUtils';
 import {fonts} from '../../../utils/fonts';
 import {getTopics} from '../../../service/topics';
 import {isEmptyOrSpaces} from '../../../utils/Utils';
-import {COLORS} from '../../../utils/theme';
-import dimen from '../../../utils/dimen';
 
 const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics}) => {
   const [dataTopic, setTopic] = React.useState('');
@@ -93,14 +93,13 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics}) => {
       onAdd(newArr, newChatTopic);
     }
     add();
-    onClose();
   };
 
   return (
     <RBSheet
       height={rbSheetHeight}
       onOpen={merge}
-      // onClose={onSwepDown}
+      onClose={() => onClose(false)}
       ref={refTopic}
       closeOnDragDown={true}
       closeOnPressMask={true}
