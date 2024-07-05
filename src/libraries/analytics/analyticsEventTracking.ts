@@ -461,7 +461,8 @@ export enum BetterSocialEventTracking {
   CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_POST_BUTTON_EMPTY_ALERTED = 'CreateCommunity-Post_postButtonEmpty_alerted'
 }
 
-const ENABLE_TOAST = ENV === 'Dev';
+// const ENABLE_TOAST = ENV === 'Dev';
+const ENABLE_TOAST = false;
 
 const AnalyticsEventTracking = (() => {
   if (!SEGMENT_WRITE_KEY) {
