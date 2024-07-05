@@ -334,12 +334,6 @@ export enum BetterSocialEventTracking {
   MY_PROFILE_HEADER_ANON_POST_TAB_CLICKED = 'Profile-MyProfile_AnonPostsTab_clicked',
   MY_PROFILE_HEADER_FOLLOWER_CLICKED = 'Profile-MyProfile_followers_openFollowerList',
   MY_PROFILE_HEADER_FOLLOWING_CLICKED = 'Profile-MyProfile_following_openFollowingListUsers',
-  // MY_PROFILE_ = '',
-  // MY_PROFILE_ = '',
-  // MY_PROFILE_ = '',
-  // MY_PROFILE_ = '',
-  // MY_PROFILE_ = '',
-  // MY_PROFILE_ = '',
 
   // FOLLOWER SCREEN
   FOLLOWER_SCREEN_SEARCH_BAR_CLICKED = 'Profile-MyProfile_followerList-search_clicked',
