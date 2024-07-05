@@ -29,6 +29,18 @@ export type UseFollowingScreenAnalyticsHook = {
     onFollowingScreenSuggestedCommunityFollow: () => void;
     onFollowingScreenSuggestedCommunityUnfollow: () => void;
   };
+
+  domain: {
+    onFollowingScreenDomainSearchClicked: () => void;
+    onFollowingScreenDomainBackButtonClicked: () => void;
+    onFollowingScreenDomainDeleteSearchClicked: () => void;
+    onFollowingScreenYourDomainItemClicked: () => void;
+    onFollowingScreenYourDomainItemFollowed: () => void;
+    onFollowingScreenYourDomainItemUnfollowed: () => void;
+    onFollowingScreenSuggestedDomainItemClicked: () => void;
+    onFollowingScreenSuggestedDomainItemFollowed: () => void;
+    onFollowingScreenSuggestedDomainItemUnfollowed: () => void;
+  };
 };
 
 const useFollowingScreenAnalyticsHook = (): UseFollowingScreenAnalyticsHook => {
@@ -111,6 +123,43 @@ const useFollowingScreenAnalyticsHook = (): UseFollowingScreenAnalyticsHook => {
     track(trackEnum.FOLLOWING_SCREEN_COMMUNITY_TAB_SUGGESTED_COMMUNITY_UNJOIN_CLICKED);
   };
 
+  // DOMAIN FRAGMENT TAB
+  const onFollowingScreenDomainSearchClicked = () => {
+    track(trackEnum.FOLLOWING_SCREEN_DOMAIN_TAB_SEARCH_CLICKED);
+  };
+
+  const onFollowingScreenDomainBackButtonClicked = () => {
+    track(trackEnum.FOLLOWING_SCREEN_DOMAIN_TAB_BACK_BUTTON_CLICKED);
+  };
+
+  const onFollowingScreenDomainDeleteSearchClicked = () => {
+    track(trackEnum.FOLLOWING_SCREEN_DOMAIN_TAB_DELETE_SEARCH_CLICKED);
+  };
+
+  const onFollowingScreenYourDomainItemClicked = () => {
+    track(trackEnum.FOLLOWING_SCREEN_DOMAIN_TAB_YOUR_ITEM_CLICKED);
+  };
+
+  const onFollowingScreenYourDomainItemFollowed = () => {
+    track(trackEnum.FOLLOWING_SCREEN_DOMAIN_TAB_YOUR_ITEM_FOLLOWED);
+  };
+
+  const onFollowingScreenYourDomainItemUnfollowed = () => {
+    track(trackEnum.FOLLOWING_SCREEN_DOMAIN_TAB_YOUR_ITEM_UNFOLLOWED);
+  };
+
+  const onFollowingScreenSuggestedDomainItemClicked = () => {
+    track(trackEnum.FOLLOWING_SCREEN_DOMAIN_TAB_SUGGESTED_ITEM_CLICKED);
+  };
+
+  const onFollowingScreenSuggestedDomainItemFollowed = () => {
+    track(trackEnum.FOLLOWING_SCREEN_DOMAIN_TAB_SUGGESTED_ITEM_FOLLOWED);
+  };
+
+  const onFollowingScreenSuggestedDomainItemUnfollowed = () => {
+    track(trackEnum.FOLLOWING_SCREEN_DOMAIN_TAB_SUGGESTED_ITEM_UNFOLLOWED);
+  };
+
   return {
     // USERS FRAGMENT TAB
     user: {
@@ -124,6 +173,7 @@ const useFollowingScreenAnalyticsHook = (): UseFollowingScreenAnalyticsHook => {
       onUserItemSuggestedFollow,
       onUserItemSuggestedClicked
     },
+    // COMMUNITY FRAGMENT TAB
     community: {
       onFollowingScreenCommunitySearchClicked,
       onFollowingScreenCommunityBackButtonClicked,
@@ -135,6 +185,18 @@ const useFollowingScreenAnalyticsHook = (): UseFollowingScreenAnalyticsHook => {
       onFollowingScreenSuggestedCommunityClicked,
       onFollowingScreenSuggestedCommunityFollow,
       onFollowingScreenSuggestedCommunityUnfollow
+    },
+    // DOMAIN FRAGMENT TAB
+    domain: {
+      onFollowingScreenDomainSearchClicked,
+      onFollowingScreenDomainBackButtonClicked,
+      onFollowingScreenDomainDeleteSearchClicked,
+      onFollowingScreenYourDomainItemClicked,
+      onFollowingScreenYourDomainItemFollowed,
+      onFollowingScreenYourDomainItemUnfollowed,
+      onFollowingScreenSuggestedDomainItemClicked,
+      onFollowingScreenSuggestedDomainItemFollowed,
+      onFollowingScreenSuggestedDomainItemUnfollowed
     }
   };
 };

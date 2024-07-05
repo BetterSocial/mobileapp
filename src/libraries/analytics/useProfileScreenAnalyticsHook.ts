@@ -20,6 +20,9 @@ export type ProfileScreenAnalyticsEventTracking = {
   onAnonPostTabClicked: () => void;
   onFollowerClicked: () => void;
   onFollowingClicked: () => void;
+  onNoPostsStartPostingClicked: () => void;
+  onNoPostsKarmaScoreClicked: () => void;
+  onNoPostsKarmaScoreClosed: () => void;
 };
 
 const useProfileScreenAnalyticsHook = (): ProfileScreenAnalyticsEventTracking => {
@@ -75,6 +78,15 @@ const useProfileScreenAnalyticsHook = (): ProfileScreenAnalyticsEventTracking =>
   const onFollowingClicked = () => {
     track(trackEnum.MY_PROFILE_HEADER_FOLLOWING_CLICKED);
   };
+  const onNoPostsStartPostingClicked = () => {
+    track(trackEnum.MY_PROFILE_HEADER_NO_POSTS_START_POSTING);
+  };
+  const onNoPostsKarmaScoreClicked = () => {
+    track(trackEnum.MY_PROFILE_HEADER_NO_POSTS_KARMA_SCORE_CLICKED);
+  };
+  const onNoPostsKarmaScoreClosed = () => {
+    track(trackEnum.MY_PROFILE_HEADER_NO_POSTS_KARMA_SCORE_CLOSED);
+  };
 
   return {
     onEditBioClicked,
@@ -93,7 +105,10 @@ const useProfileScreenAnalyticsHook = (): ProfileScreenAnalyticsEventTracking =>
     onSignedPostTabClicked,
     onAnonPostTabClicked,
     onFollowerClicked,
-    onFollowingClicked
+    onFollowingClicked,
+    onNoPostsStartPostingClicked,
+    onNoPostsKarmaScoreClicked,
+    onNoPostsKarmaScoreClosed
   };
 };
 

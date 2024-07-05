@@ -108,6 +108,7 @@ const Header = (props) => {
     const currentTime = new Date().getTime();
     const id = feeds && feeds[viewPostTimeIndex]?.id;
     if (id) viewTimePost(id, currentTime - timer.getTime(), SOURCE_FEED_TAB);
+    eventTrack.onNoPostsStartPostingClicked();
     navigator.navigate(NavigationConstants.CREATE_POST_SCREEN);
     setTimer(new Date(), dispatch);
   };
@@ -134,7 +135,7 @@ const Header = (props) => {
               justifyContent: 'center'
             }}>
             {dataMain.is_karma_unlocked ? (
-              <KarmaScore score={Math.floor(dataMain.karma_score)} />
+              <KarmaScore score={Math.floor(dataMain.karma_score)} evenTrack={eventTrack} />
             ) : (
               <KarmaLock onPressCreatePost={handleOnAddPostButtonClicked} />
             )}

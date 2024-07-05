@@ -70,6 +70,17 @@ const useDiscoveryScreenAnalyticsHook = (
       onFollowingScreenSuggestedCommunityClicked,
       onFollowingScreenSuggestedCommunityFollow,
       onFollowingScreenSuggestedCommunityUnfollow
+    },
+    domain: {
+      onFollowingScreenDomainSearchClicked,
+      onFollowingScreenDomainBackButtonClicked,
+      onFollowingScreenDomainDeleteSearchClicked,
+      onFollowingScreenYourDomainItemClicked,
+      onFollowingScreenYourDomainItemFollowed,
+      onFollowingScreenYourDomainItemUnfollowed,
+      onFollowingScreenSuggestedDomainItemClicked,
+      onFollowingScreenSuggestedDomainItemFollowed,
+      onFollowingScreenSuggestedDomainItemUnfollowed
     }
   } = useFollowingScreenAnalyticsHook();
 
@@ -82,6 +93,11 @@ const useDiscoveryScreenAnalyticsHook = (
       selectedScreen === DISCOVERY_TAB_TOPICS
     ) {
       onFollowingScreenCommunitySearchClicked();
+    } else if (
+      route.name === FOLLOWING_SCREEN_ROUTE_NAME &&
+      selectedScreen === DISCOVERY_TAB_DOMAINS
+    ) {
+      onFollowingScreenDomainSearchClicked();
     } else if (selectedScreen === DISCOVERY_TAB_TOPICS) {
       AnalyticsEventTracking.eventTrack(
         BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_COMMUNITY_SEARCHED_COMMUNITY_CLICKED
@@ -109,6 +125,11 @@ const useDiscoveryScreenAnalyticsHook = (
       selectedScreen === DISCOVERY_TAB_TOPICS
     ) {
       onFollowingScreenCommunityBackButtonClicked();
+    } else if (
+      route.name === FOLLOWING_SCREEN_ROUTE_NAME &&
+      selectedScreen === DISCOVERY_TAB_DOMAINS
+    ) {
+      onFollowingScreenDomainBackButtonClicked();
     } else if (selectedScreen === DISCOVERY_TAB_NEWS) {
       AnalyticsEventTracking.eventTrack(
         BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_NEWS_BACK_BUTTON_CLICKED
@@ -244,6 +265,11 @@ const useDiscoveryScreenAnalyticsHook = (
       selectedScreen === DISCOVERY_TAB_TOPICS
     ) {
       onFollowingScreenCommunityDeleteSearchClicked();
+    } else if (
+      route.name === FOLLOWING_SCREEN_ROUTE_NAME &&
+      selectedScreen === DISCOVERY_TAB_DOMAINS
+    ) {
+      onFollowingScreenDomainDeleteSearchClicked();
     }
   };
 
@@ -358,6 +384,13 @@ const useDiscoveryScreenAnalyticsHook = (
 
   // Domain Discovery Screen
   const onDomainPageOpened = (from: 'your-domain' | 'suggested-domain') => {
+    console.log('onDomainPageOpened', from, route.name, selectedScreen);
+    if (route.name === FOLLOWING_SCREEN_ROUTE_NAME && from === 'your-domain') {
+      return onFollowingScreenYourDomainItemClicked();
+    }
+    if (route.name === FOLLOWING_SCREEN_ROUTE_NAME && from === 'suggested-domain') {
+      return onFollowingScreenSuggestedDomainItemClicked();
+    }
     if (from === 'your-domain') {
       AnalyticsEventTracking.eventTrack(
         BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_DOMAIN_YOUR_DOMAIN_OPENED
@@ -370,7 +403,11 @@ const useDiscoveryScreenAnalyticsHook = (
   };
 
   const onDomainPageFollowButtonClicked = (from: 'your-domain' | 'suggested-domain') => {
-    if (from === 'suggested-domain') {
+    if (route.name === FOLLOWING_SCREEN_ROUTE_NAME && from === 'suggested-domain') {
+      onFollowingScreenSuggestedDomainItemFollowed();
+    } else if (route.name === FOLLOWING_SCREEN_ROUTE_NAME && from === 'your-domain') {
+      onFollowingScreenYourDomainItemFollowed();
+    } else if (from === 'suggested-domain') {
       AnalyticsEventTracking.eventTrack(
         BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_DOMAIN_SUGGESTED_DOMAIN_JOIN
       );
@@ -378,7 +415,11 @@ const useDiscoveryScreenAnalyticsHook = (
   };
 
   const onDomainPageUnfollowButtonClicked = (from: 'your-domain' | 'suggested-domain') => {
-    if (from === 'suggested-domain') {
+    if (route.name === FOLLOWING_SCREEN_ROUTE_NAME && from === 'suggested-domain') {
+      onFollowingScreenSuggestedDomainItemUnfollowed();
+    } else if (route.name === FOLLOWING_SCREEN_ROUTE_NAME && from === 'your-domain') {
+      onFollowingScreenYourDomainItemUnfollowed();
+    } else if (from === 'suggested-domain') {
       AnalyticsEventTracking.eventTrack(
         BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_DOMAIN_SUGGESTED_DOMAIN_LEFT
       );

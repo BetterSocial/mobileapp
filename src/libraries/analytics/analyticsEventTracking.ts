@@ -314,6 +314,9 @@ export enum BetterSocialEventTracking {
   OTHER_PROFILE_SCREEN_BLOCK_USER_REPORT_INFO_SKIPPED = 'Profile-OtherProfile_blockAndReport-reportInfoSkipped_clicked',
 
   // My Profile Screen
+  MY_PROFILE_HEADER_NO_POSTS_START_POSTING = 'Profile-MyProfile_noPosts-StartPosting_clicked',
+  MY_PROFILE_HEADER_NO_POSTS_KARMA_SCORE_CLICKED = 'Profile-MyProfile_noPosts-KarmaScore_clicked',
+  MY_PROFILE_HEADER_NO_POSTS_KARMA_SCORE_CLOSED = 'Profile-MyProfile_noPosts-karmaScore-closed_clicked',
   MY_PROFILE_HEADER_EDIT_BIO_CLICKED = 'Profile-MyProfile_editMyPrompt_openPrompt',
   MY_PROFILE_HEADER_EDIT_BIO_SAVE_PROMPT_CLICKED = 'Profile-MyProfile_prompt-save_clicked',
   MY_PROFILE_HEADER_SHARE_USER_CLICKED = 'Profile-MyProfile_share_clicked',
@@ -367,12 +370,16 @@ export enum BetterSocialEventTracking {
   FOLLOWING_SCREEN_COMMUNITY_TAB_YOUR_COMMUNITY_UNFOLLOWED = 'Profile-MyProfile_folllowingComm-unfollow_clicked',
   FOLLOWING_SCREEN_COMMUNITY_TAB_SUGGESTED_COMMUNITY_JOIN_CLICKED = 'Profile-MyProfile_folllowingSuggestedComm-join_clicked',
   FOLLOWING_SCREEN_COMMUNITY_TAB_SUGGESTED_COMMUNITY_UNJOIN_CLICKED = 'Profile-MyProfile_folllowingSuggestedComm-unjoin_clicked',
-  FOLLOWING_SCREEN_COMMUNITY_TAB_SUGGESTED_COMMUNITY_CLICKED_OPEN_PAGE = 'Profile-MyProfile_folllowingSuggestedComm-commClicked_openCP'
-  // FOLLOWING_SCREEN_ = ''
-  // FOLLOWING_SCREEN_ = ''
-  // FOLLOWING_SCREEN_ = ''
-  // FOLLOWING_SCREEN_ = ''
-  // FOLLOWING_SCREEN_ = ''
+  FOLLOWING_SCREEN_COMMUNITY_TAB_SUGGESTED_COMMUNITY_CLICKED_OPEN_PAGE = 'Profile-MyProfile_folllowingSuggestedComm-commClicked_openCP',
+  FOLLOWING_SCREEN_DOMAIN_TAB_SEARCH_CLICKED = 'Profile-MyProfile_followingDomains-search_clicked',
+  FOLLOWING_SCREEN_DOMAIN_TAB_DELETE_SEARCH_CLICKED = 'Profile-MyProfile_followingDomains-deleteSearch_clicked',
+  FOLLOWING_SCREEN_DOMAIN_TAB_BACK_BUTTON_CLICKED = 'Profile-MyProfile_followingDomains-back_clicked',
+  FOLLOWING_SCREEN_DOMAIN_TAB_YOUR_ITEM_CLICKED = 'Profile-MyProfile_followingDomains-domain_opened',
+  FOLLOWING_SCREEN_DOMAIN_TAB_YOUR_ITEM_FOLLOWED = 'Profile-MyProfile_followingDomains-follow_clicked',
+  FOLLOWING_SCREEN_DOMAIN_TAB_YOUR_ITEM_UNFOLLOWED = 'Profile-MyProfile_followingDomains-unfollow_clicked',
+  FOLLOWING_SCREEN_DOMAIN_TAB_SUGGESTED_ITEM_CLICKED = 'Profile-MyProfile_followingSuggestedDomains-domain_opened',
+  FOLLOWING_SCREEN_DOMAIN_TAB_SUGGESTED_ITEM_FOLLOWED = 'Profile-MyProfile_followingSuggestedDomains-follow_clicked',
+  FOLLOWING_SCREEN_DOMAIN_TAB_SUGGESTED_ITEM_UNFOLLOWED = 'Profile-MyProfile_followingSuggestedDomains-unfollow_clicked'
 }
 
 const ENABLE_TOAST = ENV === 'Dev';
