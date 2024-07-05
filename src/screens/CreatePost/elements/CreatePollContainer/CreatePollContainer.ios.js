@@ -4,12 +4,13 @@ import {Picker} from '@react-native-picker/picker';
 import {Switch, Text, TouchableOpacity, View} from 'react-native';
 
 import CreatePollContainerBaseStyle from './style/CreatePollContainerBaseStyle';
-import MemoIcPlus from '../../../../assets/icons/ic_plus';
 import IconArowRight from '../../../../assets/icons/Ic_arrow_right';
+import MemoIcPlus from '../../../../assets/icons/ic_plus';
 import PollItem from '../PollItem';
+import useCreatePostScreenAnalyticsHook from '../../../../libraries/analytics/useCreatePostScreenAnalyticsHook';
+import {COLORS} from '../../../../utils/theme';
 import {MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED} from '../../../../utils/constants';
 import {getDurationTimeText} from '../../../../utils/string/StringUtils';
-import {COLORS} from '../../../../utils/theme';
 
 function CreatePollContainer({
   onremoveallpoll = () => {},
@@ -44,6 +45,8 @@ function CreatePollContainer({
   const [pickerHour, setPickerHour] = React.useState(selectedtime.hour);
   const [pickerMinute, setPickerMinute] = React.useState(selectedtime.minute);
 
+  const eventTrack = useCreatePostScreenAnalyticsHook();
+
   const onSetTime = () => {
     const selectedTime = {...selectedtime};
     selectedTime.day = Number(pickerDay);
@@ -51,6 +54,17 @@ function CreatePollContainer({
     selectedTime.minute = Number(pickerMinute);
     ontimechanged(selectedTime);
     setIsDurationModalShown(false);
+    eventTrack.onSetPollDurationSetButtonClicked();
+  };
+
+  const onDurationClicked = () => {
+    setIsDurationModalShown(true);
+    eventTrack.onPollSectionDurationButtonClicked();
+  };
+
+  const onCancelDurationClicked = () => {
+    setIsDurationModalShown(false);
+    eventTrack.onSetPollDurationCancelClicked();
   };
 
   return (
@@ -82,7 +96,7 @@ function CreatePollContainer({
 
       <View style={S.divider} />
 
-      <TouchableOpacity style={S.polldurationbutton} onPress={() => setIsDurationModalShown(true)}>
+      <TouchableOpacity style={S.polldurationbutton} onPress={onDurationClicked}>
         <View style={S.row}>
           <Text style={S.fillparenttext}>Duration</Text>
           <View style={S.polldurationbuttonview(isAnonym)}>
@@ -126,6 +140,7 @@ function CreatePollContainer({
                 <Picker
                   onValueChange={(itemValue) => {
                     setPickerDay(itemValue);
+                    eventTrack.onSetPollDurationChangeDaysSet(itemValue);
                   }}
                   selectedValue={pickerDay}>
                   {days.map((day, index) => (
@@ -140,6 +155,7 @@ function CreatePollContainer({
                 <Picker
                   onValueChange={(itemValue) => {
                     setPickerHour(itemValue);
+                    eventTrack.onSetPollDurationChangeHoursSet(itemValue);
                   }}
                   selectedValue={pickerHour}>
                   {hour.map((h, index) => (
@@ -154,6 +170,7 @@ function CreatePollContainer({
                 <Picker
                   onValueChange={(itemValue) => {
                     setPickerMinute(itemValue);
+                    eventTrack.onSetPollDurationChangeMinutesSet(itemValue);
                   }}
                   selectedValue={pickerMinute}>
                   {minute.map((m, index) => (
@@ -164,9 +181,7 @@ function CreatePollContainer({
             </View>
           </View>
           <View style={S.bottombuttonrowcontainer}>
-            <TouchableOpacity
-              style={S.buttoncontainer}
-              onPress={() => setIsDurationModalShown(false)}>
+            <TouchableOpacity style={S.buttoncontainer} onPress={onCancelDurationClicked}>
               <Text style={S.bottombuttontext}>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity style={S.buttoncontainer} onPress={onSetTime}>
