@@ -51,22 +51,38 @@ const useDiscoveryScreenAnalyticsHook = (
 
   // FOLLOWING SCREEN ANALYTICS
   const {
-    onBackButtonClicked,
-    onDeleteSearchClicked,
-    onUserItemClicked,
-    onUserItemFollow,
-    onUserItemSuggestedFollow,
-    onUserItemSuggestedClicked,
-    onSearchBarClicked
+    user: {
+      onBackButtonClicked,
+      onDeleteSearchClicked,
+      onUserItemClicked,
+      onUserItemFollow,
+      onUserItemSuggestedFollow,
+      onUserItemSuggestedClicked,
+      onSearchBarClicked
+    },
+    community: {
+      onFollowingScreenCommunitySearchClicked,
+      onFollowingScreenCommunityBackButtonClicked,
+      onFollowingScreenCommunityDeleteSearchClicked,
+      onFollowingScreenCommunityCreateCommunityClicked,
+      onFollowingScreenYourCommunityFollowed,
+      onFollowingScreenYourCommunityUnfollowed,
+      onFollowingScreenSuggestedCommunityClicked,
+      onFollowingScreenSuggestedCommunityFollow,
+      onFollowingScreenSuggestedCommunityUnfollow
+    }
   } = useFollowingScreenAnalyticsHook();
 
   // Common Discovery Screen
   const onSearchCommunityPressed = () => {
     if (route.name === FOLLOWING_SCREEN_ROUTE_NAME && selectedScreen === DISCOVERY_TAB_USERS) {
-      return onSearchBarClicked();
-    }
-
-    if (selectedScreen === DISCOVERY_TAB_TOPICS) {
+      onSearchBarClicked();
+    } else if (
+      route.name === FOLLOWING_SCREEN_ROUTE_NAME &&
+      selectedScreen === DISCOVERY_TAB_TOPICS
+    ) {
+      onFollowingScreenCommunitySearchClicked();
+    } else if (selectedScreen === DISCOVERY_TAB_TOPICS) {
       AnalyticsEventTracking.eventTrack(
         BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_COMMUNITY_SEARCHED_COMMUNITY_CLICKED
       );
@@ -87,10 +103,13 @@ const useDiscoveryScreenAnalyticsHook = (
 
   const onBackButtonPressed = () => {
     if (route.name === FOLLOWING_SCREEN_ROUTE_NAME && selectedScreen === DISCOVERY_TAB_USERS) {
-      return onBackButtonClicked();
-    }
-
-    if (selectedScreen === DISCOVERY_TAB_NEWS) {
+      onBackButtonClicked();
+    } else if (
+      route.name === FOLLOWING_SCREEN_ROUTE_NAME &&
+      selectedScreen === DISCOVERY_TAB_TOPICS
+    ) {
+      onFollowingScreenCommunityBackButtonClicked();
+    } else if (selectedScreen === DISCOVERY_TAB_NEWS) {
       AnalyticsEventTracking.eventTrack(
         BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_NEWS_BACK_BUTTON_CLICKED
       );
@@ -220,11 +239,48 @@ const useDiscoveryScreenAnalyticsHook = (
   const onCommonSearchBarDeletedClicked = (from: DiscoveryScreenFragments) => {
     if (route.name === FOLLOWING_SCREEN_ROUTE_NAME && selectedScreen === DISCOVERY_TAB_USERS) {
       onDeleteSearchClicked();
+    } else if (
+      route.name === FOLLOWING_SCREEN_ROUTE_NAME &&
+      selectedScreen === DISCOVERY_TAB_TOPICS
+    ) {
+      onFollowingScreenCommunityDeleteSearchClicked();
     }
   };
 
   // Topic Discovery Screen
   const onFollowUnfollow = (willFollow: boolean, section: string) => {
+    if (
+      route.name === FOLLOWING_SCREEN_ROUTE_NAME &&
+      willFollow &&
+      section === 'your-communities'
+    ) {
+      return onFollowingScreenYourCommunityFollowed();
+    }
+
+    if (
+      route.name === FOLLOWING_SCREEN_ROUTE_NAME &&
+      !willFollow &&
+      section === 'your-communities'
+    ) {
+      return onFollowingScreenYourCommunityUnfollowed();
+    }
+
+    if (
+      route.name === FOLLOWING_SCREEN_ROUTE_NAME &&
+      willFollow &&
+      section === 'suggested-communities'
+    ) {
+      return onFollowingScreenSuggestedCommunityFollow();
+    }
+
+    if (
+      route.name === FOLLOWING_SCREEN_ROUTE_NAME &&
+      !willFollow &&
+      section === 'suggested-communities'
+    ) {
+      return onFollowingScreenSuggestedCommunityUnfollow();
+    }
+
     if (willFollow && section === 'your-communities') {
       AnalyticsEventTracking.eventTrack(
         BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_COMMUNITY_YOUR_COMMUNITY_JOIN
@@ -251,6 +307,10 @@ const useDiscoveryScreenAnalyticsHook = (
   };
 
   const onTopicPressed = (section: 'your-communities' | 'suggested-communities') => {
+    if (route.name === FOLLOWING_SCREEN_ROUTE_NAME && section === 'suggested-communities') {
+      return onFollowingScreenSuggestedCommunityClicked();
+    }
+
     if (section === 'your-communities') {
       AnalyticsEventTracking.eventTrack(
         BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_COMMUNITY_YOUR_COMMUNITY_OPENED
@@ -263,6 +323,9 @@ const useDiscoveryScreenAnalyticsHook = (
   };
 
   const onStartNewCommunityAnalyticsPressed = () => {
+    if (route.name === FOLLOWING_SCREEN_ROUTE_NAME) {
+      onFollowingScreenCommunityCreateCommunityClicked();
+    }
     AnalyticsEventTracking.eventTrack(
       BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_COMMUNITY_OPEN_CREATE_COMMUNITY
     );
