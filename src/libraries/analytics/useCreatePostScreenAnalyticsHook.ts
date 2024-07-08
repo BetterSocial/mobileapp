@@ -7,6 +7,7 @@ import AnalyticsEventTracking, {
 export type useCreatePostScreenAnalyticsHook = {
   onAnonButtonOn: () => void;
   onAnonButtonOff: () => void;
+  onBackButtonClicked: () => void;
   onProfileButtonClicked: () => void;
   onTextBoxTyped: (text: string) => void;
   onAddMediaPollButtonClicked: () => void;
@@ -75,6 +76,13 @@ const useCreatePostScreenAnalyticsHook = (): useCreatePostScreenAnalyticsHook =>
     );
   };
 
+  const onBackButtonClicked = () => {
+    track(
+      trackEnum.UNDEFINED_EVENT,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_BACK_BUTTON_CLICKED
+    );
+  };
+
   const onProfileButtonClicked = () => {
     track(
       trackEnum.CREATE_POST_SCREEN_PROFILE_BUTTON_CLICKED,
@@ -98,15 +106,24 @@ const useCreatePostScreenAnalyticsHook = (): useCreatePostScreenAnalyticsHook =>
   };
 
   const onAddMediaPollPageAddPollClicked = () => {
-    track(trackEnum.CREATE_POST_SCREEN_ADD_MEDIA_POLL_PAGE_ADD_POLL_CLICKED);
+    track(
+      trackEnum.CREATE_POST_SCREEN_ADD_MEDIA_POLL_PAGE_ADD_POLL_CLICKED,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_ADD_MEDIA_OR_POLL_BUTTON_POST_TYPE_BANNER_OPENED
+    );
   };
 
   const onPollSectionDurationButtonClicked = () => {
-    track(trackEnum.CREATE_POST_SCREEN_POLL_SECTION_DURATION_BUTTON_CLICKED);
+    track(
+      trackEnum.CREATE_POST_SCREEN_POLL_SECTION_DURATION_BUTTON_CLICKED,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_POST_TYPE_BANNER_NON_SELECTED
+    );
   };
 
   const onSetPollDurationSetButtonClicked = () => {
-    track(trackEnum.CREATE_POST_SCREEN_SET_POLL_DURATION_SET_BUTTON_CLICKED);
+    track(
+      trackEnum.CREATE_POST_SCREEN_SET_POLL_DURATION_SET_BUTTON_CLICKED,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_POST_TYPE_BANNER_NON_SELECTED
+    );
   };
 
   const onSetPollDurationCancelClicked = () => {
@@ -146,27 +163,45 @@ const useCreatePostScreenAnalyticsHook = (): useCreatePostScreenAnalyticsHook =>
   };
 
   const onPollSectionRemovePollButtonClicked = () => {
-    track(trackEnum.CREATE_POST_SCREEN_POLL_SECTION_REMOVE_POLL_BUTTON_CLICKED);
+    track(
+      trackEnum.CREATE_POST_SCREEN_POLL_SECTION_REMOVE_POLL_BUTTON_CLICKED,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_ADD_POLL_FLOW_REMOVE_POLL_CLICKED
+    );
   };
 
   const onAddMediaPollUploadFromLibClicked = () => {
-    track(trackEnum.CREATE_POST_SCREEN_ADD_MEDIA_POLL_UPLOAD_FROM_LIB_CLICKED);
+    track(
+      trackEnum.CREATE_POST_SCREEN_ADD_MEDIA_POLL_UPLOAD_FROM_LIB_CLICKED,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_UPLOAD_PHOTO_BANNER_UPLOAD_MEDIA
+    );
   };
 
   const onAddMediaPollTakePhotoClicked = () => {
-    track(trackEnum.CREATE_POST_SCREEN_ADD_MEDIA_POLL_TAKE_PHOTO_CLICKED);
+    track(
+      trackEnum.CREATE_POST_SCREEN_ADD_MEDIA_POLL_TAKE_PHOTO_CLICKED,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_UPLOAD_PHOTO_BANNER_TAKE_PHOTO
+    );
   };
 
   const onPhotoUploadedRemoveAllPhotosClicked = () => {
-    track(trackEnum.CREATE_POST_SCREEN_PHOTO_UPLOADED_REMOVE_ALL_PHOTOS_CLICKED);
+    track(
+      trackEnum.CREATE_POST_SCREEN_PHOTO_UPLOADED_REMOVE_ALL_PHOTOS_CLICKED,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_PHOTO_UPLOADED_REMOVE_ALL_PHOTOS_CLICKED
+    );
   };
 
   const onPhotoUploadedXButtonClicked = () => {
-    track(trackEnum.CREATE_POST_SCREEN_PHOTO_UPLOADED_X_BUTTON_CLICKED);
+    track(
+      trackEnum.CREATE_POST_SCREEN_PHOTO_UPLOADED_X_BUTTON_CLICKED,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_PHOTO_UPLOADED_X_BUTTON_CLICKED
+    );
   };
 
   const onPhotoUploadedAddMorePhotosPhotoRemoved = (photos) => {
-    track(trackEnum.CREATE_POST_SCREEN_PHOTO_UPLOADED_ADD_MORE_PHOTOS_PHOTO_REMOVED);
+    track(
+      trackEnum.CREATE_POST_SCREEN_PHOTO_UPLOADED_ADD_MORE_PHOTOS_PHOTO_REMOVED,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_PHOTO_UPLOADED_ADD_MORE_PHOTOS_UPLOAD_PHOTO_BANNER
+    );
   };
 
   const onAdSetAddCommunitiesOpenCommunityTags = () => {
@@ -186,35 +221,59 @@ const useCreatePostScreenAnalyticsHook = (): useCreatePostScreenAnalyticsHook =>
   };
 
   const onAdSetExpirationButtonOpenExpirationSetting = () => {
-    track(trackEnum.CREATE_POST_SCREEN_AD_SET_EXPIRATION_BUTTON_OPEN_EXPIRATION_SETTING);
+    track(
+      trackEnum.CREATE_POST_SCREEN_AD_SET_EXPIRATION_BUTTON_OPEN_EXPIRATION_SETTING,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_POST_DURATION_BUTTON_OPEN_POST_DURATION
+    );
   };
 
   const onExpirationSettingCancelClicked = () => {
-    track(trackEnum.CREATE_POST_SCREEN_EXPIRATION_SETTING_CANCEL_CLICKED);
+    track(
+      trackEnum.CREATE_POST_SCREEN_EXPIRATION_SETTING_CANCEL_CLICKED,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_POST_DURATION_CANCEL_CLICKED
+    );
   };
 
   const onExpirationSettingChoice24HrClicked = () => {
-    track(trackEnum.CREATE_POST_SCREEN_EXPIRATION_SETTING_CHOICE_24HR_CLICKED);
+    track(
+      trackEnum.CREATE_POST_SCREEN_EXPIRATION_SETTING_CHOICE_24HR_CLICKED,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_POST_DURATION_SET_24_HOURS_CLICKED
+    );
   };
 
   const onExpirationSettingChoice7DaysClicked = () => {
-    track(trackEnum.CREATE_POST_SCREEN_EXPIRATION_SETTING_CHOICE_7DAYS_CLICKED);
+    track(
+      trackEnum.CREATE_POST_SCREEN_EXPIRATION_SETTING_CHOICE_7DAYS_CLICKED,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_POST_DURATION_SET_7_DAYS_CLICKED
+    );
   };
 
   const onExpirationSettingChoice30DaysClicked = () => {
-    track(trackEnum.CREATE_POST_SCREEN_EXPIRATION_SETTING_CHOICE_30DAYS_CLICKED);
+    track(
+      trackEnum.CREATE_POST_SCREEN_EXPIRATION_SETTING_CHOICE_30DAYS_CLICKED,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_POST_DURATION_SET_30_DAYS_CLICKED
+    );
   };
 
   const onExpirationSettingChoiceNeverClicked = () => {
-    track(trackEnum.CREATE_POST_SCREEN_EXPIRATION_SETTING_CHOICE_NEVER_CLICKED);
+    track(
+      trackEnum.CREATE_POST_SCREEN_EXPIRATION_SETTING_CHOICE_NEVER_CLICKED,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_POST_DURATION_SET_NEVER_CLICKED
+    );
   };
 
   const onPostButtonEmptyAlerted = () => {
-    track(trackEnum.CREATE_POST_SCREEN_POST_BUTTON_EMPTY_ALERTED);
+    track(
+      trackEnum.CREATE_POST_SCREEN_POST_BUTTON_EMPTY_ALERTED,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_POST_BUTTON_EMPTY_ALERTED
+    );
   };
 
   const onPostButtonOpenMainFeed = () => {
-    track(trackEnum.CREATE_POST_SCREEN_POST_BUTTON_OPEN_MAIN_FEED);
+    track(
+      trackEnum.CREATE_POST_SCREEN_POST_BUTTON_OPEN_MAIN_FEED,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_POST_AND_CREATE_COMMUNITY_CREATED
+    );
   };
 
   const onAddCommunityButtonOpenAddComms = () => {
@@ -240,6 +299,7 @@ const useCreatePostScreenAnalyticsHook = (): useCreatePostScreenAnalyticsHook =>
   return {
     onAnonButtonOn,
     onAnonButtonOff,
+    onBackButtonClicked,
     onProfileButtonClicked,
     onTextBoxTyped,
     onAddMediaPollButtonClicked,

@@ -403,6 +403,7 @@ const CreatePost = () => {
     if (message || getReducedPoll().length > 0 || mediaStorage.length > 0) {
       sheetBackRef.current.open();
     } else {
+      eventTrack.onBackButtonClicked();
       navigation.goBack();
     }
 
