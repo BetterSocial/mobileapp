@@ -458,11 +458,24 @@ export enum BetterSocialEventTracking {
   CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_POST_DURATION_SET_NEVER_CLICKED = 'CreateCommunity-Post_PostDuration-setNever_clicked',
   CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_POST_DURATION_CANCEL_CLICKED = 'CreateCommunity-Post_PostDuration-cancel_clicked',
   CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_POST_AND_CREATE_COMMUNITY_CREATED = 'CreateCommunity-Post_postAndCreate_CommunityCreated',
-  CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_POST_BUTTON_EMPTY_ALERTED = 'CreateCommunity-Post_postButtonEmpty_alerted'
+  CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_POST_BUTTON_EMPTY_ALERTED = 'CreateCommunity-Post_postButtonEmpty_alerted',
+
+  // CREATE_COMMUNITY_SCREEN
+  CREATE_COMMUNITY_SCREEN_NAME_NEXT_BUTTON_OPEN_CC_CUSTOMIZE_PAGE = 'CreateCommunity-Name_nextButton_openCC-CustomizePage',
+  CREATE_COMMUNITY_SCREEN_BACK_BUTTON_CLICKED = 'CreateCommunity-Name_backButton_openPrevPage',
+  CREATE_COMMUNITY_SCREEN_CHANGE_ICON_BUTTON_CLICKED = 'CreateCommunity-Customize_changeIconButton_clicked',
+  CREATE_COMMUNITY_SCREEN_CHANGE_COMMUNITY_COVER_BUTTON_CLICKED = 'CreateCommunity-Customize_changeCommunityCoverButton_clicked',
+  CREATE_COMMUNITY_SCREEN_SEARCH_USER_CLICKED = 'CreateCommunity-InternalShare_searchUser_clicked',
+  CREATE_COMMUNITY_SCREEN_NEXT_BUTTON_OPEN_CREATE_POST_FLOW = 'CreateCommunity-InternalShare_nextButton_openCreatePostFlow',
+  CREATE_COMMUNITY_SCREEN_SHARE_INVITATION_LINK_BUTTON_OPEN_EXTERNAL_SHARING_PAGE = 'CreateCommunity-InternalShare_shareInvitationLinkButton_openExternalSharingPage',
+  CREATE_COMMUNITY_SCREEN_EXTERNAL_SHARING_CANCEL_BUTTON_CLICKED = 'CreateCommunity-InternalShare_externalsharingCancelButton_clicked',
+  CREATE_COMMUNITY_SCREEN_NEXT_BUTTON_OPEN_CC_INTERNAL_SHARE_PAGE = 'CreateCommunity-Customize_customizePage-nextButton_openCC-InternalSharePage',
+  CREATE_COMMUNITY_SCREEN_USER_NAME_SELECTED = 'CreateCommunity-InternalShare_userName_selected',
+  CREATE_COMMUNITY_SCREEN_USER_NAME_UNSELECTED = 'CreateCommunity-InternalShare_userName_unselected'
 }
 
-// const ENABLE_TOAST = ENV === 'Dev';
-const ENABLE_TOAST = false;
+const ENABLE_TOAST = ENV === 'Dev';
+// const ENABLE_TOAST = false;
 
 const AnalyticsEventTracking = (() => {
   if (!SEGMENT_WRITE_KEY) {

@@ -20,7 +20,8 @@ const Search = ({
   text,
   onClearText,
   isLoading = false,
-  style
+  style,
+  onPressIn = () => {}
 }) => (
   <Animated.View style={[styles.animatedViewContainer(animatedValue), style]}>
     <View style={styles.wrapperSearch}>
@@ -37,6 +38,7 @@ const Search = ({
         textAlignVertical="center"
         blurOnSubmit={true}
         keyboardAppearance="dark"
+        onPressIn={onPressIn}
       />
       <View style={styles.wrapperIcon}>
         <MemoIc_search width={20} height={20} fill={COLORS.gray310} />
