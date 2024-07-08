@@ -21,6 +21,8 @@ export type useCreatePostScreenAnalyticsHook = {
   onPollSectionMultipleChoiceButtonOn: () => void;
   onPollSectionMultipleChoiceButtonOff: () => void;
   onPollSectionRemovePollButtonClicked: () => void;
+  onAddMediaPollDialogClose: () => void;
+  onAddMorePhotosDialogClose: () => void;
   onAddMediaPollUploadFromLibClicked: () => void;
   onAddMediaPollTakePhotoClicked: () => void;
   onPhotoUploadedRemoveAllPhotosClicked: () => void;
@@ -59,7 +61,9 @@ const useCreatePostScreenAnalyticsHook = (): useCreatePostScreenAnalyticsHook =>
       return AnalyticsEventTracking.eventTrack(communityEvent, additionalData);
     }
 
-    return AnalyticsEventTracking.eventTrack(regularEvent, additionalData);
+    if (!isFromCommunity && regularEvent !== trackEnum.UNDEFINED_EVENT) {
+      return AnalyticsEventTracking.eventTrack(regularEvent, additionalData);
+    }
   };
 
   const onAnonButtonOn = () => {
@@ -115,19 +119,22 @@ const useCreatePostScreenAnalyticsHook = (): useCreatePostScreenAnalyticsHook =>
   const onPollSectionDurationButtonClicked = () => {
     track(
       trackEnum.CREATE_POST_SCREEN_POLL_SECTION_DURATION_BUTTON_CLICKED,
-      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_POST_TYPE_BANNER_NON_SELECTED
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_ADD_POLL_FLOW_DURATION_BUTTON_OPEN_SET_POLL_DURATION
     );
   };
 
   const onSetPollDurationSetButtonClicked = () => {
     track(
       trackEnum.CREATE_POST_SCREEN_SET_POLL_DURATION_SET_BUTTON_CLICKED,
-      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_POST_TYPE_BANNER_NON_SELECTED
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_SET_POLL_DURATION_SET_BUTTON_NEW_DURATION_SET
     );
   };
 
   const onSetPollDurationCancelClicked = () => {
-    track(trackEnum.CREATE_POST_SCREEN_SET_POLL_DURATION_CANCEL_CLICKED);
+    track(
+      trackEnum.CREATE_POST_SCREEN_SET_POLL_DURATION_CANCEL_CLICKED,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_POST_DURATION_CANCEL_CLICKED
+    );
   };
 
   const onSetPollDurationChangeDaysSet = (days: number) => {
@@ -205,7 +212,10 @@ const useCreatePostScreenAnalyticsHook = (): useCreatePostScreenAnalyticsHook =>
   };
 
   const onAdSetAddCommunitiesOpenCommunityTags = () => {
-    track(trackEnum.CREATE_POST_SCREEN_AD_SET_ADD_COMMUNITIES_OPEN_COMMUNITY_TAGS);
+    track(
+      trackEnum.CREATE_POST_SCREEN_AD_SET_ADD_COMMUNITIES_OPEN_COMMUNITY_TAGS,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_ADD_COMMUNITY_BUTTON_OPEN_ADD_COMMS
+    );
   };
 
   const onCommunityTags = (tags: string[]) => {
@@ -213,11 +223,17 @@ const useCreatePostScreenAnalyticsHook = (): useCreatePostScreenAnalyticsHook =>
   };
 
   const onCommunityTagsSaveButtonClicked = () => {
-    track(trackEnum.CREATE_POST_SCREEN_COMMUNITY_TAGS_SAVE_BUTTON_CLICKED);
+    track(
+      trackEnum.CREATE_POST_SCREEN_COMMUNITY_TAGS_SAVE_BUTTON_CLICKED,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_ADD_COMMS_SAVE_COMMS_UPDATED
+    );
   };
 
   const onCommunityTagsCancelClicked = () => {
-    track(trackEnum.CREATE_POST_SCREEN_COMMUNITY_TAGS_CANCEL_CLICKED);
+    track(
+      trackEnum.CREATE_POST_SCREEN_COMMUNITY_TAGS_CANCEL_CLICKED,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_ADD_COMMS_EXIT_CLICKED
+    );
   };
 
   const onAdSetExpirationButtonOpenExpirationSetting = () => {
@@ -277,23 +293,52 @@ const useCreatePostScreenAnalyticsHook = (): useCreatePostScreenAnalyticsHook =>
   };
 
   const onAddCommunityButtonOpenAddComms = () => {
-    console.log('onAddCommunityButtonOpenAddComms');
+    track(
+      trackEnum.CREATE_POST_SCREEN_ADD_COMMUNITY_BUTTON_OPEN_ADD_COMMS,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_ADD_COMMUNITY_BUTTON_OPEN_ADD_COMMS
+    );
   };
 
   const onAddCommsAddedCommNewCommAdded = (community: string) => {
-    console.log('onAddCommsAddedCommNewCommAdded', community);
+    track(
+      trackEnum.CREATE_POST_SCREEN_ADD_COMMS_ADDED_COMM_NEW_COMM_ADDED,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_ADD_COMMS_ADDED_COMM_NEW_COMM_ADDED
+    );
   };
 
   const onAddCommsDeleteCommCommDeleted = (community: string) => {
-    console.log('onAddCommsDeleteCommCommDeleted', community);
+    track(
+      trackEnum.CREATE_POST_SCREEN_ADD_COMMS_DELETE_COMM_COMM_DELETED,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_ADD_COMMS_DELETE_COMM_COMM_DELETED
+    );
   };
 
   const onAddCommsSaveCommsUpdated = (communities: string[]) => {
-    console.log('onAddCommsSaveCommsUpdated', communities);
+    track(
+      trackEnum.CREATE_POST_SCREEN_ADD_COMMS_SAVE_COMMS_UPDATED,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_ADD_COMMS_SAVE_COMMS_UPDATED
+    );
   };
 
   const onAddCommsExitClicked = () => {
-    console.log('onAddCommsExitClicked');
+    track(
+      trackEnum.CREATE_POST_SCREEN_ADD_COMMS_EXIT_CLICKED,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_ADD_COMMS_EXIT_CLICKED
+    );
+  };
+
+  const onAddMediaPollDialogClose = () => {
+    track(
+      trackEnum.UNDEFINED_EVENT,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_POST_TYPE_BANNER_NON_SELECTED
+    );
+  };
+
+  const onAddMorePhotosDialogClose = () => {
+    track(
+      trackEnum.UNDEFINED_EVENT,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_UPLOAD_PHOTO_BANNER_CLOSE_BANNER_CLICKED
+    );
   };
 
   return {
@@ -334,7 +379,9 @@ const useCreatePostScreenAnalyticsHook = (): useCreatePostScreenAnalyticsHook =>
     onAddCommsAddedCommNewCommAdded,
     onAddCommsDeleteCommCommDeleted,
     onAddCommsSaveCommsUpdated,
-    onAddCommsExitClicked
+    onAddCommsExitClicked,
+    onAddMediaPollDialogClose,
+    onAddMorePhotosDialogClose
   };
 };
 
