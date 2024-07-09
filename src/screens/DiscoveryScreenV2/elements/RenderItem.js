@@ -13,7 +13,8 @@ const RenderItem = ({
   selfUserId,
   eventTrack = {
     onOpenLinkPressed: () => {},
-    onOpenLinkContextScreen: () => {}
+    onOpenLinkContextScreen: () => {},
+    onOpenDomainScreen: () => {}
   }
 }) => {
   const [voteStatus, setVoteStatus] = React.useState('none');
@@ -100,6 +101,7 @@ const RenderItem = ({
         domain={item.domain.name}
         time={item.content.created_at}
         item={item}
+        eventTrack={eventTrack}
       />
       <Content
         item={item}

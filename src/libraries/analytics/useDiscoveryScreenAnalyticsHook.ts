@@ -370,6 +370,12 @@ const useDiscoveryScreenAnalyticsHook = (
     );
   };
 
+  const onOpenDomainScreen = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_NEWS_OPEN_DOMAIN_SCREEN
+    );
+  };
+
   const onClearRecentSearch = () => {
     AnalyticsEventTracking.eventTrack(
       BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_NEWS_CLEAR_RECENT_SEARCH_CLICKED
@@ -513,7 +519,8 @@ const useDiscoveryScreenAnalyticsHook = (
       onOpenLinkPressed,
       onOpenLinkContextScreen,
       onClearRecentSearch,
-      onRecentSearchItemClicked
+      onRecentSearchItemClicked,
+      onOpenDomainScreen
     },
     domain: {
       onDomainPageOpened,
