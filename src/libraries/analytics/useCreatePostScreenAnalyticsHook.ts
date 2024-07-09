@@ -45,6 +45,9 @@ export type useCreatePostScreenAnalyticsHook = {
   onAddCommsDeleteCommCommDeleted: (community: string) => void;
   onAddCommsSaveCommsUpdated: (communities: string[]) => void;
   onAddCommsExitClicked: () => void;
+  onPollSectionEditChoiceClicked: (index: number) => void;
+  onPollSectionAddChoiceClicked: (index: number) => void;
+  onPollSectionDeleteChoiceClicked: (index: number) => void;
 };
 
 export type CreatePostNavigationParams = {
@@ -341,6 +344,95 @@ const useCreatePostScreenAnalyticsHook = (): useCreatePostScreenAnalyticsHook =>
     );
   };
 
+  const __onPollSectionEditChoice1Clicked = () => {
+    track(
+      trackEnum.UNDEFINED_EVENT,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_ADD_POLL_FLOW_EDIT_CHOICE1
+    );
+  };
+
+  const __onPollSectionEditChoice2Clicked = () => {
+    track(
+      trackEnum.UNDEFINED_EVENT,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_ADD_POLL_FLOW_EDIT_CHOICE2
+    );
+  };
+
+  const __onPollSectionEditChoice3Clicked = () => {
+    track(
+      trackEnum.UNDEFINED_EVENT,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_ADD_POLL_FLOW_EDIT_CHOICE3
+    );
+  };
+
+  const __onPollSectionEditChoice4Clicked = () => {
+    track(
+      trackEnum.UNDEFINED_EVENT,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_ADD_POLL_FLOW_EDIT_CHOICE4
+    );
+  };
+
+  const __onPollSectionAddChoice3Clicked = () => {
+    track(
+      trackEnum.UNDEFINED_EVENT,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_ADD_POLL_FLOW_ADD_CHOICE3
+    );
+  };
+
+  const __onPollSectionAddChoice4Clicked = () => {
+    track(
+      trackEnum.UNDEFINED_EVENT,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_ADD_POLL_FLOW_ADD_CHOICE4
+    );
+  };
+
+  const __onPollSectionDeleteChoice1Clicked = () => {
+    track(
+      trackEnum.UNDEFINED_EVENT,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_ADD_POLL_FLOW_DELETE_CHOICE1
+    );
+  };
+
+  const __onPollSectionDeleteChoice2Clicked = () => {
+    track(
+      trackEnum.UNDEFINED_EVENT,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_ADD_POLL_FLOW_DELETE_CHOICE2
+    );
+  };
+
+  const __onPollSectionDeleteChoice3Clicked = () => {
+    track(
+      trackEnum.UNDEFINED_EVENT,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_ADD_POLL_FLOW_DELETE_CHOICE3
+    );
+  };
+
+  const __onPollSectionDeleteChoice4Clicked = () => {
+    track(
+      trackEnum.UNDEFINED_EVENT,
+      trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_ADD_POLL_FLOW_DELETE_CHOICE4
+    );
+  };
+
+  const onPollSectionEditChoiceClicked = (index: number) => {
+    if (index === 0) __onPollSectionEditChoice1Clicked();
+    else if (index === 1) __onPollSectionEditChoice2Clicked();
+    else if (index === 2) __onPollSectionEditChoice3Clicked();
+    else if (index === 3) __onPollSectionEditChoice4Clicked();
+  };
+
+  const onPollSectionAddChoiceClicked = (index: number) => {
+    if (index === 3) __onPollSectionAddChoice3Clicked();
+    else if (index === 4) __onPollSectionAddChoice4Clicked();
+  };
+
+  const onPollSectionDeleteChoiceClicked = (index: number) => {
+    if (index === 0) __onPollSectionDeleteChoice1Clicked();
+    else if (index === 1) __onPollSectionDeleteChoice2Clicked();
+    else if (index === 2) __onPollSectionDeleteChoice3Clicked();
+    else if (index === 3) __onPollSectionDeleteChoice4Clicked();
+  };
+
   return {
     onAnonButtonOn,
     onAnonButtonOff,
@@ -381,7 +473,10 @@ const useCreatePostScreenAnalyticsHook = (): useCreatePostScreenAnalyticsHook =>
     onAddCommsSaveCommsUpdated,
     onAddCommsExitClicked,
     onAddMediaPollDialogClose,
-    onAddMorePhotosDialogClose
+    onAddMorePhotosDialogClose,
+    onPollSectionAddChoiceClicked,
+    onPollSectionEditChoiceClicked,
+    onPollSectionDeleteChoiceClicked
   };
 };
 

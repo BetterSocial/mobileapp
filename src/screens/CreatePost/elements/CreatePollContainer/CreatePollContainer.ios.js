@@ -67,6 +67,10 @@ function CreatePollContainer({
     eventTrack.onSetPollDurationCancelClicked();
   };
 
+  const onPollItemPressIn = (index) => {
+    eventTrack.onPollSectionEditChoiceClicked(index);
+  };
+
   return (
     <View style={S.createpollcontainer}>
       {polls.map((item, index) => (
@@ -80,6 +84,9 @@ function CreatePollContainer({
             onsinglepollchanged(v, index);
           }}
           isAnonym={isAnonym}
+          eventTrack={{
+            onPollSectionEditChoiceClicked: onPollItemPressIn
+          }}
         />
       ))}
 

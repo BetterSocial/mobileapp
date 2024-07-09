@@ -630,6 +630,8 @@ const CreatePost = () => {
     if (polls.length >= MAX_POLLING_ALLOWED) {
       return;
     }
+
+    eventTrack.onPollSectionAddChoiceClicked(polls.length + 1);
     setPolls([...polls, {text: ''}]);
   };
 
@@ -637,6 +639,8 @@ const CreatePost = () => {
     if (polls.length <= MIN_POLLING_ALLOWED) {
       return;
     }
+
+    eventTrack.onPollSectionDeleteChoiceClicked(index);
     polls.splice(index, 1);
     setPolls([...polls]);
   };
