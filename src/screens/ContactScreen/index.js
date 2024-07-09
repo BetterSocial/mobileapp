@@ -1,7 +1,8 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
 import SimpleToast from 'react-native-simple-toast';
+import axios from 'axios';
+import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
 import {
   Dimensions,
   RefreshControl,
@@ -14,31 +15,32 @@ import {
 } from 'react-native';
 /* eslint-disable no-param-reassign */
 import {debounce} from 'lodash';
-import axios from 'axios';
 import {useRoute} from '@react-navigation/core';
+
 import ContactPreview from './elements/ContactPreview';
+import DiscoveryAction from '../../context/actions/discoveryAction';
+import DiscoveryRepo from '../../service/discovery';
 import Header from '../../components/Header/HeaderContact';
 import ItemUser from './elements/ItemUser';
+import MemoIc_share from '../../assets/icons/Ic_share';
 import SearchRecyclerView from './elements/SearchRecyclerView';
 import ShareUtils from '../../utils/share';
 import StringConstant from '../../utils/string/StringConstant';
+import dimen from '../../utils/dimen';
 import useCreateChat from '../../hooks/screen/useCreateChat';
+import useCreateCommunityScreenAnalyticsHook from '../../libraries/analytics/useCreateCommunityScreenAnalyticsHook';
+import useGroupInfo from '../GroupInfo/hooks/useGroupInfo';
+import {ANONYMOUS} from '../../hooks/core/constant';
+import {Button} from '../../components/Button';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH, NavigationConstants} from '../../utils/constants';
-import {Loading, Header as HeaderGeneral} from '../../components';
-import {Search} from './elements';
-import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import {Header as HeaderGeneral, Loading} from '../../components';
 import {ProgressBar} from '../../components/ProgressBar';
-import {ANONYMOUS} from '../../hooks/core/constant';
-import DiscoveryRepo from '../../service/discovery';
-import DiscoveryAction from '../../context/actions/discoveryAction';
-import useGroupInfo from '../GroupInfo/hooks/useGroupInfo';
+import {Search} from './elements';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
-import MemoIc_share from '../../assets/icons/Ic_share';
-import dimen from '../../utils/dimen';
-import {Button} from '../../components/Button';
 import {inviteCommunityMember} from '../../service/topics';
+import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 const {width} = Dimensions.get('screen');
 
@@ -82,6 +84,7 @@ const ContactScreen = ({navigation}) => {
     : StringConstant.chatTabHeaderCreateChatButtonText;
 
   const {onAddMember, isLoadingAddMember} = useGroupInfo(channelId);
+  const eventTrack = useCreateCommunityScreenAnalyticsHook();
 
   const getDiscoveryUser = async () => {
     const initialData = await DiscoveryRepo.fetchInitialDiscoveryUsers(
@@ -229,6 +232,7 @@ const ContactScreen = ({navigation}) => {
   };
 
   const handleInviteCommunityMember = async () => {
+    eventTrack.onCreateCommunityScreenNextButtonOpenCreatePostFlow();
     if (selectedUsers.length > 0) {
       try {
         const response = await inviteCommunityMember(
@@ -257,6 +261,7 @@ const ContactScreen = ({navigation}) => {
   };
 
   const onCommunityShare = () => {
+    eventTrack.onCreateCommunityScreenShareInvitationLinkButtonOpenExternalSharingPage();
     ShareUtils.shareCommunity(topicCommunityName);
   };
 
@@ -292,8 +297,10 @@ const ContactScreen = ({navigation}) => {
 
     const indexSelectedUser = copyUsers.findIndex((item) => item.user_id === value.user_id);
     if (indexSelectedUser > -1) {
+      eventTrack.onCreateCommunityScreenUserNameUnselected();
       copyUsers.splice(indexSelectedUser, 1);
     } else {
+      eventTrack.onCreateCommunityScreenUserNameSelected();
       copyUsers.push(value);
     }
 
@@ -321,6 +328,10 @@ const ContactScreen = ({navigation}) => {
     }
 
     setIsSearchMode(changedText.length > 0);
+  };
+
+  const onPressInSearch = () => {
+    if (isCreateCommunity) eventTrack.onCreateCommunityScreenSearchUserClicked();
   };
 
   return (
@@ -372,6 +383,7 @@ const ContactScreen = ({navigation}) => {
         onChangeText={onSearchTextChange}
         onClearText={() => onSearchTextChange('')}
         isLoading={isLoadingSearchResult}
+        onPressIn={onPressInSearch}
         // onPress={handleSearch}
       />
 
