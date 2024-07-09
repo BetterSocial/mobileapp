@@ -32,7 +32,8 @@ const NewsFragment = ({
       onOpenLinkPressed,
       onOpenLinkContextScreen,
       onClearRecentSearch,
-      onRecentSearchItemClicked
+      onRecentSearchItemClicked,
+      onOpenDomainScreen
     }
   } = useDiscoveryScreenAnalyticsHook();
 
@@ -73,7 +74,8 @@ const NewsFragment = ({
                 selfUserId={myId}
                 eventTrack={{
                   onOpenLinkPressed,
-                  onOpenLinkContextScreen
+                  onOpenLinkContextScreen,
+                  onOpenDomainScreen
                 }}
                 // onPressContent={onContentClicked}
               />
@@ -113,7 +115,8 @@ const NewsFragment = ({
           onPressShare={share.shareNews}
           eventTrack={{
             onOpenLinkPressed,
-            onOpenLinkContextScreen
+            onOpenLinkContextScreen,
+            onOpenDomainScreen
           }}
           // onPressContent={onContentClicked}
         />

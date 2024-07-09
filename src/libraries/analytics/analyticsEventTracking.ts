@@ -253,7 +253,8 @@ export enum BetterSocialEventTracking {
   DISCOVERY_SCREEN_SEARCH_COMMUNITY_CLEAR_RECENT_SEARCH_CLICKED = 'Discovery-SearchComms_clearRecentSearches_clicked',
 
   DISCOVERY_SCREEN_SEARCH_NEWS_OPEN_LINK_CLICKED = 'Discovery-SearchNews_openLink_clicked',
-  DISCOVERY_SCREEN_SEARCH_NEWS_OPEN_LINK_CONTEXT_SCREEN = 'Discovery-SearchNews_newsPage_opened',
+  DISCOVERY_SCREEN_SEARCH_NEWS_OPEN_LINK_CONTEXT_SCREEN = 'Discovery-SearchNews_linkContextScreen_opened',
+  DISCOVERY_SCREEN_SEARCH_NEWS_OPEN_DOMAIN_SCREEN = 'Discovery-SearchNews_newsPage_openFeedPage-DomainPage',
   DISCOVERY_SCREEN_SEARCH_NEWS_SEARCH_NEWS_CLICKED = 'Discovery-SearchNews_searchNews_clicked',
   DISCOVERY_SCREEN_SEARCH_NEWS_RECENT_SEARCH_CLICKED = 'Discovery-SearchNews_recentSearches_clicked',
   DISCOVERY_SCREEN_SEARCH_NEWS_CLEAR_RECENT_SEARCH_CLICKED = 'Discovery-SearchNews_clearRecentSearches_clicked',
@@ -264,8 +265,8 @@ export enum BetterSocialEventTracking {
 
   DISCOVERY_SCREEN_SEARCH_DOMAIN_SUGGESTED_DOMAIN_JOIN = 'Discovery-SearchDomains_suggestedDomains-followDomain_clicked',
   DISCOVERY_SCREEN_SEARCH_DOMAIN_SUGGESTED_DOMAIN_LEFT = 'Discovery-SearchDomains_suggestedDomains-followDomain_unclicked',
-  DISCOVERY_SCREEN_SEARCH_DOMAIN_YOUR_DOMAIN_OPENED = 'Discovery-SearchDomains_followedDomains-domainPage_opened',
-  DISCOVERY_SCREEN_SEARCH_DOMAIN_SUGGESTED_DOMAIN_OPENED = 'Discovery-SearchDomains_suggestedDomains-domainPage_opened',
+  DISCOVERY_SCREEN_SEARCH_DOMAIN_YOUR_DOMAIN_OPENED = 'Discovery-SearchDomains_followedDomains-domainPage_openFeedPage-DomainPage',
+  DISCOVERY_SCREEN_SEARCH_DOMAIN_SUGGESTED_DOMAIN_OPENED = 'Discovery-SearchDomains_suggestedDomains-domainPage_openFeedPage-DomainPage',
   DISCOVERY_SCREEN_SEARCH_DOMAIN_SEARCH_DOMAIN_CLICKED = 'Discovery-SearchDomains_searchDomains_clicked',
   DISCOVERY_SCREEN_SEARCH_DOMAIN_RECENT_SEARCH_CLICKED = 'Discovery-SearchDomains_recentSearches_clicked',
   DISCOVERY_SCREEN_SEARCH_DOMAIN_CLEAR_RECENT_SEARCH_CLICKED = 'Discovery-SearchDomains_clearRecentSearches_clicked',
