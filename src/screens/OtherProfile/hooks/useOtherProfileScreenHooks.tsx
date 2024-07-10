@@ -65,7 +65,6 @@ const useOtherProfileScreenHooks = (targetUserProfileId: string, username: strin
       const result = await getOtherProfile(username);
       if (result.code === 200) {
         const data = result?.data;
-        console.warn('data', JSON.stringify(data));
         setOtherProfileData(data);
         setOtherProfileUserId(data.user_id);
         updateFollowDiscoveryContext(data?.is_me_following_target, data);

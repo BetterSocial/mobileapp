@@ -179,6 +179,11 @@ const OtherProfile = () => {
   const onShare = async () => ShareUtils.shareUserLink(username);
 
   const handleSetUnFollow = async () => {
+    setDataMain((prevState) => ({
+      ...prevState,
+      is_following: false,
+      is_me_following_target: false
+    }));
     setIsCurrentFollowed(false);
 
     const data = {
@@ -193,6 +198,11 @@ const OtherProfile = () => {
   };
 
   const handleSetFollow = async () => {
+    setDataMain((prevState) => ({
+      ...prevState,
+      is_following: true,
+      is_me_following_target: true
+    }));
     setIsCurrentFollowed(true);
 
     const data = {
