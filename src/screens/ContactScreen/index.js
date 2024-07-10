@@ -449,7 +449,7 @@ const ContactScreen = ({navigation}) => {
         </View>
       )}
 
-      {isRecyclerViewShown && usersSearch.length <= 0 && (
+      {isRecyclerViewShown && usersSearch.length <= 0 && !isLoadingSearchResult && (
         <RecyclerListView
           style={styles.recyclerview}
           layoutProvider={layoutProvider}
@@ -470,7 +470,7 @@ const ContactScreen = ({navigation}) => {
         />
       )}
 
-      {isRecyclerViewShownSearch && usersSearch.length > 0 && (
+      {isRecyclerViewShownSearch && usersSearch.length > 0 && !isLoadingSearchResult && (
         <RecyclerListView
           style={styles.recyclerview}
           layoutProvider={layoutProviderSearch}
