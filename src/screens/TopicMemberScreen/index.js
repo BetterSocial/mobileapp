@@ -1,17 +1,17 @@
-import * as React from 'react';
-import {Animated, StyleSheet, Platform} from 'react-native';
 import {useRoute} from '@react-navigation/native';
 import axios from 'axios';
+import * as React from 'react';
+import {Animated, Platform, StyleSheet} from 'react-native';
 
 import {SafeAreaProvider, useSafeAreaInsets} from 'react-native-safe-area-context';
-import ShareUtils from '../../utils/share';
-import dimen from '../../utils/dimen';
-import {getAllMemberTopic} from '../../service/topics';
-import StringConstant from '../../utils/string/StringConstant';
-import UsersFragment from '../DiscoveryScreenV2/fragment/UsersFragment';
 import {Context} from '../../context';
+import {getAllMemberTopic} from '../../service/topics';
+import dimen from '../../utils/dimen';
+import ShareUtils from '../../utils/share';
+import StringConstant from '../../utils/string/StringConstant';
 import NavHeader from '../TopicPageScreen/elements/NavHeader';
 import TopicMemberHeadline from './elements/TopicMemberHeadlineList';
+import UsersFragment from '../DiscoveryScreenV2/fragment/UsersFragment';
 
 const styles = StyleSheet.create({
   parentContainer: {
@@ -24,7 +24,6 @@ const TopicMemberScreen = () => {
   const {top} = useSafeAreaInsets();
   const topicName = route?.params?.topicName;
   const topicDetail = route?.params?.topicDetail;
-  const getTopicDetail = route?.params?.getTopicDetail;
   const [isFollow, setIsFollow] = React.useState(route?.params?.isFollow);
   const [memberCount, setMemberCount] = React.useState(route?.params?.memberCount);
   const [profile] = React.useContext(Context).profile;
@@ -35,7 +34,7 @@ const TopicMemberScreen = () => {
   const [topicDataFollowedUsers, setTopicDataFollowedUsers] = React.useState([]);
   const [topicDataUnfollowedUsers, setTopicDataUnfollowedUsers] = React.useState([]);
   const [isFocus, setIsFocus] = React.useState(true);
-  const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true);
+  const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(false);
   const cancelTokenRef = React.useRef(axios.CancelToken.source());
   const scrollY = React.useRef(new Animated.Value(0)).current;
 
@@ -109,6 +108,8 @@ const TopicMemberScreen = () => {
         setTopicDataUnfollowedUsers(newDataUnfollowed);
       } else {
         setInitialMember([...newDataFollowed, ...newDataUnfollowed]);
+        setTopicDataFollowedUsers(newDataFollowed);
+        setTopicDataUnfollowedUsers(newDataUnfollowed);
       }
       setIsLoadingDiscovery({user: false});
     }
@@ -151,7 +152,6 @@ const TopicMemberScreen = () => {
         setMemberCount={setMemberCount}
         setIsFollow={setIsFollow}
         isFollow={isFollow}
-        getTopicDetail={getTopicDetail}
         hasSearch={true}
         searchText={searchText}
         setSearchText={setSearchText}
@@ -167,8 +167,7 @@ const TopicMemberScreen = () => {
       <TopicMemberHeadline text="Visible members of this community" />
       <UsersFragment
         isLoadingDiscoveryUser={isLoadingDiscovery.user}
-        isFirstTimeOpen={isFirstTimeOpen}
-        initialUsers={initalMember}
+        isFirstTimeOpen={false}
         setInitialUsers={setInitialMember}
         followedUsers={topicDataFollowedUsers}
         unfollowedUsers={topicDataUnfollowedUsers}
@@ -177,6 +176,7 @@ const TopicMemberScreen = () => {
         setIsFirstTimeOpen={setIsFirstTimeOpen}
         setSearchText={setSearchText}
         withoutRecent={true}
+        isUser={true}
       />
     </SafeAreaProvider>
   );

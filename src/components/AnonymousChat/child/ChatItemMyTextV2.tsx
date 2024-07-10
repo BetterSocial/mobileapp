@@ -1,12 +1,12 @@
 /* eslint-disable no-unexpected-multiline */
 import * as React from 'react';
-import ContextMenu from 'react-native-context-menu-view';
 import {Dimensions, StyleSheet, Text, View} from 'react-native';
 
 import ChatContextMenuView from '../../ContextMenuView/ChatContextMenuView';
 import ChatItemAttachment from './ChatItemAttachment';
 import IconChatCheckMark from '../../../assets/icon/IconChatCheckMark';
 import IconChatClockGrey from '../../../assets/icon/IconChatClockGrey';
+import MemoLinkDetectionText from '../../Text/LinkDetectionText';
 import dimen from '../../../utils/dimen';
 import {
   AVATAR_MARGIN,
@@ -18,7 +18,6 @@ import {
 import {COLORS} from '../../../utils/theme';
 import {ChatItemMyTextProps} from '../../../../types/component/AnonymousChat/BaseChatItem.types';
 import {ChatStatus} from '../../../../types/database/schema/ChannelList.types';
-import {LinkableText} from '../../LinkableText';
 import {SIGNED} from '../../../hooks/core/constant';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
 
@@ -181,7 +180,9 @@ const ChatItemMyTextV2 = ({
             </View>
           )}
           {attachments.length > 0 && <ChatItemAttachment attachments={attachments} />}
-          {attachments.length <= 0 && <LinkableText style={getStyles()} text={message} />}
+          {attachments.length <= 0 && (
+            <MemoLinkDetectionText text={message} linkTextStyle={getStyles()} />
+          )}
 
           {renderIcon()}
         </View>

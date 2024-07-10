@@ -14,7 +14,7 @@ const SET_TAG_TIMEOUT = 10 * 1000;
 const rebuildAndSubscribeTags = async () => {
   try {
     const response = await getSubscribeableTopic();
-    const {topics = [], history = []} = response?.data || {};
+    const {topics = [], history = [], hasUserPosted} = response?.data || {};
 
     return new Promise((resolve) => {
       history?.forEach((historyItem: TopicTag) => {
@@ -30,6 +30,8 @@ const rebuildAndSubscribeTags = async () => {
 
         resolve(null);
       }, SET_TAG_TIMEOUT);
+
+      OneSignal.User.addTag('has_user_posted', hasUserPosted ? 'true' : 'false');
     });
   } catch (e) {
     console.log('error rebuilding and subscribing tags ', e?.message);

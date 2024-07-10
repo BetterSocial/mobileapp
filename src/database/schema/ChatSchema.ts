@@ -4,7 +4,11 @@ import {v4 as uuid} from 'uuid';
 import BaseDbSchema from './BaseDbSchema';
 import ChannelListSchema from './ChannelListSchema';
 import UserSchema from './UserSchema';
-import {DELETED_MESSAGE_TEXT, MESSAGE_TYPE_DELETED} from '../../utils/constants';
+import {
+  DELETED_MESSAGE_TEXT,
+  MESSAGE_TYPE_DELETED,
+  MESSAGE_TYPE_REPLY_PROMPT
+} from '../../utils/constants';
 import {ModifyAnonymousChatData} from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 
 class ChatSchema implements BaseDbSchema {
@@ -117,7 +121,8 @@ class ChatSchema implements BaseDbSchema {
     db: SQLiteDatabase,
     channelId: string,
     myId: string,
-    myAnonymousId: string
+    myAnonymousId: string,
+    limit?: number
   ): Promise<BaseDbSchema[]> {
     const selectQuery = `
       SELECT A.*, 
@@ -150,7 +155,7 @@ class ChatSchema implements BaseDbSchema {
       ${ChatSchema.getTableName()} A 
       LEFT JOIN ${UserSchema.getTableName()} B 
       ON A.user_id = user_schema_user_id AND A.channel_id = user_channel_id
-      WHERE A.channel_id = ? ORDER BY created_at DESC;`;
+      WHERE A.channel_id = ? ORDER BY created_at DESC ${limit ? `LIMIT ${limit}` : ''};`;
 
     const [{rows}] = await db.executeSql(selectQuery, [myId, myAnonymousId, channelId]);
     return Promise.resolve(rows.raw().map(this.fromDatabaseObject));
@@ -270,7 +275,9 @@ class ChatSchema implements BaseDbSchema {
       console.log(e);
     }
     try {
-      attachmentJson = JSON.stringify(json?.message?.attachments);
+      if (isSavingAttachmentAllowed(json?.message?.message_type)) {
+        attachmentJson = JSON.stringify(json?.message?.attachments);
+      }
     } catch (e) {
       console.log('error stringify');
       console.log(e);
@@ -317,7 +324,9 @@ class ChatSchema implements BaseDbSchema {
       console.log(e);
     }
     try {
-      attachmentJson = JSON.stringify(json?.attachments);
+      if (isSavingAttachmentAllowed(json?.message_type)) {
+        attachmentJson = JSON.stringify(json?.attachments);
+      }
     } catch (e) {
       console.log('error stringify');
       console.log(e);
@@ -351,7 +360,9 @@ class ChatSchema implements BaseDbSchema {
       console.log(e);
     }
     try {
-      attachmentJson = JSON.stringify(json?.attachments);
+      if (isSavingAttachmentAllowed(json?.message_type)) {
+        attachmentJson = JSON.stringify(json?.attachments);
+      }
     } catch (e) {
       console.log('error stringify');
       console.log(e);
@@ -418,7 +429,9 @@ class ChatSchema implements BaseDbSchema {
       console.log(e);
     }
     try {
-      attachmentJson = JSON.stringify(data?.message?.attachments);
+      if (isSavingAttachmentAllowed(data?.message?.message_type)) {
+        attachmentJson = JSON.stringify(data?.message?.attachments);
+      }
     } catch (e) {
       console.log('error stringify');
       console.log(e);
@@ -511,6 +524,10 @@ class ChatSchema implements BaseDbSchema {
   fromDatabaseObject = (dbObject: any): BaseDbSchema => {
     throw new Error('Method not implemented. 3');
   };
+}
+
+function isSavingAttachmentAllowed(messageType): boolean {
+  return ![MESSAGE_TYPE_REPLY_PROMPT, MESSAGE_TYPE_DELETED].includes(messageType);
 }
 
 export default ChatSchema;

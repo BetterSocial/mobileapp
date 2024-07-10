@@ -7,7 +7,8 @@ const mockSubscribeableTopicResponse = {
   code: 200,
   data: {
     topics: [{name: 'android'}, {name: 'apple'}],
-    history: [{name: 'android'}, {name: 'apple'}, {name: 'women'}]
+    history: [{name: 'android'}, {name: 'apple'}, {name: 'women'}],
+    hasUserPosted: true
   },
   message: 'Success get topic user',
   status: 'success'
@@ -33,7 +34,7 @@ describe('TESTING OneSignalUtil', () => {
 
       // Assertion
       expect(OneSignal.User.removeTag).toHaveBeenCalledTimes(3);
-      expect(OneSignal.User.addTag).toHaveBeenCalledTimes(2);
+      expect(OneSignal.User.addTag).toHaveBeenCalledTimes(3);
     },
     11 * 1000
   );

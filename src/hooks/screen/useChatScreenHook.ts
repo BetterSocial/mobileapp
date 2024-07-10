@@ -2,22 +2,23 @@
 import 'react-native-get-random-values';
 
 import * as React from 'react';
-import _ from 'lodash';
-import SimpleToast from 'react-native-simple-toast';
+import {useMutation} from 'react-query';
+import {useRoute} from '@react-navigation/core';
 import {v4 as uuid} from 'uuid';
 
-import {useMutation} from 'react-query';
-import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../database/schema/ChannelListSchema';
 import ChatSchema from '../../database/schema/ChatSchema';
-import ImageUtils from '../../utils/image';
-import SignedMessageRepo from '../../service/repo/signedMessageRepo';
-import UseChatScreenHook from '../../../types/hooks/screens/useChatScreenHook.types';
 import UserSchema from '../../database/schema/UserSchema';
+import useAnalyticUtilsHook from '../../libraries/analytics/useAnalyticUtilsHook';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import useDatabaseQueueHook from '../core/queue/useDatabaseQueueHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import useUserAuthHook from '../core/auth/useUserAuthHook';
+import ImageUtils, {UploadOptions} from '../../utils/image';
+import UseChatScreenHook, {
+  GoToChatInfoScreenByTrigger
+} from '../../../types/hooks/screens/useChatScreenHook.types';
+import {BetterSocialEventTracking} from '../../libraries/analytics/analyticsEventTracking';
 import {CHANNEL_TYPE_GROUP, CHANNEL_TYPE_PERSONAL} from '../../utils/constants';
 import {DatabaseOperationLabel} from '../../core/queue/DatabaseQueue';
 import {QueueJobPriority} from '../../core/queue/BaseQueue';
@@ -35,14 +36,32 @@ export const ScrollContext = React.createContext<ScrollContextProps | null>(null
 
 function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const {localDb, refresh, otherListener} = useLocalDatabaseHook();
-  const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen, setChannelAsRead} =
-    useChatUtilsHook(type);
+  const {
+    selectedChannel,
+    goBackFromChatScreen,
+    goToChatInfoScreen,
+    setChannelAsRead,
+    setSelectedChannel
+  } = useChatUtilsHook(type);
   const {anonProfileId, signedProfileId} = useUserAuthHook();
   const {queue} = useDatabaseQueueHook();
+  const {eventTrackByUserType, getEventName} = useAnalyticUtilsHook(type);
+
+  const {params} = useRoute();
 
   const [selfAnonUserInfo, setSelfAnonUserInfo] = React.useState<any>(null);
-  const [chats, setChats] = React.useState<ChatSchema[]>([]);
-  const [isLoadingFetchAllMessage, setIsLoadingFetchAllMessage] = React.useState(true);
+  const [chats, setChats] = React.useState<ChatSchema[]>(params?.initialMessages || []);
+  const [isLoadingFetchAllMessage, setIsLoadingFetchAllMessage] = React.useState(false);
+
+  const sendChatSignedMutation = useSendSignedMessage();
+  const sendChatAnonMutation = useSendAnonMessage();
+
+  const uploadMediaFailedEvent: UploadOptions = {
+    withFailedEventTrack: getEventName(
+      BetterSocialEventTracking.SIGNED_CHAT_SCREEN_ATTACHMENT_UPLOAD_FAILED,
+      BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_ATTACHMENT_UPLOAD_FAILED
+    )
+  };
 
   const getAllMessages = useGetAllMessage(
     {
@@ -55,13 +74,6 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       enabled: !!localDb && !!selectedChannel && !!otherListener[`chat_${selectedChannel?.id}`]
     }
   );
-
-  React.useEffect(() => {
-    if (getAllMessages.data) {
-      setChats(getAllMessages.data);
-      setIsLoadingFetchAllMessage(false);
-    }
-  }, [getAllMessages.data]);
 
   const initChatData = async () => {
     if (!localDb || !selectedChannel) return;
@@ -99,16 +111,17 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   };
 
   const processImageAttachment = async (item) => {
-    const uploadedImageUrl = await ImageUtils.uploadImage(item.asset_url);
+    const uploadedImageUrl = await ImageUtils.uploadImage(item.asset_url, uploadMediaFailedEvent);
     return {...item, asset_url: uploadedImageUrl.data.url, thumb_url: uploadedImageUrl.data.url};
   };
 
   const processVideoAttachment = async (item) => {
-    const uploadedImageUrl = await ImageUtils.uploadImage(item.asset_url);
+    const uploadedImageUrl = await ImageUtils.uploadImage(item.asset_url, uploadMediaFailedEvent);
     const uploadedUrl = await ImageUtils.uploadFile(
       item.video_path,
       item.video_name,
-      item.video_type
+      item.video_type,
+      uploadMediaFailedEvent
     );
     return {
       ...item,
@@ -119,7 +132,12 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   };
 
   const processFileAttachment = async (item) => {
-    const uploadedUrl = await ImageUtils.uploadFile(item.file_path, item.file_name, item.file_type);
+    const uploadedUrl = await ImageUtils.uploadFile(
+      item.file_path,
+      item.file_name,
+      item.file_type,
+      uploadMediaFailedEvent
+    );
     return {
       ...item,
       asset_url: uploadedUrl.data.url,
@@ -144,9 +162,6 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
 
     return Promise.all(attachmentPromises);
   };
-
-  const sendChatSignedMutation = useSendSignedMessage();
-  const sendChatAnonMutation = useSendAnonMessage();
 
   const sendChat = async (props: {
     message: string;
@@ -251,7 +266,8 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   };
 
   const sendChatMutation = useMutation(sendChat, {
-    retry: true
+    retry: 10,
+    retryDelay: 1000
   });
 
   const updateChatContinuity = (chatsData: ChatSchema[]) => {
@@ -274,11 +290,50 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     return updatedChats;
   };
 
+  const goBackToChatTab = () => {
+    eventTrackByUserType(
+      BetterSocialEventTracking.SIGNED_CHAT_SCREEN_HEADER_BACK_BUTTON_CLICKED,
+      BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_HEADER_BACK_BUTTON_CLICKED
+    );
+    goBackFromChatScreen();
+  };
+
+  const goToChatInfoScreenBy = (
+    trigger: GoToChatInfoScreenByTrigger,
+    goToChatInfoScreenParams?: any
+  ) => {
+    goToChatInfoScreen(goToChatInfoScreenParams);
+    if (trigger === 'ProfilePicture')
+      eventTrackByUserType(
+        BetterSocialEventTracking.SIGNED_CHAT_SCREEN_HEADER_PROFILE_PICTURE_CLICKED,
+        BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_HEADER_PROFILE_PICTURE_CLICKED
+      );
+    else if (trigger === 'OptionsButton') {
+      eventTrackByUserType(
+        BetterSocialEventTracking.SIGNED_CHAT_SCREEN_HEADER_OPTIONS_BUTTON_CLICKED,
+        BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_HEADER_OPTIONS_BUTTON_CLICKED
+      );
+    }
+  };
+
   React.useEffect(() => {
     if (localDb && selectedChannel) {
       initChatData();
     }
   }, [localDb, otherListener[`chat_${selectedChannel?.id}`], selectedChannel]);
+
+  React.useEffect(() => {
+    return () => {
+      setChats([]);
+    };
+  }, []);
+
+  React.useEffect(() => {
+    if (getAllMessages.data) {
+      setChats(getAllMessages.data);
+      setIsLoadingFetchAllMessage(false);
+    }
+  }, [getAllMessages.data]);
 
   return {
     chats,
@@ -286,7 +341,9 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     selfAnonUserInfo,
     isLoadingFetchAllMessage,
     goBackFromChatScreen,
+    goBackToChatTab,
     goToChatInfoScreen,
+    goToChatInfoScreenBy,
     sendChat,
     updateChatContinuity,
     sendChatMutation

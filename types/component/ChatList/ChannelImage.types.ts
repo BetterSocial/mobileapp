@@ -9,11 +9,11 @@ export type ChannelImageProps = React.FC & {
 };
 
 export type ChannelImageMainProps = {
-  type: 'COMMUNITY' | 'GROUP' | 'GROUP_INFO';
+  type: 'TOPIC' | 'ANON_TOPIC' | 'GROUP' | 'GROUP_INFO';
   image?: string;
   style?: StyleProp<ImageStyle>;
 };
 
 export type ChannelImageBadgeProps = {
-  type: 'COMMUNITY' | 'GROUP' | 'GROUP_INFO';
+  type: 'TOPIC' | 'ANON_TOPIC' | 'GROUP' | 'GROUP_INFO';
 };

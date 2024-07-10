@@ -17,7 +17,10 @@ import UseChatUtilsHook, {
   ContactScreenPayload
 } from '../../../../types/hooks/screens/useChatUtilsHook.types';
 import {ANON_PM, GROUP_INFO} from '../constant';
-import {BetterSocialChannelType} from '../../../../types/database/schema/ChannelList.types';
+import {
+  BetterSocialChannelType,
+  GoToChatScreenOptionalParams
+} from '../../../../types/database/schema/ChannelList.types';
 import {ChannelTypeEnum} from '../../../../types/repo/SignedMessageRepo/SignedPostNotificationData';
 import {Context} from '../../../context';
 import {DatabaseOperationLabel} from '../../../core/queue/DatabaseQueue';
@@ -154,7 +157,7 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
     queue.addPriorityJob({
       operationLabel: DatabaseOperationLabel.FetchChannelDetail_SaveAllChat,
       id: channel?.id,
-      priority: QueueJobPriority.HIGH,
+      priority: QueueJobPriority.MEDIUM,
       task: async () => {
         const saveChatPromises = response?.messages?.map((message) => {
           return new Promise((resolve) => {
@@ -174,7 +177,7 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
     queue.addPriorityJob({
       operationLabel: DatabaseOperationLabel.FetchChannelDetail_RefreshChannelList,
       id: channel?.id,
-      priority: QueueJobPriority.MEDIUM,
+      priority: QueueJobPriority.LOW,
       task: async () => {
         refresh('channelList');
       },
@@ -259,8 +262,14 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
     }
   };
 
-  const goToChatScreen = (channel: ChannelList, from: AllowedGoToChatScreen) => {
+  const goToChatScreen = (
+    channel: ChannelList,
+    from?: AllowedGoToChatScreen,
+    optionalParams?: GoToChatScreenOptionalParams
+  ) => {
     setChannelAsRead(channel);
+
+    const {initialMessages = []} = optionalParams || {};
 
     const isChannelTypeChat: (BetterSocialChannelType | undefined)[] = ['ANON_PM', 'GROUP', 'PM'];
     const isChat = isChannelTypeChat.includes(channel?.channelType);
@@ -285,15 +294,20 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
       if (from === GROUP_INFO) {
         return openChat('AnonymousChatScreen', 'AnonymousChannelList');
       }
-      navigation.navigate('AnonymousChatScreen');
+      setTimeout(
+        () =>
+          navigation.navigate('AnonymousChatScreen', {
+            initialMessages
+          }),
+        10
+      );
     } else {
       if (from === GROUP_INFO) {
         return openChat('SignedChatScreen', 'SignedChannelList');
       }
-      navigation.navigate('SignedChatScreen');
+      setTimeout(() => navigation.navigate('SignedChatScreen', {initialMessages}), 10);
     }
 
-    console.log('checkpoint 7');
     return null;
   };
 

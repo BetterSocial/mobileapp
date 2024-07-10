@@ -41,7 +41,8 @@ export type BetterSocialChannelType =
   | 'ANON_PM'
   | 'POST_NOTIFICATION'
   | 'ANON_POST_NOTIFICATION'
-  | 'TOPIC';
+  | 'TOPIC'
+  | 'ANON_TOPIC';
 
 export interface ChannelList {
   id: string;
@@ -88,3 +89,7 @@ export enum ChatStatus {
   DELIVERED = 'delivered',
   READ = 'read'
 }
+
+export type GoToChatScreenOptionalParams = {
+  initialMessages?: ChatSchema[];
+};

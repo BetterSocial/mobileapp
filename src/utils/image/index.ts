@@ -1,6 +1,16 @@
 import ImageCompressionUtils from './compress';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../libraries/analytics/analyticsEventTracking';
 import {composeImageMeta} from '../string/file';
 import {uploadPhoto, uploadPhotoWithoutAuth} from '../../service/file';
+
+export type UploadOptions = {
+  withSuccessfulEventTrack?: BetterSocialEventTracking;
+  withFailedEventTrack?: BetterSocialEventTracking;
+  withSuccessfulEventTrackData?: object;
+  withFailedEventTrackData?: object;
+};
 
 const compressAndPrepareFormData = async (imagePath: string) => {
   const compressedImage = await ImageCompressionUtils.compress(imagePath);
@@ -11,7 +21,25 @@ const compressAndPrepareFormData = async (imagePath: string) => {
   return formData;
 };
 
-const uploadImage = async (imagePath: string) => {
+const sendAnalyticsEventTracking = (
+  imagePath: string,
+  success: boolean,
+  options: UploadOptions
+) => {
+  if (success && options?.withSuccessfulEventTrack) {
+    AnalyticsEventTracking.eventTrack(
+      options?.withSuccessfulEventTrack,
+      options?.withSuccessfulEventTrackData
+    );
+  } else if (!success && options?.withFailedEventTrack) {
+    AnalyticsEventTracking.eventTrack(
+      options?.withFailedEventTrack,
+      options?.withFailedEventTrackData
+    );
+  }
+};
+
+const uploadImage = async (imagePath: string, options: UploadOptions = {}) => {
   try {
     const formData = await compressAndPrepareFormData(imagePath);
 
@@ -19,11 +47,12 @@ const uploadImage = async (imagePath: string) => {
     return imageUrl;
   } catch (error) {
     console.log(error);
+    sendAnalyticsEventTracking(imagePath, false, options);
     return imagePath;
   }
 };
 
-const uploadFile = async (uri: string, name: string, type: string) => {
+const uploadFile = async (uri: string, name: string, type: string, options: UploadOptions = {}) => {
   try {
     const formData = new FormData();
     formData.append('photo', {
@@ -36,11 +65,12 @@ const uploadFile = async (uri: string, name: string, type: string) => {
     return url;
   } catch (error) {
     console.log(error?.response);
+    sendAnalyticsEventTracking(uri, false, options);
     return uri;
   }
 };
 
-const uploadImageWithoutAuth = async (imagePath: string) => {
+const uploadImageWithoutAuth = async (imagePath: string, options: UploadOptions = {}) => {
   try {
     const formData = await compressAndPrepareFormData(imagePath);
 
@@ -48,6 +78,7 @@ const uploadImageWithoutAuth = async (imagePath: string) => {
     return imageUrl;
   } catch (error) {
     console.log(error);
+    sendAnalyticsEventTracking(imagePath, false, options);
     return imagePath;
   }
 };

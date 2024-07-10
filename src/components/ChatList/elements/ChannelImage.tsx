@@ -27,13 +27,30 @@ const Big: React.FC<ChannelImageMainProps> = ({type, image, style}) => {
     );
   }
 
-  if (type === 'COMMUNITY') {
+  if (type === 'TOPIC') {
     return (
       <View
         style={[
           styles.containerImage,
           styles.containerDefaultImage,
           styles.containersigned_primary
+        ]}>
+        <FastImage
+          source={CommunityIcon}
+          resizeMode={FastImage.resizeMode.contain}
+          style={styles.imageDefaultCommunity}
+        />
+      </View>
+    );
+  }
+
+  if (type === 'ANON_TOPIC') {
+    return (
+      <View
+        style={[
+          styles.containerImage,
+          styles.containerDefaultImage,
+          styles.containerincognito_primary
         ]}>
         <FastImage
           source={CommunityIcon}
@@ -82,9 +99,21 @@ const Big: React.FC<ChannelImageMainProps> = ({type, image, style}) => {
 };
 
 const Small: React.FC<ChannelImageBadgeProps> = ({type}) => {
-  if (type === 'COMMUNITY') {
+  if (type === 'TOPIC') {
     return (
       <View style={[styles.badgeContainer, styles.containersigned_secondary]}>
+        <FastImage
+          source={CommunityIcon}
+          resizeMode={FastImage.resizeMode.contain}
+          style={[styles.badgeIcon, {top: -0.1, left: -0.06}]}
+        />
+      </View>
+    );
+  }
+
+  if (type === 'ANON_TOPIC') {
+    return (
+      <View style={[styles.badgeContainer, styles.containerincognito_secondary]}>
         <FastImage
           source={CommunityIcon}
           resizeMode={FastImage.resizeMode.contain}

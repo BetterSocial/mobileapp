@@ -1,6 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
+import SimpleToast from 'react-native-simple-toast';
 import {
   Dimensions,
   RefreshControl,
@@ -276,21 +277,30 @@ const ContactScreen = ({navigation}) => {
   };
 
   const handleInviteCommunityMember = async () => {
-    try {
-      const response = await inviteCommunityMember(
-        topicCommunityId.toString(),
-        selectedUsers?.map((user) => user?.user_id)
-      );
-      if (response.success) {
-        navigation.replace(NavigationConstants.CREATE_POST_SCREEN, {
-          isCreateCommunity: true,
-          topic: topicCommunityName
-        });
+    if (selectedUsers.length > 0) {
+      try {
+        const response = await inviteCommunityMember(
+          topicCommunityId.toString(),
+          selectedUsers?.map((user) => user?.user_id)
+        );
+        if (response.success) {
+          navigation.replace(NavigationConstants.CREATE_POST_SCREEN, {
+            isCreateCommunity: true,
+            topic: topicCommunityName
+          });
+        } else {
+          SimpleToast.show(response?.message, SimpleToast.SHORT);
+        }
+      } catch (e) {
+        if (__DEV__) {
+          console.log('error handleInviteCommunityMember: ', e);
+        }
       }
-    } catch (e) {
-      if (__DEV__) {
-        console.log('error handleInviteCommunityMember: ', e);
-      }
+    } else {
+      navigation.push(NavigationConstants.CREATE_POST_SCREEN, {
+        isCreateCommunity: true,
+        topic: topicCommunityName
+      });
     }
   };
 

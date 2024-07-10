@@ -103,7 +103,9 @@ async function sendSignedMessage(
 }
 
 async function getAllSignedChannels(timeStamp: string | undefined) {
-  const url = timeStamp ? `${baseUrl.getAllSignedChannels}` : baseUrl.getAllSignedChannels;
+  const url = timeStamp
+    ? `${baseUrl.getAllSignedChannels}?last_fetch_date=${timeStamp}`
+    : baseUrl.getAllSignedChannels;
   try {
     const response = await api.get(url);
     if (response.status === 200) {
@@ -176,10 +178,8 @@ async function createSignedChat(members: string[]) {
     if (response.status === 200) {
       return Promise.resolve(response.data);
     }
-
     return Promise.reject(response.status);
   } catch (e) {
-    console.log(e);
     return Promise.reject(e);
   }
 }

@@ -141,7 +141,7 @@ const NavHeader = (props) => {
           <>
             <View style={[styles.headerContainer]}>
               <Animated.View style={{opacity: opacityHeaderAnimation}}>
-                {initialData?.channelPicutre || topicDetail?.icon_path ? (
+                {initialData?.channelPicture || topicDetail?.icon_path ? (
                   <FastImage
                     source={
                       initialData?.channelPicutre
@@ -217,7 +217,6 @@ NavHeader.propTypes = {
   animatedHeight: PropTypes.number,
   opacityHeaderAnimation: PropTypes.number,
   opacityImage: PropTypes.number,
-  getTopicDetail: PropTypes.func,
   setMemberCount: PropTypes.func,
   memberCount: PropTypes.number,
   topicDetail: PropTypes.object,

@@ -1,32 +1,26 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
 import * as React from 'react';
-import {
-  Alert,
-  Image,
-  Linking,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
-} from 'react-native';
-import ImagePicker from 'react-native-image-crop-picker';
 import DocumentPicker from 'react-native-document-picker';
-import {createThumbnail} from 'react-native-create-thumbnail';
+import ImagePicker from 'react-native-image-crop-picker';
 import ToastMessage from 'react-native-toast-message';
+import {Alert, Image, Linking, StyleSheet, Text, TextInput, View} from 'react-native';
+import {createThumbnail} from 'react-native-create-thumbnail';
 
-import IconPlusAttachment from '../../assets/icon/IconPlusAttachment';
-import dimen from '../../utils/dimen';
-import {normalizeFontSize} from '../../utils/fonts';
-import ToggleSwitch from '../ToggleSwitch';
 import BottomSheetAttachment from './BottomSheetAttachment';
 import BottomSheetGif from './BottomSheetGif';
-import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
+import IconPlusAttachment from '../../assets/icon/IconPlusAttachment';
 import ImageUtils from '../../utils/image';
-import {ANONYMOUS, SIGNED} from '../../hooks/core/constant';
-import {COLORS} from '../../utils/theme';
+import PressEventTrackingWrapper from '../Wrapper/PressEventTrackingWrapper';
 import SendIcon from '../SendIcon';
+import ToggleSwitch from '../ToggleSwitch';
+import dimen from '../../utils/dimen';
+import useAnalyticUtilsHook from '../../libraries/analytics/useAnalyticUtilsHook';
+import {ANONYMOUS, SIGNED} from '../../hooks/core/constant';
+import {BetterSocialEventTracking} from '../../libraries/analytics/analyticsEventTracking';
+import {COLORS} from '../../utils/theme';
+import {normalizeFontSize} from '../../utils/fonts';
+import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
 
 const styles = StyleSheet.create({
   main: {
@@ -144,6 +138,9 @@ const InputMessageV2 = ({
   const [isLoadingUploadImageCamera, setIsLoadingUploadImageCamera] = React.useState(false);
   const [isLoadingUploadImageFile, setIsLoadingUploadImageFile] = React.useState(false);
   const [isLoadingUploadImageGIF, setIsLoadingUploadImageGIF] = React.useState(false);
+  const [isClosedByRef, setIsClosedByRef] = React.useState(false);
+
+  const {eventTrackByUserType, getEventName} = useAnalyticUtilsHook(type);
 
   const handleUploadMedia = async (medias) => {
     setIsLoadingUploadImageMedia(true);
@@ -165,7 +162,12 @@ const InputMessageV2 = ({
     setIsLoadingUploadImageCamera(true);
 
     const resultUrls: any = [];
-    const uploadedImageUrl = await ImageUtils.uploadImageWithoutAuth(path);
+    const uploadedImageUrl = await ImageUtils.uploadImageWithoutAuth(path, {
+      withFailedEventTrack: getEventName(
+        BetterSocialEventTracking.SIGNED_CHAT_SCREEN_ATTACHMENT_MEDIA_UPLOAD_FILE,
+        BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_ATTACHMENT_UPLOAD_FAILED
+      )
+    });
     resultUrls.push({
       type: 'image',
       asset_url: uploadedImageUrl,
@@ -236,6 +238,10 @@ const InputMessageV2 = ({
     setIsLoadingUploadImageMedia(true);
     const {success} = await requestExternalStoragePermission();
     if (success) {
+      eventTrackByUserType(
+        BetterSocialEventTracking.SIGNED_CHAT_SCREEN_ATTACHMENT_CLICK_MEDIA,
+        BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_ATTACHMENT_CLICK_MEDIA
+      );
       ImagePicker.openPicker({
         multiple: true,
         maxFiles: 20,
@@ -268,7 +274,7 @@ const InputMessageV2 = ({
             }
           }
 
-          refAttachment.current.close();
+          setIsClosedByRef(true);
           handleUploadMedia(newMedias);
         })
         .catch(() => {
@@ -286,6 +292,10 @@ const InputMessageV2 = ({
     setIsLoadingUploadImageCamera(true);
     const {success} = await requestCameraPermission();
     if (success) {
+      eventTrackByUserType(
+        BetterSocialEventTracking.SIGNED_CHAT_SCREEN_ATTACHMENT_CLICK_CAMERA,
+        BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_ATTACHMENT_CLICK_CAMERA
+      );
       ImagePicker.openCamera({
         mediaType: 'photo'
       })
@@ -299,7 +309,7 @@ const InputMessageV2 = ({
             cropperChooseText: 'Next',
             freeStyleCropEnabled: true
           });
-          refAttachment.current.close();
+          setIsClosedByRef(true);
           handleUploadCamera(imageCropped.path);
         })
         .catch(() => {
@@ -315,12 +325,16 @@ const InputMessageV2 = ({
 
   const onOpenFile = async () => {
     setIsLoadingUploadImageFile(true);
+    eventTrackByUserType(
+      BetterSocialEventTracking.SIGNED_CHAT_SCREEN_ATTACHMENT_CLICK_FILE,
+      BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_ATTACHMENT_CLICK_FILE
+    );
     DocumentPicker.pickSingle({
       presentationStyle: 'fullScreen'
     })
       .then((pickerResult) => {
         setIsLoadingUploadImageFile(false);
-        refAttachment.current.close();
+        setIsClosedByRef(true);
         handleFile(pickerResult);
       })
       .catch(() => {
@@ -333,9 +347,13 @@ const InputMessageV2 = ({
   };
 
   const onOpenGIF = () => {
-    refAttachment.current.close();
+    setIsClosedByRef(true);
     setTimeout(() => {
       refGif.current.open();
+      eventTrackByUserType(
+        BetterSocialEventTracking.SIGNED_CHAT_SCREEN_ATTACHMENT_CLICK_GIF,
+        BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_ATTACHMENT_CLICK_GIF
+      );
     }, 500);
   };
 
@@ -355,12 +373,6 @@ const InputMessageV2 = ({
   const isDisableButton = () => {
     return text?.length === 0;
   };
-  const sendButtonStyle = React.useCallback(() => {
-    const isDisabled = isDisableButton();
-    if (isDisabled) return COLORS.gray1;
-    if (type === 'SIGNED') return COLORS.signed_primary;
-    return COLORS.anon_primary;
-  }, [isDisableButton()]);
 
   const toggleChange = () => {
     if (messageDisable) {
@@ -386,10 +398,19 @@ const InputMessageV2 = ({
           : 'Switch to anonymous chat?\nMessage this user in Incognito Mode instead.',
         [
           {
-            text: 'Cancel'
+            text: 'Cancel',
+            onPress: () =>
+              eventTrackByUserType(
+                BetterSocialEventTracking.SIGNED_CHAT_SCREEN_TOGGLE_MOVE_CHAT_CLOSE_ALERT,
+                BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_TOGGLE_MOVE_CHAT_CLOSE_ALERT
+              )
           },
           {text: 'Yes, move to other chat', onPress: onToggleConfirm}
         ]
+      );
+      eventTrackByUserType(
+        BetterSocialEventTracking.SIGNED_CHAT_SCREEN_TOGGLE_MOVE_CHAT_OPEN_ALERT,
+        BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_TOGGLE_MOVE_CHAT_OPEN_ALERT
       );
     }
   };
@@ -398,6 +419,24 @@ const InputMessageV2 = ({
     if (type === SIGNED) return COLORS.signed_primary;
     return COLORS.anon_primary;
   }, []);
+
+  const onCloseAttachmentSheet = () => {
+    if (!isClosedByRef) {
+      eventTrackByUserType(
+        BetterSocialEventTracking.SIGNED_CHAT_SCREEN_ATTACHMENT_CLOSE_DRAWER,
+        BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_ATTACHMENT_CLOSE_DRAWER
+      );
+    }
+  };
+
+  React.useEffect(() => {
+    if (isClosedByRef) {
+      refAttachment?.current?.close();
+      setTimeout(() => {
+        setIsClosedByRef(false);
+      }, 500);
+    }
+  }, [isClosedByRef]);
 
   return (
     <View style={styles.main}>
@@ -433,17 +472,27 @@ const InputMessageV2 = ({
         )}
       </View>
       {text?.trim() !== '' && (
-        <TouchableOpacity
+        <PressEventTrackingWrapper
+          name={getEventName(
+            BetterSocialEventTracking.SIGNED_CHAT_SCREEN_SEND_BUTTON_CLICKED,
+            BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_SEND_BUTTON_CLICKED
+          )}
           style={[styles.btn, isDisableButton() ? styles.disableButton : styles.enableButton]}
           disabled={isDisableButton()}
           onPress={handleSendMessage}>
           <SendIcon type={type} isDisabled={isDisableButton()} />
-        </TouchableOpacity>
+        </PressEventTrackingWrapper>
       )}
       {text?.trim() === '' && (
-        <TouchableOpacity style={styles.btn} onPress={onSelectAttachment}>
+        <PressEventTrackingWrapper
+          style={styles.btn}
+          onPress={onSelectAttachment}
+          name={getEventName(
+            BetterSocialEventTracking.SIGNED_CHAT_SCREEN_PLUS_SIGN_CLICKED,
+            BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_PLUS_SIGN_CLICKED
+          )}>
           <IconPlusAttachment style={styles.icSendButton} fillIcon={plusButtonStyle()} />
-        </TouchableOpacity>
+        </PressEventTrackingWrapper>
       )}
 
       <BottomSheetAttachment
@@ -452,6 +501,7 @@ const InputMessageV2 = ({
         onOpenGIF={onOpenGIF}
         onOpenCamera={onOpenCamera}
         onOpenFile={onOpenFile}
+        onClose={onCloseAttachmentSheet}
         isLoadingUploadMedia={isLoadingUploadImageMedia}
         isLoadingUploadGIF={isLoadingUploadImageGIF}
         isLoadingUploadCamera={isLoadingUploadImageCamera}

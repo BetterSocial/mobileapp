@@ -1,13 +1,14 @@
-import FastImage from 'react-native-fast-image';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View} from 'react-native';
+import FastImage from 'react-native-fast-image';
 
-import ProfilePicture from '../../ProfileScreen/elements/ProfilePicture';
-import dimen from '../../../utils/dimen';
-import {COLORS} from '../../../utils/theme';
+import MemoIc_senddm from '../../../assets/icons/ic_send_dm';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
+import dimen from '../../../utils/dimen';
 import {fonts, normalize} from '../../../utils/fonts';
+import {COLORS} from '../../../utils/theme';
+import ProfilePicture from '../../ProfileScreen/elements/ProfilePicture';
 
 const renderDefaultImage = (DefaultImage) => {
   if (DefaultImage) {
@@ -40,10 +41,15 @@ const DomainList = (props) => {
     isCommunity,
     isBlockedSection,
     isDomain,
-    withKarma
+    withKarma,
+    isFromUserFragment
   } = props;
 
-  const renderButonAction = () => {
+  if (item?.withFollowButton === undefined || item?.withFollowButton === null) {
+    item.withFollowButton = true;
+  }
+
+  const renderButtonAction = () => {
     if (isBlockedSection) {
       if (item.isUnblocked) {
         return (
@@ -66,26 +72,34 @@ const DomainList = (props) => {
         </TouchableNativeFeedback>
       );
     }
-    if (item.isunfollowed) {
+    if (item.withFollowButton) {
+      if (item.isunfollowed) {
+        return (
+          <TouchableNativeFeedback onPress={handleSetFollow}>
+            <View style={styles.followContainer}>
+              <View style={styles.buttonFollow}>
+                <Text style={styles.textButtonFollow}>{isCommunity ? 'Join' : 'Follow'}</Text>
+              </View>
+            </View>
+          </TouchableNativeFeedback>
+        );
+      }
       return (
-        <TouchableNativeFeedback onPress={handleSetFollow}>
+        <TouchableNativeFeedback onPress={handleSetUnFollow}>
           <View style={styles.followContainer}>
-            <View style={styles.buttonFollow}>
-              <Text style={styles.textButtonFollow}>{isCommunity ? 'Join' : 'Follow'}</Text>
+            <View style={styles.buttonFollowing}>
+              {isFromUserFragment ? (
+                <MemoIc_senddm height={20} width={20} color={COLORS.signed_primary} />
+              ) : (
+                <Text style={styles.textButtonFollowing}>
+                  {isCommunity ? 'Joined' : 'Following'}
+                </Text>
+              )}
             </View>
           </View>
         </TouchableNativeFeedback>
       );
     }
-    return (
-      <TouchableNativeFeedback onPress={handleSetUnFollow}>
-        <View style={styles.followContainer}>
-          <View style={styles.buttonFollowing}>
-            <Text style={styles.textButtonFollowing}>{isCommunity ? 'Joined' : 'Following'}</Text>
-          </View>
-        </View>
-      </TouchableNativeFeedback>
-    );
   };
 
   const renderProfilePicture = () => {
@@ -148,7 +162,7 @@ const DomainList = (props) => {
           </View>
         </View>
       </TouchableOpacity>
-      {renderButonAction()}
+      {renderButtonAction()}
     </View>
   );
 };
@@ -307,6 +321,7 @@ const styles = StyleSheet.create({
 });
 
 DomainList.propTypes = {
+  isFromUserFragment: PropTypes.bool,
   item: PropTypes.object,
   isHashtag: PropTypes.bool,
   isDomain: PropTypes.bool,
