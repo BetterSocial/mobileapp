@@ -14,6 +14,7 @@ import TopicText from '../../components/TopicText';
 import removePrefixTopic from '../topics/removePrefixTopic';
 import {COLORS} from '../theme';
 import {DEFAULT_PROFILE_PIC_PATH} from '../constants';
+import {fonts} from '../fonts';
 import {getAnonymousUserId} from '../users';
 import {getUserId} from '../token';
 
@@ -555,6 +556,31 @@ const onOpenLink = (url) => {
 };
 
 /**
+ *
+ * @param {string} line
+ * @param {function} handleTopicPress
+ * @returns {React.ReactNode}
+ */
+const replaceTopicWithPressableText = (line, handleTopicPress = () => {}) => {
+  const topicRegex = /\B(\#[a-zA-Z0-9_+-]+\b)(?!;)/g;
+  return reactStringReplace(line, topicRegex, (match) => {
+    return (
+      <Text
+        key={`topic-${match}`}
+        style={{
+          color: COLORS.blueLink,
+          fontSize: 16,
+          fontFamily: fonts.inter[500],
+          lineHeight: 24
+        }}
+        onPress={() => handleTopicPress(match)}>
+        {match}
+      </Text>
+    );
+  });
+};
+
+/**
  * @typedef {Object} AnonUserInfo
  * @property {String} anon_user_info_color_code
  * @property {String} anon_user_info_color_name
@@ -625,5 +651,6 @@ export {
   styles,
   getCaptionWithLinkStyle,
   getAnonymousChatName,
-  getOfficialAnonUsername
+  getOfficialAnonUsername,
+  replaceTopicWithPressableText
 };

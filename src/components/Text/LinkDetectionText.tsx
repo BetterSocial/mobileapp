@@ -1,8 +1,16 @@
 import * as React from 'react';
-import {StyleProp, Text, TextStyle} from 'react-native';
+import reactStringReplace from 'react-string-replace';
+import {Pressable, StyleProp, StyleSheet, Text, TextStyle} from 'react-native';
+import {useNavigation} from '@react-navigation/core';
 
+import {COLORS} from '../../utils/theme';
 import {LinkableText} from '../LinkableText';
-import {isValidUrl} from '../../utils/string/StringUtils';
+import {
+  convertTopicNameToTopicPageScreenParam,
+  isValidUrl,
+  replaceTopicWithPressableText
+} from '../../utils/string/StringUtils';
+import {fonts} from '../../utils/fonts';
 
 export type LinkDetectionTextProps = {
   text: string;
@@ -17,7 +25,17 @@ const LinkDetectionText = ({
   parentTextStyle = {},
   textStyle = null
 }: LinkDetectionTextProps) => {
+  const navigation = useNavigation();
+
   const sanitizedTextPerLine = text?.split('\n');
+
+  const handleTopicPress = (topic) => {
+    const navigationParam = {
+      id: convertTopicNameToTopicPageScreenParam(topic)?.replace('#', '')
+    };
+
+    navigation.navigate('TopicPageScreen', navigationParam);
+  };
 
   if (!textStyle) textStyle = linkTextStyle;
 
@@ -32,7 +50,7 @@ const LinkDetectionText = ({
 
         return (
           <Text key={index} style={[textStyle]}>
-            {line}
+            {replaceTopicWithPressableText(line, handleTopicPress)}
           </Text>
         );
       })}
