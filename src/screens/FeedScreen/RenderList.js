@@ -1,6 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import PropTypes from 'prop-types';
 import React from 'react';
+import moment from 'moment';
 import {Dimensions, StyleSheet, View} from 'react-native';
 
 import AddCommentPreview from './elements/AddCommentPreview';
@@ -176,6 +177,16 @@ const RenderListFeed = (props) => {
     }
   };
 
+  const latestComment = React.useMemo(() => {
+    if (!item?.latest_reactions?.comment) return {};
+
+    const sortedComment = item?.latest_reactions?.comment?.sort(
+      (a, b) => moment(b.created_at).valueOf() - moment(a.created_at).valueOf()
+    );
+
+    return sortedComment;
+  }, [item]);
+
   return (
     <View key={item.id} testID="dataScroll" style={styles.cardContainer}>
       <View style={[styles.cardMain]}>
@@ -272,12 +283,12 @@ const RenderListFeed = (props) => {
         {hasComment ? (
           <View testID="previewComment">
             <PreviewComment
-              user={item.latest_reactions.comment[0].user}
-              comment={item?.latest_reactions?.comment[0]?.data?.text || ''}
-              image={item?.latest_reactions?.comment[0]?.user?.data?.profile_pic_url || ''}
-              time={item.latest_reactions.comment[0].created_at}
+              user={latestComment?.[0]?.user}
+              comment={latestComment?.[0]?.data?.text || ''}
+              image={latestComment?.[0]?.user?.data?.profile_pic_url || ''}
+              time={latestComment?.[0]?.created_at}
               totalComment={getTotalReaction(item) - 1}
-              item={item.latest_reactions.comment[0]}
+              item={latestComment?.[0]}
               onPress={() => onPressComment(isHaveSeeMore)}
               isShortText={isShortTextPost}
               isBlurred={isBlurred}

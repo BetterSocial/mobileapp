@@ -1,16 +1,16 @@
 import * as React from 'react';
+import LinearGradient from 'react-native-linear-gradient';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-import LinearGradient from 'react-native-linear-gradient';
+import BlurredLayer from '../../screens/FeedScreen/elements/BlurredLayer';
+import CommentUserName from '../CommentUsername/CommentUsername';
+import ProfilePicture from '../../screens/ProfileScreen/elements/ProfilePicture';
+import ReadMore from '../ReadMore';
 import {COLORS, SIZES} from '../../utils/theme';
 import {calculateTime} from '../../utils/time';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
-import CommentUserName from '../CommentUsername/CommentUsername';
-import ReadMore from '../ReadMore';
-import ProfilePicture from '../../screens/ProfileScreen/elements/ProfilePicture';
-import BlurredLayer from '../../screens/FeedScreen/elements/BlurredLayer';
 
 const PreviewComment = ({
   comment,
@@ -108,7 +108,7 @@ const PreviewComment = ({
                 />
               )}
             </TouchableOpacity>
-            <View style={{flexDirection: 'column'}}>
+            <View style={styles.profileContainer}>
               <TouchableOpacity onPress={openProfile} style={styles.containerUsername}>
                 <CommentUserName isPreviewComment comment={item} user={user} />
                 <View style={styles.point} />
@@ -131,6 +131,11 @@ export const styles = StyleSheet.create({
     fontSize: normalizeFontSize(10),
     color: COLORS.gray410,
     marginLeft: SIZES.base
+  },
+  profileContainer: {
+    flexDirection: 'column',
+    display: 'flex',
+    flex: 1
   },
   profile: {
     flexDirection: 'row',
