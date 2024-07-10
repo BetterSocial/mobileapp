@@ -97,6 +97,7 @@ export const setUnFollow = async (data) =>
         resolve(res.data);
       })
       .catch((err) => {
+        console.error(err.response);
         reject(err);
       });
   });
@@ -112,6 +113,7 @@ export const followUser = async (data) =>
         resolve(res.data);
       })
       .catch((err) => {
+        console.error(err.response);
         reject(err);
       });
   });
@@ -151,6 +153,7 @@ export const setFollow = async (data) => {
         resolve(res.data);
       })
       .catch((err) => {
+        console.error(err.response);
         reject(err);
       });
   });

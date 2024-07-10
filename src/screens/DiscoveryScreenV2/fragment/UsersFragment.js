@@ -127,7 +127,7 @@ const UsersFragment = ({
         user_id: myId,
         other_id: item.user_id,
         username: item.username,
-        following: item.following
+        following: followedUserIds.find((userId) => userId === item.user_id) ? true : item.following
       }
     });
   };
