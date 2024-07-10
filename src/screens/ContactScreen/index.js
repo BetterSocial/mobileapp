@@ -218,13 +218,10 @@ const ContactScreen = ({navigation}) => {
                 break;
 
               case VIEW_TYPE_DATA:
+              default:
                 dim.width = width;
                 dim.height = 72;
                 break;
-
-              default:
-                dim.width = width;
-                dim.height = 40;
             }
           }
         )
