@@ -294,7 +294,7 @@ const CreateCommunityCustomize = () => {
                 <View style={{flex: 1}}>
                   <Text style={styles.infoTitle}>Community Cover</Text>
                   <Text style={styles.infoDesc}>
-                    This banner greets those that enter your community.
+                    This banner greets those who enter your community.
                   </Text>
                   <TouchableOpacity style={styles.infoAction} onPress={() => onPhoto('cover')}>
                     <IconPencil width={14} height={14} color={COLORS.signed_primary} />
