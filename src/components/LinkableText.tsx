@@ -1,16 +1,16 @@
 import React from 'react';
-import {Linking, Text} from 'react-native';
+import {Linking, StyleProp, Text, TextStyle} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
+import TopicDetectionOnChat from './Text/TopicDetectionOnChat';
 import {COLORS} from '../utils/theme';
-import {
-  convertTopicNameToTopicPageScreenParam,
-  replaceTopicWithPressableText
-} from '../utils/string/StringUtils';
 
 interface Props {
   text: string;
-  style?: object;
+  style?: StyleProp<TextStyle>;
+  multiline?: false;
+  withTopicDetection?: boolean;
+  isFirstLine?: boolean;
 }
 
 export const LinkableText: React.FC<Props> = ({text, ...props}) => {
@@ -28,7 +28,7 @@ export const LinkableText: React.FC<Props> = ({text, ...props}) => {
 
   const handleTopicPress = (topic) => {
     const navigationParam = {
-      id: convertTopicNameToTopicPageScreenParam(topic)?.replace('#', '')
+      id: topic
     };
 
     navigation.navigate('TopicPageScreen', navigationParam);
@@ -49,14 +49,19 @@ export const LinkableText: React.FC<Props> = ({text, ...props}) => {
               key={index}
               style={{color: COLORS.blueLink, textDecorationLine: 'underline'}}
               onPress={() => handlePress(part)}>
-              {`${part} `}
+              {index === parts.length - 1 ? `${part}` : `${part} `}
             </Text>
           );
         }
-        if (part.startsWith('#')) {
+        if (part.startsWith('#') && props.withTopicDetection) {
           return (
             <Text key={index}>
-              {replaceTopicWithPressableText(part, () => handleTopicPress(part))}
+              <TopicDetectionOnChat
+                text={part}
+                multipart={parts?.length > 1}
+                onPress={handleTopicPress}
+                isFirstLine={props?.isFirstLine && index === 0}
+              />
               <Text> </Text>
             </Text>
           );

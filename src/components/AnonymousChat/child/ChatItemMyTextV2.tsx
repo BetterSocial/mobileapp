@@ -181,7 +181,11 @@ const ChatItemMyTextV2 = ({
           )}
           {attachments.length > 0 && <ChatItemAttachment attachments={attachments} />}
           {attachments.length <= 0 && (
-            <MemoLinkDetectionText text={message} linkTextStyle={getStyles()} />
+            <MemoLinkDetectionText
+              text={message}
+              linkTextStyle={getStyles()}
+              withTopicDetection={true}
+            />
           )}
 
           {renderIcon()}

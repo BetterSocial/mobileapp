@@ -67,11 +67,7 @@ exports[`TESTING ChatItemTargetText RENDER continuous should match snapshot 1`] 
         testID="chat-item-message"
       >
         <Text
-          style={
-            Array [
-              Object {},
-            ]
-          }
+          style={Object {}}
         >
           <Text
             style={
@@ -209,11 +205,7 @@ exports[`TESTING ChatItemTargetText RENDER not continuous should match snapshot 
         testID="chat-item-message"
       >
         <Text
-          style={
-            Array [
-              Object {},
-            ]
-          }
+          style={Object {}}
         >
           <Text
             style={
