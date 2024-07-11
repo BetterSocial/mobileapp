@@ -154,7 +154,7 @@ const InputMessageV2 = ({
       video_name: media?.nameVideo ?? null,
       video_type: media?.typeVideo ?? null
     }));
-    onSendButtonClicked('Sent media 🎆🌆🌉', resultUrls);
+    onSendButtonClicked('Sent media 🏞️', resultUrls);
     setIsLoadingUploadImageMedia(false);
   };
 
@@ -175,7 +175,7 @@ const InputMessageV2 = ({
       myCustomField: 'image'
     });
 
-    onSendButtonClicked('Sent media 🎆🌆🌉', resultUrls);
+    onSendButtonClicked('Sent media 🏞️', resultUrls);
     setIsLoadingUploadImageCamera(false);
   };
 
@@ -191,7 +191,7 @@ const InputMessageV2 = ({
         gif_path: gifPath
       }
     ];
-    onSendButtonClicked('Sent GIF 🎆🌆🌉', resultUrls);
+    onSendButtonClicked('Sent GIF 🏞️', resultUrls);
     setIsLoadingUploadImageGIF(false);
   };
 
