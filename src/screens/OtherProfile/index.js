@@ -85,8 +85,6 @@ const OtherProfile = () => {
   const {mappingColorFeed} = useCoreFeed();
   const {updateFollowDiscoveryContext, getIsMeFollowingTargetStatus} = useDiscovery();
 
-  const isCurrentFollowed = getIsMeFollowingTargetStatus(params.data.other_id);
-
   const {
     feeds,
     otherProfileData: dataMain,
@@ -99,6 +97,10 @@ const OtherProfile = () => {
     refetchOtherProfile,
     setOtherProfileData: setDataMain
   } = useOtherProfileScreenHooks(params?.data?.other_id, params?.data?.username);
+
+  const [isCurrentFollowed, setIsCurrentFollowed] = React.useState(
+    getIsMeFollowingTargetStatus(params.data.other_id) || params?.data?.following
+  );
 
   const isSignedMessageEnabled = dataMain.isSignedMessageEnabled ?? true;
   const isAnonimityEnabled = dataMain.isAnonMessageEnabled && isSignedMessageEnabled;
@@ -182,6 +184,7 @@ const OtherProfile = () => {
       is_following: false,
       is_me_following_target: false
     }));
+    setIsCurrentFollowed(false);
 
     const data = {
       user_id_follower: profile.myProfile.user_id,
@@ -200,6 +203,7 @@ const OtherProfile = () => {
       is_following: true,
       is_me_following_target: true
     }));
+    setIsCurrentFollowed(true);
 
     const data = {
       user_id_follower: profile.myProfile.user_id,
