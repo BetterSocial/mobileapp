@@ -43,6 +43,7 @@ import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {deleteAnonymousPost, deletePost, viewTimePost} from '../../service/post';
 import {
   changeRealName,
+  getFollower,
   getMyProfile,
   getSelfFeedsInProfile,
   removeImageProfile,
@@ -212,13 +213,13 @@ const ProfileScreen = ({route}) => {
   const {interactionsComplete} = useAfterInteractions();
   const isNotFromHomeTab = route?.params?.isNotFromHomeTab;
   const [, setIsHitApiFirstTime] = React.useState(false);
+  const [initialFollowerData, setInitialFollowerData] = React.useState([]);
 
   const updateUserClient = useUpdateClientGetstreamHook();
   const {refreshCount} = useResetContext();
   const {mappingColorFeed} = useCoreFeed();
   const LIMIT_PROFILE_FEED = 10;
   const TYPE_GALLERY = 'gallery';
-  const refBottomSheet = React.useRef();
 
   const {feeds} = myProfileFeed;
   const {
@@ -230,6 +231,19 @@ const ProfileScreen = ({route}) => {
     reloadFetchAnonymousPost,
     getProfileCache
   } = useProfileScreenHook();
+
+  const fetchFollower = async () => {
+    const result = await getFollower('');
+    if (result.code === 200) {
+      const newData = result.data.map((data) => ({
+        ...data,
+        name: data.user.username,
+        image: data.user.profile_pic_path,
+        description: null
+      }));
+      setInitialFollowerData(newData);
+    }
+  };
 
   const {fetchNextFeeds} = useFeedPreloadHook(mainFeeds?.length, () => getMyFeeds(postOffset));
   // eslint-disable-next-line consistent-return
@@ -273,6 +287,7 @@ const ProfileScreen = ({route}) => {
     if (interactionsComplete) {
       initialMyFeed();
       getProfileCache();
+      fetchFollower();
     }
   }, [interactionsComplete]);
 
@@ -348,7 +363,7 @@ const ProfileScreen = ({route}) => {
   const goToFollowers = (userId, username) => {
     navigation.navigate('Followers', {
       screen: 'TabFollowing',
-      params: {user_id: userId, username, isFollower: true}
+      params: {user_id: userId, username, isFollower: true, initialData: initialFollowerData}
     });
   };
 
