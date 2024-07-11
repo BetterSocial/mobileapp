@@ -132,7 +132,11 @@ const ChatItemTargetText = ({
           {attachments.length > 0 && <ChatItemAttachment attachments={attachments} />}
           {attachments.length <= 0 && (
             <View testID="chat-item-message">
-              <MemoLinkDetectionText linkTextStyle={getStyles()} text={message} />
+              <MemoLinkDetectionText
+                linkTextStyle={getStyles()}
+                text={message}
+                withTopicDetection={true}
+              />
             </View>
           )}
         </View>
