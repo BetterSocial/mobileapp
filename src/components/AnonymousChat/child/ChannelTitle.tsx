@@ -18,7 +18,8 @@ const ChannelTitle = ({
   hasFollowButton = false,
   isFollowing,
   handleFollow,
-  isAnonymousTab = false
+  isAnonymousTab = false,
+  hasAttachment = false
 }) => {
   const styles = StyleSheet.create({
     chatContentName: {
@@ -81,6 +82,19 @@ const ChannelTitle = ({
 
   const isSignedDM = type === BaseChannelItemTypeProps.SIGNED_PM;
 
+  const getMessageText = () => {
+    if (hasAttachment) {
+      return (
+        <Text>
+          <Text>{isMe ? 'You: ' : ''}</Text>
+          <Text style={{fontStyle: 'italic'}}>Sent media 🏞️</Text>
+        </Text>
+      );
+    }
+
+    return `${isMe ? 'You: ' : ''}${message}`;
+  };
+
   if (type?.includes('PM')) {
     const isShowFollowButton = unreadCount <= 0 && hasFollowButton;
 
@@ -96,7 +110,7 @@ const ChannelTitle = ({
 
           <View style={styles.chatMessage}>
             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.chatContentMessage}>
-              {`${isMe ? 'You: ' : ''}${message}`}
+              {getMessageText()}
             </Text>
             {!isShowFollowButton && unreadCount > 0 && (
               <View style={styles.chatContentUnreadCountContainer}>
