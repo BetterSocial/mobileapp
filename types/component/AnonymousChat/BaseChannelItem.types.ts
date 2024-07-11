@@ -51,4 +51,5 @@ export interface BaseChannelItemProps {
   showFollowingButton?: boolean;
   handleFollow?: () => void;
   channelType?: string;
+  hasAttachment?: boolean;
 }

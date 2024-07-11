@@ -72,11 +72,11 @@ const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement
       unreadCount={item?.unreadCount}
       isMe={isMe}
       hasFollowButton={followStatus?.isFollowing === false || followStatus?.isFollowingFromAction}
-      // hasFollowButton={true}
       showFollowingButton={followStatus?.isFollowingFromAction}
       handleFollow={onFollowUser}
       channelType={item?.channelType}
       dbAnonUserInfo={dbAnonUserInfo}
+      hasAttachment={item?.rawJson?.message?.attachments?.length > 0}
     />
   );
 };
