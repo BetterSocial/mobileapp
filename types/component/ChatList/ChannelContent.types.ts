@@ -8,5 +8,5 @@ export type ChannelContentProps = React.FC & {
 };
 
 export type ChannelContentTextProps = {
-  children: string | number;
+  children: string | number | React.ReactNode;
 };

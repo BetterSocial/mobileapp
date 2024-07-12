@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-use-before-define */
 import React from 'react';
-import {View} from 'react-native';
+import {Text, View} from 'react-native';
 
 import ChannelContent from './elements/ChannelContent';
 import ChannelImage from './elements/ChannelImage';
 import CustomPressable from '../CustomPressable';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {ChannelItemProps} from '../../../types/component/ChatList/ChannelItem.types';
+import {DELETED_MESSAGE_TEXT} from '../../utils/constants';
 import {calculateTime} from '../../utils/time';
 import {channelItemStyles as styles} from './ChannelItem.style';
 
@@ -20,23 +21,33 @@ const GroupChatChannelItem = (props: ChannelItemProps) => {
   const unreadCount = groupChat?.unreadCount;
   const hasBadge = unreadCount > 0;
 
-  const description = groupChat?.rawJson?.firstMessage ?? groupChat?.rawJson?.message;
-  const isSystemDescription =
-    description?.isSystem ||
-    description?.type === 'system' ||
-    description?.message?.type === 'system';
-  const isDeletedMessage = description?.type === 'deleted';
-  const sender = description?.user?.username ?? description?.user?.name;
-  const isMeAsSender =
-    description?.user?.id === signedProfileId || description?.user?.isMe || !description;
+  const isMe = groupChat?.lastUpdatedBy === signedProfileId;
+  const firstMessage = groupChat?.firstMessage;
+  const firstMessageText = firstMessage?.message;
+  let description = groupChat?.description;
 
-  let channelDescription = groupChat?.description;
-  if (!isSystemDescription && description !== channelDescription) {
-    channelDescription = isMeAsSender
-      ? `You: ${channelDescription}`
-      : `${sender}: ${channelDescription}`;
+  if (['deleted', 'notification-deleted'].includes(groupChat?.firstMessage?.type || '')) {
+    description = DELETED_MESSAGE_TEXT;
+  } else if (groupChat?.firstMessage?.type === 'system') {
+    description = firstMessageText || '';
+  } else if (isMe) {
+    description = `You: ${description}`;
+  } else if (!isMe) {
+    description = `${groupChat?.user?.username}: ${description}`;
   }
-  if (isDeletedMessage) channelDescription = '';
+
+  const getMessageText = (): React.ReactNode => {
+    if (groupChat?.firstMessage?.attachmentJson?.length) {
+      return (
+        <Text>
+          <Text>{isMe ? 'You: ' : `${groupChat?.user?.username}: `}</Text>
+          <Text style={{fontStyle: 'italic'}}>Sent media 🏞️</Text>
+        </Text>
+      );
+    }
+
+    return `${isMe ? 'You: ' : `${groupChat?.user?.username}: `}${description}`;
+  };
 
   return (
     <CustomPressable onPress={onChannelPressed}>
@@ -55,7 +66,7 @@ const GroupChatChannelItem = (props: ChannelItemProps) => {
               </ChannelContent.Time>
             </View>
             <View style={{flexDirection: 'row'}}>
-              <ChannelContent.Description>{channelDescription}</ChannelContent.Description>
+              <ChannelContent.Description>{getMessageText()}</ChannelContent.Description>
               {hasBadge && <ChannelContent.Badge>{unreadCount}</ChannelContent.Badge>}
             </View>
           </ChannelContent>

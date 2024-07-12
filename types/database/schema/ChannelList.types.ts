@@ -2,6 +2,7 @@
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 
 import {ChatListDetail} from './ChatListDetail.types';
+import {MessageType} from '../../../src/hooks/core/websocket/types';
 import {SQLiteBoolean} from '../../../src/database/schema/UserSchema';
 
 export interface UserSchema {
@@ -23,6 +24,12 @@ export interface UserSchema {
   anon_user_info_color_code: string | null;
   isAnonymous: SQLiteBoolean | null;
 }
+
+export type ChannelFirstMessage = {
+  message: string;
+  type: MessageType;
+  attachmentJson: object[] | null;
+};
 
 export interface ChannelListMemberSchema {
   id: string;
@@ -65,6 +72,8 @@ export interface ChannelList {
   anon_user_info_color_code: string | null;
   anon_user_info_color_name: string | null;
   topicPostExpiredAt: string | null;
+  firstMessage: ChannelFirstMessage | null;
+  isLastUpdatedByMe: boolean | undefined;
 }
 
 export interface ChatSchema {
