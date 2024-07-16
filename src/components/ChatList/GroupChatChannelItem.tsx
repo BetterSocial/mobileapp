@@ -37,7 +37,15 @@ const GroupChatChannelItem = (props: ChannelItemProps) => {
   }
 
   const getMessageText = (): React.ReactNode => {
-    if (groupChat?.firstMessage?.attachmentJson?.length) {
+    let attachmentJson;
+
+    try {
+      attachmentJson = JSON.parse(groupChat?.firstMessage?.attachmentJson || '[]');
+    } catch (e) {
+      console.log('error parsing attachment json', e);
+    }
+
+    if (attachmentJson?.length > 1) {
       return (
         <Text>
           <Text>{isMe ? 'You: ' : `${groupChat?.user?.username}: `}</Text>
@@ -46,7 +54,7 @@ const GroupChatChannelItem = (props: ChannelItemProps) => {
       );
     }
 
-    return `${isMe ? 'You: ' : `${groupChat?.user?.username}: `}${description}`;
+    return `${description}`;
   };
 
   return (
