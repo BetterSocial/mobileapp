@@ -117,6 +117,7 @@ const PostNotificationChannelItem: (props: MessageChannelItemProps) => React.Rea
         anon_user_info_emoji_code: item?.anon_user_info_emoji_code,
         anon_user_info_emoji_name: item?.anon_user_info_emoji_name
       }}
+      postNotificationIsMediaOnly={item?.rawJson?.isMediaOnlyMessage}
     />
   );
 };
