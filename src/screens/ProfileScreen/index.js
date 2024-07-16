@@ -107,7 +107,7 @@ const Header = (props) => {
     const currentTime = new Date().getTime();
     const id = feeds && feeds[viewPostTimeIndex]?.id;
     if (id) viewTimePost(id, currentTime - timer.getTime(), SOURCE_FEED_TAB);
-    navigator.navigate(NavigationConstants.CREATE_POST_SCREEN);
+    navigator.navigate(NavigationConstants.CREATE_POST_SCREEN, {});
     setTimer(new Date(), dispatch);
   };
   return (
