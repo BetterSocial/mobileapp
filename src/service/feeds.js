@@ -7,7 +7,7 @@ import {FEED_CHAT_KEY} from '../utils/constants';
 
 export const getFeedNotification = async () => {
   try {
-    const url = '/feeds/feed-chat';
+    const url = '/feeds/feed-chat-v2';
     const feedNotif = await api.get(url);
     return feedNotif.data;
   } catch (e) {
