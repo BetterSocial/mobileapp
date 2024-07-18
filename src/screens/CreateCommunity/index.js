@@ -21,9 +21,7 @@ import {Input} from '../../components/Input';
 import {ProgressBar} from '../../components/ProgressBar';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {setCapitalFirstLetter} from '../../utils/Utils';
-import {NavigationConstants} from '../../utils/constants';
 import {submitCommunityName, verifyCommunityName} from '../../service/topics';
-import DiscoveryRepo from '../../service/discovery';
 
 const MAXIMUM_NAME_LENGTH = 64;
 const MINIMUM_NAME_LENGTH = 3;
@@ -97,7 +95,7 @@ const CreateCommunity = () => {
     if (name && name.length >= MINIMUM_NAME_LENGTH && typeFetch === 'available') {
       const response = await submitCommunityName(name);
       if (response.success) {
-        navigation.replace('CreateCommunityCustomize', {
+        navigation.replace('ContactScreen', {
           isCreateCommunity: true,
           topicCommunityId: response.topic_id,
           topicCommunityName: name
