@@ -41,7 +41,7 @@ describe('TESTING anonymousMessageRepo', () => {
 
       // Assertion
       expect(result).toEqual({});
-      expect(anonymousApi.get).toBeCalledWith('/feeds/feed-chat/activityId');
+      expect(anonymousApi.get).toBeCalledWith('/feeds/feed-chat-v2/activityId');
     });
   });
 
@@ -60,7 +60,7 @@ describe('TESTING anonymousMessageRepo', () => {
 
       // Assertion
       expect(result).toEqual([]);
-      expect(anonymousApi.get).toBeCalledWith('/feeds/feed-chat/anonymous');
+      expect(anonymousApi.get).toBeCalledWith('/feeds/feed-chat-v2/anonymous');
     });
   });
 

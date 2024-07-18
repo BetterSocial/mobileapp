@@ -25,11 +25,11 @@ const baseUrl = {
   checkIsTargetAllowingAnonDM: 'chat/channels/check-allow-anon-dm-status',
   sendSignedMessage: '/chat/send-signed-message',
   getAllSignedChannels: '/chat/channels/signed',
-  getAllSignedPostNotifications: '/feeds/feed-chat',
+  getAllSignedPostNotifications: '/feeds/feed-chat-v2',
   setChannelAsRead: '/chat/channels/read',
   createSignedChat: '/chat/channels-signed',
   deleteMessage: (messageId: string) => `/chat/message/${messageId}`,
-  getSingleSignedPostNotifications: (activityId: string) => `/feeds/feed-chat/${activityId}`,
+  getSingleSignedPostNotifications: (activityId: string) => `/feeds/feed-chat-v2/${activityId}`,
   getSignedChannelDetail: (channelType: GetstreamChannelType, channelId: string) =>
     `/chat/channel-detail?channel_type=${channelType}&channel_id=${channelId}`,
   changeSignedChannelDetail: '/chat/channel-detail'
