@@ -129,6 +129,12 @@ const usePushNotificationHook = () => {
   };
 
   const __handleNotification = async (notification) => {
+    if (notification.data.type === 'topic' && notification?.data?.topic_name) {
+      navigation.navigate('TopicPageScreen', {
+        id: notification?.data?.topic_name
+      });
+    }
+
     if (notification.data.type === 'feed' || notification.data.type === 'reaction') {
       navigation.navigate('PostDetailPage', {
         feedId: notification.data.feed_id,
