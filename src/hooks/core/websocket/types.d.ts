@@ -6,6 +6,23 @@ export type WebsocketUserDataType = {
   image?: string;
 };
 
+export type BetterSocialMessageType =
+  | 'follow_user'
+  | 'follow_topic'
+  | 'new_topic_post'
+  | 'add_member_to_group'
+  | 'remove_member_from_group'
+  | 'change_channel_detail'
+  | 'leave_group';
+
+export type MessageType =
+  | 'regular'
+  | 'system'
+  | 'deleted'
+  | 'reply'
+  | 'reply-prompt'
+  | 'notification-deleted';
+
 export type GetstreamMessage = {
   attachments: any[];
   cid: string;
@@ -13,13 +30,7 @@ export type GetstreamMessage = {
   html: string;
   id: string;
   latest_reactions: any[];
-  message_type:
-    | 'regular'
-    | 'system'
-    | 'deleted'
-    | 'reply'
-    | 'reply-prompt'
-    | 'notification-deleted';
+  message_type: MessageType;
   mentioned_users: any[];
   own_reactions: any[];
   pin_expires: any;
@@ -54,14 +65,7 @@ export type GetstreamMessage = {
   ignore_unread_count?: boolean;
   textOwnMessage?: string;
   type: string;
-  better_type?:
-    | 'follow_user'
-    | 'follow_topic'
-    | 'new_topic_post'
-    | 'add_member_to_group'
-    | 'remove_member_from_group'
-    | 'change_channel_detail'
-    | 'leave_group';
+  better_type?: BetterSocialMessageType;
   only_show_to_system_user?: boolean;
   text: string;
   other_text?: string;
