@@ -129,23 +129,29 @@ const usePushNotificationHook = () => {
   };
 
   const __handleNotification = async (notification) => {
-    if (notification.data.type === 'feed' || notification.data.type === 'reaction') {
+    if (notification?.data?.type === 'topic' && notification?.data?.topic_name) {
+      navigation.navigate('TopicPageScreen', {
+        id: notification?.data?.topic_name
+      });
+    }
+
+    if (notification?.data?.type === 'feed' || notification?.data?.type === 'reaction') {
       navigation.navigate('PostDetailPage', {
         feedId: notification.data.feed_id,
         is_from_pn: true
       });
     }
-    if (notification.data.type === 'follow_user') {
+    if (notification?.data?.type === 'follow_user') {
       navigation.navigate('OtherProfile', {
         data: {
-          user_id: notification.data.user_id,
-          other_id: notification.data.user_id_follower,
-          username: notification.data.username_follower
+          user_id: notification?.data?.user_id,
+          other_id: notification?.data?.user_id_follower,
+          username: notification?.data?.username_follower
         }
       });
     }
-    if (notification.data.type === 'message.new') {
-      if (notification.userInteraction) {
+    if (notification?.data?.type === 'message.new') {
+      if (notification?.userInteraction) {
         const selectedChannel = await ChannelList.getSchemaById(
           localDb,
           notification?.data?.channel_id
