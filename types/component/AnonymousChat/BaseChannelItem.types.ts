@@ -52,4 +52,5 @@ export interface BaseChannelItemProps {
   handleFollow?: () => void;
   channelType?: string;
   hasAttachment?: boolean;
+  postNotificationIsMediaOnly?: boolean;
 }

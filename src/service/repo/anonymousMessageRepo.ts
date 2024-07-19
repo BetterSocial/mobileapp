@@ -15,9 +15,9 @@ const baseUrl = {
   checkIsTargetAllowingAnonDM: 'chat/channels/check-allow-anon-dm-status',
   sendAnonymousMessage: '/chat/anonymous',
   getAllAnonymousChannels: '/chat/channels',
-  getAllAnonymousPostNotifications: '/feeds/feed-chat/anonymous',
+  getAllAnonymousPostNotifications: '/feeds/feed-chat-v2/anonymous',
   deleteMessage: (messageId: string) => `/chat/message/${messageId}`,
-  getSingleAnonymousPostNotifications: (activityId: string) => `/feeds/feed-chat/${activityId}`,
+  getSingleAnonymousPostNotifications: (activityId: string) => `/feeds/feed-chat-v2/${activityId}`,
   setChannelAsRead: (channelId: string) => `/chat/channels/${channelId}/read`,
   getAnonymousChannelDetail: (channelType: GetstreamChannelType, channelId: string) =>
     `/chat/channel-detail?channel_type=${channelType}&channel_id=${channelId}`
