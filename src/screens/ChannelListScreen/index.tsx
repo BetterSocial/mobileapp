@@ -14,6 +14,7 @@ import Search from './elements/Search';
 import useChannelGetInitialMessagesHook from '../../hooks/core/chat/useChannelGetInitialMessagesHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import useRootChannelListHook from '../../hooks/screen/useRootChannelListHook';
+import useFetchChannelHook from '../../hooks/core/chat/useFetchChannelHook';
 import useSignedChannelListScreenHook from '../../hooks/screen/useSignedChannelListHook';
 import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
 import AnalyticsEventTracking, {
@@ -35,6 +36,7 @@ const ChannelListScreen = ({route}) => {
     goToCommunityScreen,
     goToContactScreen
   } = useSignedChannelListScreenHook();
+  const {getAllSignedChannels} = useFetchChannelHook();
   const {getInitialMessagesFromHashMap, viewabilityConfigCallbackPairs} =
     useChannelGetInitialMessagesHook();
 
@@ -44,6 +46,7 @@ const ChannelListScreen = ({route}) => {
 
   React.useEffect(() => {
     if (isFocused) {
+      getAllSignedChannels();
       refresh('channelList');
       checkNotificationPermission();
     }
