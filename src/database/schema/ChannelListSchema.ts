@@ -185,10 +185,10 @@ class ChannelList implements BaseDbSchema {
           this.unreadCount,
           this.channelType,
           this.lastUpdatedAt,
-          this.lastUpdatedBy,
-          this.createdAt,
-          this.expiredAt,
-          this.topicPostExpiredAt,
+          this.lastUpdatedBy ?? null,
+          this.createdAt ?? new Date(),
+          this.expiredAt ?? null,
+          this.topicPostExpiredAt ?? null,
           jsonString,
           this.anon_user_info_color_code,
           this.anon_user_info_color_name,
@@ -503,7 +503,7 @@ class ChannelList implements BaseDbSchema {
     anonUserInfo: AnonUserInfo | null = null
   ): ChannelList {
     const isPM = channelType === 'PM';
-    const firstMessage = data?.firstMessage;
+    const firstMessage = data?.messages[0] || data?.firstMessage;
     const isSystemMessage = firstMessage?.type === 'system' || firstMessage?.isSystem;
     const isMe = firstMessage?.user?.id === data?.myUserId;
     let descriptionSystemMessage;
@@ -517,9 +517,9 @@ class ChannelList implements BaseDbSchema {
       description: descriptionSystemMessage || firstMessage?.text || firstMessage?.message || '',
       unreadCount: data?.unreadCount ?? 0,
       channelType,
-      lastUpdatedAt: data?.last_message_at ?? data?.updated_at,
-      lastUpdatedBy: firstMessage?.user?.id,
-      createdAt: data?.created_at,
+      lastUpdatedAt: data?.last_message_at || data?.updated_at,
+      lastUpdatedBy: firstMessage?.user?.id || data?.created_by?.id,
+      createdAt: data?.created_at || data?.channel?.created_at,
       topicPostExpiredAt: data?.topicPostExpiredAt,
       rawJson: data,
       user: null,

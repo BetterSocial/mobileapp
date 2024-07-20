@@ -45,7 +45,7 @@ interface SignedMessageRepoTypes {
     attachments: any,
     replyMessageId?: string
   ) => Promise<any>;
-  getAllSignedChannels: (timeStamp: string) => Promise<ChannelData[]>;
+  getAllSignedChannels: (timeStamp?: string) => Promise<ChannelData[]>;
   getAllSignedPostNotifications: (timeStamp: string) => Promise<SignedPostNotification[]>;
   getSingleSignedPostNotifications: (activityId: string) => Promise<SignedPostNotification>;
   setChannelAsRead: (channelId: string, channelType: ChannelTypeEnum) => Promise<boolean>;
@@ -102,7 +102,7 @@ async function sendSignedMessage(
   }
 }
 
-async function getAllSignedChannels(timeStamp: string | undefined) {
+async function getAllSignedChannels(timeStamp?: string | undefined) {
   const url = timeStamp
     ? `${baseUrl.getAllSignedChannels}?last_fetch_date=${timeStamp}`
     : baseUrl.getAllSignedChannels;
