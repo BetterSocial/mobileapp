@@ -87,11 +87,11 @@ const UsersFragment = ({
   const navigation = useNavigation();
   const [client] = React.useContext(Context).client;
   const {exchangeFollower, users, updateFollowDiscoveryContext} = useDiscovery();
+  const [discovery] = React.useContext(Context).discovery;
   const [loadingDM, setLoadingDM] = React.useState(false);
   const {createSignChat, loadingCreateChat} = useCreateChat();
   const [activeSections, setActiveSections] = React.useState([]);
   const [followedUserIds, setFollowedUserIds] = React.useState([]);
-
   const route = useRoute();
 
   const [myId, setMyId] = React.useState('');

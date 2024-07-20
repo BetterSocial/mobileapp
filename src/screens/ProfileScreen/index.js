@@ -81,6 +81,7 @@ import LinkAndSocialMedia from './elements/LinkAndSocialMedia';
 import ProfileHeader from './elements/ProfileHeader';
 import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
+import DiscoveryAction from '../../context/actions/discoveryAction';
 
 const {width} = Dimensions.get('screen');
 
@@ -191,6 +192,7 @@ const ProfileScreen = ({route}) => {
   const [profile, dispatchProfile] = React.useContext(Context).profile;
   const [, dispatch] = React.useContext(Context).users;
   const [myProfileFeed, myProfileDispatch] = React.useContext(Context).myProfileFeed;
+  const [, discoveryDispatch] = React.useContext(Context).discovery;
 
   const [dataMain, setDataMain] = React.useState({});
   const [, setDataMainBio] = React.useState('');
@@ -242,6 +244,11 @@ const ProfileScreen = ({route}) => {
         description: null
       }));
       setInitialFollowerData(newData);
+
+      const followedUsers = newData.filter((item) => item.user.following);
+      const unfollowedUsers = newData.filter((item) => !item.user.following);
+      DiscoveryAction.setNewFollowedUsers(followedUsers, discoveryDispatch);
+      DiscoveryAction.setNewUnfollowedUsers(unfollowedUsers, discoveryDispatch);
     }
   };
 
