@@ -208,11 +208,12 @@ const UsersFragment = ({
     const checkUserIsBlockHandle = async () => {
       try {
         setLoadingDM(true);
+        const userId = item?.user_id || item?.userId || item?.user?.user_id;
         const sendData = {
-          user_id: item?.user_id || item?.userId
+          user_id: userId
         };
         const members = [];
-        members.push(profile?.myProfile?.user_id, item?.user_id || item?.userId);
+        members.push(profile?.myProfile?.user_id, userId);
         const processGetBlock = await checkUserBlock(sendData);
         if (!processGetBlock.data.data.blocked && !processGetBlock.data.data.blocker) {
           setLoadingDM(false);
