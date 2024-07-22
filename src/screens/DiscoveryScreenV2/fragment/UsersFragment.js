@@ -91,7 +91,6 @@ const UsersFragment = ({
   const {createSignChat, loadingCreateChat} = useCreateChat();
   const [activeSections, setActiveSections] = React.useState([]);
   const [followedUserIds, setFollowedUserIds] = React.useState([]);
-
   const route = useRoute();
 
   const [myId, setMyId] = React.useState('');
