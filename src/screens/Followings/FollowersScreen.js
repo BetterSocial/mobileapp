@@ -11,12 +11,14 @@ import Search from '../DiscoveryScreenV2/elements/Search';
 import {getFollower} from '../../service/profile';
 import {Header} from '../../components';
 import {fonts} from '../../utils/fonts';
+import DiscoveryAction from '../../context/actions/discoveryAction';
 
 function FollowersScreen() {
   const route = useRoute();
   const {params} = route;
   const navigation = useNavigation();
   const [profileState, dispatchNavbar] = React.useContext(Context).profile;
+  const [discovery, discoveryDispatch] = React.useContext(Context).discovery;
 
   const isAndroid = Platform.OS === 'android';
 
@@ -26,7 +28,6 @@ function FollowersScreen() {
   const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true);
 
   const fetchFollower = async (withLoading, text) => {
-    if (withLoading) setIsLoading(true);
     const result = await getFollower(text);
     if (result.code === 200) {
       const newData = result.data.map((data) => ({
@@ -36,6 +37,11 @@ function FollowersScreen() {
         description: null
       }));
       setDataFollower(newData);
+
+      const followedUsers = newData.filter((item) => item.user.following);
+      const unfollowedUsers = newData.filter((item) => !item.user.following);
+      DiscoveryAction.setNewFollowedUsers(followedUsers, discoveryDispatch);
+      DiscoveryAction.setNewUnfollowedUsers(unfollowedUsers, discoveryDispatch);
       if (withLoading) setIsLoading(false);
     }
   };
@@ -114,8 +120,12 @@ function FollowersScreen() {
 
       <Followings
         isLoading={isLoading}
-        dataFollower={followedUsers}
-        dataUnfollowed={unfollowedUsers}
+        dataFollower={
+          discovery?.followedUsers?.length > 0 ? discovery?.followedUsers : followedUsers
+        }
+        dataUnfollowed={
+          discovery?.unfollowedUsers?.length > 0 ? discovery?.unfollowedUsers : unfollowedUsers
+        }
         setDataFollower={setDataFollower}
       />
     </View>
