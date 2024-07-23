@@ -97,11 +97,18 @@ const CreateCommunity = () => {
     if (name && name.length >= MINIMUM_NAME_LENGTH && typeFetch === 'available') {
       const response = await submitCommunityName(name);
       if (response.success) {
-        navigation.replace('CreateCommunityCustomize', {
+        navigation.replace('ContactScreen', {
           isCreateCommunity: true,
           topicCommunityId: response.topic_id,
           topicCommunityName: name
         });
+
+        // disabled v4 add images
+        // navigation.replace('CreateCommunityCustomize', {
+        //   isCreateCommunity: true,
+        //   topicCommunityId: response.topic_id,
+        //   topicCommunityName: name
+        // });
       }
     } else {
       if (!name) {
