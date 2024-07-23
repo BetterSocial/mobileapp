@@ -69,10 +69,7 @@ const NavHeader = (props) => {
 
   const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 
-  const additionalHeaderHeight =
-    isHeaderHide || initialData?.coverImage !== undefined || coverPath !== null
-      ? dimen.normalizeDimen(12)
-      : 0;
+  const additionalHeaderHeight = isHeaderHide ? dimen.normalizeDimen(12) : 0;
 
   return (
     <View>
