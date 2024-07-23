@@ -94,4 +94,5 @@ export interface ChannelData {
   unreadCount?: number;
   firstMessage: Message;
   topicPostExpiredAt?: string;
+  channel?: any;
 }
