@@ -21,6 +21,7 @@ import useViewPostTimeHook from './hooks/useViewPostTimeHook';
 import {Shimmer} from '../../components/Shimmer/Shimmer';
 import useAnonymousChannelListScreenHook from '../../hooks/screen/useAnonymousChannelListHook';
 import StorageUtils from '../../utils/storage';
+import useDiscovery from '../DiscoveryScreenV2/hooks/useDiscovery';
 
 let lastDragY = 0;
 
@@ -59,6 +60,8 @@ const FeedScreen = (props) => {
     setShowNavbar,
     setUpVote
   } = useCoreFeed();
+
+  const {topics} = useDiscovery();
 
   const {channels: anonChannels} = useAnonymousChannelListScreenHook();
 
@@ -228,7 +231,8 @@ const FeedScreen = (props) => {
     sendViewPostTime(true);
 
     navigation.navigate('DiscoveryScreen', {
-      tab: DISCOVERY_TAB_TOPICS
+      tab: DISCOVERY_TAB_TOPICS,
+      initialTopics: topics
     });
   };
 
