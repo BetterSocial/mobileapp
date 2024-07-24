@@ -26,7 +26,7 @@ import {Header} from '../../components';
 import {fonts} from '../../utils/fonts';
 
 const DiscoveryScreenV2 = ({route}) => {
-  const {tab} = route.params;
+  const {tab, initialTopics} = route.params;
   const [selectedScreen, setSelectedScreen] = React.useState(tab || 0);
   const [isLoadingDiscovery, setIsLoadingDiscovery] = React.useState({
     user: false,
@@ -261,6 +261,7 @@ const DiscoveryScreenV2 = ({route}) => {
           fetchData={fetchDiscoveryData}
           searchText={searchText}
           withoutRecent={route.name === 'Followings'}
+          initialTopics={initialTopics}
         />
       );
 

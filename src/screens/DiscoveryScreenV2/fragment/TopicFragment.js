@@ -81,7 +81,8 @@ const TopicFragment = ({
   setUnfollowedTopic,
   fetchData = () => {},
   searchText,
-  withoutRecent = false
+  withoutRecent = false,
+  initialTopics
 }) => {
   const [activeSections, setActiveSections] = React.useState([]);
 
@@ -229,10 +230,11 @@ const TopicFragment = ({
     });
 
   const __renderTopicItems = () => {
+    const dataToUse = isFirstTimeOpen ? initialTopics : topics;
     const followingTopics = [];
     const unfollowingTopics = [];
 
-    topics.forEach((item) => {
+    dataToUse.forEach((item) => {
       if (item.user_id_follower) {
         followingTopics.push(item);
       } else {
@@ -382,7 +384,8 @@ TopicFragment.propTypes = {
   setUnfollowedTopic: PropTypes.func,
   fetchData: PropTypes.func,
   searchText: PropTypes.string,
-  withoutRecent: PropTypes.bool
+  withoutRecent: PropTypes.bool,
+  initialTopics: PropTypes.array
 };
 
 export default TopicFragment;

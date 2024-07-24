@@ -24,6 +24,7 @@ import {Shimmer} from '../../components/Shimmer/Shimmer';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {setFeedByIndex} from '../../context/actions/feeds';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
+import useDiscovery from '../DiscoveryScreenV2/hooks/useDiscovery';
 
 let lastDragY = 0;
 
@@ -62,6 +63,8 @@ const FeedScreen = (props) => {
     setShowNavbar,
     setUpVote
   } = useCoreFeed();
+
+  const {topics} = useDiscovery();
 
   const {channels: anonChannels} = useAnonymousChannelListScreenHook();
 
@@ -236,7 +239,8 @@ const FeedScreen = (props) => {
     sendViewPostTime(true);
 
     navigation.navigate('DiscoveryScreen', {
-      tab: DISCOVERY_TAB_TOPICS
+      tab: DISCOVERY_TAB_TOPICS,
+      initialTopics: topics
     });
 
     AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.MAIN_FEED_SEARCH_BAR_CLICKED);
