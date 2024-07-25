@@ -230,7 +230,7 @@ const UsersFragmentCommunity = ({
         data={data || []}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
-        onEndReached={() => fetchData()}
+        onEndReached={() => (data.length > 0 ? fetchData() : null)}
         onEndReachedThreshold={0.6}
         keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps="handled"

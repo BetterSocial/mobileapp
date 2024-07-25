@@ -279,7 +279,7 @@ const TopicFragment = ({
           data={data}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
-          onEndReached={() => fetchData()}
+          onEndReached={() => (firstData.length > 0 ? fetchData() : null)}
           onEndReachedThreshold={0.6}
         />
       </View>
