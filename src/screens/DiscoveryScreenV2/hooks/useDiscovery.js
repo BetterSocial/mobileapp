@@ -1,5 +1,6 @@
 import React from 'react';
 
+import {uniqBy} from 'lodash';
 import DiscoveryAction from '../../../context/actions/discoveryAction';
 import following from '../../../context/actions/following';
 import {Context} from '../../../context';
@@ -57,10 +58,13 @@ const useDiscovery = () => {
   };
 
   const topics = React.useMemo(() => {
-    return discovery.initialTopics.map((item) => ({
-      ...item,
-      following: item.following !== undefined ? item.following : item.user_id_follower !== null
-    }));
+    return uniqBy(
+      discovery.initialTopics.map((item) => ({
+        ...item,
+        following: item.following !== undefined ? item.following : item.user_id_follower !== null
+      })),
+      (item) => item.topic_id
+    );
   }, [discovery.initialTopics]);
 
   const mapTopic = (newTopic) => {
