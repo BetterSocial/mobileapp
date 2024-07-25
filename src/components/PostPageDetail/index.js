@@ -554,7 +554,7 @@ const PostPageDetailIdComponent = (props) => {
   };
 
   const handleRefreshComment = async () => {
-    await getComment(false, true);
+    await getComment(false, false);
   };
 
   const handleRefreshChildComment = async () => {
@@ -691,7 +691,7 @@ const PostPageDetailIdComponent = (props) => {
                   itemParent={item}
                   comments={comments}
                   isLoading={loadingPost}
-                  refreshComment={handleRefreshComment}
+                  refreshComment={() => getComment(false, false)}
                   refreshChildComment={handleRefreshChildComment}
                   findCommentAndUpdate={findCommentAndUpdate}
                   contextSource={contextSource}
@@ -740,7 +740,7 @@ const PostPageDetailIdComponent = (props) => {
             }}
           />
 
-          <BlockComponent ref={refBlockComponent} refresh={updateFeed} screen="post_detail_page" />
+          <BlockComponent ref={refBlockComponent} screen="post_detail_page" />
         </React.Fragment>
       ) : null}
     </View>
