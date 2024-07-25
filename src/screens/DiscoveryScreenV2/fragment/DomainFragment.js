@@ -329,7 +329,7 @@ const DomainFragment = ({
         data={data}
         keyExtractor={(_, index) => index.toString()}
         renderItem={renderItemList}
-        onEndReached={() => fetchData()}
+        onEndReached={() => (firstData.length > 0 ? fetchData() : null)}
         onEndReachedThreshold={0.6}
         keyboardShouldPersistTaps="handled"
       />
