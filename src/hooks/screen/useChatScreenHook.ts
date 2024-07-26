@@ -3,12 +3,14 @@ import 'react-native-get-random-values';
 
 import * as React from 'react';
 import {useMutation} from 'react-query';
+import {useRecoilState} from 'recoil';
 import {useRoute} from '@react-navigation/core';
 import {v4 as uuid} from 'uuid';
 
 import ChannelList from '../../database/schema/ChannelListSchema';
 import ChatSchema from '../../database/schema/ChatSchema';
 import UserSchema from '../../database/schema/UserSchema';
+import currentChatScreenAtom from '../../atom/currentChatScreenAtom';
 import useAnalyticUtilsHook from '../../libraries/analytics/useAnalyticUtilsHook';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import useDatabaseQueueHook from '../core/queue/useDatabaseQueueHook';
@@ -36,16 +38,12 @@ export const ScrollContext = React.createContext<ScrollContextProps | null>(null
 
 function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const {localDb, refresh, otherListener} = useLocalDatabaseHook();
-  const {
-    selectedChannel,
-    goBackFromChatScreen,
-    goToChatInfoScreen,
-    setChannelAsRead,
-    setSelectedChannel
-  } = useChatUtilsHook(type);
+  const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen, setChannelAsRead} =
+    useChatUtilsHook(type);
   const {anonProfileId, signedProfileId} = useUserAuthHook();
   const {queue} = useDatabaseQueueHook();
   const {eventTrackByUserType, getEventName} = useAnalyticUtilsHook(type);
+  const [, setCurrentChatScreen] = useRecoilState(currentChatScreenAtom);
 
   const {params} = useRoute();
 
@@ -334,8 +332,10 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   }, [localDb, otherListener[`chat_${selectedChannel?.id}`], selectedChannel]);
 
   React.useEffect(() => {
+    setCurrentChatScreen(type === 'SIGNED' ? 'SignedChatScreen' : 'AnonymousChatScreen');
     return () => {
       setChats([]);
+      setCurrentChatScreen(null);
     };
   }, []);
 
