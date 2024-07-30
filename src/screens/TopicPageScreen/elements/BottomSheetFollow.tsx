@@ -1,15 +1,19 @@
-import React, {forwardRef, Ref} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import React, {Ref, forwardRef} from 'react';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+
 import IconClose from '../../../assets/icon/IconClose';
+import UserItem from './UserItem';
+import dimen from '../../../utils/dimen';
+import useChatClientHook from '../../../utils/getstream/useChatClientHook';
+import useDiscovery from '../../DiscoveryScreenV2/hooks/useDiscovery';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../../libraries/analytics/analyticsEventTracking';
 import {BottomSheetV2} from '../../../components/BottomSheet';
 import {Button} from '../../../components/Button';
-import dimen from '../../../utils/dimen';
-import {fonts, normalizeFontSize} from '../../../utils/fonts';
-import useChatClientHook from '../../../utils/getstream/useChatClientHook';
 import {COLORS} from '../../../utils/theme';
-import useDiscovery from '../../DiscoveryScreenV2/hooks/useDiscovery';
-import UserItem from './UserItem';
+import {fonts, normalizeFontSize} from '../../../utils/fonts';
 
 export type Follow = 'signed' | 'incognito' | '';
 
@@ -53,6 +57,11 @@ const BottomSheetFollow = forwardRef((props: BottomSheetFollowProps, ref: Ref<RB
       try {
         await followTopic(topicName, isIncognito);
         updateFollowTopicDiscoveryContext(true, {topic_id: topicId}, true);
+        AnalyticsEventTracking.eventTrack(
+          type === 'signed'
+            ? BetterSocialEventTracking.FEED_COMMUNITY_PAGE_JOIN_AS_SIGNED_CLICKED
+            : BetterSocialEventTracking.FEED_COMMUNITY_PAGE_JOIN_AS_ANON_CLICKED
+        );
       } catch (error) {
         if (__DEV__) {
           console.log(error);
@@ -86,12 +95,21 @@ const BottomSheetFollow = forwardRef((props: BottomSheetFollowProps, ref: Ref<RB
 
     try {
       const isIncognito = type === 'incognito';
-      await followTopic(topicName, isIncognito);
+      followTopic(topicName, isIncognito);
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.FEED_COMMUNITY_PAGE_JOIN_LEAVE_COMMUNITY
+      );
     } catch (error) {
       if (__DEV__) {
         console.log(error);
       }
     }
+  };
+
+  const leaveCommunity = () => {
+    handleUnfollowTopic({
+      type: followType
+    });
   };
 
   return (
@@ -153,11 +171,7 @@ const BottomSheetFollow = forwardRef((props: BottomSheetFollowProps, ref: Ref<RB
               paddingHorizontal: dimen.normalizeDimen(20)
             }}>
             <Button
-              onPress={() => {
-                handleUnfollowTopic({
-                  type: followType
-                });
-              }}
+              onPress={leaveCommunity}
               disabled={followType === ''}
               styles={styles.buttonContainer(isFollow)}
               textStyling={styles.button(isFollow)}>

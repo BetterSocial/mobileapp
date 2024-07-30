@@ -1,10 +1,16 @@
 /* eslint-disable no-plusplus */
 import React from 'react';
 
+import AnalyticsEventTracking from '../../../libraries/analytics/analyticsEventTracking';
+import {NO_POLL_UUID, isPollExpired} from '../../../utils/string/StringUtils';
 import {inputSingleChoicePoll} from '../../../service/post';
-import {isPollExpired, NO_POLL_UUID} from '../../../utils/string/StringUtils';
 
-const useContentPoll = ({polls, voteCount, isAlreadyPolling: isAlreadyPollingProps}) => {
+const useContentPoll = ({
+  polls,
+  voteCount,
+  isAlreadyPolling: isAlreadyPollingProps,
+  seeResultsEventName
+}) => {
   const [isAlreadyPolling, setIsAlreadyPolling] = React.useState(false);
   const [singleChoiceSelectedIndex, setSingleChoiceSelectedIndex] = React.useState(-1);
   const [multipleChoiceSelected, setMultipleChoiceSelected] = React.useState([]);
@@ -96,6 +102,9 @@ const useContentPoll = ({polls, voteCount, isAlreadyPolling: isAlreadyPollingPro
   const onSeeResultsClicked = (item, multiplechoice, onnewpollfetched, index) => {
     if (multiplechoice) {
       handleMultipleChoice(item, onnewpollfetched, index);
+      if (seeResultsEventName) {
+        AnalyticsEventTracking.eventTrack(seeResultsEventName);
+      }
     } else {
       handleNoMultipleChoice(item, onnewpollfetched, index);
     }

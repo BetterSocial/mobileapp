@@ -1,21 +1,22 @@
 import * as React from 'react';
+import LinearGradient from 'react-native-linear-gradient';
 import SimpleToast from 'react-native-simple-toast';
+import moment from 'moment';
 import {Alert, Dimensions, StyleSheet, Text, TouchableWithoutFeedback, View} from 'react-native';
 
-import moment from 'moment';
-import LinearGradient from 'react-native-linear-gradient';
+import AnalyticsEventTracking from '../../libraries/analytics/analyticsEventTracking';
 import Comment from './Comment';
 import ConnectorWrapper from './ConnectorWrapper';
 import LoadingComment from '../LoadingComment';
 import StringConstant from '../../utils/string/StringConstant';
 import useContainerComment from './hooks/useContainerComment';
+import usePostDetail from '../PostPageDetail/hooks/usePostDetail';
 import useReplyComment from './hooks/useReplyComment';
 import usePostContextHook, {CONTEXT_SOURCE} from '../../hooks/usePostContextHooks';
-import {deleteComment} from '../../service/comment';
-import {getUserId} from '../../utils/users';
-import usePostDetail from '../PostPageDetail/hooks/usePostDetail';
 import {COLORS} from '../../utils/theme';
+import {deleteComment} from '../../service/comment';
 import {fonts, normalize} from '../../utils/fonts';
+import {getUserId} from '../../utils/users';
 
 export const ContainerReply = ({children, isGrandchild}) => (
   <View style={[{borderColor: isGrandchild ? COLORS.almostBlack : COLORS.balance_gray}]}>
@@ -97,7 +98,13 @@ const ListComment = ({
   hideLeftConnector,
   updateVote,
   feedId,
-  onReplyButtonClick
+  onReplyButtonClick,
+  eventTrackName = {
+    upvoteInserted: null,
+    upvoteRemoved: null,
+    downvoteInserted: null,
+    downvoteRemoved: null
+  }
 }) => {
   return (
     <TouchableWithoutFeedback key={index} onLongPress={() => onCommentLongPressed(item, 0)}>
@@ -119,6 +126,7 @@ const ListComment = ({
               findCommentAndUpdate={findCommentAndUpdate}
               onLongPress={onCommentLongPressed}
               updateVote={updateVote}
+              eventTrackName={eventTrackName}
               onPress={(reactionId, replyUsername) =>
                 onReplyButtonClick(reactionId, replyUsername, 0)
               }
@@ -154,7 +162,15 @@ const ContainerComment = ({
   itemParent,
   updateVote,
   isShortText,
-  onReplyButtonClick
+  onReplyButtonClick,
+  eventTrackName = {
+    confirmDelete: null,
+    cancelDelete: null,
+    upvoteInserted: null,
+    upvoteRemoved: null,
+    downvoteInserted: null,
+    downvoteRemoved: null
+  }
 }) => {
   const [, setSelectedCommentForDelete] = React.useState(null);
   const [selectedCommentLevelForDelete, setSelectedCommentLevelForDelete] = React.useState(0);
@@ -177,12 +193,20 @@ const ContainerComment = ({
       Alert.alert('', StringConstant.feedDeleteCommentConfirmation, [
         {
           text: 'No, cancel',
-          style: 'cancel'
+          style: 'cancel',
+          onPress: () => {
+            if (eventTrackName.cancelDelete)
+              AnalyticsEventTracking.eventTrack(eventTrackName.cancelDelete);
+          }
         },
         {
           text: 'Yes',
           style: 'destructive',
-          onPress: () => onDeleteCommentClicked(item)
+          onPress: () => {
+            if (eventTrackName.confirmDelete)
+              AnalyticsEventTracking.eventTrack(eventTrackName.confirmDelete);
+            onDeleteCommentClicked(item);
+          }
         }
       ]);
     }
@@ -265,6 +289,7 @@ const ContainerComment = ({
                       updateVote={handleUpdateVote}
                       feedId={feedId}
                       onReplyButtonClick={onReplyButtonClick}
+                      eventTrackName={eventTrackName}
                     />
                   ) : null}
                 </View>

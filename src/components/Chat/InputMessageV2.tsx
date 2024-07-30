@@ -165,7 +165,7 @@ const InputMessageV2 = ({
     const uploadedImageUrl = await ImageUtils.uploadImageWithoutAuth(path, {
       withFailedEventTrack: getEventName(
         BetterSocialEventTracking.SIGNED_CHAT_SCREEN_ATTACHMENT_MEDIA_UPLOAD_FILE,
-        BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_ATTACHMENT_UPLOAD_FAILED
+        BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_ATTACHMENT_MEDIA_UPLOAD_FILE
       )
     });
     resultUrls.push({

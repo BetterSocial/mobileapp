@@ -1,27 +1,28 @@
-import PropTypes from 'prop-types';
 import * as React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-
-import Toast from 'react-native-simple-toast';
 import LinearGradient from 'react-native-linear-gradient';
+import PropTypes from 'prop-types';
+import Toast from 'react-native-simple-toast';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {event} from 'react-native-reanimated';
+
 import ArrowDownvoteOff from '../../assets/arrow/Ic_downvote_off';
 import ArrowDownvoteOn from '../../assets/arrow/Ic_downvote_on';
 import ArrowUpvoteOff from '../../assets/arrow/Ic_upvote_off';
 import ArrowUpvoteOn from '../../assets/arrow/Ic_upvote_on';
-import MemoIc_block_inactive from '../../assets/block/Ic_block_inactive';
-import MemoIc_share from '../../assets/icons/Ic_share';
-import MemoIc_senddm from '../../assets/icons/ic_send_dm';
-import SendDMBlack from '../../assets/icons/images/send-dm-black.svg';
-import {Context} from '../../context';
-import useDMMessage from '../../hooks/core/chat/useDMMessage';
-import useCreateChat from '../../hooks/screen/useCreateChat';
 import BlurredLayer from '../../screens/FeedScreen/elements/BlurredLayer';
-import {getAllowAnonDmStatus} from '../../service/chat';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
-import {COLORS, FONTS} from '../../utils/theme';
 import BottomSheetMenu from '../BottomSheet/BottomSheetMenu';
-import {IcDmAnon} from '../../assets/icons/ic_dm_anon';
 import IconCommentArrow from '../../assets/icon/IconCommentArrow';
+import MemoIc_block_inactive from '../../assets/block/Ic_block_inactive';
+import MemoIc_senddm from '../../assets/icons/ic_send_dm';
+import MemoIc_share from '../../assets/icons/Ic_share';
+import SendDMBlack from '../../assets/icons/images/send-dm-black.svg';
+import useCreateChat from '../../hooks/screen/useCreateChat';
+import useDMMessage from '../../hooks/core/chat/useDMMessage';
+import {COLORS, FONTS} from '../../utils/theme';
+import {Context} from '../../context';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {IcDmAnon} from '../../assets/icons/ic_dm_anon';
+import {getAllowAnonDmStatus} from '../../service/chat';
 import {normalize} from '../../utils/fonts';
 
 const Footer = ({
@@ -40,7 +41,12 @@ const Footer = ({
   loadingVote,
   isShowDM = false,
   isShortText = false,
-  isNews = false
+  isNews = false,
+  eventTrackCallback = {
+    pressDMFooter: () => {},
+    pressAnonDM: () => {},
+    pressSignedDM: () => {}
+  }
 }) => {
   const {sendMessageDM} = useDMMessage();
   const [profile] = React.useContext(Context).profile;
@@ -91,6 +97,7 @@ const Footer = ({
   const onPressDM = async () => {
     try {
       setLoading({...loading, loadingDm: true});
+      eventTrackCallback.pressSignedDM();
       if (!item?.anon_user_info_emoji_name) {
         const channelName = username;
         const selectedUser = {
@@ -115,6 +122,7 @@ const Footer = ({
   const onPressDMAnon = async () => {
     try {
       setLoading({...loading, loadingDmAnon: true});
+      eventTrackCallback.pressAnonDM();
       await sendMessageDM(item.id, 'post', 'ANONYMOUS');
     } catch (e) {
       console.warn(e);
@@ -161,6 +169,7 @@ const Footer = ({
     try {
       refSheet.current.open();
       setLoading({...loading, loadingGetAllowAnonDmStatus: true});
+      eventTrackCallback.pressDMFooter();
       const data = await getAllowAnonDmStatus(item.id);
       setUserAllowDm(data?.user.allow_anon_dm);
     } catch (e) {
