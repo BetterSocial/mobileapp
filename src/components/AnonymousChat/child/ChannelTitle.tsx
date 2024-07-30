@@ -18,7 +18,9 @@ const ChannelTitle = ({
   hasFollowButton = false,
   isFollowing,
   handleFollow,
-  isAnonymousTab = false
+  isAnonymousTab = false,
+  hasAttachment = false,
+  postNotificationIsMediaOnly = false
 }) => {
   const styles = StyleSheet.create({
     chatContentName: {
@@ -81,6 +83,19 @@ const ChannelTitle = ({
 
   const isSignedDM = type === BaseChannelItemTypeProps.SIGNED_PM;
 
+  const getMessageText = () => {
+    if (hasAttachment) {
+      return (
+        <Text>
+          <Text>{isMe ? 'You: ' : ''}</Text>
+          <Text style={{fontStyle: 'italic'}}>Sent media 🏞️</Text>
+        </Text>
+      );
+    }
+
+    return `${isMe ? 'You: ' : ''}${message}`;
+  };
+
   if (type?.includes('PM')) {
     const isShowFollowButton = unreadCount <= 0 && hasFollowButton;
 
@@ -96,7 +111,7 @@ const ChannelTitle = ({
 
           <View style={styles.chatMessage}>
             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.chatContentMessage}>
-              {`${isMe ? 'You: ' : ''}${message}`}
+              {getMessageText()}
             </Text>
             {!isShowFollowButton && unreadCount > 0 && (
               <View style={styles.chatContentUnreadCountContainer}>
@@ -123,6 +138,18 @@ const ChannelTitle = ({
     return `${name}'s post: `;
   };
 
+  const getPostNotificationMessage = () => {
+    if (postNotificationIsMediaOnly) {
+      return (
+        <Text>
+          <Text style={{fontStyle: 'italic'}}>{message}</Text>
+        </Text>
+      );
+    }
+
+    return message;
+  };
+
   return (
     <View style={baseStyles.chatContentSection}>
       <View style={{display: 'flex', flexDirection: 'row'}}>
@@ -131,7 +158,7 @@ const ChannelTitle = ({
           ellipsizeMode="tail"
           style={[styles.chatContentName, styles.postNotificationMessage]}>
           <Text style={styles.postNotificationMessageBold}>{getTitle()}</Text>
-          {message}
+          {getPostNotificationMessage()}
         </Text>
         <View style={{position: 'relative'}}>
           <Text style={styles.chatContentTime}>{time}</Text>

@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import {ActivityIndicator, FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
 /* eslint-disable no-use-before-define */
 import {useNavigation, useRoute} from '@react-navigation/native';
-import {useState} from 'react';
 
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import DomainList from '../elements/DiscoveryItemList';
@@ -101,12 +100,13 @@ const UsersFragment = ({
   const {exchangeFollower, users, updateFollowDiscoveryContext} = useDiscovery();
   const [loadingDM, setLoadingDM] = React.useState(false);
   const {createSignChat, loadingCreateChat} = useCreateChat();
-  const [activeSections, setActiveSections] = useState([]);
+  const [activeSections, setActiveSections] = React.useState([]);
 
   const {onCommonClearRecentSearch, onCommonRecentItemClicked} = eventTrack?.common || {};
   const {onUserPageOpened, onUserPageFollowButtonClicked, onUserPageUnfollowButtonClicked} =
     eventTrack?.user || {};
 
+  const [followedUserIds, setFollowedUserIds] = React.useState([]);
   const route = useRoute();
 
   const [myId, setMyId] = React.useState('');
@@ -143,7 +143,7 @@ const UsersFragment = ({
         user_id: myId,
         other_id: item.user_id,
         username: item.username,
-        following: item.following
+        following: followedUserIds.find((userId) => userId === item.user_id) ? true : item.following
       }
     });
   };
@@ -156,15 +156,27 @@ const UsersFragment = ({
     updateFollowDiscoveryContext(willFollow, item);
   };
 
+  const rollbackFollow = (followedUserId) => {
+    const newFollowedUserIds = followedUserIds;
+    const index = followedUserIds.findIndex((userId) => userId === followedUserId);
+    newFollowedUserIds.splice(index, 1);
+    setFollowedUserIds(newFollowedUserIds);
+  };
+
   const handleFollow = async (from, willFollow, item, section) => {
     handleUser(from, willFollow, item);
+    const followedUserId = item.user ? item.user.user_id : item.user_id;
     const data = {
       user_id_follower: myId,
-      user_id_followed: item.user ? item.user.user_id : item.user_id,
+      user_id_followed: followedUserId,
       username_follower: profile.myProfile.username,
       username_followed: item.username,
       follow_source: 'discoveryScreen'
     };
+
+    const newFollowedUserIds = followedUserIds;
+    newFollowedUserIds.push(followedUserId);
+    setFollowedUserIds(newFollowedUserIds);
 
     if (willFollow) {
       try {
@@ -172,6 +184,7 @@ const UsersFragment = ({
         onUserPageFollowButtonClicked(section);
       } catch (error) {
         handleUser(from, !willFollow, item);
+        rollbackFollow(followedUserId);
       }
     } else {
       try {
@@ -179,6 +192,7 @@ const UsersFragment = ({
         onUserPageUnfollowButtonClicked(section);
       } catch (error) {
         handleUser(from, !willFollow, item);
+        rollbackFollow(followedUserId);
       }
     }
     if (searchText.length > 0) fetchData();
@@ -194,6 +208,7 @@ const UsersFragment = ({
     }
 
     const isUnfollowed = item.user ? !item.user.following : !item.following;
+    const followedUserId = item.user ? item.user.user_id : item.user_id;
 
     const handleOpenProfile = async (profileItem) => {
       if (profile?.myProfile?.user_id === profileItem?.user_id) {
@@ -212,11 +227,12 @@ const UsersFragment = ({
     const checkUserIsBlockHandle = async () => {
       try {
         setLoadingDM(true);
+        const userId = item?.user_id || item?.userId || item?.user?.user_id;
         const sendData = {
-          user_id: item?.user_id || item?.userId
+          user_id: userId
         };
         const members = [];
-        members.push(profile?.myProfile?.user_id, item?.user_id || item?.userId);
+        members.push(profile?.myProfile?.user_id, userId);
         const processGetBlock = await checkUserBlock(sendData);
         if (!processGetBlock.data.data.blocked && !processGetBlock.data.data.blocker) {
           setLoadingDM(false);
@@ -243,7 +259,9 @@ const UsersFragment = ({
             name: item.user ? item.user.username : item.username,
             image: item.user ? item.user.profile_pic_path : item.profile_pic_path,
             user_id_follower: item.user ? item.user.user_id_follower : item.user_id_follower,
-            isunfollowed: isUnfollowed,
+            isunfollowed: followedUserIds.find((userId) => userId === followedUserId)
+              ? false
+              : isUnfollowed,
             description: item.user ? item.user.bio : item.bio,
             karmaScore: item.user ? item.user.karma_score : item.karma_score,
             comumnityInfo: item.user ? item.user.community_info || [] : item.community_info || [],

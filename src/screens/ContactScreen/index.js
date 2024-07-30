@@ -22,8 +22,9 @@ import DiscoveryAction from '../../context/actions/discoveryAction';
 import DiscoveryRepo from '../../service/discovery';
 import Header from '../../components/Header/HeaderContact';
 import ItemUser from './elements/ItemUser';
+import Label from './elements/Label';
+import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import MemoIc_share from '../../assets/icons/Ic_share';
-import SearchRecyclerView from './elements/SearchRecyclerView';
 import ShareUtils from '../../utils/share';
 import StringConstant from '../../utils/string/StringConstant';
 import dimen from '../../utils/dimen';
@@ -47,17 +48,19 @@ const {width} = Dimensions.get('screen');
 const ContactScreen = ({navigation}) => {
   const [loading, setLoading] = React.useState(false);
   const [users, setUsers] = React.useState([]);
+  const [usersSearch, setUsersSearch] = React.useState([]);
   const [profile] = React.useContext(Context).profile;
   const [isRecyclerViewShown, setIsRecyclerViewShown] = React.useState(false);
+  const [isRecyclerViewShownSearch, setIsRecyclerViewShownSearch] = React.useState(false);
   const [layoutProvider, setLayoutProvider] = React.useState(() => {});
-  const [refreshing, setRefreshing] = React.useState(false);
   const [dataProvider, setDataProvider] = React.useState(null);
+  const [layoutProviderSearch, setLayoutProviderSearch] = React.useState(() => {});
+  const [dataProviderSearch, setDataProviderSearch] = React.useState(null);
+  const [refreshing, setRefreshing] = React.useState(false);
   const [text, setText] = React.useState('');
-  const [debouncedText, setDebouncedText] = React.useState('');
   const [followed, setFollowed] = React.useState([profile.myProfile.user_id]);
   const [usernames, setUsernames] = React.useState([profile.myProfile.username]);
   const [selectedUsers, setSelectedUsers] = React.useState([]);
-  const [isSearchMode, setIsSearchMode] = React.useState(false);
   const [userPage, setUserPage] = React.useState({
     currentPage: 1,
     limitPage: 1
@@ -112,12 +115,12 @@ const ContactScreen = ({navigation}) => {
     );
   };
 
-  const handleSearch = async () => {
+  const handleSearch = async (searchText) => {
     try {
-      setLoading(true);
+      setIsLoadingSearchResult(true);
 
       const cancelToken = cancelTokenRef?.current?.token;
-      const data = await DiscoveryRepo.fetchDiscoveryDataUser(text, isAnon, {cancelToken});
+      const data = await DiscoveryRepo.fetchDiscoveryDataUser(searchText, isAnon, {cancelToken});
       if (data.success) {
         const followedUsers =
           data?.followedUsers?.map((item) => ({
@@ -131,35 +134,36 @@ const ContactScreen = ({navigation}) => {
           })) || [];
 
         const dataUser = [...followedUsers, ...unfollowedUsers];
-        setUsers(
+        setUsersSearch(
           dataUser?.filter((item) =>
             isAddParticipant ? !existParticipants.includes(item.username) : item
           )
         );
       }
-      setLoading(false);
+      setIsLoadingSearchResult(false);
     } catch (error) {
-      setLoading(false);
+      setIsLoadingSearchResult(false);
     }
   };
 
   const debounced = React.useCallback(
     debounce((changedText) => {
-      handleSearch();
-      setDebouncedText(changedText);
+      handleSearch(changedText);
     }, 1000),
     []
   );
 
   React.useEffect(() => {
-    try {
-      setLoading(true);
-      getDiscoveryUser();
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
+    if (text.length === 0) {
+      try {
+        setLoading(true);
+        getDiscoveryUser();
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
     }
-  }, []);
+  }, [text]);
 
   React.useEffect(() => {
     if (users.length > 0) {
@@ -196,10 +200,51 @@ const ContactScreen = ({navigation}) => {
   }, [users]);
 
   React.useEffect(() => {
+    if (usersSearch.length > 0) {
+      const dProvider = new DataProvider((row1, row2) => row1 !== row2);
+      setLayoutProviderSearch(
+        new LayoutProvider(
+          (index) => {
+            if (usersSearch.length < 1) {
+              return 0;
+            }
+            if (usersSearch[index].viewtype === 'label') {
+              return VIEW_TYPE_LABEL;
+            }
+            return VIEW_TYPE_DATA;
+          },
+          (type, dim) => {
+            switch (type) {
+              case VIEW_TYPE_LABEL:
+                dim.width = width;
+                dim.height = 40;
+                break;
+
+              case VIEW_TYPE_DATA:
+              default:
+                dim.width = width;
+                dim.height = 72;
+                break;
+            }
+          }
+        )
+      );
+      setDataProviderSearch(dProvider.cloneWithRows(usersSearch));
+    }
+  }, [usersSearch]);
+
+  React.useEffect(() => {
     if (dataProvider) {
       setIsRecyclerViewShown(true);
     }
   }, [dataProvider]);
+
+  React.useEffect(() => {
+    if (dataProviderSearch) {
+      setIsRecyclerViewShownSearch(true);
+    }
+  }, [dataProviderSearch]);
+
   const handleCreateChannel = async () => {
     try {
       const mappingUserName = selectedUsers?.map((user) => user?.username).join(', ');
@@ -265,6 +310,26 @@ const ContactScreen = ({navigation}) => {
     ShareUtils.shareCommunity(topicCommunityName);
   };
 
+  const rowRendererSearch = (type, item, index, extendedState) => {
+    switch (type) {
+      case VIEW_TYPE_LABEL:
+        return <Label label={item?.label} />;
+      case VIEW_TYPE_DATA:
+      default:
+        return (
+          <ItemUser
+            photo={item.profile_pic_path}
+            bio={item.bio}
+            username={item.username}
+            followed={extendedState.followed}
+            userid={item.user_id}
+            isAnon={isAnon}
+            onPress={() => handleSelected(item)}
+          />
+        );
+    }
+  };
+
   const rowRenderer = (type, item, index, extendedState) => (
     <ItemUser
       photo={item.profile_pic_path}
@@ -276,7 +341,7 @@ const ContactScreen = ({navigation}) => {
       onPress={() => handleSelected(item)}
     />
   );
-  // }
+
   const handleSelected = (value) => {
     const copyFollowed = isAnon ? [] : [...followed];
     const copyUsername = isAnon ? [] : [...usernames];
@@ -324,10 +389,9 @@ const ContactScreen = ({navigation}) => {
     if (changedText.length > 0) {
       debounced(changedText);
     } else {
+      setUsersSearch([]);
       debounced.cancel();
     }
-
-    setIsSearchMode(changedText.length > 0);
   };
 
   const onPressInSearch = () => {
@@ -384,7 +448,6 @@ const ContactScreen = ({navigation}) => {
         onClearText={() => onSearchTextChange('')}
         isLoading={isLoadingSearchResult}
         onPressIn={onPressInSearch}
-        // onPress={handleSearch}
       />
 
       {!isAnon && (
@@ -395,7 +458,7 @@ const ContactScreen = ({navigation}) => {
         </View>
       )}
 
-      {isRecyclerViewShown && !isSearchMode && (
+      {isRecyclerViewShown && usersSearch.length <= 0 && !isLoadingSearchResult && (
         <RecyclerListView
           style={styles.recyclerview}
           layoutProvider={layoutProvider}
@@ -416,16 +479,28 @@ const ContactScreen = ({navigation}) => {
         />
       )}
 
-      {isSearchMode && (
-        <SearchRecyclerView
-          text={debouncedText}
-          followed={followed}
-          selectedUsers={selectedUsers}
-          usernames={usernames}
-          setLoading={setIsLoadingSearchResult}
-          onHandleSelected={(value) => handleSelected(value)}
+      {isRecyclerViewShownSearch && usersSearch.length > 0 && !isLoadingSearchResult && (
+        <RecyclerListView
+          style={styles.recyclerview}
+          layoutProvider={layoutProviderSearch}
+          dataProvider={dataProviderSearch}
+          extendedState={{
+            followed
+          }}
+          rowRenderer={rowRendererSearch}
+          scrollViewProps={{
+            refreshControl: (
+              <RefreshControl
+                tintColor={COLORS.white}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+            )
+          }}
         />
       )}
+
+      {isLoadingSearchResult && <LoadingWithoutModal />}
       <Loading visible={loading || loadingCreateChat || isLoadingAddMember} />
       {isCreateCommunity && (
         <View style={styles.footer}>

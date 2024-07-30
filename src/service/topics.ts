@@ -172,6 +172,19 @@ const inviteCommunityMember = async (topicId, memberIds) => {
   }
 };
 
+const putCommunityImage = async (topicName, icon, cover) => {
+  try {
+    const resApi = await api.put(`/topics/${topicName}`, {
+      icon,
+      cover
+    });
+    return resApi.data;
+  } catch (error) {
+    crashlytics().recordError(new Error(error));
+    return error.response.data;
+  }
+};
+
 export {
   getAllMemberTopic,
   getFollowingTopic,
@@ -183,5 +196,6 @@ export {
   putUserTopic,
   verifyCommunityName,
   submitCommunityName,
-  inviteCommunityMember
+  inviteCommunityMember,
+  putCommunityImage
 };

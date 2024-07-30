@@ -49,7 +49,7 @@ const DomainList = (props) => {
     item.withFollowButton = true;
   }
 
-  const renderButonAction = () => {
+  const renderButtonAction = () => {
     if (isBlockedSection) {
       if (item.isUnblocked) {
         return (
@@ -162,7 +162,7 @@ const DomainList = (props) => {
           </View>
         </View>
       </TouchableOpacity>
-      {renderButonAction()}
+      {renderButtonAction()}
     </View>
   );
 };

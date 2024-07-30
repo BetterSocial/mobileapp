@@ -4,7 +4,7 @@ import * as React from 'react';
 import moment from 'moment';
 import reactStringReplace from 'react-string-replace';
 import _, {isArray} from 'lodash';
-import {Linking, StyleSheet, Text} from 'react-native';
+import {Linking, Pressable, StyleSheet, Text} from 'react-native';
 
 import HighlightText from '../../components/HightlightClickText/HighlightText';
 import TaggingUserText from '../../components/TaggingUserText';
@@ -14,6 +14,7 @@ import TopicText from '../../components/TopicText';
 import removePrefixTopic from '../topics/removePrefixTopic';
 import {COLORS} from '../theme';
 import {DEFAULT_PROFILE_PIC_PATH} from '../constants';
+import {fonts} from '../fonts';
 import {getAnonymousUserId} from '../users';
 import {getUserId} from '../token';
 

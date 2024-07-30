@@ -1,5 +1,6 @@
 import crashlytics from '@react-native-firebase/crashlytics';
 
+import anonymousApi from './anonymousConfig';
 import api from './config';
 
 export const createPost = async (data) => {
@@ -132,7 +133,7 @@ export const deletePost = async (postId) => {
 
 export const deleteAnonymousPost = async (postId) => {
   try {
-    const resApi = await api.delete(`/activity/anonymous/${postId}`);
+    const resApi = await anonymousApi.delete(`/activity/anonymous-v2/${postId}`);
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(error?.response?.data);

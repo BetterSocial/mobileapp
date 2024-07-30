@@ -507,8 +507,8 @@ const CreatePost = () => {
         }
 
         const post = await createPost(data);
-        if (params.onRefresh && typeof params.onRefresh === 'function') {
-          params.onRefresh();
+        if (params && params?.onRefresh && typeof params.onRefresh === 'function') {
+          params?.onRefresh();
         }
         setLoadingPost(false);
         if (post.code === 200) {

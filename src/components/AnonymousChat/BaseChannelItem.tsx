@@ -39,7 +39,9 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
     console.log('onPress');
   },
   showFollowingButton = false,
-  dbAnonUserInfo = null
+  dbAnonUserInfo = null,
+  hasAttachment = false,
+  postNotificationIsMediaOnly = false
 }) => {
   const isAnonymousTab: boolean =
     channelType === 'ANON_PM' ||
@@ -72,6 +74,8 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
             isFollowing={showFollowingButton}
             handleFollow={handleFollow}
             isAnonymousTab={isAnonymousTab}
+            hasAttachment={hasAttachment}
+            postNotificationIsMediaOnly={postNotificationIsMediaOnly}
           />
 
           {/* Post Notification Message */}

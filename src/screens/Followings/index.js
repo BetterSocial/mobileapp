@@ -17,11 +17,13 @@ const Followings = ({
       onUserPageFollowButtonClicked: () => {},
       onUserPageUnfollowButtonClicked: () => {}
     }
-  }
+  },
+  dataUnfollowed = []
 }) => {
   return (
     <UsersFragment
       followedUsers={dataFollower}
+      unfollowedUsers={dataUnfollowed}
       setFollowedUsers={setDataFollower}
       isLoadingDiscoveryUser={isLoading}
       showRecentSearch={true}
@@ -34,6 +36,7 @@ const Followings = ({
 
 Followings.propTypes = {
   dataFollower: PropTypes.array,
+  dataUnfollowed: PropTypes.array,
   setDataFollower: PropTypes.func,
   isLoading: PropTypes.bool
 };
