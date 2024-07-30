@@ -64,7 +64,7 @@ const useFetchChannelHook = () => {
         const cleanTopicName = newChannel?.id?.replace('topic_', '');
         const response = await getLatestTopicPost(cleanTopicName);
 
-        if (!response || response?.status !== 'success') return null;
+        if (channelType === 'topics' && (!response || response?.status !== 'success')) return null;
 
         newChannel.firstMessage = {
           text: response?.message,

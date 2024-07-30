@@ -2,6 +2,7 @@ import * as React from 'react';
 /* eslint-disable react/display-name */
 import NetInfo from '@react-native-community/netinfo';
 import PropTypes from 'prop-types';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {SafeAreaView, StatusBar, View} from 'react-native';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
 import {useRecoilState, useRecoilValue} from 'recoil';
@@ -48,6 +49,7 @@ import {
   ChatDetailPage,
   ContactScreen,
   CreateCommunity,
+  CreateCommunityCustomize,
   DetailDomainScreen,
   DetailGroupImage,
   GroupInfo,
@@ -141,16 +143,7 @@ const withSafeAreaView = (Component) => {
     </SafeAreaView>
   );
 };
-const withSafeAreaViewTopBottom = (Component, topColor, bottomColor = COLORS.almostBlack) => {
-  return (props) => (
-    <React.Fragment>
-      <SafeAreaView style={{backgroundColor: topColor}} />
-      <SafeAreaView style={{flex: 1, backgroundColor: bottomColor}}>
-        <Component {...props} />
-      </SafeAreaView>
-    </React.Fragment>
-  );
-};
+
 const withKeyboardWrapper = (Component) => {
   return (props) => (
     <KeyboardWrapper>
@@ -161,201 +154,204 @@ const withKeyboardWrapper = (Component) => {
 
 const AuthenticatedNavigator = () => {
   return (
-    <OneSignalNavigator>
-      <FirebaseConfig />
-      <AuthenticatedStack.Navigator initialRouteName="HomeTabs">
-        <AuthenticatedStack.Screen
-          name="HomeTabs"
-          component={HomeBottomTabs}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="PrivacyPolicies"
-          component={withKeyboardWrapper(PrivacyPolicies)}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="Settings"
-          component={withKeyboardWrapper(Settings)}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="HelpCenter"
-          component={withKeyboardWrapper(HelpCenter)}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="ProfileScreen"
-          component={withSafeAreaView(withKeyboardWrapper(ProfileScreen))}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen name="ImageViewer" component={ImageViewerScreen} />
-        <AuthenticatedStack.Screen name="VideoViewer" component={VideoViewerScreen} />
-        <AuthenticatedStack.Screen
-          name="DomainScreen"
-          component={withKeyboardWrapper(DomainScreen)}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="ContactScreen"
-          component={withKeyboardWrapper(ContactScreen)}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="OtherProfile"
-          component={withSafeAreaView(withKeyboardWrapper(OtherProfile))}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name={NavigationConstants.CREATE_POST_SCREEN}
-          component={withSafeAreaView(withKeyboardWrapper(CreatePost))}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="Followings"
-          component={FollowingScreen}
-          options={{
-            headerShown: false
-          }}
-        />
-        <AuthenticatedStack.Screen
-          name="Followers"
-          component={withSafeAreaView(withKeyboardWrapper(FollowersScreen))}
-          options={{
-            headerShown: false
-          }}
-        />
-        <AuthenticatedStack.Screen
-          name="DetailDomainScreen"
-          component={withKeyboardWrapper(DetailDomainScreen)}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="LinkContextScreen"
-          component={withKeyboardWrapper(LinkContextScreen)}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="TopicPageScreen"
-          component={TopicPageScreen}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="TopicMemberScreen"
-          component={withKeyboardWrapper(TopicMemberScreen)}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="DiscoveryScreen"
-          component={DiscoveryScreenV2}
-          options={{
-            headerShown: false
-          }}
-        />
-        <AuthenticatedStack.Screen
-          name="BlockScreen"
-          component={Blocked}
-          options={{
-            headerShown: false
-          }}
-        />
-        <AuthenticatedStack.Screen
-          name="GroupSetting"
-          component={withKeyboardWrapper(GroupSetting)}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="AddParticipant"
-          component={withKeyboardWrapper(AddParticipant)}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="GroupMedia"
-          component={withKeyboardWrapper(GroupMedia)}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="GroupInfo"
-          component={withKeyboardWrapper(GroupInfo)}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="DetailGroupImage"
-          component={withKeyboardWrapper(DetailGroupImage)}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="ChatDetailPage"
-          component={withKeyboardWrapper(ChatDetailPage)}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="ReplyComment"
-          component={withKeyboardWrapper(ReplyComment)}
-          options={{headerShown: false}}
-        />
+    <SafeAreaProvider style={{flex: 1, backgroundColor: COLORS.almostBlack}}>
+      <OneSignalNavigator>
+        <FirebaseConfig />
+        <AuthenticatedStack.Navigator initialRouteName="HomeTabs">
+          <AuthenticatedStack.Screen
+            name="HomeTabs"
+            component={HomeBottomTabs}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen
+            name="PrivacyPolicies"
+            component={withKeyboardWrapper(PrivacyPolicies)}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen
+            name="Settings"
+            component={withKeyboardWrapper(Settings)}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen
+            name="HelpCenter"
+            component={withKeyboardWrapper(HelpCenter)}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen
+            name="ProfileScreen"
+            component={withSafeAreaView(withKeyboardWrapper(ProfileScreen))}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen name="ImageViewer" component={ImageViewerScreen} />
+          <AuthenticatedStack.Screen name="VideoViewer" component={VideoViewerScreen} />
+          <AuthenticatedStack.Screen
+            name="DomainScreen"
+            component={withKeyboardWrapper(DomainScreen)}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen
+            name="ContactScreen"
+            component={withKeyboardWrapper(ContactScreen)}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen
+            name="OtherProfile"
+            component={withSafeAreaView(withKeyboardWrapper(OtherProfile))}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen
+            name={NavigationConstants.CREATE_POST_SCREEN}
+            component={withSafeAreaView(withKeyboardWrapper(CreatePost))}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen
+            name="Followings"
+            component={FollowingScreen}
+            options={{
+              headerShown: false
+            }}
+          />
+          <AuthenticatedStack.Screen
+            name="Followers"
+            component={withSafeAreaView(withKeyboardWrapper(FollowersScreen))}
+            options={{
+              headerShown: false
+            }}
+          />
+          <AuthenticatedStack.Screen
+            name="DetailDomainScreen"
+            component={withKeyboardWrapper(DetailDomainScreen)}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen
+            name="LinkContextScreen"
+            component={withKeyboardWrapper(LinkContextScreen)}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen
+            name="TopicPageScreen"
+            component={TopicPageScreen}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen
+            name="TopicMemberScreen"
+            component={withKeyboardWrapper(TopicMemberScreen)}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen
+            name="DiscoveryScreen"
+            component={DiscoveryScreenV2}
+            options={{
+              headerShown: false
+            }}
+          />
+          <AuthenticatedStack.Screen
+            name="BlockScreen"
+            component={Blocked}
+            options={{
+              headerShown: false
+            }}
+          />
+          <AuthenticatedStack.Screen
+            name="GroupSetting"
+            component={withKeyboardWrapper(GroupSetting)}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen
+            name="AddParticipant"
+            component={withKeyboardWrapper(AddParticipant)}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen
+            name="GroupMedia"
+            component={withKeyboardWrapper(GroupMedia)}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen
+            name="GroupInfo"
+            component={withKeyboardWrapper(GroupInfo)}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen
+            name="DetailGroupImage"
+            component={withKeyboardWrapper(DetailGroupImage)}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen
+            name="ChatDetailPage"
+            component={withKeyboardWrapper(ChatDetailPage)}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen
+            name="ReplyComment"
+            component={withKeyboardWrapper(ReplyComment)}
+            options={{headerShown: false}}
+          />
 
-        <AuthenticatedStack.Screen
-          name="ProfileReplyComment"
-          component={withSafeAreaView(withKeyboardWrapper(ProfileReplyComment))}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="OtherProfileReplyComment"
-          component={withSafeAreaView(withKeyboardWrapper(OtherProfileReplyComment))}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="PostDetailPage"
-          component={withSafeAreaView(withKeyboardWrapper(PostDetailPage))}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="ProfilePostDetailPage"
-          component={withSafeAreaView(withKeyboardWrapper(ProfilePostDetail))}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="OtherProfilePostDetailPage"
-          component={withSafeAreaView(withKeyboardWrapper(OtherProfilePostDetail))}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="ChannelScreen"
-          component={withKeyboardWrapper(ChannelScreen)}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="AnonymousChatScreen"
-          component={withKeyboardWrapper(
-            withSafeAreaViewTopBottom(AnonymousChatScreen, COLORS.anon_secondary)
-          )}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="ChatInfoScreen"
-          component={withKeyboardWrapper(ChatInfoScreen)}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="SignedChatScreen"
-          component={withKeyboardWrapper(
-            withSafeAreaViewTopBottom(SignedChatScreen, COLORS.signed_secondary)
-          )}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="News"
-          component={NewsScreen}
-          options={{headerShown: false}}
-        />
-        <AuthenticatedStack.Screen
-          name="CreateCommunity"
-          component={withSafeAreaView(withKeyboardWrapper(CreateCommunity))}
-          options={{headerShown: false}}
-        />
-      </AuthenticatedStack.Navigator>
-    </OneSignalNavigator>
+          <AuthenticatedStack.Screen
+            name="ProfileReplyComment"
+            component={withSafeAreaView(withKeyboardWrapper(ProfileReplyComment))}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen
+            name="OtherProfileReplyComment"
+            component={withSafeAreaView(withKeyboardWrapper(OtherProfileReplyComment))}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen
+            name="PostDetailPage"
+            component={withSafeAreaView(withKeyboardWrapper(PostDetailPage))}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen
+            name="ProfilePostDetailPage"
+            component={withSafeAreaView(withKeyboardWrapper(ProfilePostDetail))}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen
+            name="OtherProfilePostDetailPage"
+            component={withSafeAreaView(withKeyboardWrapper(OtherProfilePostDetail))}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen
+            name="ChannelScreen"
+            component={withKeyboardWrapper(ChannelScreen)}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen
+            name="AnonymousChatScreen"
+            component={withKeyboardWrapper(AnonymousChatScreen)}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen
+            name="ChatInfoScreen"
+            component={withKeyboardWrapper(ChatInfoScreen)}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen
+            name="SignedChatScreen"
+            component={withKeyboardWrapper(SignedChatScreen)}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen
+            name="News"
+            component={NewsScreen}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen
+            name="CreateCommunity"
+            component={withSafeAreaView(withKeyboardWrapper(CreateCommunity))}
+            options={{headerShown: false}}
+          />
+          <AuthenticatedStack.Screen
+            name="CreateCommunityCustomize"
+            component={withSafeAreaView(CreateCommunityCustomize)}
+            options={{headerShown: false}}
+          />
+        </AuthenticatedStack.Navigator>
+      </OneSignalNavigator>
+    </SafeAreaProvider>
   );
 };
 

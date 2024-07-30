@@ -102,6 +102,13 @@ const CreateCommunity = () => {
           topicCommunityId: response.topic_id,
           topicCommunityName: name
         });
+
+        // disabled v4 add images
+        // navigation.replace('CreateCommunityCustomize', {
+        //   isCreateCommunity: true,
+        //   topicCommunityId: response.topic_id,
+        //   topicCommunityName: name
+        // });
       }
     } else {
       if (!name) {

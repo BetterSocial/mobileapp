@@ -6,7 +6,10 @@ import ChannelListMemberSchema from './ChannelListMemberSchema';
 import UserSchema from './UserSchema';
 import {AnonUserInfo} from '../../../types/service/AnonProfile.type';
 import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
-import {BetterSocialChannelType} from '../../../types/database/schema/ChannelList.types';
+import {
+  BetterSocialChannelType,
+  ChannelFirstMessage
+} from '../../../types/database/schema/ChannelList.types';
 import {CHANNEL_GROUP, PM} from '../../hooks/core/constant';
 import {ChannelData} from '../../../types/repo/AnonymousMessageRepo/AnonymousChannelsData';
 import {ChannelType} from '../../../types/repo/ChannelData';
@@ -54,6 +57,10 @@ class ChannelList implements BaseDbSchema {
 
   anon_user_info_emoji_code: string | null;
 
+  firstMessage: ChannelFirstMessage | null;
+
+  isLastUpdatedByMe: boolean | undefined;
+
   constructor({
     id,
     channelPicture,
@@ -73,7 +80,9 @@ class ChannelList implements BaseDbSchema {
     anon_user_info_color_code = null,
     anon_user_info_color_name = null,
     anon_user_info_emoji_name = null,
-    anon_user_info_emoji_code = null
+    anon_user_info_emoji_code = null,
+    firstMessage = null,
+    isLastUpdatedByMe = null
   }) {
     if (!id) throw new Error('ChannelList must have an id');
 
@@ -96,6 +105,8 @@ class ChannelList implements BaseDbSchema {
     this.anon_user_info_emoji_name = anon_user_info_emoji_name;
     this.anon_user_info_emoji_code = anon_user_info_emoji_code;
     this.memberUsers = memberUsers;
+    this.firstMessage = firstMessage;
+    this.isLastUpdatedByMe = isLastUpdatedByMe;
   }
 
   saveIfNotExist(db: SQLiteDatabase): Promise<void> {
@@ -174,10 +185,10 @@ class ChannelList implements BaseDbSchema {
           this.unreadCount,
           this.channelType,
           this.lastUpdatedAt,
-          this.lastUpdatedBy,
-          this.createdAt,
-          this.expiredAt,
-          this.topicPostExpiredAt,
+          this.lastUpdatedBy ?? null,
+          this.createdAt ?? new Date(),
+          this.expiredAt ?? null,
+          this.topicPostExpiredAt ?? null,
           jsonString,
           this.anon_user_info_color_code,
           this.anon_user_info_color_name,
@@ -256,10 +267,16 @@ class ChannelList implements BaseDbSchema {
         B.last_active_at,
         B.profile_picture,
         B.bio,
-        B.is_banned
+        B.is_banned,
+        C.message,
+        C.type,
+        C.attachment_json as chat_attachment_json
       FROM ${ChannelList.getTableName()} A
       LEFT JOIN ${UserSchema.getTableName()} B
       ON A.last_updated_by = B.user_id AND A.id = B.channel_id
+      LEFT JOIN 
+        (SELECT DISTINCT(chats.channel_id), chats.* FROM chats ORDER BY chats.updated_at DESC LIMIT 1) as C
+      ON A.id = C.channel_id
       WHERE expired_at IS NULL OR datetime(expired_at) >= datetime('now') AND A.description != ''
       AND A.channel_type NOT IN ('ANON_PM', 'ANON_POST_NOTIFICATION', 'ANON_GROUP')
       ORDER BY last_updated_at DESC`,
@@ -448,7 +465,13 @@ class ChannelList implements BaseDbSchema {
       anon_user_info_color_code: json?.anon_user_info_color_code,
       anon_user_info_color_name: json?.anon_user_info_color_name,
       anon_user_info_emoji_name: json?.anon_user_info_emoji_name,
-      anon_user_info_emoji_code: json?.anon_user_info_emoji_code
+      anon_user_info_emoji_code: json?.anon_user_info_emoji_code,
+      isLastUpdatedByMe: json?.is_me,
+      firstMessage: {
+        message: json?.message || null,
+        type: json?.type,
+        attachmentJson: json?.chat_attachment_json
+      }
     });
   }
 
@@ -480,7 +503,7 @@ class ChannelList implements BaseDbSchema {
     anonUserInfo: AnonUserInfo | null = null
   ): ChannelList {
     const isPM = channelType === 'PM';
-    const firstMessage = data?.firstMessage;
+    const firstMessage = data?.messages[0] || data?.firstMessage;
     const isSystemMessage = firstMessage?.type === 'system' || firstMessage?.isSystem;
     const isMe = firstMessage?.user?.id === data?.myUserId;
     let descriptionSystemMessage;
@@ -494,9 +517,9 @@ class ChannelList implements BaseDbSchema {
       description: descriptionSystemMessage || firstMessage?.text || firstMessage?.message || '',
       unreadCount: data?.unreadCount ?? 0,
       channelType,
-      lastUpdatedAt: data?.last_message_at ?? data?.updated_at,
-      lastUpdatedBy: firstMessage?.user?.id,
-      createdAt: data?.created_at,
+      lastUpdatedAt: data?.last_message_at || data?.updated_at,
+      lastUpdatedBy: firstMessage?.user?.id || data?.created_by?.id,
+      createdAt: data?.created_at || data?.channel?.created_at,
       topicPostExpiredAt: data?.topicPostExpiredAt,
       rawJson: data,
       user: null,

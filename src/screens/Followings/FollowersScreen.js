@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {BackHandler, Platform, StatusBar, StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
+import {useRoute} from '@react-navigation/native';
 
 import Followings from '.';
 import {Context} from '../../context';
@@ -10,19 +11,23 @@ import Search from '../DiscoveryScreenV2/elements/Search';
 import {getFollower} from '../../service/profile';
 import {Header} from '../../components';
 import {fonts} from '../../utils/fonts';
+import DiscoveryAction from '../../context/actions/discoveryAction';
 
 function FollowersScreen() {
+  const route = useRoute();
+  const {params} = route;
   const navigation = useNavigation();
   const [profileState, dispatchNavbar] = React.useContext(Context).profile;
+  const [discovery, discoveryDispatch] = React.useContext(Context).discovery;
 
   const isAndroid = Platform.OS === 'android';
 
   const [isLoading, setIsLoading] = React.useState(false);
-  const [dataFollower, setDataFollower] = React.useState([]);
+  const [dataFollower, setDataFollower] = React.useState(params?.params?.initialData || []);
   const [searchText, setSearchText] = React.useState('');
+  const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true);
 
   const fetchFollower = async (withLoading, text) => {
-    if (withLoading) setIsLoading(true);
     const result = await getFollower(text);
     if (result.code === 200) {
       const newData = result.data.map((data) => ({
@@ -32,17 +37,26 @@ function FollowersScreen() {
         description: null
       }));
       setDataFollower(newData);
+
+      const followedUsers = newData.filter((item) => item.user.following);
+      const unfollowedUsers = newData.filter((item) => !item.user.following);
+      DiscoveryAction.setNewFollowedUsers(followedUsers, discoveryDispatch);
+      DiscoveryAction.setNewUnfollowedUsers(unfollowedUsers, discoveryDispatch);
       if (withLoading) setIsLoading(false);
     }
   };
 
   React.useEffect(() => {
-    if (searchText.length === 0) {
+    if (!isFirstTimeOpen && searchText.length > 0) {
       fetchFollower(true, searchText);
     }
   }, [searchText]);
 
   React.useEffect(() => {
+    if (isFirstTimeOpen && !params?.params?.initialData) {
+      fetchFollower(true, '');
+    }
+    setIsFirstTimeOpen(false);
     setNavbarTitle('Search Users', dispatchNavbar);
   }, []);
 
@@ -51,7 +65,6 @@ function FollowersScreen() {
       return (
         <Header
           title="Who is following you"
-          // containerStyle={styles.header}
           titleStyle={styles.headerTitle}
           onPress={() => navigation.goBack()}
           isCenter
@@ -88,6 +101,10 @@ function FollowersScreen() {
       unsubFocusListener();
     };
   }, []);
+
+  const followedUsers = dataFollower.filter((item) => item.user.following);
+  const unfollowedUsers = dataFollower.filter((item) => !item.user.following);
+
   return (
     <View style={{flex: 1}}>
       {isAndroid ? <StatusBar translucent={false} barStyle={'light-content'} /> : null}
@@ -103,7 +120,12 @@ function FollowersScreen() {
 
       <Followings
         isLoading={isLoading}
-        dataFollower={dataFollower}
+        dataFollower={
+          discovery?.followedUsers?.length > 0 ? discovery?.followedUsers : followedUsers
+        }
+        dataUnfollowed={
+          discovery?.unfollowedUsers?.length > 0 ? discovery?.unfollowedUsers : unfollowedUsers
+        }
         setDataFollower={setDataFollower}
       />
     </View>

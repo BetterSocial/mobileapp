@@ -271,23 +271,34 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   });
 
   const updateChatContinuity = (chatsData: ChatSchema[]) => {
-    const updatedChats = chatsData.map((currentChat, currentIndex) => {
-      const previousChat = chatsData[currentIndex + 1];
+    const updatedChat = chatsData
+      .map((currentChat, currentIndex) => {
+        const previousChat = chatsData[currentIndex + 1];
 
-      if (previousChat) {
+        if (previousChat) {
+          if (
+            currentChat?.userId === previousChat?.userId &&
+            (previousChat?.rawJson?.isSystem ||
+              previousChat?.rawJson?.type === 'system' ||
+              previousChat?.rawJson?.message?.type === 'system')
+          ) {
+            currentChat.isContinuous = false;
+          }
+        }
+        // remove current same system message between previous and current chat
         if (
-          currentChat?.userId === previousChat?.userId &&
           (previousChat?.rawJson?.isSystem ||
             previousChat?.rawJson?.type === 'system' ||
-            previousChat?.rawJson?.message?.type === 'system')
+            previousChat?.rawJson?.message?.type === 'system') &&
+          previousChat?.message === currentChat.message
         ) {
-          currentChat.isContinuous = false;
+          return null;
         }
-      }
-      return currentChat;
-    });
+        return currentChat;
+      })
+      .filter((i) => i != null);
 
-    return updatedChats;
+    return updatedChat;
   };
 
   const goBackToChatTab = () => {

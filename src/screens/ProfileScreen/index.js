@@ -43,6 +43,7 @@ import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {deleteAnonymousPost, deletePost, viewTimePost} from '../../service/post';
 import {
   changeRealName,
+  getFollower,
   getMyProfile,
   getSelfFeedsInProfile,
   removeImageProfile,
@@ -80,6 +81,7 @@ import LinkAndSocialMedia from './elements/LinkAndSocialMedia';
 import ProfileHeader from './elements/ProfileHeader';
 import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
+import DiscoveryAction from '../../context/actions/discoveryAction';
 
 const {width} = Dimensions.get('screen');
 
@@ -106,7 +108,7 @@ const Header = (props) => {
     const currentTime = new Date().getTime();
     const id = feeds && feeds[viewPostTimeIndex]?.id;
     if (id) viewTimePost(id, currentTime - timer.getTime(), SOURCE_FEED_TAB);
-    navigator.navigate(NavigationConstants.CREATE_POST_SCREEN);
+    navigator.navigate(NavigationConstants.CREATE_POST_SCREEN, {});
     setTimer(new Date(), dispatch);
   };
   return (
@@ -190,6 +192,7 @@ const ProfileScreen = ({route}) => {
   const [profile, dispatchProfile] = React.useContext(Context).profile;
   const [, dispatch] = React.useContext(Context).users;
   const [myProfileFeed, myProfileDispatch] = React.useContext(Context).myProfileFeed;
+  const [, discoveryDispatch] = React.useContext(Context).discovery;
 
   const [dataMain, setDataMain] = React.useState({});
   const [, setDataMainBio] = React.useState('');
@@ -212,13 +215,13 @@ const ProfileScreen = ({route}) => {
   const {interactionsComplete} = useAfterInteractions();
   const isNotFromHomeTab = route?.params?.isNotFromHomeTab;
   const [, setIsHitApiFirstTime] = React.useState(false);
+  const [initialFollowerData, setInitialFollowerData] = React.useState([]);
 
   const updateUserClient = useUpdateClientGetstreamHook();
   const {refreshCount} = useResetContext();
   const {mappingColorFeed} = useCoreFeed();
   const LIMIT_PROFILE_FEED = 10;
   const TYPE_GALLERY = 'gallery';
-  const refBottomSheet = React.useRef();
 
   const {feeds} = myProfileFeed;
   const {
@@ -230,6 +233,24 @@ const ProfileScreen = ({route}) => {
     reloadFetchAnonymousPost,
     getProfileCache
   } = useProfileScreenHook();
+
+  const fetchFollower = async () => {
+    const result = await getFollower('');
+    if (result.code === 200) {
+      const newData = result.data.map((data) => ({
+        ...data,
+        name: data.user.username,
+        image: data.user.profile_pic_path,
+        description: null
+      }));
+      setInitialFollowerData(newData);
+
+      const followedUsers = newData.filter((item) => item.user.following);
+      const unfollowedUsers = newData.filter((item) => !item.user.following);
+      DiscoveryAction.setNewFollowedUsers(followedUsers, discoveryDispatch);
+      DiscoveryAction.setNewUnfollowedUsers(unfollowedUsers, discoveryDispatch);
+    }
+  };
 
   const {fetchNextFeeds} = useFeedPreloadHook(mainFeeds?.length, () => getMyFeeds(postOffset));
   // eslint-disable-next-line consistent-return
@@ -273,6 +294,7 @@ const ProfileScreen = ({route}) => {
     if (interactionsComplete) {
       initialMyFeed();
       getProfileCache();
+      fetchFollower();
     }
   }, [interactionsComplete]);
 
@@ -348,7 +370,7 @@ const ProfileScreen = ({route}) => {
   const goToFollowers = (userId, username) => {
     navigation.navigate('Followers', {
       screen: 'TabFollowing',
-      params: {user_id: userId, username, isFollower: true}
+      params: {user_id: userId, username, isFollower: true, initialData: initialFollowerData}
     });
   };
 
