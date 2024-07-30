@@ -477,8 +477,8 @@ export enum BetterSocialEventTracking {
   CREATE_COMMUNITY_SCREEN_USER_NAME_UNSELECTED = 'CreateCommunity-InternalShare_userName_unselected'
 }
 
-const ENABLE_TOAST = ENV === 'Dev';
-// const ENABLE_TOAST = false;
+// const ENABLE_TOAST = ENV === 'Dev';
+const ENABLE_TOAST = false;
 
 const AnalyticsEventTracking = (() => {
   if (!SEGMENT_WRITE_KEY) {
