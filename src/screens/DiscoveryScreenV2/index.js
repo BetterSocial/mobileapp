@@ -14,6 +14,7 @@ import NewsFragment from './fragment/NewsFragment';
 import Search from './elements/Search';
 import TopicFragment from './fragment/TopicFragment';
 import UsersFragment from './fragment/UsersFragment';
+import useDiscoveryScreenAnalyticsHook from '../../libraries/analytics/useDiscoveryScreenAnalyticsHook';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {
@@ -62,6 +63,15 @@ const DiscoveryScreenV2 = ({route}) => {
   });
 
   const navigation = useNavigation();
+  const eventTrack = useDiscoveryScreenAnalyticsHook(selectedScreen, setSelectedScreen);
+  const {
+    common: {
+      onSearchCommunityPressed,
+      onBackButtonPressed,
+      onTabClicked,
+      onCommonSearchBarDeletedClicked
+    }
+  } = eventTrack;
 
   React.useEffect(() => {
     const unsubscribe = () => {
@@ -243,6 +253,17 @@ const DiscoveryScreenV2 = ({route}) => {
           searchText={searchText}
           withoutRecent={route.name === 'Followings'}
           isUser={true}
+          eventTrack={{
+            common: {
+              onCommonClearRecentSearch: eventTrack.common.onCommonClearRecentSearch,
+              onCommonRecentItemClicked: eventTrack.common.onCommonRecentItemClicked
+            },
+            user: {
+              onUserPageOpened: eventTrack.user.onUserPageOpened,
+              onUserPageFollowButtonClicked: eventTrack.user.onUserPageFollowButtonClicked,
+              onUserPageUnfollowButtonClicked: eventTrack.user.onUserPageUnfollowButtonClicked
+            }
+          }}
         />
       );
 
@@ -308,7 +329,10 @@ const DiscoveryScreenV2 = ({route}) => {
           }
           // containerStyle={styles.header}
           titleStyle={styles.headerTitle}
-          onPress={() => navigation.goBack()}
+          onPress={() => {
+            onBackButtonPressed();
+            navigation.goBack();
+          }}
           isCenter
         />
       ) : (
@@ -322,13 +346,14 @@ const DiscoveryScreenV2 = ({route}) => {
           fetchDiscoveryData={fetchDiscoveryData}
           onCancelToken={onCancelToken}
           placeholderText={route.name === 'Followings' ? profileState.navbarTitle : undefined}
+          eventTrack={{
+            onSearchBarClicked: onSearchCommunityPressed,
+            onBackButtonPressed,
+            onTextCleared: () => {}
+          }}
         />
       )}
-      <DiscoveryTab
-        selectedScreen={selectedScreen}
-        onChangeScreen={(index) => setSelectedScreen(index)}
-        tabs={tabs}
-      />
+      <DiscoveryTab selectedScreen={selectedScreen} onChangeScreen={onTabClicked} tabs={tabs} />
       {route.name === 'Followings' && (
         <Search
           searchText={searchText}
@@ -341,6 +366,11 @@ const DiscoveryScreenV2 = ({route}) => {
           onCancelToken={onCancelToken}
           placeholderText={route.name === 'Followings' ? profileState.navbarTitle : undefined}
           hideBackIcon
+          eventTrack={{
+            onSearchBarClicked: onSearchCommunityPressed,
+            onBackButtonPressed,
+            onTextCleared: onCommonSearchBarDeletedClicked
+          }}
         />
       )}
       {RenderFragment}

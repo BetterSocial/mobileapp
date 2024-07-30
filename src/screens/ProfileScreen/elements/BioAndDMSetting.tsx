@@ -4,14 +4,15 @@ import CheckBox from '@react-native-community/checkbox';
 import ToastMessage from 'react-native-toast-message';
 import {Pressable, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
+import dimen from '../../../utils/dimen';
 import {COLORS} from '../../../utils/theme';
 import {Divider} from '../../../components/Divider';
 import {PencilIcon} from '../../../assets';
+import {ProfileScreenAnalyticsEventTracking} from '../../../libraries/analytics/useProfileScreenAnalyticsHook';
 import {TextWithEmoji} from './TextWithEmoji';
-import {fonts, normalizeFontSize} from '../../../utils/fonts';
 import {addDotAndRemoveNewline} from '../../../utils/string/TrimString';
+import {fonts, normalizeFontSize} from '../../../utils/fonts';
 import {profileSettingsDMpermission} from '../../../service/profile';
-import dimen from '../../../utils/dimen';
 
 type BioAndDMSettingProps = {
   bio: string;
@@ -20,6 +21,7 @@ type BioAndDMSettingProps = {
   following: number;
   allowAnonDm: boolean;
   onlyReceivedDmFromUserFollowing: boolean;
+  eventTrack?: ProfileScreenAnalyticsEventTracking;
 };
 
 const CheckBoxCustom = (props: {value: boolean; label: string; disabled?: boolean}) => {
@@ -50,7 +52,14 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
   avatarUrl,
   following,
   allowAnonDm,
-  onlyReceivedDmFromUserFollowing
+  onlyReceivedDmFromUserFollowing,
+  eventTrack = {
+    onEditBioClicked: () => {},
+    onSaveBioClicked: () => {},
+    onShareLinkClicked: () => {},
+    onAllowAllAnonMessagesClicked: () => {},
+    onAllowAnonMessagesFollowedClicked: () => {}
+  }
 }) => {
   const [isAnonymity, setIsAnonymity] = React.useState(allowAnonDm);
   const [isAllowFollowingSendDM, setIsAllowFollowingSendDM] = React.useState(
@@ -67,11 +76,13 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
   };
 
   const toggleSwitchAnon = () => {
+    eventTrack.onAllowAllAnonMessagesClicked();
     setIsAnonymity((current) => !current);
     setIsAllowFollowingSendDM(false);
   };
 
   const toggleSwitchAnonAllowFollowing = () => {
+    eventTrack.onAllowAnonMessagesFollowedClicked();
     if (isAllowFollowingSendDM) {
       setIsAllowFollowingSendDM(() => false);
       return;

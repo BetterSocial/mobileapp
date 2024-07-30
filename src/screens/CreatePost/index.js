@@ -50,7 +50,9 @@ import TopicItem from '../../components/TopicItem';
 import UserProfile from './elements/UserProfile';
 import WarningAnimatedMessage from '../../components/WarningAnimateMessage';
 import useCreatePostHook from '../../hooks/screen/useCreatePostHook';
+import useCreatePostScreenAnalyticsHook from '../../libraries/analytics/useCreatePostScreenAnalyticsHook';
 import useHastagMention from './elements/useHastagMention';
+import useRawBottomSheetHook from '../../hooks/raw-bottom-sheet';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button, ButtonAddMedia} from '../../components/Button';
 import {COLORS} from '../../utils/theme';
@@ -78,9 +80,7 @@ const MemoShowMedia = React.memo(ShowMedia, compire);
 const CreatePost = () => {
   const defaultPollItem = [{text: ''}, {text: ''}];
   const navigation = useNavigation();
-  const sheetMediaRef = React.useRef();
-  const sheetTopicRef = React.useRef();
-  const sheetExpiredRef = React.useRef();
+
   const sheetGeoRef = React.useRef();
   const sheetPrivacyRef = React.useRef();
   const sheetBackRef = React.useRef();
@@ -111,6 +111,29 @@ const CreatePost = () => {
   const [taggingUsers, setTaggingUsers] = React.useState([]);
   const [isUploadingPhotoMedia, setIsUploadingPhotoMedia] = React.useState(false);
   const [isUploadingPhotoCamera, setIsUploadingPhotoCamera] = React.useState(false);
+
+  const eventTrack = useCreatePostScreenAnalyticsHook();
+  const {
+    rbSheetRef: rbMediaRef,
+    open: openMediaSheet,
+    onClose: onCloseMediaSheet,
+    forceCloseRbSheet: forceCloseRbMediaSheet
+  } = useRawBottomSheetHook(() => {
+    if (mediaStorage.length > 0) eventTrack.onAddMorePhotosDialogClose();
+    else eventTrack.onAddMediaPollDialogClose();
+  });
+  const {
+    rbSheetRef: rbTopicRef,
+    open: openTopicSheet,
+    onClose: onCloseTopicSheet,
+    forceCloseRbSheet: forceCloseRbTopicSheet
+  } = useRawBottomSheetHook(eventTrack.onCommunityTagsCancelClicked);
+  const {
+    rbSheetRef: rbExpiredRef,
+    open: openExpiredSheet,
+    onClose: onCloseExpiredSheet,
+    forceCloseRbSheet: forceCloseRbExpiredSheet
+  } = useRawBottomSheetHook(eventTrack.onExpirationSettingCancelClicked);
 
   const {setHashtags} = useHastagMention('');
   const [allTaggingUser, setAllTaggingUser] = React.useState([]);
@@ -275,7 +298,7 @@ const CreatePost = () => {
       const responseUpload = await ImageUtils.uploadImage(pathImg);
       setMediaStorage((val) => [...val, newArr]);
       if (responseUpload?.data?.url) setDataImage((val) => [...val, responseUpload.data.url]);
-      sheetMediaRef.current.close();
+      forceCloseRbMediaSheet();
     } catch (e) {
       if (__DEV__) {
         console.log('CreatePost (upload photo):', e);
@@ -290,6 +313,7 @@ const CreatePost = () => {
   const uploadMediaFromLibrary = async () => {
     const {success} = await requestExternalStoragePermission();
     if (success) {
+      eventTrack.onAddMediaPollUploadFromLibClicked();
       launchImageLibrary(
         {mediaType: 'photo', includeBase64: true, tintColor: 'red'},
         async (res) => {
@@ -309,7 +333,7 @@ const CreatePost = () => {
       Alert.alert('Permission denied', 'Allow Helio to access photos and media on your device ?', [
         {
           text: 'Open Settings',
-          onPress: () => openSettings().then(() => sheetMediaRef.current.close())
+          onPress: () => openSettings().then(forceCloseRbMediaSheet)
         },
         {text: 'Close'}
       ]);
@@ -319,6 +343,7 @@ const CreatePost = () => {
   const takePhoto = async () => {
     const {success, message} = await requestCameraPermission();
     if (success) {
+      eventTrack.onAddMediaPollTakePhotoClicked();
       launchCamera({mediaType: 'photo', includeBase64: true, selectionLimit: 1}, async (res) => {
         const uri = res?.assets?.[0]?.uri;
         if (res.didCancel && __DEV__) {
@@ -340,10 +365,12 @@ const CreatePost = () => {
     const newImageData = [...dataImage].splice(index);
     setDataImage(newImageData);
     setMediaStorage(deleteItem);
+    eventTrack.onPhotoUploadedXButtonClicked();
   };
 
   const onRemoveAllMedia = () => {
     setMediaStorage([]);
+    eventTrack.onPhotoUploadedRemoveAllPhotosClicked();
   };
 
   const removeTopic = (v) => {
@@ -361,7 +388,11 @@ const CreatePost = () => {
   };
   const onSetExpiredSelect = (v) => {
     setExpiredSelect(v);
-    sheetExpiredRef.current.close();
+    if (v === 0) eventTrack.onExpirationSettingChoice24HrClicked();
+    else if (v === 1) eventTrack.onExpirationSettingChoice7DaysClicked();
+    else if (v === 2) eventTrack.onExpirationSettingChoice30DaysClicked();
+    else if (v === 3) eventTrack.onExpirationSettingChoiceNeverClicked();
+    forceCloseRbExpiredSheet();
   };
   const onSetGeoSelect = (v) => {
     getEstimationsAudience(listPrivacy[0].key, geoList[v].location_id);
@@ -389,6 +420,7 @@ const CreatePost = () => {
     if (message || getReducedPoll().length > 0 || mediaStorage.length > 0) {
       sheetBackRef.current.open();
     } else {
+      eventTrack.onBackButtonClicked();
       navigation.goBack();
     }
 
@@ -396,10 +428,12 @@ const CreatePost = () => {
   };
 
   const onSaveTopic = (v, topicChat) => {
+    console.log('CreatePost (onSaveTopic):', v, topicChat);
     setListTopic(v);
     setHashtags(v);
     setListTopicChat(topicChat);
-    sheetTopicRef.current.close();
+    forceCloseRbTopicSheet();
+    eventTrack.onCommunityTagsSaveButtonClicked();
   };
 
   const navigateToTopicPage = () => {
@@ -427,6 +461,7 @@ const CreatePost = () => {
         message: StringConstant.createPostFailedNoMessage,
         type: 'danger'
       });
+      eventTrack.onPostButtonEmptyAlerted();
       setLoadingPost(false);
       return true;
     }
@@ -435,7 +470,6 @@ const CreatePost = () => {
     const attemptPost = async (retryCount) => {
       try {
         const topicsToPost = _.union(initialTopic, listTopic);
-        console.log('message', message);
         const data = {
           message,
           topics: topicsToPost,
@@ -478,6 +512,7 @@ const CreatePost = () => {
         }
         setLoadingPost(false);
         if (post.code === 200) {
+          eventTrack.onPostButtonOpenMainFeed();
           showMessage({
             message: StringConstant.createPostDone,
             type: 'success'
@@ -528,7 +563,7 @@ const CreatePost = () => {
     await attemptPost(0);
   };
 
-  const randerComponentMedia = () => {
+  const renderComponentMedia = () => {
     if (isPollShown || isLinkPreviewShown) {
       return <View />;
     }
@@ -539,7 +574,11 @@ const CreatePost = () => {
           data={mediaStorage.reverse()}
           onRemoveItem={onRemoveItem}
           onRemoveAll={() => onRemoveAllMedia()}
-          onAddMedia={() => sheetMediaRef.current.open()}
+          onAddMedia={() => {
+            openMediaSheet();
+            console.log('CreatePost (onAddMedia):');
+            eventTrack.onPhotoUploadedAddMorePhotosPhotoRemoved();
+          }}
         />
       );
     }
@@ -547,7 +586,10 @@ const CreatePost = () => {
     return (
       <ButtonAddMedia
         label="+ Add media or poll"
-        onPress={() => sheetMediaRef.current.open()}
+        onPress={() => {
+          eventTrack.onAddMediaPollButtonClicked();
+          openMediaSheet();
+        }}
         labelStyle={styles.labelButtonAddMedia}
       />
     );
@@ -555,7 +597,8 @@ const CreatePost = () => {
 
   const createPoll = () => {
     setIsPollShown(true);
-    sheetMediaRef.current.close();
+    eventTrack.onAddMediaPollPageAddPollClicked();
+    forceCloseRbMediaSheet();
   };
 
   const removeAllPoll = () => {
@@ -571,11 +614,13 @@ const CreatePost = () => {
           onPress: () => {
             setIsPollShown(false);
             setPolls(defaultPollItem);
+            eventTrack.onPollSectionRemovePollButtonClicked();
           }
         }
       ]);
     }
 
+    eventTrack.onPollSectionRemovePollButtonClicked();
     setIsPollShown(false);
     setPolls(defaultPollItem);
     return null;
@@ -585,6 +630,8 @@ const CreatePost = () => {
     if (polls.length >= MAX_POLLING_ALLOWED) {
       return;
     }
+
+    eventTrack.onPollSectionAddChoiceClicked(polls.length + 1);
     setPolls([...polls, {text: ''}]);
   };
 
@@ -592,6 +639,8 @@ const CreatePost = () => {
     if (polls.length <= MIN_POLLING_ALLOWED) {
       return;
     }
+
+    eventTrack.onPollSectionDeleteChoiceClicked(index);
     polls.splice(index, 1);
     setPolls([...polls]);
   };
@@ -634,7 +683,9 @@ const CreatePost = () => {
 
   const openTopic = () => {
     setPositionKeyboard('always');
-    sheetTopicRef.current.open();
+    openTopicSheet();
+    openTopicSheet();
+    eventTrack.onAdSetAddCommunitiesOpenCommunityTags();
   };
 
   const handleTagUser = debounce((text) => {
@@ -663,6 +714,12 @@ const CreatePost = () => {
     if (geoInfo?.location_level?.toLowerCase() === 'state') return geoInfo?.state;
     if (geoInfo?.location_level?.toLowerCase() === 'country') return geoInfo?.country;
     return geoInfo?.location_level;
+  };
+
+  const onUserTypeChanged = (isAnonymous) => {
+    setTypeUser(isAnonymous);
+    if (isAnonymous) eventTrack.onAnonButtonOn();
+    else eventTrack.onAnonButtonOff();
   };
 
   React.useEffect(() => {
@@ -694,7 +751,7 @@ const CreatePost = () => {
         <Header title={headerTitle} onPress={() => onBack()} />
         <View style={{paddingHorizontal: 15}}>
           <UserProfile
-            setTypeUser={setTypeUser}
+            setTypeUser={onUserTypeChanged}
             isAnonymous={typeUser}
             anonUserInfo={anonUserInfo}
             username={profile?.myProfile?.username}
@@ -705,6 +762,7 @@ const CreatePost = () => {
             }
             onPress={() => {
               onChangeText('');
+              eventTrack.onProfileButtonClicked();
               navigation.navigate('ProfileScreen', {
                 isNotFromHomeTab: true
               });
@@ -760,16 +818,18 @@ const CreatePost = () => {
               ismultiplechoice={isPollMultipleChoice}
               selectedtime={selectedTime}
               ontimechanged={(timeObject) => setSelectedTime(timeObject)}
-              onmultiplechoicechanged={(ismultiplechoice) =>
-                setIsPollMultipleChoice(ismultiplechoice)
-              }
+              onmultiplechoicechanged={(ismultiplechoice) => {
+                setIsPollMultipleChoice(ismultiplechoice);
+                if (ismultiplechoice) eventTrack.onPollSectionMultipleChoiceButtonOn();
+                else eventTrack.onPollSectionMultipleChoiceButtonOff();
+              }}
               expiredobject={postExpired[expiredSelect].expiredobject}
               isAnonym={typeUser}
               expiration={postExpired[expiredSelect].label}
             />
           )}
           <Gap style={styles.height(26)} />
-          {randerComponentMedia()}
+          {renderComponentMedia()}
           <Gap style={styles.height(29)} />
           <Text style={styles.label}>Advanced Settings</Text>
           <Gap style={styles.height(12)} />
@@ -786,7 +846,10 @@ const CreatePost = () => {
             icon={<Timer width={16.67} height={16.67} fill={COLORS.white} />}
             label={postExpired.length === 0 ? 'Loading...' : postExpired[expiredSelect]?.label}
             labelStyle={styles.listText}
-            onPress={() => sheetExpiredRef.current.open()}
+            onPress={() => {
+              eventTrack.onAdSetExpirationButtonOpenExpirationSetting();
+              openExpiredSheet();
+            }}
           />
           {IS_GEO_SELECT_ENABLED && (
             <>
@@ -807,8 +870,9 @@ const CreatePost = () => {
           </Button>
           <Gap style={styles.height(18)} />
           <SheetMedia
-            refMedia={sheetMediaRef}
+            refMedia={rbMediaRef}
             medias={mediaStorage}
+            onClose={onCloseMediaSheet}
             uploadFromMedia={() => uploadMediaFromLibrary()}
             takePhoto={() => takePhoto()}
             createPoll={() => createPoll()}
@@ -816,17 +880,22 @@ const CreatePost = () => {
             isLoadingUploadingPhoto={isUploadingPhotoCamera}
           />
           <SheetAddTopic
-            refTopic={sheetTopicRef}
-            onAdd={(v, chatTopci) => onSaveTopic(v, chatTopci)}
+            refTopic={rbTopicRef}
+            onAdd={(v, chatTopic) => onSaveTopic(v, chatTopic)}
             topics={listTopic}
             chatTopics={listTopicChat}
-            onClose={() => sheetTopicRef.current.close()}
+            onClose={onCloseTopicSheet}
+            eventTrack={{
+              onAddTopic: eventTrack.onAddCommsAddedCommNewCommAdded,
+              onRemoveTopic: eventTrack.onAddCommsDeleteCommCommDeleted
+            }}
           />
           <SheetExpiredPost
-            refExpired={sheetExpiredRef}
+            refExpired={rbExpiredRef}
             data={postExpired}
             select={expiredSelect}
             onSelect={onSetExpiredSelect}
+            onClose={onCloseExpiredSheet}
           />
           <SheetGeographic
             geoRef={sheetGeoRef}

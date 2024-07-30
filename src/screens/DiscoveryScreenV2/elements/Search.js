@@ -35,7 +35,12 @@ const DiscoverySearch = ({
   fetchDiscoveryData = () => {},
   fetchData,
   onCancelToken = () => {},
-  hideBackIcon = false
+  hideBackIcon = false,
+  eventTrack = {
+    onSearchBarClicked: () => {},
+    onBackButtonPressed: () => {},
+    onTextCleared: () => {}
+  }
 }) => {
   const navigation = useNavigation();
   const [, discoveryDispatch] = React.useContext(Context).discovery;
@@ -54,7 +59,10 @@ const DiscoverySearch = ({
 
   const handleBackPress = () => {
     Keyboard.dismiss();
-    if (navigation.canGoBack()) navigation.goBack();
+    if (navigation.canGoBack()) {
+      eventTrack.onBackButtonPressed();
+      navigation.goBack();
+    }
   };
 
   const handleFocus = (isFocusParam) => {
@@ -106,6 +114,7 @@ const DiscoverySearch = ({
     setSearchText('');
     setLastSearch('');
     debounceChangeText('');
+    eventTrack?.onTextCleared();
   };
 
   const handleOnSubmitEditing = (event) => {
@@ -210,6 +219,7 @@ const DiscoverySearch = ({
             onChangeText={handleChangeText}
             onFocus={() => handleFocus(true)}
             onBlur={() => handleFocus(false)}
+            onPressIn={eventTrack.onSearchBarClicked}
             multiline={false}
             returnKeyType="search"
             onSubmitEditing={handleOnSubmitEditing}

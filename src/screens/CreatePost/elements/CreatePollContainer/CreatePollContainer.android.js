@@ -7,9 +7,10 @@ import CreatePollContainerBaseStyle from './style/CreatePollContainerBaseStyle';
 import MemoIcPlus from '../../../../assets/icons/ic_plus';
 import MemoIc_arrow_right from '../../../../assets/icons/Ic_arrow_right';
 import PollItem from '../PollItem';
+import useCreatePostScreenAnalyticsHook from '../../../../libraries/analytics/useCreatePostScreenAnalyticsHook';
+import {COLORS} from '../../../../utils/theme';
 import {MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED} from '../../../../utils/constants';
 import {getDurationTimeText} from '../../../../utils/string/StringUtils';
-import {COLORS} from '../../../../utils/theme';
 
 function CreatePollContainer({
   onremoveallpoll = () => {},
@@ -42,6 +43,17 @@ function CreatePollContainer({
   const [pickerDay, setPickerDay] = React.useState(selectedtime.day);
   const [pickerHour, setPickerHour] = React.useState(selectedtime.hour);
   const [pickerMinute, setPickerMinute] = React.useState(selectedtime.minute);
+  const eventTrack = useCreatePostScreenAnalyticsHook();
+
+  const onDurationClicked = () => {
+    setIsDurationModalShown(true);
+    eventTrack.onPollSectionDurationButtonClicked();
+  };
+
+  const onCancelDurationClicked = () => {
+    setIsDurationModalShown(false);
+    eventTrack.onSetPollDurationCancelClicked();
+  };
 
   return (
     <View style={S.createpollcontainer}>
@@ -72,7 +84,7 @@ function CreatePollContainer({
 
       <View style={S.divider} />
 
-      <TouchableOpacity style={S.polldurationbutton} onPress={() => setIsDurationModalShown(true)}>
+      <TouchableOpacity style={S.polldurationbutton} onPress={onDurationClicked}>
         <View style={S.row}>
           <Text style={S.fillparenttext}>Duration</Text>
           <View style={S.polldurationbuttonview(isAnonym)}>
@@ -109,7 +121,10 @@ function CreatePollContainer({
                   selectedItem={selectedtime.day}
                   indicatorColor={COLORS.anon_primary}
                   indicatorWidth={3}
-                  onItemSelected={(value) => setPickerDay(value)}
+                  onItemSelected={(value) => {
+                    setPickerDay(value);
+                    eventTrack.onSetPollDurationChangeDaysSet(value);
+                  }}
                   isCyclic={true}
                 />
               </View>
@@ -122,7 +137,10 @@ function CreatePollContainer({
                   selectedItem={selectedtime.hour}
                   indicatorColor={COLORS.anon_primary}
                   indicatorWidth={3}
-                  onItemSelected={(value) => setPickerHour(value)}
+                  onItemSelected={(value) => {
+                    setPickerHour(value);
+                    eventTrack.onSetPollDurationChangeHoursSet(value);
+                  }}
                   isCyclic={true}
                 />
               </View>
@@ -133,7 +151,10 @@ function CreatePollContainer({
                 <WheelPicker
                   data={minute}
                   selectedItem={selectedtime.minute}
-                  onItemSelected={(value) => setPickerMinute(value)}
+                  onItemSelected={(value) => {
+                    setPickerMinute(value);
+                    eventTrack.onSetPollDurationChangeMinutesSet(value);
+                  }}
                   indicatorColor={COLORS.anon_primary}
                   indicatorWidth={3}
                   isCyclic={true}
@@ -142,9 +163,7 @@ function CreatePollContainer({
             </View>
           </View>
           <View style={S.bottombuttonrowcontainer}>
-            <TouchableOpacity
-              style={S.buttoncontainer}
-              onPress={() => setIsDurationModalShown(false)}>
+            <TouchableOpacity style={S.buttoncontainer} onPress={onCancelDurationClicked}>
               <Text style={S.bottombuttontext}>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -156,6 +175,7 @@ function CreatePollContainer({
                 selectedTime.minute = pickerMinute;
                 ontimechanged(selectedTime);
                 setIsDurationModalShown(false);
+                eventTrack.onSetPollDurationSetButtonClicked();
               }}>
               <Text style={S.bottombuttontext}>Set</Text>
             </TouchableOpacity>

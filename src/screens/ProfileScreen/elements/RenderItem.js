@@ -1,12 +1,15 @@
 import * as React from 'react';
-import {Dimensions, StyleSheet, View} from 'react-native';
 import PropTypes from 'prop-types';
+import {Dimensions, StyleSheet, View} from 'react-native';
 
+import AddCommentPreview from '../../FeedScreen/elements/AddCommentPreview';
 import Content from '../../FeedScreen/Content';
 import ContentLink from '../../FeedScreen/ContentLink';
 import Header from '../../FeedScreen/Header';
 import ShareUtils from '../../../utils/share';
 import dimen from '../../../utils/dimen';
+import useFeed from '../../FeedScreen/hooks/useFeed';
+import usePostHook from '../../../hooks/core/post/usePostHook';
 import {
   ANALYTICS_SHARE_POST_PROFILE_ID,
   ANALYTICS_SHARE_POST_PROFILE_SCREEN,
@@ -15,15 +18,13 @@ import {
   POST_TYPE_STANDARD,
   SOURCE_MY_PROFILE
 } from '../../../utils/constants';
+import {BetterSocialEventTracking} from '../../../libraries/analytics/analyticsEventTracking';
+import {COLORS} from '../../../utils/theme';
 import {Context} from '../../../context';
 import {Footer, PreviewComment} from '../../../components';
 import {getCommentLength} from '../../../utils/getstream';
-import {showScoreAlertDialog} from '../../../utils/Utils';
 import {normalize, normalizeFontSizeByWidth} from '../../../utils/fonts';
-import {COLORS} from '../../../utils/theme';
-import usePostHook from '../../../hooks/core/post/usePostHook';
-import useFeed from '../../FeedScreen/hooks/useFeed';
-import AddCommentPreview from '../../FeedScreen/elements/AddCommentPreview';
+import {showScoreAlertDialog} from '../../../utils/Utils';
 
 const FULL_WIDTH = Dimensions.get('screen').width;
 
@@ -54,7 +55,19 @@ const Item = ({
   onPressDomain,
   onNewPollFetched,
   index = -1,
-  onHeaderOptionClicked = () => {}
+  onHeaderOptionClicked = () => {},
+  eventTrack = {
+    onDownvoteInserted: () => {},
+    onDownvoteRemoved: () => {},
+    onUpvoteInserted: () => {},
+    onUpvoteRemoved: () => {},
+    onReplyButtonClicked: () => {},
+    onPostOptionClicked: () => {},
+    onShareButtonClicked: () => {},
+    onDmButtonClicked: () => {},
+    pollChoice: null,
+    pollSeeResults: null
+  }
 }) => {
   const [totalVote, setTotalVote] = React.useState(0);
   const [voteStatus, setVoteStatus] = React.useState('none');
@@ -105,6 +118,11 @@ const Item = ({
   const isShortTextPost =
     item.post_type === POST_TYPE_STANDARD && item.images_url.length <= 0 && isShortText === true;
 
+  const onCommentButtonClicked = () => {
+    eventTrack.onReplyButtonClicked();
+    onPressComment(item);
+  };
+
   return (
     <View key={item.id} style={styles.cardContainer}>
       <View style={[styles.cardMain]}>
@@ -119,6 +137,8 @@ const Item = ({
           onPressFollUnFoll={() => followUnfollow(item)}
           disabledFollow={true}
           isShortText={isShortTextPost}
+          threeDotsEventName={BetterSocialEventTracking.OTHER_PROFILE_SCREEN_POST_OPTION_CLICKED}
+          shareLinkEventName={BetterSocialEventTracking.OTHER_PROFILE_SCREEN_POST_OPTION_SHARE_LINK}
         />
         {item.post_type === POST_TYPE_LINK && (
           <ContentLink
@@ -150,6 +170,10 @@ const Item = ({
             item={item}
             onNewPollFetched={onNewPollFetched}
             hasComment={hasComment}
+            eventTrackName={{
+              pollSeeResults: eventTrack.pollSeeResults,
+              pollChoice: eventTrack.pollChoice
+            }}
           />
         )}
         <Footer
@@ -164,7 +188,7 @@ const Item = ({
               ANALYTICS_SHARE_POST_PROFILE_ID
             )
           }
-          onPressComment={() => onPressComment(item)}
+          onPressComment={onCommentButtonClicked}
           onPressBlock={() => onPressBlock(item)}
           showScoreButton={profile?.myProfile?.is_backdoor_user}
           onPressScore={() => showScoreAlertDialog(item)}
@@ -185,9 +209,11 @@ const Item = ({
                   setTotalVote((p) => p - 1);
                 }
                 setStatusUpvote(false);
+                eventTrack.onDownvoteInserted();
               } else {
                 setVoteStatus('none');
                 setTotalVote((p) => p + 1);
+                eventTrack.onDownvoteRemoved();
               }
               return prev;
             });
@@ -209,9 +235,11 @@ const Item = ({
                   setTotalVote((p) => p + 1);
                 }
                 setStatusDowvote(false);
+                eventTrack.onUpvoteInserted();
               } else {
                 setVoteStatus('none');
                 setTotalVote((p) => p - 1);
+                eventTrack.onUpvoteRemoved();
               }
               return prev;
             });
@@ -219,6 +247,9 @@ const Item = ({
           statusVote={voteStatus}
           isShowDM
           isShortText={isShortTextPost}
+          eventTrackCallback={{
+            pressDMFooter: eventTrack.onDmButtonClicked
+          }}
         />
         {hasComment ? (
           <View testID="previewComment">

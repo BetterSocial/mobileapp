@@ -1,23 +1,24 @@
+import * as React from 'react';
+import Accordion from 'react-native-collapsible/Accordion';
+import PropTypes from 'prop-types';
+import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 /* eslint-disable no-underscore-dangle */
 import {useNavigation} from '@react-navigation/native';
-import * as React from 'react';
-import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 
-import PropTypes from 'prop-types';
-import Accordion from 'react-native-collapsible/Accordion';
-import TopicsProfilePictureEmptyState from '../../../assets/icon/TopicsProfilePictureEmptyState';
+import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
+import DomainList from '../elements/DiscoveryItemList';
 import IconUserGroup from '../../../assets/icons/Ic_user_group';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
-import useIsReady from '../../../hooks/useIsReady';
-import {fonts, normalizeFontSize} from '../../../utils/fonts';
-import useChatClientHook from '../../../utils/getstream/useChatClientHook';
-import {convertTopicNameToTopicPageScreenParam} from '../../../utils/string/StringUtils';
-import {COLORS} from '../../../utils/theme';
-import DomainList from '../elements/DiscoveryItemList';
-import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import RecentSearch from '../elements/RecentSearch';
-import useDiscovery from '../hooks/useDiscovery';
+import TopicsProfilePictureEmptyState from '../../../assets/icon/TopicsProfilePictureEmptyState';
 import dimen from '../../../utils/dimen';
+import useChatClientHook from '../../../utils/getstream/useChatClientHook';
+import useDiscovery from '../hooks/useDiscovery';
+import useDiscoveryScreenAnalyticsHook from '../../../libraries/analytics/useDiscoveryScreenAnalyticsHook';
+import useIsReady from '../../../hooks/useIsReady';
+import {COLORS} from '../../../utils/theme';
+import {convertTopicNameToTopicPageScreenParam} from '../../../utils/string/StringUtils';
+import {fonts, normalizeFontSize} from '../../../utils/fonts';
 
 const FROM_FOLLOWED_TOPIC = 'fromfollowedtopics';
 const FROM_FOLLOWED_TOPIC_INITIAL = 'fromfollowedtopicsinitial';
@@ -84,6 +85,10 @@ const TopicFragment = ({
   withoutRecent = false
 }) => {
   const [activeSections, setActiveSections] = React.useState([]);
+  const {
+    common: {onCommonClearRecentSearch, onCommonRecentItemClicked},
+    topic: {onFollowUnfollow, onTopicPressed, onStartNewCommunityAnalyticsPressed}
+  } = useDiscoveryScreenAnalyticsHook();
 
   React.useEffect(() => {
     if (searchText.length === 0) {
@@ -154,7 +159,8 @@ const TopicFragment = ({
     }
   };
 
-  const handleFollow = async (from, willFollow, item) => {
+  const handleFollow = async (from, willFollow, item, section) => {
+    onFollowUnfollow(willFollow, section);
     handleTopic(from, willFollow, item);
 
     try {
@@ -165,28 +171,18 @@ const TopicFragment = ({
     if (searchText.length > 0) fetchData();
   };
 
-  const __handleOnTopicPress = (item) => {
+  const __handleOnTopicPress = (item, section) => {
     const navigationParam = {
       id: convertTopicNameToTopicPageScreenParam(item.name),
       isFollowing: item.following
     };
 
+    onTopicPressed(section);
+
     navigation.push('TopicPageScreen', navigationParam);
   };
 
-  const renderRecentSearch = (index) => {
-    return (
-      index === 0 &&
-      !withoutRecent && (
-        <RecentSearch
-          shown={isFirstTimeOpen}
-          setSearchText={setSearchText}
-          setIsFirstTimeOpen={setIsFirstTimeOpen}
-        />
-      )
-    );
-  };
-  const renderDiscoveryItem = ({from, item, index}) => {
+  const renderDiscoveryItem = ({from, item, index, section}) => {
     if (item.separator) {
       return (
         <>
@@ -199,11 +195,11 @@ const TopicFragment = ({
       <>
         <View style={styles.domainContainer}>
           <DomainList
-            handleSetFollow={() => handleFollow(from, true, item)}
-            handleSetUnFollow={() => handleFollow(from, false, item)}
+            handleSetFollow={() => handleFollow(from, true, item, section)}
+            handleSetUnFollow={() => handleFollow(from, false, item, section)}
             key={`followedTopic-${index}`}
             isCommunity={true}
-            onPressBody={() => __handleOnTopicPress(item)}
+            onPressBody={() => __handleOnTopicPress(item, section)}
             item={{
               name: item.name,
               image: item.icon_path,
@@ -217,7 +213,7 @@ const TopicFragment = ({
     );
   };
 
-  const renderItem = ({index, item}) =>
+  const renderItem = ({index, item, section}) =>
     renderDiscoveryItem({
       from: isFirstTimeOpen
         ? FROM_FOLLOWED_TOPIC_INITIAL
@@ -225,8 +221,14 @@ const TopicFragment = ({
         ? FROM_UNFOLLOWED_TOPIC
         : FROM_FOLLOWED_TOPIC,
       item,
-      index
+      index,
+      section
     });
+
+  const onStartNewCommunityPressed = () => {
+    onStartNewCommunityAnalyticsPressed();
+    navigation.push('CreateCommunity');
+  };
 
   const __renderTopicItems = () => {
     const followingTopics = [];
@@ -246,9 +248,7 @@ const TopicFragment = ({
 
     return (
       <View>
-        <Pressable
-          style={styles.buttonContainer}
-          onPress={() => navigation.push('CreateCommunity')}>
+        <Pressable style={styles.buttonContainer} onPress={onStartNewCommunityPressed}>
           <View style={styles.buttonRow}>
             <IconUserGroup height={20} width={22} fill={COLORS.gray400} />
             <Text style={styles.buttonText}>Start new community</Text>
@@ -264,10 +264,19 @@ const TopicFragment = ({
                 shown={!withoutRecent || isFirstTimeOpen}
                 setSearchText={setSearchText}
                 setIsFirstTimeOpen={setIsFirstTimeOpen}
+                eventTrack={{
+                  onClearRecentSearch: () => onCommonClearRecentSearch('topic'),
+                  onRecentSearchItemClicked: () => onCommonRecentItemClicked('topic')
+                }}
               />
               <AccordionView
                 data={firstData}
-                renderItem={renderItem}
+                renderItem={(props) =>
+                  renderItem({
+                    ...props,
+                    section: 'your-communities'
+                  })
+                }
                 activeSections={activeSections}
                 setActiveSections={setActiveSections}
               />
@@ -277,7 +286,7 @@ const TopicFragment = ({
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={{paddingBottom: 100}}
           data={data}
-          renderItem={renderItem}
+          renderItem={(props) => renderItem({...props, section: 'suggested-communities'})}
           keyExtractor={(item, index) => index.toString()}
           onEndReached={() => fetchData()}
           onEndReachedThreshold={0.6}

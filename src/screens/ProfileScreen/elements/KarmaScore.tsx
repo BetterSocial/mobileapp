@@ -1,21 +1,34 @@
 import * as React from 'react';
-import {Text, View} from 'react-native';
 import Tooltip from 'react-native-walkthrough-tooltip';
+import {Text, View} from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+
 import MemoIcQuestionMark from '../../../assets/icons/Ic_question_mark';
-import {fonts, normalize} from '../../../utils/fonts';
-import {CircleGradient} from '../../../components/Karma/CircleGradient';
 import {BetterSocialLogoGram} from '../../../assets';
 import {COLORS} from '../../../utils/theme';
+import {CircleGradient} from '../../../components/Karma/CircleGradient';
+import {ProfileScreenAnalyticsEventTracking} from '../../../libraries/analytics/useProfileScreenAnalyticsHook';
+import {fonts, normalize} from '../../../utils/fonts';
 
 type KarmaScoreProps = {
   score: number;
+  evenTrack: ProfileScreenAnalyticsEventTracking;
 };
 
-export const KarmaScore = ({score}: KarmaScoreProps) => {
+export const KarmaScore = ({score, evenTrack}: KarmaScoreProps) => {
   const [isTooltipShown, setIsTooltipShown] = React.useState(false);
+  const showTooltip = () => {
+    if (evenTrack?.onNoPostsKarmaScoreClicked) evenTrack.onNoPostsKarmaScoreClicked();
+    setIsTooltipShown(true);
+  };
+
+  const closeTooltip = () => {
+    if (evenTrack?.onNoPostsKarmaScoreClosed) evenTrack.onNoPostsKarmaScoreClosed();
+    setIsTooltipShown(false);
+  };
+
   return (
-    <TouchableWithoutFeedback onPress={() => setIsTooltipShown(true)}>
+    <TouchableWithoutFeedback onPress={showTooltip}>
       <View
         style={{
           borderRadius: 32,
@@ -42,7 +55,7 @@ export const KarmaScore = ({score}: KarmaScoreProps) => {
           isVisible={isTooltipShown}
           placement={'bottom'}
           closeOnContentInteraction={false}
-          onClose={() => setIsTooltipShown(false)}
+          onClose={closeTooltip}
           closeOnBackgroundInteraction={true}
           contentStyle={{
             borderRadius: 10,
@@ -85,7 +98,7 @@ export const KarmaScore = ({score}: KarmaScoreProps) => {
                   width: '100%',
                   textAlign: 'right'
                 }}
-                onPress={() => setIsTooltipShown(false)}>
+                onPress={closeTooltip}>
                 Got it!
               </Text>
             </View>

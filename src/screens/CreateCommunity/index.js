@@ -12,18 +12,19 @@ import {
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
 
+import DiscoveryRepo from '../../service/discovery';
 import dimen from '../../utils/dimen';
+import useCreateCommunityScreenAnalyticsHook from '../../libraries/analytics/useCreateCommunityScreenAnalyticsHook';
 import {Button} from '../../components/Button';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {Header} from '../../components';
 import {Input} from '../../components/Input';
+import {NavigationConstants} from '../../utils/constants';
 import {ProgressBar} from '../../components/ProgressBar';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {setCapitalFirstLetter} from '../../utils/Utils';
-import {NavigationConstants} from '../../utils/constants';
 import {submitCommunityName, verifyCommunityName} from '../../service/topics';
-import DiscoveryRepo from '../../service/discovery';
 
 const MAXIMUM_NAME_LENGTH = 64;
 const MINIMUM_NAME_LENGTH = 3;
@@ -34,6 +35,8 @@ const CreateCommunity = () => {
   const [name, setName] = React.useState('');
   const [typeFetch, setTypeFetch] = React.useState('');
   const inputRef = React.useRef();
+
+  const eventTrack = useCreateCommunityScreenAnalyticsHook();
 
   const verifyNameDebounce = React.useCallback(
     _.debounce(async (text) => {
@@ -97,6 +100,7 @@ const CreateCommunity = () => {
     if (name && name.length >= MINIMUM_NAME_LENGTH && typeFetch === 'available') {
       const response = await submitCommunityName(name);
       if (response.success) {
+        eventTrack.onCreateCommunityScreenNameNextButtonOpenCCCustomizePage();
         navigation.replace('ContactScreen', {
           isCreateCommunity: true,
           topicCommunityId: response.topic_id,
@@ -203,7 +207,10 @@ const CreateCommunity = () => {
       <StatusBar translucent={false} barStyle={'light-content'} />
       <Header
         title="Create Community"
-        onPress={() => navigation.goBack()}
+        onPress={() => {
+          eventTrack.onCreateCommunityScreenBackButtonClicked();
+          navigation.goBack();
+        }}
         titleStyle={{
           alignSelf: 'center'
         }}

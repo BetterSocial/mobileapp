@@ -12,16 +12,23 @@ import {sanitizeUrlForLinking} from '../../utils/Utils';
 
 const Content = (props) => {
   const navigation = useNavigation();
-  const {item, title, image, description, url, onContentClicked = undefined} = props;
+  const {item, title, image, description, url, onContentClicked = undefined, eventTrack} = props;
 
   const onContentPressed = () => {
     if (onContentClicked) {
       return onContentClicked();
     }
 
+    eventTrack?.onOpenLinkContextScreen();
+
     return navigation.push('LinkContextScreen', {
       item
     });
+  };
+
+  const onOpenLinkPressed = () => {
+    eventTrack?.onOpenLinkPressed();
+    Linking.openURL(sanitizeUrlForLinking(url));
   };
 
   return (
@@ -57,7 +64,7 @@ const Content = (props) => {
             {description}{' '}
             <Text
               testID="textPress"
-              onPress={() => Linking.openURL(sanitizeUrlForLinking(url))}
+              onPress={onOpenLinkPressed}
               style={{
                 color: COLORS.signed_primary,
                 textDecorationLine: 'underline',

@@ -81,7 +81,18 @@ const UsersFragment = ({
   showRecentSearch = true,
   fetchData = () => {},
   searchText,
-  isUser
+  isUser,
+  eventTrack = {
+    common: {
+      onCommonClearRecentSearch: () => {},
+      onCommonRecentItemClicked: () => {}
+    },
+    user: {
+      onUserPageOpened: () => {},
+      onUserPageFollowButtonClicked: () => {},
+      onUserPageUnfollowButtonClicked: () => {}
+    }
+  }
 }) => {
   const [profile] = React.useContext(Context).profile;
   const navigation = useNavigation();
@@ -90,6 +101,11 @@ const UsersFragment = ({
   const [loadingDM, setLoadingDM] = React.useState(false);
   const {createSignChat, loadingCreateChat} = useCreateChat();
   const [activeSections, setActiveSections] = React.useState([]);
+
+  const {onCommonClearRecentSearch, onCommonRecentItemClicked} = eventTrack?.common || {};
+  const {onUserPageOpened, onUserPageFollowButtonClicked, onUserPageUnfollowButtonClicked} =
+    eventTrack?.user || {};
+
   const [followedUserIds, setFollowedUserIds] = React.useState([]);
   const route = useRoute();
 
@@ -120,7 +136,8 @@ const UsersFragment = ({
     handleActiveSections();
   }, [searchText, followedUsers]);
 
-  const handleOnPress = (item) => {
+  const handleOnPress = (item, section) => {
+    onUserPageOpened(section);
     navigation.push('OtherProfile', {
       data: {
         user_id: myId,
@@ -146,7 +163,7 @@ const UsersFragment = ({
     setFollowedUserIds(newFollowedUserIds);
   };
 
-  const handleFollow = async (from, willFollow, item) => {
+  const handleFollow = async (from, willFollow, item, section) => {
     handleUser(from, willFollow, item);
     const followedUserId = item.user ? item.user.user_id : item.user_id;
     const data = {
@@ -164,6 +181,7 @@ const UsersFragment = ({
     if (willFollow) {
       try {
         await setFollow(data, client);
+        onUserPageFollowButtonClicked(section);
       } catch (error) {
         handleUser(from, !willFollow, item);
         rollbackFollow(followedUserId);
@@ -171,6 +189,7 @@ const UsersFragment = ({
     } else {
       try {
         await setUnFollow(data, client);
+        onUserPageUnfollowButtonClicked(section);
       } catch (error) {
         handleUser(from, !willFollow, item);
         rollbackFollow(followedUserId);
@@ -179,7 +198,7 @@ const UsersFragment = ({
     if (searchText.length > 0) fetchData();
   };
 
-  const renderDiscoveryItem = ({from, item, index}) => {
+  const renderDiscoveryItem = ({from, item, index, section}) => {
     if (item.separator) {
       return (
         <>
@@ -231,8 +250,8 @@ const UsersFragment = ({
         <DomainList
           isFromUserFragment={true}
           key={index}
-          onPressBody={() => handleOnPress(item.user || item)}
-          handleSetFollow={() => handleFollow(from, true, item.user || item)}
+          onPressBody={() => handleOnPress(item.user || item, section)}
+          handleSetFollow={() => handleFollow(from, true, item.user || item, section)}
           handleSetUnFollow={() => {
             checkUserIsBlockHandle();
           }}
@@ -255,7 +274,7 @@ const UsersFragment = ({
     );
   };
 
-  const renderItem = ({index, item}) => {
+  const renderItem = ({index, item, section}) => {
     let result;
 
     if (isFirstTimeOpen) {
@@ -283,7 +302,8 @@ const UsersFragment = ({
     return renderDiscoveryItem({
       from: result,
       item,
-      index
+      index,
+      section
     });
   };
 
@@ -359,12 +379,16 @@ const UsersFragment = ({
                 shown={showRecentSearch || isFirstTimeOpen}
                 setSearchText={setSearchText}
                 setIsFirstTimeOpen={setIsFirstTimeOpen}
+                eventTrack={{
+                  onClearRecentSearch: () => onCommonClearRecentSearch('user'),
+                  onRecentSearchItemClicked: () => onCommonRecentItemClicked('user')
+                }}
               />
             )}
 
             <AccordionView
               data={initialAccordionData}
-              renderItem={renderItem}
+              renderItem={(props) => renderItem({...props, section: 'your-user'})}
               activeSections={activeSections}
               setActiveSections={setActiveSections}
             />
@@ -373,7 +397,7 @@ const UsersFragment = ({
         onMomentumScrollBegin={handleScroll}
         contentContainerStyle={{paddingBottom: 100}}
         data={peopleYouMightKnowData || []}
-        renderItem={renderItem}
+        renderItem={(props) => renderItem({...props, section: 'suggested-user'})}
         keyExtractor={(item, index) => index.toString()}
         onEndReached={() => fetchData()}
         onEndReachedThreshold={0.6}
