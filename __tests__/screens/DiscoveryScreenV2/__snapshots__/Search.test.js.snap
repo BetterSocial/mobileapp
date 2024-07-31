@@ -85,6 +85,7 @@ exports[`Testing Discovery Screen V2 Testing Discovery Search Bar Match Snapshot
         onBlur={[Function]}
         onChangeText={[Function]}
         onFocus={[Function]}
+        onPressIn={[Function]}
         onSubmitEditing={[Function]}
         placeholder="Search Communities"
         placeholderTextColor="#8C939F"

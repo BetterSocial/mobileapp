@@ -56,6 +56,8 @@ class BlockDomainComponent extends React.Component {
     this.refInteractionManager.current = InteractionManager.runAfterInteractions(() => {
       this.refSpecificIssue.current.open();
     });
+
+    if (this.props.onReasonsSubmitted) this.props.onReasonsSubmitted(v);
   }
 
   __onSelectBlock(v) {
@@ -73,6 +75,7 @@ class BlockDomainComponent extends React.Component {
     this.refReportDomain.current.close();
     this.refSpecificIssue.current.close();
     this.__onBlockDomain();
+    if (this.props.onSkipOnlyBlock) this.props.onSkipOnlyBlock();
   }
 
   __onBlockDomain() {
@@ -90,6 +93,8 @@ class BlockDomainComponent extends React.Component {
         this.props.getValueBlock(blockedDomain);
       }
     );
+
+    if (this.props.onReportInfoSubmitted) this.props.onReportInfoSubmitted();
   }
 
   render() {
@@ -99,6 +104,9 @@ class BlockDomainComponent extends React.Component {
           refBlockDomain={this.refBlockDomain}
           onSelect={this.__onSelectBlock}
           domain={this.props.domain}
+          onClose={() => this.props?.onCloseBlockDomain?.()}
+          onBlockAndReportDomain={() => this.props?.onBlockAndReportDomain?.()}
+          onBlockDomainIndefinitely={() => this.props?.onBlockDomainIndefinitely?.()}
         />
         <SpecificIssue
           refSpecificIssue={this.refSpecificIssue}

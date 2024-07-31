@@ -1,17 +1,17 @@
 import * as React from 'react';
-import {View, Text, StyleSheet, TouchableNativeFeedback, ActivityIndicator} from 'react-native';
 import PropTypes from 'prop-types';
+import {ActivityIndicator, StyleSheet, Text, TouchableNativeFeedback, View} from 'react-native';
 
-import {fonts} from '../../../utils/fonts';
-import {BottomSheet} from '../../../components/BottomSheet';
-import UserIcon from '../../../assets/icons/images/user.svg';
-import TrashIcon from '../../../assets/icons/images/trash.svg';
-import MediaIcon from '../../../assets/icons/images/media.svg';
 import CameraIcon from '../../../assets/icons/images/camera.svg';
+import MediaIcon from '../../../assets/icons/images/media.svg';
+import TrashIcon from '../../../assets/icons/images/trash.svg';
+import UserIcon from '../../../assets/icons/images/user.svg';
+import {BottomSheet} from '../../../components/BottomSheet';
 import {COLORS} from '../../../utils/theme';
+import {fonts} from '../../../utils/fonts';
 
 const BottomSheetImage = React.forwardRef((props, ref) => (
-  <BottomSheet ref={ref} closeOnPressMask={true} height={300}>
+  <BottomSheet ref={ref} closeOnPressMask={true} height={300} onClose={props?.onClose}>
     <View style={styles.containerBottomSheet}>
       <TouchableNativeFeedback onPress={() => props.onViewProfilePicture()}>
         <View style={styles.card}>

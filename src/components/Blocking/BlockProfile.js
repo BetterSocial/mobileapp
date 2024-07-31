@@ -1,13 +1,12 @@
 import * as React from 'react';
+import RBSheet from 'react-native-raw-bottom-sheet';
 import {StyleSheet, Text, View} from 'react-native';
 
-import RBSheet from 'react-native-raw-bottom-sheet';
-
 import ItemListLarge from './ItemListLarge';
-import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
+import {fonts} from '../../utils/fonts';
 
-const BlockProfile = ({refBlockUser, onSelect, username, isBlocker}) => {
+const BlockProfile = ({refBlockUser, onSelect, username, isBlocker, onClose = () => {}}) => {
   let data = [
     {
       id: 1,
@@ -47,6 +46,7 @@ const BlockProfile = ({refBlockUser, onSelect, username, isBlocker}) => {
         ref={refBlockUser}
         closeOnDragDown={true}
         closeOnPressMask={true}
+        onClose={() => onClose()}
         customStyles={{
           wrapper: {
             backgroundColor: COLORS.black80

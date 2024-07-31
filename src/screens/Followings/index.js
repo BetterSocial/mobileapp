@@ -1,14 +1,24 @@
 import * as React from 'react';
-
 import PropTypes from 'prop-types';
+
 import UsersFragment from '../DiscoveryScreenV2/fragment/UsersFragment';
-import {Context} from '../../context';
 
 const Followings = ({
   dataFollower = [],
-  dataUnfollowed = [],
   isLoading,
-  setDataFollower = () => {}
+  setDataFollower = () => {},
+  eventTrack = {
+    common: {
+      onCommonClearRecentSearch: () => {},
+      onCommonRecentItemClicked: () => {}
+    },
+    user: {
+      onUserPageOpened: () => {},
+      onUserPageFollowButtonClicked: () => {},
+      onUserPageUnfollowButtonClicked: () => {}
+    }
+  },
+  dataUnfollowed = []
 }) => {
   return (
     <UsersFragment
@@ -19,6 +29,7 @@ const Followings = ({
       showRecentSearch={true}
       withoutRecent={true}
       isUser={true}
+      eventTrack={eventTrack}
     />
   );
 };

@@ -3,9 +3,9 @@ import * as React from 'react';
 import {Platform, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
 import MemoIcClearCircle from '../../../assets/icons/ic_clear_circle';
-import {MAX_POLLING_CHARACTER_ALLOWED} from '../../../utils/constants';
-import {COLORS} from '../../../utils/theme';
 import dimen from '../../../utils/dimen';
+import {COLORS} from '../../../utils/theme';
+import {MAX_POLLING_CHARACTER_ALLOWED} from '../../../utils/constants';
 import {normalizeFontSize} from '../../../utils/fonts';
 
 export default function PollItem({
@@ -15,9 +15,16 @@ export default function PollItem({
   onpollchanged = () => {},
   showdeleteicon,
   showcharactercount = false,
-  isAnonym
+  isAnonym,
+  eventTrack = {
+    onPollSectionEditChoiceClicked: (pollIndex) => {}
+  }
 }) {
   const [isTextInputFocus, setIsTextInputFocus] = React.useState(false);
+  const onPollItemPressIn = () => {
+    if (eventTrack?.onPollSectionEditChoiceClicked)
+      eventTrack.onPollSectionEditChoiceClicked(index);
+  };
 
   return (
     <View style={isTextInputFocus ? S.focuspollitemcontainer(isAnonym) : S.pollitemcontainer}>
@@ -25,6 +32,7 @@ export default function PollItem({
         placeholderTextColor={COLORS.gray410}
         placeholder={`Choice ${index + 1}`}
         style={S.pollitemtextinput}
+        onPressIn={onPollItemPressIn}
         onFocus={() => setIsTextInputFocus(true)}
         onBlur={() => setIsTextInputFocus(false)}
         onChangeText={(value) => {

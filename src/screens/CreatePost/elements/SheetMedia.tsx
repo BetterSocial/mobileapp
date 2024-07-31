@@ -5,9 +5,9 @@ import {ActivityIndicator, StyleSheet, Text, TouchableOpacity, View} from 'react
 import MemoIcCamera from '../../../assets/icons/Ic_camera';
 import MemoIcCreatePoll from '../../../assets/icons/ic_create_poll';
 import MemoIcMedia from '../../../assets/icons/Ic_media';
-import {fonts, normalizeFontSize} from '../../../utils/fonts';
-import {COLORS} from '../../../utils/theme';
 import dimen from '../../../utils/dimen';
+import {COLORS} from '../../../utils/theme';
+import {fonts, normalizeFontSize} from '../../../utils/fonts';
 
 export type SheetMediaProps = {
   refMedia: React.RefObject<RBSheet>;
@@ -17,6 +17,7 @@ export type SheetMediaProps = {
   medias?: string[];
   isLoadingUploadingMedia?: boolean;
   isLoadingUploadingPhoto?: boolean;
+  onClose?: () => void;
 };
 
 export type ListProps = {
@@ -33,12 +34,15 @@ const SheetMedia = ({
   createPoll,
   medias = [],
   isLoadingUploadingMedia = false,
-  isLoadingUploadingPhoto = false
+  isLoadingUploadingPhoto = false,
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  onClose = () => {}
 }: SheetMediaProps) => (
   <RBSheet
     ref={refMedia}
     closeOnDragDown={true}
     closeOnPressMask={true}
+    onClose={onClose}
     customStyles={{
       wrapper: {
         backgroundColor: COLORS.black80

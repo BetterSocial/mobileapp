@@ -5,15 +5,25 @@ import {ScrollView, StyleSheet, Text, TextInput, TouchableNativeFeedback, View} 
 
 import Card from './Card';
 import TopicItem from '../../../components/TopicItem';
+import dimen from '../../../utils/dimen';
 import {Button} from '../../../components/Button';
+import {COLORS} from '../../../utils/theme';
 import {convertString} from '../../../utils/string/StringUtils';
 import {fonts} from '../../../utils/fonts';
 import {getTopics} from '../../../service/topics';
 import {isEmptyOrSpaces} from '../../../utils/Utils';
-import {COLORS} from '../../../utils/theme';
-import dimen from '../../../utils/dimen';
 
-const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics}) => {
+const SheetAddTopic = ({
+  refTopic,
+  onAdd,
+  topics,
+  onClose,
+  chatTopics,
+  eventTrack = {
+    onAddTopic: () => {},
+    onRemoveTopic: () => {}
+  }
+}) => {
   const [dataTopic, setTopic] = React.useState('');
   const [listTopics, setlistTopics] = React.useState([]);
   const [chatTopic, setChatTopic] = React.useState([]);
@@ -72,12 +82,14 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics}) => {
     }
     setTopic('');
     setTopicSuggestion([]);
+    if (eventTrack?.onAddTopic) eventTrack.onAddTopic();
   };
   const removeTopic = (v) => {
     const newArr = listTopics.filter((e) => e !== v);
     const newChatTopic = chatTopic.filter((chat) => chat !== `topic_${v}`);
     setlistTopics(newArr);
     setChatTopic(newChatTopic);
+    if (eventTrack?.onRemoveTopic) eventTrack.onRemoveTopic();
   };
   const merge = () => {
     setlistTopics(topics);
@@ -93,14 +105,13 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics}) => {
       onAdd(newArr, newChatTopic);
     }
     add();
-    onClose();
   };
 
   return (
     <RBSheet
       height={rbSheetHeight}
       onOpen={merge}
-      // onClose={onSwepDown}
+      onClose={() => onClose(false)}
       ref={refTopic}
       closeOnDragDown={true}
       closeOnPressMask={true}

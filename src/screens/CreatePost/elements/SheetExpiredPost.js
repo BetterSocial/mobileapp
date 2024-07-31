@@ -1,18 +1,18 @@
 import * as React from 'react';
+import RBSheet from 'react-native-raw-bottom-sheet';
 import {StyleSheet, Text, View} from 'react-native';
 
-import RBSheet from 'react-native-raw-bottom-sheet';
-
 import FlatListItem from '../../../components/FlatListItem';
-import {fonts, normalizeFontSize} from '../../../utils/fonts';
-import {COLORS} from '../../../utils/theme';
 import dimen from '../../../utils/dimen';
+import {COLORS} from '../../../utils/theme';
+import {fonts, normalizeFontSize} from '../../../utils/fonts';
 
-const SheetExpiredPost = ({refExpired, data, select, onSelect}) => (
+const SheetExpiredPost = ({refExpired, data, select, onSelect, onClose = () => {}}) => (
   <RBSheet
     ref={refExpired}
     closeOnDragDown={true}
     closeOnPressMask={true}
+    onClose={onClose}
     customStyles={{
       wrapper: {
         backgroundColor: COLORS.black80
