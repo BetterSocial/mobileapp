@@ -2,9 +2,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
+import {Alert, Linking} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
 import StringConstant from '../utils/string/StringConstant';
+import useUserAuthHook from '../hooks/core/auth/useUserAuthHook';
 import {
   POST_CHECK_AUTHOR_BLOCKED,
   POST_CHECK_AUTHOR_NOT_FOLLOWING,
@@ -14,20 +16,41 @@ import {
 import {getUserId} from '../utils/users';
 import {isAuthorFollowingMe} from '../service/post';
 
+const DEEPLINK_POST_REGEX = /helio\.social\/post\/[0-9a-fA-F\-]{36}/;
+const DEEPLINK_COMMUNITY_REGEX = /helio\.social\/c\/[a-zA-Z0-9]+/;
+const DEEPLINK_USER_REGEX = /helio\.social\/[a-zA-Z0-9]+/;
+
 const FirebaseConfig = () => {
   const navigation = useNavigation();
+  const {signedProfileId, profile} = useUserAuthHook();
 
   React.useEffect(() => {
     const unsubscribe = dynamicLinks().onLink(parseDynamicLink);
-    return () => unsubscribe();
+    const onForegroundEvent = async (event) => {
+      parseDeepLink(event?.url);
+    };
+
+    Linking.addEventListener('url', onForegroundEvent);
+    return () => {
+      unsubscribe();
+      Linking.removeEventListener('url', onForegroundEvent);
+    };
   }, []);
+
+  const parseDeepLink = async (deepLinkUrl) => {
+    if (DEEPLINK_POST_REGEX.test(deepLinkUrl)) return handleDeepLinkPost(deepLinkUrl);
+    if (DEEPLINK_COMMUNITY_REGEX.test(deepLinkUrl)) return handleDeepLinkCommunity(deepLinkUrl);
+    if (DEEPLINK_USER_REGEX.test(deepLinkUrl)) return handleDeepLinkUser(deepLinkUrl);
+  };
 
   /**
    *
    * @param {FirebaseDynamicLinksTypes.DynamicLink} dynamicLink
    */
   const parseDynamicLink = async (dynamicLink) => {
-    console.log('called dynamic link', dynamicLink);
+    setTimeout(() => {
+      Alert.alert('Dynamic Link from dynamicLink', dynamicLink?.url);
+    }, 1000);
     if (dynamicLink?.url?.includes('postExpired=true')) return handleExpiredPost();
     if (dynamicLink?.url?.includes('postPrivateId=')) return handlePrivatePost(dynamicLink);
     if (dynamicLink?.url?.includes('communityName')) return handleCommunityPage(dynamicLink);
@@ -158,6 +181,42 @@ const FirebaseConfig = () => {
   const handlePrivatePost = async (dynamicLink) => {
     const postId = dynamicLink?.url?.split('postPrivateId=')[1];
     if (postId) checkIsAuthorFollowingMe(postId);
+  };
+
+  const handleDeepLinkPost = async (deepLinkUrl) => {
+    const postId = deepLinkUrl?.split('helio.social/post/')[1];
+    if (DEEPLINK_POST_REGEX.test(deepLinkUrl) && postId) checkIsAuthorFollowingMe(postId);
+  };
+
+  const handleDeepLinkUser = async (deepLinkUrl) => {
+    const username = deepLinkUrl?.split('helio.social/')[1];
+    if (username?.toLocaleLowerCase() === profile?.username?.toLocaleLowerCase()) {
+      return navigation.navigate('Profile');
+    }
+
+    if (DEEPLINK_USER_REGEX.test(deepLinkUrl) && username) {
+      try {
+        const replacedUsername = username?.replace('+', '');
+        const data = {
+          username: replacedUsername,
+          user_id: signedProfileId
+        };
+        handleMovePage(USER, data);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  };
+
+  const handleDeepLinkCommunity = async (deepLinkUrl) => {
+    const communityName = deepLinkUrl?.split('helio.social/c/')[1];
+    if (DEEPLINK_COMMUNITY_REGEX.test(deepLinkUrl) && communityName) {
+      try {
+        navigation.navigate('TopicPageScreen', {id: communityName});
+      } catch (e) {
+        console.error(e);
+      }
+    }
   };
 
   return <></>;
