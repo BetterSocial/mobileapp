@@ -111,12 +111,12 @@ const OtherProfile = () => {
     onBlockUserBottomSheetClosed,
     onBlockUserBlockAndReportClicked,
     onBlockUserBlockIndefinitelyClicked,
-    onBlockUserBlockAndReportReason,
     onBlockUserReportInfoSubmitted,
     onBlockUserReportInfoSkipped
   } = eventTrack;
   const [isCurrentFollowed, setIsCurrentFollowed] = React.useState(
-    getIsMeFollowingTargetStatus(params.data.other_id) || params?.data?.following
+    getIsMeFollowingTargetStatus(params.data.other_id, params?.data?.username) ||
+      params?.data?.following
   );
 
   const isSignedMessageEnabled = dataMain.isSignedMessageEnabled ?? true;
