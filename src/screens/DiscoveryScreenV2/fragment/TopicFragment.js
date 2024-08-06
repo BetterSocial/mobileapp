@@ -236,7 +236,7 @@ const TopicFragment = ({
     const followingTopics = [];
     const unfollowingTopics = [];
 
-    dataToUse.forEach((item) => {
+    (dataToUse || []).forEach((item) => {
       if (item.user_id_follower) {
         followingTopics.push(item);
       } else {
