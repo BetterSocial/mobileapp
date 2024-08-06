@@ -48,9 +48,6 @@ const FirebaseConfig = () => {
    * @param {FirebaseDynamicLinksTypes.DynamicLink} dynamicLink
    */
   const parseDynamicLink = async (dynamicLink) => {
-    setTimeout(() => {
-      Alert.alert('Dynamic Link from dynamicLink', dynamicLink?.url);
-    }, 1000);
     if (dynamicLink?.url?.includes('postExpired=true')) return handleExpiredPost();
     if (dynamicLink?.url?.includes('postPrivateId=')) return handlePrivatePost(dynamicLink);
     if (dynamicLink?.url?.includes('communityName')) return handleCommunityPage(dynamicLink);
