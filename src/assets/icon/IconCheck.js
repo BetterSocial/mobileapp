@@ -16,7 +16,7 @@ function IconCheck(props) {
           fillRule="evenodd"
           clipRule="evenodd"
           d="M17.774 7.713a.75.75 0 01.013 1.061l-7.325 7.5a.75.75 0 01-1.109-.04l-3.175-3.75a.75.75 0 111.144-.969l2.643 3.121 6.748-6.91a.75.75 0 011.061-.013z"
-          fill="#fff"
+          fill={props?.fillIcon || '#fff'}
         />
       </G>
       <Defs>
@@ -31,6 +31,7 @@ function IconCheck(props) {
 IconCheck.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
-  fill: PropTypes.string
+  fill: PropTypes.string,
+  fillIcon: PropTypes.string
 };
 export default IconCheck;
