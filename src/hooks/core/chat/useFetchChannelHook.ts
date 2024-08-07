@@ -1,3 +1,4 @@
+import {Platform} from 'react-native';
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../../database/schema/ChannelListSchema';
 import ChatSchema from '../../../database/schema/ChatSchema';
@@ -76,49 +77,72 @@ const useFetchChannelHook = () => {
         newChannel.created_at = response?.time;
         newChannel.unreadCount = response?.unread_count;
 
-        queue.addPriorityJob({
-          id: `saveChannelData-${channel?.id}`,
-          priority: QueueJobPriority.MEDIUM,
-          operationLabel: DatabaseOperationLabel.CoreChatSystem_SaveTopicChannel,
-          label: `saveChannelData-${channel?.id}`,
-          task: () => {
-            return new Promise((resolve) => {
-              const channelList = ChannelList.fromChannelAPI(
-                newChannel,
-                type[channelType],
-                undefined,
-                anonUserInfo
-              );
-
-              channelList.saveIfLatest(localDb).then(() => {
-                refresh('channelList');
-                resolve(true);
+        if (Platform.OS === 'android') {
+          const channelList = ChannelList.fromChannelAPI(
+            newChannel,
+            type[channelType],
+            undefined,
+            anonUserInfo
+          );
+          channelList.saveIfLatest(localDb).then(() => {
+            refresh('channelList');
+          });
+        } else {
+          queue.addPriorityJob({
+            id: `saveChannelData-${channel?.id}`,
+            priority: QueueJobPriority.MEDIUM,
+            operationLabel: DatabaseOperationLabel.CoreChatSystem_SaveTopicChannel,
+            label: `saveChannelData-${channel?.id}`,
+            task: () => {
+              return new Promise((resolve) => {
+                const channelList = ChannelList.fromChannelAPI(
+                  newChannel,
+                  type[channelType],
+                  undefined,
+                  anonUserInfo
+                );
+                channelList.saveIfLatest(localDb).then(() => {
+                  refresh('channelList');
+                  resolve(true);
+                });
               });
-            });
-          }
-        });
+            }
+          });
+        }
       } catch (e) {
         console.log('error on helperChannelPromiseBuilder', e);
       }
     } else {
       try {
-        queue.addJob({
-          label: `saveChannelData-${channel?.id}`,
-          task: () => {
-            return new Promise((resolve) => {
-              const channelList = ChannelList.fromChannelAPI(
-                newChannel,
-                type[channelType],
-                undefined,
-                anonUserInfo
-              );
-              channelList.saveIfLatest(localDb).then(() => {
-                refresh('channelList');
-                resolve(true);
+        if (Platform.OS === 'android') {
+          const channelList = ChannelList.fromChannelAPI(
+            newChannel,
+            type[channelType],
+            undefined,
+            anonUserInfo
+          );
+          channelList.saveIfLatest(localDb).then(() => {
+            refresh('channelList');
+          });
+        } else {
+          queue.addJob({
+            label: `saveChannelData-${channel?.id}`,
+            task: () => {
+              return new Promise((resolve) => {
+                const channelList = ChannelList.fromChannelAPI(
+                  newChannel,
+                  type[channelType],
+                  undefined,
+                  anonUserInfo
+                );
+                channelList.saveIfLatest(localDb).then(() => {
+                  refresh('channelList');
+                  resolve(true);
+                });
               });
-            });
-          }
-        });
+            }
+          });
+        }
       } catch (e) {
         console.log('error on helperChannelPromiseBuilder', e);
       }
@@ -142,54 +166,81 @@ const useFetchChannelHook = () => {
 
       (members || []).map((member) => {
         const userMember = UserSchema.fromMemberWebsocketObject(member, channel?.id);
-        queue.addJob({
-          label: `saveUserMember-${member?.user?.id}`,
-          task: () => {
-            return new Promise((resolve) => {
-              UserSchema.isUserExists(localDb, member?.user?.id, channel?.id).then(
-                (isUserExists) => {
-                  if (!member?.user?.username) return resolve(true);
-                  if (!isUserExists) {
-                    userMember.save(localDb).then(() => {
+
+        if (Platform.OS === 'android') {
+          UserSchema.isUserExists(localDb, member?.user?.id, channel?.id).then((isUserExists) => {
+            if (!member?.user?.username) return;
+            if (!isUserExists) {
+              userMember.save(localDb);
+            }
+          });
+        } else {
+          queue.addJob({
+            label: `saveUserMember-${member?.user?.id}`,
+            task: () => {
+              return new Promise((resolve) => {
+                UserSchema.isUserExists(localDb, member?.user?.id, channel?.id).then(
+                  (isUserExists) => {
+                    if (!member?.user?.username) return resolve(true);
+                    if (!isUserExists) {
+                      userMember.save(localDb).then(() => {
+                        return resolve(true);
+                      });
+                    } else {
                       return resolve(true);
-                    });
-                  } else {
-                    return resolve(true);
+                    }
                   }
-                }
-              );
-            });
-          }
-        });
+                );
+              });
+            }
+          });
+        }
 
         return null;
       });
 
       (channel?.messages || []).map((message) => {
-        queue.addJob({
-          label: `saveChat-${message?.id}`,
-          task: () => {
-            return new Promise((resolve) => {
-              if (
-                message?.type === 'deleted' ||
-                message?.message_type === 'notification-deleted' ||
-                message?.type === 'notification-deleted'
-              ) {
-                resolve(true);
-                return;
-              }
-              if (message?.type === 'system') {
-                message = getFirstMessage([message]);
-              }
-              const chat = ChatSchema.fromGetAllChannelAPI(channel?.id, message);
-              chat.saveIfNotExist(localDb).then(() => {
-                resolve(true);
-
-                refreshWithId('chat', channel?.id);
-              });
-            });
+        if (Platform.OS === 'android') {
+          if (
+            message?.type === 'deleted' ||
+            message?.message_type === 'notification-deleted' ||
+            message?.type === 'notification-deleted'
+          ) {
+            return;
           }
-        });
+          if (message?.type === 'system') {
+            message = getFirstMessage([message]);
+          }
+          const chat = ChatSchema.fromGetAllChannelAPI(channel?.id, message);
+          chat.saveIfNotExist(localDb).then(() => {
+            refreshWithId('chat', channel?.id);
+          });
+        } else {
+          queue.addJob({
+            label: `saveChat-${message?.id}`,
+            task: () => {
+              return new Promise((resolve) => {
+                if (
+                  message?.type === 'deleted' ||
+                  message?.message_type === 'notification-deleted' ||
+                  message?.type === 'notification-deleted'
+                ) {
+                  resolve(true);
+                  return;
+                }
+                if (message?.type === 'system') {
+                  message = getFirstMessage([message]);
+                }
+                const chat = ChatSchema.fromGetAllChannelAPI(channel?.id, message);
+                chat.saveIfNotExist(localDb).then(() => {
+                  resolve(true);
+
+                  refreshWithId('chat', channel?.id);
+                });
+              });
+            }
+          });
+        }
 
         return null;
       });
@@ -232,13 +283,18 @@ const useFetchChannelHook = () => {
       });
     });
 
-    queue.addJob({
-      label: 'timestamp update',
-      task: async () => {
-        const timestamp = new Date().toISOString();
-        StorageUtils.channelSignedTimeStamps.set(timestamp);
-      }
-    });
+    if (Platform.OS === 'android') {
+      const timestamp = new Date().toISOString();
+      StorageUtils.channelSignedTimeStamps.set(timestamp);
+    } else {
+      queue.addJob({
+        label: 'timestamp update',
+        task: async () => {
+          const timestamp = new Date().toISOString();
+          StorageUtils.channelSignedTimeStamps.set(timestamp);
+        }
+      });
+    }
 
     await Promise.all(channelPromises);
   };

@@ -1,5 +1,6 @@
 import React from 'react';
 
+import {Platform} from 'react-native';
 import ChannelList from '../../../database/schema/ChannelListSchema';
 import ChatSchema from '../../../database/schema/ChatSchema';
 import useDatabaseQueueHook from '../queue/useDatabaseQueueHook';
@@ -34,27 +35,41 @@ const useChannelGetInitialMessagesHook = () => {
 
       if (!shouldVisibleItemGetInitialMessages) return;
 
-      queue.addPriorityJob({
-        operationLabel: DatabaseOperationLabel.ChannelList_GetInitialMessages,
-        id: item?.id,
-        priority: QueueJobPriority.HIGH,
-        task: async () => {
-          const chats = await ChatSchema.getAll(
-            localDb,
-            item?.id,
-            signedProfileId,
-            anonProfileId,
-            CHANNEL_LIST_GET_INITIAL_MESSAGES_LIMIT
-          );
+      if (Platform.OS === 'android') {
+        const chats = await ChatSchema.getAll(
+          localDb,
+          item?.id,
+          signedProfileId,
+          anonProfileId,
+          CHANNEL_LIST_GET_INITIAL_MESSAGES_LIMIT
+        );
 
-          return chats;
-        },
-        callback: (chats) => {
-          if (chats?.length > 0) {
-            initialMessagesHashMap.current[item?.id] = chats;
-          }
+        if (chats?.length > 0) {
+          initialMessagesHashMap.current[item?.id] = chats;
         }
-      });
+      } else {
+        queue.addPriorityJob({
+          operationLabel: DatabaseOperationLabel.ChannelList_GetInitialMessages,
+          id: item?.id,
+          priority: QueueJobPriority.HIGH,
+          task: async () => {
+            const chats = await ChatSchema.getAll(
+              localDb,
+              item?.id,
+              signedProfileId,
+              anonProfileId,
+              CHANNEL_LIST_GET_INITIAL_MESSAGES_LIMIT
+            );
+
+            return chats;
+          },
+          callback: (chats) => {
+            if (chats?.length > 0) {
+              initialMessagesHashMap.current[item?.id] = chats;
+            }
+          }
+        });
+      }
     });
   };
 
