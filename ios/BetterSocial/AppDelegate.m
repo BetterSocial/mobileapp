@@ -11,6 +11,8 @@
 #import <React/RCTLinkingManager.h>
 #import "RNSplashScreen.h"
 
+#import <RNBranch/RNBranch.h>
+
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
 #import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>
@@ -19,6 +21,7 @@
 #import <SKIOSNetworkPlugin/SKIOSNetworkAdapter.h>
 #import <FlipperKitReactPlugin/FlipperKitReactPlugin.h>
 #import "RNCConfig.h"
+
 
 static void InitializeFlipper(UIApplication *application) {
   NSDictionary *config = [RNCConfig env];
@@ -83,6 +86,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
   [self.window makeKeyAndVisible];
   UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
    center.delegate = self;
+
+  // [RNBranch useTestInstance];
+  [RNBranch initSessionWithLaunchOptions:launchOptions isReferrable:YES];
+  NSURL *jsCodeLocation;
   
   [RNSplashScreen show];
   return YES;
@@ -142,12 +149,14 @@ RNKeyEvent *keyEvent = nil;
    openURL:(NSURL *)url
    options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
 {
+  [RNBranch application:application openURL:url options:options];
   return [RCTLinkingManager application:application openURL:url options:options];
 }
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(nonnull NSUserActivity *)userActivity
  restorationHandler:(nonnull void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
 {
+ [RNBranch continueUserActivity:userActivity];
  return [RCTLinkingManager application:application
                   continueUserActivity:userActivity
                     restorationHandler:restorationHandler];
