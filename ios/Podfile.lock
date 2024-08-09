@@ -1,4 +1,5 @@
 PODS:
+  - Analytics (4.1.8)
   - BEMCheckBox (1.4.1)
   - boost-for-react-native (1.63.0)
   - BranchSDK (3.4.4)
@@ -628,6 +629,7 @@ PODS:
   - Yoga (1.14.0)
 
 DEPENDENCIES:
+  - Analytics (~> 4.1)
   - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
@@ -715,6 +717,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Analytics
     - BEMCheckBox
     - boost-for-react-native
     - BranchSDK
@@ -913,6 +916,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
+  Analytics: 9655e0e1c71ea98107cfcb2b14891168acc6c6c9
   BEMCheckBox: 5ba6e37ade3d3657b36caecc35c8b75c6c2b1a4e
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BranchSDK: 28bec34fb99c53ab8e86b7bf69cc55a4505fe0b3
@@ -1027,6 +1031,6 @@ SPEC CHECKSUMS:
   TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
   Yoga: d1fc3575b8b68891ff5ef3c276daa855e841eb32
 
-PODFILE CHECKSUM: 127c33ab1c923ecf1816c4414705cfe755090208
+PODFILE CHECKSUM: f358eb7b1bc3517cae85314bcbca9c1c83f09ca8
 
 COCOAPODS: 1.15.2

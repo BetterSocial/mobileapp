@@ -12,6 +12,8 @@
 #import "RNSplashScreen.h"
 
 #import <RNBranch/RNBranch.h>
+#import <Analytics/SEGAnalytics.h>
+#import "RNCConfig.h"
 
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
@@ -20,7 +22,6 @@
 #import <FlipperKitNetworkPlugin/FlipperKitNetworkPlugin.h>
 #import <SKIOSNetworkPlugin/SKIOSNetworkAdapter.h>
 #import <FlipperKitReactPlugin/FlipperKitReactPlugin.h>
-#import "RNCConfig.h"
 
 
 static void InitializeFlipper(UIApplication *application) {
@@ -74,7 +75,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
-                                                   moduleName:@"BetterSocial"
+                                                  moduleName:@"BetterSocial"
                                             initialProperties:nil];
 
   rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
@@ -86,10 +87,35 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
   [self.window makeKeyAndVisible];
   UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
    center.delegate = self;
+  
+  // ENV value
+  NSString *segmentWriteKey = [RNCConfig envFor:@"SEGMENT_WRITE_KEY"];
+  NSString *envMode = [RNCConfig envFor:@"ENV"];
+  
+  // SEGMENT INITIALIZATION
+  SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:segmentWriteKey];
+  configuration.trackApplicationLifecycleEvents = YES; // Enable this to record certain application events automatically!
+  configuration.recordScreenViews = YES; // Enable this to record screen views automatically!
+  [SEGAnalytics setupWithConfiguration:configuration];
 
-  // [RNBranch useTestInstance];
+  // BRANCH INITIALIZATION
+  if([envMode isEqualToString:@"Dev"]) {
+    NSLog(@"on the dev");
+    [Branch setUseTestBranchKey:YES];
+    [Branch enableLogging];
+    [[Branch getInstance] validateSDKIntegration];
+  }
+  
   [RNBranch initSessionWithLaunchOptions:launchOptions isReferrable:YES];
   NSURL *jsCodeLocation;
+
+  Branch *branch = [Branch getInstance];
+  [[Branch getInstance] setRequestMetadataKey:@"$segment_anonymous_id" value:[[SEGAnalytics sharedAnalytics] getAnonymousId]];
+  
+  NSString *segmentAnonymousId = [[SEGAnalytics sharedAnalytics] getAnonymousId];
+  
+  NSLog(@"segment anonymous id = %@", segmentAnonymousId);
+  NSLog(@"segment write key MODE %@ = %@", envMode, segmentWriteKey);
   
   [RNSplashScreen show];
   return YES;

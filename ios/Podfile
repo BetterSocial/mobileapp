@@ -24,6 +24,7 @@ target 'Helio' do
   pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary"
   pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
   pod 'react-native-branch', path: '../node_modules/react-native-branch'
+  pod 'Analytics', '~> 4.1'
 
   # use_react_native!(:path => config["reactNativePath"], :hermes_enabled => true)
 
@@ -38,6 +39,8 @@ target 'Helio' do
     permissions_path = '../node_modules/react-native-permissions/ios'
     pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary"
     pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
+    pod 'react-native-branch', path: '../node_modules/react-native-branch'
+    pod 'Analytics', '~> 4.1'
 
     use_react_native!(:path => config["reactNativePath"])
 
@@ -48,6 +51,8 @@ target 'Helio' do
     permissions_path = '../node_modules/react-native-permissions/ios'
     pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary"
     pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
+    pod 'react-native-branch', path: '../node_modules/react-native-branch'
+    pod 'Analytics', '~> 4.1'
 
     use_react_native!(:path => config["reactNativePath"])
 
