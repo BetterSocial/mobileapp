@@ -46,7 +46,12 @@ import {downVote, upVote} from '../../service/vote';
 import {fonts, normalize} from '../../utils/fonts';
 import {generateAnonProfileOtherProfile} from '../../service/anonymousProfile';
 import {getFeedDetail} from '../../service/post';
-import {getOtherFeedsInProfile, setFollow, setUnFollow} from '../../service/profile';
+import {
+  getOtherFeedsInProfile,
+  getOtherProfile,
+  setFollow,
+  setUnFollow
+} from '../../service/profile';
 import {getSingularOrPluralText} from '../../utils/string/StringUtils';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherProfileFeed';
@@ -142,10 +147,6 @@ const OtherProfile = () => {
     }
   };
 
-  React.useEffect(() => {
-    setOtherId(params?.data?.other_id);
-  }, [params.data]);
-
   const getOtherFeeds = async (offset = 0) => {
     const otherId = other_id;
     try {
@@ -182,15 +183,21 @@ const OtherProfile = () => {
 
   React.useEffect(() => {
     initData();
-  }, []);
+  }, [params.data]);
 
   React.useEffect(() => {
     getOtherFeeds();
   }, [other_id]);
 
-  const initData = () => {
-    setUserId(params.data.user_id);
-    setUsername(params.data.username);
+  const initData = async () => {
+    let otherUserId = params?.data?.other_id;
+    if (!otherUserId) {
+      const response = await getOtherProfile(params.data.username);
+      otherUserId = response?.data?.user_id;
+    }
+    setUserId(params?.data?.user_id);
+    setUsername(params?.data?.username);
+    setOtherId(otherUserId);
   };
 
   const onShare = async () => {
