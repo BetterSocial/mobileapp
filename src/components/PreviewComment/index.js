@@ -49,7 +49,6 @@ const PreviewComment = ({
       <View
         style={{
           height: normalize(28),
-          maxHeight: normalize(28),
           backgroundColor: COLORS.almostBlack,
           borderBottomLeftRadius: 12,
           borderBottomRightRadius: 12,
@@ -79,8 +78,8 @@ const PreviewComment = ({
           paddingHorizontal: 12,
           height: normalize(56),
           position: 'absolute',
-          width: '100%'
-          // marginTop: -1
+          width: '100%',
+          marginTop: -1
         }}
         onPress={onPress}>
         <BlurredLayer
