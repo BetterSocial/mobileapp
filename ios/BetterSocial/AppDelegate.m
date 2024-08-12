@@ -14,6 +14,7 @@
 #import <RNBranch/RNBranch.h>
 #import <Analytics/SEGAnalytics.h>
 #import "RNCConfig.h"
+#import "Mixpanel/Mixpanel.h"
 
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
@@ -91,6 +92,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
   // ENV value
   NSString *segmentWriteKey = [RNCConfig envFor:@"SEGMENT_WRITE_KEY"];
   NSString *envMode = [RNCConfig envFor:@"ENV"];
+  NSString *mixpanelToken = [RNCConfig envFor:@"MIXPANEL_TOKEN"];
   
   // SEGMENT INITIALIZATION
   SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:segmentWriteKey];
@@ -103,18 +105,25 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     NSLog(@"on the dev");
     [Branch setUseTestBranchKey:YES];
     [Branch enableLogging];
-    [[Branch getInstance] validateSDKIntegration];
+//    [[Branch getInstance] validateSDKIntegration];
   }
   
   [RNBranch initSessionWithLaunchOptions:launchOptions isReferrable:YES];
   NSURL *jsCodeLocation;
-
-  Branch *branch = [Branch getInstance];
-  [[Branch getInstance] setRequestMetadataKey:@"$segment_anonymous_id" value:[[SEGAnalytics sharedAnalytics] getAnonymousId]];
-  
   NSString *segmentAnonymousId = [[SEGAnalytics sharedAnalytics] getAnonymousId];
   
+  // MIXPANEL INITIALIZATION
+  Mixpanel *mixpanel = [Mixpanel sharedInstanceWithToken:mixpanelToken trackAutomaticEvents: NO];
+  NSString *mixpanelDistinctId = [Mixpanel sharedInstance].distinctId;
+  
+  
+  // SEGMENT SET METADATA KEY
+  Branch *branch = [Branch getInstance];
+  [[Branch getInstance] setRequestMetadataKey:@"$mixpanel_distinct_id" value:mixpanelDistinctId];
+  [[Branch getInstance] setRequestMetadataKey:@"$segment_anonymous_id" value:segmentAnonymousId];
+  
   NSLog(@"segment anonymous id = %@", segmentAnonymousId);
+  NSLog(@"mixpanel distinct id = %@", mixpanelDistinctId);
   NSLog(@"segment write key MODE %@ = %@", envMode, segmentWriteKey);
   
   [RNSplashScreen show];
