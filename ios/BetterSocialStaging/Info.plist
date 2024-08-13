@@ -32,6 +32,16 @@
 				<string>devhelio</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>org.reactjs.native.example.BetterSocial</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>humanid-vep6fkf6jbpy88ba</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
@@ -54,6 +64,7 @@
 		<string>fastmail</string>
 		<string>protonmail</string>
 		<string>szn-email</string>
+		<string>humanid-vep6fkf6jbpy88ba</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
@@ -123,30 +134,17 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>branch_universal_link_domains</key>
-		<array>
-			<string>devm.helio.social</string>
-			<string>x8ved-alternate.test-app.link</string>
-		</array>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>devhelio</string>
-			</array>
-			<key>CFBundleURLName</key>
-			<string>org.reactjs.native.example.BetterSocial</string>
-		</dict>
-	</array>
 	<key>branch_key</key>
 	<dict>
 		<key>live</key>
 		<string>key_live_hEiUNqWPZ69QIT7CMR1BdpomDvpgE8Hn</string>
 		<key>test</key>
-		<string>key_test_hDdOMB6K687PSG4BVU8CjppgtAmeCYz5</string>
+		<string>key_live_hEiUNqWPZ69QIT7CMR1BdpomDvpgE8Hn</string>
 	</dict>
+	<key>branch_universal_link_domains</key>
+	<array>
+		<string>devm.helio.social</string>
+		<string>x8ved-alternate.test-app.link</string>
+	</array>
 </dict>
 </plist>

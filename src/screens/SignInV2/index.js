@@ -2,15 +2,9 @@ import * as React from 'react';
 import JwtDecode from 'jwt-decode';
 import SimpleToast from 'react-native-simple-toast';
 import crashlytics from '@react-native-firebase/crashlytics';
-import {BackHandler, StatusBar, StyleSheet, View} from 'react-native';
+import {BackHandler, Linking, StatusBar, StyleSheet, View} from 'react-native';
 import {StackActions} from '@react-navigation/native';
-import {
-  logIn,
-  onCancel,
-  onError,
-  onSuccess,
-  unsubscribeAllEventListeners
-} from '@human-internet/react-native-humanid';
+import {closeWebLogin, logIn} from '@human-internet/react-native-humanid';
 import {useNavigation} from '@react-navigation/core';
 import {useSetRecoilState} from 'recoil';
 
@@ -53,74 +47,78 @@ const SignIn = () => {
     setClickTime(0);
   };
 
-  React.useEffect(() => {
-    setDataHumenId(null, dispatch);
-  }, []);
-
-  React.useEffect(() => {
-    onSuccess(async (exchangeToken) => {
-      try {
-        const response = await verifyHumanIdExchangeToken(exchangeToken);
-        if (response?.data?.data) {
-          const {token, anonymousToken} = response?.data || {};
-          TokenStorage.set(response?.data);
-          setValueStartup({
-            id: token,
-            deeplinkProfile: false
-          });
-          create(token);
-          setUserId(response?.data?.appUserId);
-          try {
-            const userId = await JwtDecode(token).user_id;
-            const anonymousUserId = await JwtDecode(anonymousToken).user_id;
-            setAuth({
-              anonProfileId: anonymousUserId,
-              signedProfileId: userId,
-              token,
-              anonymousToken
-            });
-            AnalyticsEventTracking.eventTrack(
-              BetterSocialEventTracking.HUMAN_ID_SUCCESS_EXISTING_ACCOUNT
-            );
-          } catch (e) {
-            crashlytics().recordError(new Error(e));
-          }
-        } else {
-          setDataHumenId(response?.data?.humanIdData, dispatch);
-          removeLocalStorege('userId');
-          navigation.dispatch(StackActions.replace('ChooseUsername'));
-          setUserId(response?.data?.humanIdData?.appUserId);
-          AnalyticsEventTracking.eventTrack(
-            BetterSocialEventTracking.HUMAN_ID_SUCCESS_NEW_REGISTRATION
-          );
-        }
-      } catch (e) {
-        SimpleToast.show(e?.message, SimpleToast.SHORT);
-        crashlytics().recordError(new Error(e?.message));
-        AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.HUMAN_ID_FAILED_VERIFICATION, {
-          error: e
-        });
-        if (__DEV__) {
-          console.log('error');
-          console.log(e);
-        }
+  const subscribeDeeplink = () => {
+    const onDeepLink = (deepLink) => {
+      console.log('deepLink', deepLink);
+      if (deepLink.url.includes('humanid-')) {
+        const exchangeToken = deepLink?.url?.split('et=')[1];
+        closeWebLogin();
+        handleDeepLinkLogin(exchangeToken);
       }
-    });
-    onError((message) => {
-      crashlytics().recordError(new Error(message));
-    });
-    onCancel(() => {
-      Analytics.logEvent('cencel_auth_humanid', {
-        id: '1'
-      });
-    });
-
-    const cleanup = () => {
-      if (unsubscribeAllEventListeners) unsubscribeAllEventListeners();
     };
 
-    return cleanup;
+    Linking.addEventListener('url', onDeepLink);
+    return () => {
+      Linking.removeEventListener('url', onDeepLink);
+    };
+  };
+
+  React.useEffect(() => {
+    setDataHumenId(null, dispatch);
+    const unsubscribe = subscribeDeeplink();
+    return () => {
+      unsubscribe();
+    };
   }, []);
+
+  const handleDeepLinkLogin = async (exchangeToken) => {
+    try {
+      const response = await verifyHumanIdExchangeToken(exchangeToken);
+      if (response?.data?.data) {
+        const {token, anonymousToken} = response?.data || {};
+        TokenStorage.set(response?.data);
+        setValueStartup({
+          id: token,
+          deeplinkProfile: false
+        });
+        create(token);
+        setUserId(response?.data?.appUserId);
+        try {
+          const userId = await JwtDecode(token).user_id;
+          const anonymousUserId = await JwtDecode(anonymousToken).user_id;
+          setAuth({
+            anonProfileId: anonymousUserId,
+            signedProfileId: userId,
+            token,
+            anonymousToken
+          });
+          AnalyticsEventTracking.eventTrack(
+            BetterSocialEventTracking.HUMAN_ID_SUCCESS_EXISTING_ACCOUNT
+          );
+        } catch (e) {
+          crashlytics().recordError(new Error(e));
+        }
+      } else {
+        setDataHumenId(response?.data?.humanIdData, dispatch);
+        removeLocalStorege('userId');
+        navigation.dispatch(StackActions.replace('ChooseUsername'));
+        setUserId(response?.data?.humanIdData?.appUserId);
+        AnalyticsEventTracking.eventTrack(
+          BetterSocialEventTracking.HUMAN_ID_SUCCESS_NEW_REGISTRATION
+        );
+      }
+    } catch (e) {
+      SimpleToast.show(e?.message, SimpleToast.SHORT);
+      crashlytics().recordError(new Error(e?.message));
+      AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.HUMAN_ID_FAILED_VERIFICATION, {
+        error: e
+      });
+      if (__DEV__) {
+        console.log('error');
+        console.log(e);
+      }
+    }
+  };
 
   const handleLogin = () => {
     try {
