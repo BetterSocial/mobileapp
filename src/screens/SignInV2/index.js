@@ -4,7 +4,14 @@ import SimpleToast from 'react-native-simple-toast';
 import crashlytics from '@react-native-firebase/crashlytics';
 import {BackHandler, Linking, StatusBar, StyleSheet, View} from 'react-native';
 import {StackActions} from '@react-navigation/native';
-import {closeWebLogin, logIn} from '@human-internet/react-native-humanid';
+import {
+  handleDeepLink,
+  logIn,
+  onCancel,
+  onError,
+  onSuccess,
+  unsubscribeAllEventListeners
+} from '@human-internet/react-native-humanid';
 import {useNavigation} from '@react-navigation/core';
 import {useSetRecoilState} from 'recoil';
 
@@ -49,12 +56,9 @@ const SignIn = () => {
 
   const subscribeDeeplink = () => {
     const onDeepLink = (deepLink) => {
-      console.log('deepLink', deepLink);
-      if (deepLink.url.includes('humanid-')) {
-        const exchangeToken = deepLink?.url?.split('et=')[1];
-        closeWebLogin();
-        handleDeepLinkLogin(exchangeToken);
-      }
+      handleDeepLink(deepLink?.url, handleExchangeToken, (error) =>
+        console.log('error human id', error)
+      );
     };
 
     Linking.addEventListener('url', onDeepLink);
@@ -71,7 +75,25 @@ const SignIn = () => {
     };
   }, []);
 
-  const handleDeepLinkLogin = async (exchangeToken) => {
+  React.useEffect(() => {
+    onSuccess(handleExchangeToken);
+    onError((message) => {
+      crashlytics().recordError(new Error(message));
+    });
+    onCancel(() => {
+      Analytics.logEvent('cencel_auth_humanid', {
+        id: '1'
+      });
+    });
+
+    const cleanup = () => {
+      if (unsubscribeAllEventListeners) unsubscribeAllEventListeners();
+    };
+
+    return cleanup;
+  }, []);
+
+  const handleExchangeToken = async (exchangeToken) => {
     try {
       const response = await verifyHumanIdExchangeToken(exchangeToken);
       if (response?.data?.data) {
