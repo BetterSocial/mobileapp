@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import {Platform} from 'react-native';
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../../database/schema/ChannelListSchema';
 import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
@@ -13,24 +14,33 @@ const useFetchPostNotificationHook = () => {
   const saveNotifications = async (notifications: any[], fromNotificationAPI: any) => {
     if (!localDb) return;
 
-    notifications.map((notification) => {
-      queue.addJob({
-        label: 'save post notifications',
-        task: async () => {
-          const channelList = fromNotificationAPI(notification);
-          await channelList.save(localDb);
-        }
-      });
+    notifications.map(async (notification) => {
+      if (Platform.OS === 'android') {
+        const channelList = fromNotificationAPI(notification);
+        await channelList.save(localDb);
+      } else {
+        queue.addJob({
+          label: 'save post notifications',
+          task: async () => {
+            const channelList = fromNotificationAPI(notification);
+            await channelList.save(localDb);
+          }
+        });
+      }
 
       return null;
     });
 
-    queue.addJob({
-      label: 'refresh channelList',
-      task: async () => {
-        refresh('channelList');
-      }
-    });
+    if (Platform.OS === 'android') {
+      refresh('channelList');
+    } else {
+      queue.addJob({
+        label: 'refresh channelList',
+        task: async () => {
+          refresh('channelList');
+        }
+      });
+    }
   };
 
   const getAllSignedPostNotifications = async () => {

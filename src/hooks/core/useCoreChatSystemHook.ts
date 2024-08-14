@@ -3,6 +3,7 @@ import * as React from 'react';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {useRoute} from '@react-navigation/native';
 
+import {Platform} from 'react-native';
 import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../database/schema/ChannelListSchema';
 import ChatSchema from '../../database/schema/ChatSchema';
@@ -171,21 +172,32 @@ const useCoreChatSystemHook = () => {
 
     if (isSystemMessage && isContainFollowingMessage) {
       const textOwnUser = 'You started following this user.\n Send them a message now.';
-      queue.addPriorityJob({
-        operationLabel: DatabaseOperationLabel.CoreChatSystem_SaveFollowingMessage,
-        id: `${websocketData?.channel?.id}-${websocketData?.message?.id}`,
-        priority: QueueJobPriority.HIGH,
-        task: async () => {
-          await ChannelList.updateChannelDescription(
-            localDb,
-            websocketData?.channel_id,
-            websocketData?.message?.textOwnMessage ?? textOwnUser,
-            websocketData
-          );
-          const chat = ChatSchema.fromWebsocketObject(websocketData);
-          await chat.save(localDb);
-        }
-      });
+      if (Platform.OS === 'android') {
+        await ChannelList.updateChannelDescription(
+          localDb,
+          websocketData?.channel_id,
+          websocketData?.message?.textOwnMessage ?? textOwnUser,
+          websocketData
+        );
+        const chat = ChatSchema.fromWebsocketObject(websocketData);
+        await chat.save(localDb);
+      } else {
+        queue.addPriorityJob({
+          operationLabel: DatabaseOperationLabel.CoreChatSystem_SaveFollowingMessage,
+          id: `${websocketData?.channel?.id}-${websocketData?.message?.id}`,
+          priority: QueueJobPriority.HIGH,
+          task: async () => {
+            await ChannelList.updateChannelDescription(
+              localDb,
+              websocketData?.channel_id,
+              websocketData?.message?.textOwnMessage ?? textOwnUser,
+              websocketData
+            );
+            const chat = ChatSchema.fromWebsocketObject(websocketData);
+            await chat.save(localDb);
+          }
+        });
+      }
 
       return websocketData;
     }
@@ -206,22 +218,34 @@ const useCoreChatSystemHook = () => {
           channelType[websocketData?.channel_type]
         );
 
-        queue.addPriorityJob({
-          operationLabel: DatabaseOperationLabel.CoreChatSystem_GeneralSystemMessage,
-          id: `${websocketData?.channel?.id}-${websocketData?.message?.id}`,
-          priority: QueueJobPriority.HIGH,
-          task: async () => {
-            if (
-              websocketData?.message?.message_type === 'notification-deleted' ||
-              websocketData?.message?.message_type === 'deleted'
-            ) {
-              await Promise.all([channelList.save(localDb)]);
-            } else {
-              const chat = ChatSchema.fromWebsocketObject(newWebsocketData);
-              await Promise.all([chat.save(localDb), channelList.save(localDb)]);
-            }
+        if (Platform.OS === 'android') {
+          if (
+            websocketData?.message?.message_type === 'notification-deleted' ||
+            websocketData?.message?.message_type === 'deleted'
+          ) {
+            await Promise.all([channelList.save(localDb)]);
+          } else {
+            const chat = ChatSchema.fromWebsocketObject(newWebsocketData);
+            await Promise.all([chat.save(localDb), channelList.save(localDb)]);
           }
-        });
+        } else {
+          queue.addPriorityJob({
+            operationLabel: DatabaseOperationLabel.CoreChatSystem_GeneralSystemMessage,
+            id: `${websocketData?.channel?.id}-${websocketData?.message?.id}`,
+            priority: QueueJobPriority.HIGH,
+            task: async () => {
+              if (
+                websocketData?.message?.message_type === 'notification-deleted' ||
+                websocketData?.message?.message_type === 'deleted'
+              ) {
+                await Promise.all([channelList.save(localDb)]);
+              } else {
+                const chat = ChatSchema.fromWebsocketObject(newWebsocketData);
+                await Promise.all([chat.save(localDb), channelList.save(localDb)]);
+              }
+            }
+          });
+        }
       }
     );
 
@@ -274,41 +298,66 @@ const useCoreChatSystemHook = () => {
       websocketMessage?.user?.id === anonProfileId;
 
     if (!isMyMessage) {
-      queue.addPriorityJob({
-        operationLabel: DatabaseOperationLabel.CoreChatSystem_SaveChat,
-        id: `${websocketData?.channel?.id}-${websocketData?.message?.id}`,
-        task: async () => {
-          const chat = ChatSchema.fromWebsocketObject(websocketData);
-          await chat.save(localDb);
-        },
-        priority: QueueJobPriority.HIGH
-      });
+      if (Platform.OS === 'android') {
+        const chat = ChatSchema.fromWebsocketObject(websocketData);
+        await chat.save(localDb);
+      } else {
+        queue.addPriorityJob({
+          operationLabel: DatabaseOperationLabel.CoreChatSystem_SaveChat,
+          id: `${websocketData?.channel?.id}-${websocketData?.message?.id}`,
+          task: async () => {
+            const chat = ChatSchema.fromWebsocketObject(websocketData);
+            await chat.save(localDb);
+          },
+          priority: QueueJobPriority.HIGH
+        });
+      }
     }
 
-    queue.addPriorityJob({
-      operationLabel: DatabaseOperationLabel.CoreChatSystem_SaveUserMember,
-      id: `${websocketData?.channel?.id}`,
-      priority: QueueJobPriority.HIGH,
-      task: async () => {
-        try {
-          websocketData?.originalMembers?.forEach(async (member) => {
-            const userMember = UserSchema.fromMemberWebsocketObject(
-              member,
-              websocketData?.channel?.id
-            );
-            await userMember.saveOrUpdateIfExists(localDb);
-          });
-        } catch (e) {
-          console.log('error on memberSchema');
-          console.log(e);
-        }
-
-        refresh('channelList');
-        refreshWithId('chat', websocketData?.channel?.id);
-        refresh('channelInfo');
-        refresh('channelMember');
+    if (Platform.OS === 'android') {
+      try {
+        websocketData?.originalMembers?.forEach(async (member) => {
+          const userMember = UserSchema.fromMemberWebsocketObject(
+            member,
+            websocketData?.channel?.id
+          );
+          await userMember.saveOrUpdateIfExists(localDb);
+        });
+      } catch (e) {
+        console.log('error on memberSchema');
+        console.log(e);
       }
-    });
+
+      refresh('channelList');
+      refreshWithId('chat', websocketData?.channel?.id);
+      refresh('channelInfo');
+      refresh('channelMember');
+    } else {
+      queue.addPriorityJob({
+        operationLabel: DatabaseOperationLabel.CoreChatSystem_SaveUserMember,
+        id: `${websocketData?.channel?.id}`,
+        priority: QueueJobPriority.HIGH,
+        task: async () => {
+          try {
+            websocketData?.originalMembers?.forEach(async (member) => {
+              const userMember = UserSchema.fromMemberWebsocketObject(
+                member,
+                websocketData?.channel?.id
+              );
+              await userMember.saveOrUpdateIfExists(localDb);
+            });
+          } catch (e) {
+            console.log('error on memberSchema');
+            console.log(e);
+          }
+
+          refresh('channelList');
+          refreshWithId('chat', websocketData?.channel?.id);
+          refresh('channelInfo');
+          refresh('channelMember');
+        }
+      });
+    }
 
     updateAppBadgeFromDB(localDb);
   };
