@@ -335,7 +335,6 @@ const Comment = ({
               styles.iconContainer
             ]}
             onPress={() => {
-              console.log(comment);
               onBlockComponent(comment);
             }}>
             <IconEn name="block" size={normalize(14)} color={COLORS.gray410} />
