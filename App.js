@@ -2,11 +2,12 @@ import * as React from 'react';
 import DeviceInfo from 'react-native-device-info';
 import FlashMessage from 'react-native-flash-message';
 import Toast from 'react-native-toast-message';
+import branch from 'react-native-branch';
 import {BackHandler, Platform, View} from 'react-native';
+import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import {HumanIDProvider} from '@human-internet/react-native-humanid';
 import {LogLevel, OneSignal} from 'react-native-onesignal';
-import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
-import {OverlayProvider, Streami18n} from 'stream-chat-react-native';
+import {QueryClient, QueryClientProvider} from 'react-query';
 import {RecoilDebugObserver} from 'reactotron-recoil-plugin';
 import {RecoilRoot} from 'recoil';
 import {
@@ -14,19 +15,19 @@ import {
   useSafeAreaFrame,
   useSafeAreaInsets
 } from 'react-native-safe-area-context';
+import {Streami18n} from 'stream-chat-react-native';
 import {appUpgradeVersionCheck} from 'app-upgrade-react-native-sdk';
 
-import {QueryClient, QueryClientProvider} from 'react-query';
 import Store from './src/context/Store';
 import getFeatureLoggerInstance, {EFeatureLogFlag} from './src/utils/log/FeatureLog';
 import {APP_UPGRADE_API_KEY, ENV, ONE_SIGNAL_APP_ID} from './src/libraries/Configs/ENVConfig';
 import {Analytics} from './src/libraries/analytics/firebaseAnalytics';
+import {COLORS} from './src/utils/theme';
 import {RootNavigator} from './src/navigations/root-stack';
 import {fetchRemoteConfig} from './src/utils/FirebaseUtil';
 import {linking} from './src/navigations/linking';
 import {reactotronInstance} from './src/libraries/reactotron/reactotronInstance';
 import {toastConfig} from './src/configs/ToastConfig';
-import {COLORS} from './src/utils/theme';
 
 const {featLog} = getFeatureLoggerInstance(EFeatureLogFlag.navigation);
 
@@ -48,6 +49,17 @@ const App = () => {
   };
 
   React.useEffect(() => {
+    const initBranch = async () => {
+      return branch.subscribe({
+        onOpenComplete: (options) => {
+          console.log('onOpenComplete', options);
+        },
+        onOpenStart: (options) => {
+          console.log('onOpenStart', options);
+        }
+      });
+    };
+
     const init = async () => {
       try {
         fetchRemoteConfig();
@@ -59,6 +71,8 @@ const App = () => {
     };
 
     init();
+    initBranch();
+
     // return unsubscribe;
   }, []);
 

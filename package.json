@@ -76,6 +76,7 @@
     "react-native": "0.64.4",
     "react-native-activity-feed": "^1.0.3",
     "react-native-autolink": "^4.0.0",
+    "react-native-branch": "^6.2.2",
     "react-native-bundle-splitter": "^2.2.1",
     "react-native-collapsible": "^1.6.1",
     "react-native-compressor": "^1.6.1",
