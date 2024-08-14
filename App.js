@@ -19,6 +19,9 @@ import {Streami18n} from 'stream-chat-react-native';
 import {appUpgradeVersionCheck} from 'app-upgrade-react-native-sdk';
 
 import Store from './src/context/Store';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from './src/libraries/analytics/analyticsEventTracking';
 import getFeatureLoggerInstance, {EFeatureLogFlag} from './src/utils/log/FeatureLog';
 import {APP_UPGRADE_API_KEY, ENV, ONE_SIGNAL_APP_ID} from './src/libraries/Configs/ENVConfig';
 import {Analytics} from './src/libraries/analytics/firebaseAnalytics';
@@ -53,9 +56,11 @@ const App = () => {
       return branch.subscribe({
         onOpenComplete: (options) => {
           console.log('onOpenComplete', options);
+          AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.BRANCH_OPEN_APP, options);
         },
         onOpenStart: (options) => {
           console.log('onOpenStart', options);
+          AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.BRANCH_OPEN_APP, options);
         }
       });
     };
