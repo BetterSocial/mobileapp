@@ -38,7 +38,11 @@ const uiBlockUser = async (postId, userId, source, reason, message, callback) =>
   try {
     await blockUser(data);
     Toast.show(handleMessage(reason, message), Toast.LONG);
-    if (callback) callback();
+    if (callback) {
+      setTimeout(() => {
+        callback();
+      }, 1000);
+    }
   } catch (e) {
     Toast.show(String(e.message), Toast.LONG);
   }
