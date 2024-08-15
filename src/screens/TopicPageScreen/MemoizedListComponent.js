@@ -1,34 +1,30 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {Dimensions, StyleSheet, View} from 'react-native';
 import SimpleToast from 'react-native-simple-toast';
-
+import {Dimensions, StyleSheet, View} from 'react-native';
 import {useRoute} from '@react-navigation/core';
-import {Footer, PreviewComment} from '../../components';
-import useWriteComment from '../../components/Comments/hooks/useWriteComment';
-import TopicsChip from '../../components/TopicsChip/TopicsChip';
-import usePostHook from '../../hooks/core/post/usePostHook';
-import {showScoreAlertDialog} from '../../utils/Utils';
-import {
-  ANALYTICS_SHARE_POST_TOPIC_ID,
-  ANALYTICS_SHARE_POST_TOPIC_SCREEN,
-  POST_TYPE_LINK,
-  POST_TYPE_POLL,
-  POST_TYPE_STANDARD
-} from '../../utils/constants';
-import dimen from '../../utils/dimen';
-import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
-import {getCommentLength, getCountCommentWithChild} from '../../utils/getstream';
-import ShareUtils from '../../utils/share';
-import StringConstant from '../../utils/string/StringConstant';
-import {COLORS} from '../../utils/theme';
+
+import AddCommentPreview from '../FeedScreen/elements/AddCommentPreview';
 import Content from '../FeedScreen/Content';
 import ContentLink from '../FeedScreen/ContentLink';
 import Header from '../FeedScreen/Header';
-import AddCommentPreview from '../FeedScreen/elements/AddCommentPreview';
-import BlurredLayer from '../FeedScreen/elements/BlurredLayer';
+import ShareUtils from '../../utils/share';
+import StringConstant from '../../utils/string/StringConstant';
+import TopicsChip from '../../components/TopicsChip/TopicsChip';
+import dimen from '../../utils/dimen';
 import useCalculationContent from '../FeedScreen/hooks/useCalculationContent';
 import useFeed from '../FeedScreen/hooks/useFeed';
+import usePostHook from '../../hooks/core/post/usePostHook';
+import useWriteComment from '../../components/Comments/hooks/useWriteComment';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../libraries/analytics/analyticsEventTracking';
+import {COLORS} from '../../utils/theme';
+import {Footer, PreviewComment} from '../../components';
+import {POST_TYPE_LINK, POST_TYPE_POLL, POST_TYPE_STANDARD} from '../../utils/constants';
+import {getCommentLength, getCountCommentWithChild} from '../../utils/getstream';
+import {normalize, normalizeFontSizeByWidth} from '../../utils/fonts';
+import {showScoreAlertDialog} from '../../utils/Utils';
 
 const FULL_WIDTH = Dimensions.get('screen').width;
 
@@ -40,6 +36,7 @@ const RenderListFeed = (props) => {
     onNewPollFetched,
     onPressDomain,
     onPressComment,
+    onPressDmAdditionalProcess,
     onPressBlock,
     userId,
     onPressDownVote,
@@ -78,7 +75,13 @@ const RenderListFeed = (props) => {
       newStatus = true;
     }
 
-    await postApiDownvote(newStatus);
+    postApiDownvote(newStatus);
+
+    AnalyticsEventTracking.eventTrack(
+      newStatus
+        ? BetterSocialEventTracking.FEED_COMMUNITY_PAGE_POST_INTERACTION_DOWNVOTE_INSERTED
+        : BetterSocialEventTracking.FEED_COMMUNITY_PAGE_POST_INTERACTION_DOWNVOTE_REMOVED
+    );
   };
 
   const onPressUpvoteHandle = async () => {
@@ -87,7 +90,14 @@ const RenderListFeed = (props) => {
     if (voteStatus === 'downvote') {
       newStatus = true;
     }
-    await postApiUpvote(newStatus);
+
+    postApiUpvote(newStatus);
+
+    AnalyticsEventTracking.eventTrack(
+      newStatus
+        ? BetterSocialEventTracking.FEED_COMMUNITY_PAGE_POST_INTERACTION_UPVOTE_INSERTED
+        : BetterSocialEventTracking.FEED_COMMUNITY_PAGE_POST_INTERACTION_UPVOTE_REMOVED
+    );
   };
 
   const postApiDownvote = async (status) => {
@@ -145,6 +155,19 @@ const RenderListFeed = (props) => {
   const isShortTextPost =
     item.post_type === POST_TYPE_STANDARD && item.images_url.length <= 0 && isShortText === true;
 
+  const onFollowUnfollowButtonPressed = async () => {
+    const action = await followUnfollowTopic(item, route?.params?.id, offset);
+    if (action === 'follow' || action === 'follow-anonymous') {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.FEED_COMMUNITY_PAGE_FOLLOW_USER_BUTTON_CLICKED
+      );
+    } else if (action === 'unfollow' || action === 'unfollow-anonymous') {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.FEED_COMMUNITY_PAGE_UNFOLLOW_USER_BUTTON_CLICKED
+      );
+    }
+  };
+
   return (
     <View style={styles.cardContainer}>
       <View style={styles.cardMain}>
@@ -154,8 +177,11 @@ const RenderListFeed = (props) => {
           height={getHeightHeader()}
           isSelf={item?.is_self}
           isFollow={item?.is_following_target}
-          onPressFollUnFoll={() => followUnfollowTopic(item, route?.params?.id, offset)}
+          onPressFollUnFoll={onFollowUnfollowButtonPressed}
           isShortText={isShortTextPost}
+          navigateToProfileEventName={
+            BetterSocialEventTracking.FEED_COMMUNITY_PAGE_POST_INTERACTION_OPEN_AUTHOR_PROFILE
+          }
         />
         {item.post_type === POST_TYPE_LINK && (
           <ContentLink
@@ -179,6 +205,11 @@ const RenderListFeed = (props) => {
             topics={item?.topics}
             setHaveSeeMore={(haveSeeMore) => setIsHaveSeeMore(haveSeeMore)}
             setIsShortText={(shortText) => setIsShortText(shortText)}
+            eventTrackName={{
+              pollSeeResults:
+                BetterSocialEventTracking.FEED_COMMUNITY_PAGE_MULTIPLE_POLL_SEE_RESULTS,
+              pollSelected: BetterSocialEventTracking.FEED_COMMUNITY_PAGE_SINGLE_POLL_CLICKED
+            }}
           />
         )}
         {isBlurred && (
@@ -196,17 +227,14 @@ const RenderListFeed = (props) => {
           item={item}
           totalComment={getCountCommentWithChild(item)}
           totalVote={totalVote}
-          onPressShare={() =>
-            ShareUtils.sharePostInTopic(
-              item,
-              ANALYTICS_SHARE_POST_TOPIC_SCREEN,
-              ANALYTICS_SHARE_POST_TOPIC_ID
-            )
-          }
+          onPressShare={() => ShareUtils.sharePostInTopic(item)}
           onPressComment={() => onPressComment(isHaveSeeMore)}
           onPressBlock={() => onPressBlock(item)}
           onPressDownVote={onPressDownVoteHandle}
           onPressUpvote={onPressUpvoteHandle}
+          eventTrackCallback={{
+            pressDMFooter: onPressDmAdditionalProcess
+          }}
           statusVote={voteStatus}
           loadingVote={loadingVote}
           isSelf={item.anonimity ? false : userId === item?.actor?.id}

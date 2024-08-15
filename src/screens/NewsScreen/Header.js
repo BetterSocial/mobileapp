@@ -13,7 +13,15 @@ import {calculateTime} from '../../utils/time';
 import {fonts} from '../../utils/fonts';
 import {setDomainData, setProfileDomain} from '../../context/actions/domainAction';
 
-const Header = ({image, domain, time, item}) => {
+const Header = ({
+  image,
+  domain,
+  time,
+  item,
+  eventTrack = {
+    onOpenDomainScreen: () => {}
+  }
+}) => {
   const [domainStore, dispatchDomain] = React.useContext(Context).domains;
   const navigation = useNavigation();
   const onHeaderPressed = () => {
@@ -21,6 +29,10 @@ const Header = ({image, domain, time, item}) => {
       setProfileDomain({}, dispatchDomain);
       setDomainData([], dispatchDomain);
     }
+
+    console.log('eventTrack', eventTrack);
+    if (eventTrack?.onOpenDomainScreen) eventTrack.onOpenDomainScreen();
+
     navigation.push('DomainScreen', {
       item: {
         ...item,

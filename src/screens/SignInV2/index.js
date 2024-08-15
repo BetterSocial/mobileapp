@@ -160,9 +160,7 @@ const SignIn = () => {
     <View style={S.container}>
       <StatusBar translucent={true} backgroundColor="transparent" />
       <View style={S.containerSlideShow}>
-        {clickTime >= 7 && isDemoLoginEnabled ? (
-          <DevDummyLogin resetClickTime={resetClickTime} />
-        ) : null}
+        {clickTime >= 7 ? <DevDummyLogin resetClickTime={resetClickTime} /> : null}
         <SlideShow onContainerPress={onClickContainer} handleLogin={handleLogin} />
       </View>
     </View>

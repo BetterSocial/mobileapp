@@ -3,6 +3,9 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import config from 'react-native-config';
 import {Alert, Share} from 'react-native';
 
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../libraries/analytics/analyticsEventTracking';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 
 const buildShare = async (message) => {
@@ -24,20 +27,18 @@ const buildShare = async (message) => {
   }
 };
 
-const shareDomain = (item) => {
-  if (__DEV__) {
-    console.log('Share in domain', item);
-  }
+const shareDomain = async (item) => {
+  await buildShare(`${item?.content?.news_url}`);
 };
 
 const shareNews = async (item) => {
   await buildShare(`${item?.content?.url}`);
 };
 
-const sharePostInTopic = async (item, analyticsLogEvent, analyticsId) => {
-  Analytics.logEvent(analyticsLogEvent, {
-    id: analyticsId
-  });
+const sharePostInTopic = async (item) => {
+  AnalyticsEventTracking.eventTrack(
+    BetterSocialEventTracking.FEED_COMMUNITY_PAGE_SHARE_BUTTON_CLICKED
+  );
   await buildShare(`${config.POST_SHARE_URL}/post/${item?.id}`);
 };
 

@@ -4,7 +4,7 @@ import * as React from 'react';
 import DocumentPicker from 'react-native-document-picker';
 import ImagePicker from 'react-native-image-crop-picker';
 import ToastMessage from 'react-native-toast-message';
-import {Alert, Image, Linking, StyleSheet, Text, TextInput, View} from 'react-native';
+import {Alert, Image, Linking, Platform, StyleSheet, Text, TextInput, View} from 'react-native';
 import {createThumbnail} from 'react-native-create-thumbnail';
 
 import BottomSheetAttachment from './BottomSheetAttachment';
@@ -165,7 +165,7 @@ const InputMessageV2 = ({
     const uploadedImageUrl = await ImageUtils.uploadImageWithoutAuth(path, {
       withFailedEventTrack: getEventName(
         BetterSocialEventTracking.SIGNED_CHAT_SCREEN_ATTACHMENT_MEDIA_UPLOAD_FILE,
-        BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_ATTACHMENT_UPLOAD_FAILED
+        BetterSocialEventTracking.ANONYMOUS_CHAT_SCREEN_ATTACHMENT_MEDIA_UPLOAD_FILE
       )
     });
     resultUrls.push({
@@ -450,12 +450,15 @@ const InputMessageV2 = ({
       <View style={styles.containerInput}>
         <TextInput
           multiline
-          style={styles.input}
+          style={[
+            styles.input,
+            Platform.OS === 'android' ? {paddingBottom: dimen.normalizeDimen(2)} : {}
+          ]}
           onChangeText={onChangeInput}
           value={text}
           onFocus={() => setInputFocus(true)}
           onBlur={() => setInputFocus(false)}
-          numberOfLines={4}
+          numberOfLines={Platform.OS === 'android' ? 1 : 4}
           keyboardAppearance="dark"
         />
         {isShowToggle && (

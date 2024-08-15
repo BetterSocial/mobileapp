@@ -6,21 +6,36 @@ import DiscoveryAction from '../../../context/actions/discoveryAction';
 import GeneralComponentAction from '../../../context/actions/generalComponentAction';
 import IconClear from '../../../assets/icon/IconClear';
 import RecentSearchItems from './RecentSearchItem';
+import {COLORS} from '../../../utils/theme';
 import {Context} from '../../../context';
 import {RECENT_SEARCH_TERMS} from '../../../utils/cache/constant';
 import {fonts} from '../../../utils/fonts';
-import {COLORS} from '../../../utils/theme';
+
+/**
+ * @typedef {Object} EventTrack
+ * @property {Function | null} onClearRecentSearch
+ * @property {Function | null} onRecentSearchItemClicked
+ */
 
 /**
  * @typedef {Object} RecentSearchOptions
  * @property {Boolean}[shown = true] shown
+ * @property {EventTrack} eventTrack
  */
 /**
  *
  * @param {RecentSearchOptions} param
  */
 const RecentSearch = (param) => {
-  const {shown = true, setSearchText = () => {}, setIsFirstTimeOpen = () => {}} = param;
+  const {
+    shown = true,
+    setSearchText = () => {},
+    setIsFirstTimeOpen = () => {},
+    eventTrack = {
+      onClearRecentSearch: () => {},
+      onRecentSearchItemClicked: () => {}
+    }
+  } = param;
 
   const [discovery, discoveryDispatch] = React.useContext(Context).discovery;
 
@@ -61,6 +76,8 @@ const RecentSearch = (param) => {
     setIsFirstTimeOpen(false);
     Keyboard.dismiss();
     manipulateSearchTermsOrder(search);
+
+    eventTrack?.onRecentSearchItemClicked();
   };
 
   const handleClearRecentSearch = async () => {
@@ -69,6 +86,8 @@ const RecentSearch = (param) => {
     await AsyncStorage.removeItem(RECENT_SEARCH_TERMS);
 
     DiscoveryAction.setDiscoveryRecentSearch([], discoveryDispatch);
+
+    eventTrack?.onClearRecentSearch();
   };
 
   if (isShown && items.length > 0)

@@ -1,26 +1,29 @@
-import {useNavigation, useRoute} from '@react-navigation/native';
 import * as React from 'react';
 import {Animated, InteractionManager, StatusBar, View, useWindowDimensions} from 'react-native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 import BlockComponent from '../../components/BlockComponent';
-import {ButtonNewPost} from '../../components/Button';
+import RenderListFeed from './RenderList';
+import Search from './elements/Search';
+import StorageUtils from '../../utils/storage';
 import TiktokScroll from '../../components/TiktokScroll';
-import {Context} from '../../context';
-import {setFeedByIndex} from '../../context/actions/feeds';
+import dimen from '../../utils/dimen';
+import useAnonymousChannelListScreenHook from '../../hooks/screen/useAnonymousChannelListHook';
+import useCoreFeed from './hooks/useCoreFeed';
+import useViewPostTimeHook from './hooks/useViewPostTimeHook';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../libraries/analytics/analyticsEventTracking';
 import useOnBottomNavigationTabPressHook, {
   LIST_VIEW_TYPE
 } from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
-import {useAfterInteractions} from '../../hooks/useAfterInteractions';
+import {ButtonNewPost} from '../../components/Button';
+import {Context} from '../../context';
 import {DISCOVERY_TAB_TOPICS} from '../../utils/constants';
-import dimen from '../../utils/dimen';
-import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
-import RenderListFeed from './RenderList';
-import Search from './elements/Search';
-import useCoreFeed from './hooks/useCoreFeed';
-import useViewPostTimeHook from './hooks/useViewPostTimeHook';
 import {Shimmer} from '../../components/Shimmer/Shimmer';
-import useAnonymousChannelListScreenHook from '../../hooks/screen/useAnonymousChannelListHook';
-import StorageUtils from '../../utils/storage';
+import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import {setFeedByIndex} from '../../context/actions/feeds';
+import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 
 let lastDragY = 0;
 
@@ -164,10 +167,15 @@ const FeedScreen = (props) => {
       refreshParent: () => refreshMoreText(index, haveSeeMore),
       isKeyboardOpen: true
     });
+
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.MAIN_FEED_POST_FOOTER_REPLY_BUTTON_CLICKED
+    );
   };
 
   const onPressBlock = (value) => {
     refBlockComponent.current.openBlockComponent(value);
+    AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.MAIN_FEED_BLOCK_BUTTON_CLICKED);
   };
 
   function onRefresh() {
@@ -230,6 +238,8 @@ const FeedScreen = (props) => {
     navigation.navigate('DiscoveryScreen', {
       tab: DISCOVERY_TAB_TOPICS
     });
+
+    AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.MAIN_FEED_SEARCH_BAR_CLICKED);
   };
 
   const saveSearchHeightHandle = (height) => {
@@ -268,6 +278,43 @@ const FeedScreen = (props) => {
     return renderListFeed(item, index);
   };
 
+  const onCloseBlockUser = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.MAIN_FEED_BLOCK_USER_BOTTOM_SHEET_CLOSED
+    );
+  };
+
+  const onBlockAndReportUser = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.MAIN_FEED_BLOCK_USER_BLOCK_AND_REPORT_CLICKED
+    );
+  };
+
+  const onBlockUserIndefinitely = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.MAIN_FEED_BLOCK_USER_BLOCK_INDEFINITELY_CLICKED
+    );
+  };
+
+  const onSkipOnlyBlock = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.MAIN_FEED_BLOCK_USER_REPORT_INFO_SKIPPED
+    );
+  };
+
+  const onReportInfoSubmitted = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.MAIN_FEED_BLOCK_USER_REPORT_INFO_SUBMITTED
+    );
+  };
+
+  const onReasonsSubmitted = (v) => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.MAIN_FEED_BLOCK_USER_BLOCK_AND_REPORT_REASON,
+      v
+    );
+  };
+
   return (
     <View>
       <StatusBar translucent={false} barStyle={'light-content'} />
@@ -303,16 +350,28 @@ const FeedScreen = (props) => {
         renderItem={renderItem}
         onEndReachedThreshold={0.9}
         onMomentumScrollEnd={(momentumEvent) => {
-          onWillSendViewPostTime(momentumEvent, feeds);
+          onWillSendViewPostTime(momentumEvent, feeds, {
+            scrollEventName: BetterSocialEventTracking.MAIN_FEED_ON_POST_SCROLLED,
+            scrollEventItemName: BetterSocialEventTracking.MAIN_FEED_ON_POST_SCROLLED_ITEM
+          });
           fetchNextFeeds(momentumEvent);
         }}
       />
-      <ButtonNewPost onRefresh={onRefresh} />
+      <ButtonNewPost
+        onRefresh={onRefresh}
+        clickEventName={BetterSocialEventTracking.MAIN_FEED_CREATE_POST_BUTTON_CLICKED}
+      />
       <BlockComponent
         ref={refBlockComponent}
         refresh={onBlockCompletedHandle}
         refreshAnonymous={onDeleteBlockedPostCompletedHandle}
         screen="screen_feed"
+        onCloseBlockUser={onCloseBlockUser}
+        onBlockAndReportUser={onBlockAndReportUser}
+        onBlockUserIndefinitely={onBlockUserIndefinitely}
+        onSkipOnlyBlock={onSkipOnlyBlock}
+        onReportInfoSubmitted={onReportInfoSubmitted}
+        onReasonsSubmitted={onReasonsSubmitted}
       />
     </View>
   );

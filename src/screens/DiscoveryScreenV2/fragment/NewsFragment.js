@@ -1,20 +1,21 @@
+import * as React from 'react';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 /* eslint-disable consistent-return */
 /* eslint-disable array-callback-return */
 import {useNavigation} from '@react-navigation/native';
-import * as React from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
 
-import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
-import {Context} from '../../../context/Store';
-import useIsReady from '../../../hooks/useIsReady';
-import {fonts} from '../../../utils/fonts';
-import {newsDiscoveryContentParamBuilder} from '../../../utils/navigation/paramBuilder';
-import share from '../../../utils/share';
-import {COLORS} from '../../../utils/theme';
-import {getUserId} from '../../../utils/users';
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
+import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import RecentSearch from '../elements/RecentSearch';
 import RenderItem from '../elements/RenderItem';
+import share from '../../../utils/share';
+import useDiscoveryScreenAnalyticsHook from '../../../libraries/analytics/useDiscoveryScreenAnalyticsHook';
+import useIsReady from '../../../hooks/useIsReady';
+import {COLORS} from '../../../utils/theme';
+import {Context} from '../../../context/Store';
+import {fonts} from '../../../utils/fonts';
+import {getUserId} from '../../../utils/users';
+import {newsDiscoveryContentParamBuilder} from '../../../utils/navigation/paramBuilder';
 
 const NewsFragment = ({
   isLoadingDiscoveryNews = false,
@@ -25,6 +26,16 @@ const NewsFragment = ({
 }) => {
   const [myId, setMyId] = React.useState('');
   const [defaultNews] = React.useContext(Context).news;
+
+  const {
+    news: {
+      onOpenLinkPressed,
+      onOpenLinkContextScreen,
+      onClearRecentSearch,
+      onRecentSearchItemClicked,
+      onOpenDomainScreen
+    }
+  } = useDiscoveryScreenAnalyticsHook();
 
   const isReady = useIsReady();
 
@@ -39,10 +50,6 @@ const NewsFragment = ({
     };
     parseToken();
   }, []);
-
-  // React.useEffect(() => {
-  //     if(news.length > 0) setIsFirstTimeOpen(false)
-  // }, [news])
 
   const renderNewsItem = () => {
     if (isFirstTimeOpen) {
@@ -65,6 +72,11 @@ const NewsFragment = ({
                 key={`news-screen-item-${index}`}
                 item={item}
                 selfUserId={myId}
+                eventTrack={{
+                  onOpenLinkPressed,
+                  onOpenLinkContextScreen,
+                  onOpenDomainScreen
+                }}
                 // onPressContent={onContentClicked}
               />
             );
@@ -101,6 +113,11 @@ const NewsFragment = ({
           selfUserId={myId}
           item={contentParam}
           onPressShare={share.shareNews}
+          eventTrack={{
+            onOpenLinkPressed,
+            onOpenLinkContextScreen,
+            onOpenDomainScreen
+          }}
           // onPressContent={onContentClicked}
         />
       );
@@ -128,6 +145,10 @@ const NewsFragment = ({
         shown={isFirstTimeOpen}
         setSearchText={setSearchText}
         setIsFirstTimeOpen={setIsFirstTimeOpen}
+        eventTrack={{
+          onClearRecentSearch,
+          onRecentSearchItemClicked
+        }}
       />
       {renderNewsItem()}
       <View style={styles.padding} />

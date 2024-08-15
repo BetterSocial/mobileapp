@@ -1,22 +1,21 @@
 import * as React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 
 import Content from '../../NewsScreen/Content';
-import Gap from '../../../components/Gap';
 import Header from '../../NewsScreen/Header';
 import {COLORS, SIZES} from '../../../utils/theme';
-import {Footer} from '../../../components';
-import {getCountComment, getCountCommentWithChild, getCountVote} from '../../../utils/getstream';
 
 const RenderItem = ({
   item,
-  onPressShare = () => {},
-  onPressComment = () => {},
-  onPressBlock = () => {},
   onPressDownVote = () => {},
   onPressUpvote = () => {},
   onPressContent = undefined,
-  selfUserId
+  selfUserId,
+  eventTrack = {
+    onOpenLinkPressed: () => {},
+    onOpenLinkContextScreen: () => {},
+    onOpenDomainScreen: () => {}
+  }
 }) => {
   const [voteStatus, setVoteStatus] = React.useState('none');
   const [statusUpvote, setStatusUpvote] = React.useState(false);
@@ -102,6 +101,7 @@ const RenderItem = ({
         domain={item.domain.name}
         time={item.content.created_at}
         item={item}
+        eventTrack={eventTrack}
       />
       <Content
         item={item}
@@ -110,6 +110,7 @@ const RenderItem = ({
         description={item.content.description}
         url={item.content.url}
         onContentClicked={onPressContent}
+        eventTrack={eventTrack}
       />
       {/* <Gap height={8} />
       <View style={styles.wrapperFooter}>

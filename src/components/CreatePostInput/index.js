@@ -6,24 +6,20 @@ import {debounce} from 'lodash';
 
 import MentionSuggestions from './elements/MentionSuggestions';
 import TopicSuggestions from './elements/TopicSuggestions';
+import dimen from '../../utils/dimen';
 import useHastagMention from '../../screens/CreatePost/elements/useHastagMention';
 import {COLORS} from '../../utils/theme';
+import {fonts} from '../../utils/fonts';
 import {getTopics} from '../../service/topics';
 import {getUserForTagging} from '../../service/mention';
 import {isEmptyOrSpaces} from '../../utils/Utils';
-import {joinTopicIntoTopicList} from '../../utils/array/ChunkArray';
-import {fonts} from '../../utils/fonts';
-import dimen from '../../utils/dimen';
 
 const CreatePostInput = ({
   allTaggedUser = [],
   message,
   topics = [],
-  topicChats = [],
   setAllTaggedUser,
   setPositionKeyboard,
-  setTopics,
-  setTopicChats,
   setMessage,
   typeUser
 }) => {
@@ -31,7 +27,7 @@ const CreatePostInput = ({
   const [userTaggingSearch, setUserTaggingSearch] = React.useState([]);
   const [hashtagPosition, setHashtagPosition] = React.useState(0);
   const [positionTopicSearch, setPositionTopicSearch] = React.useState(0);
-  const [lastTopicInCursor, setLastTopicInCursor] = React.useState('');
+  const [, setLastTopicInCursor] = React.useState('');
   const inputRef = React.useRef();
   const {formattedText, handleStateHashtag, handleStateMention, setHashtags, updateHashtag} =
     useHastagMention('');
@@ -70,7 +66,7 @@ const CreatePostInput = ({
   const searchTopic = async (name) => {
     if (!isEmptyOrSpaces(name)) {
       const cancelToken = cancelTokenRef.current.token;
-      getTopics(name, {cancelToken})
+      getTopics(name, undefined, {cancelToken})
         .then((v) => {
           setTopicSearch(v.data);
         })

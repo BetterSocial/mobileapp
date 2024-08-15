@@ -3,6 +3,7 @@ import * as React from 'react';
 import moment from 'moment';
 import {Dimensions, Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
+import AnalyticsEventTracking from '../../libraries/analytics/analyticsEventTracking';
 import PollOptions from '../../components/PollOptions';
 import PollOptionsMultipleChoice from '../../components/PollOptionsMultipleChoice';
 import useContentPoll from './hooks/useContentPoll';
@@ -26,7 +27,9 @@ const ContentPoll = ({
   currentMoment = moment(),
   isPostDetail = false,
   containerStyle,
-  topics = []
+  topics = [],
+  seeResultsEventName,
+  pollSelectedEventName
 }) => {
   const {
     renderSeeResultButton,
@@ -40,11 +43,24 @@ const ContentPoll = ({
     modifiedPoll,
     count,
     newPoll
-  } = useContentPoll({isAlreadyPolling: isAlreadyPollingProps, polls, voteCount});
+  } = useContentPoll({
+    isAlreadyPolling: isAlreadyPollingProps,
+    polls,
+    voteCount,
+    seeResultsEventName,
+    pollSelectedEventName
+  });
 
   const styles = stylesComponent(polls.length);
   const initialSetup = () => {
-    if (!multiplechoice) onSeeResultsClicked(item, multiplechoice, onnewpollfetched, index);
+    if (!multiplechoice) {
+      if (pollSelectedEventName) {
+        AnalyticsEventTracking.eventTrack(pollSelectedEventName, {
+          index: singleChoiceSelectedIndex
+        });
+      }
+      onSeeResultsClicked(item, multiplechoice, onnewpollfetched, index);
+    }
   };
 
   React.useEffect(() => {

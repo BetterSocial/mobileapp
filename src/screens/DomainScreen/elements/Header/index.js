@@ -9,8 +9,11 @@ import DomainFollowerNumber from './elements/DomainFollowerNumber';
 import MemoDomainProfilePicture from '../../../../assets/icon/DomainProfilePictureEmptyState';
 import MemoIc_interface from '../../../../assets/icons/Ic_interface';
 import StringConstant from '../../../../utils/string/StringConstant';
-import {COLORS, SIZES} from '../../../../utils/theme';
-import {Gap, SingleSidedShadowBox} from '../../../../components';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../../../libraries/analytics/analyticsEventTracking';
+import {COLORS} from '../../../../utils/theme';
+import {Gap} from '../../../../components';
 import {fonts, normalize, normalizeFontSize} from '../../../../utils/fonts';
 
 const Header = ({
@@ -29,6 +32,9 @@ const Header = ({
   const openDomainLink = async () => {
     const isURL = await Linking.canOpenURL(`https://${domain}`);
     if (isURL) {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.DOMAIN_PAGE_EXTERNAL_LINK_CLICKED
+      );
       Linking.openURL(`https://${domain}`);
     } else {
       SimpleToast.show(StringConstant.domainCannotOpenURL, SimpleToast.SHORT);

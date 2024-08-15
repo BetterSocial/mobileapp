@@ -2,10 +2,10 @@
 /* eslint-disable no-underscore-dangle */
 // eslint-disable-next-line import/no-extraneous-dependencies
 
-import {useNavigation} from '@react-navigation/native';
-import moment from 'moment';
-import PropsTypes from 'prop-types';
 import * as React from 'react';
+import LinearGradient from 'react-native-linear-gradient';
+import PropsTypes from 'prop-types';
+import moment from 'moment';
 import {
   Dimensions,
   Platform,
@@ -15,37 +15,38 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
-import LinearGradient from 'react-native-linear-gradient';
-import MemoIc_arrow_back from '../../assets/arrow/Ic_arrow_back';
+import AnalyticsEventTracking from '../../libraries/analytics/analyticsEventTracking';
+import AnonymousAvatar from '../../components/AnonymousAvatar';
+import AnonymousUsername from '../../components/AnonymousUsername';
+import BlurredLayer from './elements/BlurredLayer';
+import BottomSheetMenu from '../../components/BottomSheet/BottomSheetMenu';
 import ElipsisIcon from '../../assets/icon/ElipsisIcon';
-import ShareAndroidIcon from '../../assets/icons/images/share-for-android.svg';
-import TrashRed from '../../assets/icons/images/trash-red.svg';
+import GlobalButton from '../../components/Button/GlobalButton';
+import IconChevronLeft from '../../assets/icon/IconChevronLeft';
 import MemoEightyEight_hundred from '../../assets/timer/EightyEight_hundred';
 import MemoFivety_sixtyTwo from '../../assets/timer/Fivety_sixtyTwo';
+import MemoIc_arrow_back from '../../assets/arrow/Ic_arrow_back';
 import MemoOne from '../../assets/timer/One';
 import MemoSeventyFive_eightySeven from '../../assets/timer/SeventyFive_eightySeven';
 import MemoSixtyThree_seventyFour from '../../assets/timer/SixtyThree_seventyFour';
 import MemoThirtySeven_fourtyNine from '../../assets/timer/ThirtySeven_fourtyNine';
 import MemoTwentyFive_thirtySix from '../../assets/timer/TwentyFive_thirtySix';
-import AnonymousAvatar from '../../components/AnonymousAvatar';
-import AnonymousUsername from '../../components/AnonymousUsername';
-import BottomSheetMenu from '../../components/BottomSheet/BottomSheetMenu';
-import GlobalButton from '../../components/Button/GlobalButton';
+import ProfilePicture from '../ProfileScreen/elements/ProfilePicture';
+import ShareAndroidIcon from '../../assets/icons/images/share-for-android.svg';
+import ShareUtils from '../../utils/share';
+import StringConstant from '../../utils/string/StringConstant';
+import TrashRed from '../../assets/icons/images/trash-red.svg';
+import useFeedHeader from './hooks/useFeedHeader';
 import {
   ANALYTICS_SHARE_POST_FEED_ID,
   ANALYTICS_SHARE_POST_FEED_SCREEN,
   DEFAULT_PROFILE_PIC_PATH
 } from '../../utils/constants';
-import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
-import ShareUtils from '../../utils/share';
-import StringConstant from '../../utils/string/StringConstant';
 import {COLORS} from '../../utils/theme';
 import {calculateTime} from '../../utils/time';
-import ProfilePicture from '../ProfileScreen/elements/ProfilePicture';
-import BlurredLayer from './elements/BlurredLayer';
-import useFeedHeader from './hooks/useFeedHeader';
-import IconChevronLeft from '../../assets/icon/IconChevronLeft';
+import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -127,7 +128,9 @@ const _renderAnonimity = ({
   item,
   disabledFollow,
   isFromFeeds,
-  isShortText = false
+  isShortText = false,
+  threeDotsEventName,
+  shareLinkEventName
 }) => {
   const navigation = useNavigation();
   const refSheet = React.useRef();
@@ -137,8 +140,10 @@ const _renderAnonimity = ({
       id: 1,
       name: 'Share link',
       icon: <ShareAndroidIcon />,
-      onPress: () =>
-        ShareUtils.shareFeeds(item, ANALYTICS_SHARE_POST_FEED_SCREEN, ANALYTICS_SHARE_POST_FEED_ID)
+      onPress: () => {
+        ShareUtils.shareFeeds(item, ANALYTICS_SHARE_POST_FEED_SCREEN, ANALYTICS_SHARE_POST_FEED_ID);
+        if (shareLinkEventName) AnalyticsEventTracking.eventTrack(shareLinkEventName);
+      }
     }
   ];
 
@@ -249,6 +254,7 @@ const _renderAnonimity = ({
               <GlobalButton
                 onPress={() => {
                   refSheet.current.open();
+                  if (threeDotsEventName) AnalyticsEventTracking.eventTrack(threeDotsEventName);
                 }}>
                 <View style={{zIndex: 1000}}>
                   <ElipsisIcon width={16} height={16} color={COLORS.gray410} />
@@ -285,7 +291,10 @@ const _renderProfileNormal = ({
   item,
   disabledFollow,
   isFromFeeds,
-  isShortText
+  isShortText,
+  navigateToProfileEventName,
+  threeDotsEventName,
+  shareLinkEventName
 }) => {
   const refSheet = React.useRef();
   const dataSheet = [
@@ -293,8 +302,10 @@ const _renderProfileNormal = ({
       id: 1,
       name: 'Share link',
       icon: <ShareAndroidIcon />,
-      onPress: () =>
-        ShareUtils.shareFeeds(item, ANALYTICS_SHARE_POST_FEED_SCREEN, ANALYTICS_SHARE_POST_FEED_ID)
+      onPress: () => {
+        ShareUtils.shareFeeds(item, ANALYTICS_SHARE_POST_FEED_SCREEN, ANALYTICS_SHARE_POST_FEED_ID);
+        if (shareLinkEventName) AnalyticsEventTracking.eventTrack(shareLinkEventName);
+      }
     }
   ];
 
@@ -312,7 +323,8 @@ const _renderProfileNormal = ({
   }
   const {navigateToProfile, username, profile_pic_url, onBackNormalUser} = useFeedHeader({
     actor,
-    source
+    source,
+    navigateToProfileEventName
   });
   return (
     <SafeAreaView>
@@ -405,6 +417,7 @@ const _renderProfileNormal = ({
             <GlobalButton
               onPress={() => {
                 refSheet.current.open();
+                if (threeDotsEventName) AnalyticsEventTracking.eventTrack(threeDotsEventName);
               }}>
               {hideThreeDot ? null : (
                 <View style={{zIndex: 1000}}>
@@ -439,7 +452,10 @@ const Header = ({
   hideThreeDot,
   disabledFollow,
   isFromFeeds,
-  isShortText
+  isShortText,
+  navigateToProfileEventName,
+  threeDotsEventName,
+  shareLinkEventName
 }) => {
   const {
     anonimity,
@@ -481,7 +497,9 @@ const Header = ({
       source,
       disabledFollow,
       isFromFeeds,
-      isShortText
+      isShortText,
+      threeDotsEventName,
+      shareLinkEventName
     });
   }
   return _renderProfileNormal({
@@ -503,7 +521,10 @@ const Header = ({
     isSelf,
     disabledFollow,
     isFromFeeds,
-    isShortText
+    isShortText,
+    navigateToProfileEventName,
+    threeDotsEventName,
+    shareLinkEventName
   });
 };
 

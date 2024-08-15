@@ -80,7 +80,21 @@ const CHANNEL_LIST_GET_INITIAL_MESSAGES_LIMIT = 20;
 const SETTINGS_FAQ_URL = 'https://home.helio.social/faq';
 const SETTINGS_PRIVACY_URL = 'https://home.helio.social/privacy';
 
+const getPostType = (postTypeInNumber) => {
+  switch (postTypeInNumber) {
+    case POST_TYPE_LINK:
+      return 'post_link';
+    case POST_TYPE_POLL:
+      return 'post_poll';
+    case POST_TYPE_STANDARD:
+      return 'post_standard';
+    default:
+      return '';
+  }
+};
+
 export {
+  getPostType,
   ANALYTICS_SHARE_POST_FEED_ID,
   ANALYTICS_SHARE_POST_FEED_SCREEN,
   ANALYTICS_SHARE_POST_PDP_SCREEN,

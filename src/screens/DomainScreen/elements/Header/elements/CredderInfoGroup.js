@@ -2,20 +2,28 @@ import * as React from 'react';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import {RFValue} from 'react-native-responsive-fontsize';
 import {StyleSheet, Text, View} from 'react-native';
-import {TouchableOpacity, TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
 import CredderLogo from '../../../../../assets/icon/CredderLogo';
 import MemoIc_question_mark from '../../../../../assets/icons/Ic_question_mark';
 import StringConstant from '../../../../../utils/string/StringConstant';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../../../../libraries/analytics/analyticsEventTracking';
 import {COLORS} from '../../../../../utils/theme';
 import {CredderRating} from '../../../../../components/CredderRating';
 import {fonts, normalize} from '../../../../../utils/fonts';
 
-const CredderInfoGroup = ({description, score}) => {
+const CredderInfoGroup = ({score}) => {
   const [isTooltipShown, setIsTooltipShown] = React.useState(false);
 
+  const handleOnPressCredder = () => {
+    setIsTooltipShown(true);
+    AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.DOMAIN_PAGE_CREDDER_GROUP_CLICKED);
+  };
+
   return (
-    <TouchableWithoutFeedback style={styles.container} onPress={() => setIsTooltipShown(true)}>
+    <TouchableWithoutFeedback style={styles.container} onPress={handleOnPressCredder}>
       <CredderRating score={score} />
       <Tooltip
         // allowChildInteraction={false}

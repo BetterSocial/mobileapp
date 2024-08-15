@@ -3,10 +3,17 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import {StyleSheet, Text, View} from 'react-native';
 
 import ItemListLarge from './ItemListLarge';
-import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
+import {fonts} from '../../utils/fonts';
 
-const BlockDomain = ({refBlockDomain, onSelect, domain}) => {
+const BlockDomain = ({
+  refBlockDomain,
+  onSelect,
+  domain,
+  onClose = () => {},
+  onBlockDomainIndefinitely = () => {},
+  onBlockAndReportDomain = () => {}
+}) => {
   const data = [
     {
       id: 1,
@@ -23,12 +30,24 @@ const BlockDomain = ({refBlockDomain, onSelect, domain}) => {
       iconReght: true
     }
   ];
+
+  const onBlockClicked = (item) => {
+    if (item.id === 1) {
+      onBlockDomainIndefinitely();
+    } else if (item.id === 2) {
+      onBlockAndReportDomain();
+    }
+
+    onSelect(item?.id);
+  };
+
   return (
     <View>
       <RBSheet
         ref={refBlockDomain}
         closeOnDragDown={true}
         closeOnPressMask={true}
+        onClose={onClose}
         customStyles={{
           wrapper: {
             backgroundColor: COLORS.black80
@@ -49,7 +68,7 @@ const BlockDomain = ({refBlockDomain, onSelect, domain}) => {
             desc={item.desc}
             iconReght={item.iconReght}
             icon={item.icon}
-            onPress={() => onSelect(item.id)}
+            onPress={() => onBlockClicked(item.id)}
           />
         ))}
       </RBSheet>

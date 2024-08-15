@@ -37,10 +37,15 @@ jest.mock('@react-native-clipboard/clipboard', () => ({
 describe('Share utils test should pass', () => {
   afterEach(cleanup);
 
-  it('share domain should pass', () => {
-    const consoleLogSpy = jest.spyOn(console, 'log');
-    ShareUtils.shareDomain('domain');
-    expect(consoleLogSpy).toHaveBeenCalledWith('Share in domain', 'domain');
+  it('share domain should pass', async () => {
+    await ShareUtils.shareDomain({
+      content: {
+        news_url: 'https://www.google.com'
+      }
+    });
+    expect(mockedShare).toHaveBeenCalledWith({
+      message: 'https://www.google.com'
+    });
   });
 
   it('share news should pass', async () => {
@@ -63,10 +68,6 @@ describe('Share utils test should pass', () => {
       'analyticsLogEvent',
       'analyticsId'
     );
-
-    expect(mockedAnalytics).toHaveBeenCalledWith('analyticsLogEvent', {
-      id: 'analyticsId'
-    });
 
     expect(mockedShare).toHaveBeenCalledWith({
       message: 'https://www.google.com/post/1'

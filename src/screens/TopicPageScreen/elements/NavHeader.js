@@ -1,6 +1,6 @@
-import {useNavigation} from '@react-navigation/core';
-import PropTypes from 'prop-types';
 import * as React from 'react';
+import FastImage from 'react-native-fast-image';
+import PropTypes from 'prop-types';
 import {
   Animated,
   StatusBar,
@@ -10,20 +10,23 @@ import {
   View,
   useWindowDimensions
 } from 'react-native';
-
 import {BlurView} from '@react-native-community/blur';
-import FastImage from 'react-native-fast-image';
+import {useNavigation} from '@react-navigation/core';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import MemoIcArrowBackCircle from '../../../assets/arrow/Ic_arrow_back_circle';
-import ShareIconCircle from '../../../assets/icons/Ic_share_circle';
-import {Shimmer} from '../../../components/Shimmer/Shimmer';
-import dimen from '../../../utils/dimen';
-import {normalize, normalizeFontSize} from '../../../utils/fonts';
-import Search from '../../DiscoveryScreenV2/elements/Search';
-import {COLORS} from '../../../utils/theme';
+
 import ButtonFollow from './ButtonFollow';
 import ButtonFollowing from './ButtonFollowing';
+import MemoIcArrowBackCircle from '../../../assets/arrow/Ic_arrow_back_circle';
+import Search from '../../DiscoveryScreenV2/elements/Search';
+import ShareIconCircle from '../../../assets/icons/Ic_share_circle';
 import TopicDomainHeader from './TopicDomainHeader';
+import dimen from '../../../utils/dimen';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../../libraries/analytics/analyticsEventTracking';
+import {COLORS} from '../../../utils/theme';
+import {Shimmer} from '../../../components/Shimmer/Shimmer';
+import {normalize, normalizeFontSize} from '../../../utils/fonts';
 
 const NavHeader = (props) => {
   const {
@@ -55,6 +58,9 @@ const NavHeader = (props) => {
 
   const backScreen = () => {
     navigation.goBack();
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.FEED_COMMUNITY_PAGE_BACK_BUTTON_CLICKED
+    );
   };
 
   const renderBlur = !(coverPath?.length > 0)
@@ -63,10 +69,7 @@ const NavHeader = (props) => {
 
   const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 
-  const additionalHeaderHeight =
-    isHeaderHide || initialData?.coverImage !== undefined || coverPath !== null
-      ? dimen.normalizeDimen(12)
-      : 0;
+  const additionalHeaderHeight = isHeaderHide ? dimen.normalizeDimen(12) : 0;
 
   return (
     <View>

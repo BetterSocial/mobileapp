@@ -3,10 +3,15 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import {StyleSheet, Text, View} from 'react-native';
 
 import ItemListLarge from './ItemListLarge';
-import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
+import {fonts} from '../../utils/fonts';
 
-const BlockPostAnonymous = ({refBlockPostAnonymous, onSelect}) => {
+const BlockPostAnonymous = ({
+  refBlockPostAnonymous,
+  onSelect,
+  onBlockUserIndefinitely = () => {},
+  onBlockAndReportUser = () => {}
+}) => {
   const data = [
     {
       id: 1,
@@ -23,6 +28,17 @@ const BlockPostAnonymous = ({refBlockPostAnonymous, onSelect}) => {
       iconReght: true
     }
   ];
+
+  const onBlockClicked = (item) => {
+    if (item.id === 1) {
+      onBlockUserIndefinitely();
+    } else if (item.id === 2) {
+      onBlockAndReportUser();
+    }
+
+    onSelect(item?.id);
+  };
+
   return (
     <View>
       <RBSheet
@@ -50,7 +66,7 @@ const BlockPostAnonymous = ({refBlockPostAnonymous, onSelect}) => {
             desc={item.desc}
             iconReght={item.iconReght}
             icon={item.icon}
-            onPress={() => onSelect(item.id)}
+            onPress={() => onBlockClicked(item)}
           />
         ))}
       </RBSheet>
