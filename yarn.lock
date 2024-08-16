@@ -12292,6 +12292,11 @@ react-native-autolink@^4.0.0:
   dependencies:
     autolinker "^3.16.2"
 
+react-native-branch@^6.2.2:
+  version "6.2.2"
+  resolved "https://registry.yarnpkg.com/react-native-branch/-/react-native-branch-6.2.2.tgz#08dd83232251d382c59ce15dd380b27a4422b3f4"
+  integrity sha512-zXc90/IoZKR0RBEhpjLKHnm2rSrZdAuEdMnmGg0tC63n11MUhkHEB78KKnC1ooQV9DBjdyhkhg25D1tA7xdprw==
+
 react-native-bundle-splitter@^2.2.1:
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/react-native-bundle-splitter/-/react-native-bundle-splitter-2.2.3.tgz#aff144fb1b7c9dbd2da334b318b86032869a7755"

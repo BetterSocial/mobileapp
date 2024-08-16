@@ -11,6 +11,11 @@
 #import <React/RCTLinkingManager.h>
 #import "RNSplashScreen.h"
 
+#import <RNBranch/RNBranch.h>
+#import <Analytics/SEGAnalytics.h>
+#import "RNCConfig.h"
+#import "Mixpanel/Mixpanel.h"
+
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
 #import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>
@@ -18,7 +23,7 @@
 #import <FlipperKitNetworkPlugin/FlipperKitNetworkPlugin.h>
 #import <SKIOSNetworkPlugin/SKIOSNetworkAdapter.h>
 #import <FlipperKitReactPlugin/FlipperKitReactPlugin.h>
-#import "RNCConfig.h"
+
 
 static void InitializeFlipper(UIApplication *application) {
   NSDictionary *config = [RNCConfig env];
@@ -71,7 +76,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
-                                                   moduleName:@"BetterSocial"
+                                                  moduleName:@"BetterSocial"
                                             initialProperties:nil];
 
   rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
@@ -83,6 +88,43 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
   [self.window makeKeyAndVisible];
   UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
    center.delegate = self;
+  
+  // ENV value
+  NSString *segmentWriteKey = [RNCConfig envFor:@"SEGMENT_WRITE_KEY"];
+  NSString *envMode = [RNCConfig envFor:@"ENV"];
+  NSString *mixpanelToken = [RNCConfig envFor:@"MIXPANEL_TOKEN"];
+  
+  // SEGMENT INITIALIZATION
+  SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:segmentWriteKey];
+  configuration.trackApplicationLifecycleEvents = YES; // Enable this to record certain application events automatically!
+  configuration.recordScreenViews = YES; // Enable this to record screen views automatically!
+  [SEGAnalytics setupWithConfiguration:configuration];
+
+  // BRANCH INITIALIZATION
+  if([envMode isEqualToString:@"Dev"]) {
+    NSLog(@"on the dev");
+    [Branch setUseTestBranchKey:YES];
+    [Branch enableLogging];
+//    [[Branch getInstance] validateSDKIntegration];
+  }
+  
+  [RNBranch initSessionWithLaunchOptions:launchOptions isReferrable:YES];
+  NSURL *jsCodeLocation;
+  NSString *segmentAnonymousId = [[SEGAnalytics sharedAnalytics] getAnonymousId];
+  
+  // MIXPANEL INITIALIZATION
+  Mixpanel *mixpanel = [Mixpanel sharedInstanceWithToken:mixpanelToken trackAutomaticEvents: NO];
+  NSString *mixpanelDistinctId = [Mixpanel sharedInstance].distinctId;
+  
+  
+  // SEGMENT SET METADATA KEY
+  Branch *branch = [Branch getInstance];
+  [[Branch getInstance] setRequestMetadataKey:@"$mixpanel_distinct_id" value:mixpanelDistinctId];
+  [[Branch getInstance] setRequestMetadataKey:@"$segment_anonymous_id" value:segmentAnonymousId];
+  
+  NSLog(@"segment anonymous id = %@", segmentAnonymousId);
+  NSLog(@"mixpanel distinct id = %@", mixpanelDistinctId);
+  NSLog(@"segment write key MODE %@ = %@", envMode, segmentWriteKey);
   
   [RNSplashScreen show];
   return YES;
@@ -142,12 +184,14 @@ RNKeyEvent *keyEvent = nil;
    openURL:(NSURL *)url
    options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
 {
+  [RNBranch application:application openURL:url options:options];
   return [RCTLinkingManager application:application openURL:url options:options];
 }
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(nonnull NSUserActivity *)userActivity
  restorationHandler:(nonnull void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
 {
+ [RNBranch continueUserActivity:userActivity];
  return [RCTLinkingManager application:application
                   continueUserActivity:userActivity
                     restorationHandler:restorationHandler];
