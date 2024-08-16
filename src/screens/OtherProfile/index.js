@@ -109,7 +109,6 @@ const OtherProfile = () => {
   const {
     onBioAnonButtonOff,
     onBioAnonButtonOn,
-    onShareButtonClicked,
     onHeaderFollowUser,
     onHeaderUnfollowUser,
     onPostBlockButtonClicked,
@@ -117,7 +116,8 @@ const OtherProfile = () => {
     onBlockUserBlockAndReportClicked,
     onBlockUserBlockIndefinitelyClicked,
     onBlockUserReportInfoSubmitted,
-    onBlockUserReportInfoSkipped
+    onBlockUserReportInfoSkipped,
+    onShareUserButtonClicked
   } = eventTrack;
   const [isCurrentFollowed, setIsCurrentFollowed] = React.useState(
     getIsMeFollowingTargetStatus(params.data.other_id, params?.data?.username) ||
@@ -201,7 +201,7 @@ const OtherProfile = () => {
   };
 
   const onShare = async () => {
-    onShareButtonClicked();
+    onShareUserButtonClicked();
     ShareUtils.shareUserLink(username);
   };
 

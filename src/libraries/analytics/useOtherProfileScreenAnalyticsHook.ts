@@ -33,6 +33,10 @@ const useOtherProfileScreenAnalyticsHook = () => {
     track(trackEnum.OTHER_PROFILE_SCREEN_POST_OPTION_SHARE_LINK);
   };
 
+  const onShareUserButtonClicked = () => {
+    track(trackEnum.OTHER_PROFILE_SCREEN_HEADER_SHARE_USER_CLICKED);
+  };
+
   const onDmButtonClicked = () => {
     track(trackEnum.OTHER_PROFILE_SCREEN_POST_DM_BUTTON_CLICKED);
   };
@@ -93,6 +97,7 @@ const useOtherProfileScreenAnalyticsHook = () => {
     onReplyButtonClicked,
     onPostOptionClicked,
     onShareButtonClicked,
+    onShareUserButtonClicked,
     onDmButtonClicked,
     onHeaderFollowUser,
     onHeaderUnfollowUser,

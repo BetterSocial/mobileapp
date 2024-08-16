@@ -380,6 +380,8 @@ const CreatePost = () => {
     setHashtags(newArr);
     setListTopicChat(newChat);
 
+    eventTrack.onAddCommsDeleteCommCommDeleted();
+
     if (params?.topic) {
       if (!newArr.map((i) => i.topic).includes(params?.topic)) {
         setSelectedTopic(null);
