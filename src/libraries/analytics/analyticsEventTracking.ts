@@ -12,6 +12,12 @@ export enum BetterSocialEventTracking {
   //  DEFAULT EVENT
   UNDEFINED_EVENT = 'undefined_event',
 
+  // BACKDDOR
+  BACKDDOR_MENU_OPEN = 'PreLogin-Slider1_backDoorLogin_opened',
+  BACKDOOR_DUMMY_ONBOARDING_CLICKED = 'backdoorOB-demo_dummyOB_clicked',
+  BACKDOOR_DEMO_LOGIN_CLICKED = 'backdoorOB-demo_login_clicked',
+  BACKDOOR_CLOSE_MENU_CLICKED = 'backdoorOB-demo_closeDemoMenu_clicked',
+
   // ONBOARDING HUMAN ID
   HUMAN_ID_BUTTON_CLICKED = 'PreLogin-Slider5Login_hIDbutton_Clicked',
   HUMAN_ID_SUCCESS_EXISTING_ACCOUNT = 'external_alert_humanID-Relogin',
