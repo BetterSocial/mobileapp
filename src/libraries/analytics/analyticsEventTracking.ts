@@ -474,7 +474,10 @@ export enum BetterSocialEventTracking {
   CREATE_COMMUNITY_SCREEN_EXTERNAL_SHARING_CANCEL_BUTTON_CLICKED = 'CreateCommunity-InternalShare_externalsharingCancelButton_clicked',
   CREATE_COMMUNITY_SCREEN_NEXT_BUTTON_OPEN_CC_INTERNAL_SHARE_PAGE = 'CreateCommunity-Customize_customizePage-nextButton_openCC-InternalSharePage',
   CREATE_COMMUNITY_SCREEN_USER_NAME_SELECTED = 'CreateCommunity-InternalShare_userName_selected',
-  CREATE_COMMUNITY_SCREEN_USER_NAME_UNSELECTED = 'CreateCommunity-InternalShare_userName_unselected'
+  CREATE_COMMUNITY_SCREEN_USER_NAME_UNSELECTED = 'CreateCommunity-InternalShare_userName_unselected',
+
+  // BRANCH
+  BRANCH_OPEN_APP = 'Branch-Helio-OpenApp_opened'
 }
 
 // const ENABLE_TOAST = ENV === 'Dev';
