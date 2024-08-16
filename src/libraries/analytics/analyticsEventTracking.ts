@@ -420,6 +420,7 @@ export enum BetterSocialEventTracking {
   CREATE_POST_SCREEN_ADD_COMMS_DELETE_COMM_COMM_DELETED = 'CreatePostFlow-CreatePostFlow_addComms-deleteComm_commDeleted',
   CREATE_POST_SCREEN_ADD_COMMS_SAVE_COMMS_UPDATED = 'CreatePostFlow-CreatePostFlow_addComms-save_commsUpdated',
   CREATE_POST_SCREEN_ADD_COMMS_EXIT_CLICKED = 'CreatePostFlow-CreatePostFlow_addComms-exit_clicked',
+  CREATE_POST_SCREEN_BACK_BUTTON_CLICKED = 'CreatePostFlow-CreatePostFlow_backButton_openPrevPage',
 
   // CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN
   CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_BACK_BUTTON_CLICKED = 'CreateCommunity-Post_backButton_openPrevPage',
