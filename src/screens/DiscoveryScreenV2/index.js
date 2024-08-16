@@ -261,7 +261,8 @@ const DiscoveryScreenV2 = ({route}) => {
             user: {
               onUserPageOpened: eventTrack.user.onUserPageOpened,
               onUserPageFollowButtonClicked: eventTrack.user.onUserPageFollowButtonClicked,
-              onUserPageUnfollowButtonClicked: eventTrack.user.onUserPageUnfollowButtonClicked
+              onUserPageUnfollowButtonClicked: eventTrack.user.onUserPageUnfollowButtonClicked,
+              onUserPageDMButtonClicked: eventTrack.user.onUserPageDMButtonClicked
             }
           }}
         />

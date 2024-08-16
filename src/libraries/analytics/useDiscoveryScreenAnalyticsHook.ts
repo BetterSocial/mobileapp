@@ -38,6 +38,7 @@ export type DiscoveryScreenAnalyticsHook = {
     onUserPageOpened: (from: 'your-user' | 'suggested-user') => void;
     onUserPageFollowButtonClicked: (from: 'your-user' | 'suggested-user') => void;
     onUserPageUnfollowButtonClicked: (from: 'your-user' | 'suggested-user') => void;
+    onUserPageDMButtonClicked: (from: 'your-user' | 'suggested-user') => void;
   };
 };
 
@@ -142,6 +143,26 @@ const useDiscoveryScreenAnalyticsHook = (
       AnalyticsEventTracking.eventTrack(
         BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_USERS_BACK_BUTTON_CLICKED
       );
+    } else if (selectedScreen === DISCOVERY_TAB_TOPICS) {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_COMMUNITY_BACK_BUTTON_CLICKED
+      );
+    }
+  };
+
+  const __handleSelectedTabCLickedFromTopicsFragment = (index: number) => {
+    if (index === DISCOVERY_TAB_USERS) {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_COMMUNITY_USERS_TAB_CLICKED
+      );
+    } else if (index === DISCOVERY_TAB_NEWS) {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_COMMUNITY_NEWS_TAB_CLICKED
+      );
+    } else if (index === DISCOVERY_TAB_DOMAINS) {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_COMMUNITY_DOMAINS_TAB_CLICKED
+      );
     }
   };
 
@@ -209,6 +230,7 @@ const useDiscoveryScreenAnalyticsHook = (
     setSelectedScreen((prev: number) => {
       if (route.name === FOLLOWING_SCREEN_ROUTE_NAME && selectedScreen === DISCOVERY_TAB_USERS)
         __handleSelectedTabClickedFromFollowingUserFragment(index);
+      else if (prev === DISCOVERY_TAB_TOPICS) __handleSelectedTabCLickedFromTopicsFragment(index);
       else if (prev === DISCOVERY_TAB_NEWS) __handleSelectedTabClickedFromNewsFragment(index);
       else if (prev === DISCOVERY_TAB_DOMAINS) __handleSelectedTabClickedFromDomainFragment(index);
       else if (prev === DISCOVERY_TAB_USERS) __handleSelectedTabClickedFromUserFragment(index);
@@ -501,6 +523,18 @@ const useDiscoveryScreenAnalyticsHook = (
     }
   };
 
+  const onUserPageDMButtonClicked = (from: 'your-user' | 'suggested-user') => {
+    if (from === 'suggested-user') {
+      // AnalyticsEventTracking.eventTrack(
+      //   BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_USERS_OPEN_DM_BUTTON_CLICKED
+      // );
+    } else if (from === 'your-user') {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.DISCOVERY_SCREEN_SEARCH_USERS_YOUR_USER_OPEN_DM_BUTTON_CLICKED
+      );
+    }
+  };
+
   return {
     common: {
       onSearchCommunityPressed,
@@ -530,7 +564,8 @@ const useDiscoveryScreenAnalyticsHook = (
     user: {
       onUserPageOpened,
       onUserPageFollowButtonClicked,
-      onUserPageUnfollowButtonClicked
+      onUserPageUnfollowButtonClicked,
+      onUserPageDMButtonClicked
     }
   };
 };

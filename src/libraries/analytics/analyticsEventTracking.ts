@@ -257,6 +257,10 @@ export enum BetterSocialEventTracking {
   DISCOVERY_SCREEN_SEARCH_COMMUNITY_SEARCHED_COMMUNITY_CLICKED = 'Discovery-SearchComms_searchComms_clicked',
   DISCOVERY_SCREEN_SEARCH_COMMUNITY_RECENT_SEARCH_CLICKED = 'Discovery-SearchComms_recentSearches_clicked',
   DISCOVERY_SCREEN_SEARCH_COMMUNITY_CLEAR_RECENT_SEARCH_CLICKED = 'Discovery-SearchComms_clearRecentSearches_clicked',
+  DISCOVERY_SCREEN_SEARCH_COMMUNITY_BACK_BUTTON_CLICKED = 'Discovery-SearchComms_backButton_openPrevPage',
+  DISCOVERY_SCREEN_SEARCH_COMMUNITY_USERS_TAB_CLICKED = 'Discovery-SearchComms_searchUsersTab_openDiscovery-SearchUsers',
+  DISCOVERY_SCREEN_SEARCH_COMMUNITY_NEWS_TAB_CLICKED = 'Discovery-SearchComms_searchNewsTab_openDiscovery-SearchNews',
+  DISCOVERY_SCREEN_SEARCH_COMMUNITY_DOMAINS_TAB_CLICKED = 'Discovery-SearchComms_searchDomainsTab_openDiscovery-SearchDomains',
 
   DISCOVERY_SCREEN_SEARCH_NEWS_OPEN_LINK_CLICKED = 'Discovery-SearchNews_openLink_clicked',
   DISCOVERY_SCREEN_SEARCH_NEWS_OPEN_LINK_CONTEXT_SCREEN = 'Discovery-SearchNews_linkContextScreen_opened',
@@ -294,6 +298,7 @@ export enum BetterSocialEventTracking {
   DISCOVERY_SCREEN_SEARCH_USERS_COMMUNITY_TAB_CLICKED = 'Discovery-SearchUsers_searchCommsTab_clicked',
   DISCOVERY_SCREEN_SEARCH_USERS_DOMAINS_TAB_CLICKED = 'Discovery-SearchUsers_searchDomainsTab_clicked',
   DISCOVERY_SCREEN_SEARCH_USERS_NEWS_TAB_CLICKED = 'Discovery-SearchUsers_searchNewsTab_clicked',
+  DISCOVERY_SCREEN_SEARCH_USERS_YOUR_USER_OPEN_DM_BUTTON_CLICKED = 'Discovery-SearchUsers_followedUsers-dmButton_openSignedChat',
 
   // Other Profile Screen
   OTHER_PROFILE_SCREEN_POST_DOWNVOTE_INSERTED = 'Profile-OtherProfile_postInteractions-downvote_downvoted',
