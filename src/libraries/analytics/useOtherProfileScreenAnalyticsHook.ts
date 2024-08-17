@@ -89,7 +89,14 @@ const useOtherProfileScreenAnalyticsHook = () => {
     track(trackEnum.OTHER_PROFILE_SCREEN_BLOCK_USER_REPORT_INFO_SKIPPED);
   };
 
+  const pollChoice = trackEnum.OTHER_PROFILE_SCREEN_POST_POLL_CHOICE_CLICKED;
+
+  const pollSeeResults = trackEnum.OTHER_PROFILE_SCREEN_POST_POLL_SEE_RESULTS_CLICKED;
+
   return {
+    pollChoice,
+    pollSeeResults,
+
     onDownvoteInserted,
     onDownvoteRemoved,
     onUpvoteInserted,

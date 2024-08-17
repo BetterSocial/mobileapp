@@ -33,7 +33,12 @@ import {getTopics} from '../../service/topics';
 import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {normalize} from '../../utils/fonts';
-import {setFeedByIndex, setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
+import {
+  setFeedByIndex,
+  setTopicFeedByIndex,
+  setTopicFeeds,
+  setTopicViewPostTimeIndex
+} from '../../context/actions/feeds';
 
 const TopicPageScreen = (props) => {
   const route = useRoute();
@@ -54,7 +59,7 @@ const TopicPageScreen = (props) => {
     ? feedsContext.topicFeeds.filter((feed) => feed?.topics?.includes(topicName))
     : [];
   const mainFeeds = feedsContext.feeds;
-  const {timer, viewPostTimeIndex} = feedsContext;
+  const {timer, topicViewPostTimeIndex: viewPostTimeIndex} = feedsContext;
   const [offset, setOffset] = React.useState(0);
   const [client] = React.useContext(Context).client;
   const [user] = React.useContext(Context).profile;
@@ -62,7 +67,14 @@ const TopicPageScreen = (props) => {
   const bottomSheetFollowRef = React.useRef();
   const scrollY = React.useRef(new Animated.Value(0)).current;
   const {mappingColorFeed} = useCoreFeed();
-  const {onWillSendViewPostTime} = useViewPostTimeHook(dispatch, timer, viewPostTimeIndex);
+  const {onWillSendViewPostTime} = useViewPostTimeHook(
+    dispatch,
+    timer,
+    viewPostTimeIndex,
+    (index) => {
+      setTopicViewPostTimeIndex(index, dispatch);
+    }
+  );
   const {fetchNextFeeds} = useFeedPreloadHook(feeds?.length, () => refreshingData(offset));
   const {listRef} = useOnBottomNavigationTabPressHook(LIST_VIEW_TYPE.TIKTOK_SCROLL, onRefresh);
   const topicWithPrefix = route.params.id;

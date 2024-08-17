@@ -237,7 +237,8 @@ const RenderListFeed = (props) => {
             onNewPollFetched={onNewPollFetched}
             hasComment={hasComment}
             eventTrackName={{
-              pollSeeResults: BetterSocialEventTracking.MAIN_FEED_POST_SINGLE_POLL_CLICKED,
+              pollSeeResults:
+                BetterSocialEventTracking.MAIN_FEED_POST_MULTIPLE_CHOICE_SEE_RESULTS_CLICKED,
               pollSelected: BetterSocialEventTracking.MAIN_FEED_POST_SINGLE_POLL_CLICKED,
               navigateToTopicPage: BetterSocialEventTracking.MAIN_FEED_POST_TOPIC_CHIP_CLICKED
             }}
