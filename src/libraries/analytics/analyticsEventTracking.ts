@@ -2,7 +2,7 @@ import SimpleToast from 'react-native-simple-toast';
 /* eslint-disable no-shadow */
 import {JsonMap, createClient} from '@segment/analytics-react-native';
 
-import {ENV, SEGMENT_WRITE_KEY} from '../Configs/ENVConfig';
+import {ENABLE_SEGMENT, ENV, SEGMENT_WRITE_KEY} from '../Configs/ENVConfig';
 
 /**
  * Please refer to this for all tracking enums.
@@ -502,6 +502,13 @@ const AnalyticsEventTracking = (() => {
       eventTrack: () => {
         console.error('Empty track');
       }
+    };
+  }
+
+  if (!ENABLE_SEGMENT) {
+    return {
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      eventTrack: () => {}
     };
   }
 

@@ -272,6 +272,7 @@
 		BA74824031AE4396AE9CA127 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
 		BE33BC6A820241D54E35BFF1 /* libPods-Helio-HelioTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Helio-HelioTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C417FC732C66288800694FB3 /* branch.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = branch.json; sourceTree = "<group>"; };
+		C4A030FF2C70CB9A0024DB61 /* Helio copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Helio copy-Info.plist"; path = "/Users/fajarism/Project/BetterSocial/mobileapp/ios/Helio copy-Info.plist"; sourceTree = "<absolute>"; };
 		C4AE09022AC43A4800E13758 /* OneSignalNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneSignalNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4AE09042AC43A4800E13758 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		C4AE09062AC43A4800E13758 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -504,6 +505,7 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				391E862E5BC841779A31C4A8 /* Resources */,
 				A4DC1943686CBCB57E6A7C37 /* Pods */,
+				C4A030FF2C70CB9A0024DB61 /* Helio copy-Info.plist */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
