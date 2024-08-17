@@ -175,8 +175,8 @@ export enum BetterSocialEventTracking {
   MAIN_FEED_BLOCK_USER_REPORT_INFO_SKIPPED = 'FeedPage-MainFeed_blockAndReport-reportInfoSkipped_clicked',
   MAIN_FEED_POST_FOOTER_UPVOTE_INSERTED = 'FeedPage-MainFeed_postInteractions-upvote_upvoted',
   MAIN_FEED_POST_FOOTER_DOWNVOTE_INSERTED = 'FeedPage-MainFeed_postInteractions-downvote_downvoted',
-  MAIN_FEED_POST_FOOTER_DOWNVOTE_REMOVED = 'FeedPage-MainFeed_postInteractions-downvote-unselected_downvote-removed',
-  MAIN_FEED_POST_FOOTER_UPVOTE_REMOVED = 'FeedPage-MainFeed_postInteractions-upvote-unselected_upvote-removed',
+  MAIN_FEED_POST_FOOTER_DOWNVOTE_REMOVED = 'FeedPage-MainFeed_postInteractions-downvote_unclicked',
+  MAIN_FEED_POST_FOOTER_UPVOTE_REMOVED = 'FeedPage-MainFeed_postInteractions-upvote_unclicked',
   MAIN_FEED_POST_TOPIC_CHIP_CLICKED = 'FeedPage-MainFeed_postInteractions-hashtag_openCP',
 
   // POST DETAIL PAGE
