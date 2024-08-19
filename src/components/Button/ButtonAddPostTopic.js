@@ -1,19 +1,19 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
-import PropTypes from 'prop-types';
 import PostToCommunity from '../../assets/icon/PostToCommunity';
-import useBetterNavigationHook from '../../hooks/navigation/useBetterNavigationHook';
-import dimen from '../../utils/dimen';
-import {fonts, normalizeFontSize} from '../../utils/fonts';
 import ShadowFloatingButtons from './ShadowFloatingButtons';
+import dimen from '../../utils/dimen';
+import useBetterNavigationHook from '../../hooks/navigation/useBetterNavigationHook';
 import {COLORS} from '../../utils/theme';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
 
 const ButtonAddPostTopic = ({topicName, onRefresh, followType}) => {
   const {toCreatePostWithTopic} = useBetterNavigationHook();
 
   const onAddPostPressed = () => {
-    toCreatePostWithTopic(topicName, {onRefresh, followType});
+    toCreatePostWithTopic(topicName, {onRefresh, followType, isCreateCommunity: true});
   };
 
   return (

@@ -90,7 +90,8 @@ const UsersFragment = ({
     user: {
       onUserPageOpened: () => {},
       onUserPageFollowButtonClicked: () => {},
-      onUserPageUnfollowButtonClicked: () => {}
+      onUserPageUnfollowButtonClicked: () => {},
+      onUserPageDMButtonClicked: () => {}
     }
   }
 }) => {
@@ -103,8 +104,12 @@ const UsersFragment = ({
   const [activeSections, setActiveSections] = React.useState([]);
 
   const {onCommonClearRecentSearch, onCommonRecentItemClicked} = eventTrack?.common || {};
-  const {onUserPageOpened, onUserPageFollowButtonClicked, onUserPageUnfollowButtonClicked} =
-    eventTrack?.user || {};
+  const {
+    onUserPageOpened,
+    onUserPageFollowButtonClicked,
+    onUserPageUnfollowButtonClicked,
+    onUserPageDMButtonClicked
+  } = eventTrack?.user || {};
 
   const [followedUserIds, setFollowedUserIds] = React.useState([]);
   const route = useRoute();
@@ -236,6 +241,7 @@ const UsersFragment = ({
         const processGetBlock = await checkUserBlock(sendData);
         if (!processGetBlock.data.data.blocked && !processGetBlock.data.data.blocker) {
           setLoadingDM(false);
+          if (onUserPageDMButtonClicked) onUserPageDMButtonClicked(section);
           return createSignChat(members, item);
         }
         setLoadingDM(false);

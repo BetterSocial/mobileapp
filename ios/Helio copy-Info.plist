@@ -32,16 +32,6 @@
 				<string>helio</string>
 			</array>
 		</dict>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLName</key>
-			<string>org.bettersocial</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>humanid-owmtsyg2zjbfvs5u</string>
-			</array>
-		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
@@ -135,6 +125,24 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>branch_universal_link_domains</key>
+		<array>
+			<string>m.helio.social</string>
+			<string>x8ved-alternate.app.link</string>
+		</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>helio</string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string>org.bettersocial</string>
+		</dict>
+	</array>
 	<key>branch_key</key>
 	<dict>
 		<key>live</key>
@@ -142,10 +150,5 @@
 		<key>test</key>
 		<string>key_test_hDdOMB6K687PSG4BVU8CjppgtAmeCYz5</string>
 	</dict>
-	<key>branch_universal_link_domains</key>
-	<array>
-		<string>m.helio.social</string>
-		<string>x8ved-alternate.app.link</string>
-	</array>
 </dict>
 </plist>
