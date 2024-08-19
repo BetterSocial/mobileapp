@@ -2073,10 +2073,10 @@
   dependencies:
     "@hapi/hoek" "^9.0.0"
 
-"@human-internet/react-native-humanid@^2.4.12":
-  version "2.4.12"
-  resolved "https://registry.yarnpkg.com/@human-internet/react-native-humanid/-/react-native-humanid-2.4.12.tgz#a6330be1dc16d13949c0c78b2a47a4af61bc5cb4"
-  integrity sha512-VXb15xHrSxRLGGclkxVPTY1Hp9GxAfDhOZ+R65Q4h7y9Nz4fIXz+ybQMDadtS4eIaeW/zEfb2aZEhYAiDmgZ4g==
+"@human-internet/react-native-humanid@^2.4.13":
+  version "2.4.13"
+  resolved "https://registry.yarnpkg.com/@human-internet/react-native-humanid/-/react-native-humanid-2.4.13.tgz#a42376fac661bd700ec38ec853b54323bb4d145f"
+  integrity sha512-fVV4oOo8a5ZzRXZ6uBXzKExzLB8YA9OZJUenh01VF/eviYYCCyJQMzbdbp2krFhLVm8fwJNmaqCW8UlrIneKTw==
   dependencies:
     google-libphonenumber "3.2.15"
     react-native-iphone-x-helper "^1.3.1"
