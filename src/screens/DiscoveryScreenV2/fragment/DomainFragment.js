@@ -281,7 +281,7 @@ const DomainFragment = ({
             item={{
               name: item.domain_name,
               image: item.logo,
-              isunfollowed: ifollow.length === 0 ? item.following : !isFollow,
+              isunfollowed: ifollow.length === 0 ? !item.following : !isFollow,
               description: item.short_description || null
             }}
           />
