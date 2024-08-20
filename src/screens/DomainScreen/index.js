@@ -101,11 +101,12 @@ const DomainScreen = () => {
   };
 
   const getIFollow = async () => {
-    if (ifollow.length === 0) {
+    const isFollow = JSON.stringify(ifollow.map((i) => i.domain_id_followed)).includes(iddomain);
+    if (!isFollow) {
       const res = await getDomainIdIFollow();
       setIFollow(res.data, dispatch);
     } else {
-      setFollow(JSON.stringify(ifollow).includes(iddomain));
+      setFollow(isFollow);
     }
   };
 
@@ -223,7 +224,7 @@ const DomainScreen = () => {
     const res = await unfollowDomain(dataFollow);
     if (res.code === 200) {
       AnalyticsEventTracking.eventTrack(event);
-      const newListFollow = await ifollow.filter((obj) => obj.domain_id_followed !== iddomain);
+      const newListFollow = ifollow.filter((obj) => obj.domain_id_followed !== iddomain);
 
       setIFollow(newListFollow, dispatch);
       init();
