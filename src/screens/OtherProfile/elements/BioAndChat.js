@@ -28,7 +28,10 @@ const BioAndChat = (props) => {
     anonProfile,
     username,
     toggleSwitch,
-    isAnonimityEnabled
+    isAnonimityEnabled,
+    eventTrack = {
+      onBioSendDm: () => {}
+    }
   } = props;
   const navigation = useNavigation();
   const {saveChatFromOtherProfile, savePendingChatFromOtherProfile} = useSaveAnonChatHook();
@@ -60,6 +63,7 @@ const BioAndChat = (props) => {
         message: dmChat
       };
       const response = await sendSignedDMOtherProfile(signedMParams);
+      eventTrack.onBioSendDm();
       const newResponse = {...response, members: response?.message?.members};
       await saveChatFromOtherProfile(newResponse, 'sent', true, SIGNED);
     } catch (error) {

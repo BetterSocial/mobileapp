@@ -111,21 +111,21 @@ const useSystemMessage = () => {
 
   function getFirstMessage(messages: GetstreamMessage[]): GetstreamMessage | null | undefined {
     if (!messages) return null;
-    if (messages.length === 0) return null;
+    if (messages?.length === 0) return null;
     const sortedMessages = [...messages]?.sort((a, b) =>
-      moment(b?.updated_at).diff(moment(a?.updated_at))
+      moment(b?.updated_at)?.diff(moment(a?.updated_at))
     );
 
     let firstMessage: GetstreamMessage | null | undefined = null;
     while (sortedMessages?.length > 0) {
-      const checkFirstMessage = sortedMessages?.at(0);
+      const checkFirstMessage = sortedMessages[0];
       if (!__isSystemMessage(checkFirstMessage)) {
         firstMessage = checkFirstMessage;
         break;
       }
 
       if (checkFirstMessage?.text?.toLocaleLowerCase()?.includes('this topic has new')) {
-        sortedMessages.shift();
+        sortedMessages?.shift();
         continue;
       }
 
@@ -151,7 +151,7 @@ const useSystemMessage = () => {
         __isMessageOnlyForSystemUser(sortedMessages[0]) &&
         !__isMySystemMessage(sortedMessages[0])
       ) {
-        sortedMessages.shift();
+        sortedMessages?.shift();
         continue;
       }
 
@@ -170,7 +170,7 @@ const useSystemMessage = () => {
         break;
       }
 
-      sortedMessages.shift();
+      sortedMessages?.shift();
     }
 
     return firstMessage;

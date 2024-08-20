@@ -8,6 +8,7 @@ import {useRecoilState} from 'recoil';
 
 import ChannelList from '../../../database/schema/ChannelListSchema';
 import ChatSchema from '../../../database/schema/ChatSchema';
+import currentChatScreenAtom from '../../../atom/currentChatScreenAtom';
 import profileAtom from '../../../atom/profileAtom';
 import useAppBadgeHook from '../../appBadge/useAppBadgeHook';
 import useChatUtilsHook from '../chat/useChatUtilsHook';
@@ -23,10 +24,11 @@ const usePushNotificationHook = () => {
   const navigation = useNavigation();
   const {signedProfileId} = useUserAuthHook();
   const {localDb} = useLocalDatabaseHook();
-  const {fetchChannelDetail, setSelectedChannel} = useChatUtilsHook();
+  const {selectedChannel, fetchChannelDetail, setSelectedChannel} = useChatUtilsHook();
   const {updateAppBadgeFromDB} = useAppBadgeHook();
 
   const [, setProfileAtom] = useRecoilState(profileAtom);
+  const [currentChatScreen] = useRecoilState(currentChatScreenAtom);
 
   const [isLoadingFetchingChannelDetail, setIsLoadingFetchingChannelDetail] = useState(false);
 
@@ -152,11 +154,21 @@ const usePushNotificationHook = () => {
     }
     if (notification?.data?.type === 'message.new') {
       if (notification?.userInteraction) {
-        const selectedChannel = await ChannelList.getSchemaById(
-          localDb,
-          notification?.data?.channel_id
+        const isSameChannel = selectedChannel?.id === notification?.data?.channel_id;
+        const isOnChatScreen = ['SignedChatScreen', 'AnonymousChatScreen'].includes(
+          currentChatScreen || ''
         );
-        setSelectedChannel(selectedChannel);
+
+        if (isSameChannel && isOnChatScreen) {
+          const channel = new ChannelList({
+            id: notification?.data?.channel_id,
+            channelType: 'PM'
+          });
+          return fetchChannelDetail(channel);
+        }
+
+        const channel = await ChannelList.getSchemaById(localDb, notification?.data?.channel_id);
+        setSelectedChannel(channel);
         if (notification?.data?.is_annoymous === 'false') {
           helperNavigationResetWithData({
             screen: 'SignedChatScreen'
@@ -269,7 +281,7 @@ const usePushNotificationHook = () => {
     return () => {
       PushNotification.unregister();
     };
-  }, [navigation, signedProfileId, localDb]);
+  }, [navigation, signedProfileId, localDb, currentChatScreen]);
 
   return {
     isLoadingFetchingChannelDetail

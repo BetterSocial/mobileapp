@@ -34,7 +34,8 @@ export const ReplyComment = ({
   updateVote,
   feedId,
   level = 1,
-  onReplyButtonClick
+  onReplyButtonClick,
+  refreshComment
 }) => {
   const {isLast} = useReplyComment();
   return (
@@ -61,6 +62,7 @@ export const ReplyComment = ({
                     onPress={(reactionId, replyUsername) =>
                       onReplyButtonClick(reactionId, replyUsername, level)
                     }
+                    refreshComment={refreshComment}
                   />
                   {item.children_counts.comment > 0 && (
                     <ReplyComment
@@ -74,6 +76,7 @@ export const ReplyComment = ({
                       updateVote={updateVote}
                       level={2}
                       onReplyButtonClick={onReplyButtonClick}
+                      refreshComment={refreshComment}
                     />
                   )}
                 </View>
@@ -104,7 +107,8 @@ const ListComment = ({
     upvoteRemoved: null,
     downvoteInserted: null,
     downvoteRemoved: null
-  }
+  },
+  refreshComment
 }) => {
   return (
     <TouchableWithoutFeedback key={index} onLongPress={() => onCommentLongPressed(item, 0)}>
@@ -130,6 +134,7 @@ const ListComment = ({
               onPress={(reactionId, replyUsername) =>
                 onReplyButtonClick(reactionId, replyUsername, 0)
               }
+              refreshComment={refreshComment}
             />
           ) : null}
         </View>
@@ -144,6 +149,7 @@ const ListComment = ({
             onCommentLongPressed={onCommentLongPressed}
             updateVote={updateVote}
             onReplyButtonClick={onReplyButtonClick}
+            refreshComment={refreshComment}
           />
         )}
       </View>
@@ -290,6 +296,7 @@ const ContainerComment = ({
                       feedId={feedId}
                       onReplyButtonClick={onReplyButtonClick}
                       eventTrackName={eventTrackName}
+                      refreshComment={refreshComment}
                     />
                   ) : null}
                 </View>

@@ -5,6 +5,7 @@ import moment from 'moment';
 import {CommonActions, useNavigation} from '@react-navigation/native';
 import {atom, useRecoilState} from 'recoil';
 
+import {Platform} from 'react-native';
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../../database/schema/ChannelListSchema';
 import ChatSchema from '../../../database/schema/ChatSchema';
@@ -154,35 +155,54 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
   const helperSaveChannelDetail = async (channel: ChannelList, response: any) => {
     if (!localDb) return;
 
-    queue.addPriorityJob({
-      operationLabel: DatabaseOperationLabel.FetchChannelDetail_SaveAllChat,
-      id: channel?.id,
-      priority: QueueJobPriority.MEDIUM,
-      task: async () => {
-        const saveChatPromises = response?.messages?.map((message) => {
-          return new Promise((resolve) => {
-            // Skip if message_type is notification-deleted
-            if (message?.message_type === 'notification-deleted') return resolve(true);
+    if (Platform.OS === 'android') {
+      const saveChatPromises = response?.messages?.map((message) => {
+        return new Promise((resolve) => {
+          // Skip if message_type is notification-deleted
+          if (message?.message_type === 'notification-deleted') return resolve(true);
 
-            const chatMessage = ChatSchema.fromGetAllChannelAPI(channel?.id, message);
-            chatMessage.save(localDb);
-            resolve(true);
-          });
+          const chatMessage = ChatSchema.fromGetAllChannelAPI(channel?.id, message);
+          chatMessage.save(localDb);
+          resolve(true);
         });
+      });
 
-        await Promise.all(saveChatPromises);
-      }
-    });
+      await Promise.all(saveChatPromises);
+    } else {
+      queue.addPriorityJob({
+        operationLabel: DatabaseOperationLabel.FetchChannelDetail_SaveAllChat,
+        id: channel?.id,
+        priority: QueueJobPriority.MEDIUM,
+        task: async () => {
+          const saveChatPromises = response?.messages?.map((message) => {
+            return new Promise((resolve) => {
+              // Skip if message_type is notification-deleted
+              if (message?.message_type === 'notification-deleted') return resolve(true);
 
-    queue.addPriorityJob({
-      operationLabel: DatabaseOperationLabel.FetchChannelDetail_RefreshChannelList,
-      id: channel?.id,
-      priority: QueueJobPriority.LOW,
-      task: async () => {
-        refresh('channelList');
-      },
-      forceAddToQueue: true
-    });
+              const chatMessage = ChatSchema.fromGetAllChannelAPI(channel?.id, message);
+              chatMessage.save(localDb);
+              resolve(true);
+            });
+          });
+
+          await Promise.all(saveChatPromises);
+        }
+      });
+    }
+
+    if (Platform.OS === 'android') {
+      refresh('channelList');
+    } else {
+      queue.addPriorityJob({
+        operationLabel: DatabaseOperationLabel.FetchChannelDetail_RefreshChannelList,
+        id: channel?.id,
+        priority: QueueJobPriority.LOW,
+        task: async () => {
+          refresh('channelList');
+        },
+        forceAddToQueue: true
+      });
+    }
 
     const builtChannelData = {
       better_channel_member: response?.better_channel_members,
@@ -208,27 +228,35 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
       channelData.channelPicture = channelImage;
       channelData.name = channelName;
 
-      queue.addPriorityJob({
-        operationLabel: DatabaseOperationLabel.FetchChannelDetail_SaveChannelList,
-        id: channel?.id,
-        priority: QueueJobPriority.MEDIUM,
-        task: async () => {
-          channelData.saveIfLatest(localDb);
-        }
-      });
+      if (Platform.OS === 'android') {
+        channelData.saveIfLatest(localDb);
+      } else {
+        queue.addPriorityJob({
+          operationLabel: DatabaseOperationLabel.FetchChannelDetail_SaveChannelList,
+          id: channel?.id,
+          priority: QueueJobPriority.MEDIUM,
+          task: async () => {
+            channelData.saveIfLatest(localDb);
+          }
+        });
+      }
     }
 
     originalMembers?.map((member) => {
       const user = UserSchema.fromMemberWebsocketObject(member, channel?.id);
       try {
-        queue.addPriorityJob({
-          operationLabel: DatabaseOperationLabel.FetchChannelDetail_SaveUserMember,
-          id: `${channel?.name}-${member?.user?.username}`,
-          priority: QueueJobPriority.MEDIUM,
-          task: async () => {
-            user.saveOrUpdateIfExists(localDb);
-          }
-        });
+        if (Platform.OS === 'android') {
+          user.saveOrUpdateIfExists(localDb);
+        } else {
+          queue.addPriorityJob({
+            operationLabel: DatabaseOperationLabel.FetchChannelDetail_SaveUserMember,
+            id: `${channel?.name}-${member?.user?.username}`,
+            priority: QueueJobPriority.MEDIUM,
+            task: async () => {
+              user.saveOrUpdateIfExists(localDb);
+            }
+          });
+        }
       } catch (e) {
         console.log('error on save user from channel detail fetch', e);
       }

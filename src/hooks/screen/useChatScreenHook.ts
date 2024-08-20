@@ -3,12 +3,15 @@ import 'react-native-get-random-values';
 
 import * as React from 'react';
 import {useMutation} from 'react-query';
+import {useRecoilState} from 'recoil';
 import {useRoute} from '@react-navigation/core';
 import {v4 as uuid} from 'uuid';
 
+import {Platform} from 'react-native';
 import ChannelList from '../../database/schema/ChannelListSchema';
 import ChatSchema from '../../database/schema/ChatSchema';
 import UserSchema from '../../database/schema/UserSchema';
+import currentChatScreenAtom from '../../atom/currentChatScreenAtom';
 import useAnalyticUtilsHook from '../../libraries/analytics/useAnalyticUtilsHook';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import useDatabaseQueueHook from '../core/queue/useDatabaseQueueHook';
@@ -36,16 +39,12 @@ export const ScrollContext = React.createContext<ScrollContextProps | null>(null
 
 function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const {localDb, refresh, otherListener} = useLocalDatabaseHook();
-  const {
-    selectedChannel,
-    goBackFromChatScreen,
-    goToChatInfoScreen,
-    setChannelAsRead,
-    setSelectedChannel
-  } = useChatUtilsHook(type);
+  const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen, setChannelAsRead} =
+    useChatUtilsHook(type);
   const {anonProfileId, signedProfileId} = useUserAuthHook();
   const {queue} = useDatabaseQueueHook();
   const {eventTrackByUserType, getEventName} = useAnalyticUtilsHook(type);
+  const [, setCurrentChatScreen] = useRecoilState(currentChatScreenAtom);
 
   const {params} = useRoute();
 
@@ -80,30 +79,44 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     if (!otherListener[`chat_${selectedChannel?.id}`]) return;
 
     try {
-      queue.addPriorityJob({
-        priority: QueueJobPriority.HIGH,
-        operationLabel: DatabaseOperationLabel.ChatScreen_GetChat,
-        id: selectedChannel?.name,
-        task: async () => {
-          setChannelAsRead(selectedChannel, true);
-          getAllMessages.refetch();
-        }
-      });
-
-      if (type === 'ANONYMOUS') {
+      if (Platform.OS === 'android') {
+        setChannelAsRead(selectedChannel, true);
+        getAllMessages.refetch();
+      } else {
         queue.addPriorityJob({
-          priority: QueueJobPriority.MEDIUM,
-          operationLabel: DatabaseOperationLabel.ChatScreen_GetSelfAnonUserInfo,
+          priority: QueueJobPriority.HIGH,
+          operationLabel: DatabaseOperationLabel.ChatScreen_GetChat,
           id: selectedChannel?.name,
           task: async () => {
-            const userInfo = await UserSchema.getSelfAnonUserInfo(
-              localDb,
-              anonProfileId,
-              selectedChannel?.id
-            );
-            setSelfAnonUserInfo(userInfo);
+            setChannelAsRead(selectedChannel, true);
+            getAllMessages.refetch();
           }
         });
+      }
+
+      if (type === 'ANONYMOUS') {
+        if (Platform.OS === 'android') {
+          const userInfo = await UserSchema.getSelfAnonUserInfo(
+            localDb,
+            anonProfileId,
+            selectedChannel?.id
+          );
+          setSelfAnonUserInfo(userInfo);
+        } else {
+          queue.addPriorityJob({
+            priority: QueueJobPriority.MEDIUM,
+            operationLabel: DatabaseOperationLabel.ChatScreen_GetSelfAnonUserInfo,
+            id: selectedChannel?.name,
+            task: async () => {
+              const userInfo = await UserSchema.getSelfAnonUserInfo(
+                localDb,
+                anonProfileId,
+                selectedChannel?.id
+              );
+              setSelfAnonUserInfo(userInfo);
+            }
+          });
+        }
       }
     } catch (e) {
       console.log(e, 'error get all chat');
@@ -182,47 +195,77 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       const randomId = uuid();
 
       if (currentChatSchema === null) {
-        queue.addPriorityJob({
-          operationLabel: DatabaseOperationLabel.ChatScreen_SendChat,
-          id: `${selectedChannel?.id}-${new Date().valueOf()}`,
-          priority: QueueJobPriority.HIGH,
-          forceAddToQueue: true,
-          task: async () => {
-            currentChatSchema = await ChatSchema.generateSendingChat(
-              randomId,
-              userId,
-              selectedChannel?.id || '',
-              message,
-              attachments,
-              localDb,
-              'regular',
-              'pending'
-            );
+        if (Platform.OS === 'android') {
+          currentChatSchema = await ChatSchema.generateSendingChat(
+            randomId,
+            userId,
+            selectedChannel?.id || '',
+            message,
+            attachments,
+            localDb,
+            'regular',
+            'pending'
+          );
 
-            await currentChatSchema?.save(localDb);
-            initChatData();
-          }
-        });
-
-        if (selectedChannel) {
+          await currentChatSchema?.save(localDb);
+          initChatData();
+        } else {
           queue.addPriorityJob({
-            operationLabel: DatabaseOperationLabel.ChatScreen_UpdateChannelDescription,
-            id: `${selectedChannel?.id}-${randomId}`,
+            operationLabel: DatabaseOperationLabel.ChatScreen_SendChat,
+            id: `${selectedChannel?.id}-${new Date().valueOf()}`,
             priority: QueueJobPriority.HIGH,
+            forceAddToQueue: true,
             task: async () => {
-              const channelList: ChannelList | null = await ChannelList.getSchemaById(
+              currentChatSchema = await ChatSchema.generateSendingChat(
+                randomId,
+                userId,
+                selectedChannel?.id || '',
+                message,
+                attachments,
                 localDb,
-                selectedChannel?.id
+                'regular',
+                'pending'
               );
-              if (channelList) {
-                channelList.description = message;
-                channelList.lastUpdatedBy = userId;
-                channelList.lastUpdatedAt = new Date().toISOString();
-                await channelList.save(localDb);
-                refresh('channelList');
-              }
+
+              await currentChatSchema?.save(localDb);
+              initChatData();
             }
           });
+        }
+
+        if (selectedChannel) {
+          if (Platform.OS === 'android') {
+            const channelList: ChannelList | null = await ChannelList.getSchemaById(
+              localDb,
+              selectedChannel?.id
+            );
+            if (channelList) {
+              channelList.description = message;
+              channelList.lastUpdatedBy = userId;
+              channelList.lastUpdatedAt = new Date().toISOString();
+              await channelList.save(localDb);
+              refresh('channelList');
+            }
+          } else {
+            queue.addPriorityJob({
+              operationLabel: DatabaseOperationLabel.ChatScreen_UpdateChannelDescription,
+              id: `${selectedChannel?.id}-${randomId}`,
+              priority: QueueJobPriority.HIGH,
+              task: async () => {
+                const channelList: ChannelList | null = await ChannelList.getSchemaById(
+                  localDb,
+                  selectedChannel?.id
+                );
+                if (channelList) {
+                  channelList.description = message;
+                  channelList.lastUpdatedBy = userId;
+                  channelList.lastUpdatedAt = new Date().toISOString();
+                  await channelList.save(localDb);
+                  refresh('channelList');
+                }
+              }
+            });
+          }
         }
       }
 
@@ -248,17 +291,23 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
           replyMessageId: null
         } as any);
       }
-      queue.addPriorityJob({
-        operationLabel: DatabaseOperationLabel.ChatScreen_UpdateChatSentStatus,
-        id: `${selectedChannel?.id}-${randomId}`,
-        priority: QueueJobPriority.HIGH,
-        forceAddToQueue: true,
-        task: async () => {
-          await currentChatSchema?.updateChatSentStatus(localDb, response);
-          initChatData();
-          refresh('channelList');
-        }
-      });
+      if (Platform.OS === 'android') {
+        await currentChatSchema?.updateChatSentStatus(localDb, response);
+        initChatData();
+        refresh('channelList');
+      } else {
+        queue.addPriorityJob({
+          operationLabel: DatabaseOperationLabel.ChatScreen_UpdateChatSentStatus,
+          id: `${selectedChannel?.id}-${randomId}`,
+          priority: QueueJobPriority.HIGH,
+          forceAddToQueue: true,
+          task: async () => {
+            await currentChatSchema?.updateChatSentStatus(localDb, response);
+            initChatData();
+            refresh('channelList');
+          }
+        });
+      }
     } catch (e) {
       console.log('[ERROR] error sending chat', e);
       // if (e?.response?.data?.status === 'Channel is blocked') return;
@@ -334,8 +383,10 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   }, [localDb, otherListener[`chat_${selectedChannel?.id}`], selectedChannel]);
 
   React.useEffect(() => {
+    setCurrentChatScreen(type === 'SIGNED' ? 'SignedChatScreen' : 'AnonymousChatScreen');
     return () => {
       setChats([]);
+      setCurrentChatScreen(null);
     };
   }, []);
 

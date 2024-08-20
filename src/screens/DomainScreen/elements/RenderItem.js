@@ -5,10 +5,13 @@ import {Image, Pressable, StyleSheet, Text, TouchableOpacity, View} from 'react-
 import NewsEmptyState from '../../../assets/images/news-empty-state.png';
 import RenderItemHeader from './RenderItemHeader';
 import dimen from '../../../utils/dimen';
-import theme, {COLORS, FONTS, SIZES} from '../../../utils/theme';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../../libraries/analytics/analyticsEventTracking';
+import {COLORS} from '../../../utils/theme';
 import {Footer, Gap, PreviewComment, SingleSidedShadowBox} from '../../../components';
 import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
-import {getCountComment, getCountCommentWithChild, getCountVote} from '../../../utils/getstream';
+import {getCountCommentWithChild, getCountVote} from '../../../utils/getstream';
 
 const RenderItem = ({
   item,
@@ -73,8 +76,6 @@ const RenderItem = ({
     };
     validationStatusVote();
   }, [item, selfUserId]);
-  const name = getname(item);
-  const time = getTime(item);
 
   React.useEffect(() => {
     const initial = () => {
@@ -100,8 +101,6 @@ const RenderItem = ({
     initialVote();
   }, [item]);
 
-  const onFollowDomainPressed = () => {};
-
   const onDownvoteClick = () => {
     setStatusDowvote((prev) => {
       prev = !prev;
@@ -113,6 +112,9 @@ const RenderItem = ({
       });
       if (prev) {
         setVoteStatus('downvote');
+        AnalyticsEventTracking.eventTrack(
+          BetterSocialEventTracking.DOMAIN_PAGE_POST_DOWNVOTE_INSERTED
+        );
         if (statusUpvote === true) {
           setTotalVote((p) => p - 2);
         } else {
@@ -122,6 +124,9 @@ const RenderItem = ({
       } else {
         setVoteStatus('none');
         setTotalVote((p) => p + 1);
+        AnalyticsEventTracking.eventTrack(
+          BetterSocialEventTracking.DOMAIN_PAGE_POST_DOWNVOTE_REMOVED
+        );
       }
       return prev;
     });
@@ -138,6 +143,9 @@ const RenderItem = ({
       });
       if (prev) {
         setVoteStatus('upvote');
+        AnalyticsEventTracking.eventTrack(
+          BetterSocialEventTracking.DOMAIN_PAGE_POST_UPVOTE_INSERTED
+        );
         if (statusDownvote === true) {
           setTotalVote((p) => p + 2);
         } else {
@@ -145,6 +153,9 @@ const RenderItem = ({
         }
         setStatusDowvote(false);
       } else {
+        AnalyticsEventTracking.eventTrack(
+          BetterSocialEventTracking.DOMAIN_PAGE_POST_UPVOTE_REMOVED
+        );
         setVoteStatus('none');
         setTotalVote((p) => p - 1);
       }

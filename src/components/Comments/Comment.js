@@ -52,7 +52,8 @@ const Comment = ({
     upvoteRemoved: null,
     downvoteInserted: null,
     downvoteRemoved: null
-  }
+  },
+  refreshComment
 }) => {
   const refSheet = React.useRef();
   const navigation = useNavigation();
@@ -108,7 +109,7 @@ const Comment = ({
 
   const onBlockComponent = (commentParams) => {
     refBlockComponent.current.openBlockComponent({
-      anonimity: false,
+      anonimity: !!commentParams.data?.is_anonymous,
       actor: commentParams.user,
       id: commentParams.id
     });
@@ -333,7 +334,9 @@ const Comment = ({
               styles.btn,
               styles.iconContainer
             ]}
-            onPress={() => onBlockComponent(comment)}>
+            onPress={() => {
+              onBlockComponent(comment);
+            }}>
             <IconEn name="block" size={normalize(14)} color={COLORS.gray410} />
           </ButtonHightlight>
         )}
@@ -367,7 +370,11 @@ const Comment = ({
         </View>
       </View>
 
-      <BlockComponent ref={refBlockComponent} screen={'feed_comment_item'} />
+      <BlockComponent
+        ref={refBlockComponent}
+        refresh={refreshComment}
+        screen={'feed_comment_item'}
+      />
       <BottomSheetMenu refSheet={refSheet} dataSheet={dataSheet} height={182} />
     </View>
   );

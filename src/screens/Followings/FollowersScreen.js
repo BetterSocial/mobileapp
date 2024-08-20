@@ -3,21 +3,30 @@ import {BackHandler, Platform, StatusBar, StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
 
+import DiscoveryAction from '../../context/actions/discoveryAction';
 import Followings from '.';
-import {Context} from '../../context';
-import {setNavbarTitle, showHeaderProfile} from '../../context/actions/setMyProfileAction';
-import {withInteractionsManagedNoStatusBar} from '../../components/WithInteractionManaged';
 import Search from '../DiscoveryScreenV2/elements/Search';
-import {getFollower} from '../../service/profile';
+import useFollowerScreenAnalyticsHook from '../../libraries/analytics/useFollowerScreenAnalyticsHook';
+import {Context} from '../../context';
 import {Header} from '../../components';
 import {fonts} from '../../utils/fonts';
-import DiscoveryAction from '../../context/actions/discoveryAction';
+import {getFollower} from '../../service/profile';
+import {setNavbarTitle, showHeaderProfile} from '../../context/actions/setMyProfileAction';
+import {withInteractionsManagedNoStatusBar} from '../../components/WithInteractionManaged';
 
 function FollowersScreen() {
   const route = useRoute();
   const {params} = route;
   const navigation = useNavigation();
   const [profileState, dispatchNavbar] = React.useContext(Context).profile;
+  const {
+    onSearchBarClicked,
+    onBackButtonClicked,
+    onDeleteSearchClicked,
+    onUserItemClicked,
+    onUserItemFollow,
+    onUserItemUnfollow
+  } = useFollowerScreenAnalyticsHook();
   const [discovery, discoveryDispatch] = React.useContext(Context).discovery;
 
   const isAndroid = Platform.OS === 'android';
@@ -66,7 +75,10 @@ function FollowersScreen() {
         <Header
           title="Who is following you"
           titleStyle={styles.headerTitle}
-          onPress={() => navigation.goBack()}
+          onPress={() => {
+            onBackButtonClicked();
+            navigation.goBack();
+          }}
           isCenter
         />
       );
@@ -116,6 +128,11 @@ function FollowersScreen() {
         fetchData={fetchFollower}
         placeholderText={profileState.navbarTitle}
         hideBackIcon
+        eventTrack={{
+          onSearchBarClicked,
+          onBackButtonPressed: () => {},
+          onTextCleared: onDeleteSearchClicked
+        }}
       />
 
       <Followings
@@ -127,6 +144,17 @@ function FollowersScreen() {
           discovery?.unfollowedUsers?.length > 0 ? discovery?.unfollowedUsers : unfollowedUsers
         }
         setDataFollower={setDataFollower}
+        eventTrack={{
+          common: {
+            onCommonClearRecentSearch: () => {},
+            onCommonRecentItemClicked: () => {}
+          },
+          user: {
+            onUserPageOpened: () => onUserItemClicked(),
+            onUserPageFollowButtonClicked: () => onUserItemFollow(),
+            onUserPageUnfollowButtonClicked: () => onUserItemUnfollow()
+          }
+        }}
       />
     </View>
   );

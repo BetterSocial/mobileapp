@@ -1,7 +1,7 @@
 import * as React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import Toast from 'react-native-simple-toast';
-import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
+import {Dimensions, Share, StatusBar, StyleSheet, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 import BlockDomainComponent from '../../components/BlockDomain';
@@ -12,6 +12,10 @@ import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
 import RenderItem from './elements/RenderItem';
 import ShareUtils from '../../utils/share';
 import dimen from '../../utils/dimen';
+import useViewPostTimeHook from '../FeedScreen/hooks/useViewPostTimeHook';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../libraries/analytics/analyticsEventTracking';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {addIFollowByID, setIFollow} from '../../context/actions/news';
@@ -50,9 +54,15 @@ const DomainScreen = () => {
   const [follow, setFollow] = React.useState(false);
   const [domainStore, dispatchDomain] = React.useContext(Context).domains;
   const [postOffset, setPostOffset] = React.useState(0);
+  const [postIndex, setPostIndex] = React.useState(0);
 
   const tiktokScrollRef = React.useRef(null);
   const [headerHeightRef, setHeaderHeightRef] = React.useState(0);
+
+  const {onWillSendViewPostTime} = useViewPostTimeHook(null, null, postIndex, (newIndex) => {
+    if (newIndex - 1 < 0) return;
+    setPostIndex(newIndex - 1);
+  });
 
   const iddomain = dataDomain.content.domain_page_id;
   const [dataFollow] = React.useState({
@@ -160,6 +170,9 @@ const DomainScreen = () => {
   // }, [dataDomain]);
 
   const handleOnPressComment = (itemNews) => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.DOMAIN_PAGE_POST_REPLY_BUTTON_CLICKED
+    );
     navigation.navigate('DetailDomainScreen', {
       item: {
         ...itemNews,
@@ -182,13 +195,14 @@ const DomainScreen = () => {
 
   const domainImage = dataDomain.domain ? dataDomain.domain.image : dataDomain.og.domainImage;
 
-  const handleFollow = async () => {
+  const handleFollow = async (event = AnalyticsEventTracking.UNDEFINED_EVENT) => {
     setFollow(true);
 
     const newDomainFollowers = domainFollowers + 1;
     setDomainFollowers(newDomainFollowers);
     const res = await followDomain(dataFollow);
     if (res.code === 200) {
+      AnalyticsEventTracking.eventTrack(event);
       addIFollowByID(
         {
           domain_id_followed: iddomain
@@ -201,13 +215,14 @@ const DomainScreen = () => {
     }
   };
 
-  const handleUnfollow = async () => {
+  const handleUnfollow = async (event = AnalyticsEventTracking.UNDEFINED_EVENT) => {
     setFollow(false);
 
     const newDomainFollowers = domainFollowers - 1;
     setDomainFollowers(newDomainFollowers);
     const res = await unfollowDomain(dataFollow);
     if (res.code === 200) {
+      AnalyticsEventTracking.eventTrack(event);
       const newListFollow = await ifollow.filter((obj) => obj.domain_id_followed !== iddomain);
 
       setIFollow(newListFollow, dispatch);
@@ -235,6 +250,51 @@ const DomainScreen = () => {
     getDomainFeed(postOffset);
   };
 
+  const handleOnPressShare = (item) => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.DOMAIN_PAGE_POST_SHARE_BUTTON_CLICKED
+    );
+
+    ShareUtils.shareDomain(item);
+  };
+
+  const onCloseBlockDomain = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.DOMAIN_PAGE_BLOCK_DOMAIN_BOTTOM_SHEET_CLOSED
+    );
+  };
+
+  const onBlockAndReportDomain = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.DOMAIN_PAGE_BLOCK_DOMAIN_BLOCK_AND_REPORT_CLICKED
+    );
+  };
+
+  const onBlockDomainIndefinitely = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.DOMAIN_PAGE_BLOCK_DOMAIN_BLOCK_INDEFINITELY_CLICKED
+    );
+  };
+
+  const onSkipOnlyBlock = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.DOMAIN_PAGE_BLOCK_DOMAIN_REPORT_INFO_SKIPPED
+    );
+  };
+
+  const onReportInfoSubmitted = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.DOMAIN_PAGE_BLOCK_DOMAIN_REPORT_INFO_SUBMITTED
+    );
+  };
+
+  const onReasonsSubmitted = (v) => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.DOMAIN_PAGE_BLOCK_DOMAIN_BLOCK_AND_REPORT_REASON,
+      v
+    );
+  };
+
   if (loading) {
     return (
       <View style={styles.containerLoading}>
@@ -250,6 +310,12 @@ const DomainScreen = () => {
         ref={tiktokScrollRef}
         data={domainStore.domains}
         onEndReach={handleOnEndReached}
+        onMomentumScrollEnd={(momentumEvent) => {
+          onWillSendViewPostTime(momentumEvent, domainStore.domains, {
+            scrollEventName: BetterSocialEventTracking.DOMAIN_PAGE_POST_SCROLLED,
+            scrollEventItemName: BetterSocialEventTracking.DOMAIN_PAGE_POST_PROPERTIES
+          });
+        }}
         snapToOffsets={(() => {
           const posts = domainStore.domains.map(
             (item, index) => headerHeightRef + index * dimen.size.DOMAIN_CURRENT_HEIGHT
@@ -271,8 +337,12 @@ const DomainScreen = () => {
               onPressBlock={onReaction}
               onPressUnblock={onUnblockDomain}
               follow={follow}
-              handleFollow={handleFollow}
-              handleUnfollow={handleUnfollow}
+              handleFollow={() =>
+                handleFollow(BetterSocialEventTracking.DOMAIN_PAGE_FOLLOW_BUTTON_CLICKED)
+              }
+              handleUnfollow={() =>
+                handleUnfollow(BetterSocialEventTracking.DOMAIN_PAGE_UNFOLLOW_BUTTON_CLICKED)
+              }
               isBlocked={isBlocked}
               item={dataDomain}
             />
@@ -299,9 +369,13 @@ const DomainScreen = () => {
               onPressBlock={onReaction}
               follow={follow}
               follower={domainFollowers}
-              handleFollow={handleFollow}
-              handleUnfollow={handleUnfollow}
-              onPressShare={ShareUtils.shareDomain}
+              handleFollow={() =>
+                handleFollow(BetterSocialEventTracking.DOMAIN_PAGE_POST_FOLLOW_BUTTON_CLICKED)
+              }
+              handleUnfollow={() =>
+                handleUnfollow(BetterSocialEventTracking.DOMAIN_PAGE_POST_UNFOLLOW_BUTTON_CLICKED)
+              }
+              onPressShare={handleOnPressShare}
             />
           );
         }}
@@ -313,6 +387,12 @@ const DomainScreen = () => {
         domainId={dataDomain.content.domain_page_id}
         screen="domain_screen"
         getValueBlock={(dataParam) => checkBlock(dataParam)}
+        onCloseBlockDomain={onCloseBlockDomain}
+        onBlockAndReportDomain={onBlockAndReportDomain}
+        onBlockDomainIndefinitely={onBlockDomainIndefinitely}
+        onSkipOnlyBlock={onSkipOnlyBlock}
+        onReportInfoSubmitted={onReportInfoSubmitted}
+        onReasonsSubmitted={onReasonsSubmitted}
       />
     </View>
   );

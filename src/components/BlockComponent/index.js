@@ -179,17 +179,18 @@ class BlockComponent extends React.Component {
       console.log('block user called');
     }
     const {postId, userId, messageReport, reason} = this.state;
+    const onRefresh = () => {
+      if (this.props.refresh) {
+        this.props.refresh(this.state.postId);
+      }
+    };
     blockUtils.uiBlockUser(
       postId,
       userId,
       this.props.screen || 'screen_feed',
       reason,
       messageReport,
-      () => {
-        if (this.props.refresh) {
-          this.props.refresh(this.state.postId);
-        }
-      }
+      onRefresh
     );
   }
 

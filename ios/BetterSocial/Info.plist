@@ -2,22 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>mailto</string>
-		<string>message</string>
-		<string>readdle-spark</string>
-		<string>airmail</string>
-		<string>ms-outlook</string>
-		<string>googlegmail</string>
-		<string>inbox-gmail</string>
-		<string>ymail</string>
-		<string>superhuman</string>
-		<string>yandexmail</string>
-		<string>fastmail</string>
-		<string>protonmail</string>
-		<string>szn-email</string>
-	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -45,12 +29,32 @@
 			<string>org.bettersocial</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>me.bettersocial.org</string>
+				<string>helio</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>FirebaseDynamicLinksCustomDomains</key>
+	<array>
+		<string>https://link.bettersocial.org</string>
+	</array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>mailto</string>
+		<string>message</string>
+		<string>readdle-spark</string>
+		<string>airmail</string>
+		<string>ms-outlook</string>
+		<string>googlegmail</string>
+		<string>inbox-gmail</string>
+		<string>ymail</string>
+		<string>superhuman</string>
+		<string>yandexmail</string>
+		<string>fastmail</string>
+		<string>protonmail</string>
+		<string>szn-email</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -58,13 +62,7 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 		<key>NSExceptionDomains</key>
-		<dict>
-			<key>localhost</key>
-			<dict>
-				<key>NSExceptionAllowsInsecureHTTPLoads</key>
-				<true/>
-			</dict>
-		</dict>
+		<dict/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>This lets you using camera from your device securely.</string>
@@ -127,9 +125,30 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>FirebaseDynamicLinksCustomDomains</key>
+	<key>branch_universal_link_domains</key>
+		<array>
+			<string>m.helio.social</string>
+			<string>x8ved-alternate.app.link</string>
+		</array>
+	<key>CFBundleURLTypes</key>
 	<array>
-		<string>https://link.bettersocial.org</string>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>helio</string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string>org.bettersocial</string>
+		</dict>
 	</array>
+	<key>branch_key</key>
+	<dict>
+		<key>live</key>
+		<string>key_live_hEiUNqWPZ69QIT7CMR1BdpomDvpgE8Hn</string>
+		<key>test</key>
+		<string>key_test_hDdOMB6K687PSG4BVU8CjppgtAmeCYz5</string>
+	</dict>
 </dict>
 </plist>

@@ -2,16 +2,18 @@
 import * as React from 'react';
 import CheckBox from '@react-native-community/checkbox';
 import ToastMessage from 'react-native-toast-message';
-import {Pressable, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Platform, Pressable, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
+import dimen from '../../../utils/dimen';
 import {COLORS} from '../../../utils/theme';
 import {Divider} from '../../../components/Divider';
+import IconCheck from '../../../assets/icon/IconCheck';
 import {PencilIcon} from '../../../assets';
+import {ProfileScreenAnalyticsEventTracking} from '../../../libraries/analytics/useProfileScreenAnalyticsHook';
 import {TextWithEmoji} from './TextWithEmoji';
-import {fonts, normalizeFontSize} from '../../../utils/fonts';
 import {addDotAndRemoveNewline} from '../../../utils/string/TrimString';
+import {fonts, normalizeFontSize} from '../../../utils/fonts';
 import {profileSettingsDMpermission} from '../../../service/profile';
-import dimen from '../../../utils/dimen';
 
 type BioAndDMSettingProps = {
   bio: string;
@@ -20,24 +22,40 @@ type BioAndDMSettingProps = {
   following: number;
   allowAnonDm: boolean;
   onlyReceivedDmFromUserFollowing: boolean;
+  eventTrack?: ProfileScreenAnalyticsEventTracking;
 };
 
 const CheckBoxCustom = (props: {value: boolean; label: string; disabled?: boolean}) => {
   return (
     <View style={styles.checkboxItem}>
       <View style={styles.checkboxItemContent}>
-        <CheckBox
-          disabled={props.disabled || false}
-          value={props.value}
-          onCheckColor={COLORS.gray110}
-          tintColors={{true: COLORS.signed_primary, false: COLORS.gray110}}
-          tintColor={COLORS.signed_primary}
-          onTintColor={COLORS.signed_primary}
-          onFillColor={COLORS.signed_primary}
-          style={styles.checkbox}
-          aria-checked={props.value}
-          onValueChange={() => {}}
-        />
+        {Platform.OS === 'android' ? (
+          <>
+            {props.value ? (
+              <IconCheck
+                width={dimen.normalizeDimen(16)}
+                height={dimen.normalizeDimen(16)}
+                fill={COLORS.signed_primary}
+                fillIcon={COLORS.gray110}
+              />
+            ) : (
+              <View style={styles.checkboxFalse} />
+            )}
+          </>
+        ) : (
+          <CheckBox
+            disabled={props.disabled || false}
+            value={props.value}
+            onCheckColor={COLORS.gray110}
+            tintColors={{true: COLORS.signed_primary, false: COLORS.gray110}}
+            tintColor={COLORS.signed_primary}
+            onTintColor={COLORS.signed_primary}
+            onFillColor={COLORS.signed_primary}
+            style={styles.checkbox}
+            aria-checked={props.value}
+            onValueChange={() => {}}
+          />
+        )}
       </View>
       <Text style={styles.checkboxLabel}>{props.label}</Text>
     </View>
@@ -50,7 +68,14 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
   avatarUrl,
   following,
   allowAnonDm,
-  onlyReceivedDmFromUserFollowing
+  onlyReceivedDmFromUserFollowing,
+  eventTrack = {
+    onEditBioClicked: () => {},
+    onSaveBioClicked: () => {},
+    onShareLinkClicked: () => {},
+    onAllowAllAnonMessagesClicked: () => {},
+    onAllowAnonMessagesFollowedClicked: () => {}
+  }
 }) => {
   const [isAnonymity, setIsAnonymity] = React.useState(allowAnonDm);
   const [isAllowFollowingSendDM, setIsAllowFollowingSendDM] = React.useState(
@@ -67,11 +92,13 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
   };
 
   const toggleSwitchAnon = () => {
+    eventTrack.onAllowAllAnonMessagesClicked();
     setIsAnonymity((current) => !current);
     setIsAllowFollowingSendDM(false);
   };
 
   const toggleSwitchAnonAllowFollowing = () => {
+    eventTrack.onAllowAnonMessagesFollowedClicked();
     if (isAllowFollowingSendDM) {
       setIsAllowFollowingSendDM(() => false);
       return;
@@ -213,6 +240,7 @@ const styles = StyleSheet.create({
     width: dimen.normalizeDimen(16),
     height: dimen.normalizeDimen(16),
     borderRadius: 9999,
+    overflow: 'hidden',
     backgroundColor: COLORS.almostBlack,
     marginRight: dimen.normalizeDimen(5)
   },
@@ -220,6 +248,13 @@ const styles = StyleSheet.create({
     width: dimen.normalizeDimen(16),
     height: dimen.normalizeDimen(16),
     backgroundColor: COLORS.gray110
+  },
+  checkboxFalse: {
+    borderWidth: 2,
+    borderRadius: 100,
+    height: '100%',
+    width: '100%',
+    borderColor: COLORS.signed_primary
   },
   checkboxLabel: {
     fontSize: normalizeFontSize(12),
