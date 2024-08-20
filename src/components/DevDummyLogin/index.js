@@ -20,6 +20,9 @@ import {useSetRecoilState} from 'recoil';
 import StorageUtils from '../../utils/storage';
 import TokenStorage from '../../utils/storage/custom/tokenStorage';
 import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../libraries/analytics/analyticsEventTracking';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {InitialStartupAtom} from '../../service/initialStartup';
@@ -114,6 +117,7 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
   const [, dispatch] = React.useContext(Context).users;
   const closeDummyLogin = () => {
     resetClickTime();
+    AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.BACKDOOR_CLOSE_MENU_CLICKED);
   };
 
   const setStartupValue = useSetRecoilState(InitialStartupAtom);
@@ -205,15 +209,26 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
 
   const openDummyLoginPassword = (mode) => {
     setViewMode(mode);
+    if (mode === 'onboarding') {
+      AnalyticsEventTracking.eventTrack(
+        BetterSocialEventTracking.BACKDOOR_DUMMY_ONBOARDING_CLICKED
+      );
+    } else if (mode === 'login') {
+      AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.BACKDOOR_DEMO_LOGIN_CLICKED);
+    }
     dummyLoginPasswordRbSheetRef?.current?.open();
+  };
+
+  const sendBackoorMenuAnalyticEvent = () => {
+    AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.BACKDDOR_MENU_OPEN);
   };
 
   React.useEffect(() => {
     const savedPasswordText = StorageUtils.onboardingPassword.get();
     if (savedPasswordText) setPasswordText(savedPasswordText);
-  }, []);
 
-  console.log(dummyInput);
+    sendBackoorMenuAnalyticEvent();
+  }, []);
 
   if (ENABLE_DEV_ONLY_FEATURE === 'true')
     return (

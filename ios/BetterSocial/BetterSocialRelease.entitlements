@@ -14,6 +14,8 @@
 		<string>applinks:app.bettersocial.org</string>
 		<string>applinks:helio.social</string>
 		<string>applinks:www.helio.social</string>
+		<string>applinks:m.helio.social</string>
+		<string>applinks:x8ved-alternate.app.link</string>
 	</array>
 </dict>
 </plist>

@@ -23,7 +23,10 @@ describe('Testing Button Add Topic Post', () => {
     const {getByTestId} = render(<ButtonAddPostTopic topicName={'TestTopic'} />);
     fireEvent.press(getByTestId('onaddtopicbutton'));
     expect(mockNavigate).toHaveBeenCalledWith('CreatePost', {
-      topic: 'TestTopic'
+      topic: 'TestTopic',
+      followType: undefined,
+      isCreateCommunity: true,
+      onRefresh: undefined
     });
   });
 
@@ -36,6 +39,8 @@ describe('Testing Button Add Topic Post', () => {
     fireEvent.press(getByTestId('onaddtopicbutton'));
     expect(mockNavigate).toHaveBeenCalledWith('CreatePost', {
       topic: 'TestTopic',
+      followType: undefined,
+      isCreateCommunity: true,
       onRefresh: mockOnRefresh
     });
   });

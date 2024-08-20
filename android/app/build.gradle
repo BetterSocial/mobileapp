@@ -272,6 +272,13 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:26.7.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'io.branch.sdk.android:library:5.12.2'
+    implementation 'store.galaxy.samsung.installreferrer:samsung_galaxystore_install_referrer:4.0.0'
+
+	// Required if your app is in the Google Play Store (tip: avoid using bundled play services libs):
+	implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
+	// Alternatively, use the following lib for getting the AAID:
+	// implementation 'com.google.android.gms:play-services-ads:17.2.0'
 
     compile project(':react-native-image-picker')
 }
