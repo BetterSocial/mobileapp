@@ -112,10 +112,10 @@ const DomainScreen = () => {
 
   const init = async (withLoading = false) => {
     const domainName = dataDomain.og.domain;
+    if (withLoading) {
+      setLoading(true);
+    }
     if (domainName !== domainStore.selectedLastDomain) {
-      if (withLoading) {
-        setLoading(true);
-      }
       const result = await getProfileDomain(domain);
       if (result.code === 200) {
         setProfile(result.data);
@@ -126,10 +126,12 @@ const DomainScreen = () => {
       }
 
       await getDomainFeed(postOffset);
+    } else {
+      await getDomainFeed(postOffset);
+    }
 
-      if (withLoading) {
-        setLoading(false);
-      }
+    if (withLoading) {
+      setLoading(false);
     }
   };
 
