@@ -114,27 +114,15 @@ export const useInitialStartup = () => {
 
   const getDiscoveryData = async () => {
     try {
-      getFollowing().then((response) => {
-        following.setFollowingUsers(response.data, followingDispatch);
-      });
-
-      getFollowedDomain().then((response) => {
-        following.setFollowingDomain(response.data.data, followingDispatch);
-      });
-
-      getFollowingTopic().then((response) => {
-        following.setFollowingTopics(response.data, followingDispatch);
-      });
+      const discoveryInitialTopicResponse = await DiscoveryRepo.fetchInitialDiscoveryTopics();
+      DiscoveryAction.setDiscoveryInitialTopics(
+        discoveryInitialTopicResponse.suggestedTopics,
+        discoveryDispatch
+      );
 
       const discoveryInitialUserResponse = await DiscoveryRepo.fetchInitialDiscoveryUsers();
       DiscoveryAction.setDiscoveryInitialUsers(
         discoveryInitialUserResponse.suggestedUsers,
-        discoveryDispatch
-      );
-
-      const discoveryInitialTopicResponse = await DiscoveryRepo.fetchInitialDiscoveryTopics();
-      DiscoveryAction.setDiscoveryInitialTopics(
-        discoveryInitialTopicResponse.suggestedTopics,
         discoveryDispatch
       );
 
@@ -143,6 +131,18 @@ export const useInitialStartup = () => {
         discoveryInitialDomainResponse.suggestedDomains,
         discoveryDispatch
       );
+
+      getFollowingTopic().then((response) => {
+        following.setFollowingTopics(response.data, followingDispatch);
+      });
+
+      getFollowing().then((response) => {
+        following.setFollowingUsers(response.data, followingDispatch);
+      });
+
+      getFollowedDomain().then((response) => {
+        following.setFollowingDomain(response.data.data, followingDispatch);
+      });
 
       const response = await AsyncStorage.getItem(RECENT_SEARCH_TERMS);
       if (!response) return;
@@ -197,10 +197,10 @@ export const useInitialStartup = () => {
 
   React.useEffect(() => {
     if (initialStartup.id !== null && initialStartup.id !== '') {
+      getDiscoveryData();
       getFeedChat();
       getDomain();
       getDataFeeds();
-      getDiscoveryData();
       getProfile();
 
       timeoutSplashScreen.current = setTimeout(() => {
