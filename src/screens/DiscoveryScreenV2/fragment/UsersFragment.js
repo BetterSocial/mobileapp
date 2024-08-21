@@ -405,7 +405,7 @@ const UsersFragment = ({
         data={peopleYouMightKnowData || []}
         renderItem={(props) => renderItem({...props, section: 'suggested-user'})}
         keyExtractor={(item, index) => index.toString()}
-        onEndReached={() => fetchData()}
+        onEndReached={() => (initialAccordionData.length > 0 ? fetchData() : null)}
         onEndReachedThreshold={0.6}
         keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps="handled"
