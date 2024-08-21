@@ -81,24 +81,32 @@ const Item = ({
 
   React.useEffect(() => {
     const validationStatusVote = () => {
-      if (item.reaction_counts) {
-        if (item.latest_reactions.upvotes) {
-          const upvote = item.latest_reactions.upvotes.find((vote) => vote.user_id === selfUserId);
-          if (upvote) {
-            setVoteStatus('upvote');
-            setStatusUpvote(true);
-          }
-        } else if (item.latest_reactions.downvotes) {
-          const downvotes = item.latest_reactions.downvotes.find(
-            (vote) => vote.user_id === selfUserId
-          );
-          if (downvotes) {
-            setVoteStatus('downvote');
-            setStatusDowvote(true);
-          }
-        } else {
-          setVoteStatus('none');
-        }
+      const findUpvote =
+        item &&
+        item.own_reactions &&
+        item.own_reactions.upvotes &&
+        Array.isArray(item.own_reactions.upvotes) &&
+        item.own_reactions.upvotes.find(
+          (reaction) => reaction.user_id === profile.myProfile.user_id
+        );
+      const findDownvote =
+        item &&
+        item.own_reactions &&
+        item.own_reactions.downvotes &&
+        Array.isArray(item.own_reactions.downvotes) &&
+        item.own_reactions.downvotes.find(
+          (reaction) => reaction.user_id === profile.myProfile.user_id
+        );
+      if (findUpvote) {
+        setVoteStatus('upvote');
+        setStatusUpvote(true);
+      }
+      if (findDownvote) {
+        setVoteStatus('downvote');
+        setStatusDowvote(true);
+      }
+      if (!findDownvote && !findUpvote) {
+        setVoteStatus('none');
       }
     };
     validationStatusVote();
