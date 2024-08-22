@@ -282,6 +282,7 @@ const TopicFragment = ({
               />
             </>
           )}
+          ListFooterComponent={<View style={{height: 100}} />}
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={{paddingBottom: 100}}
