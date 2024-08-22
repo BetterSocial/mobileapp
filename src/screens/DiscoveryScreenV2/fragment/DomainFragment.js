@@ -19,6 +19,7 @@ import {COLORS} from '../../../utils/theme';
 import {Context} from '../../../context/Store';
 import {followDomain, unfollowDomain} from '../../../service/domain';
 import {fonts} from '../../../utils/fonts';
+import {addIFollowByID, setIFollow} from '../../../context/actions/news';
 
 const FROM_FOLLOWED_DOMAIN = 'fromfolloweddomains';
 const FROM_FOLLOWED_DOMAIN_INITIAL = 'fromfolloweddomainsinitial';
@@ -88,6 +89,8 @@ const DomainFragment = ({
   const [activeSections, setActiveSections] = React.useState([]);
 
   const [, followingDispatch] = React.useContext(Context).following;
+  const [news, newsDispatch] = React.useContext(Context).news;
+  const {ifollow} = news;
 
   const {
     common: {onCommonClearRecentSearch, onCommonRecentItemClicked},
@@ -217,6 +220,13 @@ const DomainFragment = ({
 
     if (willFollow) {
       try {
+        addIFollowByID(
+          {
+            domain_id_followed: item.domain_id_followed
+          },
+          newsDispatch
+        );
+
         await followDomain(data);
         onDomainPageFollowButtonClicked(section);
       } catch (e) {
@@ -224,6 +234,11 @@ const DomainFragment = ({
       }
     } else {
       try {
+        const newListFollow = ifollow.filter(
+          (obj) => obj.domain_id_followed !== item.domain_id_followed
+        );
+        setIFollow(newListFollow, newsDispatch);
+
         await unfollowDomain(data);
         onDomainPageUnfollowButtonClicked(section);
       } catch (e) {
@@ -243,6 +258,9 @@ const DomainFragment = ({
   };
 
   const renderItem = ({from, item, index, section}) => {
+    const isFollow = JSON.stringify(ifollow.map((i) => i.domain_id_followed)).includes(
+      item.domain_id_followed
+    );
     if (item.separator) {
       return (
         <>
@@ -263,7 +281,7 @@ const DomainFragment = ({
             item={{
               name: item.domain_name,
               image: item.logo,
-              isunfollowed: !item.following,
+              isunfollowed: ifollow.length === 0 ? !item.following : !isFollow,
               description: item.short_description || null
             }}
           />
