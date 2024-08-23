@@ -114,23 +114,24 @@ export const useInitialStartup = () => {
 
   const getDiscoveryData = async () => {
     try {
-      const discoveryInitialTopicResponse = await DiscoveryRepo.fetchInitialDiscoveryTopics();
-      DiscoveryAction.setDiscoveryInitialTopics(
-        discoveryInitialTopicResponse.suggestedTopics,
-        discoveryDispatch
-      );
-
-      const discoveryInitialUserResponse = await DiscoveryRepo.fetchInitialDiscoveryUsers();
-      DiscoveryAction.setDiscoveryInitialUsers(
-        discoveryInitialUserResponse.suggestedUsers,
-        discoveryDispatch
-      );
-
-      const discoveryInitialDomainResponse = await DiscoveryRepo.fetchInitialDiscoveryDomains();
-      DiscoveryAction.setDiscoveryInitialDomains(
-        discoveryInitialDomainResponse.suggestedDomains,
-        discoveryDispatch
-      );
+      DiscoveryRepo.fetchInitialDiscoveryTopics().then((discoveryInitialTopicResponse) => {
+        DiscoveryAction.setDiscoveryInitialTopics(
+          discoveryInitialTopicResponse.suggestedTopics,
+          discoveryDispatch
+        );
+      });
+      DiscoveryRepo.fetchInitialDiscoveryUsers().then((discoveryInitialUserResponse) => {
+        DiscoveryAction.setDiscoveryInitialUsers(
+          discoveryInitialUserResponse.suggestedUsers,
+          discoveryDispatch
+        );
+      });
+      DiscoveryRepo.fetchInitialDiscoveryDomains().then((discoveryInitialDomainResponse) => {
+        DiscoveryAction.setDiscoveryInitialDomains(
+          discoveryInitialDomainResponse.suggestedDomains,
+          discoveryDispatch
+        );
+      });
 
       getFollowingTopic().then((response) => {
         following.setFollowingTopics(response.data, followingDispatch);
@@ -144,10 +145,13 @@ export const useInitialStartup = () => {
         following.setFollowingDomain(response.data.data, followingDispatch);
       });
 
-      const response = await AsyncStorage.getItem(RECENT_SEARCH_TERMS);
-      if (!response) return;
-      // setItems(JSON.parse(response))
-      DiscoveryAction.setDiscoveryRecentSearch(JSON.parse(response), discoveryDispatch);
+      const recentSearchTermsResponse = await AsyncStorage.getItem(RECENT_SEARCH_TERMS);
+      if (recentSearchTermsResponse) {
+        DiscoveryAction.setDiscoveryRecentSearch(
+          JSON.parse(recentSearchTermsResponse),
+          discoveryDispatch
+        );
+      }
     } catch (e) {
       if (__DEV__) {
         console.log('error');
