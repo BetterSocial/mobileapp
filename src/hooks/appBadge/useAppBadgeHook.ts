@@ -25,7 +25,7 @@ const useAppBadgeHook = () => {
     });
   };
 
-  const udpateAppBadgeWith = (badgeNumber: number) => {
+  const updateAppBadgeWith = (badgeNumber: number) => {
     try {
       PushNotification.setApplicationIconBadgeNumber(badgeNumber || 0);
     } catch (e) {
@@ -35,7 +35,7 @@ const useAppBadgeHook = () => {
 
   return {
     updateAppBadgeFromDB,
-    udpateAppBadgeWith
+    updateAppBadgeWith
   };
 };
 
