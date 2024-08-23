@@ -23,7 +23,7 @@ import {getFollowingTopic} from '../service/topics';
 import {getSpecificCache, saveToCache} from '../utils/cache';
 import {setTimer} from '../context/actions/feeds';
 import {setMyProfileAction} from '../context/actions/setMyProfileAction';
-import {setNews} from '../context/actions/news';
+import {addIFollowByID, setNews} from '../context/actions/news';
 import {traceMetricScreen} from '../libraries/performance/firebasePerformance';
 import {useClientGetstream} from '../utils/getstream/ClientGetStram';
 import useCoreFeed from '../screens/FeedScreen/hooks/useCoreFeed';
@@ -143,6 +143,14 @@ export const useInitialStartup = () => {
 
       getFollowedDomain().then((response) => {
         following.setFollowingDomain(response.data.data, followingDispatch);
+        response.data.data.forEach((item) => {
+          addIFollowByID(
+            {
+              domain_id_followed: item.domain_id_followed
+            },
+            newsDispatch
+          );
+        });
       });
 
       const recentSearchTermsResponse = await AsyncStorage.getItem(RECENT_SEARCH_TERMS);
