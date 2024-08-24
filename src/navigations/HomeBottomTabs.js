@@ -34,10 +34,17 @@ function HomeBottomTabs() {
   const {signedChannelUnreadCount, anonymousChannelUnreadCount} = useRootChannelListHook();
   const navigation = useNavigation();
   const {isLoadingFetchingChannelDetail} = usePushNotificationHook();
-  const {udpateAppBadgeWith} = useAppBadgeHook();
+  const {updateAppBadgeWith} = useAppBadgeHook();
+  const isMounted = React.useRef(true);
 
   React.useEffect(() => {
-    if (otherProfileData !== null && initialStartup.id !== null) {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
+  React.useEffect(() => {
+    if (otherProfileData !== null && initialStartup.id !== null && isMounted.current) {
       navigation.navigate('OtherProfile', {
         data: {
           user_id: initialStartup.id,
@@ -50,7 +57,9 @@ function HomeBottomTabs() {
 
   React.useEffect(() => {
     const totalUnreadCount = (signedChannelUnreadCount || 0) + (anonymousChannelUnreadCount || 0);
-    udpateAppBadgeWith(totalUnreadCount);
+    if (isMounted.current) {
+      updateAppBadgeWith(totalUnreadCount);
+    }
   }, [signedChannelUnreadCount, anonymousChannelUnreadCount]);
 
   const renderTabBarIcon = (route, focused, color) => {
