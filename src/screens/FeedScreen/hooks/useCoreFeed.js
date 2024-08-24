@@ -69,11 +69,11 @@ const useCoreFeed = () => {
       };
       return color;
     }
-    const randomIndex = getRandomInt(0, listFeedColor.length);
+    const randomIndex = getRandomInt(0, listFeedColor.length - 1);
     let newColor = listFeedColor[randomIndex];
     newColor = {
       ...newColor,
-      bg: hexToRgb(newColor.bg, 0.25),
+      bg: hexToRgb(newColor?.bg, 0.25),
       color: 'rgba(0,0,0)'
     };
     return newColor;
