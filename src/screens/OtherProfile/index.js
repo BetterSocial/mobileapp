@@ -46,12 +46,7 @@ import {downVote, upVote} from '../../service/vote';
 import {fonts, normalize} from '../../utils/fonts';
 import {generateAnonProfileOtherProfile} from '../../service/anonymousProfile';
 import {getFeedDetail} from '../../service/post';
-import {
-  getOtherFeedsInProfile,
-  getOtherProfile,
-  setFollow,
-  setUnFollow
-} from '../../service/profile';
+import {getOtherFeedsInProfile, setFollow, setUnFollow} from '../../service/profile';
 import {getSingularOrPluralText} from '../../utils/string/StringUtils';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherProfileFeed';
@@ -69,9 +64,6 @@ const OtherProfile = () => {
   const flatListRef = React.useRef();
   const closeBlockUserBottomSheetRef = React.useRef(false);
 
-  const [user_id, setUserId] = React.useState('');
-  const [username, setUsername] = React.useState('');
-  const [other_id, setOtherId] = React.useState('');
   const [isShowButton, setIsShowButton] = React.useState(false);
   const [opacity, setOpacity] = React.useState(0);
   const [reason, setReason] = React.useState([]);
@@ -90,7 +82,7 @@ const OtherProfile = () => {
   const [loadingGenerateAnon, setLoadingGenerateAnon] = React.useState(false);
   const [anonProfile, setAnonProfile] = React.useState();
   const {mappingColorFeed} = useCoreFeed();
-  const {updateFollowDiscoveryContext, getIsMeFollowingTargetStatus} = useDiscovery();
+  const {updateFollowDiscoveryContext} = useDiscovery();
 
   const {
     feeds,
@@ -99,10 +91,14 @@ const OtherProfile = () => {
     isBlocking,
     isLoading,
     isProfileFetching,
+    isCurrentFollowed,
+    otherUserId: other_id,
+    selfUserId: user_id,
 
     refetchBlockStatus,
     refetchOtherProfile,
-    setOtherProfileData: setDataMain
+    setOtherProfileData: setDataMain,
+    setIsCurrentFollowed
   } = useOtherProfileScreenHooks(params?.data?.other_id, params?.data?.username);
 
   const eventTrack = useOtherProfileScreenAnalyticsHook();
@@ -119,10 +115,6 @@ const OtherProfile = () => {
     onBlockUserReportInfoSkipped,
     onShareUserButtonClicked
   } = eventTrack;
-  const [isCurrentFollowed, setIsCurrentFollowed] = React.useState(
-    getIsMeFollowingTargetStatus(params.data.other_id, params?.data?.username) ||
-      params?.data?.following
-  );
 
   const isSignedMessageEnabled = dataMain.isSignedMessageEnabled ?? true;
   const isAnonimityEnabled = dataMain.isAnonMessageEnabled && isSignedMessageEnabled;
@@ -182,27 +174,12 @@ const OtherProfile = () => {
   }, []);
 
   React.useEffect(() => {
-    initData();
-  }, [params.data]);
-
-  React.useEffect(() => {
     getOtherFeeds();
   }, [other_id]);
 
-  const initData = async () => {
-    let otherUserId = params?.data?.other_id;
-    if (!otherUserId) {
-      const response = await getOtherProfile(params.data.username);
-      otherUserId = response?.data?.user_id;
-    }
-    setUserId(params?.data?.user_id);
-    setUsername(params?.data?.username);
-    setOtherId(otherUserId);
-  };
-
   const onShare = async () => {
     onShareUserButtonClicked();
-    ShareUtils.shareUserLink(username);
+    ShareUtils.shareUserLink(params?.data?.username);
   };
 
   const handleSetUnFollow = async () => {
@@ -237,7 +214,7 @@ const OtherProfile = () => {
       user_id_follower: profile.myProfile.user_id,
       user_id_followed: other_id,
       username_follower: profile.myProfile.username,
-      username_followed: username,
+      username_followed: params?.data?.username,
       follow_source: 'other-profile'
     };
     const result = await setFollow(data);
@@ -615,7 +592,7 @@ const OtherProfile = () => {
           hideSetting
           showArrow
           onShareClicked={onShare}
-          username={dataMain.username}
+          username={params?.data?.username}
         />
 
         <ProfileTiktokScroll
@@ -678,7 +655,7 @@ const OtherProfile = () => {
         <BlockProfile
           onSelect={onBlocking}
           refBlockUser={blockUserRef}
-          username={username}
+          username={params?.data?.username}
           isBlocker={isBlocking}
           onClose={() => handleOnBlockUserBottomSheetClosed()}
         />
