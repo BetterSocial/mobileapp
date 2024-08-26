@@ -34,7 +34,7 @@ function HomeBottomTabs() {
   const {signedChannelUnreadCount, anonymousChannelUnreadCount} = useRootChannelListHook();
   const navigation = useNavigation();
   const {isLoadingFetchingChannelDetail} = usePushNotificationHook();
-  const {udpateAppBadgeWith} = useAppBadgeHook();
+  const {updateAppBadgeWith} = useAppBadgeHook();
 
   React.useEffect(() => {
     if (otherProfileData !== null && initialStartup.id !== null) {
@@ -50,7 +50,7 @@ function HomeBottomTabs() {
 
   React.useEffect(() => {
     const totalUnreadCount = (signedChannelUnreadCount || 0) + (anonymousChannelUnreadCount || 0);
-    udpateAppBadgeWith(totalUnreadCount);
+    updateAppBadgeWith(totalUnreadCount);
   }, [signedChannelUnreadCount, anonymousChannelUnreadCount]);
 
   const renderTabBarIcon = (route, focused, color) => {
